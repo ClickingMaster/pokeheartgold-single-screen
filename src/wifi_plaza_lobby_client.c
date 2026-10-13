@@ -332,7 +332,7 @@ BOOL ov45_0222EBF0(int channel) {
 
 void WiFiPlazaLobbyClient_GetPlayerList(WiFiPlazaPlayerList *list) {
     GF_ASSERT(_022577C0 != NULL);
-    list->unk_00 = _022577C0->idLists[0].count;
+    list->count = _022577C0->idLists[0].count;
     list->ids = _022577C0->idLists[0].ids;
 }
 

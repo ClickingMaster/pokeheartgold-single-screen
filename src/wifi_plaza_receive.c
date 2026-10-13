@@ -2,7 +2,7 @@
 
 #include "wifi_plaza_internal.h"
 
-// Receive callbacks of the exchange with one other player (WiFiPlazaWork.unk_1c0; WiFiPlazaLobbyClient_SendToPlayer sends its messages):
+// Receive callbacks of the exchange with one other player (WiFiPlazaWork.talk; WiFiPlazaLobbyClient_SendToPlayer sends its messages):
 // id is the sender, data the received words.
 
 #pragma force_active on
@@ -14,7 +14,7 @@ void WiFiPlaza_OnTalkRequest(int id, u16 *data, u32 size, WiFiPlazaWork *work) {
     BOOL busy;
 
     if (WiFiPlazaProfile_IsChecksumValid(&work->profile, work->save) == FALSE) {
-        work->unk_52c = 1;
+        work->hasError = 1;
     }
     ready = ov45_0222A920(&work->profile.player);
     busy = WiFiPlazaWork_IsTalking(work);
@@ -22,34 +22,34 @@ void WiFiPlaza_OnTalkRequest(int id, u16 *data, u32 size, WiFiPlazaWork *work) {
         WiFiPlazaWork_SendTalkAnswer(work, id, FALSE);
     } else {
         WiFiPlazaWork_SendTalkAnswer(work, id, TRUE);
-        if (WiFiPlazaTalkSession_HasTalkedWith(&work->unk_1c0, slot) == FALSE) {
-            work->unk_1c0.unk_0b = TRUE;
+        if (WiFiPlazaTalkSession_HasTalkedWith(&work->talk, slot) == FALSE) {
+            work->talk.isFirstTalk = TRUE;
         } else {
-            work->unk_1c0.unk_0b = FALSE;
+            work->talk.isFirstTalk = FALSE;
         }
-        work->unk_1c0.unk_04 = slot;
-        work->unk_1c0.unk_06 = 2;
-        work->unk_1c0.unk_0a = 2;
-        work->unk_1c0.unk_07 = 0;
-        WiFiPlazaTalkSession_StartTimeout(&work->unk_1c0);
+        work->talk.partnerSlot = slot;
+        work->talk.state = 2;
+        work->talk.role = 2;
+        work->talk.unk_07 = 0;
+        WiFiPlazaTalkSession_StartTimeout(&work->talk);
     }
 }
 
 // Message 1: the answer of the player asked.
 void WiFiPlaza_OnTalkAnswer(int id, u16 *data, u32 size, WiFiPlazaWork *work) {
     int slot = WiFiPlazaLobbyClient_IdToSlot(id);
-    if (work->unk_1c0.unk_0a != 0 && work->unk_1c0.unk_04 == slot) {
+    if (work->talk.role != 0 && work->talk.partnerSlot == slot) {
         if (*data == 1) {
-            if (WiFiPlazaTalkSession_HasTalkedWith(&work->unk_1c0, slot) == FALSE) {
-                work->unk_1c0.unk_0b = TRUE;
+            if (WiFiPlazaTalkSession_HasTalkedWith(&work->talk, slot) == FALSE) {
+                work->talk.isFirstTalk = TRUE;
             } else {
-                work->unk_1c0.unk_0b = FALSE;
+                work->talk.isFirstTalk = FALSE;
             }
-            work->unk_1c0.unk_06 = 2;
+            work->talk.state = 2;
         } else {
-            WiFiPlazaTalkSession_Reset(&work->unk_1c0);
+            WiFiPlazaTalkSession_Reset(&work->talk);
         }
-        WiFiPlazaTalkSession_StopTimeout(&work->unk_1c0);
+        WiFiPlazaTalkSession_StopTimeout(&work->talk);
     }
 }
 
@@ -58,29 +58,29 @@ void WiFiPlaza_OnTalkAnswer(int id, u16 *data, u32 size, WiFiPlazaWork *work) {
 // Message 2: the state of the other player (2 or 3), or the end of the exchange.
 void WiFiPlaza_OnTalkState(int id, u16 *data, u32 size, WiFiPlazaWork *work) {
     int slot;
-    if (work->unk_1c0.unk_0a != 0) {
+    if (work->talk.role != 0) {
         slot = WiFiPlazaLobbyClient_IdToSlot(id);
-        if (work->unk_1c0.unk_04 == slot) {
+        if (work->talk.partnerSlot == slot) {
             if ((u16)(data[1] + 0xFFFE) <= 1) { // 2 or 3
-                work->unk_1c0.unk_06 = data[1];
-                work->unk_1c0.unk_08 = data[0];
-                WiFiPlazaTalkSession_StopTimeout(&work->unk_1c0);
+                work->talk.state = data[1];
+                work->talk.partnerMessage = data[0];
+                WiFiPlazaTalkSession_StopTimeout(&work->talk);
                 return;
             }
-            WiFiPlazaTalkSession_Abort(&work->unk_1c0);
+            WiFiPlazaTalkSession_Abort(&work->talk);
             return;
         }
         if (slot == -1) {
-            WiFiPlazaTalkSession_Abort(&work->unk_1c0);
+            WiFiPlazaTalkSession_Abort(&work->talk);
         }
     }
 }
 
 void WiFiPlaza_OnTalkCancel(int id, u16 *data, u32 size, WiFiPlazaWork *work) {
-    if (work->unk_1c0.unk_06 != 0) {
+    if (work->talk.state != 0) {
         int slot = WiFiPlazaLobbyClient_IdToSlot(id);
-        if (work->unk_1c0.unk_04 == slot) {
-            WiFiPlazaTalkSession_Reset(&work->unk_1c0);
+        if (work->talk.partnerSlot == slot) {
+            WiFiPlazaTalkSession_Reset(&work->talk);
         }
     }
 }

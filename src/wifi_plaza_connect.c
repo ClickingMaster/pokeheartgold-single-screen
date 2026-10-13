@@ -56,7 +56,7 @@ typedef struct WiFiPlazaConnectArgs {
 typedef struct WiFiPlazaDisconnectArgs {
     SaveData *saveData;
     void *lobby;
-    BOOL unk_08;
+    BOOL mode;
 } WiFiPlazaDisconnectArgs;
 
 typedef struct WiFiPlazaConnectMessageBox {

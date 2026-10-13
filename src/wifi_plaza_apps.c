@@ -45,14 +45,14 @@ typedef struct WiFiPlazaMainArgs {
 typedef struct WiFiPlazaVisitorArgs {
     void *players; // WiFiPlazaWork_GetPlaces
     SaveData *save;
-    u32 time; // WiFiPlazaWork.unk_d4
+    u32 time; // WiFiPlazaWork.currentTime
     WiFiPlazaWork *work;
 } WiFiPlazaVisitorArgs;
 
 // Arguments of app 2, the plaza news.
 typedef struct WiFiPlazaNewsArgs {
-    void *unk_00; // WiFiPlazaWork.unk_04
-    u32 *time;    // WiFiPlazaWork.unk_d4
+    void *news; // WiFiPlazaWork.news
+    u32 *time;  // WiFiPlazaWork.currentTime
     WiFiPlazaWork *work;
 } WiFiPlazaNewsArgs;
 
@@ -60,8 +60,8 @@ typedef struct WiFiPlazaNewsArgs {
 typedef struct WiFiPlazaConnectArgs {
     SaveData *save;
     WiFiPlazaWork *work;
-    u32 unk_08; // WiFiPlazaApps.unk_39
-    void *unk_0c;
+    u32 skipPrompt; // WiFiPlazaApps.skipPrompt
+    void *loginTime;
     u32 result; // 0: not connected
 } WiFiPlazaConnectArgs;
 
@@ -80,9 +80,9 @@ typedef struct WiFiPlazaDisconnectArgs {
 
 // Arguments of the games (apps 6 to 8).
 typedef struct WiFiPlazaGameArgs {
-    u32 unk_00;      // ov45_0222AAC8 of the own player
-    u8 slots[4];     // WiFiPlazaWork_GetGameMembers
-    u8 unk_08[0x14]; // WiFiPlazaWork_GetSpecialVisitors
+    u32 unk_00;               // ov45_0222AAC8 of the own player
+    u8 slots[4];              // WiFiPlazaWork_GetGameMembers
+    u8 specialVisitors[0x14]; // WiFiPlazaWork_GetSpecialVisitors
     void *unk_1c;
     PlayerProfile *profiles[4];
     WiFiPlazaWork *work;
@@ -144,7 +144,7 @@ BOOL WiFiPlazaApps_EndSurvey(WiFiPlazaApps *apps);
 int WiFiPlaza_AvatarToIndex(u16 avatar) {
     int i;
     for (i = 0; i < 16; i++) {
-        if (avatar == ov45_02254A84[i].unk_00) {
+        if (avatar == ov45_02254A84[i].avatar) {
             return i;
         }
     }
@@ -153,19 +153,19 @@ int WiFiPlaza_AvatarToIndex(u16 avatar) {
 
 u16 WiFiPlaza_IndexToAvatar(u32 index) {
     if (index < 16) {
-        return ov45_02254A84[index].unk_00;
+        return ov45_02254A84[index].avatar;
     }
     return 0xffff;
 }
 
-WiFiPlazaApps *WiFiPlazaApps_New(u32 unk_39, SaveData *save, void *unk_44, WiFiPlazaWork *work, enum HeapID heapID) {
+WiFiPlazaApps *WiFiPlazaApps_New(u32 skipPrompt, SaveData *save, void *loginTime, WiFiPlazaWork *work, enum HeapID heapID) {
     WiFiPlazaApps *apps = Heap_Alloc(heapID, sizeof(WiFiPlazaApps));
     int i;
     memset(apps, 0, sizeof(WiFiPlazaApps));
     apps->work = work;
     apps->save = save;
-    apps->unk_44 = unk_44;
-    apps->unk_39 = unk_39;
+    apps->loginTime = loginTime;
+    apps->skipPrompt = skipPrompt;
     apps->heapID = heapID;
     for (i = 0; i < 13; i++) {
         WiFiPlazaApps_InitArgs(apps, i, heapID);
@@ -254,7 +254,7 @@ void WiFiPlazaGameArgs_FreeProfiles(WiFiPlazaGameArgs *args) {
 void WiFiPlazaGameArgs_Setup(WiFiPlazaGameArgs *args, WiFiPlazaWork *work, enum HeapID heapID) {
     int i;
     args->unk_00 = ov45_0222AAC8(WiFiPlazaWork_GetMyPlayer(work));
-    WiFiPlazaWork_GetSpecialVisitors(work, args->unk_08);
+    WiFiPlazaWork_GetSpecialVisitors(work, args->specialVisitors);
     WiFiPlazaWork_GetGameMembers(work, args->slots);
     args->work = work;
     args->unk_1c = NULL;
@@ -389,7 +389,7 @@ void WiFiPlazaApps_NewPlazaNewsArgs(WiFiPlazaApps *apps, void **out, enum HeapID
     p[10] = 0;
     p[11] = 0;
     p = *out;
-    ((WiFiPlazaNewsArgs *)p)->unk_00 = WiFiPlazaWork_GetNews(apps->work);
+    ((WiFiPlazaNewsArgs *)p)->news = WiFiPlazaWork_GetNews(apps->work);
     ((WiFiPlazaNewsArgs *)p)->time = ov45_0222A22C(apps->work);
     ((WiFiPlazaNewsArgs *)p)->work = apps->work;
 }
@@ -426,8 +426,8 @@ void WiFiPlazaApps_NewConnectArgs(WiFiPlazaApps *apps, void **out, enum HeapID h
     p = *out;
     ((WiFiPlazaConnectArgs *)p)->save = apps->save;
     ((WiFiPlazaConnectArgs *)p)->work = apps->work;
-    ((WiFiPlazaConnectArgs *)p)->unk_08 = apps->unk_39;
-    ((WiFiPlazaConnectArgs *)p)->unk_0c = apps->unk_44;
+    ((WiFiPlazaConnectArgs *)p)->skipPrompt = apps->skipPrompt;
+    ((WiFiPlazaConnectArgs *)p)->loginTime = apps->loginTime;
 }
 
 void WiFiPlazaApps_FreeConnectArgs(void **args) {

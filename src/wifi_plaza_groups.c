@@ -4,7 +4,7 @@
 
 // Advances the plaza time; group i starts counting (state 1) once the time reaches ov45_02254A3C[i] and ends (state 2)
 // after 1200 more updates.
-void ov45_0222C3B0(WiFiPlazaUnk20C *groups) {
+void ov45_0222C3B0(WiFiPlazaGroups *groups) {
     int i;
     if (groups->active != 0) {
         for (i = 0; i < 9; i++) {
@@ -29,7 +29,7 @@ void ov45_0222C3B0(WiFiPlazaUnk20C *groups) {
 
 // Puts id into the first free place of a group that has not ended and whose unk_bc count allows value; returns the
 // place (group * 3 + seat) or -1.
-int ov45_0222C408(WiFiPlazaUnk20C *groups, u32 id, u32 value) {
+int ov45_0222C408(WiFiPlazaGroups *groups, u32 id, u32 value) {
     int seat;
     int base;
     int group;
@@ -52,7 +52,7 @@ int ov45_0222C408(WiFiPlazaUnk20C *groups, u32 id, u32 value) {
 
 #pragma force_active reset
 
-void ov45_0222C480(WiFiPlazaUnk20C *groups, u32 id) {
+void ov45_0222C480(WiFiPlazaGroups *groups, u32 id) {
     int place = ov45_0222C5B4(groups, id);
     if (place != -1) {
         u32 group = (u32)place / 3, seat = (u32)place % 3;
@@ -60,7 +60,7 @@ void ov45_0222C480(WiFiPlazaUnk20C *groups, u32 id) {
     }
 }
 
-int ov45_0222C4B4(WiFiPlazaUnk20C *groups, u32 place) {
+int ov45_0222C4B4(WiFiPlazaGroups *groups, u32 place) {
     u32 group;
     u32 seat;
     u32 *slot;
@@ -73,14 +73,14 @@ int ov45_0222C4B4(WiFiPlazaUnk20C *groups, u32 place) {
     return *slot;
 }
 
-int ov45_0222C4E4(WiFiPlazaUnk20C *groups, u32 group) {
+int ov45_0222C4E4(WiFiPlazaGroups *groups, u32 group) {
     if (group >= 9) {
         GF_AssertFail();
     }
     return groups->states[group];
 }
 
-int ov45_0222C4FC(WiFiPlazaUnk20C *groups, u32 group) {
+int ov45_0222C4FC(WiFiPlazaGroups *groups, u32 group) {
     if (group >= 9) {
         GF_AssertFail();
     }
@@ -89,7 +89,7 @@ int ov45_0222C4FC(WiFiPlazaUnk20C *groups, u32 group) {
 
 #pragma force_active on
 
-void ov45_0222C514(WiFiPlazaUnk20C *groups, u32 id) {
+void ov45_0222C514(WiFiPlazaGroups *groups, u32 id) {
     u32 place = ov45_0222C5B4(groups, id);
     if (place != (u32)-1) {
         groups->unk_128[place / 3][place % 3] = 1;
@@ -98,7 +98,7 @@ void ov45_0222C514(WiFiPlazaUnk20C *groups, u32 id) {
 
 #pragma force_active reset
 
-int ov45_0222C54C(WiFiPlazaUnk20C *groups, u32 place) {
+int ov45_0222C54C(WiFiPlazaGroups *groups, u32 place) {
     u32 group;
     u32 seat;
     u32 *slot;
@@ -111,7 +111,7 @@ int ov45_0222C54C(WiFiPlazaUnk20C *groups, u32 place) {
     return *slot;
 }
 
-void ov45_0222C580(WiFiPlazaUnk20C *groups, u32 place) {
+void ov45_0222C580(WiFiPlazaGroups *groups, u32 place) {
     u32 group;
     u32 seat;
     u32 *slot;
@@ -127,8 +127,8 @@ void ov45_0222C580(WiFiPlazaUnk20C *groups, u32 place) {
 #pragma force_active on
 
 // The place (group * 3 + seat) of id, or -1.
-int ov45_0222C5B4(WiFiPlazaUnk20C *groups, int id) {
-    WiFiPlazaUnk20C *row = groups;
+int ov45_0222C5B4(WiFiPlazaGroups *groups, int id) {
+    WiFiPlazaGroups *row = groups;
     int i;
     int j;
     for (i = 0; i < 9; i++) {
@@ -137,14 +137,14 @@ int ov45_0222C5B4(WiFiPlazaUnk20C *groups, int id) {
                 return i * 3 + j;
             }
         }
-        row = (WiFiPlazaUnk20C *)((u8 *)row + sizeof(row->ids[0]));
+        row = (WiFiPlazaGroups *)((u8 *)row + sizeof(row->ids[0]));
     }
     return -1;
 }
 
 #pragma force_active reset
 
-void ov45_0222C5E8(WiFiPlazaUnk20C *groups, u32 place, u32 value) {
+void ov45_0222C5E8(WiFiPlazaGroups *groups, u32 place, u32 value) {
     u32 group;
     u32 seat;
     u32 *slot;
@@ -157,7 +157,7 @@ void ov45_0222C5E8(WiFiPlazaUnk20C *groups, u32 place, u32 value) {
     *slot = value + 1;
 }
 
-BOOL ov45_0222C61C(WiFiPlazaUnk20C *groups, u32 place, u32 value) {
+BOOL ov45_0222C61C(WiFiPlazaGroups *groups, u32 place, u32 value) {
     u32 group;
     u32 seat;
     u32 *slot;
@@ -173,7 +173,7 @@ BOOL ov45_0222C61C(WiFiPlazaUnk20C *groups, u32 place, u32 value) {
     return TRUE;
 }
 
-u32 ov45_0222C658(WiFiPlazaUnk20C *groups, u32 place) {
+u32 ov45_0222C658(WiFiPlazaGroups *groups, u32 place) {
     u32 group;
     u32 seat;
     u32 *slot;

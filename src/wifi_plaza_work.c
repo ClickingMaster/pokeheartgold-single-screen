@@ -6,7 +6,7 @@ void ov45_0222A1F8(WiFiPlazaWork *work) {
 }
 
 u32 WiFiPlazaWork_HasError(WiFiPlazaWork *work) {
-    return work->unk_52c;
+    return work->hasError;
 }
 
 #pragma force_active on
@@ -27,13 +27,13 @@ void *WiFiPlazaWork_GetPlaces(WiFiPlazaWork *work) {
 }
 
 u32 *ov45_0222A22C(WiFiPlazaWork *work) {
-    return &work->unk_d4;
+    return &work->currentTime;
 }
 
 BOOL WiFiPlazaWork_TakePlayerEntered(WiFiPlazaWork *work, int bit) {
     u32 mask = 1 << bit;
-    if (work->unk_f8[0] & mask) {
-        work->unk_f8[0] &= ~mask;
+    if (work->changeFlags[0] & mask) {
+        work->changeFlags[0] &= ~mask;
         return TRUE;
     }
     return FALSE;
@@ -41,21 +41,21 @@ BOOL WiFiPlazaWork_TakePlayerEntered(WiFiPlazaWork *work, int bit) {
 
 BOOL WiFiPlazaWork_TakePlayerLeft(WiFiPlazaWork *work, int bit) {
     u32 mask = 1 << bit;
-    if (work->unk_f8[1] & mask) {
-        work->unk_f8[1] &= ~mask;
+    if (work->changeFlags[1] & mask) {
+        work->changeFlags[1] &= ~mask;
         return TRUE;
     }
     return FALSE;
 }
 
 BOOL WiFiPlazaWork_IsEventFlagSet(WiFiPlazaWork *work, int bit) {
-    return (work->unk_f8[2] & (1 << bit)) != 0;
+    return (work->changeFlags[2] & (1 << bit)) != 0;
 }
 
 BOOL WiFiPlazaWork_TakePlayerUpdated(WiFiPlazaWork *work, int bit) {
     u32 mask = 1 << bit;
-    if (work->unk_f8[3] & mask) {
-        work->unk_f8[3] &= ~mask;
+    if (work->changeFlags[3] & mask) {
+        work->changeFlags[3] &= ~mask;
         return TRUE;
     }
     return FALSE;
@@ -72,75 +72,75 @@ int ov45_0222A2CC(WiFiPlazaWork *work) {
 
 u32 ov45_0222A2E0(WiFiPlazaWork *work) {
     GF_ASSERT(work != NULL);
-    return work->unk_1fc.low;
+    return work->eventSchedule.low;
 }
 
 u32 ov45_0222A2F8(WiFiPlazaWork *work) {
     GF_ASSERT(work != NULL);
-    return work->unk_1fc.high;
+    return work->eventSchedule.high;
 }
 
 void ov45_0222A310(WiFiPlazaWork *work) {
-    work->unk_1fc.high = 1;
+    work->eventSchedule.high = 1;
 }
 
 u32 WiFiPlazaWork_IsLobbyOpen(WiFiPlazaWork *work) {
-    return work->unk_1fc.flag0;
+    return work->eventSchedule.flag0;
 }
 
 u32 WiFiPlazaWork_IsClosing(WiFiPlazaWork *work) {
-    return work->unk_1fc.flag7;
+    return work->eventSchedule.flag7;
 }
 
 BOOL WiFiPlazaWork_IsClosed(WiFiPlazaWork *work) {
-    if (work->unk_1fc.flag1 == 1 && work->unk_1fc.unk_04 <= 0) {
+    if (work->eventSchedule.flag1 == 1 && work->eventSchedule.closeTimer <= 0) {
         return TRUE;
     }
     return FALSE;
 }
 
 u32 WiFiPlazaWork_GetFireworksState(WiFiPlazaWork *work) {
-    if (work->unk_1fc.unk_08 <= 0) {
-        return work->unk_1fc.mode2;
+    if (work->eventSchedule.fireworksDelay <= 0) {
+        return work->eventSchedule.mode2;
     }
     return 0;
 }
 
 BOOL WiFiPlazaWork_IsParadeStarted(WiFiPlazaWork *work) {
-    if (work->unk_1fc.flag4 == 1 && work->unk_1fc.unk_0a <= 0) {
+    if (work->eventSchedule.flag4 == 1 && work->eventSchedule.paradeDelay <= 0) {
         return TRUE;
     }
     return FALSE;
 }
 
 u32 ov45_0222A394(WiFiPlazaWork *work) {
-    return work->unk_1fc.mode5;
+    return work->eventSchedule.mode5;
 }
 
 BOOL WiFiPlazaWork_IsLightingStarted(WiFiPlazaWork *work) {
-    if (work->unk_08 == 1 && work->unk_1fc.unk_06 <= 0) {
+    if (work->lightingStarted == 1 && work->eventSchedule.lightingDelay <= 0) {
         return TRUE;
     }
     return FALSE;
 }
 
 u32 WiFiPlazaWork_GetColorEvent(WiFiPlazaWork *work) {
-    if (work->unk_1fc.unk_06 <= 0) {
-        return work->unk_1fc.unk_01;
+    if (work->eventSchedule.lightingDelay <= 0) {
+        return work->eventSchedule.colorEvent;
     }
     return 1;
 }
 
 u32 WiFiPlazaWork_GetLight1Event(WiFiPlazaWork *work) {
-    if (work->unk_1fc.unk_06 <= 0) {
-        return work->unk_1fc.unk_02;
+    if (work->eventSchedule.lightingDelay <= 0) {
+        return work->eventSchedule.light1Event;
     }
     return 7;
 }
 
 u32 ov45_0222A3EC(WiFiPlazaWork *work) {
-    if (work->unk_1fc.unk_06 <= 0) {
-        return work->unk_1fc.unk_03;
+    if (work->eventSchedule.lightingDelay <= 0) {
+        return work->eventSchedule.thirdEvent;
     }
     return 11;
 }
@@ -162,7 +162,7 @@ void ov45_0222A430(WiFiPlazaWork *work, void *value) {
 }
 
 void WiFiPlazaWork_ClearGameMembers(WiFiPlazaWork *work) {
-    MIi_CpuClear32(0, (u32 *)work->unk_3e0, 4);
+    MIi_CpuClear32(0, (u32 *)work->gameMembers, 4);
 }
 
 void WiFiPlazaWork_SetGameMember(WiFiPlazaWork *work, int id, u32 index) {
@@ -170,7 +170,7 @@ void WiFiPlazaWork_SetGameMember(WiFiPlazaWork *work, int id, u32 index) {
     GF_ASSERT(index < 4);
     value = WiFiPlazaLobbyClient_IdToSlot(id);
     GF_ASSERT(value != -1);
-    work->unk_3e0[index] = value;
+    work->gameMembers[index] = value;
 }
 
 void WiFiPlazaWork_SetOwnGameMember(WiFiPlazaWork *work, u32 index) {
@@ -179,7 +179,7 @@ void WiFiPlazaWork_SetOwnGameMember(WiFiPlazaWork *work, u32 index) {
 }
 
 void WiFiPlazaWork_GetGameMembers(WiFiPlazaWork *work, void *dest) {
-    MI_CpuCopy8(work->unk_3e0, dest, 4);
+    MI_CpuCopy8(work->gameMembers, dest, 4);
 }
 
 void ov45_0222A4A8(WiFiPlazaWork *work) {
@@ -191,5 +191,5 @@ int ov45_0222A4B8(WiFiPlazaWork *work) {
 }
 
 void ov45_0222A4C8(WiFiPlazaWork *work, u8 value) {
-    work->unk_1fc.unk_0c = value;
+    work->eventSchedule.unk_0c = value;
 }

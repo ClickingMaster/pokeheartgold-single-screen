@@ -26,31 +26,31 @@
 
 // Arguments of the Wi-Fi Plaza overlay (field_transition_tasks_2.c).
 typedef struct WiFiPlazaArgs {
-    void *unk_00;
+    void *loginTime;
     SaveData *save;
-    u32 unk_08;
+    u32 skipPrompt;
 } WiFiPlazaArgs;
 
 // Second part of a plaza player record (copied to the save data when the plaza is left, WiFiPlazaWork_Delete).
-typedef struct WiFiPlazaPlayerUnk8C {
-    u32 unk_00;
-    u32 unk_04; // < 3
-} WiFiPlazaPlayerUnk8C;
+typedef struct WiFiPlazaPlayerSurvey {
+    u32 surveyId;
+    u32 answer; // < 3
+} WiFiPlazaPlayerSurvey;
 
 // A player in the plaza lobby: the own one is WiFiPlazaWork.profile.player, the others come from the lobby
 // library (WiFiPlazaLobbyClient_GetPlayer).
 typedef struct WiFiPlazaPlayer {
-    u32 unk_00;
+    u32 lobbyId;
     u32 trainerId;
     u16 name[8];
-    u32 unk_18;   // WiFiPlaza_SecondsToTime of the entry time (WiFiPlaza_OnPlayerEnter)
-    void *unk_1c; // WiFiPlazaTime: local time of the location (WiFiPlaza_GetLocalTime)
+    u32 entryTime;   // WiFiPlaza_SecondsToTime of the entry time (WiFiPlaza_OnPlayerEnter)
+    void *localTime; // WiFiPlazaTime: local time of the location (WiFiPlaza_GetLocalTime)
     u16 species[6];
     u8 forms[6];
     u8 isEgg[6];
     u8 gender; // >= 2: taken from the avatar table
     u8 language;
-    u16 unk_3a; // mapped to the avatar by WiFiPlaza_IndexToAvatar
+    u16 avatarIndex; // mapped to the avatar by WiFiPlaza_IndexToAvatar
     u16 country;
     u8 region;
     u8 hasNationalDex;
@@ -62,44 +62,44 @@ typedef struct WiFiPlazaPlayer {
     u8 slots[12]; // < 24: used
     void *slotData[12];
     u16 unk_88[2]; // < 18
-    WiFiPlazaPlayerUnk8C unk_8c;
+    WiFiPlazaPlayerSurvey survey;
 } WiFiPlazaPlayer;
 
 // The own plaza profile (WiFiPlazaProfile_InitFromSave); WiFiPlazaProfile_UpdateChecksum and WiFiPlazaProfile_IsChecksumValid keep its CRC.
 typedef struct WiFiPlazaProfile {
     u16 name[8];
-    u16 unk_10[8]; // the name received from the lobby (WiFiPlazaProfile_SetFromLobbyRecord)
+    u16 lobbyName[8]; // the name received from the lobby (WiFiPlazaProfile_SetFromLobbyRecord)
     WiFiPlazaPlayer player;
     u32 crc; // of player
 } WiFiPlazaProfile;
 
 // The ids of the players in the lobby (WiFiPlazaLobbyClient_GetPlayerList): -1 = free.
 typedef struct WiFiPlazaPlayerList {
-    s32 unk_00;
+    s32 count;
     s32 *ids;
 } WiFiPlazaPlayerList;
 
 // Entry of the avatar table ov45_02254A84.
 typedef struct WiFiPlazaAvatarEntry {
-    u16 unk_00;
+    u16 avatar;
     u16 unk_02;
 } WiFiPlazaAvatarEntry;
 
 // Part of WiFiPlazaWork at 0x1C0: an exchange with one other player of the lobby (WiFiPlazaWork_StartTalk starts it
 // for a lobby slot, WiFiPlazaWork_AdvanceTalk / WiFiPlazaWork_CancelTalkRequest / WiFiPlazaWork_EndTalk answer or end it).
 typedef struct WiFiPlazaTalkSession {
-    u32 unk_00; // bit per lobby slot (WiFiPlazaTalkSession_HasTalkedWith / WiFiPlazaTalkSession_SetTalkedWith / WiFiPlazaTalkSession_ClearTalkedWith)
-    u16 unk_04; // lobby slot of the other player
-    u8 unk_06;  // state
+    u32 talkedWith;  // bit per lobby slot (WiFiPlazaTalkSession_HasTalkedWith / WiFiPlazaTalkSession_SetTalkedWith / WiFiPlazaTalkSession_ClearTalkedWith)
+    u16 partnerSlot; // lobby slot of the other player
+    u8 state;
     u8 unk_07;
-    u16 unk_08;
-    u8 unk_0a; // kind: 0 = none, 1 / 2 (WiFiPlazaWork_IsTalking / WiFiPlazaWork_WasAskedToTalk)
-    u8 unk_0b;
-    u8 unk_0c[20]; // per lobby slot, counts up to 6 (WiFiPlazaTalkSession_IncTalkCount; WiFiPlazaWork_CanTalkWith)
-    u16 unk_20;    // sent with WiFiPlazaLobbyClient_SendToPlayer (4 bytes from here)
-    u16 unk_22;
-    u16 unk_24; // WiFiPlazaTalkSession_StartTimeout sets it, WiFiPlazaTalkSession_StopTimeout clears it
-    s16 unk_26; // counts up to 900 while unk_24 is set (WiFiPlazaTalkSession_UpdateTimeout)
+    u16 partnerMessage;
+    u8 role; // 0 = none, 1 = asked the other player, 2 = asked by it (WiFiPlazaWork_IsTalking / WiFiPlazaWork_WasAskedToTalk)
+    u8 isFirstTalk;
+    u8 talkCounts[20]; // per lobby slot, counts up to 6 (WiFiPlazaTalkSession_IncTalkCount; WiFiPlazaWork_CanTalkWith)
+    u16 sendMessage;   // sent with WiFiPlazaLobbyClient_SendToPlayer (4 bytes from here)
+    u16 sendState;
+    u16 timeoutActive;  // WiFiPlazaTalkSession_StartTimeout sets it, WiFiPlazaTalkSession_StopTimeout clears it
+    s16 timeoutCounter; // counts up to 900 while timeoutActive is set (WiFiPlazaTalkSession_UpdateTimeout)
 } WiFiPlazaTalkSession;
 
 // A message to the lobby (WiFiPlazaLobbyClient_SendToLobby type 4).
@@ -120,16 +120,16 @@ typedef struct WiFiPlazaEventSchedule {
     u8 flag4 : 1;
     u8 mode5 : 2;
     u8 flag7 : 1;
-    u8 unk_01;
-    u8 unk_02;
-    u8 unk_03;
-    s16 unk_04;
-    s16 unk_06;
-    s16 unk_08;
-    s16 unk_0a;
+    u8 colorEvent;
+    u8 light1Event;
+    u8 thirdEvent;
+    s16 closeTimer;
+    s16 lightingDelay;
+    s16 fireworksDelay;
+    s16 paradeDelay;
     u8 unk_0c;
-    u8 unk_0d;
-    u8 unk_0e;
+    u8 lowVolume;
+    u8 bgmFadedOut;
     u8 low : 4;
     u8 high : 4;
 } WiFiPlazaEventSchedule;
@@ -149,9 +149,9 @@ typedef struct WiFiPlazaTimer {
     s64 start; // WiFiPlazaLobbyClient_GetTime
     s32 elapsed;
     s32 duration;
-    u32 phase;    // _02254A28[].phase, then 5 at the end
-    u32 counter;  // updates in the current phase
-    void *unk_1c; // WiFiPlazaPlayerInfo_New (ov45_0222B244 / ov45_0222B270)
+    u32 phase;        // _02254A28[].phase, then 5 at the end
+    u32 counter;      // updates in the current phase
+    void *playerInfo; // WiFiPlazaPlayerInfo_New (ov45_0222B244 / ov45_0222B270)
 } WiFiPlazaTimer;
 
 // A phase of WiFiPlazaTimer and its share of the duration (in 1/256).
@@ -160,7 +160,7 @@ typedef struct WiFiPlazaTimerPhase {
     u16 length;
 } WiFiPlazaTimerPhase;
 
-// Part of WiFiPlazaWork at 0x3AC: the chance of each group of WiFiPlazaWork.unk_20c (WiFiPlazaGroupWeights_PickGroup).
+// Part of WiFiPlazaWork at 0x3AC: the chance of each group of WiFiPlazaWork.groups (WiFiPlazaGroupWeights_PickGroup).
 typedef struct WiFiPlazaGroupWeights {
     u8 weights[9];
     u8 unk_09[3];
@@ -189,7 +189,7 @@ typedef struct WiFiPlazaUnk508 {
 
 // Plaza work data shared by the sub-applications (WiFiPlazaWork_New).
 // Part of WiFiPlazaWork at 0x20C: nine groups of three lobby slots (ov45_0222C388 clears it).
-typedef struct WiFiPlazaUnk20C {
+typedef struct WiFiPlazaGroups {
     u32 active; // ov45_0222C3A8 sets it
     s32 time;
     s32 counters[9];
@@ -197,7 +197,7 @@ typedef struct WiFiPlazaUnk20C {
     u32 ids[9][3]; // -1 = free (ov45_0222C388)
     u32 unk_bc[9][3];
     u32 unk_128[9][3];
-} WiFiPlazaUnk20C;
+} WiFiPlazaGroups;
 
 // A time of day (WiFiPlaza_SecondsToTime / WiFiPlazaTime_Add / WiFiPlazaTime_Subtract).
 typedef union WiFiPlazaTime {
@@ -239,11 +239,11 @@ typedef struct WiFiPlazaApps {
     OverlayManager *manager;
     void *args[13]; // per app
     u8 current;     // app
-    u8 unk_39;
+    u8 skipPrompt;
     u16 heapID;
     struct WiFiPlazaWork *work;
     SaveData *save;
-    void *unk_44;
+    void *loginTime;
 } WiFiPlazaApps;
 
 // What the lobby request handlers (wifi_plaza_requests.c) pass to the plaza news (with the player profiles in
@@ -335,28 +335,28 @@ typedef struct WiFiPlazaNews {
 typedef struct WiFiPlazaWork {
     SaveData *save;
     WiFiPlazaNews *news;
-    u32 unk_08;
+    u32 lightingStarted;
     WiFiPlazaPlace places[50]; // filled by WiFiPlaza_FillPlaces from the profile
-    u32 unk_d4;
-    s64 unk_d8; // WiFiPlazaLobbyClient_GetTime, refreshed every frame
-    s64 unk_e0; // ov45_022320C4 when the lobby opened (WiFiPlaza_OnLobbyEvent 0)
+    u32 currentTime;
+    s64 lobbyTime;     // WiFiPlazaLobbyClient_GetTime, refreshed every frame
+    s64 lobbyOpenTime; // ov45_022320C4 when the lobby opened (WiFiPlaza_OnLobbyEvent 0)
     PlayerProfile *profiles[4];
-    u32 unk_f8[4]; // per lobby slot: entered, left, events, updated (WiFiPlazaWork_TakePlayerEntered / A25C / A288 / A2A0)
+    u32 changeFlags[4]; // per lobby slot: entered, left, events, updated (WiFiPlazaWork_TakePlayerEntered / A25C / A288 / A2A0)
     WiFiPlazaProfile profile;
-    WiFiPlazaTalkSession unk_1c0;
+    WiFiPlazaTalkSession talk;
     u8 unk_1e8[0x14];
-    WiFiPlazaEventSchedule unk_1fc;
-    WiFiPlazaUnk20C unk_20c;
+    WiFiPlazaEventSchedule eventSchedule;
+    WiFiPlazaGroups groups;
     WiFiPlazaUnk3A0 unk_3a0;
     WiFiPlazaGroupWeights groupWeights;
-    u8 unk_3cc[0x14]; // per lobby slot (WiFiPlaza_SetSlotFlag); copied out by WiFiPlazaWork_GetSpecialVisitors
-    u8 unk_3e0[4];
+    u8 specialVisitors[0x14]; // per lobby slot (WiFiPlaza_SetSlotFlag); copied out by WiFiPlazaWork_GetSpecialVisitors
+    u8 gameMembers[4];
     WiFiPlazaWordSet wordSet;
     WiFiPlazaTimer timer;
     WiFiPlazaHistory history;
     WiFiPlazaUnk508 unk_508;
     enum HeapID heapID;
-    u32 unk_52c; // error flag
+    u32 hasError;
 } WiFiPlazaWork;
 
 // Location tables of the earth place NARC (as in geonet_globe_app.c); y is the longitude angle.
@@ -670,7 +670,7 @@ u8 WiFiPlazaPlayer_GetRegion(WiFiPlazaPlayer *player);
 u8 ov45_0222AAC8(WiFiPlazaPlayer *player);
 BOOL ov45_0222AADC(WiFiPlazaPlayer *player);
 u16 ov45_0222AAEC(WiFiPlazaPlayer *player, u32 index);
-void ov45_0222AB0C(WiFiPlazaPlayer *player, WiFiPlazaPlayerUnk8C *out);
+void ov45_0222AB0C(WiFiPlazaPlayer *player, WiFiPlazaPlayerSurvey *out);
 
 // wifi_plaza_lobby.c
 void *WiFiPlazaWork_GetOwnPlayerProfile(WiFiPlazaWork *work);
@@ -749,7 +749,7 @@ void WiFiPlazaProfile_UpdateChecksum(WiFiPlazaProfile *profile, SaveData *save);
 BOOL WiFiPlazaProfile_IsChecksumValid(WiFiPlazaProfile *profile, SaveData *save);
 void WiFiPlazaProfile_SetFromLobbyRecord(WiFiPlazaProfile *profile, const WiFiPlazaPlayer *src, u32 size);
 void WiFiPlaza_ClearEventFlags(u32 *flags);
-void WiFiPlazaEventSchedule_Update(WiFiPlazaEventSchedule *state, u32 *flags, WiFiPlazaUnk20C *a2, WiFiPlazaTimer *a3);
+void WiFiPlazaEventSchedule_Update(WiFiPlazaEventSchedule *state, u32 *flags, WiFiPlazaGroups *a2, WiFiPlazaTimer *a3);
 void WiFiPlazaEventSchedule_Init(WiFiPlazaEventSchedule *state);
 void WiFiPlazaEventSchedule_ApplyVolume(WiFiPlazaEventSchedule *state);
 void ov45_0222BCA0(WiFiPlazaUnk3A0 *a0);
@@ -797,23 +797,23 @@ void WiFiPlaza_HandlePlazaNewsNews(WiFiPlazaWork *work, WiFiPlazaLobbyMessage *m
 void WiFiPlaza_HandleMinigameResultNews(WiFiPlazaWork *work, WiFiPlazaLobbyMessage *msg);
 void ov45_0222C36C(void);
 void WiFiPlazaWork_AddLobbyEventNotice(WiFiPlazaWork *work, int which);
-void ov45_0222C388(WiFiPlazaUnk20C *a0);
-void ov45_0222C3A8(WiFiPlazaUnk20C *a0);
+void ov45_0222C388(WiFiPlazaGroups *a0);
+void ov45_0222C3A8(WiFiPlazaGroups *a0);
 
 // wifi_plaza_groups.c
-void ov45_0222C3B0(WiFiPlazaUnk20C *groups);
-int ov45_0222C408(WiFiPlazaUnk20C *groups, u32 id, u32 value);
-void ov45_0222C480(WiFiPlazaUnk20C *groups, u32 id);
-int ov45_0222C4B4(WiFiPlazaUnk20C *groups, u32 place);
-int ov45_0222C4E4(WiFiPlazaUnk20C *groups, u32 group);
-int ov45_0222C4FC(WiFiPlazaUnk20C *groups, u32 group);
-void ov45_0222C514(WiFiPlazaUnk20C *groups, u32 id);
-int ov45_0222C54C(WiFiPlazaUnk20C *groups, u32 place);
-void ov45_0222C580(WiFiPlazaUnk20C *groups, u32 place);
-int ov45_0222C5B4(WiFiPlazaUnk20C *groups, int id);
-void ov45_0222C5E8(WiFiPlazaUnk20C *groups, u32 place, u32 value);
-BOOL ov45_0222C61C(WiFiPlazaUnk20C *groups, u32 place, u32 value);
-u32 ov45_0222C658(WiFiPlazaUnk20C *groups, u32 place);
+void ov45_0222C3B0(WiFiPlazaGroups *groups);
+int ov45_0222C408(WiFiPlazaGroups *groups, u32 id, u32 value);
+void ov45_0222C480(WiFiPlazaGroups *groups, u32 id);
+int ov45_0222C4B4(WiFiPlazaGroups *groups, u32 place);
+int ov45_0222C4E4(WiFiPlazaGroups *groups, u32 group);
+int ov45_0222C4FC(WiFiPlazaGroups *groups, u32 group);
+void ov45_0222C514(WiFiPlazaGroups *groups, u32 id);
+int ov45_0222C54C(WiFiPlazaGroups *groups, u32 place);
+void ov45_0222C580(WiFiPlazaGroups *groups, u32 place);
+int ov45_0222C5B4(WiFiPlazaGroups *groups, int id);
+void ov45_0222C5E8(WiFiPlazaGroups *groups, u32 place, u32 value);
+BOOL ov45_0222C61C(WiFiPlazaGroups *groups, u32 place, u32 value);
+u32 ov45_0222C658(WiFiPlazaGroups *groups, u32 place);
 
 // wifi_plaza_receive.c
 void WiFiPlaza_OnTalkRequest(int id, u16 *data, u32 size, WiFiPlazaWork *work);
@@ -857,7 +857,7 @@ u16 WiFiPlazaHistory_IsCorrupt(WiFiPlazaHistory *history);
 // wifi_plaza_apps.c
 int WiFiPlaza_AvatarToIndex(u16 avatar);
 u16 WiFiPlaza_IndexToAvatar(u32 index);
-WiFiPlazaApps *WiFiPlazaApps_New(u32 unk_39, SaveData *save, void *unk_44, WiFiPlazaWork *work, enum HeapID heapID);
+WiFiPlazaApps *WiFiPlazaApps_New(u32 skipPrompt, SaveData *save, void *loginTime, WiFiPlazaWork *work, enum HeapID heapID);
 void WiFiPlazaApps_Delete(WiFiPlazaApps *apps);
 void WiFiPlazaApps_StartFirst(WiFiPlazaApps *apps);
 BOOL WiFiPlazaApps_Run(WiFiPlazaApps *apps);

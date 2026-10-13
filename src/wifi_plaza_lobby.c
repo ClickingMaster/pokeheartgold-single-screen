@@ -7,11 +7,11 @@ void *WiFiPlazaWork_GetOwnPlayerProfile(WiFiPlazaWork *work) {
 }
 
 int WiFiPlazaWork_IsSpecialVisitor(WiFiPlazaWork *work, int a1) {
-    return WiFiPlaza_GetSlotFlag(work->unk_3cc, a1);
+    return WiFiPlaza_GetSlotFlag(work->specialVisitors, a1);
 }
 
 void WiFiPlazaWork_GetSpecialVisitors(WiFiPlazaWork *work, void *dest) {
-    MI_CpuCopy8(work->unk_3cc, dest, sizeof(work->unk_3cc));
+    MI_CpuCopy8(work->specialVisitors, dest, sizeof(work->specialVisitors));
 }
 
 int WiFiPlazaWork_HasWordSet(WiFiPlazaWork *work, int a1) {
@@ -159,11 +159,11 @@ void ov45_0222AD70(void *unused, u32 value) {
 }
 
 int ov45_0222AD80(WiFiPlazaWork *work, int a1) {
-    return ov45_0222C4E4(&work->unk_20c, a1);
+    return ov45_0222C4E4(&work->groups, a1);
 }
 
 int ov45_0222AD90(WiFiPlazaWork *work, int a1) {
-    return ov45_0222C4FC(&work->unk_20c, a1);
+    return ov45_0222C4FC(&work->groups, a1);
 }
 
 int ov45_0222ADA0(void) {
@@ -171,27 +171,27 @@ int ov45_0222ADA0(void) {
 }
 
 int ov45_0222ADA8(WiFiPlazaWork *work, int a1) {
-    return ov45_0222C5B4(&work->unk_20c, a1);
+    return ov45_0222C5B4(&work->groups, a1);
 }
 
 void ov45_0222ADB8(WiFiPlazaWork *work, int a1, int a2) {
-    ov45_0222C408(&work->unk_20c, a1, a2);
+    ov45_0222C408(&work->groups, a1, a2);
 }
 
 void ov45_0222ADC8(WiFiPlazaWork *work, int a1) {
-    ov45_0222C480(&work->unk_20c, a1);
+    ov45_0222C480(&work->groups, a1);
 }
 
 void ov45_0222ADD8(WiFiPlazaWork *work, int a1) {
-    ov45_0222C514(&work->unk_20c, a1);
+    ov45_0222C514(&work->groups, a1);
 }
 
 void ov45_0222ADE8(WiFiPlazaWork *work, int a1) {
-    ov45_0222C54C(&work->unk_20c, a1);
+    ov45_0222C54C(&work->groups, a1);
 }
 
 void ov45_0222ADF8(WiFiPlazaWork *work, int a1) {
-    ov45_0222C580(&work->unk_20c, a1);
+    ov45_0222C580(&work->groups, a1);
 }
 
 void ov45_0222AE08(u32 value, u32 *quotient, u32 *remainder) {
@@ -200,11 +200,11 @@ void ov45_0222AE08(u32 value, u32 *quotient, u32 *remainder) {
 }
 
 void ov45_0222AE24(WiFiPlazaWork *work, int a1, int a2) {
-    ov45_0222C5E8(&work->unk_20c, a1, a2);
+    ov45_0222C5E8(&work->groups, a1, a2);
 }
 
 void ov45_0222AE34(WiFiPlazaWork *work, int a1) {
-    ov45_0222C658(&work->unk_20c, a1);
+    ov45_0222C658(&work->groups, a1);
 }
 
 void ov45_0222AE44(void) {
@@ -218,56 +218,56 @@ void ov45_0222AE54(void) {
 }
 
 void WiFiPlazaWork_ResetTalk(WiFiPlazaWork *work) {
-    WiFiPlazaTalkSession_Reset(&work->unk_1c0);
+    WiFiPlazaTalkSession_Reset(&work->talk);
 }
 
 #pragma force_active on
 
 int WiFiPlazaWork_StartTalk(WiFiPlazaWork *work, int slot) {
-    if (work->unk_1c0.unk_0a) {
+    if (work->talk.role) {
         return 0;
     }
     if (ov45_0222A920(WiFiPlazaWork_GetPlayer(work, slot)) != 1) {
         return 0;
     }
-    work->unk_1c0.unk_04 = slot;
-    work->unk_1c0.unk_06 = 1;
-    work->unk_1c0.unk_0a = 1;
-    WiFiPlazaTalkSession_SetMessage(&work->unk_1c0, 0);
-    WiFiPlazaLobbyClient_SendToPlayer(0, WiFiPlazaLobbyClient_SlotToId(slot), &work->unk_1c0.unk_20, 4);
-    WiFiPlazaTalkSession_StartTimeout(&work->unk_1c0);
+    work->talk.partnerSlot = slot;
+    work->talk.state = 1;
+    work->talk.role = 1;
+    WiFiPlazaTalkSession_SetMessage(&work->talk, 0);
+    WiFiPlazaLobbyClient_SendToPlayer(0, WiFiPlazaLobbyClient_SlotToId(slot), &work->talk.sendMessage, 4);
+    WiFiPlazaTalkSession_StartTimeout(&work->talk);
     return 1;
 }
 
 void WiFiPlazaWork_AdvanceTalk(WiFiPlazaWork *work, int a1) {
     int flag = 0;
-    if (work->unk_1c0.unk_0a == 1) {
-        if (work->unk_1c0.unk_06 != 2) {
+    if (work->talk.role == 1) {
+        if (work->talk.state != 2) {
             flag = 1;
         }
-    } else if (work->unk_1c0.unk_0a == 2) {
-        if (work->unk_1c0.unk_06 != 3) {
+    } else if (work->talk.role == 2) {
+        if (work->talk.state != 3) {
             flag = 1;
         }
     }
     if (flag) {
-        WiFiPlazaWork_SendTalkEnd(work, WiFiPlazaLobbyClient_SlotToId(work->unk_1c0.unk_04));
+        WiFiPlazaWork_SendTalkEnd(work, WiFiPlazaLobbyClient_SlotToId(work->talk.partnerSlot));
         return;
     }
-    switch (work->unk_1c0.unk_0a) {
+    switch (work->talk.role) {
     case 1:
-        work->unk_1c0.unk_06 = 3;
+        work->talk.state = 3;
         break;
     case 2:
-        work->unk_1c0.unk_06 = 2;
+        work->talk.state = 2;
         break;
     default:
-        WiFiPlazaWork_SendTalkEnd(work, WiFiPlazaLobbyClient_SlotToId(work->unk_1c0.unk_04));
+        WiFiPlazaWork_SendTalkEnd(work, WiFiPlazaLobbyClient_SlotToId(work->talk.partnerSlot));
         return;
     }
-    WiFiPlazaTalkSession_SetMessage(&work->unk_1c0, a1);
-    WiFiPlazaLobbyClient_SendToPlayer(2, WiFiPlazaLobbyClient_SlotToId(work->unk_1c0.unk_04), &work->unk_1c0.unk_20, 4);
-    WiFiPlazaTalkSession_StartTimeout(&work->unk_1c0);
+    WiFiPlazaTalkSession_SetMessage(&work->talk, a1);
+    WiFiPlazaLobbyClient_SendToPlayer(2, WiFiPlazaLobbyClient_SlotToId(work->talk.partnerSlot), &work->talk.sendMessage, 4);
+    WiFiPlazaTalkSession_StartTimeout(&work->talk);
 }
 
 #pragma force_active reset
@@ -275,75 +275,75 @@ void WiFiPlazaWork_AdvanceTalk(WiFiPlazaWork *work, int a1) {
 void WiFiPlazaWork_CancelTalkRequest(WiFiPlazaWork *work) {
     int id;
 
-    if (work->unk_1c0.unk_06 != 0 && work->unk_1c0.unk_0a == 1) {
-        work->unk_1c0.unk_22 = 0;
-        id = WiFiPlazaLobbyClient_SlotToId(work->unk_1c0.unk_04);
-        WiFiPlazaLobbyClient_SendToPlayer(3, id, &work->unk_1c0.unk_20, 4);
-        WiFiPlazaTalkSession_Reset(&work->unk_1c0);
+    if (work->talk.state != 0 && work->talk.role == 1) {
+        work->talk.sendState = 0;
+        id = WiFiPlazaLobbyClient_SlotToId(work->talk.partnerSlot);
+        WiFiPlazaLobbyClient_SendToPlayer(3, id, &work->talk.sendMessage, 4);
+        WiFiPlazaTalkSession_Reset(&work->talk);
     }
 }
 
 void WiFiPlazaWork_EndTalk(WiFiPlazaWork *work) {
     int id;
 
-    if (work->unk_1c0.unk_06 != 0) {
-        id = WiFiPlazaLobbyClient_SlotToId(work->unk_1c0.unk_04);
-        work->unk_1c0.unk_06 = 4;
-        work->unk_1c0.unk_22 = 4;
-        WiFiPlazaLobbyClient_SendToPlayer(2, id, &work->unk_1c0.unk_20, 4);
+    if (work->talk.state != 0) {
+        id = WiFiPlazaLobbyClient_SlotToId(work->talk.partnerSlot);
+        work->talk.state = 4;
+        work->talk.sendState = 4;
+        WiFiPlazaLobbyClient_SendToPlayer(2, id, &work->talk.sendMessage, 4);
     }
 }
 
 BOOL WiFiPlazaWork_IsTalking(WiFiPlazaWork *work) {
-    return work->unk_1c0.unk_0a != 0;
+    return work->talk.role != 0;
 }
 
 BOOL WiFiPlazaWork_WasAskedToTalk(WiFiPlazaWork *work) {
-    return work->unk_1c0.unk_0a == 2;
+    return work->talk.role == 2;
 }
 
 u16 WiFiPlazaWork_GetTalkPartner(WiFiPlazaWork *work) {
-    return work->unk_1c0.unk_04;
+    return work->talk.partnerSlot;
 }
 
 u8 WiFiPlazaWork_IsFirstTalk(WiFiPlazaWork *work) {
-    return work->unk_1c0.unk_0b;
+    return work->talk.isFirstTalk;
 }
 
 u8 WiFiPlazaWork_GetTalkState(WiFiPlazaWork *work) {
-    return work->unk_1c0.unk_06;
+    return work->talk.state;
 }
 
 u16 ov45_0222B040(WiFiPlazaWork *work) {
-    return work->unk_1c0.unk_08;
+    return work->talk.partnerMessage;
 }
 
 BOOL WiFiPlazaWork_CanTalkWith(WiFiPlazaWork *work, u32 index) {
     GF_ASSERT(index < 20);
-    if (work->unk_1c0.unk_0c[index] >= 6) {
+    if (work->talk.talkCounts[index] >= 6) {
         return FALSE;
     }
     return TRUE;
 }
 
 BOOL WiFiPlazaWork_IsTalkOver(WiFiPlazaWork *work) {
-    if (work->unk_1c0.unk_06 == 4) {
+    if (work->talk.state == 4) {
         return TRUE;
     }
-    if (WiFiPlazaTalkSession_IsWithinTimeout(&work->unk_1c0) == FALSE) {
+    if (WiFiPlazaTalkSession_IsWithinTimeout(&work->talk) == FALSE) {
         return TRUE;
     }
     return FALSE;
 }
 
 void ov45_0222B094(WiFiPlazaWork *work) {
-    WiFiPlazaTalkSession_GetTimeoutCounter(&work->unk_1c0);
+    WiFiPlazaTalkSession_GetTimeoutCounter(&work->talk);
 }
 
 void ov45_0222B0A4(WiFiPlazaWork *work) {
-    work->unk_1c0.unk_07 = 1;
+    work->talk.unk_07 = 1;
 }
 
 u8 ov45_0222B0B0(WiFiPlazaWork *work) {
-    return work->unk_1c0.unk_07;
+    return work->talk.unk_07;
 }

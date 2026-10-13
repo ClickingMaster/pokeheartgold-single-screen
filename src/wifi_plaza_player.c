@@ -8,21 +8,21 @@
 #include "wifi_plaza_internal.h"
 
 void WiFiPlazaWork_PlayBGM(WiFiPlazaWork *work) {
-    if (work->unk_1fc.flag4 == 1 && work->unk_1fc.unk_0a <= 0) {
+    if (work->eventSchedule.flag4 == 1 && work->eventSchedule.paradeDelay <= 0) {
         Sound_SetSceneAndPlayBGM(0x15, 0x481, 0);
-        WiFiPlazaEventSchedule_ApplyVolume(&work->unk_1fc);
+        WiFiPlazaEventSchedule_ApplyVolume(&work->eventSchedule);
         return;
     }
     Sound_SetSceneAndPlayBGM(0x15, 0x47f, 0);
-    WiFiPlazaEventSchedule_ApplyVolume(&work->unk_1fc);
+    WiFiPlazaEventSchedule_ApplyVolume(&work->eventSchedule);
 }
 
 void WiFiPlazaWork_SetLowVolume(WiFiPlazaWork *work, int value) {
-    if (value == work->unk_1fc.unk_0d) {
+    if (value == work->eventSchedule.lowVolume) {
         return;
     }
-    work->unk_1fc.unk_0d = value;
-    WiFiPlazaEventSchedule_ApplyVolume(&work->unk_1fc);
+    work->eventSchedule.lowVolume = value;
+    WiFiPlazaEventSchedule_ApplyVolume(&work->eventSchedule);
 }
 
 int WiFiPlazaWork_GetOwnSlot(void *unused) {
@@ -58,7 +58,7 @@ WiFiPlazaPlayer *WiFiPlazaWork_GetPlayer(WiFiPlazaWork *work, u32 index) {
 
 WiFiPlazaPlayer *WiFiPlazaWork_GetMyPlayer(WiFiPlazaWork *work) {
     if (!WiFiPlazaProfile_IsChecksumValid(&work->profile, work->save)) {
-        work->unk_52c = 1;
+        work->hasError = 1;
     }
     return &work->profile.player;
 }
@@ -68,7 +68,7 @@ void ov45_0222A5E8(WiFiPlazaWork *work, int value) {
         GF_AssertFail();
     }
     if (!WiFiPlazaProfile_IsChecksumValid(&work->profile, work->save)) {
-        work->unk_52c = 1;
+        work->hasError = 1;
         return;
     }
     if (work->profile.player.unk_43 == value) {
@@ -76,10 +76,10 @@ void ov45_0222A5E8(WiFiPlazaWork *work, int value) {
     }
     if (value != 9 && WiFiPlazaWork_IsTalking(work) == 1) {
         if (WiFiPlazaWork_WasAskedToTalk(work) == 0) {
-            WiFiPlazaLobbyClient_SlotToId(work->unk_1c0.unk_04);
-            WiFiPlazaWork_SendTalkEnd(work, work->unk_1c0.unk_04);
+            WiFiPlazaLobbyClient_SlotToId(work->talk.partnerSlot);
+            WiFiPlazaWork_SendTalkEnd(work, work->talk.partnerSlot);
         }
-        WiFiPlazaTalkSession_Abort(&work->unk_1c0);
+        WiFiPlazaTalkSession_Abort(&work->talk);
     }
     switch (work->profile.player.unk_43) {
     case 2:
@@ -122,7 +122,7 @@ void ov45_0222A72C(WiFiPlazaWork *work, u32 value) {
         GF_AssertFail();
     }
     if (!WiFiPlazaProfile_IsChecksumValid(&work->profile, work->save)) {
-        work->unk_52c = 1;
+        work->hasError = 1;
         return;
     }
     work->profile.player.unk_41 = value;
@@ -138,7 +138,7 @@ void ov45_0222A770(WiFiPlazaWork *work, int a, int b) {
         GF_AssertFail();
     }
     if (!WiFiPlazaProfile_IsChecksumValid(&work->profile, work->save)) {
-        work->unk_52c = 1;
+        work->hasError = 1;
         return;
     }
     if (a < 18 && b < 18) {
@@ -159,13 +159,13 @@ void ov45_0222A7DC(WiFiPlazaWork *work, u32 a, u32 b) {
         GF_AssertFail();
     }
     if (!WiFiPlazaProfile_IsChecksumValid(&work->profile, work->save)) {
-        work->unk_52c = 1;
+        work->hasError = 1;
         return;
     }
     if (b < 3) {
-        work->profile.player.unk_8c.unk_00 = a;
-        work->profile.player.unk_8c.unk_04 = b;
-        work->unk_1fc.low = 1;
+        work->profile.player.survey.surveyId = a;
+        work->profile.player.survey.answer = b;
+        work->eventSchedule.low = 1;
         ov45_0222B118(work, 6);
         WiFiPlazaProfile_UpdateChecksum(&work->profile, work->save);
         WiFiPlazaWork_SendOwnRecord(work);
@@ -252,7 +252,7 @@ void *WiFiPlazaPlayer_GetHistoryValue(WiFiPlazaPlayer *player, u32 index) {
 }
 
 u32 WiFiPlazaPlayer_GetLobbyId(WiFiPlazaPlayer *player) {
-    return player->unk_00;
+    return player->lobbyId;
 }
 
 u32 WiFiPlazaPlayer_GetTrainerID(WiFiPlazaPlayer *player) {
@@ -263,7 +263,7 @@ int WiFiPlazaPlayer_GetAvatarIndex(WiFiPlazaPlayer *player) {
     u16 v = WiFiPlazaPlayer_GetAvatar(player);
     int i;
     for (i = 0; i < 16; i++) {
-        if (v == ov45_02254A84[i].unk_00) {
+        if (v == ov45_02254A84[i].avatar) {
             return i;
         }
     }
@@ -271,7 +271,7 @@ int WiFiPlazaPlayer_GetAvatarIndex(WiFiPlazaPlayer *player) {
 }
 
 void *WiFiPlazaPlayer_GetLocalTime(WiFiPlazaPlayer *player) {
-    return player->unk_1c;
+    return player->localTime;
 }
 
 u32 WiFiPlazaPlayer_GetGender(WiFiPlazaPlayer *player) {
@@ -279,10 +279,10 @@ u32 WiFiPlazaPlayer_GetGender(WiFiPlazaPlayer *player) {
     u32 i;
 
     if (player->gender >= 2) {
-        if (WiFiPlaza_IndexToAvatar(player->unk_3a) != 0xFFFF) {
+        if (WiFiPlaza_IndexToAvatar(player->avatarIndex) != 0xFFFF) {
             for (i = 0; i < 16; i++) {
-                if (ov45_02254A84[i].unk_00 == player->unk_3a) {
-                    result = ov45_02254A84[i].unk_00;
+                if (ov45_02254A84[i].avatar == player->avatarIndex) {
+                    result = ov45_02254A84[i].avatar;
                 }
             }
         } else {
@@ -320,7 +320,7 @@ u8 WiFiPlazaPlayer_GetRawLanguage(WiFiPlazaPlayer *player) {
 }
 
 u16 WiFiPlazaPlayer_GetAvatar(WiFiPlazaPlayer *player) {
-    u16 avatar = WiFiPlaza_IndexToAvatar(player->unk_3a);
+    u16 avatar = WiFiPlaza_IndexToAvatar(player->avatarIndex);
     if (avatar == 0xFFFF) {
         if (WiFiPlazaPlayer_GetGender(player) == 0) {
             return 3;
@@ -380,8 +380,8 @@ u16 ov45_0222AAEC(WiFiPlazaPlayer *player, u32 index) {
     return value;
 }
 
-void ov45_0222AB0C(WiFiPlazaPlayer *player, WiFiPlazaPlayerUnk8C *out) {
-    *out = player->unk_8c;
+void ov45_0222AB0C(WiFiPlazaPlayer *player, WiFiPlazaPlayerSurvey *out) {
+    *out = player->survey;
 }
 
 #pragma force_active reset

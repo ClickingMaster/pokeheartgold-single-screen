@@ -44,7 +44,7 @@ BOOL WiFiPlaza_Init(OverlayManager *man, int *state) {
         plaza->save = save;
         plaza->work = WiFiPlazaWork_New(save, HEAP_ID_111);
     }
-    plaza->apps = WiFiPlazaApps_New(args->unk_08, args->save, args->unk_00, plaza->work, HEAP_ID_111);
+    plaza->apps = WiFiPlazaApps_New(args->skipPrompt, args->save, args->loginTime, plaza->work, HEAP_ID_111);
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     plaza->vblankTask = SysTask_CreateOnVWaitQueue(WiFiPlaza_VBlankTask, plaza, 0);
@@ -106,11 +106,11 @@ WiFiPlazaWork *WiFiPlazaWork_New(SaveData *save, enum HeapID heapID) {
         work->profiles[i] = PlayerProfile_New(heapID);
     }
     WiFiPlazaProfile_InitFromSave(&work->profile, work->save, heapID);
-    WiFiPlazaTalkSession_Init(&work->unk_1c0);
+    WiFiPlazaTalkSession_Init(&work->talk);
     ov45_0222BD30(work->unk_1e8);
     WiFiPlazaLobbyClient_SetLobbyCommands(ov45_02254AC4, 8, work);
-    WiFiPlazaEventSchedule_Init(&work->unk_1fc);
-    ov45_0222C388(&work->unk_20c);
+    WiFiPlazaEventSchedule_Init(&work->eventSchedule);
+    ov45_0222C388(&work->groups);
     WiFiPlazaGroupWeights_Init(&work->groupWeights);
     WiFiPlazaWordSet_Init(&work->wordSet, heapID);
     WiFiPlazaHistory_Init(&work->history, work->save);
@@ -121,13 +121,13 @@ WiFiPlazaWork *WiFiPlazaWork_New(SaveData *save, enum HeapID heapID) {
 #pragma force_active reset
 
 void WiFiPlazaWork_Delete(WiFiPlazaWork *work) {
-    WiFiPlazaPlayerUnk8C vals;
+    WiFiPlazaPlayerSurvey vals;
     int i;
     void *x;
     ov45_0222AB0C(&work->profile.player, &vals);
     x = Save_PlazaSurvey_Get(work->save);
-    PlazaSurvey_SetSurveyId(x, vals.unk_00);
-    PlazaSurvey_SetAnswer(x, vals.unk_04);
+    PlazaSurvey_SetSurveyId(x, vals.surveyId);
+    PlazaSurvey_SetAnswer(x, vals.answer);
     WiFiPlaza_FreePlayerProfile(&work->unk_508.profile);
     WiFiPlazaWordSet_Free(&work->wordSet);
     WiFiPlazaLobbyClient_ClearLobbyCommands();
@@ -146,18 +146,18 @@ void WiFiPlazaWork_Update(WiFiPlazaWork *work) {
     s64 time;
     WiFiPlazaNews_Update(work->news);
     WiFiPlazaLobbyClient_GetTime(&time);
-    work->unk_d8 = time;
-    WiFiPlaza_SecondsToTime(&work->unk_d4, &time);
+    work->lobbyTime = time;
+    WiFiPlaza_SecondsToTime(&work->currentTime, &time);
     WiFiPlazaWork_CheckClosingTime(work);
-    WiFiPlazaTalkSession_UpdateTimeout(&work->unk_1c0);
+    WiFiPlazaTalkSession_UpdateTimeout(&work->talk);
     ov45_0222BD30(work->unk_1e8);
-    WiFiPlaza_ClearEventFlags(work->unk_f8);
-    WiFiPlazaEventSchedule_Update(&work->unk_1fc, work->unk_f8, &work->unk_20c, &work->timer);
+    WiFiPlaza_ClearEventFlags(work->changeFlags);
+    WiFiPlazaEventSchedule_Update(&work->eventSchedule, work->changeFlags, &work->groups, &work->timer);
     ov45_0222BCB8(&work->unk_3a0);
-    ov45_0222C3B0(&work->unk_20c);
+    ov45_0222C3B0(&work->groups);
     WiFiPlazaTimer_Update(&work->timer);
     if (WiFiPlazaHistory_IsCorrupt(&work->history) == 1) {
-        work->unk_52c = 1;
+        work->hasError = 1;
     }
 }
 
