@@ -13,7 +13,7 @@ void CallTask_ChangeMapToCoords(TaskManager *taskManager, u32 mapId, int warpId,
 void CallTask_ScriptWarp(TaskManager *taskManager, u32 mapId, int warpId, int x, int y, int direction);
 TaskManager *CallFieldTask_FlyWarp(FieldSystem *fieldSystem, u32 mapId, int warpId, int x, int y, int direction);
 void JumpTask_FlyWarp(TaskManager *taskManager, u32 mapId, int warpId, int x, int y, int direction);
-void JumpTask_FieldMoveWarp(TaskManager *taskManager, Location *location, int a2);
+void JumpTask_FieldMoveWarp(TaskManager *taskManager, Location *location, int kind);
 TaskManager *CallFieldTask_WarpPanel(FieldSystem *fieldSystem, u32 mapId, int warpId);
 void CallFieldTask_ExitUnionRoom(FieldSystem *fieldSystem);
 void CallTask_EnterUnionRoom(TaskManager *taskManager);

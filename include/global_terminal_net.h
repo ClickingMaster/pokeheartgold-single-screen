@@ -265,7 +265,7 @@ BOOL GlobalTerminalNet_RequestBoxDownload(GlobalTerminalNet *net, u8 arg);
 BOOL GlobalTerminalNet_RequestRankingsHeader(GlobalTerminalNet *net);
 BOOL GlobalTerminalNet_RequestRankings(GlobalTerminalNet *net, const GlobalTerminalNetRankingsSource *src, const GlobalTerminalNetPair *pairs);
 BOOL GlobalTerminalNet_RequestVideoUpload(GlobalTerminalNet *net, const void *header);
-BOOL GlobalTerminalNet_RequestVideoSearch(GlobalTerminalNet *net, u16 arg0, u8 arg1, u8 arg2, u8 arg3);
+BOOL GlobalTerminalNet_RequestVideoSearch(GlobalTerminalNet *net, u16 species, u8 facility, u8 country, u8 region);
 BOOL GlobalTerminalNet_RequestDefaultVideoSearchNoFrontier(GlobalTerminalNet *net);
 BOOL GlobalTerminalNet_RequestDefaultVideoSearch(GlobalTerminalNet *net);
 BOOL GlobalTerminalNet_RequestLatestVideos(GlobalTerminalNet *net);

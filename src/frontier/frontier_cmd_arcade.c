@@ -19,7 +19,7 @@
 
 static void GameBoardArgs_Set(GAME_BOARD_ARGS *args, ArcadeContext *data);
 static void BattleArcade_OnGameBoardExit(void *data);
-static void BattleArcade_CreateParticleEmitter(FrontierScriptContext *ctx, ArcadeContext *arcadeCtx, u32 a2);
+static void BattleArcade_CreateParticleEmitter(FrontierScriptContext *ctx, ArcadeContext *arcadeCtx, u32 resourceId);
 static void BattleArcade_ParticleEmitterCallback(SPLEmitter *emitter);
 static BOOL FrontierScriptNative_WaitArcadeLink(FrontierScriptContext *ctx);
 
@@ -38,9 +38,9 @@ BOOL FrtCmd_ArcadeAlloc(FrontierScriptContext *ctx) {
 }
 
 BOOL FrtCmd_ArcadeInit(FrontierScriptContext *ctx) {
-    u32 arg1 = FrontierScript_ReadVar(ctx);
-    void *arg0 = Frontier_GetData(ctx->frontierSystem->frontierWork);
-    BattleArcadeData_Init(arg0, arg1);
+    u32 resume = FrontierScript_ReadVar(ctx);
+    void *arcadeCtx = Frontier_GetData(ctx->frontierSystem->frontierWork);
+    BattleArcadeData_Init(arcadeCtx, resume);
     return FALSE;
 }
 
@@ -431,9 +431,9 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
     return FALSE;
 }
 
-static void BattleArcade_CreateParticleEmitter(FrontierScriptContext *ctx, ArcadeContext *arcadeCtx, u32 a2) {
+static void BattleArcade_CreateParticleEmitter(FrontierScriptContext *ctx, ArcadeContext *arcadeCtx, u32 resourceId) {
     FrontierMap *map = FrontierSystem_GetFrontierMap(ctx->frontierSystem);
-    ParticleSystem_CreateEmitterWithParam(FrontierParticles_GetSystem(map->particleManager, 0), a2, BattleArcade_ParticleEmitterCallback, arcadeCtx);
+    ParticleSystem_CreateEmitterWithParam(FrontierParticles_GetSystem(map->particleManager, 0), resourceId, BattleArcade_ParticleEmitterCallback, arcadeCtx);
 }
 
 extern const VecFx32 ov80_0223BE6C; //{-1, 0, 0}
@@ -511,10 +511,10 @@ BOOL FrtCmd_ArcadeSetEvent(FrontierScriptContext *ctx) {
 
 BOOL FrtCmd_198(FrontierScriptContext *ctx) {
     FrontierMap *map = FrontierSystem_GetFrontierMap(ctx->frontierSystem);
-    u32 var0 = FrontierScript_ReadVar(ctx);
-    u32 var1 = FrontierScript_ReadVar(ctx);
-    u32 var2 = FrontierScript_ReadVar(ctx);
+    u32 opponent = FrontierScript_ReadVar(ctx);
+    u32 slot = FrontierScript_ReadVar(ctx);
+    u32 visible = FrontierScript_ReadVar(ctx);
     ArcadeContext *arcadeCtx = Frontier_GetData(ctx->frontierSystem->frontierWork);
-    BattleArcade_SetItemIconVisible(arcadeCtx, map, var0, var1, var2);
+    BattleArcade_SetItemIconVisible(arcadeCtx, map, opponent, slot, visible);
     return FALSE;
 }

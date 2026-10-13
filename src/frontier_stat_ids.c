@@ -1,9 +1,9 @@
 #include "frontier_stat_ids.h"
 
-u32 BattleFactory_GetWinStreakStat(u32 param0, u32 param1) {
+u32 BattleFactory_GetWinStreakStat(u32 levelMode, u32 type) {
     u32 base;
 
-    switch (param1) {
+    switch (type) {
     case 0:
         base = 0xB;
         break;
@@ -18,13 +18,13 @@ u32 BattleFactory_GetWinStreakStat(u32 param0, u32 param1) {
         break;
     }
 
-    return base + param0 * 4;
+    return base + levelMode * 4;
 }
 
-u32 BattleFactory_GetBestStreakStat(u32 param0, u32 param1) {
+u32 BattleFactory_GetBestStreakStat(u32 levelMode, u32 type) {
     u32 base;
 
-    switch (param1) {
+    switch (type) {
     case 0:
         base = 0xA;
         break;
@@ -39,13 +39,13 @@ u32 BattleFactory_GetBestStreakStat(u32 param0, u32 param1) {
         break;
     }
 
-    return base + param0 * 4;
+    return base + levelMode * 4;
 }
 
-u32 BattleFactory_GetTradeCountStat(u32 param0, u32 param1) {
+u32 BattleFactory_GetTradeCountStat(u32 levelMode, u32 type) {
     u32 base;
 
-    switch (param1) {
+    switch (type) {
     case 0:
         base = 0xD;
         break;
@@ -60,13 +60,13 @@ u32 BattleFactory_GetTradeCountStat(u32 param0, u32 param1) {
         break;
     }
 
-    return base + param0 * 4;
+    return base + levelMode * 4;
 }
 
-u32 BattleFactory_GetBestTradeCountStat(u32 param0, u32 param1) {
+u32 BattleFactory_GetBestTradeCountStat(u32 levelMode, u32 type) {
     u32 base;
 
-    switch (param1) {
+    switch (type) {
     case 0:
         base = 0xC;
         break;
@@ -81,13 +81,13 @@ u32 BattleFactory_GetBestTradeCountStat(u32 param0, u32 param1) {
         break;
     }
 
-    return base + param0 * 4;
+    return base + levelMode * 4;
 }
 
-u32 BattleHall_GetTypeRankStat(u32 param0, u32 param1) {
+u32 BattleHall_GetTypeRankStat(u32 type, u32 cell) {
     u32 base;
 
-    switch (param0) {
+    switch (type) {
     case 0:
         base = 0x25;
         break;
@@ -102,13 +102,13 @@ u32 BattleHall_GetTypeRankStat(u32 param0, u32 param1) {
         break;
     }
 
-    return base + param1 / 2;
+    return base + cell / 2;
 }
 
-u32 BattleHall_GetWinStreakStat(u32 param0) {
+u32 BattleHall_GetWinStreakStat(u32 type) {
     u32 ret;
 
-    switch (param0) {
+    switch (type) {
     case 0:
         ret = 0x23;
         break;
@@ -126,10 +126,10 @@ u32 BattleHall_GetWinStreakStat(u32 param0) {
     return ret;
 }
 
-u32 BattleHall_GetBestStreakStat(u32 param0) {
+u32 BattleHall_GetBestStreakStat(u32 type) {
     u32 ret;
 
-    switch (param0) {
+    switch (type) {
     case 0:
         ret = 0x22;
         break;
@@ -147,10 +147,10 @@ u32 BattleHall_GetBestStreakStat(u32 param0) {
     return ret;
 }
 
-u32 BattleHall_GetSpeciesStat(u32 param0) {
+u32 BattleHall_GetSpeciesStat(u32 type) {
     u32 ret;
 
-    switch (param0) {
+    switch (type) {
     case 0:
         ret = 0x24;
         break;
@@ -168,10 +168,10 @@ u32 BattleHall_GetSpeciesStat(u32 param0) {
     return ret;
 }
 
-u32 BattleHall_GetSpeciesRecordsType(u32 param0) {
+u32 BattleHall_GetSpeciesRecordsType(u32 type) {
     u32 ret;
 
-    switch (param0) {
+    switch (type) {
     case 0:
         ret = 0;
         break;
@@ -190,10 +190,10 @@ u32 BattleHall_GetSpeciesRecordsType(u32 param0) {
     return ret;
 }
 
-u32 BattleCastle_GetRankStat(u32 param0, u32 param1) {
+u32 BattleCastle_GetRankStat(u32 type, u32 index) {
     u32 base;
 
-    switch (param0) {
+    switch (type) {
     case 0:
         base = 0x4B;
         break;
@@ -208,13 +208,13 @@ u32 BattleCastle_GetRankStat(u32 param0, u32 param1) {
         break;
     }
 
-    return base + param1;
+    return base + index;
 }
 
-u32 BattleCastle_GetWinStreakStat(u32 param0) {
+u32 BattleCastle_GetWinStreakStat(u32 type) {
     u32 ret;
 
-    switch (param0) {
+    switch (type) {
     case 0:
         ret = 0x47;
         break;
@@ -232,10 +232,10 @@ u32 BattleCastle_GetWinStreakStat(u32 param0) {
     return ret;
 }
 
-u32 BattleCastle_GetBestStreakStat(u32 param0) {
+u32 BattleCastle_GetBestStreakStat(u32 type) {
     u32 ret;
 
-    switch (param0) {
+    switch (type) {
     case 0:
         ret = 0x46;
         break;
@@ -253,10 +253,10 @@ u32 BattleCastle_GetBestStreakStat(u32 param0) {
     return ret;
 }
 
-u32 BattleCastle_GetPointsStat(u32 param0) {
+u32 BattleCastle_GetPointsStat(u32 type) {
     u32 ret;
 
-    switch (param0) {
+    switch (type) {
     case 0:
         ret = 0x48;
         break;
@@ -274,10 +274,10 @@ u32 BattleCastle_GetPointsStat(u32 param0) {
     return ret;
 }
 
-u32 BattleCastle_GetSpentPointsStat(u32 param0) {
+u32 BattleCastle_GetSpentPointsStat(u32 type) {
     u32 ret;
 
-    switch (param0) {
+    switch (type) {
     case 0:
         ret = 0x49;
         break;
@@ -295,10 +295,10 @@ u32 BattleCastle_GetSpentPointsStat(u32 param0) {
     return ret;
 }
 
-u32 BattleCastle_GetBestStreakPointsStat(u32 param0) {
+u32 BattleCastle_GetBestStreakPointsStat(u32 type) {
     u32 ret;
 
-    switch (param0) {
+    switch (type) {
     case 0:
         ret = 0x4A;
         break;

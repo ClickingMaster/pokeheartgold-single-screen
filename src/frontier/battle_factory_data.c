@@ -45,12 +45,12 @@ void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
 void Frontier_AddRentalMonToParty(SaveData *saveData, Party *party, Pokemon *mon);
 int BattleFactory_GetPartySize(int type);
 // opponent Pokemon count of a type (defined returning int; the count is read as a u8 here)
-u8 BattleFactory_GetOpponentMonCount(int type, int a1);
-void BattleFactory_GetRoundTrainerIds(u8 type, u16 a1, u16 *trainerIds, int count);
-void BattleFactory_GenerateRentalSets(u16 a0, u8 levelMode, u16 *setIds, FrontierMon *mons, u8 *ivs, u32 *personalities, u16 tradeCount, u16 *excludedSetIds, u16 *excludedItems);
+u8 BattleFactory_GetOpponentMonCount(int type, int both);
+void BattleFactory_GetRoundTrainerIds(u8 type, u16 round, u16 *trainerIds, int count);
+void BattleFactory_GenerateRentalSets(u16 round, u8 levelMode, u16 *setIds, FrontierMon *mons, u8 *ivs, u32 *personalities, u16 tradeCount, u16 *excludedSetIds, u16 *excludedItems);
 void BattleFactory_GenerateTrainerSets(int count, u16 trainerId, u8 levelMode, FrontierMon *candidates, u16 *setIds, FrontierMon *mons, u8 *ivs, u32 *personalities, int candidateCount);
 const void *BattleFactory_GetTrainerSetRange(u16 trainerId, u8 levelMode);
-int BattleFactory_PickSetIds(const u16 *species, const u16 *items, int count, int num, u16 *out, enum HeapID heapId, const void *range, u16 a7, u8 *ivs);
+int BattleFactory_PickSetIds(const u16 *species, const u16 *items, int count, int num, u16 *out, enum HeapID heapId, const void *range, u16 tradeCount, u8 *ivs);
 int BattleFactory_GetMonLevel(BattleFactoryData *data);
 BOOL BattleFactory_IsMultiType(int type);
 u16 BattleFactory_GetRound(BattleFactoryData *data);

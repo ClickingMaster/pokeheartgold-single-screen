@@ -26,7 +26,7 @@ enum IntroScene2State {
 
 static void IntroMovie_Scene2_VBlankCB(void *pVoid);
 static void IntroMovie_Scene2_Init(IntroMovieOverlayData *data, IntroMovieScene2Data *sceneData);
-static BOOL IntroMovie_Scene2_Main(IntroMovieOverlayData *data, IntroMovieScene2Data *sceneData, int a2);
+static BOOL IntroMovie_Scene2_Main(IntroMovieOverlayData *data, IntroMovieScene2Data *sceneData, int totalFrames);
 static void IntroMovie_Scene2_Exit(IntroMovieOverlayData *data, IntroMovieScene2Data *sceneData);
 static void IntroMovie_Scene2_InitFlyoverGrassBgScrollAnims(IntroMovieOverlayData *data, BgConfig *bgConfig);
 static void IntroMovie_Scene2_InitBgs(IntroMovieOverlayData *data);

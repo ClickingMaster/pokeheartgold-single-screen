@@ -131,7 +131,7 @@ FS_EXTERN_OVERLAY(OVY_111);
 FS_EXTERN_OVERLAY(OVY_113);
 FS_EXTERN_OVERLAY(view_rankings_app);
 
-static PartyMenuArgs *PartyMenu_CreateArgs(enum HeapID heapID, FieldSystem *fieldSystem, int a2, PartyMenuContext context);
+static PartyMenuArgs *PartyMenu_CreateArgs(enum HeapID heapID, FieldSystem *fieldSystem, int panelLayout, PartyMenuContext context);
 static BOOL Task_OpenPartyMenuForUnionRoomBattleSelect(TaskManager *taskman);
 static BOOL Task_EasyChat(TaskManager *taskman);
 static void PokegearPhone_LaunchApp_Impl(FieldSystem *fieldSystem, PokegearArgs *args);
@@ -235,14 +235,14 @@ void PokemonSummary_LearnForget_LaunchApp(FieldSystem *fieldSystem, PokemonSumma
     FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_PokemonSummary, args);
 }
 
-static PartyMenuArgs *PartyMenu_CreateArgs(enum HeapID heapID, FieldSystem *fieldSystem, int a2, PartyMenuContext context) {
+static PartyMenuArgs *PartyMenu_CreateArgs(enum HeapID heapID, FieldSystem *fieldSystem, int panelLayout, PartyMenuContext context) {
     PartyMenuArgs *partyMenu = Heap_Alloc(heapID, sizeof(PartyMenuArgs));
     MI_CpuClearFast(partyMenu, sizeof(PartyMenuArgs));
     partyMenu->party = SaveArray_Party_Get(fieldSystem->saveData);
     partyMenu->bag = Save_Bag_Get(fieldSystem->saveData);
     partyMenu->mailbox = Save_Mailbox_Get(fieldSystem->saveData);
     partyMenu->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
-    partyMenu->panelLayout = a2;
+    partyMenu->panelLayout = panelLayout;
     partyMenu->context = context;
     partyMenu->fieldSystem = fieldSystem;
     partyMenu->menuInputStatePtr = &fieldSystem->menuInputState;
@@ -355,7 +355,7 @@ PartyMenuArgs *PartyMenu_LaunchApp_Unk5(FieldSystem *fieldSystem, int partySlot)
     return args;
 }
 
-PokemonSummaryArgs *PokemonSummary_CreateArgs(FieldSystem *fieldSystem, enum HeapID heapID, int a2) {
+PokemonSummaryArgs *PokemonSummary_CreateArgs(FieldSystem *fieldSystem, enum HeapID heapID, int mode) {
     static const u8 sPartySummaryPages[] = { 0x00, 0x01, 0x02, 0x03, 0x04 };
     SaveData *saveData = fieldSystem->saveData;
     PokemonSummaryArgs *args = Heap_AllocAtEnd(heapID, sizeof(PokemonSummaryArgs));
@@ -366,7 +366,7 @@ PokemonSummaryArgs *PokemonSummary_CreateArgs(FieldSystem *fieldSystem, enum Hea
     args->partySlot = 0;
     args->partyCount = Party_GetCount(args->party);
     args->moveToLearn = MOVE_NONE;
-    args->mode = a2;
+    args->mode = mode;
     args->natDexEnabled = SaveArray_IsNatDexEnabled(saveData);
     args->unk2C = sub_02088288(saveData);
     args->ribbons = Save_SpecialRibbons_Get(saveData);
@@ -456,25 +456,25 @@ static BOOL Task_EasyChat(TaskManager *taskman) {
     return FALSE;
 }
 
-void CallTask_EasyChat(TaskManager *taskman, int a1, UnkStruct_0203E8C8 *a2, u16 *a3, u16 *a4) {
+void CallTask_EasyChat(TaskManager *taskman, int kind, UnkStruct_0203E8C8 *a2, u16 *word1, u16 *word2) {
     EasyChatArgs *args;
 
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskman);
     EasyChatTaskData *data = Heap_Alloc(HEAP_ID_FIELD3, sizeof(EasyChatTaskData));
     data->result = a2;
-    data->retVar0 = a3;
-    data->retVar1 = a4;
-    data->mode = a1;
-    switch (a1) {
+    data->retVar0 = word1;
+    data->retVar1 = word2;
+    data->mode = kind;
+    switch (kind) {
     default:
         args = EasyChat_CreateArgs(0, 0, fieldSystem->saveData, &fieldSystem->menuInputState, HEAP_ID_FIELD3);
         data->easyChat = args;
-        EasyChatArgs_SetWord(args, *a3);
+        EasyChatArgs_SetWord(args, *word1);
         break;
     case 1:
         args = EasyChat_CreateArgs(1, 0, fieldSystem->saveData, &fieldSystem->menuInputState, HEAP_ID_FIELD3);
         data->easyChat = args;
-        EasyChatArgs_SetWords(args, *a3, *a4);
+        EasyChatArgs_SetWords(args, *word1, *word2);
         break;
     case 2:
     case 3:
@@ -483,7 +483,7 @@ void CallTask_EasyChat(TaskManager *taskman, int a1, UnkStruct_0203E8C8 *a2, u16
         args = EasyChat_CreateArgs(2, 0, fieldSystem->saveData, &fieldSystem->menuInputState, HEAP_ID_FIELD3);
         data->easyChat = args;
         sub_02090D40(args);
-        MailMessage *mailMessage = Save_Frontier_GetTowerMessage(fieldSystem->saveData, (u8)(a1 - 2));
+        MailMessage *mailMessage = Save_Frontier_GetTowerMessage(fieldSystem->saveData, (u8)(kind - 2));
         EasyChatArgs_SetMailMessage(data->easyChat, mailMessage);
         EasyChatArgs_SetCancelled(data->easyChat);
     }
@@ -800,9 +800,9 @@ static DressUpArgs *DressUp_CreateArgs(enum HeapID heapID, SaveData *saveData, i
     memset(ptr, 0, sizeof(DressUpArgs));
     ptr->mon = Party_GetMonByIndex(SaveArray_Party_Get(saveData), partyIdx);
     SaveFashionData *fashionSave = Save_FashionData_Get(saveData);
-    SaveFashionDataSub *var1 = Save_FashionData_GetEntry(fashionSave, 0);
+    SaveFashionDataSub *fashionEntry = Save_FashionData_GetEntry(fashionSave, 0);
     FashionCase *fashionCase = Save_FashionData_GetFashionCase(fashionSave);
-    ptr->fashionEntry = var1;
+    ptr->fashionEntry = fashionEntry;
     ptr->fashionCase = fashionCase;
     ptr->options = Save_PlayerData_GetOptionsAddr(saveData);
     ptr->gameStats = Save_GameStats_Get(saveData);
@@ -840,10 +840,10 @@ static BOOL Task_DressUp(TaskManager *taskman) {
     return FALSE;
 }
 
-void CallTask_DressUp(TaskManager *taskman, u16 *ret, SaveData *saveData, u16 a3, u16 a4) {
+void CallTask_DressUp(TaskManager *taskman, u16 *ret, SaveData *saveData, u16 partyIdx, u16 a4) {
     DressUpTaskData *data = Heap_Alloc(HEAP_ID_FIELD3, sizeof(DressUpTaskData));
     memset(data, 0, sizeof(DressUpTaskData));
-    data->args = DressUp_CreateArgs(HEAP_ID_FIELD3, saveData, a3, &data->saved, a4);
+    data->args = DressUp_CreateArgs(HEAP_ID_FIELD3, saveData, partyIdx, &data->saved, a4);
     data->retVar = ret;
     TaskManager_Call(taskman, Task_DressUp, data);
 }
@@ -1050,9 +1050,9 @@ static BOOL Task_NamingScreen(TaskManager *taskman) {
                 data->args->noInput = 1;
             }
         } else if (args->kind == 5) {
-            u16 *var2 = String_cstr(args->nameInputString);
+            u16 *groupName = String_cstr(args->nameInputString);
             SAV_FRIEND_GRP *friendGroup = Save_FriendGroup_Get(fieldSystem->saveData);
-            if (Save_FriendGroup_IsGroupNameTaken(friendGroup, var2)) {
+            if (Save_FriendGroup_IsGroupNameTaken(friendGroup, groupName)) {
                 data->args->noInput = 2;
             }
         }
@@ -1286,12 +1286,12 @@ CertificatesArgs *Certificates_LaunchApp(FieldSystem *fieldSystem, enum HeapID h
     return args;
 }
 
-FrontierRecordsAppArgs *FrontierRecords_LaunchApp(FieldSystem *fieldSystem, u8 a1, u8 a2, u16 a3, enum HeapID heapID) {
+FrontierRecordsAppArgs *FrontierRecords_LaunchApp(FieldSystem *fieldSystem, u8 mode, u8 facility, u16 species, enum HeapID heapID) {
     static OverlayManagerTemplate sOverlayTemplate_FrontierRecords = { FrontierRecordsApp_Init, FrontierRecordsApp_Main, FrontierRecordsApp_Exit, FS_OVERLAY_ID(OVY_86) };
     FrontierRecordsAppArgs *args = Heap_Alloc(heapID, sizeof(FrontierRecordsAppArgs));
-    args->mode = a1;
-    args->facility = a2;
-    args->species = a3;
+    args->mode = mode;
+    args->facility = facility;
+    args->species = species;
     args->saveData = fieldSystem->saveData;
     FieldSystem_LaunchApplication(fieldSystem, &sOverlayTemplate_FrontierRecords, args);
     return args;

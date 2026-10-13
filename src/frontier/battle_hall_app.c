@@ -152,7 +152,7 @@ extern const WindowTemplate gBattleHallAppWindowTemplates[4];
 // Frontier overlay (80) helpers
 u8 BattleHall_GetCellType(u8 index);
 u32 BattleHall_IsMultiType(u8 mode);
-void Frontier_BufferPartnerName(void *a0, u32 a1);
+void Frontier_BufferPartnerName(void *msgFmt, u32 field);
 
 // Not declared by the owners' headers yet
 u32 HallTypeRanks_Get(u8 type, void *hallRecords);

@@ -154,8 +154,8 @@ void ResetSystem(void) {
     OS_ResetSystem(0);
 }
 
-void FrontierFieldSystem_ClearSavedChallenge(u32 a0) {
-    BattleTowerChallenge_Clear(a0);
+void FrontierFieldSystem_ClearSavedChallenge(u32 record) {
+    BattleTowerChallenge_Clear(record);
 }
 
 u32 FrontierFieldSystem_GetSavedChallenge(u32 record) {
@@ -308,16 +308,16 @@ void FrontierFieldSystem_Free(FrontierFieldSystem *frontierFsys) {
     Heap_Free(frontierFsys);
 }
 
-void FrontierFieldSystem_StartPartySelect(FrontierFieldSystem *frontierFsys, TaskManager *taskManager, void *a2) {
-    TaskManager_CallFrontierPartySelect(taskManager, a2, 17, 0, frontierFsys->numMons, frontierFsys->numMons, 100, 0);
+void FrontierFieldSystem_StartPartySelect(FrontierFieldSystem *frontierFsys, TaskManager *taskManager, void *runningApp) {
+    TaskManager_CallFrontierPartySelect(taskManager, runningApp, 17, 0, frontierFsys->numMons, frontierFsys->numMons, 100, 0);
 }
 
-BOOL FrontierFieldSystem_ReadPartySelection(FrontierFieldSystem *frontierFsys, void **a1, SaveData *saveData) {
+BOOL FrontierFieldSystem_ReadPartySelection(FrontierFieldSystem *frontierFsys, void **runningApp, SaveData *saveData) {
     Party *party;
-    u8 *unk = *a1;
+    u8 *unk = *runningApp;
     if (unk[0x27] != 0 || unk[0x26] == 7) {
-        Heap_Free(*a1);
-        *a1 = NULL;
+        Heap_Free(*runningApp);
+        *runningApp = NULL;
         return FALSE;
     }
     party = SaveArray_Party_Get(saveData);
@@ -327,8 +327,8 @@ BOOL FrontierFieldSystem_ReadPartySelection(FrontierFieldSystem *frontierFsys, v
         frontierFsys->partyMonSpecies[i] = GetMonData(mon, MON_DATA_SPECIES, NULL);
         frontierFsys->partyMonItems[i] = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
     }
-    Heap_Free(*a1);
-    *a1 = NULL;
+    Heap_Free(*runningApp);
+    *runningApp = NULL;
     return TRUE;
 }
 
@@ -514,8 +514,8 @@ void FrontierFieldSystem_GenerateStatTrainers(FrontierFieldSystem *frontierFsys)
     }
 }
 
-u32 FrontierFieldSystem_GetTrainerOverworld(FrontierFieldSystem *frontierFsys, u32 a1) {
-    GetFrontierTrainerOverworld(frontierFsys->opponents[a1].trainerClass);
+u32 FrontierFieldSystem_GetTrainerOverworld(FrontierFieldSystem *frontierFsys, u32 index) {
+    GetFrontierTrainerOverworld(frontierFsys->opponents[index].trainerClass);
 }
 
 u32 FrontierFieldSystem_GetBattleTowerMode(FrontierFieldSystem *frontierFsys) {
@@ -570,9 +570,9 @@ BOOL FrontierFieldSystem_0204B0E0(FrontierFieldSystem *frontierFsys, SaveData *s
     return TRUE;
 }
 
-u32 FrontierFieldSystem_WifiRankAction(FrontierFieldSystem *frontierFsys, SaveData *saveData, u32 a2) {
+u32 FrontierFieldSystem_WifiRankAction(FrontierFieldSystem *frontierFsys, SaveData *saveData, u32 action) {
     FrontierData *frontierData = Save_FrontierData_Get(saveData);
-    switch (a2) {
+    switch (action) {
     case 0:
         return FrontierData_WifiRankAction(frontierData, 0);
     case 1:
@@ -662,12 +662,12 @@ u16 FrontierFieldSystem_InitChallengeRandom(FrontierFieldSystem *frontierFsys, S
     return frontierFsys->randomState / 0xffff; // unk08 is a u32, so this should return between 0-3.
 }
 
-static BOOL TryGiveTowerRibbons(SaveData *saveData, u32 ribbon, FrontierFieldSystem *a2) {
+static BOOL TryGiveTowerRibbons(SaveData *saveData, u32 ribbon, FrontierFieldSystem *frontierFsys) {
     u8 value = TRUE;
     Party *party = SaveArray_Party_Get(saveData);
     u8 count = 0;
-    for (s32 i = 0; i < a2->numMons; i++) {
-        Pokemon *mon = Party_GetMonByIndex(party, a2->partyMonIndexes[i]);
+    for (s32 i = 0; i < frontierFsys->numMons; i++) {
+        Pokemon *mon = Party_GetMonByIndex(party, frontierFsys->partyMonIndexes[i]);
         if (GetMonData(mon, ribbon, NULL) == FALSE) {
             SetMonData(mon, ribbon, &value);
             count++;

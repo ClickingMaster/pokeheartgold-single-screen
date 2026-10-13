@@ -114,7 +114,7 @@ typedef struct GlobalTerminalConnectWork {
 
 // no public header
 void GF_TouchpadResetSampling(void);
-void GF_TouchpadStartSampling(int a0);
+void GF_TouchpadStartSampling(int frequency);
 void GF_TouchpadStopSampling(void);
 void DWC_GetLastError(void *out);
 int DWC_GetLastErrorEx(int *errorCode, u32 *errorType);

@@ -29,27 +29,27 @@ extern const FieldTerrainQueries gTerrainQueries_Bdhc;
 extern const u16 _020FC60C[];
 extern const FieldTerrainQueries gTerrainQueries_Simple;
 
-int Terrain_AbsDiff(int a0, int a1);
+int Terrain_AbsDiff(int lhs, int rhs);
 int FieldSystem_GetHeightStep(FieldSystem *fieldSystem, VecFx32 *playerPos, int x, int z, u8 *outKind);
 
 extern int TileIndex_GetQuadrant(int idx, int stride);
 extern int MapLoadManager_GetMapSlotOfMatrixIndex(int chunkIdx, int a1, MapLoadManager *mapLoadManager);
 extern void *MapLoadManager_GetBdhc(MapLoadManager *mapLoadManager, u8 idx);
 extern int Bdhc_GetHeight(int a0, int a1, fx32 x, fx32 z, void *a4, fx32 *outY);
-int Terrain_CalcHeight(FieldSystem *fieldSystem, int a1, int a2, fx32 x, fx32 z, u8 *outKind);
-int Terrain_GetHeight_Bdhc(FieldSystem *fieldSystem, int a1, fx32 x, fx32 z, u8 *outKind);
-int Terrain_CalcHeightWithMode(FieldSystem *fieldSystem, int a1, int a2, fx32 x, fx32 z, u8 *outKind);
-int Terrain_GetHeight_Simple(FieldSystem *fieldSystem, int a1, fx32 x, fx32 z, u8 *outKind);
+int Terrain_CalcHeight(FieldSystem *fieldSystem, int objectHeightMode, int objectHeight, fx32 x, fx32 z, u8 *outKind);
+int Terrain_GetHeight_Bdhc(FieldSystem *fieldSystem, int objectHeight, fx32 x, fx32 z, u8 *outKind);
+int Terrain_CalcHeightWithMode(FieldSystem *fieldSystem, int objectHeightMode, int objectHeight, fx32 x, fx32 z, u8 *outKind);
+int Terrain_GetHeight_Simple(FieldSystem *fieldSystem, int objectHeight, fx32 x, fx32 z, u8 *outKind);
 BOOL Terrain_GetAttributes_Loaded(FieldSystem *fieldSystem, int x, int z, u16 *outAttr);
 BOOL Terrain_GetAttributes_Simple(FieldSystem *fieldSystem, int x, int z, u16 *outAttr);
 u8 sub_020548EC(FieldSystem *fieldSystem, int x, int z);
-int FieldSystem_GetTerrainHeight(FieldSystem *fieldSystem, int a1, fx32 x, fx32 z, u8 *outKind);
+int FieldSystem_GetTerrainHeight(FieldSystem *fieldSystem, int objectHeight, fx32 x, fx32 z, u8 *outKind);
 
 extern BOOL MapLoadManager_GetMapSlotAt(MapLoadManager *mapLoadManager, int x, int z, u8 *outIdx);
 extern SoundplateStruct *MapLoadManager_GetSoundplates(MapLoadManager *mapLoadManager, u8 idx);
 extern int MapLoadManager_GetMapMatrixIndex(MapLoadManager *mapLoadManager, u8 idx);
-u32 FieldSystem_CheckCollisionHeightAndGimmick(FieldSystem *fieldSystem, VecFx32 *playerPos, u32 x, u32 y, u32 *a4);
-void Terrain_MakeTileRect(int a0, int a1, int a2, int a3, int a4, int a5, fx32 *out);
+u32 FieldSystem_CheckCollisionHeightAndGimmick(FieldSystem *fieldSystem, VecFx32 *playerPos, u32 x, u32 y, u32 *outSlope);
+void Terrain_MakeTileRect(int x, int z, int offsetX, int offsetZ, int width, int depth, fx32 *out);
 BOOL MapProp_IsInRect(MapProp *mapProp, fx32 *rect, VecFx32 *offset);
 BOOL FieldSystem_FindMapPropInRect(FieldSystem *fieldSystem, int buildModel, fx32 *rect, MapProp **outProp);
 BOOL FieldSystem_FindMapPropOfModelsInRect(FieldSystem *fieldSystem, int *models, u32 count, fx32 *rect, MapProp **outProp, int *outModel);
@@ -60,11 +60,11 @@ void Terrain_GetChunkOrigin(int idx, int width, VecFx32 *pos);
 BOOL sub_02054E00(u16 a0);
 BOOL sub_02054E20(u16 a0);
 
-int Terrain_AbsDiff(int a0, int a1) {
-    if (a0 >= a1) {
-        return a0 - a1;
+int Terrain_AbsDiff(int lhs, int rhs) {
+    if (lhs >= rhs) {
+        return lhs - rhs;
     }
-    return a1 - a0;
+    return rhs - lhs;
 }
 
 #define MAP_TILES_COUNT_X    32
@@ -166,15 +166,15 @@ int Terrain_CalcHeight(FieldSystem *fieldSystem, int objectHeightMode, int objec
     return newObjectHeight;
 }
 
-int Terrain_GetHeight_Bdhc(FieldSystem *fieldSystem, int a1, fx32 x, fx32 z, u8 *outKind) {
-    return Terrain_CalcHeight(fieldSystem, 0, a1, x, z, outKind);
+int Terrain_GetHeight_Bdhc(FieldSystem *fieldSystem, int objectHeight, fx32 x, fx32 z, u8 *outKind) {
+    return Terrain_CalcHeight(fieldSystem, 0, objectHeight, x, z, outKind);
 }
 
-int Terrain_CalcHeightWithMode(FieldSystem *fieldSystem, int a1, int a2, fx32 x, fx32 z, u8 *outKind) {
-    return Terrain_CalcHeight(fieldSystem, a1, a2, x, z, outKind);
+int Terrain_CalcHeightWithMode(FieldSystem *fieldSystem, int objectHeightMode, int objectHeight, fx32 x, fx32 z, u8 *outKind) {
+    return Terrain_CalcHeight(fieldSystem, objectHeightMode, objectHeight, x, z, outKind);
 }
 
-int Terrain_GetHeight_Simple(FieldSystem *fieldSystem, int a1, fx32 x, fx32 z, u8 *outKind) {
+int Terrain_GetHeight_Simple(FieldSystem *fieldSystem, int objectHeight, fx32 x, fx32 z, u8 *outKind) {
     BOOL ok = MapLoadManager_GetMapSlotAt(fieldSystem->mapLoadManager, x / 0x10000, z / 0x10000, NULL);
     if (outKind != NULL) {
         *outKind = ok ? 1 : 0;
@@ -210,11 +210,11 @@ SoundplateStruct *FieldSystem_GetSoundplateAt(FieldSystem *fieldSystem, int x, i
     return MapLoadManager_GetSoundplates(mapLoadManager, idx);
 }
 
-void FieldSystem_SetTerrainQueries(void **a0, int a1) {
-    if (a1 == 0) {
-        *a0 = (void *)&gTerrainQueries_Bdhc;
-    } else if (a1 == 1) {
-        *a0 = (void *)&gTerrainQueries_Simple;
+void FieldSystem_SetTerrainQueries(void **queries, int mode) {
+    if (mode == 0) {
+        *queries = (void *)&gTerrainQueries_Bdhc;
+    } else if (mode == 1) {
+        *queries = (void *)&gTerrainQueries_Simple;
     } else {
         GF_AssertFail();
     }
@@ -248,8 +248,8 @@ u8 GetMetatileBehavior(FieldSystem *fieldSystem, int x, int z) {
     return 0xFF;
 }
 
-int FieldSystem_GetTerrainHeight(FieldSystem *fieldSystem, int a1, fx32 x, fx32 z, u8 *outKind) {
-    return FS_TERRAIN_QUERIES(fieldSystem)->getHeight(fieldSystem, a1, x, z, outKind);
+int FieldSystem_GetTerrainHeight(FieldSystem *fieldSystem, int objectHeight, fx32 x, fx32 z, u8 *outKind) {
+    return FS_TERRAIN_QUERIES(fieldSystem)->getHeight(fieldSystem, objectHeight, x, z, outKind);
 }
 
 int FieldSystem_GetHeightStep(FieldSystem *fieldSystem, VecFx32 *playerPos, int x, int z, u8 *outKind) {
@@ -277,12 +277,12 @@ int FieldSystem_GetHeightStep(FieldSystem *fieldSystem, VecFx32 *playerPos, int 
     return dir;
 }
 
-BOOL FieldSystem_CheckCollisionAndHeight(FieldSystem *fieldSystem, VecFx32 *playerPos, int xInFront, int yInFront, int a4) {
+BOOL FieldSystem_CheckCollisionAndHeight(FieldSystem *fieldSystem, VecFx32 *playerPos, int xInFront, int yInFront, int outSlope) {
     u8 kind;
     BOOL ret;
     int slope = FieldSystem_GetHeightStep(fieldSystem, playerPos, xInFront, yInFront, &kind);
-    if (a4 != 0) {
-        *(u8 *)a4 = (u8)slope;
+    if (outSlope != 0) {
+        *(u8 *)outSlope = (u8)slope;
     }
     if (slope == 0) {
         ret = FieldSystem_CheckTileCollision(fieldSystem, xInFront, yInFront);
@@ -294,12 +294,12 @@ BOOL FieldSystem_CheckCollisionAndHeight(FieldSystem *fieldSystem, VecFx32 *play
     return TRUE;
 }
 
-u32 FieldSystem_CheckCollisionHeightAndGimmick(FieldSystem *fieldSystem, VecFx32 *playerPos, u32 x, u32 y, u32 *a4) {
+u32 FieldSystem_CheckCollisionHeightAndGimmick(FieldSystem *fieldSystem, VecFx32 *playerPos, u32 x, u32 y, u32 *outSlope) {
     u8 kind;
     BOOL ret;
     int slope = FieldSystem_GetHeightStep(fieldSystem, playerPos, x, y, &kind);
-    if (a4 != NULL) {
-        *(u8 *)a4 = (u8)slope;
+    if (outSlope != NULL) {
+        *(u8 *)outSlope = (u8)slope;
     }
     if (slope == 0) {
         if (Gymmick_CheckCollision(fieldSystem, x, y, playerPos->y, &ret) == 0) {
@@ -314,11 +314,11 @@ u32 FieldSystem_CheckCollisionHeightAndGimmick(FieldSystem *fieldSystem, VecFx32
     return TRUE;
 }
 
-void Terrain_MakeTileRect(int a0, int a1, int a2, int a3, int a4, int a5, fx32 *out) {
-    int x1 = a0 + a2;
-    int z1 = a1 + a3;
-    int x2 = x1 + a4;
-    int z2 = z1 + a5;
+void Terrain_MakeTileRect(int x, int z, int offsetX, int offsetZ, int width, int depth, fx32 *out) {
+    int x1 = x + offsetX;
+    int z1 = z + offsetZ;
+    int x2 = x1 + width;
+    int z2 = z1 + depth;
     if (x1 < 0 || z1 < 0 || x2 < 0 || z2 < 0) {
         GF_AssertFail();
     }

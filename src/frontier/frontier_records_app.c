@@ -156,11 +156,11 @@ extern const u8 ov86_021E81DC[NUM_LETTERS];
 extern const FrontierRecordsWindowSet ov86_021E8230[];
 
 // Not declared by the owners' headers yet
-u32 BattleFactory_GetBestStreakStat(u8 a0, u8 a1);
-u32 BattleFactory_GetBestTradeCountStat(u8 a0, u8 a1);
-u32 BattleCastle_GetBestStreakStat(u8 a0);
-u32 BattleCastle_GetBestStreakPointsStat(u8 a0);
-u32 FactoryFlags_GetField(int a0, u32 a1, u8 a2, u32 a3);
+u32 BattleFactory_GetBestStreakStat(u8 levelMode, u8 type);
+u32 BattleFactory_GetBestTradeCountStat(u8 levelMode, u8 type);
+u32 BattleCastle_GetBestStreakStat(u8 type);
+u32 BattleCastle_GetBestStreakPointsStat(u8 type);
+u32 FactoryFlags_GetField(int flags, u32 field, u8 index, u32 a3);
 
 // text.h is not included: it declares fontId as u8 (FontID), but this module passes it unnarrowed
 u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, void *callback);

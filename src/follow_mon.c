@@ -1697,21 +1697,21 @@ void FollowMon_SetPendingHop(LocalMapObject *mapObject, u32 a1) { // todo: figur
     MapObject_SetParam(mapObject, param, 2);
 }
 
-void FollowMon_SetHopMovement(LocalMapObject *mapObject, u8 a1) {
+void FollowMon_SetHopMovement(LocalMapObject *mapObject, u8 hopMovement) {
     int param;
     u32 b;
 
-    GF_ASSERT(a1 <= 23);
+    GF_ASSERT(hopMovement <= 23);
 
     param = MapObject_GetParam(mapObject, 2);
 
     b = param & 0x3FF;
-    param = (a1 << 10) | (u8)b;
+    param = (hopMovement << 10) | (u8)b;
 
     MapObject_SetParam(mapObject, param, 2);
 }
 
-void FollowMon_SetReleaseBallPending(LocalMapObject *mapObject, u8 a1) {
+void FollowMon_SetReleaseBallPending(LocalMapObject *mapObject, u8 pending) {
     int param;
     u8 a;
     u32 b;
@@ -1721,7 +1721,7 @@ void FollowMon_SetReleaseBallPending(LocalMapObject *mapObject, u8 a1) {
     a = param & 3;
     b = param >> 3;
 
-    param = (b << 3) | (a1 << 2);
+    param = (b << 3) | (pending << 2);
     param |= a;
 
     MapObject_SetParam(mapObject, param, 2);
@@ -1964,32 +1964,32 @@ s8 FollowMonMood_Get(FollowMonMood *unk) {
     return GetMonData(unk->mon, MON_DATA_MOOD, NULL);
 }
 
-void FollowMonMood_SetMon(FollowMonMood *a0, Pokemon *mon, u16 species, u32 personality) {
+void FollowMonMood_SetMon(FollowMonMood *followMonMood, Pokemon *mon, u16 species, u32 personality) {
     s8 mood;
-    if (species != SPECIES_NONE && (a0->isRegistered == FALSE || a0->species != species || a0->personality != personality)) {
-        a0->species = species;
-        a0->personality = personality;
+    if (species != SPECIES_NONE && (followMonMood->isRegistered == FALSE || followMonMood->species != species || followMonMood->personality != personality)) {
+        followMonMood->species = species;
+        followMonMood->personality = personality;
         mood = 0;
-        a0->isRegistered = TRUE;
-        a0->mon = mon;
+        followMonMood->isRegistered = TRUE;
+        followMonMood->mon = mon;
         SetMonData(mon, MON_DATA_MOOD, &mood);
     }
 }
 
-void FollowMonMood_MoveTowardsNeutral(FollowMonMood *a0) {
+void FollowMonMood_MoveTowardsNeutral(FollowMonMood *followMonMood) {
     s8 mood;
-    if (a0->mon == NULL) {
+    if (followMonMood->mon == NULL) {
         GF_ASSERT(FALSE);
         return;
     }
 
-    mood = GetMonData(a0->mon, MON_DATA_MOOD, NULL);
+    mood = GetMonData(followMonMood->mon, MON_DATA_MOOD, NULL);
     if (mood < 0) {
         mood++;
     } else if (mood > 0) {
         mood--;
     }
-    SetMonData(a0->mon, MON_DATA_MOOD, &mood);
+    SetMonData(followMonMood->mon, MON_DATA_MOOD, &mood);
 }
 
 // following three might be better off in another file? they're not explicitly related to following mons

@@ -29,7 +29,7 @@ enum IntroScene1State {
 
 static void IntroMovie_Scene1_VBlankCB(void *pVoid);
 static void IntroMovie_Scene1_Init(IntroMovieOverlayData *data, IntroMovieScene1Data *sceneData);
-static BOOL IntroMovie_Scene1_Main(IntroMovieOverlayData *data, IntroMovieScene1Data *sceneData, int a2);
+static BOOL IntroMovie_Scene1_Main(IntroMovieOverlayData *data, IntroMovieScene1Data *sceneData, int totalFrames);
 static void IntroMovie_Scene1_Exit(IntroMovieOverlayData *data, IntroMovieScene1Data *sceneData);
 static void IntroMovie_Scene1_InitBgs(IntroMovieOverlayData *data);
 static void IntroMovie_Scene1_LoadBgGfx(BgConfig *bgConfig);

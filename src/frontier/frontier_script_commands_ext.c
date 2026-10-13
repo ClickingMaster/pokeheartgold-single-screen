@@ -91,7 +91,7 @@ void FrontierMap_SetSpriteAnimActive(FrontierMap *map, u32 idx, u32 on);
 void *FrontierParticles_CreateSystem(void *manager, u32 index, u32 member, u32 camera);
 void FrontierParticles_DestroySystem(void *manager, u32 index);
 BOOL FrontierParticles_AreAllDone(void *manager);
-void FrontierMap_CreateMonSprite(FrontierMap *map, Pokemon *mon, int heapId, int a3, int x, int y, int a6, int a7, int a8, int a9);
+void FrontierMap_CreateMonSprite(FrontierMap *map, Pokemon *mon, int heapId, int id, int x, int y, int drawPriority, int bgPriority, int blend, int blendColor);
 void FrontierMap_DeleteMonSprite(FrontierMap *map, u16 id);
 void FrontierMap_ShakeTask(SysTask *task, FrontierMapShake *shake);
 void FrontierMap_WindowTask(SysTask *task, FrontierMapWindowTask *data);
@@ -1312,12 +1312,12 @@ BOOL FrtCmd_069(FrontierScriptContext *ctx) {
     FrontierMap *map = FrontierSystem_GetFrontierMap(ctx->frontierSystem);
     u32 slot = FrontierScript_ReadVar(ctx);
     int x = FrontierScript_ReadVar(ctx), y = FrontierScript_ReadVar(ctx);
-    int a3 = FrontierScriptContext_ReadHalfWord(ctx);
+    int id = FrontierScriptContext_ReadHalfWord(ctx);
     Pokemon *mon;
     FrontierScriptContext_ReadHalfWord(ctx);
     FrontierScriptContext_ReadHalfWord(ctx);
     mon = Party_GetMonByIndex(SaveArray_Party_Get(Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork)->saveData), slot);
-    FrontierMap_CreateMonSprite(map, mon, HEAP_ID_FIELD2, a3, x, y, 0, 0, 8, 0);
+    FrontierMap_CreateMonSprite(map, mon, HEAP_ID_FIELD2, id, x, y, 0, 0, 8, 0);
     return FALSE;
 }
 #pragma force_active reset

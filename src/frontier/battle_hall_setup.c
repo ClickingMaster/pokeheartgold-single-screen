@@ -59,7 +59,7 @@ u8 BattleHall_GetLevelRank(BattleHallData *data);
 void *FrontierTrainer_Load(BattleHallTrainerRecord *record, u32 trainerId, enum HeapID heapID, u32 narcId);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, u8 level);
 void FrontierTrainer_SetBattleTrainer(BattleSetup *setup, BattleHallTrainerRecord *record, int count, int battler, enum HeapID heapID);
-void FrontierMon_GenerateWithRandomOtId(FrontierMon *frontierMon, u16 setId, int index, u8 ivs, int a4, enum HeapID heapID, u32 narcId);
+void FrontierMon_GenerateWithRandomOtId(FrontierMon *frontierMon, u16 setId, int index, u8 ivs, int pid, enum HeapID heapID, u32 narcId);
 
 // Picks a trainer class for each of the count trainers of the battle: from the classes of the rank (2 in 3) or of the
 // cell. BattleHall_PickTrainerIds turns them into trainer ids.

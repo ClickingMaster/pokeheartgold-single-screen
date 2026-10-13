@@ -65,17 +65,17 @@ extern const ArcadeEventFunc gBattleArcadeEventFuncs[];
 // The script command (frontier/frontier_cmd_arcade.h) declares the slots as u32; it passes them unnarrowed.
 u32 BattleArcadeData_Alloc(SaveData *saveData, u32 resume, u8 type, u8 slot0, u16 slot1, u16 slot2, u16 *resultVar);
 
-u32 ArcadeChallenge_GetField(void *record, int kind, u8 index, int a3, void *dst);
+u32 ArcadeChallenge_GetField(void *record, int kind, u8 index, int unused, void *dst);
 void ArcadeChallenge_Clear(void *record);
-void ArcadeChallenge_SetSaved(void *record, int a1);
-void ArcadeChallenge_SetField(void *record, int kind, u8 index, int a3, void *src);
+void ArcadeChallenge_SetSaved(void *record, int value);
+void ArcadeChallenge_SetField(void *record, int kind, u8 index, int unused, void *src);
 void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
 void BattleArcade_GetRoundTrainerIds(u32 type, u32 rank, u16 *trainerIds, u32 count);
-void FrontierTrainer_GenerateMons(u32 count, u16 trainerId, u16 partnerTrainerId, u16 *monIds, void *a4, u8 *a5, u32 *a6, u8 multiplayer);
+void FrontierTrainer_GenerateMons(u32 count, u16 trainerId, u16 partnerTrainerId, u16 *monIds, void *mons, u8 *ivs, u32 *otIds, u8 multiplayer);
 int BattleArcade_GetMonLevel(ArcadeContext *ctx);
 void FrontierMon_ToPokemon(ArcadeFrontierMon *frontierMon, Pokemon *mon, int level);
 void BattleArcade_AddMonToParty(ArcadeContext *ctx, Party *party, Pokemon *mon);
-void *FrontierTrainer_Load(void *trainer, u16 trainerId, u32 heapId, u32 a3);
+void *FrontierTrainer_Load(void *trainer, u16 trainerId, u32 heapId, u32 narcId);
 void FrontierTrainer_GetClassSprite(u8 a0);
 ManagedSprite *FrontierMap_CreateMonIcon(FrontierMap *map, Pokemon *mon, int index, int x, int y);
 void FrontierMap_DeleteMonIcon(FrontierMap *map, ManagedSprite *sprite, int index);

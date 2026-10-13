@@ -92,7 +92,7 @@ static void GameClearSave_InitGraphics(FieldSystem *fieldSystem, GameClearWork *
 static void GameClearSave_PrintSaving(FieldSystem *fieldSystem, GameClearWork *env);
 static BOOL GameClearSave_IsPrintFinished(GameClearWork *env);
 static void GameClear_FreeSaveMessage(GameClearWork *env);
-static void GameClearSave_PrintSaveStatus(FieldSystem *fieldSystem, GameClearWork *env, int a2);
+static void GameClearSave_PrintSaveStatus(FieldSystem *fieldSystem, GameClearWork *env, int writeStatus);
 static void GameClearSave_Free(FieldSystem *fieldSystem, GameClearWork *env);
 
 BOOL Task_BugContestWarpToJudging(TaskManager *taskman) {

@@ -59,7 +59,7 @@ GridCursor *GridCursor_New(enum HeapID heapId, void *userData);
 void GridCursor_Init(GridCursor *cursor, u8 value);
 void GridCursor_Delete(GridCursor *cursor);
 void GridCursor_SetPosition(GridCursor *cursor, u8 type, u8 index);
-BOOL GridCursor_Move(GridCursor *cursor, int arg1, int arg2);
+BOOL GridCursor_Move(GridCursor *cursor, int dx, int dy);
 u8 GridCursor_GetPanel(GridCursor *cursor);
 u8 GridCursor_GetIndex(GridCursor *cursor);
 

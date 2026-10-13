@@ -111,9 +111,9 @@ u8 FieldSystem_GetStartMenuInputState(FieldSystem *fieldSystem) {
     return fieldSystem->startMenuInputState;
 }
 
-void FieldSystem_SetStartMenuInputState(FieldSystem *fieldSystem, int a1) {
-    GF_ASSERT(a1 == 0 || a1 == 1);
-    fieldSystem->startMenuInputState = a1;
+void FieldSystem_SetStartMenuInputState(FieldSystem *fieldSystem, int state) {
+    GF_ASSERT(state == 0 || state == 1);
+    fieldSystem->startMenuInputState = state;
 }
 
 BOOL FieldSystem_IsFieldMapLoaded(FieldSystem *fieldSystem) {
@@ -301,8 +301,8 @@ int FieldSystem_GetBottomScreenState() {
     return sFieldSysPtr->mapSystems->unk14;
 }
 
-void FieldSystem_SetSavedBottomScreenAppId(FieldSystem *fieldSystem, int a1) {
-    fieldSystem->savedBottomScreenAppId = a1;
+void FieldSystem_SetSavedBottomScreenAppId(FieldSystem *fieldSystem, int appId) {
+    fieldSystem->savedBottomScreenAppId = appId;
 }
 
 BgConfig *FieldSystem_GetBgConfigPtr(FieldSystem *fieldSystem) {

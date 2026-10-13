@@ -26,7 +26,7 @@
 
 // Partner Pokemon are sent as raw Pokemon structs through a large-data command (up to 0x200 bytes).
 BOOL Comm_SendCommandNoCopy(int command, void *data, int size);
-u32 BattleCastle_GetPartySize(u8 type, int a1);
+u32 BattleCastle_GetPartySize(u8 type, int both);
 u32 BattleFactory_GetPartySize(u8 type);
 
 // Battle Hall

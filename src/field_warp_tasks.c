@@ -771,10 +771,10 @@ static BOOL Task_WaitFlyLanding(TaskManager *taskManager) {
     return FALSE;
 }
 
-void JumpTask_FieldMoveWarp(TaskManager *taskManager, Location *location, int a2) {
+void JumpTask_FieldMoveWarp(TaskManager *taskManager, Location *location, int kind) {
     struct FieldMoveWarpEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(struct FieldMoveWarpEnv));
     env->state = 0;
-    env->kind = a2;
+    env->kind = kind;
     env->unk8 = NULL;
     env->location = *location;
     TaskManager_Jump(taskManager, Task_FieldMoveWarp, env);

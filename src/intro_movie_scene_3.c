@@ -53,7 +53,7 @@ static void IntroMovie_Scene3_CreateSprites(IntroMovieOverlayData *data, IntroMo
 static void IntroMovie_Scene3_Load3dGfxData(IntroMovieScene3Data *sceneData);
 static void IntroMovie_Scene3_Animate3DMap(IntroMovieScene3Data *sceneData);
 static void IntroMovie_Scene3_3DVRamManInit(void);
-static void IntroMovie_Scene3_SetMapLightingAndColorParams(u8 a0);
+static void IntroMovie_Scene3_SetMapLightingAndColorParams(u8 mapIdx);
 
 static const u8 sIntroMovieScene3SpriteResCounts[4] = { 2, 2, 2, 2 };
 

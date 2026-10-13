@@ -195,7 +195,7 @@ void BattleCastleData_SetupNewChallenge(BattleCastleData *data) {
     int count = (u8)Party_GetCount(data->playerParty), i, battleNo;
     u8 *cursor;
     Pokemon *mon;
-    int a0;
+    int monCount;
     u32 isLink;
     i = 0;
     if (count > 0) {
@@ -212,9 +212,9 @@ void BattleCastleData_SetupNewChallenge(BattleCastleData *data) {
     }
     BattleCastle_GetRoundTrainerIds(data->type, BattleCastle_GetRound(data), data->trainerIds, 14);
     battleNo = data->battleNo;
-    a0 = BattleCastle_GetOpponentMonCount(data->type, 1);
+    monCount = BattleCastle_GetOpponentMonCount(data->type, 1);
     isLink = BattleCastle_IsMultiType(data->type);
-    FrontierTrainer_GenerateMons(a0, data->trainerIds[battleNo], data->trainerIds[battleNo + 7], data->opponentSetIds, data->opponentMons, data->opponentIVs, (void **)data->opponentPersonalities, (u8)isLink);
+    FrontierTrainer_GenerateMons(monCount, data->trainerIds[battleNo], data->trainerIds[battleNo + 7], data->opponentSetIds, data->opponentMons, data->opponentIVs, (void **)data->opponentPersonalities, (u8)isLink);
 }
 #pragma force_active reset
 #pragma opt_common_subs reset
@@ -441,12 +441,12 @@ void BattleCastleData_SetPartyBeforeBattle(BattleCastleData *data) {
 }
 
 void BattleCastleData_GenerateOpponents(BattleCastleData *data) {
-    int a0;
+    int monCount;
     int isLink;
     int battleNo = data->battleNo;
-    a0 = BattleCastle_GetOpponentMonCount(data->type, 1);
+    monCount = BattleCastle_GetOpponentMonCount(data->type, 1);
     isLink = BattleCastle_IsMultiType(data->type);
-    FrontierTrainer_GenerateMons(a0,
+    FrontierTrainer_GenerateMons(monCount,
         data->trainerIds[battleNo],
         data->trainerIds[battleNo + 7],
         data->opponentSetIds,

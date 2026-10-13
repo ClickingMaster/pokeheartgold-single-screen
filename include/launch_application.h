@@ -123,7 +123,7 @@ PokemonSummaryArgs *LearnForgetMove_LaunchApp(enum HeapID heapID, FieldSystem *f
 ApricornBoxArgs *sub_0203ED80(FieldSystem *fieldSystem, u32 a1, u16 *a2);
 BugContestSwapMonArgs *BugContestSwapMon_LaunchApp(FieldSystem *fieldSystem, Pokemon *a1, Pokemon *a2, BOOL a3);
 PokemonSummaryArgs *PokemonSummary_LaunchApp(enum HeapID heapID, FieldSystem *fieldSystem, u16 partySlot, u16 moveToLearn);
-void CallTask_DressUp(TaskManager *taskManager, u16 *ret, SaveData *saveData, u16 a3, u16 a4);
+void CallTask_DressUp(TaskManager *taskManager, u16 *ret, SaveData *saveData, u16 partyIdx, u16 a4);
 BOOL AccessoryPortrait_LaunchApp(FieldSystem *fieldSystem, FashionAppData *fashionData);
 void BattleRoomResults_LaunchApp(FieldSystem *fieldSystem, BattleRoomResultsArgs *unk);
 void PCBox_LaunchApp(FieldSystem *fieldSystem, PCBoxArgs *pcBoxData);
@@ -138,7 +138,7 @@ void MoveRelearner_LaunchApp(FieldSystem *fieldSystem, MoveRelearnerArgs *moveRe
 BagView *Bag_LaunchApp_AllPockets(FieldSystem *fieldSystem, ItemCheckUseData *itemCheckUseData);
 void Bag_LaunchApp(FieldSystem *fieldSystem, BagView *bagView);
 void PokemonSummary_LearnForget_LaunchApp(FieldSystem *fieldSystem, PokemonSummaryArgs *pokemonSummayArgs);
-PokemonSummaryArgs *PokemonSummary_CreateArgs(FieldSystem *fieldSystem, enum HeapID heapID, int a2);
+PokemonSummaryArgs *PokemonSummary_CreateArgs(FieldSystem *fieldSystem, enum HeapID heapID, int mode);
 PartyMenuArgs *TaskManager_LaunchPartyMenu_UnionRoomBattleSelect(TaskManager *taskman, enum HeapID heapID);
 PartyMenuArgs *PartyMenu_LaunchApp_Unk5(FieldSystem *fieldSystem, int partySlot);
 void EasyChat_LaunchApp(FieldSystem *fieldSystem, EasyChatArgs *args);
@@ -158,13 +158,13 @@ LegendaryCinematicArgs *LegendaryCinematic_LaunchApp(FieldSystem *a0, UnkStruct_
 void LaunchApp_ViewRankings(FieldSystem *fieldSystem, ViewRankingsArgs *args);
 PartyMenuArgs *PartyMenu_LaunchApp_Unk1(FieldSystem *fieldSystem, FieldMoveCheckData *fieldMoveCheckData, u8 partySlot);
 void CallTask_NamingScreen(TaskManager *taskManager, NameScreenType type, int species, int maxLen, int initPos, const u16 *defaultStr, u16 *retVar);
-void CallTask_EasyChat(TaskManager *a0, int a1, UnkStruct_0203E8C8 *a2, u16 *a3, u16 *a4);
+void CallTask_EasyChat(TaskManager *a0, int kind, UnkStruct_0203E8C8 *a2, u16 *word1, u16 *word2);
 void TrainerCardSignature_LaunchApp(FieldSystem *fieldSystem);
 void HatchEggInParty(FieldSystem *fieldSystem);
 MailboxAppArgs *Mailbox_LaunchApp(FieldSystem *fieldSystem, enum HeapID heapID);
 CertificatesArgs *Certificates_LaunchApp(FieldSystem *fieldSystem, enum HeapID heapID, u16 certificateId);
 PartyMenuArgs *PartyMenu_LaunchApp_Unk4(enum HeapID heapID, FieldSystem *fieldSystem, u16 partySlot);
-FrontierRecordsAppArgs *FrontierRecords_LaunchApp(FieldSystem *fieldSystem, u8 a1, u8 a2, u16 a3, enum HeapID heapID);
+FrontierRecordsAppArgs *FrontierRecords_LaunchApp(FieldSystem *fieldSystem, u8 mode, u8 facility, u16 species, enum HeapID heapID);
 ScratchOffCardsArgs *ScratchOffCards_LaunchApp(FieldSystem *fieldSystem, enum HeapID heapID);
 void GlobalTerminal_LaunchApp(FieldSystem *fieldSystem, u16 a1, u16 a2);
 PokegearArgs *PokegearPhone_LaunchApp(FieldSystem *fieldSystem);

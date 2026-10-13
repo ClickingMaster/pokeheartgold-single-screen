@@ -364,14 +364,14 @@ void GridCursor_SetPosition(GridCursor *cursor, u8 type, u8 index) {
     position->y = position->index / dimensions[0];
 }
 
-BOOL GridCursor_Move(GridCursor *cursor, int arg1, int arg2) {
-    volatile int savedArg2 = arg2;
+BOOL GridCursor_Move(GridCursor *cursor, int dx, int dy) {
+    volatile int savedDy = dy;
     u8 oldCurrent = ((volatile GridCursor *)cursor)->current;
     GridPosition *position = &cursor->positions[oldCurrent];
     const GridEntry *entry = &cursor->entries[oldCurrent];
     u8 oldIndex = position->index;
 
-    entry->move(cursor, position, entry->dimensions, arg1, savedArg2);
+    entry->move(cursor, position, entry->dimensions, dx, savedDy);
     if (oldCurrent != cursor->current) {
         return TRUE;
     }

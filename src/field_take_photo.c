@@ -108,7 +108,7 @@ static LocalMapObject *createSpecialMapObject(MapObjectManager *objectMan, int s
 static void TakePhoto_IterateMapObjectsDummy(FieldSystem *fieldSystem, Photo *photo);
 static void FieldTakePhoto_RemoveAllMapObjects(FieldTakePhoto *takePhoto);
 static void setCameraParam(Camera *camera);
-static void Photo_InitFromArcData(Photo *photo, FieldSystem *fieldSystem, u8 iconId, int mapId, int x, int y, int a6, int a7, u16 a8, u16 subjectObjId);
+static void Photo_InitFromArcData(Photo *photo, FieldSystem *fieldSystem, u8 iconId, int mapId, int x, int y, int hiddenPropModel0, int hiddenPropModel1, u16 a8, u16 subjectObjId);
 static BOOL FieldTask_TakePhoto(TaskManager *taskManager);
 static void TakePhoto_RestorePlayerSprite(PlayerAvatar *playerAvatar, u8 state, u8 gender);
 static void TakePhoto_CullHiddenProps(FieldSystem *fieldSystem, Photo *photo);
@@ -513,7 +513,7 @@ static void setCameraParam(Camera *camera) {
     Camera_OffsetLookAtPosAndTarget(&sCameraParam.lookAt, camera);
 }
 
-static void Photo_InitFromArcData(Photo *photo, FieldSystem *fieldSystem, u8 iconId, int mapId, int x, int y, int a6, int a7, u16 a8, u16 subjectObjId) {
+static void Photo_InitFromArcData(Photo *photo, FieldSystem *fieldSystem, u8 iconId, int mapId, int x, int y, int hiddenPropModel0, int hiddenPropModel1, u16 a8, u16 subjectObjId) {
     int partySize;
     SaveData *saveData = FieldSystem_GetSaveData(fieldSystem);
     PlayerProfile *profile = Save_PlayerData_GetProfile(saveData);
@@ -540,8 +540,8 @@ static void Photo_InitFromArcData(Photo *photo, FieldSystem *fieldSystem, u8 ico
     photo->hour = time.hour;
     photo->min = time.minute;
     MI_CpuCopy8(&sCameraParam, &photo->cameraParam, sizeof(PhotoCameraParam));
-    photo->hiddenPropModels[0] = a6;
-    photo->hiddenPropModels[1] = a7;
+    photo->hiddenPropModels[0] = hiddenPropModel0;
+    photo->hiddenPropModels[1] = hiddenPropModel1;
     photo->unk_46 = a8;
     photo->subjectSpriteId = subjectObjId;
     photo->numMons = photo->subjectSpriteId != 0 ? 1 : partySize;

@@ -3,8 +3,8 @@
 
 #include "script.h"
 
-void TaskManager_CallFrontierPartySelect(TaskManager *taskManager, void *a1, u32 a2, u32 a3, u32 a4, u32 a5, u32 a6, u32 a7);
-void TaskManager_CallFrontierWifiConnection(TaskManager *taskManager, u32 a1, u32 a2, u16 a3);
+void TaskManager_CallFrontierPartySelect(TaskManager *taskManager, void *runningApp, u32 context, u32 summaryMode, u32 minMons, u32 maxMons, u32 maxLevel, u32 partySlot);
+void TaskManager_CallFrontierWifiConnection(TaskManager *taskManager, u32 a1, u32 outputVar, u16 a3);
 void TaskManager_CallFrontierLinkPartnerCheck(TaskManager *taskManager, u32 a1, u32 a2);
 u32 BattleTower_ClaimRecordMilestone(SaveData *saveData);
 u32 BattleTower_GetRecordMilestone(SaveData *saveData);

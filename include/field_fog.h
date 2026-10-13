@@ -24,8 +24,8 @@ BOOL Fog_IsEnabled(FogData *fog);
 GXFogSlope Fog_GetSlope(FogData *fog);
 int Fog_GetOffset(FogData *fog);
 u16 Fog_GetColor(FogData *fog);
-void Fog_Set(FogData *fog, s32 arg1, BOOL enable, GXFogBlend fogMode, GXFogSlope fogSlope, int fogOffset);
-void Fog_SetColor(FogData *fog, u32 arg1, u16 arg2, u32 arg3);
+void Fog_Set(FogData *fog, s32 mask, BOOL enable, GXFogBlend fogMode, GXFogSlope fogSlope, int fogOffset);
+void Fog_SetColor(FogData *fog, u32 mask, u16 color, u32 alpha);
 void Fog_SetTable(FogData *fog, const void *src);
 
 #endif // POKEHEARTGOLD_FIELD_FOG_H

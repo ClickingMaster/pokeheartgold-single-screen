@@ -97,7 +97,7 @@ extern const TouchscreenHitbox sFriendRosterAppGridHitboxes[];
 extern const DpadMenuBox sFriendRosterAppGridDpadBoxes[];
 extern const WindowTemplate sFriendRosterAppWindowTemplates[];
 
-SysTask *FriendRosterApp_Init(BgConfig *bgConfig, void *a1, FieldSystem *fieldSystem, int *result);
+SysTask *FriendRosterApp_Init(BgConfig *bgConfig, void *lastTouchMenuInput, FieldSystem *fieldSystem, int *result);
 void FriendRosterApp_Exit(void *unused, SysTask *task);
 BOOL FriendRosterApp_IsExitDone(void);
 void FriendRosterApp_SetVramBanks(void);
@@ -134,7 +134,7 @@ BOOL FriendRosterApp_StepBlink(FriendRosterAppData *data);
 int FriendRosterApp_StartSpriteBlink(FriendRosterAppData *data, u8 target, u8 seqA, u8 seqB, u8 nextState);
 int FriendRosterApp_StartNameBlink(FriendRosterAppData *data, u8 x, u8 y, u8 nextState);
 
-SysTask *FriendRosterApp_Init(BgConfig *bgConfig, void *a1, FieldSystem *fieldSystem, int *result) {
+SysTask *FriendRosterApp_Init(BgConfig *bgConfig, void *lastTouchMenuInput, FieldSystem *fieldSystem, int *result) {
     SysTask *task;
     FriendRosterAppData *data;
     NARC *narc;
@@ -144,7 +144,7 @@ SysTask *FriendRosterApp_Init(BgConfig *bgConfig, void *a1, FieldSystem *fieldSy
     task = CreateSysTaskAndEnvironment(FriendRosterApp_Task, sizeof(FriendRosterAppData), 10, HEAP_ID_8);
     data = SysTask_GetData(task);
     data->bgConfig = bgConfig;
-    data->unk_04 = a1;
+    data->unk_04 = lastTouchMenuInput;
     data->fieldSystem = fieldSystem;
     data->unk_0C = result;
     data->task = task;

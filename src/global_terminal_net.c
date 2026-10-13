@@ -372,15 +372,15 @@ BOOL GlobalTerminalNet_RequestVideoUpload(GlobalTerminalNet *net, const void *he
     return TRUE;
 }
 
-BOOL GlobalTerminalNet_RequestVideoSearch(GlobalTerminalNet *net, u16 arg0, u8 arg1, u8 arg2, u8 arg3) {
+BOOL GlobalTerminalNet_RequestVideoSearch(GlobalTerminalNet *net, u16 species, u8 facility, u8 country, u8 region) {
     if (!GlobalTerminalNet_IsIdle(net)) {
         return FALSE;
     }
     MI_CpuFill8(&net->request, 0, sizeof(GlobalTerminalNetVideoSearch));
-    net->request.search.species = arg0;
-    net->request.search.facility = arg1;
-    net->request.search.country = arg2;
-    net->request.search.region = arg3;
+    net->request.search.species = species;
+    net->request.search.facility = facility;
+    net->request.search.country = country;
+    net->request.search.region = region;
     net->request.search.unk_08 = 0x140;
     net->searchKind = 0;
     net->pendingCommand = GTS_REQUEST_VIDEO_SEARCH;

@@ -133,8 +133,8 @@ PhoneBookEntry *GearPhoneRingManager_GetCallerPhoneBookEntry(GearPhoneRingManage
     return &ptr->entry;
 }
 
-void GearPhoneRingManager_SetCallTrigger(GearPhoneRingManager *ptr, u8 a1, BOOL a2) {
-    PhoneCallPersistentState_SetCallTriggerFlag(ptr->savingsData, a1);
+void GearPhoneRingManager_SetCallTrigger(GearPhoneRingManager *ptr, u8 callTrigger, BOOL a2) {
+    PhoneCallPersistentState_SetCallTriggerFlag(ptr->savingsData, callTrigger);
     if (a2) {
         if (ptr->elapsedMinutes < ptr->callIntervalMinutes - 1) {
             ptr->elapsedMinutes = ptr->callIntervalMinutes - 1;
@@ -142,14 +142,14 @@ void GearPhoneRingManager_SetCallTrigger(GearPhoneRingManager *ptr, u8 a1, BOOL 
     }
 }
 
-void GearPhoneRingManager_AddMinutes(GearPhoneRingManager *ptr, s32 a1, BOOL a2) {
+void GearPhoneRingManager_AddMinutes(GearPhoneRingManager *ptr, s32 minutes, BOOL a2) {
     if (!ptr->unk_var0_2) {
         ptr->unk_var0_2 = TRUE;
-        if (a1 >= 10) {
+        if (minutes >= 10) {
             return;
         }
     }
-    ptr->elapsedMinutes += a1;
+    ptr->elapsedMinutes += minutes;
     GearPhoneRingManager_CheckSafariCalls(ptr);
 }
 
