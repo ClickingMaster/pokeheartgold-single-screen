@@ -23,7 +23,7 @@ void WiFiPlazaLight_Delete(WiFiPlazaLight *light);
 void WiFiPlazaLight_Update(WiFiPlazaLight *light);
 void WiFiPlazaLight_FadeToColorSet(WiFiPlazaLight *light, int set);
 void WiFiPlazaLight_FadeLight1(WiFiPlazaLight *light, int set);
-void ov49_02268620(WiFiPlazaLight *light, int set);
+void WiFiPlazaLight_FadeToThirdSet(WiFiPlazaLight *light, int set);
 void WiFiPlazaLight_PackColor(const s8 *rgb, u16 *color);
 void WiFiPlazaLight_UnpackColor(s8 *rgb, const u16 *color);
 void WiFiPlazaLight_LerpColor(const s8 *start, const s8 *end, s8 *dest, s32 step, s32 total);

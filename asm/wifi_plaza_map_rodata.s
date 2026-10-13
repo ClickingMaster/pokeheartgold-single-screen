@@ -10,24 +10,24 @@
 	.extern WiFiPlazaObj_HandlerHop
 	.extern WiFiPlazaObj_HandlerResetHeight
 	.extern WiFiPlazaModels_GetMoverFrontPos
-	.extern ov49_0225F448
+	.extern WiFiPlazaPlayerState_PlayInstrument
 	.extern WiFiPlazaPlayerState_OwnArrival
-	.extern ov49_0225FA14
-	.extern ov49_0225FB5C
-	.extern ov49_0225FCA8
+	.extern WiFiPlazaPlayerState_OwnReturnFromAttraction
+	.extern WiFiPlazaPlayerState_OwnReturnFromMinigame
+	.extern WiFiPlazaPlayerState_OwnReturnFromSurvey
 	.extern WiFiPlazaPlayerState_OwnWalk
 	.extern WiFiPlazaPlayerState_OwnWalkLate
 	.extern WiFiPlazaPlayerState_OwnExit
-	.extern ov49_02260428
-	.extern ov49_022607C4
-	.extern ov49_02260A68
-	.extern ov49_02260D90
+	.extern WiFiPlazaPlayerState_OwnEnterAttraction
+	.extern WiFiPlazaPlayerState_OwnEnterMinigame
+	.extern WiFiPlazaPlayerState_OwnUseSurveyMonitor
+	.extern WiFiPlazaTalk_Greeter
 	.extern WiFiPlazaPlayerState_OwnRideMover
 	.extern WiFiPlazaPlayerState_OtherWaitForPlayer
 	.extern WiFiPlazaPlayerState_OtherPresent
 	.extern WiFiPlazaPlayerState_OtherLeave
-	.extern ov49_02261930
-	.extern ov49_02261B74
+	.extern WiFiPlazaPlayerState_OtherRideMover
+	.extern WiFiPlazaPlayerState_OtherDoActivity
 	.extern WiFiPlazaGameEntry_Register
 	.extern WiFiPlazaGameEntry_EndLink
 	.extern WiFiPlazaGameEntry_ReadSign
@@ -35,61 +35,61 @@
 	.extern WiFiPlazaTalk_Answer
 	.extern WiFiPlazaTalk_InfoCounter
 	.extern WiFiPlazaTalk_Reception
-	.extern ov49_02265C68
-	.extern ov49_02265C74
-	.extern ov49_02265C80
-	.extern ov49_02265C8C
-	.extern ov49_02265C98
-	.extern ov49_02265CA4
-	.extern ov49_02265CB0
-	.extern ov49_02265D10
-	.extern ov49_02265E54
-	.extern ov49_02266088
-	.extern ov49_02266354
-	.extern ov49_02266360
-	.extern ov49_0226636C
-	.extern ov49_02266378
-	.extern ov49_02266384
-	.extern ov49_02266390
-	.extern ov49_0226639C
-	.extern ov49_022663EC
-	.extern ov49_0226643C
-	.extern ov49_0226648C
-	.extern ov49_022664DC
-	.extern ov49_0226652C
-	.extern ov49_0226657C
-	.extern ov49_022665D0
-	.extern ov49_02266624
-	.extern ov49_02266678
-	.extern ov49_02266748
-	.extern ov49_02266754
-	.extern ov49_02266760
-	.extern ov49_0226676C
-	.extern ov49_02266820
-	.extern ov49_02266978
-	.extern ov49_022669B0
-	.extern ov49_02266A88
-	.extern ov49_02266AB0
-	.extern ov49_02267F94
-	.extern ov49_022680B4
-	.extern ov49_0226813C
-	.extern ov49_02268230
-	.extern ov49_022682D4
-	.extern ov49_02268334
-	.extern ov49_02268B04
-	.extern ov49_02268B08
-	.extern ov49_02268B0C
-	.extern ov49_02268B90
-	.extern ov49_02268C2C
-	.extern ov49_02268CAC
-	.extern ov49_02268CBC
-	.extern ov49_02268CCC
-	.extern ov49_02268CDC
-	.extern ov49_02268CEC
-	.extern ov49_02268DCC
-	.extern ov49_02269474
-	.extern ov49_02269494
-	.extern ov49_022694B4
+	.extern WiFiPlazaInstrument_InitRipple01
+	.extern WiFiPlazaInstrument_InitRipple02
+	.extern WiFiPlazaInstrument_InitRipple03
+	.extern WiFiPlazaInstrument_InitWhirl01
+	.extern WiFiPlazaInstrument_InitWhirl02
+	.extern WiFiPlazaInstrument_InitWhirl03
+	.extern WiFiPlazaInstrument_InitSignal
+	.extern WiFiPlazaInstrument_InitPop01
+	.extern WiFiPlazaInstrument_InitPop02
+	.extern WiFiPlazaInstrument_InitPop03
+	.extern WiFiPlazaInstrument_InitBalloon01
+	.extern WiFiPlazaInstrument_InitBalloon02
+	.extern WiFiPlazaInstrument_InitBalloon03
+	.extern WiFiPlazaInstrument_InitSparkle01
+	.extern WiFiPlazaInstrument_InitSparkle02
+	.extern WiFiPlazaInstrument_InitSparkle03
+	.extern WiFiPlazaInstrument_InitBell01
+	.extern WiFiPlazaInstrument_InitBell02
+	.extern WiFiPlazaInstrument_InitBell03
+	.extern WiFiPlazaInstrument_InitDrum01
+	.extern WiFiPlazaInstrument_InitDrum02
+	.extern WiFiPlazaInstrument_InitDrum03
+	.extern WiFiPlazaInstrument_InitCymbal01
+	.extern WiFiPlazaInstrument_InitCymbal02
+	.extern WiFiPlazaInstrument_InitCymbal03
+	.extern WiFiPlazaInstrument_UpdateRipple
+	.extern WiFiPlazaInstrument_UpdateSignal01
+	.extern WiFiPlazaInstrument_UpdateSignal02
+	.extern WiFiPlazaInstrument_UpdateSignal03
+	.extern WiFiPlazaInstrument_UpdateWhirl
+	.extern WiFiPlazaInstrument_UpdatePop
+	.extern WiFiPlazaInstrument_UpdateBalloon
+	.extern WiFiPlazaInstrument_UpdateSparkle
+	.extern WiFiPlazaInstrument_UpdateBellDrum
+	.extern WiFiPlazaInstrument_UpdateCymbal
+	.extern WiFiPlazaInstrumentBurst_StartBell
+	.extern WiFiPlazaInstrumentBurst_UpdateBell
+	.extern WiFiPlazaInstrumentBurst_StartDrum
+	.extern WiFiPlazaInstrumentBurst_UpdateDrum
+	.extern WiFiPlazaInstrumentBurst_StartCymbal
+	.extern WiFiPlazaInstrumentBurst_UpdateCymbal
+	.extern WiFiPlazaEventEffect_UpdateNone
+	.extern WiFiPlazaEventEffect_UpdatePhase2
+	.extern WiFiPlazaEventEffect_UpdatePhase3
+	.extern WiFiPlazaEventEffect_UpdatePhase4
+	.extern WiFiPlazaEventEffect_UpdatePhase5
+	.extern WiFiPlazaEventEffect_StartHideProps
+	.extern WiFiPlazaEventEffect_StartPhase2
+	.extern WiFiPlazaEventEffect_StartPhase3
+	.extern WiFiPlazaEventEffect_StartPhase4
+	.extern WiFiPlazaEventEffect_StartPhase5
+	.extern WiFiPlazaTalk_Survey
+	.extern WiFiPlazaEventWobble_InitSmall
+	.extern WiFiPlazaEventWobble_InitLarge
+	.extern WiFiPlazaEventWobble_Step
 	.include "asm/macros.inc"
 	.include "overlay_49.inc"
 	.include "global.inc"
@@ -2580,7 +2580,7 @@
 	.public WiFiPlazaObj_DeleteManager
 	.public ov49_02258B44
 	.public WiFiPlazaObj_UpdateManager
-	.public ov49_02258BD4
+	.public WiFiPlazaObj_DrawAvatars
 	.public ov49_02258BE0
 	.public WiFiPlazaObj_SetLightSet
 	.public WiFiPlazaObj_FadeToLightSet
@@ -2597,26 +2597,26 @@
 	.public WiFiPlazaObj_GetGridPos
 	.public WiFiPlazaObj_GetParam
 	.public WiFiPlazaObj_QueueCommand
-	.public ov49_02258EAC
+	.public WiFiPlazaObj_RunCommand
 	.public WiFiPlazaObj_SetHandler
 	.public WiFiPlazaObj_IsFinished
 	.public WiFiPlazaObj_GetHandler
 	.public WiFiPlazaObj_FindFacing
-	.public ov49_02258F70
+	.public WiFiPlazaObj_IsCulled
 	.public WiFiPlazaObj_FindAt
 	.public WiFiPlazaObj_IsOnCell
 	.public WiFiPlazaObj_FindFreeNeighbor
-	.public ov49_02259130
-	.public ov49_0225913C
+	.public WiFiPlazaObj_SetAvatarMode
+	.public WiFiPlazaObj_SetPositionFromGrid
 	.public WiFiPlazaObj_SetPosition
 	.public WiFiPlazaObj_GetPosition
 	.public WiFiPlazaObj_SetDirection
-	.public ov49_0225916C
-	.public ov49_02259184
-	.public ov49_0225919C
-	.public ov49_022591B4
-	.public ov49_022591C0
-	.public ov49_022591CC
+	.public WiFiPlazaObj_SetPoseEffect
+	.public WiFiPlazaObj_SetSpinEffect
+	.public WiFiPlazaObj_SetPoseLoopEffect
+	.public WiFiPlazaObj_SetLightFlags
+	.public WiFiPlazaObj_SetVisible
+	.public WiFiPlazaObj_IsVisible
 	.public WiFiPlazaObj_SpawnMapObjects
 	.public WiFiPlazaObj_QueueMove
 	.public WiFiPlazaObj_RandomPick
@@ -2711,7 +2711,7 @@
 	.public WiFiPlazaRoom_IsPlayerCardShown
 	.public WiFiPlazaRoom_IsPlayerCardIdle
 	.public WiFiPlazaRoom_ShowInstrumentPanel
-	.public ov49_0225A520
+	.public WiFiPlazaRoom_IsMoverWobbling
 	.public WiFiPlazaRoom_StartInfoPanel
 	.public WiFiPlazaRoom_SetPanelButtonDisabled
 	.public WiFiPlazaRoom_ResetPanelButton
@@ -2989,21 +2989,21 @@
 	.public WiFiPlazaPlayerBounce_Update
 	.public WiFiPlazaPlayerBounce_Stop
 	.public WiFiPlazaPlayerBounce_IsActive
-	.public ov49_0225F448
+	.public WiFiPlazaPlayerState_PlayInstrument
 	.public WiFiPlazaPlayerState_OwnArrival
-	.public ov49_0225FA14
-	.public ov49_0225FB5C
-	.public ov49_0225FCA8
+	.public WiFiPlazaPlayerState_OwnReturnFromAttraction
+	.public WiFiPlazaPlayerState_OwnReturnFromMinigame
+	.public WiFiPlazaPlayerState_OwnReturnFromSurvey
 	.public WiFiPlazaPlayerState_OwnWalk
 	.public WiFiPlazaPlayerState_OwnWalkLate
 	.public WiFiPlazaPlayerState_OwnExit
-	.public ov49_02260428
-	.public ov49_022607C4
-	.public ov49_02260A68
-	.public ov49_02260C58
-	.public ov49_02260CC0
-	.public ov49_02260D28
-	.public ov49_02260D90
+	.public WiFiPlazaPlayerState_OwnEnterAttraction
+	.public WiFiPlazaPlayerState_OwnEnterMinigame
+	.public WiFiPlazaPlayerState_OwnUseSurveyMonitor
+	.public WiFiPlazaPlayerState_GetAttractionSlot
+	.public WiFiPlazaPlayerState_GetAttractionResult
+	.public WiFiPlazaPlayerState_GetAttractionLobbyState
+	.public WiFiPlazaTalk_Greeter
 	.public WiFiPlazaPlayerState_OwnRideMover
 	.public WiFiPlazaPlayerRide_FollowCamera
 	.public WiFiPlazaPlayerRide_IsMoverHere
@@ -3016,9 +3016,9 @@
 	.public WiFiPlazaPlayerState_OtherWaitForPlayer
 	.public WiFiPlazaPlayerState_OtherPresent
 	.public WiFiPlazaPlayerState_OtherLeave
-	.public ov49_02261930
-	.public ov49_02261B74
-	.public ov49_02261DBC
+	.public WiFiPlazaPlayerState_OtherRideMover
+	.public WiFiPlazaPlayerState_OtherDoActivity
+	.public WiFiPlazaPlayerState_PlaceOtherForActivity
 	.public WiFiPlazaPlayerState_FindFreeTaggedCell
 	.public WiFiPlazaGameEntry_Register
 	.public WiFiPlazaGameEntry_EndLink
@@ -3100,84 +3100,84 @@
 	.public WiFiPlazaInstrument_PlayAnimBy
 	.public WiFiPlazaInstrument_SetAnimFrame
 	.public WiFiPlazaInstrument_GetAnimFrame
-	.public ov49_02265C68
-	.public ov49_02265C74
-	.public ov49_02265C80
-	.public ov49_02265C8C
-	.public ov49_02265C98
-	.public ov49_02265CA4
-	.public ov49_02265CB0
-	.public ov49_02265D10
-	.public ov49_02265E54
-	.public ov49_02266088
-	.public ov49_02266354
-	.public ov49_02266360
-	.public ov49_0226636C
-	.public ov49_02266378
-	.public ov49_02266384
-	.public ov49_02266390
-	.public ov49_0226639C
-	.public ov49_022663EC
-	.public ov49_0226643C
-	.public ov49_0226648C
-	.public ov49_022664DC
-	.public ov49_0226652C
-	.public ov49_0226657C
-	.public ov49_022665D0
-	.public ov49_02266624
-	.public ov49_02266678
-	.public ov49_02266748
-	.public ov49_02266754
-	.public ov49_02266760
-	.public ov49_0226676C
-	.public ov49_02266820
-	.public ov49_02266978
-	.public ov49_022669B0
-	.public ov49_02266A88
-	.public ov49_02266AB0
+	.public WiFiPlazaInstrument_InitRipple01
+	.public WiFiPlazaInstrument_InitRipple02
+	.public WiFiPlazaInstrument_InitRipple03
+	.public WiFiPlazaInstrument_InitWhirl01
+	.public WiFiPlazaInstrument_InitWhirl02
+	.public WiFiPlazaInstrument_InitWhirl03
+	.public WiFiPlazaInstrument_InitSignal
+	.public WiFiPlazaInstrument_InitPop01
+	.public WiFiPlazaInstrument_InitPop02
+	.public WiFiPlazaInstrument_InitPop03
+	.public WiFiPlazaInstrument_InitBalloon01
+	.public WiFiPlazaInstrument_InitBalloon02
+	.public WiFiPlazaInstrument_InitBalloon03
+	.public WiFiPlazaInstrument_InitSparkle01
+	.public WiFiPlazaInstrument_InitSparkle02
+	.public WiFiPlazaInstrument_InitSparkle03
+	.public WiFiPlazaInstrument_InitBell01
+	.public WiFiPlazaInstrument_InitBell02
+	.public WiFiPlazaInstrument_InitBell03
+	.public WiFiPlazaInstrument_InitDrum01
+	.public WiFiPlazaInstrument_InitDrum02
+	.public WiFiPlazaInstrument_InitDrum03
+	.public WiFiPlazaInstrument_InitCymbal01
+	.public WiFiPlazaInstrument_InitCymbal02
+	.public WiFiPlazaInstrument_InitCymbal03
+	.public WiFiPlazaInstrument_UpdateRipple
+	.public WiFiPlazaInstrument_UpdateSignal01
+	.public WiFiPlazaInstrument_UpdateSignal02
+	.public WiFiPlazaInstrument_UpdateSignal03
+	.public WiFiPlazaInstrument_UpdateWhirl
+	.public WiFiPlazaInstrument_UpdatePop
+	.public WiFiPlazaInstrument_UpdateBalloon
+	.public WiFiPlazaInstrument_UpdateSparkle
+	.public WiFiPlazaInstrument_UpdateBellDrum
+	.public WiFiPlazaInstrument_UpdateCymbal
 	.public WiFiPlazaInstrument_DrawEffectModels
-	.public ov49_02266B28
-	.public ov49_02266C6C
-	.public ov49_02266D04
-	.public ov49_02266D60
-	.public ov49_02266D7C
-	.public ov49_02266E78
-	.public ov49_02266EF8
-	.public ov49_02266F14
-	.public ov49_02267074
-	.public ov49_022670B8
-	.public ov49_022670D4
-	.public ov49_02267328
-	.public ov49_0226747C
-	.public ov49_02267674
-	.public ov49_0226786C
-	.public ov49_0226789C
-	.public ov49_02267908
-	.public ov49_02267A1C
-	.public ov49_02267A84
-	.public ov49_02267AF0
-	.public ov49_02267C20
-	.public ov49_02267C8C
-	.public ov49_02267D00
-	.public ov49_02267D34
+	.public WiFiPlazaInstrument_InitBalloon
+	.public WiFiPlazaInstrument_StartBalloonRise
+	.public WiFiPlazaInstrument_StartBalloonLift
+	.public WiFiPlazaInstrument_UpdateBalloonUp
+	.public WiFiPlazaInstrument_UpdateBalloonRise
+	.public WiFiPlazaInstrument_UpdateBalloonLift
+	.public WiFiPlazaInstrument_StartBalloonDown
+	.public WiFiPlazaInstrument_StartBalloonFall
+	.public WiFiPlazaInstrument_StartBalloonDrop
+	.public WiFiPlazaInstrument_UpdateBalloonDown
+	.public WiFiPlazaInstrument_UpdateBalloonFall
+	.public WiFiPlazaInstrument_UpdateBalloonDrop
+	.public WiFiPlazaInstrument_PlaceBalloons
+	.public WiFiPlazaInstrument_PlaceBalloonsLifted
+	.public WiFiPlazaInstrument_SetBalloonAnim
+	.public WiFiPlazaInstrument_UpdateBalloonAnim
+	.public WiFiPlazaInstrument_InitSparkle
+	.public WiFiPlazaInstrument_UpdateSparkleModel
+	.public WiFiPlazaInstrument_InitRipple
+	.public WiFiPlazaInstrument_UpdateSignalSequence
+	.public WiFiPlazaInstrument_InitWhirl
+	.public WiFiPlazaInstrument_InitCymbalFlash
+	.public WiFiPlazaInstrument_StartCymbalFlash
+	.public WiFiPlazaInstrument_UpdateCymbalFlash
 	.public WiFiPlazaInstrument_InitBursts
 	.public WiFiPlazaInstrument_UpdateBursts
 	.public WiFiPlazaInstrumentBurst_Init
 	.public WiFiPlazaInstrumentBurst_Start
 	.public WiFiPlazaInstrumentBurst_Update
-	.public ov49_02267F94
-	.public ov49_022680B4
-	.public ov49_0226813C
-	.public ov49_02268230
-	.public ov49_022682D4
-	.public ov49_02268334
-	.public ov49_022683FC
+	.public WiFiPlazaInstrumentBurst_StartBell
+	.public WiFiPlazaInstrumentBurst_UpdateBell
+	.public WiFiPlazaInstrumentBurst_StartDrum
+	.public WiFiPlazaInstrumentBurst_UpdateDrum
+	.public WiFiPlazaInstrumentBurst_StartCymbal
+	.public WiFiPlazaInstrumentBurst_UpdateCymbal
+	.public WiFiPlazaInstrumentBurst_StartHop
 	.public WiFiPlazaLight_Create
 	.public WiFiPlazaLight_Delete
 	.public WiFiPlazaLight_Update
 	.public WiFiPlazaLight_FadeToColorSet
 	.public WiFiPlazaLight_FadeLight1
-	.public ov49_02268620
+	.public WiFiPlazaLight_FadeToThirdSet
 	.public WiFiPlazaLight_PackColor
 	.public WiFiPlazaLight_UnpackColor
 	.public WiFiPlazaLight_LerpColor
@@ -3187,43 +3187,43 @@
 	.public WiFiPlazaEvent_Create
 	.public WiFiPlazaEvent_Delete
 	.public WiFiPlazaEvent_Update
-	.public ov49_02268968
+	.public WiFiPlazaEvent_GetMoverState
 	.public WiFiPlazaEvent_GetColorSet
 	.public WiFiPlazaEvent_GetLight1Set
-	.public ov49_022689D4
+	.public WiFiPlazaEvent_GetThirdSet
 	.public WiFiPlazaEvent_TurnOffLight2
-	.public ov49_02268A0C
-	.public ov49_02268A6C
-	.public ov49_02268A7C
-	.public ov49_02268ADC
-	.public ov49_02268B04
-	.public ov49_02268B08
-	.public ov49_02268B0C
-	.public ov49_02268B90
-	.public ov49_02268C2C
-	.public ov49_02268C74
-	.public ov49_02268CAC
-	.public ov49_02268CBC
-	.public ov49_02268CCC
-	.public ov49_02268CDC
-	.public ov49_02268CEC
+	.public WiFiPlazaEventEffect_Create
+	.public WiFiPlazaEventEffect_Delete
+	.public WiFiPlazaEventEffect_Update
+	.public WiFiPlazaEventEffect_RunPhase
+	.public WiFiPlazaEventEffect_UpdateNone
+	.public WiFiPlazaEventEffect_UpdatePhase2
+	.public WiFiPlazaEventEffect_UpdatePhase3
+	.public WiFiPlazaEventEffect_UpdatePhase4
+	.public WiFiPlazaEventEffect_UpdatePhase5
+	.public WiFiPlazaEventEffect_StartPhase
+	.public WiFiPlazaEventEffect_StartHideProps
+	.public WiFiPlazaEventEffect_StartPhase2
+	.public WiFiPlazaEventEffect_StartPhase3
+	.public WiFiPlazaEventEffect_StartPhase4
+	.public WiFiPlazaEventEffect_StartPhase5
 	.public WiFiPlazaEvent_GetModelList
 	.public WiFiPlazaEvent_StartLoopSE
 	.public WiFiPlazaEvent_StopLoopSE
-	.public ov49_02268DCC
-	.public ov49_02268FAC
-	.public ov49_02269090
-	.public ov49_02269098
-	.public ov49_02269154
-	.public ov49_02269178
-	.public ov49_02269240
-	.public ov49_022693A4
-	.public ov49_022693D4
-	.public ov49_022693F8
-	.public ov49_02269430
-	.public ov49_02269474
-	.public ov49_02269494
-	.public ov49_022694B4
+	.public WiFiPlazaTalk_Survey
+	.public WiFiPlazaEventMovers_Create
+	.public WiFiPlazaEventMovers_Delete
+	.public WiFiPlazaEventMovers_Update
+	.public WiFiPlazaEventMovers_GetState
+	.public WiFiPlazaEventMovers_UpdateX
+	.public WiFiPlazaEventMovers_StartActions
+	.public WiFiPlazaEventMovers_PlaySE
+	.public WiFiPlazaEventMovers_PlayCry
+	.public WiFiPlazaEventWobble_Start
+	.public WiFiPlazaEventWobble_Update
+	.public WiFiPlazaEventWobble_InitSmall
+	.public WiFiPlazaEventWobble_InitLarge
+	.public WiFiPlazaEventWobble_Step
 	.public WiFiPlazaEvent_UpdateMoverMarkers
 	.public sWiFiPlazaPropTiles
 	.public sWiFiPlazaCheckActionTiles
@@ -3267,14 +3267,14 @@
 	.public sWiFiPlazaPlayerStateOwnWalk
 	.public sWiFiPlazaPlayerStateOtherPresent
 	.public sWiFiPlazaPlayerStateOtherLeave
-	.public ov49_02269B50
-	.public ov49_02269B58
-	.public ov49_02269B60
-	.public ov49_02269B68
-	.public ov49_02269B70
+	.public sWiFiPlazaPlayerStateOtherRideMover
+	.public sWiFiPlazaPlayerStateOtherActivity
+	.public sWiFiPlazaPlayerStateTalkStart
+	.public sWiFiPlazaPlayerStateGameEntryEndLink
+	.public sWiFiPlazaPlayerStateTalkAnswer
 	.public sWiFiPlazaPlayerStateOtherWait
-	.public ov49_02269B80
-	.public ov49_02269B88
+	.public sWiFiPlazaPlayerStatePlayInstrument
+	.public sWiFiPlazaPlayerStateGameEntryRegister
 	.public ov49_02269B90
 	.public ov49_02269BA0
 	.public ov49_02269BB0
@@ -3294,20 +3294,20 @@
 	.public sWiFiPlazaTalkGreetingMsgs
 	.public sWiFiPlazaTalkMsgPairs
 	.public sWiFiPlazaTalkMsgPairsHighlighted
-	.public ov49_0226A450
-	.public ov49_0226A454
-	.public ov49_0226A45C
-	.public ov49_0226A464
-	.public ov49_0226A46C
-	.public ov49_0226A474
-	.public ov49_0226A47C
+	.public sWiFiPlazaInstrumentBalloonHeights
+	.public sWiFiPlazaInstrumentBursts_Bell01
+	.public sWiFiPlazaInstrumentBursts_Cymbal02
+	.public sWiFiPlazaInstrumentBursts_Drum01
+	.public sWiFiPlazaInstrumentBursts_Bell02
+	.public sWiFiPlazaInstrumentBursts_Cymbal03
+	.public sWiFiPlazaInstrumentBursts_Cymbal01
 	.public sWiFiPlazaInstrumentBurstUpdateFuncs
-	.public ov49_0226A49C
-	.public ov49_0226A4B4
-	.public ov49_0226A4C0
+	.public sWiFiPlazaInstrumentBursts_Drum02
+	.public sWiFiPlazaInstrumentBursts_Bell03
+	.public sWiFiPlazaInstrumentBursts_Drum03
 	.public sWiFiPlazaInstrumentBurstStartFuncs
-	.public ov49_0226A4D8
-	.public ov49_0226A508
+	.public sWiFiPlazaInstrumentSparkleStarts
+	.public sWiFiPlazaInstrumentSparkleFalls
 	.public sWiFiPlazaInstrumentUpdateFuncs
 	.public sWiFiPlazaInstrumentInitFuncs
 	.public sWiFiPlazaInstrumentStartSEs
@@ -3321,9 +3321,9 @@
 	.public ov49_0226A74C
 	.public ov49_0226A750
 	.public ov49_0226A754
-	.public ov49_0226A7A8
-	.public ov49_0226A7B8
-	.public ov49_0226A7C8
+	.public sWiFiPlazaInstrumentBurstModels01
+	.public sWiFiPlazaInstrumentBurstModels02
+	.public sWiFiPlazaInstrumentBurstModels03
 	.public sWiFiPlazaLight1Colors
 	.public sWiFiPlazaLightColorSets
 	.public ov49_0226A81C
@@ -3335,16 +3335,16 @@
 	.public ov49_0226A834
 	.public ov49_0226A83C
 	.public ov49_0226A83D
-	.public ov49_0226A84C
+	.public sWiFiPlazaEventEffectPhaseUpdates
 	.public ov49_0226A864
 	.public ov49_0226A868
-	.public ov49_0226A87C
+	.public sWiFiPlazaEventEffectPhaseStarts
 	.public ov49_0226A894
 	.public ov49_0226A8B4
-	.public ov49_0226A8C8
-	.public ov49_0226A8CC
-	.public ov49_0226A8D4
-	.public ov49_0226A8DC
+	.public sWiFiPlazaMoverMarkerTags
+	.public sWiFiPlazaEventWobbleSteps
+	.public sWiFiPlazaEventWobbleInits
+	.public sWiFiPlazaMoverSounds
 	.public WiFiPlazaMap_PosToVecFx32
 	.public WiFiPlazaMap_VecFx32ToPos
 	.public WiFiPlazaMap_Delete
@@ -3352,25 +3352,25 @@
 	.public WiFiPlazaMap_GetCollision
 	.public WiFiPlazaMap_GetTileAttr
 	.public WiFiPlazaMap_GetGrid
-	.public ov49_02258BD4
+	.public WiFiPlazaObj_DrawAvatars
 	.public ov49_02258BE0
 	.public WiFiPlazaObj_PushCommand
 	.public WiFiPlazaObj_GetOwnPlayer
 	.public WiFiPlazaObj_GetSpecial
 	.public WiFiPlazaObj_IsFinished
 	.public WiFiPlazaObj_GetHandler
-	.public ov49_02258F70
-	.public ov49_02259130
-	.public ov49_0225913C
+	.public WiFiPlazaObj_IsCulled
+	.public WiFiPlazaObj_SetAvatarMode
+	.public WiFiPlazaObj_SetPositionFromGrid
 	.public WiFiPlazaObj_SetPosition
 	.public WiFiPlazaObj_GetPosition
 	.public WiFiPlazaObj_SetDirection
-	.public ov49_0225916C
-	.public ov49_02259184
-	.public ov49_0225919C
-	.public ov49_022591B4
-	.public ov49_022591C0
-	.public ov49_022591CC
+	.public WiFiPlazaObj_SetPoseEffect
+	.public WiFiPlazaObj_SetSpinEffect
+	.public WiFiPlazaObj_SetPoseLoopEffect
+	.public WiFiPlazaObj_SetLightFlags
+	.public WiFiPlazaObj_SetVisible
+	.public WiFiPlazaObj_IsVisible
 	.public WiFiPlazaObj_InitTween
 	.public WiFiPlazaObj_GetTweenValue
 	.public WiFiPlazaObj_IsFree
@@ -3486,34 +3486,34 @@
 	.public WiFiPlazaInstrumentWave_GetValue
 	.public WiFiPlazaInstrument_IsEffectActive
 	.public WiFiPlazaInstrument_HasModel
-	.public ov49_02265C68
-	.public ov49_02265C74
-	.public ov49_02265C80
-	.public ov49_02265C8C
-	.public ov49_02265C98
-	.public ov49_02265CA4
-	.public ov49_02266354
-	.public ov49_02266360
-	.public ov49_0226636C
-	.public ov49_02266378
-	.public ov49_02266384
-	.public ov49_02266390
-	.public ov49_02266748
-	.public ov49_02266754
-	.public ov49_02266760
+	.public WiFiPlazaInstrument_InitRipple01
+	.public WiFiPlazaInstrument_InitRipple02
+	.public WiFiPlazaInstrument_InitRipple03
+	.public WiFiPlazaInstrument_InitWhirl01
+	.public WiFiPlazaInstrument_InitWhirl02
+	.public WiFiPlazaInstrument_InitWhirl03
+	.public WiFiPlazaInstrument_InitBalloon01
+	.public WiFiPlazaInstrument_InitBalloon02
+	.public WiFiPlazaInstrument_InitBalloon03
+	.public WiFiPlazaInstrument_InitSparkle01
+	.public WiFiPlazaInstrument_InitSparkle02
+	.public WiFiPlazaInstrument_InitSparkle03
+	.public WiFiPlazaInstrument_UpdateSignal01
+	.public WiFiPlazaInstrument_UpdateSignal02
+	.public WiFiPlazaInstrument_UpdateSignal03
 	.public WiFiPlazaLight_Delete
-	.public ov49_02268620
+	.public WiFiPlazaLight_FadeToThirdSet
 	.public WiFiPlazaLight_PackColor
 	.public WiFiPlazaLight_UnpackLight1
-	.public ov49_02268968
-	.public ov49_02268B04
-	.public ov49_02268B08
-	.public ov49_02268CAC
-	.public ov49_02268CBC
-	.public ov49_02268CCC
-	.public ov49_02268CDC
-	.public ov49_02269090
-	.public ov49_022694B4
+	.public WiFiPlazaEvent_GetMoverState
+	.public WiFiPlazaEventEffect_UpdateNone
+	.public WiFiPlazaEventEffect_UpdatePhase2
+	.public WiFiPlazaEventEffect_StartHideProps
+	.public WiFiPlazaEventEffect_StartPhase2
+	.public WiFiPlazaEventEffect_StartPhase3
+	.public WiFiPlazaEventEffect_StartPhase4
+	.public WiFiPlazaEventMovers_Delete
+	.public WiFiPlazaEventWobble_Step
 	.public WiFiPlazaEvent_UpdateMoverMarkers
 
 .text
@@ -3735,28 +3735,28 @@ sWiFiPlazaPlayerStateOtherPresent: ; 0x02269B40
 sWiFiPlazaPlayerStateOtherLeave: ; 0x02269B48
 	.word WiFiPlazaPlayerState_OtherLeave, 0
 
-ov49_02269B50: ; 0x02269B50
-	.word ov49_02261930, 0
+sWiFiPlazaPlayerStateOtherRideMover: ; 0x02269B50
+	.word WiFiPlazaPlayerState_OtherRideMover, 0
 
-ov49_02269B58: ; 0x02269B58
-	.word ov49_02261B74, 0
+sWiFiPlazaPlayerStateOtherActivity: ; 0x02269B58
+	.word WiFiPlazaPlayerState_OtherDoActivity, 0
 
-ov49_02269B60: ; 0x02269B60
+sWiFiPlazaPlayerStateTalkStart: ; 0x02269B60
 	.word WiFiPlazaTalk_Start, 0
 
-ov49_02269B68: ; 0x02269B68
+sWiFiPlazaPlayerStateGameEntryEndLink: ; 0x02269B68
 	.word WiFiPlazaGameEntry_EndLink, 0
 
-ov49_02269B70: ; 0x02269B70
+sWiFiPlazaPlayerStateTalkAnswer: ; 0x02269B70
 	.word WiFiPlazaTalk_Answer, 0
 
 sWiFiPlazaPlayerStateOtherWait: ; 0x02269B78
 	.word WiFiPlazaPlayerState_OtherWaitForPlayer, 0
 
-ov49_02269B80: ; 0x02269B80
-	.word ov49_0225F448, 0
+sWiFiPlazaPlayerStatePlayInstrument: ; 0x02269B80
+	.word WiFiPlazaPlayerState_PlayInstrument, 0
 
-ov49_02269B88: ; 0x02269B88
+sWiFiPlazaPlayerStateGameEntryRegister: ; 0x02269B88
 	.word WiFiPlazaGameEntry_Register, 0
 
 ov49_02269B90: ; 0x02269B90
@@ -3776,9 +3776,9 @@ ov49_02269BD0: ; 0x02269BD0
 
 sWiFiPlazaPlayerStateOwnEntries: ; 0x02269BE0
 	.word WiFiPlazaPlayerState_OwnArrival, 0
-	.word ov49_0225FA14, 0
-	.word ov49_0225FB5C, 0
-	.word ov49_0225FCA8, 0
+	.word WiFiPlazaPlayerState_OwnReturnFromAttraction, 0
+	.word WiFiPlazaPlayerState_OwnReturnFromMinigame, 0
+	.word WiFiPlazaPlayerState_OwnReturnFromSurvey, 0
 
 sWiFiPlazaArrivalMenuTemplate: ; 0x02269C00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -3802,7 +3802,7 @@ sWiFiPlazaWalkUpTileActions: ; 0x02269C60
 
 sWiFiPlazaCheckTileActions: ; 0x02269C90
 	.byte 0x24, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
-	.word ov49_02260D90
+	.word WiFiPlazaTalk_Greeter
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x25, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.word WiFiPlazaTalk_InfoCounter
@@ -3814,7 +3814,7 @@ sWiFiPlazaCheckTileActions: ; 0x02269C90
 	.word WiFiPlazaGameEntry_ReadSign
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x2B, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
-	.word ov49_02268DCC
+	.word WiFiPlazaTalk_Survey
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 	.word 0
@@ -3825,25 +3825,25 @@ sWiFiPlazaStandTileActions: ; 0x02269D20
 	.word WiFiPlazaPlayerState_OwnExit
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x16, 0x17, 0x18, 0x19, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.word ov49_02260428
+	.word WiFiPlazaPlayerState_OwnEnterAttraction
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x1A, 0x1B, 0x1C, 0x1D, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.word ov49_02260428
+	.word WiFiPlazaPlayerState_OwnEnterAttraction
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x00, 0x00, 0x00, 0x00
-	.word ov49_02260428
+	.word WiFiPlazaPlayerState_OwnEnterAttraction
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x00, 0x00, 0x00, 0x00
-	.word ov49_02260428
+	.word WiFiPlazaPlayerState_OwnEnterAttraction
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x21, 0x22, 0x23, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.word WiFiPlazaPlayerState_OwnRideMover
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x1E, 0x1F, 0x20, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.word ov49_022607C4
+	.word WiFiPlazaPlayerState_OwnEnterMinigame
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x2C, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.word ov49_02260A68
+	.word WiFiPlazaPlayerState_OwnUseSurveyMonitor
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 	.word 0
@@ -3971,121 +3971,121 @@ sWiFiPlazaTalkMsgPairsHighlighted: ; 0x02269EC6
 	.byte 0xF3, 0x01, 0x85, 0x03, 0xF4, 0x01, 0x86, 0x03, 0xF5, 0x01, 0x87, 0x03, 0xF6, 0x01, 0x88, 0x03
 	.byte 0xF7, 0x01, 0x89, 0x03, 0xF8, 0x01, 0x8A, 0x03, 0xF9, 0x01, 0x8B, 0x03, 0xFA, 0x01, 0x8C, 0x03
 
-ov49_0226A450: ; 0x0226A450
+sWiFiPlazaInstrumentBalloonHeights: ; 0x0226A450
 	.byte 0x30, 0x54, 0x80, 0x00
 
-ov49_0226A454: ; 0x0226A454
+sWiFiPlazaInstrumentBursts_Bell01: ; 0x0226A454
 	.byte 0x00, 0x00, 0x00, 0x02, 0x18, 0x00, 0x02, 0x02
 
-ov49_0226A45C: ; 0x0226A45C
+sWiFiPlazaInstrumentBursts_Cymbal02: ; 0x0226A45C
 	.byte 0x00, 0x00, 0x00, 0x02
 	.byte 0x18, 0x00, 0x02, 0x02
 
-ov49_0226A464: ; 0x0226A464
+sWiFiPlazaInstrumentBursts_Drum01: ; 0x0226A464
 	.byte 0x00, 0x00, 0x00, 0x02, 0x18, 0x00, 0x02, 0x02
 
-ov49_0226A46C: ; 0x0226A46C
+sWiFiPlazaInstrumentBursts_Bell02: ; 0x0226A46C
 	.byte 0x00, 0x00, 0x00, 0x03
 	.byte 0x18, 0x00, 0x02, 0x03
 
-ov49_0226A474: ; 0x0226A474
+sWiFiPlazaInstrumentBursts_Cymbal03: ; 0x0226A474
 	.byte 0x00, 0x00, 0x00, 0x04, 0x14, 0x00, 0x02, 0x04
 
-ov49_0226A47C: ; 0x0226A47C
+sWiFiPlazaInstrumentBursts_Cymbal01: ; 0x0226A47C
 	.byte 0x00, 0x00, 0x00, 0x02
 	.byte 0x18, 0x00, 0x01, 0x02
 
 sWiFiPlazaInstrumentBurstUpdateFuncs: ; 0x0226A484
-	.word ov49_022680B4
-	.word ov49_02268230
-	.word ov49_02268334
+	.word WiFiPlazaInstrumentBurst_UpdateBell
+	.word WiFiPlazaInstrumentBurst_UpdateDrum
+	.word WiFiPlazaInstrumentBurst_UpdateCymbal
 	.byte 0x02, 0x00, 0x38, 0x00, 0x0E, 0x00, 0x38, 0x00, 0x08, 0x00, 0x3C, 0x00
 
-ov49_0226A49C: ; 0x0226A49C
+sWiFiPlazaInstrumentBursts_Drum02: ; 0x0226A49C
 	.byte 0x00, 0x00, 0x00, 0x03
 	.byte 0x10, 0x00, 0x02, 0x03, 0x28, 0x00, 0x00, 0x03, 0x02, 0x00, 0x2C, 0x00, 0x0E, 0x00, 0x2C, 0x00
 	.byte 0x08, 0x00, 0x30, 0x00
 
-ov49_0226A4B4: ; 0x0226A4B4
+sWiFiPlazaInstrumentBursts_Bell03: ; 0x0226A4B4
 	.byte 0x00, 0x00, 0x00, 0x04, 0x10, 0x00, 0x02, 0x04, 0x20, 0x00, 0x00, 0x04
 
-ov49_0226A4C0: ; 0x0226A4C0
+sWiFiPlazaInstrumentBursts_Drum03: ; 0x0226A4C0
 	.byte 0x00, 0x00, 0x00, 0x04, 0x10, 0x00, 0x02, 0x04, 0x23, 0x00, 0x00, 0x04
 
 sWiFiPlazaInstrumentBurstStartFuncs: ; 0x0226A4CC
-	.word ov49_02267F94
-	.word ov49_0226813C
-	.word ov49_022682D4
+	.word WiFiPlazaInstrumentBurst_StartBell
+	.word WiFiPlazaInstrumentBurst_StartDrum
+	.word WiFiPlazaInstrumentBurst_StartCymbal
 
-ov49_0226A4D8: ; 0x0226A4D8
+sWiFiPlazaInstrumentSparkleStarts: ; 0x0226A4D8
 	.byte 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00
 	.byte 0x00, 0x20, 0x00, 0x00, 0x00, 0x20, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x80, 0xFF, 0xFF
 	.byte 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0xE0, 0xFE, 0xFF, 0x00, 0xE0, 0xFF, 0xFF
 	.byte 0x00, 0x00, 0x01, 0x00, 0x00, 0x80, 0xFF, 0xFF
 
-ov49_0226A508: ; 0x0226A508
+sWiFiPlazaInstrumentSparkleFalls: ; 0x0226A508
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0xFF, 0xFF
 	.byte 0x00, 0x80, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x80, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0xFF, 0xFF, 0x00, 0x80, 0xFF, 0xFF, 0x00, 0x80, 0xFF, 0xFF
 	.byte 0x00, 0x80, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00
 
 sWiFiPlazaInstrumentUpdateFuncs: ; 0x0226A538
-	.word ov49_02266A88
-	.word ov49_02266A88
-	.word ov49_02266A88
-	.word ov49_02266A88
-	.word ov49_02266A88
-	.word ov49_02266A88
-	.word ov49_02266AB0
-	.word ov49_02266AB0
-	.word ov49_02266AB0
-	.word ov49_02266678
-	.word ov49_02266678
-	.word ov49_02266678
-	.word ov49_02266748
-	.word ov49_02266754
-	.word ov49_02266760
-	.word ov49_0226676C
-	.word ov49_0226676C
-	.word ov49_0226676C
-	.word ov49_02266820
-	.word ov49_02266820
-	.word ov49_02266820
-	.word ov49_022669B0
-	.word ov49_022669B0
-	.word ov49_022669B0
-	.word ov49_02266978
-	.word ov49_02266978
-	.word ov49_02266978
+	.word WiFiPlazaInstrument_UpdateBellDrum
+	.word WiFiPlazaInstrument_UpdateBellDrum
+	.word WiFiPlazaInstrument_UpdateBellDrum
+	.word WiFiPlazaInstrument_UpdateBellDrum
+	.word WiFiPlazaInstrument_UpdateBellDrum
+	.word WiFiPlazaInstrument_UpdateBellDrum
+	.word WiFiPlazaInstrument_UpdateCymbal
+	.word WiFiPlazaInstrument_UpdateCymbal
+	.word WiFiPlazaInstrument_UpdateCymbal
+	.word WiFiPlazaInstrument_UpdateRipple
+	.word WiFiPlazaInstrument_UpdateRipple
+	.word WiFiPlazaInstrument_UpdateRipple
+	.word WiFiPlazaInstrument_UpdateSignal01
+	.word WiFiPlazaInstrument_UpdateSignal02
+	.word WiFiPlazaInstrument_UpdateSignal03
+	.word WiFiPlazaInstrument_UpdateWhirl
+	.word WiFiPlazaInstrument_UpdateWhirl
+	.word WiFiPlazaInstrument_UpdateWhirl
+	.word WiFiPlazaInstrument_UpdatePop
+	.word WiFiPlazaInstrument_UpdatePop
+	.word WiFiPlazaInstrument_UpdatePop
+	.word WiFiPlazaInstrument_UpdateSparkle
+	.word WiFiPlazaInstrument_UpdateSparkle
+	.word WiFiPlazaInstrument_UpdateSparkle
+	.word WiFiPlazaInstrument_UpdateBalloon
+	.word WiFiPlazaInstrument_UpdateBalloon
+	.word WiFiPlazaInstrument_UpdateBalloon
 
 sWiFiPlazaInstrumentInitFuncs: ; 0x0226A5A4
-	.word ov49_0226639C
-	.word ov49_022663EC
-	.word ov49_0226643C
-	.word ov49_0226648C
-	.word ov49_022664DC
-	.word ov49_0226652C
-	.word ov49_0226657C
-	.word ov49_022665D0
-	.word ov49_02266624
-	.word ov49_02265C68
-	.word ov49_02265C74
-	.word ov49_02265C80
-	.word ov49_02265CB0
-	.word ov49_02265CB0
-	.word ov49_02265CB0
-	.word ov49_02265C8C
-	.word ov49_02265C98
-	.word ov49_02265CA4
-	.word ov49_02265D10
-	.word ov49_02265E54
-	.word ov49_02266088
-	.word ov49_02266378
-	.word ov49_02266384
-	.word ov49_02266390
-	.word ov49_02266354
-	.word ov49_02266360
-	.word ov49_0226636C
+	.word WiFiPlazaInstrument_InitBell01
+	.word WiFiPlazaInstrument_InitBell02
+	.word WiFiPlazaInstrument_InitBell03
+	.word WiFiPlazaInstrument_InitDrum01
+	.word WiFiPlazaInstrument_InitDrum02
+	.word WiFiPlazaInstrument_InitDrum03
+	.word WiFiPlazaInstrument_InitCymbal01
+	.word WiFiPlazaInstrument_InitCymbal02
+	.word WiFiPlazaInstrument_InitCymbal03
+	.word WiFiPlazaInstrument_InitRipple01
+	.word WiFiPlazaInstrument_InitRipple02
+	.word WiFiPlazaInstrument_InitRipple03
+	.word WiFiPlazaInstrument_InitSignal
+	.word WiFiPlazaInstrument_InitSignal
+	.word WiFiPlazaInstrument_InitSignal
+	.word WiFiPlazaInstrument_InitWhirl01
+	.word WiFiPlazaInstrument_InitWhirl02
+	.word WiFiPlazaInstrument_InitWhirl03
+	.word WiFiPlazaInstrument_InitPop01
+	.word WiFiPlazaInstrument_InitPop02
+	.word WiFiPlazaInstrument_InitPop03
+	.word WiFiPlazaInstrument_InitSparkle01
+	.word WiFiPlazaInstrument_InitSparkle02
+	.word WiFiPlazaInstrument_InitSparkle03
+	.word WiFiPlazaInstrument_InitBalloon01
+	.word WiFiPlazaInstrument_InitBalloon02
+	.word WiFiPlazaInstrument_InitBalloon03
 
 sWiFiPlazaInstrumentStartSEs: ; 0x0226A610
 	.byte 0x9C, 0x05, 0x00, 0x00, 0x9D, 0x05, 0x00, 0x00, 0x9E, 0x05, 0x00, 0x00, 0xA2, 0x05, 0x00, 0x00
@@ -4143,15 +4143,15 @@ ov49_0226A754: ; 0x0226A754
 	.byte 0x02, 0x21, 0x11, 0x11, 0x02, 0x22, 0x11, 0x11, 0x02, 0x23, 0x11, 0x11, 0x02, 0x24, 0x11, 0x11
 	.byte 0x0D, 0x25, 0x0E, 0x11, 0x0E, 0x26, 0x0F, 0x11
 
-ov49_0226A7A8: ; 0x0226A7A8
+sWiFiPlazaInstrumentBurstModels01: ; 0x0226A7A8
 	.byte 0x13, 0x14, 0x13, 0x14, 0x13, 0x14, 0x13, 0x14
 	.byte 0x13, 0x14, 0x13, 0x14, 0x13, 0x14, 0x13, 0x14
 
-ov49_0226A7B8: ; 0x0226A7B8
+sWiFiPlazaInstrumentBurstModels02: ; 0x0226A7B8
 	.byte 0x13, 0x14, 0x15, 0x13, 0x1C, 0x1D, 0x1B, 0x19
 	.byte 0x19, 0x1D, 0x14, 0x13, 0x1D, 0x1B, 0x17, 0x13
 
-ov49_0226A7C8: ; 0x0226A7C8
+sWiFiPlazaInstrumentBurstModels03: ; 0x0226A7C8
 	.byte 0x13, 0x14, 0x1F, 0x23, 0x20, 0x22, 0x1B, 0x1E
 	.byte 0x24, 0x1D, 0x18, 0x21, 0x1E, 0x15, 0x22, 0x1F
 
@@ -4192,13 +4192,13 @@ ov49_0226A83D: ; 0x0226A83D
 	.byte 0x05, 0x01, 0x06
 	.byte 0x02, 0x00, 0x03, 0x01, 0x04, 0x02, 0x05, 0x03, 0x06, 0x04, 0x00, 0x00
 
-ov49_0226A84C: ; 0x0226A84C
-	.word ov49_02268B04
-	.word ov49_02268B04
-	.word ov49_02268B08
-	.word ov49_02268B0C
-	.word ov49_02268B90
-	.word ov49_02268C2C
+sWiFiPlazaEventEffectPhaseUpdates: ; 0x0226A84C
+	.word WiFiPlazaEventEffect_UpdateNone
+	.word WiFiPlazaEventEffect_UpdateNone
+	.word WiFiPlazaEventEffect_UpdatePhase2
+	.word WiFiPlazaEventEffect_UpdatePhase3
+	.word WiFiPlazaEventEffect_UpdatePhase4
+	.word WiFiPlazaEventEffect_UpdatePhase5
 
 ov49_0226A864: ; 0x0226A864
 	.byte 0x0A, 0x00, 0x00, 0x00
@@ -4207,13 +4207,13 @@ ov49_0226A868: ; 0x0226A868
 	.byte 0x00, 0x10, 0x00, 0x00, 0x2D, 0x00, 0x00, 0x00
 	.byte 0x00, 0x10, 0x00, 0x00, 0x50, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 
-ov49_0226A87C: ; 0x0226A87C
-	.word ov49_02268CAC
-	.word ov49_02268CAC
-	.word ov49_02268CBC
-	.word ov49_02268CCC
-	.word ov49_02268CDC
-	.word ov49_02268CEC
+sWiFiPlazaEventEffectPhaseStarts: ; 0x0226A87C
+	.word WiFiPlazaEventEffect_StartHideProps
+	.word WiFiPlazaEventEffect_StartHideProps
+	.word WiFiPlazaEventEffect_StartPhase2
+	.word WiFiPlazaEventEffect_StartPhase3
+	.word WiFiPlazaEventEffect_StartPhase4
+	.word WiFiPlazaEventEffect_StartPhase5
 
 ov49_0226A894: ; 0x0226A894
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
@@ -4224,18 +4224,18 @@ ov49_0226A8B4: ; 0x0226A8B4
 	.byte 0x06, 0x0D, 0x05, 0x0B, 0x07, 0x0E, 0x08, 0x0C, 0x01, 0x00, 0x02, 0x0A
 	.byte 0x10, 0x09, 0x04, 0x03, 0x0F, 0x00, 0x00, 0x00
 
-ov49_0226A8C8: ; 0x0226A8C8
+sWiFiPlazaMoverMarkerTags: ; 0x0226A8C8
 	.byte 0x3F, 0x3E, 0x3D, 0x00
 
-ov49_0226A8CC: ; 0x0226A8CC
-	.word ov49_022694B4
-	.word ov49_022694B4
+sWiFiPlazaEventWobbleSteps: ; 0x0226A8CC
+	.word WiFiPlazaEventWobble_Step
+	.word WiFiPlazaEventWobble_Step
 
-ov49_0226A8D4: ; 0x0226A8D4
-	.word ov49_02269474
-	.word ov49_02269494
+sWiFiPlazaEventWobbleInits: ; 0x0226A8D4
+	.word WiFiPlazaEventWobble_InitSmall
+	.word WiFiPlazaEventWobble_InitLarge
 
-ov49_0226A8DC: ; 0x0226A8DC
+sWiFiPlazaMoverSounds: ; 0x0226A8DC
 	.byte 0xFF, 0x00, 0x06, 0x00
 	.byte 0xFE, 0xFF, 0xCB, 0x05, 0xCE, 0x05, 0xC5, 0x05, 0x89, 0x01, 0x82, 0x00, 0xCB, 0x05, 0xCD, 0x05
 	.byte 0xCF, 0x05, 0xCB, 0x05, 0x19, 0x00, 0xCE, 0x01, 0xFE, 0xFF, 0xCB, 0x05, 0xFE, 0xFF, 0xD0, 0x05

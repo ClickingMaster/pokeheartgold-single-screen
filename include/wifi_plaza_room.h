@@ -245,7 +245,7 @@ u32 WiFiPlazaRoom_GetPlayerCardPlayer(WiFiPlazaRoomWork *room);
 BOOL WiFiPlazaRoom_IsPlayerCardShown(WiFiPlazaRoomWork *room);
 BOOL WiFiPlazaRoom_IsPlayerCardIdle(WiFiPlazaRoomWork *room);
 void WiFiPlazaRoom_ShowInstrumentPanel(WiFiPlazaRoomWork *room);
-BOOL ov49_0225A520(WiFiPlazaRoomWork *room, u32 index);
+BOOL WiFiPlazaRoom_IsMoverWobbling(WiFiPlazaRoomWork *room, u32 index);
 void WiFiPlazaRoom_StartInfoPanel(WiFiPlazaRoomWork *room);
 void WiFiPlazaRoom_SetPanelButtonDisabled(WiFiPlazaRoomWork *room, u16 disabled);
 void WiFiPlazaRoom_ResetPanelButton(WiFiPlazaRoomWork *room);

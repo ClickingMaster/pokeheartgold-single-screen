@@ -55,38 +55,38 @@ int Comm_FindFriendSlot(SaveData *saveData, void *friendData, u32 *index);
 void WirelessStatusIcon_ShowOnBothScreens(int a0, enum HeapID heapId);
 void WiFiPlaza_SendMinigameResultNews(void *lobby, u8 game, int count, u32 id0, u32 id1, u32 id2, u32 id3);
 
-extern const u8 _0225C1E0[];
-extern const u8 ov90_0225C1E4[];
-extern const u8 ov90_0225C1E8[];
+extern const u8 sPlazaGameMimeJrTopSelectionWeights[];
+extern const u8 sPlazaGameWobbuffetPopSelectionWeights[];
+extern const u8 sPlazaGameSwalotPlopSelectionWeights[];
 extern const u8 ov90_0225C1EC[];
-extern const s16 ov90_0225C1F0[];
+extern const s16 sPlazaGameResultsRankOffsets[];
 extern const fx32 ov90_0225C1F8[];
 extern const fx32 ov90_0225C204[];
-extern const u32 ov90_0225C210[];
+extern const u32 sPlazaGameTitleColors[];
 extern const fx32 ov90_0225C21C[];
 extern const fx32 ov90_0225C228[];
 extern const fx32 ov90_0225C234[];
 extern const fx32 ov90_0225C240[];
 extern const fx32 ov90_0225C24C[];
 extern const fx32 ov90_0225C258[];
-extern const GraphicsModes ov90_0225C264;
+extern const GraphicsModes sPlazaGameResultsGraphicsModes;
 extern const s16 ov90_0225C274[];
 extern const s16 ov90_0225C276[];
-extern const u8 ov90_0225C284[][4];
-extern const ObjCharTransferTemplate ov90_0225C294;
-extern const GraphicsModes ov90_0225C2A4;
-extern const VecFx32 ov90_0225C2B4[2];
-extern const GraphicsBanks ov90_0225C2CC;
-extern const GraphicsBanks ov90_0225C2F4;
+extern const u8 sPlazaGameSeatOrders[][4];
+extern const ObjCharTransferTemplate sPlazaGameObjCharTransfer;
+extern const GraphicsModes sPlazaGameEntryGraphicsModes;
+extern const VecFx32 sPlazaGameSignWindowSpritePositions[2];
+extern const GraphicsBanks sPlazaGameEntryBanks;
+extern const GraphicsBanks sPlazaGameResultsBanks;
 extern const u8 ov90_0225C310[][12];
 extern const u8 ov90_0225C314[][12];
 extern const u8 ov90_0225C318[][12];
 extern const u8 ov90_0225C31C[][12];
 extern const u8 ov90_0225C324[][12];
-extern const u16 ov90_0225C34C[20][2];
-extern const PlazaGameBgTemplate ov90_0225C39C[];
-extern const PlazaGameBgTemplate ov90_0225C43C[];
-extern const u8 ov90_0225C4FC[];
+extern const u16 sPlazaGameAltMessages[20][2];
+extern const PlazaGameBgTemplate sPlazaGameEntryBgTemplates[];
+extern const PlazaGameBgTemplate sPlazaGameResultsBgTemplates[];
+extern const u8 sPlazaGameCommands[];
 
 void PlazaGameRoster_Init(PlazaGameRoster *roster, u32 fromLobby, SaveData *saveData, u8 unkA, PlazaGameArgs *args) {
     int netId;
@@ -110,7 +110,7 @@ void PlazaGameRoster_Init(PlazaGameRoster *roster, u32 fromLobby, SaveData *save
         roster->launchedFromField = TRUE;
     }
     roster->saveData = saveData;
-    roster->unkA = unkA;
+    roster->voiceChat = unkA;
     roster->args = args;
 }
 
@@ -546,7 +546,7 @@ void PlazaGameSprites_Init(PlazaGameSprites *sprites, int count, int charCount, 
     // Read through a volatile pointer: the original reloads heapId from the stack here.
     heap = *(volatile enum HeapID *)&heapId;
     OamManager_Create(0, 126, 0, 31, 0, 126, 0, 31, heap);
-    template = ov90_0225C294;
+    template = sPlazaGameObjCharTransfer;
     template.maxTasks = charCount;
     template.heapID = heap;
     ObjCharTransfer_InitEx(&template, GX_OBJVRAMMODE_CHAR_1D_32K, GX_OBJVRAMMODE_CHAR_1D_32K);
@@ -708,8 +708,8 @@ void PlazaGameMessageBox_Show(PlazaGameMessageBox *messageBox, PlazaGameText *te
 
     if (messageBox->colorVariant == 1) {
         for (i = 0; i < 20; i++) {
-            if (msgNo == ov90_0225C34C[i][0]) {
-                msgNo = ov90_0225C34C[i][1];
+            if (msgNo == sPlazaGameAltMessages[i][0]) {
+                msgNo = sPlazaGameAltMessages[i][1];
             }
         }
     }
@@ -770,11 +770,11 @@ PlazaGameEntry *PlazaGameEntry_New(const PlazaGameRoster *roster, u16 game, enum
     reg_G2S_DB_BLDCNT = 0;
     reg_GX_DISPCNT &= ~(REG_GX_DISPCNT_W0_MASK | REG_GX_DISPCNT_W1_MASK | REG_GX_DISPCNT_OW_MASK);
     reg_GXS_DB_DISPCNT &= ~(REG_GXS_DB_DISPCNT_W0_MASK | REG_GXS_DB_DISPCNT_W1_MASK | REG_GXS_DB_DISPCNT_OW_MASK);
-    GfGfx_SetBanks(&ov90_0225C2CC);
+    GfGfx_SetBanks(&sPlazaGameEntryBanks);
     entry->heapId = heapId;
     PlazaGameEntry_InitCommands(entry);
     PlazaGamePlayerInfo_Init(&entry->info, &entry->roster);
-    PlazaGameBg_Init(&entry->bg, &ov90_0225C2A4, ov90_0225C39C, 5, heapId);
+    PlazaGameBg_Init(&entry->bg, &sPlazaGameEntryGraphicsModes, sPlazaGameEntryBgTemplates, 5, heapId);
     PlazaGameSprites_Init(&entry->sprites, 16, 1, 1, heapId);
     PlazaGameGfx_Init(&entry->gfx, 1, heapId);
     PlazaGameText_Init(&entry->text, heapId);
@@ -782,7 +782,7 @@ PlazaGameEntry *PlazaGameEntry_New(const PlazaGameRoster *roster, u16 game, enum
     PlazaGameMessageBox_Init(&entry->messageBox, &entry->bg, entry->roster.saveData, ov90_022588A4(&entry->roster, PlazaGameRoster_GetNetId(&entry->roster, entry->roster.localIndex)), heapId);
     entry->task = SysTask_CreateOnMainQueue(PlazaGameEntry_MainTask, entry, 0);
     entry->vblankTask = SysTask_CreateOnVWaitQueue(PlazaGameEntry_VBlankTask, entry, 0);
-    if (entry->roster.unkA) {
+    if (entry->roster.voiceChat) {
         WifiConnection_StartVoiceChat(heapId);
     }
     {
@@ -888,7 +888,7 @@ void PlazaGameEntry_MainTask(SysTask *task, void *data) {
         if (entry->timer == 0) {
             entry->state++;
             LinkSync_StartSync(0x81);
-            if (entry->roster.unkA) {
+            if (entry->roster.voiceChat) {
                 WifiConnection_StopVoiceChat();
             }
         }
@@ -918,13 +918,13 @@ void PlazaGameEntry_MainTask(SysTask *task, void *data) {
         if (entry->roster.localIndex == 0) {
             switch (entry->game) {
             case 0:
-                selection = PlazaGame_PickWeighted(ov90_0225C1E8, 3);
+                selection = PlazaGame_PickWeighted(sPlazaGameSwalotPlopSelectionWeights, 3);
                 break;
             case 1:
-                selection = PlazaGame_PickWeighted(_0225C1E0, 2);
+                selection = PlazaGame_PickWeighted(sPlazaGameMimeJrTopSelectionWeights, 2);
                 break;
             case 2:
-                selection = PlazaGame_PickWeighted(ov90_0225C1E4, 3);
+                selection = PlazaGame_PickWeighted(sPlazaGameWobbuffetPopSelectionWeights, 3);
                 break;
             }
             Comm_SendCommand(26, &selection, sizeof(selection));
@@ -1192,10 +1192,10 @@ int PlazaGame_GetRelativeSeat(u32 count, int index, u32 localIndex) {
     u32 i;
     int result;
     for (i = 0; i < count; i++) {
-        if (index == ov90_0225C284[count - 1][i]) {
+        if (index == sPlazaGameSeatOrders[count - 1][i]) {
             seat = i;
         }
-        if (localIndex == ov90_0225C284[count - 1][i]) {
+        if (localIndex == sPlazaGameSeatOrders[count - 1][i]) {
             localSeat = i;
         }
     }
@@ -1342,7 +1342,7 @@ void PlazaGameTitle_StartSlideIn(PlazaGameTitle *title, PlazaGameBg *bg, enum He
     PlazaGameTitle_SetScroll(title, bg, title->motion.current >> FX32_SHIFT);
     FontID_Alloc(2, heapId);
     width = FontID_String_GetWidth(2, title->string, 0);
-    AddTextPrinterParameterizedWithColor(&title->window, 2, title->string, 80 - (width >> 1), 0, TEXT_SPEED_INSTANT, ov90_0225C210[title->game], NULL);
+    AddTextPrinterParameterizedWithColor(&title->window, 2, title->string, 80 - (width >> 1), 0, TEXT_SPEED_INSTANT, sPlazaGameTitleColors[title->game], NULL);
     FontID_Release(2);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
 }
@@ -1494,17 +1494,17 @@ PlazaGameResults *PlazaGameResults_New(const PlazaGameRoster *roster, const Plaz
     reg_G2S_DB_BLDCNT = 0;
     reg_GX_DISPCNT &= ~(REG_GX_DISPCNT_W0_MASK | REG_GX_DISPCNT_W1_MASK | REG_GX_DISPCNT_OW_MASK);
     reg_GXS_DB_DISPCNT &= ~(REG_GXS_DB_DISPCNT_W0_MASK | REG_GXS_DB_DISPCNT_W1_MASK | REG_GXS_DB_DISPCNT_OW_MASK);
-    GfGfx_SetBanks(&ov90_0225C2F4);
+    GfGfx_SetBanks(&sPlazaGameResultsBanks);
     results->heapId = heapId;
     PlazaGamePlayerInfo_Init(&results->info, &results->roster);
     GF_CreateVramTransferManager(16, heapId);
-    PlazaGameBg_Init(&results->bg, &ov90_0225C264, ov90_0225C43C, 6, heapId);
+    PlazaGameBg_Init(&results->bg, &sPlazaGameResultsGraphicsModes, sPlazaGameResultsBgTemplates, 6, heapId);
     PlazaGameSprites_Init(&results->sprites, 32, 2, 2, heapId);
     PlazaGameGfx_Init(&results->gfx, 2, heapId);
     PlazaGameText_Init(&results->text, heapId);
     PlazaGameResults_LoadGraphics(results, heapId);
     PlazaGameMessageBox_Init(&results->messageBox, &results->bg, results->roster.saveData, ov90_022588A4(&results->roster, PlazaGameRoster_GetNetId(&results->roster, results->roster.localIndex)), heapId);
-    PlazaGameContinue_Init(&results->continuePrompt, &results->bg, results->roster.unkA, heapId);
+    PlazaGameContinue_Init(&results->continuePrompt, &results->bg, results->roster.voiceChat, heapId);
     results->showCountries = PlazaGamePlayerInfo_HasDifferentCountries(&results->roster, results->info.countries);
     switch (results->game) {
     case 0:
@@ -1520,7 +1520,7 @@ PlazaGameResults *PlazaGameResults_New(const PlazaGameRoster *roster, const Plaz
         break;
     }
     results->vblankTask = SysTask_CreateOnVWaitQueue(PlazaGameResults_VBlankTask, results, 0);
-    if (results->roster.unkA) {
+    if (results->roster.voiceChat) {
         WifiConnection_StartVoiceChat(heapId);
     }
     return results;
@@ -1765,7 +1765,7 @@ void PlazaGameResults_RankingTask(SysTask *task, void *data) {
             break;
         }
         LinkSync_StartSync(0x82);
-        if (results->roster.unkA != 0) {
+        if (results->roster.voiceChat != 0) {
             WifiConnection_StopVoiceChat();
         }
         results->state++;
@@ -1957,7 +1957,7 @@ void PlazaGameResults_TeamTask(SysTask *task, void *data) {
         }
         break;
     case 14:
-        if (results->roster.unkA) {
+        if (results->roster.voiceChat) {
             WifiConnection_StopVoiceChat();
         }
         LinkSync_StartSync(0x82);
@@ -2082,7 +2082,7 @@ void PlazaGameContinue_Init(PlazaGameContinue *prompt, PlazaGameBg *bg, u8 unk01
     prompt->template.y = 8;
     prompt->template.shapeParam = 0;
     prompt->prompt = YesNoPrompt_Create(heapId);
-    prompt->unk01 = unk01;
+    prompt->voiceChat = unk01;
     prompt->allYes = TRUE;
 }
 
@@ -2101,7 +2101,7 @@ BOOL PlazaGameContinue_Run(PlazaGameContinue *prompt, PlazaGameMessageBox *messa
         enum HeapID heap = heapId;
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, heap);
         WirelessStatusIcon_ShowOnBothScreens(0, heapId);
-        if (prompt->unk01) {
+        if (prompt->voiceChat) {
             WifiConnection_StartVoiceChat(heap);
         }
         prompt->state++;
@@ -2171,7 +2171,7 @@ BOOL PlazaGameContinue_Run(PlazaGameContinue *prompt, PlazaGameMessageBox *messa
     case 11:
         if (IsPaletteFadeFinished()) {
             WirelessStatusIcon_Destroy();
-            if (prompt->unk01) {
+            if (prompt->voiceChat) {
                 WifiConnection_StopVoiceChat();
             }
             prompt->state++;
@@ -2329,10 +2329,10 @@ void PlazaGameResults_ShowPlayer(PlazaGameResults *results, int index, int rank)
     } else {
         digits = 6;
     }
-    PlazaGamePlayer_PrintScore((PlazaGamePlayer *)((u8 *)players + offset), &results->text, results->data.scores[index], (s16)(176 - ov90_0225C1F0[4 - (rank + 1)]), 0, digits);
+    PlazaGamePlayer_PrintScore((PlazaGamePlayer *)((u8 *)players + offset), &results->text, results->data.scores[index], (s16)(176 - sPlazaGameResultsRankOffsets[4 - (rank + 1)]), 0, digits);
     PlazaGamePlayer_ScheduleTransfer((PlazaGamePlayer *)((u8 *)players + offset), &results->bg);
     PlazaGamePlayer_ShowRank((PlazaGamePlayer *)((u8 *)players + offset), rank);
-    PlazaGamePlayer_StartSlideIn((PlazaGamePlayer *)((u8 *)players + offset), ov90_0225C1F0[rank], 0);
+    PlazaGamePlayer_StartSlideIn((PlazaGamePlayer *)((u8 *)players + offset), sPlazaGameResultsRankOffsets[rank], 0);
 }
 
 #pragma force_active reset
@@ -2472,7 +2472,7 @@ void PlazaGameSignWindow_Init(PlazaGameSignWindow *window, PlazaGameGfxRes *gfxR
     window->offset = 0;
     window->task = NULL;
     for (i = 0; i < 2; i++) {
-        window->sprites[i] = PlazaGameGfx_CreateSprite(gfxRes, spriteList, (s16)(ov90_0225C2B4[i].x >> FX32_SHIFT), (s16)(ov90_0225C2B4[i].y >> FX32_SHIFT), 0, heapId);
+        window->sprites[i] = PlazaGameGfx_CreateSprite(gfxRes, spriteList, (s16)(sPlazaGameSignWindowSpritePositions[i].x >> FX32_SHIFT), (s16)(sPlazaGameSignWindowSpritePositions[i].y >> FX32_SHIFT), 0, heapId);
         Sprite_SetAnimCtrlSeq(window->sprites[i], 5);
         Sprite_SetPriority(window->sprites[i], 0);
     }
@@ -2530,7 +2530,7 @@ void PlazaGameSignWindow_Move(PlazaGameSignWindow *window, int delta) {
         offset = window->offset;
     }
     for (i = 0; i < 2; i++) {
-        pos = ov90_0225C2B4[i];
+        pos = sPlazaGameSignWindowSpritePositions[i];
         if (i == 0) {
             float distance;
             if (offset > 0) {
@@ -2748,7 +2748,7 @@ void PlazaGameSign_FinishTask(SysTask *task, void *data) {
 }
 
 const void *PlazaGame_GetCommandTable(void) {
-    return ov90_0225C4FC;
+    return sPlazaGameCommands;
 }
 
 int PlazaGame_GetCommandCount(void) {

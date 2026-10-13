@@ -37,16 +37,16 @@ void WiFiPlazaLobbyClient_ClearChannelCommands(void);
 void HBlankInterruptDisable(void);
 int GetUserFrameGfx2PaletteMember(int frame);
 
-extern const OamManagerParam ov89_0225CA58;
-extern const OamCharTransferParam ov89_0225C9EC;
-extern SpriteResourceCountsListUnion ov89_0225CA00;
-extern const GraphicsBanks ov89_0225CA78;
-extern const GraphicsModes ov89_0225C9DC;
-extern const BgTemplate ov89_0225CC18[3];
-extern const BgTemplate ov89_0225CC6C[3];
-extern const ManagedSpriteTemplate ov89_0225CB08;
-extern const ManagedSpriteTemplate ov89_0225CB3C;
-extern const ManagedSpriteTemplate ov89_0225CB70;
+extern const OamManagerParam sFootprintStampOamManagerParam;
+extern const OamCharTransferParam sFootprintStampOamCharTransfer;
+extern SpriteResourceCountsListUnion sFootprintStampSpriteResourceCounts;
+extern const GraphicsBanks sFootprintStampBanks;
+extern const GraphicsModes sFootprintStampGraphicsModes;
+extern const BgTemplate sFootprintStampMainBgTemplates[3];
+extern const BgTemplate sFootprintStampSubBgTemplates[3];
+extern const ManagedSpriteTemplate sFootprintStampInkSpriteTemplate;
+extern const ManagedSpriteTemplate sFootprintStampSlotSpriteTemplate;
+extern const ManagedSpriteTemplate sFootprintStampFootprintSpriteTemplate;
 
 typedef struct FootprintStampBgTemplates {
     BgTemplate items[3];
@@ -101,12 +101,12 @@ BOOL FootprintStamp_Init(OverlayManager *man, int *state) {
     FootprintStamp_CreateWindows(work);
     work->string = String_New(0x100, HEAP_ID_125);
     work->spriteSystem = SpriteSystem_Alloc(HEAP_ID_125);
-    SpriteSystem_Init(work->spriteSystem, &ov89_0225CA58, &ov89_0225C9EC, 0x20);
+    SpriteSystem_Init(work->spriteSystem, &sFootprintStampOamManagerParam, &sFootprintStampOamCharTransfer, 0x20);
     G2dRenderer_SetObjCharTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN, GX_OBJVRAMMODE_CHAR_1D_128K);
     G2dRenderer_SetPlttTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN);
     work->spriteManager = SpriteManager_New(work->spriteSystem);
     SpriteSystem_InitSprites(work->spriteSystem, work->spriteManager, 0x80);
-    SpriteSystem_InitManagerWithCapacities(work->spriteSystem, work->spriteManager, &ov89_0225CA00);
+    SpriteSystem_InitManagerWithCapacities(work->spriteSystem, work->spriteManager, &sFootprintStampSpriteResourceCounts);
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(work->spriteSystem), 0, 0x110000);
     WirelessStatusIcon_Create();
     FootprintStampBoard_Init(&work->board, work->unk19E0);
@@ -358,15 +358,15 @@ void FootprintStamp_InitBgs(BgConfig *bgConfig) {
 
     GfGfx_DisableEngineAPlanes();
     GfGfx_DisableEngineBPlanes();
-    banks = ov89_0225CA78;
+    banks = sFootprintStampBanks;
     GfGfx_SetBanks(&banks);
     MIi_CpuClear32(0, (u32 *)0x06000000, 0x80000);
     MIi_CpuClear32(0, (u32 *)0x06200000, 0x20000);
     MIi_CpuClear32(0, (u32 *)0x06400000, 0x40000);
     MIi_CpuClear32(0, (u32 *)0x06600000, 0x20000);
-    modes = ov89_0225C9DC;
+    modes = sFootprintStampGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    mainTemplates = *(const FootprintStampBgTemplates *)ov89_0225CC18;
+    mainTemplates = *(const FootprintStampBgTemplates *)sFootprintStampMainBgTemplates;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &mainTemplates.items[0], GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
     BgSetPosTextAndCommit(bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_X, 0);
@@ -381,7 +381,7 @@ void FootprintStamp_InitBgs(BgConfig *bgConfig) {
     BgSetPosTextAndCommit(bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_Y, 0);
     reg_G2_BG0CNT = (u16)((reg_G2_BG0CNT & ~3) | 2); // 3D layer priority 2
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
-    subTemplates = *(const FootprintStampBgTemplates *)ov89_0225CC6C;
+    subTemplates = *(const FootprintStampBgTemplates *)sFootprintStampSubBgTemplates;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &subTemplates.items[0], GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
     BgSetPosTextAndCommit(bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_X, 0);
@@ -471,7 +471,7 @@ void FootprintStamp_CreatePartySprites(FootprintStamp *work) {
     int i;
     String *string;
 
-    template = ov89_0225CB08;
+    template = sFootprintStampInkSpriteTemplate;
     for (i = 0; i < FOOTPRINT_STAMP_PARTY_SLOTS; i++) {
         template.x = i * 32 + 16;
         template.y = 176;
@@ -479,7 +479,7 @@ void FootprintStamp_CreatePartySprites(FootprintStamp *work) {
         ManagedSprite_SetAnim(work->inkSprites[i], i);
         Sprite_TickFrame(work->inkSprites[i]->sprite);
     }
-    template = ov89_0225CB3C;
+    template = sFootprintStampSlotSpriteTemplate;
     for (i = 0; i < FOOTPRINT_STAMP_PARTY_SLOTS; i++) {
         template.x = i * 32 + 16;
         template.y = 176;
@@ -487,7 +487,7 @@ void FootprintStamp_CreatePartySprites(FootprintStamp *work) {
         ManagedSprite_SetAnim(work->slotSprites[i], i);
         Sprite_TickFrame(work->slotSprites[i]->sprite);
     }
-    template = ov89_0225CB70;
+    template = sFootprintStampFootprintSpriteTemplate;
     for (i = 0; i < FOOTPRINT_STAMP_PARTY_SLOTS; i++) {
         template.x = i * 32 + 16;
         template.y = 176;

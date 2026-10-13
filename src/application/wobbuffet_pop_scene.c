@@ -22,41 +22,41 @@
 #include "wobbuffet_pop.h"
 
 // Data of this part of the overlay, still in asm.
-extern const u16 _02262C6C[];
-extern const u16 ov93_02262C72[];
-extern const u16 ov93_02262C7A[];
-extern const u16 ov93_02262C82[];
-extern const u16 ov93_02262C8A[];
-extern u32 (*const ov93_02262C94[])(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target);
+extern const u16 sWobbuffetPopConfettiPalettes[];
+extern const u16 sWobbuffetPopSubBgColorIndices[];
+extern const u16 sWobbuffetPopBonusTargetAnims[];
+extern const u16 sWobbuffetPopSubObjColorIndices[];
+extern const u16 sWobbuffetPopSubObjPaletteBases[];
+extern u32 (*const sWobbuffetPopBonusTargetStateFuncs[])(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target);
 extern const s32 ov93_02262CA4[];
-extern const s16 ov93_02262CB4[][2];
-extern const s16 ov93_02262CB6[][2];
-extern const u8 ov93_02262CC4[];
-extern const u8 ov93_02262CC5[];
-extern const u8 ov93_02262CC6[];
-extern const u8 ov93_02262CD8[][4];
-extern const u16 ov93_02262CEC[];
-extern const u16 ov93_02262CEE[];
-extern const s32 ov93_02262CF0[][2];
-extern const u16 ov93_02262D04[][4];
-extern const u16 ov93_02262D2C[][4];
-extern const u16 ov93_02262D54[][4];
-extern const u16 ov93_02262D7C[][4];
-extern const u16 ov93_02262DA4[][4];
-extern const ManagedSpriteTemplate ov93_02262DCC;
-extern const ManagedSpriteTemplate ov93_02262E00;
-extern const ManagedSpriteTemplate ov93_02262E34;
-extern const ManagedSpriteTemplate ov93_02262E68;
-extern const ManagedSpriteTemplate ov93_02262E9C;
-extern const ManagedSpriteTemplate ov93_02262ED0;
-extern const ManagedSpriteTemplate ov93_02262F04;
-extern const ManagedSpriteTemplate ov93_02262F38;
-extern const ManagedSpriteTemplate ov93_02262F6C;
-extern const ManagedSpriteTemplate ov93_02262FA0;
-extern const s32 ov93_02262FD4[][3];
-extern const u8 ov93_02263010[];
-extern const u32 ov93_022630E4[];
-extern void (*const ov93_02263114[])(WobbuffetPop *game, WobbuffetPopEvent *event);
+extern const s16 sWobbuffetPopSeatPositions[][2];
+extern const s16 sWobbuffetPopSeatPositionsY[][2];
+extern const u8 sWobbuffetPopRingSpeedSteps[];
+extern const u8 sWobbuffetPopRingSpeedDelays[];
+extern const u8 sWobbuffetPopRingSpeedTimers[];
+extern const u8 sWobbuffetPopPopupSpots[][4];
+extern const u16 sWobbuffetPopInflationCharFiles[];
+extern const u16 sWobbuffetPopInflationScrnFiles[];
+extern const s32 sWobbuffetPopInflationScales[][2];
+extern const u16 sWobbuffetPopSubObjPaletteIndices[][4];
+extern const u16 sWobbuffetPopPopupPalettes[][4];
+extern const u16 sWobbuffetPopSeatColorIndices[][4];
+extern const u16 sWobbuffetPopConfettiAnims[][4];
+extern const u16 sWobbuffetPopSubBgPaletteIndices[][4];
+extern const ManagedSpriteTemplate sWobbuffetPopPuffSpriteTemplate;
+extern const ManagedSpriteTemplate sWobbuffetPopConfettiSpriteTemplate;
+extern const ManagedSpriteTemplate sWobbuffetPopBalloonIconSpriteTemplate;
+extern const ManagedSpriteTemplate sWobbuffetPopSeatSpriteTemplate;
+extern const ManagedSpriteTemplate sWobbuffetPopBonusSpriteTemplate;
+extern const ManagedSpriteTemplate sWobbuffetPopBonusEffectSpriteTemplate;
+extern const ManagedSpriteTemplate sWobbuffetPopBonusShadowSpriteTemplate;
+extern const ManagedSpriteTemplate sWobbuffetPopDustSpriteTemplate;
+extern const ManagedSpriteTemplate sWobbuffetPopScoreFrameSpriteTemplate;
+extern const ManagedSpriteTemplate sWobbuffetPopDemoStylusSpriteTemplate;
+extern const s32 sWobbuffetPopInflationCapacities[][3];
+extern const u8 sWobbuffetPopPuffConfigs[];
+extern const u32 sWobbuffetPopCommands[];
+extern void (*const sWobbuffetPopEventFuncs[])(WobbuffetPop *game, WobbuffetPopEvent *event);
 
 // font_sprite.c; called without its palette argument.
 void TextOBJ_SetPalOffset(TextOBJ *object);
@@ -121,11 +121,11 @@ void WobbuffetPop_HandleDemoEvent(WobbuffetPop *game, WobbuffetPopEvent *event);
 void WobbuffetPopInflation_Start(BgConfig *bgConfig, int playerCount, int size, WobbuffetPopInflation *inflation) {
     NARC *narc = NARC_New(NARC_a_1_9_9, HEAP_ID_117);
 
-    GfGfxLoader_LoadCharDataFromOpenNarc(narc, ov93_02262CEC[size * 4], bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, HEAP_ID_117);
-    GfGfxLoader_LoadScrnDataFromOpenNarc(narc, ov93_02262CEE[size * 4], bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, HEAP_ID_117);
+    GfGfxLoader_LoadCharDataFromOpenNarc(narc, sWobbuffetPopInflationCharFiles[size * 4], bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, HEAP_ID_117);
+    GfGfxLoader_LoadScrnDataFromOpenNarc(narc, sWobbuffetPopInflationScrnFiles[size * 4], bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, HEAP_ID_117);
     NARC_Delete(narc);
     MI_CpuFill8(inflation, 0, sizeof(WobbuffetPopInflation));
-    inflation->capacity = ov93_02262FD4[playerCount][size];
+    inflation->capacity = sWobbuffetPopInflationCapacities[playerCount][size];
     inflation->size = size;
     inflation->active = TRUE;
     inflation->showBg = TRUE;
@@ -185,7 +185,7 @@ void WobbuffetPopInflation_UpdateBg(BgConfig *bgConfig, WobbuffetPopInflation *i
 }
 
 void WobbuffetPopInflation_CalcScale(int playerCount, int size, int air, int *scaleX, int *scaleY) {
-    int q = ov93_02262CF0[size][0] * air / ov93_02262FD4[playerCount][size];
+    int q = sWobbuffetPopInflationScales[size][0] * air / sWobbuffetPopInflationCapacities[playerCount][size];
     int scale = q + 768;
 
     *scaleX = scale;
@@ -273,7 +273,7 @@ u32 WobbuffetPopPuff_Init(WobbuffetPop *game, const WobbuffetPopPump *pump, Wobb
         GF_AssertFail();
     }
     MI_CpuFill8(puff, 0, sizeof(*puff));
-    config = ov93_02263010 + (game->app->playerCount * 40) + WobbuffetPop_GetPlayerSeat(game, pump->netId) * 10;
+    config = sWobbuffetPopPuffConfigs + (game->app->playerCount * 40) + WobbuffetPop_GetPlayerSeat(game, pump->netId) * 10;
     puff->netId = pump->netId;
     puff->balloonIndex = pump->balloonIndex;
     puff->amount = pump->bonusAmount;
@@ -425,7 +425,7 @@ BOOL WobbuffetPopPuff_Move(WobbuffetPop *game, WobbuffetPopPuff *puff) {
 }
 
 ManagedSprite *WobbuffetPop_CreatePuffSprite(WobbuffetPop *game, const u8 *config) {
-    ManagedSpriteTemplate template = ov93_02262DCC;
+    ManagedSpriteTemplate template = sWobbuffetPopPuffSpriteTemplate;
     ManagedSprite *sprite;
 
     template.x = ((const s16 *)config)[0];
@@ -471,13 +471,13 @@ void WobbuffetPopConfetti_Create(WobbuffetPop *game, WobbuffetPopConfetti *confe
     ManagedSprite *t;
 
     count = 0;
-    tmpl = ov93_02262E00;
+    tmpl = sWobbuffetPopConfettiSpriteTemplate;
     air = inflation->air;
     pendingAir = inflation->pendingAir;
     for (i = 0; i < game->app->playerCount; i++) {
         seat = WobbuffetPop_GetPlayerSeat(game, game->app->netIds[i]);
         counts[i] = 36 * inflation->playerAir[seat] / (air + pendingAir);
-        anim = ov93_02262D7C[game->app->playerCount][seat];
+        anim = sWobbuffetPopConfettiAnims[game->app->playerCount][seat];
         for (j = 0; j < counts[i]; j++) {
             p = &confetti->playerPieces[count];
             s = SpriteSystem_NewSprite(game->spriteSystem, game->spriteManager, &tmpl);
@@ -515,7 +515,7 @@ void WobbuffetPopConfetti_Create(WobbuffetPop *game, WobbuffetPopConfetti *confe
         confetti->pieces[i].sprite = t;
     }
     tmpl.drawPriority = 13;
-    tmpl.pal = _02262C6C[inflation->size];
+    tmpl.pal = sWobbuffetPopConfettiPalettes[inflation->size];
     for (i = 0; i < 3; i++) {
         q = &confetti->balloonPieces[i];
         t = SpriteSystem_NewSprite(game->spriteSystem, game->spriteManager, &tmpl);
@@ -655,7 +655,7 @@ BOOL WobbuffetPop_PopBalloon(WobbuffetPop *game) {
 }
 
 ManagedSprite *WobbuffetPop_CreateBalloonIconSprite(WobbuffetPop *game, u32 anim, u32 position) {
-    ManagedSpriteTemplate template = ov93_02262E34;
+    ManagedSpriteTemplate template = sWobbuffetPopBalloonIconSpriteTemplate;
     ManagedSprite *sprite = SpriteSystem_NewSprite(game->spriteSystem, game->spriteManager, &template);
 
     ManagedSprite_SetPositionXYWithSubscreenOffset(sprite, 72 - position * 16, 32, 0x160000);
@@ -808,14 +808,14 @@ static inline int WobbuffetPop_GetSubBgPaletteIndex(WobbuffetPop *game, int i) {
     u8 count = game->app->playerCount;
     int seat = WobbuffetPop_GetPlayerSeat(game, game->app->netIds[i]);
 
-    return ov93_02262DA4[count][seat];
+    return sWobbuffetPopSubBgPaletteIndices[count][seat];
 }
 
 static inline int WobbuffetPop_GetSubObjPaletteIndex(WobbuffetPop *game, int i, int offset) {
     u8 count = game->app->playerCount;
     int seat = WobbuffetPop_GetPlayerSeat(game, game->app->netIds[i]);
 
-    return offset * 16 + ov93_02262D04[count][seat];
+    return offset * 16 + sWobbuffetPopSubObjPaletteIndices[count][seat];
 }
 
 #pragma force_active on
@@ -827,7 +827,7 @@ void WobbuffetPop_SetPlayerSubBgColors(WobbuffetPop *game) {
     u16 *faded;
 
     for (i = 0; i < game->app->playerCount; i++) {
-        int base = ov93_02262C72[i];
+        int base = sWobbuffetPopSubBgColorIndices[i];
         for (j = 0; j < 3; j++) {
             colors[i][j] = PaletteData_GetBufferColorAtIndex(game->paletteData, PLTTBUF_SUB_BG, PLTTSEL_OPAQUE, base + j);
         }
@@ -856,7 +856,7 @@ void WobbuffetPop_SetPlayerSubObjPalettes(WobbuffetPop *game) {
 
     offset = SpriteManager_FindPlttResourceOffset(game->spriteManager, 10006, NNS_G2D_VRAM_TYPE_2DSUB);
     for (i = 0; i < game->app->playerCount; i++) {
-        int base = ov93_02262C8A[i] + offset * 16;
+        int base = sWobbuffetPopSubObjPaletteBases[i] + offset * 16;
         for (j = 0; j < 16; j++) {
             colors[i][j] = PaletteData_GetBufferColorAtIndex(game->paletteData, PLTTBUF_SUB_OBJ, PLTTSEL_OPAQUE, base);
             base++;
@@ -885,13 +885,13 @@ void WobbuffetPop_SetPlayerSubObjColors(WobbuffetPop *game) {
 
     offset = SpriteManager_FindPlttResourceOffset(game->spriteManager, 10006, NNS_G2D_VRAM_TYPE_2DSUB);
     for (i = 0; i < game->app->playerCount; i++) {
-        colors[i] = PaletteData_GetBufferColorAtIndex(game->paletteData, PLTTBUF_SUB_OBJ, PLTTSEL_OPAQUE, ov93_02262C82[i] + offset * 16);
+        colors[i] = PaletteData_GetBufferColorAtIndex(game->paletteData, PLTTBUF_SUB_OBJ, PLTTSEL_OPAQUE, sWobbuffetPopSubObjColorIndices[i] + offset * 16);
     }
     WobbuffetPop_FindPlayer(game, Comm_GetLocalNetId());
     unfaded = PaletteData_GetUnfadedBuf(game->paletteData, PLTTBUF_SUB_OBJ);
     faded = PaletteData_GetFadedBuf(game->paletteData, PLTTBUF_SUB_OBJ);
     for (i = 0; i < game->app->playerCount; i++) {
-        int index = offset * 16 + ov93_02262D54[game->app->playerCount][WobbuffetPop_GetPlayerSeat(game, game->app->netIds[i])];
+        int index = offset * 16 + sWobbuffetPopSeatColorIndices[game->app->playerCount][WobbuffetPop_GetPlayerSeat(game, game->app->netIds[i])];
         s32 player = i;
         unfaded[index] = colors[player];
         faded[index] = colors[player];
@@ -987,12 +987,12 @@ BOOL WobbuffetPop_SetPumpBonus(WobbuffetPop *game, int bonus) {
 }
 
 void WobbuffetPop_CreateSeatSprites(WobbuffetPop *game, ManagedSprite **sprites) {
-    ManagedSpriteTemplate template = ov93_02262E68;
+    ManagedSpriteTemplate template = sWobbuffetPopSeatSpriteTemplate;
     int i;
 
     for (i = 0; i < 4; i++) {
         sprites[i] = SpriteSystem_NewSprite(game->spriteSystem, game->spriteManager, &template);
-        ManagedSprite_SetPositionXYWithSubscreenOffset(sprites[i], ov93_02262CB4[i][0], ov93_02262CB4[i][1], 0x160000);
+        ManagedSprite_SetPositionXYWithSubscreenOffset(sprites[i], sWobbuffetPopSeatPositions[i][0], sWobbuffetPopSeatPositions[i][1], 0x160000);
         ManagedSprite_SetAnim(sprites[i], i / 2 + 31);
         Sprite_TickFrame(sprites[i]->sprite);
     }
@@ -1019,7 +1019,7 @@ void WobbuffetPop_FreeSeatSprites(WobbuffetPop *game, ManagedSprite **sprites) {
 
 #pragma force_active on
 void WobbuffetPopBonusRing_CreateSprites(WobbuffetPop *game, WobbuffetPopBonusRing *ring) {
-    ManagedSpriteTemplate template = ov93_02262E9C;
+    ManagedSpriteTemplate template = sWobbuffetPopBonusSpriteTemplate;
     int i;
 
     for (i = 0; i < 3; i++) {
@@ -1029,15 +1029,15 @@ void WobbuffetPopBonusRing_CreateSprites(WobbuffetPop *game, WobbuffetPopBonusRi
 
         target->sprite = SpriteSystem_NewSprite(game->spriteSystem, game->spriteManager, &template);
         ManagedSprite_SetPositionXYWithSubscreenOffset(target->sprite, (s16)x, (s16)(y - 24), 0x160000);
-        ManagedSprite_SetAnim(target->sprite, ov93_02262C7A[i + 1]);
+        ManagedSprite_SetAnim(target->sprite, sWobbuffetPopBonusTargetAnims[i + 1]);
         Sprite_TickFrame(target->sprite->sprite);
         ManagedSprite_SetDrawFlag(target->sprite, FALSE);
-        target->effect = SpriteSystem_NewSprite(game->spriteSystem, game->spriteManager, &ov93_02262ED0);
+        target->effect = SpriteSystem_NewSprite(game->spriteSystem, game->spriteManager, &sWobbuffetPopBonusEffectSpriteTemplate);
         ManagedSprite_SetPositionXYWithSubscreenOffset(target->effect, 0, 0, 0x160000);
         ManagedSprite_SetAnim(target->effect, 33);
         Sprite_TickFrame(target->effect->sprite);
         ManagedSprite_SetDrawFlag(target->effect, FALSE);
-        target->shadow = SpriteSystem_NewSprite(game->spriteSystem, game->spriteManager, &ov93_02262F04);
+        target->shadow = SpriteSystem_NewSprite(game->spriteSystem, game->spriteManager, &sWobbuffetPopBonusShadowSpriteTemplate);
         ManagedSprite_SetPositionXYWithSubscreenOffset(target->shadow, (s16)x, (s16)y, 0x160000);
         ManagedSprite_SetOamMode(target->shadow, GX_OAM_MODE_XLU);
         ManagedSprite_SetAffineOverwriteMode(target->shadow, 1);
@@ -1068,7 +1068,7 @@ void WobbuffetPopBonusRing_FreeSprites(WobbuffetPop *game, WobbuffetPopBonusRing
 #pragma force_active on
 #pragma opt_strength_reduction off
 void WobbuffetPopBonusRing_Init(WobbuffetPop *game, WobbuffetPopBonusRing *ring) {
-    ring->angleStep = 0x1e000 / ov93_02262CC4[ring->speed * 4];
+    ring->angleStep = 0x1e000 / sWobbuffetPopRingSpeedSteps[ring->speed * 4];
     int i = 0;
     int angle = i;
     WobbuffetPopBonusTarget *target = ring->targets;
@@ -1096,11 +1096,11 @@ void WobbuffetPopBonusRing_Update(WobbuffetPop *game, WobbuffetPopBonusRing *rin
     if (ring->delay == 0) {
         ring->angle += ring->angleStep;
         ring->stepTimer++;
-        if (ring->stepTimer >= ov93_02262CC4[ring->speed * 4]) {
+        if (ring->stepTimer >= sWobbuffetPopRingSpeedSteps[ring->speed * 4]) {
             ring->stepTimer = 0;
             ring->position++;
             ring->angle = ring->position * 0x1e000;
-            ring->delay = ov93_02262CC5[ring->speed * 4];
+            ring->delay = sWobbuffetPopRingSpeedDelays[ring->speed * 4];
         }
     } else {
         ring->delay--;
@@ -1110,12 +1110,12 @@ void WobbuffetPopBonusRing_Update(WobbuffetPop *game, WobbuffetPopBonusRing *rin
             if (ring->speed >= 5) {
                 ring->speed = 4;
             }
-            ring->angleStep = 0x1e000 / ov93_02262CC4[ring->speed * 4];
+            ring->angleStep = 0x1e000 / sWobbuffetPopRingSpeedSteps[ring->speed * 4];
         }
     }
     if (ring->speed == 1) {
         {
-            const u8 *p = ov93_02262CC4;
+            const u8 *p = sWobbuffetPopRingSpeedSteps;
             for (i = 0; i < 2; i++, p += 4) {
                 sum += (p[0] + p[1]) * 12;
             }
@@ -1125,7 +1125,7 @@ void WobbuffetPopBonusRing_Update(WobbuffetPop *game, WobbuffetPopBonusRing *rin
         }
     } else if (ring->speed == 2) {
         {
-            const u8 *p = ov93_02262CC4;
+            const u8 *p = sWobbuffetPopRingSpeedSteps;
             for (i = 0; i < 3; i++, p += 4) {
                 sum += (p[0] + p[1]) * 12;
             }
@@ -1166,7 +1166,7 @@ void WobbuffetPopBonusTarget_SetState(WobbuffetPopBonusTarget *target, u8 state)
 }
 
 u32 WobbuffetPopBonusTarget_Run(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target) {
-    return ov93_02262C94[target->state](game, ring, target);
+    return sWobbuffetPopBonusTargetStateFuncs[target->state](game, ring, target);
 }
 
 u32 WobbuffetPopBonusTarget_Idle(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target) {
@@ -1256,18 +1256,18 @@ u32 WobbuffetPopBonusTarget_Walk(WobbuffetPop *game, WobbuffetPopBonusRing *ring
     float scale;
 
     if (ring->stepTimer != 0) {
-        ManagedSprite_TickNFrames(target->sprite, 0x2c000 / ov93_02262CC4[ring->speed * 4]);
+        ManagedSprite_TickNFrames(target->sprite, 0x2c000 / sWobbuffetPopRingSpeedSteps[ring->speed * 4]);
     } else {
         ManagedSprite_SetAnimationFrame(target->sprite, 0);
     }
-    bob = -FX_Mul(GF_SinDegFX32(((180 * ring->stepTimer) << FX32_SHIFT) / ov93_02262CC4[ring->speed * 4]), 0xc000) / FX32_ONE;
+    bob = -FX_Mul(GF_SinDegFX32(((180 * ring->stepTimer) << FX32_SHIFT) / sWobbuffetPopRingSpeedSteps[ring->speed * 4]), 0xc000) / FX32_ONE;
     x = 128 + FX_Mul(GF_SinDegFX32(ring->angle + target->angle), 76);
     y = 98 - FX_Mul(GF_CosDegFX32(ring->angle + target->angle), 68);
     ManagedSprite_SetPositionXYWithSubscreenOffset(target->sprite, (s16)x, (s16)(y - 24 + bob), 0x160000);
     ManagedSprite_SetPositionXYWithSubscreenOffset(target->shadow, (s16)x, (s16)y, 0x160000);
     scale = (float)(FX32_ONE - ((-bob / 3) << FX32_SHIFT) / 12) / (float)FX32_ONE;
     ManagedSprite_SetAffineScale(target->shadow, scale, scale);
-    if (ring->stepTimer == ov93_02262CC4[ring->speed * 4] - 1) {
+    if (ring->stepTimer == sWobbuffetPopRingSpeedSteps[ring->speed * 4] - 1) {
         WobbuffetPopDust_Start(game, target, &target->dust);
     }
     target->atFront = (((ring->angle + target->angle) >> FX32_SHIFT) % 360 == 180);
@@ -1298,20 +1298,20 @@ u32 WobbuffetPopBonusTarget_Hit(WobbuffetPop *game, WobbuffetPopBonusRing *ring,
         ManagedSprite_SetPositionXYWithSubscreenOffset(target->effect, originX, originY - 32, 0x160000);
         ManagedSprite_SetAnim(target->effect, 33);
         ManagedSprite_SetDrawFlag(target->effect, TRUE);
-        ManagedSprite_SetAnim(target->sprite, ov93_02262C7A[target->bonus] + 2);
-        target->timer = ov93_02262CC6[ring->speed * 4];
-        target->unk_13 = ov93_02262CC6[ring->speed * 4] / 2;
+        ManagedSprite_SetAnim(target->sprite, sWobbuffetPopBonusTargetAnims[target->bonus] + 2);
+        target->timer = sWobbuffetPopRingSpeedTimers[ring->speed * 4];
+        target->unk_13 = sWobbuffetPopRingSpeedTimers[ring->speed * 4] / 2;
         target->step = (u8)(target->step + 1);
         break;
     case 1:
         if (target->timer == target->unk_13) {
-            ManagedSprite_SetAnim(target->sprite, ov93_02262C7A[target->bonus] + 1);
+            ManagedSprite_SetAnim(target->sprite, sWobbuffetPopBonusTargetAnims[target->bonus] + 1);
             ManagedSprite_SetDrawFlag(target->effect, FALSE);
             ManagedSprite_TickNFrames(target->effect, 0x4000);
         }
         if (target->timer == 0) {
             ManagedSprite_SetDrawFlag(target->effect, FALSE);
-            ManagedSprite_SetAnim(target->sprite, ov93_02262C7A[target->bonus]);
+            ManagedSprite_SetAnim(target->sprite, sWobbuffetPopBonusTargetAnims[target->bonus]);
             target->step = (u8)(target->step + 1);
         } else {
             target->timer--;
@@ -1326,18 +1326,18 @@ u32 WobbuffetPopBonusTarget_Hit(WobbuffetPop *game, WobbuffetPopBonusRing *ring,
         s32 cosine;
 
         if (ring->delay == 0) {
-            int period = ov93_02262CC4[ring->speed * 4];
+            int period = sWobbuffetPopRingSpeedSteps[ring->speed * 4];
             value += period - ring->stepTimer;
-            value += ov93_02262CC5[ring->speed * 4];
+            value += sWobbuffetPopRingSpeedDelays[ring->speed * 4];
             duration = value + period;
             start = ring->position + 2;
         } else {
             value += ring->delay;
             if (ring->position >= 12) {
-                duration = value + ov93_02262CC4[(ring->speed + 1) * 4];
+                duration = value + sWobbuffetPopRingSpeedSteps[(ring->speed + 1) * 4];
                 start = 1;
             } else {
-                duration = value + ov93_02262CC4[ring->speed * 4];
+                duration = value + sWobbuffetPopRingSpeedSteps[ring->speed * 4];
                 start = ring->position + 1;
             }
         }
@@ -1361,7 +1361,7 @@ u32 WobbuffetPopBonusTarget_Hit(WobbuffetPop *game, WobbuffetPopBonusRing *ring,
         ManagedSprite_SetPositionXYWithSubscreenOffset(target->shadow, (s16)(target->motion.hop.x / 4096), (s16)(target->motion.hop.y / 4096), 0x160000);
         target->timer--;
         if (target->timer == 0) {
-            ManagedSprite_SetAnim(target->sprite, ov93_02262C7A[target->bonus]);
+            ManagedSprite_SetAnim(target->sprite, sWobbuffetPopBonusTargetAnims[target->bonus]);
             ManagedSprite_SetAnimationFrame(target->sprite, 0);
             WobbuffetPopBonusTarget_SetState(target, 2);
             return TRUE;
@@ -1374,7 +1374,7 @@ u32 WobbuffetPopBonusTarget_Hit(WobbuffetPop *game, WobbuffetPopBonusRing *ring,
 #pragma force_active off
 
 void WobbuffetPop_CreateBonusPopupSprites(WobbuffetPop *game, WobbuffetPopBonusPopup *popups) {
-    ManagedSpriteTemplate template = ov93_02262E9C;
+    ManagedSpriteTemplate template = sWobbuffetPopBonusSpriteTemplate;
     int i;
     WobbuffetPopBonusPopup *popup;
 
@@ -1385,7 +1385,7 @@ void WobbuffetPop_CreateBonusPopupSprites(WobbuffetPop *game, WobbuffetPopBonusP
         popup->sprite = sprite;
         ManagedSprite_SetPositionXYWithSubscreenOffset(sprite, 0, 0, 0x160000);
         ManagedSprite_SetDrawFlag(popup->sprite, FALSE);
-        sprite = SpriteSystem_NewSprite(game->spriteSystem, game->spriteManager, &ov93_02262ED0);
+        sprite = SpriteSystem_NewSprite(game->spriteSystem, game->spriteManager, &sWobbuffetPopBonusEffectSpriteTemplate);
         popup->effect = sprite;
         ManagedSprite_SetPositionXYWithSubscreenOffset(sprite, 0, 0, 0x160000);
         ManagedSprite_SetAnim(popup->effect, 33);
@@ -1429,12 +1429,12 @@ void WobbuffetPop_ShowBonusPopup(WobbuffetPop *game, WobbuffetPopBonusPopup *pop
         return;
     }
     seat = WobbuffetPop_GetPlayerSeat(game, netId);
-    ManagedSprite_SetPaletteOverride(popup->sprite, ov93_02262D2C[game->app->playerCount][seat]);
-    ManagedSprite_SetAnim(popup->sprite, ov93_02262C7A[bonusCopy]);
-    spot = ov93_02262CD8[game->app->playerCount][seat];
+    ManagedSprite_SetPaletteOverride(popup->sprite, sWobbuffetPopPopupPalettes[game->app->playerCount][seat]);
+    ManagedSprite_SetAnim(popup->sprite, sWobbuffetPopBonusTargetAnims[bonusCopy]);
+    spot = sWobbuffetPopPopupSpots[game->app->playerCount][seat];
     {
-        s16 x = ov93_02262CB4[spot][0];
-        popup->targetY = ov93_02262CB6[spot][0] - 24;
+        s16 x = sWobbuffetPopSeatPositions[spot][0];
+        popup->targetY = sWobbuffetPopSeatPositionsY[spot][0] - 24;
         ManagedSprite_SetPositionXYWithSubscreenOffset(popup->sprite, x, popup->targetY - 96, 22 << 16);
     }
     Sprite_TickFrame(popup->sprite->sprite);
@@ -1485,7 +1485,7 @@ BOOL WobbuffetPopBonusPopup_Update(WobbuffetPopBonusPopup *popups, WobbuffetPopB
         ManagedSprite_SetAnim(popup->effect, 33);
         ManagedSprite_SetDrawFlag(popup->effect, TRUE);
         PlaySE(SEQ_SE_PL_BALLOON05);
-        ManagedSprite_SetAnim(popup->sprite, ov93_02262C7A[popup->bonus] + 2);
+        ManagedSprite_SetAnim(popup->sprite, sWobbuffetPopBonusTargetAnims[popup->bonus] + 2);
         popup->timer = 8;
         popup->state++;
         break;
@@ -1496,7 +1496,7 @@ BOOL WobbuffetPopBonusPopup_Update(WobbuffetPopBonusPopup *popups, WobbuffetPopB
         }
         if (popup->timer == 0) {
             ManagedSprite_SetDrawFlag(popup->effect, FALSE);
-            ManagedSprite_SetAnim(popup->sprite, ov93_02262C7A[popup->bonus]);
+            ManagedSprite_SetAnim(popup->sprite, sWobbuffetPopBonusTargetAnims[popup->bonus]);
             popup->state++;
         }
         break;
@@ -1698,7 +1698,7 @@ BOOL WobbuffetPopScoreDisplay_RollDigits(WobbuffetPopScoreDisplay *display) {
 #pragma force_active off
 
 ManagedSprite *WobbuffetPop_CreateScoreFrameSprite(WobbuffetPop *game) {
-    ManagedSprite *sprite = SpriteSystem_NewSprite(game->spriteSystem, game->spriteManager, &ov93_02262F6C);
+    ManagedSprite *sprite = SpriteSystem_NewSprite(game->spriteSystem, game->spriteManager, &sWobbuffetPopScoreFrameSpriteTemplate);
 
     Sprite_TickFrame(sprite->sprite);
     return sprite;
@@ -1756,7 +1756,7 @@ void WobbuffetPop_DeleteScoreFrameSprite(WobbuffetPop *game, ManagedSprite *spri
 }
 
 ManagedSprite *WobbuffetPop_CreateDemoStylusSprite(WobbuffetPop *game) {
-    ManagedSprite *sprite = SpriteSystem_NewSprite(game->spriteSystem, game->spriteManager, &ov93_02262FA0);
+    ManagedSprite *sprite = SpriteSystem_NewSprite(game->spriteSystem, game->spriteManager, &sWobbuffetPopDemoStylusSpriteTemplate);
 
     ManagedSprite_SetDrawFlag(sprite, FALSE);
     Sprite_TickFrame(sprite->sprite);
@@ -1822,7 +1822,7 @@ void WobbuffetPopDust_Create(WobbuffetPop *game, WobbuffetPopDust *dust) {
     ManagedSprite **out = dust->sprites;
 
     for (i = 0; i < 2; i++) {
-        ManagedSprite *sprite = SpriteSystem_NewSprite(game->spriteSystem, game->spriteManager, &ov93_02262F38);
+        ManagedSprite *sprite = SpriteSystem_NewSprite(game->spriteSystem, game->spriteManager, &sWobbuffetPopDustSpriteTemplate);
 
         ManagedSprite_SetAnim(sprite, 27);
         ManagedSprite_SetOamMode(sprite, GX_OAM_MODE_XLU);
@@ -1980,7 +1980,7 @@ BOOL WobbuffetPopPlazaScreen_Exit(OverlayManager *man, int *state) {
 }
 
 void WobbuffetPop_RegisterCommands(WobbuffetPop *game) {
-    Comm_RegisterCommandTable(ov93_022630E4, 4, game);
+    Comm_RegisterCommandTable(sWobbuffetPopCommands, 4, game);
 }
 
 u32 WobbuffetPop_GetEventCommandSize(void) {
@@ -2042,8 +2042,8 @@ BOOL WobbuffetPop_SendPlayerValue(void) {
 }
 
 BOOL WobbuffetPop_RunEvent(WobbuffetPop *game, WobbuffetPopEvent *event) {
-    if (ov93_02263114[event->kind] != NULL) {
-        ov93_02263114[event->kind](game, event);
+    if (sWobbuffetPopEventFuncs[event->kind] != NULL) {
+        sWobbuffetPopEventFuncs[event->kind](game, event);
         MI_CpuFill8(event, 0, sizeof(WobbuffetPopEvent));
         return TRUE;
     }

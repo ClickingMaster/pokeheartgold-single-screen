@@ -60,40 +60,40 @@ int NNS_G3dGetResDictIdxByName(const NNSG3dResDict *dict, const NNSG3dResName *n
 
 // Tables in asm/plaza_game_swalot_plop_data.s.
 extern const u8 _02261BE8[];
-extern const u8 ov91_02261BEC[];
-extern const u8 ov91_02261BF0[];
-extern const u16 ov91_02261BF8[];
-extern const u16 ov91_02261BFE[];
-extern const u16 ov91_02261C04[3];
-extern const u16 ov91_02261C0A[];
-extern const u8 ov91_02261C12[];
-extern const u8 ov91_02261C13[];
-extern const u16 ov91_02261C1C[6];
+extern const u8 sSwalotPlopSubBgPalettes[];
+extern const u8 sSwalotPlopShotModelFiles[];
+extern const u16 sSwalotPlopStageAnimFiles[];
+extern const u16 sSwalotPlopStageAnimModels[];
+extern const u16 sSwalotPlopSceneModelFiles[3];
+extern const u16 sSwalotPlopStageFiles[];
+extern const u8 sSwalotPlopSpecialAnimStarts[];
+extern const u8 sSwalotPlopSpecialAnimEnds[];
+extern const u16 sSwalotPlopSceneAnimFiles[6];
 extern const VecFx32 ov91_02261C28;
-extern const u32 ov91_02261C34[];
-extern const u32 ov91_02261C44[];
-extern const VecFx32 ov91_02261C4C;
-extern int (*const ov91_02261C58[])(SwalotPlopBody *body, u32 frame, u32 duration);
-extern const ObjCharTransferTemplate ov91_02261C64;
-extern const GraphicsModes ov91_02261C74;
-extern const s16 ov91_02261C84[];
-extern const BgTemplate ov91_02261C9C;
-extern const BgTemplate ov91_02261CB8;
-extern const BgTemplate ov91_02261CD4;
-extern const BgTemplate ov91_02261CF0;
-extern const BgTemplate ov91_02261D0C;
-extern const BgTemplate ov91_02261D28;
-extern const u16 ov91_02261D3C[][4];
-extern const u16 ov91_02261D5C[][4];
-extern const u16 ov91_02261D64[][4];
-extern const GraphicsBanks ov91_02261D84;
+extern const u32 sSwalotPlopHitPoints[];
+extern const u32 sSwalotPlopPhaseFrames[];
+extern const VecFx32 sSwalotPlopBodyBaseNormal;
+extern int (*const sSwalotPlopTiltFuncs[])(SwalotPlopBody *body, u32 frame, u32 duration);
+extern const ObjCharTransferTemplate sSwalotPlopObjCharTransfer;
+extern const GraphicsModes sSwalotPlopGraphicsModes;
+extern const s16 sSwalotPlopDemoCursorYs[];
+extern const BgTemplate sSwalotPlopMain1BgTemplate;
+extern const BgTemplate sSwalotPlopMain2BgTemplate;
+extern const BgTemplate sSwalotPlopSub0BgTemplate;
+extern const BgTemplate sSwalotPlopSub1BgTemplate;
+extern const BgTemplate sSwalotPlopSub2BgTemplate;
+extern const BgTemplate sSwalotPlopSub3BgTemplate;
+extern const u16 sSwalotPlopSeatAngles[][4];
+extern const u16 sSwalotPlopCameraAngles[][4];
+extern const u16 sSwalotPlopStageRotations[][4];
+extern const GraphicsBanks sSwalotPlopBanks;
 extern const u32 ov91_02261DAC[];
-extern const u8 ov91_02261F8C[];
-extern const u8 ov91_02261F90[];
-extern const NNSG3dResName ov91_022621AC[6][15];
-extern const u8 ov91_0226274C[6];
-extern const SwalotPlopCommand ov91_02262754[8];
-extern u8 ov91_022627C0[];
+extern const u8 sSwalotPlopPopupPosX[];
+extern const u8 sSwalotPlopPopupPosY[];
+extern const NNSG3dResName sSwalotPlopSceneNodeNames[6][15];
+extern const u8 sSwalotPlopSceneAnimModels[6];
+extern const SwalotPlopCommand sSwalotPlopCommands[8];
+extern u8 sSwalotPlopTouchpadBuffer[];
 
 BOOL SwalotPlop_Init(OverlayManager *man, int *state) {
     PlazaGameArgs *args = OverlayManager_GetArgs(man);
@@ -640,7 +640,7 @@ SwalotPlopGame *SwalotPlopGame_New(enum HeapID heapId, u32 duration, u32 playerC
     SwalotPlopGame_InitGfx(game, heapId);
     SwalotPlopDemo_Init(&game->demo, &game->gfx, heapId);
     SwalotPlopScoreReports_Init(&game->scoreReports);
-    if (GF_TouchpadStartRecording((TPData *)ov91_022627C0, 8, 4) != TRUE) {
+    if (GF_TouchpadStartRecording((TPData *)sSwalotPlopTouchpadBuffer, 8, 4) != TRUE) {
         GF_AssertFail();
     }
     return game;
@@ -788,7 +788,7 @@ BOOL SwalotPlopGame_RunFinish(SwalotPlopGame *game, BOOL ready) {
 BOOL SwalotPlopGame_Update(SwalotPlopGame *game) {
     u32 phase = game->phase;
     u32 leader;
-    if (phase < 2 && ov91_02261C44[phase] <= game->frame) {
+    if (phase < 2 && sSwalotPlopPhaseFrames[phase] <= game->frame) {
         game->phase = phase + 1;
         if (game->phase == SWALOT_PLOP_PHASE_FAST) {
             SwalotPlopSpeedUp_Start(&game->speedUp);
@@ -920,8 +920,8 @@ BOOL SwalotPlopCurve_Update(SwalotPlopCurve *curve) {
 }
 
 void SwalotPlop_GetPopupPos(int seat, int playerCount, int index, u32 *x, u32 *y) {
-    *x = *(const u32 *)(ov91_02261F8C + playerCount * 0x80 + seat * 0x20 + index * 8);
-    *y = *(const u32 *)(ov91_02261F90 + playerCount * 0x80 + seat * 0x20 + index * 8);
+    *x = *(const u32 *)(sSwalotPlopPopupPosX + playerCount * 0x80 + seat * 0x20 + index * 8);
+    *y = *(const u32 *)(sSwalotPlopPopupPosY + playerCount * 0x80 + seat * 0x20 + index * 8);
 }
 
 #pragma force_active on
@@ -961,7 +961,7 @@ u32 SwalotPlopGame_GetHitPoints(SwalotPlopGame *game) {
     } else {
         index = (u8)combo;
     }
-    points = ov91_02261C34[index];
+    points = sSwalotPlopHitPoints[index];
     if (game->phase == SWALOT_PLOP_PHASE_FASTEST) {
         points = points + points * 2;
     }
@@ -1287,7 +1287,7 @@ void SwalotPlopBody_Update(SwalotPlopGame *game, SwalotPlopBody *body) {
     } else {
         body->mouthOpen = TRUE;
     }
-    int (*getTilt)(SwalotPlopBody *, u32, u32) = ov91_02261C58[game->phase];
+    int (*getTilt)(SwalotPlopBody *, u32, u32) = sSwalotPlopTiltFuncs[game->phase];
     int tilt = getTilt(body, game->frame, game->duration);
     SwalotPlopBody_SetTilt(body, tilt);
     body->mouthDepth = SwalotPlopBody_CalcMouthDepth(body, body->tilt);
@@ -1313,7 +1313,7 @@ void SwalotPlopBody_SetSpin(SwalotPlopBody *body, u16 spin) {
     MTX_Identity33_(&body->spinMtx);
     MTX_RotY33_(&body->spinMtx, FX_SinIdx(spin), FX_CosIdx(spin));
     MTX_Concat33(&body->tiltMtx, &body->spinMtx, &body->rotation);
-    MTX_MultVec33(&ov91_02261C4C, &body->rotation, &body->normal);
+    MTX_MultVec33(&sSwalotPlopBodyBaseNormal, &body->rotation, &body->normal);
     v.x = 0;
     v.y = 0;
     v.z = -body->mouthDepth;
@@ -2212,7 +2212,7 @@ BOOL SwalotPlopDemo_Update(SwalotPlopDemo *demo, SwalotPlopGame *game) {
             SwalotPlopCursor_Hide(&game->gfx.cursor);
             break;
         }
-        SwalotPlopCursor_SetPos(&game->gfx.cursor, 128, ov91_02261C84[frame]);
+        SwalotPlopCursor_SetPos(&game->gfx.cursor, 128, sSwalotPlopDemoCursorYs[frame]);
         break;
     }
     case 2:
@@ -2281,7 +2281,7 @@ BOOL SwalotPlopScoreReports_HasAll(SwalotPlopScoreReports *reports, u32 playerCo
 
 void SwalotPlopGfx_SetBanks(void) {
     GraphicsBanks banks;
-    banks = ov91_02261D84;
+    banks = sSwalotPlopBanks;
     GfGfx_SetBanks(&banks);
 }
 
@@ -2398,29 +2398,29 @@ void SwalotPlopGame_Draw(SwalotPlopGame *game, SwalotPlopGfx *gfx) {
 
 void SwalotPlopGfx_InitBgs(BgConfig **bgConfig, enum HeapID heapId) {
     *bgConfig = BgConfig_Alloc(heapId);
-    GraphicsModes modes = ov91_02261C74;
+    GraphicsModes modes = sSwalotPlopGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    BgTemplate main1 = ov91_02261C9C;
+    BgTemplate main1 = sSwalotPlopMain1BgTemplate;
     InitBgFromTemplate(*bgConfig, GF_BG_LYR_MAIN_1, &main1, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_1, 0x20, 0, heapId);
     BgClearTilemapBufferAndCommit(*bgConfig, GF_BG_LYR_MAIN_1);
-    BgTemplate main2 = ov91_02261CB8;
+    BgTemplate main2 = sSwalotPlopMain2BgTemplate;
     InitBgFromTemplate(*bgConfig, GF_BG_LYR_MAIN_2, &main2, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_2, 0x20, 0, heapId);
     BgClearTilemapBufferAndCommit(*bgConfig, GF_BG_LYR_MAIN_2);
-    BgTemplate sub0 = ov91_02261CD4;
+    BgTemplate sub0 = sSwalotPlopSub0BgTemplate;
     InitBgFromTemplate(*bgConfig, GF_BG_LYR_SUB_0, &sub0, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 0x20, 0, heapId);
     BgClearTilemapBufferAndCommit(*bgConfig, GF_BG_LYR_SUB_0);
-    BgTemplate sub1 = ov91_02261CF0;
+    BgTemplate sub1 = sSwalotPlopSub1BgTemplate;
     InitBgFromTemplate(*bgConfig, GF_BG_LYR_SUB_1, &sub1, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_1, 0x20, 0, heapId);
     BgClearTilemapBufferAndCommit(*bgConfig, GF_BG_LYR_SUB_1);
-    BgTemplate sub2 = ov91_02261D0C;
+    BgTemplate sub2 = sSwalotPlopSub2BgTemplate;
     InitBgFromTemplate(*bgConfig, GF_BG_LYR_SUB_2, &sub2, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_2, 0x20, 0, heapId);
     BgClearTilemapBufferAndCommit(*bgConfig, GF_BG_LYR_SUB_2);
-    BgTemplate sub3 = ov91_02261D28;
+    BgTemplate sub3 = sSwalotPlopSub3BgTemplate;
     InitBgFromTemplate(*bgConfig, GF_BG_LYR_SUB_3, &sub3, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_3, 0x20, 0, heapId);
     BgClearTilemapBufferAndCommit(*bgConfig, GF_BG_LYR_SUB_3);
@@ -2455,7 +2455,7 @@ void SwalotPlopGfx_InitSprites(SwalotPlopGfx *gfx, enum HeapID heapId) {
 
     NNS_G2dInitOamManagerModule();
     OamManager_Create(0, 0x7E, 0, 0x1F, 0, 0x7E, 0, 0x1F, heapId);
-    template = ov91_02261C64;
+    template = sSwalotPlopObjCharTransfer;
     template.heapID = heapId;
     ObjCharTransfer_InitEx(&template, GX_OBJVRAMMODE_CHAR_1D_128K, GX_OBJVRAMMODE_CHAR_1D_128K);
     ObjPlttTransfer_Init(0x10, heapId);
@@ -2539,7 +2539,7 @@ void SwalotPlopGfx_InitCamera(SwalotPlopGfx *gfx, int playerCount, int localInde
     gfx->cameraTarget.y = 0;
     gfx->cameraTarget.z = 0;
     angle.x = 0xF112;
-    angle.y = ov91_02261D5C[playerCount][localIndex];
+    angle.y = sSwalotPlopCameraAngles[playerCount][localIndex];
     angle.z = 0;
     Camera_Init_FromTargetDistanceAndAngle(&gfx->cameraTarget, 0x1D9000, &angle, 0xFA4, 0, TRUE, gfx->camera);
     up.x = 0;
@@ -2568,7 +2568,7 @@ void SwalotPlopGfx_LoadSubBgs(SwalotPlopGfx *gfx, NARC *narc, int localIndex, en
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 16, gfx->bgConfig, GF_BG_LYR_SUB_1, 0, 0, FALSE, heapId);
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 17, gfx->bgConfig, GF_BG_LYR_SUB_0, 0, 0, FALSE, heapId);
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 13, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 384, heapId);
-    BgTilemapRectChangePalette(gfx->bgConfig, GF_BG_LYR_SUB_3, 0, 0, 32, 32, ov91_02261BEC[localIndex]);
+    BgTilemapRectChangePalette(gfx->bgConfig, GF_BG_LYR_SUB_3, 0, 0, 32, 32, sSwalotPlopSubBgPalettes[localIndex]);
     palette = localIndex * 2;
     BgTilemapRectChangePalette(gfx->bgConfig, GF_BG_LYR_SUB_2, 0, 0, 32, 32, (u8)(palette + 2));
     palette = localIndex * 2 + 1;
@@ -2608,17 +2608,17 @@ void SwalotPlopScene_Init(SwalotPlopScene *scene, NARC *narc, enum HeapID heapId
 
     memset(scene, 0, sizeof(SwalotPlopScene));
     for (i = 0; i < 3; i++) {
-        ModelResource_LoadFromNarc(&scene->resources[i], narc, ov91_02261C04[i], heapId);
+        ModelResource_LoadFromNarc(&scene->resources[i], narc, sSwalotPlopSceneModelFiles[i], heapId);
         ModelInstance_Init(&scene->models[i], &scene->resources[i]);
         ModelInstance_SetVisible(&scene->models[i], FALSE);
         ModelInstance_SetPosition(&scene->models[i], 0, -0x122000, 0);
         ModelInstance_SetScale(&scene->models[i], 0x1800, 0x1800, 0x1800);
     }
     for (i = 0; i < 6; i++) {
-        ModelAnimation_LoadFromNarc(&scene->animations[i], &scene->resources[ov91_0226274C[i]], narc, ov91_02261C1C[i], heapId, allocator);
+        ModelAnimation_LoadFromNarc(&scene->animations[i], &scene->resources[sSwalotPlopSceneAnimModels[i]], narc, sSwalotPlopSceneAnimFiles[i], heapId, allocator);
         ModelAnimation_SetFrame(&scene->animations[i], 0);
         node = 0;
-        model = scene->resources[ov91_0226274C[i]].model;
+        model = scene->resources[sSwalotPlopSceneAnimModels[i]].model;
         dict = model != NULL ? &model->nodeInfo.dict : NULL;
         missing = dict == NULL;
         while ((!missing ? GetResNameByIdx(dict, node) : NULL) != NULL) {
@@ -2626,7 +2626,7 @@ void SwalotPlopScene_Init(SwalotPlopScene *scene, NARC *narc, enum HeapID heapId
             node++;
         }
         for (j = 0; j < 15; j++) {
-            id = dict != NULL ? NNS_G3dGetResDictIdxByName(dict, &ov91_022621AC[i][j]) : -1;
+            id = dict != NULL ? NNS_G3dGetResDictIdxByName(dict, &sSwalotPlopSceneNodeNames[i][j]) : -1;
             if (id != -1) {
                 NNS_G3dAnmObjEnableID(scene->animations[i].object, id);
             }
@@ -2743,11 +2743,11 @@ void SwalotPlopScene_SetAnimation(SwalotPlopScene *scene, u32 animation) {
     }
     old = scene->current;
     if (old != animation) {
-        ModelInstance_RemoveAnimation(&scene->models[ov91_0226274C[old]], &scene->animations[old]);
-        ModelInstance_AddAnimation(&scene->models[ov91_0226274C[animation]], &scene->animations[animation]);
+        ModelInstance_RemoveAnimation(&scene->models[sSwalotPlopSceneAnimModels[old]], &scene->animations[old]);
+        ModelInstance_AddAnimation(&scene->models[sSwalotPlopSceneAnimModels[animation]], &scene->animations[animation]);
         ModelAnimation_SetFrame(&scene->animations[animation], 0);
-        ModelInstance_SetVisible(&scene->models[ov91_0226274C[scene->current]], FALSE);
-        ModelInstance_SetVisible(&scene->models[ov91_0226274C[animation]], TRUE);
+        ModelInstance_SetVisible(&scene->models[sSwalotPlopSceneAnimModels[scene->current]], FALSE);
+        ModelInstance_SetVisible(&scene->models[sSwalotPlopSceneAnimModels[animation]], TRUE);
         scene->current = animation;
     }
 }
@@ -2788,13 +2788,13 @@ void SwalotPlopScene_UpdateSpecial(SwalotPlopScene *scene) {
         }
     } else {
         int i = scene->leader == 4 ? 0 : scene->leader + 1;
-        int start = ov91_02261C12[i * 2] << 12;
+        int start = sSwalotPlopSpecialAnimStarts[i * 2] << 12;
         int frame = scene->frame;
         if (frame < start) {
             scene->frame = start;
         } else {
             int next = frame + 0x2000;
-            if (next < (ov91_02261C13[i * 2] << 12)) {
+            if (next < (sSwalotPlopSpecialAnimEnds[i * 2] << 12)) {
                 scene->frame = next;
             } else {
                 scene->frame = start;
@@ -2821,7 +2821,7 @@ void SwalotPlop_RotateToSeat(const VecFx32 *src, VecFx32 *dst, int seat, int pla
     u16 angle;
 
     MTX_Identity33_(&matrix);
-    angle = ov91_02261D3C[playerCount][seat];
+    angle = sSwalotPlopSeatAngles[playerCount][seat];
     MTX_RotY33_(&matrix, FX_SinIdx(angle), FX_CosIdx(angle));
     MTX_MultVec33(src, &matrix, dst);
 }
@@ -2831,7 +2831,7 @@ void SwalotPlop_RotateFromSeat(const VecFx32 *src, VecFx32 *dst, int seat, int p
     u16 angle;
 
     MTX_Identity33_(&matrix);
-    angle = ov91_02261D3C[playerCount][seat];
+    angle = sSwalotPlopSeatAngles[playerCount][seat];
     MTX_RotY33_(&matrix, FX_SinIdx(angle), FX_CosIdx(angle));
     MTX_Inverse33(&matrix, &matrix);
     MTX_MultVec33(src, &matrix, dst);
@@ -2841,7 +2841,7 @@ void SwalotPlopGfx_InitShotViews(SwalotPlopGfx *gfx, NARC *narc, enum HeapID hea
     int i;
 
     for (i = 0; i < 5; i++) {
-        ModelResource_LoadFromNarc(&gfx->shotModels[i], narc, ov91_02261BF0[i], heapId);
+        ModelResource_LoadFromNarc(&gfx->shotModels[i], narc, sSwalotPlopShotModelFiles[i], heapId);
     }
     ModelResource_LoadFromNarc(&gfx->shadowModel, narc, 0x2E, heapId);
     NNSi_G3dModifyPolygonAttrMask(gfx->shadowModel.model, 0, 0x1F << 16);
@@ -3271,7 +3271,7 @@ void SwalotPlopStage_Init(SwalotPlopStage *stage, SwalotPlopGfx *gfx, NARC *narc
         } else if (i == 1) {
             fileId = 37;
         } else {
-            fileId = ov91_02261C0A[playerCount - 1];
+            fileId = sSwalotPlopStageFiles[playerCount - 1];
         }
         ModelResource_LoadFromNarc(resource, narc, fileId, heapId);
         ModelInstance_Init(model, resource);
@@ -3281,14 +3281,14 @@ void SwalotPlopStage_Init(SwalotPlopStage *stage, SwalotPlopGfx *gfx, NARC *narc
             ModelInstance_SetVisible(model, FALSE);
         }
         if ((u32)i <= 1) {
-            ModelInstance_SetRotation(model, ov91_02261D64[playerCount - 1][localIndex], 1);
+            ModelInstance_SetRotation(model, sSwalotPlopStageRotations[playerCount - 1][localIndex], 1);
         } else {
             ModelInstance_SetRotation(model, GF_DegreeToSinCosIdxNoWrap(180), 1);
         }
     }
     for (i = 0; i < 3; i++) {
-        ModelAnimation_LoadFromNarc(&stage->animations[i], &stage->resources[ov91_02261BFE[i]], narc, ov91_02261BF8[i], heapId, allocator);
-        ModelInstance_AddAnimation(&stage->models[ov91_02261BFE[i]], &stage->animations[i]);
+        ModelAnimation_LoadFromNarc(&stage->animations[i], &stage->resources[sSwalotPlopStageAnimModels[i]], narc, sSwalotPlopStageAnimFiles[i], heapId, allocator);
+        ModelInstance_AddAnimation(&stage->models[sSwalotPlopStageAnimModels[i]], &stage->animations[i]);
     }
     stage->animSpeed = FX32_ONE;
 }
@@ -3703,7 +3703,7 @@ void SwalotPlopSpeedUp_ResetTempo(SwalotPlopSpeedUp *speedUp) {
 }
 
 const SwalotPlopCommand *SwalotPlop_GetCommandTable(void) {
-    return ov91_02262754;
+    return sSwalotPlopCommands;
 }
 
 int SwalotPlop_GetCommandCount(void) {

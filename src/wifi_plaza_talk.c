@@ -83,7 +83,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
         WiFiPlazaWork_ResetTalk(lobby);
         result = WiFiPlazaTalk_Init(talk, lobby, partnerIndex);
         talk->partnerObj = partnerObj;
-        ov49_02259130(partnerObj, 0);
+        WiFiPlazaObj_SetAvatarMode(partnerObj, 0);
         WiFiPlazaObj_SetDirection(partnerObj, direction);
         WiFiPlazaPlayerState_SetActive(stateManager, partnerIndex, 0);
         PlaySE(SEQ_SE_DP_BUTTON9);
@@ -493,7 +493,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
             WiFiPlazaObj_SetHandler(objManager2, WiFiPlazaObj_GetOwnPlayer(objManager2), TRUE);
         }
         if (talk->partnerObj != NULL) {
-            ov49_02259130(talk->partnerObj, 1);
+            WiFiPlazaObj_SetAvatarMode(talk->partnerObj, 1);
             WiFiPlazaPlayerState_SetActive(stateManager, WiFiPlazaObj_GetParam(talk->partnerObj, 4), 1);
             WiFiPlazaRoom_ShowOwnCard(room);
         }

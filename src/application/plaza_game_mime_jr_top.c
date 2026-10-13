@@ -149,7 +149,7 @@ typedef void (*MimeJrTopInitTemplateFunc)(ManagedSpriteTemplate *template, u16 x
 typedef void (*MimeJrTopStartBurstFunc)(MimeJrTopGame *game, s16 x, s16 y);
 typedef void (*MimeJrTopRosterInitFunc)(PlazaGameRoster *roster, u32 fromLobby, SaveData *saveData, u32 unkA, PlazaGameArgs *args);
 
-extern const u8 _0226383C[];
+extern const u8 sMimeJrTopCommands[];
 extern const VecFx32 ov92_02263878;
 extern const VecFx32 ov92_02263884;
 extern const MimeJrTopGraphicsModes ov92_02263890;
@@ -226,7 +226,7 @@ void MimeJrTop_ReceiveFinalScore(int netId, int size, const u32 *data, MimeJrTop
     entry->scores[0].score = *data;
 }
 
-void ov92_0225C584(void) {
+void MimeJrTop_ReceiveCommand4(void) {
 }
 
 u32 MimeJrTop_GetFinishSize(void) {
@@ -245,12 +245,12 @@ u32 MimeJrTop_GetFinalScoreSize(void) {
     return 8;
 }
 
-u32 ov92_0225C598(void) {
+u32 MimeJrTop_GetCommand4Size(void) {
     return 0x20;
 }
 
 const void *MimeJrTop_GetCommandTable(void) {
-    return _0226383C;
+    return sMimeJrTopCommands;
 }
 
 int MimeJrTop_GetCommandCount(void) {

@@ -19,8 +19,8 @@ BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
 // rodata of this overlay (asm/wifi_plaza_map_rodata.s)
 extern const u16 sWiFiPlazaLight1Colors[];
 extern const u16 sWiFiPlazaLightColorSets[][5];
-extern void (*const ov49_0226A84C[])(UnkStruct_ov49_02268A0C *effect, int arg);
-extern void (*const ov49_0226A87C[])(UnkStruct_ov49_02268A0C *effect, u32 arg);
+extern void (*const sWiFiPlazaEventEffectPhaseUpdates[])(WiFiPlazaEventEffect *effect, int arg);
+extern void (*const sWiFiPlazaEventEffectPhaseStarts[])(WiFiPlazaEventEffect *effect, u32 arg);
 extern const u8 ov49_0226A8B4[];
 extern const u32 ov49_0226A894[][2];
 extern const u8 ov49_0226A83C[];
@@ -34,10 +34,10 @@ extern const u8 ov49_0226A828[];
 extern const u8 ov49_0226A82C[];
 extern const u8 ov49_0226A830[];
 extern const u8 ov49_0226A834[];
-extern const u8 ov49_0226A8C8[];
-extern const u16 ov49_0226A8DC[][6];
-extern BOOL (*const ov49_0226A8CC[])(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index);
-extern BOOL (*const ov49_0226A8D4[])(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index);
+extern const u8 sWiFiPlazaMoverMarkerTags[];
+extern const u16 sWiFiPlazaMoverSounds[][6];
+extern BOOL (*const sWiFiPlazaEventWobbleSteps[])(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index);
+extern BOOL (*const sWiFiPlazaEventWobbleInits[])(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index);
 
 void WiFiPlazaLight_Delete(WiFiPlazaLight *light) {
     Heap_Free(light);
@@ -98,7 +98,7 @@ void WiFiPlazaLight_FadeLight1(WiFiPlazaLight *light, int set) {
     WiFiPlazaLight_UnpackColor((s8 *)light->lightsTo[1], &sWiFiPlazaLight1Colors[set]);
 }
 
-void ov49_02268620(WiFiPlazaLight *light, int set) {
+void WiFiPlazaLight_FadeToThirdSet(WiFiPlazaLight *light, int set) {
 }
 
 void WiFiPlazaLight_PackColor(const s8 *rgb, u16 *color) {
@@ -189,10 +189,10 @@ WiFiPlazaEvent *WiFiPlazaEvent_Create(enum HeapID heapID, WiFiPlazaRoomWork *roo
     event->objManager = WiFiPlazaRoom_GetObjManager(room);
     colorSet = WiFiPlazaEvent_GetColorSet(WiFiPlazaWork_GetColorEvent(event->lobby));
     light1Set = WiFiPlazaEvent_GetLight1Set(WiFiPlazaWork_GetLight1Event(event->lobby));
-    thirdSet = ov49_022689D4(ov45_0222A3EC(event->lobby));
+    thirdSet = WiFiPlazaEvent_GetThirdSet(ov45_0222A3EC(event->lobby));
     event->light = WiFiPlazaLight_Create(heapID, colorSet, light1Set, thirdSet);
-    event->unk14 = ov49_02268FAC(room, heapID);
-    event->unk18 = ov49_02268A0C(event->lobby, event->models, heapID);
+    event->movers = WiFiPlazaEventMovers_Create(room, heapID);
+    event->effect = WiFiPlazaEventEffect_Create(event->lobby, event->models, heapID);
     WiFiPlazaObj_SetLightSet(event->objManager, colorSet);
     mode = WiFiPlazaWork_GetFireworksState(event->lobby);
     WiFiPlazaWork_IsLobbyOpen(event->lobby);
@@ -216,8 +216,8 @@ WiFiPlazaEvent *WiFiPlazaEvent_Create(enum HeapID heapID, WiFiPlazaRoomWork *roo
 }
 
 void WiFiPlazaEvent_Delete(WiFiPlazaEvent *event) {
-    ov49_02268A6C(event->unk18);
-    ov49_02269090(event->unk14);
+    WiFiPlazaEventEffect_Delete(event->effect);
+    WiFiPlazaEventMovers_Delete(event->movers);
     WiFiPlazaLight_Delete(event->light);
     Heap_Free(event);
 }
@@ -236,8 +236,8 @@ void WiFiPlazaEvent_Update(WiFiPlazaEvent *event) {
         WiFiPlazaLight_FadeLight1(event->light, set);
     }
     if (WiFiPlazaWork_IsEventFlagSet(event->lobby, 3)) {
-        set = ov49_022689D4(ov45_0222A3EC(event->lobby));
-        ov49_02268620(event->light, set);
+        set = WiFiPlazaEvent_GetThirdSet(ov45_0222A3EC(event->lobby));
+        WiFiPlazaLight_FadeToThirdSet(event->light, set);
     }
     if (WiFiPlazaWork_IsLightingStarted(event->lobby) == TRUE && WiFiPlazaWork_GetFireworksState(event->lobby) == 0 && WiFiPlazaModels_GetPairAnimState(event->models) == 0) {
         WiFiPlazaModels_SetPairAnim(event->models, 1);
@@ -254,12 +254,12 @@ void WiFiPlazaEvent_Update(WiFiPlazaEvent *event) {
         WiFiPlazaEvent_TurnOffLight2(event);
     }
     WiFiPlazaLight_Update(event->light);
-    ov49_02269098(event->unk14);
-    ov49_02268A7C(event->unk18);
+    WiFiPlazaEventMovers_Update(event->movers);
+    WiFiPlazaEventEffect_Update(event->effect);
 }
 
-u8 ov49_02268968(WiFiPlazaEvent *event, u32 index, int field) {
-    return ov49_02269154(event->unk14, index, field);
+u8 WiFiPlazaEvent_GetMoverState(WiFiPlazaEvent *event, u32 index, int field) {
+    return WiFiPlazaEventMovers_GetState(event->movers, index, field);
 }
 
 // Lobby value 1-6 -> colour set 0-5
@@ -292,7 +292,7 @@ int WiFiPlazaEvent_GetLight1Set(int value) {
     }
 }
 
-int ov49_022689D4(int value) {
+int WiFiPlazaEvent_GetThirdSet(int value) {
     switch (value) {
     case 11:
     case 12:
@@ -311,11 +311,11 @@ void WiFiPlazaEvent_TurnOffLight2(WiFiPlazaEvent *event) {
 
 #pragma force_active on
 
-UnkStruct_ov49_02268A0C *ov49_02268A0C(WiFiPlazaWork *lobby, WiFiPlazaModels *models, enum HeapID heapID) {
-    UnkStruct_ov49_02268A0C *effect = Heap_Alloc(heapID, sizeof(UnkStruct_ov49_02268A0C));
+WiFiPlazaEventEffect *WiFiPlazaEventEffect_Create(WiFiPlazaWork *lobby, WiFiPlazaModels *models, enum HeapID heapID) {
+    WiFiPlazaEventEffect *effect = Heap_Alloc(heapID, sizeof(WiFiPlazaEventEffect));
     u32 effectId;
     u8 *cursor = (u8 *)effect;
-    u32 n = sizeof(UnkStruct_ov49_02268A0C);
+    u32 n = sizeof(WiFiPlazaEventEffect);
 
     do {
         *cursor++ = 0;
@@ -327,19 +327,19 @@ UnkStruct_ov49_02268A0C *ov49_02268A0C(WiFiPlazaWork *lobby, WiFiPlazaModels *mo
     if (effect->activeCount && effectId) {
         WiFiPlazaModels_SetEffectActive(models, 1);
         WiFiPlazaEvent_StartLoopSE(effect);
-        ov49_02268C74(effect, effectId, WiFiPlazaWork_GetFireworksCounter(lobby));
+        WiFiPlazaEventEffect_StartPhase(effect, effectId, WiFiPlazaWork_GetFireworksCounter(lobby));
     }
     return effect;
 }
 
 #pragma force_active reset
 
-void ov49_02268A6C(UnkStruct_ov49_02268A0C *effect) {
+void WiFiPlazaEventEffect_Delete(WiFiPlazaEventEffect *effect) {
     WiFiPlazaEvent_StopLoopSE(effect);
     Heap_Free(effect);
 }
 
-void ov49_02268A7C(UnkStruct_ov49_02268A0C *effect) {
+void WiFiPlazaEventEffect_Update(WiFiPlazaEventEffect *effect) {
     int effectId;
     int arg;
     int count;
@@ -351,34 +351,34 @@ void ov49_02268A7C(UnkStruct_ov49_02268A0C *effect) {
         effect->activeCount = count;
         if (count == 1) {
             WiFiPlazaModels_SetEffectActive(effect->models, 1);
-            ov49_02268C74(effect, effectId, arg);
+            WiFiPlazaEventEffect_StartPhase(effect, effectId, arg);
             WiFiPlazaEvent_StartLoopSE(effect);
         }
     }
     if (count != 0) {
         if (effect->effect != effectId) {
-            ov49_02268C74(effect, effectId, arg);
+            WiFiPlazaEventEffect_StartPhase(effect, effectId, arg);
         }
-        ov49_02268ADC(effect, effectId, arg);
+        WiFiPlazaEventEffect_RunPhase(effect, effectId, arg);
     }
 }
 
-void ov49_02268ADC(UnkStruct_ov49_02268A0C *effect, int index, int arg) {
+void WiFiPlazaEventEffect_RunPhase(WiFiPlazaEventEffect *effect, int index, int arg) {
     if ((u32)index >= 6) {
         GF_AssertFail();
     }
     if ((u32)index < 6) {
-        ov49_0226A84C[index](effect, arg);
+        sWiFiPlazaEventEffectPhaseUpdates[index](effect, arg);
     }
 }
 
-void ov49_02268B04(UnkStruct_ov49_02268A0C *effect, u32 arg) {
+void WiFiPlazaEventEffect_UpdateNone(WiFiPlazaEventEffect *effect, u32 arg) {
 }
 
-void ov49_02268B08(UnkStruct_ov49_02268A0C *effect, u32 arg) {
+void WiFiPlazaEventEffect_UpdatePhase2(WiFiPlazaEventEffect *effect, u32 arg) {
 }
 
-void ov49_02268B0C(UnkStruct_ov49_02268A0C *effect, u32 tick) {
+void WiFiPlazaEventEffect_UpdatePhase3(WiFiPlazaEventEffect *effect, u32 tick) {
     if (tick % 14 != 0) {
         return;
     }
@@ -419,7 +419,7 @@ void ov49_02268B0C(UnkStruct_ov49_02268A0C *effect, u32 tick) {
     effect->step = (effect->step + 1) & 3;
 }
 
-void ov49_02268B90(UnkStruct_ov49_02268A0C *effect, u32 tick) {
+void WiFiPlazaEventEffect_UpdatePhase4(WiFiPlazaEventEffect *effect, u32 tick) {
     WiFiPlazaEventModelList list;
     u32 kind;
     u32 i;
@@ -443,7 +443,7 @@ void ov49_02268B90(UnkStruct_ov49_02268A0C *effect, u32 tick) {
     effect->step = (effect->step + 1) % 7;
 }
 
-void ov49_02268C2C(UnkStruct_ov49_02268A0C *effect, u32 value) {
+void WiFiPlazaEventEffect_UpdatePhase5(WiFiPlazaEventEffect *effect, u32 value) {
     u32 step = effect->step;
 
     if (step < 3 && ov49_0226A864[step * 2] < value) {
@@ -454,7 +454,7 @@ void ov49_02268C2C(UnkStruct_ov49_02268A0C *effect, u32 value) {
     }
 }
 
-void ov49_02268C74(UnkStruct_ov49_02268A0C *effect, u32 index, u32 arg) {
+void WiFiPlazaEventEffect_StartPhase(WiFiPlazaEventEffect *effect, u32 index, u32 arg) {
     GF_ASSERT(index < 6);
     if (index < 6) {
         u8 *step = (u8 *)&effect->step;
@@ -463,28 +463,28 @@ void ov49_02268C74(UnkStruct_ov49_02268A0C *effect, u32 index, u32 arg) {
         step[1] = 0;
         step[2] = 0;
         step[3] = 0;
-        ov49_0226A87C[index](effect, arg);
+        sWiFiPlazaEventEffectPhaseStarts[index](effect, arg);
         effect->effect = index;
     }
 }
 
-void ov49_02268CAC(UnkStruct_ov49_02268A0C *effect) {
+void WiFiPlazaEventEffect_StartHideProps(WiFiPlazaEventEffect *effect) {
     WiFiPlazaModels_ShowEffectProps(effect->models, 0, 0x1000);
 }
 
-void ov49_02268CBC(UnkStruct_ov49_02268A0C *effect) {
+void WiFiPlazaEventEffect_StartPhase2(WiFiPlazaEventEffect *effect) {
     WiFiPlazaModels_ShowEffectProps(effect->models, 1, 0x1000);
 }
 
-void ov49_02268CCC(UnkStruct_ov49_02268A0C *effect) {
+void WiFiPlazaEventEffect_StartPhase3(WiFiPlazaEventEffect *effect) {
     WiFiPlazaModels_ShowEffectProps(effect->models, 0, 0x1000);
 }
 
-void ov49_02268CDC(UnkStruct_ov49_02268A0C *effect) {
+void WiFiPlazaEventEffect_StartPhase4(WiFiPlazaEventEffect *effect) {
     WiFiPlazaModels_ShowEffectProps(effect->models, 0, 0x1000);
 }
 
-void ov49_02268CEC(UnkStruct_ov49_02268A0C *effect) {
+void WiFiPlazaEventEffect_StartPhase5(WiFiPlazaEventEffect *effect) {
     WiFiPlazaEvent_StopLoopSE(effect);
     WiFiPlazaModels_ShowEffectProps(effect->models, 0, 0x1000);
     WiFiPlazaModels_SetEffectActive(effect->models, 0);
@@ -526,14 +526,14 @@ void WiFiPlazaEvent_GetModelList(u32 kind, WiFiPlazaEventModelList *list) {
     }
 }
 
-void WiFiPlazaEvent_StartLoopSE(UnkStruct_ov49_02268A0C *effect) {
+void WiFiPlazaEvent_StartLoopSE(WiFiPlazaEventEffect *effect) {
     if (effect->seLooping == FALSE) {
         PlaySE(0x5B5);
         effect->seLooping = TRUE;
     }
 }
 
-void WiFiPlazaEvent_StopLoopSE(UnkStruct_ov49_02268A0C *effect) {
+void WiFiPlazaEvent_StopLoopSE(WiFiPlazaEventEffect *effect) {
     if (effect->seLooping != FALSE) {
         StopSE(0x5B5, 0);
         effect->seLooping = FALSE;
@@ -542,7 +542,7 @@ void WiFiPlazaEvent_StopLoopSE(UnkStruct_ov49_02268A0C *effect) {
 
 // Player state handler: talking to the special object (map tag 97), which turns to the player; message bank 1
 // with a yes/no menu.
-BOOL ov49_02268DCC(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) {
+BOOL WiFiPlazaTalk_Survey(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) {
     u32 *nextStep = WiFiPlazaPlayerState_GetWork(state);
     WiFiPlazaWork *lobby = WiFiPlazaRoom_GetLobby(room);
     WiFiPlazaObjManager *objManager = WiFiPlazaRoom_GetObjManager(room);
@@ -558,7 +558,7 @@ BOOL ov49_02268DCC(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) {
         PlaySE(0x5DC);
         direction = ov42_022282A4(WiFiPlazaObj_GetParam(player, 6));
         WiFiPlazaObj_SetHandler(objManager, special, 0);
-        ov49_02259130(special, 0);
+        WiFiPlazaObj_SetAvatarMode(special, 0);
         WiFiPlazaObj_SetDirection(special, direction);
         if (WiFiPlazaWork_IsClosing(lobby) != 0) {
             message = WiFiPlazaRoom_GetMsgString(room, 1, 3);
@@ -614,8 +614,8 @@ BOOL ov49_02268DCC(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) {
         WiFiPlazaRoom_CloseYesNoMenu(room);
         WiFiPlazaObj_SetHandler(objManager, player, 1);
         WiFiPlazaPlayerState_FreeWork(state);
-        ov49_02259130(special, 1);
-        ov49_02258EAC(objManager, special, 0, 1);
+        WiFiPlazaObj_SetAvatarMode(special, 1);
+        WiFiPlazaObj_RunCommand(objManager, special, 0, 1);
         return TRUE;
     case 5:
         if (WiFiPlazaRoom_IsMessageFinished(room) == TRUE) {
@@ -629,13 +629,13 @@ BOOL ov49_02268DCC(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) {
     return FALSE;
 }
 
-UnkStruct_ov49_02268FAC *ov49_02268FAC(WiFiPlazaRoomWork *room, enum HeapID heapID) {
-    UnkStruct_ov49_02268FAC *work = Heap_Alloc(heapID, sizeof(UnkStruct_ov49_02268FAC));
+WiFiPlazaEventMovers *WiFiPlazaEventMovers_Create(WiFiPlazaRoomWork *room, enum HeapID heapID) {
+    WiFiPlazaEventMovers *work = Heap_Alloc(heapID, sizeof(WiFiPlazaEventMovers));
     int i;
     const u8 *tag;
     u16 pos[2];
 
-    memset(work, 0, sizeof(UnkStruct_ov49_02268FAC));
+    memset(work, 0, sizeof(WiFiPlazaEventMovers));
     work->room = room;
     work->lobby = WiFiPlazaRoom_GetLobby(room);
     work->models = WiFiPlazaRoom_GetModels(room);
@@ -644,7 +644,7 @@ UnkStruct_ov49_02268FAC *ov49_02268FAC(WiFiPlazaRoomWork *room, enum HeapID heap
     work->range = -8 - work->baseX;
     work->baseX <<= 16;
     work->range <<= 16;
-    tag = ov49_0226A8C8;
+    tag = sWiFiPlazaMoverMarkerTags;
     i = 0;
     for (; i < 3; i++, tag++) {
         WiFiPlazaMap_FindTileTag(work->map, *tag, &pos[1], &pos[0], 0);
@@ -654,20 +654,20 @@ UnkStruct_ov49_02268FAC *ov49_02268FAC(WiFiPlazaRoomWork *room, enum HeapID heap
     for (i = 0; i < 9; i++) {
         WiFiPlazaModels_SetMoverX(work->models, i, work->baseX);
         if (ov45_0222AD80(work->lobby, i) == 1) {
-            ov49_02269178(work, i);
+            WiFiPlazaEventMovers_UpdateX(work, i);
             WiFiPlazaEvent_UpdateMoverMarkers(work, i);
         }
     }
     return work;
 }
 
-void ov49_02269090(UnkStruct_ov49_02268FAC *work) {
+void WiFiPlazaEventMovers_Delete(WiFiPlazaEventMovers *work) {
     Heap_Free(work);
 }
 
 #pragma force_active on
 
-void ov49_02269098(UnkStruct_ov49_02268FAC *work) {
+void WiFiPlazaEventMovers_Update(WiFiPlazaEventMovers *work) {
     int selected = ov45_0222ADA8(work->lobby, WiFiPlazaWork_GetOwnSlot(work->lobby));
     u32 column;
     int present;
@@ -683,7 +683,7 @@ void ov49_02269098(UnkStruct_ov49_02268FAC *work) {
     for (i = 0; i < 9; i++) {
         if (ov45_0222AD80(work->lobby, i) == 1) {
             WiFiPlazaModels_SetMoverVisible(work->models, i, 1);
-            ov49_02269178(work, i);
+            WiFiPlazaEventMovers_UpdateX(work, i);
             WiFiPlazaEvent_UpdateMoverMarkers(work, i);
             if (present) {
                 if (selected == i) {
@@ -692,7 +692,7 @@ void ov49_02269098(UnkStruct_ov49_02268FAC *work) {
                     isOwnIndex = FALSE;
                 }
             }
-            ov49_02269240(work, i, present, isOwnIndex, column);
+            WiFiPlazaEventMovers_StartActions(work, i, present, isOwnIndex, column);
         } else {
             WiFiPlazaModels_SetMoverVisible(work->models, i, 0);
         }
@@ -701,14 +701,14 @@ void ov49_02269098(UnkStruct_ov49_02268FAC *work) {
         WiFiPlazaEventWobble *wobble = &work->wobbles[i];
 
         work->states[i][0] = WiFiPlazaModels_IsMoverAnim1Playing(work->models, i);
-        work->states[i][1] = ov49_02269430(wobble, work->models, i);
+        work->states[i][1] = WiFiPlazaEventWobble_Update(wobble, work->models, i);
         work->states[i][2] = WiFiPlazaModels_IsMoverAnim3Playing(work->models, i);
     }
 }
 
 #pragma force_active reset
 
-u8 ov49_02269154(UnkStruct_ov49_02268FAC *work, u32 index, int field) {
+u8 WiFiPlazaEventMovers_GetState(WiFiPlazaEventMovers *work, u32 index, int field) {
     u8 *entry;
 
     if (index >= 9) {
@@ -720,12 +720,12 @@ u8 ov49_02269154(UnkStruct_ov49_02268FAC *work, u32 index, int field) {
     // address computed as in the original: (work + index * 3 + field)[offset of states]
     entry = (u8 *)work + index * sizeof(work->states[0]);
     entry += field;
-    return entry[offsetof(UnkStruct_ov49_02268FAC, states)];
+    return entry[offsetof(WiFiPlazaEventMovers, states)];
 }
 
 #pragma force_active on
 
-void ov49_02269178(UnkStruct_ov49_02268FAC *work, int index) {
+void WiFiPlazaEventMovers_UpdateX(WiFiPlazaEventMovers *work, int index) {
     int value = ov45_0222AD90(work->lobby, index);
     int max = ov45_0222ADA0(work->lobby);
     fx32 ratio = FX_Div(work->range, 8192);
@@ -752,7 +752,7 @@ void ov49_02269178(UnkStruct_ov49_02268FAC *work, int index) {
     WiFiPlazaModels_SetMoverX(work->models, index, x);
 }
 
-void ov49_02269240(UnkStruct_ov49_02268FAC *work, u32 index, BOOL hasOwnSelection, int isOwnIndex, int ownColumn) {
+void WiFiPlazaEventMovers_StartActions(WiFiPlazaEventMovers *work, u32 index, BOOL hasOwnSelection, int isOwnIndex, int ownColumn) {
     int type = ov45_0222AD3C(work->lobby);
     int i;
 
@@ -769,32 +769,32 @@ void ov49_02269240(UnkStruct_ov49_02268FAC *work, u32 index, BOOL hasOwnSelectio
             case 0:
                 if (WiFiPlazaModels_StartMoverAnim1(work->models, index) == 1) {
                     if (index % 3 == 2) {
-                        ov49_022693D4(hasOwnSelection, isOwnIndex, isOwnColumn, ov49_0226A8DC[type][1]);
-                        if (ov49_0226A8DC[type][4] != 0xFFFE) {
-                            ov49_022693A4(hasOwnSelection, isOwnIndex, isOwnColumn, ov49_0226A8DC[type][4]);
+                        WiFiPlazaEventMovers_PlayCry(hasOwnSelection, isOwnIndex, isOwnColumn, sWiFiPlazaMoverSounds[type][1]);
+                        if (sWiFiPlazaMoverSounds[type][4] != 0xFFFE) {
+                            WiFiPlazaEventMovers_PlaySE(hasOwnSelection, isOwnIndex, isOwnColumn, sWiFiPlazaMoverSounds[type][4]);
                         }
                     } else {
-                        ov49_022693D4(hasOwnSelection, isOwnIndex, isOwnColumn, ov49_0226A8DC[type][0]);
-                        if (ov49_0226A8DC[type][2] != 0xFFFE) {
-                            ov49_022693A4(hasOwnSelection, isOwnIndex, isOwnColumn, ov49_0226A8DC[type][2]);
+                        WiFiPlazaEventMovers_PlayCry(hasOwnSelection, isOwnIndex, isOwnColumn, sWiFiPlazaMoverSounds[type][0]);
+                        if (sWiFiPlazaMoverSounds[type][2] != 0xFFFE) {
+                            WiFiPlazaEventMovers_PlaySE(hasOwnSelection, isOwnIndex, isOwnColumn, sWiFiPlazaMoverSounds[type][2]);
                         }
                     }
                     ov45_0222ADF8(work->lobby, index * 3 + i);
                 }
                 break;
             case 1:
-                if (ov49_022693F8(&work->wobbles[index], index % 3 == 2, work->models, index) == 1) {
+                if (WiFiPlazaEventWobble_Start(&work->wobbles[index], index % 3 == 2, work->models, index) == 1) {
                     ov45_0222ADF8(work->lobby, index * 3 + i);
-                    ov49_022693A4(hasOwnSelection, isOwnIndex, isOwnColumn, 1478);
+                    WiFiPlazaEventMovers_PlaySE(hasOwnSelection, isOwnIndex, isOwnColumn, 1478);
                 }
                 break;
             case 2:
                 if (WiFiPlazaModels_StartMoverAnim3(work->models, index) == 1) {
                     ov45_0222ADF8(work->lobby, index * 3 + i);
                     if (index % 3 == 2) {
-                        ov49_022693A4(hasOwnSelection, isOwnIndex, isOwnColumn, ov49_0226A8DC[type][5]);
+                        WiFiPlazaEventMovers_PlaySE(hasOwnSelection, isOwnIndex, isOwnColumn, sWiFiPlazaMoverSounds[type][5]);
                     } else {
-                        ov49_022693A4(hasOwnSelection, isOwnIndex, isOwnColumn, ov49_0226A8DC[type][3]);
+                        WiFiPlazaEventMovers_PlaySE(hasOwnSelection, isOwnIndex, isOwnColumn, sWiFiPlazaMoverSounds[type][3]);
                     }
                 }
                 break;
@@ -806,7 +806,7 @@ void ov49_02269240(UnkStruct_ov49_02268FAC *work, u32 index, BOOL hasOwnSelectio
 #pragma force_active reset
 
 // While the own player has a selection, only the own index is heard (on the player channel for the own column).
-void ov49_022693A4(BOOL hasOwnSelection, BOOL isOwnIndex, BOOL isOwnColumn, u32 seqNo) {
+void WiFiPlazaEventMovers_PlaySE(BOOL hasOwnSelection, BOOL isOwnIndex, BOOL isOwnColumn, u32 seqNo) {
     if (hasOwnSelection != FALSE) {
         if (isOwnIndex == FALSE) {
             return;
@@ -822,7 +822,7 @@ void ov49_022693A4(BOOL hasOwnSelection, BOOL isOwnIndex, BOOL isOwnColumn, u32 
     PlaySE(seqNo);
 }
 
-void ov49_022693D4(BOOL hasOwnSelection, BOOL isOwnIndex, BOOL isOwnColumn, u32 species) {
+void WiFiPlazaEventMovers_PlayCry(BOOL hasOwnSelection, BOOL isOwnIndex, BOOL isOwnColumn, u32 species) {
     if (hasOwnSelection != FALSE) {
         if (isOwnIndex == FALSE) {
             return;
@@ -833,7 +833,7 @@ void ov49_022693D4(BOOL hasOwnSelection, BOOL isOwnIndex, BOOL isOwnColumn, u32 
     PlayCry(species, 0);
 }
 
-BOOL ov49_022693F8(WiFiPlazaEventWobble *wobble, int kind, WiFiPlazaModels *models, int index) {
+BOOL WiFiPlazaEventWobble_Start(WiFiPlazaEventWobble *wobble, int kind, WiFiPlazaModels *models, int index) {
     if ((u32)kind >= 2) {
         GF_AssertFail();
     }
@@ -842,13 +842,13 @@ BOOL ov49_022693F8(WiFiPlazaEventWobble *wobble, int kind, WiFiPlazaModels *mode
     }
     wobble->kind = kind;
     wobble->active = TRUE;
-    ov49_0226A8D4[kind](wobble, models, index);
+    sWiFiPlazaEventWobbleInits[kind](wobble, models, index);
     return TRUE;
 }
 
-BOOL ov49_02269430(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index) {
+BOOL WiFiPlazaEventWobble_Update(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index) {
     if (wobble->active != FALSE) {
-        if (ov49_0226A8CC[wobble->kind](wobble, models, index) == TRUE) {
+        if (sWiFiPlazaEventWobbleSteps[wobble->kind](wobble, models, index) == TRUE) {
             u8 *p = (u8 *)wobble;
 
             p[0] = 0;
@@ -871,7 +871,7 @@ BOOL ov49_02269430(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int in
     return FALSE;
 }
 
-void ov49_02269474(WiFiPlazaEventWobble *wobble) {
+void WiFiPlazaEventWobble_InitSmall(WiFiPlazaEventWobble *wobble) {
     wobble->frame = 0;
     wobble->duration = 8;
     wobble->maxAngle = GF_DegreeToSinCosIdx(5);
@@ -879,7 +879,7 @@ void ov49_02269474(WiFiPlazaEventWobble *wobble) {
     wobble->repeats = 4;
 }
 
-void ov49_02269494(WiFiPlazaEventWobble *wobble) {
+void WiFiPlazaEventWobble_InitLarge(WiFiPlazaEventWobble *wobble) {
     wobble->frame = 0;
     wobble->duration = 16;
     wobble->maxAngle = GF_DegreeToSinCosIdx(10);
@@ -887,7 +887,7 @@ void ov49_02269494(WiFiPlazaEventWobble *wobble) {
     wobble->repeats = 2;
 }
 
-BOOL ov49_022694B4(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index) {
+BOOL WiFiPlazaEventWobble_Step(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index) {
     VecFx32 offset = { 0, 0, 0 };
     BOOL done = FALSE;
     int next = wobble->frame + 1;

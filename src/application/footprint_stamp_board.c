@@ -27,14 +27,14 @@ u32 WiFiPlazaLobbyClient_GetOwnId(void *unused);
 int WiFiPlazaLobbyClient_IdToChannelSlot(u32 playerId);
 void SetMasterBrightness(PMLCDTarget screen, int brightness);
 
-extern const u16 _0225C9B0[4]; // party bar tiles of an empty slot (the label has no ov89_ prefix)
-extern const CameraAngle ov89_0225C9B8;
-extern const VecFx32 ov89_0225C9C0;
-extern const u8 ov89_0225C9CC[FOOTPRINT_STAMP_PLAYERS_MAX][2];
-extern const s16 ov89_0225CA18[FOOTPRINT_STAMP_PLAYERS_MAX][2];
-extern const ManagedSpriteTemplate ov89_0225CBA4;
-extern const FootprintStampEffectFuncs ov89_0225CDB0[];
-extern BOOL (*const ov89_0225CD10[])(FootprintStampBoard *unused, FootprintStampBoard *board, Camera *camera);
+extern const u16 sFootprintStampEmptySlotTiles[4]; // party bar tiles of an empty slot (the label has no ov89_ prefix)
+extern const CameraAngle sFootprintStampCameraAngle;
+extern const VecFx32 sFootprintStampCameraTarget;
+extern const u8 sFootprintStampPlayerNameWindowPositions[FOOTPRINT_STAMP_PLAYERS_MAX][2];
+extern const s16 sFootprintStampMyCursorPositions[FOOTPRINT_STAMP_PLAYERS_MAX][2];
+extern const ManagedSpriteTemplate sFootprintStampSelectEffectTemplate;
+extern const FootprintStampEffectFuncs sFootprintStampEffectFuncs[];
+extern BOOL (*const sFootprintStampCameraEffectFuncs[])(FootprintStampBoard *unused, FootprintStampBoard *board, Camera *camera);
 
 // The lobby's player id list (WiFiPlazaLobbyClient_GetChannelPlayerList).
 typedef struct FootprintStampPlayerList {
@@ -52,7 +52,7 @@ typedef struct FootprintStampRow {
     u16 height;
 } FootprintStampRow;
 
-extern const FootprintStampRow ov89_0225CBD8[FOOTPRINT_STAMP_PLAYERS_MAX];
+extern const FootprintStampRow sFootprintStampPlayerRows[FOOTPRINT_STAMP_PLAYERS_MAX];
 
 void FootprintStamp_FreePlayerSprites(FootprintStamp *work) {
     int i;
@@ -86,7 +86,7 @@ void FootprintStamp_ShowParty(FootprintStamp *work) {
             ManagedSprite_SetDrawFlag(slot->slotSprites[0], FALSE);
             ManagedSprite_SetDrawFlag(slot->footprintSprites[0], FALSE);
             for (j = 0; j < 4; j++) {
-                FillBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_2, _0225C9B0[j], column, j + 20, 4, 1, 17);
+                FillBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_2, sFootprintStampEmptySlotTiles[j], column, j + 20, 4, 1, 17);
             }
         } else {
             FootprintStamp_LoadFootprintIcon(mon->party[0].species, mon->party[0].form, slot->footprintSprites[0], work->narc, work->footprintNarc, 1, work->unk19E0);
@@ -146,13 +146,13 @@ BOOL FootprintStamp_LoadFootprintIcon(int species, int form, ManagedSprite *spri
 }
 
 void FootprintStamp_CreateCamera(FootprintStamp *work) {
-    VecFx32 target = ov89_0225C9C0;
+    VecFx32 target = sFootprintStampCameraTarget;
     fx32 width, height;
     Camera *camera;
 
     camera = Camera_New(HEAP_ID_125);
     work->camera = camera;
-    Camera_Init_FromTargetDistanceAndAngle(&target, 0x7C000, &ov89_0225C9B8, 0xFA4, 0, FALSE, work->camera);
+    Camera_Init_FromTargetDistanceAndAngle(&target, 0x7C000, &sFootprintStampCameraAngle, 0xFA4, 0, FALSE, work->camera);
     Camera_SetPerspectiveClippingPlane(FX32_ONE, 0x384000, work->camera);
     Camera_SetStaticPtr(work->camera);
     Math_CalcPerspectiveViewSize(Camera_GetPerspectiveAngle(work->camera), Camera_GetDistance(work->camera), 0x1555, &width, &height);
@@ -229,7 +229,7 @@ void FootprintStamp_CreateWindows(FootprintStamp *work) {
     AddWindowParameterized(work->bgConfig, &work->msgWindow, GF_BG_LYR_MAIN_1, 2, 1, 27, 4, 13, 0x5B);
     FillWindowPixelBuffer(&work->msgWindow, 15);
     i = 0;
-    pos = ov89_0225C9CC;
+    pos = sFootprintStampPlayerNameWindowPositions;
     windows = work->playerNameWindows;
     for (; i < FOOTPRINT_STAMP_PLAYERS_MAX; i++) {
         AddWindowParameterized(work->bgConfig, &windows[i], GF_BG_LYR_SUB_1, pos[i][0], pos[i][1], 8, 2, 13, 0x200 + i * 16);
@@ -363,7 +363,7 @@ int FootprintStamp_UpdatePlayers(FootprintStamp *work) {
     joined = 0;
     left = 0;
     WiFiPlazaLobbyClient_GetChannelPlayerList(&list);
-    rows = ov89_0225CBD8;
+    rows = sFootprintStampPlayerRows;
     for (i = 0; i < FOOTPRINT_STAMP_PLAYERS_MAX; i++) {
         if (work->playerIds[i] != list.ids[i]) {
             if (list.ids[i] != (u32)-1) {
@@ -372,7 +372,7 @@ int FootprintStamp_UpdatePlayers(FootprintStamp *work) {
                 row = &rows[i];
                 for (y = row->y; y < row->y + row->height; y++) {
                     size = row->width * 2;
-                    MIi_CpuCopy16(&work->subTilemap[y * 32 + ((const u16 *)ov89_0225CBD8)[i * 4]], &tilemap[y * 32 + ((const u16 *)ov89_0225CBD8)[i * 4]], size);
+                    MIi_CpuCopy16(&work->subTilemap[y * 32 + ((const u16 *)sFootprintStampPlayerRows)[i * 4]], &tilemap[y * 32 + ((const u16 *)sFootprintStampPlayerRows)[i * 4]], size);
                 }
                 ScheduleBgTilemapBufferTransfer(work->bgConfig, GF_BG_LYR_SUB_2);
                 joined++;
@@ -381,12 +381,12 @@ int FootprintStamp_UpdatePlayers(FootprintStamp *work) {
                 work->playerSpecies[i] = SPECIES_NONE;
                 work->playerColors[i] = 0;
                 ManagedSprite_SetDrawFlag(work->playerFootprintSprites[i], FALSE);
-                FillBgTilemapRect(work->bgConfig, GF_BG_LYR_SUB_2, 0, ov89_0225CBD8[i].x, ov89_0225CBD8[i].y, ov89_0225CBD8[i].width, ov89_0225CBD8[i].height, 16);
+                FillBgTilemapRect(work->bgConfig, GF_BG_LYR_SUB_2, 0, sFootprintStampPlayerRows[i].x, sFootprintStampPlayerRows[i].y, sFootprintStampPlayerRows[i].width, sFootprintStampPlayerRows[i].height, 16);
                 ScheduleBgTilemapBufferTransfer(work->bgConfig, GF_BG_LYR_SUB_2);
                 left++;
             }
             if (work->linkFilter.myId == list.ids[i]) {
-                ManagedSprite_SetPositionXYWithSubscreenOffset(work->myCursorSprite, ov89_0225CA18[i][0], ov89_0225CA18[i][1], 0x110000);
+                ManagedSprite_SetPositionXYWithSubscreenOffset(work->myCursorSprite, sFootprintStampMyCursorPositions[i][0], sFootprintStampMyCursorPositions[i][1], 0x110000);
                 ManagedSprite_SetDrawFlag(work->myCursorSprite, TRUE);
             }
         }
@@ -428,7 +428,7 @@ void FootprintStamp_ClearPlayerName(FootprintStamp *work, u32 index) {
 #pragma force_active on
 
 void FootprintStamp_StartSelectEffect(FootprintStamp *work, int slot) {
-    ManagedSpriteTemplate template = ov89_0225CBA4;
+    ManagedSpriteTemplate template = sFootprintStampSelectEffectTemplate;
     int i;
     FootprintStamp *effect;
 
@@ -636,7 +636,7 @@ void FootprintStampBoard_Update(FootprintStampBoard *board, Camera *camera, int 
         FootprintStampBoard_Flash(board, &board->flash, phase, inkColumn);
     }
     if (board->cameraEffect) {
-        if (ov89_0225CD10[board->cameraEffect](board, board, camera) == TRUE) {
+        if (sFootprintStampCameraEffectFuncs[board->cameraEffect](board, board, camera) == TRUE) {
             board->cameraEffect = FOOTPRINT_STAMP_EFFECT_NONE;
         }
     }
@@ -646,7 +646,7 @@ void FootprintStampBoard_Update(FootprintStampBoard *board, Camera *camera, int 
             if (stamp->effectId == FOOTPRINT_STAMP_EFFECT_NONE && stamp->pendingEffect != FOOTPRINT_STAMP_EFFECT_NONE) {
                 stamp->effectId = stamp->pendingEffect;
             }
-            if (ov89_0225CDB0[stamp->effectId].update(board, stamp) == TRUE) {
+            if (sFootprintStampEffectFuncs[stamp->effectId].update(board, stamp) == TRUE) {
                 FootprintStampBoard_RemoveStamp(board, stamp, i);
             }
         }
@@ -662,8 +662,8 @@ void FootprintStampBoard_Draw(FootprintStampBoard *board) {
         FootprintStampObj *stamp = board->stamps[i];
         if (stamp != NULL) {
             u32 effect = stamp->effectId;
-            if (ov89_0225CDB0[effect].draw != NULL) {
-                ov89_0225CDB0[effect].draw(board, stamp);
+            if (sFootprintStampEffectFuncs[effect].draw != NULL) {
+                sFootprintStampEffectFuncs[effect].draw(board, stamp);
             } else {
                 ModelInstance_Draw(&stamp->instance);
             }
@@ -702,7 +702,7 @@ void FootprintStampBoard_ResolveChains(FootprintStampBoard *board) {
         other = board->sorted[FOOTPRINT_STAMP_STAMPS_MAX - 1 - j];
         for (m = 0; m < numActive; m++) {
             stamp = board->sorted[m];
-            if (ov89_0225CDB0[stamp->effectId].hit(board, stamp, other) == TRUE && FootprintStamp_SetEffect(other, stamp->effectId) == TRUE && other->chain == 0xFF) {
+            if (sFootprintStampEffectFuncs[stamp->effectId].hit(board, stamp, other) == TRUE && FootprintStamp_SetEffect(other, stamp->effectId) == TRUE && other->chain == 0xFF) {
                 other->chain = stamp->chain;
                 FootprintStampBoard_AddToChain(board, stamp->chain, stamp->effectId);
                 break;

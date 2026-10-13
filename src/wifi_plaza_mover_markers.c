@@ -2,7 +2,7 @@
 #include "global.h"
 #pragma force_active on
 
-// Marker progress of the nine movers of the room event (UnkStruct_ov49_02268FAC in include/wifi_plaza_event.h,
+// Marker progress of the nine movers of the room event (WiFiPlazaEventMovers in include/wifi_plaza_event.h,
 // which this file does not include: the layout below keeps the original's accesses).
 typedef struct WiFiPlazaMoverMarkerWork {
     int room;

@@ -14,14 +14,14 @@ typedef struct WiFiPlazaEventModelList {
 } WiFiPlazaEventModelList;
 
 // Plaza-wide effect selected by the lobby (6 kinds, init and per-frame tables in rodata)
-typedef struct UnkStruct_ov49_02268A0C {
+typedef struct WiFiPlazaEventEffect {
     WiFiPlazaWork *lobby;
     WiFiPlazaModels *models;
     u8 effect;       // 0x08
     u8 seLooping;    // 0x09 SEQ 0x5B5 is playing
     u16 activeCount; // 0x0A
     u32 step;        // 0x0C
-} UnkStruct_ov49_02268A0C;
+} WiFiPlazaEventEffect;
 
 // Rocking / hopping animation of one model (angle and height follow a sine over `duration` frames)
 typedef struct WiFiPlazaEventWobble {
@@ -34,13 +34,13 @@ typedef struct WiFiPlazaEventWobble {
     s16 repeats;
 } WiFiPlazaEventWobble;
 
-typedef struct UnkStruct_ov49_02268FAC_Point {
+typedef struct WiFiPlazaMoverMarker {
     s16 x;
     s16 z;
-} UnkStruct_ov49_02268FAC_Point;
+} WiFiPlazaMoverMarker;
 
 // Nine models whose x position follows lobby values; three markers from the map grid
-typedef struct UnkStruct_ov49_02268FAC {
+typedef struct WiFiPlazaEventMovers {
     WiFiPlazaRoomWork *room;                 // 0x00
     WiFiPlazaWork *lobby;                    // 0x04
     WiFiPlazaModels *models;                 // 0x08
@@ -48,11 +48,11 @@ typedef struct UnkStruct_ov49_02268FAC {
     u8 states[9][3];                         // 0x10
     u8 unk_2B;                               // 0x2B
     WiFiPlazaEventWobble wobbles[9];         // 0x2C
-    UnkStruct_ov49_02268FAC_Point points[3]; // 0xAA cell positions (pixels) of the map tags
+    WiFiPlazaMoverMarker points[3]; // 0xAA cell positions (pixels) of the map tags
     u8 unk_B6[6];                            // 0xB6
     fx32 baseX;                              // 0xBC
     fx32 range;                              // 0xC0
-} UnkStruct_ov49_02268FAC;
+} WiFiPlazaEventMovers;
 
 typedef struct WiFiPlazaEvent {
     WiFiPlazaRoomWork *room;
@@ -60,50 +60,50 @@ typedef struct WiFiPlazaEvent {
     WiFiPlazaModels *models;
     WiFiPlazaObjManager *objManager;
     WiFiPlazaLight *light;
-    UnkStruct_ov49_02268FAC *unk14;
-    UnkStruct_ov49_02268A0C *unk18;
+    WiFiPlazaEventMovers *movers;
+    WiFiPlazaEventEffect *effect;
 } WiFiPlazaEvent;
 
 WiFiPlazaEvent *WiFiPlazaEvent_Create(enum HeapID heapID, WiFiPlazaRoomWork *room);
 void WiFiPlazaEvent_Delete(WiFiPlazaEvent *event);
 void WiFiPlazaEvent_Update(WiFiPlazaEvent *event);
-u8 ov49_02268968(WiFiPlazaEvent *event, u32 index, int field);
+u8 WiFiPlazaEvent_GetMoverState(WiFiPlazaEvent *event, u32 index, int field);
 int WiFiPlazaEvent_GetColorSet(int value);
 int WiFiPlazaEvent_GetLight1Set(int value);
-int ov49_022689D4(int value);
+int WiFiPlazaEvent_GetThirdSet(int value);
 void WiFiPlazaEvent_TurnOffLight2(WiFiPlazaEvent *event);
-UnkStruct_ov49_02268A0C *ov49_02268A0C(WiFiPlazaWork *lobby, WiFiPlazaModels *models, enum HeapID heapID);
-void ov49_02268A6C(UnkStruct_ov49_02268A0C *effect);
-void ov49_02268A7C(UnkStruct_ov49_02268A0C *effect);
-void ov49_02268ADC(UnkStruct_ov49_02268A0C *effect, int index, int arg);
-void ov49_02268B04(UnkStruct_ov49_02268A0C *effect, u32 arg);
-void ov49_02268B08(UnkStruct_ov49_02268A0C *effect, u32 arg);
-void ov49_02268B0C(UnkStruct_ov49_02268A0C *effect, u32 tick);
-void ov49_02268B90(UnkStruct_ov49_02268A0C *effect, u32 tick);
-void ov49_02268C2C(UnkStruct_ov49_02268A0C *effect, u32 value);
-void ov49_02268C74(UnkStruct_ov49_02268A0C *effect, u32 index, u32 arg);
-void ov49_02268CAC(UnkStruct_ov49_02268A0C *effect);
-void ov49_02268CBC(UnkStruct_ov49_02268A0C *effect);
-void ov49_02268CCC(UnkStruct_ov49_02268A0C *effect);
-void ov49_02268CDC(UnkStruct_ov49_02268A0C *effect);
-void ov49_02268CEC(UnkStruct_ov49_02268A0C *effect);
+WiFiPlazaEventEffect *WiFiPlazaEventEffect_Create(WiFiPlazaWork *lobby, WiFiPlazaModels *models, enum HeapID heapID);
+void WiFiPlazaEventEffect_Delete(WiFiPlazaEventEffect *effect);
+void WiFiPlazaEventEffect_Update(WiFiPlazaEventEffect *effect);
+void WiFiPlazaEventEffect_RunPhase(WiFiPlazaEventEffect *effect, int index, int arg);
+void WiFiPlazaEventEffect_UpdateNone(WiFiPlazaEventEffect *effect, u32 arg);
+void WiFiPlazaEventEffect_UpdatePhase2(WiFiPlazaEventEffect *effect, u32 arg);
+void WiFiPlazaEventEffect_UpdatePhase3(WiFiPlazaEventEffect *effect, u32 tick);
+void WiFiPlazaEventEffect_UpdatePhase4(WiFiPlazaEventEffect *effect, u32 tick);
+void WiFiPlazaEventEffect_UpdatePhase5(WiFiPlazaEventEffect *effect, u32 value);
+void WiFiPlazaEventEffect_StartPhase(WiFiPlazaEventEffect *effect, u32 index, u32 arg);
+void WiFiPlazaEventEffect_StartHideProps(WiFiPlazaEventEffect *effect);
+void WiFiPlazaEventEffect_StartPhase2(WiFiPlazaEventEffect *effect);
+void WiFiPlazaEventEffect_StartPhase3(WiFiPlazaEventEffect *effect);
+void WiFiPlazaEventEffect_StartPhase4(WiFiPlazaEventEffect *effect);
+void WiFiPlazaEventEffect_StartPhase5(WiFiPlazaEventEffect *effect);
 void WiFiPlazaEvent_GetModelList(u32 kind, WiFiPlazaEventModelList *list);
-void WiFiPlazaEvent_StartLoopSE(UnkStruct_ov49_02268A0C *effect);
-void WiFiPlazaEvent_StopLoopSE(UnkStruct_ov49_02268A0C *effect);
-BOOL ov49_02268DCC(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room);
-UnkStruct_ov49_02268FAC *ov49_02268FAC(WiFiPlazaRoomWork *room, enum HeapID heapID);
-void ov49_02269090(UnkStruct_ov49_02268FAC *work);
-void ov49_02269098(UnkStruct_ov49_02268FAC *work);
-u8 ov49_02269154(UnkStruct_ov49_02268FAC *work, u32 index, int field);
-void ov49_02269178(UnkStruct_ov49_02268FAC *work, int index);
-void ov49_02269240(UnkStruct_ov49_02268FAC *work, u32 index, BOOL hasOwnSelection, int isOwnIndex, int ownColumn);
-void ov49_022693A4(BOOL hasOwnSelection, BOOL isOwnIndex, BOOL isOwnColumn, u32 seqNo);
-void ov49_022693D4(BOOL hasOwnSelection, BOOL isOwnIndex, BOOL isOwnColumn, u32 species);
-BOOL ov49_022693F8(WiFiPlazaEventWobble *wobble, int kind, WiFiPlazaModels *models, int index);
-BOOL ov49_02269430(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index);
-void ov49_02269474(WiFiPlazaEventWobble *wobble);
-void ov49_02269494(WiFiPlazaEventWobble *wobble);
-BOOL ov49_022694B4(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index);
-void WiFiPlazaEvent_UpdateMoverMarkers(UnkStruct_ov49_02268FAC *work, int index);
+void WiFiPlazaEvent_StartLoopSE(WiFiPlazaEventEffect *effect);
+void WiFiPlazaEvent_StopLoopSE(WiFiPlazaEventEffect *effect);
+BOOL WiFiPlazaTalk_Survey(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room);
+WiFiPlazaEventMovers *WiFiPlazaEventMovers_Create(WiFiPlazaRoomWork *room, enum HeapID heapID);
+void WiFiPlazaEventMovers_Delete(WiFiPlazaEventMovers *work);
+void WiFiPlazaEventMovers_Update(WiFiPlazaEventMovers *work);
+u8 WiFiPlazaEventMovers_GetState(WiFiPlazaEventMovers *work, u32 index, int field);
+void WiFiPlazaEventMovers_UpdateX(WiFiPlazaEventMovers *work, int index);
+void WiFiPlazaEventMovers_StartActions(WiFiPlazaEventMovers *work, u32 index, BOOL hasOwnSelection, int isOwnIndex, int ownColumn);
+void WiFiPlazaEventMovers_PlaySE(BOOL hasOwnSelection, BOOL isOwnIndex, BOOL isOwnColumn, u32 seqNo);
+void WiFiPlazaEventMovers_PlayCry(BOOL hasOwnSelection, BOOL isOwnIndex, BOOL isOwnColumn, u32 species);
+BOOL WiFiPlazaEventWobble_Start(WiFiPlazaEventWobble *wobble, int kind, WiFiPlazaModels *models, int index);
+BOOL WiFiPlazaEventWobble_Update(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index);
+void WiFiPlazaEventWobble_InitSmall(WiFiPlazaEventWobble *wobble);
+void WiFiPlazaEventWobble_InitLarge(WiFiPlazaEventWobble *wobble);
+BOOL WiFiPlazaEventWobble_Step(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index);
+void WiFiPlazaEvent_UpdateMoverMarkers(WiFiPlazaEventMovers *work, int index);
 
 #endif // POKEHEARTGOLD_WIFI_PLAZA_EVENT_H

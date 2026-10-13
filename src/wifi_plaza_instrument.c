@@ -26,20 +26,20 @@ typedef void (*WiFiPlazaInstrumentBurstStartFunc)(WiFiPlazaInstrumentBurst *burs
 typedef BOOL (*WiFiPlazaInstrumentBurstUpdateFunc)(WiFiPlazaInstrumentBurst *burst);
 
 // rodata of this overlay (asm/wifi_plaza_map_rodata.s)
-extern const u8 ov49_0226A450[];
-extern const WiFiPlazaInstrumentBurstEvent ov49_0226A454[];
-extern const WiFiPlazaInstrumentBurstEvent ov49_0226A45C[];
-extern const WiFiPlazaInstrumentBurstEvent ov49_0226A464[];
-extern const WiFiPlazaInstrumentBurstEvent ov49_0226A46C[];
-extern const WiFiPlazaInstrumentBurstEvent ov49_0226A474[];
-extern const WiFiPlazaInstrumentBurstEvent ov49_0226A47C[];
+extern const u8 sWiFiPlazaInstrumentBalloonHeights[];
+extern const WiFiPlazaInstrumentBurstEvent sWiFiPlazaInstrumentBursts_Bell01[];
+extern const WiFiPlazaInstrumentBurstEvent sWiFiPlazaInstrumentBursts_Cymbal02[];
+extern const WiFiPlazaInstrumentBurstEvent sWiFiPlazaInstrumentBursts_Drum01[];
+extern const WiFiPlazaInstrumentBurstEvent sWiFiPlazaInstrumentBursts_Bell02[];
+extern const WiFiPlazaInstrumentBurstEvent sWiFiPlazaInstrumentBursts_Cymbal03[];
+extern const WiFiPlazaInstrumentBurstEvent sWiFiPlazaInstrumentBursts_Cymbal01[];
 extern const WiFiPlazaInstrumentBurstUpdateFunc sWiFiPlazaInstrumentBurstUpdateFuncs[];
-extern const WiFiPlazaInstrumentBurstEvent ov49_0226A49C[];
-extern const WiFiPlazaInstrumentBurstEvent ov49_0226A4B4[];
-extern const WiFiPlazaInstrumentBurstEvent ov49_0226A4C0[];
+extern const WiFiPlazaInstrumentBurstEvent sWiFiPlazaInstrumentBursts_Drum02[];
+extern const WiFiPlazaInstrumentBurstEvent sWiFiPlazaInstrumentBursts_Bell03[];
+extern const WiFiPlazaInstrumentBurstEvent sWiFiPlazaInstrumentBursts_Drum03[];
 extern const WiFiPlazaInstrumentBurstStartFunc sWiFiPlazaInstrumentBurstStartFuncs[];
-extern const VecFx32 ov49_0226A4D8[];
-extern const VecFx32 ov49_0226A508[];
+extern const VecFx32 sWiFiPlazaInstrumentSparkleStarts[];
+extern const VecFx32 sWiFiPlazaInstrumentSparkleFalls[];
 extern const WiFiPlazaInstrumentUpdateFunc sWiFiPlazaInstrumentUpdateFuncs[];
 extern const WiFiPlazaInstrumentInitFunc sWiFiPlazaInstrumentInitFuncs[];
 extern const u32 sWiFiPlazaInstrumentStartSEs[];
@@ -53,9 +53,9 @@ extern const WiFiPlazaInstrumentModelDesc ov49_0226A73C[];
 extern const WiFiPlazaInstrumentModelDesc ov49_0226A74C[];
 extern const WiFiPlazaInstrumentModelDesc ov49_0226A750[];
 extern const WiFiPlazaInstrumentModelDesc ov49_0226A754[];
-extern const u8 ov49_0226A7A8[];
-extern const u8 ov49_0226A7B8[];
-extern const u8 ov49_0226A7C8[];
+extern const u8 sWiFiPlazaInstrumentBurstModels01[];
+extern const u8 sWiFiPlazaInstrumentBurstModels02[];
+extern const u8 sWiFiPlazaInstrumentBurstModels03[];
 extern const u16 sWiFiPlazaLightColorSets[][5];
 extern const u16 sWiFiPlazaLight1Colors[];
 
@@ -244,7 +244,7 @@ void WiFiPlazaInstrument_PlaySE(WiFiPlazaInstrumentManager *manager, WiFiPlazaIn
 
     if (obj == ownPlayer) {
         PlaySEOnPlayer((u16)seq, 5);
-    } else if (ov49_02258F70(obj) == 0) {
+    } else if (WiFiPlazaObj_IsCulled(obj) == 0) {
         PlaySE((u16)seq);
     }
 }
@@ -483,31 +483,31 @@ fx32 WiFiPlazaInstrument_GetAnimFrame(WiFiPlazaInstrumentManager *manager, WiFiP
     return ModelAnimation_GetFrame((ModelAnimation *)((u8 *)manager + 0x106DC + desc->anims[anim] * sizeof(ModelAnimation)));
 }
 
-void ov49_02265C68(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
-    ov49_02267A84(manager, effect, 1);
+void WiFiPlazaInstrument_InitRipple01(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+    WiFiPlazaInstrument_InitRipple(manager, effect, 1);
 }
 
-void ov49_02265C74(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
-    ov49_02267A84(manager, effect, 2);
+void WiFiPlazaInstrument_InitRipple02(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+    WiFiPlazaInstrument_InitRipple(manager, effect, 2);
 }
 
-void ov49_02265C80(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
-    ov49_02267A84(manager, effect, 3);
+void WiFiPlazaInstrument_InitRipple03(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+    WiFiPlazaInstrument_InitRipple(manager, effect, 3);
 }
 
-void ov49_02265C8C(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
-    ov49_02267C20(manager, effect, 1);
+void WiFiPlazaInstrument_InitWhirl01(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+    WiFiPlazaInstrument_InitWhirl(manager, effect, 1);
 }
 
-void ov49_02265C98(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
-    ov49_02267C20(manager, effect, 2);
+void WiFiPlazaInstrument_InitWhirl02(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+    WiFiPlazaInstrument_InitWhirl(manager, effect, 2);
 }
 
-void ov49_02265CA4(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
-    ov49_02267C20(manager, effect, 3);
+void WiFiPlazaInstrument_InitWhirl03(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+    WiFiPlazaInstrument_InitWhirl(manager, effect, 3);
 }
 
-void ov49_02265CB0(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+void WiFiPlazaInstrument_InitSignal(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     VecFx32 pos;
     int i = 0;
     ModelInstance *model = effect->models;
@@ -522,7 +522,7 @@ void ov49_02265CB0(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
     effect->work.sequence.lastStep = 0xFF;
 }
 
-void ov49_02265D10(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+void WiFiPlazaInstrument_InitPop01(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     VecFx32 a;
     VecFx32 b;
 
@@ -564,7 +564,7 @@ void ov49_02265D10(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
     ModelInstance_SetPosition(&effect->models[0], b.x, b.y, b.z);
 }
 
-void ov49_02265E54(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+void WiFiPlazaInstrument_InitPop02(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     VecFx32 a;
     VecFx32 b;
 
@@ -619,7 +619,7 @@ void ov49_02265E54(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
     ModelInstance_SetPosition(&effect->models[0], b.x, b.y, b.z);
 }
 
-void ov49_02266088(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+void WiFiPlazaInstrument_InitPop03(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     VecFx32 a;
     VecFx32 b;
 
@@ -684,125 +684,125 @@ void ov49_02266088(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
     ModelInstance_SetPosition(&effect->models[0], b.x, b.y, b.z);
 }
 
-void ov49_02266354(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
-    ov49_02266B28(manager, effect, 1);
+void WiFiPlazaInstrument_InitBalloon01(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+    WiFiPlazaInstrument_InitBalloon(manager, effect, 1);
 }
 
-void ov49_02266360(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
-    ov49_02266B28(manager, effect, 2);
+void WiFiPlazaInstrument_InitBalloon02(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+    WiFiPlazaInstrument_InitBalloon(manager, effect, 2);
 }
 
-void ov49_0226636C(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
-    ov49_02266B28(manager, effect, 3);
+void WiFiPlazaInstrument_InitBalloon03(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+    WiFiPlazaInstrument_InitBalloon(manager, effect, 3);
 }
 
-void ov49_02266378(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
-    ov49_02267908(manager, effect, 1);
+void WiFiPlazaInstrument_InitSparkle01(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+    WiFiPlazaInstrument_InitSparkle(manager, effect, 1);
 }
 
-void ov49_02266384(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
-    ov49_02267908(manager, effect, 2);
+void WiFiPlazaInstrument_InitSparkle02(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+    WiFiPlazaInstrument_InitSparkle(manager, effect, 2);
 }
 
-void ov49_02266390(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
-    ov49_02267908(manager, effect, 4);
+void WiFiPlazaInstrument_InitSparkle03(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+    WiFiPlazaInstrument_InitSparkle(manager, effect, 4);
 }
 
-void ov49_0226639C(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+void WiFiPlazaInstrument_InitBell01(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     int i;
-    const u8 *desc = ov49_0226A7A8;
+    const u8 *desc = sWiFiPlazaInstrumentBurstModels01;
 
     for (i = 0; i < 16; i++, desc++) {
         WiFiPlazaInstrument_SetModel(manager, effect, i, &sWiFiPlazaInstrumentModelDescs[*desc]);
     }
-    WiFiPlazaInstrument_InitBursts(&effect->work.burst, ov49_0226A454, 2, 0x21, 0, effect);
+    WiFiPlazaInstrument_InitBursts(&effect->work.burst, sWiFiPlazaInstrumentBursts_Bell01, 2, 0x21, 0, effect);
 }
 
-void ov49_022663EC(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+void WiFiPlazaInstrument_InitBell02(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     int i;
-    const u8 *desc = ov49_0226A7B8;
+    const u8 *desc = sWiFiPlazaInstrumentBurstModels02;
 
     for (i = 0; i < 16; i++, desc++) {
         WiFiPlazaInstrument_SetModel(manager, effect, i, &sWiFiPlazaInstrumentModelDescs[*desc]);
     }
-    WiFiPlazaInstrument_InitBursts(&effect->work.burst, ov49_0226A46C, 2, 0x21, 0, effect);
+    WiFiPlazaInstrument_InitBursts(&effect->work.burst, sWiFiPlazaInstrumentBursts_Bell02, 2, 0x21, 0, effect);
 }
 
-void ov49_0226643C(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+void WiFiPlazaInstrument_InitBell03(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     int i;
-    const u8 *desc = ov49_0226A7C8;
+    const u8 *desc = sWiFiPlazaInstrumentBurstModels03;
 
     for (i = 0; i < 16; i++, desc++) {
         WiFiPlazaInstrument_SetModel(manager, effect, i, &sWiFiPlazaInstrumentModelDescs[*desc]);
     }
-    WiFiPlazaInstrument_InitBursts(&effect->work.burst, ov49_0226A4B4, 3, 0x21, 0, effect);
+    WiFiPlazaInstrument_InitBursts(&effect->work.burst, sWiFiPlazaInstrumentBursts_Bell03, 3, 0x21, 0, effect);
 }
 
-void ov49_0226648C(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+void WiFiPlazaInstrument_InitDrum01(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     int i;
-    const u8 *desc = ov49_0226A7A8;
+    const u8 *desc = sWiFiPlazaInstrumentBurstModels01;
 
     for (i = 0; i < 16; i++, desc++) {
         WiFiPlazaInstrument_SetModel(manager, effect, i, &sWiFiPlazaInstrumentModelDescs[*desc]);
     }
-    WiFiPlazaInstrument_InitBursts(&effect->work.burst, ov49_0226A464, 2, 0x21, 1, effect);
+    WiFiPlazaInstrument_InitBursts(&effect->work.burst, sWiFiPlazaInstrumentBursts_Drum01, 2, 0x21, 1, effect);
 }
 
-void ov49_022664DC(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+void WiFiPlazaInstrument_InitDrum02(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     int i;
-    const u8 *desc = ov49_0226A7B8;
+    const u8 *desc = sWiFiPlazaInstrumentBurstModels02;
 
     for (i = 0; i < 16; i++, desc++) {
         WiFiPlazaInstrument_SetModel(manager, effect, i, &sWiFiPlazaInstrumentModelDescs[*desc]);
     }
-    WiFiPlazaInstrument_InitBursts(&effect->work.burst, ov49_0226A49C, 3, 0x29, 1, effect);
+    WiFiPlazaInstrument_InitBursts(&effect->work.burst, sWiFiPlazaInstrumentBursts_Drum02, 3, 0x29, 1, effect);
 }
 
-void ov49_0226652C(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+void WiFiPlazaInstrument_InitDrum03(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     int i;
-    const u8 *desc = ov49_0226A7C8;
+    const u8 *desc = sWiFiPlazaInstrumentBurstModels03;
 
     for (i = 0; i < 16; i++, desc++) {
         WiFiPlazaInstrument_SetModel(manager, effect, i, &sWiFiPlazaInstrumentModelDescs[*desc]);
     }
-    WiFiPlazaInstrument_InitBursts(&effect->work.burst, ov49_0226A4C0, 3, 0x21, 1, effect);
+    WiFiPlazaInstrument_InitBursts(&effect->work.burst, sWiFiPlazaInstrumentBursts_Drum03, 3, 0x21, 1, effect);
 }
 
-void ov49_0226657C(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+void WiFiPlazaInstrument_InitCymbal01(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     int i;
-    const u8 *desc = ov49_0226A7A8;
+    const u8 *desc = sWiFiPlazaInstrumentBurstModels01;
 
     for (i = 0; i < 16; i++, desc++) {
         WiFiPlazaInstrument_SetModel(manager, effect, i, &sWiFiPlazaInstrumentModelDescs[*desc]);
     }
-    WiFiPlazaInstrument_InitBursts(&effect->work.burst, ov49_0226A47C, 2, 0x21, 2, effect);
-    ov49_02267C8C(manager, effect);
+    WiFiPlazaInstrument_InitBursts(&effect->work.burst, sWiFiPlazaInstrumentBursts_Cymbal01, 2, 0x21, 2, effect);
+    WiFiPlazaInstrument_InitCymbalFlash(manager, effect);
 }
 
-void ov49_022665D0(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+void WiFiPlazaInstrument_InitCymbal02(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     int i;
-    const u8 *desc = ov49_0226A7B8;
+    const u8 *desc = sWiFiPlazaInstrumentBurstModels02;
 
     for (i = 0; i < 16; i++, desc++) {
         WiFiPlazaInstrument_SetModel(manager, effect, i, &sWiFiPlazaInstrumentModelDescs[*desc]);
     }
-    WiFiPlazaInstrument_InitBursts(&effect->work.burst, ov49_0226A45C, 2, 0x21, 2, effect);
-    ov49_02267C8C(manager, effect);
+    WiFiPlazaInstrument_InitBursts(&effect->work.burst, sWiFiPlazaInstrumentBursts_Cymbal02, 2, 0x21, 2, effect);
+    WiFiPlazaInstrument_InitCymbalFlash(manager, effect);
 }
 
-void ov49_02266624(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+void WiFiPlazaInstrument_InitCymbal03(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     int i;
-    const u8 *desc = ov49_0226A7C8;
+    const u8 *desc = sWiFiPlazaInstrumentBurstModels03;
 
     for (i = 0; i < 16; i++, desc++) {
         WiFiPlazaInstrument_SetModel(manager, effect, i, &sWiFiPlazaInstrumentModelDescs[*desc]);
     }
-    WiFiPlazaInstrument_InitBursts(&effect->work.burst, ov49_0226A474, 2, 0x21, 2, effect);
-    ov49_02267C8C(manager, effect);
+    WiFiPlazaInstrument_InitBursts(&effect->work.burst, sWiFiPlazaInstrumentBursts_Cymbal03, 2, 0x21, 2, effect);
+    WiFiPlazaInstrument_InitCymbalFlash(manager, effect);
 }
 
 // Shows the models one after another (6 steps over 54 frames) and hides each when its animation ended.
-BOOL ov49_02266678(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+BOOL WiFiPlazaInstrument_UpdateRipple(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     int limit;
     int step;
     int i;
@@ -844,20 +844,20 @@ BOOL ov49_02266678(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
     return FALSE;
 }
 
-BOOL ov49_02266748(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
-    return ov49_02267AF0(manager, effect, 0);
+BOOL WiFiPlazaInstrument_UpdateSignal01(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+    return WiFiPlazaInstrument_UpdateSignalSequence(manager, effect, 0);
 }
 
-BOOL ov49_02266754(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
-    return ov49_02267AF0(manager, effect, 1);
+BOOL WiFiPlazaInstrument_UpdateSignal02(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+    return WiFiPlazaInstrument_UpdateSignalSequence(manager, effect, 1);
 }
 
-BOOL ov49_02266760(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
-    return ov49_02267AF0(manager, effect, 2);
+BOOL WiFiPlazaInstrument_UpdateSignal03(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+    return WiFiPlazaInstrument_UpdateSignalSequence(manager, effect, 2);
 }
 
 // Shows the models one at a time over 32 frames; done when the last one finished its animation.
-BOOL ov49_0226676C(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+BOOL WiFiPlazaInstrument_UpdateWhirl(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     int i;
     int current;
     BOOL result;
@@ -891,7 +891,7 @@ BOOL ov49_0226676C(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
 #pragma force_active on
 
 // Model 0 plays three times; models 1-3 follow, each fading out (8 steps) once its animation ended.
-BOOL ov49_02266820(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+BOOL WiFiPlazaInstrument_UpdatePop(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     BOOL done;
 
     if (effect->descs[0]->anims[0] == WIFI_PLAZA_INSTRUMENT_NO_ANIM) {
@@ -945,18 +945,18 @@ BOOL ov49_02266820(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
 
 #pragma force_active reset
 
-BOOL ov49_02266978(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+BOOL WiFiPlazaInstrument_UpdateBalloon(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     u8 phase = effect->phase;
 
     switch (phase) {
     case 0:
-        if (ov49_02266D60(manager, effect) != FALSE) {
+        if (WiFiPlazaInstrument_UpdateBalloonUp(manager, effect) != FALSE) {
             effect->phase = 1;
-            ov49_02266EF8(manager, effect);
+            WiFiPlazaInstrument_StartBalloonDown(manager, effect);
         }
         break;
     case 1:
-        if (ov49_022670B8(manager, effect) != FALSE) {
+        if (WiFiPlazaInstrument_UpdateBalloonDown(manager, effect) != FALSE) {
             return TRUE;
         }
         break;
@@ -967,7 +967,7 @@ BOOL ov49_02266978(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
 #pragma force_active on
 
 // Shows the models row by row (4 per row, every 8 frames); each falls along its tween.
-BOOL ov49_022669B0(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+BOOL WiFiPlazaInstrument_UpdateSparkle(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     int i;
     BOOL result;
 
@@ -998,7 +998,7 @@ BOOL ov49_022669B0(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
         ModelInstance *model2 = model;
         do {
             if (ModelInstance_IsVisible(model) == TRUE) {
-                result = ov49_02267A1C(manager, effect, i);
+                result = WiFiPlazaInstrument_UpdateSparkleModel(manager, effect, i);
                 if (result == TRUE) {
                     ModelInstance_SetVisible(model2, FALSE);
                 }
@@ -1015,7 +1015,7 @@ BOOL ov49_022669B0(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
 
 #pragma force_active reset
 
-BOOL ov49_02266A88(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+BOOL WiFiPlazaInstrument_UpdateBellDrum(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     int result = WiFiPlazaInstrument_UpdateBursts(&effect->work.burst, effect->frame);
 
     effect->frame = effect->frame + 1;
@@ -1025,14 +1025,14 @@ BOOL ov49_02266A88(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
     return FALSE;
 }
 
-BOOL ov49_02266AB0(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+BOOL WiFiPlazaInstrument_UpdateCymbal(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     int result = WiFiPlazaInstrument_UpdateBursts(&effect->work.burst, effect->frame);
 
     effect->frame = effect->frame + 1;
     if (result == 1) {
-        ov49_02267D00(manager, effect);
+        WiFiPlazaInstrument_StartCymbalFlash(manager, effect);
     }
-    ov49_02267D34(manager, effect);
+    WiFiPlazaInstrument_UpdateCymbalFlash(manager, effect);
     if (result == 2) {
         return TRUE;
     }
@@ -1042,7 +1042,7 @@ BOOL ov49_02266AB0(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
 BOOL WiFiPlazaInstrument_DrawEffectModels(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     int i;
 
-    if (ov49_02258F70(effect->obj) == 1) {
+    if (WiFiPlazaObj_IsCulled(effect->obj) == 1) {
         return FALSE;
     }
     for (i = 0; i < WIFI_PLAZA_INSTRUMENT_EFFECT_MODELS; i++) {
@@ -1056,7 +1056,7 @@ BOOL WiFiPlazaInstrument_DrawEffectModels(WiFiPlazaInstrumentManager *manager, W
 #pragma force_active on
 
 // The player's object rises with up to 3 models (types 24-26); on map attribute 42 it only lifts slightly.
-void ov49_02266B28(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, int count) {
+void WiFiPlazaInstrument_InitBalloon(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, int count) {
     u32 packed;
 
     struct {
@@ -1074,42 +1074,42 @@ void ov49_02266B28(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
     switch (count) {
     case 1:
         WiFiPlazaInstrument_SetModel(manager, effect, 0, ov49_0226A74C);
-        ov49_0226786C(manager, effect, 0, 0);
+        WiFiPlazaInstrument_SetBalloonAnim(manager, effect, 0, 0);
         break;
     case 2:
         WiFiPlazaInstrument_SetModel(manager, effect, 0, ov49_0226A74C);
         WiFiPlazaInstrument_SetModel(manager, effect, 1, ov49_0226A750);
-        ov49_0226786C(manager, effect, 0, 2);
-        ov49_0226786C(manager, effect, 1, 1);
+        WiFiPlazaInstrument_SetBalloonAnim(manager, effect, 0, 2);
+        WiFiPlazaInstrument_SetBalloonAnim(manager, effect, 1, 1);
         break;
     case 3:
     default:
         WiFiPlazaInstrument_SetModel(manager, effect, 0, ov49_0226A74C);
         WiFiPlazaInstrument_SetModel(manager, effect, 1, ov49_0226A750);
         WiFiPlazaInstrument_SetModel(manager, effect, 2, ov49_0226A754);
-        ov49_0226786C(manager, effect, 0, 0);
-        ov49_0226786C(manager, effect, 1, 2);
-        ov49_0226786C(manager, effect, 2, 1);
+        WiFiPlazaInstrument_SetBalloonAnim(manager, effect, 0, 0);
+        WiFiPlazaInstrument_SetBalloonAnim(manager, effect, 1, 2);
+        WiFiPlazaInstrument_SetBalloonAnim(manager, effect, 2, 1);
         break;
     }
     effect->work.hop.count = (u8)count;
-    ov49_02259130(effect->obj, FALSE);
+    WiFiPlazaObj_SetAvatarMode(effect->obj, FALSE);
     if (!effect->work.hop.onTile42) {
-        ov49_02266C6C(manager, effect);
+        WiFiPlazaInstrument_StartBalloonRise(manager, effect);
     } else {
-        ov49_02266D04(manager, effect);
+        WiFiPlazaInstrument_StartBalloonLift(manager, effect);
     }
 }
 
 #pragma force_active reset
 
-void ov49_02266C6C(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+void WiFiPlazaInstrument_StartBalloonRise(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     VecFx32 pos;
     u8 height;
     float delta;
 
     WiFiPlazaObj_GetPosition(effect->obj, &pos);
-    height = ov49_0226A450[effect->work.hop.count - 1];
+    height = sWiFiPlazaInstrumentBalloonHeights[effect->work.hop.count - 1];
     if (height != 0) {
         delta = (float)(height << 12) + 0.5f;
     } else {
@@ -1117,29 +1117,29 @@ void ov49_02266C6C(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
     }
     WiFiPlazaInstrumentTween_Init(&effect->work.hop.tweens[3], pos.x, pos.x, pos.y, pos.y + (fx32)delta, pos.z, pos.z, 0x6C);
     WiFiPlazaInstrumentWave_Init(&effect->work.hop.objWave, 0, 0x71C, FX32_CONST(8));
-    ov49_0226747C(effect);
+    WiFiPlazaInstrument_PlaceBalloons(effect);
     effect->work.hop.timer = 0;
 }
 
-void ov49_02266D04(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+void WiFiPlazaInstrument_StartBalloonLift(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     VecFx32 pos;
 
     WiFiPlazaObj_GetPosition(effect->obj, &pos);
     WiFiPlazaInstrumentTween_Init(&effect->work.hop.tweens[3], pos.x, pos.x, pos.y, pos.y + FX32_CONST(2), pos.z, pos.z, 2);
     WiFiPlazaInstrumentWave_Init(&effect->work.hop.objWave, 0, 0x71C, 0);
-    ov49_02267674(effect);
+    WiFiPlazaInstrument_PlaceBalloonsLifted(effect);
     effect->work.hop.timer = 0;
 }
 
-BOOL ov49_02266D60(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+BOOL WiFiPlazaInstrument_UpdateBalloonUp(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     if (effect->work.hop.onTile42 == FALSE) {
-        return ov49_02266D7C(manager, effect);
+        return WiFiPlazaInstrument_UpdateBalloonRise(manager, effect);
     }
-    return ov49_02266E78(manager, effect);
+    return WiFiPlazaInstrument_UpdateBalloonLift(manager, effect);
 }
 
 // Rising: the object sways sideways; the own player may still turn and step with the D-pad.
-BOOL ov49_02266D7C(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+BOOL WiFiPlazaInstrument_UpdateBalloonRise(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     VecFx32 pos;
     fx32 sway;
     BOOL result;
@@ -1155,9 +1155,9 @@ BOOL ov49_02266D7C(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
         pos.x += sway;
     }
     WiFiPlazaObj_SetPosition(effect->obj, &pos);
-    ov49_0226747C(effect);
+    WiFiPlazaInstrument_PlaceBalloons(effect);
     for (i = 0; i < effect->work.hop.count; i++) {
-        ov49_0226789C(manager, effect, i);
+        WiFiPlazaInstrument_UpdateBalloonAnim(manager, effect, i);
     }
     if (effect->obj == WiFiPlazaObj_GetOwnPlayer(manager->objManager)) {
         u32 keys = gSystem.newKeys;
@@ -1188,7 +1188,7 @@ BOOL ov49_02266D7C(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
     return result;
 }
 
-BOOL ov49_02266E78(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+BOOL WiFiPlazaInstrument_UpdateBalloonLift(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     VecFx32 pos;
     BOOL result;
     int i;
@@ -1199,31 +1199,31 @@ BOOL ov49_02266E78(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
     WiFiPlazaObj_GetPosition(effect->obj, &pos);
     WiFiPlazaInstrumentTween_GetPosition(&effect->work.hop.tweens[3], &pos.x, &pos.y, &pos.z);
     WiFiPlazaObj_SetPosition(effect->obj, &pos);
-    ov49_02267674(effect);
+    WiFiPlazaInstrument_PlaceBalloonsLifted(effect);
     for (i = 0; i < effect->work.hop.count; i++) {
-        ov49_0226789C(manager, effect, i);
+        WiFiPlazaInstrument_UpdateBalloonAnim(manager, effect, i);
     }
     return result;
 }
 
-void ov49_02266EF8(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+void WiFiPlazaInstrument_StartBalloonDown(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     if (effect->work.hop.onTile42 == FALSE) {
-        ov49_02266F14(manager, effect);
+        WiFiPlazaInstrument_StartBalloonFall(manager, effect);
         return;
     }
-    ov49_02267074(manager, effect);
+    WiFiPlazaInstrument_StartBalloonDrop(manager, effect);
 }
 
 #pragma force_active on
 
 // Starts the way down: the object drops back, the models fly off (up and to the sides).
-void ov49_02266F14(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+void WiFiPlazaInstrument_StartBalloonFall(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     VecFx32 pos;
     fx32 x, y, z;
     int i;
 
     WiFiPlazaObj_GetPosition(effect->obj, &pos);
-    WiFiPlazaInstrumentTween_Init(&effect->work.hop.tweens[3], pos.x, pos.x, pos.y, pos.y - FX32_CONST(ov49_0226A450[effect->work.hop.count - 1]), pos.z, pos.z, 10);
+    WiFiPlazaInstrumentTween_Init(&effect->work.hop.tweens[3], pos.x, pos.x, pos.y, pos.y - FX32_CONST(sWiFiPlazaInstrumentBalloonHeights[effect->work.hop.count - 1]), pos.z, pos.z, 10);
     effect->work.hop.timer = 0;
     effect->work.hop.stage = 0;
     for (i = 0; i < effect->work.hop.count; i++) {
@@ -1247,14 +1247,14 @@ void ov49_02266F14(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
         }
         WiFiPlazaInstrumentTween_Init(&effect->work.hop.tweens[i], pos.x, x, pos.y, y, pos.z, z, 26);
         WiFiPlazaInstrumentWave_Init(&effect->work.hop.waves[i], 0, 0xAAA, FX32_CONST(6));
-        ov49_0226786C(manager, effect, i, 3);
+        WiFiPlazaInstrument_SetBalloonAnim(manager, effect, i, 3);
     }
     effect->work.hop.tick = 0;
 }
 
 #pragma force_active reset
 
-void ov49_02267074(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+void WiFiPlazaInstrument_StartBalloonDrop(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     VecFx32 pos;
 
     WiFiPlazaObj_GetPosition(effect->obj, &pos);
@@ -1263,17 +1263,17 @@ void ov49_02267074(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
     effect->work.hop.stage = 0;
 }
 
-BOOL ov49_022670B8(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+BOOL WiFiPlazaInstrument_UpdateBalloonDown(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     if (effect->work.hop.onTile42 == FALSE) {
-        return ov49_022670D4(manager, effect);
+        return WiFiPlazaInstrument_UpdateBalloonFall(manager, effect);
     }
-    return ov49_02267328(manager, effect);
+    return WiFiPlazaInstrument_UpdateBalloonDrop(manager, effect);
 }
 
 #pragma force_active on
 
 // The way down off map attribute 42: wait, flash the object, drop it and let it bounce once while the models fly off.
-BOOL ov49_022670D4(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+BOOL WiFiPlazaInstrument_UpdateBalloonFall(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     VecFx32 objPos;
     VecFx32 bouncePos;
     VecFx32 modelPos;
@@ -1292,14 +1292,14 @@ BOOL ov49_022670D4(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
         }
         break;
     case 1:
-        ov49_0225919C(effect->obj, TRUE);
+        WiFiPlazaObj_SetPoseLoopEffect(effect->obj, TRUE);
         effect->work.hop.timer = 16;
         effect->work.hop.stage = 2;
         break;
     case 2:
         effect->work.hop.timer--;
         if (effect->work.hop.timer <= 0) {
-            ov49_0225919C(effect->obj, FALSE);
+            WiFiPlazaObj_SetPoseLoopEffect(effect->obj, FALSE);
             effect->work.hop.stage = 3;
             effect->work.hop.timer = 0;
             WiFiPlazaObj_SetDirection(effect->obj, WiFiPlazaObj_GetParam(effect->obj, 6));
@@ -1330,7 +1330,7 @@ BOOL ov49_022670D4(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
         if (next > 10) {
             WiFiPlazaObj *obj;
 
-            ov49_02259130(effect->obj, TRUE);
+            WiFiPlazaObj_SetAvatarMode(effect->obj, TRUE);
             obj = effect->obj;
             if (obj == WiFiPlazaObj_GetOwnPlayer(manager->objManager)) {
                 WiFiPlazaCamera_SetFollowObject(manager->camera, obj);
@@ -1355,10 +1355,10 @@ BOOL ov49_022670D4(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
                 WiFiPlazaInstrumentWave_GetValue(&effect->work.hop.waves[i], &sway);
                 modelPos.x += sway;
                 ModelInstance_SetPosition(&effect->models[i], modelPos.x, modelPos.y, modelPos.z);
-            } else if (ov49_0226786C(manager, effect, i, 4) == TRUE) {
+            } else if (WiFiPlazaInstrument_SetBalloonAnim(manager, effect, i, 4) == TRUE) {
                 WiFiPlazaInstrument_PlaySE(manager, effect, 0x5A8);
             }
-            ov49_0226789C(manager, effect, i);
+            WiFiPlazaInstrument_UpdateBalloonAnim(manager, effect, i);
             tween++;
             wave++;
             model++;
@@ -1369,31 +1369,31 @@ BOOL ov49_022670D4(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
 
 #pragma force_active reset
 
-BOOL ov49_02267328(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+BOOL WiFiPlazaInstrument_UpdateBalloonDrop(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     VecFx32 pos;
     int i;
     u32 result;
 
     for (i = 0; i < effect->work.hop.count; i++) {
-        ov49_0226789C(manager, effect, i);
+        WiFiPlazaInstrument_UpdateBalloonAnim(manager, effect, i);
     }
     switch (effect->work.hop.stage) {
     case 0:
         WiFiPlazaInstrument_PlaySE(manager, effect, 0x5A8);
         for (i = 0; i < effect->work.hop.count; i++) {
-            ov49_0226786C(manager, effect, i, 4);
+            WiFiPlazaInstrument_SetBalloonAnim(manager, effect, i, 4);
         }
         effect->work.hop.stage = 1;
         break;
     case 1:
-        ov49_0225919C(effect->obj, TRUE);
+        WiFiPlazaObj_SetPoseLoopEffect(effect->obj, TRUE);
         effect->work.hop.timer = 8;
         effect->work.hop.stage = 2;
         break;
     case 2:
         effect->work.hop.timer--;
         if (effect->work.hop.timer <= 0) {
-            ov49_0225919C(effect->obj, FALSE);
+            WiFiPlazaObj_SetPoseLoopEffect(effect->obj, FALSE);
             effect->work.hop.stage = 3;
             effect->work.hop.timer = 0;
             result = WiFiPlazaObj_GetParam(effect->obj, 6);
@@ -1410,7 +1410,7 @@ BOOL ov49_02267328(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
             effect->work.hop.timer = 0;
             effect->work.hop.baseY = pos.y;
             WiFiPlazaInstrument_PlaySE(manager, effect, 0x5C2);
-            ov49_02259130(effect->obj, TRUE);
+            WiFiPlazaObj_SetAvatarMode(effect->obj, TRUE);
             if (effect->obj == WiFiPlazaObj_GetOwnPlayer(manager->objManager)) {
                 WiFiPlazaCamera_SetFollowObject(manager->camera, effect->obj);
             }
@@ -1422,7 +1422,7 @@ BOOL ov49_02267328(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
 }
 
 // Places the models (up to 3) next to the object while it rises; the float conversions are kept as calls.
-void ov49_0226747C(WiFiPlazaInstrumentEffect *effect) {
+void WiFiPlazaInstrument_PlaceBalloons(WiFiPlazaInstrumentEffect *effect) {
     VecFx32 pos;
     int count;
     u32 y;
@@ -1460,7 +1460,7 @@ void ov49_0226747C(WiFiPlazaInstrumentEffect *effect) {
 }
 
 // Same for the slight lift on map attribute 42.
-void ov49_02267674(WiFiPlazaInstrumentEffect *effect) {
+void WiFiPlazaInstrument_PlaceBalloonsLifted(WiFiPlazaInstrumentEffect *effect) {
     VecFx32 pos;
     int count;
     u32 y;
@@ -1498,7 +1498,7 @@ void ov49_02267674(WiFiPlazaInstrumentEffect *effect) {
 }
 
 // Switches model `index` to animation step `kind` (frames kind * 2 .. kind * 2 + 1, 4 = hide when done).
-BOOL ov49_0226786C(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, u32 index, u8 kind) {
+BOOL WiFiPlazaInstrument_SetBalloonAnim(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, u32 index, u8 kind) {
     if (kind != effect->work.hop.animKinds[index]) {
         effect->work.hop.animKinds[index] = kind;
         effect->work.hop.animTimers[index] = 0;
@@ -1508,7 +1508,7 @@ BOOL ov49_0226786C(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
     return FALSE;
 }
 
-void ov49_0226789C(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, u32 index) {
+void WiFiPlazaInstrument_UpdateBalloonAnim(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, u32 index) {
     u8 kind = effect->work.hop.animKinds[index];
     u8 *timers = effect->work.hop.animTimers;
     u32 frame;
@@ -1528,7 +1528,7 @@ void ov49_0226789C(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
     timers[index]--;
 }
 
-void ov49_02267908(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, u32 rows) {
+void WiFiPlazaInstrument_InitSparkle(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, u32 rows) {
     VecFx32 base;
     VecFx32 start;
     VecFx32 end;
@@ -1545,8 +1545,8 @@ void ov49_02267908(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
         for (j = 0; j < 4; j++) {
             u32 index = j + first;
             WiFiPlazaInstrument_SetModel(manager, effect, index, &sWiFiPlazaInstrumentModelDescs[descIndex]);
-            VEC_Add(&base, &ov49_0226A4D8[j], &start);
-            VEC_Add(&start, &ov49_0226A508[j], &end);
+            VEC_Add(&base, &sWiFiPlazaInstrumentSparkleStarts[j], &start);
+            VEC_Add(&start, &sWiFiPlazaInstrumentSparkleFalls[j], &end);
             ModelInstance_SetPosition(&effect->models[index], start.x, start.y, start.z);
             ModelInstance_SetVisible(&effect->models[index], FALSE);
             effect->work.shower.timers[index] = 0;
@@ -1561,7 +1561,7 @@ void ov49_02267908(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
 
 #pragma force_active on
 
-BOOL ov49_02267A1C(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, int index) {
+BOOL WiFiPlazaInstrument_UpdateSparkleModel(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, int index) {
     VecFx32 pos;
     BOOL done;
     int offset;
@@ -1579,7 +1579,7 @@ BOOL ov49_02267A1C(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
 
 #pragma force_active reset
 
-void ov49_02267A84(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, u32 count) {
+void WiFiPlazaInstrument_InitRipple(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, u32 count) {
     u32 i;
 
     for (i = 0; i < count; i++) {
@@ -1597,7 +1597,7 @@ void ov49_02267A84(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
 #pragma force_active on
 
 // Plays sequence `kind`: 12 steps over 48 frames, each showing one model at a fixed animation frame.
-BOOL ov49_02267AF0(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, int kind) {
+BOOL WiFiPlazaInstrument_UpdateSignalSequence(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, int kind) {
     WiFiPlazaInstrumentStep prev;
     WiFiPlazaInstrumentStep cur;
     int step = effect->frame * 12 / 48;
@@ -1628,7 +1628,7 @@ BOOL ov49_02267AF0(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
 
 #pragma force_active reset
 
-void ov49_02267C20(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, u32 count) {
+void WiFiPlazaInstrument_InitWhirl(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, u32 count) {
     u32 i;
 
     for (i = 0; i < count; i++) {
@@ -1643,7 +1643,7 @@ void ov49_02267C20(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
     effect->work.stack.count = count;
 }
 
-void ov49_02267C8C(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+void WiFiPlazaInstrument_InitCymbalFlash(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     VecFx32 pos;
     int i;
 
@@ -1657,7 +1657,7 @@ void ov49_02267C8C(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
     }
 }
 
-void ov49_02267D00(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+void WiFiPlazaInstrument_StartCymbalFlash(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     int i;
 
     effect->work.burst.flashActive = TRUE;
@@ -1667,7 +1667,7 @@ void ov49_02267D00(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffec
     }
 }
 
-void ov49_02267D34(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
+void WiFiPlazaInstrument_UpdateCymbalFlash(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     int i;
 
     if (effect->work.burst.flashActive != FALSE) {
@@ -1779,7 +1779,7 @@ BOOL WiFiPlazaInstrumentBurst_Update(WiFiPlazaInstrumentBurst *burst) {
 
 #pragma force_active on
 
-void ov49_02267F94(WiFiPlazaInstrumentBurst *burst, WiFiPlazaObj *obj) {
+void WiFiPlazaInstrumentBurst_StartBell(WiFiPlazaInstrumentBurst *burst, WiFiPlazaObj *obj) {
     VecFx32 pos;
     u16 angle;
     int i;
@@ -1822,7 +1822,7 @@ void ov49_02267F94(WiFiPlazaInstrumentBurst *burst, WiFiPlazaObj *obj) {
     }
 }
 
-BOOL ov49_022680B4(WiFiPlazaInstrumentBurst *burst) {
+BOOL WiFiPlazaInstrumentBurst_UpdateBell(WiFiPlazaInstrumentBurst *burst) {
     int i;
     BOOL result;
     WiFiPlazaInstrumentWave *wave;
@@ -1852,7 +1852,7 @@ BOOL ov49_022680B4(WiFiPlazaInstrumentBurst *burst) {
 
 #pragma force_active reset
 
-void ov49_0226813C(WiFiPlazaInstrumentBurst *burst, WiFiPlazaObj *obj) {
+void WiFiPlazaInstrumentBurst_StartDrum(WiFiPlazaInstrumentBurst *burst, WiFiPlazaObj *obj) {
     VecFx32 pos;
     fx32 x;
     fx32 y;
@@ -1895,12 +1895,12 @@ void ov49_0226813C(WiFiPlazaInstrumentBurst *burst, WiFiPlazaObj *obj) {
         WiFiPlazaInstrumentTween_Init(&burst->tweens[i], pos.x, x, pos.y, y, pos.z, z, 19);
         WiFiPlazaInstrumentWave_Init(&burst->waves[i], 0x1555, 0x71C, FX32_CONST(32));
     }
-    ov49_02268230(burst);
+    WiFiPlazaInstrumentBurst_UpdateDrum(burst);
 }
 
 #pragma force_active on
 
-BOOL ov49_02268230(WiFiPlazaInstrumentBurst *burst) {
+BOOL WiFiPlazaInstrumentBurst_UpdateDrum(WiFiPlazaInstrumentBurst *burst) {
     int i;
     WiFiPlazaInstrumentWave *wave;
     WiFiPlazaInstrumentTween *tween;
@@ -1933,7 +1933,7 @@ BOOL ov49_02268230(WiFiPlazaInstrumentBurst *burst) {
 
 #pragma force_active reset
 
-void ov49_022682D4(WiFiPlazaInstrumentBurst *burst, WiFiPlazaObj *obj) {
+void WiFiPlazaInstrumentBurst_StartCymbal(WiFiPlazaInstrumentBurst *burst, WiFiPlazaObj *obj) {
     VecFx32 pos;
     int i;
 
@@ -1942,7 +1942,7 @@ void ov49_022682D4(WiFiPlazaInstrumentBurst *burst, WiFiPlazaObj *obj) {
     pos.y += FX32_CONST(20);
     pos.z -= FX32_CONST(8);
     for (i = 0; i < burst->count; i++) {
-        ov49_022683FC(burst, i, &pos, 0xD000, 0x5000, 0x7000, 0xE000, 8);
+        WiFiPlazaInstrumentBurst_StartHop(burst, i, &pos, 0xD000, 0x5000, 0x7000, 0xE000, 8);
     }
 }
 
@@ -1950,7 +1950,7 @@ void ov49_022682D4(WiFiPlazaInstrumentBurst *burst, WiFiPlazaObj *obj) {
 #pragma opt_propagation off
 
 // Three hops: each time the tweens end, the next one starts from where the model landed.
-BOOL ov49_02268334(WiFiPlazaInstrumentBurst *burst) {
+BOOL WiFiPlazaInstrumentBurst_UpdateCymbal(WiFiPlazaInstrumentBurst *burst) {
     struct {
         u32 done;
         VecFx32 pos;
@@ -1969,9 +1969,9 @@ BOOL ov49_02268334(WiFiPlazaInstrumentBurst *burst) {
             ModelInstance_SetPosition(*(ModelInstance **)(modelBytes + 0xD8), out.pos.x, out.pos.y, out.pos.z);
             if (out.done == TRUE) {
                 if (burst->phase == 0) {
-                    ov49_022683FC(burst, i, &out.pos, -0x3000, 0x4000, -0x3000, 0x3000, 3);
+                    WiFiPlazaInstrumentBurst_StartHop(burst, i, &out.pos, -0x3000, 0x4000, -0x3000, 0x3000, 3);
                 } else {
-                    ov49_022683FC(burst, i, &out.pos, 0xA000, 0x5000, 0x6000, 0xA000, 4);
+                    WiFiPlazaInstrumentBurst_StartHop(burst, i, &out.pos, 0xA000, 0x5000, 0x6000, 0xA000, 4);
                 }
             }
             i++;
@@ -1995,7 +1995,7 @@ BOOL ov49_02268334(WiFiPlazaInstrumentBurst *burst) {
 #pragma opt_propagation reset
 #pragma force_active reset
 
-void ov49_022683FC(WiFiPlazaInstrumentBurst *burst, u32 index, VecFx32 *origin, fx32 dx01, fx32 dy01, fx32 dx23, fx32 dy23, s32 duration) {
+void WiFiPlazaInstrumentBurst_StartHop(WiFiPlazaInstrumentBurst *burst, u32 index, VecFx32 *origin, fx32 dx01, fx32 dy01, fx32 dx23, fx32 dy23, s32 duration) {
     fx32 x;
     fx32 y;
     fx32 z;

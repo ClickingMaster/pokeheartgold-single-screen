@@ -92,7 +92,7 @@ void WiFiPlazaObj_UpdateManager(WiFiPlazaObjManager *manager) {
     WiFiPlazaPlayerObjects_Update(manager->avatars);
 }
 
-u32 ov49_02258BD4(WiFiPlazaObjManager *manager) {
+u32 WiFiPlazaObj_DrawAvatars(WiFiPlazaObjManager *manager) {
     return WiFiPlazaPlayerObjects_Draw(manager->avatars);
 }
 
@@ -247,7 +247,7 @@ void WiFiPlazaObj_QueueCommand(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, 
     WiFiPlazaObj_QueueMove(manager, command, direction, ov42_02228188(obj->gridObj, 4));
 }
 
-void ov49_02258EAC(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, u16 value, u8 kind) {
+void WiFiPlazaObj_RunCommand(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, u16 value, u8 kind) {
     UnkStruct_ov42_02228EB0 data;
 
     data.unk0 = ov42_022282DC(obj->gridObj);
@@ -296,7 +296,7 @@ WiFiPlazaObj *WiFiPlazaObj_FindFacing(WiFiPlazaObjManager *manager, WiFiPlazaObj
 
 #pragma force_active reset
 
-u32 ov49_02258F70(WiFiPlazaObj *obj) {
+u32 WiFiPlazaObj_IsCulled(WiFiPlazaObj *obj) {
     return WiFiPlazaPlayerObject_IsCulled(obj->avatar);
 }
 
@@ -364,11 +364,11 @@ BOOL WiFiPlazaObj_FindFreeNeighbor(WiFiPlazaObjManager *manager, WiFiPlazaObj *o
     return FALSE;
 }
 
-void ov49_02259130(WiFiPlazaObj *obj, int enable) {
+void WiFiPlazaObj_SetAvatarMode(WiFiPlazaObj *obj, int enable) {
     WiFiPlazaPlayerObject_SetMode(obj->avatar, enable);
 }
 
-void ov49_0225913C(WiFiPlazaObj *obj, void *out) {
+void WiFiPlazaObj_SetPositionFromGrid(WiFiPlazaObj *obj, void *out) {
     WiFiPlazaPlayerObject_SetGridPosition(obj->avatar, out);
 }
 
@@ -385,7 +385,7 @@ void WiFiPlazaObj_SetDirection(WiFiPlazaObj *obj, u32 direction) {
 }
 
 // The stop call gets `enable` (0) as its second argument register.
-void ov49_0225916C(WiFiPlazaObj *obj, u32 enable) {
+void WiFiPlazaObj_SetPoseEffect(WiFiPlazaObj *obj, u32 enable) {
     if (enable != 0) {
         WiFiPlazaPlayerObject_StartEffect(obj->avatar, 1);
     } else {
@@ -393,7 +393,7 @@ void ov49_0225916C(WiFiPlazaObj *obj, u32 enable) {
     }
 }
 
-void ov49_02259184(WiFiPlazaObj *obj, u32 enable) {
+void WiFiPlazaObj_SetSpinEffect(WiFiPlazaObj *obj, u32 enable) {
     if (enable != 0) {
         WiFiPlazaPlayerObject_StartEffect(obj->avatar, 0);
     } else {
@@ -401,7 +401,7 @@ void ov49_02259184(WiFiPlazaObj *obj, u32 enable) {
     }
 }
 
-void ov49_0225919C(WiFiPlazaObj *obj, u32 enable) {
+void WiFiPlazaObj_SetPoseLoopEffect(WiFiPlazaObj *obj, u32 enable) {
     if (enable != 0) {
         WiFiPlazaPlayerObject_StartEffect(obj->avatar, 2);
     } else {
@@ -409,15 +409,15 @@ void ov49_0225919C(WiFiPlazaObj *obj, u32 enable) {
     }
 }
 
-void ov49_022591B4(WiFiPlazaObj *obj, u32 value) {
+void WiFiPlazaObj_SetLightFlags(WiFiPlazaObj *obj, u32 value) {
     WiFiPlazaPlayerObject_SetLightFlags(obj->avatar, value);
 }
 
-void ov49_022591C0(WiFiPlazaObj *obj, u32 value) {
+void WiFiPlazaObj_SetVisible(WiFiPlazaObj *obj, u32 value) {
     WiFiPlazaPlayerObject_SetVisible(obj->avatar, value);
 }
 
-u32 ov49_022591CC(WiFiPlazaObj *obj) {
+u32 WiFiPlazaObj_IsVisible(WiFiPlazaObj *obj) {
     return WiFiPlazaPlayerObject_IsVisible(obj->avatar);
 }
 

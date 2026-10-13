@@ -39,7 +39,7 @@ typedef struct PlazaGameRoster {
     u8 netIds[4];         // 0x4
     u8 count;             // 0x8
     u8 localIndex;        // 0x9
-    u8 unkA;              // 0xA
+    u8 voiceChat;              // 0xA
     u8 launchedFromField; // 0xB
     PlazaGameArgs *args;  // 0xC
 } PlazaGameRoster;
@@ -175,7 +175,7 @@ typedef struct PlazaGameSign {
 // "Would you like to keep playing?" prompt and the vote of all players.
 typedef struct PlazaGameContinue {
     u8 state;                     // 0x00
-    u8 unk01;                     // 0x01
+    u8 voiceChat;                     // 0x01
     u16 timer;                    // 0x02
     YesNoPrompt *prompt;          // 0x04
     YesNoPromptTemplate template; // 0x08

@@ -531,8 +531,8 @@ void WiFiPlazaRoom_ShowInstrumentPanel(WiFiPlazaRoomWork *room) {
     WiFiPlazaInfoPanel_RequestInstrument(&room->infoPanel);
 }
 
-BOOL ov49_0225A520(WiFiPlazaRoomWork *room, u32 index) {
-    return ov49_02268968(room->event, index, 1);
+BOOL WiFiPlazaRoom_IsMoverWobbling(WiFiPlazaRoomWork *room, u32 index) {
+    return WiFiPlazaEvent_GetMoverState(room->event, index, 1);
 }
 
 void WiFiPlazaRoom_StartInfoPanel(WiFiPlazaRoomWork *room) {
@@ -735,7 +735,7 @@ void WiFiPlazaRoom_Draw(WiFiPlazaRoomWork *room) {
     Thunk_G3X_Reset();
     WiFiPlazaCamera_Update(room->camera);
     WiFiPlazaModels_Draw(room->models);
-    ov49_02258BD4(room->objManager);
+    WiFiPlazaObj_DrawAvatars(room->objManager);
     WiFiPlazaInstrument_Draw(room->instruments);
     RequestSwap3DBuffers(GX_SORTMODE_AUTO, GX_BUFFERMODE_Z);
     WiFiPlazaRoom_DrawSprites(&room->graphics);

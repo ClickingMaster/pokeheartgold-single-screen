@@ -36,20 +36,20 @@ void WiFiPlazaLobbyClient_SendToChannel(int command, void *data, int size);
 s64 _ll_mul(s64 a, s64 b);
 
 // Board position of the touch grid lines (x every 16 pixels, y every 16 pixels).
-extern const fx32 ov89_0225CD6C[17];
-extern const fx32 ov89_0225CCE4[11];
+extern const fx32 sFootprintStampBoardXs[17];
+extern const fx32 sFootprintStampBoardYs[11];
 // Bounds of the three footprint sizes, relative to the stamp position (one table split over four labels).
-extern const fx32 ov89_0225CD3C[];
-extern const fx32 ov89_0225CD40[];
-extern const fx32 ov89_0225CD44[];
-extern const fx32 ov89_0225CD48[];
-extern const s16 ov89_0225CCD0[];    // chain length that moves the camera, by player count
-extern const u8 ov89_0225CE34[];     // enum FootprintStampEffect by nature
-extern const u16 ov89_0225CE70[][2]; // ink colors by OT id % 9, two columns
-extern const TouchscreenHitbox ov89_0225CE50[];
-extern const u8 ov89_0225CE94[]; // per species: 4 bytes, [0] footprint type, [1] footprint size
-extern const u8 ov89_0225CE95[];
-extern const u8 ov89_0225D64C[]; // link command table: player joined, player left, stamp received
+extern const fx32 sFootprintStampSizeBoundsLeft[];
+extern const fx32 sFootprintStampSizeBoundsRight[];
+extern const fx32 sFootprintStampSizeBoundsBottom[];
+extern const fx32 sFootprintStampSizeBoundsTop[];
+extern const s16 sFootprintStampCameraChainLengths[];    // chain length that moves the camera, by player count
+extern const u8 sFootprintStampNatureEffects[];     // enum FootprintStampEffect by nature
+extern const u16 sFootprintStampInkColors[][2]; // ink colors by OT id % 9, two columns
+extern const TouchscreenHitbox sFootprintStampPartyHitboxes[];
+extern const u8 sFootprintStampSpeciesFootprints[]; // per species: 4 bytes, [0] footprint type, [1] footprint size
+extern const u8 sFootprintStampSpeciesFootprintSizes[];
+extern const u8 sFootprintStampLinkCommands[]; // link command table: player joined, player left, stamp received
 
 #pragma force_active on
 
@@ -118,17 +118,17 @@ void FootprintStamp_TouchToBoardPos(void *unused, int x, int y, fx32 *outX, fx32
     if ((u32)i >= 17) {
         i = 16;
     }
-    *outX = ov89_0225CD6C[i];
+    *outX = sFootprintStampBoardXs[i];
     if ((u32)i < 16) {
-        *outX += ((ov89_0225CD6C[i + 1] - ov89_0225CD6C[i]) / 16) * (x % 16);
+        *outX += ((sFootprintStampBoardXs[i + 1] - sFootprintStampBoardXs[i]) / 16) * (x % 16);
     }
     i = y / 16;
     if ((u32)i >= 11) {
         i = 10;
     }
-    *outY = ov89_0225CCE4[i];
+    *outY = sFootprintStampBoardYs[i];
     if ((u32)i < 10) {
-        *outY += ((ov89_0225CCE4[i + 1] - ov89_0225CCE4[i]) / 16) * (y % 16);
+        *outY += ((sFootprintStampBoardYs[i + 1] - sFootprintStampBoardYs[i]) / 16) * (y % 16);
     }
 }
 
@@ -189,10 +189,10 @@ void FootprintStamp_GetBounds(FootprintStampModelInstance *instance, FootprintSt
 
     GF_ASSERT(size < 3);
     ModelInstance_GetPosition(instance, &x, &y, &z);
-    bounds->left = x + ov89_0225CD3C[size * 4];
-    bounds->right = x + ov89_0225CD40[size * 4];
-    bounds->bottom = y + ov89_0225CD44[size * 4];
-    bounds->top = y + ov89_0225CD48[size * 4];
+    bounds->left = x + sFootprintStampSizeBoundsLeft[size * 4];
+    bounds->right = x + sFootprintStampSizeBoundsRight[size * 4];
+    bounds->bottom = y + sFootprintStampSizeBoundsBottom[size * 4];
+    bounds->top = y + sFootprintStampSizeBoundsTop[size * 4];
     if (scaled == TRUE) {
         ModelInstance_GetScale(instance, &scaleX, &scaleY, &scaleZ);
         length = bounds->right - bounds->left;
@@ -239,7 +239,7 @@ BOOL FootprintStampBoard_AddToChain(FootprintStampBoard *board, int chain, int e
     }
     board->chains[chain].size++;
     board->chains[chain].refs++;
-    if (board->cameraEffect == FOOTPRINT_STAMP_EFFECT_NONE && board->pendingCameraEffect == FOOTPRINT_STAMP_EFFECT_NONE && board->chains[chain].size >= ov89_0225CCD0[board->playerCount]) {
+    if (board->cameraEffect == FOOTPRINT_STAMP_EFFECT_NONE && board->pendingCameraEffect == FOOTPRINT_STAMP_EFFECT_NONE && board->chains[chain].size >= sFootprintStampCameraChainLengths[board->playerCount]) {
         board->pendingCameraEffect = effect;
         MI_CpuFill8(&board->flash, 0, sizeof(FootprintStampFlash));
         return TRUE;
@@ -289,7 +289,7 @@ BOOL FootprintStamp_SetEffect(FootprintStampObj *stamp, int effect) {
 #pragma force_active reset
 
 u8 FootprintStamp_GetNatureEffect(FootprintStampObj *stamp) {
-    return ov89_0225CE34[GetNatureFromPersonality(stamp->mon.personality)];
+    return sFootprintStampNatureEffects[GetNatureFromPersonality(stamp->mon.personality)];
 }
 
 #pragma force_active on
@@ -1393,12 +1393,12 @@ void FootprintStamp_ClearPlayerNameWindow(Window *windows, u32 index) {
 }
 
 u16 FootprintStamp_GetInkColor(u32 column, u32 otId) {
-    return ov89_0225CE70[otId % 9][column];
+    return sFootprintStampInkColors[otId % 9][column];
 }
 
 u32 FootprintStamp_GetTouchedPartySlot(const FootprintStampMon *party, int current) {
     u32 ret = FOOTPRINT_STAMP_TOUCH_NONE;
-    int slot = TouchscreenHitbox_FindRectAtTouchNew(ov89_0225CE50);
+    int slot = TouchscreenHitbox_FindRectAtTouchNew(sFootprintStampPartyHitboxes);
 
     if (slot < FOOTPRINT_STAMP_PARTY_SLOTS) {
         if (current != slot && party[slot].species != SPECIES_NONE && party[slot].species <= NATIONAL_DEX_COUNT) {
@@ -1422,18 +1422,18 @@ u32 FootprintStamp_GetFootprintType(u32 species, int form, u32 unk19E0) {
     if (species == SPECIES_ARCEUS && unk19E0 == 0) {
         return 0;
     }
-    return ov89_0225CE94[species * 4];
+    return sFootprintStampSpeciesFootprints[species * 4];
 }
 
 u32 FootprintStamp_GetFootprintSize(u32 species, int form) {
     if (species == SPECIES_GIRATINA && form > 0) {
         return 2;
     }
-    return ov89_0225CE95[species * 4];
+    return sFootprintStampSpeciesFootprintSizes[species * 4];
 }
 
 int FootprintStamp_RegisterLinkCommands(FootprintStamp *work) {
-    return WiFiPlazaLobbyClient_SetChannelCommands(ov89_0225D64C, 3, work);
+    return WiFiPlazaLobbyClient_SetChannelCommands(sFootprintStampLinkCommands, 3, work);
 }
 
 BOOL FootprintStamp_IsFromOtherPlayer(u32 playerId, const FootprintStampLinkFilter *filter) {

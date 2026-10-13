@@ -131,7 +131,7 @@ void WiFiPlazaInfoPanel_Update(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomWork *roo
                 break;
             case 3:
                 if (panel->instrumentPlaying) {
-                    if (ov49_02268968(room->event, panel->instrumentIndex, panel->instrumentType) == 0) {
+                    if (WiFiPlazaEvent_GetMoverState(room->event, panel->instrumentIndex, panel->instrumentType) == 0) {
                         panel->instrumentPlaying = FALSE;
                         WiFiPlazaPanelButton_ResetTimer(&panel->button);
                     }

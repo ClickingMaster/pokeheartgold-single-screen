@@ -897,19 +897,19 @@
 	.public _0226380A
 	.public _02263818
 	.public _02263820
-	.public _0226383C
+	.public sMimeJrTopCommands
 	.public _02264020
 	.public _02264160
 	.public MimeJrTop_ReceiveStart
 	.public MimeJrTop_ReceiveFinish
 	.public MimeJrTop_ReceivePlayerState
 	.public MimeJrTop_ReceiveFinalScore
-	.public ov92_0225C584
+	.public MimeJrTop_ReceiveCommand4
 	.public MimeJrTop_GetFinishSize
 	.public MimeJrTop_GetStartSize
 	.public MimeJrTop_GetPlayerStateSize
 	.public MimeJrTop_GetFinalScoreSize
-	.public ov92_0225C598
+	.public MimeJrTop_GetCommand4Size
 	.public MimeJrTop_GetCommandTable
 	.public MimeJrTop_GetCommandCount
 	.public MimeJrTop_RegisterCommands
@@ -1083,12 +1083,12 @@
 	.public MimeJrTop_ReceiveFinish
 	.public MimeJrTop_ReceivePlayerState
 	.public MimeJrTop_ReceiveFinalScore
-	.public ov92_0225C584
+	.public MimeJrTop_ReceiveCommand4
 	.public MimeJrTop_GetFinishSize
 	.public MimeJrTop_GetStartSize
 	.public MimeJrTop_GetPlayerStateSize
 	.public MimeJrTop_GetFinalScoreSize
-	.public ov92_0225C598
+	.public MimeJrTop_GetCommand4Size
 	.public MimeJrTop_GetCommandTable
 	.public MimeJrTop_GetCommandCount
 	.public MimeJrTop_ResetRound
@@ -1128,12 +1128,12 @@
 	.public MimeJrTop_FloatMatrixToFx43
 	.rodata
 
-_0226383C:
+sMimeJrTopCommands:
 	.word MimeJrTop_ReceiveStart, MimeJrTop_GetStartSize, 0
 	.word MimeJrTop_ReceiveFinish, MimeJrTop_GetFinishSize, 0
 	.word MimeJrTop_ReceivePlayerState, MimeJrTop_GetPlayerStateSize, 0
 	.word MimeJrTop_ReceiveFinalScore, MimeJrTop_GetFinalScoreSize, 0
-	.word ov92_0225C584, ov92_0225C598, 0
+	.word MimeJrTop_ReceiveCommand4, MimeJrTop_GetCommand4Size, 0
 
 ov92_02263878: ; 0x02263878
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x06, 0x00

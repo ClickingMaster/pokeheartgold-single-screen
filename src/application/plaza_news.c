@@ -151,17 +151,17 @@ void *WiFiPlazaNews_GetEventType(void *newsData);
 int WiFiPlazaNews_FormatEvent(void *newsData, void *info, void *item, String *dest, enum HeapID heapID);
 int WiFiPlazaNews_GetEventSlot(void *newsData, void *item, int index);
 
-extern const u8 _02259904[3];     // tilemap top of each headline row, followed by the row durations
-extern const u32 ov88_02259910[]; // duration of the last headline row (240); rows 0-1 come before it
-extern const ObjCharTransferTemplate ov88_02259914;
-extern const int ov88_02259924[4];
-extern const GraphicsModes ov88_02259934;
-extern const u32 ov88_02259944[5];
-extern const GraphicsBanks ov88_02259958;
-extern const PlazaNewsTitleTemplate ov88_02259980[4];
-extern const BgTemplate ov88_022599C0[5];
-extern const u16 _02259A60[4];
-extern const u32 ov88_02259A68[4];
+extern const u8 sPlazaNewsHeadlineRowTops[3];     // tilemap top of each headline row, followed by the row durations
+extern const u32 sPlazaNewsLastHeadlineRowDuration[]; // duration of the last headline row (240); rows 0-1 come before it
+extern const ObjCharTransferTemplate sPlazaNewsObjCharTransfer;
+extern const int sPlazaNewsClockBlinkTiles[4];
+extern const GraphicsModes sPlazaNewsGraphicsModes;
+extern const u32 sPlazaNewsBgIds[5];
+extern const GraphicsBanks sPlazaNewsBanks;
+extern const PlazaNewsTitleTemplate sPlazaNewsTitleTemplates[4];
+extern const BgTemplate sPlazaNewsBgTemplates[5];
+extern const u16 sPlazaNewsTitlePaletteOffsets[4];
+extern const u32 sPlazaNewsTitleSEs[4];
 
 void PlazaNews_VBlankCallback(void *data);
 void PlazaNews_Update(PlazaNewsWork *work, void *lobby);
@@ -188,8 +188,8 @@ void PlazaNewsPeople_Free(PlazaNewsPeople *people);
 BOOL PlazaNewsPeople_UpdateState(PlazaNewsPeople *people, void *newsData);
 void PlazaNewsPeople_Draw(PlazaNewsPeople *people, PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics, void *newsData, void *lobby);
 void PlazaNewsPeople_DrawGrid(PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics, void *newsData, void *lobby, int mode);
-void ov88_02259244(PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics, void *newsData, void *lobby, u32 frame);
-void ov88_02259264(PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics, void *newsData, void *lobby, u32 frame);
+void PlazaNewsPeople_BlinkMode2(PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics, void *newsData, void *lobby, u32 frame);
+void PlazaNewsPeople_BlinkMode1(PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics, void *newsData, void *lobby, u32 frame);
 void PlazaNewsHeadlines_GetNameColors(u8 *colors, void *newsData, void *item, void *lobby);
 void PlazaNewsHeadlines_LoadNameColors(const u8 *colors, NNSG2dPaletteData *palette, int paletteNum);
 void PlazaNewsHeadlines_Init(PlazaNewsHeadlines *headlines, PlazaNewsGraphics *graphics, enum HeapID heapID);
@@ -312,7 +312,7 @@ void PlazaNews_Update(PlazaNewsWork *work, void *lobby) {
 void PlazaNewsGraphics_Init(PlazaNewsGraphics *graphics, enum HeapID heapID) {
     graphics->narc = NARC_New(NARC_a_1_9_6, heapID);
     GF_CreateVramTransferManager(0x30, heapID);
-    GfGfx_SetBanks(&ov88_02259958);
+    GfGfx_SetBanks(&sPlazaNewsBanks);
     PlazaNewsGraphics_InitBgs(graphics, heapID);
     PlazaNewsGraphics_InitSprites(graphics, heapID);
 }
@@ -337,14 +337,14 @@ void PlazaNewsGraphics_VBlank(PlazaNewsGraphics *graphics) {
 void PlazaNewsGraphics_InitBgs(PlazaNewsGraphics *graphics, enum HeapID heapID) {
     int i;
 
-    SetBothScreensModesAndDisable(&ov88_02259934);
+    SetBothScreensModesAndDisable(&sPlazaNewsGraphicsModes);
     graphics->bgConfig = BgConfig_Alloc(heapID);
     gSystem.screensFlipped = FALSE;
     GfGfx_SwapDisplay();
     for (i = 0; i < 5; i++) {
-        InitBgFromTemplate(graphics->bgConfig, (u8)ov88_02259944[i], &ov88_022599C0[i], 0);
-        BG_ClearCharDataRange((u8)ov88_02259944[i], 0x20, 0, heapID);
-        BgClearTilemapBufferAndCommit(graphics->bgConfig, (u8)ov88_02259944[i]);
+        InitBgFromTemplate(graphics->bgConfig, (u8)sPlazaNewsBgIds[i], &sPlazaNewsBgTemplates[i], 0);
+        BG_ClearCharDataRange((u8)sPlazaNewsBgIds[i], 0x20, 0, heapID);
+        BgClearTilemapBufferAndCommit(graphics->bgConfig, (u8)sPlazaNewsBgIds[i]);
     }
     GfGfxLoader_GXLoadPalFromOpenNarc(graphics->narc, 0, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0, heapID);
     LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, (enum GFPalSlotOffset)0x140, heapID);
@@ -360,7 +360,7 @@ void PlazaNewsGraphics_FreeBgs(PlazaNewsGraphics *graphics) {
     int i;
 
     for (i = 0; i < 5; i++) {
-        FreeBgTilemapBuffer(graphics->bgConfig, (u8)ov88_02259944[i]);
+        FreeBgTilemapBuffer(graphics->bgConfig, (u8)sPlazaNewsBgIds[i]);
     }
     Heap_Free(graphics->bgConfig);
     gSystem.screensFlipped = FALSE;
@@ -373,7 +373,7 @@ void PlazaNewsGraphics_InitSprites(PlazaNewsGraphics *graphics, enum HeapID heap
 
     NNS_G2dInitOamManagerModule();
     OamManager_Create(0, 0x7E, 0, 0x1F, 0, 0x7E, 0, 0x1F, heapID);
-    ObjCharTransfer_InitEx((ObjCharTransferTemplate *)&ov88_02259914, (GXOBJVRamModeChar)mode, (GXOBJVRamModeChar)(u8)mode);
+    ObjCharTransfer_InitEx((ObjCharTransferTemplate *)&sPlazaNewsObjCharTransfer, (GXOBJVRamModeChar)mode, (GXOBJVRamModeChar)(u8)mode);
     ObjPlttTransfer_Init(0x20, heapID);
     ObjCharTransfer_ClearBuffers();
     ObjPlttTransfer_Reset();
@@ -538,7 +538,7 @@ void PlazaNewsClock_DrawGauge(PlazaNewsClock *clock, PlazaNewsTileset *tileset, 
             int tile = 6;
             for (int k = 0; k < 4; k++) {
                 if (step * (k + 1) > (u32)timer) {
-                    tile = ov88_02259924[k];
+                    tile = sPlazaNewsClockBlinkTiles[k];
                     break;
                 }
             }
@@ -585,7 +585,7 @@ void PlazaNewsPeople_Draw(PlazaNewsPeople *people, PlazaNewsTileset *tileset, Pl
         people->frame = 0;
         return;
     case 2:
-        ov88_02259244(tileset, graphics, newsData, lobby, people->frame);
+        PlazaNewsPeople_BlinkMode2(tileset, graphics, newsData, lobby, people->frame);
         people->frame++;
         if (people->frame >= 32) {
             people->state = 0;
@@ -597,7 +597,7 @@ void PlazaNewsPeople_Draw(PlazaNewsPeople *people, PlazaNewsTileset *tileset, Pl
         people->frame = 0;
         return;
     case 4:
-        ov88_02259264(tileset, graphics, newsData, lobby, people->frame);
+        PlazaNewsPeople_BlinkMode1(tileset, graphics, newsData, lobby, people->frame);
         people->frame++;
         if (people->frame >= 32) {
             people->state = 0;
@@ -650,7 +650,7 @@ void PlazaNewsPeople_DrawGrid(PlazaNewsTileset *tileset, PlazaNewsGraphics *grap
 }
 #pragma force_active reset
 
-void ov88_02259244(PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics, void *newsData, void *lobby, u32 frame) {
+void PlazaNewsPeople_BlinkMode2(PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics, void *newsData, void *lobby, u32 frame) {
     int mode;
     if ((frame & 7) != 0) {
         return;
@@ -666,7 +666,7 @@ void ov88_02259244(PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics, void 
 
 #pragma opt_propagation off
 #pragma force_active on
-void ov88_02259264(PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics, void *newsData, void *lobby, u32 frame) {
+void PlazaNewsPeople_BlinkMode1(PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics, void *newsData, void *lobby, u32 frame) {
     if (!(frame & 7)) {
         u32 blink = frame >> 3;
         int mode = 1;
@@ -714,7 +714,7 @@ void PlazaNewsHeadlines_Init(PlazaNewsHeadlines *headlines, PlazaNewsGraphics *g
     PlazaNewsTicker *ticker = headlines->tickers;
     int baseTile = 768;
     Window *window = &headlines->windows[0];
-    const u8 *top = _02259904;
+    const u8 *top = sPlazaNewsHeadlineRowTops;
 
     for (; i < 3; i++) {
         PlazaNewsTicker_Init(ticker, graphics, i, heapID);
@@ -763,7 +763,7 @@ BOOL PlazaNewsHeadlines_Update(PlazaNewsHeadlines *headlines, void *newsData, vo
     WiFiPlazaWork_GetSpecialVisitors(lobby, info);
     i = 2;
     ticker = &headlines->tickers[2];
-    duration = ov88_02259910;
+    duration = sPlazaNewsLastHeadlineRowDuration;
     for (; i >= 0; i--) {
         if (ticker->active) {
             if (PlazaNewsTicker_Advance(ticker) == TRUE) {
@@ -901,9 +901,9 @@ void PlazaNewsTitles_Init(PlazaNewsTitles *titles, PlazaNewsGraphics *graphics, 
     msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 0x2F5, heapID);
     message = String_New(0x80, heapID);
     messageNo = 0;
-    sound = ov88_02259A68;
-    titleTemplate = ov88_02259980;
-    paletteOffset = _02259A60;
+    sound = sPlazaNewsTitleSEs;
+    titleTemplate = sPlazaNewsTitleTemplates;
+    paletteOffset = sPlazaNewsTitlePaletteOffsets;
     window = titles->windows;
     flash = titles->flashes;
 
