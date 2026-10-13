@@ -3,7 +3,7 @@
 
 #include "overlay_manager.h"
 
-void ov17_02201BC0(void);
+void BerryPotsApp_ResetDisplay(void);
 BOOL BerryPotsApp_Initialize(OverlayManager *manager, int *state);
 BOOL BerryPotsApp_Run(OverlayManager *manager, int *state);
 BOOL BerryPotsApp_Exit(OverlayManager *manager, int *state);

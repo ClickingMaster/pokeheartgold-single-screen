@@ -269,13 +269,13 @@ void PokewalkerApp_StartLink(PokewalkerApp *app) {
 
 #pragma force_active reset
 
-void ov112_021E7D7C(PokewalkerApp *app) {
+void PokewalkerApp_BuildUploadData(PokewalkerApp *app) {
     PokewalkerApp_BuildUploadImage(app, app->uploadImage);
     PokewalkerApp_BuildStrollData(&app->strollData, app);
     ov112_021E7DC0(app);
 }
 
-void ov112_021E7DA4(PokewalkerApp *app) {
+void PokewalkerApp_BuildSendStrollData(PokewalkerApp *app) {
     PokewalkerApp_BuildStrollData(&app->strollData, app);
     ov112_021E7DC0(app);
 }

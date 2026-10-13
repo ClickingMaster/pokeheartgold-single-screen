@@ -17,7 +17,7 @@ static void ov101_021E9848(PokegearMapAppData *mapApp, u16 xIn, u16 yIn, s16 a3,
 static BOOL PokegearMap_ShouldLocationBeHidden(PokegearMapAppData *mapApp, int a1);
 static int PokegearMap_GetFlypointIndexAtCoord(PokegearMapAppData *mapApp, u16 a1, u16 a2);
 static BOOL PokegearMap_MapHasPhoneRematchOrGift(PokegearMapAppData *mapApp, int a1);
-static void ov101_021EAA0C(PokegearMapAppData *mapApp, BOOL a1, BOOL a2);
+static void PokegearMap_PrintLocationPanel(PokegearMapAppData *mapApp, BOOL a1, BOOL a2);
 static void PokegearMap_PrintMarkingECWord(PokegearMapAppData *mapApp, u8 a1, u16 a2);
 static void PokegearMap_GetLandmarkNameFromMapID(u16 mapno, enum HeapID heapID, String *dest);
 
@@ -802,7 +802,7 @@ static BOOL PokegearMap_MapHasPhoneRematchOrGift(PokegearMapAppData *mapApp, int
     return FALSE;
 }
 
-static void ov101_021EAA0C(PokegearMapAppData *mapApp, BOOL a1, int regionNo) {
+static void PokegearMap_PrintLocationPanel(PokegearMapAppData *mapApp, BOOL a1, int regionNo) {
     u32 mapNameY;
     u32 i;
     u32 tilemap174blockId;
@@ -823,9 +823,9 @@ static void ov101_021EAA0C(PokegearMapAppData *mapApp, BOOL a1, int regionNo) {
     AddTextPrinterParameterizedWithColor(&mapApp->windows[0], 0, mapApp->regionNameStrings[regionNo], 2, 4, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     if (mapApp->type == PGMAP_TYPE_GEAR) {
         if (!PokegearMap_CanMarkLocation(mapApp, selectedLoc)) {
-            ov101_021EB38C(mapApp, 0, 2);
+            PokegearMap_SetButtonState(mapApp, 0, 2);
         } else {
-            ov101_021EB38C(mapApp, 0, 0);
+            PokegearMap_SetButtonState(mapApp, 0, 0);
         }
     }
     if (locationSpec != NULL) {
@@ -892,9 +892,9 @@ static void ov101_021EAA0C(PokegearMapAppData *mapApp, BOOL a1, int regionNo) {
     ScheduleBgTilemapBufferTransfer(mapApp->pokegear->bgConfig, GF_BG_LYR_SUB_3);
 }
 
-void ov101_021EAD90(PokegearMapAppData *mapApp, BOOL a1) {
+void PokegearMap_UpdateLocationPanel(PokegearMapAppData *mapApp, BOOL a1) {
     // Pokegear_RegionFromCoords returning 0 and 1 are considered Kanto, 2 is Johto
-    ov101_021EAA0C(mapApp, a1, (Pokegear_RegionFromCoords(mapApp->playerX, mapApp->playerY - 2) / 2) ^ TRUE);
+    PokegearMap_PrintLocationPanel(mapApp, a1, (Pokegear_RegionFromCoords(mapApp->playerX, mapApp->playerY - 2) / 2) ^ TRUE);
 }
 
 static void PokegearMap_PrintMarkingECWord(PokegearMapAppData *mapApp, u8 index, u16 word) {
@@ -947,7 +947,7 @@ void PokegearMap_PrintSelectedMapDetail(PokegearMapAppData *mapApp, BOOL forceUp
     }
 }
 
-void ov101_021EAF40(PokegearMapAppData *mapApp) {
+void PokegearMap_DrawMapTilemap(PokegearMapAppData *mapApp) {
     int i;
     const MapFlypointParam *flypoint;
 
@@ -996,7 +996,7 @@ void ov101_021EAF40(PokegearMapAppData *mapApp) {
     }
 }
 
-void ov101_021EB1E0(PokegearMapAppData *mapApp, u8 a1) {
+void PokegearMap_HighlightSelectedLocation(PokegearMapAppData *mapApp, u8 a1) {
     int i;
     u16 destX;
     u16 destY;
@@ -1047,7 +1047,7 @@ void PokegearMap_DeselectApp(void *appData) {
     PokegearCursorManager_SetCursorSpritesDrawState(mapApp->pokegear->cursorManager, 0, FALSE);
     ov101_021E94C0(mapApp);
     Sprite_SetDrawFlag(mapApp->objManager->objects[PGMAP_SPRITE_CURSOR].sprite, TRUE);
-    ov101_021EB1E0(mapApp, 1);
+    PokegearMap_HighlightSelectedLocation(mapApp, 1);
     ToggleBgLayer(GF_BG_LYR_MAIN_2, GF_PLANE_TOGGLE_ON);
 }
 
@@ -1071,7 +1071,7 @@ void PokegearMap_InMarkingsMode_ShowCursor(void *appData) {
     PokegearCursorManager_SetCursorSpritesDrawState(mapApp->pokegear->cursorManager, 0xFFFF, TRUE);
 }
 
-void ov101_021EB38C(PokegearMapAppData *mapApp, int button, int state) {
+void PokegearMap_SetButtonState(PokegearMapAppData *mapApp, int button, int state) {
     if (button == 0) {
         CopyToBgTilemapRect(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_1, 26, 2, 6, 7, mapApp->unk_178->rawData, 6 * state, 21, mapApp->unk_178->screenWidth / 8, mapApp->unk_178->screenHeight / 8);
     } else {

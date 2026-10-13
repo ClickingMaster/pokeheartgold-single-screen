@@ -307,16 +307,16 @@ BOOL PokegearMap_IsCoordInCurrentRegion(PokegearMapAppData *mapApp, u16 x, u16 y
 BOOL PokegearMap_IsFlyDestinationReachable(PokegearMapAppData *mapApp, u16 mapID, u16 x, u16 y);
 int PokegearMap_GetFlyDestinationAtCoord(PokegearMapAppData *mapApp, u16 x, u16 y);
 int FlyMap_SelectLocationAtCoord(PokegearMapAppData *mapApp, PokegearMapSelectedLocation *a1, u8 x, u8 y);
-void ov101_021EAD90(PokegearMapAppData *mapApp, BOOL a1);
+void PokegearMap_UpdateLocationPanel(PokegearMapAppData *mapApp, BOOL a1);
 void PokegearMap_PrintSelectedMapDetail(PokegearMapAppData *mapApp, BOOL forceUpdateMapName);
-void ov101_021EAF40(PokegearMapAppData *mapApp);
-void ov101_021EB1E0(PokegearMapAppData *mapApp, u8 a1);
+void PokegearMap_DrawMapTilemap(PokegearMapAppData *mapApp);
+void PokegearMap_HighlightSelectedLocation(PokegearMapAppData *mapApp, u8 a1);
 void PokegearMap_HideMapCursor(PokegearMapAppData *mapApp);
 void PokegearMap_DeselectApp(void *appData);
 void PokegearMap_ShowMapCursor(void *appData);
 void PokegearMap_InMarkingsMode_HideCursor(void *appData);
 void PokegearMap_InMarkingsMode_ShowCursor(void *appData);
-void ov101_021EB38C(PokegearMapAppData *mapApp, int button, int state);
+void PokegearMap_SetButtonState(PokegearMapAppData *mapApp, int button, int state);
 void PokegearMap_SpawnFlyContextMenu(PokegearMapAppData *mapApp, u32 x);
 void PokegearMap_PrintLandmarkNameAndFlavorText(PokegearMapAppData *mapApp, int mapID);
 

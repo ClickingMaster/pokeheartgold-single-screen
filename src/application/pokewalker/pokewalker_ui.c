@@ -619,7 +619,7 @@ void ov112_021EA5A4(PokewalkerApp *app, int anim) {
     }
 }
 
-void ov112_021EA60C(PokewalkerApp *app) {
+void PokewalkerApp_UpdateConnectionAnim(PokewalkerApp *app) {
     ManagedSprite *sprite = app->sprites[2];
     if (ov112_021E7668()) {
         if (ManagedSprite_GetActiveAnim(sprite) == 2) {
@@ -772,7 +772,7 @@ int PokewalkerApp_FindFreeParticle(PokewalkerAppParticle *particles) {
     return -1;
 }
 
-void ov112_021EA9BC(PokewalkerApp *app, const PokewalkerAppMotion *motion) {
+void PokewalkerApp_ShowMotionSprites(PokewalkerApp *app, const PokewalkerAppMotion *motion) {
     if (motion->y < 0) {
         ManagedSprite_SetDrawFlag(app->sprites[14], TRUE);
     } else {
@@ -784,12 +784,12 @@ void ov112_021EA9BC(PokewalkerApp *app, const PokewalkerAppMotion *motion) {
     ManagedSprite_SetAnim(app->sprites[13], 24);
 }
 
-void ov112_021EAA10(PokewalkerApp *app) {
+void PokewalkerApp_HideMotionSprites(PokewalkerApp *app) {
     ManagedSprite_SetDrawFlag(app->sprites[14], FALSE);
     ManagedSprite_SetDrawFlag(app->sprites[13], FALSE);
 }
 
-void ov112_021EAA34(PokewalkerApp *app, int x, int y) {
+void PokewalkerApp_SetMotionSpritePos(PokewalkerApp *app, int x, int y) {
     if (y < 0) {
         ManagedSprite_SetPositionXYWithSubscreenOffset(app->sprites[14], (s16)x, (s16)(y + 208), FX32_CONST(256));
         ManagedSprite_SetDrawFlag(app->sprites[14], TRUE);
@@ -802,7 +802,7 @@ void ov112_021EAA34(PokewalkerApp *app, int x, int y) {
 }
 
 #pragma force_active on
-void ov112_021EAA98(PokewalkerApp *app, PokewalkerAppMotion *motion, int kind) {
+void PokewalkerApp_InitMotion(PokewalkerApp *app, PokewalkerAppMotion *motion, int kind) {
     if (kind == 0) {
         motion->x = 128;
         motion->y = 130;
@@ -821,19 +821,19 @@ void ov112_021EAA98(PokewalkerApp *app, PokewalkerAppMotion *motion, int kind) {
     }
     motion->unk_08 = 0;
     motion->unk_0A = 0;
-    ov112_021EA9BC(app, motion);
+    PokewalkerApp_ShowMotionSprites(app, motion);
 }
 #pragma force_active reset
 
 // Moves the object up (delta < 0) or down; returns TRUE once it has stopped and been hidden.
-BOOL ov112_021EAAE4(PokewalkerApp *app, PokewalkerAppMotion *motion) {
+BOOL PokewalkerApp_UpdateMotion(PokewalkerApp *app, PokewalkerAppMotion *motion) {
     s8 delta = motion->delta;
     if (delta < 0) {
         motion->y += delta;
         if (motion->y < -110) {
             motion->delta = 0;
         }
-        ov112_021EAA34(app, motion->x, motion->y);
+        PokewalkerApp_SetMotionSpritePos(app, motion->x, motion->y);
         return FALSE;
     }
     if (delta > 0 && delta <= 100) {
@@ -841,14 +841,14 @@ BOOL ov112_021EAAE4(PokewalkerApp *app, PokewalkerAppMotion *motion) {
         if (motion->y > 108) {
             motion->delta = 101;
         }
-        ov112_021EAA34(app, motion->x, motion->y);
+        PokewalkerApp_SetMotionSpritePos(app, motion->x, motion->y);
         return FALSE;
     }
     if (delta != 0) {
-        ov112_021EAA34(app, motion->x, motion->y);
+        PokewalkerApp_SetMotionSpritePos(app, motion->x, motion->y);
         return FALSE;
     }
-    ov112_021EAA10(app);
+    PokewalkerApp_HideMotionSprites(app);
     return TRUE;
 }
 

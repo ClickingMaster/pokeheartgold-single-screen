@@ -111,11 +111,11 @@ int PokewalkerApp_LinkSave_Enter(PokewalkerApp *app) {
         if (app->strollMon != NULL) {
             PokewalkerApp_LoadMonPicture(app->strollMon, app->monSpriteBuffer, &app->monPicTemplate, 0);
             PokewalkerApp_ShowMonPicture(app);
-            ov112_021EAA10(app);
+            PokewalkerApp_HideMotionSprites(app);
             app->unk_1F2C2 = 0;
             PlayFanfare(SEQ_ME_KEYITEM);
         } else {
-            ov112_021EAA10(app);
+            PokewalkerApp_HideMotionSprites(app);
             app->unk_1F2D6 = 31;
         }
         PokewalkerApp_UnlockNextCourse(app);

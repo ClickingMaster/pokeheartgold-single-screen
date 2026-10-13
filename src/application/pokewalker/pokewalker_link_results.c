@@ -92,7 +92,7 @@ int PokewalkerApp_Link_UpdateReceive(PokewalkerApp *app) {
     if (result != 0) {
         PokewalkerApp_SpawnFallingParticle(app);
     }
-    ov112_021EA60C(app);
+    PokewalkerApp_UpdateConnectionAnim(app);
     PokewalkerApp_PlayTransferSE(result);
 
     result = PokewalkerIr_GetAndClearError();
@@ -118,10 +118,10 @@ int PokewalkerApp_Link_UpdateReceive(PokewalkerApp *app) {
         if (PokewalkerApp_IsWalkerMonValid(app) && app->peerIdentity.unk_5B_2 == 1) {
             GetSpeciesNameIntoArray(app->walkerMon.species, HEAP_ID_154, app->walkerMonNickname);
         }
-        ov112_021EAA98(app, LINK_MOTION(app), 1);
+        PokewalkerApp_InitMotion(app, LINK_MOTION(app), 1);
         PokewalkerApp_AddPeerTrainerHouseSets(app);
         PokewalkerApp_UpdateSavedSteps(app);
-        ov112_021ED7DC(app);
+        PokewalkerApp_AddStrollToEventLog(app);
         app->strollSteps = app->peerIdentity.unk_64 - app->walkerSteps;
         return 37;
     }
@@ -155,7 +155,7 @@ int PokewalkerApp_Link_UpdateReceive(PokewalkerApp *app) {
 #pragma force_active on
 
 // Adds the Stroll to the event log (the last record) and, if the Pokewalker brought a gift Pokemon, that too.
-void ov112_021ED7DC(PokewalkerApp *app) {
+void PokewalkerApp_AddStrollToEventLog(PokewalkerApp *app) {
     PokewalkerEventLogParams params = { 0 };
     PokewalkerEventLogMon giftMon;
     params.nickname = app->walkerMonNickname;
@@ -185,7 +185,7 @@ void ov112_021ED7DC(PokewalkerApp *app) {
 // Request 0x60: reads the Pokewalker's status, blocks and the other games' records.
 int PokewalkerApp_Link_StartReceiveGifts(PokewalkerApp *app) {
     MIi_CpuClearFast(0, (u32 *)&app->irBlocks, sizeof(PokewalkerIrBlocks));
-    ov112_021E7620(&app->irStatus, app->peerRecords);
+    PokewalkerIr_RequestReceiveGifts(&app->irStatus, app->peerRecords);
     PokewalkerApp_StartLink(app);
     PokewalkerApp_ResetLinkError(app);
     return 29;
@@ -203,7 +203,7 @@ int PokewalkerApp_Link_UpdateReceiveGifts(PokewalkerApp *app) {
         PokewalkerApp_SpawnFallingParticle(app);
     }
     PokewalkerApp_PlayTransferSE(progress);
-    ov112_021EA60C(app);
+    PokewalkerApp_UpdateConnectionAnim(app);
     error = PokewalkerIr_GetAndClearError();
     switch (error) {
     case 2:
@@ -258,8 +258,8 @@ int PokewalkerApp_Link_UpdateReceiveGifts(PokewalkerApp *app) {
 
 // Request 0x52: sends the Stroll data again (the Pokewalker is already registered).
 int PokewalkerApp_Link_StartSendStroll(PokewalkerApp *app) {
-    ov112_021E7DA4(app);
-    ov112_021E7594((u8 *)&app->strollData, (u8 *)&app->unk_F1D0, (u8 *)&app->irStatus, (u8 *)&app->irBlocks);
+    PokewalkerApp_BuildSendStrollData(app);
+    PokewalkerIr_RequestSendStroll((u8 *)&app->strollData, (u8 *)&app->unk_F1D0, (u8 *)&app->irStatus, (u8 *)&app->irBlocks);
     PokewalkerApp_StartLink(app);
     if (app->unk_1E42C) {
         PokewalkerApp_LoadMonPicture(app->unk_1E42C, app->monSpriteBuffer, &app->monPicTemplate, 0);
@@ -296,16 +296,16 @@ int PokewalkerApp_Link_UpdateSendStroll(PokewalkerApp *app) {
     if (progress) {
         PokewalkerApp_SpawnRisingParticle(app);
     }
-    ov112_021EA60C(app);
+    PokewalkerApp_UpdateConnectionAnim(app);
     PokewalkerApp_PlayTransferSE(progress);
     PokewalkerApp_SetWalkerIconFrame(app, progress);
     if (progress > 200) {
         if (app->motionStarted == 0) {
-            ov112_021EAA98(app, LINK_MOTION(app), 2);
+            PokewalkerApp_InitMotion(app, LINK_MOTION(app), 2);
             app->motionStarted = 1;
         }
     } else {
-        ov112_021EAA10(app);
+        PokewalkerApp_HideMotionSprites(app);
         app->motionStarted = 0;
     }
     error = PokewalkerIr_GetAndClearError();
@@ -331,7 +331,7 @@ int PokewalkerApp_Link_UpdateSendStroll(PokewalkerApp *app) {
         PokewalkerApp_UpdateSavedSteps(app);
         sub_02032644(app->pokewalker);
         PokewalkerApp_HideSprite(app, 8);
-        ov112_021EAA98(app, LINK_MOTION(app), 0);
+        PokewalkerApp_InitMotion(app, LINK_MOTION(app), 0);
         return 35;
     }
     if (app->linkError) {
@@ -469,7 +469,7 @@ int PokewalkerApp_Link_PrintWentToWalker(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_Link_WaitWentToWalker(PokewalkerApp *app) {
-    ov112_021EAAE4(app, LINK_MOTION(app));
+    PokewalkerApp_UpdateMotion(app, LINK_MOTION(app));
     if (!TextPrinterCheckActive(app->textPrinterId) && !PokewalkerApp_AgeParticles(app) && !IsFanfarePlaying()) {
         app->nextMode = 5;
         return 66;
@@ -515,7 +515,7 @@ BOOL PokewalkerApp_IsWalkerMonInSave(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_Link_WaitReturned(PokewalkerApp *app) {
-    ov112_021EAAE4(app, LINK_MOTION(app));
+    PokewalkerApp_UpdateMotion(app, LINK_MOTION(app));
     if (!TextPrinterCheckActive(app->textPrinterId)) {
         if (!IsFanfarePlaying()) {
             if (!PokewalkerApp_IsWalkerMonValid(app)) {
@@ -713,7 +713,7 @@ int PokewalkerApp_Link_FadeOut(PokewalkerApp *app) {
 
 int PokewalkerApp_Link_WaitFadeOut(PokewalkerApp *app) {
     if (IsPaletteFadeFinished() == TRUE) {
-        ov112_021EAA10(app);
+        PokewalkerApp_HideMotionSprites(app);
         app->nextMode = 0;
         return 66;
     }

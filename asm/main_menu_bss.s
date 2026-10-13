@@ -15,15 +15,15 @@
 	.extern ov74_02229E60
 	.extern MysteryGiftApp_StartSearch
 	.extern MysteryGiftApp_AcceptGift
-	.extern ov74_0222A2A4
+	.extern MysteryGiftApp_DeclineSearch
 	.extern MysteryGiftApp_SelectGetFromFriend
 	.extern MysteryGiftApp_SelectGetViaWfc
 	.extern MysteryGiftApp_SelectGetViaWireless
-	.extern ov74_0222A494
-	.extern ov74_0222A4CC
-	.extern ov74_0222A504
-	.extern ov74_0222A538
-	.extern ov74_0222A560
+	.extern MysteryGiftApp_DeclineAcceptGift
+	.extern MysteryGiftApp_ConfirmWirelessSearch
+	.extern MysteryGiftApp_ConfirmReceiveGift
+	.extern MysteryGiftApp_DeclineReceiveGift
+	.extern MysteryGiftApp_ConfirmWfcSearch
 	.extern MysteryGiftApp_CancelReceiveMenu
 	.extern MysteryGiftApp_SelectReceiveGift
 	.extern MysteryGiftApp_SelectCheckCard

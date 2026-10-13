@@ -41,11 +41,11 @@
 	.extern PokewalkerIr_ThreadMain
 	.extern PokewalkerIr_Start
 	.extern PokewalkerIr_Stop
-	.extern ov112_021E7484
-	.extern ov112_021E74A8
-	.extern ov112_021E7548
-	.extern ov112_021E7594
-	.extern ov112_021E7620
+	.extern PokewalkerIr_RequestEraseRecords
+	.extern PokewalkerIr_RequestUpload
+	.extern PokewalkerIr_RequestReceive
+	.extern PokewalkerIr_RequestSendStroll
+	.extern PokewalkerIr_RequestReceiveGifts
 	.extern ov112_021E7668
 	.extern PokewalkerIr_GetChunkProgress
 	.extern PokewalkerIr_GetTotalProgress
@@ -65,8 +65,8 @@
 	.extern PokewalkerApp_FreeMessages
 	.extern PokewalkerApp_LoadTilemap
 	.extern PokewalkerApp_StartLink
-	.extern ov112_021E7D7C
-	.extern ov112_021E7DA4
+	.extern PokewalkerApp_BuildUploadData
+	.extern PokewalkerApp_BuildSendStrollData
 	.extern ov112_021E7DC0
 	.extern PokewalkerApp_BuildUploadImage
 	.extern PokewalkerApp_PickRouteMons
@@ -118,7 +118,7 @@
 	.extern PokewalkerApp_HideCursor
 	.extern PokewalkerApp_PressCursor
 	.extern ov112_021EA5A4
-	.extern ov112_021EA60C
+	.extern PokewalkerApp_UpdateConnectionAnim
 	.extern ov112_021EA64C
 	.extern PokewalkerApp_ShowSprite
 	.extern PokewalkerApp_HideSprite
@@ -131,11 +131,11 @@
 	.extern PokewalkerApp_UpdateParticles
 	.extern PokewalkerApp_ClearParticles
 	.extern PokewalkerApp_FindFreeParticle
-	.extern ov112_021EA9BC
-	.extern ov112_021EAA10
-	.extern ov112_021EAA34
-	.extern ov112_021EAA98
-	.extern ov112_021EAAE4
+	.extern PokewalkerApp_ShowMotionSprites
+	.extern PokewalkerApp_HideMotionSprites
+	.extern PokewalkerApp_SetMotionSpritePos
+	.extern PokewalkerApp_InitMotion
+	.extern PokewalkerApp_UpdateMotion
 	.extern PokewalkerApp_LoadMonIconPalettes
 	.extern PokewalkerApp_LoadMonIcon
 	.extern PokewalkerApp_SetMonIconGraphics
@@ -145,8 +145,8 @@
 	.extern PokewalkerApp_MainMenu_Start
 	.extern PokewalkerApp_ShowWalkerRecords
 	.extern ov112_021EAF48
-	.extern ov112_021EAF5C
-	.extern ov112_021EAFFC
+	.extern PokewalkerApp_MainMenu_ShowTopMenu
+	.extern PokewalkerApp_MainMenu_HandleTopMenu
 	.extern PokewalkerApp_MainMenu_PrintWelcome
 	.extern PokewalkerApp_MainMenu_WaitWelcome
 	.extern PokewalkerApp_MainMenu_PrintStrollReady
@@ -273,7 +273,7 @@
 	.extern PokewalkerApp_IsWalkerMonValid
 	.extern PokewalkerApp_IsGiftMonValid
 	.extern PokewalkerApp_Link_UpdateReceive
-	.extern ov112_021ED7DC
+	.extern PokewalkerApp_AddStrollToEventLog
 	.extern PokewalkerApp_Link_StartReceiveGifts
 	.extern PokewalkerApp_Link_UpdateReceiveGifts
 	.extern PokewalkerApp_Link_StartSendStroll
@@ -4971,8 +4971,8 @@ ov112_021FF684: ; 0x021FF684
 sMainMenuStates: ; 0x021FF6C4
 	.word PokewalkerApp_MainMenu_Start
 	.word ov112_021EAF48
-	.word ov112_021EAF5C
-	.word ov112_021EAFFC
+	.word PokewalkerApp_MainMenu_ShowTopMenu
+	.word PokewalkerApp_MainMenu_HandleTopMenu
 	.word PokewalkerApp_MainMenu_PrintWelcome
 	.word PokewalkerApp_MainMenu_WaitWelcome
 	.word PokewalkerApp_MainMenu_PrintStrollReady

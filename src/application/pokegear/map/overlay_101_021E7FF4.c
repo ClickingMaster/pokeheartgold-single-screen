@@ -1074,13 +1074,13 @@ static void PokegearMap_SetBgParam_MapMode(PokegearMapAppData *mapApp) {
     PokegearMap_OnVBlank_UpdateCursorAffine(mapApp, &mapApp->cursorSpriteState);
     CopyToBgTilemapRect(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 32, 20, mapApp->unk_178->rawData, 0, 0, mapApp->unk_178->screenWidth / 8, mapApp->unk_178->screenHeight / 8);
 
-    ov101_021EAF40(mapApp);
-    ov101_021EB38C(mapApp, 1, mapApp->zoomed);
+    PokegearMap_DrawMapTilemap(mapApp);
+    PokegearMap_SetButtonState(mapApp, 1, mapApp->zoomed);
     CopyToBgTilemapRect(mapApp->pokegear->bgConfig, GF_BG_LYR_SUB_2, 0, 7, 32, 17, mapApp->unk_16C->rawData, 0, 7, mapApp->unk_16C->screenWidth / 8, mapApp->unk_16C->screenHeight / 8);
 
     PokegearMap_SelectLocationAtCoord(mapApp, &mapApp->selectedLoc, mapApp->playerX, mapApp->playerY);
-    ov101_021EAD90(mapApp, FALSE);
-    ov101_021EB1E0(mapApp, 1);
+    PokegearMap_UpdateLocationPanel(mapApp, FALSE);
+    PokegearMap_HighlightSelectedLocation(mapApp, 1);
     PokegearMap_LoadMapHasMarkingsIndicatorSprites(mapApp);
     PokegearMap_UpdateLocationIcons(mapApp, 0);
     PokegearMap_SetMapSpritesVisible(mapApp, 1);

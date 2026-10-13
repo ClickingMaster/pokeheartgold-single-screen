@@ -1145,7 +1145,7 @@ void PokewalkerIr_Stop(void) {
     OS_UnlockMutex(&ov112_021FFB08);
 }
 
-void ov112_021E7484(int active) {
+void PokewalkerIr_RequestEraseRecords(int active) {
     ov112_021FFB24.command = 0x2A;
     if (active != 0) {
         ov112_021FFB24.step = 0x2A;

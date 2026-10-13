@@ -119,7 +119,7 @@ typedef struct NintendoWfcConnect {
     int nextState;                              // 0x0020
     void *heapMem;                              // 0x0024
     NNSFndHeapHandle expHeap;                   // 0x0028
-    u8 unk_002C[0x64];                          // 0x002C, passed to ov00_021EC3F0
+    u8 connection[0x64];                          // 0x002C, passed to ov00_021EC3F0
     u32 ownRank;                                // 0x0090
     u32 rank;                                   // 0x0094
     int roomCount;                              // 0x0098
@@ -1444,7 +1444,7 @@ int NintendoWfc_StartConnect(NintendoWfcConnect *wfc) {
     CommState_InitWfcSession(wfc->args->saveData);
     Sys_SetSleepDisableFlag(4);
     NintendoWfc_CreateWirelessIcon(wfc);
-    ov00_021EC3F0(wfc->unk_002C, 2, 1, 20);
+    ov00_021EC3F0(wfc->connection, 2, 1, 20);
     ov00_021EC454(2);
     ov00_021EC4A4();
     wfc->state = 3;

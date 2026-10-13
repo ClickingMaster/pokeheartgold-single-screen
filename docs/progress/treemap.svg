@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · afd7b4caf · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 3ea684fe1 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -5684,12 +5684,12 @@ src/application/view_photo.c</title></rect>
 1,782 bytes · C-only source
 src/touch_save_app.c</title></rect>
 <rect x="1097.773" y="699.379" width="16.181" height="17.621" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="1113.954" y="680.552" width="14.638" height="12.614" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_16 / overlay_16_022014A0.o
+<rect x="1113.954" y="680.552" width="14.638" height="12.614" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_16 / berry_growth.o
 1,154 bytes · C-only source
-src/overlay_16_022014A0.c</title></rect>
-<rect x="1128.593" y="680.552" width="6.723" height="12.614" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_16 / overlay_16_02201948.o
+src/berry_growth.c</title></rect>
+<rect x="1128.593" y="680.552" width="6.723" height="12.614" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_16 / berry_pots.o
 530 bytes · C-only source
-src/overlay_16_02201948.c</title></rect>
+src/berry_pots.c</title></rect>
 <rect x="1113.954" y="680.552" width="21.361" height="12.614" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1113.954" y="693.165" width="21.361" height="12.179" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / bug_contest / overlay_bug_contest.o
 1,626 bytes · C-only source

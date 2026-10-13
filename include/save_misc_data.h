@@ -23,12 +23,12 @@ typedef struct APRICORN_TREE {
 typedef struct BerryPot {
     u8 berryId;
     u8 growthStage;
-    u16 unk_2;
-    u16 unk_4;
-    u16 unk_6;
-    u8 unk_8;
+    u16 minutesToNextStage;
+    u16 drainMinutes;
+    u16 yield;
+    u8 regrowthCount;
     u8 moisture;
-    u8 unk_A;
+    u8 health;
     u8 mulch;
 } BerryPot;
 

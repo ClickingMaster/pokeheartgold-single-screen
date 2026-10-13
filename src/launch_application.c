@@ -35,7 +35,7 @@
 #include "unown_report.h"
 #include "overlay_14.h"
 #include "overlay_15.h"
-#include "overlay_16.h"
+#include "berry_pots.h"
 #include "overlay_18.h"
 #include "overlay_37.h"
 #include "overlay_41.h"

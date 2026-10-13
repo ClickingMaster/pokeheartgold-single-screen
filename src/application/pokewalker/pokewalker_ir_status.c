@@ -5,7 +5,7 @@
 #include "application/pokewalker/pokewalker_ir.h"
 #include "application/pokewalker/pokewalker_ir_internal.h"
 
-void ov112_021E7620(void *a, void *b) {
+void PokewalkerIr_RequestReceiveGifts(void *a, void *b) {
     ov112_021FFAA4.status = a;
     ov112_021FFAA4.unk_30 = b;
     ov112_021FFB24.command = 0x60;

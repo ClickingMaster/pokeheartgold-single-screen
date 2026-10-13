@@ -270,7 +270,7 @@ int PokewalkerApp_EraseRecords_WaitPointAtCard(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_EraseRecords_PrepareLink(PokewalkerApp *app) {
-    ov112_021E7484(1);
+    PokewalkerIr_RequestEraseRecords(1);
     MIi_CpuClearFast(0, (u32 *)&app->irBlocks, sizeof(PokewalkerIrBlocks));
     MIi_CpuClearFast(0, (u32 *)&app->irStatus, sizeof(PokewalkerIrStatus));
     return 16;

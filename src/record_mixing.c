@@ -130,23 +130,23 @@ typedef struct RecordMixingApp {
     u8 unk_0380[8];                                                          // 0x0380
     u8 sendBuffer[RECORD_MIXING_BUFFER_SIZE];                                // 0x0388
     u8 receiveBuffers[RECORD_MIXING_MAX_MEMBERS][RECORD_MIXING_BUFFER_SIZE]; // 0x0F48
-    u32 unk_4A08;                                                            // 0x4A08
+    u32 recordsReceived;                                                            // 0x4A08
     SaveData *saveData;                                                      // 0x4A0C
     u32 unk_4A10;                                                            // 0x4A10
-    u8 unk_4A14;                                                             // 0x4A14
+    u8 isMixing;                                                             // 0x4A14
     u8 yesNoActive;                                                          // 0x4A15
     u16 unk_4A16;                                                            // 0x4A16
-    int unk_4A18;                                                            // 0x4A18
-    int unk_4A1C;                                                            // 0x4A1C
+    int lastMemberCount;                                                            // 0x4A18
+    int participantCount;                                                            // 0x4A1C
     int unk_4A20;                                                            // 0x4A20
-    u32 unk_4A24;                                                            // 0x4A24
-    u8 unk_4A28;                                                             // 0x4A28
-    s8 unk_4A29;                                                             // 0x4A29
+    u32 leavingMask;                                                            // 0x4A24
+    u8 leaveRequested;                                                             // 0x4A28
+    s8 maxEntriesMode;                                                             // 0x4A29
     u8 unk_4A2A;                                                             // 0x4A2A
-    u8 unk_4A2B;                                                             // 0x4A2B
+    u8 startMixingSent;                                                             // 0x4A2B
     int unk_4A2C;                                                            // 0x4A2C
     u16 unk_4A30;                                                            // 0x4A30
-    s16 unk_4A32;                                                            // 0x4A32
+    s16 leaveWaitFrames;                                                            // 0x4A32
     s32 unk_4A34;                                                            // 0x4A34
     s32 buttonHighlightTimer;                                                // 0x4A38
     RecordMixingMemberKeys memberKeys[RECORD_MIXING_MAX_MEMBERS];            // 0x4A3C
@@ -320,8 +320,8 @@ BOOL RecordMixing_Init(OverlayManager *man, int *state) {
 BOOL RecordMixing_Main(OverlayManager *man, int *state) {
     RecordMixingApp *app = OverlayManager_GetData(man);
 
-    if (Comm_GetLocalNetId() == 0 && app->unk_4A24 != 0) {
-        app->unk_4A24 &= Wireless_GetConnectedBitmap();
+    if (Comm_GetLocalNetId() == 0 && app->leavingMask != 0) {
+        app->leavingMask &= Wireless_GetConnectedBitmap();
     }
     switch (*state) {
     case 0:
@@ -336,7 +336,7 @@ BOOL RecordMixing_Main(OverlayManager *man, int *state) {
         if (sRecordMixingStateFuncs[app->state]) {
             *state = sRecordMixingStateFuncs[app->state](app, *state);
         }
-        if (app->unk_4A14 == 0) {
+        if (app->isMixing == 0) {
             RecordMixing_PrintMemberList(&app->memberListWindow, 0, 0x10300, app);
         }
         RecordMixing_UpdateMemberSprites(app);
@@ -479,8 +479,8 @@ void RecordMixing_InitResources(RecordMixingApp *app, NARC *narc) {
     app->flash.timer = 0;
     app->flash.frame = 0;
     app->flash.plttRaw = GfGfxLoader_GetPlttDataFromOpenNarc(narc, 7, &app->flash.pltt, HEAP_ID_50);
-    app->unk_4A18 = 0;
-    app->unk_4A1C = 2;
+    app->lastMemberCount = 0;
+    app->participantCount = 2;
     app->yesNoActive = 0;
 }
 
@@ -703,7 +703,7 @@ void RecordMixing_HandleInput(RecordMixingApp *app) {
     }
     if ((gSystem.newKeys & PAD_BUTTON_A) || button == 1) {
         if (!Comm_GetLocalNetId()) {
-            if (app->unk_4A1C == RecordMixing_CountMembers() && app->unk_4A24 == 0) {
+            if (app->participantCount == RecordMixing_CountMembers() && app->leavingMask == 0) {
                 packet.send[2] = 1;
                 RecordMixing_PrintMessage(app, 3, FALSE);
                 RecordMixing_SetStateAfterText(app, 22);
@@ -727,7 +727,7 @@ void RecordMixing_HandleInput(RecordMixingApp *app) {
                 PlaySE(SEQ_SE_DP_CUSTOM06);
             }
         } else {
-            if (app->unk_4A1C == Comm_CountConnected() && app->unk_4A24 == 0) {
+            if (app->participantCount == Comm_CountConnected() && app->leavingMask == 0) {
                 packet.send[1] = 1;
                 RecordMixing_PrintMessage(app, 4, FALSE);
                 RecordMixing_SetStateAfterText(app, 4);
@@ -740,7 +740,7 @@ void RecordMixing_HandleInput(RecordMixingApp *app) {
                 PlaySE(SEQ_SE_DP_CUSTOM06);
             }
         }
-    } else if (app->unk_4A20 == 0 && !Comm_GetLocalNetId() && app->unk_4A1C == Comm_CountConnected()) {
+    } else if (app->unk_4A20 == 0 && !Comm_GetLocalNetId() && app->participantCount == Comm_CountConnected()) {
         packet.send[0] = 0;
         Comm_SendCommand(117, packet.send, 1);
     }
@@ -854,7 +854,7 @@ int RecordMixing_State_HandleCancelYesNo(RecordMixingApp *app, int state) {
             return state;
         }
     } else {
-        if (app->unk_4A24 != 0) {
+        if (app->leavingMask != 0) {
             if (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B | PAD_KEY_UP | PAD_KEY_DOWN)) {
                 PlaySE(SEQ_SE_DP_CUSTOM06);
             }
@@ -882,8 +882,8 @@ int RecordMixing_State_HandleCancelYesNo(RecordMixingApp *app, int state) {
             MI_CpuFill8(data, 0, 4);
             data[2] = 0;
             data[0] = Comm_GetLocalNetId();
-            app->unk_4A28 = 1;
-            app->unk_4A32 = 0;
+            app->leaveRequested = 1;
+            app->leaveWaitFrames = 0;
             app->state = 6;
             Comm_SendCommand(112, data, 4);
         }
@@ -894,7 +894,7 @@ int RecordMixing_State_HandleCancelYesNo(RecordMixingApp *app, int state) {
 }
 
 int RecordMixing_State_WaitLeaveReply(RecordMixingApp *app, int state) {
-    app->unk_4A32 = 0;
+    app->leaveWaitFrames = 0;
     ov73_021E66F0(app);
     return state;
 }
@@ -905,18 +905,18 @@ int RecordMixing_State_SendLeave(RecordMixingApp *app, int state) {
     u8 data[4];
 
     if (app->unk_4A30 != Comm_CountConnected() || app->unk_4A30 != RecordMixing_CountMembers()) {
-        app->unk_4A32 = 0;
+        app->leaveWaitFrames = 0;
         app->state = 8;
         ov73_021E66F0(app);
         return state;
     }
-    app->unk_4A32++;
-    if (app->unk_4A32 > 30) {
+    app->leaveWaitFrames++;
+    if (app->leaveWaitFrames > 30) {
         MI_CpuFill8(data, 0, 4);
         data[2] = 1;
         data[0] = Comm_GetLocalNetId();
         Comm_SendCommand(112, data, 4);
-        app->unk_4A32 = 0;
+        app->leaveWaitFrames = 0;
         app->state = 9;
     }
     ov73_021E66F0(app);
@@ -926,7 +926,7 @@ int RecordMixing_State_SendLeave(RecordMixingApp *app, int state) {
 #pragma force_active reset
 
 int ov73_021E6A70(RecordMixingApp *app, int state) {
-    app->unk_4A28 = 0;
+    app->leaveRequested = 0;
     RecordMixing_SetStateAfterText(app, 0);
     ov73_021E66F0(app);
     return state;
@@ -943,7 +943,7 @@ int RecordMixing_State_HandleConfirmYesNo(RecordMixingApp *app, int state) {
     u32 data;
     int input;
 
-    if (app->unk_4A1C != RecordMixing_CountMembers() || app->unk_4A24 != 0) {
+    if (app->participantCount != RecordMixing_CountMembers() || app->leavingMask != 0) {
         if (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B | PAD_KEY_UP | PAD_KEY_DOWN)) {
             PlaySE(SEQ_SE_DP_CUSTOM06);
         }
@@ -974,8 +974,8 @@ int RecordMixing_State_HandleConfirmYesNo(RecordMixingApp *app, int state) {
 }
 
 int RecordMixing_State_SendStartMixing(RecordMixingApp *app, int state) {
-    if (app->unk_4A2B == 0 && Comm_SendCommand(115, NULL, 0) == TRUE) {
-        app->unk_4A2B = 1;
+    if (app->startMixingSent == 0 && Comm_SendCommand(115, NULL, 0) == TRUE) {
+        app->startMixingSent = 1;
     }
     return state;
 }
@@ -991,7 +991,7 @@ int RecordMixing_State_WaitRecords(RecordMixingApp *app, int state) {
     if (Comm_GetLocalNetId() == 0) {
         Comm_CountConnected();
     }
-    if (app->unk_4A08 == Comm_CountConnected()) {
+    if (app->recordsReceived == Comm_CountConnected()) {
         app->state = 26;
     }
     return state;
@@ -1023,7 +1023,7 @@ int RecordMixing_State_Save(RecordMixingApp *app, int state) {
         app->flash.active = 0;
         app->counter = 0;
         gSystem.softResetDisabled = FALSE;
-        app->unk_4A14 = 0;
+        app->isMixing = 0;
     }
     return state;
 }
@@ -1065,7 +1065,7 @@ int RecordMixing_State_HandleDisbandYesNo(RecordMixingApp *app, int state) {
     int input;
     int data;
 
-    if (app->unk_4A1C != RecordMixing_CountMembers() || app->unk_4A24) {
+    if (app->participantCount != RecordMixing_CountMembers() || app->leavingMask) {
         if (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B | PAD_KEY_UP | PAD_KEY_DOWN)) {
             PlaySE(SEQ_SE_DP_CUSTOM06);
         }
@@ -1223,7 +1223,7 @@ void RecordMixing_SetStateFromLink(RecordMixingApp *app, int state, int netId) {
         RecordMixing_HideYesNo(app);
         break;
     case 19:
-        if (app->unk_4A28 == 1) {
+        if (app->leaveRequested == 1) {
             return;
         }
         BufferPlayersName(app->msgFmt, 0, CommPlayerInfo_GetProfile(netId));
@@ -1232,7 +1232,7 @@ void RecordMixing_SetStateFromLink(RecordMixingApp *app, int state, int netId) {
         }
         RecordMixing_HideYesNo(app);
         if (Comm_GetLocalNetId() == 0) {
-            app->unk_4A24 &= netId ^ 0xFFFF;
+            app->leavingMask &= netId ^ 0xFFFF;
         }
         break;
     case 7:
@@ -1252,8 +1252,8 @@ void RecordMixing_SetStateFromLinkInMenu(RecordMixingApp *app, int state, int ne
             BufferPlayersName(app->msgFmt, 0, CommPlayerInfo_GetProfile(netId));
             RecordMixing_UpdateMaxEntries(app, 1);
             app->state = state;
-            app->unk_4A1C = Comm_CountConnected();
-            app->unk_4A24 = 0;
+            app->participantCount = Comm_CountConnected();
+            app->leavingMask = 0;
             if (Comm_GetLocalNetId() == 0) {
                 one = 1;
                 Comm_SendCommand(117, &one, one);
@@ -1266,7 +1266,7 @@ void RecordMixing_SetStateFromLinkInMenu(RecordMixingApp *app, int state, int ne
                 return;
             }
             if (Comm_GetLocalNetId() == 0) {
-                app->unk_4A24 &= netId ^ 0xFFFF;
+                app->leavingMask &= netId ^ 0xFFFF;
             }
             app->state = state;
             return;
@@ -1276,8 +1276,8 @@ void RecordMixing_SetStateFromLinkInMenu(RecordMixingApp *app, int state, int ne
         }
     }
     if (state == 1) {
-        app->unk_4A24 = 0;
-        app->unk_4A1C = Comm_CountConnected();
+        app->leavingMask = 0;
+        app->participantCount = Comm_CountConnected();
     }
 }
 
@@ -1558,11 +1558,11 @@ void RecordMixing_UpdateMaxEntries(RecordMixingApp *app, int index) {
             CommState_SetMaxEntries(count);
         }
         if (index == -1) {
-            app->unk_4A29 = 2;
+            app->maxEntriesMode = 2;
         } else if (index == 0) {
-            app->unk_4A29 = 1;
+            app->maxEntriesMode = 1;
         } else {
-            app->unk_4A29 = 0;
+            app->maxEntriesMode = 0;
         }
     }
 }
@@ -1573,14 +1573,14 @@ int RecordMixing_LeaderUpdateMembers(RecordMixingApp *app, int arg1) {
     u8 flag[1];
     int n = RecordMixing_CountMembers();
 
-    if (n > app->unk_4A1C) {
+    if (n > app->participantCount) {
         flag[0] = 1;
         Comm_SendCommand(117, flag, 1);
         app->unk_4A20 = 1;
     } else {
         app->unk_4A20 = 0;
     }
-    if (n == app->unk_4A18) {
+    if (n == app->lastMemberCount) {
         return 1;
     }
     switch (n) {
@@ -1596,8 +1596,8 @@ int RecordMixing_LeaderUpdateMembers(RecordMixingApp *app, int arg1) {
     case 3:
     case 4:
         UnionRoom_SetBeaconActivity(2);
-        if (n < app->unk_4A18) {
-            switch (app->unk_4A29) {
+        if (n < app->lastMemberCount) {
+            switch (app->maxEntriesMode) {
             case 0:
                 RecordMixing_UpdateMaxEntries(app, arg1);
                 break;
@@ -1605,7 +1605,7 @@ int RecordMixing_LeaderUpdateMembers(RecordMixingApp *app, int arg1) {
                 RecordMixing_UpdateMaxEntries(app, 0);
                 break;
             }
-            app->unk_4A1C = Comm_CountConnected();
+            app->participantCount = Comm_CountConnected();
         }
         break;
     case 5:
@@ -1613,7 +1613,7 @@ int RecordMixing_LeaderUpdateMembers(RecordMixingApp *app, int arg1) {
         RecordMixing_UpdateMaxEntries(app, arg1);
         break;
     }
-    app->unk_4A18 = RecordMixing_CountMembers();
+    app->lastMemberCount = RecordMixing_CountMembers();
     return 1;
 }
 

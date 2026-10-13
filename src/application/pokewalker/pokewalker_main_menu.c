@@ -145,7 +145,7 @@ int ov112_021EAF48(PokewalkerApp *app) {
 }
 
 // Top menu: 6 items (cursor positions ov112_021FF0AC).
-int ov112_021EAF5C(PokewalkerApp *app) {
+int PokewalkerApp_MainMenu_ShowTopMenu(PokewalkerApp *app) {
     int i;
 
     PokewalkerApp_RemoveWindowBank(app, 1);
@@ -164,7 +164,7 @@ int ov112_021EAF5C(PokewalkerApp *app) {
     return 3;
 }
 
-int ov112_021EAFFC(PokewalkerApp *app) {
+int PokewalkerApp_MainMenu_HandleTopMenu(PokewalkerApp *app) {
     u32 keys = gSystem.newKeys;
 
     if (keys & PAD_KEY_UP) {

@@ -541,8 +541,8 @@ int PokewalkerApp_Link_StartUpload(PokewalkerApp *app) {
     MIi_CpuClearFast(0, (u32 *)&app->irStatus, sizeof(PokewalkerIrStatus));
     PokewalkerApp_LoadTilemap(app, 2, 14);
     PokewalkerApp_PrintExit(app, 1);
-    ov112_021E7D7C(app);
-    ov112_021E74A8(app->uploadImage, (u8 *)&app->strollData, (u8 *)&app->unk_F1D0);
+    PokewalkerApp_BuildUploadData(app);
+    PokewalkerIr_RequestUpload(app->uploadImage, (u8 *)&app->strollData, (u8 *)&app->unk_F1D0);
     PokewalkerApp_StartLink(app);
     ov112_021EA5A4(app, 2);
     ManagedSprite_SetAnim(app->sprites[8], 25);
@@ -586,16 +586,16 @@ int PokewalkerApp_Link_UpdateUpload(PokewalkerApp *app) {
     if (progress > MTRandom() % 255) {
         PokewalkerApp_SpawnRisingParticle(app);
     }
-    ov112_021EA60C(app);
+    PokewalkerApp_UpdateConnectionAnim(app);
     PokewalkerApp_PlayTransferSE(progress);
     PokewalkerApp_SetWalkerIconFrame(app, progress);
     if (progress > 200) {
         if (app->motionStarted == 0) {
-            ov112_021EAA98(app, LINK_MOTION(app), 2);
+            PokewalkerApp_InitMotion(app, LINK_MOTION(app), 2);
             app->motionStarted = 1;
         }
     } else {
-        ov112_021EAA10(app);
+        PokewalkerApp_HideMotionSprites(app);
         app->motionStarted = 0;
     }
     error = PokewalkerIr_GetAndClearError();
@@ -618,7 +618,7 @@ int PokewalkerApp_Link_UpdateUpload(PokewalkerApp *app) {
         ManagedSprite_SetDrawFlag(app->sprites[2], FALSE);
         sub_02032644(app->pokewalker);
         PokewalkerApp_HideSprite(app, 8);
-        ov112_021EAA98(app, LINK_MOTION(app), 0);
+        PokewalkerApp_InitMotion(app, LINK_MOTION(app), 0);
         return 35;
     }
     if (app->linkError) {
@@ -650,7 +650,7 @@ int PokewalkerApp_Link_UpdateUpload(PokewalkerApp *app) {
 // Request 0x40: reads the Pokewalker's Pokemon, status and blocks.
 int PokewalkerApp_Link_StartReceive(PokewalkerApp *app) {
     MIi_CpuClearFast(0, (u32 *)app->irStatus.records, sizeof(app->irStatus.records));
-    ov112_021E7548((u8 *)&app->walkerMon, (u8 *)&app->irStatus, (u8 *)&app->irBlocks, (u8 *)app->peerRecords);
+    PokewalkerIr_RequestReceive((u8 *)&app->walkerMon, (u8 *)&app->irStatus, (u8 *)&app->irBlocks, (u8 *)app->peerRecords);
     PokewalkerApp_StartLink(app);
     PokewalkerApp_ResetLinkError(app);
     ov112_021EA5A4(app, 2);

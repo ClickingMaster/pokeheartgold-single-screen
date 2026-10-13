@@ -680,12 +680,12 @@ static void FlyMap_FinalizeGraphicsSetup(PokegearMapAppData *mapApp) {
     ov101_021E990C(mapApp);
     PokegearMap_OnVBlank_UpdateCursorAffine(mapApp, &mapApp->cursorSpriteState);
     CopyToBgTilemapRect(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 32, 24, mapApp->unk_178->rawData, 0, 0, mapApp->unk_178->screenWidth / 8, mapApp->unk_178->screenHeight / 8);
-    ov101_021EAF40(mapApp);
+    PokegearMap_DrawMapTilemap(mapApp);
     mapApp->flyDestination = -1;
     if (mapApp->type == PGMAP_TYPE_TOWN_MAP) {
         CopyToBgTilemapRect(mapApp->pokegear->bgConfig, GF_BG_LYR_SUB_2, 0, 8, 32, 6, mapApp->unk_16C->rawData, 0, 8, mapApp->unk_16C->screenWidth / 8, mapApp->unk_16C->screenHeight / 8);
         PokegearMap_SelectLocationAtCoord(mapApp, &mapApp->selectedLoc, mapApp->playerX, mapApp->playerY);
-        ov101_021EAD90(mapApp, TRUE);
+        PokegearMap_UpdateLocationPanel(mapApp, TRUE);
         BgSetPosTextAndCommit(mapApp->pokegear->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_Y, -81);
         BgSetPosTextAndCommit(mapApp->pokegear->bgConfig, GF_BG_LYR_SUB_2, BG_POS_OP_SET_Y, -81);
         BgSetPosTextAndCommit(mapApp->pokegear->bgConfig, GF_BG_LYR_SUB_3, BG_POS_OP_SET_Y, -81);
@@ -693,10 +693,10 @@ static void FlyMap_FinalizeGraphicsSetup(PokegearMapAppData *mapApp) {
         FlyMap_UpdateFlypointIcons(mapApp, 0);
         CopyToBgTilemapRect(mapApp->pokegear->bgConfig, GF_BG_LYR_SUB_2, 0, 8, 32, 16, mapApp->unk_16C->rawData, 0, 8, mapApp->unk_16C->screenWidth / 8, mapApp->unk_16C->screenHeight / 8);
         FlyMap_SelectLocationAtCoord(mapApp, &mapApp->selectedLoc, mapApp->playerX, mapApp->playerY);
-        ov101_021EAD90(mapApp, FALSE);
+        PokegearMap_UpdateLocationPanel(mapApp, FALSE);
         PokegearMap_PrintLandmarkNameAndFlavorText(mapApp, -1);
     }
-    ov101_021EB1E0(mapApp, TRUE);
+    PokegearMap_HighlightSelectedLocation(mapApp, TRUE);
     PokegearMap_SetMapSpritesVisible(mapApp, TRUE);
     textX = FontID_String_GetWidth(4, mapApp->closeString, 0);
     textX = (48 - textX) / 2;

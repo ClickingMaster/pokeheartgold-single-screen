@@ -62,7 +62,7 @@ PokewalkerIrWorkBuffers ov112_021FFAC0;
 PokewalkerIrWorkSync ov112_021FFB08;
 PokewalkerIrWorkProgress ov112_021FFB5C;
 
-void ov112_021E74A8(u8 *a, u8 *b, u8 *c) {
+void PokewalkerIr_RequestUpload(u8 *a, u8 *b, u8 *c) {
     ov112_021FFAA4.unk_10 = a;
     ov112_021FFAC0.unk_2C = b;
     ov112_021FFAC0.unk_30 = c;
@@ -85,7 +85,7 @@ void ov112_021E74A8(u8 *a, u8 *b, u8 *c) {
     }
 }
 
-void ov112_021E7548(u8 *a, u8 *b, u8 *c, u8 *d) {
+void PokewalkerIr_RequestReceive(u8 *a, u8 *b, u8 *c, u8 *d) {
     ov112_021FFAA4.unk_08 = a;
     ov112_021FFAC0.unk_38 = b;
     ov112_021FFAC0.unk_34 = c;
@@ -98,7 +98,7 @@ void ov112_021E7548(u8 *a, u8 *b, u8 *c, u8 *d) {
     ov112_021FFB5C.totalChunks = (ov112_021FFB5C.totalSize + 0x7F) / 0x80;
 }
 
-void ov112_021E7594(u8 *a, u8 *b, u8 *c, u8 *d) {
+void PokewalkerIr_RequestSendStroll(u8 *a, u8 *b, u8 *c, u8 *d) {
     ov112_021FFAC0.unk_2C = a;
     ov112_021FFAC0.unk_30 = b;
     ov112_021FFAC0.unk_38 = c;

@@ -1300,8 +1300,8 @@ Overlay OVY_15
 Overlay OVY_16
 {
     After OVY_15
-    Object src/overlay_16_022014A0.o
-    Object src/overlay_16_02201948.o
+    Object src/berry_growth.o
+    Object src/berry_pots.o
 }
 Overlay OVY_17
 {

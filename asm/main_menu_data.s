@@ -133,15 +133,15 @@
 	.extern ov74_02229E60
 	.extern MysteryGiftApp_StartSearch
 	.extern MysteryGiftApp_AcceptGift
-	.extern ov74_0222A2A4
+	.extern MysteryGiftApp_DeclineSearch
 	.extern MysteryGiftApp_SelectGetFromFriend
 	.extern MysteryGiftApp_SelectGetViaWfc
 	.extern MysteryGiftApp_SelectGetViaWireless
-	.extern ov74_0222A494
-	.extern ov74_0222A4CC
-	.extern ov74_0222A504
-	.extern ov74_0222A538
-	.extern ov74_0222A560
+	.extern MysteryGiftApp_DeclineAcceptGift
+	.extern MysteryGiftApp_ConfirmWirelessSearch
+	.extern MysteryGiftApp_ConfirmReceiveGift
+	.extern MysteryGiftApp_DeclineReceiveGift
+	.extern MysteryGiftApp_ConfirmWfcSearch
 	.extern MysteryGiftApp_CancelReceiveMenu
 	.extern MysteryGiftApp_SelectReceiveGift
 	.extern MysteryGiftApp_SelectCheckCard
@@ -895,24 +895,24 @@ ov74_0223C1F4: ; 0x0223C1F4
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
 ov74_0223C220: ; 0x0223C220
-	.word 0x00000012, ov74_0222A560
-	.word 0x00000013, ov74_0222A2A4
+	.word 0x00000012, MysteryGiftApp_ConfirmWfcSearch
+	.word 0x00000013, MysteryGiftApp_DeclineSearch
 
 ov74_0223C230: ; 0x0223C230
-	.word 0x00000012, ov74_0222A4CC
-	.word 0x00000013, ov74_0222A2A4
+	.word 0x00000012, MysteryGiftApp_ConfirmWirelessSearch
+	.word 0x00000013, MysteryGiftApp_DeclineSearch
 
 ov74_0223C240: ; 0x0223C240
-	.word 0x00000012, ov74_0222A504
-	.word 0x00000013, ov74_0222A538
+	.word 0x00000012, MysteryGiftApp_ConfirmReceiveGift
+	.word 0x00000013, MysteryGiftApp_DeclineReceiveGift
 
 ov74_0223C250: ; 0x0223C250
 	.word 0x00000012, MysteryGiftApp_StartSearch
-	.word 0x00000013, ov74_0222A2A4
+	.word 0x00000013, MysteryGiftApp_DeclineSearch
 
 ov74_0223C260: ; 0x0223C260
 	.word 0x00000012, MysteryGiftApp_AcceptGift
-	.word 0x00000013, ov74_0222A494
+	.word 0x00000013, MysteryGiftApp_DeclineAcceptGift
 
 ov74_0223C270: ; 0x0223C270
 	.word 0

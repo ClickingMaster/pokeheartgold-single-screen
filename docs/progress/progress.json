@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "afd7b4caf8ebe2900ecb4866a13eab5d3bbeb476",
+  "commit": "3ea684fe1a5cb212c269f9b717021aa5d6cd640c",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "e84b9d92c5cf4f34a7b58accfada2b3eaca0d3801b598358edd2f88bc722e8a0",
+    "ARM9": "b8de73af45031b30a3dba4bedd75f50035d2294adbf20d7beb9e7842275e2811",
     "ARM7": "d726d92f810e881692e1b4d2ec232d6ca89b38985dcb26b08751c0037036d92a"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -1452,18 +1452,18 @@
     {
       "cpu": "ARM9",
       "module": "OVY_16",
-      "object": "overlay_16_022014A0.o",
+      "object": "berry_growth.o",
       "bytes": 1154,
       "status": "c",
-      "source": "src/overlay_16_022014A0.c"
+      "source": "src/berry_growth.c"
     },
     {
       "cpu": "ARM9",
       "module": "OVY_16",
-      "object": "overlay_16_02201948.o",
+      "object": "berry_pots.o",
       "bytes": 530,
       "status": "c",
-      "source": "src/overlay_16_02201948.c"
+      "source": "src/berry_pots.c"
     },
     {
       "cpu": "ARM9",

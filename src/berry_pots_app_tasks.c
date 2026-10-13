@@ -8,30 +8,30 @@
 #include "touchscreen.h"
 #include "sound_playback.h"
 
-typedef struct SysTaskArgs_ov17_0220351C {
+typedef struct BerryPotsWateringCanMoveArgs {
     BerryPotsAppData *data;
     u8 unk4;
     u8 unk5;
-    u8 unk6;
-    u8 unk7;
-    u8 unk8;
+    u8 startPot;
+    u8 targetPot;
+    u8 framesLeft;
     s8 sign;
-    u8 unkA;
-} SysTaskArgs_ov17_0220351C;
+    u8 lastWateredPot;
+} BerryPotsWateringCanMoveArgs;
 
-static const TouchscreenHitbox ov17_02203FC0 = {
+static const TouchscreenHitbox sBerryPotsCancelHitbox = {
     .rect = { 160, 192, 192, 0 }
 };
 
-static void ov17_022035A4(SysTask *task, SysTaskArgs_ov17_0220351C *args);
+static void Task_BerryPotsApp_MoveWateringCan(SysTask *task, BerryPotsWateringCanMoveArgs *args);
 
-void ov17_0220351C(BerryPotsAppData *data) {
-    SysTaskArgs_ov17_0220351C *args = Heap_Alloc(data->heapID, sizeof(SysTaskArgs_ov17_0220351C));
-    MI_CpuFill8(args, 0, sizeof(SysTaskArgs_ov17_0220351C));
+void BerryPotsApp_StartWateringCanMove(BerryPotsAppData *data) {
+    BerryPotsWateringCanMoveArgs *args = Heap_Alloc(data->heapID, sizeof(BerryPotsWateringCanMoveArgs));
+    MI_CpuFill8(args, 0, sizeof(BerryPotsWateringCanMoveArgs));
     args->data = data;
-    args->unk6 = data->unk80;
-    args->unk7 = data->unk81;
-    s8 diff = data->unk81 - data->unk80;
+    args->startPot = data->wateringPot;
+    args->targetPot = data->nextWateringPot;
+    s8 diff = data->nextWateringPot - data->wateringPot;
     if (diff > 0) {
         args->sign = 1;
     } else {
@@ -39,13 +39,13 @@ void ov17_0220351C(BerryPotsAppData *data) {
         diff = -diff;
     }
 
-    args->unk8 = (diff *= 27) / 4;
-    args->unkA = data->unk80;
-    SysTask_CreateOnMainQueue((SysTaskFunc)ov17_022035A4, args, 0);
+    args->framesLeft = (diff *= 27) / 4;
+    args->lastWateredPot = data->wateringPot;
+    SysTask_CreateOnMainQueue((SysTaskFunc)Task_BerryPotsApp_MoveWateringCan, args, 0);
     data->runningTasks++;
 }
 
-static void ov17_022035A4(SysTask *task, SysTaskArgs_ov17_0220351C *args) {
+static void Task_BerryPotsApp_MoveWateringCan(SysTask *task, BerryPotsWateringCanMoveArgs *args) {
     BerryPotsAppData *data = args->data;
 
     Sprite_OffsetPositionXY(data->sprites[2], args->sign * 4, 0);
@@ -53,48 +53,48 @@ static void ov17_022035A4(SysTask *task, SysTaskArgs_ov17_0220351C *args) {
     Sprite_GetPositionXY(data->sprites[2], &x, &y);
 
     u8 potIndex = (x - 31) / 27;
-    if (potIndex != args->unkA && potIndex != args->unk7) {
-        ov17_02202B58(data, potIndex);
-        args->unkA = potIndex;
+    if (potIndex != args->lastWateredPot && potIndex != args->targetPot) {
+        BerryPotsApp_WaterPot(data, potIndex);
+        args->lastWateredPot = potIndex;
     }
 
-    if (--args->unk8 != 0) {
+    if (--args->framesLeft != 0) {
         return;
     }
 
-    Sprite_SetPositionXY(data->sprites[2], args->unk7 * 27 + 31, 56);
+    Sprite_SetPositionXY(data->sprites[2], args->targetPot * 27 + 31, 56);
 
     data->runningTasks--;
     Heap_Free(args);
     SysTask_Destroy(task);
 }
 
-typedef struct SysTaskArgs_ov17_02203674 {
+typedef struct BerryPotsHarvestBerryArgs {
     BerryPotsAppData *data;
     u8 state;
     u8 framesOnScreen;
     u8 potIndex;
     ManagedSprite *berrySprite;
-} SysTaskArgs_ov17_02203674;
+} BerryPotsHarvestBerryArgs;
 
-static void ov17_02203674(SysTask *, SysTaskArgs_ov17_02203674 *);
+static void Task_BerryPotsApp_HarvestBerry(SysTask *, BerryPotsHarvestBerryArgs *);
 
-void ov17_02203638(BerryPotsAppData *data) {
-    SysTaskArgs_ov17_02203674 *args = Heap_Alloc(data->heapID, sizeof(SysTaskArgs_ov17_02203674));
-    MI_CpuFill8(args, 0, sizeof(SysTaskArgs_ov17_02203674));
+void BerryPotsApp_StartHarvestBerryAnim(BerryPotsAppData *data) {
+    BerryPotsHarvestBerryArgs *args = Heap_Alloc(data->heapID, sizeof(BerryPotsHarvestBerryArgs));
+    MI_CpuFill8(args, 0, sizeof(BerryPotsHarvestBerryArgs));
 
     args->data = data;
-    args->potIndex = data->unk7C;
+    args->potIndex = data->selectedPot;
 
-    SysTask_CreateOnMainQueue((SysTaskFunc)ov17_02203674, args, 0);
+    SysTask_CreateOnMainQueue((SysTaskFunc)Task_BerryPotsApp_HarvestBerry, args, 0);
     data->runningTasks++;
 }
 
-static void ov17_02203674(SysTask *task, SysTaskArgs_ov17_02203674 *args) {
+static void Task_BerryPotsApp_HarvestBerry(SysTask *task, BerryPotsHarvestBerryArgs *args) {
     BerryPotsAppData *data = args->data;
     switch (args->state) {
     case 0:
-        args->berrySprite = ov17_022034C8(data, args->potIndex * 27 + 35, 80, data->unk7E + 2);
+        args->berrySprite = BerryPotsApp_CreateBerryIconSprite(data, args->potIndex * 27 + 35, 80, data->harvestBerriesLeft + 2);
         PlaySE(SEQ_SE_DP_DECIDE);
         args->state++;
         break;
@@ -114,25 +114,25 @@ static void ov17_02203674(SysTask *task, SysTaskArgs_ov17_02203674 *args) {
     }
 }
 
-void ov17_022036FC(BerryPotsAppData *data, enum BerryPotsApp_022036FC_Action action, u8 potIndex) {
-    BerryPotsAppData_UnkSub20 *unk = &data->unk20[potIndex];
+void BerryPotsApp_FormatMessage(BerryPotsAppData *data, enum BerryPotsAppMessage action, u8 potIndex) {
+    BerryPotsAppPot *unk = &data->pots[potIndex];
 
     switch (action) {
-    case BERRY_POTS_APP_022036FC_ACTION_5:
-    case BERRY_POTS_APP_022036FC_ACTION_11:
+    case BERRY_POTS_APP_MSG_MULCH_LAID:
+    case BERRY_POTS_APP_MSG_MULCH_SCATTERED:
         BufferItemName(data->msgFmt, 2, MulchIdToItemId(unk->mulch));
         break;
-    case BERRY_POTS_APP_022036FC_ACTION_10:
-    case BERRY_POTS_APP_022036FC_ACTION_14:
+    case BERRY_POTS_APP_MSG_HAS_BERRIES:
+    case BERRY_POTS_APP_MSG_PICKED:
         BufferIntegerAsString(data->msgFmt, 1, unk->quantityOrYieldMaybe, 2, PRINTING_MODE_LEFT_ALIGN, 0);
         // fallthrough
-    case BERRY_POTS_APP_022036FC_ACTION_6:
-    case BERRY_POTS_APP_022036FC_ACTION_7:
-    case BERRY_POTS_APP_022036FC_ACTION_8:
-    case BERRY_POTS_APP_022036FC_ACTION_9:
-    case BERRY_POTS_APP_022036FC_ACTION_12:
-    case BERRY_POTS_APP_022036FC_ACTION_15:
-    case BERRY_POTS_APP_022036FC_ACTION_16: {
+    case BERRY_POTS_APP_MSG_PLANTED:
+    case BERRY_POTS_APP_MSG_SPROUTED:
+    case BERRY_POTS_APP_MSG_GROWING:
+    case BERRY_POTS_APP_MSG_BLOOM:
+    case BERRY_POTS_APP_MSG_BERRY_PLANTED:
+    case BERRY_POTS_APP_MSG_PUT_AWAY:
+    case BERRY_POTS_APP_MSG_BAG_FULL: {
         String *berryName = GetNutName(unk->berryId, data->heapID);
         BufferString(data->msgFmt, 0, berryName, 0, 0, 2);
         String_Delete(berryName);
@@ -146,7 +146,7 @@ void ov17_022036FC(BerryPotsAppData *data, enum BerryPotsApp_022036FC_Action act
     StringExpandPlaceholders(data->msgFmt, data->currentStatusString, data->statusStrings[action]);
 }
 
-void ov17_022037C8(BerryPotsAppData *data, BOOL a1) {
+void BerryPotsApp_UpdateGrowthFromRTC(BerryPotsAppData *data, BOOL a1) {
     RTCDate date1;
     RTCDate date2;
     RTCTime time1;
@@ -163,67 +163,67 @@ void ov17_022037C8(BerryPotsAppData *data, BOOL a1) {
 
     u32 minutesDelta = (timestamp1 - timestamp2) / 60;
     if (minutesDelta > 0) {
-        ov16_02201760(data->berryPots, data->berryGrowthProperties, minutesDelta);
-        ov17_0220387C(data);
+        BerryPots_UpdateGrowth(data->berryPots, data->berryGrowthProperties, minutesDelta);
+        BerryPotsApp_RefreshPotData(data);
         BerryPots_SetBerryDatetime(data->berryDatetime, date1, time1);
         if (a1) {
-            ov17_02203928(data);
+            BerryPotsApp_StartGrowthAnims(data);
         }
     }
 }
 
-void ov17_0220387C(BerryPotsAppData *data) {
+void BerryPotsApp_RefreshPotData(BerryPotsAppData *data) {
     for (int i = 0; i < MAX_BERRY_POT; i++) {
-        data->unk20[i].unkB = data->unk20[i].berryId;
-        data->unk20[i].unkC = data->unk20[i].growthStage;
-        data->unk20[i].unkD = data->unk20[i].soilState;
+        data->pots[i].prevBerryId = data->pots[i].berryId;
+        data->pots[i].prevGrowthStage = data->pots[i].growthStage;
+        data->pots[i].prevSoilState = data->pots[i].soilState;
 
-        data->unk20[i].berryId = BerryPots_GetPotBerryId(data->berryPots, i);
-        data->unk20[i].growthStage = BerryPots_GetPotGrowthStage(data->berryPots, i);
-        data->unk20[i].unk2 = ov16_022015EC(data->berryPots, i);
-        data->unk20[i].moisture = BerryPots_GetPotMoisture(data->berryPots, i);
-        data->unk20[i].mulch = BerryPots_GetPotMulch(data->berryPots, i);
-        data->unk20[i].quantityOrYieldMaybe = ov16_02201668(data->berryPots, i);
-        data->unk20[i].unk6 = ov16_022015F8(data->berryPots, i);
-        data->unk20[i].unk8 = ov16_02201604(data->berryPots, i);
-        data->unk20[i].soilState = BerryPots_GetSoilState(data->berryPots, i);
+        data->pots[i].berryId = BerryPots_GetPotBerryId(data->berryPots, i);
+        data->pots[i].growthStage = BerryPots_GetPotGrowthStage(data->berryPots, i);
+        data->pots[i].health = BerryPots_GetPotHealth(data->berryPots, i);
+        data->pots[i].moisture = BerryPots_GetPotMoisture(data->berryPots, i);
+        data->pots[i].mulch = BerryPots_GetPotMulch(data->berryPots, i);
+        data->pots[i].quantityOrYieldMaybe = BerryPots_GetPotYield(data->berryPots, i);
+        data->pots[i].minutesToNextStage = BerryPots_GetPotMinutesToNextStage(data->berryPots, i);
+        data->pots[i].drainMinutes = BerryPots_GetPotDrainMinutes(data->berryPots, i);
+        data->pots[i].soilState = BerryPots_GetSoilState(data->berryPots, i);
     }
 }
 
-typedef struct SysTaskArgs_ov17_022039A0 {
+typedef struct BerryPotsGrowthAnimArgs {
     BerryPotsAppData *data;
     u8 potIndex;
-    u8 unk5;
+    u8 frame;
     u8 state;
-} SysTaskArgs_ov17_022039A0;
+} BerryPotsGrowthAnimArgs;
 
-static void ov17_022039A0(SysTask *task, SysTaskArgs_ov17_022039A0 *args);
+static void Task_BerryPotsApp_GrowthAnim(SysTask *task, BerryPotsGrowthAnimArgs *args);
 
-static void ov17_02203928(BerryPotsAppData *data) {
+static void BerryPotsApp_StartGrowthAnims(BerryPotsAppData *data) {
     for (int i = 0; i < MAX_BERRY_POT; i++) {
-        BerryPotsAppData_UnkSub20 *sub = &data->unk20[i];
+        BerryPotsAppPot *sub = &data->pots[i];
 
-        if (sub->soilState != sub->unkD) {
+        if (sub->soilState != sub->prevSoilState) {
             Sprite_SetAnimationFrame(data->sprites[3 + i], sub->soilState);
             if (sub->growthStage == BERRY_POT_GROWTH_STAGE_PLANTED) {
                 Sprite_SetAnimationFrame(sub->soilSpriteMaybe, sub->soilState);
             }
         }
 
-        if (sub->growthStage == sub->unkC) {
+        if (sub->growthStage == sub->prevGrowthStage) {
             continue;
         }
 
-        SysTaskArgs_ov17_022039A0 *args = Heap_Alloc(data->heapID, sizeof(SysTaskArgs_ov17_022039A0));
-        MI_CpuFill8(args, 0, sizeof(SysTaskArgs_ov17_022039A0));
+        BerryPotsGrowthAnimArgs *args = Heap_Alloc(data->heapID, sizeof(BerryPotsGrowthAnimArgs));
+        MI_CpuFill8(args, 0, sizeof(BerryPotsGrowthAnimArgs));
         args->data = data;
         args->potIndex = i;
-        SysTask_CreateOnMainQueue((SysTaskFunc)ov17_022039A0, args, 0);
+        SysTask_CreateOnMainQueue((SysTaskFunc)Task_BerryPotsApp_GrowthAnim, args, 0);
         data->runningTasks++;
     }
 }
 
-static void ov17_022039A0(SysTask *task, SysTaskArgs_ov17_022039A0 *args) {
+static void Task_BerryPotsApp_GrowthAnim(SysTask *task, BerryPotsGrowthAnimArgs *args) {
     BerryPotsAppData *data = args->data;
 
     switch (args->state) {
@@ -233,14 +233,14 @@ static void ov17_022039A0(SysTask *task, SysTaskArgs_ov17_022039A0 *args) {
         args->state++;
         break;
     case 1:
-        if (args->unk5++ == 15) {
-            ov17_02202A84(data, args->potIndex);
-            if (data->unk7C == args->potIndex) {
-                ov17_022028B8(data);
+        if (args->frame++ == 15) {
+            BerryPotsApp_UpdatePlantSprite(data, args->potIndex);
+            if (data->selectedPot == args->potIndex) {
+                BerryPotsApp_UpdateCursor(data);
             }
         }
 
-        if (args->unk5 >= 30) {
+        if (args->frame >= 30) {
             Sprite_SetDrawFlag(data->sprites[7 + args->potIndex], FALSE);
 
             data->runningTasks--;
@@ -252,43 +252,43 @@ static void ov17_022039A0(SysTask *task, SysTaskArgs_ov17_022039A0 *args) {
     }
 }
 
-u32 ov17_02203A34(BerryPotsAppData *data) {
+u32 BerryPotsApp_HandleSelectPotInput(BerryPotsAppData *data) {
     BOOL flag = FALSE;
-    u32 r0 = ov17_02203B68(data, &flag);
+    u32 r0 = BerryPotsApp_HandleSelectPotTouch(data, &flag);
     if (!flag) {
-        r0 = ov17_02203AD4(data);
+        r0 = BerryPotsApp_HandleSelectPotKeys(data);
     }
     return r0;
 }
 
-BOOL ov17_02203A54(BerryPotsAppData *data) {
+BOOL BerryPotsApp_HandleWateringInput(BerryPotsAppData *data) {
     BOOL flag = FALSE;
-    BOOL ret = ov17_02203C20(data, &flag);
+    BOOL ret = BerryPotsApp_HandleWateringTouch(data, &flag);
     if (!flag) {
-        ret = ov17_02203B88(data);
+        ret = BerryPotsApp_HandleWateringKeys(data);
     }
     return ret;
 }
 
-static u32 ov17_02203A74(BerryPotsAppData *data, u32 a1) {
+static u32 BerryPotsApp_SelectPotAction(BerryPotsAppData *data, u32 a1) {
     switch (a1) {
     case 0:
     case 1:
     case 2:
     case 3:
         PlaySE(SEQ_SE_DP_SELECT);
-        ov17_022028B8(data);
+        BerryPotsApp_UpdateCursor(data);
         break;
     case 4:
         if (data->runningTasks == 0) {
-            return ov17_02203D00(data);
+            return BerryPotsApp_GetPotMenuState(data);
         }
         break;
     case 5:
     default:
         if (data->runningTasks == 0) {
             PlaySE(SEQ_SE_DP_SELECT);
-            ov17_02202850(data, 1);
+            BerryPotsApp_DrawCancelButton(data, 1);
             return 1;
         }
         break;
@@ -297,7 +297,7 @@ static u32 ov17_02203A74(BerryPotsAppData *data, u32 a1) {
     return 2;
 }
 
-static u32 ov17_02203AD4(BerryPotsAppData *data) {
+static u32 BerryPotsApp_HandleSelectPotKeys(BerryPotsAppData *data) {
     BOOL flag = FALSE;
 
     if (gSystem.newKeys & (PAD_BUTTON_Y | PAD_BUTTON_X | PAD_KEY_DOWN | PAD_KEY_UP | PAD_KEY_LEFT | PAD_KEY_RIGHT | PAD_BUTTON_B | PAD_BUTTON_A)) {
@@ -307,43 +307,43 @@ static u32 ov17_02203AD4(BerryPotsAppData *data) {
     u32 newKeys = gSystem.newKeys;
 
     if (newKeys & PAD_BUTTON_B) {
-        return ov17_02203A74(data, 5);
+        return BerryPotsApp_SelectPotAction(data, 5);
     }
 
     if (newKeys & PAD_BUTTON_A) {
-        return ov17_02203A74(data, 4);
+        return BerryPotsApp_SelectPotAction(data, 4);
     }
 
     if (newKeys & PAD_KEY_LEFT) {
-        data->unk7C = (data->unk7C + (MAX_BERRY_POT - 1)) % MAX_BERRY_POT;
+        data->selectedPot = (data->selectedPot + (MAX_BERRY_POT - 1)) % MAX_BERRY_POT;
         flag = TRUE;
     } else if (newKeys & PAD_KEY_RIGHT) {
-        data->unk7C = (data->unk7C + 1) % MAX_BERRY_POT;
+        data->selectedPot = (data->selectedPot + 1) % MAX_BERRY_POT;
         flag = TRUE;
     }
 
     if (flag) {
-        return ov17_02203A74(data, data->unk7C);
+        return BerryPotsApp_SelectPotAction(data, data->selectedPot);
     } else {
         return 2;
     }
 }
 
-static u32 ov17_02203B68(BerryPotsAppData *data, BOOL *a1) {
-    int unk = ov17_02203CC8(data);
+static u32 BerryPotsApp_HandleSelectPotTouch(BerryPotsAppData *data, BOOL *a1) {
+    int unk = BerryPotsApp_GetSelectPotTouch(data);
     if (unk < 0) {
         return 2;
     }
 
     *a1 = TRUE;
     data->fieldMenuState = MENU_INPUT_STATE_TOUCH;
-    return ov17_02203A74(data, unk);
+    return BerryPotsApp_SelectPotAction(data, unk);
 }
 
-static BOOL ov17_02203B88(BerryPotsAppData *data) {
+static BOOL BerryPotsApp_HandleWateringKeys(BerryPotsAppData *data) {
     BOOL unk = FALSE;
 
-    if (data->unk81 != 0xFF) {
+    if (data->nextWateringPot != 0xFF) {
         return FALSE;
     }
 
@@ -352,50 +352,50 @@ static BOOL ov17_02203B88(BerryPotsAppData *data) {
     }
 
     if (gSystem.newKeys & PAD_KEY_LEFT) {
-        data->unk7C = (data->unk7C + (MAX_BERRY_POT - 1)) % MAX_BERRY_POT;
+        data->selectedPot = (data->selectedPot + (MAX_BERRY_POT - 1)) % MAX_BERRY_POT;
         unk = TRUE;
     } else if (gSystem.newKeys & PAD_KEY_RIGHT) {
-        data->unk7C = (data->unk7C + 1) % MAX_BERRY_POT;
+        data->selectedPot = (data->selectedPot + 1) % MAX_BERRY_POT;
         unk = TRUE;
     }
 
     if (unk) {
-        data->unk81 = data->unk7C;
+        data->nextWateringPot = data->selectedPot;
         Sprite_SetAnimActiveFlag(data->sprites[1], FALSE);
-        ov17_022028B8(data);
+        BerryPotsApp_UpdateCursor(data);
         return TRUE;
     }
 
     return FALSE;
 }
 
-static BOOL ov17_02203C20(BerryPotsAppData *data, BOOL *a1) {
-    if (data->unk81 != 0xFF) {
+static BOOL BerryPotsApp_HandleWateringTouch(BerryPotsAppData *data, BOOL *a1) {
+    if (data->nextWateringPot != 0xFF) {
         return FALSE;
     }
 
-    int unk = ov17_02203C78(data);
-    if (unk < 0 || data->unk7C == unk) {
+    int unk = BerryPotsApp_GetTouchedPot(data);
+    if (unk < 0 || data->selectedPot == unk) {
         return FALSE;
     }
 
     *a1 = TRUE;
     data->fieldMenuState = MENU_INPUT_STATE_TOUCH;
-    data->unk7C = unk;
-    data->unk81 = data->unk7C;
+    data->selectedPot = unk;
+    data->nextWateringPot = data->selectedPot;
     Sprite_SetAnimActiveFlag(data->sprites[1], FALSE);
-    ov17_022028B8(data);
+    BerryPotsApp_UpdateCursor(data);
 
     return TRUE;
 }
 
-static int ov17_02203C78(BerryPotsAppData *data) {
+static int BerryPotsApp_GetTouchedPot(BerryPotsAppData *data) {
     TouchscreenHitbox touchHitbox;
 
     for (int i = 0, xOffsetMaybe = 16; i < MAX_BERRY_POT; xOffsetMaybe += 28, i++) {
         touchHitbox.rect.left = xOffsetMaybe;
         touchHitbox.rect.right = touchHitbox.rect.left + 22;
-        if (data->unk20[i].growthStage < BERRY_POT_GROWTH_STAGE_GROWING) {
+        if (data->pots[i].growthStage < BERRY_POT_GROWTH_STAGE_GROWING) {
             touchHitbox.rect.top = 88;
             touchHitbox.rect.bottom = touchHitbox.rect.top + 24;
         } else {
@@ -410,23 +410,23 @@ static int ov17_02203C78(BerryPotsAppData *data) {
     return -1;
 }
 
-static int ov17_02203CC8(BerryPotsAppData *data) {
-    if (TouchscreenHitbox_TouchNewIsIn(&ov17_02203FC0)) {
+static int BerryPotsApp_GetSelectPotTouch(BerryPotsAppData *data) {
+    if (TouchscreenHitbox_TouchNewIsIn(&sBerryPotsCancelHitbox)) {
         return 5;
     }
 
-    int unk = ov17_02203C78(data);
+    int unk = BerryPotsApp_GetTouchedPot(data);
     if (unk >= 0) {
-        data->unk7C = unk;
-        ov17_022028B8(data);
+        data->selectedPot = unk;
+        BerryPotsApp_UpdateCursor(data);
         return 4;
     }
 
     return -1;
 }
 
-static u32 ov17_02203D00(BerryPotsAppData *data) {
-    BerryPotsAppData_UnkSub20 *unk = &data->unk20[data->unk7C];
+static u32 BerryPotsApp_GetPotMenuState(BerryPotsAppData *data) {
+    BerryPotsAppPot *unk = &data->pots[data->selectedPot];
     switch (unk->growthStage) {
     case BERRY_POT_GROWTH_STAGE_NONE:
         return (unk->mulch != MULCH_NONE) ? 4 : 3;
