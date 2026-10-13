@@ -133,15 +133,15 @@ void PokedexApp_FilterSeen(u16 *dst, u32 *count, const Pokedex *pokedex, const u
 void PokedexApp_StoreSearchResults(PokedexAppData_UnkSub0878 *result, const Pokedex *pokedex, const u16 *src, u32 count) {
     u32 i;
 
-    result->unk_7B4 = count;
-    result->unk_7B6 = 0;
+    result->count = count;
+    result->caughtCount = 0;
     for (i = 0; i < count; i++) {
-        result->unk_000[i][0] = src[i];
+        result->entries[i][0] = src[i];
         if (Pokedex_CheckMonCaughtFlag(pokedex, src[i])) {
-            result->unk_000[i][1] = 2;
-            result->unk_7B6++;
+            result->entries[i][1] = 2;
+            result->caughtCount++;
         } else {
-            result->unk_000[i][1] = 1;
+            result->entries[i][1] = 1;
         }
     }
 }
@@ -367,7 +367,7 @@ void PokedexApp_FilterByHeight(PokedexAppData *pokedexApp, u16 min, u16 max, u16
     }
     for (i = 0; i < srcCount; i++) {
         s32 height = ((s32 *)pokedexApp->heights)[src[i]];
-        if (height >= pokedexApp->sliderValues[min].unk_0 && height <= pokedexApp->sliderValues[max].unk_0 && Pokedex_CheckMonCaughtFlag(pokedex, src[i])) {
+        if (height >= pokedexApp->sliderValues[min].height && height <= pokedexApp->sliderValues[max].height && Pokedex_CheckMonCaughtFlag(pokedex, src[i])) {
             dst[*count] = src[i];
             (*count)++;
         }
@@ -384,7 +384,7 @@ void PokedexApp_FilterByWeight(PokedexAppData *pokedexApp, u16 min, u16 max, u16
     }
     for (i = 0; i < srcCount; i++) {
         s32 weight = ((s32 *)pokedexApp->weights)[src[i]];
-        if (weight >= pokedexApp->sliderValues[min].unk_2 && weight <= pokedexApp->sliderValues[max].unk_2 && Pokedex_CheckMonCaughtFlag(pokedex, src[i])) {
+        if (weight >= pokedexApp->sliderValues[min].weight && weight <= pokedexApp->sliderValues[max].weight && Pokedex_CheckMonCaughtFlag(pokedex, src[i])) {
             dst[*count] = src[i];
             (*count)++;
         }
@@ -428,20 +428,20 @@ u32 PokedexApp_GetListCursorIndex(PokedexAppData *pokedexApp) {
 
 u16 PokedexApp_GetCursorSpecies(PokedexAppData *pokedexApp) {
     int index = PokedexApp_GetListCursorIndex(pokedexApp);
-    return pokedexApp->listEntries[index].unk_0;
+    return pokedexApp->listEntries[index].species;
 }
 
 // Returns species if it is among the results, else the first result.
 u32 PokedexApp_FindSpeciesInResults(PokedexAppData_UnkSub0878 *results, u16 species) {
     u32 i;
     u16 first = 0;
-    u16 count = results->unk_7B4;
+    u16 count = results->count;
 
     for (i = 0; i < count; i++) {
         if (first == 0) {
-            first = results->unk_000[i][0];
+            first = results->entries[i][0];
         }
-        if (species == results->unk_000[i][0]) {
+        if (species == results->entries[i][0]) {
             return species;
         }
     }
@@ -455,28 +455,28 @@ void PokedexApp_BuildListEntries(PokedexAppData *pokedexApp, int mode) {
 
     MI_CpuClear32(pokedexApp->listEntries, sizeof(pokedexApp->listEntries));
     if (mode == 1) {
-        for (i = 0; i < pokedexApp->searchResults.unk_7B4; i++) {
-            u32 dexNo = Pokedex_ConvertToCurrentDexNo(pokedexApp->dexMode, pokedexApp->searchResults.unk_000[i][0]);
+        for (i = 0; i < pokedexApp->searchResults.count; i++) {
+            u32 dexNo = Pokedex_ConvertToCurrentDexNo(pokedexApp->dexMode, pokedexApp->searchResults.entries[i][0]);
             PokedexAppData *shifted;
             dexNo--;
             // addressed through the app pointer shifted by dexNo entries (listEntries[dexNo] changes the code)
             shifted = (PokedexAppData *)((u8 *)pokedexApp + dexNo * sizeof(PokedexAppData_UnkSub1030));
-            shifted->listEntries[0].unk_0 = pokedexApp->searchResults.unk_000[i][0];
-            shifted->listEntries[0].unk_2 = pokedexApp->searchResults.unk_000[i][1];
+            shifted->listEntries[0].species = pokedexApp->searchResults.entries[i][0];
+            shifted->listEntries[0].caughtState = pokedexApp->searchResults.entries[i][1];
         }
     } else {
-        for (i = 0; i < pokedexApp->searchResults.unk_7B4; i++) {
-            pokedexApp->listEntries[i + 1].unk_0 = pokedexApp->searchResults.unk_000[i][0];
-            pokedexApp->listEntries[i + 1].unk_2 = pokedexApp->searchResults.unk_000[i][1];
+        for (i = 0; i < pokedexApp->searchResults.count; i++) {
+            pokedexApp->listEntries[i + 1].species = pokedexApp->searchResults.entries[i][0];
+            pokedexApp->listEntries[i + 1].caughtState = pokedexApp->searchResults.entries[i][1];
         }
     }
 }
 
 u32 PokedexApp_GetListLength(PokedexAppData *pokedexApp, int mode) {
     if (mode == 0) {
-        return pokedexApp->searchResults.unk_7B4;
+        return pokedexApp->searchResults.count;
     }
-    return Pokedex_ConvertToCurrentDexNo(pokedexApp->dexMode, pokedexApp->searchResults.unk_000[pokedexApp->searchResults.unk_7B4 - 1][0]);
+    return Pokedex_ConvertToCurrentDexNo(pokedexApp->dexMode, pokedexApp->searchResults.entries[pokedexApp->searchResults.count - 1][0]);
 }
 
 u32 PokedexApp_GetLastListPage(PokedexAppData *pokedexApp, int mode) {

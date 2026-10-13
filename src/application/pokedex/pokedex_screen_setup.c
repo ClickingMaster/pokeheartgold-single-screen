@@ -1066,7 +1066,7 @@ u16 *PokedexApp_BuildListNumberTilemap(PokedexAppData *pokedexApp, u32 a1) {
             if (r1 >= sp10) {
                 break;
             }
-            if (pokedexApp->listEntries[r1].unk_2 == 2) {
+            if (pokedexApp->listEntries[r1].caughtState == 2) {
                 ret[160 * i + 36 + 5 * j] = 0x1002;
                 PokedexApp_3DigitNumToTiles(&ret[160 * i + 37 + 5 * j], r1 + 1, 3);
             } else {
@@ -1086,11 +1086,11 @@ u16 *PokedexApp_BuildSearchResultNumberTilemap(PokedexAppData *pokedexApp, u32 a
         MI_CpuCopy16(sp14, &ret[160 * i], 160 * sizeof(u16));
         for (u16 j = 0; j < 5; ++j) {
             u32 sp4 = a1 + 5 * i + j;
-            if (pokedexApp->listEntries[sp4].unk_0 == SPECIES_NONE) {
+            if (pokedexApp->listEntries[sp4].species == SPECIES_NONE) {
                 continue;
             }
-            u32 r1 = Pokedex_ConvertToCurrentDexNo(pokedexApp->dexMode, pokedexApp->listEntries[sp4].unk_0);
-            if (pokedexApp->listEntries[sp4].unk_2 == 2) {
+            u32 r1 = Pokedex_ConvertToCurrentDexNo(pokedexApp->dexMode, pokedexApp->listEntries[sp4].species);
+            if (pokedexApp->listEntries[sp4].caughtState == 2) {
                 ret[160 * i + 36 + 5 * j] = 0x1002;
                 PokedexApp_3DigitNumToTiles(&ret[160 * i + 37 + 5 * j], r1, 3);
             } else {
@@ -1837,40 +1837,40 @@ void PokedexApp_FreeSizeData(PokedexAppData *pokedexApp) {
 }
 
 void PokedexApp_BuildAreaList(PokedexAppData *pokedexApp, int a1, int a2) {
-    PokedexApp_LoadEncounterMaps(&pokedexApp->areaList.unk_00, pokedexApp->curSpecies, a1 + 4);
-    PokedexApp_LoadEncounterMaps(&pokedexApp->areaList.unk_08, pokedexApp->curSpecies, 7);
-    PokedexApp_LoadEncounterMaps(&pokedexApp->areaList.unk_10, pokedexApp->curSpecies, a1);
-    PokedexApp_LoadEncounterMaps(&pokedexApp->areaList.unk_18, pokedexApp->curSpecies, 3);
+    PokedexApp_LoadEncounterMaps(&pokedexApp->areaList.overworldByTime, pokedexApp->curSpecies, a1 + 4);
+    PokedexApp_LoadEncounterMaps(&pokedexApp->areaList.overworldOther, pokedexApp->curSpecies, 7);
+    PokedexApp_LoadEncounterMaps(&pokedexApp->areaList.dungeonByTime, pokedexApp->curSpecies, a1);
+    PokedexApp_LoadEncounterMaps(&pokedexApp->areaList.dungeonOther, pokedexApp->curSpecies, 3);
 
     u32 nMaps = 1;
-    nMaps += pokedexApp->areaList.unk_00.nMaps - 1;
-    nMaps += pokedexApp->areaList.unk_08.nMaps - 1;
-    nMaps += pokedexApp->areaList.unk_10.nMaps - 1;
-    nMaps += pokedexApp->areaList.unk_18.nMaps - 1;
+    nMaps += pokedexApp->areaList.overworldByTime.nMaps - 1;
+    nMaps += pokedexApp->areaList.overworldOther.nMaps - 1;
+    nMaps += pokedexApp->areaList.dungeonByTime.nMaps - 1;
+    nMaps += pokedexApp->areaList.dungeonOther.nMaps - 1;
 
-    pokedexApp->areaList.unk_20.maps = Heap_Alloc(HEAP_ID_POKEDEX_APP, sizeof(u32) * nMaps);
-    pokedexApp->areaList.unk_28 = Heap_Alloc(HEAP_ID_POKEDEX_APP, sizeof(u32) * nMaps);
-    MI_CpuClear32(pokedexApp->areaList.unk_20.maps, sizeof(u32) * nMaps);
-    MI_CpuClear32(pokedexApp->areaList.unk_28, sizeof(u32) * nMaps);
-    pokedexApp->areaList.unk_20.maps[0] = -2;
-    pokedexApp->areaList.unk_20.nMaps = 1;
-    pokedexApp->areaList.unk_28[0] = 0;
+    pokedexApp->areaList.areas.maps = Heap_Alloc(HEAP_ID_POKEDEX_APP, sizeof(u32) * nMaps);
+    pokedexApp->areaList.areaSources = Heap_Alloc(HEAP_ID_POKEDEX_APP, sizeof(u32) * nMaps);
+    MI_CpuClear32(pokedexApp->areaList.areas.maps, sizeof(u32) * nMaps);
+    MI_CpuClear32(pokedexApp->areaList.areaSources, sizeof(u32) * nMaps);
+    pokedexApp->areaList.areas.maps[0] = -2;
+    pokedexApp->areaList.areas.nMaps = 1;
+    pokedexApp->areaList.areaSources[0] = 0;
 
-    PokedexApp_AddOverworldAreas(pokedexApp, &pokedexApp->areaList.unk_00, a2, 0);
-    PokedexApp_AddOverworldAreas(pokedexApp, &pokedexApp->areaList.unk_08, a2, 1);
-    u32 r6 = pokedexApp->areaList.unk_20.nMaps;
-    PokedexApp_AddDungeonAreas(pokedexApp, &pokedexApp->areaList.unk_10, a2, r6, 0);
-    PokedexApp_AddDungeonAreas(pokedexApp, &pokedexApp->areaList.unk_18, a2, r6, 1);
+    PokedexApp_AddOverworldAreas(pokedexApp, &pokedexApp->areaList.overworldByTime, a2, 0);
+    PokedexApp_AddOverworldAreas(pokedexApp, &pokedexApp->areaList.overworldOther, a2, 1);
+    u32 r6 = pokedexApp->areaList.areas.nMaps;
+    PokedexApp_AddDungeonAreas(pokedexApp, &pokedexApp->areaList.dungeonByTime, a2, r6, 0);
+    PokedexApp_AddDungeonAreas(pokedexApp, &pokedexApp->areaList.dungeonOther, a2, r6, 1);
     PokedexApp_SortAreaList(pokedexApp);
 }
 
 void PokedexApp_FreeAreaList(PokedexAppData *pokedexApp) {
-    Heap_Free(pokedexApp->areaList.unk_00.maps);
-    Heap_Free(pokedexApp->areaList.unk_08.maps);
-    Heap_Free(pokedexApp->areaList.unk_10.maps);
-    Heap_Free(pokedexApp->areaList.unk_18.maps);
-    Heap_Free(pokedexApp->areaList.unk_20.maps);
-    Heap_Free(pokedexApp->areaList.unk_28);
+    Heap_Free(pokedexApp->areaList.overworldByTime.maps);
+    Heap_Free(pokedexApp->areaList.overworldOther.maps);
+    Heap_Free(pokedexApp->areaList.dungeonByTime.maps);
+    Heap_Free(pokedexApp->areaList.dungeonOther.maps);
+    Heap_Free(pokedexApp->areaList.areas.maps);
+    Heap_Free(pokedexApp->areaList.areaSources);
 }
 
 static void PokedexApp_LoadEncounterMaps(PokedexAppData_UnkSub18DC_0 *a0, u16 species, int a2) {
@@ -1914,26 +1914,26 @@ static void PokedexApp_AddOverworldAreas(PokedexAppData *pokedexApp, PokedexAppD
 
     if (a2 == 0) {
         for (i = 0; i < a1->nMaps - 1; ++i) {
-            if (pokedexApp->overworldAreaTable[a1->maps[i]].unk_00 >= 22) {
+            if (pokedexApp->overworldAreaTable[a1->maps[i]].x >= 22) {
                 continue;
             }
-            for (j = 0; j < pokedexApp->areaList.unk_20.nMaps; ++j) {
-                if (pokedexApp->areaList.unk_20.maps[j] == a1->maps[i]) {
-                    pokedexApp->areaList.unk_28[j] |= 1 << a3;
+            for (j = 0; j < pokedexApp->areaList.areas.nMaps; ++j) {
+                if (pokedexApp->areaList.areas.maps[j] == a1->maps[i]) {
+                    pokedexApp->areaList.areaSources[j] |= 1 << a3;
                     break;
                 }
             }
-            if (j == pokedexApp->areaList.unk_20.nMaps) {
-                pokedexApp->areaList.unk_20.maps[pokedexApp->areaList.unk_20.nMaps] = a1->maps[i];
-                pokedexApp->areaList.unk_28[pokedexApp->areaList.unk_20.nMaps] = 1 << a3;
-                ++pokedexApp->areaList.unk_20.nMaps;
+            if (j == pokedexApp->areaList.areas.nMaps) {
+                pokedexApp->areaList.areas.maps[pokedexApp->areaList.areas.nMaps] = a1->maps[i];
+                pokedexApp->areaList.areaSources[pokedexApp->areaList.areas.nMaps] = 1 << a3;
+                ++pokedexApp->areaList.areas.nMaps;
             }
         }
     } else {
         u32 mapId;
         for (i = 0; i < a1->nMaps - 1; ++i) {
             mapId = a1->maps[i];
-            if (pokedexApp->overworldAreaTable[a1->maps[i]].unk_00 < 22) {
+            if (pokedexApp->overworldAreaTable[a1->maps[i]].x < 22) {
                 continue;
             }
             if (PokedexApp_IsRoute2Area(mapId) == TRUE) {
@@ -1941,16 +1941,16 @@ static void PokedexApp_AddOverworldAreas(PokedexAppData *pokedexApp, PokedexAppD
             } else if (PokedexApp_IsRoute16Area(mapId) == TRUE) {
                 mapId = PokedexApp_GetRoute16AreaIndex();
             }
-            for (j = 0; j < pokedexApp->areaList.unk_20.nMaps; ++j) {
-                if (pokedexApp->areaList.unk_20.maps[j] == mapId) {
-                    pokedexApp->areaList.unk_28[j] |= 1 << a3;
+            for (j = 0; j < pokedexApp->areaList.areas.nMaps; ++j) {
+                if (pokedexApp->areaList.areas.maps[j] == mapId) {
+                    pokedexApp->areaList.areaSources[j] |= 1 << a3;
                     break;
                 }
             }
-            if (j == pokedexApp->areaList.unk_20.nMaps) {
-                pokedexApp->areaList.unk_20.maps[pokedexApp->areaList.unk_20.nMaps] = mapId;
-                pokedexApp->areaList.unk_28[pokedexApp->areaList.unk_20.nMaps] = 1 << a3;
-                ++pokedexApp->areaList.unk_20.nMaps;
+            if (j == pokedexApp->areaList.areas.nMaps) {
+                pokedexApp->areaList.areas.maps[pokedexApp->areaList.areas.nMaps] = mapId;
+                pokedexApp->areaList.areaSources[pokedexApp->areaList.areas.nMaps] = 1 << a3;
+                ++pokedexApp->areaList.areas.nMaps;
             }
         }
     }
@@ -1962,36 +1962,36 @@ static void PokedexApp_AddDungeonAreas(PokedexAppData *pokedexApp, PokedexAppDat
 
     if (a2 == 0) {
         for (i = 0; i < a1->nMaps - 1; ++i) {
-            if (pokedexApp->dungeonAreaTable[a1->maps[i]].unk_00 >= 22) {
+            if (pokedexApp->dungeonAreaTable[a1->maps[i]].x >= 22) {
                 continue;
             }
-            for (j = a3; j < pokedexApp->areaList.unk_20.nMaps; ++j) {
-                if (pokedexApp->areaList.unk_20.maps[j] == a1->maps[i]) {
-                    pokedexApp->areaList.unk_28[j] |= 1 << a4;
+            for (j = a3; j < pokedexApp->areaList.areas.nMaps; ++j) {
+                if (pokedexApp->areaList.areas.maps[j] == a1->maps[i]) {
+                    pokedexApp->areaList.areaSources[j] |= 1 << a4;
                     break;
                 }
             }
-            if (j == pokedexApp->areaList.unk_20.nMaps) {
-                pokedexApp->areaList.unk_20.maps[pokedexApp->areaList.unk_20.nMaps] = a1->maps[i];
-                pokedexApp->areaList.unk_28[pokedexApp->areaList.unk_20.nMaps] = 0x80000000 + (1 << a4);
-                ++pokedexApp->areaList.unk_20.nMaps;
+            if (j == pokedexApp->areaList.areas.nMaps) {
+                pokedexApp->areaList.areas.maps[pokedexApp->areaList.areas.nMaps] = a1->maps[i];
+                pokedexApp->areaList.areaSources[pokedexApp->areaList.areas.nMaps] = 0x80000000 + (1 << a4);
+                ++pokedexApp->areaList.areas.nMaps;
             }
         }
     } else {
         for (i = 0; i < a1->nMaps - 1; ++i) {
-            if (pokedexApp->dungeonAreaTable[a1->maps[i]].unk_00 < 22) {
+            if (pokedexApp->dungeonAreaTable[a1->maps[i]].x < 22) {
                 continue;
             }
-            for (j = a3; j < pokedexApp->areaList.unk_20.nMaps; ++j) {
-                if (pokedexApp->areaList.unk_20.maps[j] == a1->maps[i]) {
-                    pokedexApp->areaList.unk_28[j] |= 1 << a4;
+            for (j = a3; j < pokedexApp->areaList.areas.nMaps; ++j) {
+                if (pokedexApp->areaList.areas.maps[j] == a1->maps[i]) {
+                    pokedexApp->areaList.areaSources[j] |= 1 << a4;
                     break;
                 }
             }
-            if (j == pokedexApp->areaList.unk_20.nMaps) {
-                pokedexApp->areaList.unk_20.maps[pokedexApp->areaList.unk_20.nMaps] = a1->maps[i];
-                pokedexApp->areaList.unk_28[pokedexApp->areaList.unk_20.nMaps] = 0x80000000 + (1 << a4);
-                ++pokedexApp->areaList.unk_20.nMaps;
+            if (j == pokedexApp->areaList.areas.nMaps) {
+                pokedexApp->areaList.areas.maps[pokedexApp->areaList.areas.nMaps] = a1->maps[i];
+                pokedexApp->areaList.areaSources[pokedexApp->areaList.areas.nMaps] = 0x80000000 + (1 << a4);
+                ++pokedexApp->areaList.areas.nMaps;
             }
         }
     }
@@ -2014,21 +2014,21 @@ static void PokedexApp_SortAreaList(PokedexAppData *pokedexApp) {
     u16 i;
     u16 j;
 
-    for (i = 1; i < pokedexApp->areaList.unk_20.nMaps - 1; ++i) {
+    for (i = 1; i < pokedexApp->areaList.areas.nMaps - 1; ++i) {
         r6 = PokedexApp_GetAreaMapId(pokedexApp, i);
-        for (j = i + 1; j < pokedexApp->areaList.unk_20.nMaps; ++j) {
+        for (j = i + 1; j < pokedexApp->areaList.areas.nMaps; ++j) {
             r7 = PokedexApp_GetAreaMapId(pokedexApp, j);
             if (PokedexApp_GetAlphabeticalMapIndex(r6) > PokedexApp_GetAlphabeticalMapIndex(r7)) {
                 s32 r3;
                 u32 r3_2;
 
-                r3 = pokedexApp->areaList.unk_20.maps[i];
-                pokedexApp->areaList.unk_20.maps[i] = pokedexApp->areaList.unk_20.maps[j];
-                pokedexApp->areaList.unk_20.maps[j] = r3;
+                r3 = pokedexApp->areaList.areas.maps[i];
+                pokedexApp->areaList.areas.maps[i] = pokedexApp->areaList.areas.maps[j];
+                pokedexApp->areaList.areas.maps[j] = r3;
 
-                r3_2 = pokedexApp->areaList.unk_28[i];
-                pokedexApp->areaList.unk_28[i] = pokedexApp->areaList.unk_28[j];
-                pokedexApp->areaList.unk_28[j] = r3_2;
+                r3_2 = pokedexApp->areaList.areaSources[i];
+                pokedexApp->areaList.areaSources[i] = pokedexApp->areaList.areaSources[j];
+                pokedexApp->areaList.areaSources[j] = r3_2;
 
                 r6 = r7;
             }
@@ -2037,21 +2037,21 @@ static void PokedexApp_SortAreaList(PokedexAppData *pokedexApp) {
 }
 
 BOOL PokedexApp_IsDungeonArea(PokedexAppData *pokedexApp, u32 a1) {
-    if (pokedexApp->areaList.unk_28[a1] & 0x80000000) {
+    if (pokedexApp->areaList.areaSources[a1] & 0x80000000) {
         return TRUE;
     }
     return FALSE;
 }
 
 u32 PokedexApp_GetAreaEncounterFlag(PokedexAppData *pokedexApp, u32 a1, u32 a2) {
-    return pokedexApp->areaList.unk_28[a1] & (1 << a2);
+    return pokedexApp->areaList.areaSources[a1] & (1 << a2);
 }
 
 u32 PokedexApp_GetAreaMapId(PokedexAppData *pokedexApp, u32 a1) {
     if (PokedexApp_IsDungeonArea(pokedexApp, a1) == FALSE) { // explicit comparison required to match
-        return PokedexApp_GetOverworldMapId(pokedexApp->areaList.unk_20.maps[a1]);
+        return PokedexApp_GetOverworldMapId(pokedexApp->areaList.areas.maps[a1]);
     } else {
-        return PokedexApp_GetDungeonMapId(pokedexApp->areaList.unk_20.maps[a1]);
+        return PokedexApp_GetDungeonMapId(pokedexApp->areaList.areas.maps[a1]);
     }
 }
 

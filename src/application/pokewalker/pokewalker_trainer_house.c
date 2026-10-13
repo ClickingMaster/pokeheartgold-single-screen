@@ -31,16 +31,16 @@ BOOL PokewalkerApp_IsEventLogInvalid(PokewalkerIrRecord *records) {
             if (records->eventType >= 30) {
                 return TRUE;
             }
-            species = records->unk_0A;
+            species = records->species;
             if (species == SPECIES_NONE) {
                 return TRUE;
             }
-            if ((u16)(records->unk_08 + minusSeven) <= 1) { // 7 or 8
-                if (species > maxSpecies || records->unk_0C > maxSpecies) {
+            if ((u16)(records->gameVersion + minusSeven) <= 1) { // 7 or 8
+                if (species > maxSpecies || records->peerSpecies > maxSpecies) {
                     return TRUE;
                 }
             }
-            if (records->unk_76 >= 8) {
+            if (records->course >= 8) {
                 return TRUE;
             }
         }

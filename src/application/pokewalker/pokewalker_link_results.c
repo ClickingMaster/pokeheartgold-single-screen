@@ -46,25 +46,25 @@ void PokewalkerApp_AddPeerTrainerHouseSets(PokewalkerApp *app) {
 
 void PokewalkerApp_UpdateSavedSteps(PokewalkerApp *app) {
     u32 steps;
-    Pokewalker_GetStepsAndWatts(app->pokewalker, &app->walkerSteps, &app->unk_1D75C);
-    steps = app->peerIdentity.unk_64;
+    Pokewalker_GetStepsAndWatts(app->pokewalker, &app->walkerSteps, &app->walkerWatts);
+    steps = app->peerIdentity.steps;
     if (steps < app->walkerSteps) {
-        Pokewalker_SetStepsAddWatts(app->pokewalker, app->walkerSteps, app->irStatus.unk_0A);
+        Pokewalker_SetStepsAddWatts(app->pokewalker, app->walkerSteps, app->irStatus.watts);
     } else {
-        Pokewalker_SetStepsAddWatts(app->pokewalker, steps, app->irStatus.unk_0A);
+        Pokewalker_SetStepsAddWatts(app->pokewalker, steps, app->irStatus.watts);
     }
 }
 
 #pragma force_active reset
 
 void PokewalkerApp_AddSavedTotal(PokewalkerApp *app) {
-    Pokewalker_GetStepsAndWatts(app->pokewalker, &app->walkerSteps, &app->unk_1D75C);
-    Pokewalker_SetStepsAddWatts(app->pokewalker, app->walkerSteps, app->irStatus.unk_0A);
+    Pokewalker_GetStepsAndWatts(app->pokewalker, &app->walkerSteps, &app->walkerWatts);
+    Pokewalker_SetStepsAddWatts(app->pokewalker, app->walkerSteps, app->irStatus.watts);
 }
 
 BOOL PokewalkerApp_IsWalkerMonValid(PokewalkerApp *app) {
     u16 species;
-    if (app->peerIdentity.unk_5B_2 == 1) {
+    if (app->peerIdentity.hasWalkerMon == 1) {
         species = app->walkerMon.species;
         if (species == SPECIES_NONE || species > NATIONAL_DEX_COUNT) {
             return FALSE;
@@ -115,14 +115,14 @@ int PokewalkerApp_Link_UpdateReceive(PokewalkerApp *app) {
         break;
     case 15: // done
         ManagedSprite_SetDrawFlag(app->sprites[2], FALSE);
-        if (PokewalkerApp_IsWalkerMonValid(app) && app->peerIdentity.unk_5B_2 == 1) {
+        if (PokewalkerApp_IsWalkerMonValid(app) && app->peerIdentity.hasWalkerMon == 1) {
             GetSpeciesNameIntoArray(app->walkerMon.species, HEAP_ID_154, app->walkerMonNickname);
         }
         PokewalkerApp_InitMotion(app, LINK_MOTION(app), 1);
         PokewalkerApp_AddPeerTrainerHouseSets(app);
         PokewalkerApp_UpdateSavedSteps(app);
         PokewalkerApp_AddStrollToEventLog(app);
-        app->strollSteps = app->peerIdentity.unk_64 - app->walkerSteps;
+        app->strollSteps = app->peerIdentity.steps - app->walkerSteps;
         return 37;
     }
 
@@ -163,7 +163,7 @@ void PokewalkerApp_AddStrollToEventLog(PokewalkerApp *app) {
     params.mon.form = app->walkerMon.form;
     params.mon.gender = app->walkerMon.gender;
     params.mon.isShiny = app->walkerMon.isShiny;
-    u32 steps = app->peerIdentity.unk_64;
+    u32 steps = app->peerIdentity.steps;
     u32 savedSteps = app->walkerSteps;
     if (steps < savedSteps) {
         params.steps = 0;
@@ -261,8 +261,8 @@ int PokewalkerApp_Link_StartSendStroll(PokewalkerApp *app) {
     PokewalkerApp_BuildSendStrollData(app);
     PokewalkerIr_RequestSendStroll((u8 *)&app->strollData, (u8 *)&app->unk_F1D0, (u8 *)&app->irStatus, (u8 *)&app->irBlocks);
     PokewalkerApp_StartLink(app);
-    if (app->unk_1E42C) {
-        PokewalkerApp_LoadMonPicture(app->unk_1E42C, app->monSpriteBuffer, &app->monPicTemplate, 0);
+    if (app->strollPartyMon) {
+        PokewalkerApp_LoadMonPicture(app->strollPartyMon, app->monSpriteBuffer, &app->monPicTemplate, 0);
     } else {
         PokewalkerApp_LoadMonPicture(app->strollMon, app->monSpriteBuffer, &app->monPicTemplate, 0);
     }
@@ -327,7 +327,7 @@ int PokewalkerApp_Link_UpdateSendStroll(PokewalkerApp *app) {
         break;
     case 15: // done
         ManagedSprite_SetDrawFlag(app->sprites[2], FALSE);
-        Pokewalker_GetStepsAndWatts(app->pokewalker, &app->walkerSteps, &app->unk_1D75C);
+        Pokewalker_GetStepsAndWatts(app->pokewalker, &app->walkerSteps, &app->walkerWatts);
         PokewalkerApp_UpdateSavedSteps(app);
         Pokewalker_IncrementLinkCount(app->pokewalker);
         PokewalkerApp_HideSprite(app, 8);
@@ -455,7 +455,7 @@ int PokewalkerApp_Link_PrintWentToWalker(PokewalkerApp *app) {
         MIi_CpuClearFast(0, (u32 *)&app->irBlocks.giftMon, sizeof(PokewalkerIrGiftMon));
         app->irBlocks.flags.hasGiftMon = FALSE;
     }
-    boxMon = app->unk_1E42C;
+    boxMon = app->strollPartyMon;
     if (boxMon) {
         BufferBoxMonNickname(app->msgFormat, 1, boxMon);
     } else {
@@ -520,13 +520,13 @@ int PokewalkerApp_Link_WaitReturned(PokewalkerApp *app) {
         if (!IsFanfarePlaying()) {
             if (!PokewalkerApp_IsWalkerMonValid(app)) {
                 MIi_CpuClearFast(0, (u32 *)&app->walkerMon, sizeof(PokewalkerMon));
-                app->peerIdentity.unk_5B_2 = 0;
+                app->peerIdentity.hasWalkerMon = 0;
             }
             if (!PokewalkerApp_IsGiftMonValid(app)) {
                 MIi_CpuClearFast(0, (u32 *)&app->irBlocks.giftMon, sizeof(PokewalkerIrGiftMon));
                 app->irBlocks.flags.hasGiftMon = FALSE;
             }
-            if (PokewalkerApp_IsWalkerMonInSave(app) || app->irBlocks.flags.hasGiftMon || app->irBlocks.flags.hasGiftItem || app->peerIdentity.unk_5B_2) {
+            if (PokewalkerApp_IsWalkerMonInSave(app) || app->irBlocks.flags.hasGiftMon || app->irBlocks.flags.hasGiftItem || app->peerIdentity.hasWalkerMon) {
                 app->nextMode = 6;
                 return 66;
             }

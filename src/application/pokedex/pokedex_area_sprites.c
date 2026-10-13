@@ -49,9 +49,9 @@ void PokedexApp_UpdateTimeOfDayCursor(PokedexAppData *pokedexApp) {
 }
 
 void PokedexApp_SetupAreaListScrollbar(PokedexAppData *pokedexApp) {
-    PokedexApp_SetScrollbarSizeAnim(pokedexApp, 5, (s8)pokedexApp->areaList.unk_20.nMaps, ov18_021FA35A, 9);
+    PokedexApp_SetScrollbarSizeAnim(pokedexApp, 5, (s8)pokedexApp->areaList.areas.nMaps, ov18_021FA35A, 9);
     PokedexApp_SyncAreaScrollbar(pokedexApp);
-    PokedexApp_UpdateScrollArrows(pokedexApp, pokedexApp->areaListPos, (s8)pokedexApp->areaList.unk_20.nMaps, 6);
+    PokedexApp_UpdateScrollArrows(pokedexApp, pokedexApp->areaListPos, (s8)pokedexApp->areaList.areas.nMaps, 6);
 }
 
 // The player's map position (args x, y in map blocks) marks the area map; the Kanto page starts at block 22.
@@ -108,8 +108,8 @@ void PokedexApp_GetOverworldMarkerPos(PokedexAppData *pokedexApp, int mapIndex, 
         width = 1;
         height = 3;
     } else if (PokedexApp_GetOverworldMapId(mapIndex) == 18) {
-        x = pokedexApp->overworldAreaTable[mapIndex].unk_00;
-        y = pokedexApp->overworldAreaTable[mapIndex].unk_01;
+        x = pokedexApp->overworldAreaTable[mapIndex].x;
+        y = pokedexApp->overworldAreaTable[mapIndex].y;
         width = 1;
         height = 2;
     } else if (PokedexApp_IsRoute16Area(mapIndex) == TRUE) {
@@ -118,10 +118,10 @@ void PokedexApp_GetOverworldMarkerPos(PokedexAppData *pokedexApp, int mapIndex, 
         width = 2;
         height = 1;
     } else {
-        x = pokedexApp->overworldAreaTable[mapIndex].unk_00;
-        y = pokedexApp->overworldAreaTable[mapIndex].unk_01;
-        width = pokedexApp->overworldAreaTable[mapIndex].unk_02;
-        height = pokedexApp->overworldAreaTable[mapIndex].unk_03;
+        x = pokedexApp->overworldAreaTable[mapIndex].x;
+        y = pokedexApp->overworldAreaTable[mapIndex].y;
+        width = pokedexApp->overworldAreaTable[mapIndex].width;
+        height = pokedexApp->overworldAreaTable[mapIndex].height;
     }
     if (width == 1) {
         if (height == 1) {
@@ -166,8 +166,8 @@ void PokedexApp_GetOverworldMarkerPos(PokedexAppData *pokedexApp, int mapIndex, 
 void PokedexApp_GetDungeonMarkerPos(PokedexAppData *pokedexApp, u32 mapIndex, s16 *outX, s16 *outY, u8 *shape) {
     u32 mapId;
 
-    *outX = (pokedexApp->dungeonAreaTable[mapIndex].unk_00 - pokedexApp->areaRegion * 22) * 8 + 68;
-    *outY = pokedexApp->dungeonAreaTable[mapIndex].unk_01 * 8 + 44;
+    *outX = (pokedexApp->dungeonAreaTable[mapIndex].x - pokedexApp->areaRegion * 22) * 8 + 68;
+    *outY = pokedexApp->dungeonAreaTable[mapIndex].y * 8 + 44;
     mapId = PokedexApp_GetDungeonMapId(mapIndex);
 
     if (mapId == 0x7C || mapId == 0xB2 || mapId == 0xB3) {
@@ -213,12 +213,12 @@ void PokedexApp_UpdateAreaMarkers(PokedexAppData *pokedexApp) {
     PokedexApp_GetSpritePos(pokedexApp, 2, &local.playerX, &local.playerY, 2);
     local.specialAreas = 0;
     if (pokedexApp->areaListPos == 0) {
-        for (i = 1; i < pokedexApp->areaList.unk_20.nMaps; i++) {
+        for (i = 1; i < pokedexApp->areaList.areas.nMaps; i++) {
             if (!PokedexApp_IsDungeonArea(pokedexApp, i)) {
-                PokedexApp_GetOverworldMarkerPos(pokedexApp, pokedexApp->areaList.unk_20.maps[i], &local.marker.x, &local.marker.y, &local.marker.shape);
+                PokedexApp_GetOverworldMarkerPos(pokedexApp, pokedexApp->areaList.areas.maps[i], &local.marker.x, &local.marker.y, &local.marker.shape);
             } else {
-                PokedexApp_GetDungeonMarkerPos(pokedexApp, pokedexApp->areaList.unk_20.maps[i], &local.marker.x, &local.marker.y, &local.marker.shape);
-                PokedexApp_GetSpecialAreaMarkers(PokedexApp_GetDungeonMapId(pokedexApp->areaList.unk_20.maps[i]), &local.specialAreas);
+                PokedexApp_GetDungeonMarkerPos(pokedexApp, pokedexApp->areaList.areas.maps[i], &local.marker.x, &local.marker.y, &local.marker.shape);
+                PokedexApp_GetSpecialAreaMarkers(PokedexApp_GetDungeonMapId(pokedexApp->areaList.areas.maps[i]), &local.specialAreas);
             }
             PokedexApp_SetSpritePos(pokedexApp, i + 8, local.marker.x, local.marker.y, 2);
             PokedexApp_SetSpriteAnim(pokedexApp, i + 8, local.marker.shape);
@@ -244,7 +244,7 @@ void PokedexApp_UpdateAreaMarkers(PokedexAppData *pokedexApp) {
     } else {
         PokedexApp_HideAreaMarkers(pokedexApp);
         if (!PokedexApp_IsDungeonArea(pokedexApp, pokedexApp->areaListPos)) {
-            PokedexApp_GetOverworldMarkerPos(pokedexApp, pokedexApp->areaList.unk_20.maps[pokedexApp->areaListPos], &local.marker.x, &local.marker.y, &local.marker.shape);
+            PokedexApp_GetOverworldMarkerPos(pokedexApp, pokedexApp->areaList.areas.maps[pokedexApp->areaListPos], &local.marker.x, &local.marker.y, &local.marker.shape);
             PokedexApp_SetSpritePos(pokedexApp, 9, local.marker.x, local.marker.y, 2);
             PokedexApp_SetSpriteAnim(pokedexApp, 9, local.marker.shape);
             PokedexApp_SetSpriteVisible(pokedexApp, 9, TRUE);
@@ -258,8 +258,8 @@ void PokedexApp_UpdateAreaMarkers(PokedexAppData *pokedexApp) {
                 }
             }
         } else {
-            PokedexApp_GetDungeonMarkerPos(pokedexApp, pokedexApp->areaList.unk_20.maps[pokedexApp->areaListPos], &local.marker.x, &local.marker.y, &local.marker.shape);
-            PokedexApp_GetSpecialAreaMarkers(PokedexApp_GetDungeonMapId(pokedexApp->areaList.unk_20.maps[pokedexApp->areaListPos]), &local.specialAreas);
+            PokedexApp_GetDungeonMarkerPos(pokedexApp, pokedexApp->areaList.areas.maps[pokedexApp->areaListPos], &local.marker.x, &local.marker.y, &local.marker.shape);
+            PokedexApp_GetSpecialAreaMarkers(PokedexApp_GetDungeonMapId(pokedexApp->areaList.areas.maps[pokedexApp->areaListPos]), &local.specialAreas);
             PokedexApp_SetSpritePos(pokedexApp, 9, local.marker.x, local.marker.y, 2);
             PokedexApp_SetSpriteAnim(pokedexApp, 9, local.marker.shape);
             PokedexApp_SetSpriteVisible(pokedexApp, 9, TRUE);
@@ -300,18 +300,18 @@ void PokedexApp_UpdateAreaMarkerPalettes(PokedexAppData *pokedexApp) {
     u16 i;
 
     if (pokedexApp->areaListPos == 0) {
-        for (i = 1; i < pokedexApp->areaList.unk_20.nMaps; i++) {
+        for (i = 1; i < pokedexApp->areaList.areas.nMaps; i++) {
             if (PokedexApp_GetAreaEncounterFlag(pokedexApp, i, pokedexApp->areaBlinkPhase)) {
                 ManagedSprite_SetPaletteOverride(pokedexApp->sprites[i + 8], pokedexApp->areaBlinkPhase + 4);
                 PokedexApp_SetSpriteVisible(pokedexApp, i + 8, TRUE);
             } else {
                 PokedexApp_SetSpriteVisible(pokedexApp, i + 8, FALSE);
                 if (PokedexApp_IsDungeonArea(pokedexApp, i)) {
-                    PokedexApp_GetSpecialAreaMarkers(PokedexApp_GetDungeonMapId(pokedexApp->areaList.unk_20.maps[i]), &hiddenSpecialAreas);
+                    PokedexApp_GetSpecialAreaMarkers(PokedexApp_GetDungeonMapId(pokedexApp->areaList.areas.maps[i]), &hiddenSpecialAreas);
                 }
             }
             if (PokedexApp_IsDungeonArea(pokedexApp, i)) {
-                PokedexApp_GetSpecialAreaMarkers(PokedexApp_GetDungeonMapId(pokedexApp->areaList.unk_20.maps[i]), &specialAreas);
+                PokedexApp_GetSpecialAreaMarkers(PokedexApp_GetDungeonMapId(pokedexApp->areaList.areas.maps[i]), &specialAreas);
             }
         }
         PokedexApp_UpdateSpecialAreaMarkers(pokedexApp, specialAreas, hiddenSpecialAreas, i + 8, pokedexApp->areaBlinkPhase + 4);
@@ -323,11 +323,11 @@ void PokedexApp_UpdateAreaMarkerPalettes(PokedexAppData *pokedexApp) {
         } else {
             PokedexApp_SetSpriteVisible(pokedexApp, 9, FALSE);
             if (PokedexApp_IsDungeonArea(pokedexApp, pokedexApp->areaListPos)) {
-                PokedexApp_GetSpecialAreaMarkers(PokedexApp_GetDungeonMapId(pokedexApp->areaList.unk_20.maps[pokedexApp->areaListPos]), &hiddenSpecialAreas);
+                PokedexApp_GetSpecialAreaMarkers(PokedexApp_GetDungeonMapId(pokedexApp->areaList.areas.maps[pokedexApp->areaListPos]), &hiddenSpecialAreas);
             }
         }
         if (PokedexApp_IsDungeonArea(pokedexApp, pokedexApp->areaListPos)) {
-            PokedexApp_GetSpecialAreaMarkers(PokedexApp_GetDungeonMapId(pokedexApp->areaList.unk_20.maps[pokedexApp->areaListPos]), &specialAreas);
+            PokedexApp_GetSpecialAreaMarkers(PokedexApp_GetDungeonMapId(pokedexApp->areaList.areas.maps[pokedexApp->areaListPos]), &specialAreas);
         }
         PokedexApp_UpdateSpecialAreaMarkers(pokedexApp, specialAreas, hiddenSpecialAreas, 10, pokedexApp->areaBlinkPhase + 4);
     }

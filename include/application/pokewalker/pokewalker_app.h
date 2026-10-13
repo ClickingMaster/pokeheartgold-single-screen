@@ -132,7 +132,7 @@ typedef struct PokewalkerApp {
     int nextMode;  // 11 = leave the app
     int state;     // state of the current mode
     int nextState; // state to go to after a message or the cursor animation
-    int unk_10;
+    int linkAction;
     u16 linkError;                                  // 0x14, error of the IR link (message id once shown), 0 = none
     u16 linkConnected;                              // 0x16, the Pokewalker answered (message 6 shown)
     BgConfig *bgConfig;                             // 0x18
@@ -150,15 +150,15 @@ typedef struct PokewalkerApp {
     PokewalkerPeerRecord peerRecords[11]; // 0xB184, IR buffer; 1-10 read from Pokewalker address 0xDE24
     PokewalkerStrollData strollData;      // 0xC910
     u32 unk_F1D0;
-    u16 unk_F1D4;
+    u16 ownRecordVersion;
     u8 unk_F1D6[2];
-    PokewalkerIrClock unk_F1D8;          // copied from the Pokewalker save data
-    u8 unk_F200[0x1634];                 // 0xF200, filled by PokewalkerApp_BuildTrainerHouseData
+    PokewalkerIrClock ownRecordClock;    // copied from the Pokewalker save data
+    u8 ownTrainerHouseData[0x1634];      // 0xF200, filled by PokewalkerApp_BuildTrainerHouseData
     u8 irCompressBuffer[0xCF1C];         // 0x10834
     SaveData *eventLogSaveData;          // 0x1D750, arguments of the Pokewalker event log app (mode 8)
     PokewalkerIrRecord *eventLogRecords; // 0x1D754
     u32 walkerSteps;                     // 0x1D758, Pokewalker step count at the last link (save data)
-    u32 unk_1D75C;
+    u32 walkerWatts;
     u16 linkProgress; // 0x1D760, highest transfer progress while connected
     u8 unk_1D762[2];
     int selectMonState;     // 0x1D764, PC box selection (mode 7)
@@ -176,7 +176,7 @@ typedef struct PokewalkerApp {
     int courseId;                   // 0x1D798
     PokepicTemplate monPicTemplate; // 0x1D79C
     u8 monSpriteBuffer[0xC80];      // 0x1D7AC, 80x80 4bpp
-    void *unk_1E42C;
+    void *strollPartyMon;
     BoxPokemon *strollMon;        // 0x1E430
     Bag *bag;                     // 0x1E434
     PlayerProfile *profile;       // 0x1E438
@@ -238,7 +238,7 @@ typedef struct PokewalkerApp {
     u8 unk_1F2C3[0xD];
     volatile int timer;       // 0x1F2D0
     u16 motionStarted;        // 0x1F2D4, the motion object at 0x1F2C0 was started (transfer progress > 200)
-    u16 unk_1F2D6;            // alpha of the Pokemon picture fading in, 31 = done
+    u16 monPicAlpha;          // alpha of the Pokemon picture fading in, 31 = done
     SysTask *monFadeTask;     // 0x1F2D8
     SysTask *subBgScrollTask; // 0x1F2DC
     u16 subBgScrollX;         // 0x1F2E0, BG 5 (sub screen) x offset, slides in to 256

@@ -256,7 +256,7 @@ void PokewalkerApp_StartLink(PokewalkerApp *app) {
     app->identity.unk_08 = GAME_VERSION;
     p[0x107F] &= ~1;
     p[0x107E] = 0;
-    app->identity.unk_0C = PlayerProfile_GetTrainerID(app->profile);
+    app->identity.trainerId = PlayerProfile_GetTrainerID(app->profile);
     CopyStringToU16Array(name, (u16 *)(p + 0x106C), 8);
     app->identity.unk_04 = 1;
     app->identity.unk_0A = GAME_VERSION;
@@ -282,9 +282,9 @@ void PokewalkerApp_BuildSendStrollData(PokewalkerApp *app) {
 
 void ov112_021E7DC0(PokewalkerApp *app) {
     void *p;
-    PokewalkerApp_BuildTrainerHouseData(app->saveData, app->unk_F200);
+    PokewalkerApp_BuildTrainerHouseData(app->saveData, app->ownTrainerHouseData);
     app->unk_F1D0 = 1;
-    app->unk_F1D4 = GAME_VERSION;
+    app->ownRecordVersion = GAME_VERSION;
     p = Pokewalker_GetIrClock(app->pokewalker);
-    MIi_CpuCopyFast(p, (u32 *)&app->unk_F1D8, sizeof(PokewalkerIrClock));
+    MIi_CpuCopyFast(p, (u32 *)&app->ownRecordClock, sizeof(PokewalkerIrClock));
 }

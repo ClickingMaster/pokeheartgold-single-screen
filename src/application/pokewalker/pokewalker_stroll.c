@@ -100,7 +100,7 @@ int PokewalkerApp_StartStroll_CheckFirstStroll(PokewalkerApp *app) {
         return 5;
     }
     app->nextMode = 10;
-    app->unk_10 = 3;
+    app->linkAction = 3;
     return 7;
 }
 
@@ -127,7 +127,7 @@ int PokewalkerApp_StartStroll_End(PokewalkerApp *app) {
 #pragma opt_propagation off
 
 // Puts the Pokemon back from its Stroll into the first free PC slot: the Pokemon stored in the save data, with the
-// steps walked as experience, or (peer flag unk_5B_2) a new Pokemon made from the one on the Pokewalker.
+// steps walked as experience, or (peer flag hasWalkerMon) a new Pokemon made from the one on the Pokewalker.
 void PokewalkerApp_ReturnStrollMon(PokewalkerApp *app) {
     PCStorage *pcStorage = SaveArray_PCStorage_Get(app->saveData);
     Pokemon *mon = AllocMonZeroed(HEAP_ID_154);
@@ -139,7 +139,7 @@ void PokewalkerApp_ReturnStrollMon(PokewalkerApp *app) {
     sub_02032688(app->pokewalker, &walkerData[0], &walkerData[1]);
     box = walkerData[1];
     slot = 0;
-    if (!app->peerIdentity.unk_5B_2) {
+    if (!app->peerIdentity.hasWalkerMon) {
         received = Pokewalker_TryGetBoxMon(app->pokewalker, boxMon);
         if (received) {
             app->strollMonLeveledUp = PokewalkerApp_AddStrollExp(boxMon, mon, app->strollSteps);

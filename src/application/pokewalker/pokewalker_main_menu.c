@@ -70,7 +70,7 @@ int PokewalkerApp_MainMenu_Start(PokewalkerApp *app) {
     case 0:
         app->nextMode = 3;
         app->strollMonSpecies = SPECIES_NONE;
-        app->unk_10 = 0;
+        app->linkAction = 0;
         PokewalkerApp_RemoveWindowBank(app, 3);
         PokewalkerApp_AddWindowBank(app, 1);
         FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
@@ -79,7 +79,7 @@ int PokewalkerApp_MainMenu_Start(PokewalkerApp *app) {
         return 4;
     case 1:
         app->strollMonSpecies = SPECIES_NONE;
-        app->unk_10 = 0;
+        app->linkAction = 0;
         PokewalkerApp_RemoveWindowBank(app, 3);
         PokewalkerApp_AddWindowBank(app, 7);
         FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
@@ -190,7 +190,7 @@ int PokewalkerApp_MainMenu_HandleTopMenu(PokewalkerApp *app) {
         case 1:
             app->nextMode = 3;
             app->strollMonSpecies = SPECIES_NONE;
-            app->unk_10 = 0;
+            app->linkAction = 0;
             PokewalkerApp_RemoveWindowBank(app, 3);
             PokewalkerApp_AddWindowBank(app, 1);
             FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
@@ -200,7 +200,7 @@ int PokewalkerApp_MainMenu_HandleTopMenu(PokewalkerApp *app) {
         case 2:
             sub_020326A4(app->pokewalker, 1, 1);
             app->strollMonSpecies = SPECIES_NONE;
-            app->unk_10 = 0;
+            app->linkAction = 0;
             PokewalkerApp_RemoveWindowBank(app, 3);
             PokewalkerApp_AddWindowBank(app, 7);
             FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
@@ -366,11 +366,11 @@ int PokewalkerApp_MainMenu_EndReceiveMenu(PokewalkerApp *app) {
     switch (app->menuSelection) {
     case 0:
         app->nextMode = 3;
-        app->unk_10 = 1;
+        app->linkAction = 1;
         break;
     case 1:
         app->nextMode = 3;
-        app->unk_10 = 2;
+        app->linkAction = 2;
         break;
     case 2:
         app->nextMode = 11;
@@ -448,15 +448,15 @@ int PokewalkerApp_MainMenu_EndFullMenu(PokewalkerApp *app) {
     switch (app->menuSelection) {
     case 0:
         app->nextMode = 3;
-        app->unk_10 = 0;
+        app->linkAction = 0;
         break;
     case 1:
         app->nextMode = 3;
-        app->unk_10 = 1;
+        app->linkAction = 1;
         break;
     case 2:
         app->nextMode = 3;
-        app->unk_10 = 2;
+        app->linkAction = 2;
         break;
     case 3:
         app->nextMode = 11;
@@ -542,7 +542,7 @@ BOOL ov112_021EB950(PokewalkerApp *app, int bank) {
         return FALSE;
     }
     app->nextMode = 3;
-    app->unk_10 = 4;
+    app->linkAction = 4;
     PokewalkerApp_RemoveWindowBank(app, bank);
     PokewalkerApp_AddWindowBank(app, 1);
     FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);

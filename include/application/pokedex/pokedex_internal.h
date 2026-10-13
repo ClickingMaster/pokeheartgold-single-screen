@@ -113,40 +113,40 @@ enum {
 typedef struct PokedexAppData PokedexAppData;
 
 typedef struct PokedexAppData_UnkSub0868_State04 {
-    u8 unk_0;
-    u8 unk_1;
-    u8 unk_2;
-    u8 unk_3;
-    u8 unk_4;
-    u8 unk_5;
-    u8 unk_6;
-    u8 unk_7_0 : 4;
-    u8 unk_7_4 : 4;
+    u8 x;
+    u8 y;
+    u8 width;
+    u8 height;
+    u8 bgId;
+    u8 state;
+    u8 timer;
+    u8 normalPalette : 4;
+    u8 flashPalette : 4;
 } PokedexAppData_UnkSub0868_State04;
 
 typedef struct PokedexAppData_UnkSub0868_State06 {
-    u32 unk_0;
-    u32 unk_4;
-    s16 unk_8;
-    u16 unk_A;
+    u32 touchX;
+    u32 touchY;
+    s16 switchX;
+    u16 state;
 } PokedexAppData_UnkSub0868_State06;
 
 typedef struct PokedexAppData_UnkSub0868_State09 {
-    u16 unk_0;
-    u8 unk_2;
-    u8 unk_3;
+    u16 state;
+    u8 timer;
+    u8 buttonsShown;
 } PokedexAppData_UnkSub0868_State09;
 
 typedef struct PokedexAppData_UnkSub0868_State10 {
-    u8 unk_0;
+    u8 state;
 } PokedexAppData_UnkSub0868_State10;
 
 typedef struct PokedexAppData_UnkSub0868_State13 {
-    u16 *unk_0;
-    u8 unk_4;
-    u8 unk_5;
-    u8 unk_6;
-    u8 unk_7;
+    u16 *numberTilemap;
+    u8 state;
+    u8 scrollStep;
+    u8 scrollbarStep;
+    u8 wrapCursor;
 } PokedexAppData_UnkSub0868_State13;
 
 typedef struct PokedexAppData_UnkSub0868_State16 {
@@ -155,10 +155,10 @@ typedef struct PokedexAppData_UnkSub0868_State16 {
 } PokedexAppData_UnkSub0868_State16;
 
 typedef struct PokedexAppData_UnkSub0868_State17 {
-    u32 unk_0;
-    u32 unk_4;
+    u32 touchX;
+    u32 touchY;
     u8 filler_8[2];
-    u16 unk_A;
+    u16 state;
 } PokedexAppData_UnkSub0868_State17;
 
 typedef struct PokedexAppData_UnkSub0868_State26 {
@@ -169,15 +169,15 @@ typedef struct PokedexAppData_UnkSub0868_State26 {
 } PokedexAppData_UnkSub0868_State26;
 
 typedef struct PokedexAppData_UnkSub0868_State38 {
-    u32 unk_0;
-    u32 unk_4;
-    u16 unk_8;
-    s16 unk_A;
+    u32 prevValue;
+    u32 holdFrames;
+    u16 arrowSprite;
+    s16 direction;
 } PokedexAppData_UnkSub0868_State38;
 
 typedef struct PokedexAppData_UnkSub0868_State69 {
-    u16 unk_0;
-    u8 unk_2;
+    u16 state;
+    u8 fadeStart;
 } PokedexAppData_UnkSub0868_State69;
 
 // Weight check: the scale animation (sWeightCheckAnimFuncs[animIndex], one per weight-difference class)
@@ -197,8 +197,8 @@ typedef struct PokedexAppData_UnkSub0868_State77_Sub4 {
 } PokedexAppData_UnkSub0868_State77_Sub4;
 
 typedef struct PokedexAppData_UnkSub0868_State77 {
-    int unk_0;
-    PokedexAppData_UnkSub0868_State77_Sub4 *unk_4;
+    int state;
+    PokedexAppData_UnkSub0868_State77_Sub4 *anim;
 } PokedexAppData_UnkSub0868_State77;
 
 typedef union PokedexAppData_UnkSub0868 {
@@ -217,14 +217,14 @@ typedef union PokedexAppData_UnkSub0868 {
 } PokedexAppData_UnkSub0868;
 
 typedef struct PokedexAppData_UnkSub0878 {
-    u16 unk_000[NATIONAL_DEX_COUNT][2];
-    u16 unk_7B4;
-    u16 unk_7B6;
+    u16 entries[NATIONAL_DEX_COUNT][2];
+    u16 count;
+    u16 caughtCount;
 } PokedexAppData_UnkSub0878;
 
 typedef struct PokedexAppData_UnkSub1030 {
-    u16 unk_0; // 0x0
-    u16 unk_2; // 0x2
+    u16 species;     // 0x0
+    u16 caughtState; // 0x2
 } PokedexAppData_UnkSub1030;
 
 typedef struct PokedexAppData_UnkSub18CC {
@@ -240,26 +240,26 @@ typedef struct PokedexAppData_UnkSub18DC_0 {
 } PokedexAppData_UnkSub18DC_0;
 
 typedef struct PokedexAppData_UnkSub18DC {
-    PokedexAppData_UnkSub18DC_0 unk_00; // 0x00
-    PokedexAppData_UnkSub18DC_0 unk_08; // 0x08
-    PokedexAppData_UnkSub18DC_0 unk_10; // 0x10
-    PokedexAppData_UnkSub18DC_0 unk_18; // 0x18
-    PokedexAppData_UnkSub18DC_0 unk_20; // 0x20
-    u32 *unk_28;                        // 0x28
+    PokedexAppData_UnkSub18DC_0 overworldByTime; // 0x00
+    PokedexAppData_UnkSub18DC_0 overworldOther;  // 0x08
+    PokedexAppData_UnkSub18DC_0 dungeonByTime;   // 0x10
+    PokedexAppData_UnkSub18DC_0 dungeonOther;    // 0x18
+    PokedexAppData_UnkSub18DC_0 areas;           // 0x20
+    u32 *areaSources;                            // 0x28
 } PokedexAppData_UnkSub18DC;
 
 typedef struct PokedexAppData_UnkSub1908 {
-    u8 unk_00; // 0x00
-    u8 unk_01; // 0x01
+    u8 x;      // 0x00
+    u8 y;      // 0x01
     u8 unk_02; // 0x02
     u8 unk_03; // 0x03
 } PokedexAppData_UnkSub1908;
 
 typedef struct PokedexAppData_UnkSub190C {
-    u8 unk_00;     // 0x00
-    u8 unk_01;     // 0x01
-    u8 unk_02;     // 0x02
-    u8 unk_03;     // 0x03
+    u8 x;          // 0x00
+    u8 y;          // 0x01
+    u8 width;      // 0x02
+    u8 height;     // 0x03
     u8 unk_04[32]; // 0x04
 } PokedexAppData_UnkSub190C;
 
@@ -271,8 +271,8 @@ typedef struct PokedexBgRect {
 } PokedexBgRect;
 
 typedef struct PokedexAppData_UnkSub1850 {
-    u16 unk_0;
-    u16 unk_2;
+    u16 height;
+    u16 weight;
 } PokedexAppData_UnkSub1850;
 
 struct PokedexAppData {
@@ -304,7 +304,7 @@ struct PokedexAppData {
     u8 listCursor;                                  // 0x185A cursor on the page (5 per row)
     u8 entryTab;                                    // 0x185B
     u8 language;                                    // 0x185C language of the shown entry
-    u8 unk_185D;                                    // 0x185D
+    u8 countWindowSwap;                             // 0x185D
     u8 iconPage;                                    // 0x185E which of the two icon grid sprite sets is shown
     u8 monPicSwap : 4;                              // 0x185F which of the two picture sprites is shown
     u8 typeIconSwap : 4;                            // 0x185F which type icon pair is shown
@@ -324,7 +324,7 @@ struct PokedexAppData {
     u8 compareSide : 5;                             // 0x18C7
     u8 formPicSwapA : 1;                            // 0x18C7 which sprite pair shows the (left) form picture
     u8 formPicSwapB : 1;                            // 0x18C7 same for the compare screen's right picture
-    u8 unk_18C7_7 : 1;                              // 0x18C7
+    u8 showBackPic : 1;                             // 0x18C7
     s8 areaRegion;                                  // 0x18C8
     s8 areaTimeOfDay;                               // 0x18C9
     s8 areaListPos;                                 // 0x18CA

@@ -1,6 +1,6 @@
 // Pokewalker connection app, mode 3 = link with the Pokewalker (first part): the mode's enter/update/exit, choosing a
 // course for the Stroll (pages of 5 unlocked courses), the instructions shown before connecting, the Pokemon picture
-// and sub screen effects, and starting / following the IR requests. unk_10 selects what is done: 0 = send a Pokemon on
+// and sub screen effects, and starting / following the IR requests. linkAction selects what is done: 0 = send a Pokemon on
 // a Stroll, 1 / 2 = receive the Pokemon and gifts, 4 = send the Pokemon back.
 // The state functions are in the table sLinkStates (asm data); the rest of them follow in the next file.
 
@@ -58,13 +58,13 @@ int PokewalkerApp_Link_Exit(PokewalkerApp *app) {
 
 #pragma force_active on
 int PokewalkerApp_Link_Start(PokewalkerApp *app) {
-    if (app->unk_10 == 1) {
+    if (app->linkAction == 1) {
         app->nextState = 1;
         return 19;
-    } else if (app->unk_10 == 2) {
+    } else if (app->linkAction == 2) {
         app->nextState = 22;
         return 19;
-    } else if (app->unk_10 == 4) {
+    } else if (app->linkAction == 4) {
         return 43;
     } else if (app->strollMonSpecies) {
         return 5;
@@ -425,7 +425,7 @@ int PokewalkerApp_Link_PrintInstructions(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_Link_WaitInstructions(PokewalkerApp *app) {
-    if (!TextPrinterCheckActive(app->textPrinterId) && app->unk_1F2D6 == 31 && app->subBgScrollX == 256) {
+    if (!TextPrinterCheckActive(app->textPrinterId) && app->monPicAlpha == 31 && app->subBgScrollX == 256) {
         PokewalkerApp_LoadTilemap(app, 2, 14);
         PokewalkerApp_PrintExit(app, 1);
         return 24;
@@ -464,7 +464,7 @@ int PokewalkerApp_Link_PrintPointAtCardForStroll(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_Link_WaitPointAtCardForStroll(PokewalkerApp *app) {
-    if (!TextPrinterCheckActive(app->textPrinterId) && app->unk_1F2D6 == 31 && app->subBgScrollX == 256) {
+    if (!TextPrinterCheckActive(app->textPrinterId) && app->monPicAlpha == 31 && app->subBgScrollX == 256) {
         return 30;
     }
     return 21;
@@ -479,18 +479,18 @@ void PokewalkerApp_FadeInMonPicture(PokewalkerApp *app) {
     PokewalkerApp_LoadMonPicture(app->strollMon, app->monSpriteBuffer, &app->monPicTemplate, 0);
     ManagedSprite_SetOamMode(app->sprites[8], GX_OAM_MODE_XLU);
     PokewalkerApp_ShowSprite(app, 8);
-    app->unk_1F2D6 = 0;
+    app->monPicAlpha = 0;
     G2_SetBlendAlpha(GX_BLEND_PLANEMASK_NONE, GX_BLEND_PLANEMASK_BG3, 0, 31);
     app->monFadeTask = SysTask_CreateOnMainQueue((SysTaskFunc)PokewalkerApp_FadeInMonPictureTask, app, 2);
 }
 
 void PokewalkerApp_FadeInMonPictureTask(SysTask *task, PokewalkerApp *app) {
-    app->unk_1F2D6 += 2;
-    if (app->unk_1F2D6 >= 31) {
-        app->unk_1F2D6 = 31;
+    app->monPicAlpha += 2;
+    if (app->monPicAlpha >= 31) {
+        app->monPicAlpha = 31;
     }
-    G2_SetBlendAlpha(GX_BLEND_PLANEMASK_NONE, GX_BLEND_PLANEMASK_BG3, app->unk_1F2D6, 31 - app->unk_1F2D6);
-    if (app->unk_1F2D6 == 31) {
+    G2_SetBlendAlpha(GX_BLEND_PLANEMASK_NONE, GX_BLEND_PLANEMASK_BG3, app->monPicAlpha, 31 - app->monPicAlpha);
+    if (app->monPicAlpha == 31) {
         SysTask_Destroy(task);
     }
 }

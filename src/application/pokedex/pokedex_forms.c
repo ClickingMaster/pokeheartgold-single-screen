@@ -324,7 +324,7 @@ BOOL PokedexApp_DragAreaScrollbar(PokedexAppData *pokedexApp, u32 x, u32 y) {
     min = PokedexApp_GetScrollbarMinY(pokedexApp, 5, ov18_021FA304, 96, 86);
     max = PokedexApp_GetScrollbarMaxY(pokedexApp, 5, ov18_021FA304, 96, 86);
     max -= min;
-    segments = pokedexApp->areaList.unk_20.nMaps - 1;
+    segments = pokedexApp->areaList.areas.nMaps - 1;
     width = (max << 8) / segments;
     position = (y - min) << 8;
     index = 0;
@@ -373,7 +373,7 @@ u32 PokedexApp_GetAreaScrollbarY(PokedexAppData *pokedexApp, int index) {
 
     min = PokedexApp_GetScrollbarMinY(pokedexApp, 5, ov18_021FA304, 0x60, 0x56);
     y = PokedexApp_GetScrollbarMaxY(pokedexApp, 5, ov18_021FA304, 0x60, 0x56);
-    last = pokedexApp->areaList.unk_20.nMaps - 1;
+    last = pokedexApp->areaList.areas.nMaps - 1;
     if (index != last) {
         step = ((y - min) << 8) / last;
         offset = step * index;
@@ -488,7 +488,7 @@ void PokedexApp_SetCompareFormIcon(PokedexAppData *pokedexApp, int sprite, int i
 
 #pragma force_active on
 
-// side 1 (left) or 2 (right) of the compare screen; unk_18C7_7 shows the back pictures.
+// side 1 (left) or 2 (right) of the compare screen; showBackPic shows the back pictures.
 void PokedexApp_ShowFormCompareMonPic(PokedexAppData *pokedexApp, int side, int index, int mode) {
     struct {
         u8 form, gender;
@@ -499,7 +499,7 @@ void PokedexApp_ShowFormCompareMonPic(PokedexAppData *pokedexApp, int side, int 
     int offset;
 
     PokedexApp_GetSeenFormAndGender(pokedexApp, index, &attributes.form, &attributes.gender);
-    if (!pokedexApp->unk_18C7_7) {
+    if (!pokedexApp->showBackPic) {
         facing = 2;
         offset = 0;
     } else {

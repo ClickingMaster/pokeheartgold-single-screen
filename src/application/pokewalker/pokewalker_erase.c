@@ -313,7 +313,7 @@ int PokewalkerApp_EraseRecords_UpdateLink(PokewalkerApp *app) {
         PokewalkerApp_ReturnWalkerMonToBox(app);
         Pokewalker_Reset(app->pokewalker);
         app->walkerSteps = 0;
-        app->unk_1D75C = 0;
+        app->walkerWatts = 0;
         PokewalkerIr_Stop();
         return 20;
     }

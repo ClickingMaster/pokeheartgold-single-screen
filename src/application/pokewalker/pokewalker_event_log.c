@@ -197,7 +197,7 @@ u8 PokewalkerEventLog_IsMonShiny(PokewalkerIrRecord *record, BOOL isWalkingMon) 
 }
 
 u8 PokewalkerEventLog_GetCourse(PokewalkerIrRecord *record) {
-    u32 course = record->unk_76;
+    u32 course = record->course;
     if (course >= 8) {
         course = 0;
     }
@@ -231,7 +231,7 @@ void PokewalkerEventLog_BuildEntryList(PokewalkerEventLog *eventLog) {
     for (i = 0; i < 24; i++) {
         PokewalkerIrRecord *record = &eventLog->args->records[i];
         int type;
-        if ((u16)(record->unk_08 + 0xFFF9) <= 1 && (record->unk_0A > NATIONAL_DEX_COUNT || record->unk_0C > NATIONAL_DEX_COUNT)) { // HeartGold / SoulSilver
+        if ((u16)(record->gameVersion + 0xFFF9) <= 1 && (record->species > NATIONAL_DEX_COUNT || record->peerSpecies > NATIONAL_DEX_COUNT)) { // HeartGold / SoulSilver
             continue;
         }
         switch (record->eventType) {
@@ -293,11 +293,11 @@ void PokewalkerEventLog_BuildEntryList(PokewalkerEventLog *eventLog) {
     }
     MATH_QSort(slots, eventLog->count, sizeof(PokewalkerEventLogSlot), (int (*)(const void *, const void *, void *))PokewalkerEventLog_CompareEntryTimes, NULL);
     if (eventLog->count < 2) {
-        slots[eventLog->count - 1].record->unk_76 = 0;
+        slots[eventLog->count - 1].record->course = 0;
         slots[eventLog->count - 1].record->value = GF_RTC_DateTimeToSec();
     } else {
         PokewalkerIrRecord *previous = slots[eventLog->count - 2].record;
-        slots[eventLog->count - 1].record->unk_76 = previous->unk_76;
+        slots[eventLog->count - 1].record->course = previous->course;
         if (previous->eventType == POKEWALKER_EVENT_STEPS) {
             slots[eventLog->count - 1].record->value = previous->value + 3600;
         } else {
@@ -311,7 +311,7 @@ void PokewalkerEventLog_BuildEntryList(PokewalkerEventLog *eventLog) {
         for (i = 0; i < eventLog->count; i++) {
             PokewalkerIrRecord *record = slots[i].record;
             int type = record->eventType;
-            int steps = record->unk_78;
+            int steps = record->steps;
             if (type == POKEWALKER_EVENT_STEPS && previousType == POKEWALKER_EVENT_STEPS && steps < 300 && previousSteps < 300) {
                 record->eventType = POKEWALKER_EVENT_NONE;
             }
@@ -517,13 +517,13 @@ void PokewalkerEventLog_PrintEntry(PokewalkerEventLog *eventLog, int msgId, int 
         }
     }
     PokewalkerEventLog_BufferName(eventLog, eventLog->playerName, 0, PLAYER_NAME_LENGTH + 2);
-    PokewalkerEventLog_BufferNickname(eventLog, record->nickname, 1, record->unk_0A);
+    PokewalkerEventLog_BufferNickname(eventLog, record->nickname, 1, record->species);
     PokewalkerEventLog_BufferName(eventLog, record->peerTrainerName, 2, PLAYER_NAME_LENGTH + 2);
-    PokewalkerEventLog_BufferNickname(eventLog, record->peerNickname, 3, record->unk_0C);
+    PokewalkerEventLog_BufferNickname(eventLog, record->peerNickname, 3, record->peerSpecies);
     PokewalkerEventLog_BufferItemName(eventLog, record->item);
-    PokewalkerEventLog_BufferNickname(eventLog, record->peerNickname, 5, record->unk_0C);
+    PokewalkerEventLog_BufferNickname(eventLog, record->peerNickname, 5, record->peerSpecies);
     PokewalkerEventLog_BufferNumber(eventLog, 6, hour, 2, PRINTING_MODE_LEFT_ALIGN);
-    PokewalkerEventLog_BufferNumber(eventLog, 7, record->unk_78, 5, PRINTING_MODE_LEFT_ALIGN);
+    PokewalkerEventLog_BufferNumber(eventLog, 7, record->steps, 5, PRINTING_MODE_LEFT_ALIGN);
     PokewalkerEventLog_BufferName(eventLog, record->routeName, 8, 21);
     PokewalkerEventLog_BufferNumber(eventLog, 9, month, 2, PRINTING_MODE_LEFT_ALIGN);
     PokewalkerEventLog_BufferNumber(eventLog, 10, day, 2, PRINTING_MODE_LEFT_ALIGN);
@@ -913,10 +913,10 @@ void PokewalkerEventLog_ShowMon(PokewalkerEventLog *eventLog, int side, BOOL isW
         PokewalkerEventLog_SetMonSpriteAnim(&eventLog->monSprites[1], 1);
     }
     if (isWalkingMon) {
-        PokewalkerEventLog_LoadMonSprite(&eventLog->monSprites[side], record->unk_0A, record->form, record->gender, PokewalkerEventLog_IsMonShiny(record, TRUE), eventLog->heapId);
+        PokewalkerEventLog_LoadMonSprite(&eventLog->monSprites[side], record->species, record->form, record->gender, PokewalkerEventLog_IsMonShiny(record, TRUE), eventLog->heapId);
         return;
     }
-    PokewalkerEventLog_LoadMonSprite(&eventLog->monSprites[side], record->unk_0C, record->peerForm, record->peerGender, PokewalkerEventLog_IsMonShiny(record, FALSE), eventLog->heapId);
+    PokewalkerEventLog_LoadMonSprite(&eventLog->monSprites[side], record->peerSpecies, record->peerForm, record->peerGender, PokewalkerEventLog_IsMonShiny(record, FALSE), eventLog->heapId);
 }
 
 void PokewalkerEventLog_ShowTrainer(ManagedSprite *sprite, int gender, int pose) {
@@ -1048,7 +1048,7 @@ void PokewalkerEventLog_ShowPeerEvent(PokewalkerEventLog *eventLog) {
     int msgOffset;
     PokewalkerEventLog_ShowMon(eventLog, 0, TRUE);
     PokewalkerEventLog_ShowMon(eventLog, 1, FALSE);
-    stepsDiff = record->unk_78 - record->unk_7A;
+    stepsDiff = record->steps - record->peerSteps;
     if (stepsDiff < 0) {
         stepsDiff = -stepsDiff;
     }
@@ -1068,13 +1068,13 @@ void PokewalkerEventLog_ShowDowsingItem(PokewalkerEventLog *eventLog) {
     ManagedSprite_SetAnim(eventLog->sprites[EVENT_LOG_SPRITE_RIGHT_ICON], 11);
     if (eventLog->dowsingStreakPage != 0 && eventLog->dowsingStreakPage <= eventLog->page) {
         msgId = msg_0275_00027;
-    } else if (record->unk_78 >= 4000) {
+    } else if (record->steps >= 4000) {
         msgId = msg_0275_00028;
-    } else if (record->unk_78 >= 3000) {
+    } else if (record->steps >= 3000) {
         msgId = msg_0275_00029;
-    } else if (record->unk_78 >= 2000) {
+    } else if (record->steps >= 2000) {
         msgId = msg_0275_00030;
-    } else if (record->unk_78 >= 1000) {
+    } else if (record->steps >= 1000) {
         msgId = msg_0275_00031;
     } else {
         msgId = msg_0275_00032;
@@ -1087,7 +1087,7 @@ void PokewalkerEventLog_ShowGiftItem(PokewalkerEventLog *eventLog) {
     int msgId;
     ManagedSprite_SetDrawFlag(eventLog->sprites[EVENT_LOG_SPRITE_RIGHT_ICON], TRUE);
     ManagedSprite_SetAnim(eventLog->sprites[EVENT_LOG_SPRITE_RIGHT_ICON], 13);
-    if (record->unk_0A != SPECIES_NONE) {
+    if (record->species != SPECIES_NONE) {
         msgId = msg_0275_00033;
         PokewalkerEventLog_ShowMon(eventLog, 0, TRUE);
     } else {
@@ -1104,13 +1104,13 @@ void PokewalkerEventLog_ShowRadarCaught(PokewalkerEventLog *eventLog) {
     PokewalkerEventLog_ShowMon(eventLog, 1, FALSE);
     if (eventLog->radarStreakPage != 0 && eventLog->radarStreakPage <= eventLog->page) {
         msgId = msg_0275_00036;
-    } else if (record->unk_78 >= 4000) {
+    } else if (record->steps >= 4000) {
         msgId = msg_0275_00037;
-    } else if (record->unk_78 >= 3000) {
+    } else if (record->steps >= 3000) {
         msgId = msg_0275_00038;
-    } else if (record->unk_78 >= 2000) {
+    } else if (record->steps >= 2000) {
         msgId = msg_0275_00039;
-    } else if (record->unk_78 >= 1000) {
+    } else if (record->steps >= 1000) {
         msgId = msg_0275_00040;
     } else {
         msgId = msg_0275_00041;
@@ -1122,7 +1122,7 @@ void PokewalkerEventLog_ShowRadarCaught(PokewalkerEventLog *eventLog) {
 void PokewalkerEventLog_ShowGiftMon(PokewalkerEventLog *eventLog) {
     PokewalkerIrRecord *record = eventLog->entries[eventLog->page];
     int msgId;
-    if (record->unk_0A != SPECIES_NONE) {
+    if (record->species != SPECIES_NONE) {
         msgId = msg_0275_00042;
         PokewalkerEventLog_ShowMon(eventLog, 0, TRUE);
     } else {
@@ -1204,7 +1204,7 @@ void PokewalkerEventLog_ShowMonWentHome(PokewalkerEventLog *eventLog) {
 void PokewalkerEventLog_ShowStrollStart(PokewalkerEventLog *eventLog) {
     PokewalkerIrRecord *record = eventLog->entries[eventLog->page];
     int msgId2;
-    if (record->unk_0A == SPECIES_NONE) {
+    if (record->species == SPECIES_NONE) {
         msgId2 = msg_0275_00070;
     } else {
         PokewalkerEventLog_ShowMon(eventLog, 0, TRUE);
@@ -1278,7 +1278,7 @@ void PokewalkerEventLog_ShowStrollEnd(PokewalkerEventLog *eventLog) {
 
 // Steps of an hour (300 or more), otherwise the Pokemon took a nap (by the hour of the day).
 void PokewalkerEventLog_ShowSteps(PokewalkerEventLog *eventLog, u32 hour) {
-    u16 steps = eventLog->entries[eventLog->page]->unk_78;
+    u16 steps = eventLog->entries[eventLog->page]->steps;
     int msgId;
     if (steps >= 300) {
         PokewalkerEventLog_ShowMon(eventLog, 0, TRUE);
@@ -1329,13 +1329,13 @@ void PokewalkerEventLog_ShowEntry(PokewalkerEventLog *eventLog) {
     hour = eventLog->time.hour;
     PokewalkerEventLog_LoadSky(eventLog, hour, PokewalkerEventLog_GetCourse(record));
     PokewalkerEventLog_SetCourseSprite(eventLog, PokewalkerEventLog_GetCourse(record));
-    if (eventLog->course != record->unk_76) {
+    if (eventLog->course != record->course) {
         PokewalkerEventLog_PlayCourseBgm(eventLog, PokewalkerEventLog_GetCourse(record));
     }
-    eventLog->course = record->unk_76;
+    eventLog->course = record->course;
     type = record->eventType;
     if (type >= POKEWALKER_EVENT_PEER_FIRST && type <= POKEWALKER_EVENT_PEER_LAST) {
-        if ((u16)(record->unk_08 + 0xFFF9) <= 1) { // HeartGold / SoulSilver
+        if ((u16)(record->gameVersion + 0xFFF9) <= 1) { // HeartGold / SoulSilver
             PokewalkerEventLog_ShowPeerEvent(eventLog);
         } else {
             PokewalkerEventLog_ShowDistantPeer(eventLog);
@@ -1556,7 +1556,7 @@ BOOL PokewalkerEventLog_Main(OverlayManager *manager, int *state) {
 void PokewalkerEventLog_InitStrollEndRecord(PokewalkerIrRecord *record, PokewalkerEventLogParams *params) {
     MI_CpuFill8(record, 0, sizeof(PokewalkerIrRecord));
     MI_CpuCopy8(params->nickname, record->nickname, sizeof(record->nickname));
-    record->unk_0A = params->mon.species;
+    record->species = params->mon.species;
     record->form = params->mon.form;
     record->gender = params->mon.gender;
     record->isShiny = params->mon.isShiny;
@@ -1570,7 +1570,7 @@ void PokewalkerEventLog_SetGiftMon(PokewalkerIrRecord *records, PokewalkerEventL
 
     for (i = 0; i < 24; i++, records++) {
         if (records->eventType == POKEWALKER_EVENT_RAW_GIFT_MON) {
-            records->unk_0C = mon->species;
+            records->peerSpecies = mon->species;
             records->peerForm = mon->form;
             records->peerGender = mon->gender;
             records->peerIsShiny = mon->isShiny;

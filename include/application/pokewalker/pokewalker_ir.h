@@ -17,18 +17,18 @@ typedef struct PokewalkerIrIdentity {
     u32 unk_04;
     u16 unk_08;
     u16 unk_0A;
-    u32 unk_0C;
+    u32 trainerId;
     PokewalkerIrClock clock; // 0x10
     u8 unk_38[0x23];
     u8 unk_5B_0 : 1;
     u8 unk_5B_1 : 1;
-    u8 unk_5B_2 : 1;
+    u8 hasWalkerMon : 1;
     u8 unk_5B_3 : 5;
     u8 unk_5C;
     u8 unk_5D;
     u8 unk_5E[2];
     u32 currentTime;    // 0x60, seconds since 2000, big endian
-    u32 unk_64;         // big endian on the wire
+    u32 steps;          // big endian on the wire
 } PokewalkerIrIdentity; // size=0x68
 
 // A Pokemon in the Pokewalker's own format (stroll data, caught Pokemon, gift Pokemon).
@@ -96,18 +96,18 @@ typedef struct PokewalkerIrBlocks {
 typedef struct PokewalkerIrRecord {
     u32 value;
     u8 unk_04[4];
-    u16 unk_08;
-    u16 unk_0A;                                  // species
-    u16 unk_0C;                                  // species when unk_08 is 7 or 8
+    u16 gameVersion;
+    u16 species;                                 // species
+    u16 peerSpecies;                             // species when gameVersion is 7 or 8
     u16 item;                                    // 0x0E
     u16 peerTrainerName[PLAYER_NAME_LENGTH + 1]; // 0x10, trainer of the other Pokewalker
     u16 nickname[POKEMON_NAME_LENGTH + 1];       // 0x20, walking Pokemon
     u16 peerNickname[POKEMON_NAME_LENGTH + 1];   // 0x36, the other Pokemon
     u16 routeName[21];                           // 0x4C
-    u8 unk_76;
+    u8 course;
     u8 unk_77;
-    u16 unk_78;
-    u16 unk_7A;
+    u16 steps;
+    u16 peerSteps;
     u32 unk_7C;
     u32 unk_80;
     u8 eventType; // 1-29, 0 = empty entry
@@ -127,7 +127,7 @@ typedef struct PokewalkerIrStatus {
     u8 giveStarfBerry : 1; // 0x08
     u8 unk_08_1 : 7;
     u8 unk_09;
-    u16 unk_0A;
+    u16 watts;
     PokewalkerMon caughtMons[3]; // 0x0C
     PokewalkerIrItem items[3];   // 0x3C
     PokewalkerIrItem unk_48[10]; // 0x48

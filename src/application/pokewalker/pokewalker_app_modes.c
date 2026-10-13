@@ -70,7 +70,7 @@ enum StrollReportState {
     STROLL_REPORT_PRINT_ITEMS_PLACED,
     STROLL_REPORT_ITEMS_FADE_OUT,
     STROLL_REPORT_WAIT_ITEMS_FADE_OUT,
-    STROLL_REPORT_GIFTS_FADE_OUT, // unk_10 == 2
+    STROLL_REPORT_GIFTS_FADE_OUT, // linkAction == 2
     STROLL_REPORT_WAIT_GIFTS_FADE_OUT,
     STROLL_REPORT_SHOW_GIFTS,
     STROLL_REPORT_WAIT_GIFTS_FADE,
@@ -78,7 +78,7 @@ enum StrollReportState {
     STROLL_REPORT_PRINT_GIFT_ROUTE_FOUND,
     STROLL_REPORT_GIFTS_DONE_FADE_OUT,
     STROLL_REPORT_WAIT_GIFTS_DONE_FADE_OUT,
-    STROLL_REPORT_RECORDS_FADE_OUT, // unk_10 == 3
+    STROLL_REPORT_RECORDS_FADE_OUT, // linkAction == 3
     STROLL_REPORT_WAIT_RECORDS_FADE_OUT,
     STROLL_REPORT_SHOW_RECORDS,
     STROLL_REPORT_WAIT_RECORDS_FADE,
@@ -100,12 +100,12 @@ enum BoxDisplayWindow {
 #pragma force_active on
 int PokewalkerApp_LinkSave_Enter(PokewalkerApp *app) {
     app->strollMon = NULL;
-    if (app->unk_10 == 1) {
+    if (app->linkAction == 1) {
         PokewalkerApp_ReturnStrollMon(app);
         PokewalkerApp_ReceiveMons(app, 1);
         PokewalkerApp_ReceiveItems(app);
         PokewalkerApp_GiveStarfBerry(app);
-        if (app->peerIdentity.unk_5B_2 == 0) {
+        if (app->peerIdentity.hasWalkerMon == 0) {
             sub_020326A4(app->pokewalker, 1, 0);
         }
         if (app->strollMon != NULL) {
@@ -116,22 +116,22 @@ int PokewalkerApp_LinkSave_Enter(PokewalkerApp *app) {
             PlayFanfare(SEQ_ME_KEYITEM);
         } else {
             PokewalkerApp_HideMotionSprites(app);
-            app->unk_1F2D6 = 31;
+            app->monPicAlpha = 31;
         }
         PokewalkerApp_UnlockNextCourse(app);
         app->state = 0;
-    } else if (app->unk_10 == 2) {
+    } else if (app->linkAction == 2) {
         PokewalkerApp_ReceiveItems(app);
         PokewalkerApp_ReceiveMons(app, 0);
         app->state = 5;
-    } else if (app->unk_10 == 4) {
+    } else if (app->linkAction == 4) {
         PokewalkerApp_ReturnStrollMon(app);
         PokewalkerApp_LoadMonPicture(app->strollMon, app->monSpriteBuffer, &app->monPicTemplate, 0);
         PokewalkerApp_ShowMonPicture(app);
         app->state = 0;
         sub_020326A4(app->pokewalker, 1, 0);
     }
-    app->peerIdentity.unk_5B_2 = 0;
+    app->peerIdentity.hasWalkerMon = 0;
     return 2;
 }
 #pragma force_active reset
@@ -158,7 +158,7 @@ int PokewalkerApp_LinkSave_PrintSaving(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_LinkSave_WaitSaving(PokewalkerApp *app) {
-    if (!TextPrinterCheckActive(app->textPrinterId) && app->unk_1F2D6 == 31 && !IsFanfarePlayingOrWaiting()) {
+    if (!TextPrinterCheckActive(app->textPrinterId) && app->monPicAlpha == 31 && !IsFanfarePlayingOrWaiting()) {
         IsFanfarePlaying();
         PokewalkerApp_CreateWaitingIcon(app);
         return 2;
@@ -178,7 +178,7 @@ int PokewalkerApp_LinkSave_EndSave(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_LinkSave_SetNextMode(PokewalkerApp *app) {
-    app->nextMode = app->unk_10 == 4 ? 0 : 8;
+    app->nextMode = app->linkAction == 4 ? 0 : 8;
     return 10;
 }
 
@@ -411,7 +411,7 @@ void PokewalkerApp_SelectMon_StoreSelection(PokewalkerSelectMonWork *work, Pokew
             GetMonData(mon, MON_DATA_NICKNAME, work->nickname);
             work->isShiny = MonIsShiny(mon);
             work->gender = GetMonData(mon, MON_DATA_GENDER, NULL);
-            app->unk_1E42C = mon;
+            app->strollPartyMon = mon;
             app->strollMon = NULL;
         } else {
             PCStorage *storage = SaveArray_PCStorage_Get(app->saveData);
@@ -419,7 +419,7 @@ void PokewalkerApp_SelectMon_StoreSelection(PokewalkerSelectMonWork *work, Pokew
             PokewalkerBoxMon boxMonInfo;
             if (GetBoxMonData(boxMon, MON_DATA_SPECIES_EXISTS, NULL) != 0) {
                 app->strollMon = boxMon;
-                app->unk_1E42C = NULL;
+                app->strollPartyMon = NULL;
             }
             storage = SaveArray_PCStorage_Get(app->saveData);
             PokewalkerApp_SelectMon_GetBoxMon(storage, work->box, work->slot, &boxMonInfo);
@@ -579,10 +579,10 @@ int PokewalkerApp_StrollReport_Exit(PokewalkerApp *app) {
 
 int PokewalkerApp_StrollReport_Start(PokewalkerApp *app) {
     FillBgTilemapRect(app->bgConfig, 1, 0, 0, 0, 32, 24, 16);
-    if (app->unk_10 == 2) {
+    if (app->linkAction == 2) {
         return STROLL_REPORT_GIFTS_FADE_OUT;
     }
-    if (app->unk_10 == 3) {
+    if (app->linkAction == 3) {
         return STROLL_REPORT_RECORDS_FADE_OUT;
     }
     PokewalkerApp_LoadTilemap(app, 2, 15);
@@ -599,14 +599,14 @@ int PokewalkerApp_StrollReport_ShowResults(PokewalkerApp *app) {
     u32 startSteps;
 
     BufferPokewalkerCourseName(app->msgFormat, 2, (u8)Pokewalker_GetCourse(app->pokewalker));
-    currentSteps = app->peerIdentity.unk_64;
+    currentSteps = app->peerIdentity.steps;
     startSteps = app->walkerSteps;
     if (currentSteps > startSteps) {
         strollSteps = currentSteps - startSteps;
     }
     Pokewalker_GetStepsAndWatts(app->pokewalker, &totalSteps, &totalWatts);
     BufferIntegerAsString(app->msgFormat, 5, strollSteps, 7, PRINTING_MODE_LEFT_ALIGN, TRUE);
-    BufferIntegerAsString(app->msgFormat, 3, app->irStatus.unk_0A, 7, PRINTING_MODE_LEFT_ALIGN, TRUE);
+    BufferIntegerAsString(app->msgFormat, 3, app->irStatus.watts, 7, PRINTING_MODE_LEFT_ALIGN, TRUE);
     BufferIntegerAsString(app->msgFormat, 6, totalSteps, 7, PRINTING_MODE_LEFT_ALIGN, TRUE);
     BufferIntegerAsString(app->msgFormat, 7, totalWatts, 7, PRINTING_MODE_LEFT_ALIGN, TRUE);
     PokewalkerApp_PrintMessage(app, 2, msg_0274_00056, MAKE_TEXT_COLOR(3, 4, 0));
@@ -656,7 +656,7 @@ int PokewalkerApp_StrollReport_PrintLevelUp(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_StrollReport_PrintWatts(PokewalkerApp *app) {
-    if (app->irStatus.unk_0A == 0) {
+    if (app->irStatus.watts == 0) {
         app->textPrinterId = PokewalkerApp_StartMessageBox(app, 0, msg_0274_00046);
     } else {
         PlayFanfare(SEQ_ME_ITEM);
@@ -929,14 +929,14 @@ int PokewalkerApp_StrollReport_ShowGifts(PokewalkerApp *app) {
     PokewalkerApp_LoadTilemap(app, 2, 15);
     PokewalkerApp_PrintStringDefaultColor(app, 1, app->giftsReceivedText, 0);
     BufferPokewalkerCourseName(app->msgFormat, 2, (u8)Pokewalker_GetCourse(app->pokewalker));
-    currentSteps = app->peerIdentity.unk_64;
+    currentSteps = app->peerIdentity.steps;
     startSteps = app->walkerSteps;
     if (currentSteps > startSteps) {
         strollSteps = currentSteps - startSteps;
     }
     Pokewalker_GetStepsAndWatts(app->pokewalker, &totalSteps, &totalWatts);
     BufferIntegerAsString(app->msgFormat, 5, strollSteps, 7, PRINTING_MODE_LEFT_ALIGN, TRUE);
-    BufferIntegerAsString(app->msgFormat, 3, app->irStatus.unk_0A, 5, PRINTING_MODE_LEFT_ALIGN, TRUE);
+    BufferIntegerAsString(app->msgFormat, 3, app->irStatus.watts, 5, PRINTING_MODE_LEFT_ALIGN, TRUE);
     BufferIntegerAsString(app->msgFormat, 6, totalSteps, 7, PRINTING_MODE_LEFT_ALIGN, TRUE);
     BufferIntegerAsString(app->msgFormat, 7, totalWatts, 7, PRINTING_MODE_LEFT_ALIGN, TRUE);
     PokewalkerApp_PrintString(app, 5, app->stepsToDateText, 0, MAKE_TEXT_COLOR(3, 4, 0));
@@ -956,7 +956,7 @@ int PokewalkerApp_StrollReport_WaitGiftsFade(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_StrollReport_PrintGiftWatts(PokewalkerApp *app) {
-    if (app->irStatus.unk_0A == 0) {
+    if (app->irStatus.watts == 0) {
         app->textPrinterId = PokewalkerApp_StartMessageBox(app, 0, msg_0274_00046);
     } else {
         app->textPrinterId = PokewalkerApp_StartMessageBox(app, 0, msg_0274_00045);
@@ -1013,14 +1013,14 @@ int PokewalkerApp_StrollReport_ShowRecords(PokewalkerApp *app) {
     PokewalkerApp_LoadTilemap(app, 2, 15);
     PokewalkerApp_PrintStringDefaultColor(app, 1, app->walkerRecordsText, 0);
     BufferPokewalkerCourseName(app->msgFormat, 2, (u8)Pokewalker_GetCourse(app->pokewalker));
-    currentSteps = app->peerIdentity.unk_64;
+    currentSteps = app->peerIdentity.steps;
     startSteps = app->walkerSteps;
     if (currentSteps > startSteps) {
         strollSteps = currentSteps - startSteps;
     }
     Pokewalker_GetStepsAndWatts(app->pokewalker, &totalSteps, &totalWatts);
     BufferIntegerAsString(app->msgFormat, 5, strollSteps, 7, PRINTING_MODE_LEFT_ALIGN, TRUE);
-    BufferIntegerAsString(app->msgFormat, 3, app->irStatus.unk_0A, 5, PRINTING_MODE_LEFT_ALIGN, TRUE);
+    BufferIntegerAsString(app->msgFormat, 3, app->irStatus.watts, 5, PRINTING_MODE_LEFT_ALIGN, TRUE);
     BufferIntegerAsString(app->msgFormat, 6, totalSteps, 7, PRINTING_MODE_LEFT_ALIGN, TRUE);
     BufferIntegerAsString(app->msgFormat, 7, totalWatts, 7, PRINTING_MODE_LEFT_ALIGN, TRUE);
     PokewalkerApp_PrintString(app, 5, app->stepsToDateText, 0, MAKE_TEXT_COLOR(3, 4, 0));
@@ -1040,7 +1040,7 @@ int PokewalkerApp_StrollReport_WaitRecordsFade(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_StrollReport_PrintRecords(PokewalkerApp *app) {
-    if (app->irStatus.unk_0A == 0) {
+    if (app->irStatus.watts == 0) {
         app->textPrinterId = PokewalkerApp_StartMessageBox(app, 0, msg_0274_00047);
     } else {
         PlayFanfare(SEQ_ME_ITEM);

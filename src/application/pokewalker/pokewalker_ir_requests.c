@@ -11,7 +11,7 @@ typedef struct PokewalkerIrWorkHeader {
     u8 unk_02[6];
     u8 *unk_08;
     u8 unk_0C[4];
-    u8 *unk_10;
+    u8 *uploadImage;
     u32 error;
     u32 unk_18;
 } PokewalkerIrWorkHeader; // size=0x1C
@@ -21,10 +21,10 @@ typedef struct PokewalkerIrWorkBuffers {
     void *identity;
     void *peerIdentity;
     void *unk_28;
-    u8 *unk_2C;
-    u8 *unk_30;
-    u8 *unk_34;
-    u8 *unk_38;
+    u8 *strollData;
+    u8 *records;
+    u8 *blocks;
+    u8 *status;
     u64 transferStartTick;
     u8 *compressedSizes; // 0x44 (offsets from 0x021FFAA4)
     u8 *compressBuffer;
@@ -63,9 +63,9 @@ PokewalkerIrWorkSync ov112_021FFB08;
 PokewalkerIrWorkProgress ov112_021FFB5C;
 
 void PokewalkerIr_RequestUpload(u8 *a, u8 *b, u8 *c) {
-    ov112_021FFAA4.unk_10 = a;
-    ov112_021FFAC0.unk_2C = b;
-    ov112_021FFAC0.unk_30 = c;
+    ov112_021FFAA4.uploadImage = a;
+    ov112_021FFAC0.strollData = b;
+    ov112_021FFAC0.records = c;
     ov112_021FFB08.command = 0x32;
     ov112_021FFB08.step = 0x20;
     PokewalkerIr_BeginTransfer(NULL, 0, 0xD4C);
@@ -75,21 +75,21 @@ void PokewalkerIr_RequestUpload(u8 *a, u8 *b, u8 *c) {
     if (ov112_021FFAC0.compressBuffer != NULL) {
         ov112_021FFAC0.sizes0 = ov112_021FFAC0.compressedSizes;
         ov112_021FFAC0.upload0 = ov112_021FFAC0.compressBuffer;
-        PokewalkerIr_CompressBlocks(ov112_021FFAA4.unk_10, ov112_021FFAC0.upload0, 0x8C50, ov112_021FFAC0.sizes0);
+        PokewalkerIr_CompressBlocks(ov112_021FFAA4.uploadImage, ov112_021FFAC0.upload0, 0x8C50, ov112_021FFAC0.sizes0);
         ov112_021FFAC0.sizes1 = ov112_021FFAC0.compressedSizes + 0x119;
         ov112_021FFAC0.upload1 = ov112_021FFAC0.compressBuffer + 0x8C80;
-        PokewalkerIr_CompressBlocks(ov112_021FFAC0.unk_2C, ov112_021FFAC0.upload1, 0x28BE, ov112_021FFAC0.sizes1);
+        PokewalkerIr_CompressBlocks(ov112_021FFAC0.strollData, ov112_021FFAC0.upload1, 0x28BE, ov112_021FFAC0.sizes1);
         ov112_021FFAC0.sizes2 = ov112_021FFAC0.sizes1 + 0x52;
         ov112_021FFAC0.upload2 = ov112_021FFAC0.upload1 + 0x2900;
-        PokewalkerIr_CompressBlocks(ov112_021FFAC0.unk_30, ov112_021FFAC0.upload2, 0x224, ov112_021FFAC0.sizes2);
+        PokewalkerIr_CompressBlocks(ov112_021FFAC0.records, ov112_021FFAC0.upload2, 0x224, ov112_021FFAC0.sizes2);
     }
 }
 
 void PokewalkerIr_RequestReceive(u8 *a, u8 *b, u8 *c, u8 *d) {
     ov112_021FFAA4.unk_08 = a;
-    ov112_021FFAC0.unk_38 = b;
-    ov112_021FFAC0.unk_34 = c;
-    ov112_021FFAC0.unk_30 = d;
+    ov112_021FFAC0.status = b;
+    ov112_021FFAC0.blocks = c;
+    ov112_021FFAC0.records = d;
     ov112_021FFB08.command = 0x40;
     ov112_021FFB08.step = 0x20;
     PokewalkerIr_BeginTransfer(NULL, 0, 0xD4C);
@@ -99,10 +99,10 @@ void PokewalkerIr_RequestReceive(u8 *a, u8 *b, u8 *c, u8 *d) {
 }
 
 void PokewalkerIr_RequestSendStroll(u8 *a, u8 *b, u8 *c, u8 *d) {
-    ov112_021FFAC0.unk_2C = a;
-    ov112_021FFAC0.unk_30 = b;
-    ov112_021FFAC0.unk_38 = c;
-    ov112_021FFAC0.unk_34 = d;
+    ov112_021FFAC0.strollData = a;
+    ov112_021FFAC0.records = b;
+    ov112_021FFAC0.status = c;
+    ov112_021FFAC0.blocks = d;
     ov112_021FFB08.command = 0x52;
     ov112_021FFB08.step = 0x20;
     PokewalkerIr_BeginTransfer(NULL, 0, 0xD4C);
@@ -112,9 +112,9 @@ void PokewalkerIr_RequestSendStroll(u8 *a, u8 *b, u8 *c, u8 *d) {
     if (ov112_021FFAC0.compressBuffer != NULL) {
         ov112_021FFAC0.sizes1 = ov112_021FFAC0.compressedSizes + 0x119;
         ov112_021FFAC0.upload1 = ov112_021FFAC0.compressBuffer + 0x8C80;
-        PokewalkerIr_CompressBlocks(ov112_021FFAC0.unk_2C, ov112_021FFAC0.upload1, 0x28BE, ov112_021FFAC0.sizes1);
+        PokewalkerIr_CompressBlocks(ov112_021FFAC0.strollData, ov112_021FFAC0.upload1, 0x28BE, ov112_021FFAC0.sizes1);
         ov112_021FFAC0.sizes2 = ov112_021FFAC0.sizes1 + 0x52;
         ov112_021FFAC0.upload2 = ov112_021FFAC0.upload1 + 0x2900;
-        PokewalkerIr_CompressBlocks(ov112_021FFAC0.unk_30, ov112_021FFAC0.upload2, 0x224, ov112_021FFAC0.sizes2);
+        PokewalkerIr_CompressBlocks(ov112_021FFAC0.records, ov112_021FFAC0.upload2, 0x224, ov112_021FFAC0.sizes2);
     }
 }

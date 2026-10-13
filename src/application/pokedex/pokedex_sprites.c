@@ -286,12 +286,12 @@ void PokedexApp_SetListIcon(PokedexAppData *pokedexApp, int entry, int sprite) {
     offset = (u32)entry * 4;
     {
         PokedexAppData_UnkSub1030 *base = pokedexApp->listEntries;
-        species = ((PokedexAppData_UnkSub1030 *)((u8 *)base + offset))->unk_0;
+        species = ((PokedexAppData_UnkSub1030 *)((u8 *)base + offset))->species;
         entries = base;
     }
     if (species != SPECIES_NONE) {
         form = Pokedex_GetSeenFormByIdx(pokedexApp->args->pokedex, species, 0);
-        species = ((PokedexAppData_UnkSub1030 *)((u8 *)entries + offset))->unk_0;
+        species = ((PokedexAppData_UnkSub1030 *)((u8 *)entries + offset))->species;
         if (species == SPECIES_PICHU) {
             if (form == 2) {
                 form = 1;
@@ -301,7 +301,7 @@ void PokedexApp_SetListIcon(PokedexAppData *pokedexApp, int entry, int sprite) {
         }
         PokedexApp_SetMonIcon(pokedexApp, species, form, sprite);
         ManagedSprite_SetDrawFlag(sprites[sprite], TRUE);
-        if (((PokedexAppData_UnkSub1030 *)((u8 *)pokedexApp->listEntries + offset))->unk_2 == 1) {
+        if (((PokedexAppData_UnkSub1030 *)((u8 *)pokedexApp->listEntries + offset))->caughtState == 1) {
             PokedexApp_SetSpriteTranslucent(pokedexApp, sprite, TRUE);
         } else {
             PokedexApp_SetSpriteTranslucent(pokedexApp, sprite, FALSE);
@@ -524,7 +524,7 @@ void PokedexApp_CreateFootprintSprite(PokedexAppData *pokedexApp, int index) {
 void PokedexApp_UpdateFootprintSprite(PokedexAppData *pokedexApp, u32 species, int entry, int sprite) {
     void *graphics;
 
-    if (pokedexApp->language != GAME_LANGUAGE || species == SPECIES_NONE || pokedexApp->listEntries[entry].unk_2 == 1
+    if (pokedexApp->language != GAME_LANGUAGE || species == SPECIES_NONE || pokedexApp->listEntries[entry].caughtState == 1
         || (species == SPECIES_GIRATINA && Pokedex_GetSeenFormByIdx(pokedexApp->args->pokedex, species, 0) == 1)) {
         ManagedSprite_SetDrawFlag(pokedexApp->sprites[sprite], FALSE);
     } else {
@@ -586,7 +586,7 @@ void PokedexApp_UpdateTypeIcons(PokedexAppData *pokedexApp, u32 species, int ent
     u16 type1;
     u16 type2;
 
-    if (pokedexApp->language != GAME_LANGUAGE || species == SPECIES_NONE || pokedexApp->listEntries[entry].unk_2 == 1) {
+    if (pokedexApp->language != GAME_LANGUAGE || species == SPECIES_NONE || pokedexApp->listEntries[entry].caughtState == 1) {
         index *= 4;
         ManagedSprite_SetDrawFlag(*(ManagedSprite **)((u8 *)pokedexApp->sprites + index), FALSE);
         ManagedSprite_SetDrawFlag(*(ManagedSprite **)((u8 *)&pokedexApp->sprites[1] + index), FALSE);
@@ -1066,7 +1066,7 @@ void PokedexApp_SyncListScrollbarToPage(PokedexAppData *pokedexApp, int sprite, 
 
 // the Poke Ball mark of a caught entry
 void PokedexApp_UpdateCaughtMarkSprite(PokedexAppData *pokedexApp, int entry, int sprite) {
-    if (pokedexApp->listEntries[entry].unk_2 == 2) {
+    if (pokedexApp->listEntries[entry].caughtState == 2) {
         ManagedSprite_SetDrawFlag(pokedexApp->sprites[sprite], TRUE);
     } else {
         ManagedSprite_SetDrawFlag(pokedexApp->sprites[sprite], FALSE);
@@ -1280,13 +1280,13 @@ void PokedexApp_UpdateSliderSprites(PokedexAppData *pokedexApp, u32 min, u32 max
     if (weight == FALSE) {
         PokedexApp_SetHeightSliderX(pokedexApp, PokedexApp_SliderValueToX(pokedexApp, max), 5, TRUE);
         PokedexApp_SetHeightSliderX(pokedexApp, PokedexApp_SliderValueToX(pokedexApp, min), 11, FALSE);
-        PokedexApp_DrawHeightDigits(pokedexApp, 6, pokedexApp->sliderValues[max].unk_0);
-        PokedexApp_DrawHeightDigits(pokedexApp, 12, pokedexApp->sliderValues[min].unk_0);
+        PokedexApp_DrawHeightDigits(pokedexApp, 6, pokedexApp->sliderValues[max].height);
+        PokedexApp_DrawHeightDigits(pokedexApp, 12, pokedexApp->sliderValues[min].height);
     } else {
         PokedexApp_SetWeightSliderX(pokedexApp, PokedexApp_SliderValueToX(pokedexApp, max), 5, TRUE);
         PokedexApp_SetWeightSliderX(pokedexApp, PokedexApp_SliderValueToX(pokedexApp, min), 11, FALSE);
-        PokedexApp_DrawWeightDigits(pokedexApp, 6, pokedexApp->sliderValues[max].unk_2);
-        PokedexApp_DrawWeightDigits(pokedexApp, 12, pokedexApp->sliderValues[min].unk_2);
+        PokedexApp_DrawWeightDigits(pokedexApp, 6, pokedexApp->sliderValues[max].weight);
+        PokedexApp_DrawWeightDigits(pokedexApp, 12, pokedexApp->sliderValues[min].weight);
     }
     PokedexApp_UpdateSliderLimitSprites(pokedexApp, max, 1);
     PokedexApp_UpdateSliderLimitSprites(pokedexApp, min, 3);

@@ -37,15 +37,15 @@ typedef struct PokewalkerIrWork {
     u32 blockIndex; // 0x04
     void *unk_08;
     void *unk_0C;
-    void *unk_10;
+    void *uploadImage;
     int error; // 0x14
     u32 unk_18;
     u32 unk_1C;
     PokewalkerIrIdentity *identity;     // 0x20
     PokewalkerIrIdentity *peerIdentity; // 0x24
     void *unk_28;
-    void *unk_2C;
-    u8 *unk_30;
+    void *strollData;
+    u8 *records;
     PokewalkerIrBlocks *blocks; // 0x34
     PokewalkerIrStatus *status; // 0x38
     u64 transferStartTick;      // 0x3C
