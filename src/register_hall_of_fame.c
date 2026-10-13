@@ -198,13 +198,13 @@ struct RegisterHallOfFameData {
     RegisterHallOfFameScene nextScene;    // 13050
     u16 sceneSubstep;
     u16 curMonIndex;
-    f32 unk_13058;
-    f32 unk_1305C;
+    f32 frontpicScale;
+    f32 frontpicShadowScale;
     u32 requestUnsilhouetteFrontpic : 1;
     u32 requestUnsilhouetteBackpic : 1;
     u32 requestBeginSpotlightsAndConfetti : 1;
     u32 requestPlayFlashKanseiSfx : 1;
-    u32 unk_13060_4 : 1;
+    u32 requestFadeToBlack : 1;
     u32 scrollingPolkadotBackground : 1;
     u32 generatingConfetti : 1;
     int fadeDuration;
@@ -237,9 +237,9 @@ typedef struct RegisterHofSpotlightChildTaskData {
 typedef struct RegHOFConfettiParticle {
     u32 color;
     u8 filler_04[0x4];
-    VecFx16 unk_08[4];
-    VecFx16 unk_20;
-    VecFx16 unk_26;
+    VecFx16 vertices[4];
+    VecFx16 rotation;
+    VecFx16 rotationSpeed;
     MtxFx44 translationMat;
     u32 unk_6C;
 } RegHOFConfettiParticle;
@@ -1117,9 +1117,9 @@ static RegisterHallOfFameScene RegisterHallOfFame_WholePartyMain(RegisterHallOfF
             PlaySE(SEQ_SE_GS_DENDOUIRI_KANSEI);
             data->requestPlayFlashKanseiSfx = FALSE;
         }
-        if (data->unk_13060_4 == TRUE) {
+        if (data->requestFadeToBlack == TRUE) {
             RegisterHallOfFame_AfterFullParty_FadeToBlack(data);
-            data->unk_13060_4 = FALSE;
+            data->requestFadeToBlack = FALSE;
         }
         break;
     case REGHOF_WHOLE_SUBSCENE_EXIT:
@@ -1730,8 +1730,8 @@ static BOOL RegisterHallOfFame_ShowMon_LeftSide(RegisterHallOfFameData *data) {
             ManagedSprite_SetPriority(data->monPics[REGHOF_PIC_INDIV_BACK_SHADOW], 3);
             ManagedSprite_SetPriority(data->monPics[REGHOF_PIC_INDIV_OWSPRITE], 3);
             ManagedSprite_SetPriority(data->monPics[REGHOF_PIC_INDIV_OWSPRITE_SHADOW], 3);
-            data->unk_13058 = 1.0f;
-            data->unk_1305C = 1.5f;
+            data->frontpicScale = 1.0f;
+            data->frontpicShadowScale = 1.5f;
             data->subprocTimer = 0;
             ++data->subprocStage;
         } else {
@@ -1769,10 +1769,10 @@ static BOOL RegisterHallOfFame_ShowMon_LeftSide(RegisterHallOfFameData *data) {
             ManagedSprite_OffsetPositionXY(data->monPics[REGHOF_PIC_INDIV_OWSPRITE_SHADOW], -6, -7);
             ManagedSprite_OffsetPositionXY(data->monPics[REGHOF_PIC_INDIV_FRONT], -4, 4);
             ManagedSprite_OffsetPositionXY(data->monPics[REGHOF_PIC_INDIV_FRONT_SHADOW], -4, 4);
-            data->unk_13058 += 0.08;
-            data->unk_1305C += 0.05;
-            ManagedSprite_SetAffineScale(data->monPics[REGHOF_PIC_INDIV_FRONT], data->unk_13058, data->unk_13058);
-            ManagedSprite_SetAffineScale(data->monPics[REGHOF_PIC_INDIV_FRONT_SHADOW], data->unk_1305C, data->unk_1305C);
+            data->frontpicScale += 0.08;
+            data->frontpicShadowScale += 0.05;
+            ManagedSprite_SetAffineScale(data->monPics[REGHOF_PIC_INDIV_FRONT], data->frontpicScale, data->frontpicScale);
+            ManagedSprite_SetAffineScale(data->monPics[REGHOF_PIC_INDIV_FRONT_SHADOW], data->frontpicShadowScale, data->frontpicShadowScale);
             ++data->subprocTimer;
         }
         break;
@@ -1926,8 +1926,8 @@ static BOOL RegisterHallOfFame_ShowMon_RightSide(RegisterHallOfFameData *data) {
             ManagedSprite_SetPriority(data->monPics[REGHOF_PIC_INDIV_BACK_SHADOW], 3);
             ManagedSprite_SetPriority(data->monPics[REGHOF_PIC_INDIV_OWSPRITE], 3);
             ManagedSprite_SetPriority(data->monPics[REGHOF_PIC_INDIV_OWSPRITE_SHADOW], 3);
-            data->unk_13058 = 1.0f;
-            data->unk_1305C = 1.5f;
+            data->frontpicScale = 1.0f;
+            data->frontpicShadowScale = 1.5f;
             data->subprocTimer = 0;
             ++data->subprocStage;
         } else {
@@ -1965,10 +1965,10 @@ static BOOL RegisterHallOfFame_ShowMon_RightSide(RegisterHallOfFameData *data) {
             ManagedSprite_OffsetPositionXY(data->monPics[REGHOF_PIC_INDIV_OWSPRITE_SHADOW], 6, -7);
             ManagedSprite_OffsetPositionXY(data->monPics[REGHOF_PIC_INDIV_FRONT], 4, 4);
             ManagedSprite_OffsetPositionXY(data->monPics[REGHOF_PIC_INDIV_FRONT_SHADOW], 4, 4);
-            data->unk_13058 += 0.08;
-            data->unk_1305C += 0.05;
-            ManagedSprite_SetAffineScale(data->monPics[REGHOF_PIC_INDIV_FRONT], data->unk_13058, data->unk_13058);
-            ManagedSprite_SetAffineScale(data->monPics[REGHOF_PIC_INDIV_FRONT_SHADOW], data->unk_1305C, data->unk_1305C);
+            data->frontpicScale += 0.08;
+            data->frontpicShadowScale += 0.05;
+            ManagedSprite_SetAffineScale(data->monPics[REGHOF_PIC_INDIV_FRONT], data->frontpicScale, data->frontpicScale);
+            ManagedSprite_SetAffineScale(data->monPics[REGHOF_PIC_INDIV_FRONT_SHADOW], data->frontpicShadowScale, data->frontpicShadowScale);
             ++data->subprocTimer;
         }
         break;
@@ -2219,7 +2219,7 @@ static BOOL RegisterHallOfFame_WholeMonsSceneSubproc(RegisterHallOfFameData *dat
         if (data->subprocTimer == 30) {
             if (IsPaletteFadeFinished() == TRUE) {
                 data->fadeDuration = 15;
-                data->unk_13060_4 = TRUE;
+                data->requestFadeToBlack = TRUE;
                 ++data->subprocStage;
             }
         } else {
@@ -2617,15 +2617,15 @@ static SysTask *RegisterHallOfFame_CreateConfettiTask(RegisterHallOfFameData *da
         fx16 sp0 = (LCRandom() % FX32_CONST(0.16015625)) - FX32_CONST(0.080078125);
 
         for (j = 0; j < 4; ++j) {
-            SetVec(confetti->particles[i].unk_08[j], sp8 + sConfettiCoords[j].x, sp4 + sConfettiCoords[j].y, sp0 + sConfettiCoords[j].z);
-            SetVec(confetti->particles[i].unk_20, 0, 0, 0);
-            SetVec(confetti->particles[i].unk_26, (LCRandom() % FX32_CONST(0.125)) + FX32_CONST(0.125), (LCRandom() % FX32_CONST(0.125)) + FX32_CONST(0.125), (LCRandom() % FX32_CONST(0.125)) + FX32_CONST(0.125));
+            SetVec(confetti->particles[i].vertices[j], sp8 + sConfettiCoords[j].x, sp4 + sConfettiCoords[j].y, sp0 + sConfettiCoords[j].z);
+            SetVec(confetti->particles[i].rotation, 0, 0, 0);
+            SetVec(confetti->particles[i].rotationSpeed, (LCRandom() % FX32_CONST(0.125)) + FX32_CONST(0.125), (LCRandom() % FX32_CONST(0.125)) + FX32_CONST(0.125), (LCRandom() % FX32_CONST(0.125)) + FX32_CONST(0.125));
             MTX_Identity44(&confetti->particles[i].translationMat);
         }
 
         j = LCRandom() & 7;
         while (j--) {
-            VEC_Fx16Add(&confetti->particles[i].unk_20, &confetti->particles[i].unk_26, &confetti->particles[i].unk_20);
+            VEC_Fx16Add(&confetti->particles[i].rotation, &confetti->particles[i].rotationSpeed, &confetti->particles[i].rotation);
         }
     }
 
@@ -2660,16 +2660,16 @@ static void Task_RegisterHallOfFame_Confetti(SysTask *task, void *taskData) {
         G3B_PolygonAttr(&confetti->gxDlInfo, GX_LIGHTID_3, GX_POLYGONMODE_MODULATE, GX_CULL_NONE, 0x3F, 0x1F, 0);
         G3B_MaterialColorDiffAmb(&confetti->gxDlInfo, RGB(20, 20, 20), RGB_BLACK, FALSE);
         for (int i = 0; i < 48; ++i) {
-            confetti->particles[i].unk_08[3].y -= 85;
-            if (confetti->particles[i].unk_08[3].y <= -FX16_ONE) {
-                confetti->particles[i].unk_08[3].y = confetti->particles[i].unk_08[3].y + 2 * FX16_ONE;
+            confetti->particles[i].vertices[3].y -= 85;
+            if (confetti->particles[i].vertices[3].y <= -FX16_ONE) {
+                confetti->particles[i].vertices[3].y = confetti->particles[i].vertices[3].y + 2 * FX16_ONE;
             }
-            confetti->particles[i].unk_08[0].y = confetti->particles[i].unk_08[3].y - FX16_CONST(0.1);
-            confetti->particles[i].unk_08[1].y = confetti->particles[i].unk_08[0].y;
-            confetti->particles[i].unk_08[2].y = confetti->particles[i].unk_08[3].y;
-            VEC_Fx16Add(&confetti->particles[i].unk_20, &confetti->particles[i].unk_26, &confetti->particles[i].unk_20);
+            confetti->particles[i].vertices[0].y = confetti->particles[i].vertices[3].y - FX16_CONST(0.1);
+            confetti->particles[i].vertices[1].y = confetti->particles[i].vertices[0].y;
+            confetti->particles[i].vertices[2].y = confetti->particles[i].vertices[3].y;
+            VEC_Fx16Add(&confetti->particles[i].rotation, &confetti->particles[i].rotationSpeed, &confetti->particles[i].rotation);
             MTX_Identity44(&confetti->particles[i].translationMat);
-            MTX_TransApply44(&confetti->particles[i].translationMat, &confetti->particles[i].translationMat, confetti->particles[i].unk_08[0].x, confetti->particles[i].unk_08[0].y, confetti->particles[i].unk_08[0].z);
+            MTX_TransApply44(&confetti->particles[i].translationMat, &confetti->particles[i].translationMat, confetti->particles[i].vertices[0].x, confetti->particles[i].vertices[0].y, confetti->particles[i].vertices[0].z);
             G3B_LightColor(&confetti->gxDlInfo, GX_LIGHTID_0, RGB(11, 11, 11));
             G3B_LightColor(&confetti->gxDlInfo, GX_LIGHTID_1, confetti->particles[i].color);
             SetVec(lightVector, 0, FX16_ONE - 1, -FX16_ONE + 1);
@@ -2678,11 +2678,11 @@ static void Task_RegisterHallOfFame_Confetti(SysTask *task, void *taskData) {
             SetVec(lightVector, 0, -FX16_ONE + 1, FX16_ONE - 1);
             VEC_Fx16Normalize(&lightVector, &lightVector);
             G3B_LightVector(&confetti->gxDlInfo, GX_LIGHTID_1, lightVector.x, lightVector.y, lightVector.z);
-            MTX_RotX44(&rotMatrix, FX_SinIdx((u16)confetti->particles[i].unk_20.x), FX_CosIdx((u16)confetti->particles[i].unk_20.x));
+            MTX_RotX44(&rotMatrix, FX_SinIdx((u16)confetti->particles[i].rotation.x), FX_CosIdx((u16)confetti->particles[i].rotation.x));
             MTX_Concat44(&rotMatrix, &confetti->particles[i].translationMat, &confetti->particles[i].translationMat);
-            MTX_RotY44(&rotMatrix, FX_SinIdx((u16)confetti->particles[i].unk_20.y), FX_CosIdx((u16)confetti->particles[i].unk_20.y));
+            MTX_RotY44(&rotMatrix, FX_SinIdx((u16)confetti->particles[i].rotation.y), FX_CosIdx((u16)confetti->particles[i].rotation.y));
             MTX_Concat44(&rotMatrix, &confetti->particles[i].translationMat, &confetti->particles[i].translationMat);
-            MTX_RotZ44(&rotMatrix, FX_SinIdx((u16)confetti->particles[i].unk_20.z), FX_CosIdx((u16)confetti->particles[i].unk_20.z));
+            MTX_RotZ44(&rotMatrix, FX_SinIdx((u16)confetti->particles[i].rotation.z), FX_CosIdx((u16)confetti->particles[i].rotation.z));
             MTX_Concat44(&rotMatrix, &confetti->particles[i].translationMat, &confetti->particles[i].translationMat);
             G3B_MaterialColorSpecEmi(&confetti->gxDlInfo, RGB_WHITE, confetti->particles[i].color, FALSE);
             G3B_PushMtx(&confetti->gxDlInfo);

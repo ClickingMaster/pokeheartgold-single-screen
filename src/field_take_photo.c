@@ -539,9 +539,9 @@ static void Photo_InitFromArcData(Photo *photo, FieldSystem *fieldSystem, u8 ico
     GF_RTC_CopyTime(&time);
     photo->hour = time.hour;
     photo->min = time.minute;
-    MI_CpuCopy8(&sCameraParam, &photo->unk_48, sizeof(PhotoCameraParam));
-    photo->unk_40[0] = a6;
-    photo->unk_40[1] = a7;
+    MI_CpuCopy8(&sCameraParam, &photo->cameraParam, sizeof(PhotoCameraParam));
+    photo->hiddenPropModels[0] = a6;
+    photo->hiddenPropModels[1] = a7;
     photo->unk_46 = a8;
     photo->subjectSpriteId = subjectObjId;
     photo->numMons = photo->subjectSpriteId != 0 ? 1 : partySize;
@@ -837,8 +837,8 @@ static void sub_0206B82C(PlayerAvatar *playerAvatar, u8 state, u8 gender) {
 
 static void sub_0206B880(FieldSystem *fieldSystem, Photo *photo) {
     for (u8 i = 0; i < 2; ++i) {
-        if (photo->unk_40[i] != 0) {
-            sub_02054EB0(fieldSystem, photo->unk_40[i], TRUE);
+        if (photo->hiddenPropModels[i] != 0) {
+            sub_02054EB0(fieldSystem, photo->hiddenPropModels[i], TRUE);
         }
     }
 }

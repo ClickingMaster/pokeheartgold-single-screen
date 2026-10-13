@@ -817,12 +817,12 @@ void EvolutionScene_Run(EvolutionTaskData *data) {
             Pokepic_SetAttr(data->newPokepic, POKEPIC_VANISHED, TRUE);
             data->summaryArgs->party = (Party *)data->mon;
             data->summaryArgs->options = data->options;
-            data->summaryArgs->unk11 = 0;
+            data->summaryArgs->monDataType = 0;
             data->summaryArgs->partySlot = 0;
             data->summaryArgs->partyCount = 1;
             data->summaryArgs->moveToLearn = data->newMove;
-            data->summaryArgs->unk12 = 2;
-            data->summaryArgs->unk28 = 0;
+            data->summaryArgs->mode = 2;
+            data->summaryArgs->chatot = 0;
             data->summaryArgs->menuInputStatePtr = NULL;
             PokemonSummary_SetPages(data->summaryArgs, gEvolutionSummaryPages);
             EvolutionScene_OpenSummary(data);
@@ -850,10 +850,10 @@ void EvolutionScene_Run(EvolutionTaskData *data) {
         SetMasterBrightnessNeutral(PM_LCD_TOP);
         SetMasterBrightnessNeutral(PM_LCD_BOTTOM);
         if (PaletteData_GetSelectedBuffersBitmask(data->paletteData) == 0) {
-            if (data->summaryArgs->unk16 == 4) {
+            if (data->summaryArgs->selectedMoveSlot == 4) {
                 data->state = EVO_STATE_ASK_STOP_LEARNING;
             } else {
-                data->moveSlot = data->summaryArgs->unk16;
+                data->moveSlot = data->summaryArgs->selectedMoveSlot;
                 data->state = EVO_STATE_PRINT_POOF;
             }
         }

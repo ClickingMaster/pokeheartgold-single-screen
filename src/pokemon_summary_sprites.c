@@ -118,7 +118,7 @@ void PokemonSummary_CreateSprites(PokemonSummary *summary) {
 
 // Sprite 9 marks the shown Pokemon's party slot (not for a box Pokemon).
 void PokemonSummary_UpdatePartySlotSprite(PokemonSummary *summary) {
-    if (summary->args->unk11 != 2) {
+    if (summary->args->monDataType != 2) {
         Sprite_SetPositionXY(summary->sprites[9], gPokemonSummaryPartySlotPositions[summary->args->partySlot][0], gPokemonSummaryPartySlotPositions[summary->args->partySlot][1]);
         Sprite_SetAnimCtrlSeq(summary->sprites[9], 2);
     } else {
@@ -313,15 +313,15 @@ void PokemonSummary_UpdatePokeathlonStars(PokemonSummary *summary) {
         mon = PokemonSummary_GetShownMon(summary);
         MI_CpuFill8(&data.aprijuice, 0, sizeof(PartyExtraSub));
         CalcBoxMonPokeathlonPerformance(mon, &data.performance);
-        if (summary->args->unk11 == 1) {
+        if (summary->args->monDataType == 1) {
             Party_GetMonAprijuiceModifiers(summary->args->party, &data.aprijuice, summary->args->partySlot);
         }
         CalcBoxmonPokeathlonStars((struct PokeathlonPerformanceStars *)&data.stars, mon, (s8 *)&data.aprijuice, HEAP_ID_19);
-        PokemonSummary_SetPokeathlonStatStars(summary->sprites, 79, data.performance.stats[4].hi, data.stars.stat4, data.stars.color[4], (s8)data.aprijuice.unk_00[4], 104);
-        PokemonSummary_SetPokeathlonStatStars(summary->sprites, 84, data.performance.stats[0].hi, data.stars.stat0, data.stars.color[0], (s8)data.aprijuice.unk_00[0], 105);
-        PokemonSummary_SetPokeathlonStatStars(summary->sprites, 89, data.performance.stats[2].hi, data.stars.stat2, data.stars.color[2], (s8)data.aprijuice.unk_00[2], 106);
-        PokemonSummary_SetPokeathlonStatStars(summary->sprites, 94, data.performance.stats[1].hi, data.stars.stat1, data.stars.color[1], (s8)data.aprijuice.unk_00[1], 107);
-        PokemonSummary_SetPokeathlonStatStars(summary->sprites, 99, data.performance.stats[3].hi, data.stars.stat3, data.stars.color[3], (s8)data.aprijuice.unk_00[3], 108);
+        PokemonSummary_SetPokeathlonStatStars(summary->sprites, 79, data.performance.stats[4].hi, data.stars.stat4, data.stars.color[4], (s8)data.aprijuice.stats[4], 104);
+        PokemonSummary_SetPokeathlonStatStars(summary->sprites, 84, data.performance.stats[0].hi, data.stars.stat0, data.stars.color[0], (s8)data.aprijuice.stats[0], 105);
+        PokemonSummary_SetPokeathlonStatStars(summary->sprites, 89, data.performance.stats[2].hi, data.stars.stat2, data.stars.color[2], (s8)data.aprijuice.stats[2], 106);
+        PokemonSummary_SetPokeathlonStatStars(summary->sprites, 94, data.performance.stats[1].hi, data.stars.stat1, data.stars.color[1], (s8)data.aprijuice.stats[1], 107);
+        PokemonSummary_SetPokeathlonStatStars(summary->sprites, 99, data.performance.stats[3].hi, data.stars.stat3, data.stars.color[3], (s8)data.aprijuice.stats[3], 108);
     } else {
         PokemonSummary_HidePokeathlonStars(summary);
     }
@@ -404,7 +404,7 @@ void PokemonSummary_UpdateMoveCursorSprite(PokemonSummary *summary) {
     u32 slot = summary->moveSlot;
     switch (slot) {
     case 4:
-        if (summary->args->unk12 == 2) {
+        if (summary->args->mode == 2) {
             Sprite_SetPositionXY(summary->sprites[9], 68, (s16)(slot * 32 + 40));
         } else {
             Sprite_SetPositionXY(summary->sprites[9], 68, (s16)(slot * 32 + 24));
@@ -412,7 +412,7 @@ void PokemonSummary_UpdateMoveCursorSprite(PokemonSummary *summary) {
         Sprite_SetAnimCtrlSeq(summary->sprites[9], 0);
         break;
     case 5:
-        if (summary->args->unk12 == 2) {
+        if (summary->args->mode == 2) {
             Sprite_SetPositionXY(summary->sprites[9], 220, 176);
             Sprite_SetAnimCtrlSeq(summary->sprites[9], 3);
         }
@@ -499,7 +499,7 @@ void PokemonSummary_LoadMonIcon(PokemonSummary *summary, void *mon, int sprite) 
     void *file;
     u32 location = NNS_G2dGetImageLocation(Sprite_GetImageProxy(summary->sprites[sprite]), NNS_G2D_VRAM_TYPE_2DSUB);
     int fileId;
-    if (summary->args->unk11 == 2) {
+    if (summary->args->monDataType == 2) {
         fileId = Boxmon_GetIconNaix(mon);
     } else {
         fileId = Pokemon_GetIconNaix(mon);
@@ -526,7 +526,7 @@ void PokemonSummary_LoadPartyIcons(PokemonSummary *summary) {
     int count;
     int i;
 
-    switch (summary->args->unk11) {
+    switch (summary->args->monDataType) {
     case 0:
         count = 1;
         break;
@@ -538,7 +538,7 @@ void PokemonSummary_LoadPartyIcons(PokemonSummary *summary) {
         break;
     }
     for (i = 0; i < count; i++) {
-        switch (summary->args->unk11) {
+        switch (summary->args->monDataType) {
         case 0:
             mon = PokemonSummary_GetShownMon(summary);
             thunk_Sprite_SetPaletteOverride(summary->sprites[73 + i], Pokemon_GetIconPalette(mon) + 12);
@@ -560,7 +560,7 @@ void PokemonSummary_LoadPartyIcons(PokemonSummary *summary) {
 
 void PokemonSummary_SetBoxMonIconPos(PokemonSummary *summary) {
     PokemonSummaryArgs *args = summary->args;
-    if (args->unk11 == 2) {
+    if (args->monDataType == 2) {
         Sprite_SetPositionXY(summary->sprites[73], 215, 80);
         Sprite_SetPositionXY(summary->sprites[74], 215, 80);
     }
@@ -569,7 +569,7 @@ void PokemonSummary_SetBoxMonIconPos(PokemonSummary *summary) {
 // A box Pokemon's icon alternates between sprites 73 and 74.
 void PokemonSummary_AlternateBoxMonIcon(PokemonSummary *summary) {
     void *mon;
-    if (summary->args->unk11 != 2) {
+    if (summary->args->monDataType != 2) {
         return;
     }
     mon = PokemonSummary_GetShownMon(summary);

@@ -76,7 +76,7 @@ void NewFieldTransitionEnvironment(FieldSystem *fieldSystem, int mapID, int warp
     FieldTransitionEnvironment *fenv = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(FieldTransitionEnvironment));
     fenv->state = 0;
     fenv->transitionState = 0;
-    fenv->unk1 = 0;
+    fenv->delayTimer = 0;
     fenv->location.mapId = mapID;
     fenv->location.warpId = warpID;
     fenv->location.x = x;
@@ -90,7 +90,7 @@ void NewFieldTransitionEnvironmentByMapType(FieldSystem *fieldSystem, int mapID,
     FieldTransitionEnvironment *fenv = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(FieldTransitionEnvironment));
     fenv->state = 0;
     fenv->transitionState = 0;
-    fenv->unk1 = 0;
+    fenv->delayTimer = 0;
     fenv->location.mapId = mapID;
     fenv->location.warpId = warpID;
     fenv->location.x = x;
@@ -142,8 +142,8 @@ BOOL Task_FieldTransition(TaskManager *man) {
     switch (env->state) {
     case 0:
         env->transitionState = 0;
-        env->unk24 = NULL;
-        env->unk1 = 0;
+        env->followMonBall = NULL;
+        env->delayTimer = 0;
         if (FollowMon_IsActive(fieldSystem) && FollowMon_CheckVisibleFlag(fieldSystem) && PlayerAvatar_GetState(fieldSystem->playerAvatar) != PLAYER_STATE_CYCLING) {
             env->state = 9;
             break;
@@ -153,13 +153,13 @@ BOOL Task_FieldTransition(TaskManager *man) {
             LocalMapObject *followMon = FollowMon_GetMapObject(fieldSystem);
             int species = FollowMon_GetSpecies(followMon);
             if (!FollowMon_GetPermissionBySpeciesAndMap(species, env->location.mapId)) {
-                env->unk24 = FollowMonBall_Spawn(followMon, 1);
+                env->followMonBall = FollowMonBall_Spawn(followMon, 1);
             }
         }
         env->state++;
         break;
     case 2:
-        if (env->unk24 && FieldEffect_IsActive(env->unk24)) {
+        if (env->followMonBall && FieldEffect_IsActive(env->followMonBall)) {
             break;
         }
         FieldBGM_TryFadeIn(fieldSystem, env->location.mapId);
@@ -224,8 +224,8 @@ BOOL Task_FieldTransition(TaskManager *man) {
         Heap_Free(env);
         return TRUE;
     case 9:
-        env->unk1++;
-        if (env->unk1 >= 2) {
+        env->delayTimer++;
+        if (env->delayTimer >= 2) {
             env->state = 1;
         }
         break;
@@ -253,13 +253,13 @@ BOOL FieldTransition_ExitThroughDoor(TaskManager *man) {
     FieldTransitionEnvironment *fenv = TaskManager_GetEnvironment(man);
     switch (fenv->transitionState) {
     case 0:
-        fenv->unk18 = DoorTransition_New();
-        DoorTransition_SetPosition(PlayerAvatar_GetXCoord(fieldSystem->playerAvatar), PlayerAvatar_GetZCoord(fieldSystem->playerAvatar), fenv->unk18);
+        fenv->transitionWork = DoorTransition_New();
+        DoorTransition_SetPosition(PlayerAvatar_GetXCoord(fieldSystem->playerAvatar), PlayerAvatar_GetZCoord(fieldSystem->playerAvatar), fenv->transitionWork);
         fenv->transitionState++;
         break;
     case 1:
-        if (DoorTransition_WalkIntoDoor(fieldSystem, fenv->unk18)) {
-            DoorTransition_Free(fenv->unk18);
+        if (DoorTransition_WalkIntoDoor(fieldSystem, fenv->transitionWork)) {
+            DoorTransition_Free(fenv->transitionWork);
             fenv->transitionState++;
         }
         break;
@@ -278,14 +278,14 @@ BOOL FieldTransition_ExitThroughSideDoor(TaskManager *man) {
     FieldTransitionEnvironment *fenv = TaskManager_GetEnvironment(man);
     switch (fenv->transitionState) {
     case 0:
-        fenv->unk18 = DoorTransition_New();
-        DoorTransition_SetPosition(PlayerAvatar_GetXCoord(fieldSystem->playerAvatar), PlayerAvatar_GetZCoord(fieldSystem->playerAvatar), fenv->unk18);
+        fenv->transitionWork = DoorTransition_New();
+        DoorTransition_SetPosition(PlayerAvatar_GetXCoord(fieldSystem->playerAvatar), PlayerAvatar_GetZCoord(fieldSystem->playerAvatar), fenv->transitionWork);
         fenv->transitionState++;
         break;
     case 1: {
-        FieldEnvSubUnk18 *info = fenv->unk18;
+        FieldEnvSubUnk18 *info = fenv->transitionWork;
         if (DoorTransition_WalkIntoSideDoor(fieldSystem, info, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar))) {
-            DoorTransition_Free(fenv->unk18);
+            DoorTransition_Free(fenv->transitionWork);
             fenv->transitionState++;
         }
         break;
@@ -387,8 +387,8 @@ BOOL FieldTransition_ExitRising(TaskManager *man) {
         Field_PlayerAvatar_OrrTransitionFlags(fieldSystem->playerAvatar, 512);
         Field_PlayerAvatar_ApplyTransitionFlags(fieldSystem->playerAvatar);
         MapObject_SetAnimation(obj, 0);
-        fenv->unk18 = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(FieldEnvSubUnk18));
-        fenv18 = fenv->unk18;
+        fenv->transitionWork = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(FieldEnvSubUnk18));
+        fenv18 = fenv->transitionWork;
         fenv18->state = 0;
         fenv18->direction = PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar);
         PlayerAvatar_ToggleAutomaticHeightUpdating(fieldSystem->playerAvatar, FALSE);
@@ -423,7 +423,7 @@ BOOL FieldTransition_ExitRising(TaskManager *man) {
     case 1:
         obj = PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
         VecFx32 pos;
-        fenv18 = fenv->unk18;
+        fenv18 = fenv->transitionWork;
         u32 state = fenv18->state;
         fenv18->state++;
         MapObject_CopyPositionVector(obj, &pos);
@@ -446,7 +446,7 @@ BOOL FieldTransition_ExitRising(TaskManager *man) {
     case 3:
         if (IsPaletteFadeFinished()) {
             PlayerAvatar_ToggleAutomaticHeightUpdatingImmediate(fieldSystem->playerAvatar, TRUE);
-            Heap_Free(fenv->unk18);
+            Heap_Free(fenv->transitionWork);
             return TRUE;
         }
     }
@@ -473,15 +473,15 @@ BOOL FieldTransition_ExitSinking(TaskManager *man) {
             Field_PlayerAvatar_OrrTransitionFlags(fieldSystem->playerAvatar, 512);
             Field_PlayerAvatar_ApplyTransitionFlags(fieldSystem->playerAvatar);
             MapObject_SetAnimation(obj, 0);
-            fenv->unk18 = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(FieldEnvSubUnk18));
-            fenv->unk18->state = 0;
+            fenv->transitionWork = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(FieldEnvSubUnk18));
+            fenv->transitionWork->state = 0;
             PlayerAvatar_ToggleAutomaticHeightUpdating(fieldSystem->playerAvatar, FALSE);
             fenv->transitionState++;
         }
         break;
     case 2:
         obj = PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
-        fenv18 = fenv->unk18;
+        fenv18 = fenv->transitionWork;
         fenv18->state++;
         VecFx32 pos;
         MapObject_CopyPositionVector(obj, &pos);
@@ -499,7 +499,7 @@ BOOL FieldTransition_ExitSinking(TaskManager *man) {
     case 4:
         if (IsPaletteFadeFinished()) {
             PlayerAvatar_ToggleAutomaticHeightUpdatingImmediate(fieldSystem->playerAvatar, TRUE);
-            Heap_Free(fenv->unk18);
+            Heap_Free(fenv->transitionWork);
             return TRUE;
         }
     }
@@ -522,12 +522,12 @@ BOOL FieldTransition_EnterWithDirectionalFade(TaskManager *man) {
         fenv->transitionState = 3;
         break;
     case 1:
-        fenv->unk18 = DoorTransition_New();
-        DoorTransition_SetPosition(PlayerAvatar_GetXCoord(fieldSystem->playerAvatar), PlayerAvatar_GetZCoord(fieldSystem->playerAvatar), fenv->unk18);
+        fenv->transitionWork = DoorTransition_New();
+        DoorTransition_SetPosition(PlayerAvatar_GetXCoord(fieldSystem->playerAvatar), PlayerAvatar_GetZCoord(fieldSystem->playerAvatar), fenv->transitionWork);
         fenv->transitionState++;
         break;
     case 2: {
-        FieldEnvSubUnk18 *unk = fenv->unk18;
+        FieldEnvSubUnk18 *unk = fenv->transitionWork;
         if (DoorTransition_WalkOutOfDoor(fieldSystem, unk)) {
             DoorTransition_Free(unk);
             MapObject_SetVisible(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar), FALSE);

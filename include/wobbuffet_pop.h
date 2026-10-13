@@ -175,7 +175,7 @@ typedef struct WobbuffetPopBonusTarget {
     u8 state;              // 0x10: index into the state table
     u8 step;               // 0x11
     u8 timer;              // 0x12
-    u8 unk_13;             // 0x13
+    u8 halfTime;           // 0x13
     u8 bonus;              // 0x14
     u8 atFront;            // 0x15
     u8 unk_16[2];          // 0x16
@@ -319,7 +319,7 @@ typedef struct WobbuffetPop {
     WobbuffetPopApp *app;                                              // 0x0000
     u32 hostNetId;                                                     // 0x0004
     u32 readyCount;                                                    // 0x0008
-    u32 unk_000C[4];                                                   // 0x000C
+    u32 playerValues[4];                                               // 0x000C
     PlazaGameSign *sign;                                               // 0x001C
     u32 gameState;                                                     // 0x0020
     SpriteSystem *spriteSystem;                                        // 0x0024

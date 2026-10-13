@@ -824,7 +824,7 @@ void Sound_FreeWaveOutChannel(int channel) {
 }
 
 BOOL Sound_StartWaveOut(SoundWaveOutParam *param, int channel) {
-    BOOL success = NNS_SndWaveOutStart(*param->unk00, param->unk04, param->unk08, param->unk0c, param->unk10, param->unk14, param->unk18, param->unk1c, param->unk20, param->unk24);
+    BOOL success = NNS_SndWaveOutStart(*param->handle, param->format, param->data, param->loopFlag, param->loopStartSample, param->samples, param->sampleRate, param->volume, param->speed, param->pan);
     if (!success) {
         Sound_FreeWaveOutChannel(channel);
     }
@@ -889,16 +889,16 @@ BOOL Sound_PlayReversedWaveArc(int waveArcNo, int volume, int pan, int channel, 
         }
         Sound_ReverseWaveBuffer(*buffer, size);
     }
-    param.unk00 = Sound_GetWaveOutHandle(channel);
-    param.unk04 = NNS_SND_WAVE_FORMAT_PCM8;
-    param.unk08 = *buffer;
-    param.unk0c = 0;
-    param.unk10 = 0;
-    param.unk14 = size;
-    param.unk18 = 13379;
-    param.unk1c = volume;
-    param.unk20 = 24576;
-    param.unk24 = pan;
+    param.handle = Sound_GetWaveOutHandle(channel);
+    param.format = NNS_SND_WAVE_FORMAT_PCM8;
+    param.data = *buffer;
+    param.loopFlag = 0;
+    param.loopStartSample = 0;
+    param.samples = size;
+    param.sampleRate = 13379;
+    param.volume = volume;
+    param.speed = 24576;
+    param.pan = pan;
     success = Sound_StartWaveOut(&param, channel);
     Sound_SetWaveOutVolume(channel, volume);
     *(u8 *)GF_SdatGetAttrPtr(15) = 1;

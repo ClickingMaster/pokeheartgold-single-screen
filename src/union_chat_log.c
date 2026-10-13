@@ -199,7 +199,7 @@ UnionChatLogData *UnionChatLog_Init(FieldSystem *fieldSystem) {
     data->fieldSystem = fieldSystem;
     data->bgConfig = fieldSystem->bgConfig;
     data->unionRoom = (Manager *)fieldSystem->unionRoomObjects;
-    data->unk_08 = fieldSystem->unionRoom;
+    data->unionRoomData = fieldSystem->unionRoom;
     data->profile = Save_PlayerData_GetProfile(fieldSystem->saveData);
     data->state = UNION_CHAT_LOG_STATE_RUNNING;
     data->task = task;
@@ -719,7 +719,7 @@ void UnionChatLog_CollectMessages(UnionChatLogData *data) {
                 }
             }
         }
-        mail = UnionRoom_TakeOwnChatMessage(data->unk_08);
+        mail = UnionRoom_TakeOwnChatMessage(data->unionRoomData);
         if (mail != NULL) {
             UnionChatLog_AppendMessage(data, data->profile, mail, PlayerProfile_GetTrainerID(data->profile));
         }

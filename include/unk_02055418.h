@@ -8,9 +8,9 @@
 // Berry Patch Manager in pokeplatinum. Definitely used for something else here.
 typedef struct UnkStruct_020556FC {
     enum HeapID heapID;
-    NNSG3dRenderObj unk4;
-    NNSG3dResMdl *unk58;
-    NNSG3dResFileHeader *unk5c;
+    NNSG3dRenderObj renderObj;
+    NNSG3dResMdl *model;
+    NNSG3dResFileHeader *modelFile;
 } UnkStruct_020556FC; // size 0x60
 
 void FieldSystem_StartBugContestTimer(FieldSystem *fieldSystem);

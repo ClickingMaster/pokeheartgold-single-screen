@@ -716,26 +716,26 @@ u32 PCBox_StartSummaryApp(PCBoxWork *work) {
     args = work->subAppArgs;
     if (work->selectedSlot < PC_BOX_SLOT_PARTY_START) {
         args->party = (Party *)PCBox_GetSlotBoxMon(work, work->activeBox, 0);
-        args->unk11 = 2;
+        args->monDataType = 2;
         args->partyCount = 30;
         args->partySlot = work->selectedSlot;
     } else {
         args->party = work->party;
-        args->unk11 = 1;
+        args->monDataType = 1;
         args->partyCount = Party_GetCount(work->party);
         args->partySlot = work->selectedSlot - PC_BOX_SLOT_PARTY_START;
     }
     args->options = work->options;
     PokemonSummaryArgs_SetPlayer(args, Save_PlayerData_GetProfile(work->args->saveData));
-    args->unk12 = 0;
+    args->mode = 0;
     PokemonSummary_SetPages(args, ov14_021F7D0C);
-    args->unk16 = 0;
+    args->selectedMoveSlot = 0;
     ((u8 *)args)[0x17] = 0;
     args->moveToLearn = 0;
     args->natDexEnabled = SaveArray_IsNatDexEnabled(work->args->saveData);
     args->ribbons = Save_SpecialRibbons_Get(work->args->saveData);
     *(u32 *)args->unk24 = 0;
-    args->unk28 = 0;
+    args->chatot = 0;
     args->unk2C = sub_02088288(work->args->saveData);
     args->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(work->args->saveData);
     args->menuInputStatePtr = work->args->menuInputStatePtr;
@@ -753,7 +753,7 @@ u32 PCBox_EndSummaryApp(PCBoxWork *work) {
             work->selectedSlot = args->partySlot + PC_BOX_SLOT_PARTY_START;
         }
     }
-    if (work->selectedSlot < PC_BOX_SLOT_PARTY_START && *(u32 *)args->unk38 == 1) {
+    if (work->selectedSlot < PC_BOX_SLOT_PARTY_START && *(u32 *)args->monModified == 1) {
         PCStorage_SetBoxModified(work->storage, work->activeBox);
     }
     Heap_Free(work->subAppArgs);

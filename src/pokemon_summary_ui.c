@@ -41,7 +41,7 @@ u8 PokemonSummary_CheckTouchedButton(PokemonSummary *summary);
 void PokemonSummary_ReloadPokepic(PokemonSummary *summary);
 
 BOOL PokemonSummary_HasPage(PokemonSummary *summary, int page) {
-    return (summary->args->unk15 & (1 << page)) != 0;
+    return (summary->args->pageFlags & (1 << page)) != 0;
 }
 
 // State 2's touch input: the page tabs (0-2), the cancel button (3) and the party icons (4-9).
@@ -100,7 +100,7 @@ void PokemonSummary_LoadPageBgs(PokemonSummary *summary) {
     } else {
         PokemonSummary_LoadBgScreen(summary, summary->bgConfig, gPokemonSummaryPageScreens[summary->page][0], GF_BG_LYR_MAIN_3);
     }
-    if (summary->args->unk12 == 2) {
+    if (summary->args->mode == 2) {
         PokemonSummary_LoadBgScreen(summary, summary->bgConfig, gPokemonSummaryPageScreens[summary->page][2], GF_BG_LYR_SUB_2);
         ScheduleSetBgPosText(summary->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_X, 128);
         ScheduleSetBgPosText(summary->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_Y, 0);
@@ -116,7 +116,7 @@ void PokemonSummary_LoadPageBgs(PokemonSummary *summary) {
     } else {
         PokemonSummary_LoadBgScreen(summary, summary->bgConfig, 78, GF_BG_LYR_SUB_2);
     }
-    if (summary->args->unk11 == 2) {
+    if (summary->args->monDataType == 2) {
         BgCellManager_DrawCellAt(summary->cellManager, 4, 20, 4);
         PokemonSummary_DrawMonButtons(summary);
     }
@@ -225,10 +225,10 @@ void PokemonSummary_ChangeMon(PokemonSummary *summary, int direction) {
     }
 }
 
-// The next Pokemon to show in that direction, or -1. args->party holds a Pokemon array (unk11 0), a Party (1) or a
+// The next Pokemon to show in that direction, or -1. args->party holds a Pokemon array (monDataType 0), a Party (1) or a
 // BoxPokemon array (2).
 int PokemonSummary_FindNextMon(PokemonSummary *summary, int direction) {
-    switch (summary->args->unk11) {
+    switch (summary->args->monDataType) {
     case 0:
         return PokemonSummary_FindNextMonInArray(summary, direction);
     case 1:
@@ -246,7 +246,7 @@ BOOL PokemonSummary_CanShowMonAt(PokemonSummary *summary, int slot) {
     u8 *mons;
     Pokemon *mon;
 
-    switch (summary->args->unk11) {
+    switch (summary->args->monDataType) {
     case 0:
         size = Pokemon_sizeof();
         mons = (u8 *)summary->args->party;
@@ -287,7 +287,7 @@ BOOL PokemonSummary_CanShowMonAt(PokemonSummary *summary, int slot) {
 
 BOOL PokemonSummary_CanShowEgg(PokemonSummary *summary) {
     s8 page;
-    if (summary->args->unk12 == 3) {
+    if (summary->args->mode == 3) {
         return FALSE;
     }
     page = summary->page;
@@ -354,7 +354,7 @@ int PokemonSummary_FindNextBoxMon(PokemonSummary *summary, int direction) {
 
 void *PokemonSummary_GetShownMon(PokemonSummary *summary) {
     PokemonSummaryArgs *args = summary->args;
-    switch (args->unk11) {
+    switch (args->monDataType) {
     case 0:
         return (u8 *)args->party + args->partySlot * Pokemon_sizeof();
     case 1:
@@ -442,7 +442,7 @@ BOOL PokemonSummary_MoveMoveCursor(PokemonSummary *summary, int direction) {
     u8 old = summary->moveSlot;
     s8 slot = old;
     s8 max;
-    if (summary->args->unk12 == 2) {
+    if (summary->args->mode == 2) {
         if (summary->args->moveToLearn) {
             max = 4;
         } else {
@@ -515,7 +515,7 @@ void PokemonSummary_SwapMoves(PokemonSummary *summary) {
     void *mon = PokemonSummary_GetShownMon(summary);
     u16 move;
     u8 value;
-    if (summary->args->unk11 == 2) {
+    if (summary->args->monDataType == 2) {
         BoxMonSwapMoves(mon, summary->moveSlot, summary->swapMoveSlot);
     } else {
         MonSwapMoves(mon, summary->moveSlot, summary->swapMoveSlot);
@@ -529,7 +529,7 @@ void PokemonSummary_SwapMoves(PokemonSummary *summary) {
     value = summary->mon.maxPP[summary->moveSlot];
     summary->mon.maxPP[summary->moveSlot] = summary->mon.maxPP[summary->swapMoveSlot];
     summary->mon.maxPP[summary->swapMoveSlot] = value;
-    *(u32 *)summary->args->unk38 = 1;
+    *(u32 *)summary->args->monModified = 1;
 }
 
 #pragma force_active off
@@ -714,7 +714,7 @@ u8 PokemonSummary_GetRibbonAt(PokemonSummary *summary, u8 cell) {
 void PokemonSummaryArgs_SetPlayer(PokemonSummaryArgs *args, PlayerProfile *profile) {
     args->playerName = PlayerProfile_GetNamePtr(profile);
     args->playerId = PlayerProfile_GetTrainerID(profile);
-    args->unk10 = PlayerProfile_GetTrainerGender(profile);
+    args->playerGender = PlayerProfile_GetTrainerGender(profile);
 }
 
 int StatusIcon_GetCharNaix(void) {
@@ -863,7 +863,7 @@ void PokemonSummary_ClearForgetButton(PokemonSummary *summary) {
 }
 
 void PokemonSummary_DrawSwitchButton(PokemonSummary *summary, int value) {
-    if (summary->args->unk12 == 1) {
+    if (summary->args->mode == 1) {
         return;
     }
     if (value == 1) {

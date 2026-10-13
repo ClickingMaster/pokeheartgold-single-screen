@@ -53,7 +53,7 @@ void Mail_Init(Mail *mail) {
     }
     mail->form_flags = 0;
     for (i = 0; i < 3; i++) {
-        MailMsg_Init(&mail->unk_20[i]);
+        MailMsg_Init(&mail->messages[i]);
     }
 }
 
@@ -90,7 +90,7 @@ BOOL Mail_Compare(const Mail *a, const Mail *b) {
         }
     }
     for (i = 0; i < 3; i++) {
-        if (!MailMsg_Compare(&a->unk_20[i], &b->unk_20[i])) {
+        if (!MailMsg_Compare(&a->messages[i], &b->messages[i])) {
             return FALSE;
         }
     }
@@ -159,19 +159,19 @@ Mail *CreateKenyaMail(Pokemon *mon, u8 mailType, u8 gender, String *name, u8 otI
     ret->author_otId = otId;
 
     // LETTER! Thank you!
-    MailMsg_SetMsgBankAndNum(&ret->unk_20[0], 1, msg_0296_00007);
-    MailMsg_SetFieldI(&ret->unk_20[0], 0, EC_WORD_LIFESTYLE_LETTER);
-    MailMsg_SetFieldI(&ret->unk_20[0], 1, EC_WORD_NULL);
+    MailMsg_SetMsgBankAndNum(&ret->messages[0], 1, msg_0296_00007);
+    MailMsg_SetFieldI(&ret->messages[0], 0, EC_WORD_LIFESTYLE_LETTER);
+    MailMsg_SetFieldI(&ret->messages[0], 1, EC_WORD_NULL);
 
     // ADVENTURE was fun, wasn't it?
-    MailMsg_SetMsgBankAndNum(&ret->unk_20[1], 1, msg_0296_00015);
-    MailMsg_SetFieldI(&ret->unk_20[1], 0, EC_WORD_LIFESTYLE_ADVENTURE);
-    MailMsg_SetFieldI(&ret->unk_20[1], 1, EC_WORD_NULL);
+    MailMsg_SetMsgBankAndNum(&ret->messages[1], 1, msg_0296_00015);
+    MailMsg_SetFieldI(&ret->messages[1], 0, EC_WORD_LIFESTYLE_ADVENTURE);
+    MailMsg_SetFieldI(&ret->messages[1], 1, EC_WORD_NULL);
 
     // ZUBAT was the one thing I wanted to avoid...
-    MailMsg_SetMsgBankAndNum(&ret->unk_20[2], 2, msg_0292_00001);
-    MailMsg_SetFieldI(&ret->unk_20[2], 0, EC_WORD_POKEMON(SPECIES_ZUBAT));
-    MailMsg_SetFieldI(&ret->unk_20[2], 1, EC_WORD_NULL);
+    MailMsg_SetMsgBankAndNum(&ret->messages[2], 2, msg_0292_00001);
+    MailMsg_SetFieldI(&ret->messages[2], 0, EC_WORD_POKEMON(SPECIES_ZUBAT));
+    MailMsg_SetFieldI(&ret->messages[2], 1, EC_WORD_NULL);
 
     ret->form_flags = 0;
 
@@ -251,16 +251,16 @@ u16 Mail_GetFormFlags(const Mail *mail) {
 }
 
 MailMessage *Mail_GetUnk20Array(Mail *mail, int i) {
-    if (i < NELEMS(mail->unk_20)) {
-        return &mail->unk_20[i];
+    if (i < NELEMS(mail->messages)) {
+        return &mail->messages[i];
     } else {
-        return &mail->unk_20[0];
+        return &mail->messages[0];
     }
 }
 
 void Mail_SetMessage(Mail *mail, const MailMessage *src, int i) {
-    if (i < NELEMS(mail->unk_20)) {
-        MailMsg_Copy(&mail->unk_20[i], src);
+    if (i < NELEMS(mail->messages)) {
+        MailMsg_Copy(&mail->messages[i], src);
     }
 }
 

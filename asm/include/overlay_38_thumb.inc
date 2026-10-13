@@ -14,7 +14,7 @@
 .public ov00_021FA0D8
 .public ov00_021FA118
 .public ov00_021FA21C
-.public ov00_021FFC18
+.public B64Encode
 .public GameStats_Start
 .public GameStats_PrepareRequest
 .public GameStats_Update

@@ -435,9 +435,9 @@ void BattleLink_BuildPalPad(PlayerProfile *profile, SavePalPad *friends, SavePal
     out->filler_14[1] = PlayerProfile_GetVersion(profile);
     out->filler_14[2] = PlayerProfile_GetTrainerGender(profile);
     for (i = 0; i < 16; i++) {
-        out->unk_18[i] = friends[i].otid;
-        out->unk_58[i] = friends[i].filler_14[1];
-        out->unk_68[i] = friends[i].filler_14[0];
+        out->friendOtIds[i] = friends[i].otid;
+        out->friendVersions[i] = friends[i].filler_14[1];
+        out->friendLanguages[i] = friends[i].filler_14[0];
         out->filler_78[i] = friends[i].filler_14[2];
     }
 }

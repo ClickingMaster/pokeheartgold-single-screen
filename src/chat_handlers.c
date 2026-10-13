@@ -1535,7 +1535,7 @@ void ciRplUserIPHandler(ChatConnection *chat, ChatMessage *message) {
     }
     address = strchr(message->params[message->paramCount - 1], '@');
     if (address && chat->userAddressCallback) {
-        int ip = ov00_021FFA44(address + 1);
+        int ip = gsSocketInetAddr(address + 1);
         ((ChatUserAddressFunc)chat->userAddressCallback)(chat, ip, user, chat->connectParam);
         strncpy(chat->user, user, sizeof(chat->user));
         chat->user[sizeof(chat->user) - 1] = 0;

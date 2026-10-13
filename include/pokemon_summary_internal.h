@@ -91,7 +91,7 @@ typedef struct PokemonSummary {
     u8 swapMoveSlot : 4;
     u8 unk7BE;                          // 0x7BE: condition stats that changed (bits 0-4); the button flash step
     u8 unk7BF_0 : 4;                    // 0x7BF
-    u8 unk7BF_4 : 4;                    // 1: leave the screen
+    u8 exitRequested : 4;               // 1: leave the screen
     u8 sparkleState;                    // 0x7C0: sheen sparkles
     u8 numSparkles;                     // 0x7C1
     u8 unk7C2;                          // 0x7C2

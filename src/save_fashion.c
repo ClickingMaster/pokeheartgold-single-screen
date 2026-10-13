@@ -30,7 +30,7 @@ typedef struct FashionEntry {
     u32 mask; // bit n: items[n] is placed
     MailMessage mailMessage;
     u8 items[10][4]; // accessory id, x, y, z
-    u8 unk_70;
+    u8 backdrop;
     u8 language;
     u8 padding_72[2];
 } FashionEntry;
@@ -476,7 +476,7 @@ void FashionEntry_PlaceItem(SaveFashionDataSub *entry_, FashionSource *source, i
 void FashionEntry_SetBackdrop(SaveFashionDataSub *entry_, int value) {
     FashionEntry *entry = (FashionEntry *)entry_;
     GF_ASSERT(IsValidFashionMagic(entry->magic));
-    entry->unk_70 = value;
+    entry->backdrop = value;
 }
 
 void FashionEntry_SetMailMessageWord(SaveFashionDataSub *entry_, int value) {
@@ -528,7 +528,7 @@ void FashionEntry_GetMonSecondText(SaveFashionDataSub *entry_, String *string) {
 u8 FashionEntry_GetBackdrop(SaveFashionDataSub *entry_) {
     FashionEntry *entry = (FashionEntry *)entry_;
     GF_ASSERT(IsValidFashionMagic(entry->magic));
-    return entry->unk_70;
+    return entry->backdrop;
 }
 
 u16 FashionEntry_GetMailMessageWord(SaveFashionDataSub *entry_) {

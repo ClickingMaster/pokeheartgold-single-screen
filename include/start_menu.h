@@ -59,7 +59,7 @@ typedef struct StartMenuTaskData {
     Sprite *cursorSprite;
     u8 filler_348[0x4];
     u32 inhibitIconFlags;
-    BOOL unk_350;
+    BOOL inUnionRoom;
     TaskFunc exitTaskFunc; // 354
     ItemCheckUseData itemCheckUseData;
     FieldMoveCheckData fieldMoveCheckData;

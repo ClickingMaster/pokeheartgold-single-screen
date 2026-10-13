@@ -188,7 +188,7 @@ typedef struct Mail {
     u16 author_name[PLAYER_NAME_LENGTH + 1];
     union MailPatternData mon_icons[3];
     u16 form_flags; // bitfield of three 5-bit values
-    MailMessage unk_20[3];
+    MailMessage messages[3];
 } Mail;
 
 /**
@@ -314,7 +314,7 @@ typedef struct PartyCore {
 } PartyCore;
 
 typedef struct PartyExtraSub {
-    u8 unk_00[PERFORMANCE_MAX];
+    u8 stats[PERFORMANCE_MAX];
 } PartyExtraSub;
 
 typedef struct PartyExtra {

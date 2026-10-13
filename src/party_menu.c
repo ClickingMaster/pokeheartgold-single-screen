@@ -34,14 +34,14 @@
 
 FS_EXTERN_OVERLAY(OVY_94);
 
-typedef struct UnkStruct_0207A22C {
-    u16 unk_0;
-    u16 unk_2;
-    u16 unk_4;
-    u16 unk_6;
-    u16 unk_8;
-    u16 unk_A;
-} UnkStruct_0207A22C;
+typedef struct PartyMenuPanelCoords {
+    u16 panelX;
+    u16 panelY;
+    u16 iconX;
+    u16 iconY;
+    u16 ballX;
+    u16 ballY;
+} PartyMenuPanelCoords;
 
 static BOOL PartyMenuApp_Init(OverlayManager *manager, int *pState);
 static BOOL PartyMenuApp_Main(OverlayManager *manager, int *pState);
@@ -75,11 +75,11 @@ static void PartyMenu_MonSuperContestEligibilityCheck(PartyMenu *partyMenu, Poke
 static u32 Pokemon_CountRibbonsByCategory(Pokemon *mon, u8 contestStat);
 static void PartyMenu_DrawMonPanel(PartyMenu *partyMenu, u8 partySlot, u8 x, u8 y, u8 a4);
 static void PartyMenu_DrawPanelsAndPush(PartyMenu *partyMenu);
-static void PartyMenu_DrawPanels_Default(PartyMenu *partyMenu, const UnkStruct_0207A22C *a1);
-static void PartyMenu_DrawPanels_UseEvoStone(PartyMenu *partyMenu, const UnkStruct_0207A22C *a1);
-static void PartyMenu_DrawPanels_UseTMHM(PartyMenu *partyMenu, const UnkStruct_0207A22C *a1);
-static void PartyMenu_Setup_SuperContestEntry(PartyMenu *partyMenu, const UnkStruct_0207A22C *a1);
-static void PartyMenu_DrawPanels_FrontierFacilityEntry(PartyMenu *partyMenu, const UnkStruct_0207A22C *a1);
+static void PartyMenu_DrawPanels_Default(PartyMenu *partyMenu, const PartyMenuPanelCoords *a1);
+static void PartyMenu_DrawPanels_UseEvoStone(PartyMenu *partyMenu, const PartyMenuPanelCoords *a1);
+static void PartyMenu_DrawPanels_UseTMHM(PartyMenu *partyMenu, const PartyMenuPanelCoords *a1);
+static void PartyMenu_Setup_SuperContestEntry(PartyMenu *partyMenu, const PartyMenuPanelCoords *a1);
+static void PartyMenu_DrawPanels_FrontierFacilityEntry(PartyMenu *partyMenu, const PartyMenuPanelCoords *a1);
 static void PartyMenu_DrawEmptyMonPanel(PartyMenu *partyMenu, u8 partySlot, s16 x, s16 y);
 static void PartyMenu_InitCursorSprite(PartyMenu *partyMenu);
 static u8 PartyMenu_HandleCursorMove(PartyMenu *partyMenu);
@@ -136,7 +136,7 @@ const OverlayManagerTemplate gOverlayTemplate_PartyMenu = {
     FS_OVERLAY_ID_NONE,
 };
 
-static const UnkStruct_0207A22C _0210150C[2][6] = {
+static const PartyMenuPanelCoords _0210150C[2][6] = {
     {
      { 0x0000, 0x0000, 0x001E, 0x0010, 0x0010, 0x000E },
      { 0x0010, 0x0001, 0x009E, 0x0018, 0x0090, 0x0016 },
@@ -1134,7 +1134,7 @@ static void PartyMenu_DrawMonPanel(PartyMenu *partyMenu, u8 partySlot, u8 x, u8 
 }
 
 static void PartyMenu_DrawPanelsAndPush(PartyMenu *partyMenu) {
-    const UnkStruct_0207A22C *r1 = partyMenu->args->panelLayout == 2 ? _0210150C[1] : _0210150C[0];
+    const PartyMenuPanelCoords *r1 = partyMenu->args->panelLayout == 2 ? _0210150C[1] : _0210150C[0];
     if (partyMenu->args->context == PARTY_MENU_CONTEXT_EVO_STONE) {
         PartyMenu_DrawPanels_UseEvoStone(partyMenu, r1);
     } else if (partyMenu->args->context == PARTY_MENU_CONTEXT_TM_HM) {
@@ -1150,106 +1150,106 @@ static void PartyMenu_DrawPanelsAndPush(PartyMenu *partyMenu) {
     ScheduleBgTilemapBufferTransfer(partyMenu->bgConfig, GF_BG_LYR_SUB_0);
 }
 
-static void PartyMenu_DrawPanels_Default(PartyMenu *partyMenu, const UnkStruct_0207A22C *a1) {
+static void PartyMenu_DrawPanels_Default(PartyMenu *partyMenu, const PartyMenuPanelCoords *a1) {
     NARC *narc = NARC_New(NARC_poketool_icongra_poke_icon, HEAP_ID_PARTY_MENU);
     for (u8 i = 0; i < PARTY_SIZE; ++i) {
         if (PartyMenu_LoadMonDrawState(partyMenu, i) == TRUE) {
             if (partyMenu->monsDrawState[i].isEgg == TRUE) {
-                PartyMenu_DrawMonPanel(partyMenu, i, a1[i].unk_0, a1[i].unk_2, FALSE);
+                PartyMenu_DrawMonPanel(partyMenu, i, a1[i].panelX, a1[i].panelY, FALSE);
             } else {
-                PartyMenu_DrawMonPanel(partyMenu, i, a1[i].unk_0, a1[i].unk_2, TRUE);
+                PartyMenu_DrawMonPanel(partyMenu, i, a1[i].panelX, a1[i].panelY, TRUE);
             }
             PartyMenu_DrawPartyMonsList_Default(partyMenu, i);
-            PartyMenu_CreateMonIconSprites(partyMenu, i, a1[i].unk_4, a1[i].unk_6, narc);
-            PartyMenu_CreateBallSprite(partyMenu, i, a1[i].unk_8, a1[i].unk_A);
+            PartyMenu_CreateMonIconSprites(partyMenu, i, a1[i].iconX, a1[i].iconY, narc);
+            PartyMenu_CreateBallSprite(partyMenu, i, a1[i].ballX, a1[i].ballY);
             PartyMenu_DrawMonHeldItemIcon(partyMenu, i, partyMenu->monsDrawState[i].heldItem);
-            PartyMenu_SetMonHeldItemIconCoords(partyMenu, i, a1[i].unk_4, a1[i].unk_6);
+            PartyMenu_SetMonHeldItemIconCoords(partyMenu, i, a1[i].iconX, a1[i].iconY);
             PartyMenu_DrawMonCapsuleIcon(partyMenu, i);
             PartyMenu_RefreshMonCapsuleIconSpritePos(partyMenu, i);
             PartyMenu_DrawMonStatusIcon(partyMenu, i, partyMenu->monsDrawState[i].status);
         } else {
-            PartyMenu_DrawEmptyMonPanel(partyMenu, i, a1[i].unk_0, a1[i].unk_2);
+            PartyMenu_DrawEmptyMonPanel(partyMenu, i, a1[i].panelX, a1[i].panelY);
         }
     }
     NARC_Delete(narc);
 }
 
-static void PartyMenu_DrawPanels_UseEvoStone(PartyMenu *partyMenu, const UnkStruct_0207A22C *a1) {
+static void PartyMenu_DrawPanels_UseEvoStone(PartyMenu *partyMenu, const PartyMenuPanelCoords *a1) {
     NARC *narc = NARC_New(NARC_poketool_icongra_poke_icon, HEAP_ID_PARTY_MENU);
     for (u8 i = 0; i < PARTY_SIZE; ++i) {
         if (PartyMenu_LoadMonDrawState(partyMenu, i) == TRUE) {
-            PartyMenu_DrawMonPanel(partyMenu, i, a1[i].unk_0, a1[i].unk_2, FALSE);
+            PartyMenu_DrawMonPanel(partyMenu, i, a1[i].panelX, a1[i].panelY, FALSE);
             PartyMenu_DrawPartyMonsList_UseEvoStone(partyMenu, i);
-            PartyMenu_CreateMonIconSprites(partyMenu, i, a1[i].unk_4, a1[i].unk_6, narc);
-            PartyMenu_CreateBallSprite(partyMenu, i, a1[i].unk_8, a1[i].unk_A);
+            PartyMenu_CreateMonIconSprites(partyMenu, i, a1[i].iconX, a1[i].iconY, narc);
+            PartyMenu_CreateBallSprite(partyMenu, i, a1[i].ballX, a1[i].ballY);
             PartyMenu_DrawMonHeldItemIcon(partyMenu, i, partyMenu->monsDrawState[i].heldItem);
-            PartyMenu_SetMonHeldItemIconCoords(partyMenu, i, a1[i].unk_4, a1[i].unk_6);
+            PartyMenu_SetMonHeldItemIconCoords(partyMenu, i, a1[i].iconX, a1[i].iconY);
             PartyMenu_DrawMonCapsuleIcon(partyMenu, i);
             PartyMenu_RefreshMonCapsuleIconSpritePos(partyMenu, i);
             PartyMenu_DrawMonStatusIcon(partyMenu, i, partyMenu->monsDrawState[i].status);
         } else {
-            PartyMenu_DrawEmptyMonPanel(partyMenu, i, a1[i].unk_0, a1[i].unk_2);
+            PartyMenu_DrawEmptyMonPanel(partyMenu, i, a1[i].panelX, a1[i].panelY);
         }
     }
     NARC_Delete(narc);
 }
 
-static void PartyMenu_DrawPanels_UseTMHM(PartyMenu *partyMenu, const UnkStruct_0207A22C *a1) {
+static void PartyMenu_DrawPanels_UseTMHM(PartyMenu *partyMenu, const PartyMenuPanelCoords *a1) {
     NARC *narc = NARC_New(NARC_poketool_icongra_poke_icon, HEAP_ID_PARTY_MENU);
     for (u8 i = 0; i < PARTY_SIZE; ++i) {
         if (PartyMenu_LoadMonDrawState(partyMenu, i) == TRUE) {
-            PartyMenu_DrawMonPanel(partyMenu, i, a1[i].unk_0, a1[i].unk_2, FALSE);
+            PartyMenu_DrawMonPanel(partyMenu, i, a1[i].panelX, a1[i].panelY, FALSE);
             PartyMenu_DrawPartyMonsList_UseTMHM(partyMenu, i);
-            PartyMenu_CreateMonIconSprites(partyMenu, i, a1[i].unk_4, a1[i].unk_6, narc);
-            PartyMenu_CreateBallSprite(partyMenu, i, a1[i].unk_8, a1[i].unk_A);
+            PartyMenu_CreateMonIconSprites(partyMenu, i, a1[i].iconX, a1[i].iconY, narc);
+            PartyMenu_CreateBallSprite(partyMenu, i, a1[i].ballX, a1[i].ballY);
             PartyMenu_DrawMonHeldItemIcon(partyMenu, i, partyMenu->monsDrawState[i].heldItem);
-            PartyMenu_SetMonHeldItemIconCoords(partyMenu, i, a1[i].unk_4, a1[i].unk_6);
+            PartyMenu_SetMonHeldItemIconCoords(partyMenu, i, a1[i].iconX, a1[i].iconY);
             PartyMenu_DrawMonCapsuleIcon(partyMenu, i);
             PartyMenu_RefreshMonCapsuleIconSpritePos(partyMenu, i);
             PartyMenu_DrawMonStatusIcon(partyMenu, i, partyMenu->monsDrawState[i].status);
         } else {
-            PartyMenu_DrawEmptyMonPanel(partyMenu, i, a1[i].unk_0, a1[i].unk_2);
+            PartyMenu_DrawEmptyMonPanel(partyMenu, i, a1[i].panelX, a1[i].panelY);
         }
     }
     NARC_Delete(narc);
 }
 
-static void PartyMenu_Setup_SuperContestEntry(PartyMenu *partyMenu, const UnkStruct_0207A22C *a1) {
+static void PartyMenu_Setup_SuperContestEntry(PartyMenu *partyMenu, const PartyMenuPanelCoords *a1) {
     NARC *narc = NARC_New(NARC_poketool_icongra_poke_icon, HEAP_ID_PARTY_MENU);
     for (u8 i = 0; i < PARTY_SIZE; ++i) {
         if (PartyMenu_LoadMonDrawState(partyMenu, i) == TRUE) {
-            PartyMenu_DrawMonPanel(partyMenu, i, a1[i].unk_0, a1[i].unk_2, FALSE);
+            PartyMenu_DrawMonPanel(partyMenu, i, a1[i].panelX, a1[i].panelY, FALSE);
             PartyMenu_DrawPartyMonsList_SuperContestEntry(partyMenu, i);
-            PartyMenu_CreateMonIconSprites(partyMenu, i, a1[i].unk_4, a1[i].unk_6, narc);
-            PartyMenu_CreateBallSprite(partyMenu, i, a1[i].unk_8, a1[i].unk_A);
+            PartyMenu_CreateMonIconSprites(partyMenu, i, a1[i].iconX, a1[i].iconY, narc);
+            PartyMenu_CreateBallSprite(partyMenu, i, a1[i].ballX, a1[i].ballY);
             PartyMenu_DrawMonHeldItemIcon(partyMenu, i, partyMenu->monsDrawState[i].heldItem);
-            PartyMenu_SetMonHeldItemIconCoords(partyMenu, i, a1[i].unk_4, a1[i].unk_6);
+            PartyMenu_SetMonHeldItemIconCoords(partyMenu, i, a1[i].iconX, a1[i].iconY);
             PartyMenu_DrawMonCapsuleIcon(partyMenu, i);
             PartyMenu_RefreshMonCapsuleIconSpritePos(partyMenu, i);
             PartyMenu_DrawMonStatusIcon(partyMenu, i, partyMenu->monsDrawState[i].status);
         } else {
-            PartyMenu_DrawEmptyMonPanel(partyMenu, i, a1[i].unk_0, a1[i].unk_2);
+            PartyMenu_DrawEmptyMonPanel(partyMenu, i, a1[i].panelX, a1[i].panelY);
         }
     }
     NARC_Delete(narc);
 }
 
-static void PartyMenu_DrawPanels_FrontierFacilityEntry(PartyMenu *partyMenu, const UnkStruct_0207A22C *a1) {
+static void PartyMenu_DrawPanels_FrontierFacilityEntry(PartyMenu *partyMenu, const PartyMenuPanelCoords *a1) {
     NARC *narc = NARC_New(NARC_poketool_icongra_poke_icon, HEAP_ID_PARTY_MENU);
     for (u8 i = 0; i < PARTY_SIZE; ++i) {
         if (PartyMenu_LoadMonDrawState(partyMenu, i) == TRUE) {
-            PartyMenu_DrawMonPanel(partyMenu, i, a1[i].unk_0, a1[i].unk_2, FALSE);
+            PartyMenu_DrawMonPanel(partyMenu, i, a1[i].panelX, a1[i].panelY, FALSE);
             PartyMenu_DrawPartyMonsList_FrontierFacilityEntry(partyMenu, i);
             PartyMenu_PrintFrontierEntryStatus(partyMenu, i);
-            PartyMenu_CreateMonIconSprites(partyMenu, i, a1[i].unk_4, a1[i].unk_6, narc);
-            PartyMenu_CreateBallSprite(partyMenu, i, a1[i].unk_8, a1[i].unk_A);
+            PartyMenu_CreateMonIconSprites(partyMenu, i, a1[i].iconX, a1[i].iconY, narc);
+            PartyMenu_CreateBallSprite(partyMenu, i, a1[i].ballX, a1[i].ballY);
             PartyMenu_DrawMonHeldItemIcon(partyMenu, i, partyMenu->monsDrawState[i].heldItem);
-            PartyMenu_SetMonHeldItemIconCoords(partyMenu, i, a1[i].unk_4, a1[i].unk_6);
+            PartyMenu_SetMonHeldItemIconCoords(partyMenu, i, a1[i].iconX, a1[i].iconY);
             PartyMenu_DrawMonCapsuleIcon(partyMenu, i);
             PartyMenu_RefreshMonCapsuleIconSpritePos(partyMenu, i);
             PartyMenu_DrawMonStatusIcon(partyMenu, i, partyMenu->monsDrawState[i].status);
         } else {
-            PartyMenu_DrawEmptyMonPanel(partyMenu, i, a1[i].unk_0, a1[i].unk_2);
+            PartyMenu_DrawEmptyMonPanel(partyMenu, i, a1[i].panelX, a1[i].panelY);
         }
     }
     NARC_Delete(narc);

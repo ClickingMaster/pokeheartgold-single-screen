@@ -1318,13 +1318,13 @@ int MoveRelearner_OpenSummary(MoveRelearner *relearner) {
     MoveRelearner_Teardown(relearner);
     relearner->summary.party = (Party *)relearner->args->mon; // the summary shows this one Pokemon (partyCount 1)
     relearner->summary.options = relearner->args->options;
-    relearner->summary.unk11 = 0;
+    relearner->summary.monDataType = 0;
     relearner->summary.partySlot = 0;
     relearner->summary.partyCount = 1;
     relearner->summary.moveToLearn = MoveRelearner_GetSelectedMove(relearner);
-    relearner->summary.unk12 = 2;
+    relearner->summary.mode = 2;
     relearner->summary.unk2C = 1;
-    relearner->summary.unk28 = 0;
+    relearner->summary.chatot = 0;
     relearner->summary.menuInputStatePtr = NULL;
     PokemonSummary_SetPages(&relearner->summary, pages);
     relearner->summaryManager = OverlayManager_New(&gOverlayTemplate_PokemonSummary, &relearner->summary, HEAP_ID_66);
@@ -1337,7 +1337,7 @@ int MoveRelearner_RunSummary(MoveRelearner *relearner) {
         MoveRelearner_Setup(relearner);
         MoveRelearner_DrawListRows(relearner, relearner->args->cursorPos);
         MoveRelearner_SetCursorPos(relearner, (u8)relearner->args->cursorPos, 3);
-        relearner->args->moveSlot = relearner->summary.unk16; // the move slot chosen in the summary
+        relearner->args->moveSlot = relearner->summary.selectedMoveSlot; // the move slot chosen in the summary
         relearner->nextState = MOVE_RELEARNER_STATE_ASK_AFTER_SUMMARY;
         return MOVE_RELEARNER_STATE_WAIT_FADE;
     }

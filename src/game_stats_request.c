@@ -29,7 +29,7 @@ extern int sprintf(char *dest, const char *format, ...);
 
 void *ov00_021EC2A8(int category, u32 size);
 void ov00_021EC2EC(int category, void *ptr, u32 size);
-void ov00_021FFC18(const void *src, char *dst, int len, int mode);
+void B64Encode(const void *src, char *dst, int len, int mode);
 BOOL ov00_021FA0B4(int value);
 
 void GameStats_SeedRandom(u32 seed) {
@@ -86,7 +86,7 @@ int GameStats_EncodePayload(u32 key, const u8 *data, int len, char *out, int out
     buf[1] = x >> 16;
     buf[2] = x >> 8;
     buf[3] = x;
-    ov00_021FFC18(buf, out, len + 8, 2);
+    B64Encode(buf, out, len + 8, 2);
     out[GameStats_GetBase64Length(total)] = 0;
     ov00_021EC2EC(10, buf, 0);
     return 0;

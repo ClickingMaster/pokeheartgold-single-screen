@@ -370,11 +370,11 @@ static u32 BattleHallSelectMons_OpenSummary(BattleHallSelectMonsEnv *a0, FieldSy
     args->party = SaveArray_Party_Get(saveData);
     args->natDexEnabled = SaveArray_IsNatDexEnabled(saveData);
     args->unk2C = sub_02088288(saveData);
-    args->unk11 = 1;
+    args->monDataType = 1;
     args->partySlot = a0->partySlot;
     args->partyCount = Party_GetCount(args->party);
     args->moveToLearn = MOVE_NONE;
-    args->unk12 = 0;
+    args->mode = 0;
     args->ribbons = Save_SpecialRibbons_Get(saveData);
     args->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(saveData);
     PokemonSummary_SetPages(args, sBattleHallSummaryPages);

@@ -145,11 +145,11 @@ u32 FrontierPartySelect_LaunchSummary(FrontierPartySelectEnv *env, FieldSystem *
     args->party = SaveArray_Party_Get(saveData);
     args->natDexEnabled = SaveArray_IsNatDexEnabled(saveData);
     args->unk2C = sub_02088288(saveData);
-    args->unk11 = 1;
+    args->monDataType = 1;
     args->partySlot = env->partySlot;
     args->partyCount = Party_GetCount(args->party);
     args->moveToLearn = 0;
-    args->unk12 = env->summaryMode;
+    args->mode = env->summaryMode;
     args->ribbons = Save_SpecialRibbons_Get(saveData);
     args->menuInputStatePtr = &fieldSystem->menuInputState;
     args->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(saveData);

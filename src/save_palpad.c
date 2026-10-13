@@ -26,7 +26,7 @@ SavePalPad *PalPad_GetNthEntry(SavePalPad *arr, int n) {
 }
 
 u8 PalPadEntry_GetFromUnk68Array(SavePalPad *palPad, int n) {
-    return palPad->unk_68[n];
+    return palPad->friendLanguages[n];
 }
 
 static BOOL PalPadEntry_IsEqual(SavePalPad *a, SavePalPad *b) {
@@ -81,7 +81,7 @@ int PalPad_PlayerIdIsFriendOrMutual(SavePalPad *palPad, u32 otId) {
 
     for (i = 0; i < NUM_PALPAD_ENTRIES; i++) {
         for (j = 0; j < NUM_FRIENDS_PER_ENTRY; j++) {
-            if (otId == palPad[i].unk_18[j]) {
+            if (otId == palPad[i].friendOtIds[j]) {
                 return i + 2;
             }
         }

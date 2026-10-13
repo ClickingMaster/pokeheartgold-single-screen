@@ -60,7 +60,7 @@ BOOL StatsUpload_CheckResponseHash(const char *response, int length) {
         return FALSE;
     }
     *(SecretKey *)buf = *(SecretKey *)ov45_0225765C;
-    ov00_021FFC18(response, buf + 20, bodyLength, 2);
+    B64Encode(response, buf + 20, bodyLength, 2);
     {
         int n = ov45_02253D50(bodyLength);
         u8 *p = buf + 20;
@@ -190,7 +190,7 @@ int StatsUpload_EncodeData(char *out, const u8 *first, int firstLength, const u8
     buf[1] = sum >> 16;
     buf[2] = sum >> 8;
     buf[3] = sum;
-    ov00_021FFC18(buf, out, length + 4, 2);
+    B64Encode(buf, out, length + 4, 2);
     ov00_021EC2EC(7, buf, 0);
     out[ov45_02253D50(length + 4)] = 0;
     return 0;

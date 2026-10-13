@@ -57,7 +57,7 @@ int PokemonSummary_HandleMoveSelectInput(PokemonSummary *summary) {
         }
         return 5;
     }
-    if ((keys & PAD_BUTTON_A) && summary->args->unk12 != 1) {
+    if ((keys & PAD_BUTTON_A) && summary->args->mode != 1) {
         PlaySE(SEQ_SE_DP_DECIDE);
         return PokemonSummary_FlashSwapButton(summary, 7);
     }
@@ -68,7 +68,7 @@ int PokemonSummary_HandleMoveSelectInput(PokemonSummary *summary) {
     }
     index = PokemonSummary_GetMoveSelectTouch(summary);
     if (index == 4) {
-        if (summary->args->unk12 != 1) {
+        if (summary->args->mode != 1) {
             PlaySE(SEQ_SE_DP_DECIDE);
             return PokemonSummary_FlashSwapButton(summary, 7);
         }
@@ -181,8 +181,8 @@ int PokemonSummary_HandleForgetMoveInput(PokemonSummary *summary) {
         PlaySE(SEQ_SE_DP_DECIDE);
         index = summary->moveSlot;
         if (index == 4) {
-            summary->args->unk16 = 4;
-            summary->args->unk17 = 0;
+            summary->args->selectedMoveSlot = 4;
+            summary->args->exitedWithB = 0;
             return 21;
         }
         if (MoveIsHM(summary->mon.moves[index]) == TRUE && summary->args->moveToLearn != MOVE_NONE) {
@@ -194,8 +194,8 @@ int PokemonSummary_HandleForgetMoveInput(PokemonSummary *summary) {
     }
     if (keys & PAD_BUTTON_B) {
         PlaySE(SEQ_SE_GS_GEARCANCEL);
-        summary->args->unk16 = 4;
-        summary->args->unk17 = 1;
+        summary->args->selectedMoveSlot = 4;
+        summary->args->exitedWithB = 1;
         return PokemonSummary_FlashCancelButton(summary, 21);
     }
 
@@ -213,8 +213,8 @@ int PokemonSummary_HandleForgetMoveInput(PokemonSummary *summary) {
     case 5:
         PlaySE(SEQ_SE_GS_GEARCANCEL);
         summary->moveSlot = 5;
-        summary->args->unk16 = 4;
-        summary->args->unk17 = 0;
+        summary->args->selectedMoveSlot = 4;
+        summary->args->exitedWithB = 0;
         return PokemonSummary_FlashCancelButton(summary, 21);
     default:
         if (MoveIsHM(summary->mon.moves[index]) == TRUE && summary->args->moveToLearn != MOVE_NONE) {
@@ -247,8 +247,8 @@ int PokemonSummary_HandleForgetMoveConfirmInput(PokemonSummary *arg) {
 
     if (keys & PAD_BUTTON_A) {
         PlaySE(SEQ_SE_DP_DECIDE);
-        summary->args->unk16 = summary->moveSlot;
-        summary->args->unk17 = 0;
+        summary->args->selectedMoveSlot = summary->moveSlot;
+        summary->args->exitedWithB = 0;
         return PokemonSummary_FlashConfirmButton(summary, 21);
     }
     if (keys & PAD_BUTTON_B) {
@@ -263,8 +263,8 @@ int PokemonSummary_HandleForgetMoveConfirmInput(PokemonSummary *arg) {
         switch (input) {
         case 0:
             PlaySE(SEQ_SE_DP_DECIDE);
-            summary->args->unk16 = summary->moveSlot;
-            summary->args->unk17 = 0;
+            summary->args->selectedMoveSlot = summary->moveSlot;
+            summary->args->exitedWithB = 0;
             return PokemonSummary_FlashConfirmButton(summary, 21);
         case 1:
             PlaySE(SEQ_SE_GS_GEARCANCEL);
@@ -381,7 +381,7 @@ int PokemonSummary_UpdateCondition(PokemonSummary *summary) {
     if ((gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) == 0) {
         goto no_input;
     }
-    if (summary->args->unk11 == 2) {
+    if (summary->args->monDataType == 2) {
         BoxPokemon *boxMon = PokemonSummary_GetShownMon(summary);
         mon = AllocMonZeroed(HEAP_ID_19);
         CopyBoxPokemonToPokemon(boxMon, mon);
@@ -415,7 +415,7 @@ int PokemonSummary_UpdateCondition(PokemonSummary *summary) {
         summary->unk7BE |= 0x10;
     }
     summary->mon.contestStats[5] = GetMonData(mon, MON_DATA_SHEEN, NULL);
-    if (summary->args->unk11 == 2) {
+    if (summary->args->monDataType == 2) {
         Heap_Free(mon);
     }
     LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_14_OFFSET, HEAP_ID_19);
@@ -513,7 +513,7 @@ int PokemonSummary_ChangeMonByButton(PokemonSummary *summary) {
 
 void PokemonSummary_ReadShownMon(PokemonSummary *summary) {
     void *mon = PokemonSummary_GetShownMon(summary);
-    if (summary->args->unk11 == 2) {
+    if (summary->args->monDataType == 2) {
         PokemonSummary_ReadBoxMon(summary, mon, &summary->mon);
     } else {
         PokemonSummary_ReadMon(summary, mon, &summary->mon);
@@ -648,16 +648,16 @@ void PokemonSummary_PlayCry(PokemonSummary *summary) {
     if (summary->mon.isEgg == FALSE) {
         NARC_ReadPokepicCryDelay(summary->pokepicAnimNarc, &delay, summary->mon.species, 1);
         if (summary->mon.species == SPECIES_CHATOT) {
-            Chatot_PlayCryWithDelayedFallback((SOUND_CHATOT *)summary->args->unk28, 0, 100, 0, delay);
+            Chatot_PlayCryWithDelayedFallback((SOUND_CHATOT *)summary->args->chatot, 0, 100, 0, delay);
         } else {
             PlayCryDelayed(summary->mon.species, delay, summary->mon.form);
         }
     }
 }
 
-// Shows the first page: the move page when picking a move to forget (args->unk12 == 2), else the info page.
+// Shows the first page: the move page when picking a move to forget (args->mode == 2), else the info page.
 void PokemonSummary_ShowFirstPage(PokemonSummary *summary) {
-    switch (summary->args->unk12) {
+    switch (summary->args->mode) {
     case 0:
     case 1:
         summary->page = 0;
@@ -675,7 +675,7 @@ void PokemonSummary_ShowFirstPage(PokemonSummary *summary) {
     PokemonSummary_PrintPage(summary);
     PokemonSummary_LoadPageBgs(summary);
     PokemonSummary_UpdateShinyLeafSprites(summary);
-    if (summary->args->unk12 == 2) {
+    if (summary->args->mode == 2) {
         PokemonSummary_InitForgetMove(summary);
         return;
     }
@@ -684,16 +684,16 @@ void PokemonSummary_ShowFirstPage(PokemonSummary *summary) {
     PokemonSummary_AlternateBoxMonIcon(summary);
 }
 
-// Which pages can be shown (args->unk15, one bit per page): pages lists them, ended by 4.
+// Which pages can be shown (args->pageFlags, one bit per page): pages lists them, ended by 4.
 void PokemonSummary_SetPages(PokemonSummaryArgs *args, const u8 *pages) {
     u8 i = 0;
-    args->unk15 = 0;
+    args->pageFlags = 0;
     do {
         u8 page = pages[i];
         if (page == 4) {
             break;
         }
-        args->unk15 |= 1 << page;
+        args->pageFlags |= 1 << page;
         i++;
     } while (i < 4);
 }
@@ -717,7 +717,7 @@ void PokemonSummary_SetPage(PokemonSummary *summary, int page) {
     BgCommitTilemapBufferToVram(summary->bgConfig, GF_BG_LYR_SUB_0);
     PokemonSummary_PrintPage(summary);
     PokemonSummary_LoadPageBgs(summary);
-    if (summary->args->unk12 == 2) {
+    if (summary->args->mode == 2) {
         PokemonSummary_UpdateForgetMovePage(summary);
     }
 }
@@ -733,7 +733,7 @@ void PokemonSummary_ScrollPage(PokemonSummary *summary, int direction) {
     if (summary->mon.isEgg) {
         return;
     }
-    u8 pages = summary->args->unk15;
+    u8 pages = summary->args->pageFlags;
     do {
         page += direction;
         if (page < 0) {

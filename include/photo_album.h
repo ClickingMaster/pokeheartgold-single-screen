@@ -37,10 +37,10 @@ typedef struct Photo {
     u32 date;
     u16 hour;
     u16 min;
-    u16 unk_40[2];
+    u16 hiddenPropModels[2];
     u16 subjectSpriteId;
     u16 unk_46;
-    PhotoCameraParam unk_48;
+    PhotoCameraParam cameraParam;
     PhotoMon party[PARTY_SIZE];
 } Photo; // size: 0x84
 

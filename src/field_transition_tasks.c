@@ -49,17 +49,17 @@ BOOL FieldTransition_EnterThroughSideDoor(TaskManager *taskMan) {
     switch (env->transitionState) {
     case 0: {
         int x;
-        env->unk18 = DoorTransition_New();
+        env->transitionWork = DoorTransition_New();
         x = PlayerAvatar_GetXCoord(fieldSystem->playerAvatar);
-        DoorTransition_SetPosition(x, PlayerAvatar_GetZCoord(fieldSystem->playerAvatar), env->unk18);
+        DoorTransition_SetPosition(x, PlayerAvatar_GetZCoord(fieldSystem->playerAvatar), env->transitionWork);
         env->transitionState++;
         break;
     }
     case 1: {
-        FieldEnvSubUnk18 *work = env->unk18;
+        FieldEnvSubUnk18 *work = env->transitionWork;
         int direction = PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar);
         if (DoorTransition_WalkOutOfSideDoor(fieldSystem, work, direction)) {
-            DoorTransition_Free(env->unk18);
+            DoorTransition_Free(env->transitionWork);
             env->transitionState++;
         }
         break;
@@ -120,8 +120,8 @@ BOOL FieldTransition_EnterWithDoorExit(TaskManager *taskMan) {
     case 0: {
         FieldEnvSubUnk18 *work;
         int x;
-        env->unk18 = DoorTransition_New();
-        work = env->unk18;
+        env->transitionWork = DoorTransition_New();
+        work = env->transitionWork;
         x = PlayerAvatar_GetXCoord(fieldSystem->playerAvatar);
         DoorTransition_SetPosition(x, PlayerAvatar_GetZCoord(fieldSystem->playerAvatar), work);
         TaskManager_Call(taskMan, Task_WalkOutOfDoorAfterWarp, work);
@@ -129,7 +129,7 @@ BOOL FieldTransition_EnterWithDoorExit(TaskManager *taskMan) {
         break;
     }
     case 1:
-        DoorTransition_Free(env->unk18);
+        DoorTransition_Free(env->transitionWork);
         return TRUE;
     }
     return FALSE;
@@ -141,14 +141,14 @@ BOOL FieldTransition_EnterRising(TaskManager *taskMan) {
     FieldTransitionEnvironment *env = TaskManager_GetEnvironment(taskMan);
     switch (env->transitionState) {
     case 0:
-        env->unk18 = Heap_AllocAtEnd(HEAP_ID_FIELD2, 8);
-        *(u32 *)env->unk18 = 0;
+        env->transitionWork = Heap_AllocAtEnd(HEAP_ID_FIELD2, 8);
+        *(u32 *)env->transitionWork = 0;
         FieldMap_FadeScreen(1);
         env->transitionState++;
         break;
     case 1: {
         LocalMapObject *object = PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
-        int *counter = (int *)env->unk18;
+        int *counter = (int *)env->transitionWork;
         VecFx32 position;
         (*counter)++;
         MapObject_CopyPositionVector(object, &position);
@@ -184,7 +184,7 @@ BOOL FieldTransition_EnterRising(TaskManager *taskMan) {
         }
         break;
     case 5:
-        Heap_Free(env->unk18);
+        Heap_Free(env->transitionWork);
         return TRUE;
     }
     return FALSE;
@@ -196,14 +196,14 @@ BOOL FieldTransition_EnterSinking(TaskManager *taskMan) {
     FieldTransitionEnvironment *env = TaskManager_GetEnvironment(taskMan);
     switch (env->transitionState) {
     case 0:
-        env->unk18 = Heap_AllocAtEnd(HEAP_ID_FIELD2, 8);
-        *(u32 *)env->unk18 = 0;
+        env->transitionWork = Heap_AllocAtEnd(HEAP_ID_FIELD2, 8);
+        *(u32 *)env->transitionWork = 0;
         FieldMap_FadeScreen(1);
         env->transitionState++;
         break;
     case 1: {
         LocalMapObject *object = PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
-        int *counter = (int *)env->unk18;
+        int *counter = (int *)env->transitionWork;
         VecFx32 position;
         (*counter)++;
         MapObject_CopyPositionVector(object, &position);
@@ -239,7 +239,7 @@ BOOL FieldTransition_EnterSinking(TaskManager *taskMan) {
         }
         break;
     case 5:
-        Heap_Free(env->unk18);
+        Heap_Free(env->transitionWork);
         return TRUE;
     }
     return FALSE;

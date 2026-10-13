@@ -10,9 +10,9 @@ typedef struct SavePalPad {
     u16 name[PLAYER_NAME_LENGTH + 1];
     u32 otid;
     u8 filler_14[0x4];
-    u32 unk_18[NUM_FRIENDS_PER_ENTRY];
-    u8 unk_58[NUM_FRIENDS_PER_ENTRY];
-    u8 unk_68[NUM_FRIENDS_PER_ENTRY];
+    u32 friendOtIds[NUM_FRIENDS_PER_ENTRY];
+    u8 friendVersions[NUM_FRIENDS_PER_ENTRY];
+    u8 friendLanguages[NUM_FRIENDS_PER_ENTRY];
     u8 filler_78[NUM_FRIENDS_PER_ENTRY];
 } SavePalPad;
 

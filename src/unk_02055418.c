@@ -160,13 +160,13 @@ void FieldSystem_RegrowApricornTrees(FieldSystem *fieldSystem) {
 
 void sub_020556C8(FieldSystem *fieldSystem, UnkStruct_020556FC *unkPtrB) {
     FieldEffectManager *fieldEffectManager = fieldSystem->fieldEffectManager;
-    unkPtrB->unk5c = Heap_Alloc(unkPtrB->heapID, FieldEffectManager_GetNarcMemberSize(fieldEffectManager, 31));
-    FieldEffectManager_ReadNarcMember(fieldEffectManager, 31, unkPtrB->unk5c);
-    GF3dRender_InitObjFromHeader(&unkPtrB->unk4, &unkPtrB->unk58, &unkPtrB->unk5c);
+    unkPtrB->modelFile = Heap_Alloc(unkPtrB->heapID, FieldEffectManager_GetNarcMemberSize(fieldEffectManager, 31));
+    FieldEffectManager_ReadNarcMember(fieldEffectManager, 31, unkPtrB->modelFile);
+    GF3dRender_InitObjFromHeader(&unkPtrB->renderObj, &unkPtrB->model, &unkPtrB->modelFile);
 }
 
 void sub_020556FC(UnkStruct_020556FC *unkPtr) {
-    FieldEffectManager_HeapFree(unkPtr->unk5c); // function frees unk5c to heap
+    FieldEffectManager_HeapFree(unkPtr->modelFile); // function frees modelFile to heap
 }
 
 BOOL FieldSystem_ApricornTreeObject_HasApricorn(FieldSystem *fieldSystem, LocalMapObject *mapObject) {

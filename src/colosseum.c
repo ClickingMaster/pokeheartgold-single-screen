@@ -65,11 +65,11 @@ void Colosseum_OpenSummary(ColosseumEntry *entry, FieldSystem *fieldSystem, Part
     args->unk2C = sub_02088288(saveData);
     args->options = Save_PlayerData_GetOptionsAddr(saveData);
     args->party = party;
-    args->unk11 = 1;
+    args->monDataType = 1;
     args->partySlot = partySlot;
     args->partyCount = Party_GetCount(args->party);
     args->moveToLearn = 0;
-    args->unk12 = mode;
+    args->mode = mode;
     args->ribbons = Save_SpecialRibbons_Get(saveData);
     args->menuInputStatePtr = NULL;
     args->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(saveData);

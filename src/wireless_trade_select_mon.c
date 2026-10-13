@@ -1584,9 +1584,9 @@ s32 WirelessTradeSelectMon_SendPalPad(PlayerProfile *profile, SavePalPad *palPad
     packet->filler_14[1] = PlayerProfile_GetVersion(profile);
     packet->filler_14[2] = PlayerProfile_GetTrainerGender(profile);
     for (i = 0; i < NUM_FRIENDS_PER_ENTRY; i++, palPad++) {
-        packet->unk_18[i] = palPad->otid;
-        packet->unk_58[i] = palPad->filler_14[1];
-        packet->unk_68[i] = palPad->filler_14[0];
+        packet->friendOtIds[i] = palPad->otid;
+        packet->friendVersions[i] = palPad->filler_14[1];
+        packet->friendLanguages[i] = palPad->filler_14[0];
         packet->filler_78[i] = palPad->filler_14[2];
     }
     return Comm_SendCommandNoCopy(WIRELESS_TRADE_CMD_PALPAD, packet, sizeof(*packet));
@@ -1652,19 +1652,19 @@ void WirelessTradeSelectMon_OpenSummary(WirelessTradeSelectMon *work, u32 ofPart
     if (ofPartner == FALSE) {
         work->summaryArgs.party = work->party;
         work->summaryArgs.partyCount = Party_GetCount(work->args->party);
-        work->summaryArgs.unk28 = 0;
+        work->summaryArgs.chatot = 0;
         PokemonSummaryArgs_SetPlayer(&work->summaryArgs, CommPlayerInfo_GetProfile(Comm_GetLocalNetId()));
     } else {
         work->summaryArgs.party = work->partnerParty;
         work->summaryArgs.partyCount = Party_GetCount(work->partnerParty);
         // The partner's Chatot cry.
-        work->summaryArgs.unk28 = (int)&work->chatot[Comm_GetLocalNetId() ^ 1];
+        work->summaryArgs.chatot = (int)&work->chatot[Comm_GetLocalNetId() ^ 1];
         PokemonSummaryArgs_SetPlayer(&work->summaryArgs, CommPlayerInfo_GetProfile(Comm_GetLocalNetId() ^ 1));
     }
 
-    work->summaryArgs.unk11 = 1;
+    work->summaryArgs.monDataType = 1;
     work->summaryArgs.partySlot = work->cursor % 6;
-    work->summaryArgs.unk12 = 1;
+    work->summaryArgs.mode = 1;
     work->summaryArgs.moveToLearn = 0;
     work->summaryArgs.unk2C = sub_02088288(work->args->saveData);
     work->summaryArgs.natDexEnabled = work->args->natDexEnabled;

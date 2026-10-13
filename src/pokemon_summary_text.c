@@ -65,7 +65,7 @@ void PokemonSummary_AddPageWindows(PokemonSummary *summary) {
         summary->numPageWindows = 8;
         break;
     case 3:
-        if (summary->args->unk12 != 3 && summary->args->unk12 != 4) {
+        if (summary->args->mode != 3 && summary->args->mode != 4) {
             return;
         }
         summary->numPageWindows = 3;
@@ -93,7 +93,7 @@ void PokemonSummary_RemovePageWindows(PokemonSummary *summary) {
         ClearWindowTilemapAndCopyToVram(summary->pageWindows);
         break;
     case 3:
-        if (summary->args->unk12 != 3 && summary->args->unk12 != 4) {
+        if (summary->args->mode != 3 && summary->args->mode != 4) {
             return;
         }
         break;
@@ -167,7 +167,7 @@ void PokemonSummary_PrintHeldItem(PokemonSummary *summary) {
 
 int PokemonSummary_IsPlayersMon(PokemonSummary *summary) {
     PokemonSummaryArgs *args = summary->args;
-    if (summary->mon.otId == args->playerId && summary->mon.otGender == args->unk10 && String_Compare(summary->mon.otName, summary->playerName) == 0) {
+    if (summary->mon.otId == args->playerId && summary->mon.otGender == args->playerGender && String_Compare(summary->mon.otName, summary->playerName) == 0) {
         return TRUE;
     }
     return FALSE;
@@ -421,7 +421,7 @@ void PokemonSummary_PrintMemo(PokemonSummary *summary) {
     FillWindowPixelBuffer(&summary->pageWindows[6], 0);
     boxMon = PokemonSummary_GetShownMon(summary);
     isMine = PokemonSummary_IsPlayersMon(summary);
-    if (summary->args->unk11 == 2) {
+    if (summary->args->monDataType == 2) {
         mon = AllocMonZeroed(HEAP_ID_19);
         CopyBoxPokemonToPokemon(boxMon, mon);
         PokemonSummary_PrintTrainerMemo(&summary->pageWindows[6], mon, isMine);
@@ -499,7 +499,7 @@ void PokemonSummary_PrintStats(PokemonSummary *summary) {
 #pragma force_active off
 
 void PokemonSummary_PrintMoves(PokemonSummary *summary) {
-    if (summary->args->unk12 != 2) {
+    if (summary->args->mode != 2) {
         ScheduleWindowCopyToVram(&summary->windows[4]);
     }
     FillWindowPixelBuffer(&summary->pageWindows[8], 0);
@@ -559,7 +559,7 @@ void PokemonSummary_PrintRibbonCount(PokemonSummary *summary) {
 }
 
 void PokemonSummary_PrintFlavorPreference(PokemonSummary *summary) {
-    u8 mode = summary->args->unk12;
+    u8 mode = summary->args->mode;
     if (mode == 3) {
     } else if (mode != 4) {
         return;

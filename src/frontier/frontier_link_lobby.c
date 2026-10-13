@@ -167,11 +167,11 @@ void FrontierLinkLobby_LaunchSummary(void *frontierWork, FrontierLinkLobby *lobb
     lobby->summaryArgs->party = SaveArray_Party_Get(lobby->saveData);
     lobby->summaryArgs->natDexEnabled = SaveArray_IsNatDexEnabled(lobby->saveData);
     lobby->summaryArgs->unk2C = sub_02088288(lobby->saveData);
-    lobby->summaryArgs->unk11 = 1;
+    lobby->summaryArgs->monDataType = 1;
     lobby->summaryArgs->partySlot = lobby->partySlot;
     lobby->summaryArgs->partyCount = Party_GetCount(lobby->summaryArgs->party);
     lobby->summaryArgs->moveToLearn = 0;
-    lobby->summaryArgs->unk12 = 0;
+    lobby->summaryArgs->mode = 0;
     lobby->summaryArgs->ribbons = Save_SpecialRibbons_Get(lobby->saveData);
     lobby->summaryArgs->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(lobby->saveData);
     PokemonSummary_SetPages(lobby->summaryArgs, ov80_0223C040);

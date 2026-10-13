@@ -20,13 +20,13 @@ typedef struct FieldFadeEnvironment {
 
 typedef struct FieldTransitionEnvironment {
     u8 state;
-    u8 unk1;
+    u8 delayTimer;
     u16 transitionState;
     Location location;
-    FieldEnvSubUnk18 *unk18;
+    FieldEnvSubUnk18 *transitionWork;
     u32 transitionNo;
     u32 destinationMapID;
-    UnkStruct_0206793C *unk24;
+    UnkStruct_0206793C *followMonBall;
 } FieldTransitionEnvironment; // size: 0x28
 
 void NewFieldFadeEnvironment(TaskManager *man, enum FadeMode fadeMode, enum FadeType typeTop, enum FadeType typeBottom, u16 colour, int duration, int framesPer, enum HeapID heapID);

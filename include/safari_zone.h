@@ -39,7 +39,7 @@ typedef struct SAFARIZONE_LINKLEADER {
 typedef struct SafariZone {
     SafariZoneAreaSet area_sets[SAFARI_ZONE_MAX_AREA_SETS];
     SAFARIZONE_LINKLEADER link_leader;
-    u8 unk5F8;
+    u8 level;
     u8 objectUnlockLevel : 6;
     u8 activeAreaSet : 2;
     u16 unlockTime;

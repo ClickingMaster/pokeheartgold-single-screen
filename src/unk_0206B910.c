@@ -41,7 +41,7 @@ typedef struct UnkStruct_0206BCEC {
     u8 unk01;
     u8 unk02;
     u8 filler03[21];
-    SaveData *unk18;
+    SaveData *saveData;
 } UnkStruct_0206BCEC;
 
 typedef struct UnkStruct_0206BCD4 {
@@ -188,7 +188,7 @@ BOOL ScrCmd_234(ScriptContext *ctx) {
     unusedStruct.unk00 = arg2;
     unusedStruct.unk01 = arg1;
     unusedStruct.unk02 = arg3;
-    unusedStruct.unk18 = ctx->fieldSystem->saveData;
+    unusedStruct.saveData = ctx->fieldSystem->saveData;
     *unkStruct = sub_0206BCEC(&unusedStruct);
     return FALSE;
 }

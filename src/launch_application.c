@@ -362,11 +362,11 @@ PokemonSummaryArgs *PokemonSummary_CreateArgs(FieldSystem *fieldSystem, enum Hea
     MI_CpuFill8(args, 0, sizeof(PokemonSummaryArgs));
     args->options = Save_PlayerData_GetOptionsAddr(saveData);
     args->party = SaveArray_Party_Get(saveData);
-    args->unk11 = 1;
+    args->monDataType = 1;
     args->partySlot = 0;
     args->partyCount = Party_GetCount(args->party);
     args->moveToLearn = MOVE_NONE;
-    args->unk12 = a2;
+    args->mode = a2;
     args->natDexEnabled = SaveArray_IsNatDexEnabled(saveData);
     args->unk2C = sub_02088288(saveData);
     args->ribbons = Save_SpecialRibbons_Get(saveData);
@@ -385,11 +385,11 @@ PokemonSummaryArgs *LearnForgetMove_LaunchApp(enum HeapID heapID, FieldSystem *f
     MI_CpuFill8(args, 0, sizeof(PokemonSummaryArgs));
     args->party = SaveArray_Party_Get(fieldSystem->saveData);
     args->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
-    args->unk11 = 1;
+    args->monDataType = 1;
     args->partySlot = partySlot;
     args->partyCount = 1;
     args->moveToLearn = moveToLearn;
-    args->unk12 = 2;
+    args->mode = 2;
     args->natDexEnabled = SaveArray_IsNatDexEnabled(fieldSystem->saveData);
     args->unk2C = 0;
     args->menuInputStatePtr = &fieldSystem->menuInputState;
@@ -1338,15 +1338,15 @@ PokemonSummaryArgs *PokemonSummary_LaunchApp(enum HeapID heapID, FieldSystem *fi
     PokemonSummaryArgs *args = Heap_Alloc(HEAP_ID_FIELD2, sizeof(PokemonSummaryArgs));
     args->party = SaveArray_Party_Get(fieldSystem->saveData);
     args->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
-    args->unk11 = 1;
+    args->monDataType = 1;
     args->partySlot = partySlot;
     args->partyCount = Party_GetCount(args->party);
     args->moveToLearn = MOVE_NONE;
-    args->unk12 = 0;
+    args->mode = 0;
     args->ribbons = Save_SpecialRibbons_Get(fieldSystem->saveData);
     args->natDexEnabled = SaveArray_IsNatDexEnabled(fieldSystem->saveData);
     args->unk2C = 0;
-    args->unk28 = 0;
+    args->chatot = 0;
     args->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(fieldSystem->saveData);
     PokemonSummary_SetPages(args, _020FA0B0);
 

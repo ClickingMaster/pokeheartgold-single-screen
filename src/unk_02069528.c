@@ -23,7 +23,7 @@ void sub_02069528(SaveData *saveData, s32 a1, UnkStruct_02069528 *a2) {
     a2->trainerClass = GetUnionRoomAvatarAttrBySprite(a2->playerGender, PlayerProfile_GetAvatar(playerProfile), 1);
 
     for (s32 index = 0, position = 0; index < 3; index++, position += 8) {
-        MI_CpuCopy8(Save_Frontier_GetTowerMessage(saveData, index), &a2->unkCA[position], 8);
+        MI_CpuCopy8(Save_Frontier_GetTowerMessage(saveData, index), &a2->towerMessages[position], 8);
     }
 
     MI_CpuCopy8(Save_Frontier_GetTowerMessage(saveData, 3), &a2->unkC0, sizeof(a2->unkC0));

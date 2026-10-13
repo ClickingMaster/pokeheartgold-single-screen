@@ -56,15 +56,15 @@ u16 FrontierSave_GetStat(FrontierSave *frontier, int stat, int index) {
                 stat++;
                 index -= 16;
             }
-            return (frontier->unk_000[stat] >> index) & 1;
+            return (frontier->stats[stat] >> index) & 1;
         }
-        return frontier->unk_000[stat];
+        return frontier->stats[stat];
     }
     if (index == -1) {
         GF_ASSERT(FALSE);
         return 0;
     }
-    return frontier->unk_0E0[index][stat - 112];
+    return frontier->rowStats[index][stat - 112];
 }
 
 u32 FrontierSave_SetStat(FrontierSave *frontier, int stat, int index, u16 value) {
@@ -79,42 +79,42 @@ u32 FrontierSave_SetStat(FrontierSave *frontier, int stat, int index, u16 value)
                 index -= 16;
             }
             if (value == 0) {
-                frontier->unk_000[stat] &= (1 << index) ^ 0xffff;
+                frontier->stats[stat] &= (1 << index) ^ 0xffff;
             } else {
-                frontier->unk_000[stat] |= 1 << index;
+                frontier->stats[stat] |= 1 << index;
             }
         } else {
             GF_ASSERT(index == 255);
-            frontier->unk_000[stat] = value;
+            frontier->stats[stat] = value;
         }
     } else {
         GF_ASSERT(index != 255);
-        frontier->unk_0E0[index][stat - 112] = value;
+        frontier->rowStats[index][stat - 112] = value;
     }
     return value;
 }
 
 void FrontierSave_ClearRows(FrontierSave *frontier) {
-    MI_CpuFill8(frontier->unk_0E0, 0, 2048);
+    MI_CpuFill8(frontier->rowStats, 0, 2048);
     for (int i = 100; i <= 111; i++) {
-        frontier->unk_000[i] = 0;
+        frontier->stats[i] = 0;
     }
 }
 
 void FrontierSave_DeleteRow(FrontierSave *frontier, int row) {
     GF_ASSERT(row != 255);
     for (; row < 31; row++) {
-        MI_CpuCopy8(frontier->unk_0E0[row + 1], frontier->unk_0E0[row], 64);
+        MI_CpuCopy8(frontier->rowStats[row + 1], frontier->rowStats[row], 64);
         for (int i = 100; i < 111; i += 2) {
             FrontierSave_SetStat(frontier, i, row, FrontierSave_GetStat(frontier, i, row + 1));
         }
     }
-    frontier = (FrontierSave *)frontier->unk_0E0;
+    frontier = (FrontierSave *)frontier->rowStats;
     MI_CpuFill8((u8 *)frontier + (31 << 6), 0, 64);
 }
 
 void FrontierSave_ClearRow(FrontierSave *frontier, int row) {
-    MI_CpuFill8(frontier->unk_0E0[row], 0, 64);
+    MI_CpuFill8(frontier->rowStats[row], 0, 64);
 }
 
 u32 FrontierSave_AddStat(FrontierSave *frontier, int stat, int index, u16 amount) {

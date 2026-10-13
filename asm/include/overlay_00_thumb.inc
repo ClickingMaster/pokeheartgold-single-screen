@@ -138,10 +138,10 @@
 .public ov00_021EFDCC
 .public ov00_021EFE78
 .public ov00_021EFF04
-.public ov00_021F1284
-.public ov00_021F12F0
-.public ov00_021F13A4
-.public ov00_021F14D4
+.public DWC_CancelMatching
+.public DWC_StopSCMatchingAsync
+.public DWC_AddMatchKeyString
+.public DWC_SetMatchingOption
 .public ov00_021F9580
 .public ov00_021F9750
 .public ov00_021F9850

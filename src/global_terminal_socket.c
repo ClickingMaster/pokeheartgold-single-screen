@@ -168,7 +168,7 @@ extern u8 sGlobalTerminalSocketCipher[];
 // no public header
 void *ov00_021EC2A8(int category, int size);
 void ov00_021EC2EC(int category, void *ptr, int size);
-int ov00_021FFA44(char *address);
+int gsSocketInetAddr(char *address);
 int ov00_021ECC6C(const char *arg, void *request);
 int ov00_021ECCE0(void);
 int ov00_021EC11C(int *errorCode, int *errorType);
@@ -578,7 +578,7 @@ int GlobalTerminalSocket_Open(void) {
         sGlobalTerminalSocket.error = GTS_SOCKET_ERROR_RESOLVE;
         return 0;
     }
-    sGlobalTerminalSocket.address = ov00_021FFA44(address);
+    sGlobalTerminalSocket.address = gsSocketInetAddr(address);
     return 1;
 }
 

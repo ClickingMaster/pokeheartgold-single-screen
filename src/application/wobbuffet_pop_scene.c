@@ -1300,11 +1300,11 @@ u32 WobbuffetPopBonusTarget_Hit(WobbuffetPop *game, WobbuffetPopBonusRing *ring,
         ManagedSprite_SetDrawFlag(target->effect, TRUE);
         ManagedSprite_SetAnim(target->sprite, sWobbuffetPopBonusTargetAnims[target->bonus] + 2);
         target->timer = sWobbuffetPopRingSpeedTimers[ring->speed * 4];
-        target->unk_13 = sWobbuffetPopRingSpeedTimers[ring->speed * 4] / 2;
+        target->halfTime = sWobbuffetPopRingSpeedTimers[ring->speed * 4] / 2;
         target->step = (u8)(target->step + 1);
         break;
     case 1:
-        if (target->timer == target->unk_13) {
+        if (target->timer == target->halfTime) {
             ManagedSprite_SetAnim(target->sprite, sWobbuffetPopBonusTargetAnims[target->bonus] + 1);
             ManagedSprite_SetDrawFlag(target->effect, FALSE);
             ManagedSprite_TickNFrames(target->effect, 0x4000);
@@ -2023,7 +2023,7 @@ void WobbuffetPop_RecvPlayerValue(int netId, int size, const void *data, void *a
 
     for (i = 0; i < game->app->playerCount; i++) {
         if (netId == game->app->netIds[i]) {
-            game->unk_000C[i] = value;
+            game->playerValues[i] = value;
             break;
         }
     }

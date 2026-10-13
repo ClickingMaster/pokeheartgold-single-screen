@@ -1137,11 +1137,11 @@ int WobbuffetPop_ChooseHost(WobbuffetPop *game) {
     int i;
     u32 max;
 
-    max = game->unk_000C[0];
+    max = game->playerValues[0];
     hostNetId = game->app->netIds[0];
     for (i = 1; i < game->app->playerCount; i++) {
-        if (max < game->unk_000C[i]) {
-            max = game->unk_000C[i];
+        if (max < game->playerValues[i]) {
+            max = game->playerValues[i];
             hostNetId = game->app->netIds[i];
         }
     }

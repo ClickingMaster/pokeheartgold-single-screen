@@ -30,20 +30,20 @@ void MigratedPokemon_InitPokemonOnly(MigratedPokemon *mon) {
 static int MigratedPokemon_FindSlotIndex(MigratedPokemon *mon, u32 id) {
     int i;
     for (i = 0; i < MIGRATION_SLOT_COUNT; i++) {
-        if (id == mon->unk_588[i]) {
+        if (id == mon->migrationIds[i]) {
             return i;
         }
     }
     for (i = 0; i < MIGRATION_SLOT_COUNT; i++) {
-        if (mon->unk_588[i] == 0) {
+        if (mon->migrationIds[i] == 0) {
             return i;
         }
     }
     s64 minTimestamp = 0x7FFFFFFF;
     int oldestIdx;
     for (i = 0; i < MIGRATION_SLOT_COUNT; i++) {
-        if (mon->unk_5D8[i] < minTimestamp) {
-            minTimestamp = mon->unk_5D8[i];
+        if (mon->migrationTimes[i] < minTimestamp) {
+            minTimestamp = mon->migrationTimes[i];
             oldestIdx = i;
         }
     }
@@ -56,11 +56,11 @@ void MigratedPokemon_CopyBoxPokemonToSlot(MigratedPokemon *mon, BoxPokemon *src,
 
 void MigratedPokemon_RecordMigration(MigratedPokemon *mon, u32 id) {
     int slotIdx = MigratedPokemon_FindSlotIndex(mon, id);
-    mon->unk_588[slotIdx] = id;
-    mon->unk_5D8[slotIdx] = GF_RTC_DateTimeToSec();
+    mon->migrationIds[slotIdx] = id;
+    mon->migrationTimes[slotIdx] = GF_RTC_DateTimeToSec();
     s64 rtcOffset = OS_GetOwnerRtcOffset();
-    mon->unk_678 = (u32)rtcOffset;
-    mon->unk_67C = (u32)(rtcOffset >> 32);
+    mon->rtcOffsetLow = (u32)rtcOffset;
+    mon->rtcOffsetHigh = (u32)(rtcOffset >> 32);
     OS_GetMacAddress(mon->macAddress);
 }
 

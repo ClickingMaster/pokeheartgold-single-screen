@@ -6,17 +6,17 @@
 // The parts of the summary screen state this module uses.
 typedef struct PokemonSummaryScene {
     u8 pad_000[0x22C];
-    void *unk_22C; // 0x22C
+    void *args; // 0x22C
     u8 pad_230[0x23C - 0x230];
     u16 species; // 0x23C
     u8 pad_23E[0x280 - 0x23E];
-    u32 unk_280_0 : 28; // 0x280
-    u32 unk_280_28 : 1;
+    u32 status : 28; // 0x280
+    u32 isEgg : 1;
     u32 unk_280_29 : 3;
     u8 pad_284[0x29C - 0x284];
     void *camera;         // 0x29C
     void *pokepicManager; // 0x2A0
-    u32 unk_2A4[2];       // 0x2A4
+    u32 pokepicAnimScript[2]; // 0x2A4
     u8 pad_2AC[0x2CC - 0x2AC];
     void *pokepicAnimManager; // 0x2CC
     void *pokepic;            // 0x2D0
@@ -47,7 +47,7 @@ typedef struct ConditionChartVertex {
 
 struct UnkStruct22C {
     u8 pad_00[0x11];
-    u8 unk_11;
+    u8 monDataType;
 };
 
 extern const VecFx32 _02104EA4;
@@ -84,11 +84,11 @@ u8 PokemonSummary_CheckTouchedButton(PokemonSummaryScene *a);
 
 typedef char AssertAnimVecSize[(sizeof(ConditionChartVertexAnim) == 0x12) ? 1 : -1];
 typedef char AssertAnimVecSignedSize[(sizeof(ConditionChartVertexAnimS) == 0x12) ? 1 : -1];
-typedef char AssertPicture22C[(offsetof(PokemonSummaryScene, unk_22C) == 0x22C) ? 1 : -1];
+typedef char AssertPicture22C[(offsetof(PokemonSummaryScene, args) == 0x22C) ? 1 : -1];
 typedef char AssertPicture23C[(offsetof(PokemonSummaryScene, species) == 0x23C) ? 1 : -1];
 typedef char AssertPicture29C[(offsetof(PokemonSummaryScene, camera) == 0x29C) ? 1 : -1];
 typedef char AssertPicture2A0[(offsetof(PokemonSummaryScene, pokepicManager) == 0x2A0) ? 1 : -1];
-typedef char AssertPicture2A4[(offsetof(PokemonSummaryScene, unk_2A4) == 0x2A4) ? 1 : -1];
+typedef char AssertPicture2A4[(offsetof(PokemonSummaryScene, pokepicAnimScript) == 0x2A4) ? 1 : -1];
 typedef char AssertPicture2CC[(offsetof(PokemonSummaryScene, pokepicAnimManager) == 0x2CC) ? 1 : -1];
 typedef char AssertPicture2D0[(offsetof(PokemonSummaryScene, pokepic) == 0x2D0) ? 1 : -1];
 typedef char AssertPicture2D4[(offsetof(PokemonSummaryScene, unk_2D4) == 0x2D4) ? 1 : -1];
@@ -250,20 +250,20 @@ void PokemonSummary_CreatePokepic(PokemonSummaryScene *a) {
 
     a->pokepicManager = PokepicManager_Create(0x13);
     species = PokemonSummary_GetShownMon(a);
-    if (((struct UnkStruct22C *)a->unk_22C)->unk_11 == 2) {
+    if (((struct UnkStruct22C *)a->args)->monDataType == 2) {
         GetBoxmonSpriteCharAndPlttNarcIds(sp10, species, 2, 0);
     } else {
         GetPokemonSpriteCharAndPlttNarcIds(sp10, species, 2);
     }
-    NARC_ReadPokepicAnimScript(a->pokepicAnimNarc, a->unk_2A4, a->species, 1);
+    NARC_ReadPokepicAnimScript(a->pokepicAnimNarc, a->pokepicAnimScript, a->species, 1);
     a->unk_2D4 = 0;
-    a->pokepic = PokepicManager_CreatePokepic(a->pokepicManager, sp10, 0xd0, 0x68, 0, 0, a->unk_2A4, 0);
+    a->pokepic = PokepicManager_CreatePokepic(a->pokepicManager, sp10, 0xd0, 0x68, 0, 0, a->pokepicAnimScript, 0);
     Pokepic_SetAttr(a->pokepic, 6, 1);
     Pokepic_SetAttr(a->pokepic, 0x23, 0);
 }
 
 void PokemonSummary_StartPokepicAnim(PokemonSummaryScene *a) {
-    if (a->unk_280_28) {
+    if (a->isEgg) {
         NARC_StartPokepicAnim(a->pokepicAnimNarc, a->pokepicAnimManager, a->pokepic, 0, 2, a->unk_2D4, 0);
     } else {
         Pokepic_StartAnim(a->pokepic, 1);
@@ -284,7 +284,7 @@ int PokemonSummary_GetTouchedButton(PokemonSummaryScene *a) {
     if (a->unk_7BF_0 == 0xF) {
         return -1;
     }
-    if (((struct UnkStruct22C *)a->unk_22C)->unk_11 != 2) {
+    if (((struct UnkStruct22C *)a->args)->monDataType != 2) {
         r = TouchscreenHitbox_FindRectAtTouchNew(_02104FFC);
         if (r != -1) {
             r = _02104FD0[r][0];

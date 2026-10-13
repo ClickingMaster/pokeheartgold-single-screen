@@ -83,7 +83,7 @@ BOOL PokemonSummary_Init(OverlayManager *manager, int *state) {
     memset(summary, 0, sizeof(PokemonSummary));
     summary->args = OverlayManager_GetArgs(manager);
     summary->bgConfig = BgConfig_Alloc(HEAP_ID_19);
-    *(u32 *)summary->args->unk38 = 0;
+    *(u32 *)summary->args->monModified = 0;
     summary->pokepicAnimManager = PokepicAnimManager_New(HEAP_ID_19, 1, 1);
     summary->pokepicAnimNarc = NARC_New(NARC_a_1_8_0, HEAP_ID_19);
     FontID_SetAccessDirect(0, HEAP_ID_19);
@@ -361,7 +361,7 @@ int PokemonSummary_WaitFadeIn(PokemonSummary *summary) {
     if (IsPaletteFadeFinished() == TRUE) {
         PokemonSummary_StartPokepicAnim(summary);
         PokemonSummary_PlayCry(summary);
-        mode = summary->args->unk12;
+        mode = summary->args->mode;
         if (mode == 2) {
             return 8;
         }
@@ -377,8 +377,8 @@ int PokemonSummary_WaitFadeIn(PokemonSummary *summary) {
 int PokemonSummary_HandleInput(PokemonSummary *summary) {
     int selection;
 
-    if (summary->unk7BF_4 == 1) {
-        summary->args->unk17 = 1;
+    if (summary->exitRequested == 1) {
+        summary->args->exitedWithB = 1;
         return 21;
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_LEFT) {
@@ -399,7 +399,7 @@ int PokemonSummary_HandleInput(PokemonSummary *summary) {
     }
     if (gSystem.newKeys & PAD_BUTTON_B) {
         PlaySE(SEQ_SE_GS_GEARCANCEL);
-        summary->args->unk17 = 1;
+        summary->args->exitedWithB = 1;
         PokemonSummary_SetMenuInputState(summary, 0);
         return PokemonSummary_FlashCancelButton(summary, 21);
     }
@@ -434,7 +434,7 @@ int PokemonSummary_HandleInput(PokemonSummary *summary) {
             return 10;
         }
     }
-    if (summary->args->unk11 == 2) {
+    if (summary->args->monDataType == 2) {
         selection = PokemonSummary_GetMonButtonTouch(summary);
         if (selection == 0) {
             if (PokemonSummary_FindNextMon(summary, -1) != -1) {

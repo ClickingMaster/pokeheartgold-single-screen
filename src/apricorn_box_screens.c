@@ -3212,7 +3212,7 @@ void AprijuiceScreen_UseJuice(AprijuiceScreen *screen) {
     *(u16 *)&screen->oldStars.color[0] = *(u16 *)&entry->stars.color[0];
     *(u16 *)&screen->oldStars.color[2] = *(u16 *)&entry->stars.color[2];
     *(u16 *)&screen->oldStars.color[4] = *(u16 *)&entry->stars.color[4];
-    CalcMonPokeathlonStars(&entry->stars, entry->mon, (const s8 *)entry->aprijuice.unk_00, screen->heapId);
+    CalcMonPokeathlonStars(&entry->stars, entry->mon, (const s8 *)entry->aprijuice.stats, screen->heapId);
     screen->numChanged = 0;
     for (i = 0; i < 5; i++) {
         screen->starDelta[i] = (u8)((entry->stars.stars >> (sAprijuiceStatOrder[i] * 3)) & 7) - (u8)((screen->oldStars.stars >> (sAprijuiceStatOrder[i] * 3)) & 7);
@@ -3304,11 +3304,11 @@ void AprijuiceScreen_DrawStatStars(AprijuiceScreen *screen, AprijuiceMon *entry,
         int offset;
     } bar;
 
-    if ((s8)entry->aprijuice.unk_00[stat] == 0) {
+    if ((s8)entry->aprijuice.stats[stat] == 0) {
         Sprite_SetDrawFlag(screen->sprites[stat + 3], FALSE);
     } else {
         Sprite_SetDrawFlag(screen->sprites[stat + 3], TRUE);
-        if ((s8)entry->aprijuice.unk_00[stat] > 0) {
+        if ((s8)entry->aprijuice.stats[stat] > 0) {
             Sprite_SetAnimCtrlSeq(screen->sprites[stat + 3], 8);
         } else {
             Sprite_SetAnimCtrlSeq(screen->sprites[stat + 3], 9);
@@ -3333,7 +3333,7 @@ void AprijuiceScreen_DrawStatStars(AprijuiceScreen *screen, AprijuiceMon *entry,
 
 void AprijuiceScreen_DrawAllStars(AprijuiceScreen *screen, AprijuiceMon *entry) {
     s32 i;
-    CalcMonPokeathlonStars(&entry->stars, entry->mon, (const s8 *)entry->aprijuice.unk_00, screen->heapId);
+    CalcMonPokeathlonStars(&entry->stars, entry->mon, (const s8 *)entry->aprijuice.stats, screen->heapId);
     for (i = 0; i < 5; i++) {
         AprijuiceScreen_DrawStatStars(screen, entry, (u8)i);
     }

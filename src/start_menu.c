@@ -88,10 +88,10 @@ typedef struct UnkStruct_0203CA9C_Case8 {
     int evoMethod;
 } UnkStruct_0203CA9C_Case8;
 
-typedef struct UnkStruct_0203D580 {
+typedef struct StartMenuMoveLearnReturn {
     u16 itemId;
-    u16 unk_2;
-} UnkStruct_0203D580;
+    u16 levelUpMoveSearchState;
+} StartMenuMoveLearnReturn;
 
 typedef struct StartMenuAfterEvoPartySlotBak {
     int partySlot;
@@ -226,7 +226,7 @@ void StartMenu_Init(FieldSystem *fieldSystem) {
     } else {
         startMenu->inhibitIconFlags = FieldSystem_GetStartMenuButtonInhibitFlags_Normal(fieldSystem);
     }
-    startMenu->unk_350 = FALSE;
+    startMenu->inUnionRoom = FALSE;
     if (sub_0205CF60(fieldSystem->playerAvatar) == TRUE) {
         PlayerAvatar_StopAndFace(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
     }
@@ -236,7 +236,7 @@ void StartMenu_Init(FieldSystem *fieldSystem) {
 void StartMenu_InitUnionRoom(FieldSystem *fieldSystem) {
     StartMenuTaskData *startMenu = StartMenu_Create();
     startMenu->inhibitIconFlags = FieldSystem_GetStartMenuButtonInhibitFlags_Union(fieldSystem);
-    startMenu->unk_350 = TRUE;
+    startMenu->inUnionRoom = TRUE;
     if (sub_0205CF60(fieldSystem->playerAvatar) == TRUE) {
         PlayerAvatar_StopAndFace(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
     }
@@ -246,7 +246,7 @@ void StartMenu_InitUnionRoom(FieldSystem *fieldSystem) {
 void StartMenu_InitColosseum(FieldSystem *fieldSystem) {
     StartMenuTaskData *startMenu = StartMenu_Create();
     startMenu->inhibitIconFlags = FieldSystem_GetStartMenuButtonInhibitFlags_Colosseum(fieldSystem);
-    startMenu->unk_350 = FALSE;
+    startMenu->inUnionRoom = FALSE;
     if (sub_0205CF60(fieldSystem->playerAvatar) == TRUE) {
         PlayerAvatar_StopAndFace(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
     }
@@ -256,7 +256,7 @@ void StartMenu_InitColosseum(FieldSystem *fieldSystem) {
 void StartMenu_ReopenAfterScript(FieldSystem *fieldSystem) {
     PlaySE(SEQ_SE_DP_WIN_OPEN);
     StartMenuTaskData *startMenu = StartMenu_Create();
-    startMenu->unk_350 = FALSE;
+    startMenu->inUnionRoom = FALSE;
     if (Save_VarsFlags_CheckSafariSysFlag(Save_VarsFlags_Get(fieldSystem->saveData)) == TRUE) {
         startMenu->inhibitIconFlags = FieldSystem_GetStartMenuButtonInhibitFlags_Safari(fieldSystem);
     } else if (Save_VarsFlags_CheckBugContestFlag(Save_VarsFlags_Get(fieldSystem->saveData)) == TRUE) {
@@ -269,7 +269,7 @@ void StartMenu_ReopenAfterScript(FieldSystem *fieldSystem) {
         startMenu->inhibitIconFlags = FieldSystem_GetStartMenuButtonInhibitFlags_Colosseum(fieldSystem);
     } else if (fieldSystem->mapLoadType == MAP_LOAD_TYPE_UNION) {
         startMenu->inhibitIconFlags = FieldSystem_GetStartMenuButtonInhibitFlags_Union(fieldSystem);
-        startMenu->unk_350 = TRUE;
+        startMenu->inUnionRoom = TRUE;
     } else {
         startMenu->inhibitIconFlags = FieldSystem_GetStartMenuButtonInhibitFlags_Normal(fieldSystem);
     }
@@ -499,7 +499,7 @@ static u32 StartMenu_BuildActionLists(StartMenuTaskData *startMenu, u8 *insertio
         StartMenuButton_Insert(insertionOrderDest, displayOrderDest, &numIcons, START_MENU_ACTION_BAG, -1u);
     }
     if (!(startMenu->inhibitIconFlags & (1 << START_MENU_ACTION_DISABLE_POKEGEAR))) {
-        if (startMenu->unk_350) {
+        if (startMenu->inUnionRoom) {
             StartMenuButton_Insert(insertionOrderDest, displayOrderDest, &numIcons, START_MENU_ACTION_12, -1u);
         } else {
             StartMenuButton_Insert(insertionOrderDest, displayOrderDest, &numIcons, START_MENU_ACTION_POKEGEAR, -1u);
@@ -655,7 +655,7 @@ static BOOL StartMenu_HandleTouchInput(TaskManager *taskManager, FieldSystem *fi
 }
 
 static void sub_0203C69C(StartMenuTaskData *startMenu, FieldSystem *fieldSystem) {
-    if (CommWireless_Exists() && startMenu->unk_350) {
+    if (CommWireless_Exists() && startMenu->inUnionRoom) {
         UnionRoomObjects_RequestLeaveAll(fieldSystem->unionRoomObjects);
         CommState_ResumeAlternateSearch();
         UnionRoom_SetBeaconActivity(0);
@@ -823,15 +823,15 @@ BOOL Task_StartMenu_HandleReturn_Pokemon(TaskManager *taskManager) {
         PokemonSummaryArgs *pokemonSummaryArgs = Heap_Alloc(HEAP_ID_FIELD2, sizeof(PokemonSummaryArgs));
         pokemonSummaryArgs->party = SaveArray_Party_Get(fieldSystem->saveData);
         pokemonSummaryArgs->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
-        pokemonSummaryArgs->unk11 = 1;
+        pokemonSummaryArgs->monDataType = 1;
         pokemonSummaryArgs->partySlot = partyMenuArgs->partySlot;
         pokemonSummaryArgs->partyCount = Party_GetCount(pokemonSummaryArgs->party);
         pokemonSummaryArgs->moveToLearn = 0;
-        pokemonSummaryArgs->unk12 = 0;
+        pokemonSummaryArgs->mode = 0;
         pokemonSummaryArgs->ribbons = Save_SpecialRibbons_Get(fieldSystem->saveData);
         pokemonSummaryArgs->natDexEnabled = SaveArray_IsNatDexEnabled(fieldSystem->saveData);
         pokemonSummaryArgs->unk2C = sub_02088288(fieldSystem->saveData);
-        pokemonSummaryArgs->unk28 = 0;
+        pokemonSummaryArgs->chatot = 0;
         pokemonSummaryArgs->menuInputStatePtr = &fieldSystem->menuInputState;
         pokemonSummaryArgs->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(fieldSystem->saveData);
         PokemonSummary_SetPages(pokemonSummaryArgs, _020FA0B0);
@@ -845,22 +845,22 @@ BOOL Task_StartMenu_HandleReturn_Pokemon(TaskManager *taskManager) {
         PokemonSummaryArgs *pokemonSummaryArgs = Heap_Alloc(HEAP_ID_FIELD2, sizeof(PokemonSummaryArgs));
         pokemonSummaryArgs->party = SaveArray_Party_Get(fieldSystem->saveData);
         pokemonSummaryArgs->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
-        pokemonSummaryArgs->unk11 = 1;
+        pokemonSummaryArgs->monDataType = 1;
         pokemonSummaryArgs->partySlot = partyMenuArgs->partySlot;
         pokemonSummaryArgs->partyCount = 1;
         pokemonSummaryArgs->moveToLearn = partyMenuArgs->moveId;
-        pokemonSummaryArgs->unk12 = 2;
+        pokemonSummaryArgs->mode = 2;
         pokemonSummaryArgs->natDexEnabled = SaveArray_IsNatDexEnabled(fieldSystem->saveData);
         pokemonSummaryArgs->unk2C = sub_02088288(fieldSystem->saveData);
-        pokemonSummaryArgs->unk28 = 0;
+        pokemonSummaryArgs->chatot = 0;
         pokemonSummaryArgs->menuInputStatePtr = &fieldSystem->menuInputState;
         pokemonSummaryArgs->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(fieldSystem->saveData);
         PokemonSummary_SetPages(pokemonSummaryArgs, _020FA0AC);
         PokemonSummaryArgs_SetPlayer(pokemonSummaryArgs, Save_PlayerData_GetProfile(fieldSystem->saveData));
         PokemonSummary_LearnForget_LaunchApp(fieldSystem, pokemonSummaryArgs);
-        UnkStruct_0203D580 *unk = Heap_Alloc(HEAP_ID_FIELD2, sizeof(UnkStruct_0203D580));
+        StartMenuMoveLearnReturn *unk = Heap_Alloc(HEAP_ID_FIELD2, sizeof(StartMenuMoveLearnReturn));
         unk->itemId = partyMenuArgs->itemId;
-        unk->unk_2 = 0;
+        unk->levelUpMoveSearchState = 0;
         startMenu->exitTaskEnvironment2 = unk;
         startMenu->exitTaskEnvironment = pokemonSummaryArgs;
         StartMenu_SetExitTaskFunc(startMenu, Task_StartMenu_HandleReturn_Summary);
@@ -870,22 +870,22 @@ BOOL Task_StartMenu_HandleReturn_Pokemon(TaskManager *taskManager) {
         PokemonSummaryArgs *pokemonSummaryArgs = Heap_Alloc(HEAP_ID_FIELD2, sizeof(PokemonSummaryArgs));
         pokemonSummaryArgs->party = SaveArray_Party_Get(fieldSystem->saveData);
         pokemonSummaryArgs->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
-        pokemonSummaryArgs->unk11 = 1;
+        pokemonSummaryArgs->monDataType = 1;
         pokemonSummaryArgs->partySlot = partyMenuArgs->partySlot;
         pokemonSummaryArgs->partyCount = 1;
         pokemonSummaryArgs->moveToLearn = partyMenuArgs->moveId;
-        pokemonSummaryArgs->unk12 = 2;
+        pokemonSummaryArgs->mode = 2;
         pokemonSummaryArgs->natDexEnabled = SaveArray_IsNatDexEnabled(fieldSystem->saveData);
         pokemonSummaryArgs->unk2C = sub_02088288(fieldSystem->saveData);
-        pokemonSummaryArgs->unk28 = 0;
+        pokemonSummaryArgs->chatot = 0;
         pokemonSummaryArgs->menuInputStatePtr = &fieldSystem->menuInputState;
         pokemonSummaryArgs->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(fieldSystem->saveData);
         PokemonSummary_SetPages(pokemonSummaryArgs, _020FA0AC);
         PokemonSummaryArgs_SetPlayer(pokemonSummaryArgs, Save_PlayerData_GetProfile(fieldSystem->saveData));
         PokemonSummary_LearnForget_LaunchApp(fieldSystem, pokemonSummaryArgs);
-        UnkStruct_0203D580 *unk = Heap_Alloc(HEAP_ID_FIELD2, sizeof(UnkStruct_0203D580));
+        StartMenuMoveLearnReturn *unk = Heap_Alloc(HEAP_ID_FIELD2, sizeof(StartMenuMoveLearnReturn));
         unk->itemId = ITEM_NONE;
-        unk->unk_2 = partyMenuArgs->levelUpMoveSearchState;
+        unk->levelUpMoveSearchState = partyMenuArgs->levelUpMoveSearchState;
         startMenu->exitTaskEnvironment2 = unk;
         startMenu->exitTaskEnvironment = pokemonSummaryArgs;
         StartMenu_SetExitTaskFunc(startMenu, Task_StartMenu_HandleReturn_Summary);
@@ -1303,20 +1303,20 @@ static BOOL Task_StartMenu_HandleReturn_Summary(TaskManager *taskManager) {
     PokemonSummaryArgs *summaryArgs = Heap_Alloc(HEAP_ID_FIELD2, sizeof(PokemonSummaryArgs));
     memcpy(summaryArgs, startMenu->exitTaskEnvironment, sizeof(PokemonSummaryArgs));
     Heap_Free(startMenu->exitTaskEnvironment);
-    if (summaryArgs->unk12 == 2) {
+    if (summaryArgs->mode == 2) {
         PartyMenuArgs *partyMenuArgs = Heap_Alloc(HEAP_ID_FIELD2, sizeof(PartyMenuArgs));
-        UnkStruct_0203D580 *r7 = startMenu->exitTaskEnvironment2;
+        StartMenuMoveLearnReturn *r7 = startMenu->exitTaskEnvironment2;
         StartMenu_InitPartyMenuArgs(partyMenuArgs, fieldSystem, startMenu);
         partyMenuArgs->itemId = r7->itemId;
         partyMenuArgs->partySlot = summaryArgs->partySlot;
         partyMenuArgs->moveId = summaryArgs->moveToLearn;
-        partyMenuArgs->selectedMoveIdx = summaryArgs->unk16;
+        partyMenuArgs->selectedMoveIdx = summaryArgs->selectedMoveSlot;
         if (r7->itemId != ITEM_NONE) {
             partyMenuArgs->context = PARTY_MENU_CONTEXT_REPLACE_MOVE_TMHM;
             partyMenuArgs->levelUpMoveSearchState = 0;
         } else {
             partyMenuArgs->context = PARTY_MENU_CONTEXT_REPLACE_MOVE_LEVELUP;
-            partyMenuArgs->levelUpMoveSearchState = r7->unk_2;
+            partyMenuArgs->levelUpMoveSearchState = r7->levelUpMoveSearchState;
         }
         partyMenuArgs->menuInputStatePtr = &fieldSystem->menuInputState;
         FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_PartyMenu, partyMenuArgs);

@@ -92,11 +92,11 @@ void SafariZone_SetAreaSet(SafariZone *safari_zone, s32 area_set_no, SafariZoneA
 }
 
 void SafariZone_SetLevel(SafariZone *safari_zone, u8 a1) {
-    safari_zone->unk5F8 = a1;
+    safari_zone->level = a1;
 }
 
 u8 SafariZone_GetLevel(SafariZone *safari_zone) {
-    return safari_zone->unk5F8;
+    return safari_zone->level;
 }
 
 void SafariZone_AddToAllAreaLevels(SafariZone *safariZone, s32 a1) {

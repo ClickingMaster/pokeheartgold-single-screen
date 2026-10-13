@@ -21,7 +21,7 @@ typedef struct UnkStruct_02069528 {
     u8 playerGender : 1;
     u8 unkC8_2 : 6;
     u8 trainerClass;
-    u8 unkCA[0x18];
+    u8 towerMessages[0x18];
     u16 unkE2;
 } UnkStruct_02069528;
 

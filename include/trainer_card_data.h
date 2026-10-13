@@ -40,7 +40,7 @@ typedef struct TrainerCardData {
     u32 linkBattleWins;   // 0x3C
     u32 linkBattleLosses; // 0x40
     u32 linkTrades;       // 0x44
-    u32 unk_48[8];        // 0x48
+    u32 badgeShininess[8]; // 0x48
     u8 signature[0x600];  // 0x68, 1 bit per pixel
     u16 checksum;         // 0x668, XOR of all bytes, taken while checksum and received are 0
     u16 received;         // 0x66A, set once a link partner's card has arrived

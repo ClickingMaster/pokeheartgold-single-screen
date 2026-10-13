@@ -2322,8 +2322,8 @@ void BattleFactoryApp_CreateSummaryArgs(BattleFactoryApp *app) {
     memset(app->summaryArgs, 0, sizeof(PokemonSummaryArgs));
     app->summaryArgs->party = app->party;
     app->summaryArgs->options = app->options;
-    app->summaryArgs->unk11 = 1;
-    app->summaryArgs->unk12 = 1;
+    app->summaryArgs->monDataType = 1;
+    app->summaryArgs->mode = 1;
     app->summaryArgs->partyCount = app->numBalls;
     app->summaryArgs->partySlot = app->cursorPos;
     app->summaryArgs->moveToLearn = 0;

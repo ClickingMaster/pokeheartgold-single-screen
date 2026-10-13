@@ -68,10 +68,10 @@ extern int ov00_021EE530(u8);
 extern void ov00_021EFE78(void);
 extern int ov00_021EFDCC(void *, void *, int *);
 extern void ov00_021EFF04(void (*)(void), int);
-extern void ov00_021F1284(void);
-extern void ov00_021F12F0(void (*)(void), int);
-extern int ov00_021F13A4(int, const char *, const char *);
-extern int ov00_021F14D4(int, const void *, u32);
+extern void DWC_CancelMatching(void);
+extern void DWC_StopSCMatchingAsync(void (*)(void), int);
+extern int DWC_AddMatchKeyString(int, const char *, const char *);
+extern int DWC_SetMatchingOption(int, const void *, u32);
 extern int ov00_021F9580(u8);
 extern u32 ov00_021F9750(u32, void *, u32);
 extern void ov00_021F9850(u8, void *, int);
@@ -232,13 +232,13 @@ int ov00_021E5CEC(const char *name, int maxPlayers, int filterLocal, int timeout
     WifiConnection_FreeRecvBuffers();
     params = _0221602C;
     params.timeout = 1000 * timeoutSeconds;
-    GF_ASSERT(ov00_021F14D4(0, &params, 8) == 0);
-    GF_ASSERT(ov00_021F13A4(0, gWifiLobbyKeyName, name) != 0);
+    GF_ASSERT(DWC_SetMatchingOption(0, &params, 8) == 0);
+    GF_ASSERT(DWC_AddMatchKeyString(0, gWifiLobbyKeyName, name) != 0);
     MI_CpuFill8(gWifiConnection->matchFilter, 0, 128);
     sprintf(gWifiConnection->matchFilter, gWifiMatchFilterFormat, gWifiLobbyKeyName, name);
     GF_ASSERT(strlen(gWifiConnection->matchFilter) < 128);
     if (filterLocal) {
-        ov00_021F13A4(1, gWifiConnection->matchFilter, gWifiConnection->matchFilter);
+        DWC_AddMatchKeyString(1, gWifiConnection->matchFilter, gWifiConnection->matchFilter);
     }
     gWifiConnection->state = WIFI_CONNECTION_STATE_MATCHING;
     gWifiConnection->maxPlayers = maxPlayers;
@@ -278,7 +278,7 @@ int WifiConnection_Update(int success) {
     case WIFI_CONNECTION_STATE_MATCHED:
     case WIFI_CONNECTION_STATE_CANCEL_REQUESTED:
         if (!gWifiConnection->matchType) {
-            ov00_021F1284();
+            DWC_CancelMatching();
         } else {
             ov00_021EE278();
             ov00_021E5E34();
@@ -1179,7 +1179,7 @@ void ov00_021E70E0(void) {
 BOOL ov00_021E70F4(void) {
     if (gWifiConnection->unk_10E0 == 0) {
         gWifiConnection->unk_10E0 = 1;
-        ov00_021F12F0(ov00_021E70E0, 0);
+        DWC_StopSCMatchingAsync(ov00_021E70E0, 0);
     }
     if (gWifiConnection->unk_10E0 == 2) {
         return TRUE;

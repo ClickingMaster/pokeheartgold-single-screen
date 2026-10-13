@@ -250,11 +250,11 @@ static u32 BattleArcadeSelectMons_OpenSummary(FrontierSelectMonsEnv *a0, FieldSy
     unk->party = SaveArray_Party_Get(saveData);
     unk->natDexEnabled = SaveArray_IsNatDexEnabled(saveData);
     unk->unk2C = sub_02088288(saveData);
-    unk->unk11 = 1;
+    unk->monDataType = 1;
     unk->partySlot = a0->partySlot;
     unk->partyCount = Party_GetCount(unk->party);
     unk->moveToLearn = MOVE_NONE;
-    unk->unk12 = 0;
+    unk->mode = 0;
     unk->ribbons = Save_SpecialRibbons_Get(saveData);
     unk->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(saveData);
     PokemonSummary_SetPages(unk, sBattleArcadeSummaryPages);

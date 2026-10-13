@@ -207,7 +207,7 @@ void TrainerCardData_SetBadges(PlayerProfile *profile, FieldSystem *fieldSystem,
 
     TrainerCard_GetBadgeShininessArr(Save_TrainerCard_Get(fieldSystem->saveData));
     i = 0;
-    words = card->unk_48;
+    words = card->badgeShininess;
     for (; i < 8; i++) {
         words[i] &= ~1;
         words[i] &= 1;

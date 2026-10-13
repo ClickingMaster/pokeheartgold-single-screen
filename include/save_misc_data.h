@@ -43,16 +43,16 @@ typedef struct SAVE_MISC_DATA {
     struct GF_RTC_DateTime berry_datetime;
     Gymmick gymmick;
     u16 rivalName[PLAYER_NAME_LENGTH + 1];
-    u8 unk_0280[8]; // 3 chunks of size (4, 2, 2)
+    u8 phoneRecentCallers[8]; // 3 chunks of size (4, 2, 2)
     u8 filler_0288[0x10];
     u16 favoriteMonSpecies;
     u8 favoriteMonForm : 7;
     u8 favoriteMonIsEgg : 1;
     u8 extraChunksExist : 1;
-    u8 unk_029B_1 : 4;
+    u8 vsRecorderColorScheme : 4;
     u8 filer_029C[4];
     MailMessage battleGreetingEC;
-    u32 unk_02A8[2][5];
+    u32 extraChunkKeys[2][5];
     u8 unk_02D0[5];
     u8 dummy_02D5[3];
     u32 togepiEggPersonality;

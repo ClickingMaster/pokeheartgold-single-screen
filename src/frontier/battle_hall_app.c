@@ -1056,9 +1056,9 @@ void BattleHallApp_CreateSummaryArgs(BattleHallApp *app) {
     app->summaryArgs = Heap_Alloc(HEAP_ID_105, sizeof(PokemonSummaryArgs));
     memset(app->summaryArgs, 0, sizeof(PokemonSummaryArgs));
     app->summaryArgs->party = app->party;
-    app->summaryArgs->unk11 = 1;
+    app->summaryArgs->monDataType = 1;
     app->summaryArgs->options = app->options;
-    app->summaryArgs->unk12 = 1;
+    app->summaryArgs->mode = 1;
     app->summaryArgs->partyCount = Party_GetCount(app->party);
     app->summaryArgs->partySlot = 0;
     app->summaryArgs->moveToLearn = 0;

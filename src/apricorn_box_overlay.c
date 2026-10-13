@@ -157,7 +157,7 @@ void ApricornBox_FeedAprijuice(UnkStruct_02031CEC *record, Party *party, int slo
         } else if (v > 127) {
             v = 127;
         }
-        modifiers.unk_00[i] = v;
+        modifiers.stats[i] = v;
     }
     Party_SetMonAprijuiceModifiers(party, &modifiers, slot);
     ApplyMonMoodModifier(Party_GetMonByIndex(party, slot), 7);

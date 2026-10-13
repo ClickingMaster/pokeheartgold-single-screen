@@ -89,7 +89,7 @@ BOOL ciSocketConnect(ChatSocket *socket, const char *address, int port) {
     ASSERT(socket->state == 0, ov45_022575B0, ov45_022571D4, 220);
     strncpy(socket->host, address, 255);
     socket->host[254] = 0;
-    ip = ov00_021FFA44(address);
+    ip = gsSocketInetAddr(address);
     if (ip == (u32)-1) {
         ChatHostEntry *entry = SOC_GetHostByName(address);
         if (!entry) {

@@ -5,16 +5,16 @@
 #include <nnsys.h>
 
 typedef struct SoundWaveOutParam {
-    NNSSndWaveOutHandle *unk00;
-    NNSSndWaveFormat unk04;
-    void *unk08;
-    u32 unk0c;
-    u32 unk10;
-    u32 unk14;
-    u32 unk18;
-    s32 unk1c;
-    u32 unk20;
-    s32 unk24;
+    NNSSndWaveOutHandle *handle;
+    NNSSndWaveFormat format;
+    void *data;
+    u32 loopFlag;
+    u32 loopStartSample;
+    u32 samples;
+    u32 sampleRate;
+    s32 volume;
+    u32 speed;
+    s32 pan;
 } SoundWaveOutParam;
 
 void Sound_ClearSecondaryScene(void);

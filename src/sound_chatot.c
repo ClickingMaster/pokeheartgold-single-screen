@@ -62,16 +62,16 @@ BOOL Chatot_PlayCry(SOUND_CHATOT *a0, u32 a1, s32 a2, s32 a3) {
 
     SoundWaveOutParam sp8;
 
-    sp8.unk00 = Sound_GetWaveOutHandle(14);
-    sp8.unk04 = NNS_SND_WAVE_FORMAT_PCM8;
-    sp8.unk08 = Sound_GetChatotBuffer();
-    sp8.unk0c = 0;
-    sp8.unk10 = 0;
-    sp8.unk14 = 2000;
-    sp8.unk18 = 2000;
-    sp8.unk20 = (u32)(r4 + 0x8000);
-    sp8.unk24 = a3 / 2 + 64;
-    sp8.unk1c = a2;
+    sp8.handle = Sound_GetWaveOutHandle(14);
+    sp8.format = NNS_SND_WAVE_FORMAT_PCM8;
+    sp8.data = Sound_GetChatotBuffer();
+    sp8.loopFlag = 0;
+    sp8.loopStartSample = 0;
+    sp8.samples = 2000;
+    sp8.sampleRate = 2000;
+    sp8.speed = (u32)(r4 + 0x8000);
+    sp8.pan = a3 / 2 + 64;
+    sp8.volume = a2;
 
     BOOL ret = Sound_StartWaveOut(&sp8, 14);
     Sound_SetWaveOutVolume(14, a2);
