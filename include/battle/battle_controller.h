@@ -109,7 +109,7 @@ void BattleController_EmitPlayMoveSE(BattleSystem *battleSystem, BattleContext *
 void BattleController_EmitPlaySong(BattleSystem *battleSystem, int battlerId, int song);
 void BattleSystem_ReloadMonData(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int monIndex);
 
-void ov12_022645C8(BattleSystem *battleSystem, BattleContext *ctx, u8 a2);
+void BattleController_EmitScreenFade(BattleSystem *battleSystem, BattleContext *ctx, u8 a2);
 void BattleController_EmitSelectCommand(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int partySlot);
 void BattleController_EmitPokemonEnterBall(BattleSystem *battleSystem, s32 battlerId, s32 ball);
 void BattleController_EmitPrintSelectionMessage(BattleSystem *battleSystem, int battlerId, BattleMessage msg);

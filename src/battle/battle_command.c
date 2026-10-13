@@ -5756,7 +5756,7 @@ BOOL BtlCmd_223(BattleSystem *battleSystem, BattleContext *ctx) {
 
     int a2 = BattleScriptReadWord(ctx);
 
-    ov12_022645C8(battleSystem, ctx, a2 & 1);
+    BattleController_EmitScreenFade(battleSystem, ctx, a2 & 1);
 
     return FALSE;
 }

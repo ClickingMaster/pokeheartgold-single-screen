@@ -1734,7 +1734,7 @@ void BattleController_InitMoveAnimData(BattleSystem *battleSystem, BattleContext
 
 #pragma force_active reset
 
-void ov12_022645C8(BattleSystem *battleSystem, BattleContext *ctx, u8 a2) {
+void BattleController_EmitScreenFade(BattleSystem *battleSystem, BattleContext *ctx, u8 a2) {
     BattleControllerPacketScreenFade packet;
     MI_CpuFill8(&packet, 0, sizeof(packet));
     packet.command = 67;
