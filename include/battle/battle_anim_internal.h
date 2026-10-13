@@ -33,7 +33,7 @@ typedef struct BattleAnimContext {
     u16 power;
     u16 friendship;
     u32 fieldCondition;
-    u16 unk_10;
+    u16 moveAnimVariant;
     u16 terrain;
     u16 attacker;
     u16 defender;

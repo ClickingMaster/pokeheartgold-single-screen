@@ -95,8 +95,8 @@ int ov00_021EC0FC(int *errorCode);
 int ov00_021EC9E0(void *apInfo);
 int ov00_021ECD04(void);
 int ov00_021ECDC8(void);
-void ov00_021FA0D8(void);
-void ov00_021ED9B4(void);
+void DWC_ShutdownGHTTP(void);
+void DWC_ShutdownFriendsMatch(void);
 u64 DWC_CreateFriendKey(void *userData);
 // Not declared in a public header.
 void CommState_InitWfcSession(SaveData *saveData);
@@ -565,14 +565,14 @@ int GtsConnection_WaitAuth(GtsApp *app) {
             app->state = GTS_CONNECTION_STATE_SHOW_CONNECTION_ERROR;
             break;
         case 4:
-            ov00_021FA0D8();
+            DWC_ShutdownGHTTP();
             app->state = GTS_CONNECTION_STATE_SHOW_CONNECTION_ERROR;
             break;
         case 6:
             app->state = GTS_CONNECTION_STATE_SHOW_CONNECTION_ERROR;
             break;
         case 3:
-            ov00_021ED9B4();
+            DWC_ShutdownFriendsMatch();
             app->state = GTS_CONNECTION_STATE_SHOW_CONNECTION_ERROR;
             break;
         case 5:

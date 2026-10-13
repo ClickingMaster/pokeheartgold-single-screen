@@ -323,8 +323,8 @@
 .public ov00_021ECB94
 .public ov00_021ECD04
 .public ov00_021ECDC8
-.public ov00_021ED9B4
-.public ov00_021FA0D8
+.public DWC_ShutdownFriendsMatch
+.public DWC_ShutdownGHTTP
 .public _0223F900
 .public GameStats_Start
 .public GameStats_PrepareRequest

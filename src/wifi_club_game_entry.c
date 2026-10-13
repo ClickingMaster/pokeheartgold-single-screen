@@ -709,8 +709,8 @@ void WifiClubGameEntry_LoadBgPaletteFrame(WifiClubGameEntryScreen *arg0, s32 arg
 u8 WifiClubGameEntry_ToggleVoiceChat(WifiClubGameEntry *arg0, enum HeapID heapID) {
     arg0->clubStatus->unk22 = 1 - arg0->clubStatus->unk22;
     arg0->clubStatus->unk21 = arg0->clubStatus->unk22;
-    ov00_021E70B8(arg0->clubStatus->unk21);
-    ov00_021E6D60(arg0->clubStatus, 36);
+    WifiConnection_SetVoiceChatEnabled(arg0->clubStatus->unk21);
+    WifiConnection_SetOwnStatusData(arg0->clubStatus, 36);
     if (arg0->clubStatus->unk21 == 1) {
         WifiClubGameEntry_EnableVoiceChat(arg0);
     } else {
@@ -795,7 +795,7 @@ void WifiClubGameEntry_SetPlayingStatus(WifiClubGameEntry *arg0, WifiClubGameEnt
         arg0->clubStatus->unk1B = 26;
         break;
     }
-    ov00_021E6D60(arg0->clubStatus, 36);
+    WifiConnection_SetOwnStatusData(arg0->clubStatus, 36);
 }
 
 s32 WifiClubGameEntry_StartVoiceChat(WifiClubGameEntry *arg0) {
@@ -1099,7 +1099,7 @@ s32 WifiClubGameEntry_Leader_Start(WifiClubGameEntry *arg0, WifiClubGameEntryArg
     if (arg0->clubStatus->unk21 == 1) {
         WifiClubGameEntry_EnableVoiceChat(arg0);
     }
-    ov00_021E7220(0);
+    WifiConnection_SetDisconnectWhenAlone(0);
     CommState_SetErrorWatch(0, 1);
     WifiClubGameEntry_AddMemberAvatar(arg0, Comm_GetLocalNetId(), heapID);
     arg0->state = 1;
@@ -1260,7 +1260,7 @@ s32 WifiClubGameEntry_Leader_StartCommunicating(WifiClubGameEntry *arg0, WifiClu
     WifiClubGameEntry_ShowWaitingIcon(arg0);
     WifiClubGameEntry_StartTimeout(arg0);
     arg0->state = 12;
-    ov00_021E7130();
+    WifiConnection_ResetStopServerMatching();
     return 0;
 }
 
@@ -1269,10 +1269,10 @@ s32 WifiClubGameEntry_Leader_WaitMembersConnected(WifiClubGameEntry *arg0, WifiC
         WifiClubGameEntry_RefusePendingApplicants(arg0);
         return 0;
     }
-    if (ov00_021E70F4() == 0) {
+    if (WifiConnection_StopServerMatching() == 0) {
         return 0;
     }
-    ov00_021E7220(1);
+    WifiConnection_SetDisconnectWhenAlone(1);
     arg0->state = 13;
     return 0;
 }
@@ -1469,14 +1469,14 @@ s32 Wifi_PromptMemberDropped(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg
     WifiClubGameEntry_ReleaseAllMembers(arg0);
     WifiClubGameEntry_SetPlayingStatus(arg0, arg1);
     if ((u32)(CommState_GetWifiMatchStatus() - 4) <= 1U) {
-        ov00_021EDB1C();
+        DWC_ProcessFriendsMatch();
     }
     return 0;
 }
 
 s32 WifiClubGameEntry_Leader_EndAfterMemberDropped(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     if ((u32)(CommState_GetWifiMatchStatus() - 4) <= 1) {
-        ov00_021EDB1C();
+        DWC_ProcessFriendsMatch();
     }
     if (WifiClubGameEntry_IsMessageFinished(&arg0->screen) == 0) {
         return 0;

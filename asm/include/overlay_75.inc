@@ -180,8 +180,8 @@
 .public ov00_021ECB40
 .public ov00_021ECD04
 .public ov00_021ECDC8
-.public ov00_021ED9B4
-.public ov00_021FA0D8
+.public DWC_ShutdownFriendsMatch
+.public DWC_ShutdownGHTTP
 .public ov44_0222A4B4
 .public ov44_0222A60C
 .public ov44_0222A758

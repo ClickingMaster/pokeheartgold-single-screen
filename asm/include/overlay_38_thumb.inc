@@ -10,10 +10,10 @@
 .public _u32_div_f
 .public ov00_021EC2A8
 .public ov00_021EC2EC
-.public ov00_021FA0B4
-.public ov00_021FA0D8
-.public ov00_021FA118
-.public ov00_021FA21C
+.public DWC_InitGHTTP
+.public DWC_ShutdownGHTTP
+.public DWC_ProcessGHTTP
+.public DWC_GetGHTTPData
 .public B64Encode
 .public GameStats_Start
 .public GameStats_PrepareRequest

@@ -1883,7 +1883,7 @@ void BattleAnimTask_ThrowSpriteArc(SysTask *task, void *data) {
         ManagedSprite_SetAffineZRotation(work->sprite, (u16)work->rotation.value);
     }
     ManagedSprite_TickFrame(work->sprite);
-    SpriteSystem_DrawSprites(work->common.unk_10);
+    SpriteSystem_DrawSprites(work->common.spriteManager);
 }
 
 void BattleAnimSpriteFunc_ThrowSpriteArc(BattleAnimSystem *system, SpriteSystem *spriteSystem, SpriteManager *spriteManager, ManagedSprite *sprite) {
@@ -2214,7 +2214,7 @@ void BattleAnimTask_StretchFadeSprite(SysTask *task, void *data) {
         return;
     }
     ManagedSprite_TickFrame(work->sprite);
-    SpriteSystem_DrawSprites(work->common.unk_10);
+    SpriteSystem_DrawSprites(work->common.spriteManager);
 }
 
 void BattleAnimFunc_StretchFadeSprite(BattleAnimSystem *system) {
@@ -2996,7 +2996,7 @@ void BattleAnimTask_SpriteQuad(SysTask *task, void *data) {
         BattleAnimSystem_DestroyTask(work->common.system, task);
         Heap_Free(work);
     } else {
-        SpriteSystem_DrawSprites(work->common.unk_10);
+        SpriteSystem_DrawSprites(work->common.spriteManager);
     }
 }
 
@@ -3012,7 +3012,7 @@ void BattleAnimSpriteFunc_SpriteQuad(BattleAnimSystem *system, SpriteSystem *spr
     work->timers[0] = 0;
     for (i = 1; i < 4; i++) {
         work->timers[i] = 0;
-        work->sprites[i] = SpriteSystem_NewSprite(work->common.spriteSystem, work->common.unk_10, &template);
+        work->sprites[i] = SpriteSystem_NewSprite(work->common.spriteSystem, work->common.spriteManager, &template);
     }
     ManagedSprite_SetFlipMode(work->sprites[0], 1);
     ManagedSprite_SetFlipMode(work->sprites[1], 1);
@@ -3082,7 +3082,7 @@ void BattleAnimTask_FlashingSpritesAroundAttacker(SysTask *task, void *data) {
         BattleAnimSystem_DestroyTask(work->common.system, task);
         Heap_Free(work);
     } else {
-        SpriteSystem_DrawSprites(work->common.unk_10);
+        SpriteSystem_DrawSprites(work->common.spriteManager);
     }
 }
 
@@ -3102,7 +3102,7 @@ void BattleAnimSpriteFunc_FlashingSpritesAroundAttacker(BattleAnimSystem *system
     work->timers[0] = 0;
     for (i = 1, delay = 5; i < 4; delay += 5, i++) {
         work->timers[i] = delay + (s32)LCRandom() % 4;
-        work->sprites[i] = SpriteSystem_NewSprite(work->common.spriteSystem, work->common.unk_10, &template);
+        work->sprites[i] = SpriteSystem_NewSprite(work->common.spriteSystem, work->common.spriteManager, &template);
     }
     ManagedSprite_SetFlipMode(work->sprites[1], 1);
     ManagedSprite_SetFlipMode(work->sprites[2], 1);
@@ -3303,7 +3303,7 @@ void BattleAnimTask_SpriteTrailToDefender(SysTask *task, void *data) {
         BattleAnimSystem_DestroyTask(work->common.system, task);
         Heap_Free(work);
     } else {
-        SpriteSystem_DrawSprites(work->common.unk_10);
+        SpriteSystem_DrawSprites(work->common.spriteManager);
     }
 }
 
@@ -3332,7 +3332,7 @@ void BattleAnimSpriteFunc_SpriteTrailToDefender(BattleAnimSystem *system, Sprite
     BattleAnimSystem_GetSpriteTemplate(&template, work->common.system);
     work->sprites[0] = sprite;
     for (i = 1; i < 8; i++) {
-        work->sprites[i] = SpriteSystem_NewSprite(work->common.spriteSystem, work->common.unk_10, &template);
+        work->sprites[i] = SpriteSystem_NewSprite(work->common.spriteSystem, work->common.spriteManager, &template);
         if (i % 2) {
             ManagedSprite_SetFlipMode(work->sprites[i], 1);
         }

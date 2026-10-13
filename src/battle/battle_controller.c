@@ -51,7 +51,7 @@ typedef struct BattleControllerPacketPokemonSendOut {
     u32 battlerType;
     u32 selectedMonIndex;
     u32 ball;
-    u32 unk_14;
+    u32 breakOut;
     u16 moves[MAX_MON_MOVES];
     u16 movePPCur[MAX_MON_MOVES];
     u16 movePP[MAX_MON_MOVES];
@@ -158,7 +158,7 @@ typedef struct BattleControllerTargetGauge {
 typedef struct BattleControllerPacketSelectTarget {
     u8 command;
     u8 unk_01;
-    u16 unk_02;
+    u16 moveRange;
     BattleControllerTargetGauge gauges[BATTLER_MAX];
 } BattleControllerPacketSelectTarget;
 
@@ -175,8 +175,8 @@ typedef struct BattleControllerPacketSelectItem {
 typedef struct BattleControllerPacketShowMonList {
     u8 command;
     u8 battlerId;
-    u8 unk_02;
-    u8 unk_03;
+    u8 mode;
+    u8 reservedMon;
     u8 selectedMonIndex[BATTLER_MAX];
     u8 partyOrder[BATTLER_MAX][PARTY_SIZE];
     u32 unk_24;
@@ -186,10 +186,10 @@ typedef struct BattleControllerPacketShowMonList {
 
 typedef struct BattleControllerPacketYesNoBox {
     u8 command;
-    u8 unk_01;
-    u16 unk_02;
-    u32 unk_04;
-    u32 unk_08;
+    u8 mode;
+    u16 msgId;
+    u32 value;
+    u32 param;
 } BattleControllerPacketYesNoBox;
 
 typedef struct BattleControllerPacketAttackMessage {
@@ -267,7 +267,7 @@ typedef struct BattleControllerPacketTrainerMessage {
 // Recall (32) and send-out (33) messages; the value grades the enemy's remaining HP
 typedef struct BattleControllerPacketSwitchMessage {
     u8 command;
-    u8 unk_01;
+    u8 selectedMonIndex;
     u16 value;
 } BattleControllerPacketSwitchMessage;
 
@@ -330,7 +330,7 @@ typedef struct BattleControllerPacketSelectMoveToForget {
 
 typedef struct BattleControllerPacketMosaicAnimation {
     u8 command;
-    u8 unk_01;
+    u8 mosaic;
     u8 delay;
     u8 unk_03;
 } BattleControllerPacketMosaicAnimation;
@@ -591,7 +591,7 @@ void BattleController_EmitPokemonSendOut(BattleSystem *battleSystem, int battler
     } else {
         packet.ball = battleSystem->ctx->battleMons[battlerId].ball;
     }
-    packet.unk_14 = a3;
+    packet.breakOut = a3;
     packet.isSubstitute = !!(battleSystem->ctx->battleMons[battlerId].status2 & STATUS2_SUBSTITUTE);
     BattleSystem_FlagMonBattled(battleSystem, battlerId, packet.selectedMonIndex);
     for (int i = 0; i < MAX_MON_MOVES; i++) {
@@ -934,7 +934,7 @@ void BattleController_EmitSelectTarget(BattleSystem *battleSystem, BattleContext
     BattleBuffer_Clear(ctx, battlerId);
     battleType = BattleSystem_GetBattleType(battleSystem);
     packet.command = 16;
-    packet.unk_02 = a2;
+    packet.moveRange = a2;
     if (!(battleType & BATTLE_TYPE_DOUBLES) || (battleType & BATTLE_TYPE_MULTI) || ((battleType & BATTLE_TYPE_DOUBLES) && battlerId >= BATTLER_PLAYER2)) {
         packet.unk_01 = 1;
     } else {
@@ -1036,9 +1036,9 @@ void BattleController_EmitShowMonList(BattleSystem *battleSystem, BattleContext 
     BattleBuffer_Clear(ctx, battlerId);
     packet.command = 18;
     packet.battlerId = battlerId;
-    packet.unk_02 = a3;
+    packet.mode = a3;
     packet.unk_24 = a4;
-    packet.unk_03 = a5;
+    packet.reservedMon = a5;
     packet.switchInFlag = ctx->switchInFlag;
     for (i = 0; i < BATTLER_MAX; i++) {
         packet.selectedMonIndex[i] = ctx->selectedMonIndex[i];
@@ -1062,10 +1062,10 @@ void BattleController_EmitDrawYesNoBox(BattleSystem *battleSystem, BattleContext
 
     BattleBuffer_Clear(ctx, battlerId);
     packet.command = 19;
-    packet.unk_02 = a3;
-    packet.unk_01 = a4;
-    packet.unk_04 = a5;
-    packet.unk_08 = a6;
+    packet.msgId = a3;
+    packet.mode = a4;
+    packet.value = a5;
+    packet.param = a6;
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
 
@@ -1240,7 +1240,7 @@ void BattleController_EmitPrintReturnMessage(BattleSystem *battleSystem, BattleC
     BattleControllerPacketSwitchMessage packet;
 
     packet.command = 32;
-    packet.unk_01 = a3;
+    packet.selectedMonIndex = a3;
     packet.value = (100 * (ctx->hpTemp - ctx->battleMons[BATTLER_ENEMY].hp)) / ctx->hpTemp;
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
@@ -1249,7 +1249,7 @@ void BattleController_EmitPrintSendOutMessage(BattleSystem *battleSystem, Battle
     BattleControllerPacketSwitchMessage packet;
 
     packet.command = 33;
-    packet.unk_01 = a3;
+    packet.selectedMonIndex = a3;
     if (ctx->battleMons[BATTLER_ENEMY].hp == 0) {
         packet.value = 1000;
     } else {
@@ -1404,7 +1404,7 @@ void BattleController_EmitSelectMoveToForget(BattleSystem *battleSystem, int bat
 void BattleController_EmitPlayMosaicAnimation(BattleSystem *battleSystem, int battlerId, int a2, int delay) {
     BattleControllerPacketMosaicAnimation packet;
     packet.command = 44;
-    packet.unk_01 = a2;
+    packet.mosaic = a2;
     packet.delay = delay;
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
@@ -1656,8 +1656,8 @@ BOOL BattleController_RecvLinkData(BattleSystem *battleSystem, u8 *data) {
             battleSystem->ctx->battleBuffer[battlerId][i] = data[4 + i];
         }
     } else if (direction == 1) {
-        if (battleSystem->opponentData[battlerId]->unk1A8 == 0) {
-            battleSystem->opponentData[battlerId]->unk1A8 = 1;
+        if (battleSystem->opponentData[battlerId]->commandReceived == 0) {
+            battleSystem->opponentData[battlerId]->commandReceived = 1;
             for (i = 0; i < size; i++) {
                 battleSystem->opponentData[battlerId]->unk8C[8 + i] = data[4 + i];
             }
@@ -1682,8 +1682,8 @@ void BattleController_InitMoveAnimData(BattleSystem *battleSystem, BattleContext
     animData->move = move;
     animData->attacker = attacker;
     animData->defender = defender;
-    animData->unk_4C = a3;
-    animData->unk_50 = a4;
+    animData->isEffectAnim = a3;
+    animData->effectAnimId = a4;
     animData->terrain = BattleSystem_GetTerrainId(battleSystem);
     animData->attackerActive = FALSE;
     animData->defenderActive = FALSE;
@@ -1702,7 +1702,7 @@ void BattleController_InitMoveAnimData(BattleSystem *battleSystem, BattleContext
     } else {
         animData->fieldCondition = 0;
     }
-    animData->unk_0A = ctx->moveAnimVariant;
+    animData->moveAnimVariant = ctx->moveAnimVariant;
     animData->isSubstitute = (ctx->battleMons[(u32)attacker].status2 & STATUS2_SUBSTITUTE) ? 1 : 0;
     animData->isTransformed = (ctx->battleMons[(u32)attacker].status2 & STATUS2_TRANSFORM) != 0;
     for (i = 0; i < BATTLER_MAX; i++) {

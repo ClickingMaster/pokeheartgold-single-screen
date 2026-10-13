@@ -15,7 +15,7 @@ typedef struct WiFiPlazaPlayerInfo {
     u8 filler_1F[5];
 } WiFiPlazaPlayerInfo;
 
-BOOL ov00_021E6D60(void *arg0, s32 arg1);
+BOOL WifiConnection_SetOwnStatusData(void *arg0, s32 arg1);
 WiFiPlazaPlayerInfo *WiFiPlazaPlayerInfo_New(PlayerProfile *profile, enum HeapID heapId);
 void WiFiPlazaPlayerInfo_Free(void *ptr);
 
@@ -27,7 +27,7 @@ WiFiPlazaPlayerInfo *WiFiPlazaPlayerInfo_New(PlayerProfile *profile, enum HeapID
     ptr->avatar = PlayerProfile_GetAvatar(profile);
     ptr->version = PlayerProfile_GetVersion(profile);
     ptr->language = PlayerProfile_GetLanguage(profile);
-    GF_ASSERT(ov00_021E6D60(ptr, 0x24) == 1);
+    GF_ASSERT(WifiConnection_SetOwnStatusData(ptr, 0x24) == 1);
     return ptr;
 }
 

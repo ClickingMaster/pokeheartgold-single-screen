@@ -67,24 +67,24 @@ typedef struct WifiConnection {
     u32 heapSize;                            // 0x108C
     int voiceChatActive;                     // 0x1090
     int targetFriendIndex;                   // 0x1094
-    int unk_1098;                            // 0x1098
-    int unk_109C;                            // 0x109C
-    int unk_10A0;                            // 0x10A0
+    int newClientIndex;                      // 0x1098
+    int voiceChatEnabled;                    // 0x109C
+    int matchInProgress;                     // 0x10A0
     int voiceChatMode;                       // 0x10A4
-    int unk_10A8;                            // 0x10A8
+    int recvTimeoutArmed;                    // 0x10A8
     int keepAliveTimers[8];                  // 0x10AC
     int retryCount;                          // 0x10CC
-    int unk_10D0;                            // 0x10D0
-    u16 unk_10D4;                            // 0x10D4
-    u16 unk_10D6;                            // 0x10D6
-    int unk_10D8;                            // 0x10D8
+    int peerVoiceFlag;                       // 0x10D0
+    u16 ownVoiceFlag;                        // 0x10D4
+    u16 voiceUnmuted;                        // 0x10D6
+    int matchedAidBitmap;                    // 0x10D8
     u8 sendSequence;                         // 0x10DC
     u8 recvSequence;                         // 0x10DD
     u8 forceError;                           // 0x10DE
     u8 unk_10DF;                             // 0x10DF
-    u8 unk_10E0;                             // 0x10E0
+    u8 stopMatchingState;                    // 0x10E0
     u8 recvBufferFromGameHeap[4];            // 0x10E1
-    u8 unk_10E5;                             // 0x10E5
+    u8 disconnectWhenAlone;                  // 0x10E5
     u8 friendDataChanged;                    // 0x10E6
     u8 filler_10E7[0x1108 - 0x10E7];         // 0x10E7
 } WifiConnection;
@@ -97,26 +97,26 @@ int WifiConnection_UpdateLogin(void);
 void WifiConnection_SetReceiveCallbacks(WifiReceiveCallback recvLocal, WifiReceiveCallback recv);
 void WifiConnection_SetDisconnectCallback(void (*callback)(int, void *), void *arg);
 void WifiConnection_SetConnectFilterCallback(BOOL (*callback)(int));
-void ov00_021E5CD0(void (*callback)(int, void *), void *arg);
-int ov00_021E5CEC(const char *name, int maxPlayers, int filterLocal, int timeoutSeconds);
-void ov00_021E5E34(void);
+void WifiConnection_SetClientCallback(void (*callback)(int, void *), void *arg);
+int WifiConnection_StartAnybodyMatchmaking(const char *name, int maxPlayers, int filterLocal, int timeoutSeconds);
+void WifiConnection_FinishCancel(void);
 int WifiConnection_Update(int success);
 int WifiConnection_SendToHost(void *data, int size);
 int WifiConnection_SendFromHost(void *data, int size);
 int WifiConnection_SendToAll(void *data, int size);
 void WifiConnection_LoginCallback(int result, int unused, int arg);
 void WifiConnection_TimeoutCallback(void);
-void ov00_021E6274(u32 result);
-void ov00_021E6298(void);
-void ov00_021E629C(int index, int srcIndex);
-void ov00_021E62D4(void);
+void WifiConnection_UpdateServersCallback(u32 result);
+void WifiConnection_FriendStatusCallback(void);
+void WifiConnection_DeleteFriendCallback(int index, int srcIndex);
+void WifiConnection_BuddyFriendCallback(void);
 void WifiConnection_ResetKeepAliveTimers(void);
-void ov00_021E62F4(void);
-void ov00_021E6388(int aid);
-void ov00_021E63CC(int result, int cancelled);
-BOOL ov00_021E6424(void);
+void WifiConnection_SetRecvTimeouts(void);
+void WifiConnection_OnConnected(int aid);
+void WifiConnection_AnybodyMatchedCallback(int result, int cancelled);
+BOOL WifiConnection_EvalPlayerCallback(void);
 void WifiConnection_SendDoneCallback(u32 result, s32 aid);
-void ov00_021E644C(u32 header);
+void WifiConnection_ReadPeerVoiceFlag(u32 header);
 void WifiConnection_ReceiveCallback(u16 aid, const u8 *data, int size);
 void WifiConnection_ConnectionClosedCallback(int result, int unused1, int unused2, int arg);
 void *WifiConnection_Alloc(int unused, u32 size, int alignment);
@@ -136,29 +136,29 @@ void WifiConnection_SetErrorCallback(void (*callback)(int));
 void WifiConnection_Shutdown(void);
 void WifiConnection_SetFriendStatusBuffer(u8 *data, int stride);
 void WifiConnection_UpdateFriendStatus(void);
-void ov00_021E6D60(void *data, int size);
+void WifiConnection_SetOwnStatusData(void *data, int size);
 u8 WifiConnection_GetFriendStatus(int index);
 int WifiConnection_StartMatchmaking(int friendIndex, int maxPlayers, BOOL alternate);
 int WifiConnection_GetTargetFriendIndex(void);
-void ov00_021E6ED8(int result, int cancelled, int cancelledByMe, int unused, int aid);
-void ov00_021E6FBC(u32 result, u32 cancelled, u32 a2, u32 a3, u32 aid);
-void ov00_021E6FE0(int index);
+void WifiConnection_GameServerMatchedCallback(int result, int cancelled, int cancelledByMe, int unused, int aid);
+void WifiConnection_ConnectedToServerCallback(u32 result, u32 cancelled, u32 a2, u32 a3, u32 aid);
+void WifiConnection_NewClientCallback(int index);
 void ov00_021E700C(void);
 BOOL WifiConnection_GetVoiceActivity(void);
-int ov00_021E7080(void);
-int ov00_021E709C(void);
-void ov00_021E70B8(int value);
-void ov00_021E70CC(u16 value);
-void ov00_021E70E0(void);
-BOOL ov00_021E70F4(void);
-void ov00_021E7130(void);
+int WifiConnection_IsVoiceChatEnabled(void);
+int WifiConnection_GetNewClientIndex(void);
+void WifiConnection_SetVoiceChatEnabled(int value);
+void WifiConnection_SetVoiceUnmuted(u16 value);
+void WifiConnection_StopServerMatchingCallback(void);
+BOOL WifiConnection_StopServerMatching(void);
+void WifiConnection_ResetStopServerMatching(void);
 void ov00_021E7144(void);
 void WifiConnection_SetExtraHeapEnabled(BOOL enable, int heapId);
-void ov00_021E7220(u8 value);
+void WifiConnection_SetDisconnectWhenAlone(u8 value);
 void WifiConnection_FreeRecvBuffer(int aid);
 void WifiConnection_AllocRecvBuffer(int aid);
 void WifiConnection_FreeRecvBuffers(void);
-u8 ov00_021E7314(void);
-void ov00_021E7328(void);
+u8 WifiConnection_IsFriendDataChanged(void);
+void WifiConnection_ClearFriendDataChanged(void);
 
 #endif // POKEHEARTGOLD_WIFI_CONNECTION_H

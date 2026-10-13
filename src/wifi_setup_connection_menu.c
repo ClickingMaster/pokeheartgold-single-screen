@@ -34,7 +34,7 @@ typedef struct WifiSetupTestPromptMessages {
     u32 messages[3];
 } WifiSetupTestPromptMessages;
 
-// parameters of the connection test (ov00_021FA75C)
+// parameters of the connection test (DWC_AC_Create)
 typedef struct WifiSetupConnectionTestParams {
     u8 unk_00[10];
     u8 slot; // 1-3, 4 for the Wi-Fi USB connector
@@ -72,11 +72,11 @@ extern char ov13_02246784[];
 extern char ov13_0224679C[];
 extern char ov13_022467B4[];
 
-extern BOOL ov00_021FA75C(WifiSetupConnectionTestParams *params);
-extern int ov00_021FA904(void);
-extern int ov00_021FA9D4(void);
-extern BOOL ov00_021FAAC8(void);
-extern void ov00_021FAC20(int slot, WifiSetupConnection *connection);
+extern BOOL DWC_AC_Create(WifiSetupConnectionTestParams *params);
+extern int DWC_AC_Process(void);
+extern int DWC_AC_GetStatus(void);
+extern BOOL DWC_AC_Destroy(void);
+extern void DWCi_AC_SetUserProfile(int slot, WifiSetupConnection *connection);
 extern u8 *DWCi_BACKUPlGetWifi(void);
 
 void WifiSetupConnectionList_CreateIcons(void) {
@@ -709,11 +709,11 @@ void WifiSetupConnectionTest_Start(void) {
     } else {
         param.slot = connection->index + 1;
     }
-    if (!ov00_021FA75C(&param)) {
+    if (!DWC_AC_Create(&param)) {
         OS_Terminate();
     }
     if (mode == 0) {
-        ov00_021FAC20(connection->index, connection);
+        DWCi_AC_SetUserProfile(connection->index, connection);
     }
     WifiSetupTask_Create(0, (WifiSetupTaskFunc)WifiSetupConnectionTest_PollTask, NULL, 120);
 }
@@ -769,7 +769,7 @@ void WifiSetupConnectionTest_WaitFadeOut(void) {
 
 void WifiSetupConnectionTest_End(void) {
     WifiSetupConnections *connections = WifiSetupConnections_Get();
-    if (!ov00_021FAAC8()) {
+    if (!DWC_AC_Destroy()) {
         return;
     }
     MI_CpuCopy8(DWCi_BACKUPlGetWifi(), connections->pages[0].tail.page.info, 0xE);
@@ -787,7 +787,7 @@ void WifiSetupConnectionTest_End(void) {
 }
 
 void WifiSetupConnectionTest_PollTask(void *task) {
-    int r = ov00_021FA904();
+    int r = DWC_AC_Process();
     if (r == 0) {
         return;
     }
@@ -797,7 +797,7 @@ void WifiSetupConnectionTest_PollTask(void *task) {
         gWifiSetupConnectionTestPassed = 1;
         WifiSetupSound_Play(0x11);
     } else {
-        WifiSetupErrorScreen_SetCode(ov00_021FA9D4());
+        WifiSetupErrorScreen_SetCode(DWC_AC_GetStatus());
         WifiSetupSound_Play(0x12);
     }
     WifiSetupApp_SetStateFunc(WifiSetupConnectionTest_FadeOut);

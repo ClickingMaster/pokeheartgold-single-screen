@@ -6659,23 +6659,23 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
     case STATE_GET_POKEMON_START:
         if (data->captureType == CAPTURE_NORMAL) {
             UnkStruct_134 unkStruct;
-            unkStruct.unk8 = 3;
+            unkStruct.mode = 3;
             unkStruct.heapID = HEAP_ID_BATTLE;
-            unkStruct.unkC = battlerId + 20000;
+            unkStruct.resTagOffset = battlerId + 20000;
             unkStruct.ball = data->ballID;
             unkStruct.spriteSystem = BattleSystem_GetSpriteSystem(data->battleSystem);
             unkStruct.paletteData = BattleSystem_GetPaletteData(data->battleSystem);
-            unkStruct.unk14 = 1;
-            unkStruct.unk18 = 0;
+            unkStruct.bgPriority = 1;
+            unkStruct.keepSubSurface = 0;
             unkStruct.battleSystem = data->battleSystem;
             if (BattleSystem_GetBattleType(data->battleSystem) & BATTLE_TYPE_DOUBLES) {
                 if (battlerId == BATTLER_ENEMY) {
-                    unkStruct.unk0 = 16;
+                    unkStruct.kind = 16;
                 } else { // BATTLER_ENEMY2, assumedly.
-                    unkStruct.unk0 = 17;
+                    unkStruct.kind = 17;
                 }
             } else { // This is a single battle.
-                unkStruct.unk0 = 15;
+                unkStruct.kind = 15;
             }
             data->ballData = UnkBallData_New(&unkStruct); // Initializes whatever this is and gets it all ready to go.
             data->state = STATE_GET_POKEMON_CHECK_IF_TRAINER;
@@ -6684,7 +6684,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
             UnkBallData_SetBallAnimation(data->ballData, BALL_ANIM_THROW);
         } else { // CAPTURE_SAFARI
             OpponentData *opponentData = BattleSystem_GetOpponentData(data->battleSystem, BATTLER_PLAYER);
-            if (UnkBallData_GetMode(opponentData->ballData) != 4) { // Checks ballData->unk90.unk8.
+            if (UnkBallData_GetMode(opponentData->ballData) != 4) { // Checks ballData->params.mode.
                 data->ballData = opponentData->ballData;
                 opponentData->ballData = NULL;
                 data->state = STATE_GET_POKEMON_CHECK_IF_TRAINER;
@@ -8014,15 +8014,15 @@ static void BattleSystem_LoadLevelUpNameplate(BattleSystem *battleSystem, Getter
     SpriteSystem_LoadPaletteBuffer(palData, PLTTBUF_MAIN_OBJ, spriteSystem, spriteManager, NARC_a_0_0_8, 82, 0, 2, NNS_G2D_VRAM_TYPE_2DMAIN, 20016);
     SpriteSystem_LoadCellResObj(spriteSystem, spriteManager, NARC_a_0_0_8, 257, 1, 20013);
     SpriteSystem_LoadAnimResObj(spriteSystem, spriteManager, NARC_a_0_0_8, 258, 1, 20013);
-    data->unkC[0] = SpriteSystem_NewSprite(spriteSystem, spriteManager, &sLevelUpNameplateTemplate);
-    ManagedSprite_TickFrame(data->unkC[0]);
+    data->sprites[0] = SpriteSystem_NewSprite(spriteSystem, spriteManager, &sLevelUpNameplateTemplate);
+    ManagedSprite_TickFrame(data->sprites[0]);
     SpriteSystem_LoadCharResObjAtEndWithHardwareMappingType(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, Pokemon_GetIconNaix(mon), 0, NNS_G2D_VRAM_TYPE_2DMAIN, 20022);
     SpriteSystem_LoadPaletteBuffer(palData, PLTTBUF_MAIN_OBJ, spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), 0, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 20017);
     SpriteSystem_LoadCellResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconCell64KNaix(), 0, 20014);
     SpriteSystem_LoadAnimResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconAnim64KNaix(), 0, 20014);
-    data->unkC[1] = SpriteSystem_NewSprite(spriteSystem, spriteManager, &sPokeIconTemplate);
-    Sprite_SetPalOffsetRespectVramOffset(data->unkC[1]->sprite, Pokemon_GetIconPalette(mon));
-    ManagedSprite_TickFrame(data->unkC[1]);
+    data->sprites[1] = SpriteSystem_NewSprite(spriteSystem, spriteManager, &sPokeIconTemplate);
+    Sprite_SetPalOffsetRespectVramOffset(data->sprites[1]->sprite, Pokemon_GetIconPalette(mon));
+    ManagedSprite_TickFrame(data->sprites[1]);
     data->tempPointers[POINTER_LEVEL_UP_NAMEPLATE_FONT_SYSTEM] = FontSystem_NewInit(1, HEAP_ID_BATTLE);
 
     u32 gender;
@@ -8058,18 +8058,18 @@ static void BattleSystem_LoadLevelUpNameplate(BattleSystem *battleSystem, Getter
     textObjTemplate.vram = 1;
     textObjTemplate.heapID = HEAP_ID_BATTLE;
     textObjTemplate.unk_20 = 0;
-    data->unk14 = FontOAM_Create(&textObjTemplate);
-    data->unk18 = unkStruct;
-    TextOBJ_SetPalOffsetRespectVramOffset(data->unk14, 1);
+    data->fontOam = FontOAM_Create(&textObjTemplate);
+    data->charSpace = unkStruct;
+    TextOBJ_SetPalOffsetRespectVramOffset(data->fontOam, 1);
     RemoveWindow(&window);
 }
 
 static void BattleSystem_UnloadLevelUpNameplate(BattleSystem *battleSystem, GetterWork *data) {
     SpriteManager *spriteManager = BattleSystem_GetSpriteManager(battleSystem);
-    Sprite_DeleteAndFreeResources(data->unkC[0]);
-    Sprite_DeleteAndFreeResources(data->unkC[1]);
-    FontOAM_Delete(data->unk14);
-    ObjCharTransfer_FreeCharSpace(&data->unk18);
+    Sprite_DeleteAndFreeResources(data->sprites[0]);
+    Sprite_DeleteAndFreeResources(data->sprites[1]);
+    FontOAM_Delete(data->fontOam);
+    ObjCharTransfer_FreeCharSpace(&data->charSpace);
     SpriteManager_UnloadCharObjById(spriteManager, 0x4E35);
     SpriteManager_UnloadPlttObjById(spriteManager, 0x4E30);
     SpriteManager_UnloadCellObjById(spriteManager, 0x4E2D);

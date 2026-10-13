@@ -23,7 +23,7 @@ typedef struct LinkBattleScreenArgs {
     u8 multiOrSide;     // 0x29, party mode: the local player's side; other modes: multi battle
     u8 outcome;         // 0x2A, BATTLE_OUTCOME_*
     u8 done;            // 0x2B, set when the screen has finished
-    u8 unk_2C;          // 0x2C, BattleSetup.linkBattleMode, passed to the battle record save
+    u8 linkBattleMode;          // 0x2C, BattleSetup.linkBattleMode, passed to the battle record save
     u8 unk_2D[3];       // 0x2D
 } LinkBattleScreenArgs; // size: 0x30
 

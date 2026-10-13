@@ -226,7 +226,7 @@ void StatsUpload_Start(int server, char *key) {
     modulus = strtoul(strncpy(hex, key + 36, 8), NULL, 16);
     checksumKey = strtoul(strncpy(hex, key + 44, 8), NULL, 16);
     ov45_02253DDC(key + 52, secretKey, multiplier, increment, modulus, checksumKey);
-    ov00_021FA0B4(0);
+    DWC_InitGHTTP(0);
     ov45_0225762C.state = STATS_UPLOAD_READY;
     ov45_0225762C.active = TRUE;
 }
@@ -251,7 +251,7 @@ int StatsUpload_Process(void) {
         StatsUpload_SetFailed();
         break;
     case STATS_UPLOAD_GET_CHALLENGE:
-        request = ov00_021FA488(ov45_0225762C.url, 0, 0, StatsUpload_OnRequestProgress, StatsUpload_OnRequestCompleted, 0);
+        request = DWC_GetGHTTPDataEx(ov45_0225762C.url, 0, 0, StatsUpload_OnRequestProgress, StatsUpload_OnRequestCompleted, 0);
         ov45_0225762C.request = request;
         if (request >= 0) {
             ov45_0225762C.state = STATS_UPLOAD_WAIT_CHALLENGE;
@@ -260,12 +260,12 @@ int StatsUpload_Process(void) {
         }
         break;
     case STATS_UPLOAD_WAIT_CHALLENGE:
-        if (!ov00_021FA118()) {
+        if (!DWC_ProcessGHTTP()) {
             StatsUpload_SetFailed();
         }
         break;
     case STATS_UPLOAD_SEND:
-        request = ov00_021FA488(ov45_0225762C.url, 0, 0, StatsUpload_OnRequestProgress, StatsUpload_OnRequestCompleted, 0);
+        request = DWC_GetGHTTPDataEx(ov45_0225762C.url, 0, 0, StatsUpload_OnRequestProgress, StatsUpload_OnRequestCompleted, 0);
         ov45_0225762C.request = request;
         if (request >= 0) {
             ov45_0225762C.state = STATS_UPLOAD_WAIT_RESPONSE;
@@ -274,7 +274,7 @@ int StatsUpload_Process(void) {
         }
         break;
     case STATS_UPLOAD_WAIT_RESPONSE:
-        if (!ov00_021FA118()) {
+        if (!DWC_ProcessGHTTP()) {
             StatsUpload_SetFailed();
         }
         break;
@@ -296,7 +296,7 @@ void StatsUpload_Stop(void) {
         ov45_0225762C.responseLength = 0;
         ov45_0225762C.response = NULL;
     }
-    ov00_021FA0D8();
+    DWC_ShutdownGHTTP();
     ov45_0225762C.state = STATS_UPLOAD_STOPPED;
     ov45_0225762C.active = FALSE;
 }

@@ -544,8 +544,8 @@ BOOL WiFiPlazaLobbyClient_HostMatch(int index, int maxPlayers) {
     _022577C0->currentMatch = index;
     _022577C0->unk_69e = 1;
     _022577C0->unk_69f = 0;
-    ov00_021E5CEC(_022577C0->matches[index].info.name, maxPlayers, 1, _022577C0->matches[index].timer / 30);
-    ov00_021E5CD0(ov45_02230390, _022577C0);
+    WifiConnection_StartAnybodyMatchmaking(_022577C0->matches[index].info.name, maxPlayers, 1, _022577C0->matches[index].timer / 30);
+    WifiConnection_SetClientCallback(ov45_02230390, _022577C0);
     WifiConnection_SetDisconnectCallback(ov45_02230394, _022577C0);
     return TRUE;
 }
@@ -648,8 +648,8 @@ BOOL WiFiPlazaLobbyClient_JoinMatch(int index) {
     }
     _022577C0->currentMatch = index;
     client = _022577C0;
-    ov00_021E5CEC(client->matches[index].info.name, client->matches[index].info.maxPlayers, 0, client->matches[index].timer / 30);
-    ov00_021E5CD0(ov45_02230390, _022577C0);
+    WifiConnection_StartAnybodyMatchmaking(client->matches[index].info.name, client->matches[index].info.maxPlayers, 0, client->matches[index].timer / 30);
+    WifiConnection_SetClientCallback(ov45_02230390, _022577C0);
     WifiConnection_SetDisconnectCallback(ov45_02230394, _022577C0);
     return TRUE;
 }
@@ -774,7 +774,7 @@ u8 ov45_0222F6B0(int which, int index) {
 // Ends the matchmaking session.
 void WiFiPlazaLobbyClient_EndMatch(void) {
     GF_ASSERT(_022577C0 != NULL);
-    ov00_021E5CD0(NULL, NULL);
+    WifiConnection_SetClientCallback(NULL, NULL);
     WifiConnection_SetDisconnectCallback(NULL, NULL);
     _022577C0->currentMatch = 3;
     _022577C0->unk_69e = 0;

@@ -33,7 +33,7 @@ extern void VCT_Cleanup(void);
 extern void VCT_GetVADInfo(void *info);
 extern void CommState_GetLinkMode(void);
 extern int Comm_IsWifiPeerLinkMode(void);
-extern int ov00_021EE490(void);
+extern int DWC_GetMyAID(void);
 
 #pragma force_active on
 
@@ -315,7 +315,7 @@ void VoiceChat_Init(int heapId, int codec, int count) {
     gVoiceChat.work->mode = config.mode;
     config.data = gVoiceChat.work->sessions;
     config.count = count;
-    config.id = (u8)ov00_021EE490();
+    config.id = (u8)DWC_GetMyAID();
     if (config.id == -1) {
         GF_ASSERT(0);
     }

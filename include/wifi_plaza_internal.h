@@ -441,7 +441,7 @@ typedef struct WiFiPlazaLobbyMatchInfo {
     char name[0x14];
 } WiFiPlazaLobbyMatchInfo;
 
-// A matchmaking session of the lobby client: WiFiPlazaLobbyClient_HostMatch hosts it, WiFiPlazaLobbyClient_JoinMatch joins it (ov00_021E5CEC with its
+// A matchmaking session of the lobby client: WiFiPlazaLobbyClient_HostMatch hosts it, WiFiPlazaLobbyClient_JoinMatch joins it (WifiConnection_StartAnybodyMatchmaking with its
 // name, its player count and timer / 30 seconds).
 typedef struct WiFiPlazaLobbyMatch {
     WiFiPlazaLobbyMatchInfo info;

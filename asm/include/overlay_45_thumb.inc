@@ -166,8 +166,8 @@
 .public gGameLanguage
 .public NNS_G3dGlb
 .public WifiConnection_SetDisconnectCallback
-.public ov00_021E5CD0
-.public ov00_021E5CEC
+.public WifiConnection_SetClientCallback
+.public WifiConnection_StartAnybodyMatchmaking
 .public WifiConnection_ClassifyErrorCode
 .public ov00_021E7144
 .public Field2DObject_GetParam

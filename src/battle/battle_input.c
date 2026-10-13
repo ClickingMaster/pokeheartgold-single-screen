@@ -1907,10 +1907,10 @@ static void BattleInput_CreateMainMenuObjects(BattleInput *battleInput, int a1, 
 
     if (battleInput->cancelRunDisplay == 1) {
         strRun = NewString_ReadMsgData(msgLoader, msg_0197_00928); // CANCEL
-        battleInput->unk66F = 1;
+        battleInput->cancelShown = 1;
     } else {
         strRun = NewString_ReadMsgData(msgLoader, msg_0197_00927); // RUN
-        battleInput->unk66F = 0;
+        battleInput->cancelShown = 0;
     }
 
     BattleInput_CreateTextObject(battleInput, &battleInput->textObj[MENUTXT_FIGHT], strFight, 4, MAKE_TEXT_COLOR(1, 2, 3), 2, 20023, 128, 83, 1, NULL);
@@ -2781,7 +2781,7 @@ static void BattleInput_CreateTextObject(BattleInput *battleInput, BattleInputTe
     }
 
     battleTextObj->textObj = textObj;
-    battleTextObj->unk4 = charTransferAlloc;
+    battleTextObj->charSpace = charTransferAlloc;
     battleTextObj->fontLength = fontLength;
 }
 
@@ -2789,7 +2789,7 @@ static void BattleInput_DeleteTextObjects(BattleInput *battleInput) {
     for (int i = 0; i < 13; i++) {
         if (battleInput->textObj[i].textObj != NULL) {
             FontOAM_Delete(battleInput->textObj[i].textObj);
-            ObjCharTransfer_FreeCharSpace(&battleInput->textObj[i].unk4);
+            ObjCharTransfer_FreeCharSpace(&battleInput->textObj[i].charSpace);
             battleInput->textObj[i].textObj = NULL;
         }
     }
@@ -3559,7 +3559,7 @@ static void VBlankTask_BattleMenuSlideIn(SysTask *task, void *data) {
     }
 
     G2S_SetWnd1Position(0, 18 * 8, 255, ySet);
-    menuSlideIn->unk_10 = menuSlideIn->ySet;
+    menuSlideIn->bgY = menuSlideIn->ySet;
 }
 
 static void HBlankCB_BattleMenuSlideIn(void *data) {
@@ -3572,9 +3572,9 @@ static void HBlankCB_BattleMenuSlideIn(void *data) {
         BgConfig *bgConfig = BattleSystem_GetBgConfig(menuSlideIn->battleInput->battleSystem);
 
         BgSetPosTextAndCommit(bgConfig, 4, BG_POS_OP_SET_X, 0);
-        BgSetPosTextAndCommit(bgConfig, 4, BG_POS_OP_SET_Y, menuSlideIn->unk_10);
+        BgSetPosTextAndCommit(bgConfig, 4, BG_POS_OP_SET_Y, menuSlideIn->bgY);
         BgSetPosTextAndCommit(bgConfig, 5, BG_POS_OP_SET_X, 0);
-        BgSetPosTextAndCommit(bgConfig, 5, BG_POS_OP_SET_Y, menuSlideIn->unk_10);
+        BgSetPosTextAndCommit(bgConfig, 5, BG_POS_OP_SET_Y, menuSlideIn->bgY);
     } else if (vCnt > 192) {
         BgConfig *bgConfig = BattleSystem_GetBgConfig(menuSlideIn->battleInput->battleSystem);
 
@@ -3803,7 +3803,7 @@ static int BattleInput_CursorMove_MainMenu(BattleInput *battleInput, int shouldI
     case PAD_BUTTON_A:
         return sCursorArrayMainMenu[cursor->menuY][cursor->menuX];
     case PAD_BUTTON_B:
-        if (battleInput->unk66F == 1) {
+        if (battleInput->cancelShown == 1) {
 #ifdef __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wtautological-constant-out-of-range-compare"

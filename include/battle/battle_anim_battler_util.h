@@ -26,7 +26,7 @@ typedef struct BattleAnimCommonWork {
     BattleAnimSystem *system;
     SpriteSystem *spriteSystem;
     SpriteManager *battlerSpriteManager;
-    SpriteManager *unk_10;
+    SpriteManager *spriteManager;
     BgConfig *bgConfig;
     PaletteData *paletteData;
 } BattleAnimCommonWork; // size: 0x1C

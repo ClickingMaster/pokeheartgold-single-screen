@@ -2437,12 +2437,12 @@ int BallCapsuleEditor_PreviewCapsule(BallCapsuleEditor *editor) {
         break;
     case 1:
         if (PaletteData_GetSelectedBuffersBitmask(editor->display.paletteData) == 0) {
-            ballParams.unk0 = 1;
+            ballParams.kind = 1;
             ballParams.heapID = HEAP_ID_52;
-            ballParams.unk8 = 0;
-            ballParams.unkC = 0xFF;
-            ballParams.unk14 = 0;
-            ballParams.unk18 = 1;
+            ballParams.mode = 0;
+            ballParams.resTagOffset = 0xFF;
+            ballParams.bgPriority = 0;
+            ballParams.keepSubSurface = 1;
             ballParams.spriteSystem = editor->display.spriteSystem;
             ballParams.paletteData = editor->display.paletteData;
             ballParams.ball = GetMonData(editor->previewMon, MON_DATA_POKEBALL, NULL);
@@ -2497,12 +2497,12 @@ int BallCapsuleEditor_PreviewCapsule(BallCapsuleEditor *editor) {
         editor->subStateValue++;
         if (editor->subStateValue >= 30) {
             editor->subStateValue = 0;
-            ballParams2.unk0 = 1;
+            ballParams2.kind = 1;
             ballParams2.heapID = HEAP_ID_52;
-            ballParams2.unk8 = 5;
-            ballParams2.unkC = 0xFF;
-            ballParams2.unk14 = 0;
-            ballParams2.unk18 = 1;
+            ballParams2.mode = 5;
+            ballParams2.resTagOffset = 0xFF;
+            ballParams2.bgPriority = 0;
+            ballParams2.keepSubSurface = 1;
             ballParams2.spriteSystem = editor->display.spriteSystem;
             ballParams2.paletteData = editor->display.paletteData;
             ballParams2.ball = GetMonData(editor->previewMon, MON_DATA_POKEBALL, NULL);

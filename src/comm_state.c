@@ -1550,7 +1550,7 @@ void CommState_PlazaStart(void) {
             WifiConnection_Init(gCommState->saveData, 48, 0x58000, Comm_GetMaxChildren(gCommState->linkMode) + 1);
             WifiConnection_SetErrorCallback(CommState_ShowErrorAndHalt);
             sub_02035FD8();
-            ov00_021E70B8(0);
+            WifiConnection_SetVoiceChatEnabled(0);
             sub_020378E4(0);
             CommState_SetState(CommState_WifiLogin, 3600);
         }

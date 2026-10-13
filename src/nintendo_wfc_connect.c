@@ -221,8 +221,8 @@ void ov00_021ECB40(void);
 void ov00_021ECB94(void *a0, void *a1);
 void ov00_021ECD04(void);
 int ov00_021ECDC8(void);
-void ov00_021ED9B4(void);
-void ov00_021FA0D8(void);
+void DWC_ShutdownFriendsMatch(void);
+void DWC_ShutdownGHTTP(void);
 void GameStats_Start(void);
 int GameStats_PrepareRequest(const char *url, u32 profileId, void *request, int requestSize, void *response, int responseSize);
 int GameStats_Update(void);
@@ -1516,14 +1516,14 @@ int NintendoWfc_WaitAuth(NintendoWfcConnect *wfc) {
             wfc->state = 55;
             break;
         case 4:
-            ov00_021FA0D8();
+            DWC_ShutdownGHTTP();
             wfc->state = 55;
             break;
         case 6:
             wfc->state = 55;
             break;
         case 3:
-            ov00_021ED9B4();
+            DWC_ShutdownFriendsMatch();
             wfc->state = 55;
             break;
         case 5:

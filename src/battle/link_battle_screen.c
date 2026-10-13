@@ -796,7 +796,7 @@ int LinkBattleScreen_SaveBattleVideo(LinkBattleScreen *screen) {
         screen->frame++;
         break;
     case 1:
-        result = BattleRecord_Save(screen->args->setup->saveData, screen->args->unk_2C, 0, 0, &screen->recordSaveState, &screen->recordWriteState);
+        result = BattleRecord_Save(screen->args->setup->saveData, screen->args->linkBattleMode, 0, 0, &screen->recordSaveState, &screen->recordWriteState);
         if (result == 2) {
             ReadMsgDataIntoString(screen->msgData, msg_0638_00006, screen->string);
             PlaySE(SEQ_SE_DP_SAVE);

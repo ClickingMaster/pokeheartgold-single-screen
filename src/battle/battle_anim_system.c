@@ -316,7 +316,7 @@ BOOL BattleAnimSystem_StartMove(BattleAnimSystem *system, MoveAnimData *animData
     system->context->power = animData->power;
     system->context->friendship = animData->friendship;
     system->context->fieldCondition = animData->fieldCondition;
-    system->context->unk_10 = animData->unk_0A;
+    system->context->moveAnimVariant = animData->moveAnimVariant;
     system->context->terrain = animData->terrain;
     system->context->attacker = animData->attacker;
     system->context->defender = animData->defender;
@@ -639,7 +639,7 @@ u32 BattleAnimSystem_GetMoveParam(BattleAnimSystem *system, u32 param) {
     case 3:
         return system->context->fieldCondition;
     case 4:
-        return system->context->unk_10;
+        return system->context->moveAnimVariant;
     case 5:
         return system->context->terrain;
     default:
@@ -1079,7 +1079,7 @@ void BattleAnimScriptCmd_CallFunc(BattleAnimSystem *system) {
 
 void ov07_0221D148(BattleAnimSystem *system) {
     system->scriptPtr++;
-    if (system->context->unk_10 & 1) {
+    if (system->context->moveAnimVariant & 1) {
         system->scriptPtr++;
     }
     system->scriptPtr += *system->scriptPtr;
@@ -1164,7 +1164,7 @@ void ov07_0221D2B0(BattleAnimSystem *system) {
     system->scriptPtr++;
     value = *system->scriptPtr;
     system->scriptPtr++;
-    if (value == system->context->unk_10) {
+    if (value == system->context->moveAnimVariant) {
         system->scriptPtr += *system->scriptPtr;
     } else {
         system->scriptPtr++;

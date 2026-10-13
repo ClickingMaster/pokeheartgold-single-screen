@@ -275,8 +275,8 @@ void ov00_021EC0FC(int *a0);
 void ov00_021EC9E0(void *a0);
 void ov00_021ECD04(void);
 int ov00_021ECDC8(void);
-void ov00_021FA0D8(void);
-void ov00_021ED9B4(void);
+void DWC_ShutdownGHTTP(void);
+void DWC_ShutdownFriendsMatch(void);
 s32 WifiConnection_ClassifyErrorCode(s32 errorCode, u32 errorType);
 u64 DWC_CreateFriendKey(void *userData);
 void GtsServer_Update(void);
@@ -1698,14 +1698,14 @@ BOOL WiiMessageSettingsScreen_WaitAuth(WiiMessageSettingsScreen *screen) {
             screen->state = WMS_STATE_SHOW_CONNECTION_ERROR;
             break;
         case 4:
-            ov00_021FA0D8();
+            DWC_ShutdownGHTTP();
             screen->state = WMS_STATE_SHOW_CONNECTION_ERROR;
             break;
         case 6:
             screen->state = WMS_STATE_SHOW_CONNECTION_ERROR;
             break;
         case 3:
-            ov00_021ED9B4();
+            DWC_ShutdownFriendsMatch();
             screen->state = WMS_STATE_SHOW_CONNECTION_ERROR;
             break;
         case 5:

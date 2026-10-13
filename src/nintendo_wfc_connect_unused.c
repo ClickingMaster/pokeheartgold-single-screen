@@ -150,8 +150,8 @@ void ov00_021ECB40(void);
 void ov00_021ECB94(void *a0, void *a1);
 void ov00_021ECD04(void);
 int ov00_021ECDC8(void);
-void ov00_021ED9B4(void);
-void ov00_021FA0D8(void);
+void DWC_ShutdownFriendsMatch(void);
+void DWC_ShutdownGHTTP(void);
 
 // Defined in OVY_72 (nintendo_wfc_connect.c); not declared in its header.
 void NintendoWfcHttp_Update(void);
@@ -933,14 +933,14 @@ int NintendoWfcUnused_WaitAuth(NintendoWfcUnused *wfc) {
             wfc->state = 55;
             break;
         case 4:
-            ov00_021FA0D8();
+            DWC_ShutdownGHTTP();
             wfc->state = 55;
             break;
         case 6:
             wfc->state = 55;
             break;
         case 3:
-            ov00_021ED9B4();
+            DWC_ShutdownFriendsMatch();
             wfc->state = 55;
             break;
         case 5:

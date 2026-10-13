@@ -28,21 +28,22 @@
 fx32 FX_Sqrt(fx32 x); // not declared by the lib/include fx headers
 
 // UnkBallData (battle/battle.h) as this module uses it:
-//   unk0     BALL_ANIM_* animation run by UnkBallData_IsBallAnimationPlaying (sUnkBallDataBallAnimFuncs)
-//   unk4     set once that animation has entered its first capture state
-//   unk8     step of the current mode / capture state
-//   unkC     frame counter of the capture states, unk10 wobble direction, unk18 shake count
-//   unk14    capture state (sUnkBallDataCaptureStateFuncs)
-//   unk1C    TRUE while the mode handler runs
-//   unk20/21 blend alpha of the fade out, unk22 random direction (+1/-1)
-//   unk24    the task ticks the sprite animation
-//   unk28    set when the thrown ball has opened
-//   unkC4    frame counter of the modes, unkC8 height of the throw arc
-//   unkCC    the update task, unkD0 the BallBurstEffect, unkD4 the palette flash, unkD8 the battler sprites
-//   unkDC    frames the task waits before running the mode
-//   unk90    the UnkStruct_134 it was created from: unk0 kind (start / target position, arc), unk8 mode
-//            (sUnkBallDataModeFuncs), unkC resource tag offset, unk14 sprite BG priority, unk18 keep the
-//            renderer's sub surface
+//   ballAnim         BALL_ANIM_* animation run by UnkBallData_IsBallAnimationPlaying (sUnkBallDataBallAnimFuncs)
+//   ballAnimStarted  set once that animation has entered its first capture state
+//   step             step of the current mode / capture state
+//   stateFrames      frame counter of the capture states, wobbleDir wobble direction, shakeCount shake count
+//   captureState     capture state (sUnkBallDataCaptureStateFuncs)
+//   modeRunning      TRUE while the mode handler runs
+//   fadeAlphaA/B     blend alpha of the fade out, randomDir random direction (+1/-1)
+//   animateSprite    the task ticks the sprite animation
+//   opened           set when the thrown ball has opened
+//   modeFrames       frame counter of the modes, arcHeight height of the throw arc
+//   task             the update task, burstEffect the BallBurstEffect, paletteFlash the palette flash,
+//                    battlerSprites the battler sprites
+//   startDelay       frames the task waits before running the mode
+//   params           the UnkStruct_134 it was created from: kind (start / target position, arc), mode
+//                    (sUnkBallDataModeFuncs), resTagOffset resource tag offset, bgPriority sprite BG priority,
+//                    keepSubSurface keep the renderer's sub surface
 // Members its declaration still keeps as byte arrays:
 #define BALL_ROTATION(data)     ((s32 *)&(data)->unk34[0x34 - 0x34])  // 0x34, value motion of the rotation
 #define BALL_ARC_MOTION(data)   ((void *)&(data)->unk34[0x48 - 0x34]) // 0x48, linear part of the throw arc
@@ -654,8 +655,8 @@ void BallBurstEffect_Free(BallBurstEffect *effect) {
 }
 
 BOOL UnkBallData_BallAnimThrow(UnkBallData *data) {
-    if (data->unk4 == 0) {
-        data->unk4++;
+    if (data->ballAnimStarted == 0) {
+        data->ballAnimStarted++;
         UnkBallData_SetCaptureState(data, 1);
     }
     if (UnkBallData_IsCaptureState(data, 2) == TRUE) {
@@ -665,8 +666,8 @@ BOOL UnkBallData_BallAnimThrow(UnkBallData *data) {
 }
 
 BOOL UnkBallData_BallAnimOpen(UnkBallData *data) {
-    if (data->unk4 == 0) {
-        data->unk4++;
+    if (data->ballAnimStarted == 0) {
+        data->ballAnimStarted++;
         UnkBallData_SetCaptureState(data, 3);
     }
     if (UnkBallData_IsCaptureState(data, 4) == TRUE) {
@@ -676,8 +677,8 @@ BOOL UnkBallData_BallAnimOpen(UnkBallData *data) {
 }
 
 BOOL UnkBallData_BallAnimDeflect(UnkBallData *data) {
-    if (data->unk4 == 0) {
-        data->unk4++;
+    if (data->ballAnimStarted == 0) {
+        data->ballAnimStarted++;
         UnkBallData_SetCaptureState(data, 5);
     }
     if (UnkBallData_IsCaptureState(data, 6) == TRUE) {
@@ -687,8 +688,8 @@ BOOL UnkBallData_BallAnimDeflect(UnkBallData *data) {
 }
 
 BOOL UnkBallData_BallAnimFall(UnkBallData *data) {
-    if (data->unk4 == 0) {
-        data->unk4++;
+    if (data->ballAnimStarted == 0) {
+        data->ballAnimStarted++;
         UnkBallData_SetCaptureState(data, 7);
     }
     if (UnkBallData_IsCaptureState(data, 14) == TRUE) {
@@ -698,8 +699,8 @@ BOOL UnkBallData_BallAnimFall(UnkBallData *data) {
 }
 
 BOOL UnkBallData_BallAnimShake(UnkBallData *data) {
-    if (data->unk4 == 0) {
-        data->unk4++;
+    if (data->ballAnimStarted == 0) {
+        data->ballAnimStarted++;
         UnkBallData_SetCaptureState(data, 15);
     }
     if (UnkBallData_IsCaptureState(data, 18) == TRUE) {
@@ -709,8 +710,8 @@ BOOL UnkBallData_BallAnimShake(UnkBallData *data) {
 }
 
 BOOL ov07_02232EE0(UnkBallData *data) {
-    if (data->unk4 == 0) {
-        data->unk4++;
+    if (data->ballAnimStarted == 0) {
+        data->ballAnimStarted++;
         UnkBallData_SetCaptureState(data, 19);
     }
     if (UnkBallData_IsCaptureState(data, 27) == TRUE) {
@@ -720,8 +721,8 @@ BOOL ov07_02232EE0(UnkBallData *data) {
 }
 
 BOOL UnkBallData_BallAnimClick(UnkBallData *data) {
-    if (data->unk4 == 0) {
-        data->unk4++;
+    if (data->ballAnimStarted == 0) {
+        data->ballAnimStarted++;
         UnkBallData_SetCaptureState(data, 21);
     }
     if (UnkBallData_IsCaptureState(data, 22) == TRUE) {
@@ -731,8 +732,8 @@ BOOL UnkBallData_BallAnimClick(UnkBallData *data) {
 }
 
 BOOL UnkBallData_BallAnimFade(UnkBallData *data) {
-    if (data->unk4 == 0) {
-        data->unk4++;
+    if (data->ballAnimStarted == 0) {
+        data->ballAnimStarted++;
         UnkBallData_SetCaptureState(data, 23);
     }
     if (UnkBallData_IsCaptureState(data, 27) == TRUE) {
@@ -742,19 +743,19 @@ BOOL UnkBallData_BallAnimFade(UnkBallData *data) {
 }
 
 void UnkBallData_SetBallAnimation(UnkBallData *data, s32 ballAnim) {
-    data->unk0 = ballAnim;
-    data->unk4 = 0;
+    data->ballAnim = ballAnim;
+    data->ballAnimStarted = 0;
 }
 
 BOOL UnkBallData_IsBallAnimationPlaying(UnkBallData *data, s32 ballAnim_Unused) {
-    return sUnkBallDataBallAnimFuncs[data->unk0](data);
+    return sUnkBallDataBallAnimFuncs[data->ballAnim](data);
 }
 
 void UnkBallData_GoToCaptureState(UnkBallData *data, int state) {
-    data->unk14 = state;
-    data->unk8 = 0;
-    data->unkC = 0;
-    data->unk10 = 0;
+    data->captureState = state;
+    data->step = 0;
+    data->stateFrames = 0;
+    data->wobbleDir = 0;
 }
 
 BOOL UnkBallData_CaptureStateIdle(UnkBallData *data) {
@@ -774,37 +775,37 @@ BOOL UnkBallData_CaptureStateGoToOpen(UnkBallData *data) {
 }
 
 BOOL UnkBallData_CaptureStateOpen(UnkBallData *data) {
-    switch (data->unk8) {
+    switch (data->step) {
     case 0: {
         ManagedSprite_SetAnim(data->managedSprite, 1);
         BallBurstEffectTemplate template;
-        template.ball = data->unk90.ball;
-        template.heapId = data->unk90.heapID;
+        template.ball = data->params.ball;
+        template.heapId = data->params.heapID;
         template.emitter = 0xFF;
         template.generic = FALSE;
         ManagedSprite_GetPositionXY(data->managedSprite, &template.x, &template.y);
-        data->unkD8 = (int)BattleAnimBattlerSprites_NewAll(data->unk90.battleSystem, data->unk90.heapID);
-        data->unkD0 = (int)BallBurstEffect_New(&template);
-        data->unk8++;
+        data->battlerSprites = (int)BattleAnimBattlerSprites_NewAll(data->params.battleSystem, data->params.heapID);
+        data->burstEffect = (int)BallBurstEffect_New(&template);
+        data->step++;
         break;
     }
     case 1:
         // compared as a signed int, as the original called it
         if (((int (*)(ManagedSprite *))ManagedSprite_GetAnimationFrame)(data->managedSprite) >= 2) {
-            data->unk24 = FALSE;
-            data->unk8++;
+            data->animateSprite = FALSE;
+            data->step++;
         }
         break;
     case 2:
-        BallBurstEffect_Start((BallBurstEffect *)data->unkD0);
-        BattleAnimBattlerSprites_Free((struct BattleAnimBattlerSprites *)data->unkD8);
-        data->unk8++;
+        BallBurstEffect_Start((BallBurstEffect *)data->burstEffect);
+        BattleAnimBattlerSprites_Free((struct BattleAnimBattlerSprites *)data->battlerSprites);
+        data->step++;
         break;
     case 3:
-        if (BallBurstEffect_IsRunning((BallBurstEffect *)data->unkD0) == FALSE) {
+        if (BallBurstEffect_IsRunning((BallBurstEffect *)data->burstEffect) == FALSE) {
             ManagedSprite_SetAnimationFrame(data->managedSprite, 0);
-            BallBurstEffect_Free((BallBurstEffect *)data->unkD0);
-            data->unk8++;
+            BallBurstEffect_Free((BallBurstEffect *)data->burstEffect);
+            data->step++;
         }
         break;
     default:
@@ -819,13 +820,13 @@ BOOL UnkBallData_CaptureStateOpenDone(UnkBallData *data) {
 }
 
 BOOL UnkBallData_CaptureStateDeflect(UnkBallData *data) {
-    if (data->unkC == 0) {
+    if (data->stateFrames == 0) {
         ManagedSprite_GetPositionXY(data->managedSprite, &BALL_X(data), &BALL_Y(data));
         BALL_TARGET_X(data) = 60;
         BALL_TARGET_Y(data) = 180;
         BALL_ARC_DURATION(data) = 10;
-        data->unkC8 = 12;
-        data->unkC++;
+        data->arcHeight = 12;
+        data->stateFrames++;
     } else if (UnkBallData_RunThrowArc(data) == FALSE) {
         UnkBallData_GoToCaptureState(data, 6);
     }
@@ -847,22 +848,22 @@ BOOL UnkBallData_CaptureStateGoToFlash(UnkBallData *data) {
 }
 
 BOOL UnkBallData_CaptureStateFlash(UnkBallData *data) {
-    switch (data->unk8) {
+    switch (data->step) {
     case 0: {
         int offset = ManagedSprite_GetPaletteOverrideOffset(data->managedSprite);
-        PaletteData_BeginPaletteFade(data->unk90.paletteData, 1 << PLTTBUF_MAIN_OBJ, (u16)(1 << offset), -1, 0, 12, RGB(31, 27, 0));
-        data->unk8++;
+        PaletteData_BeginPaletteFade(data->params.paletteData, 1 << PLTTBUF_MAIN_OBJ, (u16)(1 << offset), -1, 0, 12, RGB(31, 27, 0));
+        data->step++;
         break;
     }
     case 1:
-        if (PaletteData_GetSelectedBuffersBitmask(data->unk90.paletteData) == 0) {
+        if (PaletteData_GetSelectedBuffersBitmask(data->params.paletteData) == 0) {
             int offset = ManagedSprite_GetPaletteOverrideOffset(data->managedSprite);
-            PaletteData_BeginPaletteFade(data->unk90.paletteData, 1 << PLTTBUF_MAIN_OBJ, (u16)(1 << offset), -1, 12, 0, RGB(31, 27, 0));
-            data->unk8++;
+            PaletteData_BeginPaletteFade(data->params.paletteData, 1 << PLTTBUF_MAIN_OBJ, (u16)(1 << offset), -1, 12, 0, RGB(31, 27, 0));
+            data->step++;
         }
         break;
     default:
-        if (PaletteData_GetSelectedBuffersBitmask(data->unk90.paletteData) == 0) {
+        if (PaletteData_GetSelectedBuffersBitmask(data->params.paletteData) == 0) {
             UnkBallData_GoToCaptureState(data, 10);
         }
         break;
@@ -876,19 +877,19 @@ BOOL UnkBallData_CaptureStateGoToDrop(UnkBallData *data) {
 }
 
 BOOL UnkBallData_CaptureStateDrop(UnkBallData *data) {
-    switch (data->unk8) {
+    switch (data->step) {
     case 0:
-        data->unkC++;
-        if (data->unkC >= 1) {
+        data->stateFrames++;
+        if (data->stateFrames >= 1) {
             s16 x, y;
             ManagedSprite_GetPositionXY(data->managedSprite, &x, &y);
             BattleAnimUtil_InitLinearMotion(BALL_ARC_MOTION(data), x, x, y, (s16)(y + 32), 10);
-            data->unk8++;
+            data->step++;
         }
         break;
     case 1:
         if (BattleAnimUtil_UpdateLinearMotionSprite(BALL_ARC_MOTION(data), data->managedSprite) == FALSE) {
-            data->unk8++;
+            data->step++;
             UnkBallData_GoToCaptureState(data, 13);
         }
         break;
@@ -901,26 +902,26 @@ BOOL ov07_02233224(UnkBallData *data) {
 }
 
 BOOL UnkBallData_CaptureStateBounce(UnkBallData *data) {
-    switch (data->unk8) {
+    switch (data->step) {
     case 0:
         ManagedSprite_SetAnim(data->managedSprite, 1);
         ManagedSprite_SetAnimationFrame(data->managedSprite, 0);
-        data->unk8++;
+        data->step++;
         // fallthrough
     case 1: {
-        int index = data->unkC;
+        int index = data->stateFrames;
         int offset = index * 6;
         s16 dy = *(const s16 *)((const u8 *)ov07_0223730E + offset);
         int frame = *(const u16 *)((const u8 *)ov07_02237310 + offset);
         ManagedSprite_SetAnimationFrame(data->managedSprite, frame);
-        data->unkC++;
+        data->stateFrames++;
         for (int i = 0; i < 5; i++) {
-            if (data->unkC == sUnkBallDataBounceSounds[i].frame) {
+            if (data->stateFrames == sUnkBallDataBounceSounds[i].frame) {
                 PlaySE_SetPan(sUnkBallDataBounceSounds[i].seqNo, 117);
             }
         }
-        if (data->unkC > 20 || dy == 0xFF) {
-            data->unk8++;
+        if (data->stateFrames > 20 || dy == 0xFF) {
+            data->step++;
         } else {
             ManagedSprite_OffsetPositionXY(data->managedSprite, 0, dy);
         }
@@ -938,11 +939,11 @@ BOOL UnkBallData_CaptureStateBounceDone(UnkBallData *data) {
 }
 
 BOOL UnkBallData_CaptureStateShakeWait(UnkBallData *data) {
-    int counter = data->unkC + 1;
-    data->unkC = counter;
+    int counter = data->stateFrames + 1;
+    data->stateFrames = counter;
     if (counter >= 14) {
-        data->unk8++;
-        data->unkC = 0;
+        data->step++;
+        data->stateFrames = 0;
         UnkBallData_GoToCaptureState(data, 16);
     }
     return TRUE;
@@ -954,27 +955,27 @@ BOOL UnkBallData_CaptureStateGoToShake(UnkBallData *data) {
 }
 
 BOOL UnkBallData_CaptureStateShake(UnkBallData *data) {
-    switch (data->unk8) {
+    switch (data->step) {
     case 0:
-        if (data->unk18 >= 3) {
+        if (data->shakeCount >= 3) {
             GF_AssertFail();
         }
-        data->unk8++;
+        data->step++;
         // fallthrough
     case 1: {
-        int shake = data->unk18;
+        int shake = data->shakeCount;
         const s16 *offsets = (const s16 *)((const u8 *)sUnkBallDataShakeOffsets + shake * 24);
-        int index = data->unkC;
+        int index = data->stateFrames;
         s16 dx = offsets[index];
-        data->unkC++;
-        if (data->unkC > 11 || dx == 0xFF) {
-            data->unk8++;
-            data->unk18++;
+        data->stateFrames++;
+        if (data->stateFrames > 11 || dx == 0xFF) {
+            data->step++;
+            data->shakeCount++;
             ManagedSprite_SetAffineZRotation(data->managedSprite, 0);
             UnkBallData_GoToCaptureState(data, 18);
             return TRUE;
         }
-        if (data->unkC == 5) {
+        if (data->stateFrames == 5) {
             PlaySE_SetPan(SEQ_SE_DP_BOWA, 117);
         }
         ManagedSprite_OffsetPositionXY(data->managedSprite, dx, 0);
@@ -1001,38 +1002,38 @@ BOOL ov07_0223339C(UnkBallData *data) {
 }
 
 BOOL UnkBallData_CaptureStateClick(UnkBallData *data) {
-    switch (data->unk8) {
+    switch (data->step) {
     case 0: {
         int offset = ManagedSprite_GetPaletteOverrideOffset(data->managedSprite);
-        PaletteData_BeginPaletteFade(data->unk90.paletteData, 1 << PLTTBUF_MAIN_OBJ, (u16)(1 << offset), -5, 0, 10, RGB_BLACK);
-        data->unk8++;
+        PaletteData_BeginPaletteFade(data->params.paletteData, 1 << PLTTBUF_MAIN_OBJ, (u16)(1 << offset), -5, 0, 10, RGB_BLACK);
+        data->step++;
         break;
     }
     case 1:
-        if (PaletteData_GetSelectedBuffersBitmask(data->unk90.paletteData) == 0) {
+        if (PaletteData_GetSelectedBuffersBitmask(data->params.paletteData) == 0) {
             BallBurstEffectTemplate template;
-            template.ball = data->unk90.ball;
-            template.heapId = data->unk90.heapID;
+            template.ball = data->params.ball;
+            template.heapId = data->params.heapID;
             template.emitter = BallAnim_GetBurstSkippedEmitter(template.ball);
             template.generic = FALSE;
             ManagedSprite_GetPositionXY(data->managedSprite, &template.x, &template.y);
-            data->unkD0 = (int)BallBurstEffect_New(&template);
-            data->unk8++;
+            data->burstEffect = (int)BallBurstEffect_New(&template);
+            data->step++;
         }
         break;
     case 2:
-        BallBurstEffect_Start((BallBurstEffect *)data->unkD0);
-        data->unk8++;
+        BallBurstEffect_Start((BallBurstEffect *)data->burstEffect);
+        data->step++;
         break;
     case 3:
-        if (BallBurstEffect_IsRunning((BallBurstEffect *)data->unkD0) == FALSE) {
+        if (BallBurstEffect_IsRunning((BallBurstEffect *)data->burstEffect) == FALSE) {
             ManagedSprite_SetAnimationFrame(data->managedSprite, 0);
-            BallBurstEffect_Free((BallBurstEffect *)data->unkD0);
-            data->unk8++;
+            BallBurstEffect_Free((BallBurstEffect *)data->burstEffect);
+            data->step++;
         }
         break;
     default:
-        if (PaletteData_GetSelectedBuffersBitmask(data->unk90.paletteData) == 0) {
+        if (PaletteData_GetSelectedBuffersBitmask(data->params.paletteData) == 0) {
             UnkBallData_GoToCaptureState(data, 22);
         }
         break;
@@ -1045,16 +1046,16 @@ BOOL UnkBallData_CaptureStateClickDone(UnkBallData *data) {
 }
 
 BOOL UnkBallData_CaptureStateRestorePalette(UnkBallData *data) {
-    switch (data->unk8) {
+    switch (data->step) {
     case 0: {
         int offset = ManagedSprite_GetPaletteOverrideOffset(data->managedSprite);
-        PaletteData_BeginPaletteFade(data->unk90.paletteData, 1 << PLTTBUF_MAIN_OBJ, (u16)(1 << offset), -5, 10, 0, RGB_BLACK);
-        data->unk8++;
+        PaletteData_BeginPaletteFade(data->params.paletteData, 1 << PLTTBUF_MAIN_OBJ, (u16)(1 << offset), -5, 10, 0, RGB_BLACK);
+        data->step++;
         break;
     }
     case 1:
-        if (PaletteData_GetSelectedBuffersBitmask(data->unk90.paletteData) == 0) {
-            data->unk8++;
+        if (PaletteData_GetSelectedBuffersBitmask(data->params.paletteData) == 0) {
+            data->step++;
         }
         break;
     default:
@@ -1070,22 +1071,22 @@ BOOL UnkBallData_CaptureStateGoToFadeOut(UnkBallData *data) {
 }
 
 BOOL UnkBallData_CaptureStateFadeOut(UnkBallData *data) {
-    switch (data->unk8) {
+    switch (data->step) {
     case 0:
         ManagedSprite_SetOamMode(data->managedSprite, GX_OAM_MODE_XLU);
-        data->unk8++;
+        data->step++;
         // fallthrough
     case 1:
-        if (data->unk20 != 0) {
-            data->unk20--;
-            data->unk21++;
+        if (data->fadeAlphaA != 0) {
+            data->fadeAlphaA--;
+            data->fadeAlphaB++;
         } else {
-            data->unk20 = 0;
-            data->unk21 = 15;
+            data->fadeAlphaA = 0;
+            data->fadeAlphaB = 15;
             ManagedSprite_SetDrawFlag(data->managedSprite, FALSE);
-            data->unk8++;
+            data->step++;
         }
-        reg_G2_BLDALPHA = data->unk20 | (data->unk21 << 8);
+        reg_G2_BLDALPHA = data->fadeAlphaA | (data->fadeAlphaB << 8);
         break;
     default:
         UnkBallData_GoToCaptureState(data, 26);
@@ -1104,76 +1105,76 @@ BOOL UnkBallData_CaptureStateEnd(UnkBallData *data) {
 }
 
 BOOL UnkBallData_RunCaptureState(UnkBallData *data) {
-    return sUnkBallDataCaptureStateFuncs[data->unk14](data);
+    return sUnkBallDataCaptureStateFuncs[data->captureState](data);
 }
 
 BOOL UnkBallData_RunThrowArc(UnkBallData *data) {
-    switch (data->unk8) {
+    switch (data->step) {
     case 0:
-        BattleAnimUtil_InitLinearSinMotion(BALL_ARC_MOTION(data), BALL_ARC_MOTION2(data), BALL_X(data), BALL_TARGET_X(data), BALL_Y(data), BALL_TARGET_Y(data), BALL_ARC_DURATION(data), data->unkC8 << FX32_SHIFT);
-        data->unkC4 = 0;
-        data->unk8++;
-        data->unkD4 = 0;
-        if (UnkBallData_IsSpinningKind(data->unk90.unk0) == TRUE) {
+        BattleAnimUtil_InitLinearSinMotion(BALL_ARC_MOTION(data), BALL_ARC_MOTION2(data), BALL_X(data), BALL_TARGET_X(data), BALL_Y(data), BALL_TARGET_Y(data), BALL_ARC_DURATION(data), data->arcHeight << FX32_SHIFT);
+        data->modeFrames = 0;
+        data->step++;
+        data->paletteFlash = 0;
+        if (UnkBallData_IsSpinningKind(data->params.kind) == TRUE) {
             ManagedSprite_OffsetAffineZRotation(data->managedSprite, (LCRandom() % 20 + 10) << 13);
         }
         break;
     case 1:
-        if (UnkBallData_IsSpinningKind(data->unk90.unk0) == TRUE) {
+        if (UnkBallData_IsSpinningKind(data->params.kind) == TRUE) {
             ManagedSprite_OffsetAffineZRotation(data->managedSprite, 2 << 12);
-            if (data->unkC4 > BALL_ARC_DURATION(data) / 2 + 10) {
+            if (data->modeFrames > BALL_ARC_DURATION(data) / 2 + 10) {
                 ManagedSprite_OffsetAffineZRotation(data->managedSprite, 2 << 12);
             }
-            if (UnkBallData_IsFlashingKind(data->unk90.unk0) == TRUE && data->unkC4 == BALL_ARC_DURATION(data) / 2 + 10) {
-                data->unkD4 = (int)BattleAnimUtil_StartPaletteBlend(data->unk90.paletteData, data->unk90.heapID, 2, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
+            if (UnkBallData_IsFlashingKind(data->params.kind) == TRUE && data->modeFrames == BALL_ARC_DURATION(data) / 2 + 10) {
+                data->paletteFlash = (int)BattleAnimUtil_StartPaletteBlend(data->params.paletteData, data->params.heapID, 2, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
             }
         }
-        data->unkC4++;
-        if (data->unk90.unk0 < 6 || data->unk90.unk0 > 8 || data->unkC4 <= BALL_ARC_DURATION(data) / 2 || data->unkC4 >= BALL_ARC_DURATION(data) / 2 + 5) {
+        data->modeFrames++;
+        if (data->params.kind < 6 || data->params.kind > 8 || data->modeFrames <= BALL_ARC_DURATION(data) / 2 || data->modeFrames >= BALL_ARC_DURATION(data) / 2 + 5) {
             if (BattleAnimUtil_UpdateLinearSinMotionSprite(BALL_ARC_MOTION(data), BALL_ARC_MOTION2(data), data->managedSprite) == FALSE) {
                 UnkBallData_SetRotation(data, 0);
-                data->unk8++;
+                data->step++;
             }
         }
         break;
     case 2:
-        if (UnkBallData_IsFlashingKind(data->unk90.unk0) == TRUE && data->unkD4 != 0) {
-            if (BattleAnimUtil_IsPaletteBlendActive((void *)data->unkD4) == TRUE) {
+        if (UnkBallData_IsFlashingKind(data->params.kind) == TRUE && data->paletteFlash != 0) {
+            if (BattleAnimUtil_IsPaletteBlendActive((void *)data->paletteFlash) == TRUE) {
                 break;
             }
-            BattleAnimUtil_FreePaletteBlend((void *)data->unkD4);
-            data->unk28 = TRUE;
+            BattleAnimUtil_FreePaletteBlend((void *)data->paletteFlash);
+            data->opened = TRUE;
             return FALSE;
         }
-        if (data->unk90.unk0 >= 15) {
-            data->unk28 = TRUE;
+        if (data->params.kind >= 15) {
+            data->opened = TRUE;
             return FALSE;
         }
-        if (data->unk90.ball == 1025) {
+        if (data->params.ball == 1025) {
             PlaySE_SetPan(SEQ_SE_DP_W202B, 117);
         }
-        data->unk8++;
+        data->step++;
         break;
     case 3:
         ManagedSprite_SetAnim(data->managedSprite, 1);
         UnkBallData_SetAnimateSprite(data, TRUE);
-        data->unkC4 = 0;
-        data->unk8++;
+        data->modeFrames = 0;
+        data->step++;
         break;
     default:
-        if (data->unkC4 == 5) {
-            if (data->unk90.unk0 != 12 && data->unk90.unk0 != 13) {
-                data->unkD4 = (int)BattleAnimUtil_StartPaletteBlend(data->unk90.paletteData, data->unk90.heapID, 2, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
+        if (data->modeFrames == 5) {
+            if (data->params.kind != 12 && data->params.kind != 13) {
+                data->paletteFlash = (int)BattleAnimUtil_StartPaletteBlend(data->params.paletteData, data->params.heapID, 2, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
             }
-            data->unk28 = TRUE;
+            data->opened = TRUE;
         }
-        data->unkC4++;
-        if (data->unkC4 > 15) {
-            if (data->unk90.unk0 != 12 && data->unk90.unk0 != 13) {
-                if (BattleAnimUtil_IsPaletteBlendActive((void *)data->unkD4) == TRUE) {
+        data->modeFrames++;
+        if (data->modeFrames > 15) {
+            if (data->params.kind != 12 && data->params.kind != 13) {
+                if (BattleAnimUtil_IsPaletteBlendActive((void *)data->paletteFlash) == TRUE) {
                     break;
                 }
-                BattleAnimUtil_FreePaletteBlend((void *)data->unkD4);
+                BattleAnimUtil_FreePaletteBlend((void *)data->paletteFlash);
             }
             return FALSE;
         }
@@ -1183,65 +1184,65 @@ BOOL UnkBallData_RunThrowArc(UnkBallData *data) {
 }
 
 BOOL UnkBallData_ThrowArcAndOpen(UnkBallData *data) {
-    switch (data->unk8) {
+    switch (data->step) {
     case 0:
-        BattleAnimUtil_InitLinearSinMotion(BALL_ARC_MOTION(data), BALL_ARC_MOTION2(data), BALL_X(data), BALL_TARGET_X(data), BALL_Y(data), BALL_TARGET_Y(data), BALL_ARC_DURATION(data), data->unkC8 << FX32_SHIFT);
-        data->unkC4 = 0;
-        data->unk8++;
-        data->unkD4 = 0;
-        if (UnkBallData_IsSpinningKind(data->unk90.unk0) == TRUE) {
+        BattleAnimUtil_InitLinearSinMotion(BALL_ARC_MOTION(data), BALL_ARC_MOTION2(data), BALL_X(data), BALL_TARGET_X(data), BALL_Y(data), BALL_TARGET_Y(data), BALL_ARC_DURATION(data), data->arcHeight << FX32_SHIFT);
+        data->modeFrames = 0;
+        data->step++;
+        data->paletteFlash = 0;
+        if (UnkBallData_IsSpinningKind(data->params.kind) == TRUE) {
             ManagedSprite_OffsetAffineZRotation(data->managedSprite, (LCRandom() % 20 + 10) << 13);
         }
         break;
     case 1:
-        if (UnkBallData_IsSpinningKind(data->unk90.unk0) == TRUE) {
+        if (UnkBallData_IsSpinningKind(data->params.kind) == TRUE) {
             ManagedSprite_OffsetAffineZRotation(data->managedSprite, 2 << 12);
-            if (data->unkC4 > BALL_ARC_DURATION(data) / 2 + 10) {
+            if (data->modeFrames > BALL_ARC_DURATION(data) / 2 + 10) {
                 ManagedSprite_OffsetAffineZRotation(data->managedSprite, 2 << 12);
             }
-            if (UnkBallData_IsFlashingKind(data->unk90.unk0) == TRUE && data->unkC4 == BALL_ARC_DURATION(data) / 2 + 10) {
-                data->unkD4 = (int)BattleAnimUtil_StartPaletteBlend(data->unk90.paletteData, data->unk90.heapID, 2, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
+            if (UnkBallData_IsFlashingKind(data->params.kind) == TRUE && data->modeFrames == BALL_ARC_DURATION(data) / 2 + 10) {
+                data->paletteFlash = (int)BattleAnimUtil_StartPaletteBlend(data->params.paletteData, data->params.heapID, 2, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
             }
         }
-        data->unkC4++;
-        if (data->unk90.unk0 < 6 || data->unk90.unk0 > 8 || data->unkC4 <= BALL_ARC_DURATION(data) / 2 || data->unkC4 >= BALL_ARC_DURATION(data) / 2 + 5) {
+        data->modeFrames++;
+        if (data->params.kind < 6 || data->params.kind > 8 || data->modeFrames <= BALL_ARC_DURATION(data) / 2 || data->modeFrames >= BALL_ARC_DURATION(data) / 2 + 5) {
             if (BattleAnimUtil_UpdateLinearSinMotionSprite(BALL_ARC_MOTION(data), BALL_ARC_MOTION2(data), data->managedSprite) == FALSE) {
                 UnkBallData_SetRotation(data, 0);
-                data->unk8++;
+                data->step++;
             }
         }
         break;
     case 2:
-        if (UnkBallData_IsFlashingKind(data->unk90.unk0) == TRUE && data->unkD4 != 0) {
-            if (BattleAnimUtil_IsPaletteBlendActive((void *)data->unkD4) == TRUE) {
+        if (UnkBallData_IsFlashingKind(data->params.kind) == TRUE && data->paletteFlash != 0) {
+            if (BattleAnimUtil_IsPaletteBlendActive((void *)data->paletteFlash) == TRUE) {
                 break;
             }
-            BattleAnimUtil_FreePaletteBlend((void *)data->unkD4);
-            data->unk28 = TRUE;
+            BattleAnimUtil_FreePaletteBlend((void *)data->paletteFlash);
+            data->opened = TRUE;
             return FALSE;
         }
-        if (data->unk90.unk0 >= 15) {
-            data->unk28 = TRUE;
+        if (data->params.kind >= 15) {
+            data->opened = TRUE;
             return FALSE;
         }
-        data->unk8++;
+        data->step++;
         break;
     case 3:
         ManagedSprite_SetAnim(data->managedSprite, 1);
         UnkBallData_SetAnimateSprite(data, FALSE);
-        data->unkC4 = 0;
-        data->unk8++;
+        data->modeFrames = 0;
+        data->step++;
         break;
     default:
-        if (data->unkC4 == 5) {
+        if (data->modeFrames == 5) {
             ManagedSprite_SetAnimationFrame(data->managedSprite, 2);
-            data->unkD4 = (int)BattleAnimUtil_StartPaletteBlend(data->unk90.paletteData, data->unk90.heapID, 2, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
-            data->unk28 = TRUE;
+            data->paletteFlash = (int)BattleAnimUtil_StartPaletteBlend(data->params.paletteData, data->params.heapID, 2, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
+            data->opened = TRUE;
         }
-        data->unkC4++;
-        if (data->unkC4 > 15) {
-            if (BattleAnimUtil_IsPaletteBlendActive((void *)data->unkD4) != TRUE) {
-                BattleAnimUtil_FreePaletteBlend((void *)data->unkD4);
+        data->modeFrames++;
+        if (data->modeFrames > 15) {
+            if (BattleAnimUtil_IsPaletteBlendActive((void *)data->paletteFlash) != TRUE) {
+                BattleAnimUtil_FreePaletteBlend((void *)data->paletteFlash);
                 return FALSE;
             }
         }
@@ -1253,66 +1254,66 @@ BOOL UnkBallData_ThrowArcAndOpen(UnkBallData *data) {
 BOOL UnkBallData_OpenInPlace(UnkBallData *data) {
     BallBurstEffectTemplate template;
 
-    switch (data->unk8) {
+    switch (data->step) {
     case 0:
         UnkBallData_SetAnimateSprite(data, FALSE);
         ManagedSprite_SetAnim(data->managedSprite, 1);
-        data->unkC4++;
-        if (data->unkC4 >= 2) {
+        data->modeFrames++;
+        if (data->modeFrames >= 2) {
             ManagedSprite_SetAnimationFrame(data->managedSprite, 0);
-            data->unkC4 = 0;
-            data->unk8++;
+            data->modeFrames = 0;
+            data->step++;
         }
         break;
     case 1:
-        data->unkC4++;
-        if (data->unkC4 >= 2) {
+        data->modeFrames++;
+        if (data->modeFrames >= 2) {
             ManagedSprite_SetAnimationFrame(data->managedSprite, 2);
-            data->unkC4 = 0;
-            data->unk8++;
+            data->modeFrames = 0;
+            data->step++;
         }
         break;
     case 2:
-        template.ball = data->unk90.ball;
-        template.heapId = data->unk90.heapID;
+        template.ball = data->params.ball;
+        template.heapId = data->params.heapID;
         template.emitter = 0xFF;
         template.generic = TRUE;
         ManagedSprite_GetPositionXY(data->managedSprite, &template.x, &template.y);
-        data->unkD0 = (int)BallBurstEffect_New(&template);
-        data->unk8++;
+        data->burstEffect = (int)BallBurstEffect_New(&template);
+        data->step++;
         break;
     case 3:
-        BallBurstEffect_Start((BallBurstEffect *)data->unkD0);
-        data->unk8++;
+        BallBurstEffect_Start((BallBurstEffect *)data->burstEffect);
+        data->step++;
         break;
     case 4:
-        data->unkC4++;
-        if (data->unkC4 >= 6) {
+        data->modeFrames++;
+        if (data->modeFrames >= 6) {
             ManagedSprite_SetAnimationFrame(data->managedSprite, 2);
-            data->unkC4 = 0;
-            data->unk8++;
+            data->modeFrames = 0;
+            data->step++;
         }
         break;
     case 5:
-        data->unkC4++;
-        if (data->unkC4 >= 6) {
+        data->modeFrames++;
+        if (data->modeFrames >= 6) {
             ManagedSprite_SetAnimationFrame(data->managedSprite, 1);
-            data->unkC4 = 0;
-            data->unk8++;
+            data->modeFrames = 0;
+            data->step++;
         }
         break;
     case 6:
-        data->unkC4++;
-        if (data->unkC4 >= 6) {
+        data->modeFrames++;
+        if (data->modeFrames >= 6) {
             ManagedSprite_SetAnimationFrame(data->managedSprite, 0);
-            data->unkC4 = 0;
-            data->unk8++;
+            data->modeFrames = 0;
+            data->step++;
         }
         break;
     case 7:
-        if (!BallBurstEffect_IsRunning((BallBurstEffect *)data->unkD0)) {
-            BallBurstEffect_Free((BallBurstEffect *)data->unkD0);
-            data->unk8++;
+        if (!BallBurstEffect_IsRunning((BallBurstEffect *)data->burstEffect)) {
+            BallBurstEffect_Free((BallBurstEffect *)data->burstEffect);
+            data->step++;
         }
         break;
     default:
@@ -1322,29 +1323,29 @@ BOOL UnkBallData_OpenInPlace(UnkBallData *data) {
 }
 
 BOOL UnkBallData_Wobble(UnkBallData *data) {
-    switch (data->unk8) {
+    switch (data->step) {
     case 0:
-        if (data->unk10 == 0) {
+        if (data->wobbleDir == 0) {
             BattleAnimUtil_InitValueMotion(BALL_ROTATION(data), -0x1FFF, 0x1FFF, 10);
         } else {
             BattleAnimUtil_InitValueMotion(BALL_ROTATION(data), 0x1FFF, -0x1FFF, 10);
         }
-        data->unk10 ^= 1;
-        data->unk8++;
+        data->wobbleDir ^= 1;
+        data->step++;
         break;
     case 1:
         ManagedSprite_SetAffineZRotation(data->managedSprite, *BALL_ROTATION(data));
         if (!BattleAnimUtil_UpdateValueMotion(BALL_ROTATION(data))) {
-            if (data->unkC >= 1) {
-                data->unk8++;
+            if (data->stateFrames >= 1) {
+                data->step++;
             } else {
-                data->unkC++;
-                data->unk8--;
+                data->stateFrames++;
+                data->step--;
             }
         }
         break;
     default:
-        data->unkC4 = 0;
+        data->modeFrames = 0;
         return FALSE;
     }
     return TRUE;
@@ -1354,7 +1355,7 @@ BOOL UnkBallData_TrackPosition(UnkBallData *data) {
     s16 x;
     s16 y;
 
-    if (data->unk8 == 0xFF) {
+    if (data->step == 0xFF) {
         return FALSE;
     }
     if (data->managedSprite != NULL) {
@@ -1367,16 +1368,16 @@ BOOL UnkBallData_TrackPosition(UnkBallData *data) {
 
 void UnkBallData_Task(SysTask *task, void *data) {
     UnkBallData *ballData = data;
-    if (ballData->unk1C) {
-        if (ballData->unkDC > 0) {
-            ballData->unkDC--;
+    if (ballData->modeRunning) {
+        if (ballData->startDelay > 0) {
+            ballData->startDelay--;
             SpriteSystem_DrawSprites(ballData->spriteManager);
             return;
         }
-        if (!sUnkBallDataModeFuncs[ballData->unk90.unk8](ballData)) {
-            ballData->unk1C = FALSE;
+        if (!sUnkBallDataModeFuncs[ballData->params.mode](ballData)) {
+            ballData->modeRunning = FALSE;
         }
-        if (ballData->unk24 == TRUE) {
+        if (ballData->animateSprite == TRUE) {
             ManagedSprite_TickFrame(ballData->managedSprite);
         }
         SpriteSystem_DrawSprites(ballData->spriteManager);
@@ -1387,38 +1388,38 @@ UnkBallData *UnkBallData_New(UnkStruct_134 *unkStruct_134) {
     UnkBallData *data = Heap_Alloc(unkStruct_134->heapID, sizeof(UnkBallData));
     MI_CpuFill8(data, 0, sizeof(UnkBallData));
     GF_ASSERT(data != NULL);
-    data->unk90 = *unkStruct_134;
-    data->unk8 = 0;
-    data->unk10 = 0;
-    data->unkC = 0;
-    data->unk14 = 0;
-    data->unk18 = 0;
-    data->unk0 = 0;
-    data->unk4 = 0;
-    data->spriteManager = SpriteManager_New(data->unk90.spriteSystem);
-    data->unkDC = 0;
-    data->unk24 = UnkBallData_ShouldAnimateSprite(data->unk90.unk0);
-    data->unkC4 = 0;
-    data->unk20 = 16;
-    data->unk21 = 0;
+    data->params = *unkStruct_134;
+    data->step = 0;
+    data->wobbleDir = 0;
+    data->stateFrames = 0;
+    data->captureState = 0;
+    data->shakeCount = 0;
+    data->ballAnim = 0;
+    data->ballAnimStarted = 0;
+    data->spriteManager = SpriteManager_New(data->params.spriteSystem);
+    data->startDelay = 0;
+    data->animateSprite = UnkBallData_ShouldAnimateSprite(data->params.kind);
+    data->modeFrames = 0;
+    data->fadeAlphaA = 16;
+    data->fadeAlphaB = 0;
     BattleAnimSystem_InitBlend();
     if (LCRandom() % 2) {
-        data->unk22 = 1;
+        data->randomDir = 1;
     } else {
-        data->unk22 = -1;
+        data->randomDir = -1;
     }
     UnkBallData_LoadResources(data);
     UnkBallData_CreateSprite(data);
     UnkBallData_InitThrowTarget(data);
-    data->unk1C = TRUE;
-    data->unk28 = FALSE;
-    data->unkCC = SysTask_CreateOnMainQueue(UnkBallData_Task, data, 1000);
+    data->modeRunning = TRUE;
+    data->opened = FALSE;
+    data->task = SysTask_CreateOnMainQueue(UnkBallData_Task, data, 1000);
     return data;
 }
 
 BOOL UnkBallData_IsActive(UnkBallData *data) {
     GF_ASSERT(data != NULL);
-    if (data->unk1C) {
+    if (data->modeRunning) {
         return TRUE;
     }
     return FALSE;
@@ -1426,18 +1427,18 @@ BOOL UnkBallData_IsActive(UnkBallData *data) {
 
 BOOL UnkBallData_HasOpened(UnkBallData *data) {
     GF_ASSERT(data != NULL);
-    if (data->unk28) {
+    if (data->opened) {
         return TRUE;
     }
     return FALSE;
 }
 
 void UnkBallData_SetCaptureState(UnkBallData *data, int state) {
-    data->unk14 = state;
+    data->captureState = state;
 }
 
 BOOL UnkBallData_IsCaptureState(UnkBallData *data, int state) {
-    if (data->unk14 == state) {
+    if (data->captureState == state) {
         return TRUE;
     }
     return FALSE;
@@ -1445,29 +1446,29 @@ BOOL UnkBallData_IsCaptureState(UnkBallData *data, int state) {
 
 void UnkBallData_Delete(UnkBallData *data) {
     GF_ASSERT(data != NULL);
-    SpriteSystem_FreeResourcesAndManager(data->unk90.spriteSystem, data->spriteManager);
+    SpriteSystem_FreeResourcesAndManager(data->params.spriteSystem, data->spriteManager);
     Sprite_DeleteAndFreeResources(data->managedSprite);
-    SysTask_Destroy(data->unkCC);
+    SysTask_Destroy(data->task);
     Heap_Free(data);
 }
 
 void UnkBallData_SetMode(UnkBallData *data, int mode) {
-    data->unk90.unk8 = mode;
-    data->unk8 = 0;
-    data->unkC = 0;
-    data->unk10 = 0;
-    data->unk1C = TRUE;
+    data->params.mode = mode;
+    data->step = 0;
+    data->stateFrames = 0;
+    data->wobbleDir = 0;
+    data->modeRunning = TRUE;
     ManagedSprite_GetPositionXY(data->managedSprite, &BALL_X(data), &BALL_Y(data));
 }
 
 s32 UnkBallData_GetMode(UnkBallData *data) {
     GF_ASSERT(data != NULL);
-    return data->unk90.unk8;
+    return data->params.mode;
 }
 
 void UnkBallData_InitThrowTarget(UnkBallData *data) {
     ManagedSprite_GetPositionXY(data->managedSprite, &BALL_X(data), &BALL_Y(data));
-    switch (data->unk90.unk0) {
+    switch (data->params.kind) {
     case 0:
     case 1:
     case 2:
@@ -1475,49 +1476,49 @@ void UnkBallData_InitThrowTarget(UnkBallData *data) {
     case 4:
     case 5:
         ManagedSprite_GetPositionXY(data->managedSprite, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
-        data->unkC8 = 0;
+        data->arcHeight = 0;
         BALL_ARC_DURATION(data) = 12;
         return;
     case 6:
         BattleAnimUtil_LookupScreenPos(0, 0, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
-        data->unkC8 = 48;
+        data->arcHeight = 48;
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 32;
         break;
     case 7:
         ManagedSprite_GetPositionXY(data->managedSprite, &BALL_X(data), &BALL_Y(data));
         BattleAnimUtil_LookupScreenPos(1, 4, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
-        data->unkC8 = 48;
+        data->arcHeight = 48;
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 32;
         break;
     case 8:
         BattleAnimUtil_LookupScreenPos(1, 2, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
-        data->unkC8 = 48;
+        data->arcHeight = 48;
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 32;
         break;
     case 9:
         BattleAnimUtil_LookupScreenPos(0, 1, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
-        data->unkC8 = 48;
+        data->arcHeight = 48;
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 32;
         break;
     case 10:
         BattleAnimUtil_LookupScreenPos(1, 3, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
-        data->unkC8 = 48;
+        data->arcHeight = 48;
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 32;
         break;
     case 11:
         BattleAnimUtil_LookupScreenPos(1, 5, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
-        data->unkC8 = 48;
+        data->arcHeight = 48;
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 32;
         break;
     case 12:
         BattleAnimUtil_LookupScreenPos(0, 1, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
-        data->unkC8 = 16;
+        data->arcHeight = 16;
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 16;
         BALL_ARC_DURATION(data) = 12;
         return;
     case 13:
         BattleAnimUtil_LookupScreenPos(0, 1, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
-        data->unkC8 = 32;
+        data->arcHeight = 32;
         BALL_TARGET_X(data) = BALL_TARGET_X(data) - 20;
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 38;
         BALL_ARC_DURATION(data) = 16;
@@ -1525,24 +1526,24 @@ void UnkBallData_InitThrowTarget(UnkBallData *data) {
     case 14:
         BALL_TARGET_X(data) = 128;
         BALL_TARGET_Y(data) = 64;
-        data->unkC8 = 32;
+        data->arcHeight = 32;
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 32;
         break;
     case 15:
         BattleAnimUtil_LookupScreenPos(0, 1, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
-        data->unkC8 = 64;
+        data->arcHeight = 64;
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 8;
         BALL_ARC_DURATION(data) = 16;
         return;
     case 16:
         BattleAnimUtil_LookupScreenPos(1, 3, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
-        data->unkC8 = 64;
+        data->arcHeight = 64;
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 8;
         BALL_ARC_DURATION(data) = 16;
         return;
     case 17:
         BattleAnimUtil_LookupScreenPos(1, 5, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
-        data->unkC8 = 64;
+        data->arcHeight = 64;
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 8;
         BALL_ARC_DURATION(data) = 16;
         return;
@@ -1551,7 +1552,7 @@ void UnkBallData_InitThrowTarget(UnkBallData *data) {
 }
 
 void UnkBallData_GetStartPosition(UnkBallData *data, s16 *x, s16 *y) {
-    switch (data->unk90.unk0) {
+    switch (data->params.kind) {
     case 0:
         BattleAnimUtil_LookupScreenPos(0, 0, x, y);
         *y = *y + 40;
@@ -1625,25 +1626,25 @@ void UnkBallData_LoadResources(UnkBallData *data) {
     int animRes;
     int i;
 
-    SpriteSystem_InitSprites(data->unk90.spriteSystem, data->spriteManager, 10);
-    if (data->unk90.unk18 == 0) {
-        G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(data->unk90.spriteSystem), 0, FX32_CONST(272));
+    SpriteSystem_InitSprites(data->params.spriteSystem, data->spriteManager, 10);
+    if (data->params.keepSubSurface == 0) {
+        G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(data->params.spriteSystem), 0, FX32_CONST(272));
     }
     for (i = 0; i < GF_GFX_RES_TYPE_MAX; i++) {
         counts.asArray[i] = 10;
     }
     counts.numMcel = 0;
     counts.numManm = 0;
-    SpriteSystem_InitManagerWithCapacities(data->unk90.spriteSystem, data->spriteManager, &counts);
-    charRes = BallAnim_GetSpriteResource(data->unk90.ball, 0);
-    plttRes = BallAnim_GetSpriteResource(data->unk90.ball, 1);
-    cellRes = BallAnim_GetSpriteResource(data->unk90.ball, 2);
-    animRes = BallAnim_GetSpriteResource(data->unk90.ball, 3);
-    narc = NARC_New(NARC_a_0_0_8, data->unk90.heapID);
-    SpriteSystem_LoadCharResObjFromOpenNarc(data->unk90.spriteSystem, data->spriteManager, narc, charRes, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, data->unk90.unkC + 6000);
-    SpriteSystem_LoadPaletteBufferFromOpenNarc(data->unk90.paletteData, PLTTBUF_MAIN_OBJ, data->unk90.spriteSystem, data->spriteManager, narc, plttRes, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, data->unk90.unkC + 6000);
-    SpriteSystem_LoadCellResObjFromOpenNarc(data->unk90.spriteSystem, data->spriteManager, narc, cellRes, TRUE, data->unk90.unkC + 6000);
-    SpriteSystem_LoadAnimResObjFromOpenNarc(data->unk90.spriteSystem, data->spriteManager, narc, animRes, TRUE, data->unk90.unkC + 6000);
+    SpriteSystem_InitManagerWithCapacities(data->params.spriteSystem, data->spriteManager, &counts);
+    charRes = BallAnim_GetSpriteResource(data->params.ball, 0);
+    plttRes = BallAnim_GetSpriteResource(data->params.ball, 1);
+    cellRes = BallAnim_GetSpriteResource(data->params.ball, 2);
+    animRes = BallAnim_GetSpriteResource(data->params.ball, 3);
+    narc = NARC_New(NARC_a_0_0_8, data->params.heapID);
+    SpriteSystem_LoadCharResObjFromOpenNarc(data->params.spriteSystem, data->spriteManager, narc, charRes, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, data->params.resTagOffset + 6000);
+    SpriteSystem_LoadPaletteBufferFromOpenNarc(data->params.paletteData, PLTTBUF_MAIN_OBJ, data->params.spriteSystem, data->spriteManager, narc, plttRes, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, data->params.resTagOffset + 6000);
+    SpriteSystem_LoadCellResObjFromOpenNarc(data->params.spriteSystem, data->spriteManager, narc, cellRes, TRUE, data->params.resTagOffset + 6000);
+    SpriteSystem_LoadAnimResObjFromOpenNarc(data->params.spriteSystem, data->spriteManager, narc, animRes, TRUE, data->params.resTagOffset + 6000);
     NARC_Delete(narc);
 }
 
@@ -1657,12 +1658,12 @@ void UnkBallData_CreateSprite(UnkBallData *data) {
     template.drawPriority = 0;
     template.pal = 0;
     template.vram = NNS_G2D_VRAM_TYPE_2DMAIN;
-    template.bgPriority = data->unk90.unk14;
+    template.bgPriority = data->params.bgPriority;
     template.vramTransfer = FALSE;
     for (i = 0; i < GF_GFX_RES_TYPE_MAX; i++) {
-        template.resIdList[i] = data->unk90.unkC + 6000;
+        template.resIdList[i] = data->params.resTagOffset + 6000;
     }
-    data->managedSprite = SpriteSystem_NewSprite(data->unk90.spriteSystem, data->spriteManager, &template);
+    data->managedSprite = SpriteSystem_NewSprite(data->params.spriteSystem, data->spriteManager, &template);
     ManagedSprite_SetDrawFlag(data->managedSprite, TRUE);
     ManagedSprite_SetAffineOverwriteMode(data->managedSprite, 2);
     ManagedSprite_SetAnimationFrame(data->managedSprite, 0);
@@ -1684,7 +1685,7 @@ void UnkBallData_SetRotation(UnkBallData *data, u16 rotation) {
 }
 
 void UnkBallData_SetAnimateSprite(UnkBallData *data, BOOL animate) {
-    data->unk24 = animate;
+    data->animateSprite = animate;
 }
 
 void UnkBallData_SetDrawPriority(UnkBallData *data, u16 priority) {
@@ -1696,7 +1697,7 @@ void UnkBallData_SetPriority(UnkBallData *data, int priority) {
 }
 
 void UnkBallData_SetDelay(UnkBallData *data, int delay) {
-    data->unkDC = delay;
+    data->startDelay = delay;
 }
 
 s32 BallSealEffect_GetDistance(s16 x0, s16 y0, s16 x1, s16 y1) {

@@ -487,23 +487,23 @@ typedef struct OpponentData {
     u8 unk84[0x4];
     UnkBallData *ballData;
     u8 unk8C[0x108];
-    u8 unk194;
+    u8 battlerId;
     u8 battlerType;
-    u8 unk196;
+    u8 inputMode;
     u8 unk197;
     SysTask *pokepicBobTask;
     u16 pokepicBobAngle;
     int unk1A0;
-    u32 *unk1A4;
-    u8 unk1A8;
+    u32 *pokepicAnimNarc;
+    u8 commandReceived;
     u8 unk1A9[3];
 } OpponentData;
 
 typedef struct BattleTerrain {
-    ManagedSprite *unk0;
+    ManagedSprite *sprite;
     BattleSystem *battleSystem;
-    u8 unk8;
-    u8 unk9;
+    u8 side;
+    u8 terrainId;
     s16 unkA;
     s16 unkC;
     u16 unused;
@@ -638,9 +638,9 @@ struct GetterWork {
     BattleSystem *battleSystem;
     BattleContext *ctx;
     UnkBallData *ballData;
-    ManagedSprite *unkC[2];
-    TextOBJ *unk14;
-    ObjCharSpaceReservation unk18;
+    ManagedSprite *sprites[2];
+    TextOBJ *fontOam;
+    ObjCharSpaceReservation charSpace;
     int captureType;
     int state;
     int ballID;
@@ -682,13 +682,13 @@ typedef struct BattleItem {
 typedef struct BattleCursorPosition BattleCursorPosition;
 
 typedef struct UnkStruct_134 {
-    s32 unk0;
+    s32 kind;
     enum HeapID heapID;
-    s32 unk8;
-    s32 unkC;
+    s32 mode;
+    s32 resTagOffset;
     int ball;
-    s32 unk14;
-    s32 unk18;
+    s32 bgPriority;
+    s32 keepSubSurface;
     SpriteSystem *spriteSystem;
     PaletteData *paletteData;
     BattleSystem *battleSystem;
@@ -704,32 +704,32 @@ typedef struct UnkStruct_50C {
 } UnkStruct_50C;
 
 struct UnkBallData { // TODO: Give a better name.
-    int unk0;
-    int unk4;
-    int unk8;
-    int unkC;
-    int unk10;
-    int unk14;
-    int unk18;
-    int unk1C;
-    u8 unk20;
-    u8 unk21;
-    s8 unk22;
+    int ballAnim;
+    int ballAnimStarted;
+    int step;
+    int stateFrames;
+    int wobbleDir;
+    int captureState;
+    int shakeCount;
+    int modeRunning;
+    u8 fadeAlphaA;
+    u8 fadeAlphaB;
+    s8 randomDir;
     u8 unk23;
-    BOOL unk24;
-    int unk28;
+    BOOL animateSprite;
+    int opened;
     SpriteManager *spriteManager;
     ManagedSprite *managedSprite;
     u8 unk34[0x5C];
-    UnkStruct_134 unk90;
+    UnkStruct_134 params;
     u8 unkB8[0xC];
-    int unkC4;
-    int unkC8;
-    SysTask *unkCC;
-    int unkD0;
-    int unkD4;
-    int unkD8;
-    int unkDC;
+    int modeFrames;
+    int arcHeight;
+    SysTask *task;
+    int burstEffect;
+    int paletteFlash;
+    int battlerSprites;
+    int startDelay;
 }; // Size: 0xe0
 
 #endif

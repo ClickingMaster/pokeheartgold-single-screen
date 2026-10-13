@@ -2709,7 +2709,7 @@ void BattleAnimTask_PlaySpriteAnimOnce(SysTask *task, void *data) {
         Heap_Free(work);
     } else {
         ManagedSprite_TickFrame(work->sprite);
-        SpriteSystem_DrawSprites(work->common.unk_10);
+        SpriteSystem_DrawSprites(work->common.spriteManager);
     }
 }
 
@@ -2784,7 +2784,7 @@ void BattleAnimTask_SpriteOrbit(SysTask *task, void *data) {
         return;
     }
     ManagedSprite_TickFrame(work->sprite);
-    SpriteSystem_DrawSprites(work->common.unk_10);
+    SpriteSystem_DrawSprites(work->common.spriteManager);
 }
 
 #pragma force_active reset
@@ -2822,7 +2822,7 @@ void BattleAnimTask_PlaySpriteAnimOnce2(SysTask *task, void *data) {
         Heap_Free(work);
     } else {
         ManagedSprite_TickFrame(work->sprite);
-        SpriteSystem_DrawSprites(work->common.unk_10);
+        SpriteSystem_DrawSprites(work->common.spriteManager);
     }
 }
 
@@ -2898,7 +2898,7 @@ void BattleAnimTask_SpriteArc(SysTask *task, void *data) {
         return;
     }
     ManagedSprite_TickFrame(work->sprite);
-    SpriteSystem_DrawSprites(work->common.unk_10);
+    SpriteSystem_DrawSprites(work->common.spriteManager);
 }
 
 void BattleAnimSpriteFunc_SpriteArc(BattleAnimSystem *system, SpriteSystem *spriteSystem, SpriteManager *spriteManager, ManagedSprite *sprite) {

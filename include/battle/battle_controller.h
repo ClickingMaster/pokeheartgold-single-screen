@@ -13,7 +13,7 @@ typedef struct MoveAnimData {
     u16 move;
     int damage;
     u16 power;
-    u16 unk_0A;
+    u16 moveAnimVariant;
     u16 friendship;
     u16 isSubstitute : 1;
     u16 isTransformed : 1;
@@ -29,8 +29,8 @@ typedef struct MoveAnimData {
     u8 form[BATTLER_MAX];
     u32 personality[BATTLER_MAX];
     u32 moveEffectFlags[BATTLER_MAX];
-    int unk_4C;
-    int unk_50;
+    int isEffectAnim;
+    int effectAnimId;
     int terrain;
 } MoveAnimData;
 

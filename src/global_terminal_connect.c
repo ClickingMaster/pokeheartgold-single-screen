@@ -128,8 +128,8 @@ void ov00_021EC8D8(void);
 void ov00_021EC9E0(void *out);
 void ov00_021ECD04(GlobalTerminalConnectWork *work);
 u32 ov00_021ECDC8(void);
-void ov00_021ED9B4(void);
-void ov00_021FA0D8(void);
+void DWC_ShutdownFriendsMatch(void);
+void DWC_ShutdownGHTTP(void);
 void CommState_InitWfcSession(SaveData *saveData);
 void CommState_FreeWfcSession(void);
 void CommState_ShowRestartErrorAndHalt(void);
@@ -734,14 +734,14 @@ BOOL GlobalTerminalConnect_StateWaitAuth(GlobalTerminalConnectWork *work) {
             work->state = GTC_STATE_SHOW_ERROR;
             break;
         case 4:
-            ov00_021FA0D8();
+            DWC_ShutdownGHTTP();
             work->state = GTC_STATE_SHOW_ERROR;
             break;
         case 6:
             work->state = GTC_STATE_SHOW_ERROR;
             break;
         case 3:
-            ov00_021ED9B4();
+            DWC_ShutdownFriendsMatch();
             work->state = GTC_STATE_SHOW_ERROR;
             break;
         case 5:

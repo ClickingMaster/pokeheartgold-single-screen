@@ -1,6 +1,6 @@
 #ifndef POKEHEARTGOLD_OVERLAY_00_ARM_H
 #define POKEHEARTGOLD_OVERLAY_00_ARM_H
 
-void ov00_021EDB1C(void);
+void DWC_ProcessFriendsMatch(void);
 
 #endif // POKEHEARTGOLD_OVERLAY_00_ARM_H

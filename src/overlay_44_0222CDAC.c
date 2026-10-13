@@ -1601,7 +1601,7 @@ void ov44_0222B778(UnkStruct_ov44_022319EC *arg0, u32 arg1) {
     arg0->unk4->unk0.unk1C[4] = WiFiHistory_GetPlayerRegion(saveWiFiHistory);
     arg0->unk4->unk0.unk21 = 1;
     arg0->unk4->unk0.unk22 = 1;
-    ov00_021E6D60(arg0->unk4, 36);
+    WifiConnection_SetOwnStatusData(arg0->unk4, 36);
     WifiConnection_SetFriendStatusBuffer(arg0->unk4->unk24, 36);
 }
 
@@ -1844,7 +1844,7 @@ s32 ov44_0222BE3C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (TextPrinterCheckActive(arg0->unk180) != 0) {
         return arg1;
     }
-    if (ov00_021E7314() != 0) {
+    if (WifiConnection_IsFriendDataChanged() != 0) {
         arg0->unk348 = 69;
         ov44_0222F510(arg0, 30, 1);
         GF_ASSERT(arg0->unk18C == NULL);
@@ -1868,7 +1868,7 @@ s32 ov44_0222BEE0(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (TextPrinterCheckActive(arg0->unk180) != 0) {
         return arg1;
     }
-    if (ov00_021E7314() != 0) {
+    if (WifiConnection_IsFriendDataChanged() != 0) {
         Save_PrepareForAsyncWrite(arg0->saveData, 0);
         arg0->unk348 = 71;
         return arg1;
@@ -1888,10 +1888,10 @@ s32 ov44_0222BEE0(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
 }
 
 s32 ov44_0222BF6C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
-    if (ov00_021E7314() != 0) {
+    if (WifiConnection_IsFriendDataChanged() != 0) {
         s32 temp_r0 = Save_WriteFileAsync(arg0->saveData);
         if ((temp_r0 != 0) && (temp_r0 != 1)) {
-            ov00_021E7328();
+            WifiConnection_ClearFriendDataChanged();
             Save_ClearStatusFlags(arg0->saveData);
         } else {
             return arg1;
@@ -2083,8 +2083,8 @@ s32 ov44_0222C4EC(UnkStruct_ov44_022319EC *arg0) {
 }
 
 s32 ov44_0222C500(UnkStruct_ov44_022319EC *arg0) {
-    if (ov00_021E709C() != -1) {
-        ov00_021E70B8(arg0->unk4->unk0.unk21);
+    if (WifiConnection_GetNewClientIndex() != -1) {
+        WifiConnection_SetVoiceChatEnabled(arg0->unk4->unk0.unk21);
         return 1;
     }
     return 0;
@@ -2177,7 +2177,7 @@ s32 ov44_0222C684(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     ov44_0222FBA0(arg0);
     WifiClubRoom_ContinueLightSequence(&arg0->unk38C);
     if (WifiClubRoom_IsInputLocked(&arg0->unk38C) == 0) {
-        if ((ov00_021E709C() == -1) && (gSystem.newKeys & PAD_BUTTON_X)) {
+        if ((WifiConnection_GetNewClientIndex() == -1) && (gSystem.newKeys & PAD_BUTTON_X)) {
             if (ov44_0222F8C0(arg0) != 0) {
                 ov44_0222F510(arg0, 90, 0);
             } else {
@@ -2206,22 +2206,22 @@ s32 ov44_0222C684(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         arg0->unk348 = 48;
         return arg1;
     }
-    if ((arg0->unk370 == -1) && (ov00_021E709C() != -1)) {
-        arg0->unk370 = ov00_021E709C();
+    if ((arg0->unk370 == -1) && (WifiConnection_GetNewClientIndex() != -1)) {
+        arg0->unk370 = WifiConnection_GetNewClientIndex();
         ov44_0222F780(arg0, arg0->unk370);
         ov44_0222F510(arg0, 76, 0);
-        ov00_021E70B8(arg0->unk4->unk0.unk21);
+        WifiConnection_SetVoiceChatEnabled(arg0->unk4->unk0.unk21);
         arg0->unk344 = 0;
-    } else if ((arg0->unk370 != -1) && (ov00_021E709C() == -1)) {
-        ov00_021E70B8(0);
+    } else if ((arg0->unk370 != -1) && (WifiConnection_GetNewClientIndex() == -1)) {
+        WifiConnection_SetVoiceChatEnabled(0);
         ov44_0222F780(arg0, arg0->unk370);
         ov44_0222F510(arg0, 18, 0);
         CommState_LeaveWifiMatch();
         arg0->unk348 = 27;
         return arg1;
     }
-    if ((ov00_021E7080() == 1) && (ov00_021E709C() == -1)) {
-        ov00_021E70B8(0);
+    if ((WifiConnection_IsVoiceChatEnabled() == 1) && (WifiConnection_GetNewClientIndex() == -1)) {
+        WifiConnection_SetVoiceChatEnabled(0);
     }
     u32 r0 = ov44_02229F00(arg0, &arg0->unk4->unk0);
     if (arg0->unk370 == -1) {
@@ -2607,8 +2607,8 @@ s32 ov44_0222D2B0(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
         s32 var_r5 = Handle2dMenuInput_DeleteOnFinish(arg0->unk184, HEAP_ID_53);
         WifiClubRoom_UpdateLights(&arg0->unk38C);
-        if ((arg0->unk370 == -1) && (ov00_021E709C() != -1)) {
-            ov00_021E70B8(arg0->unk4->unk0.unk21);
+        if ((arg0->unk370 == -1) && (WifiConnection_GetNewClientIndex() != -1)) {
+            WifiConnection_SetVoiceChatEnabled(arg0->unk4->unk0.unk21);
             if (var_r5 == -1) {
                 Clear2dMenuWindowAndDelete(arg0->unk184, HEAP_ID_53);
             }
@@ -2627,8 +2627,8 @@ s32 ov44_0222D2B0(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     } else {
         enum YesNoResponse yesNoResponse = YesNoPrompt_HandleInput(arg0->unk188);
         WifiClubRoom_UpdateLights(&arg0->unk38C);
-        if ((arg0->unk370 == -1) && (ov00_021E709C() != -1)) {
-            ov00_021E70B8(arg0->unk4->unk0.unk21);
+        if ((arg0->unk370 == -1) && (WifiConnection_GetNewClientIndex() != -1)) {
+            WifiConnection_SetVoiceChatEnabled(arg0->unk4->unk0.unk21);
             yesNoResponse = YESNORESPONSE_NO;
         }
         if (yesNoResponse == YESNORESPONSE_YES) {
@@ -3076,7 +3076,7 @@ s32 ov44_0222E02C(UnkStruct_ov44_022319EC *arg0) {
 }
 
 void ov44_0222E030(void) {
-    ov00_021E70B8(0);
+    WifiConnection_SetVoiceChatEnabled(0);
     if (ov44_0222E074() == FALSE) {
         IsNighttime();
         Sound_SetScene(0);
@@ -3987,7 +3987,7 @@ void ov44_0222F7BC(UnkStruct_ov44_022319EC *arg0) {
 void ov44_0222F818(UnkStruct_ov44_022319EC *arg0, u32 arg1) {
     if (arg0->unk4 != NULL) {
         ov44_0222F830(arg0, arg1);
-        ov00_021E6D60(arg0->unk4, 36);
+        WifiConnection_SetOwnStatusData(arg0->unk4, 36);
     }
 }
 
@@ -4000,7 +4000,7 @@ void ov44_0222F830(UnkStruct_ov44_022319EC *arg0, u32 arg1) {
                 if (arg1 == 1) {
                     GF_SndStartFadeOutBGM(0, 30);
                 } else if (arg1 == 16) {
-                    ov00_021E70B8(0);
+                    WifiConnection_SetVoiceChatEnabled(0);
                     if (ov44_0222E074() == 1) {
                         GF_SndStartFadeInBGM(120, 30, 1);
                     }
@@ -4013,20 +4013,20 @@ void ov44_0222F830(UnkStruct_ov44_022319EC *arg0, u32 arg1) {
 
 u8 ov44_0222F89C(UnkStruct_ov44_022319EC *arg0) {
     arg0->unk4->unk0.unk21 = 1 - arg0->unk4->unk0.unk21;
-    ov00_021E6D60(arg0->unk4, 36);
+    WifiConnection_SetOwnStatusData(arg0->unk4, 36);
     return arg0->unk4->unk0.unk21;
 }
 
 u8 ov44_0222F8C0(UnkStruct_ov44_022319EC *arg0) {
     arg0->unk4->unk0.unk22 = 1 - arg0->unk4->unk0.unk22;
     arg0->unk4->unk0.unk21 = arg0->unk4->unk0.unk22;
-    ov00_021E6D60(arg0->unk4, 36);
+    WifiConnection_SetOwnStatusData(arg0->unk4, 36);
     return arg0->unk4->unk0.unk22;
 }
 
 u8 ov44_0222F8F0(UnkStruct_ov44_022319EC *arg0) {
     arg0->unk4->unk0.unk21 = arg0->unk4->unk0.unk22;
-    ov00_021E6D60(arg0->unk4, 36);
+    WifiConnection_SetOwnStatusData(arg0->unk4, 36);
     return arg0->unk4->unk0.unk22;
 }
 
@@ -4993,7 +4993,7 @@ s32 ov44_02231974(s32 arg0) {
 
 s32 ov44_0223197C(UnkStruct_ov44_022319EC *arg0, s32 arg1, s32 arg2) {
     LinkSync_Init(HEAP_ID_15);
-    ov00_021E70B8(arg0->unk4->unk0.unk21);
+    WifiConnection_SetVoiceChatEnabled(arg0->unk4->unk0.unk21);
     if (ov44_02229F44(arg2) == 1) {
         WifiConnection_SetExtraHeapEnabled(1, 128);
     } else {

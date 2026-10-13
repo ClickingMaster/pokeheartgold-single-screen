@@ -263,7 +263,7 @@ void BattleAnimUtil_InitCommonWork(BattleAnimSystem *system, BattleAnimCommonWor
     work->system = system;
     work->spriteSystem = BattleAnimSystem_GetSpriteSystem(system);
     work->battlerSpriteManager = BattleAnimSystem_GetBattlerSpriteManager(system);
-    work->unk_10 = ov07_0221C528(system);
+    work->spriteManager = ov07_0221C528(system);
     work->bgConfig = BattleAnimSystem_GetBgConfig(system);
     work->paletteData = BattleAnimSystem_GetPaletteData(system);
 }

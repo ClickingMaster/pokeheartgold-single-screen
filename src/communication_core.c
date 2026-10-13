@@ -60,9 +60,9 @@ extern BOOL WifiConnection_SendFromHost(void *frame, int size);
 extern BOOL WifiConnection_SendToAll(void *frame, int size);
 extern int WifiConnection_GetAid(void);
 extern void WifiConnection_Shutdown(void);
-extern int ov00_021E7080(void);
-extern void ov00_021E70CC(int);
-extern u32 ov00_021EE4FC(void);
+extern int WifiConnection_IsVoiceChatEnabled(void);
+extern void WifiConnection_SetVoiceUnmuted(int);
+extern u32 DWC_GetAIDBitmap(void);
 
 // The bytes around the key state in the work area (Comm_ScrambleDirectionKeys).
 typedef struct CommKeyWork {
@@ -1270,7 +1270,7 @@ int Comm_IsNetIdConnected(int slot) {
     }
     if (Comm_IsWifiLinkMode(CommState_GetLinkMode())) {
         if (gCommCore.work[0x6B6] != 0) {
-            u16 mask = ov00_021EE4FC();
+            u16 mask = DWC_GetAIDBitmap();
             if ((mask & (1 << slot)) != 0) {
                 return 1;
             }
@@ -1523,7 +1523,7 @@ int Comm_GetBattleSlot(int slot) {
 
 int sub_020378CC(void) {
     if (Comm_IsWifiLinkMode(CommState_GetLinkMode())) {
-        return ov00_021E7080();
+        return WifiConnection_IsVoiceChatEnabled();
     }
     return 0;
 }
@@ -1545,9 +1545,9 @@ void sub_02037930(int value) {
     sub_020378E4(value);
     if (Comm_IsWifiLinkMode(CommState_GetLinkMode())) {
         if (value != 0) {
-            ov00_021E70CC(0);
+            WifiConnection_SetVoiceUnmuted(0);
         } else {
-            ov00_021E70CC(1);
+            WifiConnection_SetVoiceUnmuted(1);
         }
     }
 }

@@ -559,26 +559,26 @@
 	.public WifiConnection_SetReceiveCallbacks
 	.public WifiConnection_SetDisconnectCallback
 	.public WifiConnection_SetConnectFilterCallback
-	.public ov00_021E5CD0
-	.public ov00_021E5CEC
-	.public ov00_021E5E34
+	.public WifiConnection_SetClientCallback
+	.public WifiConnection_StartAnybodyMatchmaking
+	.public WifiConnection_FinishCancel
 	.public WifiConnection_Update
 	.public WifiConnection_SendToHost
 	.public WifiConnection_SendFromHost
 	.public WifiConnection_SendToAll
 	.public WifiConnection_LoginCallback
 	.public WifiConnection_TimeoutCallback
-	.public ov00_021E6274
-	.public ov00_021E6298
-	.public ov00_021E629C
-	.public ov00_021E62D4
+	.public WifiConnection_UpdateServersCallback
+	.public WifiConnection_FriendStatusCallback
+	.public WifiConnection_DeleteFriendCallback
+	.public WifiConnection_BuddyFriendCallback
 	.public WifiConnection_ResetKeepAliveTimers
-	.public ov00_021E62F4
-	.public ov00_021E6388
-	.public ov00_021E63CC
-	.public ov00_021E6424
+	.public WifiConnection_SetRecvTimeouts
+	.public WifiConnection_OnConnected
+	.public WifiConnection_AnybodyMatchedCallback
+	.public WifiConnection_EvalPlayerCallback
 	.public WifiConnection_SendDoneCallback
-	.public ov00_021E644C
+	.public WifiConnection_ReadPeerVoiceFlag
 	.public WifiConnection_ReceiveCallback
 	.public WifiConnection_ConnectionClosedCallback
 	.public WifiConnection_Alloc
@@ -598,30 +598,30 @@
 	.public WifiConnection_Shutdown
 	.public WifiConnection_SetFriendStatusBuffer
 	.public WifiConnection_UpdateFriendStatus
-	.public ov00_021E6D60
+	.public WifiConnection_SetOwnStatusData
 	.public WifiConnection_GetFriendStatus
 	.public WifiConnection_StartMatchmaking
 	.public WifiConnection_GetTargetFriendIndex
-	.public ov00_021E6ED8
-	.public ov00_021E6FBC
-	.public ov00_021E6FE0
+	.public WifiConnection_GameServerMatchedCallback
+	.public WifiConnection_ConnectedToServerCallback
+	.public WifiConnection_NewClientCallback
 	.public ov00_021E700C
 	.public WifiConnection_GetVoiceActivity
-	.public ov00_021E7080
-	.public ov00_021E709C
-	.public ov00_021E70B8
-	.public ov00_021E70CC
-	.public ov00_021E70E0
-	.public ov00_021E70F4
-	.public ov00_021E7130
+	.public WifiConnection_IsVoiceChatEnabled
+	.public WifiConnection_GetNewClientIndex
+	.public WifiConnection_SetVoiceChatEnabled
+	.public WifiConnection_SetVoiceUnmuted
+	.public WifiConnection_StopServerMatchingCallback
+	.public WifiConnection_StopServerMatching
+	.public WifiConnection_ResetStopServerMatching
 	.public ov00_021E7144
 	.public WifiConnection_SetExtraHeapEnabled
-	.public ov00_021E7220
+	.public WifiConnection_SetDisconnectWhenAlone
 	.public WifiConnection_FreeRecvBuffer
 	.public WifiConnection_AllocRecvBuffer
 	.public WifiConnection_FreeRecvBuffers
-	.public ov00_021E7314
-	.public ov00_021E7328
+	.public WifiConnection_IsFriendDataChanged
+	.public WifiConnection_ClearFriendDataChanged
 	.public VoiceChat_InitAudio
 	.public VoiceChat_MicCallback
 	.public VoiceChat_StreamCallback
@@ -645,13 +645,13 @@
 	.public WifiConnection_SetReceiveCallbacks
 	.public WifiConnection_SetDisconnectCallback
 	.public WifiConnection_SetConnectFilterCallback
-	.public ov00_021E5CD0
-	.public ov00_021E5E34
-	.public ov00_021E6274
-	.public ov00_021E6298
-	.public ov00_021E62D4
+	.public WifiConnection_SetClientCallback
+	.public WifiConnection_FinishCancel
+	.public WifiConnection_UpdateServersCallback
+	.public WifiConnection_FriendStatusCallback
+	.public WifiConnection_BuddyFriendCallback
 	.public WifiConnection_ResetKeepAliveTimers
-	.public ov00_021E6424
+	.public WifiConnection_EvalPlayerCallback
 	.public WifiConnection_SendDoneCallback
 	.public WifiConnection_ClearVoiceChatActive
 	.public WifiConnection_StopVoiceChat
@@ -660,17 +660,17 @@
 	.public WifiConnection_SetFriendStatusBuffer
 	.public WifiConnection_GetFriendStatus
 	.public WifiConnection_GetTargetFriendIndex
-	.public ov00_021E6FBC
-	.public ov00_021E7080
-	.public ov00_021E709C
-	.public ov00_021E70B8
-	.public ov00_021E70CC
-	.public ov00_021E70E0
-	.public ov00_021E7130
-	.public ov00_021E7220
+	.public WifiConnection_ConnectedToServerCallback
+	.public WifiConnection_IsVoiceChatEnabled
+	.public WifiConnection_GetNewClientIndex
+	.public WifiConnection_SetVoiceChatEnabled
+	.public WifiConnection_SetVoiceUnmuted
+	.public WifiConnection_StopServerMatchingCallback
+	.public WifiConnection_ResetStopServerMatching
+	.public WifiConnection_SetDisconnectWhenAlone
 	.public WifiConnection_FreeRecvBuffers
-	.public ov00_021E7314
-	.public ov00_021E7328
+	.public WifiConnection_IsFriendDataChanged
+	.public WifiConnection_ClearFriendDataChanged
 	.public VoiceChat_MicCallback
 	.public VoiceChat_SetEndCallback
 	.public VoiceChat_Mute

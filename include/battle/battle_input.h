@@ -75,7 +75,7 @@ typedef struct BattleInputMoveMemory {
 
 typedef struct BattleInputTextObject {
     TextOBJ *textObj;
-    ObjCharSpaceReservation unk4;
+    ObjCharSpaceReservation charSpace;
     u16 fontLength;
 } BattleInputTextObject;
 
@@ -86,7 +86,7 @@ typedef struct BattleMenuSlideIn {
     s16 y;
     s16 xSet; // 255 - (x / 100), used in callback to set the x position explicitly
     s16 ySet; // 40 - (y / 100)
-    s16 unk_10;
+    s16 bgY;
     u8 battlerId;
     u8 state;
 } BattleMenuSlideIn;
@@ -198,7 +198,7 @@ struct BattleInput {
     u8 monTargetType;
     u8 gender;
     u8 isTouchDisabled;
-    u8 unk66F; // true when cancel is displayed, false when run is displayed
+    u8 cancelShown; // true when cancel is displayed, false when run is displayed
     u8 unk670;
     s16 unk671;
     u8 fadeDir;

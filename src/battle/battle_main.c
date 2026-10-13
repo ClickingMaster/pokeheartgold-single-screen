@@ -90,7 +90,7 @@ typedef struct BattleLinkScreenArgs {
     u8 multiOrSide;     // 0x29
     u8 outcome;         // 0x2A
     u8 done;            // 0x2B
-    u8 unk_2C;          // 0x2C
+    u8 linkBattleMode;          // 0x2C
     u8 unk_2D[3];       // 0x2D
 } BattleLinkScreenArgs;
 
@@ -1501,7 +1501,7 @@ BOOL Battle_EndInit(OverlayManager *man) {
             args->outcome = 3;
         }
     }
-    args->unk_2C = setup->linkBattleMode;
+    args->linkBattleMode = setup->linkBattleMode;
     LinkBattleScreen_Start(args);
     return TRUE;
 }

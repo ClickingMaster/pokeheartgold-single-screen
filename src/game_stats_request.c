@@ -30,7 +30,7 @@ extern int sprintf(char *dest, const char *format, ...);
 void *ov00_021EC2A8(int category, u32 size);
 void ov00_021EC2EC(int category, void *ptr, u32 size);
 void B64Encode(const void *src, char *dst, int len, int mode);
-BOOL ov00_021FA0B4(int value);
+BOOL DWC_InitGHTTP(int value);
 
 void GameStats_SeedRandom(u32 seed) {
     gGameStatsRandState = seed | (seed << 16);
@@ -282,7 +282,7 @@ void GameStats_ResponseCallback(const char *response, int length, int error) {
 void GameStats_Start(void) {
     gGameStatsRequest.state = GAME_STATS_STATE_STARTED;
     gGameStatsRequest.requestId = -1;
-    if (!ov00_021FA0B4(0)) {
+    if (!DWC_InitGHTTP(0)) {
         gGameStatsRequest.state = GAME_STATS_STATE_IDLE;
     }
 }
