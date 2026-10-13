@@ -66,7 +66,7 @@ typedef enum PocketType {
 typedef struct GlobalTerminalLaunchArgs {
     FieldSystem *fieldSystem;
     SaveData *saveData;
-    int unk8;
+    int connectDirectly;
     u8 unkC;
 } GlobalTerminalLaunchArgs;
 
@@ -83,7 +83,7 @@ typedef struct UnkStruct_0203E600 {
 } UnkStruct_0203E600;
 
 typedef struct UnkStruct_0203E8C8 {
-    u16 unk0;
+    u16 changed;
     u16 unk2;
 } UnkStruct_0203E8C8;
 
@@ -97,7 +97,7 @@ static inline void InitUnkStructScrCmd408(BattleRoomResultsArgs *data, u16 a1, u
 static inline PCBoxArgs *PCBoxAppData_New(ScriptContext *ctx) {
     PCBoxArgs *ret = Heap_Alloc(HEAP_ID_FIELD2, sizeof(PCBoxArgs));
     ret->saveData = ctx->fieldSystem->saveData;
-    ret->unk8 = ScriptReadByte(ctx);
+    ret->mode = ScriptReadByte(ctx);
     ret->menuInputStatePtr = &ctx->fieldSystem->menuInputState;
     return ret;
 }

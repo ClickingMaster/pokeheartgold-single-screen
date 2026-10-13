@@ -79,7 +79,7 @@ u32 PCBox_State_Init(PCBoxWork *work) {
     PCBox_LoadPartyIcons(work);
     PCBox_LoadScrolledWallpaper(work, PCBox_GetWallpaperGfxIndex(work, work->activeBox), 2);
     PCBox_InitPanels(work);
-    if (work->args->unk8 != PC_BOX_MODE_WITHDRAW && work->args->unk8 != PC_BOX_MODE_DEPOSIT) {
+    if (work->args->mode != PC_BOX_MODE_WITHDRAW && work->args->mode != PC_BOX_MODE_DEPOSIT) {
         PCBox_ShowPartyButton(work);
         PCBox_ShowTrayTab(work);
     }
@@ -203,7 +203,7 @@ void PCBox_State_Start(PCBoxWork *work) {
     u32 msg;
 
     PlaySE(SEQ_SE_DP_PC_LOGIN);
-    switch (work->args->unk8) {
+    switch (work->args->mode) {
     case 0:
         PCBox_ShowDepositPartyPanel(work);
         PCBox_PrintMonActionMessage(work, 0, 0, 0x27);
@@ -388,7 +388,7 @@ void PCBox_State_ReturnToActionMenu(PCBoxWork *work) {
     u32 msg;
 
     PCBox_ClearWindowFrame(work->view, 0x25);
-    switch (work->args->unk8) {
+    switch (work->args->mode) {
     case 1:
         PCBox_DrawActionMenu(work, sPCBoxWithdrawMenu, 4);
         PCBox_PrintMonActionMessage(work, work->selectedSlot, 1, 0x27);
@@ -423,9 +423,9 @@ void PCBox_State_ReturnFromSummary(PCBoxWork *work) {
 
     PCBox_ShowSlotMonInfo(work, work->selectedSlot);
     if (work->summaryFromTray == 0) {
-        if (work->args->unk8 == PC_BOX_MODE_WITHDRAW) {
+        if (work->args->mode == PC_BOX_MODE_WITHDRAW) {
             PCBox_DrawActionMenu(work, sPCBoxWithdrawMenu, 4);
-        } else if (work->args->unk8 == PC_BOX_MODE_DEPOSIT) {
+        } else if (work->args->mode == PC_BOX_MODE_DEPOSIT) {
             PCBox_SetBoxArrowsVisible(work->view, 0);
             PCBox_SetIconsTranslucent(work, 1, 1);
             PCBox_DrawActionMenu(work, sPCBoxDepositMenu, 4);
@@ -443,13 +443,13 @@ void PCBox_State_ReturnFromSummary(PCBoxWork *work) {
         }
         PCBox_ShowActionMenu(work->view->panels);
         if (work->selectedSlot < 0x1e) {
-            if (work->args->unk8 == PC_BOX_MODE_WITHDRAW) {
+            if (work->args->mode == PC_BOX_MODE_WITHDRAW) {
                 PCBox_PrintMonActionMessage(work, work->selectedSlot, 1, 0x27);
                 msg = 0x51;
             } else {
                 msg = 0xc;
             }
-        } else if (work->args->unk8 == PC_BOX_MODE_DEPOSIT) {
+        } else if (work->args->mode == PC_BOX_MODE_DEPOSIT) {
             PCBox_ShowDepositPartyPanel(work);
             PCBox_PrintMonActionMessage(work, work->selectedSlot, 1, 0x27);
             msg = 0x5b;
@@ -460,7 +460,7 @@ void PCBox_State_ReturnFromSummary(PCBoxWork *work) {
             msg = 0x24;
         }
         PCBox_CreateSelectedIconOutline(work);
-        if (work->args->unk8 != PC_BOX_MODE_MOVE_ITEMS) {
+        if (work->args->mode != PC_BOX_MODE_MOVE_ITEMS) {
             PCBox_ShowMovesPanel(work->view);
         }
     } else {
@@ -481,7 +481,7 @@ void PCBox_State_ReturnFromSummary(PCBoxWork *work) {
             PCBox_AttachIconToCursor(work);
         }
         work->view->rowCursorPos = work->trayBox % 6 + 0x25;
-        if (work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
+        if (work->args->mode == PC_BOX_MODE_MOVE_ITEMS) {
             PCBox_SetIconsTranslucent(work, 0x81, 1);
             PCBox_SetIconsTranslucent(work, 0x82, 1);
             msg = 0x82;
@@ -490,7 +490,7 @@ void PCBox_State_ReturnFromSummary(PCBoxWork *work) {
         } else {
             msg = 0x73;
         }
-        if (work->args->unk8 != PC_BOX_MODE_MOVE_ITEMS && work->summaryFromHolding != 0) {
+        if (work->args->mode != PC_BOX_MODE_MOVE_ITEMS && work->summaryFromHolding != 0) {
             PCBox_ShowMovesPanel(work->view);
         }
         if (work->trayFromPartyPanel == 1) {
@@ -508,7 +508,7 @@ void PCBox_State_ReturnFromNamingScreen(PCBoxWork *work) {
     work->view->rowCursorPos = work->trayBox % 6;
     PCBox_ShowBoxTrayAndMenu(work);
     PCBox_PrintMenuPrompt(work, 0, 0x27);
-    if (work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
+    if (work->args->mode == PC_BOX_MODE_MOVE_ITEMS) {
         PCBox_SetIconsTranslucent(work, 0x81, 1);
     }
     PCBox_StartFadeIn(work, 0x3d);
@@ -525,15 +525,15 @@ void PCBox_State_GiveItemFromBag(PCBoxWork *work) {
         PCBox_SetBoxArrowsVisible(work->view, 0);
         PCBox_SetIconsTranslucent(work, 1, 1);
     }
-    if (work->args->unk8 != PC_BOX_MODE_MOVE_ITEMS) {
+    if (work->args->mode != PC_BOX_MODE_MOVE_ITEMS) {
         PCBox_CreateSelectedIconOutline(work);
     }
-    if ((u32)(work->args->unk8 - 2) <= 1) {
+    if ((u32)(work->args->mode - 2) <= 1) {
         PCBox_HideBottomButtons(work);
         PCBox_HideReturnButton(work->view->panels);
     }
     if (work->itemId == 0) {
-        if (work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
+        if (work->args->mode == PC_BOX_MODE_MOVE_ITEMS) {
             PCBox_DrawBagGiveButton(work, 0);
             if (work->selectedSlot < 0x1e) {
                 PCBox_SetIconsTranslucent(work, 0x81, 1);
@@ -566,12 +566,12 @@ void PCBox_State_GiveItemFromBag(PCBoxWork *work) {
             Bag_TakeItem(work->bag, work->itemId, 1, HEAP_ID_10);
         }
         if (work->selectedSlot >= 0x1e) {
-            if (work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
+            if (work->args->mode == PC_BOX_MODE_MOVE_ITEMS) {
                 PCBox_CreateGridInput(work, 7, work->selectedSlot - 0x1e);
             } else {
                 PCBox_CreateGridInput(work, 5, 10);
             }
-        } else if (work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
+        } else if (work->args->mode == PC_BOX_MODE_MOVE_ITEMS) {
             GridInputHandler_SetNextInput(work->view->gridInput, work->selectedSlot);
             DpadMenuBox_GetPosition(
                 GridInputHandler_GetDpadBox(work->view->gridInput, work->selectedSlot),
@@ -580,7 +580,7 @@ void PCBox_State_GiveItemFromBag(PCBoxWork *work) {
             ManagedSprite_SetPositionXY(work->view->sprites[9], pos[1], pos[0]);
         }
         PCBox_SetSpriteVisible(work->view, 9, 0);
-        if (work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
+        if (work->args->mode == PC_BOX_MODE_MOVE_ITEMS) {
             if (special == 0) {
                 work->view->heldItem = work->itemId;
                 PCBox_LoadHeldItemIcon(work->view, work->view->heldItem);
@@ -611,7 +611,7 @@ void PCBox_State_GiveItemFromBag(PCBoxWork *work) {
         }
     }
     PCBox_ShowSlotMonInfo(work, work->selectedSlot);
-    if (work->args->unk8 != PC_BOX_MODE_MOVE_ITEMS) {
+    if (work->args->mode != PC_BOX_MODE_MOVE_ITEMS) {
         PCBox_ShowMovesPanel(work->view);
     } else if (work->itemId != 0) {
         PCBox_ShowItemInfoPanel(work->view->panels);
@@ -779,7 +779,7 @@ u32 PCBox_State_RemoveReleasedMon(PCBoxWork *work) {
     if (work->selectedSlot < 0x1e) {
         PCBox_DrawBoxThumbnail(work, work->activeBox);
         PCBox_RefreshTrayBoxThumbnail(work, work->activeBox);
-        if (work->args->unk8 == PC_BOX_MODE_WITHDRAW) {
+        if (work->args->mode == PC_BOX_MODE_WITHDRAW) {
             PCBox_PrintMonActionMessage(work, 0, 0, 0x27);
             work->nextState = 0x51;
         } else {
@@ -814,7 +814,7 @@ u32 PCBox_State_EndPartyReleaseShift(PCBoxWork *work) {
     GridInputHandler_SetNextInput(work->view->gridInput, (u8)(work->selectedSlot - 0x1e));
     GridInputHandler_SetButtonInputMode(work->view->gridInput, 1);
     work->selectedSlot = 0xff;
-    if (work->args->unk8 == PC_BOX_MODE_DEPOSIT) {
+    if (work->args->mode == PC_BOX_MODE_DEPOSIT) {
         PCBox_PrintMonActionMessage(work, 0, 0, 0x27);
         return 0x5b;
     }
@@ -871,7 +871,7 @@ u32 PCBox_State_OpenPartyPanel(PCBoxWork *work) {
 
 u32 PCBox_State_SetupPartyPanelInput(PCBoxWork *work) {
     PCBox_ShowSlotMonInfo(work, 0x1e);
-    if (work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
+    if (work->args->mode == PC_BOX_MODE_MOVE_ITEMS) {
         PCBox_CreateGridInput(work, 7, 0);
         return 0x8b;
     }
@@ -1007,7 +1007,7 @@ u32 PCBox_State_PartyPanelClosed(PCBoxWork *work) {
     PCBox_SlideInPartyButton(work->view->panels);
     PCBox_SlideInTrayTab(work->view->panels);
     PCBox_SlideInReturnButton(work->view->panels);
-    if (work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
+    if (work->args->mode == PC_BOX_MODE_MOVE_ITEMS) {
         PCBox_SetIconsTranslucent(work, 0x81, 1);
         PCBox_CreateGridInput(work, 6, 0x21);
         return PCBox_WaitForUpdateFunc(work, PCBox_WaitBottomButtonsSlide, 0x75);
@@ -1049,7 +1049,7 @@ u32 PCBox_State_SetupBoxTrayInput(PCBoxWork *work) {
     } else {
         PCBox_CreateGridInput(work, 4, work->moveFromSlot);
         PCBox_ShowSlotMonInfo(work, work->moveFromSlot);
-        return work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS ? 0x82 : 0x29;
+        return work->args->mode == PC_BOX_MODE_MOVE_ITEMS ? 0x82 : 0x29;
     }
 }
 
@@ -1385,7 +1385,7 @@ u32 PCBox_State_ResumeBoxTrayInput(PCBoxWork *work) {
 
 u32 PCBox_State_OpenTrayBesideParty(PCBoxWork *work) {
     PCBox_PrintPartyPanelExitLabel(work->view);
-    if (work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
+    if (work->args->mode == PC_BOX_MODE_MOVE_ITEMS) {
         PCBox_SetIconsTranslucent(work, 0x81, 1);
     } else {
         PCBox_SetIconsTranslucent(work, 1, 0);
@@ -1402,7 +1402,7 @@ u32 PCBox_State_OpenTrayBesideParty(PCBoxWork *work) {
 
 u32 PCBox_State_SetupPartyInputAfterTray(PCBoxWork *work) {
     PCBox_PrintPartyPanelSwitchLabel(work->view);
-    if (work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
+    if (work->args->mode == PC_BOX_MODE_MOVE_ITEMS) {
         PCBox_CreateGridInput(work, 7, 0);
         PCBox_ShowSlotMonInfo(work, GridInputHandler_GetNextInput(work->view->gridInput) + 0x1e);
         return 0x8b;
@@ -1456,7 +1456,7 @@ void PCBox_State_ReturnToBoxFromTray(PCBoxWork *work) {
     u32 a;
     u32 b;
     u32 next;
-    if (work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
+    if (work->args->mode == PC_BOX_MODE_MOVE_ITEMS) {
         a = 6;
         b = 0x22;
         next = 0x75;
@@ -1544,7 +1544,7 @@ u32 PCBox_State_BoxMenuInput(PCBoxWork *work) {
 
 u32 PCBox_State_HideButtonsForBoxMenu(PCBoxWork *work) {
     PCBoxView *view = work->view;
-    if (work->args->unk8 == PC_BOX_MODE_WITHDRAW) {
+    if (work->args->mode == PC_BOX_MODE_WITHDRAW) {
         if (PCBox_IsMenuExitButtonShown(view->panels) == 0) {
             PCBox_SlideOutReturnButton(work->view->panels);
         }
@@ -1604,7 +1604,7 @@ u32 PCBox_State_BoxMenuClosed(PCBoxWork *work) {
     PCBox_SetSpriteVisible(work->view, 9, 0);
     PCBox_DrawReturnButton(work, 0);
     PCBox_SlideInReturnButton(work->view->panels);
-    mode = work->args->unk8;
+    mode = work->args->mode;
     if (mode == 1) {
         PCBox_CreateGridInput(work, 2, 0x1e);
         return PCBox_WaitForUpdateFunc(work, PCBox_WaitReturnButtonSlide, 0x52);
@@ -1738,7 +1738,7 @@ u32 PCBox_State_WallpaperFadeIn(PCBoxWork *work) {
 
 u32 PCBox_State_ResumeBoxInput(PCBoxWork *work) {
     PCBox_SetSpriteVisible(work->view, 9, 1);
-    if (work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
+    if (work->args->mode == PC_BOX_MODE_MOVE_ITEMS) {
         return 0x75;
     }
     return 0xC;
@@ -3239,7 +3239,7 @@ u32 PCBox_ScrollToPrevBox(PCBoxWork *work, u32 next) {
     PCBox_SetSpriteAnim(work->view, 0, 2);
     if (PCBox_IsActionMenuOpen(work->view->panels) == 1) {
         PCBox_SlideOutActionMenu(work->view->panels);
-        if (work->args->unk8 == PC_BOX_MODE_MOVE_POKEMON || work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
+        if (work->args->mode == PC_BOX_MODE_MOVE_POKEMON || work->args->mode == PC_BOX_MODE_MOVE_ITEMS) {
             PCBox_SlideInPartyButton(work->view->panels);
             PCBox_SlideInTrayTab(work->view->panels);
         }
@@ -3254,7 +3254,7 @@ u32 PCBox_ScrollToNextBox(PCBoxWork *work, u32 next) {
     PCBox_SetSpriteAnim(work->view, 1, 4);
     if (PCBox_IsActionMenuOpen(work->view->panels) == 1) {
         PCBox_SlideOutActionMenu(work->view->panels);
-        if (work->args->unk8 == PC_BOX_MODE_MOVE_POKEMON || work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
+        if (work->args->mode == PC_BOX_MODE_MOVE_POKEMON || work->args->mode == PC_BOX_MODE_MOVE_ITEMS) {
             PCBox_SlideInPartyButton(work->view->panels);
             PCBox_SlideInTrayTab(work->view->panels);
         }
@@ -3467,7 +3467,7 @@ u32 PCBox_HandleItemCommand(PCBoxWork *work) {
 }
 
 u32 PCBox_CloseMarkingMenu(PCBoxWork *work) {
-    switch (work->args->unk8) {
+    switch (work->args->mode) {
     case 0:
         PCBox_CreateGridInput(work, 0, 9);
         break;
@@ -3493,7 +3493,7 @@ u32 PCBox_CloseMarkingMenu(PCBoxWork *work) {
     }
     PCBox_SetIconsTranslucent(work, 2, 0);
     PCBox_SlideOutMarkingMenu(work->view->panels);
-    if (work->args->unk8 == PC_BOX_MODE_MOVE_POKEMON && work->selectedSlot < 0x1e) {
+    if (work->args->mode == PC_BOX_MODE_MOVE_POKEMON && work->selectedSlot < 0x1e) {
         return PCBox_WaitForUpdateFunc(work, PCBox_UpdateMarkingMenuSlide, 0x17);
     }
     return PCBox_WaitForUpdateFunc(work, PCBox_UpdateMarkingMenuSlide, 0xe);
@@ -3607,7 +3607,7 @@ u32 PCBox_SelectTrayBox(PCBoxWork *work, s32 delta) {
     s32 nv;
     u8 x;
     u8 y;
-    st = (work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) ? 0x82 : 0x29;
+    st = (work->args->mode == PC_BOX_MODE_MOVE_ITEMS) ? 0x82 : 0x29;
     cur = work->trayBox;
     nv = delta + cur / 6 * 6;
     if (nv != cur) {
@@ -4333,7 +4333,7 @@ u32 PCBox_ConfirmExit(PCBoxWork *work) {
 u32 PCBox_CancelExit(PCBoxWork *work) {
     PCBox_CloseMessageWindow(work->view, 0x25);
     GridInputHandler_SetButtonInputMode(work->view->gridInput, 1);
-    switch (work->args->unk8) {
+    switch (work->args->mode) {
     case 0:
         PCBox_PrintMonActionMessage(work, 0, 0, 0x27);
         PCBox_SetIconsTranslucent(work, 2, 0);
@@ -4436,7 +4436,7 @@ u32 PCBox_FlashPartyPanelButton(PCBoxWork *work, u32 a1, u32 a2) {
 }
 
 void PCBox_DimForExitPrompt(PCBoxWork *work) {
-    switch (work->args->unk8) {
+    switch (work->args->mode) {
     case 0:
         PCBox_SetIconsTranslucent(work, 2, 1);
         break;
@@ -4575,7 +4575,7 @@ u32 PCBox_State_SwitchBoxForWallpaper(PCBoxWork *work) {
 int PCBox_State_ChooseWallpaperMenuExit(PCBoxWork *work) {
     PCBox_CloseMessageWindow(work->view, 39);
     PCBox_SetSpriteVisible(work->view, 9, 0);
-    if (work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
+    if (work->args->mode == PC_BOX_MODE_MOVE_ITEMS) {
         PCBox_SetIconsTranslucent(work, 129, 0);
     } else {
         PCBox_SetIconsTranslucent(work, 1, 0);

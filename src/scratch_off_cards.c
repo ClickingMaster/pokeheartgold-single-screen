@@ -288,8 +288,8 @@ BOOL ScratchOffCards_Init(OverlayManager *man, int *state) {
     work->mode = args->filler_04[0];
     work->resultOut = (u16 *)args->filler_14;
     work->options = Save_PlayerData_GetOptionsAddr(work->saveData);
-    work->prizeItems = args->unk_08;
-    work->prizeKinds = args->unk_0E;
+    work->prizeItems = args->prizeItems;
+    work->prizeKinds = args->prizeKinds;
     ScratchOffCards_ClearCells(work);
     for (i = 0; i < 3; i++) {
         work->prizeItems[i] = 0;

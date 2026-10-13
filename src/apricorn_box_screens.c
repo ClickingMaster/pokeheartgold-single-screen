@@ -2513,8 +2513,8 @@ void AprijuiceScreen_WriteResult(AprijuiceScreen *screen) {
     entry = &screen->mons[screen->selectedMon];
     screen->app->partySlot = entry->slot;
     screen->app->mode = screen->juiceUsed != 0 ? 1 : 3;
-    if (screen->app->args->unk8 != NULL) {
-        *screen->app->args->unk8 = screen->juiceUsed;
+    if (screen->app->args->juiceUsedVar != NULL) {
+        *screen->app->args->juiceUsedVar = screen->juiceUsed;
     }
 }
 

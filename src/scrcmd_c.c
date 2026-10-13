@@ -1829,8 +1829,8 @@ static FashionAppData *FashionAppData_New(enum HeapID heapID, FieldSystem *field
     fashionAppData = Heap_Alloc(heapID, sizeof(FashionAppData));
     memset(fashionAppData, 0, sizeof(FashionAppData));
     fashionAppData->saveFashionData = saveFashionData;
-    fashionAppData->unk_8 = a2;
-    fashionAppData->unk_4 = a3;
+    fashionAppData->mode = a2;
+    fashionAppData->entryIndex = a3;
     return fashionAppData;
 }
 
@@ -1847,7 +1847,7 @@ BOOL ScrCmd_152(ScriptContext *ctx) {
 BOOL ScrCmd_153(ScriptContext *ctx) {
     struct FashionAppData **p_data = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
     u16 *p_dest = ScriptGetVarPointer(ctx);
-    *p_dest = (*p_data)->unk_4;
+    *p_dest = (*p_data)->entryIndex;
     Heap_Free(*p_data);
     return FALSE;
 }
@@ -4162,7 +4162,7 @@ BOOL ScrCmd_627(ScriptContext *ctx) {
         args->unk0 = NULL;
     }
     args->options = Save_PlayerData_GetOptionsAddr(ctx->fieldSystem->saveData);
-    args->unk20 = r6;
+    args->frontierMapId = r6;
     args->saveData = ctx->fieldSystem->saveData;
     args->mapId = ctx->fieldSystem->location->mapId;
     args->bagCursor = ctx->fieldSystem->bagCursor;
@@ -4202,8 +4202,8 @@ BOOL ScrCmd_GetScratchOffPrize(ScriptContext *ctx) {
     u16 *p_ret2 = ScriptGetVarPointer(ctx);
     ScratchOffCardsArgs **scratchCardDataPtr = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
     ScratchOffCardsArgs *scratchCardData = *scratchCardDataPtr;
-    *p_ret1 = scratchCardData->unk_08[cardno];
-    *p_ret2 = scratchCardData->unk_0E[cardno];
+    *p_ret1 = scratchCardData->prizeItems[cardno];
+    *p_ret2 = scratchCardData->prizeKinds[cardno];
     return FALSE;
 }
 

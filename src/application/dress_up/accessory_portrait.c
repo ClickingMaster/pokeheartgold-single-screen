@@ -253,9 +253,9 @@ BOOL AccessoryPortrait_Init(OverlayManager *man, int *state) {
     Main_SetVBlankIntrCB(AccessoryPortrait_VBlankCB, work);
     HBlankInterruptDisable();
     args = OverlayManager_GetArgs(man);
-    work->fashionData = Save_FashionData_GetEntry(args->saveFashionData, args->unk_4);
-    work->selection = args->unk_4;
-    work->mode = args->unk_8;
+    work->fashionData = Save_FashionData_GetEntry(args->saveFashionData, args->entryIndex);
+    work->selection = args->entryIndex;
+    work->mode = args->mode;
     DressUpGfx_InitDisplay();
     gSystem.screensFlipped = FALSE;
     GfGfx_SwapDisplay();

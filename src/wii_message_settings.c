@@ -674,8 +674,8 @@ void WiiMessageSettings_FinishPasswordEntry(WiiMessageSettings *app) {
 void *ov75_02246EAC(WiiMessageSettings *app) {
     UnkStruct_ov44_0222A758_args *args = Heap_Alloc(HEAP_ID_115, sizeof(UnkStruct_ov44_0222A758_args));
     MI_CpuFill8(args, 0, sizeof(UnkStruct_ov44_0222A758_args));
-    args->unk0 = app->saveData;
-    args->unk4 = 1;
+    args->saveData = app->saveData;
+    args->choice = 1;
     app->networkLoaded = FALSE;
     app->childArgs = args;
     return app->childArgs;

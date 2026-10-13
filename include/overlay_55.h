@@ -18,7 +18,7 @@ typedef struct MailViewArgs {
     u8 mailVersion;
     u8 mailType;
     String *mailAuthorName;
-    u16 unk18[3];
+    u16 monIcons[3];
     MailMessage mailMessages[3];
 } MailViewArgs;
 

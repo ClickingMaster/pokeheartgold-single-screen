@@ -22,7 +22,7 @@ struct BillboardObject {
     u8 visible;
     u8 padding_25[3];
     Billboard *owner;
-    u32 unk_2C;
+    u32 resourceId;
     NNSG3dRenderObj renderObj;
     NNSG3dResMdlSet *modelSet;
     NNSG3dResMdl *model;
@@ -32,11 +32,11 @@ struct BillboardObject {
     NNSG3dTexKey tex4x4Key;
     NNSG3dPlttKey paletteKey;
     BillboardResourceData resourceData;
-    void *unk_B0;
+    void *textureAnimation;
     u8 type;
     u8 padding_B5;
-    u16 unk_B6;
-    u32 unk_B8;
+    u16 sequence;
+    u32 frame;
     BillboardObject *next;
     BillboardObject *prev;
 };
@@ -49,10 +49,10 @@ struct Billboard {
     BillboardObject *objects;
     int objectCount;
     BillboardObject root;
-    u32 *unk_D0;
-    u32 unk_D4;
+    u32 *freeObjects;
+    u32 usedCount;
     NNSFndAllocator *allocator;
-    void *unk_DC;
+    void *textureAnimationPool;
 };
 
 typedef struct BillboardListManager {

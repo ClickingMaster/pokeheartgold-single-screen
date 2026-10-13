@@ -190,8 +190,8 @@ struct EvolutionTaskData {
     u8 form;                                // 0x80
     u8 unk_81[3];                           // 0x81
     NARC *pokegraNarc;                      // 0x84
-    u8 unk_88;                              // 0x88, NARC_ReadPokepicCryDelay of species
-    u8 unk_89;                              // 0x89, NARC_ReadPokepicCryDelay of newSpecies
+    u8 speciesCryDelay;                     // 0x88, NARC_ReadPokepicCryDelay of species
+    u8 newSpeciesCryDelay;                  // 0x89, NARC_ReadPokepicCryDelay of newSpecies
     u8 menuState;                           // 0x8A
     u8 menuResult;                          // 0x8B, enum EvolutionMenuResult
     Window menuWindows[2];                  // 0x8C
@@ -445,8 +445,8 @@ EvolutionTaskData *EvolutionScene_New(Party *party, Pokemon *mon, int species, O
     data->heapId = heapID;
     data->summaryApp = NULL;
     data->pokegraNarc = NARC_New(NARC_a_1_8_0, heapID);
-    NARC_ReadPokepicCryDelay(data->pokegraNarc, &data->unk_88, data->species, 1);
-    NARC_ReadPokepicCryDelay(data->pokegraNarc, &data->unk_89, data->newSpecies, 1);
+    NARC_ReadPokepicCryDelay(data->pokegraNarc, &data->speciesCryDelay, data->species, 1);
+    NARC_ReadPokepicCryDelay(data->pokegraNarc, &data->newSpeciesCryDelay, data->newSpecies, 1);
 
     data->paletteData = PaletteData_Init(heapID);
     PaletteData_SetAutoTransparent(data->paletteData, TRUE);

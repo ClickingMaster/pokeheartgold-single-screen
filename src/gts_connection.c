@@ -28,7 +28,7 @@
 #include "yes_no_prompt.h"
 
 // Connecting to Nintendo Wi-Fi Connection (screen 0, the first and last screen of the GTS). Entered at the start it
-// asks whether to connect (unless GtsArgs.unk3C says to connect directly), connects, authenticates, starts the GTS
+// asks whether to connect (unless GtsArgs.connectDirectly says to connect directly), connects, authenticates, starts the GTS
 // server client, asks info.asp and sends the profile (setProfile.asp), then opens the main menu (screen 1). Entered
 // again from the GTS while connected it disconnects and leaves the app. Wi-Fi errors are shown with their error code,
 // server errors with a GTS message and a disconnection.
@@ -184,7 +184,7 @@ int GtsConnection_Init(GtsApp *app, int state) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
     if (DWC_CheckInet() == 0) {
         args = app->args;
-        if (args->unk3C != 0) {
+        if (args->connectDirectly != 0) {
             // Connect without asking.
             CommState_InitWfcSession(args->saveData);
             Gts_PrintMessage(app, app->wifiMsgData, 1, 1, 0xF0F); // Connecting to Nintendo Wi-Fi Connection...
@@ -592,9 +592,9 @@ int GtsConnection_InitServer(GtsApp *app) {
     void *userData;
     u32 profileId;
 
-    userData = FriendRoster_GetUserData(app->args->unk14);
+    userData = FriendRoster_GetUserData(app->args->friendRoster);
     if (Save_SysInfo_GetDwcProfileId(app->args->sysInfo) == 0) {
-        Save_SysInfo_SetDwcProfileId(app->args->sysInfo, (s32)app->args->unk34);
+        Save_SysInfo_SetDwcProfileId(app->args->sysInfo, (s32)app->args->gsProfileId);
     }
     profileId = Save_SysInfo_GetDwcProfileId(app->args->sysInfo);
     {

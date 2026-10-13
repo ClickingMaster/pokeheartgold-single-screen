@@ -10,7 +10,7 @@
 typedef struct UnkStruct_0203F7C2 {
     MenuInputStateMgr *menuInputStatePtr;
     SaveData *saveData;
-    int unk8;
+    int showBack;
     BOOL gameCleared;
 } UnkStruct_0203F7C2;
 

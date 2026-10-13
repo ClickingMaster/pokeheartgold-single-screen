@@ -164,7 +164,7 @@ static MailViewArgs *UseMail_CreateMailViewArgs(Mail *mail, enum HeapID heapID) 
     ret->mailVersion = Mail_GetVersion(mail);
 
     for (u16 i = 0; i < 3; i++) {
-        ret->unk18[i] = Mail_GetMonIconData(mail, (u8)i, 2, Mail_GetFormFlags(mail));
+        ret->monIcons[i] = Mail_GetMonIconData(mail, (u8)i, 2, Mail_GetFormFlags(mail));
     }
 
     for (u16 i = 0; i < 3; i++) {

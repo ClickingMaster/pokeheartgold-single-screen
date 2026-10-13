@@ -36,7 +36,7 @@ void FrontierMap_RunObjectMovements(void *frontier) {
     s32 i;
 
     for (i = 0; i < FRONTIER_MAP_OBJECT_MAX; i++, object++) {
-        if (object->object != NULL && object->unk_38 == NULL) {
+        if (object->object != NULL && object->movementTask == NULL) {
             FrontierMap_RunObjectMovement(frontier, object);
         }
     }

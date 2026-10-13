@@ -14,7 +14,7 @@ typedef struct FrontierLaunchArgs {
     u32 unk14;
     u32 mapId;
     void *unk1C;
-    u8 unk20;
+    u8 frontierMapId;
     FieldSystem *fieldSystem;
 } FrontierLaunchArgs;
 

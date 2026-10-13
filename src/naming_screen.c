@@ -104,7 +104,7 @@ typedef struct NamingScreenAppData {
     String *promptString;
     String *unkJapaneseString;
     String *battleMsgString;
-    String *unk_184; // set to a message that was not localized
+    String *groupLabel; // set to a message that was not localized
     SpriteList *spriteList;
     G2dRenderer g2dRender;
     GF_2DGfxResMan *gfxResMen[4];
@@ -133,7 +133,7 @@ typedef struct NamingScreenAppData {
     void *plttDataRaw;
     NNSG2dPaletteData *plttData;
     u8 charBuf[0x100];
-    PaletteBlink *unk_5C4;
+    PaletteBlink *paletteBlink;
     BOOL isTouchInput;
     int delayCounter;
     MenuInputStateMgr *pMenuInputState;
@@ -520,7 +520,7 @@ BOOL NamingScreenApp_Init(OverlayManager *ovyMan, int *pState) {
             NamingScreen_LoadMonIcon(data->monIconCharData, data->plttData, data->playerGenderOrMonSpecies, data->monForm);
         }
         sAppData = data;
-        data->unk_5C4 = PaletteBlink_New(NULL, PM_LCD_BOTTOM, 12, HEAP_ID_NAMING_SCREEN);
+        data->paletteBlink = PaletteBlink_New(NULL, PM_LCD_BOTTOM, 12, HEAP_ID_NAMING_SCREEN);
         *pState = NS_MAIN_STATE_WAIT_FADE_IN;
         return TRUE;
     }
@@ -711,7 +711,7 @@ BOOL NamingScreenApp_Exit(OverlayManager *ovyMan, int *pState) {
         CopyU16StringArray(args->nameInputFlat, data->entryBuf);
         CopyU16ArrayToString(args->nameInputString, data->entryBuf);
     }
-    String_Delete(data->unk_184);
+    String_Delete(data->groupLabel);
     for (int i = 0; i < 7; ++i) {
         DestroySysTaskAndEnvironment(data->tasks[i]);
     }
@@ -951,7 +951,7 @@ static void NamingScreen_InitKeyboardAndEntryCursors(NamingScreenAppData *data, 
     }
     data->promptString = ReadMsgData_ExpandPlaceholders(data->msgFormat, data->msgData_249, _021020B4[data->type], HEAP_ID_NAMING_SCREEN);
     data->unkJapaneseString = ReadMsgData_ExpandPlaceholders(data->msgFormat, data->msgData_249, msg_0249_00009, HEAP_ID_NAMING_SCREEN);
-    data->unk_184 = NewString_ReadMsgData(data->msgData_249, msg_0249_00007);
+    data->groupLabel = NewString_ReadMsgData(data->msgData_249, msg_0249_00007);
     data->textCursorPos = StringLength(data->entryBufBak);
     data->kbCursor.x = 0;
     data->kbCursor.y = 1;
@@ -1337,7 +1337,7 @@ static void NamingScreen_InitWindows(NamingScreenAppData *data, OverlayManager *
     FillWindowPixelBuffer(&data->windows[8], 1);
 
     if (data->type == NAME_SCREEN_GROUP) {
-        NamingScreen_PrintMessageOnWindowWithMargin(&data->windows[8], data->type, data->unk_184);
+        NamingScreen_PrintMessageOnWindowWithMargin(&data->windows[8], data->type, data->groupLabel);
         CopyWindowToVram(&data->windows[8]);
     }
 
@@ -1709,7 +1709,7 @@ static NamingScreenMainState NamingScreen_HandleCharacterInput(NamingScreenAppDa
         }
         break;
     case NAME_SCREEN_BUTTON_OK:
-        PaletteBlink_Delete(data->unk_5C4);
+        PaletteBlink_Delete(data->paletteBlink);
         if (!data->printedFromBattleGMM) {
             PlaySE(SEQ_SE_DP_PIRORIRO);
             ++data->spriteAnimUpdateReq[6];

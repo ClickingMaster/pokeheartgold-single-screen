@@ -59,10 +59,10 @@ typedef struct OptionsApp_Data {
     u32 exitState;
     u32 setupAndFreeState;
     u32 fadeUnused; // unused, game writes 0 here when it's about to start a fade, but never reads from here
-    u32 unk10_0 : 2;
+    u32 exitChoice : 2;
     u32 currentMenuEntryId : 3;
     u32 unk10_5 : 16; // unused
-    u32 unk10_21 : 1;
+    u32 reloadFrameGfx : 1;
     u32 unk10_22 : 10; // unused
     BgConfig *bgConfig;
     OptionsApp_Options options;
@@ -359,7 +359,7 @@ BOOL OptionsMenu_Init(OverlayManager *manager, int *state) {
 BOOL OptionsMenu_Exit(OverlayManager *manager, int *state) {
     OptionsApp_Data *data = OverlayManager_GetData(manager);
 
-    if (data->unk10_0 == 1) {
+    if (data->exitChoice == 1) {
         data->options.textSpeed = data->menuEntries[MENU_ENTRY_TEXT_SPEED].value;
         data->options.battleScene = data->menuEntries[MENU_ENTRY_BATTLE_SCENE].value;
         data->options.battleStyle = data->menuEntries[MENU_ENTRY_BATTLE_STYLE].value;
@@ -373,7 +373,7 @@ BOOL OptionsMenu_Exit(OverlayManager *manager, int *state) {
         Options_SetSoundMethod(data->playerOptions, data->options.soundMethod);
         Options_SetButtonMode(data->playerOptions, data->options.buttonMode);
         Options_SetFrame(data->playerOptions, data->options.frame);
-    } else if (data->unk10_0 == 2) {
+    } else if (data->exitChoice == 2) {
         GF_SndSetMonoFlag(data->options.soundMethod);
         Options_SetButtonModeOnMain(NULL, data->options.buttonMode);
         Options_SetTextSpeed(data->playerOptions, data->options.textSpeed);
@@ -410,7 +410,7 @@ BOOL OptionsMenu_Main(OverlayManager *manager, int *state) {
         }
         break;
     case 2:
-        if (data->unk10_0 != 0) {
+        if (data->exitChoice != 0) {
             SpriteSystem_DrawSprites(data->spriteGfxHandler);
             break;
         }
@@ -456,9 +456,9 @@ static void OptionsApp_SetupGraphicsBanks(void) {
 }
 
 static void OptionsApp_OnVBlank(OptionsApp_Data *data) {
-    if (data->unk10_21) {
+    if (data->reloadFrameGfx) {
         LoadUserFrameGfx2(data->bgConfig, GF_BG_LYR_SUB_1, 0x6D, 15, data->menuEntries[MENU_ENTRY_FRAME].value, data->heapID);
-        data->unk10_21 = FALSE;
+        data->reloadFrameGfx = FALSE;
     }
 
     SpriteSystem_TransferOam();
@@ -790,7 +790,7 @@ static void OptionsApp_UpdateMenuEntry(OptionsApp_Data *data, u16 menuEntryId) {
         AddTextPrinterParameterizedWithColor(&data->windows.selectedOption, 0, data->menuEntries[menuEntryId].strings[data->menuEntries[menuEntryId].value], x, menuEntryId * 24 + 5, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
         CopyWindowToVram(&data->windows.selectedOption);
         OptionsApp_PrintTextFrameString(data, data->frameNumText, TRUE);
-        data->unk10_21 = TRUE;
+        data->reloadFrameGfx = TRUE;
         return;
     case MENU_ENTRY_SOUND_METHOD:
         GF_SndSetMonoFlag(data->menuEntries[menuEntryId].value);
@@ -881,12 +881,12 @@ static void OptionsApp_HandleKeyInput(OptionsApp_Data *data, OptionsApp_MenuEntr
             MenuInputStateMgr_SetState(data->menuInputPtr, MENU_INPUT_STATE_BUTTONS);
             PlaySE(SEQ_SE_DP_SAVE);
             Sprite_SetAnimCtrlSeq(data->sprites[8], 3);
-            data->unk10_0 = 1;
+            data->exitChoice = 1;
         } else {
             MenuInputStateMgr_SetState(data->menuInputPtr, MENU_INPUT_STATE_BUTTONS);
             PlaySE(SEQ_SE_GS_GEARCANCEL);
             Sprite_SetAnimCtrlSeq(data->sprites[7], 3);
-            data->unk10_0 = 2;
+            data->exitChoice = 2;
         }
     } else if (gSystem.newKeys & PAD_BUTTON_B) {
         MenuInputStateMgr_SetState(data->menuInputPtr, MENU_INPUT_STATE_BUTTONS);
@@ -896,7 +896,7 @@ static void OptionsApp_HandleKeyInput(OptionsApp_Data *data, OptionsApp_MenuEntr
         } else {
             Sprite_SetAnimCtrlSeq(data->sprites[7], 2);
         }
-        data->unk10_0 = 2;
+        data->exitChoice = 2;
     }
 }
 
@@ -911,7 +911,7 @@ static void OptionsApp_HandleInput(OptionsApp_Data *data) {
             data->currentMenuEntryId = ov54_021E6DA8[hitboxIndex][0];
             OptionsApp_SetActiveButtonsXPosition(data);
             ov54_021E6A64(data);
-            data->unk10_0 = 1;
+            data->exitChoice = 1;
             PlaySE(SEQ_SE_DP_SAVE);
             data->menuInputState = 1;
             MenuInputStateMgr_SetState(data->menuInputPtr, MENU_INPUT_STATE_TOUCH);
@@ -924,7 +924,7 @@ static void OptionsApp_HandleInput(OptionsApp_Data *data) {
             data->currentMenuEntryId = ov54_021E6DA8[hitboxIndex][0];
             OptionsApp_SetActiveButtonsXPosition(data);
             ov54_021E6A64(data);
-            data->unk10_0 = 2;
+            data->exitChoice = 2;
             PlaySE(SEQ_SE_GS_GEARCANCEL);
             data->menuInputState = 1;
             MenuInputStateMgr_SetState(data->menuInputPtr, MENU_INPUT_STATE_TOUCH);

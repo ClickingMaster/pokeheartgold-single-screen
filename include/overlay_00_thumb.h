@@ -22,6 +22,6 @@ BOOL WifiConnection_IsVoiceChatEnabled(void);
 void WifiConnection_SetConnectFilterCallback(BOOL (*arg0)(s32));
 void WifiConnection_ClearFriendDataChanged(void);
 BOOL WifiConnection_IsFriendDataChanged(void);
-void WifiConnection_SetFriendStatusBuffer(UnkStruct_ov44_02231958 *arg0, s32 arg1);
+void WifiConnection_SetFriendStatusBuffer(WifiClubPlayerStatus *arg0, s32 arg1);
 
 #endif // POKEHEARTGOLD_OVERLAY_00_THUMB_H

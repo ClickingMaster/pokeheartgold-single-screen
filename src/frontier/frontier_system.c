@@ -26,8 +26,8 @@ FrontierSystem *FrontierSystem_Create(void *frontierWork, enum HeapID heapId, u3
     system->mapId = mapId;
     FrontierSystem_LoadMapScripts(&system->scripts, &system->msgData, mapId, heapId);
     system->msgFormat = MessageFormat_New_Custom(8, 64, heapId);
-    system->unk_48 = String_New(1024, heapId);
-    system->unk_4C = String_New(1024, heapId);
+    system->msgBuffer = String_New(1024, heapId);
+    system->msgTemplate = String_New(1024, heapId);
     FrontierSystem_deadstripped_0222AA3C(system, mapId, 0, 0);
     return system;
 }
@@ -57,8 +57,8 @@ void FrontierSystem_Delete(FrontierSystem *system) {
         GF_AssertFail();
     }
     MessageFormat_Delete(system->msgFormat);
-    String_Delete(system->unk_48);
-    String_Delete(system->unk_4C);
+    String_Delete(system->msgBuffer);
+    String_Delete(system->msgTemplate);
     Heap_Free(system->scripts);
     DestroyMsgData(system->msgData);
     Heap_Free(system);

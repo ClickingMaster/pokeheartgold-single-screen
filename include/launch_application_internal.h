@@ -42,30 +42,30 @@ typedef struct UnkStruct_0203E6D4 {
 } UnkStruct_0203E6D4;
 
 typedef struct EasyChatTaskData {
-    UnkStruct_0203E8C8 *unk0;
-    u16 *unk4;
-    u16 *unk8;
+    UnkStruct_0203E8C8 *result;
+    u16 *retVar0;
+    u16 *retVar1;
     EasyChatArgs *easyChat;
-    int unk10;
+    int mode;
 } EasyChatTaskData;
 
 typedef struct DressUpArgs {
     Pokemon *mon;
-    SaveFashionDataSub *unk4;
+    SaveFashionDataSub *fashionEntry;
     FashionCase *fashionCase;
     Options *options;
     GameStats *gameStats;
     PlayerProfile *profile;
-    int *unk18;
-    int unk1C;
+    int *savedResult;
+    int showTutorial;
     MenuInputStateMgr *menuInputStatePtr;
 } DressUpArgs;
 
 typedef struct DressUpTaskData {
     int state;
-    u16 *unk4;
-    int unk8;
-    DressUpArgs *unkC;
+    u16 *retVar;
+    int saved;
+    DressUpArgs *args;
 } DressUpTaskData;
 
 typedef struct WirelessTradeSelectMonArgs {
@@ -78,13 +78,13 @@ typedef struct WirelessTradeSelectMonArgs {
     Options *options;
     GameStats *gameStats;
     Pokedex *pokedex;
-    int unk24;
-    int unk28;
+    int tradeAccepted;
+    int tradedSlot;
     BOOL natDexEnabled;
-    int unk30;
+    int tradeCount;
     PlayerProfile *partnerProfile;
-    Pokemon *unk38;
-    Pokemon *unk3C;
+    Pokemon *sentMon;
+    Pokemon *receivedMon;
 } WirelessTradeSelectMonArgs;
 
 typedef enum TradeSequenceBackground {
@@ -95,8 +95,8 @@ typedef enum TradeSequenceBackground {
 } TradeSequenceBackground;
 
 typedef struct TradeSequenceArgs {
-    BoxPokemon *unk0;
-    BoxPokemon *unk4;
+    BoxPokemon *sentMon;
+    BoxPokemon *receivedMon;
     PlayerProfile *partnerProfile;
     TradeSequenceBackground bgType;
     int unk10;
@@ -121,16 +121,16 @@ typedef struct NamingScreenData {
     int partyIdx;
     u16 *retVar;
     NamingScreenArgs *args;
-    String *unk10;
+    String *defaultName;
 } NamingScreenData;
 
 typedef struct GtsArgs {
-    int unk0;
+    int gtsSave;
     SysInfo *sysInfo;
     Party *party;
     PCStorage *pcStorage;
     Pokedex *pokedex;
-    FriendRoster *unk14;
+    FriendRoster *friendRoster;
     SaveWiFiHistory *wifiHistory;
     PlayerProfile *profile;
     SaveData *saveData;
@@ -138,9 +138,9 @@ typedef struct GtsArgs {
     GameStats *gameStats;
     Bag *bag;
     BOOL natDexEnabled;
-    void *unk34;
+    void *gsProfileId;
     u32 unk38;
-    int unk3C;
+    int connectDirectly;
 } GtsArgs;
 
 typedef struct UnkStruct_0203E644 {
@@ -150,7 +150,7 @@ typedef struct UnkStruct_0203E644 {
 
 typedef struct PartyMenuMoveSelectData {
     enum HeapID heapID;
-    UnkStruct_0203E644 *unk4;
+    UnkStruct_0203E644 *partyMenu;
     PokemonSummaryArgs *pokemonSummary;
 } PartyMenuMoveSelectData;
 

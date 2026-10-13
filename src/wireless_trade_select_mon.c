@@ -661,7 +661,7 @@ BOOL WirelessTradeSelectMon_ExchangeData(WirelessTradeSelectMon *work) {
         break;
     case 1:
         if (LinkSync_IsSynced(0x50)) {
-            if (work->args->unk30 == 0) {
+            if (work->args->tradeCount == 0) {
                 work->exchangeState = 6;
             } else {
                 work->exchangeState = 2;
@@ -963,7 +963,7 @@ BOOL WirelessTradeSelectMon_Exit(OverlayManager *man, int *state) {
     WirelessTradeSelectMon *work = OverlayManager_GetData(man);
     WirelessTradeSelectMonArgs *args = OverlayManager_GetArgs(man);
 
-    args->unk24 = work->tradeAccepted;
+    args->tradeAccepted = work->tradeAccepted;
     WirelessTradeSelectMon_FreeIconCharData(work);
     String_Delete(work->itemLabel);
     Heap_Free(work->partnerParty);
@@ -2323,10 +2323,10 @@ void WirelessTradeSelectMon_TradeMons(Party *party, Party *partnerParty, u32 slo
     }
     MonSetTrainerMemo(received, CommPlayerInfo_GetProfile(Comm_GetLocalNetId()), 5, 0, HEAP_ID_FIELD2);
     Pokemon_RemoveCapsule(received);
-    CopyPokemonToPokemon(sent, args->unk38);
-    CopyPokemonToPokemon(received, args->unk3C);
+    CopyPokemonToPokemon(sent, args->sentMon);
+    CopyPokemonToPokemon(received, args->receivedMon);
     PlayerProfile_Copy(CommPlayerInfo_GetProfile(Comm_GetLocalNetId() ^ 1), args->partnerProfile);
-    args->unk28 = slot;
+    args->tradedSlot = slot;
     if (Party_HasMon(party, SPECIES_CHATOT) == FALSE) {
         Chatot_Invalidate(Save_Chatot_Get(args->saveData));
     }

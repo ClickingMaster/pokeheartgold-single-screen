@@ -71,13 +71,13 @@ void NitroMain(void) {
     } else {
         switch (OS_GetResetParameter()) {
         case 0:
-            gMainOverlayState.args.unk_04 = 0;
+            gMainOverlayState.args.resetParameter = 0;
             RegisterMainOverlay(FS_OVERLAY_ID(intro_title), &gApplication_IntroMovie);
             break;
         case 1:
             SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
             SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
-            gMainOverlayState.args.unk_04 = 1;
+            gMainOverlayState.args.resetParameter = 1;
             RegisterMainOverlay(FS_OVERLAY_ID(OVY_36), &ov36_App_MainMenu_SelectOption_Continue);
             break;
         default:

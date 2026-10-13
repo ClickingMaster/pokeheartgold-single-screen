@@ -72,7 +72,7 @@ typedef struct ListMenu {
     /*0x30*/ u8 unk_30;
     /*0x31*/ u8 unk_31;
     /*0x32*/ u8 taskId;
-    /*0x33*/ u8 unk_33;
+    /*0x33*/ u8 lastMoveDirection;
     /*0x34*/ u8 heapID;
 } ListMenu;
 

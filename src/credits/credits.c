@@ -78,8 +78,8 @@ typedef struct {
     NNSG2dCellDataBank *cellDataBank;
     NNSG2dAnimBankData *animDataBank;
     u8 unused24[0x8];
-    void *unk2C;
-    void *unk30;
+    void *cellBankFile;
+    void *animBankFile;
 } CutsceneSpriteGfx;
 
 typedef struct {
@@ -130,7 +130,7 @@ typedef struct {
 } PageWork;
 
 typedef struct {
-    u16 unk0;
+    u16 active;
     u16 unk2;
     int activateTime;
     Sprite *sprite;
@@ -985,8 +985,8 @@ static void LoadCutsceneSpriteGfx(CutsceneWork *a0, int spriteId) {
     curSprite = a0->curSprite;
     GX_LoadOBJPltt(ppPlttData->pRawData, a0->spriteGfx[curSprite].plttOffset, 0x20);
 
-    a0->spriteGfx[a0->curSprite].unk2C = GfGfxLoader_GetCellBankFromOpenNarc(a0->narc, sCutsceneSpriteGfxFileIds[spriteId].cellBankFileId, TRUE, &a0->spriteGfx[a0->curSprite].cellDataBank, HEAP_ID_CREDITS);
-    a0->spriteGfx[a0->curSprite].unk30 = GfGfxLoader_GetAnimBankFromOpenNarc(a0->narc, sCutsceneSpriteGfxFileIds[spriteId].animBankFileId, TRUE, &a0->spriteGfx[a0->curSprite].animDataBank, HEAP_ID_CREDITS);
+    a0->spriteGfx[a0->curSprite].cellBankFile = GfGfxLoader_GetCellBankFromOpenNarc(a0->narc, sCutsceneSpriteGfxFileIds[spriteId].cellBankFileId, TRUE, &a0->spriteGfx[a0->curSprite].cellDataBank, HEAP_ID_CREDITS);
+    a0->spriteGfx[a0->curSprite].animBankFile = GfGfxLoader_GetAnimBankFromOpenNarc(a0->narc, sCutsceneSpriteGfxFileIds[spriteId].animBankFileId, TRUE, &a0->spriteGfx[a0->curSprite].animDataBank, HEAP_ID_CREDITS);
     Heap_Free(charData);
     Heap_Free(plttData);
     a0->curSprite++;
@@ -1000,7 +1000,7 @@ static void CreateCutsceneSprite(CreditsAppWork *work, const CutsceneSpriteParam
     CutsceneSprites *sprites = &work->cutsceneWork.sprites;
     int idx = sprites->count;
     CutsceneSprite *cutsceneSprite = &sprites->sprite[idx];
-    cutsceneSprite->unk0 = 1;
+    cutsceneSprite->active = 1;
     cutsceneSprite->unk2 = spriteParam->unk0;
 
     // Render on non-primary display screen
@@ -1052,17 +1052,17 @@ static void FreeCutsceneSprites(CreditsAppWork *work) {
     CutsceneSprites *sprites = &cutsceneWork->sprites;
 
     for (i = 0; i < 16; i++) {
-        if (sprites->sprite[i].unk0 != 0) {
+        if (sprites->sprite[i].active != 0) {
             Sprite_Delete(sprites->sprite[i].sprite);
-            sprites->sprite[i].unk0 = 0;
+            sprites->sprite[i].active = 0;
             sprites->sprite[i].unk2 = 0;
         }
     }
 
     sprites->count = 0;
     for (i = 0; i < cutsceneWork->curSprite; i++) {
-        Heap_Free(cutsceneWork->spriteGfx[i].unk2C);
-        Heap_Free(cutsceneWork->spriteGfx[i].unk30);
+        Heap_Free(cutsceneWork->spriteGfx[i].cellBankFile);
+        Heap_Free(cutsceneWork->spriteGfx[i].animBankFile);
         cutsceneWork->spriteGfx[i].cellDataBank = NULL;
         cutsceneWork->spriteGfx[i].animDataBank = NULL;
     }

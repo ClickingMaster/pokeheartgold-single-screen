@@ -187,7 +187,7 @@
 	.rodata
 
 ov75_022498E4:
-	.word ov44_0222A4B4, ov44_0222A60C, ov44_0222A758, FS_OVERLAY_ID(OVY_44)
+	.word WifiClub_Init, WifiClub_Main, WifiClub_Exit, FS_OVERLAY_ID(OVY_44)
 sWiiMessageSettingsScreenTemplate:
 	.word WiiMessageSettingsScreen_Init, WiiMessageSettingsScreen_Main, WiiMessageSettingsScreen_Exit, 0xFFFFFFFF
 

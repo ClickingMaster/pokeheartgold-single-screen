@@ -6,9 +6,9 @@
 #include "save.h"
 
 typedef struct ApricornBoxArgs {
-    u8 unk0;
+    u8 mode;
     u8 unk1[0x7];
-    u16 *unk8;
+    u16 *juiceUsedVar;
     u32 unkC;
     u32 steps;
     MenuInputStateMgr *menuInputStatePtr;

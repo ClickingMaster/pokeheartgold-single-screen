@@ -18,7 +18,7 @@
 #include "network_overlay_loader.h"
 
 typedef struct CommStateWork {
-    UnkStruct_ov44_0223197C *wifiClubData;
+    WifiClubStatusData *wifiClubData;
     u8 selectedOrder[8];
     MATHRandContext32 mathRandContext;
     void (*stateFunc)(void);
@@ -1305,7 +1305,7 @@ void CommState_WifiClubStart(void) {
     }
 }
 
-UnkStruct_ov44_0223197C *CommState_StartWifiClub(SaveData *saveData, u32 arg1) {
+WifiClubStatusData *CommState_StartWifiClub(SaveData *saveData, u32 arg1) {
     Save_PlayerData_GetProfile(saveData);
     if (Comm_IsActive()) {
         return NULL;
@@ -1391,7 +1391,7 @@ s32 CommState_GetPlazaMatchStatus(void) {
     return 0;
 }
 
-UnkStruct_ov44_0223197C *CommState_GetWifiClubData(void) {
+WifiClubStatusData *CommState_GetWifiClubData(void) {
     return gCommState->wifiClubData;
 }
 

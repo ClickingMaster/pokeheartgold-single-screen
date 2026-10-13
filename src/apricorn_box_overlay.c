@@ -67,7 +67,7 @@ BOOL ApricornBox_Main(OverlayManager *man, int *state) {
 
     switch (*state) {
     case 0:
-        if (app->args->unk0 == 3) {
+        if (app->args->mode == 3) {
             *state = 3;
         } else {
             *state = 1;
@@ -164,10 +164,10 @@ void ApricornBox_FeedAprijuice(UnkStruct_02031CEC *record, Party *party, int slo
 }
 
 void ApricornBox_InitFromArgs(ApricornBoxApp *app) {
-    if (app->args->unk8 != NULL) {
-        *app->args->unk8 = 0;
+    if (app->args->juiceUsedVar != NULL) {
+        *app->args->juiceUsedVar = 0;
     }
-    switch (app->args->unk0) {
+    switch (app->args->mode) {
     case 0:
         app->mode = 0;
         break;
@@ -235,7 +235,7 @@ int ApricornBox_State_RunPartyMenu(ApricornBoxApp *app) {
     Heap_Free(app->partyMenuArgs);
     app->partyMenuArgs = NULL;
     if (slot == 7) {
-        if (app->args->unk0 == 3) {
+        if (app->args->mode == 3) {
             return 7;
         }
         return 1;
@@ -255,7 +255,7 @@ int ApricornBox_State_RunAprijuiceScreen(ApricornBoxApp *app) {
     if (app->mode == 3) {
         return 3;
     }
-    if (app->args->unk0 == 3) {
+    if (app->args->mode == 3) {
         return 7;
     }
     return 1;

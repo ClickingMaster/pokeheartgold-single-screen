@@ -56,7 +56,7 @@ typedef struct OakSpeechData {
     int printAndFadeFullScreenTextState;
     u32 textPrinter;
     String *string;
-    PaletteBlink *unk_114;
+    PaletteBlink *paletteBlink;
     MessageFormat *msgFormat;
     u8 filler_11C[0x4];
     NamingScreenArgs *namingScreenArgs_Player;

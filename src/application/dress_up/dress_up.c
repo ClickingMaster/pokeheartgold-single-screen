@@ -159,7 +159,7 @@ BOOL DressUp_Main(OverlayManager *man, int *state) {
         break;
     case 3:
         // tutorial
-        if (args->unk1C == 1) {
+        if (args->showTutorial == 1) {
             TextFlags_SetCanTouchSpeedUpPrint(TRUE);
             work->printerId = DressUpHud_PrintMsg(&work->hud, NARC_msgdata_msg, NARC_msg_msg_0215_bin, msg_0215_00047);
             (*state)++;
@@ -255,13 +255,13 @@ BOOL DressUp_Exit(OverlayManager *man, int *state) {
 
     if (work->saveRequested == TRUE) {
         GameStats_AddScore(args->gameStats, SCORE_EVENT_POKEMON_DRESSED);
-        DressUp_SaveDesign(args->unk4, &work->canvas, args->profile);
+        DressUp_SaveDesign(args->fashionEntry, &work->canvas, args->profile);
     }
-    if (args->unk18 != NULL) {
+    if (args->savedResult != NULL) {
         if (work->saveRequested == TRUE) {
-            *args->unk18 = TRUE;
+            *args->savedResult = TRUE;
         } else {
-            *args->unk18 = FALSE;
+            *args->savedResult = FALSE;
         }
     }
     if (args->menuInputStatePtr != NULL) {

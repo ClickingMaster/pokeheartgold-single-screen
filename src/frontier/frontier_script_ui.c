@@ -84,8 +84,8 @@ void FrontierSystem_ShowMessageWindow(FrontierSystem *system) {
 }
 
 void FrontierSystem_FormatMessage(FrontierSystem *system, MsgData *msgData, u16 msgId) {
-    ReadMsgDataIntoString(msgData, msgId, system->unk_4C);
-    StringExpandPlaceholders(system->msgFormat, system->unk_48, system->unk_4C);
+    ReadMsgDataIntoString(msgData, msgId, system->msgTemplate);
+    StringExpandPlaceholders(system->msgFormat, system->msgBuffer, system->msgTemplate);
 }
 
 void FrontierSystem_StartTextPrinter(FrontierSystem *system, u8 font, u32 speed, BOOL canABSpeedUp, BOOL autoScroll) {
@@ -96,7 +96,7 @@ void FrontierSystem_StartTextPrinter(FrontierSystem *system, u8 font, u32 speed,
     } else {
         TextFlags_SetCanTouchSpeedUpPrint(TRUE);
     }
-    system->textPrinterId = AddTextPrinterParameterized(&system->messageWindow, font, system->unk_48, 0, 0, speed, NULL);
+    system->textPrinterId = AddTextPrinterParameterized(&system->messageWindow, font, system->msgBuffer, 0, 0, speed, NULL);
 }
 
 void FrontierSystem_CloseMessageWindow(FrontierSystem *system) {
@@ -111,7 +111,7 @@ void FrontierSystem_CloseMessageWindow(FrontierSystem *system) {
 #pragma force_active on
 void FrontierSystem_PrintMailMessage(FrontierSystem *system, int speed, u16 bank, u16 number, u16 field0, u16 field1, u8 canABSpeedUp) {
     FrontierSystem_ShowMessageWindow(system);
-    FrontierScript_GetMailMessageString(system->unk_48, bank, number, field0, field1);
+    FrontierScript_GetMailMessageString(system->msgBuffer, bank, number, field0, field1);
     if (canABSpeedUp != 0xFF) {
         FrontierSystem_StartTextPrinter(system, 1, speed, canABSpeedUp, FALSE);
     } else {
@@ -608,7 +608,7 @@ void FrontierScript_MovementTask(SysTask *task, FrontierMovementTask *data) {
     case 2:
         if (Field2DObject_GetParam(data->object->object, 5) == 0) {
             (*data->runningCount)--;
-            data->object->unk_38 = NULL;
+            data->object->movementTask = NULL;
             Heap_Free(data);
             SysTask_Destroy(task);
         }
@@ -689,15 +689,15 @@ void FrontierMap_CreateMonSprite(FrontierMap *map, Pokemon *mon, enum HeapID hea
         PaletteData_BlendPalette(paletteData, PLTTBUF_MAIN_OBJ, (u16)offset, 16, (u8)blend, blendColor);
     }
     Heap_Free(buffer);
-    GF_ASSERT(map->unk80[id - FRONTIER_MON_SPRITE_ID_BASE] == NULL);
-    map->unk80[id - FRONTIER_MON_SPRITE_ID_BASE] = sprite;
+    GF_ASSERT(map->monSprites[id - FRONTIER_MON_SPRITE_ID_BASE] == NULL);
+    map->monSprites[id - FRONTIER_MON_SPRITE_ID_BASE] = sprite;
 }
 #pragma force_active reset
 
 void FrontierMap_DeleteMonSprite(FrontierMap *map, u32 id) {
     u32 index = id - FRONTIER_MON_SPRITE_ID_BASE;
-    Sprite_DeleteAndFreeResources(map->unk80[index]);
-    map->unk80[index] = NULL;
+    Sprite_DeleteAndFreeResources(map->monSprites[index]);
+    map->monSprites[index] = NULL;
     SpriteManager_UnloadCharObjById(map->spriteManager, id);
     SpriteManager_UnloadPlttObjById(map->spriteManager, id);
     SpriteManager_UnloadCellObjById(map->spriteManager, id);

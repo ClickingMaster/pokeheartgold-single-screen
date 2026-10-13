@@ -294,12 +294,12 @@ static BOOL Task_OpenPartyMenuForUnionRoomBattleSelect(TaskManager *taskman) {
     int *state = TaskManager_GetStatePtr(taskman);
     switch (*state) {
     case PMMS_OPEN_PARTY_MENU:
-        FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_PartyMenu, data->unk4);
+        FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_PartyMenu, data->partyMenu);
         *state = PMMS_WAIT_PARTY_MENU;
         break;
     case PMMS_WAIT_PARTY_MENU:
         if (!FieldSystem_ApplicationIsRunning(fieldSystem)) {
-            switch (data->unk4->partySlot) {
+            switch (data->partyMenu->partySlot) {
             case 7:
                 UnionRoom_SendBattleChoice(2);
                 *state = PMMS_FREE;
@@ -315,13 +315,13 @@ static BOOL Task_OpenPartyMenuForUnionRoomBattleSelect(TaskManager *taskman) {
         break;
     case PMMS_OPEN_SUMMARY:
         data->pokemonSummary = PokemonSummary_CreateArgs(fieldSystem, data->heapID, 0);
-        data->pokemonSummary->partySlot = data->unk4->partySlot;
+        data->pokemonSummary->partySlot = data->partyMenu->partySlot;
         PokemonSummary_LearnForget_LaunchApp(fieldSystem, data->pokemonSummary);
         *state = PMMS_WAIT_SUMMARY;
         break;
     case PMMS_WAIT_SUMMARY:
         if (!FieldSystem_ApplicationIsRunning(fieldSystem)) {
-            data->unk4->partySlot = data->pokemonSummary->partySlot;
+            data->partyMenu->partySlot = data->pokemonSummary->partySlot;
             Heap_Free(data->pokemonSummary);
             *state = PMMS_OPEN_PARTY_MENU;
         }
@@ -427,25 +427,25 @@ static BOOL Task_EasyChat(TaskManager *taskman) {
         break;
     case EASY_CHAT_TASK_STATE_FINISH:
         if (EasyChatArgs_IsCancelled(data->easyChat) || !EasyChatArgs_IsChanged(data->easyChat)) {
-            data->unk0->unk0 = 0;
+            data->result->changed = 0;
         } else {
-            data->unk0->unk0 = 1;
-            switch (data->unk10) {
+            data->result->changed = 1;
+            switch (data->mode) {
             default:
-                *data->unk4 = EasyChatArgs_GetWord(data->easyChat);
+                *data->retVar0 = EasyChatArgs_GetWord(data->easyChat);
                 break;
             case 1:
                 EasyChatArgs_GetWords(data->easyChat, &msgBankMsgNo);
-                *data->unk4 = msgBankMsgNo.msgBank;
-                *data->unk8 = msgBankMsgNo.msgNo;
+                *data->retVar0 = msgBankMsgNo.msgBank;
+                *data->retVar1 = msgBankMsgNo.msgNo;
                 break;
             case 2:
             case 3:
             case 4:
             case 5:
                 EasyChatArgs_GetMailMessage(data->easyChat, &mailMessage);
-                Save_Frontier_SetTowerMessage(fieldSystem->saveData, data->unk10 - 2, &mailMessage);
-                *data->unk4 = MailMsg_GetFieldI(&mailMessage, 0);
+                Save_Frontier_SetTowerMessage(fieldSystem->saveData, data->mode - 2, &mailMessage);
+                *data->retVar0 = MailMsg_GetFieldI(&mailMessage, 0);
                 break;
             }
         }
@@ -461,10 +461,10 @@ void CallTask_EasyChat(TaskManager *taskman, int a1, UnkStruct_0203E8C8 *a2, u16
 
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskman);
     EasyChatTaskData *data = Heap_Alloc(HEAP_ID_FIELD3, sizeof(EasyChatTaskData));
-    data->unk0 = a2;
-    data->unk4 = a3;
-    data->unk8 = a4;
-    data->unk10 = a1;
+    data->result = a2;
+    data->retVar0 = a3;
+    data->retVar1 = a4;
+    data->mode = a1;
     switch (a1) {
     default:
         args = EasyChat_CreateArgs(0, 0, fieldSystem->saveData, &fieldSystem->menuInputState, HEAP_ID_FIELD3);
@@ -629,9 +629,9 @@ ApricornBoxArgs *ApricornBox_LaunchApp(FieldSystem *fieldSystem, int a1) {
     args->menuInputStatePtr = &fieldSystem->menuInputState;
     args->steps = GameStats_GetCapped(Save_GameStats_Get(args->saveData), GAME_STAT_STEPS_WALKED);
     if (a1 == 1 && !CheckFlag997(Save_VarsFlags_Get(fieldSystem->saveData))) {
-        args->unk0 = 0;
+        args->mode = 0;
     } else {
-        args->unk0 = a1;
+        args->mode = a1;
     }
     ApricornBox_LaunchApp_Impl(fieldSystem, args);
     return args;
@@ -643,9 +643,9 @@ ApricornBoxArgs *sub_0203ED80(FieldSystem *fieldSystem, u32 a1, u16 *a2) {
     args->saveData = FieldSystem_GetSaveData(fieldSystem);
     args->menuInputStatePtr = &fieldSystem->menuInputState;
     args->steps = GameStats_GetCapped(Save_GameStats_Get(args->saveData), GAME_STAT_STEPS_WALKED);
-    args->unk0 = 3;
+    args->mode = 3;
     args->unkC = a1;
-    args->unk8 = a2;
+    args->juiceUsedVar = a2;
     ApricornBox_LaunchApp_Impl(fieldSystem, args);
     return args;
 }
@@ -709,7 +709,7 @@ PokeathlonMedalsArgs *PokeathlonMedals_LaunchApp(FieldSystem *fieldSystem) {
     PokeathlonSave *pokeathlonSave = Save_Pokeathlon_Get(saveData);
     Pokedex *pokedex = Save_Pokedex_Get(saveData);
     args->pokedex = pokedex;
-    args->unk4 = PokeathlonSave_GetUnkDC(pokeathlonSave);
+    args->speciesMedals = PokeathlonSave_GetUnkDC(pokeathlonSave);
     args->natDexEnabled = Pokedex_GetNatDexFlag(pokedex);
     args->unkC = sub_0203EE54(saveData);
     PokeathlonMedals_LaunchApp_Impl(fieldSystem, args);
@@ -729,7 +729,7 @@ PokeathlonEventRecordArgs *PokeathlonEventRecord_LaunchApp(FieldSystem *fieldSys
     args->recordsLink = PokeathlonSave_GetRecordsLink(pokeathlonSave);
     args->profile = Save_PlayerData_GetProfile(saveData);
     args->unk10 = sub_0203EE54(saveData);
-    args->unk8 = PokeathlonSave_GetUnkAEC(pokeathlonSave);
+    args->eventTotals = PokeathlonSave_GetUnkAEC(pokeathlonSave);
     PokeathlonEventRecord_LaunchApp_Impl(fieldSystem, args);
     return args;
 }
@@ -802,13 +802,13 @@ static DressUpArgs *DressUp_CreateArgs(enum HeapID heapID, SaveData *saveData, i
     SaveFashionData *fashionSave = Save_FashionData_Get(saveData);
     SaveFashionDataSub *var1 = Save_FashionData_GetEntry(fashionSave, 0);
     FashionCase *fashionCase = Save_FashionData_GetFashionCase(fashionSave);
-    ptr->unk4 = var1;
+    ptr->fashionEntry = var1;
     ptr->fashionCase = fashionCase;
     ptr->options = Save_PlayerData_GetOptionsAddr(saveData);
     ptr->gameStats = Save_GameStats_Get(saveData);
     ptr->profile = Save_PlayerData_GetProfile(saveData);
-    ptr->unk18 = a3;
-    ptr->unk1C = a4;
+    ptr->savedResult = a3;
+    ptr->showTutorial = a4;
     return ptr;
 }
 
@@ -818,20 +818,20 @@ static BOOL Task_DressUp(TaskManager *taskman) {
 
     switch (data->state) {
     case DRESS_UP_TASK_STATE_LAUNCH:
-        DressUp_LaunchApp_Impl(fieldSystem, data->unkC);
+        DressUp_LaunchApp_Impl(fieldSystem, data->args);
         data->state++;
         break;
     case DRESS_UP_TASK_STATE_WAIT:
         if (!FieldSystem_ApplicationIsRunning(fieldSystem)) {
-            u16 *ptr = data->unk4;
+            u16 *ptr = data->retVar;
             if (ptr != NULL) {
-                if (data->unk8 == 1) {
+                if (data->saved == 1) {
                     *ptr = 1;
                 } else {
                     *ptr = 0;
                 }
             }
-            Heap_Free(data->unkC);
+            Heap_Free(data->args);
             Heap_Free(data);
             return TRUE;
         }
@@ -843,8 +843,8 @@ static BOOL Task_DressUp(TaskManager *taskman) {
 void CallTask_DressUp(TaskManager *taskman, u16 *ret, SaveData *saveData, u16 a3, u16 a4) {
     DressUpTaskData *data = Heap_Alloc(HEAP_ID_FIELD3, sizeof(DressUpTaskData));
     memset(data, 0, sizeof(DressUpTaskData));
-    data->unkC = DressUp_CreateArgs(HEAP_ID_FIELD3, saveData, a3, &data->unk8, a4);
-    data->unk4 = ret;
+    data->args = DressUp_CreateArgs(HEAP_ID_FIELD3, saveData, a3, &data->saved, a4);
+    data->retVar = ret;
     TaskManager_Call(taskman, Task_DressUp, data);
 }
 
@@ -876,10 +876,10 @@ static void InitWirelessTradeSelectMonArgs(WirelessTradeSelectMonArgs *args, Fie
     args->saveData = fieldSystem->saveData;
     args->gameStats = Save_GameStats_Get(fieldSystem->saveData);
     args->partnerProfile = Heap_Alloc(HEAP_ID_FIELD3, PlayerProfile_sizeof());
-    args->unk38 = Heap_Alloc(HEAP_ID_FIELD3, Pokemon_sizeof());
-    args->unk3C = Heap_Alloc(HEAP_ID_FIELD3, Pokemon_sizeof());
+    args->sentMon = Heap_Alloc(HEAP_ID_FIELD3, Pokemon_sizeof());
+    args->receivedMon = Heap_Alloc(HEAP_ID_FIELD3, Pokemon_sizeof());
     args->fieldSystem = fieldSystem;
-    args->unk30 = 0;
+    args->tradeCount = 0;
 }
 
 static void WirelessTradeSelectMon_FreeArgs(WirelessTradeSelectMonArgs *args) {
@@ -887,13 +887,13 @@ static void WirelessTradeSelectMon_FreeArgs(WirelessTradeSelectMonArgs *args) {
         Heap_Free(args->partnerProfile);
         args->partnerProfile = NULL;
     }
-    if (args->unk38 != NULL) {
-        Heap_Free(args->unk38);
-        args->unk38 = NULL;
+    if (args->sentMon != NULL) {
+        Heap_Free(args->sentMon);
+        args->sentMon = NULL;
     }
-    if (args->unk3C != NULL) {
-        Heap_Free(args->unk3C);
-        args->unk3C = NULL;
+    if (args->receivedMon != NULL) {
+        Heap_Free(args->receivedMon);
+        args->receivedMon = NULL;
     }
 }
 
@@ -917,7 +917,7 @@ static BOOL Task_WirelessTrade(TaskManager *taskman) {
         data->state++;
         break;
     case WIRELESS_TRADE_STATE_3:
-        if (data->wirelessTradeSelectMon.unk24 == 0) {
+        if (data->wirelessTradeSelectMon.tradeAccepted == 0) {
             WirelessTradeSelectMon_FreeArgs(&data->wirelessTradeSelectMon);
             Heap_Free(data);
             return TRUE;
@@ -926,8 +926,8 @@ static BOOL Task_WirelessTrade(TaskManager *taskman) {
         break;
     case WIRELESS_TRADE_STATE_4:
         data->tradeSequence.partnerProfile = data->wirelessTradeSelectMon.partnerProfile;
-        data->tradeSequence.unk0 = Mon_GetBoxMon(data->wirelessTradeSelectMon.unk38);
-        data->tradeSequence.unk4 = Mon_GetBoxMon(data->wirelessTradeSelectMon.unk3C);
+        data->tradeSequence.sentMon = Mon_GetBoxMon(data->wirelessTradeSelectMon.sentMon);
+        data->tradeSequence.receivedMon = Mon_GetBoxMon(data->wirelessTradeSelectMon.receivedMon);
         data->tradeSequence.options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
         data->tradeSequence.unk10 = 1;
 
@@ -952,11 +952,11 @@ static BOOL Task_WirelessTrade(TaskManager *taskman) {
         data->state = WIRELESS_TRADE_STATE_5;
         break;
     case WIRELESS_TRADE_STATE_5:
-        int heldItem = GetMonData(data->wirelessTradeSelectMon.unk3C, MON_DATA_HELD_ITEM, NULL);
-        int species = GetMonEvolution(NULL, data->wirelessTradeSelectMon.unk3C, EVOCTX_TRADE, heldItem, (int *)&evolutionCondition);
+        int heldItem = GetMonData(data->wirelessTradeSelectMon.receivedMon, MON_DATA_HELD_ITEM, NULL);
+        int species = GetMonEvolution(NULL, data->wirelessTradeSelectMon.receivedMon, EVOCTX_TRADE, heldItem, (int *)&evolutionCondition);
         if (species != SPECIES_NONE) {
             Heap_Create(HEAP_ID_3, HEAP_ID_26, 0x30000);
-            data->tradeSequence.evolutionTaskData = EvolutionScene_New(NULL, data->wirelessTradeSelectMon.unk3C, species, Save_PlayerData_GetOptionsAddr(fieldSystem->saveData), sub_02088288(fieldSystem->saveData), Save_Pokedex_Get(fieldSystem->saveData), Save_Bag_Get(fieldSystem->saveData), Save_GameStats_Get(fieldSystem->saveData), evolutionCondition, 4, HEAP_ID_26);
+            data->tradeSequence.evolutionTaskData = EvolutionScene_New(NULL, data->wirelessTradeSelectMon.receivedMon, species, Save_PlayerData_GetOptionsAddr(fieldSystem->saveData), sub_02088288(fieldSystem->saveData), Save_Pokedex_Get(fieldSystem->saveData), Save_Bag_Get(fieldSystem->saveData), Save_GameStats_Get(fieldSystem->saveData), evolutionCondition, 4, HEAP_ID_26);
             data->state = WIRELESS_TRADE_STATE_6;
         } else {
             data->state = WIRELESS_TRADE_STATE_7;
@@ -965,15 +965,15 @@ static BOOL Task_WirelessTrade(TaskManager *taskman) {
     case WIRELESS_TRADE_STATE_6:
         if (EvolutionScene_IsDone(data->tradeSequence.evolutionTaskData)) {
             CopyPokemonToPokemon(
-                data->wirelessTradeSelectMon.unk3C,
-                Party_GetMonByIndex(data->wirelessTradeSelectMon.party, data->wirelessTradeSelectMon.unk28));
+                data->wirelessTradeSelectMon.receivedMon,
+                Party_GetMonByIndex(data->wirelessTradeSelectMon.party, data->wirelessTradeSelectMon.tradedSlot));
             EvolutionScene_Delete(data->tradeSequence.evolutionTaskData);
             Heap_Destroy(HEAP_ID_26);
             data->state = WIRELESS_TRADE_STATE_7;
         }
         break;
     case WIRELESS_TRADE_STATE_7:
-        data->wirelessTradeSelectMon.unk30++;
+        data->wirelessTradeSelectMon.tradeCount++;
         data->state = 2;
         GameStats *gameStats = Save_GameStats_Get(fieldSystem->saveData);
         GameStats_AddScore(gameStats, SCORE_EVENT_LINK_TRADE);
@@ -1046,7 +1046,7 @@ static BOOL Task_NamingScreen(TaskManager *taskman) {
     case 3:
         NamingScreenArgs *args = data->args;
         if (args->kind == 1) {
-            if (String_Compare(args->nameInputString, data->unk10) == 0) {
+            if (String_Compare(args->nameInputString, data->defaultName) == 0) {
                 data->args->noInput = 1;
             }
         } else if (args->kind == 5) {
@@ -1064,7 +1064,7 @@ static BOOL Task_NamingScreen(TaskManager *taskman) {
             *retVar = data->args->noInput;
         }
         NamingScreen_DeleteArgs(data->args);
-        String_Delete(data->unk10);
+        String_Delete(data->defaultName);
         Heap_Free(data);
         return TRUE;
     }
@@ -1111,7 +1111,7 @@ void CallTask_NamingScreen(TaskManager *taskman, NameScreenType type, int specie
     data->partyIdx = partyIdx;
     data->retVar = retVar;
     data->args = NamingScreen_CreateArgs(HEAP_ID_FIELD2, type, species, maxLen, Save_PlayerData_GetOptionsAddr(fieldSystem->saveData), &fieldSystem->menuInputState);
-    data->unk10 = String_New(12, HEAP_ID_FIELD2);
+    data->defaultName = String_New(12, HEAP_ID_FIELD2);
 
     switch (type) {
     case NAME_SCREEN_POKEMON:
@@ -1125,11 +1125,11 @@ void CallTask_NamingScreen(TaskManager *taskman, NameScreenType type, int specie
         data->args->monGender = GetMonData(mon, MON_DATA_GENDER, NULL);
         data->args->monForm = GetMonData(mon, MON_DATA_FORM, NULL);
         if (defaultStr != NULL) {
-            CopyU16ArrayToString(data->unk10, defaultStr);
+            CopyU16ArrayToString(data->defaultName, defaultStr);
         }
         break;
     case NAME_SCREEN_GROUP:
-        CopyU16ArrayToString(data->unk10, defaultStr);
+        CopyU16ArrayToString(data->defaultName, defaultStr);
         break;
     default:
         if (defaultStr != NULL) {
@@ -1145,7 +1145,7 @@ void TrainerCard_LaunchApp(FieldSystem *fieldSystem, TrainerCardAppArgs *args) {
     args->unk66C.menuInputStatePtr = &fieldSystem->menuInputState;
     args->unk66C.saveData = fieldSystem->saveData;
     args->unk66C.gameCleared = CheckGameClearFlag(Save_VarsFlags_Get(fieldSystem->saveData));
-    args->unk66C.unk8 = 0;
+    args->unk66C.showBack = 0;
     FieldSystem_LaunchApplication(fieldSystem, &sOverlayTemplate_TrainerCard, args);
 }
 
@@ -1173,12 +1173,12 @@ void Gts_LaunchApp(FieldSystem *fieldSystem, u16 a1) {
     OverlayManagerTemplate template = sOverlayTemplate_Gts;
 
     GtsArgs *args = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(GtsArgs));
-    args->unk0 = Save_Gts_Get(fieldSystem->saveData);
+    args->gtsSave = Save_Gts_Get(fieldSystem->saveData);
     args->sysInfo = Save_SysInfo_Get(fieldSystem->saveData);
     args->party = (Party *)SaveArray_Get(fieldSystem->saveData, SAVE_PARTY);
     args->pcStorage = SaveArray_PCStorage_Get(fieldSystem->saveData);
     args->pokedex = Save_Pokedex_Get(fieldSystem->saveData);
-    args->unk14 = Save_FriendRoster_Get(fieldSystem->saveData);
+    args->friendRoster = Save_FriendRoster_Get(fieldSystem->saveData);
     args->wifiHistory = Save_WiFiHistory_Get(fieldSystem->saveData);
     args->profile = Save_PlayerData_GetProfile(fieldSystem->saveData);
     args->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
@@ -1186,9 +1186,9 @@ void Gts_LaunchApp(FieldSystem *fieldSystem, u16 a1) {
     args->unk38 = sub_02088288(fieldSystem->saveData);
     args->saveData = fieldSystem->saveData;
     args->natDexEnabled = SaveArray_IsNatDexEnabled(fieldSystem->saveData);
-    args->unk34 = Comm_GetOwnGsProfileId(args->unk14);
+    args->gsProfileId = Comm_GetOwnGsProfileId(args->friendRoster);
     args->bag = Save_Bag_Get(fieldSystem->saveData);
-    args->unk3C = a1;
+    args->connectDirectly = a1;
     FieldSystem_LaunchApplication(fieldSystem, &template, args);
 }
 
@@ -1289,10 +1289,10 @@ CertificatesArgs *Certificates_LaunchApp(FieldSystem *fieldSystem, enum HeapID h
 FrontierRecordsAppArgs *FrontierRecords_LaunchApp(FieldSystem *fieldSystem, u8 a1, u8 a2, u16 a3, enum HeapID heapID) {
     static OverlayManagerTemplate sOverlayTemplate_FrontierRecords = { FrontierRecordsApp_Init, FrontierRecordsApp_Main, FrontierRecordsApp_Exit, FS_OVERLAY_ID(OVY_86) };
     FrontierRecordsAppArgs *args = Heap_Alloc(heapID, sizeof(FrontierRecordsAppArgs));
-    args->unk4 = a1;
-    args->unk5 = a2;
-    args->unk6 = a3;
-    args->unk0 = fieldSystem->saveData;
+    args->mode = a1;
+    args->facility = a2;
+    args->species = a3;
+    args->saveData = fieldSystem->saveData;
     FieldSystem_LaunchApplication(fieldSystem, &sOverlayTemplate_FrontierRecords, args);
     return args;
 }
@@ -1363,7 +1363,7 @@ void GlobalTerminal_LaunchApp(FieldSystem *fieldSystem, u16 a1, u16 a2) {
     MI_CpuFill8(args, 0, sizeof(GlobalTerminalLaunchArgs));
     args->fieldSystem = fieldSystem;
     args->saveData = fieldSystem->saveData;
-    args->unk8 = a1;
+    args->connectDirectly = a1;
     args->unkC = a2;
     FieldSystem_LaunchApplication(fieldSystem, &template, args);
 }
@@ -1390,9 +1390,9 @@ LegendaryCinematicArgs *LegendaryCinematic_LaunchApp(FieldSystem *fieldSystem, U
     LegendaryCinematicArgs *args = Heap_Alloc(heapID, sizeof(LegendaryCinematicArgs));
     memset(args, 0, sizeof(LegendaryCinematicArgs));
     args->saveData = FieldSystem_GetSaveData(fieldSystem);
-    args->unk4 = *a1;
-    args->unk4C = a2;
-    args->unk4E = a3;
+    args->modelAttributes = *a1;
+    args->scene = a2;
+    args->timeOfDay = a3;
     FieldSystem_LaunchApplication(fieldSystem, &sOverlayTemplate_LegendaryCinematic, args);
     return args;
 }

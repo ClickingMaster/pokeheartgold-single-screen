@@ -182,9 +182,9 @@
 .public DWC_NASLoginProcess
 .public DWC_ShutdownFriendsMatch
 .public DWC_ShutdownGHTTP
-.public ov44_0222A4B4
-.public ov44_0222A60C
-.public ov44_0222A758
+.public WifiClub_Init
+.public WifiClub_Main
+.public WifiClub_Exit
 .public gApplication_TitleScreen
 .public GtsServer_Init
 .public GtsServer_Update

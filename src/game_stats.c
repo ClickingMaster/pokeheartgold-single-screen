@@ -8,8 +8,8 @@ struct GameStats {
     u32 statsWords[NUM_GAME_STATS_WORD];
     u16 statsHalf[77];
     u16 dummy;
-    u16 unk_1BC;
-    u16 unk_1BE;
+    u16 checksum;
+    u16 encryptionKey;
 };
 
 static void GameStats_Release(GameStats *gameStats, int statIdx);
@@ -220,7 +220,7 @@ u32 GameStats_sizeof(void) {
 
 void GameStats_Init(GameStats *gameStats) {
     MI_CpuClear32(gameStats, sizeof(GameStats));
-    gameStats->unk_1BE = OS_GetVBlankCount() | (OS_GetVBlankCount() << 8);
+    gameStats->encryptionKey = OS_GetVBlankCount() | (OS_GetVBlankCount() << 8);
     GameStats_Release(gameStats, GAME_STAT_SCORE);
 }
 
@@ -233,19 +233,19 @@ static inline void *GameStats_GetSecureRegion(GameStats *gameStats) {
 }
 
 static inline u32 GameStats_GetSecureRegionSize(void) {
-    return offsetof(GameStats, unk_1BC) - (offsetof(GameStats, statsWords) + 2 * sizeof(u32));
+    return offsetof(GameStats, checksum) - (offsetof(GameStats, statsWords) + 2 * sizeof(u32));
 }
 
 static void GameStats_Release(GameStats *gameStats, int statIdx) {
     if (statIdx > 1) {
-        gameStats->unk_1BC = Math_CalcArraySum(GameStats_GetSecureRegion(gameStats), GameStats_GetSecureRegionSize());
-        _MonEncryptSegment(GameStats_GetSecureRegion(gameStats), GameStats_GetSecureRegionSize(), gameStats->unk_1BC + (gameStats->unk_1BE << 16));
+        gameStats->checksum = Math_CalcArraySum(GameStats_GetSecureRegion(gameStats), GameStats_GetSecureRegionSize());
+        _MonEncryptSegment(GameStats_GetSecureRegion(gameStats), GameStats_GetSecureRegionSize(), gameStats->checksum + (gameStats->encryptionKey << 16));
     }
 }
 
 static void GameStats_Acquire(GameStats *gameStats, int statIdx) {
     if (statIdx > 1) {
-        _MonDecryptSegment(GameStats_GetSecureRegion(gameStats), GameStats_GetSecureRegionSize(), gameStats->unk_1BC + (gameStats->unk_1BE << 16));
+        _MonDecryptSegment(GameStats_GetSecureRegion(gameStats), GameStats_GetSecureRegionSize(), gameStats->checksum + (gameStats->encryptionKey << 16));
     }
 }
 

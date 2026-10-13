@@ -559,20 +559,20 @@ BOOL FrtCmd_036(FrontierScriptContext *ctx) {
         if (template.id == FRONTIER_LIST_END) {
             break;
         }
-        template.unk_00 = FrontierScript_ReadVar(ctx);
+        template.spriteId = FrontierScript_ReadVar(ctx);
         template.unk_0A = FrontierScriptContext_ReadByte(ctx);
         template.x = FrontierScriptContext_ReadHalfWord(ctx) - 8;
         template.y = FrontierScriptContext_ReadHalfWord(ctx) - 16;
         template.unk_0B = FrontierScriptContext_ReadByte(ctx);
         template.unk_0C = FrontierScriptContext_ReadByte(ctx);
         template.unk_02 = 0;
-        if (template.unk_00 == FRONTIER_ID_PLAYER) {
+        if (template.spriteId == FRONTIER_ID_PLAYER) {
             FrontierLaunchArgs *args = Frontier_GetLaunchArgs(system->frontierWork);
             PlayerProfile *profile = Save_PlayerData_GetProfile(args->saveData);
-            template.unk_00 = Frontier_GetPlayerSpriteId(profile);
+            template.spriteId = Frontier_GetPlayerSpriteId(profile);
             index = FRONTIER_MAP_OBJECT_MAX - 1;
-        } else if (template.unk_00 == FRONTIER_ID_LINK_MONS) {
-            template.unk_00 = Frontier_GetPlayerSpriteId(CommPlayerInfo_GetProfile(FrontierScriptContext_ReadByte(ctx)));
+        } else if (template.spriteId == FRONTIER_ID_LINK_MONS) {
+            template.spriteId = Frontier_GetPlayerSpriteId(CommPlayerInfo_GetProfile(FrontierScriptContext_ReadByte(ctx)));
         }
         FrontierMap_CreateObject(map, &template, index);
     }
@@ -629,10 +629,10 @@ void FrontierScript_StartMovement(int id, FrontierMapObject *object, const u8 *s
     data->unk_10 = unk3;
     data->id = id;
     data->runningCount = runningCount;
-    if (object->unk_38 != NULL) {
+    if (object->movementTask != NULL) {
         GF_AssertFail();
     }
-    object->unk_38 = SysTask_CreateOnMainQueue((SysTaskFunc)FrontierScript_MovementTask, data, 60100);
+    object->movementTask = SysTask_CreateOnMainQueue((SysTaskFunc)FrontierScript_MovementTask, data, 60100);
 }
 
 BOOL FrtCmd_041(FrontierScriptContext *ctx) {

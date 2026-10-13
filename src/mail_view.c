@@ -37,7 +37,7 @@
 
 #define MAIL_VIEW_ROW_BUTTONS 3
 
-// args->unk18[] holds the icon of each mon attached to the mail: char file id and palette.
+// args->monIcons[] holds the icon of each mon attached to the mail: char file id and palette.
 typedef union MailViewIcon {
     u16 raw;
 
@@ -49,7 +49,7 @@ typedef union MailViewIcon {
 
 // The args seen through a byte offset into unk18[] (iconOffset = 2 * mon).
 typedef struct MailViewShiftedArgs {
-    u8 filler_00[offsetof(MailViewArgs, unk18)];
+    u8 filler_00[offsetof(MailViewArgs, monIcons)];
     MailViewIcon icon;
 } MailViewShiftedArgs;
 

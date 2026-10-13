@@ -65,7 +65,7 @@ static void Camera_VecResetCoordsIfOffsetComponentNotEnabled(Camera *camera, Vec
 static void Camera_GetVecFromSomeRingBufferMaybe(Camera *camera, const VecFx32 *vecDefault, VecFx32 *vecDest) {
     if (camera->history == NULL) {
         *vecDest = *vecDefault;
-    } else if (camera->history->unk24 == FALSE) {
+    } else if (camera->history->enabled == FALSE) {
         *vecDest = *vecDefault;
     } else {
         s32 *idxPtr = &camera->history->readIdx;
@@ -122,7 +122,7 @@ void Camera_History_New(s32 count, s32 initialWriteIdx, s32 updateEnableFlags, e
     if (updateEnableFlags & CAMERA_UPDATE_ENABLE_Z) {
         history->enableUpdateZ = TRUE;
     }
-    history->unk24 = TRUE;
+    history->enabled = TRUE;
     camera->history = history;
 }
 
@@ -383,8 +383,8 @@ void Camera_SetHistoryUnk24(Camera *camera, BOOL param1) {
         return;
     }
     if (param1) {
-        camera->history->unk24 = TRUE;
+        camera->history->enabled = TRUE;
     } else {
-        camera->history->unk24 = FALSE;
+        camera->history->enabled = FALSE;
     }
 }

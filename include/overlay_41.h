@@ -6,8 +6,8 @@
 
 typedef struct FashionAppData {
     SaveFashionData *saveFashionData;
-    int unk_4;
-    int unk_8;
+    int entryIndex;
+    int mode;
 } FashionAppData;
 
 BOOL AccessoryPortrait_Init(OverlayManager *man, int *state);

@@ -211,12 +211,12 @@ int TrainerCardMainApp_Init(OverlayManager *manager, int *state) {
     TrainerCardMain_CreateButtonSprites(&cardMain->sprites);
     TrainerCardMain_CreateWindows(cardMain);
     TrainerCardMain_DrawPlayTimeColon(&cardMain->windows[5], TRUE, cardMain->colonString);
-    if (cardMain->args->unk66C.unk8) {
+    if (cardMain->args->unk66C.showBack) {
         cardMain->showingBack = TRUE;
     } else {
         cardMain->showingBack = FALSE;
     }
-    cardMain->args->unk66C.unk8 = 0;
+    cardMain->args->unk66C.showBack = 0;
     cardMain->unk_3434 = 0;
     cardMain->unk_3108 = -1;
     cardMain->unk_339C = 0;
@@ -285,7 +285,7 @@ int TrainerCardMainApp_Main(OverlayManager *manager, int *state) {
     }
     case 5:
         BeginNormalPaletteFade(FADE_MAIN_THEN_SUB, FADE_TYPE_UPWARD_OUT, FADE_TYPE_UPWARD_OUT, RGB_BLACK, 6, 1, HEAP_ID_25);
-        cardMain->args->unk66C.unk8 = 1;
+        cardMain->args->unk66C.showBack = 1;
         *state = 2;
         break;
     }
@@ -481,7 +481,7 @@ void TrainerCardMain_LoadBgGraphics(TrainerCardMain *cardMain) {
         cardMain->frontCharFile = GfGfxLoader_LoadFromNarc(NARC_a_0_4_9, 44, FALSE, HEAP_ID_25, FALSE);
         GF_ASSERT(cardMain->frontCharFile != NULL);
         GF_ASSERT(NNS_G2dGetUnpackedBGCharacterData(cardMain->frontCharFile, &cardMain->frontCharData));
-        if (cardMain->card->unk_04_2 == 0) {
+        if (cardMain->card->gender == 0) {
             cardMain->frontScreenFile = GfGfxLoader_GetScrnData(NARC_a_0_4_9, 54, FALSE, &cardMain->frontScreen, HEAP_ID_25);
         } else {
             cardMain->frontScreenFile = GfGfxLoader_GetScrnData(NARC_a_0_4_9, 55, FALSE, &cardMain->frontScreen, HEAP_ID_25);
@@ -1003,18 +1003,18 @@ void TrainerCardMain_PrintBack(TrainerCardMain *cardMain, Window *windows, Train
     StringExpandPlaceholders(format, formatted, template);
     x = 0xE0 - FontID_String_GetWidth(0, formatted, 0);
     AddTextPrinterParameterizedWithColor(&windows[7], 0, formatted, x, 0x10, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
-    BufferIntegerAsString(format, 5, card->unk_38, 6, PRINTING_MODE_LEFT_ALIGN, TRUE);
+    BufferIntegerAsString(format, 5, card->linkCount, 6, PRINTING_MODE_LEFT_ALIGN, TRUE);
     ReadMsgDataIntoString(msgData, 0x1B, template);
     StringExpandPlaceholders(format, formatted, template);
     x = 0xE0 - FontID_String_GetWidth(0, formatted, 0);
     AddTextPrinterParameterizedWithColor(&windows[8], 0, formatted, x, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     ReadMsgDataIntoString(msgData, 0x17, formatted);
     AddTextPrinterParameterizedWithColor(&windows[9], 0, formatted, 0x70, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
-    TrainerCardMain_PrintNumberRightAligned(&windows[9], 0xE0, 0, 0, formatted, card->unk_40, 4, 1, 0xFF);
+    TrainerCardMain_PrintNumberRightAligned(&windows[9], 0xE0, 0, 0, formatted, card->linkBattleLosses, 4, 1, 0xFF);
     ReadMsgDataIntoString(msgData, 0x18, formatted);
     AddTextPrinterParameterizedWithColor(&windows[9], 0, formatted, 0xB0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
-    TrainerCardMain_PrintNumberRightAligned(&windows[9], 0xE0, 0x40, 0, formatted, card->unk_3C, 4, 1, 0xFF);
-    BufferIntegerAsString(format, 5, card->unk_44, 6, PRINTING_MODE_LEFT_ALIGN, TRUE);
+    TrainerCardMain_PrintNumberRightAligned(&windows[9], 0xE0, 0x40, 0, formatted, card->linkBattleWins, 4, 1, 0xFF);
+    BufferIntegerAsString(format, 5, card->linkTrades, 6, PRINTING_MODE_LEFT_ALIGN, TRUE);
     ReadMsgDataIntoString(msgData, 0x1B, template);
     StringExpandPlaceholders(format, formatted, template);
     x = 0xE0 - FontID_String_GetWidth(0, formatted, 0);

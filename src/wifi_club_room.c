@@ -60,9 +60,9 @@ void WifiClubRoom_Init(WifiClubRoom *arg0, enum HeapID arg1, NARC *arg2, BgConfi
     WifiClubRoomGfx_Init(&arg0->gfx, arg0->heapID, arg2);
     WifiClubRoom_InitBgs(arg0->bgConfig, arg1);
 
-    Field2DPoint sp4 = ov44_02232E90(temp_r7);
+    Field2DPoint sp4 = WifiClubRoom_GetMapSize(temp_r7);
     arg0->map = Field2DMap_New(sp4.unk0, sp4.unk2, arg1);
-    Field2DMap_Load(arg0->map, ov44_02232E9C(temp_r7));
+    Field2DMap_Load(arg0->map, WifiClubRoom_GetMapCells(temp_r7));
     arg0->objects = Field2DObjectManager_New(0x30, arg1);
     WifiClubRoom_CreateDrawers(arg0, arg4, arg1);
     Field2DCamera_Init(&arg0->cameraPos);

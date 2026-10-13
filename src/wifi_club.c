@@ -90,10 +90,10 @@ BOOL Task_WifiClub(TaskManager *taskManager) {
     WifiClubTask *task = TaskManager_GetEnvironment(taskManager);
     switch (task->state) {
     case 0:
-        task->clubArgs->unk0 = fieldSystem->saveData;
+        task->clubArgs->saveData = fieldSystem->saveData;
     case 1:
         task->state++;
-        if (task->clubArgs->unk4 == 1 && Comm_HasWifiProfile(fieldSystem->saveData)) {
+        if (task->clubArgs->choice == 1 && Comm_HasWifiProfile(fieldSystem->saveData)) {
             task->state = 10;
             *task->result = 0;
         }
@@ -106,7 +106,7 @@ BOOL Task_WifiClub(TaskManager *taskManager) {
         if (Comm_HasWifiProfile(fieldSystem->saveData)) {
             SetFlag970(Save_VarsFlags_Get(fieldSystem->saveData));
         }
-        switch (task->clubArgs->unk4) {
+        switch (task->clubArgs->choice) {
         case WIFI_CLUB_BATTLE_SINGLE_FREE:
             task->maxLevel = 0;
             task->doubleBattle = FALSE;
@@ -165,7 +165,7 @@ BOOL Task_WifiClub(TaskManager *taskManager) {
         }
         break;
     case 4:
-        CallTask_02050960(taskManager, task->clubArgs->unk8, task->maxLevel, task->doubleBattle);
+        CallTask_02050960(taskManager, task->clubArgs->partnerFriendIndex, task->maxLevel, task->doubleBattle);
         task->state++;
         break;
     case 5:
@@ -275,13 +275,13 @@ WifiClubTask *WifiClubTask_New(void) {
 
 void CallTask_WifiClub(TaskManager *taskManager) {
     WifiClubTask *task = WifiClubTask_New();
-    task->clubArgs->unk4 = 2; // start mode for overlay 44
+    task->clubArgs->choice = 2; // start mode for overlay 44
     TaskManager_Call(taskManager, Task_WifiClub, task);
 }
 
 void CallTask_WifiClubWithResult(TaskManager *taskManager, u16 *result) {
     WifiClubTask *task = WifiClubTask_New();
-    task->clubArgs->unk4 = 1; // start mode for overlay 44; may end at once (result 0)
+    task->clubArgs->choice = 1; // start mode for overlay 44; may end at once (result 0)
     task->result = result;
     TaskManager_Call(taskManager, Task_WifiClub, task);
 }
@@ -372,9 +372,9 @@ void WifiClub_FinishWobbuffetPop(PlazaGameArgs *args) {
 // Connection filter of the Wi-Fi Club: TRUE when this player's activity and the other player's activity form one of
 // the matching pairs.
 BOOL WifiClub_IsMatchingActivity(s32 netId) {
-    UnkStruct_ov44_0223197C *status = CommState_GetWifiClubData();
-    u8 own = status->unk0.unk1B;
-    u8 other = status->unk24[netId].unk1B;
+    WifiClubStatusData *status = CommState_GetWifiClubData();
+    u8 own = status->own.status;
+    u8 other = status->friends[netId].status;
     if (own == 0xC && other == 5) {
         return TRUE;
     }

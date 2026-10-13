@@ -483,7 +483,7 @@ void PCBox_PrintModeTitle(PCBoxWork *work) {
 
     msg = PCBox_LoadBoxMessages();
     FillWindowPixelBuffer(&work->view->windows[3], 0);
-    PCBox_PrintMsg(work->view, msg, 3, work->args->unk8 + 0x32, 0, 8, 0, 0x10200, 0);
+    PCBox_PrintMsg(work->view, msg, 3, work->args->mode + 0x32, 0, 8, 0, 0x10200, 0);
     DestroyMsgData(msg);
     CopyWindowToVram(&work->view->windows[3]);
 }
@@ -675,7 +675,7 @@ void PCBox_DrawTabWindow(PCBoxWork *work, u32 win, u32 msgId) {
 #pragma force_active reset
 
 void PCBox_DrawTrayTab(PCBoxWork *work, u32 unused) {
-    if (work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
+    if (work->args->mode == PC_BOX_MODE_MOVE_ITEMS) {
         PCBox_DrawTabWindow(work, 0x19, 0x40);
     } else {
         PCBox_DrawTabWindow(work, 0x19, 0x3d);
@@ -1177,7 +1177,7 @@ s32 PCBox_FindTouchedTrayPartySlot(void) {
 void PCBox_CreateModeGridInput(PCBoxWork *work) {
     int layout;
 
-    switch (work->args->unk8) {
+    switch (work->args->mode) {
     case PC_BOX_MODE_DEPOSIT:
         layout = 0;
         break;

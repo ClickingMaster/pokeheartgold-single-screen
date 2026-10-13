@@ -42,6 +42,6 @@ gOverlayTemplate_MimeJrTop:
 gOverlayTemplate_WifiClubGameEntry:
 	.word WifiClubGameEntry_Init, WifiClubGameEntry_Main, WifiClubGameEntry_Exit, FS_OVERLAY_ID(OVY_44)
 gOverlayTemplate_WifiClub:
-	.word ov44_0222A4B4, ov44_0222A60C, ov44_0222A758, FS_OVERLAY_ID(OVY_44)
+	.word WifiClub_Init, WifiClub_Main, WifiClub_Exit, FS_OVERLAY_ID(OVY_44)
 gOverlayTemplate_WobbuffetPop:
 	.word WobbuffetPopApp_Init, WobbuffetPopApp_Main, WobbuffetPopApp_Exit, FS_OVERLAY_ID(OVY_93)

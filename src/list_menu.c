@@ -18,7 +18,7 @@ struct ListMenu *ListMenuInit(const struct ListMenuTemplate *template, u16 curso
     list->unk_30 = 0;
     list->unk_31 = 0;
     list->taskId = 0xFF;
-    list->unk_33 = 0;
+    list->lastMoveDirection = 0;
     list->heapID = (u8)heapID;
     list->cursorPal = list->template.cursorPal;
     list->fillValue = list->template.fillValue;
@@ -41,7 +41,7 @@ struct ListMenu *ListMenuInit(const struct ListMenuTemplate *template, u16 curso
 }
 
 s32 ListMenu_ProcessInput(struct ListMenu *list) {
-    list->unk_33 = 0;
+    list->lastMoveDirection = 0;
 
     if (gSystem.newKeys & REG_PAD_KEYINPUT_A_MASK) {
         return list->template.items[list->cursorPos + list->itemsAbove].value;
@@ -49,12 +49,12 @@ s32 ListMenu_ProcessInput(struct ListMenu *list) {
         return LIST_CANCEL;
     } else if (gSystem.newAndRepeatedKeys & REG_PAD_KEYINPUT_UP_MASK) {
         if (!ListMenuChangeSelection(list, TRUE, 1, FALSE)) {
-            list->unk_33 = 1;
+            list->lastMoveDirection = 1;
         }
         return LIST_NOTHING_CHOSEN;
     } else if (gSystem.newAndRepeatedKeys & REG_PAD_KEYINPUT_DOWN_MASK) {
         if (!ListMenuChangeSelection(list, TRUE, 1, TRUE)) {
-            list->unk_33 = 2;
+            list->lastMoveDirection = 2;
         }
         return LIST_NOTHING_CHOSEN;
     } else {
@@ -76,12 +76,12 @@ s32 ListMenu_ProcessInput(struct ListMenu *list) {
         }
         if (leftButton) {
             if (!ListMenuChangeSelection(list, TRUE, (u8)list->template.maxShowed, FALSE)) {
-                list->unk_33 = 3;
+                list->lastMoveDirection = 3;
             }
             return LIST_NOTHING_CHOSEN;
         } else if (rightButton) {
             if (!ListMenuChangeSelection(list, TRUE, (u8)list->template.maxShowed, TRUE)) {
-                list->unk_33 = 4;
+                list->lastMoveDirection = 4;
             }
             return LIST_NOTHING_CHOSEN;
         } else {

@@ -21,7 +21,7 @@ BOOL LegendaryCinematic_Init(OverlayManager *man, int *state) {
 BOOL LegendaryCinematic_Main(OverlayManager *man, int *state) {
     LegendaryCinematicData *data = OverlayManager_GetData(man);
 
-    return !sLegendaryCinematicScripts[data->args->unk4C](data);
+    return !sLegendaryCinematicScripts[data->args->scene](data);
 }
 
 BOOL LegendaryCinematic_Exit(OverlayManager *man, int *state) {

@@ -456,7 +456,7 @@ void PCBox_ScrollBoxIcons(PCBoxWork *work, s32 amount) {
             position.x = wrap;
             PCBox_SetIconImage(work->view, work->view->iconChars[i], index, work->view->iconPalettes[i]);
             ManagedSprite_SetDrawFlag(work->view->sprites[index], work->view->iconDraw[i]);
-            if (work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
+            if (work->args->mode == PC_BOX_MODE_MOVE_ITEMS) {
                 PCBox_UpdateSlotIconItemTranslucency(work, i);
             }
         }

@@ -203,9 +203,9 @@ void WifiClubGameEntry_Init(OverlayManager *overlayMananger) {
     MI_CpuFill8(temp_r0->shownVoiceChatFlags, 1, 4);
     MI_CpuFill8(temp_r0->voiceChatFlags, 1, 4);
     GF_CreateVramTransferManager(16, HEAP_ID_103);
-    UnkStruct_ov44_0223197C *temp_r0_2 = CommState_GetWifiClubData();
-    temp_r0->clubStatus = &temp_r0_2->unk0;
-    temp_r0_2->unk0.unk21 = temp_r0_2->unk0.unk22;
+    WifiClubStatusData *temp_r0_2 = CommState_GetWifiClubData();
+    temp_r0->clubStatus = &temp_r0_2->own;
+    temp_r0_2->own.voiceChat = temp_r0_2->own.voiceChatSetting;
     temp_r0->isLeader = WifiClubGameEntry_IsLocalLeader(temp_r0);
     temp_r0->applicantNetId = 255;
     WifiClubComm_RegisterCommands(temp_r0);
@@ -655,7 +655,7 @@ void WifiClubGameEntry_DrawMember(WifiClubGameEntry *arg0, WifiClubGameEntryScre
     ScheduleWindowCopyToVram(&arg1->windowList[3]);
     s32 var_r2;
     if (arg3 == Comm_GetLocalNetId()) {
-        if (arg0->clubStatus->unk21 != 0) {
+        if (arg0->clubStatus->voiceChat != 0) {
             var_r2 = 2;
         } else {
             var_r2 = 1;
@@ -707,16 +707,16 @@ void WifiClubGameEntry_LoadBgPaletteFrame(WifiClubGameEntryScreen *arg0, s32 arg
 }
 
 u8 WifiClubGameEntry_ToggleVoiceChat(WifiClubGameEntry *arg0, enum HeapID heapID) {
-    arg0->clubStatus->unk22 = 1 - arg0->clubStatus->unk22;
-    arg0->clubStatus->unk21 = arg0->clubStatus->unk22;
-    WifiConnection_SetVoiceChatEnabled(arg0->clubStatus->unk21);
+    arg0->clubStatus->voiceChatSetting = 1 - arg0->clubStatus->voiceChatSetting;
+    arg0->clubStatus->voiceChat = arg0->clubStatus->voiceChatSetting;
+    WifiConnection_SetVoiceChatEnabled(arg0->clubStatus->voiceChat);
     WifiConnection_SetOwnStatusData(arg0->clubStatus, 36);
-    if (arg0->clubStatus->unk21 == 1) {
+    if (arg0->clubStatus->voiceChat == 1) {
         WifiClubGameEntry_EnableVoiceChat(arg0);
     } else {
         WifiClubGameEntry_DisableVoiceChat(arg0);
     }
-    return arg0->clubStatus->unk22;
+    return arg0->clubStatus->voiceChatSetting;
 }
 
 void WifiClubGameEntry_CheckConnectionLost(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
@@ -783,16 +783,16 @@ s32 WifiClubGameEntry_StartMatch(u32 arg0, u32 arg1) {
 void WifiClubGameEntry_SetPlayingStatus(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1) {
     switch (arg1->game) {
     case 0:
-        arg0->clubStatus->unk1B = 18;
+        arg0->clubStatus->status = 18;
         break;
     case 1:
-        arg0->clubStatus->unk1B = 22;
+        arg0->clubStatus->status = 22;
         break;
     case 2:
-        arg0->clubStatus->unk1B = 24;
+        arg0->clubStatus->status = 24;
         break;
     case 3:
-        arg0->clubStatus->unk1B = 26;
+        arg0->clubStatus->status = 26;
         break;
     }
     WifiConnection_SetOwnStatusData(arg0->clubStatus, 36);
@@ -940,7 +940,7 @@ void WifiClubGameEntry_AddMemberAvatar(WifiClubGameEntry *arg0, s32 arg1, enum H
             PlayerProfile *playerProfile = CommPlayerInfo_GetProfile(arg1);
             GF_ASSERT(playerProfile);
             sp4.unkA = PlayerProfile_GetAvatar(playerProfile);
-        } else if (arg0->clubStatus->unk1C[2] == 0) {
+        } else if (arg0->clubStatus->trainerInfo[2] == 0) {
             sp4.unkA = 0;
         } else {
             sp4.unkA = 97;
@@ -1047,11 +1047,11 @@ void WifiClubGameEntry_SendVoiceChatFlags(WifiClubGameEntry *arg0) {
         if (sp_count > 0) {
             do {
                 if (var_r4 == 0) {
-                    var_r0 = arg0->clubStatus->unk21;
+                    var_r0 = arg0->clubStatus->voiceChat;
                 } else {
                     int temp_r7 = CommPlayerInfo_GetFriendIndex(var_r4);
                     GF_ASSERT(temp_r7 != 32);
-                    var_r0 = arg0->clubStatus[(temp_r7 + 1)].unk21;
+                    var_r0 = arg0->clubStatus[(temp_r7 + 1)].voiceChat;
                 }
                 if (var_r0 != arg0->voiceChatFlags[var_r4]) {
                     sp0 = 1;
@@ -1096,7 +1096,7 @@ s32 WifiClubGameEntry_HasTimedOut(WifiClubGameEntry *arg0) {
 }
 
 s32 WifiClubGameEntry_Leader_Start(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
-    if (arg0->clubStatus->unk21 == 1) {
+    if (arg0->clubStatus->voiceChat == 1) {
         WifiClubGameEntry_EnableVoiceChat(arg0);
     }
     WifiConnection_SetDisconnectWhenAlone(0);
@@ -1182,7 +1182,7 @@ s32 WifiClubGameEntry_Leader_HandleAcceptYesNo(WifiClubGameEntry *arg0, WifiClub
         if (temp_r0 == 0) {
             subroutine_arg0.answer = 1;
             WifiClubGameEntry_AcceptMember(arg0, arg0->applicantNetId, heapID);
-            if (arg0->clubStatus->unk21 == 1) {
+            if (arg0->clubStatus->voiceChat == 1) {
                 WifiClubGameEntry_StopVoiceChat(arg0);
                 WifiClubGameEntry_EnableVoiceChat(arg0);
             }
@@ -1300,7 +1300,7 @@ s32 WifiClubGameEntry_Leader_WaitStartSync(WifiClubGameEntry *arg0, WifiClubGame
 
 s32 WifiClubGameEntry_Leader_SendStatus(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     if (LinkSync_IsSynced(14) != 0) {
-        s16 subroutine_arg0 = (s16)arg0->clubStatus->unk1B;
+        s16 subroutine_arg0 = (s16)arg0->clubStatus->status;
         if (LinkSync_SendPacket(Comm_GetLocalNetId(), &subroutine_arg0) == 1) {
             arg0->state = 16;
         }
@@ -1318,7 +1318,7 @@ s32 WifiClubGameEntry_Leader_CheckStatuses(WifiClubGameEntry *arg0, WifiClubGame
         if (sp0 != i) {
             u16 *temp_r0 = LinkSync_GetPacket(i);
             if (temp_r0 != NULL) {
-                if (temp_r0[0] == arg0->clubStatus->unk1B) {
+                if (temp_r0[0] == arg0->clubStatus->status) {
                     var_r5++;
                 } else {
                     arg0->state = 27;
@@ -1492,7 +1492,7 @@ s32 WifiClubGameEntry_Leader_EndAfterMemberDropped(WifiClubGameEntry *arg0, Wifi
 s32 Wifi_PromptToggleVoiceChat(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID) {
     s32 strno;
 
-    if (arg0->clubStatus->unk21 == 1) {
+    if (arg0->clubStatus->voiceChat == 1) {
         // Is it OK to turn off the Voice Chat?
         strno = msg_0778_00125;
     } else {
@@ -1628,7 +1628,7 @@ s32 Wifi_PromptAwaitingMembers(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *a
     Wifi_LoadAndPrintTextToWindowWrapper(&arg0->screen, arg1, msg_0778_00123, heapID);
     WifiClubGameEntry_ShowWaitingIcon(arg0);
     arg0->state = 9;
-    if (arg0->clubStatus->unk21 == 1) {
+    if (arg0->clubStatus->voiceChat == 1) {
         WifiClubGameEntry_EnableVoiceChat(arg0);
     }
     return 0;
@@ -1648,7 +1648,7 @@ s32 WifiClubGameEntry_Member_WaitStart(WifiClubGameEntry *arg0, WifiClubGameEntr
     WifiClubGameEntry_AcceptEarlierMembers(arg0, heapID);
     if (arg0->membersChanged != 0) {
         arg0->membersChanged = 0U;
-        if (arg0->clubStatus->unk21 == 1) {
+        if (arg0->clubStatus->voiceChat == 1) {
             WifiClubGameEntry_StopVoiceChat(arg0);
             WifiClubGameEntry_EnableVoiceChat(arg0);
         }
@@ -1674,7 +1674,7 @@ s32 WifiClubGameEntry_Member_SendStatus(WifiClubGameEntry *arg0, WifiClubGameEnt
     s32 temp_r0;
 
     if (LinkSync_IsSynced(14) != 0) {
-        s16 subroutine_arg0 = (s16)arg0->clubStatus->unk1B;
+        s16 subroutine_arg0 = (s16)arg0->clubStatus->status;
         if (WifiClubGameEntry_CountMembers(arg0) != Comm_CountConnected()) {
             temp_r0 = arg0->timer - 1;
             arg0->timer = temp_r0;
@@ -1700,7 +1700,7 @@ s32 WifiClubGameEntry_Member_CheckStatuses(WifiClubGameEntry *arg0, WifiClubGame
         if (sp0 != i) {
             u16 *temp_r0 = LinkSync_GetPacket(i);
             if (temp_r0 != NULL) {
-                if (temp_r0[0] == arg0->clubStatus->unk1B) {
+                if (temp_r0[0] == arg0->clubStatus->status) {
                     var_r5++;
                 } else {
                     arg0->state = 0xF;
@@ -1766,7 +1766,7 @@ s32 Wifi_PromptToggleVoiceChat_(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *
     s32 strno;
 
     WifiClubGameEntry_AcceptEarlierMembers(arg0, heapID);
-    if (arg0->clubStatus->unk21 == 1) {
+    if (arg0->clubStatus->voiceChat == 1) {
         // Is it OK to turn off the Voice Chat?
         strno = msg_0778_00125;
     } else {

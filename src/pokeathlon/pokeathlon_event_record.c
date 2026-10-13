@@ -36,7 +36,7 @@ extern const PokeathlonEventRecordDefaultEntry ov99_021EA350;
 u16 PokeathlonEventRecord_GetEventTotal(PokeathlonEventRecordData *data, u32 event) {
     GF_ASSERT(data != NULL);
     GF_ASSERT(event < 10);
-    return ((u16 *)data->args->unk8)[event];
+    return ((u16 *)data->args->eventTotals)[event];
 }
 
 BOOL PokeathlonEventRecord_Init(OverlayManager *man, int *state) {

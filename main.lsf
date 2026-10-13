@@ -1525,9 +1525,9 @@ Overlay OVY_43
 Overlay OVY_44
 {
     After OVY_42
-    Object src/overlay_44_0222CDAC.o
+    Object src/wifi_club_app.o
     Object src/wifi_club_room.o
-    Object src/overlay_44_02232E90.o
+    Object src/wifi_club_room_maps.o
     Object src/wifi_club_game_entry.o
 }
 Overlay OVY_45

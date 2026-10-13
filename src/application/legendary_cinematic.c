@@ -444,11 +444,11 @@ void LegendaryCinematic_InitCameraAndLights(LegendaryCinematic *cinematic) {
     G3X_AntiAlias(TRUE);
     G3X_SetFog(FALSE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x8000, 0);
     G3X_SetClearColor(GX_RGB(31, 0, 0), 0, 0x7FFF, 63, FALSE);
-    attributes = (ModelAttributes *)&cinematic->args->unk4;
+    attributes = (ModelAttributes *)&cinematic->args->modelAttributes;
     NNS_G3dGlbMaterialColorDiffAmb(attributes->diffuse, attributes->ambient, attributes->setDiffuseColorAsVertexColor);
-    attributes = (ModelAttributes *)&cinematic->args->unk4;
+    attributes = (ModelAttributes *)&cinematic->args->modelAttributes;
     NNS_G3dGlbMaterialColorSpecEmi(attributes->specular, attributes->emission, attributes->enableSpecularReflectShininessTable);
-    attributes = (ModelAttributes *)&cinematic->args->unk4;
+    attributes = (ModelAttributes *)&cinematic->args->modelAttributes;
     NNS_G3dGlbPolygonAttr(attributes->lightMask, attributes->polygonMode, attributes->cullMode, attributes->id, attributes->alpha, attributes->miscFlags);
     SetBgPriority(GF_BG_LYR_MAIN_0, 0);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
@@ -572,10 +572,10 @@ int ScriptCinematic_HoOh(void *data) {
 int HoOhCinematic_Init(LegendaryCinematic *cinematic) {
     u32 variant;
     LegendaryCinematic_Init3D(cinematic);
-    LegendaryCinematic_SetLights((ModelAttributes *)&cinematic->args->unk4);
+    LegendaryCinematic_SetLights((ModelAttributes *)&cinematic->args->modelAttributes);
     LegendaryCinematic_SetEdgeMarking(ov106_021E6E04);
     LegendaryCinematic_SetCamera(cinematic, &ov106_021E6E74);
-    variant = cinematic->args->unk4E;
+    variant = cinematic->args->timeOfDay;
     LegendaryCinematic_LoadModels(cinematic, NARC_a_2_4_3, &ov106_021E6E50[variant], 1);
     LegendaryCinematic_FadeInFromWhite(cinematic, 6, 1, 3);
     return 2;
@@ -621,7 +621,7 @@ int HoOhCinematic_LoadSecondScene(LegendaryCinematic *cinematic) {
     u32 variant;
     LegendaryCinematic_FreeModels(cinematic);
     LegendaryCinematic_SetCamera(cinematic, &ov106_021E6E9C);
-    variant = cinematic->args->unk4E;
+    variant = cinematic->args->timeOfDay;
     LegendaryCinematic_LoadModels(cinematic, NARC_a_2_4_3, &ov106_021E6E2C[variant], 1);
     LegendaryCinematic_FadeInFromBlack(cinematic, 6, 1, 5);
     return 2;
@@ -656,7 +656,7 @@ int ScriptCinematic_Lugia(void *data) {
 int LugiaCinematic_Init(LegendaryCinematic *cinematic) {
     LegendaryCinematic_Init3D(cinematic);
     LegendaryCinematic_SetCamera(cinematic, &ov106_021E6EFC);
-    LegendaryCinematic_SetLights((ModelAttributes *)&cinematic->args->unk4);
+    LegendaryCinematic_SetLights((ModelAttributes *)&cinematic->args->modelAttributes);
     LegendaryCinematic_SetEdgeMarking(ov106_021E6EC4);
     LegendaryCinematic_LoadModels(cinematic, NARC_a_2_4_4, ov106_021E6EE4, 2);
     LegendaryCinematic_FadeInFromBlack(cinematic, 6, 1, 3);

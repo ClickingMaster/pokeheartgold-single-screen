@@ -23,8 +23,8 @@ typedef struct FrontierSystem {
     MsgData *msgData;                       // 0x3C
     u8 *scripts;                            // 0x40
     MessageFormat *msgFormat;               // 0x44
-    String *unk_48;                         // 0x48
-    String *unk_4C;                         // 0x4C
+    String *msgBuffer;                      // 0x48
+    String *msgTemplate;                    // 0x4C
     u8 textPrinterId;                       // 0x50
     s8 taskCount;                           // 0x51
     u16 mapId;                              // 0x52

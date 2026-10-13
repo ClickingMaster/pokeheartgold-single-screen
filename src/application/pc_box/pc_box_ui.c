@@ -160,7 +160,7 @@ void PCBox_InitPanels(PCBoxWork *work) {
     PCBox_AttachTrayTabWindow(work->view);
     PCBox_AttachReturnButtonWindow(work->view);
     PCBox_AttachMenuExitButtonWindow(work);
-    if (work->args->unk8 == PC_BOX_MODE_DEPOSIT) {
+    if (work->args->mode == PC_BOX_MODE_DEPOSIT) {
         BgCellManager_InitCell(work->view->panels, 0, 0, 32, 7);
         PCBox_LoadPanelTilemap(work->view->panels, 0, 12);
     } else {
@@ -168,13 +168,13 @@ void PCBox_InitPanels(PCBoxWork *work) {
         PCBox_LoadPanelTilemap(work->view->panels, 0, 11);
     }
     PCBox_LoadPanelTilemap(work->view->panels, 13, 13);
-    if ((u32)work->args->unk8 <= 1) {
+    if ((u32)work->args->mode <= 1) {
         PCBox_LoadPanelTilemap(work->view->panels, 1, 9);
     } else {
         PCBox_LoadPartyPanelTilemap(work->view->panels, 1);
         PCBox_AttachPartyPanelLabelWindow(work->view);
     }
-    if (work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
+    if (work->args->mode == PC_BOX_MODE_MOVE_ITEMS) {
         BgCellManager_InitCell(work->view->panels, 16, 6, 32, 9);
         BgCellManager_DrawCellAt(work->view->panels, 16, 0, 24);
         PCBox_LoadPanelTilemap(work->view->panels, 16, 85);
@@ -1572,7 +1572,7 @@ u32 PCBox_UpdateCursorSlide(PCBoxWork *work) {
     if (slide->frames == 0) {
         ManagedSprite_SetPositionXY(work->view->sprites[9], slide->x, slide->y);
         if (work->view->cursorHolding == 1) {
-            if (work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
+            if (work->args->mode == PC_BOX_MODE_MOVE_ITEMS) {
                 ManagedSprite_SetPositionXY(work->view->sprites[11], slide->x, (s16)(slide->y + 8));
             } else {
                 ManagedSprite_SetPositionXY(work->view->sprites[work->view->slotIcons[work->selectedSlot]], slide->x, (s16)(slide->y + 4));
@@ -1595,7 +1595,7 @@ u32 PCBox_UpdateCursorSlide(PCBoxWork *work) {
     }
     ManagedSprite_SetPositionXY(work->view->sprites[9], pos[1], pos[0]);
     if (work->view->cursorHolding == 1) {
-        if (work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
+        if (work->args->mode == PC_BOX_MODE_MOVE_ITEMS) {
             ManagedSprite_SetPositionXY(work->view->sprites[11], pos[1], (s16)(pos[0] + 8));
         } else {
             ManagedSprite_SetPositionXY(work->view->sprites[work->view->slotIcons[work->selectedSlot]], pos[1], (s16)(pos[0] + 4));

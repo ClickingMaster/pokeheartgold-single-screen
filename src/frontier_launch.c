@@ -18,7 +18,7 @@ FrontierLaunchArgs *Frontier_LaunchApp(FieldSystem *fieldSystem, void *param1) {
     args->unk10 = 0;
     args->unk14 = 0;
     args->mapId = fieldSystem->location->mapId;
-    args->unk20 = 14;
+    args->frontierMapId = 14;
     args->fieldSystem = fieldSystem;
     FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_Frontier, args);
     return args;

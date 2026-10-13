@@ -81,7 +81,7 @@ void *FrontierMap_Init(void *frontier) {
     FrontierLaunchArgs *args = Frontier_GetLaunchArgs(frontier);
     PlayerProfile *profile = Save_PlayerData_GetProfile(args->saveData);
     FrontierMap *map;
-    u8 mapId = args->unk20;
+    u8 mapId = args->frontierMapId;
     int i;
 
     Main_SetVBlankIntrCB(NULL, NULL);
@@ -272,14 +272,14 @@ void FrontierMap_Update(SysTask *task, FrontierMap *map) {
 void FrontierMap_Scroll(FrontierMap *map) {
     FrontierLaunchArgs *args = Frontier_GetLaunchArgs(map->frontier);
 
-    switch (FrontierMap_GetParam(args->unk20, MAP_PARAM_SCROLL_MODE)) {
+    switch (FrontierMap_GetParam(args->frontierMapId, MAP_PARAM_SCROLL_MODE)) {
     default:
     case 0:
         if (map->bg3Layer != NULL) {
             Field2DBgLayer_SetCamera(map->bg3Layer, &map->camera);
         }
         if (map->bg2Layer != NULL) {
-            if (FrontierMap_GetParam(args->unk20, MAP_PARAM_BG2_SCROLLS) == 1) {
+            if (FrontierMap_GetParam(args->frontierMapId, MAP_PARAM_BG2_SCROLLS) == 1) {
                 Field2DBgLayer_SetCamera(map->bg2Layer, &map->camera);
             }
         }
@@ -311,8 +311,8 @@ void FrontierMap_ScrollToCamera(FrontierMap *map) {
     G2dRenderer_SetMainSurfaceCoords(SpriteSystem_GetRenderer(map->spriteSystem), (fx32)fx, (fx32)fy);
     ScheduleSetBgPosText(map->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_X, x);
     ScheduleSetBgPosText(map->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_Y, y);
-    if (FrontierMap_GetParam(args->unk20, MAP_PARAM_BG2_SCREEN) != FRONTIER_MAP_NO_ID) {
-        if (FrontierMap_GetParam(args->unk20, MAP_PARAM_BG2_SCROLLS) == 1) {
+    if (FrontierMap_GetParam(args->frontierMapId, MAP_PARAM_BG2_SCREEN) != FRONTIER_MAP_NO_ID) {
+        if (FrontierMap_GetParam(args->frontierMapId, MAP_PARAM_BG2_SCROLLS) == 1) {
             ScheduleSetBgPosText(map->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_SET_X, x);
             ScheduleSetBgPosText(map->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_SET_Y, y);
         }
@@ -493,7 +493,7 @@ void FrontierMap_FreeMapObjects(FrontierMap *map) {
     for (i = 0; i < FRONTIER_MAP_OBJECT_MAX; i++) {
         if (object->object != NULL) {
             Field2DObject_Delete(object->object);
-            if (object->unk_38 != NULL) {
+            if (object->movementTask != NULL) {
                 GF_AssertFail();
             }
         }
@@ -565,8 +565,8 @@ void FrontierMap_FreeSpriteSystem(FrontierMap *map) {
         }
     }
     for (i = 0; i < 4; i++) {
-        if (map->unk80[i] != NULL) {
-            Sprite_DeleteAndFreeResources(map->unk80[i]);
+        if (map->monSprites[i] != NULL) {
+            Sprite_DeleteAndFreeResources(map->monSprites[i]);
             ((SpriteManagerUnloadFunc)SpriteManager_UnloadCharObjById)(map->spriteManager, 50000 + i);
             ((SpriteManagerUnloadFunc)SpriteManager_UnloadPlttObjById)(map->spriteManager, 50000 + i);
             ((SpriteManagerUnloadFunc)SpriteManager_UnloadCellObjById)(map->spriteManager, 50000 + i);
@@ -646,7 +646,7 @@ Field2DObject *FrontierMap_CreateObject(FrontierMap *map, const FrontierMapObjec
     args.unk4 = template->id;
     args.unk6 = template->unk_02;
     args.unk8 = template->unk_0A;
-    args.unkA = template->unk_00;
+    args.unkA = template->spriteId;
     object = Field2DObjectManager_AddObject(map->objectManager, &args);
     objectSprite = Field2DObjectSpriteManager_CreateSprite(map->objectGfx, object, 0, HEAP_ID_101);
     Field2DObjectSprite_SetVisible(objectSprite, template->unk_0B);
@@ -663,7 +663,7 @@ void FrontierMap_DeleteObject(FrontierMap *map, Field2DObject *object) {
         if (objects[i].object == object) {
             Field2DObject_Delete(objects[i].object);
             Field2DObjectSprite_Delete(objects[i].objectSprite);
-            if (objects[i].unk_38 != NULL) {
+            if (objects[i].movementTask != NULL) {
                 GF_AssertFail();
             }
             MI_CpuFill8(&objects[i], 0, sizeof(FrontierMapObject));

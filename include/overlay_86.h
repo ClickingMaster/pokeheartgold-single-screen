@@ -5,10 +5,10 @@
 #include "save.h"
 
 typedef struct FrontierRecordsAppArgs {
-    SaveData *unk0;
-    u8 unk4;
-    u8 unk5;
-    u16 unk6;
+    SaveData *saveData;
+    u8 mode;
+    u8 facility;
+    u16 species;
 } FrontierRecordsAppArgs;
 
 BOOL FrontierRecordsApp_Init(OverlayManager *man, int *state);

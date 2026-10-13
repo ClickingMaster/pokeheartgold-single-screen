@@ -104,7 +104,7 @@ void PCBox_VBlankCallback(SysTask *task, void *data) {
 }
 
 void PCBox_UpdateDetailPanel(PCBoxWork *work) {
-    if (work->args->unk8 != PC_BOX_MODE_MOVE_ITEMS) {
+    if (work->args->mode != PC_BOX_MODE_MOVE_ITEMS) {
         BgCellManager_UpdateCellMove(work->view->panels, 0x10);
         return;
     }
@@ -1185,7 +1185,7 @@ BOOL PCBox_ShowSlotMonInfo(PCBoxWork *work, u32 index) {
         lock = AcquireBoxMonLock(boxMon);
         monInfo = PCBox_CreateMonInfo(boxMon);
         if (monInfo != NULL) {
-            if (work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
+            if (work->args->mode == PC_BOX_MODE_MOVE_ITEMS) {
                 PCBox_DrawMonItemInfo(work, monInfo);
             } else {
                 PCBox_DrawMonInfo(work, monInfo);
@@ -1225,7 +1225,7 @@ void PCBox_ClearMonInfo(PCBoxWork *work) {
     PCBox_SetSpriteVisible(work->view, 0xe, 0);
     PCBox_ClearMonInfoWindows(work->view);
     PCBox_DrawMarkings(work, 0);
-    if (work->args->unk8 == PC_BOX_MODE_MOVE_ITEMS) {
+    if (work->args->mode == PC_BOX_MODE_MOVE_ITEMS) {
         PCBox_HideItemInfoPanel(work->view->panels);
     } else {
         PCBox_HideMovesPanel(work->view->panels);

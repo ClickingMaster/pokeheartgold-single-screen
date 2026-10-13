@@ -14,14 +14,14 @@ typedef struct SaveFashionDataSub3FC {
 } SaveFashionDataSub3FC; // size=0x98
 
 typedef struct FashionCase {
-    u32 unk_00[40 / sizeof(u32)];
-    u32 unk_28[(18 + sizeof(u32) - 1) / sizeof(u32)];
+    u32 accessories[40 / sizeof(u32)];
+    u32 wallpaperOrder[(18 + sizeof(u32) - 1) / sizeof(u32)];
     u8 padding_3C[4];
 } FashionCase;
 
 typedef struct SaveFashionData {      // todo: rename to SaveFashionData
-    SaveFashionDataSub unk_000[11];   // 000
-    SaveFashionDataSub3FC unk_3FC[5]; // 4FC
+    SaveFashionDataSub entries[11];   // 000
+    SaveFashionDataSub3FC largeEntries[5]; // 4FC
     FashionCase fashionCase;          // 7F4
 } SaveFashionData;                    // size=0x834
 

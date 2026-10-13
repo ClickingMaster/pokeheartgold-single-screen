@@ -24,7 +24,7 @@ typedef struct CameraHistory {
     BOOL enableUpdateY;
     BOOL enableUpdateZ;
     VecFx32 *vecs;
-    BOOL unk24;
+    BOOL enabled;
 } CameraHistory;
 
 typedef struct CameraAngle {

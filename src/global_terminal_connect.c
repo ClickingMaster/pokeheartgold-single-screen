@@ -229,7 +229,7 @@ BOOL GlobalTerminalConnect_Init(OverlayManager *manager, int *state) {
         WirelessStatusIcon_Create();
         GlobalTerminalConnect_SetStateAndNext(work, GTC_STATE_DISCONNECT, GTC_STATE_EXIT);
     } else {
-        if (work->args->launchArgs->unk8 != 0) {
+        if (work->args->launchArgs->connectDirectly != 0) {
             work->state = GTC_STATE_START_CONNECT;
         } else {
             work->state = GTC_STATE_ASK_CONNECT;

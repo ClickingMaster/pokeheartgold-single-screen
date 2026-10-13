@@ -6,7 +6,7 @@
 
 typedef struct MainOverlayArgs {
     int unk_00;
-    u32 unk_04;
+    u32 resetParameter;
     SaveData *saveData;
 } MainOverlayArgs;
 

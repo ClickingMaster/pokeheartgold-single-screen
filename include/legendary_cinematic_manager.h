@@ -10,9 +10,9 @@ typedef struct UnkStruct_0203FCC4 {
 
 typedef struct LegendaryCinematicArgs {
     SaveData *saveData;
-    UnkStruct_0203FCC4 unk4;
-    u16 unk4C;
-    u16 unk4E;
+    UnkStruct_0203FCC4 modelAttributes;
+    u16 scene;
+    u16 timeOfDay;
 } LegendaryCinematicArgs;
 
 BOOL LegendaryCinematic_Init(OverlayManager *man, int *state);

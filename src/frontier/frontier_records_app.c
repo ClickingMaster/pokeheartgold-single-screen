@@ -34,7 +34,7 @@
 #include "frontier_save_access.h"
 #include "unk_0205BFF0.h"
 
-// Facilities, as passed in FrontierRecordsAppArgs.unk5
+// Facilities, as passed in FrontierRecordsAppArgs.facility
 #define FRONTIER_RECORDS_TOWER        1
 #define FRONTIER_RECORDS_FACTORY_LV50 2
 #define FRONTIER_RECORDS_FACTORY_OPEN 3
@@ -260,11 +260,11 @@ BOOL FrontierRecordsApp_Init(OverlayManager *man, int *state) {
     app->manager = man;
     app->bgConfig = BgConfig_Alloc(HEAP_ID_121);
     args = OverlayManager_GetArgs(man);
-    app->saveData = args->unk0;
+    app->saveData = args->saveData;
     app->frontierSave = Save_Frontier_GetStatic(app->saveData);
-    app->mode = args->unk4;
-    app->facility = args->unk5;
-    app->species = args->unk6;
+    app->mode = args->mode;
+    app->facility = args->facility;
+    app->species = args->species;
     app->options = Save_PlayerData_GetOptionsAddr(app->saveData);
     FontID_Alloc(4, HEAP_ID_121);
     FrontierRecordsApp_InitGraphics(app);

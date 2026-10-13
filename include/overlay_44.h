@@ -57,7 +57,7 @@ typedef struct WifiClubGameEntryScreen {
 } WifiClubGameEntryScreen;
 
 typedef struct WifiClubGameEntry {
-    UnkStruct_ov44_02231958 *clubStatus;
+    WifiClubPlayerStatus *clubStatus;
     u8 isLeader;
     u8 state;
     u8 applicantNetId;
@@ -221,7 +221,7 @@ s32 WifiClubGameEntry_Member_WaitReconnected(WifiClubGameEntry *arg0, WifiClubGa
 s32 WifiClubGameEntry_Member_RebuildScreen(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID);
 s32 WifiClubGameEntry_Member_WaitFadeIn(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID);
 s32 WifiClubGameEntry_Member_Cancel(WifiClubGameEntry *arg0, WifiClubGameEntryArgs *arg1, enum HeapID heapID);
-Field2DPoint ov44_02232E90(s32 arg0);
-const u32 *ov44_02232E9C(u32 arg0);
+Field2DPoint WifiClubRoom_GetMapSize(s32 arg0);
+const u32 *WifiClubRoom_GetMapCells(u32 arg0);
 
 #endif // POKEHEARTGOLD_OVY_44_H

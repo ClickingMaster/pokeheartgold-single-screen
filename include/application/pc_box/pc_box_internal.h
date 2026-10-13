@@ -40,7 +40,7 @@ void TextOBJ_SetPalOffsetRespectVramOffset(TextOBJ *object, int value);
 // Defined in src/render_window.c, not declared in render_window.h.
 void DrawFrame2AroundWindow(Window *window, u32 baseTile, u32 paletteNum);
 
-// Launch modes (PCBoxArgs.unk8).
+// Launch modes (PCBoxArgs.mode).
 #define PC_BOX_MODE_DEPOSIT      0
 #define PC_BOX_MODE_WITHDRAW     1
 #define PC_BOX_MODE_MOVE_POKEMON 2

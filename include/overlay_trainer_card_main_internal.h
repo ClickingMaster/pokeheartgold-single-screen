@@ -16,12 +16,12 @@
 // The card payload at the start of TrainerCardAppArgs, as the trainer card viewer reads it.
 typedef struct TrainerCardMainCard {
     u8 version; // 0x00, game version of the card's owner (HG/SS cards show badges)
-    u8 unk_01;
+    u8 language;
     u8 unk_02;
     u8 stars; // 0x03, selects the card colour
     u8 unk_04_0 : 1;
     u8 liveIgt : 1; // 0x04, play time is read from igt instead of the stored hours/minutes
-    u8 unk_04_2 : 1;
+    u8 gender : 1;
     u8 pokedexObtained : 1;
     u8 signatureExists : 1;
     u8 unk_04_5 : 3;
@@ -44,10 +44,10 @@ typedef struct TrainerCardMainCard {
     u8 clearDay;      // 0x34
     u8 clearMinutes;  // 0x35
     u8 unk_36[2];
-    u32 unk_38;
-    u32 unk_3C;
-    u32 unk_40;
-    u32 unk_44;
+    u32 linkCount;
+    u32 linkBattleWins;
+    u32 linkBattleLosses;
+    u32 linkTrades;
     u8 unk_48[0x20];
     u8 signature[0x600]; // 0x68, 1 bit per pixel
 } TrainerCardMainCard;

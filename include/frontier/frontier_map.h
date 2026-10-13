@@ -16,7 +16,7 @@
 
 // Object placement as the frontier scripts and the save copy store it (15 halfwords)
 typedef struct FrontierMapObjectTemplate {
-    u16 unk_00;
+    u16 spriteId;
     u16 unk_02;
     u16 id;
     s16 x;
@@ -41,7 +41,7 @@ typedef struct FrontierMapObject {
     FrontierMapObjectTemplate template;
     FrontierMapObjectMovement movement;
     u8 unk_36[2];
-    void *unk_38;
+    void *movementTask;
 } FrontierMapObject;
 
 // Object graphics loaded into the map's object graphics manager (24 slots)
@@ -116,7 +116,7 @@ typedef struct FrontierMap {
     SpriteSystem *spriteSystem;
     SpriteManager *spriteManager;
     FrontierMapSpriteSet spriteSet;
-    ManagedSprite *unk80[4];
+    ManagedSprite *monSprites[4];
     void *mapEffect; // 0x90, set up by the map's init callback
     SysTask *objectTask;
     SysTask *eventTask;

@@ -21,7 +21,7 @@ GridInputHandler *GridInputHandler_Create(const TouchscreenHitbox *hitBoxes, con
     ret->isButtons = inputState;
     ret->nextInput = initialPos;
     ret->lastInput = 0xFF;
-    ret->unk_0F = 0xFF;
+    ret->returnInput = 0xFF;
     ret->enabledFlag[0] = -1;
     ret->enabledFlag[1] = -1;
     return ret;
@@ -163,7 +163,7 @@ static int GridInputHandler_HandleTouch(GridInputHandler *inputHandler, u16 hitb
     if (GridInputHandlerFlagArray_CheckFlag(inputHandler->enabledFlag, hitboxId) == TRUE) {
         inputHandler->nextInput = hitboxId;
         inputHandler->lastInput = 0xFF;
-        inputHandler->unk_0F = 0xFF;
+        inputHandler->returnInput = 0xFF;
         if (inputHandler->isButtons == TRUE && inputHandler->modeSwitchLagFrame == TRUE) {
             inputHandler->isButtons = FALSE;
             inputHandler->callbacks->onSwitchToTouchMode(inputHandler->data, inputHandler->nextInput, inputHandler->lastInput);
@@ -177,7 +177,7 @@ static int GridInputHandler_HandleTouch(GridInputHandler *inputHandler, u16 hitb
 static int GridInputHandler_HandleButton(GridInputHandler *inputHandler) {
     inputHandler->isButtons = TRUE;
     inputHandler->lastInput = 0xFF;
-    inputHandler->unk_0F = 0xFF;
+    inputHandler->returnInput = 0xFF;
     inputHandler->callbacks->onButton(inputHandler->data, inputHandler->nextInput, inputHandler->lastInput);
     return GRID_MENU_BUTTON_MODE;
 }
@@ -188,8 +188,8 @@ static int GridInputHandler_HandleDpad(GridInputHandler *inputHandler, u8 direct
     u8 r1;
 
     if (input & 0x80) {
-        if (inputHandler->unk_0F != 0xFF) {
-            input = inputHandler->unk_0F;
+        if (inputHandler->returnInput != 0xFF) {
+            input = inputHandler->returnInput;
         } else {
             input ^= 0x80;
         }
@@ -210,9 +210,9 @@ static int GridInputHandler_HandleDpad(GridInputHandler *inputHandler, u8 direct
     }
     if (inputHandler->nextInput != input) {
         if (DpadBox_IsForcedInDirection(&inputHandler->dpadPositions[input], direction) == TRUE && neighborIsEnabled) {
-            inputHandler->unk_0F = inputHandler->nextInput;
+            inputHandler->returnInput = inputHandler->nextInput;
         } else {
-            inputHandler->unk_0F = 0xFF;
+            inputHandler->returnInput = 0xFF;
         }
         inputHandler->lastInput = inputHandler->nextInput;
         inputHandler->nextInput = input;
@@ -228,19 +228,19 @@ int GridInputHandler_GetNextInput(GridInputHandler *inputHandler) {
 }
 
 int GridInputHandler_GetUnk0F(GridInputHandler *inputHandler) {
-    return inputHandler->unk_0F;
+    return inputHandler->returnInput;
 }
 
 void GridInputHandler_SetNextInput(GridInputHandler *inputHandler, int nextInput) {
     inputHandler->nextInput = nextInput;
     inputHandler->lastInput = 0xFF;
-    inputHandler->unk_0F = 0xFF;
+    inputHandler->returnInput = 0xFF;
 }
 
 void GridInputHandler_SetNextLastUnk0FInputs(GridInputHandler *inputHandler, int nextInput, int lastInput, int unk0F) {
     inputHandler->nextInput = nextInput;
     inputHandler->lastInput = lastInput;
-    inputHandler->unk_0F = unk0F;
+    inputHandler->returnInput = unk0F;
 }
 
 BOOL GridInputHandler_IsButtonInputMode(GridInputHandler *inputHandler) {
@@ -251,7 +251,7 @@ void GridInputHandler_SetButtonInputMode(GridInputHandler *inputHandler, BOOL is
     inputHandler->isButtons = isButtons;
     if (isButtons == TRUE) {
         inputHandler->lastInput = 0xFF;
-        inputHandler->unk_0F = 0xFF;
+        inputHandler->returnInput = 0xFF;
         inputHandler->callbacks->onButton(inputHandler->data, inputHandler->nextInput, -1);
     } else {
         inputHandler->callbacks->onSwitchToTouchMode(inputHandler->data, inputHandler->nextInput, -1);

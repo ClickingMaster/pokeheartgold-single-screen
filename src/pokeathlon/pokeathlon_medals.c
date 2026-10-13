@@ -61,11 +61,11 @@ u8 PokeathlonMedals_GetPageSpeciesCount(PokeathlonMedals *work) {
 }
 
 u8 PokeathlonMedals_GetSpeciesMedals(PokeathlonMedals *work, int species) {
-    return ((u8 *)work->args->unk4)[species - 1];
+    return ((u8 *)work->args->speciesMedals)[species - 1];
 }
 
 u32 PokeathlonMedals_CountMedalists(PokeathlonMedals *work) {
-    return PokeathlonUtil_CountSpeciesWithAllMedals(work->args->unk4);
+    return PokeathlonUtil_CountSpeciesWithAllMedals(work->args->speciesMedals);
 }
 
 BOOL PokeathlonMedals_HasAllMedals(PokeathlonMedals *work, int species) {

@@ -25,7 +25,7 @@ typedef struct GridInputHandler {
     u8 modeSwitchLagFrame;                        // 0x0C
     u8 nextInput;                                 // 0x0D
     u8 lastInput;                                 // 0x0E
-    u8 unk_0F;                                    // 0x0F
+    u8 returnInput;                               // 0x0F
     u32 enabledFlag[2];                           // 0x10
     const GridCallbacks *callbacks;               // 0x18
     void *data;                                   // 0x1C, passed as data to unk_18

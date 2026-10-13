@@ -8,7 +8,7 @@
 typedef struct PCBoxArgs {
     SaveData *saveData;
     MenuInputStateMgr *menuInputStatePtr;
-    int unk8;
+    int mode;
 } PCBoxArgs;
 
 BOOL PCBox_Init(OverlayManager *man, int *state);
