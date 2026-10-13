@@ -4,7 +4,7 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #pragma force_active on
-int ov45_02231C78(int *);
+int LobbyByteVector_Data(int *);
 
 typedef union {
     struct {
@@ -45,18 +45,18 @@ static inline int badMode(Work *w) {
 extern u8 ov45_02254D5C[];
 extern u8 ov45_02254D1C[];
 extern u8 ov45_02254D3C[];
-extern void ov45_02235C40(void);
-extern void ov45_02235E4C(void);
-extern void ov45_02236090(void);
-extern void ov45_022362D0(void);
-extern void ov45_02236A44(void);
+extern void PPWLobby_OnPlayerJoined(void);
+extern void PPWLobby_OnPlayerLeft(void);
+extern void PPWLobby_OnMessage(void);
+extern void PPWLobby_OnChannelDataChanged(void);
+extern void PPWLobby_OnTopicChanged(void);
 extern void ov45_02235A94(void);
 extern void ov45_02231EB0(String *);
 extern void ov45_02233994(String *, int, String *);
 extern void LobbyString_Destroy(String *);
 extern void LobbyString_InitCopy(String *, String *);
 extern void LobbyString_Assign(String *, String *);
-extern int ov45_02241048(char *, int, void *, void *, void (*)(void), int);
+extern int LobbyChat_EnterChannelAsync(char *, int, void *, void *, void (*)(void), int);
 
 static inline void initResult(Result *r, int mode, String *s) {
     r->mode = mode;
@@ -67,7 +67,7 @@ static inline void initResult(Result *r, int mode, String *s) {
 
 int PPW_LobbyJoinSubChannelAsync(int);
 
-int ov45_02231C78(int *p) {
+int LobbyByteVector_Data(int *p) {
     if (p[1] == 0) {
         return 0;
     }

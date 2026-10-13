@@ -88,12 +88,12 @@ struct InsertResult {
 };
 
 extern "C" void ov45_0224206C(InsertResult *out, void *list, Handler **h);
-extern "C" Str ov45_022428C8(Mgr *m, const Str &s);
+extern "C" Str LobbyChat_GetFullChannelName(Mgr *m, const Str &s);
 extern "C" void chatGetChannelKeysA(void *ctx, const char *name, const char *msg, int x, const char **desc, void (*cb)(), u32 id, u32 z);
-extern "C" void ov45_02240494();
+extern "C" void LobbyChat_OnGetChannelKeys();
 extern "C" unsigned long strlen(const char *);
 extern "C" const char ov45_02255304[];
-extern "C" Str ov45_0224367C(Mgr *m, int idx);
+extern "C" Str LobbyChat_GetUserNick(Mgr *m, int idx);
 
 inline Mgr *GetMgr() {
     return ov45_022577DC;
@@ -125,7 +125,7 @@ inline Handler *NewHandler(u32 a, u32 b) {
     return p;
 }
 
-extern "C" int ov45_022417B4(const char *name, int idx, const char *desc, u32 a, u32 b);
+extern "C" int LobbyChat_GetChannelKeysAsync(const char *name, int idx, const char *desc, u32 a, u32 b);
 
 struct IdTag {};
 
@@ -135,7 +135,7 @@ inline u32 GetId(Handler *h, IdTag, IdTag) {
 
 #pragma opt_common_subs off
 
-extern "C" int ov45_022417B4(const char *name, int idx, const char *desc, u32 a, u32 b) {
+extern "C" int LobbyChat_GetChannelKeysAsync(const char *name, int idx, const char *desc, u32 a, u32 b) {
     Mgr *m = ov45_022577DC;
     if (m == NULL) {
         return 4;
@@ -153,7 +153,7 @@ extern "C" int ov45_022417B4(const char *name, int idx, const char *desc, u32 a,
     if (idx == -1) {
         msg.assign(ov45_02255304);
     } else {
-        Str tmp = ov45_0224367C(GetMgr(), idx);
+        Str tmp = LobbyChat_GetUserNick(GetMgr(), idx);
         msg.assign(tmp);
         tmp.destroy();
         if (msg.equals(ov45_02255304)) {
@@ -167,8 +167,8 @@ extern "C" int ov45_022417B4(const char *name, int idx, const char *desc, u32 a,
     ov45_0224206C(&res, m->list, &h);
     u32 id = GetId(h, IdTag(), IdTag());
     Str s(name);
-    Str t = ov45_022428C8(GetMgr(), s);
-    chatGetChannelKeysA(GetMgr()->unk0, t.c_str(), msg.c_str(), 1, &desc, ov45_02240494, id, 0);
+    Str t = LobbyChat_GetFullChannelName(GetMgr(), s);
+    chatGetChannelKeysA(GetMgr()->unk0, t.c_str(), msg.c_str(), 1, &desc, LobbyChat_OnGetChannelKeys, id, 0);
     t.destroy();
     s.destroy();
     msg.destroy();

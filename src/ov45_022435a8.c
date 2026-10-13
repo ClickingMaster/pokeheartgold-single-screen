@@ -13,19 +13,19 @@ struct S {
 };
 
 typedef Iterator It;
-void ov45_02243128(It *, struct S *, void *);
-void ov45_02242C74(It *, struct S *, void *);
-void ov45_02243B50(It *, struct S *, Iterator);
-void ov45_022438F0(It *, struct S *, Iterator);
-int ov45_0224330C(struct S *, void *);
-int ov45_022435A8(struct S *, void *);
+void LobbyUserIdSet_Find(It *, struct S *, void *);
+void LobbyChannelMap_Find(It *, struct S *, void *);
+void LobbyUserIdSet_Erase(It *, struct S *, Iterator);
+void LobbyChannelMap_Erase(It *, struct S *, Iterator);
+int LobbyUserIdSet_EraseKey(struct S *, void *);
+int LobbyChannelMap_EraseKey(struct S *, void *);
 
-int ov45_022435A8(struct S *s, void *k) {
+int LobbyChannelMap_EraseKey(struct S *s, void *k) {
     It it, out;
-    ov45_02242C74(&it, s, k);
+    LobbyChannelMap_Find(&it, s, k);
     if (it.current == &s->anchor) {
         return 0;
     }
-    ov45_022438F0(&out, s, (Iterator) { it.current });
+    LobbyChannelMap_Erase(&out, s, (Iterator) { it.current });
     return 1;
 }

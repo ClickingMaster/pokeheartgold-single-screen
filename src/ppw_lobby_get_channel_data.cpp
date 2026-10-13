@@ -53,8 +53,8 @@ struct Work {
 extern "C" Work *_022577C4;
 extern "C" char ov45_022550B4[];
 extern "C" Str ov45_02232434(u8 *, int);
-extern "C" int ov45_022417B4(const char *, int, int, void (*)(), int);
-extern "C" void ov45_02236308();
+extern "C" int LobbyChat_GetChannelKeysAsync(const char *, int, int, void (*)(), int);
+extern "C" void PPWLobby_OnGetChannelKeys();
 extern "C" int PPW_LobbyGetChannelDataAsync(int, int, int, int);
 
 inline bool IsState(int s) {
@@ -99,7 +99,7 @@ extern "C" int PPW_LobbyGetChannelDataAsync(int id, int key, int mode, int arg) 
             name.Destroy();
             return 5;
         }
-        int result = ov45_022417B4(name.CStr(), id, mode, ov45_02236308, arg);
+        int result = LobbyChat_GetChannelKeysAsync(name.CStr(), id, mode, PPWLobby_OnGetChannelKeys, arg);
         {
             Work *g = _022577C4;
             int state = ErrorMap().Map(result);

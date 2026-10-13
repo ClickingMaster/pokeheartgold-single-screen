@@ -121,8 +121,8 @@ struct Root {
     MapNode *mhdr;
 };
 
-extern "C" void ov45_02242C74(MapIt *, void *, Str *);
-extern "C" void ov45_022435A8(void *, Str *);
+extern "C" void LobbyChannelMap_Find(MapIt *, void *, Str *);
+extern "C" void LobbyChannelMap_EraseKey(void *, Str *);
 
 struct Bound {
     Method m;
@@ -146,18 +146,18 @@ inline F ForEach(It first, It last, F f) {
     return f;
 }
 
-extern "C" int ov45_0224335C(Root *root, Str *key);
+extern "C" int LobbyChat_RemoveChannel(Root *root, Str *key);
 #pragma force_active on
 
-extern "C" int ov45_0224335C(Root *root, Str *key) {
+extern "C" int LobbyChat_RemoveChannel(Root *root, Str *key) {
     MapIt it;
-    ov45_02242C74(&it, (u8 *)root + 0x80, key);
+    LobbyChannelMap_Find(&it, (u8 *)root + 0x80, key);
     if (it.n == (MapNode *)((u8 *)root + 0x84)) {
         return 0;
     }
     Vec values;
     values.Build(SetIt(it.n->first), SetIt((SetNode *)&it.n->hdr));
-    ov45_022435A8((u8 *)root + 0x80, key);
+    LobbyChannelMap_EraseKey((u8 *)root + 0x80, key);
     ForEach(values.begin(), values.end(), Bound(ov45_02255358.method, root));
     values.Destroy();
     return 1;

@@ -70,14 +70,14 @@ struct Table {
 };
 
 extern "C" Table ov45_02254D5C, ov45_02254D1C, ov45_02254D3C;
-extern "C" void ov45_02235C40(void), ov45_02235E4C(void), ov45_02236090(void), ov45_022362D0(void), ov45_02236A44(void), ov45_02235A94(void);
+extern "C" void PPWLobby_OnPlayerJoined(void), PPWLobby_OnPlayerLeft(void), PPWLobby_OnMessage(void), PPWLobby_OnChannelDataChanged(void), PPWLobby_OnTopicChanged(void), ov45_02235A94(void);
 
 struct Callbacks {
     void (*f0)(void), (*f1)(void), (*f2)(void), (*f3)(void), (*f4)(void);
     int mode;
 };
 
-extern "C" int ov45_02241048(const char *, int, void *, Callbacks *, void (*)(void), int);
+extern "C" int LobbyChat_EnterChannelAsync(const char *, int, void *, Callbacks *, void (*)(void), int);
 
 class ErrorMap {
 public:
@@ -130,11 +130,11 @@ extern "C" int PPW_LobbyJoinSubChannelAsync(int mode) {
         return 4;
     }
     Callbacks cb;
-    cb.f0 = ov45_02235C40;
-    cb.f1 = ov45_02235E4C;
-    cb.f2 = ov45_02236090;
-    cb.f3 = ov45_022362D0;
-    cb.f4 = ov45_02236A44;
+    cb.f0 = PPWLobby_OnPlayerJoined;
+    cb.f1 = PPWLobby_OnPlayerLeft;
+    cb.f2 = PPWLobby_OnMessage;
+    cb.f3 = PPWLobby_OnChannelDataChanged;
+    cb.f4 = PPWLobby_OnTopicChanged;
     cb.mode = mode;
     Str name = Build(mode, ov45_02231EB0(w));
     Table *t;
@@ -153,7 +153,7 @@ extern "C" int PPW_LobbyJoinSubChannelAsync(int mode) {
         t = 0;
         break;
     }
-    int result = ov45_02241048(name.c_str(), 0, t->ctx, &cb, ov45_02235A94, mode);
+    int result = LobbyChat_EnterChannelAsync(name.c_str(), 0, t->ctx, &cb, ov45_02235A94, mode);
     {
         Work *g = _022577C4;
         int state = ErrorMap().Map(result);

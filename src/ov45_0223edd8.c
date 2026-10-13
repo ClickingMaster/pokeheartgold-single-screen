@@ -48,8 +48,8 @@ extern void LobbyString_InitFromCStr(Text *, char *);
 extern int ov45_0223D644(Text *, Text *, int);
 extern void LobbyString_Destroy(Text *);
 extern void ov45_02237664(Vector *);
-extern void ov45_0223F000(Vector *, Text *, Text *, int);
-extern int ov45_022435F8(Work *, Text *);
+extern void LobbyChat_SplitString(Vector *, Text *, Text *, int);
+extern int LobbyChat_FindUserIdByNick(Work *, Text *);
 #pragma force_active off
 
 static inline char *TextChars(Text *t) {
@@ -72,9 +72,9 @@ static inline int Compare(register char *b, char *a, Text *ta, Text *tb, int n) 
 
 #pragma force_active on
 #pragma opt_propagation off
-void ov45_0223EDD8(void *, char *, char *, int, void *);
+void LobbyChat_OnPrivateMessage(void *, char *, char *, int, void *);
 
-void ov45_0223EDD8(void *unused, char *name, char *data, int kind, void *arg) {
+void LobbyChat_OnPrivateMessage(void *unused, char *name, char *data, int kind, void *arg) {
     struct {
         Text c, d, a, b;
         volatile Callbacks second;
@@ -99,7 +99,7 @@ void ov45_0223EDD8(void *unused, char *name, char *data, int kind, void *arg) {
         }
         LobbyString_InitFromCStr(&frame.e, data);
         LobbyString_InitFromCStr(&frame.f, ov45_022552D8);
-        ov45_0223F000(&frame.vector, &frame.e, &frame.f, 0);
+        LobbyChat_SplitString(&frame.vector, &frame.e, &frame.f, 0);
         LobbyString_Destroy(&frame.f);
         LobbyString_Destroy(&frame.e);
         if (frame.vector.count == 0) {
@@ -123,7 +123,7 @@ void ov45_0223EDD8(void *unused, char *name, char *data, int kind, void *arg) {
         return;
     }
     LobbyString_InitFromCStr(&frame.g, name);
-    id = ov45_022435F8(ov45_022577DC, &frame.g);
+    id = LobbyChat_FindUserIdByNick(ov45_022577DC, &frame.g);
     LobbyString_Destroy(&frame.g);
     if (id == -1) {
         return;

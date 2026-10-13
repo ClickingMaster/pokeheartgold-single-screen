@@ -137,12 +137,12 @@ void ov45_0223DB8C(CharVec *, u32, const char *);
 u32 ov45_0223EA34(Vec *, u32);
 void ov45_0223EB00(Vec *, u32, u32 *);
 void ov45_02236E58(NodeIter *);
-Node *ov45_022370D0(Node *, void *);
+Node *LobbyTree_EraseRebalance(Node *, void *);
 
 extern char ov45_0225520C[];
 void printf(const char *, ...);
 void abort(void);
-void ov45_02236EC4(Node *, void *);
+void LobbyTree_InsertRebalance(Node *, void *);
 
 typedef struct InsertResult {
     Node *current;
@@ -234,8 +234,8 @@ typedef struct Callbacks {
 } Callbacks;
 
 Callbacks *PPWLobby_GetWork(void);
-const char *ov45_02231C78(void *);
-void ov45_0223DCD0(Session *s);
+const char *LobbyByteVector_Data(void *);
+void PPWLobbyPlayer_UpdateState(Session *s);
 
 extern VTable ov45_02254FB0;
 void DWC_GetDateTime(RTCDate *date, RTCTime *time);
@@ -258,7 +258,7 @@ extern char ov45_022551F0[];
 extern char ov45_022551F4[];
 extern char ov45_022551F8[];
 extern char ov45_022551FC[];
-void ov45_02232B24(Str *out, u32 width, const char *fmt, ...);
+void LobbyString_FormatN(Str *out, u32 width, const char *fmt, ...);
 void LobbyString_Destroy(Str *s);
 void LobbyString_Append(Str *s, void *arg);
 void LobbyString_AppendCStr(Str *s, const char *arg);
@@ -305,7 +305,7 @@ void ov45_0223E6E8(NodeIter *out, List *l, NodeIter it) {
         ov45_02236E58(&it);
         l->leftmost = it.current;
     }
-    out->current = ov45_022370D0(n, l->root);
+    out->current = LobbyTree_EraseRebalance(n, l->root);
     if (n != NULL) {
         DWC_Free(0, n, 0);
     }
@@ -354,7 +354,7 @@ Node *ov45_0223E758(List *l, Node *parent, u8 left, u8 flag, Session **key) {
     }
     l->count++;
     h.b = n;
-    ov45_02236EC4(n, l->root);
+    LobbyTree_InsertRebalance(n, l->root);
     if (flag) {
         l->leftmost = n;
     }

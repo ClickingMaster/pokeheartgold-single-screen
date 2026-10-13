@@ -24,8 +24,8 @@ extern void *ov45_02244170(Tree *, void *, void **, u8 *, u8 *);
 extern int LobbyString_Compare(void *, void *);
 void *ov45_02243970(Tree *, void *, u8, u8, void *);
 extern void ov45_02236E58(Iterator *);
-extern void *ov45_022370D0(void *, void *);
-extern void ov45_02243F1C(void *);
+extern void *LobbyTree_EraseRebalance(void *, void *);
+extern void LobbyUserIdSet_Destroy(void *);
 extern void LobbyString_Destroy(void *);
 extern void DWC_Free(int, void *, int);
 
@@ -33,8 +33,8 @@ static inline int isLess(void *a, void *b) {
     return LobbyString_Compare(a, b) < 0;
 }
 
-void ov45_02243840(Result *, Tree *, void *);
-void ov45_022438F0(Iterator *, Tree *, Iterator);
+void LobbyChannelMap_Insert(Result *, Tree *, void *);
+void LobbyChannelMap_Erase(Iterator *, Tree *, Iterator);
 
 typedef struct {
     u32 prefix[3];
@@ -70,9 +70,9 @@ extern void abort(void);
 extern void *LobbyMem_Alloc(int);
 extern void LobbyString_InitCopy(Payload *, Payload *);
 extern void ov45_02243BC0(void *, void *);
-extern void ov45_02236EC4(void *, void *);
+extern void LobbyTree_InsertRebalance(void *, void *);
 
-void ov45_02243840(Result *out, Tree *t, void *key) {
+void LobbyChannelMap_Insert(Result *out, Tree *t, void *key) {
     u8 left, first;
     void *previous;
     void *parent = ov45_02244170(t, key, &previous, &left, &first);
@@ -85,14 +85,14 @@ void ov45_02243840(Result *out, Tree *t, void *key) {
     }
 }
 
-void ov45_022438F0(Iterator *out, Tree *t, Iterator node) {
+void LobbyChannelMap_Erase(Iterator *out, Tree *t, Iterator node) {
     void *saved = node.current;
     if (saved == t->first) {
         ov45_02236E58(&node);
         t->first = node.current;
     }
-    out->current = ov45_022370D0(saved, t->anchor);
-    ov45_02243F1C((u8 *)saved + 28);
+    out->current = LobbyTree_EraseRebalance(saved, t->anchor);
+    LobbyUserIdSet_Destroy((u8 *)saved + 28);
     LobbyString_Destroy((u8 *)saved + 12);
     if (saved) {
         DWC_Free(0, saved, 0);

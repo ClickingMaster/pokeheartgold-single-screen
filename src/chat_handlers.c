@@ -967,7 +967,7 @@ void ciErrNickInUseHandler(ChatConnection *chat, ChatMessage *message) {
     if (!chat->connecting) {
         return;
     }
-    ov45_02251B0C(chat, 1, chat->nick, 0, 0);
+    ciNickError(chat, 1, chat->nick, 0, 0);
 }
 
 // 352: one user of a WHO reply (channel, user, host, server, nick, flags "H@+", ...).
@@ -2093,7 +2093,7 @@ void ciErrErroneusNicknameHandler(ChatConnection *chat, ChatMessage *message) {
     if (!chat->connecting) {
         return;
     }
-    ov45_02251B0C(chat, 2, chat->nick, 0, 0);
+    ciNickError(chat, 2, chat->nick, 0, 0);
 }
 
 // 708: the login failed (while connecting: the connect fails with reason 2).
@@ -2114,7 +2114,7 @@ void ciErrNoUniqueNickHandler(ChatConnection *chat, ChatMessage *message) {
     if (!chat->connecting) {
         return;
     }
-    ov45_02251B0C(chat, 4, ov45_02256708, 0, 0);
+    ciNickError(chat, 4, ov45_02256708, 0, 0);
 }
 
 // 710: (while connecting: nick error 3).
@@ -2123,7 +2123,7 @@ void ciErrUniqueNickExpiredHandler(ChatConnection *chat, ChatMessage *message) {
     if (!chat->connecting) {
         return;
     }
-    ov45_02251B0C(chat, 3, ov45_02256708, 0, 0);
+    ciNickError(chat, 3, ov45_02256708, 0, 0);
 }
 
 // 711: the registered nick was refused, with a number of suggested nicks (backslash separated); while
@@ -2156,7 +2156,7 @@ void ciErrRegisterNickFailedHandler(ChatConnection *chat, ChatMessage *message) 
         token = strtok(NULL, ov45_02256998);
         i++;
     }
-    ov45_02251B0C(chat, 5, chat->registeredNick, i, (int)suggestions);
+    ciNickError(chat, 5, chat->registeredNick, i, (int)suggestions);
     for (j = 0; j < i; j++) {
         DWCi_GsFree(suggestions[j]);
     }

@@ -138,12 +138,12 @@ void ov45_0223DB8C(CharVec *, u32, const char *);
 u32 ov45_0223EA34(Vec *, u32);
 void ov45_0223EB00(Vec *, u32, u32 *);
 void ov45_02236E58(NodeIter *);
-Node *ov45_022370D0(Node *, void *);
+Node *LobbyTree_EraseRebalance(Node *, void *);
 
 extern char ov45_0225520C[];
 void printf(const char *, ...);
 void abort(void);
-void ov45_02236EC4(Node *, void *);
+void LobbyTree_InsertRebalance(Node *, void *);
 
 typedef struct InsertResult {
     Node *current;
@@ -235,8 +235,8 @@ typedef struct Callbacks {
 } Callbacks;
 
 Callbacks *PPWLobby_GetWork(void);
-const char *ov45_02231C78(void *);
-void ov45_0223DCD0(Session *s);
+const char *LobbyByteVector_Data(void *);
+void PPWLobbyPlayer_UpdateState(Session *s);
 
 extern VTable ov45_02254FB0;
 void DWC_GetDateTime(RTCDate *date, RTCTime *time);
@@ -259,7 +259,7 @@ extern char ov45_022551F0[];
 extern char ov45_022551F4[];
 extern char ov45_022551F8[];
 extern char ov45_022551FC[];
-void ov45_02232B24(Str *out, u32 width, const char *fmt, ...);
+void LobbyString_FormatN(Str *out, u32 width, const char *fmt, ...);
 void LobbyString_Destroy(Str *s);
 void LobbyString_Append(Str *s, void *arg);
 void LobbyString_AppendCStr(Str *s, const char *arg);
@@ -286,19 +286,19 @@ typedef struct SplitBuf {
 void ov45_0223EC80(SplitBuf *b, u32 cap, Tag unused);
 void ov45_0223EC64(SplitBuf *b);
 
-int ov45_0223D7B4(int c);
-BOOL ov45_0223D7D4(int type, int mode, u32 value, const void *data, u32 len, Str *out);
+int LobbyString_ToLowerChar(int c);
+BOOL PPWLobby_EncodeMessage(int type, int mode, u32 value, const void *data, u32 len, Str *out);
 void ov45_0223DA3C(CharVec *s, const char *c);
 int LobbyString_CompareSubstring(const u8 *s, u32 a, u32 b, const u8 *o);
 
-int ov45_0223D7B4(int c) {
+int LobbyString_ToLowerChar(int c) {
     if (c < 0 || c >= 0x80) {
         return c;
     }
     return __lower_mapC[c];
 }
 
-BOOL ov45_0223D7D4(int type, int mode, u32 value, const void *data, u32 len, Str *out) {
+BOOL PPWLobby_EncodeMessage(int type, int mode, u32 value, const void *data, u32 len, Str *out) {
     char buf[0x191];
     Str s0;
     Str s1;
@@ -311,11 +311,11 @@ BOOL ov45_0223D7D4(int type, int mode, u32 value, const void *data, u32 len, Str
         return FALSE;
     }
     LobbyString_AssignCStr(out, ov45_022551EC);
-    ov45_02232B24(&s0, 3, ov45_022551F0, 0);
+    LobbyString_FormatN(&s0, 3, ov45_022551F0, 0);
     LobbyString_Append(out, &s0);
     LobbyString_Destroy(&s0);
     LobbyString_AppendCStr(out, ov45_022551E0);
-    ov45_02232B24(&s1, 2, ov45_022551F0, 6);
+    LobbyString_FormatN(&s1, 2, ov45_022551F0, 6);
     LobbyString_Append(out, &s1);
     LobbyString_Destroy(&s1);
     LobbyString_AppendCStr(out, ov45_022551E0);
@@ -341,7 +341,7 @@ BOOL ov45_0223D7D4(int type, int mode, u32 value, const void *data, u32 len, Str
         return FALSE;
     }
     LobbyString_AppendCStr(out, ov45_022551E0);
-    ov45_02232B24(&s2, 8, ov45_022551F0, value);
+    LobbyString_FormatN(&s2, 8, ov45_022551F0, value);
     LobbyString_Append(out, &s2);
     LobbyString_Destroy(&s2);
     LobbyString_AppendCStr(out, ov45_022551E0);
@@ -349,7 +349,7 @@ BOOL ov45_0223D7D4(int type, int mode, u32 value, const void *data, u32 len, Str
     LobbyString_AppendCStr(out, ov45_022551DC);
     switch (type) {
     case 0:
-        ov45_02232B24(&s3, len, ov45_022551FC, data);
+        LobbyString_FormatN(&s3, len, ov45_022551FC, data);
         LobbyString_Append(out, &s3);
         LobbyString_Destroy(&s3);
         break;

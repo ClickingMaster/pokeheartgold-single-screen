@@ -35,11 +35,11 @@ struct Iter {
     }
 };
 struct Vec;
-extern "C" Vec *ov45_022379D4(Vec *);
+extern "C" Vec *LobbyCharVector_Destroy(Vec *);
 extern "C" void ov45_022327B8(Vec *, Iter, Iter, TC);
 extern "C" void ov45_022383E0(Vec *, char *, char *, Alloc);
 extern "C" void ov45_02232760(Vec *, char *, char *, Tag);
-extern "C" const char *ov45_02231C78(const Vec *);
+extern "C" const char *LobbyByteVector_Data(const Vec *);
 extern "C" char ov45_02254FB0[];
 
 struct Vec {
@@ -78,7 +78,7 @@ struct Vec {
     }
 
     void Destroy() {
-        ov45_022379D4(this);
+        LobbyCharVector_Destroy(this);
     }
 
     char *begin() const {
@@ -95,7 +95,7 @@ struct Vec {
     }
 
     const char *Data() const {
-        return ov45_02231C78(this);
+        return LobbyByteVector_Data(this);
     }
 };
 

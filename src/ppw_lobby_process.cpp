@@ -183,31 +183,31 @@ extern "C" void DWC_Free(int heap, void *p, int unk);
 extern "C" void DWC_ClearError(void);
 extern "C" void StatsUpload_Stop(void);
 extern "C" void StatsUpload_Start(int mode, char *s);
-extern "C" void *ov45_02231C78(Vec *v);
+extern "C" void *LobbyByteVector_Data(Vec *v);
 extern "C" int StatsUpload_UploadWithLastHash(char *a, int b, void *c, u32 d, int e);
 extern "C" int StatsUpload_Upload(char *a, int b, void *c, u32 d, int e);
-extern "C" int ov45_02240874(void);
+extern "C" int LobbyChat_Process(void);
 extern "C" int PPW_LobbyShutdownAsync(void);
 extern "C" Vec *ov45_0223770C(Vec *);
 extern "C" void *ov45_02236AE8(void *);
 extern "C" Vec *ov45_0223775C(Vec *);
-extern "C" void ov45_02236CB0(Tree *);
-extern "C" void *ov45_02236E38(Tree *);
+extern "C" void LobbyTimerMap_Clear(Tree *);
+extern "C" void *LobbyTimerMap_Destroy(Tree *);
 extern "C" void ov45_0223DF4C(void *);
-extern "C" Vec *ov45_022379D4(Vec *);
+extern "C" Vec *LobbyCharVector_Destroy(Vec *);
 extern "C" void *ov45_02236B88(Tree *);
 extern "C" Str *LobbyString_Destroy(Str *);
-extern "C" int ov45_02240A58(void);
+extern "C" int LobbyChat_GetLastError(void);
 extern "C" int DWC_GetDateTime(RTCDate *date, RTCTime *time);
 extern "C" void ov45_02236E58(Iterator *it);
-extern "C" void ov45_02236C40(Iterator *result, Tree *t, Iterator node);
+extern "C" void LobbyTimerMap_Erase(Iterator *result, Tree *t, Iterator node);
 extern "C" void ov45_0223E558(void *);
 extern "C" void ov45_0223AF28(void *);
 extern "C" Str *LobbyString_InitFromCStr(Str *s, char *text);
 extern "C" void ov45_02233994(Str *out, u32 id, Str *s);
-extern "C" void ov45_0223633C(void);
-extern "C" void ov45_02241A20(char *s, void (*cb)(void), int x);
-extern "C" int ov45_02233CA0(void);
+extern "C" void PPWLobby_OnEnumChannels(void);
+extern "C" void LobbyChat_EnumChannelsAsync(char *s, void (*cb)(void), int x);
+extern "C" int PPWLobby_EnterMainChannel(void);
 extern "C" int ov45_02234688(void);
 
 extern "C" int PPW_LobbyProcess(void);
@@ -243,10 +243,10 @@ static inline int Request_Send(Request *r) {
     StatsUpload_Start(r->mode, Str_CStr(&r->url));
     if (r->alt) {
         u32 n = r->body.size;
-        ret = StatsUpload_UploadWithLastHash(Str_CStr(&r->post), r->len24, ov45_02231C78(&r->body), n, 0);
+        ret = StatsUpload_UploadWithLastHash(Str_CStr(&r->post), r->len24, LobbyByteVector_Data(&r->body), n, 0);
     } else {
         u32 n = r->body.size;
-        ret = StatsUpload_Upload(Str_CStr(&r->post), r->len24, ov45_02231C78(&r->body), n, 0);
+        ret = StatsUpload_Upload(Str_CStr(&r->post), r->len24, LobbyByteVector_Data(&r->body), n, 0);
     }
     if (ret == 0) {
         return 1;
@@ -313,11 +313,11 @@ static inline void Lobby_Destroy(Lobby *w) {
     ov45_0223770C(&w->vec194);
     ov45_02236AE8((u8 *)w + 0x17c);
     ov45_0223775C(&w->vec170);
-    ov45_02236CB0(&w->timers);
-    ov45_02236E38(&w->timers);
+    LobbyTimerMap_Clear(&w->timers);
+    LobbyTimerMap_Destroy(&w->timers);
     w->sub.vt = ov45_02254FA0;
     ov45_0223DF4C(&w->sub.vt);
-    ov45_022379D4(&w->sub.vec);
+    LobbyCharVector_Destroy(&w->sub.vec);
     ov45_02236B88(&w->sub.tree);
     LobbyString_Destroy(&w->sd4);
     LobbyString_Destroy(&w->sbc);
@@ -377,7 +377,7 @@ static inline void Lobby_UpdateTimers(void) {
             void *saved = it.current;
             Iterator res;
             ov45_02236E58(&it);
-            ov45_02236C40(&res, &w->timers, Iterator_Make(saved));
+            LobbyTimerMap_Erase(&res, &w->timers, Iterator_Make(saved));
         } else {
             ov45_02236E58(&it);
         }
@@ -398,7 +398,7 @@ static inline void Lobby_Login(void) {
     Str query;
     LobbyString_InitFromCStr(&name, ov45_022550B0);
     ov45_02233994(&query, 0, &name);
-    ov45_02241A20(Str_CStr(&query), ov45_0223633C, 0);
+    LobbyChat_EnumChannelsAsync(Str_CStr(&query), PPWLobby_OnEnumChannels, 0);
     LobbyString_Destroy(&query);
     LobbyString_Destroy(&name);
 }
@@ -424,7 +424,7 @@ static inline void Lobby_Fail(int r) {
 }
 
 static inline int Lobby_Process(void) {
-    switch (ov45_02240874()) {
+    switch (LobbyChat_Process()) {
     case 0:
         PPW_LobbyShutdownAsync();
         if (_022577C4 != NULL) {
@@ -438,7 +438,7 @@ static inline int Lobby_Process(void) {
         }
         break;
     case 5:
-        Lobby_SetError(ov45_02240A58());
+        Lobby_SetError(LobbyChat_GetLastError());
         break;
     case 1:
     case 2:
@@ -463,7 +463,7 @@ static inline int Lobby_Process(void) {
         break;
     }
     case 6: {
-        int r = ov45_02233CA0();
+        int r = PPWLobby_EnterMainChannel();
         if (r != 0) {
             Lobby_Fail(r);
         } else {

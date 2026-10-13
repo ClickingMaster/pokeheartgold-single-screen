@@ -808,7 +808,7 @@ void ciApplyChangesToMode(ChatChannelMode *mode, ChatModeChange *changes) {
         case CHAT_MODE_W:
             break;
         case CHAT_MODE_E:
-            mode->unk_18 = changes->set;
+            mode->opsObeyChannelLimit = changes->set;
             break;
         default:
             __msl_assertion_failed(ov45_02256690, ov45_022565D0, ov45_02256128, 0x56C);

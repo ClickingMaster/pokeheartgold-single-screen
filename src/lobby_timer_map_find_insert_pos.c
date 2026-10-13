@@ -14,10 +14,10 @@ typedef struct {
     void *root;
 } Tree;
 
-Node *ov45_02238450(Tree *, const u32 *, Node **, u8 *, u8 *);
+Node *LobbyTimerMap_FindInsertPos(Tree *, const u32 *, Node **, u8 *, u8 *);
 #pragma force_active on
 
-Node *ov45_02238450(Tree *t, const u32 *key, Node **last, u8 *left, u8 *first) {
+Node *LobbyTimerMap_FindInsertPos(Tree *t, const u32 *key, Node **last, u8 *left, u8 *first) {
     Node *n;
     Node *parent = (Node *)&t->root;
     *last = NULL;

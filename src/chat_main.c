@@ -119,8 +119,8 @@ extern const struct {
 } ov45_02257140;
 
 // Cookie buffer and counter of ciGetNextCookie.
-extern char ov45_022577F0[];
-extern int ov45_022577F4;
+extern char ciCookieBuffer[];
+extern int ciCookieCounter;
 
 // Assertion with the message, the name of the checking function and the line.
 #define ASSERT(cond, message, func, line)                           \
@@ -158,9 +158,9 @@ static inline void ConnectFailed(ChatConnection *chat) {
 int ciProcessServerMessage(ChatConnection *chat, ChatMessage *message) {
     int i;
     ASSERT(message, ov45_02256B84, ov45_02256B24, 79);
-    for (i = 0; i < ov45_02255DA0; i++) {
-        if (strnicmp(message->command, ov45_02256410[i].command) == 0) {
-            void (*handler)(ChatConnection *, ChatMessage *) = ov45_02256410[i].handler;
+    for (i = 0; i < ciNumServerMessageHandlers; i++) {
+        if (strnicmp(message->command, ciServerMessageHandlers[i].command) == 0) {
+            void (*handler)(ChatConnection *, ChatMessage *) = ciServerMessageHandlers[i].handler;
             if (handler) {
                 handler(chat, message);
             }
@@ -209,14 +209,14 @@ void ciThink(ChatConnection *chat, int id) {
     ASSERT_CHAT(chat, ov45_022569A0, 154);
     if (chat->socket.state == 1) {
         ciSocketThink(&chat->socket);
-        message = ov45_02253B5C(&chat->socket);
+        message = ciSocketRecv(&chat->socket);
         while (message) {
             if (chat->globalCallbacks.raw) {
                 text = (u32)message->text;
                 ciAddCallback_(chat, 0, chat->globalCallbacks.raw, &text, chat->globalCallbacks.param, 0, NULL, 4);
             }
             ciProcessServerMessage(chat, message);
-            message = ov45_02253B5C(&chat->socket);
+            message = ciSocketRecv(&chat->socket);
         }
         if (chat->socket.state == 2) {
             ciHandleDisconnect(chat, ov45_02256BB0);
@@ -232,16 +232,16 @@ void ciSendNick(ChatConnection *chat) {
     int error;
     ASSERT_CHAT(chat, ov45_022569A8, 206);
     if (!chat->loginType) {
-        error = ov45_02251A8C(chat->nick);
+        error = ciNickIsValid(chat->nick);
         if (error) {
-            ov45_02251B0C(chat, error, chat->nick, 0, 0);
+            ciNickError(chat, error, chat->nick, 0, 0);
             return;
         }
         nick = chat->nick;
     } else if (chat->loginType == 2 && !chat->accountSpace) {
-        error = ov45_02251A8C(chat->accountNick);
+        error = ciNickIsValid(chat->accountNick);
         if (error) {
-            ov45_02251B0C(chat, error, chat->accountNick, 0, 0);
+            ciNickError(chat, error, chat->accountNick, 0, 0);
             return;
         }
         nick = chat->accountNick;
@@ -385,7 +385,7 @@ ChatConnection *chatConnectDoit(int loginType, const char *serverAddress, int se
         SocketShutDown();
         return NULL;
     }
-    if (!ov45_02251EF0(&chat->socket, socketName)) {
+    if (!ciSocketInit(&chat->socket, socketName)) {
         ciCleanupCallbacks(chat);
         ciCleanupChannels(chat);
         DWCi_GsFree(chat);
@@ -444,9 +444,9 @@ void chatRetryWithNickA(ChatConnection *chat, const char *nick) {
     }
     strncpy(chat->nick, nick, 64);
     chat->nick[63] = 0;
-    error = ov45_02251A8C(nick);
+    error = ciNickIsValid(nick);
     if (error) {
-        ov45_02251B0C(chat, error, nick, 0, 0);
+        ciNickError(chat, error, nick, 0, 0);
         return;
     }
     ciSocketSendf(&chat->socket, ov45_02256DD0, nick);
@@ -629,7 +629,7 @@ void chatSetChannelModeA(ChatConnection *chat, const char *channel, const ChatCh
     } else {
         buffer[12] = '-';
     }
-    if (mode->unk_18) {
+    if (mode->opsObeyChannelLimit) {
         buffer[14] = '+';
     } else {
         buffer[14] = '-';
@@ -794,9 +794,9 @@ void chatSendUserMessageA(ChatConnection *chat, const char *nick, const char *me
 
 // Next request cookie, "000" .. "999".
 char *ciGetNextCookie(void) {
-    sprintf(ov45_022577F0, ov45_0225709C, ov45_022577F4++);
-    ov45_022577F4 %= 1000;
-    return ov45_022577F0;
+    sprintf(ciCookieBuffer, ov45_0225709C, ciCookieCounter++);
+    ciCookieCounter %= 1000;
+    return ciCookieBuffer;
 }
 
 // Sets keys of a channel (nick NULL or empty) or of a user in it.

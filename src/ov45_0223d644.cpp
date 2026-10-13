@@ -59,7 +59,7 @@ union Str {
     }
 };
 
-extern "C" int ov45_0223D7B4(int c);
+extern "C" int LobbyString_ToLowerChar(int c);
 extern "C" void LobbyString_CompareSubstring(Str *a, int, void *c, Str *b);
 
 inline It Transform(It first, It last, It out, int (*f)(int)) {
@@ -72,7 +72,7 @@ inline It Transform(It first, It last, It out, int (*f)(int)) {
 extern "C" void ov45_0223D644(Str *a, Str *b, void *c);
 
 extern "C" void ov45_0223D644(Str *a, Str *b, void *c) {
-    Transform(a->begin(), a->end(), a->begin(), ov45_0223D7B4);
-    Transform(b->begin(), b->end(), b->begin(), ov45_0223D7B4);
+    Transform(a->begin(), a->end(), a->begin(), LobbyString_ToLowerChar);
+    Transform(b->begin(), b->end(), b->begin(), LobbyString_ToLowerChar);
     LobbyString_CompareSubstring(a, 0, c, b);
 }

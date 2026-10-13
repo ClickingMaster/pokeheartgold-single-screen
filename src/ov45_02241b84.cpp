@@ -73,10 +73,10 @@ struct InsertResult {
 };
 
 extern "C" void ov45_0224206C(InsertResult *out, void *list, Handler **h);
-extern "C" Str ov45_022428C8(Mgr *m, const Str &s);
+extern "C" Str LobbyChat_GetFullChannelName(Mgr *m, const Str &s);
 extern "C" void chatEnumUsersA(void *ctx, const char *name, void (*cb)(), u32 id, u32 z);
 extern "C" int chatInChannelA(void *ctx, const char *name);
-extern "C" void ov45_0223FE28();
+extern "C" void LobbyChat_OnEnumUsers();
 
 inline Mgr *GetMgr() {
     return ov45_022577DC;
@@ -108,7 +108,7 @@ inline Handler *NewHandler(u32 a, u32 b) {
     return p;
 }
 
-extern "C" int ov45_02241B84(const char *name, u32 a, u32 b);
+extern "C" int LobbyChat_EnumUsersAsync(const char *name, u32 a, u32 b);
 
 struct IdTag {};
 
@@ -118,7 +118,7 @@ inline u32 GetId(Handler *h, IdTag, IdTag) {
 
 #pragma opt_common_subs off
 
-extern "C" int ov45_02241B84(const char *name, u32 a, u32 b) {
+extern "C" int LobbyChat_EnumUsersAsync(const char *name, u32 a, u32 b) {
     Mgr *m = ov45_022577DC;
     if (m == NULL) {
         return 4;
@@ -131,7 +131,7 @@ extern "C" int ov45_02241B84(const char *name, u32 a, u32 b) {
     }
     {
         Str s(name);
-        Str t = ov45_022428C8(GetMgr(), s);
+        Str t = LobbyChat_GetFullChannelName(GetMgr(), s);
         BOOL exists = chatInChannelA(GetMgr()->unk0, t.c_str()) == 0;
         t.destroy();
         s.destroy();
@@ -145,8 +145,8 @@ extern "C" int ov45_02241B84(const char *name, u32 a, u32 b) {
     ov45_0224206C(&res, m->list, &h);
     u32 id = GetId(h, IdTag(), IdTag());
     Str s(name);
-    Str t = ov45_022428C8(GetMgr(), s);
-    chatEnumUsersA(GetMgr()->unk0, t.c_str(), ov45_0223FE28, id, 0);
+    Str t = LobbyChat_GetFullChannelName(GetMgr(), s);
+    chatEnumUsersA(GetMgr()->unk0, t.c_str(), LobbyChat_OnEnumUsers, id, 0);
     t.destroy();
     s.destroy();
     return 0;

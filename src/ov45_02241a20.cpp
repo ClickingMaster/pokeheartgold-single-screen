@@ -73,10 +73,10 @@ struct InsertResult {
 };
 
 extern "C" void ov45_0224206C(InsertResult *out, void *list, Handler **h);
-extern "C" Str ov45_022428C8(Mgr *m, const Str &s);
+extern "C" Str LobbyChat_GetFullChannelName(Mgr *m, const Str &s);
 extern "C" void chatEnumChannelsA(void *ctx, const char *name, void (*cb1)(), void (*cb2)(), u32 id, u32 z);
-extern "C" void ov45_0223FE20();
-extern "C" void ov45_0223FC6C();
+extern "C" void LobbyChat_OnEnumChannelsEach();
+extern "C" void LobbyChat_OnEnumChannels();
 
 inline Mgr *GetMgr() {
     return ov45_022577DC;
@@ -108,7 +108,7 @@ inline Handler *NewHandler(u32 a, u32 b) {
     return p;
 }
 
-extern "C" int ov45_02241A20(const char *name, u32 a, u32 b);
+extern "C" int LobbyChat_EnumChannelsAsync(const char *name, u32 a, u32 b);
 
 struct IdTag {};
 
@@ -118,7 +118,7 @@ inline u32 GetId(Handler *h, IdTag, IdTag) {
 
 #pragma opt_common_subs off
 
-extern "C" int ov45_02241A20(const char *name, u32 a, u32 b) {
+extern "C" int LobbyChat_EnumChannelsAsync(const char *name, u32 a, u32 b) {
     Mgr *m = ov45_022577DC;
     if (m == NULL) {
         return 4;
@@ -134,8 +134,8 @@ extern "C" int ov45_02241A20(const char *name, u32 a, u32 b) {
     ov45_0224206C(&res, m->list, &h);
     u32 id = GetId(h, IdTag(), IdTag());
     Str s(name);
-    Str t = ov45_022428C8(GetMgr(), s);
-    chatEnumChannelsA(GetMgr()->unk0, t.c_str(), ov45_0223FE20, ov45_0223FC6C, id, 0);
+    Str t = LobbyChat_GetFullChannelName(GetMgr(), s);
+    chatEnumChannelsA(GetMgr()->unk0, t.c_str(), LobbyChat_OnEnumChannelsEach, LobbyChat_OnEnumChannels, id, 0);
     t.destroy();
     s.destroy();
     return 0;

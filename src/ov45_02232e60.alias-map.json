@@ -1,7 +1,7 @@
 [
   {
     "section": ".text",
-    "owner": {"name": "ov45_022379D4", "size": 80, "type": "FUNC"},
+    "owner": {"name": "LobbyCharVector_Destroy", "size": 80, "type": "FUNC"},
     "aliases": [
       {"name": "_ZN5BytesD1Ev", "offset": 0}
     ]

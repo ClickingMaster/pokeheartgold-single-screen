@@ -4,8 +4,8 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 extern u8 *_022577C4;
-extern void ov45_02236CB0(void *);
-extern int ov45_02240F9C(void);
+extern void LobbyTimerMap_Clear(void *);
+extern int LobbyChat_Shutdown(void);
 int PPW_LobbyShutdownAsync(void);
 
 int PPW_LobbyShutdownAsync(void) {
@@ -18,9 +18,9 @@ int PPW_LobbyShutdownAsync(void) {
     if (*(int *)_022577C4 == 9) {
         return 0;
     }
-    ov45_02236CB0(_022577C4 + 0x134);
+    LobbyTimerMap_Clear(_022577C4 + 0x134);
     *(int *)_022577C4 = 9;
-    result = ov45_02240F9C();
+    result = LobbyChat_Shutdown();
     p = _022577C4;
     unused = 0;
     if (result != 1) {

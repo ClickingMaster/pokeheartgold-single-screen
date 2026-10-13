@@ -36,15 +36,15 @@ struct String {
     }
 };
 
-extern "C" String ov45_02233ABC(const String &a, const char *b);
-extern "C" String ov45_022339F4(const String &a, const String &b);
+extern "C" String LobbyString_ConcatCStr(const String &a, const char *b);
+extern "C" String LobbyString_Concat(const String &a, const String &b);
 
 inline String operator+(const String &a, const char *b) {
-    return ov45_02233ABC(a, b);
+    return LobbyString_ConcatCStr(a, b);
 }
 
 inline String operator+(const String &a, const String &b) {
-    return ov45_022339F4(a, b);
+    return LobbyString_Concat(a, b);
 }
 
 struct Triple {
@@ -80,10 +80,10 @@ struct Obj {
 extern "C" NameTable ov45_02254DC4;
 extern "C" char ov45_02254DBC[];
 extern "C" char ov45_02255398[];
-extern "C" Obj *ov45_0224268C(Obj *obj, const String &a1, const String &a2, int idx, u32 v8, const String &aC, const String &a18, const String &a24, const Triple *t);
+extern "C" Obj *LobbyChatManager_Init(Obj *obj, const String &a1, const String &a2, int idx, u32 v8, const String &aC, const String &a18, const String &a24, const Triple *t);
 #pragma opt_propagation off
 
-extern "C" Obj *ov45_0224268C(Obj *obj, const String &a1, const String &a2, int idx, u32 v8, const String &aC, const String &a18, const String &a24, const Triple *t) {
+extern "C" Obj *LobbyChatManager_Init(Obj *obj, const String &a1, const String &a2, int idx, u32 v8, const String &aC, const String &a18, const String &a24, const Triple *t) {
     obj->unk0 = 0;
     obj->unk4 = 0;
     obj->unk8 = v8;
@@ -117,12 +117,12 @@ extern "C" Obj *ov45_0224268C(Obj *obj, const String &a1, const String &a2, int 
     obj->unkA8 = &obj->unkA0;
     NameTable names = ov45_02254DC4;
     String s48(ov45_02254DBC);
-    String s3C = ov45_02233ABC(s48, ov45_02255398);
-    String s30 = ov45_022339F4(s3C, obj->str30);
-    String s24 = ov45_02233ABC(s30, ov45_02255398);
+    String s3C = LobbyString_ConcatCStr(s48, ov45_02255398);
+    String s30 = LobbyString_Concat(s3C, obj->str30);
+    String s24 = LobbyString_ConcatCStr(s30, ov45_02255398);
     String s18(names.names[idx]);
-    String sC = ov45_022339F4(s24, s18);
-    String r = ov45_02233ABC(sC, ov45_02255398);
+    String sC = LobbyString_Concat(s24, s18);
+    String r = LobbyString_ConcatCStr(sC, ov45_02255398);
     const String *pr = &r;
     LobbyString_Assign(&obj->str48, pr);
     r.destroy();

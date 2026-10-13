@@ -27,11 +27,11 @@ struct Iter {
     }
 };
 struct Vec;
-extern "C" Vec *ov45_022379D4(Vec *v);
+extern "C" Vec *LobbyCharVector_Destroy(Vec *v);
 extern "C" void ov45_022327B8(Vec *v, Iter first, Iter last, TD);
 extern "C" void ov45_022383E0(Vec *v, char *first, char *last, Alloc);
 extern "C" void ov45_02232760(Vec *v, char *first, char *last, Tag);
-extern "C" const char *ov45_02231C78(const Vec *v);
+extern "C" const char *LobbyByteVector_Data(const Vec *v);
 
 struct Vec {
     char *ptr;
@@ -46,7 +46,7 @@ struct Vec {
     }
 
     void Destroy() {
-        ov45_022379D4(this);
+        LobbyCharVector_Destroy(this);
     }
 
     char *begin() const {
@@ -58,16 +58,16 @@ struct Vec {
     }
 
     const char *Data() const {
-        return ov45_02231C78(this);
+        return LobbyByteVector_Data(this);
     }
 };
 
-// Storage with an out-of-line destructor (ov45_022379D4).
+// Storage with an out-of-line destructor (LobbyCharVector_Destroy).
 struct VecStorage : Vec {
     ~VecStorage();
 };
 
-// Byte buffer built from a [first,last) range; destroyed by ov45_022379D4.
+// Byte buffer built from a [first,last) range; destroyed by LobbyCharVector_Destroy.
 struct Bytes {
     VecStorage v;
 

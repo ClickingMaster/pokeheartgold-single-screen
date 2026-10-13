@@ -22,9 +22,9 @@ typedef struct {
 
 void LobbyString_AssignCStr(String *str, const char *s);
 void LobbyString_Destroy(String *str);
-void ov45_0223F768(int a, int b, int c, int mode);
+void LobbyChat_OnUserModeChanged(int a, int b, int c, int mode);
 
-void ov45_0223F768(int a, int b, int c, int mode) {
+void LobbyChat_OnUserModeChanged(int a, int b, int c, int mode) {
     String str;
     u32 *w;
     u32 i;

@@ -36,7 +36,7 @@ typedef struct {
 void ov45_022327B8(Vec *, ...);
 void *ov45_0223259C(Vec *);
 void ov45_02232760(Vec *, u8 *, u8 *, int);
-void ov45_02232AE8(Record *, u32, Six *);
+void LobbyTimerMap_MakeEntry(Record *, u32, Six *);
 
 void ov45_02232760(Vec *v, u8 *first, u8 *last, int unused) {
     u32 len = last - first;

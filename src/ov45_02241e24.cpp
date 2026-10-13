@@ -73,9 +73,9 @@ struct InsertResult {
 };
 
 extern "C" void ov45_0224206C(InsertResult *out, void *list, Handler **h);
-extern "C" Str ov45_022428C8(Mgr *m, const Str &s);
+extern "C" Str LobbyChat_GetFullChannelName(Mgr *m, const Str &s);
 extern "C" void chatGetChannelModeA(void *ctx, const char *name, void (*cb)(), u32 id, u32 z);
-extern "C" void ov45_02240718();
+extern "C" void LobbyChat_OnGetChannelMode();
 
 inline Mgr *GetMgr() {
     return ov45_022577DC;
@@ -107,7 +107,7 @@ inline Handler *NewHandler(u32 a, u32 b) {
     return p;
 }
 
-extern "C" int ov45_02241E24(const char *name, u32 a, u32 b);
+extern "C" int LobbyChat_GetChannelModeAsync(const char *name, u32 a, u32 b);
 
 struct IdTag {};
 
@@ -117,7 +117,7 @@ inline u32 GetId(Handler *h, IdTag, IdTag) {
 
 #pragma opt_common_subs off
 
-extern "C" int ov45_02241E24(const char *name, u32 a, u32 b) {
+extern "C" int LobbyChat_GetChannelModeAsync(const char *name, u32 a, u32 b) {
     Mgr *m = ov45_022577DC;
     if (m == NULL) {
         return 4;
@@ -134,8 +134,8 @@ extern "C" int ov45_02241E24(const char *name, u32 a, u32 b) {
     ov45_0224206C(&res, m->list, &h);
     u32 id = GetId(h, IdTag(), IdTag());
     Str s(name);
-    Str t = ov45_022428C8(GetMgr(), s);
-    chatGetChannelModeA(GetMgr()->unk0, t.c_str(), ov45_02240718, id, 0);
+    Str t = LobbyChat_GetFullChannelName(GetMgr(), s);
+    chatGetChannelModeA(GetMgr()->unk0, t.c_str(), LobbyChat_OnGetChannelMode, id, 0);
     t.destroy();
     s.destroy();
     return 0;

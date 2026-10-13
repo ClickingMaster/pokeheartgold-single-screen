@@ -48,7 +48,7 @@ extern const char ov45_02257324[];
     ASSERT((buffer)->length <= (buffer)->size, ov45_022572CC, func, line);
 
 // Checks a nick: 0 = valid, 6 = too long, 2 = empty, bad first character or a character outside ov45_02256E04.
-int ov45_02251A8C(const char *nick) {
+int ciNickIsValid(const char *nick) {
     if (strlen(nick) >= 21) {
         return 6;
     }
@@ -67,7 +67,7 @@ int ov45_02251A8C(const char *nick) {
 }
 
 // The nick was refused: queue the nick error callback, or end the connect attempt without one.
-void ov45_02251B0C(ChatConnection *chat, int type, const char *nick, int unk_0C, int unk_10) {
+void ciNickError(ChatConnection *chat, int type, const char *nick, int unk_0C, int unk_10) {
     if (!chat) {
         __msl_assertion_failed(ov45_02256BA0, ov45_02256B94, ov45_022569C0, 3017);
     }
@@ -87,7 +87,7 @@ void ov45_02251B0C(ChatConnection *chat, int type, const char *nick, int unk_0C,
 }
 
 // Allocates an empty buffer of 0x2000 bytes.
-BOOL ov45_02251BE0(ChatBuffer *buffer) {
+BOOL ciBufferInit(ChatBuffer *buffer) {
     ASSERT(buffer, ov45_02257248, ov45_02257174, 95);
     buffer->length = 0;
     buffer->size = 0x2000;
@@ -99,12 +99,12 @@ BOOL ov45_02251BE0(ChatBuffer *buffer) {
     return TRUE;
 }
 
-void ov45_02251C40(ChatBuffer *buffer) {
+void ciBufferFree(ChatBuffer *buffer) {
     DWCi_GsFree(buffer->data);
 }
 
 // Makes room for length more bytes (the size grows in steps of 0x2000).
-BOOL ov45_02251C50(ChatBuffer *buffer, int length) {
+BOOL ciBufferPreAppend(ChatBuffer *buffer, int length) {
     int size;
     char *data;
     ASSERT_BUFFER(buffer, ov45_022571E4, 120);
@@ -125,7 +125,7 @@ BOOL ov45_02251C50(ChatBuffer *buffer, int length) {
 }
 
 // Removes the first length bytes.
-void ov45_02251DB4(ChatBuffer *buffer, int length) {
+void ciBufferClipFront(ChatBuffer *buffer, int length) {
     ASSERT_BUFFER(buffer, ov45_022571F8, 151);
     ASSERT(length >= 0, ov45_022572F0, ov45_022571F8, 152);
     ASSERT(length <= buffer->length, ov45_0225730C, ov45_022571F8, 153);
@@ -135,16 +135,16 @@ void ov45_02251DB4(ChatBuffer *buffer, int length) {
 }
 
 // Clears the socket and allocates its two buffers (name is not used).
-BOOL ov45_02251EF0(ChatSocket *socket, const char *name) {
+BOOL ciSocketInit(ChatSocket *socket, const char *name) {
     ASSERT(socket, ov45_02257324, ov45_02257194, 177);
     memset(socket, 0, sizeof(ChatSocket));
     socket->handle = -1;
-    if (!ov45_02251BE0(&socket->input)) {
+    if (!ciBufferInit(&socket->input)) {
         return FALSE;
     }
-    if (ov45_02251BE0(&socket->output)) {
+    if (ciBufferInit(&socket->output)) {
         return TRUE;
     }
-    ov45_02251C40(&socket->input);
+    ciBufferFree(&socket->input);
     return FALSE;
 }

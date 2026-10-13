@@ -117,13 +117,13 @@ struct Work {
 
 extern "C" Work *_022577C4;
 extern "C" char ov45_02254F88[];
-extern "C" void ov45_02234814();
+extern "C" void PPWLobby_TimerSendRecruitInfo();
 extern "C" u32 current_time(void);
-extern "C" Str ov45_02232B24(int, const char *, ...);
+extern "C" Str LobbyString_FormatN(int, const char *, ...);
 extern "C" void DWC_GetDateTime(Date *, Time *);
 extern "C" s64 RTC_ConvertDateTimeToSecond(const Date *, const Time *);
-extern "C" RawEntry ov45_02232AE8(int, const Info &);
-extern "C" Result ov45_02236BA8(Container *, const Entry &);
+extern "C" RawEntry LobbyTimerMap_MakeEntry(int, const Info &);
+extern "C" Result LobbyTimerMap_Insert(Container *, const Entry &);
 extern "C" int PPW_LobbyStartRecruit(User *u);
 
 struct Tag {};
@@ -137,7 +137,7 @@ inline Entry Conv(Tag, const RawEntry &r) {
 }
 
 inline Result Insert2(Container *c, const Entry &e) {
-    return ov45_02236BA8(c, e);
+    return LobbyTimerMap_Insert(c, e);
 }
 
 #pragma force_active on
@@ -164,7 +164,7 @@ extern "C" int PPW_LobbyStartRecruit(User *u) {
     if (g->busy == 0) {
         g->busy = 1;
         g->user = *u;
-        Str tmp = ov45_02232B24(20, ov45_02254F88, g->code, current_time() % 1000);
+        Str tmp = LobbyString_FormatN(20, ov45_02254F88, g->code, current_time() % 1000);
         value = tmp;
         LobbyString_Destroy(&tmp);
         strncpy(g->user.name, value.CStr(), 19);
@@ -179,7 +179,7 @@ extern "C" int PPW_LobbyStartRecruit(User *u) {
     Date date;
     Time time;
     DWC_GetDateTime(&date, &time);
-    Insert2(&h->entries, Conv(Tag(), ov45_02232AE8(3, Info(RTC_ConvertDateTimeToSecond(&date, &time), 21, ov45_02234814))));
+    Insert2(&h->entries, Conv(Tag(), LobbyTimerMap_MakeEntry(3, Info(RTC_ConvertDateTimeToSecond(&date, &time), 21, PPWLobby_TimerSendRecruitInfo))));
     LobbyString_Destroy(&value);
     return 0;
 }

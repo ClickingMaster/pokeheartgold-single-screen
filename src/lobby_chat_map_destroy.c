@@ -23,7 +23,7 @@ extern void DWC_Free(int, void *, int);
 extern void DWCi_GsFree(void *);
 extern void LobbyString_InitCopy(void *, void *);
 extern void LobbyString_Destroy(void *);
-extern void ov45_02242C74(void **, void *, void *);
+extern void LobbyChannelMap_Find(void **, void *, void *);
 extern void __msl_assertion_failed(char *, char *, char *, int);
 extern void *ArrayNew(int, int, void (*)(void *));
 extern char ov45_02255458[];
@@ -34,8 +34,8 @@ extern void ov45_02243780(void *p, int a, void *b);
 extern int ov45_02243794(void *p, void *key);
 extern int ov45_022437CC(void *p, void *key);
 extern int ov45_02243808(void *p, void *key);
-extern void *ov45_02243F1C(void *p);
-extern void *ov45_02244130(void *p);
+extern void *LobbyUserIdSet_Destroy(void *p);
+extern void *LobbyUserMap_Destroy(void *p);
 extern void *ov45_02244150(void *p);
 extern void *ov45_02244170(void *p, void *key, void **prev, u8 *left, u8 *first);
 extern Node *ov45_022441FC(Tree *p, int *key, Node **prev, u8 *left, u8 *first);
@@ -59,7 +59,7 @@ extern char ov45_02255488[];
 extern char ov45_022554A4[];
 extern char ov45_022554BC[];
 extern char ov45_022554DC[];
-extern void *ov45_02243A98(void *p);
+extern void *LobbyChannelMap_Destroy(void *p);
 extern void ciCleanupCallbacks(void *p);
 
 typedef struct {
@@ -70,10 +70,10 @@ typedef struct {
 extern Node *ov45_02243E44(Tree *, Node *, int, int, int *);
 extern Node *ov45_0224404C(Tree *, Node *, int, int, int *);
 extern u8 ov45_02255358[];
-extern void ov45_02243AB8(InsertResult *, Tree *, int *);
-extern void ov45_02243F3C(InsertResult *, Tree *, int *);
+extern void LobbyUserIdSet_Insert(InsertResult *, Tree *, int *);
+extern void LobbyUserMap_Insert(InsertResult *, Tree *, int *);
 
-void *ov45_02244130(void *p) {
+void *LobbyUserMap_Destroy(void *p) {
     if (P(p, 4)) {
         ov45_02244428(p, P(p, 4));
     }

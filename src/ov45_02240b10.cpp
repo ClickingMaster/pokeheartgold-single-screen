@@ -45,8 +45,8 @@ inline void String::destroy() {
 }
 
 extern "C" void LobbyString_InitFromCStr(String *s, const char *p);
-extern "C" void ov45_022429E0(String *s, void *user);
-extern "C" void ov45_02233ABC(String *out, const String *a, const char *b);
+extern "C" void LobbyChat_FormatNick(String *s, void *user);
+extern "C" void LobbyString_ConcatCStr(String *out, const String *a, const char *b);
 struct Root;
 extern "C" void ov45_02240F6C(String *, Root *);
 extern "C" void ov45_0223FC5C(String *, Root *);
@@ -89,14 +89,14 @@ struct InsertResult {
     bool inserted;
 };
 struct Map;
-extern "C" void ov45_02236BA8(InsertResult *out, Map *m, const Pair<u32, Task> *v);
+extern "C" void LobbyTimerMap_Insert(InsertResult *out, Map *m, const Pair<u32, Task> *v);
 
 struct Map {
     u32 words[4];
 
     InsertResult insert(const Pair<u32, Task> &v) {
         InsertResult r;
-        ov45_02236BA8(&r, this, &v);
+        LobbyTimerMap_Insert(&r, this, &v);
         return r;
     }
 };
@@ -107,7 +107,7 @@ struct Root {
     Map queue;
 };
 
-extern "C" Pair<int, Task> ov45_02232AE8(int k, const Task &t);
+extern "C" Pair<int, Task> LobbyTimerMap_MakeEntry(int k, const Task &t);
 
 struct Callbacks {
     void (*f[4])(void);
@@ -119,13 +119,13 @@ extern "C" const u8 _version_NINTENDO_DWC_LOBBY[];
 extern "C" void OSi_ReferSymbol(const void *);
 extern "C" const char ov45_02255308[], ov45_02255310[], ov45_02255318[], ov45_0225531C[];
 extern "C" void *LobbyMem_Alloc(u32);
-extern "C" Root *ov45_0224268C(Root *, String *, String *, int, void *, String *, String *, String *, void *);
+extern "C" Root *LobbyChatManager_Init(Root *, String *, String *, int, void *, String *, String *, String *, void *);
 extern "C" int ov45_0224246C(void);
-extern "C" void ov45_0223ED00(void), ov45_0223ED1C(void), ov45_0223F1C8(void), ov45_0223EDD8(void), ov45_0223FA3C(void), ov45_0223F9C4(void), ov45_0223F92C(void);
+extern "C" void LobbyChat_OnRaw(void), LobbyChat_OnDisconnected(void), LobbyChat_OnInvited(void), LobbyChat_OnPrivateMessage(void), LobbyChat_OnNickError(void), LobbyChat_OnFillInUser(void), LobbyChat_OnConnected(void);
 extern "C" int ov45_02240850(void);
 extern "C" u32 chatConnectSpecialA(const char *, int, const char *, const char *, const char *, const char *, Callbacks *, void (*)(void), void (*)(void), void (*)(void), void *, int);
 extern "C" void DWC_GetDateTime(RTCDate *, RTCTime *);
-extern "C" void ov45_022424DC(void), ov45_02242858(Root *), DWC_Free(int, void *, int);
+extern "C" void ov45_022424DC(void), LobbyChatManager_Destroy(Root *), DWC_Free(int, void *, int);
 
 inline void Free(void *p) {
     if (p) {
@@ -135,16 +135,16 @@ inline void Free(void *p) {
 
 inline void DeleteRoot(Root *r) {
     if (r) {
-        ov45_02242858(r);
+        LobbyChatManager_Destroy(r);
         Free(r);
     }
 }
 
 extern "C" void MI_CpuFill8(void *, u8, u32);
-extern "C" int ov45_02240B10(const char *a, const char *b, int n, u8 *config, void *user);
+extern "C" int LobbyChat_Initialize(const char *a, const char *b, int n, u8 *config, void *user);
 #pragma force_active on
 
-extern "C" int ov45_02240B10(const char *a, const char *b, int n, u8 *config, void *user) {
+extern "C" int LobbyChat_Initialize(const char *a, const char *b, int n, u8 *config, void *user) {
     String outer1, outer2, outer3;
     Callbacks callbacks;
     String name2, name1;
@@ -157,7 +157,7 @@ extern "C" int ov45_02240B10(const char *a, const char *b, int n, u8 *config, vo
     if (ov45_022577DC) {
         return 4;
     }
-    ov45_022429E0(&outer1, user);
+    LobbyChat_FormatNick(&outer1, user);
     LobbyString_InitFromCStr(&outer2, ov45_02255308);
     LobbyString_InitFromCStr(&outer3, ov45_02255310);
     {
@@ -168,7 +168,7 @@ extern "C" int ov45_02240B10(const char *a, const char *b, int n, u8 *config, vo
             firstReady = 1;
             LobbyString_InitFromCStr(&name1, a);
             secondReady = firstReady;
-            created = ov45_0224268C(created, &name1, &name2, n, user, &outer1, &outer2, &outer3, config);
+            created = LobbyChatManager_Init(created, &name1, &name2, n, user, &outer1, &outer2, &outer3, config);
         }
         ov45_022577DC = created;
         if (secondReady) {
@@ -190,19 +190,19 @@ extern "C" int ov45_02240B10(const char *a, const char *b, int n, u8 *config, vo
     }
     {
         MI_CpuFill8(&callbacks, 0, 20);
-        callbacks.f[0] = ov45_0223ED00;
-        callbacks.f[1] = ov45_0223ED1C;
-        callbacks.f[2] = ov45_0223EDD8;
-        callbacks.f[3] = ov45_0223F1C8;
+        callbacks.f[0] = LobbyChat_OnRaw;
+        callbacks.f[1] = LobbyChat_OnDisconnected;
+        callbacks.f[2] = LobbyChat_OnPrivateMessage;
+        callbacks.f[3] = LobbyChat_OnInvited;
         callbacks.data = *(void **)(config + 8);
         ov45_02240F6C(&s7, ov45_022577DC);
-        ov45_02233ABC(&s6, &s7, ov45_02255318);
-        ov45_02233ABC(&s5, &s6, ov45_0225531C);
+        LobbyString_ConcatCStr(&s6, &s7, ov45_02255318);
+        LobbyString_ConcatCStr(&s5, &s6, ov45_0225531C);
         ov45_0223FC5C(&s4, ov45_022577DC);
         ov45_02240F7C(&s3, ov45_022577DC);
         ov45_02240F6C(&s2, ov45_022577DC);
         ov45_02240F8C(&s1, ov45_022577DC);
-        u32 connection = chatConnectSpecialA(s5.c_str(), 0x1a0b, s4.c_str(), s3.c_str(), s2.c_str(), s1.c_str(), &callbacks, ov45_0223FA3C, ov45_0223F9C4, ov45_0223F92C, *(void **)(config + 8), 0);
+        u32 connection = chatConnectSpecialA(s5.c_str(), 0x1a0b, s4.c_str(), s3.c_str(), s2.c_str(), s1.c_str(), &callbacks, LobbyChat_OnNickError, LobbyChat_OnFillInUser, LobbyChat_OnConnected, *(void **)(config + 8), 0);
         s1.destroy();
         s2.destroy();
         s3.destroy();
@@ -222,7 +222,7 @@ extern "C" int ov45_02240B10(const char *a, const char *b, int n, u8 *config, vo
     {
         root = ov45_022577DC;
         DWC_GetDateTime(&date, &time);
-        root->queue.insert(ov45_02232AE8(0, Task(RTC_ConvertDateTimeToSecond(&date, &time), root, ov45_02240850)));
+        root->queue.insert(LobbyTimerMap_MakeEntry(0, Task(RTC_ConvertDateTimeToSecond(&date, &time), root, ov45_02240850)));
     }
     outer3.destroy();
     outer2.destroy();

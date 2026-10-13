@@ -62,7 +62,7 @@ struct Tree {
     Node header;
 };
 
-extern "C" It ov45_02236C40(Tree *t, It pos);
+extern "C" It LobbyTimerMap_Erase(Tree *t, It pos);
 
 struct Mgr {
     void *unk0;
@@ -134,11 +134,11 @@ static inline It Iterator_Make(Node *p) {
     return t;
 }
 
-extern "C" int ov45_02240874(void);
+extern "C" int LobbyChat_Process(void);
 #pragma push
 #pragma opt_common_subs off
 
-extern "C" int ov45_02240874(void) {
+extern "C" int LobbyChat_Process(void) {
     Mgr *g = ov45_022577DC;
     if (g == NULL) {
         return 0;
@@ -164,7 +164,7 @@ extern "C" int ov45_02240874(void) {
         if (!Timer_Update(n, now)) {
             Node *saved = it.n;
             ov45_02236E58(&it);
-            ov45_02236C40(&w->tree, Iterator_Make(saved));
+            LobbyTimerMap_Erase(&w->tree, Iterator_Make(saved));
         } else {
             ov45_02236E58(&it);
         }

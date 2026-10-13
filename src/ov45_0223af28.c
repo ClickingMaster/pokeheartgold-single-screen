@@ -24,10 +24,10 @@ typedef struct {
 extern int ov45_0223B104(W *);
 extern Owner *PPWLobby_GetWork(void);
 extern void ov45_022320B4(void *, void *);
-extern void ov45_02241D58(char *, void *);
+extern void LobbyChat_SetChannelMode(char *, void *);
 extern void LobbyString_Destroy(void *);
 extern u8 ov45_02254D9C[];
-extern void ov45_0223325C(int, int, int, int, int, void *, int);
+extern void PPWLobby_SendMessage(int, int, int, int, int, void *, int);
 
 typedef struct {
     u8 v;
@@ -67,10 +67,10 @@ void ov45_0223AF28(W *w) {
             return;
         }
         ov45_022320B4(&text, PPWLobby_GetWork()->text);
-        ov45_02241D58(text.s.flag == 0 ? (char *)&text.bytes[1] : text.s.ptr, ov45_02254D9C);
+        LobbyChat_SetChannelMode(text.s.flag == 0 ? (char *)&text.bytes[1] : text.s.ptr, ov45_02254D9C);
         LobbyString_Destroy(&text);
         zero = 0;
-        ov45_0223325C(-1, 0, 1, 0, 0, &zero, 4);
+        PPWLobby_SendMessage(-1, 0, 1, 0, 0, &zero, 4);
         ov45_0223B1C8(w);
         return;
     case 5:

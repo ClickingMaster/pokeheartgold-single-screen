@@ -49,7 +49,7 @@ extern const char ov45_02257620[];
 extern const char ov45_02257624[];
 
 // Line buffer of ciSocketSendf (4096 bytes).
-extern char ov45_022577F8[];
+extern char ciSendfBuffer[];
 
 // Assertion with the message, the name of the checking function and the line.
 #define ASSERT(cond, message, func, line)                           \
@@ -122,8 +122,8 @@ void ciSocketDisconnect(ChatSocket *socket) {
         gsSocketClose(socket->handle);
     }
     socket->state = 2;
-    ov45_02251C40(&socket->input);
-    ov45_02251C40(&socket->output);
+    ciBufferFree(&socket->input);
+    ciBufferFree(&socket->output);
     DWCi_GsFree(socket->message.text);
     DWCi_GsFree(socket->message.prefix);
     DWCi_GsFree(socket->message.nick);
@@ -166,7 +166,7 @@ void ciSocketThinkSend(ChatSocket *socket) {
         }
         sent = gsSocketSend(socket->handle, socket->output.data, socket->output.length < 1024 ? socket->output.length : 1024, 0);
         if (sent != 0 && sent != -1) {
-            ov45_02251DB4(&socket->output, sent);
+            ciBufferClipFront(&socket->output, sent);
         } else {
             return;
         }
@@ -185,7 +185,7 @@ void ciSocketThinkRecv(ChatSocket *socket) {
         if (!readable) {
             return;
         }
-        if (!ov45_02251C50(&socket->input, 4096)) {
+        if (!ciBufferPreAppend(&socket->input, 4096)) {
             return;
         }
         data = (u8 *)socket->input.data;
@@ -226,7 +226,7 @@ BOOL ciSocketSend(ChatSocket *socket, const char *line) {
         return TRUE;
     }
     length = strlen(line);
-    if (!ov45_02251C50(&socket->output, length + 2)) {
+    if (!ciBufferPreAppend(&socket->output, length + 2)) {
         return FALSE;
     }
     data = (u8 *)socket->output.data;
@@ -257,13 +257,13 @@ BOOL ciSocketSendf(ChatSocket *socket, const char *format, ...) {
         return TRUE;
     }
     va_start(args, format);
-    length = vsprintf(ov45_022577F8, format, args);
+    length = vsprintf(ciSendfBuffer, format, args);
     if (length != -1) {
-        ov45_022577F8[length] = 0;
+        ciSendfBuffer[length] = 0;
     } else {
-        ov45_022577F8[4095] = 0;
+        ciSendfBuffer[4095] = 0;
     }
-    return ciSocketSend(socket, ov45_022577F8);
+    return ciSocketSend(socket, ciSendfBuffer);
 }
 
 // Splits the prefix of a message into nick "!" user "@" host (heap copies in the message).

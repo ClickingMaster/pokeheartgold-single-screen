@@ -84,11 +84,11 @@ inline It FindIt(Manager *m, u32 id) {
     return ov45_0223FD8C(&m->map, kp);
 }
 
-extern "C" void ov45_0223FC6C(void *self, int result, u32 a, u32 d, u32 b, u32 c, u32 id);
+extern "C" void LobbyChat_OnEnumChannels(void *self, int result, u32 a, u32 d, u32 b, u32 c, u32 id);
 #pragma push
 #pragma opt_propagation off
 
-extern "C" void ov45_0223FC6C(void *self, int result, u32 a, u32 d, u32 b, u32 c, u32 id) {
+extern "C" void LobbyChat_OnEnumChannels(void *self, int result, u32 a, u32 d, u32 b, u32 c, u32 id) {
     if (ov45_022577DC != NULL && ov45_022577DC->state == 5) {
         return;
     }

@@ -10,8 +10,8 @@
 void *ov45_02238C08(void *);
 int ov45_02238B70(u8 *, u8 *, u32 *);
 void ov45_02238C1C(u32 *, u8 *);
-extern void ov45_022377AC(void *, u32);
-extern void *ov45_02231C78(void *);
+extern void LobbyCharVector_Grow(void *, u32);
+extern void *LobbyByteVector_Data(void *);
 
 void *ov45_02238C08(void *p) {
     if (W(p, 4) == 0) {
@@ -30,7 +30,7 @@ void ov45_02238C1C(u32 *v, u8 *p) {
         v[0] = zero;
         v[1] = zero;
         v[2] = zero;
-        ov45_022377AC(v, n);
+        LobbyCharVector_Grow(v, n);
     }
-    ov45_02238B70(p, ov45_02231C78(v), &len);
+    ov45_02238B70(p, LobbyByteVector_Data(v), &len);
 }

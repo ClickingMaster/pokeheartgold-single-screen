@@ -27,7 +27,7 @@ extern int printf(const char *, ...);
 extern void abort(void);
 extern const char ov45_0225533C[];
 extern void *LobbyMem_Alloc(u32);
-extern void ov45_02236EC4(Node *, void *);
+extern void LobbyTree_InsertRebalance(Node *, void *);
 extern void DWC_Free(int, void *, int);
 Node *ov45_0224210C(Container *, void *, int, int, const u32 *);
 
@@ -63,7 +63,7 @@ Node *ov45_0224210C(Container *c, void *owner, int first, int last, const u32 *v
     }
     c->count++;
     guard.value = node;
-    ov45_02236EC4(node, c->head);
+    LobbyTree_InsertRebalance(node, c->head);
     if (last) {
         c->tail = node;
     }

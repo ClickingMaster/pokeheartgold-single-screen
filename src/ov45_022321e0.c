@@ -23,7 +23,7 @@ typedef struct {
 extern Work *volatile _022577C4;
 extern void ov45_022320B4(String *, void *);
 extern void LobbyString_Destroy(String *);
-extern int ov45_02240A80(char *);
+extern int LobbyChat_IsInChannel(char *);
 
 static inline BOOL active(Work *w) {
     return w->mode == 5 ? FALSE : TRUE;
@@ -52,7 +52,7 @@ int PPW_LobbyGetSubChannelState(void) {
         }
     }
     ov45_022320B4(&text, &w->mode);
-    result = ov45_02240A80(!text.flag ? &text.bytes[1] : *(char **)&text.raw[4]);
+    result = LobbyChat_IsInChannel(!text.flag ? &text.bytes[1] : *(char **)&text.raw[4]);
     LobbyString_Destroy(&text);
     if (result) {
         return 2;

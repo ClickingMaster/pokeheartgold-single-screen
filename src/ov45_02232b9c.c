@@ -38,15 +38,15 @@ static inline int release(Work *w) {
     return 0;
 }
 
-extern void ov45_0223325C(int, int, int, int, int, void *, int);
-extern void ov45_02232DDC(void *, void *, void *);
-extern void ov45_02236C40(void *, void *, void *);
-char *ov45_02232B9C(Vec *);
+extern void PPWLobby_SendMessage(int, int, int, int, int, void *, int);
+extern void LobbyTimerMap_Find(void *, void *, void *);
+extern void LobbyTimerMap_Erase(void *, void *, void *);
+char *LobbyCharVector_Data(Vec *);
 int PPW_LobbyUpdateRecruitInfo(Packet *);
 int PPW_LobbyStopRecruit(void);
-int ov45_02232D8C(void *, void *);
+int LobbyTimerMap_EraseKey(void *, void *);
 
-char *ov45_02232B9C(Vec *p) {
+char *LobbyCharVector_Data(Vec *p) {
     if (p->size == 0) {
         return 0;
     }
@@ -102,22 +102,22 @@ int PPW_LobbyStopRecruit(void) {
         return 4;
     }
     w = _022577C4;
-    ov45_0223325C(*(int *)((u8 *)w + 0x4c), 0, 1, 0, 2, &w->packet, 0x44);
+    PPWLobby_SendMessage(*(int *)((u8 *)w + 0x4c), 0, 1, 0, 2, &w->packet, 0x44);
     value = 3;
-    ov45_02232D8C((u8 *)_022577C4 + 0x134, &value);
+    LobbyTimerMap_EraseKey((u8 *)_022577C4 + 0x134, &value);
     return 0;
 }
 
-int ov45_02232D8C(void *w, void *value) {
+int LobbyTimerMap_EraseKey(void *w, void *value) {
     struct {
         void *argument, *out, *found;
     } local;
 
-    ov45_02232DDC(&local.found, w, value);
+    LobbyTimerMap_Find(&local.found, w, value);
     if (local.found == (u8 *)w + 4) {
         return 0;
     }
     local.argument = local.found;
-    ov45_02236C40(&local.out, w, local.argument);
+    LobbyTimerMap_Erase(&local.out, w, local.argument);
     return 1;
 }

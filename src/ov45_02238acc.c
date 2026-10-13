@@ -49,14 +49,14 @@ extern int LobbyString_CompareChars(const u8 *, u32, u32, const void *, u32);
 extern S *LobbyString_ReplaceRange(S *, u32, u32, char *, char *, Small);
 extern void *LobbyMem_Alloc(u32);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
-extern u8 *ov45_02231C78(S *);
+extern u8 *LobbyByteVector_Data(S *);
 extern int DWC_Free();
-extern int ov45_022377AC();
+extern int LobbyCharVector_Grow();
 extern int LobbyString_Destroy();
 #include "overlay45_string_search.h"
 void LobbyString_Compare(S *p, S *q);
 void LobbyString_CompareCStr(S *p, char *q);
-void *ov45_02238450(Node *p, u32 *key, Node **out, u8 *less, u8 *empty);
+void *LobbyTimerMap_FindInsertPos(Node *p, u32 *key, Node **out, u8 *less, u8 *empty);
 void LobbyString_AssignRange(S *p, char *a, char *b);
 void ov45_02238558(void *ctx, Node *p);
 void ov45_022387E4(Vec *p, u32 n, Small tag);

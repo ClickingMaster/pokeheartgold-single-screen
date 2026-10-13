@@ -18,20 +18,20 @@ extern "C" s64 RTC_ConvertDateTimeToSecond(const Date *, const Time *);
 extern "C" void *LobbyMem_Alloc(u32);
 extern "C" void DWC_Free(int, void *, int);
 extern "C" char ov45_02254FA0[], ov45_02254FB0[];
-extern "C" void ov45_02236070();
-extern "C" void ov45_022362B4();
+extern "C" void PPWLobby_OnPlayerMessage();
+extern "C" void PPWLobby_OnExcessFlood();
 extern "C" void ov45_02238B08(void *);
 extern "C" void ov45_0223770C(void *);
 extern "C" void ov45_02236AE8(void *);
 extern "C" void ov45_0223775C(void *);
-extern "C" void ov45_02236CB0(void *);
-extern "C" void ov45_02236E38(void *);
+extern "C" void LobbyTimerMap_Clear(void *);
+extern "C" void LobbyTimerMap_Destroy(void *);
 extern "C" void ov45_0223DF4C(void *);
-extern "C" void ov45_022379D4(void *);
+extern "C" void LobbyCharVector_Destroy(void *);
 extern "C" void ov45_02236B88(void *);
 extern "C" void LobbyString_Destroy(void *);
 extern "C" void ov45_0223E100(void *, u32, u32, u32);
-extern "C" void ov45_022335A0(void);
+extern "C" void PPWLobby_StartCheckProfile(void);
 
 struct Callbacks {
     void (*connected)();
@@ -45,7 +45,7 @@ struct Callbacks {
     }
 };
 
-extern "C" int ov45_02240B10(u32, u32, u32, Callbacks *, u32);
+extern "C" int LobbyChat_Initialize(u32, u32, u32, Callbacks *, u32);
 
 inline void *operator new(std::size_t, void *p) {
     return p;
@@ -142,7 +142,7 @@ struct Sessions {
     void Destroy() {
         vtbl = ov45_02254FA0;
         ov45_0223DF4C(this);
-        ov45_022379D4(&field);
+        LobbyCharVector_Destroy(&field);
         ov45_02236B88(&list);
     }
 };
@@ -202,8 +202,8 @@ struct Work {
         ov45_0223770C(b194);
         ov45_02236AE8(b17c);
         ov45_0223775C(b170);
-        ov45_02236CB0(&tree);
-        ov45_02236E38(&tree);
+        LobbyTimerMap_Clear(&tree);
+        LobbyTimerMap_Destroy(&tree);
         sessions.Destroy();
         peers.b.name.Destroy();
         peers.a.name.Destroy();
@@ -250,12 +250,12 @@ extern "C" int ov45_02231144(u32 a0, u32 a1, u32 a2, const Config *cfg, u32 a4, 
     if (_022577C4 != 0) {
         return 4;
     }
-    Callbacks cbs(ov45_02236070, ov45_022362B4, 5);
+    Callbacks cbs(PPWLobby_OnPlayerMessage, PPWLobby_OnExcessFlood, 5);
     _022577C4 = new (LobbyMem_Alloc(sizeof(Work))) Work(a2, *cfg, a4, a7);
     if (_022577C4 == 0) {
         return 1;
     }
-    int result = ov45_02240B10(a0, a1, a2, &cbs, a4);
+    int result = LobbyChat_Initialize(a0, a1, a2, &cbs, a4);
     {
         Work *g = _022577C4;
         int state = ErrorMap().Map(result);
@@ -273,7 +273,7 @@ extern "C" int ov45_02231144(u32 a0, u32 a1, u32 a2, const Config *cfg, u32 a4, 
         return result;
     }
     ov45_0223E100(&_022577C4->sessions, a4, a5, a6);
-    ov45_022335A0();
+    PPWLobby_StartCheckProfile();
     _022577C4->state = 1;
     return 0;
 }

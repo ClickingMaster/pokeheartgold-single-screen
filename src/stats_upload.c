@@ -31,9 +31,9 @@ extern const HexDigits ov45_02254DF4; // "0123456789abcdef"
 extern const char ov45_02254E05[17];  // "0123456789abcdef"
 extern const char ov45_022576CC[];    // "&hash="
 extern const char ov45_022576D4[];    // "error:"
-extern char ov45_022576DC[];          // server addresses
-extern char ov45_02257704[];
-extern char ov45_02257728[];
+extern char gStatsUploadServerRelease[];          // server addresses
+extern char gStatsUploadServerDev1[];
+extern char gStatsUploadServerDev2[];
 extern const char ov45_02257750[]; // "&data="
 extern const char ov45_02257758[]; // "%d"
 extern const char ov45_0225775C[]; // "?pid="
@@ -55,19 +55,19 @@ BOOL StatsUpload_CheckResponseHash(const char *response, int length) {
         return FALSE;
     }
     bodyLength = length - 40;
-    buf = DWC_Alloc(7, ov45_02253D50(bodyLength) + 41);
+    buf = DWC_Alloc(7, StatsUpload_GetBase64Length(bodyLength) + 41);
     if (buf == NULL) {
         return FALSE;
     }
-    *(SecretKey *)buf = *(SecretKey *)ov45_0225765C;
+    *(SecretKey *)buf = *(SecretKey *)gStatsUploadSecretKey;
     B64Encode(response, buf + 20, bodyLength, 2);
     {
-        int n = ov45_02253D50(bodyLength);
+        int n = StatsUpload_GetBase64Length(bodyLength);
         u8 *p = buf + 20;
         p += n;
-        *(SecretKey *)p = *(SecretKey *)ov45_0225765C;
+        *(SecretKey *)p = *(SecretKey *)gStatsUploadSecretKey;
     }
-    MATH_CalcSHA1(digest, buf, ov45_02253D50(bodyLength) + 40);
+    MATH_CalcSHA1(digest, buf, StatsUpload_GetBase64Length(bodyLength) + 40);
     DWC_Free(7, buf, 0);
     for (i = 0; i < 20; i++) {
         hash[i * 2] = hex.chars[digest[i] >> 4];
@@ -77,8 +77,8 @@ BOOL StatsUpload_CheckResponseHash(const char *response, int length) {
     if (strncmp(response + (length - 40), hash, 40) != 0) {
         return FALSE;
     }
-    ov45_0225762C.body = response;
-    ov45_0225762C.bodyLength = bodyLength;
+    gStatsUpload.body = response;
+    gStatsUpload.bodyLength = bodyLength;
     return TRUE;
 }
 
@@ -88,12 +88,12 @@ void StatsUpload_OnRequestProgress(void) {
 
 // Completion callback of the HTTP requests: the challenge (state 5) or the upload response (state 7).
 void StatsUpload_OnRequestCompleted(char *response, int length, int error) {
-    ov45_0225762C.request = -1;
-    if (ov45_0225762C.state == STATS_UPLOAD_FAILED) {
+    gStatsUpload.request = -1;
+    if (gStatsUpload.state == STATS_UPLOAD_FAILED) {
         return;
     }
     if (error == 0) {
-        switch (ov45_0225762C.state) {
+        switch (gStatsUpload.state) {
         case STATS_UPLOAD_WAIT_CHALLENGE:
             if (length == 32) {
                 struct {
@@ -102,19 +102,19 @@ void StatsUpload_OnRequestCompleted(char *response, int length, int error) {
                 } block;
 
                 char hex[17];
-                u8 *digest = (u8 *)ov45_0225762C.hash + 20;
+                u8 *digest = (u8 *)gStatsUpload.hash + 20;
                 int i, j;
                 memcpy(hex, ov45_02254E05, 17);
-                memcpy(&block.key, ov45_0225765C, 20);
+                memcpy(&block.key, gStatsUploadSecretKey, 20);
                 memcpy(block.challenge, response, 32);
                 MATH_CalcSHA1(digest, &block, 52);
                 for (i = 0, j = 0; i < 20; i++, j += 2) {
-                    ov45_0225762C.hash[j] = hex[digest[i] >> 4];
-                    ov45_0225762C.hash[j + 1] = hex[digest[i] & 15];
+                    gStatsUpload.hash[j] = hex[digest[i] >> 4];
+                    gStatsUpload.hash[j + 1] = hex[digest[i] & 15];
                 }
-                *(ov45_0225762C.hash - strlen(ov45_022576CC)) = '&';
-                strncpy(ov45_022576A0, ov45_0225762C.hash, 41);
-                ov45_0225762C.state = STATS_UPLOAD_SEND;
+                *(gStatsUpload.hash - strlen(ov45_022576CC)) = '&';
+                strncpy(gStatsUploadLastHash, gStatsUpload.hash, 41);
+                gStatsUpload.state = STATS_UPLOAD_SEND;
             } else {
                 StatsUpload_SetFailed();
             }
@@ -126,23 +126,23 @@ void StatsUpload_OnRequestCompleted(char *response, int length, int error) {
                 StatsUpload_SetFailed();
                 return;
             }
-            if (ov45_0225762C.response) {
-                DWCi_GsFree(ov45_0225762C.response);
-                ov45_0225762C.response = NULL;
+            if (gStatsUpload.response) {
+                DWCi_GsFree(gStatsUpload.response);
+                gStatsUpload.response = NULL;
             }
             if (!StatsUpload_CheckResponseHash(response, length)) {
                 DWCi_GsFree(response);
                 StatsUpload_SetFailed();
                 return;
             }
-            if (ov45_0225762C.callback && !ov45_0225762C.callback(response, length)) {
+            if (gStatsUpload.callback && !gStatsUpload.callback(response, length)) {
                 DWCi_GsFree(response);
                 StatsUpload_SetFailed();
                 return;
             }
-            ov45_0225762C.response = response;
-            ov45_0225762C.responseLength = length;
-            ov45_0225762C.state = STATS_UPLOAD_DONE;
+            gStatsUpload.response = response;
+            gStatsUpload.responseLength = length;
+            gStatsUpload.state = STATS_UPLOAD_DONE;
             break;
         }
     } else {
@@ -181,18 +181,18 @@ int StatsUpload_EncodeData(char *out, const u8 *first, int firstLength, const u8
     for (i = 0; i < length; i++) {
         sum += buf[i + 4];
     }
-    ov45_02253D88(sum);
+    StatsUpload_SeedRandom(sum);
     for (i = 0; i < length; i++) {
-        buf[i + 4] ^= ov45_02253D9C();
+        buf[i + 4] ^= StatsUpload_RandomByte();
     }
-    sum ^= ov45_0225762C.checksumKey;
+    sum ^= gStatsUpload.checksumKey;
     buf[0] = sum >> 24;
     buf[1] = sum >> 16;
     buf[2] = sum >> 8;
     buf[3] = sum;
     B64Encode(buf, out, length + 4, 2);
     DWC_Free(7, buf, 0);
-    out[ov45_02253D50(length + 4)] = 0;
+    out[StatsUpload_GetBase64Length(length + 4)] = 0;
     return 0;
 }
 
@@ -202,21 +202,21 @@ void StatsUpload_Start(int server, char *key) {
     char secretKey[21];
     char hex[9] = { 0 };
     u32 multiplier, increment, modulus, checksumKey;
-    ov45_0225762C.request = -1;
-    ov45_0225762C.url = NULL;
-    ov45_0225762C.hash = NULL;
-    ov45_0225762C.data = NULL;
-    ov45_0225762C.response = NULL;
-    ov45_0225762C.responseLength = 0;
+    gStatsUpload.request = -1;
+    gStatsUpload.url = NULL;
+    gStatsUpload.hash = NULL;
+    gStatsUpload.data = NULL;
+    gStatsUpload.response = NULL;
+    gStatsUpload.responseLength = 0;
     switch (server) {
     case 0:
-        ov45_02257628 = ov45_022576DC;
+        gStatsUploadServer = gStatsUploadServerRelease;
         break;
     case 1:
-        ov45_02257628 = ov45_02257704;
+        gStatsUploadServer = gStatsUploadServerDev1;
         break;
     case 2:
-        ov45_02257628 = ov45_02257728;
+        gStatsUploadServer = gStatsUploadServerDev2;
         break;
     }
     strncpy(secretKey, key, 20);
@@ -225,23 +225,23 @@ void StatsUpload_Start(int server, char *key) {
     increment = strtoul(strncpy(hex, key + 28, 8), NULL, 16);
     modulus = strtoul(strncpy(hex, key + 36, 8), NULL, 16);
     checksumKey = strtoul(strncpy(hex, key + 44, 8), NULL, 16);
-    ov45_02253DDC(key + 52, secretKey, multiplier, increment, modulus, checksumKey);
+    StatsUpload_SetKey(key + 52, secretKey, multiplier, increment, modulus, checksumKey);
     DWC_InitGHTTP(0);
-    ov45_0225762C.state = STATS_UPLOAD_READY;
-    ov45_0225762C.active = TRUE;
+    gStatsUpload.state = STATS_UPLOAD_READY;
+    gStatsUpload.active = TRUE;
 }
 
 void StatsUpload_SetFailed(void) {
     if (!DWCi_IsError()) {
         DWCi_SetError(6, -90040);
     }
-    ov45_0225762C.state = STATS_UPLOAD_FAILED;
+    gStatsUpload.state = STATS_UPLOAD_FAILED;
 }
 
 // Advances the upload; returns the state.
 int StatsUpload_Process(void) {
     int request;
-    switch ((u32)ov45_0225762C.state) {
+    switch ((u32)gStatsUpload.state) {
     case STATS_UPLOAD_NONE:
     case STATS_UPLOAD_STOPPED:
     case STATS_UPLOAD_READY:
@@ -251,10 +251,10 @@ int StatsUpload_Process(void) {
         StatsUpload_SetFailed();
         break;
     case STATS_UPLOAD_GET_CHALLENGE:
-        request = DWC_GetGHTTPDataEx(ov45_0225762C.url, 0, 0, StatsUpload_OnRequestProgress, StatsUpload_OnRequestCompleted, 0);
-        ov45_0225762C.request = request;
+        request = DWC_GetGHTTPDataEx(gStatsUpload.url, 0, 0, StatsUpload_OnRequestProgress, StatsUpload_OnRequestCompleted, 0);
+        gStatsUpload.request = request;
         if (request >= 0) {
-            ov45_0225762C.state = STATS_UPLOAD_WAIT_CHALLENGE;
+            gStatsUpload.state = STATS_UPLOAD_WAIT_CHALLENGE;
         } else {
             StatsUpload_SetFailed();
         }
@@ -265,10 +265,10 @@ int StatsUpload_Process(void) {
         }
         break;
     case STATS_UPLOAD_SEND:
-        request = DWC_GetGHTTPDataEx(ov45_0225762C.url, 0, 0, StatsUpload_OnRequestProgress, StatsUpload_OnRequestCompleted, 0);
-        ov45_0225762C.request = request;
+        request = DWC_GetGHTTPDataEx(gStatsUpload.url, 0, 0, StatsUpload_OnRequestProgress, StatsUpload_OnRequestCompleted, 0);
+        gStatsUpload.request = request;
         if (request >= 0) {
-            ov45_0225762C.state = STATS_UPLOAD_WAIT_RESPONSE;
+            gStatsUpload.state = STATS_UPLOAD_WAIT_RESPONSE;
         } else {
             StatsUpload_SetFailed();
         }
@@ -279,31 +279,31 @@ int StatsUpload_Process(void) {
         }
         break;
     }
-    return ov45_0225762C.state;
+    return gStatsUpload.state;
 }
 
 // Stops the client and frees the URL and the last response.
 void StatsUpload_Stop(void) {
-    if (!ov45_0225762C.active) {
+    if (!gStatsUpload.active) {
         return;
     }
-    if (ov45_0225762C.url) {
-        DWC_Free(7, ov45_0225762C.url, 0);
-        ov45_0225762C.url = NULL;
+    if (gStatsUpload.url) {
+        DWC_Free(7, gStatsUpload.url, 0);
+        gStatsUpload.url = NULL;
     }
-    if (ov45_0225762C.response) {
-        DWCi_GsFree(ov45_0225762C.response);
-        ov45_0225762C.responseLength = 0;
-        ov45_0225762C.response = NULL;
+    if (gStatsUpload.response) {
+        DWCi_GsFree(gStatsUpload.response);
+        gStatsUpload.responseLength = 0;
+        gStatsUpload.response = NULL;
     }
     DWC_ShutdownGHTTP();
-    ov45_0225762C.state = STATS_UPLOAD_STOPPED;
-    ov45_0225762C.active = FALSE;
+    gStatsUpload.state = STATS_UPLOAD_STOPPED;
+    gStatsUpload.active = FALSE;
 }
 
 const char *StatsUpload_GetResponseBody(int *length) {
-    *length = ov45_0225762C.bodyLength;
-    return ov45_0225762C.body;
+    *length = gStatsUpload.bodyLength;
+    return gStatsUpload.body;
 }
 
 // Builds the upload URL for size bytes of data. With useLastHash the hash of the last challenge is used and
@@ -318,46 +318,46 @@ int StatsUpload_PrepareUpload(char *name, int pid, const void *data, int size, S
         int size;
     } header;
 
-    if (ov45_0225762C.keyReady != TRUE) {
+    if (gStatsUpload.keyReady != TRUE) {
         return 3;
     }
-    if (ov45_0225762C.url) {
-        DWC_Free(7, ov45_0225762C.url, 0);
-        ov45_0225762C.url = NULL;
+    if (gStatsUpload.url) {
+        DWC_Free(7, gStatsUpload.url, 0);
+        gStatsUpload.url = NULL;
     }
-    dataLength = ov45_02253D50(size + 12);
+    dataLength = StatsUpload_GetBase64Length(size + 12);
     dataTagLength = strlen(ov45_02257750);
     hashTagLength = strlen(ov45_022576CC);
     pidLength = snprintf(pidText, 16, ov45_02257758, pid);
     pidTagLength = strlen(ov45_0225775C);
     nameLength = strlen(name);
-    serverLength = strlen(ov45_02257628);
-    gameNameLength = strlen(ov45_0225763C);
-    ov45_0225762C.url = DWC_Alloc(7, dataLength + (dataTagLength + (hashTagLength + (pidLength + (pidTagLength + (nameLength + (serverLength + gameNameLength)))) + 41)));
-    if (!ov45_0225762C.url) {
+    serverLength = strlen(gStatsUploadServer);
+    gameNameLength = strlen(gStatsUploadGameName);
+    gStatsUpload.url = DWC_Alloc(7, dataLength + (dataTagLength + (hashTagLength + (pidLength + (pidTagLength + (nameLength + (serverLength + gameNameLength)))) + 41)));
+    if (!gStatsUpload.url) {
         return 2;
     }
-    sprintf(ov45_0225762C.url, ov45_02257764, ov45_02257628, ov45_0225763C, name, pid, ov45_02257780, ov45_022577AC);
+    sprintf(gStatsUpload.url, ov45_02257764, gStatsUploadServer, gStatsUploadGameName, name, pid, ov45_02257780, ov45_022577AC);
     {
-        char *url = ov45_0225762C.url;
-        ov45_0225762C.data = url + strlen(url);
+        char *url = gStatsUpload.url;
+        gStatsUpload.data = url + strlen(url);
     }
-    ov45_0225762C.hash = ov45_0225762C.data - strlen(ov45_02257750) - 40;
+    gStatsUpload.hash = gStatsUpload.data - strlen(ov45_02257750) - 40;
     header.pid = pid;
     header.size = size;
-    if (StatsUpload_EncodeData(ov45_0225762C.data, (const u8 *)&header, 8, data, size) == 2) {
-        DWC_Free(7, ov45_0225762C.url, 0);
-        ov45_0225762C.url = NULL;
+    if (StatsUpload_EncodeData(gStatsUpload.data, (const u8 *)&header, 8, data, size) == 2) {
+        DWC_Free(7, gStatsUpload.url, 0);
+        gStatsUpload.url = NULL;
         return 2;
     }
     if (useLastHash) {
-        memcpy(ov45_0225762C.hash, ov45_022576A0, 40);
-        ov45_0225762C.state = STATS_UPLOAD_SEND;
+        memcpy(gStatsUpload.hash, gStatsUploadLastHash, 40);
+        gStatsUpload.state = STATS_UPLOAD_SEND;
     } else {
-        *(ov45_0225762C.hash - strlen(ov45_022576CC)) = 0;
-        ov45_0225762C.state = STATS_UPLOAD_GET_CHALLENGE;
+        *(gStatsUpload.hash - strlen(ov45_022576CC)) = 0;
+        gStatsUpload.state = STATS_UPLOAD_GET_CHALLENGE;
     }
-    ov45_0225762C.callback = callback;
+    gStatsUpload.callback = callback;
     return 0;
 }
 

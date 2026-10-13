@@ -22,9 +22,9 @@ typedef struct Record {
     Body payload;
 } Record;
 
-void ov45_02232AE8(Record *, int, Body *);
+void LobbyTimerMap_MakeEntry(Record *, int, Body *);
 
-void ov45_02232AE8(Record *p, int type, Body *q) {
+void LobbyTimerMap_MakeEntry(Record *p, int type, Body *q) {
     u8 *base = (u8 *)&p->payload;
     p->type = type;
     *(u64 *)base = q->a;

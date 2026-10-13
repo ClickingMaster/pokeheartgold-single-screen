@@ -55,27 +55,27 @@ extern int DWC_CheckHasProfile(void *);
 extern u8 *volatile _022577C4;
 extern u8 ov45_02254FA0[];
 extern void *LobbyString_InitCopy(void *, void *);
-extern void *ov45_02232B9C(Vec *);
-extern Node *ov45_02232E30(u8 *, u32 *, Node *, Node *);
-extern void ov45_02232DDC(Node **, u8 *, u32 *);
+extern void *LobbyCharVector_Data(Vec *);
+extern Node *LobbyTimerMap_LowerBound(u8 *, u32 *, Node *, Node *);
+extern void LobbyTimerMap_Find(Node **, u8 *, u32 *);
 extern int DWC_Free();
 extern int DWC_GetDateTime();
 extern int ov45_02231144();
-extern int ov45_0223325C();
-extern int ov45_02233434();
+extern int PPWLobby_SendMessage();
+extern int PPWLobby_SetChannelData();
 extern int ov45_02236B88();
-extern int ov45_02236CB0();
-extern int ov45_022377AC();
+extern int LobbyTimerMap_Clear();
+extern int LobbyCharVector_Grow();
 extern int ov45_02237820();
 extern int ov45_02237890();
-extern int ov45_022379D4();
+extern int LobbyCharVector_Destroy();
 extern int LobbyString_InitFromCStr();
 extern int LobbyString_Destroy();
 extern int ov45_02238B70();
 extern int ov45_0223DF4C();
-extern int ov45_02240A74();
-extern int ov45_02240A80();
-extern int ov45_02240F9C();
+extern int LobbyChat_ToErrorCode();
+extern int LobbyChat_IsInChannel();
+extern int LobbyChat_Shutdown();
 u8 *PPWLobby_GetWork(void);
 int PPW_LobbyInitializeAsync(void *a, void *b, void *c, void *d, u8 *user, void *e, void *g);
 u8 *ov45_02231448(u8 *p);
@@ -90,11 +90,11 @@ int PPW_LobbySendChannelBinaryMessage(int a, void *b, void *c, void *d);
 int PPW_LobbySendPlayerBinaryMessage(int a, void *b, void *c, void *d);
 int PPW_LobbyGetMyUserId(void);
 void ov45_02232760(Vec *p, char *first, char *last);
-void ov45_02232AE8(Record *p, int type, Body *q);
-void ov45_02232B24(u8 *p, int n, char *fmt, ...);
-int ov45_02232D8C(u8 *p, u32 *key);
-void ov45_02232DDC(Node **out, u8 *p, u32 *key);
-Node *ov45_02232E30(u8 *p, u32 *key, Node *n, Node *best);
+void LobbyTimerMap_MakeEntry(Record *p, int type, Body *q);
+void LobbyString_FormatN(u8 *p, int n, char *fmt, ...);
+int LobbyTimerMap_EraseKey(u8 *p, u32 *key);
+void LobbyTimerMap_Find(Node **out, u8 *p, u32 *key);
+Node *LobbyTimerMap_LowerBound(u8 *p, u32 *key, Node *n, Node *best);
 int PPW_LobbyGetLastError(void);
 int PPW_LobbyToErrorCode(int x);
 int ov45_02233220(int x);
@@ -130,7 +130,7 @@ int PPW_LobbySendChannelBinaryMessage(int a, void *b, void *c, void *d) {
             return 4;
         }
     }
-    return ov45_0223325C(-1, a, 1, 1, b, c, d);
+    return PPWLobby_SendMessage(-1, a, 1, 1, b, c, d);
 }
 
 int PPW_LobbySendPlayerBinaryMessage(int a, void *b, void *c, void *d) {
@@ -148,7 +148,7 @@ int PPW_LobbySendPlayerBinaryMessage(int a, void *b, void *c, void *d) {
             return 4;
         }
     }
-    return ov45_0223325C(a, 5, 1, 1, b, c, d);
+    return PPWLobby_SendMessage(a, 5, 1, 1, b, c, d);
 }
 
 int PPW_LobbyGetMyUserId(void) {

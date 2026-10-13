@@ -10,8 +10,8 @@
 void *ov45_02238C08(void *);
 int ov45_02238B70(u8 *, u8 *, u32 *);
 void ov45_02238C1C(u32 *, u8 *);
-extern void ov45_022377AC(void *, u32);
-extern void *ov45_02231C78(void *);
+extern void LobbyCharVector_Grow(void *, u32);
+extern void *LobbyByteVector_Data(void *);
 
 int ov45_02238B70(u8 *s, u8 *out, u32 *len) {
     u32 needed = ((W(s, 0x30) - 1) << 3) + 0x18;

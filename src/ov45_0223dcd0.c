@@ -137,12 +137,12 @@ void ov45_0223DB8C(CharVec *, u32, const char *);
 u32 ov45_0223EA34(Vec *, u32);
 void ov45_0223EB00(Vec *, u32, u32 *);
 void ov45_02236E58(NodeIter *);
-Node *ov45_022370D0(Node *, void *);
+Node *LobbyTree_EraseRebalance(Node *, void *);
 
 extern char ov45_0225520C[];
 void printf(const char *, ...);
 void abort(void);
-void ov45_02236EC4(Node *, void *);
+void LobbyTree_InsertRebalance(Node *, void *);
 
 typedef struct InsertResult {
     Node *current;
@@ -234,8 +234,8 @@ typedef struct Callbacks {
 } Callbacks;
 
 Callbacks *PPWLobby_GetWork(void);
-const char *ov45_02231C78(void *);
-void ov45_0223DCD0(Session *s);
+const char *LobbyByteVector_Data(void *);
+void PPWLobbyPlayer_UpdateState(Session *s);
 
 extern VTable ov45_02254FB0;
 void DWC_GetDateTime(RTCDate *date, RTCTime *time);
@@ -258,7 +258,7 @@ extern char ov45_022551F0[];
 extern char ov45_022551F4[];
 extern char ov45_022551F8[];
 extern char ov45_022551FC[];
-void ov45_02232B24(Str *out, u32 width, const char *fmt, ...);
+void LobbyString_FormatN(Str *out, u32 width, const char *fmt, ...);
 void LobbyString_Destroy(Str *s);
 void LobbyString_Append(Str *s, void *arg);
 void LobbyString_AppendCStr(Str *s, const char *arg);
@@ -285,11 +285,11 @@ typedef struct SplitBuf {
 void ov45_0223EC80(SplitBuf *b, u32 cap, Tag unused);
 void ov45_0223EC64(SplitBuf *b);
 
-BOOL ov45_0223DD3C(SessionMgr *m, int id);
-BOOL ov45_0223DE38(SessionMgr *m, int id);
-Session *ov45_0223DEC4(SessionMgr *m, int id);
+BOOL PPWLobbyPlayers_Add(SessionMgr *m, int id);
+BOOL PPWLobbyPlayers_Remove(SessionMgr *m, int id);
+Session *PPWLobbyPlayers_Find(SessionMgr *m, int id);
 
-void ov45_0223DCD0(Session *s) {
+void PPWLobbyPlayer_UpdateState(Session *s) {
     switch (s->state) {
     case 0:
         s->state = (s->unk30 != 0 && s->unk34 != 0) ? 1 : 0;
@@ -311,7 +311,7 @@ void ov45_0223DCD0(Session *s) {
     }
 }
 
-BOOL ov45_0223DD3C(SessionMgr *m, int id) {
+BOOL PPWLobbyPlayers_Add(SessionMgr *m, int id) {
     RTCDate date;
     RTCTime time;
     Session *s;
@@ -353,7 +353,7 @@ BOOL ov45_0223DD3C(SessionMgr *m, int id) {
     return TRUE;
 }
 
-BOOL ov45_0223DE38(SessionMgr *m, int id) {
+BOOL PPWLobbyPlayers_Remove(SessionMgr *m, int id) {
     NodeIter it;
     Node *hdr = (Node *)&m->list.root;
     it.current = m->list.leftmost;
@@ -372,7 +372,7 @@ BOOL ov45_0223DE38(SessionMgr *m, int id) {
     return FALSE;
 }
 
-Session *ov45_0223DEC4(SessionMgr *m, int id) {
+Session *PPWLobbyPlayers_Find(SessionMgr *m, int id) {
     volatile FindState a;
     volatile FindState b;
     Node *r;

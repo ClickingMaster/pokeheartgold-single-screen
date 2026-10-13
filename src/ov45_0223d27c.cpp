@@ -100,10 +100,10 @@ struct Out {
 
 extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
 extern "C" void LobbyString_Destroy(Str *);
-extern "C" void ov45_0223649C(SVec *, const Str *, const Str *, int);
+extern "C" void LobbyString_Split(SVec *, const Str *, const Str *, int);
 extern "C" void ov45_02237664(SVec *);
 extern "C" int ov45_0223D644(Str *, Str *, int);
-extern "C" int ov45_02233FE4(const char *, CVec *);
+extern "C" int PPWLobby_DecodeMessageData(const char *, CVec *);
 extern "C" const char ov45_022551DC[], ov45_022551E0[], ov45_022551E4[], ov45_022551E8[], ov45_022551D9[];
 extern "C" char ov45_022551D8[];
 extern "C" int ov45_0223D27C(const Str *, Out *);
@@ -122,7 +122,7 @@ extern "C" int ov45_0223D27C(const Str *src, Out *out) {
     char *end;
     const Str *p;
     LobbyString_InitFromCStr(&delim, ov45_022551DC);
-    ov45_0223649C(&parts, src, &delim, 2);
+    LobbyString_Split(&parts, src, &delim, 2);
     LobbyString_Destroy(&delim);
     if (parts.size != 2) {
         ov45_02237664(&parts);
@@ -140,7 +140,7 @@ extern "C" int ov45_0223D27C(const Str *src, Out *out) {
         }
     }
     LobbyString_InitFromCStr(&delim2, ov45_022551E0);
-    ov45_0223649C(&fields, &parts.ptr[0], &delim2, 0);
+    LobbyString_Split(&fields, &parts.ptr[0], &delim2, 0);
     LobbyString_Destroy(&delim2);
     if (fields.size < 6) {
         ov45_02237664(&fields);
@@ -174,7 +174,7 @@ extern "C" int ov45_0223D27C(const Str *src, Out *out) {
     out->value = strtol(fields.ptr[4].c_str(), &end, 16);
     ov45_02237664(&fields);
     if (out->decode == 1) {
-        if (!ov45_02233FE4(parts.ptr[1].c_str(), &out->payload)) {
+        if (!PPWLobby_DecodeMessageData(parts.ptr[1].c_str(), &out->payload)) {
             ov45_02237664(&parts);
             return 0;
         }

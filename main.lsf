@@ -1584,7 +1584,7 @@ Overlay OVY_45
     Object src/ov45_02232e60.o
     Object lib/NitroDWC/asm/dwc_lobby_chat_data.o
     Object src/ov45_022383e0.o
-    Object src/ov45_02238450.o
+    Object src/lobby_timer_map_find_insert_pos.o
     Object src/ov45_022384bc.o
     Object src/ov45_02238508.o
     Object src/ov45_02238558.o
@@ -1677,17 +1677,17 @@ Overlay OVY_45
     Object src/ov45_0223fe28.o
     Object src/ov45_0223ffe8.o
     Object src/ov45_0224005c.o
-    Object src/ov45_02240234.o
-    Object src/ov45_02240494.o
-    Object src/ov45_02240620.o
-    Object src/ov45_02240718.o
+    Object src/lobby_chat_on_enter_channel.o
+    Object src/lobby_chat_on_get_channel_keys.o
+    Object src/lobby_chat_on_broadcast_key_changed.o
+    Object src/lobby_chat_on_get_channel_mode.o
     Object src/ov45_02240850.o
-    Object src/ov45_02240874.o
+    Object src/lobby_chat_process.o
     Object src/ov45_02240a58.o
     Object src/ov45_02240b10.o
     Object src/ov45_02240f6c.o
     Object src/ov45_02240f8c.o
-    Object src/ov45_02241048.o
+    Object src/lobby_chat_enter_channel.o
     Object src/ov45_022412c4.o
     Object src/ov45_022417b4.o
     Object src/ov45_02241a20.o
@@ -1700,12 +1700,12 @@ Overlay OVY_45
     Object src/ov45_02242254.o
     Object src/ov45_02242288.o
     Object src/ov45_0224268c.o
-    Object src/ov45_02242858.o
+    Object src/lobby_chat_manager.o
     Object src/ov45_02242acc.o
     Object src/ov45_02242be0.o
     Object src/ov45_02242ef4.o
     Object src/ov45_0224307c.o
-    Object src/ov45_02243128.o
+    Object src/lobby_chat_users.o
     Object src/ov45_0224330c.o
     Object src/ov45_0224335c.o
     Object src/ov45_022434c0.o
@@ -1713,7 +1713,7 @@ Overlay OVY_45
     Object src/ov45_022435f8.o
     Object src/ov45_022436e0.o
     Object src/ov45_02243780.o
-    Object src/ov45_02243840.o
+    Object src/lobby_channel_map.o
     Object src/ov45_02243970.o
     Object src/ov45_02243a98.o
     Object src/ov45_02243b50.o
@@ -1722,7 +1722,7 @@ Overlay OVY_45
     Object src/ov45_02243e44.o
     Object src/ov45_02243f1c.o
     Object src/ov45_02243fd4.o
-    Object src/ov45_02244130.o
+    Object src/lobby_chat_map_destroy.o
     Object src/ov45_02244170.o
     Object src/ov45_022441fc.o
     Object src/chat_callbacks.o

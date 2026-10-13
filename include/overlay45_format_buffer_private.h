@@ -23,8 +23,8 @@ typedef struct Vec {char *ptr;u32 size,cap;} Vec;
 #endif
 Str *LobbyString_InitFromCStr(Str *,char *);
 Str *LobbyString_Destroy(Str *);
-Vec *ov45_022379D4(Vec *);
-char *ov45_02232B9C(Vec *);
+Vec *LobbyCharVector_Destroy(Vec *);
+char *LobbyCharVector_Data(Vec *);
 u32 ov45_02237890(Vec *,u32);
 void ov45_02238820(Vec *,u32);
 #ifdef __cplusplus

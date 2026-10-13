@@ -88,14 +88,14 @@ BOOL ov45_02253968(ChatSocket *socket) {
         return FALSE;
     }
     last[1] = saved;
-    ov45_02251DB4(&socket->input, end - socket->input.data);
+    ciBufferClipFront(&socket->input, end - socket->input.data);
     return TRUE;
 fail:
     return FALSE;
 }
 
 // Returns the next line received from the server, or NULL.
-ChatMessage *ov45_02253B5C(ChatSocket *socket) {
+ChatMessage *ciSocketRecv(ChatSocket *socket) {
     ASSERT(socket, ov45_02257334, ov45_02257164, 1001);
     ASSERT(socket->state <= 2, ov45_02257344, ov45_02257164, 1001);
     ASSERT(&socket->input, ov45_022573C4, ov45_02257164, 1001);
@@ -118,27 +118,27 @@ ChatMessage *ov45_02253B5C(ChatSocket *socket) {
 }
 
 // Length of the base64 encoding of length bytes.
-u32 ov45_02253D50(u32 length) {
+u32 StatsUpload_GetBase64Length(u32 length) {
     return 4 * (length / 3 + (length % 3 != 0));
 }
 
-void ov45_02253D88(u32 seed) {
+void StatsUpload_SeedRandom(u32 seed) {
     ov45_022587F8 = seed | (seed << 16);
 }
 
 // Next byte of the random number generator.
-int ov45_02253D9C(void) {
-    ov45_022587F8 = (ov45_0225762C.multiplier * ov45_022587F8 + ov45_0225762C.increment) % ov45_0225762C.modulus;
+int StatsUpload_RandomByte(void) {
+    ov45_022587F8 = (gStatsUpload.multiplier * ov45_022587F8 + gStatsUpload.increment) % gStatsUpload.modulus;
     return ((int)ov45_022587F8 >> 16) & 0xFF;
 }
 
 // Sets the game name (< 32 characters), the 20 character secret key and the random number generator constants
 // (multiplier 8n + 5, odd increment, power of two modulus) used by the uploads.
-BOOL ov45_02253DDC(char *gameName, char *secretKey, u32 multiplier, u32 increment, u32 modulus, u32 checksumKey) {
+BOOL StatsUpload_SetKey(char *gameName, char *secretKey, u32 multiplier, u32 increment, u32 modulus, u32 checksumKey) {
     int i, bits;
     u32 count;
     u8 *dst;
-    ov45_0225762C.keyReady = FALSE;
+    gStatsUpload.keyReady = FALSE;
     if (strlen(gameName) >= 32) {
         return FALSE;
     }
@@ -160,9 +160,9 @@ BOOL ov45_02253DDC(char *gameName, char *secretKey, u32 multiplier, u32 incremen
     if (bits != 1) {
         return FALSE;
     }
-    strncpy(ov45_0225763C, gameName, 32);
+    strncpy(gStatsUploadGameName, gameName, 32);
     count = 10;
-    dst = ov45_0225765C;
+    dst = gStatsUploadSecretKey;
     {
         do {
             u8 x = ((u8 *)secretKey)[0], y = ((u8 *)secretKey)[1];
@@ -172,10 +172,10 @@ BOOL ov45_02253DDC(char *gameName, char *secretKey, u32 multiplier, u32 incremen
             dst += 2;
         } while (--count != 0);
     }
-    ov45_0225762C.multiplier = multiplier;
-    ov45_0225762C.increment = increment;
-    ov45_0225762C.modulus = modulus;
-    ov45_0225762C.checksumKey = checksumKey;
-    ov45_0225762C.keyReady = TRUE;
+    gStatsUpload.multiplier = multiplier;
+    gStatsUpload.increment = increment;
+    gStatsUpload.modulus = modulus;
+    gStatsUpload.checksumKey = checksumKey;
+    gStatsUpload.keyReady = TRUE;
     return TRUE;
 }

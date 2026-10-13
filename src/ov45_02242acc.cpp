@@ -8,7 +8,7 @@ struct TreeHdr;
 extern "C" void LobbyString_InitCopy(String *dst, const String *src);
 extern "C" void LobbyString_Destroy(String *s);
 extern "C" void ov45_02243BC0(TreeHdr *dst, const TreeHdr *src);
-extern "C" void ov45_02243F1C(TreeHdr *t);
+extern "C" void LobbyUserIdSet_Destroy(TreeHdr *t);
 
 struct Blob24 {
     u32 w[6];
@@ -95,24 +95,24 @@ struct Obj {
     TreeHdr tree;
 };
 
-extern "C" InsertResult ov45_02243840(TreeHdr *t, NamedEntry *e);
+extern "C" InsertResult LobbyChannelMap_Insert(TreeHdr *t, NamedEntry *e);
 extern "C" NamedEntry ov45_02242BE0(String *name, Entry *src);
-extern "C" int ov45_02242ACC(Obj *o, const String *name, const Blob24 *b, u32 x);
+extern "C" int LobbyChat_AddChannel(Obj *o, const String *name, const Blob24 *b, u32 x);
 #pragma opt_propagation off
 
-extern "C" int ov45_02242ACC(Obj *o, const String *name, const Blob24 *b, u32 x) {
+extern "C" int LobbyChat_AddChannel(Obj *o, const String *name, const Blob24 *b, u32 x) {
     String a(*name);
     Entry e;
     e.x10 = x;
     e.b = *b;
     NamedEntry ne = ov45_02242BE0(&a, &e);
     NamedEntry cp(ne);
-    u8 ins = ov45_02243840(&o->tree, &cp).inserted;
-    ov45_02243F1C(&cp.e.t);
+    u8 ins = LobbyChannelMap_Insert(&o->tree, &cp).inserted;
+    LobbyUserIdSet_Destroy(&cp.e.t);
     LobbyString_Destroy(&cp.name);
-    ov45_02243F1C(&ne.e.t);
+    LobbyUserIdSet_Destroy(&ne.e.t);
     LobbyString_Destroy(&ne.name);
-    ov45_02243F1C(&e.t);
+    LobbyUserIdSet_Destroy(&e.t);
     LobbyString_Destroy(&a);
     return ins;
 }

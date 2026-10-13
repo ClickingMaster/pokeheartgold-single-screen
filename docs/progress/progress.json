@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "6cb84c65e581464ebb4fc3a5fba0762ae512d11d",
+  "commit": "8074fed720c5eee47274d2f69c55ceaebf0d65f2",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "bad46e4a3496c59f8c78f439ed76406cef2ef3b23e12039a4e41a9fc1860a411",
+    "ARM9": "c48e6386865fde4f4215a54436cae6c8e6e6933847e6f84684613b62cdd2489b",
     "ARM7": "b44058d8b791338c04a234352793bd8125685d2c2662d6032830bb6faf239276"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -2564,6 +2564,94 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
+      "object": "lobby_channel_map.o",
+      "bytes": 304,
+      "status": "c",
+      "source": "src/lobby_channel_map.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_45",
+      "object": "lobby_chat_enter_channel.o",
+      "bytes": 636,
+      "status": "cpp",
+      "source": "src/lobby_chat_enter_channel.cpp"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_45",
+      "object": "lobby_chat_manager.o",
+      "bytes": 628,
+      "status": "c",
+      "source": "src/lobby_chat_manager.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_45",
+      "object": "lobby_chat_map_destroy.o",
+      "bytes": 64,
+      "status": "c",
+      "source": "src/lobby_chat_map_destroy.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_45",
+      "object": "lobby_chat_on_broadcast_key_changed.o",
+      "bytes": 248,
+      "status": "c",
+      "source": "src/lobby_chat_on_broadcast_key_changed.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_45",
+      "object": "lobby_chat_on_enter_channel.o",
+      "bytes": 608,
+      "status": "cpp",
+      "source": "src/lobby_chat_on_enter_channel.cpp"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_45",
+      "object": "lobby_chat_on_get_channel_keys.o",
+      "bytes": 396,
+      "status": "cpp",
+      "source": "src/lobby_chat_on_get_channel_keys.cpp"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_45",
+      "object": "lobby_chat_on_get_channel_mode.o",
+      "bytes": 312,
+      "status": "cpp",
+      "source": "src/lobby_chat_on_get_channel_mode.cpp"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_45",
+      "object": "lobby_chat_process.o",
+      "bytes": 484,
+      "status": "cpp",
+      "source": "src/lobby_chat_process.cpp"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_45",
+      "object": "lobby_chat_users.o",
+      "bytes": 484,
+      "status": "c",
+      "source": "src/lobby_chat_users.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_45",
+      "object": "lobby_timer_map_find_insert_pos.o",
+      "bytes": 108,
+      "status": "c",
+      "source": "src/lobby_timer_map_find_insert_pos.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_45",
       "object": "ov45_022310b0.o",
       "bytes": 16,
       "status": "c",
@@ -2752,14 +2840,6 @@
       "bytes": 112,
       "status": "cpp",
       "source": "src/ov45_022383e0.cpp"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "ov45_02238450.o",
-      "bytes": 108,
-      "status": "c",
-      "source": "src/ov45_02238450.c"
     },
     {
       "cpu": "ARM9",
@@ -3500,50 +3580,10 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
-      "object": "ov45_02240234.o",
-      "bytes": 608,
-      "status": "cpp",
-      "source": "src/ov45_02240234.cpp"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "ov45_02240494.o",
-      "bytes": 396,
-      "status": "cpp",
-      "source": "src/ov45_02240494.cpp"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "ov45_02240620.o",
-      "bytes": 248,
-      "status": "c",
-      "source": "src/ov45_02240620.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "ov45_02240718.o",
-      "bytes": 312,
-      "status": "cpp",
-      "source": "src/ov45_02240718.cpp"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
       "object": "ov45_02240850.o",
       "bytes": 36,
       "status": "c",
       "source": "src/ov45_02240850.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "ov45_02240874.o",
-      "bytes": 484,
-      "status": "cpp",
-      "source": "src/ov45_02240874.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3576,14 +3616,6 @@
       "bytes": 188,
       "status": "c",
       "source": "src/ov45_02240f8c.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "ov45_02241048.o",
-      "bytes": 636,
-      "status": "cpp",
-      "source": "src/ov45_02241048.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3684,14 +3716,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
-      "object": "ov45_02242858.o",
-      "bytes": 628,
-      "status": "c",
-      "source": "src/ov45_02242858.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
       "object": "ov45_02242acc.o",
       "bytes": 276,
       "status": "cpp",
@@ -3720,14 +3744,6 @@
       "bytes": 172,
       "status": "cpp",
       "source": "src/ov45_0224307c.cpp"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "ov45_02243128.o",
-      "bytes": 484,
-      "status": "c",
-      "source": "src/ov45_02243128.c"
     },
     {
       "cpu": "ARM9",
@@ -3784,14 +3800,6 @@
       "bytes": 192,
       "status": "c",
       "source": "src/ov45_02243780.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "ov45_02243840.o",
-      "bytes": 304,
-      "status": "c",
-      "source": "src/ov45_02243840.c"
     },
     {
       "cpu": "ARM9",
@@ -3856,14 +3864,6 @@
       "bytes": 348,
       "status": "c",
       "source": "src/ov45_02243fd4.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "ov45_02244130.o",
-      "bytes": 64,
-      "status": "c",
-      "source": "src/ov45_02244130.c"
     },
     {
       "cpu": "ARM9",

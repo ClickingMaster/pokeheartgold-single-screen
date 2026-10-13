@@ -18,7 +18,7 @@ typedef struct {
 } Tree;
 
 extern void ov45_02236E58(Iterator *);
-extern Node *ov45_022370D0(Node *, void *);
+extern Node *LobbyTree_EraseRebalance(Node *, void *);
 extern void DWC_Free(int, void *, int);
 extern Node *LobbyMem_Alloc(u32);
 
@@ -29,15 +29,15 @@ typedef struct {
 } Guard;
 
 void ov45_02243CF8(Tree *, Node *, Node **, int);
-void ov45_02243B50(Iterator *, Tree *, Iterator);
+void LobbyUserIdSet_Erase(Iterator *, Tree *, Iterator);
 
-void ov45_02243B50(Iterator *out, Tree *tree, Iterator node) {
+void LobbyUserIdSet_Erase(Iterator *out, Tree *tree, Iterator node) {
     Node *old = node.current;
     if (node.current == tree->last) {
         ov45_02236E58(&node);
         tree->last = node.current;
     }
-    out->current = ov45_022370D0(old, tree->root);
+    out->current = LobbyTree_EraseRebalance(old, tree->root);
     if (old) {
         DWC_Free(0, old, 0);
     }

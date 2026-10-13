@@ -76,9 +76,9 @@ struct Map {
     }
 };
 
-extern "C" void ov45_0223DCD0(Obj *obj);
+extern "C" void PPWLobbyPlayer_UpdateState(Obj *obj);
 extern "C" Handler *PPWLobby_GetWork(void);
-extern "C" void *ov45_02231C78(void *p);
+extern "C" void *LobbyByteVector_Data(void *p);
 
 inline Triple MakeAddr(Obj *o) {
     Triple t;
@@ -103,7 +103,7 @@ extern "C" void ov45_0223E558(Map *m) {
     if (it.n != end) {
         zero = 0;
         do {
-            ov45_0223DCD0(it.n->value);
+            PPWLobbyPlayer_UpdateState(it.n->value);
             switch (it.n->value->state) {
             case 0:
             case 1:
@@ -119,7 +119,7 @@ extern "C" void ov45_0223E558(Map *m) {
                 x = o2->unk1C;
                 y = it.n->value->unk2C;
                 Handler *h = PPWLobby_GetWork();
-                h->func(y, &b, ov45_02231C78(o2->unk18), x);
+                h->func(y, &b, LobbyByteVector_Data(o2->unk18), x);
                 it.n->value->unk38 = 1;
                 break;
             }

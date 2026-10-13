@@ -69,7 +69,7 @@ struct Tree {
     Node *xC;
 };
 
-extern "C" void ov45_02236EC4(Node *n, Node *root);
+extern "C" void LobbyTree_InsertRebalance(Node *n, Node *root);
 
 struct Holder {
     Alloc na;
@@ -121,7 +121,7 @@ extern "C" Node *ov45_02243970(Tree *t, Node *parent, BOOL left, BOOL rightmost,
         parent->right = n;
     }
     ++t->size;
-    ov45_02236EC4(n, t->root);
+    LobbyTree_InsertRebalance(n, t->root);
     if (rightmost) {
         t->xC = n;
     }

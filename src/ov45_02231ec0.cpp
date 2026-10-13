@@ -133,7 +133,7 @@ inline int ErrorMap::Map(int r) const {
 
 extern "C" Work *_022577C4;
 extern "C" Str ov45_022320B4(Peer *);
-extern "C" int ov45_022412CC(const char *);
+extern "C" int LobbyChat_LeaveChannel(const char *);
 extern "C" int PPW_LobbyLeaveSubChannel(void);
 
 inline Work *GetWork() {
@@ -179,7 +179,7 @@ extern "C" int PPW_LobbyLeaveSubChannel(void) {
         Str t(ov45_022320B4(&w->peer));
         int parsed;
         int state;
-        parsed = ov45_022412CC(t.text());
+        parsed = LobbyChat_LeaveChannel(t.text());
         w = GetWork();
         state = ErrorMap().Map(parsed);
         if (state != 0) {

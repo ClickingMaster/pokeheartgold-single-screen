@@ -92,12 +92,12 @@ struct Map {
     int id;
 };
 
-extern "C" int ov45_02242A2C(String *s);
+extern "C" int LobbyChat_GetUserIdFromNick(String *s);
 extern "C" void ov45_0223FC5C(String *out, Map *m);
-extern "C" int ov45_02242D30(Map *m, const String &name, const String &key);
+extern "C" int LobbyChat_AddChannelUser(Map *m, const String &name, const String &key);
 
 static inline bool SameId(int id, String *s) {
-    return id == ov45_02242A2C(s);
+    return id == LobbyChat_GetUserIdFromNick(s);
 }
 
 extern "C" Vec ov45_02242EF4(Map *map, int count, const char **names, const String &key);
@@ -114,7 +114,7 @@ extern "C" Vec ov45_02242EF4(Map *map, int count, const char **names, const Stri
             constructed = 0;
             int self = map->id;
             skip = false;
-            int id = ov45_02242A2C(&s);
+            int id = LobbyChat_GetUserIdFromNick(&s);
             if (id == self) {
                 const char *n = names[i];
                 ov45_0223FC5C(&name, map);
@@ -130,7 +130,7 @@ extern "C" Vec ov45_02242EF4(Map *map, int count, const char **names, const Stri
         }
         if (!skip) {
             String t(names[i]);
-            int id = ov45_02242D30(map, t, key);
+            int id = LobbyChat_AddChannelUser(map, t, key);
             t.destroy();
             if (id != -1) {
                 out.push_back(id);

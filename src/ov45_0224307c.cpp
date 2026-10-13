@@ -79,8 +79,8 @@ struct Obj {
     Map map;
 };
 
-extern "C" It ov45_02243128(Set *s, const Key &k);
-extern "C" void ov45_022431AC(void *list, const Key &k);
+extern "C" It LobbyUserIdSet_Find(Set *s, const Key &k);
+extern "C" void LobbyUserMap_EraseKey(void *list, const Key &k);
 
 struct HasKey {
     Key k;
@@ -90,7 +90,7 @@ struct HasKey {
     }
 
     bool operator()(Pair &p) const {
-        It r = ov45_02243128(&p.second, k);
+        It r = LobbyUserIdSet_Find(&p.second, k);
         return r != p.second.end();
     }
 };
@@ -104,13 +104,13 @@ inline It Map::FindIf(HasKey pred) {
     return it;
 }
 
-extern "C" BOOL ov45_0224307C(Obj *o, Key k);
+extern "C" BOOL LobbyChat_RemoveUserIfUnused(Obj *o, Key k);
 
-extern "C" BOOL ov45_0224307C(Obj *o, Key k) {
+extern "C" BOOL LobbyChat_RemoveUserIfUnused(Obj *o, Key k) {
     It it = o->map.FindIf(HasKey(k));
     if (it != o->map.end()) {
         return 0;
     }
-    ov45_022431AC(o->list, k);
+    LobbyUserMap_EraseKey(o->list, k);
     return 1;
 }

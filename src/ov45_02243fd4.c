@@ -26,21 +26,21 @@ struct Node {
 extern void ov45_02236E58(Iterator *);
 extern void LobbyString_Destroy(void *);
 extern void DWC_Free(int, void *, int);
-extern Node *ov45_022370D0(Node *, void *);
-void ov45_02243FD4(Iterator *, List *, Iterator);
+extern Node *LobbyTree_EraseRebalance(Node *, void *);
+void LobbyUserMap_Erase(Iterator *, List *, Iterator);
 extern void *LobbyMem_Alloc(int);
 extern void LobbyString_InitCopy(void *, void *);
-extern void ov45_02236EC4(Node *, void *);
+extern void LobbyTree_InsertRebalance(Node *, void *);
 extern char ov45_022553AC[];
 Node *ov45_0224404C(List *, Node *, int, int, u32 *);
 
-void ov45_02243FD4(Iterator *out, List *list, Iterator node) {
+void LobbyUserMap_Erase(Iterator *out, List *list, Iterator node) {
     Node *old = node.current;
     if (old == list->current) {
         ov45_02236E58(&node);
         list->current = node.current;
     }
-    out->current = ov45_022370D0(old, list->head);
+    out->current = LobbyTree_EraseRebalance(old, list->head);
     LobbyString_Destroy(old->str);
     if (old) {
         DWC_Free(0, old, 0);
@@ -93,7 +93,7 @@ Node *ov45_0224404C(List *list, Node *link, int before, int current, u32 *value)
         link->prev = n;
     }
     list->count++;
-    ov45_02236EC4(n, list->head);
+    LobbyTree_InsertRebalance(n, list->head);
     if (current) {
         list->current = n;
     }

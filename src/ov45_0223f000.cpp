@@ -13,7 +13,7 @@ struct String;
 extern "C" void LobbyString_InitCopy(String *dst, const String *src);
 extern "C" void LobbyString_Destroy(String *s);
 extern "C" void LobbyString_Assign(String *dst, const String *src);
-extern "C" String ov45_02236680(const String *s, u32 pos, u32 n);
+extern "C" String LobbyString_Substr(const String *s, u32 pos, u32 n);
 extern "C" int ov45_02242254(const String *s, const String &str, int pos);
 
 struct String {
@@ -54,7 +54,7 @@ struct String {
     }
 
     String substr(u32 pos, u32 n) const {
-        return ov45_02236680(this, pos, n);
+        return LobbyString_Substr(this, pos, n);
     }
 
     int find(const String &str, int pos) const {
@@ -96,21 +96,21 @@ struct Vec {
     }
 };
 
-extern "C" Vec ov45_0223F000(const String &src, const String &sep, int max);
+extern "C" Vec LobbyChat_SplitString(const String &src, const String &sep, int max);
 
-extern "C" Vec ov45_0223F000(const String &src, const String &sep, int max) {
+extern "C" Vec LobbyChat_SplitString(const String &src, const String &sep, int max) {
     Vec out;
     int count = 1;
     String cur(src);
     int pos;
     while (count != max && (pos = cur.find(sep, 0)) != -1) {
         if (pos != 0) {
-            String piece = ov45_02236680(&cur, 0, pos);
+            String piece = LobbyString_Substr(&cur, 0, pos);
             out.push_back(piece);
             piece.destroy();
             count++;
         }
-        String rest = ov45_02236680(&cur, pos + 1, -1);
+        String rest = LobbyString_Substr(&cur, pos + 1, -1);
         cur = rest;
         rest.destroy();
     }

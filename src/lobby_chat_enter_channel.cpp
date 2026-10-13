@@ -73,14 +73,14 @@ struct InsertResult {
 };
 
 extern "C" void ov45_0224206C(InsertResult *res, void *list, Handler **h);
-extern "C" Str ov45_022428C8(Mgr *m, const Str &s);
+extern "C" Str LobbyChat_GetFullChannelName(Mgr *m, const Str &s);
 
 struct Arg3 {
     u8 pad[0x14];
     u32 unk14;
 };
 
-extern "C" void ov45_02242ACC(Mgr *m, const Str &s, Arg3 *c, u32 d);
+extern "C" void LobbyChat_AddChannel(Mgr *m, const Str &s, Arg3 *c, u32 d);
 
 struct Callbacks {
     void (*f0)();
@@ -98,17 +98,17 @@ struct Callbacks {
 };
 
 extern "C" void chatEnterChannelA(void *ctx, const char *name, u32 b, Callbacks *cb, void (*cb2)(), u32 id, u32 z);
-extern "C" void ov45_0223F1E4();
-extern "C" void ov45_0223F2D8();
-extern "C" void ov45_0223F32C();
-extern "C" void ov45_0223F5C8();
-extern "C" void ov45_0223F6F4();
-extern "C" void ov45_0223F768();
-extern "C" void ov45_0223F83C();
-extern "C" void ov45_0223F8F4();
-extern "C" void ov45_0223F910();
-extern "C" void ov45_02240234();
-extern "C" void ov45_02240620();
+extern "C" void LobbyChat_OnChannelMessage();
+extern "C" void LobbyChat_OnKicked();
+extern "C" void LobbyChat_OnUserJoined();
+extern "C" void LobbyChat_OnUserParted();
+extern "C" void LobbyChat_OnUserChangedNick();
+extern "C" void LobbyChat_OnUserModeChanged();
+extern "C" void LobbyChat_OnTopicChanged();
+extern "C" void LobbyChat_OnChannelModeChanged();
+extern "C" void LobbyChat_OnUserListUpdated();
+extern "C" void LobbyChat_OnEnterChannel();
+extern "C" void LobbyChat_OnBroadcastKeyChanged();
 
 inline Mgr *GetMgr() {
     return ov45_022577DC;
@@ -146,10 +146,10 @@ inline u32 GetId(Handler *h, IdTag, IdTag) {
     return h->vtbl->getId(h);
 }
 
-extern "C" int ov45_02241048(const char *name, u32 p1, u32 p2, Arg3 *p3, u32 a, u32 b);
+extern "C" int LobbyChat_EnterChannelAsync(const char *name, u32 p1, u32 p2, Arg3 *p3, u32 a, u32 b);
 #pragma opt_common_subs off
 
-extern "C" int ov45_02241048(const char *name, u32 p1, u32 p2, Arg3 *p3, u32 a, u32 b) {
+extern "C" int LobbyChat_EnterChannelAsync(const char *name, u32 p1, u32 p2, Arg3 *p3, u32 a, u32 b) {
     Callbacks cb;
     Mgr *m = ov45_022577DC;
     if (m == NULL) {
@@ -168,28 +168,28 @@ extern "C" int ov45_02241048(const char *name, u32 p1, u32 p2, Arg3 *p3, u32 a, 
     u32 id = GetId(h, IdTag(), IdTag());
     {
         Str s(name);
-        Str t = ov45_022428C8(GetMgr(), s);
+        Str t = LobbyChat_GetFullChannelName(GetMgr(), s);
         Str u(t.c_str());
-        ov45_02242ACC(GetMgr(), u, p3, p2);
+        LobbyChat_AddChannel(GetMgr(), u, p3, p2);
         u.destroy();
         t.destroy();
         s.destroy();
     }
     MI_CpuFill8(&cb, 0, sizeof(cb));
-    cb.f0 = ov45_0223F1E4;
-    cb.f18 = ov45_0223F8F4;
-    cb.f4 = ov45_0223F2D8;
-    cb.f14 = ov45_0223F83C;
-    cb.fC = ov45_0223F5C8;
-    cb.f8 = ov45_0223F32C;
-    cb.f20 = ov45_0223F910;
-    cb.f1C = ov45_0223F768;
-    cb.f10 = ov45_0223F6F4;
-    cb.f28 = ov45_02240620;
+    cb.f0 = LobbyChat_OnChannelMessage;
+    cb.f18 = LobbyChat_OnChannelModeChanged;
+    cb.f4 = LobbyChat_OnKicked;
+    cb.f14 = LobbyChat_OnTopicChanged;
+    cb.fC = LobbyChat_OnUserParted;
+    cb.f8 = LobbyChat_OnUserJoined;
+    cb.f20 = LobbyChat_OnUserListUpdated;
+    cb.f1C = LobbyChat_OnUserModeChanged;
+    cb.f10 = LobbyChat_OnUserChangedNick;
+    cb.f28 = LobbyChat_OnBroadcastKeyChanged;
     cb.f2C = p3->unk14;
     Str s2(name);
-    Str t2 = ov45_022428C8(GetMgr(), s2);
-    chatEnterChannelA(GetMgr()->unk0, t2.c_str(), p1, &cb, ov45_02240234, id, 0);
+    Str t2 = LobbyChat_GetFullChannelName(GetMgr(), s2);
+    chatEnterChannelA(GetMgr()->unk0, t2.c_str(), p1, &cb, LobbyChat_OnEnterChannel, id, 0);
     t2.destroy();
     s2.destroy();
     return 0;

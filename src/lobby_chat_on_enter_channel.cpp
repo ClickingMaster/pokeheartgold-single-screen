@@ -55,7 +55,7 @@ struct Handler {
     virtual u32 getArg();
     u32 id;
     u32 unk8;
-    void (*callback)(BOOL ok, const char *str, u32 x, u32 arg);
+    void (*callback)(BOOL ok, int error, const char *str, u32 arg);
 };
 
 struct Node {
@@ -84,7 +84,7 @@ struct Map {
 };
 
 struct Manager {
-    u8 pad[0x4];
+    void *net;
     u32 state;
     u8 pad2[0x88];
     Map map;
@@ -95,8 +95,8 @@ extern "C" It ov45_0223FD8C(Map *map, Base *const &key);
 extern "C" void ov45_02242510(Map *map, u32 id);
 extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
 extern "C" Str *LobbyString_Destroy(Str *);
-extern "C" void ov45_022428D8(Str *dst, Manager *m, Str *src);
-extern "C" void ov45_0223F8F4(void *self, const char *name, u32 x, u32 id);
+extern "C" void LobbyChat_StripChannelPrefix(Str *dst, Manager *m, Str *src);
+extern "C" void LobbyChat_OnChannelModeChanged(void *self, const char *name, u32 x, u32 id);
 
 inline void KeyInit(Base *k, u32 id) {
     k->vtbl = &ov45_02255238;
@@ -107,8 +107,6 @@ inline void KeyInit(Base *k, u32 id) {
 inline Handler *Lookup(Manager *m, const It &it) {
     return it.n == m->map.end().n ? 0 : it.n->value;
 }
-
-extern "C" void ov45_02240718(void *self, int result, const char *name, u32 x, u32 id);
 
 inline It FindIt(Manager *m, u32 id) {
     Base key;
@@ -124,17 +122,60 @@ inline Handler *Find(Manager *m, u32 id) {
     return Lookup(m, ov45_0223FD8C(&m->map, kp));
 }
 
+extern "C" void ov45_0223FC5C(Str *dst, Manager *m);
+extern "C" void LobbyChat_AddChannelUser(Manager *m, Str *a, Str *b);
+extern "C" int ov45_02243808(Manager *m, Str *s);
+extern "C" int chatGetChannelNumUsersA(void *net, const char *name);
+extern "C" void chatSetChannelLimitA(void *net, const char *name, int n);
+extern "C" void chatEnumUsersA(void *session, const char *name, void *cb, u32 id, u32 z);
+extern "C" void LobbyChat_LeaveChannel(const char *s);
+extern "C" void LobbyChat_OnEnterChannelEnumUsers(void *self, int result, const char *name, int count, const char **names, u32 unused, u32 id);
+extern "C" void LobbyChat_OnEnterChannel(void *session, int ok, int error, const char *name, u32 id);
 #pragma push
 #pragma opt_propagation off
 
-extern "C" void ov45_02240718(void *self, int result, const char *name, u32 x, u32 id) {
+extern "C" void LobbyChat_OnEnterChannel(void *session, int ok, int error, const char *name, u32 id) {
     if (ov45_022577DC != NULL && ov45_022577DC->state == 5) {
         return;
     }
-    if (result == 0) {
+    if (ok == 1) {
+        Str s;
+        LobbyString_InitFromCStr(&s, name);
+        int found = ov45_02243808(ov45_022577DC, &s);
+        LobbyString_Destroy(&s);
+        if (found != 0) {
+            int limit = chatGetChannelNumUsersA(ov45_022577DC->net, name);
+            if (found == -1) {
+                ok = 0;
+                error = 7;
+            } else if (limit > found || limit == -1) {
+                ok = 0;
+                error = 2;
+            } else {
+                chatSetChannelLimitA(ov45_022577DC->net, name, found);
+            }
+        }
+    }
+    if (ok == 1) {
+        Str a;
+        ov45_0223FC5C(&a, ov45_022577DC);
+        Str b;
+        LobbyString_InitFromCStr(&b, name);
+        LobbyChat_AddChannelUser(ov45_022577DC, &a, &b);
+        LobbyString_Destroy(&b);
+        LobbyString_Destroy(&a);
+        chatEnumUsersA(session, name, (void *)LobbyChat_OnEnterChannelEnumUsers, id, 0);
         return;
     }
-    ov45_0223F8F4(self, name, x, id);
+    {
+        Str s;
+        LobbyString_InitFromCStr(&s, name);
+        Str t;
+        LobbyChat_StripChannelPrefix(&t, ov45_022577DC, &s);
+        LobbyChat_LeaveChannel(t.c_str());
+        LobbyString_Destroy(&t);
+        LobbyString_Destroy(&s);
+    }
     int sid = id;
     Manager *m = ov45_022577DC;
     It it = FindIt(m, sid);
@@ -142,10 +183,10 @@ extern "C" void ov45_02240718(void *self, int result, const char *name, u32 x, u
     Str s;
     LobbyString_InitFromCStr(&s, name);
     Str t;
-    ov45_022428D8(&t, ov45_022577DC, &s);
+    LobbyChat_StripChannelPrefix(&t, ov45_022577DC, &s);
     const char *str = t.c_str();
-    void (*cb)(BOOL, const char *, u32, u32) = h->callback;
-    cb(result == 1, str, x, h->getArg());
+    void (*cb)(BOOL, int, const char *, u32) = h->callback;
+    cb(0, error, str, h->getArg());
     LobbyString_Destroy(&t);
     LobbyString_Destroy(&s);
     ov45_02242510(&ov45_022577DC->map, sid);

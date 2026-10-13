@@ -21,7 +21,7 @@ typedef struct {
 
 extern const char ov45_022553AC[];
 extern Node *LobbyMem_Alloc(u32);
-extern void ov45_02236EC4(Node *, void *);
+extern void LobbyTree_InsertRebalance(Node *, void *);
 extern void DWC_Free(int, void *, int);
 Node *ov45_02243E44(Tree *, Node *, int, int, const u32 *);
 
@@ -63,7 +63,7 @@ Node *ov45_02243E44(Tree *t, Node *parent, int left, int last, const u32 *value)
     }
     t->count++;
     f.b = n;
-    ov45_02236EC4(n, t->alloc);
+    LobbyTree_InsertRebalance(n, t->alloc);
     if (last) {
         t->last = n;
     }
