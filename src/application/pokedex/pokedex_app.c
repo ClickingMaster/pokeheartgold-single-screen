@@ -20,7 +20,7 @@ BOOL Pokedex_Init(OverlayManager *man, int *state) {
     MI_CpuClear8(appData, sizeof(PokedexAppData));
     appData->args = OverlayManager_GetArgs(man);
     appData->nextSeq = 5;
-    appData->dexMode = UnkStruct_02092BB8_GetUnk2(appData->args->unk_08);
+    appData->dexMode = PokedexResumeState_GetDexMode(appData->args->unk_08);
     if (Pokedex_GetNatDexFlag(appData->args->pokedex)) {
         appData->nationalDex = TRUE;
         if (appData->dexMode == 2) {
@@ -59,7 +59,7 @@ BOOL Pokedex_Exit(OverlayManager *man, int *state) {
     if (DSProt_DetectEmulator(Pokedex_OnEmulatorDetected)) {
         Heap_AllocAtEnd(HEAP_ID_3, 1000);
     }
-    UnkStruct_02092BB8_Set(appData->args->unk_08, PokedexApp_GetCursorSpecies(appData), appData->dexMode);
+    PokedexResumeState_Set(appData->args->unk_08, PokedexApp_GetCursorSpecies(appData), appData->dexMode);
     if (DSProt_DetectFlashcart(Pokedex_OnFlashcartDetected)) {
         Heap_AllocAtEnd(HEAP_ID_3, 1000);
     }

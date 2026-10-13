@@ -78,7 +78,7 @@ const CommClubButtonsLayout sCommClubButtonsLayouts[] = {
     { sCommClubButtonsTwoButtonWindowTemplates, sCommClubButtonsTwoButtonHitboxes, 0, 5,  1 },
 };
 
-SysTask *CommClubButtons_Init(BgConfig *bgConfig, void *a1, void *a2, CommClubButtonsArgs *args) {
+SysTask *CommClubButtons_Init(BgConfig *bgConfig, void *lastTouchMenuInput, void *fieldSystem, CommClubButtonsArgs *args) {
     SysTask *task;
     CommClubButtonsData *data;
 
@@ -87,8 +87,8 @@ SysTask *CommClubButtons_Init(BgConfig *bgConfig, void *a1, void *a2, CommClubBu
     task = CreateSysTaskAndEnvironment(CommClubButtons_Task, sizeof(CommClubButtonsData), 10, HEAP_ID_8);
     data = SysTask_GetData(task);
     data->bgConfig = bgConfig;
-    data->lastTouchMenuInput = a1;
-    data->fieldSystem = a2;
+    data->lastTouchMenuInput = lastTouchMenuInput;
+    data->fieldSystem = fieldSystem;
     data->unk_0C = args;
     data->task = task;
     data->args = args;
@@ -103,7 +103,7 @@ SysTask *CommClubButtons_Init(BgConfig *bgConfig, void *a1, void *a2, CommClubBu
     return task;
 }
 
-void CommClubButtons_Exit(void *a0, SysTask *task) {
+void CommClubButtons_Exit(void *bgConfig, SysTask *task) {
     CommClubButtonsData *data = SysTask_GetData(task);
     CommClubButtons_RemoveWindows(data);
     CommClubButtons_FreeBgs(data->bgConfig);

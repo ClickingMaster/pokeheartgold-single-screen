@@ -78,9 +78,9 @@
 .public Pokedex_SpeciesGetLastSeenGender
 .public Pokedex_GetSeenFormByIdx
 .public PokeathlonSave_dummy1
-.public PokeathlonSave_GetUnkDC
+.public PokeathlonSave_GetMonMedals
 .public PokeathlonSave_GetRecordsSolo
-.public PokeathlonSave_GetUnkAEC
+.public PokeathlonSave_GetSoloEventBestPoints
 .public GetGenderBySpeciesAndPersonality
 .public G2x_SetBlendAlpha_
 .public MI_CpuFill8

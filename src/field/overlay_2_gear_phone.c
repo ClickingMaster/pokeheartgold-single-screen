@@ -89,18 +89,18 @@ void GearPhoneRingManager_SetCallerParams(GearPhoneRingManager *gearPhone, u8 ca
     gearPhone->callScriptID = callScriptID;
 }
 
-u8 GearPhoneRingManager_GetCallerParams(GearPhoneRingManager *gearPhone, Unk_PokegearSTRUCT_14 *a1) {
-    MI_CpuFill8(a1, 0, 5);
+u8 GearPhoneRingManager_GetCallerParams(GearPhoneRingManager *gearPhone, Unk_PokegearSTRUCT_14 *params) {
+    MI_CpuFill8(params, 0, 5);
     if (gearPhone->callerId >= NUM_PHONE_CONTACTS) {
         GF_ASSERT(FALSE);
-        a1->unk_0 = 0xFF;
+        params->unk_0 = 0xFF;
         return 0xFF;
     }
-    a1->unk_0 = gearPhone->callerParams[0];
-    a1->unk_1 = gearPhone->callerParams[1];
-    a1->isScriptedCall = gearPhone->isScriptedCall;
-    a1->callScriptID = gearPhone->callScriptID;
-    a1->callTriggerID = gearPhone->callTriggerID;
+    params->unk_0 = gearPhone->callerParams[0];
+    params->unk_1 = gearPhone->callerParams[1];
+    params->isScriptedCall = gearPhone->isScriptedCall;
+    params->callScriptID = gearPhone->callScriptID;
+    params->callTriggerID = gearPhone->callTriggerID;
     return gearPhone->callerId;
 }
 

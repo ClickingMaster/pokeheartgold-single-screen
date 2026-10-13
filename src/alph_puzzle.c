@@ -549,9 +549,9 @@ static const WindowTemplate sWindowTemplates[3] = {
     { 4, 4,  15, 24, 6, 3, 0x001 },
 };
 
-static const OamManagerParam ov110_021E6EA4 = { 0, 128, 0, 32, 0, 128, 0, 32 };
+static const OamManagerParam sAlphPuzzleOamManagerParam = { 0, 128, 0, 32, 0, 128, 0, 32 };
 
-static const OamCharTransferParam ov110_021E6DD0 = { 5, 0, 0, GX_OBJVRAMMODE_CHAR_1D_32K, GX_OBJVRAMMODE_CHAR_1D_32K };
+static const OamCharTransferParam sAlphPuzzleOamCharTransferParam = { 5, 0, 0, GX_OBJVRAMMODE_CHAR_1D_32K, GX_OBJVRAMMODE_CHAR_1D_32K };
 
 static const ResdatIdList sResdatInfo = {
     .charRes = NARC_resdat_resdat_00000010_bin,
@@ -1203,7 +1203,7 @@ static void AlphPuzzle_DestroyWindows(AlphPuzzleData *data) {
 static void AlphPuzzle_InitSpriteGraphics(AlphPuzzleData *data) {
     GF_CreateVramTransferManager(32, data->heapID);
     data->spriteRenderer = SpriteSystem_Alloc(data->heapID);
-    SpriteSystem_Init(data->spriteRenderer, &ov110_021E6EA4, &ov110_021E6DD0, 3);
+    SpriteSystem_Init(data->spriteRenderer, &sAlphPuzzleOamManagerParam, &sAlphPuzzleOamCharTransferParam, 3);
     thunk_ClearMainOAM(data->heapID);
     thunk_ClearSubOAM(data->heapID);
     data->spriteGfxHandler = SpriteManager_New(data->spriteRenderer);

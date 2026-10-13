@@ -551,7 +551,7 @@ static BOOL Task_LugiaEyeGlimmer(TaskManager *taskman) {
 static BOOL Task_UnusedHoOhAnim(TaskManager *taskman) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskman);
     u32 *pState = TaskManager_GetStatePtr(taskman);
-    UnkStruct_FieldSysC0_SubC *unkC0_SubC;
+    Field3dRenderObj *unkC0_SubC;
     u8 i;
     ClearBellCutsceneCamera *cam = fieldSystem->mapSystems->localData;
     ClearBellCutscene3dObjectTaskData *taskData = Field3dObjectTask_GetData(cam->draw3dTask);

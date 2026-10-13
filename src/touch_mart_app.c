@@ -637,10 +637,10 @@ void TouchMartApp_LoadListTilemap(TouchMartAppData *data, int itemCount) {
 
 BOOL ov31_0225E12C(MartData *martData, int index, int itemId) {
     if (martData->martType == 3) {
-        return PokeathlonSave_GetUnkB7C_AtIndex(martData->pokeathlonSave, index) == 0;
+        return PokeathlonSave_IsDailyItemBought(martData->pokeathlonSave, index) == 0;
     }
     if (martData->martType == 4) {
-        return PokeathlonSave_GetUnkB78_AtIndex(martData->pokeathlonSave, index + ((itemId - 505) / 6) * 6) == 0;
+        return PokeathlonSave_IsDataCardBought(martData->pokeathlonSave, index + ((itemId - 505) / 6) * 6) == 0;
     }
     return TRUE;
 }

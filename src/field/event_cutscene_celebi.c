@@ -47,7 +47,7 @@ static BOOL Task_CelebiTimeTravelCutscene(TaskManager *taskMan);
 static void CelebiCutscene_StartSwirlTask(CelebiTimeTravelCutsceneTaskData *data);
 static BOOL CelebiCutscene_IsSwirlTaskDone(CelebiTimeTravelCutsceneTaskData *data);
 static void Task_CelebiCutsceneSwirl(SysTask *task, void *data);
-static void CelebiCutscene_InitSwirlData(CelebiTimeTravelCutsceneTaskData *a0, CelebiSwirlParams *a1);
+static void CelebiCutscene_InitSwirlData(CelebiTimeTravelCutsceneTaskData *data, CelebiSwirlParams *params);
 static BOOL CelebiCutscene_SwirlEffect(CelebiTimeTravelCutsceneTaskData *data);
 static void Task_CelebiCutsceneSwirlEffect(SysTask *task, void *data);
 static BOOL CelebiCutscene_IsSwirlFinished(CelebiTimeTravelCutsceneTaskData *data);
@@ -154,14 +154,14 @@ static void Task_CelebiCutsceneSwirl(SysTask *task, void *_data) {
     }
 }
 
-static void CelebiCutscene_InitSwirlData(CelebiTimeTravelCutsceneTaskData *data, CelebiSwirlParams *a1) {
+static void CelebiCutscene_InitSwirlData(CelebiTimeTravelCutsceneTaskData *data, CelebiSwirlParams *params) {
     data->isSwirlFinished = FALSE;
     data->swirlFrame = 0;
-    data->swirlRotation = a1->rotation;
+    data->swirlRotation = params->rotation;
     data->swirlStartAngle = data->unk0;
     data->perspective = Camera_GetPerspectiveAngle(data->fieldSystem->camera);
-    data->swirlTargetPerspective = a1->perspective;
-    data->swirlDuration = a1->duration;
+    data->swirlTargetPerspective = params->perspective;
+    data->swirlDuration = params->duration;
     SysTask_CreateOnMainQueue(Task_CelebiCutsceneSwirlEffect, data, 1);
 }
 

@@ -26,10 +26,10 @@ extern const BgTemplate sEntryPopupBg3Template;
 extern const WindowTemplate sEntryPopupWindowTemplates[9];
 extern const ObjCharTransferTemplate sEntryPopupObjCharTransferTemplate;
 
-OverlayManager *PokedexEntryPopup_Create(UnkStruct_50C *unkStruct) {
+OverlayManager *PokedexEntryPopup_Create(PokedexEntryPopupArgs *unkStruct) {
     PokedexEntryPopup *popup = Heap_Alloc(unkStruct->heapID, sizeof(PokedexEntryPopup));
     memset(popup, 0, sizeof(PokedexEntryPopup));
-    memcpy(popup, unkStruct, sizeof(UnkStruct_50C));
+    memcpy(popup, unkStruct, sizeof(PokedexEntryPopupArgs));
     popup->gfxNarc = NARC_New(NARC_graphic_zukan_gra, popup->heapId);
     popup->state = 0;
     popup->done = 0;

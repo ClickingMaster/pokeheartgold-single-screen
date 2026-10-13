@@ -828,11 +828,11 @@ static void TakePhoto_RestorePlayerSprite(PlayerAvatar *playerAvatar, u8 state, 
     MapObject_ClearSprite(mapObject);
     MapObjectRender_ReleaseSpriteResources(mapObjectManager, gfxId, mapObject);
     MapObject_SetSpriteAndInitDraw(mapObject, spriteId);
-    int r0 = PlayerAvatar_GetUnk34(playerAvatar);
+    int r0 = PlayerAvatar_GetSurfMountEffect(playerAvatar);
     if (r0 != 0) {
         FieldEffectManager_DestroyEffect(r0);
     }
-    PlayerAvatar_SetUnk34(playerAvatar, 0);
+    PlayerAvatar_SetSurfMountEffect(playerAvatar, 0);
 }
 
 static void TakePhoto_CullHiddenProps(FieldSystem *fieldSystem, Photo *photo) {

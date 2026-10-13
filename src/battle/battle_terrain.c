@@ -19,11 +19,11 @@
 #define UNK_RES_4E25 0x4E25
 #define UNK_RES_4E26 0x4E26
 
-void BattleTerrain_LoadResources(BattleTerrain *a0);
-void BattleTerrain_CreateSprite(BattleTerrain *arg0);
-void BattleTerrain_DeleteSprite(BattleTerrain *arg0);
-void BattleTerrain_UnloadResources(BattleTerrain *arg0);
-void BattleTerrain_Init(BattleTerrain *arg0, BattleSystem *bsys, s32 unk8, s32 unk9);
+void BattleTerrain_LoadResources(BattleTerrain *terrain);
+void BattleTerrain_CreateSprite(BattleTerrain *terrain);
+void BattleTerrain_DeleteSprite(BattleTerrain *terrain);
+void BattleTerrain_UnloadResources(BattleTerrain *terrain);
+void BattleTerrain_Init(BattleTerrain *terrain, BattleSystem *bsys, s32 unk8, s32 unk9);
 
 static const u16 sEnemyTerrainCharFiles[] = {
     0x88,
@@ -111,26 +111,26 @@ static const u16 sTerrainPaletteFiles[][3] __attribute__((aligned(4))) = {
     { 0x43, 0x44, 0x45 }
 };
 
-void BattleTerrain_LoadResources(BattleTerrain *a0) {
+void BattleTerrain_LoadResources(BattleTerrain *terrain) {
     u32 r6;
     void *narc = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
 
-    SpriteSystem *spriteSystem = BattleSystem_GetSpriteSystem(a0->battleSystem);
-    SpriteManager *spriteManager = BattleSystem_GetSpriteManager(a0->battleSystem);
-    u32 subfile = BattleSystem_GetBgTimeOfDay(a0->battleSystem);
+    SpriteSystem *spriteSystem = BattleSystem_GetSpriteSystem(terrain->battleSystem);
+    SpriteManager *spriteManager = BattleSystem_GetSpriteManager(terrain->battleSystem);
+    u32 subfile = BattleSystem_GetBgTimeOfDay(terrain->battleSystem);
 
     u16 charFile;
     u32 charResId;
     u32 cellFile;
     u32 animFile;
-    if (a0->side == 0) {
-        charFile = sPlayerTerrainCharFiles[a0->terrainId];
+    if (terrain->side == 0) {
+        charFile = sPlayerTerrainCharFiles[terrain->terrainId];
         charResId = UNK_RES_4E2D;
         cellFile = 0x80;
         r6 = charResId - 8;
         animFile = 0x81;
     } else {
-        charFile = sEnemyTerrainCharFiles[a0->terrainId];
+        charFile = sEnemyTerrainCharFiles[terrain->terrainId];
         charResId = UNK_RES_4E2E;
         cellFile = 0x83;
         r6 = charResId - 8;
@@ -138,11 +138,11 @@ void BattleTerrain_LoadResources(BattleTerrain *a0) {
     }
     SpriteSystem_LoadCharResObjFromOpenNarc(spriteSystem, spriteManager, narc, charFile, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, charResId);
 
-    void *palette = BattleSystem_GetPaletteData(a0->battleSystem);
-    SpriteSystem_LoadPaletteBufferFromOpenNarc(palette, PLTTBUF_MAIN_OBJ, spriteSystem, spriteManager, narc, sTerrainPaletteFiles[a0->terrainId][subfile], FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, UNK_RES_4E29);
+    void *palette = BattleSystem_GetPaletteData(terrain->battleSystem);
+    SpriteSystem_LoadPaletteBufferFromOpenNarc(palette, PLTTBUF_MAIN_OBJ, spriteSystem, spriteManager, narc, sTerrainPaletteFiles[terrain->terrainId][subfile], FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, UNK_RES_4E29);
 
-    palette = BattleSystem_GetPaletteData(a0->battleSystem);
-    PaletteData_LoadNarc(palette, NARC_a_0_0_8, sTerrainPaletteFiles[a0->terrainId][subfile], HEAP_ID_BATTLE, PLTTBUF_MAIN_BG, 0x20, 0x70);
+    palette = BattleSystem_GetPaletteData(terrain->battleSystem);
+    PaletteData_LoadNarc(palette, NARC_a_0_0_8, sTerrainPaletteFiles[terrain->terrainId][subfile], HEAP_ID_BATTLE, PLTTBUF_MAIN_BG, 0x20, 0x70);
 
     SpriteSystem_LoadCellResObjFromOpenNarc(spriteSystem, spriteManager, narc, cellFile, TRUE, r6);
 
@@ -151,26 +151,26 @@ void BattleTerrain_LoadResources(BattleTerrain *a0) {
     NARC_Delete(narc);
 }
 
-void BattleTerrain_CreateSprite(BattleTerrain *arg0) {
+void BattleTerrain_CreateSprite(BattleTerrain *terrain) {
     SpriteSystem *spriteSystem; // r5
     ManagedSprite *managed;
 
-    spriteSystem = BattleSystem_GetSpriteSystem(arg0->battleSystem);
-    managed = SpriteSystem_NewSprite(spriteSystem, BattleSystem_GetSpriteManager(arg0->battleSystem), &sTerrainSpriteTemplates[arg0->side]);
-    arg0->sprite = managed;
+    spriteSystem = BattleSystem_GetSpriteSystem(terrain->battleSystem);
+    managed = SpriteSystem_NewSprite(spriteSystem, BattleSystem_GetSpriteManager(terrain->battleSystem), &sTerrainSpriteTemplates[terrain->side]);
+    terrain->sprite = managed;
     Sprite_TickFrame(managed->sprite);
 }
 
-void BattleTerrain_DeleteSprite(BattleTerrain *arg0) {
-    if (arg0->sprite) {
-        Sprite_DeleteAndFreeResources(arg0->sprite);
-        arg0->sprite = NULL;
+void BattleTerrain_DeleteSprite(BattleTerrain *terrain) {
+    if (terrain->sprite) {
+        Sprite_DeleteAndFreeResources(terrain->sprite);
+        terrain->sprite = NULL;
     }
 }
 
-void BattleTerrain_UnloadResources(BattleTerrain *arg0) {
-    SpriteManager *manager = BattleSystem_GetSpriteManager(arg0->battleSystem);
-    s32 resId = arg0->side == 0 ? UNK_RES_4E2D : UNK_RES_4E2E;
+void BattleTerrain_UnloadResources(BattleTerrain *terrain) {
+    SpriteManager *manager = BattleSystem_GetSpriteManager(terrain->battleSystem);
+    s32 resId = terrain->side == 0 ? UNK_RES_4E2D : UNK_RES_4E2E;
     u32 temp = resId - 8;
     SpriteManager_UnloadCharObjById(manager, resId);
     SpriteManager_UnloadPlttObjById(manager, UNK_RES_4E29);
@@ -178,28 +178,28 @@ void BattleTerrain_UnloadResources(BattleTerrain *arg0) {
     SpriteManager_UnloadAnimObjById(manager, temp);
 }
 
-void BattleTerrain_SetDrawFlag(BattleTerrain *arg0, s32 flag) {
-    ManagedSprite *sprite = arg0->sprite;
+void BattleTerrain_SetDrawFlag(BattleTerrain *terrain, s32 flag) {
+    ManagedSprite *sprite = terrain->sprite;
     if (sprite) {
         ManagedSprite_SetDrawFlag(sprite, flag);
     }
 }
 
-void BattleTerrain_Init(BattleTerrain *arg0, BattleSystem *bsys, s32 unk8, s32 unk9) {
-    MIi_CpuClearFast(0, (void *)arg0, sizeof(BattleTerrain));
-    arg0->battleSystem = bsys;
-    arg0->side = unk8;
-    arg0->terrainId = unk9;
+void BattleTerrain_Init(BattleTerrain *terrain, BattleSystem *bsys, s32 unk8, s32 unk9) {
+    MIi_CpuClearFast(0, (void *)terrain, sizeof(BattleTerrain));
+    terrain->battleSystem = bsys;
+    terrain->side = unk8;
+    terrain->terrainId = unk9;
     if (unk9 >= 0x18) {
         GF_AssertFail();
-        arg0->terrainId = 0;
+        terrain->terrainId = 0;
     }
-    BattleTerrain_LoadResources(arg0);
-    BattleTerrain_CreateSprite(arg0);
+    BattleTerrain_LoadResources(terrain);
+    BattleTerrain_CreateSprite(terrain);
 }
 
-void BattleTerrain_Free(BattleTerrain *arg0) {
-    BattleTerrain_DeleteSprite(arg0);
-    BattleTerrain_UnloadResources(arg0);
-    MIi_CpuClearFast(0, (void *)arg0, sizeof(BattleTerrain));
+void BattleTerrain_Free(BattleTerrain *terrain) {
+    BattleTerrain_DeleteSprite(terrain);
+    BattleTerrain_UnloadResources(terrain);
+    MIi_CpuClearFast(0, (void *)terrain, sizeof(BattleTerrain));
 }

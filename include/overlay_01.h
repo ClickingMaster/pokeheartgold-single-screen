@@ -41,7 +41,7 @@ void FieldSystem_SwitchBottomScreenApp(FieldSystem *fieldSystem, int a1, void *a
 int FieldSystem_GetBottomScreenAppId(FieldSystem *fieldSystem);
 int FieldSystem_GetTouchscreenChoiceMenuState(FieldSystem *fieldSystem);
 BOOL FieldSystem_GetBottomScreenAppState(FieldSystem *fieldSystem);
-UnkStruct_0206793C *FollowMonBall_Spawn(LocalMapObject *obj, int a1);
+FieldEffect *FollowMonBall_Spawn(LocalMapObject *obj, int a1);
 void FollowMon_MoveToPlayer(FieldSystem *fieldSystem, u8 a1);
 void FollowMon_SpawnReleaseBall(LocalMapObject *object);
 BOOL FollowMon_CheckVisibleFlag(FieldSystem *fieldSystem);
@@ -65,7 +65,7 @@ void ScriptMenu_ShowList(struct ScriptMenu *menu);
 void ScriptMenu_ShowMultichoiceGrid(struct ScriptMenu *menu, u8 a1);
 void ScriptMenu_SetAnchorRight(struct ScriptMenu *menu, int set);
 void ScriptMenu_SetAnchorBottom(struct ScriptMenu *menu, int set);
-void ScriptMenu_AddListItem(struct ScriptMenu *menu, int a1, int a2, int a3);
+void ScriptMenu_AddListItem(struct ScriptMenu *menu, int msgId, int helpMsgId, int value);
 void FollowMonDraw_ClearBob(LocalMapObject *object);
 void MapObject_SetFacingAndUpdateDraw(LocalMapObject *object, u32 dir);
 u8 FollowMonObject_IsLarge(LocalMapObject *object);
@@ -120,7 +120,7 @@ struct BankTransactionWork {
     int mode;
 };
 
-Window *BattleRegulationWindow_New(FieldSystem *fieldSystem, u16 a1);
+Window *BattleRegulationWindow_New(FieldSystem *fieldSystem, u16 ruleset);
 void BattleRegulationWindow_Delete(Window *window);
 BOOL FollowMon_IsNextToPlayer(FieldSystem *fieldSystem);
 

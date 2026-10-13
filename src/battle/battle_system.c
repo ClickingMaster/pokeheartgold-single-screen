@@ -127,8 +127,8 @@ u32 *BattleSystem_GetPartyGauge(BattleSystem *battleSystem, int index) {
     return battleSystem->partyGauges[index];
 }
 
-void BattleSystem_SetPartyGauge(BattleSystem *battleSystem, int index, u32 *a2) {
-    battleSystem->partyGauges[index] = a2;
+void BattleSystem_SetPartyGauge(BattleSystem *battleSystem, int index, u32 *gauge) {
+    battleSystem->partyGauges[index] = gauge;
 }
 
 BattleNumberPrinter *BattleSystem_GetHpNumPrinter(BattleSystem *battleSystem) {
@@ -945,8 +945,8 @@ u8 BattleSystem_GetTutorialState(BattleSystem *battleSystem) {
     return battleSystem->tutorialState;
 }
 
-void BattleSystem_SetTutorialState(BattleSystem *battleSystem, u8 a1) {
-    battleSystem->tutorialState = a1;
+void BattleSystem_SetTutorialState(BattleSystem *battleSystem, u8 tutorialState) {
+    battleSystem->tutorialState = tutorialState;
 }
 
 BOOL BattleSystem_MetBill(BattleSystem *battleSystem) {
@@ -979,8 +979,8 @@ void *BattleSystem_GetWaitingIcon(BattleSystem *battleSystem) {
     return battleSystem->waitingIcon;
 }
 
-void BattleSystem_SetWaitingIcon(BattleSystem *battleSystem, void *a1) {
-    battleSystem->waitingIcon = a1;
+void BattleSystem_SetWaitingIcon(BattleSystem *battleSystem, void *waitingIcon) {
+    battleSystem->waitingIcon = waitingIcon;
 }
 
 MonPicData *BattleSystem_GetMonPicData(BattleSystem *battleSystem, int index) {
@@ -992,43 +992,43 @@ u8 *MonPicData_GetCharBuffer(MonPicData *ptr, int index) {
     return ptr[index].charBuffer;
 }
 
-void MonPicData_SetNarcId(MonPicData *ptr, int index, int a2) {
+void MonPicData_SetNarcId(MonPicData *ptr, int index, int narcId) {
     GF_ASSERT(index < 4);
-    ptr[index].narcId = a2;
+    ptr[index].narcId = narcId;
 }
 
-void MonPicData_SetPaletteId(MonPicData *ptr, int index, int a2) {
+void MonPicData_SetPaletteId(MonPicData *ptr, int index, int paletteId) {
     GF_ASSERT(index < 4);
-    ptr[index].paletteId = a2;
+    ptr[index].paletteId = paletteId;
 }
 
-void MonPicData_SetHeight(MonPicData *ptr, int index, int a2) {
+void MonPicData_SetHeight(MonPicData *ptr, int index, int height) {
     GF_ASSERT(index < 4);
-    ptr[index].height = a2;
+    ptr[index].height = height;
 }
 
 void BattleSystem_SetGraphicsState(BattleSystem *battleSystem, u8 a1) {
     battleSystem->graphicsMode = a1;
 }
 
-void BattleSystem_SetLinkSendStatePtr(BattleSystem *battleSystem, u8 *a1) {
-    battleSystem->linkSendState = a1;
+void BattleSystem_SetLinkSendStatePtr(BattleSystem *battleSystem, u8 *sendState) {
+    battleSystem->linkSendState = sendState;
 }
 
-void BattleSystem_SetLinkRecvStatePtr(BattleSystem *battleSystem, u8 *a1) {
-    battleSystem->linkRecvState = a1;
+void BattleSystem_SetLinkRecvStatePtr(BattleSystem *battleSystem, u8 *recvState) {
+    battleSystem->linkRecvState = recvState;
 }
 
-void BattleSystem_SetLinkSendState(BattleSystem *battleSystem, u8 a1) {
-    *battleSystem->linkSendState = a1;
+void BattleSystem_SetLinkSendState(BattleSystem *battleSystem, u8 state) {
+    *battleSystem->linkSendState = state;
 }
 
-void BattleSystem_SetLinkRecvState(BattleSystem *battleSystem, u8 a1) {
-    *battleSystem->linkRecvState = a1;
+void BattleSystem_SetLinkRecvState(BattleSystem *battleSystem, u8 state) {
+    *battleSystem->linkRecvState = state;
 }
 
-void BattleSystem_SetBattleFinished(BattleSystem *battleSystem, u8 a1) {
-    battleSystem->battleFinished = a1;
+void BattleSystem_SetBattleFinished(BattleSystem *battleSystem, u8 finished) {
+    battleSystem->battleFinished = finished;
 }
 
 BattleHpBar *BattleSystem_GetHpBar(BattleSystem *battleSystem, int battlerId) {
@@ -1105,8 +1105,8 @@ void BattleSystem_SetCriticalHpMusicDelay(BattleSystem *battleSystem, u8 delay) 
     battleSystem->criticalHpMusicDelay = delay;
 }
 
-void BattleSystem_SetCaughtBattlerId(BattleSystem *battleSystem, int a1) {
-    battleSystem->caughtBattlerId = a1;
+void BattleSystem_SetCaughtBattlerId(BattleSystem *battleSystem, int battlerId) {
+    battleSystem->caughtBattlerId = battlerId;
 }
 
 u16 BattleSystem_Random(BattleSystem *battleSystem) {
@@ -1288,25 +1288,25 @@ void BattleSystem_GetBattlerTypes(BattleSystem *battleSystem, u8 *buffer) {
     }
 }
 
-void BattleSystem_GetPokepics(BattleSystem *battleSystem, void **a1) {
+void BattleSystem_GetPokepics(BattleSystem *battleSystem, void **pokepics) {
     int i;
 
     for (i = 0; i < 4; i++) {
-        a1[i] = NULL;
+        pokepics[i] = NULL;
     }
 
     for (i = 0; i < battleSystem->maxBattlers; i++) {
-        a1[i] = OpponentData_GetPokepic(battleSystem->opponentData[i]);
+        pokepics[i] = OpponentData_GetPokepic(battleSystem->opponentData[i]);
     }
 }
 
-void BattleSystem_SetHpBarPriority(BattleSystem *battleSystem, int a1) {
+void BattleSystem_SetHpBarPriority(BattleSystem *battleSystem, int priority) {
     int i;
     BattleHpBar *hpBar;
 
     for (i = 0; i < battleSystem->maxBattlers; i++) {
         hpBar = OpponentData_GetHpBar(battleSystem->opponentData[i]);
-        BattleHpBar_SetPriority(hpBar, a1);
+        BattleHpBar_SetPriority(hpBar, priority);
     }
 }
 
@@ -1360,7 +1360,7 @@ void BattleSystem_SetDefaultBlend() {
     G2_BlendNone();
 }
 
-u8 BattleSystem_PrintTrainerMessage(BattleSystem *battleSystem, int trainerId, int battlerId, int a2, int delay) {
+u8 BattleSystem_PrintTrainerMessage(BattleSystem *battleSystem, int trainerId, int battlerId, int msgType, int delay) {
     Window *window = BattleSystem_GetWindow(battleSystem, 0);
     int index;
 
@@ -1368,7 +1368,7 @@ u8 BattleSystem_PrintTrainerMessage(BattleSystem *battleSystem, int trainerId, i
         if (trainerId == 0x2710 || battleSystem->battleType & BATTLE_TYPE_13) {
             String *msg;
 
-            if (a2 == 0x64) {
+            if (msgType == 0x64) {
                 msg = MailMsg_GetExpandedString(&battleSystem->trainers[battlerId].winMessage, HEAP_ID_BATTLE);
             } else {
                 msg = MailMsg_GetExpandedString(&battleSystem->trainers[battlerId].loseMessage, HEAP_ID_BATTLE);
@@ -1384,7 +1384,7 @@ u8 BattleSystem_PrintTrainerMessage(BattleSystem *battleSystem, int trainerId, i
             u32 msgId;
             int i;
 
-            if (a2 == 0x64) {
+            if (msgType == 0x64) {
                 stringId = trainerId * 3 + 1;
             } else {
                 stringId = trainerId * 3 + 2;
@@ -1411,7 +1411,7 @@ u8 BattleSystem_PrintTrainerMessage(BattleSystem *battleSystem, int trainerId, i
             DestroyMsgData(data);
         }
     } else {
-        GetTrainerMessageByIdPair(trainerId, a2, battleSystem->msgBuffer, HEAP_ID_BATTLE);
+        GetTrainerMessageByIdPair(trainerId, msgType, battleSystem->msgBuffer, HEAP_ID_BATTLE);
         FillWindowPixelBuffer(window, 0xFF);
         index = AddTextPrinterParameterized(window, 1, battleSystem->msgBuffer, 0, 0, delay, BattleSystem_TextPrinterCallback);
     }

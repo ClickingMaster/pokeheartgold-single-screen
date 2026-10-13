@@ -1515,7 +1515,7 @@ void MailboxApp_PrintMailLine(MailboxApp *app, u32 windowId, u32 line) {
     u8 selectedMail = app->selectedMail;
     Mail *mail = app->data->mail[selectedMail];
 
-    message = Mail_GetUnk20Array(mail, (u8)line);
+    message = Mail_GetMessage(mail, (u8)line);
     if (MailMsg_IsInit(message)) {
         string = MailMsg_GetExpandedString(message, HEAP_ID_157);
         MailboxApp_PrintString(&app->data->windows[windowId], string, 0, 0, 1, 0x10200, 0);

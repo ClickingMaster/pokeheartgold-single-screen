@@ -18,7 +18,7 @@
 #include "pokemon_icon_idx.h"
 #include "string_util.h"
 
-struct UnkStruct_020F67A4 {
+struct MailIconFormOverride {
     u16 base_icon;
     u16 formed_icon;
     u16 species;
@@ -26,7 +26,7 @@ struct UnkStruct_020F67A4 {
     u8 dummy;
 };
 
-static const struct UnkStruct_020F67A4 sFormOverrides[] = {
+static const struct MailIconFormOverride sFormOverrides[] = {
     { 0x1EE, 0x21C, SPECIES_GIRATINA, GIRATINA_ORIGIN },
     { 0x1F3, 0x21D, SPECIES_SHAYMIN,  SHAYMIN_SKY     },
     { 0x1E6, 0x21E, SPECIES_ROTOM,    ROTOM_HEAT      },
@@ -250,7 +250,7 @@ u16 Mail_GetFormFlags(const Mail *mail) {
     return mail->form_flags;
 }
 
-MailMessage *Mail_GetUnk20Array(Mail *mail, int i) {
+MailMessage *Mail_GetMessage(Mail *mail, int i) {
     if (i < NELEMS(mail->messages)) {
         return &mail->messages[i];
     } else {

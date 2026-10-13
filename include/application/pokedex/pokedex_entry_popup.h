@@ -19,7 +19,7 @@ typedef struct PokedexEntryPopupSprite {
     SpriteResource *resources[4]; // char, palette, cell, anim
 } PokedexEntryPopupSprite;
 
-// "Registered in the Pokedex" popup after a capture (msg_0802). Starts with a copy of UnkStruct_50C; created
+// "Registered in the Pokedex" popup after a capture (msg_0802). Starts with a copy of PokedexEntryPopupArgs; created
 // by PokedexEntryPopup_Create, run by PokedexEntryPopup_Task.
 typedef struct PokedexEntryPopup {
     BgConfig *bgConfig;                  // 0x000

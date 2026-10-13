@@ -227,7 +227,7 @@ int GridInputHandler_GetNextInput(GridInputHandler *inputHandler) {
     return inputHandler->nextInput;
 }
 
-int GridInputHandler_GetUnk0F(GridInputHandler *inputHandler) {
+int GridInputHandler_GetReturnInput(GridInputHandler *inputHandler) {
     return inputHandler->returnInput;
 }
 
@@ -237,7 +237,7 @@ void GridInputHandler_SetNextInput(GridInputHandler *inputHandler, int nextInput
     inputHandler->returnInput = 0xFF;
 }
 
-void GridInputHandler_SetNextLastUnk0FInputs(GridInputHandler *inputHandler, int nextInput, int lastInput, int unk0F) {
+void GridInputHandler_SetNextLastReturnInputs(GridInputHandler *inputHandler, int nextInput, int lastInput, int unk0F) {
     inputHandler->nextInput = nextInput;
     inputHandler->lastInput = lastInput;
     inputHandler->returnInput = unk0F;

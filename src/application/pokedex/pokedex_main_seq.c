@@ -2137,7 +2137,7 @@ PokedexApp_MainSeq_62(PokedexAppData *pokedexApp) {
     case 0: {
         u16 r1 = PokedexApp_GetCursorSpecies(pokedexApp);
         if (r1 != 0) {
-            UnkStruct_02092BB8_Set(pokedexApp->args->unk_08, r1, pokedexApp->dexMode);
+            PokedexResumeState_Set(pokedexApp->args->unk_08, r1, pokedexApp->dexMode);
         }
         PokedexApp_RunSearch(pokedexApp, pokedexApp->dexMode, DEX_ORDER_NATIONAL, DEX_SEARCH_LETTERS_ALL, DEX_SEARCH_TYPE_ALL, DEX_SEARCH_TYPE_ALL, 0, 152, 0, 152, 1 << DEX_SEARCH_AREA_ALL, DEX_SEARCH_BODYTYPE_ALL);
         PokedexApp_BuildListEntries(pokedexApp, 1);
@@ -2174,7 +2174,7 @@ static int PokedexApp_MainSeq_63(PokedexAppData *pokedexApp) {
     case 0: {
         u16 species = PokedexApp_GetCursorSpecies(pokedexApp);
         if (species != SPECIES_NONE) {
-            UnkStruct_02092BB8_Set(pokedexApp->args->unk_08, species, pokedexApp->dexMode);
+            PokedexResumeState_Set(pokedexApp->args->unk_08, species, pokedexApp->dexMode);
         }
         PokedexApp_RunSearch(pokedexApp, pokedexApp->dexMode, DEX_ORDER_NATIONAL, DEX_SEARCH_LETTERS_ALL, DEX_SEARCH_TYPE_ALL, DEX_SEARCH_TYPE_ALL, 0, 152, 0, 152, 1 << DEX_SEARCH_AREA_ALL, DEX_SEARCH_BODYTYPE_ALL);
         PokedexApp_BuildListEntries(pokedexApp, 1);
@@ -2223,7 +2223,7 @@ static int PokedexApp_MainSeq_64(PokedexAppData *pokedexApp) {
     case 0: {
         u16 r1 = PokedexApp_GetCursorSpecies(pokedexApp);
         if (r1 != SPECIES_NONE) {
-            UnkStruct_02092BB8_Set(pokedexApp->args->unk_08, r1, pokedexApp->dexMode);
+            PokedexResumeState_Set(pokedexApp->args->unk_08, r1, pokedexApp->dexMode);
         }
         BgCellManager_EraseCell(pokedexApp->bgCellManager, 4);
         PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 22, 0);
@@ -3427,7 +3427,7 @@ static int ov18_021EDC50(PokedexAppData *pokedexApp, u8 a1, u8 a2, u8 a3, u8 a4,
 }
 
 static void PokedexApp_SetDexMode(PokedexAppData *pokedexApp, int a1) {
-    UnkStruct_02092BB8_Set(pokedexApp->args->unk_08, PokedexApp_GetCursorSpecies(pokedexApp), pokedexApp->dexMode);
+    PokedexResumeState_Set(pokedexApp->args->unk_08, PokedexApp_GetCursorSpecies(pokedexApp), pokedexApp->dexMode);
     pokedexApp->dexMode = a1;
     PokedexApp_DrawDexModeLabel(pokedexApp);
     PokedexApp_SetDexModeSwitchPos(pokedexApp, 0);
@@ -3464,7 +3464,7 @@ static void PokedexApp_SwitchDexMode(PokedexAppData *pokedexApp, int a1) {
 }
 
 static void PokedexApp_RestoreListCursor(PokedexAppData *pokedexApp) {
-    u32 r4 = Pokedex_ConvertToCurrentDexNo(pokedexApp->dexMode, PokedexApp_FindSpeciesInResults(&pokedexApp->searchResults, UnkStruct_02092BB8_GetSpecies(pokedexApp->args->unk_08))) - 1;
+    u32 r4 = Pokedex_ConvertToCurrentDexNo(pokedexApp->dexMode, PokedexApp_FindSpeciesInResults(&pokedexApp->searchResults, PokedexResumeState_GetSpecies(pokedexApp->args->unk_08))) - 1;
     pokedexApp->listCursor = r4 % 15;
     pokedexApp->listPage = r4 / 15;
 }

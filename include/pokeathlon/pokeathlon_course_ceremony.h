@@ -58,7 +58,7 @@ typedef struct PokeathlonCourseCeremonySync {
     u8 finished;
 } PokeathlonCourseCeremonySync;
 
-// A Pokemon of a participant's team (0x28, PokeathlonCourse_GetParticipantUnk04).
+// A Pokemon of a participant's team (0x28, PokeathlonCourse_GetParticipantMons).
 typedef struct PokeathlonCourseCeremonyMon {
     u16 species;      // 0x00
     u16 form;         // 0x02

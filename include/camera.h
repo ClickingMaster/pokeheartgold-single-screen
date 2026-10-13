@@ -109,6 +109,6 @@ fx32 Camera_GetPerspectiveClippingPlaneNear(const Camera *camera);
 const VecFx32 *Camera_GetCurrentTarget(const Camera *camera);
 void Camera_SetLookAtCamTarget(const VecFx32 *target, Camera *camera);
 void Camera_SetLookAtCamPos(const VecFx32 *pos, Camera *camera);
-void Camera_SetHistoryUnk24(Camera *camera, BOOL param1);
+void Camera_SetHistoryEnabled(Camera *camera, BOOL param1);
 
 #endif // POKEHEARTGOLD_CAMERA_H

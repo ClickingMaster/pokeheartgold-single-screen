@@ -4,6 +4,6 @@
 #include "battle.h"
 
 void BattleTerrain_SetDrawFlag(BattleTerrain *unkBattleSystemSub17C, s32);
-void BattleTerrain_Free(BattleTerrain *a0);
+void BattleTerrain_Free(BattleTerrain *terrain);
 
 #endif

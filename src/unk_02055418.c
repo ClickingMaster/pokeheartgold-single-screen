@@ -90,7 +90,7 @@ void FieldSystem_HandleDaysPassed(FieldSystem *fieldSystem, int days) {
         sub_02031CCC(Save_ApricornBox_Get(fieldSystem->saveData), days);
         SaveData_SafariZone_CheckAreasWithUpdatedEncounters(fieldSystem->saveData, days);
     }
-    PokeathlonSave_ResetUnkB7C(Save_Pokeathlon_Get(fieldSystem->saveData));
+    PokeathlonSave_ResetDailyItemsBought(Save_Pokeathlon_Get(fieldSystem->saveData));
     Save_VarsFlags_UpdateBuenasPasswordSet(Save_VarsFlags_Get(fieldSystem->saveData));
 }
 

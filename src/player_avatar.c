@@ -28,8 +28,8 @@ static void PlayerAvatar_SetGender(PlayerAvatar *avatar, u32 gender);
 static void PlayerAvatar_SetFlagsBits(PlayerAvatar *avatar, PlayerAvatarFlags flags);
 static void PlayerAvatar_ClearFlagsBits(PlayerAvatar *avatar, PlayerAvatarFlags flags);
 static PlayerAvatarFlags PlayerAvatar_GetFlagsBitsMask(PlayerAvatar *avatar, PlayerAvatarFlags flags);
-static void PlayerAvatar_SetUnk28(PlayerAvatar *avatar, s32 param1);
-static void PlayerAvatar_SetUnk2C(PlayerAvatar *avatar, s32 param1);
+static void PlayerAvatar_SetLastHorizontalInput(PlayerAvatar *avatar, s32 param1);
+static void PlayerAvatar_SetLastVerticalInput(PlayerAvatar *avatar, s32 param1);
 static void PlayerAvatar_SetPlayerSaveData(PlayerAvatar *avatar, PlayerSaveData *playerSaveData);
 static void PlayerSaveData_SetState(PlayerSaveData *playerSaveData, s32 state);
 static void PlayerAvatar_SetPlayerSaveDataState(PlayerAvatar *avatar, s32 state);
@@ -189,7 +189,7 @@ void PlayerAvatar_InitMapFeatures(PlayerAvatar *avatar) {
         u32 x = PlayerAvatar_GetXCoord(avatar);
         u32 z = PlayerAvatar_GetZCoord(avatar);
         u32 direction = PlayerAvatar_GetFacingDirection(avatar);
-        PlayerAvatar_SetUnk34(avatar, SurfMountEffect_Create(mapObject, x, z, direction, 1));
+        PlayerAvatar_SetSurfMountEffect(avatar, SurfMountEffect_Create(mapObject, x, z, direction, 1));
     }
 }
 
@@ -216,10 +216,10 @@ static void PlayerAvatar_Setup(PlayerAvatar *avatar, s32 state, u32 gender, Play
     PlayerAvatar_SetState(avatar, state);
     PlayerAvatar_SetGender(avatar, gender);
     PlayerAvatar_SetTransitionFlags(avatar, 0);
-    PlayerAvatar_ClearUnk24ClearFlag2(avatar);
-    PlayerAvatar_SetUnk28(avatar, -1);
-    PlayerAvatar_SetUnk2C(avatar, -1);
-    PlayerAvatar_SetUnk8(avatar, 255); // obj_player?
+    PlayerAvatar_ClearSpeedAndFlag2(avatar);
+    PlayerAvatar_SetLastHorizontalInput(avatar, -1);
+    PlayerAvatar_SetLastVerticalInput(avatar, -1);
+    PlayerAvatar_SetHeldMovement(avatar, 255); // obj_player?
     PlayerAvatar_SetFlag1(avatar, TRUE);
 }
 
@@ -365,20 +365,20 @@ static PlayerAvatarFlags PlayerAvatar_GetFlagsBitsMask(PlayerAvatar *avatar, Pla
     return (PlayerAvatarFlags)(avatar->flags & flags);
 }
 
-s32 PlayerAvatar_GetUnk24(PlayerAvatar *avatar) {
+s32 PlayerAvatar_GetSpeed(PlayerAvatar *avatar) {
     return avatar->speed;
 }
 
-void PlayerAvatar_SetUnk24(PlayerAvatar *avatar, s32 param1) {
+void PlayerAvatar_SetSpeed(PlayerAvatar *avatar, s32 param1) {
     avatar->speed = param1;
 }
 
-void PlayerAvatar_ClearUnk24ClearFlag2(PlayerAvatar *avatar) {
+void PlayerAvatar_ClearSpeedAndFlag2(PlayerAvatar *avatar) {
     avatar->speed = 0;
     PlayerAvatar_SetFlag2(avatar, FALSE);
 }
 
-s32 PlayerAvatar_Unk24AddWithCeiling(PlayerAvatar *avatar, s32 param1, s32 param2) {
+s32 PlayerAvatar_AddSpeedWithCeiling(PlayerAvatar *avatar, s32 param1, s32 param2) {
     s32 var = avatar->speed + param1;
     avatar->speed = var;
     if (var > param2) {
@@ -387,32 +387,32 @@ s32 PlayerAvatar_Unk24AddWithCeiling(PlayerAvatar *avatar, s32 param1, s32 param
     return avatar->speed;
 }
 
-static void PlayerAvatar_SetUnk28(PlayerAvatar *avatar, s32 param1) {
+static void PlayerAvatar_SetLastHorizontalInput(PlayerAvatar *avatar, s32 param1) {
     avatar->lastHorizontalInput = param1;
 }
 
-s32 PlayerAvatar_GetUnk28(PlayerAvatar *avatar) {
+s32 PlayerAvatar_GetLastHorizontalInput(PlayerAvatar *avatar) {
     return avatar->lastHorizontalInput;
 }
 
-static void PlayerAvatar_SetUnk2C(PlayerAvatar *avatar, s32 param1) {
+static void PlayerAvatar_SetLastVerticalInput(PlayerAvatar *avatar, s32 param1) {
     avatar->lastVerticalInput = param1;
 }
 
-s32 PlayerAvatar_GetUnk2C(PlayerAvatar *avatar) {
+s32 PlayerAvatar_GetLastVerticalInput(PlayerAvatar *avatar) {
     return avatar->lastVerticalInput;
 }
 
-void PlayerAvatar_SetUnk28Unk2C(PlayerAvatar *avatar, s32 unk28, s32 unk2C) {
-    PlayerAvatar_SetUnk28(avatar, unk28);
-    PlayerAvatar_SetUnk2C(avatar, unk2C);
+void PlayerAvatar_SetLastInputs(PlayerAvatar *avatar, s32 unk28, s32 unk2C) {
+    PlayerAvatar_SetLastHorizontalInput(avatar, unk28);
+    PlayerAvatar_SetLastVerticalInput(avatar, unk2C);
 }
 
-void PlayerAvatar_SetUnk34(PlayerAvatar *avatar, u32 param1) {
+void PlayerAvatar_SetSurfMountEffect(PlayerAvatar *avatar, u32 param1) {
     avatar->surfMountEffect = param1;
 }
 
-u32 PlayerAvatar_GetUnk34(PlayerAvatar *avatar) {
+u32 PlayerAvatar_GetSurfMountEffect(PlayerAvatar *avatar) {
     return avatar->surfMountEffect;
 }
 
@@ -424,23 +424,23 @@ PlayerSaveData *PlayerAvatar_GetPlayerSaveData(PlayerAvatar *avatar) {
     return avatar->playerSaveData;
 }
 
-void PlayerAvatar_SetUnk8(PlayerAvatar *avatar, u32 param1) {
+void PlayerAvatar_SetHeldMovement(PlayerAvatar *avatar, u32 param1) {
     avatar->heldMovement = param1;
 }
 
-u32 PlayerAvatar_GetUnk8(PlayerAvatar *avatar) {
+u32 PlayerAvatar_GetHeldMovement(PlayerAvatar *avatar) {
     return avatar->heldMovement;
 }
 
-BOOL PlayerAvatar_GetUnkC(PlayerAvatar *avatar) {
+BOOL PlayerAvatar_GetFootstepToggle(PlayerAvatar *avatar) {
     return avatar->footstepToggle;
 }
 
-void PlayerAvatar_ToggleUnkC(PlayerAvatar *avatar) {
+void PlayerAvatar_ToggleFootstep(PlayerAvatar *avatar) {
     avatar->footstepToggle = (avatar->footstepToggle + 1) & TRUE;
 }
 
-void PlayerAvatar_ResetUnkC(PlayerAvatar *avatar) {
+void PlayerAvatar_ResetFootstepToggle(PlayerAvatar *avatar) {
     avatar->footstepToggle = FALSE;
 }
 

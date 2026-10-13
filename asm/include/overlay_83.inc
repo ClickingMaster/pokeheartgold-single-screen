@@ -96,7 +96,7 @@
 .public GridInputHandler_Free
 .public GridInputHandler_HandleInput_NoHold
 .public GridInputHandler_GetNextInput
-.public GridInputHandler_SetNextLastUnk0FInputs
+.public GridInputHandler_SetNextLastReturnInputs
 .public Main_SetVBlankIntrCB
 .public Main_SetHBlankIntrCB
 .public Heap_Create

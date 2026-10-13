@@ -21,7 +21,7 @@ typedef struct HatchEggTaskData {
     HatchEggTaskState state;
     BOOL wantToNameNewMon;
     NamingScreenArgs *namingScreenArgs;
-    UnkStruct_02091240 unkC;
+    HatchEggArgs unkC;
 } HatchEggTaskData;
 
 FS_EXTERN_OVERLAY(OVY_95);
@@ -98,7 +98,7 @@ static BOOL Task_HatchEggInParty(TaskManager *taskManager) {
     return FALSE;
 }
 
-void CallTask_HatchEggInParty(TaskManager *taskManager, UnkStruct_02091240 *a1) {
+void CallTask_HatchEggInParty(TaskManager *taskManager, HatchEggArgs *a1) {
     HatchEggTaskData *data = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(HatchEggTaskData));
     memset(data, 0, sizeof(HatchEggTaskData));
     data->unkC = *a1;

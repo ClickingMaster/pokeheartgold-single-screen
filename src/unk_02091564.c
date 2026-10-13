@@ -14,7 +14,7 @@
 FS_EXTERN_OVERLAY(OVY_53);
 const OverlayManagerTemplate gApplication_OakSpeech = { OakSpeech_Init, OakSpeech_Main, OakSpeech_Exit, FS_OVERLAY_ID(OVY_53) };
 
-static const UnkStruct_02091564 sFieldCommCommands[] = {
+static const FieldCommCommand sFieldCommCommands[] = {
     { CommPlayerManager_ReceivePosition, CommPlayerManager_GetPositionSize,         NULL         },
     { CommPlayerManager_ReceiveHostPosition, CommPlayerManager_GetHostPositionSize,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize1,         NULL         },

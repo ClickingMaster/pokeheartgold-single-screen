@@ -223,10 +223,10 @@
 .public BallSealEffect_Start
 .public BallSealEffect_IsActive
 .public BallSealEffect_Free
-.public UnkBallData_New
-.public UnkBallData_IsActive
-.public UnkBallData_HasOpened
-.public UnkBallData_Delete
+.public BallThrow_New
+.public BallThrow_IsActive
+.public BallThrow_HasOpened
+.public BallThrow_Delete
 .public BallSealEffect_GetDistance
 .public BallCapsuleEditor_Init
 .public BallCapsuleEditor_Main

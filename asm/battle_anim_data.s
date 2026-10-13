@@ -112,14 +112,14 @@
 	.public sBattleAnimFlippedCameraUp
 	.public sBattleAnimBattlerTypePositions
 	.public sBattleAnimEmitterPositions
-	.public sUnkBallDataStaticSpriteKinds
-	.public sUnkBallDataFlashingKinds
-	.public sUnkBallDataModeFuncs
-	.public sUnkBallDataBallAnimFuncs
-	.public sUnkBallDataBounceSounds
-	.public sUnkBallDataSpinningKinds
-	.public sUnkBallDataShakeOffsets
-	.public sUnkBallDataCaptureStateFuncs
+	.public sBallThrowStaticSpriteKinds
+	.public sBallThrowFlashingKinds
+	.public sBallThrowModeFuncs
+	.public sBallThrowBallAnimFuncs
+	.public sBallThrowBounceSounds
+	.public sBallThrowSpinningKinds
+	.public sBallThrowShakeOffsets
+	.public sBallThrowCaptureStateFuncs
 	.public ov07_0223730E
 	.public ov07_02237310
 	.public ov07_0223738C
@@ -406,72 +406,72 @@
 	.extern BattleAnimFunc_ObjWindowBgScrollDown
 	.extern BattleAnimFunc_ObjWindowBgScrollUpAlt
 	.extern BattleAnimFunc_ObjWindowBgScrollDownFast
-	.extern UnkBallData_ShouldAnimateSprite
+	.extern BallThrow_ShouldAnimateSprite
 	.extern BallAnim_GetSpriteResource
-	.extern UnkBallData_BallAnimThrow
-	.extern UnkBallData_BallAnimOpen
-	.extern UnkBallData_BallAnimDeflect
-	.extern UnkBallData_BallAnimFall
-	.extern UnkBallData_BallAnimShake
-	.extern UnkBallData_BallAnimSkip
-	.extern UnkBallData_BallAnimClick
-	.extern UnkBallData_BallAnimFade
-	.extern UnkBallData_CaptureStateIdle
-	.extern UnkBallData_CaptureStateThrow
-	.extern UnkBallData_CaptureStateGoToOpen
-	.extern UnkBallData_CaptureStateOpen
-	.extern UnkBallData_CaptureStateOpenDone
-	.extern UnkBallData_CaptureStateDeflect
-	.extern UnkBallData_CaptureStateDeflectDone
-	.extern UnkBallData_CaptureStateStartFall
-	.extern UnkBallData_CaptureStateGoToFlash
-	.extern UnkBallData_CaptureStateFlash
-	.extern UnkBallData_CaptureStateGoToDrop
-	.extern UnkBallData_CaptureStateDrop
-	.extern UnkBallData_CaptureStateNone
-	.extern UnkBallData_CaptureStateBounce
-	.extern UnkBallData_CaptureStateBounceDone
-	.extern UnkBallData_CaptureStateShakeWait
-	.extern UnkBallData_CaptureStateGoToShake
-	.extern UnkBallData_CaptureStateShake
-	.extern UnkBallData_CaptureStateShakeDone
-	.extern UnkBallData_CaptureStateGoToSkip
-	.extern UnkBallData_CaptureStateSkip
-	.extern UnkBallData_CaptureStateClick
-	.extern UnkBallData_CaptureStateClickDone
-	.extern UnkBallData_CaptureStateRestorePalette
-	.extern UnkBallData_CaptureStateGoToFadeOut
-	.extern UnkBallData_CaptureStateFadeOut
-	.extern UnkBallData_CaptureStateGoToEnd
-	.extern UnkBallData_CaptureStateEnd
-	.extern UnkBallData_RunCaptureState
-	.extern UnkBallData_RunThrowArc
-	.extern UnkBallData_ThrowArcAndOpen
-	.extern UnkBallData_OpenInPlace
-	.extern UnkBallData_Wobble
-	.extern UnkBallData_TrackPosition
-	.extern UnkBallData_Task
+	.extern BallThrow_BallAnimThrow
+	.extern BallThrow_BallAnimOpen
+	.extern BallThrow_BallAnimDeflect
+	.extern BallThrow_BallAnimFall
+	.extern BallThrow_BallAnimShake
+	.extern BallThrow_BallAnimSkip
+	.extern BallThrow_BallAnimClick
+	.extern BallThrow_BallAnimFade
+	.extern BallThrow_CaptureStateIdle
+	.extern BallThrow_CaptureStateThrow
+	.extern BallThrow_CaptureStateGoToOpen
+	.extern BallThrow_CaptureStateOpen
+	.extern BallThrow_CaptureStateOpenDone
+	.extern BallThrow_CaptureStateDeflect
+	.extern BallThrow_CaptureStateDeflectDone
+	.extern BallThrow_CaptureStateStartFall
+	.extern BallThrow_CaptureStateGoToFlash
+	.extern BallThrow_CaptureStateFlash
+	.extern BallThrow_CaptureStateGoToDrop
+	.extern BallThrow_CaptureStateDrop
+	.extern BallThrow_CaptureStateNone
+	.extern BallThrow_CaptureStateBounce
+	.extern BallThrow_CaptureStateBounceDone
+	.extern BallThrow_CaptureStateShakeWait
+	.extern BallThrow_CaptureStateGoToShake
+	.extern BallThrow_CaptureStateShake
+	.extern BallThrow_CaptureStateShakeDone
+	.extern BallThrow_CaptureStateGoToSkip
+	.extern BallThrow_CaptureStateSkip
+	.extern BallThrow_CaptureStateClick
+	.extern BallThrow_CaptureStateClickDone
+	.extern BallThrow_CaptureStateRestorePalette
+	.extern BallThrow_CaptureStateGoToFadeOut
+	.extern BallThrow_CaptureStateFadeOut
+	.extern BallThrow_CaptureStateGoToEnd
+	.extern BallThrow_CaptureStateEnd
+	.extern BallThrow_RunCaptureState
+	.extern BallThrow_RunThrowArc
+	.extern BallThrow_ThrowArcAndOpen
+	.extern BallThrow_OpenInPlace
+	.extern BallThrow_Wobble
+	.extern BallThrow_TrackPosition
+	.extern BallThrow_Task
 
 	.text
-	.public UnkBallData_New
-	.public UnkBallData_IsActive
-	.public UnkBallData_HasOpened
-	.public UnkBallData_SetCaptureState
-	.public UnkBallData_IsCaptureState
-	.public UnkBallData_Delete
-	.public UnkBallData_SetMode
-	.public UnkBallData_GetMode
-	.public UnkBallData_InitThrowTarget
-	.public UnkBallData_GetStartPosition
-	.public UnkBallData_LoadResources
-	.public UnkBallData_CreateSprite
-	.public UnkBallData_SetDrawFlag
-	.public UnkBallData_SetPosition
-	.public UnkBallData_SetRotation
-	.public UnkBallData_SetAnimateSprite
-	.public UnkBallData_SetDrawPriority
-	.public UnkBallData_SetPriority
-	.public UnkBallData_SetDelay
+	.public BallThrow_New
+	.public BallThrow_IsActive
+	.public BallThrow_HasOpened
+	.public BallThrow_SetCaptureState
+	.public BallThrow_IsCaptureState
+	.public BallThrow_Delete
+	.public BallThrow_SetMode
+	.public BallThrow_GetMode
+	.public BallThrow_InitThrowTarget
+	.public BallThrow_GetStartPosition
+	.public BallThrow_LoadResources
+	.public BallThrow_CreateSprite
+	.public BallThrow_SetDrawFlag
+	.public BallThrow_SetPosition
+	.public BallThrow_SetRotation
+	.public BallThrow_SetAnimateSprite
+	.public BallThrow_SetDrawPriority
+	.public BallThrow_SetPriority
+	.public BallThrow_SetDelay
 	.public BallSealEffect_GetDistance
 	.public BallSealEffect_GetSealDistance
 	.public BallSealEffect_GetSealEmitDelay
@@ -1592,82 +1592,82 @@ sBattleAnimEmitterPositions: ; 0x0223687C
 	.byte 0xA8, 0x0A, 0x00, 0x00, 0xFC, 0xF6, 0xFF, 0xFF, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x58, 0xF4, 0xFF, 0xFF, 0x48, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-sUnkBallDataStaticSpriteKinds: ; 0x0223717C
+sBallThrowStaticSpriteKinds: ; 0x0223717C
 	.byte 0x03, 0x00, 0x00, 0x00
 	.byte 0x05, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 
-sUnkBallDataFlashingKinds: ; 0x02237188
+sBallThrowFlashingKinds: ; 0x02237188
 	.byte 0x06, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00
 	.byte 0x08, 0x00, 0x00, 0x00, 0x09, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x0B, 0x00, 0x00, 0x00
 
-sUnkBallDataModeFuncs: ; 0x022371A0
-	.word UnkBallData_RunThrowArc
-	.word UnkBallData_ThrowArcAndOpen
-	.word UnkBallData_Wobble
-	.word UnkBallData_RunCaptureState
-	.word UnkBallData_TrackPosition
-	.word UnkBallData_OpenInPlace
+sBallThrowModeFuncs: ; 0x022371A0
+	.word BallThrow_RunThrowArc
+	.word BallThrow_ThrowArcAndOpen
+	.word BallThrow_Wobble
+	.word BallThrow_RunCaptureState
+	.word BallThrow_TrackPosition
+	.word BallThrow_OpenInPlace
 
-sUnkBallDataBallAnimFuncs: ; 0x022371B8
-	.word UnkBallData_BallAnimThrow
-	.word UnkBallData_BallAnimOpen
-	.word UnkBallData_BallAnimDeflect
-	.word UnkBallData_BallAnimFall
-	.word UnkBallData_BallAnimShake
-	.word UnkBallData_BallAnimSkip
-	.word UnkBallData_BallAnimClick
-	.word UnkBallData_BallAnimFade
+sBallThrowBallAnimFuncs: ; 0x022371B8
+	.word BallThrow_BallAnimThrow
+	.word BallThrow_BallAnimOpen
+	.word BallThrow_BallAnimDeflect
+	.word BallThrow_BallAnimFall
+	.word BallThrow_BallAnimShake
+	.word BallThrow_BallAnimSkip
+	.word BallThrow_BallAnimClick
+	.word BallThrow_BallAnimFade
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00
 
-sUnkBallDataBounceSounds: ; 0x02237200
+sBallThrowBounceSounds: ; 0x02237200
 	.byte 0x01, 0x00, 0x00, 0x00, 0xE6, 0x05, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0xE6, 0x05, 0x00, 0x00
 	.byte 0x0E, 0x00, 0x00, 0x00, 0xE7, 0x05, 0x00, 0x00, 0x12, 0x00, 0x00, 0x00, 0xE8, 0x05, 0x00, 0x00
 	.byte 0x14, 0x00, 0x00, 0x00, 0xE9, 0x05, 0x00, 0x00
 
-sUnkBallDataSpinningKinds: ; 0x02237228
+sBallThrowSpinningKinds: ; 0x02237228
 	.byte 0x06, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00
 	.byte 0x08, 0x00, 0x00, 0x00, 0x09, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x0B, 0x00, 0x00, 0x00
 	.byte 0x0C, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x0F, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00
 	.byte 0x11, 0x00, 0x00, 0x00
 
-sUnkBallDataShakeOffsets: ; 0x02237254
+sBallThrowShakeOffsets: ; 0x02237254
 	.byte 0xFE, 0xFF, 0x00, 0x00, 0x02, 0x00, 0x02, 0x00, 0x00, 0x00, 0xFE, 0xFF
 	.byte 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00
 	.byte 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0xFF, 0xFF
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x00
 
-sUnkBallDataCaptureStateFuncs: ; 0x0223729C
-	.word UnkBallData_CaptureStateIdle
-	.word UnkBallData_CaptureStateThrow
-	.word UnkBallData_CaptureStateGoToOpen
-	.word UnkBallData_CaptureStateOpen
-	.word UnkBallData_CaptureStateOpenDone
-	.word UnkBallData_CaptureStateDeflect
-	.word UnkBallData_CaptureStateDeflectDone
-	.word UnkBallData_CaptureStateStartFall
-	.word UnkBallData_CaptureStateGoToFlash
-	.word UnkBallData_CaptureStateFlash
-	.word UnkBallData_CaptureStateGoToDrop
-	.word UnkBallData_CaptureStateDrop
-	.word UnkBallData_CaptureStateNone
-	.word UnkBallData_CaptureStateBounce
-	.word UnkBallData_CaptureStateBounceDone
-	.word UnkBallData_CaptureStateShakeWait
-	.word UnkBallData_CaptureStateGoToShake
-	.word UnkBallData_CaptureStateShake
-	.word UnkBallData_CaptureStateShakeDone
-	.word UnkBallData_CaptureStateGoToSkip
-	.word UnkBallData_CaptureStateSkip
-	.word UnkBallData_CaptureStateClick
-	.word UnkBallData_CaptureStateClickDone
-	.word UnkBallData_CaptureStateRestorePalette
-	.word UnkBallData_CaptureStateGoToFadeOut
-	.word UnkBallData_CaptureStateFadeOut
-	.word UnkBallData_CaptureStateGoToEnd
-	.word UnkBallData_CaptureStateEnd
+sBallThrowCaptureStateFuncs: ; 0x0223729C
+	.word BallThrow_CaptureStateIdle
+	.word BallThrow_CaptureStateThrow
+	.word BallThrow_CaptureStateGoToOpen
+	.word BallThrow_CaptureStateOpen
+	.word BallThrow_CaptureStateOpenDone
+	.word BallThrow_CaptureStateDeflect
+	.word BallThrow_CaptureStateDeflectDone
+	.word BallThrow_CaptureStateStartFall
+	.word BallThrow_CaptureStateGoToFlash
+	.word BallThrow_CaptureStateFlash
+	.word BallThrow_CaptureStateGoToDrop
+	.word BallThrow_CaptureStateDrop
+	.word BallThrow_CaptureStateNone
+	.word BallThrow_CaptureStateBounce
+	.word BallThrow_CaptureStateBounceDone
+	.word BallThrow_CaptureStateShakeWait
+	.word BallThrow_CaptureStateGoToShake
+	.word BallThrow_CaptureStateShake
+	.word BallThrow_CaptureStateShakeDone
+	.word BallThrow_CaptureStateGoToSkip
+	.word BallThrow_CaptureStateSkip
+	.word BallThrow_CaptureStateClick
+	.word BallThrow_CaptureStateClickDone
+	.word BallThrow_CaptureStateRestorePalette
+	.word BallThrow_CaptureStateGoToFadeOut
+	.word BallThrow_CaptureStateFadeOut
+	.word BallThrow_CaptureStateGoToEnd
+	.word BallThrow_CaptureStateEnd
 
 ov07_0223730C:
 	.byte 0x00, 0x00

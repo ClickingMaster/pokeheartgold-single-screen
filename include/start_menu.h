@@ -68,11 +68,11 @@ typedef struct StartMenuTaskData {
     u8 filler_unk_388[4];
 } StartMenuTaskData;
 
-typedef struct UnkStruct_0203D818 {
+typedef struct StartMenuMailReturn {
     u16 itemId;
     u8 partySlot;
     u8 kind;
-} UnkStruct_0203D818;
+} StartMenuMailReturn;
 
 BOOL FieldSystem_MapIsNotMysteryZone(FieldSystem *fieldSystem);
 void StartMenu_Init(FieldSystem *fieldSystem);
@@ -84,7 +84,7 @@ void StartMenu_SetExitTaskFunc(StartMenuTaskData *env, TaskFunc func);
 BOOL Task_StartMenu_HandleReturn_Pokemon(TaskManager *taskManager);
 BOOL Task_ReturnToMenuFromAppItem(TaskManager *taskManager);
 BOOL Task_UseFlyInField(TaskManager *taskManager);
-UnkStruct_0203D818 *StartMenu_CreateMailReturnInfo(u16 itemId, u8 kind, u8 partySlot);
+StartMenuMailReturn *StartMenu_CreateMailReturnInfo(u16 itemId, u8 kind, u8 partySlot);
 BOOL Task_ReturnToMenuFromMail(TaskManager *taskManager);
 BOOL Task_ReturnToMenuFromVSRecorder(TaskManager *taskManager);
 

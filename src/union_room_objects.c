@@ -42,8 +42,8 @@ FieldSystem *UnionRoom_GetFieldSystem(struct UnionRoom *unionRoom);
 UnionRoomPlayerRecord *UnionRoom_GetRecord(struct UnionRoom *unionRoom, int index);
 s32 CommState_GetJoinResult(void);
 s32 CommState_IsAlternateLinked(void);
-UnkStruct_0206793C *FieldShadow_CreateFriendShadow(LocalMapObject *object, int index);
-UnkStruct_0206793C *UnionChatMarker_Spawn(LocalMapObject *object);
+FieldEffect *FieldShadow_CreateFriendShadow(LocalMapObject *object, int index);
+FieldEffect *UnionChatMarker_Spawn(LocalMapObject *object);
 
 extern const u16 gUnionRoomGroupFirstSlot[];
 

@@ -3773,7 +3773,7 @@ u32 PCBox_SelectBoxMenuBox(PCBoxWork *work, s32 delta) {
     PCBox_DrawTrayBoxNameAndCount(work);
     v = GridInputHandler_GetNextInput(work->view->gridInput);
     work->view->rowCursorPos = v;
-    GridInputHandler_SetNextLastUnk0FInputs(work->view->gridInput, 8, v, v);
+    GridInputHandler_SetNextLastReturnInputs(work->view->gridInput, 8, v, v);
     DpadMenuBox_GetPosition(GridInputHandler_GetDpadBox(work->view->gridInput, 8), &x, &y);
     ManagedSprite_SetPositionXY(work->view->sprites[9], x, y);
     PCBox_SetSpriteAnim(work->view, 9, 8);
@@ -3816,7 +3816,7 @@ void PCBox_SelectWallpaperInPage(PCBoxWork *work, u32 delta) {
     PCBox_UpdateWallpaperCursor(work);
     PCBox_DrawWallpaperName(work);
     work->view->rowCursorPos = GridInputHandler_GetNextInput(work->view->gridInput);
-    ((void (*)(void *, s32, u8, u8))GridInputHandler_SetNextLastUnk0FInputs)(
+    ((void (*)(void *, s32, u8, u8))GridInputHandler_SetNextLastReturnInputs)(
         work->view->gridInput,
         6,
         (u8)work->view->rowCursorPos,
@@ -3884,7 +3884,7 @@ u32 PCBox_SelectDepositBox(PCBoxWork *work, s32 delta) {
     PCBox_DrawTrayBoxNameAndCount(work);
     v = GridInputHandler_GetNextInput(work->view->gridInput);
     work->view->rowCursorPos = v;
-    GridInputHandler_SetNextLastUnk0FInputs(work->view->gridInput, 8, v, v);
+    GridInputHandler_SetNextLastReturnInputs(work->view->gridInput, 8, v, v);
     DpadMenuBox_GetPosition(GridInputHandler_GetDpadBox(work->view->gridInput, 8), &x, &y);
     ManagedSprite_SetPositionXY(work->view->sprites[9], x, y);
     PCBox_SetSpriteAnim(work->view, 9, 8);

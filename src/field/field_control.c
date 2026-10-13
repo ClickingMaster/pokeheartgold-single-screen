@@ -114,8 +114,8 @@ static BOOL FieldSystem_IsBottomScreenAppReady(FieldSystem *fieldSystem) {
     return FieldSystem_GetBottomScreenAppState(fieldSystem) == TRUE;
 }
 
-static void FieldControl_RequestRegisteredItemAnim(FieldSystem *fieldSystem, int arg1) {
-    FieldSystem_RequestTouchscreenMenuRegisteredItemAnim(fieldSystem, arg1);
+static void FieldControl_RequestRegisteredItemAnim(FieldSystem *fieldSystem, int item) {
+    FieldSystem_RequestTouchscreenMenuRegisteredItemAnim(fieldSystem, item);
 }
 
 void FieldInput_Update(FieldInput *fieldInput, FieldSystem *fieldSystem, u16 newKeys, u16 heldKeys) {

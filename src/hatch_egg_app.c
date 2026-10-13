@@ -46,7 +46,7 @@ typedef struct HatchEggAppArgs {
     u32 taskState;
     BOOL wantToNameNewMon; // set by the nickname prompt
     void *namingScreenArgs;
-    UnkStruct_02091240 hatch;
+    HatchEggArgs hatch;
 } HatchEggAppArgs;
 
 typedef struct HatchEggParticlesParam {

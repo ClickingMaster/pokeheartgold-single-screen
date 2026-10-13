@@ -405,7 +405,7 @@ u16 PhoneCall_GetScriptId_Irwin(PokegearPhoneCallContext *ctx, PokegearPhoneCall
 extern const TouchscreenHitbox gPhoneCallFastForwardHitbox;
 extern const PokegearPhoneContextMenuParam sContextMenuParam[];
 extern const PhoneScriptGenericHeader sGenericPhoneCallHeaders[];
-extern const u8 ov101_021F8760[];
+extern const u8 gEthanLyraRandomMsgConditions[];
 
 extern const PhoneCallScriptDef gPhoneCallScriptDef[];
 extern const u8 sGreetingMsgIDs[][12];

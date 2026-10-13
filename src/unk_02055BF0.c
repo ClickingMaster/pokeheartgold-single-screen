@@ -185,7 +185,7 @@ BOOL Task_FieldTransition(TaskManager *man) {
         break;
     case 6:
         if (_020FC76C[env->transitionNo]) {
-            Camera_SetHistoryUnk24(fieldSystem->camera, 0);
+            Camera_SetHistoryEnabled(fieldSystem->camera, 0);
             _020FC76C[env->transitionNo](fieldSystem);
         }
         env->state++;
@@ -220,7 +220,7 @@ BOOL Task_FieldTransition(TaskManager *man) {
         }
         break;
     case 8:
-        Camera_SetHistoryUnk24(fieldSystem->camera, 1);
+        Camera_SetHistoryEnabled(fieldSystem->camera, 1);
         Heap_Free(env);
         return TRUE;
     case 9:

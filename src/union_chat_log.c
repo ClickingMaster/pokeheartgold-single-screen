@@ -628,7 +628,7 @@ String *UnionChatLog_GetFriendOfText(SavePalPad *palPad, u32 trainerId, MessageF
             int index = status - 2;
             String *string = String_New(10, HEAP_ID_87);
             CopyU16ArrayToString(string, PalPad_GetNthEntry(palPad, index)->name);
-            BufferString(msgFormat, 0, string, 0, 0, PalPadEntry_GetFromUnk68Array(palPad, index));
+            BufferString(msgFormat, 0, string, 0, 0, PalPadEntry_GetFriendLanguage(palPad, index));
             String_Delete(string);
         }
         result = ReadMsgData_ExpandPlaceholders(msgFormat, msgData, msg_0738_UNION_00208, HEAP_ID_87);

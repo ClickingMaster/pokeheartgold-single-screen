@@ -53,8 +53,6 @@ enum WifiClubGame {
 
 BOOL LoadOVY13(void); // network_overlay_loader.c
 
-typedef UnkStruct_ov44_0222A758_args WifiClubArgs; // unk0: save data, unk4: choice, unk8: battle partner
-
 typedef struct WifiClubTask {
     WifiClubArgs *clubArgs; // 0x00
     u32 state;              // 0x04

@@ -63,7 +63,7 @@ int ApricornBox_UseJuiceServing(SaveApricornBox *box);
 ApricornRecord *ApricornRecord_New(SaveApricornBox *box, PlayerProfile *profile, u32 value, enum HeapID heapId);
 BOOL ApricornRecord_IsSameTrainer(ApricornRecord *a, ApricornRecord *b);
 void ApricornBox_StoreJuiceRecords(SaveApricornBox *box, ApricornRecord *records, int count, int skip);
-void ApricornJuice_GetFlavors(UnkStruct_02031CEC *data, u8 *out);
+void ApricornJuice_GetFlavors(ApricornJuice *data, u8 *out);
 
 u32 Save_ApricornBox_sizeof(void) {
     return sizeof(SaveApricornBox);
@@ -239,7 +239,7 @@ u8 ApricornBox_GetJuiceServings(SaveApricornBox *box) {
     return box->juiceServings;
 }
 
-BOOL ApricornBox_GetJuice(SaveApricornBox *box, int index, UnkStruct_02031CEC *out) {
+BOOL ApricornBox_GetJuice(SaveApricornBox *box, int index, ApricornJuice *out) {
     const u16 *src;
     u16 *dst = (u16 *)out;
 
@@ -250,7 +250,7 @@ BOOL ApricornBox_GetJuice(SaveApricornBox *box, int index, UnkStruct_02031CEC *o
         *(ApricornPreset *)out = gApricornJuicePresets[index];
     } else if (index <= 7) {
         src = (const u16 *)((u8 *)box + 0x38 + (index - 5) * 0x20);
-        if (ApricornJuice_GetFlavorTotal((UnkStruct_02031CEC *)src) == 0) {
+        if (ApricornJuice_GetFlavorTotal((ApricornJuice *)src) == 0) {
             ClearApricornJuice(out);
             return FALSE;
         }
@@ -271,14 +271,14 @@ BOOL ApricornBox_GetJuice(SaveApricornBox *box, int index, UnkStruct_02031CEC *o
     return TRUE;
 }
 
-BOOL ApricornJuice_IsValid(UnkStruct_02031CEC *data) {
+BOOL ApricornJuice_IsValid(ApricornJuice *data) {
     if (ApricornJuice_GetFlavorTotal(data) != 0) {
         return TRUE;
     }
     return FALSE;
 }
 
-int ApricornJuice_GetFlavorTotal(UnkStruct_02031CEC *data) {
+int ApricornJuice_GetFlavorTotal(ApricornJuice *data) {
     ApricornMix *mix = (ApricornMix *)data;
     int i;
     u16 total = 0;
@@ -503,7 +503,7 @@ void ApricornBox_StoreJuiceRecords(SaveApricornBox *box, ApricornRecord *records
     u32 destIndex;
 
     do {
-        if (!ApricornJuice_IsValid((UnkStruct_02031CEC *)&box->juiceRecords[initialIndex][0x18])) {
+        if (!ApricornJuice_IsValid((ApricornJuice *)&box->juiceRecords[initialIndex][0x18])) {
             break;
         }
         numRecords++;
@@ -571,7 +571,7 @@ String *ApricornBox_GetJuiceName(SaveApricornBox *box, int type, u32 heapId) {
         DestroyMsgData(msgData);
     } else if (type < 8) {
         u32 offset = (u8)(type - 5) << 5;
-        if (ApricornJuice_IsValid((UnkStruct_02031CEC *)((u8 *)box + 0x38 + offset))) {
+        if (ApricornJuice_IsValid((ApricornJuice *)((u8 *)box + 0x38 + offset))) {
             CopyU16ArrayToString(result, (u16 *)((u8 *)box + 0x28 + offset));
         }
     }
@@ -579,7 +579,7 @@ String *ApricornBox_GetJuiceName(SaveApricornBox *box, int type, u32 heapId) {
 }
 
 String *ApricornBox_GetJuiceFlavorName(SaveApricornBox *box, u16 type, u32 heapId) {
-    UnkStruct_02031CEC data;
+    ApricornJuice data;
     MsgData *msgData;
     String *result;
     ApricornBox_GetJuice(box, type, &data);
@@ -608,7 +608,7 @@ void ApricornBox_MixQueuedApricorns(SaveApricornBox *box) {
     u16 actions = s->actions;
     int i, j;
     u8 reduce;
-    ApricornJuice_GetFlavors((UnkStruct_02031CEC *)s->base, (u8 *)values);
+    ApricornJuice_GetFlavors((ApricornJuice *)s->base, (u8 *)values);
     for (n = 0; n < 5; n++) {
         reduce = 0;
         action = actions & 7;
@@ -684,7 +684,7 @@ void ApricornBox_MixQueuedApricorns(SaveApricornBox *box) {
 
 #pragma force_active off
 
-void ApricornJuice_GetFlavors(UnkStruct_02031CEC *data, u8 *out) {
+void ApricornJuice_GetFlavors(ApricornJuice *data, u8 *out) {
     int i;
     ApricornMix *mix = (ApricornMix *)data;
     for (i = 0; i < 5; i++) {

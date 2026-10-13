@@ -70,7 +70,7 @@ static void ViewPhotoSysTask_DrawLyr3Icon(ViewPhotoSysTaskData *viewPhoto);
 static void ViewPhotoSysTask_PrintTextOnWindows(ViewPhotoSysTaskData *viewPhoto);
 static u8 Photo_CountValidMons(Photo *photo);
 
-static const WindowTemplate ov19_0225A04E[2] = {
+static const WindowTemplate sViewPhotoWindowTemplates[2] = {
     {
      .bgId = GF_BG_LYR_SUB_1,
      .left = 24,
@@ -91,7 +91,7 @@ static const WindowTemplate ov19_0225A04E[2] = {
      },
 };
 
-static const TouchscreenHitbox ov19_0225A05E[] = {
+static const TouchscreenHitbox sViewPhotoTouchHitboxes[] = {
     { .rect = { 162, 188, 194, 254 } },
     { .rect = { 24, 56, 80, 96 } },
     { .rect = { 24, 56, 160, 176 } },
@@ -259,7 +259,7 @@ static ViewPhotoInputResponse ViewPhotoSysTask_GetKeyInput(ViewPhotoSysTaskData 
 }
 
 static ViewPhotoInputResponse ViewPhotoSysTask_GetTouchInput(ViewPhotoSysTaskData *viewPhoto) {
-    int hitbox = TouchscreenHitbox_FindRectAtTouchNew(ov19_0225A05E);
+    int hitbox = TouchscreenHitbox_FindRectAtTouchNew(sViewPhotoTouchHitboxes);
     if (hitbox == -1) {
         return VIEW_PHOTO_INPUT_NOTHING;
     }
@@ -383,7 +383,7 @@ static void ViewPhotoSysTask_ReleaseMessages(ViewPhotoSysTaskData *viewPhoto) {
 
 static void ViewPhotoSysTask_InitWindows(ViewPhotoSysTaskData *viewPhoto) {
     for (int i = 0; i < 2; ++i) {
-        AddWindow(viewPhoto->bgConfig, &viewPhoto->windows[i], &ov19_0225A04E[i]);
+        AddWindow(viewPhoto->bgConfig, &viewPhoto->windows[i], &sViewPhotoWindowTemplates[i]);
         FillWindowPixelBuffer(&viewPhoto->windows[i], 0);
     }
 }

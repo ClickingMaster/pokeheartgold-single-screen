@@ -31,8 +31,8 @@ typedef struct UseMailData {
     MailMessage editMessage;
 } UseMailData;
 
-BOOL ov55_UnkApp_Init(OverlayManager *manager, int *state);
-BOOL ov55_UnkApp_Main(OverlayManager *manager, int *state);
-BOOL ov55_UnkApp_Exit(OverlayManager *manager, int *state);
+BOOL UseMail_Init(OverlayManager *manager, int *state);
+BOOL UseMail_Main(OverlayManager *manager, int *state);
+BOOL UseMail_Exit(OverlayManager *manager, int *state);
 
 #endif

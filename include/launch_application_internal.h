@@ -42,7 +42,7 @@ typedef struct UnkStruct_0203E6D4 {
 } UnkStruct_0203E6D4;
 
 typedef struct EasyChatTaskData {
-    UnkStruct_0203E8C8 *result;
+    EasyChatResult *result;
     u16 *retVar0;
     u16 *retVar1;
     EasyChatArgs *easyChat;

@@ -153,7 +153,7 @@ BOOL ScrCmd_710(ScriptContext *ctx) {
 
 static void ov03_02256BA8(FieldSystem *fieldSystem, u8 index) {
     u16 modelID = ov03_0225945C[index];
-    UnkStruct_FieldSysC0_SubC *unkC0_SubC = Field3dObjectList_GetRenderObjectByID(fieldSystem->renderObjManager, modelID);
+    Field3dRenderObj *unkC0_SubC = Field3dObjectList_GetRenderObjectByID(fieldSystem->renderObjManager, modelID);
     if (unkC0_SubC == NULL) {
         GF_AssertFail();
     } else {
@@ -719,10 +719,10 @@ static u32 MartData_GetCurrency(MartData *data, u32 martType) {
 
 int MartData_CheckCannotBuy(MartData *data, u32 unkAmount) {
     if (data->martType == MART_TYPE_3) {
-        if (PokeathlonSave_GetUnkB7C_AtIndex(data->pokeathlonSave, data->cursorPos + data->pageStart)) {
+        if (PokeathlonSave_IsDailyItemBought(data->pokeathlonSave, data->cursorPos + data->pageStart)) {
             return 2;
         }
-    } else if (data->martType == MART_TYPE_4 && PokeathlonSave_GetUnkB78_AtIndex(data->pokeathlonSave, data->item - 505)) {
+    } else if (data->martType == MART_TYPE_4 && PokeathlonSave_IsDataCardBought(data->pokeathlonSave, data->item - 505)) {
         return 3;
     }
 
@@ -954,9 +954,9 @@ static u8 MartData_PerformTransaction(MartData *data) {
         Bag_AddItem(data->inventory, data->item, data->quantity, HEAP_ID_FIELD2);
     } else if (data->martType == MART_TYPE_3) {
         MartData_Inventory_AddApricornOrItem(data, data->item);
-        PokeathlonSave_SetUnkB7C_AtIndex(data->pokeathlonSave, data->cursorPos + data->pageStart);
+        PokeathlonSave_SetDailyItemBought(data->pokeathlonSave, data->cursorPos + data->pageStart);
     } else if (data->martType == MART_TYPE_4) {
-        PokeathlonSave_SetUnkB78_AtIndex(data->pokeathlonSave, data->item - 505);
+        PokeathlonSave_SetDataCardBought(data->pokeathlonSave, data->item - 505);
     } else {
         GiveOrTakeSeal(data->inventory, data->item, data->quantity);
     }
@@ -1061,7 +1061,7 @@ static u8 MartData_FinishClose(FieldSystem *fieldSystem, MartData *data) {
     return TASK_MART_27;
 }
 
-static const ResdatIdList ov03_0225946C = {
+static const ResdatIdList sMartSpriteResdat = {
     .charRes = NARC_resdat_resdat_00000066_bin,
     .plttRes = NARC_resdat_resdat_00000067_bin,
     .cellRes = NARC_resdat_resdat_00000065_bin,
@@ -1071,7 +1071,7 @@ static const ResdatIdList ov03_0225946C = {
     .headerId = NARC_resdat_resdat_00000088_bin
 };
 
-static const UnmanagedSpriteTemplate ov03_022594F8[19] = {
+static const UnmanagedSpriteTemplate sMartSpriteTemplates[19] = {
     {
      .resourceSet = 0,
      .x = 177,
@@ -1285,9 +1285,9 @@ static const UnmanagedSpriteTemplate ov03_022594F8[19] = {
 };
 
 void MartData_CreateSprites(MartData *data) {
-    FieldSpriteManager_InitWithResDat(&data->fieldSpriteManager, &ov03_0225946C, 19, HEAP_ID_FIELD2);
+    FieldSpriteManager_InitWithResDat(&data->fieldSpriteManager, &sMartSpriteResdat, 19, HEAP_ID_FIELD2);
     for (u32 i = 0; i < 19; i++) {
-        data->sprites[i] = FieldSpriteManager_CreateSprite(&data->fieldSpriteManager, &ov03_022594F8[i]);
+        data->sprites[i] = FieldSpriteManager_CreateSprite(&data->fieldSpriteManager, &sMartSpriteTemplates[i]);
     }
     Sprite_SetPriority(data->sprites[13], 1);
     Sprite_SetPriority(data->sprites[18], 1);
@@ -1344,9 +1344,9 @@ static void MartData_UpdateButtonSprites(MartData *data, int arg1) {
     case 0:
         for (j = 0; j < 6; j++) {
             VecFx32 vec;
-            vec.x = ov03_022594F8[j + 4].x * FX32_ONE;
-            vec.y = ov03_022594F8[j + 4].y * FX32_ONE + 0xC0000;
-            vec.z = ov03_022594F8[j + 4].z * FX32_ONE;
+            vec.x = sMartSpriteTemplates[j + 4].x * FX32_ONE;
+            vec.y = sMartSpriteTemplates[j + 4].y * FX32_ONE + 0xC0000;
+            vec.z = sMartSpriteTemplates[j + 4].z * FX32_ONE;
             Sprite_SetMatrix(data->sprites[j + 4], &vec);
         }
         for (i = 0; i < NELEMS(ov03_02259850); i++) {
@@ -1503,7 +1503,7 @@ static void Mart_FadeOut(FieldSystem *fieldSystem_unused, MartData *data) {
     data->state = TASK_MART_23;
 }
 
-static const u8 ov03_022597F0[9] = {
+static const u8 sMartSellBagPockets[9] = {
     0,
     1,
     2,
@@ -1519,7 +1519,7 @@ static void Task_Mart_LaunchSellBag(TaskManager *taskManager) {
     if (IsPaletteFadeFinished()) {
         FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
         MartData *data = TaskManager_GetEnvironment(taskManager);
-        data->bagView = Bag_CreateView(Save_Bag_Get(fieldSystem->saveData), ov03_022597F0, HEAP_ID_FIELD2);
+        data->bagView = Bag_CreateView(Save_Bag_Get(fieldSystem->saveData), sMartSellBagPockets, HEAP_ID_FIELD2);
         BagView_Init(data->bagView, fieldSystem->saveData, 2, fieldSystem->bagCursor, &fieldSystem->menuInputState);
         Bag_LaunchApp(fieldSystem, data->bagView);
         TaskManager_Jump(taskManager, Task_MartBag, data);

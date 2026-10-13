@@ -106,11 +106,11 @@
 .public gGameLanguage
 .public gOverlayTemplate_NamingScreen
 .public gSystem
-.public UnkBallData_SetBallAnimation
-.public UnkBallData_IsBallAnimationPlaying
-.public UnkBallData_New
-.public UnkBallData_Delete
-.public UnkBallData_GetMode
+.public BallThrow_SetBallAnimation
+.public BallThrow_IsBallAnimationPlaying
+.public BallThrow_New
+.public BallThrow_Delete
+.public BallThrow_GetMode
 .public BattleSystem_FreeGraphics
 .public BattleSystem_FreeMainBgLayers
 .public BattleSystem_ReinitMainBgLayers

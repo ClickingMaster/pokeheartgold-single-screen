@@ -85,11 +85,11 @@ static void *LoadZukanSpeciesList(enum HeapID heapID, s32 fileId, int *unkPtr);
 static void SpeciesListMenu_SetMsgData(SpeciesListMenu *unkPtr, MsgData *msgdata);
 static void SpeciesListMenu_Init(FieldSystem *fieldSystem, SpeciesListMenu *unkPtr, u8 x, u8 y, u8 a4, u8 a5, u16 *input, MessageFormat *msgfmt, Window *window, MsgData *msgdata, u16 *cursorPos, u16 *itemsAbove);
 static SpeciesListMenu *SpeciesListMenu_New(FieldSystem *fieldSystem, u8 x, u8 y, u8 a3, u8 a4, u16 *input, MessageFormat *msgfmt, Window *window, MsgData *msgdata, u16 *cursorPos, u16 *itemsAbove);
-static void SpeciesListMenu_AddItem(SpeciesListMenu *unkPtr, int strNo, u16 a2, u32 a3);
+static void SpeciesListMenu_AddItem(SpeciesListMenu *unkPtr, int strNo, u16 a2, u32 value);
 static void SpeciesListMenu_Show(SpeciesListMenu *unkPtr);
-static void SpeciesListMenu_AddItemInternal(SpeciesListMenu *unkPtr, int strNo, u16 a2, u32 a3);
+static void SpeciesListMenu_AddItemInternal(SpeciesListMenu *unkPtr, int strNo, u16 a2, u32 value);
 static void SpeciesListMenu_InitTemplate(SpeciesListMenu *unkPtr);
-static void SpeciesListMenu_ItemPrintFunc(struct ListMenu *listMenu, s32 a1, u8 unused);
+static void SpeciesListMenu_ItemPrintFunc(struct ListMenu *listMenu, s32 value, u8 unused);
 static void SpeciesListMenu_MoveCursorFunc(struct ListMenu *listMenu, s32 unused1, u8 unused2);
 static void SpeciesListMenu_Task(SysTask *sysTask, void *work);
 static void SpeciesListMenu_Close(SpeciesListMenu *unkPtr);
@@ -238,8 +238,8 @@ static SpeciesListMenu *SpeciesListMenu_New(FieldSystem *fieldSystem, u8 x, u8 y
     return unkPtr;
 }
 
-static void SpeciesListMenu_AddItem(SpeciesListMenu *unkPtr, int strNo, u16 a2, u32 a3) {
-    SpeciesListMenu_AddItemInternal(unkPtr, strNo, a2, a3);
+static void SpeciesListMenu_AddItem(SpeciesListMenu *unkPtr, int strNo, u16 a2, u32 value) {
+    SpeciesListMenu_AddItemInternal(unkPtr, strNo, a2, value);
 }
 
 static void SpeciesListMenu_Show(SpeciesListMenu *unkPtr) {
@@ -256,16 +256,16 @@ static void SpeciesListMenu_Show(SpeciesListMenu *unkPtr) {
     unkPtr->sysTask = SysTask_CreateOnMainQueue(SpeciesListMenu_Task, unkPtr, 0);
 }
 
-static void SpeciesListMenu_AddItemInternal(SpeciesListMenu *unkPtr, int strNo, u16 a2, u32 a3) {
+static void SpeciesListMenu_AddItemInternal(SpeciesListMenu *unkPtr, int strNo, u16 a2, u32 value) {
     String *str = String_New(0x50, HEAP_ID_FIELD1);
     ReadMsgDataIntoString(unkPtr->msgdata, strNo, str);
     StringExpandPlaceholders(unkPtr->msgfmt, unkPtr->stringArr_1C[unkPtr->totalItems], str);
     unkPtr->items[unkPtr->totalItems].text = unkPtr->stringArr_1C[unkPtr->totalItems];
     String_Delete(str);
-    if (a3 == 0xfa) {
+    if (value == 0xfa) {
         unkPtr->items[unkPtr->totalItems].value = -3;
     } else {
-        unkPtr->items[unkPtr->totalItems].value = a3;
+        unkPtr->items[unkPtr->totalItems].value = value;
     }
     unkPtr->msgIds[unkPtr->totalItems] = a2;
     unkPtr->totalItems++;
@@ -293,8 +293,8 @@ static void SpeciesListMenu_InitTemplate(SpeciesListMenu *unkPtr) {
     unkPtr->listMenuTemplate.data = unkPtr;
 }
 
-static void SpeciesListMenu_ItemPrintFunc(struct ListMenu *listMenu, s32 a1, u8 unused) {
-    if (a1 == -3) {
+static void SpeciesListMenu_ItemPrintFunc(struct ListMenu *listMenu, s32 value, u8 unused) {
+    if (value == -3) {
         ListMenuOverrideSetColors(listMenu, 3, 0xf, 4);
     } else {
         ListMenuOverrideSetColors(listMenu, 1, 0xf, 2);
@@ -721,11 +721,11 @@ BOOL ScrCmd_709(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_ScreenShake(ScriptContext *ctx) {
-    u32 a1 = ScriptGetVar(ctx);
-    u32 a2 = ScriptGetVar(ctx);
-    u32 a3 = ScriptGetVar(ctx);
-    u16 a4 = ScriptGetVar(ctx);
-    ShakeScreen(ctx->fieldSystem->taskman, a1, a2, a3, a4);
+    u32 amplitudeX = ScriptGetVar(ctx);
+    u32 amplitudeY = ScriptGetVar(ctx);
+    u32 repeats = ScriptGetVar(ctx);
+    u16 period = ScriptGetVar(ctx);
+    ShakeScreen(ctx->fieldSystem->taskman, amplitudeX, amplitudeY, repeats, period);
     return TRUE;
 }
 
@@ -760,7 +760,7 @@ BOOL ScrCmd_724(ScriptContext *ctx) {
     u8 unkVar = ScriptGetVar(ctx);
     u16 *unkPtrA = ScriptGetVarPointer(ctx);
 
-    PokeathlonStatistics *unkPtrB = PokeathlonSave_GetUnkB00(Save_Pokeathlon_Get(ctx->fieldSystem->saveData));
+    PokeathlonStatistics *unkPtrB = PokeathlonSave_GetStatistics(Save_Pokeathlon_Get(ctx->fieldSystem->saveData));
 
     if (unkVar <= 9) {
         *unkPtrA = ClampToU16Max(unkPtrB->eventFirstPlaces[unkVar]);
@@ -807,7 +807,7 @@ BOOL ScrCmd_725(ScriptContext *ctx) {
     u8 unkA = ScriptReadByte(ctx);
     u32 unkB = ScriptGetVar(ctx);
 
-    PokeathlonStatistics *unkPtr = PokeathlonSave_GetAgainUnkB00(Save_Pokeathlon_Get(ctx->fieldSystem->saveData));
+    PokeathlonStatistics *unkPtr = PokeathlonSave_GetStatistics2(Save_Pokeathlon_Get(ctx->fieldSystem->saveData));
 
     if (unkA == 0) {
         val = unkPtr->unk70 + unkB;
@@ -886,7 +886,7 @@ BOOL ScrCmd_740(ScriptContext *ctx) {
 
 // Related to aprijuice stand- viewing label
 BOOL ScrCmd_741(ScriptContext *ctx) {
-    UnkStruct_02031CEC unkOut;
+    ApricornJuice unkOut;
     RTCDate date;
     s32 unkVar;
     MessageFormat **msgfmt;

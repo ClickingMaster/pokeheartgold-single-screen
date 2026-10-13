@@ -270,7 +270,7 @@ static const int sTouchArrayMainMenu[] = {
 };
 
 ALIGN(4)
-static const u8 ov12_0226EB04[] = {
+static const u8 sRectPaletteIdsMainMenu[] = {
     1,
     2,
     3,
@@ -331,7 +331,7 @@ static const int sTouchArrayPalPark[] = {
 };
 
 ALIGN(4)
-static const u8 ov12_0226EB00[] = {
+static const u8 sRectPaletteIdsPalParkMenu[] = {
     1,
     4
 };
@@ -402,7 +402,7 @@ static const int sTouchArrayFightMenu[] = {
 };
 
 ALIGN(4)
-static const u8 ov12_0226EB08[] = {
+static const u8 sRectPaletteIdsFightMenu[] = {
     4,
     8,
     9,
@@ -450,7 +450,7 @@ static const int sTouchArrayTwoOptionsMenu[] = {
 };
 
 ALIGN(4)
-static const u8 ov12_0226EAFC[] = {
+static const u8 sRectPaletteIdsTwoOptionsMenu[] = {
     1,
     4
 };
@@ -521,7 +521,7 @@ static const int sTouchArrayTargetMenu[] = {
 };
 
 ALIGN(4)
-static const u8 ov12_0226EB10[] = {
+static const u8 sRectPaletteIdsTargetMenu[] = {
     6,
     12,
     13,
@@ -560,7 +560,7 @@ static const int sTouchArrayVsRecorderPlayback[] = {
 };
 
 ALIGN(4)
-static const u8 ov12_0226E1F8[] = {
+static const u8 sRectPaletteIdsVsRecorderPlayback[] = {
     4
 };
 
@@ -599,7 +599,7 @@ static const BattleMenuTemplate sBattleMenuTemplates[] = {
                        .priority = { 2, 3, 3, 0 },
                        .touchscreenRect = sTouchscreenRectMainMenuButtons,
                        .touchInput = sTouchArrayMainMenu,
-                       .rectPaletteIds = ov12_0226EB04,
+                       .rectPaletteIds = sRectPaletteIdsMainMenu,
                        .funcCursor = BattleInput_CursorMove_MainMenu,
                        .funcSaveCursorPos = BattleInput_CursorSave_MainMenu,
                        .funcCreateMenuObjects = BattleInput_CreateMainMenuObjectsInitial,
@@ -612,7 +612,7 @@ static const BattleMenuTemplate sBattleMenuTemplates[] = {
                        .priority = { 2, 3, 3, 0 },
                        .touchscreenRect = sTouchscreenRectMainMenuButtons,
                        .touchInput = sTouchArrayMainMenu,
-                       .rectPaletteIds = ov12_0226EB04,
+                       .rectPaletteIds = sRectPaletteIdsMainMenu,
                        .funcCursor = BattleInput_CursorMove_MainMenu,
                        .funcSaveCursorPos = BattleInput_CursorSave_MainMenu,
                        .funcCreateMenuObjects = BattleInput_CreateMainMenuObjectsInitial,
@@ -625,7 +625,7 @@ static const BattleMenuTemplate sBattleMenuTemplates[] = {
                        .priority = { 2, 3, 3, 0 },
                        .touchscreenRect = sTouchscreenRectMainMenuButtons,
                        .touchInput = sTouchArrayMainMenu,
-                       .rectPaletteIds = ov12_0226EB04,
+                       .rectPaletteIds = sRectPaletteIdsMainMenu,
                        .funcCursor = BattleInput_CursorMove_MainMenu,
                        .funcSaveCursorPos = BattleInput_CursorSave_MainMenu,
                        .funcCreateMenuObjects = BattleInput_CreateMainMenuObjects,
@@ -638,7 +638,7 @@ static const BattleMenuTemplate sBattleMenuTemplates[] = {
                        .priority = { 2, 3, 3, 0 },
                        .touchscreenRect = sTouchscreenRectMainMenuButtons,
                        .touchInput = sTouchArrayMainMenu,
-                       .rectPaletteIds = ov12_0226EB04,
+                       .rectPaletteIds = sRectPaletteIdsMainMenu,
                        .funcCursor = BattleInput_CursorMove_MainMenu,
                        .funcSaveCursorPos = BattleInput_CursorSave_MainMenu,
                        .funcCreateMenuObjects = BattleInput_CreateMainMenuObjects,
@@ -651,7 +651,7 @@ static const BattleMenuTemplate sBattleMenuTemplates[] = {
                        .priority = { 2, 3, 3, 0 },
                        .touchscreenRect = ov12_0226E240,
                        .touchInput = sTouchArrayMainMenu,
-                       .rectPaletteIds = ov12_0226EB04,
+                       .rectPaletteIds = sRectPaletteIdsMainMenu,
                        .funcCursor = BattleInput_CursorMove_MainMenu,
                        .funcSaveCursorPos = BattleInput_CursorSave_MainMenu,
                        .funcCreateMenuObjects = BattleInput_CreateMainMenuFightObjectInitial,
@@ -664,7 +664,7 @@ static const BattleMenuTemplate sBattleMenuTemplates[] = {
                        .priority = { 2, 3, 3, 0 },
                        .touchscreenRect = ov12_0226E240,
                        .touchInput = sTouchArrayMainMenu,
-                       .rectPaletteIds = ov12_0226EB04,
+                       .rectPaletteIds = sRectPaletteIdsMainMenu,
                        .funcCursor = BattleInput_CursorMove_MainMenu,
                        .funcSaveCursorPos = BattleInput_CursorSave_MainMenu,
                        .funcCreateMenuObjects = BattleInput_CreateMainMenuFightObject,
@@ -677,7 +677,7 @@ static const BattleMenuTemplate sBattleMenuTemplates[] = {
                        .priority = { 2, 1, 3, 0 },
                        .touchscreenRect = sTouchscreenRectMainMenuButtons,
                        .touchInput = sTouchArrayMainMenu,
-                       .rectPaletteIds = ov12_0226EB04,
+                       .rectPaletteIds = sRectPaletteIdsMainMenu,
                        .funcCursor = BattleInput_CursorMove_MainMenu,
                        .funcSaveCursorPos = BattleInput_CursorSave_MainMenu,
                        .funcCreateMenuObjects = BattleInput_CreateMainMenuObjectsInitial,
@@ -690,7 +690,7 @@ static const BattleMenuTemplate sBattleMenuTemplates[] = {
                        .priority = { 2, 1, 3, 0 },
                        .touchscreenRect = sTouchscreenRectMainMenuButtons,
                        .touchInput = sTouchArrayMainMenu,
-                       .rectPaletteIds = ov12_0226EB04,
+                       .rectPaletteIds = sRectPaletteIdsMainMenu,
                        .funcCursor = BattleInput_CursorMove_MainMenu,
                        .funcSaveCursorPos = BattleInput_CursorSave_MainMenu,
                        .funcCreateMenuObjects = BattleInput_CreateMainMenuObjects,
@@ -703,7 +703,7 @@ static const BattleMenuTemplate sBattleMenuTemplates[] = {
                        .priority = { 2, 3, 3, 0 },
                        .touchscreenRect = sTouchscreenRectPalParkButtons,
                        .touchInput = sTouchArrayPalPark,
-                       .rectPaletteIds = ov12_0226EB00,
+                       .rectPaletteIds = sRectPaletteIdsPalParkMenu,
                        .funcCursor = BattleInput_CursorMove_PalParkMenu,
                        .funcSaveCursorPos = NULL,
                        .funcCreateMenuObjects = BattleInput_CreatePalParkMenuObjectsInitial,
@@ -716,7 +716,7 @@ static const BattleMenuTemplate sBattleMenuTemplates[] = {
                        .priority = { 2, 3, 3, 0 },
                        .touchscreenRect = sTouchscreenRectPalParkButtons,
                        .touchInput = sTouchArrayPalPark,
-                       .rectPaletteIds = ov12_0226EB00,
+                       .rectPaletteIds = sRectPaletteIdsPalParkMenu,
                        .funcCursor = BattleInput_CursorMove_PalParkMenu,
                        .funcSaveCursorPos = NULL,
                        .funcCreateMenuObjects = BattleInput_CreatePalParkMenuObjects,
@@ -729,7 +729,7 @@ static const BattleMenuTemplate sBattleMenuTemplates[] = {
                        .priority = { 2, 1, 3, 0 },
                        .touchscreenRect = sTouchscreenRectFightMenuButtons,
                        .touchInput = sTouchArrayFightMenu,
-                       .rectPaletteIds = ov12_0226EB08,
+                       .rectPaletteIds = sRectPaletteIdsFightMenu,
                        .funcCursor = BattleInput_CursorMove_FightMenu,
                        .funcSaveCursorPos = BattleInput_CursorSave_FightMenu,
                        .funcCreateMenuObjects = BattleInput_CreateFightMenuObjects,
@@ -742,7 +742,7 @@ static const BattleMenuTemplate sBattleMenuTemplates[] = {
                        .priority = { 2, 1, 3, 0 },
                        .touchscreenRect = sTouchscreenRectTargetMenuButtons,
                        .touchInput = sTouchArrayTargetMenu,
-                       .rectPaletteIds = ov12_0226EB10,
+                       .rectPaletteIds = sRectPaletteIdsTargetMenu,
                        .funcCursor = BattleInput_CursorMove_TargetMenu,
                        .funcSaveCursorPos = BattleInput_CursorSave_TargetMenu,
                        .funcCreateMenuObjects = BattleInput_CreateTargetMenuObjects,
@@ -755,7 +755,7 @@ static const BattleMenuTemplate sBattleMenuTemplates[] = {
                        .priority = { 2, 1, 3, 0 },
                        .touchscreenRect = sTouchscreenRectTwoOptionsMenuButtons,
                        .touchInput = sTouchArrayTwoOptionsMenu,
-                       .rectPaletteIds = ov12_0226EAFC,
+                       .rectPaletteIds = sRectPaletteIdsTwoOptionsMenu,
                        .funcCursor = BattleInput_CursorMove_TwoOptionsMenu,
                        .funcSaveCursorPos = NULL,
                        .funcCreateMenuObjects = BattleInput_CreateYesNoMenuObjects,
@@ -768,7 +768,7 @@ static const BattleMenuTemplate sBattleMenuTemplates[] = {
                        .priority = { 2, 1, 3, 0 },
                        .touchscreenRect = sTouchscreenRectTwoOptionsMenuButtons,
                        .touchInput = sTouchArrayTwoOptionsMenu,
-                       .rectPaletteIds = ov12_0226EAFC,
+                       .rectPaletteIds = sRectPaletteIdsTwoOptionsMenu,
                        .funcCursor = BattleInput_CursorMove_TwoOptionsMenu,
                        .funcSaveCursorPos = NULL,
                        .funcCreateMenuObjects = BattleInput_CreateKeepForgetMenuObjects,
@@ -781,7 +781,7 @@ static const BattleMenuTemplate sBattleMenuTemplates[] = {
                        .priority = { 2, 1, 3, 0 },
                        .touchscreenRect = sTouchscreenRectTwoOptionsMenuButtons,
                        .touchInput = sTouchArrayTwoOptionsMenu,
-                       .rectPaletteIds = ov12_0226EAFC,
+                       .rectPaletteIds = sRectPaletteIdsTwoOptionsMenu,
                        .funcCursor = BattleInput_CursorMove_TwoOptionsMenu,
                        .funcSaveCursorPos = NULL,
                        .funcCreateMenuObjects = BattleInput_CreateGiveUpOnMoveMenuObjects,
@@ -794,7 +794,7 @@ static const BattleMenuTemplate sBattleMenuTemplates[] = {
                        .priority = { 2, 1, 3, 0 },
                        .touchscreenRect = sTouchscreenRectTwoOptionsMenuButtons,
                        .touchInput = sTouchArrayTwoOptionsMenu,
-                       .rectPaletteIds = ov12_0226EAFC,
+                       .rectPaletteIds = sRectPaletteIdsTwoOptionsMenu,
                        .funcCursor = BattleInput_CursorMove_TwoOptionsMenu,
                        .funcSaveCursorPos = NULL,
                        .funcCreateMenuObjects = BattleInput_CreateSwitchOrFleeMenuObjects,
@@ -807,7 +807,7 @@ static const BattleMenuTemplate sBattleMenuTemplates[] = {
                        .priority = { 2, 1, 3, 0 },
                        .touchscreenRect = sTouchscreenRectTwoOptionsMenuButtons,
                        .touchInput = sTouchArrayTwoOptionsMenu,
-                       .rectPaletteIds = ov12_0226EAFC,
+                       .rectPaletteIds = sRectPaletteIdsTwoOptionsMenu,
                        .funcCursor = BattleInput_CursorMove_TwoOptionsMenu,
                        .funcSaveCursorPos = NULL,
                        .funcCreateMenuObjects = BattleInput_CreateSwitchOrKeepMenuObjects,
@@ -820,7 +820,7 @@ static const BattleMenuTemplate sBattleMenuTemplates[] = {
                        .priority = { 2, 3, 3, 0 },
                        .touchscreenRect = sTouchscreenRectVsRecorderPlaybackButton,
                        .touchInput = sTouchArrayVsRecorderPlayback,
-                       .rectPaletteIds = ov12_0226E1F8,
+                       .rectPaletteIds = sRectPaletteIdsVsRecorderPlayback,
                        .funcCursor = NULL,
                        .funcSaveCursorPos = NULL,
                        .funcCreateMenuObjects = BattleInput_CreateVSRecorderPlaybackMenuObjects,
@@ -833,7 +833,7 @@ static const BattleMenuTemplate sBattleMenuTemplates[] = {
                        .priority = { 2, 3, 3, 0 },
                        .touchscreenRect = sTouchscreenRectMainMenuButtons,
                        .touchInput = sTouchArrayMainMenu,
-                       .rectPaletteIds = ov12_0226EB04,
+                       .rectPaletteIds = sRectPaletteIdsMainMenu,
                        .funcCursor = BattleInput_CursorMove_MainMenu,
                        .funcSaveCursorPos = BattleInput_CursorSave_MainMenu,
                        .funcCreateMenuObjects = BattleInput_CreateMainMenuObjectsInitial,
@@ -846,7 +846,7 @@ static const BattleMenuTemplate sBattleMenuTemplates[] = {
                        .priority = { 2, 3, 3, 0 },
                        .touchscreenRect = sTouchscreenRectMainMenuButtons,
                        .touchInput = sTouchArrayMainMenu,
-                       .rectPaletteIds = ov12_0226EB04,
+                       .rectPaletteIds = sRectPaletteIdsMainMenu,
                        .funcCursor = BattleInput_CursorMove_MainMenu,
                        .funcSaveCursorPos = BattleInput_CursorSave_MainMenu,
                        .funcCreateMenuObjects = BattleInput_CreateMainMenuObjects,
@@ -880,7 +880,7 @@ static const ManagedSpriteTemplate sBallGaugeOpponentTemplate = {
     .vramTransfer = 0
 };
 
-static const ManagedSpriteTemplate ov12_0226E4B0 = {
+static const ManagedSpriteTemplate sSpriteTemplateTypeIcon = {
     .x = 0,
     .y = 0,
     .z = 0,
@@ -893,7 +893,7 @@ static const ManagedSpriteTemplate ov12_0226E4B0 = {
     .vramTransfer = 0
 };
 
-static const ManagedSpriteTemplate ov12_0226E4E4 = {
+static const ManagedSpriteTemplate sSpriteTemplatePokemonIcon = {
     .x = 0,
     .y = 0,
     .z = 0,
@@ -1030,10 +1030,10 @@ static const TouchscreenHitbox sFightMenuButtonsTouchscreenRect[] = {
 };
 
 ALIGN(4)
-static const s16 ov12_0226E258[] = { 0x22F, 0x22C, 0x229, 0x226 };
+static const s16 sEmptyMoveButtonsScreenOffsets[] = { 0x22F, 0x22C, 0x229, 0x226 };
 
 ALIGN(4)
-static const TouchscreenHitbox ov12_0226E2A8[] = {
+static const TouchscreenHitbox sEmptyMoveButtonsTouchscreenRect[] = {
     {
      .rect = {
             .top = 3,
@@ -1078,7 +1078,7 @@ static const s16 sTargetMenuButtonsScreenOffsets[][3] = {
 };
 
 ALIGN(4)
-static const TouchscreenHitbox ov12_0226E348[] = {
+static const TouchscreenHitbox sTargetMenuButtonsTouchscreenRect[] = {
     {
      .rect = {
             .top = 10,
@@ -1122,7 +1122,7 @@ static const TouchscreenHitbox ov12_0226E348[] = {
 };
 
 ALIGN(4)
-static const s16 ov12_0226E238[] = {
+static const s16 sEmptyTargetButtonsScreenOffsets[] = {
     0x238,
     0x235,
     0x232,
@@ -1130,7 +1130,7 @@ static const s16 ov12_0226E238[] = {
 };
 
 ALIGN(4)
-static const TouchscreenHitbox ov12_0226E2F8[] = {
+static const TouchscreenHitbox sEmptyTargetButtonsTouchscreenRect[] = {
     {
      .rect = {
             .top = 0xB,
@@ -1166,13 +1166,13 @@ static const TouchscreenHitbox ov12_0226E2F8[] = {
 };
 
 ALIGN(4)
-static const s16 ov12_0226E286[][3] = {
+static const s16 sTwoOptionsMenuButtonsScreenOffsets[][3] = {
     { 0, 5,   10  },
     { 0, 192, 384 }
 };
 
 ALIGN(4)
-static const TouchscreenHitbox ov12_0226E24C[] = {
+static const TouchscreenHitbox sTwoOptionsMenuButtonsTouchscreenRect[] = {
     {
      .rect = {
             .top = 13,
@@ -1192,10 +1192,10 @@ static const TouchscreenHitbox ov12_0226E24C[] = {
 };
 
 ALIGN(4)
-static const s16 ov12_0226E228[] = { 0, 192, 384 };
+static const s16 sVsRecorderButtonScreenOffsets[] = { 0, 192, 384 };
 
 ALIGN(4)
-static const TouchscreenHitbox ov12_0226E20C = {
+static const TouchscreenHitbox sVsRecorderButtonTouchscreenRect = {
     .rect = {
              .top = 18,
              .bottom = 23,
@@ -2428,11 +2428,11 @@ static int BattleInput_TouchCallback_TwoOptionMenu(BattleInput *battleInput, int
     BattleInput_StartFeedbackTask(Task_ButtonFeedback, battleInput);
 
     if (touchInput == BATTLE_INPUT_YES) {
-        battleInput->feedback.button.screenOffsets = ov12_0226E286[1];
-        battleInput->feedback.button.touchscreenHitbox = &ov12_0226E24C[1];
+        battleInput->feedback.button.screenOffsets = sTwoOptionsMenuButtonsScreenOffsets[1];
+        battleInput->feedback.button.touchscreenHitbox = &sTwoOptionsMenuButtonsTouchscreenRect[1];
     } else {
-        battleInput->feedback.button.screenOffsets = ov12_0226E286[0];
-        battleInput->feedback.button.touchscreenHitbox = &ov12_0226E24C[0];
+        battleInput->feedback.button.screenOffsets = sTwoOptionsMenuButtonsScreenOffsets[0];
+        battleInput->feedback.button.touchscreenHitbox = &sTwoOptionsMenuButtonsTouchscreenRect[0];
     }
 
     battleInput->feedback.button.bufferIndex = 6;
@@ -2481,7 +2481,7 @@ static int BattleInput_TouchCallback_TargetMenu(BattleInput *battleInput, int to
         BattleInput_StartFeedbackTask(Task_ButtonFeedback, battleInput);
 
         battleInput->feedback.button.screenOffsets = sTargetMenuButtonsScreenOffsets[4];
-        battleInput->feedback.button.touchscreenHitbox = &ov12_0226E348[4];
+        battleInput->feedback.button.touchscreenHitbox = &sTargetMenuButtonsTouchscreenRect[4];
         battleInput->feedback.button.bufferIndex = 4;
         battleInput->feedback.button.ret = touchInput;
         battleInput->feedback.button.textObjId = 4;
@@ -2517,8 +2517,8 @@ static int BattleInput_TouchCallback_VSRecorderMenu(BattleInput *battleInput, in
     BattleInput_ButtonFeedbackDummy(battleInput, unused);
     BattleInput_StartFeedbackTask(Task_ButtonFeedback, battleInput);
 
-    battleInput->feedback.button.screenOffsets = ov12_0226E228;
-    battleInput->feedback.button.touchscreenHitbox = &ov12_0226E20C;
+    battleInput->feedback.button.screenOffsets = sVsRecorderButtonScreenOffsets;
+    battleInput->feedback.button.touchscreenHitbox = &sVsRecorderButtonTouchscreenRect;
     battleInput->feedback.button.bufferIndex = 6;
     battleInput->feedback.button.ret = touchInput;
     battleInput->feedback.button.textObjId = 0;
@@ -2613,7 +2613,7 @@ static ManagedSprite *BattleInput_SetPokemonIcon(BattleInput *battleInput, Pokem
 
     SpriteSystem_LoadCharResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, Pokemon_GetIconNaix(pokemon), 0, NNS_G2D_VRAM_TYPE_2DSUB, resId);
 
-    spriteTemplate = ov12_0226E4E4;
+    spriteTemplate = sSpriteTemplatePokemonIcon;
     spriteTemplate.resIdList[0] = resId;
     spriteTemplate.x = sPokemonIconPositions[battler][0];
     spriteTemplate.y = sPokemonIconPositions[battler][1];
@@ -2663,7 +2663,7 @@ static ManagedSprite *BattleInput_SetBugContestPokemonIcon(BattleInput *battleIn
 
     SpriteSystem_LoadCharResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, Pokemon_GetIconNaix(pokemon), 0, NNS_G2D_VRAM_TYPE_2DSUB, 20039);
 
-    ManagedSpriteTemplate spriteTemplate = ov12_0226E4E4;
+    ManagedSpriteTemplate spriteTemplate = sSpriteTemplatePokemonIcon;
     spriteTemplate.resIdList[0] = 20039;
     spriteTemplate.x = 120;
     spriteTemplate.y = 8;
@@ -2972,7 +2972,7 @@ static void BattleInput_CreateMoveTypeIcons(BattleInput *battleInput) {
     renderer = BattleSystem_GetSpriteSystem(battleInput->battleSystem);
     spriteManager = BattleSystem_GetSpriteManager(battleInput->battleSystem);
     moveDisplayObj = BattleInput_GetMoveMemory(battleInput, battleInput->battlerType);
-    typeIconTemplate = ov12_0226E4B0;
+    typeIconTemplate = sSpriteTemplateTypeIcon;
 
     for (i = 0; i < MAX_MON_MOVES; i++) {
         GF_ASSERT(battleInput->spriteTypeIcons[i] == 0);
@@ -3035,7 +3035,7 @@ static void BattleInput_SetEmptyMoveButtons(BattleInput *battleInput, int movePo
     palette = BattleSystem_GetPaletteData(battleInput->battleSystem);
 
     for (i = movePos; i < 4; i++) {
-        BattleInput_CopyButtonTilemap(battleInput, &ov12_0226E258[i], &ov12_0226E2A8[i], 3, 0);
+        BattleInput_CopyButtonTilemap(battleInput, &sEmptyMoveButtonsScreenOffsets[i], &sEmptyMoveButtonsTouchscreenRect[i], 3, 0);
         PaletteData_LoadPalette(palette, &battleInput->paletteBuffer[14 * 16], PLTTBUF_SUB_BG, (8 + i) * 16, 0x20);
     }
 }
@@ -3047,11 +3047,11 @@ static void BattleInput_SetEmptyTargetButton(BattleInput *battleInput, int textO
     BgConfig *bgConfig = BattleSystem_GetBgConfig(battleInput->battleSystem);
     palette = BattleSystem_GetPaletteData(battleInput->battleSystem);
 
-    BattleInput_CopyButtonTilemap(battleInput, &ov12_0226E238[textObjId], &ov12_0226E2F8[textObjId], 4, 0);
+    BattleInput_CopyButtonTilemap(battleInput, &sEmptyTargetButtonsScreenOffsets[textObjId], &sEmptyTargetButtonsTouchscreenRect[textObjId], 4, 0);
 
     PaletteData_LoadPalette(palette, &battleInput->paletteBuffer[14 * 16], PLTTBUF_SUB_BG, paletteNo[textObjId] * 16, 0x20);
     ScheduleBgTilemapBufferTransfer(bgConfig, 4);
-    FillBgTilemapRect(bgConfig, 5, 0x6000 / 0x20 - 1, ov12_0226E2F8[textObjId].rect.left, ov12_0226E2F8[textObjId].rect.top, ov12_0226E2F8[textObjId].rect.right - ov12_0226E2F8[textObjId].rect.left + 1, ov12_0226E2F8[textObjId].rect.bottom - ov12_0226E2F8[textObjId].rect.top + 1, 17);
+    FillBgTilemapRect(bgConfig, 5, 0x6000 / 0x20 - 1, sEmptyTargetButtonsTouchscreenRect[textObjId].rect.left, sEmptyTargetButtonsTouchscreenRect[textObjId].rect.top, sEmptyTargetButtonsTouchscreenRect[textObjId].rect.right - sEmptyTargetButtonsTouchscreenRect[textObjId].rect.left + 1, sEmptyTargetButtonsTouchscreenRect[textObjId].rect.bottom - sEmptyTargetButtonsTouchscreenRect[textObjId].rect.top + 1, 17);
     ScheduleBgTilemapBufferTransfer(bgConfig, 5);
 }
 
@@ -3366,7 +3366,7 @@ static void Task_TargetMenuButtonFeedback(SysTask *task, void *data) {
 
         for (i = 0; i < 4; i++) {
             if (v4[i] == 1) {
-                BattleInput_CopyButtonTilemap(battleInput, sTargetMenuButtonsScreenOffsets[i], &ov12_0226E348[i], 4, 2);
+                BattleInput_CopyButtonTilemap(battleInput, sTargetMenuButtonsScreenOffsets[i], &sTargetMenuButtonsTouchscreenRect[i], 4, 2);
 
                 if (battleInput->textObj[0 + i].textObj != 0) {
                     TextOBJ_GetPosition(battleInput->textObj[0 + i].textObj, &x, &y);
@@ -3395,7 +3395,7 @@ static void Task_TargetMenuButtonFeedback(SysTask *task, void *data) {
 
         for (i = 0; i < 4; i++) {
             if (v4[i] == 1) {
-                BattleInput_CopyButtonTilemap(battleInput, sTargetMenuButtonsScreenOffsets[i], &ov12_0226E348[i], 4, 1);
+                BattleInput_CopyButtonTilemap(battleInput, sTargetMenuButtonsScreenOffsets[i], &sTargetMenuButtonsTouchscreenRect[i], 4, 1);
 
                 if (battleInput->textObj[0 + i].textObj != 0) {
                     TextOBJ_GetPosition(battleInput->textObj[0 + i].textObj, &x, &y);

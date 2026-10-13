@@ -4,19 +4,19 @@
 #include "pm_string.h"
 #include "save.h"
 
-typedef struct UnkStruct_02031CEC {
+typedef struct ApricornJuice {
     u16 unk0;
     u8 unk2;
     u8 unk3;
     u32 unk4;
-} UnkStruct_02031CEC; // size: 0x8
+} ApricornJuice; // size: 0x8
 
 typedef struct SaveApricornBox SaveApricornBox;
 
 SaveApricornBox *Save_ApricornBox_Get(SaveData *saveData);
 void sub_02031CCC(SaveApricornBox *, int);
-BOOL ApricornBox_GetJuice(SaveApricornBox *apricornBox, int a1, UnkStruct_02031CEC *a2);
-int ApricornJuice_GetFlavorTotal(UnkStruct_02031CEC *a0);
+BOOL ApricornBox_GetJuice(SaveApricornBox *apricornBox, int a1, ApricornJuice *a2);
+int ApricornJuice_GetFlavorTotal(ApricornJuice *a0);
 void ApricornBox_UpdateSteps(SaveApricornBox *saveApricornBox, u32 steps);
 String *ApricornBox_GetJuiceName(SaveApricornBox *apricornBox, int a1, u32 a2);
 String *ApricornBox_GetJuiceFlavorName(SaveApricornBox *apricornBox, u16 a1, u32 a2);

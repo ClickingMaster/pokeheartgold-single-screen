@@ -27,8 +27,8 @@ typedef struct {
     u8 sprite;
     u8 pad9[3];
     void *unkC;
-    struct UnkStruct_0206793C *effect1;
-    struct UnkStruct_0206793C *effect2;
+    struct FieldEffect *effect1;
+    struct FieldEffect *effect2;
 } Slot;
 
 typedef struct {
@@ -43,8 +43,8 @@ typedef struct {
     u8 sprite;
     u8 pad15[3];
     void *unkC;
-    struct UnkStruct_0206793C *effect1;
-    struct UnkStruct_0206793C *effect2;
+    struct FieldEffect *effect1;
+    struct FieldEffect *effect2;
 } SlotCursor;
 
 typedef struct {

@@ -735,14 +735,14 @@ void SetupAndStartTrainerBattle(TaskManager *taskManager, u32 opponentTrainer1, 
     CallTask_StartEncounter(taskManager, setup, BattleSetup_GetWildTransitionEffect(setup), BattleSetup_GetWildBattleMusic(setup), winFlag);
 }
 
-void CallTask_LinkBattle(TaskManager *taskManager, void *param1, u32 battleType) {
+void CallTask_LinkBattle(TaskManager *taskManager, void *partySlots, u32 battleType) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     Encounter *encounter;
     BattleSetup *setup;
 
     setup = BattleSetup_New(HEAP_ID_FIELD2, battleType);
 
-    BattleSetup_InitForLinkBattle(setup, fieldSystem, param1);
+    BattleSetup_InitForLinkBattle(setup, fieldSystem, partySlots);
 
     encounter = Encounter_New(setup, BattleSetup_GetWildTransitionEffect(setup), BattleSetup_GetWildBattleMusic(setup), NULL);
     TaskManager_Call(taskManager, Task_LinkBattle, encounter);
@@ -822,12 +822,12 @@ static BOOL Task_CommClubLinkBattle(TaskManager *taskManager) {
     return FALSE;
 }
 
-void FieldSystem_StartCommClubLinkBattle(FieldSystem *fieldSystem, void *param1, s32 battleType) {
+void FieldSystem_StartCommClubLinkBattle(FieldSystem *fieldSystem, void *partySlots, s32 battleType) {
     Encounter *encounter;
     BattleSetup *setup = BattleSetup_New(HEAP_ID_FIELD2, battleType);
     u32 var;
 
-    BattleSetup_InitForLinkBattle(setup, fieldSystem, param1);
+    BattleSetup_InitForLinkBattle(setup, fieldSystem, partySlots);
     BattleRecord_Create(fieldSystem->saveData, HEAP_ID_FIELD2, &var);
 
     setup->linkBattleMode = Encounter_GetLinkBattleMode(fieldSystem->linkBattleRuleset, battleType);

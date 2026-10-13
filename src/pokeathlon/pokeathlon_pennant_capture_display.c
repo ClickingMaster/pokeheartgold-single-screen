@@ -66,7 +66,7 @@ PokeathlonPennantCaptureDisplay *PokeathlonPennantCaptureDisplay_New(enum HeapID
     for (i = 0; i < 3; i++) {
         display->names[i] = String_New(11, heapId);
     }
-    participant = PokeathlonCourse_GetParticipantUnk04(course, PokeathlonCourse_GetNetId(course));
+    participant = PokeathlonCourse_GetParticipantMons(course, PokeathlonCourse_GetNetId(course));
     for (int j = 0; j < 3; j++) {
         CopyU16ArrayToString(display->names[j], (u16 *)(participant + 0x12));
         participant += 0x28;

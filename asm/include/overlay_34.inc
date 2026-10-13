@@ -70,7 +70,7 @@
 .public PlayerProfile_GetTrainerID
 .public PlayerProfile_GetTrainerGender
 .public PalPad_GetNthEntry
-.public PalPadEntry_GetFromUnk68Array
+.public PalPadEntry_GetFriendLanguage
 .public PalPad_PlayerIdIsFriendOrMutual
 .public CommWireless_GetParentInfo
 .public CommWireless_GetProfile

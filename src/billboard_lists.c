@@ -218,8 +218,8 @@ BOOL Billboard_HasPendingFree(Billboard *billboard) {
     return TRUE;
 }
 
-void Billboard_ClearPendingFree(void *arg0) {
-    Billboard *billboard = arg0;
+void Billboard_ClearPendingFree(void *data) {
+    Billboard *billboard = data;
     if (billboard->state == 2) {
         billboard->state = 0;
     }

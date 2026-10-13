@@ -346,7 +346,7 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
             i = 0;
             out = mons;
             for (; i < 4; i++) {
-                PokeathlonHurdleDashTeamMon *mon = (PokeathlonHurdleDashTeamMon *)PokeathlonCourse_GetParticipantUnk04(course, i);
+                PokeathlonHurdleDashTeamMon *mon = (PokeathlonHurdleDashTeamMon *)PokeathlonCourse_GetParticipantMons(course, i);
                 for (j = 0; j < 3; j++) {
                     (*out)[0] = mon->species;
                     (*out)[1] = mon->form;

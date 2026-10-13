@@ -1,10 +1,9 @@
 #ifndef POKEHEARTGOLD_UNK_0206793C_H
 #define POKEHEARTGOLD_UNK_0206793C_H
 
+#include "field/field_effect_manager.h"
 #include "npc_trade.h"
 #include "script.h"
-
-typedef struct UnkStruct_0206793C UnkStruct_0206793C;
 
 void FieldSystem_ClearFollowingTrainer(FieldSystem *fieldSystem);
 void FieldSystem_ResetStateOnWarp(FieldSystem *fieldSystem);
@@ -13,7 +12,7 @@ void FieldSystem_ResetStateOnFlyWarp(FieldSystem *fieldSystem);
 void FieldSystem_ClearSafariAndRandomizeRoamers(FieldSystem *fieldSystem);
 void FieldSystem_ClearSafariSysFlag(FieldSystem *fieldSystem);
 void FieldSystem_RandomizeRoamers(FieldSystem *fieldSystem);
-BOOL FieldEffect_IsActive(UnkStruct_0206793C *unk);
+BOOL FieldEffect_IsActive(FieldEffect *unk);
 void CallTask_NPCTrade(TaskManager *taskManager, NPCTradeAppData *tradeWork, u16 arg, enum HeapID heapID);
 
 #endif // POKEHEARTGOLD_UNK_0206793C_H

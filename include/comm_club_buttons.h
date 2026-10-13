@@ -12,8 +12,8 @@ typedef struct CommClubButtonsArgs {
     u16 selection;   // touched button, 0xFFFF = none
 } CommClubButtonsArgs;
 
-SysTask *CommClubButtons_Init(BgConfig *bgConfig, void *a1, void *a2, CommClubButtonsArgs *args);
-void CommClubButtons_Exit(void *a0, SysTask *task);
+SysTask *CommClubButtons_Init(BgConfig *bgConfig, void *lastTouchMenuInput, void *fieldSystem, CommClubButtonsArgs *args);
+void CommClubButtons_Exit(void *bgConfig, SysTask *task);
 BOOL CommClubButtons_IsExitDone(void);
 
 #endif // POKEHEARTGOLD_COMM_CLUB_BUTTONS_H

@@ -125,7 +125,7 @@ typedef struct NintendoWfcConnect {
     int roomCount;                              // 0x0098
     u32 room;                                   // 0x009C
     u8 downloadBuffer[0xA38];                   // 0x00A0
-    UnkStruct_02069528 uploadRecord;            // 0x0AD8
+    FrontierWifiUploadRecord uploadRecord;            // 0x0AD8
     u8 filler_0BBC[0x14];                       // 0x0BBC
     MessageFormat *msgFormat;                   // 0x0BD0
     MsgData *msgDataTower;                      // 0x0BD4, Wi-Fi Battle Tower (bank 774)
@@ -363,7 +363,7 @@ void NintendoWfcHttp_Init(u32 profileId, u64 friendKey);
 BOOL NintendoWfcHttp_IsDone(void);
 void NintendoWfcHttp_RequestRoomCount(int rank);
 void NintendoWfcHttp_RequestDownload(int rank, int room, void *buffer);
-void NintendoWfcHttp_RequestUpload(int rank, int room, int a2, UnkStruct_02069528 *record);
+void NintendoWfcHttp_RequestUpload(int rank, int room, int a2, FrontierWifiUploadRecord *record);
 void NintendoWfcHttp_RequestInfo(void);
 void NintendoWfcHttp_RequestSetProfile(WifiServerProfile *profile, u32 *response);
 BOOL NintendoWfc_Init(OverlayManager *man, int *state);
@@ -659,12 +659,12 @@ void NintendoWfcHttp_RequestDownload(int rank, int room, void *buffer) {
 
 #pragma force_active on
 
-void NintendoWfcHttp_RequestUpload(int rank, int room, int a2, UnkStruct_02069528 *record) {
+void NintendoWfcHttp_RequestUpload(int rank, int room, int a2, FrontierWifiUploadRecord *record) {
     u8 *dst;
     u8 *src;
     u32 n;
     GameStats_Start();
-    memcpy(ov72_0223B834, record, sizeof(UnkStruct_02069528));
+    memcpy(ov72_0223B834, record, sizeof(FrontierWifiUploadRecord));
     // the request continues after the record: rank, room, a2 and the friend key
     ov72_0223B900[0x18] = rank - 1;
     ov72_0223B900[0x19] = room - 1;

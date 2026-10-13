@@ -126,7 +126,7 @@ typedef struct BallCapsuleEditor {
     BallCapsuleEditorDisplay display;                        // 0x0D4
     TouchscreenListMenu *menu;                               // 0x24C
     void *pokepicEffect;                                     // 0x250, BallSealEffect_New
-    UnkBallData *ballData;                                   // 0x254
+    BallThrow *ballData;                                   // 0x254
     GF3DVramMan *vramMan;                                    // 0x258
     FontSystem *fontSystem;                          // 0x25C
     TextOBJ *buttonLabels[2];                                // 0x260, OK / CANCEL
@@ -217,8 +217,8 @@ BOOL BallSealEffect_IsLoaded(void *effect);
 void BallSealEffect_Start(void *effect);
 BOOL BallSealEffect_IsActive(void *effect);
 void BallSealEffect_Free(void *effect);
-BOOL UnkBallData_IsActive(UnkBallData *data);
-BOOL UnkBallData_HasOpened(UnkBallData *data);
+BOOL BallThrow_IsActive(BallThrow *data);
+BOOL BallThrow_HasOpened(BallThrow *data);
 s32 BallSealEffect_GetDistance(s32 x1, s32 y1, s32 x2, s32 y2);
 
 // Defined in pokepic_animation.c / render_window.c; not declared in a public header.
@@ -2416,10 +2416,10 @@ other:
 // "Confirming...": the party Pokémon (or the first non-Egg) comes out of its ball with the capsule's seals.
 int BallCapsuleEditor_PreviewCapsule(BallCapsuleEditor *editor) {
     u32 capsuleId;
-    UnkStruct_134 ballParams;
+    BattleBallParams ballParams;
     CAPSULE capsule;
     BallCapsuleEditorPokepicEffectParams effectParams;
-    UnkStruct_134 ballParams2;
+    BattleBallParams ballParams2;
     int result;
 
     switch (editor->subState) {
@@ -2446,7 +2446,7 @@ int BallCapsuleEditor_PreviewCapsule(BallCapsuleEditor *editor) {
             ballParams.spriteSystem = editor->display.spriteSystem;
             ballParams.paletteData = editor->display.paletteData;
             ballParams.ball = GetMonData(editor->previewMon, MON_DATA_POKEBALL, NULL);
-            editor->ballData = UnkBallData_New(&ballParams);
+            editor->ballData = BallThrow_New(&ballParams);
             editor->subState++;
         }
         break;
@@ -2468,7 +2468,7 @@ int BallCapsuleEditor_PreviewCapsule(BallCapsuleEditor *editor) {
         editor->subStateValue = 0;
         break;
     case 3:
-        if (BallSealEffect_IsLoaded(editor->pokepicEffect) == TRUE && UnkBallData_HasOpened(editor->ballData) == TRUE) {
+        if (BallSealEffect_IsLoaded(editor->pokepicEffect) == TRUE && BallThrow_HasOpened(editor->ballData) == TRUE) {
             BallCapsuleEditor_GrowPreviewPokepic(editor);
             BallSealEffect_Start(editor->pokepicEffect);
             BallCapsuleEditor_SetPreviewPokepicHidden(editor, FALSE);
@@ -2479,8 +2479,8 @@ int BallCapsuleEditor_PreviewCapsule(BallCapsuleEditor *editor) {
         break;
     case 4:
         result = BallCapsuleEditor_GrowPreviewPokepic(editor);
-        if (UnkBallData_IsActive(editor->ballData) == FALSE && result == FALSE) {
-            UnkBallData_Delete(editor->ballData);
+        if (BallThrow_IsActive(editor->ballData) == FALSE && result == FALSE) {
+            BallThrow_Delete(editor->ballData);
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
             BallCapsuleEditor_StartPreviewPokepicAnim(editor);
             editor->subStateValue = 0;
@@ -2506,7 +2506,7 @@ int BallCapsuleEditor_PreviewCapsule(BallCapsuleEditor *editor) {
             ballParams2.spriteSystem = editor->display.spriteSystem;
             ballParams2.paletteData = editor->display.paletteData;
             ballParams2.ball = GetMonData(editor->previewMon, MON_DATA_POKEBALL, NULL);
-            editor->ballData = UnkBallData_New(&ballParams2);
+            editor->ballData = BallThrow_New(&ballParams2);
             BallCapsuleEditor_ResetBlend();
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
             editor->subState++;
@@ -2514,12 +2514,12 @@ int BallCapsuleEditor_PreviewCapsule(BallCapsuleEditor *editor) {
         break;
     case 7:
         result = BallCapsuleEditor_ShrinkPreviewPokepic(editor);
-        if (UnkBallData_IsActive(editor->ballData) == FALSE && result == FALSE) {
+        if (BallThrow_IsActive(editor->ballData) == FALSE && result == FALSE) {
             PaletteData_BeginPaletteFade(editor->display.paletteData, 2, 0x80B, 0, 10, 0, RGB_BLACK);
             PaletteData_BeginPaletteFade(editor->display.paletteData, 8, 0xFFFF, 0, 10, 0, RGB_BLACK);
             BallCapsuleEditor_SetPreviewPokepicHidden(editor, TRUE);
             BallCapsuleEditor_DeletePreviewPokepic(editor);
-            UnkBallData_Delete(editor->ballData);
+            BallThrow_Delete(editor->ballData);
             editor->subState++;
         }
         break;

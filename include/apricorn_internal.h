@@ -35,7 +35,7 @@ typedef struct ApricornRecord {
     u8 version;
     u8 padding;
     u16 name[8];
-    UnkStruct_02031CEC data;
+    ApricornJuice data;
 } ApricornRecord;
 
 typedef struct ApricornMix {
@@ -46,9 +46,9 @@ typedef struct ApricornMix {
 int ApricornBox_CountQueuedApricorns(SaveApricornBox *);
 int ApricornBox_TakeApricorn(SaveApricornBox *, int, u32);
 void ClearApricornJuice(void *);
-BOOL ApricornBox_GetJuice(SaveApricornBox *, int, UnkStruct_02031CEC *);
-BOOL ApricornJuice_IsValid(UnkStruct_02031CEC *);
-int ApricornJuice_GetFlavorTotal(UnkStruct_02031CEC *);
+BOOL ApricornBox_GetJuice(SaveApricornBox *, int, ApricornJuice *);
+BOOL ApricornJuice_IsValid(ApricornJuice *);
+int ApricornJuice_GetFlavorTotal(ApricornJuice *);
 void ApricornJuice_RankFlavors(void *, void *);
 void ApricornBox_SetMixState(SaveApricornBox *, u32);
 void sub_02032340(SaveApricornBox *, u8);

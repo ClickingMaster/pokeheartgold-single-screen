@@ -245,24 +245,24 @@ void Field_PlayerAvatar_TransitionToWalking(PlayerAvatar *playerAvatar) {
     u32 surfMount;
     Field_PlayerAvatar_SetSprite(playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_WALKING, PlayerAvatar_GetGender(playerAvatar)));
     PlayerAvatar_SetState(playerAvatar, PLAYER_STATE_WALKING);
-    PlayerAvatar_ClearUnk24ClearFlag2(playerAvatar);
-    surfMount = PlayerAvatar_GetUnk34(playerAvatar);
+    PlayerAvatar_ClearSpeedAndFlag2(playerAvatar);
+    surfMount = PlayerAvatar_GetSurfMountEffect(playerAvatar);
     if (surfMount != 0) {
         FieldEffectManager_DestroyEffect(surfMount);
     }
-    PlayerAvatar_SetUnk34(playerAvatar, 0);
+    PlayerAvatar_SetSurfMountEffect(playerAvatar, 0);
 }
 
 void Field_PlayerAvatar_TransitionToCycling(PlayerAvatar *playerAvatar) {
     u32 surfMount;
     Field_PlayerAvatar_SetSprite(playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_CYCLING, PlayerAvatar_GetGender(playerAvatar)));
     PlayerAvatar_SetState(playerAvatar, PLAYER_STATE_CYCLING);
-    PlayerAvatar_ClearUnk24ClearFlag2(playerAvatar);
-    surfMount = PlayerAvatar_GetUnk34(playerAvatar);
+    PlayerAvatar_ClearSpeedAndFlag2(playerAvatar);
+    surfMount = PlayerAvatar_GetSurfMountEffect(playerAvatar);
     if (surfMount != 0) {
         FieldEffectManager_DestroyEffect(surfMount);
     }
-    PlayerAvatar_SetUnk34(playerAvatar, 0);
+    PlayerAvatar_SetSurfMountEffect(playerAvatar, 0);
     PlaySE(SEQ_SE_DP_JITENSYA);
 }
 
@@ -272,28 +272,28 @@ void Field_PlayerAvatar_TransitionToSurfing(PlayerAvatar *playerAvatar) {
     LocalMapObject *mapObject;
     Field_PlayerAvatar_SetSprite(playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_SURFING, PlayerAvatar_GetGender(playerAvatar)));
     PlayerAvatar_SetState(playerAvatar, PLAYER_STATE_SURFING);
-    PlayerAvatar_ClearUnk24ClearFlag2(playerAvatar);
-    surfMount = PlayerAvatar_GetUnk34(playerAvatar);
+    PlayerAvatar_ClearSpeedAndFlag2(playerAvatar);
+    surfMount = PlayerAvatar_GetSurfMountEffect(playerAvatar);
     if (surfMount != 0) {
         FieldEffectManager_DestroyEffect(surfMount);
     }
-    PlayerAvatar_SetUnk34(playerAvatar, 0);
+    PlayerAvatar_SetSurfMountEffect(playerAvatar, 0);
     direction = PlayerAvatar_GetFacingDirection(playerAvatar);
     mapObject = PlayerAvatar_GetMapObject(playerAvatar);
     MapObject_GetFieldSystem(mapObject);
-    PlayerAvatar_SetUnk34(playerAvatar, SurfMountEffect_Create(mapObject, 0, 0, direction, 1));
+    PlayerAvatar_SetSurfMountEffect(playerAvatar, SurfMountEffect_Create(mapObject, 0, 0, direction, 1));
 }
 
 void Field_PlayerAvatar_TransitionToRocket(PlayerAvatar *playerAvatar) {
     u32 surfMount;
     Field_PlayerAvatar_SetSprite(playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_ROCKET, PlayerAvatar_GetGender(playerAvatar)));
     PlayerAvatar_SetState(playerAvatar, PLAYER_STATE_ROCKET);
-    PlayerAvatar_ClearUnk24ClearFlag2(playerAvatar);
-    surfMount = PlayerAvatar_GetUnk34(playerAvatar);
+    PlayerAvatar_ClearSpeedAndFlag2(playerAvatar);
+    surfMount = PlayerAvatar_GetSurfMountEffect(playerAvatar);
     if (surfMount != 0) {
         FieldEffectManager_DestroyEffect(surfMount);
     }
-    PlayerAvatar_SetUnk34(playerAvatar, 0);
+    PlayerAvatar_SetSurfMountEffect(playerAvatar, 0);
 }
 
 void Field_PlayerAvatar_TransitionX0008(PlayerAvatar *playerAvatar) {
@@ -573,7 +573,7 @@ BOOL Task_Surf(TaskManager *taskManager) {
         int z = PlayerAvatar_GetZCoord(work->playerAvatar);
         int dz = GetDeltaYByFacingDirection(work->direction);
         work->surfMount = SurfMountEffect_Create(work->mapObject, x + dx, z + dz, work->direction, 0);
-        PlayerAvatar_SetUnk34(work->playerAvatar, work->surfMount);
+        PlayerAvatar_SetSurfMountEffect(work->playerAvatar, work->surfMount);
         PlayerAvatar_SetState(work->playerAvatar, PLAYER_STATE_SURFING);
         work->state++;
         break;
@@ -635,7 +635,7 @@ void Field_StartStopSurfingTask(int direction, FieldSystem *fieldSystem, PlayerA
     work->fieldSystem = fieldSystem;
     work->playerAvatar = playerAvatar;
     work->mapObject = PlayerAvatar_GetMapObject(playerAvatar);
-    work->surfMount = PlayerAvatar_GetUnk34(playerAvatar);
+    work->surfMount = PlayerAvatar_GetSurfMountEffect(playerAvatar);
     if (work->surfMount == 0) {
         GF_AssertFail();
     }
@@ -658,7 +658,7 @@ BOOL Task_StopSurfing(TaskManager *taskManager) {
         if (MapObject_IsMovementPaused(work->mapObject)) {
             MapObject_ClearHeldMovementIfActive(work->mapObject);
             FieldEffectManager_DestroyEffect(work->surfMount);
-            PlayerAvatar_SetUnk34(work->playerAvatar, 0);
+            PlayerAvatar_SetSurfMountEffect(work->playerAvatar, 0);
             PlayerAvatar_SetState(work->playerAvatar, PLAYER_STATE_WALKING);
             FieldSystem_ProcessSoundplate(work->fieldSystem, FALSE);
             if (FollowMon_IsActive(work->fieldSystem)) {

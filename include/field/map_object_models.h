@@ -8,7 +8,7 @@
 // Map object models: the map model NARC and the billboard renderer's lifetime, the graphics info of each sprite id,
 // and the billboard callbacks of the following Pokemon, the Ho-Oh / Lugia objects and the camera focus object.
 
-void MapObjectManager_InitRender(MapObjectManager *mapObjectManager, int arg1, int objectsToPreload, const int *objectIDs, int arg4);
+void MapObjectManager_InitRender(MapObjectManager *mapObjectManager, int textureCount, int objectsToPreload, const int *objectIDs, int loadsPerFrame);
 void MapObjectManager_FreeRender(MapObjectManager *mapObjectManager);
 void FldObjSys_OpenMModelNarc(MapObjectManager *manager);
 void FldObjSys_CloseMModelNarc(MapObjectManager *manager);

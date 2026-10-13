@@ -325,7 +325,7 @@ void PokedexApp_OnSearchNameGridMove(PokedexAppData *pokedexApp, int target, int
             for (i = 0; i <= 26; i++) {
                 if (left == sSearchNameDpadBoxes[i].left) {
                     target = i;
-                    ((GridSetInputsU8Func)GridInputHandler_SetNextLastUnk0FInputs)(pokedexApp->gridInput, target, input, input);
+                    ((GridSetInputsU8Func)GridInputHandler_SetNextLastReturnInputs)(pokedexApp->gridInput, target, input, input);
                     break;
                 }
             }
@@ -334,7 +334,7 @@ void PokedexApp_OnSearchNameGridMove(PokedexAppData *pokedexApp, int target, int
             for (i = 26; i >= 0; i--) {
                 if (left == sSearchNameDpadBoxes[i].left) {
                     target = i;
-                    ((GridSetInputsU8Func)GridInputHandler_SetNextLastUnk0FInputs)(pokedexApp->gridInput, target, input, input);
+                    ((GridSetInputsU8Func)GridInputHandler_SetNextLastReturnInputs)(pokedexApp->gridInput, target, input, input);
                     break;
                 }
             }
@@ -381,19 +381,19 @@ void PokedexApp_OnSearchTypeGridMove(PokedexAppData *pokedexApp, int target, int
             s32 previous = pokedexApp->prevGridInput;
             if (previous >= 16 && previous <= 17) {
                 target = previous % 4;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 18);
+                GridInputHandler_SetNextLastReturnInputs(pokedexApp->gridInput, (u8)target, (u8)input, 18);
             } else if (previous >= 0 && previous <= 1) {
                 target = previous;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)previous, (u8)input, 18);
+                GridInputHandler_SetNextLastReturnInputs(pokedexApp->gridInput, (u8)previous, (u8)input, 18);
             }
         } else if (target == 16) {
             s32 previous = pokedexApp->prevGridInput;
             if (previous >= 0 && previous <= 1) {
                 target = previous + 16;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 18);
+                GridInputHandler_SetNextLastReturnInputs(pokedexApp->gridInput, (u8)target, (u8)input, 18);
             } else if (previous >= 16 && previous <= 17) {
                 target = previous;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)previous, (u8)input, 18);
+                GridInputHandler_SetNextLastReturnInputs(pokedexApp->gridInput, (u8)previous, (u8)input, 18);
             }
         }
     } else if (input == 19) {
@@ -401,19 +401,19 @@ void PokedexApp_OnSearchTypeGridMove(PokedexAppData *pokedexApp, int target, int
             s32 previous = pokedexApp->prevGridInput;
             if (previous >= 14 && previous <= 15) {
                 target = previous % 4;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 19);
+                GridInputHandler_SetNextLastReturnInputs(pokedexApp->gridInput, (u8)target, (u8)input, 19);
             } else if (previous >= 2 && previous <= 3) {
                 target = previous;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)previous, (u8)input, 19);
+                GridInputHandler_SetNextLastReturnInputs(pokedexApp->gridInput, (u8)previous, (u8)input, 19);
             }
         } else if (target == 15) {
             s32 previous = pokedexApp->prevGridInput;
             if (previous >= 2 && previous <= 3) {
                 target = previous + 12;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 19);
+                GridInputHandler_SetNextLastReturnInputs(pokedexApp->gridInput, (u8)target, (u8)input, 19);
             } else if (previous >= 14 && previous <= 15) {
                 target = previous;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)previous, (u8)input, 19);
+                GridInputHandler_SetNextLastReturnInputs(pokedexApp->gridInput, (u8)previous, (u8)input, 19);
             }
         }
     }
@@ -650,19 +650,19 @@ void PokedexApp_OnSearchFormGridMove(PokedexAppData *pokedexApp, int target, int
             previous = pokedexApp->prevGridInput;
             if (previous >= 0 && previous <= 2) {
                 target = previous;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 15);
+                GridInputHandler_SetNextLastReturnInputs(pokedexApp->gridInput, (u8)target, (u8)input, 15);
             } else if (previous >= 10 && previous <= 12) {
                 target = previous % 5;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 15);
+                GridInputHandler_SetNextLastReturnInputs(pokedexApp->gridInput, (u8)target, (u8)input, 15);
             }
         } else if (target == 10) {
             previous = pokedexApp->prevGridInput;
             if (previous >= 0 && previous <= 2) {
                 target = previous + 10;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 15);
+                GridInputHandler_SetNextLastReturnInputs(pokedexApp->gridInput, (u8)target, (u8)input, 15);
             } else if (previous >= 10 && previous <= 12) {
                 target = previous;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 15);
+                GridInputHandler_SetNextLastReturnInputs(pokedexApp->gridInput, (u8)target, (u8)input, 15);
             }
         }
     } else if (input == 16) {
@@ -670,19 +670,19 @@ void PokedexApp_OnSearchFormGridMove(PokedexAppData *pokedexApp, int target, int
             previous = pokedexApp->prevGridInput;
             if (previous >= 3 && previous <= 4) {
                 target = previous;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 16);
+                GridInputHandler_SetNextLastReturnInputs(pokedexApp->gridInput, (u8)target, (u8)input, 16);
             } else if (previous >= 13 && previous <= 14) {
                 target = previous % 5;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 16);
+                GridInputHandler_SetNextLastReturnInputs(pokedexApp->gridInput, (u8)target, (u8)input, 16);
             }
         } else if (target == 14) {
             previous = pokedexApp->prevGridInput;
             if (previous >= 3 && previous <= 4) {
                 target = previous + 10;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 16);
+                GridInputHandler_SetNextLastReturnInputs(pokedexApp->gridInput, (u8)target, (u8)input, 16);
             } else if (previous >= 13 && previous <= 14) {
                 target = previous;
-                GridInputHandler_SetNextLastUnk0FInputs(pokedexApp->gridInput, (u8)target, (u8)input, 16);
+                GridInputHandler_SetNextLastReturnInputs(pokedexApp->gridInput, (u8)target, (u8)input, 16);
             }
         }
     }

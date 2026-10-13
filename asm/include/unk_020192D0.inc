@@ -38,9 +38,9 @@
 .public GridInputHandler_HandleInput_NoHold
 .public GridInputHandler_HandleInput_AllowHold
 .public GridInputHandler_GetNextInput
-.public GridInputHandler_GetUnk0F
+.public GridInputHandler_GetReturnInput
 .public GridInputHandler_SetNextInput
-.public GridInputHandler_SetNextLastUnk0FInputs
+.public GridInputHandler_SetNextLastReturnInputs
 .public GridInputHandler_IsButtonInputMode
 .public GridInputHandler_SetButtonInputMode
 .public GridInputHandler_SetAllEnabled

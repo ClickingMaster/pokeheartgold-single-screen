@@ -206,7 +206,7 @@ int FlyMap_HandleKeyInput(PokegearMapAppData *mapApp) {
     return -1;
 }
 
-const TouchscreenHitbox ov101_021F7EA4[2] = {
+const TouchscreenHitbox gPokegearMapAreaHitboxes[2] = {
     { .rect = { 8, 152, 8, 200 } },
     { .rect = { 16, 144, 40, 224 } },
 };
@@ -253,7 +253,7 @@ static int PokegearMap_HandleMapTouch(PokegearMapAppData *mapApp, BOOL *pRetIsTo
             return -1;
         }
     }
-    if (!TouchscreenHitbox_TouchNewIsIn(&ov101_021F7EA4[0])) {
+    if (!TouchscreenHitbox_TouchNewIsIn(&gPokegearMapAreaHitboxes[0])) {
         return -1;
     }
     pixel = 1;
@@ -298,7 +298,7 @@ int FlyMap_HandleTouchInput_NotDragging(PokegearMapAppData *mapApp, BOOL *pRetIs
         *pRetIsTouch = TRUE;
         return 4;
     }
-    if (!TouchscreenHitbox_TouchNewIsIn(&ov101_021F7EA4[1])) {
+    if (!TouchscreenHitbox_TouchNewIsIn(&gPokegearMapAreaHitboxes[1])) {
         return -1;
     }
     pixel = 1;

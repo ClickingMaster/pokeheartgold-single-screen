@@ -228,11 +228,11 @@ struct WifiClubApp {
     u16 friendCount;
 };
 
-typedef struct UnkStruct_ov44_0222A758_args {
+typedef struct WifiClubArgs {
     SaveData *saveData;
     u32 choice;
     u32 partnerFriendIndex;
-} UnkStruct_ov44_0222A758_args;
+} WifiClubArgs;
 
 s32 WifiClub_HasBattleFrontier(WifiClubApp *app);
 s32 WifiClub_IsPoffinCookingAvailable(WifiClubApp *app);

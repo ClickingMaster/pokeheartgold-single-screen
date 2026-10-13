@@ -93,7 +93,7 @@ PokeathlonRingDropUi *PokeathlonRingDropUi_New(SpriteSystem *spriteSystem, Sprit
     ui->iconNarc = NARC_New((NarcId)20, ui->heapId);
     ui->digitsBuffer = GfGfxLoader_GetScrnData((NarcId)242, 7, TRUE, &ui->digits, ui->heapId);
     ui->iconPalette = SpriteSystem_LoadPlttResObj(spriteSystem, spriteManager, (NarcId)20, GetMonIconPlttNaix(), FALSE, 3, 2, 10004);
-    member = PokeathlonCourse_GetParticipantUnk04(course, PokeathlonCourse_GetNetId(course));
+    member = PokeathlonCourse_GetParticipantMons(course, PokeathlonCourse_GetNetId(course));
     i = 0;
     do {
         ui->memberNames[i] = String_New(11, ui->heapId);

@@ -331,7 +331,7 @@ void LegendaryBirdObject_DeleteBillboard(LocalMapObject *object) {
 }
 
 // Manager flag 1: the render data exists.
-void MapObjectManager_InitRender(MapObjectManager *mapObjectManager, int arg1, int objectsToPreload, const int *objectIDs, int arg4) {
+void MapObjectManager_InitRender(MapObjectManager *mapObjectManager, int textureCount, int objectsToPreload, const int *objectIDs, int loadsPerFrame) {
     u32 count;
     u32 priority;
 
@@ -341,7 +341,7 @@ void MapObjectManager_InitRender(MapObjectManager *mapObjectManager, int arg1, i
     FldObjSys_OpenMModelNarc(mapObjectManager);
     count = MapObjectManager_GetObjectCount(mapObjectManager);
     priority = MapObjectManager_GetPriority(mapObjectManager) - 1;
-    MapObjectRender_Init(MapObjectManager_GetRender(mapObjectManager), mapObjectManager, count, priority, arg1, objectsToPreload, objectIDs, arg4);
+    MapObjectRender_Init(MapObjectManager_GetRender(mapObjectManager), mapObjectManager, count, priority, textureCount, objectsToPreload, objectIDs, loadsPerFrame);
     MapObjectManager_SetFlagsBits(mapObjectManager, (MapObjectFlagBits)1);
 }
 

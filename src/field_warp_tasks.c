@@ -60,7 +60,7 @@ struct WarpPanelEnv {
     int state;
     int spinDone;
     Location location;
-    UnkStruct_0206793C *followMonBall;
+    FieldEffect *followMonBall;
 };
 
 struct UnionRoomWarpEnv {

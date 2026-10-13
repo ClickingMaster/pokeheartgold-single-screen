@@ -8,13 +8,13 @@
 typedef s32 (*UnkFuncPtr_0203AC88)(void);
 typedef void (*UnkFuncPtr_0203AC88_void)(void *, void *, String *, WifiClubGameEntry *);
 
-typedef struct UnkStruct_0203AC88 {
+typedef struct WifiClubCommCommand {
     UnkFuncPtr_0203AC88_void func1;
     UnkFuncPtr_0203AC88 func2;
     UnkFuncPtr_0203AC88 func3;
-} UnkStruct_0203AC88;
+} WifiClubCommCommand;
 
-const UnkStruct_0203AC88 *WifiClubComm_GetCommandTable(void);
+const WifiClubCommCommand *WifiClubComm_GetCommandTable(void);
 int WifiClubComm_GetCommandCount(void);
 
 #endif // POKEHEARTGOLD_UNK_0203AC88_H

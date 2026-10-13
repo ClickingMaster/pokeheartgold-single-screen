@@ -42,25 +42,21 @@ typedef struct MapPropAnimationPoolList {
     int numPools;
 } MapPropAnimationPoolList;
 
-typedef struct UnkStruct_FieldSysC0_SubC {
+typedef struct Field3dRenderObj {
     NNSG3dRenderObj renderObj;
     NNSG3dResMdl *model;
     int index;
-} UnkStruct_FieldSysC0_SubC;
+} Field3dRenderObj;
 
-typedef UnkStruct_FieldSysC0_SubC Field3dRenderObj;
-
-typedef struct UnkStruct_FieldSysC0 {
+typedef struct Field3dRenderObjManager {
     u8 *modelNumToLoadedSlot;
     NNSG3dResFileHeader **resFileHeaders;
-    UnkStruct_FieldSysC0_SubC *objectHeap;
-    UnkStruct_FieldSysC0_SubC **objects;
+    Field3dRenderObj *objectHeap;
+    Field3dRenderObj **objects;
     int numObjects;
     int indexMax;
     int objectMax;
-} UnkStruct_FieldSysC0;
-
-typedef UnkStruct_FieldSysC0 Field3dRenderObjManager;
+} Field3dRenderObjManager;
 
 // TimeOfDayVisual?
 typedef struct TimeOfDayPropAnimSet {
@@ -84,13 +80,13 @@ typedef struct ResAnim_4004 {
     u8 numMapData;
 } ResAnim_4004;
 
-UnkStruct_FieldSysC0 *Field3dObjectList_New(enum HeapID heapID, int indexMax, int objectMax, NNSG3dResFileHeader **fileResHeader); // FieldSysC0_New
-void Field3dObjectList_Free(UnkStruct_FieldSysC0 *unkC0);                                                                           // FieldSysC0_Free
-UnkStruct_FieldSysC0_SubC *Field3dObjectList_AddShared(UnkStruct_FieldSysC0 *unkC0, int index);
-UnkStruct_FieldSysC0_SubC *Field3dObjectList_GetRenderObjectByID(UnkStruct_FieldSysC0 *unkC0, int index);
-UnkStruct_FieldSysC0_SubC *Field3dObjectList_GetOrAddInstance(UnkStruct_FieldSysC0 *unkC0, int index);
-BOOL Field3dObjectList_ReleaseInstance(UnkStruct_FieldSysC0 *unkC0, UnkStruct_FieldSysC0_SubC *object);
-BOOL Field3dObjectList_HasModelFile(UnkStruct_FieldSysC0 *unkC0, int index);
+Field3dRenderObjManager *Field3dObjectList_New(enum HeapID heapID, int indexMax, int objectMax, NNSG3dResFileHeader **fileResHeader); // FieldSysC0_New
+void Field3dObjectList_Free(Field3dRenderObjManager *unkC0);                                                                           // FieldSysC0_Free
+Field3dRenderObj *Field3dObjectList_AddShared(Field3dRenderObjManager *unkC0, int index);
+Field3dRenderObj *Field3dObjectList_GetRenderObjectByID(Field3dRenderObjManager *unkC0, int index);
+Field3dRenderObj *Field3dObjectList_GetOrAddInstance(Field3dRenderObjManager *unkC0, int index);
+BOOL Field3dObjectList_ReleaseInstance(Field3dRenderObjManager *unkC0, Field3dRenderObj *object);
+BOOL Field3dObjectList_HasModelFile(Field3dRenderObjManager *unkC0, int index);
 MapPropAnimationPoolList *MapPropAnimationPoolList_New(enum HeapID heapID);
 MapPropAnimationPool *MapPropAnimationPoolList_AddPool(MapPropAnimationPoolList *unkC8, enum HeapID heapID, u16 count);
 void MapPropAnimationPoolList_Free(MapPropAnimationPoolList *unkSubC8); // UnkSubC8_Free

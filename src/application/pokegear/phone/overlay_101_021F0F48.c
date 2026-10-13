@@ -18,7 +18,7 @@ BOOL PhoneContactListUI_StartPageScroll(PhoneContactListUI *ui, u8 direction);
 BOOL PhoneContactListUI_ScrollMany(PhoneContactListUI *ui);
 void PhoneContactListUI_HandleScrollInProgress(PhoneContactListUI *ui);
 
-static const TouchscreenHitbox ov101_021F8634[] = {
+static const TouchscreenHitbox sContactListTouchHitboxes[] = {
     { .rect = { 0x08, 0x20, 0x08, 0xE0 } },
     { .rect = { 0x20, 0x38, 0x08, 0xE0 } },
     { .rect = { 0x38, 0x50, 0x08, 0xE0 } },
@@ -30,7 +30,7 @@ static const TouchscreenHitbox ov101_021F8634[] = {
     { .rect = { TOUCHSCREEN_RECTLIST_END } },
 };
 
-static const TouchscreenHitbox ov101_021F8658[] = {
+static const TouchscreenHitbox sContactListTouchHitboxes2[] = {
     { .rect = { 0x08, 0x18, 0x04, 0x24 } },
     { .rect = { 0x20, 0x30, 0x04, 0x24 } },
     { .rect = { 0x38, 0x48, 0x04, 0x24 } },
@@ -363,7 +363,7 @@ int PhoneContactListUI_HandleTouchInput(PhoneContactListUI *ui) {
         PhoneContactListUI_HandleScrollInProgress(ui);
         return -1;
     }
-    result = TouchscreenHitbox_FindRectAtTouchNew(ov101_021F8634);
+    result = TouchscreenHitbox_FindRectAtTouchNew(sContactListTouchHitboxes);
     if (result == -1) {
         return -1;
     }
@@ -395,7 +395,7 @@ int PhoneContactListUI_HandleTouchInput2(PhoneContactListUI *ui, int *gotTouch) 
         PhoneContactListUI_HandleScrollInProgress(ui);
         return -1;
     }
-    result = TouchscreenHitbox_FindRectAtTouchNew(ov101_021F8658);
+    result = TouchscreenHitbox_FindRectAtTouchNew(sContactListTouchHitboxes2);
     if (result == -1) {
         return -1;
     }

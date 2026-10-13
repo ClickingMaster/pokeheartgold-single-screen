@@ -172,7 +172,7 @@ int PlayerAvatar_IsReadyToMove(PlayerAvatar *avatar, int direction) {
 void PlayerAvatar_StoreHeldDirections(PlayerAvatar *avatar, int direction, int keys, int heldKeys) {
     int horizontal = GetHorizontalDirectionFromKeys(heldKeys);
     int vertical = GetVerticalDirectionFromKeys(heldKeys);
-    PlayerAvatar_SetUnk28Unk2C(avatar, horizontal, vertical);
+    PlayerAvatar_SetLastInputs(avatar, horizontal, vertical);
     PlayerAvatar_ClearFlag6(avatar);
 }
 
@@ -239,13 +239,13 @@ void PlayerAvatar_PlayFootstepSound(LocalMapObject *object, PlayerAvatar *avatar
         behavior = sub_02060FE0(object, direction);
     }
     if (gPlayerFootstepSounds[behavior].sequence == SEQ_SE_GS_EDAPAKI) {
-        PlayerAvatar_ResetUnkC(avatar);
+        PlayerAvatar_ResetFootstepToggle(avatar);
     } else if (PlayerAvatar_GetPlayerMoveState(avatar) == PLAYER_MOVE_STATE_NONE) {
-        PlayerAvatar_ResetUnkC(avatar);
+        PlayerAvatar_ResetFootstepToggle(avatar);
     } else {
-        PlayerAvatar_ToggleUnkC(avatar);
+        PlayerAvatar_ToggleFootstep(avatar);
     }
-    if (PlayerAvatar_GetUnkC(avatar) != 0) {
+    if (PlayerAvatar_GetFootstepToggle(avatar) != 0) {
         return;
     }
     state = PlayerAvatar_GetState(avatar);
@@ -342,7 +342,7 @@ void PlayerAvatar_UpdateMovement(PlayerAvatar *avatar) {
 void PlayerAvatar_ResetMovement(PlayerAvatar *avatar) {
     PlayerAvatar_SetMoveState(avatar, AVATAR_MOVE_STATE_NONE);
     PlayerAvatar_SetPlayerMoveState(avatar, PLAYER_MOVE_STATE_NONE);
-    PlayerAvatar_ClearUnk24ClearFlag2(avatar);
+    PlayerAvatar_ClearSpeedAndFlag2(avatar);
 }
 
 BOOL sub_0205CF60(PlayerAvatar *avatar) {
@@ -445,7 +445,7 @@ BOOL ForcedMovement_Ice(PlayerAvatar *avatar, int value) {
         PlayerAvatar_SetObjectMovement(avatar, mapObject, GetMovementForDirection(direction, 8));
         PlayerAvatar_SetFlag1(avatar, TRUE);
         PlayerAvatar_SetForcedMovement(avatar, TRUE);
-        PlayerAvatar_SetUnk28Unk2C(avatar, -1, -1);
+        PlayerAvatar_SetLastInputs(avatar, -1, -1);
     } else {
         MapObject_SetFlagsBits(mapObject, (MapObjectFlagBits)(MAPOBJECTFLAG_UNK7 | MAPOBJECTFLAG_UNK8));
         PlayerAvatar_SlideInDirection(avatar, direction);
@@ -459,11 +459,11 @@ BOOL ForcedMovement_CyclingRoadSlope(PlayerAvatar *avatar, int value) {
     if (PlayerAvatar_CheckCollision(avatar, mapObject, DIR_SOUTH) == 0) {
         PlayerAvatar_SetObjectMovement(avatar, mapObject, GetMovementForDirection(DIR_SOUTH, 0x14));
         PlayerAvatar_SetMoveState(avatar, AVATAR_MOVE_STATE_MOVING);
-        PlayerAvatar_SetUnk24(avatar, 3);
+        PlayerAvatar_SetSpeed(avatar, 3);
         return TRUE;
     }
     PlayerAvatar_SetObjectMovement(avatar, mapObject, GetMovementForDirection(DIR_SOUTH, 1));
-    PlayerAvatar_ClearUnk24ClearFlag2(avatar);
+    PlayerAvatar_ClearSpeedAndFlag2(avatar);
     PlayerAvatar_SetMoveState(avatar, AVATAR_MOVE_STATE_NONE);
     PlayerAvatar_SetFlag2(avatar, FALSE);
     return TRUE;
@@ -473,7 +473,7 @@ void PlayerAvatar_EndForcedMovement(PlayerAvatar *avatar) {
     if (PlayerAvatar_CheckForcedMovement(avatar) == TRUE) {
         MapObject_ClearFlagsBits(PlayerAvatar_GetMapObject(avatar), (MapObjectFlagBits)(MAPOBJECTFLAG_UNK7 | MAPOBJECTFLAG_UNK8));
         if (!PlayerAvatar_CheckFlag7(avatar)) {
-            PlayerAvatar_ClearUnk24ClearFlag2(avatar);
+            PlayerAvatar_ClearSpeedAndFlag2(avatar);
         }
         PlayerAvatar_SetForcedMovement(avatar, FALSE);
         PlayerAvatar_SetFlag7(avatar, FALSE);
@@ -500,7 +500,7 @@ int PlayerAvatar_GetSlopeInDirection(PlayerAvatar *avatar, int direction) {
 }
 
 BOOL PlayerAvatar_AdjustSpeedForSlope(PlayerAvatar *avatar, int slope) {
-    int speed = PlayerAvatar_GetUnk24(avatar);
+    int speed = PlayerAvatar_GetSpeed(avatar);
     if (slope == 1) {
         speed--;
         if (speed < 0) {
@@ -512,7 +512,7 @@ BOOL PlayerAvatar_AdjustSpeedForSlope(PlayerAvatar *avatar, int slope) {
             speed = 3;
         }
     }
-    PlayerAvatar_SetUnk24(avatar, speed);
+    PlayerAvatar_SetSpeed(avatar, speed);
     return TRUE;
 }
 
@@ -521,7 +521,7 @@ void PlayerAvatar_SlideInDirection(PlayerAvatar *avatar, int direction) {
     int movement = MOVEMENT_RUN_UP;
     int command;
     FieldSystem *fieldSystem;
-    switch (PlayerAvatar_GetUnk24(avatar)) {
+    switch (PlayerAvatar_GetSpeed(avatar)) {
     case 1:
         movement = 0x50;
         break;
@@ -680,8 +680,8 @@ void PlayerAvatar_FootStep(PlayerAvatar *avatar, LocalMapObject *mapObject, int 
 void PlayerAvatar_FootTurn(PlayerAvatar *avatar, LocalMapObject *mapObject, int direction, u16 keys, u16 heldKeys) {
     PlayerAvatar_SetObjectMovement(avatar, mapObject, GetMovementForDirection(direction, 0x28));
     MapObject_SetNextFacingDirection(mapObject, direction);
-    PlayerAvatar_ResetUnkC(avatar);
-    PlayerAvatar_ToggleUnkC(avatar);
+    PlayerAvatar_ResetFootstepToggle(avatar);
+    PlayerAvatar_ToggleFootstep(avatar);
 }
 
 void PlayerAvatar_MoveOnBike(PlayerAvatar *avatar, LocalMapObject *mapObject, MapLoadManager *mapLoadManager, int direction, u16 keys, u16 heldKeys) {
@@ -690,7 +690,7 @@ void PlayerAvatar_MoveOnBike(PlayerAvatar *avatar, LocalMapObject *mapObject, Ma
 
 int PlayerAvatar_GetBikeMovement(PlayerAvatar *avatar, int direction) {
     int movement = 0x4C;
-    switch (PlayerAvatar_GetUnk24(avatar)) {
+    switch (PlayerAvatar_GetSpeed(avatar)) {
     case 1:
         movement = MOVEMENT_RUN_UP;
         break;
@@ -705,7 +705,7 @@ int PlayerAvatar_GetBikeMovement(PlayerAvatar *avatar, int direction) {
 }
 
 BOOL PlayerAvatar_AccelerateBike(PlayerAvatar *avatar) {
-    int speed = PlayerAvatar_Unk24AddWithCeiling(avatar, 1, 3);
+    int speed = PlayerAvatar_AddSpeedWithCeiling(avatar, 1, 3);
     if (!PlayerAvatar_CheckFlag2(avatar) && speed >= 2) {
         PlayerAvatar_SetFlag2(avatar, TRUE);
     }
@@ -714,12 +714,12 @@ BOOL PlayerAvatar_AccelerateBike(PlayerAvatar *avatar) {
 
 BOOL PlayerAvatar_DecelerateBike(PlayerAvatar *avatar) {
     BOOL ret = TRUE;
-    int speed = PlayerAvatar_GetUnk24(avatar) - 1;
+    int speed = PlayerAvatar_GetSpeed(avatar) - 1;
     if (speed < 0) {
         speed = 0;
         ret = FALSE;
     }
-    PlayerAvatar_SetUnk24(avatar, speed);
+    PlayerAvatar_SetSpeed(avatar, speed);
     if (PlayerAvatar_CheckFlag2(avatar) == TRUE && speed == 0) {
         PlayerAvatar_SetFlag2(avatar, FALSE);
     }
@@ -769,7 +769,7 @@ int BikeStepKindToMoveState(int stepKind) {
 
 // 0: stop, 1: ride, 2: turn, 3: coast (still rolling at speed 2+).
 int PlayerAvatar_GetBikeStepKind(PlayerAvatar *avatar, int direction) {
-    int speed = PlayerAvatar_GetUnk24(avatar);
+    int speed = PlayerAvatar_GetSpeed(avatar);
     int facing;
     if (direction == -1) {
         if (speed < 2) {
@@ -797,7 +797,7 @@ int PlayerAvatar_GetBikeStepKind(PlayerAvatar *avatar, int direction) {
 void PlayerAvatar_BikeStop(PlayerAvatar *avatar, LocalMapObject *mapObject, int direction, u16 keys, u16 heldKeys) {
     int movement = GetMovementForDirection(MapObject_GetFacingDirection(mapObject), MOVEMENT_FACE_UP);
     PlayerAvatar_SetObjectMovement(avatar, mapObject, movement);
-    PlayerAvatar_ClearUnk24ClearFlag2(avatar);
+    PlayerAvatar_ClearSpeedAndFlag2(avatar);
 }
 
 void PlayerAvatar_BikeRide(PlayerAvatar *avatar, LocalMapObject *mapObject, int direction, u16 keys, u16 heldKeys) {
@@ -810,7 +810,7 @@ void PlayerAvatar_BikeRide(PlayerAvatar *avatar, LocalMapObject *mapObject, int 
         PlayerAvatar_CountStep(avatar);
         PlayerAvatar_SetFlag6(avatar);
     } else if (collision & 0x10) {
-        if (PlayerAvatar_GetUnk24(avatar) >= 3) {
+        if (PlayerAvatar_GetSpeed(avatar) >= 3) {
             movement = PlayerAvatar_GetBikeMovement(avatar, direction);
             PlayerAvatar_SetFlag6(avatar);
             PlayerAvatar_SetForcedMovement(avatar, TRUE);
@@ -820,21 +820,21 @@ void PlayerAvatar_BikeRide(PlayerAvatar *avatar, LocalMapObject *mapObject, int 
                 PlaySE(SEQ_SE_DP_WALL_HIT);
             }
             MapObject_SetNextFacingDirection(mapObject, direction);
-            PlayerAvatar_ClearUnk24ClearFlag2(avatar);
+            PlayerAvatar_ClearSpeedAndFlag2(avatar);
         }
     } else if (collision & 0x40) {
         int facing = MapObject_GetNextFacingDirection(mapObject);
         movement = GetMovementForDirection(facing, MOVEMENT_FACE_UP);
         MapObject_SetNextFacingDirection(mapObject, facing);
-        PlayerAvatar_ClearUnk24ClearFlag2(avatar);
-        PlayerAvatar_SetUnk28Unk2C(avatar, -1, -1);
+        PlayerAvatar_ClearSpeedAndFlag2(avatar);
+        PlayerAvatar_SetLastInputs(avatar, -1, -1);
     } else if (collision != 0) {
         movement = GetMovementForDirection(direction, 0x1C);
         if (!(collision & 8)) {
             PlaySE(SEQ_SE_DP_WALL_HIT);
         }
         MapObject_SetNextFacingDirection(mapObject, direction);
-        PlayerAvatar_ClearUnk24ClearFlag2(avatar);
+        PlayerAvatar_ClearSpeedAndFlag2(avatar);
     } else {
         movement = PlayerAvatar_GetBikeMovement(avatar, direction);
         PlayerAvatar_AccelerateBike(avatar);
@@ -845,10 +845,10 @@ void PlayerAvatar_BikeRide(PlayerAvatar *avatar, LocalMapObject *mapObject, int 
 }
 
 void PlayerAvatar_BikeTurn(PlayerAvatar *avatar, LocalMapObject *mapObject, int direction, u16 keys, u16 heldKeys) {
-    PlayerAvatar_ClearUnk24ClearFlag2(avatar);
+    PlayerAvatar_ClearSpeedAndFlag2(avatar);
     PlayerAvatar_SetObjectMovement(avatar, mapObject, GetMovementForDirection(direction, 0x28));
     MapObject_SetNextFacingDirection(mapObject, direction);
-    PlayerAvatar_ClearUnk24ClearFlag2(avatar);
+    PlayerAvatar_ClearSpeedAndFlag2(avatar);
 }
 
 void PlayerAvatar_BikeCoast(PlayerAvatar *avatar, LocalMapObject *mapObject, int direction, u16 keys, u16 heldKeys) {
@@ -861,7 +861,7 @@ void PlayerAvatar_BikeCoast(PlayerAvatar *avatar, LocalMapObject *mapObject, int
         movement = GetMovementForDirection(facing, 0x38);
     } else if (collision & 0x40) {
         movement = GetMovementForDirection(facing, MOVEMENT_FACE_UP);
-        PlayerAvatar_ClearUnk24ClearFlag2(avatar);
+        PlayerAvatar_ClearSpeedAndFlag2(avatar);
     } else if (collision != 0) {
         rolling = FALSE;
         movement = GetMovementForDirection(facing, 0x1C);
@@ -869,7 +869,7 @@ void PlayerAvatar_BikeCoast(PlayerAvatar *avatar, LocalMapObject *mapObject, int
             PlaySE(SEQ_SE_DP_WALL_HIT);
         }
         MapObject_SetNextFacingDirection(mapObject, facing);
-        PlayerAvatar_ClearUnk24ClearFlag2(avatar);
+        PlayerAvatar_ClearSpeedAndFlag2(avatar);
     } else {
         movement = PlayerAvatar_GetBikeMovement(avatar, facing);
     }
@@ -881,7 +881,7 @@ void PlayerAvatar_BikeCoast(PlayerAvatar *avatar, LocalMapObject *mapObject, int
 }
 
 void PlayerAvatar_SetObjectMovement(PlayerAvatar *avatar, LocalMapObject *mapObject, int movement) {
-    PlayerAvatar_SetUnk8(avatar, movement);
+    PlayerAvatar_SetHeldMovement(avatar, movement);
     MapObject_SetHeldMovement(mapObject, movement);
 }
 
@@ -1109,8 +1109,8 @@ int PlayerAvatar_ChooseInputDirection(PlayerAvatar *avatar, int keys, int heldKe
     }
 
     facing = PlayerAvatar_GetNextFacingDirection(avatar);
-    lastHorizontal = PlayerAvatar_GetUnk28(avatar);
-    lastVertical = PlayerAvatar_GetUnk2C(avatar);
+    lastHorizontal = PlayerAvatar_GetLastHorizontalInput(avatar);
+    lastVertical = PlayerAvatar_GetLastVerticalInput(avatar);
     if (facing != -1) {
         if (horizontal == lastHorizontal && vertical == lastVertical) {
             return facing;
@@ -1151,7 +1151,7 @@ BOOL IsRunButtonHeld(PlayerAvatar *avatar, int heldKeys) {
 }
 
 BOOL PlayerAvatar_IsRunning(PlayerAvatar *avatar) {
-    switch (PlayerAvatar_GetUnk8(avatar)) {
+    switch (PlayerAvatar_GetHeldMovement(avatar)) {
     case 0x58:
     case 0x59:
     case 0x5A:

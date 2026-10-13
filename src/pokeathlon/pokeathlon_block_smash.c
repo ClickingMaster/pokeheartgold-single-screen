@@ -314,7 +314,7 @@ typedef struct PokeathlonBlockSmashMonPicParams {
     u32 unk38[3];
 } PokeathlonBlockSmashMonPicParams;
 
-// PokeathlonCourse_GetParticipantUnk04: the participant's team.
+// PokeathlonCourse_GetParticipantMons: the participant's team.
 typedef struct PokeathlonBlockSmashTeamMon {
     u8 unk0[0x12];
     u16 nickname[11];
@@ -688,7 +688,7 @@ void PokeathlonBlockSmash_InitText(PokeathlonCourseData *course) {
         FillWindowPixelBuffer(&work->windows[i], 0);
         ClearWindowTilemap(&work->windows[i]);
     }
-    mons = (PokeathlonBlockSmashTeamMon *)PokeathlonCourse_GetParticipantUnk04(course, PokeathlonCourse_GetNetId(course));
+    mons = (PokeathlonBlockSmashTeamMon *)PokeathlonCourse_GetParticipantMons(course, PokeathlonCourse_GetNetId(course));
     for (i = 0; i < 3; i++) {
         work->names[i] = String_New(11, work->heapId);
         CopyU16ArrayToString(work->names[i], mons[i].nickname);

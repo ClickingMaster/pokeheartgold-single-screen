@@ -16,7 +16,7 @@ typedef enum MapMarkingIcon {
     MAP_MARKING_ICON_NULL = 15,
 } MapMarkingIcon;
 
-typedef struct UnkStruct_0202F3DC {
+typedef struct MapMarkingsRAM {
     u32 mapID;
     u8 icons[4];
     u16 words[4];

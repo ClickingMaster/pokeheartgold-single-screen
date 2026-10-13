@@ -41,9 +41,9 @@
 .public PlayerAvatar_SetTransitionFlags
 .public PlayerAvatar_GetTransitionFlags
 .public PlayerAvatar_GetGender
-.public PlayerAvatar_ClearUnk24ClearFlag2
-.public PlayerAvatar_SetUnk34
-.public PlayerAvatar_GetUnk34
+.public PlayerAvatar_ClearSpeedAndFlag2
+.public PlayerAvatar_SetSurfMountEffect
+.public PlayerAvatar_GetSurfMountEffect
 .public PlayerAvatar_GetSpriteByStateAndGender
 .public PlayerAvatar_CheckForcedMovement
 .public PlayerAvatar_SetFlag1

@@ -427,7 +427,7 @@ int EvolutionScene_RunMenu(EvolutionTaskData *data) {
 
 #pragma force_active on
 
-EvolutionTaskData *EvolutionScene_New(Party *party, Pokemon *mon, int species, Options *options, u32 a4, Pokedex *dex, Bag *bag, GameStats *stats, u32 evolutionCondition, u32 a9, enum HeapID heapID) {
+EvolutionTaskData *EvolutionScene_New(Party *party, Pokemon *mon, int species, Options *options, u32 a4, Pokedex *dex, Bag *bag, GameStats *stats, u32 evolutionCondition, u32 flags, enum HeapID heapID) {
     EvolutionTaskData *data;
 
     gSystem.screensFlipped = FALSE;
@@ -483,7 +483,7 @@ EvolutionTaskData *EvolutionScene_New(Party *party, Pokemon *mon, int species, O
     data->bag = bag;
     data->gameStats = stats;
     data->evolutionCondition = evolutionCondition;
-    data->flags = a9;
+    data->flags = flags;
     EvolutionScene_CreatePokepics(data);
 
     PaletteData_BeginPaletteFade(data->paletteData, 0xF, 0xFFFF, 1, 16, 0, RGB_BLACK);

@@ -53,11 +53,11 @@ typedef struct PokeathlonSave {
     PokeathlonSavePrefix prefix;           // 0x000: serialized byte and halfword views
     Pokeathlon_RecordsSolo recordsSolo[10]; // 0x2CC
     Pokeathlon_RecordsLink recordsLink[10]; // 0x484
-    u8 soloEventBestPoints[0x14];                       // pointed to by PokeathlonSave_GetUnkAEC
-    PokeathlonStatistics statistics;    // pointed to by PokeathlonSave_GetUnkB00 / PokeathlonSave_GetAgainUnkB00
+    u8 soloEventBestPoints[0x14];                       // pointed to by PokeathlonSave_GetSoloEventBestPoints
+    PokeathlonStatistics statistics;    // pointed to by PokeathlonSave_GetStatistics / PokeathlonSave_GetStatistics2
     int athletePoints;                      // 0xB74 - capped at 99999
-    u32 unk_B78;                            // bitfield, bits 0-26 (PokeathlonSave_GetUnkB78_AtIndex / PokeathlonSave_SetUnkB78_AtIndex)
-    u16 unk_B7C;                            // bitfield (PokeathlonSave_GetUnkB7C_AtIndex / PokeathlonSave_SetUnkB7C_AtIndex / PokeathlonSave_ResetUnkB7C)
+    u32 dataCardsBought;                            // bitfield, bits 0-26 (PokeathlonSave_IsDataCardBought / PokeathlonSave_SetDataCardBought)
+    u16 dailyItemsBought;                            // bitfield (PokeathlonSave_IsDailyItemBought / PokeathlonSave_SetDailyItemBought / PokeathlonSave_ResetDailyItemsBought)
     u16 unk_B7E;
 } PokeathlonSave; // size: 0xB80
 
@@ -76,25 +76,25 @@ u32 PokeathlonSave_sizeof();
 void PokeathlonSave_Init(PokeathlonSave *dest);
 PokeathlonSave *Save_Pokeathlon_Get(SaveData *saveData);
 PokeathlonSave *PokeathlonSave_dummy1(PokeathlonSave *pokeathlon);
-void *PokeathlonSave_GetUnkDC(PokeathlonSave *pokeathlonSave);
+void *PokeathlonSave_GetMonMedals(PokeathlonSave *pokeathlonSave);
 Pokeathlon_RecordsSolo *PokeathlonSave_GetRecordsSolo(PokeathlonSave *pokeathlonSave);
 Pokeathlon_RecordsLink *PokeathlonSave_GetRecordsLink(PokeathlonSave *pokeathlonSave);
-void *PokeathlonSave_GetUnkAEC(PokeathlonSave *pokeathlonSave);
-PokeathlonStatistics *PokeathlonSave_GetUnkB00(PokeathlonSave *pokeathlonSave);
+void *PokeathlonSave_GetSoloEventBestPoints(PokeathlonSave *pokeathlonSave);
+PokeathlonStatistics *PokeathlonSave_GetStatistics(PokeathlonSave *pokeathlonSave);
 PokeathlonSave *PokeathlonSave_dummy2(PokeathlonSave *pokeathlon);
-BOOL PokeathlonSave_GetUnkDC_AtIndex(PokeathlonSave *pokeathlonSave, int shift, int index);
+BOOL PokeathlonSave_MonHasMedal(PokeathlonSave *pokeathlonSave, int shift, int index);
 Pokeathlon_RecordsSolo *PokeathlonSave_GetRecordsSolo2(PokeathlonSave *pokeathlonSave);
 Pokeathlon_RecordsLink *PokeathlonSave_GetRecordsLink2(PokeathlonSave *pokeathlonSave);
-PokeathlonStatistics *PokeathlonSave_GetAgainUnkB00(PokeathlonSave *pokeathlonSave);
-void PokeathlonSave_SetUnkDC_AtIndex(PokeathlonSave *pokeathlonSave, int shift, int index);
+PokeathlonStatistics *PokeathlonSave_GetStatistics2(PokeathlonSave *pokeathlonSave);
+void PokeathlonSave_AddMonMedals(PokeathlonSave *pokeathlonSave, int shift, int index);
 void PokeathlonSave_AddAthletePoints(PokeathlonSave *pokeathlonSave, u16 amount);
 void PokeathlonSave_SubAthletePoints(PokeathlonSave *pokeathlonSave, u16 amount);
 u32 PokeathlonSave_GetAthletePoints(PokeathlonSave *pokeathlonSave);
-BOOL PokeathlonSave_GetUnkB78_AtIndex(PokeathlonSave *pokeathlon, int idx);
-void PokeathlonSave_SetUnkB78_AtIndex(PokeathlonSave *pokeathlon, int idx);
-BOOL PokeathlonSave_GetUnkB7C_AtIndex(PokeathlonSave *pokeathlon, int idx);
-void PokeathlonSave_SetUnkB7C_AtIndex(PokeathlonSave *pokeathlon, int idx);
-void PokeathlonSave_ResetUnkB7C(PokeathlonSave *pokeathlon);
+BOOL PokeathlonSave_IsDataCardBought(PokeathlonSave *pokeathlon, int idx);
+void PokeathlonSave_SetDataCardBought(PokeathlonSave *pokeathlon, int idx);
+BOOL PokeathlonSave_IsDailyItemBought(PokeathlonSave *pokeathlon, int idx);
+void PokeathlonSave_SetDailyItemBought(PokeathlonSave *pokeathlon, int idx);
+void PokeathlonSave_ResetDailyItemsBought(PokeathlonSave *pokeathlon);
 
 u32 PokeathlonSave_FriendshipRecords_sizeof();
 void PokeathlonSave_FriendshipRecords_Init(PokeathlonSave_FriendshipRecords *dest);

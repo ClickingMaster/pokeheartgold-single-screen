@@ -150,8 +150,8 @@ typedef struct BATTLE_ARCADE_OBJECT {
 BOOL BattleArcadeGameBoard_InitOverlay(OverlayManager *man, int *state);
 BOOL BattleArcadeGameBoard_Main(OverlayManager *man, int *state);
 BOOL BattleArcadeGameBoard_Exit(OverlayManager *man, int *state);
-void BattleArcadeGameBoard_ReceiveBoardLayout(int a0, int size, void *data, void *_work);
-void BattleArcadeGameBoard_ReceiveStopPos(int a0, int size, void *data, void *_work);
-void BattleArcadeGameBoard_ReceiveCursorPos(int a0, int size, void *data, void *_work);
+void BattleArcadeGameBoard_ReceiveBoardLayout(int netId, int size, void *data, void *_work);
+void BattleArcadeGameBoard_ReceiveStopPos(int netId, int size, void *data, void *_work);
+void BattleArcadeGameBoard_ReceiveCursorPos(int netId, int size, void *data, void *_work);
 
 #endif

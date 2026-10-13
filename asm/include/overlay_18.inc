@@ -146,7 +146,7 @@
 .public GridInputHandler_HandleInput_AllowHold
 .public GridInputHandler_GetNextInput
 .public GridInputHandler_SetNextInput
-.public GridInputHandler_SetNextLastUnk0FInputs
+.public GridInputHandler_SetNextLastReturnInputs
 .public GridInputHandler_ClearEnabledFlag
 .public GridInputHandler_GetDpadBox
 .public Main_SetVBlankIntrCB
@@ -254,9 +254,9 @@
 .public GetPokedexDataNarcID
 .public GetDexWeightMsgBank
 .public GetDexHeightMsgBank
-.public UnkStruct_02092BB8_Set
-.public UnkStruct_02092BB8_GetUnk2
-.public UnkStruct_02092BB8_GetSpecies
+.public PokedexResumeState_Set
+.public PokedexResumeState_GetDexMode
+.public PokedexResumeState_GetSpecies
 .public NNS_G2dGetImageLocation
 .public NNS_G2dGetImagePaletteLocation
 .public FX_Div

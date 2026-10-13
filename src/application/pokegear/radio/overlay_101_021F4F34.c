@@ -106,7 +106,7 @@ void Radio_OnReselectApp(void *cbArg) {
     radioApp->isDraggingCursor = 0;
 }
 
-void Radio_UnknownCB(void *cbArg) {
+void Radio_OnDeselectApp(void *cbArg) {
     PokegearRadioAppData *radioApp = cbArg;
     radioApp->isDraggingCursor = 0;
     radioApp->pokegear->cursorInAppSwitchZone = FALSE;
@@ -272,7 +272,7 @@ int Radio_HandleTouchInput(PokegearRadioAppData *radioApp, BOOL *inputWasTouch) 
     if (*inputWasTouch) {
         radioApp->pokegear->menuInputState = MENU_INPUT_STATE_TOUCH;
         if (radioApp->pokegear->cursorInAppSwitchZone == TRUE) {
-            Radio_UnknownCB(radioApp);
+            Radio_OnDeselectApp(radioApp);
         }
     }
     return input;

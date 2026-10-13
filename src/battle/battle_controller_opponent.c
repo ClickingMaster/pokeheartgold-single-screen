@@ -87,15 +87,15 @@ int BallSealEffect_IsLoaded(void *ballOpenEffect);
 void BallSealEffect_Start(void *ballOpenEffect);
 BOOL BallSealEffect_IsActive(void *ballOpenEffect);
 void BallSealEffect_Free(void *ballOpenEffect);
-BOOL UnkBallData_IsActive(UnkBallData *ballData);
-BOOL UnkBallData_HasOpened(UnkBallData *ballData);
-void UnkBallData_SetMode(UnkBallData *ballData, u32 a1);
-void UnkBallData_SetDrawFlag(UnkBallData *ballData, int a1);
-void UnkBallData_SetPosition(UnkBallData *ballData, s16 x, s16 y);
-void UnkBallData_SetAnimateSprite(UnkBallData *ballData, u32 a1);
-void UnkBallData_SetDrawPriority(UnkBallData *ballData, u16 a1);
-void UnkBallData_SetPriority(UnkBallData *ballData, int a1);
-void UnkBallData_SetDelay(UnkBallData *ballData, s32 a1);
+BOOL BallThrow_IsActive(BallThrow *ballData);
+BOOL BallThrow_HasOpened(BallThrow *ballData);
+void BallThrow_SetMode(BallThrow *ballData, u32 a1);
+void BallThrow_SetDrawFlag(BallThrow *ballData, int a1);
+void BallThrow_SetPosition(BallThrow *ballData, s16 x, s16 y);
+void BallThrow_SetAnimateSprite(BallThrow *ballData, u32 a1);
+void BallThrow_SetDrawPriority(BallThrow *ballData, u16 a1);
+void BallThrow_SetPriority(BallThrow *ballData, int a1);
+void BallThrow_SetDelay(BallThrow *ballData, s32 a1);
 void *BattleAnimEmitterManager_New(enum HeapID heapID, s32 a1);
 void *BattleAnimEmitterManager_AddEmitter(void *emitterManager, BattleEmitterParams *params);
 void BattleAnimEmitterManager_Free(void *emitterManager);
@@ -572,7 +572,7 @@ typedef struct OpponentPokemonSendOutWork {
     BattleSystem *battleSystem;
     OpponentData *opponentData;
     void *ballOpenEffect;
-    UnkBallData *ballData;
+    BallThrow *ballData;
     BattleAnimBattlerSprites *battlerSprites;
     PokepicTemplate pokepicTemplate;
     BattleAnimSystem *animSystem;
@@ -602,7 +602,7 @@ typedef struct OpponentRecallPokemonWork {
     BattleSystem *battleSystem;
     OpponentData *opponentData;
     Pokepic *pokepic;
-    UnkBallData *ballData;
+    BallThrow *ballData;
     MoveAnimData animData;
     u8 command;
     u8 battlerId;
@@ -1417,7 +1417,7 @@ OpponentData *OpponentData_New(BattleSystem *battleSystem, const u8 *data) {
 #pragma force_active on
 
 void OpponentData_CreateBallData(BattleSystem *battleSystem, OpponentData *opponentData, u16 ball, int a3) {
-    UnkStruct_134 ballParams;
+    BattleBallParams ballParams;
 
     if ((BattleSystem_GetBattleType(battleSystem) & (BATTLE_TYPE_SAFARI | BATTLE_TYPE_PAL_PARK)) == 0) {
         if ((opponentData->battlerType & BATTLER_TYPE_IS_ENEMY) == 0 || (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_TRAINER)) {
@@ -1430,11 +1430,11 @@ void OpponentData_CreateBallData(BattleSystem *battleSystem, OpponentData *oppon
             ballParams.paletteData = BattleSystem_GetPaletteData(battleSystem);
             ballParams.keepSubSurface = 0;
             ballParams.bgPriority = 1;
-            opponentData->ballData = UnkBallData_New(&ballParams);
-            UnkBallData_SetDrawPriority(opponentData->ballData, 100);
-            UnkBallData_SetPriority(opponentData->ballData, 2);
-            UnkBallData_SetDrawFlag(opponentData->ballData, 0);
-            UnkBallData_SetAnimateSprite(opponentData->ballData, 0);
+            opponentData->ballData = BallThrow_New(&ballParams);
+            BallThrow_SetDrawPriority(opponentData->ballData, 100);
+            BallThrow_SetPriority(opponentData->ballData, 2);
+            BallThrow_SetDrawFlag(opponentData->ballData, 0);
+            BallThrow_SetAnimateSprite(opponentData->ballData, 0);
         }
     }
 }
@@ -3308,7 +3308,7 @@ void Task_PokemonSlideIn(SysTask *task, void *data) {
         return;
     case 2: {
         PokepicManager *pokepicManager;
-        if (UnkBallData_GetMode(work->opponentData->ballData) || BallSealEffect_IsLoaded(work->ballOpenEffect) != 1 || UnkBallData_HasOpened(work->opponentData->ballData) != 1) {
+        if (BallThrow_GetMode(work->opponentData->ballData) || BallSealEffect_IsLoaded(work->ballOpenEffect) != 1 || BallThrow_HasOpened(work->opponentData->ballData) != 1) {
             break;
         }
         if (work->battlerType == BATTLER_TYPE_PLAYER_SIDE_SLOT_2) {
@@ -3341,7 +3341,7 @@ void Task_PokemonSlideIn(SysTask *task, void *data) {
         return;
     }
     case 3:
-        if (UnkBallData_IsActive(work->opponentData->ballData) != 1) {
+        if (BallThrow_IsActive(work->opponentData->ballData) != 1) {
             work->state++;
         }
     case 4:
@@ -3379,7 +3379,7 @@ void Task_PokemonSlideIn(SysTask *task, void *data) {
         if (PokepicAnimManager_GetAnimState(BattleSystem_GetPokepicAnimManager(work->battleSystem), work->battlerId) != 1 || Pokepic_IsAnimFinished(work->opponentData->pokepic)) {
             break;
         }
-        UnkBallData_Delete(work->opponentData->ballData);
+        BallThrow_Delete(work->opponentData->ballData);
         work->opponentData->ballData = NULL;
         BallSealEffect_Free(work->ballOpenEffect);
         if (work->shiny) {
@@ -3481,7 +3481,7 @@ void Task_FollowMonSlideIn(SysTask *task, void *data) {
         if (PokepicAnimManager_GetAnimState(BattleSystem_GetPokepicAnimManager(work->battleSystem), work->battlerId) != 1 || Pokepic_IsAnimFinished(work->opponentData->pokepic)) {
             break;
         }
-        UnkBallData_Delete(work->opponentData->ballData);
+        BallThrow_Delete(work->opponentData->ballData);
         work->opponentData->ballData = NULL;
         if (work->shiny) {
             work->animSystem = BattleAnimSystem_New(HEAP_ID_BATTLE);
@@ -3517,7 +3517,7 @@ void Task_PokemonSendOut(SysTask *task, void *data) {
     MoveAnimData substituteAnimData;
     BattleAnimBattlerPicParams params;
     MoveAnimData unsubstituteAnimData;
-    UnkStruct_134 ballParams;
+    BattleBallParams ballParams;
     PokepicAnimScript scripts[10];
     BattlePokeballOpenArgs openArgs;
     u8 state;
@@ -3539,7 +3539,7 @@ void Task_PokemonSendOut(SysTask *task, void *data) {
         } else {
             ballParams.mode = 0;
         }
-        work->ballData = UnkBallData_New(&ballParams);
+        work->ballData = BallThrow_New(&ballParams);
         {
             PokepicManager *pokepicManager = BattleSystem_GetPokepicManager(work->battleSystem);
             NARC_ReadPokepicAnimScript((NARC *)work->opponentData->pokepicAnimNarc, scripts, work->species, work->battlerType);
@@ -3563,7 +3563,7 @@ void Task_PokemonSendOut(SysTask *task, void *data) {
         work->state++;
         break;
     case 2:
-        if ((UnkBallData_GetMode(work->ballData) == 0 || work->breakOut != 0) && BallSealEffect_IsLoaded(work->ballOpenEffect) == 1 && UnkBallData_HasOpened(work->ballData) == 1) {
+        if ((BallThrow_GetMode(work->ballData) == 0 || work->breakOut != 0) && BallSealEffect_IsLoaded(work->ballOpenEffect) == 1 && BallThrow_HasOpened(work->ballData) == 1) {
             if (work->battlerSprites) {
                 BattleAnimBattlerSprites_Free(work->battlerSprites);
             }
@@ -3579,7 +3579,7 @@ void Task_PokemonSendOut(SysTask *task, void *data) {
         }
         break;
     case 3:
-        if (UnkBallData_IsActive(work->ballData) != 1) {
+        if (BallThrow_IsActive(work->ballData) != 1) {
             work->state++;
         }
     case 4:
@@ -3612,7 +3612,7 @@ void Task_PokemonSendOut(SysTask *task, void *data) {
         break;
     case 6:
         if (PokepicAnimManager_GetAnimState(BattleSystem_GetPokepicAnimManager(work->battleSystem), work->battlerId) == 1 && Pokepic_IsAnimFinished(work->opponentData->pokepic) == FALSE) {
-            UnkBallData_Delete(work->ballData);
+            BallThrow_Delete(work->ballData);
             BallSealEffect_Free(work->ballOpenEffect);
             if (work->shiny) {
                 BattleController_InitMoveAnimData(work->battleSystem, NULL, &shinyAnimData, 1, 11, work->battlerId, work->battlerId, 0);
@@ -3745,8 +3745,8 @@ void Task_RecallPokemon(SysTask *task, void *data) {
     MoveAnimData substituteAnimData;
     BattleAnimBattlerPicParams params;
     MoveAnimData unsubstituteAnimData;
-    UnkStruct_134 enemyBallParams;
-    UnkStruct_134 playerBallParams;
+    BattleBallParams enemyBallParams;
+    BattleBallParams playerBallParams;
     OpponentBallKindTable ballKinds;
     u8 state;
 
@@ -3790,7 +3790,7 @@ void Task_RecallPokemon(SysTask *task, void *data) {
             enemyBallParams.paletteData = BattleSystem_GetPaletteData(work->battleSystem);
             enemyBallParams.bgPriority = 1;
             enemyBallParams.keepSubSurface = 0;
-            work->ballData = UnkBallData_New(&enemyBallParams);
+            work->ballData = BallThrow_New(&enemyBallParams);
         } else {
             ballKinds = ov12_0226D128;
             playerBallParams.kind = ballKinds.kinds[battlerType];
@@ -3802,7 +3802,7 @@ void Task_RecallPokemon(SysTask *task, void *data) {
             playerBallParams.paletteData = BattleSystem_GetPaletteData(work->battleSystem);
             playerBallParams.bgPriority = 1;
             playerBallParams.keepSubSurface = 0;
-            work->ballData = UnkBallData_New(&playerBallParams);
+            work->ballData = BallThrow_New(&playerBallParams);
         }
         work->state = 5;
         Pokepic_StartPaletteFade(work->pokepic, 0, 16, 0, sBallColors[work->ball]);
@@ -3834,8 +3834,8 @@ void Task_RecallPokemon(SysTask *task, void *data) {
         }
         break;
     case 7:
-        if (UnkBallData_IsActive(work->ballData) == FALSE) {
-            UnkBallData_Delete(work->ballData);
+        if (BallThrow_IsActive(work->ballData) == FALSE) {
+            BallThrow_Delete(work->ballData);
             work->state = 8;
         }
         break;
@@ -4040,7 +4040,7 @@ void Task_ThrowPokeball(SysTask *task, void *data) {
     s16 x, y;
     int animFrame;
     u32 battleType = BattleSystem_GetBattleType(work->battleSystem);
-    UnkStruct_134 ball;
+    BattleBallParams ball;
 
     switch (work->state) {
     case 0:
@@ -4078,10 +4078,10 @@ void Task_ThrowPokeball(SysTask *task, void *data) {
         ball.paletteData = BattleSystem_GetPaletteData(work->battleSystem);
         ball.keepSubSurface = 0;
         ball.battleSystem = work->battleSystem;
-        work->opponentData->ballData = UnkBallData_New(&ball);
-        UnkBallData_SetDrawPriority(work->opponentData->ballData, 100);
-        UnkBallData_SetPriority(work->opponentData->ballData, 2);
-        UnkBallData_SetAnimateSprite(work->opponentData->ballData, 0);
+        work->opponentData->ballData = BallThrow_New(&ball);
+        BallThrow_SetDrawPriority(work->opponentData->ballData, 100);
+        BallThrow_SetPriority(work->opponentData->ballData, 2);
+        BallThrow_SetAnimateSprite(work->opponentData->ballData, 0);
         ManagedSprite_SetAnimationFrame(work->opponentData->managedSprite, 0);
         ManagedSprite_SetAnim(work->opponentData->managedSprite, 1);
         ManagedSprite_SetAnimateFlag(work->opponentData->managedSprite, TRUE);
@@ -4091,14 +4091,14 @@ void Task_ThrowPokeball(SysTask *task, void *data) {
         if (work->facing == 2) {
             ManagedSprite_OffsetPositionXY(work->opponentData->managedSprite, 5, 0);
             ManagedSprite_GetPositionXY(work->opponentData->managedSprite, &x, &y);
-            if (x >= 160 && UnkBallData_GetMode(work->opponentData->ballData) != 0) {
-                UnkBallData_SetDrawFlag(work->opponentData->ballData, 1);
-                UnkBallData_SetMode(work->opponentData->ballData, 0);
+            if (x >= 160 && BallThrow_GetMode(work->opponentData->ballData) != 0) {
+                BallThrow_SetDrawFlag(work->opponentData->ballData, 1);
+                BallThrow_SetMode(work->opponentData->ballData, 0);
                 if ((battleType & BATTLE_TYPE_DOUBLES) && !(battleType & BATTLE_TYPE_MULTI)) {
                     OpponentData *partner = BattleSystem_GetOpponentData(work->battleSystem, BattleSystem_GetBattlerIdPartner(work->battleSystem, work->battlerId));
-                    UnkBallData_SetDrawFlag(partner->ballData, 1);
-                    UnkBallData_SetMode(partner->ballData, 0);
-                    UnkBallData_SetDelay(partner->ballData, 12);
+                    BallThrow_SetDrawFlag(partner->ballData, 1);
+                    BallThrow_SetMode(partner->ballData, 0);
+                    BallThrow_SetDelay(partner->ballData, 12);
                 }
             } else if (x >= 296) {
                 SpriteManager *mgr = BattleSystem_GetSpriteManager(work->battleSystem);
@@ -4123,17 +4123,17 @@ void Task_ThrowPokeball(SysTask *task, void *data) {
         if (work->opponentData->ballData) {
             animFrame = ManagedSprite_GetAnimationFrame(work->opponentData->managedSprite);
             if (ov12_0226D1E8[work->backpic][animFrame][0] != 0x7FFF) {
-                UnkBallData_SetDrawFlag(work->opponentData->ballData, 1);
-                UnkBallData_SetPosition(work->opponentData->ballData, x + ov12_0226D1E8[work->backpic][animFrame][0], y + ov12_0226D1EA[work->backpic][animFrame][0]);
-                if (animFrame == 3 && UnkBallData_GetMode(work->opponentData->ballData) != 0) {
-                    UnkBallData_SetMode(work->opponentData->ballData, 0);
-                    UnkBallData_SetAnimateSprite(work->opponentData->ballData, 1);
+                BallThrow_SetDrawFlag(work->opponentData->ballData, 1);
+                BallThrow_SetPosition(work->opponentData->ballData, x + ov12_0226D1E8[work->backpic][animFrame][0], y + ov12_0226D1EA[work->backpic][animFrame][0]);
+                if (animFrame == 3 && BallThrow_GetMode(work->opponentData->ballData) != 0) {
+                    BallThrow_SetMode(work->opponentData->ballData, 0);
+                    BallThrow_SetAnimateSprite(work->opponentData->ballData, 1);
                     if ((battleType & BATTLE_TYPE_DOUBLES) && !(battleType & BATTLE_TYPE_MULTI)) {
                         OpponentData *partner = BattleSystem_GetOpponentData(work->battleSystem, BattleSystem_GetBattlerIdPartner(work->battleSystem, work->battlerId));
-                        UnkBallData_SetPosition(partner->ballData, x + ov12_0226D1E8[work->backpic][animFrame][0], y + ov12_0226D1EA[work->backpic][animFrame][0]);
-                        UnkBallData_SetDrawFlag(partner->ballData, 1);
-                        UnkBallData_SetMode(partner->ballData, 0);
-                        UnkBallData_SetAnimateSprite(partner->ballData, 1);
+                        BallThrow_SetPosition(partner->ballData, x + ov12_0226D1E8[work->backpic][animFrame][0], y + ov12_0226D1EA[work->backpic][animFrame][0]);
+                        BallThrow_SetDrawFlag(partner->ballData, 1);
+                        BallThrow_SetMode(partner->ballData, 0);
+                        BallThrow_SetAnimateSprite(partner->ballData, 1);
                     }
                 }
             }
@@ -4156,11 +4156,11 @@ void Task_ThrowPokeball(SysTask *task, void *data) {
             work->delay = 8;
             work->state = 4;
         } else if (work->opponentData->ballData && ov12_0226D1E8[work->backpic][animFrame][0] != 0x7FFF) {
-            UnkBallData_SetPosition(work->opponentData->ballData, x + ov12_0226D1E8[work->backpic][animFrame][0], y + ov12_0226D1EA[work->backpic][animFrame][0]);
-            if (animFrame == 3 && UnkBallData_GetMode(work->opponentData->ballData) != work->ballTargetState) {
-                UnkBallData_SetMode(work->opponentData->ballData, work->ballTargetState);
-                UnkBallData_SetPriority(work->opponentData->ballData, 1);
-                UnkBallData_SetAnimateSprite(work->opponentData->ballData, 1);
+            BallThrow_SetPosition(work->opponentData->ballData, x + ov12_0226D1E8[work->backpic][animFrame][0], y + ov12_0226D1EA[work->backpic][animFrame][0]);
+            if (animFrame == 3 && BallThrow_GetMode(work->opponentData->ballData) != work->ballTargetState) {
+                BallThrow_SetMode(work->opponentData->ballData, work->ballTargetState);
+                BallThrow_SetPriority(work->opponentData->ballData, 1);
+                BallThrow_SetAnimateSprite(work->opponentData->ballData, 1);
                 if (work->ballTargetState != 3) {
                     PlaySE(SEQ_SE_DP_THROW);
                 }
@@ -4177,8 +4177,8 @@ void Task_ThrowPokeball(SysTask *task, void *data) {
         }
         break;
     case 5:
-        if (UnkBallData_IsActive(work->opponentData->ballData) != 1) {
-            UnkBallData_Delete(work->opponentData->ballData);
+        if (BallThrow_IsActive(work->opponentData->ballData) != 1) {
+            BallThrow_Delete(work->opponentData->ballData);
             work->opponentData->ballData = NULL;
             work->state = 6;
         }
@@ -4225,12 +4225,12 @@ void Task_ThrowPokeballWithFollowMon(SysTask *task, void *data) {
             int frame = ManagedSprite_GetAnimationFrame(work->opponentData->managedSprite);
             if (ov12_0226D1E8[work->backpic][frame][0] != 0x7FFF) {
                 OpponentData *partner = BattleSystem_GetOpponentData(work->battleSystem, BattleSystem_GetBattlerIdPartner(work->battleSystem, work->battlerId));
-                if (frame == 3 && UnkBallData_GetMode(partner->ballData) != 0) {
-                    UnkBallData_SetPosition(partner->ballData, x + ov12_0226D1E8[work->backpic][frame][0], y + ov12_0226D1EA[work->backpic][frame][0]);
-                    UnkBallData_SetDrawFlag(partner->ballData, 1);
-                    UnkBallData_SetMode(partner->ballData, 0);
-                    UnkBallData_SetAnimateSprite(partner->ballData, 1);
-                    UnkBallData_SetPriority(partner->ballData, 1);
+                if (frame == 3 && BallThrow_GetMode(partner->ballData) != 0) {
+                    BallThrow_SetPosition(partner->ballData, x + ov12_0226D1E8[work->backpic][frame][0], y + ov12_0226D1EA[work->backpic][frame][0]);
+                    BallThrow_SetDrawFlag(partner->ballData, 1);
+                    BallThrow_SetMode(partner->ballData, 0);
+                    BallThrow_SetAnimateSprite(partner->ballData, 1);
+                    BallThrow_SetPriority(partner->ballData, 1);
                 }
             }
         }

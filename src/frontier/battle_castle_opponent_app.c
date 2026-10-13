@@ -3260,7 +3260,7 @@ int BattleCastle_HandlePartyGridInput(GridInputHandler *grid) {
 
 void ov83_02247B04(GridInputHandler *grid) {
     int input = GridInputHandler_GetNextInput(grid);
-    GridInputHandler_SetNextLastUnk0FInputs(grid, 0, input, input);
+    GridInputHandler_SetNextLastReturnInputs(grid, 0, input, input);
 }
 
 void BattleCastlePartyApp_OnPartyGridKeyMove(BattleCastlePartyApp *app, int newTarget, int prevTarget) {

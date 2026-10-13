@@ -9,7 +9,7 @@
 #include "system.h"
 #include "sound_playback.h"
 
-struct UnkStruct_02016C28 {
+struct YesNoPromptButtonTemplate {
     BgConfig *bgConfig;
     fx32 *unk4;
     u16 screenDataNarcId;
@@ -49,7 +49,7 @@ static void YesNoPrompt_InitPlttFromTemplate(YesNoPrompt *yesno, const YesNoProm
 static void YesNoPrompt_InitButtonsFromTemplate(YesNoPrompt *yesno, const YesNoPromptTemplate *template);
 static void SetupTouchHitboxesController(YesNoPrompt *yesno, const YesNoPromptTemplate *template);
 static void YesNoButton_TouchHitboxCB(u32 index, u32 event, YesNoPrompt *yesno);
-static void YesNoPromptButton_Draw(YesNoPromptButton *button, const struct UnkStruct_02016C28 *arg, enum HeapID heapID);
+static void YesNoPromptButton_Draw(YesNoPromptButton *button, const struct YesNoPromptButtonTemplate *arg, enum HeapID heapID);
 static void YesNoPromptButton_Clear(YesNoPromptButton *button);
 static SysTask *LoadPixelDataFromNarcAndScheduleTransfer(NarcId narcId, s32 fileId, BgConfig *bgConfig, int bgId, u32 tileStart, enum HeapID heapID);
 static SysTask *LoadPlttFromNarcAndScheduleTransfer(NarcId narcId, s32 fileId, int bgId, u32 offset, u32 size, enum HeapID heapID);
@@ -237,7 +237,7 @@ static void YesNoPrompt_InitPlttFromTemplate(YesNoPrompt *yesno, const YesNoProm
 static void YesNoPrompt_InitButtonsFromTemplate(YesNoPrompt *yesno, const YesNoPromptTemplate *template) {
     int i;
     int j;
-    struct UnkStruct_02016C28 sp4;
+    struct YesNoPromptButtonTemplate sp4;
 
     for (i = 0; i < 2; ++i) {
         yesno->unk68[i] = (i + 1) * FX32_ONE;
@@ -290,7 +290,7 @@ static void YesNoButton_TouchHitboxCB(u32 index, u32 event, YesNoPrompt *yesno) 
     }
 }
 
-static void YesNoPromptButton_Draw(YesNoPromptButton *button, const struct UnkStruct_02016C28 *arg, enum HeapID heapID) {
+static void YesNoPromptButton_Draw(YesNoPromptButton *button, const struct YesNoPromptButtonTemplate *arg, enum HeapID heapID) {
     struct YesNoPromptSubstruct00_18 *r2 = &button->unk18;
     r2->unk0 = arg->unk4;
     r2->unk4 = arg->unk13;

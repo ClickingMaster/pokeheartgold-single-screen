@@ -32,7 +32,7 @@ static void ovFieldMain_GetMsgBoxParametersEx(FieldSystem *fieldSystem, MessageF
 static void ovFieldMain_CreateMessageBox(FieldSystem *fieldSystem, MessageBox *messageBox);
 static void ovFieldMain_ReadAndExpandMsgDataViaBuffer(MessageBox *messageBox, MsgData *messageData, u32 messageNum);
 static void ovFieldMain_GetFormattedECMessage(MessageBox *messageBox, u16 messageBank, u16 messageNum, u16 word1, u16 word2);
-static void ovFieldMain_PrintMessageEx(MessageBox *messageBox, FontID fontId, u32 textFrameDelay, BOOL canABSpeedUp, u32 a4);
+static void ovFieldMain_PrintMessageEx(MessageBox *messageBox, FontID fontId, u32 textFrameDelay, BOOL canABSpeedUp, u32 autoScrollParam);
 static void ovFieldMain_AddTextPrinterParameterized(MessageBox *messageBox, FontID fontId);
 
 const u16 gScriptStdMsgBanks[] = {
@@ -300,8 +300,8 @@ static void ovFieldMain_GetFormattedECMessage(MessageBox *messageBox, u16 messag
     String_Delete(string);
 }
 
-static void ovFieldMain_PrintMessageEx(MessageBox *messageBox, FontID fontId, u32 textFrameDelay, BOOL canABSpeedUp, u32 a4) {
-    *(messageBox->textPrinterNumPtr) = DialogBox_PrintMessageEx(messageBox->window, messageBox->message, fontId, textFrameDelay, canABSpeedUp, a4);
+static void ovFieldMain_PrintMessageEx(MessageBox *messageBox, FontID fontId, u32 textFrameDelay, BOOL canABSpeedUp, u32 autoScrollParam) {
+    *(messageBox->textPrinterNumPtr) = DialogBox_PrintMessageEx(messageBox->window, messageBox->message, fontId, textFrameDelay, canABSpeedUp, autoScrollParam);
 }
 
 static void ovFieldMain_AddTextPrinterParameterized(MessageBox *messageBox, FontID fontId) {

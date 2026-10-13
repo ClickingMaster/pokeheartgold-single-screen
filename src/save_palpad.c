@@ -25,7 +25,7 @@ SavePalPad *PalPad_GetNthEntry(SavePalPad *arr, int n) {
     return &arr[n];
 }
 
-u8 PalPadEntry_GetFromUnk68Array(SavePalPad *palPad, int n) {
+u8 PalPadEntry_GetFriendLanguage(SavePalPad *palPad, int n) {
     return palPad->friendLanguages[n];
 }
 

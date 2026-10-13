@@ -9,7 +9,7 @@
 static BOOL Task_ViewRankingsApp(TaskManager *taskManager);
 
 void FieldSystem_LaunchTask_ViewRankingsApp(FieldSystem *fieldSystem, u8 pageScrollParam, u8 cursorPos) {
-    UnkStruct_02097D48 *taskData = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(UnkStruct_02097D48));
+    ViewRankingsTaskData *taskData = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(ViewRankingsTaskData));
     taskData->state = 0;
     taskData->args = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(ViewRankingsArgs));
     taskData->args->saveData = FieldSystem_GetSaveData(fieldSystem);
@@ -20,7 +20,7 @@ void FieldSystem_LaunchTask_ViewRankingsApp(FieldSystem *fieldSystem, u8 pageScr
 
 static BOOL Task_ViewRankingsApp(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    UnkStruct_02097D48 *taskData = TaskManager_GetEnvironment(taskManager);
+    ViewRankingsTaskData *taskData = TaskManager_GetEnvironment(taskManager);
 
     switch (taskData->state) {
     case 0:

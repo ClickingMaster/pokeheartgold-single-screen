@@ -1604,7 +1604,7 @@ BOOL ScrCmd_136(ScriptContext *ctx) {
 
 BOOL ScrCmd_PartySelectUI(ScriptContext *ctx) {
     PartyMenuArgs **partyMenu = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
-    *partyMenu = PartyMenu_LaunchApp_Unk2(HEAP_ID_FIELD3, ctx->fieldSystem);
+    *partyMenu = PartyMenu_LaunchApp_PartySelect(HEAP_ID_FIELD3, ctx->fieldSystem);
     SetupNativeScript(ctx, ScrNative_WaitApplication);
     return TRUE;
 }
@@ -2158,7 +2158,7 @@ BOOL ScrCmd_630(ScriptContext *ctx) {
 
 BOOL ScrCmd_492(ScriptContext *ctx) {
     u16 r4 = ScriptGetVar(ctx);
-    UnkStruct_0203E8C8 *r6 = (UnkStruct_0203E8C8 *)ScriptGetVarPointer(ctx);
+    EasyChatResult *r6 = (EasyChatResult *)ScriptGetVarPointer(ctx);
     u16 *r3 = ScriptGetVarPointer(ctx);
 
     *r3 = 0xFFFF;
@@ -2167,7 +2167,7 @@ BOOL ScrCmd_492(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_PromptEasyChat(ScriptContext *ctx) {
-    UnkStruct_0203E8C8 *r6 = (UnkStruct_0203E8C8 *)ScriptGetVarPointer(ctx);
+    EasyChatResult *r6 = (EasyChatResult *)ScriptGetVarPointer(ctx);
     u16 *r4 = ScriptGetVarPointer(ctx);
     u16 *r0 = ScriptGetVarPointer(ctx);
 
@@ -3954,7 +3954,7 @@ BOOL ScrCmd_550(ScriptContext *ctx) {
 BOOL ScrCmd_551(ScriptContext *ctx) {
     u16 r6 = ScriptGetVar(ctx);
     PartyMenuArgs **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
-    *p_work = PartyMenu_LaunchApp_Unk4(HEAP_ID_FIELD3, ctx->fieldSystem, r6);
+    *p_work = PartyMenu_LaunchApp_DayCare(HEAP_ID_FIELD3, ctx->fieldSystem, r6);
     SetupNativeScript(ctx, ScrNative_WaitApplication);
     return TRUE;
 }
@@ -4813,7 +4813,7 @@ BOOL ScrCmd_712(ScriptContext *ctx) {
         *p_work = PokeathlonEventRecord_LaunchApp(ctx->fieldSystem);
         break;
     case 3:
-        *p_work = PokeathlonUnk_LaunchApp(ctx->fieldSystem);
+        *p_work = PokeathlonTrophies_LaunchApp(ctx->fieldSystem);
         break;
     default:
     case 0:

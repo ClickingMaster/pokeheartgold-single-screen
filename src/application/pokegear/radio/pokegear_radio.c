@@ -82,7 +82,7 @@ BOOL PokegearRadio_Exit(OverlayManager *man, int *state) {
 void Radio_Load(PokegearRadioAppData *radioApp) {
     radioApp->pokegear->childAppdata = radioApp;
     radioApp->pokegear->reselectAppCB = Radio_OnReselectApp;
-    radioApp->pokegear->deselectAppCB = Radio_UnknownCB;
+    radioApp->pokegear->deselectAppCB = Radio_OnDeselectApp;
     radioApp->skin = Pokegear_GetSkin(radioApp->pokegear->savePokegear);
     Pokegear_GetRadioCursorCoords(radioApp->pokegear->savePokegear, &radioApp->cursorX, &radioApp->cursorY);
     radioApp->selectedButton = 3;

@@ -2,7 +2,7 @@
 
 // This only exists to enforce data alignment and arrangement
 
-const u8 ov101_021F8760[] = {
+const u8 gEthanLyraRandomMsgConditions[] = {
     3,
     3,
     3,

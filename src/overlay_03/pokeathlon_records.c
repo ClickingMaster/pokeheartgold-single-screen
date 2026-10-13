@@ -41,7 +41,7 @@ void PokeathlonRecords_Show(TaskManager *taskManager, enum PokeathlonData dataTy
     data->bgConfig = fieldSystem->bgConfig;
     data->fieldSystem = fieldSystem;
     data->pokeathlonSave = Save_Pokeathlon_Get(fieldSystem->saveData);
-    data->pokeathlonStruct = PokeathlonSave_GetUnkB00(data->pokeathlonSave);
+    data->pokeathlonStruct = PokeathlonSave_GetStatistics(data->pokeathlonSave);
     TaskManager_Call(fieldSystem->taskman, &Task_PokeathlonRecords, data);
 }
 
@@ -146,7 +146,7 @@ static BOOL PokeathlonRecords_IsRecordShown(PokeathlonRecordsWork *data, int ind
     if (index == 0) {
         return TRUE;
     }
-    return PokeathlonSave_GetUnkB78_AtIndex(data->pokeathlonSave, index - 1);
+    return PokeathlonSave_IsDataCardBought(data->pokeathlonSave, index - 1);
 }
 
 static const int sPokeathlonRecordCounts[3] = {

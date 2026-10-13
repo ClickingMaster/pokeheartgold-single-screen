@@ -67,8 +67,8 @@
 .public Options_GetFrame
 .public Save_Pokeathlon_Get
 .public PokeathlonSave_GetAthletePoints
-.public PokeathlonSave_GetUnkB78_AtIndex
-.public PokeathlonSave_GetUnkB7C_AtIndex
+.public PokeathlonSave_IsDataCardBought
+.public PokeathlonSave_IsDailyItemBought
 .public GetItemAttr
 .public GXS_SetGraphicsMode
 .public GX_SetBankForSubBG

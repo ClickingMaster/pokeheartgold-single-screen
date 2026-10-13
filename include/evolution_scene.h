@@ -11,7 +11,7 @@
 // The evolution scene (src/evolution_scene.c): plays an evolution and teaches the moves of the new level
 typedef struct EvolutionTaskData EvolutionTaskData;
 
-EvolutionTaskData *EvolutionScene_New(Party *party, Pokemon *mon, int species, Options *options, u32 a4, Pokedex *dex, Bag *bag, GameStats *stats, u32 evolutionCondition, u32 a9, enum HeapID heapID);
+EvolutionTaskData *EvolutionScene_New(Party *party, Pokemon *mon, int species, Options *options, u32 a4, Pokedex *dex, Bag *bag, GameStats *stats, u32 evolutionCondition, u32 flags, enum HeapID heapID);
 BOOL EvolutionScene_IsDone(EvolutionTaskData *);
 void EvolutionScene_Delete(EvolutionTaskData *);
 

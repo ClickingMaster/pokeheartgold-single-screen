@@ -3,15 +3,15 @@
 
 #include "heap.h"
 
-typedef struct UnkStruct_02092BB8 {
+typedef struct PokedexResumeState {
     u16 species;
-    u16 unk_2;
-} UnkStruct_02092BB8;
+    u16 dexMode;
+} PokedexResumeState;
 
-UnkStruct_02092BB8 *UnkStruct_02092BB8_New(enum HeapID heapID);
-void UnkStruct_02092BB8_Free(UnkStruct_02092BB8 *data);
-void UnkStruct_02092BB8_Set(UnkStruct_02092BB8 *data, u16 species, u16 a2);
-u16 UnkStruct_02092BB8_GetUnk2(UnkStruct_02092BB8 *data);
-u32 UnkStruct_02092BB8_GetSpecies(UnkStruct_02092BB8 *data);
+PokedexResumeState *PokedexResumeState_New(enum HeapID heapID);
+void PokedexResumeState_Free(PokedexResumeState *data);
+void PokedexResumeState_Set(PokedexResumeState *data, u16 species, u16 a2);
+u16 PokedexResumeState_GetDexMode(PokedexResumeState *data);
+u32 PokedexResumeState_GetSpecies(PokedexResumeState *data);
 
 #endif // POKEHEARTGOLD_UNK_02092BB8_H

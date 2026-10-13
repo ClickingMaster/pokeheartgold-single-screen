@@ -271,7 +271,7 @@ u16 PokeathlonTrophies_CalcEventRecordTotal(PokeathlonSave *pokeathlon) {
     const u16 *records;
 
     GF_ASSERT(pokeathlon != NULL);
-    records = PokeathlonSave_GetUnkAEC(pokeathlon);
+    records = PokeathlonSave_GetSoloEventBestPoints(pokeathlon);
     for (i = 0; i < 10; i++) {
         sum += records[i];
     }
@@ -304,7 +304,7 @@ void PokeathlonTrophies_CreateSummary(PokeathlonTrophies *work, PokeathlonTrophi
     profile = args->profile;
     courseRecords = (PokeathlonCourseRecordEntry *)PokeathlonSave_dummy1(pokeathlon);
     recordsSolo = PokeathlonSave_GetRecordsSolo(pokeathlon);
-    medals = PokeathlonSave_GetUnkDC(pokeathlon);
+    medals = PokeathlonSave_GetMonMedals(pokeathlon);
     for (i = 0; i < 5; i++) {
         u16 score = courseRecords[i].totalScore;
         summary->courseScores[i] = score;

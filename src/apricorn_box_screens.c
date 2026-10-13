@@ -45,7 +45,7 @@ BOOL ApricornBox_QueueApricorn(SaveApricornBox *box, int apricorn, u32 value);
 u32 ApricornBox_GetMixState(SaveApricornBox *apricornBox);
 int sub_02031FE8(void *data);
 int ApricornBox_UseJuiceServing(SaveApricornBox *box);
-void ApricornBox_FeedAprijuice(UnkStruct_02031CEC *record, Party *party, int slot);
+void ApricornBox_FeedAprijuice(ApricornJuice *record, Party *party, int slot);
 void ParticleSystem_DeleteAllEmitters(SPLEmitter *emitter);
 
 // Output of ApricornJuice_RankFlavors: the juice made from the blended apricorns.
@@ -69,7 +69,7 @@ typedef struct ApricornBoxScreen {
     u8 mixStage;                         // 0x019, ApricornBox_GetMixProgressLevel
     u8 apricornCounts[7];                // 0x01A
     u8 filler_21;                        // 0x021
-    u8 juiceRecord[8];                   // 0x022, UnkStruct_02031CEC (unaligned)
+    u8 juiceRecord[8];                   // 0x022, ApricornJuice (unaligned)
     ApricornBoxJuice juice;              // 0x02A
     u32 steps;                           // 0x038
     u16 subState;                        // 0x03C
@@ -865,10 +865,10 @@ void ApricornBoxScreen_LoadBoxState(ApricornBoxScreen *screen) {
     int i;
     screen->numBlending = ApricornBox_CountQueuedApricorns(screen->apricornBox);
     screen->juiceServings = ApricornBox_GetJuiceServings(screen->apricornBox);
-    ApricornBox_GetJuice(screen->apricornBox, 8, (UnkStruct_02031CEC *)screen->juiceRecord);
+    ApricornBox_GetJuice(screen->apricornBox, 8, (ApricornJuice *)screen->juiceRecord);
     screen->juiceMildness = screen->juiceRecord[2];
     screen->unk_17 = sub_02031FE8(screen->juiceRecord);
-    screen->flavorTotal = ApricornJuice_GetFlavorTotal((UnkStruct_02031CEC *)screen->juiceRecord);
+    screen->flavorTotal = ApricornJuice_GetFlavorTotal((ApricornJuice *)screen->juiceRecord);
     ApricornJuice_RankFlavors(screen->juiceRecord, &screen->juice);
     screen->mixStage = ApricornBox_GetMixProgressLevel(screen->apricornBox);
     for (i = 0; i < 7; i++) {
@@ -2275,7 +2275,7 @@ typedef struct AprijuiceScreen {
     u8 filler_0C[4];                            // 0x00C
     Party *party;                               // 0x010
     SaveApricornBox *apricornBox;               // 0x014
-    UnkStruct_02031CEC juiceRecord;             // 0x018
+    ApricornJuice juiceRecord;             // 0x018
     ApricornBoxJuice juice;                     // 0x020
     struct PokeathlonPerformanceStars oldStars; // 0x02E
     u8 stat;                                    // 0x036

@@ -180,7 +180,7 @@ static const int ov53_021E84FC[1] = {
     4,
 };
 
-static const WindowTemplate ov53_021E8518 = {
+static const WindowTemplate sWindowTemplate_TutorialTouchMsg = {
     .bgId = GF_BG_LYR_SUB_0,
     .left = 24,
     .top = 20,
@@ -215,7 +215,7 @@ static const int sButtonBlinkPalOffsets[] = {
     14,
 };
 
-static const TouchscreenHitbox ov53_021E8510[] = {
+static const TouchscreenHitbox sTouchToAdvanceButtonHitboxes[] = {
     {
      .rect = {
             144,
@@ -394,7 +394,7 @@ static const int sMultichoiceMenuBgCursorCoords[][3] = {
      },
 };
 
-static const TouchscreenHitbox ov53_021E8650[3][4] = {
+static const TouchscreenHitbox sMultichoiceMenuHitboxes[3][4] = {
     {
      {
             .rect = {
@@ -1272,7 +1272,7 @@ static int OakSpeech_MultichoiceMenuHandleInputVertical(OakSpeechData *data, int
     int hitbox;
 
     TouchscreenHitbox hitboxes[3][4];
-    ARRAY_ASSIGN(hitboxes, ov53_021E8650);
+    ARRAY_ASSIGN(hitboxes, sMultichoiceMenuHitboxes);
 
     if (data->menuData.pressDelay != 0) {
         ++data->menuData.pressDelay;
@@ -2171,7 +2171,7 @@ static void OakSpeech_ShowTutorialTouchMsg(OakSpeechData *data) {
     Window *window = &data->controlTutorialTouchMsgWindow;
 
     ReadMsgDataIntoString(data->msgData, msg_0219_00060, string);
-    AddWindow(data->bgConfig, window, &ov53_021E8518);
+    AddWindow(data->bgConfig, window, &sWindowTemplate_TutorialTouchMsg);
     FillWindowPixelBuffer(window, 0);
     AddTextPrinterParameterizedWithColor(window, 4, string, 0, 0, TEXT_SPEED_INSTANT, MAKE_TEXT_COLOR(15, 1, 0), NULL);
     CopyWindowToVram(window);
@@ -2181,7 +2181,7 @@ static void OakSpeech_ShowTutorialTouchMsg(OakSpeechData *data) {
 
 static void OakSpeech_HideTutorialTouchMsg(OakSpeechData *data) {
     Window *window = &data->controlTutorialTouchMsgWindow;
-    AddWindow(data->bgConfig, window, &ov53_021E8518);
+    AddWindow(data->bgConfig, window, &sWindowTemplate_TutorialTouchMsg);
     FillWindowPixelBuffer(window, 0);
     CopyWindowToVram(window);
     RemoveWindow(window);
@@ -2224,7 +2224,7 @@ static BOOL OakSpeech_IsTouchToAdvanceButtonActive(OakSpeechData *data) {
 static void OakSpeech_HandleTouchToAdvanceButton(OakSpeechData *data) {
     int hitbox;
     if (OakSpeech_IsTouchToAdvanceButtonActive(data)) {
-        hitbox = TouchscreenHitbox_FindRectAtTouchHeld(ov53_021E8510);
+        hitbox = TouchscreenHitbox_FindRectAtTouchHeld(sTouchToAdvanceButtonHitboxes);
         if (hitbox == 0 && System_GetTouchNew()) {
             gSystem.simulatedInputs = TRUE;
             OakSpeech_TouchToAdvanceButtonAction(data, TOUCHTOADVANCE_PRESS);

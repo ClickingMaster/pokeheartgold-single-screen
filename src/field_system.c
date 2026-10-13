@@ -163,7 +163,7 @@ void FieldSystem_Delete(OverlayManager *man) {
     MapMatrix_Free(fieldSystem->mapMatrix);
     Field_FreeMapEvents(fieldSystem);
     Heap_Free(fieldSystem->bagCursor);
-    UnkStruct_02092BB8_Free(fieldSystem->unkA8);
+    PokedexResumeState_Free(fieldSystem->unkA8);
     GearPhoneRingManager_Delete(fieldSystem->phoneRingManager);
     Heap_Free(fieldSystem->processManager);
     OverlayManager_FreeData(man);

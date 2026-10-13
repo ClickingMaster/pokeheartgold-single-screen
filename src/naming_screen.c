@@ -139,7 +139,7 @@ typedef struct NamingScreenAppData {
     MenuInputStateMgr *pMenuInputState;
 } NamingScreenAppData; // size: 0x5D4
 
-typedef struct UnkStruct_02102278 {
+typedef struct NamingScreenTouchHitboxDef {
     u8 x;
     u8 y;
     u16 sizeParam : 2; // GameFreak tried to be size-efficient here, but

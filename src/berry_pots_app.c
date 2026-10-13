@@ -61,8 +61,8 @@ static BOOL BerryPotsApp_WateringAnim(BerryPotsAppData *data);
 static BOOL BerryPotsApp_HarvestAnim(BerryPotsAppData *data);
 static void BerryPotsApp_SetCursorVisible(BerryPotsAppData *data, BOOL visible);
 static void BerryPotsApp_SetAnimsActive(BerryPotsAppData *data, BOOL active);
-static void BerryPotsApp_PrintMessage(BerryPotsAppData *data, enum BerryPotsAppMessage action, u8 a2, BOOL a3);
-static void BerryPotsApp_CreateMenu(BerryPotsAppData *data, u32 a1);
+static void BerryPotsApp_PrintMessage(BerryPotsAppData *data, enum BerryPotsAppMessage action, u8 potIndex, BOOL drawFrame);
+static void BerryPotsApp_CreateMenu(BerryPotsAppData *data, u32 menuId);
 static int BerryPotsApp_HandleMenuInput(BerryPotsAppData *data);
 static void BerryPotsApp_HarvestBerries(BerryPotsAppData *data);
 static void BerryPotsApp_VBlankCB(BerryPotsAppData *data);
@@ -948,27 +948,27 @@ static void BerryPotsApp_SetAnimsActive(BerryPotsAppData *data, BOOL active) {
     }
 }
 
-static void BerryPotsApp_PrintMessage(BerryPotsAppData *data, enum BerryPotsAppMessage action, u8 a2, BOOL a3) {
+static void BerryPotsApp_PrintMessage(BerryPotsAppData *data, enum BerryPotsAppMessage action, u8 potIndex, BOOL drawFrame) {
     Window *window = (action == BERRY_POTS_APP_MSG_TOUCH_POT) ? &data->windows[1] : &data->windows[2];
     FillWindowPixelBuffer(window, 0xF);
-    if (a3) {
+    if (drawFrame) {
         FillBgTilemapRect(data->bgConfig, 0, RGB_BLACK, 0, 18, 32, 6, 0);
         DrawFrameAndWindow2(window, TRUE, 1, 13);
     }
-    BerryPotsApp_FormatMessage(data, action, a2);
+    BerryPotsApp_FormatMessage(data, action, potIndex);
     AddTextPrinterParameterized(window, 1, data->currentStatusString, 0, 0, 0xFF, NULL);
     ScheduleWindowCopyToVram(window);
     data->messageTimer = 60;
 }
 
-static void BerryPotsApp_CreateMenu(BerryPotsAppData *data, u32 a1) {
+static void BerryPotsApp_CreateMenu(BerryPotsAppData *data, u32 menuId) {
     TouchscreenListMenuHeader header;
     MI_CpuFill8(&header, 0, sizeof(TouchscreenListMenuHeader));
 
     header.template = sMenuTemplate;
-    header.listMenuItems = data->listMenuItems[a1];
+    header.listMenuItems = data->listMenuItems[menuId];
     header.bgConfig = data->bgConfig;
-    header.numWindows = sBerryPotsMenus[a1].numButtons;
+    header.numWindows = sBerryPotsMenus[menuId].numButtons;
 
     data->menu = TouchscreenListMenu_Create(data->menuSpawner, &header, (u8)data->fieldMenuState, 0xf, 16 - (header.numWindows * 3), 0xe, 0);
 }

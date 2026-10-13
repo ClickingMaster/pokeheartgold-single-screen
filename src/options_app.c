@@ -154,7 +154,7 @@ static const TouchscreenHitbox sOptionsAppTouchscreenHitboxes[16] = {
     { TOUCHSCREEN_RECTLIST_END },
 };
 
-static const u32 ov54_021E6DA8[15][2] = {
+static const u32 sOptionsAppHitboxEntryValues[15][2] = {
     { MENU_ENTRY_TEXT_SPEED,   0 },
     { MENU_ENTRY_TEXT_SPEED,   1 },
     { MENU_ENTRY_TEXT_SPEED,   2 },
@@ -172,7 +172,7 @@ static const u32 ov54_021E6DA8[15][2] = {
     { MENU_ENTRY_6,            6 },
 };
 
-static const UnmanagedSpriteTemplate ov54_021E6EAC[9] = {
+static const UnmanagedSpriteTemplate sOptionsAppSpriteTemplates[9] = {
     {
      .resourceSet = 0,
      .x = 112,
@@ -908,7 +908,7 @@ static void OptionsApp_HandleInput(OptionsApp_Data *data) {
             break;
 
         case 13: // Confirm button
-            data->currentMenuEntryId = ov54_021E6DA8[hitboxIndex][0];
+            data->currentMenuEntryId = sOptionsAppHitboxEntryValues[hitboxIndex][0];
             OptionsApp_SetActiveButtonsXPosition(data);
             ov54_021E6A64(data);
             data->exitChoice = 1;
@@ -921,7 +921,7 @@ static void OptionsApp_HandleInput(OptionsApp_Data *data) {
             break;
 
         case 14: // Quit button
-            data->currentMenuEntryId = ov54_021E6DA8[hitboxIndex][0];
+            data->currentMenuEntryId = sOptionsAppHitboxEntryValues[hitboxIndex][0];
             OptionsApp_SetActiveButtonsXPosition(data);
             ov54_021E6A64(data);
             data->exitChoice = 2;
@@ -934,10 +934,10 @@ static void OptionsApp_HandleInput(OptionsApp_Data *data) {
             break;
 
         default: {
-            data->currentMenuEntryId = ov54_021E6DA8[hitboxIndex][0];
+            data->currentMenuEntryId = sOptionsAppHitboxEntryValues[hitboxIndex][0];
             OptionsApp_MenuEntry *entry = &data->menuEntries[data->currentMenuEntryId];
 
-            u32 value = ov54_021E6DA8[hitboxIndex][1];
+            u32 value = sOptionsAppHitboxEntryValues[hitboxIndex][1];
             if (value == 3) {
                 OptionsApp_UpdateMenuEntryCarousel(data, data->currentMenuEntryId, entry, -1);
             } else if (value == 4) {
@@ -1032,7 +1032,7 @@ static void OptionsApp_FreeSpriteRenderer(OptionsApp_Data *data) {
 
 static void OptionsApp_SetupSprites(OptionsApp_Data *data) {
     for (u16 i = 0; i < NELEMS(data->sprites); i++) {
-        data->sprites[i] = SpriteSystem_CreateSpriteFromResourceHeader(data->spriteRenderer, data->spriteGfxHandler, &ov54_021E6EAC[i]);
+        data->sprites[i] = SpriteSystem_CreateSpriteFromResourceHeader(data->spriteRenderer, data->spriteGfxHandler, &sOptionsAppSpriteTemplates[i]);
         thunk_Sprite_SetPriority(data->sprites[i], 2);
         Sprite_SetAnimActiveFlag(data->sprites[i], TRUE);
     }

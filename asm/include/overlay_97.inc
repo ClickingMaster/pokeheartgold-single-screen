@@ -76,7 +76,7 @@
 .public CopyU16ArrayToString
 .public SaveArray_PCStorage_Get
 .public Save_Pokeathlon_Get
-.public PokeathlonSave_GetUnkDC_AtIndex
+.public PokeathlonSave_MonHasMedal
 .public WirelessStatusIcon_CreateOnScreenIfConnected
 .public GetMonData
 .public GetBoxMonData

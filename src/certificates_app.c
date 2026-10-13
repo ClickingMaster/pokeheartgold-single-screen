@@ -179,10 +179,10 @@ static void CertificatesApp_FreeSpriteRenderer(CertificatesApp_Data *data);
 static void CertificatesApp_CreateSprites(CertificatesApp_Data *data);
 static void CertificatesApp_UpdateSpritePositions(CertificatesApp_Data *data);
 static void CertificatesApp_LoadSpriteChars(Sprite *sprite, void *unkBuffer, u32 unkBufferSize, u32 srcOffset);
-static void CertificatesApp_LoadMmodelSprite(Sprite *sprite, s32 narcMemberNum, u8 a2, enum HeapID heapID);
+static void CertificatesApp_LoadMmodelSprite(Sprite *sprite, s32 narcMemberNum, u8 frameIndex, enum HeapID heapID);
 static void CertificatesApp_LoadPlayerSprite(Sprite *sprite, PlayerProfile *profile, enum HeapID heapID);
 static u32 CertificatesApp_GetMonMmodelId(int species, int form, int gender);
-static void CertificatesApp_LoadMonSprite(Sprite *sprite, Pokemon *pokemon, enum HeapID heapID, u32 a3);
+static void CertificatesApp_LoadMonSprite(Sprite *sprite, Pokemon *pokemon, enum HeapID heapID, u32 spriteSize);
 
 BOOL Certificates_Init(OverlayManager *manager, int *state) {
     Heap_Create(HEAP_ID_3, HEAP_ID_CERTIFICATES, 0x20000);
@@ -684,7 +684,7 @@ static void CertificatesApp_LoadSpriteChars(Sprite *sprite, void *unkBuffer, u32
     GXS_LoadOBJ(unkBuffer, (u32)((void *)NNS_G2dGetImageLocation(proxy, NNS_G2D_VRAM_TYPE_2DSUB) + srcOffset), unkBufferSize);
 }
 
-void CertificatesApp_LoadMmodelSprite(Sprite *sprite, s32 narcMemberNum, u8 a2, enum HeapID heapID) {
+void CertificatesApp_LoadMmodelSprite(Sprite *sprite, s32 narcMemberNum, u8 frameIndex, enum HeapID heapID) {
     thunk_Sprite_SetDrawFlag(sprite, FALSE);
 
     NARC *narc = NARC_New(NARC_data_mmodel_mmodel, heapID);
@@ -693,7 +693,7 @@ void CertificatesApp_LoadMmodelSprite(Sprite *sprite, s32 narcMemberNum, u8 a2, 
 
     const void *address = NNS_G3dGetTexData(tex);
     void *buffer = Heap_AllocAtEnd(heapID, 0x200);
-    CharTiles_CopyRectFromBuffer(address + (a2 * 0x200), 4, 0, 0, 4, 4, buffer);
+    CharTiles_CopyRectFromBuffer(address + (frameIndex * 0x200), 4, 0, 0, 4, 4, buffer);
     CertificatesApp_LoadSpriteChars(sprite, buffer, 0x200, 0);
     Heap_Free(buffer);
 
@@ -735,14 +735,14 @@ static u32 CertificatesApp_GetMonMmodelId(int species, int form, int gender) {
     return ret;
 }
 
-static void CertificatesApp_LoadMonSprite(Sprite *sprite, Pokemon *pokemon, enum HeapID heapID, u32 a3) {
+static void CertificatesApp_LoadMonSprite(Sprite *sprite, Pokemon *pokemon, enum HeapID heapID, u32 spriteSize) {
     u32 species = GetMonData(pokemon, MON_DATA_SPECIES, NULL);
     u32 form = GetMonData(pokemon, MON_DATA_FORM, NULL);
     u32 gender = GetMonGender(pokemon);
     BOOL shiny = MonIsShiny(pokemon);
 
     u32 bufferSize, unk;
-    if (a3 != 0) {
+    if (spriteSize != 0) {
         bufferSize = 0x800;
         unk = 8;
     } else {

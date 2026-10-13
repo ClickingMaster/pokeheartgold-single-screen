@@ -301,7 +301,7 @@ void FrontierData_SetWifiTeam(FrontierData *data, u32 index, void *src) {
     }
 }
 
-void FrontierData_GetWifiTeam(FrontierData *data, s32 index, UnkStruct_02069528 *dst) {
+void FrontierData_GetWifiTeam(FrontierData *data, s32 index, FrontierWifiUploadRecord *dst) {
     if (index == 0) {
         MI_CpuCopy8(data->wifiTeams[1], dst, 0xA8);
     } else {

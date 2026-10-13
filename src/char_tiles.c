@@ -173,8 +173,8 @@ static void CharTiles_LoadObjBlocksFromNarc(NarcId narcId, s32 fileId, enum Heap
     Heap_Free(sp14);
 }
 
-void CharTiles_LoadRectAsObjFromNarc(NarcId narcId, s32 fileId, enum HeapID heapID, TileRect *a3, void *dest) {
-    CharTiles_LoadObjBlocksFromNarc(narcId, fileId, heapID, a3->x, a3->y, a3->w, a3->h, dest);
+void CharTiles_LoadRectAsObjFromNarc(NarcId narcId, s32 fileId, enum HeapID heapID, TileRect *rect, void *dest) {
+    CharTiles_LoadObjBlocksFromNarc(narcId, fileId, heapID, rect->x, rect->y, rect->w, rect->h, dest);
 }
 
 void CharTiles_LoadPicAsObjFromNarc(NarcId narcId, s32 fileId, enum HeapID heapID, void *dest) {
@@ -216,8 +216,8 @@ void CharTiles_LoadMonObjBlocksFromNarc(NarcId narcId, s32 fileId, enum HeapID h
     Heap_Free(sp24);
 }
 
-void CharTiles_LoadMonRectAsObjFromNarc(NarcId narcId, s32 fileId, enum HeapID heapID, TileRect *a3, void *dest, u32 personality, BOOL isAnimated, int whichFacing, int species) {
-    CharTiles_LoadMonObjBlocksFromNarc(narcId, fileId, heapID, a3->x, a3->y, a3->w, a3->h, dest, personality, isAnimated, whichFacing, species);
+void CharTiles_LoadMonRectAsObjFromNarc(NarcId narcId, s32 fileId, enum HeapID heapID, TileRect *rect, void *dest, u32 personality, BOOL isAnimated, int whichFacing, int species) {
+    CharTiles_LoadMonObjBlocksFromNarc(narcId, fileId, heapID, rect->x, rect->y, rect->w, rect->h, dest, personality, isAnimated, whichFacing, species);
 }
 
 void CharTiles_LoadMonPicAsObjFromNarc(NarcId narcId, s32 fileId, enum HeapID heapID, void *dest, u32 personality, BOOL isAnimated, int whichFacing, int species) {

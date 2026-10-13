@@ -10,10 +10,10 @@ typedef struct ViewRankingsArgs {
     SaveData *saveData;
 } ViewRankingsArgs;
 
-typedef struct UnkStruct_02097D48 {
+typedef struct ViewRankingsTaskData {
     u32 state;
     ViewRankingsArgs *args;
-} UnkStruct_02097D48;
+} ViewRankingsTaskData;
 
 // pageScrollParam = 3 * scroll + page
 void FieldSystem_LaunchTask_ViewRankingsApp(FieldSystem *fieldSystem, u8 pageScrollParam, u8 cursorPos);

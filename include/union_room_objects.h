@@ -23,8 +23,8 @@ typedef struct UnionRoomSlot {
     u8 isWandering; // 0x09, set when a lone player starts walking around
     u8 unk_0A[2];
     u32 id;                           // 0x0C, the player record's id when the object appeared
-    UnkStruct_0206793C *emote;        // 0x10
-    UnkStruct_0206793C *friendEffect; // 0x14
+    FieldEffect *emote;        // 0x10
+    FieldEffect *friendEffect; // 0x14
 } UnionRoomSlot;
 
 typedef struct UnionRoomMessage {

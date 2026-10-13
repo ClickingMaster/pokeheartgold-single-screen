@@ -23,7 +23,7 @@ struct MapProp {
     BOOL active;
     BOOL culled;
     BOOL overrideRotation;
-    UnkStruct_FieldSysC0_SubC *render;
+    Field3dRenderObj *render;
     VecFx32 translation;
     VecFx32 rotation;
     VecFx32 scale;
@@ -31,12 +31,12 @@ struct MapProp {
 
 struct MapPropManager {
     MapProp mapProps[MAP_PROP_MAX];
-    UnkStruct_FieldSysC0 *fsys_unkC0;
+    Field3dRenderObjManager *fsys_unkC0;
 }; // size: 0x704
 
 static void MapPropManager_Init(MapPropManager *mapPropManager, void *unkC0);
 static void MapProp_Init(MapProp *mapProp);
-static void DrawModelShapewise(const NNSG3dResMdl *mapPropManager, const VecFx32 *baseTrans, const MtxFx33 *prmBaseRot, const VecFx32 *baseScale, BuildModelShapes *a4, int a5);
+static void DrawModelShapewise(const NNSG3dResMdl *mapPropManager, const VecFx32 *baseTrans, const MtxFx33 *prmBaseRot, const VecFx32 *baseScale, BuildModelShapes *shapes, int buildModel);
 
 static void MapPropManager_Init(MapPropManager *mapPropManager, void *unkC0) {
     mapPropManager->fsys_unkC0 = unkC0;
@@ -47,7 +47,7 @@ static void MapPropManager_Init(MapPropManager *mapPropManager, void *unkC0) {
     }
 }
 
-MapPropManager *MapPropManager_New(enum HeapID heapID, UnkStruct_FieldSysC0 *unkC0) {
+MapPropManager *MapPropManager_New(enum HeapID heapID, Field3dRenderObjManager *unkC0) {
     MapPropManager *ret = Heap_Alloc(heapID, sizeof(MapPropManager));
     MI_CpuClearFast(ret, sizeof(MapPropManager));
     MapPropManager_Init(ret, unkC0);
@@ -137,7 +137,7 @@ void MapPropManager_LoadFromNARC(NARC *narc, u32 size, MapPropManager *mapPropMa
     }
 }
 
-void MapPropManager_LoadFromSafariZone(NARC *a0, MapPropManager *mapPropManager, int a2, const SAFARIZONE_AREA *safariArea, u16 *a4, BOOL gender) {
+void MapPropManager_LoadFromSafariZone(NARC *narc, MapPropManager *mapPropManager, int a2, const SAFARIZONE_AREA *safariArea, u16 *a4, BOOL gender) {
     u32 numSafariObjects = safariArea->active_object_count;
     if (numSafariObjects > SAFARI_ZONE_MAX_OBJECTS) {
         GF_ASSERT(FALSE);
@@ -183,7 +183,7 @@ void MapPropManager_LoadFromSafariZone(NARC *a0, MapPropManager *mapPropManager,
     }
 }
 
-void MapPropManager_DrawWithOffset(const VecFx32 *position, AreaDataManager *areaDataManager, BOOL a2, ModelAttributes *modelAttributes, MapPropManager *mapPropManager) {
+void MapPropManager_DrawWithOffset(const VecFx32 *position, AreaDataManager *areaDataManager, BOOL applyAttributes, ModelAttributes *modelAttributes, MapPropManager *mapPropManager) {
     VecFx32 translation;
     MtxFx33 rotation = { FX32_ONE, 0, 0, 0, FX32_ONE, 0, 0, 0, FX32_ONE };
 
@@ -199,7 +199,7 @@ void MapPropManager_DrawWithOffset(const VecFx32 *position, AreaDataManager *are
             continue;
         }
         BuildModelShapes *r4 = AreaDataManager_GetBuildModelShapes(areaDataManager);
-        if (a2 == TRUE) {
+        if (applyAttributes == TRUE) {
             ModelAttributes_ApplyToModel(modelAttributes, mapProp->render->model, 0xF33);
         }
         u16 sp14;
@@ -270,7 +270,7 @@ MapProp *MapPropManager_GetMapPropByIndex_Checked_RequireActive(MapPropManager *
     return ret;
 }
 
-static void DrawModelShapewise(const NNSG3dResMdl *model, const VecFx32 *baseTrans, const MtxFx33 *prmBaseRot, const VecFx32 *baseScale, BuildModelShapes *a4, int buildModel) {
+static void DrawModelShapewise(const NNSG3dResMdl *model, const VecFx32 *baseTrans, const MtxFx33 *prmBaseRot, const VecFx32 *baseScale, BuildModelShapes *shapes, int buildModel) {
     NNS_G3dGlbSetBaseTrans(baseTrans);
     NNS_G3dGlbSetBaseRot(prmBaseRot);
     NNS_G3dGlbSetBaseScale(baseScale);
@@ -278,8 +278,8 @@ static void DrawModelShapewise(const NNSG3dResMdl *model, const VecFx32 *baseTra
 
     u16 num;
     u16 sp0;
-    BuildModelShapes_GetShapeRange(buildModel, a4, &num, &sp0);
-    u16(*shpDat)[2] = BuildModelShapes_GetShapes(sp0, a4);
+    BuildModelShapes_GetShapeRange(buildModel, shapes, &num, &sp0);
+    u16(*shpDat)[2] = BuildModelShapes_GetShapes(sp0, shapes);
     u8 i;
     u8 matID = 0xFF;
     for (i = 0; i < num; ++i) {

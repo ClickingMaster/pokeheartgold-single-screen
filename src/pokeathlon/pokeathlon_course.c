@@ -212,7 +212,7 @@ BOOL PokeathlonCourse_Exit(OverlayManager *manager, int *state) {
     // Get Pokeathlon save data and process result
     saveData = *(SaveData **)data->args;
     pokeathlonSave = Save_Pokeathlon_Get(saveData);
-    result = PokeathlonSave_GetAgainUnkB00(pokeathlonSave);
+    result = PokeathlonSave_GetStatistics2(pokeathlonSave);
     PokeathlonCourse_AddCapped(data->frameCounter, 59999, result);
 
     // Reset text flags
@@ -306,7 +306,7 @@ PokeathlonParticipantData *PokeathlonCourse_GetParticipantData(PokeathlonCourseD
     return &data->participants[index];
 }
 
-u8 *PokeathlonCourse_GetParticipantUnk04(PokeathlonCourseData *data, int index) {
+u8 *PokeathlonCourse_GetParticipantMons(PokeathlonCourseData *data, int index) {
     return &data->participants[index].field_04;
 }
 
@@ -465,7 +465,7 @@ u32 PokeathlonCourse_GetField3A4(PokeathlonCourseData *data) {
     return data->eventDataTransfer[1];
 }
 
-u32 PokeathlonCourse_GetUnkConstant4() {
+u32 PokeathlonCourse_GetEventResultSize() {
     return 4; // might be max participants or something; needs to see where it's called
 }
 

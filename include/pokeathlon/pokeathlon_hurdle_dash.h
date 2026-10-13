@@ -115,7 +115,7 @@ typedef struct PokeathlonHurdleDashMonView {
     u32 personality; // 0x0C
 } PokeathlonHurdleDashMonView;
 
-// A Pokemon of a team in the course data (PokeathlonCourse_GetParticipantUnk04).
+// A Pokemon of a team in the course data (PokeathlonCourse_GetParticipantMons).
 typedef struct PokeathlonHurdleDashTeamMon {
     u16 species;
     u16 form;

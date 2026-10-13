@@ -474,7 +474,7 @@ typedef struct BattleHpBar {
     u16 bobAngle;
 } BattleHpBar;
 
-typedef struct UnkBallData UnkBallData;
+typedef struct BallThrow BallThrow;
 
 typedef struct OpponentData {
     u32 unk0[6];
@@ -485,7 +485,7 @@ typedef struct OpponentData {
     BattleHpBar hpBar;
     void *unk80;
     u8 unk84[0x4];
-    UnkBallData *ballData;
+    BallThrow *ballData;
     u8 unk8C[0x108];
     u8 battlerId;
     u8 battlerType;
@@ -637,7 +637,7 @@ struct BattleSystem {
 struct GetterWork {
     BattleSystem *battleSystem;
     BattleContext *ctx;
-    UnkBallData *ballData;
+    BallThrow *ballData;
     ManagedSprite *sprites[2];
     TextOBJ *fontOam;
     ObjCharSpaceReservation charSpace;
@@ -681,7 +681,7 @@ typedef struct BattleItem {
 
 typedef struct BattleCursorPosition BattleCursorPosition;
 
-typedef struct UnkStruct_134 {
+typedef struct BattleBallParams {
     s32 kind;
     enum HeapID heapID;
     s32 mode;
@@ -692,18 +692,18 @@ typedef struct UnkStruct_134 {
     SpriteSystem *spriteSystem;
     PaletteData *paletteData;
     BattleSystem *battleSystem;
-} UnkStruct_134;
+} BattleBallParams;
 
-typedef struct UnkStruct_50C {
+typedef struct PokedexEntryPopupArgs {
     BgConfig *bgConfig;
     PaletteData *paletteData;
     PokepicManager *pokepicManager;
     Pokemon *mon;
     BOOL natDexEnabled;
     enum HeapID heapID;
-} UnkStruct_50C;
+} PokedexEntryPopupArgs;
 
-struct UnkBallData { // TODO: Give a better name.
+struct BallThrow { // TODO: Give a better name.
     int ballAnim;
     int ballAnimStarted;
     int step;
@@ -721,7 +721,7 @@ struct UnkBallData { // TODO: Give a better name.
     SpriteManager *spriteManager;
     ManagedSprite *managedSprite;
     u8 unk34[0x5C];
-    UnkStruct_134 params;
+    BattleBallParams params;
     u8 unkB8[0xC];
     int modeFrames;
     int arcHeight;

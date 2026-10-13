@@ -12,7 +12,7 @@
 typedef struct PokedexArgs {
     Pokedex *pokedex;
     PlayerProfile *playerProfile;
-    UnkStruct_02092BB8 *unk_08;
+    PokedexResumeState *unk_08;
     MenuInputStateMgr *menuInputStatePtr;
     int x;
     int y;
@@ -24,7 +24,7 @@ BOOL Pokedex_Init(OverlayManager *man, int *state);
 BOOL Pokedex_Main(OverlayManager *man, int *state);
 BOOL Pokedex_Exit(OverlayManager *man, int *state);
 
-OverlayManager *PokedexEntryPopup_Create(UnkStruct_50C *unkStruct);
+OverlayManager *PokedexEntryPopup_Create(PokedexEntryPopupArgs *unkStruct);
 s32 PokedexEntryPopup_IsDone(OverlayManager *man);
 void PokedexEntryPopup_Delete(OverlayManager *man);
 Pokepic *PokedexEntryPopup_GetPokepic(OverlayManager *man);

@@ -202,10 +202,10 @@ static void DisplayWindow(CreditsAppWork *work);
 static void StartTogglePageDisplay(PageDisplayWork *pageDisplay, BgConfig *bgConfig, BOOL hidden);
 static BOOL PageWindowRendering(PageDisplayWork *pageDisplay);
 static void TogglePageDisplayCB(SysTask *task, void *taskData);
-static void SetPageWindowPosition(int a0, int a1, int a2, int a3);
+static void SetPageWindowPosition(int x1, int y1, int x2, int y2);
 static void LoadPage(PageWork *a0);
 static void LoadCutsceneSpriteResources(CreditsAppWork *work);
-static void LoadCutsceneSpriteGfx(CutsceneWork *a0, int a1);
+static void LoadCutsceneSpriteGfx(CutsceneWork *cutsceneWork, int spriteId);
 static void InitCutsceneSprites(CreditsAppWork *work);
 static void FreeCutsceneSprites(CreditsAppWork *work);
 
@@ -852,8 +852,8 @@ static void StartTogglePageDisplay(PageDisplayWork *pageDisplay, BgConfig *bgCon
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
 }
 
-static BOOL PageWindowRendering(PageDisplayWork *a0) {
-    return a0->rendering;
+static BOOL PageWindowRendering(PageDisplayWork *pageDisplay) {
+    return pageDisplay->rendering;
 }
 
 static void TogglePageDisplayCB(SysTask *task, void *taskData) {
@@ -888,14 +888,14 @@ static void TogglePageDisplayCB(SysTask *task, void *taskData) {
     BgSetPosTextAndCommit(pageDisplay->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_X, xPos);
 }
 
-static void SetPageWindowPosition(int a0, int a1, int a2, int a3) {
-    if (a0 == 0 && a2 == 0xff) {
-        G2S_SetWnd1Position(0, a1, 1, a3);
-        G2S_SetWnd0Position(1, a1, 0, a3);
+static void SetPageWindowPosition(int x1, int y1, int x2, int y2) {
+    if (x1 == 0 && x2 == 0xff) {
+        G2S_SetWnd1Position(0, y1, 1, y2);
+        G2S_SetWnd0Position(1, y1, 0, y2);
         return;
     }
 
-    G2S_SetWnd0Position(a0, a1, a2, a3);
+    G2S_SetWnd0Position(x1, y1, x2, y2);
 }
 
 static void LoadPage(PageWork *ptr) {
@@ -939,7 +939,7 @@ static void LoadCutsceneSpriteResources(CreditsAppWork *work) {
     }
 }
 
-static void LoadCutsceneSpriteGfx(CutsceneWork *a0, int spriteId) {
+static void LoadCutsceneSpriteGfx(CutsceneWork *cutsceneWork, int spriteId) {
     int playerId;
     int friendId;
     BOOL playerCharacter = FALSE;
@@ -952,14 +952,14 @@ static void LoadCutsceneSpriteGfx(CutsceneWork *a0, int spriteId) {
 
     if (spriteId == 5) {
         playerCharacter = TRUE;
-        if (a0->gender == PLAYER_GENDER_FEMALE) {
+        if (cutsceneWork->gender == PLAYER_GENDER_FEMALE) {
             playerId = 7;
         } else {
             playerId = 5;
         }
     } else if (spriteId == 7) {
         friendCharacter = TRUE;
-        if (a0->gender == PLAYER_GENDER_FEMALE) {
+        if (cutsceneWork->gender == PLAYER_GENDER_FEMALE) {
             friendId = 5;
         } else {
             friendId = 7;
@@ -967,29 +967,29 @@ static void LoadCutsceneSpriteGfx(CutsceneWork *a0, int spriteId) {
     }
 
     if (playerCharacter) {
-        charData = GfGfxLoader_GetCharDataFromOpenNarc(a0->narc, sCutsceneSpriteGfxFileIds[playerId].charFileId, TRUE, &ppCharData, HEAP_ID_CREDITS);
-        plttData = GfGfxLoader_GetPlttDataFromOpenNarc(a0->narc, sCutsceneSpriteGfxFileIds[playerId].plttFileId, &ppPlttData, HEAP_ID_CREDITS);
+        charData = GfGfxLoader_GetCharDataFromOpenNarc(cutsceneWork->narc, sCutsceneSpriteGfxFileIds[playerId].charFileId, TRUE, &ppCharData, HEAP_ID_CREDITS);
+        plttData = GfGfxLoader_GetPlttDataFromOpenNarc(cutsceneWork->narc, sCutsceneSpriteGfxFileIds[playerId].plttFileId, &ppPlttData, HEAP_ID_CREDITS);
     } else if (friendCharacter) {
-        charData = GfGfxLoader_GetCharDataFromOpenNarc(a0->narc, sCutsceneSpriteGfxFileIds[friendId].charFileId, TRUE, &ppCharData, HEAP_ID_CREDITS);
-        plttData = GfGfxLoader_GetPlttDataFromOpenNarc(a0->narc, sCutsceneSpriteGfxFileIds[friendId].plttFileId, &ppPlttData, HEAP_ID_CREDITS);
+        charData = GfGfxLoader_GetCharDataFromOpenNarc(cutsceneWork->narc, sCutsceneSpriteGfxFileIds[friendId].charFileId, TRUE, &ppCharData, HEAP_ID_CREDITS);
+        plttData = GfGfxLoader_GetPlttDataFromOpenNarc(cutsceneWork->narc, sCutsceneSpriteGfxFileIds[friendId].plttFileId, &ppPlttData, HEAP_ID_CREDITS);
     } else {
-        charData = GfGfxLoader_GetCharDataFromOpenNarc(a0->narc, sCutsceneSpriteGfxFileIds[spriteId].charFileId, TRUE, &ppCharData, HEAP_ID_CREDITS);
-        plttData = GfGfxLoader_GetPlttDataFromOpenNarc(a0->narc, sCutsceneSpriteGfxFileIds[spriteId].plttFileId, &ppPlttData, HEAP_ID_CREDITS);
+        charData = GfGfxLoader_GetCharDataFromOpenNarc(cutsceneWork->narc, sCutsceneSpriteGfxFileIds[spriteId].charFileId, TRUE, &ppCharData, HEAP_ID_CREDITS);
+        plttData = GfGfxLoader_GetPlttDataFromOpenNarc(cutsceneWork->narc, sCutsceneSpriteGfxFileIds[spriteId].plttFileId, &ppPlttData, HEAP_ID_CREDITS);
     }
 
     DC_FlushRange(ppCharData->pRawData, ppCharData->szByte);
-    int curSprite = a0->curSprite;
-    GX_LoadOBJ(ppCharData->pRawData, a0->spriteGfx[curSprite].charOffset, ppCharData->szByte);
+    int curSprite = cutsceneWork->curSprite;
+    GX_LoadOBJ(ppCharData->pRawData, cutsceneWork->spriteGfx[curSprite].charOffset, ppCharData->szByte);
 
     DC_FlushRange(ppPlttData->pRawData, ppPlttData->szByte);
-    curSprite = a0->curSprite;
-    GX_LoadOBJPltt(ppPlttData->pRawData, a0->spriteGfx[curSprite].plttOffset, 0x20);
+    curSprite = cutsceneWork->curSprite;
+    GX_LoadOBJPltt(ppPlttData->pRawData, cutsceneWork->spriteGfx[curSprite].plttOffset, 0x20);
 
-    a0->spriteGfx[a0->curSprite].cellBankFile = GfGfxLoader_GetCellBankFromOpenNarc(a0->narc, sCutsceneSpriteGfxFileIds[spriteId].cellBankFileId, TRUE, &a0->spriteGfx[a0->curSprite].cellDataBank, HEAP_ID_CREDITS);
-    a0->spriteGfx[a0->curSprite].animBankFile = GfGfxLoader_GetAnimBankFromOpenNarc(a0->narc, sCutsceneSpriteGfxFileIds[spriteId].animBankFileId, TRUE, &a0->spriteGfx[a0->curSprite].animDataBank, HEAP_ID_CREDITS);
+    cutsceneWork->spriteGfx[cutsceneWork->curSprite].cellBankFile = GfGfxLoader_GetCellBankFromOpenNarc(cutsceneWork->narc, sCutsceneSpriteGfxFileIds[spriteId].cellBankFileId, TRUE, &cutsceneWork->spriteGfx[cutsceneWork->curSprite].cellDataBank, HEAP_ID_CREDITS);
+    cutsceneWork->spriteGfx[cutsceneWork->curSprite].animBankFile = GfGfxLoader_GetAnimBankFromOpenNarc(cutsceneWork->narc, sCutsceneSpriteGfxFileIds[spriteId].animBankFileId, TRUE, &cutsceneWork->spriteGfx[cutsceneWork->curSprite].animDataBank, HEAP_ID_CREDITS);
     Heap_Free(charData);
     Heap_Free(plttData);
-    a0->curSprite++;
+    cutsceneWork->curSprite++;
 }
 
 static void CreateCutsceneSprite(CreditsAppWork *work, const CutsceneSpriteParam *spriteParam) {

@@ -95,7 +95,7 @@ BOOL SpinTradeFlow_WaitGroupApp(SpinTradeFlow *work) {
             work->state = 5;
         } else {
             CommState_SetErrorWatch(1, 1);
-            work->partyMenu = PartyMenu_LaunchApp_Unk5(work->fieldSystem, work->selection);
+            work->partyMenu = PartyMenu_LaunchApp_SpinTrade(work->fieldSystem, work->selection);
             work->subwork->unk0[0] = 1;
             work->state = 2;
         }
@@ -127,7 +127,7 @@ BOOL SpinTradeFlow_WaitPartyMenu(SpinTradeFlow *work) {
 BOOL SpinTradeFlow_WaitSummary(SpinTradeFlow *work) {
     if (!FieldSystem_ApplicationIsRunning(work->fieldSystem)) {
         Heap_Free(work->summary);
-        work->partyMenu = PartyMenu_LaunchApp_Unk5(work->fieldSystem, work->selection);
+        work->partyMenu = PartyMenu_LaunchApp_SpinTrade(work->fieldSystem, work->selection);
         work->state = 2;
     }
     return FALSE;

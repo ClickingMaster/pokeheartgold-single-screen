@@ -396,7 +396,7 @@ static const WindowTemplate sWholePartySceneWindowTemplates[2] = {
      },
 };
 
-static const TileRect ov63_0221FAF0 = {
+static const TileRect sRegisterHofTrainerPicTileRect = {
     0,
     0,
     10,
@@ -410,7 +410,7 @@ static const GraphicsModes sGraphicsModes_WholePartyScene = {
     GX_BG0_AS_3D,
 };
 
-static const OamCharTransferParam ov63_0221FB30 = {
+static const OamCharTransferParam sRegisterHofOamCharTransferParam = {
     0x400,
     0x10000,
     0x4000,
@@ -555,7 +555,7 @@ static const BgTemplate sBgTemplate_IndivMons_Main2 = {
     .mosaic = FALSE,
 };
 
-static const TileRect ov63_0221FC38[2] = {
+static const TileRect sRegisterHofMonPicTileRects[2] = {
     {
      0,
      0,
@@ -675,7 +675,7 @@ static const GXRgb sSpritePltt_Black[16] = {
     RGB_BLACK,
 };
 
-static const OamManagerParam ov63_0221FCB8 = {
+static const OamManagerParam sRegisterHofOamManagerParam = {
     0,
     0x80,
     0,
@@ -930,8 +930,8 @@ static void RegisterHallOfFame_CreateSpriteGfxHandlers(RegisterHallOfFameData *d
     data->spriteGfxHandler = SpriteManager_New(data->spriteRenderer);
 
     {
-        OamManagerParam sp2C = ov63_0221FCB8;
-        OamCharTransferParam sp18 = ov63_0221FB30;
+        OamManagerParam sp2C = sRegisterHofOamManagerParam;
+        OamCharTransferParam sp18 = sRegisterHofOamCharTransferParam;
         SpriteSystem_Init(data->spriteRenderer, &sp2C, &sp18, 0x20);
     }
 
@@ -1988,7 +1988,7 @@ static void RegisterHallOfFame_GetPartyDetails(RegisterHallOfFameData *data) {
     u32 i;
     PokepicTemplate sp40;
     TileRect sp20[2];
-    ARRAY_ASSIGN(sp20, ov63_0221FC38);
+    ARRAY_ASSIGN(sp20, sRegisterHofMonPicTileRects);
     NARC *narc = NARC_New(NARC_a_1_8_0, HEAP_ID_REGISTER_HALL_OF_FAME);
     BOOL encry;
     Pokemon *pokemon;
@@ -2343,7 +2343,7 @@ static void RegisterHallOfFame_WholePartyScene_DeleteWindows(RegisterHallOfFameD
 static void RegisterHallOfFame_WholePartyScene_CreateSprites(RegisterHallOfFameData *data) {
 
     TrainerPicFileIds sp2C;
-    TileRect sp1C = ov63_0221FAF0;
+    TileRect sp1C = sRegisterHofTrainerPicTileRect;
     NARC *narc = NARC_New(NARC_a_0_0_8, HEAP_ID_REGISTER_HALL_OF_FAME);
     u32 i;
     int tag;

@@ -7,16 +7,16 @@
 
 #define HEAP_ID_TRAINER_CARD ((enum HeapID)94)
 
-typedef struct UnkStruct_0203F7C2 {
+typedef struct TrainerCardAppSettings {
     MenuInputStateMgr *menuInputStatePtr;
     SaveData *saveData;
     int showBack;
     BOOL gameCleared;
-} UnkStruct_0203F7C2;
+} TrainerCardAppSettings;
 
 typedef struct TrainerCardAppArgs {
     u8 unk0[0x66c];
-    UnkStruct_0203F7C2 unk66C;
+    TrainerCardAppSettings unk66C;
 } TrainerCardAppArgs;
 
 typedef struct {

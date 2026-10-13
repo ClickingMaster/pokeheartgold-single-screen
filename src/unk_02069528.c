@@ -8,11 +8,11 @@
 #include "frontier_data_access.h"
 #include "union_room_avatar.h"
 
-void sub_02069528(SaveData *saveData, s32 a1, UnkStruct_02069528 *a2) {
+void sub_02069528(SaveData *saveData, s32 a1, FrontierWifiUploadRecord *a2) {
     PlayerProfile *playerProfile = Save_PlayerData_GetProfile(saveData);
     SaveWiFiHistory *saveWiFiHistory = Save_WiFiHistory_Get(saveData);
     FrontierData *frontierData = Save_FrontierData_Get(saveData);
-    MI_CpuFill8(a2, 0, sizeof(UnkStruct_02069528));
+    MI_CpuFill8(a2, 0, sizeof(FrontierWifiUploadRecord));
     MI_CpuCopy8(PlayerProfile_GetNamePtr(playerProfile), &a2->playerName, (PLAYER_NAME_LENGTH + 1) * sizeof(u16));
     a2->trainerId = PlayerProfile_GetTrainerID(playerProfile);
     a2->gameVersion = gGameVersion;

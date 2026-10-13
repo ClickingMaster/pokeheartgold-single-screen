@@ -718,12 +718,12 @@ static void FuchsiaGymmick_KillNeighboringSegmentsAnims(FuchsiaGymmickLocalData 
     }
 }
 
-static void FuchsiaGymmick_KillWallAnimTask(FuchsiaGymmickWallAnimTask *a0) {
-    Field3dObject_SetActiveFlag(&a0->animState->object, FALSE);
-    a0->animState->active = FALSE;
-    a0->active = FALSE;
-    a0->wallId = -1;
-    a0->animState = NULL;
-    SysTask_Destroy(a0->sysTask);
-    a0->sysTask = NULL;
+static void FuchsiaGymmick_KillWallAnimTask(FuchsiaGymmickWallAnimTask *animTask) {
+    Field3dObject_SetActiveFlag(&animTask->animState->object, FALSE);
+    animTask->animState->active = FALSE;
+    animTask->active = FALSE;
+    animTask->wallId = -1;
+    animTask->animState = NULL;
+    SysTask_Destroy(animTask->sysTask);
+    animTask->sysTask = NULL;
 }

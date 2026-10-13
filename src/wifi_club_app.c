@@ -846,7 +846,7 @@ void WifiClub_PaletteCycleTask(s32 task, WifiClubPaletteCycle *paletteCycle) {
 s32 WifiClub_Init(OverlayManager *overlayMananger, s32 *state) {
     switch (*state) {
     case 0:
-        UnkStruct_ov44_0222A758_args *overlayArgs = OverlayManager_GetArgs(overlayMananger);
+        WifiClubArgs *overlayArgs = OverlayManager_GetArgs(overlayMananger);
         if (CommState_IsWifi() != 0) {
             switch (overlayArgs->choice) {
             case 1:
@@ -968,7 +968,7 @@ void WifiClub_TeardownGraphics(WifiClubApp *app) {
 s32 WifiClub_Exit(OverlayManager *overlayManager) {
     WifiClubApp *data = OverlayManager_GetData(overlayManager);
     WifiClub_TeardownGraphics(data);
-    UnkStruct_ov44_0222A758_args *args = OverlayManager_GetArgs(overlayManager);
+    WifiClubArgs *args = OverlayManager_GetArgs(overlayManager);
     args->choice = data->exitChoice;
     if ((data->exitChoice == 8) || (data->exitChoice == 10)) {
         UnloadDwcOverlay();

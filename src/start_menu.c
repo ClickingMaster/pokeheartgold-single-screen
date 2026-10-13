@@ -80,13 +80,13 @@ typedef struct StartMenuActionFunc {
     TaskFunc func;
 } StartMenuActionFunc;
 
-typedef struct UnkStruct_0203CA9C_Case8 {
+typedef struct StartMenuEvolutionArgs {
     u8 partySlot;
     u8 evoType;
     u16 evoParam;
     u16 species;
     int evoMethod;
-} UnkStruct_0203CA9C_Case8;
+} StartMenuEvolutionArgs;
 
 typedef struct StartMenuMoveLearnReturn {
     u16 itemId;
@@ -805,7 +805,7 @@ static BOOL Task_StartMenu_Pokemon(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
 
-    startMenu->exitTaskEnvironment = PartyMenu_LaunchApp_Unk1(fieldSystem, &startMenu->fieldMoveCheckData, 0);
+    startMenu->exitTaskEnvironment = PartyMenu_LaunchApp_Field(fieldSystem, &startMenu->fieldMoveCheckData, 0);
     startMenu->exitTaskFunc = Task_StartMenu_HandleReturn_Pokemon;
     return FALSE;
 }
@@ -919,7 +919,7 @@ BOOL Task_StartMenu_HandleReturn_Pokemon(TaskManager *taskManager) {
         break;
     }
     case PARTY_MENU_ACTION_RETURN_EVO_ITEM_USE: {
-        UnkStruct_0203CA9C_Case8 *unk = Heap_Alloc(HEAP_ID_FIELD2, sizeof(UnkStruct_0203CA9C_Case8));
+        StartMenuEvolutionArgs *unk = Heap_Alloc(HEAP_ID_FIELD2, sizeof(StartMenuEvolutionArgs));
         unk->evoParam = partyMenuArgs->itemId;
         unk->evoType = EVOCTX_ITEM_USE;
         unk->partySlot = partyMenuArgs->partySlot;
@@ -930,7 +930,7 @@ BOOL Task_StartMenu_HandleReturn_Pokemon(TaskManager *taskManager) {
         break;
     }
     case PARTY_MENU_ACTION_RETURN_EVO_RARE_CANDY: {
-        UnkStruct_0203CA9C_Case8 *unk = Heap_Alloc(HEAP_ID_FIELD2, sizeof(UnkStruct_0203CA9C_Case8));
+        StartMenuEvolutionArgs *unk = Heap_Alloc(HEAP_ID_FIELD2, sizeof(StartMenuEvolutionArgs));
         unk->evoParam = MapHeader_GetMapEvolutionMethod(fieldSystem->location->mapId);
         unk->evoType = EVOCTX_LEVELUP;
         unk->partySlot = partyMenuArgs->partySlot;
@@ -1324,7 +1324,7 @@ static BOOL Task_StartMenu_HandleReturn_Summary(TaskManager *taskManager) {
         startMenu->exitTaskEnvironment = partyMenuArgs;
         StartMenu_SetExitTaskFunc(startMenu, Task_StartMenu_HandleReturn_Pokemon);
     } else {
-        startMenu->exitTaskEnvironment = PartyMenu_LaunchApp_Unk1(fieldSystem, &startMenu->fieldMoveCheckData, summaryArgs->partySlot);
+        startMenu->exitTaskEnvironment = PartyMenu_LaunchApp_Field(fieldSystem, &startMenu->fieldMoveCheckData, summaryArgs->partySlot);
         StartMenu_SetExitTaskFunc(startMenu, Task_StartMenu_HandleReturn_Pokemon);
     }
     Heap_Free(summaryArgs);
@@ -1375,7 +1375,7 @@ BOOL Task_UseFlyInField(TaskManager *taskManager) {
     PokegearArgs *pokegearArgs = startMenu->exitTaskEnvironment;
     if (!pokegearArgs->setFlyDestination) {
         Heap_FreeExplicit(HEAP_ID_FIELD2, pokegearArgs);
-        startMenu->exitTaskEnvironment = PartyMenu_LaunchApp_Unk1(fieldSystem, &startMenu->fieldMoveCheckData, partySlot);
+        startMenu->exitTaskEnvironment = PartyMenu_LaunchApp_Field(fieldSystem, &startMenu->fieldMoveCheckData, partySlot);
         StartMenu_SetExitTaskFunc(startMenu, Task_StartMenu_HandleReturn_Pokemon);
     } else {
         Pokemon *pokemon = Party_GetMonByIndex(SaveArray_Party_Get(fieldSystem->saveData), partySlot);
@@ -1389,8 +1389,8 @@ BOOL Task_UseFlyInField(TaskManager *taskManager) {
     return FALSE;
 }
 
-UnkStruct_0203D818 *StartMenu_CreateMailReturnInfo(u16 itemId, u8 kind, u8 partySlot) {
-    UnkStruct_0203D818 *ret = Heap_Alloc(HEAP_ID_FIELD2, sizeof(UnkStruct_0203D818));
+StartMenuMailReturn *StartMenu_CreateMailReturnInfo(u16 itemId, u8 kind, u8 partySlot) {
+    StartMenuMailReturn *ret = Heap_Alloc(HEAP_ID_FIELD2, sizeof(StartMenuMailReturn));
     ret->itemId = itemId;
     ret->partySlot = partySlot;
     ret->kind = kind;
@@ -1401,7 +1401,7 @@ BOOL Task_ReturnToMenuFromMail(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
 
-    UnkStruct_0203D818 *unk = startMenu->exitTaskEnvironment2;
+    StartMenuMailReturn *unk = startMenu->exitTaskEnvironment2;
     switch (unk->kind) {
     case 3:
         UseMailArgs_Free(startMenu->exitTaskEnvironment);
@@ -1410,7 +1410,7 @@ BOOL Task_ReturnToMenuFromMail(TaskManager *taskManager) {
         break;
     case 2:
         UseMailArgs_Free(startMenu->exitTaskEnvironment);
-        startMenu->exitTaskEnvironment = PartyMenu_LaunchApp_Unk1(fieldSystem, &startMenu->fieldMoveCheckData, unk->partySlot);
+        startMenu->exitTaskEnvironment = PartyMenu_LaunchApp_Field(fieldSystem, &startMenu->fieldMoveCheckData, unk->partySlot);
         StartMenu_SetExitTaskFunc(startMenu, Task_StartMenu_HandleReturn_Pokemon);
         break;
     case 0:
@@ -1418,7 +1418,7 @@ BOOL Task_ReturnToMenuFromMail(TaskManager *taskManager) {
             StartMenu_ReturnToPartyMenuAfterMail(fieldSystem, startMenu, 12);
         } else {
             UseMailArgs_Free(startMenu->exitTaskEnvironment);
-            startMenu->exitTaskEnvironment = PartyMenu_LaunchApp_Unk1(fieldSystem, &startMenu->fieldMoveCheckData, unk->partySlot);
+            startMenu->exitTaskEnvironment = PartyMenu_LaunchApp_Field(fieldSystem, &startMenu->fieldMoveCheckData, unk->partySlot);
             StartMenu_SetExitTaskFunc(startMenu, Task_StartMenu_HandleReturn_Pokemon);
         }
         break;
@@ -1437,7 +1437,7 @@ BOOL Task_ReturnToMenuFromMail(TaskManager *taskManager) {
 }
 
 static void StartMenu_ReturnToPartyMenuAfterMail(FieldSystem *fieldSystem, StartMenuTaskData *startMenu, u8 a2) {
-    UnkStruct_0203D818 *unk = startMenu->exitTaskEnvironment2;
+    StartMenuMailReturn *unk = startMenu->exitTaskEnvironment2;
     PartyMenuArgs *partyMenuArgs = Heap_Alloc(HEAP_ID_FIELD2, sizeof(PartyMenuArgs));
     StartMenu_InitPartyMenuArgs(partyMenuArgs, fieldSystem, startMenu);
     partyMenuArgs->itemId = unk->itemId;
@@ -1463,7 +1463,7 @@ static void Task_StartMenu_Evolution(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
 
-    UnkStruct_0203CA9C_Case8 *unk = startMenu->exitTaskEnvironment;
+    StartMenuEvolutionArgs *unk = startMenu->exitTaskEnvironment;
     Sound_Stop();
     Heap_Create(HEAP_ID_3, HEAP_ID_EVOLUTION, 0x30000);
 

@@ -203,7 +203,7 @@ PokeathlonRelayRunHud *PokeathlonRelayRunHud_New(enum HeapID heapId, BgConfig *b
     for (i = 0; i < RELAY_RUN_MEMBERS; i++) {
         hud->names[i] = String_New(11, heapId);
     }
-    mon = PokeathlonCourse_GetParticipantUnk04(course, PokeathlonCourse_GetNetId(course));
+    mon = PokeathlonCourse_GetParticipantMons(course, PokeathlonCourse_GetNetId(course));
     {
         int member;
         for (member = 0; member < RELAY_RUN_MEMBERS; member++) {

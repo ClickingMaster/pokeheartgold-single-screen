@@ -247,7 +247,7 @@ struct FieldSystem {
     MapPropManager *mapPropManager;
     FrontierFieldSystem *frontierFsys;
     LinkBattleRuleset *linkBattleRuleset;
-    UnkStruct_02092BB8 *unkA8;
+    PokedexResumeState *unkA8;
     u32 unkAC;
     void *unkB0;
     s64 plazaLoginTime;

@@ -199,7 +199,7 @@ struct ChooseStarterAppWork {
     GXRgb edgeColorTable[8];
 }; // size=0x598
 
-static void freeAllMonSprite2dResObj(struct StarterChooseMonSpriteData *a0);
+static void freeAllMonSprite2dResObj(struct StarterChooseMonSpriteData *pMonSpriteData);
 static void vBlankCB(struct ChooseStarterAppWork *work);
 static void setGxBanks(void);
 static void createOamManager(enum HeapID heapID);
@@ -238,13 +238,13 @@ static u8 printMsgOnWinEx(Window *window, enum HeapID heapID, BOOL makeFrame, s3
 static void printMsgOnBottom(struct ChooseStarterAppWork *work, int msgId);
 static void freeWindow(Window *window);
 static int getInput(struct ChooseStarterAppWork *work);
-static int getRotateDirection(int a0, u8 a1, int a2);
+static int getRotateDirection(int targetSelection, u8 curSelection, int ballWobbleState);
 static int getTappedBallId(VecFx32 *vecs, VecFx32 *near, VecFx32 *far, fx32 radius);
 static void createMonSprites(struct ChooseStarterAppWork *work);
 static void loadOneMonObj(GF_2DGfxResMan *charResMan, GF_2DGfxResMan *plttResMan, void *charData, void *plttData, u8 idx);
 static void createOneMonRender(struct StarterChooseMonSpriteData *pMonSpriteData, u8 idx, enum HeapID heapID);
 static void setAllButSelectedMonSpritesInvisible(struct ChooseStarterAppWork *work);
-static void setAllMonSpritesInvisible(struct StarterChooseMonSpriteData *a0);
+static void setAllMonSpritesInvisible(struct StarterChooseMonSpriteData *pMonSpriteData);
 static BOOL yRotateSelectedBall(struct ChooseStarterAppWork *work, fx32 from, fx32 to);
 static u16 calcBallTranslationArcStep(const fx32 *from, const fx32 *to, int step, int max);
 
@@ -571,18 +571,18 @@ BOOL ChooseStarter_Exit(OverlayManager *ovy, int *state) {
     return TRUE;
 }
 
-static void freeAllMonSprite2dResObj(struct StarterChooseMonSpriteData *a0) {
+static void freeAllMonSprite2dResObj(struct StarterChooseMonSpriteData *pMonSpriteData) {
     int i;
 
     for (i = 0; i < 3; i++) {
-        SpriteTransfer_DeleteCharTransferTask(a0->objs[i].charResObj);
-        SpriteTransfer_DeletePlttTransferTask(a0->objs[i].plttResObj);
-        DestroySingle2DGfxResObj(a0->charResMan, a0->objs[i].charResObj);
-        DestroySingle2DGfxResObj(a0->plttResMan, a0->objs[i].plttResObj);
-        DestroySingle2DGfxResObj(a0->cellResMan, a0->objs[i].cellResObj);
-        DestroySingle2DGfxResObj(a0->animResMan, a0->objs[i].animResObj);
-        Heap_Free(a0->charDatas[i]);
-        Heap_Free(a0->plttDatas[i]);
+        SpriteTransfer_DeleteCharTransferTask(pMonSpriteData->objs[i].charResObj);
+        SpriteTransfer_DeletePlttTransferTask(pMonSpriteData->objs[i].plttResObj);
+        DestroySingle2DGfxResObj(pMonSpriteData->charResMan, pMonSpriteData->objs[i].charResObj);
+        DestroySingle2DGfxResObj(pMonSpriteData->plttResMan, pMonSpriteData->objs[i].plttResObj);
+        DestroySingle2DGfxResObj(pMonSpriteData->cellResMan, pMonSpriteData->objs[i].cellResObj);
+        DestroySingle2DGfxResObj(pMonSpriteData->animResMan, pMonSpriteData->objs[i].animResObj);
+        Heap_Free(pMonSpriteData->charDatas[i]);
+        Heap_Free(pMonSpriteData->plttDatas[i]);
     }
 }
 
@@ -1144,9 +1144,9 @@ static int getInput(struct ChooseStarterAppWork *work) {
     return ret;
 }
 
-static int getRotateDirection(int a0, u8 a1, int a2) {
-#pragma unused(a2)
-    if (((a1 + 1) % 3) == a0) {
+static int getRotateDirection(int targetSelection, u8 curSelection, int ballWobbleState) {
+#pragma unused(ballWobbleState)
+    if (((curSelection + 1) % 3) == targetSelection) {
         return CHOOSE_STARTER_INPUT_CYCLE_CLOCKWISE;
     } else {
         return CHOOSE_STARTER_INPUT_CYCLE_COUNTERCLOCKWISE;
@@ -1240,11 +1240,11 @@ static void setAllButSelectedMonSpritesInvisible(struct ChooseStarterAppWork *wo
     Sprite_SetDrawFlag(work->monSpriteData.sprites[work->curSelection], TRUE);
 }
 
-static void setAllMonSpritesInvisible(struct StarterChooseMonSpriteData *a0) {
+static void setAllMonSpritesInvisible(struct StarterChooseMonSpriteData *pMonSpriteData) {
     int i;
 
     for (i = 0; i < 3; i++) {
-        Sprite_SetDrawFlag(a0->sprites[i], FALSE);
+        Sprite_SetDrawFlag(pMonSpriteData->sprites[i], FALSE);
     }
 }
 

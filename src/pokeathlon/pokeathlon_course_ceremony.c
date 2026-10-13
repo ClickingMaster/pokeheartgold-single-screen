@@ -837,7 +837,7 @@ void PokeathlonCourseCeremony_LoadWinnerMonPics(PokeathlonCourseData *course, in
     PokepicTemplate template;
     int i;
     void *file;
-    PokeathlonCourse_GetParticipantUnk04(course, team);
+    PokeathlonCourse_GetParticipantMons(course, team);
     PokeathlonCourse_GetParticipantData(course, team);
     for (i = 0; i < 3; i++) {
         PokeathlonCourse_GetMonInfo(course, team, i, &info);
@@ -1421,7 +1421,7 @@ BOOL PokeathlonCourseCeremony_Exit(PokeathlonCourseData *course) {
 // Puts the nickname of the team's member-th Pokemon into placeholder field.
 void PokeathlonCourseCeremony_BufferMonName(PokeathlonCourseData *course, int team, int member, int field) {
     PokeathlonCourseCeremony *ceremony = PokeathlonCourse_GetHeapAllocPtr4(course);
-    PokeathlonCourseCeremonyMon *mons = (PokeathlonCourseCeremonyMon *)PokeathlonCourse_GetParticipantUnk04(course, team);
+    PokeathlonCourseCeremonyMon *mons = (PokeathlonCourseCeremonyMon *)PokeathlonCourse_GetParticipantMons(course, team);
     String *string = String_New(11, ceremony->heapId);
     CopyU16ArrayToString(string, mons[member].nickname);
     BufferString(PokeathlonCourseMessageBox_GetMsgFormat(ceremony->messageBox), field, string, 2, 1, 0);
@@ -1691,7 +1691,7 @@ u32 PokeathlonCourseCeremony_CalcChallengeBonus(PokeathlonCourseData *course, u8
     s32 bonus = 75;
     s32 i;
     narc = NARC_New(NARC_poketool_personal_performance, PokeathlonCourse_GetHeapID(course));
-    mon = (PokeathlonCourseCeremonyMon *)PokeathlonCourse_GetParticipantUnk04(course, team);
+    mon = (PokeathlonCourseCeremonyMon *)PokeathlonCourse_GetParticipantMons(course, team);
     for (i = 0; i < 3; i++, mon++) {
         NARC_ReadWholeMember(narc, PokeathlonCourse_GetPerformanceFileId(mon->species, mon->form), performance);
         bonus -= performance[0] + 1;
@@ -2067,7 +2067,7 @@ void PokeathlonCourseCeremony_ChooseOwnIntro(PokeathlonCourseCeremonyIntro *intr
     PokeathlonStatistics *records;
     u8 statistic;
 
-    records = PokeathlonSave_GetAgainUnkB00(Save_Pokeathlon_Get(PokeathlonCourse_GetSaveData(course)));
+    records = PokeathlonSave_GetStatistics2(Save_Pokeathlon_Get(PokeathlonCourse_GetSaveData(course)));
     PokeathlonCourseCeremony_GetIntroStats(&stats, records);
     PokeathlonCourseCeremony_WeighIntroStats(weights, (u32 *)&stats);
     statistic = PokeathlonCourseCeremony_PickIntroStat(weights, &level);

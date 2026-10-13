@@ -49,7 +49,7 @@ static BOOL UseMail_RunSubApp(OverlayManager **manager) {
     return FALSE;
 }
 
-BOOL ov55_UnkApp_Init(OverlayManager *manager, int *state) {
+BOOL UseMail_Init(OverlayManager *manager, int *state) {
     UseMailData *overlayData;
     UseMailArgs *args;
 
@@ -72,7 +72,7 @@ BOOL ov55_UnkApp_Init(OverlayManager *manager, int *state) {
     return TRUE;
 }
 
-BOOL ov55_UnkApp_Main(OverlayManager *manager, int *state) {
+BOOL UseMail_Main(OverlayManager *manager, int *state) {
     UseMailData *overlayData = OverlayManager_GetData(manager);
     UseMailArgs *args = OverlayManager_GetArgs(manager);
 
@@ -143,7 +143,7 @@ BOOL ov55_UnkApp_Main(OverlayManager *manager, int *state) {
     return FALSE;
 }
 
-BOOL ov55_UnkApp_Exit(OverlayManager *manager, int *state) {
+BOOL UseMail_Exit(OverlayManager *manager, int *state) {
     UseMailData *overlayData = OverlayManager_GetData(manager);
     UseMail_FreeMailViewArgs(overlayData->mailViewArgs);
     OverlayManager_FreeData(manager);
@@ -168,7 +168,7 @@ static MailViewArgs *UseMail_CreateMailViewArgs(Mail *mail, enum HeapID heapID) 
     }
 
     for (u16 i = 0; i < 3; i++) {
-        MailMsg_Copy(&ret->mailMessages[i], Mail_GetUnk20Array(mail, (u8)i));
+        MailMsg_Copy(&ret->mailMessages[i], Mail_GetMessage(mail, (u8)i));
     }
 
     return ret;

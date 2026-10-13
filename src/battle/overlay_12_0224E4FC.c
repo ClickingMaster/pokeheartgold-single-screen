@@ -6146,7 +6146,7 @@ void SortExecutionOrderBySpeed(BattleSystem *battleSystem, BattleContext *ctx) {
     }
 }
 
-static const int ov12_0226CBDC[] = {
+static const int sSubstituteStatusEffects[] = {
     15, 16, 17, 18, 19, 20, 21, 22, 25, 26
 };
 
@@ -6155,8 +6155,8 @@ BOOL CheckStatusEffectsSubstitute(BattleContext *ctx, int battlerId, int status)
     BOOL ret = FALSE;
 
     if ((ctx->battleMons[battlerId].status2 & STATUS2_SUBSTITUTE) || (ctx->battleMons[battlerId].moveEffectFlags & MOVE_EFFECT_FLAG_HIDE_SUBSTITUTE)) {
-        for (i = 0; i < NELEMS(ov12_0226CBDC); i++) {
-            if (ov12_0226CBDC[i] == status) {
+        for (i = 0; i < NELEMS(sSubstituteStatusEffects); i++) {
+            if (sSubstituteStatusEffects[i] == status) {
                 ret = TRUE;
                 break;
             }

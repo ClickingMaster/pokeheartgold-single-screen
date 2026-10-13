@@ -363,7 +363,7 @@ void PokeathlonBox_ShowMonInfo(int boxno, u8 slot, PokeathlonBox *data) {
             Party_GetMonAprijuiceModifiers(party, &aprijuiceModifier, slot);
             PokeathlonBox_CalcStatChanges(&partyLightMonStats, &partyMonStats, &aprijuiceModifier, &sp70);
             for (u8 i = 0; i < 5; i++) {
-                if (PokeathlonSave_GetUnkDC_AtIndex(Save_Pokeathlon_Get(data->saveData), sp5C[i], sp70.species)) {
+                if (PokeathlonSave_MonHasMedal(Save_Pokeathlon_Get(data->saveData), sp5C[i], sp70.species)) {
                     sp70.medals[i] = 1;
                 } else {
                     sp70.medals[i] = 0;
@@ -386,7 +386,7 @@ void PokeathlonBox_ShowMonInfo(int boxno, u8 slot, PokeathlonBox *data) {
         MI_CpuFill8(&emptyAprijuiceModifier, 0, 5);
         PokeathlonBox_CalcStatChanges(&boxLightMonStats, &boxMonStats, &emptyAprijuiceModifier, &sp70);
         for (u8 i = 0; i < 5; i++) {
-            if (PokeathlonSave_GetUnkDC_AtIndex(Save_Pokeathlon_Get(data->saveData), sp5C[i], sp70.species)) {
+            if (PokeathlonSave_MonHasMedal(Save_Pokeathlon_Get(data->saveData), sp5C[i], sp70.species)) {
                 sp70.medals[i] = 1;
             } else {
                 sp70.medals[i] = 0;

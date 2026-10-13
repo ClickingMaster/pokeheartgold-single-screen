@@ -23,7 +23,7 @@ PokeathlonSave *PokeathlonSave_dummy1(PokeathlonSave *pokeathlon) {
     return pokeathlon;
 }
 
-void *PokeathlonSave_GetUnkDC(PokeathlonSave *pokeathlonSave) {
+void *PokeathlonSave_GetMonMedals(PokeathlonSave *pokeathlonSave) {
     return pokeathlonSave->prefix.legacy.bytes1F0;
 }
 
@@ -35,11 +35,11 @@ Pokeathlon_RecordsLink *PokeathlonSave_GetRecordsLink(PokeathlonSave *pokeathlon
     return pokeathlonSave->recordsLink;
 }
 
-void *PokeathlonSave_GetUnkAEC(PokeathlonSave *pokeathlonSave) {
+void *PokeathlonSave_GetSoloEventBestPoints(PokeathlonSave *pokeathlonSave) {
     return pokeathlonSave->soloEventBestPoints;
 }
 
-PokeathlonStatistics *PokeathlonSave_GetUnkB00(PokeathlonSave *pokeathlonSave) {
+PokeathlonStatistics *PokeathlonSave_GetStatistics(PokeathlonSave *pokeathlonSave) {
     return &pokeathlonSave->statistics;
 }
 
@@ -47,7 +47,7 @@ PokeathlonSave *PokeathlonSave_dummy2(PokeathlonSave *pokeathlon) {
     return pokeathlon;
 }
 
-BOOL PokeathlonSave_GetUnkDC_AtIndex(PokeathlonSave *pokeathlonSave, int shift, int index) {
+BOOL PokeathlonSave_MonHasMedal(PokeathlonSave *pokeathlonSave, int shift, int index) {
     if (shift < 0 || shift > 4) {
         GF_ASSERT(FALSE);
         return FALSE;
@@ -71,11 +71,11 @@ Pokeathlon_RecordsLink *PokeathlonSave_GetRecordsLink2(PokeathlonSave *pokeathlo
     return pokeathlonSave->recordsLink;
 }
 
-PokeathlonStatistics *PokeathlonSave_GetAgainUnkB00(PokeathlonSave *pokeathlonSave) {
+PokeathlonStatistics *PokeathlonSave_GetStatistics2(PokeathlonSave *pokeathlonSave) {
     return &pokeathlonSave->statistics;
 }
 
-void PokeathlonSave_SetUnkDC_AtIndex(PokeathlonSave *pokeathlonSave, int shift, int index) {
+void PokeathlonSave_AddMonMedals(PokeathlonSave *pokeathlonSave, int shift, int index) {
     u8 i, bit;
     int indexMinusOne = index - 1;
     if (indexMinusOne < 0) {
@@ -108,26 +108,26 @@ u32 PokeathlonSave_GetAthletePoints(PokeathlonSave *pokeathlonSave) {
     return pokeathlonSave->athletePoints;
 }
 
-BOOL PokeathlonSave_GetUnkB78_AtIndex(PokeathlonSave *pokeathlon, int idx) {
+BOOL PokeathlonSave_IsDataCardBought(PokeathlonSave *pokeathlon, int idx) {
     GF_ASSERT(idx < 27);
-    return (pokeathlon->unk_B78 >> idx) & 1;
+    return (pokeathlon->dataCardsBought >> idx) & 1;
 }
 
-void PokeathlonSave_SetUnkB78_AtIndex(PokeathlonSave *pokeathlon, int idx) {
+void PokeathlonSave_SetDataCardBought(PokeathlonSave *pokeathlon, int idx) {
     GF_ASSERT(idx < 27);
-    pokeathlon->unk_B78 |= 1 << idx;
+    pokeathlon->dataCardsBought |= 1 << idx;
 }
 
-BOOL PokeathlonSave_GetUnkB7C_AtIndex(PokeathlonSave *pokeathlon, int idx) {
-    return (pokeathlon->unk_B7C >> idx) & 1;
+BOOL PokeathlonSave_IsDailyItemBought(PokeathlonSave *pokeathlon, int idx) {
+    return (pokeathlon->dailyItemsBought >> idx) & 1;
 }
 
-void PokeathlonSave_SetUnkB7C_AtIndex(PokeathlonSave *pokeathlon, int idx) {
-    pokeathlon->unk_B7C |= 1 << idx;
+void PokeathlonSave_SetDailyItemBought(PokeathlonSave *pokeathlon, int idx) {
+    pokeathlon->dailyItemsBought |= 1 << idx;
 }
 
-void PokeathlonSave_ResetUnkB7C(PokeathlonSave *pokeathlon) {
-    pokeathlon->unk_B7C = 0;
+void PokeathlonSave_ResetDailyItemsBought(PokeathlonSave *pokeathlon) {
+    pokeathlon->dailyItemsBought = 0;
 }
 
 u32 PokeathlonSave_FriendshipRecords_sizeof() {

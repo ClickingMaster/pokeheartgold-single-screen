@@ -28,7 +28,7 @@ u8 Mail_GetLanguage(const Mail *mail);
 u8 Mail_GetVersion(const Mail *mail);
 u16 Mail_GetMonIconData(Mail *mail, u8 r1, u8 r4, u16 r3);
 u16 Mail_GetFormFlags(const Mail *mail);
-MailMessage *Mail_GetUnk20Array(Mail *mail, int i);
+MailMessage *Mail_GetMessage(Mail *mail, int i);
 void Mail_SetMessage(Mail *mail, const MailMessage *src, int i);
 Mailbox *Save_Mailbox_Get(SaveData *saveData);
 u32 Save_Mailbox_sizeof(void);

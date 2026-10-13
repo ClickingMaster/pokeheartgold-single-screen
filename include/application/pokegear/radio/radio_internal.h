@@ -101,7 +101,7 @@ BOOL Radio_VideoInit(PokegearRadioAppData *radioApp);
 BOOL Radio_VideoUnload(PokegearRadioAppData *radioApp);
 
 void Radio_OnReselectApp(void *cbArg);
-void Radio_UnknownCB(void *cbArg);
+void Radio_OnDeselectApp(void *cbArg);
 void Radio_CloseStation(PokegearRadioAppData *radioApp);
 void Radio_Start(PokegearRadioAppData *radioApp);
 void Radio_Run(PokegearAppData *pokegear, void *cbArg);

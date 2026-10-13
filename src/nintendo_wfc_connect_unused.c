@@ -79,7 +79,7 @@ typedef struct NintendoWfcUnused {
     int roomCount;                              // 0x0098
     u32 room;                                   // 0x009C
     u8 downloadBuffer[0xA38];                   // 0x00A0
-    UnkStruct_02069528 uploadRecord;            // 0x0AD8
+    FrontierWifiUploadRecord uploadRecord;            // 0x0AD8
     u8 filler_0BBC[0x14];                       // 0x0BBC
     MessageFormat *msgFormat;                   // 0x0BD0
     MsgData *msgDataTower;                      // 0x0BD4, Wi-Fi Battle Tower (bank 799)
@@ -159,7 +159,7 @@ BOOL NintendoWfcHttp_IsDone(void);
 s32 NintendoWfcHttp_GetResult(void);
 void NintendoWfcHttp_RequestRoomCount(int rank);
 void NintendoWfcHttp_RequestDownload(int rank, int room, void *buffer);
-void NintendoWfcHttp_RequestUpload(int rank, int room, int a2, UnkStruct_02069528 *record);
+void NintendoWfcHttp_RequestUpload(int rank, int room, int a2, FrontierWifiUploadRecord *record);
 void NintendoWfcHttp_RequestInfo(void);
 void NintendoWfcHttp_RequestSetProfile(WifiServerProfile *profile, u32 *response);
 // The definition takes (u32 profileId, u64 friendKey); this app passes the key as two words.

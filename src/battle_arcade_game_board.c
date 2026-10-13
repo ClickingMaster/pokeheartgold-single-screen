@@ -55,15 +55,15 @@ static void BattleArcadeGameBoard_LoadBoardBg(GAME_BOARD_WORK *work, GFBgLayer l
 static void ov84_0223EB08(GAME_BOARD_WORK *work, GFBgLayer layer);
 static void BattleArcadeGameBoard_LoadBgPalette(void);
 static void BattleArcadeGameBoard_LoadSubScreenBg(GAME_BOARD_WORK *work, GFBgLayer layer);
-static void BattleArcadeGameBoard_SetState(GAME_BOARD_WORK *work, int *state, int a2);
+static void BattleArcadeGameBoard_SetState(GAME_BOARD_WORK *work, int *state, int newState);
 static void BattleArcadeGameBoard_UpdateCursor(GAME_BOARD_WORK *work, int key);
 static void BattleArcadeGameBoard_SetCursorPos(GAME_BOARD_WORK *work, u8 cursorPos);
 static void BattleArcadeGameBoard_StartCursorSlowdown(GAME_BOARD_WORK *work);
-static u8 BattleArcadeGameBoard_WrapPos(u8 area, u8 a2);
+static u8 BattleArcadeGameBoard_WrapPos(u8 area, u8 pos);
 static u16 BattleArcade_GetWinStreak(GAME_BOARD_WORK *work);
-static BOOL BattleArcadeGameBoard_SendCommand(GAME_BOARD_WORK *work, u16 type, u16 a2);
+static BOOL BattleArcadeGameBoard_SendCommand(GAME_BOARD_WORK *work, u16 type, u16 stopPos);
 static void BattleArcadeGameBoard_PackBoardLayout(GAME_BOARD_WORK *work, u16 type);
-static void BattleArcadeGameBoard_PackStopPos(GAME_BOARD_WORK *work, u16 type, u16 a2);
+static void BattleArcadeGameBoard_PackStopPos(GAME_BOARD_WORK *work, u16 type, u16 stopPos);
 static u16 BattleArcade_Random(GAME_BOARD_WORK *work);
 static void BattleArcadeGameBoard_PackCursorPos(GAME_BOARD_WORK *work, u16 type);
 static void BattleArcadeGameBoard_StopCursor(GAME_BOARD_WORK *work, u8 type);
@@ -734,9 +734,9 @@ static void BattleArcadeGameBoard_LoadSubScreenBg(GAME_BOARD_WORK *work, GFBgLay
     GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, 125, work->bgConfig, layer, 0, 0, TRUE, HEAP_ID_GAME_BOARD);
 }
 
-static void BattleArcadeGameBoard_SetState(GAME_BOARD_WORK *work, int *state, int a2) {
+static void BattleArcadeGameBoard_SetState(GAME_BOARD_WORK *work, int *state, int newState) {
     work->substate = 0;
-    *state = a2;
+    *state = newState;
 }
 
 extern u8 gBattleArcadeCursorDelays[8][2];
@@ -771,11 +771,11 @@ static void BattleArcadeGameBoard_StartCursorSlowdown(GAME_BOARD_WORK *work) {
     work->stopRequestPos = work->cursorPos;
 }
 
-static u8 BattleArcadeGameBoard_WrapPos(u8 area, u8 a2) {
-    if (a2 >= area) {
-        return a2 - area;
+static u8 BattleArcadeGameBoard_WrapPos(u8 area, u8 pos) {
+    if (pos >= area) {
+        return pos - area;
     }
-    return a2;
+    return pos;
 }
 
 static u16 BattleArcade_GetWinStreak(GAME_BOARD_WORK *work) {
@@ -788,7 +788,7 @@ static u16 BattleArcade_GetWinStreak(GAME_BOARD_WORK *work) {
     return winStreak;
 }
 
-static BOOL BattleArcadeGameBoard_SendCommand(GAME_BOARD_WORK *work, u16 type, u16 a2) {
+static BOOL BattleArcadeGameBoard_SendCommand(GAME_BOARD_WORK *work, u16 type, u16 stopPos) {
     int unkA;
 
     switch (type) {
@@ -798,7 +798,7 @@ static BOOL BattleArcadeGameBoard_SendCommand(GAME_BOARD_WORK *work, u16 type, u
         break;
     case 31:
         unkA = 72;
-        BattleArcadeGameBoard_PackStopPos(work, type, a2);
+        BattleArcadeGameBoard_PackStopPos(work, type, stopPos);
         break;
     case 32:
         unkA = 73;
@@ -827,14 +827,14 @@ static void BattleArcadeGameBoard_PackBoardLayout(GAME_BOARD_WORK *work, u16 typ
     work->sendBuffer[offset] = work->cursorPosStart;
 }
 
-void BattleArcadeGameBoard_ReceiveBoardLayout(int a0, int size, void *data, void *_work) {
+void BattleArcadeGameBoard_ReceiveBoardLayout(int netId, int size, void *data, void *_work) {
     int i, offset;
     GAME_BOARD_WORK *work = _work;
     const u16 *recv = data;
 
     work->linkMessageCount++;
 
-    if (Comm_GetLocalNetId() == a0) {
+    if (Comm_GetLocalNetId() == netId) {
         return;
     }
 
@@ -851,17 +851,17 @@ void BattleArcadeGameBoard_ReceiveBoardLayout(int a0, int size, void *data, void
     }
 }
 
-static void BattleArcadeGameBoard_PackStopPos(GAME_BOARD_WORK *work, u16 type, u16 a2) {
+static void BattleArcadeGameBoard_PackStopPos(GAME_BOARD_WORK *work, u16 type, u16 stopPos) {
     int offset = 0;
 
     work->sendBuffer[offset] = type;
     offset++;
 
-    work->sendBuffer[offset] = a2;
+    work->sendBuffer[offset] = stopPos;
     offset++;
 
     if (Comm_GetLocalNetId() == 0 && work->stopPos == 255) {
-        work->stopPos = a2;
+        work->stopPos = stopPos;
     }
 
     work->sendBuffer[offset] = work->stopPos;
@@ -874,14 +874,14 @@ static u16 BattleArcade_Random(GAME_BOARD_WORK *work) {
     return LCRandom();
 }
 
-void BattleArcadeGameBoard_ReceiveStopPos(int a0, int size, void *data, void *_work) {
+void BattleArcadeGameBoard_ReceiveStopPos(int netId, int size, void *data, void *_work) {
     GAME_BOARD_WORK *work = _work;
 
     u16 *recv = data;
 
     work->linkMessageCount++;
 
-    if (Comm_GetLocalNetId() == a0) {
+    if (Comm_GetLocalNetId() == netId) {
         return;
     }
 
@@ -904,11 +904,11 @@ static void BattleArcadeGameBoard_PackCursorPos(GAME_BOARD_WORK *work, u16 type)
     work->sendBuffer[1] = work->cursorPos;
 }
 
-void BattleArcadeGameBoard_ReceiveCursorPos(int a0, int size, void *data, void *_work) {
+void BattleArcadeGameBoard_ReceiveCursorPos(int netId, int size, void *data, void *_work) {
     GAME_BOARD_WORK *work = _work;
     const u16 *recv = data;
 
-    if (Comm_GetLocalNetId() == a0) {
+    if (Comm_GetLocalNetId() == netId) {
         return;
     }
 
@@ -1141,7 +1141,7 @@ static void BattleArcadeGameBoard_FillPanels(GAME_BOARD_WORK *work) {
 
 extern const u8 gBattleArcadeEventColorOdds[4][4];
 
-static u8 BattleArcadeGameBoard_PickEventColor(GAME_BOARD_WORK *work, u8 a1) {
+static u8 BattleArcadeGameBoard_PickEventColor(GAME_BOARD_WORK *work, u8 oddsRow) {
     u8 cnt, i;
     u16 rand;
 
@@ -1149,7 +1149,7 @@ static u8 BattleArcadeGameBoard_PickEventColor(GAME_BOARD_WORK *work, u8 a1) {
     rand = LCRandom() % 100;
 
     for (i = 0; i < 4; i++) {
-        cnt += gBattleArcadeEventColorOdds[a1][i];
+        cnt += gBattleArcadeEventColorOdds[oddsRow][i];
         if (rand < cnt) {
             break;
         }

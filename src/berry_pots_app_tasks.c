@@ -146,7 +146,7 @@ void BerryPotsApp_FormatMessage(BerryPotsAppData *data, enum BerryPotsAppMessage
     StringExpandPlaceholders(data->msgFmt, data->currentStatusString, data->statusStrings[action]);
 }
 
-void BerryPotsApp_UpdateGrowthFromRTC(BerryPotsAppData *data, BOOL a1) {
+void BerryPotsApp_UpdateGrowthFromRTC(BerryPotsAppData *data, BOOL startAnims) {
     RTCDate date1;
     RTCDate date2;
     RTCTime time1;
@@ -166,7 +166,7 @@ void BerryPotsApp_UpdateGrowthFromRTC(BerryPotsAppData *data, BOOL a1) {
         BerryPots_UpdateGrowth(data->berryPots, data->berryGrowthProperties, minutesDelta);
         BerryPotsApp_RefreshPotData(data);
         BerryPots_SetBerryDatetime(data->berryDatetime, date1, time1);
-        if (a1) {
+        if (startAnims) {
             BerryPotsApp_StartGrowthAnims(data);
         }
     }
@@ -270,8 +270,8 @@ BOOL BerryPotsApp_HandleWateringInput(BerryPotsAppData *data) {
     return ret;
 }
 
-static u32 BerryPotsApp_SelectPotAction(BerryPotsAppData *data, u32 a1) {
-    switch (a1) {
+static u32 BerryPotsApp_SelectPotAction(BerryPotsAppData *data, u32 selection) {
+    switch (selection) {
     case 0:
     case 1:
     case 2:
@@ -329,13 +329,13 @@ static u32 BerryPotsApp_HandleSelectPotKeys(BerryPotsAppData *data) {
     }
 }
 
-static u32 BerryPotsApp_HandleSelectPotTouch(BerryPotsAppData *data, BOOL *a1) {
+static u32 BerryPotsApp_HandleSelectPotTouch(BerryPotsAppData *data, BOOL *touched) {
     int unk = BerryPotsApp_GetSelectPotTouch(data);
     if (unk < 0) {
         return 2;
     }
 
-    *a1 = TRUE;
+    *touched = TRUE;
     data->fieldMenuState = MENU_INPUT_STATE_TOUCH;
     return BerryPotsApp_SelectPotAction(data, unk);
 }
@@ -369,7 +369,7 @@ static BOOL BerryPotsApp_HandleWateringKeys(BerryPotsAppData *data) {
     return FALSE;
 }
 
-static BOOL BerryPotsApp_HandleWateringTouch(BerryPotsAppData *data, BOOL *a1) {
+static BOOL BerryPotsApp_HandleWateringTouch(BerryPotsAppData *data, BOOL *touched) {
     if (data->nextWateringPot != 0xFF) {
         return FALSE;
     }
@@ -379,7 +379,7 @@ static BOOL BerryPotsApp_HandleWateringTouch(BerryPotsAppData *data, BOOL *a1) {
         return FALSE;
     }
 
-    *a1 = TRUE;
+    *touched = TRUE;
     data->fieldMenuState = MENU_INPUT_STATE_TOUCH;
     data->selectedPot = unk;
     data->nextWateringPot = data->selectedPot;

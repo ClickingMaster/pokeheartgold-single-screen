@@ -15,7 +15,7 @@ BOOL ApricornBox_RunChildApp(OverlayManager **pMan);
 BOOL ApricornBox_Init(OverlayManager *man, int *state);
 BOOL ApricornBox_Main(OverlayManager *man, int *state);
 BOOL ApricornBox_Exit(OverlayManager *man, int *state);
-void ApricornBox_FeedAprijuice(UnkStruct_02031CEC *record, Party *party, int slot);
+void ApricornBox_FeedAprijuice(ApricornJuice *record, Party *party, int slot);
 void ApricornBox_InitFromArgs(ApricornBoxApp *app);
 void ApricornBox_Cleanup(ApricornBoxApp *app);
 int ApricornBox_State_OpenBoxScreen(ApricornBoxApp *app);
@@ -107,7 +107,7 @@ BOOL ApricornBox_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-void ApricornBox_FeedAprijuice(UnkStruct_02031CEC *record, Party *party, int slot) {
+void ApricornBox_FeedAprijuice(ApricornJuice *record, Party *party, int slot) {
     s8 newMods[5];
     PartyExtraSub modifiers;
     ApricornJuiceData juice;

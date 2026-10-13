@@ -138,7 +138,7 @@
 .public Mail_GetType
 .public Mail_GetMonIconData
 .public Mail_GetFormFlags
-.public Mail_GetUnk20Array
+.public Mail_GetMessage
 .public Save_Mailbox_Get
 .public Mailbox_DeleteSlotI
 .public Mailbox_AllocAndFetchMailI
@@ -169,9 +169,9 @@
 .public _s32_div_f
 .public gOverlayTemplate_PartyMenu
 .public gSystem
-.public ov55_UnkApp_Init
-.public ov55_UnkApp_Main
-.public ov55_UnkApp_Exit
+.public UseMail_Init
+.public UseMail_Main
+.public UseMail_Exit
 .public MailboxApp_Init
 .public MailboxApp_Main
 .public MailboxApp_Exit

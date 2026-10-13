@@ -12,7 +12,7 @@ typedef struct ObjCharTransferTemplate {
     enum HeapID heapID;
 } ObjCharTransferTemplate;
 
-typedef struct UnkStruct_02021758 {
+typedef struct ObjCharTransferTaskTemplate {
     NNSG2dCharacterData *charData;
     NNS_G2D_VRAM_TYPE vram;
     int id;

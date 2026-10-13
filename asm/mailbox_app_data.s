@@ -196,7 +196,7 @@ ov103_021EEC30: ; 0x021EEC30
 	.byte 0x01, 0x00, 0x00, 0x00, 0x60, 0x00, 0x00, 0x00
 
 ov103_021EEC58: ; 0x021EEC58
-	.word ov55_UnkApp_Init, ov55_UnkApp_Main, ov55_UnkApp_Exit, FS_OVERLAY_ID(OVY_55)
+	.word UseMail_Init, UseMail_Main, UseMail_Exit, FS_OVERLAY_ID(OVY_55)
 
 ov103_021EEC68: ; 0x021EEC68
 	.word MailboxApp_EraseMail, MailboxApp_ReturnToMailList

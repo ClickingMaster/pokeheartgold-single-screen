@@ -242,8 +242,8 @@ ScriptMenu *ScriptMenu_Create(FieldSystem *fieldSystem, u8 x, u8 y, u8 initCurso
     return ScriptMenu_New(fieldSystem, x, y, initCursorPos, cancellable, ret_p, msgFmt, window, msgData);
 }
 
-void ScriptMenu_AddListItem(ScriptMenu *menu, int msgId, int a2, int value) {
-    ScriptMenu_AppendListItem(menu, msgId, a2, value);
+void ScriptMenu_AddListItem(ScriptMenu *menu, int msgId, int helpMsgId, int value) {
+    ScriptMenu_AppendListItem(menu, msgId, helpMsgId, value);
 }
 
 // force_active only sets a section flag; it is kept so the objects stay identical to the matched ones
@@ -324,7 +324,7 @@ void ScriptMenu_ShowListAtPosition(ScriptMenu *menu, u16 *scroll_p, u16 *row_p) 
 }
 #pragma force_active reset
 
-void ScriptMenu_AppendListItem(ScriptMenu *menu, int msgId, int a2, int value) {
+void ScriptMenu_AppendListItem(ScriptMenu *menu, int msgId, int helpMsgId, int value) {
     String *tmp = String_New(80, HEAP_ID_FIELD1);
     ReadMsgDataIntoString(menu->msgData, msgId, tmp);
     StringExpandPlaceholders(menu->msgFmt, menu->strbufs[menu->count], tmp);
@@ -335,7 +335,7 @@ void ScriptMenu_AppendListItem(ScriptMenu *menu, int msgId, int a2, int value) {
     } else {
         menu->items[menu->count].value = value;
     }
-    menu->msgIds[menu->count] = a2;
+    menu->msgIds[menu->count] = helpMsgId;
     menu->count++;
 }
 
@@ -452,13 +452,13 @@ void ScriptMenu_CloseList(ScriptMenu *menu) {
     Heap_Free(menu);
 }
 
-void ScriptMenu_PrintHelpMessage(ScriptMenu *menu, u32 msgId, u32 a2) {
+void ScriptMenu_PrintHelpMessage(ScriptMenu *menu, u32 msgId, u32 textSpeed) {
     String *tmp = String_New(90, HEAP_ID_FIELD1);
     String *dest = String_New(90, HEAP_ID_FIELD1);
     FillWindowPixelBuffer(menu->printWindow, 15);
     ReadMsgDataIntoString(menu->msgData, msgId, tmp);
     StringExpandPlaceholders(menu->msgFmt, dest, tmp);
-    AddTextPrinterParameterized(menu->printWindow, 1, dest, 0, 0, a2, 0);
+    AddTextPrinterParameterized(menu->printWindow, 1, dest, 0, 0, textSpeed, 0);
     String_Delete(tmp);
     String_Delete(dest);
 }
@@ -589,17 +589,17 @@ int MapNumToFloorNo(int mapId) {
     }
 }
 
-int GetFloorNameMessage(u32 mapId, int a1, u8 *width_p) {
+int GetFloorNameMessage(u32 mapId, int floor, u8 *width_p) {
     switch (mapId) {
     case 0x1B9:
-        if (a1 == 0) {
+        if (floor == 0) {
             *width_p = 0x20;
             return 0x7A;
         }
         break;
     case 0x1BB:
     case 0x1BC:
-        if (a1 == 3) {
+        if (floor == 3) {
             *width_p = 0x10;
             return 0x7D;
         }
@@ -807,9 +807,9 @@ u8 ScriptMenu_GetCount(ScriptMenu *menu) {
     return menu->count;
 }
 
-Window *BattleRegulationWindow_New(FieldSystem *fieldSystem, u16 a1) {
+Window *BattleRegulationWindow_New(FieldSystem *fieldSystem, u16 ruleset) {
     Window *windows = AllocWindows(HEAP_ID_FIELD1, 1);
-    BattleRegulation_PrintRulesWindow(fieldSystem, windows, a1);
+    BattleRegulation_PrintRulesWindow(fieldSystem, windows, ruleset);
     return windows;
 }
 

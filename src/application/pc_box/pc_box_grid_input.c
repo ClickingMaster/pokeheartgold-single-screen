@@ -87,7 +87,7 @@ void PCBox_DepositBoxGridOnKeyMove(PCBoxWork *work, u32 a1, u32 a2) {
     }
     if (a2 == 8 && a1 == 0) {
         a1 = work->view->rowCursorPos;
-        GridInputHandler_SetNextLastUnk0FInputs(work->view->gridInput, (u8)a1, 8, 8);
+        GridInputHandler_SetNextLastReturnInputs(work->view->gridInput, (u8)a1, 8, 8);
     }
     if ((s32)a1 >= 0 && (s32)a1 <= 5) {
         work->view->rowCursorPos = a1;
@@ -289,7 +289,7 @@ void PCBox_TrayGridOnKeyMove(PCBoxWork *work, u32 a1, u32 a2) {
     if (a1 == 37
         && (((s32)a2 >= 0 && (s32)a2 <= 5) || ((s32)a2 >= 24 && (s32)a2 <= 29) || ((s32)a2 >= 30 && (s32)a2 <= 31) || a2 == 36)) {
         a1 = work->view->rowCursorPos;
-        GridInputHandler_SetNextLastUnk0FInputs(work->view->gridInput, (u8)a1, (u8)a2, GridInputHandler_GetUnk0F(work->view->gridInput));
+        GridInputHandler_SetNextLastReturnInputs(work->view->gridInput, (u8)a1, (u8)a2, GridInputHandler_GetReturnInput(work->view->gridInput));
     }
     if ((s32)a1 >= 37 && (s32)a1 <= 42) {
         work->view->rowCursorPos = a1;
@@ -531,7 +531,7 @@ void PCBox_BoxMenuGridOnKeyMove(PCBoxWork *work, u32 a1, u32 a2) {
     }
     if (a2 == 8 && a1 == 0) {
         a1 = work->view->rowCursorPos;
-        GridInputHandler_SetNextLastUnk0FInputs(work->view->gridInput, (u8)a1, 8, 8);
+        GridInputHandler_SetNextLastReturnInputs(work->view->gridInput, (u8)a1, 8, 8);
     }
     if ((s32)a1 >= 0 && (s32)a1 <= 5) {
         work->view->rowCursorPos = a1;
@@ -606,7 +606,7 @@ void PCBox_WallpaperGridOnKeyMove(PCBoxWork *work, u32 a1, u32 a2) {
     }
     if (a2 == 6 && a1 == 0) {
         a1 = work->view->rowCursorPos;
-        GridInputHandler_SetNextLastUnk0FInputs(work->view->gridInput, (u8)a1, 6, 6);
+        GridInputHandler_SetNextLastReturnInputs(work->view->gridInput, (u8)a1, 6, 6);
     }
     if ((s32)a1 >= 0 && (s32)a1 <= 3) {
         work->view->rowCursorPos = a1;

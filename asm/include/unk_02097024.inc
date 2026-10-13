@@ -8,7 +8,7 @@
 .public CommState_SetErrorWatch
 .public FieldSystem_LaunchApplication
 .public PokemonSummary_LearnForget_LaunchApp
-.public PartyMenu_LaunchApp_Unk5
+.public PartyMenu_LaunchApp_SpinTrade
 .public PokemonSummary_CreateArgs
 .public FieldSystem_ApplicationIsRunning
 .public SpinTradeLink_New

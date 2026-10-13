@@ -37,7 +37,7 @@ void FieldSystem_Init(OverlayManager *man, FieldSystem *fieldSystem) {
     if ((key + key2) % 2441) {
         ClobberHeapByBadgeCount(fieldSystem);
     }
-    fieldSystem->unkA8 = UnkStruct_02092BB8_New(HEAP_ID_FIELD2);
+    fieldSystem->unkA8 = PokedexResumeState_New(HEAP_ID_FIELD2);
     fieldSystem->followMonMood = FollowMonMood_New(HEAP_ID_FIELD2);
     fieldSystem->phoneRingManager = GearPhoneRingManager_New(HEAP_ID_FIELD2, fieldSystem);
     fieldSystem->judgeStatPosition = 0;

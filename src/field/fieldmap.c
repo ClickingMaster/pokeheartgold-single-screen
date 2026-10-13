@@ -597,15 +597,15 @@ static void FieldMap_Render3D(FieldSystem *fieldSystem) {
     fx64 temp_ret = (fieldSystem->unk11C << FX32_SHIFT) * (fx64)(FX_CosIdx((u16)(-camAngle.x)));
     fx64 temp_r2_2 = temp_ret + 0x800;
     fx64 temp_r2_3 = temp_r2_2 >> FX32_SHIFT;
-    MtxFx44 v0 = NNS_G3dGlb.projMtx;
-    MtxFx44 v1 = v0;
-    fx64 temp_ret_2 = v1._22 * (fx64)((fx32)temp_r2_3);
+    MtxFx44 projMtx = NNS_G3dGlb.projMtx;
+    MtxFx44 newProjMtx = projMtx;
+    fx64 temp_ret_2 = newProjMtx._22 * (fx64)((fx32)temp_r2_3);
     fx64 temp_r3 = temp_ret_2 + 0x800;
-    v1._32 += temp_r3 >> FX32_SHIFT;
+    newProjMtx._32 += temp_r3 >> FX32_SHIFT;
 
     // Resembles NNS_G3dGlbSetProjectionMtx(), except this has no NNS_G3D_NULL_ASSERT func,
     // So static below is either a diff func or that one is incorrect?
-    MIi_CpuCopyFast((u32 *)&v1, (u32 *)&NNS_G3dGlb.projMtx, sizeof(MtxFx44));
+    MIi_CpuCopyFast((u32 *)&newProjMtx, (u32 *)&NNS_G3dGlb.projMtx, sizeof(MtxFx44));
     NNS_G3dGlb.flag &= ~(NNS_G3D_GLB_FLAG_INVPROJ_UPTODATE | NNS_G3D_GLB_FLAG_INVCAMERAPROJ_UPTODATE);
     NNS_G3dGlbFlushP();
 
@@ -613,7 +613,7 @@ static void FieldMap_Render3D(FieldSystem *fieldSystem) {
     BillboardLists_Draw();
 
     // Same here.
-    MIi_CpuCopyFast((u32 *)&v0, (u32 *)&NNS_G3dGlb.projMtx, sizeof(MtxFx44));
+    MIi_CpuCopyFast((u32 *)&projMtx, (u32 *)&NNS_G3dGlb.projMtx, sizeof(MtxFx44));
     NNS_G3dGlb.flag &= ~(NNS_G3D_GLB_FLAG_INVPROJ_UPTODATE | NNS_G3D_GLB_FLAG_INVCAMERAPROJ_UPTODATE);
     NNS_G3dGlbFlushP();
 
@@ -717,12 +717,12 @@ static void FieldMap_InitFieldEffectsAndObjects(FieldSystem *fieldSystem) {
 
     FieldEffectManager_InitRenderers(fieldSystem->fieldEffectManager, defaultFieldEffectRenderers);
 
-    int v0 = 10;
+    int loadsPerFrame = 10;
     if (fieldSystem->mapLoadType == MAP_LOAD_TYPE_UNION) {
-        v0 = 5;
+        loadsPerFrame = 5;
     }
 
-    MapObjectManager_InitRender(fieldSystem->mapObjectManager, 32, MapObjectsToPreload_GetCount(fieldSystem->mapObjectsToPreload) + 3, MapObjectsToPreload_GetIDs(fieldSystem->mapObjectsToPreload), v0);
+    MapObjectManager_InitRender(fieldSystem->mapObjectManager, 32, MapObjectsToPreload_GetCount(fieldSystem->mapObjectsToPreload) + 3, MapObjectsToPreload_GetIDs(fieldSystem->mapObjectsToPreload), loadsPerFrame);
     FollowMon_SetAltSequenceFrameFlags(fieldSystem->mapObjectManager);
     MapObjectModelList_Init(fieldSystem->fieldEffectManager);
     PlayerAvatar_InitMapFeatures(fieldSystem->playerAvatar);

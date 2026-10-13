@@ -477,7 +477,7 @@ BOOL ScrCmd_772(ScriptContext *ctx) {
 
     pokeathlon = Save_Pokeathlon_Get(ctx->fieldSystem->saveData);
     for (i = 0; i < 27; i++) {
-        if (!PokeathlonSave_GetUnkB78_AtIndex(pokeathlon, i)) {
+        if (!PokeathlonSave_IsDataCardBought(pokeathlon, i)) {
             break;
         }
     }
@@ -513,7 +513,7 @@ BOOL ScrCmd_834(ScriptContext *ctx) {
         r6++;
     }
     for (i = 0; i < 12; i++) {
-        if (PokeathlonSave_GetUnkB7C_AtIndex(pokeathlon, i)) {
+        if (PokeathlonSave_IsDailyItemBought(pokeathlon, i)) {
             r4++;
         }
     }
@@ -533,7 +533,7 @@ BOOL ScrCmd_835(ScriptContext *ctx) {
     ret_ptr = ScriptGetVarPointer(ctx);
     pokeathlon = Save_Pokeathlon_Get(ctx->fieldSystem->saveData);
     for (i = 0; i < 27; i++) {
-        if (!PokeathlonSave_GetUnkB78_AtIndex(pokeathlon, i)) {
+        if (!PokeathlonSave_IsDataCardBought(pokeathlon, i)) {
             break;
         }
     }

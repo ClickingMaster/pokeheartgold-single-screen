@@ -6,7 +6,7 @@
 typedef struct HiddenObjectCover HiddenObjectCover;
 
 HiddenObjectCover *HiddenObjectCover_New(FieldEffectManager *manager);
-void HiddenObjectCover_Free(HiddenObjectCover *a0);
-void HiddenObjectCover_Spawn(LocalMapObject *mapObject, int a1);
+void HiddenObjectCover_Free(HiddenObjectCover *cover);
+void HiddenObjectCover_Spawn(LocalMapObject *mapObject, int index);
 
 #endif // POKEHEARTGOLD_FIELD_HIDDEN_OBJECT_COVER_H

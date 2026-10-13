@@ -1806,7 +1806,7 @@
 	.extern PokeathlonCourse_GetPlayerProfile
 	.extern PokeathlonCourse_GetParticipantCount
 	.extern PokeathlonCourse_GetParticipantData
-	.extern PokeathlonCourse_GetParticipantUnk04
+	.extern PokeathlonCourse_GetParticipantMons
 	.extern PokeathlonCourse_GetSaveData
 	.extern PokeathlonCourse_GetFieldData
 	.extern PokeathlonCourse_GetFieldData_AtIndex
@@ -1837,7 +1837,7 @@
 	.extern PokeathlonCourse_SetField3A4
 	.extern PokeathlonCourse_ResetField3A4
 	.extern PokeathlonCourse_GetField3A4
-	.extern PokeathlonCourse_GetUnkConstant4
+	.extern PokeathlonCourse_GetEventResultSize
 	.extern PokeathlonCourse_SetField5E0_AtIndex
 	.extern PokeathlonCourse_GetField5F0_AtIndex
 	.extern PokeathlonCourse_SetStateField07

@@ -3,11 +3,11 @@
 
 #include "battle/battle.h"
 
-void UnkBallData_SetBallAnimation(UnkBallData *data, s32 ballAnim);
-BOOL UnkBallData_IsBallAnimationPlaying(UnkBallData *data, s32 ballAnim_Unused); // IsBallAnimationPlaying?
-UnkBallData *UnkBallData_New(UnkStruct_134 *unkStruct_134);                      // unkBallData_Init?
-void UnkBallData_Delete(UnkBallData *data);                                      // unkBallData_Destroy?
-s32 UnkBallData_GetMode(UnkBallData *data);
+void BallThrow_SetBallAnimation(BallThrow *data, s32 ballAnim);
+BOOL BallThrow_IsBallAnimationPlaying(BallThrow *data, s32 ballAnim_Unused); // IsBallAnimationPlaying?
+BallThrow *BallThrow_New(BattleBallParams *unkStruct_134);                      // unkBallData_Init?
+void BallThrow_Delete(BallThrow *data);                                      // unkBallData_Destroy?
+s32 BallThrow_GetMode(BallThrow *data);
 
 // src/battle/battle_anim_system.c: the move animation system
 

@@ -51,12 +51,12 @@
 	.extern PokeathlonCourse_GetMode
 	.extern PokeathlonCourse_GetParticipantCount
 	.extern PokeathlonCourse_GetParticipantData
-	.extern PokeathlonCourse_GetParticipantUnk04
+	.extern PokeathlonCourse_GetParticipantMons
 	.extern PokeathlonCourse_GetPlayerProfile
 	.extern PokeathlonCourse_GetPlayerProfileFromData
 	.extern PokeathlonCourse_GetSaveData
 	.extern PokeathlonCourse_GetSystem
-	.extern PokeathlonCourse_GetUnkConstant4
+	.extern PokeathlonCourse_GetEventResultSize
 	.extern PokeathlonCourse_IncrementField1ED
 	.extern PokeathlonCourse_IncrementField1EF
 	.extern PokeathlonCourse_InitPlayerProfiles
