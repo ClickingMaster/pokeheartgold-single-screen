@@ -5,13 +5,13 @@
 
 #include "overlay_44.h"
 
-typedef s32 (*UnkFuncPtr_0203AC88)(void);
-typedef void (*UnkFuncPtr_0203AC88_void)(void *, void *, String *, WifiClubGameEntry *);
+typedef s32 (*WifiClubCommSizeFunc)(void);
+typedef void (*WifiClubCommRecvFunc)(void *, void *, String *, WifiClubGameEntry *);
 
 typedef struct WifiClubCommCommand {
-    UnkFuncPtr_0203AC88_void func1;
-    UnkFuncPtr_0203AC88 func2;
-    UnkFuncPtr_0203AC88 func3;
+    WifiClubCommRecvFunc func1;
+    WifiClubCommSizeFunc func2;
+    WifiClubCommSizeFunc func3;
 } WifiClubCommCommand;
 
 const WifiClubCommCommand *WifiClubComm_GetCommandTable(void);

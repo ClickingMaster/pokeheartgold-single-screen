@@ -153,12 +153,12 @@ typedef struct GtsSearchCursor {
 // The icon of a Pokemon of the shown box, loaded into VRAM in the next VBlank (gts_select_mon.c).
 typedef struct GtsMonIcon GtsMonIcon;
 
-typedef struct GtsUnk1234 {
+typedef struct GtsCursorValueTable {
     u16 unk_00;
     u16 unk_02;
     u16 unk_04[10];
     u16 unk_18[10];
-} GtsUnk1234;
+} GtsCursorValueTable;
 
 // The selector of species, gender, level and country (gts_selector.c).
 typedef struct GtsSelector GtsSelector;
@@ -316,7 +316,7 @@ struct GtsApp {
     GtsVBlankFunc vblankFunc;                // 0x1208, run every frame
     s16 avatarPositions[8][2];               // 0x120C, {x, y} of avatarSprites
     u8 filler_122C[8];                       // 0x122C
-    GtsUnk1234 unk_1234;                     // 0x1234
+    GtsCursorValueTable unk_1234;                     // 0x1234
     WifiServerProfile profile;                     // 0x1260, sent by GtsServer_RequestSetProfile (screen 0)
     u32 profileResponse[2];                  // 0x12C4, its answer
     u32 searchCountry;                       // 0x12CC, of SEEK POKEMON, 0 for any
@@ -416,8 +416,8 @@ int Gts_FindLevelRange(int minLevel, int maxLevel, int kind);
 void Gts_SetSearchCountry(GtsApp *app, int index);
 int Gts_GetCountryGroupRange(int group, int *start);
 int Gts_CreateCountryListItems(ListMenuItem **items, MsgData *msgData, int group);
-void GtsUnk1234_Clear(GtsUnk1234 *arg);
-void GtsUnk1234_SetEntry(GtsUnk1234 *arg, int index, u16 value1, u16 value2);
+void GtsUnk1234_Clear(GtsCursorValueTable *arg);
+void GtsUnk1234_SetEntry(GtsCursorValueTable *arg, int index, u16 value1, u16 value2);
 
 // The selector (gts_selector.c). mode: 0 species, 1 gender, 2 level, 3 country. GtsSelector_Main returns -1 while
 // the player chooses, -2 for BACK, else the choice.

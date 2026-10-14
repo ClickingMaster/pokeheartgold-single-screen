@@ -30,7 +30,7 @@ typedef struct GAME_BOARD_ARGS {
     u16 round;
     u8 opponentHeldItemFlag[ARCADE_ENEMY_POKEMON_MAX];
     u8 opponentLevelFlag[ARCADE_ENEMY_POKEMON_MAX];
-    u8 opponentUnkFlag[ARCADE_ENEMY_POKEMON_MAX];
+    u8 opponentUnusedFlag[ARCADE_ENEMY_POKEMON_MAX];
     u8 opponentMoveFlag[ARCADE_ENEMY_POKEMON_MAX];
     Party *playerParty;
     Party *opponentParty;

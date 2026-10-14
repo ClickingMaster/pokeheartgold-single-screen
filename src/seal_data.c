@@ -3,14 +3,14 @@
 #include "global.h"
 
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
+    u8 gfxCharId;
+    u8 nameMsgId;
+    u8 battleAnimResId;
     u8 unk3_0 : 2;
-    u8 unk3_2 : 6;
-} Unk02091054;
+    u8 descriptionMsgId : 6;
+} SealData;
 
-static const Unk02091054 _02105F04[81] = {
+static const SealData _02105F04[81] = {
     { 0x27, 0x00, 0x35, 0x01, 0x00 },
     { 0x28, 0x01, 0x35, 0x01, 0x00 },
     { 0x29, 0x02, 0x36, 0x01, 0x01 },
@@ -97,17 +97,17 @@ static const Unk02091054 _02105F04[81] = {
 // Has something to do with seals...
 u8 Seal_GetGfxCharId(u32 idx) {
     GF_ASSERT(idx < NELEMS(_02105F04));
-    return _02105F04[idx].unk0;
+    return _02105F04[idx].gfxCharId;
 }
 
 u8 Seal_GetNameMsgId(u8 idx) {
     GF_ASSERT(idx < NELEMS(_02105F04));
-    return _02105F04[idx].unk1;
+    return _02105F04[idx].nameMsgId;
 }
 
 u8 Seal_GetBattleAnimResId(u32 idx) {
     GF_ASSERT(idx < NELEMS(_02105F04));
-    return _02105F04[idx].unk2;
+    return _02105F04[idx].battleAnimResId;
 }
 
 BOOL Seal_IsLetterSeal(u32 idx) {
@@ -121,5 +121,5 @@ BOOL Seal_IsLetterSeal(u32 idx) {
 
 u32 Seal_GetDescriptionMsgId(u32 idx) {
     GF_ASSERT(idx < NELEMS(_02105F04));
-    return _02105F04[idx].unk3_2;
+    return _02105F04[idx].descriptionMsgId;
 }

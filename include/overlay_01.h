@@ -99,9 +99,9 @@ void FollowMon_StartHopIntoBall(FieldSystem *fieldSystem);
 void MapObject_SetPositionNextTo(LocalMapObject *playerObj, LocalMapObject *tsurePokeObj, int direction, int facing);
 void FieldSystem_SetTouchscreenChoiceMenuState(FieldSystem *fieldSystem, int appId, int state, void *result);
 
-typedef BOOL (*UnkCallback_021F6B34)(struct ScriptMenu *menu, int idx);
+typedef BOOL (*TouchscreenChoiceMenuCallback)(struct ScriptMenu *menu, int idx);
 
-void FieldSystem_SetTouchscreenChoiceMenuCallback(FieldSystem *fieldSystem, UnkCallback_021F6B34 cb, struct ScriptMenu *menu);
+void FieldSystem_SetTouchscreenChoiceMenuCallback(FieldSystem *fieldSystem, TouchscreenChoiceMenuCallback cb, struct ScriptMenu *menu);
 void ScriptMenu_PrintItemHelpMessage(struct ScriptMenu *menu, int idx);
 
 struct UnkStruct_020FACDC {

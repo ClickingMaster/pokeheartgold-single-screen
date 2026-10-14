@@ -3,10 +3,10 @@
 
 #include "task.h"
 
-typedef struct FieldTransitionUnkEnvironmentA {
+typedef struct FieldTransitionUnusedEnv {
     int state;
     int unk4;
-} FieldTransitionUnkEnvironmentA;
+} FieldTransitionUnusedEnv;
 
 // Map enter routines (field_transition_effects.c sMapEnterRoutines, by FieldTransitionEnvironment.transitionNo)
 BOOL FieldTransition_EnterThroughSideDoor(TaskManager *man);

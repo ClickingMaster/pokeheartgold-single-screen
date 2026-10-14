@@ -146,7 +146,7 @@ BOOL PokeathlonRelayRun_Init(PokeathlonCourseData *course) {
             int member = i % RELAY_RUN_MEMBERS;
             int team = i / RELAY_RUN_MEMBERS;
             PokeathlonCourse_GetMonInfo(course, team, member, &infos[i]);
-            template.sizeTypes[i] = PokeathlonCourse_GetSpriteSizeType((PokeathlonCourseUnkTypes *)PokeathlonCourse_GetPerformance(course, team, member));
+            template.sizeTypes[i] = PokeathlonCourse_GetSpriteSizeType((PokeathlonPerformanceSizeInfo *)PokeathlonCourse_GetPerformance(course, team, member));
             mons[i].x = infos[i].species;
             mons[i].y = infos[i].form;
         }
@@ -190,7 +190,7 @@ BOOL PokeathlonRelayRun_Init(PokeathlonCourseData *course) {
                 PokeathlonCourseMonObject_SetDrawFlag(object, TRUE);
             }
             {
-                PokeathlonRelayRunCollision *collision = &collisions[PokeathlonCourse_GetCollisionSizeClass((PokeathlonCourseUnkTypes *)PokeathlonCourse_GetPerformance(course, i / RELAY_RUN_MEMBERS, i % RELAY_RUN_MEMBERS))];
+                PokeathlonRelayRunCollision *collision = &collisions[PokeathlonCourse_GetCollisionSizeClass((PokeathlonPerformanceSizeInfo *)PokeathlonCourse_GetPerformance(course, i / RELAY_RUN_MEMBERS, i % RELAY_RUN_MEMBERS))];
                 PokeathlonCourseObject_SetCollision(object, collision[-1].offsetY, collision[-1].radius);
             }
             object = PokeathlonCourseMonObjects_Get(relayRun->monObjects, (u8)i);

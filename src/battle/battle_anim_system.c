@@ -140,7 +140,7 @@ typedef struct BattleAnimPaletteCycle {
 } BattleAnimPaletteCycle;
 
 // unknown object read by Ov07UnkFE70_GetCurrentValue
-struct Ov07UnkFE70 {
+struct BattleAnimIndexedBytes {
     u8 unk_00[4];
     u32 index;
     u8 unk_08[0x3C];
@@ -3184,7 +3184,7 @@ void BattleAnimBattlerSprites_Free2(BattleAnimBattlerSprites *sprites, int battl
 
 #pragma force_active reset
 
-u8 Ov07UnkFE70_GetCurrentValue(Ov07UnkFE70 *data) {
+u8 Ov07UnkFE70_GetCurrentValue(BattleAnimIndexedBytes *data) {
     GF_ASSERT(data != NULL);
     return data->values[data->index];
 }

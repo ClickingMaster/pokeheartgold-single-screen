@@ -27,16 +27,16 @@ enum BerryPotsAppMessage {
     BERRY_POTS_APP_MSG_BAG_FULL,
 };
 
-typedef struct BerryPotsAppArgs_UnkSub4 {
+typedef struct BerryPotsLaunchArgs {
     u8 unk0[4];
     MenuInputStateMgr *menuInputPtr;
     u8 unk8[4];
     SaveData *savedata;
-} BerryPotsAppArgs_UnkSub4;
+} BerryPotsLaunchArgs;
 
 typedef struct BerryPotsAppArgs {
     u8 unk0[4];
-    BerryPotsAppArgs_UnkSub4 *launchArgs;
+    BerryPotsLaunchArgs *launchArgs;
     u8 unk8[0xC];
     u8 itemAction;
     u8 potIndex;

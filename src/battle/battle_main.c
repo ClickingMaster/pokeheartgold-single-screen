@@ -307,7 +307,7 @@ void Battle_BattleExit(OverlayManager *man) {
     setup->bagCursor = battleSystem->bagCursor;
     setup->keyPressedSave = battleSystem->keyPressedSave;
     setup->unk_128 = battleSystem->unk98;
-    setup->unk_134 = (struct UnkStruct_02067A60 *)battleSystem->unk9C;
+    setup->unk_134 = (struct BattleSetupSub_134 *)battleSystem->unk9C;
     setup->safariBalls = battleSystem->safariBallCnt;
     setup->winFlag = battleSystem->battleOutcomeFlag & 0x3F;
     setup->caughtBattlerId = battleSystem->caughtBattlerId;

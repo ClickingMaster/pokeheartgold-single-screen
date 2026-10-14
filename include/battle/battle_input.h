@@ -47,11 +47,11 @@ typedef union BattleInputMenu {
     BattleInputTwoOptionMenu twoOption;
 } BattleInputMenu;
 
-typedef struct BattleInput_UnkSub14 {
+typedef struct BattleInputUnusedSub {
     void *unk0;
     u8 unk4;
     s8 unk5;
-} BattleInput_UnkSub14;
+} BattleInputUnusedSub;
 
 typedef struct BattleInputMove {
     u16 moveNo[4];
@@ -172,7 +172,7 @@ struct BattleInput {
     SysTask *ballTask;
     SysTask *feedbackTask;
     SysTask *unk10;
-    BattleInput_UnkSub14 unk14;
+    BattleInputUnusedSub unk14;
     BattleInputMenu menu;
     u16 *screenBuffer[7];
     u16 *paletteBuffer;

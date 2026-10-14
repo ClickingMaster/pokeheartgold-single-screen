@@ -888,7 +888,7 @@ int Gts_CreateCountryListItems(ListMenuItem **items, MsgData *msgData, int group
 
 #pragma force_active reset
 
-void GtsUnk1234_Clear(GtsUnk1234 *arg) {
+void GtsUnk1234_Clear(GtsCursorValueTable *arg) {
     int i;
     for (i = 0; i < 10; i++) {
         arg->unk_04[i] = 0;
@@ -898,7 +898,7 @@ void GtsUnk1234_Clear(GtsUnk1234 *arg) {
     arg->unk_02 = 0;
 }
 
-void GtsUnk1234_SetEntry(GtsUnk1234 *arg, int index, u16 value1, u16 value2) {
+void GtsUnk1234_SetEntry(GtsCursorValueTable *arg, int index, u16 value1, u16 value2) {
     arg->unk_04[index] = value1;
     arg->unk_18[index] = value2;
 }

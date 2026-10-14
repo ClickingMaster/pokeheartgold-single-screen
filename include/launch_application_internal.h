@@ -35,11 +35,11 @@ typedef enum WirelessTradeState {
     WIRELESS_TRADE_STATE_7,
 } WirelessTradeState;
 
-typedef struct UnkStruct_0203E6D4 {
+typedef struct PartyMenuUnionRoomBattleSelectData {
     enum HeapID heapID;
     PartyMenuArgs *partyMenu;
     u8 unk8[0x4];
-} UnkStruct_0203E6D4;
+} PartyMenuUnionRoomBattleSelectData;
 
 typedef struct EasyChatTaskData {
     EasyChatResult *result;
@@ -143,14 +143,14 @@ typedef struct GtsArgs {
     int connectDirectly;
 } GtsArgs;
 
-typedef struct UnkStruct_0203E644 {
+typedef struct PartyMenuArgsSlotView {
     u8 unk0[0x26];
     u8 partySlot;
-} UnkStruct_0203E644;
+} PartyMenuArgsSlotView;
 
 typedef struct PartyMenuMoveSelectData {
     enum HeapID heapID;
-    UnkStruct_0203E644 *partyMenu;
+    PartyMenuArgsSlotView *partyMenu;
     PokemonSummaryArgs *pokemonSummary;
 } PartyMenuMoveSelectData;
 

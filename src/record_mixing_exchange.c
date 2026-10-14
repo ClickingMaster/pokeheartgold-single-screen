@@ -71,7 +71,7 @@ void RecordMixing_Fashion_Merge(RecordMixingMergeArgs *args) {
 }
 
 void RecordMixing_Block23_Merge(RecordMixingMergeArgs *args) {
-    UnkStruct_0202E474 *data = Save_Block23_Get(args->saveData);
+    SaveBlock23 *data = Save_Block23_Get(args->saveData);
     RecordMixing_MergeBlock23(data, args->numPlayers, args->localId, args->records, args->records2);
 }
 

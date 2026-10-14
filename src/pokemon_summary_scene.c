@@ -45,7 +45,7 @@ typedef struct ConditionChartVertex {
     s16 x, y, z;
 } ConditionChartVertex;
 
-struct UnkStruct22C {
+struct PokemonSummaryArgsDataTypeView {
     u8 pad_00[0x11];
     u8 monDataType;
 };
@@ -250,7 +250,7 @@ void PokemonSummary_CreatePokepic(PokemonSummaryScene *a) {
 
     a->pokepicManager = PokepicManager_Create(0x13);
     species = PokemonSummary_GetShownMon(a);
-    if (((struct UnkStruct22C *)a->args)->monDataType == 2) {
+    if (((struct PokemonSummaryArgsDataTypeView *)a->args)->monDataType == 2) {
         GetBoxmonSpriteCharAndPlttNarcIds(pokepicTemplate, species, 2, 0);
     } else {
         GetPokemonSpriteCharAndPlttNarcIds(pokepicTemplate, species, 2);
@@ -284,7 +284,7 @@ int PokemonSummary_GetTouchedButton(PokemonSummaryScene *a) {
     if (a->unk_7BF_0 == 0xF) {
         return -1;
     }
-    if (((struct UnkStruct22C *)a->args)->monDataType != 2) {
+    if (((struct PokemonSummaryArgsDataTypeView *)a->args)->monDataType != 2) {
         r = TouchscreenHitbox_FindRectAtTouchNew(_02104FFC);
         if (r != -1) {
             r = _02104FD0[r][0];

@@ -538,7 +538,7 @@ void MapPropAnimationManager_LoadPropAnimations(int fileCount, NNSG3dResMdl *res
     }
         
     if (animListFile->flags == (1 << 3)) {
-        MapPropAnimation_AddToRenderObj(renderObj, timeOfDayAnimations[TimeOfDayPropAnimManager_GetVisualState(unk104)]); // FieldSystemUnkSub104_GetTimeOfDayVisualState
+        MapPropAnimation_AddToRenderObj(renderObj, timeOfDayAnimations[TimeOfDayPropAnimManager_GetVisualState(unk104)]);
         TimeOfDayPropAnimManager_AddProp(unk104, renderObj, &timeOfDayAnimations[0], 4);
     }
 }

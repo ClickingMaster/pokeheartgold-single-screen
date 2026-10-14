@@ -21,7 +21,7 @@ typedef void (*BattleAnimScriptCmd)(BattleAnimSystem *system);
 typedef struct BattleAnimSoundTaskData BattleAnimSoundTaskData;
 typedef struct BattleAnimBrightnessFlashWork BattleAnimBrightnessFlashWork;
 typedef struct BattleAnimBgSwitchWork BattleAnimBgSwitchWork;
-typedef struct Ov07UnkFE70 Ov07UnkFE70;
+typedef struct BattleAnimIndexedBytes BattleAnimIndexedBytes;
 
 // Per-move data (a copy of the battle's move animation packet) and the battlers' state, filled by
 // BattleAnimSystem_StartMove.
@@ -337,7 +337,7 @@ void BattleAnimSystem_LoadBattleBgTiles(BattleAnimSystem *system, GFBgLayer laye
 void BattleAnimSystem_LoadBattleBgPalette(BattleAnimSystem *system);
 BOOL BattleAnimSystem_ShouldFlipSide(BattleAnimSystem *system, int side);
 u32 BattleAnimSystem_GetBackgroundFile(u32 bgId, int kind);
-u8 Ov07UnkFE70_GetCurrentValue(Ov07UnkFE70 *data);
+u8 Ov07UnkFE70_GetCurrentValue(BattleAnimIndexedBytes *data);
 void BattleAnimEmitterCb_None(SPLEmitter *emitter);
 SPLEmitter *BattleAnimSystem_NewParticleSystem(enum HeapID heapId, int resId, BOOL loadNow);
 SPLEmitter *BattleAnimSystem_NewParticleSystemFromNarc(enum HeapID heapId, NarcId narcId, int resId, BOOL loadNow);

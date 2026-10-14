@@ -23,7 +23,7 @@ void RenderModel_BindTexturesTask(SysTask *task, void *data);
 void RenderModel_BindTexturesOnVBlank(RenderModel *model);
 void RenderModel_FreeFile(RenderModel *model);
 void RenderModel_ReleaseTextures(RenderModel *model);
-void RenderModel_Free(UnkOv01_021FFECC_sub *data);
+void RenderModel_Free(RenderModelStorage *data);
 
 void RenderModel_Clear(RenderModel *model) {
     u32 count = sizeof(*model);
@@ -80,7 +80,7 @@ void RenderModel_ReleaseTextures(RenderModel *model) {
     }
 }
 
-void RenderModel_Free(UnkOv01_021FFECC_sub *data) {
+void RenderModel_Free(RenderModelStorage *data) {
     RenderModel *model = (RenderModel *)data;
     RenderModel_ReleaseTextures(model);
     RenderModel_FreeFile(model);

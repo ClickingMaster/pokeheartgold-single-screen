@@ -29,7 +29,7 @@ static void SysTask_RingGearPhone(SysTask *task, GearPhoneRingManager *ptr);
 
 static void FieldSystem_InitPokegearArgs(FieldSystem *sys, PokegearArgs *pokegearArgs, BOOL isMap) {
     s16 x, y;
-    Unk_PokegearSTRUCT_14 Unk_struct;
+    GearPhoneCallerParams callerParams;
     SaveVarsFlags *state = Save_VarsFlags_Get(sys->saveData);
     LocalFieldData *points = Save_LocalFieldData_Get(sys->saveData);
     Location *warpPtr = LocalFieldData_GetSpecialSpawnWarpPtr(points);
@@ -69,17 +69,17 @@ static void FieldSystem_InitPokegearArgs(FieldSystem *sys, PokegearArgs *pokegea
         return;
     }
     if (GearPhoneRingManager_IsRinging(phoneRingMgr)) {
-        pokegearArgs->callerId = GearPhoneRingManager_GetCallerParams(phoneRingMgr, &Unk_struct);
+        pokegearArgs->callerId = GearPhoneRingManager_GetCallerParams(phoneRingMgr, &callerParams);
         if (pokegearArgs->callerId >= NUM_PHONE_CONTACTS) {
             pokegearArgs->isScriptedLaunch = 0;
         } else {
             // scripted phone call
-            pokegearArgs->callScriptID = Unk_struct.callScriptID;     // message num?
-            pokegearArgs->isScriptedCall = Unk_struct.isScriptedCall; // call type?
+            pokegearArgs->callScriptID = callerParams.callScriptID;     // message num?
+            pokegearArgs->isScriptedCall = callerParams.isScriptedCall; // call type?
             if (pokegearArgs->isScriptedCall == 3) {
-                PhoneCallPersistentState_ClearCallTriggerFlag(SaveData_GetPhoneCallPersistentState(sys->saveData), Unk_struct.callTriggerID);
+                PhoneCallPersistentState_ClearCallTriggerFlag(SaveData_GetPhoneCallPersistentState(sys->saveData), callerParams.callTriggerID);
             } else if (pokegearArgs->isScriptedCall == 0) {
-                SaveMisc_PhoneRecentCallers_Add(Save_Misc_Get(sys->saveData), Unk_struct.unk_0, Unk_struct.unk_1, pokegearArgs->callerId);
+                SaveMisc_PhoneRecentCallers_Add(Save_Misc_Get(sys->saveData), callerParams.unk_0, callerParams.unk_1, pokegearArgs->callerId);
             }
             gearRingingManagerReset(phoneRingMgr);
             pokegearArgs->isScriptedLaunch = 1;
@@ -180,11 +180,11 @@ static void GearPhoneRingManager_CheckSafariCalls(GearPhoneRingManager *ptr) {
         if (!Pokedex_GetNatDexFlag(Save_Pokedex_Get(ptr->saveData))) {
             return;
         }
-        u32 Unkvar = SafariZone_CheckUnlockWaitPassed(zone, igt, 3);
-        if (Unkvar == 0) {
+        u32 unlockWaitResult = SafariZone_CheckUnlockWaitPassed(zone, igt, 3);
+        if (unlockWaitResult == 0) {
             return;
         }
-        if (Unkvar > 1) {
+        if (unlockWaitResult > 1) {
             if (var < 3) {
                 GearPhoneRingManager_SetCallTrigger(ptr, CALL_TRIGGER_BAOBA_MEMORY_LOSS, TRUE);
             } else {

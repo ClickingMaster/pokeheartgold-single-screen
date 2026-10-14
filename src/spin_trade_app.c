@@ -177,9 +177,9 @@ typedef struct SpinTradeMarker {
 } SpinTradeMarker;             // size 0x68
 
 typedef struct SpinTradeObjects {
-    UnkOv01_021FFECC_sub eggModel;             // 0x000
-    UnkOv01_021FFECC_sub shadowModel;          // 0x014
-    UnkOv01_021FFECC_sub markerModels[5];      // 0x028
+    RenderModelStorage eggModel;             // 0x000
+    RenderModelStorage shadowModel;          // 0x014
+    RenderModelStorage markerModels[5];      // 0x028
     SpinTradeRenderAnim markerAnims[5];        // 0x08C
     SpinTradeEgg eggs[SPIN_TRADE_MAX_PLAYERS]; // 0x140
     SpinTradeShadow shadows[5];                // 0x4B0
@@ -199,7 +199,7 @@ typedef struct SpinTradeMachine {
     fx32 speed;                 // 0x48
     u16 rotation[3];            // 0x4C
     u16 unk_52;                 // 0x52
-    UnkOv01_021FFECC_sub model; // 0x54
+    RenderModelStorage model; // 0x54
     NNSG3dRenderObj renderObj;  // 0x68
 } SpinTradeMachine;             // size 0xBC
 
@@ -437,14 +437,14 @@ int GF_TouchpadUpdate(SpinTradeTouchSamples *out, int mode, u32 threshold);
 void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapId);
 BOOL SpinTradeLink_SendCommand(SpinTradeLinkMenu *menu, int command, void *data, int size);
 Party *SpinTradeLink_GetReceivedParty(SpinTradeLinkMenu *menu, int netId);
-void RenderModel_LoadFromNarc(UnkOv01_021FFECC_sub *model, int index, NARC *narc, int fileId, enum HeapID heapId, BOOL atEnd);
-void RenderModel_BindTexturesOnVBlank(UnkOv01_021FFECC_sub *model);
+void RenderModel_LoadFromNarc(RenderModelStorage *model, int index, NARC *narc, int fileId, enum HeapID heapId, BOOL atEnd);
+void RenderModel_BindTexturesOnVBlank(RenderModelStorage *model);
 void RenderAnimation_LoadFromNarc(SpinTradeRenderAnim *anim, int unused, NARC *narc, int fileId, enum HeapID heapId, BOOL atEnd);
 void RenderAnimation_FreeFile(SpinTradeRenderAnim *anim);
-void RenderAnimation_AllocObjectForModel(SpinTradeRenderAnim *anim, UnkOv01_021FFECC_sub *model, enum HeapID heapId);
-void RenderAnimation_InitObjectForModel(SpinTradeRenderAnim *anim, UnkOv01_021FFECC_sub *model);
+void RenderAnimation_AllocObjectForModel(SpinTradeRenderAnim *anim, RenderModelStorage *model, enum HeapID heapId);
+void RenderAnimation_InitObjectForModel(SpinTradeRenderAnim *anim, RenderModelStorage *model);
 BOOL RenderAnimation_Advance(SpinTradeRenderAnim *anim, fx32 step, BOOL loop);
-void RenderObj_InitWithAnimation(NNSG3dRenderObj *obj, UnkOv01_021FFECC_sub *model, SpinTradeRenderAnim *anim);
+void RenderObj_InitWithAnimation(NNSG3dRenderObj *obj, RenderModelStorage *model, SpinTradeRenderAnim *anim);
 void RenderObj_DrawRotated(NNSG3dRenderObj *obj, const VecFx32 *position, const VecFx32 *scale, const u16 *angles);
 
 BOOL SpinTradeApp_Init(OverlayManager *man, int *state);
@@ -2021,9 +2021,9 @@ void SpinTrade_LoadObjectModels(SpinTradeApp *app) {
     volatile int i; // volatile: matches the original loop codegen
     const int *modelIds;
     const int *animIds;
-    UnkOv01_021FFECC_sub *model;
+    RenderModelStorage *model;
     SpinTradeRenderAnim *anim;
-    UnkOv01_021FFECC_sub *animModel;
+    RenderModelStorage *animModel;
     SpinTradeObjects *objects = &app->objects;
 
     RenderModel_LoadFromNarc(&objects->eggModel, 0, app->narc, 0, HEAP_ID_102, FALSE);

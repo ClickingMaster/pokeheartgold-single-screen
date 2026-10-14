@@ -146,19 +146,19 @@ u32 WiFiPlazaWork_GetThirdEvent(WiFiPlazaWork *work) {
 }
 
 void WiFiPlazaWork_StartGameEntryCooldown(WiFiPlazaWork *work) {
-    WiFiPlazaUnk3A0_StartCooldown(&work->unk_3a0);
+    WiFiPlazaSessionState_StartCooldown(&work->sessionState);
 }
 
 int WiFiPlazaWork_IsGameEntryCoolingDown(WiFiPlazaWork *work) {
-    return WiFiPlazaUnk3A0_IsCoolingDown(&work->unk_3a0);
+    return WiFiPlazaSessionState_IsCoolingDown(&work->sessionState);
 }
 
 void *WiFiPlazaWork_GetField508_04(WiFiPlazaWork *work) {
-    return work->unk_508.unk_04;
+    return work->ownProfileData.unk_04;
 }
 
 void WiFiPlazaWork_SetField508_04(WiFiPlazaWork *work, void *value) {
-    work->unk_508.unk_04 = value;
+    work->ownProfileData.unk_04 = value;
 }
 
 void WiFiPlazaWork_ClearGameMembers(WiFiPlazaWork *work) {
@@ -183,11 +183,11 @@ void WiFiPlazaWork_GetGameMembers(WiFiPlazaWork *work, void *dest) {
 }
 
 void WiFiPlazaWork_SetAppQuitForClosing(WiFiPlazaWork *work) {
-    WiFiPlazaUnk3A0_SetAppQuitForClosing(&work->unk_3a0);
+    WiFiPlazaSessionState_SetAppQuitForClosing(&work->sessionState);
 }
 
 int WiFiPlazaWork_DidAppQuitForClosing(WiFiPlazaWork *work) {
-    return WiFiPlazaUnk3A0_DidAppQuitForClosing(&work->unk_3a0);
+    return WiFiPlazaSessionState_DidAppQuitForClosing(&work->sessionState);
 }
 
 void WiFiPlazaWork_SetMinigameActiveFlag(WiFiPlazaWork *work, u8 value) {

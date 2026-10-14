@@ -1712,7 +1712,7 @@ BOOL ScrCmd_BattleArcadeGetPartySelection(ScriptContext *ctx) {
 BOOL ScrCmd_GetMoveSelection(ScriptContext *ctx) {
     u8 mode = ScriptReadByte(ctx);
     u16 *p_ret = ScriptGetVarPointer(ctx);
-    UnkStruct_0203E600 **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA); // presumably move selection data?
+    MoveSelectionResult **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA); // presumably move selection data?
     GF_ASSERT(*p_work != NULL);
     if (mode == 1) {
         *p_ret = RunningAppData_GetUnk16(*p_work);
@@ -1982,7 +1982,7 @@ BOOL ScrCmd_OpenBattleRoomResults(ScriptContext *ctx) {
     u16 sp0 = ScriptGetVar(ctx);
     BattleRoomResultsArgs **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
     *p_work = Heap_Alloc(HEAP_ID_FIELD2, sizeof(struct BattleRoomResultsArgs));
-    InitUnkStructScrCmd408(*p_work, showLeaders, sp0, ctx);
+    BattleRoomResultsArgs_Init(*p_work, showLeaders, sp0, ctx);
     BattleRoomResults_LaunchApp(ctx->fieldSystem, *p_work);
     SetupNativeScript(ctx, ScrNative_WaitApplication_DestroyTaskData);
     return TRUE;
@@ -2479,8 +2479,8 @@ BOOL ScrCmd_Dummy229(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_LinkBattle(ScriptContext *ctx) {
-    struct UnkStruct_ScrCmd230 **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
-    struct UnkStruct_ScrCmd230 *work = *p_work;
+    struct LinkBattleScriptWork **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
+    struct LinkBattleScriptWork *work = *p_work;
     CallTask_LinkBattle(ctx->fieldSystem->taskman, &work->unk_30, 5);
     Heap_Free(work);
     *p_work = NULL;

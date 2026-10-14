@@ -1683,14 +1683,14 @@ static void WeatherTask_Rain(SysTask *task, void *data) {
         if (taskData->data[0] > 0) {
             taskData->data[0]--;
         } else {
-            int vUnk;
+            int fogFadeDone;
             if (work->fogMode) {
-                vUnk = WeatherFogTableFade_Update(&taskData->fogTableFade);
+                fogFadeDone = WeatherFogTableFade_Update(&taskData->fogTableFade);
             } else {
-                vUnk = 1;
+                fogFadeDone = 1;
             }
 
-            if (vUnk == 1 && ret == 3) {
+            if (fogFadeDone == 1 && ret == 3) {
                 if (work->linkedListDummy.next == &work->linkedListDummy) {
                     work->state = 5;
                 }
@@ -1845,14 +1845,14 @@ static void WeatherTask_Snow(SysTask *task, void *data) {
         if (taskData->data[0] > 0) {
             taskData->data[0]--;
         } else {
-            int vUnk;
+            int fogFadeDone;
             if (work->fogMode) {
-                vUnk = WeatherFogTableFade_Update(&taskData->fogTableFade);
+                fogFadeDone = WeatherFogTableFade_Update(&taskData->fogTableFade);
             } else {
-                vUnk = 1;
+                fogFadeDone = 1;
             }
 
-            if (vUnk == 1 && ret == 3) {
+            if (fogFadeDone == 1 && ret == 3) {
                 if (work->linkedListDummy.next == &work->linkedListDummy) {
                     work->state = 5;
                 }
@@ -2009,9 +2009,9 @@ static void WeatherTask_DiamondDust(SysTask *task, void *data) {
         if (taskData->data[0] > 0) {
             taskData->data[0]--;
         } else {
-            int vUnk = WeatherFog_Update(&taskData->fogChange, &taskData->fogTableFade, work->fogMode);
+            int fogFadeDone = WeatherFog_Update(&taskData->fogChange, &taskData->fogTableFade, work->fogMode);
 
-            if (vUnk == 1 && ret == 3) {
+            if (fogFadeDone == 1 && ret == 3) {
                 if (work->linkedListDummy.next == &work->linkedListDummy) {
                     work->state = 5;
                 }

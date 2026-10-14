@@ -70,24 +70,24 @@ typedef struct GlobalTerminalLaunchArgs {
     u8 unkC;
 } GlobalTerminalLaunchArgs;
 
-struct UnkStruct_ScrCmd230 {
+struct LinkBattleScriptWork {
     u8 filler_00[0x30];
     u8 unk_30[6];
 };
 
-typedef struct UnkStruct_0203E600 {
+typedef struct MoveSelectionResult {
     u8 unk0[0x14];
     u8 unk14;
     u8 unk15;
     u8 unk16;
-} UnkStruct_0203E600;
+} MoveSelectionResult;
 
 typedef struct EasyChatResult {
     u16 changed;
     u16 unk2;
 } EasyChatResult;
 
-static inline void InitUnkStructScrCmd408(BattleRoomResultsArgs *data, u16 a1, u16 a2, ScriptContext *ctx) {
+static inline void BattleRoomResultsArgs_Init(BattleRoomResultsArgs *data, u16 a1, u16 a2, ScriptContext *ctx) {
     MI_CpuClear8(data, sizeof(BattleRoomResultsArgs));
     data->showLeaders = a1;
     data->unk_6 = a2;
@@ -117,8 +117,8 @@ void VsRecorder_LaunchApp(FieldSystem *fieldSystem, SaveData *saveData);
 SafariDecorationArgs *SafariDecoration_LaunchApp(FieldSystem *fieldSystem);
 void GeonetGlobe_LaunchApp(FieldSystem *fieldSystem);
 void ChooseStarter_LaunchApp(FieldSystem *fieldSystem, ChooseStarterArgs *args);
-u16 RunningAppData_GetUnk16(UnkStruct_0203E600 *a0);
-u16 RunningAppData_GetUnk14(UnkStruct_0203E600 *a0);
+u16 RunningAppData_GetUnk16(MoveSelectionResult *a0);
+u16 RunningAppData_GetUnk14(MoveSelectionResult *a0);
 PokemonSummaryArgs *LearnForgetMove_LaunchApp(enum HeapID heapID, FieldSystem *fieldSystem, u8 partySlot, u16 moveToLearn);
 ApricornBoxArgs *ApricornBox_LaunchAppForJuice(FieldSystem *fieldSystem, u32 a1, u16 *juiceUsedVar);
 BugContestSwapMonArgs *BugContestSwapMon_LaunchApp(FieldSystem *fieldSystem, Pokemon *newlyCaughtMon, Pokemon *currentMon, BOOL noPokemonCaught);
@@ -154,7 +154,7 @@ NintendoWifiConnectArgs *NintendoWifiConnection_LaunchApp(FieldSystem *fieldSyst
 void PokeathlonCourse_LaunchApp(FieldSystem *fieldSystem, PokeathlonCourseArgs *args);
 void MagnetTrainCutscene_LaunchApp(FieldSystem *fieldSystem, void *args);
 void ShipDepartureCutscene_LaunchApp(FieldSystem *fieldSystem, void *args);
-LegendaryCinematicArgs *LegendaryCinematic_LaunchApp(FieldSystem *fieldSystem, UnkStruct_0203FCC4 *modelAttributes, u16 scene, u16 timeOfDay, enum HeapID heapID);
+LegendaryCinematicArgs *LegendaryCinematic_LaunchApp(FieldSystem *fieldSystem, ModelAttributesStorage *modelAttributes, u16 scene, u16 timeOfDay, enum HeapID heapID);
 void LaunchApp_ViewRankings(FieldSystem *fieldSystem, ViewRankingsArgs *args);
 PartyMenuArgs *PartyMenu_LaunchApp_Field(FieldSystem *fieldSystem, FieldMoveCheckData *fieldMoveCheckData, u8 partySlot);
 void CallTask_NamingScreen(TaskManager *taskManager, NameScreenType type, int species, int maxLen, int initPos, const u16 *defaultStr, u16 *retVar);

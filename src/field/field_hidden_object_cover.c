@@ -11,7 +11,7 @@
 
 struct HiddenObjectCover {
     FieldEffectManager *manager;
-    UnkOv01_021FFECC_sub models[4];
+    RenderModelStorage models[4];
     NNSG3dRenderObj renderObjs[4];
 };
 

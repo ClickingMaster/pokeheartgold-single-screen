@@ -70,9 +70,9 @@ typedef struct PokeathlonCourseState {
 } PokeathlonCourseState;
 
 // Unknown sub-structure at offset 0x974 (0x74 bytes)
-typedef struct PokeathlonUnkSubStruct_974 {
+typedef struct PokeathlonParticipantStats {
     u8 data[0x74]; // Opaque data for now
-} PokeathlonUnkSubStruct_974;
+} PokeathlonParticipantStats;
 
 // Pokeathlon course data structure (0xD70 = 3440 bytes)
 struct PokeathlonCourseData {
@@ -117,7 +117,7 @@ struct PokeathlonCourseData {
     u8 filler_72B[1];                          // 0x72B
     PokeathlonFieldData fieldData[6];          // 0x72C - Array of PokeathlonFieldData (6 * 0x60 = 0x1E0 bytes)
     u8 filler_96C[8];                          // 0x96C
-    PokeathlonUnkSubStruct_974 records[4];   // 0x974 - Array of 4 unknown sub-structures (0x74 bytes each = 0x1D0 bytes)
+    PokeathlonParticipantStats records[4];   // 0x974 - Array of 4 unknown sub-structures (0x74 bytes each = 0x1D0 bytes)
     u8 filler_B44[0x60];                       // 0xB44
     u8 monCounters[0x180];                       // 0xBA4
     s32 frameCounter;                          // 0xD24 - Increments every 0x708 frames (max 0xEA5F)
@@ -166,7 +166,7 @@ void PokeathlonCourse_ResetField1EF(PokeathlonCourseData *data);
 void *PokeathlonCourse_GetSystem(PokeathlonCourseData *data);
 BOOL PokeathlonCourse_GetNetId(PokeathlonCourseData *data);
 PlayerProfile *PokeathlonCourse_GetPlayerProfileFromData(PokeathlonCourseData *data, int index);
-PokeathlonUnkSubStruct_974 *PokeathlonCourse_GetField974_AtIndex(PokeathlonCourseData *data, int index);
+PokeathlonParticipantStats *PokeathlonCourse_GetField974_AtIndex(PokeathlonCourseData *data, int index);
 u8 *PokeathlonCourse_GetDataCopyArea(PokeathlonCourseData *data);
 void PokeathlonCourse_ResetDataCopyArea(PokeathlonCourseData *data);
 void PokeathlonCourse_SetField3A4(PokeathlonCourseData *data, u32 a0, u32 a1, u32 a2);

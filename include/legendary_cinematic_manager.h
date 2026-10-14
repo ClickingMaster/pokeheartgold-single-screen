@@ -4,13 +4,13 @@
 #include "overlay_manager.h"
 #include "save.h"
 
-typedef struct UnkStruct_0203FCC4 {
+typedef struct ModelAttributesStorage {
     int unk0[0x12];
-} UnkStruct_0203FCC4;
+} ModelAttributesStorage;
 
 typedef struct LegendaryCinematicArgs {
     SaveData *saveData;
-    UnkStruct_0203FCC4 modelAttributes;
+    ModelAttributesStorage modelAttributes;
     u16 scene;
     u16 timeOfDay;
 } LegendaryCinematicArgs;

@@ -34,9 +34,9 @@ typedef struct FieldEffectBasicTemplate {
 
 typedef struct {
     u8 unk0[0xc];
-    NNSG3dResMdl *unkC;
+    NNSG3dResMdl *model;
     u8 unk10[4];
-} UnkOv01_021FFECC_sub;
+} RenderModelStorage;
 
 FieldEffectManager *FieldEffectManager_New(FieldSystem *fieldSystem, u32 rendererCount, enum HeapID heapID);
 void FieldEffectManager_InitAnimManagerList(FieldEffectManager *manager, u32 animManagerCount);

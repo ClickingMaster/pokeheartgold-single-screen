@@ -88,10 +88,10 @@ typedef struct FieldProcessManager {
     BOOL isDone;
 } FieldProcessManager;
 
-typedef struct FieldEnvSubUnk18 {
+typedef struct FieldTransitionWork {
     int state;
     u32 direction;
-} FieldEnvSubUnk18;
+} FieldTransitionWork;
 
 typedef struct FieldMapSystems {
     u32 unk0;
@@ -100,7 +100,7 @@ typedef struct FieldMapSystems {
     WeatherManager *weatherManager;
     FieldTextureManager *textureManager;
     u32 unk14;
-    UnkStruct_020556FC *unk18;
+    UnusedFieldModel *unk18;
     HBlankSystem *hBlankSystem;
     void *poisonEffect;
     void *localData;
@@ -326,7 +326,7 @@ void FieldSystem_SetSavedBottomScreenAppId(FieldSystem *fieldSystem, int appId);
 BgConfig *FieldSystem_GetBgConfigPtr(FieldSystem *fieldSystem);
 SaveData *FieldSystem_GetSaveData(FieldSystem *fieldSystem);
 void Task_AntipiracyRandom();
-void Field_SetEnvironmentSoundState_None_Unk2();
+void Field_ForceEnvironmentSoundRecheck();
 
 extern const OverlayManagerTemplate gApplication_NewGameFieldsys;
 extern const OverlayManagerTemplate gApplication_ContinueFieldsys;

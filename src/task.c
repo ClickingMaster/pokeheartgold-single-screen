@@ -13,7 +13,7 @@ static TaskManager *Task_New(FieldSystem *fieldSystem, TaskFunc taskFunc, void *
     taskman->unk10 = 0;
     taskman->unk14 = NULL;
     taskman->fieldSystem = fieldSystem;
-    taskman->unk1C = Heap_AllocAtEnd((enum HeapID)32, sizeof(TaskManagerUnkSub1C));
+    taskman->bgGoTo = Heap_AllocAtEnd((enum HeapID)32, sizeof(TaskManagerBgGoTo));
     return taskman;
 }
 
@@ -57,7 +57,7 @@ BOOL FieldSystem_RunTaskFrame(FieldSystem *fieldSystem) {
         if (fieldSystem->taskman->unk14 != NULL) {
             Heap_Free(fieldSystem->taskman->unk14);
         }
-        Heap_Free(fieldSystem->taskman->unk1C);
+        Heap_Free(fieldSystem->taskman->bgGoTo);
         Heap_Free(fieldSystem->taskman);
         fieldSystem->taskman = prevTask;
         if (prevTask == NULL) {
@@ -85,7 +85,7 @@ BOOL FieldSystem_IsOverworldRestored(FieldSystem *fieldSystem) {
 
 static BOOL Task_RunApplicationUntilComplete(TaskManager *taskManager) {
     FieldSystem *fieldSystem;
-    struct UnkTaskEnv *env;
+    struct ApplicationTaskEnv *env;
 
     fieldSystem = TaskManager_GetFieldSystem(taskManager);
     env = TaskManager_GetEnvironment(taskManager);
@@ -106,9 +106,9 @@ static BOOL Task_RunApplicationUntilComplete(TaskManager *taskManager) {
 }
 
 void CallApplicationAsTask(TaskManager *taskManager, const OverlayManagerTemplate *template, void *work) {
-    struct UnkTaskEnv *env;
+    struct ApplicationTaskEnv *env;
 
-    env = Heap_AllocAtEnd((enum HeapID)32, sizeof(struct UnkTaskEnv));
+    env = Heap_AllocAtEnd((enum HeapID)32, sizeof(struct ApplicationTaskEnv));
     env->state = 0;
     env->template = template;
     env->work = work;
@@ -128,5 +128,5 @@ u32 *TaskManager_GetStatePtr(TaskManager *taskManager) {
 }
 
 u32 TaskManager_GetBgGoToId(TaskManager *taskManager) {
-    return taskManager->unk1C->unk0;
+    return taskManager->bgGoTo->bgGoToId;
 }

@@ -22,15 +22,15 @@ void NNS_G3dMdlSetMdlAlphaAll(NNSG3dResMdl *pMdl, u32 alpha);
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 2).
 typedef struct Footprints {
     FieldEffectManager *manager;
-    UnkOv01_021FFECC_sub modelsA[FOOTPRINT_MODEL_COUNT];
-    UnkOv01_021FFECC_sub modelsB[FOOTPRINT_MODEL_COUNT];
+    RenderModelStorage modelsA[FOOTPRINT_MODEL_COUNT];
+    RenderModelStorage modelsB[FOOTPRINT_MODEL_COUNT];
     NNSG3dRenderObj renderObjsA[FOOTPRINT_MODEL_COUNT];
     NNSG3dRenderObj renderObjsB[FOOTPRINT_MODEL_COUNT];
 } Footprints;
 
 typedef struct FootprintEffectArgs {
     u32 kind;
-    UnkOv01_021FFECC_sub *model;
+    RenderModelStorage *model;
     NNSG3dRenderObj *renderObj;
 } FootprintEffectArgs;
 
@@ -40,7 +40,7 @@ typedef struct FootprintEffect {
     BOOL hidden;
     int alpha;
     u32 kind;
-    UnkOv01_021FFECC_sub *model;
+    RenderModelStorage *model;
     NNSG3dRenderObj *renderObj;
 } FootprintEffect;
 
@@ -49,7 +49,7 @@ void Footprints_Free(Footprints *footprints);
 void Footprints_LoadModels(Footprints *footprints);
 void Footprints_FreeModels(Footprints *footprints);
 NNSG3dRenderObj *Footprints_GetRenderObj(Footprints *footprints, u32 kind, u32 direction, u32 prevDirection);
-UnkOv01_021FFECC_sub *Footprints_GetModel(Footprints *footprints, u32 kind, u32 direction, u32 prevDirection);
+RenderModelStorage *Footprints_GetModel(Footprints *footprints, u32 kind, u32 direction, u32 prevDirection);
 BOOL Footprints_SpawnInSand(LocalMapObject *mapObject);
 BOOL Footprints_SpawnTracksInSand(LocalMapObject *mapObject);
 BOOL Footprints_SpawnInSnow(LocalMapObject *mapObject);
@@ -162,8 +162,8 @@ NNSG3dRenderObj *Footprints_GetRenderObj(Footprints *footprints, u32 kind, u32 d
     return renderObj;
 }
 
-UnkOv01_021FFECC_sub *Footprints_GetModel(Footprints *footprints, u32 kind, u32 direction, u32 prevDirection) {
-    UnkOv01_021FFECC_sub *model = NULL;
+RenderModelStorage *Footprints_GetModel(Footprints *footprints, u32 kind, u32 direction, u32 prevDirection) {
+    RenderModelStorage *model = NULL;
 
     switch (kind) {
     case 0:
@@ -300,8 +300,8 @@ void FootprintEffect_Draw(FieldEffect *effect, FootprintEffect *work) {
 
     if (work->hidden == FALSE) {
         FieldEffect_GetPosition(effect, &position);
-        NNSi_G3dModifyPolygonAttrMask(work->model->unkC, TRUE, 0x1F << 16);
-        NNS_G3dMdlSetMdlAlphaAll(work->model->unkC, work->alpha);
+        NNSi_G3dModifyPolygonAttrMask(work->model->model, TRUE, 0x1F << 16);
+        NNS_G3dMdlSetMdlAlphaAll(work->model->model, work->alpha);
         RenderObj_DrawAt((int)work->renderObj, &position);
     }
 }

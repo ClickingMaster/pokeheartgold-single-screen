@@ -6,11 +6,11 @@
 
 typedef BOOL (*TaskFunc)(TaskManager *taskman);
 
-typedef struct TaskManagerUnkSub1C {
-    u32 unk0;
-} TaskManagerUnkSub1C;
+typedef struct TaskManagerBgGoTo {
+    u32 bgGoToId;
+} TaskManagerBgGoTo;
 
-struct UnkTaskEnv {
+struct ApplicationTaskEnv {
     int state;
     const OverlayManagerTemplate *template;
     void *work;
@@ -24,7 +24,7 @@ struct TaskManager { // declared in field_system.h
     u32 unk10;
     void *unk14;
     FieldSystem *fieldSystem;
-    TaskManagerUnkSub1C *unk1C; // size=4
+    TaskManagerBgGoTo *bgGoTo; // size=4
 };
 
 TaskManager *FieldSystem_CreateTask(FieldSystem *fieldSystem, TaskFunc taskFunc, void *env);

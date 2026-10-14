@@ -65,24 +65,24 @@ extern const DoorModelList gSideDoorExitModels;
 extern const DoorModelList gSideDoorEntryModels;
 extern const CameraTranslationPathTemplate gDoorCameraPaths[2];
 
-FieldEnvSubUnk18 *DoorTransition_New(void) {
+FieldTransitionWork *DoorTransition_New(void) {
     DoorTransitionWork *work = Heap_AllocAtEnd(HEAP_ID_FIELD1, sizeof(DoorTransitionWork));
     work->state = 0;
     work->translationDone = 0;
-    return (FieldEnvSubUnk18 *)work;
+    return (FieldTransitionWork *)work;
 }
 
-void DoorTransition_Free(FieldEnvSubUnk18 *work) {
+void DoorTransition_Free(FieldTransitionWork *work) {
     Heap_Free(work);
 }
 
-void DoorTransition_SetPosition(u32 x, u32 z, FieldEnvSubUnk18 *arg) {
+void DoorTransition_SetPosition(u32 x, u32 z, FieldTransitionWork *arg) {
     DoorTransitionWork *work = (DoorTransitionWork *)arg;
     work->x = x;
     work->z = z;
 }
 
-BOOL DoorTransition_WalkIntoDoor(FieldSystem *fieldSystem, FieldEnvSubUnk18 *arg) {
+BOOL DoorTransition_WalkIntoDoor(FieldSystem *fieldSystem, FieldTransitionWork *arg) {
     DoorTransitionWork *work = (DoorTransitionWork *)arg;
     fx32 rect[4];
     DoorAnimListEntry entry;
@@ -210,7 +210,7 @@ prop_loaded:
     return FALSE;
 }
 
-BOOL DoorTransition_WalkOutOfDoor(FieldSystem *fieldSystem, FieldEnvSubUnk18 *arg) {
+BOOL DoorTransition_WalkOutOfDoor(FieldSystem *fieldSystem, FieldTransitionWork *arg) {
     DoorTransitionWork *work = (DoorTransitionWork *)arg;
     fx32 rect[4];
     DoorAnimListEntry entry;
@@ -407,7 +407,7 @@ int DoorTransition_GetCameraPathIndex(int modelId) {
     return ret;
 }
 
-BOOL DoorTransition_WalkOutOfSideDoor(FieldSystem *fieldSystem, FieldEnvSubUnk18 *arg, u8 direction) {
+BOOL DoorTransition_WalkOutOfSideDoor(FieldSystem *fieldSystem, FieldTransitionWork *arg, u8 direction) {
     DoorTransitionWork *work = (DoorTransitionWork *)arg;
     NNSG3dResTex *texture;
     NNSG3dRenderObj *renderObj;
@@ -488,7 +488,7 @@ BOOL DoorTransition_WalkOutOfSideDoor(FieldSystem *fieldSystem, FieldEnvSubUnk18
     return FALSE;
 }
 
-BOOL DoorTransition_WalkIntoSideDoor(FieldSystem *fieldSystem, FieldEnvSubUnk18 *arg, u8 direction) {
+BOOL DoorTransition_WalkIntoSideDoor(FieldSystem *fieldSystem, FieldTransitionWork *arg, u8 direction) {
     DoorTransitionWork *work = (DoorTransitionWork *)arg;
     NNSG3dResTex *texture;
     NNSG3dRenderObj *renderObj;

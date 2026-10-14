@@ -1,6 +1,6 @@
 #ifndef POKEHEARTGOLD_FIELD_ENVIRONMENT_SOUND_H
 #define POKEHEARTGOLD_FIELD_ENVIRONMENT_SOUND_H
 
-void Field_SetEnvironmentSoundState_None_Unk2(void);
+void Field_ForceEnvironmentSoundRecheck(void);
 
 #endif // POKEHEARTGOLD_FIELD_ENVIRONMENT_SOUND_H

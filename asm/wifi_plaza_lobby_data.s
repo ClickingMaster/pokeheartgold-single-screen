@@ -624,11 +624,11 @@
 	.public WiFiPlazaWork_SetTalkField07
 	.public WiFiPlazaWork_GetTalkField07
 	.public WiFiPlaza_ClearEventFlags
-	.public WiFiPlazaUnk3A0_StartCooldown
-	.public WiFiPlazaUnk3A0_IsCoolingDown
-	.public WiFiPlazaUnk3A0_UpdateCooldown
-	.public WiFiPlazaUnk3A0_SetAppQuitForClosing
-	.public WiFiPlazaUnk3A0_DidAppQuitForClosing
+	.public WiFiPlazaSessionState_StartCooldown
+	.public WiFiPlazaSessionState_IsCoolingDown
+	.public WiFiPlazaSessionState_UpdateCooldown
+	.public WiFiPlazaSessionState_SetAppQuitForClosing
+	.public WiFiPlazaSessionState_DidAppQuitForClosing
 	.public WiFiPlazaTalkSession_Init
 	.public WiFiPlazaTalkSession_SetMessage
 	.public WiFiPlazaTalkSession_StartTimeout

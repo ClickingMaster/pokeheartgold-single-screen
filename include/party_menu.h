@@ -257,7 +257,7 @@ typedef enum PartyMenuSpriteId {
     PARTY_MENU_SPRITE_ID_MAX,
 } PartyMenuSpriteId;
 
-typedef struct UnkTemplatePartyMenuContextMenu_0207E590 {
+typedef struct PartyMenuContextMenu {
     ListMenuItem *items;
     Window *window;
     u8 unk_08;
@@ -281,7 +281,7 @@ typedef struct PartyMenuArgs {
     Bag *bag;
     Mailbox *mailbox;
     Options *options;
-    UnkStruct_0202E474 *unk_10;
+    SaveBlock23 *unk_10;
     LinkBattleRuleset *linkBattleRuleset;
     FieldMoveCheckData *fieldMoveCheckData;
     FieldSystem *fieldSystem;

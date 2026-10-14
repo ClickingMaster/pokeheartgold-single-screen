@@ -13,7 +13,7 @@ static void AreaMapAnimation_AllocAnimObj(NNSFndAllocator *pAllocator, NNSG3dAnm
 static void *AreaMapAnimation_AllocAnimObjMem(NNSFndAllocator *pAllocator, ResAnim_4004 *anim);
 static void AreaMapAnimation_InitAnimObj(NNSG3dAnmObj *alloc, ResAnim_4004 *anim);
 
-Field3dRenderObjManager *Field3dObjectList_New(enum HeapID heapID, int indexMax, int objectMax, NNSG3dResFileHeader **resFileHeaders) { // FieldSysC0_New
+Field3dRenderObjManager *Field3dObjectList_New(enum HeapID heapID, int indexMax, int objectMax, NNSG3dResFileHeader **resFileHeaders) {
     Field3dRenderObjManager *unkC0 = Heap_Alloc(heapID, sizeof(Field3dRenderObjManager));
     unkC0->numObjects = 0;
     unkC0->indexMax = indexMax;
@@ -34,7 +34,7 @@ Field3dRenderObjManager *Field3dObjectList_New(enum HeapID heapID, int indexMax,
     return unkC0;
 }
 
-void Field3dObjectList_Free(Field3dRenderObjManager *unkC0) { // FieldSysC0_Free
+void Field3dObjectList_Free(Field3dRenderObjManager *unkC0) {
     Heap_Free(unkC0->modelNumToLoadedSlot);
     Heap_Free(unkC0->objectHeap);
     Heap_Free(unkC0->objects);
@@ -102,7 +102,7 @@ static Field3dRenderObj *Field3dObjectList_InitNextObject(Field3dRenderObjManage
     return object;
 }
 
-MapPropAnimationPoolList *MapPropAnimationPoolList_New(enum HeapID heapID) { // FieldSystemUnkSubC8_New
+MapPropAnimationPoolList *MapPropAnimationPoolList_New(enum HeapID heapID) {
     MapPropAnimationPoolList *unkC8 = Heap_Alloc(heapID, sizeof(MapPropAnimationPoolList));
     unkC8->numPools = 0;
     unkC8->unk0 = 0;
@@ -139,7 +139,7 @@ MapPropAnimationPool *MapPropAnimationPoolList_AddPool(MapPropAnimationPoolList 
     return ret;
 }
 
-void MapPropAnimationPoolList_Free(MapPropAnimationPoolList *unkSubC8) { // UnkSubC8_Free
+void MapPropAnimationPoolList_Free(MapPropAnimationPoolList *unkSubC8) {
     if (unkSubC8 != NULL) {
         MapPropAnimationPool *unk4 = unkSubC8->head;
         if (unk4 == NULL) {
@@ -188,7 +188,7 @@ void MapPropAnimationPool_Release(MapPropAnimationPool *unkCC_Sub0, MapPropAnima
     }
 }
 
-static u16 MapPropAnimationPool_GetNumUsed(MapPropAnimationPool *unkCC_Sub0) { // FieldSystemUnkSubCC_Sub0_GetCount?
+static u16 MapPropAnimationPool_GetNumUsed(MapPropAnimationPool *unkCC_Sub0) {
     return unkCC_Sub0->numUsed;
 }
 
@@ -294,7 +294,7 @@ void MapPropAnimation_GoToFirstFrame(MapPropAnimation *animation) {
     }
 }
 
-void MapPropAnimationPool_FreeAnimObj(MapPropAnimationPool *unkCC_Sub0, MapPropAnimation *animation) { // FieldSystemUnkSubCC_Sub0_FreeMapPropAnimObj
+void MapPropAnimationPool_FreeAnimObj(MapPropAnimationPool *unkCC_Sub0, MapPropAnimation *animation) {
     NNS_G3dFreeAnmObj(&unkCC_Sub0->allocator, animation->animObj);
 }
 
@@ -366,7 +366,7 @@ static BOOL MapPropAnimation_IsOnLastFrame(MapPropAnimation *animation) {
     return animation->animObj->frame == 0;
 }
 
-AreaMapAnimation *AreaMapAnimation_New(MapPropAnimationPoolList *unkSubC8) { // UnkCC_Init
+AreaMapAnimation *AreaMapAnimation_New(MapPropAnimationPoolList *unkSubC8) {
     AreaMapAnimation *unkCC = Heap_Alloc(HEAP_ID_FIELD1, sizeof(AreaMapAnimation));
     MapPropAnimationPool *unkCC_Sub0 = MapPropAnimationPoolList_AddPool(unkSubC8, HEAP_ID_FIELD1, 1);
     unkCC->pool = unkCC_Sub0;
@@ -374,11 +374,11 @@ AreaMapAnimation *AreaMapAnimation_New(MapPropAnimationPoolList *unkSubC8) { // 
     return unkCC;
 }
 
-void AreaMapAnimation_Free(AreaMapAnimation *unkCC) { // UnkCC_Free
+void AreaMapAnimation_Free(AreaMapAnimation *unkCC) {
     Heap_Free(unkCC);
 }
 
-void AreaMapAnimation_Load(AreaMapAnimation *unkCC, int fileID) { // UnkCC_Load
+void AreaMapAnimation_Load(AreaMapAnimation *unkCC, int fileID) {
     MapPropAnimation *animation = MapPropAnimationPool_Alloc(unkCC->pool);
     if (animation == NULL) {
         GF_AssertFail();
@@ -388,11 +388,11 @@ void AreaMapAnimation_Load(AreaMapAnimation *unkCC, int fileID) { // UnkCC_Load
     unkCC->mapPropAnimation = animation;
 }
 
-void AreaMapAnimation_AddToRenderObj(AreaMapAnimation *unkCC, NNSG3dRenderObj *renderObj) { // UnkCC_AddMapPropAnimationToRenderObj
+void AreaMapAnimation_AddToRenderObj(AreaMapAnimation *unkCC, NNSG3dRenderObj *renderObj) {
     MapPropAnimation_AddToRenderObj(renderObj, unkCC->mapPropAnimation);
 }
 
-void AreaMapAnimation_RemoveFromRenderObj(AreaMapAnimation *unkCC, NNSG3dRenderObj *renderObj) { // UnkCC_RemoveMapPropAnimationFromRenderObj
+void AreaMapAnimation_RemoveFromRenderObj(AreaMapAnimation *unkCC, NNSG3dRenderObj *renderObj) {
     MapPropAnimation_RemoveFromRenderObj(renderObj, unkCC->mapPropAnimation);
 }
 
@@ -435,14 +435,14 @@ static void AreaMapAnimation_InitAnimObj(NNSG3dAnmObj *alloc, ResAnim_4004 *anim
     AreaMapAnimation_InitAnimObjMapData(alloc, anim);
 }
 
-TimeOfDayPropAnimManager *TimeOfDayPropAnimManager_New(enum HeapID heapID) { // FieldSystemUnkSub104_Init
+TimeOfDayPropAnimManager *TimeOfDayPropAnimManager_New(enum HeapID heapID) {
     TimeOfDayPropAnimManager *unk104 = Heap_Alloc(heapID, sizeof(TimeOfDayPropAnimManager));
     MIi_CpuClearFast(0, (u32 *)unk104, sizeof(TimeOfDayPropAnimManager));
     unk104->timeOfDay = GF_RTC_GetTimeOfDay();
     return unk104;
 }
 
-void TimeOfDayPropAnimManager_Free(TimeOfDayPropAnimManager *unk104) { // FieldSystemUnkSub104_Free
+void TimeOfDayPropAnimManager_Free(TimeOfDayPropAnimManager *unk104) {
     Heap_Free(unk104);
 }
 
@@ -478,7 +478,7 @@ static const u8 sTimeOfDayVisualState[RTC_TIMEOFDAY_COUNT] = {
     [RTC_TIMEOFDAY_LATE] = 3
 };
 
-void TimeOfDayPropAnimManager_Update(TimeOfDayPropAnimManager *unk104) { // FieldSystemUnkSub104_SwitchTimeOfDay
+void TimeOfDayPropAnimManager_Update(TimeOfDayPropAnimManager *unk104) {
     u8 currentTimeOfDay = (u8)GF_RTC_GetTimeOfDay();
     if (unk104->timeOfDay != currentTimeOfDay) {
         u8 previousTimeOfDay = unk104->timeOfDay;
@@ -493,6 +493,6 @@ void TimeOfDayPropAnimManager_Update(TimeOfDayPropAnimManager *unk104) { // Fiel
     }
 }
 
-u8 TimeOfDayPropAnimManager_GetVisualState(TimeOfDayPropAnimManager *unk104) { // FieldSystemUnkSub104_GetTimeOfDayVisualState
+u8 TimeOfDayPropAnimManager_GetVisualState(TimeOfDayPropAnimManager *unk104) {
     return sTimeOfDayVisualState[unk104->timeOfDay];
 }

@@ -45,7 +45,7 @@ const OverlayManagerTemplate gApplication_ContinueFieldsys = {
 
 static FieldSystem *sFieldSysPtr;
 
-typedef struct UnkFieldSystemInit {
+typedef struct FieldSystemInitWork {
     int unk0;
     int commError;
 } FieldSystemInitWork;
@@ -318,6 +318,6 @@ void Task_AntipiracyRandom() {
     LCRandom();
 }
 
-void Field_SetEnvironmentSoundState_None_Unk2() {
+void Field_ForceEnvironmentSoundRecheck() {
     sFieldSysPtr->environmentSoundState = ENVIRONMENT_SOUND_NONE_UNK2;
 }

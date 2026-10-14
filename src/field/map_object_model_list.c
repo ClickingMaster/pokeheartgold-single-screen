@@ -16,7 +16,7 @@ void FieldEffect_SetPosition(void *effect, VecFx32 *position);
 
 typedef struct MapObjectModel {
     u32 spriteId; // MAP_OBJECT_MODEL_FREE: free
-    UnkOv01_021FFECC_sub model;
+    RenderModelStorage model;
     NNSG3dRenderObj renderObj;
 } MapObjectModel;
 

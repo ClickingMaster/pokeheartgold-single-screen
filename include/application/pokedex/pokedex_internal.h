@@ -124,22 +124,22 @@ typedef struct PokedexFlashButtonState {
     u8 flashPalette : 4;
 } PokedexFlashButtonState;
 
-typedef struct PokedexAppData_UnkSub0868_State06 {
+typedef struct PokedexListDragState {
     u32 touchX;
     u32 touchY;
     s16 switchX;
     u16 state;
-} PokedexAppData_UnkSub0868_State06;
+} PokedexListDragState;
 
-typedef struct PokedexAppData_UnkSub0868_State09 {
+typedef struct PokedexEntrySlideState {
     u16 state;
     u8 timer;
     u8 buttonsShown;
-} PokedexAppData_UnkSub0868_State09;
+} PokedexEntrySlideState;
 
-typedef struct PokedexAppData_UnkSub0868_State10 {
+typedef struct PokedexBasicSeqState {
     u8 state;
-} PokedexAppData_UnkSub0868_State10;
+} PokedexBasicSeqState;
 
 typedef struct PokedexListScrollState {
     u16 *numberTilemap;
@@ -149,24 +149,24 @@ typedef struct PokedexListScrollState {
     u8 wrapCursor;
 } PokedexListScrollState;
 
-typedef struct PokedexAppData_UnkSub0868_State16 {
+typedef struct PokedexSeqU16PairState {
     u16 unk_0;
     u16 unk_2;
-} PokedexAppData_UnkSub0868_State16;
+} PokedexSeqU16PairState;
 
-typedef struct PokedexAppData_UnkSub0868_State17 {
+typedef struct PokedexEntryDragState {
     u32 touchX;
     u32 touchY;
     u8 filler_8[2];
     u16 state;
-} PokedexAppData_UnkSub0868_State17;
+} PokedexEntryDragState;
 
-typedef struct PokedexAppData_UnkSub0868_State26 {
+typedef struct PokedexSearchPageChangeState {
     u8 unk_0;
     u8 unk_1;
     u8 unk_2;
     u8 unk_3;
-} PokedexAppData_UnkSub0868_State26;
+} PokedexSearchPageChangeState;
 
 typedef struct PokedexSliderState {
     u32 prevValue;
@@ -175,10 +175,10 @@ typedef struct PokedexSliderState {
     s16 direction;
 } PokedexSliderState;
 
-typedef struct PokedexAppData_UnkSub0868_State69 {
+typedef struct PokedexEntryTabSwitchState {
     u16 state;
     u8 fadeStart;
-} PokedexAppData_UnkSub0868_State69;
+} PokedexEntryTabSwitchState;
 
 // Weight check: the scale animation (sWeightCheckAnimFuncs[animIndex], one per weight-difference class)
 typedef struct PokedexWeightCheckAnim {
@@ -203,15 +203,15 @@ typedef struct PokedexWeightCheckState {
 
 typedef union PokedexSeqState {
     PokedexFlashButtonState state_04;
-    PokedexAppData_UnkSub0868_State06 state_06;
-    PokedexAppData_UnkSub0868_State09 state_09;
-    PokedexAppData_UnkSub0868_State10 state_10;
+    PokedexListDragState state_06;
+    PokedexEntrySlideState state_09;
+    PokedexBasicSeqState state_10;
     PokedexListScrollState state_13;
-    PokedexAppData_UnkSub0868_State16 state_16;
-    PokedexAppData_UnkSub0868_State17 state_17;
-    PokedexAppData_UnkSub0868_State26 state_26;
+    PokedexSeqU16PairState state_16;
+    PokedexEntryDragState state_17;
+    PokedexSearchPageChangeState state_26;
     PokedexSliderState state_38;
-    PokedexAppData_UnkSub0868_State69 state_69;
+    PokedexEntryTabSwitchState state_69;
     PokedexWeightCheckState state_77;
     u8 padding[16];
 } PokedexSeqState;

@@ -113,7 +113,7 @@ void RecordMixing_FillBlock23Entries(SaveData *saveData, RecordMixingEntry *out,
 
 void *RecordMixing_Block23List2_Load(SaveData *saveData, enum HeapID heapID, u32 size) {
     void *out = Heap_AllocAtEnd(heapID, size);
-    UnkStruct_0202E474 *data = Save_Block23_Get(saveData);
+    SaveBlock23 *data = Save_Block23_Get(saveData);
     if (size != RecordMixing_Block23List2_GetSize(saveData)) {
         GF_AssertFail();
     }
@@ -123,7 +123,7 @@ void *RecordMixing_Block23List2_Load(SaveData *saveData, enum HeapID heapID, u32
 
 void *RecordMixing_Block23List0_Load(SaveData *saveData, enum HeapID heapID, u32 size) {
     void *out = Heap_AllocAtEnd(heapID, size);
-    UnkStruct_0202E474 *data = Save_Block23_Get(saveData);
+    SaveBlock23 *data = Save_Block23_Get(saveData);
     if (size != RecordMixing_Block23List0_GetSize(saveData)) {
         GF_AssertFail();
     }
@@ -133,7 +133,7 @@ void *RecordMixing_Block23List0_Load(SaveData *saveData, enum HeapID heapID, u32
 
 void *RecordMixing_Block23List1_Load(SaveData *saveData, enum HeapID heapID, u32 size) {
     void *out = Heap_AllocAtEnd(heapID, size);
-    UnkStruct_0202E474 *data = Save_Block23_Get(saveData);
+    SaveBlock23 *data = Save_Block23_Get(saveData);
     if (size != RecordMixing_Block23List1_GetSize(saveData)) {
         GF_AssertFail();
     }
@@ -143,7 +143,7 @@ void *RecordMixing_Block23List1_Load(SaveData *saveData, enum HeapID heapID, u32
 
 void *RecordMixing_Block23List2_Load2(SaveData *saveData, enum HeapID heapID, u32 size) {
     void *out = Heap_AllocAtEnd(heapID, size);
-    UnkStruct_0202E474 *data = Save_Block23_Get(saveData);
+    SaveBlock23 *data = Save_Block23_Get(saveData);
     if (size != RecordMixing_Block23List2_GetSize(saveData)) {
         GF_AssertFail();
     }
@@ -153,7 +153,7 @@ void *RecordMixing_Block23List2_Load2(SaveData *saveData, enum HeapID heapID, u3
 
 void *RecordMixing_Block23List0_Load2(SaveData *saveData, enum HeapID heapID, u32 size) {
     void *out = Heap_AllocAtEnd(heapID, size);
-    UnkStruct_0202E474 *data = Save_Block23_Get(saveData);
+    SaveBlock23 *data = Save_Block23_Get(saveData);
     if (size != RecordMixing_Block23List0_GetSize(saveData)) {
         GF_AssertFail();
     }
@@ -163,7 +163,7 @@ void *RecordMixing_Block23List0_Load2(SaveData *saveData, enum HeapID heapID, u3
 
 void *RecordMixing_Block23List1_Load2(SaveData *saveData, enum HeapID heapID, u32 size) {
     void *out = Heap_AllocAtEnd(heapID, size);
-    UnkStruct_0202E474 *data = Save_Block23_Get(saveData);
+    SaveBlock23 *data = Save_Block23_Get(saveData);
     if (size != RecordMixing_Block23List1_GetSize(saveData)) {
         GF_AssertFail();
     }

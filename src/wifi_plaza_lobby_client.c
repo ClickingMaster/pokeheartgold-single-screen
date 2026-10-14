@@ -49,7 +49,7 @@ void WiFiPlazaLobbyClient_Init(enum HeapID heapID, SaveData *save, u32 count, Wi
     WiFiPlazaLobbyClient_AllocPlayerData(gWiFiPlazaLobbyClient, count, heapID);
     WiFiPlazaLobbyClient_AllocIdLists(gWiFiPlazaLobbyClient, 20, 8, heapID);
     WiFiPlazaLobbyClient_InitMatches(gWiFiPlazaLobbyClient);
-    WiFiPlazaLobbyIdValueList_Init(&gWiFiPlazaLobbyClient->unk_6a0, 128, heapID);
+    WiFiPlazaLobbyIdValueList_Init(&gWiFiPlazaLobbyClient->surveyData, 128, heapID);
     gWiFiPlazaLobbyClient->initResult = 0;
 }
 
@@ -57,7 +57,7 @@ void WiFiPlazaLobbyClient_Init(enum HeapID heapID, SaveData *save, u32 count, Wi
 
 void WiFiPlazaLobbyClient_Free(void) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
-    WiFiPlazaLobbyIdValueList_Free(&gWiFiPlazaLobbyClient->unk_6a0);
+    WiFiPlazaLobbyIdValueList_Free(&gWiFiPlazaLobbyClient->surveyData);
     WiFiPlazaLobbyClient_FreeIdLists(gWiFiPlazaLobbyClient);
     WiFiPlazaLobbyClient_FreePlayerData(gWiFiPlazaLobbyClient);
     Heap_Free(gWiFiPlazaLobbyClient);
@@ -365,7 +365,7 @@ void WiFiPlazaLobbyClient_GetTime(s64 *time) {
 }
 
 u32 WiFiPlazaLobbyClient_GetScheduleValue(int field) {
-    WiFiPlazaLobbyClientUnk1B4 *unk;
+    WiFiPlazaLobbySchedule *unk;
     u32 result;
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
     {
@@ -376,7 +376,7 @@ u32 WiFiPlazaLobbyClient_GetScheduleValue(int field) {
         GF_ASSERT(valid);
     }
     GF_ASSERT(field < 8);
-    unk = &gWiFiPlazaLobbyClient->unk_1b4;
+    unk = &gWiFiPlazaLobbyClient->schedule;
     switch (field) {
     case 0:
         result = unk->unk_00;
@@ -682,12 +682,12 @@ u8 WiFiPlazaLobbyClient_IsMatchHost(void) {
 
 int WiFiPlazaLobbyClient_IsSpecialVisitor(int id) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
-    return WiFiPlazaLobbyIdValueList_Contains(&gWiFiPlazaLobbyClient->unk_6a0, id);
+    return WiFiPlazaLobbyIdValueList_Contains(&gWiFiPlazaLobbyClient->surveyData, id);
 }
 
 int WiFiPlazaLobbyClient_GetSpecialVisitorCode(int id) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
-    return WiFiPlazaLobbyIdValueList_GetValue(&gWiFiPlazaLobbyClient->unk_6a0, id);
+    return WiFiPlazaLobbyIdValueList_GetValue(&gWiFiPlazaLobbyClient->surveyData, id);
 }
 
 void WiFiPlazaLobbyClient_SubmitSurveyAnswer(int index) {
@@ -708,25 +708,25 @@ u32 WiFiPlazaLobbyClient_GetSurveyValue(int field) {
     GF_ASSERT(field < 11);
     switch (field) {
     case 0:
-        return gWiFiPlazaLobbyClient->unk_6a0.unk_04[0].unk_04;
+        return gWiFiPlazaLobbyClient->surveyData.unk_04[0].unk_04;
     case 1:
-        return gWiFiPlazaLobbyClient->unk_6a0.unk_04[0].unk_08;
+        return gWiFiPlazaLobbyClient->surveyData.unk_04[0].unk_08;
     case 2:
-        return gWiFiPlazaLobbyClient->unk_6a0.unk_04[1].unk_00;
+        return gWiFiPlazaLobbyClient->surveyData.unk_04[1].unk_00;
     case 3:
-        return gWiFiPlazaLobbyClient->unk_6a0.unk_04[0].unk_08 >= 1000;
+        return gWiFiPlazaLobbyClient->surveyData.unk_04[0].unk_08 >= 1000;
     case 4:
-        return gWiFiPlazaLobbyClient->unk_6a0.unk_04[1].unk_04;
+        return gWiFiPlazaLobbyClient->surveyData.unk_04[1].unk_04;
     case 5:
-        return gWiFiPlazaLobbyClient->unk_6a0.unk_04[1].unk_08;
+        return gWiFiPlazaLobbyClient->surveyData.unk_04[1].unk_08;
     case 6:
-        return gWiFiPlazaLobbyClient->unk_6a0.unk_2c4;
+        return gWiFiPlazaLobbyClient->surveyData.unk_2c4;
     case 7:
-        return gWiFiPlazaLobbyClient->unk_6a0.unk_04[1].unk_08 >= 1000;
+        return gWiFiPlazaLobbyClient->surveyData.unk_04[1].unk_08 >= 1000;
     case 8:
     case 9:
     case 10:
-        return gWiFiPlazaLobbyClient->unk_6a0.unk_2d4[field - 8];
+        return gWiFiPlazaLobbyClient->surveyData.unk_2d4[field - 8];
     default:
         GF_AssertFail();
         return 0;
@@ -738,17 +738,17 @@ void *WiFiPlazaLobbyClient_GetSurveyText(int field) {
     GF_ASSERT(field < 8);
     switch (field) {
     case 0:
-        return gWiFiPlazaLobbyClient->unk_6a0.unk_04[0].unk_0c;
+        return gWiFiPlazaLobbyClient->surveyData.unk_04[0].unk_0c;
     case 1:
     case 2:
     case 3:
-        return gWiFiPlazaLobbyClient->unk_6a0.unk_04[0].unk_e8[field - 1];
+        return gWiFiPlazaLobbyClient->surveyData.unk_04[0].unk_e8[field - 1];
     case 4:
-        return gWiFiPlazaLobbyClient->unk_6a0.unk_04[1].unk_0c;
+        return gWiFiPlazaLobbyClient->surveyData.unk_04[1].unk_0c;
     case 5:
     case 6:
     case 7:
-        return gWiFiPlazaLobbyClient->unk_6a0.unk_04[1].unk_e8[field - 5];
+        return gWiFiPlazaLobbyClient->surveyData.unk_04[1].unk_e8[field - 5];
     default:
         GF_AssertFail();
         return NULL;
@@ -766,9 +766,9 @@ u8 WiFiPlazaLobbyClient_GetSurveyFlag(int which, int index) {
         return 0;
     }
     if (which == 0) {
-        return gWiFiPlazaLobbyClient->unk_6a0.unk_04[0].unk_154[index];
+        return gWiFiPlazaLobbyClient->surveyData.unk_04[0].unk_154[index];
     }
-    return gWiFiPlazaLobbyClient->unk_6a0.unk_04[1].unk_154[index];
+    return gWiFiPlazaLobbyClient->surveyData.unk_04[1].unk_154[index];
 }
 
 // Ends the matchmaking session.

@@ -91,7 +91,7 @@ typedef struct OptionsApp_Data {
     u8 textPrinter;
 } OptionsApp_Data; // size: 0x32c
 
-static const s8 sOptionsApp_UnkWindowWidthOffsets[MENU_ENTRY_COUNT] = {
+static const s8 sOptionsApp_ClearRectXOffsets[MENU_ENTRY_COUNT] = {
     0,
     0,
     0,
@@ -782,7 +782,7 @@ static void OptionsApp_UpdateMenuEntry(OptionsApp_Data *data, u16 menuEntryId) {
     u16 i;
     u8 frameDelay;
     u16 x = 0;
-    FillWindowPixelRect(&data->windows.selectedOption, 0, 108 + sOptionsApp_UnkWindowWidthOffsets[menuEntryId], menuEntryId * 24 + 5, 384, 24);
+    FillWindowPixelRect(&data->windows.selectedOption, 0, 108 + sOptionsApp_ClearRectXOffsets[menuEntryId], menuEntryId * 24 + 5, 384, 24);
 
     switch (menuEntryId) {
     case MENU_ENTRY_FRAME:

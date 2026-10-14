@@ -256,7 +256,7 @@ static inline void PokegearManagedObject_AddCoord(PokegearManagedObject *obj, s1
     obj->pos.y += y;
 }
 
-static inline void PokegearManagedObject_SetUnk01(PokegearManagedObject *obj, BOOL a1) {
+static inline void PokegearManagedObject_SetAutoCull(PokegearManagedObject *obj, BOOL a1) {
     obj->autoCull = a1;
 }
 

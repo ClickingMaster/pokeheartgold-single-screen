@@ -22,7 +22,7 @@ BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 4).
 typedef struct SurfMount {
     FieldEffectManager *manager;
-    UnkOv01_021FFECC_sub model;
+    RenderModelStorage model;
     NNSG3dRenderObj renderObj;
 } SurfMount;
 

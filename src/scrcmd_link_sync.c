@@ -36,19 +36,19 @@ typedef struct BallCapsuleEditorTaskData {
     u32 state;
 } BallCapsuleEditorTaskData;
 
-typedef struct UnkStruct_0206BCEC {
+typedef struct LinkSyncWorkParams {
     u8 unk00;
     u8 unk01;
     u8 unk02;
     u8 filler03[21];
     SaveData *saveData;
-} UnkStruct_0206BCEC;
+} LinkSyncWorkParams;
 
-typedef struct UnkStruct_0206BCD4 {
+typedef struct LinkSyncWork {
     u8 filler00[4];
-    u8 unk04;
+    u8 syncEnabled;
     u8 filler05[15];
-} UnkStruct_0206BCD4;
+} LinkSyncWork;
 
 static const OverlayManagerTemplate sOverlayTemplate_BallCapsuleEditor = {
     .init = BallCapsuleEditor_Init,
@@ -59,11 +59,11 @@ static const OverlayManagerTemplate sOverlayTemplate_BallCapsuleEditor = {
 
 static BOOL Task_BallCapsuleEditor(TaskManager *taskManager);
 static BOOL ScrNative_WaitLinkSyncWork(ScriptContext *ctx);
-static void LinkSyncWork_StartSync(UnkStruct_0206BCD4 *a0, u8 syncState);
-static BOOL LinkSyncWork_IsSynced(UnkStruct_0206BCD4 *a0, u8 syncState);
-static UnkStruct_0206BCD4 *LinkSyncWork_New(void);
-static UnkStruct_0206BCD4 *LinkSyncWork_CreateWithHeap(UnkStruct_0206BCEC *unused);
-static void LinkSyncWork_Delete(UnkStruct_0206BCD4 *a0);
+static void LinkSyncWork_StartSync(LinkSyncWork *a0, u8 syncState);
+static BOOL LinkSyncWork_IsSynced(LinkSyncWork *a0, u8 syncState);
+static LinkSyncWork *LinkSyncWork_New(void);
+static LinkSyncWork *LinkSyncWork_CreateWithHeap(LinkSyncWorkParams *unused);
+static void LinkSyncWork_Delete(LinkSyncWork *a0);
 
 void CallTask_BallCapsuleEditor(TaskManager *taskManager, SaveData *saveData) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
@@ -161,7 +161,7 @@ static BOOL Task_BallCapsuleEditor(TaskManager *taskManager) {
 }
 
 BOOL ScrCmd_ConditionalLinkSyncStart(ScriptContext *ctx) {
-    UnkStruct_0206BCD4 **unkStruct = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
+    LinkSyncWork **unkStruct = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
     LinkSyncWork_StartSync(*unkStruct, ScriptGetVar(ctx));
     return FALSE;
 }
@@ -174,17 +174,17 @@ BOOL ScrCmd_ConditionalLinkSyncWait(ScriptContext *ctx) {
 }
 
 static BOOL ScrNative_WaitLinkSyncWork(ScriptContext *ctx) {
-    UnkStruct_0206BCD4 **unkStruct = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
+    LinkSyncWork **unkStruct = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
     return LinkSyncWork_IsSynced(*unkStruct, ctx->data[0]);
 }
 
 BOOL ScrCmd_ConditionalLinkSyncCreate(ScriptContext *ctx) {
-    UnkStruct_0206BCD4 **unkStruct = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
+    LinkSyncWork **unkStruct = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
     u16 arg1 = ScriptGetVar(ctx);
     u16 arg2 = ScriptGetVar(ctx);
     u16 arg3 = ScriptGetVar(ctx);
     u16 unused = ScriptGetVar(ctx);
-    UnkStruct_0206BCEC unusedStruct;
+    LinkSyncWorkParams unusedStruct;
     unusedStruct.unk00 = arg2;
     unusedStruct.unk01 = arg1;
     unusedStruct.unk02 = arg3;
@@ -194,7 +194,7 @@ BOOL ScrCmd_ConditionalLinkSyncCreate(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_ConditionalLinkSyncDestroy(ScriptContext *ctx) {
-    UnkStruct_0206BCD4 **unkStruct = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
+    LinkSyncWork **unkStruct = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
     u16 unused = ScriptGetVar(ctx);
     u32 unused2 = MapHeader_GetMapSec(ctx->fieldSystem->location->mapId);
     LinkSyncWork_Delete(*unkStruct);
@@ -214,31 +214,31 @@ BOOL ScrCmd_BeginTextAutoScroll(ScriptContext *ctx) {
     return FALSE;
 }
 
-static void LinkSyncWork_StartSync(UnkStruct_0206BCD4 *a0, u8 syncState) {
-    if (a0->unk04 != 0) {
+static void LinkSyncWork_StartSync(LinkSyncWork *a0, u8 syncState) {
+    if (a0->syncEnabled != 0) {
         LinkSync_StartSync(syncState);
     }
 }
 
-static BOOL LinkSyncWork_IsSynced(UnkStruct_0206BCD4 *a0, u8 syncState) {
-    if (a0->unk04 == 0) {
+static BOOL LinkSyncWork_IsSynced(LinkSyncWork *a0, u8 syncState) {
+    if (a0->syncEnabled == 0) {
         return TRUE;
     }
     return LinkSync_IsSynced(syncState) == TRUE;
 }
 
-static UnkStruct_0206BCD4 *LinkSyncWork_New(void) {
-    UnkStruct_0206BCD4 *unkStruct = Heap_Alloc(HEAP_ID_20, sizeof(UnkStruct_0206BCD4));
-    MI_CpuFill8(unkStruct, 0, sizeof(UnkStruct_0206BCD4));
+static LinkSyncWork *LinkSyncWork_New(void) {
+    LinkSyncWork *unkStruct = Heap_Alloc(HEAP_ID_20, sizeof(LinkSyncWork));
+    MI_CpuFill8(unkStruct, 0, sizeof(LinkSyncWork));
     return unkStruct;
 }
 
-static UnkStruct_0206BCD4 *LinkSyncWork_CreateWithHeap(UnkStruct_0206BCEC *unused) {
+static LinkSyncWork *LinkSyncWork_CreateWithHeap(LinkSyncWorkParams *unused) {
     Heap_Create(HEAP_ID_FIELD2, HEAP_ID_20, 0x4000);
     return LinkSyncWork_New();
 }
 
-static void LinkSyncWork_Delete(UnkStruct_0206BCD4 *a0) {
+static void LinkSyncWork_Delete(LinkSyncWork *a0) {
     Heap_Free(a0);
     Heap_Destroy(HEAP_ID_20);
 }

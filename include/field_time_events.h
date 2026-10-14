@@ -6,12 +6,12 @@
 #include "script.h"
 
 // Berry Patch Manager in pokeplatinum. Definitely used for something else here.
-typedef struct UnkStruct_020556FC {
+typedef struct UnusedFieldModel {
     enum HeapID heapID;
     NNSG3dRenderObj renderObj;
     NNSG3dResMdl *model;
     NNSG3dResFileHeader *modelFile;
-} UnkStruct_020556FC; // size 0x60
+} UnusedFieldModel; // size 0x60
 
 void FieldSystem_StartBugContestTimer(FieldSystem *fieldSystem);
 void FieldSystem_CheckDayChange(FieldSystem *fieldSystem, SysInfo_RTC *sysinfo, RTCDate *date);
@@ -27,11 +27,11 @@ void FieldSystem_GetAdventureStartTime(FieldSystem *fieldSystem, RTCDate *date, 
 void FieldSystem_GetGameClearTime(FieldSystem *fieldSystem, RTCDate *date, RTCTime *time);
 void FieldSystem_SetGameClearTime(FieldSystem *fieldSystem);
 BOOL FieldSystem_HasPenalty(FieldSystem *fieldSystem);
-UnkStruct_020556FC *UnusedFieldModel_New(FieldSystem *fieldSystem, enum HeapID heapID);
-void UnusedFieldModel_Delete(UnkStruct_020556FC *unkPtr);
+UnusedFieldModel *UnusedFieldModel_New(FieldSystem *fieldSystem, enum HeapID heapID);
+void UnusedFieldModel_Delete(UnusedFieldModel *unkPtr);
 void FieldSystem_RegrowApricornTrees(FieldSystem *fieldSystem);
-void UnusedFieldModel_Load(FieldSystem *fieldSystem, UnkStruct_020556FC *unkPtrB);
-void UnusedFieldModel_Unload(struct UnkStruct_020556FC *unkPtr);
+void UnusedFieldModel_Load(FieldSystem *fieldSystem, UnusedFieldModel *unkPtrB);
+void UnusedFieldModel_Unload(struct UnusedFieldModel *unkPtr);
 BOOL FieldSystem_ApricornTreeObject_HasApricorn(FieldSystem *fieldSystem, LocalMapObject *mapObject);
 BOOL FieldSystem_ApricornTree_PickApricorn(FieldSystem *fieldSystem, LocalMapObject *mapObj);
 BOOL FieldSystem_ApricornTree_HasApricorn(FieldSystem *fieldSystem, LocalMapObject *mapObj);

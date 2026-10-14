@@ -15,7 +15,7 @@
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 7).
 typedef struct MudSplash {
     FieldEffectManager *manager;
-    UnkOv01_021FFECC_sub model;
+    RenderModelStorage model;
     RenderAnimation animation;
 } MudSplash;
 

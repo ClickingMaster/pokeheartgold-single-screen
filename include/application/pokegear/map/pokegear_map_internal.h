@@ -151,15 +151,15 @@ typedef struct PokegearMapLocationSpec {
     u16 objXoffset : 4;
     u16 objYoffset : 4;
     u8 flavorText;
-    u8 tilemapUnk174BlockID;
+    u8 subBg3BlockID;
     u8 unk_8; // unused
     u8 unk_9; // unused
     u8 unk_A; // unused
     u8 unk_B; // unused
-    u8 tilemapUnk170SrcX;
-    u8 tilemapUnk170SrcY;
-    u8 tilemapUnk170DestWidth;
-    u8 tilemapUnk170DestHeight;
+    u8 tilemapCopyRectSrcX;
+    u8 tilemapCopyRectSrcY;
+    u8 tilemapCopyRectWidth;
+    u8 tilemapCopyRectHeight;
 } PokegearMapLocationSpec;
 
 typedef struct MapMarkingsHeapNode {

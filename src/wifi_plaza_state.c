@@ -48,14 +48,14 @@ void WiFiPlazaWork_MarkActivityDone(WiFiPlazaWork *work, int slot) {
     if (slot >= 8) {
         GF_AssertFail();
     }
-    work->unk_3a0.flags[slot] = 1;
+    work->sessionState.flags[slot] = 1;
 }
 
 int WiFiPlazaWork_GetNextUndoneActivity(WiFiPlazaWork *work) {
     int i;
     int ok;
     for (i = 0; i < 8; i++) {
-        if (work->unk_3a0.flags[i] == 0) {
+        if (work->sessionState.flags[i] == 0) {
             switch (i) {
             case 0:
             case 1:
@@ -113,13 +113,13 @@ u32 WiFiPlazaWork_GetFireworksCounter(WiFiPlazaWork *work) {
 }
 
 void WiFiPlazaWork_SetSurveyTally(WiFiPlazaWork *work, const WiFiPlazaTallyCache *tally) {
-    work->unk_508.hasTally = TRUE;
-    work->unk_508.tally = *tally;
+    work->ownProfileData.hasTally = TRUE;
+    work->ownProfileData.tally = *tally;
 }
 
 BOOL WiFiPlazaWork_GetSurveyTally(WiFiPlazaWork *work, WiFiPlazaTallyCache *tally) {
-    if (work->unk_508.hasTally == TRUE) {
-        *tally = work->unk_508.tally;
+    if (work->ownProfileData.hasTally == TRUE) {
+        *tally = work->ownProfileData.tally;
         return TRUE;
     }
     return FALSE;
@@ -162,7 +162,7 @@ void WiFiPlaza_OnPlayerEnter(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *wor
     int index;
     int valid;
     if (isOwn) {
-        WiFiPlazaProfile_CopyToPlayerProfile(&work->unk_508.profile, &work->profile, work->heapID);
+        WiFiPlazaProfile_CopyToPlayerProfile(&work->ownProfileData.profile, &work->profile, work->heapID);
         if (!WiFiPlazaProfile_IsChecksumValid(&work->profile, work->save)) {
             work->hasError = 1;
         }
@@ -576,15 +576,15 @@ void WiFiPlazaEventSchedule_ApplyVolume(WiFiPlazaEventSchedule *state) {
     }
 }
 
-void WiFiPlazaUnk3A0_StartCooldown(WiFiPlazaUnk3A0 *a0) {
+void WiFiPlazaSessionState_StartCooldown(WiFiPlazaSessionState *a0) {
     a0->timer = 900;
 }
 
-int WiFiPlazaUnk3A0_IsCoolingDown(WiFiPlazaUnk3A0 *a0) {
+int WiFiPlazaSessionState_IsCoolingDown(WiFiPlazaSessionState *a0) {
     return a0->timer > 0;
 }
 
-void WiFiPlazaUnk3A0_UpdateCooldown(WiFiPlazaUnk3A0 *a0) {
+void WiFiPlazaSessionState_UpdateCooldown(WiFiPlazaSessionState *a0) {
     if (a0->timer > 0) {
         a0->timer--;
     }
@@ -607,10 +607,10 @@ void WiFiPlazaProfile_CopyToPlayerProfile(PlayerProfile **profile, WiFiPlazaProf
     Heap_Free(player);
 }
 
-void WiFiPlazaUnk3A0_SetAppQuitForClosing(WiFiPlazaUnk3A0 *a0) {
-    a0->unk_02 = 1;
+void WiFiPlazaSessionState_SetAppQuitForClosing(WiFiPlazaSessionState *a0) {
+    a0->appQuitForClosing = 1;
 }
 
-u8 WiFiPlazaUnk3A0_DidAppQuitForClosing(WiFiPlazaUnk3A0 *a0) {
-    return a0->unk_02;
+u8 WiFiPlazaSessionState_DidAppQuitForClosing(WiFiPlazaSessionState *a0) {
+    return a0->appQuitForClosing;
 }

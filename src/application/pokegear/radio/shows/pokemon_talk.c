@@ -186,11 +186,11 @@ void RadioShow_PokemonTalk_SampleMapAreasAndEncounters(RadioShow *radioShow, Pok
     int j;
     u16 landmark;
     u16 index;
-    BOOL visitedUnk25;
+    BOOL canListRoutes47And48;
     Pokedex *pokedex;
 
     pokedex = Save_Pokedex_Get(radioShow->saveData);
-    visitedUnk25 = Save_VarsFlags_FlypointFlagAction(Save_VarsFlags_Get(radioShow->saveData), FLAG_ACTION_CHECK, FLYPOINT_UNK25);
+    canListRoutes47And48 = Save_VarsFlags_FlypointFlagAction(Save_VarsFlags_Get(radioShow->saveData), FLAG_ACTION_CHECK, FLYPOINT_UNK25);
 
     MI_CpuClear8(data->landmarksBuffer, sizeof(data->landmarksBuffer));
     MI_CpuClear8(data->speciesBuffer, sizeof(data->speciesBuffer));
@@ -206,7 +206,7 @@ void RadioShow_PokemonTalk_SampleMapAreasAndEncounters(RadioShow *radioShow, Pok
                 }
             }
             if (j >= NELEMS(sFilterLandmarks)) {
-                if (visitedUnk25 || (i != MAP_ROUTE_47 && i != MAP_ROUTE_48)) {
+                if (canListRoutes47And48 || (i != MAP_ROUTE_47 && i != MAP_ROUTE_48)) {
                     data->landmarksBuffer[data->numLandmarks++] = i;
                     if (data->numLandmarks >= 150) {
                         GF_ASSERT(FALSE);

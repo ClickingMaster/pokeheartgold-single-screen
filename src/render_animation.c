@@ -49,7 +49,7 @@ void RenderObj_Init(NNSG3dRenderObj *object, NNSG3dResMdl *model);
 void RenderObj_InitFromModel(NNSG3dRenderObj *object, void *model);
 void RenderObj_AddAnimObj(NNSG3dRenderObj *object, NNSG3dAnmObj *animation);
 void RenderObj_AddAnimation(NNSG3dRenderObj *object, RenderAnimation *animation);
-void RenderObj_InitWithAnimation(NNSG3dRenderObj *object, UnkOv01_021FFECC_sub *model, RenderAnimation *animation);
+void RenderObj_InitWithAnimation(NNSG3dRenderObj *object, RenderModelStorage *model, RenderAnimation *animation);
 void RenderObj_Draw(NNSG3dRenderObj *object, const VecFx32 *position, const VecFx32 *scale, const MtxFx33 *rotation);
 void RenderObj_DrawAt(int object, VecFx32 *position);
 void RenderObj_DrawRotated(NNSG3dRenderObj *object, const VecFx32 *position, const VecFx32 *scale, const u16 *angles);
@@ -190,7 +190,7 @@ void RenderObj_AddAnimation(NNSG3dRenderObj *object, RenderAnimation *animation)
     RenderObj_AddAnimObj(object, animation->object);
 }
 
-void RenderObj_InitWithAnimation(NNSG3dRenderObj *object, UnkOv01_021FFECC_sub *model, RenderAnimation *animation) {
+void RenderObj_InitWithAnimation(NNSG3dRenderObj *object, RenderModelStorage *model, RenderAnimation *animation) {
     RenderObj_InitFromModel(object, model);
     RenderObj_AddAnimation(object, animation);
 }

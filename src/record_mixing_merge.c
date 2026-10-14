@@ -13,8 +13,8 @@
 #define RECORD_MIXING_MAX_MEMBERS 5
 
 // Defined in save_block_23.c; not declared in a header.
-void SaveBlock23_ClearArraysAndReset(UnkStruct_0202E474 *data);
-void SaveBlock23_Reset(UnkStruct_0202E474 *data);
+void SaveBlock23_ClearArraysAndReset(SaveBlock23 *data);
+void SaveBlock23_Reset(SaveBlock23 *data);
 
 void RecordMixing_MergeReceivedRecords(SaveData *saveData, u8 (*buffers)[0xBC0]);
 
@@ -26,7 +26,7 @@ void RecordMixing_MergeReceivedRecords(SaveData *saveData, u8 (*buffers)[0xBC0])
     void *records2[RECORD_MIXING_MAX_MEMBERS];
     u32 offsets[3];
     u32 size;
-    UnkStruct_0202E474 *block23;
+    SaveBlock23 *block23;
     u32 remaining;
     int i;
     u32 offset;

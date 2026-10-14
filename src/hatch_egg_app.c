@@ -1221,7 +1221,7 @@ BOOL HatchEggApp_Exit(OverlayManager *man, int *state) {
     Heap_Destroy(HEAP_ID_70);
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
-    Field_SetEnvironmentSoundState_None_Unk2();
+    Field_ForceEnvironmentSoundRecheck();
     return TRUE;
 }
 

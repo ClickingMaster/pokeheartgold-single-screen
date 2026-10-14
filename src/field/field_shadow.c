@@ -28,7 +28,7 @@ typedef struct FieldShadow {
     VecFx32 scale;
     FieldEffectManager *manager;
     SysTask *task;
-    UnkOv01_021FFECC_sub models[4];
+    RenderModelStorage models[4];
     NNSG3dRenderObj renderObjs[4];
 } FieldShadow;
 
@@ -194,8 +194,8 @@ void FieldShadow_FreeModels(FieldShadow *shadow) {
 }
 
 void FieldShadow_SetAlpha(FieldShadow *shadow, u32 alpha) {
-    NNSi_G3dModifyPolygonAttrMask(shadow->models[0].unkC, 1, 0x1F << 16);
-    NNS_G3dMdlSetMdlAlphaAll(shadow->models[0].unkC, alpha);
+    NNSi_G3dModifyPolygonAttrMask(shadow->models[0].model, 1, 0x1F << 16);
+    NNS_G3dMdlSetMdlAlphaAll(shadow->models[0].model, alpha);
 }
 
 void FieldShadow_CreateMapObjectShadow(LocalMapObject *object) {

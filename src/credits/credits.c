@@ -173,7 +173,7 @@ typedef struct {
     NNSG2dScreenData *bg3ScrnData[NUM_SCENES];
 } CreditsAppWork;
 
-extern const UnkOv021E60F6 ov76_021E6E88[4];
+extern const CreditsGfxResCounts ov76_021E6E88[4];
 extern const u8 sPokemonSpriteSeqNos[8];
 
 #include "credits/data.h"
@@ -466,7 +466,7 @@ static void LoadBgGraphics(CreditsAppWork *work) {
 
 static void CreateOamAndObjResMgrs(CreditsAppWork *work) {
     ObjCharTransferTemplate objCharTransferTemplate;
-    UnkOv021E60F6 temp2;
+    CreditsGfxResCounts temp2;
 
     GX_SetOBJVRamModeChar(GX_OBJVRAMMODE_CHAR_1D_128K);
     GXS_SetOBJVRamModeChar(GX_OBJVRAMMODE_CHAR_1D_128K);

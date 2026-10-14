@@ -31,8 +31,8 @@ void WiFiPlazaLobbyClient_OnEnterChannel(int result, u32 libChannel) {
     WiFiPlazaLobbyClient *client;
 
     if (libChannel == 0) {
-        gWiFiPlazaLobbyClient->unk_5b4 = sizeof(gWiFiPlazaLobbyClient->unk_1b4);
-        GF_ASSERT(WiFiPlazaLobbyClient_CheckResult(PPW_LobbyGetSchedule(&gWiFiPlazaLobbyClient->unk_1b4, &gWiFiPlazaLobbyClient->unk_5b4)));
+        gWiFiPlazaLobbyClient->unk_5b4 = sizeof(gWiFiPlazaLobbyClient->schedule);
+        GF_ASSERT(WiFiPlazaLobbyClient_CheckResult(PPW_LobbyGetSchedule(&gWiFiPlazaLobbyClient->schedule, &gWiFiPlazaLobbyClient->unk_5b4)));
         PPW_LobbyGetChannelDataAsync(-1, 0, sWiFiPlazaLocationListKey, 0);
         return;
     }
@@ -232,7 +232,7 @@ BOOL WiFiPlazaLobbyClient_OnEvent12Result(int result) {
 
 void WiFiPlazaLobbyClient_OnSpecialVisitorsReceived(int result, const void *data, u32 size) {
     if (result == 0) {
-        WiFiPlazaLobbyIdValueList_Set(&gWiFiPlazaLobbyClient->unk_6a0, data, size);
+        WiFiPlazaLobbyIdValueList_Set(&gWiFiPlazaLobbyClient->surveyData, data, size);
     } else {
         gWiFiPlazaLobbyClient->unk_132 = 1;
     }
@@ -240,7 +240,7 @@ void WiFiPlazaLobbyClient_OnSpecialVisitorsReceived(int result, const void *data
 
 void WiFiPlazaLobbyClient_OnSurveyReceived(int result, const void *data) {
     if (result == 0) {
-        WiFiPlazaLobbyClient_CopySurveyData(&gWiFiPlazaLobbyClient->unk_6a0.unk_04[0].unk_04, data);
+        WiFiPlazaLobbyClient_CopySurveyData(&gWiFiPlazaLobbyClient->surveyData.unk_04[0].unk_04, data);
     } else {
         gWiFiPlazaLobbyClient->unk_132 = 1;
     }

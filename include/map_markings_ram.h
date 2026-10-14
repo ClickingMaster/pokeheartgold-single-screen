@@ -31,7 +31,7 @@ typedef struct MapMarkingsSave {
     u16 words[4];
 } MapMarkingsSave;
 
-typedef struct UnkPokegearSub8List {
+typedef struct MapMarkingsSaveArray {
     MapMarkingsSave list[100];
 } MapMarkingsSaveArray;
 

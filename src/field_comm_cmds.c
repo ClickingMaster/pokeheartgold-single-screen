@@ -98,7 +98,7 @@ static const FieldCommCommand sFieldCommCommands[] = {
     { UnionRoom_RecvRestartSearch, CommCmd_GetSize0,         NULL         },
     { UnionRoom_RecvTalkChoice, CommCmd_GetSize1,         NULL         },
     { UnionRoom_RecvTalkCancel, CommCmd_GetSize0,         NULL         },
-    { UnionRoom_RecvTrainerCard, CommCmd_GetTrainerCardSize,         (UnkFuncPtr_02091564)UnionRoom_GetTrainerCardBuffer },
+    { UnionRoom_RecvTrainerCard, CommCmd_GetTrainerCardSize,         (FieldCommHandlerFunc)UnionRoom_GetTrainerCardBuffer },
     { Colosseum_RecvMixBattleMons, Colosseum_GetMixBattleMonsSize,         Colosseum_GetMixBattleMonsBuffer },
     { Colosseum_RecvMixBattleChoice, CommCmd_GetSize1,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize1,         NULL         },

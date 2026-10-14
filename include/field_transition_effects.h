@@ -23,7 +23,7 @@ typedef struct FieldTransitionEnvironment {
     u8 delayTimer;
     u16 transitionState;
     Location location;
-    FieldEnvSubUnk18 *transitionWork;
+    FieldTransitionWork *transitionWork;
     u32 transitionNo;
     u32 destinationMapID;
     FieldEffect *followMonBall;

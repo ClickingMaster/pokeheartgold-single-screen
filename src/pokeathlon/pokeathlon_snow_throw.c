@@ -187,7 +187,7 @@ BOOL PokeathlonSnowThrow_Init(PokeathlonCourseData *course) {
             member = count % SNOW_THROW_MEMBERS;
             participant = count / SNOW_THROW_MEMBERS;
             PokeathlonCourse_GetMonInfo(course, participant, member, &infos[i]);
-            template.sizeTypes[i] = PokeathlonCourse_GetSpriteSizeType((PokeathlonCourseUnkTypes *)PokeathlonCourse_GetPerformance(course, participant, member));
+            template.sizeTypes[i] = PokeathlonCourse_GetSpriteSizeType((PokeathlonPerformanceSizeInfo *)PokeathlonCourse_GetPerformance(course, participant, member));
         }
         PokeathlonSnowThrowDisplay_CreateSprites(work->display, work->spritePool, &infos[9]);
         for (i = 0; i < SNOW_THROW_MEMBERS; i++) {

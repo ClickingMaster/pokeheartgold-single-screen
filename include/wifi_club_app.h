@@ -55,11 +55,11 @@ struct WifiClubRoomPerson {
     WifiClubRoomPersonAnimFunc animate;
 };
 
-typedef struct UnkStruct_ov44_02232C4C {
+typedef struct WifiClubUnusedEntry {
     s16 unk0;
     u8 unk2;
     u8 unk3;
-} UnkStruct_ov44_02232C4C;
+} WifiClubUnusedEntry;
 
 typedef struct WifiClubRoomGfx {
     SpriteList *spriteList;

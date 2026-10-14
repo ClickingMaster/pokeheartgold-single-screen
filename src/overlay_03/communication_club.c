@@ -21,7 +21,7 @@
 
 typedef struct CommClubManager CommClubManager;
 typedef void (*CommClubManagerTaskFunc)(SysTask *, void *);
-typedef void (*UnkFuncPtr_CommClub)(CommClubManager *);
+typedef void (*CommClubManagerFunc)(CommClubManager *);
 
 struct CommClubManager {
     String *string[8];
@@ -32,7 +32,7 @@ struct CommClubManager {
     ListMenuItem *items;
     FieldSystem *fieldSystem;
     CommClubManagerTaskFunc commClubTask;
-    UnkFuncPtr_CommClub unk70;
+    CommClubManagerFunc unk70;
     MsgData *msgData;
     PlayerProfile *playerProfile[2];
     u8 playerListed[8];

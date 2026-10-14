@@ -434,7 +434,7 @@ PlayerProfile *PokeathlonCourse_GetPlayerProfileFromData(PokeathlonCourseData *d
     return PokeathlonCourse_GetPlayerProfile(data->playerProfiles, index);
 }
 
-PokeathlonUnkSubStruct_974 *PokeathlonCourse_GetField974_AtIndex(PokeathlonCourseData *data, int index) {
+PokeathlonParticipantStats *PokeathlonCourse_GetField974_AtIndex(PokeathlonCourseData *data, int index) {
     return &data->records[index];
 }
 

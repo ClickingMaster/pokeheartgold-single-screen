@@ -80,8 +80,8 @@ typedef struct ResAnim_4004 {
     u8 numMapData;
 } ResAnim_4004;
 
-Field3dRenderObjManager *Field3dObjectList_New(enum HeapID heapID, int indexMax, int objectMax, NNSG3dResFileHeader **fileResHeader); // FieldSysC0_New
-void Field3dObjectList_Free(Field3dRenderObjManager *unkC0);                                                                           // FieldSysC0_Free
+Field3dRenderObjManager *Field3dObjectList_New(enum HeapID heapID, int indexMax, int objectMax, NNSG3dResFileHeader **fileResHeader);
+void Field3dObjectList_Free(Field3dRenderObjManager *unkC0);
 Field3dRenderObj *Field3dObjectList_AddShared(Field3dRenderObjManager *unkC0, int index);
 Field3dRenderObj *Field3dObjectList_GetRenderObjectByID(Field3dRenderObjManager *unkC0, int index);
 Field3dRenderObj *Field3dObjectList_GetOrAddInstance(Field3dRenderObjManager *unkC0, int index);
@@ -89,7 +89,7 @@ BOOL Field3dObjectList_ReleaseInstance(Field3dRenderObjManager *unkC0, Field3dRe
 BOOL Field3dObjectList_HasModelFile(Field3dRenderObjManager *unkC0, int index);
 MapPropAnimationPoolList *MapPropAnimationPoolList_New(enum HeapID heapID);
 MapPropAnimationPool *MapPropAnimationPoolList_AddPool(MapPropAnimationPoolList *unkC8, enum HeapID heapID, u16 count);
-void MapPropAnimationPoolList_Free(MapPropAnimationPoolList *unkSubC8); // UnkSubC8_Free
+void MapPropAnimationPoolList_Free(MapPropAnimationPoolList *unkSubC8);
 MapPropAnimation *MapPropAnimationPool_Alloc(MapPropAnimationPool *unkCC_Sub0);
 void MapPropAnimationPool_Release(MapPropAnimationPool *unkCC_Sub0, MapPropAnimation *animation);
 void MapPropAnimationPoolList_Update(MapPropAnimationPoolList *unkSubC8);
@@ -106,9 +106,9 @@ void MapPropAnimation_SetPaused(MapPropAnimation *animation, BOOL paused);
 BOOL MapPropAnimation_IsLoopFinished(MapPropAnimation *animation);
 void MapPropAnimation_GoToLastFrame(MapPropAnimation *animation);
 void MapPropAnimation_SetLoopCount(MapPropAnimation *animation, const int loopCount);
-AreaMapAnimation *AreaMapAnimation_New(MapPropAnimationPoolList *unkSubC8); // UnkCC_Init
-void AreaMapAnimation_Free(AreaMapAnimation *unkCC);                    // UnkCC_Free
-void AreaMapAnimation_Load(AreaMapAnimation *unkCC, int fileID);        // UnkCC_Load
+AreaMapAnimation *AreaMapAnimation_New(MapPropAnimationPoolList *unkSubC8);
+void AreaMapAnimation_Free(AreaMapAnimation *unkCC);
+void AreaMapAnimation_Load(AreaMapAnimation *unkCC, int fileID);
 void AreaMapAnimation_AddToRenderObj(AreaMapAnimation *unkCC, NNSG3dRenderObj *renderObj);
 void AreaMapAnimation_RemoveFromRenderObj(AreaMapAnimation *unkCC, NNSG3dRenderObj *renderObj);
 void AreaMapAnimation_IsLoaded(AreaMapAnimation *unkCC);

@@ -24,7 +24,7 @@ typedef struct RockClimb {
     BOOL loaded;
     u8 unk08[8];
     FieldEffectManager *manager;
-    UnkOv01_021FFECC_sub model;
+    RenderModelStorage model;
     NNSG3dRenderObj renderObj;
 } RockClimb;
 

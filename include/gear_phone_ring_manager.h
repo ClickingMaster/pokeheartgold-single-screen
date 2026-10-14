@@ -32,13 +32,13 @@ typedef struct PokegearArgs {
     void *menuInputStatePtr; // 0x28
 } PokegearArgs;
 
-typedef struct UnkPokegearstruct_14 {
+typedef struct GearPhoneCallerParams {
     u8 unk_0;
     u8 unk_1;
     u8 callTriggerID;
     u8 isScriptedCall;
     u8 callScriptID;
-} Unk_PokegearSTRUCT_14;
+} GearPhoneCallerParams;
 
 void FieldSystem_InitPokegearArgs_Phone(FieldSystem *sys, PokegearArgs *ptr);
 void FieldSystem_InitPokegearArgs_Map(FieldSystem *sys, PokegearArgs *ptr);

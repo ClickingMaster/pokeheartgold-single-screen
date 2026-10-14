@@ -516,11 +516,11 @@ typedef struct MonPicData {
     int height;
 } MonPicData;
 
-typedef struct UnkBattleSystemSub220 {
+typedef struct BattleSystemUnusedWords {
     int unk0;
     int unk4;
     int unk8;
-} UnkBattleSystemSub220;
+} BattleSystemUnusedWords;
 
 typedef struct BattleInput BattleInput;
 
@@ -570,7 +570,7 @@ struct BattleSystem {
     void *pokepicAnimManager; // related to animations
     u32 *cellTransferState;
     MonPicData monPicData[4];
-    UnkBattleSystemSub220 unk210;
+    BattleSystemUnusedWords unk210;
     GameStats *gameStats;
     u8 *bgTiles;
     u16 *bgPalette;

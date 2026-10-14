@@ -126,28 +126,28 @@ typedef struct WeatherMistTaskData {
     WeatherFogChange fogChange;
 } WeatherMistTaskData;
 
-typedef struct UnkStruct_021ED710_Sub_Sub4 {
+typedef struct WeatherFlashTaskReservedVec {
     fx32 unk0;
     fx32 unk4;
     fx32 unk8;
     s16 unkC;
     s16 unkE;
-} UnkStruct_021ED710_Sub_Sub4;
+} WeatherFlashTaskReservedVec;
 
-typedef struct UnkStruct_021ED710_Sub {
+typedef struct WeatherFlashTaskReserved {
     s16 x;
     s16 z;
-    UnkStruct_021ED710_Sub_Sub4 unk4;
+    WeatherFlashTaskReservedVec unk4;
     void *unk14;
     void *unk18;
     void *unk1C[2];
     SysTask *task;
     u32 unk2C;
     u16 unk30[4][192];
-} UnkStruct_021ED710_Sub;
+} WeatherFlashTaskReserved;
 
 typedef struct WeatherFlashTaskData {
-    UnkStruct_021ED710_Sub unk0;
+    WeatherFlashTaskReserved unk0;
     void *darkness;
     u16 scaleFrame;
     u16 endStep;

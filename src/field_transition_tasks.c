@@ -32,7 +32,7 @@ typedef struct WiFiPlazaTaskEnv {
 } WiFiPlazaTaskEnv;
 
 // Defined in field overlay / Wi-Fi Plaza sources that have no header yet.
-BOOL DoorTransition_WalkOutOfSideDoor(FieldSystem *fieldSystem, FieldEnvSubUnk18 *work, u8 direction);
+BOOL DoorTransition_WalkOutOfSideDoor(FieldSystem *fieldSystem, FieldTransitionWork *work, u8 direction);
 BOOL Task_WalkOutOfDoorAfterWarp(TaskManager *taskMan);
 int FieldSystem_GetTerrainHeight(FieldSystem *fieldSystem, int y, fx32 x, fx32 z, u8 *outKind);
 BOOL WiFiPlaza_Init(OverlayManager *man, int *state);
@@ -56,7 +56,7 @@ BOOL FieldTransition_EnterThroughSideDoor(TaskManager *taskMan) {
         break;
     }
     case 1: {
-        FieldEnvSubUnk18 *work = env->transitionWork;
+        FieldTransitionWork *work = env->transitionWork;
         int direction = PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar);
         if (DoorTransition_WalkOutOfSideDoor(fieldSystem, work, direction)) {
             DoorTransition_Free(env->transitionWork);
@@ -118,7 +118,7 @@ BOOL FieldTransition_EnterWithDoorExit(TaskManager *taskMan) {
     PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
     switch (env->transitionState) {
     case 0: {
-        FieldEnvSubUnk18 *work;
+        FieldTransitionWork *work;
         int x;
         env->transitionWork = DoorTransition_New();
         work = env->transitionWork;

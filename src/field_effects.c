@@ -98,7 +98,7 @@ void FieldEffect_ClearState(FieldEffect *effect, u32 size);
 void FieldEffect_SetParam(FieldEffect *effect, int parameter);
 int FieldEffect_GetParam(FieldEffect *effect);
 void FieldEffect_SetUserData(FieldEffect *effect, void *userData);
-UnkOv01_021FFFCC *FieldEffect_GetUserData(void *data);
+FieldEffectUserData *FieldEffect_GetUserData(void *data);
 void FieldEffect_SetTask(FieldEffect *effect, SysTask *task);
 SysTask *FieldEffect_GetTask(FieldEffect *effect);
 void FieldEffect_SetPool(FieldEffect *effect, FieldEffectPool *pool);
@@ -364,7 +364,7 @@ void FieldEffect_SetUserData(FieldEffect *effect, void *userData) {
     effect->userData = userData;
 }
 
-UnkOv01_021FFFCC *FieldEffect_GetUserData(void *data) {
+FieldEffectUserData *FieldEffect_GetUserData(void *data) {
     return ((FieldEffect *)data)->userData;
 }
 

@@ -3,7 +3,7 @@
 #include "wifi_plaza_internal.h"
 
 void *WiFiPlazaWork_GetOwnPlayerProfile(WiFiPlazaWork *work) {
-    return work->unk_508.profile;
+    return work->ownProfileData.profile;
 }
 
 int WiFiPlazaWork_IsSpecialVisitor(WiFiPlazaWork *work, int slot) {

@@ -514,10 +514,10 @@ void PokegearMap_UpdateLocationIcons(PokegearMapAppData *mapApp, u8 mode) {
             mapApp->objManager->objects[index].pos.y = y;
             if (MapApp_GetMarkingsHeapNodeByMapID(mapApp, locationSpec->mapId) != NULL) {
                 Sprite_SetDrawFlag(mapApp->objManager->objects[index].sprite, TRUE);
-                PokegearManagedObject_SetUnk01(&mapApp->objManager->objects[index], TRUE);
+                PokegearManagedObject_SetAutoCull(&mapApp->objManager->objects[index], TRUE);
             } else {
                 Sprite_SetDrawFlag(mapApp->objManager->objects[index].sprite, FALSE);
-                PokegearManagedObject_SetUnk01(&mapApp->objManager->objects[index], FALSE);
+                PokegearManagedObject_SetAutoCull(&mapApp->objManager->objects[index], FALSE);
             }
             break;
         case 1:
@@ -526,7 +526,7 @@ void PokegearMap_UpdateLocationIcons(PokegearMapAppData *mapApp, u8 mode) {
             break;
         case 2:
             Sprite_SetDrawFlag(mapApp->objManager->objects[index].sprite, FALSE);
-            PokegearManagedObject_SetUnk01(&mapApp->objManager->objects[index], FALSE);
+            PokegearManagedObject_SetAutoCull(&mapApp->objManager->objects[index], FALSE);
             break;
         }
     }
@@ -535,7 +535,7 @@ void PokegearMap_UpdateLocationIcons(PokegearMapAppData *mapApp, u8 mode) {
     for (i = 0; i < ROAMER_MAX; ++i) {
         index = i + PGMAP_SPRITE_ROAMER_RAIKOU;
         if (mapApp->roamerLocations[i] == MAP_EVERYWHERE) {
-            PokegearManagedObject_SetUnk01(&mapApp->objManager->objects[index], FALSE);
+            PokegearManagedObject_SetAutoCull(&mapApp->objManager->objects[index], FALSE);
             Sprite_SetDrawFlag(mapApp->objManager->objects[index].sprite, FALSE);
             continue;
         }
@@ -546,7 +546,7 @@ void PokegearMap_UpdateLocationIcons(PokegearMapAppData *mapApp, u8 mode) {
         case 0:
             mapApp->objManager->objects[index].pos.x = x;
             mapApp->objManager->objects[index].pos.y = y;
-            PokegearManagedObject_SetUnk01(&mapApp->objManager->objects[index], TRUE);
+            PokegearManagedObject_SetAutoCull(&mapApp->objManager->objects[index], TRUE);
             Sprite_SetDrawFlag(mapApp->objManager->objects[index].sprite, TRUE);
             break;
         case 1:
@@ -554,7 +554,7 @@ void PokegearMap_UpdateLocationIcons(PokegearMapAppData *mapApp, u8 mode) {
             mapApp->objManager->objects[index].destY = y;
             break;
         case 2:
-            PokegearManagedObject_SetUnk01(&mapApp->objManager->objects[index], FALSE);
+            PokegearManagedObject_SetAutoCull(&mapApp->objManager->objects[index], FALSE);
             Sprite_SetDrawFlag(mapApp->objManager->objects[index].sprite, FALSE);
             break;
         }
@@ -845,9 +845,9 @@ static void PokegearMap_PrintLocationPanel(PokegearMapAppData *mapApp, BOOL copy
             ScheduleBgTilemapBufferTransfer(mapApp->pokegear->bgConfig, GF_BG_LYR_SUB_2);
             return;
         }
-        if (locationSpec->tilemapUnk174BlockID != 0) {
+        if (locationSpec->subBg3BlockID != 0) {
             tilemap16CsrcX = 8;
-            tilemap174blockId = locationSpec->tilemapUnk174BlockID - 1;
+            tilemap174blockId = locationSpec->subBg3BlockID - 1;
         } else {
             tilemap16CsrcX = 0;
             tilemap174blockId = 0;
@@ -1024,14 +1024,14 @@ void PokegearMap_HighlightSelectedLocation(PokegearMapAppData *mapApp, u8 show) 
             continue;
         }
         location = &mapApp->locationSpecs[i];
-        if (location->tilemapUnk170DestWidth * location->tilemapUnk170DestHeight >= 9) {
+        if (location->tilemapCopyRectWidth * location->tilemapCopyRectHeight >= 9) {
             destX = location->x - 1;
             destY = location->y - 1;
         } else {
             destX = location->x;
             destY = location->y;
         }
-        CopyToBgTilemapRect(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_2, destX, destY, location->tilemapUnk170DestWidth, location->tilemapUnk170DestHeight, mapApp->mapScreen->rawData, location->tilemapUnk170SrcX, location->tilemapUnk170SrcY, mapApp->mapScreen->screenWidth / 8, mapApp->mapScreen->screenHeight / 8);
+        CopyToBgTilemapRect(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_2, destX, destY, location->tilemapCopyRectWidth, location->tilemapCopyRectHeight, mapApp->mapScreen->rawData, location->tilemapCopyRectSrcX, location->tilemapCopyRectSrcY, mapApp->mapScreen->screenWidth / 8, mapApp->mapScreen->screenHeight / 8);
     }
     ScheduleBgTilemapBufferTransfer(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_2);
 }

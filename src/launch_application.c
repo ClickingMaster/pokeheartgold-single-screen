@@ -284,7 +284,7 @@ int PartyMenuArgs_GetSelectedAction(PartyMenuArgs *partyWork) {
     return partyWork->selectedAction;
 }
 
-u16 RunningAppData_GetUnk14(UnkStruct_0203E600 *a0) {
+u16 RunningAppData_GetUnk14(MoveSelectionResult *a0) {
     return a0->unk14;
 }
 
@@ -335,7 +335,7 @@ static BOOL Task_OpenPartyMenuForUnionRoomBattleSelect(TaskManager *taskman) {
 
 PartyMenuArgs *TaskManager_LaunchPartyMenu_UnionRoomBattleSelect(TaskManager *taskman, enum HeapID heapID) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskman);
-    UnkStruct_0203E6D4 *data = Heap_Alloc(heapID, sizeof(UnkStruct_0203E6D4));
+    PartyMenuUnionRoomBattleSelectData *data = Heap_Alloc(heapID, sizeof(PartyMenuUnionRoomBattleSelectData));
     data->heapID = heapID;
     PartyMenuArgs *args = PartyMenu_CreateArgs(heapID, fieldSystem, 0, PARTY_MENU_CONTEXT_UNION_ROOM_BATTLE_SELECT);
     args->minMonsToSelect = 2;
@@ -399,7 +399,7 @@ PokemonSummaryArgs *LearnForgetMove_LaunchApp(enum HeapID heapID, FieldSystem *f
     return args;
 }
 
-u16 RunningAppData_GetUnk16(UnkStruct_0203E600 *a0) {
+u16 RunningAppData_GetUnk16(MoveSelectionResult *a0) {
     return a0->unk16;
 }
 
@@ -1385,7 +1385,7 @@ void ShipDepartureCutscene_LaunchApp(FieldSystem *fieldSystem, void *args) {
     FieldSystem_LaunchApplication(fieldSystem, &template, args);
 }
 
-LegendaryCinematicArgs *LegendaryCinematic_LaunchApp(FieldSystem *fieldSystem, UnkStruct_0203FCC4 *modelAttributes, u16 scene, u16 timeOfDay, enum HeapID heapID) {
+LegendaryCinematicArgs *LegendaryCinematic_LaunchApp(FieldSystem *fieldSystem, ModelAttributesStorage *modelAttributes, u16 scene, u16 timeOfDay, enum HeapID heapID) {
     static const OverlayManagerTemplate sOverlayTemplate_LegendaryCinematic = { LegendaryCinematic_Init, LegendaryCinematic_Main, LegendaryCinematic_Exit, FS_OVERLAY_ID(OVY_106) };
     LegendaryCinematicArgs *args = Heap_Alloc(heapID, sizeof(LegendaryCinematicArgs));
     memset(args, 0, sizeof(LegendaryCinematicArgs));

@@ -89,7 +89,7 @@ void GearPhoneRingManager_SetCallerParams(GearPhoneRingManager *gearPhone, u8 ca
     gearPhone->callScriptID = callScriptID;
 }
 
-u8 GearPhoneRingManager_GetCallerParams(GearPhoneRingManager *gearPhone, Unk_PokegearSTRUCT_14 *params) {
+u8 GearPhoneRingManager_GetCallerParams(GearPhoneRingManager *gearPhone, GearPhoneCallerParams *params) {
     MI_CpuFill8(params, 0, 5);
     if (gearPhone->callerId >= NUM_PHONE_CONTACTS) {
         GF_ASSERT(FALSE);

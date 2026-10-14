@@ -41,8 +41,8 @@ typedef struct PokeathlonPennantCaptureCollision {
 } PokeathlonPennantCaptureCollision;
 
 // The performance of Pokemon i (team i / 3, member i % 3).
-static inline PokeathlonCourseUnkTypes *PokeathlonPennantCapture_GetPerformance(PokeathlonCourseData *course, int i) {
-    return (PokeathlonCourseUnkTypes *)PokeathlonCourse_GetPerformance(course, i / 3, i % 3);
+static inline PokeathlonPerformanceSizeInfo *PokeathlonPennantCapture_GetPerformance(PokeathlonCourseData *course, int i) {
+    return (PokeathlonPerformanceSizeInfo *)PokeathlonCourse_GetPerformance(course, i / 3, i % 3);
 }
 
 // Puts a Pokemon at its team's start: the four teams start side by side, 32 units apart, facing down; on the touch
@@ -150,7 +150,7 @@ BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
             member = i % 3;
             participant = i / 3;
             PokeathlonCourse_GetMonInfo(course, participant, member, &infos[i]);
-            template.sizeTypes[i] = PokeathlonCourse_GetSpriteSizeType((PokeathlonCourseUnkTypes *)PokeathlonCourse_GetPerformance(course, participant, member));
+            template.sizeTypes[i] = PokeathlonCourse_GetSpriteSizeType((PokeathlonPerformanceSizeInfo *)PokeathlonCourse_GetPerformance(course, participant, member));
             icons[i].species = infos[i].species;
             icons[i].form = infos[i].form;
         }

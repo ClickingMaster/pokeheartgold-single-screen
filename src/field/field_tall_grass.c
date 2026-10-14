@@ -47,22 +47,22 @@ typedef struct TallGrassEffect {
     void *billboard;
 } TallGrassEffect;
 
-typedef struct UnkOv01_0220914C_Args {
+typedef struct TallGrassUnusedEffectArgs {
     int x;
     int z;
     FieldSystem *fieldSystem;
     FieldEffectManager *manager;
     u8 unk10[4];
-} UnkOv01_0220914C_Args;
+} TallGrassUnusedEffectArgs;
 
-typedef struct UnkOv01_0220914C_Effect {
+typedef struct TallGrassUnusedEffect {
     int state;
     BOOL done;
     u8 unk08[4];
     int kind;
-    UnkOv01_0220914C_Args args;
+    TallGrassUnusedEffectArgs args;
     void *billboard;
-} UnkOv01_0220914C_Effect;
+} TallGrassUnusedEffect;
 
 TallGrass *TallGrass_New(FieldEffectManager *manager);
 void TallGrass_Free(TallGrass *grass);
@@ -74,10 +74,10 @@ BOOL TallGrassEffect_Init(FieldEffect *effect, TallGrassEffect *work);
 BOOL TallGrassEffect_Destroy(FieldEffect *effect, TallGrassEffect *work);
 void TallGrassEffect_Update(FieldEffect *effect, TallGrassEffect *work);
 void TallGrassEffect_Draw(FieldEffect *effect, TallGrassEffect *work);
-BOOL TallGrassUnusedEffect_Init(FieldEffect *effect, UnkOv01_0220914C_Effect *work);
-BOOL TallGrassUnusedEffect_Destroy(FieldEffect *effect, UnkOv01_0220914C_Effect *work);
-void TallGrassUnusedEffect_Update(FieldEffect *effect, UnkOv01_0220914C_Effect *work);
-void TallGrassUnusedEffect_Draw(FieldEffect *effect, UnkOv01_0220914C_Effect *work);
+BOOL TallGrassUnusedEffect_Init(FieldEffect *effect, TallGrassUnusedEffect *work);
+BOOL TallGrassUnusedEffect_Destroy(FieldEffect *effect, TallGrassUnusedEffect *work);
+void TallGrassUnusedEffect_Update(FieldEffect *effect, TallGrassUnusedEffect *work);
+void TallGrassUnusedEffect_Draw(FieldEffect *effect, TallGrassUnusedEffect *work);
 
 // In asm/field_tall_grass_data.s (its order of these objects is not one MWCC reproduces).
 extern const FieldEffectBasicTemplate gTallGrassEffectTemplate; // tall grass effect
@@ -279,11 +279,11 @@ void TallGrassEffect_Draw(FieldEffect *effect, TallGrassEffect *work) {
 }
 
 #pragma force_active on
-BOOL TallGrassUnusedEffect_Init(FieldEffect *effect, UnkOv01_0220914C_Effect *work) {
+BOOL TallGrassUnusedEffect_Init(FieldEffect *effect, TallGrassUnusedEffect *work) {
     VecFx32 position;
     int record;
 
-    work->args = *(UnkOv01_0220914C_Args *)FieldEffect_GetUserData(effect);
+    work->args = *(TallGrassUnusedEffectArgs *)FieldEffect_GetUserData(effect);
     work->kind = FieldEffect_GetParam(effect);
     position.x = (work->args.x << 16) + 0x8000;
     position.z = (work->args.z << 16) + 0x9000;
@@ -308,11 +308,11 @@ BOOL TallGrassUnusedEffect_Init(FieldEffect *effect, UnkOv01_0220914C_Effect *wo
 }
 #pragma force_active reset
 
-BOOL TallGrassUnusedEffect_Destroy(FieldEffect *effect, UnkOv01_0220914C_Effect *work) {
+BOOL TallGrassUnusedEffect_Destroy(FieldEffect *effect, TallGrassUnusedEffect *work) {
     return BillboardObject_Delete(work->billboard);
 }
 
-void TallGrassUnusedEffect_Update(FieldEffect *effect, UnkOv01_0220914C_Effect *work) {
+void TallGrassUnusedEffect_Update(FieldEffect *effect, TallGrassUnusedEffect *work) {
     switch (work->state) {
     case 0:
         if (BillboardObject_AdvanceFrame(work->billboard, FX32_ONE) == TRUE) {
@@ -325,7 +325,7 @@ void TallGrassUnusedEffect_Update(FieldEffect *effect, UnkOv01_0220914C_Effect *
     }
 }
 
-void TallGrassUnusedEffect_Draw(FieldEffect *effect, UnkOv01_0220914C_Effect *work) {
+void TallGrassUnusedEffect_Draw(FieldEffect *effect, TallGrassUnusedEffect *work) {
     VecFx32 position;
 
     FieldEffect_GetPosition(effect, &position);

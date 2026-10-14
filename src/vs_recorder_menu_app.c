@@ -135,7 +135,7 @@ int VsRecorderMenu_Exit(OverlayManager *manager, int *state) {
         UnloadOverlayByID(FS_OVERLAY_ID(OVY_40));
         gSystem.screensFlipped = FALSE;
         GfGfx_SwapDisplay();
-        Field_SetEnvironmentSoundState_None_Unk2();
+        Field_ForceEnvironmentSoundRecheck();
         return TRUE;
     }
     return FALSE;

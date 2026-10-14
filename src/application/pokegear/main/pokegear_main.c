@@ -146,7 +146,7 @@ BOOL Pokegear_Exit(OverlayManager *man, int *state) {
     enum HeapID heapID = pokegearApp->heapID;
     OverlayManager_FreeData(man);
     Sound_ClearSecondaryScene();
-    Field_SetEnvironmentSoundState_None_Unk2();
+    Field_ForceEnvironmentSoundRecheck();
     Heap_Destroy(heapID);
     return TRUE;
 }

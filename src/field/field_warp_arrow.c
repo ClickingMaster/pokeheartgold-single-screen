@@ -22,7 +22,7 @@
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 3).
 typedef struct WarpArrow {
     FieldEffectManager *manager;
-    UnkOv01_021FFECC_sub model;
+    RenderModelStorage model;
     NNSG3dRenderObj renderObj;
 } WarpArrow;
 

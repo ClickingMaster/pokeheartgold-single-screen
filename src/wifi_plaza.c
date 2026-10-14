@@ -114,7 +114,7 @@ WiFiPlazaWork *WiFiPlazaWork_New(SaveData *save, enum HeapID heapID) {
     WiFiPlazaGroupWeights_Init(&work->groupWeights);
     WiFiPlazaWordSet_Init(&work->wordSet, heapID);
     WiFiPlazaHistory_Init(&work->history, work->save);
-    WiFiPlaza_NewPlayerProfile(&work->unk_508.profile, heapID);
+    WiFiPlaza_NewPlayerProfile(&work->ownProfileData.profile, heapID);
     return work;
 }
 
@@ -128,7 +128,7 @@ void WiFiPlazaWork_Delete(WiFiPlazaWork *work) {
     x = Save_PlazaSurvey_Get(work->save);
     PlazaSurvey_SetSurveyId(x, vals.surveyId);
     PlazaSurvey_SetAnswer(x, vals.answer);
-    WiFiPlaza_FreePlayerProfile(&work->unk_508.profile);
+    WiFiPlaza_FreePlayerProfile(&work->ownProfileData.profile);
     WiFiPlazaWordSet_Free(&work->wordSet);
     WiFiPlazaLobbyClient_ClearLobbyCommands();
     WiFiPlazaNews_Delete(work->news);
@@ -153,7 +153,7 @@ void WiFiPlazaWork_Update(WiFiPlazaWork *work) {
     WiFiPlaza_ClearTapToyPlayedFlags(work->unk_1e8);
     WiFiPlaza_ClearEventFlags(work->changeFlags);
     WiFiPlazaEventSchedule_Update(&work->eventSchedule, work->changeFlags, &work->groups, &work->timer);
-    WiFiPlazaUnk3A0_UpdateCooldown(&work->unk_3a0);
+    WiFiPlazaSessionState_UpdateCooldown(&work->sessionState);
     WiFiPlazaGroups_Update(&work->groups);
     WiFiPlazaTimer_Update(&work->timer);
     if (WiFiPlazaHistory_IsCorrupt(&work->history) == 1) {
