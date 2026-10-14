@@ -66,9 +66,9 @@ void VsRecorder_PrintVideoNumber(VsRecorderVideoSearch *search, VsRecorderWork *
     String *msg = NewString_ReadMsgData(work->msgData, msg_0013_00295);
     String *out = String_New(255, HEAP_ID_109);
 
-    String16_FormatInteger(low, value % 100000, 5, PRINTING_MODE_LEADING_ZEROS, 1);
-    String16_FormatInteger(mid, upper % 100000, 5, PRINTING_MODE_LEADING_ZEROS, 1);
-    String16_FormatInteger(high, upper / 100000, 2, PRINTING_MODE_LEADING_ZEROS, 1);
+    String16_FormatInteger(low, value % 100000, 5, PRINTING_MODE_LEADING_ZEROS, TRUE);
+    String16_FormatInteger(mid, upper % 100000, 5, PRINTING_MODE_LEADING_ZEROS, TRUE);
+    String16_FormatInteger(high, upper / 100000, 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
     BufferString(msgFmt, 2, low, 0, 1, 2);
     BufferString(msgFmt, 1, mid, 0, 1, 2);
     BufferString(msgFmt, 0, high, 0, 1, 2);
@@ -350,7 +350,7 @@ void VsRecorder_NumberPadConfirm(VsRecorderNumberPad *pad) {
                 pad->number *= 10;
             }
             pad->number += num;
-            String16_FormatInteger(str, num, 1, PRINTING_MODE_RIGHT_ALIGN, 1);
+            String16_FormatInteger(str, num, 1, PRINTING_MODE_RIGHT_ALIGN, TRUE);
             String_Cat(pad->config.text, str);
             i++;
             digit++;

@@ -104,7 +104,7 @@ BOOL VsRecorder_VideoSearchDownloadVideo(VsRecorderWork *work) {
         // fallthrough
     case 1:
         VsRecorder_StepFade(&search->fade, 1);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 0)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 0)) {
             work->step++;
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 0xC, (u8)search->fade, (u16)work->blendColor);
@@ -212,7 +212,7 @@ BOOL VsRecorder_VideoSearchResume(VsRecorderWork *work) {
         break;
     case 3:
         VsRecorder_StepFade(&search->fade, 0);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 0)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, FALSE, 0)) {
             VsRecorder_SetVideoPartyIconsDrawFlag(&search->info, TRUE);
             VsRecorder_CreateSearchDetailsButtonWindow(work);
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
@@ -349,7 +349,7 @@ BOOL VsRecorder_NumberSearchShowPad(VsRecorderWork *work) {
         break;
     case 2:
         VsRecorder_StepFade(&search->fade, 0);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 0)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, FALSE, 0)) {
             VsRecorder_ShowNotice(work, msg_0013_00112);
             work->step++;
         }
@@ -385,7 +385,7 @@ BOOL VsRecorder_NumberSearchClosePad(VsRecorderWork *work) {
         // fallthrough
     case 1:
         VsRecorder_StepFade(&search->fade, 1);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 0)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 0)) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
             VsRecorder_FreeNumberPadButtons(work);
             work->step++;
@@ -576,7 +576,7 @@ BOOL VsRecorder_NumberSearchShowDetails(VsRecorderWork *work) {
         break;
     case 3:
         VsRecorder_StepFade(&search->fade, 0);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 0)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, FALSE, 0)) {
             VsRecorder_SetVideoPartyIconsDrawFlag(&search->info, TRUE);
             VsRecorder_CreateSearchDetailsButtonWindow(work);
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
@@ -639,7 +639,7 @@ BOOL VsRecorder_NumberSearchExitDetails(VsRecorderWork *work) {
         break;
     case 1:
         VsRecorder_StepFade(&search->fade, 1);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 0)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 0)) {
             VsRecorder_FreeSearchButtons(work);
             work->step++;
         }
@@ -866,7 +866,7 @@ BOOL VsRecorder_NumberSearchShowSlots(VsRecorderWork *work) {
             break;
         case 1:
             VsRecorder_StepFade(&search->fade, 1);
-            if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 0)) {
+            if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 0)) {
                 VsRecorder_SetVBlankPaused(work, TRUE);
                 VsRecorder_FreeSearchButtons(work);
                 VsRecorder_CreateSearchSlotButtons(work);
@@ -893,7 +893,7 @@ BOOL VsRecorder_NumberSearchShowSlots(VsRecorderWork *work) {
             break;
         case 4:
             VsRecorder_StepFade(&search->fade, 1);
-            if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 0)) {
+            if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 0)) {
                 VsRecorder_FreeSearchSlotButtons(work);
                 work->step++;
             }
@@ -1008,7 +1008,7 @@ BOOL VsRecorder_NumberSearchResume(VsRecorderWork *work) {
         break;
     case 1:
         if (VsRecorder_IsFlipScreensDone(work)) {
-            if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 1)) {
+            if (VsRecorder_StepBlend(&search->eva, &search->evb, FALSE, 1)) {
                 SetBgPriority(GF_BG_LYR_MAIN_0, 1);
                 SetBgPriority(GF_BG_LYR_MAIN_1, 3);
                 SetBgPriority(GF_BG_LYR_MAIN_2, 0);
@@ -1045,7 +1045,7 @@ BOOL VsRecorder_NumberSearchResume(VsRecorderWork *work) {
         break;
     case 3:
         search->fade = 0;
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 0)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, FALSE, 0)) {
             if (search->showProfile == 0) {
                 VsRecorder_SetVideoPartyIconsDrawFlag(&search->info, TRUE);
             } else {
@@ -1587,7 +1587,7 @@ BOOL VsRecorder_FoundVideoToggleProfile(VsRecorderWork *work) {
         work->step++;
         break;
     case 1:
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 1)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 1)) {
             work->step++;
         }
         break;
@@ -1606,7 +1606,7 @@ BOOL VsRecorder_FoundVideoToggleProfile(VsRecorderWork *work) {
         work->step++;
         break;
     case 3:
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 1)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, FALSE, 1)) {
             if (search->showProfile == 0) {
                 VsRecorder_SetProfileDrawFlag(&search->profile, TRUE);
             } else {
@@ -1645,7 +1645,7 @@ BOOL VsRecorder_FoundVideoShowSlots(VsRecorderWork *work) {
         break;
     case 1:
         VsRecorder_StepFade(&search->fade, 1);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 0)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 0)) {
             VsRecorder_SetVBlankPaused(work, TRUE);
             VsRecorder_FreeSearchButtons(work);
             VsRecorder_CreateSearchSlotButtons(work);
@@ -1658,7 +1658,7 @@ BOOL VsRecorder_FoundVideoShowSlots(VsRecorderWork *work) {
         break;
     case 2:
         VsRecorder_StepFade(&search->fade, 0);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 1)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, FALSE, 1)) {
             VsRecorder_ShowSearchMessage(work, 0x64, 0);
             work->step++;
         }
@@ -1677,7 +1677,7 @@ BOOL VsRecorder_FoundVideoConfirmOverwrite(VsRecorderWork *work) {
     switch (work->step) {
     case 0:
         VsRecorder_StepFade(&search->fade, 1);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 2)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 2)) {
             GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, 84, work->bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, HEAP_ID_109);
             VsRecorder_PrintSearchMessage(work, 0x66, search->slot);
             work->step++;
@@ -1685,7 +1685,7 @@ BOOL VsRecorder_FoundVideoConfirmOverwrite(VsRecorderWork *work) {
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 0xC, (u8)search->fade, (u16)work->blendColor);
         break;
     case 1:
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 2)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, FALSE, 2)) {
             VsRecorder_CreateSearchOverwriteWindows(work);
             GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
             work->step++;
@@ -1707,7 +1707,7 @@ BOOL VsRecorder_FoundVideoOverwriteNo(VsRecorderWork *work) {
         work->step++;
         break;
     case 1:
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 2)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 2)) {
             VsRecorder_RemoveSearchOverwriteWindows(work);
             BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_2);
             BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_3);
@@ -1716,7 +1716,7 @@ BOOL VsRecorder_FoundVideoOverwriteNo(VsRecorderWork *work) {
         break;
     case 2:
         VsRecorder_StepFade(&search->fade, 0);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 2)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, FALSE, 2)) {
             VsRecorder_PrintSearchMessage(work, 0x64, 0);
             GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
             work->step++;
@@ -1740,7 +1740,7 @@ BOOL VsRecorder_FoundVideoSave(VsRecorderWork *work) {
         break;
     case 1:
         VsRecorder_StepFade(&search->fade, 1);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 2)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 2)) {
             BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_2);
             VsRecorder_PrintSearchMessage(work, 0x116, 0);
             VsRecorder_ResetRecordSave(work);
@@ -1855,7 +1855,7 @@ BOOL VsRecorder_FoundVideoReturnToDetails(VsRecorderWork *work) {
         break;
     case 1:
         VsRecorder_StepFade(&search->fade, 1);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 0)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 0)) {
             work->step++;
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 0xC, (u8)search->fade, (u16)work->blendColor);
@@ -1889,7 +1889,7 @@ BOOL VsRecorder_FoundVideoReturnToDetails(VsRecorderWork *work) {
         break;
     case 3:
         VsRecorder_StepFade(&search->fade, 0);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 0)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, FALSE, 0)) {
             if (search->showProfile == 0) {
                 VsRecorder_SetVideoPartyIconsDrawFlag(&search->info, TRUE);
             } else {
@@ -1922,7 +1922,7 @@ BOOL VsRecorder_FoundVideoSlotsCancel(VsRecorderWork *work) {
         break;
     case 1:
         VsRecorder_StepFade(&search->fade, 1);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 0)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 0)) {
             VsRecorder_FreeSearchSlotButtons(work);
             work->step++;
         }
@@ -1955,7 +1955,7 @@ BOOL VsRecorder_FoundVideoSlotsCancel(VsRecorderWork *work) {
         break;
     case 3:
         VsRecorder_StepFade(&search->fade, 0);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 0)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, FALSE, 0)) {
             if (search->showProfile == 0) {
                 VsRecorder_SetVideoPartyIconsDrawFlag(&search->info, TRUE);
             } else {

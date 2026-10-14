@@ -595,7 +595,7 @@ BOOL VsRecorder_VideoSearchShowConditions(VsRecorderWork *work) {
         break;
     case 1:
         VsRecorder_StepFade(&search->fade, 0);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 0)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, FALSE, 0)) {
             VsRecorder_ShowTopMessage(work, msg_0013_00124);
             search->species = SEARCH_ANY_SPECIES;
             search->facility = SEARCH_ANY;
@@ -641,7 +641,7 @@ BOOL VsRecorder_VideoSearchExit(VsRecorderWork *work) {
         break;
     case 1:
         VsRecorder_StepFade(&search->fade, 1);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 0)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 0)) {
             work->step++;
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 0xC, (u8)search->fade, (u16)work->blendColor);
@@ -688,7 +688,7 @@ BOOL VsRecorder_VideoSearchOpenCondition(VsRecorderWork *work) {
         // fallthrough
     case 1:
         VsRecorder_StepFade(&search->fade, 1);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 2)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 2)) {
             work->step++;
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 0xC, (u8)search->fade, (u16)work->blendColor);
@@ -724,7 +724,7 @@ BOOL VsRecorder_VideoSearchSelectFacility(VsRecorderWork *work) {
         break;
     case 1:
         VsRecorder_StepFade(&search->fade, 0);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 2)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, FALSE, 2)) {
             VsRecorder_SetVBlankPaused(work, TRUE);
             VsRecorder_CreateTouchScrollSprites(&work->touchScroll, work);
             VsRecorder_ClearListWindow(&work->listWindow);
@@ -767,7 +767,7 @@ BOOL VsRecorder_VideoSearchSelectFacility(VsRecorderWork *work) {
         // fallthrough
     case 4:
         VsRecorder_StepFade(&search->fade, 1);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 2)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 2)) {
             VsRecorder_SetSearchButtonsMode(work, FALSE);
             work->step++;
         }
@@ -859,7 +859,7 @@ BOOL VsRecorder_VideoSearchSelectCategory(VsRecorderWork *work) {
         break;
     case 1:
         VsRecorder_StepFade(&search->fade, 0);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 2)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, FALSE, 2)) {
             VsRecorder_CreateSearchCategoryWindows(work);
             work->step++;
         }
@@ -878,12 +878,12 @@ BOOL VsRecorder_VideoSearchSelectCategory(VsRecorderWork *work) {
         // fallthrough
     case 4:
         if (search->categoryChosen == TRUE) {
-            if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 2)) {
+            if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 2)) {
                 work->step++;
             }
         } else {
             VsRecorder_StepFade(&search->fade, 1);
-            if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 2)) {
+            if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 2)) {
                 VsRecorder_SetSearchButtonsMode(work, FALSE);
                 work->step++;
             }
@@ -912,7 +912,7 @@ BOOL VsRecorder_VideoSearchSelectSpecies(VsRecorderWork *work) {
         work->step++;
         break;
     case 1:
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 2)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, FALSE, 2)) {
             VsRecorder_SetVBlankPaused(work, TRUE);
             VsRecorder_CreateTouchScrollSprites(&work->touchScroll, work);
             search->listConfig = sVsRecorderSearchSpeciesListConfig;
@@ -956,13 +956,13 @@ BOOL VsRecorder_VideoSearchSelectSpecies(VsRecorderWork *work) {
     case 4:
         if (search->species != SEARCH_ANY_SPECIES) {
             VsRecorder_StepFade(&search->fade, 1);
-            if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 2)) {
+            if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 2)) {
                 VsRecorder_SetSearchButtonsMode(work, FALSE);
                 work->step++;
             }
             PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 0xC, (u8)search->fade, (u16)work->blendColor);
         } else {
-            if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 2)) {
+            if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 2)) {
                 work->step++;
             }
         }
@@ -1079,7 +1079,7 @@ BOOL VsRecorder_VideoSearchSelectLocation(VsRecorderWork *work) {
         break;
     case 1:
         VsRecorder_StepFade(&search->fade, 0);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 2)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, FALSE, 2)) {
             VsRecorder_SetVBlankPaused(work, TRUE);
             VsRecorder_CreateTouchScrollSprites(&work->touchScroll, work);
             VsRecorder_InitMessageList(&work->listWindow, work, (VsRecorderListConfig *)&sVsRecorderSearchLocationListConfig);
@@ -1112,7 +1112,7 @@ BOOL VsRecorder_VideoSearchSelectLocation(VsRecorderWork *work) {
         // fallthrough
     case 4:
         VsRecorder_StepFade(&search->fade, 1);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 2)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 2)) {
             VsRecorder_SetSearchButtonsMode(work, FALSE);
             work->step++;
         }
@@ -1136,7 +1136,7 @@ BOOL VsRecorder_VideoSearchReturnToConditions(VsRecorderWork *work) {
         break;
     case 1:
         VsRecorder_StepFade(&search->fade, 0);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 2)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, FALSE, 2)) {
             VsRecorder_SetMessageText(work, msg_0013_00124);
             VsRecorder_CreateSearchButtonWindows(work, 0);
             work->step++;
@@ -1228,7 +1228,7 @@ BOOL VsRecorder_VideoSearchLeaveConditions(VsRecorderWork *work) {
         break;
     case 1:
         VsRecorder_StepFade(&search->fade, 1);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 0)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 0)) {
             VsRecorder_SetSearchButtonsMode(work, TRUE);
             work->step++;
         }
@@ -1278,7 +1278,7 @@ BOOL VsRecorder_VideoSearchShowResults(VsRecorderWork *work) {
         break;
     case 1:
         VsRecorder_StepFade(&search->fade, 0);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 0)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, FALSE, 0)) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
             GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
             VsRecorder_SetSearchResultIconsDrawFlag(work, TRUE);
@@ -1338,7 +1338,7 @@ BOOL VsRecorder_VideoSearchResultsMain(VsRecorderWork *work) {
         // fallthrough
     case 2:
         VsRecorder_StepFade(&search->fade, 1);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 0)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 0)) {
             VsRecorder_SetSearchButtonsMode(work, FALSE);
             if (search->nextSubState == SEARCH_SHOW_DETAILS) {
                 VsRecorder_SetTextSpriteMsg(&search->buttons[0], (VsRecorderGfx *)&work->narc, 3);
@@ -1376,7 +1376,7 @@ BOOL VsRecorder_VideoSearchResultsBack(VsRecorderWork *work) {
         break;
     case 1:
         VsRecorder_StepFade(&search->fade, 0);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 0)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, FALSE, 0)) {
             VsRecorder_ShowTopMessage(work, msg_0013_00124);
             VsRecorder_CreateSearchConditionWindows(work, 0);
             VsRecorder_PrintSearchSpecies(work, search->species);
@@ -1425,7 +1425,7 @@ BOOL VsRecorder_VideoSearchShowDetails(VsRecorderWork *work) {
         break;
     case 3:
         VsRecorder_StepFade(&search->fade, 0);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 0)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, FALSE, 0)) {
             VsRecorder_SetVideoPartyIconsDrawFlag(&search->info, TRUE);
             VsRecorder_CreateSearchDetailsButtonWindow(work);
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
@@ -1489,7 +1489,7 @@ BOOL VsRecorder_VideoSearchBackToResults(VsRecorderWork *work) {
         break;
     case 1:
         VsRecorder_StepFade(&search->fade, 1);
-        if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 0)) {
+        if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 0)) {
             VsRecorder_SetTextSpriteMsg(&search->buttons[0], (VsRecorderGfx *)&work->narc, 3);
             VsRecorder_SetTextSpriteMsg(&search->buttons[1], (VsRecorderGfx *)&work->narc, 0x6F);
             ManagedSprite_SetAnim(search->buttons[0].sprite, 0);
@@ -1527,7 +1527,7 @@ BOOL VsRecorder_VideoSearchShowSlots(VsRecorderWork *work) {
             break;
         case 1:
             VsRecorder_StepFade(&search->fade, 1);
-            if (VsRecorder_StepBlend(&search->eva, &search->evb, 1, 0)) {
+            if (VsRecorder_StepBlend(&search->eva, &search->evb, TRUE, 0)) {
                 VsRecorder_SetVBlankPaused(work, TRUE);
                 VsRecorder_FreeSearchButtons(work);
                 VsRecorder_CreateSearchSlotButtons(work);
@@ -1582,7 +1582,7 @@ BOOL VsRecorder_VideoSearchShowSlots(VsRecorderWork *work) {
             break;
         case 5:
             VsRecorder_StepFade(&search->fade, 0);
-            if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 0)) {
+            if (VsRecorder_StepBlend(&search->eva, &search->evb, FALSE, 0)) {
                 if (search->showProfile == 0) {
                     VsRecorder_SetVideoPartyIconsDrawFlag(&search->info, TRUE);
                 } else {

@@ -559,7 +559,7 @@ BOOL VsRecorder_BoxDataViewExit(VsRecorderWork *work) {
         }
         break;
     default:
-        if (VsRecorder_StepFade(&boxData->fade, 0) != 0) {
+        if (VsRecorder_StepFade(&boxData->fade, 0) != FALSE) {
             VsRecorder_ClearPaletteBlend(work);
             VsRecorder_ResetFade(&boxData->fade);
             PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 12, 16, (u16)work->blendColor);

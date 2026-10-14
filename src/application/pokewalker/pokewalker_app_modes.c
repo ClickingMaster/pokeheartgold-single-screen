@@ -105,7 +105,7 @@ int PokewalkerApp_LinkSave_Enter(PokewalkerApp *app) {
     app->strollMon = NULL;
     if (app->linkAction == 1) {
         PokewalkerApp_ReturnStrollMon(app);
-        PokewalkerApp_ReceiveMons(app, 1);
+        PokewalkerApp_ReceiveMons(app, TRUE);
         PokewalkerApp_ReceiveItems(app);
         PokewalkerApp_GiveStarfBerry(app);
         if (app->peerIdentity.hasWalkerMon == 0) {
@@ -125,7 +125,7 @@ int PokewalkerApp_LinkSave_Enter(PokewalkerApp *app) {
         app->state = 0;
     } else if (app->linkAction == 2) {
         PokewalkerApp_ReceiveItems(app);
-        PokewalkerApp_ReceiveMons(app, 0);
+        PokewalkerApp_ReceiveMons(app, FALSE);
         app->state = 5;
     } else if (app->linkAction == 4) {
         PokewalkerApp_ReturnStrollMon(app);

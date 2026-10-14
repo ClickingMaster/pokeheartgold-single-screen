@@ -213,16 +213,16 @@ BOOL SwalotPlop_Main(OverlayManager *man, int *state) {
         (*state)++;
         break;
     case 3:
-        if (LinkSync_IsSynced(1) != 0) {
+        if (LinkSync_IsSynced(1) != FALSE) {
             BeginNormalPaletteFade(0, 0x1B, 0x1B, 0xFFFF, 6, 1, HEAP_ID_106);
             (*state)++;
         }
         break;
     case 4:
-        SwalotPlopGame_RunIntro(app->game, 0);
-        if (IsPaletteFadeFinished() != 0) {
+        SwalotPlopGame_RunIntro(app->game, FALSE);
+        if (IsPaletteFadeFinished() != FALSE) {
             if (app->netId == 0) {
-                if (Comm_SendCommand(22, NULL, 0) != 0) {
+                if (Comm_SendCommand(22, NULL, 0) != FALSE) {
                     (*state)++;
                 }
             } else {
@@ -231,20 +231,20 @@ BOOL SwalotPlop_Main(OverlayManager *man, int *state) {
         }
         break;
     case 5:
-        SwalotPlopGame_RunIntro(app->game, 0);
-        if (app->startReceived != 0) {
+        SwalotPlopGame_RunIntro(app->game, FALSE);
+        if (app->startReceived != FALSE) {
             (*state)++;
         }
         break;
     case 6:
-        if (SwalotPlopGame_RunIntro(app->game, 1) == 0) {
+        if (SwalotPlopGame_RunIntro(app->game, TRUE) == FALSE) {
             (*state)++;
         }
         break;
     case 7:
-        if (app->finishReceived != 0) {
+        if (app->finishReceived != FALSE) {
             msg.score = SwalotPlopGame_GetScore(app->game);
-            if (Comm_SendCommand(25, &msg.score, 4) != 0) {
+            if (Comm_SendCommand(25, &msg.score, 4) != FALSE) {
                 (*state)++;
             }
         } else {
@@ -266,11 +266,11 @@ BOOL SwalotPlop_Main(OverlayManager *man, int *state) {
         }
         break;
     case 8:
-        SwalotPlopGame_RunFinish(app->game, 0);
+        SwalotPlopGame_RunFinish(app->game, FALSE);
         if (app->netId == 0) {
             if (SwalotPlopTally_HasAllScores(app->tally) == TRUE) {
                 SwalotPlopTally_GetScores(app->tally, msg.scores);
-                if (Comm_SendCommand(26, msg.scores, 0x10) != 0) {
+                if (Comm_SendCommand(26, msg.scores, 0x10) != FALSE) {
                     (*state)++;
                 }
             }
@@ -279,30 +279,30 @@ BOOL SwalotPlop_Main(OverlayManager *man, int *state) {
         }
         break;
     case 9:
-        SwalotPlopGame_RunFinish(app->game, 0);
+        SwalotPlopGame_RunFinish(app->game, FALSE);
         if (app->scoresReceived == TRUE) {
             (*state)++;
         }
         break;
     case 10:
-        if (SwalotPlopGame_RunFinish(app->game, 1) == 0) {
+        if (SwalotPlopGame_RunFinish(app->game, TRUE) == FALSE) {
             (*state)++;
         }
         break;
     case 11:
         BeginNormalPaletteFade(0, 0x1A, 0x1A, 0xFFFF, 6, 1, HEAP_ID_106);
-        SwalotPlopGame_RunFinish(app->game, 1);
+        SwalotPlopGame_RunFinish(app->game, TRUE);
         (*state)++;
         break;
     case 12:
-        SwalotPlopGame_RunFinish(app->game, 1);
-        if (IsPaletteFadeFinished() != 0) {
+        SwalotPlopGame_RunFinish(app->game, TRUE);
+        if (IsPaletteFadeFinished() != FALSE) {
             LinkSync_StartSync(3);
             (*state)++;
         }
         break;
     case 13:
-        if (LinkSync_IsSynced(3) == 0) {
+        if (LinkSync_IsSynced(3) == FALSE) {
             return FALSE;
         }
         if (args->unk38 != 0) {
@@ -357,7 +357,7 @@ BOOL SwalotPlop_Exit(OverlayManager *man, int *state) {
         (*state)++;
         break;
     case 1:
-        if (LinkSync_IsSynced(4) != 0 || Comm_CountConnected() < CommPlayerInfo_CountAccepted()) {
+        if (LinkSync_IsSynced(4) != FALSE || Comm_CountConnected() < CommPlayerInfo_CountAccepted()) {
             return TRUE;
         }
         break;
@@ -2846,7 +2846,7 @@ void SwalotPlopGfx_InitShotViews(SwalotPlopGfx *gfx, NARC *narc, enum HeapID hea
         ModelResource_LoadFromNarc(&gfx->shotModels[i], narc, sSwalotPlopShotModelFiles[i], heapId);
     }
     ModelResource_LoadFromNarc(&gfx->shadowModel, narc, 0x2E, heapId);
-    NNSi_G3dModifyPolygonAttrMask(gfx->shadowModel.model, 0, 0x1F << 16);
+    NNSi_G3dModifyPolygonAttrMask(gfx->shadowModel.model, FALSE, 0x1F << 16);
 
     gfx->shotRes[GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CHAR], narc, 7, FALSE, 100, NNS_G2D_VRAM_TYPE_2DSUB, heapId);
     gfx->shotRes[GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], narc, 4, FALSE, 100, NNS_G2D_VRAM_TYPE_2DSUB, 4, heapId);

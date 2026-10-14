@@ -447,12 +447,12 @@ void PokewalkerIr_SendChunk(void) {
     sizes = NULL;
     switch (ov112_021FFB24.step) {
     case 0x3A:
-        if (ov112_021FFAA4.upload0 != 0) {
+        if (ov112_021FFAA4.upload0 != NULL) {
             sizes = ov112_021FFAF0;
         }
         break;
     case 0x3C:
-        if (ov112_021FFAA4.upload1 != 0) {
+        if (ov112_021FFAA4.upload1 != NULL) {
             sizes = ov112_021FFAF8;
         }
         break;
@@ -667,7 +667,7 @@ void PokewalkerIr_OnReceiveComplete(void) {
     case 74:
         switch (ov112_021FFB24.command) {
         case 82:
-            PokewalkerIr_Send(0, 0, 36, 1);
+            PokewalkerIr_Send(NULL, 0, 36, 1);
             return;
         case 64:
             ov112_021FFB24.step = 76;
@@ -676,7 +676,7 @@ void PokewalkerIr_OnReceiveComplete(void) {
             return;
         case 176:
             if (ov112_021FFAA4.blocks->flags.hasData0) {
-                PokewalkerIr_Send(0, 0, 156, 1);
+                PokewalkerIr_Send(NULL, 0, 156, 1);
                 return;
             }
             ov112_021FFB24.step = 176;
@@ -685,7 +685,7 @@ void PokewalkerIr_OnReceiveComplete(void) {
             return;
         case 178:
             if (ov112_021FFAA4.blocks->flags.hasGiftMon) {
-                PokewalkerIr_Send(0, 0, 156, 1);
+                PokewalkerIr_Send(NULL, 0, 156, 1);
                 return;
             }
             ov112_021FFB24.step = 178;
@@ -694,7 +694,7 @@ void PokewalkerIr_OnReceiveComplete(void) {
             return;
         case 180:
             if (ov112_021FFAA4.blocks->flags.hasGiftItem) {
-                PokewalkerIr_Send(0, 0, 156, 1);
+                PokewalkerIr_Send(NULL, 0, 156, 1);
                 return;
             }
             ov112_021FFB24.step = 180;
@@ -703,7 +703,7 @@ void PokewalkerIr_OnReceiveComplete(void) {
             return;
         case 182:
             if (ov112_021FFAA4.blocks->flags.hasData3) {
-                PokewalkerIr_Send(0, 0, 156, 1);
+                PokewalkerIr_Send(NULL, 0, 156, 1);
                 return;
             }
             ov112_021FFB24.step = 182;
@@ -723,7 +723,7 @@ void PokewalkerIr_OnReceiveComplete(void) {
             return;
         }
     case 76:
-        PokewalkerIr_Send(0, 0, 36, 1);
+        PokewalkerIr_Send(NULL, 0, 36, 1);
         return;
     default:
         return;
@@ -929,32 +929,32 @@ void PokewalkerIr_OnReceive(void *data, u32 size, int command) {
     case 38:
         switch (ov112_021FFB24.command) {
         case 50:
-            PokewalkerIr_Send(0, 0, 56, 1);
+            PokewalkerIr_Send(NULL, 0, 56, 1);
             break;
         case 64:
-            PokewalkerIr_Send(0, 0, 78, 1);
+            PokewalkerIr_Send(NULL, 0, 78, 1);
             PokewalkerIr_SetError(15);
             PokewalkerIr_Disconnect();
             break;
         case 82:
-            PokewalkerIr_Send(0, 0, 90, 1);
+            PokewalkerIr_Send(NULL, 0, 90, 1);
             break;
         case 96:
-            PokewalkerIr_Send(0, 0, 102, 1);
+            PokewalkerIr_Send(NULL, 0, 102, 1);
             PokewalkerIr_SetError(15);
             PokewalkerIr_Disconnect();
             break;
         case 176:
-            PokewalkerIr_Send(0, 0, 192, 1);
+            PokewalkerIr_Send(NULL, 0, 192, 1);
             break;
         case 178:
-            PokewalkerIr_Send(0, 0, 194, 1);
+            PokewalkerIr_Send(NULL, 0, 194, 1);
             break;
         case 180:
-            PokewalkerIr_Send(0, 0, 196, 1);
+            PokewalkerIr_Send(NULL, 0, 196, 1);
             break;
         case 182:
-            PokewalkerIr_Send(0, 0, 198, 1);
+            PokewalkerIr_Send(NULL, 0, 198, 1);
             break;
         case 184:
         case 186:
@@ -963,20 +963,20 @@ void PokewalkerIr_OnReceive(void *data, u32 size, int command) {
             if (ov112_021FFAA4.blocks->flags.handshake == 15) {
                 switch (ov112_021FFAA4.blockIndex) {
                 case 0:
-                    PokewalkerIr_Send(0, 0, 208, 1);
+                    PokewalkerIr_Send(NULL, 0, 208, 1);
                     break;
                 case 1:
-                    PokewalkerIr_Send(0, 0, 210, 1);
+                    PokewalkerIr_Send(NULL, 0, 210, 1);
                     break;
                 case 2:
-                    PokewalkerIr_Send(0, 0, 212, 1);
+                    PokewalkerIr_Send(NULL, 0, 212, 1);
                     break;
                 case 3:
-                    PokewalkerIr_Send(0, 0, 214, 1);
+                    PokewalkerIr_Send(NULL, 0, 214, 1);
                     break;
                 }
             } else {
-                PokewalkerIr_Send(0, 0, ov112_021FFB24.command, 1);
+                PokewalkerIr_Send(NULL, 0, ov112_021FFB24.command, 1);
             }
             break;
         }

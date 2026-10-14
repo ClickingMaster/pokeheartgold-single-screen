@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include "constants/sndseq.h"
+
 #include "error_handling.h"
 #include "filesystem.h"
 #include "geometry_math.h"
@@ -208,8 +210,8 @@ int WobbuffetPopBalloon_UpdateDrag(WobbuffetPopBalloon *balloon) {
             balloon->playingPumpSe = 0;
             return 1;
         }
-        if (previous != -1 && current > previous && !IsSEPlaying(0x58f)) {
-            PlaySE(0x58f);
+        if (previous != -1 && current > previous && !IsSEPlaying(SEQ_SE_PL_BALLOON02)) {
+            PlaySE(SEQ_SE_PL_BALLOON02);
             balloon->playingPumpSe = 1;
         }
         amount = ((balloon->touch[1] - balloon->grabOffsetY) << 12) - (balloon->pushDepth + (sWobbuffetPopBalloonTouchTop[balloon->selection * 4] << 12));

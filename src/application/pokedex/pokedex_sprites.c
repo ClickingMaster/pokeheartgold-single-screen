@@ -1191,7 +1191,7 @@ void PokedexApp_CreateSearchSprites(PokedexAppData *pokedexApp) {
             template.x = 224;
             template.y = 72;
             pokedexApp->sprites[i] = SpriteSystem_NewSprite(pokedexApp->spriteSystem, pokedexApp->spriteManager, &template);
-            if (pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_BODY_TYPE] == 14) {
+            if (pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_BODY_TYPE] == DEX_SEARCH_BODYTYPE_ALL) {
                 PokedexApp_SetSpriteVisible(pokedexApp, i, FALSE);
             } else {
                 PokedexApp_SetSpriteAnim(pokedexApp, i, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_BODY_TYPE]);
@@ -1228,7 +1228,7 @@ void PokedexApp_FreeSprites26And27(PokedexAppData *pokedexApp) {
 
 // body type 14 is "any": no icon
 void PokedexApp_UpdateBodyTypeSprite(PokedexAppData *pokedexApp) {
-    if (pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_BODY_TYPE] == 14) {
+    if (pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_BODY_TYPE] == DEX_SEARCH_BODYTYPE_ALL) {
         PokedexApp_SetSpriteVisible(pokedexApp, 28, FALSE);
     } else {
         PokedexApp_SetSpriteVisible(pokedexApp, 28, TRUE);
@@ -1511,7 +1511,7 @@ void PokedexApp_SetSearchEntrySpritesVisible(PokedexAppData *pokedexApp, int vis
 }
 
 void PokedexApp_UpdateSearchBodyTypeIcon(PokedexAppData *pokedexApp) {
-    if (pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_BODY_TYPE] == 14) {
+    if (pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_BODY_TYPE] == DEX_SEARCH_BODYTYPE_ALL) {
         PokedexApp_SetSpriteVisible(pokedexApp, 43, FALSE);
     } else {
         PokedexApp_SetSpriteVisible(pokedexApp, 43, TRUE);
