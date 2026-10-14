@@ -139,8 +139,8 @@ static BOOL Task_StartMenu_HandleSelection_Save(TaskManager *taskManager);
 static void Task_StartMenu_WaitSaveAppOpen(TaskManager *taskManager);
 static void Task_StartMenu_WaitSaveAppClose(TaskManager *taskManager);
 static BOOL StartMenu_SelectUnionChatLog(TaskManager *taskManager);
-static void sub_0203D2EC(TaskManager *taskManager);
-static void sub_0203D304(TaskManager *taskManager);
+static void StartMenu_State19_Advance(TaskManager *taskManager);
+static void StartMenu_State20_Close(TaskManager *taskManager);
 static BOOL Task_StartMenu_HandleSelection_Options(TaskManager *taskManager);
 static BOOL Task_StartMenu_Options(TaskManager *taskManager);
 static BOOL Task_StartMenu_HandleReturn_Options(TaskManager *taskManager);
@@ -440,10 +440,10 @@ static BOOL Task_StartMenu(TaskManager *taskManager) {
         }
         break;
     case START_MENU_STATE_19:
-        sub_0203D2EC(taskManager);
+        StartMenu_State19_Advance(taskManager);
         break;
     case START_MENU_STATE_20:
-        sub_0203D304(taskManager);
+        StartMenu_State20_Close(taskManager);
         break;
     }
     if (startMenu->cursorActive) {
@@ -830,7 +830,7 @@ BOOL Task_StartMenu_HandleReturn_Pokemon(TaskManager *taskManager) {
         pokemonSummaryArgs->mode = 0;
         pokemonSummaryArgs->ribbons = Save_SpecialRibbons_Get(fieldSystem->saveData);
         pokemonSummaryArgs->natDexEnabled = SaveArray_IsNatDexEnabled(fieldSystem->saveData);
-        pokemonSummaryArgs->unk2C = sub_02088288(fieldSystem->saveData);
+        pokemonSummaryArgs->unk2C = PokemonSummary_GetDefaultUnk2C(fieldSystem->saveData);
         pokemonSummaryArgs->chatot = 0;
         pokemonSummaryArgs->menuInputStatePtr = &fieldSystem->menuInputState;
         pokemonSummaryArgs->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(fieldSystem->saveData);
@@ -851,7 +851,7 @@ BOOL Task_StartMenu_HandleReturn_Pokemon(TaskManager *taskManager) {
         pokemonSummaryArgs->moveToLearn = partyMenuArgs->moveId;
         pokemonSummaryArgs->mode = 2;
         pokemonSummaryArgs->natDexEnabled = SaveArray_IsNatDexEnabled(fieldSystem->saveData);
-        pokemonSummaryArgs->unk2C = sub_02088288(fieldSystem->saveData);
+        pokemonSummaryArgs->unk2C = PokemonSummary_GetDefaultUnk2C(fieldSystem->saveData);
         pokemonSummaryArgs->chatot = 0;
         pokemonSummaryArgs->menuInputStatePtr = &fieldSystem->menuInputState;
         pokemonSummaryArgs->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(fieldSystem->saveData);
@@ -876,7 +876,7 @@ BOOL Task_StartMenu_HandleReturn_Pokemon(TaskManager *taskManager) {
         pokemonSummaryArgs->moveToLearn = partyMenuArgs->moveId;
         pokemonSummaryArgs->mode = 2;
         pokemonSummaryArgs->natDexEnabled = SaveArray_IsNatDexEnabled(fieldSystem->saveData);
-        pokemonSummaryArgs->unk2C = sub_02088288(fieldSystem->saveData);
+        pokemonSummaryArgs->unk2C = PokemonSummary_GetDefaultUnk2C(fieldSystem->saveData);
         pokemonSummaryArgs->chatot = 0;
         pokemonSummaryArgs->menuInputStatePtr = &fieldSystem->menuInputState;
         pokemonSummaryArgs->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(fieldSystem->saveData);
@@ -1164,14 +1164,14 @@ static BOOL StartMenu_SelectUnionChatLog(TaskManager *taskManager) {
     return TRUE;
 }
 
-static void sub_0203D2EC(TaskManager *taskManager) {
+static void StartMenu_State19_Advance(TaskManager *taskManager) {
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
 
     startMenu->state = START_MENU_STATE_20;
 }
 
-static void sub_0203D304(TaskManager *taskManager) {
+static void StartMenu_State20_Close(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
 
@@ -1471,9 +1471,9 @@ static void Task_StartMenu_Evolution(TaskManager *taskManager) {
     Pokemon *pokemon = Party_GetMonByIndex(party, unk->partySlot);
     EvolutionTaskData *evolution;
     if (unk->evoType == EVOCTX_LEVELUP) {
-        evolution = EvolutionScene_New(party, pokemon, unk->species, Save_PlayerData_GetOptionsAddr(fieldSystem->saveData), sub_02088288(fieldSystem->saveData), Save_Pokedex_Get(fieldSystem->saveData), Save_Bag_Get(fieldSystem->saveData), Save_GameStats_Get(fieldSystem->saveData), unk->evoMethod, TRUE, HEAP_ID_EVOLUTION);
+        evolution = EvolutionScene_New(party, pokemon, unk->species, Save_PlayerData_GetOptionsAddr(fieldSystem->saveData), PokemonSummary_GetDefaultUnk2C(fieldSystem->saveData), Save_Pokedex_Get(fieldSystem->saveData), Save_Bag_Get(fieldSystem->saveData), Save_GameStats_Get(fieldSystem->saveData), unk->evoMethod, TRUE, HEAP_ID_EVOLUTION);
     } else {
-        evolution = EvolutionScene_New(party, pokemon, unk->species, Save_PlayerData_GetOptionsAddr(fieldSystem->saveData), sub_02088288(fieldSystem->saveData), Save_Pokedex_Get(fieldSystem->saveData), Save_Bag_Get(fieldSystem->saveData), Save_GameStats_Get(fieldSystem->saveData), unk->evoMethod, FALSE, HEAP_ID_EVOLUTION);
+        evolution = EvolutionScene_New(party, pokemon, unk->species, Save_PlayerData_GetOptionsAddr(fieldSystem->saveData), PokemonSummary_GetDefaultUnk2C(fieldSystem->saveData), Save_Pokedex_Get(fieldSystem->saveData), Save_Bag_Get(fieldSystem->saveData), Save_GameStats_Get(fieldSystem->saveData), unk->evoMethod, FALSE, HEAP_ID_EVOLUTION);
     }
     StartMenuAfterEvoPartySlotBak *newEnv = Heap_Alloc(HEAP_ID_FIELD2, sizeof(StartMenuAfterEvoPartySlotBak));
     newEnv->partySlot = unk->partySlot;

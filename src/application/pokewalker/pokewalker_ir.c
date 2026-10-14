@@ -43,7 +43,7 @@ u16 PokewalkerIr_Checksum(u8 *bytes, u32 len) {
     return sum;
 }
 
-void ov112_021E5938(void) {
+void PokewalkerIr_MarkDisconnected(void) {
     gPokewalkerIrLink.closing = 1;
     gPokewalkerIrLink.numDisconnects++;
 }
@@ -136,13 +136,13 @@ void PokewalkerIr_Send(void *data, int len, u8 command, u8 arg) {
     }
 }
 
-void ov112_021E5A80(void) {
+void PokewalkerIr_PollDummy(void) {
 }
 
 #pragma force_active on
 #pragma optimization_level 1
 
-BOOL ov112_021E5A84(u32 size) {
+BOOL PokewalkerIr_ShouldDropShortPacket(u32 size) {
     u32 i;
     if (size == 1) {
         if (gPokewalkerIrLink.active != 0) {
@@ -216,7 +216,7 @@ test:
         if (i < size) {
             goto loop;
         }
-        ((void (*)(u32))ov112_021E5938)(i);
+        ((void (*)(u32))PokewalkerIr_MarkDisconnected)(i);
     }
     return FALSE;
 }
@@ -227,7 +227,7 @@ test:
 int PokewalkerIr_Poll(void) {
     PokewalkerIrPacket *packet;
     u32 length = CARD_SpiWaitReadRange(&gPokewalkerIrPacket);
-    if (ov112_021E5A84(length)) {
+    if (PokewalkerIr_ShouldDropShortPacket(length)) {
         length = 0;
     }
     if (length == 0) {
@@ -274,9 +274,9 @@ int PokewalkerIr_Poll(void) {
         }
         PokewalkerIr_SendPacket(NULL, 0, 0xFA, _021FF500[0], gPokewalkerIrLink.ownId);
         if (gPokewalkerIrLink.active) {
-            ov112_021E5938();
+            PokewalkerIr_MarkDisconnected();
         }
-        ov112_021E5A80();
+        PokewalkerIr_PollDummy();
         break;
     case 0xFA:
         if (gPokewalkerIrLink.handshakeState != 1) {
@@ -309,7 +309,7 @@ int PokewalkerIr_Poll(void) {
         }
         break;
     case 0xF6:
-        ov112_021E5938();
+        PokewalkerIr_MarkDisconnected();
         break;
     default:
         if (gPokewalkerIrLink.closing != 1) {
@@ -337,7 +337,7 @@ void PokewalkerIr_SetCloseCallback(void *callback) {
     gPokewalkerIrLink.onClose = callback;
 }
 
-void ov112_021E5D5C(u8 value) {
+void PokewalkerIr_SetSendParam(u8 value) {
     _021FF500[0] = value;
 }
 
@@ -1124,7 +1124,7 @@ void PokewalkerIr_Start(void *stack, u32 stackSize, u32 priority) {
     ov112_021FFAA4.compressedSizes = NULL;
     ov112_021FFAA4.compressBuffer = NULL;
     PokewalkerIr_InitLink();
-    ov112_021E5D5C(1);
+    PokewalkerIr_SetSendParam(1);
     PokewalkerIr_SetConnectCallback(PokewalkerIr_OnConnect);
     PokewalkerIr_SetReceiveCallback(PokewalkerIr_OnReceive);
     PokewalkerIr_SetCloseCallback(PokewalkerIr_RestartTransfer);

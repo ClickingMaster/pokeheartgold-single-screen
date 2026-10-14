@@ -8,7 +8,7 @@
 #include "field_terrain.h"
 
 // Defined elsewhere without a header yet.
-int sub_020548EC(FieldSystem *fieldSystem, int x, int z); // defined as u8; the caller truncates the result itself
+int FieldSystem_GetTileAttrBits8To14(FieldSystem *fieldSystem, int x, int z); // defined as u8; the caller truncates the result itself
 int FieldSystem_GetTerrainHeight(FieldSystem *fieldSystem, int y, int x, int z, u8 *floorType);
 void MapObject_GetPreviousCoordsBehind(LocalMapObject *object, int *x, int *z);
 
@@ -144,7 +144,7 @@ BOOL MapObject_CheckWaterBehavior(LocalMapObject *object, int behavior) {
         }
     } else if (MetatileBehavior_IsSurfableWater((u8)behavior)) {
         return 1;
-    } else if (sub_0205B78C((u8)behavior)) {
+    } else if (MetatileBehavior_Is34((u8)behavior)) {
         u32 sprite = MapObject_GetSpriteID(object) - 0xB2;
         if (sprite <= 1) {
             return 1;
@@ -210,10 +210,10 @@ int MapObject_GetMetatileBehaviorInDirection(LocalMapObject *object, int directi
     return GetMetatileBehavior(MapObject_GetFieldSystem(object), x, z);
 }
 
-u8 sub_02060FE0(LocalMapObject *object, int direction) {
+u8 MapObject_GetTileAttrBits8To14InDirection(LocalMapObject *object, int direction) {
     int x = MapObject_GetXCoord(object) + GetDeltaXByFacingDirection(direction);
     int z = MapObject_GetZCoord(object) + GetDeltaYByFacingDirection(direction);
-    return sub_020548EC(MapObject_GetFieldSystem(object), x, z);
+    return FieldSystem_GetTileAttrBits8To14(MapObject_GetFieldSystem(object), x, z);
 }
 
 void MapObject_OffsetPositionInDirection(LocalMapObject *object, int direction, int distance) {

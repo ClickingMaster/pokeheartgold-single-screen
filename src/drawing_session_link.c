@@ -25,14 +25,14 @@ void DrawingSessionLink_ReceivePictureChunk(void *a, void *b, void *data, Drawin
     }
 }
 
-void sub_0208F8BC(int index, void *unused, const u8 *src, DrawingSessionLinkWork *work) {
+void DrawingSessionLink_ReceiveMemberStroke(int index, void *unused, const u8 *src, DrawingSessionLinkWork *work) {
     if (index != 0) {
         work = (DrawingSessionLinkWork *)((u8 *)work + index * 10);
         *(TenBytes *)&work->raw[0x93bd] = *(const TenBytes *)src;
     }
 }
 
-void sub_0208F8E4(int index, void *unused, const u8 *src, DrawingSessionLinkWork *work) {
+void DrawingSessionLink_ReceiveStrokes(int index, void *unused, const u8 *src, DrawingSessionLinkWork *work) {
     if (work != 0 && index == 0) {
         int row = 0;
         do {
@@ -101,7 +101,7 @@ void DrawingSessionLink_HandleJoinRequest(int id, void *unused, const FourBytes 
     }
 }
 
-void sub_0208FA50(void) {
+void DrawingSessionLink_ReceiveDummy103(void) {
 }
 
 void DrawingSessionLink_ReceiveMemberJoined(void *a, void *b, const u8 *data, DrawingSessionLinkWork *work) {
@@ -112,13 +112,13 @@ void DrawingSessionLink_ReceiveMemberJoined(void *a, void *b, const u8 *data, Dr
     }
 }
 
-void sub_0208FA88(void) {
+void DrawingSessionLink_ReceiveDummy99(void) {
 }
 
-void sub_0208FA8C(void) {
+void DrawingSessionLink_ReceiveDummy100(void) {
 }
 
-void sub_0208FA90(void *a, void *b, void *c, DrawingSessionLinkWork *work) {
+void DrawingSessionLink_ReceiveEvent15(void *a, void *b, void *c, DrawingSessionLinkWork *work) {
     if (Comm_GetLocalNetId() != 0) {
         DrawingSession_HandleNetEvent(work, 15, 0);
     }
@@ -140,7 +140,7 @@ void DrawingSessionLink_ReceiveJoinNotice(int value, void *b, void *c, DrawingSe
     CommState_SetErrorWatch(0, 1);
 }
 
-void sub_0208FAEC(void *a, void *b, void *c, DrawingSessionLinkWork *work) {
+void DrawingSessionLink_ReceiveSetJoinState1(void *a, void *b, void *c, DrawingSessionLinkWork *work) {
     U32(work, 0x93f4) = 1;
 }
 
@@ -168,7 +168,7 @@ void *DrawingSessionLink_GetChunkRecvBuffer(int index, void *base) {
     return (u8 *)base + 0x8000 + index * 0x3f0;
 }
 
-int sub_0208FB5C(void) {
+int DrawingSessionLink_GetSize4(void) {
     return 4;
 }
 

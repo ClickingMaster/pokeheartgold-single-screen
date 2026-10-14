@@ -155,7 +155,7 @@ void BattleAnimUtil_LoadMonIntoPicOppositeFacing(struct BattleAnimBattlerPicPara
 void BattleAnimUtil_LoadMonIntoPic(struct BattleAnimBattlerPicParams *params, int target, BOOL oppositeFacing, enum HeapID heapId);
 void BattleAnimUtil_RestorePic(struct BattleAnimBattlerPicParams *params, enum HeapID heapId);
 void BattleAnimUtil_LoadSubstituteIntoPic(struct BattleAnimBattlerPicParams *params, enum HeapID heapId);
-s16 ov07_02234B5C(u32 battlerType, u32 index);
+s16 BattleAnimUtil_GetBattlerTypeCoord(u32 battlerType, u32 index);
 
 // Overlay 7 functions of other modules that no header declares yet (types as their modules declare them)
 void BattleAnimSystem_InitBlend(void);

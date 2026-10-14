@@ -125,7 +125,7 @@ void WiFiPlaza_SendMinigameResultNews(void *unused, int mode, u8 kind, u32 slot0
     }
 }
 
-int ov45_0222AD2C(WiFiPlazaWork *work) {
+int WiFiPlazaWork_GetScheduleValue3(WiFiPlazaWork *work) {
     int value = WiFiPlazaLobbyClient_GetScheduleValue(3);
     if ((u32)value >= 5) {
         value = 0;
@@ -133,7 +133,7 @@ int ov45_0222AD2C(WiFiPlazaWork *work) {
     return value;
 }
 
-int ov45_0222AD3C(WiFiPlazaWork *work) {
+int WiFiPlazaWork_GetScheduleValue2(WiFiPlazaWork *work) {
     int value = WiFiPlazaLobbyClient_GetScheduleValue(2);
     if ((u32)value >= 5) {
         value = 0;
@@ -340,10 +340,10 @@ void WiFiPlazaWork_GetTalkTimeoutCounter(WiFiPlazaWork *work) {
     WiFiPlazaTalkSession_GetTimeoutCounter(&work->talk);
 }
 
-void ov45_0222B0A4(WiFiPlazaWork *work) {
+void WiFiPlazaWork_SetTalkField07(WiFiPlazaWork *work) {
     work->talk.unk_07 = 1;
 }
 
-u8 ov45_0222B0B0(WiFiPlazaWork *work) {
+u8 WiFiPlazaWork_GetTalkField07(WiFiPlazaWork *work) {
     return work->talk.unk_07;
 }

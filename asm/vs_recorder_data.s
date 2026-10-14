@@ -3330,8 +3330,8 @@
 	.public VsRecorder_HasResumeScreen
 	.public VsRecorder_SetResumeScreen
 	.public VsRecorder_LoadFrameBg
-	.public ov40_0222C6C8
-	.public ov40_0222C710
+	.public VsRecorder_LoadMessageBg
+	.public VsRecorder_LoadBoxDataMessageBg
 	.public VsRecorder_LoadDecorGfx
 	.public VsRecorder_CreateDecorSprites
 	.public VsRecorder_DeleteDecorSprites
@@ -3354,9 +3354,9 @@
 	.public VsRecorder_CreateTextSprite
 	.public VsRecorder_SetTextSpriteMsg
 	.public VsRecorder_FreeTextSprite
-	.public ov40_0222D6EC
+	.public VsRecorder_LoadButtonGfx31
 	.public VsRecorder_LoadButtonGfx
-	.public ov40_0222D78C
+	.public VsRecorder_LoadSlotButtonGfx
 	.public VsRecorder_FreeButtonGfx
 	.public VsRecorder_NewButtonSprite
 	.public VsRecorder_FreeMenuRows
@@ -3444,9 +3444,9 @@
 	.public VsRecorder_DeleteSprite
 	.public VsRecorder_PrintVideoInfo
 	.public VsRecorder_RemoveVideoInfoWindows
-	.public ov40_022303B8
-	.public ov40_02230404
-	.public ov40_02230410
+	.public VsRecorder_HeaderUsesThreeMonLayout
+	.public VsRecorderVideoInfo_UsesThreeMonLayout
+	.public VsRecorderVideoInfo_GetScreenId
 	.public VsRecorder_CreateVideoPartyIcons
 	.public VsRecorder_CreateVideoInfo
 	.public VsRecorder_FreeVideoInfo
@@ -4025,8 +4025,8 @@
 	.public VsRecorder_OpenMonIconNarc
 	.public VsRecorder_CloseMonIconNarc
 	.public VsRecorder_DeleteSprite
-	.public ov40_02230404
-	.public ov40_02230410
+	.public VsRecorderVideoInfo_UsesThreeMonLayout
+	.public VsRecorderVideoInfo_GetScreenId
 	.public VsRecorder_CreateVideoInfo
 	.public VsRecorder_SetVideoPartyIconsDrawFlag
 	.public VsRecorder_ResetRecordSave

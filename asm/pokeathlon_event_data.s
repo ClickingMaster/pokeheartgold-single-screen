@@ -281,7 +281,7 @@
 	.public PokeathlonCourse_FreeObjTransfer
 	.public PokeathlonCourseScoreList_Init
 	.public PokeathlonCourseScoreList_GetCount
-	.public ov96_021E9528
+	.public PokeathlonCourseScoreList_GetField04
 	.public PokeathlonCourseCmd_EventsSize
 	.public PokeathlonCourseCmd_ParticipantSize
 	.public PokeathlonCourseCmd_AllParticipantsSize

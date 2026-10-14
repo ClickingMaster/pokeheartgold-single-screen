@@ -369,7 +369,7 @@ void VsRecorder_LoadFrameBg(VsRecorderWork *work) {
 
 #pragma force_active reset
 
-void ov40_0222C6C8(VsRecorderWork *work, GFBgLayer layer, BOOL alternate) {
+void VsRecorder_LoadMessageBg(VsRecorderWork *work, GFBgLayer layer, BOOL alternate) {
     NARC *narc = work->narc;
     BgConfig *bgConfig = work->bgConfig;
     int screen = 2;
@@ -382,7 +382,7 @@ void ov40_0222C6C8(VsRecorderWork *work, GFBgLayer layer, BOOL alternate) {
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, screen, bgConfig, layer, 0, 0, FALSE, HEAP_ID_109);
 }
 
-void ov40_0222C710(VsRecorderWork *work, GFBgLayer layer) {
+void VsRecorder_LoadBoxDataMessageBg(VsRecorderWork *work, GFBgLayer layer) {
     NARC *narc = work->narc;
     BgConfig *bgConfig = work->bgConfig;
 

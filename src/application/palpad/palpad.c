@@ -491,7 +491,7 @@ void PalPadGfx_BufferFriendName(PalPadGfx *gfx, SaveData *saveData, int slot, en
     Heap_Free(profile);
 }
 
-void ov43_0222AB5C(PalPadGfx *gfx, SaveData *saveData, int slot, enum HeapID heapId) {
+void PalPadGfx_BufferFriendGroupName(PalPadGfx *gfx, SaveData *saveData, int slot, enum HeapID heapId) {
     PlayerProfile *profile = PlayerProfile_New(heapId);
     FriendRoster *wifiList = Save_FriendRoster_Get(saveData);
 

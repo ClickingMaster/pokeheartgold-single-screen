@@ -568,7 +568,7 @@ int PokewalkerApp_LoadMonPicture(BoxPokemon *boxMon, void *buffer, PokepicTempla
 }
 #pragma force_active reset
 
-BOOL ov112_021E9338(PokewalkerApp *app) {
+BOOL PokewalkerApp_IsStrollStateNonzero(PokewalkerApp *app) {
     u16 unk0;
     u16 unk2;
     Pokewalker_GetStrollState(app->pokewalker, &unk0, &unk2);

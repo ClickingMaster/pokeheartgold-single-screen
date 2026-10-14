@@ -31,7 +31,7 @@ u16 GBSounds_GetGBSeqNoByDSSeqNo(u16 seqNo);
 void Sound_ReloadFieldSceneData(u16 seqNo, int bankNo);
 u8 GF_GetPlayerNoBySeq(u16 seqNo);
 int Sound_GetSavedHeapLevel(int state);
-void sub_02005464(int seqNo, enum SoundHandleNo handleNo);
+void Sound_ApplyVoiceChatVolume(int seqNo, enum SoundHandleNo handleNo);
 void Sound_SetReloadFieldSeqFlag(u16 seqNo);
 void GF_SndSetFadeTimer(u32 frames);
 void Sound_StopWaveOut(int handleNo);
@@ -75,7 +75,7 @@ void SetPlayerPan(int playerNo, int pan);
 void SetAllSEPan(int pan);
 BOOL IsShayminSkyCry(u16 species, u8 form);
 void ClearQueuedCries(void);
-void sub_02006820(int species, int handleNo, int volume);
+void Sound_SetInitialVolumeWithVoiceChat(int species, int handleNo, int volume);
 void StartCryStopTask(int frames, int heapId);
 BOOL PlayChorusCryWithPitch(u16 species, int pitch, u8 form);
 void PlayReversedCry(u16 species, int pitch, int volume, int pan, int heapId);
@@ -118,7 +118,7 @@ BOOL PlayBGM(u16 seqNo) {
 
 void Sound_OnBGMStarted(u16 seqNo, enum SoundHandleNo handleNo) {
     Sound_SetCurrentBGM(seqNo);
-    sub_02005464(seqNo, handleNo);
+    Sound_ApplyVoiceChatVolume(seqNo, handleNo);
     GF_SndSetState(1);
     if (handleNo == SND_HANDLE_FIELD) {
         GF_SndWorkSetGbSoundsVolume(128);
@@ -272,7 +272,7 @@ BOOL PlaySEEx(enum SoundHandleNo handleNo, int playerNo, int bankNo, int playerP
         return FALSE;
     }
     BOOL success = Sound_StartSeq(handleNo, playerNo, bankNo, playerPrio, seqNo, 0);
-    sub_02005464(seqNo, handleNo);
+    Sound_ApplyVoiceChatVolume(seqNo, handleNo);
     if (!success) {
         GF_SndOnStartSeqFailed(seqNo);
     }
@@ -362,10 +362,10 @@ BOOL PlayCry(u16 species, u8 form) {
             StopCry(0);
         }
         success = Sound_StartSeq(SND_HANDLE_PV, -1, species, -1, 2, 0);
-        sub_02005464(species, SND_HANDLE_PV);
+        Sound_ApplyVoiceChatVolume(species, SND_HANDLE_PV);
     } else {
         success = Sound_StartSeq(SND_HANDLE_CHORUS, -1, species, -1, 2, 0);
-        sub_02005464(species, SND_HANDLE_CHORUS);
+        Sound_ApplyVoiceChatVolume(species, SND_HANDLE_CHORUS);
     }
     Chatot_SetForceDefaultCry(0);
     return success;
@@ -447,13 +447,13 @@ BOOL PlayCryEx(u32 pattern, u16 species, int pan, int volume, int heapId, u8 for
             PlayCry(SPECIES_CHATOT, form);
             if (*chatotMode == 0) {
                 GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-                sub_02006820(species, 1, volume);
+                Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
             } else if (*firstActive == 1) {
                 Sound_SetWaveOutPan(14, wavePan);
                 Sound_SetWaveOutVolume(14, volume);
             } else {
                 GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-                sub_02006820(species, 1, volume);
+                Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
             }
             return TRUE;
         default:
@@ -465,32 +465,32 @@ BOOL PlayCryEx(u32 pattern, u16 species, int pan, int volume, int heapId, u8 for
     case 0:
         PlayCry(species, form);
         GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-        sub_02006820(species, 1, volume);
+        Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
         break;
     case 1:
         PlayCry(species, form);
         GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-        sub_02006820(species, 1, volume);
+        Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
         StartCryStopTask(20, heapId);
         break;
     case 2:
         PlayCry(species, form);
         GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-        sub_02006820(species, 1, volume);
+        Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
         GF_SndHandleSetTrackPitch(1, 0xFFFF, 64);
         PlayChorusCryWithPitch(species, 20, form);
         GF_SndHandleSetTrackPan(8, 0xFFFF, pan);
-        sub_02006820(species, 8, chorusVolume);
+        Sound_SetInitialVolumeWithVoiceChat(species, 8, chorusVolume);
         break;
     case 3:
         PlayCry(species, form);
         GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-        sub_02006820(species, 1, volume);
+        Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
         StartCryStopTask(30, heapId);
         GF_SndHandleSetTrackPitch(1, 0xFFFF, 192);
         PlayChorusCryWithPitch(species, 16, form);
         GF_SndHandleSetTrackPan(8, 0xFFFF, pan);
-        sub_02006820(species, 8, chorusVolume);
+        Sound_SetInitialVolumeWithVoiceChat(species, 8, chorusVolume);
         break;
     case 4:
         Sound_AllocWaveOutChannel(14);
@@ -504,29 +504,29 @@ BOOL PlayCryEx(u32 pattern, u16 species, int pan, int volume, int heapId, u8 for
     case 5:
         PlayCry(species, form);
         GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-        sub_02006820(species, 1, volume);
+        Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
         GF_SndHandleSetTrackPitch(1, 0xFFFF, -224);
         break;
     case 6:
         PlayCry(species, form);
         GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-        sub_02006820(species, 1, volume);
+        Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
         GF_SndHandleSetTrackPitch(1, 0xFFFF, 44);
         PlayChorusCryWithPitch(species, -64, form);
         GF_SndHandleSetTrackPan(8, 0xFFFF, pan);
-        sub_02006820(species, 8, chorusVolume);
+        Sound_SetInitialVolumeWithVoiceChat(species, 8, chorusVolume);
         break;
     case 7:
         PlayCry(species, form);
         GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-        sub_02006820(species, 1, volume);
+        Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
         StartCryStopTask(11, heapId);
         GF_SndHandleSetTrackPitch(1, 0xFFFF, -128);
         break;
     case 8:
         PlayCry(species, form);
         GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-        sub_02006820(species, 1, volume);
+        Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
         StartCryStopTask(60, heapId);
         GF_SndHandleSetTrackPitch(1, 0xFFFF, 60);
         break;
@@ -540,26 +540,26 @@ BOOL PlayCryEx(u32 pattern, u16 species, int pan, int volume, int heapId, u8 for
     case 10:
         PlayCry(species, form);
         GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-        sub_02006820(species, 1, volume);
+        Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
         StartCryStopTask(100, heapId);
         GF_SndHandleSetTrackPitch(1, 0xFFFF, -44);
         break;
     case 11:
         PlayCry(species, form);
         GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-        sub_02006820(species, 1, volume);
+        Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
         GF_SndHandleSetTrackPitch(1, 0xFFFF, -96);
         break;
     case 12:
         PlayCry(species, form);
         GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-        sub_02006820(species, 1, volume);
+        Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
         StartCryStopTask(20, heapId);
         GF_SndHandleSetTrackPitch(1, 0xFFFF, -96);
         break;
     case 13:
         PlayCry(species, form);
-        sub_02006820(species, 1, 127);
+        Sound_SetInitialVolumeWithVoiceChat(species, 1, 127);
         PlayChorusCryWithPitch(species, 20, form);
         GF_SndHandleSetTrackPan(8, 0xFFFF, pan);
         GF_SndHandleMoveVolume(8, volume, 0);
@@ -571,9 +571,9 @@ BOOL PlayCryEx(u32 pattern, u16 species, int pan, int volume, int heapId, u8 for
     return TRUE;
 }
 
-void sub_02006820(int species, int handleNo, int volume) {
+void Sound_SetInitialVolumeWithVoiceChat(int species, int handleNo, int volume) {
     GF_SndHandleSetInitialVolume(handleNo, volume);
-    sub_02005464(species, (enum SoundHandleNo)handleNo);
+    Sound_ApplyVoiceChatVolume(species, (enum SoundHandleNo)handleNo);
 }
 
 void StartCryStopTask(int frames, int heapId) {
@@ -735,7 +735,7 @@ BOOL PlayFanfare(u16 seqNo) {
     GF_Snd_SaveState(GF_SdatGetAttrPtr(29));
     GF_Snd_LoadSeqEx(seqNo, 3);
     BOOL success = Sound_StartSeq(SND_HANDLE_ME, -1, -1, -1, seqNo, 0);
-    sub_02005464(seqNo, SND_HANDLE_ME);
+    Sound_ApplyVoiceChatVolume(seqNo, SND_HANDLE_ME);
     return success;
 }
 

@@ -590,14 +590,14 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
         resume = app->flags.bits.linkResume;
         if (resume == 1) {
             BattleCastlePartyApp_OpenHealMenu(app);
-            ov83_02247630(app->unk_778, 204, 100);
+            BattleCastleSprite_ShowAnim11WithSE(app->unk_778, 204, 100);
             app->subState = CASTLE_PARTY_STATE_HEAL_MENU;
             app->flags.bits.linkResume = 0;
             return FALSE;
         }
         if (resume == 2) {
             BattleCastlePartyApp_OpenRentalMenu(app);
-            ov83_02247630(app->unk_778, 211, 106);
+            BattleCastleSprite_ShowAnim11WithSE(app->unk_778, 211, 106);
             app->subState = CASTLE_PARTY_STATE_RENTAL_MENU;
             app->flags.bits.linkResume = 0;
             return FALSE;
@@ -617,7 +617,7 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
             return TRUE;
         case GRID_MENU_CANCEL:
             if (app->cursorPos != app->numOwnSlots) {
-                ov83_02247B04(app->partyGrid);
+                BattleCastle_SetGridInputsToNext(app->partyGrid);
                 BattleCastlePartyApp_SetCursorPos(app, CASTLE_PARTY_GRID_EXIT, app->cursorPos);
             }
             break;
@@ -794,7 +794,7 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
         if (BattleCastle_IsAdvancePressed() == TRUE) {
             PlaySE(SEQ_SE_DP_SELECT);
             BattleCastlePartyApp_OpenHealMenu(app);
-            ov83_02247630(app->unk_778, 204, 100);
+            BattleCastleSprite_ShowAnim11WithSE(app->unk_778, 204, 100);
             app->subState = CASTLE_PARTY_STATE_HEAL_MENU;
         }
         break;
@@ -1019,7 +1019,7 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
         if (BattleCastle_IsAdvancePressed() == TRUE) {
             PlaySE(SEQ_SE_DP_SELECT);
             BattleCastlePartyApp_OpenRentalMenu(app);
-            ov83_02247630(app->unk_778, 211, 106);
+            BattleCastleSprite_ShowAnim11WithSE(app->unk_778, 211, 106);
             app->subState = CASTLE_PARTY_STATE_RENTAL_MENU;
         }
         break;

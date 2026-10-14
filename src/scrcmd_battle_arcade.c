@@ -249,7 +249,7 @@ static u32 BattleArcadeSelectMons_OpenSummary(FrontierSelectMonsEnv *env, FieldS
     unk->options = Save_PlayerData_GetOptionsAddr(saveData);
     unk->party = SaveArray_Party_Get(saveData);
     unk->natDexEnabled = SaveArray_IsNatDexEnabled(saveData);
-    unk->unk2C = sub_02088288(saveData);
+    unk->unk2C = PokemonSummary_GetDefaultUnk2C(saveData);
     unk->monDataType = 1;
     unk->partySlot = env->partySlot;
     unk->partyCount = Party_GetCount(unk->party);

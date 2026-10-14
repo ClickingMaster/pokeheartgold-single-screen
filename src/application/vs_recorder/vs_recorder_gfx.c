@@ -167,7 +167,7 @@ void VsRecorder_FreeTextSprite(VsRecorderTextSprite *textSprite) {
     ObjCharTransfer_FreeCharSpace(&textSprite->charAlloc);
 }
 
-void ov40_0222D6EC(VsRecorderWork *work, int vram) {
+void VsRecorder_LoadButtonGfx31(VsRecorderWork *work, int vram) {
     NARC *narc = work->narc;
     SpriteSystem *spriteSystem = work->spriteSystem;
     SpriteManager *spriteManager = work->spriteManager;
@@ -187,7 +187,7 @@ void VsRecorder_LoadButtonGfx(VsRecorderWork *work, int vram) {
     SpriteSystem_LoadAnimResObjFromOpenNarc(spriteSystem, spriteManager, narc, 0x7C, FALSE, 11924);
 }
 
-void ov40_0222D78C(VsRecorderWork *work, int vram) {
+void VsRecorder_LoadSlotButtonGfx(VsRecorderWork *work, int vram) {
     NARC *narc = work->narc;
     SpriteSystem *spriteSystem = work->spriteSystem;
     SpriteManager *spriteManager = work->spriteManager;

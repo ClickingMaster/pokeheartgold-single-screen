@@ -146,7 +146,7 @@
 .public Party_GetCount
 .public Party_GetMonByIndex
 .public SaveArray_IsNatDexEnabled
-.public sub_02088288
+.public PokemonSummary_GetDefaultUnk2C
 .public PokemonSummary_SetPages
 .public PokemonSummaryArgs_SetPlayer
 .public FrontierLink_RegisterCommands

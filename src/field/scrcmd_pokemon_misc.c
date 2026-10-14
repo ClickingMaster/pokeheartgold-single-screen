@@ -879,7 +879,7 @@ BOOL ScrCmd_LaunchApricornBoxForJuice(ScriptContext *ctx) {
     ApricornBoxArgs **args = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
     u32 unkVar = ScriptGetVar(ctx);
     u16 *unkPtrB = ScriptGetVarPointer(ctx);
-    *args = sub_0203ED80(ctx->fieldSystem, unkVar, unkPtrB);
+    *args = ApricornBox_LaunchAppForJuice(ctx->fieldSystem, unkVar, unkPtrB);
     SetupNativeScript(ctx, ScrNative_WaitApplication_DestroyTaskData);
     return TRUE;
 }

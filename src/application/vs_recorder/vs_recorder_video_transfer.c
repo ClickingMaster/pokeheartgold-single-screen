@@ -200,7 +200,7 @@ BOOL VsRecorder_VideoSearchResume(VsRecorderWork *work) {
     case 2:
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_CreateVideoInfo(&search->info, work);
-        VsRecorder_LoadScreen(work, ov40_02230410(&search->info), GF_BG_LYR_MAIN_3);
+        VsRecorder_LoadScreen(work, VsRecorderVideoInfo_GetScreenId(&search->info), GF_BG_LYR_MAIN_3);
         VsRecorder_SetVideoPartyIconsDrawFlag(&search->info, FALSE);
         VsRecorder_SetVBlankPaused(work, FALSE);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
@@ -564,7 +564,7 @@ BOOL VsRecorder_NumberSearchShowDetails(VsRecorderWork *work) {
         VsRecorder_SetVBlankPaused(work, TRUE);
         search->showProfile = 0;
         VsRecorder_CreateVideoInfo(&search->info, work);
-        VsRecorder_LoadScreen(work, ov40_02230410(&search->info), GF_BG_LYR_MAIN_3);
+        VsRecorder_LoadScreen(work, VsRecorderVideoInfo_GetScreenId(&search->info), GF_BG_LYR_MAIN_3);
         VsRecorder_SetVideoPartyIconsDrawFlag(&search->info, FALSE);
         VsRecorder_SetVBlankPaused(work, FALSE);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
@@ -717,7 +717,7 @@ void VsRecorder_ShowSearchMessage(VsRecorderWork *work, int msgId, int unused) {
     VsRecorderVideoSearch *search = work->screenWork;
     String *str;
 
-    ((void (*)(VsRecorderWork *, GFBgLayer))ov40_0222C6C8)(work, GF_BG_LYR_MAIN_2); // the third argument is left unset
+    ((void (*)(VsRecorderWork *, GFBgLayer))VsRecorder_LoadMessageBg)(work, GF_BG_LYR_MAIN_2); // the third argument is left unset
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
     InitWindow(window);
     AddWindowParameterized(work->bgConfig, window, GF_BG_LYR_MAIN_2, 1, 19, 30, 4, 14, 0x12C);
@@ -802,7 +802,7 @@ void VsRecorder_CreateSearchSlotButtons(VsRecorderWork *work) {
     const int *anim;
     int i;
 
-    ov40_0222D78C(work, NNS_G2D_VRAM_TYPE_2DSUB);
+    VsRecorder_LoadSlotButtonGfx(work, NNS_G2D_VRAM_TYPE_2DSUB);
     msgId = msgIds.values;
     y = 105;
     gfx = (VsRecorderGfx *)work;
@@ -1032,7 +1032,7 @@ BOOL VsRecorder_NumberSearchResume(VsRecorderWork *work) {
         if (search->showProfile == 0) {
             VsRecorder_CreateVideoInfo(&search->info, work);
             VsRecorder_SetVideoPartyIconsDrawFlag(&search->info, FALSE);
-            VsRecorder_LoadScreen(work, ov40_02230410(&search->info), GF_BG_LYR_MAIN_3);
+            VsRecorder_LoadScreen(work, VsRecorderVideoInfo_GetScreenId(&search->info), GF_BG_LYR_MAIN_3);
         } else {
             VsRecorder_CreateProfile(&search->profile, work);
             VsRecorder_SetProfileDrawFlag(&search->profile, FALSE);
@@ -1485,7 +1485,7 @@ void VsRecorder_SetNumberPadButtonsMode(VsRecorderWork *work, int backOnly) {
 void VsRecorder_CreateNumberPadButtons(VsRecorderWork *work) {
     VsRecorderVideoSearch *search = work->screenWork;
 
-    ov40_0222D6EC(work, NNS_G2D_VRAM_TYPE_2DMAIN);
+    VsRecorder_LoadButtonGfx31(work, NNS_G2D_VRAM_TYPE_2DMAIN);
     search->buttons[0].sprite = VsRecorder_NewButtonSprite(work, NNS_G2D_VRAM_TYPE_2DMAIN);
     search->buttons[1].sprite = VsRecorder_NewButtonSprite(work, NNS_G2D_VRAM_TYPE_2DMAIN);
     VsRecorder_CreateTextSprite(&search->buttons[0], (VsRecorderGfx *)&work->narc, NNS_G2D_VRAM_TYPE_2DMAIN);
@@ -1534,7 +1534,7 @@ void VsRecorder_SetSearchButtonsMode(VsRecorderWork *work, int backOnly) {
 void VsRecorder_CreateSearchButtons(VsRecorderWork *work) {
     VsRecorderVideoSearch *search = work->screenWork;
 
-    ov40_0222D6EC(work, NNS_G2D_VRAM_TYPE_2DSUB);
+    VsRecorder_LoadButtonGfx31(work, NNS_G2D_VRAM_TYPE_2DSUB);
     search->buttons[0].sprite = VsRecorder_NewButtonSprite(work, NNS_G2D_VRAM_TYPE_2DSUB);
     search->buttons[1].sprite = VsRecorder_NewButtonSprite(work, NNS_G2D_VRAM_TYPE_2DSUB);
     VsRecorder_CreateTextSprite(&search->buttons[0], (VsRecorderGfx *)&work->narc, NNS_G2D_VRAM_TYPE_2DSUB);
@@ -1599,7 +1599,7 @@ BOOL VsRecorder_FoundVideoToggleProfile(VsRecorderWork *work) {
         } else {
             VsRecorder_CreateVideoInfo(&search->info, work);
             VsRecorder_SetVideoPartyIconsDrawFlag(&search->info, FALSE);
-            VsRecorder_LoadScreen(work, ov40_02230410(&search->info), GF_BG_LYR_MAIN_3);
+            VsRecorder_LoadScreen(work, VsRecorderVideoInfo_GetScreenId(&search->info), GF_BG_LYR_MAIN_3);
         }
         VsRecorder_SetVBlankPaused(work, FALSE);
         work->step++;
@@ -1875,7 +1875,7 @@ BOOL VsRecorder_FoundVideoReturnToDetails(VsRecorderWork *work) {
             VsRecorder_FreeVideoInfo(&search->info, work);
             VsRecorder_CreateVideoInfo(&search->info, work);
             VsRecorder_SetVideoPartyIconsDrawFlag(&search->info, FALSE);
-            VsRecorder_LoadScreen(work, ov40_02230410(&search->info), GF_BG_LYR_MAIN_3);
+            VsRecorder_LoadScreen(work, VsRecorderVideoInfo_GetScreenId(&search->info), GF_BG_LYR_MAIN_3);
         } else {
             VsRecorder_FreeProfile(&search->profile, work);
             VsRecorder_CreateProfile(&search->profile, work);
@@ -1942,7 +1942,7 @@ BOOL VsRecorder_FoundVideoSlotsCancel(VsRecorderWork *work) {
         if (search->showProfile == 0) {
             VsRecorder_CreateVideoInfo(&search->info, work);
             VsRecorder_SetVideoPartyIconsDrawFlag(&search->info, FALSE);
-            VsRecorder_LoadScreen(work, ov40_02230410(&search->info), GF_BG_LYR_MAIN_3);
+            VsRecorder_LoadScreen(work, VsRecorderVideoInfo_GetScreenId(&search->info), GF_BG_LYR_MAIN_3);
         } else {
             VsRecorder_CreateProfile(&search->profile, work);
             VsRecorder_SetProfileDrawFlag(&search->profile, FALSE);

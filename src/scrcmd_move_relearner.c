@@ -19,7 +19,7 @@ BOOL ScrCmd_GetLearnForgetMoveResult(ScriptContext *ctx) {
     void **runningAppData = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA); //*could* be MoveRelearnerArgs, not sure
     GF_ASSERT(*runningAppData != NULL);
 
-    *retPtr = sub_0203E864(*runningAppData);
+    *retPtr = RunningAppData_GetUnk16(*runningAppData);
     if (*retPtr == 4) {
         *retPtr = 255;
     }

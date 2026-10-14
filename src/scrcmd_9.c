@@ -36,7 +36,7 @@
 #include "battle_frontier_communication.h"
 
 static BOOL ScrNative_WaitFrontierPartnerCheck(ScriptContext *ctx);
-static u32 FrontierFieldSystem_0204A2A8(FrontierFieldSystem *frontierFsys, u8 a1);
+static u32 FrontierFieldSystem_GetAllyIdOrSprite(FrontierFieldSystem *frontierFsys, u8 a1);
 
 static const u16 StatTrainerOverworlds[] = { SPRITE_SEVEN1, SPRITE_SEVEN5, SPRITE_SEVEN2, SPRITE_SEVEN3, SPRITE_SEVEN4 };
 
@@ -98,10 +98,10 @@ BOOL ScrCmd_BattleTowerAction(ScriptContext *ctx) {
         *result = FrontierFieldSystem_WifiRankAction(NULL, ctx->fieldSystem->saveData, 0);
         break;
     case 11:
-        sub_0204A730(ctx->fieldSystem->saveData, arg);
+        FrontierFieldSystem_SetFrontierFlag5(ctx->fieldSystem->saveData, arg);
         break;
     case 12:
-        *result = sub_0204A750(ctx->fieldSystem->saveData);
+        *result = FrontierFieldSystem_GetFrontierFlag5(ctx->fieldSystem->saveData);
         break;
     case 14:
         *result = FrontierFieldSystem_ForfeitSavedChallenge(ctx->fieldSystem->saveData);
@@ -148,7 +148,7 @@ BOOL ScrCmd_BattleTowerAction(ScriptContext *ctx) {
         *result = FrontierFieldSystem_GetPalmerDefeated(frontierFsys);
         break;
     case 47: // unused
-        FrontierFieldSystem_0204B0E0(frontierFsys, ctx->fieldSystem->saveData);
+        FrontierFieldSystem_IsStreakMilestoneUnflagged(frontierFsys, ctx->fieldSystem->saveData);
         break;
     case 48:
         *result = FrontierFieldSystem_TryGivePalmerRibbons(frontierFsys, ctx->fieldSystem->saveData);
@@ -172,7 +172,7 @@ BOOL ScrCmd_BattleTowerAction(ScriptContext *ctx) {
         *result = FrontierFieldSystem_WifiRankAction(frontierFsys, ctx->fieldSystem->saveData, 1);
         break;
     case 55:
-        *result = FrontierFieldSystem_0204A2A8(frontierFsys, arg);
+        *result = FrontierFieldSystem_GetAllyIdOrSprite(frontierFsys, arg);
         break;
     case 57:
         *result = FrontierFieldSystem_InitChallengeRandom(frontierFsys, ctx->fieldSystem->saveData);
@@ -236,10 +236,10 @@ BOOL ScrCmd_BattleTowerSendLinkData(ScriptContext *ctx) {
         break;
     case 2:
         unk0 = 64;
-        FrontierFieldSystem_0204B720(ctx->fieldSystem->frontierFsys, unk4);
+        FrontierFieldSystem_SetLinkFlag(ctx->fieldSystem->frontierFsys, unk4);
         break;
     }
-    if (sub_0205C298(ctx->fieldSystem->saveData) == 1) {
+    if (Save_IsPlayerOrPartnerVersion0(ctx->fieldSystem->saveData) == 1) {
         if (LinkSync_SendPacket(Comm_GetLocalNetId(), frontierFsys->linkSendBuffer) == 1) {
             *unkPtr = TRUE;
         } else {
@@ -258,7 +258,7 @@ BOOL ScrCmd_BattleTowerCheckLinkPartner(ScriptContext *ctx) {
     FrontierFieldSystem *frontierFsys = ctx->fieldSystem->frontierFsys;
     u16 unk6 = ScriptGetVar(ctx);
     u16 unk7 = ScriptReadHalfword(ctx);
-    if (sub_0205C298(ctx->fieldSystem->saveData) == 1) {
+    if (Save_IsPlayerOrPartnerVersion0(ctx->fieldSystem->saveData) == 1) {
         TaskManager_CallFrontierLinkPartnerCheck(ctx->fieldSystem->taskman, unk6, unk7);
     } else {
         frontierFsys->resultVar = unk7;
@@ -297,7 +297,7 @@ BOOL ScrCmd_BattleRoomHasLeaders(ScriptContext *ctx) {
     return FALSE;
 }
 
-static u32 FrontierFieldSystem_0204A2A8(FrontierFieldSystem *frontierFsys, u8 a1) {
+static u32 FrontierFieldSystem_GetAllyIdOrSprite(FrontierFieldSystem *frontierFsys, u8 a1) {
     if (a1 == 2) {
         return frontierFsys->multiBattleAllyID;
     } else if (a1 == 1) {

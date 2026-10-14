@@ -386,7 +386,7 @@ BOOL PokeathlonBlockSmash_Init(PokeathlonCourseData *course) {
     case 3:
         if (PokeathlonCourseMonObjects_IsLoaded(work->monPics)) {
             PokeathlonBlockSmash_LoadSpriteResources(work);
-            ov96_02209B04(work->spriteSystem, work->spriteManager);
+            PokeathlonBlockSmash_LoadMainAndSubSpriteRes(work->spriteSystem, work->spriteManager);
             Sprite_SetDrawPriority(*PokeathlonCourse_CreateHudSprites(course, 0, work->iconResources, SpriteManager_GetSpriteList(work->spriteManager)), 0);
             PokeathlonCourse_IncrementField1ED(course);
         }
@@ -587,7 +587,7 @@ void PokeathlonBlockSmash_LoadSpriteResources(PokeathlonBlockSmash *work) {
 
 #pragma opt_propagation off
 
-void ov96_02209B04(SpriteSystem *spriteSystem, SpriteManager *spriteManager) {
+void PokeathlonBlockSmash_LoadMainAndSubSpriteRes(SpriteSystem *spriteSystem, SpriteManager *spriteManager) {
     int i;
     int vram;
     vram = NNS_G2D_VRAM_TYPE_2DMAIN;

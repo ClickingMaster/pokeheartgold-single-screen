@@ -52,7 +52,7 @@ static void BattleArcade_VBlank(void *work);
 static void BattleArcade_SetVramBanks(void);
 static void BattleArcadeGameBoard_InitBgLayers(BgConfig *config);
 static void BattleArcadeGameBoard_LoadBoardBg(GAME_BOARD_WORK *work, GFBgLayer layer);
-static void ov84_0223EB08(GAME_BOARD_WORK *work, GFBgLayer layer);
+static void BattleArcadeGameBoard_LoadBoardScreen121(GAME_BOARD_WORK *work, GFBgLayer layer);
 static void BattleArcadeGameBoard_LoadBgPalette(void);
 static void BattleArcadeGameBoard_LoadSubScreenBg(GAME_BOARD_WORK *work, GFBgLayer layer);
 static void BattleArcadeGameBoard_SetState(GAME_BOARD_WORK *work, int *state, int newState);
@@ -332,7 +332,7 @@ static BOOL BattleArcadeGameBoard_MoveCursor(GAME_BOARD_WORK *work) {
                 BattleArcadeObj_SetVisible(work->panel[i], 1);
             }
         }
-        ov84_0223EB08(work, GF_BG_LYR_MAIN_3);
+        BattleArcadeGameBoard_LoadBoardScreen121(work, GF_BG_LYR_MAIN_3);
         PlaySE(SEQ_SE_DP_WIN_OPEN2);
         work->wait = 24;
         work->substate = 3;
@@ -704,7 +704,7 @@ static void BattleArcadeGameBoard_LoadBoardBg(GAME_BOARD_WORK *work, GFBgLayer l
     GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, var, work->bgConfig, layer, 0, 0, 1, HEAP_ID_GAME_BOARD);
 }
 
-static void ov84_0223EB08(GAME_BOARD_WORK *work, GFBgLayer layer) {
+static void BattleArcadeGameBoard_LoadBoardScreen121(GAME_BOARD_WORK *work, GFBgLayer layer) {
     u32 var;
 
     if (BattleArcade_MultiplayerCheck(work->type) == FALSE) {

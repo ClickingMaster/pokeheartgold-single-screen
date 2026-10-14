@@ -64,7 +64,7 @@ u32 BattleTower_IncBattleNumber(void *data) {
     return p[0xC];
 }
 
-u32 ov80_022358E8(void *data) {
+u32 Overlay80Counter_GetSumCapped(void *data) {
     Overlay80Counter *p = data;
     u32 byte = *(volatile u8 *)&p->count;
     u32 result = p->base + byte;

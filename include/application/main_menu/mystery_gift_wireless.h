@@ -24,7 +24,7 @@ void MysteryGiftComm_HandleReceived(u8 channel);
 u8 MysteryGiftComm_IsReceived(void);
 int MysteryGiftComm_GetRecvBufferSize(void);
 void *MysteryGiftComm_GetRecvBuffer(int netId, void *arg, int size);
-void ov74_02229DE0(int i);
+void MysteryGiftComm_RecvSetFlag3C1(int i);
 void MysteryGiftComm_Free(void);
 void MysteryGiftComm_RegisterCommands(void *owner);
 

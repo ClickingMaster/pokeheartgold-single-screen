@@ -68,7 +68,7 @@ BOOL WonderCardAlbum_ShowCardMenu(WonderCardAlbum *album, Window *window, u32 co
 BOOL WonderCardAlbum_ShowTrashYesNo(WonderCardAlbum *album, Window *window, u32 color);
 BOOL WonderCardAlbum_ShowShareYesNo(WonderCardAlbum *album, Window *window, u32 color);
 BOOL WonderCardAlbum_ShowWirelessYesNo(WonderCardAlbum *album, Window *window, u32 color);
-BOOL ov74_0222D7D0(WonderCardAlbum *album);
+BOOL WonderCardAlbum_BufferZero(WonderCardAlbum *album);
 void WonderCardAlbum_StartFade(WonderCardAlbum *album, enum FadeType fadeType, int nextState, int *state);
 void WonderCardAlbum_DrawCard(WonderCardAlbum *album, int unused, int page);
 int WonderCardAlbum_PrintTextBox(WonderCardAlbum *album, Window *window, int boxId, int baseTile);

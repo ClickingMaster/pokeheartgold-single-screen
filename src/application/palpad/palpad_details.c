@@ -454,7 +454,7 @@ void PalPadDetails_DrawProfile(PalPadDetails *details, PalPadShared *shared, Pal
     PalPadGfx_BufferFriendName(gfx, shared->saveData, shared->friends.slots[shared->selectedFriend], heapId);
     PalPadDetails_PrintProfileText(&details->profileWindows[2], shared, gfx, 17, 0, 0, color);
     PalPadDetails_PrintProfileText(&details->profileWindows[6], shared, gfx, 15, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
-    ov43_0222AB5C(gfx, shared->saveData, shared->friends.slots[shared->selectedFriend], heapId);
+    PalPadGfx_BufferFriendGroupName(gfx, shared->saveData, shared->friends.slots[shared->selectedFriend], heapId);
     PalPadDetails_PrintProfileText(&details->profileWindows[3], shared, gfx, 16, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
     PalPadDetails_PrintProfileText(&details->profileWindows[7], shared, gfx, 27, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
     if (PalPadGfx_BufferLastDate(gfx, shared->saveData, shared->friends.slots[shared->selectedFriend])) {

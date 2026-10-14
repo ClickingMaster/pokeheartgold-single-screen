@@ -32,7 +32,7 @@
 .public GetVarPointer
 .public FrontierFieldSystem_ReceiveLinkAllyData
 .public FrontierFieldSystem_ReceiveRoundTrainers
-.public sub_0204B690
+.public FrontierFieldSystem_IsLinkFlagSetByEither
 .public TaskManager_Call
 .public FieldSystem_ApplicationIsRunning
 .public TaskManager_GetFieldSystem
@@ -42,7 +42,7 @@
 .public TaskManager_CallFrontierLinkPartnerCheck
 .public BattleTower_ClaimRecordMilestone
 .public BattleTower_GetRecordMilestone
-.public sub_02067484
+.public FrontierFieldSystem_AddBattleTotals
 .public BattleTower_NextRandom
 .public BattleTower_InitSeed
 .public BattleTower_AdvanceSeed
@@ -53,7 +53,7 @@
 .public SaveArray_Party_Get
 .public SaveArray_IsNatDexEnabled
 .public Save_Bag_Get
-.public sub_02088288
+.public PokemonSummary_GetDefaultUnk2C
 .public PokemonSummary_IsPokeathlonUnlocked
 .public PokemonSummary_SetPages
 .public PokemonSummaryArgs_SetPlayer

@@ -44,14 +44,14 @@ void IncrementGameStat119(WiFiPlazaWork *work) {
     GameStats_Inc(Save_GameStats_Get(work->save), GAME_STAT_UNK119);
 }
 
-void ov45_0222B118(WiFiPlazaWork *work, int slot) {
+void WiFiPlazaWork_MarkActivityDone(WiFiPlazaWork *work, int slot) {
     if (slot >= 8) {
         GF_AssertFail();
     }
     work->unk_3a0.flags[slot] = 1;
 }
 
-int ov45_0222B134(WiFiPlazaWork *work) {
+int WiFiPlazaWork_GetNextUndoneActivity(WiFiPlazaWork *work) {
     int i;
     int ok;
     for (i = 0; i < 8; i++) {
@@ -60,7 +60,7 @@ int ov45_0222B134(WiFiPlazaWork *work) {
             case 0:
             case 1:
             case 2:
-                if (ov45_0222A394(work) == 1) {
+                if (WiFiPlazaWork_GetEventScheduleMode5(work) == 1) {
                     ok = 0;
                 } else {
                     ok = 1;

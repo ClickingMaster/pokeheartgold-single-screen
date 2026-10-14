@@ -32,7 +32,7 @@ int EasyChatInitialGrid_FindCellAt(u32 x, u32 y);
 
 MenuInputState *EasyChatApp_GetMenuInputStatePtr(EasyChatApp *app);
 u32 EasyChatApp_GetType(EasyChatApp *app);
-u8 ov102_021E8F70(EasyChatApp *app);
+u8 EasyChatApp_GetPromptMsgNo(EasyChatApp *app);
 u8 EasyChatApp_GetListMode(EasyChatApp *app);
 u16 EasyChatApp_GetMsgBank(EasyChatApp *app);
 u16 EasyChatApp_GetWord(EasyChatApp *app, int slot);

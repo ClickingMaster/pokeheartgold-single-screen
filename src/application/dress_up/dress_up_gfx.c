@@ -138,7 +138,7 @@ void DressUpGfx_SetSlotPriority(DressUpSlot *slot, u32 depth) {
     GraphicsObject_SetDepth(slot->object, depth);
 }
 
-void ov41_02246020(DressUpSlot *slot, int *x, int *y) {
+void DressUpGfx_GetSlotMargins(DressUpSlot *slot, int *x, int *y) {
     u32 width;
     u32 height;
 

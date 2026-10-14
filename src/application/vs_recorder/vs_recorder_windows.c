@@ -49,7 +49,7 @@ void VsRecorder_ShowNotice(VsRecorderWork *work, int msgId) {
 
     if (work->messageShown != TRUE) {
         work->messageShown = TRUE;
-        ov40_0222C6C8(work, GF_BG_LYR_SUB_2, FALSE);
+        VsRecorder_LoadMessageBg(work, GF_BG_LYR_SUB_2, FALSE);
         reg_G2S_DB_BLDCNT = 0;
         SetBgPriority(GF_BG_LYR_SUB_2, 0);
         InitWindow(window);
@@ -90,7 +90,7 @@ void VsRecorder_ShowTopMessage(VsRecorderWork *work, int msgId) {
 
     if (work->messageShown != TRUE) {
         work->messageShown = TRUE;
-        ov40_0222C6C8(work, GF_BG_LYR_MAIN_2, FALSE);
+        VsRecorder_LoadMessageBg(work, GF_BG_LYR_MAIN_2, FALSE);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
         InitWindow(window);
         AddWindowParameterized(work->bgConfig, window, GF_BG_LYR_MAIN_2, 1, 0x13, 0x1E, 4, 0xE, 0x20);
@@ -135,7 +135,7 @@ void VsRecorder_ShowMenuNotice(VsRecorderWork *work, int msgId) {
         work->menuNoticeShown = TRUE;
         reg_G2S_DB_BLDCNT = 0;
         SetBgPriority(GF_BG_LYR_SUB_2, 0);
-        ov40_0222C6C8(work, GF_BG_LYR_SUB_2, FALSE);
+        VsRecorder_LoadMessageBg(work, GF_BG_LYR_SUB_2, FALSE);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
         InitWindow(window);
         AddWindowParameterized(work->bgConfig, window, GF_BG_LYR_SUB_2, 1, 0x13, 0x1E, 4, 0xE, 0x20);

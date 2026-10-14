@@ -62,7 +62,7 @@ BattleSetup *BattleSetup_New(enum HeapID heapID, u32 battleTypeFlags) {
     setup->bag = Save_Bag_New(heapID);
     setup->pokedex = Pokedex_New(heapID);
     setup->options = Options_New(heapID);
-    setup->unk_134 = sub_02067A60(heapID);
+    setup->unk_134 = BattleSetupSub134_New(heapID);
     setup->bagCursor = NULL;
     setup->keyPressedSave = NULL;
     setup->safariBalls = 0;
@@ -161,7 +161,7 @@ void BattleSetup_Delete(BattleSetup *setup) {
     Heap_Free(setup->bag);
     Heap_Free(setup->pokedex);
     Heap_Free(setup->options);
-    sub_02067A78(setup->unk_134);
+    BattleSetupSub134_Delete(setup->unk_134);
     Heap_Free(setup->bugContestMon);
     Heap_Free(setup);
 }
@@ -237,7 +237,7 @@ void BattleSetup_InitFromSaveData(BattleSetup *setup, FieldSystem *fieldSystem, 
     setup->storagePC = SaveArray_PCStorage_Get(saveData);
     setup->mapSection = MapHeader_GetMapSec(mapno);
     setup->evolutionLocation = MapHeader_GetMapEvolutionMethod(mapno);
-    setup->unk_164 = sub_02088288(saveData);
+    setup->unk_164 = PokemonSummary_GetDefaultUnk2C(saveData);
     setup->metBill = CheckMetBill(Save_VarsFlags_Get(saveData));
     if (PhoneCallPersistentState_MomSavings_BalanceAction(SaveData_GetPhoneCallPersistentState(saveData), MOMS_BALANCE_GET, 0) < 999999) {
         setup->momsSavingsActive = Save_VarsFlags_MomsSavingsFlagCheck(Save_VarsFlags_Get(saveData));

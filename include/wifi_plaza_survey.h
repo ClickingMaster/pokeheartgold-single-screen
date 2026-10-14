@@ -136,7 +136,7 @@ extern void WiFiPlazaLobbyClient_SubmitSurveyAnswer(int answer);
 extern int WiFiPlazaLobbyClient_GetSurveySubmitState(void);
 extern u32 WiFiPlazaLobbyClient_GetSurveyValue(int field);
 extern const u16 *WiFiPlazaLobbyClient_GetSurveyText(int field);
-extern int ov45_0222F6B0(int which, void *value);
+extern int WiFiPlazaLobbyClient_GetSurveyFlag(int which, void *value);
 
 BOOL WiFiPlazaSurvey_Init(OverlayManager *man, int *state);
 BOOL WiFiPlazaSurvey_Main(OverlayManager *man, int *state);

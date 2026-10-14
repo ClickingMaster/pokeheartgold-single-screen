@@ -87,7 +87,7 @@ static const FieldCommCommand sFieldCommCommands[] = {
     { CommCmd_RecvIgnored, CommCmd_GetSize1,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize1,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize1,         NULL         },
-    { sub_02057D50, CommCmd_GetSize1,         NULL         },
+    { CommPlayerManager_RecvUnkE6, CommCmd_GetSize1,         NULL         },
     { CommClubLink_RecvOnSpot, CommCmd_GetSize1,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize1,         NULL         },
     { CommCmd_RecvIgnored, CommCmd_GetSize1,         NULL         },

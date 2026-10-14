@@ -69,7 +69,7 @@
 	.public BattleArcade_SetMonOriginalTrainer
 	.public BattleArcade_AddMonToParty
 	.public BattleArcade_SetOpponentParty
-	.public ov80_02238430
+	.public BattleArcade_GetValueForEvent
 	.public BattleArcade_GetTrainerAIFlags
 	.public BattleArcade_GetRound
 	.public BattleArcade_GetEventColor
@@ -88,7 +88,7 @@
 	.public BattleArcade_GetMonLevel
 	.public BattleArcade_SetMonOriginalTrainer
 	.public BattleArcade_AddMonToParty
-	.public ov80_02238430
+	.public BattleArcade_GetValueForEvent
 	.public BattleArcade_GetTrainerAIFlags
 	.public BattleArcade_GetRound
 	.public BattleArcade_GetEventColor

@@ -135,7 +135,7 @@ BOOL WiFiPlazaGameEntry_Register(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork 
         if (WiFiPlazaWork_IsGameEntryCoolingDown(lobby) != 0) {
             param->result = WIFI_PLAZA_GAME_ENTRY_NOT_READY;
             WiFiPlazaPlayerState_SetStep(savedState, 28);
-        } else if (ov45_0222A394(lobby) != 0) {
+        } else if (WiFiPlazaWork_GetEventScheduleMode5(lobby) != 0) {
             param->result = WIFI_PLAZA_GAME_ENTRY_PLAZA_CLOSING;
             WiFiPlazaPlayerState_SetStep(savedState, 28);
         } else {
@@ -181,7 +181,7 @@ BOOL WiFiPlazaGameEntry_Register(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork 
         WiFiPlazaGameEntry_PrintMessage(entry, savedState, room, param->game + 0x22, 2);
         break;
     case 6: // join
-        if (ov45_0222A394(lobby) != 0) {
+        if (WiFiPlazaWork_GetEventScheduleMode5(lobby) != 0) {
             param->result = WIFI_PLAZA_GAME_ENTRY_PLAZA_CLOSING;
             WiFiPlazaPlayerState_SetStep(savedState, 28);
         } else if (WiFiPlazaLobbyClient_IsMatchActive(param->slot) == TRUE) {
@@ -316,7 +316,7 @@ checkSession:
         CommState_SetPlazaLinkMode();
         CommPlayerInfo_Init(WiFiPlazaWork_GetSaveData(WiFiPlazaRoom_GetLobby(room)), 0);
         CommPlayerInfo_SetProfile(WiFiPlazaWork_GetOwnPlayerProfile(lobby));
-        sub_020378E4(0);
+        Comm_SetWifiContinuousSend(0);
         WiFiPlazaGameEntry_StartSync(entry, savedState, 10, 17);
         break;
     case 10:

@@ -1090,7 +1090,7 @@ void VsRecorder_SetDressUpSendButtonHidden(VsRecorderWork *work, BOOL hidden) {
 
 void VsRecorder_CreateDressUpButtons(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
-    ov40_0222D6EC(work, NNS_G2D_VRAM_TYPE_2DSUB);
+    VsRecorder_LoadButtonGfx31(work, NNS_G2D_VRAM_TYPE_2DSUB);
     dressUp->exitButton.sprite = VsRecorder_NewButtonSprite(work, NNS_G2D_VRAM_TYPE_2DSUB);
     dressUp->sendButton.sprite = VsRecorder_NewButtonSprite(work, NNS_G2D_VRAM_TYPE_2DSUB);
     VsRecorder_CreateTextSprite(&dressUp->exitButton, (VsRecorderGfx *)&work->narc, NNS_G2D_VRAM_TYPE_2DSUB);

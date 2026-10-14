@@ -398,7 +398,7 @@ int PokewalkerApp_Link_HandleConfirmCourseYesNo(PokewalkerApp *app) {
     switch (PokewalkerApp_HandleTwoChoiceMenu(app)) {
     case 0:
         PokewalkerApp_HideCursor(app);
-        if (ov112_021E9338(app) == TRUE) {
+        if (PokewalkerApp_IsStrollStateNonzero(app) == TRUE) {
             app->nextState = 20;
             return 18;
         }
@@ -524,7 +524,7 @@ int PokewalkerApp_Link_PrintPointAtCardForGifts(PokewalkerApp *app) {
 
 int PokewalkerApp_Link_WaitPointAtCardForGifts(PokewalkerApp *app) {
     if (!TextPrinterCheckActive(app->textPrinterId) && app->subBgScrollX == 256) {
-        ov112_021EA5A4(app, 2);
+        PokewalkerApp_ShowConnectionSprites(app, 2);
         return 28;
     }
     return 23;
@@ -544,7 +544,7 @@ int PokewalkerApp_Link_StartUpload(PokewalkerApp *app) {
     PokewalkerApp_BuildUploadData(app);
     PokewalkerIr_RequestUpload(app->uploadImage, (u8 *)&app->strollData, (u8 *)&app->unk_F1D0);
     PokewalkerApp_StartLink(app);
-    ov112_021EA5A4(app, 2);
+    PokewalkerApp_ShowConnectionSprites(app, 2);
     ManagedSprite_SetAnim(app->sprites[8], 25);
     ManagedSprite_SetAnimationFrame(app->sprites[8], 0);
     PokewalkerApp_ResetLinkError(app);
@@ -564,7 +564,7 @@ void PokewalkerApp_PlayTransferSE(int progress) {
 
 // Returns the highest transfer progress seen while the link is up (the progress restarts with each block).
 int PokewalkerApp_UpdateLinkProgress(PokewalkerApp *app, int progress) {
-    if (ov112_021E7668()) {
+    if (PokewalkerIrStatus_IsConnected()) {
         u16 highest = app->linkProgress;
         if (highest < progress) {
             app->linkProgress = progress;
@@ -627,7 +627,7 @@ int PokewalkerApp_Link_UpdateUpload(PokewalkerApp *app) {
         PokewalkerIr_Stop();
         return 32;
     }
-    if (ov112_021E7668() == NULL) {
+    if (PokewalkerIrStatus_IsConnected() == NULL) {
         PokewalkerApp_ShowSubBg1(app, TRUE);
         if (PokewalkerApp_GetTouchedButton(5) == 0 || (gSystem.newKeys & PAD_BUTTON_A) || (gSystem.newKeys & PAD_BUTTON_B)) {
             app->linkError = 33;
@@ -653,7 +653,7 @@ int PokewalkerApp_Link_StartReceive(PokewalkerApp *app) {
     PokewalkerIr_RequestReceive((u8 *)&app->walkerMon, (u8 *)&app->irStatus, (u8 *)&app->irBlocks, (u8 *)app->peerRecords);
     PokewalkerApp_StartLink(app);
     PokewalkerApp_ResetLinkError(app);
-    ov112_021EA5A4(app, 2);
+    PokewalkerApp_ShowConnectionSprites(app, 2);
     ManagedSprite_SetAnimationFrame(app->sprites[8], 0);
     return 27;
 }

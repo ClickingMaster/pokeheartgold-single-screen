@@ -76,11 +76,11 @@
 	.extern WiFiPlazaNewsEvent_GetMinigameResultSlot
 	.extern WiFiPlazaPlayerObject_ShowStandingSprite
 	.extern WiFiPlazaPlayerObject_PlayStandingSequence
-	.extern ov45_02230BFC
+	.extern WiFiPlazaPlayerObject_HoldWalkFrameThenRestart
 	.extern WiFiPlazaPlayerObject_PlayWalkingSequence
 	.extern WiFiPlazaPlayerObject_EffectTurnAround
-	.extern ov45_02230D20
-	.extern ov45_02230D5C
+	.extern WiFiPlazaPlayerObject_EffectSetWalkFrameOnce
+	.extern WiFiPlazaPlayerObject_EffectWalkInPlace
 	.public IncrementGameStat119
 	.public IncrementGameStat47
 	.public sWiFiPlazaTimerPhases
@@ -93,26 +93,26 @@
 	.public WiFiPlazaWork_New
 	.public WiFiPlazaWork_Delete
 	.public WiFiPlazaWork_Update
-	.public ov45_0222A208
+	.public WiFiPlazaWork_TakeLobbyFlag131
 	.public WiFiPlazaWork_GetPlaces
 	.public WiFiPlazaWork_TakePlayerEntered
 	.public WiFiPlazaWork_TakePlayerLeft
 	.public WiFiPlazaWork_IsEventFlagSet
 	.public WiFiPlazaWork_TakePlayerUpdated
-	.public ov45_0222A2CC
-	.public ov45_0222A2E0
-	.public ov45_0222A2F8
-	.public ov45_0222A310
+	.public WiFiPlazaWork_GetScheduleValue4
+	.public WiFiPlazaWork_HasAnsweredSurvey
+	.public WiFiPlazaWork_GetEventScheduleHigh
+	.public WiFiPlazaWork_SetEventScheduleHigh
 	.public WiFiPlazaWork_IsLobbyOpen
 	.public WiFiPlazaWork_IsClosing
 	.public WiFiPlazaWork_IsClosed
 	.public WiFiPlazaWork_GetFireworksState
 	.public WiFiPlazaWork_IsParadeStarted
-	.public ov45_0222A394
+	.public WiFiPlazaWork_GetEventScheduleMode5
 	.public WiFiPlazaWork_IsLightingStarted
 	.public WiFiPlazaWork_GetColorEvent
 	.public WiFiPlazaWork_GetLight1Event
-	.public ov45_0222A3EC
+	.public WiFiPlazaWork_GetThirdEvent
 	.public WiFiPlazaWork_ClearGameMembers
 	.public WiFiPlazaWork_SetGameMember
 	.public WiFiPlazaWork_SetOwnGameMember
@@ -153,8 +153,8 @@
 	.public WiFiPlaza_SendActivityNews
 	.public ov45_0222AC58
 	.public WiFiPlaza_SendMinigameResultNews
-	.public ov45_0222AD2C
-	.public ov45_0222AD3C
+	.public WiFiPlazaWork_GetScheduleValue3
+	.public WiFiPlazaWork_GetScheduleValue2
 	.public WiFiPlazaWork_GetOpenDuration
 	.public WiFiPlazaWork_HasPlayedTapToy
 	.public WiFiPlazaWork_SendTapToyPlayed
@@ -184,8 +184,8 @@
 	.public WiFiPlazaWork_IncPartnerTalkCount
 	.public WiFiPlazaWork_IncTalkCount
 	.public WiFiPlazaWork_SetTalkedWith
-	.public ov45_0222B118
-	.public ov45_0222B134
+	.public WiFiPlazaWork_MarkActivityDone
+	.public WiFiPlazaWork_GetNextUndoneActivity
 	.public WiFiPlazaWork_PickTapToy
 	.public WiFiPlazaWork_GetFireworksPhase
 	.public WiFiPlazaWork_GetFireworksCounter
@@ -413,7 +413,7 @@
 	.public WiFiPlazaLobbyClient_Shutdown
 	.public WiFiPlazaLobbyClient_IsDisconnected
 	.public WiFiPlazaLobbyClient_GetState
-	.public ov45_0222E9BC
+	.public WiFiPlazaLobbyClient_TakeFlag131
 	.public WiFiPlazaLobbyClient_GetOwnId
 	.public WiFiPlazaLobbyClient_SetOwnPlayer
 	.public WiFiPlazaLobbyClient_GetPlayer
@@ -463,7 +463,7 @@
 	.public WiFiPlazaLobbyClient_GetSurveySubmitState
 	.public WiFiPlazaLobbyClient_GetSurveyValue
 	.public WiFiPlazaLobbyClient_GetSurveyText
-	.public ov45_0222F6B0
+	.public WiFiPlazaLobbyClient_GetSurveyFlag
 	.public WiFiPlazaLobbyClient_EndMatch
 	.public WiFiPlazaLobbyClient_CheckResult
 	.public WiFiPlazaLobbyClient_ClearErrors
@@ -497,11 +497,11 @@
 	.public WiFiPlazaLobbyClient_OnMatchClosed
 	.public WiFiPlazaLobbyClient_OnLobbyEvent
 	.public WiFiPlazaLobbyClient_OnOwnRecord
-	.public ov45_02230090
+	.public WiFiPlazaLobbyClient_OnEvent12Result
 	.public WiFiPlazaLobbyClient_OnSpecialVisitorsReceived
 	.public WiFiPlazaLobbyClient_OnSurveyReceived
 	.public WiFiPlazaLobbyClient_OnSurveySubmitted
-	.public ov45_02230130
+	.public WiFiPlazaLobbyClient_SetFlag131
 	.public WiFiPlazaLobbyClient_InitMatches
 	.public WiFiPlazaLobbyMatches_Set
 	.public WiFiPlazaLobbyMatches_Remove
@@ -547,13 +547,13 @@
 	.public WiFiPlazaPlayerObject_FollowPlayer
 	.public WiFiPlazaPlayerObject_ShowStandingSprite
 	.public WiFiPlazaPlayerObject_PlayStandingSequence
-	.public ov45_02230BFC
+	.public WiFiPlazaPlayerObject_HoldWalkFrameThenRestart
 	.public WiFiPlazaPlayerObject_PlayWalkingSequence
 	.public WiFiPlazaPlayerObject_UpdateEffect
 	.public WiFiPlazaPlayerObject_EffectTurnAround
-	.public ov45_02230D20
-	.public ov45_02230D5C
-	.public ov45_02230DC4
+	.public WiFiPlazaPlayerObject_EffectSetWalkFrameOnce
+	.public WiFiPlazaPlayerObject_EffectWalkInPlace
+	.public WiFiPlazaPlayerObject_ActionKeepsSequence
 	.public WiFiPlazaPlayerObject_UpdateCulling
 	.public WiFiPlazaPlayerObject_ApplyVisibility
 	.public WiFiPlazaPlayerObject_ApplyLightFlags
@@ -604,12 +604,12 @@
 	.public WiFiPlazaWork_GetSaveData
 	.public WiFiPlazaWork_StartGameEntryCooldown
 	.public WiFiPlazaWork_IsGameEntryCoolingDown
-	.public ov45_0222A424
-	.public ov45_0222A430
+	.public WiFiPlazaWork_GetField508_04
+	.public WiFiPlazaWork_SetField508_04
 	.public WiFiPlazaWork_GetGameMembers
 	.public WiFiPlazaWork_SetAppQuitForClosing
 	.public WiFiPlazaWork_DidAppQuitForClosing
-	.public ov45_0222A4C8
+	.public WiFiPlazaWork_SetMinigameActiveFlag
 	.public WiFiPlazaPlayer_GetActivity
 	.public WiFiPlazaPlayer_GetLobbyId
 	.public WiFiPlazaPlayer_GetTrainerID
@@ -621,8 +621,8 @@
 	.public WiFiPlazaWork_IsFirstTalk
 	.public WiFiPlazaWork_GetTalkState
 	.public WiFiPlazaWork_GetTalkPartnerMessage
-	.public ov45_0222B0A4
-	.public ov45_0222B0B0
+	.public WiFiPlazaWork_SetTalkField07
+	.public WiFiPlazaWork_GetTalkField07
 	.public WiFiPlaza_ClearEventFlags
 	.public WiFiPlazaUnk3A0_StartCooldown
 	.public WiFiPlazaUnk3A0_IsCoolingDown
@@ -656,9 +656,9 @@
 	.public WiFiPlazaLobbyClient_ToErrorCode
 	.public WiFiPlazaLobbyClient_ChannelFromLib
 	.public WiFiPlazaLobbyClient_ChannelToLib
-	.public ov45_0222FDD4
+	.public WiFiPlazaLobbyClient_OnEvent3Dummy
 	.public WiFiPlazaLobbyClient_OnMatchClientDummy
-	.public ov45_022306F4
+	.public WiFiPlazaPlayerObjects_ClearPendingFree
 	.public WiFiPlazaPlayerObject_SetLightFlags
 	.public WiFiPlazaPlayerObject_StopEffect
 	.public WiFiPlazaPlayerObject_SetEffectStep
@@ -935,12 +935,12 @@ sStr_IIup73: ; 0x02254F14
 	.balign 4, 0
 sWiFiPlazaPlayerObjectEffects: ; 0x02254F1C
 	.word WiFiPlazaPlayerObject_EffectTurnAround
-	.word ov45_02230D20
-	.word ov45_02230D5C
+	.word WiFiPlazaPlayerObject_EffectSetWalkFrameOnce
+	.word WiFiPlazaPlayerObject_EffectWalkInPlace
 
 sWiFiPlazaPlayerObjectActions: ; 0x02254F28
 	.word WiFiPlazaPlayerObject_ShowStandingSprite
-	.word ov45_02230BFC
+	.word WiFiPlazaPlayerObject_HoldWalkFrameThenRestart
 	.word WiFiPlazaPlayerObject_PlayStandingSequence
 	.word WiFiPlazaPlayerObject_PlayWalkingSequence
 	.word WiFiPlazaPlayerObject_ShowStandingSprite

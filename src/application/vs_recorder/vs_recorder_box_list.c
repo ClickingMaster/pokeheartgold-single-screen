@@ -127,7 +127,7 @@ BOOL VsRecorder_BoxDataViewDownload(VsRecorderWork *work) {
     case 8:
         VsRecorder_StepFade(&boxData->fade, 0);
         if (VsRecorder_StepBlend(&boxData->eva, &boxData->evb, FALSE, 2)) {
-            ov40_0222C710(work, GF_BG_LYR_MAIN_2);
+            VsRecorder_LoadBoxDataMessageBg(work, GF_BG_LYR_MAIN_2);
             VsRecorder_PrintBoxDataMessage(work, 275); // Which category would you like to see?
             VsRecorder_CreateBoxDataCategoryButtons(work);
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
@@ -259,7 +259,7 @@ BOOL VsRecorder_BoxListBack(VsRecorderWork *work) {
         if (!VsRecorder_StepBlend(&boxData->eva, &boxData->evb, FALSE, 2)) {
             break;
         }
-        ov40_0222C710(work, GF_BG_LYR_MAIN_2);
+        VsRecorder_LoadBoxDataMessageBg(work, GF_BG_LYR_MAIN_2);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
         VsRecorder_PrintBoxDataMessage(work, 275); // Which category would you like to see?
@@ -310,7 +310,7 @@ BOOL VsRecorder_BoxDataViewOpenBox(VsRecorderWork *work) {
         VsRecorder_SetVBlankPaused(work, TRUE);
         boxData->form = boxData->downloads[work->listWindow.cursor]->form;
         VsRecorder_SelectFirstBoxMon(boxData);
-        ov40_0222C710(work, GF_BG_LYR_MAIN_2);
+        VsRecorder_LoadBoxDataMessageBg(work, GF_BG_LYR_MAIN_2);
         VsRecorder_CreateBoxDataWindows(work);
         VsRecorder_ShowBox(work);
         VsRecorder_PrintBoxDataOwnerMessage(work, 255);

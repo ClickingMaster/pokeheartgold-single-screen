@@ -57,7 +57,7 @@ static void MartData_RestoreBottomScreenApp(FieldSystem *fieldSystem, MartData *
 static u8 MartData_FinishClose(FieldSystem *fieldSystem, MartData *data);
 static void MartData_DeleteSprites(MartData *data);
 static void MartData_SetScrollArrowPositions(MartData *data, BOOL arg1);
-static void ov03_022586BC(MartData *data, int flag);
+static void MartData_SetSprite2PaletteOverride(MartData *data, int flag);
 static u8 MartData_StartButtonPressAnim(MartData *data, u8 arg1, u8 arg2);
 static u8 MartData_AnimateButtonPress(MartData *data);
 static void Mart_FadeOut(FieldSystem *fieldSystem_unused, MartData *data);
@@ -734,7 +734,7 @@ static u8 MartData_BeginPurchase(MartData *data, u16 itemID) {
     data->spriteDrawn[1] = Sprite_GetDrawFlag(data->sprites[1]);
     Sprite_SetDrawFlag(data->sprites[0], FALSE);
     Sprite_SetDrawFlag(data->sprites[1], FALSE);
-    ov03_022586BC(data, 1);
+    MartData_SetSprite2PaletteOverride(data, 1);
     data->item = itemID;
     data->quantity = 1;
     data->cost = MartData_GetItemPrice(data, data->item);
@@ -800,7 +800,7 @@ static u8 MartData_CancelQuantityInput(MartData *data) {
     MartData_SetScrollArrowPositions(data, FALSE);
     Sprite_SetDrawFlag(data->sprites[0], data->spriteDrawn[0]);
     Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
-    ov03_022586BC(data, 0);
+    MartData_SetSprite2PaletteOverride(data, 0);
     MartData_UpdateButtonSprites(data, 0);
     data->touchMartAction = 4;
     Sprite_SetDrawFlag(data->sprites[13], TRUE);
@@ -921,7 +921,7 @@ static u8 MartData_HandleConfirmInput(MartData *data, u32 button) {
         MartData_SetScrollArrowPositions(data, FALSE);
         Sprite_SetDrawFlag(data->sprites[0], data->spriteDrawn[0]);
         Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
-        ov03_022586BC(data, 0);
+        MartData_SetSprite2PaletteOverride(data, 0);
         MartData_UpdateButtonSprites(data, 0);
         data->touchMartAction = 4;
         return TASK_MART_3;
@@ -982,7 +982,7 @@ static u8 MartData_WaitPurchaseMessage(MartData *data) {
         MartData_SetScrollArrowPositions(data, FALSE);
         Sprite_SetDrawFlag(data->sprites[0], data->spriteDrawn[0]);
         Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
-        ov03_022586BC(data, 0);
+        MartData_SetSprite2PaletteOverride(data, 0);
         MartData_UpdateButtonSprites(data, 0);
         data->touchMartAction = 4;
         return TASK_MART_4;
@@ -999,7 +999,7 @@ static u8 MartData_WaitErrorMessage(MartData *data) {
         MartData_SetScrollArrowPositions(data, FALSE);
         Sprite_SetDrawFlag(data->sprites[0], data->spriteDrawn[0]);
         Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
-        ov03_022586BC(data, 0);
+        MartData_SetSprite2PaletteOverride(data, 0);
         MartData_UpdateButtonSprites(data, 0);
         data->touchMartAction = 5;
         return TASK_MART_4;
@@ -1016,7 +1016,7 @@ static u8 MartData_WaitPremierBallMessage(MartData *data) {
         MartData_SetScrollArrowPositions(data, FALSE);
         Sprite_SetDrawFlag(data->sprites[0], data->spriteDrawn[0]);
         Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
-        ov03_022586BC(data, 0);
+        MartData_SetSprite2PaletteOverride(data, 0);
         MartData_UpdateButtonSprites(data, 0);
         data->touchMartAction = 4;
         return TASK_MART_3;
@@ -1460,7 +1460,7 @@ static void MartData_LoadItemIcon(MartData *data, int charID, int paletteID, u16
     SpriteTransfer_ReplacePlttData(plttResObj);
 }
 
-static void ov03_022586BC(MartData *data, int flag) {
+static void MartData_SetSprite2PaletteOverride(MartData *data, int flag) {
     thunk_Sprite_SetPaletteOverride(data->sprites[2], flag);
 }
 

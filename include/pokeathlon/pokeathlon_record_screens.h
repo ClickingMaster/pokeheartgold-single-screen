@@ -63,7 +63,7 @@ typedef struct PokeathlonCourseRecord {
 } PokeathlonCourseRecord; // size: 0x94
 
 void PokeathlonCourseRecord_CopyArgs(PokeathlonCourseRecord *work, const PokeathlonCourseRecordArgs *args);
-BOOL ov99_021E5B70(PokeathlonCourseRecordArgs *args);
+BOOL PokeathlonCourseRecord_AreFlags0EFTo0F1Set(PokeathlonCourseRecordArgs *args);
 void PokeathlonCourseRecord_FreeArgs(PokeathlonCourseRecordArgs *args);
 PokeathlonRecordMon *PokeathlonCourseRecord_GetMon(PokeathlonCourseRecordArgs *args, int course, int slot);
 u16 PokeathlonCourseRecord_GetTotalScore(PokeathlonCourseRecordArgs *args, int course);
@@ -180,7 +180,7 @@ typedef struct PokeathlonMedals {
 } PokeathlonMedals; // size: 0x4D0
 
 BOOL PokeathlonMedals_GetSpeciesOrderFileIndex(void);
-BOOL ov99_021E7150(PokeathlonMedals *work);
+BOOL PokeathlonMedals_AreFlags0EFTo0F1Set(PokeathlonMedals *work);
 u8 PokeathlonMedals_GetPageSpeciesCount(PokeathlonMedals *work);
 u8 PokeathlonMedals_GetSpeciesMedals(PokeathlonMedals *work, int species);
 u32 PokeathlonMedals_CountMedalists(PokeathlonMedals *work);
@@ -307,7 +307,7 @@ void PokeathlonEventRecord_CopyRecords(PokeathlonEventRecord *work, const Pokeat
 void PokeathlonEventRecord_CreateRecordData(PokeathlonEventRecord *work, PokeathlonEventRecordArgs *args);
 void PokeathlonEventRecord_FreeRecordData(PokeathlonEventRecordData *data);
 PokeathlonEventRecords *PokeathlonEventRecord_GetRecords(PokeathlonEventRecordData *data, u32 event, BOOL link);
-BOOL ov99_021E945C(PokeathlonEventRecordData *data);
+BOOL PokeathlonEventRecord_AreFlags0EFTo0F1Set(PokeathlonEventRecordData *data);
 void PokeathlonEventRecord_GetRecordMon(PokeathlonEventRecordData *data, PokeathlonMonInfo *mon, int event, int rank, int slot, BOOL link);
 u16 PokeathlonEventRecord_GetRecordScore(PokeathlonEventRecordData *data, int event, u8 rank, BOOL link);
 u32 PokeathlonEventRecord_GetTimesJoined(PokeathlonEventRecordData *data, u32 event, BOOL link);

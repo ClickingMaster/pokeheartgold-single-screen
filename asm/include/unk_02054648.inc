@@ -9,7 +9,7 @@
 .public FieldSystem_GetSoundplateAt
 .public FieldSystem_SetTerrainQueries
 .public FieldSystem_CheckTileCollision
-.public sub_020548EC
+.public FieldSystem_GetTileAttrBits8To14
 .public GetMetatileBehavior
 .public FieldSystem_GetTerrainHeight
 .public FieldSystem_CheckCollisionAndHeight
@@ -21,7 +21,7 @@
 .public FieldSystem_FindMapPropOfModels
 .public FieldSystem_CollectMapPropModelsInRect
 .public Terrain_GetChunkOrigin
-.public sub_02054E20
+.public MapModelNo_HasNoAreaMapAnimation
 .public Gymmick_CheckCollision
 .public _s32_div_f
 .public MapProp_GetTranslation
@@ -46,7 +46,7 @@
 	.public Terrain_GetAttributes_Simple
 	.public FieldSystem_GetHeightStep
 	.public MapProp_IsInRect
-	.public sub_02054E00
+	.public MapModelNo_IsInTableD0ToD3
 	.public _020FC5FC
 	.public gTerrainQueries_Bdhc
 	.public _020FC60C

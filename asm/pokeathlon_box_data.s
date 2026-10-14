@@ -4,21 +4,21 @@
 
 	.text
 	.public gPokeathlonBoxObjCharTransferTemplate
-	.public ov97_0221E5D4
+	.public PokeathlonBox_Main
 	.public PokeathlonBox_Setup
-	.public ov97_0221E898
-	.public ov97_0221E91C
-	.public ov97_0221E98C
-	.public ov97_0221EA88
-	.public ov97_0221EB38
+	.public PokeathlonBox_GetBoxMon
+	.public PokeathlonBox_GetLightBoxMon
+	.public PokeathlonBox_CopySelectedMons
+	.public PokeathlonBox_GetPartyMonStats
+	.public PokeathlonBox_GetBoxMonStats
 	.public PokeathlonBox_ShowMonInfo
 	.public PokeathlonBox_CalcStatChanges
-	.public ov97_0221EEA4
+	.public PokeathlonBox_SetupGraphics
 	.public PokeathlonBox_DrawMonInfo
-	.public ov97_0221F020
+	.public PokeathlonBox_ReleaseGraphics
 	.public PokeathlonBox_DeleteSprites
 	.public PokeathlonBox_LoadBgGraphics
-	.public ov97_0221F1D8
+	.public PokeathlonBox_InitBgFromTemplates
 	.public PokeathlonBox_PrintStaticTexts
 	.public PokeathlonBox_PrintMonTexts
 	.public PokeathlonBox_ShowMonSprites
@@ -37,18 +37,18 @@
 	.public gPokeathlonBoxBgTemplate1
 	.public gPokeathlonBoxBgTemplate2
 	.public gPokeathlonBoxBgTemplate4
-	.public ov97_0221E5C0
-	.public ov97_0221E69C
+	.public PokeathlonBox_Init
+	.public PokeathlonBox_Exit
 	.public PokeathlonBox_RunSetup
-	.public ov97_0221E7F4
-	.public ov97_0221E814
-	.public ov97_0221E834
+	.public PokeathlonBox_SetGraphicsBanks
+	.public PokeathlonBox_SetGraphicsModes
+	.public PokeathlonBox_SetObjCharTransferTemplate
 	.public PokeathlonBox_CreateOamManager
 	.public PokeathlonBox_VBlankCallback
-	.public ov97_0221E97C
-	.public ov97_0221EBD8
-	.public ov97_0221EE84
-	.public ov97_0221F010
+	.public PokeathlonBox_GetBoxName
+	.public PokeathlonBox_GetLightBoxMonStats
+	.public PokeathlonBox_InitGraphics
+	.public PokeathlonBox_RenderAndAnimateSprites
 	.public PokeathlonBox_InitSpriteTemplate
 	.public PokeathlonBox_GetMonPicVramOffsets
 	.public PokeathlonBox_TransferMonPic

@@ -5,7 +5,7 @@
 
 // The three matchmaking sessions of the lobby client: the info their hosts send, the start time, the countdown.
 
-u32 ov00_021E7144(void);
+u32 WifiConnection_GetNumConnectionHost(void);
 
 #pragma force_active on
 
@@ -71,7 +71,7 @@ WiFiPlazaLobbyMatch *WiFiPlazaLobbyMatches_Get(WiFiPlazaLobbyClient *client, int
 void WiFiPlazaLobbyMatches_Update(WiFiPlazaLobbyClient *client) {
     int i;
     if (gWiFiPlazaLobbyClient->unk_69e == 1) {
-        u32 count = ov00_021E7144();
+        u32 count = WifiConnection_GetNumConnectionHost();
         WiFiPlazaLobbyMatch *match;
         GF_ASSERT(count <= 4);
         match = &gWiFiPlazaLobbyClient->matches[gWiFiPlazaLobbyClient->currentMatch];

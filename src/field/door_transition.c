@@ -130,7 +130,7 @@ BOOL DoorTransition_WalkIntoDoor(FieldSystem *fieldSystem, FieldEnvSubUnk18 *arg
         renderObj = MapProp_GetRenderSurface(prop);
         model = MapProp_GetResModel(prop);
         MapPropOneShotAnimationManager_LoadPropAnimations(fieldSystem->mapPropAnimationManager, fieldSystem->mapPropOneShotAnimationManager, DOOR_ANIM_TAG, modelId0, renderObj, model, texture, animationCount, 1, FALSE);
-        ov01_021E90B0(fieldSystem->mapPropOneShotAnimationManager, DOOR_ANIM_TAG, 1);
+        MapPropOneShotAnimationManager_SetAnimationField35(fieldSystem->mapPropOneShotAnimationManager, DOOR_ANIM_TAG, 1);
         goto prop_loaded;
 no_prop:
         return TRUE;

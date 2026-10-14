@@ -179,7 +179,7 @@
 	.public sPokeathlonEventRecordBgLayers
 
 	.public PokeathlonCourseRecord_CopyArgs
-	.public ov99_021E5B70
+	.public PokeathlonCourseRecord_AreFlags0EFTo0F1Set
 	.public PokeathlonCourseRecord_FreeArgs
 	.public PokeathlonCourseRecord_GetMon
 	.public PokeathlonTrophies_CreatePlayerSprite
@@ -194,7 +194,7 @@
 	.public PokeathlonTrophies_GetTotalPoints
 	.public PokeathlonTrophies_GetCourseScore
 	.public PokeathlonMedals_GetSpeciesOrderFileIndex
-	.public ov99_021E7150
+	.public PokeathlonMedals_AreFlags0EFTo0F1Set
 	.public PokeathlonMedals_GetSpeciesMedals
 	.public PokeathlonMedals_CountMedalists
 	.public PokeathlonMedals_HasAllMedals
@@ -209,7 +209,7 @@
 	.public PokeathlonEventRecord_PrintReturnButton
 	.public PokeathlonEventRecord_ClearNameWindows
 	.public PokeathlonEventRecord_FreeRecordData
-	.public ov99_021E945C
+	.public PokeathlonEventRecord_AreFlags0EFTo0F1Set
 	.public PokeathlonEventRecord_GetTimesJoined
 	.public PokeathlonEventRecord_GetProfile
 

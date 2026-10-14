@@ -19,7 +19,7 @@
 void *MysteryGiftWfc_Alloc(void *unused, u32 size);
 void MysteryGiftWfc_Free(void *unused, void *ptr);
 int MysteryGiftWfc_HandleError(MysteryGiftAppData *data);
-BOOL ov74_02236A2C(MysteryGiftAppData *data);
+BOOL MysteryGiftWfc_CheckInetStatus4(MysteryGiftAppData *data);
 void MysteryGiftWfc_WaitForRequest(MysteryGiftAppData *data, int *state, int nextState);
 void MysteryGiftWfc_StartCleanup(MysteryGiftAppData *data, int result, int *state, int nextState, int failState);
 void MysteryGiftWfc_OnRequestDone(int unused, int error);

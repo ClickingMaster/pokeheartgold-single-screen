@@ -15,7 +15,7 @@
 	.public MailboxApp_State_YesNo
 	.public MailboxApp_State_SelectMail
 	.public MailboxApp_State_MailMenu
-	.public ov103_021ED9AC
+	.public MailboxApp_State_UseMailDone
 	.public MailboxApp_StartCellFlash
 	.public MailboxApp_StartUseMail
 	.public MailboxApp_FinishUseMail
@@ -94,8 +94,8 @@
 	.public MailboxApp_State_ConfirmErase
 	.public MailboxApp_State_PrintHoldMailPrompt
 	.public MailboxApp_State_ConfirmHoldMail
-	.public ov103_021ED960
-	.public ov103_021ED97C
+	.public MailboxApp_State_SelectMonForMailDone
+	.public MailboxApp_State_FadeInDimmedList
 	.public MailboxApp_State_ShowMailToBagResult
 	.public MailboxApp_ReturnToMailList
 	.public MailboxApp_StartFadeIn
@@ -229,10 +229,10 @@ gMailboxStateFuncs: ; 0x021EECA8
 	.word MailboxApp_State_ConfirmErase
 	.word MailboxApp_State_PrintHoldMailPrompt
 	.word MailboxApp_State_ConfirmHoldMail
-	.word ov103_021ED960
-	.word ov103_021ED97C
+	.word MailboxApp_State_SelectMonForMailDone
+	.word MailboxApp_State_FadeInDimmedList
 	.word MailboxApp_State_ShowMailToBagResult
-	.word ov103_021ED9AC
+	.word MailboxApp_State_UseMailDone
 	.word MailboxApp_ReturnToMailList
 
 gMailboxAppDataOamCharTransferParam: ; 0x021EED0C

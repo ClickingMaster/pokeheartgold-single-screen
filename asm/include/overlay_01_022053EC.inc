@@ -90,7 +90,7 @@
 .public FollowMon_GetHopHeight
 .public MapObject_IsShinyPokemon
 .public MapObject_HasFollowMonSprite
-.public ov01_022055B0
+.public FollowMon_GetShapeParamLow
 .public FollowMonObject_IsLarge
 .public MapObject_GetCoordsBehind
 .public MapObject_GetPreviousCoordsBehind

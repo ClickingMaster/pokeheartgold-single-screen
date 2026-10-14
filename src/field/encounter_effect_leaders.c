@@ -95,7 +95,7 @@ u32 LeadersEffect_GetPlayerGender(FieldSystem *fieldSystem);
 BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID heapID, const EliteFourIntroParams *params);
 void LeadersEffect_LoadBlendedSpritePalette(Sprite *sprite, enum HeapID heapID, s32 member, u8 amount, u16 color);
 
-BOOL ov01_021EFE30(EncounterEffectTask *effect);
+BOOL EncounterEffect_IsWipeDone(EncounterEffectTask *effect);
 void EncounterEffectInterp_InitFx(EncounterEffectInterp *interp, s32 start, s32 end, s32 duration);
 BOOL EncounterEffectInterp_UpdateFx(EncounterEffectInterp *interp);
 void EncounterEffect_LoadBgGraphics(NARC *narc, int member1, int member2, int member3, int palette, int paletteCount, BgConfig *bgConfig, int bgId);
@@ -281,7 +281,7 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
         effect->state++;
         break;
     case 4:
-        if (ov01_021EFE30(effect)) {
+        if (EncounterEffect_IsWipeDone(effect)) {
             effect->state++;
             ZigzagWipe_Free(work->band);
             work->timer = 10;

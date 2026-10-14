@@ -2429,8 +2429,8 @@
 	.public Gts_SetSearchCountry
 	.public Gts_GetCountryGroupRange
 	.public Gts_CreateCountryListItems
-	.public ov70_0223F948
-	.public ov70_0223F960
+	.public GtsUnk1234_Clear
+	.public GtsUnk1234_SetEntry
 	.public GtsTransaction_Init
 	.public GtsTransaction_Main
 	.public GtsTransaction_Exit
@@ -2822,8 +2822,8 @@
 	.public GtsWanted_DeleteSprites
 	.public GtsWanted_InvalidState4
 	.public GtsWanted_InvalidState5
-	.public ov70_0223F948
-	.public ov70_0223F960
+	.public GtsUnk1234_Clear
+	.public GtsUnk1234_SetEntry
 	.public GtsTransaction_Idle
 	.public GtsTransaction_SaveAndExit
 	.public GtsTransaction_WaitSaveDelay

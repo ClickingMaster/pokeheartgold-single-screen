@@ -46,7 +46,7 @@
 .public CommPlayerManager_GetPlayerFrontX
 .public CommPlayerManager_GetPlayerFrontZ
 .public CommPlayerManager_AssignBattleSlots
-.public sub_02057D50
+.public CommPlayerManager_RecvUnkE6
 .public CommPlayerManager_FaceRoomCenter
 .public CommPlayerManager_StepAllPlayersBack
 .public CommPlayerManager_GetMoveTimer
@@ -107,7 +107,7 @@
 	.public CommPlayerManager_GetHostFrontX
 	.public CommPlayerManager_GetHostFrontZ
 	.public CommPlayerManager_SetPlayerMoveEnabled
-	.public sub_02057D74
+	.public CommPlayerManager_HostLockFlaggedPlayersOnSpots
 	.public CommPlayerManager_GetOppositeDirection
 	.public CommPlayerManager_SetLocalMoveDelay
 	.public _020FC7A0

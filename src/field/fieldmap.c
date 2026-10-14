@@ -359,7 +359,7 @@ BOOL FieldMap_Exit(OverlayManager *man, int *state) {
                 UnloadOverlayByID(FS_OVERLAY_ID(OVY_3));
             }
 
-            sub_02005D00();
+            Sound_ResetFieldBGMStopOnce();
             return TRUE;
         }
         break;

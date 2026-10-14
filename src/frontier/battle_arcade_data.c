@@ -425,7 +425,7 @@ u32 BattleArcade_GetTrainerIndex(ArcadeContext *ctx, u32 partner) {
     return (u16)(ctx->battleNo + partner * 7);
 }
 
-void ov80_022347B8(ArcadeContext *ctx) {
+void BattleArcadeData_SaveRecordMode1(ArcadeContext *ctx) {
     BattleArcadeData_SaveRecord(ctx, 1);
 }
 
@@ -1011,7 +1011,7 @@ void BattleArcade_Event_Dummy29(ArcadeContext *ctx) {
 void BattleArcade_Event_Dummy30(ArcadeContext *ctx) {
 }
 
-u32 ov80_02235324(ArcadeContext *ctx) {
+u32 BattleArcadeData_GetRoundTableValue(ArcadeContext *ctx) {
     u32 type = ctx->type;
     u32 round = ctx->round;
     u32 result;

@@ -241,7 +241,7 @@
 .public MetatileBehavior_CanGenerateWalkingEncounters
 .public MetatileBehavior_CanPlaceSafariObjectOnLand
 .public MetatileBehavior_IsSurfableWater_thunk
-.public sub_0205BB04
+.public MetatileBehavior_Is113Or114Or46
 .public PlayerAvatar_GetFacingDirection
 .public PlayerAvatar_GetXCoord
 .public PlayerAvatar_GetZCoord

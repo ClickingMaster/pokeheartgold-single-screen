@@ -189,7 +189,7 @@ WiFiPlazaEvent *WiFiPlazaEvent_Create(enum HeapID heapID, WiFiPlazaRoomWork *roo
     event->objManager = WiFiPlazaRoom_GetObjManager(room);
     colorSet = WiFiPlazaEvent_GetColorSet(WiFiPlazaWork_GetColorEvent(event->lobby));
     light1Set = WiFiPlazaEvent_GetLight1Set(WiFiPlazaWork_GetLight1Event(event->lobby));
-    thirdSet = WiFiPlazaEvent_GetThirdSet(ov45_0222A3EC(event->lobby));
+    thirdSet = WiFiPlazaEvent_GetThirdSet(WiFiPlazaWork_GetThirdEvent(event->lobby));
     event->light = WiFiPlazaLight_Create(heapID, colorSet, light1Set, thirdSet);
     event->movers = WiFiPlazaEventMovers_Create(room, heapID);
     event->effect = WiFiPlazaEventEffect_Create(event->lobby, event->models, heapID);
@@ -199,7 +199,7 @@ WiFiPlazaEvent *WiFiPlazaEvent_Create(enum HeapID heapID, WiFiPlazaRoomWork *roo
     flagB = WiFiPlazaWork_IsParadeStarted(event->lobby);
     flagC = WiFiPlazaWork_IsLightingStarted(event->lobby);
     flagD = WiFiPlazaWork_IsClosing(event->lobby);
-    ov45_0222A394(event->lobby);
+    WiFiPlazaWork_GetEventScheduleMode5(event->lobby);
     if (mode == 2) {
         WiFiPlazaModels_EnableKind1To4Lights(event->models);
     }
@@ -236,7 +236,7 @@ void WiFiPlazaEvent_Update(WiFiPlazaEvent *event) {
         WiFiPlazaLight_FadeLight1(event->light, set);
     }
     if (WiFiPlazaWork_IsEventFlagSet(event->lobby, 3)) {
-        set = WiFiPlazaEvent_GetThirdSet(ov45_0222A3EC(event->lobby));
+        set = WiFiPlazaEvent_GetThirdSet(WiFiPlazaWork_GetThirdEvent(event->lobby));
         WiFiPlazaLight_FadeToThirdSet(event->light, set);
     }
     if (WiFiPlazaWork_IsLightingStarted(event->lobby) == TRUE && WiFiPlazaWork_GetFireworksState(event->lobby) == 0 && WiFiPlazaModels_GetPairAnimState(event->models) == 0) {
@@ -570,7 +570,7 @@ BOOL WiFiPlazaTalk_Survey(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
             *nextStep = 4;
             WiFiPlazaRoom_PrintMessage(room, message);
             WiFiPlazaPlayerState_SetStep(state, 5);
-        } else if (ov45_0222A2E0(lobby) == 1) {
+        } else if (WiFiPlazaWork_HasAnsweredSurvey(lobby) == 1) {
             message = WiFiPlazaRoom_GetMsgString(room, 1, 0x57);
             *nextStep = 4;
             WiFiPlazaRoom_PrintMessage(room, message);
@@ -753,10 +753,10 @@ void WiFiPlazaEventMovers_UpdateX(WiFiPlazaEventMovers *work, int index) {
 }
 
 void WiFiPlazaEventMovers_StartActions(WiFiPlazaEventMovers *work, u32 index, BOOL hasOwnSelection, int isOwnIndex, int ownColumn) {
-    int type = ov45_0222AD3C(work->lobby);
+    int type = WiFiPlazaWork_GetScheduleValue2(work->lobby);
     int i;
 
-    ov45_0222AD2C(work->lobby);
+    WiFiPlazaWork_GetScheduleValue3(work->lobby);
     for (i = 0; i < 3; i++) {
         int active = WiFiPlazaWork_GetGroupActionRequest(work->lobby, index * 3 + i);
         int isOwnColumn = FALSE;

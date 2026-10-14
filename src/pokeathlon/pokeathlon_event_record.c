@@ -125,7 +125,7 @@ BOOL PokeathlonEventRecord_Main(OverlayManager *man, int *state) {
 
 BOOL PokeathlonEventRecord_RecordReachesThreshold(PokeathlonEventRecord *work, int event) {
     u16 score = PokeathlonEventRecord_GetRecordScore(work->data, event, 0, work->linkMode);
-    return PokeathlonUtil_ReachesEventThreshold((u8)event, ov99_021E945C(work->data), score);
+    return PokeathlonUtil_ReachesEventThreshold((u8)event, PokeathlonEventRecord_AreFlags0EFTo0F1Set(work->data), score);
 }
 
 BOOL PokeathlonEventRecord_SoloRecordReachesThreshold(PokeathlonEventRecord *work, s8 event, u32 column) {
@@ -344,7 +344,7 @@ void PokeathlonEventRecord_PrintEventRecord(PokeathlonEventRecord *work) {
     if (work->cursor < 0) {
         PokeathlonUtil_ClearAndCopyWindow(work->textContext, 6);
     }
-    if (!ov99_021E945C(work->data)) {
+    if (!PokeathlonEventRecord_AreFlags0EFTo0F1Set(work->data)) {
         if (work->noRecord[work->cursor]) {
             PokeathlonUtil_PrintAlignedMessage(work->textContext, 6, msg_0314_00109, FALSE);
         } else {
@@ -705,7 +705,7 @@ PokeathlonEventRecords *PokeathlonEventRecord_GetRecords(PokeathlonEventRecordDa
     return &data->records[event];
 }
 
-BOOL ov99_021E945C(PokeathlonEventRecordData *data) {
+BOOL PokeathlonEventRecord_AreFlags0EFTo0F1Set(PokeathlonEventRecordData *data) {
     return data->args->unk10;
 }
 

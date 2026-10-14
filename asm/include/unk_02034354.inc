@@ -22,7 +22,7 @@
 .public CommPlayerInfo_Exists
 .public CommPlayerInfo_SendLocal
 .public CommPlayerInfo_GetEntrySize
-.public sub_02034524
+.public CommPlayerInfo_RecvSetUnk3A4
 .public CommPlayerInfo_RecvEntry
 .public CommPlayerInfo_RecvPlayerEntry
 .public CommPlayerInfo_HostRedistribute
@@ -50,7 +50,7 @@
 .public Comm_SendCommand
 .public Comm_IsNetIdConnected
 .public Comm_CountConnected
-.public sub_0203753C
+.public Comm_SendParentCommandNoCopyUnchecked
 .public Comm_GetLocalNetId
 .public Comm_ParentQueueHasCommand
 .public Comm_GetBattleSlot

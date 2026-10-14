@@ -64,7 +64,7 @@ void PokedexApp_CreateFormsSprites(PokedexAppData *pokedexApp) {
 
 #pragma force_active reset
 
-void ov18_021F5EF0(PokedexAppData *pokedexApp, int index) {
+void PokedexApp_ShowFormMonPicsMode0(PokedexAppData *pokedexApp, int index) {
     PokedexApp_ShowFormMonPics(pokedexApp, index, 0);
 }
 
@@ -537,7 +537,7 @@ void PokedexApp_ShowFormCompareMonPic(PokedexAppData *pokedexApp, int side, int 
 
 #pragma force_active reset
 
-void ov18_021F6984(PokedexAppData *pokedexApp, int side, int index) {
+void PokedexApp_ShowFormCompareMonPicMode0(PokedexAppData *pokedexApp, int side, int index) {
     PokedexApp_ShowFormCompareMonPic(pokedexApp, side, index, 0);
 }
 

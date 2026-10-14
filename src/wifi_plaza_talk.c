@@ -122,7 +122,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
         break;
     case 3: // greetings
         IncrementGameStat47(lobby);
-        ov45_0222B118(lobby, 7);
+        WiFiPlazaWork_MarkActivityDone(lobby, 7);
         WiFiPlazaTalk_PrintGreeting(talk, lobby, room, talk->myTimeOfDay, me, partner);
         WiFiPlazaTalk_SetNextStep(talk, 128, 4, state, 37);
         break;
@@ -559,7 +559,7 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
         break;
     }
     case 1: // greetings
-        if (!ov45_0222B0B0(lobby)) {
+        if (!WiFiPlazaWork_GetTalkField07(lobby)) {
             break;
         }
         WiFiPlazaTalk_PrintGreeting(talk, lobby, room, talk->partnerTimeOfDay, partner, me);
@@ -567,7 +567,7 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
         break;
     case 2:
         IncrementGameStat47(lobby);
-        ov45_0222B118(lobby, 7);
+        WiFiPlazaWork_MarkActivityDone(lobby, 7);
         WiFiPlazaTalk_PrintGreeting(talk, lobby, room, talk->myTimeOfDay, me, partner);
         WiFiPlazaTalk_SetNextStep(talk, 128, 3, state, 30);
         break;
@@ -1146,7 +1146,7 @@ BOOL WiFiPlazaTalk_Reception(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *roo
             goto done;
         }
         // what the receptionist recommends
-        switch (ov45_0222B134(lobby)) {
+        switch (WiFiPlazaWork_GetNextUndoneActivity(lobby)) {
         case 0:
             WiFiPlazaRoom_BufferActivityName(room, 0, 0);
             message = WiFiPlazaRoom_GetMsgString(room, 1, 0x49);

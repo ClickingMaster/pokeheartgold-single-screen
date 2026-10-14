@@ -1531,7 +1531,7 @@
 	.public BattleCastleSprite_ChangeAnim
 	.public BattleCastleSprite_SetBounce
 	.public BattleCastleSprite_IsAnimated
-	.public ov83_02247630
+	.public BattleCastleSprite_ShowAnim11WithSE
 	.public BattleCastleSprite_LoadMonPic
 	.public BattleCastle_SetSpritesTranslucent
 	.public BattleCastle_GetMonIndex
@@ -1557,7 +1557,7 @@
 	.public BattleCastlePartyApp_CreatePartyGrid
 	.public BattleCastleOpponentApp_CreatePartyGrid
 	.public BattleCastle_HandlePartyGridInput
-	.public ov83_02247B04
+	.public BattleCastle_SetGridInputsToNext
 	.public BattleCastlePartyApp_OnPartyGridKeyMove
 	.public BattleCastlePartyApp_OnPartyGridTouch
 	.public BattleCastleOpponentApp_OnPartyGridKeyMove
@@ -1713,7 +1713,7 @@
 	.public BattleCastle_GetMenuTiles
 	.public BattleCastle_FreeGrid
 	.public BattleCastle_GridCallbackNoOp
-	.public ov83_02247B04
+	.public BattleCastle_SetGridInputsToNext
 	.public BattleCastlePartyApp_OnPartyGridKeyMove
 	.public BattleCastlePartyApp_OnPartyGridTouch
 	.public BattleCastleOpponentApp_OnPartyGridKeyMove

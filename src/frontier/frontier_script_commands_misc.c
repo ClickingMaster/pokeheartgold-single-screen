@@ -35,7 +35,7 @@ BOOL FrtCmd_TowerAction(void *ctx) {
         *dst = FrontierFieldSystem_HasWonSet(data);
         break;
     case 0x24:
-        *dst = ov80_022358E8(data);
+        *dst = Overlay80Counter_GetSumCapped(data);
         break;
     case 0x2B:
         *dst = FrontierFieldSystem_GetBattleTowerMode(data);

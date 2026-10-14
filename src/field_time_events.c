@@ -87,7 +87,7 @@ void FieldSystem_HandleDaysPassed(FieldSystem *fieldSystem, int days) {
     FieldSystem_RegrowApricornTrees(fieldSystem);
     PhoneCallPersistentState_BlackBeltKenji_UpdateWaitDays(SaveData_GetPhoneCallPersistentState(fieldSystem->saveData), days);
     if (!hasPenalty) {
-        sub_02031CCC(Save_ApricornBox_Get(fieldSystem->saveData), days);
+        ApricornBox_AddJuiceMildnessForDays(Save_ApricornBox_Get(fieldSystem->saveData), days);
         SaveData_SafariZone_CheckAreasWithUpdatedEncounters(fieldSystem->saveData, days);
     }
     PokeathlonSave_ResetDailyItemsBought(Save_Pokeathlon_Get(fieldSystem->saveData));

@@ -90,7 +90,7 @@ void BattleFactoryData_SaveRecord(BattleFactoryData *data, int mode);
 u8 BattleFactory_IncBattleNo(BattleFactoryData *data);
 u8 BattleFactory_GetBattleNo(BattleFactoryData *data);
 int BattleFactory_GetTrainerSprite(BattleFactoryData *data, int partner);
-void ov80_022307C8(BattleFactoryData *data);
+void BattleFactoryData_SaveRecordMode1(BattleFactoryData *data);
 void BattleFactory_CompleteRound(BattleFactoryData *data);
 void BattleFactory_SetRentalParty(BattleFactoryData *data);
 void BattleFactory_GenerateOpponentMons(BattleFactoryData *data);

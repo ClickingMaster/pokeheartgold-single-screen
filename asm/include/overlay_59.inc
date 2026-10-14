@@ -174,8 +174,8 @@
 .public ApricornBox_GetJuice
 .public ApricornJuice_GetFlavorTotal
 .public ApricornJuice_RankFlavors
-.public sub_02031FE8
-.public sub_02032004
+.public ApricornJuice_GetTopMixIndex
+.public ApricornJuice_GetFlavorNameIndex
 .public ApricornBox_UseJuiceServing
 .public GetMonData
 .public GetMonBaseStat_HandleAlternateForm

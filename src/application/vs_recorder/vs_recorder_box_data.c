@@ -977,7 +977,7 @@ BOOL VsRecorder_BoxDataSendShow(VsRecorderWork *work) {
 
     switch (work->step) {
     case 0:
-        ov40_0222C710(work, GF_BG_LYR_MAIN_2);
+        VsRecorder_LoadBoxDataMessageBg(work, GF_BG_LYR_MAIN_2);
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_CreateBoxDataWindows(work);
         VsRecorder_ShowBox(work);
@@ -1078,7 +1078,7 @@ BOOL VsRecorder_BoxDataViewShow(VsRecorderWork *work) {
     switch (work->step) {
     case 0:
         VsRecorder_SetVBlankPaused(work, TRUE);
-        ov40_0222C710(work, GF_BG_LYR_MAIN_2);
+        VsRecorder_LoadBoxDataMessageBg(work, GF_BG_LYR_MAIN_2);
         VsRecorder_CreateBoxDataWindows(work);
         VsRecorder_PrintBoxDataMessage(work, 275); // Which category would you like to see?
         GfGfxLoader_LoadCharDataFromOpenNarc(work->narc, 62, work->bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, HEAP_ID_109);

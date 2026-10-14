@@ -202,7 +202,7 @@ void PokemonSummary_ShowMon(PokemonSummary *summary, u8 slot) {
     PokemonSummary_PrintHeldItem(summary);
     PokemonSummary_LoadPageBgs(summary);
     PokemonSummary_ReloadPokepic(summary);
-    sub_0208B448(summary);
+    PokemonSummary_HideSprites0To7And21And22(summary);
     PokemonSummary_SetMonTypeSprites(summary);
     PokemonSummary_UpdateTypeSprites(summary);
     PokemonSummary_UpdatePokeathlonStars(summary);

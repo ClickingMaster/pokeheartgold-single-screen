@@ -153,7 +153,7 @@ int PokewalkerApp_LinkSave_Exit(PokewalkerApp *app) {
 
 int PokewalkerApp_LinkSave_PrintSaving(PokewalkerApp *app) {
     app->textPrinterId = PokewalkerApp_StartMessageBox(app, 2, msg_0274_00013);
-    ov112_021EA5A4(app, 0);
+    PokewalkerApp_ShowConnectionSprites(app, 0);
     return 1;
 }
 
@@ -184,7 +184,7 @@ int PokewalkerApp_LinkSave_SetNextMode(PokewalkerApp *app) {
 
 int PokewalkerApp_LinkSave_PrintSaving2(PokewalkerApp *app) {
     app->textPrinterId = PokewalkerApp_StartMessageBox(app, 2, msg_0274_00013);
-    ov112_021EA5A4(app, 0);
+    PokewalkerApp_ShowConnectionSprites(app, 0);
     return 6;
 }
 

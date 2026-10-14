@@ -31,14 +31,14 @@ BOOL GlobalTerminalServer_DownloadBox(int arg, void *response);
 void GlobalTerminalServer_GetResponseSize(GlobalTerminalNetResponse *response);
 void *GlobalTerminalServer_GetResponse(GlobalTerminalNet *net);
 int GlobalTerminalServer_GetResponseBufferSize(int command);
-BOOL ov39_0222A2CC(void *response);
+BOOL GlobalTerminalServer_SendRequest22000(void *response);
 BOOL GlobalTerminalServer_GetRankings(void *request, void *response);
 BOOL GlobalTerminalServer_UploadVideo(void *request, void *response);
 BOOL GlobalTerminalServer_SearchVideos(void *request, void *response);
-BOOL ov39_0222A3DC(void *request, void *response);
-BOOL ov39_0222A434(void *request, void *response);
+BOOL GlobalTerminalServer_SearchVideosKind1(void *request, void *response);
+BOOL GlobalTerminalServer_SearchVideosKind2(void *request, void *response);
 BOOL GlobalTerminalServer_DownloadVideo(u32 argLow, u32 argHigh, int arg2, void *response);
-BOOL ov39_0222A4C0(u32 argLow, u32 argHigh, void *response);
+BOOL GlobalTerminalServer_SendRequest23003(u32 argLow, u32 argHigh, void *response);
 
 // no public header
 void DWC_ClearError(void);
@@ -533,7 +533,7 @@ BOOL GlobalTerminalNet_SendPendingRequest(GlobalTerminalNet *net) {
         result = GlobalTerminalServer_DownloadBox(net->requestArg.bytes[0], net->responseBuffer);
         break;
     case GTS_REQUEST_22000:
-        result = ov39_0222A2CC(net->responseBuffer);
+        result = GlobalTerminalServer_SendRequest22000(net->responseBuffer);
         break;
     case GTS_REQUEST_RANKINGS:
         result = GlobalTerminalServer_GetRankings(&net->request, net->responseBuffer);
@@ -547,10 +547,10 @@ BOOL GlobalTerminalNet_SendPendingRequest(GlobalTerminalNet *net) {
             result = GlobalTerminalServer_SearchVideos(&net->request, net->responseBuffer);
             break;
         case 1:
-            result = ov39_0222A3DC(&net->request, net->responseBuffer);
+            result = GlobalTerminalServer_SearchVideosKind1(&net->request, net->responseBuffer);
             break;
         case 2:
-            result = ov39_0222A434(&net->request, net->responseBuffer);
+            result = GlobalTerminalServer_SearchVideosKind2(&net->request, net->responseBuffer);
             break;
         }
         break;
@@ -558,7 +558,7 @@ BOOL GlobalTerminalNet_SendPendingRequest(GlobalTerminalNet *net) {
         result = GlobalTerminalServer_DownloadVideo(net->requestArg.word, net->requestArgHigh, 0x140, net->responseBuffer);
         break;
     case GTS_REQUEST_23003:
-        result = ov39_0222A4C0(net->requestArg.word, net->requestArgHigh, net->responseBuffer);
+        result = GlobalTerminalServer_SendRequest23003(net->requestArg.word, net->requestArgHigh, net->responseBuffer);
         break;
     default:
         GF_AssertFail();

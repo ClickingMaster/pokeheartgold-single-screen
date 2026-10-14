@@ -194,7 +194,7 @@ void VsRecorder_RemoveVideoInfoWindows(VsRecorderVideoInfo *info) {
     } while (i < 5);
 }
 
-BOOL ov40_022303B8(void *header) {
+BOOL VsRecorder_HeaderUsesThreeMonLayout(void *header) {
     // called without a prototype in the original (int result)
     switch (((int (*)(void *, int, int))BattleRecordHeader_GetField)(header, 3, 0)) {
     case 0xE:
@@ -210,12 +210,12 @@ BOOL ov40_022303B8(void *header) {
     }
 }
 
-BOOL ov40_02230404(VsRecorderVideoInfo *info) {
-    return ov40_022303B8(info->header);
+BOOL VsRecorderVideoInfo_UsesThreeMonLayout(VsRecorderVideoInfo *info) {
+    return VsRecorder_HeaderUsesThreeMonLayout(info->header);
 }
 
-int ov40_02230410(VsRecorderVideoInfo *info) {
-    return ov40_02230404(info) == TRUE ? 0x51 : 0x52;
+int VsRecorderVideoInfo_GetScreenId(VsRecorderVideoInfo *info) {
+    return VsRecorderVideoInfo_UsesThreeMonLayout(info) == TRUE ? 0x51 : 0x52;
 }
 
 #pragma force_active on
@@ -247,7 +247,7 @@ void VsRecorder_CreateVideoPartyIcons(VsRecorderVideoInfo *info, VsRecorderWork 
     n = 0;
     start = 0;
     sel = 0;
-    if (ov40_02230404(info) == TRUE) {
+    if (VsRecorderVideoInfo_UsesThreeMonLayout(info) == TRUE) {
         step = 3;
         end = 3;
         sel = 1;

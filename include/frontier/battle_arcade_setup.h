@@ -18,7 +18,7 @@ BOOL BattleArcade_MultiplayerCheck(int type);
 void BattleArcade_SetMonOriginalTrainer(ArcadeContext *ctx, Pokemon *mon);
 void BattleArcade_AddMonToParty(ArcadeContext *ctx, Party *party, Pokemon *mon);
 void BattleArcade_SetOpponentParty(ArcadeContext *ctx);
-u32 ov80_02238430(ArcadeContext *ctx, u8 eventId);
+u32 BattleArcade_GetValueForEvent(ArcadeContext *ctx, u8 eventId);
 u32 BattleArcade_GetTrainerAIFlags(ArcadeContext *ctx);
 u32 BattleArcade_GetRound(ArcadeContext *ctx);
 u32 BattleArcade_GetEventColor(u8 eventId);

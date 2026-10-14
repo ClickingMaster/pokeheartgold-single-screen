@@ -13,7 +13,7 @@
 	.public TouchscreenMenu_GetActionType
 	.public TouchscreenMenu_PrintActionLabel
 	.public TouchscreenMenu_SetButtonsActive
-	.public ov27_0225A714
+	.public TouchscreenMenu_SyncStartMenuState
 	.public TouchscreenMenu_UpdateForStartMenu
 	.public TouchscreenMenu_IsFieldBusy
 	.public TouchscreenMenu_SetDimmed

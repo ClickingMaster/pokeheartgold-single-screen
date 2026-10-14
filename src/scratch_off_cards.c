@@ -247,8 +247,8 @@ void ScratchOffCards_ScratchAt(ScratchOffCardsWork *work, int x, int y);
 void ScratchOffCards_ClearScratchPixel(ScratchOffCardsWork *work, u32 x, u32 y);
 void ScratchOffCardsSpriteGfx_Init(ScratchOffCardsSpriteGfx *gfx);
 void ScratchOffCardsSpriteGfx_LoadCardChoiceGfx(ScratchOffCardsSpriteGfx *gfx, u32 unused);
-void ov87_021E7C50(ScratchOffCardsSpriteGfx *gfx, u32 slot, u32 id, u32 vram);
-void ov87_021E7CE0(ScratchOffCardsSpriteGfx *gfx, u32 unused);
+void ScratchOffCardsSpriteGfx_LoadSlotGfx1E(ScratchOffCardsSpriteGfx *gfx, u32 slot, u32 id, u32 vram);
+void ScratchOffCardsSpriteGfx_LoadSlot3Gfx(ScratchOffCardsSpriteGfx *gfx, u32 unused);
 void ScratchOffCardsSpriteGfx_LoadWinGfx(ScratchOffCardsSpriteGfx *gfx, u32 unused);
 Sprite *ScratchOffCardsSpriteGfx_CreateSprite(ScratchOffCardsSpriteGfx *gfx, int resId, int animSeq, int priority, int drawPriority, u8 isSubScreen);
 void ScratchOffCardsSpriteGfx_Free(ScratchOffCardsSpriteGfx *gfx);
@@ -1749,10 +1749,10 @@ void ScratchOffCardsSpriteGfx_Init(ScratchOffCardsSpriteGfx *gfx) {
         counts++;
     }
     ScratchOffCardsSpriteGfx_LoadCardChoiceGfx(gfx, 1);
-    ov87_021E7C50(gfx, 1, 1, 1);
-    ov87_021E7CE0(gfx, 1);
+    ScratchOffCardsSpriteGfx_LoadSlotGfx1E(gfx, 1, 1, 1);
+    ScratchOffCardsSpriteGfx_LoadSlot3Gfx(gfx, 1);
     ScratchOffCardsSpriteGfx_LoadWinGfx(gfx, 1);
-    ov87_021E7C50(gfx, 0, 0, 2);
+    ScratchOffCardsSpriteGfx_LoadSlotGfx1E(gfx, 0, 0, 2);
     for (i = 0; i < 5; i++) {
         SpriteTransfer_CreateCharTransferTask(gfx->resObj[i][GF_GFX_RES_TYPE_CHAR]);
         SpriteTransfer_CreateExtPlttTransferTask(gfx->resObj[i][GF_GFX_RES_TYPE_PLTT]);
@@ -1768,14 +1768,14 @@ void ScratchOffCardsSpriteGfx_LoadCardChoiceGfx(ScratchOffCardsSpriteGfx *gfx, u
     gfx->resObj[2][GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_ANIM], NARC_a_2_0_5, 0xA, FALSE, 2, GF_GFX_RES_TYPE_ANIM, HEAP_ID_122);
 }
 
-void ov87_021E7C50(ScratchOffCardsSpriteGfx *gfx, u32 slot, u32 id, u32 vram) {
+void ScratchOffCardsSpriteGfx_LoadSlotGfx1E(ScratchOffCardsSpriteGfx *gfx, u32 slot, u32 id, u32 vram) {
     gfx->resObj[slot][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_CHAR], NARC_a_2_0_5, 0x20, FALSE, id, vram, HEAP_ID_122);
     gfx->resObj[slot][GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], NARC_a_2_0_5, 0x21, FALSE, id, vram, 5, HEAP_ID_122);
     gfx->resObj[slot][GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_CELL], NARC_a_2_0_5, 0x1F, FALSE, id, GF_GFX_RES_TYPE_CELL, HEAP_ID_122);
     gfx->resObj[slot][GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_ANIM], NARC_a_2_0_5, 0x1E, FALSE, id, GF_GFX_RES_TYPE_ANIM, HEAP_ID_122);
 }
 
-void ov87_021E7CE0(ScratchOffCardsSpriteGfx *gfx, u32 unused) {
+void ScratchOffCardsSpriteGfx_LoadSlot3Gfx(ScratchOffCardsSpriteGfx *gfx, u32 unused) {
     gfx->resObj[3][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_CHAR], NARC_a_2_0_5, 0x10, FALSE, 3, 1, HEAP_ID_122);
     gfx->resObj[3][GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], NARC_a_2_0_5, 0x11, FALSE, 3, 1, 4, HEAP_ID_122);
     gfx->resObj[3][GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_CELL], NARC_a_2_0_5, 0xF, FALSE, 3, GF_GFX_RES_TYPE_CELL, HEAP_ID_122);

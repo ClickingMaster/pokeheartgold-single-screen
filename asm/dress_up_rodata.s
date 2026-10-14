@@ -13,7 +13,7 @@
 	.public DressUpGfx_GetSlotSize
 	.public DressUpGfx_SetSlotVisible
 	.public DressUpGfx_SetSlotPriority
-	.public ov41_02246020
+	.public DressUpGfx_GetSlotMargins
 	.public DressUpGfx_FindFreeSlot
 	.public DressUpGfx_CreateSlotGraphicsObject
 	.public DressUpGfx_GetSlotHitbox
@@ -186,7 +186,7 @@
 	.public DressUp_FindFreeSlideAnim
 	.public DressUp_TickSlideAnims
 	.public DressUp_TickSlideAnim
-	.public ov41_02248E10
+	.public DressUp_DivFloorPlusOne
 	.public DressUpTouch_Reset
 	.public DressUpTouch_Update
 	.public DressUpTouch_DefaultHandler

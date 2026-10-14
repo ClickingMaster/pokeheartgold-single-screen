@@ -28,7 +28,7 @@
 .public MapMatrix_GetMatrixId
 .public MapMatrix_GetMapAltitude
 .public GetMapModelNo
-.public sub_02054E20
+.public MapModelNo_HasNoAreaMapAnimation
 .public NNS_GfdResetLnkTexVramState
 .public NNS_GfdResetLnkPlttVramState
 .public NNS_G3dRenderObjInit

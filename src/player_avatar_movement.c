@@ -44,7 +44,7 @@ extern const FootstepSound gPlayerFootstepSounds[];
 
 // Declared with the types their call sites were matched against.
 int GetMovementDirection(u32 movement);
-int sub_02060FE0(LocalMapObject *object, int direction);
+int MapObject_GetTileAttrBits8To14InDirection(LocalMapObject *object, int direction);
 int GetMovementForDirection(int direction, int movement);
 BOOL MapObject_IsOnBridge(LocalMapObject *object, int tile);
 BOOL MapObject_IsOutsideMovementRange(LocalMapObject *object, int x, int y, int z);
@@ -62,7 +62,7 @@ void Field_PlayerAvatar_TryEnterPoketchPose(PlayerAvatar *avatar);
 int PlayerAvatar_CheckReadyToMove(PlayerAvatar *avatar, int direction, int keys, int heldKeys);
 int PlayerAvatar_IsReadyToMove(PlayerAvatar *avatar, int direction);
 void PlayerAvatar_StoreHeldDirections(PlayerAvatar *avatar, int direction, int keys, int heldKeys);
-void sub_0205CC74(PlayerAvatar *avatar);
+void PlayerAvatar_ClearFlag1IfFlag6Moving(PlayerAvatar *avatar);
 void PlayerAvatar_PlayTerrainSounds(PlayerAvatar *avatar);
 void PlayerAvatar_PlayFootstepSound(LocalMapObject *object, PlayerAvatar *avatar);
 BOOL PlayerAvatar_TryForcedMovement(PlayerAvatar *avatar, int value);
@@ -138,7 +138,7 @@ void PlayerAvatar_MoveControl(PlayerAvatar *avatar, MapLoadManager *mapLoadManag
             }
         }
         PlayerAvatar_MoveByState(avatar, manager, direction, keys, heldKeys);
-        sub_0205CC74(avatar);
+        PlayerAvatar_ClearFlag1IfFlag6Moving(avatar);
         PlayerAvatar_PlayTerrainSounds(avatar);
     }
 }
@@ -176,7 +176,7 @@ void PlayerAvatar_StoreHeldDirections(PlayerAvatar *avatar, int direction, int k
     PlayerAvatar_ClearFlag6(avatar);
 }
 
-void sub_0205CC74(PlayerAvatar *avatar) {
+void PlayerAvatar_ClearFlag1IfFlag6Moving(PlayerAvatar *avatar) {
     if (PlayerAvatar_CheckFlag6(avatar) == TRUE && PlayerAvatar_GetMoveState(avatar) == AVATAR_MOVE_STATE_MOVING) {
         PlayerAvatar_SetFlag1(avatar, FALSE);
     }
@@ -236,7 +236,7 @@ void PlayerAvatar_PlayFootstepSound(LocalMapObject *object, PlayerAvatar *avatar
         return;
     }
     if (direction != -1) {
-        behavior = sub_02060FE0(object, direction);
+        behavior = MapObject_GetTileAttrBits8To14InDirection(object, direction);
     }
     if (gPlayerFootstepSounds[behavior].sequence == SEQ_SE_GS_EDAPAKI) {
         PlayerAvatar_ResetFootstepToggle(avatar);

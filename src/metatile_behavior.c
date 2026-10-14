@@ -315,7 +315,7 @@ BOOL MetatileBehavior_IsSurfableWater(u8 tile) {
     return (sMetatileBehaviorFlags[tile] & 1) != TILE_BEHAVIOR_FLAG_NONE;
 }
 
-BOOL sub_0205B78C(u8 tile) {
+BOOL MetatileBehavior_Is34(u8 tile) {
     return tile == TILE_BEHAVIOR_34;
 }
 
@@ -499,7 +499,7 @@ BOOL MetatileBehavior_IsBridge(u8 tile) {
     return tile == TILE_BEHAVIOR_113 || tile == TILE_BEHAVIOR_114 || tile == TILE_BEHAVIOR_115;
 }
 
-BOOL sub_0205BA44(u8 tile) {
+BOOL MetatileBehavior_Is113Or114(u8 tile) {
     return tile == TILE_BEHAVIOR_113 || tile == TILE_BEHAVIOR_114;
 }
 
@@ -519,7 +519,7 @@ BOOL MetatileBehavior_IsReflective(u8 tile) {
     return tile == TILE_BEHAVIOR_PUDDLE_NO_SPLASHING || tile == TILE_BEHAVIOR_ICE || tile == TILE_BEHAVIOR_REFLECTIVE;
 }
 
-BOOL sub_0205BA94(u8 tile) {
+BOOL MetatileBehavior_Is169(u8 tile) {
     return tile == TILE_BEHAVIOR_169;
 }
 
@@ -555,6 +555,6 @@ BOOL MetatileBehavior_IsHeadbutt(u8 tile) {
     return tile == TILE_BEHAVIOR_HEADBUTT;
 }
 
-BOOL sub_0205BB04(u8 tile) {
-    return sub_0205BA44(tile) || tile == TILE_BEHAVIOR_46;
+BOOL MetatileBehavior_Is113Or114Or46(u8 tile) {
+    return MetatileBehavior_Is113Or114(tile) || tile == TILE_BEHAVIOR_46;
 }

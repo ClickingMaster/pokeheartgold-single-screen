@@ -31,13 +31,13 @@
 .public ApricornBox_CountQueuedApricorns
 .public ApricornBox_QueueApricorn
 .public ApricornBox_GetMixProgressLevel
-.public sub_02031CCC
+.public ApricornBox_AddJuiceMildnessForDays
 .public ApricornBox_GetJuiceServings
 .public ApricornBox_GetJuice
 .public ApricornJuice_GetFlavorTotal
 .public ApricornJuice_RankFlavors
-.public sub_02031FE8
-.public sub_02032004
+.public ApricornJuice_GetTopMixIndex
+.public ApricornJuice_GetFlavorNameIndex
 .public ApricornBox_UseJuiceServing
 .public ApricornBox_UpdateSteps
 .public ApricornRecord_New
@@ -55,7 +55,7 @@
 
 .public ApricornRecord_IsSameTrainer
 
-.public sub_02032340
+.public ApricornBox_AddJuiceMildness
 
 .public ApricornBox_MixQueuedApricorns
 

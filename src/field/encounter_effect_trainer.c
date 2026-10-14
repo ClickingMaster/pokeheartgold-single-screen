@@ -96,7 +96,7 @@ typedef struct BallFallEffectWork {
     s16 timer;
 } BallFallEffectWork;
 
-BOOL ov01_021EFE30(EncounterEffectTask *effect);
+BOOL EncounterEffect_IsWipeDone(EncounterEffectTask *effect);
 void EncounterEffectInterp_InitFx(EncounterEffectInterp *interp, s32 start, s32 end, s32 duration);
 BOOL EncounterEffectInterp_UpdateFx(EncounterEffectInterp *interp);
 void *StripeWipe_New(void);
@@ -199,7 +199,7 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
         Sprite_SetMatrix(work->sprites[1], &right);
         EncounterEffectQuadInterp_Update(&work->cameraDistance);
         Camera_SetDistance(work->cameraDistance.value, work->camera);
-        if (ov01_021EFE30(effect)) {
+        if (EncounterEffect_IsWipeDone(effect)) {
             effect->state++;
         }
         break;
@@ -300,7 +300,7 @@ void EncounterEffect_TrainerSpinApart(SysTask *task, EncounterEffectTask *effect
     case 6:
         EncounterEffectQuadInterp_Update(&work->cameraDistance);
         Camera_SetDistance(work->cameraDistance.value, work->camera);
-        if (ov01_021EFE30(effect) == TRUE) {
+        if (EncounterEffect_IsWipeDone(effect) == TRUE) {
             effect->state++;
         }
         break;

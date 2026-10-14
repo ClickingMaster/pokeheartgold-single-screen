@@ -159,15 +159,15 @@
 	.extern BattleAnimScriptCmd_Call
 	.extern BattleAnimScriptCmd_Return
 	.extern BattleAnimScriptCmd_JumpIfArgEqual
-	.extern ov07_0221D0C0
+	.extern BattleAnimScriptCmd_JumpIfContextField01
 	.extern BattleAnimScriptCmd_CallFunc
-	.extern ov07_0221D148
+	.extern BattleAnimScriptCmd_JumpByVariantBit0
 	.extern BattleAnimScriptCmd_JumpBySide
 	.extern BattleAnimScriptCmd_JumpByWeather
-	.extern ov07_0221D214
+	.extern BattleAnimScriptCmd_JumpIfField08Is1
 	.extern BattleAnimScriptCmd_JumpIfAttackerActive
 	.extern BattleAnimScriptCmd_JumpIfSameSide
-	.extern ov07_0221D2B0
+	.extern BattleAnimScriptCmd_JumpIfVariantEqual
 	.extern BattleAnimScriptCmd_Jump
 	.extern BattleAnimScriptCmd_BrightnessFlash
 	.extern BattleAnimScriptCmd_Nop6
@@ -488,7 +488,7 @@
 	.public BattleAnimEmitter_GetEmitterCount
 	.public BattleAnimUtil_LoadMonIntoPicSameFacing
 	.public BattleAnimUtil_LoadMonIntoPicOppositeFacing
-	.public ov07_02234B5C
+	.public BattleAnimUtil_GetBattlerTypeCoord
 	.rodata
 
 sBattleAnimBgMaskLayers:
@@ -592,8 +592,8 @@ sBattleAnimScriptCmdTable: ; 0x02234DE8
 	.word BattleAnimScriptCmd_Call
 	.word BattleAnimScriptCmd_Return
 	.word BattleAnimScriptCmd_SetArg
-	.word ov07_0221D148
-	.word ov07_0221D2B0
+	.word BattleAnimScriptCmd_JumpByVariantBit0
+	.word BattleAnimScriptCmd_JumpIfVariantEqual
 	.word BattleAnimScriptCmd_Jump
 	.word BattleAnimScriptCmd_SwitchBackground
 	.word BattleAnimScriptCmd_SetBgScroll
@@ -612,7 +612,7 @@ sBattleAnimScriptCmdTable: ; 0x02234DE8
 	.word BattleAnimScriptCmd_JumpIfArgEqual
 	.word BattleAnimScriptCmd_CopyBattlerToBg
 	.word BattleAnimScriptCmd_ClearBattlerBg
-	.word ov07_0221D0C0
+	.word BattleAnimScriptCmd_JumpIfContextField01
 	.word BattleAnimScriptCmd_SwitchBackgroundBySide
 	.word BattleAnimScriptCmd_PanSweepSERaw
 	.word BattleAnimScriptCmd_PanSweepSEConverted
@@ -650,7 +650,7 @@ sBattleAnimScriptCmdTable: ; 0x02234DE8
 	.word BattleAnimScriptCmd_ChangeBattlerPic
 	.word BattleAnimScriptCmd_RestoreBattlerPic
 	.word BattleAnimScriptCmd_JumpByWeather
-	.word ov07_0221D214
+	.word BattleAnimScriptCmd_JumpIfField08Is1
 	.word BattleAnimScriptCmd_JumpIfSameSide
 	.word BattleAnimScriptCmd_InitSpriteManager
 	.word BattleAnimScriptCmd_LoadCharResource

@@ -421,7 +421,7 @@ u32 FrontierListMenu_GetWidth(FrontierMenu *menu) {
 
 void FrontierListMenu_InitTemplate(FrontierMenu *menu) {
     menu->listTemplate.items = menu->listItems;
-    menu->listTemplate.moveCursorFunc = (LM_MoveCursorFunc_t)ov80_0222EC84;
+    menu->listTemplate.moveCursorFunc = (LM_MoveCursorFunc_t)FrontierListMenu_MoveCursorCallback;
     menu->listTemplate.itemPrintFunc = FrontierListMenu_PrintItem;
     menu->listTemplate.window = &menu->window;
     menu->listTemplate.totalItems = menu->count;
@@ -449,7 +449,7 @@ void FrontierListMenu_PrintItem(ListMenu *list, s32 value, u8 onInit) {
     }
 }
 
-u32 ov80_0222EC84(ListMenu *list) {
+u32 FrontierListMenu_MoveCursorCallback(ListMenu *list) {
     return ListMenuGetTemplateField(list, (enum ListMenuAttr)19);
 }
 

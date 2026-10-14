@@ -13,7 +13,7 @@
 #include "phone_rematch.h"
 
 static void PokegearMap_LoadState(PokegearMapAppData *mapApp);
-static void ov101_021E9848(PokegearMapAppData *mapApp, u16 xIn, u16 yIn, s16 a3, s16 a4, int *xOut, int *yOut);
+static void PokegearMap_CalcZoomAffineOrigin(PokegearMapAppData *mapApp, u16 xIn, u16 yIn, s16 a3, s16 a4, int *xOut, int *yOut);
 static BOOL PokegearMap_ShouldLocationBeHidden(PokegearMapAppData *mapApp, int a1);
 static int PokegearMap_GetFlypointIndexAtCoord(PokegearMapAppData *mapApp, u16 a1, u16 a2);
 static BOOL PokegearMap_MapHasPhoneRematchOrGift(PokegearMapAppData *mapApp, int a1);
@@ -109,7 +109,7 @@ void PokegearMap_ScreenToGridOffset(PokegearMapAppData *mapApp, s16 xIn, s16 yIn
     }
 }
 
-void ov101_021E94C0(PokegearMapAppData *mapApp) {
+void PokegearMap_SetCursorToPlayerPos(PokegearMapAppData *mapApp) {
     s16 x;
     s16 y;
     u8 scale;
@@ -125,7 +125,7 @@ void ov101_021E94C0(PokegearMapAppData *mapApp) {
     PokegearManagedObject_SetCoordUpdateSprite(&mapApp->objManager->objects[PGMAP_SPRITE_CURSOR], x, y);
 }
 
-void ov101_021E9530(PokegearMapAppData *mapApp, u8 zoomed, u16 x0, u16 y0, s16 xIn, s16 yIn) {
+void PokegearMap_CalcViewAroundPos(PokegearMapAppData *mapApp, u8 zoomed, u16 x0, u16 y0, s16 xIn, s16 yIn) {
     u16 x;
     u16 y;
     s16 xCenter;
@@ -194,7 +194,7 @@ void ov101_021E9530(PokegearMapAppData *mapApp, u8 zoomed, u16 x0, u16 y0, s16 x
     mapApp->cursorSpriteState.dyStep = FX_Div(FX32_CONST(mapApp->cursorSpriteState.dy), FX32_CONST(mapApp->cursorSpeed));
 }
 
-static void ov101_021E9848(PokegearMapAppData *mapApp, u16 xIn, u16 yIn, s16 a3, s16 a4, int *xOut, int *yOut) {
+static void PokegearMap_CalcZoomAffineOrigin(PokegearMapAppData *mapApp, u16 xIn, u16 yIn, s16 a3, s16 a4, int *xOut, int *yOut) {
     u8 r2 = 0;
     u8 r1 = 0;
     if (!mapApp->zoomed) {
@@ -218,7 +218,7 @@ static void ov101_021E9848(PokegearMapAppData *mapApp, u16 xIn, u16 yIn, s16 a3,
     }
 }
 
-void ov101_021E990C(PokegearMapAppData *mapApp) {
+void PokegearMap_InitCursorAndPlayerSprites(PokegearMapAppData *mapApp) {
     s16 x;
     s16 y;
     u16 ratio;
@@ -239,14 +239,14 @@ void ov101_021E990C(PokegearMapAppData *mapApp) {
     if (mapApp->sessionState.active) {
         PokegearMap_LoadState(mapApp);
     } else {
-        ov101_021E9530(mapApp, FALSE, mapApp->playerX, mapApp->playerY, 0, 0);
+        PokegearMap_CalcViewAroundPos(mapApp, FALSE, mapApp->playerX, mapApp->playerY, 0, 0);
         mapApp->cursorSpriteState.x = mapApp->cursorSpriteState.destX;
         mapApp->cursorSpriteState.y = mapApp->cursorSpriteState.destY;
         x = (mapApp->playerX - mapApp->cursorSpriteState.left) * 8 + mapApp->centerX + 4;
         y = (mapApp->playerY - mapApp->cursorSpriteState.top) * 8 + mapApp->centerY + 4;
         if (mapApp->zoomed) {
-            ov101_021E9530(mapApp, TRUE, mapApp->playerX, mapApp->playerY, x, y);
-            ov101_021E9848(mapApp, mapApp->playerX, mapApp->playerY, x, y, &mapApp->cursorSpriteState.affineX, &mapApp->cursorSpriteState.affineY);
+            PokegearMap_CalcViewAroundPos(mapApp, TRUE, mapApp->playerX, mapApp->playerY, x, y);
+            PokegearMap_CalcZoomAffineOrigin(mapApp, mapApp->playerX, mapApp->playerY, x, y, &mapApp->cursorSpriteState.affineX, &mapApp->cursorSpriteState.affineY);
             mapApp->cursorSpriteState.x = mapApp->cursorSpriteState.destX;
             mapApp->cursorSpriteState.y = mapApp->cursorSpriteState.destY;
             x = (mapApp->playerX - mapApp->cursorSpriteState.left) * grid + mapApp->centerX + gridHalf;
@@ -1045,7 +1045,7 @@ void PokegearMap_DeselectApp(void *appData) {
     PokegearMapAppData *mapApp = appData;
 
     PokegearCursorManager_SetCursorSpritesDrawState(mapApp->pokegear->cursorManager, 0, FALSE);
-    ov101_021E94C0(mapApp);
+    PokegearMap_SetCursorToPlayerPos(mapApp);
     Sprite_SetDrawFlag(mapApp->objManager->objects[PGMAP_SPRITE_CURSOR].sprite, TRUE);
     PokegearMap_HighlightSelectedLocation(mapApp, 1);
     ToggleBgLayer(GF_BG_LYR_MAIN_2, GF_PLANE_TOGGLE_ON);
@@ -1054,7 +1054,7 @@ void PokegearMap_DeselectApp(void *appData) {
 void PokegearMap_ShowMapCursor(void *appData) {
     PokegearMapAppData *mapApp = appData;
 
-    ov101_021E94C0(mapApp);
+    PokegearMap_SetCursorToPlayerPos(mapApp);
     Sprite_SetDrawFlag(mapApp->objManager->objects[PGMAP_SPRITE_CURSOR].sprite, TRUE);
     mapApp->touchDragging = FALSE;
 }

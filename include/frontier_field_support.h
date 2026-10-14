@@ -8,7 +8,7 @@ void TaskManager_CallFrontierWifiConnection(TaskManager *taskManager, u32 a1, u3
 void TaskManager_CallFrontierLinkPartnerCheck(TaskManager *taskManager, u32 kind, u32 outputVar);
 u32 BattleTower_ClaimRecordMilestone(SaveData *saveData);
 u32 BattleTower_GetRecordMilestone(SaveData *saveData);
-void sub_02067484(FieldSystem *fieldSystem, void *);
+void FrontierFieldSystem_AddBattleTotals(FieldSystem *fieldSystem, void *);
 u32 BattleTower_NextRandom(u32 value);
 void BattleTower_InitSeed(SaveData *saveData);
 u32 BattleTower_AdvanceSeed(SaveData *saveData);

@@ -178,7 +178,7 @@ typedef struct MapModelLoad {
 #undef AreaMapAnimation_IsLoaded
 BOOL AreaMapAnimation_IsLoaded(AreaMapAnimation *unkCC);
 
-BOOL sub_02054E20(u32 modelNo); // u16 in the field terrain headers; called here without narrowing
+BOOL MapModelNo_HasNoAreaMapAnimation(u32 modelNo); // u16 in the field terrain headers; called here without narrowing
 BOOL AreaDataManager_IsLit(AreaDataManager *areaDataManager);
 
 extern const MapLoadFuncs sMapLoadFuncs_Default;
@@ -494,7 +494,7 @@ void MapLoadManager_LoadModelAndBdhc(MapLoadManager *mapLoadManager, LoadedMap *
         if (mapLoadManager->mapLoadedCallback != NULL) {
             mapLoadManager->mapLoadedCallback(mapLoadManager->mapLoadedCallbackArg, matrixIndex, map->propManager);
         }
-        if (AreaMapAnimation_IsLoaded(mapLoadManager->areaMapAnimation) && !sub_02054E20(modelNo)) {
+        if (AreaMapAnimation_IsLoaded(mapLoadManager->areaMapAnimation) && !MapModelNo_HasNoAreaMapAnimation(modelNo)) {
             AreaMapAnimation_AddToRenderObj(mapLoadManager->areaMapAnimation, &map->renderObj);
         }
     }
@@ -1556,7 +1556,7 @@ void Task_LoadMapModel(SysTask *task, MapModelLoad *load) {
         NNS_G3dRenderObjInit(load->renderObj, model);
         GF_ASSERT(load->renderObj->anmMat == NULL);
         load->renderObj->anmMat = NULL;
-        if (AreaMapAnimation_IsLoaded(load->areaMapAnimation) && !sub_02054E20(load->modelNo)) {
+        if (AreaMapAnimation_IsLoaded(load->areaMapAnimation) && !MapModelNo_HasNoAreaMapAnimation(load->modelNo)) {
             AreaMapAnimation_AddToRenderObj(load->areaMapAnimation, load->renderObj);
         }
         *load->loaded = TRUE;

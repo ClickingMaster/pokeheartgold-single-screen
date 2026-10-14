@@ -28,7 +28,7 @@ gCommBaseCommands:
 	.word Comm_RecvShutdown, CommCmd_GetSize0, 0
 	.word CommPlayerInfo_RecvPlayerEntry, CommPlayerInfo_GetEntrySize, 0
 	.word CommPlayerInfo_RecvEntry, CommPlayerInfo_GetEntrySize, 0
-	.word sub_02034524, CommCmd_GetSize0, 0
+	.word CommPlayerInfo_RecvSetUnk3A4, CommCmd_GetSize0, 0
 	.word CommState_RecvJoinRequest, CommState_GetJoinMessageSize, 0
 	.word CommState_RecvJoinReply, CommState_GetJoinMessageSize, 0
 	.word 0, 0, 0

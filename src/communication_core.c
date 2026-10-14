@@ -218,7 +218,7 @@ void Comm_Reset(void) {
     gCommSendStages.stage[1] = 4;
 }
 
-void sub_02035DD8(void) {
+void Comm_OnTransferModeChanged(void) {
     Comm_ResetBuffers();
 }
 
@@ -298,7 +298,7 @@ void Comm_UpdateTransferMode(void) {
         gCommCore.work[0x6AD] = 1;
     }
     if (changed) {
-        sub_02035DD8();
+        Comm_OnTransferModeChanged();
     }
     Comm_UpdateTransferModeHandshake();
 }
@@ -314,11 +314,11 @@ void Comm_RequestTransferMode(int connected) {
     }
 }
 
-void sub_02035FD8(void) {
+void Comm_RequestTransferMode1(void) {
     Comm_RequestTransferMode(1);
 }
 
-void sub_02035FE4(void) {
+void Comm_RequestTransferMode0(void) {
     Comm_RequestTransferMode(0);
 }
 
@@ -333,7 +333,7 @@ int Comm_GetTransferMode(void) {
     return state;
 }
 
-BOOL sub_02036010(void) {
+BOOL Comm_IsTransferMode1(void) {
     if (Comm_GetTransferMode() == 1) {
         return TRUE;
     }
@@ -445,7 +445,7 @@ void Comm_ResetWork(void) {
     gCommCore.updateLock = lock;
 }
 
-void sub_0203624C(void) {
+void Comm_ResetInTransferMode1(void) {
     u8 lock = gCommCore.updateLock;
     gCommCore.updateLock = 0;
     if (gCommCore.work != NULL) {
@@ -1352,7 +1352,7 @@ int Comm_IsKeySyncEnabled(void) {
     return 1;
 }
 
-int sub_0203753C(int command, void *data, int size) {
+int Comm_SendParentCommandNoCopyUnchecked(int command, void *data, int size) {
     if (Comm_GetTransferMode() == 1) {
         return PacketPool_Enqueue(gCommCore.work + 0x580, command, data, size, 1, 0);
     }
@@ -1521,14 +1521,14 @@ int Comm_GetBattleSlot(int slot) {
     return slot;
 }
 
-int sub_020378CC(void) {
+int Comm_IsWifiVoiceChatEnabled(void) {
     if (Comm_IsWifiLinkMode(CommState_GetLinkMode())) {
         return WifiConnection_IsVoiceChatEnabled();
     }
     return 0;
 }
 
-void sub_020378E4(int value) {
+void Comm_SetWifiContinuousSend(int value) {
     int i;
     if (Comm_IsWifiLinkMode(CommState_GetLinkMode()) && *(int *)(gCommCore.work + 0x664) != value) {
         *(int *)(gCommCore.work + 0x664) = value;
@@ -1541,8 +1541,8 @@ void sub_020378E4(int value) {
     }
 }
 
-void sub_02037930(int value) {
-    sub_020378E4(value);
+void Comm_SetWifiContinuousSendAndMuteVoice(int value) {
+    Comm_SetWifiContinuousSend(value);
     if (Comm_IsWifiLinkMode(CommState_GetLinkMode())) {
         if (value != 0) {
             WifiConnection_SetVoiceUnmuted(0);

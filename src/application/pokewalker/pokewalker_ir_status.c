@@ -16,7 +16,7 @@ void PokewalkerIr_RequestReceiveGifts(void *a, void *b) {
     ov112_021FFB24.totalChunks = (ov112_021FFB24.totalSize + 0x7F) / 0x80;
 }
 
-void *ov112_021E7668(void) {
+void *PokewalkerIrStatus_IsConnected(void) {
     return (void *)PokewalkerIr_IsConnected();
 }
 

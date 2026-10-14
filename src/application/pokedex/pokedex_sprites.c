@@ -1216,7 +1216,7 @@ void PokedexApp_FreeSearchSprites(PokedexAppData *pokedexApp) {
 
 #pragma force_active on
 
-void ov18_021F3448(PokedexAppData *pokedexApp) {
+void PokedexApp_FreeSprites26And27(PokedexAppData *pokedexApp) {
     PokedexApp_DeleteSprite(pokedexApp, 26);
     PokedexApp_DeleteSprite(pokedexApp, 27);
     SpriteManager_UnloadCharObjById(pokedexApp->spriteManager, 0xC59E);
@@ -1528,12 +1528,12 @@ void PokedexApp_MoveSearchSummaryIcons(PokedexAppData *pokedexApp, int dy) {
     ManagedSprite_SetPositionXY(pokedexApp->sprites[43], x, y + dy);
 }
 
-void ov18_021F3C30(PokedexAppData *pokedexApp) {
+void PokedexApp_ShowSprite25Raised(PokedexAppData *pokedexApp) {
     ManagedSprite_SetPositionXY(pokedexApp->sprites[25], 48, -96);
     PokedexApp_SetSpriteVisible(pokedexApp, 25, TRUE);
 }
 
-void ov18_021F3C54(PokedexAppData *pokedexApp, int dy) {
+void PokedexApp_MoveSprite25Vertically(PokedexAppData *pokedexApp, int dy) {
     s16 x;
     s16 y;
 
@@ -1541,7 +1541,7 @@ void ov18_021F3C54(PokedexAppData *pokedexApp, int dy) {
     ManagedSprite_SetPositionXY(pokedexApp->sprites[25], x, y + dy);
 }
 
-void ov18_021F3C88(PokedexAppData *pokedexApp) {
+void PokedexApp_ShowSprite25(PokedexAppData *pokedexApp) {
     ManagedSprite_SetPositionXY(pokedexApp->sprites[25], 48, 24);
     PokedexApp_SetSpriteVisible(pokedexApp, 25, TRUE);
 }

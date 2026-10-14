@@ -305,7 +305,7 @@ void GtsWanted_CreateData(GtsApp *app) {
     MI_CpuClearFast(app->searchCursor, sizeof(GtsSearchCursor));
     app->searchCursor->alphabeticalSpecies = Gts_LoadAlphabeticalSpecies(HEAP_ID_61, 0, &app->searchCursor->alphabeticalSpeciesCount);
     app->searchCursor->johtoDexFlags = Gts_CreateJohtoDexFlags(HEAP_ID_61);
-    ov70_0223F948(&app->unk_1234);
+    GtsUnk1234_Clear(&app->unk_1234);
 }
 
 void GtsWanted_FreeData(GtsApp *app) {
@@ -376,7 +376,7 @@ int GtsWanted_HandleSpeciesSelector(GtsApp *app) {
         ClearFrameAndWindow2(&app->waitingIconWindow, FALSE);
         Gts_SetNextScreen(app, 5, 5);
         app->state = GTS_WANTED_STATE_FADE_OUT;
-        ov70_0223F960(&app->unk_1234, app->searchCursor->unk_06 + app->searchCursor->unk_04, app->searchCursor->unk_0A, app->searchCursor->unk_08);
+        GtsUnk1234_SetEntry(&app->unk_1234, app->searchCursor->unk_06 + app->searchCursor->unk_04, app->searchCursor->unk_0A, app->searchCursor->unk_08);
         break;
     case -1:
         break;
@@ -392,7 +392,7 @@ int GtsWanted_HandleSpeciesSelector(GtsApp *app) {
             gender = GTS_GENDER_ANY;
         }
         Gts_DrawWantedMon(app->gtsMsgData, app->speciesNames, app->msgFormat, app->infoWindows, app->depositWanted.species, gender, -1);
-        ov70_0223F960(&app->unk_1234, app->searchCursor->unk_06 + app->searchCursor->unk_04, app->searchCursor->unk_0A, app->searchCursor->unk_08);
+        GtsUnk1234_SetEntry(&app->unk_1234, app->searchCursor->unk_06 + app->searchCursor->unk_04, app->searchCursor->unk_0A, app->searchCursor->unk_08);
         break;
     }
     }
@@ -888,7 +888,7 @@ int Gts_CreateCountryListItems(ListMenuItem **items, MsgData *msgData, int group
 
 #pragma force_active reset
 
-void ov70_0223F948(GtsUnk1234 *arg) {
+void GtsUnk1234_Clear(GtsUnk1234 *arg) {
     int i;
     for (i = 0; i < 10; i++) {
         arg->unk_04[i] = 0;
@@ -898,7 +898,7 @@ void ov70_0223F948(GtsUnk1234 *arg) {
     arg->unk_02 = 0;
 }
 
-void ov70_0223F960(GtsUnk1234 *arg, int index, u16 value1, u16 value2) {
+void GtsUnk1234_SetEntry(GtsUnk1234 *arg, int index, u16 value1, u16 value2) {
     arg->unk_04[index] = value1;
     arg->unk_18[index] = value2;
 }

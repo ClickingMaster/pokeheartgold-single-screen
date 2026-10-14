@@ -386,7 +386,7 @@ void BallCapsuleEditor_SetButtonFrame(ManagedSprite *button, u32 event);
 void BallCapsuleEditor_MoveButtonLabel(TextOBJ *label, s32 dx, s32 dy);
 void BallCapsuleEditor_Task_ButtonPress(SysTask *task, void *data);
 SysTask *BallCapsuleEditor_StartButtonPress(ManagedSprite *button, TextOBJ *label);
-u32 ov57_0223B940(BallCapsuleEditor *editor);
+u32 BallCapsuleEditor_GetField280(BallCapsuleEditor *editor);
 void BallCapsuleEditor_SetInputEnabled(BallCapsuleEditor *editor, BOOL enabled);
 void BallCapsuleEditor_CreatePreviewPokepic(BallCapsuleEditor *editor);
 void BallCapsuleEditor_StartPreviewPokepicAnim(BallCapsuleEditor *editor);
@@ -2237,7 +2237,7 @@ int BallCapsuleEditor_EnterEdit(BallCapsuleEditor *editor) {
         editor->subState++;
         break;
     case 1:
-        if (ov57_0223B940(editor) == 1 || IsPaletteFadeFinished() != TRUE) {
+        if (BallCapsuleEditor_GetField280(editor) == 1 || IsPaletteFadeFinished() != TRUE) {
             break;
         }
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
@@ -2303,7 +2303,7 @@ BOOL BallCapsuleEditor_LeaveEdit(BallCapsuleEditor *editor) {
         editor->subState++;
         break;
     case 2:
-        if (ov57_0223B940(editor) == 1) {
+        if (BallCapsuleEditor_GetField280(editor) == 1) {
             break;
         }
         if (IsPaletteFadeFinished() != TRUE) {
@@ -3127,7 +3127,7 @@ SysTask *BallCapsuleEditor_StartButtonPress(ManagedSprite *button, TextOBJ *labe
 
 #pragma force_active reset
 
-u32 ov57_0223B940(BallCapsuleEditor *editor) {
+u32 BallCapsuleEditor_GetField280(BallCapsuleEditor *editor) {
     return editor->unk_280;
 }
 

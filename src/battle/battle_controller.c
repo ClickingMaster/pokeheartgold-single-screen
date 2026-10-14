@@ -533,7 +533,7 @@ void BattleController_EmitPokemonEncounter(BattleSystem *battleSystem, int battl
     packet.shiny = battleSystem->ctx->battleMons[battlerId].shiny;
     packet.species = battleSystem->ctx->battleMons[battlerId].species;
     packet.personality = battleSystem->ctx->battleMons[battlerId].personality;
-    packet.battlerType = ov12_02256748(battleSystem->ctx, battlerId, BattleSystem_GetBattlerType(battleSystem, battlerId), TRUE);
+    packet.battlerType = BattleContext_GetLowHpOrStatusCode(battleSystem->ctx, battlerId, BattleSystem_GetBattlerType(battleSystem, battlerId), TRUE);
     packet.form = battleSystem->ctx->battleMons[battlerId].form;
     for (i = 0; i < MAX_MON_MOVES; i++) {
         packet.moves[i] = GetBattlerVar(battleSystem->ctx, battlerId, BMON_DATA_MOVE1 + i, NULL);
@@ -553,7 +553,7 @@ void BattleController_EmitPokemonSlideIn(BattleSystem *battleSystem, int battler
     packet.shiny = battleSystem->ctx->battleMons[battlerId].shiny;
     packet.species = battleSystem->ctx->battleMons[battlerId].species;
     packet.personality = battleSystem->ctx->battleMons[battlerId].personality;
-    packet.battlerType = ov12_02256748(battleSystem->ctx, battlerId, BattleSystem_GetBattlerType(battleSystem, battlerId), TRUE);
+    packet.battlerType = BattleContext_GetLowHpOrStatusCode(battleSystem->ctx, battlerId, BattleSystem_GetBattlerType(battleSystem, battlerId), TRUE);
     packet.selectedMonIndex = battleSystem->ctx->selectedMonIndex[battlerId];
     packet.form = battleSystem->ctx->battleMons[battlerId].form;
     packet.ball = battleSystem->ctx->battleMons[battlerId].ball;
@@ -583,7 +583,7 @@ void BattleController_EmitPokemonSendOut(BattleSystem *battleSystem, int battler
     }
     packet.shiny = battleSystem->ctx->battleMons[battlerId].shiny;
     packet.species = battleSystem->ctx->battleMons[battlerId].species;
-    packet.battlerType = ov12_02256748(battleSystem->ctx, battlerId, BattleSystem_GetBattlerType(battleSystem, battlerId), FALSE);
+    packet.battlerType = BattleContext_GetLowHpOrStatusCode(battleSystem->ctx, battlerId, BattleSystem_GetBattlerType(battleSystem, battlerId), FALSE);
     packet.selectedMonIndex = battleSystem->ctx->selectedMonIndex[battlerId];
     packet.form = battleSystem->ctx->battleMons[battlerId].form;
     if (ball) {

@@ -106,6 +106,6 @@ BOOL BattleCastleData_SendLinkMessage(BattleCastleData *data, u32 kind, u16 valu
 void BattleCastle_ShowPointsWindows(FrontierSystem *system, BattleCastleData *data);
 void BattleCastle_HidePointsWindows(FrontierSystem *system, BattleCastleData *data);
 void BattleCastle_PrintPoints(FrontierSystem *system, BattleCastleData *data);
-u32 ov80_02233648(BattleCastleData *data);
+u32 BattleCastleData_GetRoundTableValue(BattleCastleData *data);
 
 #endif // POKEHEARTGOLD_FRONTIER_BATTLE_CASTLE_DATA_H

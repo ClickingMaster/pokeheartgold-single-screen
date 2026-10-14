@@ -21,7 +21,7 @@ void Sound_ClearSecondaryScene(void);
 void GF_SndHandleMoveVolume(int, int, int);
 
 void Sound_SetMasterVolume(int volume);
-void sub_02005D00(void);
+void Sound_ResetFieldBGMStopOnce(void);
 void GF_MicPauseOnLidClose(void);
 void GF_MicResumeOnLidOpen(void);
 BOOL SoundSys_GetGBSoundsState(void);
@@ -56,7 +56,7 @@ void GF_SndHandleSetPlayerVolume(u32 playerNo, u32 volume);
 void GF_SndHandleSetInitialVolume(s32 handleNo, s32 volume);
 u16 GF_GetVolumeBySeqNo();
 
-void sub_02005448(); // One original caller passes the sequence through the existing r0 value.
+void Sound_ApplyVoiceChatVolumeForSeq(); // One original caller passes the sequence through the existing r0 value.
 void Sound_SetScene(int scene);
 void Sound_SetSelectSEMuted(BOOL);
 

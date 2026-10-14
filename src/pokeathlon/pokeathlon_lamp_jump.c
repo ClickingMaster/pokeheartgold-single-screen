@@ -58,7 +58,7 @@ int PokeathlonCourseMonObjects_IsLoaded(void *manager);
 void *PokeathlonCourseMonObjects_Get(void *manager, u8 index);
 void PokeathlonCourseMonObject_SetDrawFlag(void *sprite, int draw);
 void PokeathlonCourseMonObject_SetAnimState(void *sprite, int anim);
-void ov96_021EAD08(void *sprite, int anim);
+void PokeathlonCourseMonObject_SetAnimCode(void *sprite, int anim);
 void PokeathlonCourseObject_SetTouchRadius(void *sprite, int radius);
 void PokeathlonCourseObject_SetCollision(void *sprite, int x, int y);
 void PokeathlonCourseObject_SetGroundPosition(void *sprite, int x, int y);
@@ -618,13 +618,13 @@ void PokeathlonLampJump_UpdateMonSprites(PokeathlonCourseData *course) {
         }
         if (mon->stunned) {
             PokeathlonCourseSpritePoolSprite_Show(mon->effectSprite, 1, 1);
-            ov96_021EAD08(mon->sprite, 20);
+            PokeathlonCourseMonObject_SetAnimCode(mon->sprite, 20);
             if (!GF_SndCountPlayingSeqOnPlayer(gPokeathlonLampJumpSoundPlayers[i])) {
                 PlaySEOnPlayer(SEQ_SE_GS_W146, gPokeathlonLampJumpSoundPlayers[i]);
             }
         } else {
             PokeathlonCourseSpritePoolSprite_Show(mon->effectSprite, 1, 0);
-            ov96_021EAD08(mon->sprite, 0);
+            PokeathlonCourseMonObject_SetAnimCode(mon->sprite, 0);
             if (lampJump->jumps[i].jumping) {
                 PokeathlonCourseMonObject_SetAnimState(mon->sprite, 1);
             } else {

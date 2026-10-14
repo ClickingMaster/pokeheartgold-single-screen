@@ -115,7 +115,7 @@ void BattleAnimUtil_GetBattlerTypePosition(int battlerType, int unused, BattleAn
 
 void BattleAnimUtil_GetBattlerPosition(BattleAnimSystem *system, int battler, BattleAnimPosition *pos) {
     int battlerType = BattleAnimUtil_GetBattlerType(system, battler);
-    int unk = ov07_0221BFC0(system);
+    int unk = BattleAnimSystem_GetField08(system);
     BattleAnimUtil_GetBattlerTypePosition(battlerType, unk, pos);
 }
 
@@ -142,7 +142,7 @@ void BattleAnimUtil_GetEmitterPosition(int battlerType, VecFx32 *pos, int unused
     void name(BattleAnimSystem *system, int battler, VecFx32 *pos) {                                  \
         int perspective = ParticleSystem_GetPerspectiveType((ParticleSystem *)BattleAnimSystem_GetCurrentParticleSystem(system)); \
         int battlerType = BattleAnimUtil_GetBattlerType(system, battler);                             \
-        int unk = ov07_0221BFC0(system);                                                              \
+        int unk = BattleAnimSystem_GetField08(system);                                                              \
         func(battlerType, pos, unk, perspective);                                                     \
     }
 

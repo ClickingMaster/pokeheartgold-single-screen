@@ -3494,7 +3494,7 @@ static void Task_BattleMenuSlideIn(SysTask *task, void *data) {
         BgSetPosTextAndCommit(bgConfig, 4, BG_POS_OP_SET_Y, 0);
         BgSetPosTextAndCommit(bgConfig, 5, BG_POS_OP_SET_X, 0);
         BgSetPosTextAndCommit(bgConfig, 5, BG_POS_OP_SET_Y, 0);
-        ov12_0223BB64(menuSlideIn->battleInput->battleSystem, 1);
+        BattleSystem_SetField2440(menuSlideIn->battleInput->battleSystem, 1);
         Heap_Free(data);
         SysTask_Destroy(task);
 

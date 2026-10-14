@@ -769,7 +769,7 @@ s32 WifiClubGameEntry_StartMatch(u32 friendIndex, u32 game) {
     if (result == 1) {
         switch (game) {
         case 0:
-            sub_02039AF8();
+            CommState_SetWifiPeerLinkMode29();
             break;
         case 1:
         case 2:
@@ -822,7 +822,7 @@ s32 WifiClubGameEntry_StopVoiceChat(WifiClubGameEntry *gameEntry) {
 void WifiClubGameEntry_EnableVoiceChat(WifiClubGameEntry *gameEntry) {
     if (WifiClubGameEntry_StartVoiceChat(gameEntry) != 0) {
         GF_GetCurrentPlayingBGM();
-        sub_02005448();
+        Sound_ApplyVoiceChatVolumeForSeq();
     }
 }
 
@@ -1880,7 +1880,7 @@ s32 WifiClubGameEntry_Member_ApplyAgain(WifiClubGameEntry *gameEntry, WifiClubGa
 s32 WifiClubGameEntry_Member_WaitReconnected(WifiClubGameEntry *gameEntry, WifiClubGameEntryArgs *args, enum HeapID heapID) {
     WifiClubGameEntry_CheckMatchFailed(gameEntry);
     if (CommState_GetWifiMatchStatus() == 1 && Comm_IsNetIdConnected(0) == 1) {
-        sub_020378E4(0);
+        Comm_SetWifiContinuousSend(0);
         WifiClubGameEntry_HideWaitingIcon(gameEntry, args, heapID);
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, heapID);
         gameEntry->state = 27;

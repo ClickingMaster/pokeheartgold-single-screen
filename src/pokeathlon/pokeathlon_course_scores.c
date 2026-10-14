@@ -188,7 +188,7 @@ s32 PokeathlonCourseScoreList_GetCount(PokeathlonCourseScoreList *list) {
     return list->count;
 }
 
-u32 ov96_021E9528(PokeathlonCourseScoreList *list) {
+u32 PokeathlonCourseScoreList_GetField04(PokeathlonCourseScoreList *list) {
     return list->unk04;
 }
 

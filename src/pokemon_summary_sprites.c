@@ -128,7 +128,7 @@ void PokemonSummary_UpdatePartySlotSprite(PokemonSummary *summary) {
 
 #pragma force_active off
 
-void sub_0208B448(PokemonSummary *summary) {
+void PokemonSummary_HideSprites0To7And21And22(PokemonSummary *summary) {
     Sprite **sprites = summary->sprites;
     u8 i;
     for (i = 0; i < 8; i++) {
@@ -684,7 +684,7 @@ void PokemonSummary_UpdateRibbonCursorSprite(PokemonSummary *summary) {
     Sprite_SetPositionXY(summary->sprites[63], (s16)(column * 32 + 32), (s16)(row * 40 + 24));
 }
 
-void sub_0208C3C0(PokemonSummary *summary) {
+void PokemonSummary_AnimateRibbonSprite66(PokemonSummary *summary) {
     if (Sprite_GetDrawFlag(summary->sprites[66]) == TRUE) {
         Sprite_UpdateAnim(summary->sprites[66], FX32_ONE);
     }

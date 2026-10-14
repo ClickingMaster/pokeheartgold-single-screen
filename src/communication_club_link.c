@@ -270,7 +270,7 @@ void CommClubLink_ChildShowRoom(void) {
     }
 }
 
-void sub_0205857C(void) {
+void CommClubLink_CheckPartnerState5E(void) {
     int i;
 
     for (i = 0; i < Comm_CountConnected(); i++) {
@@ -296,7 +296,7 @@ void CommClubLink_WaitLeaveSpot(void) {
         Comm_SendFixedCommand(94, &flag);
         CommClubLink_SetState(CommClubLink_WaitOnSpot, 0);
     }
-    sub_0205857C();
+    CommClubLink_CheckPartnerState5E();
 }
 
 void CommClubLink_OnEntryResult(int start, Party *party) {
@@ -338,7 +338,7 @@ void CommClubLink_WaitOnSpot(void) {
         flag = 0;
         Comm_SendFixedCommand(94, &flag);
     }
-    sub_0205857C();
+    CommClubLink_CheckPartnerState5E();
 }
 
 void CommClubLink_RecvOnSpot(int sender, int unused, u8 *data) {
@@ -384,7 +384,7 @@ void CommClubLink_StartBattle(void) {
 }
 
 void CommClubLink_WaitBattleTransferMode(void) {
-    if (sub_02036010()) {
+    if (Comm_IsTransferMode1()) {
         if (gCommClubLink->timer) {
             gCommClubLink->timer--;
         }
@@ -402,7 +402,7 @@ void CommClubLink_RequestBattleTransferMode(void) {
         gCommClubLink->timer--;
         return;
     }
-    sub_02035FD8();
+    Comm_RequestTransferMode1();
     CommClubLink_SetState(CommClubLink_WaitBattleTransferMode, 120);
 }
 
@@ -462,7 +462,7 @@ void CommClubLink_WaitCards(void) {
 }
 
 void CommClubLink_WaitRoomTransferMode(void) {
-    if (sub_02036010() == 0) {
+    if (Comm_IsTransferMode1() == 0) {
         if (gCommClubLink->timer) {
             gCommClubLink->timer--;
         }
@@ -480,7 +480,7 @@ void CommClubLink_RequestRoomTransferMode(void) {
         gCommClubLink->timer--;
         return;
     }
-    sub_02035FE4();
+    Comm_RequestTransferMode0();
     CommClubLink_SetState(CommClubLink_WaitRoomTransferMode, 120);
 }
 

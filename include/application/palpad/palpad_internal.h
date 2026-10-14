@@ -253,7 +253,7 @@ void PalPadGfx_PrintTitle(PalPadGfx *gfx, Window *window, int msgId);
 void PalPadGfx_ClearTitle(PalPadGfx *gfx);
 void PalPadGfx_BufferFriendCode(PalPadGfx *gfx, u64 friendCode);
 void PalPadGfx_BufferFriendName(PalPadGfx *gfx, SaveData *saveData, int slot, enum HeapID heapId);
-void ov43_0222AB5C(PalPadGfx *gfx, SaveData *saveData, int slot, enum HeapID heapId);
+void PalPadGfx_BufferFriendGroupName(PalPadGfx *gfx, SaveData *saveData, int slot, enum HeapID heapId);
 BOOL PalPadGfx_BufferLastDate(PalPadGfx *gfx, SaveData *saveData, int slot);
 void PalPadGfx_BufferNumber(PalPadGfx *gfx, int value);
 void PalPadGfx_BufferActivityName(PalPadGfx *gfx, int activity);

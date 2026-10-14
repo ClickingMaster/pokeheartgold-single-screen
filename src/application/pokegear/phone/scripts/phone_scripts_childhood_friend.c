@@ -57,7 +57,7 @@ BOOL GearPhoneCall_EthanLyra(PokegearPhoneCallContext *ctx) {
     return FALSE;
 }
 
-u8 ov101_021F3D34(PokegearPhoneCallContext *ctx) {
+u8 PhoneCall_EthanLyra_GetRandomRegionMsg(PokegearPhoneCallContext *ctx) {
     int i;
     u8 count;
     u8 *ptr;
@@ -106,7 +106,7 @@ BOOL GearPhoneCall_EthanLyra2(PokegearPhoneCallContext *ctx) {
         if ((LCRandom() % 1000) < 500) {
             PhoneCallMessagePrint_Ungendered(ctx, ctx->msgData_PhoneContact, msg_0662_00010 + ((LCRandom() % 900) / 300));
         } else {
-            PhoneCallMessagePrint_Ungendered(ctx, ctx->msgData_PhoneContact, ov101_021F3D34(ctx));
+            PhoneCallMessagePrint_Ungendered(ctx, ctx->msgData_PhoneContact, PhoneCall_EthanLyra_GetRandomRegionMsg(ctx));
         }
         break;
     default:

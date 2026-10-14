@@ -40,7 +40,7 @@ typedef struct DressUpTrayTween {
 void DressUp_TweenToTrayTask(SysTask *task, DressUpTrayTween *tween);
 
 // ceil(value / divisor) for positive values that are not multiples, value / divisor + 1 otherwise
-int ov41_02248E10(int value, int divisor) {
+int DressUp_DivFloorPlusOne(int value, int divisor) {
     int d = divisor;
     int v = value;
     int rem = v % d;

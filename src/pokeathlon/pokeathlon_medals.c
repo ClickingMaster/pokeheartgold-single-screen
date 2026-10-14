@@ -43,7 +43,7 @@ BOOL PokeathlonMedals_GetSpeciesOrderFileIndex(void) {
     return TRUE;
 }
 
-BOOL ov99_021E7150(PokeathlonMedals *work) {
+BOOL PokeathlonMedals_AreFlags0EFTo0F1Set(PokeathlonMedals *work) {
     return work->args->unkC;
 }
 
@@ -722,7 +722,7 @@ void PokeathlonMedals_PrintStaticText(PokeathlonMedals *work) {
     }
     BufferIntegerAsString(msgFormat, 0, PokeathlonMedals_CountMedalists(work), 3, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     PokeathlonUtil_PrintMessageAtXY(work->textContext, 1, msg_0314_00128, 1, 0);
-    if (ov99_021E7150(work)) {
+    if (PokeathlonMedals_AreFlags0EFTo0F1Set(work)) {
         int trustTrophies = PokeathlonMedals_CountTrustTrophies(work);
         PokeathlonUtil_PrintMessageAtXY(work->textContext, 2, trustTrophies + msg_0314_00113, 1, 0);
     }

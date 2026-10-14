@@ -24,7 +24,7 @@
 	.public SafariAreaCustomizer_CreateMenuItems
 	.public SafariAreaCustomizer_CreateSprites
 	.public SafariAreaCustomizer_CreateCancelTextObj
-	.public ov108_021E767C
+	.public SafariAreaCustomizer_DrawPageScreenPart
 	.public SafariAreaCustomizer_PrintWindowText
 	.public SafariAreaCustomizer_PrintPageNumber
 	.public SafariAreaCustomizer_MoveCursor
@@ -78,7 +78,7 @@
 	.public SafariAreaCustomizer_ChangePage
 	.public SafariAreaCustomizer_HandleMoveInput
 	.public SafariAreaCustomizer_ShowCursors
-	.public ov108_021E6238
+	.public thunk_SafariAreaCustomizer_ShowCursors
 	.public SafariAreaCustomizer_CheckInputModeSwitch
 	.public SafariAreaCustomizer_StartMove
 	.public SafariAreaCustomizer_EndMove

@@ -28,7 +28,7 @@
 
 // Declared only in other modules' private headers.
 void *WiFiPlazaWork_GetSaveData(void *lobby);
-void *ov45_0222A2CC(void *lobby);
+void *WiFiPlazaWork_GetScheduleValue4(void *lobby);
 void WiFiPlazaWork_SetLowVolume(void *lobby, int value);
 void WiFiPlazaWork_SetAppQuitForClosing(void *lobby);
 u32 WiFiPlazaWork_IsClosing(void *lobby);
@@ -70,7 +70,7 @@ BOOL FootprintStamp_Init(OverlayManager *man, int *state) {
     MI_CpuFill8(work, 0, sizeof(FootprintStamp));
     work->args = OverlayManager_GetArgs(man);
     work->saveData = WiFiPlazaWork_GetSaveData(work->args->lobby);
-    work->unk19E0 = ov45_0222A2CC(work->args->lobby);
+    work->unk19E0 = WiFiPlazaWork_GetScheduleValue4(work->args->lobby);
     FootprintStamp_InitLinkFilter(work);
     FootprintStamp_LoadParty(work->args->boardType, work->saveData, work->party);
     work->ink = FOOTPRINT_STAMP_INK_MAX;

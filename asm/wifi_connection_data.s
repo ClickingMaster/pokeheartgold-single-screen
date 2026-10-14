@@ -605,7 +605,7 @@
 	.public WifiConnection_GameServerMatchedCallback
 	.public WifiConnection_ConnectedToServerCallback
 	.public WifiConnection_NewClientCallback
-	.public ov00_021E700C
+	.public WifiConnection_CreateTokenAndScanFriends
 	.public WifiConnection_GetVoiceActivity
 	.public WifiConnection_IsVoiceChatEnabled
 	.public WifiConnection_GetNewClientIndex
@@ -614,7 +614,7 @@
 	.public WifiConnection_StopServerMatchingCallback
 	.public WifiConnection_StopServerMatching
 	.public WifiConnection_ResetStopServerMatching
-	.public ov00_021E7144
+	.public WifiConnection_GetNumConnectionHost
 	.public WifiConnection_SetExtraHeapEnabled
 	.public WifiConnection_SetDisconnectWhenAlone
 	.public WifiConnection_FreeRecvBuffer

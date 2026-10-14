@@ -25,7 +25,7 @@ extern void *Save_FriendRoster_Get(void *);
 extern void FrontierSave_ClearRow(void *, int, int);
 extern void *Save_Frontier_GetStatic(void *);
 extern int Comm_IsWifiPeerLinkMode(void);
-extern int sub_02034098(void);
+extern int Comm_IsLinkMode19To23Or34(void);
 extern int Comm_CountConnected(void);
 extern void CommState_SetWifiError(int, u32, int);
 extern int CommState_GetLinkMode(void);
@@ -127,7 +127,7 @@ int WifiConnection_Init(void *saveData, int heapId, u32 heapSize, int maxPlayers
     for (i = 0; i < 32; i++) {
         gWifiConnection->friendStatus[i] = 0;
     }
-    ov00_021E700C();
+    WifiConnection_CreateTokenAndScanFriends();
     if (!DWC_CheckHasProfile(gWifiConnection->userData)) {
         return 1;
     }
@@ -1075,7 +1075,7 @@ void WifiConnection_GameServerMatchedCallback(int result, int cancelled, int can
             u32 mask;
             u32 current;
             CommState_GetLinkMode();
-            if (sub_02034098() && aid == -1) {
+            if (Comm_IsLinkMode19To23Or34() && aid == -1) {
                 reject = 1;
             }
             if (gWifiConnection->connectFilterCallback && gWifiConnection->connectFilterCallback(aid) == 0) {
@@ -1127,7 +1127,7 @@ void WifiConnection_NewClientCallback(int index) {
 
 #pragma force_active reset
 
-void ov00_021E700C(void) {
+void WifiConnection_CreateTokenAndScanFriends(void) {
     u8 profileToken[12];
     u8 newToken[12];
     int i;
@@ -1195,7 +1195,7 @@ void WifiConnection_ResetStopServerMatching(void) {
 
 #pragma force_active on
 
-void ov00_021E7144(void) {
+void WifiConnection_GetNumConnectionHost(void) {
     DWC_GetNumConnectionHost();
 }
 

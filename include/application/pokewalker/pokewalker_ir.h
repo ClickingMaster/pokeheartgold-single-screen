@@ -136,7 +136,7 @@ typedef struct PokewalkerIrStatus {
 } PokewalkerIrStatus; // size=0xD4C
 
 u16 PokewalkerIr_Checksum(u8 *bytes, u32 len);
-void ov112_021E5938(void);
+void PokewalkerIr_MarkDisconnected(void);
 void PokewalkerIr_ResetLink(void);
 void PokewalkerIr_InitLink(void);
 u32 PokewalkerIr_IsConnected(void);
@@ -144,15 +144,15 @@ void PokewalkerIr_SendPacket(const u8 *src, int len, u8 command, u8 arg, u32 ses
 void PokewalkerIr_CloseLink(int result);
 void PokewalkerIr_Disconnect(void);
 void PokewalkerIr_Send(void *data, int len, u8 command, u8 arg);
-void ov112_021E5A80(void);
-BOOL ov112_021E5A84(u32 size);
+void PokewalkerIr_PollDummy(void);
+BOOL PokewalkerIr_ShouldDropShortPacket(u32 size);
 BOOL PokewalkerIr_CheckTimeout(void);
 BOOL PokewalkerIr_VerifyPacket(u32 size);
 int PokewalkerIr_Poll(void);
 void PokewalkerIr_SetConnectCallback(void *callback);
 void PokewalkerIr_SetReceiveCallback(void *callback);
 void PokewalkerIr_SetCloseCallback(void *callback);
-void ov112_021E5D5C(u8 value);
+void PokewalkerIr_SetSendParam(u8 value);
 void PokewalkerIr_SetCompressBuffer(void *buffer);
 void PokewalkerIr_CompressBlocks(u8 *src, u8 *dst, u16 size, u8 *sizes);
 void PokewalkerIr_SetError(int error);
@@ -176,7 +176,7 @@ void PokewalkerIr_RequestUpload(u8 *a, u8 *b, u8 *c);
 void PokewalkerIr_RequestReceive(u8 *a, u8 *b, u8 *c, u8 *d);
 void PokewalkerIr_RequestSendStroll(u8 *a, u8 *b, u8 *c, u8 *d);
 void PokewalkerIr_RequestReceiveGifts(void *a, void *b);
-void *ov112_021E7668(void);
+void *PokewalkerIrStatus_IsConnected(void);
 u8 PokewalkerIr_GetChunkProgress(void);
 u8 PokewalkerIr_GetTotalProgress(void);
 u32 PokewalkerIr_GetAndClearError(void);

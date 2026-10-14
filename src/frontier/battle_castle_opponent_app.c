@@ -678,7 +678,7 @@ BOOL BattleCastleOpponentApp_HandleMenu(BattleCastleOpponentApp *app) {
         } else if (app->flags.bits.linkResume == CASTLE_OPP_RESUME_SUMMARY_MENU) {
             BattleCastleOpponentApp_CloseWindow(&app->windows[CASTLE_OPP_WIN_MESSAGE]);
             BattleCastleOpponentApp_OpenSummaryMenu(app);
-            ov83_02247630(app->unk_540, 200, 105);
+            BattleCastleSprite_ShowAnim11WithSE(app->unk_540, 200, 105);
             app->subState = CASTLE_OPP_STATE_SUMMARY_MENU;
         } else if (app->flags.bits.linkResume == CASTLE_OPP_RESUME_BOUGHT_PAGE) {
             app->subState = CASTLE_OPP_STATE_SHOW_BOUGHT_PAGE;
@@ -700,7 +700,7 @@ BOOL BattleCastleOpponentApp_HandleMenu(BattleCastleOpponentApp *app) {
             return TRUE;
         case (u32)GRID_MENU_CANCEL:
             if (app->cursorPos != app->numOwnSlots) {
-                ov83_02247B04(app->partyGrid);
+                BattleCastle_SetGridInputsToNext(app->partyGrid);
                 BattleCastleOpponentApp_SetCursorPos(app, CASTLE_OPP_GRID_EXIT, app->cursorPos);
             }
             break;
@@ -977,7 +977,7 @@ BOOL BattleCastleOpponentApp_HandleMenu(BattleCastleOpponentApp *app) {
         if (BattleCastle_IsAdvancePressed() == TRUE) {
             BattleCastleOpponentApp_OpenSummaryMenu(app);
             BattleCastleOpponentApp_PrintMonSummary(app, 0);
-            ov83_02247630(app->unk_540, 200, 105);
+            BattleCastleSprite_ShowAnim11WithSE(app->unk_540, 200, 105);
             app->subState = CASTLE_OPP_STATE_SUMMARY_MENU;
         }
         break;
@@ -3012,7 +3012,7 @@ int BattleCastleSprite_IsAnimated(BattleCastleSprite *sprite) {
     return Sprite_IsAnimated(sprite->sprite);
 }
 
-void ov83_02247630(BattleCastleSprite *sprite, int x, u32 y) {
+void BattleCastleSprite_ShowAnim11WithSE(BattleCastleSprite *sprite, int x, u32 y) {
     BattleCastleSprite_SetAnim(sprite, 11);
     BattleCastleSprite_SetPosition(sprite, x, y);
     BattleCastleSprite_SetDrawFlag(sprite, TRUE);
@@ -3258,7 +3258,7 @@ int BattleCastle_HandlePartyGridInput(GridInputHandler *grid) {
     return gBattleCastlePartyGridSlots[input];
 }
 
-void ov83_02247B04(GridInputHandler *grid) {
+void BattleCastle_SetGridInputsToNext(GridInputHandler *grid) {
     int input = GridInputHandler_GetNextInput(grid);
     GridInputHandler_SetNextLastReturnInputs(grid, 0, input, input);
 }

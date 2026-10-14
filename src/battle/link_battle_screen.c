@@ -252,7 +252,7 @@ void LinkBattleScreen_InitPartySprites(LinkBattleScreen *screen);
 void LinkBattleScreen_LoadMonIconGfx(LinkBattleScreen *screen);
 void LinkBattleScreen_LoadItemIconGfx(LinkBattleScreen *screen);
 void LinkBattleScreen_LoadStatusIconGfx(LinkBattleScreen *screen);
-void ov05_0221E4C8(LinkBattleScreen *screen);
+void LinkBattleScreen_LoadPlistSpriteRes(LinkBattleScreen *screen);
 void LinkBattleScreen_SetPartySpriteOffset(LinkBattleScreen *screen, int shift);
 void LinkBattleScreen_AddPartyWindows(LinkBattleScreen *screen);
 void LinkBattleScreen_RemovePartyWindows(LinkBattleScreen *screen);
@@ -1638,7 +1638,7 @@ void LinkBattleScreen_InitPartySprites(LinkBattleScreen *screen) {
     LinkBattleScreen_LoadMonIconGfx(screen);
     LinkBattleScreen_LoadItemIconGfx(screen);
     LinkBattleScreen_LoadStatusIconGfx(screen);
-    ov05_0221E4C8(screen);
+    LinkBattleScreen_LoadPlistSpriteRes(screen);
     for (i = 0; i < PARTY_SIZE; i++) {
         LinkBattleScreen_CreateMonSprites(screen, i);
     }
@@ -1676,7 +1676,7 @@ void LinkBattleScreen_LoadStatusIconGfx(LinkBattleScreen *screen) {
     NARC_Delete(narc);
 }
 
-void ov05_0221E4C8(LinkBattleScreen *screen) {
+void LinkBattleScreen_LoadPlistSpriteRes(LinkBattleScreen *screen) {
     NARC *narc = NARC_New(NARC_graphic_plist_gra, screen->args->heapId);
     SpriteSystem_LoadCharResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, 2, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB811);
     SpriteSystem_LoadPlttResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, 8, FALSE, 2, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB80B);

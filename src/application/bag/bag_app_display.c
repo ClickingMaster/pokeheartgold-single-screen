@@ -69,7 +69,7 @@ void BagApp_ShowTMHMTypeIcons(BagApp *app, u16 itemId, BOOL show);
 void BagApp_CreateSpriteSystem(BagApp *app);
 void BagApp_LoadSpriteResources(BagApp *app);
 void BagApp_CreateSprites(BagApp *app);
-void ov15_021FFEC0(BagApp *app);
+void BagApp_ClearField648(BagApp *app);
 void BagApp_UpdatePageArrows(BagApp *app);
 
 #pragma force_active on
@@ -333,7 +333,7 @@ void BagApp_PrintMoney(BagApp *app, BOOL skipLabel) {
     String_Delete(string);
 }
 
-void ov15_021FF1E0(BagApp *app) {
+void BagApp_PrintMsg115And116(BagApp *app) {
     Window *window = &app->windows[5];
     FillWindowPixelBuffer(window, 15);
     DrawFrameAndWindow1(window, TRUE, 0x3F7, 14);
@@ -586,15 +586,15 @@ void BagApp_SetItemIconSprite(BagApp *app, int slot, u16 itemId) {
 
 #pragma force_active reset
 
-void ov15_021FF950(BagApp *app) {
+void BagApp_SetField648(BagApp *app) {
     app->unk_64B = 0;
     app->unk_648 = 1;
 }
 
-void ov15_021FF964(BagApp *app) {
+void BagApp_UpdateField648(BagApp *app) {
     switch (app->unk_648) {
     case 1:
-        ov15_021FFEC0(app);
+        BagApp_ClearField648(app);
         break;
     case 0:
         break;
@@ -700,7 +700,7 @@ void BagApp_CreateSprites(BagApp *app) {
     ManagedSprite_SetPriority(app->sprites[38], 1);
 }
 
-void ov15_021FFEC0(BagApp *app) {
+void BagApp_ClearField648(BagApp *app) {
     app->unk_648 = 0;
 }
 

@@ -53,6 +53,6 @@ void MainMenuUtil_LoadSpriteResources(NarcId narcId, u32 charFileId, u32 plttFil
 void MainMenuUtil_UpdateSprites(void);
 Sprite *MainMenuUtil_CreateSprite(u32 screen, Sprite *sprite, u32 x, u32 y, u32 animSeq);
 void MainMenuUtil_FreeSprites(void);
-u32 ov74_02235A68(int spriteId);
+u32 MainMenuUtil_GetVersionMaskBit(int spriteId);
 
 #endif // POKEHEARTGOLD_APPLICATION_MAIN_MENU_MAIN_MENU_INTERNAL_H

@@ -56,7 +56,7 @@
 .public BattleFactory_IncBattleNo
 .public BattleFactory_GetBattleNo
 .public BattleFactory_GetTrainerSprite
-.public ov80_022307C8
+.public BattleFactoryData_SaveRecordMode1
 .public BattleFactory_CompleteRound
 .public BattleFactory_SetRentalParty
 .public BattleFactory_GenerateOpponentMons

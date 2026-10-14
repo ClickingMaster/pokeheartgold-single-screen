@@ -13,20 +13,20 @@
 
 	.public DrawingSessionLink_RegisterCommands
 	.public DrawingSessionLink_ReceivePictureChunk
-	.public sub_0208F8BC
-	.public sub_0208F8E4
+	.public DrawingSessionLink_ReceiveMemberStroke
+	.public DrawingSessionLink_ReceiveStrokes
 	.public DrawingSessionLink_ReceivePictureDone
 	.public DrawingSessionLink_HandleJoinRequest
-	.public sub_0208FA50
+	.public DrawingSessionLink_ReceiveDummy103
 	.public DrawingSessionLink_ReceiveMemberJoined
-	.public sub_0208FA88
-	.public sub_0208FA8C
-	.public sub_0208FA90
+	.public DrawingSessionLink_ReceiveDummy99
+	.public DrawingSessionLink_ReceiveDummy100
+	.public DrawingSessionLink_ReceiveEvent15
 	.public DrawingSessionLink_ReceiveJoinNotice
-	.public sub_0208FAEC
+	.public DrawingSessionLink_ReceiveSetJoinState1
 	.public DrawingSessionLink_SendPictureChunk
 	.public DrawingSessionLink_GetChunkRecvBuffer
-	.public sub_0208FB5C
+	.public DrawingSessionLink_GetSize4
 	.public DrawingSessionLink_GetJoinRequestSize
 	.public gDrawingSessionLinkCommands
 
@@ -123,23 +123,23 @@ gDrawingSessionLinkCommands:
 	.word CommCmd_RecvIgnored, CommCmd_GetSize1, 0
 	.word CommCmd_RecvIgnored, CommCmd_GetSize1, 0
 	.word CommCmd_RecvIgnored, CommCmd_GetSize1, 0
-	.word CommCmd_RecvIgnored, sub_0208FB5C, 0
+	.word CommCmd_RecvIgnored, DrawingSessionLink_GetSize4, 0
 	.word CommCmd_RecvIgnored, CommCmd_GetSize1, 0
 	.word CommCmd_RecvIgnored, CommCmd_GetSize1, 0
 	.word CommCmd_RecvIgnored, CommCmd_GetSize1, 0
 	.word CommCmd_RecvIgnored, CommCmd_GetSize1, 0
 	.word CommCmd_RecvIgnored, CommCmd_GetSize1, 0
 	.word DrawingSessionLink_ReceivePictureChunk, CommCmd_GetSize1008, DrawingSessionLink_GetChunkRecvBuffer
-	.word sub_0208F8BC, CommCmd_GetSize10, 0
-	.word sub_0208F8E4, CommCmd_GetSize50, 0
-	.word sub_0208FA88, CommCmd_GetSize1, 0
-	.word sub_0208FA8C, CommCmd_GetSize1, 0
+	.word DrawingSessionLink_ReceiveMemberStroke, CommCmd_GetSize10, 0
+	.word DrawingSessionLink_ReceiveStrokes, CommCmd_GetSize50, 0
+	.word DrawingSessionLink_ReceiveDummy99, CommCmd_GetSize1, 0
+	.word DrawingSessionLink_ReceiveDummy100, CommCmd_GetSize1, 0
 	.word DrawingSessionLink_ReceiveMemberJoined, CommCmd_GetSize1, 0
 	.word DrawingSessionLink_ReceivePictureDone, CommCmd_GetSize0, 0
-	.word sub_0208FA50, CommCmd_GetSize0, 0
+	.word DrawingSessionLink_ReceiveDummy103, CommCmd_GetSize0, 0
 	.word DrawingSessionLink_HandleJoinRequest, DrawingSessionLink_GetJoinRequestSize, 0
-	.word sub_0208FA90, CommCmd_GetSize0, 0
+	.word DrawingSessionLink_ReceiveEvent15, CommCmd_GetSize0, 0
 	.word DrawingSessionLink_ReceiveJoinNotice, CommCmd_GetSize0, 0
-	.word sub_0208FAEC, CommCmd_GetSize0, 0
+	.word DrawingSessionLink_ReceiveSetJoinState1, CommCmd_GetSize0, 0
 	.word CommCmd_RecvIgnored, CommCmd_GetSize1, 0
 	.word CommCmd_RecvIgnored, CommCmd_GetSize1, 0

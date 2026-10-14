@@ -575,7 +575,7 @@ void DressUpTray_PageSwapTask(SysTask *task, DressUpPageSwap *swap) {
         DressUpTray_SetPageVisible(swap->tray, swap->toGroup, swap->toPage, TRUE);
         swap->tabSlideDone = FALSE;
         DressUpTray_SlideInTabBg(swap->tray, (swap->tray->tabBgIndex + 1) % 2, 2, 5, &swap->tabSlideDone);
-        swap->counter = ov41_02248E10(swap->fromLeft, 1);
+        swap->counter = DressUp_DivFloorPlusOne(swap->fromLeft, 1);
         swap->state++;
         break;
     case 1:
@@ -586,7 +586,7 @@ void DressUpTray_PageSwapTask(SysTask *task, DressUpPageSwap *swap) {
             }
         }
         if (swap->fromLeft == 0) {
-            swap->counter = ov41_02248E10(swap->toLeft, 2);
+            swap->counter = DressUp_DivFloorPlusOne(swap->toLeft, 2);
             swap->state++;
         }
         break;

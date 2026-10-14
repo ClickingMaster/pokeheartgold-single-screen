@@ -537,7 +537,7 @@ void MainMenuUtil_FreeSprites(void) {
 
 #pragma force_active reset
 
-u32 ov74_02235A68(int spriteId) {
+u32 MainMenuUtil_GetVersionMaskBit(int spriteId) {
     return 1 << (spriteId - 10);
 }
 

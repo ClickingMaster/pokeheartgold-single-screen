@@ -232,7 +232,7 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         BattleArcadeData_SaveRecord(arcadeCtx, 2);
         break;
     case 12:
-        *out = ov80_02238430(arcadeCtx, arcadeCtx->eventId);
+        *out = BattleArcade_GetValueForEvent(arcadeCtx, arcadeCtx->eventId);
         break;
     case 14:
         *out = BattleArcade_IncBattleNo(arcadeCtx);
@@ -262,7 +262,7 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         *out = BattleArcade_GetTrainerSprite(arcadeCtx, var0);
         break;
     case 21:
-        ov80_022347B8(arcadeCtx);
+        BattleArcadeData_SaveRecordMode1(arcadeCtx);
         break;
     case 22:
         BattleArcade_CompleteRound(arcadeCtx);
@@ -394,7 +394,7 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         }
         break;
     case 45:
-        *out = ov80_02235324(arcadeCtx);
+        *out = BattleArcadeData_GetRoundTableValue(arcadeCtx);
         break;
     case 46:
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);

@@ -258,7 +258,7 @@ void BattleArcade_SetOpponentParty(ArcadeContext *ctx) {
 }
 #pragma force_active reset
 
-u32 ov80_02238430(ArcadeContext *ctx, u8 eventId) {
+u32 BattleArcade_GetValueForEvent(ArcadeContext *ctx, u8 eventId) {
     BattleArcade_GetRound(ctx);
     if (eventId == ARCADE_EVENT_28) {
         return 1;

@@ -44,7 +44,7 @@ struct PlayerAvatar {
 
 u32 FrontierStat_GetFriendIndex(u32 stat);
 u8 Comm_GetPartnerGameVersion(void);
-u8 sub_0205C298(SaveData *saveData);
+u8 Save_IsPlayerOrPartnerVersion0(SaveData *saveData);
 u8 BattleArcade_GetWinStreakStat(u32 mode);
 u8 BattleArcade_GetBestStreakStat(u32 mode);
 u8 BattleTower_GetWinStreakStat(u32 mode);

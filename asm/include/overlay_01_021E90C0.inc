@@ -51,7 +51,7 @@
 .public MapPropOneShotAnimationManager_UnloadAnimation
 .public MapPropOneShotAnimationManager_IsAnimationLoopFinished
 .public MapPropOneShotAnimationManager_GetAnimationMapPropModelID
-.public ov01_021E90B0
+.public MapPropOneShotAnimationManager_SetAnimationField35
 .public DoorTransition_New
 .public DoorTransition_Free
 .public DoorTransition_SetPosition

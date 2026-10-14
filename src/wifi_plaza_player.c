@@ -166,7 +166,7 @@ void WiFiPlazaWork_SetSurveyAnswer(WiFiPlazaWork *work, u32 a, u32 b) {
         work->profile.player.survey.surveyId = a;
         work->profile.player.survey.answer = b;
         work->eventSchedule.low = 1;
-        ov45_0222B118(work, 6);
+        WiFiPlazaWork_MarkActivityDone(work, 6);
         WiFiPlazaProfile_UpdateChecksum(&work->profile, work->save);
         WiFiPlazaWork_SendOwnRecord(work);
     }

@@ -88,7 +88,7 @@ void WiFiPlazaLobbyClient_OnPlayerLeave(int id) {
     WiFiPlazaLobbyClient_RemoveFromIdList(gWiFiPlazaLobbyClient, id, 1);
 }
 
-void ov45_0222FDD4(void) {
+void WiFiPlazaLobbyClient_OnEvent3Dummy(void) {
 }
 
 #pragma force_active on
@@ -220,7 +220,7 @@ void WiFiPlazaLobbyClient_OnOwnRecord(int result, const WiFiPlazaPlayer *data, u
     }
 }
 
-BOOL ov45_02230090(int result) {
+BOOL WiFiPlazaLobbyClient_OnEvent12Result(int result) {
     if (result == 0) {
         return TRUE;
     }
@@ -253,7 +253,7 @@ void WiFiPlazaLobbyClient_OnSurveySubmitted(void) {
     gWiFiPlazaLobbyClient->unk_980 = 2;
 }
 
-void ov45_02230130(void) {
+void WiFiPlazaLobbyClient_SetFlag131(void) {
     gWiFiPlazaLobbyClient->unk_131 = 1;
 }
 

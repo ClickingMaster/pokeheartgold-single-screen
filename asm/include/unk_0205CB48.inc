@@ -103,7 +103,7 @@
 .public GetDeltaYByFacingDirection
 .public MapObject_SetPreviousCoordsToCurrent
 .public MapObject_GetMetatileBehaviorInDirection
-.public sub_02060FE0
+.public MapObject_GetTileAttrBits8To14InDirection
 .public OffsetPositionInDirection
 .public GetOppositeDirection
 .public FieldSystem_SnapToTerrainHeight
@@ -124,7 +124,7 @@
 
 	.public PlayerAvatar_IsReadyToMove
 	.public PlayerAvatar_StoreHeldDirections
-	.public sub_0205CC74
+	.public PlayerAvatar_ClearFlag1IfFlag6Moving
 	.public PlayerAvatar_PlayTerrainSounds
 	.public PlayerAvatar_PlayFootstepSound
 	.public PlayerAvatar_TryForcedMovement

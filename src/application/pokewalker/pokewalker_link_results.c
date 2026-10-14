@@ -132,7 +132,7 @@ int PokewalkerApp_Link_UpdateReceive(PokewalkerApp *app) {
         PokewalkerIr_Stop();
         return 32;
     }
-    if (!ov112_021E7668()) {
+    if (!PokewalkerIrStatus_IsConnected()) {
         PokewalkerApp_ShowSubBg1(app, TRUE);
         if (PokewalkerApp_GetTouchedButton(5) == 0 || (gSystem.newKeys & PAD_BUTTON_A) || (gSystem.newKeys & PAD_BUTTON_B)) {
             app->linkError = 33;
@@ -236,7 +236,7 @@ int PokewalkerApp_Link_UpdateReceiveGifts(PokewalkerApp *app) {
         PokewalkerIr_Stop();
         return 32;
     }
-    if (!ov112_021E7668()) {
+    if (!PokewalkerIrStatus_IsConnected()) {
         PokewalkerApp_ShowSubBg1(app, TRUE);
         if (!PokewalkerApp_GetTouchedButton(5) || (gSystem.newKeys & PAD_BUTTON_A) || (gSystem.newKeys & PAD_BUTTON_B)) {
             PokewalkerIr_Stop();
@@ -271,7 +271,7 @@ int PokewalkerApp_Link_StartSendStroll(PokewalkerApp *app) {
     ManagedSprite_SetAnim(app->sprites[8], 25);
     ManagedSprite_SetAnimationFrame(app->sprites[8], 0);
     app->motionStarted = 0;
-    ov112_021EA5A4(app, 2);
+    PokewalkerApp_ShowConnectionSprites(app, 2);
     PokewalkerApp_ResetLinkError(app);
     return 31;
 }
@@ -340,7 +340,7 @@ int PokewalkerApp_Link_UpdateSendStroll(PokewalkerApp *app) {
         PokewalkerIr_Stop();
         return 32;
     }
-    if (!ov112_021E7668()) {
+    if (!PokewalkerIrStatus_IsConnected()) {
         PokewalkerApp_ShowSubBg1(app, TRUE);
         if (!PokewalkerApp_GetTouchedButton(5) || (gSystem.newKeys & PAD_BUTTON_A) || (gSystem.newKeys & PAD_BUTTON_B)) {
             app->linkError = 33;
@@ -667,7 +667,7 @@ int PokewalkerApp_Link_EndSendBackMenu(PokewalkerApp *app) {
 int PokewalkerApp_Link_PrintComeBack(PokewalkerApp *app) {
     BoxPokemon *boxMon = &app->returnedMon;
     Pokewalker_TryGetBoxMon(app->pokewalker, boxMon);
-    ov112_021EA5A4(app, 0);
+    PokewalkerApp_ShowConnectionSprites(app, 0);
     BufferBoxMonNickname(app->msgFormat, 1, boxMon);
     PokewalkerApp_LoadMonPicture(boxMon, app->monSpriteBuffer, &app->monPicTemplate, 0);
     PokewalkerApp_StartMessage(app, 2, msg_0274_00026, 53);
@@ -736,7 +736,7 @@ int PokewalkerApp_Link_WaitCursor(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_Link_End(PokewalkerApp *app) {
-    ov112_021EA64C(app);
+    PokewalkerApp_HideConnectionSprites(app);
     PokewalkerApp_HideSprite(app, 3);
     PokewalkerApp_HideSprite(app, 4);
     PokewalkerApp_HideSprite(app, 8);

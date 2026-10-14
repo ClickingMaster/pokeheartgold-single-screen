@@ -6,7 +6,7 @@
 .public CommCmd_GetSize0
 .public CommCmd_GetSize1
 .public Comm_GetLocalNetId
-.public sub_020378E4
+.public Comm_SetWifiContinuousSend
 .public WirelessTrade_RegisterCommands
 .public WirelessTrade_SetWork
 .public MIi_CpuCopyFast

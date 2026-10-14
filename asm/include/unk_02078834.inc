@@ -6,7 +6,7 @@
 .public Heap_Alloc
 .public Heap_AllocAtEnd
 .public Heap_Free
-.public sub_020378E4
+.public Comm_SetWifiContinuousSend
 .public CommState_GetWifiClubData
 .public Comm_HasWifiProfile
 .public FieldSystem_LaunchApplication

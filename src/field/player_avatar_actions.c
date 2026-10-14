@@ -506,7 +506,7 @@ BOOL Field_PlayerCanSurfOnTile(PlayerAvatar *playerAvatar, int currentTile, int 
                 return FALSE;
             }
         }
-        if (sub_0205B78C(currentTile) == TRUE) {
+        if (MetatileBehavior_Is34(currentTile) == TRUE) {
             return FALSE;
         }
         return TRUE;

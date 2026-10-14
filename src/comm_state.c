@@ -337,7 +337,7 @@ void CommState_ParentStart(void) {
         CommWireless_Init(gCommState->profile, 1);
         CommPlayerInfo_Init(gCommState->saveData, gCommState->rules);
         if (Comm_StartParent(1, 1, 512, 1)) {
-            sub_02035FD8();
+            Comm_RequestTransferMode1();
             CommState_SetState(CommState_WaitLinked, 0);
         }
     }
@@ -360,7 +360,7 @@ void CommState_ChildStartScan(void) {
         CommWireless_Init(gCommState->profile, 1);
         CommPlayerInfo_Init(gCommState->saveData, gCommState->rules);
         if (Comm_StartScan(1, 1, 512)) {
-            sub_02035FD8();
+            Comm_RequestTransferMode1();
             CommState_SetState(CommState_ChildScanning, 0);
         }
     }
@@ -397,7 +397,7 @@ void CommState_ChildRescan(void) {
         return;
     }
     if (CommWireless_IsIdle() && Comm_StartScan(0, 1, 512)) {
-        sub_02035FD8();
+        Comm_RequestTransferMode1();
         CommState_SetState(CommState_ChildConnecting, 10);
     }
 }
@@ -419,7 +419,7 @@ void CommState_RestartScanStart(void) {
         return;
     }
     if (CommWireless_IsIdle() && Comm_StartScan(0, 1, 512)) {
-        sub_02035FD8();
+        Comm_RequestTransferMode1();
         CommState_SetState(CommState_ChildScanning, 10);
     }
 }
@@ -436,7 +436,7 @@ void CommState_FreeWhenDone(void) {
 void CommState_ResumeParentWaitAlone(void) {
     if (Comm_CountConnected() <= 1) {
         Wireless_SetEntryClosed(0);
-        sub_0203624C();
+        Comm_ResetInTransferMode1();
         CommState_SetState(CommState_AlternateWaitStopped, 0);
     }
     if (gCommState->timer) {
@@ -444,7 +444,7 @@ void CommState_ResumeParentWaitAlone(void) {
         return;
     }
     Wireless_SetEntryClosed(0);
-    sub_0203624C();
+    Comm_ResetInTransferMode1();
     CommState_SetState(CommState_AlternateWaitStopped, 0);
 }
 
@@ -471,7 +471,7 @@ void CommState_AlternateInit(void) {
         Wireless_SetMaxEntries(gCommState->maxEntries);
         CommPlayerInfo_Init(gCommState->saveData, 0);
         if (Comm_StartScan(1, 1, 512)) {
-            sub_02035FD8();
+            Comm_RequestTransferMode1();
             CommState_SetState(CommState_AlternateScan, 64);
         }
     }
@@ -500,7 +500,7 @@ void CommState_AlternateStartParent(void) {
         MATHRandContext32 *mathRandContext = &gCommState->mathRandContext;
         mathRandContext->x = (mathRandContext->mul * mathRandContext->x) + mathRandContext->add;
         //
-        sub_02035FD8();
+        Comm_RequestTransferMode1();
         gCommState->renewTgid = 0;
         CommState_SetState(&CommState_AlternateParentWait, 10000);
     }
@@ -526,7 +526,7 @@ void CommState_AlternateParentWait(void) {
 
 void CommState_AlternateStartScan(void) {
     if (CommWireless_IsIdle() && Comm_StartScan(0, 0, 512)) {
-        sub_02035FD8();
+        Comm_RequestTransferMode1();
         // Equivalent to u32 rand = MATH_Rand32(&gCommState->mathRandContext, 32)
         MATHRandContext32 *mathRandContext = &gCommState->mathRandContext;
         u64 nextX = (mathRandContext->mul * mathRandContext->x) + mathRandContext->add;
@@ -545,7 +545,7 @@ void CommState_JoinWaitStopped(void) {
 
 void CommState_JoinStartScan(void) {
     if (CommWireless_IsIdle() && Comm_StartScan(0, 0, 512)) {
-        sub_02035FD8();
+        Comm_RequestTransferMode1();
         CommState_SetState(CommState_JoinConnect, 100);
     }
 }
@@ -643,12 +643,12 @@ void CommState_AlternateLinked(void) {
 
 void CommState_RestartIdle(void) {
     if (CommWireless_IsIdle() && Comm_StartParent(0, gCommState->renewTgid, 512, 0)) {
-        sub_02035FD8();
+        Comm_RequestTransferMode1();
         CommState_SetState(CommState_Idle, 0);
     }
 }
 
-void sub_020388E0(void) {
+void CommState_SetLinkMode13RequestMode0(void) {
     u8 sp[2];
     gCommState->linkMode = 13;
     if (!Comm_GetLocalNetId()) {
@@ -700,7 +700,7 @@ void CommState_ReconnectScan(void) {
     if (CommWireless_IsIdle()) {
         gCommState->linkMode = 13;
         if (Comm_StartScan(0, 0, 512)) {
-            sub_02035FE4();
+            Comm_RequestTransferMode0();
             CommState_SetState(CommState_ReconnectWaitParent, 100);
         }
     }
@@ -843,7 +843,7 @@ void CommState_OnBeacon(u32 ggid, s32 info) {
 
 void CommState_BeaconWatchScan(void) {
     if (Comm_StartScan(1, 1, 32)) {
-        sub_02035FD8();
+        Comm_RequestTransferMode1();
         CommState_SetState(CommState_BeaconWatch, 0);
     }
 }
@@ -902,7 +902,7 @@ void CommState_MysteryGiftParentStart(void) {
         CommWireless_Init(gCommState->profile, 1);
         CommPlayerInfo_Init(gCommState->saveData, 0);
         if (Comm_StartParent(1, 1, 512, 1)) {
-            sub_02035FD8();
+            Comm_RequestTransferMode1();
             CommState_SetState(CommState_WaitLinked, 0);
         }
     }
@@ -913,7 +913,7 @@ void CommState_MysteryGiftChildStart(void) {
         CommWireless_Init(gCommState->profile, 1);
         CommPlayerInfo_Init(gCommState->saveData, 0);
         if (Comm_StartScan(1, 1, 512)) {
-            sub_02035FD8();
+            Comm_RequestTransferMode1();
             CommState_SetState(CommState_ChildScanning, 0);
         }
     }
@@ -1299,7 +1299,7 @@ void CommState_WifiClubStart(void) {
         if (Comm_StartParent(1, 1, 512, 1)) {
             WifiConnection_Init(gCommState->saveData, 48, 0x2C400, Comm_GetMaxChildren(gCommState->linkMode) + 1);
             WifiConnection_SetErrorCallback(CommState_ShowErrorAndHalt);
-            sub_02035FD8();
+            Comm_RequestTransferMode1();
             CommState_SetState(CommState_WifiLogin, 3600);
         }
     }
@@ -1518,7 +1518,7 @@ BOOL CommState_SetError(int errorKind) {
     return FALSE;
 }
 
-void sub_02039AF8(void) {
+void CommState_SetWifiPeerLinkMode29(void) {
     gCommState->linkMode = 29;
     WifiConnection_SetReceiveCallbacks(&Comm_RecvPeerFrameCallback, &Comm_RecvPeerFrameCallback);
 }
@@ -1549,9 +1549,9 @@ void CommState_PlazaStart(void) {
         if (Comm_StartParent(1, 1, 512, 1)) {
             WifiConnection_Init(gCommState->saveData, 48, 0x58000, Comm_GetMaxChildren(gCommState->linkMode) + 1);
             WifiConnection_SetErrorCallback(CommState_ShowErrorAndHalt);
-            sub_02035FD8();
+            Comm_RequestTransferMode1();
             WifiConnection_SetVoiceChatEnabled(0);
-            sub_020378E4(0);
+            Comm_SetWifiContinuousSend(0);
             CommState_SetState(CommState_WifiLogin, 3600);
         }
     }
@@ -1692,7 +1692,7 @@ void CommState_PlazaEndMatch(void) {
     }
     if (CommState_PlazaUpdateLobby() && WifiConnection_Disconnect(0) && WifiConnection_FinishDisconnect()) {
         Comm_ResetWork();
-        sub_020378E4(0);
+        Comm_SetWifiContinuousSend(0);
         CommState_SetState(CommState_PlazaLobby, 0);
     }
 }

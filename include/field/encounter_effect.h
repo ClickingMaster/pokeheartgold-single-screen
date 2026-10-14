@@ -23,7 +23,7 @@ typedef struct EncounterEffectTask {
     void *work;    // effect-specific, freed by EncounterEffect_Finish
     FieldSystem *fieldSystem;
     BOOL *done;  // set to TRUE by the effect when the screen is ready for the battle
-    BOOL wipeDone; // read by ov01_021EFE30
+    BOOL wipeDone; // read by EncounterEffect_IsWipeDone
     u32 unk_1C;
     NARC *narc; // deleted by EncounterEffect_Finish
 } EncounterEffectTask;
@@ -73,7 +73,7 @@ void EncounterEffect_UnloadOverlay(s32 effect);
 void EncounterEffect_Start(s32 effect, FieldSystem *fieldSystem, BOOL *done);
 void EncounterEffect_Finish(EncounterEffectTask *effect, SysTask *task);
 void EncounterEffect_StartFlash(int screen, int brightness, int otherBrightness, BOOL *done, int count);
-BOOL ov01_021EFE30(EncounterEffectTask *effect);
+BOOL EncounterEffect_IsWipeDone(EncounterEffectTask *effect);
 void EncounterEffectInterp_Init(EncounterEffectInterp *interp, s32 start, s32 end, s32 duration);
 BOOL EncounterEffectInterp_Update(EncounterEffectInterp *interp);
 void EncounterEffectInterp_InitFx(EncounterEffectInterp *interp, s32 start, s32 end, s32 duration);

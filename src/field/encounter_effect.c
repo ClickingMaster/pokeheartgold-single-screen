@@ -206,7 +206,7 @@ void Task_EncounterEffectFlash(SysTask *task, void *data) {
     BrightnessInterp_Update(&flash->otherFade);
 }
 
-BOOL ov01_021EFE30(EncounterEffectTask *effect) {
+BOOL EncounterEffect_IsWipeDone(EncounterEffectTask *effect) {
     return effect->wipeDone;
 }
 

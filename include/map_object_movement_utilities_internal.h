@@ -67,7 +67,7 @@ BOOL MapObject_CheckSnowFootprintBehavior(LocalMapObject *object, int tile);
 BOOL MapObject_IsOnBridge(LocalMapObject *object, int tile);
 void MapObject_MoveCoordsInDirection(LocalMapObject *object, int direction);
 int MapObject_GetMetatileBehaviorInDirection(LocalMapObject *object, int direction);
-u8 sub_02060FE0(LocalMapObject *object, int direction);
+u8 MapObject_GetTileAttrBits8To14InDirection(LocalMapObject *object, int direction);
 void MapObject_OffsetPositionInDirection(LocalMapObject *object, int direction, int distance);
 BOOL MapObject_UpdateMetatileBehaviors(LocalMapObject *object);
 void OffsetPositionInDirection(int direction, VecFx32 *position, int distance);

@@ -306,7 +306,7 @@ s32 GetMovementDirection(u32 movement) {
     return -1;
 }
 
-BOOL sub_020623C8(u32 movement) {
+BOOL IsMovement56To59(u32 movement) {
     movement -= 0x38;
     if (movement <= 3) {
         return TRUE;
@@ -314,7 +314,7 @@ BOOL sub_020623C8(u32 movement) {
     return FALSE;
 }
 
-u32 sub_020623D8(s32 direction) {
+u32 GetMovement8ForDirection(s32 direction) {
     struct DirectionMovements {
         u32 movements[4];
     } table = *(const struct DirectionMovements *)_020FDA28;

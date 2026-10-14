@@ -261,7 +261,7 @@ BOOL FrtCmd_FactoryAction(FrontierScriptContext *ctx) {
         *var = BattleFactory_GetTrainerSprite(data, arg);
         break;
     case 21:
-        ov80_022307C8(data);
+        BattleFactoryData_SaveRecordMode1(data);
         break;
     case 22:
         BattleFactory_CompleteRound(data);

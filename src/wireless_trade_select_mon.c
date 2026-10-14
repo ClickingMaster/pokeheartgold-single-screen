@@ -440,7 +440,7 @@ BOOL WirelessTradeSelectMon_Init(OverlayManager *man, int *state) {
     WirelessStatusIcon_Create();
     IsNighttime();
     FieldBGM_Play(NULL, SEQ_GS_POKESEN);
-    sub_02005448(SEQ_GS_POKESEN);
+    Sound_ApplyVoiceChatVolumeForSeq(SEQ_GS_POKESEN);
     NARC_Delete(narc);
     return TRUE;
 }
@@ -696,7 +696,7 @@ BOOL WirelessTradeSelectMon_ExchangeData(WirelessTradeSelectMon *work) {
         }
         break;
     case 6:
-        sub_020378E4(1);
+        Comm_SetWifiContinuousSend(1);
         LinkSync_StartSync(0x51);
         work->exchangeState++;
         break;
@@ -1666,7 +1666,7 @@ void WirelessTradeSelectMon_OpenSummary(WirelessTradeSelectMon *work, u32 ofPart
     work->summaryArgs.partySlot = work->cursor % 6;
     work->summaryArgs.mode = 1;
     work->summaryArgs.moveToLearn = 0;
-    work->summaryArgs.unk2C = sub_02088288(work->args->saveData);
+    work->summaryArgs.unk2C = PokemonSummary_GetDefaultUnk2C(work->args->saveData);
     work->summaryArgs.natDexEnabled = work->args->natDexEnabled;
     work->summaryArgs.options = work->args->options;
     work->summaryArgs.ribbons = Save_SpecialRibbons_Get(work->args->saveData);

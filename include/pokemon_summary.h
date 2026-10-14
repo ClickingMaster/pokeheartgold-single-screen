@@ -34,7 +34,7 @@ typedef struct PokemonSummaryArgs {
     u8 monModified[0x4];
 } PokemonSummaryArgs;
 
-u32 sub_02088288(SaveData *);
+u32 PokemonSummary_GetDefaultUnk2C(SaveData *);
 BOOL PokemonSummary_IsPokeathlonUnlocked(SaveData *);
 void PokemonSummary_SetPages(PokemonSummaryArgs *, const u8 *);
 void PokemonSummaryArgs_SetPlayer(PokemonSummaryArgs *, PlayerProfile *);

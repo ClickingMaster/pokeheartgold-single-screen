@@ -666,7 +666,7 @@ void PokemonSummary_ShowFirstPage(PokemonSummary *summary) {
         summary->page = 1;
         break;
     }
-    sub_0208B448(summary);
+    PokemonSummary_HideSprites0To7And21And22(summary);
     PokemonSummary_UpdateTypeSprites(summary);
     PokemonSummary_ShowRibbonSprites(summary);
     PokemonSummary_UpdateMarkingSprites(summary);
@@ -704,7 +704,7 @@ void PokemonSummary_SetPage(PokemonSummary *summary, int page) {
     }
     PokemonSummary_RemovePageWindows(summary);
     summary->page = page;
-    sub_0208B448(summary);
+    PokemonSummary_HideSprites0To7And21And22(summary);
     PokemonSummary_UpdateTypeSprites(summary);
     PokemonSummary_UpdatePokeathlonStars(summary);
     PokemonSummary_UpdateShinyLeafSprites(summary);

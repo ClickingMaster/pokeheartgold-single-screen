@@ -414,9 +414,9 @@
 .public PokeathlonCourse_Init
 .public PokeathlonCourse_Main
 .public PokeathlonCourse_Exit
-.public ov97_0221E5C0
-.public ov97_0221E5D4
-.public ov97_0221E69C
+.public PokeathlonBox_Init
+.public PokeathlonBox_Main
+.public PokeathlonBox_Exit
 .public PokeathlonUtil_CreateTextContext
 .public PokeathlonUtil_FreeTextContext
 .public PokeathlonUtil_PrintAlignedMessage

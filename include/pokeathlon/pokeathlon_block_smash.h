@@ -169,7 +169,7 @@ void PokeathlonBlockSmash_FreeSpriteSystem(PokeathlonBlockSmash *work);
 void PokeathlonBlockSmash_CreateHudSprites(PokeathlonBlockSmash *work);
 void PokeathlonBlockSmash_DeleteHudSprites(PokeathlonBlockSmash *work);
 void PokeathlonBlockSmash_LoadSpriteResources(PokeathlonBlockSmash *work);
-void ov96_02209B04(SpriteSystem *spriteSystem, SpriteManager *spriteManager);
+void PokeathlonBlockSmash_LoadMainAndSubSpriteRes(SpriteSystem *spriteSystem, SpriteManager *spriteManager);
 void PokeathlonBlockSmash_UpdateScoreDigits(PokeathlonBlockSmash *work);
 void PokeathlonBlockSmash_StopHudAnims(PokeathlonBlockSmash *work);
 void PokeathlonBlockSmash_InitBgs(BgConfig *bgConfig, enum HeapID heapId);

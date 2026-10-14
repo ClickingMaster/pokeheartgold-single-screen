@@ -32,6 +32,6 @@
 .public BattleArcade_MultiplayerCheck
 .public BattleArcade_AddMonToParty
 .public BattleArcade_SetOpponentParty
-.public ov80_02238430
+.public BattleArcade_GetValueForEvent
 .public BattleArcade_GetRound
 .public BattleArcade_GetEventColor

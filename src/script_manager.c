@@ -461,7 +461,7 @@ u16 HiddenItemScriptNoToHiddenItemIdx(u16 script) {
     return script - _std_hidden_item;
 }
 
-u8 sub_02040578(u16 script) {
+u8 HiddenItemScriptNoToUnk3(u16 script) {
     const struct HiddenItemData *table = sHiddenItemParam;
     int i;
     u16 hiddenItemIdx = HiddenItemScriptNoToHiddenItemIdx(script);
@@ -560,7 +560,7 @@ HiddenItemResponse *AllocAndFetchNearbyHiddenItems(FieldSystem *fieldSystem, enu
                 && bgEvents[i].x <= right
                 && bgEvents[i].z >= top
                 && bgEvents[i].z <= bottom) {
-                ret[j].unk4 = sub_02040578(bgEvents[i].scriptId);
+                ret[j].unk4 = HiddenItemScriptNoToUnk3(bgEvents[i].scriptId);
                 ret[j].x = bgEvents[i].x - x;
                 ret[j].y = bgEvents[i].z - z;
                 j++;

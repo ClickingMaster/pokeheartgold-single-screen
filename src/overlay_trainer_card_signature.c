@@ -70,7 +70,7 @@ void TrainerCardSignature_CreateWindows(TrainerCardSignature *signature, Overlay
 void TrainerCardSignature_RemoveWindows(TrainerCardSignature *signature);
 void TrainerCardSignature_UpdateCanvasDummy(void);
 void TrainerCardSignature_HandleTouch(TrainerCardSignature *signature);
-void ov52_021E8CBC(Sprite **sprite, int pressed);
+void TrainerCardSignature_SetDoneButtonSpriteSeq(Sprite **sprite, int pressed);
 void TrainerCardSignature_SetDoneButtonPressed(Sprite **sprite, int pressed);
 int TrainerCardSignature_State_Draw(TrainerCardSignature *signature, int state);
 void TrainerCardSignature_UpdateCanvas(TrainerCardSignature *signature);
@@ -467,7 +467,7 @@ void TrainerCardSignature_HandleTouch(TrainerCardSignature *signature) {
             }
         } else {
             signature->penStyle = hit;
-            ov52_021E8CBC(&signature->doneButtonSprite, hit);
+            TrainerCardSignature_SetDoneButtonSpriteSeq(&signature->doneButtonSprite, hit);
         }
     }
     if (TouchscreenHitbox_FindRectAtTouchHeld(sTrainerCardSignatureCanvasHitbox) != -1) {
@@ -485,7 +485,7 @@ void TrainerCardSignature_HandleTouch(TrainerCardSignature *signature) {
 
 #pragma force_active reset
 
-void ov52_021E8CBC(Sprite **sprite, int pressed) {
+void TrainerCardSignature_SetDoneButtonSpriteSeq(Sprite **sprite, int pressed) {
     const volatile u16 *anims = sTrainerCardSignatureDoneButtonPos;
     if (pressed == 0) {
         Sprite_SetAnimCtrlSeq(*sprite, anims[2] + 1);

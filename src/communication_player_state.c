@@ -75,7 +75,7 @@ int CommPlayerInfo_GetEntrySize(void) {
     return sizeof(CommPlayerInfoEntry);
 }
 
-void sub_02034524(void) {
+void CommPlayerInfo_RecvSetUnk3A4(void) {
     if (gCommPlayerInfo != NULL) {
         gCommPlayerInfo->unk3A4 = 1;
     }
@@ -135,10 +135,10 @@ BOOL CommPlayerInfo_HostRedistribute(void) {
             if (gCommPlayerInfo->status[i] != 0) {
                 gCommPlayerInfo->entries[i].index = i;
                 MI_CpuCopy8(gCommPlayerInfo->profiles[i], gCommPlayerInfo->entries[i].profile, PlayerProfile_sizeof());
-                sub_0203753C(4, &gCommPlayerInfo->entries[i], sizeof(CommPlayerInfoEntry));
+                Comm_SendParentCommandNoCopyUnchecked(4, &gCommPlayerInfo->entries[i], sizeof(CommPlayerInfoEntry));
             }
         }
-        sub_0203753C(5, NULL, 0);
+        Comm_SendParentCommandNoCopyUnchecked(5, NULL, 0);
         gCommPlayerInfo->unk3A5 = 0;
         return TRUE;
     }

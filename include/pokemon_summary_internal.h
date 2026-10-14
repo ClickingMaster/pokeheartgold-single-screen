@@ -251,7 +251,7 @@ void PokemonSummary_FreeSpriteSystem(PokemonSummary *summary);
 void PokemonSummary_UpdateSpriteAnims(PokemonSummary *summary);
 void PokemonSummary_CreateSprites(PokemonSummary *summary);
 void PokemonSummary_UpdatePartySlotSprite(PokemonSummary *summary);
-void sub_0208B448(PokemonSummary *summary);
+void PokemonSummary_HideSprites0To7And21And22(PokemonSummary *summary);
 void PokemonSummary_LoadBallSprite(PokemonSummary *summary);
 void PokemonSummary_UpdateStatusSprite(PokemonSummary *summary);
 void PokemonSummary_LoadTypeAndIconSprites(PokemonSummary *summary);
@@ -286,6 +286,6 @@ void PokemonSummary_SetRibbonSprite(PokemonSummary *summary, int ribbon, int ind
 void PokemonSummary_ShowRibbonSprites(PokemonSummary *summary);
 void PokemonSummary_UpdateRibbonSprites(PokemonSummary *summary);
 void PokemonSummary_UpdateRibbonCursorSprite(PokemonSummary *summary);
-void sub_0208C3C0(PokemonSummary *summary);
+void PokemonSummary_AnimateRibbonSprite66(PokemonSummary *summary);
 
 #endif // POKEHEARTGOLD_POKEMON_SUMMARY_INTERNAL_H

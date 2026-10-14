@@ -93,7 +93,7 @@
 .public EncounterEffect_Start
 .public EncounterEffect_Finish
 .public EncounterEffect_StartFlash
-.public ov01_021EFE30
+.public EncounterEffect_IsWipeDone
 .public EncounterEffectInterp_Init
 .public EncounterEffectInterp_Update
 .public EncounterEffectInterp_InitFx

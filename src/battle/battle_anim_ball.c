@@ -583,7 +583,7 @@ void BallSealEffect_SetEmitterPositionFromSeal(SPLEmitter *emitter) {
     int x, y;
 
     BallSealEffect_GetBasePosition(emitTask->battlerType, &pos);
-    sub_0209109C(SealOnCapsuleGetID(emitTask->seal));
+    Seal_IsLetterSeal(SealOnCapsuleGetID(emitTask->seal));
     x = SealOnCapsuleGetX(emitTask->seal);
     y = SealOnCapsuleGetY(emitTask->seal);
     pos.x += (s16)(x - 190) * 172;
@@ -1715,7 +1715,7 @@ u8 BallSealEffect_GetSealEmitDelay(const SEAL *seal) {
     BallSealEmitDelays delays = sBallSealEmitDelays;
     int band;
 
-    if (!sub_0209109C((u8)SealOnCapsuleGetID(seal))) {
+    if (!Seal_IsLetterSeal((u8)SealOnCapsuleGetID(seal))) {
         band = BallSealEffect_GetSealDistance(seal);
         if (band >= 56) {
             band = 3;
@@ -1896,7 +1896,7 @@ void BattleAnimUtil_LoadMonIntoPic(BattleAnimBattlerPicParams *params, int targe
     params->picData[params->battler]->height = GetMonPicHeightBySpeciesGenderForm(species, gender, facing, form, personality);
     {
         s8 height = params->picData[params->battler]->height;
-        y = ov07_02234B5C(params->battlerTypes[params->battler], 1);
+        y = BattleAnimUtil_GetBattlerTypeCoord(params->battlerTypes[params->battler], 1);
         Pokepic_SetAttr(params->pokepics[params->battler], POKEPIC_Y, y + height);
         if (facing == 2) {
             NARC *narc = NARC_New(NARC_a_1_8_0, heapId);
@@ -1941,7 +1941,7 @@ void BattleAnimUtil_RestorePic(BattleAnimBattlerPicParams *params, enum HeapID h
     params->picData[params->battler]->height = GetMonPicHeightBySpeciesGenderForm((u16)species, (u8)gender, (u8)facing, (u8)form, personality);
     int battler = params->battler;
     u32 slot = battler * sizeof(Pokepic *); // byte offset of the battler's pointers, kept from before the call
-    int offset = ov07_02234B5C(params->battlerTypes[battler], 1);
+    int offset = BattleAnimUtil_GetBattlerTypeCoord(params->battlerTypes[battler], 1);
     int height = (*(MonPicData **)((u8 *)params->picData + slot))->height;
     Pokepic_SetAttr(*(Pokepic **)((u8 *)params->pokepics + slot), POKEPIC_Y, height + offset);
 }
@@ -1979,7 +1979,7 @@ void BattleAnimUtil_LoadSubstituteIntoPic(BattleAnimBattlerPicParams *params, en
     params->picData[params->battler]->paletteId = template.palDataID;
     ReadWholeNarcMemberByIdPair(&height, NARC_poketool_pokegra_height_o, member);
     params->picData[params->battler]->height = height;
-    y = ov07_02234B5C(params->battlerTypes[params->battler], 1) + params->picData[params->battler]->height;
+    y = BattleAnimUtil_GetBattlerTypeCoord(params->battlerTypes[params->battler], 1) + params->picData[params->battler]->height;
     Pokepic_SetAttr(params->pokepics[params->battler], POKEPIC_Y, y);
     if (params->battlerTypes[params->battler] & BATTLER_TYPE_IS_ENEMY) {
         Pokepic_SetAttr(params->pokepics[params->battler], POKEPIC_SHADOW_SIZE, 1);
@@ -1992,7 +1992,7 @@ void BattleAnimUtil_LoadSubstituteIntoPic(BattleAnimBattlerPicParams *params, en
 
 #pragma force_active reset
 
-s16 ov07_02234B5C(u32 battlerType, u32 index) {
+s16 BattleAnimUtil_GetBattlerTypeCoord(u32 battlerType, u32 index) {
     if (index == 0) {
         return gBattlerSlideInTargetX[battlerType][0];
     }

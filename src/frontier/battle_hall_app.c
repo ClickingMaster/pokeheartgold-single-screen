@@ -1063,7 +1063,7 @@ void BattleHallApp_CreateSummaryArgs(BattleHallApp *app) {
     app->summaryArgs->partySlot = 0;
     app->summaryArgs->moveToLearn = 0;
     app->summaryArgs->natDexEnabled = SaveArray_IsNatDexEnabled(app->saveData);
-    app->summaryArgs->unk2C = sub_02088288(app->saveData);
+    app->summaryArgs->unk2C = PokemonSummary_GetDefaultUnk2C(app->saveData);
     app->summaryArgs->ribbons = Save_SpecialRibbons_Get(app->saveData);
     app->summaryArgs->isFlag982Set = 0;
     PokemonSummary_SetPages(app->summaryArgs, gBattleHallAppSummaryPages);

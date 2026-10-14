@@ -188,7 +188,7 @@ BOOL FrontierFieldSystem_ReceiveRoundTrainers(FieldSystem *fieldSystem, u16 *tra
     return TRUE;
 }
 
-BOOL sub_0204B690(FieldSystem *fieldSystem, u16 *a1) {
+BOOL FrontierFieldSystem_IsLinkFlagSetByEither(FieldSystem *fieldSystem, u16 *a1) {
     return fieldSystem->frontierFsys->unk10_3 || a1[0] != 0;
 }
 
@@ -206,7 +206,7 @@ void FrontierFieldSystem_PackRoundTrainers(FrontierFieldSystem *frontierFsys) {
     MI_CpuCopy8(frontierFsys->trainersInCurrentRound, frontierFsys->linkSendBuffer, sizeof(frontierFsys->trainersInCurrentRound));
 }
 
-void FrontierFieldSystem_0204B720(FrontierFieldSystem *frontierFsys, u32 a1) {
+void FrontierFieldSystem_SetLinkFlag(FrontierFieldSystem *frontierFsys, u32 a1) {
     frontierFsys->unk10_3 = a1;
     frontierFsys->linkSendBuffer[0] = a1;
 }

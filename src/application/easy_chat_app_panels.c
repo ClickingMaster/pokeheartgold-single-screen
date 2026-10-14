@@ -809,7 +809,7 @@ void EasyChatSentenceView_PrintMessage(EasyChatSentenceView *sentence, u32 messa
         msgFormat = MessageFormat_New_Custom(2, 60, HEAP_ID_DEFAULT);
         string = String_New(300, HEAP_ID_DEFAULT);
         BufferPocketName(msgFormat, 0, 0);
-        ReadMsgDataIntoString(sentence->msgData, ov102_021E8F70(sentence->app), sentence->string);
+        ReadMsgDataIntoString(sentence->msgData, EasyChatApp_GetPromptMsgNo(sentence->app), sentence->string);
         StringExpandPlaceholders(msgFormat, string, sentence->string);
         AddTextPrinterParameterizedWithColor(sentence->messageWindow, 1, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 9), NULL);
         String_Delete(string);

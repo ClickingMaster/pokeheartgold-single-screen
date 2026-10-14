@@ -320,7 +320,7 @@ BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx) {
         FrontierTrainer_LoadRecord(&data->trainers[1], data->trainerIds[data->battleNo + 7], HEAP_ID_FIELD2, 204);
         break;
     case 38:
-        *result = ov80_02233648(data);
+        *result = BattleCastleData_GetRoundTableValue(data);
         break;
     case 39:
         *result = CastleFlags_GetField(Save_Frontier_GetCastleFlags(launchArgs->saveData), 10, 0, 0, 0);

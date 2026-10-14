@@ -76,7 +76,7 @@
 .public BattleArcade_GetBattleNo
 .public BattleArcade_GetTrainerSprite
 .public BattleArcade_GetTrainerIndex
-.public ov80_022347B8
+.public BattleArcadeData_SaveRecordMode1
 .public BattleArcade_CompleteRound
 .public BattleArcade_SetPartyBeforeBattle
 .public BattleArcade_SetPartyAfterBattle
@@ -115,7 +115,7 @@
 .public BattleArcade_Event_Dummy28
 .public BattleArcade_Event_Dummy29
 .public BattleArcade_Event_Dummy30
-.public ov80_02235324
+.public BattleArcadeData_GetRoundTableValue
 .public BattleArcade_CopyMonHeldItem
 .public BattleArcade_GetRoundTrainerIds
 .public BattleArcade_GetMonCount

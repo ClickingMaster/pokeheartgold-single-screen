@@ -404,7 +404,7 @@ void DressUpObj_GetSize(DressUpNode *node, int *width, int *height) {
 void DressUpObj_GetMargins(DressUpNode *node, int *left, int *right, int *top, int *bottom) {
     u8 margins[4];
     if ((int)node->mode < 3) { // signed compare here (unsigned in the tray)
-        ov41_02246020(node->object, left, top);
+        DressUpGfx_GetSlotMargins(node->object, left, top);
         *right = *left;
         *bottom = *top;
     } else {

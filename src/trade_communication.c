@@ -85,7 +85,7 @@ void WirelessTrade_RecvPacket(int sender, int unused, void *data, TradeContext *
     if (sender != Comm_GetLocalNetId()) {
         MIi_CpuCopyFast(data, work->packets[sender].data, 0x3e8);
         work->state = 4;
-        sub_020378E4(0);
+        Comm_SetWifiContinuousSend(0);
     }
 }
 

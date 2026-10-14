@@ -362,7 +362,7 @@ int GtsViewMon_Init(GtsApp *app, int state) {
     app->summaryArgs.partySlot = 0;
     app->summaryArgs.mode = 1;
     app->summaryArgs.moveToLearn = 0;
-    app->summaryArgs.unk2C = sub_02088288(app->args->saveData);
+    app->summaryArgs.unk2C = PokemonSummary_GetDefaultUnk2C(app->args->saveData);
     app->summaryArgs.natDexEnabled = app->args->natDexEnabled;
     app->summaryArgs.options = app->args->options;
     app->summaryArgs.ribbons = Save_SpecialRibbons_Get(app->args->saveData);

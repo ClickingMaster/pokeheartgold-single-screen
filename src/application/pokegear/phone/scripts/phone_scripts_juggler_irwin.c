@@ -8,7 +8,7 @@
 #include "sys_flags.h"
 #include "sys_vars.h"
 
-u16 ov101_021F42E4(PokegearPhoneCallContext *ctx, PokegearPhoneCallState *state, u8 badgeCount, u8 hasPlainBadge);
+u16 PhoneCall_Irwin_GetProgressScriptId(PokegearPhoneCallContext *ctx, PokegearPhoneCallState *state, u8 badgeCount, u8 hasPlainBadge);
 
 u16 PhoneCall_GetScriptId_Irwin(PokegearPhoneCallContext *ctx, PokegearPhoneCallState *state) {
     u8 badgeCount;
@@ -25,7 +25,7 @@ u16 PhoneCall_GetScriptId_Irwin(PokegearPhoneCallContext *ctx, PokegearPhoneCall
     }
     badgeCount = PlayerProfile_CountBadges(ctx->playerProfile);
     hasPlainBadge = PlayerProfile_TestBadgeFlag(ctx->playerProfile, BADGE_PLAIN);
-    scriptID = ov101_021F42E4(ctx, state, badgeCount, hasPlainBadge);
+    scriptID = PhoneCall_Irwin_GetProgressScriptId(ctx, state, badgeCount, hasPlainBadge);
     if (scriptID != 0xFFFF) {
         return scriptID;
     } else if (!hasPlainBadge) {
@@ -37,7 +37,7 @@ u16 PhoneCall_GetScriptId_Irwin(PokegearPhoneCallContext *ctx, PokegearPhoneCall
     }
 }
 
-u16 ov101_021F42E4(PokegearPhoneCallContext *ctx, PokegearPhoneCallState *state, u8 badgeCount, u8 hasPlainBadge) {
+u16 PhoneCall_Irwin_GetProgressScriptId(PokegearPhoneCallContext *ctx, PokegearPhoneCallState *state, u8 badgeCount, u8 hasPlainBadge) {
     if (!Save_VarsFlags_CheckFlagInArray(ctx->saveVarsFlags, FLAG_UNK_998)) {
         return 0xFFFF;
     }

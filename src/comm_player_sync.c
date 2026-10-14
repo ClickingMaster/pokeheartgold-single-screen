@@ -313,7 +313,7 @@ void CommPlayerManager_FieldUpdate(FieldSystem *fieldSystem, int value) {
         CommPlayerManager_MoveHostPlayers(NULL, gCommPlayerManager);
     }
     if (Comm_IsActive() && Comm_GetLocalNetId() == 0) {
-        sub_02057D74();
+        CommPlayerManager_HostLockFlaggedPlayersOnSpots();
     }
 }
 
@@ -775,7 +775,7 @@ BOOL CommPlayerManager_AssignBattleSlots(void) {
     return result;
 }
 
-void sub_02057D50(int netId, int size, const u8 *data) {
+void CommPlayerManager_RecvUnkE6(int netId, int size, const u8 *data) {
     int value = *data;
     if (value == 3) {
         gCommPlayerManager->inputLocked[netId] = 0;
@@ -784,7 +784,7 @@ void sub_02057D50(int netId, int size, const u8 *data) {
     }
 }
 
-void sub_02057D74(void) {
+void CommPlayerManager_HostLockFlaggedPlayersOnSpots(void) {
     int count;
     const u16 *table;
     u8 i;

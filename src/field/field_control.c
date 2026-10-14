@@ -577,7 +577,7 @@ static BOOL FieldSystem_CheckMapTransition(FieldSystem *fieldSystem, FieldInput 
 static u16 GetInteractedMetatileScript(FieldSystem *fieldSystem, u8 metatileBehavior) {
     int facingDirection = PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar);
     u32 standingTile = GetMetatileBehavior(fieldSystem, PlayerAvatar_GetXCoord(fieldSystem->playerAvatar), PlayerAvatar_GetZCoord(fieldSystem->playerAvatar));
-    if (sub_0205B78C(standingTile)) {
+    if (MetatileBehavior_Is34(standingTile)) {
         return 0xFFFF;
     } else if (MetatileBehavior_IsPC(metatileBehavior) && facingDirection == DIR_NORTH) {
         return std_pokecenter_pc;

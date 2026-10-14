@@ -2581,7 +2581,7 @@
 	.public WiFiPlazaObj_UpdateObjsAndLight
 	.public WiFiPlazaObj_UpdateManager
 	.public WiFiPlazaObj_DrawAvatars
-	.public ov49_02258BE0
+	.public WiFiPlazaObj_ClearPendingFree
 	.public WiFiPlazaObj_SetLightSet
 	.public WiFiPlazaObj_FadeToLightSet
 	.public WiFiPlazaObj_PushCommand
@@ -3353,7 +3353,7 @@
 	.public WiFiPlazaMap_GetTileAttr
 	.public WiFiPlazaMap_GetGrid
 	.public WiFiPlazaObj_DrawAvatars
-	.public ov49_02258BE0
+	.public WiFiPlazaObj_ClearPendingFree
 	.public WiFiPlazaObj_PushCommand
 	.public WiFiPlazaObj_GetOwnPlayer
 	.public WiFiPlazaObj_GetSpecial

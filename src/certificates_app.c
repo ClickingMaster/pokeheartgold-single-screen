@@ -171,7 +171,7 @@ static void CertificatesApp_ResetScroll(CertificatesApp_Data *data);
 static void CertificatesApp_ApplyScroll(CertificatesApp_Data *data);
 static void CertificatesApp_LoadBgGraphics(CertificatesApp_Data *data);
 static void CertificatesApp_PrintText(CertificatesApp_Data *data);
-static ManagedSprite *ov78_021E61C4(SpriteSystem *renderer, SpriteManager *gfxHandler, s16 x, s16 y, u8 animation, u8 spritePriority);
+static ManagedSprite *CertificatesApp_CreateSprite(SpriteSystem *renderer, SpriteManager *gfxHandler, s16 x, s16 y, u8 animation, u8 spritePriority);
 static ManagedSprite *CertificatesApp_CreateMonSprite(SpriteSystem *renderer, SpriteManager *gfxHandler, s16 x, s16 y);
 static ManagedSprite *CertificatesApp_CreatePlayerSprite(SpriteSystem *renderer, SpriteManager *gfxHandler, s16 x, s16 y);
 static void CertificatesApp_SetupSpriteRenderer(CertificatesApp_Data *data);
@@ -563,7 +563,7 @@ static void CertificatesApp_PrintText(CertificatesApp_Data *data) {
     String_Delete(string);
 }
 
-static ManagedSprite *ov78_021E61C4(SpriteSystem *renderer, SpriteManager *gfxHandler, s16 x, s16 y, u8 animation, u8 spritePriority) {
+static ManagedSprite *CertificatesApp_CreateSprite(SpriteSystem *renderer, SpriteManager *gfxHandler, s16 x, s16 y, u8 animation, u8 spritePriority) {
     ManagedSpriteTemplate template = ov78_021E6880;
     template.x = x;
     template.y = y;
@@ -655,7 +655,7 @@ static void CertificatesApp_CreateSprites(CertificatesApp_Data *data) {
         NARC_Delete(narc);
     }
 
-    data->sprites[0] = ov78_021E61C4(data->spriteRenderer, data->spriteGfxHandler, sCertificatesSpritePositions[0][0], sCertificatesSpritePositions[1][1], 7, 0);
+    data->sprites[0] = CertificatesApp_CreateSprite(data->spriteRenderer, data->spriteGfxHandler, sCertificatesSpritePositions[0][0], sCertificatesSpritePositions[1][1], 7, 0);
     data->sprites[1] = CertificatesApp_CreatePlayerSprite(data->spriteRenderer, data->spriteGfxHandler, sCertificatesSpritePositions[1][0], sCertificatesSpritePositions[1][1]);
     data->sprites[2] = CertificatesApp_CreateMonSprite(data->spriteRenderer, data->spriteGfxHandler, sCertificatesSpritePositions[2][0], sCertificatesSpritePositions[2][1]);
 

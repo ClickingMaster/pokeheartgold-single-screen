@@ -43,7 +43,7 @@ u8 ApricornBox_GetJuiceServings(SaveApricornBox *box);
 int ApricornBox_GetMixProgressLevel(SaveApricornBox *box);
 BOOL ApricornBox_QueueApricorn(SaveApricornBox *box, int apricorn, u32 value);
 u32 ApricornBox_GetMixState(SaveApricornBox *apricornBox);
-int sub_02031FE8(void *data);
+int ApricornJuice_GetTopMixIndex(void *data);
 int ApricornBox_UseJuiceServing(SaveApricornBox *box);
 void ApricornBox_FeedAprijuice(ApricornJuice *record, Party *party, int slot);
 void ParticleSystem_DeleteAllEmitters(SPLEmitter *emitter);
@@ -64,7 +64,7 @@ typedef struct ApricornBoxScreen {
     u8 juiceServings;                           // 0x014, ApricornBox_GetJuiceServings
     u8 flavorTotal;                           // 0x015, ApricornJuice_GetFlavorTotal(juiceRecord)
     u8 juiceMildness;                           // 0x016, juiceRecord byte 2
-    u8 unk_17;                           // 0x017, sub_02031FE8(juiceRecord)
+    u8 unk_17;                           // 0x017, ApricornJuice_GetTopMixIndex(juiceRecord)
     u8 numBlending;                      // 0x018, apricorns in the blender (ApricornBox_CountQueuedApricorns, at most 5)
     u8 mixStage;                         // 0x019, ApricornBox_GetMixProgressLevel
     u8 apricornCounts[7];                // 0x01A
@@ -867,7 +867,7 @@ void ApricornBoxScreen_LoadBoxState(ApricornBoxScreen *screen) {
     screen->juiceServings = ApricornBox_GetJuiceServings(screen->apricornBox);
     ApricornBox_GetJuice(screen->apricornBox, 8, (ApricornJuice *)screen->juiceRecord);
     screen->juiceMildness = screen->juiceRecord[2];
-    screen->unk_17 = sub_02031FE8(screen->juiceRecord);
+    screen->unk_17 = ApricornJuice_GetTopMixIndex(screen->juiceRecord);
     screen->flavorTotal = ApricornJuice_GetFlavorTotal((ApricornJuice *)screen->juiceRecord);
     ApricornJuice_RankFlavors(screen->juiceRecord, &screen->juice);
     screen->mixStage = ApricornBox_GetMixProgressLevel(screen->apricornBox);
@@ -1661,7 +1661,7 @@ void ApricornBoxScreen_ReadMessage(ApricornBoxScreen *screen, int msgNo) {
         BufferIntegerAsString(screen->msgFormat, 1, screen->quantity, 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
         break;
     case 21: {
-        int juice = sub_02032004(screen->juiceRecord);
+        int juice = ApricornJuice_GetFlavorNameIndex(screen->juiceRecord);
         ReadMsgDataIntoString(screen->msgData, juice + 19, screen->string);
         BufferString(screen->msgFormat, 0, screen->string, 2, 0, 2);
         BufferIntegerAsString(screen->msgFormat, 1, screen->flavorTotal, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);

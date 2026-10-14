@@ -737,7 +737,7 @@ s32 WifiClub_CountBattleReadyMons(WifiClubApp *app) {
 
 void WifiClub_SetLinkModeForStatus(u32 status) {
     if ((status - 18) <= 1) {
-        sub_02039AF8();
+        CommState_SetWifiPeerLinkMode29();
         return;
     }
     if (WifiClub_IsGroupActivityStatus(status) != 0) {
@@ -749,11 +749,11 @@ void WifiClub_SetLinkModeForStatus(u32 status) {
         return;
     }
     if ((status - 20) <= 1) {
-        sub_020378E4(0);
+        Comm_SetWifiContinuousSend(0);
         CommState_SetFrontierWifiLinkMode();
         return;
     }
-    sub_020378E4(1);
+    Comm_SetWifiContinuousSend(1);
     CommState_SetSingleBattleWifiLinkMode();
 }
 
@@ -2803,7 +2803,7 @@ s32 WifiClub_State_StartRecruiting(WifiClubApp *app, s32 mainState) {
     }
     if (CommState_IsWifiInLobby() != 0) {
         CommState_SetErrorWatch(0, 1);
-        sub_020378E4(0);
+        Comm_SetWifiContinuousSend(0);
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_53);
         app->isRematch = 0;
         CommPlayerInfo_Init(app->saveData, 0);
@@ -3277,7 +3277,7 @@ s32 WifiClub_State_WaitMatchAccepted(WifiClubApp *app, s32 mainState) {
             CommState_SetErrorWatch(0, 1);
             WifiClub_SetLinkModeForStatus(ownStatus);
             app->exitChoice = WifiClub_GetGroupActivityChoice(ownStatus);
-            sub_020378E4(0);
+            Comm_SetWifiContinuousSend(0);
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_53);
             app->isRematch = 0;
             mainState = 2;
@@ -3824,7 +3824,7 @@ s32 WifiClub_State_VoiceChatModePrompt(WifiClubApp *app, s32 mainState) {
                         if (WifiClub_StartMatch(app, app->partnerId - 1, temp_r0) != 0) {
                             app->matchTimer = 1800;
                             WifiClub_SetLinkModeForStatus(temp_r0);
-                            sub_020378E4(0);
+                            Comm_SetWifiContinuousSend(0);
                             WifiClub_SetStatusAndSend(app, temp_r0);
                             WifiClub_BufferFriendName(app, app->partnerId - 1);
                             WifiClub_PrintMessage(app, 17, 0);
@@ -3858,7 +3858,7 @@ s32 WifiClub_State_VoiceChatModePrompt(WifiClubApp *app, s32 mainState) {
                     if (WifiClub_StartMatch(app, app->partnerId - 1, temp_r0) != 0) {
                         app->matchTimer = 1800;
                         WifiClub_SetLinkModeForStatus(temp_r0);
-                        sub_020378E4(0);
+                        Comm_SetWifiContinuousSend(0);
                         WifiClub_SetStatusAndSend(app, temp_r0);
                         WifiClub_BufferFriendName(app, app->partnerId - 1);
                         WifiClub_PrintMessage(app, 17, 0);

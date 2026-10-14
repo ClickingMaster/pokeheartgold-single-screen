@@ -139,7 +139,7 @@ void PokeathlonCourseRecord_CopyArgs(PokeathlonCourseRecord *work, const Pokeath
     work->args = copy;
 }
 
-BOOL ov99_021E5B70(PokeathlonCourseRecordArgs *args) {
+BOOL PokeathlonCourseRecord_AreFlags0EFTo0F1Set(PokeathlonCourseRecordArgs *args) {
     return args->unk4;
 }
 
@@ -361,7 +361,7 @@ void PokeathlonCourseRecord_PrintCourseName(PokeathlonCourseRecord *work, int co
     PokeathlonUtil_PrintMessageAtXY(work->textContext, 1, msg_0314_00004, 1, 0);
     BufferPokeathlonCourseName(msgFormat, 0, course & 0xFF);
     PokeathlonUtil_PrintAlignedMessage(work->textContext, 3, msg_0314_00003, TRUE);
-    if (ov99_021E5B70(work->args)) {
+    if (PokeathlonCourseRecord_AreFlags0EFTo0F1Set(work->args)) {
         medal = PokeathlonUtil_GetCourseMedal(PokeathlonCourseRecord_GetTotalScore(work->args, course));
         if (medal == 0) {
             PokeathlonUtil_PrintAlignedMessage(work->textContext, 4, msg_0314_00005, TRUE);

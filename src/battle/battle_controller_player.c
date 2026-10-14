@@ -84,7 +84,7 @@ static BOOL BattleControllerPlayer_NeedsTargetSelection(BattleSystem *battleSyst
 static void BattleControllerPlayer_ResetActionStatus(BattleSystem *battleSystem, BattleContext *ctx);
 static BOOL TryFaintMon(BattleContext *ctx, ControllerCommand a1, ControllerCommand a2, int a3);
 static BOOL BattleControllerPlayer_TryGrantExp(BattleContext *ctx, ControllerCommand a1, ControllerCommand a2);
-static void ov12_0224DD74(BattleSystem *battleSystem, BattleContext *ctx);
+static void BattleControllerPlayer_UpdateTargetMoveHistory(BattleSystem *battleSystem, BattleContext *ctx);
 static BOOL BattleControllerPlayer_RunCriticalHitScript(BattleSystem *battleSystem, BattleContext *ctx);
 static BOOL BattleControllerPlayer_TryFollowupMessage(BattleSystem *battleSystem, BattleContext *ctx);
 static BOOL TryBuildRage(BattleSystem *battleSystem, BattleContext *ctx);
@@ -234,7 +234,7 @@ static void BattleControllerPlayer_SelectionScreenInit(BattleSystem *battleSyste
         ctx->recordInputFlags[battlerId] = 0;
     }
 
-    ov12_0223BB64(battleSystem, 0);
+    BattleSystem_SetField2440(battleSystem, 0);
     BattleSystem_SetTrainerAIOverlayLoaded(battleSystem, 1);
 
     ctx->command = CONTROLLER_COMMAND_SELECTION_SCREEN_INPUT;
@@ -3211,7 +3211,7 @@ static void BattleControllerPlayer_NextMoveTarget(BattleSystem *battleSystem, Ba
         ctx->battlerIdAttacker = ctx->battlerIdMagicCoat;
     }
 
-    ov12_0224DD74(battleSystem, ctx);
+    BattleControllerPlayer_UpdateTargetMoveHistory(battleSystem, ctx);
 
     if (ctx->trainerAIData.moveData[ctx->moveNoCur].range == RANGE_ADJACENT_OPPONENTS && !(ctx->battleStatus & BATTLE_STATUS_CHECK_LOOP_ONLY_ONCE) && ctx->moveTargetLoopIndex < BattleSystem_GetMaxBattlers(battleSystem)) {
         ctx->moveCheckSkipFlags = 13;
@@ -3310,7 +3310,7 @@ static void BattleControllerPlayer_UpdateMoveHistory(BattleSystem *battleSystem,
         ctx->moveNoSketch[ctx->battlerIdAttacker] = ctx->moveNoTemp;
     }
 
-    ov12_0224DD74(battleSystem, ctx);
+    BattleControllerPlayer_UpdateTargetMoveHistory(battleSystem, ctx);
     BattleContext_UndoMetronomeItemOnFail(battleSystem, ctx);
     ctx->command = CONTROLLER_COMMAND_40;
 }
@@ -3702,7 +3702,7 @@ static BOOL BattleControllerPlayer_TryGrantExp(BattleContext *ctx, ControllerCom
     }
 }
 
-static void ov12_0224DD74(BattleSystem *battleSystem, BattleContext *ctx) {
+static void BattleControllerPlayer_UpdateTargetMoveHistory(BattleSystem *battleSystem, BattleContext *ctx) {
     int flag;
     int moveType;
     u8 item;

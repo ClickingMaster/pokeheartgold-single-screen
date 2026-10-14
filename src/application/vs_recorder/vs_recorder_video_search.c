@@ -38,7 +38,7 @@ typedef struct VsRecorderIconPositions {
     VsRecorderIconPos pos[5 * 6];
 } VsRecorderIconPositions;
 
-// party slots in icon order, by ov40_022303B8 (0: singles, 1: the other side starts at the fourth icon)
+// party slots in icon order, by VsRecorder_HeaderUsesThreeMonLayout (0: singles, 1: the other side starts at the fourth icon)
 typedef struct VsRecorderPartyIconOrder {
     int slots[2][6];
 } VsRecorderPartyIconOrder;
@@ -150,7 +150,7 @@ void VsRecorder_CreateSearchResultIcons(VsRecorderWork *work) {
         if (VIDEO_PARTY(work, scroll + i) == NULL) {
             continue;
         }
-        if (ov40_022303B8(VIDEO_PARTY(work, scroll + i)->species)) {
+        if (VsRecorder_HeaderUsesThreeMonLayout(VIDEO_PARTY(work, scroll + i)->species)) {
             layout = 1;
         } else {
             layout = 0;
@@ -167,7 +167,7 @@ void VsRecorder_CreateSearchResultIcons(VsRecorderWork *work) {
                 count++;
             }
         }
-        if (ov40_022303B8(VIDEO_PARTY(work, scroll + i)->species)) {
+        if (VsRecorder_HeaderUsesThreeMonLayout(VIDEO_PARTY(work, scroll + i)->species)) {
             count = 3;
         }
         for (j = 3; j < 6; j++) {
@@ -281,7 +281,7 @@ void VsRecorder_ScrollSearchResultIcons(VsRecorderWork *work) {
         int forms[6] = { 0 };
 
         layout = 0;
-        if (ov40_022303B8(VIDEO_PARTY(work, index)->species)) {
+        if (VsRecorder_HeaderUsesThreeMonLayout(VIDEO_PARTY(work, index)->species)) {
             layout = 1;
         }
         count = 0;
@@ -295,7 +295,7 @@ void VsRecorder_ScrollSearchResultIcons(VsRecorderWork *work) {
                 count++;
             }
         }
-        if (ov40_022303B8(VIDEO_PARTY(work, index)->species)) {
+        if (VsRecorder_HeaderUsesThreeMonLayout(VIDEO_PARTY(work, index)->species)) {
             count = 3;
         }
         for (j = 3; j < 6; j++) {
@@ -1413,7 +1413,7 @@ BOOL VsRecorder_VideoSearchShowDetails(VsRecorderWork *work) {
         search->showProfile = 0;
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_CreateVideoInfo(&search->info, work);
-        VsRecorder_LoadScreen(work, ov40_02230410(&search->info), GF_BG_LYR_MAIN_3);
+        VsRecorder_LoadScreen(work, VsRecorderVideoInfo_GetScreenId(&search->info), GF_BG_LYR_MAIN_3);
         VsRecorder_SetVideoPartyIconsDrawFlag(&search->info, FALSE);
         VsRecorder_SetVBlankPaused(work, FALSE);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
@@ -1569,7 +1569,7 @@ BOOL VsRecorder_VideoSearchShowSlots(VsRecorderWork *work) {
             if (search->showProfile == 0) {
                 VsRecorder_CreateVideoInfo(&search->info, work);
                 VsRecorder_SetVideoPartyIconsDrawFlag(&search->info, FALSE);
-                VsRecorder_LoadScreen(work, ov40_02230410(&search->info), GF_BG_LYR_MAIN_3);
+                VsRecorder_LoadScreen(work, VsRecorderVideoInfo_GetScreenId(&search->info), GF_BG_LYR_MAIN_3);
             } else {
                 VsRecorder_CreateProfile(&search->profile, work);
                 VsRecorder_SetProfileDrawFlag(&search->profile, FALSE);

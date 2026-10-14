@@ -86,7 +86,7 @@ void WiFiPlazaObj_DeleteManager(WiFiPlazaObjManager *manager);
 void WiFiPlazaObj_UpdateObjsAndLight(WiFiPlazaObjManager *manager);
 void WiFiPlazaObj_UpdateManager(WiFiPlazaObjManager *manager);
 u32 WiFiPlazaObj_DrawAvatars(WiFiPlazaObjManager *manager);
-u32 ov49_02258BE0(WiFiPlazaObjManager *manager);
+u32 WiFiPlazaObj_ClearPendingFree(WiFiPlazaObjManager *manager);
 void WiFiPlazaObj_SetLightSet(WiFiPlazaObjManager *manager, int set);
 void WiFiPlazaObj_FadeToLightSet(WiFiPlazaObjManager *manager, int set);
 void WiFiPlazaObj_PushCommand(WiFiPlazaObjManager *manager, Field2DCommand *command);
@@ -152,7 +152,7 @@ void *WiFiPlazaPlayerObjects_New(u32 count, u32 mode, enum HeapID heapID, u32 lo
 void WiFiPlazaPlayerObjects_Delete(void *avatars);
 void WiFiPlazaPlayerObjects_Update(void *avatars);
 u32 WiFiPlazaPlayerObjects_Draw(void *avatars);
-u32 ov45_022306F4(void *avatars);
+u32 WiFiPlazaPlayerObjects_ClearPendingFree(void *avatars);
 void WiFiPlazaPlayerObjects_SetModelAlpha(void *avatars, int value);
 void *WiFiPlazaPlayerObjects_Add(void *avatars, Field2DObject *gridObj);
 void WiFiPlazaPlayerObject_Delete(void *avatar);

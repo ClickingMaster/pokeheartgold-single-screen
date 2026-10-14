@@ -139,7 +139,7 @@ typedef struct WiFiPlazaUnk3A0 {
     s16 timer; // WiFiPlazaUnk3A0_StartCooldown starts it, WiFiPlazaUnk3A0_UpdateCooldown counts it down
     u8 unk_02; // WiFiPlazaUnk3A0_SetAppQuitForClosing / WiFiPlazaUnk3A0_DidAppQuitForClosing
     u8 unk_03;
-    u8 flags[8]; // ov45_0222B118 sets one, ov45_0222B134 finds a clear one
+    u8 flags[8]; // WiFiPlazaWork_MarkActivityDone sets one, WiFiPlazaWork_GetNextUndoneActivity finds a clear one
 } WiFiPlazaUnk3A0;
 
 // Part of WiFiPlazaWork at 0x49C: a timer in 1/30 s of the lobby time (WiFiPlazaTimer_Init sets it up, WiFiPlazaTimer_Start
@@ -434,7 +434,7 @@ typedef struct WiFiPlazaLobbyLocation {
 typedef struct WiFiPlazaLobbyMatchInfo {
     int index;
     int maxPlayers;
-    int playerCount; // ov00_021E7144 for the own session
+    int playerCount; // WifiConnection_GetNumConnectionHost for the own session
     int state;       // 1 once the host closed it (WiFiPlazaLobbyClient_CloseMatch)
     WiFiPlazaLobbyEntryTime startTime;
     u8 unk_18[0x18];
@@ -477,7 +477,7 @@ typedef struct WiFiPlazaLobbyClientUnk1B4 {
     WiFiPlazaLobbyKeyValue values[126]; // WiFiPlazaLobbySchedule_FindValue
 } WiFiPlazaLobbyClientUnk1B4;
 
-// WiFiPlazaLobbyClient_GetSurveyValue / WiFiPlazaLobbyClient_GetSurveyText / ov45_0222F6B0 read the two halves.
+// WiFiPlazaLobbyClient_GetSurveyValue / WiFiPlazaLobbyClient_GetSurveyText / WiFiPlazaLobbyClient_GetSurveyFlag read the two halves.
 typedef struct WiFiPlazaLobbyClientUnk6A4 {
     u32 unk_00;
     u32 unk_04;
@@ -508,7 +508,7 @@ typedef struct WiFiPlazaPlayerObject {
     void *sprite;                    // billboard object
     ModelInstance model;
     u8 action;        // Field2DObject_GetParam field 5
-    u8 savedSequence; // sequence and frame when an action of ov45_02230DC4 ended
+    u8 savedSequence; // sequence and frame when an action of WiFiPlazaPlayerObject_ActionKeepsSequence ended
     u16 actionFrame;  // Field2DObject_GetParam field 8
     u32 savedFrame;
     u32 lightFlags;
@@ -604,7 +604,7 @@ typedef struct WiFiPlazaLobbyClient {
 // wifi_plaza_work.c
 void WiFiPlazaWork_VBlankDummy(WiFiPlazaWork *work);
 u32 WiFiPlazaWork_HasError(WiFiPlazaWork *work);
-void ov45_0222A208(void *a0, void *a1, void *a2);
+void WiFiPlazaWork_TakeLobbyFlag131(void *a0, void *a1, void *a2);
 void *WiFiPlazaWork_GetNews(WiFiPlazaWork *work);
 void *WiFiPlazaWork_GetPlaces(WiFiPlazaWork *work);
 u32 *WiFiPlazaWork_GetCurrentTimePtr(WiFiPlazaWork *work);
@@ -613,31 +613,31 @@ BOOL WiFiPlazaWork_TakePlayerLeft(WiFiPlazaWork *work, int bit);
 BOOL WiFiPlazaWork_IsEventFlagSet(WiFiPlazaWork *work, int bit);
 BOOL WiFiPlazaWork_TakePlayerUpdated(WiFiPlazaWork *work, int bit);
 void *WiFiPlazaWork_GetSaveData(void **ptr);
-int ov45_0222A2CC(WiFiPlazaWork *work);
-u32 ov45_0222A2E0(WiFiPlazaWork *work);
-u32 ov45_0222A2F8(WiFiPlazaWork *work);
-void ov45_0222A310(WiFiPlazaWork *work);
+int WiFiPlazaWork_GetScheduleValue4(WiFiPlazaWork *work);
+u32 WiFiPlazaWork_HasAnsweredSurvey(WiFiPlazaWork *work);
+u32 WiFiPlazaWork_GetEventScheduleHigh(WiFiPlazaWork *work);
+void WiFiPlazaWork_SetEventScheduleHigh(WiFiPlazaWork *work);
 u32 WiFiPlazaWork_IsLobbyOpen(WiFiPlazaWork *work);
 u32 WiFiPlazaWork_IsClosing(WiFiPlazaWork *work);
 BOOL WiFiPlazaWork_IsClosed(WiFiPlazaWork *work);
 u32 WiFiPlazaWork_GetFireworksState(WiFiPlazaWork *work);
 BOOL WiFiPlazaWork_IsParadeStarted(WiFiPlazaWork *work);
-u32 ov45_0222A394(WiFiPlazaWork *work);
+u32 WiFiPlazaWork_GetEventScheduleMode5(WiFiPlazaWork *work);
 BOOL WiFiPlazaWork_IsLightingStarted(WiFiPlazaWork *work);
 u32 WiFiPlazaWork_GetColorEvent(WiFiPlazaWork *work);
 u32 WiFiPlazaWork_GetLight1Event(WiFiPlazaWork *work);
-u32 ov45_0222A3EC(WiFiPlazaWork *work);
+u32 WiFiPlazaWork_GetThirdEvent(WiFiPlazaWork *work);
 void WiFiPlazaWork_StartGameEntryCooldown(WiFiPlazaWork *work);
 int WiFiPlazaWork_IsGameEntryCoolingDown(WiFiPlazaWork *work);
-void *ov45_0222A424(WiFiPlazaWork *work);
-void ov45_0222A430(WiFiPlazaWork *work, void *value);
+void *WiFiPlazaWork_GetField508_04(WiFiPlazaWork *work);
+void WiFiPlazaWork_SetField508_04(WiFiPlazaWork *work, void *value);
 void WiFiPlazaWork_ClearGameMembers(WiFiPlazaWork *work);
 void WiFiPlazaWork_SetGameMember(WiFiPlazaWork *work, int id, u32 index);
 void WiFiPlazaWork_SetOwnGameMember(WiFiPlazaWork *work, u32 index);
 void WiFiPlazaWork_GetGameMembers(WiFiPlazaWork *work, void *dest);
 void WiFiPlazaWork_SetAppQuitForClosing(WiFiPlazaWork *work);
 int WiFiPlazaWork_DidAppQuitForClosing(WiFiPlazaWork *work);
-void ov45_0222A4C8(WiFiPlazaWork *work, u8 value);
+void WiFiPlazaWork_SetMinigameActiveFlag(WiFiPlazaWork *work, u8 value);
 
 // wifi_plaza_player.c
 void WiFiPlazaWork_PlayBGM(WiFiPlazaWork *work);
@@ -684,8 +684,8 @@ void WiFiPlaza_SendChatNews(void *unused, u32 slot0, u32 slot1);
 void WiFiPlaza_SendTapToyTradeNews(void *unused, u32 slot0, u32 slot1, u8 value);
 void WiFiPlaza_SendActivityNews(void *unused, int selector, int count, int slot0, int slot1, int slot2, int slot3, int flag);
 void WiFiPlaza_SendMinigameResultNews(void *unused, int mode, u8 kind, u32 slot0, u32 slot1, u32 slot2, u32 slot3);
-int ov45_0222AD2C(WiFiPlazaWork *work);
-int ov45_0222AD3C(WiFiPlazaWork *work);
+int WiFiPlazaWork_GetScheduleValue3(WiFiPlazaWork *work);
+int WiFiPlazaWork_GetScheduleValue2(WiFiPlazaWork *work);
 int WiFiPlazaWork_GetOpenDuration(WiFiPlazaWork *work);
 u8 WiFiPlazaWork_HasPlayedTapToy(WiFiPlazaWork *work, u32 index);
 void WiFiPlazaWork_SendTapToyPlayed(void *unused, u32 value);
@@ -717,8 +717,8 @@ u16 WiFiPlazaWork_GetTalkPartnerMessage(WiFiPlazaWork *work);
 BOOL WiFiPlazaWork_CanTalkWith(WiFiPlazaWork *work, u32 index);
 BOOL WiFiPlazaWork_IsTalkOver(WiFiPlazaWork *work);
 void WiFiPlazaWork_GetTalkTimeoutCounter(WiFiPlazaWork *work);
-void ov45_0222B0A4(WiFiPlazaWork *work);
-u8 ov45_0222B0B0(WiFiPlazaWork *work);
+void WiFiPlazaWork_SetTalkField07(WiFiPlazaWork *work);
+u8 WiFiPlazaWork_GetTalkField07(WiFiPlazaWork *work);
 
 // wifi_plaza_state.c
 void WiFiPlazaWork_IncPartnerTalkCount(WiFiPlazaWork *work);
@@ -726,8 +726,8 @@ void WiFiPlazaWork_IncTalkCount(WiFiPlazaWork *work, int slot);
 void WiFiPlazaWork_SetTalkedWith(WiFiPlazaWork *work, int slot);
 void IncrementGameStat47(WiFiPlazaWork *work);
 void IncrementGameStat119(WiFiPlazaWork *work);
-void ov45_0222B118(WiFiPlazaWork *work, int slot);
-int ov45_0222B134(WiFiPlazaWork *work);
+void WiFiPlazaWork_MarkActivityDone(WiFiPlazaWork *work, int slot);
+int WiFiPlazaWork_GetNextUndoneActivity(WiFiPlazaWork *work);
 int WiFiPlazaWork_PickTapToy(WiFiPlazaWork *work);
 u32 WiFiPlazaWork_GetFireworksPhase(WiFiPlazaWork *work);
 u32 WiFiPlazaWork_GetFireworksCounter(WiFiPlazaWork *work);
@@ -970,7 +970,7 @@ BOOL WiFiPlazaLobbyClient_IsInLobby(void);
 void WiFiPlazaLobbyClient_Shutdown(void);
 BOOL WiFiPlazaLobbyClient_IsDisconnected(void);
 int WiFiPlazaLobbyClient_GetState(void);
-u8 ov45_0222E9BC(void);
+u8 WiFiPlazaLobbyClient_TakeFlag131(void);
 int WiFiPlazaLobbyClient_GetOwnId(void);
 void WiFiPlazaLobbyClient_SetOwnPlayer(WiFiPlazaPlayer *player);
 WiFiPlazaPlayer *WiFiPlazaLobbyClient_GetPlayer(int id);
@@ -1020,7 +1020,7 @@ void WiFiPlazaLobbyClient_SubmitSurveyAnswer(int index);
 u32 WiFiPlazaLobbyClient_GetSurveySubmitState(void);
 u32 WiFiPlazaLobbyClient_GetSurveyValue(int field);
 void *WiFiPlazaLobbyClient_GetSurveyText(int field);
-u8 ov45_0222F6B0(int which, int index);
+u8 WiFiPlazaLobbyClient_GetSurveyFlag(int which, int index);
 void WiFiPlazaLobbyClient_EndMatch(void);
 BOOL WiFiPlazaLobbyClient_CheckResult(int result);
 void WiFiPlazaLobbyClient_ClearErrors(void);
@@ -1052,7 +1052,7 @@ BOOL WiFiPlazaLobbyClient_HasChannelRoom(WiFiPlazaLobbyClient *client, int chann
 void WiFiPlazaLobbyClient_OnEnterChannel(int result, u32 libChannel);
 void WiFiPlazaLobbyClient_OnPlayerEnter(int id, const WiFiPlazaLobbyPlayerRecord *record, const void *data, u32 size);
 void WiFiPlazaLobbyClient_OnPlayerLeave(int id);
-void ov45_0222FDD4(void);
+void WiFiPlazaLobbyClient_OnEvent3Dummy(void);
 void WiFiPlazaLobbyClient_OnMessage(int id, u32 libChannel, u32 type, const void *data, u32 size);
 void WiFiPlazaLobbyClient_OnLocationsChanged(int a0, int a1, int a2, int a3, const char *key, const void *data);
 void WiFiPlazaLobbyClient_OnPlayerRecordChanged(int id, const WiFiPlazaLobbyPlayerRecord *record);
@@ -1061,11 +1061,11 @@ void WiFiPlazaLobbyClient_OnMatchInfo(int id, WiFiPlazaLobbyMatchInfo *info);
 void WiFiPlazaLobbyClient_OnMatchClosed(int id, const WiFiPlazaLobbyMatchInfo *info);
 void WiFiPlazaLobbyClient_OnLobbyEvent(u32 event);
 void WiFiPlazaLobbyClient_OnOwnRecord(int result, const WiFiPlazaPlayer *data, u32 size);
-BOOL ov45_02230090(int result);
+BOOL WiFiPlazaLobbyClient_OnEvent12Result(int result);
 void WiFiPlazaLobbyClient_OnSpecialVisitorsReceived(int result, const void *data, u32 size);
 void WiFiPlazaLobbyClient_OnSurveyReceived(int result, const void *data);
 void WiFiPlazaLobbyClient_OnSurveySubmitted(void);
-void ov45_02230130(void);
+void WiFiPlazaLobbyClient_SetFlag131(void);
 void WiFiPlazaLobbyClient_InitMatches(WiFiPlazaLobbyClient *client);
 
 // wifi_plaza_lobby_matches.c
@@ -1092,7 +1092,7 @@ WiFiPlazaPlayerObjects *WiFiPlazaPlayerObjects_New(u32 count, BOOL mode, enum He
 void WiFiPlazaPlayerObjects_Delete(WiFiPlazaPlayerObjects *objects);
 void WiFiPlazaPlayerObjects_Update(WiFiPlazaPlayerObjects *objects);
 void WiFiPlazaPlayerObjects_Draw(WiFiPlazaPlayerObjects *objects);
-void ov45_022306F4(WiFiPlazaPlayerObjects *objects);
+void WiFiPlazaPlayerObjects_ClearPendingFree(WiFiPlazaPlayerObjects *objects);
 void WiFiPlazaPlayerObjects_SetModelAlpha(WiFiPlazaPlayerObjects *objects, int alpha);
 WiFiPlazaPlayerObject *WiFiPlazaPlayerObjects_Add(WiFiPlazaPlayerObjects *objects, Field2DObject *player);
 void WiFiPlazaPlayerObject_Delete(WiFiPlazaPlayerObject *object);
@@ -1123,13 +1123,13 @@ void WiFiPlazaPlayerObject_DrawModel(WiFiPlazaPlayerObject *object);
 void WiFiPlazaPlayerObject_FollowPlayer(WiFiPlazaPlayerObject *object);
 void WiFiPlazaPlayerObject_ShowStandingSprite(WiFiPlazaPlayerObject *object);
 void WiFiPlazaPlayerObject_PlayStandingSequence(WiFiPlazaPlayerObject *object);
-void ov45_02230BFC(WiFiPlazaPlayerObject *object);
+void WiFiPlazaPlayerObject_HoldWalkFrameThenRestart(WiFiPlazaPlayerObject *object);
 void WiFiPlazaPlayerObject_PlayWalkingSequence(WiFiPlazaPlayerObject *object);
 void WiFiPlazaPlayerObject_UpdateEffect(WiFiPlazaPlayerObject *object);
 void WiFiPlazaPlayerObject_EffectTurnAround(WiFiPlazaPlayerObject *object);
-void ov45_02230D20(WiFiPlazaPlayerObject *object);
-void ov45_02230D5C(WiFiPlazaPlayerObject *object);
-BOOL ov45_02230DC4(u32 action);
+void WiFiPlazaPlayerObject_EffectSetWalkFrameOnce(WiFiPlazaPlayerObject *object);
+void WiFiPlazaPlayerObject_EffectWalkInPlace(WiFiPlazaPlayerObject *object);
+BOOL WiFiPlazaPlayerObject_ActionKeepsSequence(u32 action);
 void WiFiPlazaPlayerObject_UpdateCulling(WiFiPlazaPlayerObject *object);
 void WiFiPlazaPlayerObject_ApplyVisibility(WiFiPlazaPlayerObject *object);
 void WiFiPlazaPlayerObject_ApplyLightFlags(void *sprite, WiFiPlazaPlayerObject *object);
@@ -1177,7 +1177,7 @@ int PPW_LobbyStopRecruit(void);
 int PPW_LobbySubmitQuestionnaire(int index);
 void PPW_LobbyGetLastError(void);
 void PPW_LobbyToErrorCode(void);
-void ov45_02233220(void);
+void PPW_LobbyInitResultToLastError(void);
 extern const u8 sWiFiPlazaChannelCapacities[4]; // room per channel
 extern const char *sWiFiPlazaLocationListKey; // lobby data key of the location list
 extern const u8 sStr_pokemonplatds[];

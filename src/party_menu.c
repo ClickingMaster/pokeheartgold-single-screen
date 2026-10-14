@@ -66,7 +66,7 @@ static GF3DVramMan *Create3dVramManForPartyMenu(enum HeapID heapID);
 static void Init3dVramManForPartyMenu(void);
 static void Delete3dVramManForPartyMenu(GF3DVramMan *gf3dVramMan);
 static void PartyMenu_LoadBgGraphics(PartyMenu *partyMenu, NARC *narc);
-static BOOL sub_0207A880(PartyMenu *partyMenu, u8 partySlot);
+static BOOL PartyMenu_IsOddSlotInLayout2(PartyMenu *partyMenu, u8 partySlot);
 static PartyMenu *PartyMenu_CreateData(OverlayManager *manager);
 static void PartyMenu_InitCancelDisabled(PartyMenu *partyMenu);
 static void PartyMenu_InitDpadLayoutAndButtons(PartyMenu *partyMenu);
@@ -1276,14 +1276,14 @@ void PartyMenu_UpdateMonPanelPalette(PartyMenu *partyMenu, u8 partySlot) {
         }
         if (GetMonData(mon, MON_DATA_HP, NULL) == 0) {
             paletteSlot += 2;
-        } else if (sub_0207A880(partyMenu, partySlot) == TRUE) {
+        } else if (PartyMenu_IsOddSlotInLayout2(partyMenu, partySlot) == TRUE) {
             paletteSlot += 1;
         }
     }
     BG_LoadPlttData(GF_BG_LYR_MAIN_2, &partyMenu->hpBarPalettes[16 * paletteSlot], 0x10, (partySlot + 3) * 32);
 }
 
-static BOOL sub_0207A880(PartyMenu *partyMenu, u8 partySlot) {
+static BOOL PartyMenu_IsOddSlotInLayout2(PartyMenu *partyMenu, u8 partySlot) {
     return partyMenu->args->panelLayout == 2 && (partySlot & 1);
 }
 

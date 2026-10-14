@@ -180,7 +180,7 @@ void BattleCastleSprite_SetMonIconPalette(BattleCastleSprite *sprite, Pokemon *m
 void BattleCastleSprite_ChangeAnim(BattleCastleSprite *sprite, int value);
 void BattleCastleSprite_SetBounce(BattleCastleSprite *sprite, int value);
 int BattleCastleSprite_IsAnimated(BattleCastleSprite *sprite);
-void ov83_02247630(BattleCastleSprite *sprite, int x, u32 y);
+void BattleCastleSprite_ShowAnim11WithSE(BattleCastleSprite *sprite, int x, u32 y);
 void BattleCastleSprite_LoadMonPic(BattleCastleSprite *sprite, BoxPokemon *boxMon, u16 species, u32 personality);
 void BattleCastle_SetSpritesTranslucent(BattleCastleSprite **sprites, u32 count, int mode);
 u32 BattleCastle_GetMonIndex(u32 numMons, u32 slot);
@@ -204,7 +204,7 @@ void BattleCastle_PrintMsg(Window *window, MsgData *msgData, s32 msgNo, int x, i
 void BattleCastle_FreeGrid(GridInputHandler *grid);
 GridInputHandler *BattleCastlePartyApp_CreatePartyGrid(BattleCastlePartyApp *app, int initialPos, int numMons);
 int BattleCastle_HandlePartyGridInput(GridInputHandler *grid);
-void ov83_02247B04(GridInputHandler *grid);
+void BattleCastle_SetGridInputsToNext(GridInputHandler *grid);
 GridInputHandler *BattleCastlePartyApp_CreateItemGrid(BattleCastlePartyApp *app);
 int BattleCastle_HandleItemGridInput(GridInputHandler *grid);
 TouchscreenListMenuSpawner *BattleCastle_CreateListMenuSpawner(SpriteList *spriteList, PaletteData *paletteData);

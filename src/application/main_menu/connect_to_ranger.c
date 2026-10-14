@@ -418,11 +418,11 @@ void ConnectToRanger_StoreManaphyEggCard(ConnectToRangerApp *app) {
     string = ReadMsgData_ExpandPlaceholders(msgFormat, msgData, msg_0247_00078, app->heapID);
     CopyStringToU16Array(string, wonderCard->info.name, NELEMS(wonderCard->info.name));
     String_Delete(string);
-    heartGold = ov74_02235A68(8);
-    soulSilver = ov74_02235A68(7);
-    diamond = ov74_02235A68(12);
-    pearl = ov74_02235A68(10);
-    platinum = ov74_02235A68(11);
+    heartGold = MainMenuUtil_GetVersionMaskBit(8);
+    soulSilver = MainMenuUtil_GetVersionMaskBit(7);
+    diamond = MainMenuUtil_GetVersionMaskBit(12);
+    pearl = MainMenuUtil_GetVersionMaskBit(10);
+    platinum = MainMenuUtil_GetVersionMaskBit(11);
     wonderCard->info.version = soulSilver | (pearl | platinum | diamond) | heartGold;
     wonderCard->info.id = 1;
     wonderCard->info.unique = FALSE;

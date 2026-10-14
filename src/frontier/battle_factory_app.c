@@ -298,9 +298,9 @@ BOOL BattleFactoryApp_ScrollBallsOut(BattleFactoryApp *app);
 void BattleFactoryApp_AnimateBackground(BattleFactoryApp *app);
 void BattleFactoryApp_SetBgPalette(BattleFactoryApp *app, int bgId, u8 palette, u8 width, u8 height);
 void BattleFactoryApp_SetCenterAnim(BattleFactoryApp *app, int kind);
-void ov81_02240698(BattleFactoryApp *app, GFBgLayer bgId);
-void ov81_022406E0(BattleFactoryApp *app, GFBgLayer bgId);
-void ov81_02240728(BattleFactoryApp *app, GFBgLayer bgId);
+void BattleFactoryApp_LoadBgGfx81(BattleFactoryApp *app, GFBgLayer bgId);
+void BattleFactoryApp_LoadBgGfx92(BattleFactoryApp *app, GFBgLayer bgId);
+void BattleFactoryApp_LoadBgGfx4(BattleFactoryApp *app, GFBgLayer bgId);
 void BattleFactoryApp_LoadBgPalette(void);
 void BattleFactoryApp_LoadSubScreenBg(BattleFactoryApp *app, GFBgLayer bgId);
 u8 BattleFactoryApp_PrintMessage(BattleFactoryApp *app, Window *window, u32 msgId, u32 x, u32 y, u32 textSpeed, u8 fg, u8 shadow, u8 bg, u8 fontId);
@@ -1695,8 +1695,8 @@ BOOL BattleFactoryApp_SwitchPage(BattleFactoryApp *app) {
             break;
         }
         BattleFactorySprite_SetVisible(app->centerSprite, FALSE);
-        ov81_02240728(app, GF_BG_LYR_SUB_2);
-        ov81_022406E0(app, GF_BG_LYR_MAIN_2);
+        BattleFactoryApp_LoadBgGfx4(app, GF_BG_LYR_SUB_2);
+        BattleFactoryApp_LoadBgGfx92(app, GF_BG_LYR_MAIN_2);
         BgSetPosTextAndCommit(app->bgConfig, GF_BG_LYR_SUB_2, BG_POS_OP_SET_X, app->bgScrollX);
         PlaySE(SEQ_SE_DP_ELEBETA2);
         app->timer = 0;
@@ -1939,9 +1939,9 @@ void BattleFactoryApp_InitBgGraphics(BattleFactoryApp *app) {
     PaletteData_AllocBuffers(app->paletteData, PLTTBUF_MAIN_OBJ, 0x200, HEAP_ID_100);
     PaletteData_AllocBuffers(app->paletteData, PLTTBUF_MAIN_BG, 0x200, HEAP_ID_100);
     BattleFactoryApp_LoadBgPalette();
-    ov81_02240728(app, GF_BG_LYR_SUB_2);
-    ov81_02240698(app, GF_BG_LYR_MAIN_3);
-    ov81_022406E0(app, GF_BG_LYR_MAIN_2);
+    BattleFactoryApp_LoadBgGfx4(app, GF_BG_LYR_SUB_2);
+    BattleFactoryApp_LoadBgGfx81(app, GF_BG_LYR_MAIN_3);
+    BattleFactoryApp_LoadBgGfx92(app, GF_BG_LYR_MAIN_2);
     if (app->shown) {
         BgSetPosTextAndCommit(app->bgConfig, GF_BG_LYR_SUB_2, BG_POS_OP_SET_X, app->bgScrollX);
     }
@@ -2063,17 +2063,17 @@ void BattleFactoryApp_SetCenterAnim(BattleFactoryApp *app, int kind) {
     app->centerSprite = BattleFactoryApp_CreateCenterSprite(app, animSeq);
 }
 
-void ov81_02240698(BattleFactoryApp *app, GFBgLayer bgId) {
+void BattleFactoryApp_LoadBgGfx81(BattleFactoryApp *app, GFBgLayer bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(app->narc, 0x81, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_100);
     GfGfxLoader_LoadScrnDataFromOpenNarc(app->narc, 0x82, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_100);
 }
 
-void ov81_022406E0(BattleFactoryApp *app, GFBgLayer bgId) {
+void BattleFactoryApp_LoadBgGfx92(BattleFactoryApp *app, GFBgLayer bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(app->narc, 0x92, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_100);
     GfGfxLoader_LoadScrnDataFromOpenNarc(app->narc, 0x91, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_100);
 }
 
-void ov81_02240728(BattleFactoryApp *app, GFBgLayer bgId) {
+void BattleFactoryApp_LoadBgGfx4(BattleFactoryApp *app, GFBgLayer bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(app->narc, 4, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_100);
     GfGfxLoader_LoadScrnDataFromOpenNarc(app->narc, 8, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_100);
 }

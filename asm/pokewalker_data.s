@@ -6,7 +6,7 @@
 
 	.text
 	.extern PokewalkerIr_Checksum
-	.extern ov112_021E5938
+	.extern PokewalkerIr_MarkDisconnected
 	.extern PokewalkerIr_ResetLink
 	.extern PokewalkerIr_InitLink
 	.extern PokewalkerIr_IsConnected
@@ -14,15 +14,15 @@
 	.extern PokewalkerIr_CloseLink
 	.extern PokewalkerIr_Disconnect
 	.extern PokewalkerIr_Send
-	.extern ov112_021E5A80
-	.extern ov112_021E5A84
+	.extern PokewalkerIr_PollDummy
+	.extern PokewalkerIr_ShouldDropShortPacket
 	.extern PokewalkerIr_CheckTimeout
 	.extern PokewalkerIr_VerifyPacket
 	.extern PokewalkerIr_Poll
 	.extern PokewalkerIr_SetConnectCallback
 	.extern PokewalkerIr_SetReceiveCallback
 	.extern PokewalkerIr_SetCloseCallback
-	.extern ov112_021E5D5C
+	.extern PokewalkerIr_SetSendParam
 	.extern PokewalkerIr_SetCompressBuffer
 	.extern PokewalkerIr_CompressBlocks
 	.extern PokewalkerIr_SetError
@@ -46,7 +46,7 @@
 	.extern PokewalkerIr_RequestReceive
 	.extern PokewalkerIr_RequestSendStroll
 	.extern PokewalkerIr_RequestReceiveGifts
-	.extern ov112_021E7668
+	.extern PokewalkerIrStatus_IsConnected
 	.extern PokewalkerIr_GetChunkProgress
 	.extern PokewalkerIr_GetTotalProgress
 	.extern PokewalkerIr_GetAndClearError
@@ -75,7 +75,7 @@
 	.extern PokewalkerApp_PrintPlayerName
 	.extern PokewalkerApp_PrintStrollTexts
 	.extern PokewalkerApp_LoadMonPicture
-	.extern ov112_021E9338
+	.extern PokewalkerApp_IsStrollStateNonzero
 	.extern PokewalkerApp_GetPixel4bpp
 	.extern PokewalkerApp_ConvertTo2bpp
 	.extern PokewalkerApp_GetBoxMonIconFile
@@ -117,9 +117,9 @@
 	.extern PokewalkerApp_SetCursorPosition
 	.extern PokewalkerApp_HideCursor
 	.extern PokewalkerApp_PressCursor
-	.extern ov112_021EA5A4
+	.extern PokewalkerApp_ShowConnectionSprites
 	.extern PokewalkerApp_UpdateConnectionAnim
-	.extern ov112_021EA64C
+	.extern PokewalkerApp_HideConnectionSprites
 	.extern PokewalkerApp_ShowSprite
 	.extern PokewalkerApp_HideSprite
 	.extern PokewalkerApp_SetSpriteAnim
@@ -144,7 +144,7 @@
 	.extern PokewalkerApp_MainMenu_Exit
 	.extern PokewalkerApp_MainMenu_Start
 	.extern PokewalkerApp_ShowWalkerRecords
-	.extern ov112_021EAF48
+	.extern PokewalkerApp_MainMenu_WaitFade
 	.extern PokewalkerApp_MainMenu_ShowTopMenu
 	.extern PokewalkerApp_MainMenu_HandleTopMenu
 	.extern PokewalkerApp_MainMenu_PrintWelcome
@@ -170,8 +170,8 @@
 	.extern PokewalkerApp_MainMenu_WaitMessage
 	.extern PokewalkerApp_MainMenu_WaitCursor
 	.extern PokewalkerApp_MainMenu_End
-	.extern ov112_021EB90C
-	.extern ov112_021EB950
+	.extern PokewalkerApp_MainMenu_EnterMode2
+	.extern PokewalkerApp_MainMenu_TryEnterMode3
 	.extern PokewalkerApp_IsDownXLHeld
 	.extern PokewalkerApp_IsUpSelectRHeld
 	.extern PokewalkerApp_Mode1_Enter
@@ -4970,7 +4970,7 @@ sWindowBank6Templates: ; 0x021FF684
 
 sMainMenuStates: ; 0x021FF6C4
 	.word PokewalkerApp_MainMenu_Start
-	.word ov112_021EAF48
+	.word PokewalkerApp_MainMenu_WaitFade
 	.word PokewalkerApp_MainMenu_ShowTopMenu
 	.word PokewalkerApp_MainMenu_HandleTopMenu
 	.word PokewalkerApp_MainMenu_PrintWelcome

@@ -58,7 +58,7 @@ BOOL ApricornBox_QueueApricorn(SaveApricornBox *box, int apricorn, u32 value);
 int ApricornBox_GetMixProgressLevel(SaveApricornBox *box);
 u8 ApricornBox_GetJuiceServings(SaveApricornBox *box);
 void PackJuiceFlavor(u16 *out, u8 *pair, int type);
-int sub_02031FE8(void *data);
+int ApricornJuice_GetTopMixIndex(void *data);
 int ApricornBox_UseJuiceServing(SaveApricornBox *box);
 ApricornRecord *ApricornRecord_New(SaveApricornBox *box, PlayerProfile *profile, u32 value, enum HeapID heapId);
 BOOL ApricornRecord_IsSameTrainer(ApricornRecord *a, ApricornRecord *b);
@@ -221,7 +221,7 @@ int ApricornBox_GetMixProgressLevel(SaveApricornBox *box) {
     return 3;
 }
 
-void sub_02031CCC(SaveApricornBox *box, int amount) {
+void ApricornBox_AddJuiceMildnessForDays(SaveApricornBox *box, int amount) {
     int increment = amount * 10;
     int value;
     if (box->juiceServings != 0) {
@@ -395,7 +395,7 @@ void ApricornJuice_RankFlavors(void *input_, void *out_) {
 
 #pragma force_active off
 
-int sub_02031FE8(void *data) {
+int ApricornJuice_GetTopMixIndex(void *data) {
     struct {
         u16 value : 4;
         u16 padding : 12;
@@ -411,7 +411,7 @@ int sub_02031FE8(void *data) {
     return value;
 }
 
-int sub_02032004(void *data) {
+int ApricornJuice_GetFlavorNameIndex(void *data) {
     u8 result[16];
     ApricornJuice_RankFlavors(data, result);
     if (result[12] == 0) {
@@ -439,7 +439,7 @@ void ApricornBox_UpdateSteps(SaveApricornBox *box, u32 steps) {
     if ((((u32)box->queuedApricorns << 16) >> 31) != 0 || box->juiceServings != 0) {
         difference = steps - box->juiceAgingSteps;
         if (difference >= 100) {
-            sub_02032340(box, difference / 100);
+            ApricornBox_AddJuiceMildness(box, difference / 100);
             box->juiceAgingSteps = steps - difference % 100;
         }
         if ((((u32)box->queuedApricorns << 16) >> 31) != 0) {
@@ -584,12 +584,12 @@ String *ApricornBox_GetJuiceFlavorName(SaveApricornBox *box, u16 type, u32 heapI
     String *result;
     ApricornBox_GetJuice(box, type, &data);
     msgData = NewMsgDataFromNarc((MsgDataLoadType)1, (NarcId)0x1B, 0x15, (enum HeapID)heapId);
-    result = NewString_ReadMsgData(msgData, sub_02032004(&data) + 0x13);
+    result = NewString_ReadMsgData(msgData, ApricornJuice_GetFlavorNameIndex(&data) + 0x13);
     DestroyMsgData(msgData);
     return result;
 }
 
-void sub_02032340(SaveApricornBox *box, u8 amount) {
+void ApricornBox_AddJuiceMildness(SaveApricornBox *box, u8 amount) {
     int value = box->juice[2] + amount;
     if (value > 255) {
         box->juice[2] = 255;

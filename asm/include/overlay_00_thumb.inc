@@ -11,7 +11,7 @@
 .public Save_Frontier_GetStatic
 .public FrontierSave_ClearRow
 .public Comm_IsWifiPeerLinkMode
-.public sub_02034098
+.public Comm_IsLinkMode19To23Or34
 .public Comm_CountConnected
 .public CommState_SetWifiError
 .public CommState_GetLinkMode
@@ -105,7 +105,7 @@
 .public WifiConnection_SetVoiceUnmuted
 .public WifiConnection_StopServerMatching
 .public WifiConnection_ResetStopServerMatching
-.public ov00_021E7144
+.public WifiConnection_GetNumConnectionHost
 .public WifiConnection_SetExtraHeapEnabled
 .public WifiConnection_SetDisconnectWhenAlone
 .public WifiConnection_IsFriendDataChanged

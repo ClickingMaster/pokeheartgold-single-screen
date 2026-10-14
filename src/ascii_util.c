@@ -68,6 +68,6 @@ void Ascii_SetResName(NNSG3dResName *resName, const s8 *input) {
     }
 }
 
-BOOL sub_02020B78(u16 c) {
+BOOL IsCharCodeBelowDigit0(u16 c) {
     return c < CHAR_0;
 }

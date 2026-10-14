@@ -48,7 +48,7 @@ void TrainerFlagSet(SaveData *saveData, u32 trno);
 void TrainerFlagClear(SaveData *saveData, u32 trno);
 u16 HiddenItemScriptNoToFlagId(u16 script);
 u16 HiddenItemScriptNoToHiddenItemIdx(u16 script);
-u8 sub_02040578(u16 script);
+u8 HiddenItemScriptNoToUnk3(u16 script);
 BOOL GetHiddenItemParams(ScriptEnvironment *env, u16 script);
 HiddenItemResponse *AllocAndFetchNearbyHiddenItems(FieldSystem *fieldSystem, enum HeapID heapID);
 void RunInitScript(FieldSystem *fieldSystem);

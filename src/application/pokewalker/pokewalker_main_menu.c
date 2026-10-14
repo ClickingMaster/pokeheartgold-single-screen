@@ -136,11 +136,11 @@ void PokewalkerApp_ShowWalkerRecords(PokewalkerApp *app, BOOL onStroll) {
         FillWindowPixelBuffer(&app->subWindows[5], 0);
         CopyWindowToVram(&app->subWindows[5]);
     }
-    ov112_021EA64C(app);
+    PokewalkerApp_HideConnectionSprites(app);
 }
 #pragma force_active reset
 
-int ov112_021EAF48(PokewalkerApp *app) {
+int PokewalkerApp_MainMenu_WaitFade(PokewalkerApp *app) {
     return IsPaletteFadeFinished() == TRUE ? 4 : 2;
 }
 
@@ -279,9 +279,9 @@ int PokewalkerApp_MainMenu_HandleStrollMenu(PokewalkerApp *app) {
         return 25;
     } else if (PokewalkerApp_IsDownXLHeld()) {
         PlaySE(SEQ_SE_DP_SELECT);
-        ov112_021EB90C(app, 3);
+        PokewalkerApp_MainMenu_EnterMode2(app, 3);
         return 26;
-    } else if (PokewalkerApp_IsUpSelectRHeld() && ov112_021EB950(app, 3)) {
+    } else if (PokewalkerApp_IsUpSelectRHeld() && PokewalkerApp_MainMenu_TryEnterMode3(app, 3)) {
         PlaySE(SEQ_SE_DP_SELECT);
         return 26;
     }
@@ -349,10 +349,10 @@ int PokewalkerApp_MainMenu_HandleReceiveMenu(PokewalkerApp *app) {
         return 25;
     } else if (PokewalkerApp_IsDownXLHeld()) {
         PlaySE(SEQ_SE_DP_SELECT);
-        ov112_021EB90C(app, 3);
+        PokewalkerApp_MainMenu_EnterMode2(app, 3);
         return 26;
     } else if (PokewalkerApp_IsUpSelectRHeld()) {
-        if (ov112_021EB950(app, 3)) {
+        if (PokewalkerApp_MainMenu_TryEnterMode3(app, 3)) {
             PlaySE(SEQ_SE_DP_SELECT);
             return 26;
         }
@@ -434,9 +434,9 @@ int PokewalkerApp_MainMenu_HandleFullMenu(PokewalkerApp *app) {
         return 25;
     } else if (PokewalkerApp_IsDownXLHeld()) {
         PlaySE(SEQ_SE_DP_SELECT);
-        ov112_021EB90C(app, 7);
+        PokewalkerApp_MainMenu_EnterMode2(app, 7);
         return 26;
-    } else if (PokewalkerApp_IsUpSelectRHeld() && ov112_021EB950(app, 3)) {
+    } else if (PokewalkerApp_IsUpSelectRHeld() && PokewalkerApp_MainMenu_TryEnterMode3(app, 3)) {
         PlaySE(SEQ_SE_DP_SELECT);
         return 26;
     }
@@ -523,7 +523,7 @@ int PokewalkerApp_MainMenu_End(PokewalkerApp *app) {
     return 27;
 }
 
-void ov112_021EB90C(PokewalkerApp *app, int bank) {
+void PokewalkerApp_MainMenu_EnterMode2(PokewalkerApp *app, int bank) {
     app->nextMode = 2;
     PokewalkerApp_RemoveWindowBank(app, bank);
     PokewalkerApp_AddWindowBank(app, 1);
@@ -532,7 +532,7 @@ void ov112_021EB90C(PokewalkerApp *app, int bank) {
     PokewalkerApp_HideCursor(app);
 }
 
-BOOL ov112_021EB950(PokewalkerApp *app, int bank) {
+BOOL PokewalkerApp_MainMenu_TryEnterMode3(PokewalkerApp *app, int bank) {
     struct {
         u16 unk2;
         u16 unk0;

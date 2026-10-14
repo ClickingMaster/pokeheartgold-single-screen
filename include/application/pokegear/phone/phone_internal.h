@@ -393,7 +393,7 @@ BOOL GearPhoneCall_Buena(PokegearPhoneCallContext *ctx);
 BOOL GearPhoneCall_Buena2(PokegearPhoneCallContext *ctx);
 u16 PhoneCall_GetScriptId_EthanLyra(PokegearPhoneCallContext *ctx, PokegearPhoneCallState *state);
 BOOL GearPhoneCall_EthanLyra(PokegearPhoneCallContext *ctx);
-u8 ov101_021F3D34(PokegearPhoneCallContext *ctx);
+u8 PhoneCall_EthanLyra_GetRandomRegionMsg(PokegearPhoneCallContext *ctx);
 BOOL GearPhoneCall_EthanLyra2(PokegearPhoneCallContext *ctx);
 u16 PhoneCall_GetScriptId_GymLeader(PokegearPhoneCallContext *ctx, PokegearPhoneCallState *state);
 BOOL GearPhoneCall_GymLeader_Outgoing(PokegearPhoneCallContext *ctx);

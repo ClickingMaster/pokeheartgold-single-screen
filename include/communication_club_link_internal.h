@@ -40,9 +40,9 @@ void Comm_SendFixedCommand(int, void *);
 BOOL CommPlayerManager_GetMoveTimer(int);
 void CommPlayerManager_PauseField(void);
 void Colosseum_StartEntry(FieldSystem *, void (*)(int, Party *));
-BOOL sub_02036010(void);
-void sub_02035FD8(void);
-void sub_02035FE4(void);
+BOOL Comm_IsTransferMode1(void);
+void Comm_RequestTransferMode1(void);
+void Comm_RequestTransferMode0(void);
 void CommPlayerManager_Delete(int);
 void CommState_RestartScan(void);
 BOOL CommWireless_IsIdle(void);
@@ -51,7 +51,7 @@ BOOL Comm_SendCommandNoCopy(int, void *, int);
 void CommClubLink_Free(void);
 void CommClubLink_HostShowRoom(void);
 void CommClubLink_ChildShowRoom(void);
-void sub_0205857C(void);
+void CommClubLink_CheckPartnerState5E(void);
 void CommClubLink_StartBattle(void);
 #include "encounter.h"
 #include "screen_fade.h"

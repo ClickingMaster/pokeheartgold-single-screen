@@ -967,7 +967,7 @@ void BattleSystem_AddSpeciesCaughtScore(BattleSystem *battleSystem) {
     GameStats_AddScore(battleSystem->gameStats, SCORE_EVENT_REGISTER_SPECIES_CAUGHT);
 }
 
-void ov12_0223BB64(BattleSystem *battleSystem, int a1) {
+void BattleSystem_SetField2440(BattleSystem *battleSystem, int a1) {
     battleSystem->unk2440 = a1;
 }
 

@@ -5185,7 +5185,7 @@ void BattleContext_UndoMetronomeItemOnFail(BattleSystem *battleSystem, BattleCon
 }
 
 // Related to send out Pokemon crys..?
-int ov12_02256748(BattleContext *ctx, int battlerId, int battlerType, BOOL encounter) {
+int BattleContext_GetLowHpOrStatusCode(BattleContext *ctx, int battlerId, int battlerType, BOOL encounter) {
     int ret;
     int color;
     BOOL half;

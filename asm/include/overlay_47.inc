@@ -134,7 +134,7 @@
 .public WiFiPlazaLobbyClient_GetSurveySubmitState
 .public WiFiPlazaLobbyClient_GetSurveyValue
 .public WiFiPlazaLobbyClient_GetSurveyText
-.public ov45_0222F6B0
+.public WiFiPlazaLobbyClient_GetSurveyFlag
 .public WiFiPlazaSurvey_Init
 .public WiFiPlazaSurvey_Main
 .public WiFiPlazaSurvey_Exit

@@ -52,7 +52,7 @@
 .public PokemonSummary_UpdateSpriteAnims
 .public PokemonSummary_CreateSprites
 .public PokemonSummary_UpdatePartySlotSprite
-.public sub_0208B448
+.public PokemonSummary_HideSprites0To7And21And22
 .public PokemonSummary_LoadBallSprite
 .public PokemonSummary_UpdateStatusSprite
 .public PokemonSummary_UpdateTypeSprites
@@ -78,7 +78,7 @@
 .public PokemonSummary_ShowRibbonSprites
 .public PokemonSummary_UpdateRibbonSprites
 .public PokemonSummary_UpdateRibbonCursorSprite
-.public sub_0208C3C0
+.public PokemonSummary_AnimateRibbonSprite66
 .public GetRibbonAttr
 .public NNS_G2dGetImageLocation
 .public GXS_LoadOBJ

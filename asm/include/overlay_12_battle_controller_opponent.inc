@@ -5,7 +5,7 @@
 .public PaletteData_BeginPaletteFade
 .public PaletteData_GetSelectedBuffersBitmask
 .public PaletteData_BlendPalette
-.public sub_02005B58
+.public Sound_SetKeepPlayingCries
 .public PlayBGM
 .public GF_SndStartFadeOutBGM
 .public PlaySE_SetPan
@@ -109,7 +109,7 @@
 .public BattleAnimBattlerSprites_NewAll
 .public BattleAnimBattlerSprites_Free
 .public BattleAnimBattlerSprites_Free2
-.public ov07_0221FE70
+.public Ov07UnkFE70_GetCurrentValue
 .public BallSealEffect_New
 .public BallSealEffect_LoadResources
 .public BallSealEffect_IsLoaded
@@ -136,7 +136,7 @@
 .public BattleAnimEmitter_IsActive
 .public BattleAnimUtil_RestorePic
 .public BattleAnimUtil_LoadSubstituteIntoPic
-.public ov07_02234B5C
+.public BattleAnimUtil_GetBattlerTypeCoord
 .public gBattlerSlideInTargetX
 .public gBattlerPokepicPositions
 .public BattleBagMenu_Create
@@ -196,7 +196,7 @@
 .public BattleSystem_GetTutorialState
 .public BattleSystem_SetTutorialState
 .public BattleSystem_GameStatIncrement
-.public ov12_0223BB64
+.public BattleSystem_SetField2440
 .public BattleSystem_SetSwitchingOrCanPickCommandMask
 .public BattleSystem_GetWaitingIcon
 .public BattleSystem_SetWaitingIcon

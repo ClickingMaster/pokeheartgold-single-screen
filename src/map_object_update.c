@@ -288,7 +288,7 @@ void MapObject_SpawnFootprints(LocalMapObject *object, u8 behavior, u8 prevBehav
     if (kind == 0) {
         return;
     }
-    if (sub_0205BA94(prevBehavior) == TRUE) {
+    if (MetatileBehavior_Is169(prevBehavior) == TRUE) {
         kind = flags->footprints;
         if (kind == 1) {
             Footprints_SpawnOnBehavior169(object);

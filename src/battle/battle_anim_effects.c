@@ -701,7 +701,7 @@ void BattleAnimFunc_FadeInShrinkSprite(BattleAnimSystem *system) {
     memset(work, 0, sizeof(BattleAnimFadeInShrinkSpriteWork));
     work->system = system;
     work->spriteManager = BattleAnimSystem_GetBattlerSpriteManager(system);
-    work->flipX = ov07_0221BFC0(system);
+    work->flipX = BattleAnimSystem_GetField08(system);
     work->sprite = BattleAnimSystem_GetBattlerSprite(work->system, 0);
     BattleAnimUtil_InitScaleMotion(&work->scale, 14, 10, 10, 8);
     BattleAnimUtil_InitValueMotionFx(&work->blend, 0, 16, 8);
@@ -3700,7 +3700,7 @@ void BattleAnimObjWindowBg_Start(BattleAnimSystem *system, const BattleAnimObjWi
     ManagedSprite_SetPriority(work->sprites[0], 2);
     ManagedSprite_SetPriority(work->sprites[1], 2);
     type = BattleAnimUtil_GetBattlerType(system, work->params.target == 0 ? BattleAnimSystem_GetAttacker(system) : BattleAnimSystem_GetDefender(system));
-    if ((u32)ov07_0221BFC0(system) == 1) {
+    if ((u32)BattleAnimSystem_GetField08(system) == 1) {
         ManagedSprite_SetDrawFlag(work->sprites[2], FALSE);
         type = BattleAnimSystem_GetBgPriority(work->common.system, 2);
         ManagedSprite_SetPriority(work->sprites[0], type);

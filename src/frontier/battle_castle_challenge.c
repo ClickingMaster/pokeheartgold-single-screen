@@ -732,7 +732,7 @@ void BattleCastle_PrintPlayerPoints(FrontierSystem *system, Window *window, Play
 #pragma force_active reset
 
 // Value of the current round from gBattleCastleRoundValues_Single / gBattleCastleRoundValues_Multi (0x14 at 21 / 49 wins of the single challenge).
-u32 ov80_02233648(BattleCastleData *data) {
+u32 BattleCastleData_GetRoundTableValue(BattleCastleData *data) {
     u32 type = data->type;
     u32 round = data->round;
     u32 result;

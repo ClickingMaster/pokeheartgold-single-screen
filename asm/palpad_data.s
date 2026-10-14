@@ -531,7 +531,7 @@
 	.public PalPadGfx_ClearTitle
 	.public PalPadGfx_BufferFriendCode
 	.public PalPadGfx_BufferFriendName
-	.public ov43_0222AB5C
+	.public PalPadGfx_BufferFriendGroupName
 	.public PalPadGfx_BufferLastDate
 	.public PalPadGfx_BufferNumber
 	.public PalPadGfx_BufferActivityName

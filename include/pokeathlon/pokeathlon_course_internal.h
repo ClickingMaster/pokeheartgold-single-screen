@@ -624,7 +624,7 @@ void PokeathlonCourseScoreList_Rank(PokeathlonCourseScoreList *list, int mode);
 PokeathlonCourseScore *PokeathlonCourseScoreList_GetRanked(PokeathlonCourseScoreList *list, u32 index);
 void PokeathlonCourseScoreList_Init(PokeathlonCourseScoreList *list);
 s32 PokeathlonCourseScoreList_GetCount(PokeathlonCourseScoreList *list);
-u32 ov96_021E9528(PokeathlonCourseScoreList *list);
+u32 PokeathlonCourseScoreList_GetField04(PokeathlonCourseScoreList *list);
 void PokeathlonCourseScoreList_AddPointsToTotals(PokeathlonCourseScoreList *list);
 void PokeathlonCourseScoreList_SaveEventPoints(PokeathlonCourseScoreList *list, int event);
 u32 PokeathlonCourseScoreList_GetEventPoints(PokeathlonCourseScoreList *list, int event, int participant);
@@ -689,7 +689,7 @@ void PokeathlonCourseMonObject_SetAffineMatrix(PokeathlonCourseMonObject *object
 void PokeathlonCourseMonObject_SetAnimStateRaw(PokeathlonCourseMonObject *object, u32 animState);
 void PokeathlonCourseMonObject_SetAnimState(PokeathlonCourseMonObject *object, u32 animState);
 void PokeathlonCourseMonObject_SetAnim(PokeathlonCourseMonObject *object, int anim);
-void ov96_021EAD08(PokeathlonCourseMonObject *object, int anim);
+void PokeathlonCourseMonObject_SetAnimCode(PokeathlonCourseMonObject *object, int anim);
 BOOL PokeathlonCourseMonObject_IsAnimated(PokeathlonCourseMonObject *object);
 void PokeathlonCourseMonObject_SetPosition(PokeathlonCourseMonObject *object, s32 x, s32 y, BOOL moveShadow);
 void PokeathlonCourseMonObject_SetMonPosition(PokeathlonCourseMonObject *object, s32 x, s32 y);

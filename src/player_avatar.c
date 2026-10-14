@@ -47,7 +47,7 @@ u8 Comm_GetPartnerGameVersion(void) {
     return PlayerProfile_GetVersion(profile);
 }
 
-u8 sub_0205C298(SaveData *saveData) {
+u8 Save_IsPlayerOrPartnerVersion0(SaveData *saveData) {
     if (PlayerProfile_GetVersion(Save_PlayerData_GetProfile(saveData)) == 0) {
         return 1;
     }

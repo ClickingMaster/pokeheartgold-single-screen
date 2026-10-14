@@ -138,7 +138,7 @@ void TrainerCardMain_CreateButtonSprites(TrainerCardMainSprites *sprites);
 void TrainerCardMain_FreeSprites(TrainerCardMainSprites *sprites);
 void TrainerCardMain_SetButtonSpriteAnim(TrainerCardMainSprites *sprites, int button, int sequence, int draw);
 void TrainerCardMain_InitObjTransfer(void);
-void ov51_021E7DA4(u8 *pairs);
+void TrainerCardMain_InitUnk33A0Pairs(u8 *pairs);
 
 #pragma force_active on
 
@@ -204,7 +204,7 @@ int TrainerCardMainApp_Init(OverlayManager *manager, int *state) {
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);
     TextFlags_SetCanABSpeedUpPrint(TRUE);
     Sound_SetSceneAndPlayBGM(0x38, 0, 0);
-    ov51_021E7DA4(&cardMain->unk_33A0[0][0]);
+    TrainerCardMain_InitUnk33A0Pairs(&cardMain->unk_33A0[0][0]);
     PlaySE(SEQ_SE_DP_CARD3);
     TrainerCardMain_InitSprites(&cardMain->sprites);
     TrainerCardMain_CreateBadgeSprites(&cardMain->sprites, cardMain->badgeFlags, cardMain->showKantoBadges);
@@ -1329,7 +1329,7 @@ void TrainerCardMain_InitObjTransfer(void) {
     thunk_ClearSubOAM(HEAP_ID_25);
 }
 
-void ov51_021E7DA4(u8 *pairs) {
+void TrainerCardMain_InitUnk33A0Pairs(u8 *pairs) {
     int i;
     for (i = 0; i < 4; i++) {
         pairs[0] = i;

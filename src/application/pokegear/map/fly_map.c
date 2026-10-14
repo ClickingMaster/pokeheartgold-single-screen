@@ -178,7 +178,7 @@ static int FlyMap_MainTask_HandleInput(PokegearMapAppData *mapApp) {
     case 4:
         return PGMAP_MAIN_STATE_FADE_OUT;
     }
-    ov101_021EC304(mapApp);
+    PokegearMap_UpdateCursorMovement(mapApp);
     return PGMAP_MAIN_STATE_HANDLE_INPUT;
 }
 

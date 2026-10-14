@@ -40,8 +40,8 @@
 .public Sound_ClearBGMPauseFlags
 .public GF_SndHandleMoveVolume
 .public GF_SndHandleSetInitialVolume
-.public sub_02005448
-.public sub_02005464
+.public Sound_ApplyVoiceChatVolumeForSeq
+.public Sound_ApplyVoiceChatVolume
 .public GF_GetVolumeBySeqNo
 .public GF_SetVolumeBySeqNo
 .public GF_SndPlayerCountPlayingSeqByPlayerNo
@@ -80,7 +80,7 @@
 .public GF_FadeStartMusicId
 .public Sound_SetBGMPlayerChannels
 .public GF_SndHandleSetPlayerVolume
-.public sub_02005B58
+.public Sound_SetKeepPlayingCries
 .public Sound_SetChatotRecordingDisabled
 .public GF_SndReadSeqVariable
 .public Sound_ApplyFootstepVariation
@@ -90,8 +90,8 @@
 .public SoundSys_ToggleGBSounds
 .public GBSounds_GetGBSeqNoByDSSeqNo
 .public GBSounds_SetAllocatableChannels
-.public sub_02005CF4
-.public sub_02005D00
+.public Sound_SetFieldBGMStopOnce
+.public Sound_ResetFieldBGMStopOnce
 .public PlayBGM
 .public GF_SndStartFadeInBGM
 .public GF_SndStartFadeOutBGM
@@ -101,7 +101,7 @@
 .public Heap_Alloc
 .public Heap_Free
 .public GF_AssertFail
-.public sub_020378CC
+.public Comm_IsWifiVoiceChatEnabled
 .public NNS_SndSetMasterVolume
 .public NNS_SndSetMonoFlag
 .public NNS_SndWaveOutAllocChannel

@@ -166,7 +166,7 @@
 .public NARC_ReadPokepicShadowXOffset
 .public NARC_ReadPokepicShadowSize
 .public Seal_GetBattleAnimResId
-.public sub_0209109C
+.public Seal_IsLetterSeal
 .public FX_Div
 .public FX_Sqrt
 .public FX_Atan2Idx
@@ -201,7 +201,7 @@
 .public BattleAnimBattlerSprites_NewAll
 .public BattleAnimBattlerSprites_Free
 .public BattleAnimBattlerSprites_Free2
-.public ov07_0221FE70
+.public Ov07UnkFE70_GetCurrentValue
 .public BallSealEffect_New
 .public BallSealEffect_LoadResources
 .public BallSealEffect_IsLoaded
@@ -231,7 +231,7 @@
 .public BattleAnimEmitter_IsActive
 .public BattleAnimUtil_RestorePic
 .public BattleAnimUtil_LoadSubstituteIntoPic
-.public ov07_02234B5C
+.public BattleAnimUtil_GetBattlerTypeCoord
 .public gBattlerSlideInTargetX
 .public gBattlerPokepicPositions
 .public BattleSystem_GetSpriteSystem

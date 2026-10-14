@@ -128,7 +128,7 @@ NamingScreenArgs *PalPadNaming_CreateNamingArgs(PalPadNaming *naming, PalPadShar
     NamingScreenArgs *args = NamingScreen_CreateArgs(heapId, NAME_SCREEN_UNK7, 0, 7, options, NULL);
 
     if (shared->useInitialName == TRUE) {
-        if (!sub_02020B78(shared->initialName[0])) {
+        if (!IsCharCodeBelowDigit0(shared->initialName[0])) {
             CopyU16ArrayToString(args->nameInputString, shared->initialName);
         } else {
             String_SetEmpty(args->nameInputString);

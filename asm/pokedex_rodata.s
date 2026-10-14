@@ -1479,7 +1479,7 @@
 	.public PokedexApp_DrawForeignCategory
 	.public PokedexApp_DrawSearchEntryDetails
 	.public PokedexApp_SetupSearchWindows
-	.public ov18_021EEE84
+	.public PokedexApp_PutSearchWindowCellTiles
 	.public PokedexApp_DrawSearchMessage
 	.public PokedexApp_DrawSearchOrderLabel
 	.public PokedexApp_DrawSearchNameLabel
@@ -1631,7 +1631,7 @@
 	.public PokedexApp_UnloadSearchEntryResources
 	.public PokedexApp_CreateSearchSprites
 	.public PokedexApp_FreeSearchSprites
-	.public ov18_021F3448
+	.public PokedexApp_FreeSprites26And27
 	.public PokedexApp_UpdateBodyTypeSprite
 	.public PokedexApp_HideBodyTypeOptionSprites
 	.public PokedexApp_SetBodyTypeSpriteLayout
@@ -1655,9 +1655,9 @@
 	.public PokedexApp_SetSearchEntrySpritesVisible
 	.public PokedexApp_UpdateSearchBodyTypeIcon
 	.public PokedexApp_MoveSearchSummaryIcons
-	.public ov18_021F3C30
-	.public ov18_021F3C54
-	.public ov18_021F3C88
+	.public PokedexApp_ShowSprite25Raised
+	.public PokedexApp_MoveSprite25Vertically
+	.public PokedexApp_ShowSprite25
 	.public PokedexApp_GetSeenFormAndGender
 	.public PokedexApp_CreateEntryTabCursor
 	.public PokedexApp_FreeEntryTabCursor
@@ -1681,7 +1681,7 @@
 	.public PokedexApp_GetSpecialAreaMarkers
 	.public PokedexApp_PlaceSpecialAreaMarkers
 	.public PokedexApp_UpdateSpecialAreaMarkers
-	.public ov18_021F4974
+	.public PokedexApp_HitTestSpecialAreaMarkers
 	.public PokedexApp_SetupSizeCheckSprites
 	.public PokedexApp_FreeSizeCheckSprites
 	.public PokedexApp_LoadSizeCheckResources
@@ -1754,7 +1754,7 @@
 	.public PokedexApp_SetupFormsSprites
 	.public PokedexApp_FreeFormsSprites
 	.public PokedexApp_CreateFormsSprites
-	.public ov18_021F5EF0
+	.public PokedexApp_ShowFormMonPicsMode0
 	.public PokedexApp_ShowFormMonPics
 	.public PokedexApp_SetFormListIcon
 	.public PokedexApp_DrawFormListIcons
@@ -1782,7 +1782,7 @@
 	.public PokedexApp_HideFormCompareSprites
 	.public PokedexApp_SetCompareFormIcon
 	.public PokedexApp_ShowFormCompareMonPic
-	.public ov18_021F6984
+	.public PokedexApp_ShowFormCompareMonPicMode0
 	.public PokedexApp_UpdateFormCompareSelector
 	.public PokedexApp_SetPlayerMarkerAnim
 	.public PokedexApp_LoadMonPicToBg
@@ -1900,7 +1900,7 @@
 	.public PokedexApp_BuildListEntries
 	.public PokedexApp_GetListLength
 	.public PokedexApp_GetLastListPage
-	.public ov18_021F8970
+	.public PokedexApp_IdentityU32
 	.public PokedexEntryPopup_Create
 	.public PokedexEntryPopup_IsDone
 	.public PokedexEntryPopup_Delete
@@ -2110,7 +2110,7 @@
 	.public PokedexApp_OnSearchFormGridTouch
 	.public PokedexApp_DummyGridCallback
 	.public PokedexApp_GetListCursorIndex
-	.public ov18_021F8970
+	.public PokedexApp_IdentityU32
 	.public PokedexEntryPopup_IsDone
 	.public PokedexEntryPopup_Delete
 	.public PokedexEntryPopup_FreeBgs

@@ -45,7 +45,7 @@
 	.public TrainerCardSignature_InitObjTransfer
 	.public TrainerCardSignature_RemoveWindows
 	.public TrainerCardSignature_UpdateCanvasDummy
-	.public ov52_021E8CBC
+	.public TrainerCardSignature_SetDoneButtonSpriteSeq
 	.public TrainerCardSignature_SetDoneButtonPressed
 	.public TrainerCardSignature_State_Draw
 	.public TrainerCardSignature_UpdateCanvas

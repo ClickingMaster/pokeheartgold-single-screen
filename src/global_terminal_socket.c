@@ -196,9 +196,9 @@ void GlobalTerminalSocket_Free(void *ptr);
 void GlobalTerminalSocket_Lock(void);
 void GlobalTerminalSocket_Unlock(void);
 int GlobalTerminalSocket_InitMutex(void);
-int ov39_0222993C(void *settings);
+int GlobalTerminalSocket_InitSettingsStub(void *settings);
 int GlobalTerminalSocket_InitTick(void);
-void ov39_02229970(void);
+void GlobalTerminalSocket_ResetStub(void);
 void GlobalTerminalSocket_ThreadMain(void);
 int GlobalTerminalSocket_StartThread(void);
 int GlobalTerminalSocket_IsIPv4Address(signed char *str);
@@ -221,19 +221,19 @@ int GlobalTerminalServer_DownloadBox(int id, void *response);
 int GlobalTerminalServer_GetResponseSize(void);
 void *GlobalTerminalServer_GetResponse(void);
 int GlobalTerminalServer_GetResponseBufferSize(int command);
-int ov39_0222A2CC(void *response);
+int GlobalTerminalServer_SendRequest22000(void *response);
 int GlobalTerminalServer_GetRankings(GlobalTerminalServerRankingsRequest *request, void *response);
 int GlobalTerminalServer_UploadVideo(GlobalTerminalServerVideoUpload *video, void *response);
 int GlobalTerminalServer_SearchVideos(GlobalTerminalServerVideoSearchParams *params, void *response);
-int ov39_0222A3DC(int *arg, void *response);
-int ov39_0222A434(int *arg, void *response);
+int GlobalTerminalServer_SearchVideosKind1(int *arg, void *response);
+int GlobalTerminalServer_SearchVideosKind2(int *arg, void *response);
 int GlobalTerminalServer_DownloadVideo(int idLow, int idHigh, int arg2, void *response);
-int ov39_0222A4C0(int idLow, int idHigh, void *response);
+int GlobalTerminalServer_SendRequest23003(int idLow, int idHigh, void *response);
 void GlobalTerminalSocket_Encode(const u8 *src, int size, u8 *dst);
 void GlobalTerminalSocket_Decode(const u8 *src, int size, u8 *dst);
 int GlobalTerminalSocket_GetRequestSize(int command);
 int GlobalTerminalSocket_GetResponseBufferSize(int command);
-void ov39_0222A8AC(void *request, void *arg);
+void GlobalTerminalSocket_PrepareUploadStub(void *request, void *arg);
 
 void GlobalTerminalSocket_Reset(void) {
     GlobalTerminalSocket_ClearRequest();
@@ -241,8 +241,8 @@ void GlobalTerminalSocket_Reset(void) {
     sGlobalTerminalSocket.hasToken = FALSE;
     sGlobalTerminalSocket.host[0] = '\0';
     sGlobalTerminalSocketSettings.port = 0;
-    ov39_0222993C(&sGlobalTerminalSocketSettings);
-    ov39_02229970();
+    GlobalTerminalSocket_InitSettingsStub(&sGlobalTerminalSocketSettings);
+    GlobalTerminalSocket_ResetStub();
 }
 
 int GlobalTerminalSocket_Start(char *host, int port, GlobalTerminalNetLogin *login) {
@@ -495,7 +495,7 @@ int GlobalTerminalSocket_InitMutex(void) {
     return 1;
 }
 
-int ov39_0222993C(void *settings) {
+int GlobalTerminalSocket_InitSettingsStub(void *settings) {
     return 1;
 }
 
@@ -507,7 +507,7 @@ int GlobalTerminalSocket_InitTick(void) {
     return 1;
 }
 
-void ov39_02229970(void) {
+void GlobalTerminalSocket_ResetStub(void) {
 }
 
 void GlobalTerminalSocket_ThreadMain(void) {
@@ -792,7 +792,7 @@ int GlobalTerminalServer_GetError(void) {
 
 int GlobalTerminalServer_UploadDressUp(GlobalTerminalServerDressUpUpload *upload, void *response) {
     GlobalTerminalServerDressUpUpload payload = *upload;
-    ov39_0222A8AC(upload, ov39_0222AA78);
+    GlobalTerminalSocket_PrepareUploadStub(upload, ov39_0222AA78);
     return GlobalTerminalSocket_SendRequest(GTS_REQUEST_DRESS_UP_UPLOAD, &payload, response, -1);
 }
 
@@ -809,7 +809,7 @@ int GlobalTerminalServer_UploadBox(int tray, GlobalTerminalServerBoxData *box, v
     GlobalTerminalServerBoxUpload payload;
     payload.tray = tray;
     payload.box = *box;
-    ov39_0222A8AC(box, ov39_0222AA78);
+    GlobalTerminalSocket_PrepareUploadStub(box, ov39_0222AA78);
     return GlobalTerminalSocket_SendRequest(GTS_REQUEST_BOX_UPLOAD, &payload, response, -1);
 }
 
@@ -834,7 +834,7 @@ int GlobalTerminalServer_GetResponseBufferSize(int command) {
     return GlobalTerminalSocket_GetResponseBufferSize(command);
 }
 
-int ov39_0222A2CC(void *response) {
+int GlobalTerminalServer_SendRequest22000(void *response) {
     return GlobalTerminalSocket_SendRequest(GTS_REQUEST_22000, NULL, response, -1);
 }
 
@@ -857,14 +857,14 @@ int GlobalTerminalServer_SearchVideos(GlobalTerminalServerVideoSearchParams *par
     return GlobalTerminalSocket_SendRequest(GTS_REQUEST_VIDEO_SEARCH, &payload, response, -1);
 }
 
-int ov39_0222A3DC(int *arg, void *response) {
+int GlobalTerminalServer_SearchVideosKind1(int *arg, void *response) {
     GlobalTerminalServerVideoList payload = { 0 };
     payload.kind = 1;
     payload.data[2] = *arg;
     return GlobalTerminalSocket_SendRequest(GTS_REQUEST_VIDEO_SEARCH, &payload, response, -1);
 }
 
-int ov39_0222A434(int *arg, void *response) {
+int GlobalTerminalServer_SearchVideosKind2(int *arg, void *response) {
     GlobalTerminalServerVideoList payload = { 0 };
     payload.kind = 2;
     payload.data[2] = *arg;
@@ -879,7 +879,7 @@ int GlobalTerminalServer_DownloadVideo(int idLow, int idHigh, int arg2, void *re
     return GlobalTerminalSocket_SendRequest(GTS_REQUEST_VIDEO_DOWNLOAD, payload, response, -1);
 }
 
-int ov39_0222A4C0(int idLow, int idHigh, void *response) {
+int GlobalTerminalServer_SendRequest23003(int idLow, int idHigh, void *response) {
     int payload[2];
     payload[0] = idLow;
     payload[1] = idHigh;
@@ -1026,5 +1026,5 @@ int GlobalTerminalSocket_GetResponseBufferSize(int command) {
     return size + 8;
 }
 
-void ov39_0222A8AC(void *request, void *arg) {
+void GlobalTerminalSocket_PrepareUploadStub(void *request, void *arg) {
 }

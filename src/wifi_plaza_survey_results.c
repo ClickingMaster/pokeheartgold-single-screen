@@ -523,7 +523,7 @@ void WiFiPlazaSurvey_CountPlazaAnswers(WiFiPlazaSurveyTally *tally, void *lobby)
             void *value = WiFiPlazaPlayer_GetRawLanguage(player);
             WiFiPlazaSurveyAnswerRecord record;
             WiFiPlazaPlayer_GetSurvey(player, &record);
-            if (ov45_0222F6B0(0, value) == 1 && record.answer < WIFI_PLAZA_SURVEY_NUM_ANSWERS) {
+            if (WiFiPlazaLobbyClient_GetSurveyFlag(0, value) == 1 && record.answer < WIFI_PLAZA_SURVEY_NUM_ANSWERS) {
                 tally->counts[record.answer]++;
                 tally->total++;
             }

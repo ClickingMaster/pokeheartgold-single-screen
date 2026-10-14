@@ -40,7 +40,7 @@ u16 PokeathlonResultsAnnouncement_GetPlateRank();
 // Course helpers, the announcer's text box and the scene (OVY_96, not yet tidied).
 PokeathlonResultsAnnouncementScore *PokeathlonCourseScoreList_GetRanked(void *scoreList, u8 rank);
 int PokeathlonCourseScoreList_GetCount(void *scoreList);
-int ov96_021E9528(void *scoreList);
+int PokeathlonCourseScoreList_GetField04(void *scoreList);
 int PokeathlonCourseScoreList_GetEventPoints(void *scoreList, u32 event, int participant);
 u16 PokeathlonCourse_GetNpcTeamSpriteId(u8 team);
 void *PokeathlonCourseSpritePool_New(enum HeapID heapId, const void *config);
@@ -126,7 +126,7 @@ BOOL PokeathlonResultsAnnouncement_Init(PokeathlonCourseData *course) {
         PokeathlonCourseSpritePool_SetSurfaceCoords(announcement->scene, 0, 0, 0, FX32_CONST(300));
         scoreList = PokeathlonCourse_GetGraphicsSystem(course);
         value = PokeathlonCourseScoreList_GetCount(scoreList);
-        PokeathlonResultsAnnouncement_StartRanking(&announcement->ranking, course, (u8)value, ov96_021E9528(scoreList));
+        PokeathlonResultsAnnouncement_StartRanking(&announcement->ranking, course, (u8)value, PokeathlonCourseScoreList_GetField04(scoreList));
         announcement->scoreboard = PokeathlonResultsAnnouncement_NewScoreboard(announcement->heapId, announcement->bgConfig, announcement->scene);
         PokeathlonResultsAnnouncement_LoadScoreboardResources(announcement->scoreboard, 2);
         PokeathlonCourseSpritePool_TransferResources(announcement->scene);

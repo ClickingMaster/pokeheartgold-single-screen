@@ -33,7 +33,7 @@
 .public Comm_SendCommandNoCopy
 .public Comm_SendCommand
 .public Comm_GetLocalNetId
-.public sub_020388E0
+.public CommState_SetLinkMode13RequestMode0
 .public CommState_SetErrorWatch
 .public CommState_SetError
 .public UnionRoom_RecvTalkChoice
@@ -67,7 +67,7 @@
 
 	.public UnionRoom_GetGroupOfMemberSlot
 	.public UnionRoom_GetPlayerActivityMsg
-	.public sub_0205A730
+	.public UnionRoom_GetSentTalkReplyMsg
 	.public UnionRoom_FillStatusMembers
 	.public UnionRoomStatus_Init
 	.public _020FC7D4

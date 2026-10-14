@@ -19,25 +19,6 @@ typedef PartyExtraSub PartyAprijuiceModifier;
 typedef struct PokeathlonTodayPerformance PokeathlonTodayPerformance;
 typedef struct PokeathlonPerformanceStars PokeathlonPerformanceStars;
 
-#define PokeathlonBox_Init                       ov97_0221E5C0
-#define PokeathlonBox_Main                       ov97_0221E5D4
-#define PokeathlonBox_Exit                       ov97_0221E69C
-#define PokeathlonBox_SetGraphicsBanks           ov97_0221E7F4
-#define PokeathlonBox_SetGraphicsModes           ov97_0221E814
-#define PokeathlonBox_SetObjCharTransferTemplate ov97_0221E834
-#define PokeathlonBox_GetBoxMon                  ov97_0221E898
-#define PokeathlonBox_GetLightBoxMon             ov97_0221E91C
-#define PokeathlonBox_GetBoxName                 ov97_0221E97C
-#define PokeathlonBox_CopySelectedMons           ov97_0221E98C
-#define PokeathlonBox_GetPartyMonStats           ov97_0221EA88
-#define PokeathlonBox_GetBoxMonStats             ov97_0221EB38
-#define PokeathlonBox_GetLightBoxMonStats        ov97_0221EBD8
-#define PokeathlonBox_InitGraphics               ov97_0221EE84
-#define PokeathlonBox_SetupGraphics              ov97_0221EEA4
-#define PokeathlonBox_RenderAndAnimateSprites    ov97_0221F010
-#define PokeathlonBox_ReleaseGraphics            ov97_0221F020
-#define PokeathlonBox_InitBgFromTemplates        ov97_0221F1D8
-
 typedef struct PokeathlonBox_MonStats {
     s8 power;
     s8 stamina;

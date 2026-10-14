@@ -33,7 +33,7 @@ int Terrain_CalcHeightWithMode(FieldSystem *fieldSystem, int objectHeightMode, i
 int Terrain_GetHeight_Simple(FieldSystem *fieldSystem, int objectHeight, fx32 x, fx32 z, u8 *outKind);
 BOOL Terrain_GetAttributes_Loaded(FieldSystem *fieldSystem, int x, int z, u16 *outAttr);
 BOOL Terrain_GetAttributes_Simple(FieldSystem *fieldSystem, int x, int z, u16 *outAttr);
-u8 sub_020548EC(FieldSystem *fieldSystem, int x, int z);
+u8 FieldSystem_GetTileAttrBits8To14(FieldSystem *fieldSystem, int x, int z);
 int FieldSystem_GetTerrainHeight(FieldSystem *fieldSystem, int objectHeight, fx32 x, fx32 z, u8 *outKind);
 
 extern BOOL MapLoadManager_GetMapSlotAt(MapLoadManager *mapLoadManager, int x, int z, u8 *outIdx);
@@ -48,8 +48,8 @@ BOOL FieldSystem_FindMapProp(FieldSystem *fieldSystem, int buildModel, MapProp *
 BOOL FieldSystem_FindMapPropOfModels(FieldSystem *fieldSystem, int *models, u32 count, MapProp **outProp, int *outModel);
 int *FieldSystem_CollectMapPropModelsInRect(FieldSystem *fieldSystem, u32 heapId, int count, fx32 *rect, int fill);
 void Terrain_GetChunkOrigin(int idx, int width, VecFx32 *pos);
-BOOL sub_02054E00(u16 a0);
-BOOL sub_02054E20(u16 a0);
+BOOL MapModelNo_IsInTableD0ToD3(u16 a0);
+BOOL MapModelNo_HasNoAreaMapAnimation(u16 a0);
 
 extern const u16 _020FC5FC[];
 extern const FieldAttrVTable gTerrainQueries_Bdhc;

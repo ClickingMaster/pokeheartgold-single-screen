@@ -179,7 +179,7 @@ void PhotoAlbumApp_FreeSpritesAndMenus(PhotoAlbumApp *app);
 void PhotoAlbumApp_CreateSprites(PhotoAlbumApp *app);
 void PhotoAlbumApp_DeleteSprites(PhotoAlbumApp *app);
 void PhotoAlbumApp_DrawPageArrows(PhotoAlbumApp *app, int position, int draw);
-void ov109_021E6FD4(PhotoAlbumApp *app, int bgId, int mode, int index);
+void PhotoAlbumApp_DrawPageArrowBg(PhotoAlbumApp *app, int bgId, int mode, int index);
 void PhotoAlbumApp_DrawGridColumns(PhotoAlbumApp *app, int bgId, int page, u8 start);
 void PhotoAlbumApp_DrawPage(PhotoAlbumApp *app, int bgId, int mask, u8 page);
 void PhotoAlbumApp_DrawPhotoIcon(PhotoAlbumApp *app, int index, u8 bgId, u8 destX, u8 destY);
@@ -1184,7 +1184,7 @@ void PhotoAlbumApp_DrawPageArrows(PhotoAlbumApp *app, int position, int draw) {
     }
 }
 
-void ov109_021E6FD4(PhotoAlbumApp *app, int bgId, int mode, int index) {
+void PhotoAlbumApp_DrawPageArrowBg(PhotoAlbumApp *app, int bgId, int mode, int index) {
     NNSG2dScreenData *screen;
     u8 x;
     int row;
@@ -1219,11 +1219,11 @@ void PhotoAlbumApp_DrawGridColumns(PhotoAlbumApp *app, int bgId, int page, u8 st
 void PhotoAlbumApp_DrawPage(PhotoAlbumApp *app, int bgId, int mask, u8 page) {
     if (mask & 1) {
         PhotoAlbumApp_DrawGridColumns(app, bgId, page, 0);
-        ov109_021E6FD4(app, bgId, 1, page);
+        PhotoAlbumApp_DrawPageArrowBg(app, bgId, 1, page);
     }
     if (mask & 2) {
         PhotoAlbumApp_DrawGridColumns(app, bgId, page, 2);
-        ov109_021E6FD4(app, bgId, 2, page);
+        PhotoAlbumApp_DrawPageArrowBg(app, bgId, 2, page);
     }
     ScheduleBgTilemapBufferTransfer(app->bgConfig, (u8)bgId);
 }

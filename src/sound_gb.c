@@ -8,7 +8,7 @@ BOOL NNS_SndPlayerReadVariable(NNSSndHandle *handle, u32 variable, s16 *value);
 void NNS_SndPlayerSetTrackAllocatableChannel(NNSSndHandle *handle, u32 tracks, u32 channels);
 u8 GF_GetPlayerNoBySeq(u16 seqNo);
 void GF_SndHandleSetTrackPitch(int handleNo, u32 tracks, int pitch);
-void sub_02005B58(u8 value);
+void Sound_SetKeepPlayingCries(u8 value);
 void Sound_SetChatotRecordingDisabled(u8 value);
 BOOL GF_SndReadSeqVariable(u16 seqNo, u32 variable, s16 *value);
 void Sound_ApplyFootstepVariation(u16 seqNo);
@@ -17,9 +17,9 @@ void SoundSys_SetGBSoundsState(u8 enabled);
 u16 GBSounds_GetGBSeqNoByDSSeqNo(u16 seqNo);
 u16 GBSounds_GetDSSeqNoByGBSeqNo(u16 seqNo);
 void GBSounds_SetAllocatableChannels(void);
-void sub_02005CF4(BOOL enabled);
+void Sound_SetFieldBGMStopOnce(BOOL enabled);
 
-void sub_02005B58(u8 value) {
+void Sound_SetKeepPlayingCries(u8 value) {
     *(u8 *)GF_SdatGetAttrPtr(53) = value;
 }
 void Sound_SetChatotRecordingDisabled(u8 value) {
@@ -88,10 +88,10 @@ void GBSounds_SetAllocatableChannels(void) {
     NNS_SndPlayerSetTrackAllocatableChannel(GF_GetSoundHandle(7), 15, 0xA7FE);
     NNS_SndPlayerSetTrackAllocatableChannel(GF_GetSoundHandle(2), 15, 0xA7FE);
 }
-void sub_02005CF4(BOOL enabled) {
+void Sound_SetFieldBGMStopOnce(BOOL enabled) {
     _021D05E8[3] = enabled;
 }
-void sub_02005D00(void) {
+void Sound_ResetFieldBGMStopOnce(void) {
     _021D05E8[3] = 0;
     _021D05E8[1] = 0;
 }

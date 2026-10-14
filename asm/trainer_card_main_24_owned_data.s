@@ -56,7 +56,7 @@
 .public TrainerCardMain_FreeSprites
 .public TrainerCardMain_SetButtonSpriteAnim
 .public TrainerCardMain_InitObjTransfer
-.public ov51_021E7DA4
+.public TrainerCardMain_InitUnk33A0Pairs
 .public sTrainerCardSignHitbox
 .public sTrainerCardCardHitbox
 .public sTrainerCardGraphicsModes

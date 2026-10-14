@@ -27,7 +27,7 @@
 	.public BagApp_DestroyYesNoPrompt
 	.public BagApp_PrintSellPrice
 	.public BagApp_PrintMoney
-	.public ov15_021FF1E0
+	.public BagApp_PrintMsg115And116
 	.public BagApp_PrintCancelButton
 	.public BagApp_DrawItemList
 	.public BagApp_DrawSelectedItemEntry
@@ -42,8 +42,8 @@
 	.public BagApp_InitSprites
 	.public BagApp_FreeSprites
 	.public BagApp_TickSprites
-	.public ov15_021FF950
-	.public ov15_021FF964
+	.public BagApp_SetField648
+	.public BagApp_UpdateField648
 	.public BagApp_SetCursorPosition
 	.public BagApp_HideCursor
 	.public BagApp_SetMoveCursorPosition
@@ -103,7 +103,7 @@
 	.extern Bag_Main
 	.extern BagApp_LoadInfoPanelTilemap
 	.extern BagApp_ItemAction_Use
-	.extern ov15_021FBC6C
+	.extern BagApp_ItemAction_Action9
 	.extern BagApp_ItemAction_Confirm
 	.extern BagApp_ItemAction_Trash
 	.extern BagApp_ItemAction_Register
@@ -642,7 +642,7 @@ sItemActionFuncs: ; 0x02201368
 	.word BagApp_ItemAction_Register
 	.word BagApp_ItemAction_Deselect
 	.word BagApp_ItemAction_Give
-	.word ov15_021FBC6C
+	.word BagApp_ItemAction_Action9
 	.word BagApp_ItemAction_Confirm
 	.word 0x00000000
 	.word BagApp_ItemAction_Move

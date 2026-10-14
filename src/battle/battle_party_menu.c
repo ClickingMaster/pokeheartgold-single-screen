@@ -268,7 +268,7 @@ void BattlePartyMenu_LoadMonIconResources(BattlePartyMenu *menu);
 void BattlePartyMenu_LoadStatusIconResources(BattlePartyMenu *menu);
 void BattlePartyMenu_LoadTypeIconResources(BattlePartyMenu *menu);
 void BattlePartyMenu_LoadHeldItemIconResources(BattlePartyMenu *menu);
-void ov08_02220928(BattlePartyMenu *menu);
+void BattlePartyMenu_LoadSpriteResB00B(BattlePartyMenu *menu);
 ManagedSprite *BattlePartyMenu_CreateSprite(BattlePartyMenu *menu, int index);
 void BattlePartyMenu_CreateSprites(BattlePartyMenu *menu);
 void BattlePartyMenu_FreeSprites(BattlePartyMenu *menu);
@@ -2729,7 +2729,7 @@ void BattlePartyMenu_InitSprites(BattlePartyMenu *menu) {
     BattlePartyMenu_LoadStatusIconResources(menu);
     BattlePartyMenu_LoadTypeIconResources(menu);
     BattlePartyMenu_LoadHeldItemIconResources(menu);
-    ov08_02220928(menu);
+    BattlePartyMenu_LoadSpriteResB00B(menu);
     BattlePartyMenu_CreateSprites(menu);
     BattlePartyMenu_CreateCursor(menu);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
@@ -2804,7 +2804,7 @@ void BattlePartyMenu_LoadHeldItemIconResources(BattlePartyMenu *menu) {
 }
 
 // resources 0xB00B / 0xB017 from NARC a/0/7/1 (probably the contest condition markers)
-void ov08_02220928(BattlePartyMenu *menu) {
+void BattlePartyMenu_LoadSpriteResB00B(BattlePartyMenu *menu) {
     SpriteSystem *spriteSystem = BattleSystem_GetSpriteSystem(menu->context->battleSystem);
 
     SpriteSystem_LoadPaletteBuffer(menu->paletteData, PLTTBUF_SUB_OBJ, spriteSystem, menu->spriteManager, NARC_a_0_7_1, 27, FALSE, 1, NNS_G2D_VRAM_TYPE_2DSUB, 0xB00B);

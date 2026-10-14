@@ -543,7 +543,7 @@ void MapPropAnimationManager_LoadPropAnimations(int fileCount, NNSG3dResMdl *res
     }
 }
 
-void ov01_021E90B0(MapPropOneShotAnimationManager *oneShotAnimManager, const int tag, u8 arg2) {
+void MapPropOneShotAnimationManager_SetAnimationField35(MapPropOneShotAnimationManager *oneShotAnimManager, const int tag, u8 arg2) {
     MapPropOneShotAnimation *oneShotAnimation = MapPropOneShotAnimationManager_GetAnimation(oneShotAnimManager, tag);
     oneShotAnimation->unk35 = arg2;
 }

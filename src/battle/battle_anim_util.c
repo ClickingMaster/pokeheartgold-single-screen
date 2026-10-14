@@ -764,7 +764,7 @@ void BattleAnimUtil_PaletteToGrayscale(u16 *palette, int count) {
 
 void BattleAnimSystem_ApplyGrayscale(BattleAnimSystem *system) {
     u16 *buffer = PaletteData_GetFadedBuf(BattleAnimSystem_GetPaletteData(system), PLTTBUF_MAIN_BG);
-    if (ov07_0221BFC0(system) == 1) {
+    if (BattleAnimSystem_GetField08(system) == 1) {
         BattleAnimUtil_PaletteToGrayscale(buffer, 48);
     } else {
         BattleAnimUtil_PaletteToGrayscale(buffer, 128);
@@ -775,7 +775,7 @@ void BattleAnimSystem_ApplyGrayscale(BattleAnimSystem *system) {
 
 void BattleAnimSystem_RestoreFromGrayscale(BattleAnimSystem *system) {
     PaletteData *paletteData = BattleAnimSystem_GetPaletteData(system);
-    if (ov07_0221BFC0(system) == 1) {
+    if (BattleAnimSystem_GetField08(system) == 1) {
         PaletteData_CopyPalette(paletteData, PLTTBUF_MAIN_BG, 0, PLTTBUF_MAIN_BG, 0, 48 * sizeof(u16));
         return;
     }

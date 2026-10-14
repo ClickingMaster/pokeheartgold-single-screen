@@ -677,7 +677,7 @@ static void FlyMap_FinalizeGraphicsSetup(PokegearMapAppData *mapApp) {
     }
     mapApp->pokegear->reselectAppCB = PokegearMap_ShowMapCursor;
     mapApp->pokegear->deselectAppCB = PokegearMap_DeselectApp;
-    ov101_021E990C(mapApp);
+    PokegearMap_InitCursorAndPlayerSprites(mapApp);
     PokegearMap_OnVBlank_UpdateCursorAffine(mapApp, &mapApp->cursorSpriteState);
     CopyToBgTilemapRect(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 32, 24, mapApp->mainBg1Screen->rawData, 0, 0, mapApp->mainBg1Screen->screenWidth / 8, mapApp->mainBg1Screen->screenHeight / 8);
     PokegearMap_DrawMapTilemap(mapApp);

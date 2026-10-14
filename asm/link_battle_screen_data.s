@@ -72,7 +72,7 @@
 	.public LinkBattleScreen_LoadMonIconGfx
 	.public LinkBattleScreen_LoadItemIconGfx
 	.public LinkBattleScreen_LoadStatusIconGfx
-	.public ov05_0221E4C8
+	.public LinkBattleScreen_LoadPlistSpriteRes
 	.public LinkBattleScreen_SetPartySpriteOffset
 	.public LinkBattleScreen_AddPartyWindows
 	.public LinkBattleScreen_RemovePartyWindows

@@ -139,7 +139,7 @@
 .public Comm_CountConnected
 .public Comm_IsActive
 .public Comm_GetLocalNetId
-.public sub_020378E4
+.public Comm_SetWifiContinuousSend
 .public LinkSync_StartSync
 .public LinkSync_IsSynced
 .public LinkSync_ClearPackets
@@ -147,7 +147,7 @@
 .public Save_VarsFlags_Get
 .public Save_VarsFlags_GetVarAddr
 .public CommClubLink_Exit
-.public sub_0205C298
+.public Save_IsPlayerOrPartnerVersion0
 .public GetMonData
 .public GetPokemonSpriteCharAndPlttNarcIds
 .public Pokemon_GetIconNaix

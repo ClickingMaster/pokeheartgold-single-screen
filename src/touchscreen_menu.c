@@ -219,7 +219,7 @@ int TouchscreenMenu_GetActionType(TouchscreenMenuData *data);
 void TouchscreenMenu_PrintActionLabel(TouchscreenMenuData *data, int actionType);
 void TouchscreenMenu_UpdateActionLabel(TouchscreenMenuData *data);
 void TouchscreenMenu_SetButtonsActive(TouchscreenMenuData *data, BOOL active);
-BOOL ov27_0225A714(TouchscreenMenuData *data);
+BOOL TouchscreenMenu_SyncStartMenuState(TouchscreenMenuData *data);
 void TouchscreenMenu_RefreshLabelAndNewIcons(TouchscreenMenuData *data);
 void TouchscreenMenu_HighlightSelectionAndDisable(TouchscreenMenuData *data);
 void TouchscreenMenu_UpdateForStartMenu(TouchscreenMenuData *data);
@@ -317,7 +317,7 @@ SysTask *TouchscreenMenu_Create(BgConfig *bgConfig, u16 *lastTouchMenuInput, Fie
     } else if (!FieldSystem_TaskIsRunning(fieldSystem)) {
         fieldSystem->unkD2_7 = TRUE;
     }
-    if (!ov27_0225A714(data)) {
+    if (!TouchscreenMenu_SyncStartMenuState(data)) {
         return task;
     }
     TouchscreenMenu_UpdateForStartMenu(data);
@@ -565,7 +565,7 @@ void TouchscreenMenu_SetButtonsActive(TouchscreenMenuData *data, BOOL active) {
     }
 }
 
-BOOL ov27_0225A714(TouchscreenMenuData *data) {
+BOOL TouchscreenMenu_SyncStartMenuState(TouchscreenMenuData *data) {
     FieldSystem *fieldSystem;
     u16 *lastTouchMenuInput;
     int state;

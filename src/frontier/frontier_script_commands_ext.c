@@ -1367,7 +1367,7 @@ BOOL FrtCmd_AddGameScore(FrontierScriptContext *ctx) {
 
 BOOL FrtCmd_CheckPlayerOrPartnerVersion0(FrontierScriptContext *ctx) {
     u16 *result = FrontierScript_ReadVarPtr(ctx);
-    *result = sub_0205C298(Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork)->saveData);
+    *result = Save_IsPlayerOrPartnerVersion0(Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork)->saveData);
     return FALSE;
 }
 
@@ -1390,7 +1390,7 @@ BOOL FrtCmd_200(FrontierScriptContext *ctx) {
 }
 
 BOOL FrtCmd_201(FrontierScriptContext *ctx) {
-    sub_020378E4(FrontierScript_ReadVar(ctx));
+    Comm_SetWifiContinuousSend(FrontierScript_ReadVar(ctx));
     return FALSE;
 }
 

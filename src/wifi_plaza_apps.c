@@ -34,8 +34,8 @@ extern BOOL (*const sWiFiPlazaAppEndFuncs[13])(WiFiPlazaApps *apps, void **args)
 // Arguments of app 0, the plaza.
 typedef struct WiFiPlazaMainArgs {
     SaveData *save;
-    int unk_04; // ov45_0222AD2C
-    int unk_08; // ov45_0222AD3C
+    int unk_04; // WiFiPlazaWork_GetScheduleValue3
+    int unk_08; // WiFiPlazaWork_GetScheduleValue2
     u32 unk_0c[3];
     u32 result; // what to do next (WiFiPlazaApps_EndMain)
     WiFiPlazaWork *work;
@@ -288,8 +288,8 @@ void WiFiPlazaApps_FreeMainArgs(void **args) {
 
 void WiFiPlazaApps_StartMain(WiFiPlazaApps *apps, void **args) {
     WiFiPlazaMainArgs *main = *args;
-    main->unk_04 = ov45_0222AD2C(apps->work);
-    main->unk_08 = ov45_0222AD3C(apps->work);
+    main->unk_04 = WiFiPlazaWork_GetScheduleValue3(apps->work);
+    main->unk_08 = WiFiPlazaWork_GetScheduleValue2(apps->work);
     WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaMainOverlayTemplate);
 }
 
@@ -474,7 +474,7 @@ BOOL WiFiPlazaApps_EndSwalotPlop(WiFiPlazaApps *apps, void **args) {
     WiFiPlazaGameArgs *game;
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_90));
     game = *args;
-    ov45_0222A430(apps->work, game->unk_1c);
+    WiFiPlazaWork_SetField508_04(apps->work, game->unk_1c);
     WiFiPlazaWork_SetTapToy(apps->work, game->unk_00);
     WiFiPlazaApps_Start(apps, 0);
     return FALSE;
@@ -506,7 +506,7 @@ BOOL WiFiPlazaApps_EndMimeJrTop(WiFiPlazaApps *apps, void **args) {
     WiFiPlazaGameArgs *game;
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_90));
     game = *args;
-    ov45_0222A430(apps->work, game->unk_1c);
+    WiFiPlazaWork_SetField508_04(apps->work, game->unk_1c);
     WiFiPlazaWork_SetTapToy(apps->work, game->unk_00);
     WiFiPlazaApps_Start(apps, 0);
     return FALSE;
@@ -538,7 +538,7 @@ BOOL WiFiPlazaApps_EndWobbuffetPop(WiFiPlazaApps *apps, void **args) {
     WiFiPlazaGameArgs *game;
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_90));
     game = *args;
-    ov45_0222A430(apps->work, game->unk_1c);
+    WiFiPlazaWork_SetField508_04(apps->work, game->unk_1c);
     WiFiPlazaWork_SetTapToy(apps->work, game->unk_00);
     WiFiPlazaApps_Start(apps, 0);
     return FALSE;

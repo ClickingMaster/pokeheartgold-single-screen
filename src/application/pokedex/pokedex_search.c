@@ -202,7 +202,7 @@ void PokedexApp_FilterByType(u32 type, u16 *dst, u32 *dstCount, const u16 *src, 
     u32 matchCount;
     u32 count;
 
-    switch (ov18_021F8970(type)) {
+    switch (PokedexApp_IdentityU32(type)) {
     case DEX_SEARCH_TYPE_ALL:
         count = srcCount;
         memcpy(dst, src, count * sizeof(u16));
@@ -487,6 +487,6 @@ u32 PokedexApp_GetLastListPage(PokedexAppData *pokedexApp, int mode) {
 }
 
 // Passes its argument through (the type filter's switch value).
-u32 ov18_021F8970(u32 value) {
+u32 PokedexApp_IdentityU32(u32 value) {
     return value;
 }

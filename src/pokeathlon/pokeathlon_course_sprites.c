@@ -874,7 +874,7 @@ void PokeathlonCourseMonObject_SetAnim(PokeathlonCourseMonObject *object, int an
     Sprite_TryChangeAnimSeq(sprite, seq);
 }
 
-void ov96_021EAD08(PokeathlonCourseMonObject *object, int anim) {
+void PokeathlonCourseMonObject_SetAnimCode(PokeathlonCourseMonObject *object, int anim) {
     Sprite *sprite = PokeathlonCourseMonGfx_GetSprite(object->gfx);
     switch (anim) {
     case 0:

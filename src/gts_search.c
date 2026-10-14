@@ -375,7 +375,7 @@ void GtsSearch_CreateData(GtsApp *app) {
     app->searchCursor = Heap_Alloc(HEAP_ID_61, sizeof(GtsSearchCursor));
     MIi_CpuClearFast(0, (u32 *)app->searchCursor, sizeof(GtsSearchCursor));
     app->searchCursor->johtoDexFlags = Gts_CreateJohtoDexFlags(HEAP_ID_61);
-    ov70_0223F948(&app->unk_1234);
+    GtsUnk1234_Clear(&app->unk_1234);
 }
 
 void GtsSearch_FreeData(GtsApp *app) {
@@ -744,7 +744,7 @@ int GtsSearch_HandleSpeciesSelector(GtsApp *app) {
     case -2:
         GtsSearch_SetBlendBrightness(0);
         app->state = GTS_SEARCH_STATE_START;
-        ov70_0223F960(&app->unk_1234, app->searchCursor->unk_06 + app->searchCursor->unk_04, app->searchCursor->unk_0A, app->searchCursor->unk_08);
+        GtsUnk1234_SetEntry(&app->unk_1234, app->searchCursor->unk_06 + app->searchCursor->unk_04, app->searchCursor->unk_0A, app->searchCursor->unk_08);
         break;
     case -1:
         break;
@@ -755,7 +755,7 @@ int GtsSearch_HandleSpeciesSelector(GtsApp *app) {
         FillWindowPixelBuffer(&app->infoWindows[1], 0);
         Gts_PrintSpeciesName(&app->infoWindows[1], app->speciesNames, selection, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
         app->searchCursor->genderRatio = GetMonBaseStat(selection, BASE_GENDER_RATIO);
-        ov70_0223F960(&app->unk_1234, app->searchCursor->unk_06 + app->searchCursor->unk_04, app->searchCursor->unk_0A, app->searchCursor->unk_08);
+        GtsUnk1234_SetEntry(&app->unk_1234, app->searchCursor->unk_06 + app->searchCursor->unk_04, app->searchCursor->unk_0A, app->searchCursor->unk_08);
         if (Gts_SetFixedGender(&app->searchCriteria, app->searchCursor->genderRatio)) {
             FillWindowPixelBuffer(&app->infoWindows[3], 0);
             Gts_PrintGender(&app->infoWindows[3], app->gtsMsgData, app->searchCriteria.gender, TRUE, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));

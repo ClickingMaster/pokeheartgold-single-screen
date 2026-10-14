@@ -96,8 +96,8 @@ u32 WiFiPlazaObj_DrawAvatars(WiFiPlazaObjManager *manager) {
     return WiFiPlazaPlayerObjects_Draw(manager->avatars);
 }
 
-u32 ov49_02258BE0(WiFiPlazaObjManager *manager) {
-    return ov45_022306F4(manager->avatars);
+u32 WiFiPlazaObj_ClearPendingFree(WiFiPlazaObjManager *manager) {
+    return WiFiPlazaPlayerObjects_ClearPendingFree(manager->avatars);
 }
 
 void WiFiPlazaObj_SetLightSet(WiFiPlazaObjManager *manager, int set) {

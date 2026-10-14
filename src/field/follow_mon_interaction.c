@@ -812,7 +812,7 @@ BOOL FollowMonInteraction_StepHasMovement(FollowMonInteraction *interaction, Fol
 
 BOOL FollowMonInteraction_TryShowEmote(FieldSystem *fieldSystem, FollowMonInteraction *interaction, FollowMonInteractionStep *step) {
     u8 emote;
-    if (sub_0205BB04((u8)fieldSystem->followMonInteraction->metatileBehavior) != FALSE) {
+    if (MetatileBehavior_Is113Or114Or46((u8)fieldSystem->followMonInteraction->metatileBehavior) != FALSE) {
         return FALSE;
     }
     emote = step->emote;

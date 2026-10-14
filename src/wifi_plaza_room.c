@@ -575,7 +575,7 @@ BOOL WiFiPlazaRoom_IsInstrumentFinished(WiFiPlazaRoomWork *room, u32 playerIndex
 void WiFiPlazaRoom_VBlank(void *data) {
     WiFiPlazaRoomWork *room = data;
     WiFiPlazaModels_VBlank(room->models);
-    ov49_02258BE0(room->objManager);
+    WiFiPlazaObj_ClearPendingFree(room->objManager);
     WiFiPlazaRoom_GraphicsVBlank(&room->graphics);
 }
 
@@ -746,7 +746,7 @@ void WiFiPlazaRoom_UpdateMatchSigns(WiFiPlazaRoomWork *room) {
     int i;
     u32 state;
     u32 recruiting;
-    u32 stop = ov45_0222A394(room->lobby);
+    u32 stop = WiFiPlazaWork_GetEventScheduleMode5(room->lobby);
     for (i = 0; i < 3; i++) {
         state = WiFiPlazaLobbyClient_IsMatchActive(i);
         if (state == TRUE) {

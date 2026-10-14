@@ -107,7 +107,7 @@ void FrontierListMenu_AddItemInternal(FrontierMenu *menu, u32 msgId, u16 descrip
 u32 FrontierListMenu_GetWidth(FrontierMenu *menu);
 void FrontierListMenu_InitTemplate(FrontierMenu *menu);
 void FrontierListMenu_PrintItem(ListMenu *list, s32 value, u8 onInit);
-u32 ov80_0222EC84(ListMenu *list);
+u32 FrontierListMenu_MoveCursorCallback(ListMenu *list);
 void FrontierListMenu_Task(SysTask *task, FrontierMenu *menu);
 void FrontierListMenu_Close(FrontierMenu *menu, int playSound);
 void FrontierMenu_PrintMessage(FrontierMenu *menu, u16 msgId, u32 speed);

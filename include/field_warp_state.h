@@ -8,8 +8,8 @@
 struct UnkStruct_02067A60;
 struct FlyTaskEnv;
 
-struct UnkStruct_02067A60 *sub_02067A60(enum HeapID heapID);
-void sub_02067A78(struct UnkStruct_02067A60 *);
+struct UnkStruct_02067A60 *BattleSetupSub134_New(enum HeapID heapID);
+void BattleSetupSub134_Delete(struct UnkStruct_02067A60 *);
 
 struct FlyTaskEnv *FlyTaskEnv_New(enum HeapID heapID, FieldSystem *fieldSystem, Pokemon *pokemon, u16 r3, u16 mapNo, s16 x, s16 y);
 BOOL FieldTask_Fly(TaskManager *taskManager);

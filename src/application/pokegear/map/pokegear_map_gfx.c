@@ -36,7 +36,7 @@ static void PokegearMap_RemoveAuxSprites_MapMode(PokegearMapAppData *mapApp);
 static void PokegearMap_RemoveAllSprites(PokegearMapAppData *mapApp);
 static void PokegearMap_SetBgParam_MapMode(PokegearMapAppData *mapApp);
 static void PokegearMap_SetBgParam_MarkingsMode(PokegearMapAppData *mapApp);
-static void ov101_021E9264(PokegearMapAppData *mapApp, BOOL a1);
+static void PokegearMap_ResetMarkingsModeIfLeaving(PokegearMapAppData *mapApp, BOOL a1);
 
 BOOL PokegearMap_LoadGFX(PokegearMapAppData *mapApp) {
     switch (mapApp->substate) {
@@ -102,7 +102,7 @@ BOOL PokegearMap_AnimateSwitchToMarkingMode(PokegearMapAppData *mapApp) {
         PokegearMap_RemoveAuxSprites_MapMode(mapApp);
         break;
     case 2:
-        ov101_021E9264(mapApp, TRUE);
+        PokegearMap_ResetMarkingsModeIfLeaving(mapApp, TRUE);
         PokegearMap_SetBgParam_MarkingsMode(mapApp);
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, mapApp->heapID);
         PokegearMap_BeginScrollMarkingsPanelBottomScreen(mapApp, 0);
@@ -148,7 +148,7 @@ BOOL PokegearMap_AnimateSwitchFromMarkingMode(PokegearMapAppData *mapApp) {
         PokegearMap_RemoveAuxSprites_MarkingsMode(mapApp);
         break;
     case 3:
-        ov101_021E9264(mapApp, FALSE);
+        PokegearMap_ResetMarkingsModeIfLeaving(mapApp, FALSE);
         PokegearMap_SetBgParam_MapMode(mapApp);
         PokegearMap_BeginScrollMarkingsPanelTopScreen(mapApp, 0);
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, mapApp->heapID);
@@ -1070,7 +1070,7 @@ static void PokegearMap_SetBgParam_MapMode(PokegearMapAppData *mapApp) {
 
     mapApp->pokegear->reselectAppCB = PokegearMap_ShowMapCursor;
     mapApp->pokegear->deselectAppCB = PokegearMap_DeselectApp;
-    ov101_021E990C(mapApp);
+    PokegearMap_InitCursorAndPlayerSprites(mapApp);
     PokegearMap_OnVBlank_UpdateCursorAffine(mapApp, &mapApp->cursorSpriteState);
     CopyToBgTilemapRect(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 32, 20, mapApp->mainBg1Screen->rawData, 0, 0, mapApp->mainBg1Screen->screenWidth / 8, mapApp->mainBg1Screen->screenHeight / 8);
 
@@ -1150,7 +1150,7 @@ static void PokegearMap_SetBgParam_MarkingsMode(PokegearMapAppData *mapApp) {
     mapApp->pokegear->deselectAppCB = PokegearMap_InMarkingsMode_HideCursor;
 }
 
-static void ov101_021E9264(PokegearMapAppData *mapApp, BOOL a1) {
+static void PokegearMap_ResetMarkingsModeIfLeaving(PokegearMapAppData *mapApp, BOOL a1) {
     if (!a1) {
         mapApp->sessionState.index = 0;
         mapApp->inMarkingsMode = FALSE;

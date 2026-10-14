@@ -11,8 +11,8 @@
 	.extern MysteryGiftComm_HandleReceived
 	.extern MysteryGiftComm_GetRecvBufferSize
 	.extern MysteryGiftComm_GetRecvBuffer
-	.extern ov74_02229DE0
-	.extern ov74_02229E60
+	.extern MysteryGiftComm_RecvSetFlag3C1
+	.extern thunk_MysteryGiftApp_SetWaitingIconVisible
 	.extern MysteryGiftApp_StartSearch
 	.extern MysteryGiftApp_AcceptGift
 	.extern MysteryGiftApp_DeclineSearch
@@ -46,7 +46,7 @@
 	.extern WonderCardAlbum_ShowCardMenu
 	.extern WonderCardAlbum_ShowTrashYesNo
 	.extern WonderCardAlbum_ShowShareYesNo
-	.extern ov74_0222D7D0
+	.extern WonderCardAlbum_BufferZero
 	.extern WonderCardAlbum_Init
 	.extern WonderCardAlbum_Main
 	.extern WonderCardAlbum_Exit

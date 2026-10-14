@@ -681,7 +681,7 @@ void BattleAnimFunc_SlidingBg(BattleAnimSystem *system) {
     PaletteData_LoadNarc(work->common.paletteData, NARC_a_0_0_7, file, BattleAnimSystem_GetHeapID(system), PLTTBUF_MAIN_BG, 0x20, 0x90);
     BgClearTilemapBufferAndCommit(work->common.bgConfig, GF_BG_LYR_MAIN_2);
     file = 2;
-    if (ov07_0221BFC0(system) == 1) {
+    if (BattleAnimSystem_GetField08(system) == 1) {
         file = 4;
     } else if (BattleAnimUtil_GetBattlerSide(system, BattleAnimSystem_GetAttacker(system)) == BATTLE_ANIM_SIDE_ENEMY) {
         file = 3;
@@ -798,7 +798,7 @@ void BattleAnimFunc_SlidingBg2(BattleAnimSystem *system) {
     } else {
         work->y += 84;
     }
-    if (ov07_0221BFC0(system) == 1) {
+    if (BattleAnimSystem_GetField08(system) == 1) {
         work->dx *= -1;
     }
     work->curEva = 4;
@@ -814,7 +814,7 @@ void BattleAnimFunc_SlidingBg2(BattleAnimSystem *system) {
     PaletteData_LoadNarc(work->common.paletteData, NARC_a_0_0_7, file, BattleAnimSystem_GetHeapID(system), PLTTBUF_MAIN_BG, 0x20, 0x90);
     BgClearTilemapBufferAndCommit(work->common.bgConfig, GF_BG_LYR_MAIN_2);
     file = 2;
-    if (ov07_0221BFC0(system) == 1) {
+    if (BattleAnimSystem_GetField08(system) == 1) {
         file = 4;
     } else if (BattleAnimUtil_GetBattlerSide(system, BattleAnimSystem_GetAttacker(system)) == BATTLE_ANIM_SIDE_ENEMY) {
         file = 3;
@@ -1628,7 +1628,7 @@ void BattleAnimFunc_SlideBattler2(BattleAnimSystem *system) {
     if (BattleAnimUtil_GetBattlerSideSignByMode(system, battler) <= 0) {
         work->dx *= -1;
     }
-    ov07_0221BFC0(system);
+    BattleAnimSystem_GetField08(system);
     BattleAnim_CreateTaskAndRun(work->system, BattleAnimTask_SlideBattler2, work);
 }
 
@@ -1875,7 +1875,7 @@ void BattleAnimFunc_MoveBattlerBy(BattleAnimSystem *system) {
         work->dx *= -1;
         work->dy *= -1;
     }
-    if (ov07_0221BFC0(system) == 1) {
+    if (BattleAnimSystem_GetField08(system) == 1) {
         work->dy *= -1;
     }
     BattleAnim_CreateTaskAndRun(work->system, BattleAnimTask_MoveBattlerBy, work);
@@ -2837,7 +2837,7 @@ void BattleAnimSpriteFunc_SpriteAboveDefender(BattleAnimSystem *system, SpriteSy
     BattleAnimSystem_GetBattlerScreenCoord(system, battler, 1);
     int anim;
     s16 y;
-    if (ov07_0221BFC0(system) == 1) {
+    if (BattleAnimSystem_GetField08(system) == 1) {
         x = 72;
         y = 32;
         anim = 0;

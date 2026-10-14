@@ -428,7 +428,7 @@ int BattleFactory_GetTrainerSprite(BattleFactoryData *data, int partner) {
     return FrontierTrainer_GetClassSprite((u8)trainer.trainerClass);
 }
 
-void ov80_022307C8(BattleFactoryData *data) {
+void BattleFactoryData_SaveRecordMode1(BattleFactoryData *data) {
     BattleFactoryData_SaveRecord(data, 1);
 }
 

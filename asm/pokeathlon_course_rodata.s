@@ -193,9 +193,9 @@ gPokeathlonEventScoreOrders:
 
 	.global subOverlayTemplate
 subOverlayTemplate: ; 0x0221A7E4
-	.word ov97_0221E5C0
-	.word ov97_0221E5D4
-	.word ov97_0221E69C
+	.word PokeathlonBox_Init
+	.word PokeathlonBox_Main
+	.word PokeathlonBox_Exit
 	.word FS_OVERLAY_ID(OVY_97)
 
 gPokeathlonCirclePushEvent:

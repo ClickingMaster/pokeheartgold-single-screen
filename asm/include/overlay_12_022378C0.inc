@@ -131,7 +131,7 @@
 .public Comm_CountConnected
 .public Comm_GetLocalNetId
 .public Comm_GetBattleSlot
-.public sub_02037930
+.public Comm_SetWifiContinuousSendAndMuteVoice
 .public LinkSync_StartSync
 .public LinkSync_IsSynced
 .public CommState_IsWifi

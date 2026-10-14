@@ -23,7 +23,7 @@ extern const TouchscreenHitbox sVsRecorderDeleteNoHitbox;
 // the message window of the delete screen (main screen BG 2)
 void VsRecorder_ShowDeleteWindow(VsRecorderWork *work, BOOL alternate) {
     Window *window = &work->messageWindow;
-    ov40_0222C6C8(work, GF_BG_LYR_MAIN_2, alternate);
+    VsRecorder_LoadMessageBg(work, GF_BG_LYR_MAIN_2, alternate);
     InitWindow(window);
     AddWindowParameterized(work->bgConfig, window, GF_BG_LYR_MAIN_2, 1, 0x13, 0x1E, 4, 0xE, 0x12C);
 }

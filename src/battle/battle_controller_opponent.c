@@ -67,7 +67,7 @@ typedef struct BattleItemInput {
 #define REPLY_ITEM_SELECTION(battleSystem, battlerId, input) ((void (*)(BattleSystem *, int, BattleItemInput))BattleController_ReplyItemSelection)(battleSystem, battlerId, input)
 
 // Functions of other modules no header declares yet.
-void sub_02005B58(u8 value);
+void Sound_SetKeepPlayingCries(u8 value);
 
 // Overlay 7 (battle animations) functions no header declares yet.
 typedef struct BattlePokeballOpenArgs {
@@ -102,7 +102,7 @@ void BattleAnimEmitterManager_Free(void *emitterManager);
 void BattleAnimEmitterManager_StopAll(void *emitterManager);
 void BattleAnimEmitter_Start(void *emitter);
 u32 BattleAnimEmitter_IsActive(void *emitter);
-s16 ov07_02234B5C(u32 battlerType, u32 index);
+s16 BattleAnimUtil_GetBattlerTypeCoord(u32 battlerType, u32 index);
 
 extern const s16 gBattlerSlideInTargetX[][2];
 // Pokemon/trainer positions (x, y, z) by battler type: [0] on the field, [1] off screen where a slide-in starts.
@@ -1786,7 +1786,7 @@ void BattleControllerOpponent_ChangeForm(BattleSystem *battleSystem, OpponentDat
 
     height = GetMonPicHeightBySpeciesGenderForm(packet->species, packet->gender, facing, packet->form, packet->personality);
     MonPicData_SetHeight(BattleSystem_GetMonPicDataList(battleSystem), opponentData->battlerId, height);
-    Pokepic_SetAttr(opponentData->pokepic, POKEPIC_Y, height + ov07_02234B5C(opponentData->battlerType, 1));
+    Pokepic_SetAttr(opponentData->pokepic, POKEPIC_Y, height + BattleAnimUtil_GetBattlerTypeCoord(opponentData->battlerType, 1));
     BattleController_EmitCommandComplete(battleSystem, opponentData->battlerId, packet->command);
     OpponentData_ClearCommand(opponentData);
 }
@@ -2073,7 +2073,7 @@ void OpponentData_PokemonEncounter(BattleSystem *battleSystem, OpponentData *opp
     } else {
         SysTask_CreateOnMainQueue(Task_PokemonEncounter, work, 0);
     }
-    sub_02005B58(1);
+    Sound_SetKeepPlayingCries(1);
 }
 
 void OpponentData_PokemonSlideIn(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPokemonSendOut *packet) {
@@ -2109,7 +2109,7 @@ void OpponentData_PokemonSlideIn(BattleSystem *battleSystem, OpponentData *oppon
     work->ball = packet->ball;
     work->shiny = packet->shiny;
     work->breakOut = 0;
-    sub_02005B58(1);
+    Sound_SetKeepPlayingCries(1);
 
     battleType = BattleSystem_GetBattleType(battleSystem);
     if (BattleSystem_GetFollowMonSlot(battleSystem, opponentData->battlerId) != 0xFF) {
@@ -3198,7 +3198,7 @@ void Task_PokemonEncounter(SysTask *task, void *data) {
         }
         break;
     default:
-        sub_02005B58(0);
+        Sound_SetKeepPlayingCries(0);
         BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work);
         SysTask_Destroy(task);
@@ -3267,7 +3267,7 @@ void Task_GiratinaEncounter(SysTask *task, void *data) {
         work->state = 0xFF;
         break;
     default:
-        sub_02005B58(0);
+        Sound_SetKeepPlayingCries(0);
         BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work);
         SysTask_Destroy(task);
@@ -3401,7 +3401,7 @@ void Task_PokemonSlideIn(SysTask *task, void *data) {
         work->state = 0xFF;
         return;
     default:
-        sub_02005B58(0);
+        Sound_SetKeepPlayingCries(0);
         BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work);
         SysTask_Destroy(task);
@@ -3502,7 +3502,7 @@ void Task_FollowMonSlideIn(SysTask *task, void *data) {
         work->state = 0xFF;
         return;
     default:
-        sub_02005B58(0);
+        Sound_SetKeepPlayingCries(0);
         BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work);
         SysTask_Destroy(task);
@@ -4459,7 +4459,7 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
                 } else {
                     BattleInput_ChangeMenu(narc0, narc1, battleInput, 3, 0, (int *)&action);
                 }
-                ov12_0223BB64(work->battleSystem, 1);
+                BattleSystem_SetField2440(work->battleSystem, 1);
             } else {
                 if (BattleSystem_GetBattleSpecial(work->battleSystem) & BATTLE_SPECIAL_FIRST_RIVAL) {
                     BattleInput_ChangeMenu(narc0, narc1, battleInput, 5, 0, (int *)&action);
@@ -6485,7 +6485,7 @@ void Task_SpriteToOAM(SysTask *task, void *data) {
 void Task_OAMToSprite(SysTask *task, void *data) {
     OpponentSpriteOamWork *work = data;
     GF_ASSERT(OPPONENT_SPRITE_OAM(work->opponentData) != NULL);
-    if (ov07_0221FE70(OPPONENT_SPRITE_OAM(work->opponentData)) == 3 && work->state < 5) {
+    if (Ov07UnkFE70_GetCurrentValue(OPPONENT_SPRITE_OAM(work->opponentData)) == 3 && work->state < 5) {
         work->state++;
         return;
     }

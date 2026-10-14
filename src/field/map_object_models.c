@@ -212,7 +212,7 @@ BOOL FollowMonBillboard_IsBobFrame(u8 direction, LocalMapObject *object, Sprite 
         frame -= 60;
         break;
     }
-    if (ov01_022055B0(object)) {
+    if (FollowMon_GetShapeParamLow(object)) {
         if (direction == DIR_SOUTH) {
             if (frame < 5 || frame >= 15) {
                 return TRUE;

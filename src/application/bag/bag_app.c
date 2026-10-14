@@ -159,7 +159,7 @@ void BagApp_ClampPocketScroll(s16 *scroll, u16 *position, s32 itemCount);
 void BagApp_PocketScrollDummy(s16 *scroll, u16 *position, u32 itemCount, enum HeapID heapID);
 s32 BagApp_GetPageItemCount(BagApp *app);
 int BagApp_GetMovingItemPageSlot(BagApp *app);
-void ov15_021FA0D8(BagApp *app);
+void BagApp_ClearField348(BagApp *app);
 void BagApp_SetPocketPositionFromButton(BagApp *app, s32 button);
 BOOL BagApp_ShouldMoveCursorToButton(BagApp *app, s32 button);
 s32 BagApp_GetCursorItemId(BagApp *app);
@@ -203,7 +203,7 @@ String *BagApp_TryUseRepel(BagApp *app, u16 itemId);
 String *BagApp_ToggleGBSounds(BagApp *app, u16 itemId);
 void BagApp_TakeUsedItem(BagApp *app);
 int BagApp_UseItemInPlaceTask(BagApp *app);
-int ov15_021FBC6C(BagApp *app);
+int BagApp_ItemAction_Action9(BagApp *app);
 int BagApp_ItemAction_Confirm(BagApp *app);
 int BagApp_ItemAction_Trash(BagApp *app);
 s32 BagApp_StepQuantity(s32 quantity, s32 max, s32 step);
@@ -256,7 +256,7 @@ void BagApp_AddWindows(BagApp *app);
 void BagApp_RemoveWindows(BagApp *app);
 void BagApp_LoadUnusedStrings(BagApp *app);
 void BagApp_FreeUnusedStrings(BagApp *app);
-void ov15_021FE528(BagApp *app);
+void BagApp_FillBg3TileRows13And14(BagApp *app);
 void BagApp_ClearMoveInfoWindow(BagApp *app);
 void BagApp_LoadQuantityTemplates(BagApp *app);
 void BagApp_FreeQuantityTemplates(BagApp *app);
@@ -298,7 +298,7 @@ BOOL Bag_Init(OverlayManager *man, int *state) {
     BagApp_AddWindows(app);
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);
     BagApp_LoadUnusedStrings(app);
-    ov15_021FE528(app);
+    BagApp_FillBg3TileRows13And14(app);
     BagApp_LoadItemMenuStrings(app);
     BagApp_LoadQuantityTemplates(app);
     BagApp_LoadPocketItemNames(app);
@@ -316,7 +316,7 @@ BOOL Bag_Init(OverlayManager *man, int *state) {
     BagApp_SetCursorPosition(app, app->cursorButton);
     BagApp_PrintCursorDescription(app);
     if (app->bagView->mode == 4 || app->bagView->mode == 5) {
-        ov15_021FF1E0(app);
+        BagApp_PrintMsg115And116(app);
     }
     BagApp_Init3D(app);
     Main_SetVBlankIntrCB(BagApp_VBlankCallback, app);
@@ -487,7 +487,7 @@ BOOL Bag_Exit(OverlayManager *man, int *state) {
     BagApp_FreeSprites(app);
     Heap_Free(app->bgPaletteBuffers[0]);
     Heap_Free(app->bgPaletteBuffers[1]);
-    ov15_021FA0D8(app);
+    BagApp_ClearField348(app);
     BagApp_SaveCursorPositions(app);
     BagApp_RemoveWindows(app);
     BagApp_FreeBgLayers(app->bgConfig);
@@ -812,7 +812,7 @@ int BagApp_GetMovingItemPageSlot(BagApp *app) {
 
 #pragma force_active reset
 
-void ov15_021FA0D8(BagApp *app) {
+void BagApp_ClearField348(BagApp *app) {
     app->unk_348 = 0;
 }
 
@@ -1202,11 +1202,11 @@ int BagApp_State_PocketSwitch(BagApp *app) {
         pocketSwitch->flags &= ~0x70;
         pocketSwitch->unk_4 = 0;
         app->switchPocket = pocket;
-        ov15_021FF950(app);
+        BagApp_SetField648(app);
         BagApp_StartCameraTween(&app->scene, app->switchPocket + 1, 7);
     }
     BagApp_RunPocketSwitch(app);
-    ov15_021FF964(app);
+    BagApp_UpdateField648(app);
     return 0;
 }
 
@@ -1234,7 +1234,7 @@ BOOL BagApp_HandlePocketSwitchDpad(BagApp *app) {
         if (pocketSwitch->unk_4 != 3) {
             pocketSwitch->unk_4 = 4;
         }
-        ov15_021FF950(app);
+        BagApp_SetField648(app);
         return TRUE;
     }
     if (gSystem.newKeys & PAD_KEY_RIGHT) {
@@ -1258,7 +1258,7 @@ BOOL BagApp_HandlePocketSwitchDpad(BagApp *app) {
         if (pocketSwitch->unk_4 != 3) {
             pocketSwitch->unk_4 = 4;
         }
-        ov15_021FF950(app);
+        BagApp_SetField648(app);
         return TRUE;
     }
     return FALSE;
@@ -1905,7 +1905,7 @@ int BagApp_UseItemInPlaceTask(BagApp *app) {
     return 13;
 }
 
-int ov15_021FBC6C(BagApp *app) {
+int BagApp_ItemAction_Action9(BagApp *app) {
     BagApp_CloseItemMenuWindows(app);
     BeginAppScreenFade(1, HEAP_ID_6);
     app->bagView->selectedAction = 1;
@@ -3352,7 +3352,7 @@ void BagApp_FreeUnusedStrings(BagApp *app) {
     }
 }
 
-void ov15_021FE528(BagApp *app) {
+void BagApp_FillBg3TileRows13And14(BagApp *app) {
     u16 i;
     for (i = 0; i < 12; i++) {
         FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_3, i + 0xCD, i, 13, 1, 1, 4);

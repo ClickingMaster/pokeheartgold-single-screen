@@ -51,9 +51,9 @@ BOOL ApricornJuice_IsValid(ApricornJuice *);
 int ApricornJuice_GetFlavorTotal(ApricornJuice *);
 void ApricornJuice_RankFlavors(void *, void *);
 void ApricornBox_SetMixState(SaveApricornBox *, u32);
-void sub_02032340(SaveApricornBox *, u8);
+void ApricornBox_AddJuiceMildness(SaveApricornBox *, u8);
 void ApricornBox_MixQueuedApricorns(SaveApricornBox *);
-int sub_02032004(void *);
+int ApricornJuice_GetFlavorNameIndex(void *);
 u8 GetJuiceFlavorLevel(int, u8);
 
 #endif

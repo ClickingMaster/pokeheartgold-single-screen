@@ -42,7 +42,7 @@ int Terrain_CalcHeightWithMode(FieldSystem *fieldSystem, int objectHeightMode, i
 int Terrain_GetHeight_Simple(FieldSystem *fieldSystem, int objectHeight, fx32 x, fx32 z, u8 *outKind);
 BOOL Terrain_GetAttributes_Loaded(FieldSystem *fieldSystem, int x, int z, u16 *outAttr);
 BOOL Terrain_GetAttributes_Simple(FieldSystem *fieldSystem, int x, int z, u16 *outAttr);
-u8 sub_020548EC(FieldSystem *fieldSystem, int x, int z);
+u8 FieldSystem_GetTileAttrBits8To14(FieldSystem *fieldSystem, int x, int z);
 int FieldSystem_GetTerrainHeight(FieldSystem *fieldSystem, int objectHeight, fx32 x, fx32 z, u8 *outKind);
 
 extern BOOL MapLoadManager_GetMapSlotAt(MapLoadManager *mapLoadManager, int x, int z, u8 *outIdx);
@@ -57,8 +57,8 @@ BOOL FieldSystem_FindMapProp(FieldSystem *fieldSystem, int buildModel, MapProp *
 BOOL FieldSystem_FindMapPropOfModels(FieldSystem *fieldSystem, int *models, u32 count, MapProp **outProp, int *outModel);
 int *FieldSystem_CollectMapPropModelsInRect(FieldSystem *fieldSystem, u32 heapId, int capacity, fx32 *rect, u32 fill);
 void Terrain_GetChunkOrigin(int idx, int width, VecFx32 *pos);
-BOOL sub_02054E00(u16 a0);
-BOOL sub_02054E20(u16 a0);
+BOOL MapModelNo_IsInTableD0ToD3(u16 a0);
+BOOL MapModelNo_HasNoAreaMapAnimation(u16 a0);
 
 int Terrain_AbsDiff(int lhs, int rhs) {
     if (lhs >= rhs) {
@@ -230,7 +230,7 @@ BOOL FieldSystem_CheckTileCollision(FieldSystem *fieldSystem, int x, int z) {
     return FALSE;
 }
 
-u8 sub_020548EC(FieldSystem *fieldSystem, int x, int z) {
+u8 FieldSystem_GetTileAttrBits8To14(FieldSystem *fieldSystem, int x, int z) {
     u16 attr;
     if (FS_TERRAIN_QUERIES(fieldSystem)->getAttributes(fieldSystem, x, z, &attr)) {
         return (u8)(attr >> 8) & 0x7F;
@@ -509,7 +509,7 @@ void Terrain_GetChunkOrigin(int idx, int width, VecFx32 *pos) {
     pos->z = pos->z + ((u16)(idx / width) << 21);
 }
 
-BOOL sub_02054E00(u16 a0) {
+BOOL MapModelNo_IsInTableD0ToD3(u16 a0) {
     int i;
     const u16 *p = _020FC60C;
     for (i = 0; i < 4; i++) {
@@ -521,10 +521,10 @@ BOOL sub_02054E00(u16 a0) {
     return FALSE;
 }
 
-BOOL sub_02054E20(u16 a0) {
+BOOL MapModelNo_HasNoAreaMapAnimation(u16 a0) {
     int i;
     const u16 *p;
-    if (!sub_02054E00(a0)) {
+    if (!MapModelNo_IsInTableD0ToD3(a0)) {
         return FALSE;
     }
     p = _020FC5FC;

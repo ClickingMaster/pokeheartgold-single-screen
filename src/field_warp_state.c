@@ -2,13 +2,13 @@
 
 static const u16 sFollowMovement[] = { 73, 1, 33, 1, 74, 1, 254, 0 };
 
-void *sub_02067A60(int heapId) {
+void *BattleSetupSub134_New(int heapId) {
     void *p = Heap_Alloc(heapId, 0x24);
     MIi_CpuClearFast(0, p, 0x24);
     return p;
 }
 
-void sub_02067A78(void *p) {
+void BattleSetupSub134_Delete(void *p) {
     Heap_Free(p);
 }
 

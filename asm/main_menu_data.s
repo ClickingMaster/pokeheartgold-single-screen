@@ -82,7 +82,7 @@
 	.public MainMenuUtil_UpdateGiftSprite
 	.public MainMenuUtil_CreateSprite
 	.public MainMenuUtil_FreeSprites
-	.public ov74_02235A68
+	.public MainMenuUtil_GetVersionMaskBit
 	.public MainMenuUtil_ShowCardSubScreen
 	.public MainMenuUtil_EncryptWonderCard
 	.public MainMenuUtil_DecryptWonderCard
@@ -129,8 +129,8 @@
 	.extern MysteryGiftComm_HandleReceived
 	.extern MysteryGiftComm_GetRecvBufferSize
 	.extern MysteryGiftComm_GetRecvBuffer
-	.extern ov74_02229DE0
-	.extern ov74_02229E60
+	.extern MysteryGiftComm_RecvSetFlag3C1
+	.extern thunk_MysteryGiftApp_SetWaitingIconVisible
 	.extern MysteryGiftApp_StartSearch
 	.extern MysteryGiftApp_AcceptGift
 	.extern MysteryGiftApp_DeclineSearch
@@ -164,7 +164,7 @@
 	.extern WonderCardAlbum_ShowCardMenu
 	.extern WonderCardAlbum_ShowTrashYesNo
 	.extern WonderCardAlbum_ShowShareYesNo
-	.extern ov74_0222D7D0
+	.extern WonderCardAlbum_BufferZero
 	.extern WonderCardAlbum_Init
 	.extern WonderCardAlbum_Main
 	.extern WonderCardAlbum_Exit
@@ -380,7 +380,7 @@
 	.public MainMenuUtil_UpdateGiftSprite
 	.public MainMenuUtil_CreateSprite
 	.public MainMenuUtil_FreeSprites
-	.public ov74_02235A68
+	.public MainMenuUtil_GetVersionMaskBit
 	.public MainMenuUtil_VBlankCB
 	.public MainMenuUtil_GetGiftPalette
 	.public MainMenuUtil_LoadGiftMonSprite
@@ -427,7 +427,7 @@
 	.public MysteryGiftWfc_Alloc
 	.public MysteryGiftWfc_Free
 	.public MysteryGiftWfc_HandleError
-	.public ov74_02236A2C
+	.public MysteryGiftWfc_CheckInetStatus4
 	.public MysteryGiftWfc_WaitForRequest
 	.public MysteryGiftWfc_StartCleanup
 	.public MysteryGiftWfc_OnRequestDone
@@ -526,7 +526,7 @@ sMysteryGiftCommCommands:
 	.word MysteryGiftComm_HandleReceived
 	.word MysteryGiftComm_GetRecvBufferSize
 	.word MysteryGiftComm_GetRecvBuffer
-	.word ov74_02229DE0
+	.word MysteryGiftComm_RecvSetFlag3C1
 	.word CommCmd_GetSize0
 	.word 0
 gApp_MainMenu_SelectOption_MysteryGift:
@@ -1033,7 +1033,7 @@ sWonderCardAlbumTextBoxes: ; 0x0223C340
 	.byte 0x03, 0x00, 0x00, 0x00, 0x19, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x02, 0x01, 0x00, 0xFF, 0xFF, 0xFF, 0xFF
 	.byte 0x39, 0x00, 0x00, 0x00
-	.word ov74_0222D7D0
+	.word WonderCardAlbum_BufferZero
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x03, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x13, 0x00, 0x00, 0x00
 	.byte 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x01, 0x00, 0xFF, 0xFF, 0xFF, 0xFF

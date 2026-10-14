@@ -96,7 +96,7 @@ BOOL TryEatOpponentBerry(BattleSystem *battleSystem, BattleContext *ctx, int bat
 BOOL TryFling(BattleSystem *battleSystem, BattleContext *ctx, int battlerId);
 void BattleContext_UpdateMetronomeItem(BattleSystem *battleSystem, BattleContext *ctx);
 void BattleContext_UndoMetronomeItemOnFail(BattleSystem *battleSystem, BattleContext *ctx);
-int ov12_02256748(BattleContext *ctx, int battlerId, int battlerType, BOOL encounter);
+int BattleContext_GetLowHpOrStatusCode(BattleContext *ctx, int battlerId, int battlerType, BOOL encounter);
 BOOL Battler_CanSelectAction(BattleContext *ctx, int battlerId);
 void BattleSystem_SetCaughtMonCatchData(BattleSystem *battleSystem, BattleContext *ctx, Pokemon *mon);
 u8 BattleBuffer_GetNext(BattleContext *ctx, int battlerId);

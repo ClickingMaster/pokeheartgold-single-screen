@@ -39,20 +39,20 @@ void Comm_SendParentCommandNoCopy(int, const void *, int);
 
 void *DrawingSessionLink_RegisterCommands(void *);
 void DrawingSessionLink_ReceivePictureChunk(void *, void *, void *, DrawingSessionLinkWork *);
-void sub_0208F8BC(int, void *, const u8 *, DrawingSessionLinkWork *);
-void sub_0208F8E4(int, void *, const u8 *, DrawingSessionLinkWork *);
+void DrawingSessionLink_ReceiveMemberStroke(int, void *, const u8 *, DrawingSessionLinkWork *);
+void DrawingSessionLink_ReceiveStrokes(int, void *, const u8 *, DrawingSessionLinkWork *);
 void DrawingSessionLink_ReceivePictureDone(void *, void *, void *, DrawingSessionLinkWork *);
 void DrawingSessionLink_HandleJoinRequest(int, void *, const FourBytes *, DrawingSessionLinkWork *);
-void sub_0208FA50(void);
+void DrawingSessionLink_ReceiveDummy103(void);
 void DrawingSessionLink_ReceiveMemberJoined(void *, void *, const u8 *, DrawingSessionLinkWork *);
-void sub_0208FA88(void);
-void sub_0208FA8C(void);
-void sub_0208FA90(void *, void *, void *, DrawingSessionLinkWork *);
+void DrawingSessionLink_ReceiveDummy99(void);
+void DrawingSessionLink_ReceiveDummy100(void);
+void DrawingSessionLink_ReceiveEvent15(void *, void *, void *, DrawingSessionLinkWork *);
 void DrawingSessionLink_ReceiveJoinNotice(int, void *, void *, DrawingSessionLinkWork *);
-void sub_0208FAEC(void *, void *, void *, DrawingSessionLinkWork *);
+void DrawingSessionLink_ReceiveSetJoinState1(void *, void *, void *, DrawingSessionLinkWork *);
 void DrawingSessionLink_SendPictureChunk(DrawingSessionLinkWork *, int);
 void *DrawingSessionLink_GetChunkRecvBuffer(int, void *);
-int sub_0208FB5C(void);
+int DrawingSessionLink_GetSize4(void);
 int DrawingSessionLink_GetJoinRequestSize(void);
 
 #endif

@@ -600,9 +600,9 @@ void BattleAnimSpriteFunc_BlinkScaleFadeSprites(BattleAnimSystem *system, Sprite
     work->sprites[0] = sprite;
 
     if (BattleAnimUtil_GetBattlerSide(system, BattleAnimSystem_GetDefender(system)) == BATTLE_ANIM_SIDE_PLAYER) {
-        BattleAnimUtil_GetBattlerTypePosition(BATTLER_TYPE_SOLO_PLAYER, ov07_0221BFC0(system), &pos);
+        BattleAnimUtil_GetBattlerTypePosition(BATTLER_TYPE_SOLO_PLAYER, BattleAnimSystem_GetField08(system), &pos);
     } else {
-        BattleAnimUtil_GetBattlerTypePosition(BATTLER_TYPE_SOLO_ENEMY, ov07_0221BFC0(system), &pos);
+        BattleAnimUtil_GetBattlerTypePosition(BATTLER_TYPE_SOLO_ENEMY, BattleAnimSystem_GetField08(system), &pos);
     }
     for (i = 1; i < (int)BattleAnimSystem_GetArg(work->system, 0); i++) {
         work->sprites[i] = SpriteSystem_NewSprite(work->spriteSystem, work->spriteManager, &template);
@@ -2233,7 +2233,7 @@ void BattleAnimFunc_StretchFadeSprite(BattleAnimSystem *system) {
     work->endEvb = 31;
     work->peakEva = 31;
     work->peakEvb = 4;
-    if (ov07_0221BFC0(system) == 1) {
+    if (BattleAnimSystem_GetField08(system) == 1) {
         work->sprite = work->sprites[0];
         ManagedSprite_SetDrawFlag(work->sprites[1], FALSE);
         ManagedSprite_SetAnim(work->sprite, 0);
@@ -2452,7 +2452,7 @@ void BattleAnimSpriteFunc_CrossingSprites(BattleAnimSystem *system, SpriteSystem
         ManagedSprite_SetOamMode(work->sprites[i].sprite, GX_OAM_MODE_XLU);
         ManagedSprite_SetPriority(work->sprites[i].sprite, BattleAnimSystem_GetBasePriority(work->system) + 1);
     }
-    if (ov07_0221BFC0(system) == 1) {
+    if (BattleAnimSystem_GetField08(system) == 1) {
         ManagedSprite_SetPositionXY(work->sprites[0].sprite, 160, 54);
         ManagedSprite_SetPositionXY(work->sprites[1].sprite, 80, 39);
     } else {
@@ -2566,7 +2566,7 @@ void BattleAnimSpriteFunc_BlinkSpritesCenter(BattleAnimSystem *system, SpriteSys
         work->blinkTimers[i] = 0;
         ManagedSprite_SetAffineOverwriteMode(work->sprites[i], 2);
         ManagedSprite_SetOamMode(work->sprites[i], GX_OAM_MODE_XLU);
-        if (ov07_0221BFC0(work->system) == 1) {
+        if (BattleAnimSystem_GetField08(work->system) == 1) {
             ManagedSprite_SetAffineScale(work->sprites[i], -1.0f, 1.0f);
         }
     }
@@ -3369,7 +3369,7 @@ void BattleAnimSpriteFunc_SpriteTrailToDefender(BattleAnimSystem *system, Sprite
     priority2 = BattleAnimSystem_GetBgPriority(work->common.system, 2);
     for (i = 0; i < 8; i++) {
         work->timers[i] = (8 - i) * 4;
-        if (ov07_0221BFC0(work->common.system) == 0) {
+        if (BattleAnimSystem_GetField08(work->common.system) == 0) {
             if (BattleAnimUtil_GetBattlerSide(work->common.system, BattleAnimSystem_GetAttacker(work->common.system)) == BATTLE_ANIM_SIDE_PLAYER) {
                 if (i < 4) {
                     ManagedSprite_SetPriority(work->sprites[i], priority2);
@@ -3586,7 +3586,7 @@ void BattleAnimFunc_SquashSprite(BattleAnimSystem *system) {
     work->paletteBlends[1] = BattleAnimUtil_StartPaletteBlend(work->common.paletteData, BattleAnimSystem_GetHeapID(system), PLTTBUF_MAIN_OBJ, (u16)(paletteOffset << 4), 16, 0, 1, 0, 15, 0xFFFF, 1100);
     battler = BattleAnimSystem_GetAttacker(work->common.system);
     battlerType = BattleAnimUtil_GetBattlerType(work->common.system, battler);
-    BattleAnimUtil_GetBattlerTypePosition(battlerType, ov07_0221BFC0(work->common.system), &pos);
+    BattleAnimUtil_GetBattlerTypePosition(battlerType, BattleAnimSystem_GetField08(work->common.system), &pos);
     ManagedSprite_GetPositionXY(work->sprites[0], &x, &y);
     if (BattleAnimUtil_GetBattlerSide(work->common.system, battler) == BATTLE_ANIM_SIDE_PLAYER) {
         facing = 0;

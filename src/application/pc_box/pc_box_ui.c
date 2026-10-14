@@ -736,7 +736,7 @@ u32 PCBox_StartSummaryApp(PCBoxWork *work) {
     args->ribbons = Save_SpecialRibbons_Get(work->args->saveData);
     *(u32 *)args->unk24 = 0;
     args->chatot = 0;
-    args->unk2C = sub_02088288(work->args->saveData);
+    args->unk2C = PokemonSummary_GetDefaultUnk2C(work->args->saveData);
     args->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(work->args->saveData);
     args->menuInputStatePtr = work->args->menuInputStatePtr;
     work->subApp = OverlayManager_New(&gOverlayTemplate_PokemonSummary, args, HEAP_ID_9);
@@ -900,7 +900,7 @@ u32 PCBox_UpdateMoveModePartyDrag(PCBoxWork *work) {
         break;
     case 1:
     case 2:
-        if (ov14_021E6814(work) == 0 && a == 0 && b == 0) {
+        if (PCBox_AnimateMoveEntries(work) == 0 && a == 0 && b == 0) {
             PCBox_ApplyMoveEntryIcons(work, view->temp);
             if (work->selectedSlot < 0x1e) {
                 work->selectedSlot = 0xff;
@@ -911,7 +911,7 @@ u32 PCBox_UpdateMoveModePartyDrag(PCBoxWork *work) {
         }
         break;
     case 3:
-        if (ov14_021E66F4(work) == 0) {
+        if (PCBox_AnimateSelectedSlotMoveEntry(work) == 0) {
             PCBox_ApplyMoveEntryIcons(work, view->temp);
             PCBox_SlideInPartyPanel(work->view->panels);
             PCBox_ShowSlotMonInfo(work, 0xff);
@@ -1403,7 +1403,7 @@ u32 PCBox_UpdateDepositDrag(PCBoxWork *work) {
                 value = PCBox_GetTouchedBoxSlot((s16)work->view->touchX,
                     (s16)work->view->touchY);
             }
-            ov14_021E6F3C(work, work->selectedSlot, value);
+            PCBox_SetupDepositMoveEntries(work, work->selectedSlot, value);
             PCBox_SetSelectedIconOutlineVisible(work, 0);
             work->selectedSlot = (u8)PCBox_GetMoveEntryTarget(work, work->selectedSlot);
             if (work->selectedSlot < 30) {
@@ -1439,7 +1439,7 @@ u32 PCBox_UpdateDepositDrag(PCBoxWork *work) {
         }
         break;
     case 5:
-        if (ov14_021E66F4(work) == 0) {
+        if (PCBox_AnimateSelectedSlotMoveEntry(work) == 0) {
             PCBox_ApplyMoveEntryIcons(work, view->temp);
             PCBox_ClearMonInfo(work);
             PCBox_SlideInPartyPanel(work->view->panels);

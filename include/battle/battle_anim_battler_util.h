@@ -88,7 +88,7 @@ void *BattleAnimUtil_AllocWork(BattleAnimSystem *system, u32 size);
 void BattleAnimUtil_FreeWork(void *work);
 
 // overlay 7 functions defined in sources not merged yet (switch to battle/battle_anim_internal.h when it lands)
-int ov07_0221BFC0(BattleAnimSystem *system);
+int BattleAnimSystem_GetField08(BattleAnimSystem *system);
 enum HeapID BattleAnimSystem_GetHeapID(BattleAnimSystem *system);
 u16 BattleAnimSystem_GetAttacker(BattleAnimSystem *system);
 u16 BattleAnimSystem_GetDefender(BattleAnimSystem *system);

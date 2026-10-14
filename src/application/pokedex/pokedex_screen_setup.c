@@ -27,7 +27,7 @@ static void PokedexApp_3DigitNumToTiles(u16 *a0, u16 a1, u16 a2);
 static void PokedexApp_LoadSearchGraphics(PokedexAppData *pokedexApp);
 static void PokedexApp_HighlightSearchOption(PokedexAppData *pokedexApp, const PokedexBgRect *rect, BOOL highlight);
 static void PokedexApp_MoveSearchOptionHighlight(PokedexAppData *pokedexApp, const PokedexBgRect *rects, u32 *selection, int newIndex);
-static void ov18_021E7564(PokedexAppData *pokedexApp);
+static void PokedexApp_DisableSearchAreaOption1(PokedexAppData *pokedexApp);
 static void PokedexApp_HighlightBodyTypeOption(PokedexAppData *pokedexApp, u32 index, BOOL highlight);
 static void PokedexApp_HighlightLetterOption(PokedexAppData *pokedexApp, u32 index, BOOL highlight);
 static void PokedexApp_ApplyPendingSubBgPriority(PokedexAppData *pokedexApp);
@@ -1323,7 +1323,7 @@ void PokedexApp_SetupSearchPage(PokedexAppData *pokedexApp, int searchPage, int 
         PokedexApp_DrawSearchMessage(pokedexApp, 7);
         PokedexApp_DrawSearchAreaPage(pokedexApp);
         PokedexApp_UpdateSearchSprites(pokedexApp, 4);
-        ov18_021E7564(pokedexApp);
+        PokedexApp_DisableSearchAreaOption1(pokedexApp);
         break;
     case 7:
         GfGfxLoader_LoadScrnDataFromOpenNarc(pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000068_NSCR_lz, pokedexApp->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, TRUE, HEAP_ID_POKEDEX_APP);
@@ -1371,7 +1371,7 @@ void PokedexApp_SelectSearchArea(PokedexAppData *pokedexApp, int index) {
     ScheduleWindowCopyToVram(&pokedexApp->windows[75]);
 }
 
-static void ov18_021E7564(PokedexAppData *pokedexApp) {
+static void PokedexApp_DisableSearchAreaOption1(PokedexAppData *pokedexApp) {
     if (pokedexApp->nationalDex == 1) {
         return;
     }

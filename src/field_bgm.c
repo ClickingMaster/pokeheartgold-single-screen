@@ -19,7 +19,7 @@ void Sound_Stop();
 void Sound_ClearBGMPauseFlags();
 void GF_FadeStartMusicId(int, int, int, int, int, void *);
 void GF_NowStartMusicId(int, int, int, int, void *);
-void sub_02005CF4(BOOL);
+void Sound_SetFieldBGMStopOnce(BOOL);
 BOOL Sound_PlayFieldBGM(u16);
 
 // clang-format off
@@ -220,7 +220,7 @@ void FieldBGM_PlayForMapHeader(FieldSystem *fieldSystem, u32 mapID, BOOL a2) {
 
     Sound_SetFieldBGM(seqNo);
 
-    sub_02005CF4(TRUE);
+    Sound_SetFieldBGMStopOnce(TRUE);
 
     fieldSystem->environmentSoundState = ENVIRONMENT_SOUND_NONE_UNK3;
 
@@ -230,16 +230,16 @@ void FieldBGM_PlayForMapHeader(FieldSystem *fieldSystem, u32 mapID, BOOL a2) {
         FieldBGM_Play(NULL, seqNo);
     }
 
-    sub_02005CF4(FALSE);
+    Sound_SetFieldBGMStopOnce(FALSE);
 }
 
 BOOL FieldBGM_PlayEffectiveForMapHeader(FieldSystem *fieldSystem, u32 mapId) {
     u16 seqNo = FieldBGM_GetEffective(fieldSystem, mapId);
     Sound_SetFieldBGM(FieldBGM_GetForMapHeader(fieldSystem, mapId));
 
-    sub_02005CF4(TRUE);
+    Sound_SetFieldBGMStopOnce(TRUE);
     u32 res = FieldBGM_Play(NULL, seqNo);
-    sub_02005CF4(FALSE);
+    Sound_SetFieldBGMStopOnce(FALSE);
 
     return res;
 }

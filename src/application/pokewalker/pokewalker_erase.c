@@ -73,7 +73,7 @@ int PokewalkerApp_EraseRecords_Enter(PokewalkerApp *app) {
     FillBgTilemapRect(app->bgConfig, GF_BG_LYR_SUB_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
     FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
     FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
-    ov112_021EA64C(app);
+    PokewalkerApp_HideConnectionSprites(app);
     PokewalkerApp_HideSprite(app, 7);
     BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_SUB_0);
     BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_SUB_1);
@@ -94,7 +94,7 @@ int PokewalkerApp_EraseRecords_Update(PokewalkerApp *app) {
 
 int PokewalkerApp_EraseRecords_Exit(PokewalkerApp *app) {
     PokewalkerApp_HideSprite(app, 8);
-    ov112_021EA64C(app);
+    PokewalkerApp_HideConnectionSprites(app);
     return 1;
 }
 
@@ -263,7 +263,7 @@ int PokewalkerApp_EraseRecords_PrintPointAtCard(PokewalkerApp *app) {
 
 int PokewalkerApp_EraseRecords_WaitPointAtCard(PokewalkerApp *app) {
     if (TextPrinterCheckActive(app->textPrinterId) == FALSE && app->subBgScrollX == 0x100) {
-        ov112_021EA5A4(app, 2);
+        PokewalkerApp_ShowConnectionSprites(app, 2);
         return 15;
     }
     return 14;
@@ -320,7 +320,7 @@ int PokewalkerApp_EraseRecords_UpdateLink(PokewalkerApp *app) {
     if (nextState != 17) {
         PokewalkerIr_Stop();
     }
-    if (!ov112_021E7668()) {
+    if (!PokewalkerIrStatus_IsConnected()) {
         PokewalkerApp_ShowSubBg1(app, TRUE);
         if (PokewalkerApp_GetTouchedButton(5) == 0 || (gSystem.newKeys & PAD_BUTTON_A) || (gSystem.newKeys & PAD_BUTTON_B)) {
             PokewalkerIr_Stop();

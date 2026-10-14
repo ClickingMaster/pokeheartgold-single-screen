@@ -11,8 +11,8 @@ u32 WiFiPlazaWork_HasError(WiFiPlazaWork *work) {
 
 #pragma force_active on
 
-void ov45_0222A208(void *a0, void *a1, void *a2) {
-    ov45_0222E9BC();
+void WiFiPlazaWork_TakeLobbyFlag131(void *a0, void *a1, void *a2) {
+    WiFiPlazaLobbyClient_TakeFlag131();
 }
 
 #pragma force_active reset
@@ -65,22 +65,22 @@ void *WiFiPlazaWork_GetSaveData(void **ptr) {
     return *ptr;
 }
 
-int ov45_0222A2CC(WiFiPlazaWork *work) {
+int WiFiPlazaWork_GetScheduleValue4(WiFiPlazaWork *work) {
     GF_ASSERT(work != NULL);
     return WiFiPlazaLobbyClient_GetScheduleValue(4);
 }
 
-u32 ov45_0222A2E0(WiFiPlazaWork *work) {
+u32 WiFiPlazaWork_HasAnsweredSurvey(WiFiPlazaWork *work) {
     GF_ASSERT(work != NULL);
     return work->eventSchedule.low;
 }
 
-u32 ov45_0222A2F8(WiFiPlazaWork *work) {
+u32 WiFiPlazaWork_GetEventScheduleHigh(WiFiPlazaWork *work) {
     GF_ASSERT(work != NULL);
     return work->eventSchedule.high;
 }
 
-void ov45_0222A310(WiFiPlazaWork *work) {
+void WiFiPlazaWork_SetEventScheduleHigh(WiFiPlazaWork *work) {
     work->eventSchedule.high = 1;
 }
 
@@ -113,7 +113,7 @@ BOOL WiFiPlazaWork_IsParadeStarted(WiFiPlazaWork *work) {
     return FALSE;
 }
 
-u32 ov45_0222A394(WiFiPlazaWork *work) {
+u32 WiFiPlazaWork_GetEventScheduleMode5(WiFiPlazaWork *work) {
     return work->eventSchedule.mode5;
 }
 
@@ -138,7 +138,7 @@ u32 WiFiPlazaWork_GetLight1Event(WiFiPlazaWork *work) {
     return 7;
 }
 
-u32 ov45_0222A3EC(WiFiPlazaWork *work) {
+u32 WiFiPlazaWork_GetThirdEvent(WiFiPlazaWork *work) {
     if (work->eventSchedule.lightingDelay <= 0) {
         return work->eventSchedule.thirdEvent;
     }
@@ -153,11 +153,11 @@ int WiFiPlazaWork_IsGameEntryCoolingDown(WiFiPlazaWork *work) {
     return WiFiPlazaUnk3A0_IsCoolingDown(&work->unk_3a0);
 }
 
-void *ov45_0222A424(WiFiPlazaWork *work) {
+void *WiFiPlazaWork_GetField508_04(WiFiPlazaWork *work) {
     return work->unk_508.unk_04;
 }
 
-void ov45_0222A430(WiFiPlazaWork *work, void *value) {
+void WiFiPlazaWork_SetField508_04(WiFiPlazaWork *work, void *value) {
     work->unk_508.unk_04 = value;
 }
 
@@ -190,6 +190,6 @@ int WiFiPlazaWork_DidAppQuitForClosing(WiFiPlazaWork *work) {
     return WiFiPlazaUnk3A0_DidAppQuitForClosing(&work->unk_3a0);
 }
 
-void ov45_0222A4C8(WiFiPlazaWork *work, u8 value) {
+void WiFiPlazaWork_SetMinigameActiveFlag(WiFiPlazaWork *work, u8 value) {
     work->eventSchedule.unk_0c = value;
 }

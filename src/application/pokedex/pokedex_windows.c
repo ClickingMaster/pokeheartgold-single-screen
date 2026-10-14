@@ -412,10 +412,10 @@ void PokedexApp_SetupSearchWindows(PokedexAppData *pokedexApp) {
     PokedexApp_DrawSearchMessage(pokedexApp, 0);
     PokedexApp_DrawSearchMenuPage(pokedexApp);
     PokedexApp_DrawSearchCriteria(pokedexApp);
-    ov18_021EEE84(pokedexApp);
+    PokedexApp_PutSearchWindowCellTiles(pokedexApp);
 }
 
-void ov18_021EEE84(PokedexAppData *pokedexApp) {
+void PokedexApp_PutSearchWindowCellTiles(PokedexAppData *pokedexApp) {
     BgCellManager_PutWindowTiles(pokedexApp->bgCellManager, 6, &pokedexApp->windows[17]);
     BgCellManager_PutWindowTiles(pokedexApp->bgCellManager, 6, &pokedexApp->windows[18]);
     BgCellManager_PutWindowTiles(pokedexApp->bgCellManager, 6, &pokedexApp->windows[19]);

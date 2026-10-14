@@ -238,7 +238,7 @@ void PokedexApp_UpdateAreaMarkers(PokedexAppData *pokedexApp) {
             int next = i + 8;
             PokedexApp_PlaceSpecialAreaMarkers(pokedexApp, local.specialAreas, next);
             if (!hit && local.specialAreas) {
-                hit = ov18_021F4974(pokedexApp, next, local.playerX, local.playerY);
+                hit = PokedexApp_HitTestSpecialAreaMarkers(pokedexApp, next, local.playerX, local.playerY);
             }
         }
     } else {
@@ -274,7 +274,7 @@ void PokedexApp_UpdateAreaMarkers(PokedexAppData *pokedexApp) {
             }
             PokedexApp_PlaceSpecialAreaMarkers(pokedexApp, local.specialAreas, 10);
             if (!hit && local.specialAreas) {
-                hit = ov18_021F4974(pokedexApp, 10, local.playerX, local.playerY);
+                hit = PokedexApp_HitTestSpecialAreaMarkers(pokedexApp, 10, local.playerX, local.playerY);
             }
         }
     }
@@ -402,7 +402,7 @@ void PokedexApp_UpdateSpecialAreaMarkers(PokedexAppData *pokedexApp, u32 special
     }
 }
 
-BOOL ov18_021F4974(PokedexAppData *pokedexApp, u32 start, s32 x, s32 y) {
+BOOL PokedexApp_HitTestSpecialAreaMarkers(PokedexAppData *pokedexApp, u32 start, s32 x, s32 y) {
     u32 i;
     u32 end;
     s16 pos[2];

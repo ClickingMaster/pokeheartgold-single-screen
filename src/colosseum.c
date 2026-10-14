@@ -62,7 +62,7 @@ void Colosseum_OpenSummary(ColosseumEntry *entry, FieldSystem *fieldSystem, Part
     MI_CpuFill8(args, 0, sizeof(PokemonSummaryArgs));
     PokemonSummaryArgs_SetPlayer(args, Save_PlayerData_GetProfile(fieldSystem->saveData));
     args->natDexEnabled = SaveArray_IsNatDexEnabled(saveData);
-    args->unk2C = sub_02088288(saveData);
+    args->unk2C = PokemonSummary_GetDefaultUnk2C(saveData);
     args->options = Save_PlayerData_GetOptionsAddr(saveData);
     args->party = party;
     args->monDataType = 1;

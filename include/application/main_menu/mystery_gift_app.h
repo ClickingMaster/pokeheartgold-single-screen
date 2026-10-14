@@ -20,7 +20,7 @@ typedef struct MysteryGiftMenuItem {
 } MysteryGiftMenuItem;
 
 void MysteryGiftApp_SetWaitingIconVisible(MysteryGiftAppData *data, BOOL visible);
-void ov74_02229E60(MysteryGiftAppData *data, BOOL visible);
+void thunk_MysteryGiftApp_SetWaitingIconVisible(MysteryGiftAppData *data, BOOL visible);
 void MysteryGiftApp_FreeGraphics(OverlayManager *manager);
 void MysteryGiftApp_InitSprites(MysteryGiftAppData *data);
 void MysteryGiftApp_SetSpriteAnim(MysteryGiftAppData *data, int animSeq);
@@ -29,7 +29,7 @@ void MysteryGiftApp_ClearWindowIfInUse(Window *window, BOOL dontCopyToVram);
 int MysteryGiftApp_StartSearch(OverlayManager *manager);
 int MysteryGiftApp_AcceptGift(OverlayManager *manager);
 WonderCard *MysteryGiftApp_GetReceivedCard(OverlayManager *manager);
-BOOL ov74_0222A0E4(WonderCard *card);
+BOOL MysteryGiftApp_IsSpecialCard(WonderCard *card);
 void MysteryGiftApp_WaitForSave(MysteryGiftAppData *data);
 void MysteryGiftApp_SaveReceivedGift(OverlayManager *manager);
 void MysteryGiftApp_ShowReceivePrompt(OverlayManager *manager, int mode);
@@ -76,7 +76,7 @@ void MysteryGiftAnim_CreateSparkleSprites(MysteryGiftAnimData *anim);
 void MysteryGiftAnim_CreateRibbons(MysteryGiftAnimData *anim);
 void MysteryGiftAnim_DeleteSparkles(MysteryGiftAnimData *anim);
 void MysteryGiftAnim_DeleteRibbons(MysteryGiftAnimData *anim);
-void ov74_0222B3A4(MysteryGiftAnimData *anim);
+void MysteryGiftAnim_InitSparkles(MysteryGiftAnimData *anim);
 void MysteryGiftAnim_StartSparkleTasks(MysteryGiftAnimData *anim);
 void MysteryGiftAnim_StartRibbonTasks(MysteryGiftAnimData *anim);
 BOOL MysteryGiftAnim_StepTowards(s32 x, s32 y, float fromX, float fromY, float *outX, float *outY, float speed, int minDistance);

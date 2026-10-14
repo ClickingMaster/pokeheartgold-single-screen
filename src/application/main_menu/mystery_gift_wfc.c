@@ -124,11 +124,11 @@ int MysteryGiftWfc_HandleError(MysteryGiftAppData *data) {
     data->wfcErrorReady = TRUE;
     sMysteryGiftWfcStatus.errorShown = TRUE;
     data->wfcCallback = NULL;
-    ov74_02229E60(data, FALSE);
+    thunk_MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
     return WFC_STATE_ERROR;
 }
 
-BOOL ov74_02236A2C(MysteryGiftAppData *data) {
+BOOL MysteryGiftWfc_CheckInetStatus4(MysteryGiftAppData *data) {
     u8 buffer[60];
     switch (DWC_GetInetStatus()) {
     case 4:
@@ -216,7 +216,7 @@ int MysteryGiftWfc_Run(OverlayManager *manager, int *state) {
     case WFC_STATE_CONNECT:
         DWC_ProcessInet();
         if (DWC_CheckInet()) {
-            if (ov74_02236A2C(data) == TRUE) {
+            if (MysteryGiftWfc_CheckInetStatus4(data) == TRUE) {
                 if (data->wfcCancel == TRUE) {
                     sMysteryGiftWfcStatus.result = MYSTERY_GIFT_WFC_RESULT_CANCELLED;
                     *state = WFC_STATE_DISCONNECT;

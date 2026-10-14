@@ -412,7 +412,7 @@ BOOL WonderCardAlbum_ShowWirelessYesNo(WonderCardAlbum *album, Window *window, u
     return TRUE;
 }
 
-BOOL ov74_0222D7D0(WonderCardAlbum *album) {
+BOOL WonderCardAlbum_BufferZero(WonderCardAlbum *album) {
     BufferIntegerAsString(album->msgFormat, 0, 0, 1, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     return TRUE;
 }

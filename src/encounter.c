@@ -272,7 +272,7 @@ static BOOL Task_TrainerHouseBattle(TaskManager *taskManager) {
     case 3:
         BattleSetup_CopyPokedexToSaveData(encounter->setup, fieldSystem);
         if (fieldSystem->frontierFsys != NULL) {
-            sub_02067484(fieldSystem, &encounter->setup->battleTotals);
+            FrontierFieldSystem_AddBattleTotals(fieldSystem, &encounter->setup->battleTotals);
         }
         Encounter_GetResult(encounter, fieldSystem);
         CallTask_RestoreOverworld(taskManager);

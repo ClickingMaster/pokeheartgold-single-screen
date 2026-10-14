@@ -9,7 +9,7 @@
 .public FontID_String_GetWidth
 .public LoadFontPal0
 .public LoadFontPal1
-.public sub_02005448
+.public Sound_ApplyVoiceChatVolumeForSeq
 .public PlaySE
 .public PlayCry
 .public Chatot_PlayCryWithFallback
@@ -171,7 +171,7 @@
 .public Comm_IsNetIdConnected
 .public Comm_CountConnected
 .public Comm_GetLocalNetId
-.public sub_020378E4
+.public Comm_SetWifiContinuousSend
 .public LinkSync_StartSync
 .public LinkSync_IsSynced
 .public CommState_FrameDummy
@@ -211,7 +211,7 @@
 .public ItemIdIsMail
 .public Bag_HasItem
 .public Save_Bag_Get
-.public sub_02088288
+.public PokemonSummary_GetDefaultUnk2C
 .public PokemonSummary_SetPages
 .public PokemonSummaryArgs_SetPlayer
 .public MonSetTrainerMemo

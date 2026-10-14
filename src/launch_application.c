@@ -145,7 +145,7 @@ static void BerryPots_LaunchApp_Impl(FieldSystem *fieldSystem, BerryPotsArgs *ar
 static void ApricornBox_LaunchApp_Impl(FieldSystem *fieldSystem, ApricornBoxArgs *args);
 static void BugContestSwapMon_LaunchApp_Impl(FieldSystem *fieldSystem, BugContestSwapMonArgs *args);
 static void OptionsMenu_LaunchApp_Impl(FieldSystem *fieldSystem, OptionsMenuArgs *args);
-static BOOL sub_0203EE54(SaveData *saveData);
+static BOOL LaunchApp_AreFlags0EFTo0F1Set(SaveData *saveData);
 static void PokeathlonCourseRecord_LaunchApp_Impl(FieldSystem *fieldSystem, PokeathlonCourseRecordArgs *args);
 static void PokeathlonMedals_LaunchApp_Impl(FieldSystem *fieldSystem, PokeathlonMedalsArgs *args);
 static void PokeathlonEventRecord_LaunchApp_Impl(FieldSystem *fieldSystem, PokeathlonEventRecordArgs *args);
@@ -284,7 +284,7 @@ int PartyMenuArgs_GetSelectedAction(PartyMenuArgs *partyWork) {
     return partyWork->selectedAction;
 }
 
-u16 sub_0203E600(UnkStruct_0203E600 *a0) {
+u16 RunningAppData_GetUnk14(UnkStruct_0203E600 *a0) {
     return a0->unk14;
 }
 
@@ -368,7 +368,7 @@ PokemonSummaryArgs *PokemonSummary_CreateArgs(FieldSystem *fieldSystem, enum Hea
     args->moveToLearn = MOVE_NONE;
     args->mode = mode;
     args->natDexEnabled = SaveArray_IsNatDexEnabled(saveData);
-    args->unk2C = sub_02088288(saveData);
+    args->unk2C = PokemonSummary_GetDefaultUnk2C(saveData);
     args->ribbons = Save_SpecialRibbons_Get(saveData);
     args->menuInputStatePtr = &fieldSystem->menuInputState;
     args->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(fieldSystem->saveData);
@@ -399,7 +399,7 @@ PokemonSummaryArgs *LearnForgetMove_LaunchApp(enum HeapID heapID, FieldSystem *f
     return args;
 }
 
-u16 sub_0203E864(UnkStruct_0203E600 *a0) {
+u16 RunningAppData_GetUnk16(UnkStruct_0203E600 *a0) {
     return a0->unk16;
 }
 
@@ -637,7 +637,7 @@ ApricornBoxArgs *ApricornBox_LaunchApp(FieldSystem *fieldSystem, int mode) {
     return args;
 }
 
-ApricornBoxArgs *sub_0203ED80(FieldSystem *fieldSystem, u32 a1, u16 *juiceUsedVar) {
+ApricornBoxArgs *ApricornBox_LaunchAppForJuice(FieldSystem *fieldSystem, u32 a1, u16 *juiceUsedVar) {
     ApricornBoxArgs *args = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(ApricornBoxArgs));
     MI_CpuFill8(args, 0, sizeof(ApricornBoxArgs));
     args->saveData = FieldSystem_GetSaveData(fieldSystem);
@@ -679,7 +679,7 @@ OptionsMenuArgs *OptionsMenu_LaunchApp(FieldSystem *fieldSystem) {
     return args;
 }
 
-static BOOL sub_0203EE54(SaveData *saveData) {
+static BOOL LaunchApp_AreFlags0EFTo0F1Set(SaveData *saveData) {
     return Save_VarsFlags_CheckFlagInArray(Save_VarsFlags_Get(saveData), FLAG_UNK_0EF) && Save_VarsFlags_CheckFlagInArray(Save_VarsFlags_Get(saveData), FLAG_UNK_0F0) && Save_VarsFlags_CheckFlagInArray(Save_VarsFlags_Get(saveData), FLAG_UNK_0F1);
 }
 
@@ -693,7 +693,7 @@ PokeathlonCourseRecordArgs *PokeathlonCourseRecord_LaunchApp(FieldSystem *fieldS
     SaveData *saveData = FieldSystem_GetSaveData(fieldSystem);
     PokeathlonSave *pokeathlon = Save_Pokeathlon_Get(saveData);
     args->pokeathlon = PokeathlonSave_dummy1(pokeathlon);
-    args->unk4 = sub_0203EE54(saveData);
+    args->unk4 = LaunchApp_AreFlags0EFTo0F1Set(saveData);
     PokeathlonCourseRecord_LaunchApp_Impl(fieldSystem, args);
     return args;
 }
@@ -711,7 +711,7 @@ PokeathlonMedalsArgs *PokeathlonMedals_LaunchApp(FieldSystem *fieldSystem) {
     args->pokedex = pokedex;
     args->speciesMedals = PokeathlonSave_GetMonMedals(pokeathlonSave);
     args->natDexEnabled = Pokedex_GetNatDexFlag(pokedex);
-    args->unkC = sub_0203EE54(saveData);
+    args->unkC = LaunchApp_AreFlags0EFTo0F1Set(saveData);
     PokeathlonMedals_LaunchApp_Impl(fieldSystem, args);
     return args;
 }
@@ -728,7 +728,7 @@ PokeathlonEventRecordArgs *PokeathlonEventRecord_LaunchApp(FieldSystem *fieldSys
     args->recordsSolo = PokeathlonSave_GetRecordsSolo(pokeathlonSave);
     args->recordsLink = PokeathlonSave_GetRecordsLink(pokeathlonSave);
     args->profile = Save_PlayerData_GetProfile(saveData);
-    args->unk10 = sub_0203EE54(saveData);
+    args->unk10 = LaunchApp_AreFlags0EFTo0F1Set(saveData);
     args->eventTotals = PokeathlonSave_GetSoloEventBestPoints(pokeathlonSave);
     PokeathlonEventRecord_LaunchApp_Impl(fieldSystem, args);
     return args;
@@ -956,7 +956,7 @@ static BOOL Task_WirelessTrade(TaskManager *taskman) {
         int species = GetMonEvolution(NULL, data->wirelessTradeSelectMon.receivedMon, EVOCTX_TRADE, heldItem, (int *)&evolutionCondition);
         if (species != SPECIES_NONE) {
             Heap_Create(HEAP_ID_3, HEAP_ID_26, 0x30000);
-            data->tradeSequence.evolutionTaskData = EvolutionScene_New(NULL, data->wirelessTradeSelectMon.receivedMon, species, Save_PlayerData_GetOptionsAddr(fieldSystem->saveData), sub_02088288(fieldSystem->saveData), Save_Pokedex_Get(fieldSystem->saveData), Save_Bag_Get(fieldSystem->saveData), Save_GameStats_Get(fieldSystem->saveData), evolutionCondition, 4, HEAP_ID_26);
+            data->tradeSequence.evolutionTaskData = EvolutionScene_New(NULL, data->wirelessTradeSelectMon.receivedMon, species, Save_PlayerData_GetOptionsAddr(fieldSystem->saveData), PokemonSummary_GetDefaultUnk2C(fieldSystem->saveData), Save_Pokedex_Get(fieldSystem->saveData), Save_Bag_Get(fieldSystem->saveData), Save_GameStats_Get(fieldSystem->saveData), evolutionCondition, 4, HEAP_ID_26);
             data->state = WIRELESS_TRADE_STATE_6;
         } else {
             data->state = WIRELESS_TRADE_STATE_7;
@@ -1183,7 +1183,7 @@ void Gts_LaunchApp(FieldSystem *fieldSystem, u16 connectDirectly) {
     args->profile = Save_PlayerData_GetProfile(fieldSystem->saveData);
     args->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
     args->gameStats = Save_GameStats_Get(fieldSystem->saveData);
-    args->unk38 = sub_02088288(fieldSystem->saveData);
+    args->unk38 = PokemonSummary_GetDefaultUnk2C(fieldSystem->saveData);
     args->saveData = fieldSystem->saveData;
     args->natDexEnabled = SaveArray_IsNatDexEnabled(fieldSystem->saveData);
     args->gsProfileId = Comm_GetOwnGsProfileId(args->friendRoster);

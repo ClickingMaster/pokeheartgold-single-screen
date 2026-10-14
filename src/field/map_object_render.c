@@ -254,8 +254,8 @@ BOOL MapObjectManager_IsModelInUse(MapObjectManager *manager, u32 modelId, Local
 BOOL MapObjectManager_IsSequenceInUse(MapObjectManager *manager, u32 sequenceId, LocalMapObject *skip);
 void MapObjectRender_SetBillboards(MapObjectRender *render, void *billboards);
 void MapObjectRender_SetObjectCount(MapObjectRender *render, u32 count);
-void *ov01_021FA1DC(MapObjectRender *render);
-void *ov01_021FA1E4(MapObjectRender *render);
+void *MapObjectRender_GetFieldE8(MapObjectRender *render);
+void *MapObjectRender_GetFieldEC(MapObjectRender *render);
 void MapObjectRender_SetTextures(MapObjectRender *render, GF_3DGfxRawResMan *textures);
 GF_3DGfxRawResMan *MapObjectRender_GetTextures(MapObjectRender *render);
 u32 *MapObjectRender_GetTextureIds(MapObjectRender *render);
@@ -636,13 +636,13 @@ void MapObjectRender_LoadResidentSpriteTextures(MapObjectRender *render, const u
 #pragma force_active reset
 
 void MapObjectRender_LoadResidentModel(MapObjectRender *render, u32 id) {
-    ov01_021FA1DC(render);
+    MapObjectRender_GetFieldE8(render);
     MapObjectRender_LoadIntoBank(render, render->modelBank, id, 0xFF, gBillboardModelNarcMembers);
     MapObjectRender_AddResidentModelId(render, id);
 }
 
 void MapObjectRender_LoadDynamicModel(MapObjectRender *render, u32 id) {
-    ov01_021FA1DC(render);
+    MapObjectRender_GetFieldE8(render);
     MapObjectRender_LoadIntoBank(render, render->modelBank, id, 0xFF, gBillboardModelNarcMembers);
     MapObjectRender_AddDynamicModelId(render, id);
 }
@@ -655,13 +655,13 @@ void MapObjectRender_LoadResidentModels(MapObjectRender *render, const u32 *ids)
 }
 
 void MapObjectRender_LoadResidentSequence(MapObjectRender *render, u32 id) {
-    ov01_021FA1E4(render);
+    MapObjectRender_GetFieldEC(render);
     MapObjectRender_LoadIntoBank(render, render->sequenceBank, id, 0xFF, gBillboardSequenceNarcMembers);
     MapObjectRender_AddResidentSequenceId(render, id);
 }
 
 void MapObjectRender_LoadDynamicSequence(MapObjectRender *render, u32 id) {
-    ov01_021FA1E4(render);
+    MapObjectRender_GetFieldEC(render);
     MapObjectRender_LoadIntoBank(render, render->sequenceBank, id, 0xFF, gBillboardSequenceNarcMembers);
     MapObjectRender_AddDynamicSequenceId(render, id);
 }
@@ -765,7 +765,7 @@ void MapObjectRender_FreeUnusedModels(MapObjectManager *manager, MapObjectRender
     u32 *ids;
     int count;
     u32 *cursor;
-    ov01_021FA1DC(render);
+    MapObjectRender_GetFieldE8(render);
     ids = MapObjectRender_GetModelIds(render);
     cursor = ids + MapObjectRender_GetResidentModelCount(render);
     count = MapObjectRender_GetDynamicModelCount(render);
@@ -827,7 +827,7 @@ void MapObjectRender_FreeUnusedSequences(MapObjectManager *manager, MapObjectRen
     u32 *ids;
     int count;
     u32 *cursor;
-    ov01_021FA1E4(render);
+    MapObjectRender_GetFieldEC(render);
     ids = MapObjectRender_GetSequenceIds(render);
     cursor = ids + MapObjectRender_GetResidentSequenceCount(render);
     count = MapObjectRender_GetDynamicSequenceCount(render);
@@ -1059,11 +1059,11 @@ void MapObjectRender_SetObjectCount(MapObjectRender *render, u32 count) {
     render->objectCount = count;
 }
 
-void *ov01_021FA1DC(MapObjectRender *render) {
+void *MapObjectRender_GetFieldE8(MapObjectRender *render) {
     return render->unkE8;
 }
 
-void *ov01_021FA1E4(MapObjectRender *render) {
+void *MapObjectRender_GetFieldEC(MapObjectRender *render) {
     return render->unkEC;
 }
 

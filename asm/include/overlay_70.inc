@@ -262,7 +262,7 @@
 .public EvolutionScene_Delete
 .public GetItemNameIntoString
 .public ItemIdIsMail
-.public sub_02088288
+.public PokemonSummary_GetDefaultUnk2C
 .public PokemonSummary_IsPokeathlonUnlocked
 .public PokemonSummary_SetPages
 .public PokemonSummaryArgs_SetPlayer

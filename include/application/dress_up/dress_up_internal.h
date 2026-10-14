@@ -497,7 +497,7 @@ void DressUpGfx_GetSlotPos(DressUpSlot *slot, s32 *x, s32 *y);
 void DressUpGfx_GetSlotSize(DressUpSlot *slot, s32 *width, s32 *height);
 void DressUpGfx_SetSlotVisible(DressUpSlot *slot, BOOL visible);
 void DressUpGfx_SetSlotPriority(DressUpSlot *slot, u32 depth);
-void ov41_02246020(DressUpSlot *slot, int *x, int *y);
+void DressUpGfx_GetSlotMargins(DressUpSlot *slot, int *x, int *y);
 DressUpSlot *DressUpGfx_FindFreeSlot(DressUpSlotList *list);
 GraphicsObject *DressUpGfx_CreateSlotGraphicsObject(const DressUpSlotTemplate *template);
 void DressUpGfx_GetSlotHitbox(DressUpSlot *slot, TouchscreenHitbox *hitbox);
@@ -674,7 +674,7 @@ void DressUp_TickSlideAnims(DressUpSlideAnim *anims, int count);
 void DressUp_TickSlideAnim(DressUpSlideAnim *anim);
 
 // dress_up_touch.c
-int ov41_02248E10(int value, int divisor);
+int DressUp_DivFloorPlusOne(int value, int divisor);
 void DressUpTouch_Reset(DressUpTouch *touch);
 void DressUpTouch_Update(DressUpTouch *touch);
 void DressUpTouch_DefaultHandler(DressUpTouch *touch);

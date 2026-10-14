@@ -124,7 +124,7 @@ int WiFiPlazaLobbyClient_Update(void) {
 void WiFiPlazaLobbyClient_GetLastError(void) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
     if (gWiFiPlazaLobbyClient->initResult != 0) {
-        ov45_02233220();
+        PPW_LobbyInitResultToLastError();
     } else {
         PPW_LobbyGetLastError();
     }
@@ -147,7 +147,7 @@ void WiFiPlazaLobbyClient_InitializeEx(int value, int mode) {
     callbacks[0] = (void (*)(void))WiFiPlazaLobbyClient_OnEnterChannel;
     callbacks[1] = (void (*)(void))WiFiPlazaLobbyClient_OnPlayerEnter;
     callbacks[2] = (void (*)(void))WiFiPlazaLobbyClient_OnPlayerLeave;
-    callbacks[3] = (void (*)(void))ov45_0222FDD4;
+    callbacks[3] = (void (*)(void))WiFiPlazaLobbyClient_OnEvent3Dummy;
     callbacks[4] = (void (*)(void))WiFiPlazaLobbyClient_OnMessage;
     callbacks[5] = (void (*)(void))WiFiPlazaLobbyClient_OnLocationsChanged;
     callbacks[6] = (void (*)(void))WiFiPlazaLobbyClient_OnPlayerRecordChanged;
@@ -156,11 +156,11 @@ void WiFiPlazaLobbyClient_InitializeEx(int value, int mode) {
     callbacks[9] = (void (*)(void))WiFiPlazaLobbyClient_OnMatchClosed;
     callbacks[10] = (void (*)(void))WiFiPlazaLobbyClient_OnLobbyEvent;
     callbacks[11] = (void (*)(void))WiFiPlazaLobbyClient_OnOwnRecord;
-    callbacks[12] = (void (*)(void))ov45_02230090;
+    callbacks[12] = (void (*)(void))WiFiPlazaLobbyClient_OnEvent12Result;
     callbacks[13] = (void (*)(void))WiFiPlazaLobbyClient_OnSpecialVisitorsReceived;
     callbacks[14] = (void (*)(void))WiFiPlazaLobbyClient_OnSurveyReceived;
     callbacks[15] = (void (*)(void))WiFiPlazaLobbyClient_OnSurveySubmitted;
-    callbacks[16] = (void (*)(void))ov45_02230130;
+    callbacks[16] = (void (*)(void))WiFiPlazaLobbyClient_SetFlag131;
     userData = FriendRoster_GetUserData(gWiFiPlazaLobbyClient->friendRoster);
     gWiFiPlazaLobbyClient->initResult = PPW_LobbyInitializeAsync(sStr_pokemonplatds, sStr_IIup73, mode, callbacks, userData, value, gWiFiPlazaLobbyClient->playerDataSize);
     WiFiPlazaLobbyClient_CheckResult(gWiFiPlazaLobbyClient->initResult);
@@ -201,7 +201,7 @@ int WiFiPlazaLobbyClient_GetState(void) {
     return client->state;
 }
 
-u8 ov45_0222E9BC(void) {
+u8 WiFiPlazaLobbyClient_TakeFlag131(void) {
     u8 value;
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
     value = gWiFiPlazaLobbyClient->unk_131;
@@ -755,7 +755,7 @@ void *WiFiPlazaLobbyClient_GetSurveyText(int field) {
     }
 }
 
-u8 ov45_0222F6B0(int which, int index) {
+u8 WiFiPlazaLobbyClient_GetSurveyFlag(int which, int index) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
     GF_ASSERT(which < 2);
     GF_ASSERT((u32)index < 12);

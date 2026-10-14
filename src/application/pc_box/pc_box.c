@@ -582,7 +582,7 @@ u32 PCBox_AnimateMonMove(PCBoxWork *work) {
     return 1;
 }
 
-u32 ov14_021E66F4(PCBoxWork *work) {
+u32 PCBox_AnimateSelectedSlotMoveEntry(PCBoxWork *work) {
     s16 pos[2];
     u32 i;
     u32 s;
@@ -614,7 +614,7 @@ u32 ov14_021E66F4(PCBoxWork *work) {
     return 1;
 }
 
-u32 ov14_021E6814(PCBoxWork *work) {
+u32 PCBox_AnimateMoveEntries(PCBoxWork *work) {
     s16 pos[2];
     u32 j;
     u32 i;
@@ -897,7 +897,7 @@ void PCBox_SetupMonMove(PCBoxWork *work, u32 a, u32 b) {
     PCBox_SetupMoveEntryToSlot(work, &w->entries[sC]);
 }
 
-void ov14_021E6F3C(PCBoxWork *work, u32 a, u32 b) {
+void PCBox_SetupDepositMoveEntries(PCBoxWork *work, u32 a, u32 b) {
     PCBoxMoveWork *w;
     u32 slot;
     u32 i;

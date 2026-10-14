@@ -22,7 +22,7 @@
 .public Comm_IsUnionRoomLinkMode
 .public Comm_IsWifiLinkMode
 .public Comm_IsWifiPeerLinkMode
-.public sub_02034098
+.public Comm_IsLinkMode19To23Or34
 .public Comm_IsCommClubLinkMode
 .public Comm_RegisterCommandTable
 .public Comm_FreeCommandTable
@@ -34,7 +34,7 @@
 .public CommCmd_GetSize0
 .public CommCmd_GetSize1
 .public CommPlayerInfo_GetEntrySize
-.public sub_02034524
+.public CommPlayerInfo_RecvSetUnk3A4
 .public CommPlayerInfo_RecvEntry
 .public CommPlayerInfo_RecvPlayerEntry
 .public Comm_SendParentCommand

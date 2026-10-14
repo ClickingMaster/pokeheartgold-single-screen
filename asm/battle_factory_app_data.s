@@ -664,9 +664,9 @@
 	.public BattleFactoryApp_AnimateBackground
 	.public BattleFactoryApp_SetBgPalette
 	.public BattleFactoryApp_SetCenterAnim
-	.public ov81_02240698
-	.public ov81_022406E0
-	.public ov81_02240728
+	.public BattleFactoryApp_LoadBgGfx81
+	.public BattleFactoryApp_LoadBgGfx92
+	.public BattleFactoryApp_LoadBgGfx4
 	.public BattleFactoryApp_LoadBgPalette
 	.public BattleFactoryApp_LoadSubScreenBg
 	.public BattleFactoryApp_PrintMessage
@@ -850,9 +850,9 @@
 	.public BattleFactoryApp_AnimateBackground
 	.public BattleFactoryApp_SetBgPalette
 	.public BattleFactoryApp_SetCenterAnim
-	.public ov81_02240698
-	.public ov81_022406E0
-	.public ov81_02240728
+	.public BattleFactoryApp_LoadBgGfx81
+	.public BattleFactoryApp_LoadBgGfx92
+	.public BattleFactoryApp_LoadBgGfx4
 	.public BattleFactoryApp_LoadBgPalette
 	.public BattleFactoryApp_LoadSubScreenBg
 	.public BattleFactoryApp_PrintMessage

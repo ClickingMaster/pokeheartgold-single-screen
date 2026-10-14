@@ -191,7 +191,7 @@ void *MysteryGiftComm_GetRecvBuffer(int netId, void *arg, int size) {
 
 #pragma force_active on
 
-void ov74_02229DE0(int i) {
+void MysteryGiftComm_RecvSetFlag3C1(int i) {
     sMysteryGiftCommWork->unk_3C1[i] = TRUE;
 }
 

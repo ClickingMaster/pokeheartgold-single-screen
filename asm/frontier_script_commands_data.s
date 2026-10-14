@@ -296,7 +296,7 @@
 	.public FrontierListMenu_GetWidth
 	.public FrontierListMenu_InitTemplate
 	.public FrontierListMenu_PrintItem
-	.public ov80_0222EC84
+	.public FrontierListMenu_MoveCursorCallback
 	.public FrontierListMenu_Task
 	.public FrontierListMenu_Close
 	.public FrontierMenu_PrintMessage
@@ -485,7 +485,7 @@
 	.public FrontierMenu_PrintDescription
 	.public FrontierListMenu_AddItem
 	.public FrontierListMenu_PrintItem
-	.public ov80_0222EC84
+	.public FrontierListMenu_MoveCursorCallback
 	.public FrontierListMenu_Cancel
 	.public FrontierMap_DeleteMonIcon
 	.public FrontierMap_DeleteItemIcon

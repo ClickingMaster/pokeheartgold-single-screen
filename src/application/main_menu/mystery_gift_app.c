@@ -182,7 +182,7 @@ void MysteryGiftApp_SetWaitingIconVisible(MysteryGiftAppData *data, BOOL visible
 
 #pragma force_active reset
 
-void ov74_02229E60(MysteryGiftAppData *data, BOOL visible) {
+void thunk_MysteryGiftApp_SetWaitingIconVisible(MysteryGiftAppData *data, BOOL visible) {
     MysteryGiftApp_SetWaitingIconVisible(data, visible);
 }
 
@@ -317,7 +317,7 @@ WonderCard *MysteryGiftApp_GetReceivedCard(OverlayManager *manager) {
 
 #pragma force_active reset
 
-BOOL ov74_0222A0E4(WonderCard *card) {
+BOOL MysteryGiftApp_IsSpecialCard(WonderCard *card) {
     int eggLocation;
 
     switch (card->tag) {
@@ -345,7 +345,7 @@ void MysteryGiftApp_WaitForSave(MysteryGiftAppData *data) {
         data->callback = NULL;
     }
     if ((u32)(MainMenuUtil_RunSave() - 2) <= 1) {
-        if (ov74_0222A0E4(&data->receivedCard) != TRUE) {
+        if (MysteryGiftApp_IsSpecialCard(&data->receivedCard) != TRUE) {
             PlaySE(SEQ_SE_DP_SAVE);
         }
         data->callback = NULL;
@@ -1106,7 +1106,7 @@ void MysteryGiftAnim_DeleteRibbons(MysteryGiftAnimData *anim) {
 #pragma push
 #pragma opt_repositioncode off
 
-void ov74_0222B3A4(MysteryGiftAnimData *anim) {
+void MysteryGiftAnim_InitSparkles(MysteryGiftAnimData *anim) {
     MysteryGiftDelayTable delaysCopy;
     u32 delayPtr;
     MysteryGiftDelayTable delays;
@@ -1565,7 +1565,7 @@ void MysteryGiftAnim_Init(MysteryGiftAnimData *anim) {
     MysteryGiftAnim_ApplyBrightness(anim);
     MysteryGiftAnim_LoadResources(anim);
     MysteryGiftAnim_CreateSparkles(anim);
-    ov74_0222B3A4(anim);
+    MysteryGiftAnim_InitSparkles(anim);
     MysteryGiftAnim_CreateGiftMainSprite(anim);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
@@ -1796,7 +1796,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         card = MysteryGiftApp_GetReceivedCard(manager);
         MysteryGiftApp_SetWaitingIconVisible(data, TRUE);
         MysteryGiftApp_SetSpriteAnim(data, 1);
-        if (ov74_0222A0E4(card) == TRUE) {
+        if (MysteryGiftApp_IsSpecialCard(card) == TRUE) {
             MysteryGiftAnimData *anim;
 
             MysteryGiftApp_SaveReceivedGift(manager);
@@ -1832,7 +1832,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
             BgClearTilemapBufferAndCommit(data->bgConfig, GF_BG_LYR_MAIN_0);
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
             card = &data->receivedCard;
-            if (ov74_0222A0E4(card) == TRUE) {
+            if (MysteryGiftApp_IsSpecialCard(card) == TRUE) {
                 MainMenuUtil_ShowCardSubScreen(data->bgConfig, card);
                 data->animStatus = 2;
             } else {

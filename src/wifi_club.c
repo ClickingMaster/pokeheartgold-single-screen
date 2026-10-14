@@ -190,7 +190,7 @@ BOOL Task_WifiClub(TaskManager *taskManager) {
         task->state++;
         return TRUE;
     case 12:
-        sub_020378E4(0);
+        Comm_SetWifiContinuousSend(0);
         task->launchedArgs = Frontier_LaunchApp(fieldSystem, NULL);
         task->state++;
         break;

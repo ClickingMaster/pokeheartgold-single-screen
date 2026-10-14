@@ -150,7 +150,7 @@ BOOL FollowPlayerState_FollowMonStart(LocalMapObject *object, FollowPlayerMoveme
             if (FollowMon_IsHiddenUntilStep(object) && !state->noBallEffect) {
                 FollowMon_SpawnStepEffects(object);
             }
-            if (sub_020623C8(FollowMon_GetMovement(object))) {
+            if (IsMovement56To59(FollowMon_GetMovement(object))) {
                 FollowMon_SetPendingHop(object, (u8)PlayerAvatar_GetFacingDirection(FieldSystem_GetPlayerAvatar(fieldSystem)));
             }
             return TRUE;
@@ -328,11 +328,11 @@ BOOL FollowPlayerMovement_StartFollowMonStep(LocalMapObject *object, FollowPlaye
     playerMovement = FollowMon_GetMovement(object);
     direction = GetDirectionTowards((int)x, (int)z, (int)previousX, (int)previousZ);
     movement = FollowMon_GetPendingHop(object);
-    fastMovement = sub_020623C8(playerMovement);
+    fastMovement = IsMovement56To59(playerMovement);
     nextState = 1;
     if (movement) {
         if (fastMovement) {
-            movement = FollowMon_GetFasterMovement(movement, sub_020623D8(movement));
+            movement = FollowMon_GetFasterMovement(movement, GetMovement8ForDirection(movement));
             state->hopSpeed = GetMovementSpeed(movement);
             FollowMon_SetHopMovement(object, (u8)movement);
             nextState = 2;
@@ -352,7 +352,7 @@ BOOL FollowPlayerMovement_StartFollowMonStep(LocalMapObject *object, FollowPlaye
             FollowMon_SetPendingHop(object, 0);
         }
     } else if (fastMovement) {
-        movement = sub_020623D8(direction);
+        movement = GetMovement8ForDirection(direction);
         FollowMon_SetPendingHop(object, (u8)PlayerAvatar_GetFacingDirection(avatar));
     } else {
         movement = GetMovementForDirection(direction, (u32)playerMovement);

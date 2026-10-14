@@ -273,7 +273,7 @@
 .public Save_Bag_Get
 .public NamingScreen_CreateArgs
 .public NamingScreen_DeleteArgs
-.public sub_02088288
+.public PokemonSummary_GetDefaultUnk2C
 .public PokemonSummary_IsPokeathlonUnlocked
 .public PokemonSummary_SetPages
 .public PokemonSummaryArgs_SetPlayer

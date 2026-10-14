@@ -76,7 +76,7 @@ struct UnionRoom {
 void CommWireless_SetMail(MailMessage *message);
 void CommWireless_SetRuleset(UnionRoomStatus *status);
 void CommWireless_RefreshBeacon(void);
-void sub_020388E0(void);
+void CommState_SetLinkMode13RequestMode0(void);
 // Declared u32 here (they return u8): the matched code truncates the results itself.
 u32 CommPlayerInfo_GetCountry(int netId);
 u32 CommPlayerInfo_GetRegion(int netId);
@@ -86,7 +86,7 @@ BOOL Comm_SendCommandNoCopy(int command, void *data, int size);
 int UnionRoom_TrySendTalkCancel(struct UnionRoom *unionRoom, int ret);
 int UnionRoom_GetGroupOfMemberSlot(int slot);
 int UnionRoom_GetPlayerActivityMsg(struct UnionRoom *unionRoom, int slot);
-int sub_0205A730(int a0, int gender, MessageFormat *msgFmt);
+int UnionRoom_GetSentTalkReplyMsg(int a0, int gender, MessageFormat *msgFmt);
 void UnionRoom_FillStatusMembers(UnionRoomStatus *status, int unused);
 void UnionRoomStatus_Init(UnionRoomStatus *status);
 void UnionRoom_ResetTalk(struct UnionRoom *unionRoom);
@@ -119,7 +119,7 @@ void UnionRoom_RecvTalkChoice(int netId, int size, u8 *data, FieldSystem *fieldS
     fieldSystem->unionRoom->talkChoiceReceived = 1;
     fieldSystem->unionRoom->talkChoice = *data;
     if (*data == 4) {
-        sub_020388E0();
+        CommState_SetLinkMode13RequestMode0();
     }
 }
 
@@ -265,7 +265,7 @@ int UnionRoom_GetPartnerHometownMsg(MessageFormat *msgFmt) {
     return 15;
 }
 
-int sub_0205A730(int a0, int gender, MessageFormat *msgFmt) {
+int UnionRoom_GetSentTalkReplyMsg(int a0, int gender, MessageFormat *msgFmt) {
     if (a0 != 0) {
         return _020FC99C[a0][gender];
     }
@@ -288,7 +288,7 @@ int UnionRoom_GetTalkMsg(struct UnionRoom *unionRoom, int objId, int kind, Messa
     gender = PlayerProfile_GetTrainerGender(profile);
     switch (kind) {
     case 1:
-        return sub_0205A730(unionRoom->sentTalkReply - 1, gender, msgFmt);
+        return UnionRoom_GetSentTalkReplyMsg(unionRoom->sentTalkReply - 1, gender, msgFmt);
     case 2:
         return _020FC7D4[gender];
     case 9:

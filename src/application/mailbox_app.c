@@ -200,10 +200,10 @@ int MailboxApp_State_CloseMail(MailboxApp *app);
 int MailboxApp_State_ConfirmErase(MailboxApp *app);
 int MailboxApp_State_PrintHoldMailPrompt(MailboxApp *app);
 int MailboxApp_State_ConfirmHoldMail(MailboxApp *app);
-int ov103_021ED960(MailboxApp *app);
-int ov103_021ED97C(MailboxApp *app);
+int MailboxApp_State_SelectMonForMailDone(MailboxApp *app);
+int MailboxApp_State_FadeInDimmedList(MailboxApp *app);
 int MailboxApp_State_ShowMailToBagResult(MailboxApp *app);
-int ov103_021ED9AC(MailboxApp *app);
+int MailboxApp_State_UseMailDone(MailboxApp *app);
 int MailboxApp_ReturnToMailList(MailboxApp *app);
 int MailboxApp_StartFadeIn(MailboxApp *app, int nextState);
 int MailboxApp_StartFadeOut(MailboxApp *app, int nextState);
@@ -908,7 +908,7 @@ int MailboxApp_State_ConfirmHoldMail(MailboxApp *app) {
     return MailboxApp_AskYesNo(app, 1);
 }
 
-int ov103_021ED960(MailboxApp *app) {
+int MailboxApp_State_SelectMonForMailDone(MailboxApp *app) {
     if (app->partyMenuAction != 6) {
         app->nextState = 21;
         return 0;
@@ -917,7 +917,7 @@ int ov103_021ED960(MailboxApp *app) {
     return 6;
 }
 
-int ov103_021ED97C(MailboxApp *app) {
+int MailboxApp_State_FadeInDimmedList(MailboxApp *app) {
     MailboxAppData_SetSpriteDrawFlag(app->data, 2, FALSE);
     MailboxAppData_SetListDimmed(app->data, TRUE);
     return MailboxApp_StartFadeIn(app, 22);
@@ -928,7 +928,7 @@ int MailboxApp_State_ShowMailToBagResult(MailboxApp *app) {
     return MailboxApp_PrintMailToBagResult(app);
 }
 
-int ov103_021ED9AC(MailboxApp *app) {
+int MailboxApp_State_UseMailDone(MailboxApp *app) {
     if (app->useMailResult == 0) {
         app->nextState = 21;
         return 0;

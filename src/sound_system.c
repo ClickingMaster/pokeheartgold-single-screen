@@ -25,7 +25,7 @@ extern s8 sSoundChatotBuffer[2000];
 u16 GBSounds_GetDSSeqNoByGBSeqNo(u16 seqNo);
 void StopBGMSEAndCry(void);
 void Sound_Stop(void);
-BOOL sub_020378CC(void);
+BOOL Comm_IsWifiVoiceChatEnabled(void);
 
 // NitroSystem / MIC, with the argument types these call sites were compiled against
 void NNS_SndPlayerPause(NNSSndHandle *handle, BOOL pause);
@@ -75,7 +75,7 @@ void Sound_PlayBGMForContestScene(u16 seqNo, int mode);
 void Sound_PlayBGMForImageScene(u16 seqNo, int mode);
 void Sound_LoadSecondarySceneSoundEffects(int scene);
 void Sound_PlayBGMForScene(int scene, u16 seqNo, int mode);
-void sub_02005464(int seqNo, enum SoundHandleNo handleNo);
+void Sound_ApplyVoiceChatVolume(int seqNo, enum SoundHandleNo handleNo);
 u8 GF_GetPlayerNoBySeq(u16 seqNo);
 const struct NNSSndArcBankInfo *GF_GetBankInfoBySeqNo(int seqNo);
 BOOL Sound_PlayReversedWaveArc(int waveArcNo, int volume, int pan, int channel, int heapId);
@@ -651,11 +651,11 @@ void GF_SndHandleSetInitialVolume(s32 handleNo, s32 volume) {
     NNS_SndPlayerSetInitialVolume(GF_GetSoundHandle(handleNo), volume);
 }
 
-void sub_02005448(int seqNo) {
-    sub_02005464(seqNo, GF_GetSndHandleByPlayerNo(GF_GetPlayerNoBySeq((u16)seqNo)));
+void Sound_ApplyVoiceChatVolumeForSeq(int seqNo) {
+    Sound_ApplyVoiceChatVolume(seqNo, GF_GetSndHandleByPlayerNo(GF_GetPlayerNoBySeq((u16)seqNo)));
 }
 
-void sub_02005464(int seqNo, enum SoundHandleNo handleNo) {
+void Sound_ApplyVoiceChatVolume(int seqNo, enum SoundHandleNo handleNo) {
     const NNSSndSeqParam *param = NNS_SndArcGetSeqParam(seqNo);
     int volume;
     if (handleNo == SND_HANDLE_PV || handleNo == SND_HANDLE_CHORUS) {
@@ -666,7 +666,7 @@ void sub_02005464(int seqNo, enum SoundHandleNo handleNo) {
         }
         volume = param->volume;
     }
-    if (sub_020378CC() == 1) {
+    if (Comm_IsWifiVoiceChatEnabled() == 1) {
         GF_SndHandleSetInitialVolume(handleNo, volume / 5);
     }
 }
@@ -851,7 +851,7 @@ void Sound_SetWaveOutSpeed(int channel, u32 speed) {
 }
 
 void Sound_SetWaveOutVolume(int channel, int volume) {
-    if (sub_020378CC() == 1) {
+    if (Comm_IsWifiVoiceChatEnabled() == 1) {
         NNS_SndWaveOutSetVolume(*Sound_GetWaveOutHandle(channel), volume / 5);
     } else {
         NNS_SndWaveOutSetVolume(*Sound_GetWaveOutHandle(channel), volume);

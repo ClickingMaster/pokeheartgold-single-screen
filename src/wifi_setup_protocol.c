@@ -72,7 +72,7 @@ int WifiSetup_ParseJoinReply(const u8 *src, u8 *dst);
 int WifiSetup_ReadLittleEndian(const u8 *src, int length);
 int WifiSetup_ParseWepRecord(const u8 *src, u8 *dst);
 int WifiSetup_ParseWpaRecord(const u8 *src, u8 *dst);
-int ov13_02221F64(const u8 *a, void *dst);
+int WifiSetup_ParseType70Record(const u8 *a, void *dst);
 int WifiSetup_ParseSecurityRecords(int id, u8 *p, int remaining, u8 *out, u8 *other);
 int WifiSetup_IsEncryptionRequested(int value);
 int WifiSetup_SendRequest(int which, void *a, void *b, void *c);
@@ -608,7 +608,7 @@ int WifiSetup_ParseWpaRecord(const u8 *src, u8 *dst) {
     return 0;
 }
 
-int ov13_02221F64(const u8 *a, void *dst) {
+int WifiSetup_ParseType70Record(const u8 *a, void *dst) {
     const u8 *item = a + 6;
     int size = WifiSetup_NetToHost16(*(u16 *)(item + 2));
     if (size <= 0) {
@@ -672,7 +672,7 @@ int WifiSetup_ParseSecurityRecords(int id, u8 *p, int remaining, u8 *out, u8 *ot
             flags |= 8;
             break;
         case 10:
-            r = ov13_02221F64(p, otherCopy + offset);
+            r = WifiSetup_ParseType70Record(p, otherCopy + offset);
             break;
         default:
             r = -3;

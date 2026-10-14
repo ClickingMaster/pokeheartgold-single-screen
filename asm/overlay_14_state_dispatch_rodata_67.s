@@ -2239,8 +2239,8 @@
 	.public PCBox_UpdateArceusGiratinaForm
 	.public PCBox_RevertShayminFormOnMove
 	.public PCBox_AnimateMonMove
-	.public ov14_021E66F4
-	.public ov14_021E6814
+	.public PCBox_AnimateSelectedSlotMoveEntry
+	.public PCBox_AnimateMoveEntries
 	.public PCBox_CanMoveMon
 	.public PCBox_CanMovePartyMonToEmptySlot
 	.public PCBox_CanSwapHeldItems
@@ -2248,7 +2248,7 @@
 	.public PCBox_SetupMoveEntryToSprite
 	.public PCBox_SetupMonSwapEntries
 	.public PCBox_SetupMonMove
-	.public ov14_021E6F3C
+	.public PCBox_SetupDepositMoveEntries
 	.public PCBox_SetupMonMoveToPartyEnd
 	.public PCBox_GetMoveEntryTarget
 	.public PCBox_SetupPartyShiftAfterRelease

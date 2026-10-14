@@ -119,7 +119,7 @@ int Comm_GetMaxChildren(u16 command);
 int Comm_GetMinChildren(u16 command);
 BOOL Comm_IsWifiLinkMode(int v);
 BOOL Comm_IsWifiPeerLinkMode(int v);
-BOOL sub_02034098(int v);
+BOOL Comm_IsLinkMode19To23Or34(int v);
 BOOL Comm_IsCommClubLinkMode(int v);
 void Comm_FreeCommandTable(void);
 u32 CommCmd_GetSize2(void);
@@ -497,7 +497,7 @@ BOOL Comm_IsWifiPeerLinkMode(int v) {
     return FALSE;
 }
 
-BOOL sub_02034098(int v) {
+BOOL Comm_IsLinkMode19To23Or34(int v) {
     switch (v) {
     case 19:
     case 20:

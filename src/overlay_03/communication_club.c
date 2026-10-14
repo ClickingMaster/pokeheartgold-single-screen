@@ -103,7 +103,7 @@ static void CommClub_WaitAckThenParentList(SysTask *task, void *commClubManager)
 static void CommClub_FinishGroup(CommClubManager *commClubManager_unused);
 static int CommClub_GetMinPlayers();
 static int CommClub_GetMaxPlayers();
-static int ov03_02255B98();
+static int CommClub_GetBeaconId();
 static void CommClub_PrintAwaitingContact();
 static BOOL CommClub_HasErrorDummy();
 static void CommClub_OpenYesNoButtons(CommClubManager *commClubManager);
@@ -259,7 +259,7 @@ static void CommClub_DeleteManager() {
 }
 
 static void CommClub_StartChild(CommClubManager *commClubManager) {
-    CommClubLink_StartChild(commClubManager->fieldSystem, commClubManager->commType, ov03_02255B98());
+    CommClubLink_StartChild(commClubManager->fieldSystem, commClubManager->commType, CommClub_GetBeaconId());
 }
 
 static void CommClub_ParentListMoveCursor(struct ListMenu *list_unused, s32 index_unused, u8 onInit) {
@@ -610,7 +610,7 @@ static void CommClub_MemberListPrintRow(ListMenu *listMenu_unused, u16 arg1_unus
 }
 
 static void CommClub_StartParent(CommClubManager *commClubManager) {
-    CommClubLink_StartParent(commClubManager->fieldSystem, commClubManager->commType, ov03_02255B98());
+    CommClubLink_StartParent(commClubManager->fieldSystem, commClubManager->commType, CommClub_GetBeaconId());
 }
 
 static void CommClub_ExitLink() {
@@ -1493,7 +1493,7 @@ static int CommClub_GetMaxPlayers() {
     return Comm_GetMaxPlayers(sCommClubManager->commType);
 }
 
-static int ov03_02255B98() {
+static int CommClub_GetBeaconId() {
     return sCommClubManager->unk92 + (sCommClubManager->unk93 * 16);
 }
 

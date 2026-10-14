@@ -141,7 +141,7 @@
 	.public PokeathlonCourseScoreList_GetRanked
 	.public PokeathlonCourseScoreList_Init
 	.public PokeathlonCourseScoreList_GetCount
-	.public ov96_021E9528
+	.public PokeathlonCourseScoreList_GetField04
 	.public PokeathlonCourseScoreList_AddPointsToTotals
 	.public PokeathlonCourseScoreList_SaveEventPoints
 	.public PokeathlonCourseScoreList_GetEventPoints
@@ -205,7 +205,7 @@
 	.public PokeathlonCourseMonObject_SetAnimStateRaw
 	.public PokeathlonCourseMonObject_SetAnimState
 	.public PokeathlonCourseMonObject_SetAnim
-	.public ov96_021EAD08
+	.public PokeathlonCourseMonObject_SetAnimCode
 	.public PokeathlonCourseMonObject_IsAnimated
 	.public PokeathlonCourseMonObject_SetPosition
 	.public PokeathlonCourseMonObject_SetMonPosition
@@ -981,7 +981,7 @@
 	.public PokeathlonBlockSmash_CreateHudSprites
 	.public PokeathlonBlockSmash_DeleteHudSprites
 	.public PokeathlonBlockSmash_LoadSpriteResources
-	.public ov96_02209B04
+	.public PokeathlonBlockSmash_LoadMainAndSubSpriteRes
 	.public PokeathlonBlockSmash_UpdateScoreDigits
 	.public PokeathlonBlockSmash_StopHudAnims
 	.public PokeathlonBlockSmash_InitBgs

@@ -166,7 +166,7 @@ BOOL VsRecorder_SavedVideoShow(VsRecorderWork *work) {
     case 2:
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_CreateVideoInfo(&savedVideo->info, work);
-        VsRecorder_LoadScreen(work, ov40_02230410(&savedVideo->info), GF_BG_LYR_MAIN_3);
+        VsRecorder_LoadScreen(work, VsRecorderVideoInfo_GetScreenId(&savedVideo->info), GF_BG_LYR_MAIN_3);
         VsRecorder_SetVideoPartyIconsDrawFlag(&savedVideo->info, FALSE);
         VsRecorder_SetVBlankPaused(work, FALSE);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
@@ -226,7 +226,7 @@ BOOL VsRecorder_SavedVideoToggleProfile(VsRecorderWork *work) {
         } else {
             VsRecorder_CreateVideoInfo(&savedVideo->info, work);
             VsRecorder_SetVideoPartyIconsDrawFlag(&savedVideo->info, FALSE);
-            VsRecorder_LoadScreen(work, ov40_02230410(&savedVideo->info), GF_BG_LYR_MAIN_3);
+            VsRecorder_LoadScreen(work, VsRecorderVideoInfo_GetScreenId(&savedVideo->info), GF_BG_LYR_MAIN_3);
         }
         VsRecorder_SetVBlankPaused(work, FALSE);
         work->step++;
@@ -524,7 +524,7 @@ BOOL VsRecorder_SavedVideoResume(VsRecorderWork *work) {
     case 2:
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_CreateVideoInfo(&savedVideo->info, work);
-        VsRecorder_LoadScreen(work, ov40_02230410(&savedVideo->info), GF_BG_LYR_MAIN_3);
+        VsRecorder_LoadScreen(work, VsRecorderVideoInfo_GetScreenId(&savedVideo->info), GF_BG_LYR_MAIN_3);
         VsRecorder_SetVideoPartyIconsDrawFlag(&savedVideo->info, FALSE);
         VsRecorder_SetVBlankPaused(work, FALSE);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
@@ -629,7 +629,7 @@ void VsRecorder_PrintProfileButton(VsRecorderWork *work, u32 msgId) {
 
 void VsRecorder_CreateExitButton(VsRecorderWork *work) {
     VsRecorderSavedVideo *savedVideo = work->screenWork;
-    ov40_0222D6EC(work, NNS_G2D_VRAM_TYPE_2DSUB);
+    VsRecorder_LoadButtonGfx31(work, NNS_G2D_VRAM_TYPE_2DSUB);
     savedVideo->exitButton.sprite = VsRecorder_NewButtonSprite(work, NNS_G2D_VRAM_TYPE_2DSUB);
     VsRecorder_CreateTextSprite(&savedVideo->exitButton, (VsRecorderGfx *)&work->narc, NNS_G2D_VRAM_TYPE_2DSUB);
     VsRecorder_SetTextSpriteMsg(&savedVideo->exitButton, (VsRecorderGfx *)&work->narc, 3); // EXIT

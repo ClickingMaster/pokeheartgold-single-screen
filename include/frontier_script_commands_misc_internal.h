@@ -35,7 +35,7 @@ void GameStats_Add(void *stats, u32 stat, u32 value);
 u32 FrontierFieldSystem_GetFrontierBattleNumber(void *data);
 u32 BattleTower_IncBattleNumber(void *data);
 u32 FrontierFieldSystem_HasWonSet(void *data);
-u32 ov80_022358E8(void *data);
+u32 Overlay80Counter_GetSumCapped(void *data);
 u32 FrontierFieldSystem_GetBattleTowerMode(void *data);
 void BattleTower_GenerateOpponents(void *data, void *saveData);
 u32 BattleTower_GetTrainerSprite(void *data, u32 value);

@@ -40,8 +40,8 @@
 .public EventObjectMovementMan_Delete
 .public GetMovementForDirection
 .public GetMovementDirection
-.public sub_020623C8
-.public sub_020623D8
+.public IsMovement56To59
+.public GetMovement8ForDirection
 .public MapObject_ExecuteMovementCommand
 .public MapObject_RunForcedMovement
 .public MapObjectMovementCmd098_Step2

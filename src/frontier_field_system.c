@@ -188,7 +188,7 @@ u32 FrontierFieldSystem_GetWinStreak(SaveData *saveData, u32 towerMode) {
     }
 }
 
-void sub_0204A730(SaveData *saveData, u8 a1) {
+void FrontierFieldSystem_SetFrontierFlag5(SaveData *saveData, u8 a1) {
     FrontierData *frontierData = Save_FrontierData_Get(saveData);
     if (a1 == 0) {
         FrontierData_FlagAction(frontierData, 5, 2);
@@ -197,7 +197,7 @@ void sub_0204A730(SaveData *saveData, u8 a1) {
     }
 }
 
-u16 sub_0204A750(SaveData *saveData) {
+u16 FrontierFieldSystem_GetFrontierFlag5(SaveData *saveData) {
     return FrontierData_FlagAction(Save_FrontierData_Get(saveData), 5, 0);
 }
 
@@ -556,7 +556,7 @@ u32 FrontierFieldSystem_AwardTowerBattlePoints(FrontierFieldSystem *frontierFsys
     return battlePoints;
 }
 
-BOOL FrontierFieldSystem_0204B0E0(FrontierFieldSystem *frontierFsys, SaveData *saveData) {
+BOOL FrontierFieldSystem_IsStreakMilestoneUnflagged(FrontierFieldSystem *frontierFsys, SaveData *saveData) {
     u32 unk = FrontierFieldSystem_GetWinStreak(saveData, frontierFsys->towerMode);
     if (unk < 50) {
         return FALSE;

@@ -52,7 +52,7 @@ void PokemonSummary_StartPokepicAnim(PokemonSummary *summary);
 void PokemonSummary_DrawPokepic(PokemonSummary *summary);
 void PokemonSummary_FreePokepicAndCamera(PokemonSummary *summary);
 
-u32 sub_02088288(SaveData *saveData) {
+u32 PokemonSummary_GetDefaultUnk2C(SaveData *saveData) {
     return 1;
 }
 
@@ -197,7 +197,7 @@ BOOL PokemonSummary_Main(OverlayManager *manager, int *state) {
         break;
     }
     PokemonSummary_UpdateSpriteAnims(summary);
-    sub_0208C3C0(summary);
+    PokemonSummary_AnimateRibbonSprite66(summary);
     SpriteSystem_DrawSprites(summary->spriteManager);
     PokemonSummary_DrawPokepic(summary);
     return FALSE;

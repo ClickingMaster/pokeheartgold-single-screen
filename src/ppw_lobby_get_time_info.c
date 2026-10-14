@@ -97,7 +97,7 @@ void LobbyTimerMap_Find(Node **out, u8 *p, u32 *key);
 Node *LobbyTimerMap_LowerBound(u8 *p, u32 *key, Node *n, Node *best);
 int PPW_LobbyGetLastError(void);
 int PPW_LobbyToErrorCode(int x);
-int ov45_02233220(int x);
+int PPW_LobbyInitResultToLastError(int x);
 int PPW_LobbyShutdownAsync(void);
 int PPW_LobbyStopRecruit(void);
 int PPW_LobbyGetSubChannelState(void);

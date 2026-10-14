@@ -103,7 +103,7 @@
 	.public EasyChatYesNo_GetCursor
 	.public EasyChatApp_GetMenuInputStatePtr
 	.public EasyChatApp_GetType
-	.public ov102_021E8F70
+	.public EasyChatApp_GetPromptMsgNo
 	.public EasyChatApp_GetListMode
 	.public EasyChatApp_GetMsgBank
 	.public EasyChatApp_GetWord
@@ -339,7 +339,7 @@
 	.public EasyChatYesNo_GetCursor
 	.public EasyChatApp_GetMenuInputStatePtr
 	.public EasyChatApp_GetType
-	.public ov102_021E8F70
+	.public EasyChatApp_GetPromptMsgNo
 	.public EasyChatApp_GetListMode
 	.public EasyChatApp_GetMsgBank
 	.public EasyChatApp_GetWord

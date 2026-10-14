@@ -213,7 +213,7 @@ BattleAnimSpriteFunc BattleAnimSystem_GetSpriteFunc(u32 id);
 void BattleAnimFunc_None(BattleAnimSystem *system);
 
 // overlay 7 functions defined in sources not merged yet; position: any motion (s16 x, y first)
-int ov07_0221BFC0(BattleAnimSystem *system);
+int BattleAnimSystem_GetField08(BattleAnimSystem *system);
 PaletteData *BattleAnimSystem_GetPaletteData(BattleAnimSystem *system);
 fx32 BattleAnimUtil_CalcStep(fx32 start, fx32 end, int duration);
 int BattleAnimUtil_CalcStepCount(fx32 start, fx32 end, fx32 step);

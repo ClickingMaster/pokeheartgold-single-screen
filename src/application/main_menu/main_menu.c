@@ -593,7 +593,7 @@ typedef struct MainMenuNoticeBox {
     u32 msgId;
 } MainMenuNoticeBox;
 
-static BOOL ov74_0222779C(MainMenuAppData *data) {
+static BOOL MainMenu_UpdateNoticeBoxes(MainMenuAppData *data) {
     static MainMenuNoticeBox ov74_0223BC30[] = {
         { .x = 4, .y = 2,  .width = 24, .height = 20, .msgId = msg_0017_00001 }, // Found a mystery gift
         { .x = 4, .y = 4,  .width = 24, .height = 16, .msgId = msg_0017_00003 }, // Found a mystery gift, but don't have the Pokédex
@@ -1358,7 +1358,7 @@ BOOL MainMenuApp_Main(OverlayManager *manager, int *state) {
     data->frames++;
     BOOL cartInserted = CTRDG_IsExisting(); // unused
 
-    if (ov74_0222779C(data) == TRUE) {
+    if (MainMenu_UpdateNoticeBoxes(data) == TRUE) {
         MainMenu_UpdateBeaconWatch(data);
         HandleScreenScroll(data);
         return FALSE;

@@ -14,7 +14,7 @@ typedef struct ApricornJuice {
 typedef struct SaveApricornBox SaveApricornBox;
 
 SaveApricornBox *Save_ApricornBox_Get(SaveData *saveData);
-void sub_02031CCC(SaveApricornBox *, int);
+void ApricornBox_AddJuiceMildnessForDays(SaveApricornBox *, int);
 BOOL ApricornBox_GetJuice(SaveApricornBox *apricornBox, int index, ApricornJuice *out);
 int ApricornJuice_GetFlavorTotal(ApricornJuice *data);
 void ApricornBox_UpdateSteps(SaveApricornBox *saveApricornBox, u32 steps);

@@ -49,7 +49,7 @@
 	.extern WifiSetup_ReadLittleEndian
 	.extern WifiSetup_ParseWepRecord
 	.extern WifiSetup_ParseWpaRecord
-	.extern ov13_02221F64
+	.extern WifiSetup_ParseType70Record
 	.extern WifiSetup_ParseSecurityRecords
 	.extern WifiSetup_IsEncryptionRequested
 	.extern WifiSetup_SendRequest

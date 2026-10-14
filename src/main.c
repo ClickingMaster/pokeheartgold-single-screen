@@ -60,7 +60,7 @@ void NitroMain(void) {
     FontID_Alloc(3, HEAP_ID_3);
     gMainOverlayState.args.unk_00 = -1;
     gMainOverlayState.args.saveData = SaveData_New();
-    sub_02005D00();
+    Sound_ResetFieldBGMStopOnce();
     InitSoundData(Save_Chatot_Get(gMainOverlayState.args.saveData), Save_PlayerData_GetOptionsAddr(gMainOverlayState.args.saveData));
     Init_Timer3();
     if (Comm_LoadAndInitDwc(3) == 3) {

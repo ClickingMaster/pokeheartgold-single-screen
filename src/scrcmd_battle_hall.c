@@ -369,7 +369,7 @@ static u32 BattleHallSelectMons_OpenSummary(BattleHallSelectMonsEnv *env, FieldS
     args->options = Save_PlayerData_GetOptionsAddr(saveData);
     args->party = SaveArray_Party_Get(saveData);
     args->natDexEnabled = SaveArray_IsNatDexEnabled(saveData);
-    args->unk2C = sub_02088288(saveData);
+    args->unk2C = PokemonSummary_GetDefaultUnk2C(saveData);
     args->monDataType = 1;
     args->partySlot = env->partySlot;
     args->partyCount = Party_GetCount(args->party);

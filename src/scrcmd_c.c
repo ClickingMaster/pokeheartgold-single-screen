@@ -121,7 +121,7 @@ FS_EXTERN_OVERLAY(OVY_22);
 FS_EXTERN_OVERLAY(OVY_25);
 
 BOOL NativeScript_WaitYesNo(ScriptContext *ctx);
-BOOL sub_02042C78(ScriptContext *ctx);
+BOOL ScrNative_WaitMonPicAnim(ScriptContext *ctx);
 BOOL ScrNative_WaitApplication(ScriptContext *ctx);
 LocalMapObject *Script_GetMapObjectByPerson(FieldSystem *fieldSystem, u16 person);
 void _ScheduleObjectEventMovement(FieldSystem *fieldSystem, EventObjectMovementMan *movementMan, MovementScriptCommand *cmds);
@@ -1715,9 +1715,9 @@ BOOL ScrCmd_GetMoveSelection(ScriptContext *ctx) {
     UnkStruct_0203E600 **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA); // presumably move selection data?
     GF_ASSERT(*p_work != NULL);
     if (mode == 1) {
-        *p_ret = sub_0203E864(*p_work);
+        *p_ret = RunningAppData_GetUnk16(*p_work);
     } else {
-        *p_ret = sub_0203E600(*p_work);
+        *p_ret = RunningAppData_GetUnk14(*p_work);
     }
     Heap_Free(*p_work);
     *p_work = NULL;
@@ -1891,11 +1891,11 @@ BOOL ScrCmd_AnimateMonPic(ScriptContext *ctx) {
 
 BOOL ScrCmd_WaitMonPicAnim(ScriptContext *ctx) {
     ctx->data[0] = ScriptReadHalfword(ctx);
-    SetupNativeScript(ctx, sub_02042C78);
+    SetupNativeScript(ctx, ScrNative_WaitMonPicAnim);
     return TRUE;
 }
 
-BOOL sub_02042C78(ScriptContext *ctx) {
+BOOL ScrNative_WaitMonPicAnim(ScriptContext *ctx) {
     u8 **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
     u16 *dest_p = GetVarPointer(ctx->fieldSystem, ctx->data[0]);
     return **p_work != 3;
@@ -2839,16 +2839,16 @@ BOOL ScrNative_WaitUnionRoomTalkChoice(ScriptContext *ctx) {
     }
 }
 
-BOOL sub_02044434(ScriptContext *ctx);
+BOOL ScrNative_UnionRoomWaitTalkReply(ScriptContext *ctx);
 
 BOOL ScrCmd_UnionRoomWaitTalkReply(ScriptContext *ctx) {
     u16 var_idx = ScriptReadHalfword(ctx);
     ctx->data[0] = var_idx;
-    SetupNativeScript(ctx, sub_02044434);
+    SetupNativeScript(ctx, ScrNative_UnionRoomWaitTalkReply);
     return TRUE;
 }
 
-BOOL sub_02044434(ScriptContext *ctx) {
+BOOL ScrNative_UnionRoomWaitTalkReply(ScriptContext *ctx) {
     u16 *p_ret = GetVarPointer(ctx->fieldSystem, ctx->data[0]);
     int reply = UnionRoom_GetTalkReply(ctx->fieldSystem->unionRoom);
     if (gSystem.newKeys & PAD_BUTTON_B) {

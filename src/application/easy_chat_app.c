@@ -1578,7 +1578,7 @@ u32 EasyChatApp_GetType(EasyChatApp *app) {
     return app->type;
 }
 
-u8 ov102_021E8F70(EasyChatApp *app) {
+u8 EasyChatApp_GetPromptMsgNo(EasyChatApp *app) {
     return EasyChatArgs_GetPromptMsgNo(app->args);
 }
 

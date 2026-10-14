@@ -708,7 +708,7 @@
 	.public _0222091C
 	.public _02220920
 	.public _02220924
-	.public ov08_02220928
+	.public BattlePartyMenu_LoadSpriteResB00B
 	.public _022209AC
 	.public _022209B0
 	.public _022209B4

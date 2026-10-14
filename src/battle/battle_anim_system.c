@@ -139,7 +139,7 @@ typedef struct BattleAnimPaletteCycle {
     BattleAnimPaletteCycleData *data;
 } BattleAnimPaletteCycle;
 
-// unknown object read by ov07_0221FE70
+// unknown object read by Ov07UnkFE70_GetCurrentValue
 struct Ov07UnkFE70 {
     u8 unk_00[4];
     u32 index;
@@ -262,7 +262,7 @@ BattleAnimSystem *BattleAnimSystem_New(enum HeapID heapId) {
     return system;
 }
 
-int ov07_0221BFC0(BattleAnimSystem *system) {
+int BattleAnimSystem_GetField08(BattleAnimSystem *system) {
     GF_ASSERT(system != NULL);
     return system->unk_08;
 }
@@ -1042,9 +1042,9 @@ void BattleAnimScriptCmd_JumpIfArgEqual(BattleAnimSystem *system) {
     }
 }
 
-void ov07_0221D0C0(BattleAnimSystem *system) {
+void BattleAnimScriptCmd_JumpIfContextField01(BattleAnimSystem *system) {
     system->scriptPtr++;
-    if (ov07_0221F8C4(system->context)) {
+    if (BattleAnimContext_GetField01(system->context)) {
         system->scriptPtr = (u32 *)*system->scriptPtr;
     } else {
         system->scriptPtr++;
@@ -1077,7 +1077,7 @@ void BattleAnimScriptCmd_CallFunc(BattleAnimSystem *system) {
 
 #pragma force_active reset
 
-void ov07_0221D148(BattleAnimSystem *system) {
+void BattleAnimScriptCmd_JumpByVariantBit0(BattleAnimSystem *system) {
     system->scriptPtr++;
     if (system->context->moveAnimVariant & 1) {
         system->scriptPtr++;
@@ -1125,9 +1125,9 @@ void BattleAnimScriptCmd_JumpByWeather(BattleAnimSystem *system) {
 
 #pragma force_active reset
 
-void ov07_0221D214(BattleAnimSystem *system) {
+void BattleAnimScriptCmd_JumpIfField08Is1(BattleAnimSystem *system) {
     system->scriptPtr++;
-    if (ov07_0221BFC0(system) == 1) {
+    if (BattleAnimSystem_GetField08(system) == 1) {
         system->scriptPtr += *system->scriptPtr;
     } else {
         system->scriptPtr++;
@@ -1159,7 +1159,7 @@ void BattleAnimScriptCmd_JumpIfSameSide(BattleAnimSystem *system) {
     }
 }
 
-void ov07_0221D2B0(BattleAnimSystem *system) {
+void BattleAnimScriptCmd_JumpIfVariantEqual(BattleAnimSystem *system) {
     u32 value;
     system->scriptPtr++;
     value = *system->scriptPtr;
@@ -1725,7 +1725,7 @@ void BattleAnimBackground_LoadGraphics(BattleAnimBgSwitchWork *work, BattleAnimS
     PaletteData_LoadNarc(system->paletteData, NARC_a_0_0_7, member, system->heapId, PLTTBUF_MAIN_BG, 0x20, 0x90);
     BgClearTilemapBufferAndCommit(system->bgConfig, layer);
     screen = 2;
-    if (ov07_0221BFC0(system) == 1) {
+    if (BattleAnimSystem_GetField08(system) == 1) {
         screen = 4;
     } else if (BattleAnimBackground_ShouldFlip(work, system, 7) == TRUE) {
         screen = 3;
@@ -1814,7 +1814,7 @@ BOOL BattleAnimBackground_BlendIn(SysTask *task, void *data) {
         goto running;
     case 1:
         SetBgControlParam(work->system->bgConfig, GF_BG_LYR_MAIN_3, GF_BG_CNT_SET_CHAR_BASE, 3);
-        if (ov07_0221BFC0(work->system) != 1) {
+        if (BattleAnimSystem_GetField08(work->system) != 1) {
             SetBgControlParam(work->system->bgConfig, GF_BG_LYR_MAIN_3, GF_BG_CNT_SET_COLOR_MODE, 0);
         }
         BattleAnimBackground_LoadGraphics(work, work->system, GF_BG_LYR_MAIN_3, work->bgId);
@@ -1896,7 +1896,7 @@ BOOL BattleAnimBackground_BlendOut(SysTask *task, BattleAnimBgSwitchWork *work) 
         BgSetPosTextAndCommit(work->system->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_X, 0);
         BgSetPosTextAndCommit(work->system->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_Y, 0);
         SetBgControlParam(work->system->bgConfig, GF_BG_LYR_MAIN_3, GF_BG_CNT_SET_CHAR_BASE, 4);
-        if (ov07_0221BFC0(work->system) == 0) {
+        if (BattleAnimSystem_GetField08(work->system) == 0) {
             SetBgControlParam(work->system->bgConfig, GF_BG_LYR_MAIN_3, GF_BG_CNT_SET_COLOR_MODE, 1);
             BattleAnimSystem_LoadBattleBgTiles(work->system, GF_BG_LYR_MAIN_3);
             BattleAnimSystem_LoadBattleBgPalette(work->system);
@@ -1979,7 +1979,7 @@ BOOL BattleAnimBackground_FadeOut(SysTask *task, BattleAnimBgSwitchWork *work) {
         }
         BattleAnimBackground_StopMarkedEffects(work);
         ToggleBgLayer(GF_BG_LYR_MAIN_3, GF_PLANE_TOGGLE_OFF);
-        if (ov07_0221BFC0(work->system) == 0) {
+        if (BattleAnimSystem_GetField08(work->system) == 0) {
             SetBgControlParam(work->system->bgConfig, GF_BG_LYR_MAIN_3, GF_BG_CNT_SET_COLOR_MODE, 1);
             BattleAnimSystem_LoadBattleBgTiles(work->system, GF_BG_LYR_MAIN_3);
             BattleAnimSystem_LoadBattleBgPalette(work->system);
@@ -2305,14 +2305,14 @@ void BattleAnimBackground_LoadBattleBgToLayerDefault(BattleAnimSystem *system, G
 void BattleAnimBackground_LoadBattleBgToLayer(BattleAnimSystem *system, GFBgLayer layer, int colorMode) {
     SetBgPriority(layer, (u8)BattleAnimSystem_GetBgPriority(system, 2));
     ToggleBgLayer(layer, GF_PLANE_TOGGLE_OFF);
-    if (ov07_0221BFC0(system) == 1) {
+    if (BattleAnimSystem_GetField08(system) == 1) {
         SetBgControlParam(system->bgConfig, layer, GF_BG_CNT_SET_CHAR_BASE, 4);
     } else {
         SetBgControlParam(system->bgConfig, layer, GF_BG_CNT_SET_COLOR_MODE, colorMode);
         SetBgControlParam(system->bgConfig, layer, GF_BG_CNT_SET_CHAR_BASE, 4);
     }
     BgClearTilemapBufferAndCommit(system->bgConfig, layer);
-    if (ov07_0221BFC0(system) == 1) {
+    if (BattleAnimSystem_GetField08(system) == 1) {
         GfGfxLoader_LoadCharData(system->battleBg.narcId, system->battleBg.charMember, system->bgConfig, layer, 0, 0, TRUE, system->heapId);
     } else {
         BattleAnimSystem_LoadBattleBgTiles(system, layer);
@@ -2322,7 +2322,7 @@ void BattleAnimBackground_LoadBattleBgToLayer(BattleAnimSystem *system, GFBgLaye
 
 void BattleAnimBackground_ResetLayer(BattleAnimSystem *system, GFBgLayer layer) {
     SetBgPriority(layer, (u8)BattleAnimSystem_GetBgPriority(system, 1));
-    if (ov07_0221BFC0(system) == 1) {
+    if (BattleAnimSystem_GetField08(system) == 1) {
         SetBgControlParam(system->bgConfig, layer, GF_BG_CNT_SET_CHAR_BASE, 3);
     } else {
         SetBgControlParam(system->bgConfig, layer, GF_BG_CNT_SET_COLOR_MODE, 0);
@@ -2510,7 +2510,7 @@ void BattleAnimScriptCmd_SwitchBackgroundBySide(BattleAnimSystem *system) {
     system->scriptPtr++;
     unk08Set = *system->scriptPtr;
     system->scriptPtr++;
-    if (ov07_0221BFC0(system) == 1) {
+    if (BattleAnimSystem_GetField08(system) == 1) {
         work->bgId = unk08Set;
     } else if (BattleAnimUtil_GetBattlerSide(system, system->context->defender) == 3) {
         work->bgId = enemySide;
@@ -2882,7 +2882,7 @@ BattleAnimScriptCmd BattleAnimSystem_GetScriptCmd(u32 cmd) {
     return sBattleAnimScriptCmdTable[cmd];
 }
 
-u8 ov07_0221F8C4(BattleAnimContext *context) {
+u8 BattleAnimContext_GetField01(BattleAnimContext *context) {
     return context->unk_01;
 }
 
@@ -2906,7 +2906,7 @@ s8 BattleAnimSystem_ConvertPan(BattleAnimSystem *system, int pan) {
             pan *= -1;
         }
     }
-    if (ov07_0221BFC0(system) == 1) {
+    if (BattleAnimSystem_GetField08(system) == 1) {
         pan *= -1;
     }
     return pan;
@@ -3184,7 +3184,7 @@ void BattleAnimBattlerSprites_Free2(BattleAnimBattlerSprites *sprites, int battl
 
 #pragma force_active reset
 
-u8 ov07_0221FE70(Ov07UnkFE70 *data) {
+u8 Ov07UnkFE70_GetCurrentValue(Ov07UnkFE70 *data) {
     GF_ASSERT(data != NULL);
     return data->values[data->index];
 }

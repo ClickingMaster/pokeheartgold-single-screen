@@ -119,7 +119,7 @@ extern void BattleAnimSystem_Delete(u32 *animSystem);
 extern void LinkBattleScreen_Start(BattleLinkScreenArgs *args);
 extern void BattleRecord_StoreSetup(BattleSetup *setup);
 extern void ParticleSystem_FreeAll(void);
-extern void sub_02037930(int mode);
+extern void Comm_SetWifiContinuousSendAndMuteVoice(int mode);
 extern void CommState_FrameDummy(int a0, BgConfig *bgConfig);
 extern void WirelessStatusIcon_SetLevel(int linkLevel);
 extern int DWC_GetLinkLevel(void);
@@ -1066,7 +1066,7 @@ BOOL Battle_LinkMain(OverlayManager *man) {
     switch (work->state) {
     case 0:
         SetMasterBrightnessNeutral(0);
-        sub_02037930(1);
+        Comm_SetWifiContinuousSendAndMuteVoice(1);
         work->state++;
         break;
     case 1:
@@ -1271,7 +1271,7 @@ common:
         if (PaletteData_GetSelectedBuffersBitmask(work->palette) == 0) {
             done = TRUE;
             WaitingIcon_Delete(work->waitingIcon);
-            sub_02037930(0);
+            Comm_SetWifiContinuousSendAndMuteVoice(0);
         }
         break;
     default:

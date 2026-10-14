@@ -605,7 +605,7 @@ void PokewalkerApp_PressCursor(PokewalkerApp *app) {
 }
 
 #pragma force_active on
-void ov112_021EA5A4(PokewalkerApp *app, int anim) {
+void PokewalkerApp_ShowConnectionSprites(PokewalkerApp *app, int anim) {
     ManagedSprite_SetAnim(app->sprites[1], 0);
     ManagedSprite_SetDrawFlag(app->sprites[1], TRUE);
     if (anim == 0) {
@@ -621,7 +621,7 @@ void ov112_021EA5A4(PokewalkerApp *app, int anim) {
 
 void PokewalkerApp_UpdateConnectionAnim(PokewalkerApp *app) {
     ManagedSprite *sprite = app->sprites[2];
-    if (ov112_021E7668()) {
+    if (PokewalkerIrStatus_IsConnected()) {
         if (ManagedSprite_GetActiveAnim(sprite) == 2) {
             ManagedSprite_SetAnim(app->sprites[2], 1);
         }
@@ -633,7 +633,7 @@ void PokewalkerApp_UpdateConnectionAnim(PokewalkerApp *app) {
 }
 #pragma force_active reset
 
-void ov112_021EA64C(PokewalkerApp *app) {
+void PokewalkerApp_HideConnectionSprites(PokewalkerApp *app) {
     ManagedSprite_SetDrawFlag(app->sprites[1], FALSE);
     ManagedSprite_SetDrawFlag(app->sprites[2], FALSE);
 }

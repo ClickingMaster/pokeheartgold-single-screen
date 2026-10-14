@@ -84,7 +84,7 @@ BOOL Task_FrontierLinkPartnerCheck(TaskManager *taskManager);
 void TaskManager_CallFrontierLinkPartnerCheck(TaskManager *taskManager, u16 kind, u16 outputVar);
 u32 BattleTower_ClaimRecordMilestone(SaveData *saveData);
 u32 BattleTower_GetRecordMilestone(SaveData *saveData);
-void sub_02067484(Unk67484Outer *outer, const int *delta);
+void FrontierFieldSystem_AddBattleTotals(Unk67484Outer *outer, const int *delta);
 u32 BattleTower_NextRandom(u32 value);
 u32 BattleTower_NextSeed(u32 value);
 u32 BattleTower_InitSeed(SaveData *saveData);
@@ -144,7 +144,7 @@ u32 FrontierPartySelect_LaunchSummary(FrontierPartySelectEnv *env, FieldSystem *
     args->options = Save_PlayerData_GetOptionsAddr(saveData);
     args->party = SaveArray_Party_Get(saveData);
     args->natDexEnabled = SaveArray_IsNatDexEnabled(saveData);
-    args->unk2C = sub_02088288(saveData);
+    args->unk2C = PokemonSummary_GetDefaultUnk2C(saveData);
     args->monDataType = 1;
     args->partySlot = env->partySlot;
     args->partyCount = Party_GetCount(args->party);
@@ -273,7 +273,7 @@ BOOL Task_FrontierLinkPartnerCheck(TaskManager *taskManager) {
         *output = FrontierFieldSystem_ReceiveRoundTrainers(fieldSystem, linkData);
         break;
     case 2:
-        *output = sub_0204B690(fieldSystem, linkData);
+        *output = FrontierFieldSystem_IsLinkFlagSetByEither(fieldSystem, linkData);
         break;
     }
     Heap_Free(env);
@@ -379,7 +379,7 @@ u32 BattleTower_GetRecordMilestone(SaveData *saveData) {
     return 3;
 }
 
-void sub_02067484(Unk67484Outer *outer, const int *delta) {
+void FrontierFieldSystem_AddBattleTotals(Unk67484Outer *outer, const int *delta) {
     Unk67484Inner *inner = outer->inner;
     inner->x += delta[0];
     inner->y += delta[1];

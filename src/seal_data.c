@@ -110,7 +110,7 @@ u8 Seal_GetBattleAnimResId(u32 idx) {
     return _02105F04[idx].unk2;
 }
 
-BOOL sub_0209109C(u32 idx) {
+BOOL Seal_IsLetterSeal(u32 idx) {
     GF_ASSERT(idx < NELEMS(_02105F04));
     if (idx < 0x32 || idx > 0x4d) {
         return FALSE;

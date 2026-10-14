@@ -187,7 +187,7 @@ u32 FollowMon_GetFasterMovement(u32 direction, u32 movement) {
 fx32 FollowMon_GetHopHeight(LocalMapObject *object) {
     HopHeightTable table = gFollowMonHopHeights;
     LocalMapObject *mapObject = object;
-    u8 row = ov01_02205584(mapObject);
+    u8 row = FollowMon_GetShapeParamHigh(mapObject);
     s32 index;
     u8 column;
     if (row != 0) {
@@ -218,7 +218,7 @@ BOOL MapObject_HasFollowMonSprite(LocalMapObject *object) {
     return spriteId >= SPRITE_FOLLOWER_MON && spriteId <= SPRITE_FOLLOWER_MON_6;
 }
 
-u8 ov01_02205584(LocalMapObject *object) {
+u8 FollowMon_GetShapeParamHigh(LocalMapObject *object) {
     u16 shape = MapObject_GetParam(object, FOLLOW_MON_PARAM_SHAPE);
     if (MapObject_GetID(object) != obj_partner_poke) {
         return 0;
@@ -226,7 +226,7 @@ u8 ov01_02205584(LocalMapObject *object) {
     return ((u8)shape >> 4) & 0xF;
 }
 
-u8 ov01_022055B0(LocalMapObject *object) {
+u8 FollowMon_GetShapeParamLow(LocalMapObject *object) {
     u16 shape = MapObject_GetParam(object, FOLLOW_MON_PARAM_SHAPE);
     if (MapObject_GetID(object) != obj_partner_poke) {
         return 0;

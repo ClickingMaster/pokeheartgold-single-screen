@@ -166,7 +166,7 @@ void FrontierLinkLobby_LaunchSummary(void *frontierWork, FrontierLinkLobby *lobb
     lobby->summaryArgs->options = Save_PlayerData_GetOptionsAddr(lobby->saveData);
     lobby->summaryArgs->party = SaveArray_Party_Get(lobby->saveData);
     lobby->summaryArgs->natDexEnabled = SaveArray_IsNatDexEnabled(lobby->saveData);
-    lobby->summaryArgs->unk2C = sub_02088288(lobby->saveData);
+    lobby->summaryArgs->unk2C = PokemonSummary_GetDefaultUnk2C(lobby->saveData);
     lobby->summaryArgs->monDataType = 1;
     lobby->summaryArgs->partySlot = lobby->partySlot;
     lobby->summaryArgs->partyCount = Party_GetCount(lobby->summaryArgs->party);

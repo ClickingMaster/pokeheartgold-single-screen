@@ -171,7 +171,7 @@ int SafariAreaCustomizer_ChangePage(SafariAreaCustomizer *s);
 int SafariAreaCustomizer_HandleMoveInput(SafariAreaCustomizer *s);
 int SafariAreaCustomizer_SwapAreas(SafariAreaCustomizer *s);
 void SafariAreaCustomizer_ShowCursors(SafariAreaCustomizer *s);
-void ov108_021E6238(SafariAreaCustomizer *s);
+void thunk_SafariAreaCustomizer_ShowCursors(SafariAreaCustomizer *s);
 int SafariAreaCustomizer_CheckInputModeSwitch(SafariAreaCustomizer *s);
 int SafariAreaCustomizer_HandleSlotButtons(SafariAreaCustomizer *s);
 int SafariAreaCustomizer_HandleSlotTouch(SafariAreaCustomizer *s);
@@ -202,7 +202,7 @@ void SafariAreaCustomizer_CreateSprites(SafariAreaCustomizer *s);
 void SafariAreaCustomizer_DeleteSprites(SafariAreaCustomizer *s);
 void SafariAreaCustomizer_CreateCancelTextObj(SafariAreaCustomizer *s);
 void SafariAreaCustomizer_DeleteCancelTextObj(SafariAreaCustomizer *s);
-void ov108_021E767C(SafariAreaCustomizer *s, int value);
+void SafariAreaCustomizer_DrawPageScreenPart(SafariAreaCustomizer *s, int value);
 void SafariAreaCustomizer_PrintWindowText(SafariAreaCustomizer *s, u8 windowId, u8 msg, BOOL unused);
 void SafariAreaCustomizer_PrintPageNumber(SafariAreaCustomizer *s);
 void SafariAreaCustomizer_SetCursorAnim(SafariAreaCustomizer *s, u32 index, u32 anim, BOOL draw);
@@ -522,7 +522,7 @@ int SafariAreaCustomizer_HandleSlotMenu(SafariAreaCustomizer *s) {
         if (touchMode == MENU_INPUT_STATE_BUTTONS) {
             SafariAreaCustomizer_ShowCursors(s);
         } else {
-            ov108_021E6238(s);
+            thunk_SafariAreaCustomizer_ShowCursors(s);
         }
     }
     s->touchMode = touchMode;
@@ -617,13 +617,13 @@ int SafariAreaCustomizer_HandleConfirmArea(SafariAreaCustomizer *s) {
         if (!touchMode) {
             SafariAreaCustomizer_ShowCursors(s);
         } else {
-            ov108_021E6238(s);
+            thunk_SafariAreaCustomizer_ShowCursors(s);
         }
     }
     s->touchMode = touchMode;
     YesNoPrompt_Reset(s->yesNoPrompt);
     ClearWindowTilemapAndCopyToVram(&s->windows[1]);
-    ov108_021E767C(s, 0);
+    SafariAreaCustomizer_DrawPageScreenPart(s, 0);
     SafariAreaCustomizer_PrintWindowText(s, 0, 1, TRUE);
     SafariAreaCustomizer_DrawSelectFrame(s, 1, 0, FALSE);
     if (yes) {
@@ -716,7 +716,7 @@ void SafariAreaCustomizer_ShowCursors(SafariAreaCustomizer *s) {
     }
 }
 
-void ov108_021E6238(SafariAreaCustomizer *s) {
+void thunk_SafariAreaCustomizer_ShowCursors(SafariAreaCustomizer *s) {
     SafariAreaCustomizer_ShowCursors(s);
 }
 
@@ -741,7 +741,7 @@ int SafariAreaCustomizer_CheckInputModeSwitch(SafariAreaCustomizer *s) {
             if (s->onSwitchToTouch != NULL) {
                 s->onSwitchToTouch(s);
             }
-            ov108_021E6238(s);
+            thunk_SafariAreaCustomizer_ShowCursors(s);
             s->touchMode = MENU_INPUT_STATE_TOUCH;
             return FALSE;
         }
@@ -1085,7 +1085,7 @@ void SafariAreaCustomizer_AskConfirmArea(SafariAreaCustomizer *s) {
     YesNoPrompt_InitFromTemplate(s->yesNoPrompt, &template);
     SafariAreaCustomizer_DrawSelectFrame(s, 1, s->cursorPos, TRUE);
     SafariAreaCustomizer_LoadAreaPicture(s, s->selectedSlot, (u8)(s->cursorPos + NUM_AREA_SLOTS * s->page));
-    ov108_021E767C(s, 1);
+    SafariAreaCustomizer_DrawPageScreenPart(s, 1);
     SafariAreaCustomizer_PrintWindowText(s, 1, 3, TRUE);
 }
 
@@ -1372,7 +1372,7 @@ void SafariAreaCustomizer_DeleteCancelTextObj(SafariAreaCustomizer *s) {
 }
 
 #pragma force_active on
-void ov108_021E767C(SafariAreaCustomizer *s, int value) {
+void SafariAreaCustomizer_DrawPageScreenPart(SafariAreaCustomizer *s, int value) {
     NNSG2dScreenData *screen;
 
     FillBgTilemapRect(s->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 19, 24, 5, 17);
@@ -1559,12 +1559,12 @@ void SafariAreaCustomizer_LoadAreaPicture(SafariAreaCustomizer *s, u32 slot, int
 void SafariAreaCustomizer_InitScreen(SafariAreaCustomizer *s) {
     SafariAreaCustomizer_PrintObjectTypeLabels(s);
     SafariAreaCustomizer_PrintSlotInfo(s, s->selectedSlot);
-    ov108_021E767C(s, 0);
+    SafariAreaCustomizer_DrawPageScreenPart(s, 0);
     SafariAreaCustomizer_PrintWindowText(s, 0, 0, TRUE);
     if (s->touchMode == MENU_INPUT_STATE_BUTTONS) {
         SafariAreaCustomizer_ShowCursors(s);
     } else {
-        ov108_021E6238(s);
+        thunk_SafariAreaCustomizer_ShowCursors(s);
     }
     s->mainBgY = 0;
     s->subBgY = -192;

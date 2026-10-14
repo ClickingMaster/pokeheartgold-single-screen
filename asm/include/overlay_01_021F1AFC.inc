@@ -24,7 +24,7 @@
 .public FieldBGM_GetForMapHeader
 .public FieldBGM_TryFadeOut
 .public MetatileBehavior_IsSurfableWater
-.public sub_0205B78C
+.public MetatileBehavior_Is34
 .public MetatileBehavior_IsRockClimbNorthSouth
 .public MetatileBehavior_IsRockClimbEastWest
 .public MetatileBehavior_IsWaterfall
