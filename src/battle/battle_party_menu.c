@@ -15,6 +15,10 @@
 #include "battle/battle_dpad_cursor.h"
 #include "battle/battle_main.h"
 #include "battle/battle_system.h"
+#include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0006.h"
+#include "msgdata/msg/msg_0722.h"
+#include "msgdata/msg/msg_0749.h"
 
 #include "bag.h"
 #include "bag_cursor.h"
@@ -582,7 +586,7 @@ int BattlePartyMenu_TryUseItemOnMon(BattlePartyMenu *menu) {
         menu->effectState = 0;
         return 22;
     }
-    ReadMsgDataIntoString(menu->msgData, 81, menu->string);
+    ReadMsgDataIntoString(menu->msgData, msg_0006_00081, menu->string);
     BattlePartyMenu_ShowMessage(menu);
     menu->context->selectedMon = 6;
     menu->nextState = 25;
@@ -864,7 +868,7 @@ int BattlePartyMenu_HandleRestorePPInput(BattlePartyMenu *menu) {
             menu->nextState = 23;
             return 22;
         }
-        ReadMsgDataIntoString(menu->msgData, 81, menu->string);
+        ReadMsgDataIntoString(menu->msgData, msg_0006_00081, menu->string);
         BattlePartyMenu_ShowMessage(menu);
         menu->context->selectedMon = 6;
         menu->nextState = 25;
@@ -1164,7 +1168,7 @@ void BattlePartyMenu_LoadBgGraphics(BattlePartyMenu *menu) {
 }
 
 void BattlePartyMenu_InitText(BattlePartyMenu *menu) {
-    menu->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 6, menu->context->heapID);
+    menu->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0006_bin, menu->context->heapID);
     menu->msgPrinter = MessagePrinter_New(15, 14, 0, menu->context->heapID);
     menu->msgFormat = MessageFormat_New(menu->context->heapID);
     menu->string = String_New(0x200, menu->context->heapID);
@@ -1488,7 +1492,7 @@ int BattlePartyMenu_CanSwitchToSelectedMon(BattlePartyMenu *menu) {
     BattlePartyMenuMon *mon = &menu->mons[menu->context->selectedMon];
 
     if (BattlePartyMenu_IsPartnerMon(menu, menu->context->selectedMon) == 1) {
-        String *template = NewString_ReadMsgData(menu->msgData, 80);
+        String *template = NewString_ReadMsgData(menu->msgData, msg_0006_00080);
         int partner;
         context = menu->context;
         partner = BattleSystem_GetBattlerIdPartner(context->battleSystem, context->battlerId);
@@ -1511,14 +1515,14 @@ int BattlePartyMenu_CanSwitchToSelectedMon(BattlePartyMenu *menu) {
         }
     }
     if (BattlePartyMenu_IsSelectedMonEgg(menu) == 1) {
-        ReadMsgDataIntoString(menu->msgData, 79, menu->string);
+        ReadMsgDataIntoString(menu->msgData, msg_0006_00079, menu->string);
         return 0;
     }
     context = menu->context;
     if (context->reservedMon != 6) {
         u8 slot = context->selectedMon;
         if (context->reservedMon == context->partyOrder[slot]) {
-            String *template = NewString_ReadMsgData(menu->msgData, 93);
+            String *template = NewString_ReadMsgData(menu->msgData, msg_0006_00093);
             BufferBoxMonNickname(menu->msgFormat, 0, Mon_GetBoxMon(menu->mons[slot].mon));
             StringExpandPlaceholders(menu->msgFormat, menu->string, template);
             String_Delete(template);
@@ -1528,7 +1532,7 @@ int BattlePartyMenu_CanSwitchToSelectedMon(BattlePartyMenu *menu) {
     if (context->move) {
         u8 slot = menu->activeMon;
         BattlePartyMenuMonRef active = { slot * sizeof(BattlePartyMenuMon), &menu->mons };
-        String *template = NewString_ReadMsgData(menu->msgData, 78);
+        String *template = NewString_ReadMsgData(menu->msgData, msg_0006_00078);
         BufferBoxMonNickname(menu->msgFormat, 0, Mon_GetBoxMon(*(Pokemon **)((u8 *)active.mons + active.offset)));
         StringExpandPlaceholders(menu->msgFormat, menu->string, template);
         String_Delete(template);
@@ -1757,7 +1761,7 @@ void BattlePartyMenu_PrintMonName(BattlePartyMenu *menu, int window, int fontId,
     String_Delete(name);
     if (mon->hideGender == FALSE && mon->isEgg == FALSE) {
         if (mon->gender == MON_MALE) {
-            String *symbol = NewString_ReadMsgData(menu->msgData, 16);
+            String *symbol = NewString_ReadMsgData(menu->msgData, msg_0006_00016);
             u32 width = GetWindowWidth(win);
             int symbolX = width * 8 - FontID_String_GetWidth(0, symbol, 0);
             if (fontId == 0) {
@@ -1767,7 +1771,7 @@ void BattlePartyMenu_PrintMonName(BattlePartyMenu *menu, int window, int fontId,
             }
             String_Delete(symbol);
         } else if (mon->gender == MON_FEMALE) {
-            String *symbol = NewString_ReadMsgData(menu->msgData, 17);
+            String *symbol = NewString_ReadMsgData(menu->msgData, msg_0006_00017);
             u32 width = GetWindowWidth(win);
             int symbolX = width * 8 - FontID_String_GetWidth(0, symbol, 0);
             if (fontId == 0) {
@@ -1840,7 +1844,7 @@ void BattlePartyMenu_DrawHPBar(BattlePartyMenu *menu, int window, int slot, u16 
 
 void BattlePartyMenu_PrintAbilityName(BattlePartyMenu *menu, int window, int slot) {
     String *string = String_New(16, menu->context->heapID);
-    String *template = NewString_ReadMsgData(menu->msgData, 8);
+    String *template = NewString_ReadMsgData(menu->msgData, msg_0006_00008);
 
     BufferAbilityName(menu->msgFormat, 0, menu->mons[slot].ability);
     StringExpandPlaceholders(menu->msgFormat, string, template);
@@ -1855,11 +1859,11 @@ void BattlePartyMenu_PrintHeldItemName(BattlePartyMenu *menu, int window, int sl
     String *string;
 
     if (mon->heldItem == ITEM_NONE) {
-        string = NewString_ReadMsgData(menu->msgData, 20);
+        string = NewString_ReadMsgData(menu->msgData, msg_0006_00020);
     } else {
         String *template;
         string = String_New(18, menu->context->heapID);
-        template = NewString_ReadMsgData(menu->msgData, 9);
+        template = NewString_ReadMsgData(menu->msgData, msg_0006_00009);
         BufferItemName(menu->msgFormat, 0, mon->heldItem);
         StringExpandPlaceholders(menu->msgFormat, string, template);
         String_Delete(template);
@@ -1893,7 +1897,7 @@ void BattlePartyMenu_PrintMoveName(BattlePartyMenu *menu, int move, int window, 
 #pragma force_active on
 
 void BattlePartyMenu_PrintPPLabel(BattlePartyMenu *menu, int window, u16 x, u32 y) {
-    String *string = NewString_ReadMsgData(menu->msgData, 14);
+    String *string = NewString_ReadMsgData(menu->msgData, msg_0006_00014);
 
     AddTextPrinterParameterizedWithColor(&menu->pageWindows[window], 0, string, x, y, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);
     String_Delete(string);
@@ -1927,12 +1931,12 @@ void BattlePartyMenu_PrintButtonLabel(BattlePartyMenu *menu, int window, int msg
 void BattlePartyMenu_PrintLevelAndNextExp(BattlePartyMenu *menu, int slot) {
     BattlePartyMenuMon *mon = &menu->mons[slot];
     u16 base = menu->windowSet * 22;
-    String *string = NewString_ReadMsgData(menu->msgData, 23);
+    String *string = NewString_ReadMsgData(menu->msgData, msg_0006_00023);
 
     AddTextPrinterParameterizedWithColor(&menu->pageWindows[19], 0, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);
     String_Delete(string);
 
-    string = NewString_ReadMsgData(menu->msgData, 24);
+    string = NewString_ReadMsgData(menu->msgData, msg_0006_00024);
     String *expanded = String_New(8, menu->context->heapID);
     BufferIntegerAsString(menu->msgFormat, 0, mon->level, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
     StringExpandPlaceholders(menu->msgFormat, expanded, string);
@@ -1941,11 +1945,11 @@ void BattlePartyMenu_PrintLevelAndNextExp(BattlePartyMenu *menu, int slot) {
     String_Delete(string);
     String_Delete(expanded);
 
-    string = NewString_ReadMsgData(menu->msgData, 25);
+    string = NewString_ReadMsgData(menu->msgData, msg_0006_00025);
     AddTextPrinterParameterizedWithColor(&menu->pageWindows[20], 0, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);
     String_Delete(string);
 
-    string = NewString_ReadMsgData(menu->msgData, 26);
+    string = NewString_ReadMsgData(menu->msgData, msg_0006_00026);
     expanded = String_New(14, menu->context->heapID);
     if (mon->level < 100) {
         BufferIntegerAsString(menu->msgFormat, 0, mon->nextLevelExp - mon->exp, 6, PRINTING_MODE_RIGHT_ALIGN, TRUE);
@@ -1995,12 +1999,12 @@ DEFINE_PRINT_STAT(BattlePartyMenu_PrintSpDefense, 18, 38, 39, spDefense, 9)
 void BattlePartyMenu_PrintHPStat(BattlePartyMenu *menu, int slot) {
     BattlePartyMenuMon *mon = &menu->mons[slot];
     u16 base = menu->windowSet * 22;
-    String *string = NewString_ReadMsgData(menu->msgData, 28);
+    String *string = NewString_ReadMsgData(menu->msgData, msg_0006_00028);
 
     AddTextPrinterParameterizedWithColor(&menu->pageWindows[13], 0, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);
     String_Delete(string);
 
-    string = NewString_ReadMsgData(menu->msgData, 31);
+    string = NewString_ReadMsgData(menu->msgData, msg_0006_00031);
     u32 slashWidth = FontID_String_GetWidth(0, string, 0);
     u32 windowWidth = GetWindowWidth(&menu->pageWindows[4]);
     u16 middle = (windowWidth * 8 - slashWidth) / 2;
@@ -2008,7 +2012,7 @@ void BattlePartyMenu_PrintHPStat(BattlePartyMenu *menu, int slot) {
     AddTextPrinterParameterizedWithColor((Window *)((u8 *)menu->pageWindows + offset), 0, string, middle, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     String_Delete(string);
 
-    string = NewString_ReadMsgData(menu->msgData, 29);
+    string = NewString_ReadMsgData(menu->msgData, msg_0006_00029);
     String *expanded = String_New(8, menu->context->heapID);
     BufferIntegerAsString(menu->msgFormat, 0, mon->hp, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
     StringExpandPlaceholders(menu->msgFormat, expanded, string);
@@ -2017,7 +2021,7 @@ void BattlePartyMenu_PrintHPStat(BattlePartyMenu *menu, int slot) {
     String_Delete(string);
     String_Delete(expanded);
 
-    string = NewString_ReadMsgData(menu->msgData, 30);
+    string = NewString_ReadMsgData(menu->msgData, msg_0006_00030);
     expanded = String_New(8, menu->context->heapID);
     BufferIntegerAsString(menu->msgFormat, 0, mon->maxHp, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
     StringExpandPlaceholders(menu->msgFormat, expanded, string);
@@ -2030,7 +2034,7 @@ void BattlePartyMenu_PrintHPStat(BattlePartyMenu *menu, int slot) {
 
 void BattlePartyMenu_PrintAbilityDescription(BattlePartyMenu *menu, int slot) {
     int window = menu->windowSet * 22;
-    MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 722, menu->context->heapID);
+    MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0722_bin, menu->context->heapID);
     u16 msgNo = menu->mons[slot].ability;
     String *string = NewString_ReadMsgData(msgData, msgNo);
 
@@ -2044,7 +2048,7 @@ void BattlePartyMenu_PrintAbilityDescription(BattlePartyMenu *menu, int slot) {
 void BattlePartyMenu_PrintAccuracyLabel(BattlePartyMenu *menu, int window) {
     Window *windows = menu->pageWindows;
     Window *win = &windows[window];
-    String *string = NewString_ReadMsgData(menu->msgData, 51);
+    String *string = NewString_ReadMsgData(menu->msgData, msg_0006_00051);
 
     AddTextPrinterParameterizedWithColor(win, 0, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);
     String_Delete(string);
@@ -2056,13 +2060,13 @@ void BattlePartyMenu_PrintMoveAccuracy(BattlePartyMenu *menu, int window, int ac
     Window *win = &windows[window];
 
     if (accuracy == 0) {
-        String *string = NewString_ReadMsgData(menu->msgData, 50);
+        String *string = NewString_ReadMsgData(menu->msgData, msg_0006_00050);
         u16 width = FontID_String_GetWidth(0, string, 0);
         u16 x = GetWindowWidth(win) * 8 - width;
         AddTextPrinterParameterizedWithColor(win, 0, string, x, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
         String_Delete(string);
     } else {
-        String *template = NewString_ReadMsgData(menu->msgData, 52);
+        String *template = NewString_ReadMsgData(menu->msgData, msg_0006_00052);
         String *string = String_New(8, menu->context->heapID);
         BufferIntegerAsString(menu->msgFormat, 0, accuracy, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
         StringExpandPlaceholders(menu->msgFormat, string, template);
@@ -2078,7 +2082,7 @@ void BattlePartyMenu_PrintMoveAccuracy(BattlePartyMenu *menu, int window, int ac
 void BattlePartyMenu_PrintPowerLabel(BattlePartyMenu *menu, int window) {
     Window *windows = menu->pageWindows;
     Window *win = &windows[window];
-    String *string = NewString_ReadMsgData(menu->msgData, 48);
+    String *string = NewString_ReadMsgData(menu->msgData, msg_0006_00048);
 
     AddTextPrinterParameterizedWithColor(win, 0, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);
     String_Delete(string);
@@ -2090,13 +2094,13 @@ void BattlePartyMenu_PrintMovePower(BattlePartyMenu *menu, int window, u32 power
     Window *win = &windows[window];
 
     if (power <= 1) {
-        String *string = NewString_ReadMsgData(menu->msgData, 50);
+        String *string = NewString_ReadMsgData(menu->msgData, msg_0006_00050);
         u16 width = FontID_String_GetWidth(0, string, 0);
         u16 x = GetWindowWidth(win) * 8 - width;
         AddTextPrinterParameterizedWithColor(win, 0, string, x, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
         String_Delete(string);
     } else {
-        String *template = NewString_ReadMsgData(menu->msgData, 49);
+        String *template = NewString_ReadMsgData(menu->msgData, msg_0006_00049);
         String *string = String_New(8, menu->context->heapID);
         BufferIntegerAsString(menu->msgFormat, 0, power, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
         StringExpandPlaceholders(menu->msgFormat, string, template);
@@ -2112,7 +2116,7 @@ void BattlePartyMenu_PrintMovePower(BattlePartyMenu *menu, int window, u32 power
 void BattlePartyMenu_PrintMoveDescription(BattlePartyMenu *menu, int window, int move) {
     Window *windows = menu->pageWindows;
     Window *win = &windows[window];
-    MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 749, menu->context->heapID);
+    MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0749_bin, menu->context->heapID);
     String *string = NewString_ReadMsgData(msgData, move);
 
     AddTextPrinterParameterizedWithColor(win, 0, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
@@ -2124,7 +2128,7 @@ void BattlePartyMenu_PrintMoveDescription(BattlePartyMenu *menu, int window, int
 void BattlePartyMenu_PrintCategoryLabel(BattlePartyMenu *menu, int window) {
     Window *windows = menu->pageWindows;
     Window *win = &windows[window];
-    String *string = NewString_ReadMsgData(menu->msgData, 53);
+    String *string = NewString_ReadMsgData(menu->msgData, msg_0006_00053);
     u16 width = FontID_String_GetWidth(0, string, 0);
     u16 x = (GetWindowWidth(win) * 8 - width) / 2;
 
@@ -2140,13 +2144,13 @@ void BattlePartyMenu_PrintMoveCategory(BattlePartyMenu *menu, int window, int mo
 
     switch (moveClass) {
     case 0:
-        string = NewString_ReadMsgData(menu->msgData, 54);
+        string = NewString_ReadMsgData(menu->msgData, msg_0006_00054);
         break;
     case 1:
-        string = NewString_ReadMsgData(menu->msgData, 56);
+        string = NewString_ReadMsgData(menu->msgData, msg_0006_00056);
         break;
     case 2:
-        string = NewString_ReadMsgData(menu->msgData, 55);
+        string = NewString_ReadMsgData(menu->msgData, msg_0006_00055);
         break;
     }
     AddTextPrinterParameterizedWithColor(win, 0, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
@@ -2157,13 +2161,13 @@ void BattlePartyMenu_PrintMoveCategory(BattlePartyMenu *menu, int window, int mo
 void BattlePartyMenu_PrintMovePP(BattlePartyMenu *menu, int window, int pp, int maxPP) {
     Window *windows = menu->pageWindows;
     Window *win = &windows[window];
-    String *string = NewString_ReadMsgData(menu->msgData, 46);
+    String *string = NewString_ReadMsgData(menu->msgData, msg_0006_00046);
     u32 slashWidth = FontID_String_GetWidth(0, string, 0);
     u32 middle = (GetWindowWidth(win) * 8 - slashWidth) / 2;
 
     AddTextPrinterParameterizedWithColor(win, 0, string, middle, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);
     String_Delete(string);
-    string = NewString_ReadMsgData(menu->msgData, 44);
+    string = NewString_ReadMsgData(menu->msgData, msg_0006_00044);
     String *expanded = String_New(6, menu->context->heapID);
     BufferIntegerAsString(menu->msgFormat, 0, pp, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
     StringExpandPlaceholders(menu->msgFormat, expanded, string);
@@ -2171,7 +2175,7 @@ void BattlePartyMenu_PrintMovePP(BattlePartyMenu *menu, int window, int pp, int 
     AddTextPrinterParameterizedWithColor(win, 0, expanded, middle - width, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);
     String_Delete(string);
     String_Delete(expanded);
-    string = NewString_ReadMsgData(menu->msgData, 45);
+    string = NewString_ReadMsgData(menu->msgData, msg_0006_00045);
     expanded = String_New(6, menu->context->heapID);
     BufferIntegerAsString(menu->msgFormat, 0, maxPP, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
     StringExpandPlaceholders(menu->msgFormat, expanded, string);
@@ -2188,9 +2192,9 @@ void BattlePartyMenu_PrintForgetButtonLabel(BattlePartyMenu *menu, int window) {
     u32 width;
 
     if (menu->context->selectedMove == 4) {
-        string = NewString_ReadMsgData(menu->msgData, 59);
+        string = NewString_ReadMsgData(menu->msgData, msg_0006_00059);
     } else {
-        string = NewString_ReadMsgData(menu->msgData, 58);
+        string = NewString_ReadMsgData(menu->msgData, msg_0006_00058);
     }
     width = FontID_String_GetWidth(4, string, 0);
     AddTextPrinterParameterizedWithColor(win, 4, string, (96 - width) / 2, 5, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(7, 8, 9), NULL);
@@ -2208,7 +2212,7 @@ void BattlePartyMenu_PrintHMCantBeForgotten(BattlePartyMenu *menu) {
         window = &menu->pageWindows[5];
     }
     FillWindowPixelBuffer(window, 0);
-    string = NewString_ReadMsgData(menu->msgData, 60);
+    string = NewString_ReadMsgData(menu->msgData, msg_0006_00060);
     AddTextPrinterParameterizedWithColor(window, 0, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     String_Delete(string);
     ScheduleWindowCopyToVram(window);
@@ -2218,21 +2222,21 @@ void BattlePartyMenu_PrintMoveListPP(BattlePartyMenu *menu, BattlePartyMenuMove 
     Window *windows = menu->pageWindows;
     Window *win = &windows[window];
     String *expanded = String_New(6, menu->context->heapID);
-    String *string = NewString_ReadMsgData(menu->msgData, 43);
+    String *string = NewString_ReadMsgData(menu->msgData, msg_0006_00043);
 
     AddTextPrinterParameterizedWithColor(win, 0, string, 40, 24, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);
     String_Delete(string);
-    string = NewString_ReadMsgData(menu->msgData, 46);
+    string = NewString_ReadMsgData(menu->msgData, msg_0006_00046);
     u32 width = FontID_String_GetWidth(0, string, 0);
     AddTextPrinterParameterizedWithColor(win, 0, string, 80, 24, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);
     String_Delete(string);
-    string = NewString_ReadMsgData(menu->msgData, 45);
+    string = NewString_ReadMsgData(menu->msgData, msg_0006_00045);
     BufferIntegerAsString(menu->msgFormat, 0, move->maxPP, 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
     StringExpandPlaceholders(menu->msgFormat, expanded, string);
     width += 80;
     AddTextPrinterParameterizedWithColor(win, 0, expanded, width, 24, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);
     String_Delete(string);
-    string = NewString_ReadMsgData(menu->msgData, 44);
+    string = NewString_ReadMsgData(menu->msgData, msg_0006_00044);
     BufferIntegerAsString(menu->msgFormat, 0, move->pp, 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
     StringExpandPlaceholders(menu->msgFormat, expanded, string);
     width = FontID_String_GetWidth(0, expanded, 0);
@@ -2246,13 +2250,13 @@ void BattlePartyMenu_UpdateMoveListPP(BattlePartyMenu *menu, BattlePartyMenuMove
     Window *windows = menu->pageWindows;
     Window *win = &windows[window];
     String *expanded = String_New(6, menu->context->heapID);
-    String *string = NewString_ReadMsgData(menu->msgData, 43);
+    String *string = NewString_ReadMsgData(menu->msgData, msg_0006_00043);
     u32 width = FontID_String_GetWidth(0, string, 0);
 
     String_Delete(string);
     width += 40;
     FillWindowPixelRect(win, 0, (u16)width, 24, (u16)(80 - width), 16);
-    string = NewString_ReadMsgData(menu->msgData, 44);
+    string = NewString_ReadMsgData(menu->msgData, msg_0006_00044);
     BufferIntegerAsString(menu->msgFormat, 0, move->pp, 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
     StringExpandPlaceholders(menu->msgFormat, expanded, string);
     width = FontID_String_GetWidth(0, expanded, 0);
@@ -2286,9 +2290,9 @@ void BattlePartyMenu_PrintPartyListPage(BattlePartyMenu *menu) {
         } while (i < Party_GetCount(menu->context->party));
     }
     if (menu->context->mode == 2) {
-        BattlePartyMenu_PrintPrompt(menu, 7);
+        BattlePartyMenu_PrintPrompt(menu, msg_0006_00007);
     } else {
-        BattlePartyMenu_PrintPrompt(menu, 6);
+        BattlePartyMenu_PrintPrompt(menu, msg_0006_00006);
     }
 }
 
@@ -2313,10 +2317,10 @@ void BattlePartyMenu_PrintMonMenuPage(BattlePartyMenu *menu) {
     FillWindowPixelBuffer(menu->pageWindows + 2, 0);
     FillWindowPixelBuffer(menu->pageWindows + 3, 0);
     BattlePartyMenu_PrintMonNameCentered(menu, menu->context->selectedMon);
-    BattlePartyMenu_PrintButtonLabel(menu, 1, 15);
+    BattlePartyMenu_PrintButtonLabel(menu, 1, msg_0006_00015);
     if (!menu->mons[menu->context->selectedMon].isEgg) {
-        BattlePartyMenu_PrintButtonLabel(menu, 2, 18);
-        BattlePartyMenu_PrintButtonLabel(menu, 3, 19);
+        BattlePartyMenu_PrintButtonLabel(menu, 2, msg_0006_00018);
+        BattlePartyMenu_PrintButtonLabel(menu, 3, msg_0006_00019);
         return;
     }
     ScheduleWindowCopyToVram(menu->pageWindows + 2);
@@ -2338,9 +2342,9 @@ static inline String *BattlePartyMenu_ReadGenderSymbol(BattlePartyMenu *menu, Ba
         BattlePartyMenuMon *mon = locals->mon;
         if (!mon->isEgg) {
             if (mon->gender == MON_MALE) {
-                symbol = NewString_ReadMsgData(menu->msgData, 16);
+                symbol = NewString_ReadMsgData(menu->msgData, msg_0006_00016);
             } else if (mon->gender == MON_FEMALE) {
-                symbol = NewString_ReadMsgData(menu->msgData, 17);
+                symbol = NewString_ReadMsgData(menu->msgData, msg_0006_00017);
             }
         }
     }
@@ -2407,7 +2411,7 @@ void BattlePartyMenu_PrintCheckMovesPage(BattlePartyMenu *menu) {
             BattlePartyMenu_PrintMoveListPP(menu, move, base + 1 + i);
         }
     }
-    BattlePartyMenu_PrintButtonLabel(menu, 5, 18);
+    BattlePartyMenu_PrintButtonLabel(menu, 5, msg_0006_00018);
     ScheduleWindowCopyToVram((Window *)((u8 *)menu->pageWindows + window1));
     ScheduleWindowCopyToVram((Window *)((u8 *)menu->pageWindows + window2));
     ScheduleWindowCopyToVram((Window *)((u8 *)menu->pageWindows + window3));
@@ -2454,7 +2458,7 @@ void BattlePartyMenu_PrintSummaryPage(BattlePartyMenu *menu) {
     BattlePartyMenu_PrintAbilityName(menu, base + 1, menu->context->selectedMon);
     BattlePartyMenu_PrintHeldItemName(menu, base + 3, menu->context->selectedMon);
     BattlePartyMenu_PrintAbilityDescription(menu, menu->context->selectedMon);
-    BattlePartyMenu_PrintButtonLabel(menu, 21, 19);
+    BattlePartyMenu_PrintButtonLabel(menu, 21, msg_0006_00019);
     menu->windowSet ^= 1;
 }
 
@@ -2514,7 +2518,7 @@ void BattlePartyMenu_PrintLearnMovePage(BattlePartyMenu *menu) {
             BattlePartyMenu_PrintMoveListPP(menu, &moves[i], i + 1);
         }
     }
-    BattlePartyMenu_PrintMoveName(menu, menu->context->move, 5, 73, 4, 7, MAKE_TEXT_COLOR(7, 8, 9));
+    BattlePartyMenu_PrintMoveName(menu, menu->context->move, 5, msg_0006_00073, 4, 7, MAKE_TEXT_COLOR(7, 8, 9));
     newMove.pp = GetMoveAttr(menu->context->move, MOVEATTR_PP);
     newMove.maxPP = newMove.pp;
     BattlePartyMenu_PrintMoveListPP(menu, &newMove, 5);
@@ -2559,7 +2563,7 @@ void BattlePartyMenu_PrintForgetMovePage(BattlePartyMenu *menu) {
         BattlePartyMenu_PrintMovePP(menu, 3, move->pp, move->maxPP);
     } else {
         pp = GetMoveAttr(menu->context->move, MOVEATTR_PP);
-        BattlePartyMenu_PrintMoveName(menu, menu->context->move, 1, 73, 0, 0, MAKE_TEXT_COLOR(15, 14, 0));
+        BattlePartyMenu_PrintMoveName(menu, menu->context->move, 1, msg_0006_00073, 0, 0, MAKE_TEXT_COLOR(15, 14, 0));
         BattlePartyMenu_PrintMoveDescription(menu, 8, menu->context->move);
         BattlePartyMenu_PrintMoveAccuracy(menu, 6, GetMoveAttr(menu->context->move, MOVEATTR_ACCURACY));
         BattlePartyMenu_PrintMovePower(menu, 7, GetMoveAttr(menu->context->move, MOVEATTR_POWER));
@@ -2587,7 +2591,7 @@ void BattlePartyMenu_PrintRestorePPPage(BattlePartyMenu *menu) {
         }
     }
     if (GetItemAttr(menu->context->item, ITEMATTR_PP_RESTORE_ALL, menu->context->heapID) == 0) {
-        BattlePartyMenu_PrintPrompt(menu, 94);
+        BattlePartyMenu_PrintPrompt(menu, msg_0006_00094);
     }
     ScheduleWindowCopyToVram(&menu->pageWindows[1]);
     ScheduleWindowCopyToVram(&menu->pageWindows[2]);
@@ -2615,7 +2619,7 @@ void BattlePartyMenu_PrintContestForgetMovePage(BattlePartyMenu *menu) {
     FillWindowPixelBuffer(&menu->pageWindows[6], 0);
     BattlePartyMenu_PrintMonName(menu, 0, 0, menu->context->selectedMon, 0, 0);
     BattlePartyMenu_PrintPPLabel(menu, 2, 0, 0);
-    string = NewString_ReadMsgData(menu->msgData, 57);
+    string = NewString_ReadMsgData(menu->msgData, msg_0006_00057);
     AddTextPrinterParameterizedWithColor(&menu->pageWindows[4], 0, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);
     String_Delete(string);
     ScheduleWindowCopyToVram(&menu->pageWindows[4]);
@@ -2627,7 +2631,7 @@ void BattlePartyMenu_PrintContestForgetMovePage(BattlePartyMenu *menu) {
         BattlePartyMenu_PrintMovePP(menu, 3, move->pp, move->maxPP);
     } else {
         pp = GetMoveAttr(menu->context->move, MOVEATTR_PP);
-        BattlePartyMenu_PrintMoveName(menu, menu->context->move, 1, 73, 0, 0, MAKE_TEXT_COLOR(15, 14, 0));
+        BattlePartyMenu_PrintMoveName(menu, menu->context->move, 1, msg_0006_00073, 0, 0, MAKE_TEXT_COLOR(15, 14, 0));
         BattlePartyMenu_PrintMovePP(menu, 3, pp, pp);
     }
     BattlePartyMenu_PrintForgetButtonLabel(menu, 6);
@@ -2682,31 +2686,31 @@ void BattlePartyMenu_BufferItemResultMessage(BattlePartyMenu *menu) {
     }
     prevHp = menu->mons[context->selectedMon].hp;
     if (prevHp == 0 && hp != 0) {
-        BattlePartyMenu_BufferMonMessage(menu, mon, 88);
+        BattlePartyMenu_BufferMonMessage(menu, mon, msg_0006_00088);
     } else if (hp != prevHp) {
-        String *template = NewString_ReadMsgData(menu->msgData, 82);
+        String *template = NewString_ReadMsgData(menu->msgData, msg_0006_00082);
         BufferBoxMonNickname(menu->msgFormat, 0, Mon_GetBoxMon(mon));
         BufferIntegerAsString(menu->msgFormat, 1, hp - menu->mons[context->selectedMon].hp, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
         StringExpandPlaceholders(menu->msgFormat, menu->string, template);
         String_Delete(template);
     } else if (GetItemAttr_PreloadedItemData(itemData, ITEMATTR_PP_RESTORE) || GetItemAttr_PreloadedItemData(itemData, ITEMATTR_PP_RESTORE_ALL)) {
-        ReadMsgDataIntoString(menu->msgData, 87, menu->string);
+        ReadMsgDataIntoString(menu->msgData, msg_0006_00087, menu->string);
     } else if (healed == 1) {
-        BattlePartyMenu_BufferMonMessage(menu, mon, 92);
+        BattlePartyMenu_BufferMonMessage(menu, mon, msg_0006_00092);
     } else if (healed == 2) {
-        BattlePartyMenu_BufferMonMessage(menu, mon, 83);
+        BattlePartyMenu_BufferMonMessage(menu, mon, msg_0006_00083);
     } else if (healed == 4) {
-        BattlePartyMenu_BufferMonMessage(menu, mon, 85);
+        BattlePartyMenu_BufferMonMessage(menu, mon, msg_0006_00085);
     } else if (healed == 8) {
-        BattlePartyMenu_BufferMonMessage(menu, mon, 86);
+        BattlePartyMenu_BufferMonMessage(menu, mon, msg_0006_00086);
     } else if (healed == 0x10) {
-        BattlePartyMenu_BufferMonMessage(menu, mon, 84);
+        BattlePartyMenu_BufferMonMessage(menu, mon, msg_0006_00084);
     } else if (healed == 0x20) {
-        BattlePartyMenu_BufferMonMessage(menu, mon, 90);
+        BattlePartyMenu_BufferMonMessage(menu, mon, msg_0006_00090);
     } else if (healed == 0x40) {
-        BattlePartyMenu_BufferMonMessage(menu, mon, 91);
+        BattlePartyMenu_BufferMonMessage(menu, mon, msg_0006_00091);
     } else {
-        BattlePartyMenu_BufferMonMessage(menu, mon, 89);
+        BattlePartyMenu_BufferMonMessage(menu, mon, msg_0006_00089);
     }
     Heap_Free(itemData);
 }
@@ -2715,7 +2719,7 @@ void BattlePartyMenu_BufferEmbargoMessage(BattlePartyMenu *menu) {
     BattlePartyContext *context = menu->context;
     u8 *partyOrder = &context->partyOrder[context->selectedMon];
     Pokemon *mon = BattleSystem_GetPartyMon(context->battleSystem, context->battlerId, *partyOrder);
-    String *template = NewString_ReadMsgData(menu->msgData, 95);
+    String *template = NewString_ReadMsgData(menu->msgData, msg_0006_00095);
 
     BufferBoxMonNickname(menu->msgFormat, 0, Mon_GetBoxMon(mon));
     BufferMoveName(menu->msgFormat, 1, MOVE_EMBARGO);

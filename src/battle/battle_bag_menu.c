@@ -15,6 +15,9 @@
 #include "battle/battle_main.h"
 #include "battle/battle_system.h"
 #include "battle/battle_util.h"
+#include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0005.h"
+#include "msgdata/msg/msg_0040.h"
 
 #include "bag_cursor.h"
 #include "bg_window.h"
@@ -495,7 +498,7 @@ int BattleBagMenu_TryUseItem(BattleBagMenu *menu) {
         battleUseFunc = GetItemAttr(context->selectedItem, ITEMATTR_BATTLEUSEFUNC, context->heapID);
         if (context->embargo && context->selectedItem != ITEM_GUARD_SPEC_ && battleUseFunc != 3) {
             mon = BattleSystem_GetPartyMon(context->battleSystem, context->battlerId, slot);
-            string = NewString_ReadMsgData(menu->msgData, 46);
+            string = NewString_ReadMsgData(menu->msgData, msg_0005_00046);
             BufferBoxMonNickname(menu->msgFormat, 0, Mon_GetBoxMon(mon));
             BufferMoveName(menu->msgFormat, 1, MOVE_EMBARGO);
             StringExpandPlaceholders(menu->msgFormat, menu->string, string);
@@ -513,8 +516,8 @@ int BattleBagMenu_TryUseItem(BattleBagMenu *menu) {
                 BattleBagMenu_ConsumeItem(context->battleSystem, context->selectedItem, menu->pocket, context->heapID);
                 return 13;
             }
-            msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 40, context->heapID);
-            string = NewString_ReadMsgData(msgData, 37);
+            msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0040_bin, context->heapID);
+            string = NewString_ReadMsgData(msgData, msg_0040_00037);
             BufferPlayersName(menu->msgFormat, 0, context->profile);
             StringExpandPlaceholders(menu->msgFormat, menu->string, string);
             String_Delete(string);
@@ -523,26 +526,26 @@ int BattleBagMenu_TryUseItem(BattleBagMenu *menu) {
             menu->nextState = 8;
             return 9;
         }
-        ReadMsgDataIntoString(menu->msgData, 34, menu->string);
+        ReadMsgDataIntoString(menu->msgData, msg_0005_00034, menu->string);
         BattleBagMenu_ShowMessage(menu);
         menu->nextState = 8;
         return 9;
     }
     if (menu->pocket == 2) {
         if (context->ballBlocked[0] == 1) {
-            ReadMsgDataIntoString(menu->msgData, 44, menu->string);
+            ReadMsgDataIntoString(menu->msgData, msg_0005_00044, menu->string);
             BattleBagMenu_ShowMessage(menu);
             menu->nextState = 8;
             return 9;
         }
         if (context->ballBlocked[1] == 1) {
-            ReadMsgDataIntoString(menu->msgData, 47, menu->string);
+            ReadMsgDataIntoString(menu->msgData, msg_0005_00047, menu->string);
             BattleBagMenu_ShowMessage(menu);
             menu->nextState = 8;
             return 9;
         }
         if (context->ballBlocked[2] == 1) {
-            ReadMsgDataIntoString(menu->msgData, 48, menu->string);
+            ReadMsgDataIntoString(menu->msgData, msg_0005_00048, menu->string);
             BattleBagMenu_ShowMessage(menu);
             menu->nextState = 8;
             return 9;
@@ -550,7 +553,7 @@ int BattleBagMenu_TryUseItem(BattleBagMenu *menu) {
         party = BattleSystem_GetParty(context->battleSystem, context->battlerId);
         pcStorage = BattleSystem_GetPcStorage(context->battleSystem);
         if (Party_GetCount(party) == PARTY_SIZE && PCStorage_FindFirstBoxWithEmptySlot(pcStorage) == NUM_BOXES) {
-            ReadMsgDataIntoString(menu->msgData, 45, menu->string);
+            ReadMsgDataIntoString(menu->msgData, msg_0005_00045, menu->string);
             BattleBagMenu_ShowMessage(menu);
             menu->nextState = 8;
             return 9;
@@ -733,7 +736,7 @@ void BattleBagMenu_LoadBgGraphics(BattleBagMenu *menu) {
 }
 
 void BattleBagMenu_InitText(BattleBagMenu *menu) {
-    menu->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 5, menu->context->heapID);
+    menu->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0005_bin, menu->context->heapID);
     menu->msgPrinter = MessagePrinter_New(15, 14, 0, menu->context->heapID);
     menu->msgFormat = MessageFormat_New(menu->context->heapID);
     menu->string = String_New(0x200, menu->context->heapID);
@@ -877,14 +880,14 @@ void BattleBagMenu_PrintPocketMenuPage(BattleBagMenu *menu) {
     for (i = 0; i < 5; i++) {
         FillWindowPixelBuffer(&menu->pageWindows[i], 0);
     }
-    BattleBagMenu_PrintCenteredText(menu, 0, 0, 4, 7, MAKE_TEXT_COLOR(3, 2, 1));
-    BattleBagMenu_PrintCenteredText(menu, 0, 1, 4, 0x17, MAKE_TEXT_COLOR(3, 2, 1));
-    BattleBagMenu_PrintCenteredText(menu, 1, 2, 4, 7, MAKE_TEXT_COLOR(3, 2, 1));
-    BattleBagMenu_PrintCenteredText(menu, 1, 3, 4, 0x17, MAKE_TEXT_COLOR(3, 2, 1));
-    BattleBagMenu_PrintCenteredText(menu, 2, 7, 4, 7, MAKE_TEXT_COLOR(3, 2, 1));
-    BattleBagMenu_PrintCenteredText(menu, 3, 6, 4, 7, MAKE_TEXT_COLOR(3, 2, 1));
+    BattleBagMenu_PrintCenteredText(menu, 0, msg_0005_00000, 4, 7, MAKE_TEXT_COLOR(3, 2, 1));
+    BattleBagMenu_PrintCenteredText(menu, 0, msg_0005_00001, 4, 0x17, MAKE_TEXT_COLOR(3, 2, 1));
+    BattleBagMenu_PrintCenteredText(menu, 1, msg_0005_00002, 4, 7, MAKE_TEXT_COLOR(3, 2, 1));
+    BattleBagMenu_PrintCenteredText(menu, 1, msg_0005_00003, 4, 0x17, MAKE_TEXT_COLOR(3, 2, 1));
+    BattleBagMenu_PrintCenteredText(menu, 2, msg_0005_00007, 4, 7, MAKE_TEXT_COLOR(3, 2, 1));
+    BattleBagMenu_PrintCenteredText(menu, 3, msg_0005_00006, 4, 7, MAKE_TEXT_COLOR(3, 2, 1));
     if (menu->context->lastUsedItem != ITEM_NONE) {
-        String *string = NewString_ReadMsgData(menu->msgData, 8);
+        String *string = NewString_ReadMsgData(menu->msgData, msg_0005_00008);
         AddTextPrinterParameterizedWithColor(&menu->pageWindows[4], 4, string, 0, 5, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(3, 2, 1), NULL);
         String_Delete(string);
         ScheduleWindowCopyToVram(&menu->pageWindows[4]);
@@ -960,18 +963,18 @@ void BattleBagMenu_PrintPageNumber(BattleBagMenu *menu) {
 
     FillWindowPixelBuffer(&menu->pageWindows[25], 0);
     windows = menu->pageWindows;
-    slash = NewString_ReadMsgData(menu->msgData, 28);
+    slash = NewString_ReadMsgData(menu->msgData, msg_0005_00028);
     width = FontID_String_GetWidth(0, slash, 0);
     // the window is addressed through an integer offset (pointer indexing changes the code)
     x = (GetWindowWidth(PAGE_NUMBER_WINDOW(windows)) * 8 - width) / 2;
     AddTextPrinterParameterizedWithColor(PAGE_NUMBER_WINDOW(windows), 0, slash, x, 4, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     String_Delete(slash);
-    lastPage = NewString_ReadMsgData(menu->msgData, 29);
+    lastPage = NewString_ReadMsgData(menu->msgData, msg_0005_00029);
     BufferIntegerAsString(menu->msgFormat, 0, menu->lastPages[menu->pocket] + 1, 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
     StringExpandPlaceholders(menu->msgFormat, menu->string, lastPage);
     AddTextPrinterParameterizedWithColor(PAGE_NUMBER_WINDOW(windows), 0, menu->string, x + width, 4, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     String_Delete(lastPage);
-    currentPage = NewString_ReadMsgData(menu->msgData, 30);
+    currentPage = NewString_ReadMsgData(menu->msgData, msg_0005_00030);
     BufferIntegerAsString(menu->msgFormat, 0, menu->context->pocketPages[menu->pocket] + 1, 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
     StringExpandPlaceholders(menu->msgFormat, menu->string, currentPage);
     AddTextPrinterParameterizedWithColor(PAGE_NUMBER_WINDOW(windows), 0, menu->string, x - FontID_String_GetWidth(0, menu->string, 0), 4, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
@@ -983,18 +986,18 @@ void BattleBagMenu_PrintPocketName(BattleBagMenu *menu) {
     FillWindowPixelBuffer(&menu->pageWindows[24], 0);
     switch (menu->pocket) {
     case 0:
-        BattleBagMenu_PrintCenteredText(menu, 24, 22, 0, 4, MAKE_TEXT_COLOR(1, 2, 0));
-        BattleBagMenu_PrintCenteredText(menu, 24, 23, 0, 0x14, MAKE_TEXT_COLOR(1, 2, 0));
+        BattleBagMenu_PrintCenteredText(menu, 24, msg_0005_00022, 0, 4, MAKE_TEXT_COLOR(1, 2, 0));
+        BattleBagMenu_PrintCenteredText(menu, 24, msg_0005_00023, 0, 0x14, MAKE_TEXT_COLOR(1, 2, 0));
         break;
     case 1:
-        BattleBagMenu_PrintCenteredText(menu, 24, 24, 0, 4, MAKE_TEXT_COLOR(1, 2, 0));
-        BattleBagMenu_PrintCenteredText(menu, 24, 25, 0, 0x14, MAKE_TEXT_COLOR(1, 2, 0));
+        BattleBagMenu_PrintCenteredText(menu, 24, msg_0005_00024, 0, 4, MAKE_TEXT_COLOR(1, 2, 0));
+        BattleBagMenu_PrintCenteredText(menu, 24, msg_0005_00025, 0, 0x14, MAKE_TEXT_COLOR(1, 2, 0));
         break;
     case 2:
-        BattleBagMenu_PrintCenteredText(menu, 24, 26, 0, 0xC, MAKE_TEXT_COLOR(1, 2, 0));
+        BattleBagMenu_PrintCenteredText(menu, 24, msg_0005_00026, 0, 0xC, MAKE_TEXT_COLOR(1, 2, 0));
         break;
     case 3:
-        BattleBagMenu_PrintCenteredText(menu, 24, 27, 0, 0xC, MAKE_TEXT_COLOR(1, 2, 0));
+        BattleBagMenu_PrintCenteredText(menu, 24, msg_0005_00027, 0, 0xC, MAKE_TEXT_COLOR(1, 2, 0));
         break;
     }
 }
@@ -1007,7 +1010,7 @@ void BattleBagMenu_PrintItemListPage(BattleBagMenu *menu) {
 
 void BattleBagMenu_PrintUseItemName(BattleBagMenu *menu, int slot) {
     Window *window = menu->pageWindows;
-    String *string = NewString_ReadMsgData(menu->msgData, 9);
+    String *string = NewString_ReadMsgData(menu->msgData, msg_0005_00009);
     ItemSlot *items = menu->pocketItems[menu->pocket];
     BufferItemName(menu->msgFormat, 0, items[slot].id);
     StringExpandPlaceholders(menu->msgFormat, menu->string, string);
@@ -1039,7 +1042,7 @@ void BattleBagMenu_PrintUseItemPage(BattleBagMenu *menu) {
     BattleBagMenu_PrintUseItemName(menu, position + page * 6);
     BattleBagMenu_PrintItemQuantity(menu, position + page * 6, 0, 1, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
     BattleBagMenu_PrintItemDescription(menu, position + page * 6);
-    BattleBagMenu_PrintCenteredText(menu, 3, 31, 4, 5, MAKE_TEXT_COLOR(3, 2, 1));
+    BattleBagMenu_PrintCenteredText(menu, 3, msg_0005_00031, 4, 5, MAKE_TEXT_COLOR(3, 2, 1));
 }
 
 void BattleBagMenu_ShowMessage(BattleBagMenu *menu) {

@@ -23,6 +23,7 @@
 #include "battle/battle_util.h"
 #include "battle/party_gauge.h"
 #include "battle/trainer_ai.h"
+#include "msgdata/msg/msg_0197.h"
 
 #include "brightness.h"
 #include "filesystem.h"
@@ -2962,7 +2963,7 @@ void OpponentData_ShowWaitMessage(BattleSystem *battleSystem, OpponentData *oppo
 
     if (opponentData->inputMode == 0) {
         msgData = BattleSystem_GetMessageLoader(battleSystem);
-        msg.id = 923;
+        msg.id = msg_0197_00923;
         msg.tag = TAG_NONE;
         BattleSystem_PrintBattleMessage(battleSystem, msgData, &msg, 0);
         waitingIcon = WaitingIcon_New(BattleSystem_GetWindow(battleSystem, 0), 1);
@@ -4393,13 +4394,13 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
             case 0:
                 msg.tag = TAG_NICKNAME;
                 msg.param[0] = work->battlerId | (work->partySlot << 8);
-                msg.id = 921;
+                msg.id = msg_0197_00921;
                 BattleSystem_PrintBattleMessage(work->battleSystem, loader, &msg, 0);
                 work->state = 3;
                 break;
             case 1:
                 msg.tag = TAG_NONE;
-                msg.id = 1226 + BattleSystem_GetTrainerGender(work->battleSystem, 0);
+                msg.id = msg_0197_01226 + BattleSystem_GetTrainerGender(work->battleSystem, 0);
                 work->printerId = BattleSystem_PrintBattleMessage(work->battleSystem, loader, &msg, BattleSystem_GetTextFrameDelay(work->battleSystem));
                 work->state = 2;
                 break;
@@ -4408,15 +4409,15 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
             if (battleType & BATTLE_TYPE_SAFARI) {
                 msg.tag = TAG_TRNAME;
                 msg.param[0] = BattleSystem_GetTrainerIndex(work->battleSystem, work->battlerId);
-                msg.id = 922;
+                msg.id = msg_0197_00922;
             } else if (battleType & BATTLE_TYPE_PAL_PARK) {
                 msg.tag = TAG_TRNAME;
                 msg.param[0] = BattleSystem_GetTrainerIndex(work->battleSystem, work->battlerId);
-                msg.id = 1222;
+                msg.id = msg_0197_01222;
             } else {
                 msg.tag = TAG_NICKNAME;
                 msg.param[0] = work->battlerId | (work->partySlot << 8);
-                msg.id = 921;
+                msg.id = msg_0197_00921;
             }
             BattleSystem_PrintBattleMessage(work->battleSystem, loader, &msg, 0);
             work->state = 3;
@@ -4664,7 +4665,7 @@ void Task_PlayerSelectMove(SysTask *task, void *data) {
 
             msg.tag = TAG_NICKNAME;
             msg.param[0] = work->battlerId | (work->selectedMonIndex << 8);
-            msg.id = 921;
+            msg.id = msg_0197_00921;
             BattleSystem_PrintBattleMessage(work->battleSystem, loader, &msg, 0);
             BattleInput_EnableBallGauge(battleInput);
             narc0 = NARC_New(NARC_a_0_0_7, HEAP_ID_BATTLE);
@@ -5133,7 +5134,7 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
         break;
     case 9: {
         MsgData *msgData;
-        usedMsg.id = 1206;
+        usedMsg.id = msg_0197_01206;
         usedMsg.tag = TAG_ITEM;
         usedMsg.param[0] = work->bagMenu->item;
         msgData = BattleSystem_GetMessageLoader(work->battleSystem);
@@ -5184,7 +5185,7 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
     } break;
     case 15: {
         MsgData *msgData;
-        battleItemMsg.id = 1203;
+        battleItemMsg.id = msg_0197_01203;
         battleItemMsg.tag = 12;
         battleItemMsg.param[0] = work->battlerId | (work->partyMenu->selectedMonIndex[work->battlerId] << 8);
         switch (work->bagMenu->item) {
@@ -5207,11 +5208,11 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
             battleItemMsg.param[1] = 5;
             break;
         case ITEM_GUARD_SPEC_:
-            battleItemMsg.id = 1204;
+            battleItemMsg.id = msg_0197_01204;
             battleItemMsg.tag = TAG_NONE;
             break;
         case ITEM_DIRE_HIT:
-            battleItemMsg.id = 1205;
+            battleItemMsg.id = msg_0197_01205;
             battleItemMsg.tag = TAG_NICKNAME;
             break;
         }
@@ -5259,12 +5260,12 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
         MsgData *msgData = BattleSystem_GetMessageLoader(work->battleSystem);
         int battlerId = work->partyMenu->args->selectedSlot * 2;
         if (work->partyMenu->args->hp) {
-            hpMsg.id = 1214;
+            hpMsg.id = msg_0197_01214;
             hpMsg.tag = 17;
             hpMsg.param[0] = battlerId | (work->partyMenu->selectedMonIndex[battlerId] << 8);
             hpMsg.param[1] = work->partyMenu->args->hp;
         } else {
-            hpMsg.id = 1250;
+            hpMsg.id = msg_0197_01250;
             hpMsg.tag = TAG_NICKNAME;
             hpMsg.param[0] = battlerId | (work->partyMenu->selectedMonIndex[battlerId] << 8);
         }
@@ -5313,29 +5314,29 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
             count++;
         }
         if (count != 1) {
-            statusMsg.id = 1229;
+            statusMsg.id = msg_0197_01229;
         } else {
             switch (status) {
             case 0:
-                statusMsg.id = 1210;
+                statusMsg.id = msg_0197_01210;
                 break;
             case 1:
-                statusMsg.id = 1207;
+                statusMsg.id = msg_0197_01207;
                 break;
             case 2:
-                statusMsg.id = 1209;
+                statusMsg.id = msg_0197_01209;
                 break;
             case 3:
-                statusMsg.id = 1211;
+                statusMsg.id = msg_0197_01211;
                 break;
             case 4:
-                statusMsg.id = 1208;
+                statusMsg.id = msg_0197_01208;
                 break;
             case 5:
-                statusMsg.id = 1212;
+                statusMsg.id = msg_0197_01212;
                 break;
             case 6:
-                statusMsg.id = 1213;
+                statusMsg.id = msg_0197_01213;
                 break;
             }
         }
@@ -6725,12 +6726,12 @@ Pokepic *BattleControllerOpponent_CreatePokepic(BattleSystem *battleSystem, Poke
 void BattleControllerOpponent_GetReturnMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSwitchMessage *packet, BattleMessage *msg) {
     if (opponentData->battlerType & BATTLER_TYPE_IS_ENEMY) {
         if (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_LINK) {
-            msg->id = 990;
+            msg->id = msg_0197_00990;
             msg->tag = 27;
             msg->param[0] = opponentData->battlerId;
             msg->param[1] = opponentData->battlerId | packet->selectedMonIndex << 8;
         } else {
-            msg->id = 989;
+            msg->id = msg_0197_00989;
             msg->tag = 50;
             msg->param[0] = opponentData->battlerId;
             msg->param[1] = opponentData->battlerId;
@@ -6740,18 +6741,18 @@ void BattleControllerOpponent_GetReturnMessage(BattleSystem *battleSystem, Oppon
         if (!(BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_DOUBLES) && !(BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_LINK)) {
             u16 value = packet->value;
             if (value == 0) {
-                msg->id = 984;
+                msg->id = msg_0197_00984;
             } else if (value < 25) {
-                msg->id = 985;
+                msg->id = msg_0197_00985;
             } else if (value < 50) {
-                msg->id = 988;
+                msg->id = msg_0197_00988;
             } else if (value < 75) {
-                msg->id = 986;
+                msg->id = msg_0197_00986;
             } else {
-                msg->id = 987;
+                msg->id = msg_0197_00987;
             }
         } else {
-            msg->id = 985;
+            msg->id = msg_0197_00985;
         }
         msg->tag = TAG_NICKNAME;
         msg->param[0] = opponentData->battlerId | packet->selectedMonIndex << 8;
@@ -6761,13 +6762,13 @@ void BattleControllerOpponent_GetReturnMessage(BattleSystem *battleSystem, Oppon
 void BattleControllerOpponent_GetSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSwitchMessage *packet, BattleMessage *msg) {
     if (opponentData->battlerType & BATTLER_TYPE_IS_ENEMY) {
         if (!(BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_LINK)) {
-            msg->id = 972;
+            msg->id = msg_0197_00972;
             msg->tag = 50;
             msg->param[0] = opponentData->battlerId;
             msg->param[1] = opponentData->battlerId;
             msg->param[2] = opponentData->battlerId | (packet->selectedMonIndex << 8);
         } else {
-            msg->id = 974;
+            msg->id = msg_0197_00974;
             msg->tag = 27;
             msg->param[0] = opponentData->battlerId;
             msg->param[1] = opponentData->battlerId | (packet->selectedMonIndex << 8);
@@ -6776,18 +6777,18 @@ void BattleControllerOpponent_GetSendOutMessage(BattleSystem *battleSystem, Oppo
         if (!(BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_DOUBLES) && !(BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_LINK)) {
             u16 value = packet->value;
             if (value < 100) {
-                msg->id = 982;
+                msg->id = msg_0197_00982;
             } else if (value < 325) {
-                msg->id = 983;
+                msg->id = msg_0197_00983;
             } else if (value < 550) {
-                msg->id = 981;
+                msg->id = msg_0197_00981;
             } else if (value < 775) {
-                msg->id = 980;
+                msg->id = msg_0197_00980;
             } else {
-                msg->id = 979;
+                msg->id = msg_0197_00979;
             }
         } else {
-            msg->id = 979;
+            msg->id = msg_0197_00979;
         }
         msg->tag = TAG_NICKNAME;
         msg->param[0] = opponentData->battlerId | (packet->selectedMonIndex << 8);
@@ -6808,31 +6809,31 @@ void BattleControllerOpponent_GetEncounterMessage(BattleSystem *battleSystem, Op
     }
     if (battleType & BATTLE_TYPE_LINK) {
         if (battleType & BATTLE_TYPE_FRONTIER) {
-            msg->id = 992;
+            msg->id = msg_0197_00992;
             msg->tag = 59;
             msg->param[0] = enemy1;
             msg->param[1] = enemy1;
             msg->param[2] = enemy2;
             msg->param[3] = enemy2;
         } else if (battleType & BATTLE_TYPE_MULTI) {
-            msg->id = 971;
+            msg->id = msg_0197_00971;
             msg->tag = 26;
             msg->param[0] = enemy1;
             msg->param[1] = enemy2;
         } else {
-            msg->id = 970;
+            msg->id = msg_0197_00970;
             msg->tag = TAG_TRNAME;
             msg->param[0] = enemy1;
         }
     } else if ((battleType & BATTLE_TYPE_TAG) || (battleType & BATTLE_TYPE_MULTI)) {
-        msg->id = 992;
+        msg->id = msg_0197_00992;
         msg->tag = 59;
         msg->param[0] = enemy1;
         msg->param[1] = enemy1;
         msg->param[2] = enemy2;
         msg->param[3] = enemy2;
     } else {
-        msg->id = 969;
+        msg->id = msg_0197_00969;
         msg->tag = 30;
         msg->param[0] = enemy1;
         msg->param[1] = enemy1;
@@ -6854,7 +6855,7 @@ void BattleControllerOpponent_GetFirstSendOutMessage(BattleSystem *battleSystem,
         }
         if (battleType & BATTLE_TYPE_LINK) {
             if (battleType & BATTLE_TYPE_FRONTIER) {
-                msg->id = 991;
+                msg->id = msg_0197_00991;
                 msg->tag = 60;
                 msg->param[0] = battler;
                 msg->param[1] = battler;
@@ -6863,26 +6864,26 @@ void BattleControllerOpponent_GetFirstSendOutMessage(BattleSystem *battleSystem,
                 msg->param[4] = partner;
                 msg->param[5] = partner | (packet->selectedMonIndex[partner] << 8);
             } else if (battleType & BATTLE_TYPE_MULTI) {
-                msg->id = 976;
+                msg->id = msg_0197_00976;
                 msg->tag = 56;
                 msg->param[0] = battler;
                 msg->param[1] = battler | (packet->selectedMonIndex[battler] << 8);
                 msg->param[2] = partner;
                 msg->param[3] = partner | (packet->selectedMonIndex[partner] << 8);
             } else if (battleType & BATTLE_TYPE_DOUBLES) {
-                msg->id = 975;
+                msg->id = msg_0197_00975;
                 msg->tag = 49;
                 msg->param[0] = battler;
                 msg->param[1] = battler | (packet->selectedMonIndex[battler] << 8);
                 msg->param[2] = partner | (packet->selectedMonIndex[partner] << 8);
             } else {
-                msg->id = 974;
+                msg->id = msg_0197_00974;
                 msg->tag = 27;
                 msg->param[0] = battler;
                 msg->param[1] = battler | (packet->selectedMonIndex[battler] << 8);
             }
         } else if ((battleType & BATTLE_TYPE_TAG) || (battleType & BATTLE_TYPE_MULTI)) {
-            msg->id = 991;
+            msg->id = msg_0197_00991;
             msg->tag = 60;
             msg->param[0] = battler;
             msg->param[1] = battler;
@@ -6891,14 +6892,14 @@ void BattleControllerOpponent_GetFirstSendOutMessage(BattleSystem *battleSystem,
             msg->param[4] = partner;
             msg->param[5] = partner | (packet->selectedMonIndex[partner] << 8);
         } else if (battleType & BATTLE_TYPE_DOUBLES) {
-            msg->id = 973;
+            msg->id = msg_0197_00973;
             msg->tag = 57;
             msg->param[0] = battler;
             msg->param[1] = battler;
             msg->param[2] = battler | (packet->selectedMonIndex[battler] << 8);
             msg->param[3] = partner | (packet->selectedMonIndex[partner] << 8);
         } else {
-            msg->id = 972;
+            msg->id = msg_0197_00972;
             msg->tag = 50;
             msg->param[0] = battler;
             msg->param[1] = battler;
@@ -6942,35 +6943,35 @@ void BattleControllerOpponent_GetFirstSendOutMessage(BattleSystem *battleSystem,
 
     if (battleType & BATTLE_TYPE_LINK) {
         if (battleType & BATTLE_TYPE_MULTI) {
-            msg->id = 977;
+            msg->id = msg_0197_00977;
             msg->tag = 49;
             msg->param[0] = battler;
             msg->param[1] = battler | (packet->selectedMonIndex[battler] << 8);
             msg->param[2] = partner | (packet->selectedMonIndex[partner] << 8);
         } else if (battleType & BATTLE_TYPE_DOUBLES) {
-            msg->id = 978;
+            msg->id = msg_0197_00978;
             msg->tag = 9;
             msg->param[0] = battler | (packet->selectedMonIndex[battler] << 8);
             msg->param[1] = partner | (packet->selectedMonIndex[partner] << 8);
         } else {
-            msg->id = 979;
+            msg->id = msg_0197_00979;
             msg->tag = TAG_NICKNAME;
             msg->param[0] = battler | (packet->selectedMonIndex[battler] << 8);
         }
     } else if (battleType & BATTLE_TYPE_MULTI) {
-        msg->id = 993;
+        msg->id = msg_0197_00993;
         msg->tag = 57;
         msg->param[0] = battler;
         msg->param[1] = battler;
         msg->param[2] = battler | (packet->selectedMonIndex[battler] << 8);
         msg->param[3] = partner | (packet->selectedMonIndex[partner] << 8);
     } else if (battleType & BATTLE_TYPE_DOUBLES) {
-        msg->id = 978;
+        msg->id = msg_0197_00978;
         msg->tag = 9;
         msg->param[0] = battler | (packet->selectedMonIndex[battler] << 8);
         msg->param[1] = partner | (packet->selectedMonIndex[partner] << 8);
     } else {
-        msg->id = 979;
+        msg->id = msg_0197_00979;
         msg->tag = TAG_NICKNAME;
         msg->param[0] = battler | (packet->selectedMonIndex[battler] << 8);
     }
@@ -6992,36 +6993,36 @@ void BattleControllerOpponent_GetResultMessage(BattleSystem *battleSystem, Oppon
     switch (outcome) {
     case BATTLE_OUTCOME_WIN:
         if (battleType & BATTLE_TYPE_MULTI) {
-            msg->id = 786;
+            msg->id = msg_0197_00786;
             msg->tag = 26;
             msg->param[0] = enemy1;
             msg->param[1] = enemy2;
         } else {
-            msg->id = 785;
+            msg->id = msg_0197_00785;
             msg->tag = TAG_TRNAME;
             msg->param[0] = enemy1;
         }
         break;
     case BATTLE_OUTCOME_LOSE:
         if (battleType & BATTLE_TYPE_MULTI) {
-            msg->id = 788;
+            msg->id = msg_0197_00788;
             msg->tag = 26;
             msg->param[0] = enemy1;
             msg->param[1] = enemy2;
         } else {
-            msg->id = 787;
+            msg->id = msg_0197_00787;
             msg->tag = TAG_TRNAME;
             msg->param[0] = enemy1;
         }
         break;
     case BATTLE_OUTCOME_DRAW:
         if (battleType & BATTLE_TYPE_MULTI) {
-            msg->id = 790;
+            msg->id = msg_0197_00790;
             msg->tag = 26;
             msg->param[0] = enemy1;
             msg->param[1] = enemy2;
         } else {
-            msg->id = 789;
+            msg->id = msg_0197_00789;
             msg->tag = TAG_TRNAME;
             msg->param[0] = enemy1;
         }
@@ -7044,28 +7045,28 @@ void BattleControllerOpponent_GetRunAwayMessage(BattleSystem *battleSystem, Oppo
         }
     }
     if (playerSide && enemySide) {
-        msg->id = 781;
+        msg->id = msg_0197_00781;
         msg->tag = TAG_NONE;
         BattleSystem_SetBattleOutcomeFlags(battleSystem, 0xC0 | BATTLE_OUTCOME_DRAW);
         return;
     }
     if (playerSide) {
-        msg->id = 781;
+        msg->id = msg_0197_00781;
         msg->tag = TAG_NONE;
         BattleSystem_SetBattleOutcomeFlags(battleSystem, 0xC0 | BATTLE_OUTCOME_LOSE);
         return;
     }
     if (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_MULTI) {
-        msg->id = 792;
+        msg->id = msg_0197_00792;
         msg->tag = 26;
         msg->param[0] = BattleSystem_GetBattlerFromBattlerType(battleSystem, BATTLER_TYPE_ENEMY_SIDE_SLOT_1);
         msg->param[1] = BattleSystem_GetBattlerFromBattlerType(battleSystem, BATTLER_TYPE_ENEMY_SIDE_SLOT_2);
     } else if (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_DOUBLES) {
-        msg->id = 791;
+        msg->id = msg_0197_00791;
         msg->tag = TAG_TRNAME;
         msg->param[0] = BattleSystem_GetBattlerFromBattlerType(battleSystem, BATTLER_TYPE_ENEMY_SIDE_SLOT_1);
     } else {
-        msg->id = 791;
+        msg->id = msg_0197_00791;
         msg->tag = TAG_TRNAME;
         msg->param[0] = BattleSystem_GetBattlerFromBattlerType(battleSystem, BATTLER_TYPE_SOLO_ENEMY);
     }
@@ -7073,7 +7074,7 @@ void BattleControllerOpponent_GetRunAwayMessage(BattleSystem *battleSystem, Oppo
 }
 
 void BattleControllerOpponent_GetForfeitMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleMessage *msg) {
-    msg->id = 956;
+    msg->id = msg_0197_00956;
     msg->tag = TAG_TRNAME;
     if (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_LINK) {
         u32 position = BattleSystem_GetLinkPosition(battleSystem, BattleSystem_GetNetworkId(battleSystem));

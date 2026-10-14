@@ -14,6 +14,8 @@
 #include "battle/battle_system.h"
 #include "battle/battle_util.h"
 #include "battle/battle_recording_stop.h"
+#include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0197.h"
 
 #include "bag.h"
 #include "bag_cursor.h"
@@ -196,8 +198,8 @@ void Battle_BattleInit(OverlayManager *manager) {
     BattleSystem_InitTerrainsAndBalls(battleSystem);
     GF_TouchpadResetSampling();
     GF_TouchpadStartSampling(4);
-    battleSystem->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 197, HEAP_ID_BATTLE);
-    battleSystem->attackMsgData = (void *)NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 3, HEAP_ID_BATTLE);
+    battleSystem->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0197_bin, HEAP_ID_BATTLE);
+    battleSystem->attackMsgData = (void *)NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0003_EVERYWHERE_bin, HEAP_ID_BATTLE);
     battleSystem->msgFormat = MessageFormat_New(HEAP_ID_BATTLE);
     battleSystem->msgBuffer = String_New(320, HEAP_ID_BATTLE);
     MIi_CpuCopy16(PaletteData_GetUnfadedBuf(battleSystem->palette, PLTTBUF_MAIN_BG), battleSystem->bgPaletteBackup, 224);
@@ -1044,9 +1046,9 @@ void Battle_LinkInit(OverlayManager *man, BattleSetup *setup) {
     AddWindowParameterized(work->bgConfig, work->window, 1, 2, 0x13, 0x1B, 4, 0xB, 0x1F);
     FillWindowPixelBuffer(work->window, 0xFF);
     DrawFrameAndWindow2(work->window, FALSE, 1, 0xA);
-    msgData = NewMsgDataFromNarc((MsgDataLoadType)1, (NarcId)0x1B, 0xC5, HEAP_ID_BATTLE);
+    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0197_bin, HEAP_ID_BATTLE);
     string = String_New(0x100, HEAP_ID_BATTLE);
-    ReadMsgDataIntoString(msgData, 0x39B, string);
+    ReadMsgDataIntoString(msgData, msg_0197_00923, string);
     AddTextPrinterParameterized(work->window, 1, string, 0, 0, 0, NULL);
     String_Delete(string);
     DestroyMsgData(msgData);
