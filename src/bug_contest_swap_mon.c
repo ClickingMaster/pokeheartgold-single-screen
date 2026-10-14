@@ -6,6 +6,7 @@
 #include "constants/sndseq.h"
 
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0029.h"
 
 #include "bg_window.h"
 #include "filesystem.h"
@@ -712,7 +713,7 @@ void SwapMonPanel_Draw(SwapMonPanel *panel, SwapMonText *text) {
     hp = GetMonData(mon, MON_DATA_HP, NULL);
     maxHp = GetMonData(mon, MON_DATA_MAX_HP, NULL);
     BufferBoxMonSpeciesName(messageFormat, 0, Mon_GetBoxMon(mon));
-    SwapMonText_PrintString(text, &panel->windows[SWAP_MON_PANEL_WIN_NAME], 4, 4, 1);
+    SwapMonText_PrintString(text, &panel->windows[SWAP_MON_PANEL_WIN_NAME], msg_0029_00004, 4, 1);
     color = MAKE_TEXT_COLOR(7, 8, 0);
     switch (GetMonGender(mon)) {
     case MON_MALE:

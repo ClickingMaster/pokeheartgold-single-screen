@@ -2,6 +2,9 @@
 
 #include "global.h"
 
+#include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0028.h"
+
 #include "frontier_data_access.h"
 #include "heap.h"
 #include "mail_message.h"
@@ -501,8 +504,8 @@ void BattleRoomDownload_GetTrainer(BattleRoomDownload *download, BattleTowerOppo
     out->id = 10000;
     out->trainerClass = ((BattleRoomTrainer *)((u8 *)trainers + offset))->trainerClass;
     if (((BattleRoomTrainer *)((u8 *)trainers + offset))->useDefaultName) {
-        MsgData *msg = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, (NarcId)27, 28, (enum HeapID)11);
-        ReadMsgDataIntoU16Array(msg, (((BattleRoomTrainer *)((u8 *)trainers + offset))->gender) + 33, out->name);
+        MsgData *msg = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0028_bin, HEAP_ID_FIELD2);
+        ReadMsgDataIntoU16Array(msg, (((BattleRoomTrainer *)((u8 *)trainers + offset))->gender) + msg_0028_00033, out->name);
         DestroyMsgData(msg);
     } else {
         MI_CpuCopy8(((BattleRoomTrainer *)((u8 *)trainers + offset))->name, out->name, 16);

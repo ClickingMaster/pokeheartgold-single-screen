@@ -1089,7 +1089,7 @@ void BoxMonSelector_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {
     BoxMonSelector_InitBgLayers(bgConfig);
     gSystem.screensFlipped = TRUE;
     GfGfx_SwapDisplay();
-    GfGfxLoader_GXLoadPal(NARC_a_1_5_1, 0, GF_PAL_LOCATION_MAIN_BG, (enum GFPalSlotOffset)0, 0xC0, heapId);
+    GfGfxLoader_GXLoadPal(NARC_a_1_5_1, 0, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0xC0, heapId);
     GfGfxLoader_LoadCharData(NARC_a_1_5_1, 2, bgConfig, GF_BG_LYR_MAIN_2, 0, 5 << 10, TRUE, heapId);
     BG_FillCharDataRange(bgConfig, GF_BG_LYR_MAIN_0, 0, 1, 0);
 }
@@ -1097,22 +1097,22 @@ void BoxMonSelector_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {
 void BoxMonSelector_InitBgLayers(BgConfig *bgConfig) {
     {
         BgTemplate template = gBoxMonSelectorBgTemplateMain0;
-        InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &template, 0);
+        InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &template, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
     }
     {
         BgTemplate template = gBoxMonSelectorBgTemplateMain1;
-        InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &template, 0);
+        InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &template, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
     }
     {
         BgTemplate template = gBoxMonSelectorBgTemplateMain2;
-        InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &template, 0);
+        InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &template, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
     }
     {
         BgTemplate template = gBoxMonSelectorBgTemplateMain3;
-        InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &template, 0);
+        InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &template, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
     }
 }

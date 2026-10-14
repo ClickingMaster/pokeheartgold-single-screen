@@ -168,24 +168,24 @@ void Frontier_ChangeMode(FrontierWork *work, u8 mode, u16 taskId) {
 }
 
 void *Frontier_GetMapObjectGfx(FrontierWork *work) {
-    return (u8 *)work + 0x24;
+    return work->objectGfx;
 }
 
 void *Frontier_GetMapObjects(FrontierWork *work) {
-    return (u8 *)work + 0x84;
+    return work->objects;
 }
 
 void *Frontier_GetMapObject(FrontierWork *work, int index) {
-    return (u8 *)work + 0x84 + index * 0x3c;
+    return &work->objects[index];
 }
 
 void *Frontier_GetMapSpriteState(FrontierWork *work) {
-    return (u8 *)work + 0xa04;
+    return work->spriteState;
 }
 
 void Frontier_ResetMapSpriteState(FrontierWork *work) {
     int i;
-    MI_CpuFill8((u8 *)work + 0xa04, 0, 8);
+    MI_CpuFill8(work->spriteState, 0, 8);
     i = 0;
     do {
         i++;

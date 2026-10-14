@@ -76,7 +76,7 @@ FontSystem *FontSystem_NewInit(int count, enum HeapID heapId) {
     FontSystem *system = Heap_Alloc(heapId, sizeof(FontSystem));
     GF_ASSERT(system != NULL);
     for (int i = 0; i < 12; i++) {
-        system->cellFiles[i] = GfGfxLoader_GetCellBank((NarcId)35, i, FALSE, &system->cellBanks[i], heapId);
+        system->cellFiles[i] = GfGfxLoader_GetCellBank(NARC_a_0_3_5, i, FALSE, &system->cellBanks[i], heapId);
         GF_ASSERT(system->cellFiles[i] != NULL);
     }
     system->objects = Heap_Alloc(heapId, sizeof(TextOBJ) * count);

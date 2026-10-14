@@ -1,6 +1,10 @@
 #include "global.h"
 
 #include "constants/items.h"
+#include "constants/save_arrays.h"
+
+#include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0021.h"
 
 #include "apricorn_internal.h"
 
@@ -74,7 +78,7 @@ u32 ApricornJuiceRecord_sizeof(void) {
 }
 
 SaveApricornBox *Save_ApricornBox_Get(SaveData *saveData) {
-    return SaveArray_Get(saveData, 0x26);
+    return SaveArray_Get(saveData, SAVE_APRICORN_BOX);
 }
 
 void InitApricornBox(SaveApricornBox *apricornBox) {
@@ -199,7 +203,7 @@ BOOL ApricornBox_QueueApricorn(SaveApricornBox *box, int apricorn, u32 value) {
         if (box->juiceServings == 0) {
             box->juiceAgingSteps = value;
         }
-        *(u32 *)((u8 *)box + 0x1C) &= 0xC0000000;
+        box->mixWord &= 0xC0000000;
         ApricornBox_TakeApricorn(box, apricorn, 1);
         return TRUE;
     }
@@ -259,7 +263,7 @@ BOOL ApricornBox_GetJuice(SaveApricornBox *box, int index, ApricornJuice *out) {
         dst[2] = src[2];
         dst[3] = src[3];
     } else {
-        if (*((u8 *)box + 9) == 0) {
+        if (box->juiceServings == 0) {
             ClearApricornJuice(out);
             return FALSE;
         }
@@ -556,7 +560,7 @@ void ApricornBox_StoreJuiceRecords(SaveApricornBox *box, ApricornRecord *records
                 } while (foundIndex < limit);
             }
         }
-        *(ApricornRecord *)((u8 *)box + 0x20 + destIndex * 0x20) = *records;
+        *(ApricornRecord *)box->juiceRecords[destIndex] = *records;
 next_record:
         records++;
         outerIndex++;
@@ -566,8 +570,8 @@ next_record:
 String *ApricornBox_GetJuiceName(SaveApricornBox *box, int type, u32 heapId) {
     String *result = String_New(9, (enum HeapID)heapId);
     if (type < 5) {
-        MsgData *msgData = NewMsgDataFromNarc((MsgDataLoadType)1, (NarcId)0x1B, 0x15, (enum HeapID)heapId);
-        ReadMsgDataIntoString(msgData, type + 0xE, result);
+        MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0021_bin, (enum HeapID)heapId);
+        ReadMsgDataIntoString(msgData, type + msg_0021_00014, result);
         DestroyMsgData(msgData);
     } else if (type < 8) {
         u32 offset = (u8)(type - 5) << 5;
@@ -583,8 +587,8 @@ String *ApricornBox_GetJuiceFlavorName(SaveApricornBox *box, u16 type, u32 heapI
     MsgData *msgData;
     String *result;
     ApricornBox_GetJuice(box, type, &data);
-    msgData = NewMsgDataFromNarc((MsgDataLoadType)1, (NarcId)0x1B, 0x15, (enum HeapID)heapId);
-    result = NewString_ReadMsgData(msgData, ApricornJuice_GetFlavorNameIndex(&data) + 0x13);
+    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0021_bin, (enum HeapID)heapId);
+    result = NewString_ReadMsgData(msgData, ApricornJuice_GetFlavorNameIndex(&data) + msg_0021_00019);
     DestroyMsgData(msgData);
     return result;
 }

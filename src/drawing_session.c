@@ -140,8 +140,8 @@ BOOL DrawingSession_Init(OverlayManager *man, int *state) {
         HBlankInterruptDisable();
         GfGfx_DisableEngineAPlanes();
         GfGfx_DisableEngineBPlanes();
-        GX_SetVisiblePlane(0);
-        GXS_SetVisiblePlane(0);
+        GX_SetVisiblePlane(GX_PLANEMASK_NONE);
+        GXS_SetVisiblePlane(GX_PLANEMASK_NONE);
         Heap_Create(HEAP_ID_3, HEAP_ID_39, 0x40000);
         work = OverlayManager_CreateAndGetData(man, sizeof(DrawingSessionWork), HEAP_ID_39);
         memset(work, 0, sizeof(DrawingSessionWork));

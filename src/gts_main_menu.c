@@ -2,6 +2,8 @@
 
 #include "constants/sndseq.h"
 
+#include "msgdata/msg/msg_0775.h"
+
 #include "bg_window.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
@@ -290,7 +292,7 @@ void GtsMainMenu_RemoveWindows(GtsApp *app) {
 
 void GtsMainMenu_CreateStrings(GtsApp *app) {
     app->msgBuffer = String_New(180, HEAP_ID_61);
-    app->titleString = NewString_ReadMsgData(app->gtsMsgData, 39); // GLOBAL TRADE SYSTEM
+    app->titleString = NewString_ReadMsgData(app->gtsMsgData, msg_0775_00039); // GLOBAL TRADE SYSTEM
 }
 
 void GtsMainMenu_DeleteStrings(GtsApp *app) {
@@ -345,7 +347,7 @@ int GtsMainMenu_WaitFadeIn2(GtsApp *app) {
 }
 
 int GtsMainMenu_ShowPrompt(GtsApp *app) {
-    GtsMainMenu_PrintMessage(app, 4, 1, 0, 0xF0F); // Are you seeking or offering a Pokemon?
+    GtsMainMenu_PrintMessage(app, msg_0775_00004, 1, 0, 0xF0F); // Are you seeking or offering a Pokemon?
     Gts_SetState(app, GTS_MAIN_MENU_STATE_WAIT_TEXT, GTS_MAIN_MENU_STATE_HANDLE_INPUT);
     Sprite_SetAnimActiveFlag(app->cursorSprite, TRUE);
     Gts_StartCountingBoxMons(app);
@@ -371,7 +373,7 @@ void GtsMainMenu_SelectButton(GtsApp *app, int button) {
             PlaySE(SEQ_SE_DP_SELECT);
         } else {
             Sprite_SetAnimActiveFlag(app->cursorSprite, FALSE);
-            GtsMainMenu_PrintMessage(app, 34, 1, 0, 0xF0F); // Please wait a while.
+            GtsMainMenu_PrintMessage(app, msg_0775_00034, 1, 0, 0xF0F); // Please wait a while.
             Gts_SetState(app, GTS_MAIN_MENU_STATE_WAIT_TEXT_AND_PAUSE, GTS_MAIN_MENU_STATE_SHOW_PROMPT);
             PlaySE(SEQ_SE_DP_BOX03);
             app->waitFrames = 0;
@@ -384,7 +386,7 @@ void GtsMainMenu_SelectButton(GtsApp *app, int button) {
         PlaySE(SEQ_SE_DP_SELECT);
         break;
     case 2:
-        GtsMainMenu_PrintPrompt(app, 7, Gts_GetTextFrameDelay(app), 0, 0xF0F); // Disconnect?
+        GtsMainMenu_PrintPrompt(app, msg_0775_00007, Gts_GetTextFrameDelay(app), 0, 0xF0F); // Disconnect?
         Gts_SetState(app, GTS_MAIN_MENU_STATE_WAIT_TEXT, GTS_MAIN_MENU_STATE_SHOW_EXIT_PROMPT);
         Sprite_SetAnimActiveFlag(app->cursorSprite, FALSE);
         PlaySE(SEQ_SE_DP_SELECT);
@@ -406,7 +408,7 @@ int GtsMainMenu_HandleInput(GtsApp *app) {
     }
 
     if (gSystem.newKeys & PAD_BUTTON_B) {
-        GtsMainMenu_PrintPrompt(app, 7, Gts_GetTextFrameDelay(app), 0, 0xF0F); // Disconnect?
+        GtsMainMenu_PrintPrompt(app, msg_0775_00007, Gts_GetTextFrameDelay(app), 0, 0xF0F); // Disconnect?
         Gts_SetState(app, GTS_MAIN_MENU_STATE_WAIT_TEXT, GTS_MAIN_MENU_STATE_SHOW_EXIT_PROMPT);
         Sprite_SetAnimActiveFlag(app->cursorSprite, FALSE);
     } else if (gSystem.newKeys & PAD_BUTTON_A) {

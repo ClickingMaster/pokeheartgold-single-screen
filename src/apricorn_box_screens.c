@@ -6,6 +6,8 @@
 #include "constants/sndseq.h"
 
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0021.h"
+#include "msgdata/msg/msg_0022.h"
 
 #include "apricorn_box_overlay_internal.h"
 #include "bg_window.h"
@@ -839,7 +841,7 @@ void ApricornBoxScreen_DrawScreen(ApricornBoxScreen *screen) {
     u8 mode;
     ApricornBoxScreen_DrawCloseButton(screen, 0);
     ApricornBoxScreen_UpdateCursor(screen);
-    ReadMsgDataIntoString(screen->msgData, 0, screen->string);
+    ReadMsgDataIntoString(screen->msgData, msg_0021_00000, screen->string);
     width = (u8)FontID_String_GetWidth(0, screen->string, 0);
     x = (80 - width) / 2;
     AddTextPrinterParameterizedWithColor(&screen->windows[3], 0, screen->string, x, 0, TEXT_SPEED_INSTANT, MAKE_TEXT_COLOR(15, 2, 0), NULL);
@@ -894,7 +896,7 @@ void ApricornBoxScreen_DrawConfirmButton(ApricornBoxScreen *screen, int index, i
 
     Window *window = &screen->windows[index + 6];
     FillWindowPixelBuffer(window, 0);
-    ReadMsgDataIntoString(screen->msgData, index + 5, screen->string2);
+    ReadMsgDataIntoString(screen->msgData, index + msg_0021_00005, screen->string2);
     width.value = FontID_String_GetWidth(4, screen->string2, 0);
     AddTextPrinterParameterizedWithColor(window, 4, screen->string2, (48 - width.value) / 2, 0, TEXT_SPEED_NOTRANSFER, sApricornBoxConfirmButtonColors[index], NULL);
     ScheduleWindowCopyToVram(window);
@@ -986,7 +988,7 @@ void ApricornBoxScreen_ShowQuantityPanel(ApricornBoxScreen *screen, int show) {
         FillWindowPixelBuffer(&screen->windows[5], 0);
         AddTextPrinterParameterizedWithColor(&screen->windows[5], 0, screen->apricornNames[screen->selectedApricorn], 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
         ScheduleWindowCopyToVram(&screen->windows[5]);
-        ReadMsgDataIntoString(screen->msgData, 26, screen->string2);
+        ReadMsgDataIntoString(screen->msgData, msg_0021_00026, screen->string2);
         FillWindowPixelBuffer(&screen->windows[10], 0);
         AddTextPrinterParameterizedWithColor(&screen->windows[10], 0, screen->string2, 2, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
         ScheduleWindowCopyToVram(&screen->windows[10]);
@@ -1100,7 +1102,7 @@ void ApricornBoxScreen_PrintJuiceTaste(ApricornBoxScreen *screen) {
         }
         AddTextPrinterParameterized((Window *)((u8 *)screen + offset), 1, screen->string2, 0, 32, TEXT_SPEED_NOTRANSFER, NULL);
     } else if ((u8)(screen->juice.numEntries + 255) <= 1) {
-        ReadMsgDataIntoString(screen->msgData, 122, screen->string2);
+        ReadMsgDataIntoString(screen->msgData, msg_0021_00122, screen->string2);
         AddTextPrinterParameterized((Window *)((u8 *)screen + offset), 1, screen->string2, 0, (screen->juice.numEntries - 1) * 16 + 16, TEXT_SPEED_NOTRANSFER, NULL);
     }
     ScheduleWindowCopyToVram((Window *)((u8 *)screen + offset));
@@ -1386,14 +1388,14 @@ void ApricornBoxScreen_LoadBgGraphics(ApricornBoxScreen *screen) {
     LoadUserFrameGfx2(screen->bgConfig, GF_BG_LYR_MAIN_0, 1, 13, screen->frame, screen->heapId);
     LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_12_OFFSET, screen->heapId);
     LoadFontPal1(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_12_OFFSET, screen->heapId);
-    G2x_SetBlendAlpha_((u32)&reg_G2_BLDCNT, 0, 8, 6, 26);
+    G2x_SetBlendAlpha_((u32)&reg_G2_BLDCNT, GX_BLEND_PLANEMASK_NONE, GX_BLEND_PLANEMASK_BG3, 6, 26);
 }
 
 #pragma force_active reset
 
 void ApricornBoxScreen_FreeBgGraphics(ApricornBoxScreen *screen) {
     NARC_Delete(screen->narc);
-    G2x_SetBlendAlpha_((u32)&reg_G2_BLDCNT, 0, 0, 31, 0);
+    G2x_SetBlendAlpha_((u32)&reg_G2_BLDCNT, GX_BLEND_PLANEMASK_NONE, GX_BLEND_PLANEMASK_NONE, 31, 0);
 }
 
 #pragma force_active on
@@ -1406,13 +1408,13 @@ void ApricornBoxScreen_InitStrings(ApricornBoxScreen *screen) {
     screen->msgFormat = MessageFormat_New_Custom(16, 32, screen->heapId);
     screen->string = String_New(256, screen->heapId);
     screen->string2 = String_New(256, screen->heapId);
-    screen->closeText = NewString_ReadMsgData(screen->msgData, 1);
-    screen->numberTemplate = NewString_ReadMsgData(screen->msgData, 25);
+    screen->closeText = NewString_ReadMsgData(screen->msgData, msg_0021_00001);
+    screen->numberTemplate = NewString_ReadMsgData(screen->msgData, msg_0021_00025);
     for (i = 0; i < 22; i++) {
-        screen->unk_78[i] = NewString_ReadMsgData(screen->msgData, i + 27);
+        screen->unk_78[i] = NewString_ReadMsgData(screen->msgData, i + msg_0021_00027);
     }
     for (j = 0; j < 7; j++) {
-        screen->apricornNames[j] = NewString_ReadMsgData(screen->msgData, j + 7);
+        screen->apricornNames[j] = NewString_ReadMsgData(screen->msgData, j + msg_0021_00007);
     }
 }
 
@@ -1662,7 +1664,7 @@ void ApricornBoxScreen_ReadMessage(ApricornBoxScreen *screen, int msgNo) {
         break;
     case 21: {
         int juice = ApricornJuice_GetFlavorNameIndex(screen->juiceRecord);
-        ReadMsgDataIntoString(screen->msgData, juice + 19, screen->string);
+        ReadMsgDataIntoString(screen->msgData, juice + msg_0021_00019, screen->string);
         BufferString(screen->msgFormat, 0, screen->string, 2, 0, 2);
         BufferIntegerAsString(screen->msgFormat, 1, screen->flavorTotal, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
         BufferIntegerAsString(screen->msgFormat, 2, screen->juiceMildness, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
@@ -1670,10 +1672,10 @@ void ApricornBoxScreen_ReadMessage(ApricornBoxScreen *screen, int msgNo) {
         break;
     }
     default:
-        ReadMsgDataIntoString(screen->msgData, msgNo + 27, screen->string2);
+        ReadMsgDataIntoString(screen->msgData, msgNo + msg_0021_00027, screen->string2);
         return;
     }
-    ReadMsgDataIntoString(screen->msgData, msgNo + 27, screen->string);
+    ReadMsgDataIntoString(screen->msgData, msgNo + msg_0021_00027, screen->string);
     StringExpandPlaceholders(screen->msgFormat, screen->string2, screen->string);
 }
 
@@ -2671,13 +2673,13 @@ void AprijuiceScreen_DrawScreen(AprijuiceScreen *screen) {
     int i;
     Window *windows;
     AprijuiceScreen_DrawButtons(screen, 2);
-    ReadMsgDataIntoString(screen->msgData, 0, screen->string2);
+    ReadMsgDataIntoString(screen->msgData, msg_0022_00000, screen->string2);
     AddTextPrinterParameterizedWithColor(&screen->windows[3], 0, screen->string2, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     ScheduleWindowCopyToVram(&screen->windows[3]);
     i = 0;
     windows = screen->windows;
     for (; i < 5; i++) {
-        ReadMsgDataIntoString(screen->msgData, sAprijuiceStatOrder[i] + 5, screen->string2);
+        ReadMsgDataIntoString(screen->msgData, sAprijuiceStatOrder[i] + msg_0022_00005, screen->string2);
         AddTextPrinterParameterizedWithColor(&windows[i + 5], 0, screen->string2, 4, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
         ScheduleWindowCopyToVram(&windows[i + 5]);
     }
@@ -2738,7 +2740,7 @@ void AprijuiceScreen_DrawButtons(AprijuiceScreen *screen, u32 state) {
     case 2:
         FillWindowPixelBuffer(&screen->windows[1], 0);
         for (i = 0; i < 2; i++) {
-            ReadMsgDataIntoString(screen->msgData, i + 1, screen->string2);
+            ReadMsgDataIntoString(screen->msgData, i + msg_0022_00001, screen->string2);
             AddTextPrinterParameterizedWithColor(&screen->windows[1], 4, screen->string2, 0, 4 + i * 24, TEXT_SPEED_NOTRANSFER, sAprijuiceButtonColors[i], NULL);
             Sprite_SetDrawFlag(screen->sprites[i], TRUE);
         }
@@ -2771,7 +2773,7 @@ BOOL AprijuiceScreen_PlayDrinkAnim(AprijuiceScreen *screen) {
         }
         AprijuiceScreen_DrawButtons(screen, 3);
         AprijuiceScreen_DrawMessageBox(screen);
-        AprijuiceScreen_PrintMessage(screen, 0);
+        AprijuiceScreen_PrintMessage(screen, msg_0022_00000);
         Sprite_SetDrawFlag(screen->sprites[2], TRUE);
         Sprite_SetAnimCtrlSeq(screen->sprites[2], 10);
         Sprite_ResetAnimCtrlState(screen->sprites[2]);
@@ -2827,7 +2829,7 @@ BOOL AprijuiceScreen_PrintNothingChanged(AprijuiceScreen *screen) {
     switch (screen->animState) {
     case 0:
         AprijuiceScreen_DrawMessageBox(screen);
-        AprijuiceScreen_PrintMessage(screen, 1);
+        AprijuiceScreen_PrintMessage(screen, msg_0022_00001);
         screen->animState++;
         break;
     case 1:
@@ -2880,9 +2882,9 @@ BOOL AprijuiceScreen_ShowStatChange(AprijuiceScreen *screen) {
         AprijuiceScreen_DrawStatStars(screen, &screen->mons[screen->selectedMon], (u8)stat);
         AprijuiceScreen_DrawMessageBox(screen);
         if (screen->starDelta[screen->stat] < 0) {
-            AprijuiceScreen_PrintMessage(screen, stat + 7);
+            AprijuiceScreen_PrintMessage(screen, stat + msg_0022_00007);
         } else {
-            AprijuiceScreen_PrintMessage(screen, stat + 2);
+            AprijuiceScreen_PrintMessage(screen, stat + msg_0022_00002);
         }
         screen->animState++;
         break;
@@ -3017,12 +3019,12 @@ void AprijuiceScreen_LoadBgGraphics(AprijuiceScreen *screen) {
     screen->narc = narc;
     LoadUserFrameGfx2(screen->bgConfig, GF_BG_LYR_MAIN_1, 1, 13, screen->frame, screen->heapId);
     LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_12_OFFSET, screen->heapId);
-    G2x_SetBlendAlpha_((u32)&reg_G2_BLDCNT, 1, 14, 6, 26);
+    G2x_SetBlendAlpha_((u32)&reg_G2_BLDCNT, GX_BLEND_PLANEMASK_BG0, GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3, 6, 26);
 }
 
 void AprijuiceScreen_FreeBgGraphics(AprijuiceScreen *screen) {
     NARC_Delete(screen->narc);
-    G2x_SetBlendAlpha_((u32)&reg_G2_BLDCNT, 0, 0, 31, 0);
+    G2x_SetBlendAlpha_((u32)&reg_G2_BLDCNT, GX_BLEND_PLANEMASK_NONE, GX_BLEND_PLANEMASK_NONE, 31, 0);
 }
 
 void AprijuiceScreen_InitStrings(AprijuiceScreen *screen) {
@@ -3034,10 +3036,10 @@ void AprijuiceScreen_InitStrings(AprijuiceScreen *screen) {
     screen->msgFormat = MessageFormat_New_Custom(16, 16, screen->heapId);
     screen->string = String_New(256, screen->heapId);
     screen->string2 = String_New(256, screen->heapId);
-    screen->levelTemplate = NewString_ReadMsgData(screen->msgData, 4);
+    screen->levelTemplate = NewString_ReadMsgData(screen->msgData, msg_0022_00004);
     i = 0;
     do {
-        screen->genderSymbols[i] = NewString_ReadMsgData(screen->msgData, i + 10);
+        screen->genderSymbols[i] = NewString_ReadMsgData(screen->msgData, i + msg_0022_00010);
         i++;
     } while (i < 2);
 }

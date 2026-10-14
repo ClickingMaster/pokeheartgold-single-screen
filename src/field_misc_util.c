@@ -1,6 +1,8 @@
 #include "global.h"
 
 #include "constants/heap.h"
+#include "constants/items.h"
+#include "constants/pokemon.h"
 
 #include "field_system.h"
 #include "heap.h"
@@ -64,7 +66,7 @@ u32 CountDigits(u32 value) {
 }
 
 BOOL ItemIsTMOrHM(u16 item) {
-    if (item >= 328 && item <= 427) {
+    if (item >= ITEM_TM01 && item <= ITEM_HM08) {
         return TRUE;
     }
     return FALSE;
@@ -181,7 +183,7 @@ u16 Save_GetPartyLead(SaveData *saveData) {
 
     for (i = 0; i < count; i++) {
         void *mon = Party_GetMonByIndex(SaveArray_Party_Get(saveData), i);
-        if (GetMonData(mon, 0x4C, NULL) == 0) {
+        if (GetMonData(mon, MON_DATA_IS_EGG, NULL) == 0) {
             return i;
         }
     }
@@ -194,7 +196,7 @@ u16 Save_GetPartyLeadAlive(SaveData *saveData) {
 
     for (i = 0; i < count; i++) {
         void *mon = Party_GetMonByIndex(SaveArray_Party_Get(saveData), i);
-        if (GetMonData(mon, 0x4C, NULL) == 0 && GetMonData(mon, 0xA3, NULL) != 0) {
+        if (GetMonData(mon, MON_DATA_IS_EGG, NULL) == 0 && GetMonData(mon, MON_DATA_HP, NULL) != 0) {
             return i;
         }
     }

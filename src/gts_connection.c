@@ -1,6 +1,9 @@
 #include "global.h"
 
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0775.h"
+#include "msgdata/msg/msg_0778.h"
+#include "msgdata/msg/msg_0800.h"
 
 #include "bg_window.h"
 #include "font.h"
@@ -187,7 +190,7 @@ int GtsConnection_Init(GtsApp *app, int state) {
         if (args->connectDirectly != 0) {
             // Connect without asking.
             CommState_InitWfcSession(args->saveData);
-            Gts_PrintMessage(app, app->wifiMsgData, 1, 1, 0xF0F); // Connecting to Nintendo Wi-Fi Connection...
+            Gts_PrintMessage(app, app->wifiMsgData, msg_0778_00001, 1, 0xF0F); // Connecting to Nintendo Wi-Fi Connection...
             Gts_SetState(app, GTS_CONNECTION_STATE_WAIT_TEXT, GTS_CONNECTION_STATE_START_CONNECT);
             Gts_CreateWaitingIcon(app);
         } else {
@@ -394,7 +397,7 @@ void GtsConnection_RemoveWindows(GtsApp *app) {
 void GtsConnection_CreateStrings(GtsApp *app) {
     app->msgBuffer = String_New(180, HEAP_ID_61);
     app->errorBuffer = String_New(256, HEAP_ID_61);
-    app->titleString = NewString_ReadMsgData(app->gtsMsgData, 31); // Nintendo Wi-Fi Connection
+    app->titleString = NewString_ReadMsgData(app->gtsMsgData, msg_0775_00031); // Nintendo Wi-Fi Connection
 }
 
 void GtsConnection_DeleteStrings(GtsApp *app) {
@@ -405,7 +408,7 @@ void GtsConnection_DeleteStrings(GtsApp *app) {
 
 // Also starts counting the Pokemon in the PC while the player answers (without resetting the count).
 int GtsConnection_AskConnect(GtsApp *app) {
-    Gts_PrintMessage(app, app->wifiErrorMsgData, 17, 1, 0xF0F); // Connect to Nintendo Wi-Fi Connection?
+    Gts_PrintMessage(app, app->wifiErrorMsgData, msg_0800_00017, 1, 0xF0F); // Connect to Nintendo Wi-Fi Connection?
     Gts_SetState(app, GTS_CONNECTION_STATE_WAIT_TEXT_AND_SHOW_YES_NO, GTS_CONNECTION_STATE_HANDLE_CONNECT_PROMPT);
     app->countingBox = 1;
     return 3;
@@ -415,7 +418,7 @@ int GtsConnection_HandleConnectPrompt(GtsApp *app) {
     int response = Gts_HandleYesNoPrompt(app);
     if (response == YESNORESPONSE_YES) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
-        Gts_PrintMessage(app, app->wifiMsgData, 1, 1, 0xF0F); // Connecting to Nintendo Wi-Fi Connection...
+        Gts_PrintMessage(app, app->wifiMsgData, msg_0778_00001, 1, 0xF0F); // Connecting to Nintendo Wi-Fi Connection...
         Gts_SetState(app, GTS_CONNECTION_STATE_WAIT_TEXT, GTS_CONNECTION_STATE_START_CONNECT);
         Gts_CreateWaitingIcon(app);
     } else if (response == YESNORESPONSE_NO) {
@@ -428,7 +431,7 @@ int GtsConnection_HandleConnectPrompt(GtsApp *app) {
 }
 
 int GtsConnection_AskDisconnect(GtsApp *app) {
-    Gts_PrintMessage(app, app->gtsMsgData, 7, 1, 0xF0F); // Is it OK to disconnect from Nintendo Wi-Fi Connection?
+    Gts_PrintMessage(app, app->gtsMsgData, msg_0775_00007, 1, 0xF0F); // Is it OK to disconnect from Nintendo Wi-Fi Connection?
     Gts_SetState(app, GTS_CONNECTION_STATE_WAIT_TEXT_AND_SHOW_YES_NO, GTS_CONNECTION_STATE_HANDLE_DISCONNECT_MENU);
     return 3;
 }
@@ -461,7 +464,7 @@ done:
 }
 
 int GtsConnection_PrintDisconnecting(GtsApp *app) {
-    Gts_PrintMessage(app, app->wifiErrorMsgData, 26, 1, 0xF0F); // Disconnecting from Nintendo Wi-Fi Connection.
+    Gts_PrintMessage(app, app->wifiErrorMsgData, msg_0800_00026, 1, 0xF0F); // Disconnecting from Nintendo Wi-Fi Connection.
     Gts_SetState(app, GTS_CONNECTION_STATE_WAIT_TEXT, GTS_CONNECTION_STATE_DISCONNECT);
     return 3;
 }
@@ -476,7 +479,7 @@ int GtsConnection_Disconnect(GtsApp *app) {
 
 int GtsConnection_PrintDisconnected(GtsApp *app) {
     WirelessStatusIcon_Destroy();
-    Gts_PrintMessage(app, app->wifiErrorMsgData, 27, 1, 0xF0F); // You have been disconnected from Nintendo Wi-Fi Connection.
+    Gts_PrintMessage(app, app->wifiErrorMsgData, msg_0800_00027, 1, 0xF0F); // You have been disconnected from Nintendo Wi-Fi Connection.
     Gts_SetState(app, GTS_CONNECTION_STATE_WAIT_TEXT_AND_DELAY, GTS_CONNECTION_STATE_FADE_OUT);
     return 3;
 }
@@ -834,7 +837,7 @@ int GtsConnection_PrintServerError(GtsApp *app) {
 int GtsConnection_DisconnectAfterError(GtsApp *app) {
     switch (app->subState) {
     case 0:
-        Gts_PrintMessage(app, app->gtsMsgData, 186, 1, 0xF0F); // Disconnecting from Nintendo Wi-Fi Connection...
+        Gts_PrintMessage(app, app->gtsMsgData, msg_0775_00186, 1, 0xF0F); // Disconnecting from Nintendo Wi-Fi Connection...
         app->subState++;
         break;
     case 1:
@@ -845,7 +848,7 @@ int GtsConnection_DisconnectAfterError(GtsApp *app) {
         }
         break;
     case 2:
-        Gts_PrintMessage(app, app->gtsMsgData, 187, 1, 0xF0F); // You have disconnected from Nintendo Wi-Fi Connection.
+        Gts_PrintMessage(app, app->gtsMsgData, msg_0775_00187, 1, 0xF0F); // You have disconnected from Nintendo Wi-Fi Connection.
         app->subState++;
         break;
     case 3:

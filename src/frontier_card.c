@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include "constants/species.h"
+
 #include "easy_chat.h"
 #include "heap.h"
 #include "location_gmm_dat.h"
@@ -107,14 +109,14 @@ u32 FrontierCard_GetGender(FrontierCard *card) {
 }
 
 u32 FrontierCard_GetSpecies(FrontierCard *card) {
-    if (card->species >= 495) {
+    if (card->species >= SPECIES_BAD_EGG) {
         return 0;
     }
     return card->species;
 }
 
 u32 FrontierCard_GetSanitizedForm(FrontierCard *card) {
-    if (card->species >= 495) {
+    if (card->species >= SPECIES_BAD_EGG) {
         return 0;
     }
     return SanitizeMonForm(card->species, card->form);

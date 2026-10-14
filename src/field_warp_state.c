@@ -1,5 +1,7 @@
 #include "field_warp_state_internal.h"
 
+#include "constants/pokemon.h"
+
 static const u16 sFollowMovement[] = { 73, 1, 33, 1, 74, 1, 254, 0 };
 
 void *BattleSetupSub134_New(int heapId) {
@@ -126,7 +128,7 @@ BOOL FieldTask_Fly(void *task) {
             break;
         }
         if (FollowMon_IsVisible(fs)) {
-            if (FieldSystem_FirstAliveMonHasType(fs, 2)) {
+            if (FieldSystem_FirstAliveMonHasType(fs, TYPE_FLYING)) {
                 kind = 2;
                 FollowMonMood_Add(*(void **)(fs + 0x108), 1);
             } else {
@@ -141,8 +143,8 @@ BOOL FieldTask_Fly(void *task) {
         }
         break;
     case 2: {
-        u32 species = GetMonData(env->mon, 5, 0);
-        u32 form = GetMonData(env->mon, 0x70, 0);
+        u32 species = GetMonData(env->mon, MON_DATA_SPECIES, 0);
+        u32 form = GetMonData(env->mon, MON_DATA_FORM, 0);
         PlayCry((u16)species, (u8)form);
         env->state++;
         break;

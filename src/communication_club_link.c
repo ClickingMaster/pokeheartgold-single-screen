@@ -18,7 +18,7 @@ void CommClubLink_InitDummy(void) {
 void CommClubLink_Init(FieldSystem *fieldSystem) {
     if (gCommClubLink == NULL) {
         FieldComm_RegisterCommands(fieldSystem);
-        gCommClubLink = Heap_Alloc((enum HeapID)15, sizeof(CommClubLink));
+        gCommClubLink = Heap_Alloc(HEAP_ID_15, sizeof(CommClubLink));
         MI_CpuFill8(gCommClubLink, 0, sizeof(CommClubLink));
         gCommClubLink->timer = 50;
         gCommClubLink->task = SysTask_CreateOnMainQueue(CommClubLink_Task, NULL, 10);
@@ -92,7 +92,7 @@ void CommClubLink_StartCardExchange(FieldSystem *fieldSystem) {
         CommPlayerInfo_GetProfile(Comm_GetLocalNetId());
         for (i = 0; i < Comm_CountConnected(); i++) {
             if (gCommClubLink->cards[i] == NULL) {
-                gCommClubLink->cards[i] = Heap_Alloc((enum HeapID)0, 0x66C);
+                gCommClubLink->cards[i] = Heap_Alloc(HEAP_ID_DEFAULT, 0x66C);
             }
         }
         TrainerCardData_Build(0, 0, 0, 0xFF, gCommClubLink->fieldSystem, gCommClubLink->cards[netId]);
@@ -179,7 +179,7 @@ void CommClubLink_IdleLinked(void) {
 
 void CommClubLink_HostInitRoom(void) {
     if (LinkSync_IsSynced(98)) {
-        void *data = Heap_Alloc((enum HeapID)15, CommPlayerManager_sizeof());
+        void *data = Heap_Alloc(HEAP_ID_15, CommPlayerManager_sizeof());
         CommPlayerManager_Init(data, gCommClubLink->fieldSystem, 0);
         CommPlayerManager_ResumeFieldOnce();
         Comm_DisableKeySync();
@@ -200,7 +200,7 @@ void CommClubLink_HostShowRoom(void) {
         CommPlayerInfo_HostRedistribute();
     }
     if (LinkSync_IsSynced(92)) {
-        BeginNormalPaletteFade((enum FadeMode)0, (enum FadeType)1, (enum FadeType)1, 0, 6, 1, (enum HeapID)4);
+        BeginNormalPaletteFade((enum FadeMode)0, (enum FadeType)1, (enum FadeType)1, 0, 6, 1, HEAP_ID_FIELD1);
         ResetVisibleHardwareWindows((PMLCDTarget)0);
         ResetVisibleHardwareWindows((PMLCDTarget)1);
         CommPlayerManager_ResyncLocalPlayer();
@@ -238,7 +238,7 @@ void CommClubLink_HostPlacePlayers(void) {
 
 void CommClubLink_ChildInitRoom(void) {
     if (LinkSync_IsSynced(98)) {
-        void *data = Heap_Alloc((enum HeapID)15, CommPlayerManager_sizeof());
+        void *data = Heap_Alloc(HEAP_ID_15, CommPlayerManager_sizeof());
         CommPlayerManager_Init(data, gCommClubLink->fieldSystem, 0);
         CommPlayerManager_ResumeFieldOnce();
         LinkSync_StartSync(92);
@@ -263,7 +263,7 @@ void CommClubLink_ChildShowRoom(void) {
         CommPlayerManager_SendLocalPosition(0);
         flag = 1;
         Comm_SendFixedCommand(94, &flag);
-        BeginNormalPaletteFade((enum FadeMode)0, (enum FadeType)1, (enum FadeType)1, 0, 6, 1, (enum HeapID)4);
+        BeginNormalPaletteFade((enum FadeMode)0, (enum FadeType)1, (enum FadeType)1, 0, 6, 1, HEAP_ID_FIELD1);
         ResetVisibleHardwareWindows((PMLCDTarget)0);
         ResetVisibleHardwareWindows((PMLCDTarget)1);
         CommClubLink_SetState(CommClubLink_WaitOnSpot, 0);
@@ -301,7 +301,7 @@ void CommClubLink_WaitLeaveSpot(void) {
 
 void CommClubLink_OnEntryResult(int start, Party *party) {
     if (party) {
-        gCommClubLink->party = SaveArray_Party_Alloc((enum HeapID)11);
+        gCommClubLink->party = SaveArray_Party_Alloc(HEAP_ID_FIELD2);
         Party_Copy(party, gCommClubLink->party);
     }
     if (start) {

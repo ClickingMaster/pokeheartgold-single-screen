@@ -3,6 +3,8 @@
 #include "constants/pokemon.h"
 #include "constants/sndseq.h"
 
+#include "msgdata/msg/msg_0775.h"
+
 #include "bg_window.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
@@ -371,7 +373,7 @@ void GtsSearch_RemoveWindows(GtsApp *app) {
 
 void GtsSearch_CreateData(GtsApp *app) {
     app->msgBuffer = String_New(180, HEAP_ID_61);
-    app->titleString = NewString_ReadMsgData(app->gtsMsgData, 42); // SEEK POKEMON
+    app->titleString = NewString_ReadMsgData(app->gtsMsgData, msg_0775_00042); // SEEK POKEMON
     app->searchCursor = Heap_Alloc(HEAP_ID_61, sizeof(GtsSearchCursor));
     MIi_CpuClearFast(0, (u32 *)app->searchCursor, sizeof(GtsSearchCursor));
     app->searchCursor->johtoDexFlags = Gts_CreateJohtoDexFlags(HEAP_ID_61);
@@ -387,7 +389,7 @@ void GtsSearch_FreeData(GtsApp *app) {
 
 int GtsSearch_Start(GtsApp *app) {
     if (app->nextScreenArg == 15) {
-        GtsSearch_PrintMessage(app, 32, 0, 0, 0xF0F); // Touch "SELECT" to set trade partner.
+        GtsSearch_PrintMessage(app, msg_0775_00032, 0, 0, 0xF0F); // Touch "SELECT" to set trade partner.
         if (GX_GetMasterBrightness() == -16) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 16, 1, HEAP_ID_61);
             app->state = GTS_SEARCH_STATE_SCROLL_IN;
@@ -395,7 +397,7 @@ int GtsSearch_Start(GtsApp *app) {
             app->state = GTS_SEARCH_STATE_HANDLE_INPUT;
         }
     } else {
-        GtsSearch_PrintMessage(app, 8, 1, 0, 0xF0F); // What kind of Pokemon are you seeking?
+        GtsSearch_PrintMessage(app, msg_0775_00008, 1, 0, 0xF0F); // What kind of Pokemon are you seeking?
         Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_HANDLE_INPUT);
     }
     Sprite_SetDrawFlag(app->panelSprite, TRUE);
@@ -444,7 +446,7 @@ void GtsSearch_SelectButton(GtsApp *app, int button) {
         app->state = GTS_SEARCH_STATE_START_SEARCH;
         break;
     case 6:
-        GtsSearch_PrintMessage(app, 15, 1, 0, 0xF0F); // Stop searching?
+        GtsSearch_PrintMessage(app, msg_0775_00015, 1, 0, 0xF0F); // Stop searching?
         Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_SHOW_EXIT_PROMPT);
         PlaySE(SEQ_SE_DP_SELECT);
         break;
@@ -461,7 +463,7 @@ int GtsSearch_HandleInput(GtsApp *app) {
         if (gSystem.newKeys & PAD_BUTTON_A) {
             GtsSearch_SelectButton(app, GtsSearch_GetCursorButton(app));
         } else if (gSystem.newKeys & PAD_BUTTON_B) {
-            GtsSearch_PrintMessage(app, 15, 1, 0, 0xF0F); // Stop searching?
+            GtsSearch_PrintMessage(app, msg_0775_00015, 1, 0, 0xF0F); // Stop searching?
             Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_SHOW_EXIT_PROMPT);
             PlaySE(SEQ_SE_DP_SELECT);
         }
@@ -471,16 +473,16 @@ int GtsSearch_HandleInput(GtsApp *app) {
 
 int GtsSearch_StartSearch(GtsApp *app) {
     if (app->searchCriteria.species == SPECIES_NONE) {
-        GtsSearch_PrintMessage(app, 12, 1, 0, 0xF0F); // Please choose the Pokemon you want!
+        GtsSearch_PrintMessage(app, msg_0775_00012, 1, 0, 0xF0F); // Please choose the Pokemon you want!
         Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_HANDLE_INPUT);
         PlaySE(SEQ_SE_DP_BOX03);
     } else if (GtsSearch_IsSameSearch(&app->searchCriteria, &app->lastSearch, app->searchCountry, app->lastSearchCountry)) {
-        GtsSearch_PrintMessage(app, 33, 1, 0, 0xF0F); // Please change your conditions.
+        GtsSearch_PrintMessage(app, msg_0775_00033, 1, 0, 0xF0F); // Please change your conditions.
         Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_HANDLE_INPUT);
         PlaySE(SEQ_SE_DP_BOX03);
     } else {
         PlaySE(SEQ_SE_DP_Z_SEARCH);
-        GtsSearch_PrintMessage(app, 13, 1, 0, 0xF0F); // Searching for the Pokemon you want...
+        GtsSearch_PrintMessage(app, msg_0775_00013, 1, 0, 0xF0F); // Searching for the Pokemon you want...
         Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_SEND_SEARCH);
         Gts_StopAvatarAnims(app);
     }
@@ -590,11 +592,11 @@ int GtsSearch_WaitSearch(GtsApp *app) {
 
 int GtsSearch_ShowResultCount(GtsApp *app) {
     if (app->searchResultCount == 0) {
-        GtsSearch_PrintMessage(app, 14, 1, 0, 0xF0F); // None were found!
+        GtsSearch_PrintMessage(app, msg_0775_00014, 1, 0, 0xF0F); // None were found!
         Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_HANDLE_INPUT);
         PlaySE(SEQ_SE_DP_BOX03);
     } else {
-        GtsSearch_PrintMessage(app, 30, 1, 0, 0xF0F); // A trade partner has been found!
+        GtsSearch_PrintMessage(app, msg_0775_00030, 1, 0, 0xF0F); // A trade partner has been found!
         Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_WAIT_RESULTS_SHOWN);
         app->waitFrames = 0;
     }
@@ -604,7 +606,7 @@ int GtsSearch_ShowResultCount(GtsApp *app) {
 int GtsSearch_WaitResultsShown(GtsApp *app) {
     app->waitFrames++;
     if (app->waitFrames > 45) {
-        GtsSearch_PrintMessage(app, 32, 1, 0, 0xF0F); // Touch "SELECT" to set trade partner.
+        GtsSearch_PrintMessage(app, msg_0775_00032, 1, 0, 0xF0F); // Touch "SELECT" to set trade partner.
         Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_HANDLE_INPUT);
         app->hasSearchResults = TRUE;
     }
@@ -613,14 +615,14 @@ int GtsSearch_WaitResultsShown(GtsApp *app) {
 
 int GtsSearch_SearchFailed(GtsApp *app) {
     app->lastSearch.species = SPECIES_NONE;
-    GtsSearch_PrintMessage(app, 38, 1, 0, 0xF0F); // GTS check failed.
+    GtsSearch_PrintMessage(app, msg_0775_00038, 1, 0, 0xF0F); // GTS check failed.
     Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_HANDLE_INPUT);
     PlaySE(SEQ_SE_DP_BOX03);
     return 3;
 }
 
 int GtsSearch_ServerError(GtsApp *app) {
-    GtsSearch_PrintMessage(app, 153, 4, 0, 0xF0F);
+    GtsSearch_PrintMessage(app, msg_0775_00153, 4, 0, 0xF0F);
     Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT_AND_PAUSE, GTS_SEARCH_STATE_SERVER_ERROR_EXIT);
     app->waitFrames = 0;
     PlaySE(SEQ_SE_DP_BOX03);
@@ -628,7 +630,7 @@ int GtsSearch_ServerError(GtsApp *app) {
 }
 
 int GtsSearch_ServerErrorExit(GtsApp *app) {
-    GtsSearch_PrintMessage(app, 158, 4, 0, 0xF0F);
+    GtsSearch_PrintMessage(app, msg_0775_00158, 4, 0, 0xF0F);
     Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT_AND_PAUSE, GTS_SEARCH_STATE_FADE_OUT);
     Gts_SetNextScreen(app, 0, 0);
     PlaySE(SEQ_SE_DP_BOX03);
@@ -724,7 +726,7 @@ int GtsSearch_FadeOut(GtsApp *app) {
 }
 
 int GtsSearch_AskSpecies(GtsApp *app) {
-    GtsSearch_PrintMessage(app, 9, 1, 0, 0xF0F); // Please choose the Pokemon you want.
+    GtsSearch_PrintMessage(app, msg_0775_00009, 1, 0, 0xF0F); // Please choose the Pokemon you want.
     Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_OPEN_SPECIES_SELECTOR);
     return 3;
 }
@@ -768,7 +770,7 @@ int GtsSearch_HandleSpeciesSelector(GtsApp *app) {
 #pragma force_active reset
 
 int GtsSearch_AskGender(GtsApp *app) {
-    GtsSearch_PrintMessage(app, 10, 1, 0, 0xF0F); // Please choose its gender.
+    GtsSearch_PrintMessage(app, msg_0775_00010, 1, 0, 0xF0F); // Please choose its gender.
     Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_OPEN_GENDER_SELECTOR);
     return 3;
 }
@@ -806,7 +808,7 @@ int GtsSearch_HandleGenderSelector(GtsApp *app) {
 #pragma force_active reset
 
 int GtsSearch_AskLevel(GtsApp *app) {
-    GtsSearch_PrintMessage(app, 11, 1, 0, 0xF0F); // Please choose the level.
+    GtsSearch_PrintMessage(app, msg_0775_00011, 1, 0, 0xF0F); // Please choose the level.
     Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_OPEN_LEVEL_SELECTOR);
     return 3;
 }
@@ -845,7 +847,7 @@ int GtsSearch_HandleLevelSelector(GtsApp *app) {
 #pragma force_active reset
 
 int GtsSearch_AskCountry(GtsApp *app) {
-    GtsSearch_PrintMessage(app, 176, 1, 0, 0xF0F);
+    GtsSearch_PrintMessage(app, msg_0775_00176, 1, 0, 0xF0F);
     Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_OPEN_COUNTRY_SELECTOR);
     return 3;
 }

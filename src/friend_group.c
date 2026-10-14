@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+#include "constants/save_arrays.h"
+
 #include "math_util.h"
 #include "string_util.h"
 
@@ -94,7 +96,7 @@ void Save_FriendGroup_SetLanguage(SAV_FRIEND_GRP *data, int index, u8 language) 
 }
 
 SAV_FRIEND_GRP *Save_FriendGroup_Get(SaveData *save) {
-    return SaveArray_Get(save, 14);
+    return SaveArray_Get(save, SAVE_FRIEND_GROUP);
 }
 
 BOOL Save_FriendGroup_IsGroupValid(SAV_FRIEND_GRP *data, int index) {

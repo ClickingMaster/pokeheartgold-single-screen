@@ -182,7 +182,7 @@ void CommClubButtons_InitBgs(BgConfig *bgConfig) {
         BgTemplate template = {
             0, 0, 0x800, 0, 1, 0, 15, 0, 0, 0, 0, 0, 0
         };
-        InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &template, 0);
+        InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &template, GF_BG_TYPE_TEXT);
         BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 0x20, 0, HEAP_ID_8);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
     }
@@ -191,7 +191,7 @@ void CommClubButtons_InitBgs(BgConfig *bgConfig) {
         BgTemplate template = {
             0, 0, 0x800, 0, 1, 0, 14, 1, 0, 1, 0, 0, 0
         };
-        InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &template, 0);
+        InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &template, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
     }
 
@@ -199,7 +199,7 @@ void CommClubButtons_InitBgs(BgConfig *bgConfig) {
         BgTemplate template = {
             0, 0, 0x800, 0, 1, 0, 13, 1, 0, 2, 0, 0, 0
         };
-        InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &template, 0);
+        InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &template, GF_BG_TYPE_TEXT);
     }
 }
 

@@ -1,5 +1,7 @@
 #include "global_terminal_app_internal.h"
 
+#include "constants/sndseq.h"
+
 // DWC allocations of the Wi-Fi apps run by GlobalTerminalApp_Main (set once the DWC heap exists).
 // The public label _021D1108 in asm/global_terminal_app_data.s is a separate, unreferenced word.
 static NNSFndHeapHandle sDwcHeap;
@@ -21,7 +23,7 @@ BOOL GlobalTerminalApp_Init(OverlayManager *man, int *state) {
     data = OverlayManager_CreateAndGetData(man, sizeof(GlobalTerminalApp), HEAP_ID_123);
     MI_CpuFill8(data, 0, sizeof(GlobalTerminalApp));
     data->args = OverlayManager_GetArgs(man);
-    Sound_SetSceneAndPlayBGM(11, 0x47D, 1);
+    Sound_SetSceneAndPlayBGM(11, SEQ_GS_WIFI_ACCESS, 1);
     return TRUE;
 }
 

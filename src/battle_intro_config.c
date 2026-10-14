@@ -1,3 +1,5 @@
+#include "constants/maps.h"
+#include "constants/pokemon.h"
 #include "constants/sndseq.h"
 #include "constants/species.h"
 #include "constants/trainer_class.h"
@@ -191,8 +193,8 @@ u32 NPCTrainerGetBattleIntroAndMusicParam(u32 trainerClass) {
 
 u32 WildPokemonGetBattleIntroAndMusicParam(void *party, u32 mapId) {
     u32 i;
-    u32 species = GetMonData(GetFirstAliveMonInParty_CrashIfNone(party), 5, NULL);
-    if (mapId == 109) {
+    u32 species = GetMonData(GetFirstAliveMonInParty_CrashIfNone(party), MON_DATA_SPECIES, NULL);
+    if (mapId == MAP_PAL_PARK) {
         return 42;
     }
     for (i = 0; i < 11; i++) {

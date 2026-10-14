@@ -546,8 +546,8 @@ void BallCapsuleEditor_ResetDisplay(enum HeapID heapID) {
     HBlankInterruptDisable();
     GfGfx_DisableEngineAPlanes();
     GfGfx_DisableEngineBPlanes();
-    GX_SetVisiblePlane(0);
-    GXS_SetVisiblePlane(0);
+    GX_SetVisiblePlane(GX_PLANEMASK_NONE);
+    GXS_SetVisiblePlane(GX_PLANEMASK_NONE);
 }
 
 void BallCapsuleEditor_DisableInterrupts(enum HeapID heapID) {

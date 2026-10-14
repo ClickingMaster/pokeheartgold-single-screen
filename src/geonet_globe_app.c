@@ -5,6 +5,7 @@
 #include "constants/sndseq.h"
 
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0186.h"
 
 #include "bg_window.h"
 #include "camera.h"
@@ -210,8 +211,8 @@ BOOL GeonetGlobe_Init(OverlayManager *man, int *state) {
     Main_SetHBlankIntrCB(NULL, NULL);
     GfGfx_DisableEngineAPlanes();
     GfGfx_DisableEngineBPlanes();
-    GX_SetVisiblePlane(0);
-    GXS_SetVisiblePlane(0);
+    GX_SetVisiblePlane(GX_PLANEMASK_NONE);
+    GXS_SetVisiblePlane(GX_PLANEMASK_NONE);
     Heap_Create(HEAP_ID_3, HEAP_ID_49, 0x80000);
     globe = OverlayManager_CreateAndGetData(man, sizeof(GeonetGlobe), HEAP_ID_49);
     memset(globe, 0, sizeof(GeonetGlobe));
@@ -291,7 +292,7 @@ BOOL GeonetGlobe_Main(OverlayManager *man, int *state) {
         }
         break;
     case 2:
-        if (GeonetGlobe_PrintMessage(globe, 0, TRUE) == TRUE) {
+        if (GeonetGlobe_PrintMessage(globe, msg_0186_00000, TRUE) == TRUE) {
             if (globe->playerCountry == 0) {
                 *state = 3;
             } else {
@@ -300,7 +301,7 @@ BOOL GeonetGlobe_Main(OverlayManager *man, int *state) {
         }
         break;
     case 3:
-        if (GeonetGlobe_PrintMessage(globe, 1, TRUE) == TRUE) {
+        if (GeonetGlobe_PrintMessage(globe, msg_0186_00001, TRUE) == TRUE) {
             GeonetGlobe_CreateMenu(globe, &globe->windows[GEONET_GLOBE_WINDOW_LIST], &gGeonetGlobeListWindowTemplate, &sGeonetMenuTemplate, sGeonetMenuEntries);
             *state = 4;
         }
@@ -327,7 +328,7 @@ BOOL GeonetGlobe_Main(OverlayManager *man, int *state) {
         }
         break;
     case 5:
-        if (GeonetGlobe_PrintMessage(globe, 2, TRUE) == TRUE) {
+        if (GeonetGlobe_PrintMessage(globe, msg_0186_00002, TRUE) == TRUE) {
             globe->yesNoMenu = Std_CreateYesNoMenu(globe->bgConfig, &sGeonetYesNoWindowTemplate, 473, 7, globe->heapID);
             *state = 6;
         }
@@ -353,7 +354,7 @@ case6_no:
         *state = 3;
         break;
     case 7:
-        if (GeonetGlobe_PrintMessage(globe, 3, TRUE) == TRUE) {
+        if (GeonetGlobe_PrintMessage(globe, msg_0186_00003, TRUE) == TRUE) {
             globe->selectedCountry = 0;
             msgIds = LocationGmmDatGetDistrictNameMsgIdsPtr(0);
             count = LocationGmmDatGetDistrictCount(0);
@@ -383,7 +384,7 @@ case6_no:
         }
         break;
     case 9:
-        if (GeonetGlobe_PrintMessage(globe, 4, TRUE) == TRUE) {
+        if (GeonetGlobe_PrintMessage(globe, msg_0186_00004, TRUE) == TRUE) {
             globe->selectedRegion = 0;
             placeIndex = LocationGmmDatIndexGetByCountryMsgNo(globe->selectedCountry);
             msgBank = LocationGmmDatGetGmmNo(placeIndex);
@@ -416,7 +417,7 @@ case6_no:
         *state = 12;
         break;
     case 12:
-        if (GeonetGlobe_PrintMessage(globe, 5, TRUE) == TRUE) {
+        if (GeonetGlobe_PrintMessage(globe, msg_0186_00005, TRUE) == TRUE) {
             globe->yesNoMenu = Std_CreateYesNoMenu(globe->bgConfig, &sGeonetYesNoWindowTemplate, 473, 7, globe->heapID);
             *state = 13;
         }
@@ -747,11 +748,11 @@ void GeonetGlobe_InitBgs(GeonetGlobe *globe, NARC *narc) {
     BgClearTilemapBufferAndCommit(globe->bgConfig, GF_BG_LYR_SUB_2);
     InitBgFromTemplate(globe->bgConfig, GF_BG_LYR_SUB_3, &sGeonetBgTemplate_Frame, GF_BG_TYPE_TEXT);
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 5, globe->bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, globe->heapID);
-    GfGfxLoader_GXLoadPalFromOpenNarc(narc, 6, GF_PAL_LOCATION_SUB_BG, (enum GFPalSlotOffset)0, 0x80, globe->heapID);
+    GfGfxLoader_GXLoadPalFromOpenNarc(narc, 6, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0x80, globe->heapID);
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 7, globe->bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, globe->heapID);
     LoadUserFrameGfx2(globe->bgConfig, GF_BG_LYR_SUB_2, 482, 6, (u8)Options_GetFrame(globe->options), globe->heapID);
     LoadUserFrameGfx1(globe->bgConfig, GF_BG_LYR_SUB_2, 473, 7, 0, globe->heapID);
-    LoadFontPal0(GF_PAL_LOCATION_SUB_BG, (enum GFPalSlotOffset)0x80, globe->heapID);
+    LoadFontPal0(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_4_OFFSET, globe->heapID);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_2, 0x20, 0, globe->heapID);
     BG_SetMaskColor(GF_BG_LYR_SUB_2, RGB(19, 26, 17));
     AddWindow(globe->bgConfig, &globe->windows[GEONET_GLOBE_WINDOW_MESSAGE], &sGeonetMessageWindowTemplate);
@@ -763,11 +764,11 @@ void GeonetGlobe_InitBgs(GeonetGlobe *globe, NARC *narc) {
     BgClearTilemapBufferAndCommit(globe->bgConfig, GF_BG_LYR_MAIN_2);
     InitBgFromTemplate(globe->bgConfig, GF_BG_LYR_MAIN_3, &sGeonetBgTemplate_Frame, GF_BG_TYPE_TEXT);
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 5, globe->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, FALSE, globe->heapID);
-    GfGfxLoader_GXLoadPalFromOpenNarc(narc, 6, GF_PAL_LOCATION_MAIN_BG, (enum GFPalSlotOffset)0, 0x80, globe->heapID);
+    GfGfxLoader_GXLoadPalFromOpenNarc(narc, 6, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0x80, globe->heapID);
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 7, globe->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, FALSE, globe->heapID);
     LoadUserFrameGfx1(globe->bgConfig, GF_BG_LYR_MAIN_2, 473, 7, 0, globe->heapID);
-    LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, (enum GFPalSlotOffset)0x80, globe->heapID);
-    LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, (enum GFPalSlotOffset)0x1E0, globe->heapID);
+    LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_4_OFFSET, globe->heapID);
+    LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_15_OFFSET, globe->heapID);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_2, 0x20, 0, globe->heapID);
     BG_SetMaskColor(GF_BG_LYR_MAIN_2, RGB_BLACK);
     string = String_New(16, globe->heapID);
@@ -782,11 +783,11 @@ void GeonetGlobe_InitBgs(GeonetGlobe *globe, NARC *narc) {
     BG_LoadPlttData(GF_BG_LYR_MAIN_2, &colors[0], sizeof(u16), 510);
     AddWindow(globe->bgConfig, &globe->windows[GEONET_GLOBE_WINDOW_EXIT_BUTTON], &sGeonetExitButtonWindowTemplate);
     FillWindowPixelRect(&globe->windows[GEONET_GLOBE_WINDOW_EXIT_BUTTON], 15, 0, 0, 216, 32);
-    ReadMsgDataIntoString(globe->msgData, 16, string);
+    ReadMsgDataIntoString(globe->msgData, msg_0186_00016, string);
     AddTextPrinterParameterized(&globe->windows[GEONET_GLOBE_WINDOW_EXIT_BUTTON], 4, string, 0, 0, TEXT_SPEED_NOTRANSFER, NULL);
     AddWindow(globe->bgConfig, &globe->windows[GEONET_GLOBE_WINDOW_INFO_BUTTON], &sGeonetInfoButtonWindowTemplate);
     FillWindowPixelRect(&globe->windows[GEONET_GLOBE_WINDOW_INFO_BUTTON], 15, 0, 0, 216, 32);
-    ReadMsgDataIntoString(globe->msgData, 13, string);
+    ReadMsgDataIntoString(globe->msgData, msg_0186_00013, string);
     AddTextPrinterParameterized(&globe->windows[GEONET_GLOBE_WINDOW_INFO_BUTTON], 4, string, 0, 0, TEXT_SPEED_NOTRANSFER, NULL);
     String_Delete(string);
     FontID_Release(4);
@@ -907,7 +908,7 @@ void GeonetGlobe_ShowPlayerLocation(GeonetGlobe *globe) {
     DrawFrameAndWindow1(&globe->windows[GEONET_GLOBE_WINDOW_LOCATION], FALSE, 473, 7);
     BufferCountryName(globe->msgFormat, 0, globe->playerCountry);
     BufferCityName(globe->msgFormat, 1, globe->playerCountry, globe->playerRegion);
-    ReadMsgDataIntoString(globe->msgData, 14, template);
+    ReadMsgDataIntoString(globe->msgData, msg_0186_00014, template);
     StringExpandPlaceholders(globe->msgFormat, string, template);
     AddTextPrinterParameterized(&globe->windows[GEONET_GLOBE_WINDOW_LOCATION], 0, string, 0, 0, TEXT_SPEED_INSTANT, NULL);
     String_Delete(template);
@@ -1011,7 +1012,7 @@ void GeonetGlobe_UpdateLocationName(GeonetGlobe *globe) {
     if (globe->showLocationName == FALSE) {
         String *string = String_New(1024, globe->heapID);
         FillWindowPixelRect(&globe->windows[GEONET_GLOBE_WINDOW_MESSAGE], 15, 0, 0, 216, 48);
-        ReadMsgDataIntoString(globe->msgData, 15, string);
+        ReadMsgDataIntoString(globe->msgData, msg_0186_00015, string);
         AddTextPrinterParameterized(&globe->windows[GEONET_GLOBE_WINDOW_MESSAGE], 1, string, 0, 0, TEXT_SPEED_INSTANT, NULL);
         String_Delete(string);
         return;

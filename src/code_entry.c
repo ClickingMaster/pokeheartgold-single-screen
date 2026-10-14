@@ -232,8 +232,8 @@ BOOL CodeEntry_Init(OverlayManager *manager, int *state) {
         WirelessStatusIcon_Create();
         WirelessStatusIcon_ShowOnBothScreens(1, HEAP_ID_108);
     }
-    G2x_SetBlendAlpha_(0x04000050, 0, 6, 0xF, 7);
-    G2x_SetBlendAlpha_(0x04001050, 0, 0xE, 7, 8);
+    G2x_SetBlendAlpha_(REG_BLDCNT_ADDR, GX_BLEND_PLANEMASK_NONE, GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2, 0xF, 7);
+    G2x_SetBlendAlpha_(REG_DB_BLDCNT_ADDR, GX_BLEND_PLANEMASK_NONE, GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3, 7, 8);
     Main_SetVBlankIntrCB((void (*)(void *))CodeEntry_VBlank, app);
     return TRUE;
 }

@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include "constants/std_script.h"
+
 #include "application/choose_starter/choose_starter_sub_res.naix"
 #include "field/field_camera_zoom.h"
 #include "field/field_effect_helpers.h"
@@ -1077,7 +1079,7 @@ BOOL PlayerStepEvent_RepelCounterDecrement(SaveData *saveData, FieldSystem *fiel
     if (*repel != 0) {
         (*repel)--;
         if (*repel == 0) {
-            StartMapSceneScript(fieldSystem, 2022, NULL);
+            StartMapSceneScript(fieldSystem, std_repel_wore_off, NULL);
             return TRUE;
         }
     }

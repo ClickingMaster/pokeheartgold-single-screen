@@ -1,6 +1,9 @@
 #include "global.h"
 
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0775.h"
+#include "msgdata/msg/msg_0778.h"
+#include "msgdata/msg/msg_0800.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -185,8 +188,8 @@ BOOL GlobalTerminalConnect_Init(OverlayManager *manager, int *state) {
     HBlankInterruptDisable();
     GfGfx_DisableEngineAPlanes();
     GfGfx_DisableEngineBPlanes();
-    GX_SetVisiblePlane(0);
-    GXS_SetVisiblePlane(0);
+    GX_SetVisiblePlane(GX_PLANEMASK_NONE);
+    GXS_SetVisiblePlane(GX_PLANEMASK_NONE);
     GX_SetVisibleWnd(0);
     GXS_SetVisibleWnd(0);
     G2_BlendNone();
@@ -210,7 +213,7 @@ BOOL GlobalTerminalConnect_Init(OverlayManager *manager, int *state) {
     work->msgDataWifi = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0800_bin, HEAP_ID_124);
     work->string = String_New(180, HEAP_ID_124);
     work->errorString = String_New(256, HEAP_ID_124);
-    work->title = NewString_ReadMsgData(work->msgDataGts, 31);
+    work->title = NewString_ReadMsgData(work->msgDataGts, msg_0775_00031);
     GlobalTerminalConnect_LoadGraphics(work);
     GlobalTerminalConnect_CreateWindows(work);
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_124);
@@ -326,10 +329,10 @@ void GlobalTerminalConnect_InitBgs(BgConfig *bgConfig) {
     GfGfx_DisableEngineBPlanes();
     banks = sGlobalTerminalConnectGraphicsBanks;
     GfGfx_SetBanks(&banks);
-    MI_CpuClear32((void *)HW_BG_VRAM, 0x80000);
-    MI_CpuClear32((void *)HW_DB_BG_VRAM, 0x20000);
-    MI_CpuClear32((void *)HW_OBJ_VRAM, 0x40000);
-    MI_CpuClear32((void *)HW_DB_OBJ_VRAM, 0x20000);
+    MI_CpuClear32((void *)HW_BG_VRAM, HW_BG_VRAM_SIZE);
+    MI_CpuClear32((void *)HW_DB_BG_VRAM, HW_DB_BG_VRAM_SIZE);
+    MI_CpuClear32((void *)HW_OBJ_VRAM, HW_OBJ_VRAM_SIZE);
+    MI_CpuClear32((void *)HW_DB_OBJ_VRAM, HW_DB_OBJ_VRAM_SIZE);
     modes = sGlobalTerminalConnectGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     mainTemplates = sGlobalTerminalConnectMainBgTemplates;
@@ -616,7 +619,7 @@ BOOL GlobalTerminalConnect_StateAskConnect(GlobalTerminalConnectWork *work) {
         work->substate++;
         break;
     case 1:
-        GlobalTerminalConnect_PrintMessage(work, work->msgDataWifi, 17, work->textSpeed, MAKE_TEXT_COLOR(0, 15, 15));
+        GlobalTerminalConnect_PrintMessage(work, work->msgDataWifi, msg_0800_00017, work->textSpeed, MAKE_TEXT_COLOR(0, 15, 15));
         work->substate++;
         break;
     case 2:
@@ -646,7 +649,7 @@ BOOL GlobalTerminalConnect_StateStartConnect(GlobalTerminalConnectWork *work) {
         CommState_InitWfcSession(work->args->launchArgs->saveData);
         Sys_SetSleepDisableFlag(4);
         WirelessStatusIcon_Create();
-        GlobalTerminalConnect_PrintMessage(work, work->msgDataConnecting, 1, work->textSpeed, MAKE_TEXT_COLOR(0, 15, 15));
+        GlobalTerminalConnect_PrintMessage(work, work->msgDataConnecting, msg_0778_00001, work->textSpeed, MAKE_TEXT_COLOR(0, 15, 15));
         GlobalTerminalConnect_ShowWaitingIcon(work);
         work->substate++;
         break;
@@ -834,7 +837,7 @@ BOOL GlobalTerminalConnect_StateShowServerError(GlobalTerminalConnectWork *work)
 BOOL GlobalTerminalConnect_StateServerErrorDisconnect(GlobalTerminalConnectWork *work) {
     switch (work->substate) {
     case 0:
-        GlobalTerminalConnect_PrintMessage(work, work->msgDataGts, 186, work->textSpeed, MAKE_TEXT_COLOR(0, 15, 15));
+        GlobalTerminalConnect_PrintMessage(work, work->msgDataGts, msg_0775_00186, work->textSpeed, MAKE_TEXT_COLOR(0, 15, 15));
         work->substate++;
         break;
     case 1:
@@ -845,7 +848,7 @@ BOOL GlobalTerminalConnect_StateServerErrorDisconnect(GlobalTerminalConnectWork 
         }
         break;
     case 2:
-        GlobalTerminalConnect_PrintMessage(work, work->msgDataGts, 187, work->textSpeed, MAKE_TEXT_COLOR(0, 15, 15));
+        GlobalTerminalConnect_PrintMessage(work, work->msgDataGts, msg_0775_00187, work->textSpeed, MAKE_TEXT_COLOR(0, 15, 15));
         work->substate++;
         break;
     case 3:
@@ -876,7 +879,7 @@ BOOL GlobalTerminalConnect_StateDisconnect(GlobalTerminalConnectWork *work) {
     }
     switch (work->substate) {
     case 0:
-        GlobalTerminalConnect_PrintMessage(work, work->msgDataWifi, 26, work->textSpeed, MAKE_TEXT_COLOR(0, 15, 15));
+        GlobalTerminalConnect_PrintMessage(work, work->msgDataWifi, msg_0800_00026, work->textSpeed, MAKE_TEXT_COLOR(0, 15, 15));
         work->substate++;
         break;
     case 1:
@@ -886,7 +889,7 @@ BOOL GlobalTerminalConnect_StateDisconnect(GlobalTerminalConnectWork *work) {
         break;
     case 2:
         WirelessStatusIcon_Destroy();
-        GlobalTerminalConnect_PrintMessage(work, work->msgDataWifi, 27, work->textSpeed, MAKE_TEXT_COLOR(0, 15, 15));
+        GlobalTerminalConnect_PrintMessage(work, work->msgDataWifi, msg_0800_00027, work->textSpeed, MAKE_TEXT_COLOR(0, 15, 15));
         work->substate++;
         break;
     case 3:

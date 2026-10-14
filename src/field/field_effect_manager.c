@@ -293,7 +293,7 @@ void *FieldEffectManager_CreateBillboard(FieldEffectManager *manager, FieldEffec
     billboard = BillboardObject_Create(&template);
     GF_ASSERT(billboard != NULL);
     if (billboard != NULL) {
-        NNS_G3dMdlSetMdlFogEnableFlagAll(BillboardObject_GetModel(billboard), 1);
+        NNS_G3dMdlSetMdlFogEnableFlagAll(BillboardObject_GetModel(billboard), TRUE);
         AreaLight_ClearMaterialModifyFlags(BillboardObject_GetModel(billboard));
     }
     return billboard;

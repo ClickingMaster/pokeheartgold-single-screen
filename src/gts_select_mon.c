@@ -5,6 +5,8 @@
 #include "constants/sndseq.h"
 #include "constants/species.h"
 
+#include "msgdata/msg/msg_0775.h"
+
 #include "bg_window.h"
 #include "filesystem.h"
 #include "font.h"
@@ -203,7 +205,7 @@ void GtsSelectMon_DimUnwantedIcons(GtsMonSummary *summaries, Sprite **sprites, G
 // The last states of SEEK POKEMON (screen 4).
 
 int GtsSearch_PrintSearchFailed(GtsApp *app) {
-    GtsSearch_PrintMessage(app, 152, 1, 0, 0xF0F); // The search failed...
+    GtsSearch_PrintMessage(app, msg_0775_00152, 1, 0, 0xF0F); // The search failed...
     Gts_SetState(app, 21, 1);                      // GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_HANDLE_INPUT
     return 3;
 }
@@ -279,22 +281,22 @@ void GtsSearch_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused3, 
 void GtsSearch_DrawFieldLabels(Window *fieldWindows, Window *lineWindow, MsgData *msgData) {
     String *string;
 
-    string = NewString_ReadMsgData(msgData, 61); // POKEMON
+    string = NewString_ReadMsgData(msgData, msg_0775_00061); // POKEMON
     Gts_PrintAlignedFont0(&fieldWindows[0], string, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
     String_Delete(string);
-    string = NewString_ReadMsgData(msgData, 63); // GENDER
+    string = NewString_ReadMsgData(msgData, msg_0775_00063); // GENDER
     Gts_PrintAlignedFont0(&fieldWindows[2], string, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
     String_Delete(string);
-    string = NewString_ReadMsgData(msgData, 65); // LEVEL
+    string = NewString_ReadMsgData(msgData, msg_0775_00065); // LEVEL
     Gts_PrintAlignedFont0(&fieldWindows[4], string, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
     String_Delete(string);
-    string = NewString_ReadMsgData(msgData, 171); // LOCATION
+    string = NewString_ReadMsgData(msgData, msg_0775_00171); // LOCATION
     Gts_PrintAlignedFont0(lineWindow, string, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
     String_Delete(string);
-    string = NewString_ReadMsgData(msgData, 67); // SEARCH
+    string = NewString_ReadMsgData(msgData, msg_0775_00067); // SEARCH
     Gts_PrintAlignedFont4(&fieldWindows[6], string, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
     String_Delete(string);
-    string = NewString_ReadMsgData(msgData, 238); // CANCEL
+    string = NewString_ReadMsgData(msgData, msg_0775_00238); // CANCEL
     Gts_PrintAlignedFont4(&fieldWindows[7], string, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
     String_Delete(string);
 }
@@ -313,7 +315,7 @@ void GtsSearch_DrawResultsButton(BgConfig *bgConfig, Window *window, MsgData *ms
     }
     BgTilemapRectChangePalette(bgConfig, GF_BG_LYR_MAIN_1, 18, 2, 14, 4, palette);
     BgCommitTilemapBufferToVram(bgConfig, GF_BG_LYR_MAIN_1);
-    string = NewString_ReadMsgData(msgData, 69); // SELECT
+    string = NewString_ReadMsgData(msgData, msg_0775_00069); // SELECT
     Gts_PrintAlignedFont4(window, string, 0, 0, 0, color);
     String_Delete(string);
 }
@@ -540,7 +542,7 @@ void GtsSelectMon_RemoveWindows(GtsApp *app) {
 void GtsSelectMon_CreateData(GtsApp *app) {
     app->boxName = String_New(18, HEAP_ID_61);
     app->msgBuffer = String_New(180, HEAP_ID_61);
-    app->cancelText = NewString_ReadMsgData(app->gtsMsgData, 109); // CANCEL
+    app->cancelText = NewString_ReadMsgData(app->gtsMsgData, msg_0775_00109); // CANCEL
     if (app->selectedSlot == GTS_SELECT_MON_BACK) {
         app->selectedSlot = 0;
     }
@@ -587,15 +589,15 @@ void GtsSelectMon_SelectMonToDeposit(GtsApp *app) {
         if (GtsSelectMon_CanOffer(app->args->party, app->args->pcStorage, app->selectedBox, app->selectedSlot)) {
             boxMon = Gts_GetBoxMon(app->args->party, app->args->pcStorage, app->selectedBox, app->selectedSlot);
             BufferBoxMonNickname(app->msgFormat, 0, boxMon);
-            GtsSelectMon_PrintMessage(app, 22, 1, 0, 0xF0F, FALSE); // Offer {nickname}?
+            GtsSelectMon_PrintMessage(app, msg_0775_00022, 1, 0, 0xF0F, FALSE); // Offer {nickname}?
             Gts_SetState(app, GTS_SELECT_MON_STATE_WAIT_TEXT, GTS_SELECT_MON_STATE_OPEN_DEPOSIT_MENU);
         } else {
-            GtsSelectMon_PrintMessage(app, 26, 1, 0, 0xF0F, TRUE); // That Pokemon may not be offered for trade!
+            GtsSelectMon_PrintMessage(app, msg_0775_00026, 1, 0, 0xF0F, TRUE); // That Pokemon may not be offered for trade!
             Gts_SetState(app, GTS_SELECT_MON_STATE_WAIT_TEXT_AND_CLEAR, GTS_SELECT_MON_STATE_HANDLE_INPUT);
         }
         break;
     case GTS_SLOT_EGG:
-        GtsSelectMon_PrintMessage(app, 27, 1, 0, 0xF0F, TRUE); // An Egg may not be offered for trade!
+        GtsSelectMon_PrintMessage(app, msg_0775_00027, 1, 0, 0xF0F, TRUE); // An Egg may not be offered for trade!
         Gts_SetState(app, GTS_SELECT_MON_STATE_WAIT_TEXT_AND_CLEAR, GTS_SELECT_MON_STATE_HANDLE_INPUT);
         break;
     }
@@ -618,11 +620,11 @@ void GtsSelectMon_SelectMonToTrade(GtsApp *app) {
         if (GtsSelectMon_BoxMonMatchesWanted(boxMon, &app->searchResults[app->selectedResult].wanted)) {
             if (GtsSelectMon_CanOffer(app->args->party, app->args->pcStorage, app->selectedBox, app->selectedSlot)) {
                 BufferBoxMonNickname(app->msgFormat, 0, boxMon);
-                GtsSelectMon_PrintMessage(app, 18, 1, 0, 0xF0F, FALSE); // Do what with this {nickname}?
+                GtsSelectMon_PrintMessage(app, msg_0775_00018, 1, 0, 0xF0F, FALSE); // Do what with this {nickname}?
                 Gts_SetState(app, GTS_SELECT_MON_STATE_WAIT_TEXT, GTS_SELECT_MON_STATE_OPEN_TRADE_MENU);
                 PlaySE(SEQ_SE_DP_SELECT);
             } else {
-                GtsSelectMon_PrintMessage(app, 26, 1, 0, 0xF0F, TRUE); // That Pokemon may not be offered for trade!
+                GtsSelectMon_PrintMessage(app, msg_0775_00026, 1, 0, 0xF0F, TRUE); // That Pokemon may not be offered for trade!
                 Gts_SetState(app, GTS_SELECT_MON_STATE_WAIT_TEXT_AND_CLEAR, GTS_SELECT_MON_STATE_HANDLE_INPUT);
             }
         } else {
@@ -771,9 +773,9 @@ int GtsSelectMon_StepIndex(int index, int count, int step) {
 
 int GtsSelectMon_OpenDepositMenu(GtsApp *app) {
     app->listItems = ListMenuItems_New(3, HEAP_ID_61);
-    ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, 98, 1);  // SUMMARY
-    ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, 99, 2);  // OFFER
-    ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, 100, 3); // CANCEL
+    ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, msg_0775_00098, 1);  // SUMMARY
+    ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, msg_0775_00099, 2);  // OFFER
+    ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, msg_0775_00100, 3); // CANCEL
     app->menu = Gts_CreateListMenu(app, 3, 10);
     app->state = GTS_SELECT_MON_STATE_HANDLE_DEPOSIT_MENU;
     return 3;
@@ -798,7 +800,7 @@ int GtsSelectMon_HandleDepositMenu(GtsApp *app) {
         ListMenuItems_Delete(app->listItems);
         boxMon = Gts_GetBoxMon(app->args->party, app->args->pcStorage, app->selectedBox, app->selectedSlot);
         if (GtsSelectMon_HasSpecialRibbon(boxMon)) {
-            GtsSelectMon_PrintMessage(app, 37, 1, 0, 0xF0F, TRUE); // It has a special Ribbon.
+            GtsSelectMon_PrintMessage(app, msg_0775_00037, 1, 0, 0xF0F, TRUE); // It has a special Ribbon.
             Gts_SetState(app, GTS_SELECT_MON_STATE_WAIT_TEXT_AND_CLEAR, GTS_SELECT_MON_STATE_HANDLE_INPUT);
             break;
         }
@@ -806,16 +808,16 @@ int GtsSelectMon_HandleDepositMenu(GtsApp *app) {
             int restriction = GtsSelectMon_GetFormRestriction(boxMon);
             if (restriction) {
                 if (restriction == GTS_FORM_SPECIAL) {
-                    GtsSelectMon_PrintMessage(app, 177, 1, 0, 0xF0F, TRUE); // This Pokemon cannot be traded in this Forme!
+                    GtsSelectMon_PrintMessage(app, msg_0775_00177, 1, 0, 0xF0F, TRUE); // This Pokemon cannot be traded in this Forme!
                 } else {
-                    GtsSelectMon_PrintMessage(app, 178, 1, 0, 0xF0F, TRUE); // Spiky-eared PICHU cannot be offered in trade.
+                    GtsSelectMon_PrintMessage(app, msg_0775_00178, 1, 0, 0xF0F, TRUE); // Spiky-eared PICHU cannot be offered in trade.
                 }
                 Gts_SetState(app, GTS_SELECT_MON_STATE_WAIT_TEXT_AND_CLEAR, GTS_SELECT_MON_STATE_HANDLE_INPUT);
                 break;
             }
         }
         if (GtsSelectMon_HoldsGriseousOrb(boxMon)) {
-            GtsSelectMon_PrintMessage(app, 179, 1, 0, 0xF0F, TRUE); // This Pokemon cannot be traded while holding that item!
+            GtsSelectMon_PrintMessage(app, msg_0775_00179, 1, 0, 0xF0F, TRUE); // This Pokemon cannot be traded while holding that item!
             Gts_SetState(app, GTS_SELECT_MON_STATE_WAIT_TEXT_AND_CLEAR, GTS_SELECT_MON_STATE_HANDLE_INPUT);
             break;
         }
@@ -846,9 +848,9 @@ int GtsSelectMon_HandleDepositMenu(GtsApp *app) {
 
 int GtsSelectMon_OpenTradeMenu(GtsApp *app) {
     app->listItems = ListMenuItems_New(3, HEAP_ID_61);
-    ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, 87, 1); // SUMMARY
-    ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, 88, 2); // TRADE
-    ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, 89, 3); // CANCEL
+    ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, msg_0775_00087, 1); // SUMMARY
+    ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, msg_0775_00088, 2); // TRADE
+    ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, msg_0775_00089, 3); // CANCEL
     app->menu = Gts_CreateListMenu(app, 3, 10);
     app->state = GTS_SELECT_MON_STATE_HANDLE_TRADE_MENU;
     return 3;
@@ -873,7 +875,7 @@ int GtsSelectMon_HandleTradeMenu(GtsApp *app) {
         ClearFrameAndWindow2(&app->waitingIconWindow, FALSE);
         boxMon = Gts_GetBoxMon(app->args->party, app->args->pcStorage, app->selectedBox, app->selectedSlot);
         if (GtsSelectMon_HasSpecialRibbon(boxMon)) {
-            GtsSelectMon_PrintMessage(app, 37, 1, 0, 0xF0F, TRUE); // It has a special Ribbon.
+            GtsSelectMon_PrintMessage(app, msg_0775_00037, 1, 0, 0xF0F, TRUE); // It has a special Ribbon.
             Gts_SetState(app, GTS_SELECT_MON_STATE_WAIT_TEXT_AND_CLEAR, GTS_SELECT_MON_STATE_HANDLE_INPUT);
             break;
         }
@@ -881,16 +883,16 @@ int GtsSelectMon_HandleTradeMenu(GtsApp *app) {
             int restriction = GtsSelectMon_GetFormRestriction(boxMon);
             if (restriction) {
                 if (restriction == GTS_FORM_SPECIAL) {
-                    GtsSelectMon_PrintMessage(app, 177, 1, 0, 0xF0F, TRUE); // This Pokemon cannot be traded in this Forme!
+                    GtsSelectMon_PrintMessage(app, msg_0775_00177, 1, 0, 0xF0F, TRUE); // This Pokemon cannot be traded in this Forme!
                 } else {
-                    GtsSelectMon_PrintMessage(app, 178, 1, 0, 0xF0F, TRUE); // Spiky-eared PICHU cannot be offered in trade.
+                    GtsSelectMon_PrintMessage(app, msg_0775_00178, 1, 0, 0xF0F, TRUE); // Spiky-eared PICHU cannot be offered in trade.
                 }
                 Gts_SetState(app, GTS_SELECT_MON_STATE_WAIT_TEXT_AND_CLEAR, GTS_SELECT_MON_STATE_HANDLE_INPUT);
                 break;
             }
         }
         if (GtsSelectMon_HoldsGriseousOrb(boxMon)) {
-            GtsSelectMon_PrintMessage(app, 179, 1, 0, 0xF0F, TRUE); // This Pokemon cannot be traded while holding that item!
+            GtsSelectMon_PrintMessage(app, msg_0775_00179, 1, 0, 0xF0F, TRUE); // This Pokemon cannot be traded while holding that item!
             Gts_SetState(app, GTS_SELECT_MON_STATE_WAIT_TEXT_AND_CLEAR, GTS_SELECT_MON_STATE_HANDLE_INPUT);
             break;
         }
@@ -948,7 +950,7 @@ int GtsSelectMon_HandleExitPrompt(GtsApp *app) {
 }
 
 int GtsSelectMon_AskRemoveCapsuleForTrade(GtsApp *app) {
-    GtsSelectMon_PrintMessage(app, 25, 1, 0, 0xF0F, TRUE); // The Ball Capsule will be detached. Is that OK?
+    GtsSelectMon_PrintMessage(app, msg_0775_00025, 1, 0, 0xF0F, TRUE); // The Ball Capsule will be detached. Is that OK?
     Gts_SetState(app, GTS_SELECT_MON_STATE_WAIT_TEXT, GTS_SELECT_MON_STATE_SHOW_CAPSULE_PROMPT_FOR_TRADE);
     return 3;
 }
@@ -975,7 +977,7 @@ int GtsSelectMon_HandleCapsulePromptForTrade(GtsApp *app) {
 // The search result's Pokemon comes into the party when it holds Mail (unless the offered Pokemon leaves the party).
 BOOL GtsSelectMon_StartTrade(GtsApp *app) {
     if (Gts_MonHoldsMail(&app->searchResults[app->selectedResult].mon) && app->selectedBox != GTS_BOX_PARTY && Party_GetCount(app->args->party) == PARTY_SIZE) {
-        GtsSelectMon_PrintMessage(app, 28, 1, 0, 0xF0F, TRUE); // Your party is full. You can't receive a Pokemon!
+        GtsSelectMon_PrintMessage(app, msg_0775_00028, 1, 0, 0xF0F, TRUE); // Your party is full. You can't receive a Pokemon!
         Gts_SetState(app, GTS_SELECT_MON_STATE_WAIT_TEXT_AND_CLEAR, GTS_SELECT_MON_STATE_HANDLE_INPUT);
         return FALSE;
     }
@@ -989,7 +991,7 @@ BOOL GtsSelectMon_StartTrade(GtsApp *app) {
 }
 
 int GtsSelectMon_AskRemoveCapsule(GtsApp *app) {
-    GtsSelectMon_PrintMessage(app, 25, 1, 0, 0xF0F, TRUE); // The Ball Capsule will be detached. Is that OK?
+    GtsSelectMon_PrintMessage(app, msg_0775_00025, 1, 0, 0xF0F, TRUE); // The Ball Capsule will be detached. Is that OK?
     Gts_SetState(app, GTS_SELECT_MON_STATE_WAIT_TEXT, GTS_SELECT_MON_STATE_SHOW_CAPSULE_PROMPT);
     return 3;
 }
@@ -1167,7 +1169,7 @@ void GtsSelectMon_ShowBox(GtsApp *app, int box) {
                 Sprite_SetDrawFlag(app->capsuleSprites[i], FALSE);
             }
         }
-        ReadMsgDataIntoString(app->gtsMsgData, 92, app->boxName); // IN PARTY
+        ReadMsgDataIntoString(app->gtsMsgData, msg_0775_00092, app->boxName); // IN PARTY
     }
     NARC_Delete(narc);
     FillWindowPixelBuffer(&app->boxNameWindow, 0);

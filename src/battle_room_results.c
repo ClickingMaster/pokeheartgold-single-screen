@@ -5,6 +5,7 @@
 #include "constants/sndseq.h"
 
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0028.h"
 
 #include "bg_window.h"
 #include "font.h"
@@ -259,7 +260,7 @@ BOOL BattleRoomResults_SetupScreens(BattleRoomResults *results) {
         HBlankInterruptDisable();
         GfGfx_DisableEngineAPlanes();
         GfGfx_DisableEngineBPlanes();
-        GX_SetVisiblePlane(0);
+        GX_SetVisiblePlane(GX_PLANEMASK_NONE);
         reg_GXS_DB_DISPCNT = ~REG_GXS_DB_DISPCNT_DISPLAY_MASK & reg_GXS_DB_DISPCNT;
         reg_GX_POWCNT = ~REG_GX_POWCNT_DSEL_MASK & reg_GX_POWCNT;
         BattleRoomResults_SetGfxBanks();
@@ -311,8 +312,8 @@ BOOL BattleRoomResults_TeardownScreens(BattleRoomResults *results) {
         HBlankInterruptDisable();
         GfGfx_DisableEngineAPlanes();
         GfGfx_DisableEngineBPlanes();
-        GX_SetVisiblePlane(0);
-        GXS_SetVisiblePlane(0);
+        GX_SetVisiblePlane(GX_PLANEMASK_NONE);
+        GXS_SetVisiblePlane(GX_PLANEMASK_NONE);
         results->subState = 0;
         return TRUE;
     }
@@ -447,21 +448,21 @@ void BattleRoomResults_LoadBgGraphics(BattleRoomResults *results) {
     if (results->showLeaders == FALSE) {
         narc = NARC_New(NARC_a_1_1_8, results->heapID);
         GfGfxLoader_LoadCharDataFromOpenNarc(narc, 4, results->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, TRUE, results->heapID);
-        GfGfxLoader_GXLoadPalFromOpenNarc(narc, 7, GF_PAL_LOCATION_MAIN_BG, (enum GFPalSlotOffset)0, 0x20, results->heapID);
+        GfGfxLoader_GXLoadPalFromOpenNarc(narc, 7, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0x20, results->heapID);
         GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 6, results->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, TRUE, results->heapID);
         NARC_Delete(narc);
         narc = NARC_New(NARC_a_1_8_3, results->heapID);
         GfGfxLoader_LoadCharDataFromOpenNarc(narc, 142, results->bgConfig, GF_BG_LYR_SUB_1, 0, 0, TRUE, results->heapID);
-        GfGfxLoader_GXLoadPalFromOpenNarc(narc, 196, GF_PAL_LOCATION_SUB_BG, (enum GFPalSlotOffset)0, 0x20, results->heapID);
+        GfGfxLoader_GXLoadPalFromOpenNarc(narc, 196, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0x20, results->heapID);
         GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 141, results->bgConfig, GF_BG_LYR_SUB_1, 0, 0, TRUE, results->heapID);
         NARC_Delete(narc);
     } else {
         narc = NARC_New(NARC_a_1_1_8, results->heapID);
         GfGfxLoader_LoadCharDataFromOpenNarc(narc, 4, results->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, TRUE, results->heapID);
-        GfGfxLoader_GXLoadPalFromOpenNarc(narc, 7, GF_PAL_LOCATION_MAIN_BG, (enum GFPalSlotOffset)0, 0x20, results->heapID);
+        GfGfxLoader_GXLoadPalFromOpenNarc(narc, 7, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0x20, results->heapID);
         GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 5, results->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, TRUE, results->heapID);
         GfGfxLoader_LoadCharDataFromOpenNarc(narc, 8, results->bgConfig, GF_BG_LYR_SUB_1, 0, 0, TRUE, results->heapID);
-        GfGfxLoader_GXLoadPalFromOpenNarc(narc, 10, GF_PAL_LOCATION_SUB_BG, (enum GFPalSlotOffset)0, 0x20, results->heapID);
+        GfGfxLoader_GXLoadPalFromOpenNarc(narc, 10, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0x20, results->heapID);
         GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 9, results->bgConfig, GF_BG_LYR_SUB_1, 0, 0, TRUE, results->heapID);
         NARC_Delete(narc);
     }
@@ -493,8 +494,8 @@ void BattleRoomResults_AddWindows(BattleRoomResults *results) {
         } while (i < BATTLE_ROOM_RESULTS_NUM_LEADER_WINDOWS);
     }
     FontID_Alloc(4, results->heapID);
-    LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, (enum GFPalSlotOffset)0x1E0, results->heapID);
-    LoadFontPal0(GF_PAL_LOCATION_SUB_BG, (enum GFPalSlotOffset)0x1E0, results->heapID);
+    LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_15_OFFSET, results->heapID);
+    LoadFontPal0(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_15_OFFSET, results->heapID);
 }
 
 void BattleRoomResults_RemoveWindows(BattleRoomResults *results) {
@@ -524,8 +525,8 @@ void BattleRoomResults_InitStrings(BattleRoomResults *results) {
     results->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0028_bin, results->heapID);
     results->msgFormat = MessageFormat_New_Custom(2, 64, results->heapID);
     results->string = String_New(512, results->heapID);
-    results->defaultNames[0] = NewString_ReadMsgData(results->msgData, 33);
-    results->defaultNames[1] = NewString_ReadMsgData(results->msgData, 34);
+    results->defaultNames[0] = NewString_ReadMsgData(results->msgData, msg_0028_00033);
+    results->defaultNames[1] = NewString_ReadMsgData(results->msgData, msg_0028_00034);
 }
 
 void BattleRoomResults_FreeStrings(BattleRoomResults *results) {
@@ -563,7 +564,7 @@ void BattleRoomResults_PrintFormattedMessage(BattleRoomResults *results, int win
 
 void BattleRoomResults_PrintTitle(BattleRoomResults *results) {
     int width = GetWindowWidth(&results->windows[0]);
-    BattleRoomResults_PrintMessage(results, 0, 24, (width * 8) / 2, 0, 4, MAKE_TEXT_COLOR(15, 1, 0), 2);
+    BattleRoomResults_PrintMessage(results, 0, msg_0028_00024, (width * 8) / 2, 0, 4, MAKE_TEXT_COLOR(15, 1, 0), 2);
 }
 
 #pragma force_active on
@@ -578,24 +579,24 @@ void BattleRoomResults_PrintResults(BattleRoomResults *results) {
     }
     BattleRoomResults_PrintTitle(results);
     width = GetWindowWidth(&results->windows[1]);
-    BattleRoomResults_PrintMessage(results, 1, 2, (width * 8) / 2, 0, 0, MAKE_TEXT_COLOR(15, 2, 0), 2);
-    BattleRoomResults_PrintMessage(results, 2, 5, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
-    BattleRoomResults_PrintMessage(results, 3, 8, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
-    BattleRoomResults_PrintMessage(results, 4, 12, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    BattleRoomResults_PrintMessage(results, 1, msg_0028_00002, (width * 8) / 2, 0, 0, MAKE_TEXT_COLOR(15, 2, 0), 2);
+    BattleRoomResults_PrintMessage(results, 2, msg_0028_00005, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    BattleRoomResults_PrintMessage(results, 3, msg_0028_00008, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    BattleRoomResults_PrintMessage(results, 4, msg_0028_00012, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
     if (FrontierData_FlagAction(results->frontierData, 12, 0) == 0) {
-        BattleRoomResults_PrintMessage(results, 6, 9, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
+        BattleRoomResults_PrintMessage(results, 6, msg_0028_00009, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
     } else {
-        BattleRoomResults_PrintMessage(results, 6, 10, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
+        BattleRoomResults_PrintMessage(results, 6, msg_0028_00010, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
     }
-    BattleRoomResults_PrintMessage(results, 8, 11, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    BattleRoomResults_PrintMessage(results, 8, msg_0028_00011, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
     BufferIntegerAsString(results->msgFormat, 0, FrontierData_WifiRankAction(results->frontierData, 0), 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
-    BattleRoomResults_PrintFormattedMessage(results, 5, 14, GetWindowWidth(&results->windows[5]) * 8, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 1);
+    BattleRoomResults_PrintFormattedMessage(results, 5, msg_0028_00014, GetWindowWidth(&results->windows[5]) * 8, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 1);
     BufferIntegerAsString(results->msgFormat, 0, FrontierSave_GetStat(results->frontierSave, 9, 255), 4, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     width = GetWindowWidth(&results->windows[7]);
-    BattleRoomResults_PrintFormattedMessage(results, 7, 15, (width * 8) / 2, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 2);
+    BattleRoomResults_PrintFormattedMessage(results, 7, msg_0028_00015, (width * 8) / 2, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 2);
     BufferIntegerAsString(results->msgFormat, 0, FrontierSave_GetStat(results->frontierSave, 8, 255), 4, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     width = GetWindowWidth(&results->windows[9]);
-    BattleRoomResults_PrintFormattedMessage(results, 9, 15, (width * 8) / 2, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 2);
+    BattleRoomResults_PrintFormattedMessage(results, 9, msg_0028_00015, (width * 8) / 2, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 2);
     for (j = 0; j < BATTLE_ROOM_RESULTS_NUM_RESULT_WINDOWS; j++) {
         ScheduleWindowCopyToVram(&results->windows[j]);
     }
@@ -673,10 +674,10 @@ void BattleRoomResults_PrintLeaderNames(BattleRoomResults *results) {
 void BattleRoomResults_PrintPageNumber(BattleRoomResults *results) {
     FillWindowPixelBuffer(&results->windows[4], 0);
     BufferIntegerAsString(results->msgFormat, 0, results->page + 1, 1, PRINTING_MODE_LEFT_ALIGN, TRUE);
-    BattleRoomResults_PrintFormattedMessage(results, 4, 20, 8, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 1);
-    BattleRoomResults_PrintMessage(results, 4, 21, 16, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 2);
+    BattleRoomResults_PrintFormattedMessage(results, 4, msg_0028_00020, 8, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 1);
+    BattleRoomResults_PrintMessage(results, 4, msg_0028_00021, 16, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 2);
     BufferIntegerAsString(results->msgFormat, 0, BATTLE_ROOM_RESULTS_NUM_PAGES, 1, PRINTING_MODE_LEFT_ALIGN, TRUE);
-    BattleRoomResults_PrintFormattedMessage(results, 4, 20, 24, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    BattleRoomResults_PrintFormattedMessage(results, 4, msg_0028_00020, 24, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
     ScheduleWindowCopyToVram(&results->windows[4]);
 }
 
@@ -693,10 +694,10 @@ void BattleRoomResults_PrintLeadersScreen(BattleRoomResults *results) {
     BattleRoomResults_PrintTitle(results);
     BattleRoomDownload_GetLeadersRoom(results->downloadData, values);
     BufferIntegerAsString(results->msgFormat, 0, values[0], 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
-    BattleRoomResults_PrintFormattedMessage(results, 1, 17, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0), 0);
+    BattleRoomResults_PrintFormattedMessage(results, 1, msg_0028_00017, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0), 0);
     BufferIntegerAsString(results->msgFormat, 1, values[1], 3, PRINTING_MODE_LEADING_ZEROS, TRUE);
-    BattleRoomResults_PrintFormattedMessage(results, 2, 18, 60, 0, 0, MAKE_TEXT_COLOR(15, 2, 0), 2);
-    BattleRoomResults_PrintMessage(results, 3, 19, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0), 0);
+    BattleRoomResults_PrintFormattedMessage(results, 2, msg_0028_00018, 60, 0, 0, MAKE_TEXT_COLOR(15, 2, 0), 2);
+    BattleRoomResults_PrintMessage(results, 3, msg_0028_00019, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0), 0);
     for (j = 0, window2 = results->windows; j <= 3; j++, window2++) {
         ScheduleWindowCopyToVram(window2);
     }
@@ -731,23 +732,23 @@ void BattleRoomResults_PrintLeaderInfo(BattleRoomResults *results, int leader) {
 
         BufferString(results->msgFormat, 0, *(String **)((u8 *)results + (offsetof(BattleRoomResults, leaders[0].name) + offset)), genders[offset], 1, 2);
         if (genders[offset] == 0) {
-            BattleRoomResults_PrintFormattedMessage(results, windowIndex, 22, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
+            BattleRoomResults_PrintFormattedMessage(results, windowIndex, msg_0028_00022, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
         } else {
-            BattleRoomResults_PrintFormattedMessage(results, windowIndex, 23, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
+            BattleRoomResults_PrintFormattedMessage(results, windowIndex, msg_0028_00023, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
         }
-        BattleRoomResults_PrintMessage(results, windowIndex + 1, 28, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
+        BattleRoomResults_PrintMessage(results, windowIndex + 1, msg_0028_00028, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
         countries = (u8 *)results + offsetof(BattleRoomResults, leaders[0].country);
         if (countries[offset] == 0) {
-            BattleRoomResults_PrintMessage(results, windowIndex + 1, 31, 0, 16, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
+            BattleRoomResults_PrintMessage(results, windowIndex + 1, msg_0028_00031, 0, 16, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
         } else {
             BufferCountryName(results->msgFormat, 0, countries[offset]);
-            BattleRoomResults_PrintFormattedMessage(results, windowIndex + 1, 29, 0, 16, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
+            BattleRoomResults_PrintFormattedMessage(results, windowIndex + 1, msg_0028_00029, 0, 16, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
         }
         if (*(u8 *)((u8 *)results + (offsetof(BattleRoomResults, leaders[0].region) + offset)) != 0) {
             BufferCityName(results->msgFormat, 0, countries[offset], *(u8 *)((u8 *)results + (offsetof(BattleRoomResults, leaders[0].region) + offset)));
-            BattleRoomResults_PrintFormattedMessage(results, windowIndex + 1, 30, 0, 32, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
+            BattleRoomResults_PrintFormattedMessage(results, windowIndex + 1, msg_0028_00030, 0, 32, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
         }
-        BattleRoomResults_PrintMessage(results, windowIndex + 2, 32, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
+        BattleRoomResults_PrintMessage(results, windowIndex + 2, msg_0028_00032, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
         greetings = (u8 *)results + offsetof(BattleRoomResults, leaders[0].greeting);
         string = MailMsg_GetExpandedString((MailMessage *)(greetings + offset), results->heapID);
         BattleRoomResults_PrintString((Window *)(windows + 2 * sizeof(Window)), string, 0, 16, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);

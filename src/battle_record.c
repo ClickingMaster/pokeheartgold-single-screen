@@ -1,5 +1,10 @@
 #include "battle_record.h"
 
+#include "constants/items.h"
+#include "constants/moves.h"
+#include "constants/pokemon.h"
+#include "constants/species.h"
+
 #include "battle/battle_setup.h"
 
 #include "battle_recording.h"
@@ -214,7 +219,7 @@ int BattleRecord_WriteSlot(SaveData *save, BattleRecord *record, int index, u16 
     switch (*state) {
     case 0: {
         Sys_SetSoftResetDisableFlag(8);
-        Sys_SetAsyncSaveMarker((enum HeapID)11);
+        Sys_SetAsyncSaveMarker(HEAP_ID_FIELD2);
         int result = SaveBattleRecord(save, record, index);
         if (result == 2) {
             Save_PrepareForAsyncWrite(save, 2);
@@ -388,14 +393,14 @@ BOOL BattleRecord_IsValid(SaveData *save, BattleRecord *record) {
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 6; j++) {
             struct BattleRecordMon *mon = &((BattleRecordData *)data)->parties[i].mons[j];
-            if (mon->species > 495) {
+            if (mon->species > SPECIES_BAD_EGG) {
                 return FALSE;
             }
-            if (mon->heldItem > 536) {
+            if (mon->heldItem > ITEM_MAX) {
                 return FALSE;
             }
             for (int k = 0; k < 4; k++) {
-                if (mon->moves[k] > 467) {
+                if (mon->moves[k] > NUM_MOVES) {
                     return FALSE;
                 }
             }
@@ -538,11 +543,11 @@ void BattleRecordParty_FromParty(Party *party, BattleRecordParty *record) {
 
 void BattleRecordParty_ToParty(BattleRecordParty *record, Party *party) {
     u8 value = 0;
-    Pokemon *mon = AllocMonZeroed((enum HeapID)11);
+    Pokemon *mon = AllocMonZeroed(HEAP_ID_FIELD2);
     Party_InitWithMaxSize(party, record->capacity);
     for (int i = 0; i < record->count; i++) {
         Pokemon_FromBattleRecordMon(&record->mons[i], mon);
-        SetMonData(mon, 162, &value);
+        SetMonData(mon, MON_DATA_BALL_CAPSULE_ID, &value);
         Party_AddMon(party, mon);
     }
     Heap_Free(mon);

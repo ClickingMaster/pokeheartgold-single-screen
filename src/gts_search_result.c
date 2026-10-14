@@ -2,6 +2,8 @@
 
 #include "constants/sndseq.h"
 
+#include "msgdata/msg/msg_0775.h"
+
 #include "bg_window.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
@@ -95,10 +97,10 @@ int GtsSearchResult_Init(GtsApp *app, int state) {
     Gts_DrawMonSummary(app->gtsMsgData, app->speciesNames, app->msgFormat, app->infoWindows, Mon_GetBoxMon(&app->searchResults[app->selectedResult].mon), &app->searchResults[app->selectedResult].summary);
     Gts_DrawTrainerInfo(app->gtsMsgData, &app->infoWindows[7], app->searchResults[app->selectedResult].trainerName, &app->searchResults[app->selectedResult].mon, &app->infoWindows[12]);
     Gts_LoadMonPicture(&app->searchResults[app->selectedResult].mon);
-    GtsSearchResult_PrintLabel(app->gtsMsgData, &app->infoWindows[14], 77);   // WANTED
-    GtsSearchResult_PrintLabel(app->gtsMsgData, &app->infoWindows[9], 81);    // OT'S LOCATION
-    GtsSearchResult_PrintButtonLabel(app->gtsMsgData, &app->windows[0], 88);  // TRADE
-    GtsSearchResult_PrintButtonLabel(app->gtsMsgData, &app->windows[1], 109); // CANCEL
+    GtsSearchResult_PrintLabel(app->gtsMsgData, &app->infoWindows[14], msg_0775_00077);   // WANTED
+    GtsSearchResult_PrintLabel(app->gtsMsgData, &app->infoWindows[9], msg_0775_00081);    // OT'S LOCATION
+    GtsSearchResult_PrintButtonLabel(app->gtsMsgData, &app->windows[0], msg_0775_00088);  // TRADE
+    GtsSearchResult_PrintButtonLabel(app->gtsMsgData, &app->windows[1], msg_0775_00109); // CANCEL
     GtsSearchResult_DrawDetails(app);
     Gts_SetAvatarMarker(app, app->selectedResult, -app->scrollY);
     app->vblankFunc = GtsSearchResult_ScrollBgs;
@@ -265,8 +267,8 @@ void GtsSearchResult_CreateStrings(GtsApp *app) {
     if (result->city) {
         BufferCityName(app->msgFormat, 9, result->country, result->city);
     }
-    app->unk_0BC4[0] = ReadMsgData_ExpandPlaceholders(app->msgFormat, app->gtsMsgData, 82, HEAP_ID_61);
-    app->unk_0BC4[1] = ReadMsgData_ExpandPlaceholders(app->msgFormat, app->gtsMsgData, 83, HEAP_ID_61);
+    app->unk_0BC4[0] = ReadMsgData_ExpandPlaceholders(app->msgFormat, app->gtsMsgData, msg_0775_00082, HEAP_ID_61);
+    app->unk_0BC4[1] = ReadMsgData_ExpandPlaceholders(app->msgFormat, app->gtsMsgData, msg_0775_00083, HEAP_ID_61);
 }
 
 #pragma force_active reset
@@ -305,7 +307,7 @@ void GtsSearchResult_Select(GtsApp *app, int result) {
 
 int GtsSearchResult_HandleInput(GtsApp *app) {
     if (gSystem.newKeys & PAD_BUTTON_A) {
-        GtsSearchResult_PrintMessage(app, 16, 1, 0, 0xF0F); // Trade Pokemon with this Trainer?
+        GtsSearchResult_PrintMessage(app, msg_0775_00016, 1, 0, 0xF0F); // Trade Pokemon with this Trainer?
         Gts_SetState(app, GTS_SEARCH_RESULT_STATE_WAIT_TEXT, GTS_SEARCH_RESULT_STATE_SHOW_TRADE_PROMPT);
         PlaySE(SEQ_SE_DP_SELECT);
     } else if (gSystem.newKeys & PAD_BUTTON_B) {
@@ -332,7 +334,7 @@ int GtsSearchResult_HandleInput(GtsApp *app) {
         }
         button = TouchscreenHitbox_FindRectAtTouchNew(sGtsSearchResultButtonHitboxes);
         if (button == 0) {
-            GtsSearchResult_PrintMessage(app, 16, 1, 0, 0xF0F); // Trade Pokemon with this Trainer?
+            GtsSearchResult_PrintMessage(app, msg_0775_00016, 1, 0, 0xF0F); // Trade Pokemon with this Trainer?
             Gts_SetState(app, GTS_SEARCH_RESULT_STATE_WAIT_TEXT, GTS_SEARCH_RESULT_STATE_SHOW_TRADE_PROMPT);
             PlaySE(SEQ_SE_DP_SELECT);
         } else if (button == 1) {
@@ -371,15 +373,15 @@ int GtsSearchResult_HandleTradePrompt(GtsApp *app) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
         app->state = GTS_SEARCH_RESULT_STATE_FADE_OUT;
         Gts_SetNextScreen(app, 5, 6);
-        GtsSearchResult_PrintLabel(app->gtsMsgData, &app->infoWindows[14], 77); // WANTED
-        GtsSearchResult_PrintLabel(app->gtsMsgData, &app->infoWindows[9], 81);  // OT'S LOCATION
+        GtsSearchResult_PrintLabel(app->gtsMsgData, &app->infoWindows[14], msg_0775_00077); // WANTED
+        GtsSearchResult_PrintLabel(app->gtsMsgData, &app->infoWindows[9], msg_0775_00081);  // OT'S LOCATION
         GtsSearchResult_DrawDetails(app);
     } else if (response == YESNORESPONSE_NO) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
         ClearFrameAndWindow2(&app->waitingIconWindow, FALSE);
         app->state = GTS_SEARCH_RESULT_STATE_HANDLE_INPUT;
-        GtsSearchResult_PrintButtonLabel(app->gtsMsgData, &app->windows[0], 88);  // TRADE
-        GtsSearchResult_PrintButtonLabel(app->gtsMsgData, &app->windows[1], 109); // CANCEL
+        GtsSearchResult_PrintButtonLabel(app->gtsMsgData, &app->windows[0], msg_0775_00088);  // TRADE
+        GtsSearchResult_PrintButtonLabel(app->gtsMsgData, &app->windows[1], msg_0775_00109); // CANCEL
     }
     return 3;
 }
