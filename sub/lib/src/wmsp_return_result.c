@@ -1,5 +1,7 @@
 #include <nitro/types.h>
 
+#include <nitro/pxi/fifo_shared.h>
+
 #include "wmsp_internal.h"
 
 // The code below is compiled as ARM (32-bit) code.
@@ -8,8 +10,6 @@
 // Returns a WM result buffer to the ARM9 and releases it (placed in WRAM).
 
 #include <nitro/wram_begin.h>
-
-#define PXI_FIFO_TAG_WM 10
 
 s32 PXI_SendWordByFifo(s32 tag, u32 data, BOOL error);
 void VENEER_SVC_WaitByLoop(s32 count);

@@ -165,7 +165,7 @@ void SendMessageToWmDirect(WlHeapBufMan *man, void *msg) {
     if (w->heap.bufMan[9].count) {
         MoveHeapBuf(man, &w->heap.bufMan[9], msg);
         AddTask(2, 0x13);
-    } else if (__VENEER_OS_SendMessage(w->indicateQueue, msg, 0)) {
+    } else if (__VENEER_OS_SendMessage(w->indicateQueue, msg, OS_MESSAGE_NOBLOCK)) {
         DeleteHeapBuf(man, msg);
     } else {
         MoveHeapBuf(man, &wlWorkPlain->heap.bufMan[9], msg);
@@ -176,7 +176,7 @@ void SendMessageToWmTask(void) {
     WlWork *w = wlWorkPlain;
     WlHeapBuf *msg = w->heap.bufMan[9].first;
     while (msg != (WlHeapBuf *)-1) {
-        if (!__VENEER_OS_SendMessage(w->indicateQueue, msg, 0)) {
+        if (!__VENEER_OS_SendMessage(w->indicateQueue, msg, OS_MESSAGE_NOBLOCK)) {
             break;
         }
         DeleteHeapBuf(&wlWorkPlain->heap.bufMan[9], msg);

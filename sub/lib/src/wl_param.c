@@ -26,7 +26,7 @@ extern u16 c_RateSet$4351[];
 void InitializeParam(void *camTable, u32 camTableSize) {
     WlWork *w = wlWork;
     u8 *buf = w->bss.gameInfo;
-    __VENEER_MIi_CpuClear16(0, &w->param, 0x28); // all of WlParam
+    __VENEER_MIi_CpuClear16(0, &w->param, sizeof(WlParam)); // all of WlParam
     __VENEER_MIi_CpuClear16(0, &wlWork->bss, sizeof(WlBss));
     wlWork->param.camTable = camTable;
     wlWork->param.camTableSize = camTableSize;

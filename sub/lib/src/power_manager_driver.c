@@ -19,11 +19,7 @@
 #define PM_REG_CONTROL 0
 
 // Wake-up triggers selected by the ARM9 (PMi_TriggerBL bits).
-#define PM_TRIGGER_KEY       0x01
-#define PM_TRIGGER_RTC_ALARM 0x02
-#define PM_TRIGGER_CARD      0x04
-#define PM_TRIGGER_CARTRIDGE 0x08
-#define PM_TRIGGER_CARD_IREQ 0x10
+#include <nitro/spi/common/pm_common.h>
 
 typedef struct PmBlinkPattern {
     u64 pattern;
@@ -335,7 +331,7 @@ void PMi_DoSleep(void) {
     u16 ime;
     ime = REG_IME;
     restore = 0;
-    REG_IME = 0;
+    REG_IME = OS_IME_DISABLE;
     irq = OS_DisableInterrupts();
     mask = OS_DisableIrqMask(~0xfe000000u);
     control = PMi_GetRegister(PM_REG_CONTROL);
@@ -345,10 +341,10 @@ void PMi_DoSleep(void) {
     SND_BeginSleep();
     PMi_ResetControl(1);
     if (PMi_TriggerBL & PM_TRIGGER_KEY) {
-        REG_KEYCNT = PMi_KeyPattern.keyPattern | 0x4000;
+        REG_KEYCNT = PMi_KeyPattern.keyPattern | REG_PAD_KEYCNT_INTR_MASK;
         OS_EnableIrqMask(OS_IE_KEY);
     }
-    if (PMi_TriggerBL & PM_TRIGGER_CARD) {
+    if (PMi_TriggerBL & PM_TRIGGER_COVER_OPEN) {
         OS_EnableIrqMask(0x400000);
     }
     if (PMi_TriggerBL & PM_TRIGGER_RTC_ALARM) {
@@ -357,19 +353,19 @@ void PMi_DoSleep(void) {
         EXIi_SelectRcnt(EXI_GPIOIF_GPIO);
         EXIi_SetBitRcnt0L(0x40, 0);
         EXIi_SetBitRcnt0L(0x100, 0x100);
-        OS_EnableIrqMask(0x80);
+        OS_EnableIrqMask(OS_IE_SIO);
+    }
+    if (PMi_TriggerBL & PM_TRIGGER_CARD) {
+        OS_EnableIrqMask(OS_IE_CARD_IREQ);
     }
     if (PMi_TriggerBL & PM_TRIGGER_CARTRIDGE) {
-        OS_EnableIrqMask(0x100000);
-    }
-    if (PMi_TriggerBL & PM_TRIGGER_CARD_IREQ) {
-        OS_EnableIrqMask(0x2000);
+        OS_EnableIrqMask(OS_IE_CARTRIDGE);
     }
     OS_RestoreInterrupts(irq);
     {
         u16 previous = REG_IME;
         (void)previous;
-        REG_IME = 1;
+        REG_IME = OS_IME_ENABLE;
     }
     __VENEER_SVC_Sleep();
     PMi_SetRegister(PM_REG_CONTROL, control);

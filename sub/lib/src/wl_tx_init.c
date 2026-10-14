@@ -10,7 +10,7 @@ void InitTxCtrl(void) {
     WlTxCtrl *txCtrl = &w->txCtrl;
     WlBss *bss = &w->bss;
     WlParam *param = &w->param;
-    __VENEER_MIi_CpuClear32(0, txCtrl, 0xB0);
+    __VENEER_MIi_CpuClear32(0, txCtrl, sizeof(WlTxCtrl));
     w->txCtrl.txq[0].active = 0;
     txCtrl->txq[0].heapFrame = NULL;
     txCtrl->txq[1].active = 0;

@@ -149,6 +149,6 @@ reset:
     }
     cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 1;
-    cb[1] = 0;
+    cb[1] = WM_ERRCODE_SUCCESS;
     __VENEER_WMSP_ReturnResult2Wm9(cb);
 }

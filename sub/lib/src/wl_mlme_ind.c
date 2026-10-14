@@ -30,7 +30,7 @@ void IssueMlmeConfirm(void) {
 }
 
 int MLME_IssueAuthIndication(const u16 *macAdrs, int algorithm) {
-    WlMlmePeerInd *ind = AllocateHeapBuf(&wlWorkPlain->heap.bufMan[0], 24);
+    WlMlmePeerInd *ind = AllocateHeapBuf(&wlWorkPlain->heap.bufMan[0], sizeof(WlMlmePeerInd));
     if (!ind) {
         SetFatalErr(1);
         return 0;
@@ -44,7 +44,7 @@ int MLME_IssueAuthIndication(const u16 *macAdrs, int algorithm) {
 }
 
 int MLME_IssueDeAuthIndication(const u16 *macAdrs, int reason) {
-    WlMlmePeerInd *ind = AllocateHeapBuf(&wlWorkPlain->heap.bufMan[0], 24);
+    WlMlmePeerInd *ind = AllocateHeapBuf(&wlWorkPlain->heap.bufMan[0], sizeof(WlMlmePeerInd));
     if (!ind) {
         SetFatalErr(1);
         return 0;
@@ -117,7 +117,7 @@ int MLME_IssueReAssIndication(const u16 *macAdrs, u32 aid, const u8 *ssidElement
 }
 
 int MLME_IssueDisAssIndication(const u16 *macAdrs, int reason) {
-    WlMlmePeerInd *ind = AllocateHeapBuf(&wlWorkPlain->heap.bufMan[0], 24);
+    WlMlmePeerInd *ind = AllocateHeapBuf(&wlWorkPlain->heap.bufMan[0], sizeof(WlMlmePeerInd));
     if (!ind) {
         SetFatalErr(1);
         return 0;
@@ -144,7 +144,7 @@ int MLME_IssueBeaconLostIndication(const u16 *macAdrs) {
 }
 
 int MLME_IssueBeaconSendIndication(void) {
-    WlIndHeader *ind = AllocateHeapBuf(&wlWorkPlain->heap.bufMan[0], 16);
+    WlIndHeader *ind = AllocateHeapBuf(&wlWorkPlain->heap.bufMan[0], sizeof(WlIndHeader));
     if (!ind) {
         SetFatalErr(1);
         return 0;
@@ -191,7 +191,7 @@ int MLME_IssueBeaconRecvIndication(WlRxFrame *frame) {
 }
 
 void InitializeMLME(void) {
-    MIi_CpuClear16(0, (u16 *)&wlWorkPlain->mlme, 32);
+    MIi_CpuClear16(0, (u16 *)&wlWorkPlain->mlme, sizeof(WlMlme));
 }
 
 #pragma dont_inline reset

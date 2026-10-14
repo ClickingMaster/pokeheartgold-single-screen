@@ -45,12 +45,12 @@ void NVRAM_SoftwareReset(void);
 
 void NVRAM_ExecuteProcess(NvramRequest *request) {
     OSIntrMode irq = OS_DisableInterrupts();
-    if (!SPIi_CheckException(1)) {
+    if (!SPIi_CheckException(SPI_MODULE_NVRAM)) {
         OS_RestoreInterrupts(irq);
         SPIi_ReturnResult((u16)request->command, 4);
         return;
     }
-    SPIi_GetException(1);
+    SPIi_GetException(SPI_MODULE_NVRAM);
     OS_RestoreInterrupts(irq);
     switch (request->command) {
     case 0x20:
@@ -65,7 +65,7 @@ void NVRAM_ExecuteProcess(NvramRequest *request) {
     case 0x23:
         if (!NvramCheckReadyToRead()) {
             SPIi_ReturnResult((u16)request->command, 3);
-            SPIi_ReleaseException(1);
+            SPIi_ReleaseException(SPI_MODULE_NVRAM);
             return;
         }
         NVRAM_ReadDataBytes(request->address, request->length, request->data);
@@ -73,7 +73,7 @@ void NVRAM_ExecuteProcess(NvramRequest *request) {
     case 0x24:
         if (!NvramCheckReadyToRead()) {
             SPIi_ReturnResult((u16)request->command, 3);
-            SPIi_ReleaseException(1);
+            SPIi_ReleaseException(SPI_MODULE_NVRAM);
             return;
         }
         NVRAM_ReadDataBytesAtHigherSpeed(request->address, request->length, request->data);
@@ -81,7 +81,7 @@ void NVRAM_ExecuteProcess(NvramRequest *request) {
     case 0x25:
         if (!NvramCheckReadyToWrite()) {
             SPIi_ReturnResult((u16)request->command, 3);
-            SPIi_ReleaseException(1);
+            SPIi_ReleaseException(SPI_MODULE_NVRAM);
             return;
         }
         NVRAM_PageWrite(request->address, (u16)request->length, request->data);
@@ -89,7 +89,7 @@ void NVRAM_ExecuteProcess(NvramRequest *request) {
     case 0x26:
         if (!NvramCheckReadyToWrite()) {
             SPIi_ReturnResult((u16)request->command, 3);
-            SPIi_ReleaseException(1);
+            SPIi_ReleaseException(SPI_MODULE_NVRAM);
             return;
         }
         NVRAM_PageProgram(request->address, (u16)request->length, request->data);
@@ -97,7 +97,7 @@ void NVRAM_ExecuteProcess(NvramRequest *request) {
     case 0x27:
         if (!NvramCheckReadyToWrite()) {
             SPIi_ReturnResult((u16)request->command, 3);
-            SPIi_ReleaseException(1);
+            SPIi_ReleaseException(SPI_MODULE_NVRAM);
             return;
         }
         NVRAM_PageErase(request->address);
@@ -105,7 +105,7 @@ void NVRAM_ExecuteProcess(NvramRequest *request) {
     case 0x28:
         if (!NvramCheckReadyToWrite()) {
             SPIi_ReturnResult((u16)request->command, 3);
-            SPIi_ReleaseException(1);
+            SPIi_ReleaseException(SPI_MODULE_NVRAM);
             return;
         }
         NVRAM_SectorErase(request->address);
@@ -119,7 +119,7 @@ void NVRAM_ExecuteProcess(NvramRequest *request) {
     case 0x2b:
         if (!NvramCheckReadyToWrite()) {
             SPIi_ReturnResult((u16)request->command, 3);
-            SPIi_ReleaseException(1);
+            SPIi_ReleaseException(SPI_MODULE_NVRAM);
             return;
         }
         NVRAM_ChipErase();
@@ -131,12 +131,12 @@ void NVRAM_ExecuteProcess(NvramRequest *request) {
         NVRAM_SoftwareReset();
         break;
     default:
-        SPIi_ReleaseException(1);
+        SPIi_ReleaseException(SPI_MODULE_NVRAM);
         SPIi_ReturnResult((u16)request->command, 1);
         return;
     }
     SPIi_ReturnResult((u16)request->command, 0);
-    SPIi_ReleaseException(1);
+    SPIi_ReleaseException(SPI_MODULE_NVRAM);
 }
 
 int NvramCheckReadyToRead(void) {

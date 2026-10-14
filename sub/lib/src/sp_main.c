@@ -201,8 +201,8 @@ selected:
     }
     SND_Init(6);
     PAD_InitXYButton();
-    OS_SetIrqFunction(1, VBlankIntr);
-    OS_EnableIrqMask(1);
+    OS_SetIrqFunction(OS_IE_VBLANK, VBlankIntr);
+    OS_EnableIrqMask(OS_IE_VBLANK);
     // Enable the VBlank IRQ in DISPSTAT, then set IME.
     {
         volatile u16 *disp = (volatile u16 *)0x04000004;

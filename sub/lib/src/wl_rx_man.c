@@ -80,7 +80,7 @@ void RxAssReqFrame(WlRxFrame *frame) {
         return;
     }
     // body: capability, listen interval, elements
-    __VENEER_MIi_CpuClear32(0, (u32 *)&info, 44);
+    __VENEER_MIi_CpuClear32(0, (u32 *)&info, sizeof(WlElements));
     info.elements = (u8 *)frame + 0x30;
     info.length = length - 4;
     ElementChecker(&info);
@@ -121,7 +121,7 @@ void RxProbeReqFrame(WlRxFrame *frame) {
     if (!(frame->addr3[0] & 1) && !(frame->status & 0x8000)) {
         return;
     }
-    __VENEER_MIi_CpuClear32(0, (u32 *)&info, 44);
+    __VENEER_MIi_CpuClear32(0, (u32 *)&info, sizeof(WlElements));
     info.elements = (u8 *)frame + 0x2C;
     info.length = frame->length;
     if (!wlWorkPlain->param.flags.bits.bcSsidResponse) {

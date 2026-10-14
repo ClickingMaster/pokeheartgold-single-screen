@@ -1,5 +1,7 @@
 #include <nitro/types.h>
 
+#include <nitro/pxi/fifo_shared.h>
+
 #include "wmsp_internal.h"
 
 // The code below is compiled as ARM (32-bit) code.
@@ -11,16 +13,10 @@
 #define REG_POWCNT2  (*(volatile u16 *)0x04000304)
 #define POWCNT2_WIFI 2
 
-#define PXI_FIFO_TAG_WM  10
-#define PXI_FIFO_TAG_WVR 15
-
 #define WVR_COMMAND_START          0x10000
 #define WVR_COMMAND_TERMINATE      0x20000
 #define WVR_RESULT_ILLEGAL_STATE   5
 #define WVR_RESULT_INVALID_COMMAND 7
-
-// Result code WVR returns for WM requests while the wireless manager is not running.
-#define WVR_WM_RESULT_UNAVAILABLE 4
 
 enum {
     WVR_STATE_IDLE = 1,
@@ -140,7 +136,7 @@ void WvrPxiWmSubstituteCallback(int tag, void *buf, int error) {
     if (p) {
         MIi_CpuClear32(0, (u32 *)p, 0x100);
         p[0] = command;
-        p[1] = WVR_WM_RESULT_UNAVAILABLE;
+        p[1] = WM_ERRCODE_WM_DISABLE;
         while (PXI_SendWordByFifo(PXI_FIFO_TAG_WM, (u32)p, 0) < 0) {}
     }
 }
@@ -242,32 +238,32 @@ void WvrTerminateThread(void *arg) {
         __VENEER_WMSP_CancelAllAlarms();
     }
     for (;;) {
-        if (!OS_ReceiveMessage(&w->pxiQueue, &msg, 0)) {
+        if (!OS_ReceiveMessage(&w->pxiQueue, &msg, OS_MESSAGE_NOBLOCK)) {
             break;
         }
         if (ARM9_BUF(w)) {
             u16 *buf = WMSP_GetBuffer4Callback2Wm9();
             MIi_CpuClear32(0, (u32 *)buf, 0x100);
             buf[0] = *(u16 *)msg;
-            buf[1] = WVR_WM_RESULT_UNAVAILABLE;
+            buf[1] = WM_ERRCODE_WM_DISABLE;
             WMSP_ReturnResult2Wm9(buf);
             *(u16 *)msg |= 0x8000;
         }
     }
     if (WvrCheckThreadRunning(__VENEER_WMSP_GetRequestThread())) {
-        OS_SendMessage(&w->pxiQueue, 0, 1);
+        OS_SendMessage(&w->pxiQueue, 0, OS_MESSAGE_BLOCK);
         OS_JoinThread(__VENEER_WMSP_GetRequestThread());
     }
-    a = OS_ReceiveMessage(&w->pxiQueue, &msg, 0);
-    b = OS_ReceiveMessage(&w->replyQueue, &msg, 0);
-    c = OS_ReceiveMessage(&w->requestQueue, &msg, 0);
+    a = OS_ReceiveMessage(&w->pxiQueue, &msg, OS_MESSAGE_NOBLOCK);
+    b = OS_ReceiveMessage(&w->replyQueue, &msg, OS_MESSAGE_NOBLOCK);
+    c = OS_ReceiveMessage(&w->requestQueue, &msg, OS_MESSAGE_NOBLOCK);
     if (a | b | c) {
         OS_Terminate();
     }
     __VENEER_WL_Terminate();
-    while (OS_ReceiveMessage(&w->indicateQueue, &msg, 0)) {}
+    while (OS_ReceiveMessage(&w->indicateQueue, &msg, OS_MESSAGE_NOBLOCK)) {}
     if (WvrCheckThreadRunning(__VENEER_WMSP_GetIndicateThread())) {
-        OS_SendMessage(&w->indicateQueue, 0, 1);
+        OS_SendMessage(&w->indicateQueue, 0, OS_MESSAGE_BLOCK);
         OS_JoinThread(__VENEER_WMSP_GetIndicateThread());
     }
     PM_SetLEDPattern(1);

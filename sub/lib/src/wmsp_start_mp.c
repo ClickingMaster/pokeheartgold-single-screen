@@ -11,7 +11,7 @@ void WMSP_StartMP(WmspStartMPRequest *request) {
     u32 recvBufSize = request->recvBufSize;
     u8 *sendBuf = request->sendBuf;
     u32 sendBufSize = request->sendBufSize;
-    u32 error = 0;
+    u32 error = WM_ERRCODE_SUCCESS;
     u32 flags;
     WmspStatus *status = wmspW.status;
     WmspStatus *settings;
@@ -22,7 +22,7 @@ void WMSP_StartMP(WmspStartMPRequest *request) {
     if (!status->ignoreSizePrecheckMode) {
         u32 needed = (status->sendMaxSize + 31) & ~31u;
         if (sendBufSize < needed) {
-            error = 6;
+            error = WM_ERRCODE_INVALID_PARAM;
         }
         if (status->aid == 0) {
             needed = (status->recvMaxSize + 12) * status->parentParam.maxEntry + 0x29;
@@ -31,12 +31,12 @@ void WMSP_StartMP(WmspStartMPRequest *request) {
         }
         needed &= ~31u;
         if (recvBufSize < needed) {
-            error = 6;
+            error = WM_ERRCODE_INVALID_PARAM;
         }
     }
     if (status->mode == 2) {
         if (!(status->allowedChannel & ((1 << work->arm9Buf->bssDesc.channel) >> 1))) {
-            error = 6;
+            error = WM_ERRCODE_INVALID_PARAM;
         }
     }
     if (error) {
@@ -141,7 +141,7 @@ void WMSP_StartMP(WmspStartMPRequest *request) {
         }
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 14;
-        cb[1] = 0;
+        cb[1] = WM_ERRCODE_SUCCESS;
         cb[2] = 10;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
         status->mpActive = 1;
@@ -150,7 +150,7 @@ void WMSP_StartMP(WmspStartMPRequest *request) {
         if (result[2]) {
             cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
             cb[0] = 14;
-            cb[1] = 1;
+            cb[1] = WM_ERRCODE_FAILED;
             cb[2] = 0x216;
             cb[3] = result[2];
             __VENEER_WMSP_ReturnResult2Wm9(cb);
@@ -159,7 +159,7 @@ void WMSP_StartMP(WmspStartMPRequest *request) {
         __VENEER_OS_RestoreInterrupts((OSIntrMode)irq);
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 14;
-        cb[1] = 3;
+        cb[1] = WM_ERRCODE_ILLEGAL_STATE;
         cb[2] = 10;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
     }

@@ -104,7 +104,7 @@ void WMSP_IndicateThread(void *arg) {
         case 0x84:
             cb_1 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
             cb_1[0] = 0x80;
-            cb_1[1] = 0;
+            cb_1[1] = WM_ERRCODE_SUCCESS;
             cb_1[2] = 0x13;
             __VENEER_WMSP_ReturnResult2Wm9(cb_1);
             break;
@@ -130,7 +130,7 @@ void WMSP_IndicateThread(void *arg) {
                 }
                 cb_2 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
                 cb_2[0] = 8;
-                cb_2[1] = 0;
+                cb_2[1] = WM_ERRCODE_SUCCESS;
                 cb_2[4] = 9;
                 cb_2[9] = H(message, 22);
                 cb_2[8] = aid85;
@@ -168,7 +168,7 @@ void WMSP_IndicateThread(void *arg) {
                 __VENEER_OS_RestoreInterrupts(irq);
                 cb_2 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
                 cb_2[0] = 12;
-                cb_2[1] = 0;
+                cb_2[1] = WM_ERRCODE_SUCCESS;
                 cb_2[4] = 9;
                 cb_2[6] = H(message, 22);
                 cb_2[5] = st->aid;
@@ -198,7 +198,7 @@ void WMSP_IndicateThread(void *arg) {
                 if (!ok) {
                     cb_3 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
                     cb_3[0] = 0x80;
-                    cb_3[1] = 8;
+                    cb_3[1] = WM_ERRCODE_FIFO_ERROR;
                     cb_3[2] = 0x16;
                     cb_3[3] = 0x22;
                     __VENEER_WMSP_ReturnResult2Wm9(cb_3);
@@ -214,7 +214,7 @@ void WMSP_IndicateThread(void *arg) {
             __VENEER_MIi_CpuClear16(1, st->portSeqNo[aid86], 16);
             cb_3 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
             cb_3[0] = 8;
-            cb_3[1] = 0;
+            cb_3[1] = WM_ERRCODE_SUCCESS;
             cb_3[4] = 7;
             __VENEER_MI_CpuCopy8((u8 *)message + 16, cb_3 + 5, 6);
             cb_3[8] = aid86;
@@ -227,14 +227,14 @@ void WMSP_IndicateThread(void *arg) {
         case 0x87:
             cb_4 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
             cb_4[0] = 0x80;
-            cb_4[1] = 0;
+            cb_4[1] = WM_ERRCODE_SUCCESS;
             cb_4[2] = 0x12;
             __VENEER_WMSP_ReturnResult2Wm9(cb_4);
             break;
         case 0x88:
             cb_5 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
             cb_5[0] = 0x80;
-            cb_5[1] = 0;
+            cb_5[1] = WM_ERRCODE_SUCCESS;
             cb_5[2] = 0x11;
             __VENEER_WMSP_ReturnResult2Wm9(cb_5);
             break;
@@ -242,7 +242,7 @@ void WMSP_IndicateThread(void *arg) {
             if (st->beaconIndicateFlag) {
                 cb_6 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
                 cb_6[0] = 12;
-                cb_6[1] = 0;
+                cb_6[1] = WM_ERRCODE_SUCCESS;
                 cb_6[4] = 8;
                 __VENEER_WMSP_ReturnResult2Wm9(cb_6);
             }
@@ -251,7 +251,7 @@ void WMSP_IndicateThread(void *arg) {
             if (st->beaconIndicateFlag) {
                 cb_7 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
                 cb_7[0] = 8;
-                cb_7[1] = 0;
+                cb_7[1] = WM_ERRCODE_SUCCESS;
                 cb_7[4] = 2;
                 __VENEER_WMSP_ReturnResult2Wm9(cb_7);
             }
@@ -277,7 +277,7 @@ void WMSP_IndicateThread(void *arg) {
                 if (!ok) {
                     cb_8 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
                     cb_8[0] = 0x80;
-                    cb_8[1] = 8;
+                    cb_8[1] = WM_ERRCODE_FIFO_ERROR;
                     cb_8[2] = 0x16;
                     cb_8[3] = 0x25;
                     __VENEER_WMSP_ReturnResult2Wm9(cb_8);
@@ -289,7 +289,7 @@ void WMSP_IndicateThread(void *arg) {
             }
             cb_8 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
             cb_8[0] = 0x80;
-            cb_8[1] = 0;
+            cb_8[1] = WM_ERRCODE_SUCCESS;
             cb_8[2] = 0x10;
             cb_8[3] = H(message, 0x44);
             cb_8[4] = st->state;
@@ -319,7 +319,7 @@ void WMSP_IndicateThread(void *arg) {
             __VENEER_MI_CpuCopy8((u8 *)message + 0x2e, rxBuf + 0x1e, 6);
             cb_9 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
             cb_9[0] = 0x11;
-            cb_9[1] = 0;
+            cb_9[1] = WM_ERRCODE_SUCCESS;
             cb_9[2] = 15;
             *(u8 **)(cb_9 + 4) = rxBuf;
             __VENEER_WMSP_ReturnResult2Wm9(cb_9);
@@ -381,7 +381,7 @@ void WMSP_IndicateThread(void *arg) {
                 }
                 cb_10 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
                 cb_10[0] = 14;
-                cb_10[1] = 9;
+                cb_10[1] = WM_ERRCODE_TIMEOUT;
                 cb_10[2] = 13;
                 *(u32 *)(cb_10 + 4) = 0;
                 __VENEER_WMSP_ReturnResult2Wm9(cb_10);
@@ -399,7 +399,7 @@ void WMSP_IndicateThread(void *arg) {
                 st->unk_5e = (H(mpRecvBuf, 0x30) & 0x8000) ? 1 : 0;
                 cb_10 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
                 cb_10[0] = 14;
-                cb_10[1] = 0;
+                cb_10[1] = WM_ERRCODE_SUCCESS;
                 cb_10[2] = 12;
                 *(u8 **)(cb_10 + 4) = mpRecvBuf;
                 __VENEER_WMSP_ReturnResult2Wm9(cb_10);
@@ -411,7 +411,7 @@ void WMSP_IndicateThread(void *arg) {
                 st->unk_5e = 0;
                 cb_10 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
                 cb_10[0] = 14;
-                cb_10[1] = 14;
+                cb_10[1] = WM_ERRCODE_NO_DATA;
                 cb_10[2] = 12;
                 *(u8 **)(cb_10 + 4) = mpRecvBuf;
                 __VENEER_WMSP_ReturnResult2Wm9(cb_10);
@@ -486,7 +486,7 @@ void WMSP_IndicateThread(void *arg) {
                         if (!ok) {
                             cb_11 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
                             cb_11[0] = 0x80;
-                            cb_11[1] = 8;
+                            cb_11[1] = WM_ERRCODE_FIFO_ERROR;
                             cb_11[2] = 0x16;
                             cb_11[3] = 0x25;
                             __VENEER_WMSP_ReturnResult2Wm9(cb_11);
@@ -500,7 +500,7 @@ void WMSP_IndicateThread(void *arg) {
             }
             cb_11 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
             cb_11[0] = 14;
-            cb_11[1] = 0;
+            cb_11[1] = WM_ERRCODE_SUCCESS;
             cb_11[2] = 11;
             *(u8 **)(cb_11 + 4) = mpEndBuf;
             __VENEER_WMSP_ReturnResult2Wm9(cb_11);
@@ -576,11 +576,11 @@ void WMSP_IndicateThread(void *arg) {
             cb_12 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
             cb_12[0] = 14;
             if (timeout) {
-                cb_12[1] = 9;
+                cb_12[1] = WM_ERRCODE_TIMEOUT;
             } else if (H(message, 0x3e) & (1 << st->aid)) {
-                cb_12[1] = 15;
+                cb_12[1] = WM_ERRCODE_SEND_FAILED;
             } else {
-                cb_12[1] = 0;
+                cb_12[1] = WM_ERRCODE_SUCCESS;
             }
             cb_12[2] = 13;
             *(u32 *)(cb_12 + 4) = 0;
@@ -620,7 +620,7 @@ void WMSP_IndicateThread(void *arg) {
                 WMSP_FlushSendQueue(1, 0);
                 cb_13 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
                 cb_13[0] = 0x80;
-                cb_13[1] = 0;
+                cb_13[1] = WM_ERRCODE_SUCCESS;
                 cb_13[2] = 0x17;
                 cb_13[3] = 1;
                 __VENEER_WMSP_ReturnResult2Wm9(cb_13);
@@ -642,7 +642,7 @@ void WMSP_IndicateThread(void *arg) {
             if (!ok) {
                 cb_13 = __VENEER_WMSP_GetBuffer4Callback2Wm9();
                 cb_13[0] = 0x80;
-                cb_13[1] = 8;
+                cb_13[1] = WM_ERRCODE_FIFO_ERROR;
                 cb_13[2] = 0x16;
                 cb_13[3] = 0x25;
                 __VENEER_WMSP_ReturnResult2Wm9(cb_13);

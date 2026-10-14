@@ -16,6 +16,8 @@
 #include <nitro/os/tick.h>
 #include <nitro/os/valarm.h>
 
+#include "WM.h"
+
 // Parent parameters given by the ARM9 (WMSP_SetParentParam).
 typedef struct WmspParentParam {
     void *userGameInfo; // ARM9 buffer (WMSP_SetGameInfo)

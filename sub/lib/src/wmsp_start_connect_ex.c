@@ -31,7 +31,7 @@ void WMSP_StartConnectEx(WmspStartConnectExRequest *request) {
     if (status->state != 2 || (status->miscFlags & 1)) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 12;
-        cb[1] = 3;
+        cb[1] = WM_ERRCODE_ILLEGAL_STATE;
         cb[4] = 6;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
         return;
@@ -40,7 +40,7 @@ void WMSP_StartConnectEx(WmspStartConnectExRequest *request) {
     if (parent->bssDesc.gameInfoLength >= 16 && !(parent->attribute & 1)) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 12;
-        cb[1] = 11;
+        cb[1] = WM_ERRCODE_NO_ENTRY;
         cb[4] = 6;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
         return;
@@ -50,7 +50,7 @@ void WMSP_StartConnectEx(WmspStartConnectExRequest *request) {
         if (!(bit & status->enableChannel) || !(0x1fff & (bit >> 1))) {
             cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
             cb[0] = 12;
-            cb[1] = 6;
+            cb[1] = WM_ERRCODE_INVALID_PARAM;
             cb[4] = 6;
             __VENEER_WMSP_ReturnResult2Wm9(cb);
             return;
@@ -58,7 +58,7 @@ void WMSP_StartConnectEx(WmspStartConnectExRequest *request) {
     }
     cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 12;
-    cb[1] = 0;
+    cb[1] = WM_ERRCODE_SUCCESS;
     cb[4] = 6;
     __VENEER_WMSP_ReturnResult2Wm9(cb);
     if (status->rate == 1) {
@@ -116,7 +116,7 @@ void WMSP_StartConnectEx(WmspStartConnectExRequest *request) {
         return;
     }
     status->pwrMgtMode = power;
-    __VENEER_MI_CpuCopy8(&parent->bssDesc, &descriptor, 64);
+    __VENEER_MI_CpuCopy8(&parent->bssDesc, &descriptor, sizeof(WmspBssDesc));
     if (status->mode == 2) {
         // SSID: ggid, tgid, 0, then the request's 24 bytes
         descriptor.data[5] = 32;
@@ -137,7 +137,7 @@ void WMSP_StartConnectEx(WmspStartConnectExRequest *request) {
     if (result[2] == 12 && result[3] == 19) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 12;
-        cb[1] = 12;
+        cb[1] = WM_ERRCODE_OVER_MAX_ENTRY;
         cb[4] = 6;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
         return;
@@ -153,7 +153,7 @@ void WMSP_StartConnectEx(WmspStartConnectExRequest *request) {
         __VENEER_OS_RestoreInterrupts((OSIntrMode)irq);
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 12;
-        cb[1] = 12;
+        cb[1] = WM_ERRCODE_OVER_MAX_ENTRY;
         cb[4] = 6;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
         return;
@@ -189,7 +189,7 @@ void WMSP_StartConnectEx(WmspStartConnectExRequest *request) {
     status->beaconIndicateFlag = 1;
     cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 12;
-    cb[1] = 0;
+    cb[1] = WM_ERRCODE_SUCCESS;
     cb[4] = 7;
     cb[5] = status->aid;
     __VENEER_MI_CpuCopy8(status->bssid, cb + 8, 6);

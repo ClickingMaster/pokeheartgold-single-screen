@@ -20,9 +20,9 @@ void WMSP_SetEntry(u32 *request) {
     cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 0x21;
     if (!result[2]) {
-        cb[1] = 0;
+        cb[1] = WM_ERRCODE_SUCCESS;
     } else {
-        cb[1] = 1;
+        cb[1] = WM_ERRCODE_FAILED;
         cb[2] = 0x245;
         cb[3] = result[2];
     }
@@ -45,9 +45,9 @@ void WMSP_AutoDeAuth(void *request) {
     cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 0x22;
     if (!result[2]) {
-        cb[1] = 0;
+        cb[1] = WM_ERRCODE_SUCCESS;
     } else {
-        cb[1] = 1;
+        cb[1] = WM_ERRCODE_FAILED;
         cb[2] = 5;
         cb[3] = result[2];
     }
@@ -69,7 +69,7 @@ void WMSP_Enable(void *request) {
     {
         u16 *cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 3;
-        cb[1] = 0;
+        cb[1] = WM_ERRCODE_SUCCESS;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
     }
 }
@@ -146,7 +146,7 @@ void WMSP_Disable(void *request) {
     if (status->state != 1) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 4;
-        cb[1] = 3;
+        cb[1] = WM_ERRCODE_ILLEGAL_STATE;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
         return;
     }
@@ -154,7 +154,7 @@ void WMSP_Disable(void *request) {
     status->state = 0;
     cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 4;
-    cb[1] = 0;
+    cb[1] = WM_ERRCODE_SUCCESS;
     __VENEER_WMSP_ReturnResult2Wm9(cb);
 }
 
@@ -166,14 +166,14 @@ void WMSP_PowerOn(void *request) {
     if (status->state != 1) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 5;
-        cb[1] = 3;
+        cb[1] = WM_ERRCODE_ILLEGAL_STATE;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
         return;
     }
     if (!WMSPi_CommonWlIdle(&command, &wlResult)) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 5;
-        cb[1] = 1;
+        cb[1] = WM_ERRCODE_FAILED;
         cb[2] = command;
         cb[3] = wlResult;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
@@ -182,7 +182,7 @@ void WMSP_PowerOn(void *request) {
     status->state = 2;
     cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 5;
-    cb[1] = 0;
+    cb[1] = WM_ERRCODE_SUCCESS;
     __VENEER_WMSP_ReturnResult2Wm9(cb);
 }
 
@@ -263,7 +263,7 @@ void WMSP_PowerOff(void *request) {
     if (status->state != 2) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 6;
-        cb[1] = 3;
+        cb[1] = WM_ERRCODE_ILLEGAL_STATE;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
         return;
     }
@@ -271,7 +271,7 @@ void WMSP_PowerOff(void *request) {
     if (result[2]) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 6;
-        cb[1] = 1;
+        cb[1] = WM_ERRCODE_FAILED;
         cb[2] = 0x301;
         cb[3] = result[2];
         __VENEER_WMSP_ReturnResult2Wm9(cb);
@@ -280,7 +280,7 @@ void WMSP_PowerOff(void *request) {
     status->state = 1;
     cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 6;
-    cb[1] = 0;
+    cb[1] = WM_ERRCODE_SUCCESS;
     __VENEER_WMSP_ReturnResult2Wm9(cb);
 }
 
@@ -292,7 +292,7 @@ void WMSP_SetMPParameter(u32 *request) {
     cb[0] = 0x23;
     cb[1] = result;
     *(u32 *)(cb + 2) = request[1];
-    __VENEER_MI_CpuCopy8(&old, cb + 4, 0x1c);
+    __VENEER_MI_CpuCopy8(&old, cb + 4, sizeof(WmspMPParam));
     __VENEER_WMSP_ReturnResult2Wm9(cb);
 }
 
@@ -300,13 +300,13 @@ void WMSP_SetMPParameter(u32 *request) {
 // `old` (may be NULL). Returns 0, 3 (size or mode fields during MP) or 6 (value out of range).
 u32 WMSP_SetMPParameterCore(WmspMPParam *input, WmspMPParam *old) {
     OSIntrMode irq;
-    u32 result = 0;
+    u32 result = WM_ERRCODE_SUCCESS;
     u32 mask;
     WmspStatus *status = wmspW.status;
     mask = input->mask;
     if ((u16)(status->state + (u16)-9) <= 1 && (mask & 0x2c00)) {
         mask &= ~0x2c00;
-        result = 3;
+        result = WM_ERRCODE_ILLEGAL_STATE;
     }
     irq = __VENEER_OS_DisableInterrupts();
     if (old) {
@@ -359,7 +359,7 @@ u32 WMSP_SetMPParameterCore(WmspMPParam *input, WmspMPParam *old) {
     if (mask & 8) {
         u16 value = input->parentSize;
         if (status->parentMaxSize < (u16)((value + 1) & ~1)) {
-            result = 6;
+            result = WM_ERRCODE_INVALID_PARAM;
         } else {
             WMSP_SetParentSize(value);
         }
@@ -367,7 +367,7 @@ u32 WMSP_SetMPParameterCore(WmspMPParam *input, WmspMPParam *old) {
     if (mask & 16) {
         u16 value = input->childSize;
         if ((u16)((value + 1) & ~1) > 512) {
-            result = 6;
+            result = WM_ERRCODE_INVALID_PARAM;
         } else {
             WMSP_SetChildSize(value);
         }
@@ -375,7 +375,7 @@ u32 WMSP_SetMPParameterCore(WmspMPParam *input, WmspMPParam *old) {
     if (mask & 32) {
         u32 value = input->parentInterval;
         if (value > 10000) {
-            result = 6;
+            result = WM_ERRCODE_INVALID_PARAM;
         } else {
             status->parentInterval = value;
             status->parentIntervalTick = ((u64)value * 0x82ea / 64) / 1024; // microseconds -> ticks
@@ -384,7 +384,7 @@ u32 WMSP_SetMPParameterCore(WmspMPParam *input, WmspMPParam *old) {
     if (mask & 64) {
         u32 value = input->childInterval;
         if (value > 10000) {
-            result = 6;
+            result = WM_ERRCODE_INVALID_PARAM;
         } else {
             status->childInterval = value;
             status->childIntervalTick = ((u64)value * 0x82ea / 64) / 1024;
@@ -395,7 +395,7 @@ u32 WMSP_SetMPParameterCore(WmspMPParam *input, WmspMPParam *old) {
         if (value <= 190 || (value >= 220 && value <= 262)) {
             status->parentVAlarmLine = value;
         } else {
-            result = 6;
+            result = WM_ERRCODE_INVALID_PARAM;
         }
     }
     if (mask & 256) {
@@ -403,7 +403,7 @@ u32 WMSP_SetMPParameterCore(WmspMPParam *input, WmspMPParam *old) {
         if (value <= 190 || (value >= 220 && value <= 262)) {
             status->childVAlarmLine = value;
         } else {
-            result = 6;
+            result = WM_ERRCODE_INVALID_PARAM;
         }
     }
     if (mask & 512) {
@@ -435,14 +435,14 @@ void WMSP_SetBeaconPeriod(u32 *request) {
     if (error) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 0x24;
-        cb[1] = 1;
+        cb[1] = WM_ERRCODE_FAILED;
         cb[2] = 0x242;
         cb[3] = error;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
     } else {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 0x24;
-        cb[1] = 0;
+        cb[1] = WM_ERRCODE_SUCCESS;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
     }
 }
@@ -464,13 +464,13 @@ void WMSP_SetPowerSaveMode(void *request) {
     cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 0x28;
     if (status->state != 11) {
-        cb[1] = 3;
+        cb[1] = WM_ERRCODE_ILLEGAL_STATE;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
         return;
     }
     result = WMSP_WL_MlmePowerManagement(buf, arg[1] == 1, 0, 1);
     if (result[2] != 0) {
-        cb[1] = 1;
+        cb[1] = WM_ERRCODE_FAILED;
         cb[2] = 1;
         cb[3] = result[2];
         __VENEER_WMSP_ReturnResult2Wm9(cb);
@@ -490,13 +490,13 @@ void WMSP_SetPowerSaveMode(void *request) {
     frame.data = bufArr;
     result = WMSP_WL_MaData(bufArr, (u16 *)&frame);
     if (result[2] != 0) {
-        cb[1] = 1;
+        cb[1] = WM_ERRCODE_FAILED;
         cb[2] = 0x100;
         cb[3] = result[2];
         __VENEER_WMSP_ReturnResult2Wm9(cb);
         return;
     }
-    cb[1] = 0;
+    cb[1] = WM_ERRCODE_SUCCESS;
     __VENEER_WMSP_ReturnResult2Wm9(cb);
 }
 
@@ -504,14 +504,14 @@ void WMSP_SetPowerSaveMode(void *request) {
 void WMSP_StartTestRxMode(void) {
     u16 *cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 41;
-    cb[1] = 4;
+    cb[1] = WM_ERRCODE_WM_DISABLE;
     __VENEER_WMSP_ReturnResult2Wm9(cb);
 }
 
 void WMSP_StopTestRxMode(void) {
     u16 *cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 42;
-    cb[1] = 4;
+    cb[1] = WM_ERRCODE_WM_DISABLE;
     __VENEER_WMSP_ReturnResult2Wm9(cb);
 }
 

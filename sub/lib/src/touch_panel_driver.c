@@ -5,6 +5,7 @@
 #include <nitro/os/system.h>
 #include <nitro/os/terminate_proc.h>
 #include <nitro/os/valarm.h>
+#include <nitro/spi/ARM9/tp.h>
 
 #include "spi_internal.h"
 // The code below is compiled as ARM (32-bit) code.
@@ -82,7 +83,7 @@ void TP_AnalyzeCommand(u32 word) {
         break;
     }
     case 0:
-        if (!SPIi_SetEntry(0, command, 0)) {
+        if (!SPIi_SetEntry(SPI_MODULE_TP, command, 0)) {
             SPIi_ReturnResult(command, 4);
         }
         break;
@@ -101,7 +102,7 @@ void TP_AnalyzeCommand(u32 word) {
             SPIi_ReturnResult(command, 2);
             break;
         }
-        if (SPIi_SetEntry(0, command, 2, (u32)low, (u32)tpw.command[1])) {
+        if (SPIi_SetEntry(SPI_MODULE_TP, command, 2, (u32)low, (u32)tpw.command[1])) {
             tpw.state = 1;
         } else {
             SPIi_ReturnResult(command, 4);
@@ -113,7 +114,7 @@ void TP_AnalyzeCommand(u32 word) {
             SPIi_ReturnResult(command, 3);
             break;
         }
-        if (SPIi_SetEntry(0, command, 0)) {
+        if (SPIi_SetEntry(SPI_MODULE_TP, command, 0)) {
             tpw.state = 3;
         } else {
             SPIi_ReturnResult(command, 4);
@@ -168,12 +169,12 @@ void TP_ExecuteProcess(TpRequest *request) {
         TpSample result;
         u16 deviation;
         irq = OS_DisableInterrupts();
-        if (!SPIi_CheckException(0)) {
+        if (!SPIi_CheckException(SPI_MODULE_TP)) {
             OS_RestoreInterrupts(irq);
             SPIi_ReturnResult((u16)request->command, 4);
             break;
         }
-        SPIi_GetException(0);
+        SPIi_GetException(SPI_MODULE_TP);
         OS_RestoreInterrupts(irq);
         TP_ExecSampling(&result, tpw.range, &deviation);
         UpdateTouchThreshold(&result, deviation);
@@ -184,7 +185,7 @@ void TP_ExecuteProcess(TpRequest *request) {
         } else {
             SPIi_ReturnResult(request->command, request->count & 0xff);
         }
-        SPIi_ReleaseException(0);
+        SPIi_ReleaseException(SPI_MODULE_TP);
         break;
     }
     case 1:
@@ -222,8 +223,8 @@ void TP_ExecuteProcess(TpRequest *request) {
 
 void TpVAlarmHandler(void *arg) {
     TpSample data;
-    if (SPIi_SetEntry(0, 0x10, 1, arg) == 0) {
-        data.bits.validity = 3;
+    if (SPIi_SetEntry(SPI_MODULE_TP, 0x10, 1, arg) == 0) {
+        data.bits.validity = TP_VALIDITY_INVALID_XY;
         *(u16 *)0x027fffaa = data.halves[0];
         *(u16 *)0x027fffac = data.halves[1];
         SPIi_ReturnResult(0x10, (u32)arg & 0xff);
@@ -354,15 +355,15 @@ void TP_ExecSampling(TpSample *sample, int range, u16 *spread) {
     if (!touch) {
         sample->bits.x = 0;
         sample->bits.y = 0;
-        sample->bits.touch = 0;
-        sample->bits.validity = 3;
+        sample->bits.touch = TP_TOUCH_OFF;
+        sample->bits.validity = TP_VALIDITY_INVALID_XY;
         last_touch_flg = 0;
         return;
     }
     sample->bits.validity = TPi_DetectPos(&value, (int)magnitude, 0, &dx);
     sample->bits.x = value;
     if (TPi_DetectPos(&value, (int)magnitude, 1, &dy) == 2) {
-        sample->bits.validity |= 2;
+        sample->bits.validity |= TP_VALIDITY_INVALID_Y;
     }
     sample->bits.y = value;
     REG_SPICNT = 0x8a01;
@@ -372,21 +373,21 @@ void TP_ExecSampling(TpSample *sample, int range, u16 *spread) {
     REG_SPICNT = 0x8201;
     SPI_DummyWait_03801538();
     if (touch == 2) {
-        sample->bits.validity = 3;
+        sample->bits.validity = TP_VALIDITY_INVALID_XY;
     }
     switch (TPi_DetectTouch()) {
     case 2:
-        sample->bits.touch = 1;
-        sample->bits.validity = 3;
+        sample->bits.touch = TP_TOUCH_ON;
+        sample->bits.validity = TP_VALIDITY_INVALID_XY;
         last_touch_flg = 0;
         break;
     case 1:
-        sample->bits.touch = 1;
+        sample->bits.touch = TP_TOUCH_ON;
         last_touch_flg = 1;
         *spread = dx >= dy ? dx : dy;
         break;
     case 0:
-        sample->bits.touch = 0;
+        sample->bits.touch = TP_TOUCH_OFF;
         last_touch_flg = 0;
         break;
     default:

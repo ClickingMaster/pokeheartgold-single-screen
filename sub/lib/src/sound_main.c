@@ -78,7 +78,7 @@ void SND_StopIntervalTimer(void) {
 }
 
 void SND_SendWakeupMessage(void) {
-    OS_SendMessage(&sndMesgQueue, (void *)SND_MESSAGE_WAKEUP, 0);
+    OS_SendMessage(&sndMesgQueue, (void *)SND_MESSAGE_WAKEUP, OS_MESSAGE_NOBLOCK);
 }
 
 void SNDi_LockMutex(void) {
@@ -88,7 +88,7 @@ void SNDi_UnlockMutex(void) {
 }
 
 void SndAlarmCallback(void *arg) {
-    OS_SendMessage(&sndMesgQueue, (void *)SND_MESSAGE_TICK, 0);
+    OS_SendMessage(&sndMesgQueue, (void *)SND_MESSAGE_TICK, OS_MESSAGE_NOBLOCK);
 }
 
 void SndThread(void *arg) {
@@ -104,7 +104,7 @@ void SndThread(void *arg) {
     OS_SetPeriodicAlarm(&sndAlarm, OS_GetTick() + 65536, 2728, SndAlarmCallback, 0);
     for (;;) {
         int tick = 0;
-        OS_ReceiveMessage(&sndMesgQueue, &message, 1);
+        OS_ReceiveMessage(&sndMesgQueue, &message, OS_MESSAGE_BLOCK);
         switch ((u32)message) {
         case SND_MESSAGE_TICK:
             tick = 1;

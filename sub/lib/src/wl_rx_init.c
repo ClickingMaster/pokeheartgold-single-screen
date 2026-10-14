@@ -33,7 +33,7 @@ void InitRxCtrl(void) {
     WlBss *bss = &w->bss;
     WlRxCtrl *rx = &w->rxCtrl;
     u32 start;
-    __VENEER_MIi_CpuClear32(0, rx, 0x50);
+    __VENEER_MIi_CpuClear32(0, rx, sizeof(WlRxCtrl));
     WL_REG(0x030) = 0x8000;
     switch (wlWorkPlain->bss.mode) {
     case 0:

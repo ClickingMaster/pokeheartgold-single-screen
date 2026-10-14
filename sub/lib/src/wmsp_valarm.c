@@ -153,7 +153,7 @@ void WmspChildVAlarmMP(void *arg) {
                 if (!sent) {
                     u16 *cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
                     cb[0] = 128;
-                    cb[1] = 8;
+                    cb[1] = WM_ERRCODE_FIFO_ERROR;
                     cb[2] = 22;
                     cb[3] = 37;
                     __VENEER_WMSP_ReturnResult2Wm9(cb);
@@ -224,7 +224,7 @@ void WmspFromVAlarmToWmspThread(void) {
         if (work->arm9Buf) {
             u16 *cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
             cb[0] = 128;
-            cb[1] = 8;
+            cb[1] = WM_ERRCODE_FIFO_ERROR;
             cb[2] = 22;
             cb[3] = 28;
             __VENEER_WMSP_ReturnResult2Wm9(cb);

@@ -27,7 +27,7 @@ void WMSP_RequestResumeMP(void) {
     } else {
         u16 *result = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         result[0] = 0x80;
-        result[1] = 8;
+        result[1] = WM_ERRCODE_FIFO_ERROR;
         result[2] = 0x16;
         result[3] = WMSP_REQ_RESUME_MP;
         __VENEER_WMSP_ReturnResult2Wm9(result);
@@ -54,7 +54,7 @@ void WmspKickMPParent(u16 bitmap) {
     if (!ok && work->arm9Buf) {
         u16 *result = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         result[0] = 0x80;
-        result[1] = 8;
+        result[1] = WM_ERRCODE_FIFO_ERROR;
         result[2] = 0x16;
         result[3] = WMSP_REQ_KICK_MP_PARENT;
         __VENEER_WMSP_ReturnResult2Wm9(result);
@@ -73,7 +73,7 @@ void WmspMaMultiPollAckAlarmCallback(void *arg) {
         if (work->arm9Buf) {
             u16 *result = __VENEER_WMSP_GetBuffer4Callback2Wm9();
             result[0] = 0x80;
-            result[1] = 8;
+            result[1] = WM_ERRCODE_FIFO_ERROR;
             result[2] = 0x16;
             result[3] = 0x80;
             __VENEER_WMSP_ReturnResult2Wm9(result);
@@ -112,7 +112,7 @@ void WmspKickMPChild(void *arg) {
     if (!ok && work->arm9Buf) {
         u16 *result = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         result[0] = 0x80;
-        result[1] = 8;
+        result[1] = WM_ERRCODE_FIFO_ERROR;
         result[2] = 0x16;
         result[3] = WMSP_REQ_KICK_MP_CHILD;
         __VENEER_WMSP_ReturnResult2Wm9(result);

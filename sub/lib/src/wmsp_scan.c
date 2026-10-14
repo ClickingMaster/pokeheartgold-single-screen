@@ -10,7 +10,7 @@
 void WmspError_060033F4(u16 command, u16 result) {
     u16 *cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 8;
-    cb[1] = 1;
+    cb[1] = WM_ERRCODE_FAILED;
     cb[4] = 0;
     cb[2] = command;
     cb[3] = result;
@@ -25,7 +25,7 @@ void WMSP_EndParent(void *request) {
     if (status->state != 7) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 9;
-        cb[1] = 3;
+        cb[1] = WM_ERRCODE_ILLEGAL_STATE;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
         return;
     }
@@ -77,7 +77,7 @@ void WMSP_EndParent(void *request) {
     WMSP_ResetSizeVars();
     cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 9;
-    cb[1] = 0;
+    cb[1] = WM_ERRCODE_SUCCESS;
     __VENEER_WMSP_ReturnResult2Wm9(cb);
 }
 
@@ -85,7 +85,7 @@ void WMSP_EndParent(void *request) {
 void WmspError_060035F4(u16 command, u16 result) {
     u16 *cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 9;
-    cb[1] = 1;
+    cb[1] = WM_ERRCODE_FAILED;
     cb[2] = command;
     cb[3] = result;
     __VENEER_WMSP_ReturnResult2Wm9(cb);
@@ -105,7 +105,7 @@ void WMSP_StartScan(void *request) {
     if (status->state != 2 && status->state != 3 && status->state != 5) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 10;
-        cb[1] = 3;
+        cb[1] = WM_ERRCODE_ILLEGAL_STATE;
         cb[4] = 4;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
         return;
@@ -121,7 +121,7 @@ void WMSP_StartScan(void *request) {
     if (channel == 0) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 10;
-        cb[1] = 6;
+        cb[1] = WM_ERRCODE_INVALID_PARAM;
         cb[4] = 4;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
         return;
@@ -129,7 +129,7 @@ void WMSP_StartScan(void *request) {
     if (!((1u << channel) & status->enableChannel)) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 10;
-        cb[1] = 6;
+        cb[1] = WM_ERRCODE_INVALID_PARAM;
         cb[4] = 4;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
         return;
@@ -169,7 +169,7 @@ void WMSP_StartScan(void *request) {
     cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     if (reply[4] == 0) {
         cb[0] = 10;
-        cb[1] = 0;
+        cb[1] = WM_ERRCODE_SUCCESS;
         cb[4] = 4;
         cb[8] = channel;
         cb[9] = 0;
@@ -177,7 +177,7 @@ void WMSP_StartScan(void *request) {
         __VENEER_MIi_CpuClear16(0, (u8 *)status->scanBuf + 64, 128);
         __VENEER_MI_CpuCopy8(reply + 5, status->scanBuf, reply[5] * 2);
         cb[0] = 10;
-        cb[1] = 0;
+        cb[1] = WM_ERRCODE_SUCCESS;
         cb[4] = 5;
         cb[8] = reply[0x20];
         rssi = WMSP_GetRssi8_06003988(reply[6] & 255);
@@ -189,7 +189,7 @@ void WMSP_StartScan(void *request) {
         cb[27] = reply[0x23];
         if (cb[27] > 128) {
             cb[0] = 10;
-            cb[1] = 0;
+            cb[1] = WM_ERRCODE_SUCCESS;
             cb[4] = 4;
             cb[8] = channel;
             cb[9] = 0;

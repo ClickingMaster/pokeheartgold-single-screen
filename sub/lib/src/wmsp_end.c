@@ -10,7 +10,7 @@
 void WmspError_06002FC0(u16 command, u16 result) {
     u16 *cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 1;
-    cb[1] = 1;
+    cb[1] = WM_ERRCODE_FAILED;
     cb[2] = command;
     cb[3] = result;
     __VENEER_WMSP_ReturnResult2Wm9(cb);
@@ -23,14 +23,14 @@ void WMSP_End(void *request) {
     if (status->state != 2) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 2;
-        cb[1] = 3;
+        cb[1] = WM_ERRCODE_ILLEGAL_STATE;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
     } else {
         error = WMSP_WL_DevShutdown(buf)[2];
         if (error) {
             cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
             cb[0] = 2;
-            cb[1] = 1;
+            cb[1] = WM_ERRCODE_FAILED;
             cb[2] = 0x301;
             cb[3] = error;
             __VENEER_WMSP_ReturnResult2Wm9(cb);
@@ -40,7 +40,7 @@ void WMSP_End(void *request) {
             status->state = 0;
             cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
             cb[0] = 2;
-            cb[1] = 0;
+            cb[1] = WM_ERRCODE_SUCCESS;
             __VENEER_WMSP_ReturnResult2Wm9(cb);
         }
     }
@@ -62,21 +62,21 @@ void WMSP_SetParentParam(u32 *request) {
     if (!(mask & status->enableChannel)) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 7;
-        cb[1] = 6;
+        cb[1] = WM_ERRCODE_INVALID_PARAM;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
     } else {
         error = WMSP_WL_ParamSetMaxConnectableChild(buf, status->parentParam.maxEntry)[2];
         if (error) {
             cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
             cb[0] = 7;
-            cb[1] = 1;
+            cb[1] = WM_ERRCODE_FAILED;
             cb[2] = 0x212;
             cb[3] = error;
             __VENEER_WMSP_ReturnResult2Wm9(cb);
         } else {
             cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
             cb[0] = 7;
-            cb[1] = 0;
+            cb[1] = WM_ERRCODE_SUCCESS;
             __VENEER_WMSP_ReturnResult2Wm9(cb);
         }
     }

@@ -135,7 +135,7 @@ void *WMSP_WlRequest(void *request) {
     if (*(u16 *)(reply + *(u16 *)(reply + 0xe) * 2 + 0x14) == 14) {
         u16 *result = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         result[0] = 0x80;
-        result[1] = 0x13;
+        result[1] = WM_ERRCODE_FLASH_ERROR;
         result[2] = 0x18;
         __VENEER_WMSP_ReturnResult2Wm9(result);
         __VENEER_SND_BeginSleep();
@@ -185,7 +185,7 @@ void WmspPxiCallback(int tag, u16 *request, BOOL error) {
         // The command queue is full.
         u16 *result = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         result[0] = request[0];
-        result[1] = 8;
+        result[1] = WM_ERRCODE_FIFO_ERROR;
         result[2] = 0;
         result[3] = 0;
         __VENEER_WMSP_ReturnResult2Wm9(result);
@@ -262,7 +262,7 @@ BOOL WMSP_SetAllParams(u32 command, u8 *buf) {
     {
         u16 *result = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         result[0] = command;
-        result[1] = 1;
+        result[1] = WM_ERRCODE_FAILED;
         result[2] = 0x200;
         result[3] = error;
         __VENEER_WMSP_ReturnResult2Wm9(result);

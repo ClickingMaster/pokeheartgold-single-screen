@@ -1,6 +1,7 @@
 #pragma force_active on
 #include <nitro/types.h>
 // The SDK headers below expect <nitro/types.h> to be included first.
+#include <nitro/mi/dma.h>
 #include <nitro/os/system.h>
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
@@ -18,13 +19,13 @@ void MI_StopDma(u32 dmaNo);
 
 void MI_WaitDma(u32 dmaNo) {
     OSIntrMode saved = OS_DisableInterrupts();
-    while (*(volatile u32 *)(REG_DMA0SAD_ADDR + ((dmaNo * 3 + 2) << 2)) & 0x80000000u) {}
+    while (*(volatile u32 *)(REG_DMA0SAD_ADDR + ((dmaNo * 3 + 2) << 2)) & MI_DMA_ENABLE) {}
     // Channel 0 is left with a harmless source/destination and control word.
     if (dmaNo == 0) {
         DmaRegisters *reg = &((DmaRegisters *)REG_DMA0SAD_ADDR)[dmaNo];
         reg->source = 0;
         reg->destination = 0;
-        reg->control = 0x81400001u;
+        reg->control = MI_DMA_ENABLE | MI_DMA_SRC_FIX | MI_DMA_DEST_FIX | 1;
     }
     OS_RestoreInterrupts(saved);
 }
@@ -42,7 +43,7 @@ void MI_StopDma(u32 dmaNo) {
         DmaRegisters *reg = &((DmaRegisters *)REG_DMA0SAD_ADDR)[dmaNo];
         reg->source = 0;
         reg->destination = 0;
-        reg->control = 0x81400001u;
+        reg->control = MI_DMA_ENABLE | MI_DMA_SRC_FIX | MI_DMA_DEST_FIX | 1;
     }
     OS_RestoreInterrupts(saved);
 }

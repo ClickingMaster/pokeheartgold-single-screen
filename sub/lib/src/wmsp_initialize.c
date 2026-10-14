@@ -17,7 +17,7 @@ void WMSP_Initialize(u32 *request) {
     if (!WMSPi_CommonWlIdle(&result, &wlResult)) {
         u16 *cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 0;
-        cb[1] = 1;
+        cb[1] = WM_ERRCODE_FAILED;
         cb[2] = result;
         cb[3] = wlResult;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
@@ -26,7 +26,7 @@ void WMSP_Initialize(u32 *request) {
         {
             u16 *cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
             cb[0] = 0;
-            cb[1] = 0;
+            cb[1] = WM_ERRCODE_SUCCESS;
             __VENEER_WMSP_ReturnResult2Wm9(cb);
         }
     }

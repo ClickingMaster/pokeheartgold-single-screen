@@ -56,7 +56,7 @@ BOOL WMSP_DisconnectCore(u32 *request, BOOL indication, u16 *disconnected) {
             if (!indication) {
                 callback = __VENEER_WMSP_GetBuffer4Callback2Wm9();
                 callback[0] = 13;
-                callback[1] = 3;
+                callback[1] = WM_ERRCODE_ILLEGAL_STATE;
                 callback[2] = 0;
                 callback[3] = 0;
                 callback[4] = mask;
@@ -84,7 +84,7 @@ BOOL WMSP_DisconnectCore(u32 *request, BOOL indication, u16 *disconnected) {
         if (!indication) {
             callback = __VENEER_WMSP_GetBuffer4Callback2Wm9();
             callback[0] = 13;
-            callback[1] = 3;
+            callback[1] = WM_ERRCODE_ILLEGAL_STATE;
             callback[2] = 0;
             callback[3] = 0;
             callback[4] = mask;

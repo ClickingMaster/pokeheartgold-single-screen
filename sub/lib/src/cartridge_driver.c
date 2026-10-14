@@ -279,7 +279,7 @@ void CTRDGi_InitModuleInfo(void) {
     if (!(post & 1)) {
         return;
     }
-    mask = OS_SetIrqMask(0x40000);
+    mask = OS_SetIrqMask(OS_IE_FIFO_RECV);
     ime = OS_EnableIrq();
     while (ctw_sp.ready != 1) {
         VENEER_SVC_WaitByLoop(0x100);

@@ -27,7 +27,7 @@ void WMSP_StartParent(u32 *request) {
     if (st->state != 2 || (st->miscFlags & 1)) {
         res = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         res[0] = 8;
-        res[1] = 3;
+        res[1] = WM_ERRCODE_ILLEGAL_STATE;
         res[4] = 0;
         __VENEER_WMSP_ReturnResult2Wm9(res);
         return;
@@ -36,7 +36,7 @@ void WMSP_StartParent(u32 *request) {
     if (!(st->allowedChannel & ((1 << st->parentParam.channel) >> 1))) {
         res = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         res[0] = 8;
-        res[1] = 6;
+        res[1] = WM_ERRCODE_INVALID_PARAM;
         res[4] = 0;
         __VENEER_WMSP_ReturnResult2Wm9(res);
         return;
@@ -82,7 +82,7 @@ void WMSP_StartParent(u32 *request) {
     res = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     st->state = 7;
     res[0] = 8;
-    res[1] = 0;
+    res[1] = WM_ERRCODE_SUCCESS;
     res[4] = 0;
     res[0x16] = st->parentSize;
     res[0x17] = st->childSize;

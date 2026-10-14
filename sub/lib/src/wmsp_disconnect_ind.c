@@ -11,7 +11,7 @@ void WMSP_IndicateDisconnectionFromMyself(BOOL parent, u16 aid, void *mac) {
     u16 *cb;
     WmspStatus *status = wmspW.status;
     cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
-    cb[1] = 0;
+    cb[1] = WM_ERRCODE_SUCCESS;
     if (parent) {
         cb[0] = 8;
         cb[4] = 26;
@@ -36,7 +36,7 @@ void WMSP_IndicateDisconnectionFromMyself(BOOL parent, u16 aid, void *mac) {
 void WmspError_06004CB4(u16 command, u16 result, u16 aidBitmap, u16 disconnected) {
     u16 *cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 13;
-    cb[1] = 1;
+    cb[1] = WM_ERRCODE_FAILED;
     cb[2] = command;
     cb[3] = result;
     cb[4] = aidBitmap;
@@ -48,7 +48,7 @@ void WmspError_06004CB4(u16 command, u16 result, u16 aidBitmap, u16 disconnected
 void WmspIndError(u16 a, u16 b, u16 c, u16 d) {
     u16 *cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 37;
-    cb[1] = 1;
+    cb[1] = WM_ERRCODE_FAILED;
     cb[2] = a;
     cb[3] = b;
     cb[4] = c;

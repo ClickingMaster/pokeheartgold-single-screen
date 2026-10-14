@@ -57,7 +57,7 @@ void WMSP_StartScanEx(WmspStartScanExRequest *req) {
     if (s->state != 2 && s->state != 3 && s->state != 5) {
         c = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         c[0] = 38;
-        c[1] = 3;
+        c[1] = WM_ERRCODE_ILLEGAL_STATE;
         c[4] = 4;
         __VENEER_WMSP_ReturnResult2Wm9(c);
         return;
@@ -95,7 +95,7 @@ void WMSP_StartScanEx(WmspStartScanExRequest *req) {
     {
         c = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         c[0] = 38;
-        c[1] = 6;
+        c[1] = WM_ERRCODE_INVALID_PARAM;
         c[4] = 4;
         __VENEER_WMSP_ReturnResult2Wm9(c);
         return;
@@ -177,7 +177,7 @@ mask_ready:
     c = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     if (r[4] == 0) {
         c[0] = 38;
-        c[1] = 0;
+        c[1] = WM_ERRCODE_SUCCESS;
         c[4] = 4;
         c[7] = 0;
         c[5] = bits >> 1;
@@ -203,7 +203,7 @@ mask_ready:
             }
         }
         c[0] = 38;
-        c[1] = 0;
+        c[1] = WM_ERRCODE_SUCCESS;
         c[4] = 5;
         c[7] = r[4];
         c[5] = bits >> 1;

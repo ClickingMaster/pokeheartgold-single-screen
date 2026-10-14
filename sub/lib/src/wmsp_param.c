@@ -15,7 +15,7 @@ void WMSP_EndMP(void *request) {
     if (status->state != 9 && status->state != 10) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 16;
-        cb[1] = 3;
+        cb[1] = WM_ERRCODE_ILLEGAL_STATE;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
         return;
     }
@@ -48,7 +48,7 @@ void WMSP_EndMP(void *request) {
     }
     cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 16;
-    cb[1] = 0;
+    cb[1] = WM_ERRCODE_SUCCESS;
     __VENEER_WMSP_ReturnResult2Wm9(cb);
 }
 
@@ -56,7 +56,7 @@ void WMSP_EndMP(void *request) {
 void WmspError_06005328(u16 command, u16 result) {
     u16 *cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 16;
-    cb[1] = 1;
+    cb[1] = WM_ERRCODE_FAILED;
     cb[2] = command;
     cb[3] = result;
     __VENEER_WMSP_ReturnResult2Wm9(cb);
@@ -79,7 +79,7 @@ void WMSP_StartDCF(u32 *request) {
     status->state = 11;
     u16 *cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 17;
-    cb[1] = 0;
+    cb[1] = WM_ERRCODE_SUCCESS;
     cb[2] = 14;
     __VENEER_WMSP_ReturnResult2Wm9(cb);
     status->dcfActive = 1;
@@ -106,9 +106,9 @@ void WMSP_SetDCFData(u32 *request) {
     u16 *cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 18;
     if (reply[2] == 0) {
-        cb[1] = 0;
+        cb[1] = WM_ERRCODE_SUCCESS;
     } else {
-        cb[1] = 1;
+        cb[1] = WM_ERRCODE_FAILED;
     }
     if (reply[2]) {
         cb[2] = 0x100;
@@ -126,7 +126,7 @@ void WMSP_EndDCF(void *request) {
         __VENEER_OS_RestoreInterrupts(irq);
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 19;
-        cb[1] = 3;
+        cb[1] = WM_ERRCODE_ILLEGAL_STATE;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
     } else {
         status->dcfActive = 0;
@@ -136,14 +136,14 @@ void WMSP_EndDCF(void *request) {
         if (error) {
             cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
             cb[0] = 19;
-            cb[1] = 1;
+            cb[1] = WM_ERRCODE_FAILED;
             cb[2] = 0x104;
             cb[3] = error;
             __VENEER_WMSP_ReturnResult2Wm9(cb);
         } else {
             cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
             cb[0] = 19;
-            cb[1] = 0;
+            cb[1] = WM_ERRCODE_SUCCESS;
             __VENEER_WMSP_ReturnResult2Wm9(cb);
         }
     }
@@ -173,7 +173,7 @@ void WMSP_SetWEPKey(u32 *request) {
     }
     u16 *cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 20;
-    cb[1] = 0;
+    cb[1] = WM_ERRCODE_SUCCESS;
     __VENEER_WMSP_ReturnResult2Wm9(cb);
 }
 
@@ -207,14 +207,14 @@ void WMSP_SetWEPKeyEx(u32 *request) {
     if (error) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 20;
-        cb[1] = 1;
+        cb[1] = WM_ERRCODE_FAILED;
         cb[2] = 0x207;
         cb[3] = error;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
     }
     cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 39;
-    cb[1] = 0;
+    cb[1] = WM_ERRCODE_SUCCESS;
     __VENEER_WMSP_ReturnResult2Wm9(cb);
 }
 
@@ -239,9 +239,9 @@ void WMSP_SetGameInfo(u32 *request) {
     cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 24;
     if (reply[2] == 0) {
-        cb[1] = 0;
+        cb[1] = WM_ERRCODE_SUCCESS;
     } else {
-        cb[1] = 1;
+        cb[1] = WM_ERRCODE_FAILED;
     }
     if (reply[2]) {
         cb[2] = 0x245;
@@ -258,14 +258,14 @@ void WMSP_SetBeaconTxRxInd(u32 *request) {
     if (error) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 25;
-        cb[1] = 1;
+        cb[1] = WM_ERRCODE_FAILED;
         cb[2] = 0x215;
         cb[3] = error;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
     } else {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 25;
-        cb[1] = 0;
+        cb[1] = WM_ERRCODE_SUCCESS;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
     }
 }
@@ -274,14 +274,14 @@ void WMSP_SetBeaconTxRxInd(u32 *request) {
 void WMSP_StartTestMode(void *request) {
     u16 *cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 26;
-    cb[1] = 4;
+    cb[1] = WM_ERRCODE_WM_DISABLE;
     __VENEER_WMSP_ReturnResult2Wm9(cb);
 }
 
 void WMSP_StopTestMode(void *request) {
     u16 *cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 27;
-    cb[1] = 4;
+    cb[1] = WM_ERRCODE_WM_DISABLE;
     __VENEER_WMSP_ReturnResult2Wm9(cb);
 }
 
@@ -298,7 +298,7 @@ void WMSP_SetLifeTime(u32 *request) {
     if (error) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 29;
-        cb[1] = 1;
+        cb[1] = WM_ERRCODE_FAILED;
         cb[2] = 0x211;
         cb[3] = error;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
@@ -322,7 +322,7 @@ void WMSP_SetLifeTime(u32 *request) {
         }
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 29;
-        cb[1] = 0;
+        cb[1] = WM_ERRCODE_SUCCESS;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
     }
 }
@@ -344,7 +344,7 @@ void WMSP_MeasureChannel(u16 *request) {
     if (wmspW.status->state != 2) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 30;
-        cb[1] = 3;
+        cb[1] = WM_ERRCODE_ILLEGAL_STATE;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
         return;
     }
@@ -399,7 +399,7 @@ void WMSP_MeasureChannel(u16 *request) {
     status->state = 2;
     cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 30;
-    cb[1] = 0;
+    cb[1] = WM_ERRCODE_SUCCESS;
     cb[4] = ccaBusyRatio;
     cb[5] = channel;
     __VENEER_WMSP_ReturnResult2Wm9(cb);
@@ -409,7 +409,7 @@ void WMSP_MeasureChannel(u16 *request) {
 void WmspError_06005BB8(u16 command, u16 result) {
     u16 *cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 30;
-    cb[1] = 1;
+    cb[1] = WM_ERRCODE_FAILED;
     cb[2] = command;
     cb[3] = result;
     __VENEER_WMSP_ReturnResult2Wm9(cb);
@@ -422,14 +422,14 @@ void WMSP_InitWirelessCounter(void *request) {
     if (error) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 31;
-        cb[1] = 1;
+        cb[1] = WM_ERRCODE_FAILED;
         cb[2] = 0x305;
         cb[3] = error;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
     } else {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 31;
-        cb[1] = 0;
+        cb[1] = WM_ERRCODE_SUCCESS;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
     }
 }
@@ -443,14 +443,14 @@ void WMSP_GetWirelessCounter(void *request) {
     if (error) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 32;
-        cb[1] = 1;
+        cb[1] = WM_ERRCODE_FAILED;
         cb[2] = 0x307;
         cb[3] = error;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
     } else {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 32;
-        cb[1] = 0;
+        cb[1] = WM_ERRCODE_SUCCESS;
         __VENEER_MIi_CpuCopy16(reply + 4, cb + 4, 0xb4);
         __VENEER_WMSP_ReturnResult2Wm9(cb);
     }

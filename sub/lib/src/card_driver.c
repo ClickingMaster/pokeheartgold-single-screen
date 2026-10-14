@@ -310,9 +310,9 @@ void CARDi_CommArray(const void *src, void *dst, u32 size, void (*core)(CardSpiP
             u64 start = OS_GetTick();
             while (((OS_GetTick() - start) * 64000) / 33514 < (s32)_03806AF4.delay) {}
             REG_CARD_SPI_CNT = 0xa042;
-            while (REG_CARD_SPI_CNT & 0x80) {}
+            while (REG_CARD_SPI_CNT & REG_MI_MCCNT0_BUSY_MASK) {}
             REG_CARD_SPI_DATA = 0;
-            while (REG_CARD_SPI_CNT & 0x80) {}
+            while (REG_CARD_SPI_CNT & REG_MI_MCCNT0_BUSY_MASK) {}
             {
                 volatile u16 discard = REG_CARD_SPI_DATA;
             }
@@ -326,7 +326,7 @@ void CARDi_CommArray(const void *src, void *dst, u32 size, void (*core)(CardSpiP
         } else {
             REG_CARD_SPI_CNT = 0xa040;
         }
-        while (REG_CARD_SPI_CNT & 0x80) {}
+        while (REG_CARD_SPI_CNT & REG_MI_MCCNT0_BUSY_MASK) {}
         core(p);
         if (!p->count) {
             break;
@@ -342,7 +342,7 @@ void CARDi_CommArray(const void *src, void *dst, u32 size, void (*core)(CardSpiP
 
 void CARDi_CommReadCore(CardSpiParam *param) {
     REG_CARD_SPI_DATA = 0;
-    while (REG_CARD_SPI_CNT & 0x80) {}
+    while (REG_CARD_SPI_CNT & REG_MI_MCCNT0_BUSY_MASK) {}
     *param->dst = (u8)REG_CARD_SPI_DATA;
     param->dst++;
 }
@@ -351,13 +351,13 @@ void CARDi_CommWriteCore(CardSpiParam *param) {
     volatile u16 discard;
     REG_CARD_SPI_DATA = *param->src;
     param->src++;
-    while (REG_CARD_SPI_CNT & 0x80) {}
+    while (REG_CARD_SPI_CNT & REG_MI_MCCNT0_BUSY_MASK) {}
     discard = REG_CARD_SPI_DATA;
 }
 
 void CARDi_CommVerifyCore(CardSpiParam *param) {
     REG_CARD_SPI_DATA = 0;
-    while (REG_CARD_SPI_CNT & 0x80) {}
+    while (REG_CARD_SPI_CNT & REG_MI_MCCNT0_BUSY_MASK) {}
     if ((u8)REG_CARD_SPI_DATA != *param->src) {
         param->verified = FALSE;
         if (param->count > 1) {
@@ -547,7 +547,7 @@ void CARDi_SetWriteProtectCore(u8 protection) {
 
 void CARDi_SetRomOp(u32 first, u32 second) {
     vu8 *p = (vu8 *)0x040001a1;
-    while (REG_CARD_ROM_CNT & 0x80000000) {}
+    while (REG_CARD_ROM_CNT & REG_MI_MCCNT1_START_MASK) {}
     p[0] = 0xc0;
     p[7] = (u8)(first >> 24);
     p[8] = (u8)(first >> 16);
@@ -584,7 +584,7 @@ void CARDi_ReadEnd(void) {
 #pragma opt_propagation reset
 
 u32 CARDi_GetRomFlag(u32 mask) {
-    return (*(u32 *)(cardi_rom_header_addr + 0x60) & ~0x07000000) | mask | 0xa0000000;
+    return (*(u32 *)(cardi_rom_header_addr + 0x60) & ~REG_MI_MCCNT1_PC_MASK) | mask | 0xa0000000;
 }
 
 void CARDi_ReadCard(void *argument) {
@@ -593,7 +593,7 @@ void CARDi_ReadCard(void *argument) {
 u32 CARDi_ReadRomIDCore(void) {
     CARDi_SetRomOp(MROMOP_G_READ_ID, 0);
     REG_CARD_ROM_CNT = CARDi_GetRomFlag(0x07000000) & ~CARD_LATENCY1_MASK;
-    while (!(REG_CARD_ROM_CNT & 0x00800000)) {}
+    while (!(REG_CARD_ROM_CNT & REG_MI_MCCNT1_RDY_MASK)) {}
     return REG_CARD_ROM_DATA;
 }
 
@@ -652,17 +652,17 @@ void CARDi_OnFifoRecv(PXIFifoTag tag, u32 data, BOOL err) {
             break;
         case CARD_REQ_ACK:
             break;
-        case 2:
-        case 3:
-        case 4:
+        case CARD_REQ_IDENTIFY:
+        case CARD_REQ_READ_ID:
+        case CARD_REQ_READ_ROM:
         case 5:
-        case 6:
-        case 7:
-        case 8:
-        case 9:
+        case CARD_REQ_READ_BACKUP:
+        case CARD_REQ_WRITE_BACKUP:
+        case CARD_REQ_PROGRAM_BACKUP:
+        case CARD_REQ_VERIFY_BACKUP:
         case 10:
-        case 11:
-        case 12:
+        case CARD_REQ_ERASE_SECTOR_BACKUP:
+        case CARD_REQ_ERASE_CHIP_BACKUP:
         case 13:
         case 14:
         case 15:

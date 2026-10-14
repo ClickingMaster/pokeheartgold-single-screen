@@ -16,7 +16,7 @@ asm s32 __VENEER__s32_div_f(s32 dividend, s32 divisor) {
 void WmspError_060045D0(u16 command, u16 result, u16 detail) {
     u16 *cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
     cb[0] = 12;
-    cb[1] = 1;
+    cb[1] = WM_ERRCODE_FAILED;
     cb[2] = command;
     cb[3] = result;
     cb[7] = detail;
@@ -30,7 +30,7 @@ void WMSP_Disconnect(u32 *request) {
     if (WMSP_DisconnectCore(request, FALSE, &result) == TRUE) {
         u16 *cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
         cb[0] = 13;
-        cb[1] = 0;
+        cb[1] = WM_ERRCODE_SUCCESS;
         cb[4] = aidBitmap;
         cb[5] = result;
         __VENEER_WMSP_ReturnResult2Wm9(cb);

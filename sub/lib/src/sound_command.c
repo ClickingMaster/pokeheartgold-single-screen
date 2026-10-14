@@ -68,49 +68,49 @@ void SND_CommandInit(void) {
 
 void SND_CommandProc(void) {
     OSMessage message;
-    while (OS_ReceiveMessage(&sCommandMesgQueue, &message, 0)) {
+    while (OS_ReceiveMessage(&sCommandMesgQueue, &message, OS_MESSAGE_NOBLOCK)) {
         volatile u8 *cap1 = (volatile u8 *)0x04000509, *cap0 = cap1 - 1;
         struct SNDCommand *list = (struct SNDCommand *)message;
         while (list) {
             struct SNDCommand cmd = *list;
             switch (cmd.id) {
-            case 0:
+            case SND_CMD_START_SEQ:
                 SND_StartSeq((int)cmd.arg[0], (const u8 *)cmd.arg[1], cmd.arg[2], (void *)cmd.arg[3]);
                 break;
-            case 1:
+            case SND_CMD_STOP_SEQ:
                 SND_StopSeq(cmd.arg[0]);
                 break;
-            case 2:
+            case SND_CMD_PREPARE_SEQ:
                 SND_PrepareSeq((int)cmd.arg[0], (const u8 *)cmd.arg[1], cmd.arg[2], (void *)cmd.arg[3]);
                 break;
-            case 3:
+            case SND_CMD_START_PREPARED_SEQ:
                 SND_StartPreparedSeq(cmd.arg[0]);
                 break;
-            case 4:
+            case SND_CMD_PAUSE_SEQ:
                 SND_PauseSeq(cmd.arg[0], cmd.arg[1]);
                 break;
-            case 5:
+            case SND_CMD_SKIP_SEQ:
                 SND_SkipSeq(cmd.arg[0], cmd.arg[1]);
                 break;
-            case 6:
+            case SND_CMD_PLAYER_PARAM:
                 SNDi_SetPlayerParam(cmd.arg[0], cmd.arg[1], cmd.arg[2], cmd.arg[3]);
                 break;
-            case 7:
+            case SND_CMD_TRACK_PARAM:
                 SNDi_SetTrackParam(cmd.arg[0] & 0xffffff, cmd.arg[1], cmd.arg[2], cmd.arg[3], (cmd.arg[0] >> 24) & 255);
                 break;
-            case 8:
+            case SND_CMD_MUTE_TRACK:
                 SND_SetTrackMute(cmd.arg[0], cmd.arg[1], cmd.arg[2]);
                 break;
-            case 9:
+            case SND_CMD_ALLOCATABLE_CHANNEL:
                 SND_SetTrackAllocatableChannel(cmd.arg[0], cmd.arg[1], cmd.arg[2]);
                 break;
-            case 10:
+            case SND_CMD_PLAYER_LOCAL_VAR:
                 SND_SetPlayerLocalVariable(cmd.arg[0], cmd.arg[1], (s16)cmd.arg[2]);
                 break;
-            case 11:
+            case SND_CMD_PLAYER_GLOBAL_VAR:
                 SND_SetPlayerGlobalVariable(cmd.arg[0], (s16)cmd.arg[1]);
                 break;
-            case 12: {
+            case SND_CMD_START_TIMER: {
                 u32 channels, capture, alarms;
                 alarms = cmd.arg[2];
                 capture = cmd.arg[1];
@@ -141,7 +141,7 @@ void SND_CommandProc(void) {
                 SND_UpdateSharedWork();
                 break;
             }
-            case 13: {
+            case SND_CMD_STOP_TIMER: {
                 u32 channels, capture, alarms;
                 int i;
                 u32 flag;
@@ -170,13 +170,13 @@ void SND_CommandProc(void) {
                 SND_UpdateSharedWork();
                 break;
             }
-            case 17:
+            case SND_CMD_SETUP_CAPTURE:
                 SND_SetupCapture((cmd.arg[2] >> 31) & 1, (cmd.arg[2] >> 30) & 1, cmd.arg[0], cmd.arg[1], (cmd.arg[2] >> 29) & 1, (cmd.arg[2] >> 28) & 1, (cmd.arg[2] >> 27) & 1);
                 break;
-            case 18:
+            case SND_CMD_SETUP_ALARM:
                 SND_SetupAlarm(cmd.arg[0], (u64)cmd.arg[1], (u64)cmd.arg[2], cmd.arg[3]);
                 break;
-            case 19: {
+            case SND_CMD_CHANNEL_TIMER: {
                 u32 channels, timer;
                 timer = cmd.arg[1];
                 channels = cmd.arg[0];
@@ -187,7 +187,7 @@ void SND_CommandProc(void) {
                 }
                 break;
             }
-            case 20: {
+            case SND_CMD_CHANNEL_VOLUME: {
                 u32 channels;
                 int volume, shift;
                 shift = cmd.arg[2];
@@ -200,7 +200,7 @@ void SND_CommandProc(void) {
                 }
                 break;
             }
-            case 21: {
+            case SND_CMD_CHANNEL_PAN: {
                 u32 channels;
                 int pan;
                 pan = cmd.arg[1];
@@ -212,49 +212,49 @@ void SND_CommandProc(void) {
                 }
                 break;
             }
-            case 14:
+            case SND_CMD_SETUP_CHANNEL_PCM:
                 SND_SetupChannelPcm((u16)cmd.arg[0], cmd.arg[1] & 0x7ffffff, (cmd.arg[3] >> 24) & 3, (cmd.arg[3] >> 26) & 3, (u16)cmd.arg[3], cmd.arg[2] & 0x3fffff, (cmd.arg[2] >> 24) & 127, (cmd.arg[2] >> 22) & 3, (u16)(cmd.arg[0] >> 16), (cmd.arg[3] >> 16) & 127);
                 break;
-            case 15:
+            case SND_CMD_SETUP_CHANNEL_PSG:
                 SND_SetupChannelPsg(cmd.arg[0], cmd.arg[3], cmd.arg[1] & 127, (cmd.arg[1] >> 8) & 3, (cmd.arg[2] >> 8) & 65535, cmd.arg[2] & 127);
                 break;
-            case 16:
+            case SND_CMD_SETUP_CHANNEL_NOISE:
                 SND_SetupChannelNoise(cmd.arg[0], cmd.arg[1] & 127, (cmd.arg[1] >> 8) & 3, (cmd.arg[2] >> 8) & 65535, cmd.arg[2] & 127);
                 break;
-            case 22:
+            case SND_CMD_SURROUND_DECAY:
                 SNDi_SetSurroundDecay(cmd.arg[0]);
                 break;
-            case 23:
+            case SND_CMD_MASTER_VOLUME:
                 SND_SetMasterVolume(cmd.arg[0]);
                 break;
-            case 24:
+            case SND_CMD_MASTER_PAN:
                 SND_SetMasterPan(cmd.arg[0]);
                 break;
-            case 25:
+            case SND_CMD_OUTPUT_SELECTOR:
                 SND_SetOutputSelector(cmd.arg[0], cmd.arg[1], cmd.arg[2], cmd.arg[3]);
                 break;
-            case 26:
+            case SND_CMD_LOCK_CHANNEL:
                 SND_LockChannel(cmd.arg[0], cmd.arg[1]);
                 break;
-            case 27:
+            case SND_CMD_UNLOCK_CHANNEL:
                 SND_UnlockChannel(cmd.arg[0], cmd.arg[1]);
                 break;
-            case 28:
+            case SND_CMD_STOP_UNLOCKED_CHANNEL:
                 SND_StopUnlockedChannel(cmd.arg[0], cmd.arg[1]);
                 break;
-            case 30:
+            case SND_CMD_INVALIDATE_SEQ:
                 SND_InvalidateSeq((const void *)cmd.arg[0], (const void *)cmd.arg[1]);
                 break;
-            case 31:
+            case SND_CMD_INVALIDATE_BANK:
                 SND_InvalidateBank((const void *)cmd.arg[0], (const void *)cmd.arg[1]);
                 break;
-            case 32:
+            case SND_CMD_INVALIDATE_WAVE:
                 SND_InvalidateWave(cmd.arg[0], cmd.arg[1]);
                 break;
-            case 29:
+            case SND_CMD_SET_SHARED_WORK:
                 SNDi_SharedWork = (struct SNDSharedWork *)cmd.arg[0];
                 break;
-            case 33: {
+            case SND_CMD_READ_DRIVER_INFO: {
                 struct SNDDriverInfo *dest = (struct SNDDriverInfo *)cmd.arg[0];
                 MIi_CpuCopy32((const u32 *)&SNDi_Work, (u32 *)&dest->work, sizeof(dest->work));
                 dest->workPtr = &SNDi_Work;
@@ -275,7 +275,7 @@ void SND_CommandProc(void) {
 void PxiFifoCallback(PXIFifoTag tag, u32 data, BOOL err) {
     OSIntrMode irq = OS_DisableInterrupts();
     if (data >= 0x02000000) {
-        OS_SendMessage(&sCommandMesgQueue, (void *)data, 0);
+        OS_SendMessage(&sCommandMesgQueue, (void *)data, OS_MESSAGE_NOBLOCK);
     } else if (!data) {
         SND_SendWakeupMessage();
     }

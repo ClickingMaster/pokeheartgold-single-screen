@@ -156,14 +156,14 @@ void RTC_Init(u32 priority) {
     PXI_Init();
     PXI_SetFifoRecvCallback(PXI_FIFO_TAG_RTC, RtcPxiCallback);
     OS_InitMessageQueue(&rtcWork.queue, rtcWork.messages, 4);
-    OS_CreateThread(&rtcWork.thread, RtcThread, 0, rtcWork.stack + sizeof rtcWork.stack, 256, priority);
+    OS_CreateThread(&rtcWork.thread, RtcThread, 0, rtcWork.stack + sizeof rtcWork.stack, sizeof rtcWork.stack, priority);
     OS_WakeupThreadDirect(&rtcWork.thread);
     EXIi_SelectRcnt(EXI_GPIOIF_GPIO);
     EXIi_SetBitRcnt0L(0x40, 0);
     EXIi_SetBitRcnt0L(0x100, 0x100);
     irq = OS_DisableInterrupts();
-    OS_SetIrqFunction(0x80, RtcAlarmIntr);
-    OS_EnableIrqMask(0x80);
+    OS_SetIrqFunction(OS_IE_SIO, RtcAlarmIntr);
+    OS_EnableIrqMask(OS_IE_SIO);
     OS_RestoreInterrupts(irq);
 }
 
@@ -201,7 +201,7 @@ void RtcPxiCallback(PXIFifoTag channel, u32 word, BOOL error) {
         } else {
             rtcWork.busy = 1;
             rtcWork.command = command;
-            if (!OS_SendMessage(&rtcWork.queue, 0, 0)) {
+            if (!OS_SendMessage(&rtcWork.queue, 0, OS_MESSAGE_NOBLOCK)) {
                 RtcReturnResult(command, 4);
             }
         }
@@ -221,7 +221,7 @@ void RtcThread(void *arg) {
     void *message;
     u8 *data = (u8 *)RTC_SHARED_DATA;
     for (;;) {
-        OS_ReceiveMessage(&rtcWork.queue, &message, 1);
+        OS_ReceiveMessage(&rtcWork.queue, &message, OS_MESSAGE_BLOCK);
         {
             u16 command = rtcWork.command;
             switch (command) {

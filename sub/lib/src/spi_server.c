@@ -173,18 +173,18 @@ BOOL SPIi_SetEntry(u32 module, u32 command, u16 count, ...) {
     spiWork.nextCommand = (index + 1) & 15;
     OS_RestoreInterrupts(irq);
     va_end(args);
-    return OS_SendMessage(&spiWork.queue, &spiWork.commands[index], 0);
+    return OS_SendMessage(&spiWork.queue, &spiWork.commands[index], OS_MESSAGE_NOBLOCK);
 }
 
 BOOL SPIi_CheckEntry(void) {
     OSMessage message;
-    return OS_ReadMessage(&spiWork.queue, &message, 0);
+    return OS_ReadMessage(&spiWork.queue, &message, OS_MESSAGE_NOBLOCK);
 }
 
 void SpiCommonThread(void *arg) {
     OSMessage message;
     for (;;) {
-        OS_ReceiveMessage(&spiWork.queue, &message, 1);
+        OS_ReceiveMessage(&spiWork.queue, &message, OS_MESSAGE_BLOCK);
         switch (((SpiCommand *)message)->module) {
         case SPI_MODULE_TP:
             TP_ExecuteProcess(message);
