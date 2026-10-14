@@ -50,11 +50,11 @@ BOOL FrtCmd_CastleAlloc(FrontierScriptContext *ctx);
 BOOL FrtCmd_CastleInit(FrontierScriptContext *ctx);
 BOOL FrtCmd_CastleFree(FrontierScriptContext *ctx);
 BOOL FrtCmd_CastleLaunchPartyApp(FrontierScriptContext *ctx);
-BOOL FrtCmd_164(FrontierScriptContext *ctx);
+BOOL FrtCmd_CastleLaunchEmptyApp(FrontierScriptContext *ctx);
 BOOL FrtCmd_CastleEndBattle(FrontierScriptContext *ctx);
 BOOL FrtCmd_CastleStartBattle(FrontierScriptContext *ctx);
 BOOL FrtCmd_CastleLaunchOpponentApp(FrontierScriptContext *ctx);
-BOOL FrtCmd_158(FrontierScriptContext *ctx);
+BOOL FrtCmd_CastleSetPartyBeforeBattle(FrontierScriptContext *ctx);
 BOOL FrtCmd_CastleGenerateOpponents(FrontierScriptContext *ctx);
 BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx);
 BOOL FrtCmd_CastleGetBattleResult(FrontierScriptContext *ctx);
@@ -108,7 +108,7 @@ BOOL FrtCmd_CastleLaunchPartyApp(FrontierScriptContext *ctx) {
     return BattleCastle_LaunchApp(ctx, &gOverlayTemplate_BattleCastlePartyApp);
 }
 
-BOOL FrtCmd_164(FrontierScriptContext *ctx) {
+BOOL FrtCmd_CastleLaunchEmptyApp(FrontierScriptContext *ctx) {
     return BattleCastle_LaunchApp(ctx, &ov80_0223BE24);
 }
 
@@ -163,7 +163,7 @@ void BattleCastle_OnAppExit(void *args) {
     Heap_Free(appArgs);
 }
 
-BOOL FrtCmd_158(FrontierScriptContext *ctx) {
+BOOL FrtCmd_CastleSetPartyBeforeBattle(FrontierScriptContext *ctx) {
     BattleCastleData_SetPartyBeforeBattle(Frontier_GetData(ctx->frontierSystem->frontierWork));
     return FALSE;
 }

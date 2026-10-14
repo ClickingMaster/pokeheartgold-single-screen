@@ -18,7 +18,7 @@ typedef struct FrontierSystem {
     u16 vars[8];                            // 0x24, script variables 0x8008-0x800F
     enum HeapID heapId;                     // 0x34
     u8 unk_38;                              // 0x38, tasks only run while 0
-    u8 syncAborted;                         // 0x39, set while FrtCmd_203 waits when the partner stops the link
+    u8 syncAborted;                         // 0x39, set while FrtCmd_LinkSyncOrAbort waits when the partner stops the link
     u8 filler_3A[2];
     MsgData *msgData;                       // 0x3C
     u8 *scripts;                            // 0x40
@@ -39,7 +39,7 @@ typedef struct FrontierSystem {
     struct WaitingIcon *waitingIcon;        // 0x7C
     u8 filler_80[0x28];
     Window *castlePointsWindows[2];         // 0xA8, Battle Castle points (BattleCastle_ShowPointsWindows)
-    u16 recordSaveState;                    // 0xB0, battle record save (FrtCmd_109)
+    u16 recordSaveState;                    // 0xB0, battle record save (FrtCmd_SaveBattleRecord)
     u16 recordWriteState;                   // 0xB2
     u16 recordType;                         // 0xB4
     u16 recordAmount;                       // 0xB6

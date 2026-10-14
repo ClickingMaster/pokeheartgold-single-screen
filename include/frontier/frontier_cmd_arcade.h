@@ -14,7 +14,7 @@ BOOL FrtCmd_ArcadeAlloc(FrontierScriptContext *ctx);
 BOOL FrtCmd_ArcadeInit(FrontierScriptContext *ctx);
 BOOL FrtCmd_ArcadeFree(FrontierScriptContext *ctx);
 BOOL FrtCmd_LaunchGameBoard(FrontierScriptContext *ctx);
-BOOL FrtCmd_187(FrontierScriptContext *ctx);
+BOOL FrtCmd_ArcadeEndBattle(FrontierScriptContext *ctx);
 BOOL FrtCmd_ArcadeStartBattle(FrontierScriptContext *ctx);
 BOOL FrtCmd_ArcadeSetPartyBeforeBattle(FrontierScriptContext *ctx);
 BOOL FrtCmd_ArcadeSetPartyAfterBattle(FrontierScriptContext *ctx);
@@ -24,6 +24,6 @@ BOOL FrtCmd_ArcadeSendBuffer(FrontierScriptContext *ctx);
 BOOL FrtCmd_ArcadeReceiveBuffer(FrontierScriptContext *ctx);
 BOOL FrtCmd_ArcadePrintMsg(FrontierScriptContext *ctx);
 BOOL FrtCmd_ArcadeSetEvent(FrontierScriptContext *ctx);
-BOOL FrtCmd_198(FrontierScriptContext *ctx);
+BOOL FrtCmd_ArcadeSetItemIconVisible(FrontierScriptContext *ctx);
 
 #endif

@@ -4,8 +4,8 @@
 
 #include "sys_task_api.h"
 
-// Tasks of the frontier map's shake (FrtCmd_076) and window (FrtCmd_078) commands, and the menu alignment flags
-// (FrtCmd_206/207).
+// Tasks of the frontier map's shake (FrtCmd_ShakeMap) and window (FrtCmd_SetWindowDelayed) commands, and the menu alignment flags
+// (FrtCmd_MenuSetAlignRight/MenuSetAlignBottom).
 
 #pragma force_active on
 void FrontierMap_ShakeTask(SysTask *task, FrontierMapShake *shake) {

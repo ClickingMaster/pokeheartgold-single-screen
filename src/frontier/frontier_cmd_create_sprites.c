@@ -11,7 +11,7 @@ u32 FrontierScript_ReadVar(FrontierScriptContext *ctx);
 FrontierMap *Frontier_GetMap(void *frontierWork);
 ManagedSprite *FrontierMap_CreateSprite(FrontierMap *map, u32 idx, u32 id);
 void FrontierMap_SetSpriteAnimActive(FrontierMap *map, u32 idx, u32 on);
-BOOL FrtCmd_044(FrontierScriptContext *ctx);
+BOOL FrtCmd_CreateSprites(FrontierScriptContext *ctx);
 
 static inline u8 ReadScriptByte(FrontierScriptContext *ctx) {
     return *(ctx->scriptPtr++);
@@ -19,7 +19,7 @@ static inline u8 ReadScriptByte(FrontierScriptContext *ctx) {
 
 #pragma force_active on
 // Creates the extra map sprites of a list: sprite id, x, y, draw flag, animation flag, slot; ends with 0xFD13.
-BOOL FrtCmd_044(FrontierScriptContext *ctx) {
+BOOL FrtCmd_CreateSprites(FrontierScriptContext *ctx) {
     u32 draw, y, x;
     u16 animActive;
     u32 slot;

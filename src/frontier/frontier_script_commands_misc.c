@@ -1,12 +1,12 @@
 #include "frontier_script_commands_misc_internal.h"
 
-BOOL FrtCmd_091(void *ctx) {
+BOOL FrtCmd_StopBGM(void *ctx) {
     FrontierScriptContext_ReadHalfWord(ctx);
     StopBGM(GF_GetCurrentPlayingBGM(), 0);
     return FALSE;
 }
 
-BOOL FrtCmd_132(void *ctx) {
+BOOL FrtCmd_TowerAction(void *ctx) {
     u8 *script = ctx;
     void *args = Frontier_GetLaunchArgs(**(void ***)script);
     u16 command = FrontierScriptContext_ReadHalfWord(ctx);
@@ -98,7 +98,7 @@ u32 ov80_0223558C(void *data, u32 mode) {
     return 0;
 }
 
-BOOL FrtCmd_133(void *ctx) {
+BOOL FrtCmd_TowerPrintTrainerMessage(void *ctx) {
     u8 *script = ctx;
     u8 arg;
     u8 *data;
@@ -112,12 +112,12 @@ BOOL FrtCmd_133(void *ctx) {
     return TRUE;
 }
 
-BOOL FrtCmd_134(void *ctx) {
+BOOL FrtCmd_TowerFreeData(void *ctx) {
     FrontierFieldSystem_Free(Frontier_GetData(**(void ***)ctx));
     return FALSE;
 }
 
-BOOL FrtCmd_135(void *ctx) {
+BOOL FrtCmd_TowerStartBattle(void *ctx) {
     u8 *script = ctx;
     void *args = Frontier_GetLaunchArgs(**(void ***)ctx);
     u8 *data = Frontier_GetData(**(void ***)ctx);
@@ -128,7 +128,7 @@ BOOL FrtCmd_135(void *ctx) {
     return TRUE;
 }
 
-BOOL FrtCmd_136(void *ctx) {
+BOOL FrtCmd_TowerEndBattle(void *ctx) {
     u8 *script = ctx;
     u8 *data = Frontier_GetData(**(void ***)ctx);
     u16 *dst = FrontierScript_ReadVarPtr(ctx);
@@ -139,7 +139,7 @@ BOOL FrtCmd_136(void *ctx) {
     return FALSE;
 }
 
-BOOL FrtCmd_137(void *ctx) {
+BOOL FrtCmd_TowerSendLinkMessage(void *ctx) {
     u32 kind;
     u32 value;
     u8 *data;
@@ -163,7 +163,7 @@ BOOL FrtCmd_137(void *ctx) {
     return FALSE;
 }
 
-BOOL FrtCmd_138(void *ctx) {
+BOOL FrtCmd_TowerWaitLink(void *ctx) {
     u16 first = FrontierScriptContext_ReadHalfWord(ctx);
     u16 second = FrontierScriptContext_ReadHalfWord(ctx);
     *(u16 *)((u8 *)ctx + 0x78) = first;

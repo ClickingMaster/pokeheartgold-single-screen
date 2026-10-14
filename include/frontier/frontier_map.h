@@ -76,7 +76,7 @@ typedef struct FrontierMapSpriteSet {
     u16 loadedResourceIds[FRONTIER_MAP_SPRITE_MAX];
 } FrontierMapSpriteSet;
 
-// Map shake (FrtCmd_076): the offsets are added to the scroll and flip sign every interval + 1 frames, count times.
+// Map shake (FrtCmd_ShakeMap): the offsets are added to the scroll and flip sign every interval + 1 frames, count times.
 typedef struct FrontierMapShake {
     SysTask *task;
     s16 x;
@@ -87,7 +87,7 @@ typedef struct FrontierMapShake {
     u8 unk_0B;
 } FrontierMapShake;
 
-// Main screen window 0 set after a delay (FrtCmd_078).
+// Main screen window 0 set after a delay (FrtCmd_SetWindowDelayed).
 typedef struct FrontierMapWindowTask {
     SysTask *task;
     u8 left;

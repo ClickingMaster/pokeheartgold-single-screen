@@ -63,7 +63,7 @@ BOOL FrtCmd_LaunchGameBoard(FrontierScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL FrtCmd_187(FrontierScriptContext *ctx) {
+BOOL FrtCmd_ArcadeEndBattle(FrontierScriptContext *ctx) {
     u8 monCnt;
     Pokemon *mon;
     int i, index1, index2, partyCnt, data;
@@ -509,7 +509,7 @@ BOOL FrtCmd_ArcadeSetEvent(FrontierScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL FrtCmd_198(FrontierScriptContext *ctx) {
+BOOL FrtCmd_ArcadeSetItemIconVisible(FrontierScriptContext *ctx) {
     FrontierMap *map = FrontierSystem_GetFrontierMap(ctx->frontierSystem);
     u32 opponent = FrontierScript_ReadVar(ctx);
     u32 slot = FrontierScript_ReadVar(ctx);

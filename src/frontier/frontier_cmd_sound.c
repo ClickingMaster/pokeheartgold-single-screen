@@ -11,26 +11,26 @@
 // Defined in frontier_script_commands.c.
 u16 FrontierScript_ReadVar(FrontierScriptContext *ctx);
 
-BOOL FrtCmd_085(FrontierScriptContext *ctx);
-BOOL FrtCmd_086(FrontierScriptContext *ctx);
-BOOL FrtCmd_087(FrontierScriptContext *ctx);
+BOOL FrtCmd_PlaySE(FrontierScriptContext *ctx);
+BOOL FrtCmd_StopSE(FrontierScriptContext *ctx);
+BOOL FrtCmd_WaitSE(FrontierScriptContext *ctx);
 BOOL FrontierScriptNative_WaitSE(FrontierScriptContext *ctx);
-BOOL FrtCmd_088(FrontierScriptContext *ctx);
-BOOL FrtCmd_089(FrontierScriptContext *ctx);
+BOOL FrtCmd_PlayFanfare(FrontierScriptContext *ctx);
+BOOL FrtCmd_WaitFanfare(FrontierScriptContext *ctx);
 BOOL FrontierScriptNative_WaitFanfare(FrontierScriptContext *ctx);
-BOOL FrtCmd_090(FrontierScriptContext *ctx);
+BOOL FrtCmd_PlayBGM(FrontierScriptContext *ctx);
 
-BOOL FrtCmd_085(FrontierScriptContext *ctx) {
+BOOL FrtCmd_PlaySE(FrontierScriptContext *ctx) {
     PlaySE(FrontierScript_ReadVar(ctx));
     return FALSE;
 }
 
-BOOL FrtCmd_086(FrontierScriptContext *ctx) {
+BOOL FrtCmd_StopSE(FrontierScriptContext *ctx) {
     StopSE(FrontierScript_ReadVar(ctx), 0);
     return FALSE;
 }
 
-BOOL FrtCmd_087(FrontierScriptContext *ctx) {
+BOOL FrtCmd_WaitSE(FrontierScriptContext *ctx) {
     ctx->data[0] = FrontierScript_ReadVar(ctx);
     FrontierScriptContext_Pause(ctx, FrontierScriptNative_WaitSE);
     return TRUE;
@@ -43,12 +43,12 @@ BOOL FrontierScriptNative_WaitSE(FrontierScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL FrtCmd_088(FrontierScriptContext *ctx) {
+BOOL FrtCmd_PlayFanfare(FrontierScriptContext *ctx) {
     PlayFanfare(FrontierScriptContext_ReadHalfWord(ctx));
     return FALSE;
 }
 
-BOOL FrtCmd_089(FrontierScriptContext *ctx) {
+BOOL FrtCmd_WaitFanfare(FrontierScriptContext *ctx) {
     FrontierScriptContext_Pause(ctx, FrontierScriptNative_WaitFanfare);
     return TRUE;
 }
@@ -60,7 +60,7 @@ BOOL FrontierScriptNative_WaitFanfare(FrontierScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL FrtCmd_090(FrontierScriptContext *ctx) {
+BOOL FrtCmd_PlayBGM(FrontierScriptContext *ctx) {
     u32 seqNo = FrontierScriptContext_ReadHalfWord(ctx);
     Sound_SetFieldBGM(seqNo);
     PlayBGM(seqNo);

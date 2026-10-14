@@ -25,7 +25,7 @@ typedef struct FrontierMessageParams {
     u8 unk_03;
 } FrontierMessageParams;
 
-// Script menus: a 2D menu (one column, FrtCmd_021/022) or a list menu (FrtCmd_026/027), with an optional description
+// Script menus: a 2D menu (one column, FrtCmd_MenuInitStdGmm/MenuInit) or a list menu (FrtCmd_ListMenuInitStdGmm/ListMenuInit), with an optional description
 // message per item printed into the frontier system's message window.
 typedef struct FrontierMenu {
     FrontierSystem *system;                   // 0x000
@@ -62,7 +62,7 @@ typedef struct FrontierMenu {
     u16 unk_2D6;
 } FrontierMenu; // size 0x2D8
 
-// Work of a map object's movement task (FrtCmd_040).
+// Work of a map object's movement task (FrtCmd_ApplyMovement).
 typedef struct FrontierMovementTask {
     u8 state;                        // 0x00
     u8 repeat;                       // 0x01

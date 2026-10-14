@@ -1,117 +1,117 @@
-	.extern FrtCmd_000
-	.extern FrtCmd_001
-	.extern FrtCmd_002
-	.extern FrtCmd_003
-	.extern FrtCmd_004
-	.extern FrtCmd_005
-	.extern FrtCmd_006
-	.extern FrtCmd_007
-	.extern FrtCmd_008
-	.extern FrtCmd_009
-	.extern FrtCmd_010
-	.extern FrtCmd_011
-	.extern FrtCmd_012
-	.extern FrtCmd_013
-	.extern FrtCmd_014
-	.extern FrtCmd_015
-	.extern FrtCmd_016
-	.extern FrtCmd_017
-	.extern FrtCmd_018
-	.extern FrtCmd_019
-	.extern FrtCmd_020
-	.extern FrtCmd_021
-	.extern FrtCmd_022
-	.extern FrtCmd_023
-	.extern FrtCmd_024
-	.extern FrtCmd_025
-	.extern FrtCmd_026
-	.extern FrtCmd_027
-	.extern FrtCmd_028
-	.extern FrtCmd_029
-	.extern FrtCmd_030
-	.extern FrtCmd_031
-	.extern FrtCmd_032
-	.extern FrtCmd_033
-	.extern FrtCmd_034
-	.extern FrtCmd_035
-	.extern FrtCmd_036
-	.extern FrtCmd_037
-	.extern FrtCmd_038
-	.extern FrtCmd_039
-	.extern FrtCmd_040
-	.extern FrtCmd_041
-	.extern FrtCmd_042
-	.extern FrtCmd_043
-	.extern FrtCmd_044
-	.extern FrtCmd_045
-	.extern FrtCmd_046
-	.extern FrtCmd_047
-	.extern FrtCmd_048
-	.extern FrtCmd_049
-	.extern FrtCmd_050
-	.extern FrtCmd_051
-	.extern FrtCmd_052
-	.extern FrtCmd_053
-	.extern FrtCmd_054
-	.extern FrtCmd_055
-	.extern FrtCmd_056
-	.extern FrtCmd_057
-	.extern FrtCmd_058
-	.extern FrtCmd_059
-	.extern FrtCmd_060
-	.extern FrtCmd_061
-	.extern FrtCmd_062
-	.extern FrtCmd_063
-	.extern FrtCmd_064
-	.extern FrtCmd_065
-	.extern FrtCmd_066
-	.extern FrtCmd_067
-	.extern FrtCmd_068
-	.extern FrtCmd_069
-	.extern FrtCmd_070
-	.extern FrtCmd_071
-	.extern FrtCmd_072
-	.extern FrtCmd_073
-	.extern FrtCmd_074
-	.extern FrtCmd_075
-	.extern FrtCmd_076
-	.extern FrtCmd_077
-	.extern FrtCmd_078
-	.extern FrtCmd_079
-	.extern FrtCmd_083
-	.extern FrtCmd_084
-	.extern FrtCmd_108
-	.extern FrtCmd_109
-	.extern FrtCmd_110
-	.extern FrtCmd_111
-	.extern FrtCmd_112
-	.extern FrtCmd_113
-	.extern FrtCmd_114
-	.extern FrtCmd_115
-	.extern FrtCmd_116
-	.extern FrtCmd_117
-	.extern FrtCmd_119
-	.extern FrtCmd_120
-	.extern FrtCmd_121
-	.extern FrtCmd_122
-	.extern FrtCmd_123
-	.extern FrtCmd_124
-	.extern FrtCmd_125
-	.extern FrtCmd_126
-	.extern FrtCmd_127
-	.extern FrtCmd_128
-	.extern FrtCmd_129
-	.extern FrtCmd_130
-	.extern FrtCmd_131
-	.extern FrtCmd_150
-	.extern FrtCmd_183
+	.extern FrtCmd_Nop
+	.extern FrtCmd_End
+	.extern FrtCmd_Exit
+	.extern FrtCmd_ChangeMode
+	.extern FrtCmd_ChangeModeWithTask
+	.extern FrtCmd_Wait
+	.extern FrtCmd_SetVar
+	.extern FrtCmd_CopyVar
+	.extern FrtCmd_AddVar
+	.extern FrtCmd_SubVar
+	.extern FrtCmd_GoTo
+	.extern FrtCmd_GoToIf
+	.extern FrtCmd_Call
+	.extern FrtCmd_Return
+	.extern FrtCmd_CallIf
+	.extern FrtCmd_PrintMessageInstant
+	.extern FrtCmd_PrintMessage
+	.extern FrtCmd_PrintMessageCanSpeedUp
+	.extern FrtCmd_CloseMessage
+	.extern FrtCmd_FadeScreen
+	.extern FrtCmd_WaitFade
+	.extern FrtCmd_MenuInitStdGmm
+	.extern FrtCmd_MenuInit
+	.extern FrtCmd_MenuItemAdd
+	.extern FrtCmd_MenuItemAddWithDescription
+	.extern FrtCmd_MenuExec
+	.extern FrtCmd_ListMenuInitStdGmm
+	.extern FrtCmd_ListMenuInit
+	.extern FrtCmd_ListMenuItemAdd
+	.extern FrtCmd_ListMenuExec
+	.extern FrtCmd_ListMenuCancel
+	.extern FrtCmd_YesNo
+	.extern FrtCmd_CompareVarToValue
+	.extern FrtCmd_CompareVarToVar
+	.extern FrtCmd_LoadObjectGfx
+	.extern FrtCmd_RemoveObjectGfx
+	.extern FrtCmd_CreateObjects
+	.extern FrtCmd_DeleteObject
+	.extern FrtCmd_SetObjectVisible
+	.extern FrtCmd_Dummy039
+	.extern FrtCmd_ApplyMovement
+	.extern FrtCmd_WaitMovement
+	.extern FrtCmd_LoadSpriteResources
+	.extern FrtCmd_UnloadSpriteResources
+	.extern FrtCmd_CreateSprites
+	.extern FrtCmd_DeleteSprite
+	.extern FrtCmd_SetSpriteDrawFlag
+	.extern FrtCmd_SetSpriteFlip
+	.extern FrtCmd_SetSpriteTranslucent
+	.extern FrtCmd_StartSpriteAnim
+	.extern FrtCmd_StopSpriteAnim
+	.extern FrtCmd_WaitSpriteAnim
+	.extern FrtCmd_LaunchNamingScreen
+	.extern FrtCmd_LinkSync
+	.extern FrtCmd_ClearLinkSyncPackets
+	.extern FrtCmd_ExitClubLink
+	.extern FrtCmd_Random
+	.extern FrtCmd_HealParty
+	.extern FrtCmd_WaitButton
+	.extern FrtCmd_WaitButtonOrDelay
+	.extern FrtCmd_Dummy060
+	.extern FrtCmd_SetSaveVar
+	.extern FrtCmd_GetSaveVar
+	.extern FrtCmd_BattleTransition
+	.extern FrtCmd_GetPlayerSpriteId
+	.extern FrtCmd_CreateParticleSystem
+	.extern FrtCmd_DestroyParticleSystem
+	.extern FrtCmd_CreateParticleEmitter
+	.extern FrtCmd_WaitParticles
+	.extern FrtCmd_CreatePartyMonSprite
+	.extern FrtCmd_DeleteMonSprite
+	.extern FrtCmd_BrainIntro
+	.extern FrtCmd_IncGameStat
+	.extern FrtCmd_AddGameStat
+	.extern FrtCmd_AddGameScore
+	.extern FrtCmd_CheckPlayerOrPartnerVersion0
+	.extern FrtCmd_ShakeMap
+	.extern FrtCmd_WaitShakeMap
+	.extern FrtCmd_SetWindowDelayed
+	.extern FrtCmd_WaitWindowDelayed
+	.extern FrtCmd_ClearObjectMovement
+	.extern FrtCmd_SetObjectLookAround
+	.extern FrtCmd_CreateBattleRecord
+	.extern FrtCmd_SaveBattleRecord
+	.extern FrtCmd_PlayBattleRecord
+	.extern FrtCmd_DeleteBattleRecord
+	.extern FrtCmd_CheckBattleRecordSlotValid
+	.extern FrtCmd_CheckBattleRecordAiFlagsValid
+	.extern FrtCmd_SaveGameNormal
+	.extern FrtCmd_SaveGameAsync
+	.extern FrtCmd_SaveWipeExtraChunks
+	.extern FrtCmd_CheckExtraSaveChunksExist
+	.extern FrtCmd_AddWaitingIcon
+	.extern FrtCmd_RemoveWaitingIcon
+	.extern FrtCmd_BufferItemName
+	.extern FrtCmd_BufferInt
+	.extern FrtCmd_BufferPlayersName
+	.extern FrtCmd_BufferPartnersName
+	.extern FrtCmd_BufferMoveName
+	.extern FrtCmd_BufferSpeciesName
+	.extern FrtCmd_BufferTypeName
+	.extern FrtCmd_BufferRivalsName
+	.extern FrtCmd_GetBattlePoints
+	.extern FrtCmd_GiveBattlePoints
+	.extern FrtCmd_TakeBattlePoints
+	.extern FrtCmd_Dummy150
+	.extern FrtCmd_UpdateWifiFriendDate
 	.extern FrtCmd_200
 	.extern FrtCmd_201
-	.extern FrtCmd_203
-	.extern FrtCmd_204
-	.extern FrtCmd_205
-	.extern FrtCmd_206
-	.extern FrtCmd_207
+	.extern FrtCmd_LinkSyncOrAbort
+	.extern FrtCmd_GetSyncAborted
+	.extern FrtCmd_ClearSyncAborted
+	.extern FrtCmd_MenuSetAlignRight
+	.extern FrtCmd_MenuSetAlignBottom
 	.extern FrontierTransition_Flash
 	.extern FrontierTransition_FlashWipeHorizontal
 	.extern FrontierTransition_FlashWipeVertical
@@ -122,115 +122,115 @@
 	.public FrontierScript_ReadVar
 	.public FrontierScript_GetVarPtr
 	.public FrontierScript_GetVar
-	.public FrtCmd_000
-	.public FrtCmd_001
-	.public FrtCmd_002
-	.public FrtCmd_003
+	.public FrtCmd_Nop
+	.public FrtCmd_End
+	.public FrtCmd_Exit
+	.public FrtCmd_ChangeMode
 	.public FrontierScriptNative_WaitFrame
-	.public FrtCmd_004
-	.public FrtCmd_005
+	.public FrtCmd_ChangeModeWithTask
+	.public FrtCmd_Wait
 	.public FrontierScriptNative_WaitFrames
-	.public FrtCmd_006
-	.public FrtCmd_007
-	.public FrtCmd_008
-	.public FrtCmd_009
+	.public FrtCmd_SetVar
+	.public FrtCmd_CopyVar
+	.public FrtCmd_AddVar
+	.public FrtCmd_SubVar
 	.public FrontierScript_Compare
-	.public FrtCmd_032
-	.public FrtCmd_033
+	.public FrtCmd_CompareVarToValue
+	.public FrtCmd_CompareVarToVar
 	.public FrontierScript_Jump
-	.public FrtCmd_010
-	.public FrtCmd_011
-	.public FrtCmd_012
-	.public FrtCmd_013
-	.public FrtCmd_014
-	.public FrtCmd_015
-	.public FrtCmd_016
-	.public FrtCmd_017
+	.public FrtCmd_GoTo
+	.public FrtCmd_GoToIf
+	.public FrtCmd_Call
+	.public FrtCmd_Return
+	.public FrtCmd_CallIf
+	.public FrtCmd_PrintMessageInstant
+	.public FrtCmd_PrintMessage
+	.public FrtCmd_PrintMessageCanSpeedUp
 	.public FrontierScriptNative_WaitMessage
-	.public FrtCmd_018
-	.public FrtCmd_019
-	.public FrtCmd_020
+	.public FrtCmd_CloseMessage
+	.public FrtCmd_FadeScreen
+	.public FrtCmd_WaitFade
 	.public FrontierScriptNative_WaitPaletteFade
-	.public FrtCmd_021
-	.public FrtCmd_022
-	.public FrtCmd_023
-	.public FrtCmd_024
-	.public FrtCmd_025
+	.public FrtCmd_MenuInitStdGmm
+	.public FrtCmd_MenuInit
+	.public FrtCmd_MenuItemAdd
+	.public FrtCmd_MenuItemAddWithDescription
+	.public FrtCmd_MenuExec
 	.public FrontierScriptNative_WaitMenu
-	.public FrtCmd_026
-	.public FrtCmd_027
-	.public FrtCmd_028
-	.public FrtCmd_029
-	.public FrtCmd_030
-	.public FrtCmd_031
+	.public FrtCmd_ListMenuInitStdGmm
+	.public FrtCmd_ListMenuInit
+	.public FrtCmd_ListMenuItemAdd
+	.public FrtCmd_ListMenuExec
+	.public FrtCmd_ListMenuCancel
+	.public FrtCmd_YesNo
 	.public FrontierScriptNative_WaitYesNo
-	.public FrtCmd_034
-	.public FrtCmd_035
-	.public FrtCmd_036
-	.public FrtCmd_037
-	.public FrtCmd_038
-	.public FrtCmd_039
-	.public FrtCmd_040
+	.public FrtCmd_LoadObjectGfx
+	.public FrtCmd_RemoveObjectGfx
+	.public FrtCmd_CreateObjects
+	.public FrtCmd_DeleteObject
+	.public FrtCmd_SetObjectVisible
+	.public FrtCmd_Dummy039
+	.public FrtCmd_ApplyMovement
 	.public FrontierScript_StartMovement
-	.public FrtCmd_041
+	.public FrtCmd_WaitMovement
 	.public FrontierScriptNative_WaitMovements
-	.public FrtCmd_042
-	.public FrtCmd_043
-	.public FrtCmd_044
-	.public FrtCmd_045
-	.public FrtCmd_046
-	.public FrtCmd_047
-	.public FrtCmd_048
-	.public FrtCmd_049
-	.public FrtCmd_050
-	.public FrtCmd_051
+	.public FrtCmd_LoadSpriteResources
+	.public FrtCmd_UnloadSpriteResources
+	.public FrtCmd_CreateSprites
+	.public FrtCmd_DeleteSprite
+	.public FrtCmd_SetSpriteDrawFlag
+	.public FrtCmd_SetSpriteFlip
+	.public FrtCmd_SetSpriteTranslucent
+	.public FrtCmd_StartSpriteAnim
+	.public FrtCmd_StopSpriteAnim
+	.public FrtCmd_WaitSpriteAnim
 	.public FrontierScriptNative_WaitSpriteAnim
 	.public FrontierScript_SetObjectMovement
-	.public FrtCmd_083
-	.public FrtCmd_084
-	.public FrtCmd_052
+	.public FrtCmd_ClearObjectMovement
+	.public FrtCmd_SetObjectLookAround
+	.public FrtCmd_LaunchNamingScreen
 	.public FrontierScript_FreeNamingScreenArgs
-	.public FrtCmd_108
-	.public FrtCmd_109
+	.public FrtCmd_CreateBattleRecord
+	.public FrtCmd_SaveBattleRecord
 	.public FrontierScriptNative_WaitSaveBattleRecord
 	.public FrontierScript_GetBattleRecordType
-	.public FrtCmd_110
-	.public FrtCmd_111
-	.public FrtCmd_112
-	.public FrtCmd_114
-	.public FrtCmd_115
+	.public FrtCmd_PlayBattleRecord
+	.public FrtCmd_DeleteBattleRecord
+	.public FrtCmd_CheckBattleRecordSlotValid
+	.public FrtCmd_SaveGameNormal
+	.public FrtCmd_SaveGameAsync
 	.public FrontierScriptNative_WaitSave
-	.public FrtCmd_116
-	.public FrtCmd_117
-	.public FrtCmd_119
-	.public FrtCmd_120
-	.public FrtCmd_121
-	.public FrtCmd_122
+	.public FrtCmd_SaveWipeExtraChunks
+	.public FrtCmd_CheckExtraSaveChunksExist
+	.public FrtCmd_AddWaitingIcon
+	.public FrtCmd_RemoveWaitingIcon
+	.public FrtCmd_BufferItemName
+	.public FrtCmd_BufferInt
 	.public FrontierScript_CountDigits
-	.public FrtCmd_123
-	.public FrtCmd_124
-	.public FrtCmd_125
-	.public FrtCmd_126
+	.public FrtCmd_BufferPlayersName
+	.public FrtCmd_BufferPartnersName
+	.public FrtCmd_BufferMoveName
+	.public FrtCmd_BufferSpeciesName
 	.public FrontierScript_ReadString
-	.public FrtCmd_127
-	.public FrtCmd_128
-	.public FrtCmd_129
-	.public FrtCmd_130
-	.public FrtCmd_131
-	.public FrtCmd_053
+	.public FrtCmd_BufferTypeName
+	.public FrtCmd_BufferRivalsName
+	.public FrtCmd_GetBattlePoints
+	.public FrtCmd_GiveBattlePoints
+	.public FrtCmd_TakeBattlePoints
+	.public FrtCmd_LinkSync
 	.public FrontierScriptNative_WaitLinkSync
-	.public FrtCmd_054
-	.public FrtCmd_055
+	.public FrtCmd_ClearLinkSyncPackets
+	.public FrtCmd_ExitClubLink
 	.public FrontierScriptNative_WaitCommEnd
-	.public FrtCmd_056
-	.public FrtCmd_057
-	.public FrtCmd_058
+	.public FrtCmd_Random
+	.public FrtCmd_HealParty
+	.public FrtCmd_WaitButton
 	.public FrontierScriptNative_WaitButton
-	.public FrtCmd_059
+	.public FrtCmd_WaitButtonOrDelay
 	.public FrontierScriptNative_WaitButtonOrFrames
-	.public FrtCmd_060
-	.public FrtCmd_061
-	.public FrtCmd_062
+	.public FrtCmd_Dummy060
+	.public FrtCmd_SetSaveVar
+	.public FrtCmd_GetSaveVar
 	.public FrontierTransition_Flash
 	.public FrontierTransition_FlashWipeHorizontal
 	.public FrontierTransition_FlashWipeVertical
@@ -239,39 +239,39 @@
 	.public FrontierTransition_RowScroll1
 	.public FrontierTransition_RowScroll2
 	.public FrontierTransition_Wave
-	.public FrtCmd_063
+	.public FrtCmd_BattleTransition
 	.public FrontierScriptNative_WaitTransition
-	.public FrtCmd_064
-	.public FrtCmd_065
-	.public FrtCmd_066
-	.public FrtCmd_067
-	.public FrtCmd_068
+	.public FrtCmd_GetPlayerSpriteId
+	.public FrtCmd_CreateParticleSystem
+	.public FrtCmd_DestroyParticleSystem
+	.public FrtCmd_CreateParticleEmitter
+	.public FrtCmd_WaitParticles
 	.public FrontierScriptNative_WaitMapEffect
-	.public FrtCmd_076
-	.public FrtCmd_077
+	.public FrtCmd_ShakeMap
+	.public FrtCmd_WaitShakeMap
 	.public FrontierScriptNative_WaitShake
-	.public FrtCmd_078
-	.public FrtCmd_079
+	.public FrtCmd_SetWindowDelayed
+	.public FrtCmd_WaitWindowDelayed
 	.public FrontierScriptNative_WaitWindowTask
-	.public FrtCmd_150
-	.public FrtCmd_069
-	.public FrtCmd_070
-	.public FrtCmd_071
+	.public FrtCmd_Dummy150
+	.public FrtCmd_CreatePartyMonSprite
+	.public FrtCmd_DeleteMonSprite
+	.public FrtCmd_BrainIntro
 	.public FrontierScriptNative_WaitBrainIntro
-	.public FrtCmd_072
-	.public FrtCmd_073
-	.public FrtCmd_074
-	.public FrtCmd_075
-	.public FrtCmd_113
-	.public FrtCmd_183
+	.public FrtCmd_IncGameStat
+	.public FrtCmd_AddGameStat
+	.public FrtCmd_AddGameScore
+	.public FrtCmd_CheckPlayerOrPartnerVersion0
+	.public FrtCmd_CheckBattleRecordAiFlagsValid
+	.public FrtCmd_UpdateWifiFriendDate
 	.public FrtCmd_200
 	.public FrtCmd_201
-	.public FrtCmd_203
+	.public FrtCmd_LinkSyncOrAbort
 	.public FrontierScriptNative_WaitLinkSyncOrAbort
-	.public FrtCmd_204
-	.public FrtCmd_205
-	.public FrtCmd_206
-	.public FrtCmd_207
+	.public FrtCmd_GetSyncAborted
+	.public FrtCmd_ClearSyncAborted
+	.public FrtCmd_MenuSetAlignRight
+	.public FrtCmd_MenuSetAlignBottom
 	.public FrontierSystem_PrintMessage
 	.public FrontierSystem_ShowMessageWindow
 	.public FrontierSystem_FormatMessage
@@ -388,83 +388,83 @@
 	.public ov80_0223DC22
 	.public FrontierScript_ReadVar
 	.public FrontierScript_ReadVarPtr
-	.public FrtCmd_000
-	.public FrtCmd_001
-	.public FrtCmd_002
-	.public FrtCmd_003
-	.public FrtCmd_004
-	.public FrtCmd_005
-	.public FrtCmd_006
-	.public FrtCmd_007
-	.public FrtCmd_008
-	.public FrtCmd_009
-	.public FrtCmd_010
-	.public FrtCmd_012
-	.public FrtCmd_013
-	.public FrtCmd_016
-	.public FrtCmd_017
-	.public FrtCmd_018
-	.public FrtCmd_020
-	.public FrtCmd_023
-	.public FrtCmd_024
-	.public FrtCmd_025
-	.public FrtCmd_028
-	.public FrtCmd_029
-	.public FrtCmd_030
-	.public FrtCmd_032
-	.public FrtCmd_033
-	.public FrtCmd_035
-	.public FrtCmd_037
-	.public FrtCmd_039
-	.public FrtCmd_041
-	.public FrtCmd_043
-	.public FrtCmd_045
-	.public FrtCmd_047
-	.public FrtCmd_049
-	.public FrtCmd_050
-	.public FrtCmd_051
-	.public FrtCmd_053
-	.public FrtCmd_054
-	.public FrtCmd_055
-	.public FrtCmd_056
-	.public FrtCmd_057
-	.public FrtCmd_058
-	.public FrtCmd_059
-	.public FrtCmd_060
-	.public FrtCmd_061
-	.public FrtCmd_062
-	.public FrtCmd_065
-	.public FrtCmd_066
-	.public FrtCmd_067
-	.public FrtCmd_068
-	.public FrtCmd_070
-	.public FrtCmd_072
-	.public FrtCmd_073
-	.public FrtCmd_074
-	.public FrtCmd_075
-	.public FrtCmd_077
-	.public FrtCmd_079
-	.public FrtCmd_083
-	.public FrtCmd_084
-	.public FrtCmd_108
-	.public FrtCmd_111
-	.public FrtCmd_113
-	.public FrtCmd_114
-	.public FrtCmd_116
-	.public FrtCmd_117
-	.public FrtCmd_119
-	.public FrtCmd_120
-	.public FrtCmd_128
-	.public FrtCmd_129
-	.public FrtCmd_130
-	.public FrtCmd_131
-	.public FrtCmd_150
-	.public FrtCmd_183
+	.public FrtCmd_Nop
+	.public FrtCmd_End
+	.public FrtCmd_Exit
+	.public FrtCmd_ChangeMode
+	.public FrtCmd_ChangeModeWithTask
+	.public FrtCmd_Wait
+	.public FrtCmd_SetVar
+	.public FrtCmd_CopyVar
+	.public FrtCmd_AddVar
+	.public FrtCmd_SubVar
+	.public FrtCmd_GoTo
+	.public FrtCmd_Call
+	.public FrtCmd_Return
+	.public FrtCmd_PrintMessage
+	.public FrtCmd_PrintMessageCanSpeedUp
+	.public FrtCmd_CloseMessage
+	.public FrtCmd_WaitFade
+	.public FrtCmd_MenuItemAdd
+	.public FrtCmd_MenuItemAddWithDescription
+	.public FrtCmd_MenuExec
+	.public FrtCmd_ListMenuItemAdd
+	.public FrtCmd_ListMenuExec
+	.public FrtCmd_ListMenuCancel
+	.public FrtCmd_CompareVarToValue
+	.public FrtCmd_CompareVarToVar
+	.public FrtCmd_RemoveObjectGfx
+	.public FrtCmd_DeleteObject
+	.public FrtCmd_Dummy039
+	.public FrtCmd_WaitMovement
+	.public FrtCmd_UnloadSpriteResources
+	.public FrtCmd_DeleteSprite
+	.public FrtCmd_SetSpriteFlip
+	.public FrtCmd_StartSpriteAnim
+	.public FrtCmd_StopSpriteAnim
+	.public FrtCmd_WaitSpriteAnim
+	.public FrtCmd_LinkSync
+	.public FrtCmd_ClearLinkSyncPackets
+	.public FrtCmd_ExitClubLink
+	.public FrtCmd_Random
+	.public FrtCmd_HealParty
+	.public FrtCmd_WaitButton
+	.public FrtCmd_WaitButtonOrDelay
+	.public FrtCmd_Dummy060
+	.public FrtCmd_SetSaveVar
+	.public FrtCmd_GetSaveVar
+	.public FrtCmd_CreateParticleSystem
+	.public FrtCmd_DestroyParticleSystem
+	.public FrtCmd_CreateParticleEmitter
+	.public FrtCmd_WaitParticles
+	.public FrtCmd_DeleteMonSprite
+	.public FrtCmd_IncGameStat
+	.public FrtCmd_AddGameStat
+	.public FrtCmd_AddGameScore
+	.public FrtCmd_CheckPlayerOrPartnerVersion0
+	.public FrtCmd_WaitShakeMap
+	.public FrtCmd_WaitWindowDelayed
+	.public FrtCmd_ClearObjectMovement
+	.public FrtCmd_SetObjectLookAround
+	.public FrtCmd_CreateBattleRecord
+	.public FrtCmd_DeleteBattleRecord
+	.public FrtCmd_CheckBattleRecordAiFlagsValid
+	.public FrtCmd_SaveGameNormal
+	.public FrtCmd_SaveWipeExtraChunks
+	.public FrtCmd_CheckExtraSaveChunksExist
+	.public FrtCmd_AddWaitingIcon
+	.public FrtCmd_RemoveWaitingIcon
+	.public FrtCmd_BufferRivalsName
+	.public FrtCmd_GetBattlePoints
+	.public FrtCmd_GiveBattlePoints
+	.public FrtCmd_TakeBattlePoints
+	.public FrtCmd_Dummy150
+	.public FrtCmd_UpdateWifiFriendDate
 	.public FrtCmd_200
 	.public FrtCmd_201
-	.public FrtCmd_203
-	.public FrtCmd_204
-	.public FrtCmd_205
+	.public FrtCmd_LinkSyncOrAbort
+	.public FrtCmd_GetSyncAborted
+	.public FrtCmd_ClearSyncAborted
 	.public FrontierScript_GetVar
 	.public FrontierScriptNative_WaitFrame
 	.public FrontierScriptNative_WaitFrames
@@ -518,98 +518,98 @@ ov80_0223B9EC: ; 0x0223B9EC
 	.word FrontierTransition_Wave
 
 gFrontierCommandTable: ; 0x0223BA04
-	.word FrtCmd_000
-	.word FrtCmd_001
-	.word FrtCmd_002
-	.word FrtCmd_003
-	.word FrtCmd_004
-	.word FrtCmd_005
-	.word FrtCmd_006
-	.word FrtCmd_007
-	.word FrtCmd_008
-	.word FrtCmd_009
-	.word FrtCmd_010
-	.word FrtCmd_011
-	.word FrtCmd_012
-	.word FrtCmd_013
-	.word FrtCmd_014
-	.word FrtCmd_015
-	.word FrtCmd_016
-	.word FrtCmd_017
-	.word FrtCmd_018
-	.word FrtCmd_019
-	.word FrtCmd_020
-	.word FrtCmd_021
-	.word FrtCmd_022
-	.word FrtCmd_023
-	.word FrtCmd_024
-	.word FrtCmd_025
-	.word FrtCmd_026
-	.word FrtCmd_027
-	.word FrtCmd_028
-	.word FrtCmd_029
-	.word FrtCmd_030
-	.word FrtCmd_031
-	.word FrtCmd_032
-	.word FrtCmd_033
-	.word FrtCmd_034
-	.word FrtCmd_035
-	.word FrtCmd_036
-	.word FrtCmd_037
-	.word FrtCmd_038
-	.word FrtCmd_039
-	.word FrtCmd_040
-	.word FrtCmd_041
-	.word FrtCmd_042
-	.word FrtCmd_043
-	.word FrtCmd_044
-	.word FrtCmd_045
-	.word FrtCmd_046
-	.word FrtCmd_047
-	.word FrtCmd_048
-	.word FrtCmd_049
-	.word FrtCmd_050
-	.word FrtCmd_051
-	.word FrtCmd_052
-	.word FrtCmd_053
-	.word FrtCmd_054
-	.word FrtCmd_055
-	.word FrtCmd_056
-	.word FrtCmd_057
-	.word FrtCmd_058
-	.word FrtCmd_059
-	.word FrtCmd_060
-	.word FrtCmd_061
-	.word FrtCmd_062
-	.word FrtCmd_063
-	.word FrtCmd_064
-	.word FrtCmd_065
-	.word FrtCmd_066
-	.word FrtCmd_067
-	.word FrtCmd_068
-	.word FrtCmd_069
-	.word FrtCmd_070
-	.word FrtCmd_071
-	.word FrtCmd_072
-	.word FrtCmd_073
-	.word FrtCmd_074
-	.word FrtCmd_075
-	.word FrtCmd_076
-	.word FrtCmd_077
-	.word FrtCmd_078
-	.word FrtCmd_079
+	.word FrtCmd_Nop
+	.word FrtCmd_End
+	.word FrtCmd_Exit
+	.word FrtCmd_ChangeMode
+	.word FrtCmd_ChangeModeWithTask
+	.word FrtCmd_Wait
+	.word FrtCmd_SetVar
+	.word FrtCmd_CopyVar
+	.word FrtCmd_AddVar
+	.word FrtCmd_SubVar
+	.word FrtCmd_GoTo
+	.word FrtCmd_GoToIf
+	.word FrtCmd_Call
+	.word FrtCmd_Return
+	.word FrtCmd_CallIf
+	.word FrtCmd_PrintMessageInstant
+	.word FrtCmd_PrintMessage
+	.word FrtCmd_PrintMessageCanSpeedUp
+	.word FrtCmd_CloseMessage
+	.word FrtCmd_FadeScreen
+	.word FrtCmd_WaitFade
+	.word FrtCmd_MenuInitStdGmm
+	.word FrtCmd_MenuInit
+	.word FrtCmd_MenuItemAdd
+	.word FrtCmd_MenuItemAddWithDescription
+	.word FrtCmd_MenuExec
+	.word FrtCmd_ListMenuInitStdGmm
+	.word FrtCmd_ListMenuInit
+	.word FrtCmd_ListMenuItemAdd
+	.word FrtCmd_ListMenuExec
+	.word FrtCmd_ListMenuCancel
+	.word FrtCmd_YesNo
+	.word FrtCmd_CompareVarToValue
+	.word FrtCmd_CompareVarToVar
+	.word FrtCmd_LoadObjectGfx
+	.word FrtCmd_RemoveObjectGfx
+	.word FrtCmd_CreateObjects
+	.word FrtCmd_DeleteObject
+	.word FrtCmd_SetObjectVisible
+	.word FrtCmd_Dummy039
+	.word FrtCmd_ApplyMovement
+	.word FrtCmd_WaitMovement
+	.word FrtCmd_LoadSpriteResources
+	.word FrtCmd_UnloadSpriteResources
+	.word FrtCmd_CreateSprites
+	.word FrtCmd_DeleteSprite
+	.word FrtCmd_SetSpriteDrawFlag
+	.word FrtCmd_SetSpriteFlip
+	.word FrtCmd_SetSpriteTranslucent
+	.word FrtCmd_StartSpriteAnim
+	.word FrtCmd_StopSpriteAnim
+	.word FrtCmd_WaitSpriteAnim
+	.word FrtCmd_LaunchNamingScreen
+	.word FrtCmd_LinkSync
+	.word FrtCmd_ClearLinkSyncPackets
+	.word FrtCmd_ExitClubLink
+	.word FrtCmd_Random
+	.word FrtCmd_HealParty
+	.word FrtCmd_WaitButton
+	.word FrtCmd_WaitButtonOrDelay
+	.word FrtCmd_Dummy060
+	.word FrtCmd_SetSaveVar
+	.word FrtCmd_GetSaveVar
+	.word FrtCmd_BattleTransition
+	.word FrtCmd_GetPlayerSpriteId
+	.word FrtCmd_CreateParticleSystem
+	.word FrtCmd_DestroyParticleSystem
+	.word FrtCmd_CreateParticleEmitter
+	.word FrtCmd_WaitParticles
+	.word FrtCmd_CreatePartyMonSprite
+	.word FrtCmd_DeleteMonSprite
+	.word FrtCmd_BrainIntro
+	.word FrtCmd_IncGameStat
+	.word FrtCmd_AddGameStat
+	.word FrtCmd_AddGameScore
+	.word FrtCmd_CheckPlayerOrPartnerVersion0
+	.word FrtCmd_ShakeMap
+	.word FrtCmd_WaitShakeMap
+	.word FrtCmd_SetWindowDelayed
+	.word FrtCmd_WaitWindowDelayed
 	.word FrtCmd_CastleShowPoints
 	.word FrtCmd_CastleHidePoints
 	.word FrtCmd_CastlePrintPoints
-	.word FrtCmd_083
-	.word FrtCmd_084
-	.word FrtCmd_085
-	.word FrtCmd_086
-	.word FrtCmd_087
-	.word FrtCmd_088
-	.word FrtCmd_089
-	.word FrtCmd_090
-	.word FrtCmd_091
+	.word FrtCmd_ClearObjectMovement
+	.word FrtCmd_SetObjectLookAround
+	.word FrtCmd_PlaySE
+	.word FrtCmd_StopSE
+	.word FrtCmd_WaitSE
+	.word FrtCmd_PlayFanfare
+	.word FrtCmd_WaitFanfare
+	.word FrtCmd_PlayBGM
+	.word FrtCmd_StopBGM
 	.word FrtCmd_FactoryAlloc
 	.word FrtCmd_FactoryInit
 	.word FrtCmd_FactoryFree
@@ -626,37 +626,37 @@ gFrontierCommandTable: ; 0x0223BA04
 	.word FrtCmd_FactorySendBuffer
 	.word FrtCmd_FactoryReceiveBuffer
 	.word FrtCmd_FactoryPrintMsg
-	.word FrtCmd_108
-	.word FrtCmd_109
-	.word FrtCmd_110
-	.word FrtCmd_111
-	.word FrtCmd_112
-	.word FrtCmd_113
-	.word FrtCmd_114
-	.word FrtCmd_115
-	.word FrtCmd_116
-	.word FrtCmd_117
+	.word FrtCmd_CreateBattleRecord
+	.word FrtCmd_SaveBattleRecord
+	.word FrtCmd_PlayBattleRecord
+	.word FrtCmd_DeleteBattleRecord
+	.word FrtCmd_CheckBattleRecordSlotValid
+	.word FrtCmd_CheckBattleRecordAiFlagsValid
+	.word FrtCmd_SaveGameNormal
+	.word FrtCmd_SaveGameAsync
+	.word FrtCmd_SaveWipeExtraChunks
+	.word FrtCmd_CheckExtraSaveChunksExist
 	.word FrtCmd_HallUpdateSpeciesRecord
-	.word FrtCmd_119
-	.word FrtCmd_120
-	.word FrtCmd_121
-	.word FrtCmd_122
-	.word FrtCmd_123
-	.word FrtCmd_124
-	.word FrtCmd_125
-	.word FrtCmd_126
-	.word FrtCmd_127
-	.word FrtCmd_128
-	.word FrtCmd_129
-	.word FrtCmd_130
-	.word FrtCmd_131
-	.word FrtCmd_132
-	.word FrtCmd_133
-	.word FrtCmd_134
-	.word FrtCmd_135
-	.word FrtCmd_136
-	.word FrtCmd_137
-	.word FrtCmd_138
+	.word FrtCmd_AddWaitingIcon
+	.word FrtCmd_RemoveWaitingIcon
+	.word FrtCmd_BufferItemName
+	.word FrtCmd_BufferInt
+	.word FrtCmd_BufferPlayersName
+	.word FrtCmd_BufferPartnersName
+	.word FrtCmd_BufferMoveName
+	.word FrtCmd_BufferSpeciesName
+	.word FrtCmd_BufferTypeName
+	.word FrtCmd_BufferRivalsName
+	.word FrtCmd_GetBattlePoints
+	.word FrtCmd_GiveBattlePoints
+	.word FrtCmd_TakeBattlePoints
+	.word FrtCmd_TowerAction
+	.word FrtCmd_TowerPrintTrainerMessage
+	.word FrtCmd_TowerFreeData
+	.word FrtCmd_TowerStartBattle
+	.word FrtCmd_TowerEndBattle
+	.word FrtCmd_TowerSendLinkMessage
+	.word FrtCmd_TowerWaitLink
 	.word FrtCmd_HallAlloc
 	.word FrtCmd_HallInit
 	.word FrtCmd_HallFree
@@ -668,7 +668,7 @@ gFrontierCommandTable: ; 0x0223BA04
 	.word FrtCmd_HallSendLinkMessage
 	.word FrtCmd_HallWaitLink
 	.word FrtCmd_HallPrintTrainerMessage
-	.word FrtCmd_150
+	.word FrtCmd_Dummy150
 	.word FrtCmd_CastleAlloc
 	.word FrtCmd_CastleInit
 	.word FrtCmd_CastleFree
@@ -676,13 +676,13 @@ gFrontierCommandTable: ; 0x0223BA04
 	.word FrtCmd_CastleEndBattle
 	.word FrtCmd_CastleStartBattle
 	.word FrtCmd_CastleLaunchOpponentApp
-	.word FrtCmd_158
+	.word FrtCmd_CastleSetPartyBeforeBattle
 	.word FrtCmd_CastleGenerateOpponents
 	.word FrtCmd_CastleAction
 	.word FrtCmd_CastleGetBattleResult
 	.word FrtCmd_CastleSendLinkMessage
 	.word FrtCmd_CastleWaitLink
-	.word FrtCmd_164
+	.word FrtCmd_CastleLaunchEmptyApp
 	.word FrtCmd_CastleWaitLinkChoice
 	.word FrtCmd_CastleGetPoints
 	.word FrtCmd_CastleSpendPoints
@@ -701,11 +701,11 @@ gFrontierCommandTable: ; 0x0223BA04
 	.word FrtCmd_TowerLinkSendTrainers
 	.word FrtCmd_TowerLinkWaitReceive
 	.word FrtCmd_TowerFree
-	.word FrtCmd_183
+	.word FrtCmd_UpdateWifiFriendDate
 	.word FrtCmd_ArcadeAlloc
 	.word FrtCmd_ArcadeInit
 	.word FrtCmd_ArcadeFree
-	.word FrtCmd_187
+	.word FrtCmd_ArcadeEndBattle
 	.word FrtCmd_ArcadeStartBattle
 	.word FrtCmd_ArcadeSetPartyBeforeBattle
 	.word FrtCmd_ArcadeSetPartyAfterBattle
@@ -716,16 +716,16 @@ gFrontierCommandTable: ; 0x0223BA04
 	.word FrtCmd_LaunchGameBoard
 	.word FrtCmd_ArcadePrintMsg
 	.word FrtCmd_ArcadeSetEvent
-	.word FrtCmd_198
-	.word FrtCmd_199
+	.word FrtCmd_ArcadeSetItemIconVisible
+	.word FrtCmd_Dummy199
 	.word FrtCmd_200
 	.word FrtCmd_201
 	.word FrtCmd_LinkLobbyWaitReceiveOrAbort
-	.word FrtCmd_203
-	.word FrtCmd_204
-	.word FrtCmd_205
-	.word FrtCmd_206
-	.word FrtCmd_207
+	.word FrtCmd_LinkSyncOrAbort
+	.word FrtCmd_GetSyncAborted
+	.word FrtCmd_ClearSyncAborted
+	.word FrtCmd_MenuSetAlignRight
+	.word FrtCmd_MenuSetAlignBottom
 
 ov80_0223BD44: ; 0x0223BD44
 	.byte 0x01, 0x02, 0x04, 0x08, 0x0F, 0x10, 0x20, 0x00

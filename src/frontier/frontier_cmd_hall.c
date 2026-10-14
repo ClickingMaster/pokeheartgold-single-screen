@@ -54,7 +54,7 @@ BOOL FrtCmd_HallSendLinkMessage(FrontierScriptContext *ctx);
 BOOL FrtCmd_HallWaitLink(FrontierScriptContext *ctx);
 BOOL FrtCmd_HallPrintTrainerMessage(FrontierScriptContext *ctx);
 BOOL FrtCmd_HallUpdateSpeciesRecord(FrontierScriptContext *ctx);
-BOOL FrtCmd_199(FrontierScriptContext *ctx);
+BOOL FrtCmd_Dummy199(FrontierScriptContext *ctx);
 
 BOOL FrtCmd_HallAlloc(FrontierScriptContext *ctx) {
     u16 resume = FrontierScript_ReadVar(ctx);
@@ -324,6 +324,6 @@ BOOL FrtCmd_HallUpdateSpeciesRecord(FrontierScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL FrtCmd_199(FrontierScriptContext *ctx) {
+BOOL FrtCmd_Dummy199(FrontierScriptContext *ctx) {
     return FALSE;
 }
