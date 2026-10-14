@@ -1485,7 +1485,7 @@ BOOL BattleAnimEmitterCameraCb_SetPresetAngle4(SPLEmitter *emitter, BattleAnimEm
 
     CopyCameraAngle(&angle, &sBattleAnimEmitterCameraAngles[4]);
     camera = ParticleSystem_GetCamera(config->particleSystem);
-    ParticleSystem_SetPerspectiveType(config->particleSystem, 1);
+    ParticleSystem_SetPerspectiveType(config->particleSystem, CAMERA_PERSPECTIVE_TYPE_ORTHOGRAPHIC);
     Camera_SetAnglePos(&angle, camera);
     return TRUE;
 }
@@ -1512,7 +1512,7 @@ BOOL BattleAnimEmitterCameraCb_SetPresetAngle3(SPLEmitter *emitter, BattleAnimEm
 
     CopyCameraAngle(&angle, &sBattleAnimEmitterCameraAngles[3]);
     camera = ParticleSystem_GetCamera(config->particleSystem);
-    ParticleSystem_SetPerspectiveType(config->particleSystem, 1);
+    ParticleSystem_SetPerspectiveType(config->particleSystem, CAMERA_PERSPECTIVE_TYPE_ORTHOGRAPHIC);
     Camera_SetAnglePos(&angle, camera);
     return TRUE;
 }
@@ -1525,7 +1525,7 @@ BOOL BattleAnimEmitterCameraCb_SetAngleByMode(SPLEmitter *emitter, BattleAnimEmi
     CameraAngle angle2 = sBattleAnimEmitterCameraAngles[5];
     Camera *camera = ParticleSystem_GetCamera(config->particleSystem);
 
-    ParticleSystem_SetPerspectiveType(config->particleSystem, 1);
+    ParticleSystem_SetPerspectiveType(config->particleSystem, CAMERA_PERSPECTIVE_TYPE_ORTHOGRAPHIC);
     if (BattleAnimSystem_GetField08(config->system) == 1) {
         Camera_SetAnglePos(&angle1, camera);
     } else {
@@ -1542,7 +1542,7 @@ BOOL BattleAnimEmitterCameraCb_SetPresetAngle0(SPLEmitter *emitter, BattleAnimEm
 
     CopyCameraAngle(&angle, &sBattleAnimEmitterCameraAngles[0]);
     camera = ParticleSystem_GetCamera(config->particleSystem);
-    ParticleSystem_SetPerspectiveType(config->particleSystem, 1);
+    ParticleSystem_SetPerspectiveType(config->particleSystem, CAMERA_PERSPECTIVE_TYPE_ORTHOGRAPHIC);
     Camera_SetAnglePos(&angle, camera);
     return TRUE;
 }
@@ -1553,7 +1553,7 @@ BOOL BattleAnimEmitterCameraCb_SetPresetAngle1(SPLEmitter *emitter, BattleAnimEm
 
     CopyCameraAngle(&angle, &sBattleAnimEmitterCameraAngles[1]);
     camera = ParticleSystem_GetCamera(config->particleSystem);
-    ParticleSystem_SetPerspectiveType(config->particleSystem, 1);
+    ParticleSystem_SetPerspectiveType(config->particleSystem, CAMERA_PERSPECTIVE_TYPE_ORTHOGRAPHIC);
     Camera_SetAnglePos(&angle, camera);
     return TRUE;
 }

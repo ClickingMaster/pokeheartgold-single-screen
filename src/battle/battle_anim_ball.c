@@ -10,6 +10,7 @@
 
 #include "battle/battle.h"
 
+#include "camera.h"
 #include "filesystem.h"
 #include "heap.h"
 #include "math_util.h"
@@ -511,7 +512,7 @@ void BallSealEffect_DelayedEmitTask(SysTask *task, void *data) {
     if (emitTask->delay == 0) {
         *emitTask->emitted = TRUE;
         ParticleSystem_CreateEmitterWithParam(emitTask->particleSystem, 0, emitTask->callback, emitTask);
-        ParticleSystem_SetPerspectiveType(emitTask->particleSystem, 1);
+        ParticleSystem_SetPerspectiveType(emitTask->particleSystem, CAMERA_PERSPECTIVE_TYPE_ORTHOGRAPHIC);
         SysTask_Destroy(task);
         Heap_Free(emitTask);
     } else {
@@ -531,7 +532,7 @@ void BallSealEffect_Emit(BallSealEffect *effect, void (*callback)(SPLEmitter *))
             ParticleSystem_CreateEmitterWithParam(effect->particleSystems[0], i, callback, effect);
         }
         effect->emitted[0] = TRUE;
-        ParticleSystem_SetPerspectiveType(effect->particleSystems[0], 1);
+        ParticleSystem_SetPerspectiveType(effect->particleSystems[0], CAMERA_PERSPECTIVE_TYPE_ORTHOGRAPHIC);
         return;
     }
     for (i = 0; i < effect->count; i++) {
@@ -661,7 +662,7 @@ void BallBurstEffect_Start(BallBurstEffect *effect) {
     } else {
         ParticleSystem_CreateEmitterWithParam(effect->particleSystem, emitter, BallBurstEffect_SetEmitterPosition, effect);
     }
-    ParticleSystem_SetPerspectiveType(effect->particleSystem, 1);
+    ParticleSystem_SetPerspectiveType(effect->particleSystem, CAMERA_PERSPECTIVE_TYPE_ORTHOGRAPHIC);
 }
 
 BOOL BallBurstEffect_IsRunning(BallBurstEffect *effect) {

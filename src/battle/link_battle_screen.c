@@ -400,9 +400,9 @@ int LinkBattleScreen_Init(LinkBattleScreen *screen) {
     HBlankInterruptDisable();
     GfGfx_DisableEngineAPlanes();
     GfGfx_DisableEngineBPlanes();
-    reg_GX_DISPCNT &= 0xFFFFE0FF;
-    reg_GXS_DB_DISPCNT &= 0xFFFFE0FF;
-    reg_GX_POWCNT |= 0x8000;
+    reg_GX_DISPCNT &= ~REG_GX_DISPCNT_DISPLAY_MASK;
+    reg_GXS_DB_DISPCNT &= ~REG_GXS_DB_DISPCNT_DISPLAY_MASK;
+    reg_GX_POWCNT |= REG_GX_POWCNT_DSEL_MASK;
     reg_G2_BLDCNT = 0;
     reg_G2S_DB_BLDCNT = 0;
     LinkBattleScreen_SetVramBanks();
@@ -741,7 +741,7 @@ int LinkBattleScreen_RevealCenterBand(LinkBattleScreen *screen) {
     if (screen->frame == 16) {
         screen->frame = 0;
         screen->delayFrames = 32;
-        reg_GX_DISPCNT &= 0xFFFF1FFF;
+        reg_GX_DISPCNT &= ~(REG_GX_DISPCNT_W0_MASK | REG_GX_DISPCNT_W1_MASK | REG_GX_DISPCNT_OW_MASK);
         return 1;
     }
     {

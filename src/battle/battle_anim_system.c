@@ -1813,9 +1813,9 @@ BOOL BattleAnimBackground_BlendIn(SysTask *task, void *data) {
         work->step++;
         goto running;
     case 1:
-        SetBgControlParam(work->system->bgConfig, GF_BG_LYR_MAIN_3, GF_BG_CNT_SET_CHAR_BASE, 3);
+        SetBgControlParam(work->system->bgConfig, GF_BG_LYR_MAIN_3, GF_BG_CNT_SET_CHAR_BASE, GX_BG_CHARBASE_0x0c000);
         if (BattleAnimSystem_GetField08(work->system) != 1) {
-            SetBgControlParam(work->system->bgConfig, GF_BG_LYR_MAIN_3, GF_BG_CNT_SET_COLOR_MODE, 0);
+            SetBgControlParam(work->system->bgConfig, GF_BG_LYR_MAIN_3, GF_BG_CNT_SET_COLOR_MODE, GX_BG_COLORMODE_16);
         }
         BattleAnimBackground_LoadGraphics(work, work->system, GF_BG_LYR_MAIN_3, work->bgId);
         G2_SetBlendAlpha(GX_BLEND_PLANEMASK_BG2, GX_BLEND_PLANEMASK_BG3, work->evb, work->eva);
@@ -1895,9 +1895,9 @@ BOOL BattleAnimBackground_BlendOut(SysTask *task, BattleAnimBgSwitchWork *work) 
         BattleAnimBackground_StopMarkedEffects(work);
         BgSetPosTextAndCommit(work->system->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_X, 0);
         BgSetPosTextAndCommit(work->system->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_Y, 0);
-        SetBgControlParam(work->system->bgConfig, GF_BG_LYR_MAIN_3, GF_BG_CNT_SET_CHAR_BASE, 4);
+        SetBgControlParam(work->system->bgConfig, GF_BG_LYR_MAIN_3, GF_BG_CNT_SET_CHAR_BASE, GX_BG_CHARBASE_0x10000);
         if (BattleAnimSystem_GetField08(work->system) == 0) {
-            SetBgControlParam(work->system->bgConfig, GF_BG_LYR_MAIN_3, GF_BG_CNT_SET_COLOR_MODE, 1);
+            SetBgControlParam(work->system->bgConfig, GF_BG_LYR_MAIN_3, GF_BG_CNT_SET_COLOR_MODE, GX_BG_COLORMODE_256);
             BattleAnimSystem_LoadBattleBgTiles(work->system, GF_BG_LYR_MAIN_3);
             BattleAnimSystem_LoadBattleBgPalette(work->system);
         } else {
@@ -1936,7 +1936,7 @@ BOOL BattleAnimBackground_FadeIn(SysTask *task, BattleAnimBgSwitchWork *work) {
         if (PaletteData_GetSelectedBuffersBitmask(work->system->paletteData) != 0) {
             goto running;
         }
-        SetBgControlParam(work->system->bgConfig, GF_BG_LYR_MAIN_3, GF_BG_CNT_SET_COLOR_MODE, 0);
+        SetBgControlParam(work->system->bgConfig, GF_BG_LYR_MAIN_3, GF_BG_CNT_SET_COLOR_MODE, GX_BG_COLORMODE_16);
         BattleAnimBackground_LoadGraphics(work, work->system, GF_BG_LYR_MAIN_3, work->bgId);
         if (work->fadeToWhite == FALSE) {
             PaletteData_ForceBeginPaletteFade(work->system->paletteData, PLTTBUF_MAIN_BG_F, 0x200, work->switchFadeWait, 16, 0, RGB_BLACK);
@@ -1980,7 +1980,7 @@ BOOL BattleAnimBackground_FadeOut(SysTask *task, BattleAnimBgSwitchWork *work) {
         BattleAnimBackground_StopMarkedEffects(work);
         ToggleBgLayer(GF_BG_LYR_MAIN_3, GF_PLANE_TOGGLE_OFF);
         if (BattleAnimSystem_GetField08(work->system) == 0) {
-            SetBgControlParam(work->system->bgConfig, GF_BG_LYR_MAIN_3, GF_BG_CNT_SET_COLOR_MODE, 1);
+            SetBgControlParam(work->system->bgConfig, GF_BG_LYR_MAIN_3, GF_BG_CNT_SET_COLOR_MODE, GX_BG_COLORMODE_256);
             BattleAnimSystem_LoadBattleBgTiles(work->system, GF_BG_LYR_MAIN_3);
             BattleAnimSystem_LoadBattleBgPalette(work->system);
         } else {
@@ -2306,10 +2306,10 @@ void BattleAnimBackground_LoadBattleBgToLayer(BattleAnimSystem *system, GFBgLaye
     SetBgPriority(layer, (u8)BattleAnimSystem_GetBgPriority(system, 2));
     ToggleBgLayer(layer, GF_PLANE_TOGGLE_OFF);
     if (BattleAnimSystem_GetField08(system) == 1) {
-        SetBgControlParam(system->bgConfig, layer, GF_BG_CNT_SET_CHAR_BASE, 4);
+        SetBgControlParam(system->bgConfig, layer, GF_BG_CNT_SET_CHAR_BASE, GX_BG_CHARBASE_0x10000);
     } else {
         SetBgControlParam(system->bgConfig, layer, GF_BG_CNT_SET_COLOR_MODE, colorMode);
-        SetBgControlParam(system->bgConfig, layer, GF_BG_CNT_SET_CHAR_BASE, 4);
+        SetBgControlParam(system->bgConfig, layer, GF_BG_CNT_SET_CHAR_BASE, GX_BG_CHARBASE_0x10000);
     }
     BgClearTilemapBufferAndCommit(system->bgConfig, layer);
     if (BattleAnimSystem_GetField08(system) == 1) {
@@ -2323,10 +2323,10 @@ void BattleAnimBackground_LoadBattleBgToLayer(BattleAnimSystem *system, GFBgLaye
 void BattleAnimBackground_ResetLayer(BattleAnimSystem *system, GFBgLayer layer) {
     SetBgPriority(layer, (u8)BattleAnimSystem_GetBgPriority(system, 1));
     if (BattleAnimSystem_GetField08(system) == 1) {
-        SetBgControlParam(system->bgConfig, layer, GF_BG_CNT_SET_CHAR_BASE, 3);
+        SetBgControlParam(system->bgConfig, layer, GF_BG_CNT_SET_CHAR_BASE, GX_BG_CHARBASE_0x0c000);
     } else {
-        SetBgControlParam(system->bgConfig, layer, GF_BG_CNT_SET_COLOR_MODE, 0);
-        SetBgControlParam(system->bgConfig, layer, GF_BG_CNT_SET_CHAR_BASE, 3);
+        SetBgControlParam(system->bgConfig, layer, GF_BG_CNT_SET_COLOR_MODE, GX_BG_COLORMODE_16);
+        SetBgControlParam(system->bgConfig, layer, GF_BG_CNT_SET_CHAR_BASE, GX_BG_CHARBASE_0x0c000);
     }
     BgClearTilemapBufferAndCommit(system->bgConfig, layer);
 }
@@ -2483,7 +2483,7 @@ void BattleAnimScriptCmd_SetBackground(BattleAnimSystem *system) {
     bgId = *system->scriptPtr;
     system->scriptPtr++;
     ToggleBgLayer(GF_BG_LYR_MAIN_3, GF_PLANE_TOGGLE_OFF);
-    SetBgControlParam(system->bgConfig, GF_BG_LYR_MAIN_3, GF_BG_CNT_SET_COLOR_MODE, 0);
+    SetBgControlParam(system->bgConfig, GF_BG_LYR_MAIN_3, GF_BG_CNT_SET_COLOR_MODE, GX_BG_COLORMODE_16);
     member = BattleAnimSystem_GetBackgroundFile(bgId, 0);
     GfGfxLoader_LoadCharData(NARC_a_0_0_7, member, system->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, system->heapId);
     member = BattleAnimSystem_GetBackgroundFile(bgId, 1);
