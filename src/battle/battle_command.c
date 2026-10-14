@@ -20,7 +20,7 @@
 #include "battle/battle_controller_opponent.h"
 #include "battle/battle_controller_player.h"
 #include "battle/battle_system.h"
-#include "battle/overlay_12_0224E4FC.h"
+#include "battle/battle_util.h"
 #include "msgdata/msg/msg_0197.h"
 
 #include "assert.h"
@@ -49,7 +49,7 @@
 #include "sound_playback.h"
 #include "font_sprite.h"
 #include "palette_blink.h"
-#include "unk_0208805C.h"
+#include "ui_util.h"
 
 int BattleScriptReadWord(BattleContext *ctx);
 static void BattleScriptIncrementPointer(BattleContext *ctx, int adrs);

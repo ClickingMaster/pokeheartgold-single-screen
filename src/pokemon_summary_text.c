@@ -21,7 +21,7 @@
 #include "string_util.h"
 #include "text.h"
 #include "trainer_memo.h"
-#include "unk_02088288.h"
+#include "pokemon_summary.h"
 
 // Pokemon summary screen text (ARM9 static 0x0208C3E4-0x0208DE40): the screen's windows and the text of each page.
 // Window templates: asm/pokemon_summary_text_data.s.

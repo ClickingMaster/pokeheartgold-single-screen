@@ -12,7 +12,7 @@
 #include "safari_zone.h"
 #include "save_vars_flags.h"
 #include "script.h"
-#include "unk_02031B0C.h"
+#include "apricorn_box.h"
 
 enum PokeathlonData {
     OVERALL_DATA,

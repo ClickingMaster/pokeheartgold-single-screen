@@ -17,7 +17,7 @@
 #include "sys_task_api.h"
 #include "task.h"
 #include "map_object_movement_commands.h"
-#include "unk_0206793C.h"
+#include "field_warp_reset.h"
 
 // The 10 players' records of the union room link state (src/field_application_tasks_10.c).
 typedef struct UnionRoomGroup {

@@ -28,7 +28,7 @@
 #include "sys_vars.h"
 #include "field_terrain.h"
 #include "player_avatar_movement.h"
-#include "unk_0206D494.h"
+#include "field_misc_events.h"
 #include "safari_zone_encounters.h"
 #include "swarm.h"
 #include "wild_encounter.h"

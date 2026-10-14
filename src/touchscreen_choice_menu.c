@@ -30,7 +30,7 @@
 #include "task.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "sprite_resource.h"
 
 // Field bottom-screen app 3 (ScrCmd_TouchscreenMenuHide, sBottomScreenApps[3] of field/bottom_screen_app.c):

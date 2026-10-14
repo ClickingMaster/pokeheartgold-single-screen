@@ -10,7 +10,7 @@
 
 #include "field/field_effect_helpers.h"
 #include "msgdata/msg.naix"
-#include "overlay_2/overlay_02_02248728.h"
+#include "overlay_2/overlay_02_field_utils.h"
 
 #include "bg_window.h"
 #include "dialog_box.h"
@@ -47,7 +47,7 @@
 #include "system.h"
 #include "task.h"
 #include "field_terrain.h"
-#include "unk_02055418.h"
+#include "field_time_events.h"
 
 // What the following Pokemon and its surroundings look like when the player talks to it; compared against the
 // conditions of the interaction tables (FollowMonRule) to pick an interaction script.

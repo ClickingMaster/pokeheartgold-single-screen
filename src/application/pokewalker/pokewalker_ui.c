@@ -19,7 +19,7 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "vram_transfer_manager.h"
 
 // Pixel positions of one of Spinda's four spots, terminated by x = 0xFF.

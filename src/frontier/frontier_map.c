@@ -18,7 +18,7 @@
 #include "sys_task_api.h"
 #include "system.h"
 #include "touchpad.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "swap_3d_buffers.h"
 #include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"

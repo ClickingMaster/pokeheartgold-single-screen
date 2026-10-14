@@ -1,7 +1,7 @@
 #ifndef POKEHEARTGOLD_OVERLAY_00_THUMB_H
 #define POKEHEARTGOLD_OVERLAY_00_THUMB_H
 
-#include "overlay_44_02232E9C.h"
+#include "wifi_club_app.h"
 
 s32 WifiConnection_ClassifyErrorCode(u32 errorCode, u32 context);
 int WifiConnection_GetTargetFriendIndex(void);

@@ -25,7 +25,7 @@
 #include "sprite.h"
 #include "sprite_transfer.h"
 #include "sys_task_api.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "sprite_resource.h"
 
 // A step of the cut-in's step table: TRUE to run the next step in the same frame.

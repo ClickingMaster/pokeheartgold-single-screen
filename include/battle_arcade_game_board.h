@@ -10,7 +10,7 @@
 #include "save.h"
 #include "save_frontier.h"
 #include "sprite.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 
 #define ARCADE_ENEMY_POKEMON_MAX 4
 

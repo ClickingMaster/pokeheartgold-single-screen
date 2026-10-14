@@ -9,7 +9,7 @@
 #include "math_util.h"
 #include "sprite.h"
 #include "sys_task_api.h"
-#include "unk_0200FA24.h"
+#include "screen_fade_legacy.h"
 
 // The wild-battle effects 0-5 cover the screen with a grid of 8x6 black (or white) squares
 // of 32x32 pixels; effect 46 (PKMN Trainer Red) fills the screen in random order and then

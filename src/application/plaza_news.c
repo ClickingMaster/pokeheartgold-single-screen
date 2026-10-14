@@ -18,7 +18,7 @@
 #include "system.h"
 #include "text.h"
 #include "sound_playback.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "sprite_resource.h"
 #include "oam_manager.h"
 #include "wireless_status_icon.h"

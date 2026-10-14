@@ -12,12 +12,12 @@
 #include "metatile_behavior.h"
 #include "overlay_01.h"
 #include "field/door_transition.h"
-#include "overlay_01_021F1AFC.h"
+#include "player_avatar_actions.h"
 #include "player_avatar.h"
 #include "screen_fade.h"
 #include "task.h"
 #include "field_terrain.h"
-#include "unk_02055BF0.h"
+#include "field_transition_effects.h"
 #include "map_object_movement_commands.h"
 
 // Map enter routines (sMapEnterRoutines) and the player/camera placement run before them (sMapEnterPlacementRoutines), indexed by

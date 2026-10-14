@@ -6,7 +6,7 @@
 
 #include "field_system.h"
 #include "script.h"
-#include "unk_0206793C.h"
+#include "field_warp_reset.h"
 
 // todo: split
 

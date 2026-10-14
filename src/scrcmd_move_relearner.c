@@ -1,7 +1,7 @@
 #include "launch_application.h"
 #include "move_relearner.h"
 #include "scrcmd.h"
-#include "unk_02088288.h"
+#include "pokemon_summary.h"
 
 BOOL ScrNative_WaitApplication(ScriptContext *ctx);
 

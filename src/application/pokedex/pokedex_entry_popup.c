@@ -18,7 +18,7 @@
 #include "sound_system.h"
 #include "sprite_transfer.h"
 #include "text.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 
 extern const BgTemplate sEntryPopupBg1Template;
 extern const BgTemplate sEntryPopupBg2Template;

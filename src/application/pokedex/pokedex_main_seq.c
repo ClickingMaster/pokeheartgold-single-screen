@@ -11,7 +11,7 @@
 #include "sound_chatot.h"
 #include "sound_playback.h"
 #include "touchpad.h"
-#include "unk_0208805C.h"
+#include "ui_util.h"
 
 #define PLTTBUF_EXCEPT_MAIN_BG_F (PLTTBUF_SUB_BG_F | PLTTBUF_MAIN_OBJ_F | PLTTBUF_SUB_OBJ_F)
 #define PLTTFADE_OPAQUE_ALL_F    (0xFFFF)

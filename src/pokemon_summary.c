@@ -26,8 +26,8 @@
 #include "sys_flags.h"
 #include "system.h"
 #include "touchpad.h"
-#include "unk_0208805C.h"
-#include "unk_02088288.h"
+#include "ui_util.h"
+#include "pokemon_summary.h"
 #include "vram_transfer_manager.h"
 #include "wireless_status_icon.h"
 

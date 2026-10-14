@@ -12,8 +12,8 @@
 #include "pokedex.h"
 #include "pokemon_storage_system.h"
 #include "save_arrays.h"
-#include "unk_02055418.h"
-#include "unk_0205BB1C.h"
+#include "field_time_events.h"
+#include "field_misc_util.h"
 #include "wild_encounter.h"
 
 const u16 sBugContestOpponentClasses[] = {

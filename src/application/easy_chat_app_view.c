@@ -17,8 +17,8 @@
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
-#include "unk_02009D48.h"
-#include "unk_0200FA24.h"
+#include "sprite_resource_header.h"
+#include "screen_fade_legacy.h"
 #include "wireless_status_icon.h"
 
 typedef struct EasyChatSentenceView EasyChatSentenceView;

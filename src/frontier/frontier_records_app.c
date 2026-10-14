@@ -27,12 +27,12 @@
 #include "system.h"
 #include "touchscreen.h"
 #include "sound_playback.h"
-#include "unk_0200FA24.h"
+#include "screen_fade_legacy.h"
 #include "palette_blink.h"
 #include "grid_input_handler.h"
 #include "frontier_data_access.h"
 #include "frontier_save_access.h"
-#include "unk_0205BFF0.h"
+#include "frontier_stat_ids_legacy.h"
 
 // Facilities, as passed in FrontierRecordsAppArgs.facility
 #define FRONTIER_RECORDS_TOWER        1

@@ -9,7 +9,7 @@
 #include "player_data.h"
 #include "sprite.h"
 #include "sys_task.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "sprite_resource.h"
 
 // Field bottom-screen app 8 in the Union Room: a scrolling log of the chat messages of the players

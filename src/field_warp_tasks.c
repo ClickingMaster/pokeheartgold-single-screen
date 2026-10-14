@@ -29,12 +29,12 @@
 #include "spawn_warp.h"
 #include "field_terrain.h"
 #include "field_overworld_transition.h"
-#include "unk_020552A4.h"
-#include "unk_02055418.h"
+#include "field_overworld_restore.h"
+#include "field_time_events.h"
 #include "comm_player_manager.h"
-#include "unk_02058AEC.h"
+#include "union_room.h"
 #include "union_room_objects.h"
-#include "unk_0206793C.h"
+#include "field_warp_reset.h"
 
 struct WarpWithStairsSoundEnv {
     int state;

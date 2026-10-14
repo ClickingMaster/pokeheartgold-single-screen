@@ -26,7 +26,7 @@
 #include "systask_environment.h"
 #include "system.h"
 #include "sound_playback.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "char_tiles.h"
 #include "swap_3d_buffers.h"
 #include "legendary_cinematic_manager.h"

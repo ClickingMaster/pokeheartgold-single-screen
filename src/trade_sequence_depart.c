@@ -17,7 +17,7 @@
 #include "sys_task_api.h"
 #include "trade_sequence_internal.h"
 #include "trade_sequence_models.h"
-#include "unk_0200FA24.h"
+#include "screen_fade_legacy.h"
 #include "swap_3d_buffers.h"
 
 // Scene 1 of the trade animation: the Poke Ball model fades in over a zooming background and circles up off the top

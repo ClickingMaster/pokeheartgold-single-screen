@@ -18,7 +18,7 @@
 #include "map_object.h"
 #include "metatile_behavior.h"
 #include "overlay_01.h"
-#include "overlay_01_021F1AFC.h"
+#include "player_avatar_actions.h"
 #include "overlay_02.h"
 #include "unown_report.h"
 #include "overlay_43.h"

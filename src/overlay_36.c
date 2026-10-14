@@ -33,7 +33,7 @@
 #include "friend_group_access.h"
 #include "union_room_avatar.h"
 #include "frontier_field_support.h"
-#include "unk_02091564.h"
+#include "field_comm_cmds.h"
 
 #define HEAPID_OV36 (HEAP_ID_OV36)
 

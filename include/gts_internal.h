@@ -16,11 +16,11 @@
 #include "sprite.h"
 #include "touchscreen_list_menu.h"
 #include "trade_anim.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "sprite_resource.h"
 #include "save_wii_message.h"
 #include "evolution_scene.h"
-#include "unk_02088288.h"
+#include "pokemon_summary.h"
 #include "yes_no_prompt.h"
 
 // A deposited Pokemon as the server stores it (the payload of post.asp, the answers of get.asp/result.asp,

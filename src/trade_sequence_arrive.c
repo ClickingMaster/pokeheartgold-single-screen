@@ -8,7 +8,7 @@
 #include "trade_sequence_arrive_internal.h"
 #include "trade_sequence_internal.h"
 #include "trade_sequence_models.h"
-#include "unk_0200FA24.h"
+#include "screen_fade_legacy.h"
 #include "swap_3d_buffers.h"
 
 // Scene 5 of the trade animation (trades and receiving): the ball model, spinning, comes down onto the top screen

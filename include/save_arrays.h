@@ -6,7 +6,7 @@
 #include "palPark_migration.h"
 #include "pokemon_storage_system.h"
 #include "save.h"
-#include "unk_0202E41C.h"
+#include "save_block_23.h"
 #include "frontier_save_access.h"
 
 typedef u32 (*SAVESIZEFN)(void);

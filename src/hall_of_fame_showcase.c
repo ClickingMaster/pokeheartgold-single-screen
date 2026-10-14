@@ -26,7 +26,7 @@
 #include "text.h"
 #include "touchscreen.h"
 #include "sound_playback.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "char_tiles.h"
 #include "grid_input_handler.h"
 #include "touchpad.h"

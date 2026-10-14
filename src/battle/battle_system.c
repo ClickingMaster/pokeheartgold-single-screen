@@ -12,7 +12,7 @@
 #include "battle/battle_controller_opponent.h"
 #include "battle/battle_hp_bar.h"
 #include "battle/battle_input.h"
-#include "battle/overlay_12_0224E4FC.h"
+#include "battle/battle_util.h"
 #include "battle/battle_recording_stop.h"
 #include "msgdata/msg/msg_0197.h"
 

@@ -4,7 +4,7 @@
 #include "constants/species.h"
 
 #include "field/area_light.h"
-#include "field/overlay_01_021FB878.h"
+#include "field/field_3d_model.h"
 #include "msgdata/msg.naix"
 
 #include "bg_window.h"

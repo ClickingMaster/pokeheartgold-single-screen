@@ -23,8 +23,8 @@
 #include "sound_playback.h"
 #include "headbutt_tree.h"
 #include "field_overworld_transition.h"
-#include "unk_020552A4.h"
-#include "unk_02067A80.h"
+#include "field_overworld_restore.h"
+#include "field_warp_reset_suppress.h"
 
 typedef enum FieldViewPhotoTaskState {
     VIEW_PHOTO_STATE_INIT,

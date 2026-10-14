@@ -60,7 +60,7 @@ DWCFriendData *FriendRoster_GetDwcFriendData(WiFiList *a0, int a1);
 #ifndef POKEHEARTGOLD_PR488_PRIVATE_H
 #define POKEHEARTGOLD_PR488_PRIVATE_H
 
-#include "overlay_44_02232E9C.h"
+#include "wifi_club_app.h"
 #include "save.h"
 #include "save_wifi_history.h"
 #include "friend_roster.h"

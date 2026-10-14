@@ -24,7 +24,7 @@
 #include "text.h"
 #include "trade_sequence_internal.h"
 #include "trade_sequence_models.h"
-#include "unk_0200FA24.h"
+#include "screen_fade_legacy.h"
 #include "swap_3d_buffers.h"
 #include "wireless_status_icon.h"
 

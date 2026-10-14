@@ -20,7 +20,7 @@
 #include "sprite_transfer.h"
 #include "system.h"
 #include "text.h"
-#include "unk_0200FA24.h"
+#include "screen_fade_legacy.h"
 #include "swap_3d_buffers.h"
 #include "wifi_plaza_event.h"
 #include "wireless_status_icon.h"

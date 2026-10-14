@@ -15,8 +15,8 @@
 #include "map_header.h"
 #include "pokemon.h"
 #include "trainer_memo.h"
-#include "unk_02055418.h"
-#include "unk_0206D494.h"
+#include "field_time_events.h"
+#include "field_misc_events.h"
 #include "update_dex_received.h"
 
 static String *_GetNpcTradeName(enum HeapID heapID, s32 msgno);

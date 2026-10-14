@@ -31,7 +31,7 @@
 #include "communication_core.h"
 #include "link_synchronization.h"
 #include "frontier_field_system.h"
-#include "unk_0204B538.h"
+#include "frontier_opponents.h"
 #include "frontier_field_support.h"
 #include "battle_frontier_communication.h"
 

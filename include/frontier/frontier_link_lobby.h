@@ -4,7 +4,7 @@
 #include "field_system.h"
 #include "party_menu.h"
 #include "save.h"
-#include "unk_02088288.h"
+#include "pokemon_summary.h"
 
 #define LINK_LOBBY_PARTY_SIZE 4
 

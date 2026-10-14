@@ -19,8 +19,8 @@
 #include "save_trainer_card.h"
 #include "task.h"
 #include "communication_core.h"
-#include "unk_0204B538.h"
-#include "unk_02088288.h"
+#include "frontier_opponents.h"
+#include "pokemon_summary.h"
 
 // Party menu + summary for a Battle Frontier entry (TaskManager_CallFrontierPartySelect).
 typedef struct FrontierPartySelectEnv {

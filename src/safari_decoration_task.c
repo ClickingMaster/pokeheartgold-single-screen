@@ -1,7 +1,7 @@
 #include "safari_decoration_task.h"
 
 #include "launch_application.h"
-#include "unk_020552A4.h"
+#include "field_overworld_restore.h"
 
 static BOOL Task_SafariDecoration(TaskManager *taskManager);
 

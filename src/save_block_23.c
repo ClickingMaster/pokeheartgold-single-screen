@@ -1,7 +1,7 @@
 #include "global.h"
 
 #include "save.h"
-#include "unk_0202E41C.h"
+#include "save_block_23.h"
 
 u32 SaveBlock23_sizeof(void);
 void SaveBlock23_Init(UnkStruct_0202E474 *data);

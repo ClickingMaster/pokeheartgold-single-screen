@@ -9,7 +9,7 @@
 #include "map_object_movement_utilities.h"
 #include "map_object_movement_utilities_internal.h"
 #include "math_util.h"
-#include "overlay_01_022001E4.h"
+#include "field_emote_mark.h"
 #include "sound_playback.h"
 #include "sys_task_api.h"
 

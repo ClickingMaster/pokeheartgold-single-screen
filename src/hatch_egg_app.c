@@ -38,7 +38,7 @@
 #include "sound_playback.h"
 #include "particle_system.h"
 #include "swap_3d_buffers.h"
-#include "unk_02087E70.h"
+#include "field_environment_sound.h"
 #include "vram_transfer_manager.h"
 
 // Layout of HatchEggTaskData (hatch_egg_task.c), which the task passes as the overlay's args.

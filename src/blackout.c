@@ -17,8 +17,8 @@
 #include "text.h"
 #include "oam_manager.h"
 #include "spawn_warp.h"
-#include "unk_020552A4.h"
-#include "unk_0206793C.h"
+#include "field_overworld_restore.h"
+#include "field_warp_reset.h"
 #include "use_item_on_mon.h"
 
 static void Blackout_InitDisplays(BgConfig *bgConfig);

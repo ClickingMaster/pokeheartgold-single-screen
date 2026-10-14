@@ -251,13 +251,13 @@ void BattleSystem_FreeMainBgLayers(BattleSystem *battleSystem) {
 #include "battle/battle_main.h"
 #include "battle/battle_controller_player.h"
 #include "battle/battle_system.h"
-#include "battle/overlay_12_0224E4FC.h"
+#include "battle/battle_util.h"
 
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "palette.h"
 #include "render_window.h"
-#include "unk_0200FA24.h"
+#include "screen_fade_legacy.h"
 
 BOOL Battle_BattleMain(OverlayManager *man);
 void Battle_InitBackgrounds(BattleSystem *battleSystem, BgConfig *bgConfig);

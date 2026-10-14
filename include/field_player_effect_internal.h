@@ -13,7 +13,7 @@
 #include "task.h"
 #include "sound_playback.h"
 #include "map_object_movement_commands.h"
-#include "unk_0206793C.h"
+#include "field_warp_reset.h"
 #include "field_effects.h"
 
 typedef struct {

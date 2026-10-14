@@ -4,7 +4,7 @@
 #include "field/field_effect_helpers.h"
 #include "field/field_move_cut_in.h"
 #include "field/fly_landing_effect.h"
-#include "field/overlay_01_021FB878.h"
+#include "field/field_3d_model.h"
 #include "field/sprite_gfx_manager.h"
 
 #include "field_effects.h"
@@ -28,7 +28,7 @@
 #include "task.h"
 #include "char_tiles.h"
 #include "field_terrain.h"
-#include "overlay_2/overlay_02_02248728.h"
+#include "overlay_2/overlay_02_field_utils.h"
 
 // The second half of the field move cut-in (see field_move_cut_in.h): its HBlank window, the Pokemon sprite
 // resources, the effects drawn in the cut-in (scrolling banner sprites, the Pokemon flying off with the trainer,

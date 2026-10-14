@@ -6,7 +6,7 @@
 
 #include "field_system.h"
 #include "map_header.h"
-#include "unk_02055418.h"
+#include "field_time_events.h"
 
 const MonthDay DiamondDustDates[] = {
     { JANUARY,  1  },

@@ -22,7 +22,7 @@
 #include "field/map_prop_render.h"
 #include "field/signpost.h"
 #include "field/weather_manager.h"
-#include "overlay_2/overlay_02_02248728.h"
+#include "overlay_2/overlay_02_field_utils.h"
 
 #include "bg_window.h"
 #include "bug_contest.h"
@@ -61,7 +61,7 @@
 #include "oam_manager.h"
 #include "billboard_lists.h"
 #include "swap_3d_buffers.h"
-#include "unk_02055418.h"
+#include "field_time_events.h"
 #include "comm_player_manager.h"
 #include "gymmick_collision.h"
 #include "vram_transfer_manager.h"

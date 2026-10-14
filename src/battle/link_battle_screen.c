@@ -54,8 +54,8 @@
 #include "communication_core.h"
 #include "link_synchronization.h"
 #include "wireless_status_icon.h"
-#include "unk_0208805C.h"
-#include "unk_02088288.h"
+#include "ui_util.h"
+#include "pokemon_summary.h"
 #include "vram_transfer_manager.h"
 
 #define LINK_BATTLE_SCREEN_PARTY_WINDOW_COUNT 24

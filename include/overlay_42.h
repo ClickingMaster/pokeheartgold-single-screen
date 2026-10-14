@@ -6,7 +6,7 @@
 #include "bg_window.h"
 #include "palette.h"
 #include "sprite.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 
 typedef struct Field2DPoint {
     s16 unk0;

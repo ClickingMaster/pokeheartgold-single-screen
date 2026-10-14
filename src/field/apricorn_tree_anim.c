@@ -5,12 +5,12 @@
 #include "constants/sndseq.h"
 
 #include "map_object.h"
-#include "overlay_01_021F1AFC.h"
+#include "player_avatar_actions.h"
 #include "field/map_object_render.h"
 #include "script.h"
 #include "task.h"
 #include "sound_playback.h"
-#include "unk_02055418.h"
+#include "field_time_events.h"
 #include "player_avatar_movement.h"
 #include "map_object_movement_commands.h"
 

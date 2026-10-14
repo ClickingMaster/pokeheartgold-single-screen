@@ -1,7 +1,7 @@
 #include "wifi_club_comm.h"
 
 #include "communication_command.h"
-#include "unk_0203AC88.h"
+#include "wifi_club_comm_table.h"
 
 void WifiClubComm_RegisterCommands(void *arg0) {
     Comm_RegisterCommandTable(WifiClubComm_GetCommandTable(), WifiClubComm_GetCommandCount(), arg0);

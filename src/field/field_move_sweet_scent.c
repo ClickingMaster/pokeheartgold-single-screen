@@ -3,7 +3,7 @@
 #include "global.h"
 
 #include "field/field_follow_mon.h"
-#include "field/overlay_01_021FB878.h"
+#include "field/field_3d_model.h"
 
 #include "field_move_environment.h"
 #include "field_system.h"

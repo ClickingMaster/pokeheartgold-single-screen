@@ -15,7 +15,7 @@
 #include "pokedex_util.h"
 #include "save.h"
 #include "save_special_ribbons.h"
-#include "unk_02088288.h"
+#include "pokemon_summary.h"
 
 // The frontier link lobby (frontier/frontier_link_lobby.h): its link messages and the party menu / summary it opens.
 

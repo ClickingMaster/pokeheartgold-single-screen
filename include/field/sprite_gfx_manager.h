@@ -3,7 +3,7 @@
 
 #include "filesystem.h"
 #include "sprite.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "sprite_resource.h"
 
 // Sprite list plus char / palette / cell / animation resources of the overlay 2 field animations (cut-ins), on the

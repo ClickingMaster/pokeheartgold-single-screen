@@ -4,7 +4,7 @@
 #include "filesystem.h"
 #include "palette.h"
 #include "sprite.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 
 typedef union ResdatIdList {
     u16 raw[GF_GFX_RES_TYPE_MAX + 1];

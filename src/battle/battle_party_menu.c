@@ -45,8 +45,8 @@
 #include "touchscreen.h"
 #include "type_icon_resources.h"
 #include "message_printer_number.h"
-#include "unk_0208805C.h"
-#include "unk_02088288.h"
+#include "ui_util.h"
+#include "pokemon_summary.h"
 
 // In-battle party screen (overlay 8). Pages: 0 party list, 1 mon menu (SHIFT / SUMMARY / CHECK MOVES), 2 summary,
 // 3 move list, 4 move detail, 5 restore PP, 6 / 8 learn move (battle / contest view), 7 / 9 confirm the move to

@@ -12,7 +12,7 @@
 #include "main.h"
 #include "map_events.h"
 #include "math_util.h"
-#include "overlay_01_021F1AFC.h"
+#include "player_avatar_actions.h"
 #include "field/bottom_screen_app.h"
 #include "overlay_124.h"
 #include "overlay_35.h"
@@ -22,7 +22,7 @@
 #include "communication_core.h"
 #include "comm_player_manager.h"
 #include "player_avatar_movement.h"
-#include "unk_02092BB8.h"
+#include "pokedex_resume_state.h"
 #include "gear_phone_ring_manager.h"
 
 FS_EXTERN_OVERLAY(intro_title);

@@ -14,7 +14,7 @@
 #include "party_menu.h"
 #include "player_data.h"
 #include "task.h"
-#include "unk_02088288.h"
+#include "pokemon_summary.h"
 
 // Colosseum (ARM9 static 0x02058AEC-0x02059DB0): the link battle room. Once both players have taken their seats,
 // each one chooses the Pokemon to enter in the party menu (message bank 14: "Please choose the Pokemon to be

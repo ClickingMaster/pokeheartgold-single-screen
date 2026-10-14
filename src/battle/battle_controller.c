@@ -9,7 +9,7 @@
 
 #include "battle/battle.h"
 #include "battle/battle_system.h"
-#include "battle/overlay_12_0224E4FC.h"
+#include "battle/battle_util.h"
 
 #include "battle_link_comm.h"
 #include "move.h"

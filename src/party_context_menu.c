@@ -12,7 +12,7 @@
 #include "text.h"
 #include "sound_playback.h"
 #include "message_printer_number.h"
-#include "unk_0208805C.h"
+#include "ui_util.h"
 
 static void PartyMenu_StartContextMenuButtonPressAnim_FromCursorObj(PartyMenu *partyMenu, PartyMenuContextMenuCursor *cursor, int followUpState);
 static void addFiveWindows(BgConfig *bgConfig, Window *window, const WindowTemplate *template);

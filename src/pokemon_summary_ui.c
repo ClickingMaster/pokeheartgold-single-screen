@@ -17,8 +17,8 @@
 #include "sprite.h"
 #include "sprite_system.h"
 #include "touchscreen.h"
-#include "unk_0208805C.h"
-#include "unk_02088288.h"
+#include "ui_util.h"
+#include "pokemon_summary.h"
 
 // Pokemon summary screen (ARM9 static 0x02089E80-0x0208B1AC): touch input on the pages, the page backgrounds and
 // HP/EXP bars, switching to another Pokemon, the move info and ribbon list slide-ins, the ribbon cursor, the touch

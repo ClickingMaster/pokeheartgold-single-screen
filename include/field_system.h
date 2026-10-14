@@ -35,8 +35,8 @@
 #include "sys_task.h"
 #include "sys_task_api.h"
 #include "terrain_attributes.h"
-#include "unk_02055418.h"
-#include "unk_02092BB8.h"
+#include "field_time_events.h"
+#include "pokedex_resume_state.h"
 
 typedef struct FollowMon {
     LocalMapObject *mapObject;

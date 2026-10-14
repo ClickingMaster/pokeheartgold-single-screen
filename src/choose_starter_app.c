@@ -25,7 +25,7 @@
 #include "text.h"
 #include "touchscreen.h"
 #include "sound_playback.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "oam_manager.h"
 #include "char_tiles.h"
 #include "geometry_math.h"

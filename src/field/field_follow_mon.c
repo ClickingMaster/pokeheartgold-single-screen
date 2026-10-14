@@ -14,7 +14,7 @@
 #include "heap.h"
 #include "map_object.h"
 #include "overlay_01.h"
-#include "overlay_01_022031C0.h"
+#include "field_follow_mon_ball.h"
 #include "overlay_25.h"
 #include "palette.h"
 #include "party.h"

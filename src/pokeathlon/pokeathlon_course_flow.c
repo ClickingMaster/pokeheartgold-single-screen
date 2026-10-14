@@ -25,7 +25,7 @@
 #include "sprite.h"
 #include "string_util.h"
 #include "sys_task_api.h"
-#include "unk_02031B0C.h"
+#include "apricorn_box.h"
 #include "communication_command.h"
 #include "communication_core.h"
 #include "vram_transfer_manager.h"

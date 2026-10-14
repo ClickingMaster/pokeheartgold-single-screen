@@ -5,7 +5,7 @@
 #include "hatch_egg_app.h"
 #include "trainer_memo.h"
 #include "field_overworld_transition.h"
-#include "unk_020552A4.h"
+#include "field_overworld_restore.h"
 
 typedef enum HatchEggTaskState {
     HATCHEGGTASKSTATE_LEAVE_OVERWORLD,

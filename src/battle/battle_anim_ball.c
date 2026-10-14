@@ -21,7 +21,7 @@
 #include "sound_playback.h"
 #include "sprite_system.h"
 #include "sys_task_api.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "char_tiles.h"
 #include "seal_data.h"
 

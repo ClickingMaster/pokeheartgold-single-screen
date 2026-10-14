@@ -5,7 +5,7 @@
 #include "mail.h"
 #include "party.h"
 #include "task.h"
-#include "unk_0202E41C.h"
+#include "save_block_23.h"
 
 #define USE_ITEM_TASK_MENU  0
 #define USE_ITEM_TASK_FIELD 1

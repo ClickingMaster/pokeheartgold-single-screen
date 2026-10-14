@@ -3,7 +3,7 @@
 #include "constants/global_fieldmap.h"
 #include "constants/maps.h"
 
-#include "overlay_2/overlay_02_02248728.h"
+#include "overlay_2/overlay_02_field_utils.h"
 
 #include "field_metatile_query_internal.h"
 #include "field_system.h"

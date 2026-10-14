@@ -51,7 +51,7 @@
 #include "system.h"
 #include "text.h"
 #include "title_screen.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "sprite_resource.h"
 #include "comm_wireless.h"
 #include "communication_core.h"

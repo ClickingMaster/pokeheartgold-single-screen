@@ -15,7 +15,7 @@
 #include "scrcmd_9.h"
 #include "frontier_field_system.h"
 #include "communication_core.h"
-#include "unk_0205BFF0.h"
+#include "frontier_stat_ids_legacy.h"
 #include "battle_frontier_communication.h"
 #include "use_item_on_mon.h"
 

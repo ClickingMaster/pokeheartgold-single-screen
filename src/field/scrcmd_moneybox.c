@@ -1,4 +1,4 @@
-#include "overlay_01_021EDAFC.h"
+#include "money_box.h"
 #include "scrcmd.h"
 
 extern Window *FieldSystem_ShowMoneyBox(FieldSystem *, u8, u8);

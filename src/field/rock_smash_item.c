@@ -11,7 +11,7 @@
 #include "filesystem.h"
 #include "follow_mon.h"
 #include "math_util.h"
-#include "overlay_01_022001E4.h"
+#include "field_emote_mark.h"
 #include "script.h"
 #include "task.h"
 #include "field_effects.h"

@@ -19,7 +19,7 @@
 #include "scrcmd.h"
 #include "sys_vars.h"
 #include "sound_playback.h"
-#include "unk_0206D494.h"
+#include "field_misc_events.h"
 
 static void FieldSystem_InitPokegearArgs(FieldSystem *sys, PokegearArgs *ptr, BOOL isMap);
 static void GearPhoneRingManager_CheckSafariCalls(GearPhoneRingManager *ptr);

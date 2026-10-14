@@ -12,7 +12,7 @@
 #include "sprite_transfer.h"
 #include "sound_playback.h"
 #include "oam_manager.h"
-#include "unk_0200FA24.h"
+#include "screen_fade_legacy.h"
 #include "gf_g2d_renderer.h"
 
 static void WeatherTask_ChangeWeather(SysTask *task, void *data);

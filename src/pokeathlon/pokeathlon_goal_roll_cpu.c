@@ -7,7 +7,7 @@
 #include "heap.h"
 #include "math_util.h"
 #include "sprite_system.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 
 // Course helpers and the sprite pool (OVY_96, not yet tidied).
 void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int event, int value);

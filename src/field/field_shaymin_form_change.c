@@ -5,7 +5,7 @@
 #include "field/field_effect_helpers.h"
 #include "field/field_effect_manager.h"
 #include "field/field_shaymin_form_change.h"
-#include "field/overlay_01_021FB878.h"
+#include "field/field_3d_model.h"
 
 #include "field_effects.h"
 #include "filesystem_files_def.h"

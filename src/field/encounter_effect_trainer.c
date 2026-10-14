@@ -7,7 +7,7 @@
 #include "gf_gfx_planes.h"
 #include "heap.h"
 #include "sprite.h"
-#include "unk_0200FA24.h"
+#include "screen_fade_legacy.h"
 
 // Trainer battle transitions (effects 6-11). Most of them zoom the field camera in while a
 // couple of Poke Ball sprites spin over the screen.

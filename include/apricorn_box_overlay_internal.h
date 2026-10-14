@@ -20,7 +20,7 @@
 #include "save.h"
 #include "screen_fade.h"
 #include "system.h"
-#include "unk_02031B0C.h"
+#include "apricorn_box.h"
 
 // No tracked definition found for the Apricorn Box application work block.
 // Derived from OverlayManager_CreateAndGetData(man, 0x20, ...) + MI_CpuFill8(.., 0x20).

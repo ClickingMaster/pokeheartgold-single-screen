@@ -17,7 +17,7 @@
 #include "system.h"
 #include "trade_sequence_internal.h"
 #include "trade_sequence_models.h"
-#include "unk_0200FA24.h"
+#include "screen_fade_legacy.h"
 #include "swap_3d_buffers.h"
 
 // Scene 2 of the trade animation: the ball model spirals across the screen, the screens swap as it leaves the top

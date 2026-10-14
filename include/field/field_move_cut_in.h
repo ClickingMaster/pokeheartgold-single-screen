@@ -2,14 +2,14 @@
 #define POKEHEARTGOLD_FIELD_FIELD_MOVE_CUT_IN_H
 
 #include "field/field_effect_manager.h"
-#include "field/overlay_01_021FB878.h"
+#include "field/field_3d_model.h"
 #include "field/sprite_gfx_manager.h"
 
 #include "field_system.h"
 #include "pokemon.h"
 #include "sprite.h"
 #include "sys_task.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "sprite_resource.h"
 
 // The field move cut-in of overlay 2: the banner with the Pokemon flying across the screen when a field move is

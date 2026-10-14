@@ -9,7 +9,7 @@
 #include "party.h"
 #include "pokemon.h"
 #include "task.h"
-#include "unk_0205BB1C.h"
+#include "field_misc_util.h"
 
 typedef struct SpinEnvironment {
     LocalMapObject *object;

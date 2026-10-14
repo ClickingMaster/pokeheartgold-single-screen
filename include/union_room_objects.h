@@ -7,7 +7,7 @@
 #include "save_palpad.h"
 #include "script.h"
 #include "sys_task_api.h"
-#include "unk_0206793C.h"
+#include "field_warp_reset.h"
 
 // One union room map object: slots 0-9 are the other players (object ids 1-10), slots 10-49 the members of their
 // groups (4 per player, first slot from a table), slot 50 is the player's own avatar.

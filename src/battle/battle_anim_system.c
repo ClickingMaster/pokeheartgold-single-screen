@@ -26,7 +26,7 @@
 #include "sys_task.h"
 #include "sys_task_api.h"
 #include "system.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "vram_transfer_manager.h"
 
 // SE pan sweep / repeat / delay task (sBattleAnimSoundFuncs[kind])

@@ -9,7 +9,7 @@
 #include "save.h"
 #include "save_arrays.h"
 #include "save_rankings.h"
-#include "unk_0202E41C.h"
+#include "save_block_23.h"
 #include "frontier_wifi_upload_record.h"
 
 // record_mixing_records.c

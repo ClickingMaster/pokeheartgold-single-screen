@@ -29,8 +29,8 @@
 #include "system.h"
 #include "text.h"
 #include "touchpad.h"
-#include "unk_02009D48.h"
-#include "unk_0200FA24.h"
+#include "sprite_resource_header.h"
+#include "screen_fade_legacy.h"
 #include "yes_no_prompt.h"
 
 // Pokemon Dress-Up editor (ScrCmd_OpenDressUp): app Init/Main/Exit, the editor's graphics, canvas, tray, frame BG,

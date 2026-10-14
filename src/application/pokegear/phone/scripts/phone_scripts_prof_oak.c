@@ -4,7 +4,7 @@
 #include "msgdata/msg/msg_0666.h"
 
 #include "sound_playback.h"
-#include "unk_0205BB1C.h"
+#include "field_misc_util.h"
 
 u16 PhoneCall_GetScriptId_ProfOak(PokegearPhoneCallContext *ctx, PokegearPhoneCallState *state) {
     Pokedex *pokedex;

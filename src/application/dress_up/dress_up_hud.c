@@ -18,7 +18,7 @@
 #include "sprite_transfer.h"
 #include "sys_task_api.h"
 #include "text.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "sprite_resource.h"
 
 // Editor sub screen (message box, accessory count meter, an unused countdown with its pulse tween), message and

@@ -11,7 +11,7 @@
 #include "sys_task.h"
 #include "sys_task_api.h"
 #include "trade_sequence_internal.h"
-#include "unk_0200FA24.h"
+#include "screen_fade_legacy.h"
 
 // Scene 3 of the trade animation (trades only): the pictures of the sent and the received Pokemon slide past each
 // other, then the screen fades to white.

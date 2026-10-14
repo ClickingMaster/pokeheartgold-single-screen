@@ -25,7 +25,7 @@
 #include "trade_sequence_internal.h"
 #include "trade_sequence_models.h"
 #include "trade_sequence_receive_internal.h"
-#include "unk_0200FA24.h"
+#include "screen_fade_legacy.h"
 #include "swap_3d_buffers.h"
 
 // Scene 6 of the trade animation (trades and receiving): the ball lands with a flash and the received Pokemon

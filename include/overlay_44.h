@@ -2,9 +2,9 @@
 #define POKEHEARTGOLD_OVY_44_H
 
 #include "list_menu_2d.h"
-#include "overlay_44_02232E9C.h"
+#include "wifi_club_app.h"
 #include "render_window.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 
 typedef struct WifiClubGameEntryAvatar {
     Field2DObject *object;

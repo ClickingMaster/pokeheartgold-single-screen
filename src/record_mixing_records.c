@@ -7,7 +7,7 @@
 #include "player_data.h"
 #include "save_arrays.h"
 #include "string_util.h"
-#include "unk_0202E41C.h"
+#include "save_block_23.h"
 #include "communication_player_state.h"
 
 #define RECORD_MIXING_MAX_GROUPS_KEPT 4

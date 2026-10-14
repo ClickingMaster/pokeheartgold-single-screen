@@ -2,7 +2,7 @@
 #define POKEHEARTGOLD_FIELD_CONTROL_H
 
 #include "field_system.h"
-#include "unk_02031B0C.h"
+#include "apricorn_box.h"
 
 typedef struct Soundplate {
     u8 soundplateSoundID;

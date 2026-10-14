@@ -22,7 +22,7 @@
 #include "communication_player_state.h"
 #include "communication_core.h"
 #include "comm_state.h"
-#include "unk_0208805C.h"
+#include "ui_util.h"
 
 // Frontier trainer and Pokemon generation helpers shared by the facilities: trainers (narc 204) list the ids of their
 // Pokemon sets (narc 205); a set becomes a FrontierMon (the record the facilities store) and then a Pokemon.

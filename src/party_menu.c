@@ -27,8 +27,8 @@
 #include "touchpad.h"
 #include "wireless_status_icon.h"
 #include "frontier_field_support.h"
-#include "unk_0208805C.h"
-#include "unk_02088288.h"
+#include "ui_util.h"
+#include "pokemon_summary.h"
 #include "use_item_on_mon.h"
 #include "vram_transfer_manager.h"
 

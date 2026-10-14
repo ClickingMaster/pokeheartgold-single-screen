@@ -23,8 +23,8 @@
 #include "sprite.h"
 #include "sprite_system.h"
 #include "system.h"
-#include "unk_0208805C.h"
-#include "unk_02088288.h"
+#include "ui_util.h"
+#include "pokemon_summary.h"
 
 // Pokemon summary screen (ARM9 static 0x02088D48-0x02089E80): the move, ribbon and condition input states, the
 // button flash, reading the shown Pokemon into PokemonSummary.mon, and switching pages. The force_active region keeps

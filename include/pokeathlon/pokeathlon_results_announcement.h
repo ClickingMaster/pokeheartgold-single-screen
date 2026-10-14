@@ -11,7 +11,7 @@
 #include "sprite.h"
 #include "sprite_system.h"
 #include "string_util.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 
 // The "Results Announcement" screen the course shows after an event (event template gPokeathlonCourseEvent_ResultsAnnouncement,
 // states gPokeathlonResultsAnnouncementSteps): the announcer comments on the event (msg 309 #246..), the teams' plates slide in

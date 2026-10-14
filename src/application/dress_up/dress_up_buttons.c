@@ -17,7 +17,7 @@
 #include "system.h"
 #include "touch_hitbox_controller.h"
 #include "touchscreen.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "sprite_resource.h"
 
 // Button panel of the Dress-Up editor: next / previous page, the accessory and backdrop tabs (a radio pair) and

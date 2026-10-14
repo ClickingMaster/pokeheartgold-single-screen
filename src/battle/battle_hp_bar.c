@@ -6,7 +6,7 @@
 #include "msgdata/msg/msg_0197.h"
 
 #include "math_util.h"
-#include "unk_0208805C.h"
+#include "ui_util.h"
 
 typedef enum HPBarType {
     HP_BAR_TYPE_SINGLE_PLAYER,

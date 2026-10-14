@@ -12,7 +12,7 @@
 #include "battle/battle_input.h"
 #include "battle/battle_setup.h"
 #include "battle/battle_system.h"
-#include "battle/overlay_12_0224E4FC.h"
+#include "battle/battle_util.h"
 #include "battle/battle_recording_stop.h"
 
 #include "bag.h"
@@ -44,7 +44,7 @@
 #include "system.h"
 #include "text.h"
 #include "sound_playback.h"
-#include "unk_0200FA24.h"
+#include "screen_fade_legacy.h"
 #include "particle_system.h"
 #include "palette_blink.h"
 #include "touchpad.h"
@@ -54,7 +54,7 @@
 #include "link_synchronization.h"
 #include "comm_state.h"
 #include "wireless_status_icon.h"
-#include "unk_0208805C.h"
+#include "ui_util.h"
 #include "vram_transfer_manager.h"
 
 FS_EXTERN_OVERLAY(OVY_5);

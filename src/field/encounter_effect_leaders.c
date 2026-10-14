@@ -17,7 +17,7 @@
 #include "pm_string.h"
 #include "sprite.h"
 #include "text.h"
-#include "unk_0200FA24.h"
+#include "screen_fade_legacy.h"
 #include "swap_3d_buffers.h"
 
 // Battle intros of the gym leaders and the rival (effects 12-28): the leader's picture slides

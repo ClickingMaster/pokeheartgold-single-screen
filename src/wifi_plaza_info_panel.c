@@ -11,7 +11,7 @@
 #include "sys_task_api.h"
 #include "text.h"
 #include "type_icon_resources.h"
-#include "unk_0200FA24.h"
+#include "screen_fade_legacy.h"
 #include "wifi_plaza_event.h"
 #include "wifi_plaza_room.h"
 

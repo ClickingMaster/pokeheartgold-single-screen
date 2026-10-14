@@ -13,7 +13,7 @@
 #include "system.h"
 #include "sound_playback.h"
 #include "swap_3d_buffers.h"
-#include "unk_0208805C.h"
+#include "ui_util.h"
 
 #define SHIP_CUTSCENE_NUM_ANIMS  4
 #define SHIP_CUTSCENE_NUM_SCENES 1

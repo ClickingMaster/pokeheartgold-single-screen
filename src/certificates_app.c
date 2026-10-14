@@ -23,7 +23,7 @@
 #include "system.h"
 #include "text.h"
 #include "char_tiles.h"
-#include "unk_0205BB1C.h"
+#include "field_misc_util.h"
 
 typedef struct CertificatesApp_Data {
     enum HeapID heapID;

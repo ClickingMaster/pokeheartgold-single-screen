@@ -10,7 +10,7 @@
 #include "field/field_move_effects.h"
 #include "field/map_prop.h"
 #include "field/map_prop_animation.h"
-#include "field/overlay_01_021FB878.h"
+#include "field/field_3d_model.h"
 
 #include "camera.h"
 #include "field_system.h"

@@ -13,7 +13,7 @@
 #include "pm_string.h"
 #include "sprite.h"
 #include "sys_task.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "sprite_resource.h"
 
 // Shared by the Pokeathlon course translation units of OVY_96 (course flow, link commands, Pokemon sprites,

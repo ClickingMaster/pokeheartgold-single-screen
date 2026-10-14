@@ -12,7 +12,7 @@
 #include "pokemon.h"
 #include "sound_playback.h"
 #include "text.h"
-#include "unk_0200FA24.h"
+#include "screen_fade_legacy.h"
 #include "swap_3d_buffers.h"
 
 // Declared only in other modules' private headers (src/model_animation.c, ov45, screen fade).

@@ -16,7 +16,7 @@
 #include "pokemon_icon_idx.h"
 #include "sprite.h"
 #include "sprite_system.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "char_tiles.h"
 #include "pokedex_language.h"
 #include "pokedex_language_order.h"

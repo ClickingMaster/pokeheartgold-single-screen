@@ -14,7 +14,7 @@
 #include "task.h"
 #include "particle_system.h"
 #include "dpad_menu_box.h"
-#include "unk_0202E41C.h"
+#include "save_block_23.h"
 #include "yes_no_prompt.h"
 
 typedef enum PartyMonSelection {

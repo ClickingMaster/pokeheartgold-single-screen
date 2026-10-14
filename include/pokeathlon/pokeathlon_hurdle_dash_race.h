@@ -7,7 +7,7 @@
 #include "pokeathlon/pokeathlon_hurdle_dash.h"
 
 #include "sprite.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "sprite_resource.h"
 
 // The race of Hurdle Dash (Pokeathlon event 0): running, jumping and tripping over the hurdles, the

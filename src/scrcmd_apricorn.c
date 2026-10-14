@@ -1,7 +1,7 @@
 #include "field_system.h"
 #include "scrcmd.h"
-#include "unk_02031B0C.h"
-#include "unk_02055418.h"
+#include "apricorn_box.h"
+#include "field_time_events.h"
 
 #include "field/apricorn_tree_anim.h"
 

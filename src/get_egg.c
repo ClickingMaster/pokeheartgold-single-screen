@@ -19,7 +19,7 @@
 #include "script.h"
 #include "start_menu.h"
 #include "trainer_memo.h"
-#include "unk_02055418.h"
+#include "field_time_events.h"
 #include "gear_phone_ring_manager.h"
 
 static u8 Save_Daycare_CountMonsInDaycare(Daycare *daycare);

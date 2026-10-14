@@ -13,7 +13,7 @@
 #include "save_vars_flags.h"
 #include "sys_vars.h"
 #include "frontier_save_access.h"
-#include "unk_0205BFF0.h"
+#include "frontier_stat_ids_legacy.h"
 
 // The Battle Factory's script data: rentals and opponents generated from Battle Factory sets, the player's rental
 // party, trades and the record kept in the FactoryChallenge save.

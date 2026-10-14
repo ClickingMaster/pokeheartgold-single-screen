@@ -16,11 +16,11 @@
 #include "map_object_movement_commands.h"
 #include "map_object_movement_utilities.h"
 #include "metatile_behavior.h"
-#include "overlay_01_021F1AFC.h"
+#include "player_avatar_actions.h"
 #include "player_avatar.h"
 #include "sound_playback.h"
 #include "field_terrain.h"
-#include "unk_0206D494.h"
+#include "field_misc_events.h"
 
 // Player avatar movement control (ARM9 static 0x0205CB48-0x0205E0A0): turns the d-pad input into the player's map
 // object movement each frame, on foot and on the bike, with collision checks, forced movement (ice, Cycling Road

@@ -13,7 +13,7 @@
 #include "pokepic.h"
 #include "sprite.h"
 #include "sprite_system.h"
-#include "unk_02088288.h"
+#include "pokemon_summary.h"
 
 // Pokemon summary screen work (0x7D8 bytes), used by src/pokemon_summary*.c.
 

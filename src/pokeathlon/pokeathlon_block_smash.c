@@ -26,7 +26,7 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "wireless_status_icon.h"
 
 // Course helpers (OVY_96, not yet tidied).

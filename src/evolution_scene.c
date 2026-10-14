@@ -46,7 +46,7 @@
 #include "touchscreen.h"
 #include "swap_3d_buffers.h"
 #include "palette_vram_addr.h"
-#include "unk_02088288.h"
+#include "pokemon_summary.h"
 #include "vram_transfer_manager.h"
 #include "wireless_status_icon.h"
 

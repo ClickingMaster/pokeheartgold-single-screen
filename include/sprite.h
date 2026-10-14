@@ -1,7 +1,7 @@
 #ifndef POKEHEARTGOLD_SPRITE_H
 #define POKEHEARTGOLD_SPRITE_H
 
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 
 typedef enum SpriteAnimType {
     SPRITE_ANIM_TYPE_NULL,

@@ -5,7 +5,7 @@
 #include "gf_gfx_loader.h"
 #include "math_util.h"
 #include "overlay_42.h"
-#include "overlay_44_02232E9C.h"
+#include "wifi_club_app.h"
 #include "sprite_transfer.h"
 #include "sprite_resource.h"
 #include "vram_transfer_manager.h"

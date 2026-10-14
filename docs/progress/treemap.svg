@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · b71862b88 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 0ee0d3831 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -308,9 +308,9 @@ src/scrcmd_battle_hall.c</title></rect>
 <rect x="97.621" y="444.353" width="17.708" height="24.613" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_strbuf.o
 2,724 bytes · C-only source
 src/scrcmd_strbuf.c</title></rect>
-<rect x="115.329" y="444.353" width="17.552" height="24.613" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / unk_02055BF0.o
+<rect x="115.329" y="444.353" width="17.552" height="24.613" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_transition_effects.o
 2,700 bytes · C-only source
-src/unk_02055BF0.c</title></rect>
+src/field_transition_effects.c</title></rect>
 <rect x="132.881" y="431.956" width="34.707" height="12.411" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_mystery_gift.o
 2,692 bytes · C-only source
 src/scrcmd_mystery_gift.c</title></rect>
@@ -392,9 +392,9 @@ lib/NitroWiFi/src/socl_read.c</title></rect>
 <rect x="113.314" y="534.519" width="17.057" height="19.980" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / communication_command.o
 2,130 bytes · C-only source
 src/communication_command.c</title></rect>
-<rect x="96.145" y="554.499" width="17.138" height="19.812" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / unk_0206D494.o
+<rect x="96.145" y="554.499" width="17.138" height="19.812" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_misc_events.o
 2,122 bytes · C-only source
-src/unk_0206D494.c</title></rect>
+src/field_misc_events.c</title></rect>
 <rect x="113.282" y="554.499" width="17.089" height="19.812" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / rtc_api.o
 2,116 bytes · C-only source
 lib/NitroSDK/src/rtc/rtc_api.c</title></rect>
@@ -432,9 +432,9 @@ src/communication_player_state.c</title></rect>
 <rect x="167.588" y="450.422" width="17.239" height="17.672" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / battle_link_comm.o
 1,904 bytes · C-only source
 src/battle_link_comm.c</title></rect>
-<rect x="184.828" y="450.422" width="17.004" height="17.672" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / unk_0204B538.o
+<rect x="184.828" y="450.422" width="17.004" height="17.672" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / frontier_opponents.o
 1,878 bytes · C-only source
-src/unk_0204B538.c</title></rect>
+src/frontier_opponents.c</title></rect>
 <rect x="167.588" y="468.094" width="17.122" height="17.532" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / fnd_expheap.o
 1,876 bytes · C-only source
 lib/NitroSystem/src/fnd_expheap.c</title></rect>
@@ -823,9 +823,9 @@ src/catching_show.c</title></rect>
 <rect x="46.062" y="646.103" width="17.886" height="9.160" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / gfd_linked_list_vram_man.o
 1,024 bytes · C-only source
 lib/NitroSystem/src/gfd_linked_list_vram_man.c</title></rect>
-<rect x="46.062" y="655.264" width="17.886" height="9.089" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / unk_0206B910.o
+<rect x="46.062" y="655.264" width="17.886" height="9.089" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_link_sync.o
 1,016 bytes · C-only source
-src/unk_0206B910.c</title></rect>
+src/scrcmd_link_sync.c</title></rect>
 <rect x="28.000" y="664.353" width="9.022" height="18.018" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wvr.o
 1,016 bytes · C-only source
 lib/NitroSDK/src/wvr.c</title></rect>
@@ -856,9 +856,9 @@ src/blackout.c</title></rect>
 <rect x="55.196" y="682.371" width="8.752" height="17.478" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / vct_fir.o
 956 bytes · C-only source
 lib/libVCT/src/vct_fir.c</title></rect>
-<rect x="46.260" y="699.848" width="8.881" height="17.152" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / unk_02055418.o
+<rect x="46.260" y="699.848" width="8.881" height="17.152" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_time_events.o
 952 bytes · C-only source
-src/unk_02055418.c</title></rect>
+src/field_time_events.c</title></rect>
 <rect x="55.141" y="699.848" width="8.806" height="17.152" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_send_transport.o
 944 bytes · C-only source
 lib/libCPS/src/cps_send_transport.c</title></rect>
@@ -941,9 +941,9 @@ src/drawing_session_link.c</title></rect>
 <rect x="124.812" y="667.202" width="9.628" height="13.960" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_direct_io_read.o
 840 bytes · C-only source
 lib/MSL_C/src/msl_direct_io_read.c</title></rect>
-<rect x="134.440" y="646.103" width="8.553" height="15.714" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / unk_02009D48.o
+<rect x="134.440" y="646.103" width="8.553" height="15.714" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / sprite_resource_header.o
 840 bytes · C-only source
-src/unk_02009D48.c</title></rect>
+src/sprite_resource_header.c</title></rect>
 <rect x="142.993" y="646.103" width="8.512" height="15.714" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wm_settings.o
 836 bytes · C-only source
 lib/NitroSDK/src/wm_settings.c</title></rect>
@@ -1214,9 +1214,9 @@ src/oam_manager.c</title></rect>
 <rect x="272.429" y="574.311" width="5.703" height="15.487" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / soc.o
 552 bytes · C-only source
 lib/NitroWiFi/src/soc.c</title></rect>
-<rect x="278.132" y="574.311" width="11.324" height="7.772" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / unk_0208805C.o
+<rect x="278.132" y="574.311" width="11.324" height="7.772" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / ui_util.o
 550 bytes · C-only source
-src/unk_0208805C.c</title></rect>
+src/ui_util.c</title></rect>
 <rect x="278.132" y="582.083" width="11.324" height="7.715" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / palette_blink.o
 546 bytes · C-only source
 src/palette_blink.c</title></rect>
@@ -2156,12 +2156,12 @@ lib/NitroSDK/src/snd/snd_player_local_variable.c</title></rect>
 <rect x="286.468" y="703.129" width="4.314" height="2.522" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / MATH_pop.o
 68 bytes · C-only source
 lib/NitroSDK/src/math/MATH_pop.c</title></rect>
-<rect x="286.468" y="705.651" width="4.314" height="2.522" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / rand.o
+<rect x="286.468" y="705.651" width="4.314" height="2.522" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_comm_cmds.o
+68 bytes · C-only source
+src/field_comm_cmds.c</title></rect>
+<rect x="273.162" y="708.173" width="2.826" height="3.850" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / rand.o
 68 bytes · C-only source
 lib/MSL_C/src/rand.c</title></rect>
-<rect x="273.162" y="708.173" width="2.826" height="3.850" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / unk_02091564.o
-68 bytes · C-only source
-src/unk_02091564.c</title></rect>
 <rect x="275.988" y="708.173" width="2.743" height="3.850" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / map_landmark_name.o
 66 bytes · C-only source
 src/map_landmark_name.c</title></rect>
@@ -2259,9 +2259,9 @@ lib/MSL_C/src/msl_new_bad_alloc.c</title></rect>
 <rect x="305.009" y="701.381" width="3.230" height="2.179" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_shared_ptr_release_weak.o
 44 bytes · C-only source
 lib/MSL_C/src/msl_shared_ptr_release_weak.c</title></rect>
-<rect x="299.870" y="703.560" width="4.431" height="1.589" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / unk_02092BB8.o
+<rect x="299.870" y="703.560" width="4.431" height="1.589" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pokedex_resume_state.o
 44 bytes · C-only source
-src/unk_02092BB8.c</title></rect>
+src/pokedex_resume_state.c</title></rect>
 <rect x="299.870" y="705.149" width="2.270" height="2.961" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / palette_vram_addr.o
 42 bytes · C-only source
 src/palette_vram_addr.c</title></rect>
@@ -2408,9 +2408,9 @@ lib/MSL_C/src/msl_w_pow.c</title></rect>
 12 bytes · Original hand-written assembly
 lib/NitroSDK/src/os/os_terminate_proc.c
 OS_Halt</title></rect>
-<rect x="303.977" y="715.949" width="1.827" height="1.051" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / unk_0203AC88.o
+<rect x="303.977" y="715.949" width="1.827" height="1.051" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wifi_club_comm_table.o
 12 bytes · C-only source
-src/unk_0203AC88.c</title></rect>
+src/wifi_club_comm_table.c</title></rect>
 <rect x="305.804" y="714.898" width="1.218" height="1.051" fill="#6f8fd8" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / mi_swap.o
 8 bytes · Original hand-written assembly
 lib/NitroSDK/src/mi/mi_swap.c
@@ -2590,9 +2590,9 @@ src/pokeathlon/pokeathlon_course_mon_palette.c</title></rect>
 <rect x="308.240" y="259.445" width="84.296" height="88.697" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_12 / battle_command.o
 46,728 bytes · C-only source
 src/battle/battle_command.c</title></rect>
-<rect x="392.535" y="259.445" width="75.262" height="88.697" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_12 / overlay_12_0224E4FC.o
+<rect x="392.535" y="259.445" width="75.262" height="88.697" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_12 / battle_util.o
 41,720 bytes · C-only source
-src/battle/overlay_12_0224E4FC.c</title></rect>
+src/battle/battle_util.c</title></rect>
 <rect x="308.240" y="348.141" width="79.781" height="77.763" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_12 / battle_controller_opponent.o
 38,774 bytes · C-only source
 src/battle/battle_controller_opponent.c</title></rect>
@@ -4520,66 +4520,66 @@ src/application/pokegear/map/pokegear_map_input.c</title></rect>
 <rect x="1004.736" y="292.663" width="21.394" height="35.331" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / pokegear_map_gfx.o
 4,724 bytes · C-only source
 src/application/pokegear/map/pokegear_map_gfx.c</title></rect>
-<rect x="1026.131" y="292.663" width="16.349" height="35.331" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / overlay_101_021F0F48.o
+<rect x="1026.131" y="292.663" width="16.349" height="35.331" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / phone_contact_list_ui.o
 3,610 bytes · C-only source
-src/application/pokegear/phone/overlay_101_021F0F48.c</title></rect>
-<rect x="1004.736" y="327.994" width="14.590" height="33.711" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / overlay_101_021EDCE0.o
+src/application/pokegear/phone/phone_contact_list_ui.c</title></rect>
+<rect x="1004.736" y="327.994" width="14.590" height="33.711" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / fly_map_gfx.o
 3,074 bytes · C-only source
-src/application/pokegear/map/overlay_101_021EDCE0.c</title></rect>
-<rect x="1019.327" y="327.994" width="23.153" height="18.383" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / overlay_101_021F1D74.o
+src/application/pokegear/map/fly_map_gfx.c</title></rect>
+<rect x="1019.327" y="327.994" width="23.153" height="18.383" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / phone_call.o
 2,660 bytes · C-only source
-src/application/pokegear/phone/overlay_101_021F1D74.c</title></rect>
+src/application/pokegear/phone/phone_call.c</title></rect>
 <rect x="1019.327" y="346.376" width="23.153" height="15.328" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / pokegear_map.o
 2,218 bytes · C-only source
 src/application/pokegear/map/pokegear_map.c</title></rect>
-<rect x="965.519" y="361.705" width="20.494" height="16.989" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / overlay_101_021F4F34.o
+<rect x="965.519" y="361.705" width="20.494" height="16.989" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / pokegear_radio_tuner.o
 2,176 bytes · C-only source
-src/application/pokegear/radio/overlay_101_021F4F34.c</title></rect>
-<rect x="965.519" y="378.694" width="20.494" height="14.397" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / overlay_101_021F57B8.o
+src/application/pokegear/radio/pokegear_radio_tuner.c</title></rect>
+<rect x="965.519" y="378.694" width="20.494" height="14.397" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / radio_show.o
 1,844 bytes · C-only source
-src/application/pokegear/radio/overlay_101_021F57B8.c</title></rect>
-<rect x="986.014" y="361.705" width="17.894" height="15.970" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / overlay_101_021F017C.o
+src/application/pokegear/radio/radio_show.c</title></rect>
+<rect x="986.014" y="361.705" width="17.894" height="15.970" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / pokegear_phone_gfx.o
 1,786 bytes · C-only source
-src/application/pokegear/phone/overlay_101_021F017C.c</title></rect>
-<rect x="986.014" y="377.675" width="17.894" height="15.416" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / overlay_101_021F0880.o
+src/application/pokegear/phone/pokegear_phone_gfx.c</title></rect>
+<rect x="986.014" y="377.675" width="17.894" height="15.416" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / pokegear_phone_contacts.o
 1,724 bytes · C-only source
-src/application/pokegear/phone/overlay_101_021F0880.c</title></rect>
+src/application/pokegear/phone/pokegear_phone_contacts.c</title></rect>
 <rect x="965.519" y="393.090" width="19.917" height="11.343" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / pokemon_talk.o
 1,412 bytes · C-only source
 src/application/pokegear/radio/shows/pokemon_talk.c</title></rect>
 <rect x="965.519" y="404.434" width="19.917" height="11.102" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / pokegear_radio.o
 1,382 bytes · C-only source
 src/application/pokegear/radio/pokegear_radio.c</title></rect>
-<rect x="965.519" y="415.536" width="19.917" height="10.749" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / overlay_101_021F49F8.o
+<rect x="965.519" y="415.536" width="19.917" height="10.749" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / pokegear_radio_gfx.o
 1,338 bytes · C-only source
-src/application/pokegear/radio/overlay_101_021F49F8.c</title></rect>
+src/application/pokegear/radio/pokegear_radio_gfx.c</title></rect>
 <rect x="985.437" y="393.090" width="18.471" height="11.400" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / phone_scripts_generic.o
 1,316 bytes · C-only source
 src/application/pokegear/phone/scripts/phone_scripts_generic.c</title></rect>
-<rect x="985.437" y="404.490" width="18.471" height="10.967" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / overlay_101_021EF1D8.o
+<rect x="985.437" y="404.490" width="18.471" height="10.967" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / pokegear_configure_ui.o
 1,266 bytes · C-only source
-src/application/pokegear/configure/overlay_101_021EF1D8.c</title></rect>
+src/application/pokegear/configure/pokegear_configure_ui.c</title></rect>
 <rect x="985.437" y="415.457" width="18.471" height="10.828" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / fly_map.o
 1,250 bytes · C-only source
 src/application/pokegear/map/fly_map.c</title></rect>
 <rect x="1003.908" y="361.705" width="17.844" height="10.940" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / pokegear_phone.o
 1,220 bytes · C-only source
 src/application/pokegear/phone/pokegear_phone.c</title></rect>
-<rect x="1003.908" y="372.644" width="17.844" height="10.384" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / overlay_101_021EED44.o
+<rect x="1003.908" y="372.644" width="17.844" height="10.384" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / pokegear_configure_gfx.o
 1,158 bytes · C-only source
-src/application/pokegear/configure/overlay_101_021EED44.c</title></rect>
-<rect x="1003.908" y="383.028" width="17.844" height="9.971" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / overlay_101_021EFD20.o
+src/application/pokegear/configure/pokegear_configure_gfx.c</title></rect>
+<rect x="1003.908" y="383.028" width="17.844" height="9.971" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / pokegear_phone_states.o
 1,112 bytes · C-only source
-src/application/pokegear/phone/overlay_101_021EFD20.c</title></rect>
+src/application/pokegear/phone/pokegear_phone_states.c</title></rect>
 <rect x="1021.752" y="361.705" width="11.404" height="15.377" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / pokegear_configure.o
 1,096 bytes · C-only source
 src/application/pokegear/configure/pokegear_configure.c</title></rect>
 <rect x="1033.156" y="361.705" width="9.323" height="15.377" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / phone_scripts_prof_oak.o
 896 bytes · C-only source
 src/application/pokegear/phone/scripts/phone_scripts_prof_oak.c</title></rect>
-<rect x="1021.752" y="377.082" width="8.645" height="15.917" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / overlay_101_021ED498.o
+<rect x="1021.752" y="377.082" width="8.645" height="15.917" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / pokegear_map_markings.o
 860 bytes · C-only source
-src/application/pokegear/map/overlay_101_021ED498.c</title></rect>
+src/application/pokegear/map/pokegear_map_markings.c</title></rect>
 <rect x="1030.397" y="377.082" width="12.083" height="8.051" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / phone_scripts_gym_leader.o
 608 bytes · C-only source
 src/application/pokegear/phone/scripts/phone_scripts_gym_leader.c</title></rect>
@@ -4619,9 +4619,9 @@ src/application/pokegear/phone/scripts/phone_scripts_daycare_man.c</title></rect
 <rect x="1031.468" y="392.999" width="11.012" height="5.754" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / trainer_profiles.o
 396 bytes · C-only source
 src/application/pokegear/radio/shows/trainer_profiles.c</title></rect>
-<rect x="1031.468" y="398.753" width="5.626" height="10.636" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / overlay_101_021EF6D0.o
+<rect x="1031.468" y="398.753" width="5.626" height="10.636" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / pokegear_configure_input.o
 374 bytes · C-only source
-src/application/pokegear/configure/overlay_101_021EF6D0.c</title></rect>
+src/application/pokegear/configure/pokegear_configure_input.c</title></rect>
 <rect x="1037.094" y="398.753" width="5.386" height="10.636" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear_app / phone_scripts_baoba.o
 358 bytes · C-only source
 src/application/pokegear/phone/scripts/phone_scripts_baoba.c</title></rect>
@@ -5542,12 +5542,12 @@ NitroStaticInit, NitroStaticInit_</title></rect>
 7,030 bytes · C-only source
 src/battle_arcade_game_board.c</title></rect>
 <rect x="919.739" y="666.670" width="44.693" height="25.168" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="919.739" y="691.839" width="17.895" height="25.161" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear / overlay_100_021E5900.o
+<rect x="919.739" y="691.839" width="17.895" height="25.161" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear / pokegear_app_ui.o
 2,814 bytes · C-only source
-src/application/pokegear/main/overlay_100_021E5900.c</title></rect>
-<rect x="937.634" y="691.839" width="10.391" height="25.161" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear / overlay_100_021E6914.o
+src/application/pokegear/main/pokegear_app_ui.c</title></rect>
+<rect x="937.634" y="691.839" width="10.391" height="25.161" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear / pokegear_sprites.o
 1,634 bytes · C-only source
-src/application/pokegear/main/overlay_100_021E6914.c</title></rect>
+src/application/pokegear/main/pokegear_sprites.c</title></rect>
 <rect x="948.025" y="691.839" width="16.407" height="12.659" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear / pokegear_cursor.o
 1,298 bytes · C-only source
 src/application/pokegear/main/pokegear_cursor.c</title></rect>

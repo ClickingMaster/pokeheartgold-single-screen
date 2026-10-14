@@ -21,12 +21,12 @@
 #include "communication_core.h"
 #include "comm_state.h"
 #include "field_terrain.h"
-#include "unk_02055418.h"
+#include "field_time_events.h"
 #include "union_room_avatar.h"
-#include "unk_0205BB1C.h"
+#include "field_misc_util.h"
 #include "field_warp_state.h"
-#include "unk_0206D494.h"
-#include "unk_02088288.h"
+#include "field_misc_events.h"
+#include "pokemon_summary.h"
 #include "gear_phone_ring_manager.h"
 
 static void BattleSetup_SetParty(BattleSetup *setup, Party *party, int battlerId);

@@ -7,7 +7,7 @@
 #include "msgdata.h"
 #include "player_data.h"
 #include "string_util.h"
-#include "unk_02031B0C.h"
+#include "apricorn_box.h"
 
 struct SaveApricornBox {
     u8 apricorns[7];

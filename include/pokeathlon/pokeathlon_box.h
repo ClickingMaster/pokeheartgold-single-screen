@@ -12,7 +12,7 @@
 #include "pokemon_storage_system.h"
 #include "pokemon_types_def.h"
 #include "sprite.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "sprite_resource.h"
 
 typedef PartyExtraSub PartyAprijuiceModifier;

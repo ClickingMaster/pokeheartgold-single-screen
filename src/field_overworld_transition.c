@@ -6,7 +6,7 @@
 #include "overlay_01.h"
 #include "screen_fade.h"
 #include "task.h"
-#include "unk_020552A4.h"
+#include "field_overworld_restore.h"
 
 // Field tasks that leave the overworld (unload the field map) or bring it back, with or without a screen fade.
 

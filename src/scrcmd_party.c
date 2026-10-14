@@ -12,7 +12,7 @@
 #include "save_arrays.h"
 #include "scrcmd.h"
 #include "script_pokemon_util.h"
-#include "unk_0205BB1C.h"
+#include "field_misc_util.h"
 
 FS_EXTERN_OVERLAY(npc_trade);
 

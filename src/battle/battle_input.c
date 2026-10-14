@@ -20,7 +20,7 @@
 #include "sound_playback.h"
 #include "font_sprite.h"
 #include "type_icon_resources.h"
-#include "unk_0208805C.h"
+#include "ui_util.h"
 
 static void BattleInput_FreeDefaultResources(BattleInput *battleInput);
 static void BattleInput_FreeBallGaugeResources(BattleInput *battleInput);

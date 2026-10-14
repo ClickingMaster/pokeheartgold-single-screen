@@ -6,7 +6,7 @@
 
 #include "gf_gfx_loader.h"
 #include "pokemon_icon_idx.h"
-#include "unk_0208805C.h"
+#include "ui_util.h"
 #include "vram_transfer_manager.h"
 
 static void PartyMenu_SetIconAnimSeqIfChanged(Sprite *sprite, u8 seqNo);

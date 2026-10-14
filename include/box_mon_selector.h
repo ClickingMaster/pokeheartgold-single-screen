@@ -10,7 +10,7 @@
 #include "pm_string.h"
 #include "sprite.h"
 #include "touchscreen.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "sprite_resource.h"
 #include "yes_no_prompt.h"
 

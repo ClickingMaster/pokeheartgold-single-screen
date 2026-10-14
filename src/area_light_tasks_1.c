@@ -6,7 +6,7 @@
 #include "sound.h"
 #include "sound_system.h"
 #include "sound_playback.h"
-#include "unk_02055418.h"
+#include "field_time_events.h"
 
 void CallTask_ShipVoyage(FieldSystem *fieldSystem, u8 param1, u8 param2, u32 mapId, u32 x, u32 y) {
     AreaLightTaskEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(AreaLightTaskEnv));

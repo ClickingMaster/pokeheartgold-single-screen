@@ -37,7 +37,7 @@
 #include "touchscreen.h"
 #include "touchscreen_list_menu.h"
 #include "sound_playback.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "yes_no_prompt.h"
 
 typedef enum CoinDisplay {

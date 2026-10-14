@@ -8,7 +8,7 @@
 #include "comm_wireless.h"
 #include "communication_core.h"
 #include "comm_state.h"
-#include "unk_02091564.h"
+#include "field_comm_cmds.h"
 
 // Communication core and Union Room message functions, declared with the types their call sites were matched
 // against.
@@ -455,7 +455,7 @@ void UnionRoom_SendTalkResponse(struct UnionRoom *unionRoom, int mode, int value
     }
 }
 
-// Communication command callbacks (comm command table in unk_02091564.c).
+// Communication command callbacks (comm command table in field_comm_cmds.c).
 void UnionRoom_RecvUnusedProfile(void) {
 }
 

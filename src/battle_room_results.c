@@ -22,7 +22,7 @@
 #include "text.h"
 #include "touchscreen.h"
 #include "sound_playback.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "grid_input_handler.h"
 #include "frontier_data_access.h"
 #include "frontier_save_access.h"

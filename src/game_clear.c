@@ -28,10 +28,10 @@
 #include "task.h"
 #include "text.h"
 #include "sound_playback.h"
-#include "unk_020552A4.h"
-#include "unk_02055418.h"
-#include "unk_0206793C.h"
-#include "unk_0206D494.h"
+#include "field_overworld_restore.h"
+#include "field_time_events.h"
+#include "field_warp_reset.h"
+#include "field_misc_events.h"
 #include "use_item_on_mon.h"
 
 #define WAIT_SE_SAVE_FRAMES   32

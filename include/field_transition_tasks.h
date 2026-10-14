@@ -8,14 +8,14 @@ typedef struct FieldTransitionUnkEnvironmentA {
     int unk4;
 } FieldTransitionUnkEnvironmentA;
 
-// Map enter routines (unk_02055BF0.c sMapEnterRoutines, by FieldTransitionEnvironment.transitionNo)
+// Map enter routines (field_transition_effects.c sMapEnterRoutines, by FieldTransitionEnvironment.transitionNo)
 BOOL FieldTransition_EnterThroughSideDoor(TaskManager *man);
 BOOL FieldTransition_EnterFromWarpStairs(TaskManager *man);
 BOOL FieldTransition_EnterRising(TaskManager *man);
 BOOL FieldTransition_EnterWithDoorExit(TaskManager *man);
 BOOL FieldTransition_EnterSinking(TaskManager *man);
 
-// Player/camera placement before the enter routine (unk_02055BF0.c sMapEnterPlacementRoutines)
+// Player/camera placement before the enter routine (field_transition_effects.c sMapEnterPlacementRoutines)
 void FieldTransition_PlaceInsideSideDoor(FieldSystem *fieldSystem);
 void FieldTransition_PlaceOffWarpStairs(FieldSystem *fieldSystem);
 void FieldTransition_PlaceBelowFloor(FieldSystem *fieldSystem);

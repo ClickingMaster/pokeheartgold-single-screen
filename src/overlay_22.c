@@ -3,7 +3,7 @@
 #include "pokeathlon/pokeathlon_save.h"
 
 #include "coins.h"
-#include "overlay_01_021EDAFC.h"
+#include "money_box.h"
 #include "scrcmd.h"
 #include "script.h"
 #include "script_manager.h"

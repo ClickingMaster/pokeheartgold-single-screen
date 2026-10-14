@@ -10,7 +10,7 @@
 #include "palette.h"
 #include "sprite.h"
 #include "sprite_transfer.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "oam_manager.h"
 #include "vram_transfer_manager.h"
 

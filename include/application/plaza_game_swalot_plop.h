@@ -18,7 +18,7 @@
 #include "overlay_manager.h"
 #include "pm_string.h"
 #include "sprite.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "sprite_resource.h"
 
 // SWALOT Plop (overlay 91), a Wi-Fi Plaza game: every player flicks berries on the touch

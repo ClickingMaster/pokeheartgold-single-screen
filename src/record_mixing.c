@@ -31,7 +31,7 @@
 #include "text.h"
 #include "touchpad.h"
 #include "touchscreen.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "sprite_resource.h"
 #include "wireless_manager.h"
 #include "communication_player_state.h"

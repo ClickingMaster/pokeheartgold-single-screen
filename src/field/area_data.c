@@ -8,7 +8,7 @@
 
 #include "field/build_model_shapes.h"
 #include "field/map_prop_animation.h"
-#include "field/overlay_01_021FB878.h"
+#include "field/field_3d_model.h"
 #include "field/map_prop_render.h"
 
 #include "assert.h"

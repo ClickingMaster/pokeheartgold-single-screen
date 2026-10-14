@@ -16,7 +16,7 @@
 #include "sprite.h"
 #include "sprite_system.h"
 #include "type_icon_resources.h"
-#include "unk_02088288.h"
+#include "pokemon_summary.h"
 #include "vram_transfer_manager.h"
 
 // Pokemon summary screen sprites (ARM9 static 0x0208B1AC-0x0208C3E4): the sprite system of the screen and the

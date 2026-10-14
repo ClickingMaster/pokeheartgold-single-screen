@@ -7,7 +7,7 @@
 #include "overlay_manager.h"
 #include "player_data.h"
 #include "pokedex.h"
-#include "unk_02092BB8.h"
+#include "pokedex_resume_state.h"
 
 typedef struct PokedexArgs {
     Pokedex *pokedex;

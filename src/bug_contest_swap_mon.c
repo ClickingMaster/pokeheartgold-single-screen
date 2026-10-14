@@ -28,8 +28,8 @@
 #include "system.h"
 #include "text.h"
 #include "sound_playback.h"
-#include "unk_02009D48.h"
-#include "unk_0208805C.h"
+#include "sprite_resource_header.h"
+#include "ui_util.h"
 #include "yes_no_prompt.h"
 
 // Bug-Catching Contest: shows the Pokemon just caught and, when the player already holds one, asks

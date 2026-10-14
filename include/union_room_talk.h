@@ -28,7 +28,7 @@ void UnionRoom_BroadcastChatMessage(MailMessage *message);
 void UnionRoom_SetOwnChatMessage(struct UnionRoom *unionRoom, MailMessage *message);
 MailMessage *UnionRoom_TakeOwnChatMessage(struct UnionRoom *);
 
-// link command handlers (command table in unk_02091564.c): (netId, size, data, fieldSystem)
+// link command handlers (command table in field_comm_cmds.c): (netId, size, data, fieldSystem)
 void UnionRoom_RecvTalkChoice(int, int, u8 *, FieldSystem *);
 void UnionRoom_RecvTalkCancel(int, int, u8 *, FieldSystem *);
 void UnionRoom_RecvTrainerCard(int, int, void *);

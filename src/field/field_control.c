@@ -15,7 +15,7 @@
 
 #include "field/encounter_check.h"
 #include "overlay_2/event_cutscene.h"
-#include "overlay_2/overlay_02_02248728.h"
+#include "overlay_2/overlay_02_field_utils.h"
 #include "overlay_2/overlay_02_gear_phone.h"
 
 #include "bug_contest_internal.h"
@@ -34,7 +34,7 @@
 #include "menu_input_state.h"
 #include "metatile_behavior.h"
 #include "overlay_01.h"
-#include "overlay_01_021F1AFC.h"
+#include "player_avatar_actions.h"
 #include "field/spin_slide.h"
 #include "field/bottom_screen_app.h"
 #include "field_poison_effect.h"
@@ -48,7 +48,7 @@
 #include "sys_flags.h"
 #include "sys_vars.h"
 #include "sound_playback.h"
-#include "unk_02031B0C.h"
+#include "apricorn_box.h"
 #include "wireless_manager.h"
 #include "communication_player_state.h"
 #include "communication_core.h"
@@ -56,13 +56,13 @@
 #include "field_interaction.h"
 #include "field_terrain.h"
 #include "headbutt_tree.h"
-#include "unk_02055BF0.h"
+#include "field_transition_effects.h"
 #include "communication_club_link.h"
-#include "unk_02058AEC.h"
+#include "union_room.h"
 #include "union_room_talk.h"
 #include "player_avatar_movement.h"
 #include "map_object_behavior.h"
-#include "unk_0206D494.h"
+#include "field_misc_events.h"
 
 static BOOL FieldSystem_CheckSign(FieldSystem *fieldSystem);
 static u16 GetInteractedMetatileScript(FieldSystem *fieldSystem, u8 metatileBehavior);

@@ -1,7 +1,7 @@
 #ifndef POKEHEARTGOLD_COMM_STATE_H
 #define POKEHEARTGOLD_COMM_STATE_H
 
-#include "overlay_44_02232E9C.h"
+#include "wifi_club_app.h"
 #include "save.h"
 #include "save_wifi_history.h"
 #include "friend_roster.h"

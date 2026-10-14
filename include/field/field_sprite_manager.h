@@ -3,7 +3,7 @@
 
 #include "sprite.h"
 #include "sprite_system.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 
 typedef struct FieldSpriteManager {
     SpriteList *spriteList;

@@ -11,7 +11,7 @@
 #include "pokemon.h"
 #include "frontier_save_access.h"
 #include "communication_core.h"
-#include "unk_0205BFF0.h"
+#include "frontier_stat_ids_legacy.h"
 
 // Link messages of the Battle Frontier facilities' script side in multi battles with a friend (wireless): for each
 // facility a sender (packs the local data into the work's link buffer and sends it) and a receive callback

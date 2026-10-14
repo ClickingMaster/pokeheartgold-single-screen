@@ -14,7 +14,7 @@
 #include "battle/battle_finger.h"
 #include "battle/battle_main.h"
 #include "battle/battle_system.h"
-#include "battle/overlay_12_0224E4FC.h"
+#include "battle/battle_util.h"
 
 #include "bag_cursor.h"
 #include "bg_window.h"

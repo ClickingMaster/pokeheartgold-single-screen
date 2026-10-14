@@ -12,7 +12,7 @@
 #include "scrcmd.h"
 #include "sys_vars.h"
 #include "union_room_avatar.h"
-#include "unk_0205BB1C.h"
+#include "field_misc_util.h"
 #include "map_landmark_name.h"
 
 static String *_get_species_name(u16 species, enum HeapID heapID);

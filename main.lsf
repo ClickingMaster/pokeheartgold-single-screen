@@ -31,7 +31,7 @@ Static main
     Object src/filesystem.o
     Object src/gf_gfx_loader.o
     Object src/pokepic.o
-    Object src/unk_02009D48.o
+    Object src/sprite_resource_header.o
     Object src/sprite_resource.o
     Object src/sprite_transfer.o
     Object src/oam_manager.o
@@ -186,7 +186,7 @@ Static main
     Object asm/wireless_status_icon_data.o
     Object src/wireless_status_icon.o
     Object src/communication_error.o
-    Object src/unk_0203AC88.o
+    Object src/wifi_club_comm_table.o
     Object src/wfc_user_info_warning.o
     Object src/map_matrix.o
     Object src/map_header.o
@@ -211,7 +211,7 @@ Static main
     Object src/scrcmd_8.o
     Object src/scrcmd_9.o
     Object src/frontier_field_system.o
-    Object src/unk_0204B538.o
+    Object src/frontier_opponents.o
     Object src/scrcmd_apricorn.o
     Object src/scrcmd_mystery_gift.o
     Object src/scrcmd_12.o
@@ -241,10 +241,10 @@ Static main
     Object src/field_bgm.o
     Object src/battle_transition_task.o
     Object src/field_overworld_transition.o
-    Object src/unk_02055418.o
+    Object src/field_time_events.o
     Object src/catching_show.o
     Object asm/unk_02055BF0_data.o
-    Object src/unk_02055BF0.o
+    Object src/field_transition_effects.o
     Object src/field_transition_tasks.o
     Object src/comm_player_manager.o
     Object asm/comm_player_manager_data.o
@@ -302,10 +302,10 @@ Static main
     Object src/follow_mon.o
     Object src/map_preview_graphic.o
     Object src/field_take_photo.o
-    Object src/unk_0206B910.o
+    Object src/scrcmd_link_sync.o
     Object src/alph_checks.o
     Object src/get_egg.o
-    Object src/unk_0206D494.o
+    Object src/field_misc_events.o
     Object src/pokemon.o
     Object src/move.o
     Object src/trainer_data.o
@@ -338,7 +338,7 @@ Static main
     Object src/vs_recorder_app.o
     Object src/vs_recorder_menu_app.o
     Object asm/vs_recorder_screen_data.o
-    Object src/unk_0208805C.o
+    Object src/ui_util.o
     Object asm/pokemon_summary_data.o
     Object src/pokemon_summary.o
     Object src/pokemon_summary_states.o
@@ -364,7 +364,7 @@ Static main
     Object src/pokedex_language.o
     Object src/pokedex_language_order.o
     Object src/dex_mon_measures.o
-    Object src/unk_02091564.o
+    Object src/field_comm_cmds.o
     Object src/network_overlay_loader.o
     Object asm/network_overlay_loader_data.o
     Object src/location_gmm_dat.o
@@ -376,7 +376,7 @@ Static main
     Object src/save_data_read_error.o
     Object src/save_data_write_error.o
     Object src/mart_bag_task.o
-    Object src/unk_02092BB8.o
+    Object src/pokedex_resume_state.o
     Object src/gear_phone_ring_manager.o
     Object src/mom_gift.o
     Object src/phone_rematch.o
@@ -1185,7 +1185,7 @@ Overlay OVY_12
     Object src/battle/battle_command.o
     Object asm/overlay_12_battle_command.o
     Object src/battle/battle_controller_player.o
-    Object src/battle/overlay_12_0224E4FC.o
+    Object src/battle/battle_util.o
     Object src/battle/battle_controller_opponent.o
     Object asm/battle_controller_opponent_data.o
     Object src/battle/battle_pokepic_bob.o
@@ -2245,32 +2245,32 @@ Overlay OVY_99
 Overlay pokegear
 {
     After main
-    Object src/application/pokegear/main/overlay_100_021E5900.o
+    Object src/application/pokegear/main/pokegear_app_ui.o
     Object src/application/pokegear/main/pokegear_main.o
-    Object src/application/pokegear/main/overlay_100_021E6914.o
+    Object src/application/pokegear/main/pokegear_sprites.o
     Object src/application/pokegear/main/pokegear_cursor.o
 }
 Overlay pokegear_app
 {
     After pokegear
     Object src/application/pokegear/map/pokegear_map.o
-    Object src/application/pokegear/map/overlay_101_021F79B4.o
+    Object src/application/pokegear/map/pokegear_map_flypoints.o
     Object src/application/pokegear/map/pokegear_map_gfx.o
     Object src/application/pokegear/map/pokegear_map_view.o
     Object src/application/pokegear/map/pokegear_map_input.o
-    Object src/application/pokegear/map/overlay_101_021ED498.o
+    Object src/application/pokegear/map/pokegear_map_markings.o
     Object src/application/pokegear/map/fly_map.o
-    Object src/application/pokegear/map/overlay_101_021EDCE0.o
+    Object src/application/pokegear/map/fly_map_gfx.o
     Object src/application/pokegear/configure/pokegear_configure.o
-    Object src/application/pokegear/configure/overlay_101_021EED44.o
-    Object src/application/pokegear/configure/overlay_101_021EF1D8.o
-    Object src/application/pokegear/configure/overlay_101_021EF6D0.o
+    Object src/application/pokegear/configure/pokegear_configure_gfx.o
+    Object src/application/pokegear/configure/pokegear_configure_ui.o
+    Object src/application/pokegear/configure/pokegear_configure_input.o
     Object src/application/pokegear/phone/pokegear_phone.o
-    Object src/application/pokegear/phone/overlay_101_021EFD20.o
-    Object src/application/pokegear/phone/overlay_101_021F017C.o
-    Object src/application/pokegear/phone/overlay_101_021F0880.o
-    Object src/application/pokegear/phone/overlay_101_021F0F48.o
-    Object src/application/pokegear/phone/overlay_101_021F1D74.o
+    Object src/application/pokegear/phone/pokegear_phone_states.o
+    Object src/application/pokegear/phone/pokegear_phone_gfx.o
+    Object src/application/pokegear/phone/pokegear_phone_contacts.o
+    Object src/application/pokegear/phone/phone_contact_list_ui.o
+    Object src/application/pokegear/phone/phone_call.o
     Object src/application/pokegear/phone/scripts/phone_scripts_mother.o
     Object src/application/pokegear/phone/scripts/phone_scripts_prof_elm.o
     Object src/application/pokegear/phone/scripts/phone_scripts_generic.o
@@ -2288,9 +2288,9 @@ Overlay pokegear_app
     Object src/application/pokegear/phone/scripts/phone_scripts_juggler_irwin.o
     Object src/application/pokegear/phone/extra_ethan_lyra_data.o
     Object src/application/pokegear/radio/pokegear_radio.o
-    Object src/application/pokegear/radio/overlay_101_021F49F8.o
-    Object src/application/pokegear/radio/overlay_101_021F4F34.o
-    Object src/application/pokegear/radio/overlay_101_021F57B8.o
+    Object src/application/pokegear/radio/pokegear_radio_gfx.o
+    Object src/application/pokegear/radio/pokegear_radio_tuner.o
+    Object src/application/pokegear/radio/radio_show.o
     Object src/application/pokegear/radio/shows/pokemon_music.o
     Object src/application/pokegear/radio/shows/poke_flute.o
     Object src/application/pokegear/radio/shows/unown.o

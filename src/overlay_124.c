@@ -8,7 +8,7 @@
 #include "main.h"
 #include "map_events.h"
 #include "save_local_field_data.h"
-#include "unk_02092BB8.h"
+#include "pokedex_resume_state.h"
 #include "gear_phone_ring_manager.h"
 
 FS_EXTERN_OVERLAY(ds_protect);

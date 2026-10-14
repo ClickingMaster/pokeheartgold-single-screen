@@ -12,7 +12,7 @@
 #include "msgdata.h"
 #include "sprite.h"
 #include "text.h"
-#include "unk_0200FA24.h"
+#include "screen_fade_legacy.h"
 
 // Team Rocket battle intros: effect 39 (grunts) and 40-44 (executives and the boss).
 

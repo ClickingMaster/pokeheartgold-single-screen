@@ -12,7 +12,7 @@
 #include "launch_application.h"
 #include "overlay_13_thumb_1.h"
 #include "overlay_44.h"
-#include "overlay_44_02232E9C.h"
+#include "wifi_club_app.h"
 #include "overlay_manager.h"
 #include "poke_overlay.h"
 #include "save_vars_flags.h"

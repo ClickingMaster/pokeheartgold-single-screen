@@ -37,8 +37,8 @@
 #include "grid_input_handler.h"
 #include "swap_3d_buffers.h"
 #include "type_icon_resources.h"
-#include "unk_0208805C.h"
-#include "unk_02088288.h"
+#include "ui_util.h"
+#include "pokemon_summary.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 

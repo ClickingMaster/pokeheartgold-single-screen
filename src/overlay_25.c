@@ -28,7 +28,7 @@
 #include "script.h"
 #include "script_manager.h"
 #include "string_util.h"
-#include "unk_020517A4.h"
+#include "battle_intro_config.h"
 #include "union_room_avatar.h"
 
 #define MAX_TRAINER_HOUSE_LEVEL 50

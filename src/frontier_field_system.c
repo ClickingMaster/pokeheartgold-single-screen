@@ -20,7 +20,7 @@
 #include "sys_vars.h"
 #include "frontier_data_access.h"
 #include "frontier_save_access.h"
-#include "unk_0204B538.h"
+#include "frontier_opponents.h"
 #include "frontier_field_support.h"
 
 typedef struct SpeciesAndItem {

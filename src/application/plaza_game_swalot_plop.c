@@ -33,7 +33,7 @@
 #include "system.h"
 #include "text.h"
 #include "touchpad.h"
-#include "unk_0200FA24.h"
+#include "screen_fade_legacy.h"
 #include "swap_3d_buffers.h"
 #include "communication_command.h"
 #include "communication_player_state.h"

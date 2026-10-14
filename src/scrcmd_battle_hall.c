@@ -26,10 +26,10 @@
 #include "task.h"
 #include "frontier_save_access.h"
 #include "communication_core.h"
-#include "unk_0205BB1C.h"
-#include "unk_0205BFF0.h"
-#include "unk_02088288.h"
-#include "unk_02091564.h"
+#include "field_misc_util.h"
+#include "frontier_stat_ids_legacy.h"
+#include "pokemon_summary.h"
+#include "field_comm_cmds.h"
 
 typedef enum BattleHallChallengeType {
     BATTLE_HALL_CHALLENGE_TYPE_SINGLE,

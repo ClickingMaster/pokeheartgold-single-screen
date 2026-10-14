@@ -8,7 +8,7 @@
 #include "bg_window.h"
 #include "save.h"
 #include "sprite.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "sprite_resource.h"
 
 // Shared services of the main menu overlay (src/application/main_menu/main_menu_util.c): heap of the crypto library,

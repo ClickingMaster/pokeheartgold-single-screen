@@ -21,7 +21,7 @@
 #include "sound_playback.h"
 #include "system.h"
 #include "text.h"
-#include "unk_0200FA24.h"
+#include "screen_fade_legacy.h"
 
 // not declared in the SDK headers of this repo
 void RTC_GetDateTime(RTCDate *date, RTCTime *time);

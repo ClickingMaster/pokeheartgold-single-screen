@@ -31,7 +31,7 @@
 #include "save_trainer_house.h"
 #include "save_vars_flags.h"
 #include "save_wifi_history.h"
-#include "unk_0202E41C.h"
+#include "save_block_23.h"
 #include "frontier_save_access.h"
 
 // These macros are temporary. As the respective sources

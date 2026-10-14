@@ -23,7 +23,7 @@
 #include "player_avatar.h"
 #include "screen_fade.h"
 #include "sound_playback.h"
-#include "unk_02055BF0.h"
+#include "field_transition_effects.h"
 
 // Door prop slot used by the one-shot animation manager for front doors and for side doors.
 #define DOOR_ANIM_TAG      1

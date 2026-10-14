@@ -11,7 +11,7 @@
 #include "msgdata.h"
 #include "obj_pltt_transfer.h"
 #include "overlay_00_thumb.h"
-#include "overlay_44_02232E9C.h"
+#include "wifi_club_app.h"
 #include "party.h"
 #include "poke_overlay.h"
 #include "pokedex.h"

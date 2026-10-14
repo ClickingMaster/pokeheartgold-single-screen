@@ -52,14 +52,14 @@
 #include "task.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "sprite_resource.h"
 #include "communication_core.h"
 #include "field_interaction.h"
 #include "comm_player_manager.h"
 #include "communication_club_link.h"
 #include "frontier_field_support.h"
-#include "unk_0206D494.h"
+#include "field_misc_events.h"
 #include "gear_phone_ring_manager.h"
 
 // Field bottom-screen app 0, the touchscreen start menu (ScrCmd_TouchscreenMenuShow, AppEntry 0 of

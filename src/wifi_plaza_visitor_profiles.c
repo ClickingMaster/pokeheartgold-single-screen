@@ -33,7 +33,7 @@
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "sprite_resource.h"
 #include "oam_manager.h"
 #include "swap_3d_buffers.h"

@@ -13,7 +13,7 @@
 #include "systask_environment.h"
 #include "touchscreen.h"
 #include "union_room_avatar.h"
-#include "unk_02088288.h"
+#include "pokemon_summary.h"
 
 // The avatars on the sub screen: the player walking in and out of the GTS, the trainers a search found (in the
 // Union Room avatar graphics), the marker over the selected one. Then screen 8: the Pokemon summary of the

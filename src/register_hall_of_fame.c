@@ -33,7 +33,7 @@
 #include "sound_playback.h"
 #include "char_tiles.h"
 #include "palette_vram_addr.h"
-#include "unk_0206D494.h"
+#include "field_misc_events.h"
 
 typedef enum RegisterHallOfFameScene {
     REGHOF_SCENE_WAIT_FADE,

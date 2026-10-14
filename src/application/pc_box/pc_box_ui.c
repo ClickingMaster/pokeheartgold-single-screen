@@ -30,7 +30,7 @@
 #include "sys_task_api.h"
 #include "touchpad.h"
 #include "touchscreen.h"
-#include "unk_02088288.h"
+#include "pokemon_summary.h"
 #include "yes_no_prompt.h"
 
 typedef u32 (*PCBoxStateFunc)(PCBoxWork *work);

@@ -12,7 +12,7 @@
 #include "gf_rtc.h"
 #include "map_object.h"
 #include "overlay_01.h"
-#include "overlay_01_021F1AFC.h"
+#include "player_avatar_actions.h"
 #include "player_avatar.h"
 #include "screen_fade.h"
 #include "system.h"

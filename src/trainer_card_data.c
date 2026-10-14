@@ -15,7 +15,7 @@
 #include "sys_flags.h"
 #include "task.h"
 #include "union_room_talk.h"
-#include "unk_02055418.h"
+#include "field_time_events.h"
 
 typedef struct LinkTrainerCardTaskEnv {
     int state;

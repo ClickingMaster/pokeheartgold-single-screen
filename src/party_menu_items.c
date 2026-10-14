@@ -17,7 +17,7 @@
 #include "system.h"
 #include "text.h"
 #include "sound_playback.h"
-#include "unk_02088288.h"
+#include "pokemon_summary.h"
 #include "use_item_on_mon.h"
 
 typedef enum PartyMenuItemType {

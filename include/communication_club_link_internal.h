@@ -55,7 +55,7 @@ void sub_0205857C(void);
 void CommClubLink_StartBattle(void);
 #include "encounter.h"
 #include "screen_fade.h"
-#include "unk_02091564.h"
+#include "field_comm_cmds.h"
 void CommRandom_Init(void *);
 void CommState_StartParentSession(SaveData *, s32, s32, LinkBattleRuleset *, int);
 void CommState_StartChildSession(SaveData *, u8, u32, LinkBattleRuleset *, int);

@@ -20,7 +20,7 @@
 #include "message_format.h"
 #include "msgdata.h"
 #include "options.h"
-#include "overlay_44_02232E9C.h"
+#include "wifi_club_app.h"
 #include "overlay_manager.h"
 #include "palette.h"
 #include "player_data.h"

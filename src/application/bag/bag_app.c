@@ -42,7 +42,7 @@
 #include "message_printer_number.h"
 #include "swap_3d_buffers.h"
 #include "wireless_status_icon.h"
-#include "unk_0208805C.h"
+#include "ui_util.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 

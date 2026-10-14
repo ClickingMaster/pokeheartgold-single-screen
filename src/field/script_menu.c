@@ -10,7 +10,7 @@
 #include "heap.h"
 #include "list_menu_2d.h"
 #include "overlay_01.h"
-#include "overlay_01_021EDAFC.h"
+#include "money_box.h"
 #include "overlay_03.h"
 #include "player_data.h"
 #include "pm_string.h"

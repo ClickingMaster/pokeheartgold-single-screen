@@ -4,7 +4,7 @@
 #include "global.h"
 
 #include "sprite.h"
-#include "unk_02009D48.h"
+#include "sprite_resource_header.h"
 #include "sprite_resource.h"
 
 // Helpers of the course Pokemon objects (position conversions, collision circle) and the

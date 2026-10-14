@@ -10,7 +10,7 @@
 #include "text.h"
 #include "sound_playback.h"
 #include "font_sprite.h"
-#include "unk_0208805C.h"
+#include "ui_util.h"
 
 static void PokegearMap_InitBGs(PokegearMapAppData *mapApp);
 static void PokegearMap_UnloadBGs(PokegearMapAppData *mapApp);
