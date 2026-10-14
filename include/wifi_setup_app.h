@@ -8,7 +8,7 @@
 // calls, system and display start-up and shutdown, the per-frame main loop, the setup client
 // request, the text banks and the session started from the screens.
 
-// results of WifiSetupApp_PollClient
+// results of WifiSetupApp_PollAossClient
 #define WIFI_SETUP_CLIENT_BUSY   0
 #define WIFI_SETUP_CLIENT_DONE   1
 #define WIFI_SETUP_CLIENT_FAILED 2
@@ -88,11 +88,11 @@ extern const u8 ov13_02245320[12];
 extern const WifiSetupSessionParams ov13_02245F8C;
 
 int WifiSetupApp_Run(void *heap, s32 language, s32 flags);
-void WifiSetupApp_StartClient(void);
-void WifiSetupApp_StopClient(BOOL apply);
-int WifiSetupApp_PollClient(void);
-void *WifiSetupApp_ClientAlloc(u32 size);
-void WifiSetupApp_ClientFree(void *ptr);
+void WifiSetupApp_StartAossClient(void);
+void WifiSetupApp_StopAossClient(BOOL apply);
+int WifiSetupApp_PollAossClient(void);
+void *WifiSetupApp_AossClientAlloc(u32 size);
+void WifiSetupApp_AossClientFree(void *ptr);
 BOOL WifiSetupApp_SetParams(int language, u32 flags);
 void WifiSetupApp_InitSystem(void);
 void WifiSetupApp_InitDisplay(void);

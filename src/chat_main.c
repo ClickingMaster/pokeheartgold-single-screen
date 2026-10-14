@@ -283,7 +283,7 @@ void ciSendLogin(ChatConnection *chat) {
 
 // Creates the connection and starts the login; with blocking, waits until the connect attempt has ended
 // (NULL if it failed).
-ChatConnection *chatConnectDoit(int loginType, const char *serverAddress, int serverPort, const char *nick, const char *user, const char *realName, int accountSpace, const char *email, const char *accountNick, const char *registeredNick, const char *password, const char *authTicket, const char *partnerKey, const char *gameName, const char *gameKey, const ChatGlobalCallbacks *callbacks, void *nickErrorCallback, void *userAddressCallback, void *connectedCallback, void *connectParam, BOOL blocking) {
+ChatConnection *chatConnectDoit(int loginType, const char *serverAddress, int serverPort, const char *nick, const char *user, const char *realName, int accountSpace, const char *email, const char *accountNick, const char *registeredNick, const char *password, const char *authTicket, const char *partnerKey, const char *gameName, const char *gameKey, const ChatGlobalCallbacks *callbacks, void *nickErrorCallback, void *fillInUserCallback, void *connectedCallback, void *connectParam, BOOL blocking) {
     const char *socketName = ov45_02256C2C;
     ChatConnection *chat;
     ASSERT(serverAddress != NULL, ov45_02256C30, ov45_02256A08, 347);
@@ -401,14 +401,14 @@ ChatConnection *chatConnectDoit(int loginType, const char *serverAddress, int se
         return NULL;
     }
     chat->nickErrorCallback = nickErrorCallback;
-    chat->userAddressCallback = userAddressCallback;
+    chat->fillInUserCallback = fillInUserCallback;
     chat->connectedCallback = connectedCallback;
     chat->connectParam = connectParam;
     if (gameName && gameName[0] && gameKey && gameKey[0]) {
         strncpy(chat->gameKey, gameKey, 128);
         chat->gameKey[127] = 0;
         ciSocketSendf(&chat->socket, ov45_02256DB8, ov45_0225699C, gameName);
-    } else if (chat->userAddressCallback) {
+    } else if (chat->fillInUserCallback) {
         ciSocketSend(&chat->socket, ov45_02256DC8);
     } else {
         ciSendNickAndUser(chat);
@@ -427,8 +427,8 @@ ChatConnection *chatConnectDoit(int loginType, const char *serverAddress, int se
 }
 
 // Connects with a nick only (login type 0).
-ChatConnection *chatConnectSpecialA(const char *serverAddress, int serverPort, const char *nick, const char *realName, const char *gameName, const char *gameKey, const ChatGlobalCallbacks *callbacks, void *nickErrorCallback, void *userAddressCallback, void *connectedCallback, void *connectParam, BOOL blocking) {
-    return chatConnectDoit(0, serverAddress, serverPort, nick, NULL, realName, 0, NULL, NULL, NULL, NULL, NULL, NULL, gameName, gameKey, callbacks, nickErrorCallback, userAddressCallback, connectedCallback, connectParam, blocking);
+ChatConnection *chatConnectSpecialA(const char *serverAddress, int serverPort, const char *nick, const char *realName, const char *gameName, const char *gameKey, const ChatGlobalCallbacks *callbacks, void *nickErrorCallback, void *fillInUserCallback, void *connectedCallback, void *connectParam, BOOL blocking) {
+    return chatConnectDoit(0, serverAddress, serverPort, nick, NULL, realName, 0, NULL, NULL, NULL, NULL, NULL, NULL, gameName, gameKey, callbacks, nickErrorCallback, fillInUserCallback, connectedCallback, connectParam, blocking);
 }
 
 // Tries another nick after the nick error callback (NULL gives up).

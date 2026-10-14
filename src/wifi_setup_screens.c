@@ -1947,7 +1947,7 @@ void WifiSetupAoss_Init(void) {
     WifiSetupBanner_Show(2);
     WifiSetup_PrintMessage(0x22);
     WifiSetupBusyIcon_Create(0);
-    WifiSetupApp_StartClient();
+    WifiSetupApp_StartAossClient();
     WifiSetupSound_Play(0xb);
     WifiSetupApp_SetStateFunc(WifiSetupAoss_FadeIn);
 }
@@ -1994,7 +1994,7 @@ void WifiSetupAoss_Main(void) {
     WifiSetupAoss_HandleInput();
     WifiSetupAoss_Update();
     WifiSetupAoss_CheckButtons();
-    switch (WifiSetupApp_PollClient()) {
+    switch (WifiSetupApp_PollAossClient()) {
     case 0:
         return;
     case 1:
@@ -2080,7 +2080,7 @@ void WifiSetupAoss_End(void) {
     if (WifiSetupButtonBar_IsNotClosing() == 0) {
         return;
     }
-    WifiSetupApp_StopClient(gWifiSetupAoss.flag != 0 ? 1 : 0);
+    WifiSetupApp_StopAossClient(gWifiSetupAoss.flag != 0 ? 1 : 0);
     WifiSetupBusyIcon_Destroy();
     WifiSetupText_FreeBgCanvas(0);
     if (gWifiSetupAoss.flag == 0) {

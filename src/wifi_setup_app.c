@@ -35,7 +35,7 @@ extern void GXx_SetMasterBrightness_(vu16 *reg, int brightness);
 
 // Starts the setup client: requests settings 0 and 1 with the setup key, one connection attempt and
 // one receive attempt with default timing, from this console's MAC address.
-void WifiSetupApp_StartClient(void) {
+void WifiSetupApp_StartAossClient(void) {
     WifiSetupRequestKey key;
     u32 n;
     u16 *dst;
@@ -68,13 +68,13 @@ void WifiSetupApp_StartClient(void) {
     gWifiSetupClient.request->receiveDelay = -1;
     gWifiSetupClient.request->receiveTimeout = -1;
     OS_GetMacAddress(gWifiSetupClient.request->unk_110);
-    if (WifiSetup_Startup(WifiSetupApp_ClientAlloc, WifiSetupApp_ClientFree)) {
+    if (WifiSetup_Startup(WifiSetupApp_AossClientAlloc, WifiSetupApp_AossClientFree)) {
         OS_Terminate();
     }
 }
 
 // Stops the setup client; with `apply`, the settings it received are taken over.
-void WifiSetupApp_StopClient(BOOL apply) {
+void WifiSetupApp_StopAossClient(BOOL apply) {
     WifiSetup_Cleanup();
     if (apply && gWifiSetupClient.request->error == 0 && gWifiSetupClient.done == TRUE) {
         WifiSetupConnections_SetFromInfo(gWifiSetupClient.request->result);
@@ -82,7 +82,7 @@ void WifiSetupApp_StopClient(BOOL apply) {
     WifiSetupHeap_FreeAndClear(&ov13_0224F4C8);
 }
 
-int WifiSetupApp_PollClient(void) {
+int WifiSetupApp_PollAossClient(void) {
     u32 error;
     if (!WifiSetup_RunAoss(gWifiSetupClient.request)) {
         gWifiSetupClient.done = TRUE;
@@ -95,11 +95,11 @@ int WifiSetupApp_PollClient(void) {
     return WIFI_SETUP_CLIENT_FAILED;
 }
 
-void *WifiSetupApp_ClientAlloc(u32 size) {
+void *WifiSetupApp_AossClientAlloc(u32 size) {
     return WifiSetupHeap_AllocZeroed(size, 32);
 }
 
-void WifiSetupApp_ClientFree(void *ptr) {
+void WifiSetupApp_AossClientFree(void *ptr) {
     WifiSetupHeap_Free(ptr);
 }
 

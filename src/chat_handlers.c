@@ -1524,7 +1524,7 @@ void ciRplGetChanKeyHandler(ChatConnection *chat, ChatMessage *message) {
     }
 }
 
-// 302: the address of the own user ("USRIP" answer, nick=+user@address in the last parameter). The user address
+// 302: the address of the own user ("USRIP" answer, nick=+user@address in the last parameter). The fill-in-user
 // callback can choose the user name from it before the registration is sent.
 void ciRplUserIPHandler(ChatConnection *chat, ChatMessage *message) {
     char user[128], *address;
@@ -1534,9 +1534,9 @@ void ciRplUserIPHandler(ChatConnection *chat, ChatMessage *message) {
         return;
     }
     address = strchr(message->params[message->paramCount - 1], '@');
-    if (address && chat->userAddressCallback) {
+    if (address && chat->fillInUserCallback) {
         int ip = gsSocketInetAddr(address + 1);
-        ((ChatUserAddressFunc)chat->userAddressCallback)(chat, ip, user, chat->connectParam);
+        ((ChatFillInUserFunc)chat->fillInUserCallback)(chat, ip, user, chat->connectParam);
         strncpy(chat->user, user, sizeof(chat->user));
         chat->user[sizeof(chat->user) - 1] = 0;
     }
@@ -1936,7 +1936,7 @@ void ciRplSecureKeyHandler(ChatConnection *chat, ChatMessage *message) {
     chat->socket.encrypted = TRUE;
     if (chat->loginType) {
         ciSendLogin(chat);
-    } else if (chat->userAddressCallback) {
+    } else if (chat->fillInUserCallback) {
         ciSocketSend(&chat->socket, ov45_02256990);
     } else {
         ciSendNickAndUser(chat);
@@ -1975,7 +1975,7 @@ void ciRplLoginHandler(ChatConnection *chat, ChatMessage *message) {
     }
     chat->unk_8AC[0] = atol(message->params[1]);
     chat->unk_8AC[1] = atol(message->params[2]);
-    if (chat->userAddressCallback) {
+    if (chat->fillInUserCallback) {
         ciSocketSend(&chat->socket, ov45_02256990);
     } else {
         ciSendNickAndUser(chat);
