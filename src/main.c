@@ -183,19 +183,19 @@ static void WaitForVBlankOrReset(u32 param) {
 }
 
 static void HandleCommunicationErrorScreen(void) {
-    int r1 = CommState_GetErrorScreen();
-    switch (r1) {
+    int errorScreen = CommState_GetErrorScreen();
+    switch (errorScreen) {
     case 5:
-        ShowCommunicationErrorAndReset(0, r1);
+        ShowCommunicationErrorAndReset(0, errorScreen);
         break;
     case 1:
-        ShowCommunicationErrorAndReset(1, r1);
+        ShowCommunicationErrorAndReset(1, errorScreen);
         break;
     case 2:
-        ShowCommunicationErrorAndReset(0, r1);
+        ShowCommunicationErrorAndReset(0, errorScreen);
         break;
     case 3:
-        ShowCommunicationErrorAndReset(1, r1);
+        ShowCommunicationErrorAndReset(1, errorScreen);
         break;
     }
 }
@@ -213,50 +213,50 @@ static void DoSoftReset(u32 param) {
 }
 
 static void ShowCommunicationErrorAndReset(u32 resetParam, int errorScreen) {
-    int sp4;
-    int r7;
-    int r4;
-    int r5;
+    int linkMode;
+    int isWifi;
+    int frameCount;
+    int errorType;
 
-    r4 = 0;
-    sp4 = CommState_GetLinkMode();
-    r7 = CommState_IsWifi();
+    frameCount = 0;
+    linkMode = CommState_GetLinkMode();
+    isWifi = CommState_IsWifi();
     gSystem.touchpadReadAuto = FALSE;
     if (errorScreen == 3) {
-        r5 = 3;
+        errorType = 3;
     } else {
         if (resetParam == 0) {
             if (CommState_IsWifi() == TRUE) {
-                r5 = 6;
+                errorType = 6;
             } else {
-                r5 = 2;
+                errorType = 2;
             }
         } else {
             if (CommState_IsWifi() == TRUE) {
-                r5 = 5;
+                errorType = 5;
             } else {
-                r5 = 0;
+                errorType = 0;
             }
         }
     }
-    ShowCommunicationError(HEAP_ID_DEFAULT, r5, 0);
+    ShowCommunicationError(HEAP_ID_DEFAULT, errorType, 0);
     CommState_StopForReset();
     WaitForVBlank();
     DoSoundUpdateFrame();
     while (1) {
         HandleDSLidAction();
         ReadKeypadAndTouchpad();
-        if (errorScreen == 1 && r5 == 0 && IsLinkModeWithSoftResetCancel(sp4) && r7 == 0 && (gSystem.newKeys & PAD_BUTTON_B) && r4 >= 10) {
+        if (errorScreen == 1 && errorType == 0 && IsLinkModeWithSoftResetCancel(linkMode) && isWifi == 0 && (gSystem.newKeys & PAD_BUTTON_B) && frameCount >= 10) {
             resetParam = 0;
             break;
         }
-        if ((gSystem.newKeys & PAD_BUTTON_A) && r4 >= 10) {
+        if ((gSystem.newKeys & PAD_BUTTON_A) && frameCount >= 10) {
             break;
         }
         DoSoundUpdateFrame();
         WaitForVBlank();
-        if (r4 < 10) {
-            r4++;
+        if (frameCount < 10) {
+            frameCount++;
         }
     }
     DoSoftReset(resetParam);

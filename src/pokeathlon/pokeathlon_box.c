@@ -332,8 +332,8 @@ void PokeathlonBox_GetLightBoxMonStats(BoxPokemon *boxMon, PokeathlonBox_MonStat
 }
 
 void PokeathlonBox_ShowMonInfo(int boxno, u8 slot, PokeathlonBox *data) {
-    PokeathlonBox_MonInfo sp70;
-    u32 sp5C[5];
+    PokeathlonBox_MonInfo monInfo;
+    u32 medalShifts[5];
 
     PokeathlonBox_MonStats partyMonStats;
     PokeathlonBox_MonStats partyLightMonStats;
@@ -345,59 +345,59 @@ void PokeathlonBox_ShowMonInfo(int boxno, u8 slot, PokeathlonBox *data) {
 
     PartyAprijuiceModifier emptyAprijuiceModifier;
 
-    sp5C = ov97_0221FCB8;
+    medalShifts = ov97_0221FCB8;
     if (boxno != -1 && slot != -1) {
-        sp70.unk9 = 2;
+        monInfo.unk9 = 2;
         if (boxno == NUM_BOXES) {
             Party *party = SaveArray_Party_Get(data->saveData);
             Pokemon *partyMon = Party_GetMonByIndex(party, slot);
-            sp70.personality = GetMonData(partyMon, MON_DATA_PERSONALITY, NULL);
-            sp70.species = GetMonData(partyMon, MON_DATA_SPECIES, NULL);
-            sp70.form = GetMonData(partyMon, MON_DATA_FORM, NULL);
-            GetMonData(partyMon, MON_DATA_NICKNAME, sp70.nickname);
-            sp70.isShiny = MonIsShiny(partyMon);
-            sp70.gender = GetMonData(partyMon, MON_DATA_GENDER, NULL);
+            monInfo.personality = GetMonData(partyMon, MON_DATA_PERSONALITY, NULL);
+            monInfo.species = GetMonData(partyMon, MON_DATA_SPECIES, NULL);
+            monInfo.form = GetMonData(partyMon, MON_DATA_FORM, NULL);
+            GetMonData(partyMon, MON_DATA_NICKNAME, monInfo.nickname);
+            monInfo.isShiny = MonIsShiny(partyMon);
+            monInfo.gender = GetMonData(partyMon, MON_DATA_GENDER, NULL);
             BoxPokemon *boxMon = Mon_GetBoxMon(Party_GetMonByIndex(party, slot));
             PokeathlonBox_GetPartyMonStats(party, (u32)slot, &partyMonStats);
             PokeathlonBox_GetLightBoxMonStats(boxMon, &partyLightMonStats);
             Party_GetMonAprijuiceModifiers(party, &aprijuiceModifier, slot);
-            PokeathlonBox_CalcStatChanges(&partyLightMonStats, &partyMonStats, &aprijuiceModifier, &sp70);
+            PokeathlonBox_CalcStatChanges(&partyLightMonStats, &partyMonStats, &aprijuiceModifier, &monInfo);
             for (u8 i = 0; i < 5; i++) {
-                if (PokeathlonSave_MonHasMedal(Save_Pokeathlon_Get(data->saveData), sp5C[i], sp70.species)) {
-                    sp70.medals[i] = 1;
+                if (PokeathlonSave_MonHasMedal(Save_Pokeathlon_Get(data->saveData), medalShifts[i], monInfo.species)) {
+                    monInfo.medals[i] = 1;
                 } else {
-                    sp70.medals[i] = 0;
+                    monInfo.medals[i] = 0;
                 }
             }
-            PokeathlonBox_DrawMonInfo(data->graphics, &sp70);
+            PokeathlonBox_DrawMonInfo(data->graphics, &monInfo);
             return;
         }
 
         PokeathlonBox_GetBoxMon(SaveArray_PCStorage_Get(data->saveData), boxno, slot, &pokeathlonBoxMon);
-        sp70.personality = pokeathlonBoxMon.personality;
-        sp70.species = pokeathlonBoxMon.species;
-        sp70.form = pokeathlonBoxMon.form;
-        CopyU16StringArrayN(sp70.nickname, pokeathlonBoxMon.nickname, 11);
-        sp70.isShiny = pokeathlonBoxMon.isShiny;
-        sp70.gender = pokeathlonBoxMon.gender;
+        monInfo.personality = pokeathlonBoxMon.personality;
+        monInfo.species = pokeathlonBoxMon.species;
+        monInfo.form = pokeathlonBoxMon.form;
+        CopyU16StringArrayN(monInfo.nickname, pokeathlonBoxMon.nickname, 11);
+        monInfo.isShiny = pokeathlonBoxMon.isShiny;
+        monInfo.gender = pokeathlonBoxMon.gender;
         BoxPokemon *boxMon = PCStorage_GetMonByIndexPair(SaveArray_PCStorage_Get(data->saveData), boxno, slot);
         PokeathlonBox_GetBoxMonStats(boxMon, &boxMonStats);
         PokeathlonBox_GetLightBoxMonStats(boxMon, &boxLightMonStats);
         MI_CpuFill8(&emptyAprijuiceModifier, 0, 5);
-        PokeathlonBox_CalcStatChanges(&boxLightMonStats, &boxMonStats, &emptyAprijuiceModifier, &sp70);
+        PokeathlonBox_CalcStatChanges(&boxLightMonStats, &boxMonStats, &emptyAprijuiceModifier, &monInfo);
         for (u8 i = 0; i < 5; i++) {
-            if (PokeathlonSave_MonHasMedal(Save_Pokeathlon_Get(data->saveData), sp5C[i], sp70.species)) {
-                sp70.medals[i] = 1;
+            if (PokeathlonSave_MonHasMedal(Save_Pokeathlon_Get(data->saveData), medalShifts[i], monInfo.species)) {
+                monInfo.medals[i] = 1;
             } else {
-                sp70.medals[i] = 0;
+                monInfo.medals[i] = 0;
             }
         }
-        PokeathlonBox_DrawMonInfo(data->graphics, &sp70);
+        PokeathlonBox_DrawMonInfo(data->graphics, &monInfo);
         return;
     }
 
-    sp70.unk9 = 0;
-    PokeathlonBox_DrawMonInfo(data->graphics, &sp70);
+    monInfo.unk9 = 0;
+    PokeathlonBox_DrawMonInfo(data->graphics, &monInfo);
 }
 
 void PokeathlonBox_CalcStatChanges(PokeathlonBox_MonStats *stats1, PokeathlonBox_MonStats *stats2, PartyAprijuiceModifier *aprijuiceModifier, PokeathlonBox_MonInfo *mon) {

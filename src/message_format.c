@@ -466,11 +466,11 @@ void BufferContestBackgroundName(MessageFormat *msgFmt, u32 fieldno, u32 bgId) {
 
 void BufferGroupName(MessageFormat *msgFmt, SaveData *saveData, s32 groupId, s32 fieldno, s32 nameType) {
     SAV_FRIEND_GRP *friendGrp = Save_FriendGroup_Get(saveData);
-    u8 sp10 = Save_FriendGroup_GetLeaderGender(friendGrp, groupId);
-    u8 r7 = Save_FriendGroup_GetLanguage(friendGrp, groupId);
+    u8 gender = Save_FriendGroup_GetLeaderGender(friendGrp, groupId);
+    u8 language = Save_FriendGroup_GetLanguage(friendGrp, groupId);
     String *dest = String_New(64, HEAP_ID_FIELD1);
     CopyU16ArrayToString(dest, Save_FriendGroup_GetName(friendGrp, groupId, nameType));
-    BufferString(msgFmt, fieldno, dest, sp10, 1, r7);
+    BufferString(msgFmt, fieldno, dest, gender, 1, language);
     String_Delete(dest);
 }
 

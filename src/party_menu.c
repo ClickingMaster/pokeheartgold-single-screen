@@ -986,7 +986,7 @@ static void PartyMenu_InitCancelDisabled(PartyMenu *partyMenu) {
 }
 
 static void PartyMenu_InitDpadLayoutAndButtons(PartyMenu *partyMenu) {
-    u8 r4 = 3;
+    u8 buttonFlags = 3;
     if (partyMenu->args->panelLayout == 2) {
         partyMenu->dpadMenuBox = _0210144C;
     } else if (partyMenu->args->context == PARTY_MENU_CONTEXT_UNION_ROOM_BATTLE_SELECT || partyMenu->args->context == PARTY_MENU_CONTEXT_17 || partyMenu->args->context == PARTY_MENU_CONTEXT_BATTLE_HALL || partyMenu->args->context == PARTY_MENU_CONTEXT_23) {
@@ -1002,13 +1002,13 @@ static void PartyMenu_InitDpadLayoutAndButtons(PartyMenu *partyMenu) {
         s16 x, y;
         Sprite_GetPositionXY(partyMenu->sprites[PARTY_MENU_SPRITE_ID_9], &x, &y);
         Sprite_SetPositionXY(partyMenu->sprites[PARTY_MENU_SPRITE_ID_9], x, y - 8);
-        r4 ^= 1;
+        buttonFlags ^= 1;
     }
     if (partyMenu->args->context == PARTY_MENU_CONTEXT_4 || partyMenu->args->context == PARTY_MENU_CONTEXT_SPIN_TRADE) {
         Sprite_SetDrawFlag(partyMenu->sprites[PARTY_MENU_SPRITE_ID_9], FALSE);
-        r4 ^= 2;
+        buttonFlags ^= 2;
     }
-    PartyMenu_PrintConfirmCancelButtonText(partyMenu, r4);
+    PartyMenu_PrintConfirmCancelButtonText(partyMenu, buttonFlags);
 }
 
 static u8 PartyMenu_IsMonDrawStateActive(PartyMenu *partyMenu, u8 partySlot) {
@@ -1134,17 +1134,17 @@ static void PartyMenu_DrawMonPanel(PartyMenu *partyMenu, u8 partySlot, u8 x, u8 
 }
 
 static void PartyMenu_DrawPanelsAndPush(PartyMenu *partyMenu) {
-    const PartyMenuPanelCoords *r1 = partyMenu->args->panelLayout == 2 ? _0210150C[1] : _0210150C[0];
+    const PartyMenuPanelCoords *coords = partyMenu->args->panelLayout == 2 ? _0210150C[1] : _0210150C[0];
     if (partyMenu->args->context == PARTY_MENU_CONTEXT_EVO_STONE) {
-        PartyMenu_DrawPanels_UseEvoStone(partyMenu, r1);
+        PartyMenu_DrawPanels_UseEvoStone(partyMenu, coords);
     } else if (partyMenu->args->context == PARTY_MENU_CONTEXT_TM_HM) {
-        PartyMenu_DrawPanels_UseTMHM(partyMenu, r1);
+        PartyMenu_DrawPanels_UseTMHM(partyMenu, coords);
     } else if (partyMenu->args->context == PARTY_MENU_CONTEXT_SUPER_CONTEST) {
-        PartyMenu_Setup_SuperContestEntry(partyMenu, r1);
+        PartyMenu_Setup_SuperContestEntry(partyMenu, coords);
     } else if (partyMenu->args->context == PARTY_MENU_CONTEXT_UNION_ROOM_BATTLE_SELECT || partyMenu->args->context == PARTY_MENU_CONTEXT_17 || partyMenu->args->context == PARTY_MENU_CONTEXT_BATTLE_HALL || partyMenu->args->context == PARTY_MENU_CONTEXT_23) {
-        PartyMenu_DrawPanels_FrontierFacilityEntry(partyMenu, r1);
+        PartyMenu_DrawPanels_FrontierFacilityEntry(partyMenu, coords);
     } else {
-        PartyMenu_DrawPanels_Default(partyMenu, r1);
+        PartyMenu_DrawPanels_Default(partyMenu, coords);
     }
     ScheduleBgTilemapBufferTransfer(partyMenu->bgConfig, GF_BG_LYR_MAIN_2);
     ScheduleBgTilemapBufferTransfer(partyMenu->bgConfig, GF_BG_LYR_SUB_0);
@@ -2482,8 +2482,8 @@ static int PartyMenu_Subtask_GiveItemToMon(PartyMenu *partyMenu) {
                 partyMenu->args->selectedAction = PARTY_MENU_ACTION_RETURN_6;
                 return PARTY_MENU_STATE_BEGIN_EXIT;
             } else {
-                s32 sp0;
-                result = PartyMenu_GiveItemToMon_HandleGriseousOrb(partyMenu, mon, &sp0);
+                s32 transformResult;
+                result = PartyMenu_GiveItemToMon_HandleGriseousOrb(partyMenu, mon, &transformResult);
                 ReadMsgDataIntoString(partyMenu->msgData, msg_0300_00107, partyMenu->unformattedStrBuf);
                 BufferBoxMonNickname(partyMenu->msgFormat, 0, Mon_GetBoxMon(mon));
                 BufferItemName(partyMenu->msgFormat, 1, partyMenu->args->itemId);

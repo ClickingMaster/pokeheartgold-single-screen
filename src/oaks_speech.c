@@ -1184,39 +1184,39 @@ static void OakSpeech_LoadButtonTutorialGfx(OakSpeechData *data) {
 }
 
 static void OakSpeech_SetButtonTutorialScreenLayout(OakSpeechData *data, int layout) {
-    int sp10[6];
-    ARRAY_ASSIGN(sp10, sButtonTutorialNSCR);
+    int screenIds[6];
+    ARRAY_ASSIGN(screenIds, sButtonTutorialNSCR);
 
     if (layout < 6) {
-        GfGfxLoader_LoadScrnData(NARC_demo_intro_intro, sp10[layout], data->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, FALSE, data->heapID);
+        GfGfxLoader_LoadScrnData(NARC_demo_intro_intro, screenIds[layout], data->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, FALSE, data->heapID);
     }
 }
 
 static void OakSpeech_DrawPicOnBgLayer(OakSpeechData *data, int layer1pic, int layer2pic) {
-    int sp10[10][2];
-    ARRAY_ASSIGN(sp10, sBgPicNCGR_NCLR);
+    int charPalIds[10][2];
+    ARRAY_ASSIGN(charPalIds, sBgPicNCGR_NCLR);
 
     if (layer1pic != 0 && layer2pic < 12) { // possible typo?
-        GfGfxLoader_LoadCharData(NARC_demo_intro_intro, sp10[layer1pic][0], data->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, data->heapID);
-        GfGfxLoader_GXLoadPal(NARC_demo_intro_intro, sp10[layer1pic][1], GF_PAL_LOCATION_MAIN_BG, (enum GFPalSlotOffset)0xE0, 32, data->heapID);
+        GfGfxLoader_LoadCharData(NARC_demo_intro_intro, charPalIds[layer1pic][0], data->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, data->heapID);
+        GfGfxLoader_GXLoadPal(NARC_demo_intro_intro, charPalIds[layer1pic][1], GF_PAL_LOCATION_MAIN_BG, (enum GFPalSlotOffset)0xE0, 32, data->heapID);
         GfGfxLoader_LoadScrnData(NARC_demo_intro_intro, 9, data->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, data->heapID);
         OakSpeech_FillBgLayerWithPalette(data, GF_BG_LYR_MAIN_1, 7);
     }
 
     if (layer2pic != 0 && layer2pic < 12) {
-        GfGfxLoader_LoadCharData(NARC_demo_intro_intro, sp10[layer2pic][0], data->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, FALSE, data->heapID);
-        GfGfxLoader_GXLoadPal(NARC_demo_intro_intro, sp10[layer2pic][1], GF_PAL_LOCATION_MAIN_BG, (enum GFPalSlotOffset)0x100, 32, data->heapID);
+        GfGfxLoader_LoadCharData(NARC_demo_intro_intro, charPalIds[layer2pic][0], data->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, FALSE, data->heapID);
+        GfGfxLoader_GXLoadPal(NARC_demo_intro_intro, charPalIds[layer2pic][1], GF_PAL_LOCATION_MAIN_BG, (enum GFPalSlotOffset)0x100, 32, data->heapID);
         GfGfxLoader_LoadScrnData(NARC_demo_intro_intro, NARC_intro_intro_00000009_NSCR, data->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, FALSE, data->heapID);
         OakSpeech_FillBgLayerWithPalette(data, GF_BG_LYR_MAIN_2, 8);
     }
 }
 
 static void OakSpeech_LoadSubScreenBackground(OakSpeechData *data, int index) {
-    int sp10[5];
-    ARRAY_ASSIGN(sp10, sSubScreenBackgroundNSCR);
+    int screenIds[5];
+    ARRAY_ASSIGN(screenIds, sSubScreenBackgroundNSCR);
 
     if (index < 5) {
-        GfGfxLoader_LoadScrnData(NARC_demo_intro_intro, sp10[index], data->bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, data->heapID);
+        GfGfxLoader_LoadScrnData(NARC_demo_intro_intro, screenIds[index], data->bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, data->heapID);
         if (index == 1) {
             OakSpeech_FillBgLayerWithPalette(data, GF_BG_LYR_SUB_3, 3);
         } else if (index == 2) {
@@ -1226,14 +1226,14 @@ static void OakSpeech_LoadSubScreenBackground(OakSpeechData *data, int index) {
 }
 
 static void OakSpeech_LoadSubScreenMenuGraphics(OakSpeechData *data, int index) {
-    int sp10[3][2];
-    ARRAY_ASSIGN(sp10, sSubScreenMenuGraphics);
+    int screenCharIds[3][2];
+    ARRAY_ASSIGN(screenCharIds, sSubScreenMenuGraphics);
 
-    GfGfxLoader_LoadScrnData(NARC_demo_intro_intro, sp10[index][0], data->bgConfig, GF_BG_LYR_SUB_2, 0, 0, FALSE, data->heapID);
+    GfGfxLoader_LoadScrnData(NARC_demo_intro_intro, screenCharIds[index][0], data->bgConfig, GF_BG_LYR_SUB_2, 0, 0, FALSE, data->heapID);
     OakSpeech_FillBgLayerWithPalette(data, GF_BG_LYR_SUB_2, 7);
     GfGfxLoader_GXLoadPal(NARC_demo_intro_intro, NARC_intro_intro_00000033_NCLR, GF_PAL_LOCATION_SUB_BG, (enum GFPalSlotOffset)0xE0, 0x60, data->heapID);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_2, 0x20, 0, data->heapID);
-    GfGfxLoader_LoadCharData(NARC_demo_intro_intro, sp10[index][1], data->bgConfig, GF_BG_LYR_SUB_2, 0, 0, FALSE, data->heapID);
+    GfGfxLoader_LoadCharData(NARC_demo_intro_intro, screenCharIds[index][1], data->bgConfig, GF_BG_LYR_SUB_2, 0, 0, FALSE, data->heapID);
     ScheduleSetBgPosText(data->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_Y, 0);
     if (index == 1) {
         if (data->playerGender == PLAYER_GENDER_MALE) {
@@ -1457,13 +1457,13 @@ static BOOL OakSpeech_PlayerPicShrinkAnim(OakSpeechData *data) {
         data->playerPicShrinkAnimDelay = 8;
     }
     if (data->playerGender == PLAYER_GENDER_MALE) {
-        int sp28[6];
-        ARRAY_ASSIGN(sp28, sPlayerPicShrinkGfx_Male);
-        gfxId = sp28[data->playerPicShrinkAnimStep];
+        int maleGfxIds[6];
+        ARRAY_ASSIGN(maleGfxIds, sPlayerPicShrinkGfx_Male);
+        gfxId = maleGfxIds[data->playerPicShrinkAnimStep];
     } else {
-        int sp10[6];
-        ARRAY_ASSIGN(sp10, sPlayerPicShrinkGfx_Female);
-        gfxId = sp10[data->playerPicShrinkAnimStep];
+        int femaleGfxIds[6];
+        ARRAY_ASSIGN(femaleGfxIds, sPlayerPicShrinkGfx_Female);
+        gfxId = femaleGfxIds[data->playerPicShrinkAnimStep];
     }
     if (gfxId == 0xFF) {
         ret = TRUE;

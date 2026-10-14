@@ -930,17 +930,17 @@ void PartyMenu_LevelUpPrintStatsChange(PartyMenu *partyMenu) {
 }
 
 void PartyMenu_LevelUpPrintNewStats(PartyMenu *partyMenu) {
-    String *spC;
+    String *numberMsg;
     u32 i;
 
     FillWindowPixelRect(&partyMenu->levelUpStatsWindow[0], 15, 80, 0, 32, 112);
-    spC = NewString_ReadMsgData(partyMenu->msgData, msg_0300_00176);
+    numberMsg = NewString_ReadMsgData(partyMenu->msgData, msg_0300_00176);
     for (i = 0; i < NUM_STATS; ++i) {
         BufferIntegerAsString(partyMenu->msgFormat, 0, partyMenu->levelUpStatsTmp[i], 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
-        StringExpandPlaceholders(partyMenu->msgFormat, partyMenu->formattedStrBuf, spC);
+        StringExpandPlaceholders(partyMenu->msgFormat, partyMenu->formattedStrBuf, numberMsg);
         AddTextPrinterParameterized(&partyMenu->levelUpStatsWindow[0], 0, partyMenu->formattedStrBuf, 104 - FontID_String_GetWidth(0, partyMenu->formattedStrBuf, 0), i * 16, TEXT_SPEED_NOTRANSFER, NULL);
     }
-    String_Delete(spC);
+    String_Delete(numberMsg);
     ScheduleWindowCopyToVram(&partyMenu->levelUpStatsWindow[0]);
 }
 

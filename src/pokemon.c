@@ -2130,25 +2130,25 @@ u8 CalcShininessByOtIdAndPersonality(u32 otid, u32 pid) {
 }
 
 u32 GenerateShinyPersonality(u32 otid) {
-    int r4;
-    u16 r6;
-    u16 r5;
+    int i;
+    u16 pidLow;
+    u16 pidHigh;
     otid = (u32)((((otid & 0xFFFF0000) >> 16) ^ (otid & 0xFFFF)) >> 3u);
-    r6 = (u16)(LCRandom() & 7);
-    r5 = (u16)(LCRandom() & 7);
-    for (r4 = 0; r4 < 13; r4++) {
-        if (MaskOfFlagNo(r4) & otid) {
+    pidLow = (u16)(LCRandom() & 7);
+    pidHigh = (u16)(LCRandom() & 7);
+    for (i = 0; i < 13; i++) {
+        if (MaskOfFlagNo(i) & otid) {
             if (LCRandom() & 1) {
-                r6 |= MaskOfFlagNo(r4 + 3);
+                pidLow |= MaskOfFlagNo(i + 3);
             } else {
-                r5 |= MaskOfFlagNo(r4 + 3);
+                pidHigh |= MaskOfFlagNo(i + 3);
             }
         } else if (LCRandom() & 1) {
-            r6 |= MaskOfFlagNo(r4 + 3);
-            r5 |= MaskOfFlagNo(r4 + 3);
+            pidLow |= MaskOfFlagNo(i + 3);
+            pidHigh |= MaskOfFlagNo(i + 3);
         }
     }
-    return (u32)((r5 << 16) | r6);
+    return (u32)((pidHigh << 16) | pidLow);
 }
 
 void GetPokemonSpriteCharAndPlttNarcIds(PokepicTemplate *pokepicTemplate, Pokemon *mon, u8 whichFacing) {
@@ -2159,7 +2159,7 @@ void DP_GetBoxmonSpriteCharAndPlttNarcIds(PokepicTemplate *pokepicTemplate, BoxP
     GetBoxmonSpriteCharAndPlttNarcIds(pokepicTemplate, boxMon, whichFacing, TRUE);
 }
 
-void GetBoxmonSpriteCharAndPlttNarcIds(PokepicTemplate *pokepicTemplate, BoxPokemon *boxMon, u8 whichFacing, BOOL sp14) {
+void GetBoxmonSpriteCharAndPlttNarcIds(PokepicTemplate *pokepicTemplate, BoxPokemon *boxMon, u8 whichFacing, BOOL useDPVariant) {
     BOOL decry = AcquireBoxMonLock(boxMon);
     u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES_OR_EGG, NULL);
     u8 gender = GetBoxMonGender(boxMon);
@@ -2175,7 +2175,7 @@ void GetBoxmonSpriteCharAndPlttNarcIds(PokepicTemplate *pokepicTemplate, BoxPoke
     } else {
         form = GetBoxMonData(boxMon, MON_DATA_FORM, NULL);
     }
-    if (sp14 == TRUE) {
+    if (useDPVariant == TRUE) {
         DP_GetMonSpriteCharAndPlttNarcIdsEx(pokepicTemplate, species, gender, whichFacing, shiny, form, pid);
     } else {
         GetMonSpriteCharAndPlttNarcIdsEx(pokepicTemplate, species, gender, whichFacing, shiny, form, pid);
@@ -3139,7 +3139,7 @@ void BoxMonSetMoveInSlot(BoxPokemon *boxMon, u16 move, u8 slot) {
     SetBoxMonData(boxMon, MON_DATA_MOVE1_PP + slot, &pp);
 }
 
-u32 MonTryLearnMoveOnLevelUp(Pokemon *mon, int *last_i, u16 *sp0) {
+u32 MonTryLearnMoveOnLevelUp(Pokemon *mon, int *last_i, u16 *newMove) {
     u32 ret = 0;
     u16 *levelUpLearnset = Heap_Alloc(HEAP_ID_DEFAULT, MAX_LEARNED_MOVES * sizeof(u16));
     u16 species = (u16)GetMonData(mon, MON_DATA_SPECIES, NULL);
@@ -3159,9 +3159,9 @@ u32 MonTryLearnMoveOnLevelUp(Pokemon *mon, int *last_i, u16 *sp0) {
         }
     }
     if ((levelUpLearnset[*last_i] & LEVEL_UP_LEARNSET_LEVEL_MASK) == (level << LEVEL_UP_LEARNSET_LEVEL_SHIFT)) {
-        *sp0 = LEVEL_UP_LEARNSET_MOVE(levelUpLearnset[*last_i]);
+        *newMove = LEVEL_UP_LEARNSET_MOVE(levelUpLearnset[*last_i]);
         (*last_i)++;
-        ret = TryAppendMonMove(mon, *sp0);
+        ret = TryAppendMonMove(mon, *newMove);
     }
     Heap_Free(levelUpLearnset);
     return ret;
@@ -3226,31 +3226,31 @@ BOOL MonHasMove(Pokemon *mon, u16 move) {
 }
 
 void CopyBoxPokemonToPokemon(const BoxPokemon *src, Pokemon *dest) {
-    u32 sp0 = 0;
-    CAPSULE sp4;
+    u32 zero = 0;
+    CAPSULE capsule;
     struct Mail *mail;
     dest->box = *src;
     if (dest->box.boxDecrypted) {
         dest->box.partyDecrypted = TRUE;
     }
-    SetMonData(dest, MON_DATA_STATUS, &sp0);
-    SetMonData(dest, MON_DATA_HP, &sp0);
-    SetMonData(dest, MON_DATA_MAX_HP, &sp0);
+    SetMonData(dest, MON_DATA_STATUS, &zero);
+    SetMonData(dest, MON_DATA_HP, &zero);
+    SetMonData(dest, MON_DATA_MAX_HP, &zero);
     mail = Mail_New(HEAP_ID_DEFAULT);
     SetMonData(dest, MON_DATA_MAIL, mail);
     Heap_Free(mail);
-    SetMonData(dest, MON_DATA_BALL_CAPSULE_ID, &sp0);
-    MI_CpuClearFast(&sp4, sizeof(sp4));
-    SetMonData(dest, MON_DATA_BALL_CAPSULE, &sp4);
+    SetMonData(dest, MON_DATA_BALL_CAPSULE_ID, &zero);
+    MI_CpuClearFast(&capsule, sizeof(capsule));
+    SetMonData(dest, MON_DATA_BALL_CAPSULE, &capsule);
     CalcMonLevelAndStats(dest);
 }
 
 u8 Party_GetMaxLevel(Party *party) {
     int i;
-    int r7 = Party_GetCount(party);
+    int count = Party_GetCount(party);
     u8 ret = 1;
     u8 level;
-    for (i = 0; i < r7; i++) {
+    for (i = 0; i < count; i++) {
         Pokemon *mon = Party_GetMonByIndex(party, i);
         if (GetMonData(mon, MON_DATA_SPECIES, NULL) != SPECIES_NONE
             && !GetMonData(mon, MON_DATA_IS_EGG, NULL)) {
@@ -3313,7 +3313,7 @@ void Party_GivePokerusAtRandom(Party *party) {
     int count = Party_GetCount(party);
     int idx;
     Pokemon *mon;
-    u8 sp0;
+    u8 pokerus;
     switch (LCRandom()) {
     case 0x4000:
     case 0x8000:
@@ -3324,15 +3324,15 @@ void Party_GivePokerusAtRandom(Party *party) {
         } while (GetMonData(mon, MON_DATA_SPECIES, NULL) == SPECIES_NONE || GetMonData(mon, MON_DATA_IS_EGG, NULL));
         if (!Party_MaskMonsWithPokerus(party, (u8)MaskOfFlagNo(idx))) {
             do {
-                sp0 = (u8)LCRandom();
-            } while (!(sp0 & 7));
-            if (sp0 & 0xF0) {
-                sp0 &= 7;
+                pokerus = (u8)LCRandom();
+            } while (!(pokerus & 7));
+            if (pokerus & 0xF0) {
+                pokerus &= 7;
             }
-            sp0 |= sp0 << 4;
-            sp0 &= 0xF3;
-            sp0++;
-            SetMonData(mon, MON_DATA_POKERUS, &sp0);
+            pokerus |= pokerus << 4;
+            pokerus &= 0xF3;
+            pokerus++;
+            SetMonData(mon, MON_DATA_POKERUS, &pokerus);
         }
     }
 }
@@ -3363,7 +3363,7 @@ u8 Party_MaskMonsWithPokerus(Party *party, u8 mask) {
     return ret;
 }
 
-void Party_UpdatePokerus(Party *party, int r5) {
+void Party_UpdatePokerus(Party *party, int days) {
     int i;
     u8 pokerus;
     Pokemon *mon;
@@ -3373,10 +3373,10 @@ void Party_UpdatePokerus(Party *party, int r5) {
         if (GetMonData(mon, MON_DATA_SPECIES, NULL) != SPECIES_NONE) {
             pokerus = (u8)GetMonData(mon, MON_DATA_POKERUS, NULL);
             if (pokerus & 0xF) {
-                if ((pokerus & 0xF) < r5 || r5 > 4) {
+                if ((pokerus & 0xF) < days || days > 4) {
                     pokerus &= 0xF0;
                 } else {
-                    pokerus -= r5;
+                    pokerus -= days;
                 }
                 if (pokerus == 0) {
                     pokerus = 0x10; // immune
@@ -3670,36 +3670,36 @@ void LoadLevelUpLearnset_HandleAlternateForm(int species, int form, u16 *levelUp
     ReadWholeNarcMemberByIdPair(levelUpLearnset, NARC_poketool_personal_wotbl, ResolveMonForm(species, form));
 }
 
-void PlayCryHandleChatot(SOUND_CHATOT *r6, u32 r5, u16 r4, s32 unused, s32 sp18, u32 sp1C, u32 sp20, u32 sp24) {
+void PlayCryHandleChatot(SOUND_CHATOT *chatot, u32 pattern, u16 species, s32 unused, s32 pan, u32 volume, u32 forceDefaultCry, u32 heapID) {
 #pragma unused(unused)
-    if (r4 == SPECIES_CHATOT) {
-        if (!Chatot_CryPatternUsesRecording((int)r5)) {
+    if (species == SPECIES_CHATOT) {
+        if (!Chatot_CryPatternUsesRecording((int)pattern)) {
             Chatot_SetForceDefaultCry(1);
-            PlayCryEx(r5, r4, sp18, sp1C, sp24, 0);
+            PlayCryEx(pattern, species, pan, volume, heapID, 0);
         } else {
-            if (sp20) {
+            if (forceDefaultCry) {
                 Chatot_SetForceDefaultCry(1);
             }
-            Chatot_PlayCryWithFallback(r6, 0, sp1C, sp18);
+            Chatot_PlayCryWithFallback(chatot, 0, volume, pan);
         }
     } else {
-        PlayCryEx(r5, r4, sp18, sp1C, sp24, 0);
+        PlayCryEx(pattern, species, pan, volume, heapID, 0);
     }
 }
 
-void PlayCryDelayedHandleChatot(SOUND_CHATOT *r7, u32 r6, u16 r5, s32 r4, s32 sp20, u32 sp24, u32 sp28, u32 sp2C, u8 sp30) {
-    if (r5 == SPECIES_CHATOT) {
-        if (!Chatot_CryPatternUsesRecording((int)r6)) {
+void PlayCryDelayedHandleChatot(SOUND_CHATOT *chatot, u32 pattern, u16 species, s32 form, s32 pan, u32 volume, u32 forceDefaultCry, u32 heapID, u8 delay) {
+    if (species == SPECIES_CHATOT) {
+        if (!Chatot_CryPatternUsesRecording((int)pattern)) {
             Chatot_SetForceDefaultCry(1);
-            PlayCryDelayedEx(r6, r5, sp20, sp24, sp2C, sp30, r4);
+            PlayCryDelayedEx(pattern, species, pan, volume, heapID, delay, form);
         } else {
-            if (sp28) {
+            if (forceDefaultCry) {
                 Chatot_SetForceDefaultCry(1);
             }
-            Chatot_PlayCryWithDelayedFallback(r7, 0, sp24, sp20, sp30);
+            Chatot_PlayCryWithDelayedFallback(chatot, 0, volume, pan, delay);
         }
     } else {
-        PlayCryDelayedEx(r6, r5, sp20, sp24, sp2C, sp30, r4);
+        PlayCryDelayedEx(pattern, species, pan, volume, heapID, delay, form);
     }
 }
 
@@ -3826,35 +3826,35 @@ void UpdateBoxMonAbility(BoxPokemon *boxMon) {
 }
 
 void SetMonPersonality(Pokemon *mon, u32 personality) {
-    PokemonDataBlockA *r4;
-    PokemonDataBlockB *r6;
-    PokemonDataBlockC *r7;
-    PokemonDataBlockD *sp8;
-    PokemonDataBlockA *spC;
-    PokemonDataBlockB *sp10;
-    PokemonDataBlockC *sp14;
-    PokemonDataBlockD *sp18;
+    PokemonDataBlockA *oldBlockA;
+    PokemonDataBlockB *oldBlockB;
+    PokemonDataBlockC *oldBlockC;
+    PokemonDataBlockD *oldBlockD;
+    PokemonDataBlockA *newBlockA;
+    PokemonDataBlockB *newBlockB;
+    PokemonDataBlockC *newBlockC;
+    PokemonDataBlockD *newBlockD;
     Pokemon *tmpMon;
 
     tmpMon = AllocMonZeroed(HEAP_ID_DEFAULT);
     CopyPokemonToPokemon(mon, tmpMon);
-    r4 = &GetSubstruct(&tmpMon->box, mon->box.personality, 0)->blockA;
-    r6 = &GetSubstruct(&tmpMon->box, mon->box.personality, 1)->blockB;
-    r7 = &GetSubstruct(&tmpMon->box, mon->box.personality, 2)->blockC;
-    sp8 = &GetSubstruct(&tmpMon->box, mon->box.personality, 3)->blockD;
-    spC = &GetSubstruct(&mon->box, personality, 0)->blockA;
-    sp10 = &GetSubstruct(&mon->box, personality, 1)->blockB;
-    sp14 = &GetSubstruct(&mon->box, personality, 2)->blockC;
-    sp18 = &GetSubstruct(&mon->box, personality, 3)->blockD;
+    oldBlockA = &GetSubstruct(&tmpMon->box, mon->box.personality, 0)->blockA;
+    oldBlockB = &GetSubstruct(&tmpMon->box, mon->box.personality, 1)->blockB;
+    oldBlockC = &GetSubstruct(&tmpMon->box, mon->box.personality, 2)->blockC;
+    oldBlockD = &GetSubstruct(&tmpMon->box, mon->box.personality, 3)->blockD;
+    newBlockA = &GetSubstruct(&mon->box, personality, 0)->blockA;
+    newBlockB = &GetSubstruct(&mon->box, personality, 1)->blockB;
+    newBlockC = &GetSubstruct(&mon->box, personality, 2)->blockC;
+    newBlockD = &GetSubstruct(&mon->box, personality, 3)->blockD;
 
     DECRYPT_BOX(&tmpMon->box);
     DECRYPT_PTY(mon);
     DECRYPT_BOX(&mon->box);
     mon->box.personality = personality;
-    *spC = *r4;
-    *sp10 = *r6;
-    *sp14 = *r7;
-    *sp18 = *sp8;
+    *newBlockA = *oldBlockA;
+    *newBlockB = *oldBlockB;
+    *newBlockC = *oldBlockC;
+    *newBlockD = *oldBlockD;
     mon->box.checksum = CHECKSUM(&mon->box);
     ENCRYPT_BOX(&mon->box);
     ENCRYPT_PTY(mon);
@@ -3865,24 +3865,24 @@ u32 ChangePersonalityToNatureGenderAndAbility(u32 pid, u16 species, u8 nature, u
     // u32 pid is a random seed to convolve into a pid that bears the
     // requested nature, gender, and ability. This is used to make
     // pokemon caught on the Pokewalker, and the Spiky-Eared Pichu.
-    // In both actual use cases, u32 pid is OTID, which means r4 and r1
+    // In both actual use cases, u32 pid is OTID, which means otIdXor and trainerIdXor
     // are always SID ^ TID.
     GF_ASSERT(ability < 2);
     GF_ASSERT(gender != 0xFF);
     if (gen_mode) {
-        u32 r4 = ((pid & 0xFFFF0000) >> 16) ^ (u16)pid;
+        u32 otIdXor = ((pid & 0xFFFF0000) >> 16) ^ (u16)pid;
         pid = GenPersonalityByGenderAndNature(species, gender, nature);
         if ((pid & 1) != ability) {
             // Force correct ability for gender and nature pid
             pid++;
         }
-        pid |= ((u16)pid ^ r4) << 16;
+        pid |= ((u16)pid ^ otIdXor) << 16;
     } else {
-        u32 r1;
+        u32 trainerIdXor;
         u8 ratio = GetMonBaseStat(species, BASE_GENDER_RATIO);
         GF_ASSERT((nature & 1) == ability);
-        r1 = ((pid & 0xFFFF0000) >> 16) ^ (u16)pid;
-        pid = (0xFF00 ^ (r1 & 0xFF00)) << 16;
+        trainerIdXor = ((pid & 0xFFFF0000) >> 16) ^ (u16)pid;
+        pid = (0xFF00 ^ (trainerIdXor & 0xFF00)) << 16;
         // Force the pid to have the requested nature
         pid += nature - (pid % 25);
         // Maintaining that pid%25 is nature, and pid&1 is ability,
@@ -4117,15 +4117,15 @@ BOOL BoxmonBelongsToPlayer(BoxPokemon *boxMon, PlayerProfile *profile, enum Heap
     u32 otId = GetBoxMonData(boxMon, MON_DATA_OT_ID, NULL);
     u32 myGender = PlayerProfile_GetTrainerGender(profile);
     u32 otGender = GetBoxMonData(boxMon, MON_DATA_OT_GENDER, NULL);
-    String *r7 = PlayerProfile_GetPlayerName_NewString(profile, heapID);
-    String *r6 = String_New(PLAYER_NAME_LENGTH + 1, heapID);
+    String *playerName = PlayerProfile_GetPlayerName_NewString(profile, heapID);
+    String *otName = String_New(PLAYER_NAME_LENGTH + 1, heapID);
     BOOL ret = FALSE;
-    GetBoxMonData(boxMon, MON_DATA_OT_NAME_STRING, r6);
-    if (myId == otId && myGender == otGender && String_Compare(r7, r6) == 0) {
+    GetBoxMonData(boxMon, MON_DATA_OT_NAME_STRING, otName);
+    if (myId == otId && myGender == otGender && String_Compare(playerName, otName) == 0) {
         ret = TRUE;
     }
-    String_Delete(r6);
-    String_Delete(r7);
+    String_Delete(otName);
+    String_Delete(playerName);
     return ret;
 }
 
@@ -4165,11 +4165,11 @@ int TrainerClassToBackpicID(int trainerClass, BOOL isLink) {
 }
 
 void Pokemon_RemoveCapsule(Pokemon *mon) {
-    u8 sp0 = 0;
-    CAPSULE sp1;
-    MI_CpuClearFast(&sp1, sizeof(sp1));
-    SetMonData(mon, MON_DATA_BALL_CAPSULE_ID, &sp0);
-    SetMonData(mon, MON_DATA_BALL_CAPSULE, &sp1);
+    u8 capsuleId = 0;
+    CAPSULE capsule;
+    MI_CpuClearFast(&capsule, sizeof(capsule));
+    SetMonData(mon, MON_DATA_BALL_CAPSULE_ID, &capsuleId);
+    SetMonData(mon, MON_DATA_BALL_CAPSULE, &capsule);
 }
 
 void RestoreBoxMonPP(BoxPokemon *boxMon) {
@@ -4186,46 +4186,46 @@ void RestoreBoxMonPP(BoxPokemon *boxMon) {
 }
 
 void NARC_ReadPokepicAnimScript(NARC *narc, PokepicAnimScript *dest, u16 species, u16 isFrontpic) {
-    struct PokepicSpeciesAnimData sp4;
-    int r5 = (isFrontpic & 1 ? 0 : 1);
-    NARC_ReadFromMember(narc, 0, species * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &sp4);
-    MI_CpuCopy8(&sp4.facings[r5].animScripts[0], dest, sizeof(PokepicAnimScript) * 10);
+    struct PokepicSpeciesAnimData animData;
+    int facing = (isFrontpic & 1 ? 0 : 1);
+    NARC_ReadFromMember(narc, 0, species * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &animData);
+    MI_CpuCopy8(&animData.facings[facing].animScripts[0], dest, sizeof(PokepicAnimScript) * 10);
 }
 
 void NARC_StartPokepicAnim(NARC *narc, void *manager, void *pic, u16 species, int whichFacing, int reverseX, int index) {
-    struct PokepicSpeciesAnimData spA;
-    struct PokepicAnimParams sp4;
-    int r4 = (whichFacing == 2 ? 0 : 1);
-    NARC_ReadFromMember(narc, 0, species * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &spA);
-    sp4.scriptId = spA.facings[r4].animScriptId;
-    sp4.delay = spA.facings[r4].animDelay;
-    sp4.reverseX = reverseX;
-    PokepicAnimManager_StartAnim(manager, pic, &sp4, index);
+    struct PokepicSpeciesAnimData animData;
+    struct PokepicAnimParams animParams;
+    int facing = (whichFacing == 2 ? 0 : 1);
+    NARC_ReadFromMember(narc, 0, species * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &animData);
+    animParams.scriptId = animData.facings[facing].animScriptId;
+    animParams.delay = animData.facings[facing].animDelay;
+    animParams.reverseX = reverseX;
+    PokepicAnimManager_StartAnim(manager, pic, &animParams, index);
 }
 
 void NARC_ReadPokepicCryDelay(NARC *narc, u8 *ret, u16 species, u16 isFrontpic) {
-    struct PokepicSpeciesAnimData sp4;
-    int r5 = (isFrontpic & 1 ? 0 : 1);
-    NARC_ReadFromMember(narc, 0, species * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &sp4);
-    *ret = sp4.facings[r5].cryDelay;
+    struct PokepicSpeciesAnimData animData;
+    int facing = (isFrontpic & 1 ? 0 : 1);
+    NARC_ReadFromMember(narc, 0, species * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &animData);
+    *ret = animData.facings[facing].cryDelay;
 }
 
 void NARC_ReadPokepicShadowHeight(NARC *narc, s8 *ret, u16 species, u16 isFrontpic) {
-    struct PokepicSpeciesAnimData sp4;
-    NARC_ReadFromMember(narc, 0, species * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &sp4);
-    *ret = sp4.shadowHeight;
+    struct PokepicSpeciesAnimData animData;
+    NARC_ReadFromMember(narc, 0, species * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &animData);
+    *ret = animData.shadowHeight;
 }
 
 void NARC_ReadPokepicShadowXOffset(NARC *narc, s8 *ret, u16 species, u16 isFrontpic) {
-    struct PokepicSpeciesAnimData sp4;
-    NARC_ReadFromMember(narc, 0, species * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &sp4);
-    *ret = sp4.shadowXOffset;
+    struct PokepicSpeciesAnimData animData;
+    NARC_ReadFromMember(narc, 0, species * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &animData);
+    *ret = animData.shadowXOffset;
 }
 
 void NARC_ReadPokepicShadowSize(NARC *narc, u8 *ret, u16 species, u16 isFrontpic) {
-    struct PokepicSpeciesAnimData sp4;
-    NARC_ReadFromMember(narc, 0, species * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &sp4);
-    *ret = sp4.shadowSize;
+    struct PokepicSpeciesAnimData animData;
+    NARC_ReadFromMember(narc, 0, species * sizeof(struct PokepicSpeciesAnimData), sizeof(struct PokepicSpeciesAnimData), &animData);
+    *ret = animData.shadowSize;
 }
 
 BOOL SetTrMonCapsule(int capsuleId, Pokemon *mon, enum HeapID heapID) {
@@ -4406,7 +4406,7 @@ void Pokemon_FromBattleRecordMon(const struct BattleRecordMon *src, Pokemon *mon
 }
 
 u32 _u32_getDigitN(u32 num, u8 digit) {
-    const u32 sp0[8] = {
+    const u32 powersOf10[8] = {
         1,
         10,
         100,
@@ -4416,7 +4416,7 @@ u32 _u32_getDigitN(u32 num, u8 digit) {
         1000000,
         10000000
     };
-    return (num % sp0[digit + 1]) / sp0[digit];
+    return (num % powersOf10[digit + 1]) / powersOf10[digit];
 }
 
 s16 PokeathlonStatScoreToStars(s16 score) {

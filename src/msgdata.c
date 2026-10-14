@@ -37,14 +37,14 @@ inline static void Decrypt2(u16 *data, u32 count, u32 num) {
 }
 
 static void ReadMsgData_ExistingTable_ExistingArray(MAT *table, u32 num, u16 *dest) {
-    MAT_ENTRY sp0;
+    MAT_ENTRY alloc;
 
     if (num < table->count) {
-        sp0 = table->alloc[num];
-        Decrypt1(&sp0, num, table->key);
+        alloc = table->alloc[num];
+        Decrypt1(&alloc, num, table->key);
 
-        CopyEncryptedMessage16(dest, (const u16 *)((u8 *)table + sp0.offset), &sp0);
-        Decrypt2(dest, sp0.length, num);
+        CopyEncryptedMessage16(dest, (const u16 *)((u8 *)table + alloc.offset), &alloc);
+        Decrypt2(dest, alloc.length, num);
     } else {
         GF_ASSERT(FALSE);
     }
@@ -124,13 +124,13 @@ void ReadMsgData_NewNarc_ExistingString(NarcId narc_id, s32 group, u32 num, enum
 static void ReadMsgData_ExistingNarc_ExistingString(NARC *narc, u32 group, u32 num, enum HeapID heapID, String *dest) {
     u16 *buf;
     u32 size;
-    u16 sp10[2];
+    u16 header[2];
     MAT_ENTRY alloc;
 
-    NARC_ReadFromMember(narc, group, 0, 4, sp10);
-    if (num < sp10[0]) {
+    NARC_ReadFromMember(narc, group, 0, 4, header);
+    if (num < header[0]) {
         NARC_ReadFromMember(narc, group, 8 * num + 4, 8, &alloc);
-        Decrypt1(&alloc, num, sp10[1]);
+        Decrypt1(&alloc, num, header[1]);
         size = alloc.length * 2;
         buf = Heap_AllocAtEnd(heapID, size);
         if (buf != NULL) {
@@ -162,13 +162,13 @@ static String *ReadMsgData_ExistingNarc_NewString(NARC *narc, u32 group, u32 num
     String *dest;
     u16 *buf;
     u32 size;
-    u16 sp10[2];
+    u16 header[2];
     MAT_ENTRY alloc;
 
-    NARC_ReadFromMember(narc, group, 0, 4, sp10);
-    if (num < sp10[0]) {
+    NARC_ReadFromMember(narc, group, 0, 4, header);
+    if (num < header[0]) {
         NARC_ReadFromMember(narc, group, 8 * num + 4, 8, &alloc);
-        Decrypt1(&alloc, num, sp10[1]);
+        Decrypt1(&alloc, num, header[1]);
         dest = String_New(alloc.length, heapID);
         if (dest != NULL) {
             size = alloc.length * 2;
@@ -283,16 +283,16 @@ void GetSpeciesNameIntoArray(u16 species, enum HeapID heapID, u16 *dest) {
 
 String *ReadMsgData_ExpandPlaceholders(MessageFormat *messageFormat, MsgData *msgData, u32 msgno, enum HeapID heapID) {
     String *ret = NULL;
-    String *r4 = String_New(1024, HEAP_ID_DEFAULT);
-    String *r5;
-    if (r4 != NULL) {
-        r5 = NewString_ReadMsgData(msgData, msgno);
-        if (r5 != NULL) {
-            StringExpandPlaceholders(messageFormat, r4, r5);
-            ret = String_Dup(r4, heapID);
-            String_Delete(r5);
+    String *expandedString = String_New(1024, HEAP_ID_DEFAULT);
+    String *rawString;
+    if (expandedString != NULL) {
+        rawString = NewString_ReadMsgData(msgData, msgno);
+        if (rawString != NULL) {
+            StringExpandPlaceholders(messageFormat, expandedString, rawString);
+            ret = String_Dup(expandedString, heapID);
+            String_Delete(rawString);
         }
-        String_Delete(r4);
+        String_Delete(expandedString);
     }
     return ret;
 }

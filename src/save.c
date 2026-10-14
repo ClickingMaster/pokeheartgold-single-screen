@@ -68,8 +68,8 @@ static u32 PCModifiedFlags_GetIndexOfNthModifiedBox(u32 flags, u8 last);
 SaveData *SaveData_New(void) {
     SaveData *ret;
     int status;
-    int sp4;
-    int sp0;
+    int err1;
+    int err2;
 
     ret = Heap_Alloc(HEAP_ID_1, sizeof(SaveData));
     MI_CpuClearFast(ret, sizeof(SaveData));
@@ -97,15 +97,15 @@ SaveData *SaveData_New(void) {
         } else {
             ret->boxModifiedFlags = Save_GetPCBoxModifiedFlags(ret);
         }
-        Save_CheckFrontierData(ret, &sp4, &sp0);
-        if (sp4 == 3) {
+        Save_CheckFrontierData(ret, &err1, &err2);
+        if (err1 == 3) {
             ret->statusFlags |= 8;
-        } else if (sp4 == 2) {
+        } else if (err1 == 2) {
             ret->statusFlags |= 4;
         }
-        if (sp0 == 3) {
+        if (err2 == 3) {
             ret->statusFlags |= 0x20;
-        } else if (sp0 == 2) {
+        } else if (err2 == 2) {
             ret->statusFlags |= 0x10;
         }
         break;
@@ -135,21 +135,21 @@ const void *SaveArray_Const_Get(const SaveData *saveData, int id) {
 }
 
 BOOL Save_DeleteAllData(SaveData *saveData) {
-    u8 *r6;
+    u8 *blankSector;
     int i;
 
-    r6 = Heap_AllocAtEnd(HEAP_ID_3, SAVE_SECTOR_SIZE);
+    blankSector = Heap_AllocAtEnd(HEAP_ID_3, SAVE_SECTOR_SIZE);
     Sys_SetSleepDisableFlag(1);
     FlashClobberChunkFooter(saveData, 0, saveData->lastGoodSector == 0 ? 1 : 0);
     FlashClobberChunkFooter(saveData, 1, saveData->lastGoodSector == 0 ? 1 : 0);
     FlashClobberChunkFooter(saveData, 0, saveData->lastGoodSector);
     FlashClobberChunkFooter(saveData, 1, saveData->lastGoodSector);
-    MI_CpuFillFast(r6, -1, SAVE_SECTOR_SIZE);
+    MI_CpuFillFast(blankSector, -1, SAVE_SECTOR_SIZE);
     for (i = 0; i < 64; i++) {
-        FlashWriteChunk(i * SAVE_SECTOR_SIZE, r6, SAVE_SECTOR_SIZE);
-        FlashWriteChunk((i + 64) * SAVE_SECTOR_SIZE, r6, SAVE_SECTOR_SIZE);
+        FlashWriteChunk(i * SAVE_SECTOR_SIZE, blankSector, SAVE_SECTOR_SIZE);
+        FlashWriteChunk((i + 64) * SAVE_SECTOR_SIZE, blankSector, SAVE_SECTOR_SIZE);
     }
-    Heap_Free(r6);
+    Heap_Free(blankSector);
     Save_InitDynamicRegion(saveData);
     saveData->saveFileExists = FALSE;
     Sys_ClearSleepDisableFlag(1);
@@ -157,8 +157,8 @@ BOOL Save_DeleteAllData(SaveData *saveData) {
 }
 
 BOOL SaveData_TryLoadOnContinue(SaveData *saveData) {
-    int sp4;
-    int sp0;
+    int err1;
+    int err2;
 
     if (!saveData->flashChipDetected) {
         return FALSE;
@@ -166,7 +166,7 @@ BOOL SaveData_TryLoadOnContinue(SaveData *saveData) {
     if (Save_LoadDynamicRegion(saveData)) {
         saveData->saveFileExists = TRUE;
         saveData->isNewGame = FALSE;
-        Save_CheckFrontierData(saveData, &sp4, &sp0);
+        Save_CheckFrontierData(saveData, &err1, &err2);
         Save_ResetPCBoxModifiedFlags(saveData);
         return TRUE;
     }
@@ -389,14 +389,14 @@ static int SaveCounterCompare(u32 stat1, u32 stat2) {
 }
 
 static u32 SaveSlotCheckCompare(struct SaveSlotCheck *first, struct SaveSlotCheck *second, u32 *ret1_p, u32 *ret2_p) {
-    int r0;
+    int cmp;
 
-    r0 = SaveCounterCompare(first->count, second->count);
+    cmp = SaveCounterCompare(first->count, second->count);
     if (first->valid && second->valid) {
-        if (r0 > 0) {
+        if (cmp > 0) {
             *ret1_p = 0;
             *ret2_p = 1;
-        } else if (r0 < 0) {
+        } else if (cmp < 0) {
             *ret1_p = 1;
             *ret2_p = 0;
         } else {
@@ -527,33 +527,33 @@ static int Save_GetSaveFilesStatus(SaveData *saveData) {
 
 static void Save_CheckFrontierData(SaveData *saveData, int *err1, int *err2) {
     SAVE_MISC_DATA *misc;
-    int sp14;
-    int sp10;
-    u32 sp0C;
-    u32 sp08;
-    u8 sp04;
+    int readStatus;
+    int keysUpdated;
+    u32 curKey;
+    u32 prevKey;
+    u8 lastSlot;
     int i;
 
     misc = Save_Misc_Get(saveData);
     *err1 = 1;
     *err2 = 1;
     if (Save_CheckExtraChunksExist(saveData)) {
-        SaveMisc_GetExtraChunkKeys(misc, 1, &sp0C, &sp08, &sp04);
-        if (sp0C != -1 || sp08 != -1) {
-            Heap_Free(ReadExtraSaveChunkKeyed(saveData, HEAP_ID_3, 1, &sp14, &sp10));
-            if (sp14 == 2) {
+        SaveMisc_GetExtraChunkKeys(misc, 1, &curKey, &prevKey, &lastSlot);
+        if (curKey != -1 || prevKey != -1) {
+            Heap_Free(ReadExtraSaveChunkKeyed(saveData, HEAP_ID_3, 1, &readStatus, &keysUpdated));
+            if (readStatus == 2) {
                 *err1 = 3;
-            } else if (sp14 == 1 && sp10 == 1) {
+            } else if (readStatus == 1 && keysUpdated == 1) {
                 *err1 = 2;
             }
         }
         for (i = 2; i <= 5; i++) {
-            SaveMisc_GetExtraChunkKeys(misc, i, &sp0C, &sp08, &sp04);
-            if (sp0C != -1 || sp08 != -1) {
-                Heap_Free(ReadExtraSaveChunkKeyed(saveData, HEAP_ID_3, i, &sp14, &sp10));
-                if (sp14 == 2) {
+            SaveMisc_GetExtraChunkKeys(misc, i, &curKey, &prevKey, &lastSlot);
+            if (curKey != -1 || prevKey != -1) {
+                Heap_Free(ReadExtraSaveChunkKeyed(saveData, HEAP_ID_3, i, &readStatus, &keysUpdated));
+                if (readStatus == 2) {
                     *err2 = 3;
-                } else if (sp14 == 1 && sp10 == 1 && *err2 != 3) {
+                } else if (readStatus == 1 && keysUpdated == 1 && *err2 != 3) {
                     *err2 = 2;
                 }
             }
@@ -722,12 +722,12 @@ static int _NowWriteFlash(SaveData *saveData) {
 }
 
 static int FlashClobberChunkFooter(SaveData *saveData, int spec, int sector) {
-    struct SaveChunkFooter sp0;
+    struct SaveChunkFooter footer;
     struct SaveSlotSpec *slotSpec;
 
     slotSpec = &saveData->saveSlotSpecs[spec];
-    MI_CpuFill8(&sp0, 0xFF, sizeof(struct SaveChunkFooter));
-    return FlashWriteChunk(GetChunkOffsetFromCurrentSaveSlot(sector, slotSpec) + slotSpec->size - sizeof(struct SaveChunkFooter), &sp0, sizeof(struct SaveChunkFooter));
+    MI_CpuFill8(&footer, 0xFF, sizeof(struct SaveChunkFooter));
+    return FlashWriteChunk(GetChunkOffsetFromCurrentSaveSlot(sector, slotSpec) + slotSpec->size - sizeof(struct SaveChunkFooter), &footer, sizeof(struct SaveChunkFooter));
 }
 
 static u32 GetSaveChunkSizePlusCRC(int idx) {
@@ -914,23 +914,23 @@ int WriteExtraSaveChunkKeyed(SaveData *saveData, int idx, void *data) {
     const struct ExtraSaveChunkHeader *hdr;
     u32 size;
     int ret;
-    u32 sp14;
-    u32 sp10;
-    u8 sp0C;
-    u32 r6;
+    u32 curKey;
+    u32 prevKey;
+    u8 lastSlot;
+    u32 newKey;
 
     Sys_SetSleepDisableFlag(1);
     GF_ASSERT(idx < gNumExtraSaveChunkHeaders);
     hdr = &gExtraSaveChunkHeaders[idx];
     GF_ASSERT(hdr->id == idx);
     size = hdr->sizeFunc() + sizeof(struct SaveArrayFooter);
-    Save_GetExtraChunkKeys(saveData, idx, &sp14, &sp10, &sp0C);
+    Save_GetExtraChunkKeys(saveData, idx, &curKey, &prevKey, &lastSlot);
     do {
-        r6 = PRandom(sp14);
-    } while (r6 == -1);
-    Save_SetExtraChunkKeys(saveData, idx, r6, sp14, sp0C ^ 1);
-    *(u32 *)data = r6;
-    if (sp0C == 1) {
+        newKey = PRandom(curKey);
+    } while (newKey == -1);
+    Save_SetExtraChunkKeys(saveData, idx, newKey, curKey, lastSlot ^ 1);
+    *(u32 *)data = newKey;
+    if (lastSlot == 1) {
         CreateChunkFooter(saveData, data, idx, hdr->sizeFunc());
         ret = FlashWriteChunk(hdr->sector * SAVE_SECTOR_SIZE, data, size);
         GF_ASSERT(ValidateChunk(saveData, data, idx, hdr->sizeFunc()) == TRUE);
@@ -1003,11 +1003,11 @@ void *ReadExtraSaveChunk(SaveData *saveData, enum HeapID heapID, int idx, int *r
 
 void *ReadExtraSaveChunkKeyed(SaveData *saveData, enum HeapID heapID, int idx, int *ret_p, int *ret2_p) {
     const struct ExtraSaveChunkHeader *hdr;
-    u32 sp2C;
-    u32 sp28;
-    u32 sp24;
-    u32 sp20;
-    u8 sp1C;
+    u32 slot0Key;
+    u32 slot1Key;
+    u32 curKey;
+    u32 prevKey;
+    u8 lastSlot;
     u32 size;
     void *ret;
     BOOL valid1;
@@ -1022,48 +1022,48 @@ void *ReadExtraSaveChunkKeyed(SaveData *saveData, enum HeapID heapID, int idx, i
     GF_ASSERT(hdr->id == idx);
     size = hdr->sizeFunc() + sizeof(struct SaveArrayFooter);
     ret = Heap_Alloc(heapID, size);
-    Save_GetExtraChunkKeys(saveData, idx, &sp24, &sp20, &sp1C);
+    Save_GetExtraChunkKeys(saveData, idx, &curKey, &prevKey, &lastSlot);
     FlashLoadChunk(hdr->sector * SAVE_SECTOR_SIZE, ret, size);
     valid1 = ValidateChunk(saveData, ret, idx, hdr->sizeFunc());
-    MI_CpuCopy8(ret, &sp2C, sizeof(u32));
+    MI_CpuCopy8(ret, &slot0Key, sizeof(u32));
     FlashLoadChunk((hdr->sector + 64) * SAVE_SECTOR_SIZE, ret, size);
     valid2 = ValidateChunk(saveData, ret, idx, hdr->sizeFunc());
-    MI_CpuCopy8(ret, &sp28, sizeof(u32));
+    MI_CpuCopy8(ret, &slot1Key, sizeof(u32));
     *ret_p = 1;
     *ret2_p = 0;
-    if (valid1 == TRUE && valid2 == FALSE && sp24 == sp2C) {
-        if (sp1C == 1) {
-            Save_SetExtraChunkKeys(saveData, idx, sp20, sp20, 0);
+    if (valid1 == TRUE && valid2 == FALSE && curKey == slot0Key) {
+        if (lastSlot == 1) {
+            Save_SetExtraChunkKeys(saveData, idx, prevKey, prevKey, 0);
             *ret2_p = 1;
         }
         FlashLoadChunk(hdr->sector * SAVE_SECTOR_SIZE, ret, size);
         return ret;
     }
-    if (valid1 == FALSE && valid2 == TRUE && sp24 == sp28) {
-        if (sp1C == 0) {
-            Save_SetExtraChunkKeys(saveData, idx, sp20, sp20, 1);
+    if (valid1 == FALSE && valid2 == TRUE && curKey == slot1Key) {
+        if (lastSlot == 0) {
+            Save_SetExtraChunkKeys(saveData, idx, prevKey, prevKey, 1);
             *ret2_p = 1;
         }
         FlashLoadChunk((hdr->sector + 64) * SAVE_SECTOR_SIZE, ret, size);
         return ret;
     }
     if (valid1 == TRUE && valid2 == TRUE) {
-        if (sp1C == 0) {
-            if (sp24 == sp2C) {
+        if (lastSlot == 0) {
+            if (curKey == slot0Key) {
                 FlashLoadChunk(hdr->sector * SAVE_SECTOR_SIZE, ret, size);
                 return ret;
-            } else if (sp20 == sp28) {
-                Save_SetExtraChunkKeys(saveData, idx, sp20, sp20, sp1C ^ 1);
+            } else if (prevKey == slot1Key) {
+                Save_SetExtraChunkKeys(saveData, idx, prevKey, prevKey, lastSlot ^ 1);
                 *ret2_p = 1;
                 FlashLoadChunk((hdr->sector + 64) * SAVE_SECTOR_SIZE, ret, size);
                 return ret;
             }
         } else {
-            if (sp24 == sp28) {
+            if (curKey == slot1Key) {
                 FlashLoadChunk((hdr->sector + 64) * SAVE_SECTOR_SIZE, ret, size);
                 return ret;
-            } else if (sp20 == sp2C) {
-                Save_SetExtraChunkKeys(saveData, idx, sp20, sp20, sp1C ^ 1);
+            } else if (prevKey == slot0Key) {
+                Save_SetExtraChunkKeys(saveData, idx, prevKey, prevKey, lastSlot ^ 1);
                 *ret2_p = 1;
                 FlashLoadChunk(hdr->sector * SAVE_SECTOR_SIZE, ret, size);
                 return ret;
@@ -1135,12 +1135,12 @@ static void FlashWriteCommandCallback(void *arg) {
 
 static s32 FlashWriteChunkInternal(u32 offset, void *data, u32 size) {
     s32 lock;
-    u32 sp14;
+    u32 probeWord;
 
     lock = OS_GetLockID();
     GF_ASSERT(lock != OS_LOCK_ID_ERROR);
     CARD_LockBackup(lock);
-    if (!CARD_ReadBackup(0, &sp14, sizeof(u32))) {
+    if (!CARD_ReadBackup(0, &probeWord, sizeof(u32))) {
         SaveErrorHandling(lock, 1);
     }
     saveWritten = FALSE;
@@ -1211,17 +1211,17 @@ void SaveSubstruct_UpdateCRC(int idx) {
 }
 
 static int HandleWriteSaveAsync_PCBoxes(SaveData *saveData, struct AsyncWriteManager *writeMan) {
-    u32 r7;
-    int r0;
-    int sp0;
+    u32 pcStorageSize;
+    int result;
+    int writeSuccess;
     void *data;
     switch (writeMan->state) {
     case 0:
         saveData->newBoxModifiedFlags = Save_CalcPCBoxModifiedFlags(saveData);
         saveData->numModifiedBoxes = PCModifiedFlags_CountModifiedBoxes(saveData->newBoxModifiedFlags);
         saveData->nextBoxToWrite = 0;
-        r7 = PCStorage_GetSizeOfBox() * PCStorage_GetNumBoxes();
-        saveData->pcStorageCRC = GF_CalcCRC16(SaveArray_Get(saveData, SAVE_PCSTORAGE), r7);
+        pcStorageSize = PCStorage_GetSizeOfBox() * PCStorage_GetNumBoxes();
+        saveData->pcStorageCRC = GF_CalcCRC16(SaveArray_Get(saveData, SAVE_PCSTORAGE), pcStorageSize);
         if (saveData->numModifiedBoxes == 0) {
             GF_ASSERT(saveData->pcStorageCRC == saveData->pcStorageLastCRC);
             Save_PCStorage_ClearBoxPadding(saveData);
@@ -1238,11 +1238,11 @@ static int HandleWriteSaveAsync_PCBoxes(SaveData *saveData, struct AsyncWriteMan
         writeMan->state++;
         // fallthrough
     case 1:
-        r0 = Save_WritePCBoxes(saveData, writeMan);
-        if (r0 == 0) {
+        result = Save_WritePCBoxes(saveData, writeMan);
+        if (result == 0) {
             return WRITE_STATUS_TOTAL_FAIL;
         }
-        if (r0 == 1) {
+        if (result == 1) {
             writeMan->state++;
             if (writeMan->curSector + 1 == writeMan->numSectors) {
                 return WRITE_STATUS_NEXT;
@@ -1255,9 +1255,9 @@ static int HandleWriteSaveAsync_PCBoxes(SaveData *saveData, struct AsyncWriteMan
         writeMan->state++;
         // fallthrough
     case 3:
-        if (WaitFlashWrite(writeMan->lockId, writeMan->waitingAsync, &sp0)) {
+        if (WaitFlashWrite(writeMan->lockId, writeMan->waitingAsync, &writeSuccess)) {
             writeMan->waitingAsync = 0;
-            if (!sp0) {
+            if (!writeSuccess) {
                 return WRITE_STATUS_TOTAL_FAIL;
             }
             writeMan->curSector++;

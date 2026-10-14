@@ -100,7 +100,7 @@ u8 SafariZone_GetLevel(SafariZone *safari_zone) {
 }
 
 void SafariZone_AddToAllAreaLevels(SafariZone *safariZone, s32 amount) {
-    u8 sp8[6];
+    u8 doneAreas[6];
     u32 area_no;
     int j;
     int i;
@@ -110,10 +110,10 @@ void SafariZone_AddToAllAreaLevels(SafariZone *safariZone, s32 amount) {
     }
 
     j = 0;
-    MI_CpuClear8(sp8, NELEMS(sp8));
+    MI_CpuClear8(doneAreas, NELEMS(doneAreas));
     for (i = 0; i < SAFARI_ZONE_MAX_AREAS_PER_SET; i++) {
         area_no = safariZone->area_sets[0].areas[i].area_no;
-        if (SafariZone_IsAreaInList(area_no, sp8, j)) {
+        if (SafariZone_IsAreaInList(area_no, doneAreas, j)) {
             continue;
         }
 
@@ -123,7 +123,7 @@ void SafariZone_AddToAllAreaLevels(SafariZone *safariZone, s32 amount) {
             safariZone->area_sets[0].areaLevels[area_no] = 0xFF;
         }
 
-        sp8[j++] = area_no;
+        doneAreas[j++] = area_no;
     }
 }
 

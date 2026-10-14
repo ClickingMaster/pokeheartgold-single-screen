@@ -591,21 +591,21 @@ static void CommClub_HandleLeaveGroupChoice(void *task, CommClubManager *commClu
 }
 
 static void CommClub_MemberListPrintRow(ListMenu *listMenu_unused, u16 arg1_unused, u8 row) {
-    u16 spC = 0;
+    u16 playerIndex = 0;
     if (sCommClubManager->listMenu) {
-        ListMenuGetScrollAndRow(sCommClubManager->listMenu, &spC, NULL);
+        ListMenuGetScrollAndRow(sCommClubManager->listMenu, &playerIndex, NULL);
     }
-    spC += row;
-    if (CommPlayerInfo_GetProfile(spC)) {
-        BufferPlayersName(sCommClubManager->messageFormat[0], 0, CommPlayerInfo_GetProfile(spC));
+    playerIndex += row;
+    if (CommPlayerInfo_GetProfile(playerIndex)) {
+        BufferPlayersName(sCommClubManager->messageFormat[0], 0, CommPlayerInfo_GetProfile(playerIndex));
         ReadMsgDataIntoString(sCommClubManager->msgData, CommunicationClub_Text_00079, sCommClubManager->string[1]); // {STRVAR_1 3, 0, 0}
         StringExpandPlaceholders(sCommClubManager->messageFormat[0], sCommClubManager->string[0], sCommClubManager->string[1]);
-        s32 temp_r4 = row * 16;
-        AddTextPrinterParameterized(&sCommClubManager->windows[0], 0, sCommClubManager->string[0], 8, temp_r4, 0, NULL);
-        BufferIntegerAsString(sCommClubManager->messageFormat[0], 2, PlayerProfile_GetTrainerID_VisibleHalf(CommPlayerInfo_GetProfile(spC)), 5, PRINTING_MODE_LEADING_ZEROS, TRUE);
+        s32 rowY = row * 16;
+        AddTextPrinterParameterized(&sCommClubManager->windows[0], 0, sCommClubManager->string[0], 8, rowY, 0, NULL);
+        BufferIntegerAsString(sCommClubManager->messageFormat[0], 2, PlayerProfile_GetTrainerID_VisibleHalf(CommPlayerInfo_GetProfile(playerIndex)), 5, PRINTING_MODE_LEADING_ZEROS, TRUE);
         ReadMsgDataIntoString(sCommClubManager->msgData, CommunicationClub_Text_ID_1, sCommClubManager->string[3]); // ID{STRVAR_1 54, 2, 0}
         StringExpandPlaceholders(sCommClubManager->messageFormat[0], sCommClubManager->string[2], sCommClubManager->string[3]);
-        AddTextPrinterParameterized(&sCommClubManager->windows[0], 0, sCommClubManager->string[2], 72, temp_r4, 0, NULL);
+        AddTextPrinterParameterized(&sCommClubManager->windows[0], 0, sCommClubManager->string[2], 72, rowY, 0, NULL);
     }
 }
 
