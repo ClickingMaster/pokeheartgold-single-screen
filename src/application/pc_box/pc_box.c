@@ -116,7 +116,7 @@ void PCBox_SetUpdateFunc(PCBoxView *view, void *v) {
     view->subState = 0;
     view->counter = 0;
     view->updateFunc = v;
-    view->pendingUpdateFunc = 0;
+    view->pendingUpdateFunc = NULL;
 }
 
 void PCBox_SetPendingUpdateFunc(PCBoxView *view, void *v) {

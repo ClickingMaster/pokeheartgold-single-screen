@@ -2041,7 +2041,7 @@ void RangerLink_DebugPacket(RangerLinkPacket *packet) {
 
 BOOL RangerLink_SetMPData(void *data, int size, u32 destBitmap) {
     u16 port = RangerLink_GetPort();
-    if (WM_SetMPDataToPortEx(RangerLink_SetMPDataCallback, 0, data, (u16)size, destBitmap, port, 2) != WM_OPERATING) {
+    if (WM_SetMPDataToPortEx(RangerLink_SetMPDataCallback, NULL, data, (u16)size, destBitmap, port, 2) != WM_OPERATING) {
         RangerLink_DebugError();
         return FALSE;
     }
@@ -2142,7 +2142,7 @@ BOOL RangerLink_WmStartMP(void) {
     int mode;
     void *recvBuffer, *sendBuffer;
     int recvSize;
-    if (WM_SetPortCallback(4, RangerLink_PortCallback, 0) != WM_OK) {
+    if (WM_SetPortCallback(4, RangerLink_PortCallback, NULL) != WM_OK) {
         RangerLink_DebugError();
         return FALSE;
     }

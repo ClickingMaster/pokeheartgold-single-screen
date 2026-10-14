@@ -527,7 +527,7 @@ void PCBox_ResetSpriteAffine(PCBoxReleaseWork *releaseWork) {
 void PCBox_SetIconRangeTranslucent(PCBoxWork *work, u32 enabled, u32 first, u32 end, u32 check) {
     if (check == 1) {
         for (; first < end; first++) {
-            if (PCBox_GetSlotMonData(work, first, MON_DATA_HELD_ITEM, NULL) == 0) {
+            if (PCBox_GetSlotMonData(work, first, MON_DATA_HELD_ITEM, NULL) == ITEM_NONE) {
                 PCBox_SetSpriteTranslucent(work->view, work->view->slotIcons[first], 1);
             } else {
                 PCBox_SetSpriteTranslucent(work->view, work->view->slotIcons[first], 0);

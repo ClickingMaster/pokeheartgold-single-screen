@@ -810,7 +810,7 @@ void MimeJrTop_InitGraphics(MimeJrTopApp *app) {
     app->resources.unkNarc = NARC_New(NARC_a_1_8_9, HEAP_ID_113);
     app->resources.bgConfig = BgConfig_Alloc(HEAP_ID_113);
     app->resources.palette = PaletteData_Init(HEAP_ID_113);
-    app->resources.vramMan = GF_3DVramMan_Create(HEAP_ID_113, 0, 1, 0, 4, 0);
+    app->resources.vramMan = GF_3DVramMan_Create(HEAP_ID_113, 0, 1, 0, 4, NULL);
     app->resources.camera = Camera_New(HEAP_ID_113);
     MimeJrTop_InitCamera(app);
     PaletteData_SetAutoTransparent(app->resources.palette, TRUE);

@@ -701,7 +701,7 @@ int PhotoAlbumApp_HandleMoveSelection(PhotoAlbumApp *app, u32 input) {
     switch (input) {
     case 12:
         PlaySE(0x5DC);
-        PhotoAlbumApp_PrintPhotoDetails(app, 0);
+        PhotoAlbumApp_PrintPhotoDetails(app, NULL);
         PhotoAlbumApp_UpdateSelectionSprite(app, 0);
         PhotoAlbumApp_StartCloseButtonAnim(app);
         PhotoAlbumApp_PrintMessage(app, 0, FALSE, 0);
@@ -728,7 +728,7 @@ int PhotoAlbumApp_HandleMoveSelection(PhotoAlbumApp *app, u32 input) {
         }
         PlaySE(0x5DC);
         PhotoAlbumApp_UpdateSelectionSprite(app, 0);
-        PhotoAlbumApp_PrintPhotoDetails(app, 0);
+        PhotoAlbumApp_PrintPhotoDetails(app, NULL);
         if (slot != app->slotIdx) {
             PhotoAlbumApp_SwapEntries(app, app->slotIdx, slot);
             PhotoAlbumApp_RedrawSwappedIcons(app, app->slotIdx, slot);
@@ -1426,7 +1426,7 @@ int PhotoAlbumApp_HandleContextMenu(PhotoAlbumApp *app) {
         app->mode = 1;
         return 5;
     default:
-        PhotoAlbumApp_PrintPhotoDetails(app, 0);
+        PhotoAlbumApp_PrintPhotoDetails(app, NULL);
         PhotoAlbumApp_UpdateSelectionSprite(app, 0);
         PhotoAlbumApp_SetCursorPos(app, app->cursorX, app->cursorY, 1);
         return 1;
@@ -1471,7 +1471,7 @@ int PhotoAlbumApp_HandleDeletePrompt(PhotoAlbumApp *app) {
         PhotoAlbumApp_UpdatePageArrows(app);
     }
     PhotoAlbumApp_SetCursorPos(app, app->cursorX, app->cursorY, 1);
-    PhotoAlbumApp_PrintPhotoDetails(app, 0);
+    PhotoAlbumApp_PrintPhotoDetails(app, NULL);
     PhotoAlbumApp_PrintMessage(app, 0, FALSE, 0);
     app->mode = 0;
     return 1;

@@ -83,9 +83,33 @@ typedef union AgbBoxMonSubstruct {
     } misc;
 
     struct {
-        u8 unk_00[8];
+        u16 moves[4];
         u8 pp[4];
     } attacks;
+
+    struct {
+        u16 species;
+        u16 heldItem;
+        u32 experience;
+        u8 ppUps;
+        u8 friendship;
+        u8 unk_0A[2];
+    } growth;
+
+    struct {
+        u8 hpEV;
+        u8 atkEV;
+        u8 defEV;
+        u8 speedEV;
+        u8 spAtkEV;
+        u8 spDefEV;
+        u8 cool;
+        u8 beauty;
+        u8 cute;
+        u8 smart;
+        u8 tough;
+        u8 sheen;
+    } condition;
 } AgbBoxMonSubstruct;
 
 extern PmAgbCartridge sPmAgbCartridgeSpec;
@@ -506,7 +530,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
     u8 *result = NULL;
     switch (personality % 24) {
     case 0: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data;
@@ -524,7 +548,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
         break;
     }
     case 1: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data;
@@ -542,7 +566,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
         break;
     }
     case 2: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data;
@@ -560,7 +584,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
         break;
     }
     case 3: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data;
@@ -578,7 +602,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
         break;
     }
     case 4: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data;
@@ -596,7 +620,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
         break;
     }
     case 5: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data;
@@ -614,7 +638,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
         break;
     }
     case 6: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data + 12;
@@ -632,7 +656,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
         break;
     }
     case 7: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data + 12;
@@ -650,7 +674,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
         break;
     }
     case 8: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data + 24;
@@ -668,7 +692,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
         break;
     }
     case 9: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data + 36;
@@ -686,7 +710,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
         break;
     }
     case 10: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data + 24;
@@ -704,7 +728,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
         break;
     }
     case 11: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data + 36;
@@ -722,7 +746,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
         break;
     }
     case 12: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data + 12;
@@ -740,7 +764,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
         break;
     }
     case 13: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data + 12;
@@ -758,7 +782,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
         break;
     }
     case 14: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data + 24;
@@ -776,7 +800,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
         break;
     }
     case 15: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data + 36;
@@ -794,7 +818,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
         break;
     }
     case 16: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data + 24;
@@ -812,7 +836,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
         break;
     }
     case 17: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data + 36;
@@ -830,7 +854,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
         break;
     }
     case 18: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data + 12;
@@ -848,7 +872,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
         break;
     }
     case 19: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data + 12;
@@ -866,7 +890,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
         break;
     }
     case 20: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data + 24;
@@ -884,7 +908,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
         break;
     }
     case 21: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data + 36;
@@ -902,7 +926,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
         break;
     }
     case 22: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data + 24;
@@ -920,7 +944,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
         break;
     }
     case 23: {
-        u8 *data = (u8 *)mon + 32;
+        u8 *data = (u8 *)mon->secure;
         switch (which) {
         case 0:
             result = data + 36;
@@ -1064,26 +1088,26 @@ u32 AGB_GetBoxMonData(AgbBoxMon *mon, int field, u8 *dest) {
         if (mon->isBadEgg) {
             result = 412; // the Egg species of the GBA games
         } else {
-            result = *(u16 *)growth;
+            result = growth->growth.species;
         }
         break;
     case AGB_MON_DATA_HELD_ITEM:
-        result = ((u16 *)growth)[1];
+        result = growth->growth.heldItem;
         break;
     case AGB_MON_DATA_EXPERIENCE:
-        result = ((u32 *)growth)[1];
+        result = growth->growth.experience;
         break;
     case AGB_MON_DATA_PP_UPS:
-        result = ((u8 *)growth)[8];
+        result = growth->growth.ppUps;
         break;
     case AGB_MON_DATA_FRIENDSHIP:
-        result = ((u8 *)growth)[9];
+        result = growth->growth.friendship;
         break;
     case AGB_MON_DATA_MOVE1:
     case AGB_MON_DATA_MOVE2:
     case AGB_MON_DATA_MOVE3:
     case AGB_MON_DATA_MOVE4:
-        result = ((u16 *)attacks)[field - AGB_MON_DATA_MOVE1];
+        result = attacks->attacks.moves[field - AGB_MON_DATA_MOVE1];
         break;
     case AGB_MON_DATA_MOVE1_PP:
     case AGB_MON_DATA_MOVE2_PP:
@@ -1092,40 +1116,40 @@ u32 AGB_GetBoxMonData(AgbBoxMon *mon, int field, u8 *dest) {
         result = attacks->attacks.pp[field - AGB_MON_DATA_MOVE1_PP];
         break;
     case AGB_MON_DATA_HP_EV:
-        result = ((u8 *)condition)[0];
+        result = condition->condition.hpEV;
         break;
     case AGB_MON_DATA_ATK_EV:
-        result = ((u8 *)condition)[1];
+        result = condition->condition.atkEV;
         break;
     case AGB_MON_DATA_DEF_EV:
-        result = ((u8 *)condition)[2];
+        result = condition->condition.defEV;
         break;
     case AGB_MON_DATA_SPEED_EV:
-        result = ((u8 *)condition)[3];
+        result = condition->condition.speedEV;
         break;
     case AGB_MON_DATA_SPATK_EV:
-        result = ((u8 *)condition)[4];
+        result = condition->condition.spAtkEV;
         break;
     case AGB_MON_DATA_SPDEF_EV:
-        result = ((u8 *)condition)[5];
+        result = condition->condition.spDefEV;
         break;
     case AGB_MON_DATA_COOL:
-        result = ((u8 *)condition)[6];
+        result = condition->condition.cool;
         break;
     case AGB_MON_DATA_BEAUTY:
-        result = ((u8 *)condition)[7];
+        result = condition->condition.beauty;
         break;
     case AGB_MON_DATA_CUTE:
-        result = ((u8 *)condition)[8];
+        result = condition->condition.cute;
         break;
     case AGB_MON_DATA_SMART:
-        result = ((u8 *)condition)[9];
+        result = condition->condition.smart;
         break;
     case AGB_MON_DATA_TOUGH:
-        result = ((u8 *)condition)[10];
+        result = condition->condition.tough;
         break;
     case AGB_MON_DATA_SHEEN:
-        result = ((u8 *)condition)[11];
+        result = condition->condition.sheen;
         break;
     // misc word 0: pokerus (8 bits), met location (8), met level (7), met game (4), ball (4), OT gender (1)
     case AGB_MON_DATA_POKERUS:
@@ -1230,7 +1254,7 @@ u32 AGB_GetBoxMonData(AgbBoxMon *mon, int field, u8 *dest) {
         result = misc->words[2] >> 31;
         break;
     case AGB_MON_DATA_SPECIES_OR_EGG:
-        result = *(u16 *)growth;
+        result = growth->growth.species;
         if (result && (((misc->words[1] << 1) >> 31) || mon->isBadEgg)) {
             result = 412;
         }
@@ -1251,7 +1275,7 @@ u32 AGB_GetBoxMonData(AgbBoxMon *mon, int field, u8 *dest) {
 void AGB_SetBoxMonData(AgbBoxMon *mon, int field, const void *value) {
     u8 *box = (u8 *)mon;
     const u8 *in = value;
-    u8 *growth;
+    AgbBoxMonSubstruct *growth;
     u8 *misc;
     int i;
     growth = NULL;
@@ -1296,8 +1320,8 @@ void AGB_SetBoxMonData(AgbBoxMon *mon, int field, const void *value) {
         }
         break;
     case AGB_MON_DATA_SPECIES:
-        *(u16 *)growth = in[0] + (in[1] << 8);
-        if (*(u16 *)growth != 0) {
+        growth->growth.species = in[0] + (in[1] << 8);
+        if (growth->growth.species != 0) {
             box[0x13] |= 2;
         } else {
             box[0x13] &= ~2;

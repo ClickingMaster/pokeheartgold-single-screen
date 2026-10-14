@@ -410,7 +410,7 @@ void PalPadGfx_InitWindows(PalPadGfx *gfx, PalPadShared *shared, enum HeapID hea
     gfx->titleBuffer = String_New(0x80, heapId);
     gfx->pageText = String_New(0x80, heapId);
     gfx->pageBuffer = String_New(0x80, heapId);
-    gfx->listMenuSpawner = TouchscreenListMenuSpawner_Create(heapId, 0);
+    gfx->listMenuSpawner = TouchscreenListMenuSpawner_Create(heapId, NULL);
     gfx->yesNoPrompt = YesNoPrompt_Create(heapId);
 }
 

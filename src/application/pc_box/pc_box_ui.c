@@ -731,7 +731,7 @@ u32 PCBox_StartSummaryApp(PCBoxWork *work) {
     args->mode = 0;
     PokemonSummary_SetPages(args, sPCBoxSummaryPages);
     args->selectedMoveSlot = 0;
-    ((u8 *)args)[0x17] = 0;
+    args->exitedWithB = 0;
     args->moveToLearn = 0;
     args->natDexEnabled = SaveArray_IsNatDexEnabled(work->args->saveData);
     args->ribbons = Save_SpecialRibbons_Get(work->args->saveData);
@@ -875,7 +875,7 @@ u32 PCBox_UpdateMoveModePartyDrag(PCBoxWork *work) {
                 work->view->showOutlineAfterMove = 1;
             }
             if (work->selectedSlot < 0x1e) {
-                if (PCBox_GetSlotMonData(work, work->selectedSlot, MON_DATA_SPECIES_EXISTS, 0) == 0) {
+                if (PCBox_GetSlotMonData(work, work->selectedSlot, MON_DATA_SPECIES_EXISTS, NULL) == 0) {
                     view->subState = 3;
                     break;
                 }
@@ -1930,7 +1930,7 @@ u32 PCBox_AnimateSwappedItemMove(PCBoxWork *work) {
     case 0:
         if (PCBox_IsSpriteAnimated(view, 0xb) != 1) {
             u32 old = work->selectedSlot;
-            work->selectedSlot = (u8)(*(u16 *)((u8 *)(view->temp) + 0));
+            work->selectedSlot = (u8)((PCBoxHeldItemMove *)view->temp)->toSlot;
             PCBox_StartHeldItemMoveWithIcon(work, old, old, 2);
             view->subState = 1;
         }
@@ -2034,7 +2034,7 @@ u32 PCBox_AnimateTraySwappedItemMove(PCBoxWork *work) {
         break;
     case 2: {
         u32 old = work->selectedSlot;
-        work->selectedSlot = (u8)(*(u16 *)((u8 *)(view->temp) + 0));
+        work->selectedSlot = (u8)((PCBoxHeldItemMove *)view->temp)->toSlot;
         PCBox_StartHeldItemMoveWithIcon(work, old, old, 2);
         view->subState = 3;
         break;
@@ -2289,7 +2289,7 @@ u32 PCBox_AnimatePartySwappedItemMove(PCBoxWork *work) {
     case 0:
         if (PCBox_IsSpriteAnimated(work->view, 0xb) == 0) {
             u32 old = work->selectedSlot;
-            work->selectedSlot = (u8)(*(u16 *)((u8 *)(view->temp) + 0));
+            work->selectedSlot = (u8)((PCBoxHeldItemMove *)view->temp)->toSlot;
             PCBox_StartHeldItemMoveWithIcon(work, old, old, 1);
             if (work->view->partyPanelLowered != 0) {
                 work->view->partyPanelLowered = 0;
