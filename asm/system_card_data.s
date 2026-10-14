@@ -1,5 +1,5 @@
 	.include "asm/macros.inc"
-	.include "unk_02027010.inc"
+	.include "system_card_data.inc"
 	.include "global.inc"
 
 	.rodata

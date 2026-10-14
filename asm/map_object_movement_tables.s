@@ -9,7 +9,7 @@
 #include "fielddata/script/scr_seq/event_D24R0204.h"
 #include "constants/field_move_response.h"
 	.include "asm/macros.inc"
-	.include "unk_data_020FCBD8.inc"
+	.include "map_object_movement_tables.inc"
 	.include "global.inc"
 
 	.rodata

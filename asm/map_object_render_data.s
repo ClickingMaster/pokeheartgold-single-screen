@@ -51,7 +51,7 @@
 	.public MapObject_ChangeBillboardSpriteKeepingCopy
 	.public SpriteChangeWork_Task
 	.public SpriteId_GetBillboardInfo
-	.include "overlay_01_021F944C.inc"
+	.include "map_object_render_data.inc"
 	.include "global.inc"
 
 .text

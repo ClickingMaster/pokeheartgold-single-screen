@@ -1,5 +1,5 @@
 	.include "asm/macros.inc"
-	.include "unk_02014DA0.inc"
+	.include "particle_system_data.inc"
 	.include "global.inc"
 
 	.public NNS_G3dGlb

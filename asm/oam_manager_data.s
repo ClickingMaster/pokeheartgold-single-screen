@@ -1,5 +1,5 @@
 	.include "asm/macros.inc"
-	.include "unk_0200B150.inc"
+	.include "oam_manager_data.inc"
 	.include "global.inc"
 
 	.bss

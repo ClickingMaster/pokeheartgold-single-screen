@@ -6,7 +6,7 @@
 #include "constants/moves.h"
 #include "constants/std_script.h"
 	.include "asm/macros.inc"
-	.include "unk_0206979C.inc"
+	.include "render_animation_data.inc"
 	.include "global.inc"
 
 	.public NNS_G3dGlb

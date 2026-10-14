@@ -60,7 +60,7 @@ void VeryTallGrassEffect_Destroy(FieldEffect *effect, VeryTallGrassEffect *work)
 void VeryTallGrassEffect_Update(FieldEffect *effect, VeryTallGrassEffect *work);
 void VeryTallGrassEffect_Draw(FieldEffect *effect, VeryTallGrassEffect *work);
 
-// In asm/overlay_01_021FF854_data_local.s.
+// In asm/field_very_tall_grass_data.s.
 extern const FieldEffectBasicTemplate sVeryTallGrassEffectTemplate; // very tall grass effect
 extern const u32 sVeryTallGrassRecordParams[6];                   // very tall grass record params
 

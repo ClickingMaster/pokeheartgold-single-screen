@@ -15,7 +15,7 @@
 
 // Link messages of the Battle Frontier facilities' script side in multi battles with a friend (wireless): for each
 // facility a sender (packs the local data into the work's link buffer and sends it) and a receive callback
-// (registered in the command table in asm/unk_02096910.s, entries 0x16 onwards). Every receive callback counts the
+// (registered in the command table in asm/battle_frontier_communication_data.s, entries 0x16 onwards). Every receive callback counts the
 // messages it got, also its own echo, and ignores its own data; most only take the partner's data when the local
 // player is not the parent (net id 0), whose data wins.
 //   Battle Factory 0x16-0x1C, Battle Hall 0x21-0x26, Battle Castle 0x2A-0x30, Battle Arcade 0x41-0x46.

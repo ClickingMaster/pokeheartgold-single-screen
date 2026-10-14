@@ -1,5 +1,5 @@
 	.include "asm/macros.inc"
-	.include "unk_02056D7C.inc"
+	.include "comm_player_manager_data.inc"
 	.include "global.inc"
 
 	.data

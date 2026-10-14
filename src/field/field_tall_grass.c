@@ -79,7 +79,7 @@ BOOL TallGrassUnusedEffect_Destroy(FieldEffect *effect, UnkOv01_0220914C_Effect 
 void TallGrassUnusedEffect_Update(FieldEffect *effect, UnkOv01_0220914C_Effect *work);
 void TallGrassUnusedEffect_Draw(FieldEffect *effect, UnkOv01_0220914C_Effect *work);
 
-// In asm/overlay_01_021FEEEC_data_local.s (its order of these objects is not one MWCC reproduces).
+// In asm/field_tall_grass_data.s (its order of these objects is not one MWCC reproduces).
 extern const FieldEffectBasicTemplate gTallGrassEffectTemplate; // tall grass effect
 extern const FieldEffectBasicTemplate sTallGrassUnusedEffectTemplate; // created nowhere
 extern const u32 gTallGrassRecord6Params[6];                   // record 6 params

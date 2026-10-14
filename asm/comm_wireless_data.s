@@ -1,5 +1,5 @@
 	.include "asm/macros.inc"
-	.include "unk_02034B0C.inc"
+	.include "comm_wireless_data.inc"
 	.include "global.inc"
 
 	.bss

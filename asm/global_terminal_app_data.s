@@ -1,5 +1,5 @@
 	.include "asm/macros.inc"
-	.include "unk_020192D0.inc"
+	.include "global_terminal_bg_cell_data.inc"
 	.include "global.inc"
 
 	.rodata

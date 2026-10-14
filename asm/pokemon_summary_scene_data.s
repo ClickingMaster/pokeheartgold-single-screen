@@ -5,7 +5,7 @@
 #include "constants/field_move_response.h"
 #include "msgdata/msg/msg_0300.h"
 	.include "asm/macros.inc"
-	.include "unk_0208DE40.inc"
+	.include "pokemon_summary_scene_data.inc"
 	.include "global.inc"
 
 	.public gOverlayTemplate_Battle

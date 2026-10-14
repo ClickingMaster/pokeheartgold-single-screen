@@ -1,7 +1,7 @@
 #include "constants/items.h"
 #include "constants/moves.h"
 	.include "asm/macros.inc"
-	.include "unk_02077678.inc"
+	.include "type_icon_resources_data.inc"
 	.include "global.inc"
 
 	.rodata

@@ -28,7 +28,7 @@
 	.set sMsgIdsSub, ov01_02206AF4 - 4
 	.set sStatRows, ov01_02206B04
 	.include "asm/macros.inc"
-	.include "overlay_01_021F3F50.inc"
+	.include "save_stats_printer_data.inc"
 	.include "global.inc"
 
 	.public ov01_02206AD8

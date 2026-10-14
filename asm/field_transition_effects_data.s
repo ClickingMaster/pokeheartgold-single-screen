@@ -1,5 +1,5 @@
 	.include "asm/macros.inc"
-	.include "unk_02055BF0_data.inc"
+	.include "field_transition_effects_data.inc"
 	.include "global.inc"
 
 	.rodata

@@ -56,7 +56,7 @@ struct SaveStatsRow {
     u32 color; // index into sTextColors
 };
 
-// in asm/overlay_01_021F3F50_data_local.s (overlapping tables)
+// in asm/save_stats_printer_data.s (overlapping tables)
 extern const u32 sTextColors[2];
 extern const u32 sMsgIdsMain[4];
 extern const u32 sMsgIdsSub[5];

@@ -3,7 +3,7 @@
 	.public gWirelessConnectTag
 	.public gWirelessManager
 	.include "asm/macros.inc"
-	.include "unk_02032844.inc"
+	.include "wireless_manager_data.inc"
 	.include "global.inc"
 
 	.data

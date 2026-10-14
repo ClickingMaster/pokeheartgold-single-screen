@@ -6,7 +6,7 @@
 	.public _020FC8F4
 	.public _020FC914
 	.include "asm/macros.inc"
-	.include "unk_0205A44C.inc"
+	.include "union_room_talk_data.inc"
 	.include "global.inc"
 
 	.rodata

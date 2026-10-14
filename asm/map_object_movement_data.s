@@ -33,7 +33,7 @@
 	.public _02061630
 	.public _0206163C
 	.public _02061642
-	.include "unk_02061284.inc"
+	.include "map_object_movement_data.inc"
 	.include "global.inc"
 
 	.text

@@ -95,7 +95,7 @@ BOOL MapObjectEmoteMarkEffect_Init(FieldEffect *effect, EmoteMarkEffect *work);
 void MapObjectEmoteMarkEffect_Update(FieldEffect *effect, EmoteMarkEffect *work);
 
 // The effect templates and the record parameters ({ 0, 1, 0, 0, 0, 2 }) stay in asm
-// (asm/overlay_01_022001E4.s, linked after this file). sEmoteMarkTemplate is a mark at a fixed position that
+// (asm/field_emote_mark_data.s, linked after this file). sEmoteMarkTemplate is a mark at a fixed position that
 // nothing creates; sMapObjectEmoteMarkTemplate follows a map object.
 extern const FieldEffectBasicTemplate sMapObjectEmoteMarkTemplate;
 extern const u32 sEmoteMarkRecordParams[6];

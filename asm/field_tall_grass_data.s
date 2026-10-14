@@ -19,7 +19,7 @@
 	.public gTallGrassRecord5Params
 	.public gTallGrassRecord7Params
 	.include "asm/macros.inc"
-	.include "overlay_01_021FEEEC.inc"
+	.include "field_tall_grass_data.inc"
 	.include "global.inc"
 
 	.public gTallGrassEffectTemplate

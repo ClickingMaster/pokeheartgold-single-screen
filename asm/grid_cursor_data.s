@@ -4,7 +4,7 @@
 #include "constants/moves.h"
 #include "constants/species.h"
 	.include "asm/macros.inc"
-	.include "unk_020957B0.inc"
+	.include "grid_cursor_data.inc"
 	.include "global.inc"
 
 	.text

@@ -5,7 +5,7 @@
 #include "constants/pokemon.h"
 #include "constants/species.h"
 	.include "asm/macros.inc"
-	.include "unk_02096910.inc"
+	.include "battle_frontier_communication_data.inc"
 	.include "global.inc"
 
 	.rodata

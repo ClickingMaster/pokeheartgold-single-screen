@@ -1,6 +1,6 @@
 #include "constants/maps.h"
 	.include "asm/macros.inc"
-	.include "unk_0203BA5C.inc"
+	.include "spawn_warp_data.inc"
 	.include "global.inc"
 
 	.rodata

@@ -4,7 +4,7 @@
 #include "constants/moves.h"
 #include "constants/species.h"
 	.include "asm/macros.inc"
-	.include "unk_02097024.inc"
+	.include "spin_trade_flow_data.inc"
 	.include "global.inc"
 
 	.rodata

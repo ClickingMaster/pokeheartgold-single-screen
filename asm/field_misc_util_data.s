@@ -2,7 +2,7 @@
 #include "constants/sndseq.h"
 #include "msgdata/msg/msg_0666.h"
 	.include "asm/macros.inc"
-	.include "unk_0205BB1C.inc"
+	.include "field_misc_util_data.inc"
 	.include "global.inc"
 
 	.rodata

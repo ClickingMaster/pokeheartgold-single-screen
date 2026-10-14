@@ -1,5 +1,5 @@
 	.include "asm/macros.inc"
-	.include "unk_02013534.inc"
+	.include "font_sprite_data.inc"
 	.include "global.inc"
 
 	.rodata

@@ -1,6 +1,6 @@
 #include "constants/map_sections.h"
 	.include "asm/macros.inc"
-	.include "unk_02017FAC.inc"
+	.include "map_section_data.inc"
 	.include "global.inc"
 
 	.public gMapsecTypeStarts

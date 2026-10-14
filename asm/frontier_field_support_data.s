@@ -9,7 +9,7 @@
 #include "fielddata/script/scr_seq/event_D24R0204.h"
 #include "constants/field_move_response.h"
 	.include "asm/macros.inc"
-	.include "unk_02066EDC.inc"
+	.include "frontier_field_support_data.inc"
 	.include "global.inc"
 
 	.text

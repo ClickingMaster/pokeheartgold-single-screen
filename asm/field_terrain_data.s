@@ -1,5 +1,5 @@
 	.include "asm/macros.inc"
-	.include "unk_02054648.inc"
+	.include "field_terrain_data.inc"
 	.include "global.inc"
 
 	.rodata

@@ -2,7 +2,7 @@
 #include "constants/pokemon.h"
 #include "constants/sndseq.h"
 	.include "asm/macros.inc"
-	.include "overlay_12_022378C0.inc"
+	.include "battle_main_data.inc"
 	.include "global.inc"
 
 	.text

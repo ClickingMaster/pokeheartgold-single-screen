@@ -1,5 +1,5 @@
 	.include "asm/macros.inc"
-	.include "unk_0202FBCC.inc"
+	.include "battle_record_data.inc"
 	.include "global.inc"
 
 	.bss

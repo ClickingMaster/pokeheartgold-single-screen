@@ -1,5 +1,5 @@
 	.include "asm/macros.inc"
-	.include "unk_0202C730.inc"
+	.include "friend_group_data.inc"
 	.include "global.inc"
 
 	.bss

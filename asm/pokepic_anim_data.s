@@ -3,7 +3,7 @@
 	.public gPokepicMotionTypeTargetArgs
 	.public gPokepicAnimCommands
 	.include "asm/macros.inc"
-	.include "unk_02016EDC.inc"
+	.include "pokepic_anim_data.inc"
 	.include "global.inc"
 
 	.rodata
