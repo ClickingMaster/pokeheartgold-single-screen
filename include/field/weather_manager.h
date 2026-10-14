@@ -156,7 +156,7 @@ typedef struct WeatherFlashTaskData {
 void FieldTextureManager_KeepTextures(FieldTextureManager *textureManager);
 WeatherManager *WeatherManager_New(FieldSystem *fieldSystem);
 void WeatherManager_Delete(WeatherManager *weatherManager);
-void WeatherManager_SetWeather(WeatherManager *weatherManager, int a1);
+void WeatherManager_SetWeather(WeatherManager *weatherManager, int weather);
 BOOL WeatherManager_ChangeWeather(WeatherManager *weatherManager, s32 weather);
 u32 WeatherManager_GetWeather(WeatherManager *weatherManager);
 

@@ -33,7 +33,7 @@
 #include "unk_0200FA24.h"
 #include "yes_no_prompt.h"
 
-// Pokemon Dress-Up editor (ScrCmd_154): app Init/Main/Exit, the editor's graphics, canvas, tray, frame BG,
+// Pokemon Dress-Up editor (ScrCmd_OpenDressUp): app Init/Main/Exit, the editor's graphics, canvas, tray, frame BG,
 // buttons and HUD set-up, the DONE / return transitions, the two yes/no prompts and saving the design.
 
 // fashion save entry accessors (src/save_fashion.c)

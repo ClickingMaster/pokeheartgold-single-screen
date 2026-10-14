@@ -37,12 +37,12 @@ BOOL Task_HoneyOrSweetScent(TaskManager *taskManager);
 BOOL Task_OverworldFish(TaskManager *taskManager);
 struct FishingRodWork *CreateFishingRodTaskEnv(FieldSystem *fieldSystem, enum HeapID heapID, int rod);
 void FieldSystem_TryStorePlayerLocation(FieldSystem *fieldSystem);
-void FieldSystem_SwitchBottomScreenApp(FieldSystem *fieldSystem, int a1, void *a2);
+void FieldSystem_SwitchBottomScreenApp(FieldSystem *fieldSystem, int appId, void *args);
 int FieldSystem_GetBottomScreenAppId(FieldSystem *fieldSystem);
 int FieldSystem_GetTouchscreenChoiceMenuState(FieldSystem *fieldSystem);
 BOOL FieldSystem_GetBottomScreenAppState(FieldSystem *fieldSystem);
-FieldEffect *FollowMonBall_Spawn(LocalMapObject *obj, int a1);
-void FollowMon_MoveToPlayer(FieldSystem *fieldSystem, u8 a1);
+FieldEffect *FollowMonBall_Spawn(LocalMapObject *obj, int kind);
+void FollowMon_MoveToPlayer(FieldSystem *fieldSystem, u8 direction);
 void FollowMon_SpawnReleaseBall(LocalMapObject *object);
 BOOL FollowMon_CheckVisibleFlag(FieldSystem *fieldSystem);
 BOOL FollowMon_StartRecall(FieldSystem *fieldSystem);
@@ -59,10 +59,10 @@ void ScriptMenu_AddItem(struct ScriptMenu *menu, u32 msgId, u32 value);
 void ScriptMenu_ShowMultichoice(struct ScriptMenu *menu);
 void ScriptMenu_Free(struct ScriptMenu *menu);
 void ScriptMenu_CloseMultichoice(struct ScriptMenu *menu);
-void ScriptMenu_ShowListWithWidth(struct ScriptMenu *menu, u16 a1);
-void ScriptMenu_ShowListAtPosition(struct ScriptMenu *menu, u16 *a1, u16 *a2);
+void ScriptMenu_ShowListWithWidth(struct ScriptMenu *menu, u16 width);
+void ScriptMenu_ShowListAtPosition(struct ScriptMenu *menu, u16 *scroll_p, u16 *row_p);
 void ScriptMenu_ShowList(struct ScriptMenu *menu);
-void ScriptMenu_ShowMultichoiceGrid(struct ScriptMenu *menu, u8 a1);
+void ScriptMenu_ShowMultichoiceGrid(struct ScriptMenu *menu, u8 divisor);
 void ScriptMenu_SetAnchorRight(struct ScriptMenu *menu, int set);
 void ScriptMenu_SetAnchorBottom(struct ScriptMenu *menu, int set);
 void ScriptMenu_AddListItem(struct ScriptMenu *menu, int msgId, int helpMsgId, int value);
@@ -70,8 +70,8 @@ void FollowMonDraw_ClearBob(LocalMapObject *object);
 void MapObject_SetFacingAndUpdateDraw(LocalMapObject *object, u32 dir);
 u8 FollowMonObject_IsLarge(LocalMapObject *object);
 void MapObject_GetCoordsBehind(LocalMapObject *object, int *p_x, int *p_y);
-void TallGrass_SpawnAt(LocalMapObject *object, int a1, int x, int y, int a4);
-void VeryTallGrass_SpawnAt(LocalMapObject *object, int a1, int x, int y, int a4);
+void TallGrass_SpawnAt(LocalMapObject *object, int animate, int x, int y, int checkFacing);
+void VeryTallGrass_SpawnAt(LocalMapObject *object, int animate, int x, int y, int checkFacing);
 void FieldSystem_StartPalPadRegistration(FieldSystem *fieldSystem);
 void CallFieldTask_RockClimb(TaskManager *taskManager, int playerDirection, int partySlot);
 void CallFieldTask_Surf(TaskManager *taskManager, int playerDirection, int partySlot);
@@ -94,10 +94,10 @@ struct SaveStatsPrinter *Field_SaveStatsPrinter_New(FieldSystem *fieldSystem, en
 void Field_SaveStatsPrinter_Print(struct SaveStatsPrinter *printer);
 void Field_SaveStatsPrinter_RemoveFromScreen(struct SaveStatsPrinter *printer);
 void Field_SaveStatsPrinter_Delete(struct SaveStatsPrinter *printer);
-void FieldSystem_ShowEmoteBubble(FieldSystem *fieldSystem, LocalMapObject *partnerPokeObj, int a2);
+void FieldSystem_ShowEmoteBubble(FieldSystem *fieldSystem, LocalMapObject *partnerPokeObj, int kind);
 void FollowMon_StartHopIntoBall(FieldSystem *fieldSystem);
-void MapObject_SetPositionNextTo(LocalMapObject *playerObj, LocalMapObject *tsurePokeObj, int a2, int a3);
-void FieldSystem_SetTouchscreenChoiceMenuState(FieldSystem *fieldSystem, int a1, int a2, void *a3);
+void MapObject_SetPositionNextTo(LocalMapObject *playerObj, LocalMapObject *tsurePokeObj, int direction, int facing);
+void FieldSystem_SetTouchscreenChoiceMenuState(FieldSystem *fieldSystem, int appId, int state, void *result);
 
 typedef BOOL (*UnkCallback_021F6B34)(struct ScriptMenu *menu, int idx);
 
@@ -108,7 +108,7 @@ struct UnkStruct_020FACDC {
     int filler_00[12 / sizeof(int)];
 };
 
-BOOL FollowMon_StartFlash(FieldSystem *fieldSystem, u8 a1, u8 a2);
+BOOL FollowMon_StartFlash(FieldSystem *fieldSystem, u8 step, u8 period);
 
 struct BankTransactionWorkSub {
     u32 max;

@@ -49,12 +49,12 @@ void BattleController_ReplyTargetSelection(BattleSystem *battleSystem, int battl
 void BattleController_ReplyItemSelection(BattleSystem *battleSystem, int battlerId, u32 input);
 void BattleController_ReplyPartySelection(BattleSystem *battleSystem, int battlerId, u32 input);
 void BattleController_ReplySelectionMessageDone(BattleSystem *battleSystem, int battlerId);
-void BattleController_InitMoveAnimData(BattleSystem *battleSystem, BattleContext *ctx, MoveAnimData *animData, int a3, int a4, int attacker, int defender, u16 move);
+void BattleController_InitMoveAnimData(BattleSystem *battleSystem, BattleContext *ctx, MoveAnimData *animData, int isEffectAnim, int effectAnimId, int attacker, int defender, u16 move);
 
-void BattleController_EmitPlayEncounterAnimation(BattleSystem *battleSystem, BOOL a1);
+void BattleController_EmitPlayEncounterAnimation(BattleSystem *battleSystem, BOOL battlerId);
 void BattleController_EmitPokemonEncounter(BattleSystem *battleSystem, int battlerId);
 void BattleController_EmitPokemonSlideIn(BattleSystem *battleSystem, int battlerId);
-void BattleController_EmitPokemonSendOut(BattleSystem *battleSystem, int battlerId, int ball, int a3);
+void BattleController_EmitPokemonSendOut(BattleSystem *battleSystem, int battlerId, int ball, int breakOut);
 void BattleController_EmitRecallPokemon(BattleSystem *battleSystem, BattleContext *ctx, int battlerId);
 void BattleController_EmitDeletePokemon(BattleSystem *battleSystem, int battlerId);
 void BattleController_EmitTrainerEncounter(BattleSystem *battleSystem, int battlerId);
@@ -64,8 +64,8 @@ void BattleController_EmitTrainerSlideIn(BattleSystem *battleSystem, int battler
 void BattleController_EmitBackgroundSlideIn(BattleSystem *battleSystem, int battlerId);
 void BattleController_EmitHealthbarSlideIn(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, u32 delay);
 void BattleController_EmitHealthbarSlideOut(BattleSystem *battleSystem, int battlerId);
-void BattleController_EmitShowMonList(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, u32 a3, u32 canSwitch, u32 a5);
-void BattleController_EmitDrawYesNoBox(BattleSystem *battleSystem, BattleContext *ctx, int a2, int msgId, int a4, int a5, int a6);
+void BattleController_EmitShowMonList(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, u32 mode, u32 canSwitch, u32 reservedMon);
+void BattleController_EmitDrawYesNoBox(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int msgId, int mode, int value, int a6);
 void BattleController_EmitShowWaitMessage(BattleSystem *battleSystem, int battlerId);
 void BattleController_EmitPrintAttackMessage(BattleSystem *battleSystem, BattleContext *ctx);
 void BattleController_EmitPrintMessage(BattleSystem *battleSystem, BattleContext *ctx, BattleMessage *msg);
@@ -88,9 +88,9 @@ void BattleController_EmitPrintFirstSendOutMessage(BattleSystem *battleSystem, B
 void BattleController_EmitBattleMonToPartyMonCopy(BattleSystem *battleSystem, BattleContext *ctx, int battlerId);
 void BattleControl_EmitPartyStatusHeal(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int moveNo);
 void BattleController_EmitSetBattleResults(BattleSystem *battleSystem);
-void BattleController_EmitPlayMosaicAnimation(BattleSystem *battleSystem, int battlerId, int a2, int delay);
+void BattleController_EmitPlayMosaicAnimation(BattleSystem *battleSystem, int battlerId, int mosaic, int delay);
 void BattleController_EmitChangeForm(BattleSystem *battleSystem, int battlerId);
-void BattleController_EmitSetBattleBackground(BattleSystem *battleSystem, int a1);
+void BattleController_EmitSetBattleBackground(BattleSystem *battleSystem, int battlerId);
 void BattleController_EmitInitStartBallGauge(BattleSystem *battleSystem, int battlerId);
 void BattleController_EmitDeleteStartBallGauge(BattleSystem *battleSystem, int battlerId);
 void BattleController_EmitInitBallGauge(BattleSystem *battleSystem, int battlerId);
@@ -109,13 +109,13 @@ void BattleController_EmitPlayMoveSE(BattleSystem *battleSystem, BattleContext *
 void BattleController_EmitPlaySong(BattleSystem *battleSystem, int battlerId, int song);
 void BattleSystem_ReloadMonData(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int monIndex);
 
-void BattleController_EmitScreenFade(BattleSystem *battleSystem, BattleContext *ctx, u8 a2);
+void BattleController_EmitScreenFade(BattleSystem *battleSystem, BattleContext *ctx, u8 mode);
 void BattleController_EmitSelectCommand(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int partySlot);
 void BattleController_EmitPokemonEnterBall(BattleSystem *battleSystem, s32 battlerId, s32 ball);
 void BattleController_EmitPrintSelectionMessage(BattleSystem *battleSystem, int battlerId, BattleMessage msg);
 void BattleController_EmitCancelSelection(BattleSystem *battleSystem, int battlerId);
 void BattleController_EmitSelectMove(BattleSystem *battleSystem, BattleContext *ctx, int battlerId);
-void BattleController_EmitSelectTarget(BattleSystem *battleSystem, BattleContext *ctx, int a2, int battlerId);
+void BattleController_EmitSelectTarget(BattleSystem *battleSystem, BattleContext *ctx, int moveRange, int battlerId);
 void BattleController_EmitSelectItem(BattleSystem *battleSystem, BattleContext *ctx, int battlerId);
 void BattleController_EmitEndSelection(BattleSystem *battleSystem, int battlerId);
 void BattleController_EmitExpBarUpdate(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, u32 prevExp);

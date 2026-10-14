@@ -21,6 +21,6 @@ void FieldTransition_PlaceOffWarpStairs(FieldSystem *fieldSystem);
 void FieldTransition_PlaceBelowFloor(FieldSystem *fieldSystem);
 void FieldTransition_PlaceAboveFloor(FieldSystem *fieldSystem);
 
-void CallTask_WiFiPlaza(TaskManager *taskManager, u16 a1);
+void CallTask_WiFiPlaza(TaskManager *taskManager, u16 parameter);
 
 #endif // POKEHEARTGOLD_FIELD_TRANSITION_TASKS_H

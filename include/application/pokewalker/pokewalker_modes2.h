@@ -91,7 +91,7 @@ typedef struct PokewalkerBoxDisplay {
 // Box selector (ARM9, no header yet).
 void *BoxMonSelector_New(enum HeapID heapId, int count, int flag);
 void BoxMonSelector_Delete(void *boxSelector);
-void BoxMonSelector_Init(void *boxSelector, BgConfig *bgConfig, PCStorage *storage, Party *party, u32 a4, u32 a5, BOOL a6, u32 a7, void *getMon, void *getBoxName, void *selection, void *onCursorMove, void *arg);
+void BoxMonSelector_Init(void *boxSelector, BgConfig *bgConfig, PCStorage *storage, Party *party, u32 unused11, u32 unused12, BOOL canCancel, u32 initialPage, void *getMon, void *getBoxName, void *selection, void *onCursorMove, void *arg);
 void BoxMonSelector_VBlank(void *boxSelector);
 int BoxMonSelector_Run(void *boxSelector);
 void BoxMonSelector_RenderSprites(void *boxSelector);

@@ -17,7 +17,7 @@ void FrontierMap_LoadMonIconResources(FrontierMap *map);
 void FrontierMap_UnloadMonIconResources(FrontierMap *map);
 void FrontierMap_LoadItemIconResources(FrontierMap *map);
 void FrontierMap_UnloadItemIconResources(FrontierMap *map);
-void FrontierScript_GetVar(FrontierScriptContext *ctx, u16 a1);
-void FrontierScript_PrintMessageEntry(FrontierScriptContext *ctx, u16 *a1);
+void FrontierScript_GetVar(FrontierScriptContext *ctx, u16 index);
+void FrontierScript_PrintMessageEntry(FrontierScriptContext *ctx, u16 *entry);
 
 #endif

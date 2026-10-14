@@ -7,6 +7,6 @@ BOOL FieldSystem_FollowMonShayminNeedsRevert(FieldSystem *fieldSystem);
 void StartShayminRevertToLandForm(TaskManager *taskMan);
 void FieldSystem_BeginCelebiTimeTravelCutsceneTask(FieldSystem *fieldSystem);
 void FieldSystem_BeginSinjohCutsceneTask(FieldSystem *fieldSystem);
-void FieldSystem_BeginSinjohGetEggCutsceneTask(FieldSystem *fieldSystem, u8 a1);
+void FieldSystem_BeginSinjohGetEggCutsceneTask(FieldSystem *fieldSystem, u8 whichLegend);
 
 #endif

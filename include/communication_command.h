@@ -4,7 +4,7 @@
 #include "global.h"
 
 BOOL Comm_IsUnionRoomLinkMode(int);
-void Comm_RegisterCommandTable(const void *, int, void *arg2);
+void Comm_RegisterCommandTable(const void *, int, void *context);
 u32 CommCmd_GetSize1(void);
 u32 CommCmd_GetSize0(void);
 u32 CommCmd_GetSizeVariable(void);

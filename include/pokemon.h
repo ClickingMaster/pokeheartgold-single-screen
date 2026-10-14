@@ -152,7 +152,7 @@ u8 GetMonPicHeightBySpeciesGenderForm(u16 species, u8 gender, u8 whichFacing, u8
 u8 GetMonPicHeightBySpeciesGenderForme_PBR(u16 species, u8 gender, u8 whichFacing, u8 form, u32 pid);
 struct ManagedSprite *CreateTrainerPicSprite(SpriteSystem *renderer, SpriteManager *gfxHandler, PaletteData *plttData, int x, int y, int trainerClass, int battlerPosition, BOOL isLink, int resTag, enum HeapID heapID);
 void GetTrainerPicFileIds(s32 trainer_class, s32 battlerPosition, BOOL isLink, struct TrainerPicFileIds *fileIds);
-void GetTrainerPicFileIdsNoLink(s32 trainer_class, s32 a1, struct TrainerPicFileIds *fileIds);
+void GetTrainerPicFileIdsNoLink(s32 trainer_class, s32 battlerSide, struct TrainerPicFileIds *fileIds);
 u32 Pokemon_sizeof(void);
 u32 BoxPokemon_sizeof(void);
 BoxPokemon *Mon_GetBoxMon(Pokemon *mon);
@@ -196,7 +196,7 @@ BOOL BoxmonBelongsToPlayer(BoxPokemon *boxMon, PlayerProfile *profile, enum Heap
 int TrainerClassToBackpicID(int trainerClass, BOOL isLink);
 void NARC_ReadPokepicAnimScript(NARC *narc, PokepicAnimScript *dest, u16 species, u16 isFrontpic);
 void NARC_StartPokepicAnim(NARC *narc, void *manager, void *pic, u16 species, int whichFacing, int reverseX, int index);
-void NARC_ReadPokepicCryDelay(NARC *narc, u8 *ret, u16 a2, u16 a3);
+void NARC_ReadPokepicCryDelay(NARC *narc, u8 *ret, u16 species, u16 isFrontpic);
 void NARC_ReadPokepicShadowHeight(NARC *narc, s8 *ret, u16 species, u16 isFrontpic);
 void NARC_ReadPokepicShadowXOffset(NARC *narc, s8 *ret, u16 species, u16 isFrontpic);
 void NARC_ReadPokepicShadowSize(NARC *narc, u8 *ret, u16 species, u16 isFrontpic);

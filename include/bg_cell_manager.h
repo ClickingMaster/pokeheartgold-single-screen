@@ -6,19 +6,19 @@
 
 typedef struct BgCellManager BgCellManager;
 
-BgCellManager *BgCellManager_New(BgConfig *bgConfig, int a1, int a2, enum HeapID a3);
-void BgCellManager_Delete(BgCellManager *a0);
-void BgCellManager_InitCell(BgCellManager *a0, int a1, int a2, int a3, int a4);
-void BgCellManager_SetCellTilemap(BgCellManager *a0, int a1, u16 *a2);
-void BgCellManager_LoadCellTilemapFromOpenNarc(BgCellManager *a0, int a1, NARC *narc, int fileId, int a4);
-void BgCellManager_DrawCellAt(BgCellManager *a0, int a1, int a2, int a3);
-void BgCellManager_EraseCell(BgCellManager *a0, int a1);
-void BgCellManager_StartCellMove(BgCellManager *a0, int a1, int a2, int a3, u8 a4);
-void BgCellManager_Update(BgCellManager *a0);
-BOOL BgCellManager_IsCellMoving(BgCellManager *a0, int a1);
-void BgCellManager_SetCellPalette(BgCellManager *a0, int a1, u8 x, u8 y, u8 width, u8 height, u8 palette);
-u16 *BgCellManager_GetCellTilemap(BgCellManager *a0, int a1);
-void BgCellManager_GetCellSize(BgCellManager *a0, int a1, u16 *a2, u16 *a3);
-void BgCellManager_SetCellClipRect(BgCellManager *a0, int a1, s8 a2, s8 a3, s8 a4, s8 a5);
+BgCellManager *BgCellManager_New(BgConfig *bgConfig, int transferMode, int count, enum HeapID heapId);
+void BgCellManager_Delete(BgCellManager *manager);
+void BgCellManager_InitCell(BgCellManager *manager, int index, int bgId, int width, int height);
+void BgCellManager_SetCellTilemap(BgCellManager *manager, int index, u16 *src);
+void BgCellManager_LoadCellTilemapFromOpenNarc(BgCellManager *manager, int index, NARC *narc, int fileId, int compressed);
+void BgCellManager_DrawCellAt(BgCellManager *manager, int index, int x, int y);
+void BgCellManager_EraseCell(BgCellManager *manager, int index);
+void BgCellManager_StartCellMove(BgCellManager *manager, int index, int dx, int dy, u8 frames);
+void BgCellManager_Update(BgCellManager *manager);
+BOOL BgCellManager_IsCellMoving(BgCellManager *manager, int index);
+void BgCellManager_SetCellPalette(BgCellManager *manager, int index, u8 x, u8 y, u8 width, u8 height, u8 palette);
+u16 *BgCellManager_GetCellTilemap(BgCellManager *manager, int index);
+void BgCellManager_GetCellSize(BgCellManager *manager, int index, u16 *width, u16 *height);
+void BgCellManager_SetCellClipRect(BgCellManager *manager, int index, s8 xMin, s8 xMax, s8 yMin, s8 yMax);
 
 #endif // POKEHEARTGOLD_BG_CELL_MANAGER_H

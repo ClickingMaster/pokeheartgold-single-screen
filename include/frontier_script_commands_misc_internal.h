@@ -16,7 +16,7 @@ u32 BattleTower_GetTrainerMessageBank(u32 mode);
 void FrontierScript_PrintMessageEntryFromBank(void *ctx, void *data, u32 value);
 void *BattleTower_NewBattleSetup(void *data, void *args);
 void Sound_SetSceneAndPlayBGM(u32 scene, u32 sequence, u32 arg);
-void Frontier_LaunchApplication(void *ctx, const void *template, void *args, u32 arg, u32 arg2);
+void Frontier_LaunchApplication(void *ctx, const void *template, void *args, u32 arg, u32 exit);
 extern const u8 gOverlayTemplate_Battle[];
 u32 IsBattleResultWin(u32 result);
 void BattleSetup_Delete(void *setup);

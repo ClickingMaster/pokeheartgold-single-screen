@@ -113,8 +113,8 @@ void FollowMon_SpawnGrassEffects(LocalMapObject *object);
 // FieldEffectManager_CreateEffect, which HiddenObjectCover_Spawn's tail call leaves in r0.
 int HiddenObjectCover_Spawn(LocalMapObject *object, int coverType);
 void TallGrass_Spawn(LocalMapObject *object, int mode);
-void TallGrass_SpawnAt(LocalMapObject *object, int mode, int x, int z, int a4);
+void TallGrass_SpawnAt(LocalMapObject *object, int mode, int x, int z, int checkFacing);
 void VeryTallGrass_Spawn(LocalMapObject *object, int mode);
-void VeryTallGrass_SpawnAt(LocalMapObject *object, int mode, int x, int z, int a4);
+void VeryTallGrass_SpawnAt(LocalMapObject *object, int mode, int x, int z, int checkFacing);
 
 #endif // POKEHEARTGOLD_MAP_OBJECT_FOLLOW_INTERNAL_H

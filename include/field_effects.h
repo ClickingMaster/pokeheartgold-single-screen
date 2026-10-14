@@ -14,8 +14,8 @@ typedef struct {
     UnkOv01_021FFFCC_common unk0;
 } UnkOv01_021FFFCC;
 
-void FieldEffect_Destroy(int a0);
-UnkOv01_021FFFCC *FieldEffect_GetUserData(void *a0);
-void FieldEffect_GetPosition(void *a0, VecFx32 *a1);
+void FieldEffect_Destroy(int value);
+UnkOv01_021FFFCC *FieldEffect_GetUserData(void *data);
+void FieldEffect_GetPosition(void *data, VecFx32 *position);
 
 #endif // POKEHEARTGOLD_FIELD_EFFECTS_H

@@ -222,12 +222,12 @@ struct BattleInput {
 BattleInput *BattleInput_New(void);
 void BgConfig_InitBattleMenuBackgrounds(BgConfig *config);
 void BgConfig_CleanupBattleMenuBackgrounds(BgConfig *config);
-void *BattleInput_NewInit(NARC *a0, NARC *a1, BattleSystem *battleSystem, u32 gender, u8 *a4);
+void *BattleInput_NewInit(NARC *unused, NARC *unused2, BattleSystem *battleSystem, u32 gender, u8 *keyPressedSave);
 void BattleInput_Free(BattleInput *battleInput);
 void BattleInput_LoadDefaultResources(BattleInput *battleInput);
 void BattleInput_ChangeMenu(NARC *narc0, NARC *narc1, BattleInput *battleInput, int menuId, int forceReload, int *menuData);
 void BattleInput_LoadBallGaugeResources(NARC *narc, BattleInput *battleInput);
-void BattleInput_SetPartyExpPercents(BattleInput *battleInput, u8 *a1);
+void BattleInput_SetPartyExpPercents(BattleInput *battleInput, u8 *percentExpToNextLevel);
 void BattleInput_UpdateBallGaugeAnimation(BattleInput *battleInput, u8 *playerStatus, u8 *opponentStatus);
 void BattleInput_EnableBallGauge(BattleInput *battleInput);
 void BattleInput_DisableBallGauge(BattleInput *battleInput);

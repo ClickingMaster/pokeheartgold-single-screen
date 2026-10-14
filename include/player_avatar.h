@@ -66,7 +66,7 @@ void PlayerAvatar_CopyPositionVector(PlayerAvatar *avatar, VecFx32 *vector);
 VecFx32 *PlayerAvatar_GetPositionVector(PlayerAvatar *avatar);
 void PlayerAvatar_SetMoveState(PlayerAvatar *avatar, u32 state);
 u32 PlayerAvatar_GetMoveState(PlayerAvatar *avatar);
-void PlayerAvatar_SetPlayerMoveState(PlayerAvatar *avatar, u32 param1);
+void PlayerAvatar_SetPlayerMoveState(PlayerAvatar *avatar, u32 state);
 u32 PlayerAvatar_GetPlayerMoveState(PlayerAvatar *avatar);
 void PlayerAvatar_SetMapObject(PlayerAvatar *avatar, LocalMapObject *mapObject);
 LocalMapObject *PlayerAvatar_GetMapObject(PlayerAvatar *avatar);

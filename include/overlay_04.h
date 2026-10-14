@@ -11,7 +11,7 @@ void GymmickFree_Blackthorn(FieldSystem *fieldSystem);
 BOOL BlackthornGymmick_TryStartPlatformAction(FieldSystem *fieldSystem);
 void GymmickFree_Fuchsia(FieldSystem *fieldSystem);
 void GymmickFree_Viridian(FieldSystem *fieldSystem);
-void ViridianGymmick_HandleTileAction(FieldSystem *fieldSystem, u8 arg1);
+void ViridianGymmick_HandleTileAction(FieldSystem *fieldSystem, u8 tile);
 void GymmickFree_Sinjoh(FieldSystem *fieldSystem);
 
 void GymmickInit_Ecruteak(FieldSystem *fieldSystem);

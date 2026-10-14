@@ -3,6 +3,6 @@
 
 #include "field/field_effect_manager.h"
 
-void RenderModel_Free(UnkOv01_021FFECC_sub *a0);
+void RenderModel_Free(UnkOv01_021FFECC_sub *data);
 
 #endif // POKEHEARTGOLD_RENDER_MODEL_H

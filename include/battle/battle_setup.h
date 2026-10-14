@@ -94,9 +94,9 @@ void BattleSetup_InitForLinkBattle(BattleSetup *setup, FieldSystem *fieldSystem,
 void BattleSetup_CopyResultsToSaveData(BattleSetup *setup, FieldSystem *fieldSystem);
 void BattleSetup_CopyPokedexToSaveData(BattleSetup *setup, FieldSystem *fieldSystem);
 void BattleSetup_SetFishing(BattleSetup *setup);
-BOOL IsBattleResultWin(u32 a0);
-BOOL IsBattleResultStaticWildWin(u32 a0);
-BOOL IsBattleResultLatiCaught(u32 a0);
+BOOL IsBattleResultWin(u32 result);
+BOOL IsBattleResultStaticWildWin(u32 result);
+BOOL IsBattleResultLatiCaught(u32 result);
 void BattleSetup_SetAllySideBattlersToPlayer(BattleSetup *setup);
 
 #endif // POKEHEARTGOLD_BATTLE_SETUP_H

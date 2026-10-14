@@ -49,7 +49,7 @@ BOOL ScrCmd_GiveBadge(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_297(ScriptContext *ctx) {
+BOOL ScrCmd_CheckFlagUnk960(ScriptContext *ctx) {
     u16 *ret = ScriptGetVarPointer(ctx);
 
     *ret = CheckFlag960(Save_VarsFlags_Get(ctx->fieldSystem->saveData));
@@ -63,7 +63,7 @@ BOOL ScrCmd_CountBadges(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_298(ScriptContext *ctx) {
+BOOL ScrCmd_SetFlagUnk960(ScriptContext *ctx) {
     SetFlag960(Save_VarsFlags_Get(ctx->fieldSystem->saveData));
     return FALSE;
 }

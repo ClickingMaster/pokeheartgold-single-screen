@@ -311,7 +311,7 @@
       ]
     },
     {
-      "name": "ScrCmd_048",
+      "name": "NPCMsgAutoScrollInLink",
       "args": [
         "message"
       ]
@@ -380,11 +380,11 @@
       ]
     },
     {
-      "name": "ScrCmd_061",
+      "name": "ReopenStartMenuOnEnd",
       "args": []
     },
     {
-      "name": "ScrCmd_062",
+      "name": "ScrollMsgBg",
       "args": [
         1,
         1,
@@ -401,7 +401,7 @@
       ]
     },
     {
-      "name": "ScrCmd_064",
+      "name": "MultichoiceInitStdGmm",
       "args": [
         1,
         1,
@@ -411,7 +411,7 @@
       ]
     },
     {
-      "name": "ScrCmd_065",
+      "name": "MultichoiceInit",
       "args": [
         1,
         1,
@@ -421,18 +421,18 @@
       ]
     },
     {
-      "name": "ScrCmd_066",
+      "name": "MultichoiceItemAdd",
       "args": [
         "message",
         1
       ]
     },
     {
-      "name": "ScrCmd_067",
+      "name": "MultichoiceExec",
       "args": []
     },
     {
-      "name": "ScrCmd_068",
+      "name": "ScriptListMenuInitStdGmm",
       "args": [
         1,
         1,
@@ -442,7 +442,7 @@
       ]
     },
     {
-      "name": "ScrCmd_069",
+      "name": "ScriptListMenuInit",
       "args": [
         1,
         1,
@@ -452,7 +452,7 @@
       ]
     },
     {
-      "name": "ScrCmd_070",
+      "name": "ScriptListMenuItemAdd",
       "args": [
         2,
         2,
@@ -460,11 +460,11 @@
       ]
     },
     {
-      "name": "ScrCmd_071",
+      "name": "ScriptListMenuExec",
       "args": []
     },
     {
-      "name": "ScrCmd_072",
+      "name": "MultichoiceGridExec",
       "args": [
         1
       ]
@@ -525,7 +525,7 @@
       "args": []
     },
     {
-      "name": "ScrCmd_083",
+      "name": "SetBGMOverride",
       "args": [
         2
       ]
@@ -544,7 +544,7 @@
       ]
     },
     {
-      "name": "ScrCmd_086",
+      "name": "SetSoundPlayerPause",
       "args": [
         1,
         1
@@ -557,7 +557,7 @@
       ]
     },
     {
-      "name": "ScrCmd_088",
+      "name": "SetBGMDisabled",
       "args": [
         1
       ]
@@ -583,7 +583,7 @@
       "args": []
     },
     {
-      "name": "ScrCmd_093",
+      "name": "SetSoundScene63",
       "args": []
     },
     {
@@ -630,14 +630,14 @@
       ]
     },
     {
-      "name": "ScrCmd_102",
+      "name": "CreateCameraTarget",
       "args": [
         "var",
         "var"
       ]
     },
     {
-      "name": "ScrCmd_103",
+      "name": "RemoveCameraTarget",
       "args": []
     },
     {
@@ -660,7 +660,7 @@
       ]
     },
     {
-      "name": "ScrCmd_107",
+      "name": "OffsetPlayerAndCamera",
       "args": [
         2,
         2,
@@ -668,14 +668,14 @@
       ]
     },
     {
-      "name": "ScrCmd_108",
+      "name": "SetObjectKeep",
       "args": [
         2,
         1
       ]
     },
     {
-      "name": "ScrCmd_109",
+      "name": "ChangeObjectMovement",
       "args": [
         "var",
         2
@@ -716,7 +716,7 @@
       "args": []
     },
     {
-      "name": "ScrCmd_116",
+      "name": "ShowPointsBox",
       "args": [
         1,
         2,
@@ -724,11 +724,11 @@
       ]
     },
     {
-      "name": "ScrCmd_117",
+      "name": "HidePointsBox",
       "args": []
     },
     {
-      "name": "ScrCmd_118",
+      "name": "UpdatePointsBox",
       "args": [
         1
       ]
@@ -852,7 +852,7 @@
       ]
     },
     {
-      "name": "ScrCmd_136",
+      "name": "GetPartyMonUnownLetter",
       "args": [
         2,
         2
@@ -938,7 +938,7 @@
       ]
     },
     {
-      "name": "ScrCmd_148",
+      "name": "SetPhoneCallTrigger",
       "args": [
         1,
         1
@@ -955,21 +955,21 @@
       "args": []
     },
     {
-      "name": "ScrCmd_151",
+      "name": "StartPalPadRegistration",
       "args": []
     },
     {
-      "name": "ScrCmd_152",
+      "name": "OpenWifiClub",
       "args": []
     },
     {
-      "name": "ScrCmd_153",
+      "name": "FashionAppGetEntryIndex",
       "args": [
         2
       ]
     },
     {
-      "name": "ScrCmd_154",
+      "name": "OpenDressUp",
       "args": [
         "var",
         "var",
@@ -977,14 +977,14 @@
       ]
     },
     {
-      "name": "ScrCmd_155",
+      "name": "OpenAccessoryPortrait",
       "args": [
         2,
         "var"
       ]
     },
     {
-      "name": "ScrCmd_156",
+      "name": "OpenBallCapsuleEditor",
       "args": []
     },
     {
@@ -992,25 +992,25 @@
       "args": []
     },
     {
-      "name": "ScrCmd_158",
+      "name": "OpenPCBox",
       "args": [
         1
       ]
     },
     {
-      "name": "ScrCmd_159",
+      "name": "OpenDrawingSession",
       "args": []
     },
     {
-      "name": "ScrCmd_160",
+      "name": "OpenLinkTrainerCard",
       "args": []
     },
     {
-      "name": "ScrCmd_161",
+      "name": "OpenWirelessTrade",
       "args": []
     },
     {
-      "name": "ScrCmd_162",
+      "name": "OpenRecordMixing",
       "args": []
     },
     {
@@ -1020,18 +1020,18 @@
       ]
     },
     {
-      "name": "ScrCmd_164",
+      "name": "OpenHallOfFameShowcase",
       "args": []
     },
     {
-      "name": "ScrCmd_165",
+      "name": "OpenGts",
       "args": [
         "var",
         "var"
       ]
     },
     {
-      "name": "ScrCmd_166",
+      "name": "OpenWifiClubWithResult",
       "args": [
         "var"
       ]
@@ -1121,7 +1121,7 @@
       ]
     },
     {
-      "name": "ScrCmd_180",
+      "name": "FlyWarp",
       "args": [
         2,
         2,
@@ -1139,7 +1139,7 @@
       ]
     },
     {
-      "name": "ScrCmd_183",
+      "name": "PlayFieldMoveCutIn",
       "args": [
         "var"
       ]
@@ -1299,14 +1299,14 @@
       ]
     },
     {
-      "name": "ScrCmd_208",
+      "name": "Dummy208",
       "args": [
         1,
         "var"
       ]
     },
     {
-      "name": "ScrCmd_209",
+      "name": "Dummy209",
       "args": [
         1,
         "var"
@@ -1320,7 +1320,7 @@
       ]
     },
     {
-      "name": "ScrCmd_211",
+      "name": "GetSwarmMapAndSpecies",
       "args": [
         2,
         2
@@ -1400,11 +1400,11 @@
       ]
     },
     {
-      "name": "ScrCmd_223",
+      "name": "TrainerBattleWithTrainer1",
       "args": []
     },
     {
-      "name": "ScrCmd_224",
+      "name": "SetLastInteractedTrainerFlag",
       "args": []
     },
     {
@@ -1414,7 +1414,7 @@
       ]
     },
     {
-      "name": "ScrCmd_226",
+      "name": "CommClubJoin",
       "args": [
         "var",
         "var",
@@ -1423,7 +1423,7 @@
       ]
     },
     {
-      "name": "ScrCmd_227",
+      "name": "CommClubHost",
       "args": [
         "var",
         "var",
@@ -1432,39 +1432,39 @@
       ]
     },
     {
-      "name": "ScrCmd_228",
+      "name": "Dummy228",
       "args": [
         2
       ]
     },
     {
-      "name": "ScrCmd_229",
+      "name": "Dummy229",
       "args": [
         2
       ]
     },
     {
-      "name": "ScrCmd_230",
+      "name": "LinkBattle",
       "args": []
     },
     {
-      "name": "ScrCmd_231",
+      "name": "Dummy231",
       "args": []
     },
     {
-      "name": "ScrCmd_232",
+      "name": "ConditionalLinkSyncStart",
       "args": [
         2
       ]
     },
     {
-      "name": "ScrCmd_233",
+      "name": "ConditionalLinkSyncWait",
       "args": [
         2
       ]
     },
     {
-      "name": "ScrCmd_234",
+      "name": "ConditionalLinkSyncCreate",
       "args": [
         "var",
         "var",
@@ -1473,19 +1473,19 @@
       ]
     },
     {
-      "name": "ScrCmd_235",
+      "name": "ConditionalLinkSyncDestroy",
       "args": [
         "var"
       ]
     },
     {
-      "name": "ScrCmd_236",
+      "name": "SetVarZero",
       "args": [
         2
       ]
     },
     {
-      "name": "ScrCmd_237",
+      "name": "BeginTextAutoScroll",
       "args": []
     },
     {
@@ -1551,7 +1551,7 @@
       ]
     },
     {
-      "name": "ScrCmd_247",
+      "name": "Dummy247",
       "args": []
     },
     {
@@ -1570,7 +1570,7 @@
       ]
     },
     {
-      "name": "ScrCmd_250",
+      "name": "StartFirstBattle",
       "args": [
         2,
         2
@@ -1581,7 +1581,7 @@
       "args": []
     },
     {
-      "name": "ScrCmd_252",
+      "name": "OpenTrainerCardSignature",
       "args": []
     },
     {
@@ -1597,112 +1597,112 @@
       ]
     },
     {
-      "name": "ScrCmd_255",
+      "name": "FashionEntryIsSaved",
       "args": [
         2,
         "var"
       ]
     },
     {
-      "name": "ScrCmd_256",
+      "name": "FashionEntrySetMailWord",
       "args": [
         "var"
       ]
     },
     {
-      "name": "ScrCmd_257",
+      "name": "LinkSyncAndWait",
       "args": [
         2
       ]
     },
     {
-      "name": "ScrCmd_258",
+      "name": "LinkSyncClearPackets",
       "args": []
     },
     {
-      "name": "ScrCmd_259",
+      "name": "GetUnionRoomPartnerHometownMsg",
       "args": [
         2
       ]
     },
     {
-      "name": "ScrCmd_260",
+      "name": "GetUnionRoomOwnChatMsg",
       "args": [
         "var"
       ]
     },
     {
-      "name": "ScrCmd_261",
+      "name": "UnionRoomSetActivity",
       "args": [
         2
       ]
     },
     {
-      "name": "ScrCmd_262",
+      "name": "UnionRoomRefuseJoins",
       "args": []
     },
     {
-      "name": "ScrCmd_263",
+      "name": "UnionRoomResumeSearch",
       "args": []
     },
     {
-      "name": "ScrCmd_264",
+      "name": "BufferUnionRoomPartnerLanguage",
       "args": [
         2
       ]
     },
     {
-      "name": "ScrCmd_265",
+      "name": "FieldCommRegisterCommands",
       "args": []
     },
     {
-      "name": "ScrCmd_266",
+      "name": "UnionRoomRequestLeaveAll",
       "args": []
     },
     {
-      "name": "ScrCmd_267",
+      "name": "GetUnionRoomTalkMsg",
       "args": [
         2,
         "var"
       ]
     },
     {
-      "name": "ScrCmd_268",
+      "name": "GetUnionRoomPlayerActivity",
       "args": [
         "var"
       ]
     },
     {
-      "name": "ScrCmd_269",
+      "name": "UnionRoomWaitJoinStatus",
       "args": [
         "var"
       ]
     },
     {
-      "name": "ScrCmd_270",
+      "name": "UnionRoomRestoreObjects",
       "args": []
     },
     {
-      "name": "ScrCmd_271",
+      "name": "UnionRoomSendTalkResponse",
       "args": [
         2,
         2
       ]
     },
     {
-      "name": "ScrCmd_272",
+      "name": "UnionRoomWaitTalkChoice",
       "args": [
         "var"
       ]
     },
     {
-      "name": "ScrCmd_273",
+      "name": "UnionRoomWaitTalkReply",
       "args": [
         "var"
       ]
     },
     {
-      "name": "ScrCmd_274",
+      "name": "UnionRoomRequestJoinPlayer",
       "args": [
         "var",
         "var"
@@ -1753,21 +1753,21 @@
       "args": []
     },
     {
-      "name": "ScrCmd_283",
+      "name": "CommClubExit",
       "args": []
     },
     {
-      "name": "ScrCmd_284",
+      "name": "CommClubStartCardExchange",
       "args": []
     },
     {
-      "name": "ScrCmd_285",
+      "name": "SetCommPlayerFacing",
       "args": [
         2
       ]
     },
     {
-      "name": "ScrCmd_286",
+      "name": "EnterUnionRoom",
       "args": []
     },
     {
@@ -1782,7 +1782,7 @@
       ]
     },
     {
-      "name": "ScrCmd_289",
+      "name": "SetPlayerProfileAvatar",
       "args": [
         "var"
       ]
@@ -1827,13 +1827,13 @@
       ]
     },
     {
-      "name": "ScrCmd_297",
+      "name": "CheckFlagUnk960",
       "args": [
         "var"
       ]
     },
     {
-      "name": "ScrCmd_298",
+      "name": "SetFlagUnk960",
       "args": []
     },
     {
@@ -1875,7 +1875,7 @@
       "args": []
     },
     {
-      "name": "ScrCmd_307",
+      "name": "DoorAnimationLoad",
       "args": [
         2,
         2,
@@ -1885,25 +1885,25 @@
       ]
     },
     {
-      "name": "ScrCmd_308",
+      "name": "DoorAnimationWait",
       "args": [
         1
       ]
     },
     {
-      "name": "ScrCmd_309",
+      "name": "DoorAnimationUnload",
       "args": [
         1
       ]
     },
     {
-      "name": "ScrCmd_310",
+      "name": "DoorAnimationOpen",
       "args": [
         1
       ]
     },
     {
-      "name": "ScrCmd_311",
+      "name": "DoorAnimationClose",
       "args": [
         1
       ]
@@ -1923,15 +1923,15 @@
       "args": []
     },
     {
-      "name": "ScrCmd_315",
+      "name": "EcruteakGymBindCandleToTrainer",
       "args": []
     },
     {
-      "name": "ScrCmd_316",
+      "name": "EcruteakGymUnbindCandleFromTrainer",
       "args": []
     },
     {
-      "name": "ScrCmd_317",
+      "name": "EcruteakGymExtinguishCandle",
       "args": [
         1
       ]
@@ -2011,19 +2011,19 @@
       ]
     },
     {
-      "name": "ScrCmd_333",
+      "name": "BagSelectItem",
       "args": [
         1
       ]
     },
     {
-      "name": "ScrCmd_334",
+      "name": "BagGetSelectedItem",
       "args": [
         2
       ]
     },
     {
-      "name": "ScrCmd_335",
+      "name": "BagPocketHasItems",
       "args": [
         2,
         2
@@ -2093,7 +2093,7 @@
       ]
     },
     {
-      "name": "ScrCmd_344",
+      "name": "SetObjectFacingAndUpdateDraw",
       "args": [
         2,
         2
@@ -2108,7 +2108,7 @@
       "args": []
     },
     {
-      "name": "ScrCmd_347",
+      "name": "WriteScriptEnvField34",
       "args": [
         "var"
       ]
@@ -2124,7 +2124,7 @@
       "args": []
     },
     {
-      "name": "ScrCmd_350",
+      "name": "UnionRoomBattlePartySelect",
       "args": []
     },
     {
@@ -2249,7 +2249,7 @@
       "args": []
     },
     {
-      "name": "ScrCmd_370",
+      "name": "BagSelectItemNoResult",
       "args": [
         1
       ]
@@ -2274,7 +2274,7 @@
       ]
     },
     {
-      "name": "ScrCmd_374",
+      "name": "MakeObjectInvisible",
       "args": [
         "object2"
       ]
@@ -2286,11 +2286,11 @@
       ]
     },
     {
-      "name": "ScrCmd_376",
+      "name": "OpenMailbox",
       "args": []
     },
     {
-      "name": "ScrCmd_377",
+      "name": "CountMailboxMessages",
       "args": [
         "var"
       ]
@@ -2303,7 +2303,7 @@
       ]
     },
     {
-      "name": "ScrCmd_379",
+      "name": "GetCurrentTimeOfDay",
       "args": [
         "var"
       ]
@@ -2316,7 +2316,7 @@
       ]
     },
     {
-      "name": "ScrCmd_381",
+      "name": "Random2",
       "args": [
         2,
         2
@@ -2407,13 +2407,13 @@
       ]
     },
     {
-      "name": "ScrCmd_394",
+      "name": "OpenLearnForgetMove",
       "args": [
         "var"
       ]
     },
     {
-      "name": "ScrCmd_395",
+      "name": "GetLearnForgetMoveResult",
       "args": [
         "var"
       ]
@@ -2491,14 +2491,14 @@
       "switch_arg": 0
     },
     {
-      "name": "ScrCmd_403",
+      "name": "GiveAccessory",
       "args": [
         "var",
         "var"
       ]
     },
     {
-      "name": "ScrCmd_404",
+      "name": "CanGiveAccessory",
       "args": [
         "var",
         "var",
@@ -2506,7 +2506,7 @@
       ]
     },
     {
-      "name": "ScrCmd_405",
+      "name": "HasAccessoryCount",
       "args": [
         2,
         2,
@@ -2514,42 +2514,42 @@
       ]
     },
     {
-      "name": "ScrCmd_406",
+      "name": "GiveContestBackground",
       "args": [
         "var"
       ]
     },
     {
-      "name": "ScrCmd_407",
-      "args": [
-        "var",
-        "var"
-      ]
-    },
-    {
-      "name": "ScrCmd_408",
+      "name": "HasWallpaper",
       "args": [
         "var",
         "var"
       ]
     },
     {
-      "name": "ScrCmd_409",
+      "name": "OpenBattleRoomResults",
+      "args": [
+        "var",
+        "var"
+      ]
+    },
+    {
+      "name": "FrontierAssertCleared",
       "args": []
     },
     {
-      "name": "ScrCmd_410",
+      "name": "FrontierFieldSystemInit",
       "args": [
         2,
         2
       ]
     },
     {
-      "name": "ScrCmd_411",
+      "name": "FrontierFieldSystemFree",
       "args": []
     },
     {
-      "name": "ScrCmd_412",
+      "name": "BattleTowerAction",
       "args": [
         2,
         "var",
@@ -2557,7 +2557,7 @@
       ]
     },
     {
-      "name": "ScrCmd_413",
+      "name": "BattleTowerGetAllyMonSpeciesAndMove",
       "args": [
         "var",
         2,
@@ -2566,53 +2566,53 @@
       ]
     },
     {
-      "name": "ScrCmd_414",
+      "name": "BattleTowerClaimRecordMilestone",
       "args": [
         "var"
       ]
     },
     {
-      "name": "ScrCmd_415",
+      "name": "BattleTowerGetRecordMilestone",
       "args": [
         "var"
       ]
     },
     {
-      "name": "ScrCmd_416",
+      "name": "BattleTowerSendLinkData",
       "args": [
         2,
-        2,
-        "var"
-      ]
-    },
-    {
-      "name": "ScrCmd_417",
-      "args": [
         2,
         "var"
       ]
     },
     {
-      "name": "ScrCmd_418",
+      "name": "BattleTowerCheckLinkPartner",
+      "args": [
+        2,
+        "var"
+      ]
+    },
+    {
+      "name": "GetBattleRoomLeadersRoom",
       "args": [
         "var",
         "var"
       ]
     },
     {
-      "name": "ScrCmd_419",
+      "name": "BattleRoomHasLeaders",
       "args": [
         "var"
       ]
     },
     {
-      "name": "ScrCmd_420",
+      "name": "IncGameStat",
       "args": [
         2
       ]
     },
     {
-      "name": "ScrCmd_421",
+      "name": "GetGameStatHiLo",
       "args": [
         2,
         2,
@@ -2620,7 +2620,7 @@
       ]
     },
     {
-      "name": "ScrCmd_422",
+      "name": "ModifyGameStat",
       "args": [
         2,
         2,
@@ -2655,7 +2655,7 @@
       ]
     },
     {
-      "name": "ScrCmd_427",
+      "name": "Dummy427",
       "args": [
         2
       ]
@@ -2714,7 +2714,7 @@
       ]
     },
     {
-      "name": "ScrCmd_436",
+      "name": "LeaveOverworld",
       "args": []
     },
     {
@@ -2745,7 +2745,7 @@
       ]
     },
     {
-      "name": "ScrCmd_441",
+      "name": "NonNPCMsgEasyChat",
       "args": [
         2,
         2,
@@ -2754,7 +2754,7 @@
       ]
     },
     {
-      "name": "ScrCmd_442",
+      "name": "MsgBoxEasyChat",
       "args": [
         2,
         2,
@@ -2763,13 +2763,13 @@
       ]
     },
     {
-      "name": "ScrCmd_443",
+      "name": "MsgBoxFrontierOpponentIntro",
       "args": [
         1
       ]
     },
     {
-      "name": "ScrCmd_444",
+      "name": "MsgBoxFrontierBannedSpecies",
       "args": [
         1,
         2,
@@ -2778,13 +2778,13 @@
       ]
     },
     {
-      "name": "ScrCmd_445",
+      "name": "GetPreviousMapId",
       "args": [
         "var"
       ]
     },
     {
-      "name": "ScrCmd_446",
+      "name": "GetCurrentMapId",
       "args": [
         "var"
       ]
@@ -2797,7 +2797,7 @@
       ]
     },
     {
-      "name": "ScrCmd_448",
+      "name": "WarpToColosseum",
       "args": [
         "maps",
         2,
@@ -2807,40 +2807,40 @@
       ]
     },
     {
-      "name": "ScrCmd_449",
+      "name": "ReturnFromColosseum",
       "args": []
     },
     {
-      "name": "ScrCmd_450",
+      "name": "OpenGeonetGlobe",
       "args": []
     },
     {
-      "name": "ScrCmd_451",
+      "name": "GetLocalNetId",
       "args": [
         "var"
       ]
     },
     {
-      "name": "ScrCmd_452",
+      "name": "ShowPokemonPicWindow",
       "args": [
         "species",
         2
       ]
     },
     {
-      "name": "ScrCmd_453",
+      "name": "ClosePokemonPicWindow",
       "args": []
     },
     {
-      "name": "ScrCmd_454",
+      "name": "SetLastTalkedTrainerMovement",
       "args": []
     },
     {
-      "name": "ScrCmd_455",
+      "name": "NPCMsgByObjectType",
       "args": []
     },
     {
-      "name": "ScrCmd_456",
+      "name": "TogglePlayerAutoHeightUpdate",
       "args": [
         1
       ]
@@ -2860,7 +2860,7 @@
       ]
     },
     {
-      "name": "ScrCmd_459",
+      "name": "LighthouseLightUp",
       "args": []
     },
     {
@@ -2879,7 +2879,7 @@
       ]
     },
     {
-      "name": "ScrCmd_462",
+      "name": "ClearPhoneRematchSeeking",
       "args": [
         "var"
       ]
@@ -2895,7 +2895,7 @@
       ]
     },
     {
-      "name": "ScrCmd_465",
+      "name": "FriendGroupAction",
       "args": [
         2
       ],
@@ -2930,7 +2930,7 @@
       }
     },
     {
-      "name": "ScrCmd_466",
+      "name": "MonHasRelearnableMoves",
       "args": [
         "var",
         "var"
@@ -2984,7 +2984,7 @@
       "args": []
     },
     {
-      "name": "ScrCmd_475",
+      "name": "Dummy475",
       "args": []
     },
     {
@@ -3106,13 +3106,13 @@
       ]
     },
     {
-      "name": "ScrCmd_491",
+      "name": "Dummy491",
       "args": [
         2
       ]
     },
     {
-      "name": "ScrCmd_492",
+      "name": "PromptEasyChatOneWord",
       "args": [
         "var",
         "var",
@@ -3128,7 +3128,7 @@
       ]
     },
     {
-      "name": "ScrCmd_494",
+      "name": "BufferEasyChatWord",
       "args": [
         2,
         "var"
@@ -3175,19 +3175,19 @@
       ]
     },
     {
-      "name": "ScrCmd_500",
+      "name": "PCPropLoadAnimation",
       "args": [
         1
       ]
     },
     {
-      "name": "ScrCmd_501",
+      "name": "PCPropPowerOn",
       "args": [
         1
       ]
     },
     {
-      "name": "ScrCmd_502",
+      "name": "PCPropPowerOff",
       "args": [
         1
       ]
@@ -3231,13 +3231,13 @@
       ]
     },
     {
-      "name": "ScrCmd_509",
+      "name": "MigratedPokemonIsFull",
       "args": [
         "var"
       ]
     },
     {
-      "name": "ScrCmd_510",
+      "name": "MoveMigratedPokemonToPC",
       "args": []
     },
     {
@@ -3275,40 +3275,40 @@
       ]
     },
     {
-      "name": "ScrCmd_517",
+      "name": "PartyHasSpecies",
       "args": [
         "species",
         "var"
       ]
     },
     {
-      "name": "ScrCmd_518",
+      "name": "SetPartyDeoxysForm",
       "args": [
         "var"
       ]
     },
     {
-      "name": "ScrCmd_519",
+      "name": "CountPartyBurmyForms",
       "args": [
         2
       ]
     },
     {
-      "name": "ScrCmd_520",
+      "name": "SetFlagUnk975",
       "args": []
     },
     {
-      "name": "ScrCmd_521",
+      "name": "ClearFlagUnk975",
       "args": []
     },
     {
-      "name": "ScrCmd_522",
+      "name": "GetCurrentHour",
       "args": [
         "var"
       ]
     },
     {
-      "name": "ScrCmd_523",
+      "name": "SpinObject",
       "args": [
         "object2",
         2,
@@ -3318,7 +3318,7 @@
       ]
     },
     {
-      "name": "ScrCmd_524",
+      "name": "BlinkObject",
       "args": [
         2,
         2,
@@ -3326,13 +3326,13 @@
       ]
     },
     {
-      "name": "ScrCmd_525",
+      "name": "HasAllRegisInParty",
       "args": [
         2
       ]
     },
     {
-      "name": "ScrCmd_526",
+      "name": "GetRandomGivableAccessory",
       "args": [
         2
       ]

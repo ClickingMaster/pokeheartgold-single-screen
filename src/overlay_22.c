@@ -10,7 +10,7 @@
 
 extern Window *PointsBox_New(struct FieldSystem *fieldSystem, u8 type, u8 x, u8 y);
 
-BOOL ScrCmd_116(ScriptContext *ctx) {
+BOOL ScrCmd_ShowPointsBox(ScriptContext *ctx) {
     u8 type = ScriptReadByte(ctx);
     u16 x = ScriptGetVar(ctx);
     u16 y = ScriptGetVar(ctx);
@@ -19,13 +19,13 @@ BOOL ScrCmd_116(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_117(ScriptContext *ctx) {
+BOOL ScrCmd_HidePointsBox(ScriptContext *ctx) {
     Window **window = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_POINTS_BOX);
     PointsBox_Delete(*window);
     return FALSE;
 }
 
-BOOL ScrCmd_118(ScriptContext *ctx) {
+BOOL ScrCmd_UpdatePointsBox(ScriptContext *ctx) {
     u8 type = ScriptReadByte(ctx);
     Window **window = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_POINTS_BOX);
     PointsBox_Update(ctx->fieldSystem, *window, type);

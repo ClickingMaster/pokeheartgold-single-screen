@@ -13,6 +13,6 @@ typedef struct HatchEggArgs {
     u16 unkC;
 } HatchEggArgs;
 
-void CallTask_HatchEggInParty(TaskManager *taskman, HatchEggArgs *a1);
+void CallTask_HatchEggInParty(TaskManager *taskman, HatchEggArgs *args);
 
 #endif // POKEHEARTGOLD_HATCH_EGG_TASK_H

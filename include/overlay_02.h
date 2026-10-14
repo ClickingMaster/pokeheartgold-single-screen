@@ -55,7 +55,7 @@ Field3dObjectTask *RockDebris_CreateWithFollower(FieldSystem *fieldSystem);
 void RockDebris_Delete(Field3dObjectTask *task);
 
 // TODO: define the struct, figure out what a1 is
-void *FieldMoveCutIn_Start(FieldSystem *fieldSystem, int a1, Pokemon *mon, int gender);
+void *FieldMoveCutIn_Start(FieldSystem *fieldSystem, int kind, Pokemon *mon, int gender);
 BOOL FieldMoveCutIn_IsFinished(void *work);
 void FieldMoveCutIn_Delete(void *work);
 SysTask *FieldMoveCutIn_StartFlyWithObject(FieldSystem *fieldSystem, Pokemon *mon, LocalMapObject *object, LocalMapObject *otherObject);

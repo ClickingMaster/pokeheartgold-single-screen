@@ -128,9 +128,9 @@ void MysteryGiftComm_Task(SysTask *task, void *data) {
     }
 }
 
-void MysteryGiftComm_StartParent(void *owner, void *saveData, void *a2) {
+void MysteryGiftComm_StartParent(void *owner, void *saveData, void *linkMode) {
     if (!Comm_IsActive()) {
-        CommState_StartMysteryGiftParent(saveData, a2);
+        CommState_StartMysteryGiftParent(saveData, linkMode);
         MysteryGiftComm_Start(owner);
         MysteryGiftComm_SetState(MysteryGiftComm_ParentWaitStartup, 0);
     }
@@ -142,10 +142,10 @@ int MysteryGiftWireless_SendCard(void *data, void *size) {
 
 #pragma force_active on
 
-void MysteryGiftComm_StartChild(void *owner, int a1) {
+void MysteryGiftComm_StartChild(void *owner, int linkMode) {
     if (!Comm_IsActive()) {
         void **args = OverlayManager_GetArgs(MysteryGiftApp_GetOverlayManager());
-        CommState_StartMysteryGiftChild(args[2], a1);
+        CommState_StartMysteryGiftChild(args[2], linkMode);
         MysteryGiftComm_Start(owner);
         MysteryGiftComm_SetState(MysteryGiftComm_ChildWaitStartup, 0);
     }

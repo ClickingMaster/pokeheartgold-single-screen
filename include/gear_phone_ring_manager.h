@@ -52,7 +52,7 @@ void GearPhoneRingManager_SetCallTrigger(GearPhoneRingManager *ptr, u8 callTrigg
 void GearPhoneRingManager_AddMinutes(GearPhoneRingManager *ptr, s32 minutes, BOOL a2);
 void GearPhoneRingManager_HandleTimeAdvance(GearPhoneRingManager *ptr, s64 seconds);
 void GearPhoneRingManager_ResetIfActive(GearPhoneRingManager *ptr);
-void GearPhone_ToggleRinging(GearPhoneRingManager *ptr, BOOL a1);
+void GearPhone_ToggleRinging(GearPhoneRingManager *ptr, BOOL toggle);
 BOOL FieldSystem_TryTriggerBillPCFullCall(FieldSystem *sys);
 BOOL FieldSystem_TryTriggerOakDexProgressCall(FieldSystem *sys);
 BOOL FieldSystem_TryTriggerElmEggHatchedCall(FieldSystem *sys, Pokemon *mon);

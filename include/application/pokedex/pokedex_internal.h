@@ -388,9 +388,9 @@ void PokedexApp_SetupSearchPage(PokedexAppData *pokedexApp, int searchPage, int 
 void PokedexApp_SelectSearchOrder(PokedexAppData *pokedexApp, int index);
 void PokedexApp_HighlightSearchTypes(PokedexAppData *pokedexApp);
 void PokedexApp_SelectSearchArea(PokedexAppData *pokedexApp, int index);
-void PokedexApp_SelectSearchBodyType(PokedexAppData *pokedexApp, u32 a1);
+void PokedexApp_SelectSearchBodyType(PokedexAppData *pokedexApp, u32 bodyType);
 u8 PokedexApp_GetLetterGridCell(int index);
-void PokedexApp_SelectSearchLetter(PokedexAppData *pokedexApp, u32 a1);
+void PokedexApp_SelectSearchLetter(PokedexAppData *pokedexApp, u32 letter);
 void PokedexApp_BuildListReturnCells(PokedexAppData *pokedexApp);
 void PokedexApp_UpdateSearchResultEntry(PokedexAppData *pokedexApp);
 void PokedexApp_CycleSearchEntryLanguage(PokedexAppData *pokedexApp, u16 species, s16 delta);
@@ -405,10 +405,10 @@ void PokedexApp_FreeAreaList(PokedexAppData *pokedexApp);
 BOOL PokedexApp_IsDungeonArea(PokedexAppData *pokedexApp, u32 areaIndex);
 u32 PokedexApp_GetAreaEncounterFlag(PokedexAppData *pokedexApp, u32 areaIndex, u32 sourceBit);
 u32 PokedexApp_GetAreaMapId(PokedexAppData *pokedexApp, u32 areaIndex);
-u32 PokedexApp_GetOverworldMapId(u32 a0);
+u32 PokedexApp_GetOverworldMapId(u32 idx);
 u32 PokedexApp_GetDungeonMapId(u32 index);
-BOOL PokedexApp_IsRoute2Area(u32 a0);
-BOOL PokedexApp_IsRoute16Area(u32 a0);
+BOOL PokedexApp_IsRoute2Area(u32 idx);
+BOOL PokedexApp_IsRoute16Area(u32 idx);
 void PokedexApp_LoadAreaTables(PokedexAppData *pokedexApp);
 void PokedexApp_FreeAreaTables(PokedexAppData *pokedexApp);
 

@@ -61,7 +61,7 @@ typedef struct PokeathlonCourseObjects {
 // Course object code (OVY_96, not yet tidied).
 void *PokeathlonCourseMonGfx_GetSprite(void *gfx);
 BOOL PokeathlonCourseMonGfx_IsShiftedUp(void *gfx);
-void PokeathlonCourseMonGfx_SetScale(void *gfx, void *scale, void *a2);
+void PokeathlonCourseMonGfx_SetScale(void *gfx, void *scale, void *y);
 void PokeathlonCourseMonGfx_ShiftLargeUp(void *gfxManager);
 PokeathlonCourseObject *PokeathlonCourseMonObjects_Get(void *objects, u8 index);
 void *PokeathlonCourseMonObject_GetGfx(void *object);

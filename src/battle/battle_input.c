@@ -1283,15 +1283,15 @@ void BgConfig_CleanupBattleMenuBackgrounds(BgConfig *config) {
     }
 }
 
-void *BattleInput_NewInit(NARC *unused, NARC *unused2, BattleSystem *battleSystem, u32 gender, u8 *a4) {
+void *BattleInput_NewInit(NARC *unused, NARC *unused2, BattleSystem *battleSystem, u32 gender, u8 *keyPressedSave) {
     BattleInput *battleInput = BattleInput_New();
 
     battleInput->battleSystem = battleSystem;
     battleInput->gender = gender;
-    battleInput->keyPressedSave = a4;
+    battleInput->keyPressedSave = keyPressedSave;
 
     if (battleInput->keyPressedSave != 0) {
-        battleInput->keyPressed = *a4;
+        battleInput->keyPressed = *keyPressedSave;
     }
 
     PaletteData *palette = BattleSystem_GetPaletteData(battleSystem);

@@ -28,7 +28,7 @@ struct SysTaskQueue {
     SysTask *nextTask;
 };
 
-void SysTaskQueue_RunTasks(SysTaskQueue *a0);
+void SysTaskQueue_RunTasks(SysTaskQueue *queue);
 u32 SysTaskQueue_GetArenaSize(u32 num);
 SysTaskQueue *SysTaskQueue_PlacementNew(u32 num, void *p_mem);
 void *SysTask_GetData(SysTask *task);

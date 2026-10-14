@@ -10,7 +10,7 @@ typedef struct PokedexResumeState {
 
 PokedexResumeState *PokedexResumeState_New(enum HeapID heapID);
 void PokedexResumeState_Free(PokedexResumeState *data);
-void PokedexResumeState_Set(PokedexResumeState *data, u16 species, u16 a2);
+void PokedexResumeState_Set(PokedexResumeState *data, u16 species, u16 dexMode);
 u16 PokedexResumeState_GetDexMode(PokedexResumeState *data);
 u32 PokedexResumeState_GetSpecies(PokedexResumeState *data);
 

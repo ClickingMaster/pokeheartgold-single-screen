@@ -6,19 +6,19 @@
 #include "constants/sndseq.h"
 
 BOOL PlaySE(u16 sndseq);
-void StopBGM(u16 sndseq, int a1);
+void StopBGM(u16 sndseq, int fadeFrames);
 BOOL PlaySEWithFieldBank(u16 sndseq);
 void StopSEByHandle(int, int);
 BOOL IsCryFinished(void);
 void StopCry(int);
 BOOL PlaySE_SetPitch(u16 seqNo, int pitch);
 BOOL IsSEPlaying(u16 sndseq);
-void StopAllSE(int a0);
-u32 GF_SndCountPlayingSeqBySeqNo(u16 a0);
-void StopBGM(u16 a0, int a1);
-BOOL PlayBGMOnBGMPlayerInField(u16 a0);
-void StopSE(u16 sndseq, int a1);
-BOOL PlayFanfare(u16 a0);
+void StopAllSE(int unused);
+u32 GF_SndCountPlayingSeqBySeqNo(u16 seqNo);
+void StopBGM(u16 a0, int fadeFrames);
+BOOL PlayBGMOnBGMPlayerInField(u16 seqNo);
+void StopSE(u16 sndseq, int fadeFrames);
+BOOL PlayFanfare(u16 seqNo);
 BOOL IsFanfarePlaying(void);
 BOOL GF_IsAnySEPlaying(void);
 void Sound_Stop(void);

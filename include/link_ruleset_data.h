@@ -16,8 +16,8 @@ typedef enum StdLinkBattleRuleset {
     STD_RULESET_GS,
 } StdLinkBattleRuleset;
 
-LinkBattleRuleset *LinkBattleRuleset_GetRegulation(SaveData *saveData, int a1);
-void LinkBattleRuleset_GetRegulationName(SaveData *saveData, int a1, String *a2, enum HeapID heapID);
+LinkBattleRuleset *LinkBattleRuleset_GetRegulation(SaveData *saveData, int index);
+void LinkBattleRuleset_GetRegulationName(SaveData *saveData, int index, String *string, enum HeapID heapID);
 LinkBattleRuleset *LinkBattleRuleset_GetDefault(void);
 int LinkBattleRuleset_GetRegulationIndex(const LinkBattleRuleset *ruleset);
 

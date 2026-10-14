@@ -38,8 +38,8 @@ typedef struct MainMenuTextPrinter {
 void MainMenuUtil_InitWork(enum HeapID heapID);
 void *MainMenuUtil_CreateAppData(OverlayManager *manager, enum HeapID heapID, u32 size, u32 heapSize);
 void MainMenuUtil_InitBg(BgConfig *bgConfig, int bgId, u32 screenSize, u32 screenBase, u32 charBase);
-void MainMenuUtil_SetFadeWhite(u32 a0);
-void MainMenuUtil_StartFade(u32 a0, u32 newState, int *state, u32 waitingState);
+void MainMenuUtil_SetFadeWhite(u32 fadeWhite);
+void MainMenuUtil_StartFade(u32 fadeType, u32 newState, int *state, u32 waitingState);
 void MainMenuUtil_WaitFade(int *state);
 void MainMenuTextPrinter_Init(MainMenuTextPrinter *printer, Window *window, u32 palette, u32 msgFileId, u32 frameBaseTile, u32 framePalette);
 void MainMenuTextPrinter_SetSize(MainMenuTextPrinter *printer, u32 width, u32 height, u32 baseTile);
@@ -49,10 +49,10 @@ int MainMenuTextPrinter_AddWindowAndPrint(BgConfig *bgConfig, MainMenuTextPrinte
 u32 MainMenuTextPrinter_GetTileCount(MainMenuTextPrinter *printer);
 void MainMenuUtil_InitObjTransfer(void);
 void MainMenuUtil_InitSprites(void);
-void MainMenuUtil_LoadSpriteResources(NarcId narcId, u32 charFileId, u32 plttFileId, u32 cellFileId, u32 animFileId, u32 a5);
+void MainMenuUtil_LoadSpriteResources(NarcId narcId, u32 charFileId, u32 plttFileId, u32 cellFileId, u32 animFileId, u32 screen);
 void MainMenuUtil_UpdateSprites(void);
-Sprite *MainMenuUtil_CreateSprite(u32 a0, Sprite *sprite, u32 x, u32 y, u32 animSeq);
+Sprite *MainMenuUtil_CreateSprite(u32 screen, Sprite *sprite, u32 x, u32 y, u32 animSeq);
 void MainMenuUtil_FreeSprites(void);
-u32 ov74_02235A68(int a0);
+u32 ov74_02235A68(int spriteId);
 
 #endif // POKEHEARTGOLD_APPLICATION_MAIN_MENU_MAIN_MENU_INTERNAL_H

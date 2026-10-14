@@ -41,7 +41,7 @@ BOOL ScrCmd_PalParkAction(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_509(ScriptContext *ctx) {
+BOOL ScrCmd_MigratedPokemonIsFull(ScriptContext *ctx) {
     struct MigratedPokemon *unkStruct = Save_MigratedPokemon_Get(ctx->fieldSystem->saveData);
     Pokemon *mon = AllocMonZeroed(HEAP_ID_FIELD3);
     u16 *retPtr = ScriptGetVarPointer(ctx);
@@ -54,7 +54,7 @@ BOOL ScrCmd_509(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_510(ScriptContext *ctx) {
+BOOL ScrCmd_MoveMigratedPokemonToPC(ScriptContext *ctx) {
     MigratedPokemon *unkStruct = Save_MigratedPokemon_Get(ctx->fieldSystem->saveData);
     PCStorage *storage = SaveArray_PCStorage_Get(ctx->fieldSystem->saveData);
     Pokemon *mon = AllocMonZeroed(HEAP_ID_FIELD3);

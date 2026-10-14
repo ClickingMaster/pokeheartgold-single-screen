@@ -5,7 +5,7 @@
 
 void PlayerAvatar_GetCoordsInFront(PlayerAvatar *playerAvatar, int *x, int *z);
 void PlayerAvatar_UpdateMovement(PlayerAvatar *playerAvatar);
-void PlayerAvatar_MoveControl(PlayerAvatar *playerAvatar, MapLoadManager *mapLoadManager, int a2, u16 a3, u16 a4, int a5);
+void PlayerAvatar_MoveControl(PlayerAvatar *playerAvatar, MapLoadManager *mapLoadManager, int direction, u16 keys, u16 heldKeys, int allowTurn);
 void PlayerAvatar_ResetMovement(PlayerAvatar *playerAvatar);
 BOOL PlayerAvatar_IsBetweenSteps(PlayerAvatar *playerAvatar);
 void PlayerAvatar_StopAndFace(PlayerAvatar *playerAvatar, int direction);

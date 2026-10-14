@@ -5,7 +5,7 @@
 #include "player_data.h"
 #include "pokemon_types_def.h"
 
-void RenderObj_InitFromModel(NNSG3dRenderObj *a0, void *a1);
-void RenderObj_DrawAt(int a0, VecFx32 *a1);
+void RenderObj_InitFromModel(NNSG3dRenderObj *object, void *model);
+void RenderObj_DrawAt(int object, VecFx32 *position);
 
 #endif // POKEHEARTGOLD_RENDER_ANIMATION_H

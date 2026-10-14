@@ -10,7 +10,7 @@ BOOL MapObject_CheckWaterBehavior(LocalMapObject *object, int tile);
 BOOL MapObject_CheckSnowBehavior(LocalMapObject *object, int tile);
 int GetDeltaXByFacingDirection(int direction);
 int GetDeltaYByFacingDirection(int direction);
-void SetPositionToTileCenter(int x, int y, VecFx32 *a2);
+void SetPositionToTileCenter(int x, int y, VecFx32 *position);
 BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position);
 void MapObject_SetPreviousCoordsToCurrent(LocalMapObject *object);
 

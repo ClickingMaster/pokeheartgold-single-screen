@@ -70,7 +70,7 @@ void BattleArcadeData_Init(ArcadeContext *ctx, u32 resume);
 void BattleArcadeData_Free(ArcadeContext *ctx);
 u32 BattleArcade_GetWonBattlePoints(ArcadeContext *ctx, Party *playerParty, Party *opponentParty, int rank);
 void BattleArcade_CopyMonHeldItem(Party *srcParty, Party *dstParty, int srcSlot, int dstSlot);
-int BattleCastle_IsMultiType(u8 a0);
+int BattleCastle_IsMultiType(u8 type);
 void BattleArcade_StoreGameBoardResult(ArcadeContext *ctx, GAME_BOARD_ARGS *args);
 void BattleArcade_SetPartyBeforeBattle(ArcadeContext *ctx);
 void BattleArcade_SetPartyAfterBattle(ArcadeContext *ctx);

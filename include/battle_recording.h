@@ -14,7 +14,7 @@ typedef struct BattleRecord {
 
 void BattleRecord_Create(SaveData *save, enum HeapID heapID, u32 *out);
 BOOL BattleRecord_Exists(void);
-void BattleRecord_SetCommand(int battlerId, u32 a1, u8 data);
-u8 BattleRecord_GetCommand(int battlerId, u32 a1);
+void BattleRecord_SetCommand(int battlerId, u32 offset, u8 data);
+u8 BattleRecord_GetCommand(int battlerId, u32 offset);
 
 #endif // POKEHEARTGOLD_BATTLE_RECORDING_H

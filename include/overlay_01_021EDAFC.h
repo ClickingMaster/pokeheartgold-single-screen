@@ -8,7 +8,7 @@ void PointsBox_Delete(Window *window);
 void PointsBox_Update(FieldSystem *fieldSystem, Window *window, u8 type);
 void MoneyBoxSys_Delete(Window *moneybox);
 void MoneyBoxSys_Update(FieldSystem *fieldSystem, Window *moneybox);
-Window *SavingsBox_New(FieldSystem *fieldSystem, u8 arg1, u8 arg2);
+Window *SavingsBox_New(FieldSystem *fieldSystem, u8 x, u8 y);
 void SavingsBox_Delete(Window *window);
 void SavingsBox_Update(FieldSystem *fieldSystem, Window *window);
 

@@ -27,7 +27,7 @@ void PartyMenu_DrawPartyMonsList_UseTMHM(PartyMenu *partyMenu, u8 partySlot);
 void PartyMenu_DrawPartyMonsList_SuperContestEntry(PartyMenu *partyMenu, u8 partySlot);
 void PartyMenu_DrawPartyMonsList_FrontierFacilityEntry(PartyMenu *partyMenu, u8 partySlot);
 void PartyMenu_PrintFrontierEntryStatus(PartyMenu *partyMenu, u8 partySlot);
-void PartyMenu_PrintConfirmCancelButtonText(PartyMenu *partyMenu, u8 a1);
+void PartyMenu_PrintConfirmCancelButtonText(PartyMenu *partyMenu, u8 flag);
 
 // For these next three funcs, if msgId is -1, uses partyMenu->formattedStrBuf
 void PartyMenu_PrintMessageOnWindow32(PartyMenu *partyMenu, int msgId, BOOL drawFrame);
@@ -41,8 +41,8 @@ void PartyMenu_LevelUpCloseStatsWindow(PartyMenu *partyMenu);
 void PartyMenu_PrintTopScreenMonNameAndItem(PartyMenu *partyMenu);
 void PartyMenu_DrawContextMenuButtonFrames(PartyMenu *partyMenu, int numItems, int selection, int state);
 PartyMenuContextMenuCursor *PartyMenu_CreateContextMenuCursor(PartyMenu *partyMenu, const PartyMenuContextMenu *template, int selection, enum HeapID heapID, int state);
-void PartyMenu_CloseContextMenu(PartyMenu *partyMenu, PartyMenuContextMenuCursor *a1);
-u32 PartyMenu_HandleInput_ContextMenu(PartyMenu *partyMenu, PartyMenuContextMenuCursor *a1);
-u32 PartyMenu_HandleSubcontextMenuInput_TopLevel(PartyMenu *partyMenu, PartyMenuContextMenuCursor *a1);
+void PartyMenu_CloseContextMenu(PartyMenu *partyMenu, PartyMenuContextMenuCursor *cursor);
+u32 PartyMenu_HandleInput_ContextMenu(PartyMenu *partyMenu, PartyMenuContextMenuCursor *cursor);
+u32 PartyMenu_HandleSubcontextMenuInput_TopLevel(PartyMenu *partyMenu, PartyMenuContextMenuCursor *cursor);
 
 #endif // POKEHEARTGOLD_PARTY_CONTEXT_MENU_H

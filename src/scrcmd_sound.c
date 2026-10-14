@@ -37,7 +37,7 @@ BOOL ScrCmd_ResetBGM(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_083(ScriptContext *ctx) {
+BOOL ScrCmd_SetBGMOverride(ScriptContext *ctx) {
     u16 seqno = ScriptReadHalfword(ctx);
     FieldBGM_SetOverride(ctx->fieldSystem, seqno);
     return FALSE;
@@ -66,7 +66,7 @@ BOOL ScrCmd_FadeInBGM(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_086(ScriptContext *ctx) {
+BOOL ScrCmd_SetSoundPlayerPause(ScriptContext *ctx) {
     u8 playerNo = ScriptReadByte(ctx);
     u8 paused = ScriptReadByte(ctx);
     Sound_SetPlayerPause(playerNo, paused);
@@ -79,7 +79,7 @@ BOOL ScrCmd_TempBGM(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_088(ScriptContext *ctx) {
+BOOL ScrCmd_SetBGMDisabled(ScriptContext *ctx) {
     u8 disabled = ScriptReadByte(ctx);
     GF_SND_BGM_DisableSet(disabled);
     return FALSE;
@@ -186,7 +186,7 @@ BOOL ScrCmd_ChatotSaveRecording(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_093(ScriptContext *ctx) {
+BOOL ScrCmd_SetSoundScene63(ScriptContext *ctx) {
     Sound_SetSceneAndPlayBGM(0x3f, 0, 0);
     return TRUE;
 }

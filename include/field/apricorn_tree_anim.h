@@ -3,6 +3,6 @@
 
 #include "player_avatar.h"
 
-void FieldSystem_AnimApricornTree(FieldSystem *fieldSystem, LocalMapObject *tree, u16 *a2);
+void FieldSystem_AnimApricornTree(FieldSystem *fieldSystem, LocalMapObject *tree, u16 *result);
 
 #endif // POKEHEARTGOLD_OVERLAY_01_APRICORN_TREE_ANIM_H

@@ -283,7 +283,7 @@ BOOL ScrCmd_BufferDecorationName(ScriptContext *ctx) {
 }
 
 // This may be what's left of ScrCmd_GetUndergroundTrapName from D/P/Pt.
-BOOL ScrCmd_208(ScriptContext *ctx) {
+BOOL ScrCmd_Dummy208(ScriptContext *ctx) {
     MessageFormat **msg_fmt = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
     u8 idx = ScriptReadByte(ctx);
     u16 unused_id = ScriptGetVar(ctx);
@@ -292,7 +292,7 @@ BOOL ScrCmd_208(ScriptContext *ctx) {
 }
 
 // This may be what's left of ScrCmd_GetUndergroundItemName from D/P/Pt.
-BOOL ScrCmd_209(ScriptContext *ctx) {
+BOOL ScrCmd_Dummy209(ScriptContext *ctx) {
     MessageFormat **msg_fmt = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
     u8 idx = ScriptReadByte(ctx);
     u16 unused_id = ScriptGetVar(ctx);

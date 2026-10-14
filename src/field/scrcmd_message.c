@@ -78,7 +78,7 @@ BOOL ScrCmd_MsgBoxExtern(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_441(ScriptContext *ctx) {
+BOOL ScrCmd_NonNPCMsgEasyChat(ScriptContext *ctx) {
     u16 messageBank = ScriptReadHalfword(ctx);
     u16 messageNum = ScriptReadHalfword(ctx);
     u16 word1 = ScriptReadHalfword(ctx);
@@ -87,7 +87,7 @@ BOOL ScrCmd_441(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_442(ScriptContext *ctx) {
+BOOL ScrCmd_MsgBoxEasyChat(ScriptContext *ctx) {
     u16 messageBank = ScriptReadHalfword(ctx);
     u16 messageNum = ScriptReadHalfword(ctx);
     u16 word1 = ScriptReadHalfword(ctx);
@@ -97,7 +97,7 @@ BOOL ScrCmd_442(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_443(ScriptContext *ctx) {
+BOOL ScrCmd_MsgBoxFrontierOpponentIntro(ScriptContext *ctx) {
     u8 index = ScriptReadByte(ctx);
     FrontierFieldSystem *frontierFsys = ctx->fieldSystem->frontierFsys;
     if (frontierFsys == NULL) {
@@ -115,7 +115,7 @@ BOOL ScrCmd_443(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_444(ScriptContext *ctx) {
+BOOL ScrCmd_MsgBoxFrontierBannedSpecies(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u8 baseMessageNum = ScriptReadByte(ctx);
     u16 numEligiblePokemon = ScriptGetVar(ctx);
@@ -189,7 +189,7 @@ BOOL ScrCmd_GenderMsgBox(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_455(ScriptContext *ctx) {
+BOOL ScrCmd_NPCMsgByObjectType(ScriptContext *ctx) {
     LocalMapObject **objPtr = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_LAST_INTERACTED);
     u8 mapObjectType = MapObject_GetType(*objPtr);
     ovFieldMain_ShowMessage(ctx, ctx->msgdata, mapObjectType, TRUE, NULL);

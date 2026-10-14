@@ -570,7 +570,7 @@ void BattleController_EmitPokemonSlideIn(BattleSystem *battleSystem, int battler
 
 #pragma force_active on
 
-void BattleController_EmitPokemonSendOut(BattleSystem *battleSystem, int battlerId, int ball, int a3) {
+void BattleController_EmitPokemonSendOut(BattleSystem *battleSystem, int battlerId, int ball, int breakOut) {
     BattleControllerPacketPokemonSendOut packet;
 
     packet.command = 4;
@@ -591,7 +591,7 @@ void BattleController_EmitPokemonSendOut(BattleSystem *battleSystem, int battler
     } else {
         packet.ball = battleSystem->ctx->battleMons[battlerId].ball;
     }
-    packet.breakOut = a3;
+    packet.breakOut = breakOut;
     packet.isSubstitute = !!(battleSystem->ctx->battleMons[battlerId].status2 & STATUS2_SUBSTITUTE);
     BattleSystem_FlagMonBattled(battleSystem, battlerId, packet.selectedMonIndex);
     for (int i = 0; i < MAX_MON_MOVES; i++) {
@@ -926,7 +926,7 @@ void BattleController_ReplyMoveSelection(BattleSystem *battleSystem, int battler
 
 #pragma force_active on
 
-void BattleController_EmitSelectTarget(BattleSystem *battleSystem, BattleContext *ctx, int a2, int battlerId) {
+void BattleController_EmitSelectTarget(BattleSystem *battleSystem, BattleContext *ctx, int moveRange, int battlerId) {
     BattleControllerPacketSelectTarget packet;
     int i;
     u32 battleType;
@@ -934,7 +934,7 @@ void BattleController_EmitSelectTarget(BattleSystem *battleSystem, BattleContext
     BattleBuffer_Clear(ctx, battlerId);
     battleType = BattleSystem_GetBattleType(battleSystem);
     packet.command = 16;
-    packet.moveRange = a2;
+    packet.moveRange = moveRange;
     if (!(battleType & BATTLE_TYPE_DOUBLES) || (battleType & BATTLE_TYPE_MULTI) || ((battleType & BATTLE_TYPE_DOUBLES) && battlerId >= BATTLER_PLAYER2)) {
         packet.unk_01 = 1;
     } else {
@@ -1028,7 +1028,7 @@ void BattleController_ReplyItemSelection(BattleSystem *battleSystem, int battler
 
 #pragma force_active on
 
-void BattleController_EmitShowMonList(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, u32 a3, u32 canSwitch, u32 a5) {
+void BattleController_EmitShowMonList(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, u32 mode, u32 canSwitch, u32 reservedMon) {
     BattleControllerPacketShowMonList packet;
     int i;
     int j;
@@ -1036,9 +1036,9 @@ void BattleController_EmitShowMonList(BattleSystem *battleSystem, BattleContext 
     BattleBuffer_Clear(ctx, battlerId);
     packet.command = 18;
     packet.battlerId = battlerId;
-    packet.mode = a3;
+    packet.mode = mode;
     packet.trapped = canSwitch;
-    packet.reservedMon = a5;
+    packet.reservedMon = reservedMon;
     packet.switchInFlag = ctx->switchInFlag;
     for (i = 0; i < BATTLER_MAX; i++) {
         packet.selectedMonIndex[i] = ctx->selectedMonIndex[i];
@@ -1057,14 +1057,14 @@ void BattleController_ReplyPartySelection(BattleSystem *battleSystem, int battle
 
 #pragma force_active on
 
-void BattleController_EmitDrawYesNoBox(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int msgId, int a4, int a5, int a6) {
+void BattleController_EmitDrawYesNoBox(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int msgId, int mode, int value, int a6) {
     BattleControllerPacketYesNoBox packet;
 
     BattleBuffer_Clear(ctx, battlerId);
     packet.command = 19;
     packet.msgId = msgId;
-    packet.mode = a4;
-    packet.value = a5;
+    packet.mode = mode;
+    packet.value = value;
     packet.param = a6;
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
@@ -1401,10 +1401,10 @@ void BattleController_EmitSelectMoveToForget(BattleSystem *battleSystem, int bat
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
 
-void BattleController_EmitPlayMosaicAnimation(BattleSystem *battleSystem, int battlerId, int a2, int delay) {
+void BattleController_EmitPlayMosaicAnimation(BattleSystem *battleSystem, int battlerId, int mosaic, int delay) {
     BattleControllerPacketMosaicAnimation packet;
     packet.command = 44;
-    packet.mosaic = a2;
+    packet.mosaic = mosaic;
     packet.delay = delay;
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
@@ -1674,7 +1674,7 @@ BOOL BattleController_RecvLinkData(BattleSystem *battleSystem, u8 *data) {
     return ret;
 }
 
-void BattleController_InitMoveAnimData(BattleSystem *battleSystem, BattleContext *ctx, MoveAnimData *animData, int a3, int a4, int attacker, int defender, u16 move) {
+void BattleController_InitMoveAnimData(BattleSystem *battleSystem, BattleContext *ctx, MoveAnimData *animData, int isEffectAnim, int effectAnimId, int attacker, int defender, u16 move) {
     int i;
     u8 slot;
 
@@ -1682,8 +1682,8 @@ void BattleController_InitMoveAnimData(BattleSystem *battleSystem, BattleContext
     animData->move = move;
     animData->attacker = attacker;
     animData->defender = defender;
-    animData->isEffectAnim = a3;
-    animData->effectAnimId = a4;
+    animData->isEffectAnim = isEffectAnim;
+    animData->effectAnimId = effectAnimId;
     animData->terrain = BattleSystem_GetTerrainId(battleSystem);
     animData->attackerActive = FALSE;
     animData->defenderActive = FALSE;
@@ -1734,11 +1734,11 @@ void BattleController_InitMoveAnimData(BattleSystem *battleSystem, BattleContext
 
 #pragma force_active reset
 
-void BattleController_EmitScreenFade(BattleSystem *battleSystem, BattleContext *ctx, u8 a2) {
+void BattleController_EmitScreenFade(BattleSystem *battleSystem, BattleContext *ctx, u8 mode) {
     BattleControllerPacketScreenFade packet;
     MI_CpuFill8(&packet, 0, sizeof(packet));
     packet.command = 67;
-    packet.mode = a2;
+    packet.mode = mode;
     BattleController_EmitPacket(battleSystem, 1, 0, &packet, sizeof(packet));
 }
 

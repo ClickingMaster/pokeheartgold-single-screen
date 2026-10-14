@@ -70,7 +70,7 @@ void FieldEffectManager_LoadTexResource(FieldEffectManager *manager, int id, u32
 void FieldEffectManager_FreeTexResource(FieldEffectManager *manager, int id);
 void FieldEffectManager_LoadRenderModel(FieldEffectManager *manager, void *model, int index, int fileId, BOOL atEnd);
 void FieldEffectManager_LoadRenderAnimation(FieldEffectManager *manager, void *animation, int index, int fileId, BOOL atEnd);
-void FieldEffectManager_InitRenderAnimation(FieldEffectManager *manager, void *animation, void *model, void *anim, int a4);
+void FieldEffectManager_InitRenderAnimation(FieldEffectManager *manager, void *animation, void *model, void *anim, int unused);
 void FieldEffectManager_LoadModel(FieldEffectManager *manager, u32 fileId, BOOL atEnd, NNSG3dRenderObj *renderObj, NNSG3dResMdl **ppMdl, NNSG3dResFileHeader **ppRes);
 NNSG3dResTex *FieldEffectManager_GetTexture(FieldEffectManager *manager, u32 id);
 

@@ -889,7 +889,7 @@ BOOL VsRecorder_RankingsSwitch(VsRecorderWork *work);
 // other OVY_40 modules (still address-named)
 BOOL VsRecorder_IsNetIdle(VsRecorderWork *work);
 GlobalTerminalNet *VsRecorder_GetNet(VsRecorderWork *work);
-u32 VsRecorder_WriteRecordAsync(SaveData *save, u32 a1, u32 a2, u16 *a3, void *a4);
+u32 VsRecorder_WriteRecordAsync(SaveData *save, u32 index, u32 sealed, u16 *state, void *writeState);
 int VsRecorder_WriteRecord(SaveData *save, int index);
 void VsRecorder_InitNet(VsRecorderWork *work);
 void VsRecorder_UpdateNet(VsRecorderWork *work);

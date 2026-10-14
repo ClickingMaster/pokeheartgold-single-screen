@@ -48,7 +48,7 @@ void PokegearConfigure_DrawUnlockedSkinsButtons(PokegearConfigureAppData *config
 
 void PokegearConfigure_OnReselectApp(void *appData);
 void PokegearConfigure_SetAppCursorActive(PokegearConfigureAppData *configureApp);
-void PokegearConfigure_SpawnContextMenu(PokegearConfigureAppData *configureApp, u8 a1);
+void PokegearConfigure_SpawnContextMenu(PokegearConfigureAppData *configureApp, u8 skin);
 void PokegearConfigure_ToggleButtonFocusState(PokegearConfigureAppData *configureApp, int skin, int selected);
 
 int PokegearConfigure_HandleKeyInput(PokegearConfigureAppData *configureApp);

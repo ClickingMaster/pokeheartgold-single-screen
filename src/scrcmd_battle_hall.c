@@ -125,7 +125,7 @@ BOOL ScrCmd_NopVar490(ScriptContext *ctx) {
 }
 
 // Essentially a nop
-BOOL ScrCmd_491(ScriptContext *ctx) {
+BOOL ScrCmd_Dummy491(ScriptContext *ctx) {
     u16 *unused = ScriptGetVarPointer(ctx);
     return FALSE;
 }

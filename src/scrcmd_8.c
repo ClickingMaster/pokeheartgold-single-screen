@@ -12,7 +12,7 @@ BOOL ScrCmd_GetStaticEncounterOutcome(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_465(ScriptContext *ctx) {
+BOOL ScrCmd_FriendGroupAction(ScriptContext *ctx) {
     MessageFormat **msg = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
     SAV_FRIEND_GRP *group = Save_FriendGroup_Get(ctx->fieldSystem->saveData);
     SaveData *save = ctx->fieldSystem->saveData;

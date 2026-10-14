@@ -327,7 +327,7 @@ int FlyMap_HandleTouchInput_NotDragging(PokegearMapAppData *mapApp, BOOL *pRetIs
 int FlyMap_HandleTouchInput_DraggingMap(PokegearMapAppData *mapApp);
 void ov101_021EC304(PokegearMapAppData *mapApp);
 int PokegearMap_HandleKeyInput_SelectMarkingsSlot(PokegearMapAppData *mapApp);
-int PokegearMap_HandleTouchInput_SelectMarkingsSlot(PokegearMapAppData *mapApp, BOOL *a1);
+int PokegearMap_HandleTouchInput_SelectMarkingsSlot(PokegearMapAppData *mapApp, BOOL *pRetIsTouch);
 int PokegearMap_HandleKeyInput_SelectedIconFromPool(PokegearMapAppData *mapApp);
 int PokegearMap_HandleTouchInput_DragItemFromPool(PokegearMapAppData *mapApp);
 int PokegearMap_HandleKeyInput_SelectedMarkingSlot(PokegearMapAppData *mapApp);

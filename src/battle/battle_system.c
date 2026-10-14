@@ -1007,8 +1007,8 @@ void MonPicData_SetHeight(MonPicData *ptr, int index, int height) {
     ptr[index].height = height;
 }
 
-void BattleSystem_SetGraphicsState(BattleSystem *battleSystem, u8 a1) {
-    battleSystem->graphicsMode = a1;
+void BattleSystem_SetGraphicsState(BattleSystem *battleSystem, u8 graphicsMode) {
+    battleSystem->graphicsMode = graphicsMode;
 }
 
 void BattleSystem_SetLinkSendStatePtr(BattleSystem *battleSystem, u8 *sendState) {

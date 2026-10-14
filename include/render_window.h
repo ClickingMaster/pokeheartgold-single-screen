@@ -19,9 +19,9 @@ WaitingIcon *WaitingIcon_New(Window *window, u16 tileNum);
 void WaitingIcon_Delete(WaitingIcon *waitingIcon);
 struct PokepicManager *DrawPokemonPicFromSpecies(BgConfig *bgConfig, GFBgLayer layer, int x, int y, u8 paletteNum, u16 baseTile, u16 species, u8 gender, enum HeapID heapID);
 struct PokepicManager *DrawPokemonPicFromMon(BgConfig *bgConfig, GFBgLayer layer, int x, int y, u8 paletteNum, u16 baseTile, Pokemon *mon, enum HeapID heapID);
-void LoadUserFrameGfx1Tiles(BgConfig *bgConfig, u32 a1, u32 a2, u32 a3, enum HeapID heapID);
+void LoadUserFrameGfx1Tiles(BgConfig *bgConfig, u32 layer, u32 baseTile, u32 frame, enum HeapID heapID);
 u32 GetUserFrameGfx1PaletteMember(void);
-void LoadDownArrowTiles(Window *window, int a1);
+void LoadDownArrowTiles(Window *window, int baseTile);
 void WaitingIcon_DeleteWithoutRestore(void);
 
 #endif // POKEHEARTGOLD_RENDER_WINDOW_H

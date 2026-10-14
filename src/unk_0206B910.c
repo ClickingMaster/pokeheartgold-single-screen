@@ -160,13 +160,13 @@ static BOOL Task_BallCapsuleEditor(TaskManager *taskManager) {
     return FALSE;
 }
 
-BOOL ScrCmd_232(ScriptContext *ctx) {
+BOOL ScrCmd_ConditionalLinkSyncStart(ScriptContext *ctx) {
     UnkStruct_0206BCD4 **unkStruct = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
     LinkSyncWork_StartSync(*unkStruct, ScriptGetVar(ctx));
     return FALSE;
 }
 
-BOOL ScrCmd_233(ScriptContext *ctx) {
+BOOL ScrCmd_ConditionalLinkSyncWait(ScriptContext *ctx) {
     void *unused = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
     ctx->data[0] = ScriptGetVar(ctx);
     SetupNativeScript(ctx, ScrNative_WaitLinkSyncWork);
@@ -178,7 +178,7 @@ static BOOL ScrNative_WaitLinkSyncWork(ScriptContext *ctx) {
     return LinkSyncWork_IsSynced(*unkStruct, ctx->data[0]);
 }
 
-BOOL ScrCmd_234(ScriptContext *ctx) {
+BOOL ScrCmd_ConditionalLinkSyncCreate(ScriptContext *ctx) {
     UnkStruct_0206BCD4 **unkStruct = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
     u16 arg1 = ScriptGetVar(ctx);
     u16 arg2 = ScriptGetVar(ctx);
@@ -193,7 +193,7 @@ BOOL ScrCmd_234(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_235(ScriptContext *ctx) {
+BOOL ScrCmd_ConditionalLinkSyncDestroy(ScriptContext *ctx) {
     UnkStruct_0206BCD4 **unkStruct = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
     u16 unused = ScriptGetVar(ctx);
     u32 unused2 = MapHeader_GetMapSec(ctx->fieldSystem->location->mapId);
@@ -201,14 +201,14 @@ BOOL ScrCmd_235(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_236(ScriptContext *ctx) {
+BOOL ScrCmd_SetVarZero(ScriptContext *ctx) {
     void **unused = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
     u16 *result = ScriptGetVarPointer(ctx);
     *result = 0;
     return FALSE;
 }
 
-BOOL ScrCmd_237(ScriptContext *ctx) {
+BOOL ScrCmd_BeginTextAutoScroll(ScriptContext *ctx) {
     void **unused = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
     TextFlags_BeginAutoScroll(TRUE);
     return FALSE;

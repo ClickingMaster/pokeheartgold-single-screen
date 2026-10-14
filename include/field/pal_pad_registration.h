@@ -6,7 +6,7 @@
 #include "message_format.h"
 #include "msgdata.h"
 
-// After a wireless session (ScrCmd_151): offers to register each link partner who asked for it in the Pal Pad's
+// After a wireless session (ScrCmd_StartPalPadRegistration): offers to register each link partner who asked for it in the Pal Pad's
 // Friend Roster, and when the roster is full lets the player pick an entry to delete (bottom-screen Friend Roster
 // app). The touch YES/NO helpers live in bottom_screen_app.c.
 typedef struct PalPadRegistration {

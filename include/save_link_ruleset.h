@@ -51,7 +51,7 @@ void Save_LinkBattleRuleset_Init(Save_LinkBattleRuleset *ruleset);
 void LinkBattleRuleset_CopyNameToString(const LinkBattleRuleset *rule, String *dest);
 String *LinkBattleRuleset_CreateStringFromName(const LinkBattleRuleset *rule, enum HeapID heapID);
 int LinkBattleRuleset_GetRuleValue(const LinkBattleRuleset *ruleset, enum LinkBattleRule rule);
-LinkBattleRuleset *Save_LinkBattleRuleset_GetByIndex(SaveData *saveData, int a1);
+LinkBattleRuleset *Save_LinkBattleRuleset_GetByIndex(SaveData *saveData, int rulesetNum);
 void Save_LinkBattleRuleset_Set(SaveData *saveData, const LinkBattleRuleset *rule);
 
 #endif // POKEHEARTGOLD_SAVE_LINK_RULESET_H

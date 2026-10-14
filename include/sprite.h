@@ -119,7 +119,7 @@ void Sprite_SetMatrix(Sprite *sprite, VecFx32 *vec);
 void Sprite_SetAffineMatrix(Sprite *sprite, VecFx32 *vec);
 void Sprite_SetAffineScale(Sprite *sprite, VecFx32 *vec);
 void Sprite_SetScaleAndAffineType(Sprite *sprite, VecFx32 *vec, u8 affine);
-void Sprite_SetAffineZRotation(Sprite *sprite, u32 a1);
+void Sprite_SetAffineZRotation(Sprite *sprite, u32 rotation);
 void Sprite_SetRotationAndAffineType(Sprite *sprite, u32 rotation, u8 affine);
 void Sprite_SetDrawFlag(Sprite *sprite, BOOL flag);
 void Sprite_SetAnimActiveFlag(Sprite *sprite, BOOL flag);

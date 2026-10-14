@@ -148,7 +148,7 @@ void WiFiPlazaObj_StartLightFade(WiFiPlazaObjLight *light, u32 value);
 BOOL WiFiPlazaObj_UpdateLight(WiFiPlazaObjLight *light, void *avatars);
 
 // OVY_45 avatar manager (no header yet), with the types this overlay calls them with
-void *WiFiPlazaPlayerObjects_New(u32 count, u32 arg1, enum HeapID heapID, u32 arg3);
+void *WiFiPlazaPlayerObjects_New(u32 count, u32 mode, enum HeapID heapID, u32 loadHeapID);
 void WiFiPlazaPlayerObjects_Delete(void *avatars);
 void WiFiPlazaPlayerObjects_Update(void *avatars);
 u32 WiFiPlazaPlayerObjects_Draw(void *avatars);

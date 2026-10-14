@@ -22,7 +22,7 @@ typedef struct SafariObjectConfig {
 } SafariObjectConfig;
 
 void GetSafariObjectConfig(SafariObjectConfig *dest, int idx, int gender);
-void SaveData_SafariZone_CheckAreasWithUpdatedEncounters(SaveData *saveData, int a1);
+void SaveData_SafariZone_CheckAreasWithUpdatedEncounters(SaveData *saveData, int daysElapsed);
 EncounterSlot *SafariZoneAreaSet_LoadAreaEncounters(SafariZoneAreaSet *areaSet, int area, int encounterType, TimeOfDayWildParam timeOfDay, enum HeapID heapID);
 
 #endif // POKEHEARTGOLD_SAFARI_ZONE_ENCOUNTERS_H

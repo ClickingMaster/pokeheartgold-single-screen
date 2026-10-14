@@ -40,25 +40,25 @@ static u32 FrontierFieldSystem_0204A2A8(FrontierFieldSystem *frontierFsys, u8 a1
 
 static const u16 StatTrainerOverworlds[] = { SPRITE_SEVEN1, SPRITE_SEVEN5, SPRITE_SEVEN2, SPRITE_SEVEN3, SPRITE_SEVEN4 };
 
-BOOL ScrCmd_410(ScriptContext *ctx) {
+BOOL ScrCmd_FrontierFieldSystemInit(ScriptContext *ctx) {
     u16 resumeFromPrevious = ScriptReadHalfword(ctx);
     u16 towerMode = ScriptReadHalfword(ctx);
     ctx->fieldSystem->frontierFsys = FrontierFieldSystem_New(FieldSystem_GetSaveData(ctx->fieldSystem), resumeFromPrevious, towerMode);
     return FALSE;
 }
 
-BOOL ScrCmd_409(ScriptContext *ctx) {
+BOOL ScrCmd_FrontierAssertCleared(ScriptContext *ctx) {
     FrontierFieldSystem_AssertCleared(&ctx->fieldSystem->frontierFsys);
     return FALSE;
 }
 
-BOOL ScrCmd_411(ScriptContext *ctx) {
+BOOL ScrCmd_FrontierFieldSystemFree(ScriptContext *ctx) {
     FrontierFieldSystem_Free(ctx->fieldSystem->frontierFsys);
     ctx->fieldSystem->frontierFsys = NULL;
     return FALSE;
 }
 
-BOOL ScrCmd_412(ScriptContext *ctx) {
+BOOL ScrCmd_BattleTowerAction(ScriptContext *ctx) {
     void **unk;
     u16 id = ScriptReadHalfword(ctx);
     u16 arg = ScriptGetVar(ctx);
@@ -195,7 +195,7 @@ BOOL ScrCmd_412(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_413(ScriptContext *ctx) {
+BOOL ScrCmd_BattleTowerGetAllyMonSpeciesAndMove(ScriptContext *ctx) {
     FrontierFieldSystem *frontierFsys = ctx->fieldSystem->frontierFsys;
     u16 multiBattleAllyIndex = ScriptGetVar(ctx);
     u16 allyMonIndex = ScriptGetVar(ctx);
@@ -206,19 +206,19 @@ BOOL ScrCmd_413(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_414(ScriptContext *ctx) {
+BOOL ScrCmd_BattleTowerClaimRecordMilestone(ScriptContext *ctx) {
     u16 *unk = ScriptGetVarPointer(ctx);
     *unk = BattleTower_ClaimRecordMilestone(ctx->fieldSystem->saveData);
     return FALSE;
 }
 
-BOOL ScrCmd_415(ScriptContext *ctx) {
+BOOL ScrCmd_BattleTowerGetRecordMilestone(ScriptContext *ctx) {
     u16 *unk = ScriptGetVarPointer(ctx);
     *unk = BattleTower_GetRecordMilestone(ctx->fieldSystem->saveData);
     return FALSE;
 }
 
-BOOL ScrCmd_416(ScriptContext *ctx) {
+BOOL ScrCmd_BattleTowerSendLinkData(ScriptContext *ctx) {
     u16 unk7 = ScriptGetVar(ctx);
     u16 unk4 = ScriptGetVar(ctx);
     u16 *unkPtr = ScriptGetVarPointer(ctx);
@@ -254,7 +254,7 @@ BOOL ScrCmd_416(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_417(ScriptContext *ctx) {
+BOOL ScrCmd_BattleTowerCheckLinkPartner(ScriptContext *ctx) {
     FrontierFieldSystem *frontierFsys = ctx->fieldSystem->frontierFsys;
     u16 unk6 = ScriptGetVar(ctx);
     u16 unk7 = ScriptReadHalfword(ctx);
@@ -281,7 +281,7 @@ static BOOL ScrNative_WaitFrontierPartnerCheck(ScriptContext *ctx) {
     }
 }
 
-BOOL ScrCmd_418(ScriptContext *ctx) {
+BOOL ScrCmd_GetBattleRoomLeadersRoom(ScriptContext *ctx) {
     u16 *unk4 = ScriptGetVarPointer(ctx);
     u16 *unk6 = ScriptGetVarPointer(ctx);
     u8 unk[2];
@@ -291,7 +291,7 @@ BOOL ScrCmd_418(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_419(ScriptContext *ctx) {
+BOOL ScrCmd_BattleRoomHasLeaders(ScriptContext *ctx) {
     u16 *unk = ScriptGetVarPointer(ctx);
     *unk = BattleRoomDownload_HasLeaders(Save_BattleRoomDownload_Get(ctx->fieldSystem->saveData));
     return FALSE;

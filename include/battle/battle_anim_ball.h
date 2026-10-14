@@ -165,14 +165,14 @@ SPLEmitter *BattleAnimSystem_NewParticleSystem(enum HeapID heapId, int resId, BO
 SPLEmitter *BattleAnimSystem_NewParticleSystemFromNarc(enum HeapID heapId, NarcId narcId, int resId, BOOL loadNow);
 SPLEmitter *BattleAnimSystem_NewParticleSystemFromOpenNarc(NARC *narc, enum HeapID heapId, int member, BOOL loadNow);
 void BattleAnimSystem_FreeParticleSystem(SPLEmitter *particleSystem);
-void BattleAnimUtil_LookupScreenPos(int a0, int battlerType, s16 *x, s16 *y);
+void BattleAnimUtil_LookupScreenPos(int set, int battlerType, s16 *x, s16 *y);
 void BattleAnimUtil_InitLinearMotion(void *motion, s16 startX, s16 endX, s16 startY, s16 endY, int duration);
 BOOL BattleAnimUtil_UpdateLinearMotionSprite(void *motion, ManagedSprite *sprite);
 void BattleAnimUtil_InitLinearSinMotion(void *motion, void *motion2, s16 startX, s16 endX, s16 startY, s16 endY, u16 duration, fx32 height);
 BOOL BattleAnimUtil_UpdateLinearSinMotionSprite(void *motion, void *motion2, ManagedSprite *sprite);
 void BattleAnimUtil_InitValueMotion(s32 *motion, int start, int end, int duration);
 BOOL BattleAnimUtil_UpdateValueMotion(s32 *motion);
-void *BattleAnimUtil_StartPaletteBlend(PaletteData *paletteData, enum HeapID heapId, int bufferId, u16 offset, u16 count, s8 a5, s8 a6, u8 start, u8 end, u16 color, u32 priority);
+void *BattleAnimUtil_StartPaletteBlend(PaletteData *paletteData, enum HeapID heapId, int bufferId, u16 offset, u16 count, s8 delay, s8 step, u8 start, u8 end, u16 color, u32 priority);
 BOOL BattleAnimUtil_IsPaletteBlendActive(void *blend);
 void BattleAnimUtil_FreePaletteBlend(void *blend);
 void BattleAnimUtil_GetEmitterPositionKind0Alt(int battlerType, VecFx32 *pos, int unused, int perspective);

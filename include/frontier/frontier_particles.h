@@ -3,6 +3,6 @@
 
 #include "particle_system.h"
 
-SPLEmitter *FrontierParticles_GetSystem(u32 a0, u32 a1);
+SPLEmitter *FrontierParticles_GetSystem(u32 manager, u32 index);
 
 #endif

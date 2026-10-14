@@ -8,15 +8,15 @@ typedef struct FriendRoster FriendRoster;
 void Save_FriendRoster_LoadFromSave(SaveData *saveData);
 void Save_FriendRoster_StoreToSave(SaveData *saveData);
 FriendRoster *Save_FriendRoster_Get(SaveData *saveData);
-int FriendRoster_CountFriends(struct FriendRoster *a0);
-void *FriendRoster_GetUserData(FriendRoster *a0);
-u16 *FriendRoster_GetPlayerName(struct FriendRoster *a0, s32 a1);
-u16 *FriendRoster_GetGroupName(struct FriendRoster *a0, s32 a1);
-s32 FriendRoster_GetEntryField(struct FriendRoster *a0, s32 a1, s32 a2);
-void FriendRoster_Compact(struct FriendRoster *a0);
-void FriendRoster_UpdateDate(struct FriendRoster *a0, s32 a1);
-int FriendRoster_GetUsedSlotCount(struct FriendRoster *a0);
-void FriendRoster_SetEntryField(FriendRoster *a0, int a1, int a2, u8 a3);
-void Save_FriendRoster_Init(struct FriendRoster *a0);
+int FriendRoster_CountFriends(struct FriendRoster *data);
+void *FriendRoster_GetUserData(FriendRoster *data);
+u16 *FriendRoster_GetPlayerName(struct FriendRoster *data, s32 index);
+u16 *FriendRoster_GetGroupName(struct FriendRoster *data, s32 index);
+s32 FriendRoster_GetEntryField(struct FriendRoster *data, s32 index, s32 field);
+void FriendRoster_Compact(struct FriendRoster *data);
+void FriendRoster_UpdateDate(struct FriendRoster *data, s32 index);
+int FriendRoster_GetUsedSlotCount(struct FriendRoster *data);
+void FriendRoster_SetEntryField(FriendRoster *data, int index, int field, u8 value);
+void Save_FriendRoster_Init(struct FriendRoster *data);
 
 #endif // POKEHEARTGOLD_FRIEND_ROSTER_H

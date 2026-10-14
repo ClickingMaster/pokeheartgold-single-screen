@@ -141,8 +141,8 @@ u32 CommCmd_GetSize1424() {
 void CommCmd_RecvIgnored() {
 }
 
-void FieldComm_RegisterCommands(void *arg0) {
-    Comm_RegisterCommandTable(&sFieldCommCommands, NELEMS(sFieldCommCommands), arg0);
+void FieldComm_RegisterCommands(void *context) {
+    Comm_RegisterCommandTable(&sFieldCommCommands, NELEMS(sFieldCommCommands), context);
 }
 
 u32 CommCmd_GetTrainerCardSize() {

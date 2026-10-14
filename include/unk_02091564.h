@@ -16,7 +16,7 @@ typedef struct FieldCommCommand {
     UnkFuncPtr_02091564 func3;
 } FieldCommCommand;
 
-void FieldComm_RegisterCommands(void *arg0);
+void FieldComm_RegisterCommands(void *context);
 u32 CommCmd_GetTrainerCardSize();
 u32 CommCmd_GetSize3008();
 u32 CommCmd_GetSize1008();

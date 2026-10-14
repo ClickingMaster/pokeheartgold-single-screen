@@ -11,7 +11,7 @@ BOOL ItemIsTMOrHM(u16 item);
 u16 GetOakJohtoDexRating(u16 numCaught, u16 gender, u16 *var_p);
 u16 GetOakNationalDexRating(u16 numCaught, u16 gender, u16 *var_p);
 BOOL Save_PlayerHasAllRegisInParty(SaveData *saveData);
-void CallTask_SpinMapObject(TaskManager *taskManager, LocalMapObject *object, u16 a2, u16 a3, u16 a4, u16 a5);
-void CallTask_BlinkMapObject(TaskManager *taskManager, LocalMapObject *object, u16 a2, u16 a3);
+void CallTask_SpinMapObject(TaskManager *taskManager, LocalMapObject *object, u16 turns, u16 step, u16 xRadius, u16 zRadius);
+void CallTask_BlinkMapObject(TaskManager *taskManager, LocalMapObject *object, u16 cycles, u16 interval);
 
 #endif // POKEHEARTGOLD_UNK_0205BB1C_H

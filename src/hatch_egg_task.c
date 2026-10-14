@@ -98,10 +98,10 @@ static BOOL Task_HatchEggInParty(TaskManager *taskManager) {
     return FALSE;
 }
 
-void CallTask_HatchEggInParty(TaskManager *taskManager, HatchEggArgs *a1) {
+void CallTask_HatchEggInParty(TaskManager *taskManager, HatchEggArgs *args) {
     HatchEggTaskData *data = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(HatchEggTaskData));
     memset(data, 0, sizeof(HatchEggTaskData));
-    data->unkC = *a1;
+    data->unkC = *args;
 
     TaskManager_Call(taskManager, Task_HatchEggInParty, data);
 }

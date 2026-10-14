@@ -1222,8 +1222,8 @@ void NNS_G3dMdlSetMdlLightEnableFlagAll(NNSG3dResMdl *pResMdl, u32 light);
 void NNS_G3dMdlSetMdlPolygonIDAll(NNSG3dResMdl *pResMdl, u32 polygonID);
 void NNS_G3dMdlSetMdlAlphaAll(NNSG3dResMdl *pResMdl, u32 alpha);
 void *Save_PlazaSurvey_Get(SaveData *save);
-void PlazaSurvey_SetSurveyId(void *a0, u32 a1);
-void PlazaSurvey_SetAnswer(void *a0, u32 a1);
+void PlazaSurvey_SetSurveyId(void *data, u32 surveyId);
+void PlazaSurvey_SetAnswer(void *data, u32 answer);
 void *WiFiPlazaPlayerInfo_New(PlayerProfile *profile, enum HeapID heapID);
 void WiFiPlazaPlayerInfo_Free(void *a0);
 

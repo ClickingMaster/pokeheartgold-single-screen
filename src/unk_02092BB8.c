@@ -12,9 +12,9 @@ void PokedexResumeState_Free(PokedexResumeState *data) {
     Heap_Free(data);
 }
 
-void PokedexResumeState_Set(PokedexResumeState *data, u16 species, u16 a2) {
+void PokedexResumeState_Set(PokedexResumeState *data, u16 species, u16 dexMode) {
     data->species = species;
-    data->dexMode = a2;
+    data->dexMode = dexMode;
 }
 
 u16 PokedexResumeState_GetDexMode(PokedexResumeState *data) {

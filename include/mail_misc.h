@@ -44,7 +44,7 @@ typedef struct UseMailArgs {
     MenuInputStateMgr *menuInputStatePtr;
 } UseMailArgs;
 
-EasyChatArgs *EasyChat_CreateArgs(u8 a0, u8 a1, SaveData *saveData, MenuInputStateMgr *menuInputStateMgr, enum HeapID heapID);
+EasyChatArgs *EasyChat_CreateArgs(u8 args, u8 a1, SaveData *saveData, MenuInputStateMgr *menuInputStateMgr, enum HeapID heapID);
 void EasyChat_FreeArgs(EasyChatArgs *args);
 void EasyChatArgs_SetWord(EasyChatArgs *args, u16 word);
 void EasyChatArgs_SetWords(EasyChatArgs *args, u16 word1, u16 word2);

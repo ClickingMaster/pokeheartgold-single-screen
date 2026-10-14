@@ -4,7 +4,7 @@
 #include "script.h"
 
 void CommPlayerManager_RemoveAllAvatars(void);
-void CommPlayerManager_FieldUpdate(FieldSystem *fieldSystem, int a1);
+void CommPlayerManager_FieldUpdate(FieldSystem *fieldSystem, int value);
 int CommPlayerManager_IsLocalPlayerConnected(void);
 void CommPlayerManager_SetLocalFacing(u16 val);
 void CommPlayerManager_ReceivePosition(void);

@@ -14,11 +14,11 @@ typedef struct Signpost {
 Signpost *Signpost_Init(enum HeapID heapID);
 void Signpost_Free(Signpost *signpost);
 void Signpost_SetParam(Signpost *signpost, u8 type, u16 narcMemberID);
-void Signpost_SetCommand(Signpost *signpost, u8 arg1);
+void Signpost_SetCommand(Signpost *signpost, u8 command);
 Window *Signpost_GetWindow(Signpost *signpost);
 u8 Signpost_GetType(Signpost *signpost);
 BOOL Signpost_CommandIsFinished(Signpost *signpost);
 void Signpost_DoCurrentCommand(FieldSystem *fieldSystem);
-void FieldSystem_SetAndExecuteSignpostWindowCommand(FieldSystem *fieldSystem, u8 arg1);
+void FieldSystem_SetAndExecuteSignpostWindowCommand(FieldSystem *fieldSystem, u8 cmd);
 
 #endif // POKEHEARTGOLD_FIELD_SIGNPOST_H

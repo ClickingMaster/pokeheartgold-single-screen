@@ -33,8 +33,8 @@ typedef struct GlobalTerminalApp {
 
 void LoadOVY38(void);
 void UnloadOVY38(void);
-void WirelessStatusIcon_SetLevel(int a0);
-const OverlayManagerTemplate *VsRecorderApp_GetTemplate(u8 a0);
+void WirelessStatusIcon_SetLevel(int level);
+const OverlayManagerTemplate *VsRecorderApp_GetTemplate(u8 mode);
 BOOL CommWireless_IsStartedUp(void);
 void CommWireless_Terminate(void);
 void DWC_SetMemFunc(void *(*alloc)(int, u32, int), void (*free)(int, void *, u32));

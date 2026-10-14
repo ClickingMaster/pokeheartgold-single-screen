@@ -87,7 +87,7 @@ int OakSpeech_DeadstrippedFunction2(int index);
 void OakSpeech_InitSpriteEngine(OakSpeechData *data);
 void OakSpeech_CleanupSpriteEngine(OakSpeechData *data);
 void OakSpeech_CreateSprites(OakSpeechData *data);
-void OakSpeech_SelectedGenderIndicatorSpritesAction(OakSpeechData *data, int a1);
+void OakSpeech_SelectedGenderIndicatorSpritesAction(OakSpeechData *data, int action);
 
 OakSpeechYesNo *OakSpeechYesNo_Create(BgConfig *bgConfig, Sprite *sprite, int backgroundBgId, int buttonBgId, int buttonPalette, enum HeapID heapID);
 void OakSpeechYesNo_Delete(OakSpeechYesNo *yesnoMenu);

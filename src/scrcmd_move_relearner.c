@@ -6,7 +6,7 @@
 BOOL ScrNative_WaitApplication(ScriptContext *ctx);
 
 // Triggered for move deleter
-BOOL ScrCmd_394(ScriptContext *ctx) {
+BOOL ScrCmd_OpenLearnForgetMove(ScriptContext *ctx) {
     u16 partySlot = ScriptGetVar(ctx);
     PokemonSummaryArgs **runningAppData = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
     *runningAppData = LearnForgetMove_LaunchApp(HEAP_ID_FIELD3, ctx->fieldSystem, partySlot, 0);
@@ -14,7 +14,7 @@ BOOL ScrCmd_394(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_395(ScriptContext *ctx) {
+BOOL ScrCmd_GetLearnForgetMoveResult(ScriptContext *ctx) {
     u16 *retPtr = ScriptGetVarPointer(ctx);
     void **runningAppData = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA); //*could* be MoveRelearnerArgs, not sure
     GF_ASSERT(*runningAppData != NULL);
@@ -29,7 +29,7 @@ BOOL ScrCmd_395(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_466(ScriptContext *ctx) {
+BOOL ScrCmd_MonHasRelearnableMoves(ScriptContext *ctx) {
     u16 *retPtr = ScriptGetVarPointer(ctx);
     u16 slot = ScriptGetVar(ctx);
     Party *party = SaveArray_Party_Get(ctx->fieldSystem->saveData);

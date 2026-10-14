@@ -299,7 +299,7 @@ void PokegearPhone_ResetBgLayers(PokegearPhoneAppData *phoneApp);
 void PokegearPhone_LoadBgGraphics(PokegearPhoneAppData *phoneApp);
 void PokegearPhone_FreeBgGraphics(PokegearPhoneAppData *phoneApp);
 void PokegearPhone_LoadPalettes(PokegearPhoneAppData *phoneApp);
-void PokegearPhone_SetTouchscreenDimState(PokegearPhoneAppData *phoneApp, BOOL a1);
+void PokegearPhone_SetTouchscreenDimState(PokegearPhoneAppData *phoneApp, BOOL shouldDim);
 void PokegearPhone_AddWindows(PokegearPhoneAppData *phoneApp);
 void PokegearPhone_RemoveWindows(PokegearPhoneAppData *phoneApp);
 void PokegearPhone_InitText(PokegearPhoneAppData *phoneApp);

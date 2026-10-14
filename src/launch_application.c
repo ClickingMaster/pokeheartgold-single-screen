@@ -456,12 +456,12 @@ static BOOL Task_EasyChat(TaskManager *taskman) {
     return FALSE;
 }
 
-void CallTask_EasyChat(TaskManager *taskman, int kind, EasyChatResult *a2, u16 *word1, u16 *word2) {
+void CallTask_EasyChat(TaskManager *taskman, int kind, EasyChatResult *result, u16 *word1, u16 *word2) {
     EasyChatArgs *args;
 
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskman);
     EasyChatTaskData *data = Heap_Alloc(HEAP_ID_FIELD3, sizeof(EasyChatTaskData));
-    data->result = a2;
+    data->result = result;
     data->retVar0 = word1;
     data->retVar1 = word2;
     data->mode = kind;
@@ -622,22 +622,22 @@ static void ApricornBox_LaunchApp_Impl(FieldSystem *fieldSystem, ApricornBoxArgs
     FieldSystem_LaunchApplication(fieldSystem, &template, args);
 }
 
-ApricornBoxArgs *ApricornBox_LaunchApp(FieldSystem *fieldSystem, int a1) {
+ApricornBoxArgs *ApricornBox_LaunchApp(FieldSystem *fieldSystem, int mode) {
     ApricornBoxArgs *args = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(ApricornBoxArgs));
     MI_CpuFill8(args, 0, sizeof(ApricornBoxArgs));
     args->saveData = FieldSystem_GetSaveData(fieldSystem);
     args->menuInputStatePtr = &fieldSystem->menuInputState;
     args->steps = GameStats_GetCapped(Save_GameStats_Get(args->saveData), GAME_STAT_STEPS_WALKED);
-    if (a1 == 1 && !CheckFlag997(Save_VarsFlags_Get(fieldSystem->saveData))) {
+    if (mode == 1 && !CheckFlag997(Save_VarsFlags_Get(fieldSystem->saveData))) {
         args->mode = 0;
     } else {
-        args->mode = a1;
+        args->mode = mode;
     }
     ApricornBox_LaunchApp_Impl(fieldSystem, args);
     return args;
 }
 
-ApricornBoxArgs *sub_0203ED80(FieldSystem *fieldSystem, u32 a1, u16 *a2) {
+ApricornBoxArgs *sub_0203ED80(FieldSystem *fieldSystem, u32 a1, u16 *juiceUsedVar) {
     ApricornBoxArgs *args = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(ApricornBoxArgs));
     MI_CpuFill8(args, 0, sizeof(ApricornBoxArgs));
     args->saveData = FieldSystem_GetSaveData(fieldSystem);
@@ -645,7 +645,7 @@ ApricornBoxArgs *sub_0203ED80(FieldSystem *fieldSystem, u32 a1, u16 *a2) {
     args->steps = GameStats_GetCapped(Save_GameStats_Get(args->saveData), GAME_STAT_STEPS_WALKED);
     args->mode = 3;
     args->unkC = a1;
-    args->juiceUsedVar = a2;
+    args->juiceUsedVar = juiceUsedVar;
     ApricornBox_LaunchApp_Impl(fieldSystem, args);
     return args;
 }
@@ -1168,7 +1168,7 @@ void TrainerCardSignature_LaunchApp(FieldSystem *fieldSystem) {
     FieldSystem_LaunchApplication(fieldSystem, &template, fieldSystem->saveData);
 }
 
-void Gts_LaunchApp(FieldSystem *fieldSystem, u16 a1) {
+void Gts_LaunchApp(FieldSystem *fieldSystem, u16 connectDirectly) {
     static const OverlayManagerTemplate sOverlayTemplate_Gts = { Gts_Init, Gts_Main, Gts_Exit, FS_OVERLAY_ID(OVY_70) };
     OverlayManagerTemplate template = sOverlayTemplate_Gts;
 
@@ -1188,11 +1188,11 @@ void Gts_LaunchApp(FieldSystem *fieldSystem, u16 a1) {
     args->natDexEnabled = SaveArray_IsNatDexEnabled(fieldSystem->saveData);
     args->gsProfileId = Comm_GetOwnGsProfileId(args->friendRoster);
     args->bag = Save_Bag_Get(fieldSystem->saveData);
-    args->connectDirectly = a1;
+    args->connectDirectly = connectDirectly;
     FieldSystem_LaunchApplication(fieldSystem, &template, args);
 }
 
-NintendoWifiConnectArgs *NintendoWifiConnection_LaunchApp(FieldSystem *fieldSystem, u16 a1, u16 a2) {
+NintendoWifiConnectArgs *NintendoWifiConnection_LaunchApp(FieldSystem *fieldSystem, u16 mode, u16 connectNow) {
     static const OverlayManagerTemplate sOverlayTemplate_NintendoWifiConnect = { NintendoWfc_Init, NintendoWfc_Main, NintendoWfc_Exit, FS_OVERLAY_ID(OVY_72) };
     OverlayManagerTemplate template = sOverlayTemplate_NintendoWifiConnect;
 
@@ -1204,8 +1204,8 @@ NintendoWifiConnectArgs *NintendoWifiConnection_LaunchApp(FieldSystem *fieldSyst
     args->dwcUserData = FriendRoster_GetUserData(Save_FriendRoster_Get(fieldSystem->saveData));
     args->saveData = fieldSystem->saveData;
     args->dwcProfileId = Comm_GetOwnGsProfileId(Save_FriendRoster_Get(fieldSystem->saveData));
-    args->mode = a1;
-    args->connectNow = a2;
+    args->mode = mode;
+    args->connectNow = connectNow;
     args->incomplete = 1;
     FieldSystem_LaunchApplication(fieldSystem, &template, args);
     return args;
@@ -1355,7 +1355,7 @@ PokemonSummaryArgs *PokemonSummary_LaunchApp(enum HeapID heapID, FieldSystem *fi
     return args;
 }
 
-void GlobalTerminal_LaunchApp(FieldSystem *fieldSystem, u16 a1, u16 a2) {
+void GlobalTerminal_LaunchApp(FieldSystem *fieldSystem, u16 connectDirectly, u16 a2) {
     static const OverlayManagerTemplate sOverlayTemplate_GlobalTerminal = { GlobalTerminalApp_Init, GlobalTerminalApp_Main, GlobalTerminalApp_Exit, FS_OVERLAY_ID(OVY_39) };
     OverlayManagerTemplate template = sOverlayTemplate_GlobalTerminal;
 
@@ -1363,7 +1363,7 @@ void GlobalTerminal_LaunchApp(FieldSystem *fieldSystem, u16 a1, u16 a2) {
     MI_CpuFill8(args, 0, sizeof(GlobalTerminalLaunchArgs));
     args->fieldSystem = fieldSystem;
     args->saveData = fieldSystem->saveData;
-    args->connectDirectly = a1;
+    args->connectDirectly = connectDirectly;
     args->unkC = a2;
     FieldSystem_LaunchApplication(fieldSystem, &template, args);
 }
@@ -1385,14 +1385,14 @@ void ShipDepartureCutscene_LaunchApp(FieldSystem *fieldSystem, void *args) {
     FieldSystem_LaunchApplication(fieldSystem, &template, args);
 }
 
-LegendaryCinematicArgs *LegendaryCinematic_LaunchApp(FieldSystem *fieldSystem, UnkStruct_0203FCC4 *a1, u16 a2, u16 a3, enum HeapID heapID) {
+LegendaryCinematicArgs *LegendaryCinematic_LaunchApp(FieldSystem *fieldSystem, UnkStruct_0203FCC4 *modelAttributes, u16 scene, u16 timeOfDay, enum HeapID heapID) {
     static const OverlayManagerTemplate sOverlayTemplate_LegendaryCinematic = { LegendaryCinematic_Init, LegendaryCinematic_Main, LegendaryCinematic_Exit, FS_OVERLAY_ID(OVY_106) };
     LegendaryCinematicArgs *args = Heap_Alloc(heapID, sizeof(LegendaryCinematicArgs));
     memset(args, 0, sizeof(LegendaryCinematicArgs));
     args->saveData = FieldSystem_GetSaveData(fieldSystem);
-    args->modelAttributes = *a1;
-    args->scene = a2;
-    args->timeOfDay = a3;
+    args->modelAttributes = *modelAttributes;
+    args->scene = scene;
+    args->timeOfDay = timeOfDay;
     FieldSystem_LaunchApplication(fieldSystem, &sOverlayTemplate_LegendaryCinematic, args);
     return args;
 }

@@ -237,13 +237,13 @@ BOOL ScrCmd_PartyCheckForDouble(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_223(ScriptContext *ctx) {
+BOOL ScrCmd_TrainerBattleWithTrainer1(ScriptContext *ctx) {
     u32 *winFlag = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_BATTLE_WIN_FLAG);
     SetupAndStartTrainerBattle(ctx->taskman, 1, 0, 0, 0, 0, HEAP_ID_FIELD2, winFlag);
     return TRUE;
 }
 
-BOOL ScrCmd_224(ScriptContext *ctx) {
+BOOL ScrCmd_SetLastInteractedTrainerFlag(ScriptContext *ctx) {
     LocalMapObject **lastInteracted = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_LAST_INTERACTED);
     u32 mapObjectId = MapObject_GetID(*lastInteracted);
     TrainerFlagSet(ctx->fieldSystem->saveData, (u16)mapObjectId);
