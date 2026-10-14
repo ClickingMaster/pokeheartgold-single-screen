@@ -109,7 +109,7 @@ static u16 sSpeciesListZukanFiles[9] = {
     101,
 };
 
-BOOL ScrCmd_648(ScriptContext *ctx) {
+BOOL ScrCmd_BattleHallRecordSpeciesListMenu(ScriptContext *ctx) {
     int i;
     u32 out_1;
     int out_2;
@@ -619,7 +619,7 @@ BOOL ScrCmd_GetPartyMonForm(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_699(ScriptContext *ctx) {
+BOOL ScrCmd_SetOtherObjectsFlag13(ScriptContext *ctx) {
     int unkVar;
     FieldSystem *fieldSystem;
     MapObjectManager *mapObjectManager;
@@ -659,7 +659,7 @@ BOOL ScrCmd_699(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_700(ScriptContext *ctx) {
+BOOL ScrCmd_ClearOtherObjectsFlag13(ScriptContext *ctx) {
     int index = 0;
     FieldSystem *fieldSystem;
     MapObjectManager *mapObjectManager;
@@ -702,7 +702,7 @@ BOOL ScrCmd_CheckMonSeen(ScriptContext *ctx) {
 }
 
 // Related to the trapped floor in the rocket hideout
-BOOL ScrCmd_708(ScriptContext *ctx) {
+BOOL ScrCmd_PlayTrapEffect(ScriptContext *ctx) {
     u32 unkVar = ScriptGetVar(ctx);
     ShowTrapEffect(ctx->fieldSystem->taskman, unkVar);
     return TRUE;
@@ -715,7 +715,7 @@ BOOL ScrCmd_ShowLegendaryWing(ScriptContext *ctx) {
 }
 
 // Related to Persian statues in the rocket hideout
-BOOL ScrCmd_709(ScriptContext *ctx) {
+BOOL ScrCmd_PlayHideoutAlarm(ScriptContext *ctx) {
     ShowHideoutAlarm(ctx->fieldSystem->taskman);
     return TRUE;
 }
@@ -730,7 +730,7 @@ BOOL ScrCmd_ScreenShake(ScriptContext *ctx) {
 }
 
 // Related to Lance flying off on his dragonite in the Lake of Rage
-BOOL ScrCmd_775(ScriptContext *ctx) {
+BOOL ScrCmd_LanceFlyAway(ScriptContext *ctx) {
     u32 objIdA = ScriptGetVar(ctx);
     u32 objIdB = ScriptGetVar(ctx);
 
@@ -756,7 +756,7 @@ static u32 ClampToU16Max(u32 unkA) {
 }
 
 // Related to Pokeathlon "Ball Sign"- whatever that is
-BOOL ScrCmd_724(ScriptContext *ctx) {
+BOOL ScrCmd_GetPokeathlonStat(ScriptContext *ctx) {
     u8 unkVar = ScriptGetVar(ctx);
     u16 *unkPtrA = ScriptGetVarPointer(ctx);
 
@@ -801,7 +801,7 @@ BOOL ScrCmd_724(ScriptContext *ctx) {
 }
 
 // This does something with pokeathlon records like "number times jumped"
-BOOL ScrCmd_725(ScriptContext *ctx) {
+BOOL ScrCmd_AdjustPokeathlonStat11(ScriptContext *ctx) {
     s32 val;
 
     u8 unkA = ScriptReadByte(ctx);
@@ -834,7 +834,7 @@ BOOL ScrCmd_ProcessSoundplate(ScriptContext *ctx) {
 }
 
 // Related to Kurt
-BOOL ScrCmd_735(ScriptContext *ctx) {
+BOOL ScrCmd_GetKurtApricornQuantity(ScriptContext *ctx) {
     u16 *apricornQuantity = ScriptGetVarPointer(ctx);
     *apricornQuantity = ApricornBox_GetKurtQuantity(Save_ApricornBox_Get(ctx->fieldSystem->saveData));
     return FALSE;
@@ -846,7 +846,7 @@ BOOL ScrCmd_ClearKurtApricorn(ScriptContext *ctx) {
 }
 
 // Related to Kurt
-BOOL ScrCmd_737(ScriptContext *ctx) {
+BOOL ScrCmd_GetKurtBall(ScriptContext *ctx) {
     u16 *unkPtr = ScriptGetVarPointer(ctx);
     *unkPtr = ApricornBox_GetKurtBall(Save_ApricornBox_Get(ctx->fieldSystem->saveData));
     return FALSE;
@@ -867,7 +867,7 @@ BOOL ScrCmd_GetTotalApricornCount(ScriptContext *ctx) {
 }
 
 // Related to Kurt- canceling
-BOOL ScrCmd_739(ScriptContext *ctx) { // todo: rename structs and find out stuff
+BOOL ScrCmd_LaunchApricornBoxForKurt(ScriptContext *ctx) { // todo: rename structs and find out stuff
     ApricornBoxArgs **args = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
     *args = ApricornBox_LaunchApp(ctx->fieldSystem, 2);
     SetupNativeScript(ctx, ScrNative_WaitApplication_DestroyTaskData);
@@ -875,7 +875,7 @@ BOOL ScrCmd_739(ScriptContext *ctx) { // todo: rename structs and find out stuff
 }
 
 // Related to aprijuice stand- canceling
-BOOL ScrCmd_740(ScriptContext *ctx) {
+BOOL ScrCmd_LaunchApricornBoxForJuice(ScriptContext *ctx) {
     ApricornBoxArgs **args = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
     u32 unkVar = ScriptGetVar(ctx);
     u16 *unkPtrB = ScriptGetVarPointer(ctx);
@@ -885,7 +885,7 @@ BOOL ScrCmd_740(ScriptContext *ctx) {
 }
 
 // Related to aprijuice stand- viewing label
-BOOL ScrCmd_741(ScriptContext *ctx) {
+BOOL ScrCmd_GetApricornJuiceOffer(ScriptContext *ctx) {
     ApricornJuice unkOut;
     RTCDate date;
     s32 unkVar;
@@ -934,7 +934,7 @@ BOOL ScrCmd_741(ScriptContext *ctx) {
 }
 
 // Gets called after selecting which type of pokeathlon data to load- might just outright start the loading process
-BOOL ScrCmd_743(ScriptContext *ctx) {
+BOOL ScrCmd_ShowPokeathlonRecords(ScriptContext *ctx) {
     PokeathlonRecords_Show(ctx->taskman, (enum PokeathlonData)ScriptGetVar(ctx));
     return TRUE;
 }
@@ -1078,7 +1078,7 @@ BOOL ScrCmd_GiveTogepiEgg(ScriptContext *ctx) {
 }
 
 // unused
-BOOL ScrCmd_777(ScriptContext *ctx) {
+BOOL ScrCmd_MonIsFromTogepiEgg(ScriptContext *ctx) {
     u32 partyIndex = ScriptGetVar(ctx);
     u16 *unkPtr = ScriptGetVarPointer(ctx);
 
@@ -1233,7 +1233,7 @@ BOOL ScrCmd_BufferPokeathlonCourseName(ScriptContext *ctx) {
 }
 
 // Gets called when getting a package from your mom
-BOOL ScrCmd_811(ScriptContext *ctx) {
+BOOL ScrCmd_PeekMomGift(ScriptContext *ctx) {
     u16 *unkPtr1 = ScriptGetVarPointer(ctx);
     u16 *unkPtr2 = ScriptGetVarPointer(ctx);
 
@@ -1243,7 +1243,7 @@ BOOL ScrCmd_811(ScriptContext *ctx) {
 }
 
 // Gets called when getting a package from your mom
-BOOL ScrCmd_812(ScriptContext *ctx) {
+BOOL ScrCmd_PopMomGift(ScriptContext *ctx) {
     PhoneCallPersistentState_MomGiftQueue_Get(SaveData_GetPhoneCallPersistentState(ctx->fieldSystem->saveData));
     return FALSE;
 }

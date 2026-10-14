@@ -144,7 +144,7 @@ static const WindowTemplate ov03_02259464 = {
     .baseTile = 253,
 };
 
-BOOL ScrCmd_710(ScriptContext *ctx) {
+BOOL ScrCmd_UpdateMapPropAnimsFromFlag96B(ScriptContext *ctx) {
     for (int i = 0; i < 3; i++) {
         RocketHQ_UpdateElectrodePropAnimation(ctx->fieldSystem, i);
     }

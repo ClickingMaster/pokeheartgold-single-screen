@@ -144,7 +144,7 @@ BOOL Task_FollowMonRecall(TaskManager *taskMan);
 BOOL Task_FollowMonHideForFieldMove(TaskManager *taskMan);
 BOOL Task_FollowMonFlash(TaskManager *taskMan);
 
-BOOL ScrCmd_808(ScriptContext *ctx) {
+BOOL ScrCmd_TrainerHouseBattle(ScriptContext *ctx) {
     u16 trainerNum = FieldSystem_VarGet(ctx->fieldSystem, ScriptReadHalfword(ctx));
     FSOverlayID overlay = FS_OVERLAY_ID(OVY_25);
     HandleLoadOverlay(overlay, OVY_LOAD_ASYNC);

@@ -11,7 +11,7 @@ BOOL ScrNative_SEPlaying(ScriptContext *ctx);
 BOOL ScrNative_WaitCry(ScriptContext *ctx);
 BOOL ScrNative_WaitFanfare(ScriptContext *ctx);
 
-BOOL ScrCmd_575(ScriptContext *ctx) {
+BOOL ScrCmd_CountPlayingSeq(ScriptContext *ctx) {
     u16 seqNo = ScriptReadHalfword(ctx);
     u16 *retPtr = ScriptGetVarPointer(ctx);
     *retPtr = GF_SndCountPlayingSeqBySeqNo(seqNo);
@@ -191,24 +191,24 @@ BOOL ScrCmd_093(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_544(ScriptContext *ctx) {
+BOOL ScrCmd_SetSeqVolume(ScriptContext *ctx) {
     u16 seqNo = ScriptGetVar(ctx);
     u16 volume = ScriptGetVar(ctx);
     GF_SetVolumeBySeqNo(seqNo, volume);
     return FALSE;
 }
 
-BOOL ScrCmd_664(ScriptContext *ctx) {
+BOOL ScrCmd_Dummy664(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_665(ScriptContext *ctx) {
+BOOL ScrCmd_FieldBGMPlay(ScriptContext *ctx) {
     u16 seqNo = ScriptGetVar(ctx);
     FieldBGM_Play(ctx->fieldSystem, seqNo);
     return TRUE;
 }
 
-BOOL ScrCmd_666(ScriptContext *ctx) {
+BOOL ScrCmd_GetCurrentBGM(ScriptContext *ctx) {
     u16 *retPtr = ScriptGetVarPointer(ctx);
     *retPtr = GF_GetCurrentPlayingBGM();
     return FALSE;

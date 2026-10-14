@@ -404,7 +404,7 @@ const struct MartItem *_0210FA04[] = {
     _020FBEEE,
 };
 
-BOOL ScrCmd_771(ScriptContext *ctx) {
+BOOL ScrCmd_PokeathlonDailyMart(ScriptContext *ctx) {
     SaveVarsFlags *flagsys;
     RTCDate date;
 
@@ -471,7 +471,7 @@ const struct MartItem *_0210F9D4[] = {
     _020FBBA4,
 };
 
-BOOL ScrCmd_772(ScriptContext *ctx) {
+BOOL ScrCmd_PokeathlonDataCardMart(ScriptContext *ctx) {
     PokeathlonSave *pokeathlon;
     int i;
 
@@ -485,7 +485,7 @@ BOOL ScrCmd_772(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_834(ScriptContext *ctx) {
+BOOL ScrCmd_CheckPokeathlonDailyMartHasStock(ScriptContext *ctx) {
     u16 *retPtr;
     PokeathlonSave *pokeathlon;
     SaveVarsFlags *varsFlags;
@@ -525,7 +525,7 @@ BOOL ScrCmd_834(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_835(ScriptContext *ctx) {
+BOOL ScrCmd_CountPokeathlonDataCardsBought(ScriptContext *ctx) {
     u16 *ret_ptr;
     int i;
     PokeathlonSave *pokeathlon;

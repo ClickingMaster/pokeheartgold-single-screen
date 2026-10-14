@@ -63,7 +63,7 @@ static const u8 sBattleCastleSummaryPages[] = {
     4,
 };
 
-BOOL ScrCmd_637(ScriptContext *ctx) {
+BOOL ScrCmd_BattleCastleAction(ScriptContext *ctx) {
     u16 command = ScriptReadHalfword(ctx);
     u16 arg1 = ScriptGetVar(ctx);
     u16 *result = ScriptGetVarPointer(ctx);
@@ -104,7 +104,7 @@ BOOL ScrCmd_637(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_640(ScriptContext *ctx) {
+BOOL ScrCmd_BattleCastleResetStreak(ScriptContext *ctx) {
     u16 unk = ScriptGetVar(ctx);
     BattleCastle_ResetStreak(ctx->fieldSystem->saveData, Save_Frontier_GetCastleFlags(ctx->fieldSystem->saveData), unk);
     return FALSE;
@@ -124,7 +124,7 @@ static void BattleCastle_ResetStreak(SaveData *saveData, u32 castleFlags, u8 cha
     }
 }
 
-BOOL ScrCmd_638(ScriptContext *ctx) {
+BOOL ScrCmd_BattleCastleCheckTeam(ScriptContext *ctx) {
     u16 firstMon = ScriptGetVar(ctx);
     u16 secondMon = ScriptGetVar(ctx);
     u16 *result = ScriptGetVarPointer(ctx);

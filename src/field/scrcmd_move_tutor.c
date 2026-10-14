@@ -96,7 +96,7 @@ static MoveTutorLearnset *GetMoveTutorLearnset(enum HeapID heapID, u32 index);
 static BOOL NativeScript_WaitMoveTutorMenu(ScriptContext *ctx);
 
 // get number of pages needed to show learnable moves from move tutor
-BOOL ScrCmd_652(ScriptContext *ctx) {
+BOOL ScrCmd_GetTutorMoveListPageCount(ScriptContext *ctx) {
     u16 slot = ScriptGetVar(ctx);
     u16 moveTutorNpc = ScriptGetVar(ctx);
     u16 *result = ScriptGetVarPointer(ctx);
@@ -137,7 +137,7 @@ BOOL ScrCmd_TutorMoveGetPrice(ScriptContext *ctx) {
 }
 
 // check if mon at given slot can learn from headbutt move tutor
-BOOL ScrCmd_656(ScriptContext *ctx) {
+BOOL ScrCmd_MonCanLearnHeadbuttFromTutor(ScriptContext *ctx) {
     u16 slot = ScriptGetVar(ctx);
     u16 *result = ScriptGetVarPointer(ctx);
     Party *party = SaveArray_Party_Get(ctx->fieldSystem->saveData);
@@ -319,7 +319,7 @@ static BOOL NativeScript_WaitMoveTutorMenu(ScriptContext *ctx) {
 }
 
 // Unused
-BOOL ScrCmd_742(ScriptContext *ctx) {
+BOOL ScrCmd_MonLearnsetHasMove(ScriptContext *ctx) {
     u16 slot = ScriptGetVar(ctx);
     u16 move = ScriptGetVar(ctx);
     u16 *result = ScriptGetVarPointer(ctx);

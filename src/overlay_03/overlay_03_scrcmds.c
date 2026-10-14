@@ -15,33 +15,33 @@
 #include "safari_zone_encounters.h"
 #include "safari_decoration_task.h"
 
-BOOL ScrCmd_716(ScriptContext *ctx) {
+BOOL ScrCmd_LaunchSafariAreaCustomizer(ScriptContext *ctx) {
     SafariAreaCustomizerArgs **safariAreaArgs = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
     *safariAreaArgs = SafariAreaCustomizer_LaunchApp(ctx->fieldSystem);
     SetupNativeScript(ctx, &ScrNative_WaitApplication_DestroyTaskData);
     return TRUE;
 }
 
-BOOL ScrCmd_717(ScriptContext *ctx) {
+BOOL ScrCmd_StartSafariDecoration(ScriptContext *ctx) {
     CallTask_SafariDecoration(ctx->taskman, GetVarPointer(ctx->fieldSystem, ScriptReadHalfword(ctx)));
     return TRUE;
 }
 
-BOOL ScrCmd_718(ScriptContext *ctx) {
+BOOL ScrCmd_BufferSafariZoneObjectName(ScriptContext *ctx) {
     MessageFormat **messageFormat = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
     u8 fieldno = *ctx->script_ptr++;
     BufferSafariZoneObjectName(*messageFormat, fieldno, (u8)FieldSystem_VarGet(ctx->fieldSystem, ScriptReadHalfword(ctx)));
     return FALSE;
 }
 
-BOOL ScrCmd_719(ScriptContext *ctx) {
+BOOL ScrCmd_GetFacingSafariObject(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
     *GetVarPointer(ctx->fieldSystem, ScriptReadHalfword(ctx)) = FieldSystem_GetFacingSafariObject(fieldSystem, GetVarPointer(ctx->fieldSystem, ScriptReadHalfword(ctx)));
     return FALSE;
 }
 
-BOOL ScrCmd_720(ScriptContext *ctx) {
+BOOL ScrCmd_RemoveSafariObject(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
 
@@ -102,7 +102,7 @@ BOOL ScrCmd_720(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_721(ScriptContext *ctx) {
+BOOL ScrCmd_CheckSafariObjectPlacement(ScriptContext *ctx) {
     u16 *var = GetVarPointer(ctx->fieldSystem, ScriptReadHalfword(ctx));
     *var = FieldSystem_CheckSafariObjectPlacement(ctx->fieldSystem);
     return FALSE;

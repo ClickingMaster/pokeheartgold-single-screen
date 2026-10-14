@@ -129,7 +129,7 @@ BOOL ScrCmd_444(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_527(ScriptContext *ctx) {
+BOOL ScrCmd_MsgFont3(ScriptContext *ctx) {
     struct MessagePrintOptions unkStruct;
     u16 messageNum = ScriptReadHalfword(ctx);
     ovFieldMain_InitMessagePrintOptions(&unkStruct, ctx);
@@ -158,7 +158,7 @@ BOOL ScrCmd_NonNPCMsgVar(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_592(ScriptContext *ctx) {
+BOOL ScrCmd_NonNPCMsgVarAutoScroll(ScriptContext *ctx) {
     struct MessagePrintOptions unkStruct;
     u16 messageNum = ScriptGetVar(ctx);
     ovFieldMain_InitMessagePrintOptions(&unkStruct, ctx);

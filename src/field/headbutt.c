@@ -215,7 +215,7 @@ static void GetCoordsOfFacingTree(FieldSystem *fieldSystem, u32 *x, u32 *y) {
 // Not related to headbutt, should these be a separate file object? //
 // ---------------------------------------------------------------- //
 
-BOOL ScrCmd_795(ScriptContext *ctx) {
+BOOL ScrCmd_ShowSavingsBox(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u8 x = ScriptGetVar(ctx);
     u8 y = ScriptGetVar(ctx);
@@ -224,14 +224,14 @@ BOOL ScrCmd_795(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_796(ScriptContext *ctx) {
+BOOL ScrCmd_HideSavingsBox(ScriptContext *ctx) {
     Window **moneyBox = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MONEY_BOX);
     SavingsBox_Delete(*moneyBox);
     return FALSE;
 }
 
 // Unused
-BOOL ScrCmd_797(ScriptContext *ctx) {
+BOOL ScrCmd_UpdateSavingsBox(ScriptContext *ctx) {
     Window **moneyBox = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MONEY_BOX);
     SavingsBox_Update(ctx->fieldSystem, *moneyBox);
     return FALSE;

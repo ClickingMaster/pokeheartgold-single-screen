@@ -1020,7 +1020,7 @@ BOOL ScrCmd_066(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_559(ScriptContext *ctx) {
+BOOL ScrCmd_MultichoiceAddItemVar(ScriptContext *ctx) {
     struct ScriptMenu **pp_menu = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MENU_WINDOW);
     u16 msgId = ScriptGetVar(ctx);
     u16 value = ScriptGetVar(ctx);
@@ -1043,7 +1043,7 @@ BOOL NativeScript_WaitMultichoice(ScriptContext *ctx) {
 
 BOOL NativeScript_WaitMultichoiceUnionRoom(ScriptContext *ctx);
 
-BOOL ScrCmd_585(ScriptContext *ctx) {
+BOOL ScrCmd_MultichoiceShowUnionRoom(ScriptContext *ctx) {
     struct ScriptMenu **pp_menu = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MENU_WINDOW);
     ScriptMenu_ShowMultichoice(*pp_menu);
     SetupNativeScript(ctx, NativeScript_WaitMultichoiceUnionRoom);
@@ -1093,7 +1093,7 @@ BOOL ScrCmd_071(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_695(ScriptContext *ctx) {
+BOOL ScrCmd_MultichoiceShowListWithWidth(ScriptContext *ctx) {
     struct ScriptMenu **pp_menu = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MENU_WINDOW);
     u16 var = ScriptGetVar(ctx);
     ScriptMenu_ShowListWithWidth(*pp_menu, var);
@@ -1101,7 +1101,7 @@ BOOL ScrCmd_695(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_677(ScriptContext *ctx) {
+BOOL ScrCmd_MultichoiceShowListAtPosition(ScriptContext *ctx) {
     struct ScriptMenu **pp_menu = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MENU_WINDOW);
     u16 *scrollPtr = ScriptGetVarPointer(ctx);
     u16 *rowPtr = ScriptGetVarPointer(ctx);
@@ -1118,14 +1118,14 @@ BOOL ScrCmd_072(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_841(ScriptContext *ctx) {
+BOOL ScrCmd_MultichoiceSetAnchorRight(ScriptContext *ctx) {
     struct ScriptMenu **pp_menu = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MENU_WINDOW);
     u8 val = ScriptReadByte(ctx);
     ScriptMenu_SetAnchorRight(*pp_menu, val);
     return TRUE;
 }
 
-BOOL ScrCmd_842(ScriptContext *ctx) {
+BOOL ScrCmd_MultichoiceSetAnchorBottom(ScriptContext *ctx) {
     struct ScriptMenu **pp_menu = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MENU_WINDOW);
     u8 val = ScriptReadByte(ctx);
     ScriptMenu_SetAnchorBottom(*pp_menu, val);
@@ -1153,7 +1153,7 @@ BOOL ScrCmd_ApplyMovement(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_563(ScriptContext *ctx) {
+BOOL ScrCmd_WalkPersonToCoords(ScriptContext *ctx) {
     u16 person = ScriptGetVar(ctx);
     u16 x = ScriptGetVar(ctx);
     u16 z = ScriptGetVar(ctx);
@@ -1460,7 +1460,7 @@ BOOL ScrCmd_103(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_678(ScriptContext *ctx) {
+BOOL ScrCmd_CreateCameraFocusObject(ScriptContext *ctx) {
     u16 x = ScriptGetVar(ctx);
     u16 y = ScriptGetVar(ctx);
     LocalMapObject **p_cameraObj = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_CAMERA_TARGET);
@@ -1471,7 +1471,7 @@ BOOL ScrCmd_678(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_679(ScriptContext *ctx) {
+BOOL ScrCmd_RemoveCameraFocusObject(ScriptContext *ctx) {
     LocalMapObject **p_cameraObj = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_CAMERA_TARGET);
     MapObject_Remove(*p_cameraObj);
     return FALSE;
@@ -1584,7 +1584,7 @@ BOOL ScrCmd_109(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_574(ScriptContext *ctx) {
+BOOL ScrCmd_GetObjectMovementType(ScriptContext *ctx) {
     u16 *p_dest = ScriptGetVarPointer(ctx);
     *p_dest = 0;
     u16 objectId = ScriptGetVar(ctx);
@@ -1609,7 +1609,7 @@ BOOL ScrCmd_PartySelectUI(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_566(ScriptContext *ctx) { // todo: trade screen
+BOOL ScrCmd_ChoosePartyMonForTrade(ScriptContext *ctx) { // todo: trade screen
     PartyMenuArgs **partyMenu = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
     *partyMenu = PartyMenu_LaunchApp_InGameTrade(HEAP_ID_FIELD3, ctx->fieldSystem);
     SetupNativeScript(ctx, ScrNative_WaitApplication);
@@ -1635,7 +1635,7 @@ BOOL ScrCmd_GetPartySelection(ScriptContext *ctx) { // todo: get selected pokemo
     return FALSE;
 }
 
-BOOL ScrCmd_635(ScriptContext *ctx) {
+BOOL ScrCmd_BattleHallGetPartySelection(ScriptContext *ctx) {
     u16 *p_firstSlot = ScriptGetVarPointer(ctx);
     u16 *p_secondSlot = ScriptGetVarPointer(ctx);
     PartyMenuArgs **partyMenuPtr = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
@@ -1659,7 +1659,7 @@ BOOL ScrCmd_635(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_639(ScriptContext *ctx) {
+BOOL ScrCmd_BattleCastleGetPartySelection(ScriptContext *ctx) {
     u16 *p_firstSlot = ScriptGetVarPointer(ctx);
     u16 *p_secondSlot = ScriptGetVarPointer(ctx);
     u16 *p_thirdSlot = ScriptGetVarPointer(ctx);
@@ -1684,7 +1684,7 @@ BOOL ScrCmd_639(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_645(ScriptContext *ctx) {
+BOOL ScrCmd_BattleArcadeGetPartySelection(ScriptContext *ctx) {
     u16 *p_firstSlot = ScriptGetVarPointer(ctx);
     u16 *p_secondSlot = ScriptGetVarPointer(ctx);
     u16 *p_thirdSlot = ScriptGetVarPointer(ctx);
@@ -1749,7 +1749,7 @@ BOOL ScrCmd_GetPhoneBookRematch(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_684(ScriptContext *ctx) {
+BOOL ScrCmd_GetWeatherType(ScriptContext *ctx) {
     u16 *p_dest = ScriptGetVarPointer(ctx);
     *p_dest = LocalFieldData_GetWeatherType(Save_LocalFieldData_Get(ctx->fieldSystem->saveData));
     return FALSE;
@@ -1868,7 +1868,7 @@ BOOL ScrCmd_452(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_547(ScriptContext *ctx) {
+BOOL ScrCmd_ShowPartyMonPic(ScriptContext *ctx) {
     struct PokepicManager **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
     u16 partyIdx = ScriptGetVar(ctx);
     Pokemon *mon = Party_GetMonByIndex(SaveArray_Party_Get(ctx->fieldSystem->saveData), partyIdx);
@@ -1883,13 +1883,13 @@ BOOL ScrCmd_453(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_548(ScriptContext *ctx) {
+BOOL ScrCmd_AnimateMonPic(ScriptContext *ctx) {
     u8 **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
     **p_work = 2;
     return TRUE;
 }
 
-BOOL ScrCmd_549(ScriptContext *ctx) {
+BOOL ScrCmd_WaitMonPicAnim(ScriptContext *ctx) {
     ctx->data[0] = ScriptReadHalfword(ctx);
     SetupNativeScript(ctx, sub_02042C78);
     return TRUE;
@@ -1911,7 +1911,7 @@ BOOL ScrCmd_454(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_681(ScriptContext *ctx) {
+BOOL ScrCmd_EditBattleGreeting(ScriptContext *ctx) {
     u16 *var_p = ScriptGetVarPointer(ctx);
     CallTask_EditBattleGreeting(ctx->taskman, var_p);
     return TRUE;
@@ -2034,7 +2034,7 @@ BOOL ScrCmd_164(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_706(ScriptContext *ctx) {
+BOOL ScrCmd_CheckHallOfFameSaveInvalid(ScriptContext *ctx) {
     int saveOk;
     HallOfFame *hof = LoadHallOfFame(ctx->fieldSystem->saveData, HEAP_ID_FIELD1, &saveOk);
     u16 *p_var = ScriptGetVarPointer(ctx);
@@ -2137,14 +2137,14 @@ BOOL ScrCmd_NicknameInput(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_629(ScriptContext *ctx) {
+BOOL ScrCmd_RunSpinTradeFlow(ScriptContext *ctx) {
     void **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
     *p_work = SpinTradeFlow_New(ctx->fieldSystem);
     SetupNativeScript(ctx, ScrNative_RunSpinTradeFlow);
     return TRUE;
 }
 
-BOOL ScrCmd_630(ScriptContext *ctx) {
+BOOL ScrCmd_CheckUnionRoomPartnerVersionNotDummy(ScriptContext *ctx) {
     u16 *ret_p = ScriptGetVarPointer(ctx);
     u32 partnerVersion = UnionRoom_GetPartnerGameVersion();
     u32 r0 = PlayerData_GetDummyGameVersion();
@@ -2245,7 +2245,7 @@ BOOL ScrCmd_446(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_840(ScriptContext *ctx) {
+BOOL ScrCmd_GetMapPokeCenterOrLeagueType(ScriptContext *ctx) {
     u16 mapId = ScriptGetVar(ctx);
     u16 *ret_p = ScriptGetVarPointer(ctx);
 
@@ -2350,7 +2350,7 @@ BOOL ScrCmd_PlayerOnBikeSet(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_591(ScriptContext *ctx) {
+BOOL ScrCmd_SetBicycleBGMOverride(ScriptContext *ctx) {
     FieldBGM_SetOverride(ctx->fieldSystem, SEQ_PL_BICYCLE);
     return FALSE;
 }
@@ -2586,7 +2586,7 @@ BOOL ScrCmd_WildBattle(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_686(ScriptContext *ctx) {
+BOOL ScrCmd_FatefulWildBattle(ScriptContext *ctx) {
     u32 *winFlag = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_BATTLE_WIN_FLAG);
     u16 species = ScriptGetVar(ctx);
     u16 level = ScriptGetVar(ctx);
@@ -2641,7 +2641,7 @@ BOOL ScrCmd_SaveWipeExtraChunks(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_642(ScriptContext *ctx) {
+BOOL ScrCmd_CheckExtraSaveChunksExist(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     *p_ret = Save_CheckExtraChunksExist(ctx->fieldSystem->saveData);
     return FALSE;
@@ -2743,7 +2743,7 @@ BOOL ScrCmd_267(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_586(ScriptContext *ctx) {
+BOOL ScrCmd_GetUnionRoomBattleCancel(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     *p_ret = UnionRoom_GetBattleCancel(ctx->fieldSystem->unionRoom);
     if (*p_ret) {
@@ -2951,7 +2951,7 @@ BOOL NativeScript_WaitCommShutdown(ScriptContext *ctx) {
     }
 }
 
-BOOL ScrCmd_587(ScriptContext *ctx) {
+BOOL ScrCmd_CommClubLinkExit(ScriptContext *ctx) {
     CommClubLink_ExitSynced();
     SetupNativeScript(ctx, NativeScript_WaitCommShutdown);
     return TRUE;
@@ -3377,14 +3377,14 @@ BOOL ScrCmd_422(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_704(ScriptContext *ctx) {
+BOOL ScrCmd_AddGameStat(ScriptContext *ctx) {
     u16 statIdx = ScriptReadHalfword(ctx);
     u16 value = ScriptGetVar(ctx);
     GameStats_Add(Save_GameStats_Get(ctx->fieldSystem->saveData), statIdx, value);
     return FALSE;
 }
 
-BOOL ScrCmd_705(ScriptContext *ctx) {
+BOOL ScrCmd_AddGameStatWord(ScriptContext *ctx) {
     u16 statIdx = ScriptReadHalfword(ctx);
     u32 value = ScriptReadWord(ctx);
     GameStats_Add(Save_GameStats_Get(ctx->fieldSystem->saveData), statIdx, value);
@@ -3653,7 +3653,7 @@ void Script_SetMonSeenFlagBySpecies(FieldSystem *fieldSystem, u16 species) {
     Heap_Free(mon);
 }
 
-BOOL ScrCmd_687(ScriptContext *ctx) {
+BOOL ScrCmd_SetMonSeenFlag(ScriptContext *ctx) {
     u16 species = ScriptGetVar(ctx);
     Script_SetMonSeenFlagBySpecies(ctx->fieldSystem, species);
     return FALSE;
@@ -3830,13 +3830,13 @@ BOOL ScrCmd_526(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_528(ScriptContext *ctx) {
+BOOL ScrCmd_GetAgbCartridgeVersion(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     *p_ret = gSystem.agbCartridgeVersion;
     return TRUE;
 }
 
-BOOL ScrCmd_530(ScriptContext *ctx) {
+BOOL ScrCmd_MapEventKeyAction(ScriptContext *ctx) {
     u16 key = ScriptGetVar(ctx);
     u8 action = ScriptReadByte(ctx);
     SaveVarsFlags *varsFlags = Save_VarsFlags_Get(ctx->fieldSystem->saveData);
@@ -3856,25 +3856,25 @@ BOOL ScrCmd_BufferBackgroundName(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_534(ScriptContext *ctx) {
+BOOL ScrCmd_GetVar4041(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     *p_ret = Save_VarsFlags_GetVar4041(Save_VarsFlags_Get(ctx->fieldSystem->saveData));
     return FALSE;
 }
 
-BOOL ScrCmd_536(ScriptContext *ctx) {
+BOOL ScrCmd_TakeFashionAccessory(ScriptContext *ctx) {
     u16 id = ScriptGetVar(ctx);
     u16 quantity = ScriptGetVar(ctx);
     FashionCase_TakeAccessory(Save_FashionData_GetFashionCase(Save_FashionData_Get(ctx->fieldSystem->saveData)), id, quantity);
     return FALSE;
 }
 
-BOOL ScrCmd_537(ScriptContext *ctx) {
+BOOL ScrCmd_RandomizeVar4041(ScriptContext *ctx) {
     Save_VarsFlags_RandomizeVar4041(ctx->fieldSystem->saveData);
     return FALSE;
 }
 
-BOOL ScrCmd_538(ScriptContext *ctx) {
+BOOL ScrCmd_UnlockRandomTrendySaying(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     u16 wordIdx = ScriptGetVar(ctx);
     MessageFormat **p_msgFmt = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
@@ -3888,20 +3888,20 @@ BOOL ScrCmd_538(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_540(ScriptContext *ctx) {
+BOOL ScrCmd_CheckAllTrendySayingsUnlocked(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     *p_ret = Save_EasyChat_TrendySayingsUnlockedAllCheck(Save_EasyChat_Get(ctx->fieldSystem->saveData)) == TRUE;
     return FALSE;
 }
 
-BOOL ScrCmd_539(ScriptContext *ctx) {
+BOOL ScrCmd_CheckVar4042AtLeast5(ScriptContext *ctx) {
     SaveVarsFlags *varsFlags = Save_VarsFlags_Get(ctx->fieldSystem->saveData);
     u16 *p_ret = ScriptGetVarPointer(ctx);
     *p_ret = Save_VarsFlags_GetVar4042(varsFlags) >= 5;
     return FALSE;
 }
 
-BOOL ScrCmd_543(ScriptContext *ctx) {
+BOOL ScrCmd_CheckIsPlayerBirthday(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     FieldSystem *fieldSystem = ctx->fieldSystem;
     SysInfo *sysInfo = Save_SysInfo_Get(fieldSystem->saveData);
@@ -3913,14 +3913,14 @@ BOOL ScrCmd_543(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_545(ScriptContext *ctx) {
+BOOL ScrCmd_CountUnownLettersRegistered(ScriptContext *ctx) {
     Pokedex *pokedex = Save_Pokedex_Get(ctx->fieldSystem->saveData);
     u16 *p_ret = ScriptGetVarPointer(ctx);
     *p_ret = Pokedex_GetSeenFormNum_Unown(pokedex, TRUE);
     return FALSE;
 }
 
-BOOL ScrCmd_546(ScriptContext *ctx) {
+BOOL ScrCmd_CheckEventKey(ScriptContext *ctx) {
     u8 mode = ScriptReadByte(ctx);
     u16 *p_ret = ScriptGetVarPointer(ctx);
     SaveVarsFlags *varsFlags = Save_VarsFlags_Get(ctx->fieldSystem->saveData);
@@ -3929,7 +3929,7 @@ BOOL ScrCmd_546(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_550(ScriptContext *ctx) {
+BOOL ScrCmd_GetHallOfFameEntryCount(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     int loadResult;
     HallOfFame *hof = LoadHallOfFame(ctx->fieldSystem->saveData, HEAP_ID_FIELD3, &loadResult);
@@ -3951,7 +3951,7 @@ BOOL ScrCmd_550(ScriptContext *ctx) {
     }
 }
 
-BOOL ScrCmd_551(ScriptContext *ctx) {
+BOOL ScrCmd_ChoosePartyMonForDayCare(ScriptContext *ctx) {
     u16 partySlot = ScriptGetVar(ctx);
     PartyMenuArgs **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
     *p_work = PartyMenu_LaunchApp_DayCare(HEAP_ID_FIELD3, ctx->fieldSystem, partySlot);
@@ -3959,7 +3959,7 @@ BOOL ScrCmd_551(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_552(ScriptContext *ctx) {
+BOOL ScrCmd_GetDayCarePartySelection(ScriptContext *ctx) {
     u16 *p_slot = ScriptGetVarPointer(ctx);
     u16 *p_action = ScriptGetVarPointer(ctx);
     struct PartyMenuArgs **partyMenu = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
@@ -3975,7 +3975,7 @@ BOOL ScrCmd_552(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_553(ScriptContext *ctx) {
+BOOL ScrCmd_RandomChance(ScriptContext *ctx) {
     u8 limit = ScriptReadByte(ctx);
     u16 *p_ret = ScriptGetVarPointer(ctx);
     u16 rnd;
@@ -3991,7 +3991,7 @@ BOOL ScrCmd_553(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_560(ScriptContext *ctx) {
+BOOL ScrCmd_StartFieldMoveEffect(ScriptContext *ctx) {
     u16 my_case = ScriptGetVar(ctx);
     u16 *p_ret = ScriptGetVarPointer(ctx);
     FieldSystem *fieldSystem = ctx->fieldSystem;
@@ -4021,19 +4021,19 @@ BOOL ScrCmd_560(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_564(ScriptContext *ctx) {
+BOOL ScrCmd_CheckHasWifiProfile(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     *p_ret = Comm_HasWifiProfile(ctx->fieldSystem->saveData);
     return FALSE;
 }
 
-BOOL ScrCmd_565(ScriptContext *ctx) {
+BOOL ScrCmd_CountWifiFriends(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     *p_ret = FriendRoster_CountFriends(Save_FriendRoster_Get(ctx->fieldSystem->saveData));
     return FALSE;
 }
 
-BOOL ScrCmd_568(ScriptContext *ctx) {
+BOOL ScrCmd_ItemIsPlate(ScriptContext *ctx) {
     u16 itemId = ScriptGetVar(ctx);
     u16 *p_ret = ScriptGetVarPointer(ctx);
     *p_ret = 0;
@@ -4043,7 +4043,7 @@ BOOL ScrCmd_568(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_571(ScriptContext *ctx) {
+BOOL ScrCmd_CheckEasyChatWordsMatchFixedPhrase(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     u16 word1 = ScriptGetVar(ctx);
     u16 word2 = ScriptGetVar(ctx);
@@ -4067,12 +4067,12 @@ BOOL ScrCmd_571(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_573(ScriptContext *ctx) {
+BOOL ScrCmd_SetMysteryGiftActive(ScriptContext *ctx) {
     Save_SysInfo_SetMysteryGiftActive(Save_SysInfo_Get(ctx->fieldSystem->saveData), 1);
     return FALSE;
 }
 
-BOOL ScrCmd_576(ScriptContext *ctx) {
+BOOL ScrCmd_GetUnionRoomPartnerHometownMsg2(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u16 *p_ret = ScriptGetVarPointer(ctx);
     MessageFormat **p_msgFmt = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
@@ -4080,22 +4080,22 @@ BOOL ScrCmd_576(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_577(ScriptContext *ctx) {
+BOOL ScrCmd_CreateWirelessStatusIcon(ScriptContext *ctx) {
     WirelessStatusIcon_Create();
     return FALSE;
 }
 
-BOOL ScrCmd_578(ScriptContext *ctx) {
+BOOL ScrCmd_DestroyWirelessStatusIcon(ScriptContext *ctx) {
     WirelessStatusIcon_Destroy();
     return FALSE;
 }
 
-BOOL ScrCmd_579(ScriptContext *ctx) {
+BOOL ScrCmd_SyncMapObjectsToSave(ScriptContext *ctx) {
     FieldSystem_SyncMapObjectsToSave(ctx->fieldSystem);
     return FALSE;
 }
 
-BOOL ScrCmd_582(ScriptContext *ctx) {
+BOOL ScrCmd_SetSpecialSpawnWarp(ScriptContext *ctx) {
     u16 mapId = ScriptGetVar(ctx);
     u16 x = ScriptGetVar(ctx);
     u16 y = ScriptGetVar(ctx);
@@ -4108,7 +4108,7 @@ BOOL ScrCmd_582(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_583(ScriptContext *ctx) {
+BOOL ScrCmd_ClearObjectFlag18(ScriptContext *ctx) {
     u16 objectId = ScriptGetVar(ctx);
     u8 clear = ScriptReadByte(ctx);
     LocalMapObject *object = MapObjectManager_GetFirstActiveObjectByID(ctx->fieldSystem->mapObjectManager, objectId);
@@ -4144,13 +4144,13 @@ BOOL ScrCmd_HideSaveStats(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_595(ScriptContext *ctx) {
+BOOL ScrCmd_SetWarpResetSuppressed(ScriptContext *ctx) {
     u8 suppressed = ScriptReadByte(ctx);
     FieldSystem_SetWarpResetSuppressed(ctx->fieldSystem, suppressed);
     return FALSE;
 }
 
-BOOL ScrCmd_627(ScriptContext *ctx) {
+BOOL ScrCmd_LaunchFrontier(ScriptContext *ctx) {
     FrontierLaunchArgs **pArgs = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
     u8 frontierMapId = ScriptReadByte(ctx);
     FrontierLaunchArgs *args = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(FrontierLaunchArgs));
@@ -4172,7 +4172,7 @@ BOOL ScrCmd_627(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_631(ScriptContext *ctx) {
+BOOL ScrCmd_OpenFrontierRecords(ScriptContext *ctx) {
     void **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
     u16 mode = ScriptGetVar(ctx);
     u16 facility = ScriptGetVar(ctx);
@@ -4207,7 +4207,7 @@ BOOL ScrCmd_GetScratchOffPrize(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_662(ScriptContext *ctx) {
+BOOL ScrCmd_LaunchGlobalTerminal(ScriptContext *ctx) {
     u16 r6 = ScriptGetVar(ctx);
     u16 connectDirectly = ScriptGetVar(ctx);
     u16 *p_ret = ScriptGetVarPointer(ctx);
@@ -4221,7 +4221,7 @@ BOOL ScrCmd_662(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_663(ScriptContext *ctx) {
+BOOL ScrCmd_LaunchWiFiPlaza(ScriptContext *ctx) {
     u16 *p_var = ScriptGetVarPointer(ctx);
     if (Comm_HasWifiProfile(ctx->fieldSystem->saveData)) {
         CallTask_WiFiPlaza(ctx->taskman, *p_var);
@@ -4229,7 +4229,7 @@ BOOL ScrCmd_663(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_667(ScriptContext *ctx) {
+BOOL ScrCmd_CheckABHeld(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     *p_ret = 0;
     if (gSystem.heldKeys & PAD_BUTTON_A) {
@@ -4327,7 +4327,7 @@ BOOL ScrCmd_AddSpecialGameStat2(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_682(ScriptContext *ctx) {
+BOOL ScrCmd_CheckFieldHeapFreeSize(ScriptContext *ctx) {
     static u32 sHeap4Size;
     static u32 sHeap32Size;
     static u32 sHeap11Size;
@@ -4348,7 +4348,7 @@ BOOL ScrCmd_682(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_691(ScriptContext *ctx) {
+BOOL ScrCmd_CheckPlazaLoginTimeElapsed(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u16 *p_ret = ScriptGetVarPointer(ctx);
     if (GF_RTC_DateTimeToSec() - fieldSystem->plazaLoginTime >= 120) {
@@ -4359,7 +4359,7 @@ BOOL ScrCmd_691(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_696(ScriptContext *ctx) {
+BOOL ScrCmd_UpdatePartyGiratinaFormsAndCaughtFlags(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u16 forceOrigin = ScriptGetVar(ctx);
     Party *party = SaveArray_Party_Get(ctx->fieldSystem->saveData);
@@ -4420,20 +4420,20 @@ BOOL ScrCmd_FollowerPokeIsEventTrigger(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_596(ScriptContext *ctx) {
+BOOL ScrCmd_FollowMonIsLarge(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u16 *p_ret = ScriptGetVarPointer(ctx);
     *p_ret = FollowMonObject_IsLarge(MapObjectManager_GetFirstActiveObjectByID(fieldSystem->mapObjectManager, obj_partner_poke));
     return FALSE;
 }
 
-BOOL ScrCmd_597(ScriptContext *ctx) {
+BOOL ScrCmd_FollowMonShowEmoteBubble(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     FieldSystem_ShowEmoteBubble(fieldSystem, MapObjectManager_GetFirstActiveObjectByID(fieldSystem->mapObjectManager, obj_partner_poke), 0);
     return TRUE;
 }
 
-BOOL ScrCmd_598(ScriptContext *ctx) {
+BOOL ScrCmd_SwapPlayerAndFollowMonPositions(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u16 mode = ScriptReadHalfword(ctx);
     LocalMapObject *obj1, *obj2;
@@ -4451,12 +4451,12 @@ BOOL ScrCmd_598(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_599(ScriptContext *ctx) {
+BOOL ScrCmd_FollowMonHopIntoBall(ScriptContext *ctx) {
     FollowMon_StartHopIntoBall(ctx->fieldSystem);
     return TRUE;
 }
 
-BOOL ScrCmd_600(ScriptContext *ctx) {
+BOOL ScrCmd_FollowMonRecall(ScriptContext *ctx) {
     if (FollowMon_StartRecall(ctx->fieldSystem)) {
         return TRUE;
     } else {
@@ -4526,7 +4526,7 @@ static BOOL NativeScript_WaitFollowingPokemonMovement(ScriptContext *ctx) {
     }
 }
 
-BOOL ScrCmd_605(ScriptContext *ctx) {
+BOOL ScrCmd_FollowMonSetPositionNextToPlayer(ScriptContext *ctx) {
     u8 direction = ScriptReadByte(ctx);
     u8 facing = ScriptReadByte(ctx);
     if (FollowMon_IsActive(ctx->fieldSystem)) {
@@ -4537,7 +4537,7 @@ BOOL ScrCmd_605(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_606(ScriptContext *ctx) {
+BOOL ScrCmd_FollowMonReleaseNextToPlayer(ScriptContext *ctx) {
     if (FollowMon_IsActive(ctx->fieldSystem)) {
         LocalMapObject *object = FollowMon_GetMapObject(ctx->fieldSystem);
         if (FollowMon_GetPermissionBySpeciesAndMap(FollowMon_GetSpecies(object), ctx->fieldSystem->location->mapId)) {
@@ -4549,7 +4549,7 @@ BOOL ScrCmd_606(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_607(ScriptContext *ctx) {
+BOOL ScrCmd_FollowMonMoveToPlayer(ScriptContext *ctx) {
     if (FollowMon_IsActive(ctx->fieldSystem)) {
         LocalMapObject *object = FollowMon_GetMapObject(ctx->fieldSystem);
         if (FollowMon_GetPermissionBySpeciesAndMap(FollowMon_GetSpecies(object), ctx->fieldSystem->location->mapId)) {
@@ -4559,7 +4559,7 @@ BOOL ScrCmd_607(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_608(ScriptContext *ctx) {
+BOOL ScrCmd_FollowMonSpawnReleaseBall(ScriptContext *ctx) {
     if (FollowMon_IsActive(ctx->fieldSystem)) {
         LocalMapObject *object = MapObjectManager_GetFirstActiveObjectByID(ctx->fieldSystem->mapObjectManager, obj_partner_poke);
         FollowMon_SpawnReleaseBall(object);
@@ -4567,7 +4567,7 @@ BOOL ScrCmd_608(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_609(ScriptContext *ctx) {
+BOOL ScrCmd_FollowMonResetMovement(ScriptContext *ctx) {
     if (FollowMon_IsActive(ctx->fieldSystem)) {
         LocalMapObject *object = MapObjectManager_GetFirstActiveObjectByID(ctx->fieldSystem->mapObjectManager, obj_partner_poke);
         FollowPlayerMovement_Reset(object);
@@ -4575,7 +4575,7 @@ BOOL ScrCmd_609(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_610(ScriptContext *ctx) {
+BOOL ScrCmd_StartCameraShift(ScriptContext *ctx) {
     u16 mode = ScriptReadHalfword(ctx);
     FieldCameraShift_Start(ctx->fieldSystem->cameraShift, mode);
     return TRUE;
@@ -4621,7 +4621,7 @@ BOOL ScrCmd_RegisterPokegearCard(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_804(ScriptContext *ctx) {
+BOOL ScrCmd_SetPokegearMapUnlockLevel(ScriptContext *ctx) {
     Pokegear_SetMapUnlockLevel(SaveData_Pokegear_Get(ctx->fieldSystem->saveData), ScriptReadByte(ctx));
     return FALSE;
 }
@@ -4785,7 +4785,7 @@ BOOL ScrCmd_PlaceStarterBallsInElmsLab(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_622(ScriptContext *ctx) {
+BOOL ScrCmd_GetObjectFacing(ScriptContext *ctx) {
     u16 objectId = ScriptReadHalfword(ctx);
     u16 *p_ret = ScriptGetVarPointer(ctx);
     LocalMapObject *object = MapObjectManager_GetFirstActiveObjectByID(ctx->fieldSystem->mapObjectManager, objectId);
@@ -4802,7 +4802,7 @@ BOOL ScrCmd_FollowMonInteract(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_712(ScriptContext *ctx) {
+BOOL ScrCmd_LaunchPokeathlonRecordsApp(ScriptContext *ctx) {
     void **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
     u8 action = ScriptReadByte(ctx);
     switch (action) {
@@ -4835,7 +4835,7 @@ BOOL ScrCmd_AlphPuzzle(ScriptContext *ctx) { // this just loads a different puzz
     return TRUE;
 }
 
-BOOL ScrCmd_722(ScriptContext *ctx) {
+BOOL ScrCmd_MagnetTrainRide(ScriptContext *ctx) {
     u8 r7 = ScriptReadByte(ctx);
     u8 r6 = ScriptReadByte(ctx);
     u16 mapId = ScriptReadHalfword(ctx);
@@ -4845,7 +4845,7 @@ BOOL ScrCmd_722(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_723(ScriptContext *ctx) {
+BOOL ScrCmd_ShipVoyage(ScriptContext *ctx) {
     u8 r7 = ScriptReadByte(ctx);
     u8 r6 = ScriptReadByte(ctx);
     u16 mapId = ScriptReadHalfword(ctx);
@@ -4867,7 +4867,7 @@ BOOL ScrCmd_GetFollowPokePartyIndex(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_728(ScriptContext *ctx) {
+BOOL ScrCmd_FollowMonFlash(ScriptContext *ctx) {
     u8 step = ScriptReadByte(ctx);
     u8 period = ScriptReadByte(ctx);
     if (FollowMon_StartFlash(ctx->fieldSystem, step, period)) {
@@ -4877,7 +4877,7 @@ BOOL ScrCmd_728(ScriptContext *ctx) {
     }
 }
 
-BOOL ScrCmd_729(ScriptContext *ctx) {
+BOOL ScrCmd_FollowMonIsActive(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     if (FollowMon_IsActive(ctx->fieldSystem)) {
         *p_ret = TRUE;
@@ -4887,7 +4887,7 @@ BOOL ScrCmd_729(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_730(ScriptContext *ctx) {
+BOOL ScrCmd_FollowMonIsInactiveOrVisible(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     if (!FollowMon_IsActive(ctx->fieldSystem)) {
         *p_ret = TRUE;
@@ -4899,18 +4899,18 @@ BOOL ScrCmd_730(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_731(ScriptContext *ctx) {
+BOOL ScrCmd_FollowMonGrowAndShrink(ScriptContext *ctx) {
     FollowMon_StartGrowAndShrink(ctx->fieldSystem);
     return TRUE;
 }
 
-BOOL ScrCmd_732(ScriptContext *ctx) {
+BOOL ScrCmd_FollowMonAddMood(ScriptContext *ctx) {
     s8 mood = ScriptReadByte(ctx);
     FollowMonMood_Add(ctx->fieldSystem->followMonMood, mood);
     return FALSE;
 }
 
-BOOL ScrCmd_733(ScriptContext *ctx) {
+BOOL ScrCmd_FirstAliveMonHasType(ScriptContext *ctx) {
     u8 type = ScriptReadByte(ctx);
     u16 *p_ret = ScriptGetVarPointer(ctx);
     if (FieldSystem_FirstAliveMonHasType(ctx->fieldSystem, type)) {
@@ -4921,7 +4921,7 @@ BOOL ScrCmd_733(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_734(ScriptContext *ctx) {
+BOOL ScrCmd_FollowMonJumpOnSpot(ScriptContext *ctx) {
     u8 count = ScriptReadByte(ctx);
     FollowMon_JumpOnSpot(ctx->fieldSystem, count);
     return TRUE;
@@ -4974,7 +4974,7 @@ BOOL NativeScript_WaitTouchscreenMenuShown(ScriptContext *ctx) {
     }
 }
 
-BOOL ScrCmd_815(ScriptContext *ctx) {
+BOOL ScrCmd_SetSavedBottomScreenApp(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u16 appId = ScriptReadHalfword(ctx);
     FieldSystem_SetSavedBottomScreenAppId(fieldSystem, appId);
@@ -5184,7 +5184,7 @@ BOOL ScrCmd_LegendCutsceneLugiaEyeGlimmerEffect(ScriptContext *ctx) {
 }
 
 // Unreferenced
-BOOL ScrCmd_760(ScriptContext *ctx) {
+BOOL ScrCmd_UnusedHoOhAnim(ScriptContext *ctx) {
     LegendCutscene_StartUnusedHoOhAnim(ctx->fieldSystem);
     return TRUE;
 }
@@ -5285,33 +5285,33 @@ BOOL ScrCmd_BufferRulesetName(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_799(ScriptContext *ctx) {
+BOOL ScrCmd_BufferBattleRegulationName(ScriptContext *ctx) {
     u16 *p_var = ScriptGetVarPointer(ctx);
     MessageFormat **p_msgFmt = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
     BattleRegulation_BufferName(ctx->fieldSystem, *p_msgFmt, *p_var);
     return FALSE;
 }
 
-BOOL ScrCmd_800(ScriptContext *ctx) {
+BOOL ScrCmd_SetActiveBattleRegulation(ScriptContext *ctx) {
     u16 *p_var = ScriptGetVarPointer(ctx);
     BattleRegulation_SetActiveRuleset(ctx->fieldSystem, *p_var);
     return FALSE;
 }
 
-BOOL ScrCmd_801(ScriptContext *ctx) {
+BOOL ScrCmd_ShowBattleRegulationWindow(ScriptContext *ctx) {
     Window **p_moneyBox = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MONEY_BOX);
     u16 *p_var = ScriptGetVarPointer(ctx);
     *p_moneyBox = BattleRegulationWindow_New(ctx->fieldSystem, *p_var);
     return FALSE;
 }
 
-BOOL ScrCmd_802(ScriptContext *ctx) {
+BOOL ScrCmd_HideBattleRegulationWindow(ScriptContext *ctx) {
     Window **p_moneyBox = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MONEY_BOX);
     BattleRegulationWindow_Delete(*p_moneyBox);
     return FALSE;
 }
 
-BOOL ScrCmd_803(ScriptContext *ctx) {
+BOOL ScrCmd_CheckPartyBattleRegulation(ScriptContext *ctx) {
     u16 *r4 = ScriptGetVarPointer(ctx);
     u16 *p_ret = ScriptGetVarPointer(ctx);
     MessageFormat **p_msgFmt = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
@@ -5319,22 +5319,22 @@ BOOL ScrCmd_803(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_805(ScriptContext *ctx) {
+BOOL ScrCmd_LoadEventSoundEffects(ScriptContext *ctx) {
     Sound_LoadSceneSoundEffects(75);
     return FALSE;
 }
 
-BOOL ScrCmd_806(ScriptContext *ctx) {
+BOOL ScrCmd_ShayminRevertToLandForm(ScriptContext *ctx) {
     StartShayminRevertToLandForm(ctx->fieldSystem->taskman);
     return TRUE;
 }
 
-BOOL ScrCmd_810(ScriptContext *ctx) {
+BOOL ScrCmd_CelebiTimeTravel(ScriptContext *ctx) {
     FieldSystem_BeginCelebiTimeTravelCutsceneTask(ctx->fieldSystem);
     return TRUE;
 }
 
-BOOL ScrCmd_814(ScriptContext *ctx) {
+BOOL ScrCmd_SetFlag99A(ScriptContext *ctx) {
     SetFlag99A(Save_VarsFlags_Get(ctx->fieldSystem->saveData));
     return FALSE;
 }
@@ -5344,7 +5344,7 @@ BOOL ScrCmd_UnownCircle(ScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL ScrCmd_817(ScriptContext *ctx) {
+BOOL ScrCmd_SinjohGetEggCutscene(ScriptContext *ctx) {
     FieldSystem_BeginSinjohGetEggCutsceneTask(ctx->fieldSystem, ScriptReadByte(ctx));
     return TRUE;
 }
@@ -5354,22 +5354,22 @@ BOOL ScrCmd_MystriStageGymmickInit(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_819(ScriptContext *ctx) {
+BOOL ScrCmd_SinjohFreezeAllModels(ScriptContext *ctx) {
     SinjohGymmick_FreezeAllModels(ctx->fieldSystem);
     return FALSE;
 }
 
-BOOL ScrCmd_820(ScriptContext *ctx) {
+BOOL ScrCmd_SinjohSetChosenLegend(ScriptContext *ctx) {
     SinjohGymmick_SetChosenLegend(ctx->fieldSystem, ScriptReadByte(ctx));
     return TRUE;
 }
 
-BOOL ScrCmd_822(ScriptContext *ctx) {
+BOOL ScrCmd_CustomSafariLinkExchange(ScriptContext *ctx) {
     CustomSafariLink_ExchangeAreaSets(ctx->fieldSystem);
     return TRUE;
 }
 
-BOOL ScrCmd_823(ScriptContext *ctx) {
+BOOL ScrCmd_BufferSafariLinkLeaderName(ScriptContext *ctx) {
     u16 *p_var = ScriptGetVarPointer(ctx);
     MessageFormat **p_msgFmt = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
     PlayerProfile *profile = PlayerProfile_New(HEAP_ID_FIELD1);
@@ -5379,7 +5379,7 @@ BOOL ScrCmd_823(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_824(ScriptContext *ctx) {
+BOOL ScrCmd_CheckSafariZoneLinked(ScriptContext *ctx) {
     SafariZone *safariZone = Save_SafariZone_Get(ctx->fieldSystem->saveData);
     u16 *p_ret = ScriptGetVarPointer(ctx);
     SafariZone_DeactivateLinkIfExpired(safariZone);
@@ -5391,7 +5391,7 @@ BOOL ScrCmd_824(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_829(ScriptContext *ctx) {
+BOOL ScrCmd_FollowMonIsNextToPlayer(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     if (FollowMon_IsNextToPlayer(ctx->fieldSystem)) {
         *p_ret = TRUE;
@@ -5401,7 +5401,7 @@ BOOL ScrCmd_829(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_830(ScriptContext *ctx) {
+BOOL ScrCmd_CheckGiftAccessoriesFull(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     if (FashionCase_GiftAccessoriesFull(ctx->fieldSystem->saveData) == TRUE) {
         *p_ret = TRUE;
@@ -5411,13 +5411,13 @@ BOOL ScrCmd_830(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_831(ScriptContext *ctx) {
+BOOL ScrCmd_GetRandomGiftAccessory(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     *p_ret = FashionCase_GetRandomGiftAccessory();
     return FALSE;
 }
 
-BOOL ScrCmd_832(ScriptContext *ctx) {
+BOOL ScrCmd_CheckHasAllBackdrops(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     if (FashionCase_HasAllBackdrops(ctx->fieldSystem->saveData) == TRUE) {
         *p_ret = TRUE;
@@ -5427,13 +5427,13 @@ BOOL ScrCmd_832(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_833(ScriptContext *ctx) {
+BOOL ScrCmd_GetRandomMissingBackdrop(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     *p_ret = FashionCase_GetRandomMissingBackdrop(ctx->fieldSystem->saveData);
     return FALSE;
 }
 
-BOOL ScrCmd_837(ScriptContext *ctx) {
+BOOL ScrCmd_CheckHasLinkBattleRuleset(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     if (Save_LinkBattleRuleset_GetByIndex(ctx->fieldSystem->saveData, 0) != NULL) {
         *p_ret = TRUE;

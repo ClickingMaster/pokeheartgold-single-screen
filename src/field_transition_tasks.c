@@ -21,7 +21,7 @@
 #include "map_object_movement_commands.h"
 
 // Map enter routines (sMapEnterRoutines) and the player/camera placement run before them (_020FC76C), indexed by
-// FieldTransitionEnvironment.transitionNo, plus the Wi-Fi Plaza launch task (ScrCmd_663).
+// FieldTransitionEnvironment.transitionNo, plus the Wi-Fi Plaza launch task (ScrCmd_LaunchWiFiPlaza).
 
 typedef struct WiFiPlazaTaskEnv {
     u16 state;

@@ -148,7 +148,7 @@ BOOL ScrCmd_BufferIntEx(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_661(ScriptContext *ctx) {
+BOOL ScrCmd_BufferIntExWord(ScriptContext *ctx) {
     MessageFormat **msg_fmt = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
     u8 idx = ScriptReadByte(ctx);
     u32 number = ScriptReadWord(ctx);

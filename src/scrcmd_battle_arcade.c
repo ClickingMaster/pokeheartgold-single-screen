@@ -63,7 +63,7 @@ static const u8 sBattleArcadeSummaryPages[] = {
     4,
 };
 
-BOOL ScrCmd_643(ScriptContext *ctx) {
+BOOL ScrCmd_BattleArcadeAction(ScriptContext *ctx) {
     u16 command = ScriptReadHalfword(ctx);
     u16 arg1 = ScriptGetVar(ctx);
     u16 *result = ScriptGetVarPointer(ctx);
@@ -104,7 +104,7 @@ BOOL ScrCmd_643(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_646(ScriptContext *ctx) {
+BOOL ScrCmd_BattleArcadeResetStreak(ScriptContext *ctx) {
     u16 unk = ScriptGetVar(ctx);
     BattleArcade_ResetStreak(ctx->fieldSystem->saveData, Save_Frontier_GetArcadeFlags(ctx->fieldSystem->saveData), unk);
     return FALSE;
@@ -120,7 +120,7 @@ static void BattleArcade_ResetStreak(SaveData *saveData, void *arcadeFlags, u8 c
     FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), BattleArcade_GetWinStreakStat(challengeType), FrontierStat_GetFriendIndex(BattleArcade_GetWinStreakStat(challengeType)), 0);
 }
 
-BOOL ScrCmd_644(ScriptContext *ctx) {
+BOOL ScrCmd_BattleArcadeCheckTeam(ScriptContext *ctx) {
     u16 firstMon = ScriptGetVar(ctx);
     u16 secondMon = ScriptGetVar(ctx);
     u16 *result = ScriptGetVarPointer(ctx);

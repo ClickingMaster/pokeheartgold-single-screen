@@ -130,8 +130,8 @@ BOOL ScrCmd_491(ScriptContext *ctx) {
     return FALSE;
 }
 
-// same as ScrCmd_636, but battle factory
-BOOL ScrCmd_628(ScriptContext *ctx) {
+// same as ScrCmd_BattleHallResetStreak, but battle factory
+BOOL ScrCmd_BattleFactoryResetStreak(ScriptContext *ctx) {
     u16 type = ScriptGetVar(ctx);
     u16 levelMode = ScriptGetVar(ctx);
     u32 factoryFlags = Save_Frontier_GetFactoryFlags(ctx->fieldSystem->saveData);
@@ -151,7 +151,7 @@ BOOL ScrCmd_628(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_633(ScriptContext *ctx) {
+BOOL ScrCmd_BattleHallAction(ScriptContext *ctx) {
     u16 action = ScriptReadHalfword(ctx);
     u16 type = ScriptGetVar(ctx);
     u16 *resultPtr = ScriptGetVarPointer(ctx);
@@ -235,7 +235,7 @@ static BOOL BattleHall_DoesPartyContainEligibleMons(s32 numRequiredMons, SaveDat
 }
 
 // upon continuing battle hall challenge without previously saving
-BOOL ScrCmd_636(ScriptContext *ctx) {
+BOOL ScrCmd_BattleHallResetStreak(ScriptContext *ctx) {
     u16 type = ScriptGetVar(ctx);
     u32 hallFlags = Save_Frontier_GetHallFlags(ctx->fieldSystem->saveData);
     BattleHall_ResetStreak(ctx->fieldSystem->saveData, hallFlags, type);
@@ -243,7 +243,7 @@ BOOL ScrCmd_636(ScriptContext *ctx) {
 }
 
 // returns whether the player and partner chose different mons for battle hall
-BOOL ScrCmd_634(ScriptContext *ctx) {
+BOOL ScrCmd_BattleHallCheckSpecies(ScriptContext *ctx) {
     u16 playerSpecies = ScriptGetVar(ctx);
     u16 *resultPtr = ScriptGetVarPointer(ctx);
     BattleHall_StartSpeciesCheck(ctx->taskman, playerSpecies, resultPtr);
@@ -517,7 +517,7 @@ BOOL ScrCmd_BattleHallGetTotalStreak(ScriptContext *ctx) {
 }
 
 // Unused
-BOOL ScrCmd_697(ScriptContext *ctx) {
+BOOL ScrCmd_CheckBattleHallStreakIs50(ScriptContext *ctx) {
     u16 *result = ScriptGetVarPointer(ctx);
     FrontierSave_GetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), BattleHall_GetSpeciesStat(0), 0xff);
     u32 unk0 = FrontierSave_GetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), BattleHall_GetWinStreakStat(0), 0xff);
