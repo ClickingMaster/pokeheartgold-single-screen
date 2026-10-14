@@ -78,7 +78,7 @@ void RandomLookMovement_InitLeftRight(LocalMapObject *object) {
 void RandomLookMovement_Update(LocalMapObject *object) {
     u8 *state = MapObject_GetMovementData(object);
     int direction = MapObject_GetAllowedDirectionToNearbyPlayer(object, *(u32 *)(state + 4), -1);
-    if (direction != -1) {
+    if (direction != DIR_NONE) {
         MapObject_SetFacingDirection(object, direction);
     } else if (*(u16 *)state == 0) {
         (*(s16 *)(state + 2))--;
@@ -123,7 +123,7 @@ void RandomWalkMovement_Update(LocalMapObject *object) {
     case 0:
         MapObject_ClearSingleMovement(object);
         MapObject_ClearEndMovement(object);
-        direction = GetMovementForDirection(MapObject_GetFacingDirection(object), 0);
+        direction = GetMovementForDirection(MapObject_GetFacingDirection(object), MOVEMENT_FACE_UP);
         MapObject_ForceSetHeldMovement(object, direction);
         state->state++;
         break;
@@ -259,19 +259,19 @@ void FaceDirectionMovement_Update(LocalMapObject *object) {
 }
 
 void FaceDirectionMovement_InitUp(LocalMapObject *object) {
-    FaceDirectionMovement_Init(object, 0);
+    FaceDirectionMovement_Init(object, DIR_NORTH);
 }
 
 void FaceDirectionMovement_InitDown(LocalMapObject *object) {
-    FaceDirectionMovement_Init(object, 1);
+    FaceDirectionMovement_Init(object, DIR_SOUTH);
 }
 
 void FaceDirectionMovement_InitLeft(LocalMapObject *object) {
-    FaceDirectionMovement_Init(object, 2);
+    FaceDirectionMovement_Init(object, DIR_WEST);
 }
 
 void FaceDirectionMovement_InitRight(LocalMapObject *object) {
-    FaceDirectionMovement_Init(object, 3);
+    FaceDirectionMovement_Init(object, DIR_EAST);
 }
 
 void SpinMovement_Init(LocalMapObject *object, u32 value) {
@@ -299,10 +299,10 @@ void SpinMovement_Update(LocalMapObject *object) {
 
 BOOL SpinMovement_FaceNearbyPlayer(LocalMapObject *object, u8 *state) {
     int direction = MapObject_GetAllowedDirectionToNearbyPlayer(object, 0x26, -1);
-    if (direction == -1) {
+    if (direction == DIR_NONE) {
         direction = MapObject_GetFacingDirection(object);
     }
-    MapObject_ForceSetHeldMovement(object, GetMovementForDirection(direction, 0));
+    MapObject_ForceSetHeldMovement(object, GetMovementForDirection(direction, MOVEMENT_FACE_UP));
     state[2] = 1;
     return TRUE;
 }
@@ -317,7 +317,7 @@ BOOL SpinMovement_WaitFace(LocalMapObject *object, u8 *state) {
 }
 
 BOOL SpinMovement_Wait(LocalMapObject *object, u8 *state) {
-    if (*(u32 *)(state + 4) != 0 && MapObject_GetAllowedDirectionToNearbyPlayer(object, 0x26, -1) != -1) {
+    if (*(u32 *)(state + 4) != 0 && MapObject_GetAllowedDirectionToNearbyPlayer(object, 0x26, -1) != DIR_NONE) {
         state[2] = 0;
         return TRUE;
     }
@@ -372,7 +372,7 @@ void AlternatingSpinMovement_Update(LocalMapObject *object) {
 
 void AlternatingSpinMovement_Face(LocalMapObject *object, u8 *state) {
     u32 facing = MapObject_GetFacingDirection(object);
-    MapObject_ForceSetHeldMovement(object, GetMovementForDirection(facing, 0));
+    MapObject_ForceSetHeldMovement(object, GetMovementForDirection(facing, MOVEMENT_FACE_UP));
     state[2] = 1;
 }
 
@@ -736,11 +736,11 @@ int MapObject_GetDirectionToNearbyPlayer(LocalMapObject *object) {
     int i, movement, entry, x, z, distance, objectX, objectZ, maxZ, minX, minZ, maxX;
     u32 y;
     if (type != 1 && type != 2) {
-        return -1;
+        return DIR_NONE;
     }
     avatar = FieldSystem_GetPlayerAvatar(MapObject_GetFieldSystem(object));
     if (!PlayerAvatar_IsRunning(avatar)) {
-        return -1;
+        return DIR_NONE;
     }
     i = 0;
     movement = MapObject_GetMovement(object);
@@ -748,11 +748,11 @@ int MapObject_GetDirectionToNearbyPlayer(LocalMapObject *object) {
         entry = gPlayerAwareMovementTypes[i++];
     } while (entry != movement && entry != 255);
     if (movement != entry) {
-        return -1;
+        return DIR_NONE;
     }
     y = MapObject_GetPositionVectorYCoordUInt(PlayerAvatar_GetMapObject(avatar));
     if (y != MapObject_GetPositionVectorYCoordUInt(object)) {
-        return -1;
+        return DIR_NONE;
     }
     x = PlayerAvatar_GetXCoord(avatar);
     z = PlayerAvatar_GetZCoord(avatar);
@@ -777,7 +777,7 @@ int MapObject_GetDirectionToNearbyPlayer(LocalMapObject *object) {
     }
     return GetDirectionTowards(objectX, objectZ, x, z);
 fail:
-    return -1;
+    return DIR_NONE;
 }
 
 #pragma force_active off
@@ -798,10 +798,10 @@ int MapObject_GetAllowedDirectionToNearbyPlayer(LocalMapObject *object, int tabl
     list = GetDirectionTable(tableId);
     count = DirectionList_Count(list, value);
     if (count == 1) {
-        return -1;
+        return DIR_NONE;
     }
     direction = MapObject_GetDirectionToNearbyPlayer(object);
-    if (direction == -1) {
+    if (direction == DIR_NONE) {
         goto done;
     }
     i = 0;
@@ -811,32 +811,32 @@ int MapObject_GetAllowedDirectionToNearbyPlayer(LocalMapObject *object, int tabl
         }
         i++;
     } while (i < count);
-    xDirection = -1;
-    zDirection = -1;
+    xDirection = DIR_NONE;
+    zDirection = DIR_NONE;
     objectX = MapObject_GetXCoord(object);
     objectZ = MapObject_GetZCoord(object);
     avatar = FieldSystem_GetPlayerAvatar(MapObject_GetFieldSystem(object));
     playerX = PlayerAvatar_GetXCoord(avatar);
     playerZ = PlayerAvatar_GetZCoord(avatar);
     if (objectX > playerX) {
-        xDirection = 2;
+        xDirection = DIR_WEST;
     } else if (objectX < playerX) {
-        xDirection = 3;
+        xDirection = DIR_EAST;
     }
     if (objectZ > playerZ) {
-        zDirection = 0;
+        zDirection = DIR_NORTH;
     } else if (objectZ < playerZ) {
-        zDirection = 1;
+        zDirection = DIR_SOUTH;
     }
     i = 0;
-    if (xDirection == -1) {
+    if (xDirection == DIR_NONE) {
         do {
             if (list[i] == zDirection) {
                 return zDirection;
             }
             i++;
         } while (i < count);
-    } else if (zDirection == -1) {
+    } else if (zDirection == DIR_NONE) {
         do {
             if (list[i] == xDirection) {
                 return xDirection;
@@ -854,7 +854,7 @@ int MapObject_GetAllowedDirectionToNearbyPlayer(LocalMapObject *object, int tabl
             i++;
         } while (i < count);
     }
-    direction = -1;
+    direction = DIR_NONE;
 done:
     return direction;
 }

@@ -5,6 +5,8 @@
 #include "constants/sndseq.h"
 #include "constants/species.h"
 
+#include "msgdata/msg/msg_0302.h"
+
 #include "bg_window.h"
 #include "font.h"
 #include "heap.h"
@@ -536,15 +538,15 @@ void PokemonSummary_ReadMon(PokemonSummary *summary, Pokemon *mon, PokemonSummar
     out->species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     boxMon = Mon_GetBoxMon(mon);
 
-    ReadMsgDataIntoString(summary->msgData, 11, summary->buffer);
+    ReadMsgDataIntoString(summary->msgData, msg_0302_00011, summary->buffer);
     BufferBoxMonSpeciesName(summary->msgFormat, 0, boxMon);
     StringExpandPlaceholders(summary->msgFormat, summary->mon.speciesName, summary->buffer);
 
-    ReadMsgDataIntoString(summary->msgData, 0, summary->buffer);
+    ReadMsgDataIntoString(summary->msgData, msg_0302_00000, summary->buffer);
     BufferBoxMonNickname(summary->msgFormat, 0, boxMon);
     StringExpandPlaceholders(summary->msgFormat, summary->mon.nickname, summary->buffer);
 
-    ReadMsgDataIntoString(summary->msgData, 14, summary->buffer);
+    ReadMsgDataIntoString(summary->msgData, msg_0302_00014, summary->buffer);
     BufferBoxMonOTName(summary->msgFormat, 0, boxMon);
     StringExpandPlaceholders(summary->msgFormat, summary->mon.otName, summary->buffer);
 

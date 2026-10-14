@@ -38,9 +38,9 @@ void EncounterEffect_Legendary(void *sysTask, Ov116Task *task) {
     case 0:
         task->work = Heap_Alloc(4, sizeof(Ov116PanWork));
         memset(task->work, 0, sizeof(Ov116PanWork));
-        GfGfx_EngineATogglePlanes(2, 0);
-        GfGfx_EngineATogglePlanes(4, 0);
-        GfGfx_EngineATogglePlanes(8, 0);
+        GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, 0);
+        GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, 0);
+        GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, 0);
         task->state++;
         break;
     case 1:
@@ -80,14 +80,14 @@ void EncounterEffect_Legendary(void *sysTask, Ov116Task *task) {
         }
         break;
     case 7:
-        SetMasterBrightnessByColor(1, 0x7FFF);
+        SetMasterBrightnessByColor(PM_LCD_BOTTOM, 0x7FFF);
         FieldMotionBlur_Stop(work);
         *(vu16 *)0x04000050 = 0;
         if (task->completionFlag != NULL) {
             *task->completionFlag = 1;
         }
         EncounterEffect_Finish(task, sysTask);
-        SetMasterBrightnessByColor(1, 0x7FFF);
+        SetMasterBrightnessByColor(PM_LCD_BOTTOM, 0x7FFF);
         break;
     }
 }
@@ -99,9 +99,9 @@ void LegendaryEffect_RunBirdSequence(void *sysTask, Ov116Task *task, const Ov116
     case 0:
         task->work = Heap_Alloc(4, sizeof(Ov116MoveWork));
         memset(task->work, 0, sizeof(Ov116MoveWork));
-        GfGfx_EngineATogglePlanes(2, 0);
-        GfGfx_EngineATogglePlanes(4, 0);
-        GfGfx_EngineATogglePlanes(8, 0);
+        GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, 0);
+        GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, 0);
+        GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, 0);
         task->state++;
         break;
     case 1:
@@ -156,14 +156,14 @@ void LegendaryEffect_RunBirdSequence(void *sysTask, Ov116Task *task, const Ov116
         }
         break;
     case 9:
-        SetMasterBrightnessByColor(1, 0x7FFF);
+        SetMasterBrightnessByColor(PM_LCD_BOTTOM, 0x7FFF);
         FieldMotionBlur_Stop(work);
         *(vu16 *)0x04000050 = 0;
         if (task->completionFlag != NULL) {
             *task->completionFlag = 1;
         }
         EncounterEffect_Finish(task, sysTask);
-        SetMasterBrightnessByColor(1, 0x7FFF);
+        SetMasterBrightnessByColor(PM_LCD_BOTTOM, 0x7FFF);
         break;
     }
 }

@@ -1,8 +1,11 @@
 #include "global.h"
 
 #include "constants/game_stats.h"
+#include "constants/map_sections.h"
 #include "constants/pokemon.h"
 #include "constants/pokewalker_courses.h"
+
+#include "msgdata/msg/msg_0775.h"
 
 #include "bg_window.h"
 #include "communication_error.h"
@@ -272,28 +275,28 @@ void GtsTransaction_DeleteStrings(GtsApp *app) {
 int GtsTransaction_Start(GtsApp *app) {
     switch (app->nextScreenArg) {
     case 7:
-        Gts_PrintMessage(app, app->gtsMsgData, 24, 1, 0xF0F); // Checking GTS's status...
+        Gts_PrintMessage(app, app->gtsMsgData, msg_0775_00024, 1, 0xF0F); // Checking GTS's status...
         Gts_SetState(app, GTS_TRANSACTION_STATE_WAIT_TEXT, GTS_TRANSACTION_STATE_SEND_POST);
         break;
     case 8:
-        Gts_PrintMessage(app, app->gtsMsgData, 24, 1, 0xF0F);
+        Gts_PrintMessage(app, app->gtsMsgData, msg_0775_00024, 1, 0xF0F);
         Gts_SetState(app, GTS_TRANSACTION_STATE_WAIT_TEXT, GTS_TRANSACTION_STATE_SEND_GET);
         break;
     case 9:
-        Gts_PrintMessage(app, app->gtsMsgData, 24, 1, 0xF0F);
+        Gts_PrintMessage(app, app->gtsMsgData, msg_0775_00024, 1, 0xF0F);
         Gts_SetState(app, GTS_TRANSACTION_STATE_WAIT_TEXT, GTS_TRANSACTION_STATE_SEND_EXCHANGE);
         break;
     case 10:
-        Gts_PrintMessage(app, app->gtsMsgData, 24, 1, 0xF0F);
+        Gts_PrintMessage(app, app->gtsMsgData, msg_0775_00024, 1, 0xF0F);
         Gts_SetState(app, GTS_TRANSACTION_STATE_WAIT_TEXT, GTS_TRANSACTION_STATE_RECEIVE_TRADED_MON);
         app->unk_11FC = 1;
         break;
     case 11:
-        Gts_PrintMessage(app, app->gtsMsgData, 24, 0, 0xF0F);
+        Gts_PrintMessage(app, app->gtsMsgData, msg_0775_00024, TEXT_SPEED_INSTANT, 0xF0F);
         app->state = GTS_TRANSACTION_STATE_SEND_RESULT;
         break;
     case 12:
-        Gts_PrintMessage(app, app->gtsMsgData, 148, 1, 0xF0F); // Saving... Do not turn off the power.
+        Gts_PrintMessage(app, app->gtsMsgData, msg_0775_00148, 1, 0xF0F); // Saving... Do not turn off the power.
         app->nextScreen = 1;
         app->state = GTS_TRANSACTION_STATE_SAVE_AND_EXIT;
         break;
@@ -618,12 +621,12 @@ int GtsTransaction_WaitResult(GtsApp *app) {
             switch (canReceive) {
             case 1:
                 Gts_DeleteWaitingIcon(app);
-                Gts_PrintMessage(app, app->gtsMsgData, 29, 1, 0xF0F); // Your Storage Boxes are full.
+                Gts_PrintMessage(app, app->gtsMsgData, msg_0775_00029, 1, 0xF0F); // Your Storage Boxes are full.
                 Gts_SetState(app, GTS_TRANSACTION_STATE_WAIT_TEXT, GTS_TRANSACTION_STATE_EXIT_TO_MAIN_MENU);
                 break;
             case 2:
                 Gts_DeleteWaitingIcon(app);
-                Gts_PrintMessage(app, app->gtsMsgData, 35, 1, 0xF0F); // Your party is full (the Pokemon holds Mail).
+                Gts_PrintMessage(app, app->gtsMsgData, msg_0775_00035, 1, 0xF0F); // Your party is full (the Pokemon holds Mail).
                 Gts_SetState(app, GTS_TRANSACTION_STATE_WAIT_TEXT, GTS_TRANSACTION_STATE_EXIT_TO_MAIN_MENU);
                 break;
             case 0:
@@ -896,7 +899,7 @@ int GtsTransaction_WaitUnsavedReturn(GtsApp *app) {
 }
 
 int GtsTransaction_AlreadyTraded(GtsApp *app) {
-    Gts_PrintMessage(app, app->gtsMsgData, 147, 1, 0xF0F); // Unfortunately, it was traded to another Trainer.
+    Gts_PrintMessage(app, app->gtsMsgData, msg_0775_00147, 1, 0xF0F); // Unfortunately, it was traded to another Trainer.
     Gts_SetState(app, GTS_TRANSACTION_STATE_WAIT_TEXT, GTS_TRANSACTION_STATE_FADE_OUT);
     Gts_SetNextScreen(app, 1, 0);
     Gts_DeleteWaitingIcon(app);
@@ -905,7 +908,7 @@ int GtsTransaction_AlreadyTraded(GtsApp *app) {
 }
 
 void GtsTransaction_PrintServerError(GtsApp *app) {
-    int msgId = 154; // Communication error...
+    int msgId = msg_0775_00154; // Communication error...
     // Switched over serverResult + 15 (-11..-6, -1, -14, -2; the plain switch compiles differently).
     switch (app->serverResult + 15) {
     case 4:
@@ -914,14 +917,14 @@ void GtsTransaction_PrintServerError(GtsApp *app) {
     case 7:
     case 8:
     case 9:
-        msgId = 26; // That Pokemon may not be offered for trade!
+        msgId = msg_0775_00026; // That Pokemon may not be offered for trade!
         break;
     case 14:
-        msgId = 151; // The GTS is very crowded now.
+        msgId = msg_0775_00151; // The GTS is very crowded now.
         break;
     case 1:
     case 13:
-        msgId = 156; // You were disconnected from the GTS.
+        msgId = msg_0775_00156; // You were disconnected from the GTS.
         break;
     }
     Gts_PrintMessage(app, app->gtsMsgData, msgId, 1, 0xF0F);
@@ -1067,7 +1070,7 @@ void GtsTransaction_ReceiveMon(GtsApp *app, Pokemon *mon, int box, int traded) {
     if (traded) {
         friendship = 70;
         if (GetMonData(mon, MON_DATA_SPECIES, NULL) == SPECIES_ARCEUS) {
-            if (GetMonData(mon, MON_DATA_FATEFUL_ENCOUNTER, NULL) != 0 || (GetMonData(mon, MON_DATA_MET_LOCATION, NULL) == 86 && GetMonData(mon, MON_DATA_FATEFUL_ENCOUNTER, NULL) == 0)) {
+            if (GetMonData(mon, MON_DATA_FATEFUL_ENCOUNTER, NULL) != 0 || (GetMonData(mon, MON_DATA_MET_LOCATION, NULL) == MAPSEC_HALL_OF_ORIGIN && GetMonData(mon, MON_DATA_FATEFUL_ENCOUNTER, NULL) == 0)) {
                 varsFlags = Save_VarsFlags_Get(app->args->saveData);
                 if (Save_VarsFlags_GetVar404C(varsFlags) == 0) {
                     Save_VarsFlags_SetVar404C(varsFlags, 1);
@@ -1106,7 +1109,7 @@ void GtsTransaction_ReceiveExchangedMon(GtsApp *app, Pokemon *mon, int box) {
         box = 0;
     }
     if (GetMonData(mon, MON_DATA_SPECIES, NULL) == SPECIES_ARCEUS) {
-        if (GetMonData(mon, MON_DATA_FATEFUL_ENCOUNTER, NULL) != 0 || (GetMonData(mon, MON_DATA_MET_LOCATION, NULL) == 86 && GetMonData(mon, MON_DATA_FATEFUL_ENCOUNTER, NULL) == 0)) {
+        if (GetMonData(mon, MON_DATA_FATEFUL_ENCOUNTER, NULL) != 0 || (GetMonData(mon, MON_DATA_MET_LOCATION, NULL) == MAPSEC_HALL_OF_ORIGIN && GetMonData(mon, MON_DATA_FATEFUL_ENCOUNTER, NULL) == 0)) {
             varsFlags = Save_VarsFlags_Get(app->args->saveData);
             if (Save_VarsFlags_GetVar404C(varsFlags) == 0) {
                 Save_VarsFlags_SetVar404C(varsFlags, 1);

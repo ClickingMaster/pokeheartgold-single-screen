@@ -18,7 +18,7 @@ void EncounterEffect_FrontierOrLinkSingle(void *task, Ov114Task *ctx) {
         work->sprite19c = EncounterEffect_CreateSprite(work->spriteResources, &work->resource168, 2 << 18, 6 << 16, 0, 0);
         Sprite_SetDrawFlag(work->sprite19c, FALSE);
         Sprite_SetOamMode(work->sprite19c, 1);
-        GfGfx_EngineATogglePlanes(0x10, TRUE);
+        GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, TRUE);
         ctx->state++;
         break;
     case 1:
@@ -65,7 +65,7 @@ void EncounterEffect_FrontierOrLinkSingle(void *task, Ov114Task *ctx) {
         }
         break;
     case 7:
-        SetMasterBrightnessByColor(1, 0);
+        SetMasterBrightnessByColor(PM_LCD_BOTTOM, 0);
         HBlankSystem_Start(*(void **)((u8 *)*(void **)((u8 *)ctx->fieldSystem + 4) + 0x1c));
         if (ctx->completionFlag != NULL) {
             *ctx->completionFlag = 1;
@@ -100,7 +100,7 @@ void EncounterEffect_Double(void *task, Ov114Task *ctx) {
             work->sprites170[i] = EncounterEffect_CreateSprite(work->spriteResources, &work->resource13c, 2 << 18, 6 << 16, 0, 0);
             Sprite_SetDrawFlag(work->sprites170[i], FALSE);
         }
-        GfGfx_EngineATogglePlanes(0x10, TRUE);
+        GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, TRUE);
         ctx->state++;
         break;
     case 1:
@@ -151,7 +151,7 @@ void EncounterEffect_Double(void *task, Ov114Task *ctx) {
         }
         break;
     case 7:
-        SetMasterBrightnessByColor(1, 0);
+        SetMasterBrightnessByColor(PM_LCD_BOTTOM, 0);
         HBlankSystem_Start(*(void **)((u8 *)*(void **)((u8 *)ctx->fieldSystem + 4) + 0x1c));
         if (ctx->completionFlag != NULL) {
             *ctx->completionFlag = 1;

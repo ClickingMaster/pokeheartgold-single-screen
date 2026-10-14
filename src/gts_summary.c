@@ -3,6 +3,8 @@
 #include "constants/pokemon.h"
 #include "constants/sndseq.h"
 
+#include "msgdata/msg/msg_0775.h"
+
 #include "bg_window.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
@@ -94,7 +96,7 @@ void Gts_LoadSubScreenBg(GtsApp *app) {
     GfGfxLoader_GXLoadPal(NARC_a_1_0_0, 5, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0x200, HEAP_ID_61);
     GfGfxLoader_LoadCharData(NARC_a_1_0_0, 17, bgConfig, GF_BG_LYR_SUB_1, 0, 0xA800, TRUE, HEAP_ID_61);
     GfGfxLoader_LoadScrnData(NARC_a_1_0_0, 40, bgConfig, GF_BG_LYR_SUB_1, 0, 0x600, TRUE, HEAP_ID_61);
-    FillBgTilemapRect(bgConfig, GF_BG_LYR_SUB_1, 0, 0, 24, 32, 8, 17);
+    FillBgTilemapRect(bgConfig, GF_BG_LYR_SUB_1, 0, 0, 24, 32, 8, TILEMAP_FILL_OVWT_PAL);
     BgCommitTilemapBufferToVram(bgConfig, GF_BG_LYR_SUB_1);
     LoadFontPal1(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_1_OFFSET, HEAP_ID_61);
 }
@@ -244,7 +246,7 @@ void GtsSummary_CreateStrings(GtsApp *app) {
     int i;
 
     app->msgBuffer = String_New(180, HEAP_ID_61);
-    app->titleString = NewString_ReadMsgData(app->gtsMsgData, 39); // GLOBAL TRADE SYSTEM
+    app->titleString = NewString_ReadMsgData(app->gtsMsgData, msg_0775_00039); // GLOBAL TRADE SYSTEM
     for (i = 0; i < 10; i++) {
         app->unk_0BC4[i] = String_New(20, HEAP_ID_61);
     }
@@ -271,7 +273,7 @@ int GtsSummary_Start(GtsApp *app) {
 
 int GtsSummary_HandleInput(GtsApp *app) {
     if ((gSystem.newKeys & PAD_BUTTON_A) || gSystem.touchNew) {
-        GtsSummary_PrintMonMessage(app, 5, 1, 0, 0xF0F, &app->record.mon); // Do what with this Pokemon?
+        GtsSummary_PrintMonMessage(app, msg_0775_00005, 1, 0, 0xF0F, &app->record.mon); // Do what with this Pokemon?
         Gts_SetState(app, GTS_SUMMARY_STATE_WAIT_TEXT, GTS_SUMMARY_STATE_SHOW_MENU);
         PlaySE(SEQ_SE_DP_SELECT);
     } else if (gSystem.newKeys & PAD_BUTTON_B) {
@@ -313,8 +315,8 @@ int GtsSummary_HandleTakeBackPrompt(GtsApp *app) {
 
 int GtsSummary_ShowMenu(GtsApp *app) {
     app->listItems = ListMenuItems_New(2, HEAP_ID_61);
-    ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, 55, 1); // TAKE BACK
-    ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, 56, 2); // LEAVE AS IS
+    ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, msg_0775_00055, 1); // TAKE BACK
+    ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, msg_0775_00056, 2); // LEAVE AS IS
     app->menu = Gts_CreateListMenu(app, 2, 13);
     Gts_DimScreen(TRUE);
     app->state = GTS_SUMMARY_STATE_HANDLE_MENU;
@@ -328,11 +330,11 @@ int GtsSummary_HandleMenu(GtsApp *app) {
         ListMenuItems_Delete(app->listItems);
         Pokemon *mon = &app->record.mon;
         if (Gts_MonHoldsMail(mon) && Party_GetCount(app->args->party) == PARTY_SIZE) {
-            GtsSummary_PrintMonMessage(app, 36, 1, 0, 0xF0F, mon); // Your party is full (the Pokemon holds Mail).
+            GtsSummary_PrintMonMessage(app, msg_0775_00036, 1, 0, 0xF0F, mon); // Your party is full (the Pokemon holds Mail).
             Gts_SetState(app, GTS_SUMMARY_STATE_WAIT_TEXT, GTS_SUMMARY_STATE_HANDLE_INPUT);
             return 3;
         }
-        GtsSummary_PrintMonMessage(app, 6, 1, 0, 0xF0F, mon); // Will you take this Pokemon?
+        GtsSummary_PrintMonMessage(app, msg_0775_00006, 1, 0, 0xF0F, mon); // Will you take this Pokemon?
         Gts_SetState(app, GTS_SUMMARY_STATE_WAIT_TEXT, GTS_SUMMARY_STATE_SHOW_TAKE_BACK_PROMPT);
         GtsSummary_DrawWanted(app);
     } else if (result == 2 || result == -2) {
@@ -401,14 +403,14 @@ void Gts_DrawMonSummary(MsgData *msgData, MsgData *speciesNames, MessageFormat *
     gender = summary->gender;
     monLevel = summary->level;
     item = GetBoxMonData(boxMon, MON_DATA_HELD_ITEM, NULL);
-    itemLabel = NewString_ReadMsgData(msgData, 73); // ITEM
+    itemLabel = NewString_ReadMsgData(msgData, msg_0775_00073); // ITEM
     genderSymbol = NewString_ReadMsgData(msgData, sGtsGenderSymbolMsgs[gender]);
-    levelLabel = NewString_ReadMsgData(msgData, 106); // Lv.
+    levelLabel = NewString_ReadMsgData(msgData, msg_0775_00106); // Lv.
     BufferIntegerAsString(msgFormat, 3, monLevel, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
-    level = ReadMsgData_ExpandPlaceholders(msgFormat, msgData, 107, HEAP_ID_61);
+    level = ReadMsgData_ExpandPlaceholders(msgFormat, msgData, msg_0775_00107, HEAP_ID_61);
     speciesName = NewString_ReadMsgData(speciesNames, species);
     GetItemNameIntoString(itemName, item, HEAP_ID_61);
-    nameLabel = NewString_ReadMsgData(msgData, 59); // NAME
+    nameLabel = NewString_ReadMsgData(msgData, msg_0775_00059); // NAME
     for (i = 0; i < 6; i++) {
         FillWindowPixelBuffer(&windows[i], 0);
     }
@@ -438,11 +440,11 @@ void Gts_DrawMonSummary(MsgData *msgData, MsgData *speciesNames, MessageFormat *
 void Gts_DrawTrainerInfo(MsgData *msgData, Window *trainerWindows, const u16 *trainerName, Pokemon *mon, Window *otWindows) {
     String *name = String_New(16, HEAP_ID_61);
     String *otName = String_New(16, HEAP_ID_61);
-    String *trainerLabel = NewString_ReadMsgData(msgData, 49); // OFFERER
+    String *trainerLabel = NewString_ReadMsgData(msgData, msg_0775_00049); // OFFERER
     String *otLabel;
 
     CopyU16ArrayToString(name, trainerName);
-    otLabel = NewString_ReadMsgData(msgData, 180);
+    otLabel = NewString_ReadMsgData(msgData, msg_0775_00180);
     GetMonData(mon, MON_DATA_OT_NAME_STRING, otName);
     Gts_PrintAlignedFont0(&trainerWindows[0], trainerLabel, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
     Gts_PrintAlignedFont0(&trainerWindows[1], name, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));

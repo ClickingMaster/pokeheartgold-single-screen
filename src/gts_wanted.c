@@ -3,6 +3,7 @@
 #include "constants/pokemon.h"
 
 #include "application/zukanlist/zkn_data/zukan_data.naix"
+#include "msgdata/msg/msg_0775.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -317,7 +318,7 @@ void GtsWanted_FreeData(GtsApp *app) {
 
 int GtsWanted_Start(GtsApp *app) {
     if (IsPaletteFadeFinished()) {
-        GtsWanted_PrintMessage(app, 9, 1, 0, 0xF0F); // Please choose the Pokemon you want.
+        GtsWanted_PrintMessage(app, msg_0775_00009, 1, 0, 0xF0F); // Please choose the Pokemon you want.
         Gts_SetState(app, GTS_WANTED_STATE_WAIT_TEXT, GTS_WANTED_STATE_HANDLE_INPUT);
     }
     return 3;
@@ -402,7 +403,7 @@ int GtsWanted_HandleSpeciesSelector(GtsApp *app) {
 #pragma force_active reset
 
 int GtsWanted_AskGender(GtsApp *app) {
-    GtsWanted_PrintMessage(app, 10, 1, 0, 0xF0F); // Please choose its gender.
+    GtsWanted_PrintMessage(app, msg_0775_00010, 1, 0, 0xF0F); // Please choose its gender.
     Gts_SetState(app, GTS_WANTED_STATE_WAIT_TEXT, GTS_WANTED_STATE_OPEN_GENDER_SELECTOR);
     return 3;
 }
@@ -437,7 +438,7 @@ int GtsWanted_HandleGenderSelector(GtsApp *app) {
 #pragma force_active reset
 
 int GtsWanted_AskLevel(GtsApp *app) {
-    GtsWanted_PrintMessage(app, 11, 1, 0, 0xF0F); // Please choose the level.
+    GtsWanted_PrintMessage(app, msg_0775_00011, 1, 0, 0xF0F); // Please choose the level.
     Gts_SetState(app, GTS_WANTED_STATE_WAIT_TEXT, GTS_WANTED_STATE_OPEN_LEVEL_SELECTOR);
     return 3;
 }
@@ -481,7 +482,7 @@ int GtsWanted_HandleLevelSelector(GtsApp *app) {
 #pragma force_active reset
 
 int GtsWanted_AskConfirm(GtsApp *app) {
-    GtsWanted_PrintMessage(app, 23, 1, 0, 0xF0F); // Are these conditions OK?
+    GtsWanted_PrintMessage(app, msg_0775_00023, 1, 0, 0xF0F); // Are these conditions OK?
     Gts_SetState(app, GTS_WANTED_STATE_WAIT_TEXT, GTS_WANTED_STATE_SHOW_CONFIRM_PROMPT);
     return 3;
 }
@@ -560,7 +561,7 @@ void Gts_PrintCountryName(Window *window, MsgData *countryNames, MsgData *msgDat
         Gts_PrintAlignedFont0(window, string, 0, y, align, color);
         String_Delete(string);
     } else {
-        string = NewString_ReadMsgData(msgData, 173); // ANY
+        string = NewString_ReadMsgData(msgData, msg_0775_00173); // ANY
         Gts_PrintAlignedFont0(window, string, 0, y, align, color);
         String_Delete(string);
     }
@@ -628,7 +629,7 @@ void Gts_DrawWantedMon(MsgData *msgData, MsgData *speciesNames, MessageFormat *m
     int i;
     Window *window;
 
-    title = NewString_ReadMsgData(msgData, 101); // WANTED
+    title = NewString_ReadMsgData(msgData, msg_0775_00101); // WANTED
     Gts_PrintAlignedFont0(windows, title, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
     window = windows;
     i = 1;
@@ -652,7 +653,7 @@ void Gts_DrawWantedMonLevelLeft(MsgData *msgData, MsgData *speciesNames, Message
     int i;
     Window *window;
 
-    title = NewString_ReadMsgData(msgData, 101); // WANTED
+    title = NewString_ReadMsgData(msgData, msg_0775_00101); // WANTED
     Gts_PrintAlignedFont0(windows, title, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
     window = windows;
     i = 1;
@@ -688,9 +689,9 @@ void GtsWanted_DrawOfferedMon(MsgData *msgData, MessageFormat *msgFormat, Window
     GetBoxMonData(boxMon, MON_DATA_NICKNAME_STRING, nickname);
     gender = GetBoxMonData(boxMon, MON_DATA_GENDER, NULL) + 1;
     level = CalcBoxMonLevel(boxMon);
-    title = NewString_ReadMsgData(msgData, 104); // OFFER POKEMON
+    title = NewString_ReadMsgData(msgData, msg_0775_00104); // OFFER POKEMON
     BufferIntegerAsString(msgFormat, 3, level, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
-    levelString = ReadMsgData_ExpandPlaceholders(msgFormat, msgData, 108, HEAP_ID_61); // Lv. {level}
+    levelString = ReadMsgData_ExpandPlaceholders(msgFormat, msgData, msg_0775_00108, HEAP_ID_61); // Lv. {level}
     if (gender != GTS_GENDER_ANY) {
         ReadMsgDataIntoString(msgData, sGtsGenderSymbolMsgs[gender], genderSymbol);
     }

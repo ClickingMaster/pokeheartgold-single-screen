@@ -130,7 +130,7 @@ BOOL TypeBehavior_LookSidewaysUpdate(LocalMapObject *object) {
     }
     case 1: {
         TwoByTwoValues moveTable = gLookSidewaysDirections;
-        MapObject_ForceSetHeldMovement(object, GetMovementForDirection(moveTable.values[state->sequence][state->index], 0));
+        MapObject_ForceSetHeldMovement(object, GetMovementForDirection(moveTable.values[state->sequence][state->index], MOVEMENT_FACE_UP));
         state->turnState++;
     }
     case 2:
@@ -220,7 +220,7 @@ search_check:
         state->index = (i + 1) % 4;
         state->turnState++;
     case 1:
-        MapObject_ForceSetHeldMovement(object, GetMovementForDirection(spinOrders.values[state->sequence][state->index], 0));
+        MapObject_ForceSetHeldMovement(object, GetMovementForDirection(spinOrders.values[state->sequence][state->index], MOVEMENT_FACE_UP));
         state->turnState++;
     case 2:
         if (MapObject_RunForcedMovement(object) == 0) {
@@ -680,10 +680,10 @@ BOOL TrainerApproach_StartFace(TrainerApproachWork *work) {
     if (!MapObject_AreBitsSetForMovementScriptInit(work->trainer)) {
         return FALSE;
     }
-    if (work->direction == -1) {
+    if (work->direction == DIR_NONE) {
         GF_AssertFail();
     }
-    MapObject_SetHeldMovement(work->trainer, GetMovementForDirection(work->direction, 0));
+    MapObject_SetHeldMovement(work->trainer, GetMovementForDirection(work->direction, MOVEMENT_FACE_UP));
     work->state = 4;
     return FALSE;
 }
@@ -742,7 +742,7 @@ BOOL TrainerApproach_CheckDistance(TrainerApproachWork *work) {
 
 BOOL TrainerApproach_StartStep(TrainerApproachWork *work) {
     if (MapObject_AreBitsSetForMovementScriptInit(work->trainer) == TRUE) {
-        MapObject_SetHeldMovement(work->trainer, GetMovementForDirection(work->direction, 12));
+        MapObject_SetHeldMovement(work->trainer, GetMovementForDirection(work->direction, MOVEMENT_STEP_UP));
         work->state = 12;
     }
     return FALSE;
@@ -776,7 +776,7 @@ BOOL TrainerApproach_TurnPlayer(TrainerApproachWork *work) {
     if (direction != PlayerAvatar_GetFacingDirection(work->player) && (work->trainerIndex == 0 || work->encounterType == 2)) {
         if (MapObject_AreBitsSetForMovementScriptInit(object) == TRUE) {
             MapObject_ClearFlagsBits(object, MAPOBJECTFLAG_UNK7);
-            MapObject_SetHeldMovement(object, GetMovementForDirection(direction, 0));
+            MapObject_SetHeldMovement(object, GetMovementForDirection(direction, MOVEMENT_FACE_UP));
             work->state = 15;
         }
     } else {

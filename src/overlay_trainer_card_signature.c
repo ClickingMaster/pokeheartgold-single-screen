@@ -5,6 +5,9 @@
 #include "constants/game_stats.h"
 #include "constants/sndseq.h"
 
+#include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0252.h"
+
 #include "filesystem.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
@@ -115,7 +118,7 @@ int TrainerCardSignature_Init(OverlayManager *manager, int *state) {
         signature->bgConfig = BgConfig_Alloc(HEAP_ID_39);
         narc = NARC_New(NARC_a_0_9_1, HEAP_ID_39);
         signature->msgFormat = MessageFormat_New(HEAP_ID_39);
-        signature->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 0xfc, HEAP_ID_39);
+        signature->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0252_bin, HEAP_ID_39);
         TextFlags_SetCanTouchSpeedUpPrint(TRUE);
         TextFlags_SetCanABSpeedUpPrint(TRUE);
         SetKeyRepeatTimers(4, 8);
@@ -234,20 +237,20 @@ void TrainerCardSignature_InitBgLayers(BgConfig *bgConfig) {
     modes = sTrainerCardSignatureGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     bg0 = sTrainerCardSignatureMainBg0Template;
-    InitBgFromTemplate(bgConfig, 0, &bg0, 0);
-    BgClearTilemapBufferAndCommit(bgConfig, 0);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &bg0, GF_BG_TYPE_TEXT);
+    BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
     bg1 = sTrainerCardSignatureMainBg1Template;
-    InitBgFromTemplate(bgConfig, 1, &bg1, 0);
-    BgClearTilemapBufferAndCommit(bgConfig, 1);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &bg1, GF_BG_TYPE_TEXT);
+    BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
     bg2 = sTrainerCardSignatureMainBg2Template;
-    InitBgFromTemplate(bgConfig, 2, &bg2, 0);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &bg2, GF_BG_TYPE_TEXT);
     bg4 = sTrainerCardSignatureSubBg0Template;
-    InitBgFromTemplate(bgConfig, 4, &bg4, 0);
-    BgClearTilemapBufferAndCommit(bgConfig, 4);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &bg4, GF_BG_TYPE_TEXT);
+    BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
     bg5 = sTrainerCardSignatureSubBg1Template;
-    InitBgFromTemplate(bgConfig, 5, &bg5, 0);
-    BG_ClearCharDataRange(0, 32, 0, HEAP_ID_39);
-    BG_ClearCharDataRange(4, 32, 0, HEAP_ID_39);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &bg5, GF_BG_TYPE_TEXT);
+    BG_ClearCharDataRange(GF_BG_LYR_MAIN_0, 32, 0, HEAP_ID_39);
+    BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 32, 0, HEAP_ID_39);
 }
 
 void TrainerCardSignature_InitStrings(TrainerCardSignature *signature) {
@@ -266,8 +269,8 @@ void TrainerCardSignature_InitStrings(TrainerCardSignature *signature) {
     signature->messageString = String_New(80, HEAP_ID_39);
     signature->penStyle = 0;
     signature->state = 1;
-    ReadMsgDataIntoString(signature->msgData, 12, signature->doneString);
-    ReadMsgDataIntoString(signature->msgData, 9, signature->titleString);
+    ReadMsgDataIntoString(signature->msgData, msg_0252_00012, signature->doneString);
+    ReadMsgDataIntoString(signature->msgData, msg_0252_00009, signature->titleString);
     signature->yesNoPrompt = YesNoPrompt_Create(HEAP_ID_39);
     MIi_CpuClearFast(0, (u32 *)&signature->prevMoveX, 5);
 }
@@ -287,12 +290,12 @@ void TrainerCardSignature_FreeStrings(TrainerCardSignature *signature) {
 }
 
 void TrainerCardSignature_FreeBgLayers(BgConfig *bgConfig) {
-    FreeBgTilemapBuffer(bgConfig, 5);
-    FreeBgTilemapBuffer(bgConfig, 4);
-    FreeBgTilemapBuffer(bgConfig, 3);
-    FreeBgTilemapBuffer(bgConfig, 2);
-    FreeBgTilemapBuffer(bgConfig, 1);
-    FreeBgTilemapBuffer(bgConfig, 0);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_1);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_0);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_3);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_2);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_1);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_0);
     Heap_Free(bgConfig);
 }
 
@@ -304,7 +307,7 @@ void TrainerCardSignature_LoadBgGraphics(TrainerCardSignature *signature, NARC *
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 2, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 64, HEAP_ID_39);
     LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_13_OFFSET, HEAP_ID_39);
     LoadFontPal1(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_13_OFFSET, HEAP_ID_39);
-    BG_ClearCharDataRange(1, 32, 0, HEAP_ID_39);
+    BG_ClearCharDataRange(GF_BG_LYR_MAIN_1, 32, 0, HEAP_ID_39);
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 3, bgConfig, GF_BG_LYR_MAIN_2, 0, 0x2000, TRUE, HEAP_ID_39);
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 5, bgConfig, GF_BG_LYR_MAIN_2, 0, 0x600, TRUE, HEAP_ID_39);
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 4, bgConfig, GF_BG_LYR_SUB_1, 0, 0x2000, TRUE, HEAP_ID_39);
@@ -394,11 +397,11 @@ void TrainerCardSignature_CreateWindows(TrainerCardSignature *signature, Overlay
     u32 vramOffset;
     u8 *buffer;
 
-    AddWindowParameterized(signature->bgConfig, &signature->messageWindow, 0, 2, 1, 0x1B, 4, 0xD, 0x28);
+    AddWindowParameterized(signature->bgConfig, &signature->messageWindow, GF_BG_LYR_MAIN_0, 2, 1, 0x1B, 4, 0xD, 0x28);
     FillWindowPixelBuffer(&signature->messageWindow, 0xF);
-    AddWindowParameterized(signature->bgConfig, &signature->canvasWindow, 1, 4, 9, 0x18, 8, 1, 1);
+    AddWindowParameterized(signature->bgConfig, &signature->canvasWindow, GF_BG_LYR_MAIN_1, 4, 9, 0x18, 8, 1, 1);
     FillWindowPixelBuffer(&signature->canvasWindow, 2);
-    AddWindowParameterized(signature->bgConfig, &signature->doneButtonWindow, 1, 0x1A, 0x15, 8, 2, 2, 0xC1);
+    AddWindowParameterized(signature->bgConfig, &signature->doneButtonWindow, GF_BG_LYR_MAIN_1, 0x1A, 0x15, 8, 2, 2, 0xC1);
     FillWindowPixelBuffer(&signature->doneButtonWindow, 0);
     DC_FlushRange(TrainerCardSignature_PrintCentered(&signature->doneButtonWindow, signature->doneString, 1, 2, MAKE_TEXT_COLOR(14, 7, 2)), 0x200);
     i = 0;
@@ -412,7 +415,7 @@ void TrainerCardSignature_CreateWindows(TrainerCardSignature *signature, Overlay
         vramOffset += 0x100;
         x += 4;
     }
-    AddWindowParameterized(signature->bgConfig, &signature->titleWindow, 1, 2, 2, 0x1C, 2, 0xD, 0xD1);
+    AddWindowParameterized(signature->bgConfig, &signature->titleWindow, GF_BG_LYR_MAIN_1, 2, 2, 0x1C, 2, 0xD, 0xD1);
     width = FontID_String_GetWidth(1, signature->titleString, 0);
     FillWindowPixelBuffer(&signature->titleWindow, 0);
     AddTextPrinterParameterizedWithColor(&signature->titleWindow, 1, signature->titleString, (0xE0 - width) / 2, 0, TEXT_SPEED_INSTANT, MAKE_TEXT_COLOR(1, 2, 0), NULL);
@@ -425,7 +428,7 @@ void TrainerCardSignature_CreateWindows(TrainerCardSignature *signature, Overlay
         y = 3;
         window = signature->penNameWindows;
         for (; i < TRAINER_CARD_SIGNATURE_PEN_COUNT; i++) {
-            AddWindowParameterized(signature->bgConfig, window, 4, 5, y, 10, 2, 0xD, baseTile);
+            AddWindowParameterized(signature->bgConfig, window, GF_BG_LYR_SUB_0, 5, y, 10, 2, 0xD, baseTile);
             FillWindowPixelBuffer(window, 0);
             baseTile += 0x14;
             y += 4;
@@ -460,7 +463,7 @@ void TrainerCardSignature_HandleTouch(TrainerCardSignature *signature) {
     if (hit != -1) {
         if (hit == 0) {
             if (signature->state == 1) {
-                TrainerCardSignature_PrintMessage(signature, 10);
+                TrainerCardSignature_PrintMessage(signature, msg_0252_00010);
                 signature->state = 2;
                 TrainerCardSignature_SetDoneButtonPressed(&signature->doneButtonSprite, 1);
                 PlaySE(SEQ_SE_DP_DECIDE);
@@ -584,7 +587,7 @@ int TrainerCardSignature_State_ErasePrompt(TrainerCardSignature *signature, int 
 #pragma force_active reset
 
 int TrainerCardSignature_State_PrintEraseMessage(TrainerCardSignature *signature, int state) {
-    TrainerCardSignature_PrintMessage(signature, 11);
+    TrainerCardSignature_PrintMessage(signature, msg_0252_00011);
     signature->state = 5;
     TrainerCardSignature_UpdateCanvas(signature);
     return state;

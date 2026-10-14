@@ -145,8 +145,8 @@ void OrbitCursor_ReloadPalette(OrbitCursor *p, int palette) {
 
     SpriteManager_UnloadPlttObjById(sm, 0x56CF);
     SpriteManager_UnloadPlttObjById(sm, 0x56D0);
-    SpriteSystem_LoadPaletteBufferFromOpenNarc(pd, PLTTBUF_MAIN_OBJ, ss, sm, narc, gOrbitCursorPaletteMembers[palette], FALSE, 1, 1, 0x56CF);
-    SpriteSystem_LoadPaletteBufferFromOpenNarc(pd, PLTTBUF_SUB_OBJ, ss, sm, narc, gOrbitCursorPaletteMembers[palette], FALSE, 1, 2, 0x56D0);
+    SpriteSystem_LoadPaletteBufferFromOpenNarc(pd, PLTTBUF_MAIN_OBJ, ss, sm, narc, gOrbitCursorPaletteMembers[palette], FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 0x56CF);
+    SpriteSystem_LoadPaletteBufferFromOpenNarc(pd, PLTTBUF_SUB_OBJ, ss, sm, narc, gOrbitCursorPaletteMembers[palette], FALSE, 1, NNS_G2D_VRAM_TYPE_2DSUB, 0x56D0);
 }
 
 void OrbitCursor_LoadResources(OrbitCursor *p, int palette) {
@@ -160,16 +160,16 @@ void OrbitCursor_LoadResources(OrbitCursor *p, int palette) {
 
     if (resBase == 1) {
         if (p->unk_1C == 0) {
-            SpriteSystem_LoadPaletteBufferFromOpenNarc(pd, PLTTBUF_MAIN_OBJ, ss, sm, narc, gOrbitCursorPaletteMembers[palette], FALSE, 1, 1, resId);
+            SpriteSystem_LoadPaletteBufferFromOpenNarc(pd, PLTTBUF_MAIN_OBJ, ss, sm, narc, gOrbitCursorPaletteMembers[palette], FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, resId);
         } else {
-            SpriteSystem_LoadPaletteBufferFromOpenNarc(pd, PLTTBUF_MAIN_OBJ, ss, sm, narc, 0x60, FALSE, 1, 1, resId);
+            SpriteSystem_LoadPaletteBufferFromOpenNarc(pd, PLTTBUF_MAIN_OBJ, ss, sm, narc, 0x60, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, resId);
         }
         SpriteSystem_LoadCharResObjFromOpenNarc(ss, sm, narc, 0x5F, FALSE, 1, resId);
     } else {
         if (p->unk_1C == 0) {
-            SpriteSystem_LoadPaletteBufferFromOpenNarc(pd, PLTTBUF_SUB_OBJ, ss, sm, narc, gOrbitCursorPaletteMembers[palette], FALSE, 1, 2, resId);
+            SpriteSystem_LoadPaletteBufferFromOpenNarc(pd, PLTTBUF_SUB_OBJ, ss, sm, narc, gOrbitCursorPaletteMembers[palette], FALSE, 1, NNS_G2D_VRAM_TYPE_2DSUB, resId);
         } else {
-            SpriteSystem_LoadPaletteBufferFromOpenNarc(pd, PLTTBUF_SUB_OBJ, ss, sm, narc, 0x60, FALSE, 1, 2, resId);
+            SpriteSystem_LoadPaletteBufferFromOpenNarc(pd, PLTTBUF_SUB_OBJ, ss, sm, narc, 0x60, FALSE, 1, NNS_G2D_VRAM_TYPE_2DSUB, resId);
         }
         SpriteSystem_LoadCharResObjFromOpenNarc(ss, sm, narc, 0x5F, FALSE, 2, resId);
     }

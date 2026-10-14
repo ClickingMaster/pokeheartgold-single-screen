@@ -6,6 +6,7 @@
 #include "constants/species.h"
 
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0187.h"
 
 #include "bg_window.h"
 #include "camera.h"
@@ -222,7 +223,7 @@ GF3DVramMan *HatchEggApp_Create3DVramMan(void) {
 }
 
 void HatchEggApp_Init3D(void) {
-    GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, 1);
+    GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
     G2_SetBG0Priority(1);
     G3X_SetShading(GX_SHADING_TOON);
     G3X_AntiAlias(TRUE);
@@ -267,9 +268,9 @@ void HatchEggApp_InitBgs(BgConfig *bgConfig) {
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
     G2_SetBG0Priority(1);
-    GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, 1);
+    GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
     GfGfx_BothDispOn();
-    GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, 1);
+    GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
 void HatchEggApp_VBlankCB(void *data) {
@@ -653,7 +654,7 @@ BOOL HatchEggApp_RunEggScene(HatchEggApp *app) {
         if (HatchEggApp_HatchEgg(app) == FALSE) {
             HatchEggApp_StartPokepicAnim(app);
             PlayCry(GetMonData(app->args->hatch.mon, MON_DATA_SPECIES, NULL), GetMonData(app->args->hatch.mon, MON_DATA_FORM, NULL));
-            app->printerId = HatchEggApp_PrintMessage(&app->window, 0, app->args->hatch.mon, app->textSpeed);
+            app->printerId = HatchEggApp_PrintMessage(&app->window, msg_0187_00000, app->args->hatch.mon, app->textSpeed);
             app->state++;
         }
         break;
@@ -672,7 +673,7 @@ BOOL HatchEggApp_RunEggScene(HatchEggApp *app) {
         if (TextPrinterCheckActive(app->printerId)) {
             break;
         }
-        app->printerId = HatchEggApp_PrintMessage(&app->window, 1, app->args->hatch.mon, app->textSpeed);
+        app->printerId = HatchEggApp_PrintMessage(&app->window, msg_0187_00001, app->args->hatch.mon, app->textSpeed);
         app->state++;
     case 11:
         if (TextPrinterCheckActive(app->printerId)) {
@@ -760,7 +761,7 @@ BOOL HatchEggApp_RunManaphyEggScene(HatchEggApp *app) {
         if (HatchEggApp_HatchManaphyEgg(app) == FALSE) {
             HatchEggApp_StartPokepicAnim(app);
             PlayCry(GetMonData(app->args->hatch.mon, MON_DATA_SPECIES, NULL), GetMonData(app->args->hatch.mon, MON_DATA_FORM, NULL));
-            app->printerId = HatchEggApp_PrintMessage(&app->window, 0, app->args->hatch.mon, app->textSpeed);
+            app->printerId = HatchEggApp_PrintMessage(&app->window, msg_0187_00000, app->args->hatch.mon, app->textSpeed);
             app->state = 8;
         }
         break;
@@ -785,7 +786,7 @@ BOOL HatchEggApp_RunManaphyEggScene(HatchEggApp *app) {
         if (TextPrinterCheckActive(app->printerId)) {
             break;
         }
-        app->printerId = HatchEggApp_PrintMessage(&app->window, 1, app->args->hatch.mon, app->textSpeed);
+        app->printerId = HatchEggApp_PrintMessage(&app->window, msg_0187_00001, app->args->hatch.mon, app->textSpeed);
         app->state++;
     case 11:
         if (TextPrinterCheckActive(app->printerId)) {
@@ -958,7 +959,7 @@ BOOL HatchEggApp_HatchEgg(HatchEggApp *app) {
             break;
         }
         ManagedSprite_SetAnimationFrame(app->eggSprite, 4);
-        GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, 0);
+        GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
         app->subState++;
         break;
     case 1:
@@ -1004,7 +1005,7 @@ BOOL HatchEggApp_HatchEgg(HatchEggApp *app) {
         if (PaletteData_GetSelectedBuffersBitmask(app->paletteData) != 0 || done != 2 || Pokepic_ResumePaletteFade(app->pokepic) != FALSE) {
             break;
         }
-        GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, 1);
+        GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
         HatchEggApp_SetPokepicVanished(app, FALSE);
         ManagedSprite_SetDrawFlag(app->eggSprite, FALSE);
         ManagedSprite_SetDrawFlag(app->topBar, FALSE);
@@ -1052,7 +1053,7 @@ BOOL HatchEggApp_HatchManaphyEgg(HatchEggApp *app) {
         HatchEggParticles_Emit(app->particles, 1);
         HatchEggParticles_Emit(app->particles, 2);
         HatchEggParticles_Emit(app->particles, 3);
-        GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, 0);
+        GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
         app->subState++;
         break;
     case 1:
@@ -1096,7 +1097,7 @@ BOOL HatchEggApp_HatchManaphyEgg(HatchEggApp *app) {
             break;
         }
         HatchEggApp_SetPokepicVanished(app, FALSE);
-        GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, 1);
+        GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
         ManagedSprite_SetDrawFlag(app->eggSprite, FALSE);
         ManagedSprite_SetDrawFlag(app->topBar, FALSE);
         ManagedSprite_SetDrawFlag(app->bottomBar, FALSE);
@@ -1199,10 +1200,10 @@ BOOL HatchEggApp_Exit(OverlayManager *man, int *state) {
     HatchEggApp *app = OverlayManager_GetData(man);
     HatchEggYesNoMenu_Free(app->yesNoMenu);
     GF_3DVramMan_Delete(app->vramMan);
-    GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, 0);
-    GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, 0);
-    GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0 | GX_PLANEMASK_BG1, 0);
-    GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, 0);
+    GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
+    GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
+    GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0 | GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
+    GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
     PaletteData_FreeBuffers(app->paletteData, PLTTBUF_MAIN_BG);
     PaletteData_FreeBuffers(app->paletteData, PLTTBUF_MAIN_OBJ);
     PaletteData_FreeBuffers(app->paletteData, PLTTBUF_SUB_BG);
@@ -1296,7 +1297,7 @@ void HatchEggYesNoMenu_LoadGfx(HatchEggYesNoMenu *menu, PaletteData *paletteData
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 10, menu->bgConfig, GF_BG_LYR_SUB_1, 0, 0, FALSE, HEAP_ID_70);
     ToggleBgLayer(GF_BG_LYR_SUB_1, GF_PLANE_TOGGLE_OFF);
     ToggleBgLayer(GF_BG_LYR_SUB_2, GF_PLANE_TOGGLE_OFF);
-    GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, 1);
+    GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     NARC_Delete(narc);
 }
 #pragma force_active reset
@@ -1309,7 +1310,7 @@ void HatchEggYesNoMenu_Show(HatchEggYesNoMenu *menu, u32 yesMsgId, u32 noMsgId) 
     HatchEggYesNoMenu_UpdateCursor(menu);
     ToggleBgLayer(GF_BG_LYR_SUB_1, GF_PLANE_TOGGLE_ON);
     ToggleBgLayer(GF_BG_LYR_SUB_2, GF_PLANE_TOGGLE_ON);
-    GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, 1);
+    GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     ManagedSprite_SetDrawFlag(menu->cursor, TRUE);
 }
 
@@ -1328,7 +1329,7 @@ int HatchEggYesNoMenu_Run(HatchEggYesNoMenu *menu) {
             ToggleBgLayer(GF_BG_LYR_SUB_1, GF_PLANE_TOGGLE_OFF);
             ToggleBgLayer(GF_BG_LYR_SUB_2, GF_PLANE_TOGGLE_OFF);
             ManagedSprite_SetDrawFlag(menu->cursor, FALSE);
-            GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, 0);
+            GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
             return menu->selection;
         }
         break;
@@ -1361,7 +1362,7 @@ void HatchEggYesNoMenu_PrintButton(HatchEggYesNoMenu *menu, Window *window, u32 
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0187_bin, menu->heapId);
     String *string = ReadMsgData_ExpandPlaceholders(menu->msgFormat, msgData, msgId, menu->heapId);
     FillWindowPixelBuffer(window, 0);
-    AddTextPrinterParameterizedWithColor(window, 4, string, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), NULL);
+    AddTextPrinterParameterizedWithColor(window, 4, string, 0, 0, TEXT_SPEED_INSTANT, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     CopyWindowToVram(window);
     DestroyMsgData(msgData);
     String_Delete(string);

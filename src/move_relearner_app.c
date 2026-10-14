@@ -7,6 +7,7 @@
 #include "constants/sndseq.h"
 
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0747.h"
 
 #include "bg_window.h"
 #include "camera.h"
@@ -492,8 +493,8 @@ void MoveRelearner_InitStrings(MoveRelearner *relearner) {
     relearner->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0747_bin, HEAP_ID_66);
     relearner->msgFormat = MessageFormat_New(HEAP_ID_66);
     relearner->string = String_New(256, HEAP_ID_66);
-    relearner->ppLabel = NewString_ReadMsgData(relearner->msgData, 25);  // "PP"
-    relearner->ppFormat = NewString_ReadMsgData(relearner->msgData, 31); // "{0}/{1}"
+    relearner->ppLabel = NewString_ReadMsgData(relearner->msgData, msg_0747_00025);  // "PP"
+    relearner->ppFormat = NewString_ReadMsgData(relearner->msgData, msg_0747_00031); // "{0}/{1}"
 }
 
 void MoveRelearner_FreeStrings(MoveRelearner *relearner) {
@@ -700,26 +701,26 @@ void MoveRelearner_PrintStaticTexts(MoveRelearner *relearner) {
     BoxPokemon *boxMon;
     u32 i;
 
-    ReadMsgDataIntoString(relearner->msgData, 36, relearner->string); // "TEACH WHICH MOVE?"
+    ReadMsgDataIntoString(relearner->msgData, msg_0747_00036, relearner->string); // "TEACH WHICH MOVE?"
     MoveRelearner_PrintString(relearner, 7, 0, MAKE_TEXT_COLOR(1, 2, 0), 0, 4);
     ScheduleWindowCopyToVram(&relearner->windows[7]);
-    ReadMsgDataIntoString(relearner->msgData, 35, relearner->string); // "TEACH"
+    ReadMsgDataIntoString(relearner->msgData, msg_0747_00035, relearner->string); // "TEACH"
     MoveRelearner_PrintString(relearner, 8, 4, MAKE_TEXT_COLOR(15, 14, 0), 2, 4);
-    ReadMsgDataIntoString(relearner->msgData, 34, relearner->string); // "RETURN"
+    ReadMsgDataIntoString(relearner->msgData, msg_0747_00034, relearner->string); // "RETURN"
     MoveRelearner_PrintString(relearner, 9, 4, MAKE_TEXT_COLOR(15, 14, 0), 2, 4);
     ScheduleWindowCopyToVram(&relearner->windows[9]);
-    ReadMsgDataIntoString(relearner->msgData, 22, relearner->string); // "CATEGORY"
+    ReadMsgDataIntoString(relearner->msgData, msg_0747_00022, relearner->string); // "CATEGORY"
     MoveRelearner_PrintString(relearner, 0, 0, MAKE_TEXT_COLOR(15, 14, 0), 0, 0);
     ScheduleWindowCopyToVram(&relearner->windows[0]);
-    ReadMsgDataIntoString(relearner->msgData, 23, relearner->string); // "POWER"
+    ReadMsgDataIntoString(relearner->msgData, msg_0747_00023, relearner->string); // "POWER"
     MoveRelearner_PrintString(relearner, 1, 0, MAKE_TEXT_COLOR(15, 14, 0), 0, 0);
     ScheduleWindowCopyToVram(&relearner->windows[1]);
-    ReadMsgDataIntoString(relearner->msgData, 24, relearner->string); // "ACCURACY"
+    ReadMsgDataIntoString(relearner->msgData, msg_0747_00024, relearner->string); // "ACCURACY"
     MoveRelearner_PrintString(relearner, 2, 0, MAKE_TEXT_COLOR(15, 14, 0), 0, 0);
     ScheduleWindowCopyToVram(&relearner->windows[2]);
 
     format = String_New(256, HEAP_ID_66);
-    ReadMsgDataIntoString(relearner->msgData, 39, format); // "LEARNED MOVES"
+    ReadMsgDataIntoString(relearner->msgData, msg_0747_00039, format); // "LEARNED MOVES"
     BufferBoxMonNickname(relearner->msgFormat, 0, Mon_GetBoxMon(relearner->args->mon));
     StringExpandPlaceholders(relearner->msgFormat, relearner->string, format);
     MoveRelearner_PrintString(relearner, 12, 0, MAKE_TEXT_COLOR(1, 2, 0), 0, 4);
@@ -746,11 +747,11 @@ void MoveRelearner_PrintStaticTexts(MoveRelearner *relearner) {
     }
     ScheduleWindowCopyToVram(&relearner->windows[13]);
 
-    ReadMsgDataIntoString(relearner->msgData, 37, format); // species name
+    ReadMsgDataIntoString(relearner->msgData, msg_0747_00037, format); // species name
     BufferBoxMonSpeciesName(relearner->msgFormat, 0, boxMon);
     StringExpandPlaceholders(relearner->msgFormat, relearner->string, format);
     AddTextPrinterParameterizedWithColor(&relearner->windows[14], 0, relearner->string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
-    ReadMsgDataIntoString(relearner->msgData, 38, format); // "Lv. {0}"
+    ReadMsgDataIntoString(relearner->msgData, msg_0747_00038, format); // "Lv. {0}"
     BufferIntegerAsString(relearner->msgFormat, 0, GetBoxMonData(boxMon, MON_DATA_LEVEL, NULL), 3, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     StringExpandPlaceholders(relearner->msgFormat, relearner->string, format);
     MoveRelearner_PrintString(relearner, 14, 0, MAKE_TEXT_COLOR(1, 2, 0), 1, 16);
@@ -829,7 +830,7 @@ void MoveRelearner_InitMoveList(MoveRelearner *relearner) {
         if (move != 0xFFFF) {
             ListMenuItems_AppendFromMsgData(relearner->moveList, moveNames, move, move);
         } else {
-            ListMenuItems_AppendFromMsgData(relearner->moveList, relearner->msgData, 32, -2);
+            ListMenuItems_AppendFromMsgData(relearner->moveList, relearner->msgData, msg_0747_00032, -2);
             break;
         }
     }
@@ -857,17 +858,17 @@ void MoveRelearner_PrintMoveInfo(MoveRelearner *relearner, s32 move) {
         // move is passed without truncation to u16: the original callee prototype took it as u32
         value = ((u32(*)(u32, MoveAttr))GetMoveAttr)(move, MOVEATTR_POWER);
         if (value <= 1) {
-            ReadMsgDataIntoString(relearner->msgData, 33, relearner->string); // "---"
+            ReadMsgDataIntoString(relearner->msgData, msg_0747_00033, relearner->string); // "---"
         } else {
-            MoveRelearner_FormatNumber(relearner, 29, value, 3, PRINTING_MODE_LEFT_ALIGN);
+            MoveRelearner_FormatNumber(relearner, msg_0747_00029, value, 3, PRINTING_MODE_LEFT_ALIGN);
         }
         MoveRelearner_PrintString(relearner, 3, 0, MAKE_TEXT_COLOR(1, 2, 0), 1, 0);
 
         value = ((u32(*)(u32, MoveAttr))GetMoveAttr)(move, MOVEATTR_ACCURACY);
         if (value == 0) {
-            ReadMsgDataIntoString(relearner->msgData, 33, relearner->string); // "---"
+            ReadMsgDataIntoString(relearner->msgData, msg_0747_00033, relearner->string); // "---"
         } else {
-            MoveRelearner_FormatNumber(relearner, 30, value, 3, PRINTING_MODE_LEFT_ALIGN);
+            MoveRelearner_FormatNumber(relearner, msg_0747_00030, value, 3, PRINTING_MODE_LEFT_ALIGN);
         }
         MoveRelearner_PrintString(relearner, 4, 0, MAKE_TEXT_COLOR(1, 2, 0), 1, 0);
 

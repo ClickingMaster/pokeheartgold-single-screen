@@ -219,8 +219,8 @@ void PokepicAnimManager_StartAnim(void *managerArg, void *picArg, struct Pokepic
     mgr->anims[index].waitPaletteFade = 0;
     mgr->anims[index].task = SysTask_CreateOnMainQueue(PokepicScriptAnim_Task, &mgr->anims[index], 0);
     mgr->anims[index].delay = delay;
-    mgr->anims[index].baseX = Pokepic_GetAttr(pic, 0);
-    mgr->anims[index].baseY = Pokepic_GetAttr(pic, 1);
+    mgr->anims[index].baseX = Pokepic_GetAttr(pic, POKEPIC_X);
+    mgr->anims[index].baseY = Pokepic_GetAttr(pic, POKEPIC_Y);
     mgr->anims[index].x = 0;
     mgr->anims[index].y = 0;
     mgr->anims[index].dx = 0;
@@ -455,7 +455,7 @@ u32 PokepicScriptAnim_Compare(const s32 *a, const s32 *b) {
 }
 
 void PokepicScriptAnim_AdjustYForScale(PokepicScriptAnim *anim) {
-    Pokepic_AddAttr(anim->pic, 1, -anim->scaleY / 8);
+    Pokepic_AddAttr(anim->pic, POKEPIC_Y, -anim->scaleY / 8);
 }
 
 void PokepicScriptAnimCmd_End(PokepicScriptAnim *anim) {
@@ -469,12 +469,12 @@ void PokepicScriptAnimCmd_Yield(PokepicScriptAnim *anim) {
 }
 
 void PokepicScriptAnimCmd_ResetTransform(PokepicScriptAnim *anim) {
-    Pokepic_SetAttr(anim->pic, 0, anim->baseX);
-    Pokepic_SetAttr(anim->pic, 1, anim->baseY);
-    Pokepic_SetAttr(anim->pic, 9, 0);
-    Pokepic_SetAttr(anim->pic, 10, 0);
-    Pokepic_SetAttr(anim->pic, 12, 0x100);
-    Pokepic_SetAttr(anim->pic, 13, 0x100);
+    Pokepic_SetAttr(anim->pic, POKEPIC_X, anim->baseX);
+    Pokepic_SetAttr(anim->pic, POKEPIC_Y, anim->baseY);
+    Pokepic_SetAttr(anim->pic, POKEPIC_ZROT, 0);
+    Pokepic_SetAttr(anim->pic, POKEPIC_XPIVOT, 0);
+    Pokepic_SetAttr(anim->pic, POKEPIC_AFFINEW, 0x100);
+    Pokepic_SetAttr(anim->pic, POKEPIC_AFFINEH, 0x100);
 }
 
 void PokepicScriptAnimCmd_CopyVar(PokepicScriptAnim *anim) {
@@ -714,17 +714,17 @@ void PokepicScriptAnimCmd_SetOrAddTransform(PokepicScriptAnim *anim) {
 
 void PokepicScriptAnimCmd_ApplyPosition(PokepicScriptAnim *anim) {
     if (anim->reverseX != 0) {
-        Pokepic_SetAttr(anim->pic, 0, anim->baseX - (anim->x + anim->dx));
+        Pokepic_SetAttr(anim->pic, POKEPIC_X, anim->baseX - (anim->x + anim->dx));
     } else {
-        Pokepic_SetAttr(anim->pic, 0, anim->baseX + anim->x + anim->dx);
+        Pokepic_SetAttr(anim->pic, POKEPIC_X, anim->baseX + anim->x + anim->dx);
     }
-    Pokepic_SetAttr(anim->pic, 1, anim->baseY + anim->y + anim->dy);
+    Pokepic_SetAttr(anim->pic, POKEPIC_Y, anim->baseY + anim->y + anim->dy);
 }
 
 void PokepicScriptAnimCmd_ApplyTransform(PokepicScriptAnim *anim) {
-    Pokepic_SetAttr(anim->pic, 12, anim->scaleX + 0x100);
-    Pokepic_SetAttr(anim->pic, 13, anim->scaleY + 0x100);
-    Pokepic_SetAttr(anim->pic, 9, (u16)anim->rotation);
+    Pokepic_SetAttr(anim->pic, POKEPIC_AFFINEW, anim->scaleX + 0x100);
+    Pokepic_SetAttr(anim->pic, POKEPIC_AFFINEH, anim->scaleY + 0x100);
+    Pokepic_SetAttr(anim->pic, POKEPIC_ZROT, (u16)anim->rotation);
     if (anim->scaleMode == 0x1b) {
         if (anim->scaleY < 0) {
             PokepicScriptAnim_AdjustYForScale(anim);

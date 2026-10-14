@@ -7,6 +7,7 @@
 #include "constants/species.h"
 
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0181.h"
 
 #include "bg_window.h"
 #include "filesystem.h"
@@ -404,7 +405,7 @@ void HallOfFameShowcase_InitWindows(HallOfFameShowcase *showcase) {
         AddWindow(showcase->bgConfig, &showcase->windows[i], &sShowcaseWindowTemplates[i]);
     }
     FillWindowPixelBuffer(&showcase->windows[16], 0);
-    ReadMsgDataIntoString(showcase->msgData, 6, showcase->stringBuf);
+    ReadMsgDataIntoString(showcase->msgData, msg_0181_00006, showcase->stringBuf);
     width = FontID_String_GetWidth(4, showcase->stringBuf, 0);
     AddTextPrinterParameterizedWithColor(&showcase->windows[16], 4, showcase->stringBuf, 24 - width / 2, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 1, 0), NULL);
     CopyWindowPixelsToVram_TextMode(&showcase->windows[16]);
@@ -625,7 +626,7 @@ void HallOfFameShowcase_ChangeRecord(HallOfFameShowcase *showcase, int delta) {
 
     window = &showcase->windows[page.windowIndex];
     FillWindowPixelBuffer(window, 0);
-    ReadMsgDataIntoString(showcase->msgData, 0, showcase->stringBuf);
+    ReadMsgDataIntoString(showcase->msgData, msg_0181_00000, showcase->stringBuf);
     BufferIntegerAsString(showcase->msgFormat, 0, Save_HOF_TranslateRecordIdx(showcase->hallOfFame, showcase->record), 4, PRINTING_MODE_LEFT_ALIGN, TRUE);
     Save_HOF_GetClearDate(showcase->hallOfFame, showcase->record, &page.date);
     BufferIntegerAsString(showcase->msgFormat, 1, page.date.year + 2000, 4, PRINTING_MODE_LEFT_ALIGN, TRUE);
@@ -658,20 +659,20 @@ static inline void HallOfFameShowcase_PrintMonDetail(HallOfFameShowcase *showcas
     AddTextPrinterParameterizedWithColor(&showcase->windows[firstWindow + 1], 0, showcase->stringBuf, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 2, 0), NULL);
     if (showcase->mon.species != SPECIES_NIDORAN_F && showcase->mon.species != SPECIES_NIDORAN_M) {
         if (gender == MON_MALE) {
-            ReadMsgDataIntoString(showcase->msgData, 3, showcase->stringBuf2);
+            ReadMsgDataIntoString(showcase->msgData, msg_0181_00003, showcase->stringBuf2);
             width = FontID_String_GetWidth(0, showcase->stringBuf, 0);
             AddTextPrinterParameterizedWithColor(&showcase->windows[firstWindow + 1], 0, showcase->stringBuf2, width + 8, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 2, 0), NULL);
         } else if (gender == MON_FEMALE) {
-            ReadMsgDataIntoString(showcase->msgData, 4, showcase->stringBuf2);
+            ReadMsgDataIntoString(showcase->msgData, msg_0181_00004, showcase->stringBuf2);
             width = FontID_String_GetWidth(0, showcase->stringBuf, 0);
             AddTextPrinterParameterizedWithColor(&showcase->windows[firstWindow + 1], 0, showcase->stringBuf2, width + 8, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 2, 0), NULL);
         }
     }
-    ReadMsgDataIntoString(showcase->msgData, 1, showcase->stringBuf);
+    ReadMsgDataIntoString(showcase->msgData, msg_0181_00001, showcase->stringBuf);
     BufferIntegerAsString(showcase->msgFormat, 0, showcase->mon.level, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
     StringExpandPlaceholders(showcase->msgFormat, showcase->stringBuf2, showcase->stringBuf);
     AddTextPrinterParameterizedWithColor(&showcase->windows[firstWindow + 1], 0, showcase->stringBuf2, 0, 16, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 2, 0), NULL);
-    ReadMsgDataIntoString(showcase->msgData, 2, showcase->stringBuf);
+    ReadMsgDataIntoString(showcase->msgData, msg_0181_00002, showcase->stringBuf);
     AddTextPrinterParameterizedWithColor(&showcase->windows[firstWindow + 2], 0, showcase->stringBuf, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 2, 0), NULL);
     width = FontID_String_GetWidth(0, showcase->stringBuf, 0);
     AddTextPrinterParameterizedWithColor(&showcase->windows[firstWindow + 2], 0, showcase->mon.otname, width, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 2, 0), NULL);

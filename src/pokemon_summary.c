@@ -123,7 +123,7 @@ BOOL PokemonSummary_Main(OverlayManager *manager, int *state) {
     switch (*state) {
     case 0:
         BeginAppScreenFade(0, HEAP_ID_19);
-        Pokepic_SetAttr(summary->pokepic, 6, 0);
+        Pokepic_SetAttr(summary->pokepic, POKEPIC_VANISHED, 0);
         *state = 1;
         break;
     case 1:
@@ -189,7 +189,7 @@ BOOL PokemonSummary_Main(OverlayManager *manager, int *state) {
         }
         break;
     case 19:
-        Pokepic_SetAttr(summary->pokepic, 6, 0);
+        Pokepic_SetAttr(summary->pokepic, POKEPIC_VANISHED, 0);
         *state = 2;
         break;
     case 20:

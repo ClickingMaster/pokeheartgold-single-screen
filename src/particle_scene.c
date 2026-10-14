@@ -46,7 +46,7 @@ GF3DVramMan *ParticleScene_CreateVramMan(enum HeapID heapID) {
 }
 
 void ParticleScene_Setup3D(void) {
-    GfGfx_EngineATogglePlanes(1, 1);
+    GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
     G2_SetBG0Priority(1);
     G3X_SetShading((GXShading)0);
     G3X_AntiAlias(TRUE);

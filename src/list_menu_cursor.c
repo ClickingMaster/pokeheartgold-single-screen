@@ -44,6 +44,6 @@ void ListMenuCursorSetColor(struct ListMenuCursor *cursor_, u32 color) {
 
 void ListMenuUpdateCursorObj(struct ListMenuCursor *cursor_, Window *window, u8 x, u8 y) {
     ListMenuCursor *cursor = cursor_;
-    AddTextPrinterParameterizedWithColor(window, 0, cursor->string, x, y, 0xFF, cursor->color, NULL);
+    AddTextPrinterParameterizedWithColor(window, 0, cursor->string, x, y, TEXT_SPEED_NOTRANSFER, cursor->color, NULL);
     CopyWindowPixelsToVram_TextMode(window);
 }

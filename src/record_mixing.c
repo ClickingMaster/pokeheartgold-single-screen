@@ -5,6 +5,7 @@
 #include "constants/sndseq.h"
 
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0422.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -472,7 +473,7 @@ void RecordMixing_InitResources(RecordMixingApp *app, NARC *narc) {
     app->messageText = String_New(180, HEAP_ID_50);
     app->titleText = String_New(40, HEAP_ID_50);
     app->state = 0;
-    ReadMsgDataIntoString(app->msgData, 17, app->titleText);
+    ReadMsgDataIntoString(app->msgData, msg_0422_00017, app->titleText);
     RecordMixing_LoadAvatarGraphics(app, narc);
     app->avatarPalette = UnionRoom_LoadAvatarPalette(HEAP_ID_50);
     app->flash.active = 0;
@@ -614,7 +615,7 @@ void RecordMixing_AddWindows(RecordMixingApp *app, OverlayManager *unused) {
     AddWindowParameterized(app->bgConfig, &app->buttonWindows[1], GF_BG_LYR_MAIN_0, 24, 21, 8, 2, 9, 0x133);
     FillWindowPixelBuffer(&app->buttonWindows[1], 0);
     AddWindowParameterized(app->bgConfig, &app->titleWindow, GF_BG_LYR_SUB_0, 3, 1, 26, 2, 9, 1);
-    RecordMixing_PrintCenteredString(&app->titleWindow, app->titleText, 0);
+    RecordMixing_PrintCenteredString(&app->titleWindow, app->titleText, TEXT_SPEED_INSTANT);
     AddWindowParameterized(app->bgConfig, &app->memberListWindow, GF_BG_LYR_SUB_0, 8, 7, 16, 11, 9, 0x35);
     FillWindowPixelBuffer(&app->memberListWindow, 0);
     RecordMixing_PrintMemberList(&app->memberListWindow, 0, 0x10300, app);
@@ -640,10 +641,10 @@ int RecordMixing_State_PrintGroupPrompt(RecordMixingApp *app, int state) {
     CommState_SetErrorWatch(0, 1);
     if (Comm_GetLocalNetId() == 0) {
         if (Comm_CountConnected() >= 2) {
-            RecordMixing_PrintMessage(app, 2, FALSE);
+            RecordMixing_PrintMessage(app, msg_0422_00002, FALSE);
         }
     } else {
-        RecordMixing_PrintMessage(app, 8, FALSE);
+        RecordMixing_PrintMessage(app, msg_0422_00008, FALSE);
     }
     RecordMixing_SetStateAfterText(app, 3);
     return state;
@@ -705,7 +706,7 @@ void RecordMixing_HandleInput(RecordMixingApp *app) {
         if (!Comm_GetLocalNetId()) {
             if (app->participantCount == RecordMixing_CountMembers() && app->leavingMask == 0) {
                 packet.send[2] = 1;
-                RecordMixing_PrintMessage(app, 3, FALSE);
+                RecordMixing_PrintMessage(app, msg_0422_00003, FALSE);
                 RecordMixing_SetStateAfterText(app, 22);
                 Comm_SendCommand(117, &packet.send[2], 1);
                 RecordMixing_UpdateMaxEntries(app, 0);
@@ -719,7 +720,7 @@ void RecordMixing_HandleInput(RecordMixingApp *app) {
     } else if ((gSystem.newKeys & PAD_BUTTON_B) || button == 2) {
         if (Comm_GetLocalNetId()) {
             if (app->leaderJoinPending == 0) {
-                RecordMixing_PrintMessage(app, 4, FALSE);
+                RecordMixing_PrintMessage(app, msg_0422_00004, FALSE);
                 RecordMixing_SetStateAfterText(app, 4);
                 PlaySE(SEQ_SE_GS_GEARCANCEL);
             } else if (app->buttonHighlightTimer < 0) {
@@ -729,7 +730,7 @@ void RecordMixing_HandleInput(RecordMixingApp *app) {
         } else {
             if (app->participantCount == Comm_CountConnected() && app->leavingMask == 0) {
                 packet.send[1] = 1;
-                RecordMixing_PrintMessage(app, 4, FALSE);
+                RecordMixing_PrintMessage(app, msg_0422_00004, FALSE);
                 RecordMixing_SetStateAfterText(app, 4);
                 Comm_SendCommand(117, &packet.send[1], 1);
                 RecordMixing_UpdateMaxEntries(app, 0);
@@ -877,7 +878,7 @@ int RecordMixing_State_HandleCancelYesNo(RecordMixingApp *app, int state) {
             RecordMixing_SetStateAfterText(app, 0);
         } else if (Comm_GetLocalNetId() == 0) {
             RecordMixing_SetStateAfterText(app, 11);
-            RecordMixing_PrintMessage(app, 14, FALSE);
+            RecordMixing_PrintMessage(app, msg_0422_00014, FALSE);
         } else {
             MI_CpuFill8(data, 0, 4);
             data[2] = 0;
@@ -981,8 +982,8 @@ int RecordMixing_State_SendStartMixing(RecordMixingApp *app, int state) {
 }
 
 void RecordMixing_StartFlash(RecordMixingApp *app) {
-    ReadMsgDataIntoString(app->msgData, 18, app->titleText);
-    RecordMixing_PrintCenteredString(&app->titleWindow, app->titleText, 0);
+    ReadMsgDataIntoString(app->msgData, msg_0422_00018, app->titleText);
+    RecordMixing_PrintCenteredString(&app->titleWindow, app->titleText, TEXT_SPEED_INSTANT);
     Sprite_SetAnimCtrlSeq(app->playerSprite, 37);
     app->flash.active = 1;
 }
@@ -1005,7 +1006,7 @@ int RecordMixing_State_MergeRecords(RecordMixingApp *app, int state) {
 
 int RecordMixing_State_StartSave(RecordMixingApp *app, int state) {
     gSystem.softResetDisabled = TRUE;
-    GameStats_AddScore(app->args->gameStats, 19);
+    GameStats_AddScore(app->args->gameStats, SCORE_EVENT_RECORDS_MIXED);
     Comm_InitSyncedSave(&app->saveState);
     app->state = 28;
     return state;
@@ -1017,7 +1018,7 @@ int RecordMixing_State_Save(RecordMixingApp *app, int state) {
     }
     if (Comm_SyncedSave(app->args->saveData, 2, (u32 *)&app->saveState)) {
         StopSE(SEQ_SE_DP_F209, 8);
-        RecordMixing_PrintMessage(app, 13, FALSE);
+        RecordMixing_PrintMessage(app, msg_0422_00013, FALSE);
         RecordMixing_SetStateAfterText(app, 29);
         Sprite_SetAnimCtrlSeq(app->playerSprite, 0);
         app->flash.active = 0;
@@ -1036,7 +1037,7 @@ int RecordMixing_State_WaitAfterSave(RecordMixingApp *app, int state) {
 }
 
 int RecordMixing_State_PrintCanceled(RecordMixingApp *app, int state) {
-    RecordMixing_PrintMessage(app, 5, FALSE);
+    RecordMixing_PrintMessage(app, msg_0422_00005, FALSE);
     RecordMixing_SetStateAfterText(app, 10);
     RecordMixing_UpdateDummy(app);
     return state;
@@ -1094,11 +1095,11 @@ int RecordMixing_State_HandleDisbandYesNo(RecordMixingApp *app, int state) {
 
 int RecordMixing_State_PrintDisband(RecordMixingApp *app, int state) {
     if (Comm_GetLocalNetId() == 0) {
-        RecordMixing_PrintMessage(app, 5, FALSE);
+        RecordMixing_PrintMessage(app, msg_0422_00005, FALSE);
     } else {
         PlayerProfile *leader = CommPlayerInfo_GetProfile(0);
         BufferPlayersName(app->msgFmt, 0, leader);
-        RecordMixing_PrintMessage(app, 16, FALSE);
+        RecordMixing_PrintMessage(app, msg_0422_00016, FALSE);
     }
     RecordMixing_SetStateAfterText(app, 14);
     app->counter = 0;
@@ -1134,7 +1135,7 @@ int RecordMixing_State_WaitExitSync(RecordMixingApp *app, int state) {
 
 int RecordMixing_State_PrintMemberUnavailable(RecordMixingApp *app, int state) {
     if (RecordMixing_IsPrinterDone(app->printerId) != FALSE) {
-        RecordMixing_PrintMessage(app, 9, FALSE);
+        RecordMixing_PrintMessage(app, msg_0422_00009, FALSE);
     }
     app->state = 18;
     RecordMixing_UpdateDummy(app);
@@ -1159,7 +1160,7 @@ int RecordMixing_State_PrintMemberLeft(RecordMixingApp *app, int state) {
     if (app->printerId != 0xFF && RecordMixing_IsPrinterDone(app->printerId) == FALSE) {
         RemoveTextPrinter((u8)app->printerId);
     }
-    RecordMixing_PrintMessage(app, 15, TRUE);
+    RecordMixing_PrintMessage(app, msg_0422_00015, TRUE);
     app->state = 20;
     if (Comm_GetLocalNetId() == 0) {
         RecordMixing_UpdateMaxEntries(app, 0);
@@ -1219,7 +1220,7 @@ void RecordMixing_SetStateFromLink(RecordMixingApp *app, int state, int netId) {
         }
         RecordMixing_SetButtonState(app, 1, 2);
         ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_1);
-        RecordMixing_PrintMessage(app, 12, FALSE);
+        RecordMixing_PrintMessage(app, msg_0422_00012, FALSE);
         RecordMixing_HideYesNo(app);
         break;
     case 19:
@@ -1295,14 +1296,14 @@ void RecordMixing_PrintButtons(RecordMixingApp *app) {
 
     if (!Comm_GetLocalNetId()) {
         RecordMixing_SetButtonState(app, 0, 0);
-        string = NewString_ReadMsgData(app->msgData, 21);
+        string = NewString_ReadMsgData(app->msgData, msg_0422_00021);
         x = 64 - FontID_String_GetWidth(4, string, 0);
         AddTextPrinterParameterizedWithColor(&app->buttonWindows[0], 4, string, x / 2, 0, TEXT_SPEED_INSTANT, 0x40100, NULL);
         String_Delete(string);
     }
     app->buttonHighlightTimer = -1;
     RecordMixing_SetButtonState(app, 1, 0);
-    string = NewString_ReadMsgData(app->msgData, 22);
+    string = NewString_ReadMsgData(app->msgData, msg_0422_00022);
     x = 64 - FontID_String_GetWidth(4, string, 0);
     AddTextPrinterParameterizedWithColor(&app->buttonWindows[1], 4, string, x / 2, 0, TEXT_SPEED_INSTANT, 0x40100, NULL);
     String_Delete(string);
@@ -1362,7 +1363,7 @@ BOOL RecordMixing_PrintMemberList(Window *window, int unused, u32 color, RecordM
             String *idText;
             PlayerName_FlatToString(memberWalk->members[0].cur, nameWalk->memberNames[0]);
             BufferIntegerAsString(app->msgFmt, 0, id, 5, PRINTING_MODE_LEADING_ZEROS, TRUE);
-            idText = ReadMsgData_ExpandPlaceholders(app->msgFmt, app->msgData, 1, HEAP_ID_50);
+            idText = ReadMsgData_ExpandPlaceholders(app->msgFmt, app->msgData, msg_0422_00001, HEAP_ID_50);
             if (localId == i) {
                 AddTextPrinterParameterizedWithColor(window, 0, nameWalk->memberNames[0], 5, y, TEXT_SPEED_NOTRANSFER, 0x20300, NULL);
                 AddTextPrinterParameterizedWithColor(window, 0, idText, 70, y, TEXT_SPEED_NOTRANSFER, 0x20300, NULL);

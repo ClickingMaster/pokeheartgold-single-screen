@@ -3,6 +3,9 @@
 #include "constants/sndseq.h"
 
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0778.h"
+#include "msgdata/msg/msg_0799.h"
+#include "msgdata/msg/msg_0800.h"
 #include "nnsys/fnd/expheap.h"
 
 #include "bg_window.h"
@@ -595,7 +598,7 @@ int NintendoWfcUnused_SessionInit(NintendoWfcUnused *wfc) {
     wfc->waitingIcon = NULL;
     if (DWC_CheckInet() == 0) {
         if (wfc->args->connectNow != 0) {
-            NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataWfc, 1, 1, 0xF0F);
+            NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataWfc, msg_0778_00001, 1, 0xF0F);
             NintendoWfcUnused_SetState(wfc, 47, 2);
             NintendoWfcUnused_ShowWaitingIcon(wfc);
         } else {
@@ -642,21 +645,21 @@ int NintendoWfcUnused_SessionExit(NintendoWfcUnused *wfc) {
 
 void NintendoWfcUnused_InitBgs(BgConfig *bgConfig) {
     BgTemplate main0 = sNintendoWfcUnusedBgTemplate_Main0;
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &main0, 0);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &main0, GF_BG_TYPE_TEXT);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, FALSE);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
     {
         BgTemplate main1 = sNintendoWfcUnusedBgTemplate_Main1;
-        InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &main1, 0);
+        InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &main1, GF_BG_TYPE_TEXT);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, FALSE);
         {
             BgTemplate sub0 = sNintendoWfcUnusedBgTemplate_Sub0;
-            InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &sub0, 0);
+            InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &sub0, GF_BG_TYPE_TEXT);
             GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, FALSE);
             BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
             {
                 BgTemplate sub1 = sNintendoWfcUnusedBgTemplate_Sub1;
-                InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &sub1, 0);
+                InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &sub1, GF_BG_TYPE_TEXT);
             }
         }
     }
@@ -794,7 +797,7 @@ void NintendoWfcUnused_InitStrings(NintendoWfcUnused *wfc) {
     wfc->msgString = String_New(180, HEAP_ID_150);
     wfc->roomString = String_New(4, HEAP_ID_150);
     wfc->rankString = String_New(3, HEAP_ID_150);
-    wfc->titleString = NewString_ReadMsgData(wfc->msgDataTower, 10);
+    wfc->titleString = NewString_ReadMsgData(wfc->msgDataTower, msg_0799_00010);
     wfc->errorString = String_New(256, HEAP_ID_150);
 }
 
@@ -807,7 +810,7 @@ void NintendoWfcUnused_FreeStrings(NintendoWfcUnused *wfc) {
 }
 
 int NintendoWfcUnused_AskConnect(NintendoWfcUnused *wfc) {
-    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataError, 17, 1, 0xF0F);
+    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataError, msg_0800_00017, 1, 0xF0F);
     NintendoWfcUnused_SetState(wfc, 48, 1);
     return 3;
 }
@@ -820,7 +823,7 @@ int NintendoWfcUnused_HandleConnectChoice(NintendoWfcUnused *wfc) {
             NintendoWfcUnused_SetNextMode(wfc, 0, 0);
             wfc->state = 46;
         } else {
-            NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataWfc, 1, 1, 0xF0F);
+            NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataWfc, msg_0778_00001, 1, 0xF0F);
             NintendoWfcUnused_SetState(wfc, 47, 2);
             NintendoWfcUnused_ShowWaitingIcon(wfc);
         }
@@ -829,7 +832,7 @@ int NintendoWfcUnused_HandleConnectChoice(NintendoWfcUnused *wfc) {
 }
 
 int NintendoWfcUnused_AskLogOut(NintendoWfcUnused *wfc) {
-    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataWfc, 12, 1, 0xF0F);
+    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataWfc, msg_0778_00012, 1, 0xF0F);
     NintendoWfcUnused_SetState(wfc, 48, 52);
     return 3;
 }
@@ -1191,7 +1194,7 @@ int NintendoWfcUnused_WaitRoomCount(NintendoWfcUnused *wfc) {
 #pragma force_active reset
 
 int NintendoWfcUnused_AskChallengeRoom(NintendoWfcUnused *wfc) {
-    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, 0, 1, 0xF0F);
+    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, msg_0799_00000, 1, 0xF0F);
     NintendoWfcUnused_SetState(wfc, 47, 14);
     return 3;
 }
@@ -1245,14 +1248,14 @@ int NintendoWfcUnused_HandleChallengeRoomInput(NintendoWfcUnused *wfc) {
 int NintendoWfcUnused_PrintReceivingTrainers(NintendoWfcUnused *wfc) {
     BufferIntegerAsString(wfc->msgFormat, 0, wfc->room, 3, PRINTING_MODE_LEADING_ZEROS, TRUE);
     BufferIntegerAsString(wfc->msgFormat, 1, wfc->rank, 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
-    NintendoWfcUnused_PrintFormattedMessage(wfc, wfc->msgDataTower, 1, 1, 0xF0F);
+    NintendoWfcUnused_PrintFormattedMessage(wfc, wfc->msgDataTower, msg_0799_00001, 1, 0xF0F);
     NintendoWfcUnused_SetState(wfc, 47, 17);
     MIi_CpuClearFast(0, (u32 *)wfc->downloadBuffer, sizeof(wfc->downloadBuffer));
     return 3;
 }
 
 int NintendoWfcUnused_PrintRoomUnavailable(NintendoWfcUnused *wfc) {
-    NintendoWfcUnused_PrintFormattedMessage(wfc, wfc->msgDataTower, 2, 1, 0xF0F);
+    NintendoWfcUnused_PrintFormattedMessage(wfc, wfc->msgDataTower, msg_0799_00002, 1, 0xF0F);
     NintendoWfcUnused_SetState(wfc, 47, 13);
     return 3;
 }
@@ -1328,7 +1331,7 @@ int NintendoWfcUnused_WaitTrainersDownload(NintendoWfcUnused *wfc) {
 #pragma force_active reset
 
 int NintendoWfcUnused_PrintTrainersReceived(NintendoWfcUnused *wfc) {
-    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, 3, 1, 0xF0F);
+    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, msg_0799_00003, 1, 0xF0F);
     NintendoWfcUnused_SetState(wfc, 47, 45);
     NintendoWfcUnused_HideWaitingIcon(wfc);
     wfc->args->incomplete = 0;
@@ -1336,7 +1339,7 @@ int NintendoWfcUnused_PrintTrainersReceived(NintendoWfcUnused *wfc) {
 }
 
 int NintendoWfcUnused_PrintSendingRecord(NintendoWfcUnused *wfc) {
-    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, 7, 1, 0xF0F);
+    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, msg_0799_00007, 1, 0xF0F);
     NintendoWfcUnused_SetState(wfc, 47, 26);
     NintendoWfcUnused_ShowWaitingIcon(wfc);
     return 3;
@@ -1409,7 +1412,7 @@ int NintendoWfcUnused_WaitUpload(NintendoWfcUnused *wfc) {
 #pragma force_active reset
 
 int NintendoWfcUnused_PrintRecordSent(NintendoWfcUnused *wfc) {
-    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, 8, 1, 0xF0F);
+    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, msg_0799_00008, 1, 0xF0F);
     NintendoWfcUnused_SetState(wfc, 47, 45);
     NintendoWfcUnused_HideWaitingIcon(wfc);
     wfc->args->incomplete = 0;
@@ -1417,7 +1420,7 @@ int NintendoWfcUnused_PrintRecordSent(NintendoWfcUnused *wfc) {
 }
 
 int NintendoWfcUnused_AskLeadersRank(NintendoWfcUnused *wfc) {
-    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, 5, 1, 0xF0F);
+    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, msg_0799_00005, 1, 0xF0F);
     NintendoWfcUnused_SetState(wfc, 47, 30);
     return 3;
 }
@@ -1465,7 +1468,7 @@ int NintendoWfcUnused_HandleLeadersRankInput(NintendoWfcUnused *wfc) {
 #pragma force_active reset
 
 int NintendoWfcUnused_AskLeadersRoom(NintendoWfcUnused *wfc) {
-    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, 6, 1, 0xF0F);
+    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, msg_0799_00006, 1, 0xF0F);
     NintendoWfcUnused_SetState(wfc, 47, 33);
     return 3;
 }
@@ -1515,7 +1518,7 @@ int NintendoWfcUnused_HandleLeadersRoomInput(NintendoWfcUnused *wfc) {
 int NintendoWfcUnused_PrintReceivingLeaders(NintendoWfcUnused *wfc) {
     BufferIntegerAsString(wfc->msgFormat, 0, wfc->room, 3, PRINTING_MODE_LEADING_ZEROS, TRUE);
     BufferIntegerAsString(wfc->msgFormat, 1, wfc->rank, 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
-    NintendoWfcUnused_PrintFormattedMessage(wfc, wfc->msgDataTower, 1, 1, 0xF0F);
+    NintendoWfcUnused_PrintFormattedMessage(wfc, wfc->msgDataTower, msg_0799_00001, 1, 0xF0F);
     NintendoWfcUnused_SetState(wfc, 47, 36);
     wfc->state = 36;
     return 3;
@@ -1585,7 +1588,7 @@ int NintendoWfcUnused_WaitLeadersDownload(NintendoWfcUnused *wfc) {
 #pragma force_active reset
 
 int NintendoWfcUnused_PrintLeadersReceived(NintendoWfcUnused *wfc) {
-    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, 3, 1, 0xF0F);
+    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, msg_0799_00003, 1, 0xF0F);
     NintendoWfcUnused_SetState(wfc, 47, 45);
     NintendoWfcUnused_HideWaitingIcon(wfc);
     wfc->args->incomplete = 0;
@@ -1612,7 +1615,7 @@ int NintendoWfcUnused_Save(NintendoWfcUnused *wfc) {
 }
 
 int NintendoWfcUnused_AskCancelChallenge(NintendoWfcUnused *wfc) {
-    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, 4, 1, 0xF0F);
+    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, msg_0799_00004, 1, 0xF0F);
     NintendoWfcUnused_SetState(wfc, 48, 22);
     return 3;
 }
@@ -1631,7 +1634,7 @@ int NintendoWfcUnused_HandleCancelChallengeChoice(NintendoWfcUnused *wfc) {
 }
 
 int NintendoWfcUnused_AskCancelDownload(NintendoWfcUnused *wfc) {
-    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, 9, 1, 0xF0F);
+    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, msg_0799_00009, 1, 0xF0F);
     NintendoWfcUnused_SetState(wfc, 48, 24);
     return 3;
 }
@@ -1650,7 +1653,7 @@ int NintendoWfcUnused_HandleCancelDownloadChoice(NintendoWfcUnused *wfc) {
 }
 
 int NintendoWfcUnused_PrintDisconnecting(NintendoWfcUnused *wfc) {
-    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataError, 26, 1, 0xF0F);
+    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataError, msg_0800_00026, 1, 0xF0F);
     NintendoWfcUnused_SetState(wfc, 47, 42);
     return 3;
 }
@@ -1663,7 +1666,7 @@ int NintendoWfcUnused_CloseConnection(NintendoWfcUnused *wfc) {
 }
 
 int NintendoWfcUnused_PrintDisconnected(NintendoWfcUnused *wfc) {
-    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataError, 27, 1, 0xF0F);
+    NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataError, msg_0800_00027, 1, 0xF0F);
     NintendoWfcUnused_SetState(wfc, 49, 46);
     wfc->messageTimer = 0;
     return 3;
@@ -1694,25 +1697,25 @@ int NintendoWfcUnused_UnusedState_HandleYesNo(NintendoWfcUnused *wfc) {
 }
 
 int NintendoWfcUnused_ShowHttpError(NintendoWfcUnused *wfc) {
-    int msgNo = 0;
+    int msgNo = msg_0799_00000;
     switch (wfc->httpResult) {
     case -6:
     case -2:
-        msgNo = 13;
+        msgNo = msg_0799_00013;
         break;
     case 1:
-        msgNo = 11;
+        msgNo = msg_0799_00011;
         break;
     case -1:
     case 2:
-        msgNo = 12;
+        msgNo = msg_0799_00012;
         break;
     case -7:
     case -4:
-        msgNo = 14;
+        msgNo = msg_0799_00014;
         break;
     case -3:
-        msgNo = 15;
+        msgNo = msg_0799_00015;
         break;
     }
     NintendoWfcUnused_HideWaitingIcon(wfc);
@@ -1724,7 +1727,7 @@ int NintendoWfcUnused_ShowHttpError(NintendoWfcUnused *wfc) {
 int NintendoWfcUnused_Disconnect(NintendoWfcUnused *wfc) {
     switch (wfc->subState) {
     case 0:
-        NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, 16, 1, 0xF0F);
+        NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, msg_0799_00016, 1, 0xF0F);
         wfc->subState++;
         break;
     case 1:
@@ -1735,7 +1738,7 @@ int NintendoWfcUnused_Disconnect(NintendoWfcUnused *wfc) {
         }
         break;
     case 2:
-        NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, 17, 1, 0xF0F);
+        NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, msg_0799_00017, 1, 0xF0F);
         wfc->subState++;
         break;
     case 3:
@@ -1827,12 +1830,12 @@ int NintendoWfcUnused_GetAlignedTextX(const Window *window, String *string, int 
 
 void NintendoWfcUnused_PrintAlignedText(Window *window, String *string, int x, int y, int alignment, u32 color) {
     x = NintendoWfcUnused_GetAlignedTextX(window, string, x, alignment, color, 1);
-    AddTextPrinterParameterizedWithColor(window, 1, string, x, y, 0, color, NULL);
+    AddTextPrinterParameterizedWithColor(window, 1, string, x, y, TEXT_SPEED_INSTANT, color, NULL);
 }
 
 void NintendoWfcUnused_PrintAlignedTextSmall(Window *window, String *string, int x, int y, int alignment, u32 color) {
     x = NintendoWfcUnused_GetAlignedTextX(window, string, x, alignment, color, 0);
-    AddTextPrinterParameterizedWithColor(window, 0, string, x, y, 0, color, NULL);
+    AddTextPrinterParameterizedWithColor(window, 0, string, x, y, TEXT_SPEED_INSTANT, color, NULL);
 }
 
 void NintendoWfcUnused_PrintNumber(Window *window, String *string, int number, int digits) {
@@ -1874,7 +1877,7 @@ void NintendoWfcUnused_PrintErrorMessage(NintendoWfcUnused *wfc, int msgNo) {
     StringExpandPlaceholders(wfc->msgFormat, wfc->errorString, string);
     FillWindowPixelBuffer(&wfc->errorWindow, 15);
     DrawFrameAndWindow1(&wfc->errorWindow, TRUE, 31, 11);
-    wfc->textPrinterId = AddTextPrinterParameterized(&wfc->errorWindow, 1, wfc->errorString, 0, 0, 0, NULL);
+    wfc->textPrinterId = AddTextPrinterParameterized(&wfc->errorWindow, 1, wfc->errorString, 0, 0, TEXT_SPEED_INSTANT, NULL);
     String_Delete(string);
 }
 

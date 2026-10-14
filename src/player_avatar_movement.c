@@ -120,7 +120,7 @@ BOOL PlayerAvatar_IsOnCyclingRoadSlope(PlayerAvatar *avatar, int behavior, int v
 
 void PlayerAvatar_MoveControl(PlayerAvatar *avatar, MapLoadManager *mapLoadManager, int direction, u16 keys, u16 heldKeys, int allowTurn) {
     register MapLoadManager *manager = mapLoadManager;
-    if (direction == -1) {
+    if (direction == DIR_NONE) {
         direction = PlayerAvatar_ChooseInputDirection(avatar, keys, heldKeys);
     }
     if (PlayerAvatar_IsReadyToMove(avatar, direction)) {
@@ -153,7 +153,7 @@ int PlayerAvatar_IsReadyToMove(PlayerAvatar *avatar, int direction) {
     if (MapObject_AreBitsSetForMovementScriptInit(mapObject) == TRUE) {
         return TRUE;
     }
-    if (direction == -1) {
+    if (direction == DIR_NONE) {
         return FALSE;
     }
     if (IsWallBumpMovement(MapObject_GetMovementCommand(mapObject)) == TRUE) {
@@ -195,7 +195,7 @@ void PlayerAvatar_PlayTerrainSounds(PlayerAvatar *avatar) {
     object = PlayerAvatar_GetMapObject(avatar);
     behavior = MapObject_GetCurrentMetatileBehavior(object);
     direction = GetMovementDirection(MapObject_GetMovementCommand(object));
-    if (direction == -1) {
+    if (direction == DIR_NONE) {
         previous = behavior;
     } else {
         previous = MapObject_GetMetatileBehaviorInDirection(object, direction);
@@ -235,7 +235,7 @@ void PlayerAvatar_PlayFootstepSound(LocalMapObject *object, PlayerAvatar *avatar
     if (MetatileBehavior_IsVeryTallGrass(current) != FALSE || MetatileBehavior_IsPuddle(current) == TRUE || MetatileBehavior_IsShallowWater(current) == TRUE || MetatileBehavior_IsTallGrass(current) != FALSE) {
         return;
     }
-    if (direction != -1) {
+    if (direction != DIR_NONE) {
         behavior = MapObject_GetTileAttrBits8To14InDirection(object, direction);
     }
     if (gPlayerFootstepSounds[behavior].sequence == SEQ_SE_GS_EDAPAKI) {
@@ -602,7 +602,7 @@ int PlayerAvatar_AdjustMovementDummy(LocalMapObject *mapObject, u8 behavior, int
 // 0: stand, 1: step, 2: turn.
 int PlayerAvatar_GetFootStepKind(PlayerAvatar *avatar, int direction) {
     int facing;
-    if (direction == -1) {
+    if (direction == DIR_NONE) {
         PlayerAvatar_SetMoveState(avatar, AVATAR_MOVE_STATE_NONE);
         return 0;
     }
@@ -771,7 +771,7 @@ int BikeStepKindToMoveState(int stepKind) {
 int PlayerAvatar_GetBikeStepKind(PlayerAvatar *avatar, int direction) {
     int speed = PlayerAvatar_GetSpeed(avatar);
     int facing;
-    if (direction == -1) {
+    if (direction == DIR_NONE) {
         if (speed < 2) {
             PlayerAvatar_SetMoveState(avatar, AVATAR_MOVE_STATE_NONE);
             return 0;
@@ -948,7 +948,7 @@ BOOL MapObject_IsLedgeInDirection(PlayerAvatar *avatar, LocalMapObject *mapObjec
     int z;
     u8 behavior;
 
-    if (direction != -1) {
+    if (direction != DIR_NONE) {
         fieldSystem = MapObject_GetFieldSystem(mapObject);
         x = MapObject_GetXCoord(mapObject) + GetDeltaXByFacingDirection(direction);
         z = MapObject_GetZCoord(mapObject) + GetDeltaYByFacingDirection(direction);
@@ -985,7 +985,7 @@ BOOL MapObject_IsWarpInDirection(PlayerAvatar *avatar, LocalMapObject *mapObject
     int z;
     u8 behavior;
 
-    if (direction != -1) {
+    if (direction != DIR_NONE) {
         fieldSystem = MapObject_GetFieldSystem(mapObject);
         x = MapObject_GetXCoord(mapObject);
         z = MapObject_GetZCoord(mapObject);
@@ -1024,7 +1024,7 @@ BOOL MapObject_IsWaterInDirection(PlayerAvatar *avatar, LocalMapObject *mapObjec
     int z;
     int dz;
     u8 behavior;
-    if (direction != -1) {
+    if (direction != DIR_NONE) {
         fieldSystem = MapObject_GetFieldSystem(mapObject);
         x = MapObject_GetXCoord(mapObject);
         dx = GetDeltaXByFacingDirection(direction);
@@ -1046,7 +1046,7 @@ BOOL PlayerAvatar_IsBikeBlockedInDirection(PlayerAvatar *avatar, LocalMapObject 
     int dz;
     u32 behavior;
 
-    if (direction != -1 && PlayerAvatar_GetState(avatar) == PLAYER_STATE_CYCLING) {
+    if (direction != DIR_NONE && PlayerAvatar_GetState(avatar) == PLAYER_STATE_CYCLING) {
         fieldSystem = MapObject_GetFieldSystem(mapObject);
         x = MapObject_GetXCoord(mapObject);
         dx = GetDeltaXByFacingDirection(direction);
@@ -1080,7 +1080,7 @@ int GetHorizontalDirectionFromKeys(int keys) {
     if (keys & PAD_KEY_RIGHT) {
         return DIR_EAST;
     }
-    return -1;
+    return DIR_NONE;
 }
 
 int GetVerticalDirectionFromKeys(int keys) {
@@ -1090,7 +1090,7 @@ int GetVerticalDirectionFromKeys(int keys) {
     if (keys & PAD_KEY_DOWN) {
         return DIR_SOUTH;
     }
-    return -1;
+    return DIR_NONE;
 }
 
 // With two directions held, keeps the current one until the other changes.
@@ -1101,17 +1101,17 @@ int PlayerAvatar_ChooseInputDirection(PlayerAvatar *avatar, int keys, int heldKe
     int lastHorizontal;
     int lastVertical;
 
-    if (horizontal == -1) {
+    if (horizontal == DIR_NONE) {
         return vertical;
     }
-    if (vertical == -1) {
+    if (vertical == DIR_NONE) {
         return horizontal;
     }
 
     facing = PlayerAvatar_GetNextFacingDirection(avatar);
     lastHorizontal = PlayerAvatar_GetLastHorizontalInput(avatar);
     lastVertical = PlayerAvatar_GetLastVerticalInput(avatar);
-    if (facing != -1) {
+    if (facing != DIR_NONE) {
         if (horizontal == lastHorizontal && vertical == lastVertical) {
             return facing;
         }

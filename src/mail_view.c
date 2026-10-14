@@ -3,6 +3,7 @@
 #include "constants/sndseq.h"
 
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0233.h"
 
 #include "bg_window.h"
 #include "filesystem.h"
@@ -371,7 +372,7 @@ BOOL MailView_ShowEmptyMailWarning(MailView *mailView) {
         DrawFrameAndWindow2(&mailView->windows[5], TRUE, 10, 6);
         FillWindowPixelBuffer(&mailView->windows[5], 0xFF);
         string = String_New(76, mailView->heapID);
-        ReadMsgDataIntoString(mailView->msgData, 2, string);
+        ReadMsgDataIntoString(mailView->msgData, msg_0233_00002, string);
         AddTextPrinterParameterizedWithColor(&mailView->windows[5], 1, string, 0, 0, TEXT_SPEED_INSTANT, MAKE_TEXT_COLOR(1, 2, 15), NULL);
         String_Delete(string);
         break;
@@ -451,7 +452,7 @@ BOOL MailView_ConfirmQuit(MailView *mailView) {
         DrawFrameAndWindow2(&mailView->windows[5], TRUE, 10, 6);
         FillWindowPixelBuffer(&mailView->windows[5], 0xFF);
         string = String_New(76, mailView->heapID);
-        ReadMsgDataIntoString(mailView->msgData, 3, string);
+        ReadMsgDataIntoString(mailView->msgData, msg_0233_00003, string);
         mailView->textPrinterId = AddTextPrinterParameterizedWithColor(&mailView->windows[5], 1, string, 0, 0, mailView->textSpeed, MAKE_TEXT_COLOR(1, 2, 15), NULL);
         String_Delete(string);
         MailView_ResetCursorHighlight(mailView);
@@ -726,7 +727,7 @@ void MailView_LoadBgGraphics(void *data) {
     NNS_G2dGetUnpackedScreenData(mailView->buttonScreenFile, &mailView->buttonScreen);
     NARC_Delete(narc);
 
-    FillBgTilemapRect(mailView->bgConfig, GF_BG_LYR_SUB_0, 0x2001, 0, 0, 32, 32, 17);
+    FillBgTilemapRect(mailView->bgConfig, GF_BG_LYR_SUB_0, 0x2001, 0, 0, 32, 32, TILEMAP_FILL_OVWT_PAL);
     CopyToBgTilemapRect(mailView->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, 32, 24, mailView->bgScreen->rawData, 0, 0, (u8)(mailView->bgScreen->screenWidth >> 3), (u8)(mailView->bgScreen->screenHeight >> 3));
     ScheduleBgTilemapBufferTransfer(mailView->bgConfig, GF_BG_LYR_MAIN_3);
     ScheduleBgTilemapBufferTransfer(mailView->bgConfig, GF_BG_LYR_SUB_0);

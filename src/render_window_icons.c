@@ -205,19 +205,19 @@ void WaitingIcon_Draw(WaitingIcon *icon, int mode) {
     u8 width = GetWindowWidth(icon->window);
     if (mode == 2) {
         BG_LoadCharTilesData(icon->window->bgConfig, bgId, icon->savedTiles, 128, icon->baseTile + 18);
-        FillBgTilemapRect(icon->window->bgConfig, bgId, icon->baseTile + 10, x + width + 1, y + 2, 1, 1, 16);
-        FillBgTilemapRect(icon->window->bgConfig, bgId, icon->baseTile + 11, x + width + 2, y + 2, 1, 1, 16);
-        FillBgTilemapRect(icon->window->bgConfig, bgId, icon->baseTile + 10, x + width + 1, y + 3, 1, 1, 16);
-        FillBgTilemapRect(icon->window->bgConfig, bgId, icon->baseTile + 11, x + width + 2, y + 3, 1, 1, 16);
+        FillBgTilemapRect(icon->window->bgConfig, bgId, icon->baseTile + 10, x + width + 1, y + 2, 1, 1, TILEMAP_FILL_KEEP_PAL);
+        FillBgTilemapRect(icon->window->bgConfig, bgId, icon->baseTile + 11, x + width + 2, y + 2, 1, 1, TILEMAP_FILL_KEEP_PAL);
+        FillBgTilemapRect(icon->window->bgConfig, bgId, icon->baseTile + 10, x + width + 1, y + 3, 1, 1, TILEMAP_FILL_KEEP_PAL);
+        FillBgTilemapRect(icon->window->bgConfig, bgId, icon->baseTile + 11, x + width + 2, y + 3, 1, 1, TILEMAP_FILL_KEEP_PAL);
         BgCommitTilemapBufferToVram(icon->window->bgConfig, bgId);
         return;
     }
     BG_LoadCharTilesData(icon->window->bgConfig, bgId, icon->frameTiles[icon->frame], 128, icon->baseTile + 18);
     if (mode != 0) {
-        FillBgTilemapRect(icon->window->bgConfig, bgId, icon->baseTile + 18, x + width + 1, y + 2, 1, 1, 16);
-        FillBgTilemapRect(icon->window->bgConfig, bgId, icon->baseTile + 19, x + width + 2, y + 2, 1, 1, 16);
-        FillBgTilemapRect(icon->window->bgConfig, bgId, icon->baseTile + 20, x + width + 1, y + 3, 1, 1, 16);
-        FillBgTilemapRect(icon->window->bgConfig, bgId, icon->baseTile + 21, x + width + 2, y + 3, 1, 1, 16);
+        FillBgTilemapRect(icon->window->bgConfig, bgId, icon->baseTile + 18, x + width + 1, y + 2, 1, 1, TILEMAP_FILL_KEEP_PAL);
+        FillBgTilemapRect(icon->window->bgConfig, bgId, icon->baseTile + 19, x + width + 2, y + 2, 1, 1, TILEMAP_FILL_KEEP_PAL);
+        FillBgTilemapRect(icon->window->bgConfig, bgId, icon->baseTile + 20, x + width + 1, y + 3, 1, 1, TILEMAP_FILL_KEEP_PAL);
+        FillBgTilemapRect(icon->window->bgConfig, bgId, icon->baseTile + 21, x + width + 2, y + 3, 1, 1, TILEMAP_FILL_KEEP_PAL);
         BgCommitTilemapBufferToVram(icon->window->bgConfig, bgId);
     }
 }

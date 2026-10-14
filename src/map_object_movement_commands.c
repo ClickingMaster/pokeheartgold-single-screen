@@ -303,7 +303,7 @@ s32 GetMovementDirection(u32 movement) {
             entry = *table;
         } while (entry != NULL);
     }
-    return -1;
+    return DIR_NONE;
 }
 
 BOOL IsMovement56To59(u32 movement) {

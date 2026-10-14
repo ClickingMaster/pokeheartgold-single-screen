@@ -54,25 +54,25 @@ void MapObject_UpdateMovement(LocalMapObject *object) {
 BOOL MapObject_CanUpdateMovement(LocalMapObject *object) {
     u32 flags;
     if (MapObject_CheckSingleMovement(object) == 1) {
-        return 1;
+        return TRUE;
     }
     if (!MapObject_GetFlagsBitsMask(object, (MapObjectFlagBits)(MAPOBJECTFLAG_UNK11 | MAPOBJECTFLAG_UNK12))) {
-        return 1;
+        return TRUE;
     }
     if (MapObject_GetMovement(object) == 0x32) {
-        return 1;
+        return TRUE;
     }
     if (MapObject_GetMovement(object) == 0x30) {
-        return 1;
+        return TRUE;
     }
     flags = MapObject_GetFlags(object);
     if ((flags & (1 << 12)) && !(flags & (1 << 23))) {
-        return 0;
+        return FALSE;
     }
     if ((flags & (2 << 10)) && !MapObject_CheckIgnoreMetatileBehaviors(object)) {
-        return 0;
+        return FALSE;
     }
-    return 1;
+    return TRUE;
 }
 
 void MapObject_UpdateHeightIfFlagged(LocalMapObject *object) {
@@ -314,15 +314,15 @@ void MapObject_UpdateShallowWaterRipple(LocalMapObject *object, u8 behavior, u8 
     if (MetatileBehavior_IsShallowWater(behavior) == 1) {
         if (MapObject_CheckFlag26(object) == 0) {
             ShallowWaterRipple_Spawn(object, 1);
-            MapObject_SetFlag26(object, 1);
+            MapObject_SetFlag26(object, TRUE);
         }
     } else {
-        MapObject_SetFlag26(object, 0);
+        MapObject_SetFlag26(object, FALSE);
     }
 }
 
 void MapObject_ResetShallowWaterRipple(LocalMapObject *object, u8 behavior, u8 prevBehavior, const MapObjectEffectFlags *flags) {
-    MapObject_SetFlag26(object, 0);
+    MapObject_SetFlag26(object, FALSE);
 }
 
 void MapObject_CreateShadowWithSavedBehavior(LocalMapObject *object, u8 behavior, u8 prevBehavior, const MapObjectEffectFlags *flags) {
@@ -497,9 +497,9 @@ void MapObject_CreateReflection(LocalMapObject *object, u8 behavior, u8 prevBeha
                     if (MetatileBehavior_HasReflectiveSurface(behavior) == TRUE) {
                         selected = behavior;
                     } else {
-                        first = MapObject_GetMetatileBehaviorInDirection(object, 1);
-                        second = MapObject_GetMetatileBehaviorInDirection(object, 3);
-                        third = MapObject_GetMetatileBehaviorInDirection(object, 2);
+                        first = MapObject_GetMetatileBehaviorInDirection(object, DIR_SOUTH);
+                        second = MapObject_GetMetatileBehaviorInDirection(object, DIR_EAST);
+                        third = MapObject_GetMetatileBehaviorInDirection(object, DIR_WEST);
                         fourth = MapObject_GetAdjacentTileBehavior(object, 4);
                         fifth = MapObject_GetAdjacentTileBehavior(object, 5);
                         found = FALSE;
@@ -543,7 +543,7 @@ void MapObject_CreateReflection(LocalMapObject *object, u8 behavior, u8 prevBeha
                     if (MetatileBehavior_HasReflectiveSurface(behavior) == TRUE) {
                         selected = behavior;
                     } else {
-                        u8 adjacent = MapObject_GetMetatileBehaviorInDirection(object, 1);
+                        u8 adjacent = MapObject_GetMetatileBehaviorInDirection(object, DIR_SOUTH);
                         if (MetatileBehavior_HasReflectiveSurface(adjacent) == TRUE) {
                             selected = adjacent;
                         }
@@ -569,7 +569,7 @@ void MapObject_CreateReflection(LocalMapObject *object, u8 behavior, u8 prevBeha
                 if (MetatileBehavior_HasReflectiveSurface(behavior) == TRUE) {
                     selected = behavior;
                 } else {
-                    u8 adjacent = MapObject_GetMetatileBehaviorInDirection(object, 1);
+                    u8 adjacent = MapObject_GetMetatileBehaviorInDirection(object, DIR_SOUTH);
                     if (MetatileBehavior_HasReflectiveSurface(adjacent) == TRUE) {
                         selected = adjacent;
                     }
@@ -596,9 +596,9 @@ void MapObject_UpdateReflection(LocalMapObject *object, u8 behavior, u8 prevBeha
         return;
     }
     if (MapObject_GetID(object) == 0xFD && FollowMonObject_IsLarge(object) != 0) {
-        u8 first = MapObject_GetMetatileBehaviorInDirection(object, 1);
-        u8 second = MapObject_GetMetatileBehaviorInDirection(object, 3);
-        u8 third = MapObject_GetMetatileBehaviorInDirection(object, 2);
+        u8 first = MapObject_GetMetatileBehaviorInDirection(object, DIR_SOUTH);
+        u8 second = MapObject_GetMetatileBehaviorInDirection(object, DIR_EAST);
+        u8 third = MapObject_GetMetatileBehaviorInDirection(object, DIR_WEST);
         u8 fourth = MapObject_GetAdjacentTileBehavior(object, 4);
         u8 fifth = MapObject_GetAdjacentTileBehavior(object, 5);
         BOOL found = FALSE;
@@ -618,7 +618,7 @@ void MapObject_UpdateReflection(LocalMapObject *object, u8 behavior, u8 prevBeha
             MapObject_SetFlag24(object, FALSE);
         }
     } else {
-        u8 adjacent = MapObject_GetMetatileBehaviorInDirection(object, 1);
+        u8 adjacent = MapObject_GetMetatileBehaviorInDirection(object, DIR_SOUTH);
         if (MetatileBehavior_HasReflectiveSurface(adjacent) == FALSE) {
             MapObject_SetFlag24(object, FALSE);
         }
@@ -627,9 +627,9 @@ void MapObject_UpdateReflection(LocalMapObject *object, u8 behavior, u8 prevBeha
 
 void MapObject_UpdateOnBridgeFlag(LocalMapObject *object, u8 behavior, u8 prevBehavior, const MapObjectEffectFlags *flags) {
     if (MetatileBehavior_IsBridgeStart(behavior) == 1) {
-        MapObject_SetFlag28(object, 1);
+        MapObject_SetFlag28(object, TRUE);
     } else if (MapObject_CheckFlag28(object) == 1 && MetatileBehavior_IsBridge(behavior) == 0) {
-        MapObject_SetFlag28(object, 0);
+        MapObject_SetFlag28(object, FALSE);
     }
 }
 

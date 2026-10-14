@@ -153,7 +153,7 @@ void PokemonSummary_DrawHpBar(PokemonSummary *summary) {
     fullTile = (u16)(tileBase + 8);
     do {
         u16 tile = pixels >= 8 ? fullTile : (u16)(tileBase + pixels);
-        FillBgTilemapRect(summary->bgConfig, GF_BG_LYR_MAIN_3, tile, (u8)(i + 10), 5, 1, 1, 17);
+        FillBgTilemapRect(summary->bgConfig, GF_BG_LYR_MAIN_3, tile, (u8)(i + 10), 5, 1, 1, TILEMAP_FILL_OVWT_PAL);
         if (pixels < 8) {
             pixels = 0;
         } else {
@@ -858,7 +858,7 @@ void PokemonSummary_DrawForgetConfirm(PokemonSummary *summary, int show) {
 }
 
 void PokemonSummary_ClearForgetButton(PokemonSummary *summary) {
-    FillBgTilemapRect(summary->bgConfig, GF_BG_LYR_SUB_2, 0x3006, 0, 18, 17, 6, 17);
+    FillBgTilemapRect(summary->bgConfig, GF_BG_LYR_SUB_2, 0x3006, 0, 18, 17, 6, TILEMAP_FILL_OVWT_PAL);
     ScheduleBgTilemapBufferTransfer(summary->bgConfig, GF_BG_LYR_SUB_2);
 }
 
@@ -924,14 +924,14 @@ void PokemonSummary_DrawMonButtons(PokemonSummary *summary) {
     if (PokemonSummary_FindNextMon(summary, -1) != -1) {
         BgCellManager_DrawCellAt(summary->cellManager, 5, 24, 5);
     } else {
-        FillBgTilemapRect(summary->bgConfig, GF_BG_LYR_SUB_2, 1, 24, 5, 6, 3, 16);
+        FillBgTilemapRect(summary->bgConfig, GF_BG_LYR_SUB_2, 1, 24, 5, 6, 3, TILEMAP_FILL_KEEP_PAL);
         ScheduleBgTilemapBufferTransfer(summary->bgConfig, GF_BG_LYR_SUB_2);
     }
 
     if (PokemonSummary_FindNextMon(summary, 1) != -1) {
         BgCellManager_DrawCellAt(summary->cellManager, 6, 24, 13);
     } else {
-        FillBgTilemapRect(summary->bgConfig, GF_BG_LYR_SUB_2, 1, 24, 13, 6, 3, 16);
+        FillBgTilemapRect(summary->bgConfig, GF_BG_LYR_SUB_2, 1, 24, 13, 6, 3, TILEMAP_FILL_KEEP_PAL);
         ScheduleBgTilemapBufferTransfer(summary->bgConfig, GF_BG_LYR_SUB_2);
     }
 }

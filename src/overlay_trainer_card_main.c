@@ -4,6 +4,9 @@
 
 #include "constants/sndseq.h"
 
+#include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0727.h"
+
 #include "font.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
@@ -323,12 +326,12 @@ void TrainerCardMain_LoadStrings(TrainerCardMain *cardMain) {
     int i;
 
     FontID_Alloc(4, HEAP_ID_25);
-    cardMain->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 0x2d7, HEAP_ID_25);
+    cardMain->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0727_bin, HEAP_ID_25);
     cardMain->unk_33C8 = String_New(4, HEAP_ID_25);
     cardMain->formattedString = String_New(0x20, HEAP_ID_25);
     cardMain->numberString = String_New(10, HEAP_ID_25);
     cardMain->colonString = String_New(5, HEAP_ID_25);
-    ReadMsgDataIntoString(cardMain->msgData, 11, cardMain->colonString);
+    ReadMsgDataIntoString(cardMain->msgData, msg_0727_00011, cardMain->colonString);
     for (i = 0; i < 3; i++) {
         cardMain->buttonStrings[i] = NewString_ReadMsgData(cardMain->msgData, i + 14);
     }
@@ -443,22 +446,22 @@ void TrainerCardMain_InitBgLayers(BgConfig *bgConfig) {
     modes = sTrainerCardGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     bg7 = sTrainerCardSubBg3Template;
-    InitBgFromTemplate(bgConfig, 7, &bg7, 2);
-    BgClearTilemapBufferAndCommit(bgConfig, 7);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_3, &bg7, GF_BG_TYPE_256x16PLTT);
+    BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_3);
     bg45 = sTrainerCardSubBg01Templates;
-    InitBgFromTemplate(bgConfig, 4, &bg45.templates[0], 0);
-    BgClearTilemapBufferAndCommit(bgConfig, 4);
-    InitBgFromTemplate(bgConfig, 5, &bg45.templates[1], 0);
-    BgClearTilemapBufferAndCommit(bgConfig, 5);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &bg45.templates[0], GF_BG_TYPE_TEXT);
+    BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &bg45.templates[1], GF_BG_TYPE_TEXT);
+    BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
     bg6 = sTrainerCardSubBg2Template;
-    InitBgFromTemplate(bgConfig, 6, &bg6, 2);
-    BgClearTilemapBufferAndCommit(bgConfig, 6);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &bg6, GF_BG_TYPE_256x16PLTT);
+    BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_2);
     bg2 = sTrainerCardMainBg2Template;
-    InitBgFromTemplate(bgConfig, 2, &bg2, 0);
-    BgClearTilemapBufferAndCommit(bgConfig, 2);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &bg2, GF_BG_TYPE_TEXT);
+    BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
     bg3 = sTrainerCardMainBg3Template;
-    InitBgFromTemplate(bgConfig, 3, &bg3, 0);
-    BgClearTilemapBufferAndCommit(bgConfig, 3);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &bg3, GF_BG_TYPE_TEXT);
+    BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
 }
 
 #pragma force_active on
@@ -520,18 +523,18 @@ void TrainerCardMain_LoadBgGraphics(TrainerCardMain *cardMain) {
 #pragma force_active reset
 
 void TrainerCardMain_FreeBgLayers(BgConfig *bgConfig) {
-    GfGfx_EngineATogglePlanes(0x1f, FALSE);
-    GfGfx_EngineBTogglePlanes(0x1f, FALSE);
-    BgSetPosTextAndCommit(bgConfig, 5, BG_POS_OP_SET_X, 0);
-    BgSetPosTextAndCommit(bgConfig, 5, BG_POS_OP_SET_Y, 0);
-    BgSetPosTextAndCommit(bgConfig, 3, BG_POS_OP_SET_X, 0);
-    BgSetPosTextAndCommit(bgConfig, 3, BG_POS_OP_SET_Y, 0);
-    FreeBgTilemapBuffer(bgConfig, 7);
-    FreeBgTilemapBuffer(bgConfig, 6);
-    FreeBgTilemapBuffer(bgConfig, 4);
-    FreeBgTilemapBuffer(bgConfig, 5);
-    FreeBgTilemapBuffer(bgConfig, 2);
-    FreeBgTilemapBuffer(bgConfig, 3);
+    GfGfx_EngineATogglePlanes(GX_PLANEMASK_ALL, FALSE);
+    GfGfx_EngineBTogglePlanes(GX_PLANEMASK_ALL, FALSE);
+    BgSetPosTextAndCommit(bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_X, 0);
+    BgSetPosTextAndCommit(bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_Y, 0);
+    BgSetPosTextAndCommit(bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_X, 0);
+    BgSetPosTextAndCommit(bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_Y, 0);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_3);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_2);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_0);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_1);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_2);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_3);
     Heap_Free(bgConfig);
 }
 
@@ -539,12 +542,12 @@ void TrainerCardMain_LoadSideLayout(TrainerCardMain *cardMain) {
     if (cardMain->showingBack == FALSE) {
         GfGfxLoader_LoadScrnData(NARC_a_0_4_9, 0x2f, cardMain->bgConfig, (GFBgLayer)6, 0, 0, FALSE, HEAP_ID_25);
         TrainerCardMain_ClearWindows(cardMain->windows, 7, 10);
-        BgClearTilemapBufferAndCommit(cardMain->bgConfig, 7);
+        BgClearTilemapBufferAndCommit(cardMain->bgConfig, GF_BG_LYR_SUB_3);
     } else {
         GfGfxLoader_LoadScrnData(NARC_a_0_4_9, 0x30, cardMain->bgConfig, (GFBgLayer)6, 0, 0, FALSE, HEAP_ID_25);
         TrainerCardMain_ClearWindows(cardMain->windows, 0, 6);
         TrainerCardMain_ClearBackSideRect(cardMain);
-        BgClearTilemapBufferAndCommit(cardMain->bgConfig, 7);
+        BgClearTilemapBufferAndCommit(cardMain->bgConfig, GF_BG_LYR_SUB_3);
     }
 }
 
@@ -796,14 +799,14 @@ void TrainerCardMain_DrawFrontPicture(TrainerCardMain *cardMain) {
     NNSG2dScreenData *screen;
     BG_LoadCharTilesData(cardMain->bgConfig, 7, cardMain->frontCharData->pRawData, cardMain->frontCharData->szByte, 0);
     screen = cardMain->frontScreen;
-    CopyToBgTilemapRect(cardMain->bgConfig, 7, 21, 5, 10, 11, screen->rawData, 21, 5, (u8)(screen->screenWidth >> 3), (u8)(screen->screenHeight >> 3));
-    BgCommitTilemapBufferToVram(cardMain->bgConfig, 7);
+    CopyToBgTilemapRect(cardMain->bgConfig, GF_BG_LYR_SUB_3, 21, 5, 10, 11, screen->rawData, 21, 5, (u8)(screen->screenWidth >> 3), (u8)(screen->screenHeight >> 3));
+    BgCommitTilemapBufferToVram(cardMain->bgConfig, GF_BG_LYR_SUB_3);
 }
 
 #pragma force_active reset
 
 void TrainerCardMain_ClearBackSideRect(TrainerCardMain *cardMain) {
-    FillBgTilemapRect(cardMain->bgConfig, 7, 0, 0x14, 6, 6, 9, 0x10);
+    FillBgTilemapRect(cardMain->bgConfig, GF_BG_LYR_SUB_3, 0, 0x14, 6, 6, 9, TILEMAP_FILL_KEEP_PAL);
 }
 
 #pragma force_active on
@@ -880,8 +883,8 @@ void TrainerCardMain_CreateWindows(TrainerCardMain *cardMain) {
     LoadUserFrameGfx2(cardMain->bgConfig, (GFBgLayer)4, 0x3e1, 13, cardMain->frame, HEAP_ID_25);
     LoadFontPal0((enum GFPalLoadLocation)4, (enum GFPalSlotOffset)0x1c0, HEAP_ID_25);
     cardMain->yesNoPrompt = YesNoPrompt_Create(HEAP_ID_25);
-    ScheduleBgTilemapBufferTransfer(cardMain->bgConfig, 7);
-    ScheduleBgTilemapBufferTransfer(cardMain->bgConfig, 4);
+    ScheduleBgTilemapBufferTransfer(cardMain->bgConfig, GF_BG_LYR_SUB_3);
+    ScheduleBgTilemapBufferTransfer(cardMain->bgConfig, GF_BG_LYR_SUB_0);
 }
 
 void TrainerCardMain_DestroyWindows(TrainerCardMain *cardMain) {
@@ -917,13 +920,13 @@ void TrainerCardMain_PrintFront(TrainerCardMain *cardMain, Window *windows, Trai
     CopyU16ArrayToString(cardMain->formattedString, card->name);
     TrainerCardMain_PrintStringRightAligned(&windows[1], 104, 0, 0, cardMain->formattedString);
     BufferIntegerAsString(format, 5, card->money, 6, PRINTING_MODE_LEFT_ALIGN, TRUE);
-    ReadMsgDataIntoString(msgData, 19, template);
+    ReadMsgDataIntoString(msgData, msg_0727_00019, template);
     StringExpandPlaceholders(format, formatted, template);
     x = 136 - FontID_String_GetWidth(0, formatted, 0);
     AddTextPrinterParameterizedWithColor(&windows[2], 0, formatted, x, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     if (card->pokedexObtained) {
         BufferIntegerAsString(format, 5, card->pokedexCount, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
-        ReadMsgDataIntoString(msgData, 26, template);
+        ReadMsgDataIntoString(msgData, msg_0727_00026, template);
         StringExpandPlaceholders(format, formatted, template);
         x = 136 - FontID_String_GetWidth(0, formatted, 0);
         AddTextPrinterParameterizedWithColor(&windows[3], 0, formatted, x, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
@@ -932,11 +935,11 @@ void TrainerCardMain_PrintFront(TrainerCardMain *cardMain, Window *windows, Trai
     if (card->liveIgt) {
         BufferIntegerAsString(format, 0, GetIGTHours(card->igt), 3, PRINTING_MODE_RIGHT_ALIGN, TRUE);
         BufferIntegerAsString(format, 1, GetIGTMinutes(card->igt), 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
-        ReadMsgDataIntoString(msgData, 21, template);
+        ReadMsgDataIntoString(msgData, msg_0727_00021, template);
     } else {
         BufferIntegerAsString(format, 0, card->playHours, 3, PRINTING_MODE_RIGHT_ALIGN, TRUE);
         BufferIntegerAsString(format, 1, card->playMinutes, 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
-        ReadMsgDataIntoString(msgData, 20, template);
+        ReadMsgDataIntoString(msgData, msg_0727_00020, template);
     }
     StringExpandPlaceholders(format, formatted, template);
     x = 224 - FontID_String_GetWidth(0, formatted, 0);
@@ -944,7 +947,7 @@ void TrainerCardMain_PrintFront(TrainerCardMain *cardMain, Window *windows, Trai
     BufferIntegerAsString(format, 2, card->startYear, 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
     BufferMonthNameAbbr(format, 3, card->startMonth);
     BufferIntegerAsString(format, 4, card->startDay, 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
-    ReadMsgDataIntoString(msgData, 22, template);
+    ReadMsgDataIntoString(msgData, msg_0727_00022, template);
     StringExpandPlaceholders(format, formatted, template);
     x = 224 - FontID_String_GetWidth(0, formatted, 0);
     AddTextPrinterParameterizedWithColor(&windows[6], 0, formatted, x, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
@@ -989,33 +992,33 @@ void TrainerCardMain_PrintBack(TrainerCardMain *cardMain, Window *windows, Train
         BufferIntegerAsString(format, 4, card->clearDay, 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
         BufferIntegerAsString(format, 0, card->clearHours, 3, PRINTING_MODE_RIGHT_ALIGN, TRUE);
         BufferIntegerAsString(format, 1, card->clearMinutes, 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
-        ReadMsgDataIntoString(msgData, 0x16, template);
+        ReadMsgDataIntoString(msgData, msg_0727_00022, template);
         StringExpandPlaceholders(format, formatted, template);
     } else {
-        ReadMsgDataIntoString(msgData, 0x0C, template);
+        ReadMsgDataIntoString(msgData, msg_0727_00012, template);
         BufferString(format, 0, template, 0, 0, 2);
         BufferString(format, 1, template, 0, 0, 2);
-        ReadMsgDataIntoString(msgData, 0x19, formatted);
+        ReadMsgDataIntoString(msgData, msg_0727_00025, formatted);
     }
     x = 0xE0 - FontID_String_GetWidth(0, formatted, 0);
     AddTextPrinterParameterizedWithColor(&windows[7], 0, formatted, x, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
-    ReadMsgDataIntoString(msgData, 0x14, template);
+    ReadMsgDataIntoString(msgData, msg_0727_00020, template);
     StringExpandPlaceholders(format, formatted, template);
     x = 0xE0 - FontID_String_GetWidth(0, formatted, 0);
     AddTextPrinterParameterizedWithColor(&windows[7], 0, formatted, x, 0x10, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     BufferIntegerAsString(format, 5, card->linkCount, 6, PRINTING_MODE_LEFT_ALIGN, TRUE);
-    ReadMsgDataIntoString(msgData, 0x1B, template);
+    ReadMsgDataIntoString(msgData, msg_0727_00027, template);
     StringExpandPlaceholders(format, formatted, template);
     x = 0xE0 - FontID_String_GetWidth(0, formatted, 0);
     AddTextPrinterParameterizedWithColor(&windows[8], 0, formatted, x, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
-    ReadMsgDataIntoString(msgData, 0x17, formatted);
+    ReadMsgDataIntoString(msgData, msg_0727_00023, formatted);
     AddTextPrinterParameterizedWithColor(&windows[9], 0, formatted, 0x70, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     TrainerCardMain_PrintNumberRightAligned(&windows[9], 0xE0, 0, 0, formatted, card->linkBattleLosses, 4, 1, 0xFF);
-    ReadMsgDataIntoString(msgData, 0x18, formatted);
+    ReadMsgDataIntoString(msgData, msg_0727_00024, formatted);
     AddTextPrinterParameterizedWithColor(&windows[9], 0, formatted, 0xB0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     TrainerCardMain_PrintNumberRightAligned(&windows[9], 0xE0, 0x40, 0, formatted, card->linkBattleWins, 4, 1, 0xFF);
     BufferIntegerAsString(format, 5, card->linkTrades, 6, PRINTING_MODE_LEFT_ALIGN, TRUE);
-    ReadMsgDataIntoString(msgData, 0x1B, template);
+    ReadMsgDataIntoString(msgData, msg_0727_00027, template);
     StringExpandPlaceholders(format, formatted, template);
     x = 0xE0 - FontID_String_GetWidth(0, formatted, 0);
     AddTextPrinterParameterizedWithColor(&windows[10], 0, formatted, x, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
@@ -1054,13 +1057,13 @@ void TrainerCardMain_PrintLivePlayTime(Window *windows, TrainerCardMainCard *car
     GF_ASSERT(card->igt != NULL);
     GetIGTHours(card->igt);
     FillWindowPixelRect(&windows[5], 0, 184, 0, 40, 16);
-    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 727, HEAP_ID_25);
+    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0727_bin, HEAP_ID_25);
     formatted = String_New(32, HEAP_ID_25);
     template = String_New(32, HEAP_ID_25);
     format = MessageFormat_New_Custom(2, 32, HEAP_ID_25);
     BufferIntegerAsString(format, 0, GetIGTHours(card->igt), 3, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     BufferIntegerAsString(format, 1, GetIGTMinutes(card->igt), 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
-    ReadMsgDataIntoString(msgData, 21, template);
+    ReadMsgDataIntoString(msgData, msg_0727_00021, template);
     StringExpandPlaceholders(format, formatted, template);
     x = 224 - FontID_String_GetWidth(0, formatted, 0);
     AddTextPrinterParameterizedWithColor(&windows[5], 0, formatted, x, 0, TEXT_SPEED_INSTANT, MAKE_TEXT_COLOR(1, 2, 0), NULL);
@@ -1117,7 +1120,7 @@ void TrainerCardMain_PrintSignPrompt(TrainerCardMain *cardMain, int message) {
     }
     FillWindowPixelBuffer(&cardMain->windows[11], 0xf);
     cardMain->textPrinterId = AddTextPrinterParameterizedWithColor(&cardMain->windows[11], 1, cardMain->promptStrings[message], 0, 0, cardMain->textSpeed, MAKE_TEXT_COLOR(1, 2, 15), NULL);
-    ScheduleBgTilemapBufferTransfer(cardMain->bgConfig, 4);
+    ScheduleBgTilemapBufferTransfer(cardMain->bgConfig, GF_BG_LYR_SUB_0);
 }
 
 void TrainerCardMain_ShowYesNoPrompt(TrainerCardMain *cardMain, int unused) {
@@ -1132,7 +1135,7 @@ void TrainerCardMain_ShowYesNoPrompt(TrainerCardMain *cardMain, int unused) {
     template.ignoreTouchFlag = cardMain->inTouchMode;
     template.initialCursorPos = 0;
     YesNoPrompt_InitFromTemplate(cardMain->yesNoPrompt, &template);
-    ScheduleBgTilemapBufferTransfer(cardMain->bgConfig, 4);
+    ScheduleBgTilemapBufferTransfer(cardMain->bgConfig, GF_BG_LYR_SUB_0);
 }
 
 int TrainerCardMain_HandleYesNoPrompt(TrainerCardMain *cardMain, BOOL keepFrame) {
@@ -1152,7 +1155,7 @@ int TrainerCardMain_HandleYesNoPrompt(TrainerCardMain *cardMain, BOOL keepFrame)
     YesNoPrompt_Reset(cardMain->yesNoPrompt);
     if (!answer || keepFrame) {
         ClearFrameAndWindow2(&cardMain->windows[11], FALSE);
-        ScheduleBgTilemapBufferTransfer(cardMain->bgConfig, 4);
+        ScheduleBgTilemapBufferTransfer(cardMain->bgConfig, GF_BG_LYR_SUB_0);
     }
     return answer;
 }

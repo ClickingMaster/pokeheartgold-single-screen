@@ -2,6 +2,8 @@
 
 #include "constants/sndseq.h"
 
+#include "msgdata/msg/msg_0775.h"
+
 #include "assert.h"
 #include "bg_cell_manager.h"
 #include "bg_window.h"
@@ -340,7 +342,7 @@ void GtsSelector_RemoveWindows(GtsSelector *selector, int page) {
             RemoveWindow(&selector->windows[i]);
         }
         if (position[1] == 16) {
-            FillBgTilemapRect(selector->bgConfig, GF_BG_LYR_MAIN_2, 5, 17, 1, 15, 15, 16);
+            FillBgTilemapRect(selector->bgConfig, GF_BG_LYR_MAIN_2, 5, 17, 1, 15, 15, TILEMAP_FILL_KEEP_PAL);
             BgCommitTilemapBufferToVram(selector->bgConfig, GF_BG_LYR_MAIN_2);
         }
         RemoveWindow(&selector->windows[14]);
@@ -354,7 +356,7 @@ void GtsSelector_RemoveWindows(GtsSelector *selector, int page) {
             RemoveWindow(&selector->windows[i]);
         }
         if (position[1] == 16) {
-            FillBgTilemapRect(selector->bgConfig, GF_BG_LYR_MAIN_2, 5, 17, 1, 15, 15, 16);
+            FillBgTilemapRect(selector->bgConfig, GF_BG_LYR_MAIN_2, 5, 17, 1, 15, 15, TILEMAP_FILL_KEEP_PAL);
             BgCommitTilemapBufferToVram(selector->bgConfig, GF_BG_LYR_MAIN_2);
         }
         RemoveWindow(&selector->windows[14]);
@@ -368,7 +370,7 @@ void GtsSelector_RemoveWindows(GtsSelector *selector, int page) {
             RemoveWindow(&selector->windows[i]);
         }
         if (position[1] == 16) {
-            FillBgTilemapRect(selector->bgConfig, GF_BG_LYR_MAIN_2, 5, 17, 1, 15, 15, 16);
+            FillBgTilemapRect(selector->bgConfig, GF_BG_LYR_MAIN_2, 5, 17, 1, 15, 15, TILEMAP_FILL_KEEP_PAL);
             BgCommitTilemapBufferToVram(selector->bgConfig, GF_BG_LYR_MAIN_2);
         }
         RemoveWindow(&selector->windows[14]);
@@ -382,7 +384,7 @@ void GtsSelector_RemoveWindows(GtsSelector *selector, int page) {
             RemoveWindow(&selector->windows[i]);
         }
         if (position[1] == 16) {
-            FillBgTilemapRect(selector->bgConfig, GF_BG_LYR_MAIN_2, 5, 17, 1, 15, 15, 16);
+            FillBgTilemapRect(selector->bgConfig, GF_BG_LYR_MAIN_2, 5, 17, 1, 15, 15, TILEMAP_FILL_KEEP_PAL);
             BgCommitTilemapBufferToVram(selector->bgConfig, GF_BG_LYR_MAIN_2);
         }
         RemoveWindow(&selector->windows[14]);
@@ -397,7 +399,7 @@ void GtsSelector_RemoveWindows(GtsSelector *selector, int page) {
             RemoveWindow(&selector->windows[i]);
         }
         if (position[1] == 16 || position[1] == 17) {
-            FillBgTilemapRect(selector->bgConfig, GF_BG_LYR_MAIN_2, 5, 18, 1, 14, 15, 16);
+            FillBgTilemapRect(selector->bgConfig, GF_BG_LYR_MAIN_2, 5, 18, 1, 14, 15, TILEMAP_FILL_KEEP_PAL);
             BgCommitTilemapBufferToVram(selector->bgConfig, GF_BG_LYR_MAIN_2);
         }
         RemoveWindow(&selector->windows[14]);
@@ -1151,7 +1153,7 @@ void GtsSelector_ShowGroups(GtsSelector *selector, int page, int y) {
     BgCellManager_LoadCellTilemap(selector->cellManager, 0, NARC_a_1_0_0, fileId, 1);
     BgCellManager_GetCellTilemap(selector->cellManager, 0);
     GtsSelector_AddWindows(selector, page);
-    MI_CpuFill8(selector->enabled, TRUE, 26);
+    MI_CpuFill8(selector->enabled, TRUE, sizeof(selector->enabled));
     int i;
     for (i = 0; i < 9; i++) {
         String *string = NewString_ReadMsgData(selector->gtsMsgData, i + 110); // ABC .. YZ
@@ -1176,9 +1178,9 @@ void GtsSelector_ShowGroups(GtsSelector *selector, int page, int y) {
         GtsSelector_PrintString(selector->cellManager, &selector->windows[i], string, 2, color);
         String_Delete(string);
     }
-    GtsSelector_PrintButtonLabel(selector->cellManager, selector->gtsMsgData, &selector->windows[14], 68); // BACK
+    GtsSelector_PrintButtonLabel(selector->cellManager, selector->gtsMsgData, &selector->windows[14], msg_0775_00068); // BACK
     if (page == GTS_SELECTOR_PAGE_COUNTRY_GROUPS) {
-        String *string = NewString_ReadMsgData(selector->gtsMsgData, 174); // ANY
+        String *string = NewString_ReadMsgData(selector->gtsMsgData, msg_0775_00174); // ANY
         GtsSelector_PrintString(selector->cellManager, &selector->windows[15], string, 2, MAKE_TEXT_COLOR(15, 14, 2));
         String_Delete(string);
     }
@@ -1206,7 +1208,7 @@ void GtsSelector_ShowGenders(GtsSelector *selector) {
         i++;
         offset += sizeof(Window);
     } while (i < 3);
-    GtsSelector_PrintButtonLabel(selector->cellManager, selector->gtsMsgData, &selector->windows[14], 68);
+    GtsSelector_PrintButtonLabel(selector->cellManager, selector->gtsMsgData, &selector->windows[14], msg_0775_00068);
     BgCellManager_DrawCellAt(selector->cellManager, 0, 32, 0);
     BgCellManager_DrawCell(selector->cellManager, 0);
     BgCellManager_StartCellMove(selector->cellManager, 0, -4, 0, 4);
@@ -1225,7 +1227,7 @@ void GtsSelector_ShowLevels(GtsSelector *selector) {
     GtsSelector_PrintListPage(selector, 0, selector->count);
     selector->page = 0;
     GtsSelector_PrintPageNumber(selector->cellManager, selector->printer, &selector->windows[4], selector->page, GtsSelector_CountPages(selector->count, 4));
-    GtsSelector_PrintButtonLabel(selector->cellManager, selector->gtsMsgData, &selector->windows[14], 68);
+    GtsSelector_PrintButtonLabel(selector->cellManager, selector->gtsMsgData, &selector->windows[14], msg_0775_00068);
     BgCellManager_DrawCellAt(selector->cellManager, 0, 32, 0);
     Sprite_SetAnimCtrlSeq(selector->cursorSprite, 49);
     selector->cursor = 0;
@@ -1350,7 +1352,7 @@ int GtsSelector_ReopenSpeciesGroups(GtsSelector *selector) {
     BgCellManager_LoadCellTilemap(selector->cellManager, 0, NARC_a_1_0_0, 34, 1);
     BgCellManager_GetCellTilemap(selector->cellManager, 0);
     GtsSelector_AddWindows(selector, GTS_SELECTOR_PAGE_SPECIES_GROUPS);
-    MI_CpuFill8(selector->enabled, TRUE, 26);
+    MI_CpuFill8(selector->enabled, TRUE, sizeof(selector->enabled));
     // A byte offset into windows next to the index.
     int i = 0;
     int offset = i;
@@ -1373,7 +1375,7 @@ int GtsSelector_ReopenSpeciesGroups(GtsSelector *selector) {
         GtsSelector_PrintString(selector->cellManager, (Window *)((u8 *)selector->windows + offset), string, 2, color);
         String_Delete(string);
     }
-    GtsSelector_PrintButtonLabel(selector->cellManager, selector->gtsMsgData, &selector->windows[14], 68);
+    GtsSelector_PrintButtonLabel(selector->cellManager, selector->gtsMsgData, &selector->windows[14], msg_0775_00068);
     BgCellManager_DrawCellAt(selector->cellManager, 0, 16, 0);
     BgCellManager_DrawCell(selector->cellManager, 0);
     Sprite_SetAnimCtrlSeq(selector->cursorSprite, 61);
@@ -1393,7 +1395,7 @@ int GtsSelector_OpenSpeciesLetters(GtsSelector *selector) {
     BgCellManager_LoadCellTilemap(selector->cellManager, 0, NARC_a_1_0_0, 32, 1);
     BgCellManager_GetCellTilemap(selector->cellManager, 0);
     GtsSelector_AddWindows(selector, GTS_SELECTOR_PAGE_LETTERS);
-    MI_CpuFill8(selector->enabled, TRUE, 26);
+    MI_CpuFill8(selector->enabled, TRUE, sizeof(selector->enabled));
     GtsSelector_PrintMessage(selector->cellManager, selector->gtsMsgData, selector->windows, selector->group + 110, 2, MAKE_TEXT_COLOR(15, 14, 2));
     i = 1;
     if (i <= ov70_02245F5C[selector->group][0]) {
@@ -1409,7 +1411,7 @@ int GtsSelector_OpenSpeciesLetters(GtsSelector *selector) {
             i++;
         } while (i <= gGtsSelectorLetterGroups[selector->group].count);
     }
-    GtsSelector_PrintButtonLabel(selector->cellManager, selector->gtsMsgData, &selector->windows[14], 68);
+    GtsSelector_PrintButtonLabel(selector->cellManager, selector->gtsMsgData, &selector->windows[14], msg_0775_00068);
     BgCellManager_DrawCellAt(selector->cellManager, 0, 16, 0);
     Sprite_SetAnimCtrlSeq(selector->cursorSprite, 47);
     if (selector->letter < 0) {
@@ -1555,7 +1557,7 @@ int GtsSelector_OpenSpeciesList(GtsSelector *selector) {
     GtsSelector_PrintListPage(selector, 0, selector->count);
     value = GtsSelector_CountPages(selector->count, 4);
     GtsSelector_PrintPageNumber(selector->cellManager, selector->printer, &selector->windows[4], selector->page, value);
-    GtsSelector_PrintButtonLabel(selector->cellManager, selector->gtsMsgData, &selector->windows[14], 68);
+    GtsSelector_PrintButtonLabel(selector->cellManager, selector->gtsMsgData, &selector->windows[14], msg_0775_00068);
     BgCellManager_DrawCellAt(selector->cellManager, 0, 16, 0);
     Sprite_SetAnimCtrlSeq(selector->cursorSprite, 49);
     selector->cursor = 0;
@@ -1714,7 +1716,7 @@ int GtsSelector_OpenCountryLetters(GtsSelector *selector) {
     BgCellManager_LoadCellTilemap(selector->cellManager, 0, NARC_a_1_0_0, 32, 1);
     BgCellManager_GetCellTilemap(selector->cellManager, 0);
     GtsSelector_AddWindows(selector, GTS_SELECTOR_PAGE_LETTERS);
-    MI_CpuFill8(selector->enabled, TRUE, 26);
+    MI_CpuFill8(selector->enabled, TRUE, sizeof(selector->enabled));
     GtsSelector_PrintMessage(selector->cellManager, selector->gtsMsgData, selector->windows, selector->group + 110, 2, MAKE_TEXT_COLOR(15, 14, 2));
     // A byte offset into windows next to the index.
     i = 1;
@@ -1732,7 +1734,7 @@ int GtsSelector_OpenCountryLetters(GtsSelector *selector) {
         i++;
         offset += sizeof(Window);
     } while (i < 4);
-    GtsSelector_PrintButtonLabel(selector->cellManager, selector->gtsMsgData, &selector->windows[14], 68);
+    GtsSelector_PrintButtonLabel(selector->cellManager, selector->gtsMsgData, &selector->windows[14], msg_0775_00068);
     BgCellManager_DrawCellAt(selector->cellManager, 0, 16, 0);
     Sprite_SetAnimCtrlSeq(selector->cursorSprite, 47);
     if (selector->letter < 0) {
@@ -1811,7 +1813,7 @@ int GtsSelector_OpenCountryList(GtsSelector *selector) {
     GtsSelector_PrintCountryPage(selector, 0, selector->count);
     selector->page = 0;
     GtsSelector_PrintPageNumber(selector->cellManager, selector->printer, &selector->windows[5], selector->page, GtsSelector_CountPages(selector->count, 5));
-    GtsSelector_PrintButtonLabel(selector->cellManager, selector->gtsMsgData, &selector->windows[14], 68);
+    GtsSelector_PrintButtonLabel(selector->cellManager, selector->gtsMsgData, &selector->windows[14], msg_0775_00068);
     BgCellManager_DrawCellAt(selector->cellManager, 0, 1, 0);
     selector->cursor = 0;
     {

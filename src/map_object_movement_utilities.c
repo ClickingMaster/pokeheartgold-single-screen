@@ -140,45 +140,45 @@ BOOL MapObject_IsMoveBlockedByBehavior(LocalMapObject *object, int x, int z, int
 BOOL MapObject_CheckWaterBehavior(LocalMapObject *object, int behavior) {
     if (MetatileBehavior_IsBridgeOverWater((u8)behavior)) {
         if (!MapObject_CheckFlag28(object)) {
-            return 1;
+            return TRUE;
         }
     } else if (MetatileBehavior_IsSurfableWater((u8)behavior)) {
-        return 1;
+        return TRUE;
     } else if (MetatileBehavior_Is34((u8)behavior)) {
         u32 sprite = MapObject_GetSpriteID(object) - 0xB2;
         if (sprite <= 1) {
-            return 1;
+            return TRUE;
         }
     }
-    return 0;
+    return FALSE;
 }
 
 BOOL MapObject_CheckSandBehavior(LocalMapObject *object, int behavior) {
     if (MetatileBehavior_IsSand(behavior)) {
-        return 1;
+        return TRUE;
     }
-    return 0;
+    return FALSE;
 }
 
 BOOL MapObject_CheckSnowBehavior(LocalMapObject *object, int behavior) {
     if (MetatileBehavior_IsSnow(behavior)) {
-        return 1;
+        return TRUE;
     }
-    return 0;
+    return FALSE;
 }
 
 BOOL MapObject_CheckSnowFootprintBehavior(LocalMapObject *object, int behavior) {
     if (MetatileBehavior_IsSnowForFootprints(behavior)) {
-        return 1;
+        return TRUE;
     }
-    return 0;
+    return FALSE;
 }
 
 BOOL MapObject_IsOnBridge(LocalMapObject *object, int behavior) {
     if (MapObject_CheckFlag28(object) == 1 && MetatileBehavior_IsBridge((u8)behavior) == 1) {
-        return 1;
+        return TRUE;
     }
-    return 0;
+    return FALSE;
 }
 
 int GetDeltaXByFacingDirection(int direction) {
@@ -220,16 +220,16 @@ void MapObject_OffsetPositionInDirection(LocalMapObject *object, int direction, 
     VecFx32 position;
     MapObject_CopyPositionVector(object, &position);
     switch (direction) {
-    case 0:
+    case DIR_NORTH:
         position.z -= distance;
         break;
-    case 1:
+    case DIR_SOUTH:
         position.z += distance;
         break;
-    case 2:
+    case DIR_WEST:
         position.x -= distance;
         break;
-    case 3:
+    case DIR_EAST:
         position.x += distance;
         break;
     }
@@ -280,24 +280,24 @@ BOOL MapObject_UpdateMetatileBehaviors(LocalMapObject *object) {
     MapObject_SetCurrentMetatileBehavior(object, current);
     if (MetatileBehavior_IsNone(current) == 1) {
         MapObject_SetFlagsBits(object, MAPOBJECTFLAG_UNK11);
-        return 0;
+        return FALSE;
     }
     MapObject_ClearFlagsBits(object, MAPOBJECTFLAG_UNK11);
-    return 1;
+    return TRUE;
 }
 
 void OffsetPositionInDirection(int direction, VecFx32 *position, int distance) {
     switch (direction) {
-    case 0:
+    case DIR_NORTH:
         position->z -= distance;
         break;
-    case 1:
+    case DIR_SOUTH:
         position->z += distance;
         break;
-    case 2:
+    case DIR_WEST:
         position->x -= distance;
         break;
-    case 3:
+    case DIR_EAST:
         position->x += distance;
         break;
     }
@@ -321,36 +321,36 @@ u32 GetOppositeDirection(u32 direction) {
 
 int GetDirectionTowards(int x, int z, int targetX, int targetZ) {
     if (x > targetX) {
-        return 2;
+        return DIR_WEST;
     }
     if (x < targetX) {
-        return 3;
+        return DIR_EAST;
     }
     if (z > targetZ) {
-        return 0;
+        return DIR_NORTH;
     }
-    return 1;
+    return DIR_SOUTH;
 }
 
 BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position) {
     u8 behavior;
     int y = FieldSystem_GetTerrainHeight(fieldSystem, position->y, position->x, position->z, &behavior);
     if (behavior == 0) {
-        return 0;
+        return FALSE;
     }
     position->y = y;
-    return 1;
+    return TRUE;
 }
 
 BOOL FieldSystem_SnapToTerrainHeightEx(FieldSystem *fieldSystem, VecFx32 *position, BOOL allowType2) {
     u8 behavior;
     int y = FieldSystem_GetTerrainHeight(fieldSystem, position->y, position->x, position->z, &behavior);
     if (behavior == 0) {
-        return 0;
+        return FALSE;
     }
-    if (behavior == 2 && allowType2 == 0) {
-        return 0;
+    if (behavior == 2 && allowType2 == FALSE) {
+        return FALSE;
     }
     position->y = y;
-    return 1;
+    return TRUE;
 }
