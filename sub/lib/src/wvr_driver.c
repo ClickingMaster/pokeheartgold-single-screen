@@ -137,7 +137,7 @@ void WvrPxiWmSubstituteCallback(int tag, void *buf, int error) {
         MIi_CpuClear32(0, (u32 *)p, 0x100);
         p[0] = command;
         p[1] = WM_ERRCODE_WM_DISABLE;
-        while (PXI_SendWordByFifo(PXI_FIFO_TAG_WM, (u32)p, 0) < 0) {}
+        while (PXI_SendWordByFifo(PXI_FIFO_TAG_WM, (u32)p, FALSE) < 0) {}
     }
 }
 
@@ -211,7 +211,7 @@ void WvrPxiReceiveCallback(int tag, u32 word, int error) {
         result = word | WVR_RESULT_INVALID_COMMAND;
         break;
     }
-    while (PXI_SendWordByFifo(PXI_FIFO_TAG_WVR, result, 0) < 0) {}
+    while (PXI_SendWordByFifo(PXI_FIFO_TAG_WVR, result, FALSE) < 0) {}
 }
 
 void WvrStartUpThread(void *arg) {
@@ -219,7 +219,7 @@ void WvrStartUpThread(void *arg) {
         MIi_CpuCopyFast(wvrStatus.image, (u32 *)0x06000000, wvrStatus.imageSize);
     }
     WvrBegin(wvrStatus.callback);
-    while (PXI_SendWordByFifo(PXI_FIFO_TAG_WVR, WVR_COMMAND_START, 0) < 0) {}
+    while (PXI_SendWordByFifo(PXI_FIFO_TAG_WVR, WVR_COMMAND_START, FALSE) < 0) {}
     OS_DisableInterrupts();
     wvrStatus.state = WVR_STATE_ACTIVE;
     OS_ExitThread();
@@ -275,7 +275,7 @@ void WvrTerminateThread(void *arg) {
     if (wvrStatus.image) {
         MIi_CpuClearFast(0, (u32 *)0x06000000, wvrStatus.imageSize);
     }
-    while (PXI_SendWordByFifo(PXI_FIFO_TAG_WVR, WVR_COMMAND_TERMINATE, 0) < 0) {}
+    while (PXI_SendWordByFifo(PXI_FIFO_TAG_WVR, WVR_COMMAND_TERMINATE, FALSE) < 0) {}
     OS_DisableInterrupts();
     wvrStatus.state = WVR_STATE_IDLE;
     OS_ExitThread();

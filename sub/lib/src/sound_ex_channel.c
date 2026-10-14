@@ -386,7 +386,7 @@ struct SNDExChannel *SND_AllocExChannel(u32 mask, int priority, int weak, SNDExC
     if (best->callback) {
         best->callback(best, 0, best->callbackUserData);
     }
-    best->flags.syncFlag = 2;
+    best->flags.syncFlag = SND_CHN_SYNC_STOP;
     best->flags.active = 0;
     best->channelLLNext = 0;
     best->callback = callback;

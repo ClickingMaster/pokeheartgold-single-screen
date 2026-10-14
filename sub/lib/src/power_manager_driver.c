@@ -100,50 +100,50 @@ void PM_AnalyzeCommand(u32 word) {
     u32 header;
     u16 command;
     int i;
-    if (word & 0x02000000) {
+    if (word & SPI_PXI_START_BIT) {
         for (i = 0; i < 16; i++) {
             PMi_Work.command[i] = 0;
         }
     }
-    PMi_Work.command[(word & 0xf0000) >> 16] = word;
-    if (!(word & 0x01000000)) {
+    PMi_Work.command[(word & SPI_PXI_INDEX_MASK) >> SPI_PXI_INDEX_SHIFT] = word;
+    if (!(word & SPI_PXI_END_BIT)) {
         return;
     }
     header = PMi_KeyPattern.work.command[0];
     command = (header & 0xff00) >> 8;
     switch (command) {
     case 0x60:
-        SPIi_ReturnResult(0x60, 0);
+        SPIi_ReturnResult(0x60, SPI_PXI_RESULT_SUCCESS);
         break;
     case 0x61:
         if (!SPIi_SetEntry(SPI_MODULE_PM, command, 2, (u32)(header & 0xff), (u32)PMi_KeyPattern.work.command[1])) {
-            SPIi_ReturnResult(command, 4);
+            SPIi_ReturnResult(command, SPI_PXI_RESULT_EXCLUSIVE);
         }
         break;
     case 0x64:
         if (!SPIi_SetEntry(SPI_MODULE_PM, command, 2, (u32)(header & 0xff), (u32)PMi_KeyPattern.work.command[1])) {
-            SPIi_ReturnResult(command, 4);
+            SPIi_ReturnResult(command, SPI_PXI_RESULT_EXCLUSIVE);
         }
         break;
     case 0x65:
         if (!SPIi_SetEntry(SPI_MODULE_PM, command, 1, (u32)(u16)header)) {
-            SPIi_ReturnResult(command, 4);
+            SPIi_ReturnResult(command, SPI_PXI_RESULT_EXCLUSIVE);
         }
         break;
     case 0x63:
         if (!SPIi_SetEntry(SPI_MODULE_PM, command, 1, ((header & 0xff) << 16) | PMi_KeyPattern.work.command[1])) {
-            SPIi_ReturnResult(command, 4);
+            SPIi_ReturnResult(command, SPI_PXI_RESULT_EXCLUSIVE);
         }
         break;
     case 0x66:
         PM_SetLEDPattern(header & 0xff);
-        SPIi_ReturnResult(0x66, 0);
+        SPIi_ReturnResult(0x66, SPI_PXI_RESULT_SUCCESS);
         break;
     case 0x67:
         SPIi_ReturnResult(0x67, (u16)PM_GetLEDPattern());
         break;
     default:
-        SPIi_ReturnResult(command, 1);
+        SPIi_ReturnResult(command, SPI_PXI_RESULT_INVALID_COMMAND);
         break;
     }
 }
@@ -152,7 +152,7 @@ void PM_ExecuteProcess(PmRequest *request) {
     OSIntrMode irq = OS_DisableInterrupts();
     if (!SPIi_CheckException(SPI_MODULE_PM)) {
         OS_RestoreInterrupts(irq);
-        SPIi_ReturnResult((u16)request->command, 4);
+        SPIi_ReturnResult((u16)request->command, SPI_PXI_RESULT_EXCLUSIVE);
         return;
     }
     SPIi_GetException(SPI_MODULE_PM);
@@ -172,7 +172,7 @@ void PM_ExecuteProcess(PmRequest *request) {
         value = request->args[1];
         PMi_KeyPattern.work.value = value;
         PMi_SetRegister((u16)reg, (u8)value);
-        SPIi_ReturnResult(0x64, 0);
+        SPIi_ReturnResult(0x64, SPI_PXI_RESULT_SUCCESS);
         break;
     }
     case 0x65: {
@@ -194,14 +194,14 @@ void PM_ExecuteProcess(PmRequest *request) {
         value = request->args[0];
         PMi_KeyPattern.work.value = value;
         PMi_SwitchUtilityProc(value);
-        SPIi_ReturnResult(0x63, 0);
+        SPIi_ReturnResult(0x63, SPI_PXI_RESULT_SUCCESS);
         break;
     }
     case 0x66:
         PMi_SetLED(request->args[0]);
         break;
     default:
-        SPIi_ReturnResult((u16)request->command, 1);
+        SPIi_ReturnResult((u16)request->command, SPI_PXI_RESULT_INVALID_COMMAND);
         break;
     }
     SPIi_ReleaseException(SPI_MODULE_PM);
@@ -209,7 +209,7 @@ void PM_ExecuteProcess(PmRequest *request) {
 
 void PMi_SendPxiCommand(u32 command, u32 param, u32 data) {
     u32 word = ((command & 0x3c00000u) << 22) | ((param & 0x3f0000u) << 16) | (u16)data;
-    while (PXI_SendWordByFifo(PXI_FIFO_TAG_PM, word, 0) != 0) {}
+    while (PXI_SendWordByFifo(PXI_FIFO_TAG_PM, word, FALSE) != 0) {}
 }
 
 void PMi_SetRegister(u16 reg, u32 value) {

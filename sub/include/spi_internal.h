@@ -21,6 +21,47 @@
 
 #define TP_VALARM_TAG 0x54505641 // 'TPVA'
 
+// PXI words from the ARM9 SPI libraries. A request may span several words: bit 25 marks the first, bit 24 the last,
+// bits 16-19 hold the word index; the first word carries the command id in bits 8-15.
+#define SPI_PXI_START_BIT   0x02000000
+#define SPI_PXI_END_BIT     0x01000000
+#define SPI_PXI_INDEX_MASK  0x000f0000
+#define SPI_PXI_INDEX_SHIFT 16
+
+#define SPI_PXI_COMMAND_TP_SAMPLING        0x00
+#define SPI_PXI_COMMAND_TP_AUTO_ON         0x01
+#define SPI_PXI_COMMAND_TP_AUTO_OFF        0x02
+#define SPI_PXI_COMMAND_TP_SETUP_STABILITY 0x03
+#define SPI_PXI_COMMAND_TP_AUTO_SAMPLING   0x10
+
+#define SPI_PXI_COMMAND_NVRAM_WREN      0x20
+#define SPI_PXI_COMMAND_NVRAM_WRDI      0x21
+#define SPI_PXI_COMMAND_NVRAM_RDSR      0x22
+#define SPI_PXI_COMMAND_NVRAM_READ      0x23
+#define SPI_PXI_COMMAND_NVRAM_FAST_READ 0x24
+#define SPI_PXI_COMMAND_NVRAM_PW        0x25
+#define SPI_PXI_COMMAND_NVRAM_PP        0x26
+#define SPI_PXI_COMMAND_NVRAM_PE        0x27
+#define SPI_PXI_COMMAND_NVRAM_SE        0x28
+#define SPI_PXI_COMMAND_NVRAM_DP        0x29
+#define SPI_PXI_COMMAND_NVRAM_RDP       0x2a
+#define SPI_PXI_COMMAND_NVRAM_CE        0x2b
+#define SPI_PXI_COMMAND_NVRAM_RSI       0x2c
+#define SPI_PXI_COMMAND_NVRAM_SR        0x2d
+
+#define SPI_PXI_COMMAND_MIC_SAMPLING    0x40
+#define SPI_PXI_COMMAND_MIC_AUTO_ON     0x41
+#define SPI_PXI_COMMAND_MIC_AUTO_OFF    0x42
+#define SPI_PXI_COMMAND_MIC_AUTO_ADJUST 0x43
+#define SPI_PXI_COMMAND_MIC_BUFFER_FULL 0x51
+
+// Result codes returned to the ARM9 with SPIi_ReturnResult.
+#define SPI_PXI_RESULT_SUCCESS           0
+#define SPI_PXI_RESULT_INVALID_COMMAND   1
+#define SPI_PXI_RESULT_INVALID_PARAMETER 2
+#define SPI_PXI_RESULT_ILLEGAL_STATUS    3
+#define SPI_PXI_RESULT_EXCLUSIVE         4
+
 typedef struct SpiCommand {
     u32 module;
     u32 command;

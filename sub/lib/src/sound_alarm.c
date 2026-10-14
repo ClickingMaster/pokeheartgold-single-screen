@@ -72,7 +72,7 @@ void SND_StopAlarm(int index) {
 }
 
 void AlarmHandler(void *arg) {
-    while (PXI_SendWordByFifo(PXI_FIFO_TAG_SOUND, (u32)arg, 0) < 0) {}
+    while (PXI_SendWordByFifo(PXI_FIFO_TAG_SOUND, (u32)arg, FALSE) < 0) {}
 }
 
 #pragma dont_inline reset

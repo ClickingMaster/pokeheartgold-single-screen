@@ -60,68 +60,68 @@ void SPI_DummyWait_03800EE0(void) {
 void TP_AnalyzeCommand(u32 word) {
     u16 command;
     int i;
-    if (word & 0x02000000) {
+    if (word & SPI_PXI_START_BIT) {
         for (i = 0; i < 16; i++) {
             tpw.command[i] = 0;
         }
     }
-    tpw.command[(word & 0xf0000) >> 16] = word;
-    if (!(word & 0x01000000)) {
+    tpw.command[(word & SPI_PXI_INDEX_MASK) >> SPI_PXI_INDEX_SHIFT] = word;
+    if (!(word & SPI_PXI_END_BIT)) {
         return;
     }
     command = (tpw.command[0] & 0xff00) >> 8;
     switch (command) {
-    case 3: {
+    case SPI_PXI_COMMAND_TP_SETUP_STABILITY: {
         u16 low = (u16)(tpw.command[0] & 0xff);
         if (!low) {
-            SPIi_ReturnResult(3, 2);
+            SPIi_ReturnResult(SPI_PXI_COMMAND_TP_SETUP_STABILITY, SPI_PXI_RESULT_INVALID_PARAMETER);
         } else {
             tpw.range = low;
             tpw.minRange = low;
-            SPIi_ReturnResult(3, 0);
+            SPIi_ReturnResult(SPI_PXI_COMMAND_TP_SETUP_STABILITY, SPI_PXI_RESULT_SUCCESS);
         }
         break;
     }
-    case 0:
+    case SPI_PXI_COMMAND_TP_SAMPLING:
         if (!SPIi_SetEntry(SPI_MODULE_TP, command, 0)) {
-            SPIi_ReturnResult(command, 4);
+            SPIi_ReturnResult(command, SPI_PXI_RESULT_EXCLUSIVE);
         }
         break;
-    case 1: {
+    case SPI_PXI_COMMAND_TP_AUTO_ON: {
         u16 low;
         if (tpw.state) {
-            SPIi_ReturnResult(command, 3);
+            SPIi_ReturnResult(command, SPI_PXI_RESULT_ILLEGAL_STATUS);
             break;
         }
         low = (u16)(tpw.command[0] & 0xff);
         if (!low || low > 4) {
-            SPIi_ReturnResult(command, 2);
+            SPIi_ReturnResult(command, SPI_PXI_RESULT_INVALID_PARAMETER);
             break;
         }
         if (tpw.command[1] >= 263) {
-            SPIi_ReturnResult(command, 2);
+            SPIi_ReturnResult(command, SPI_PXI_RESULT_INVALID_PARAMETER);
             break;
         }
         if (SPIi_SetEntry(SPI_MODULE_TP, command, 2, (u32)low, (u32)tpw.command[1])) {
             tpw.state = 1;
         } else {
-            SPIi_ReturnResult(command, 4);
+            SPIi_ReturnResult(command, SPI_PXI_RESULT_EXCLUSIVE);
         }
         break;
     }
-    case 2:
+    case SPI_PXI_COMMAND_TP_AUTO_OFF:
         if (tpw.state != 2) {
-            SPIi_ReturnResult(command, 3);
+            SPIi_ReturnResult(command, SPI_PXI_RESULT_ILLEGAL_STATUS);
             break;
         }
         if (SPIi_SetEntry(SPI_MODULE_TP, command, 0)) {
             tpw.state = 3;
         } else {
-            SPIi_ReturnResult(command, 4);
+            SPIi_ReturnResult(command, SPI_PXI_RESULT_EXCLUSIVE);
         }
         break;
     default:
-        SPIi_ReturnResult(command, 1);
+        SPIi_ReturnResult(command, SPI_PXI_RESULT_INVALID_COMMAND);
         break;
     }
 }
@@ -160,18 +160,18 @@ static inline void UpdateTouchThreshold(const TpSample *sample, u16 deviation) {
 
 void TP_ExecuteProcess(TpRequest *request) {
     switch (request->command) {
-    case 0x10:
+    case SPI_PXI_COMMAND_TP_AUTO_SAMPLING:
         if (tpw.state != 2) {
             break;
         }
-    case 0: {
+    case SPI_PXI_COMMAND_TP_SAMPLING: {
         OSIntrMode irq;
         TpSample result;
         u16 deviation;
         irq = OS_DisableInterrupts();
         if (!SPIi_CheckException(SPI_MODULE_TP)) {
             OS_RestoreInterrupts(irq);
-            SPIi_ReturnResult((u16)request->command, 4);
+            SPIi_ReturnResult((u16)request->command, SPI_PXI_RESULT_EXCLUSIVE);
             break;
         }
         SPIi_GetException(SPI_MODULE_TP);
@@ -180,15 +180,15 @@ void TP_ExecuteProcess(TpRequest *request) {
         UpdateTouchThreshold(&result, deviation);
         *(volatile u16 *)0x027fffaa = result.halves[0];
         *(volatile u16 *)0x027fffac = result.halves[1];
-        if (request->command == 0) {
-            SPIi_ReturnResult(request->command, 0);
+        if (request->command == SPI_PXI_COMMAND_TP_SAMPLING) {
+            SPIi_ReturnResult(request->command, SPI_PXI_RESULT_SUCCESS);
         } else {
             SPIi_ReturnResult(request->command, request->count & 0xff);
         }
         SPIi_ReleaseException(SPI_MODULE_TP);
         break;
     }
-    case 1:
+    case SPI_PXI_COMMAND_TP_AUTO_ON:
         if (tpw.state == 1) {
             u32 i;
             for (i = 0; i < request->count; i++) {
@@ -200,19 +200,19 @@ void TP_ExecuteProcess(TpRequest *request) {
                 tpw.lines[i] = (s16)line;
                 OS_SetPeriodicVAlarm(&tpw.alarms[i], tpw.lines[i], 10, TpVAlarmHandler, (void *)i);
             }
-            SPIi_ReturnResult((u16)request->command, 0);
+            SPIi_ReturnResult((u16)request->command, SPI_PXI_RESULT_SUCCESS);
             tpw.state = 2;
         } else {
-            SPIi_ReturnResult((u16)request->command, 3);
+            SPIi_ReturnResult((u16)request->command, SPI_PXI_RESULT_ILLEGAL_STATUS);
         }
         break;
-    case 2:
+    case SPI_PXI_COMMAND_TP_AUTO_OFF:
         if (tpw.state == 3) {
             OS_CancelVAlarms(TP_VALARM_TAG);
-            SPIi_ReturnResult((u16)request->command, 0);
+            SPIi_ReturnResult((u16)request->command, SPI_PXI_RESULT_SUCCESS);
             tpw.state = 0;
         } else {
-            SPIi_ReturnResult((u16)request->command, 3);
+            SPIi_ReturnResult((u16)request->command, SPI_PXI_RESULT_ILLEGAL_STATUS);
         }
         break;
     }
@@ -223,11 +223,11 @@ void TP_ExecuteProcess(TpRequest *request) {
 
 void TpVAlarmHandler(void *arg) {
     TpSample data;
-    if (SPIi_SetEntry(SPI_MODULE_TP, 0x10, 1, arg) == 0) {
+    if (SPIi_SetEntry(SPI_MODULE_TP, SPI_PXI_COMMAND_TP_AUTO_SAMPLING, 1, arg) == 0) {
         data.bits.validity = TP_VALIDITY_INVALID_XY;
         *(u16 *)0x027fffaa = data.halves[0];
         *(u16 *)0x027fffac = data.halves[1];
-        SPIi_ReturnResult(0x10, (u32)arg & 0xff);
+        SPIi_ReturnResult(SPI_PXI_COMMAND_TP_AUTO_SAMPLING, (u32)arg & 0xff);
     }
 }
 

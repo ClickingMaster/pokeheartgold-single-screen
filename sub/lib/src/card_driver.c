@@ -42,10 +42,12 @@
 #define CARD_REQ_IDENTIFY            2
 #define CARD_REQ_READ_ID             3
 #define CARD_REQ_READ_ROM            4
+#define CARD_REQ_WRITE_ROM           5
 #define CARD_REQ_READ_BACKUP         6
 #define CARD_REQ_WRITE_BACKUP        7
 #define CARD_REQ_PROGRAM_BACKUP      8
 #define CARD_REQ_VERIFY_BACKUP       9
+#define CARD_REQ_ERASE_PAGE_BACKUP   10
 #define CARD_REQ_ERASE_SECTOR_BACKUP 11
 #define CARD_REQ_ERASE_CHIP_BACKUP   12
 
@@ -304,12 +306,12 @@ void CARDi_CommArray(const void *src, void *dst, u32 size, void (*core)(CardSpiP
     CardSpiParam *p = &cardi_param;
     p->src = src;
     p->dst = dst;
-    REG_CARD_SPI_CNT = 0xa040;
+    REG_CARD_SPI_CNT = REG_MI_MCCNT0_E_MASK | REG_MI_MCCNT0_SEL_MASK | REG_MI_MCCNT0_MODE_MASK;
     while (size) {
         if (_03806AF4.pending && (((s32)cardi_common.cmd->type >> 16) & 0xff) == 0xff) {
             u64 start = OS_GetTick();
             while (((OS_GetTick() - start) * 64000) / 33514 < (s32)_03806AF4.delay) {}
-            REG_CARD_SPI_CNT = 0xa042;
+            REG_CARD_SPI_CNT = REG_MI_MCCNT0_E_MASK | REG_MI_MCCNT0_SEL_MASK | REG_MI_MCCNT0_MODE_MASK | (2 << REG_MI_MCCNT0_BAUDRATE_SHIFT);
             while (REG_CARD_SPI_CNT & REG_MI_MCCNT0_BUSY_MASK) {}
             REG_CARD_SPI_DATA = 0;
             while (REG_CARD_SPI_CNT & REG_MI_MCCNT0_BUSY_MASK) {}
@@ -321,10 +323,10 @@ void CARDi_CommArray(const void *src, void *dst, u32 size, void (*core)(CardSpiP
             while (((OS_GetTick() - start) * 64000) / 33514 < (s32)_03806AF4.delay) {}
         }
         if (--p->count == 0) {
-            REG_CARD_SPI_CNT = 0xa000;
+            REG_CARD_SPI_CNT = REG_MI_MCCNT0_E_MASK | REG_MI_MCCNT0_SEL_MASK;
             _03806AF4.pending = 1;
         } else {
-            REG_CARD_SPI_CNT = 0xa040;
+            REG_CARD_SPI_CNT = REG_MI_MCCNT0_E_MASK | REG_MI_MCCNT0_SEL_MASK | REG_MI_MCCNT0_MODE_MASK;
         }
         while (REG_CARD_SPI_CNT & REG_MI_MCCNT0_BUSY_MASK) {}
         core(p);
@@ -655,12 +657,12 @@ void CARDi_OnFifoRecv(PXIFifoTag tag, u32 data, BOOL err) {
         case CARD_REQ_IDENTIFY:
         case CARD_REQ_READ_ID:
         case CARD_REQ_READ_ROM:
-        case 5:
+        case CARD_REQ_WRITE_ROM:
         case CARD_REQ_READ_BACKUP:
         case CARD_REQ_WRITE_BACKUP:
         case CARD_REQ_PROGRAM_BACKUP:
         case CARD_REQ_VERIFY_BACKUP:
-        case 10:
+        case CARD_REQ_ERASE_PAGE_BACKUP:
         case CARD_REQ_ERASE_SECTOR_BACKUP:
         case CARD_REQ_ERASE_CHIP_BACKUP:
         case 13:

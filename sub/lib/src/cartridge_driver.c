@@ -228,7 +228,7 @@ void CTRDGi_UnlockByProcessor(u32 id, CtrdgLock *lock) {
 }
 
 void CTRDGi_SendtoPxi(u32 data) {
-    while (PXI_SendWordByFifo(13, data, 0)) {
+    while (PXI_SendWordByFifo(13, data, FALSE)) {
         VENEER_SVC_WaitByLoop(1);
     }
 }
@@ -430,7 +430,7 @@ void CTRDGi_CallbackForSetPhi(u32 tag, u32 data, int error) {
             reg &= ~96;
             REG_EXMEMCNT = reg | (data << 5);
         }
-        while (PXI_SendWordByFifo(17, 18, 0)) {
+        while (PXI_SendWordByFifo(17, 18, FALSE)) {
             VENEER_SVC_WaitByLoop(1);
         }
     } else {

@@ -25,6 +25,42 @@
 // Date/time block shared with the ARM9 (the RTC command data buffer).
 #define RTC_SHARED_DATA 0x027ffde8
 
+// PXI word exchanged with the ARM9 RTC library: command in bits 8-14, bit 15 set on replies, result in bits 0-7.
+#define RTC_PXI_COMMAND_MASK    0x00007f00
+#define RTC_PXI_COMMAND_SHIFT   8
+#define RTC_PXI_RESULT_BIT_MASK 0x00008000
+#define RTC_PXI_RESULT_MASK     0x000000ff
+
+#define RTC_PXI_COMMAND_RESET           0x00
+#define RTC_PXI_COMMAND_SET_HOUR_FORMAT 0x01
+#define RTC_PXI_COMMAND_READ_DATETIME   0x10
+#define RTC_PXI_COMMAND_READ_DATE       0x11
+#define RTC_PXI_COMMAND_READ_TIME       0x12
+#define RTC_PXI_COMMAND_READ_PULSE      0x13
+#define RTC_PXI_COMMAND_READ_ALARM1     0x14
+#define RTC_PXI_COMMAND_READ_ALARM2     0x15
+#define RTC_PXI_COMMAND_READ_STATUS1    0x16
+#define RTC_PXI_COMMAND_READ_STATUS2    0x17
+#define RTC_PXI_COMMAND_READ_ADJUST     0x18
+#define RTC_PXI_COMMAND_READ_FREE       0x19
+#define RTC_PXI_COMMAND_WRITE_DATETIME  0x20
+#define RTC_PXI_COMMAND_WRITE_DATE      0x21
+#define RTC_PXI_COMMAND_WRITE_TIME      0x22
+#define RTC_PXI_COMMAND_WRITE_PULSE     0x23
+#define RTC_PXI_COMMAND_WRITE_ALARM1    0x24
+#define RTC_PXI_COMMAND_WRITE_ALARM2    0x25
+#define RTC_PXI_COMMAND_WRITE_STATUS1   0x26
+#define RTC_PXI_COMMAND_WRITE_STATUS2   0x27
+#define RTC_PXI_COMMAND_WRITE_ADJUST    0x28
+#define RTC_PXI_COMMAND_WRITE_FREE      0x29
+#define RTC_PXI_COMMAND_INTERRUPT       0x30
+
+#define RTC_PXI_RESULT_SUCCESS         0
+#define RTC_PXI_RESULT_INVALID_COMMAND 1
+#define RTC_PXI_RESULT_ILLEGAL_STATUS  2
+#define RTC_PXI_RESULT_BUSY            3
+#define RTC_PXI_RESULT_FATAL_ERROR     4
+
 // RTC transfers move one byte; every named field is in that byte, the upper byte is never serialized.
 typedef struct RtcStatus1 {
     u16 reset : 1;
@@ -159,8 +195,8 @@ void RTC_Init(u32 priority) {
     OS_CreateThread(&rtcWork.thread, RtcThread, 0, rtcWork.stack + sizeof rtcWork.stack, sizeof rtcWork.stack, priority);
     OS_WakeupThreadDirect(&rtcWork.thread);
     EXIi_SelectRcnt(EXI_GPIOIF_GPIO);
-    EXIi_SetBitRcnt0L(0x40, 0);
-    EXIi_SetBitRcnt0L(0x100, 0x100);
+    EXIi_SetBitRcnt0L(REG_EXI_RCNT0_L_DIR_SI_MASK, 0);
+    EXIi_SetBitRcnt0L(REG_EXI_RCNT0_L_I_MASK, REG_EXI_RCNT0_L_I_MASK);
     irq = OS_DisableInterrupts();
     OS_SetIrqFunction(OS_IE_SIO, RtcAlarmIntr);
     OS_EnableIrqMask(OS_IE_SIO);
@@ -175,46 +211,46 @@ void RtcPxiCallback(PXIFifoTag channel, u32 word, BOOL error) {
     if (error) {
         return;
     }
-    command = (word & 0x7f00) >> 8;
+    command = (word & RTC_PXI_COMMAND_MASK) >> RTC_PXI_COMMAND_SHIFT;
     switch (command) {
-    case 0:
-    case 1:
-    case 16:
-    case 17:
-    case 18:
-    case 19:
-    case 20:
-    case 21:
-    case 22:
-    case 23:
-    case 24:
-    case 25:
-    case 35:
-    case 36:
-    case 37:
-    case 38:
-    case 39:
-    case 40:
-    case 41:
+    case RTC_PXI_COMMAND_RESET:
+    case RTC_PXI_COMMAND_SET_HOUR_FORMAT:
+    case RTC_PXI_COMMAND_READ_DATETIME:
+    case RTC_PXI_COMMAND_READ_DATE:
+    case RTC_PXI_COMMAND_READ_TIME:
+    case RTC_PXI_COMMAND_READ_PULSE:
+    case RTC_PXI_COMMAND_READ_ALARM1:
+    case RTC_PXI_COMMAND_READ_ALARM2:
+    case RTC_PXI_COMMAND_READ_STATUS1:
+    case RTC_PXI_COMMAND_READ_STATUS2:
+    case RTC_PXI_COMMAND_READ_ADJUST:
+    case RTC_PXI_COMMAND_READ_FREE:
+    case RTC_PXI_COMMAND_WRITE_PULSE:
+    case RTC_PXI_COMMAND_WRITE_ALARM1:
+    case RTC_PXI_COMMAND_WRITE_ALARM2:
+    case RTC_PXI_COMMAND_WRITE_STATUS1:
+    case RTC_PXI_COMMAND_WRITE_STATUS2:
+    case RTC_PXI_COMMAND_WRITE_ADJUST:
+    case RTC_PXI_COMMAND_WRITE_FREE:
         if (rtcWork.busy) {
-            RtcReturnResult(command, 3);
+            RtcReturnResult(command, RTC_PXI_RESULT_BUSY);
         } else {
             rtcWork.busy = 1;
             rtcWork.command = command;
             if (!OS_SendMessage(&rtcWork.queue, 0, OS_MESSAGE_NOBLOCK)) {
-                RtcReturnResult(command, 4);
+                RtcReturnResult(command, RTC_PXI_RESULT_FATAL_ERROR);
             }
         }
         break;
     default:
-        RtcReturnResult(command, 1);
+        RtcReturnResult(command, RTC_PXI_RESULT_INVALID_COMMAND);
         break;
     }
 }
 
 void RtcReturnResult(u32 command, u32 status) {
-    u32 packet = ((command << 8) & 0x7f00) | 0x8000 | (status & 255);
-    while (PXI_SendWordByFifo(PXI_FIFO_TAG_RTC, packet, 0) < 0) {}
+    u32 packet = ((command << RTC_PXI_COMMAND_SHIFT) & RTC_PXI_COMMAND_MASK) | RTC_PXI_RESULT_BIT_MASK | (status & RTC_PXI_RESULT_MASK);
+    while (PXI_SendWordByFifo(PXI_FIFO_TAG_RTC, packet, FALSE) < 0) {}
 }
 
 void RtcThread(void *arg) {
@@ -225,144 +261,144 @@ void RtcThread(void *arg) {
         {
             u16 command = rtcWork.command;
             switch (command) {
-            case 0:
+            case RTC_PXI_COMMAND_RESET:
                 RTC_Reset();
                 rtcWork.busy = 0;
-                RtcReturnResult(0, 0);
+                RtcReturnResult(RTC_PXI_COMMAND_RESET, RTC_PXI_RESULT_SUCCESS);
                 break;
-            case 1:
+            case RTC_PXI_COMMAND_SET_HOUR_FORMAT:
                 RTC_SetHourFormat(((RtcStatus1 *)data)->hour24);
                 rtcWork.busy = 0;
-                RtcReturnResult(1, 0);
+                RtcReturnResult(RTC_PXI_COMMAND_SET_HOUR_FORMAT, RTC_PXI_RESULT_SUCCESS);
                 break;
-            case 16:
+            case RTC_PXI_COMMAND_READ_DATETIME:
                 RTC_ReadDateTime(data);
                 rtcWork.busy = 0;
-                RtcReturnResult(16, 0);
+                RtcReturnResult(RTC_PXI_COMMAND_READ_DATETIME, RTC_PXI_RESULT_SUCCESS);
                 break;
-            case 17:
+            case RTC_PXI_COMMAND_READ_DATE:
                 RTC_ReadDate(data);
                 rtcWork.busy = 0;
-                RtcReturnResult(17, 0);
+                RtcReturnResult(RTC_PXI_COMMAND_READ_DATE, RTC_PXI_RESULT_SUCCESS);
                 break;
-            case 18:
+            case RTC_PXI_COMMAND_READ_TIME:
                 RTC_ReadTime(data + 4);
                 rtcWork.busy = 0;
-                RtcReturnResult(18, 0);
+                RtcReturnResult(RTC_PXI_COMMAND_READ_TIME, RTC_PXI_RESULT_SUCCESS);
                 break;
-            case 19:
+            case RTC_PXI_COMMAND_READ_PULSE:
                 if (!RTC_ReadPulse(data + 4)) {
                     rtcWork.busy = 0;
-                    RtcReturnResult(19, 2);
+                    RtcReturnResult(RTC_PXI_COMMAND_READ_PULSE, RTC_PXI_RESULT_ILLEGAL_STATUS);
                 } else {
                     rtcWork.busy = 0;
-                    RtcReturnResult(19, 0);
+                    RtcReturnResult(RTC_PXI_COMMAND_READ_PULSE, RTC_PXI_RESULT_SUCCESS);
                 }
                 break;
-            case 20:
+            case RTC_PXI_COMMAND_READ_ALARM1:
                 if (!RTC_ReadAlarm1(data + 4)) {
                     rtcWork.busy = 0;
-                    RtcReturnResult(20, 2);
+                    RtcReturnResult(RTC_PXI_COMMAND_READ_ALARM1, RTC_PXI_RESULT_ILLEGAL_STATUS);
                 } else {
                     rtcWork.busy = 0;
-                    RtcReturnResult(20, 0);
+                    RtcReturnResult(RTC_PXI_COMMAND_READ_ALARM1, RTC_PXI_RESULT_SUCCESS);
                 }
                 break;
-            case 21:
+            case RTC_PXI_COMMAND_READ_ALARM2:
                 if (!RTC_ReadAlarm2(data + 4)) {
                     rtcWork.busy = 0;
-                    RtcReturnResult(21, 2);
+                    RtcReturnResult(RTC_PXI_COMMAND_READ_ALARM2, RTC_PXI_RESULT_ILLEGAL_STATUS);
                 } else {
                     rtcWork.busy = 0;
-                    RtcReturnResult(21, 0);
+                    RtcReturnResult(RTC_PXI_COMMAND_READ_ALARM2, RTC_PXI_RESULT_SUCCESS);
                 }
                 break;
-            case 22:
+            case RTC_PXI_COMMAND_READ_STATUS1:
                 RTC_ReadStatus1(data);
                 rtcWork.busy = 0;
-                RtcReturnResult(22, 0);
+                RtcReturnResult(RTC_PXI_COMMAND_READ_STATUS1, RTC_PXI_RESULT_SUCCESS);
                 break;
-            case 23:
+            case RTC_PXI_COMMAND_READ_STATUS2:
                 RTC_ReadStatus2(data + 2);
                 rtcWork.busy = 0;
-                RtcReturnResult(23, 0);
+                RtcReturnResult(RTC_PXI_COMMAND_READ_STATUS2, RTC_PXI_RESULT_SUCCESS);
                 break;
-            case 24:
+            case RTC_PXI_COMMAND_READ_ADJUST:
                 RTC_ReadAdjust(data + 4);
                 rtcWork.busy = 0;
-                RtcReturnResult(24, 0);
+                RtcReturnResult(RTC_PXI_COMMAND_READ_ADJUST, RTC_PXI_RESULT_SUCCESS);
                 break;
-            case 25:
+            case RTC_PXI_COMMAND_READ_FREE:
                 RTC_ReadFree(data + 4);
                 rtcWork.busy = 0;
-                RtcReturnResult(25, 0);
+                RtcReturnResult(RTC_PXI_COMMAND_READ_FREE, RTC_PXI_RESULT_SUCCESS);
                 break;
-            case 32:
+            case RTC_PXI_COMMAND_WRITE_DATETIME:
                 RTC_WriteDateTime(data);
                 rtcWork.busy = 0;
-                RtcReturnResult(32, 0);
+                RtcReturnResult(RTC_PXI_COMMAND_WRITE_DATETIME, RTC_PXI_RESULT_SUCCESS);
                 break;
-            case 33:
+            case RTC_PXI_COMMAND_WRITE_DATE:
                 RTC_ReadTime(data + 4);
                 RTC_WriteDateTime(data);
                 rtcWork.busy = 0;
-                RtcReturnResult(33, 0);
+                RtcReturnResult(RTC_PXI_COMMAND_WRITE_DATE, RTC_PXI_RESULT_SUCCESS);
                 break;
-            case 34:
+            case RTC_PXI_COMMAND_WRITE_TIME:
                 RTC_WriteTime(data + 4);
                 rtcWork.busy = 0;
-                RtcReturnResult(34, 0);
+                RtcReturnResult(RTC_PXI_COMMAND_WRITE_TIME, RTC_PXI_RESULT_SUCCESS);
                 break;
-            case 35:
+            case RTC_PXI_COMMAND_WRITE_PULSE:
                 if (!RTC_WritePulse(data + 4)) {
                     rtcWork.busy = 0;
-                    RtcReturnResult(35, 2);
+                    RtcReturnResult(RTC_PXI_COMMAND_WRITE_PULSE, RTC_PXI_RESULT_ILLEGAL_STATUS);
                 } else {
                     rtcWork.busy = 0;
-                    RtcReturnResult(35, 0);
+                    RtcReturnResult(RTC_PXI_COMMAND_WRITE_PULSE, RTC_PXI_RESULT_SUCCESS);
                 }
                 break;
-            case 36:
+            case RTC_PXI_COMMAND_WRITE_ALARM1:
                 if (!RTC_WriteAlarm1(data + 4)) {
                     rtcWork.busy = 0;
-                    RtcReturnResult(36, 2);
+                    RtcReturnResult(RTC_PXI_COMMAND_WRITE_ALARM1, RTC_PXI_RESULT_ILLEGAL_STATUS);
                 } else {
                     rtcWork.busy = 0;
-                    RtcReturnResult(36, 0);
+                    RtcReturnResult(RTC_PXI_COMMAND_WRITE_ALARM1, RTC_PXI_RESULT_SUCCESS);
                 }
                 break;
-            case 37:
+            case RTC_PXI_COMMAND_WRITE_ALARM2:
                 if (!RTC_WriteAlarm2(data + 4)) {
                     rtcWork.busy = 0;
-                    RtcReturnResult(37, 2);
+                    RtcReturnResult(RTC_PXI_COMMAND_WRITE_ALARM2, RTC_PXI_RESULT_ILLEGAL_STATUS);
                 } else {
                     rtcWork.busy = 0;
-                    RtcReturnResult(37, 0);
+                    RtcReturnResult(RTC_PXI_COMMAND_WRITE_ALARM2, RTC_PXI_RESULT_SUCCESS);
                 }
                 break;
-            case 38:
+            case RTC_PXI_COMMAND_WRITE_STATUS1:
                 RTC_WriteStatus1(data);
                 rtcWork.busy = 0;
-                RtcReturnResult(38, 0);
+                RtcReturnResult(RTC_PXI_COMMAND_WRITE_STATUS1, RTC_PXI_RESULT_SUCCESS);
                 break;
-            case 39:
+            case RTC_PXI_COMMAND_WRITE_STATUS2:
                 RTC_WriteStatus2(data + 2);
                 rtcWork.busy = 0;
-                RtcReturnResult(39, 0);
+                RtcReturnResult(RTC_PXI_COMMAND_WRITE_STATUS2, RTC_PXI_RESULT_SUCCESS);
                 break;
-            case 40:
+            case RTC_PXI_COMMAND_WRITE_ADJUST:
                 RTC_WriteAdjust(data + 4);
                 rtcWork.busy = 0;
-                RtcReturnResult(40, 0);
+                RtcReturnResult(RTC_PXI_COMMAND_WRITE_ADJUST, RTC_PXI_RESULT_SUCCESS);
                 break;
-            case 41:
+            case RTC_PXI_COMMAND_WRITE_FREE:
                 RTC_WriteFree(data + 4);
                 rtcWork.busy = 0;
-                RtcReturnResult(41, 0);
+                RtcReturnResult(RTC_PXI_COMMAND_WRITE_FREE, RTC_PXI_RESULT_SUCCESS);
                 break;
             default:
                 rtcWork.busy = 0;
-                RtcReturnResult(command, 1);
+                RtcReturnResult(command, RTC_PXI_RESULT_INVALID_COMMAND);
                 break;
             }
         }
@@ -386,7 +422,7 @@ void RtcAlarmIntr(void) {
             status2.alarm2Enable = 0;
         }
         RTC_WriteStatus2(&status2);
-        RtcReturnResult(48, flags);
+        RtcReturnResult(RTC_PXI_COMMAND_INTERRUPT, flags);
     }
 }
 

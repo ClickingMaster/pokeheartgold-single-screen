@@ -129,8 +129,8 @@ void SPIi_ReturnResult(u32 command, u32 result) {
         tag = PXI_FIFO_TAG_NVRAM;
         break;
     }
-    word = 0x03000000 | (((command & 0xff) | 0x80) << 8) | (result & 0xff);
-    while (PXI_SendWordByFifo(tag, word, 0) < 0) {}
+    word = SPI_PXI_START_BIT | SPI_PXI_END_BIT | (((command & 0xff) | 0x80) << 8) | (result & 0xff);
+    while (PXI_SendWordByFifo(tag, word, FALSE) < 0) {}
 }
 
 BOOL SPIi_CheckException(u32 owner) {

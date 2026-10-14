@@ -85,12 +85,12 @@ static inline void PublishMicSample(u16 value) {
 
 void MIC_ExecuteProcess(MicRequest *request) {
     switch (request->command) {
-    case 0x40: {
+    case SPI_PXI_COMMAND_MIC_SAMPLING: {
         OSIntrMode irq = OS_DisableInterrupts();
         u16 value;
         if (!SPIi_CheckException(SPI_MODULE_MIC)) {
             OS_RestoreInterrupts(irq);
-            SPIi_ReturnResult((u16)request->command, 4);
+            SPIi_ReturnResult((u16)request->command, SPI_PXI_RESULT_EXCLUSIVE);
             break;
         }
         SPIi_GetException(SPI_MODULE_MIC);
@@ -108,11 +108,11 @@ void MIC_ExecuteProcess(MicRequest *request) {
             }
             PublishMicSample(value);
         }
-        SPIi_ReturnResult((u16)request->command, 0);
+        SPIi_ReturnResult((u16)request->command, SPI_PXI_RESULT_SUCCESS);
         SPIi_ReleaseException(SPI_MODULE_MIC);
         break;
     }
-    case 0x41:
+    case SPI_PXI_COMMAND_MIC_AUTO_ON:
         if (micw.state == 1) {
             OSIntrMode irq;
             micw.last = 0;
@@ -124,13 +124,13 @@ void MIC_ExecuteProcess(MicRequest *request) {
             REG_TM3CNT_L = micw.timer;
             REG_TM3CNT_H = micw.clock | 0xc0;
             OS_RestoreInterrupts(irq);
-            SPIi_ReturnResult((u16)request->command, 0);
+            SPIi_ReturnResult((u16)request->command, SPI_PXI_RESULT_SUCCESS);
             micw.state = 2;
         } else {
-            SPIi_ReturnResult((u16)request->command, 3);
+            SPIi_ReturnResult((u16)request->command, SPI_PXI_RESULT_ILLEGAL_STATUS);
         }
         break;
-    case 0x42:
+    case SPI_PXI_COMMAND_MIC_AUTO_OFF:
         if (micw.state - 3u <= 1) {
             OSIntrMode irq;
             REG_TM3CNT_H &= ~0x80u;
@@ -139,16 +139,16 @@ void MIC_ExecuteProcess(MicRequest *request) {
             MIC_DisableMultipleInterrupt();
             OS_RestoreInterrupts(irq);
             if (micw.state == 3) {
-                SPIi_ReturnResult(0x42, 0);
+                SPIi_ReturnResult(SPI_PXI_COMMAND_MIC_AUTO_OFF, SPI_PXI_RESULT_SUCCESS);
             } else {
-                SPIi_ReturnResult(0x51, 0);
+                SPIi_ReturnResult(SPI_PXI_COMMAND_MIC_BUFFER_FULL, SPI_PXI_RESULT_SUCCESS);
             }
             micw.state = 0;
         } else {
             if (micw.state == 3) {
-                SPIi_ReturnResult(0x42, 3);
+                SPIi_ReturnResult(SPI_PXI_COMMAND_MIC_AUTO_OFF, SPI_PXI_RESULT_ILLEGAL_STATUS);
             } else {
-                SPIi_ReturnResult(0x51, 3);
+                SPIi_ReturnResult(SPI_PXI_COMMAND_MIC_BUFFER_FULL, SPI_PXI_RESULT_ILLEGAL_STATUS);
             }
         }
         break;

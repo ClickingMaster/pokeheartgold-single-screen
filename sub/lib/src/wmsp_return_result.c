@@ -17,7 +17,7 @@ void VENEER_SVC_WaitByLoop(s32 count);
 #pragma force_active on
 
 void WMSP_ReturnResult2Wm9(void *result) {
-    while (PXI_SendWordByFifo(PXI_FIFO_TAG_WM, (u32)result, 0) < 0) {
+    while (PXI_SendWordByFifo(PXI_FIFO_TAG_WM, (u32)result, FALSE) < 0) {
         VENEER_SVC_WaitByLoop(0x100);
     }
     OS_UnlockMutex(&wmspW.mutex);

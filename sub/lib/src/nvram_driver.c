@@ -47,95 +47,95 @@ void NVRAM_ExecuteProcess(NvramRequest *request) {
     OSIntrMode irq = OS_DisableInterrupts();
     if (!SPIi_CheckException(SPI_MODULE_NVRAM)) {
         OS_RestoreInterrupts(irq);
-        SPIi_ReturnResult((u16)request->command, 4);
+        SPIi_ReturnResult((u16)request->command, SPI_PXI_RESULT_EXCLUSIVE);
         return;
     }
     SPIi_GetException(SPI_MODULE_NVRAM);
     OS_RestoreInterrupts(irq);
     switch (request->command) {
-    case 0x20:
+    case SPI_PXI_COMMAND_NVRAM_WREN:
         NVRAM_WriteEnable();
         break;
-    case 0x21:
+    case SPI_PXI_COMMAND_NVRAM_WRDI:
         NVRAM_WriteDisable();
         break;
-    case 0x22:
+    case SPI_PXI_COMMAND_NVRAM_RDSR:
         NVRAM_ReadStatusRegister(request->data);
         break;
-    case 0x23:
+    case SPI_PXI_COMMAND_NVRAM_READ:
         if (!NvramCheckReadyToRead()) {
-            SPIi_ReturnResult((u16)request->command, 3);
+            SPIi_ReturnResult((u16)request->command, SPI_PXI_RESULT_ILLEGAL_STATUS);
             SPIi_ReleaseException(SPI_MODULE_NVRAM);
             return;
         }
         NVRAM_ReadDataBytes(request->address, request->length, request->data);
         break;
-    case 0x24:
+    case SPI_PXI_COMMAND_NVRAM_FAST_READ:
         if (!NvramCheckReadyToRead()) {
-            SPIi_ReturnResult((u16)request->command, 3);
+            SPIi_ReturnResult((u16)request->command, SPI_PXI_RESULT_ILLEGAL_STATUS);
             SPIi_ReleaseException(SPI_MODULE_NVRAM);
             return;
         }
         NVRAM_ReadDataBytesAtHigherSpeed(request->address, request->length, request->data);
         break;
-    case 0x25:
+    case SPI_PXI_COMMAND_NVRAM_PW:
         if (!NvramCheckReadyToWrite()) {
-            SPIi_ReturnResult((u16)request->command, 3);
+            SPIi_ReturnResult((u16)request->command, SPI_PXI_RESULT_ILLEGAL_STATUS);
             SPIi_ReleaseException(SPI_MODULE_NVRAM);
             return;
         }
         NVRAM_PageWrite(request->address, (u16)request->length, request->data);
         break;
-    case 0x26:
+    case SPI_PXI_COMMAND_NVRAM_PP:
         if (!NvramCheckReadyToWrite()) {
-            SPIi_ReturnResult((u16)request->command, 3);
+            SPIi_ReturnResult((u16)request->command, SPI_PXI_RESULT_ILLEGAL_STATUS);
             SPIi_ReleaseException(SPI_MODULE_NVRAM);
             return;
         }
         NVRAM_PageProgram(request->address, (u16)request->length, request->data);
         break;
-    case 0x27:
+    case SPI_PXI_COMMAND_NVRAM_PE:
         if (!NvramCheckReadyToWrite()) {
-            SPIi_ReturnResult((u16)request->command, 3);
+            SPIi_ReturnResult((u16)request->command, SPI_PXI_RESULT_ILLEGAL_STATUS);
             SPIi_ReleaseException(SPI_MODULE_NVRAM);
             return;
         }
         NVRAM_PageErase(request->address);
         break;
-    case 0x28:
+    case SPI_PXI_COMMAND_NVRAM_SE:
         if (!NvramCheckReadyToWrite()) {
-            SPIi_ReturnResult((u16)request->command, 3);
+            SPIi_ReturnResult((u16)request->command, SPI_PXI_RESULT_ILLEGAL_STATUS);
             SPIi_ReleaseException(SPI_MODULE_NVRAM);
             return;
         }
         NVRAM_SectorErase(request->address);
         break;
-    case 0x29:
+    case SPI_PXI_COMMAND_NVRAM_DP:
         NVRAM_DeepPowerDown();
         break;
-    case 0x2a:
+    case SPI_PXI_COMMAND_NVRAM_RDP:
         NVRAM_ReleaseFromDeepPowerDown();
         break;
-    case 0x2b:
+    case SPI_PXI_COMMAND_NVRAM_CE:
         if (!NvramCheckReadyToWrite()) {
-            SPIi_ReturnResult((u16)request->command, 3);
+            SPIi_ReturnResult((u16)request->command, SPI_PXI_RESULT_ILLEGAL_STATUS);
             SPIi_ReleaseException(SPI_MODULE_NVRAM);
             return;
         }
         NVRAM_ChipErase();
         break;
-    case 0x2c:
+    case SPI_PXI_COMMAND_NVRAM_RSI:
         NVRAM_ReadSiliconId(request->data);
         break;
-    case 0x2d:
+    case SPI_PXI_COMMAND_NVRAM_SR:
         NVRAM_SoftwareReset();
         break;
     default:
         SPIi_ReleaseException(SPI_MODULE_NVRAM);
-        SPIi_ReturnResult((u16)request->command, 1);
+        SPIi_ReturnResult((u16)request->command, SPI_PXI_RESULT_INVALID_COMMAND);
         return;
     }
-    SPIi_ReturnResult((u16)request->command, 0);
+    SPIi_ReturnResult((u16)request->command, SPI_PXI_RESULT_SUCCESS);
     SPIi_ReleaseException(SPI_MODULE_NVRAM);
 }
 
