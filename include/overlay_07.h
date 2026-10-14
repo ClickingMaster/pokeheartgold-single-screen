@@ -5,7 +5,7 @@
 
 void BallThrow_SetBallAnimation(BallThrow *data, s32 ballAnim);
 BOOL BallThrow_IsBallAnimationPlaying(BallThrow *data, s32 ballAnim_Unused); // IsBallAnimationPlaying?
-BallThrow *BallThrow_New(BattleBallParams *unkStruct_134);                      // unkBallData_Init?
+BallThrow *BallThrow_New(BallThrowParams *unkStruct_134);                      // unkBallData_Init?
 void BallThrow_Delete(BallThrow *data);                                      // unkBallData_Destroy?
 s32 BallThrow_GetMode(BallThrow *data);
 

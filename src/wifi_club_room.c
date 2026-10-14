@@ -129,7 +129,7 @@ u8 WifiClubRoom_GetTalkPartnerId(WifiClubRoom *room) {
     return room->player->talkPartnerId;
 }
 
-s32 WifiClubRoom_GetTileUnderPlayer(WifiClubRoom *room) {
+s32 WifiClubRoom_GetTileAtPlayer(WifiClubRoom *room) {
     GF_ASSERT(room->player != NULL);
     Field2DPoint pos = Field2DObject_GetPos(room->player->object);
     return Field2DMap_GetTag(room->map, pos.unk0 / 16, pos.unk2 / 16);

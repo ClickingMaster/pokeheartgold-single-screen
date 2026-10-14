@@ -451,7 +451,7 @@ s32 WifiClubRoom_IsInitialized(WifiClubRoom *room);
 s32 WifiClubRoom_Update(WifiClubRoom *room);
 void WifiClubRoom_Draw(WifiClubRoom *room);
 u8 WifiClubRoom_GetTalkPartnerId(WifiClubRoom *room);
-s32 WifiClubRoom_GetTileUnderPlayer(WifiClubRoom *room);
+s32 WifiClubRoom_GetTileAtPlayer(WifiClubRoom *room);
 void WifiClubRoom_ShowFriendMarker(WifiClubRoom *room, WifiClubRoomPerson *person);
 void WifiClubRoom_HideFriendMarker(WifiClubRoom *room);
 void WifiClubRoom_SetInputLocked(WifiClubRoom *room, s32 locked);

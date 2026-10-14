@@ -3,65 +3,65 @@
 #include "wifi_plaza_internal.h"
 
 // Clears the 20 bytes one at a time.
-void WiFiPlaza_ClearTapToyPlayedFlags(volatile u8 *a0) {
+void WiFiPlaza_ClearTapToyPlayedFlags(volatile u8 *buffer) {
     u32 count = 20;
     do {
-        *a0++ = 0;
+        *buffer++ = 0;
         count--;
     } while (count != 0);
 }
 
-void WiFiPlazaTalkSession_Init(WiFiPlazaTalkSession *a0) {
-    memset(a0, 0, sizeof(WiFiPlazaTalkSession));
+void WiFiPlazaTalkSession_Init(WiFiPlazaTalkSession *session) {
+    memset(session, 0, sizeof(WiFiPlazaTalkSession));
 }
 
-void WiFiPlazaTalkSession_Reset(WiFiPlazaTalkSession *a0) {
-    a0->partnerSlot = 0;
-    a0->state = 0;
-    a0->role = 0;
-    WiFiPlazaTalkSession_StopTimeout(a0);
+void WiFiPlazaTalkSession_Reset(WiFiPlazaTalkSession *session) {
+    session->partnerSlot = 0;
+    session->state = 0;
+    session->role = 0;
+    WiFiPlazaTalkSession_StopTimeout(session);
 }
 
-void WiFiPlazaTalkSession_Abort(WiFiPlazaTalkSession *a0) {
-    a0->partnerSlot = 0;
-    a0->state = 4;
-    WiFiPlazaTalkSession_StopTimeout(a0);
-    a0->role = 0;
+void WiFiPlazaTalkSession_Abort(WiFiPlazaTalkSession *session) {
+    session->partnerSlot = 0;
+    session->state = 4;
+    WiFiPlazaTalkSession_StopTimeout(session);
+    session->role = 0;
 }
 
-BOOL WiFiPlazaTalkSession_HasTalkedWith(WiFiPlazaTalkSession *a0, u32 slot) {
+BOOL WiFiPlazaTalkSession_HasTalkedWith(WiFiPlazaTalkSession *session, u32 slot) {
     GF_ASSERT(slot < 20);
-    return (a0->talkedWith & (1 << slot)) != 0;
+    return (session->talkedWith & (1 << slot)) != 0;
 }
 
-void WiFiPlazaTalkSession_SetTalkedWith(WiFiPlazaTalkSession *a0, u32 slot) {
+void WiFiPlazaTalkSession_SetTalkedWith(WiFiPlazaTalkSession *session, u32 slot) {
     GF_ASSERT(slot < 20);
-    a0->talkedWith |= 1 << slot;
+    session->talkedWith |= 1 << slot;
 }
 
-void WiFiPlazaTalkSession_ClearTalkedWith(WiFiPlazaTalkSession *a0, u32 slot) {
+void WiFiPlazaTalkSession_ClearTalkedWith(WiFiPlazaTalkSession *session, u32 slot) {
     GF_ASSERT(slot < 20);
-    a0->talkedWith &= ~(1 << slot);
+    session->talkedWith &= ~(1 << slot);
 }
 
-void WiFiPlazaTalkSession_IncTalkCount(WiFiPlazaTalkSession *a0, u32 slot) {
+void WiFiPlazaTalkSession_IncTalkCount(WiFiPlazaTalkSession *session, u32 slot) {
     int value;
 
     GF_ASSERT(slot < 20);
-    value = a0->talkCounts[slot] + 1;
+    value = session->talkCounts[slot] + 1;
     if (value <= 6) {
-        a0->talkCounts[slot] = value;
+        session->talkCounts[slot] = value;
     }
 }
 
-void WiFiPlazaTalkSession_ResetTalkCount(WiFiPlazaTalkSession *a0, u32 slot) {
+void WiFiPlazaTalkSession_ResetTalkCount(WiFiPlazaTalkSession *session, u32 slot) {
     GF_ASSERT(slot < 20);
-    a0->talkCounts[slot] = 0;
+    session->talkCounts[slot] = 0;
 }
 
-void WiFiPlazaTalkSession_SetMessage(WiFiPlazaTalkSession *a0, int value) {
-    a0->sendState = a0->state;
-    a0->sendMessage = value;
+void WiFiPlazaTalkSession_SetMessage(WiFiPlazaTalkSession *session, int value) {
+    session->sendState = session->state;
+    session->sendMessage = value;
 }
 
 void WiFiPlazaWork_SendTalkAnswer(WiFiPlazaWork *work, int id, u16 value) {
@@ -76,35 +76,35 @@ void WiFiPlazaWork_SendTalkEnd(WiFiPlazaWork *work, int id) {
     WiFiPlazaLobbyClient_SendToPlayer(2, id, &work->talk.sendMessage, 4);
 }
 
-void WiFiPlazaTalkSession_StartTimeout(WiFiPlazaTalkSession *a0) {
-    a0->timeoutActive = 1;
-    a0->timeoutCounter = 0;
+void WiFiPlazaTalkSession_StartTimeout(WiFiPlazaTalkSession *session) {
+    session->timeoutActive = 1;
+    session->timeoutCounter = 0;
 }
 
-void WiFiPlazaTalkSession_StopTimeout(WiFiPlazaTalkSession *a0) {
-    a0->timeoutActive = 0;
-    a0->timeoutCounter = 0;
+void WiFiPlazaTalkSession_StopTimeout(WiFiPlazaTalkSession *session) {
+    session->timeoutActive = 0;
+    session->timeoutCounter = 0;
 }
 
 // Counts timeoutCounter up to 900 while timeoutActive is set.
-void WiFiPlazaTalkSession_UpdateTimeout(WiFiPlazaTalkSession *a0) {
-    if (a0->timeoutActive == 1) {
-        int value = a0->timeoutCounter + 1;
+void WiFiPlazaTalkSession_UpdateTimeout(WiFiPlazaTalkSession *session) {
+    if (session->timeoutActive == 1) {
+        int value = session->timeoutCounter + 1;
         if (value <= 900) {
-            a0->timeoutCounter = value;
+            session->timeoutCounter = value;
         }
     }
 }
 
-BOOL WiFiPlazaTalkSession_IsWithinTimeout(WiFiPlazaTalkSession *a0) {
-    if (a0->timeoutActive == 0) {
+BOOL WiFiPlazaTalkSession_IsWithinTimeout(WiFiPlazaTalkSession *session) {
+    if (session->timeoutActive == 0) {
         return TRUE;
     }
-    return a0->timeoutCounter < 900;
+    return session->timeoutCounter < 900;
 }
 
-s16 WiFiPlazaTalkSession_GetTimeoutCounter(WiFiPlazaTalkSession *a0) {
-    return a0->timeoutCounter;
+s16 WiFiPlazaTalkSession_GetTimeoutCounter(WiFiPlazaTalkSession *session) {
+    return session->timeoutCounter;
 }
 
 // Lobby message type 0: two players.
@@ -328,11 +328,11 @@ void WiFiPlazaWork_AddLobbyEventNotice(WiFiPlazaWork *work, int which) {
     WiFiPlazaNews_AddLobbyEventNotice(work->news, &notice);
 }
 
-void WiFiPlazaGroups_Init(WiFiPlazaGroups *a0) {
-    memset(a0, 0, sizeof(WiFiPlazaGroups));
-    MIi_CpuClear32(0xFFFFFFFF, (u32 *)a0->ids, sizeof(a0->ids));
+void WiFiPlazaGroups_Init(WiFiPlazaGroups *groups) {
+    memset(groups, 0, sizeof(WiFiPlazaGroups));
+    MIi_CpuClear32(0xFFFFFFFF, (u32 *)groups->ids, sizeof(groups->ids));
 }
 
-void WiFiPlazaGroups_Start(WiFiPlazaGroups *a0) {
-    a0->active = 1;
+void WiFiPlazaGroups_Start(WiFiPlazaGroups *groups) {
+    groups->active = 1;
 }

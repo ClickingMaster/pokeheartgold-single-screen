@@ -64,20 +64,20 @@ const struct ScriptBankMapping sScriptBankMapping[30] = {
 };
 
 void StartMapSceneScript(FieldSystem *fieldSystem, u16 script, LocalMapObject *lastInteracted) {
-    ScriptEnvironment *r4 = ScriptEnvironment_New();
-    SetupScriptEngine(fieldSystem, r4, script, lastInteracted, NULL);
-    FieldSystem_CreateTask(fieldSystem, Task_RunScripts, r4);
+    ScriptEnvironment *env = ScriptEnvironment_New();
+    SetupScriptEngine(fieldSystem, env, script, lastInteracted, NULL);
+    FieldSystem_CreateTask(fieldSystem, Task_RunScripts, env);
 }
 
 void FieldSystem_SetEngagedTrainer(FieldSystem *fieldSystem, LocalMapObject *obj, int sightDistance, int sightDirection, int scriptId, int trainerId, int encounterType, int idx) {
     ScriptEnvironment *env = TaskManager_GetEnvironment(fieldSystem->taskman);
-    EngagedTrainer *r0 = &env->engagedTrainers[idx];
-    r0->sightDistance = sightDistance;
-    r0->sightDirection = sightDirection;
-    r0->scriptId = scriptId;
-    r0->trainerId = trainerId;
-    r0->encounterType = encounterType;
-    r0->overworldEvent = obj;
+    EngagedTrainer *trainer = &env->engagedTrainers[idx];
+    trainer->sightDistance = sightDistance;
+    trainer->sightDirection = sightDirection;
+    trainer->scriptId = scriptId;
+    trainer->trainerId = trainerId;
+    trainer->encounterType = encounterType;
+    trainer->overworldEvent = obj;
 }
 
 void QueueScript(TaskManager *taskman, u16 script, LocalMapObject *lastInteracted, void *a3) {
@@ -182,12 +182,12 @@ ScriptContext *CreateScriptContext(FieldSystem *fieldSystem, u16 script) {
 
 void SetUpScriptContextForMap(FieldSystem *fieldSystem, ScriptContext *ctx, u16 scriptId, u32 unused_r3) {
 #pragma unused(unused_r3)
-    u16 r6;
+    u16 scriptIndex;
 
     ctx->fieldSystem = fieldSystem;
-    r6 = LoadScriptsAndMessagesByMapId(fieldSystem, ctx, scriptId);
+    scriptIndex = LoadScriptsAndMessagesByMapId(fieldSystem, ctx, scriptId);
     SetupBytecodeScript(ctx, ctx->mapScripts);
-    ScriptRunByIndex(ctx, r6);
+    ScriptRunByIndex(ctx, scriptIndex);
     ScriptContext_SetTaskManager(ctx, fieldSystem->taskman);
 }
 

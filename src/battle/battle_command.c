@@ -6658,7 +6658,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
     switch (data->state) {
     case STATE_GET_POKEMON_START:
         if (data->captureType == CAPTURE_NORMAL) {
-            BattleBallParams unkStruct;
+            BallThrowParams unkStruct;
             unkStruct.mode = 3;
             unkStruct.heapID = HEAP_ID_BATTLE;
             unkStruct.resTagOffset = battlerId + 20000;

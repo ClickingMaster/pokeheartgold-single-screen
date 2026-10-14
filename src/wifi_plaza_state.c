@@ -508,7 +508,7 @@ void WiFiPlaza_ClearEventFlags(u32 *flags) {
 }
 
 // Counts down the four lobby timers of state; each one raises a flag in flags[2] when it runs out.
-void WiFiPlazaEventSchedule_Update(WiFiPlazaEventSchedule *state, u32 *flags, WiFiPlazaGroups *a2, WiFiPlazaTimer *a3) {
+void WiFiPlazaEventSchedule_Update(WiFiPlazaEventSchedule *state, u32 *flags, WiFiPlazaGroups *groups, WiFiPlazaTimer *timer) {
     if (state->closeTimer - 1 >= 0) {
         state->closeTimer--;
         if (state->closeTimer == 840) {
@@ -536,13 +536,13 @@ void WiFiPlazaEventSchedule_Update(WiFiPlazaEventSchedule *state, u32 *flags, Wi
         state->mode2 = 1;
         flags[2] |= 0x20;
         state->fireworksDelay--;
-        WiFiPlazaTimer_Start(a3);
+        WiFiPlazaTimer_Start(timer);
     }
 
     if (state->paradeDelay - 1 >= 0) {
         state->paradeDelay--;
     } else if (state->paradeDelay == 0) {
-        WiFiPlazaGroups_Start(a2);
+        WiFiPlazaGroups_Start(groups);
         if (state->unk_0c == 0) {
             PlayBGM(SEQ_GS_WIFIPARADE);
         }

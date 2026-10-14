@@ -132,59 +132,59 @@ BOOL ScrCmd_491(ScriptContext *ctx) {
 
 // same as ScrCmd_636, but battle factory
 BOOL ScrCmd_628(ScriptContext *ctx) {
-    u16 r4 = ScriptGetVar(ctx);
-    u16 r5 = ScriptGetVar(ctx);
-    u32 r0 = Save_Frontier_GetFactoryFlags(ctx->fieldSystem->saveData);
+    u16 type = ScriptGetVar(ctx);
+    u16 levelMode = ScriptGetVar(ctx);
+    u32 factoryFlags = Save_Frontier_GetFactoryFlags(ctx->fieldSystem->saveData);
     u8 s = 0;
-    FactoryFlags_SetField(r0, 0xa, r5 * 4 + r4, &s);
-    if (r4 == 3) {
-        u32 r7;
-        if (r5 == 0) {
-            r7 = 0x66;
+    FactoryFlags_SetField(factoryFlags, 0xa, levelMode * 4 + type, &s);
+    if (type == 3) {
+        u32 stat;
+        if (levelMode == 0) {
+            stat = 0x66;
         } else {
-            r7 = 0x68;
+            stat = 0x68;
         }
-        FrontierSave_SetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), r7, FrontierStat_GetFriendIndex(r7), 0);
+        FrontierSave_SetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), stat, FrontierStat_GetFriendIndex(stat), 0);
     }
-    FrontierSave_SetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), BattleFactory_GetWinStreakStat(r5, r4), FrontierStat_GetFriendIndex(BattleFactory_GetWinStreakStat(r5, r4)), 0);
-    FrontierSave_SetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), BattleFactory_GetTradeCountStat(r5, r4), FrontierStat_GetFriendIndex(BattleFactory_GetTradeCountStat(r5, r4)), 0);
+    FrontierSave_SetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), BattleFactory_GetWinStreakStat(levelMode, type), FrontierStat_GetFriendIndex(BattleFactory_GetWinStreakStat(levelMode, type)), 0);
+    FrontierSave_SetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), BattleFactory_GetTradeCountStat(levelMode, type), FrontierStat_GetFriendIndex(BattleFactory_GetTradeCountStat(levelMode, type)), 0);
     return FALSE;
 }
 
 BOOL ScrCmd_633(ScriptContext *ctx) {
-    u16 r7 = ScriptReadHalfword(ctx);
-    u16 r5 = ScriptGetVar(ctx);
+    u16 action = ScriptReadHalfword(ctx);
+    u16 type = ScriptGetVar(ctx);
     u16 *resultPtr = ScriptGetVarPointer(ctx);
     Save_Frontier_GetHallChallenge(ctx->fieldSystem->saveData);
-    u32 sp04 = Save_Frontier_GetHallFlags(ctx->fieldSystem->saveData);
-    void *r1 = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
-    switch (r7) {
+    u32 hallFlags = Save_Frontier_GetHallFlags(ctx->fieldSystem->saveData);
+    void *appArgs = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
+    switch (action) {
     case 0:
-        *resultPtr = BattleHall_DoesPartyContainEligibleMons(r5, ctx->fieldSystem->saveData);
+        *resultPtr = BattleHall_DoesPartyContainEligibleMons(type, ctx->fieldSystem->saveData);
         break;
     case 1:
-        if (r5 == 3) {
+        if (type == 3) {
             *resultPtr = FrontierSave_GetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), 0x6a, FrontierStat_GetFriendIndex(0x6a));
         } else {
-            *resultPtr = HallFlags_GetField(sp04, 5, r5, 0, 0);
+            *resultPtr = HallFlags_GetField(hallFlags, 5, type, 0, 0);
         }
         break;
     case 2:
-        *resultPtr = FrontierSave_GetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), BattleHall_GetSpeciesStat(r5), FrontierStat_GetFriendIndex(BattleHall_GetSpeciesStat(r5)));
+        *resultPtr = FrontierSave_GetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), BattleHall_GetSpeciesStat(type), FrontierStat_GetFriendIndex(BattleHall_GetSpeciesStat(type)));
         break;
     case 3:
-        BattleHall_ResetStreak(ctx->fieldSystem->saveData, sp04, r5);
+        BattleHall_ResetStreak(ctx->fieldSystem->saveData, hallFlags, type);
         break;
     case 4: {
         BattleHallChallengeType challengeType;
-        if (r5 == 0) {
+        if (type == 0) {
             challengeType = BATTLE_HALL_CHALLENGE_TYPE_SINGLE;
-        } else if (r5 == 1) {
+        } else if (type == 1) {
             challengeType = BATTLE_HALL_CHALLENGE_TYPE_DOUBLE;
         } else {
             challengeType = BATTLE_HALL_CHALLENGE_TYPE_MULTI;
         }
-        BattleHall_StartSelectMons(ctx->taskman, r1, challengeType);
+        BattleHall_StartSelectMons(ctx->taskman, appArgs, challengeType);
         return TRUE;
     }
     default:
@@ -236,9 +236,9 @@ static BOOL BattleHall_DoesPartyContainEligibleMons(s32 numRequiredMons, SaveDat
 
 // upon continuing battle hall challenge without previously saving
 BOOL ScrCmd_636(ScriptContext *ctx) {
-    u16 r4 = ScriptGetVar(ctx);
-    u32 r1 = Save_Frontier_GetHallFlags(ctx->fieldSystem->saveData);
-    BattleHall_ResetStreak(ctx->fieldSystem->saveData, r1, r4);
+    u16 type = ScriptGetVar(ctx);
+    u32 hallFlags = Save_Frontier_GetHallFlags(ctx->fieldSystem->saveData);
+    BattleHall_ResetStreak(ctx->fieldSystem->saveData, hallFlags, type);
     return FALSE;
 }
 
@@ -251,34 +251,34 @@ BOOL ScrCmd_634(ScriptContext *ctx) {
 }
 
 static void BattleHall_StartSpeciesCheck(TaskManager *taskManager, u16 playerSpecies, u16 *resultPtr) {
-    BattleHallSpeciesCheck *r4 = Heap_Alloc(HEAP_ID_FIELD2, sizeof(BattleHallSpeciesCheck));
-    memset(r4, 0, sizeof(BattleHallSpeciesCheck));
-    r4->playerTeam = playerSpecies;
-    r4->result = resultPtr;
-    FieldComm_RegisterCommands((FieldSystem *)r4);
-    TaskManager_Call(taskManager, Task_BattleHallSpeciesCheck, r4);
+    BattleHallSpeciesCheck *speciesCheck = Heap_Alloc(HEAP_ID_FIELD2, sizeof(BattleHallSpeciesCheck));
+    memset(speciesCheck, 0, sizeof(BattleHallSpeciesCheck));
+    speciesCheck->playerTeam = playerSpecies;
+    speciesCheck->result = resultPtr;
+    FieldComm_RegisterCommands((FieldSystem *)speciesCheck);
+    TaskManager_Call(taskManager, Task_BattleHallSpeciesCheck, speciesCheck);
 }
 
 static BOOL Task_BattleHallSpeciesCheck(TaskManager *taskManager) {
-    BattleHallSpeciesCheck *r4 = TaskManager_GetEnvironment(taskManager);
-    switch (r4->state) {
+    BattleHallSpeciesCheck *speciesCheck = TaskManager_GetEnvironment(taskManager);
+    switch (speciesCheck->state) {
     case 0:
-        if (Comm_SendCommand(0x84, r4, sizeof(BattleHallSpeciesCheck)) == 1) {
-            r4->state++;
+        if (Comm_SendCommand(0x84, speciesCheck, sizeof(BattleHallSpeciesCheck)) == 1) {
+            speciesCheck->state++;
         }
         break;
     case 1:
-        if (r4->numReceived >= 2) {
-            if (r4->playerTeam == r4->partnerTeam) {
-                *(r4->result) = FALSE;
+        if (speciesCheck->numReceived >= 2) {
+            if (speciesCheck->playerTeam == speciesCheck->partnerTeam) {
+                *(speciesCheck->result) = FALSE;
             } else {
-                *(r4->result) = TRUE;
+                *(speciesCheck->result) = TRUE;
             }
-            r4->state++;
+            speciesCheck->state++;
         }
         break;
     case 2:
-        Heap_Free(r4);
+        Heap_Free(speciesCheck);
         return TRUE;
     }
     return FALSE;
@@ -286,31 +286,31 @@ static BOOL Task_BattleHallSpeciesCheck(TaskManager *taskManager) {
 
 static void BattleHall_StartSelectMons(TaskManager *taskManager, void *appArgs, BattleHallChallengeType challengeType) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    BattleHallSelectMonsEnv *r4 = Heap_Alloc(HEAP_ID_FIELD2, sizeof(BattleHallSelectMonsEnv));
-    MI_CpuFill8(r4, 0, sizeof(BattleHallSelectMonsEnv));
-    r4->challengeType = challengeType;
-    r4->appArgs = appArgs;
-    TaskManager_Call(fieldSystem->taskman, Task_BattleHallSelectMons, r4);
+    BattleHallSelectMonsEnv *env = Heap_Alloc(HEAP_ID_FIELD2, sizeof(BattleHallSelectMonsEnv));
+    MI_CpuFill8(env, 0, sizeof(BattleHallSelectMonsEnv));
+    env->challengeType = challengeType;
+    env->appArgs = appArgs;
+    TaskManager_Call(fieldSystem->taskman, Task_BattleHallSelectMons, env);
 }
 
 static BOOL Task_BattleHallSelectMons(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    BattleHallSelectMonsEnv *r4 = TaskManager_GetEnvironment(taskManager);
-    switch (r4->state) {
+    BattleHallSelectMonsEnv *env = TaskManager_GetEnvironment(taskManager);
+    switch (env->state) {
     case 0:
-        r4->state = BattleHallSelectMons_OpenPartyMenu(r4, fieldSystem, HEAP_ID_FIELD2);
+        env->state = BattleHallSelectMons_OpenPartyMenu(env, fieldSystem, HEAP_ID_FIELD2);
         break;
     case 1:
-        r4->state = BattleHallSelectMons_WaitPartyMenu(r4, fieldSystem);
+        env->state = BattleHallSelectMons_WaitPartyMenu(env, fieldSystem);
         break;
     case 2:
-        r4->state = BattleHallSelectMons_OpenSummary(r4, fieldSystem, HEAP_ID_FIELD2);
+        env->state = BattleHallSelectMons_OpenSummary(env, fieldSystem, HEAP_ID_FIELD2);
         break;
     case 3:
-        r4->state = BattleHallSelectMons_WaitSummary(r4, fieldSystem);
+        env->state = BattleHallSelectMons_WaitSummary(env, fieldSystem);
         break;
     case 4:
-        Heap_Free(r4);
+        Heap_Free(env);
         return TRUE;
     }
     return FALSE;

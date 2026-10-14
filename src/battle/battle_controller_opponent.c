@@ -1417,7 +1417,7 @@ OpponentData *OpponentData_New(BattleSystem *battleSystem, const u8 *data) {
 #pragma force_active on
 
 void OpponentData_CreateBallData(BattleSystem *battleSystem, OpponentData *opponentData, u16 ball, int battlerId) {
-    BattleBallParams ballParams;
+    BallThrowParams ballParams;
 
     if ((BattleSystem_GetBattleType(battleSystem) & (BATTLE_TYPE_SAFARI | BATTLE_TYPE_PAL_PARK)) == 0) {
         if ((opponentData->battlerType & BATTLER_TYPE_IS_ENEMY) == 0 || (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_TRAINER)) {
@@ -3517,7 +3517,7 @@ void Task_PokemonSendOut(SysTask *task, void *data) {
     MoveAnimData substituteAnimData;
     BattleAnimBattlerPicParams params;
     MoveAnimData unsubstituteAnimData;
-    BattleBallParams ballParams;
+    BallThrowParams ballParams;
     PokepicAnimScript scripts[10];
     BattlePokeballOpenArgs openArgs;
     u8 state;
@@ -3745,8 +3745,8 @@ void Task_RecallPokemon(SysTask *task, void *data) {
     MoveAnimData substituteAnimData;
     BattleAnimBattlerPicParams params;
     MoveAnimData unsubstituteAnimData;
-    BattleBallParams enemyBallParams;
-    BattleBallParams playerBallParams;
+    BallThrowParams enemyBallParams;
+    BallThrowParams playerBallParams;
     OpponentBallKindTable ballKinds;
     u8 state;
 
@@ -4040,7 +4040,7 @@ void Task_ThrowPokeball(SysTask *task, void *data) {
     s16 x, y;
     int animFrame;
     u32 battleType = BattleSystem_GetBattleType(work->battleSystem);
-    BattleBallParams ball;
+    BallThrowParams ball;
 
     switch (work->state) {
     case 0:

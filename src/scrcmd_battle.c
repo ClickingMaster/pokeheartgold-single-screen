@@ -14,53 +14,53 @@
 #include "map_object_behavior.h"
 
 BOOL ScrCmd_GetTrainerPathToPlayer(ScriptContext *ctx) {
-    int *sp18, *encounterType, *sp10, *r7;
+    int *sightDistance, *encounterType, *sightDirection, *approachTask;
     LocalMapObject **localMapObject;
     FieldSystem *fieldSystem = ctx->fieldSystem;
 
     u16 trainerNum = ScriptGetVar(ctx);
     if (trainerNum == 0) {
-        sp18 = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_ENGAGED_TRAINER_0_FIELD_00);
-        sp10 = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_ENGAGED_TRAINER_0_FIELD_04);
+        sightDistance = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_ENGAGED_TRAINER_0_FIELD_00);
+        sightDirection = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_ENGAGED_TRAINER_0_FIELD_04);
         FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_ENGAGED_TRAINER_0_FIELD_08);
         FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_ENGAGED_TRAINER_0_ID);
         encounterType = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_ENGAGED_TRAINER_0_ENCOUNTER_TYPE);
         localMapObject = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_ENGAGED_TRAINER_0_EVENT);
-        r7 = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_ENGAGED_TRAINER_0_FIELD_18);
+        approachTask = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_ENGAGED_TRAINER_0_FIELD_18);
     } else {
-        sp18 = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_ENGAGED_TRAINER_1_FIELD_00);
-        sp10 = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_ENGAGED_TRAINER_1_FIELD_04);
+        sightDistance = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_ENGAGED_TRAINER_1_FIELD_00);
+        sightDirection = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_ENGAGED_TRAINER_1_FIELD_04);
         FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_ENGAGED_TRAINER_1_FIELD_08);
         FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_ENGAGED_TRAINER_1_ID);
         encounterType = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_ENGAGED_TRAINER_1_ENCOUNTER_TYPE);
         localMapObject = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_ENGAGED_TRAINER_1_EVENT);
-        r7 = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_ENGAGED_TRAINER_1_FIELD_18);
+        approachTask = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_ENGAGED_TRAINER_1_FIELD_18);
     }
 
-    *r7 = TrainerApproach_Start(fieldSystem, *localMapObject, fieldSystem->playerAvatar, *sp10, *sp18, 0, *encounterType, trainerNum);
+    *approachTask = TrainerApproach_Start(fieldSystem, *localMapObject, fieldSystem->playerAvatar, *sightDirection, *sightDistance, 0, *encounterType, trainerNum);
     return FALSE;
 }
 
 BOOL ScrCmd_TrainerStepTowardsPlayer(ScriptContext *ctx) {
-    int *r5;
+    int *approachTask;
     u16 trainerNum = ScriptGetVar(ctx);
     u16 *retPtr = ScriptGetVarPointer(ctx);
 
     *retPtr = 0;
     if (trainerNum == 0) {
-        r5 = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_ENGAGED_TRAINER_0_FIELD_18);
+        approachTask = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_ENGAGED_TRAINER_0_FIELD_18);
     } else {
-        r5 = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_ENGAGED_TRAINER_1_FIELD_18);
+        approachTask = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_ENGAGED_TRAINER_1_FIELD_18);
     }
 
-    if (*r5 == 0) {
+    if (*approachTask == 0) {
         *retPtr = 1;
         return TRUE;
     }
 
     if (TrainerApproach_IsDone() == TRUE) {
-        TrainerApproach_Delete(*r5);
-        *r5 = 0;
+        TrainerApproach_Delete(*approachTask);
+        *approachTask = 0;
         *retPtr = 1;
     }
 

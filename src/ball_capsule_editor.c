@@ -2416,10 +2416,10 @@ other:
 // "Confirming...": the party Pokémon (or the first non-Egg) comes out of its ball with the capsule's seals.
 int BallCapsuleEditor_PreviewCapsule(BallCapsuleEditor *editor) {
     u32 capsuleId;
-    BattleBallParams ballParams;
+    BallThrowParams ballParams;
     CAPSULE capsule;
     BallCapsuleEditorPokepicEffectParams effectParams;
-    BattleBallParams ballParams2;
+    BallThrowParams ballParams2;
     int result;
 
     switch (editor->subState) {

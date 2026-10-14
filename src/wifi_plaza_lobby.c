@@ -6,20 +6,20 @@ void *WiFiPlazaWork_GetOwnPlayerProfile(WiFiPlazaWork *work) {
     return work->unk_508.profile;
 }
 
-int WiFiPlazaWork_IsSpecialVisitor(WiFiPlazaWork *work, int a1) {
-    return WiFiPlaza_GetSlotFlag(work->specialVisitors, a1);
+int WiFiPlazaWork_IsSpecialVisitor(WiFiPlazaWork *work, int slot) {
+    return WiFiPlaza_GetSlotFlag(work->specialVisitors, slot);
 }
 
 void WiFiPlazaWork_GetSpecialVisitors(WiFiPlazaWork *work, void *dest) {
     MI_CpuCopy8(work->specialVisitors, dest, sizeof(work->specialVisitors));
 }
 
-int WiFiPlazaWork_HasWordSet(WiFiPlazaWork *work, int a1) {
-    return WiFiPlazaWordSet_HasWords(&work->wordSet, a1);
+int WiFiPlazaWork_HasWordSet(WiFiPlazaWork *work, int slot) {
+    return WiFiPlazaWordSet_HasWords(&work->wordSet, slot);
 }
 
-u16 *WiFiPlazaWork_GetWordSet(WiFiPlazaWork *work, int a1) {
-    return WiFiPlazaWordSet_GetWords(&work->wordSet, a1);
+u16 *WiFiPlazaWork_GetWordSet(WiFiPlazaWork *work, int slot) {
+    return WiFiPlazaWordSet_GetWords(&work->wordSet, slot);
 }
 
 u32 WiFiPlaza_GetChannelPlayerCount(void) {
@@ -28,8 +28,8 @@ u32 WiFiPlaza_GetChannelPlayerCount(void) {
     return pair[0];
 }
 
-int WiFiPlaza_ChannelSlotToSlot(void *unused, int a1) {
-    int index = WiFiPlazaLobbyClient_ChannelSlotToId(a1);
+int WiFiPlaza_ChannelSlotToSlot(void *unused, int channelSlot) {
+    int index = WiFiPlazaLobbyClient_ChannelSlotToId(channelSlot);
     int result = -1;
     if (index != -1) {
         result = WiFiPlazaLobbyClient_IdToSlot(index);
@@ -158,40 +158,40 @@ void WiFiPlazaWork_SendTapToyPlayed(void *unused, u32 value) {
     WiFiPlazaLobbyClient_SendToLobby(5, data, sizeof(data));
 }
 
-int WiFiPlazaWork_GetGroupState(WiFiPlazaWork *work, int a1) {
-    return WiFiPlazaGroups_GetState(&work->groups, a1);
+int WiFiPlazaWork_GetGroupState(WiFiPlazaWork *work, int group) {
+    return WiFiPlazaGroups_GetState(&work->groups, group);
 }
 
-int WiFiPlazaWork_GetGroupCounter(WiFiPlazaWork *work, int a1) {
-    return WiFiPlazaGroups_GetCounter(&work->groups, a1);
+int WiFiPlazaWork_GetGroupCounter(WiFiPlazaWork *work, int group) {
+    return WiFiPlazaGroups_GetCounter(&work->groups, group);
 }
 
 int WiFiPlazaWork_GetGroupDuration(void) {
     return 1200;
 }
 
-int WiFiPlazaWork_FindGroupPlace(WiFiPlazaWork *work, int a1) {
-    return WiFiPlazaGroups_FindPlace(&work->groups, a1);
+int WiFiPlazaWork_FindGroupPlace(WiFiPlazaWork *work, int id) {
+    return WiFiPlazaGroups_FindPlace(&work->groups, id);
 }
 
-void WiFiPlazaWork_JoinGroup(WiFiPlazaWork *work, int a1, int a2) {
-    WiFiPlazaGroups_Join(&work->groups, a1, a2);
+void WiFiPlazaWork_JoinGroup(WiFiPlazaWork *work, int id, int value) {
+    WiFiPlazaGroups_Join(&work->groups, id, value);
 }
 
-void WiFiPlazaWork_LeaveGroup(WiFiPlazaWork *work, int a1) {
-    WiFiPlazaGroups_Leave(&work->groups, a1);
+void WiFiPlazaWork_LeaveGroup(WiFiPlazaWork *work, int id) {
+    WiFiPlazaGroups_Leave(&work->groups, id);
 }
 
-void WiFiPlazaWork_RequestGroupAction(WiFiPlazaWork *work, int a1) {
-    WiFiPlazaGroups_RequestAction(&work->groups, a1);
+void WiFiPlazaWork_RequestGroupAction(WiFiPlazaWork *work, int id) {
+    WiFiPlazaGroups_RequestAction(&work->groups, id);
 }
 
-void WiFiPlazaWork_GetGroupActionRequest(WiFiPlazaWork *work, int a1) {
-    WiFiPlazaGroups_GetActionRequest(&work->groups, a1);
+void WiFiPlazaWork_GetGroupActionRequest(WiFiPlazaWork *work, int place) {
+    WiFiPlazaGroups_GetActionRequest(&work->groups, place);
 }
 
-void WiFiPlazaWork_ClearGroupActionRequest(WiFiPlazaWork *work, int a1) {
-    WiFiPlazaGroups_ClearActionRequest(&work->groups, a1);
+void WiFiPlazaWork_ClearGroupActionRequest(WiFiPlazaWork *work, int place) {
+    WiFiPlazaGroups_ClearActionRequest(&work->groups, place);
 }
 
 void WiFiPlaza_SplitGroupPlace(u32 value, u32 *quotient, u32 *remainder) {
@@ -199,12 +199,12 @@ void WiFiPlaza_SplitGroupPlace(u32 value, u32 *quotient, u32 *remainder) {
     *remainder = value % 3;
 }
 
-void WiFiPlazaWork_SetGroupMarkerPassed(WiFiPlazaWork *work, int a1, int a2) {
-    WiFiPlazaGroups_SetMarkerPassed(&work->groups, a1, a2);
+void WiFiPlazaWork_SetGroupMarkerPassed(WiFiPlazaWork *work, int place, int value) {
+    WiFiPlazaGroups_SetMarkerPassed(&work->groups, place, value);
 }
 
-void WiFiPlazaWork_GetGroupMarkerCount(WiFiPlazaWork *work, int a1) {
-    WiFiPlazaGroups_GetMarkerCount(&work->groups, a1);
+void WiFiPlazaWork_GetGroupMarkerCount(WiFiPlazaWork *work, int place) {
+    WiFiPlazaGroups_GetMarkerCount(&work->groups, place);
 }
 
 void WiFiPlazaWork_SendJoinGroup(void) {
@@ -239,7 +239,7 @@ int WiFiPlazaWork_StartTalk(WiFiPlazaWork *work, int slot) {
     return 1;
 }
 
-void WiFiPlazaWork_AdvanceTalk(WiFiPlazaWork *work, int a1) {
+void WiFiPlazaWork_AdvanceTalk(WiFiPlazaWork *work, int value) {
     int flag = 0;
     if (work->talk.role == 1) {
         if (work->talk.state != 2) {
@@ -265,7 +265,7 @@ void WiFiPlazaWork_AdvanceTalk(WiFiPlazaWork *work, int a1) {
         WiFiPlazaWork_SendTalkEnd(work, WiFiPlazaLobbyClient_SlotToId(work->talk.partnerSlot));
         return;
     }
-    WiFiPlazaTalkSession_SetMessage(&work->talk, a1);
+    WiFiPlazaTalkSession_SetMessage(&work->talk, value);
     WiFiPlazaLobbyClient_SendToPlayer(2, WiFiPlazaLobbyClient_SlotToId(work->talk.partnerSlot), &work->talk.sendMessage, 4);
     WiFiPlazaTalkSession_StartTimeout(&work->talk);
 }

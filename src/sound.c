@@ -117,11 +117,11 @@ void DoSoundUpdateFrame(void) {
     // debug stuff left in
     NNS_SndUpdateDriverInfo();
     if (gSystem.newKeys & PAD_BUTTON_DEBUG) {
-        SNDChannelInfo sp24;
-        SNDTrackInfo sp8;
+        SNDChannelInfo channelInfo;
+        SNDTrackInfo trackInfo;
         for (i = 0; i < 16; i++) {
-            NNS_SndPlayerReadDriverTrackInfo(&work->soundHandles[SND_HANDLE_BGM], i, &sp8);
-            NNS_SndReadDriverChannelInfo(i, &sp24);
+            NNS_SndPlayerReadDriverTrackInfo(&work->soundHandles[SND_HANDLE_BGM], i, &trackInfo);
+            NNS_SndReadDriverChannelInfo(i, &channelInfo);
         }
     }
 

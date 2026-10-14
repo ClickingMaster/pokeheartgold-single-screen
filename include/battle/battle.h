@@ -681,7 +681,7 @@ typedef struct BattleItem {
 
 typedef struct BattleCursorPosition BattleCursorPosition;
 
-typedef struct BattleBallParams {
+typedef struct BallThrowParams {
     s32 kind;
     enum HeapID heapID;
     s32 mode;
@@ -692,7 +692,7 @@ typedef struct BattleBallParams {
     SpriteSystem *spriteSystem;
     PaletteData *paletteData;
     BattleSystem *battleSystem;
-} BattleBallParams;
+} BallThrowParams;
 
 typedef struct PokedexEntryPopupArgs {
     BgConfig *bgConfig;
@@ -721,7 +721,7 @@ struct BallThrow { // TODO: Give a better name.
     SpriteManager *spriteManager;
     ManagedSprite *managedSprite;
     u8 unk34[0x5C];
-    BattleBallParams params;
+    BallThrowParams params;
     u8 unkB8[0xC];
     int modeFrames;
     int arcHeight;

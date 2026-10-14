@@ -8,11 +8,11 @@
 #include "sound_playback.h"
 
 BOOL ChatotSoundMain(void) {
-    u8 *r4 = GF_SdatGetAttrPtr(16);
-    u8 *r0 = GF_SdatGetAttrPtr(30);
+    u8 *waveOutAllocated = GF_SdatGetAttrPtr(16);
+    u8 *chatotPlaying = GF_SdatGetAttrPtr(30);
 
-    if (*r0 == 1) {
-        if (*r4 == 1) {
+    if (*chatotPlaying == 1) {
+        if (*waveOutAllocated == 1) {
             if (Sound_IsWaveOutPlaying(14) == 0) {
                 Chatot_StopCry();
                 return TRUE;
@@ -27,18 +27,18 @@ BOOL ChatotSoundMain(void) {
 }
 
 BOOL Chatot_CheckCry(SOUND_CHATOT *chatot) {
-    u8 *r5 = GF_SdatGetAttrPtr(31);
-    u8 *r4 = GF_SdatGetAttrPtr(54);
+    u8 *forceDefaultCry = GF_SdatGetAttrPtr(31);
+    u8 *recordingDisabled = GF_SdatGetAttrPtr(54);
 
     if (!Chatot_Exists(chatot)) {
         return FALSE;
     }
 
-    if (*r4 == 1) {
+    if (*recordingDisabled == 1) {
         return FALSE;
     }
 
-    if (*r5 != 1) {
+    if (*forceDefaultCry != 1) {
         return TRUE;
     }
 
@@ -46,8 +46,8 @@ BOOL Chatot_CheckCry(SOUND_CHATOT *chatot) {
 }
 
 BOOL Chatot_PlayCry(SOUND_CHATOT *chatot, u32 a1, s32 volume, s32 pan) {
-    s8 *sp0 = Sound_GetChatotBuffer();
-    s8 *sp4 = GF_SdatGetAttrPtr(30);
+    s8 *buffer = Sound_GetChatotBuffer();
+    s8 *chatotPlaying = GF_SdatGetAttrPtr(30);
 
     if (!Chatot_CheckCry(chatot)) {
         return FALSE;
@@ -56,41 +56,41 @@ BOOL Chatot_PlayCry(SOUND_CHATOT *chatot, u32 a1, s32 volume, s32 pan) {
     StopCry(0);
     Chatot_StopCry();
     Sound_AllocWaveOutChannel(14);
-    u16 r4 = (LCRandom() % 8192);
+    u16 speedOffset = (LCRandom() % 8192);
 
-    Chatot_Decode(sp0, Chatot_GetData(chatot));
+    Chatot_Decode(buffer, Chatot_GetData(chatot));
 
-    SoundWaveOutParam sp8;
+    SoundWaveOutParam waveOutParam;
 
-    sp8.handle = Sound_GetWaveOutHandle(14);
-    sp8.format = NNS_SND_WAVE_FORMAT_PCM8;
-    sp8.data = Sound_GetChatotBuffer();
-    sp8.loopFlag = 0;
-    sp8.loopStartSample = 0;
-    sp8.samples = 2000;
-    sp8.sampleRate = 2000;
-    sp8.speed = (u32)(r4 + 0x8000);
-    sp8.pan = pan / 2 + 64;
-    sp8.volume = volume;
+    waveOutParam.handle = Sound_GetWaveOutHandle(14);
+    waveOutParam.format = NNS_SND_WAVE_FORMAT_PCM8;
+    waveOutParam.data = Sound_GetChatotBuffer();
+    waveOutParam.loopFlag = 0;
+    waveOutParam.loopStartSample = 0;
+    waveOutParam.samples = 2000;
+    waveOutParam.sampleRate = 2000;
+    waveOutParam.speed = (u32)(speedOffset + 0x8000);
+    waveOutParam.pan = pan / 2 + 64;
+    waveOutParam.volume = volume;
 
-    BOOL ret = Sound_StartWaveOut(&sp8, 14);
+    BOOL ret = Sound_StartWaveOut(&waveOutParam, 14);
     Sound_SetWaveOutVolume(14, volume);
-    *sp4 = 1;
+    *chatotPlaying = 1;
     Chatot_SetForceDefaultCry(0);
 
     return ret;
 }
 
 void Chatot_StopCry() {
-    u8 *r5 = GF_SdatGetAttrPtr(16);
-    u8 *r4 = GF_SdatGetAttrPtr(30);
+    u8 *waveOutAllocated = GF_SdatGetAttrPtr(16);
+    u8 *chatotPlaying = GF_SdatGetAttrPtr(30);
 
-    if (*r5 == 1) {
+    if (*waveOutAllocated == 1) {
         Sound_StopWaveOutAndFreeBuffer(14);
         Sound_FreeWaveOutChannel(14);
     }
 
-    *r4 = 0;
+    *chatotPlaying = 0;
 }
 
 BOOL Chatot_StartRecording(void) {
@@ -119,15 +119,15 @@ void Chatot_SaveRecording(SOUND_CHATOT *chatot) {
 }
 
 void Chatot_SetForceDefaultCry(u8 forceDefault) {
-    u8 *r0 = GF_SdatGetAttrPtr(31);
-    *r0 = forceDefault;
+    u8 *forceDefaultCry = GF_SdatGetAttrPtr(31);
+    *forceDefaultCry = forceDefault;
 }
 
 void Chatot_PlayCryWithFallback(SOUND_CHATOT *chatot, u32 a1, u32 volume, s32 pan) {
-    SOUND_CHATOT **r0 = GF_SdatGetAttrPtr(36);
+    SOUND_CHATOT **myChatot = GF_SdatGetAttrPtr(36);
     BOOL ret;
     if (chatot == 0) {
-        ret = Chatot_PlayCry(*r0, a1, volume, pan);
+        ret = Chatot_PlayCry(*myChatot, a1, volume, pan);
     } else {
         ret = Chatot_PlayCry(chatot, a1, volume, pan);
     }
@@ -139,10 +139,10 @@ void Chatot_PlayCryWithFallback(SOUND_CHATOT *chatot, u32 a1, u32 volume, s32 pa
 }
 
 BOOL Chatot_PlayCryWithDelayedFallback(SOUND_CHATOT *chatot, u32 a1, u32 volume, s32 pan, u8 delay) {
-    SOUND_CHATOT **r0 = GF_SdatGetAttrPtr(36);
+    SOUND_CHATOT **myChatot = GF_SdatGetAttrPtr(36);
     BOOL ret;
     if (chatot == 0) {
-        ret = Chatot_PlayCry(*r0, a1, volume, pan);
+        ret = Chatot_PlayCry(*myChatot, a1, volume, pan);
     } else {
         ret = Chatot_PlayCry(chatot, a1, volume, pan);
     }

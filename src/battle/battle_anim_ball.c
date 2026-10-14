@@ -41,7 +41,7 @@ fx32 FX_Sqrt(fx32 x); // not declared by the lib/include fx headers
 //   task             the update task, burstEffect the BallBurstEffect, paletteFlash the palette flash,
 //                    battlerSprites the battler sprites
 //   startDelay       frames the task waits before running the mode
-//   params           the BattleBallParams it was created from: kind (start / target position, arc), mode
+//   params           the BallThrowParams it was created from: kind (start / target position, arc), mode
 //                    (sBallThrowModeFuncs), resTagOffset resource tag offset, bgPriority sprite BG priority,
 //                    keepSubSurface keep the renderer's sub surface
 // Members its declaration still keeps as byte arrays:
@@ -1384,7 +1384,7 @@ void BallThrow_Task(SysTask *task, void *data) {
     }
 }
 
-BallThrow *BallThrow_New(BattleBallParams *unkStruct_134) {
+BallThrow *BallThrow_New(BallThrowParams *unkStruct_134) {
     BallThrow *data = Heap_Alloc(unkStruct_134->heapID, sizeof(BallThrow));
     MI_CpuFill8(data, 0, sizeof(BallThrow));
     GF_ASSERT(data != NULL);

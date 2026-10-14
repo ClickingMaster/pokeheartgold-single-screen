@@ -4089,7 +4089,7 @@ void WifiClub_FreeRosterScreen(WifiClubApp *app) {
 }
 
 u8 WifiClub_UpdateRosterScreen(WifiClubApp *app, enum HeapID heapID) {
-    u32 var_r5 = WifiClubRoom_GetTileUnderPlayer(&app->room);
+    u32 var_r5 = WifiClubRoom_GetTileAtPlayer(&app->room);
     u32 tile = WifiClubRoom_GetTileBelowPlayer(&app->room);
     if ((tile >= 3) && (tile <= 6)) {
         var_r5 = tile;

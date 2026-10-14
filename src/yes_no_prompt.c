@@ -237,20 +237,20 @@ static void YesNoPrompt_InitPlttFromTemplate(YesNoPrompt *yesno, const YesNoProm
 static void YesNoPrompt_InitButtonsFromTemplate(YesNoPrompt *yesno, const YesNoPromptTemplate *template) {
     int i;
     int j;
-    struct YesNoPromptButtonTemplate sp4;
+    struct YesNoPromptButtonTemplate buttonTemplate;
 
     for (i = 0; i < 2; ++i) {
         yesno->unk68[i] = (i + 1) * FX32_ONE;
     }
 
-    sp4.bgConfig = yesno->bgConfig;
-    sp4.bgId = yesno->bgId;
-    sp4.screenDataNarcId = NARC_system_touch_subwindow;
-    sp4.baseTile = template->tileStart;
-    sp4.plttNum = template->plttSlot;
-    sp4.unk4 = yesno->unk68;
-    sp4.unk13 = 2;
-    sp4.x = yesno->x;
+    buttonTemplate.bgConfig = yesno->bgConfig;
+    buttonTemplate.bgId = yesno->bgId;
+    buttonTemplate.screenDataNarcId = NARC_system_touch_subwindow;
+    buttonTemplate.baseTile = template->tileStart;
+    buttonTemplate.plttNum = template->plttSlot;
+    buttonTemplate.unk4 = yesno->unk68;
+    buttonTemplate.unk13 = 2;
+    buttonTemplate.x = yesno->x;
 
     u8 baseFileNo;
     if (template->shapeParam) {
@@ -261,11 +261,11 @@ static void YesNoPrompt_InitButtonsFromTemplate(YesNoPrompt *yesno, const YesNoP
 
     for (i = 0; i < 2; ++i) {
         for (j = 0; j < 2; ++j) {
-            sp4.scrnDataFileNo[j] = baseFileNo + j + i * 2;
+            buttonTemplate.scrnDataFileNo[j] = baseFileNo + j + i * 2;
         }
-        sp4.y = i * yesno->height + yesno->y;
-        sp4.plttNum += i;
-        YesNoPromptButton_Draw(&yesno->buttons[i], &sp4, yesno->heapID);
+        buttonTemplate.y = i * yesno->height + yesno->y;
+        buttonTemplate.plttNum += i;
+        YesNoPromptButton_Draw(&yesno->buttons[i], &buttonTemplate, yesno->heapID);
     }
 }
 
@@ -284,8 +284,8 @@ static void YesNoButton_TouchHitboxCB(u32 index, u32 event, YesNoPrompt *yesno) 
     yesno->lastTouchEvent = event;
     if (event == 0) {
         yesno->result = index;
-        YesNoPromptButton *r3 = &yesno->buttons[index];
-        ScreenPushGraphicsRect(r3->bgConfig, r3->bgId, r3->screenDataPtrs[1], r3->x, r3->y);
+        YesNoPromptButton *button = &yesno->buttons[index];
+        ScreenPushGraphicsRect(button->bgConfig, button->bgId, button->screenDataPtrs[1], button->x, button->y);
         PlaySE(SEQ_SE_DP_BUTTON9);
     }
 }
