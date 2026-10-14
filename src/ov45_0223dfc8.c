@@ -96,7 +96,7 @@ typedef struct Session {
     int id;
     u32 unk30;
     u32 unk34;
-    u32 unk38;
+    u32 entered;
 } Session;
 
 typedef struct Node {
@@ -316,7 +316,7 @@ void PPWLobbyPlayers_GetEnteredIds(Vec *out, SessionMgr *m) {
     it.current = m->list.leftmost;
     while (it.current != hdr) {
         Session *s = ((Node *)it.current)->val;
-        if (s->unk38 != 0) {
+        if (s->entered != 0) {
             id = s->id;
             TouchTag();
             if (out->size < out->cap) {

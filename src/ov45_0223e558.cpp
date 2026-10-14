@@ -11,7 +11,7 @@ struct Triple {
 struct Obj {
     u32 unk0, unk4, unk8, unkC, unk10, unk14;
     u8 unk18[4];
-    u32 unk1C, unk20, unk24, state, unk2C, unk30, unk34, unk38;
+    u32 unk1C, unk20, unk24, state, id, unk30, unk34, entered;
 };
 
 struct Node {
@@ -117,10 +117,10 @@ extern "C" void PPWLobbyPlayers_UpdateStates(Map *m) {
                 const Triple &t = (Triple) { .c = obj->unk4, .a = obj->unk8, .b = obj->unkC };
                 Triple b = t;
                 x = o2->unk1C;
-                y = it.n->value->unk2C;
+                y = it.n->value->id;
                 Handler *h = PPWLobby_GetWork();
                 h->func(y, &b, LobbyByteVector_Data(o2->unk18), x);
-                it.n->value->unk38 = 1;
+                it.n->value->entered = 1;
                 break;
             }
             }

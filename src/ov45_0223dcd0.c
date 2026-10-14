@@ -96,7 +96,7 @@ typedef struct Session {
     int id;
     u32 unk30;
     u32 unk34;
-    u32 unk38;
+    u32 entered;
 } Session;
 
 typedef struct Node {
@@ -302,7 +302,7 @@ void PPWLobbyPlayer_UpdateState(Session *s) {
         }
         return;
     case 2:
-        if (s->unk38 != 0) {
+        if (s->entered != 0) {
             s->state = 3;
         }
         return;
@@ -336,7 +336,7 @@ BOOL PPWLobbyPlayers_Add(SessionMgr *m, int id) {
         n->id = id;
         n->unk30 = 0;
         n->unk34 = 0;
-        n->unk38 = 0;
+        n->entered = 0;
     }
     s = n;
     PPWLobbyPlayerSet_Insert(&res, &m->list, &s);
