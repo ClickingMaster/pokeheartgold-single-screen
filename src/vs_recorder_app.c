@@ -1,3 +1,5 @@
+#include "constants/sndseq.h"
+
 #include "application/vs_recorder/vs_recorder_screens.h"
 
 #include "bag_cursor.h"
@@ -176,9 +178,9 @@ BOOL VsRecorderApp_RunPlayback(VsRecorderApp *work, enum HeapID heapId) {
         GF_SndHandleSetPlayerVolume(7, 0x7F);
         Sound_SetChatotRecordingDisabled(TRUE);
         if (VsRecorderApp_IsFrontierBrainClass(work->setup->trainer[BATTLER_ENEMY].data.trainerClass) == TRUE) {
-            Sound_SetSceneAndPlayBGM(5, 0x47B, 1);
+            Sound_SetSceneAndPlayBGM(5, SEQ_GS_BA_BRAIN, 1);
         } else {
-            Sound_SetSceneAndPlayBGM(5, 0x45D, 1);
+            Sound_SetSceneAndPlayBGM(5, SEQ_GS_VS_TRAINER, 1);
         }
         work->manager = OverlayManager_New(&gOverlayTemplate_Battle, work->setup, heapId);
         work->state++;

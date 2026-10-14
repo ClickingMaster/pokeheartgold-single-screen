@@ -245,7 +245,7 @@ BOOL IsStackableAccessory(u32 value) {
 
 void FashionCase_Init(FashionCase *fashionCase) {
     int i;
-    memset(fashionCase, 0, 0x40);
+    memset(fashionCase, 0, sizeof(FashionCase));
     for (i = 0; i < 18; i++) {
         SetWallpaperOrder(&fashionCase->wallpaperOrder[0], 18, (u8)i);
     }

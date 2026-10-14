@@ -61,7 +61,7 @@ u32 SpinTradeArgs_GetResult(SpinTradeArgs *work) {
 }
 
 void *SpinTradeFlow_New(FieldSystem *fieldSystem) {
-    SpinTradeFlow *work = Heap_Alloc((enum HeapID)11, sizeof(SpinTradeFlow));
+    SpinTradeFlow *work = Heap_Alloc(HEAP_ID_FIELD2, sizeof(SpinTradeFlow));
     memset(work, 0, sizeof(SpinTradeFlow));
     work->fieldSystem = fieldSystem;
     work->saveData = fieldSystem->saveData;
@@ -83,7 +83,7 @@ BOOL SpinTradeFlow_Run(void *data) {
 }
 
 BOOL SpinTradeFlow_LaunchGroupApp(SpinTradeFlow *work) {
-    work->subwork = SpinTradeArgs_New((const SpinTradeCommonArgs *)work->sendData, (enum HeapID)11);
+    work->subwork = SpinTradeArgs_New((const SpinTradeCommonArgs *)work->sendData, HEAP_ID_FIELD2);
     work->state = 1;
     FieldSystem_LaunchApplication(work->fieldSystem, &gOverlayTemplate_SpinTradeGroup, work->subwork);
     return FALSE;
@@ -109,7 +109,7 @@ BOOL SpinTradeFlow_WaitPartyMenu(SpinTradeFlow *work) {
         slot = work->partyMenu->partySlot;
         Heap_Free(work->partyMenu);
         if (work->partyMenu->selectedAction == 1) {
-            work->summary = PokemonSummary_CreateArgs(work->fieldSystem, (enum HeapID)3, 0);
+            work->summary = PokemonSummary_CreateArgs(work->fieldSystem, HEAP_ID_3, 0);
             work->selection = slot;
             work->summary->partySlot = slot;
             PokemonSummary_LearnForget_LaunchApp(work->fieldSystem, work->summary);

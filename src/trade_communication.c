@@ -75,7 +75,7 @@ void WirelessTrade_RecvSpecialRibbons(int sender, int unused, u8 *data, TradeCon
 void WirelessTrade_RecvPalPad(int sender, int unused, SavePalPad *data, TradeContext *context) {
     TradeWork *work = context->work;
     if (sender != Comm_GetLocalNetId()) {
-        SavePalPad_Merge(work->palPad, data, 1, (enum HeapID)26);
+        SavePalPad_Merge(work->palPad, data, 1, HEAP_ID_26);
         work->state = 3;
     }
 }

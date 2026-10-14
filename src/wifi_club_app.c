@@ -2,6 +2,7 @@
 
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0778.h"
+#include "msgdata/msg/msg_0800.h"
 
 #include "bg_window.h"
 #include "dwcaccount.h"
@@ -872,8 +873,8 @@ s32 WifiClub_Init(OverlayManager *overlayMananger, s32 *state) {
         } else {
             Heap_Create(HEAP_ID_3, HEAP_ID_53, 0xA0000);
         }
-        WifiClubApp *data = OverlayManager_CreateAndGetData(overlayMananger, 4288, HEAP_ID_53);
-        MI_CpuFill8(data, 0, 4288);
+        WifiClubApp *data = OverlayManager_CreateAndGetData(overlayMananger, sizeof(WifiClubApp), HEAP_ID_53);
+        MI_CpuFill8(data, 0, sizeof(WifiClubApp));
         GF_CreateVramTransferManager(32, HEAP_ID_53);
         data->textPrinterId = 8;
         data->saveData = overlayArgs->saveData;
@@ -881,8 +882,8 @@ s32 WifiClub_Init(OverlayManager *overlayMananger, s32 *state) {
         data->startMode = overlayArgs->choice;
         data->exitChoice = 8;
         data->contactFriend = -1;
-        GfGfx_EngineATogglePlanes(15, 0);
-        GfGfx_EngineBTogglePlanes(15, 0);
+        GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0 | GX_PLANEMASK_BG1 | GX_PLANEMASK_BG2 | GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
+        GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0 | GX_PLANEMASK_BG1 | GX_PLANEMASK_BG2 | GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
         WifiClub_AllocStrings(data);
         WifiClub_SetupGraphics(data);
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_53);
@@ -972,7 +973,7 @@ s32 WifiClub_Exit(OverlayManager *overlayManager) {
     args->choice = data->exitChoice;
     if ((data->exitChoice == 8) || (data->exitChoice == 10)) {
         UnloadDwcOverlay();
-        TextFlags_SetCanTouchSpeedUpPrint(0);
+        TextFlags_SetCanTouchSpeedUpPrint(FALSE);
     } else {
         args->partnerFriendIndex = WifiConnection_GetTargetFriendIndex();
     }
@@ -997,7 +998,7 @@ s32 WifiClub_Exit(OverlayManager *overlayManager) {
         break;
     }
     if (WifiClub_IsRoomBgmPlaying() == 1) {
-        GF_SndHandleSetInitialVolume(0, 120);
+        GF_SndHandleSetInitialVolume(SND_HANDLE_FIELD, 120);
     }
     return 1;
 }
@@ -1023,9 +1024,9 @@ void WifiClub_InitBgs(BgConfig *bgConfig) {
     SetBothScreensModesAndDisable(&graphicsModes);
 
     BgTemplate bgTemplate0 = sWifiClubBgTemplate_Main0;
-    InitBgFromTemplate(bgConfig, 0, &bgTemplate0, 0);
-    BG_ClearCharDataRange(0, 32, 0, HEAP_ID_53);
-    BgClearTilemapBufferAndCommit(bgConfig, 0);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &bgTemplate0, 0);
+    BG_ClearCharDataRange(GF_BG_LYR_MAIN_0, 32, 0, HEAP_ID_53);
+    BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
 
     BgTemplate bgTemplate1 = sWifiClubBgTemplate_Main1;
     InitBgFromTemplate(bgConfig, 1, &bgTemplate1, 0);
@@ -1038,36 +1039,36 @@ void WifiClub_InitBgs(BgConfig *bgConfig) {
     BgClearTilemapBufferAndCommit(bgConfig, 2);
 
     BgTemplate bgTemplate3 = sWifiClubBgTemplate_Main3;
-    InitBgFromTemplate(bgConfig, 3, &bgTemplate3, 0);
-    BG_ClearCharDataRange(3, 32, 0, HEAP_ID_53);
-    BgClearTilemapBufferAndCommit(bgConfig, 3);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &bgTemplate3, 0);
+    BG_ClearCharDataRange(GF_BG_LYR_MAIN_3, 32, 0, HEAP_ID_53);
+    BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
 
     BgTemplate bgTemplate4 = sWifiClubBgTemplate_Sub0;
     InitBgFromTemplate(bgConfig, 4, &bgTemplate4, 0);
     BgClearTilemapBufferAndCommit(bgConfig, 4);
 
     BgTemplate bgTemplate5 = sWifiClubBgTemplate_Sub1;
-    InitBgFromTemplate(bgConfig, 5, &bgTemplate5, 0);
-    BgClearTilemapBufferAndCommit(bgConfig, 5);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &bgTemplate5, 0);
+    BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
 
     BgTemplate bgTemplate6 = sWifiClubBgTemplate_Sub2;
-    InitBgFromTemplate(bgConfig, 6, &bgTemplate6, 0);
-    BgClearTilemapBufferAndCommit(bgConfig, 6);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &bgTemplate6, 0);
+    BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_2);
 
     BgTemplate bgTemplate7 = sWifiClubBgTemplate_Sub3;
-    InitBgFromTemplate(bgConfig, 7, &bgTemplate7, 0);
-    BgClearTilemapBufferAndCommit(bgConfig, 7);
-    BG_ClearCharDataRange(0, 32, 0, HEAP_ID_53);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_3, &bgTemplate7, 0);
+    BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_3);
+    BG_ClearCharDataRange(GF_BG_LYR_MAIN_0, 32, 0, HEAP_ID_53);
     BG_ClearCharDataRange(1, 32, 0, HEAP_ID_53);
     BG_ClearCharDataRange(2, 32, 0, HEAP_ID_53);
-    BG_ClearCharDataRange(3, 32, 0, HEAP_ID_53);
+    BG_ClearCharDataRange(GF_BG_LYR_MAIN_3, 32, 0, HEAP_ID_53);
     BG_ClearCharDataRange(4, 32, 0, HEAP_ID_53);
-    BG_ClearCharDataRange(5, 32, 0, HEAP_ID_53);
-    BG_ClearCharDataRange(6, 32, 0, HEAP_ID_53);
-    BG_ClearCharDataRange(7, 32, 0, HEAP_ID_53);
-    SetBgPriority(0, 3);
+    BG_ClearCharDataRange(GF_BG_LYR_SUB_1, 32, 0, HEAP_ID_53);
+    BG_ClearCharDataRange(GF_BG_LYR_SUB_2, 32, 0, HEAP_ID_53);
+    BG_ClearCharDataRange(GF_BG_LYR_SUB_3, 32, 0, HEAP_ID_53);
+    SetBgPriority(GF_BG_LYR_MAIN_0, 3);
     SetBgPriority(1, 1);
-    SetBgPriority(3, 0);
+    SetBgPriority(GF_BG_LYR_MAIN_3, 0);
     SetBgPriority(2, 0);
     reg_G2_BLDCNT = 0;
     reg_G2S_DB_BLDCNT = 0;
@@ -1107,13 +1108,13 @@ WifiClubRoomPerson *WifiClub_FindPlayerObject(WifiClubApp *app, u32 personId) {
 void WifiClub_LoadStatusIcons(BgConfig *bgConfig, WifiClubStatusIcons *statusIcons, NARC *narc, enum HeapID heapID) {
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 14, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_8_OFFSET, 64, heapID);
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 14, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_13_OFFSET, 64, heapID);
-    GfGfxLoader_LoadCharDataFromOpenNarc(narc, 13, bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, heapID);
-    GfGfxLoader_LoadCharDataFromOpenNarc(narc, 13, bgConfig, GF_BG_LYR_SUB_2, 0, 0, 0, heapID);
+    GfGfxLoader_LoadCharDataFromOpenNarc(narc, 13, bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, heapID);
+    GfGfxLoader_LoadCharDataFromOpenNarc(narc, 13, bgConfig, GF_BG_LYR_SUB_2, 0, 0, FALSE, heapID);
     if (statusIcons->charsRaw == 0) {
-        statusIcons->charsRaw = GfGfxLoader_GetCharDataFromOpenNarc(narc, 13, 0, &statusIcons->chars, heapID);
+        statusIcons->charsRaw = GfGfxLoader_GetCharDataFromOpenNarc(narc, 13, FALSE, &statusIcons->chars, heapID);
     }
     if (statusIcons->screenRaw == NULL) {
-        statusIcons->screenRaw = GfGfxLoader_GetScrnDataFromOpenNarc(narc, 15, 0, &statusIcons->screen, heapID);
+        statusIcons->screenRaw = GfGfxLoader_GetScrnDataFromOpenNarc(narc, 15, FALSE, &statusIcons->screen, heapID);
     }
 }
 
@@ -1296,32 +1297,32 @@ void WifiClub_FreeStrings(WifiClubApp *app) {
 }
 
 void WifiClub_FreeBgConfig(BgConfig *bgConfig) {
-    FreeBgTilemapBuffer(bgConfig, 7);
-    FreeBgTilemapBuffer(bgConfig, 6);
-    FreeBgTilemapBuffer(bgConfig, 5);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_3);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_2);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_1);
     FreeBgTilemapBuffer(bgConfig, 4);
-    FreeBgTilemapBuffer(bgConfig, 3);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_3);
     FreeBgTilemapBuffer(bgConfig, 2);
     FreeBgTilemapBuffer(bgConfig, 1);
-    FreeBgTilemapBuffer(bgConfig, 0);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_0);
     Heap_Free(bgConfig);
 }
 
 void WifiClub_LoadBgGraphics(WifiClubApp *app, NARC *narc) {
     BgConfig *bgConfig = app->bgConfig;
-    GfGfx_EngineATogglePlanes(1, 1);
-    GfGfx_EngineATogglePlanes(2, 1);
-    GfGfx_EngineATogglePlanes(4, 1);
-    GfGfx_EngineATogglePlanes(8, 1);
-    GfGfx_EngineBTogglePlanes(1, 1);
+    GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
+    GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
+    GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
+    GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
+    GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 3, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0, HEAP_ID_53);
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 3, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0, HEAP_ID_53);
     LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_13_OFFSET, HEAP_ID_53);
     LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_12_OFFSET, HEAP_ID_53);
-    GfGfxLoader_LoadCharDataFromOpenNarc(narc, 2, bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, HEAP_ID_53);
-    GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 6, bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, HEAP_ID_53);
-    GfGfxLoader_LoadCharDataFromOpenNarc(narc, 11, bgConfig, GF_BG_LYR_SUB_0, 0, 0, 0, HEAP_ID_53);
-    GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 12, bgConfig, GF_BG_LYR_SUB_0, 0, 0, 0, HEAP_ID_53);
+    GfGfxLoader_LoadCharDataFromOpenNarc(narc, 2, bgConfig, GF_BG_LYR_MAIN_0, 0, 0, FALSE, HEAP_ID_53);
+    GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 6, bgConfig, GF_BG_LYR_MAIN_0, 0, 0, FALSE, HEAP_ID_53);
+    GfGfxLoader_LoadCharDataFromOpenNarc(narc, 11, bgConfig, GF_BG_LYR_SUB_0, 0, 0, FALSE, HEAP_ID_53);
+    GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 12, bgConfig, GF_BG_LYR_SUB_0, 0, 0, FALSE, HEAP_ID_53);
     Options *options = Save_PlayerData_GetOptionsAddr(app->saveData);
     LoadUserFrameGfx2(bgConfig, GF_BG_LYR_MAIN_2, 482, 10, Options_GetFrame(options), HEAP_ID_53);
     LoadUserFrameGfx1(bgConfig, GF_BG_LYR_MAIN_2, 473, 11, 0, HEAP_ID_53);
@@ -1350,20 +1351,20 @@ void WifiClub_InitSpriteSystem(WifiClubApp *app, NARC *narc) {
 }
 
 void WifiClub_EnableObjPlane(WifiClubApp *app) {
-    GfGfx_EngineATogglePlanes(16, 1);
+    GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
 void WifiClub_PrintTitleBar(WifiClubApp *app) {
     if (WindowIsInUse(&app->titleWindow) != 0) {
-        EraseFrameAndWindow1(&app->titleWindow, 0);
+        EraseFrameAndWindow1(&app->titleWindow, FALSE);
         RemoveWindow(&app->titleWindow);
     }
-    AddWindowParameterized(app->bgConfig, &app->titleWindow, 3, 5, 1, 22, 2, 13, 458);
+    AddWindowParameterized(app->bgConfig, &app->titleWindow, GF_BG_LYR_MAIN_3, 5, 1, 22, 2, 13, 458);
     FillWindowPixelBuffer(&app->titleWindow, 0);
 
     // Nintendo Wi-Fi Connection
     ReadMsgDataIntoString(app->msgData, msg_0778_00021, app->tmpString);
-    AddTextPrinterParameterizedWithColor(&app->titleWindow, 1, app->tmpString, FontID_String_GetCenterAlignmentX(0, app->tmpString, 0, 176), 0, 255, 0xF0E00, NULL);
+    AddTextPrinterParameterizedWithColor(&app->titleWindow, 1, app->tmpString, FontID_String_GetCenterAlignmentX(0, app->tmpString, 0, 176), 0, TEXT_SPEED_NOTRANSFER, 0xF0E00, NULL);
     ScheduleWindowCopyToVram(&app->titleWindow);
 }
 
@@ -1411,7 +1412,7 @@ s32 WifiClub_State_Start(WifiClubApp *app, s32 mainState) {
             app->timer = 20;
             app->state = 65;
         } else {
-            WifiClub_PrintMessage(app, 77, 0);
+            WifiClub_PrintMessage(app, msg_0778_00077, 0);
             CommState_SetErrorWatch(1, 1);
             LinkSync_StartSync(16);
             app->state = 61;
@@ -1421,20 +1422,20 @@ s32 WifiClub_State_Start(WifiClubApp *app, s32 mainState) {
         WifiClub_PrintTitleBar(app);
         FriendRoster_GetUserData(app->friendRoster);
         if (DWC_CheckHasProfile() == 0) {
-            SetBgPriority(0, 3);
+            SetBgPriority(GF_BG_LYR_MAIN_0, 3);
             SetBgPriority(1, 0);
-            SetBgPriority(3, 0);
+            SetBgPriority(GF_BG_LYR_MAIN_3, 0);
             SetBgPriority(2, 1);
-            WifiClub_ShowConnectionNotice(app, 18);
+            WifiClub_ShowConnectionNotice(app, msg_0800_00018);
             app->yesNoPrompt = WifiClub_CreateYesNoPrompt(app->bgConfig, &sUserInfoPromptWindowTemplate, 0);
             app->state = 6;
         } else {
             FriendRoster_GetUserData(app->friendRoster);
             if (DWC_CheckValidConsole() == 0) {
-                WifiClub_ShowConnectionNotice(app, 20);
+                WifiClub_ShowConnectionNotice(app, msg_0800_00020);
                 app->state = 3;
             } else {
-                WifiClub_PrintMessage(app, 17, 1);
+                WifiClub_PrintMessage(app, msg_0800_00017, 1);
                 app->state = 1;
             }
         }
@@ -1455,7 +1456,7 @@ s32 WifiClub_State_ConnectPrompt(WifiClubApp *app, s32 mainState) {
     if (response == YESNORESPONSE_YES) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
         app->clubData = CommState_StartWifiClub(app->saveData, 1188);
-        WifiClub_PrintMessage(app, 23, 1);
+        WifiClub_PrintMessage(app, msg_0800_00023, 1);
         GF_ASSERT(app->waitingIcon == NULL);
         app->waitingIcon = WaitingIcon_New(&app->msgWindow, 482);
         app->state = 14;
@@ -1470,11 +1471,11 @@ s32 WifiClub_State_ConnectPrompt(WifiClubApp *app, s32 mainState) {
 
 s32 WifiClub_State_AskUpdateUserInfo(WifiClubApp *app, s32 mainState) {
     if ((gSystem.newKeys & (PAD_BUTTON_B | PAD_BUTTON_A)) || (System_GetTouchNew() == 1)) {
-        WifiClub_ShowConnectionNotice(app, 21);
-        SetBgPriority(3, 0);
+        WifiClub_ShowConnectionNotice(app, msg_0800_00021);
+        SetBgPriority(GF_BG_LYR_MAIN_3, 0);
         SetBgPriority(2, 1);
         SetBgPriority(1, 0);
-        SetBgPriority(0, 3);
+        SetBgPriority(GF_BG_LYR_MAIN_0, 3);
         app->yesNoPrompt = WifiClub_CreateYesNoPrompt(app->bgConfig, &sUserInfoPromptWindowTemplate, 1);
         app->state = 4;
     }
@@ -1485,14 +1486,14 @@ s32 WifiClub_State_UpdateUserInfoPrompt(WifiClubApp *app, s32 mainState) {
     enum YesNoResponse response = YesNoPrompt_HandleInput(app->yesNoPrompt);
     if (response == YESNORESPONSE_YES) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
-        ClearFrameAndWindow2(&app->noticeWindow, 0);
+        ClearFrameAndWindow2(&app->noticeWindow, FALSE);
         RemoveWindow(&app->noticeWindow);
-        WifiClub_ShowConnectionNotice(app, 22);
+        WifiClub_ShowConnectionNotice(app, msg_0800_00022);
         app->yesNoPrompt = WifiClub_CreateYesNoPrompt(app->bgConfig, &sUserInfoPromptWindowTemplate, 1);
         app->state = 5;
     } else if (response == YESNORESPONSE_NO) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
-        ClearFrameAndWindow2(&app->noticeWindow, 0);
+        ClearFrameAndWindow2(&app->noticeWindow, FALSE);
         RemoveWindow(&app->noticeWindow);
         app->state = 34;
     } else {
@@ -1505,11 +1506,11 @@ s32 WifiClub_State_ConfirmUpdateUserInfoPrompt(WifiClubApp *app, s32 mainState) 
     enum YesNoResponse response = YesNoPrompt_HandleInput(app->yesNoPrompt);
     if (response == YESNORESPONSE_YES) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
-        SetBgPriority(3, 0);
+        SetBgPriority(GF_BG_LYR_MAIN_3, 0);
         SetBgPriority(2, 0);
         SetBgPriority(1, 1);
-        SetBgPriority(0, 3);
-        ClearFrameAndWindow2(&app->noticeWindow, 0);
+        SetBgPriority(GF_BG_LYR_MAIN_0, 3);
+        ClearFrameAndWindow2(&app->noticeWindow, FALSE);
         RemoveWindow(&app->noticeWindow);
         Save_FriendRoster_Init(app->friendRoster);
         void *saveArray = SaveArray_Get(app->saveData, 31);
@@ -1517,19 +1518,19 @@ s32 WifiClub_State_ConfirmUpdateUserInfoPrompt(WifiClubApp *app, s32 mainState) 
         FrontierSave_ClearRows(Save_Frontier_GetStatic(app->saveData));
         app->state = 14;
         app->clubData = CommState_StartWifiClub(app->saveData, 1188);
-        WifiClub_PrintMessage(app, 23, 1);
+        WifiClub_PrintMessage(app, msg_0800_00023, 1);
         GF_ASSERT(app->waitingIcon == NULL);
         app->waitingIcon = WaitingIcon_New(&app->msgWindow, 482);
         app->userInfoSaved = 1;
     } else if (response == YESNORESPONSE_NO) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
-        SetBgPriority(3, 0);
+        SetBgPriority(GF_BG_LYR_MAIN_3, 0);
         SetBgPriority(2, 0);
         SetBgPriority(1, 1);
-        SetBgPriority(0, 3);
-        ClearFrameAndWindow2(&app->noticeWindow, 0);
+        SetBgPriority(GF_BG_LYR_MAIN_0, 3);
+        ClearFrameAndWindow2(&app->noticeWindow, FALSE);
         RemoveWindow(&app->noticeWindow);
-        WifiClub_ShowConnectionNotice(app, 20);
+        WifiClub_ShowConnectionNotice(app, msg_0800_00020);
         app->state = 3;
     } else {
         return mainState;
@@ -1541,25 +1542,25 @@ s32 WifiClub_State_SaveUserInfoPrompt(WifiClubApp *app, s32 mainState) {
     enum YesNoResponse response = YesNoPrompt_HandleInput(app->yesNoPrompt);
     if (response == YESNORESPONSE_YES) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
-        SetBgPriority(0, 3);
+        SetBgPriority(GF_BG_LYR_MAIN_0, 3);
         SetBgPriority(1, 1);
-        SetBgPriority(3, 0);
+        SetBgPriority(GF_BG_LYR_MAIN_3, 0);
         SetBgPriority(2, 0);
-        ClearFrameAndWindow2(&app->noticeWindow, 0);
+        ClearFrameAndWindow2(&app->noticeWindow, FALSE);
         RemoveWindow(&app->noticeWindow);
         app->state = 14;
         app->clubData = CommState_StartWifiClub(app->saveData, 1188);
-        WifiClub_PrintMessage(app, 23, 1);
+        WifiClub_PrintMessage(app, msg_0800_00023, 1);
         GF_ASSERT(app->waitingIcon == NULL);
         app->waitingIcon = WaitingIcon_New(&app->msgWindow, 482);
         app->userInfoSaved = 1;
     } else if (response == YESNORESPONSE_NO) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
-        SetBgPriority(0, 3);
+        SetBgPriority(GF_BG_LYR_MAIN_0, 3);
         SetBgPriority(1, 1);
-        SetBgPriority(3, 0);
+        SetBgPriority(GF_BG_LYR_MAIN_3, 0);
         SetBgPriority(2, 0);
-        ClearFrameAndWindow2(&app->noticeWindow, 0);
+        ClearFrameAndWindow2(&app->noticeWindow, FALSE);
         RemoveWindow(&app->noticeWindow);
         app->state = 34;
     } else {
@@ -1569,9 +1570,9 @@ s32 WifiClub_State_SaveUserInfoPrompt(WifiClubApp *app, s32 mainState) {
 }
 
 s32 WifiClub_State_StartConnecting(WifiClubApp *app, s32 mainState) {
-    SetBgPriority(0, 3);
+    SetBgPriority(GF_BG_LYR_MAIN_0, 3);
     SetBgPriority(1, 1);
-    SetBgPriority(3, 0);
+    SetBgPriority(GF_BG_LYR_MAIN_3, 0);
     SetBgPriority(2, 0);
     app->state = 15;
     return mainState;
@@ -1657,21 +1658,21 @@ void WifiClub_HandleWifiError(WifiClubApp *app) {
     s32 var_r7;
     if ((var_r5 == 11) || (errorCode == 25)) {
         if (wifiError[1] != 2) {
-            var_r7 = 14;
+            var_r7 = msg_0800_00014;
         } else {
-            var_r7 = 11;
+            var_r7 = msg_0800_00011;
         }
         var_r5 = 11;
     } else if (errorCode == 26) {
-        var_r7 = 13;
+        var_r7 = msg_0800_00013;
         var_r5 = 12;
     } else if (var_r5 >= 0) {
         var_r7 = var_r5;
     } else {
-        var_r7 = 11;
+        var_r7 = msg_0800_00011;
     }
     WifiClub_CloseMessage(app);
-    BufferIntegerAsString(app->msgFormat, 0, errorCode, 5, PRINTING_MODE_LEADING_ZEROS, 1);
+    BufferIntegerAsString(app->msgFormat, 0, errorCode, 5, PRINTING_MODE_LEADING_ZEROS, TRUE);
     app->timer = 30;
     WifiClub_ShowConnectionNotice(app, var_r7);
     switch (var_r5) {
@@ -1697,7 +1698,7 @@ void WifiClub_HandleWifiError(WifiClubApp *app) {
 s32 WifiClub_State_WaitErrorButton(WifiClubApp *app, s32 mainState) {
     if ((gSystem.newKeys & (PAD_BUTTON_B | PAD_BUTTON_A)) || (System_GetTouchNew() == 1)) {
         if (WindowIsInUse(&app->noticeWindow) != 0) {
-            ClearFrameAndWindow2(&app->noticeWindow, 0);
+            ClearFrameAndWindow2(&app->noticeWindow, FALSE);
             RemoveWindow(&app->noticeWindow);
         }
         app->state = 8;
@@ -1725,10 +1726,10 @@ s32 WifiClub_State_ErrorThenAskReconnect(WifiClubApp *app, s32 mainState) {
     }
     if ((gSystem.newKeys & (PAD_BUTTON_B | PAD_BUTTON_A)) || (System_GetTouchNew() == 1)) {
         if (WindowIsInUse(&app->noticeWindow) != 0) {
-            ClearFrameAndWindow2(&app->noticeWindow, 0);
+            ClearFrameAndWindow2(&app->noticeWindow, FALSE);
             RemoveWindow(&app->noticeWindow);
         }
-        WifiClub_PrintMessage(app, 88, 0);
+        WifiClub_PrintMessage(app, msg_0778_00088, 0);
         app->state = 11;
     }
     return mainState;
@@ -1803,21 +1804,21 @@ s32 WifiClub_State_Reconnect(WifiClubApp *app, s32 mainState) {
             WifiClub_FreeRosterScreen(app);
         }
         if (WindowIsInUse(&app->titleWindow) != 0) {
-            EraseFrameAndWindow1(&app->titleWindow, 0);
+            EraseFrameAndWindow1(&app->titleWindow, FALSE);
             RemoveWindow(&app->titleWindow);
         }
         if (WindowIsInUse(&app->statusWindow) != 0) {
             RemoveWindow(&app->statusWindow);
         }
-        BgClearTilemapBufferAndCommit(app->bgConfig, 3);
+        BgClearTilemapBufferAndCommit(app->bgConfig, GF_BG_LYR_MAIN_3);
         NARC *narc = NARC_New(NARC_a_0_8_8, HEAP_ID_53);
         WifiClub_LoadBgGraphics(app, narc);
         NARC_Delete(narc);
         app->paletteCycle.active = 1;
         gSystem.screensFlipped = 1;
         GfGfx_SwapDisplay();
-        BgSetPosTextAndCommit(app->bgConfig, 0, BG_POS_OP_SET_X, 0);
-        BgSetPosTextAndCommit(app->bgConfig, 0, BG_POS_OP_SET_Y, 0);
+        BgSetPosTextAndCommit(app->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_SET_X, 0);
+        BgSetPosTextAndCommit(app->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_SET_Y, 0);
         app->resetBrightness = 1;
         if (app->unk14C != NULL) {
             RemoveWindow(&app->unk310);
@@ -1832,7 +1833,7 @@ s32 WifiClub_State_Reconnect(WifiClubApp *app, s32 mainState) {
         MI_CpuFill8(app->friendVoiceChat, 0, 128);
         WifiClub_PrintTitleBar(app);
         app->clubData = CommState_StartWifiClub(app->saveData, 1188);
-        WifiClub_PrintMessage(app, 23, 1);
+        WifiClub_PrintMessage(app, msg_0800_00023, 1);
         GF_ASSERT(app->waitingIcon == NULL);
         app->waitingIcon = WaitingIcon_New(&app->msgWindow, 482);
         app->state = 14;
@@ -1846,7 +1847,7 @@ s32 WifiClub_State_Connecting(WifiClubApp *app, s32 mainState) {
     }
     if (WifiConnection_IsFriendDataChanged() != 0) {
         app->state = 69;
-        WifiClub_PrintMessage(app, 30, 1);
+        WifiClub_PrintMessage(app, msg_0800_00030, 1);
         GF_ASSERT(app->waitingIcon == NULL);
         app->waitingIcon = WaitingIcon_New(&app->msgWindow, 482);
     }
@@ -1929,7 +1930,7 @@ s32 WifiClub_State_WaitThenReenterRoom(WifiClubApp *app, s32 mainState) {
 
 s32 WifiClub_State_ShowUserInfoSaved(WifiClubApp *app, s32 mainState) {
     WifiClub_CloseMessage(app);
-    WifiClub_ShowConnectionNotice(app, 19);
+    WifiClub_ShowConnectionNotice(app, msg_0800_00019);
     app->state = 17;
     app->userInfoSaved = 0;
     return mainState;
@@ -1942,7 +1943,7 @@ s32 WifiClub_State_UserInfoSavedWaitButton(WifiClubApp *app, s32 mainState) {
             app->state = 34;
             CommState_EndWifiSession();
         } else if (FriendRoster_CountFriends(app->friendRoster) == 0) {
-            WifiClub_PrintMessage(app, 26, 1);
+            WifiClub_PrintMessage(app, msg_0800_00026, 1);
             app->state = 59;
             app->timer = 1;
         } else {
@@ -1950,7 +1951,7 @@ s32 WifiClub_State_UserInfoSavedWaitButton(WifiClubApp *app, s32 mainState) {
             WifiClub_CollectOnlineFriends(app);
             app->state = WifiClub_FadeOutToEnterRoom();
             if (WindowIsInUse(&app->noticeWindow) != 0) {
-                ClearFrameAndWindow2(&app->noticeWindow, 0);
+                ClearFrameAndWindow2(&app->noticeWindow, FALSE);
                 RemoveWindow(&app->noticeWindow);
             }
         }
@@ -1972,7 +1973,7 @@ void WifiClub_PrintOwnStatus(WifiClubApp *app) {
     } else {
         color = MAKE_TEXT_COLOR(3, 4, 0);
     }
-    AddTextPrinterParameterizedWithColor(&app->statusWindow, 0, strPlayerName, 32, 0, 255, color, NULL);
+    AddTextPrinterParameterizedWithColor(&app->statusWindow, 0, strPlayerName, 32, 0, TEXT_SPEED_NOTRANSFER, color, NULL);
     String_Delete(strPlayerName);
     s32 ownStatus = WifiClub_GetPlayerStatus(app, &app->clubData->own);
     s32 statusMsgId = WifiClub_GetStatusLabel(ownStatus, &color);
@@ -1991,7 +1992,7 @@ void WifiClub_PrintOwnStatus(WifiClubApp *app) {
     } else {
         ReadMsgDataIntoString(app->msgData, statusMsgId, app->msgRaw);
     }
-    AddTextPrinterParameterizedWithColor(&app->statusWindow, 0, app->msgRaw, 102, 0, 255, color, NULL);
+    AddTextPrinterParameterizedWithColor(&app->statusWindow, 0, app->msgRaw, 102, 0, TEXT_SPEED_NOTRANSFER, color, NULL);
     WifiClub_DrawStatusIconToBg(app->bgConfig, &app->statusIcons, 1, 2, 1, ownStatus);
     s32 var_r0_2;
     if (app->clubData->own.voiceChat != 0) {
@@ -2014,14 +2015,14 @@ void WifiClub_CreateStatusBarWindows(WifiClubApp *app) {
         RemoveWindow(&app->statusWindow);
     }
     if (WindowIsInUse(&app->titleWindow) != 0) {
-        EraseFrameAndWindow1(&app->titleWindow, 0);
+        EraseFrameAndWindow1(&app->titleWindow, FALSE);
         RemoveWindow(&app->titleWindow);
     }
-    AddWindowParameterized(app->bgConfig, &app->statusWindow, 3, 1, 1, 28, 2, 13, 402);
+    AddWindowParameterized(app->bgConfig, &app->statusWindow, GF_BG_LYR_MAIN_3, 1, 1, 28, 2, 13, 402);
     AddWindowParameterized(app->bgConfig, &app->titleWindow, 1, 1, 1, 28, 2, 13, 417);
     FillWindowPixelBuffer(&app->titleWindow, 15);
     ScheduleWindowCopyToVram(&app->titleWindow);
-    DrawFrameAndWindow1(&app->titleWindow, 0, 473, 11);
+    DrawFrameAndWindow1(&app->titleWindow, FALSE, 473, 11);
 }
 
 s32 WifiClub_State_EnterRoom(WifiClubApp *app, s32 mainState) {
@@ -2037,7 +2038,7 @@ s32 WifiClub_State_EnterRoom(WifiClubApp *app, s32 mainState) {
     WifiClub_LoadStatusIcons(app->bgConfig, &app->statusIcons, narc, HEAP_ID_53);
     WifiClub_RestoreVoiceChatSetting(app);
     WifiClub_CloseMessage(app);
-    BgClearTilemapBufferAndCommit(app->bgConfig, 3);
+    BgClearTilemapBufferAndCommit(app->bgConfig, GF_BG_LYR_MAIN_3);
     if (app->unk14C != NULL) {
         RemoveWindow(&app->unk310);
         DestroyListMenu(app->unk150, NULL, NULL);
@@ -2167,7 +2168,7 @@ s32 WifiClub_State_Room(WifiClubApp *app, s32 mainState) {
     }
     if (CommState_GetWifiMatchStatus() == 4) {
         WifiClub_BufferFriendName(app, WifiConnection_GetTargetFriendIndex());
-        WifiClub_PrintMessage(app, 18, 0);
+        WifiClub_PrintMessage(app, msg_0778_00018, 0);
         app->state = 29;
         WifiClub_SetStatusAndSend(app, 16);
         CommState_LeaveWifiMatch();
@@ -2179,9 +2180,9 @@ s32 WifiClub_State_Room(WifiClubApp *app, s32 mainState) {
     if (WifiClubRoom_IsInputLocked(&app->room) == 0) {
         if ((WifiConnection_GetNewClientIndex() == -1) && (gSystem.newKeys & PAD_BUTTON_X)) {
             if (WifiClub_ToggleVoiceChatSetting(app) != 0) {
-                WifiClub_PrintMessage(app, 90, 0);
+                WifiClub_PrintMessage(app, msg_0778_00090, 0);
             } else {
-                WifiClub_PrintMessage(app, 91, 0);
+                WifiClub_PrintMessage(app, msg_0778_00091, 0);
             }
             PlaySE(SEQ_SE_DP_DECIDE);
             WifiClub_PrintOwnStatus(app);
@@ -2209,13 +2210,13 @@ s32 WifiClub_State_Room(WifiClubApp *app, s32 mainState) {
     if ((app->contactFriend == -1) && (WifiConnection_GetNewClientIndex() != -1)) {
         app->contactFriend = WifiConnection_GetNewClientIndex();
         WifiClub_BufferFriendName(app, app->contactFriend);
-        WifiClub_PrintMessage(app, 76, 0);
+        WifiClub_PrintMessage(app, msg_0778_00076, 0);
         WifiConnection_SetVoiceChatEnabled(app->clubData->own.voiceChat);
         app->unk344 = 0;
     } else if ((app->contactFriend != -1) && (WifiConnection_GetNewClientIndex() == -1)) {
         WifiConnection_SetVoiceChatEnabled(0);
         WifiClub_BufferFriendName(app, app->contactFriend);
-        WifiClub_PrintMessage(app, 18, 0);
+        WifiClub_PrintMessage(app, msg_0778_00018, 0);
         CommState_LeaveWifiMatch();
         app->state = 27;
         return mainState;
@@ -2244,7 +2245,7 @@ s32 WifiClub_State_Room(WifiClubApp *app, s32 mainState) {
         } else {
             app->exitChoice = 8;
             app->state = 57;
-            WifiClub_PrintMessage(app, 25, 1);
+            WifiClub_PrintMessage(app, msg_0800_00025, 1);
         }
         WifiClub_CancelRosterSelection(app, HEAP_ID_53);
         return mainState;
@@ -2294,25 +2295,25 @@ s32 WifiClub_State_WaitVoiceChatPartner(WifiClubApp *app, s32 mainState) {
         app->state = 70;
     } else if (CommState_GetWifiMatchStatus() == 5) {
         WifiClub_BufferFriendName(app, WifiConnection_GetTargetFriendIndex());
-        WifiClub_PrintMessage(app, 15, 0);
+        WifiClub_PrintMessage(app, msg_0778_00015, 0);
         app->state = 27;
     } else if (CommState_GetWifiMatchStatus() == 3) {
         WifiClub_BufferFriendName(app, WifiConnection_GetTargetFriendIndex());
-        WifiClub_PrintMessage(app, 18, 0);
+        WifiClub_PrintMessage(app, msg_0778_00018, 0);
         app->state = 27;
     } else if ((CommState_GetWifiMatchStatus() == 4) || (CommState_WasWifiDisconnected() != 0)) {
         WifiClub_BufferFriendName(app, WifiConnection_GetTargetFriendIndex());
-        WifiClub_PrintMessage(app, 19, 0);
+        WifiClub_PrintMessage(app, msg_0778_00019, 0);
         app->state = 27;
     } else if (CommState_HasWifiFailed() != 0) {
         WifiClub_HandleWifiError(app);
     } else if (partnerVoiceChat == 0) {
         WifiClub_BufferFriendName(app, WifiConnection_GetTargetFriendIndex());
-        WifiClub_PrintMessage(app, 16, 0);
+        WifiClub_PrintMessage(app, msg_0778_00016, 0);
         app->state = 27;
     } else if (partnerStatus != 16) {
         WifiClub_BufferFriendName(app, WifiConnection_GetTargetFriendIndex());
-        WifiClub_PrintMessage(app, 16, 0);
+        WifiClub_PrintMessage(app, msg_0778_00016, 0);
         app->state = 27;
     } else if (CommState_GetWifiMatchStatus() == 1) {
         WifiClub_CloseMessage(app);
@@ -2325,7 +2326,7 @@ s32 WifiClub_State_WaitVoiceChatPartner(WifiClubApp *app, s32 mainState) {
 
 s32 WifiClub_State_StartVoiceChat(WifiClubApp *app, s32 mainState) {
     WifiClub_BufferFriendName(app, WifiConnection_GetTargetFriendIndex());
-    WifiClub_PrintMessage(app, 14, 0);
+    WifiClub_PrintMessage(app, msg_0778_00014, 0);
     WifiClub_SetStatusAndSend(app, 1);
     app->state = 23;
     if (WifiConnection_GetTargetFriendIndex() != -1) {
@@ -2340,14 +2341,14 @@ s32 WifiClub_State_VoiceChatStartMessage(WifiClubApp *app, s32 mainState) {
         return mainState;
     }
     if (WifiConnection_GetTargetFriendIndex() < 0) {
-        WifiClub_PrintMessage(app, 19, 0);
+        WifiClub_PrintMessage(app, msg_0778_00019, 0);
         app->state = 27;
         return mainState;
     }
     u32 partnerStatus = WifiClub_GetPlayerStatus(app, WifiClub_GetFriendStatusData(app, WifiConnection_GetTargetFriendIndex()));
     if ((partnerStatus != 16) && (partnerStatus != 1)) {
         WifiClub_BufferFriendName(app, WifiConnection_GetTargetFriendIndex());
-        WifiClub_PrintMessage(app, 16, 0);
+        WifiClub_PrintMessage(app, msg_0778_00016, 0);
         app->state = 27;
         return mainState;
     }
@@ -2364,7 +2365,7 @@ s32 WifiClub_State_VoiceChatStartMessage(WifiClubApp *app, s32 mainState) {
 
 s32 WifiClub_State_VoiceChat(WifiClubApp *app, s32 mainState) {
     if (WifiConnection_GetTargetFriendIndex() < 0) {
-        WifiClub_PrintMessage(app, 19, 0);
+        WifiClub_PrintMessage(app, msg_0778_00019, 0);
         app->state = 27;
         return mainState;
     }
@@ -2373,24 +2374,24 @@ s32 WifiClub_State_VoiceChat(WifiClubApp *app, s32 mainState) {
     WifiClub_RedrawRosterIfNeeded(app);
     if (CommState_GetWifiMatchStatus() == 5) {
         WifiClub_BufferFriendName(app, WifiConnection_GetTargetFriendIndex());
-        WifiClub_PrintMessage(app, 15, 0);
+        WifiClub_PrintMessage(app, msg_0778_00015, 0);
         app->state = 27;
     } else if (CommState_GetWifiMatchStatus() == 3) {
         WifiClub_BufferFriendName(app, WifiConnection_GetTargetFriendIndex());
-        WifiClub_PrintMessage(app, 18, 0);
+        WifiClub_PrintMessage(app, msg_0778_00018, 0);
         app->state = 27;
     } else if ((CommState_GetWifiMatchStatus() == 4) || (CommState_WasWifiDisconnected() != 0)) {
         WifiClub_BufferFriendName(app, WifiConnection_GetTargetFriendIndex());
-        WifiClub_PrintMessage(app, 19, 0);
+        WifiClub_PrintMessage(app, msg_0778_00019, 0);
         app->state = 27;
     } else if (CommState_HasWifiFailed() != 0) {
         WifiClub_HandleWifiError(app);
     } else if ((partnerStatus != 16) && (partnerStatus != 1)) {
         WifiClub_BufferFriendName(app, WifiConnection_GetTargetFriendIndex());
-        WifiClub_PrintMessage(app, 16, 0);
+        WifiClub_PrintMessage(app, msg_0778_00016, 0);
         app->state = 27;
     } else if ((gSystem.newKeys & (PAD_BUTTON_B | PAD_BUTTON_A)) || (System_GetTouchNew() == 1)) {
-        WifiClub_PrintMessage(app, 20, 0);
+        WifiClub_PrintMessage(app, msg_0778_00020, 0);
         app->state = 25;
     } else if (WifiConnection_GetVoiceActivity() != 0) {
         WifiClub_DrawIconToBg(app->bgConfig, &app->statusIcons, 1, 2, 1, 2, 0);
@@ -2576,7 +2577,7 @@ s32 WifiClub_State_ErrorThenDisconnect(WifiClubApp *app, s32 mainState) {
         return mainState;
     }
     if ((gSystem.newKeys & (PAD_BUTTON_B | PAD_BUTTON_A)) || (System_GetTouchNew() == 1)) {
-        WifiClub_PrintMessage(app, 26, 1);
+        WifiClub_PrintMessage(app, msg_0800_00026, 1);
         app->state = 59;
         app->timer = 1;
     }
@@ -2585,7 +2586,7 @@ s32 WifiClub_State_ErrorThenDisconnect(WifiClubApp *app, s32 mainState) {
 
 s32 WifiClub_State_AskCancelSeeking(WifiClubApp *app, s32 mainState) {
     WifiClubRoom_UpdateLights(&app->room);
-    WifiClub_PrintMessage(app, 10, 0);
+    WifiClub_PrintMessage(app, msg_0778_00010, 0);
     app->state = 40;
     return mainState;
 }
@@ -2686,17 +2687,17 @@ s32 WifiClub_State_OpenSeekMenu(WifiClubApp *app, s32 mainState) {
         ListMenuItems_AppendFromMsgData(app->menuItems, app->msgData, listMenuItems[i].strno, listMenuItems[i].value);
     }
     if (WindowIsInUse(&app->menuWindow) != 0) {
-        EraseFrameAndWindow1(&app->menuWindow, 0);
+        EraseFrameAndWindow1(&app->menuWindow, FALSE);
         RemoveWindow(&app->menuWindow);
     }
     s32 height = (listLen + 1) * 2;
     AddWindowParameterized(app->bgConfig, &app->menuWindow, 2, 16, 3, 15, height, 13, 59 - height);
-    DrawFrameAndWindow1(&app->menuWindow, 1, 473, 11);
+    DrawFrameAndWindow1(&app->menuWindow, TRUE, 473, 11);
     listMenuTemplate.items = app->menuItems;
     listMenuTemplate.window = &app->menuWindow;
     app->listMenu = ListMenuInit(&listMenuTemplate, 0, app->seekMenuCursor, HEAP_ID_53);
     ScheduleWindowCopyToVram(&app->menuWindow);
-    WifiClub_PrintMessage(app, 8, 0);
+    WifiClub_PrintMessage(app, msg_0778_00008, 0);
     WifiClubRoom_UpdateLights(&app->room);
     app->state = 37;
     return mainState;
@@ -2707,7 +2708,7 @@ s32 WifiClub_State_SeekMenu(WifiClubApp *app, s32 mainState) {
     s32 cookingError = WifiClub_GetCookingError(app);
     WifiClubRoom_UpdateLights(&app->room);
     if (CommState_HasWifiFailed() != 0) {
-        EraseFrameAndWindow1(&app->menuWindow, 0);
+        EraseFrameAndWindow1(&app->menuWindow, FALSE);
         RemoveWindow(&app->menuWindow);
         DestroyListMenu(app->listMenu, NULL, &app->seekMenuCursor);
         ListMenuItems_Delete(app->menuItems);
@@ -2718,7 +2719,7 @@ s32 WifiClub_State_SeekMenu(WifiClubApp *app, s32 mainState) {
     if (TextPrinterCheckActive(app->textPrinterId) != 0) {
         if (WifiClub_CheckIncomingContact(app) != 0) {
             app->state = 19;
-            EraseFrameAndWindow1(&app->menuWindow, 0);
+            EraseFrameAndWindow1(&app->menuWindow, FALSE);
             RemoveWindow(&app->menuWindow);
             DestroyListMenu(app->listMenu, NULL, &app->seekMenuCursor);
             ListMenuItems_Delete(app->menuItems);
@@ -2742,21 +2743,21 @@ s32 WifiClub_State_SeekMenu(WifiClubApp *app, s32 mainState) {
         PlaySE(SEQ_SE_DP_DECIDE);
         if ((var_r4 == 19) && (cookingError != 0)) {
             if (cookingError == 1) {
-                WifiClub_PrintMessage(app, 104, 0);
+                WifiClub_PrintMessage(app, msg_0778_00104, 0);
             } else if (cookingError == 3) {
-                WifiClub_PrintMessage(app, 106, 0);
+                WifiClub_PrintMessage(app, msg_0778_00106, 0);
             } else {
-                WifiClub_PrintMessage(app, 105, 0);
+                WifiClub_PrintMessage(app, msg_0778_00105, 0);
             }
             app->state = 29;
         } else if ((var_r4 == 15) && (battleReadyMons < 2)) {
-            WifiClub_PrintMessage(app, 89, 0);
+            WifiClub_PrintMessage(app, msg_0778_00089, 0);
             app->state = 29;
         } else if ((var_r4 == 1) && (battleReadyMons < 2)) {
-            WifiClub_PrintMessage(app, 103, 0);
+            WifiClub_PrintMessage(app, msg_0778_00103, 0);
             app->state = 29;
         } else if ((var_r4 == 0) || (var_r4 == 1) || (var_r4 == 29)) {
-            EraseFrameAndWindow1(&app->menuWindow, 0);
+            EraseFrameAndWindow1(&app->menuWindow, FALSE);
             RemoveWindow(&app->menuWindow);
             DestroyListMenu(app->listMenu, NULL, &app->seekMenuCursor);
             ListMenuItems_Delete(app->menuItems);
@@ -2785,7 +2786,7 @@ s32 WifiClub_State_SeekMenu(WifiClubApp *app, s32 mainState) {
         }
     }
 
-    EraseFrameAndWindow1(&app->menuWindow, 0);
+    EraseFrameAndWindow1(&app->menuWindow, FALSE);
     RemoveWindow(&app->menuWindow);
     DestroyListMenu(app->listMenu, NULL, &app->seekMenuCursor);
     ListMenuItems_Delete(app->menuItems);
@@ -2850,12 +2851,12 @@ s32 WifiClub_OpenSeekSubmenu(WifiClubApp *app, s32 menuChoice) {
         }
     }
     if (WindowIsInUse(&app->menuWindow) != 0) {
-        EraseFrameAndWindow1(&app->menuWindow, 0);
+        EraseFrameAndWindow1(&app->menuWindow, FALSE);
         RemoveWindow(&app->menuWindow);
     }
     u32 windowHeight = listLen * 2;
     AddWindowParameterized(app->bgConfig, &app->menuWindow, 2, 16, 9, 15, windowHeight, 13, 59 - windowHeight);
-    DrawFrameAndWindow1(&app->menuWindow, 1, 473, 11);
+    DrawFrameAndWindow1(&app->menuWindow, TRUE, 473, 11);
     listMenuTemplate.items = app->menuItems;
     listMenuTemplate.window = &app->menuWindow;
     app->listMenu = ListMenuInit(&listMenuTemplate, 0, (&app->unk376)[app->unk37C], HEAP_ID_53);
@@ -2866,7 +2867,7 @@ s32 WifiClub_OpenSeekSubmenu(WifiClubApp *app, s32 menuChoice) {
 s32 WifiClub_State_SeekSubmenu(WifiClubApp *app, s32 mainState) {
     WifiClubRoom_UpdateLights(&app->room);
     if (CommState_HasWifiFailed() != 0) {
-        EraseFrameAndWindow1(&app->menuWindow, 0);
+        EraseFrameAndWindow1(&app->menuWindow, FALSE);
         RemoveWindow(&app->menuWindow);
         DestroyListMenu(app->listMenu, 0, &app->unk376 + app->unk37C);
         ListMenuItems_Delete(app->menuItems);
@@ -2876,7 +2877,7 @@ s32 WifiClub_State_SeekSubmenu(WifiClubApp *app, s32 mainState) {
     }
     if (WifiClub_CheckIncomingContact(app) != 0) {
         app->state = 19;
-        EraseFrameAndWindow1(&app->menuWindow, 0);
+        EraseFrameAndWindow1(&app->menuWindow, FALSE);
         RemoveWindow(&app->menuWindow);
         DestroyListMenu(app->listMenu, 0, &app->unk376 + app->unk37C);
         ListMenuItems_Delete(app->menuItems);
@@ -2915,7 +2916,7 @@ s32 WifiClub_State_SeekSubmenu(WifiClubApp *app, s32 mainState) {
         }
         WifiClub_StartSeeking(app, var_r7);
     }
-    EraseFrameAndWindow1(&app->menuWindow, 0);
+    EraseFrameAndWindow1(&app->menuWindow, FALSE);
     RemoveWindow(&app->menuWindow);
     DestroyListMenu(app->listMenu, 0, &app->unk376 + app->unk37C);
     ListMenuItems_Delete(app->menuItems);
@@ -2929,7 +2930,7 @@ s32 WifiClub_State_TalkToPlayer(WifiClubApp *app, s32 mainState) {
     WifiClubRoomPerson *partnerPerson = WifiClub_FindPlayerObject(app, partnerId);
     if (partnerPerson == 0) {
         WifiClub_BufferFriendName(app, partnerId - 1);
-        WifiClub_PrintMessage(app, 16, 0);
+        WifiClub_PrintMessage(app, msg_0778_00016, 0);
         app->state = 29;
         return mainState;
     }
@@ -2941,41 +2942,41 @@ s32 WifiClub_State_TalkToPlayer(WifiClubApp *app, s32 mainState) {
     s32 var_r1 = 0;
 
     if (partnerStatus == 15) {
-        var_r1 = 3;
+        var_r1 = msg_0778_00003;
     } else if (partnerStatus == 19) {
-        var_r1 = 4;
+        var_r1 = msg_0778_00004;
     } else if (partnerStatus == 18) {
-        var_r1 = 83;
+        var_r1 = msg_0778_00083;
     } else if (partnerStatus == 21) {
-        var_r1 = 5;
+        var_r1 = msg_0778_00005;
     } else if (partnerStatus == 20) {
-        var_r1 = 84;
+        var_r1 = msg_0778_00084;
     } else if (partnerStatus == 23) {
         BufferWiFiPlazaActivityName(app->msgFormat, 1, 0);
-        var_r1 = 6;
+        var_r1 = msg_0778_00006;
     } else if (partnerStatus == 22) {
-        var_r1 = 85;
+        var_r1 = msg_0778_00085;
     } else if (partnerStatus == 25) {
         BufferWiFiPlazaActivityName(app->msgFormat, 1, 1);
-        var_r1 = 6;
+        var_r1 = msg_0778_00006;
     } else if (partnerStatus == 24) {
-        var_r1 = 85;
+        var_r1 = msg_0778_00085;
     } else if (partnerStatus == 27) {
         BufferWiFiPlazaActivityName(app->msgFormat, 1, 2);
-        var_r1 = 6;
+        var_r1 = msg_0778_00006;
     } else if (partnerStatus == 26) {
-        var_r1 = 85;
+        var_r1 = msg_0778_00085;
     } else {
         if (WifiClub_IsSeekingBattleStatus(partnerStatus) != 0) {
-            var_r1 = 2;
+            var_r1 = msg_0778_00002;
         } else if (partnerStatus == 8) {
-            var_r1 = 82;
+            var_r1 = msg_0778_00082;
         } else if (WifiClub_IsInBattleStatus(partnerStatus) != 0) {
-            var_r1 = 81;
+            var_r1 = msg_0778_00081;
         } else if (partnerStatus == 1) {
-            var_r1 = 86;
+            var_r1 = msg_0778_00086;
         } else {
-            var_r1 = 7;
+            var_r1 = msg_0778_00007;
         }
     }
     WifiClub_PrintMessage(app, var_r1, 0);
@@ -3001,14 +3002,14 @@ s32 WifiClub_State_OpenApplyMenu(WifiClubApp *app, s32 mainState) {
         WifiClubRoom_EndTalk(&app->room, partnerPerson);
         DestroyListMenu(app->listMenu, 0, 0);
         WifiClub_BufferFriendName(app, partnerId - 1);
-        WifiClub_PrintMessage(app, 16, 0);
+        WifiClub_PrintMessage(app, msg_0778_00016, 0);
         app->state = 29;
         return mainState;
     }
     if (app->partnerStatus != WifiClub_GetPlayerStatus(app, WifiClub_GetFriendStatusData(app, partnerId - 1))) {
         WifiClubRoom_EndTalk(&app->room, partnerPerson);
         WifiClub_BufferFriendName(app, partnerId - 1);
-        WifiClub_PrintMessage(app, 16, 0);
+        WifiClub_PrintMessage(app, msg_0778_00016, 0);
         app->state = 29;
         return mainState;
     }
@@ -3047,7 +3048,7 @@ s32 WifiClub_State_OpenApplyMenu(WifiClubApp *app, s32 mainState) {
         }
     }
     AddWindowParameterized(app->bgConfig, &app->menuWindow, 2, 16, ((3 - itemCount) * 2) + 11, 15, itemCount * 2, 13, 59);
-    DrawFrameAndWindow1(&app->menuWindow, 1, 473, 11);
+    DrawFrameAndWindow1(&app->menuWindow, TRUE, 473, 11);
     listMenuTemplate.items = app->menuItems; // itemPrintFunc
     listMenuTemplate.window = &app->menuWindow;
     app->listMenu = ListMenuInit(&listMenuTemplate, 0, 0, HEAP_ID_53);
@@ -3105,7 +3106,7 @@ s32 WifiClub_State_ApplyMenu(WifiClubApp *app, s32 mainState) {
     s32 partnerId = WifiClubRoom_GetTalkPartnerId(&app->room);
     WifiClubRoomPerson *partnerPerson = WifiClub_FindPlayerObject(app, partnerId);
     if (CommState_HasWifiFailed() != 0) {
-        EraseFrameAndWindow1(&app->menuWindow, 0);
+        EraseFrameAndWindow1(&app->menuWindow, FALSE);
         RemoveWindow(&app->menuWindow);
         DestroyListMenu(app->listMenu, 0, NULL);
         ListMenuItems_Delete(app->menuItems);
@@ -3120,7 +3121,7 @@ s32 WifiClub_State_ApplyMenu(WifiClubApp *app, s32 mainState) {
         if (partnerPerson == 0) {
             DestroyListMenu(app->listMenu, 0, NULL);
             WifiClub_BufferFriendName(app, partnerId - 1);
-            WifiClub_PrintMessage(app, 16, 0);
+            WifiClub_PrintMessage(app, msg_0778_00016, 0);
             app->state = 29;
             var_r6 = 1;
             break;
@@ -3130,7 +3131,7 @@ s32 WifiClub_State_ApplyMenu(WifiClubApp *app, s32 mainState) {
             u8 r6 = partnerStatusData->voiceChat;
             if ((app->partnerStatus != r0) || ((WifiClub_IsGroupActivityStatus(r0) == 0) && (app->partnerVoiceChat != r6))) {
                 WifiClub_BufferFriendName(app, partnerId - 1);
-                WifiClub_PrintMessage(app, 16, 0);
+                WifiClub_PrintMessage(app, msg_0778_00016, 0);
                 app->state = 29;
                 var_r6 = 1;
                 break;
@@ -3156,37 +3157,37 @@ s32 WifiClub_State_ApplyMenu(WifiClubApp *app, s32 mainState) {
                 s32 partnerVoiceChat = friendStatusData->voiceChat;
                 if ((app->partnerStatus != partnerStatus) || ((WifiClub_IsGroupActivityStatus(partnerStatus) == 0) && (app->partnerVoiceChat != partnerVoiceChat))) {
                     WifiClub_BufferFriendName(app, partnerId - 1);
-                    WifiClub_PrintMessage(app, 16, 0);
+                    WifiClub_PrintMessage(app, msg_0778_00016, 0);
                     app->state = 29;
                     var_r6 = 1;
                 } else if (WifiClub_IsPartyValid(friendStatusData) == 0) {
                     WifiClub_BufferFriendName(app, partnerId - 1);
-                    WifiClub_PrintMessage(app, 16, 0);
+                    WifiClub_PrintMessage(app, msg_0778_00016, 0);
                     app->state = 29;
                     var_r6 = 1;
                 } else if ((WifiClub_StatusNeedsTwoMons(partnerStatus) != 0) && (battleReadyMons < 2)) {
                     if (partnerStatus == 15) {
-                        WifiClub_PrintMessage(app, 89, 0);
+                        WifiClub_PrintMessage(app, msg_0778_00089, 0);
                     } else {
-                        WifiClub_PrintMessage(app, 103, 0);
+                        WifiClub_PrintMessage(app, msg_0778_00103, 0);
                     }
                     app->state = 29;
                     var_r6 = 1;
                 } else if ((partnerStatus == 19) && (cookingError != 0)) {
                     if (cookingError == 1) {
-                        WifiClub_PrintMessage(app, 104, 0);
+                        WifiClub_PrintMessage(app, msg_0778_00104, 0);
                     } else if (cookingError == 3) {
-                        WifiClub_PrintMessage(app, 106, 0);
+                        WifiClub_PrintMessage(app, msg_0778_00106, 0);
                     } else {
-                        WifiClub_PrintMessage(app, 105, 0);
+                        WifiClub_PrintMessage(app, msg_0778_00105, 0);
                     }
                     app->state = 29;
                     var_r6 = 1;
                 } else if ((WifiClub_IsGroupActivityStatus(partnerStatus) == 0) && (partnerVoiceChat != app->clubData->own.voiceChat)) {
                     if (partnerVoiceChat != 0) {
-                        WifiClub_PrintMessage(app, 134, 0);
+                        WifiClub_PrintMessage(app, msg_0778_00134, 0);
                     } else {
-                        WifiClub_PrintMessage(app, 135, 0);
+                        WifiClub_PrintMessage(app, msg_0778_00135, 0);
                     }
                     WifiClub_SetStatusAndSend(app, WifiClub_GetCounterpartStatus(partnerStatus));
                     app->state = 63;
@@ -3200,7 +3201,7 @@ s32 WifiClub_State_ApplyMenu(WifiClubApp *app, s32 mainState) {
                                 WifiClub_SetLinkModeForStatus(counterpartStatus);
                                 WifiClub_SetStatusAndSend(app, counterpartStatus);
                                 WifiClub_BufferFriendName(app, partnerId - 1);
-                                WifiClub_PrintMessage(app, 17, 0);
+                                WifiClub_PrintMessage(app, msg_0778_00017, 0);
                                 GF_ASSERT(app->waitingIcon == NULL);
                                 app->waitingIcon = WaitingIcon_New(&app->msgWindow, 482);
                                 if (counterpartStatus != 1) {
@@ -3213,13 +3214,13 @@ s32 WifiClub_State_ApplyMenu(WifiClubApp *app, s32 mainState) {
                                 var_r6 = 1;
                             } else {
                                 WifiClub_BufferFriendName(app, partnerId - 1);
-                                WifiClub_PrintMessage(app, 16, 0);
+                                WifiClub_PrintMessage(app, msg_0778_00016, 0);
                                 app->state = 29;
                                 var_r6 = 1;
                             }
                         } else {
                             WifiClub_BufferFriendName(app, partnerId - 1);
-                            WifiClub_PrintMessage(app, 16, 0);
+                            WifiClub_PrintMessage(app, msg_0778_00016, 0);
                             app->state = 29;
                             var_r6 = 1;
                         }
@@ -3236,7 +3237,7 @@ s32 WifiClub_State_ApplyMenu(WifiClubApp *app, s32 mainState) {
     if (var_r6 == 0) {
         WifiClub_CloseMessage(app);
     }
-    EraseFrameAndWindow1(&app->menuWindow, 0);
+    EraseFrameAndWindow1(&app->menuWindow, FALSE);
     RemoveWindow(&app->menuWindow);
     DestroyListMenu(app->listMenu, 0, NULL);
     ListMenuItems_Delete(app->menuItems);
@@ -3252,15 +3253,15 @@ s32 WifiClub_State_WaitMatchAccepted(WifiClubApp *app, s32 mainState) {
         app->state = 70;
     } else if (CommState_GetWifiMatchStatus() == 3) {
         WifiClub_BufferFriendName(app, WifiConnection_GetTargetFriendIndex());
-        WifiClub_PrintMessage(app, 18, 0);
+        WifiClub_PrintMessage(app, msg_0778_00018, 0);
         app->state = 27;
     } else if (CommState_GetWifiMatchStatus() == 5) {
         WifiClub_BufferFriendName(app, WifiConnection_GetTargetFriendIndex());
-        WifiClub_PrintMessage(app, 15, 0);
+        WifiClub_PrintMessage(app, msg_0778_00015, 0);
         app->state = 27;
     } else if ((CommState_GetWifiMatchStatus() == 4) || (CommState_WasWifiDisconnected() != 0)) {
         WifiClub_BufferFriendName(app, WifiConnection_GetTargetFriendIndex());
-        WifiClub_PrintMessage(app, 18, 0);
+        WifiClub_PrintMessage(app, msg_0778_00018, 0);
         app->state = 27;
     } else if (CommState_HasWifiFailed() != 0) {
         WifiClub_HandleWifiError(app);
@@ -3283,7 +3284,7 @@ s32 WifiClub_State_WaitMatchAccepted(WifiClubApp *app, s32 mainState) {
             mainState = 2;
         } else if (Comm_IsWifiConnected() == 1) {
             WifiClub_BufferFriendName(app, WifiConnection_GetTargetFriendIndex());
-            WifiClub_PrintMessage(app, 18, 0);
+            WifiClub_PrintMessage(app, msg_0778_00018, 0);
             app->state = 27;
         }
     }
@@ -3360,14 +3361,14 @@ s32 WifiClub_State_Contacted(WifiClubApp *app, s32 mainState) {
             return mainState;
         }
         WifiClub_BufferFriendName(app, WifiConnection_GetTargetFriendIndex());
-        WifiClub_PrintMessage(app, 18, 0);
+        WifiClub_PrintMessage(app, msg_0778_00018, 0);
         app->state = 29;
         WifiClub_SetStatusAndSend(app, 16);
         CommState_LeaveWifiMatch();
         return mainState;
     }
     WifiClub_BufferFriendName(app, WifiConnection_GetTargetFriendIndex());
-    WifiClub_PrintMessage(app, 11, 0);
+    WifiClub_PrintMessage(app, msg_0778_00011, 0);
     CommPlayerInfo_Init(app->saveData, 0);
     app->state = 49;
     app->timer = 30;
@@ -3377,7 +3378,7 @@ s32 WifiClub_State_Contacted(WifiClubApp *app, s32 mainState) {
 s32 WifiClub_CheckMatchLost(WifiClubApp *app) {
     if (CommState_GetWifiMatchStatus() >= 3) {
         WifiClub_BufferFriendName(app, app->contactFriend);
-        WifiClub_PrintMessage(app, 18, 0);
+        WifiClub_PrintMessage(app, msg_0778_00018, 0);
         app->state = 27;
     } else if (CommState_HasWifiFailed() != 0) {
         WifiClub_HandleWifiError(app);
@@ -3387,7 +3388,7 @@ s32 WifiClub_CheckMatchLost(WifiClubApp *app) {
         u32 partnerStatus = WifiClub_GetPlayerStatus(app, partnerStatusData);
         if ((ownStatus != WifiClub_GetCounterpartStatus(partnerStatus)) && (ownStatus != partnerStatus)) {
             WifiClub_BufferFriendName(app, WifiConnection_GetTargetFriendIndex());
-            WifiClub_PrintMessage(app, 16, 0);
+            WifiClub_PrintMessage(app, msg_0778_00016, 0);
             app->state = 27;
 
         } else {
@@ -3401,10 +3402,10 @@ s32 WifiClub_CheckMatchLost(WifiClubApp *app) {
 s32 WifiClub_State_SyncStart(WifiClubApp *app, s32 mainState) {
     if ((CommState_GetWifiMatchStatus() >= 4) || (CommState_WasWifiDisconnected() != 0) || (Comm_IsNetIdConnected(0) == 0)) {
         if (app->isRematch != 0) {
-            WifiClub_PrintMessage(app, 101, 0);
+            WifiClub_PrintMessage(app, msg_0778_00101, 0);
         } else {
             WifiClub_BufferFriendName(app, app->contactFriend);
-            WifiClub_PrintMessage(app, 18, 0);
+            WifiClub_PrintMessage(app, msg_0778_00018, 0);
         }
         app->isRematch = 0;
         app->state = 27;
@@ -3453,7 +3454,7 @@ s32 WifiClub_State_ReceiveStatus(WifiClubApp *app, s32 mainState) {
             app->state = 52;
         } else {
             WifiClub_BufferFriendName(app, WifiConnection_GetTargetFriendIndex());
-            WifiClub_PrintMessage(app, 16, 0);
+            WifiClub_PrintMessage(app, msg_0778_00016, 0);
             app->state = 27;
         }
     }
@@ -3532,7 +3533,7 @@ s32 WifiClub_State_StartActivity(WifiClubApp *app, s32 mainState) {
 }
 
 s32 WifiClub_State_ReloadRoom(WifiClubApp *app, s32 mainState) {
-    BgClearTilemapBufferAndCommit(app->bgConfig, 3);
+    BgClearTilemapBufferAndCommit(app->bgConfig, GF_BG_LYR_MAIN_3);
     app->unk364 = 0;
     app->state = WifiClub_FadeOutToEnterRoom();
     return mainState;
@@ -3590,7 +3591,7 @@ s32 WifiClub_State_DisconnectPrompt(WifiClubApp *app, s32 mainState) {
             return mainState;
         }
         if (var_r5 == 0) {
-            WifiClub_PrintMessage(app, 26, 1);
+            WifiClub_PrintMessage(app, msg_0800_00026, 1);
             app->state = 59;
             app->timer = 1;
         } else {
@@ -3608,7 +3609,7 @@ s32 WifiClub_State_DisconnectPrompt(WifiClubApp *app, s32 mainState) {
         }
         if (yesNoResponse == YESNORESPONSE_YES) {
             YesNoPrompt_Destroy(app->yesNoPrompt);
-            WifiClub_PrintMessage(app, 26, 1);
+            WifiClub_PrintMessage(app, msg_0800_00026, 1);
             app->state = 59;
             app->timer = 1;
         } else if (yesNoResponse == YESNORESPONSE_NO) {
@@ -3633,7 +3634,7 @@ s32 WifiClub_State_Disconnecting(WifiClubApp *app, s32 mainState) {
     }
     if (CommState_Exists() == 0) {
         FriendRoster_Compact(app->friendRoster);
-        WifiClub_PrintMessage(app, 27, 1);
+        WifiClub_PrintMessage(app, msg_0800_00027, 1);
         app->state = 60;
         app->timer = 30;
     }
@@ -3679,7 +3680,7 @@ s32 WifiClub_State_RematchPrompt(WifiClubApp *app, s32 mainState) {
         } else {
             YesNoPrompt_Destroy(app->yesNoPrompt);
         }
-        WifiClub_PrintMessage(app, 101, 0);
+        WifiClub_PrintMessage(app, msg_0778_00101, 0);
         app->state = 28;
     } else {
         if (CommState_HasWifiFailed() != 0) {
@@ -3695,7 +3696,7 @@ s32 WifiClub_State_RematchPrompt(WifiClubApp *app, s32 mainState) {
                 if (menuResult == -1) {
                     return mainState;
                 } else if (menuResult == 0) {
-                    WifiClub_PrintMessage(app, 138, 0);
+                    WifiClub_PrintMessage(app, msg_0778_00138, 0);
                     GF_ASSERT(app->waitingIcon == 0);
                     app->waitingIcon = WaitingIcon_New(&app->msgWindow, 482);
                     app->isRematch = 1;
@@ -3712,7 +3713,7 @@ s32 WifiClub_State_RematchPrompt(WifiClubApp *app, s32 mainState) {
                 s32 promptResult = YesNoPrompt_HandleInput(app->yesNoPrompt);
                 if (promptResult == 1) {
                     YesNoPrompt_Destroy(app->yesNoPrompt);
-                    WifiClub_PrintMessage(app, 138, 0);
+                    WifiClub_PrintMessage(app, msg_0778_00138, 0);
                     GF_ASSERT(app->waitingIcon == 0);
                     app->waitingIcon = WaitingIcon_New(&app->msgWindow, 482);
                     app->isRematch = 1;
@@ -3742,7 +3743,7 @@ s32 WifiClub_State_CreateVoiceChatModePrompt(WifiClubApp *app, s32 mainState) {
     u32 partnerId = WifiClubRoom_GetTalkPartnerId(&app->room);
     if (WifiClub_FindPlayerObject(app, partnerId) == 0) {
         WifiClub_BufferFriendName(app, partnerId - 1);
-        WifiClub_PrintMessage(app, 16, 0);
+        WifiClub_PrintMessage(app, msg_0778_00016, 0);
         app->state = 29;
         return mainState;
     }
@@ -3751,7 +3752,7 @@ s32 WifiClub_State_CreateVoiceChatModePrompt(WifiClubApp *app, s32 mainState) {
     u8 r7 = partnerStatusData->voiceChat;
     if ((app->partnerStatus != r0) || (app->partnerVoiceChat != r7)) {
         WifiClub_BufferFriendName(app, partnerId - 1);
-        WifiClub_PrintMessage(app, 16, 0);
+        WifiClub_PrintMessage(app, msg_0778_00016, 0);
         app->state = 29;
         return mainState;
     }
@@ -3775,7 +3776,7 @@ s32 WifiClub_State_VoiceChatModePrompt(WifiClubApp *app, s32 mainState) {
             YesNoPrompt_Destroy(app->yesNoPrompt);
         }
         WifiClub_BufferFriendName(app, temp_r0 - 1);
-        WifiClub_PrintMessage(app, 16, 0);
+        WifiClub_PrintMessage(app, msg_0778_00016, 0);
         app->state = 29;
         return mainState;
     }
@@ -3789,7 +3790,7 @@ s32 WifiClub_State_VoiceChatModePrompt(WifiClubApp *app, s32 mainState) {
             YesNoPrompt_Destroy(app->yesNoPrompt);
         }
         WifiClub_BufferFriendName(app, temp_r0 - 1);
-        WifiClub_PrintMessage(app, 16, 0);
+        WifiClub_PrintMessage(app, msg_0778_00016, 0);
         app->state = 29;
         return mainState;
     }
@@ -3807,7 +3808,7 @@ s32 WifiClub_State_VoiceChatModePrompt(WifiClubApp *app, s32 mainState) {
             } else {
                 YesNoPrompt_Destroy(app->yesNoPrompt);
             }
-            WifiClub_PrintMessage(app, 18, 0);
+            WifiClub_PrintMessage(app, msg_0778_00018, 0);
             CommState_LeaveWifiMatch();
             app->state = 29;
             return mainState;
@@ -3827,7 +3828,7 @@ s32 WifiClub_State_VoiceChatModePrompt(WifiClubApp *app, s32 mainState) {
                             Comm_SetWifiContinuousSend(0);
                             WifiClub_SetStatusAndSend(app, temp_r0);
                             WifiClub_BufferFriendName(app, app->partnerId - 1);
-                            WifiClub_PrintMessage(app, 17, 0);
+                            WifiClub_PrintMessage(app, msg_0778_00017, 0);
                             GF_ASSERT(app->waitingIcon == 0);
                             app->waitingIcon = WaitingIcon_New(&app->msgWindow, 482);
                             if (temp_r0 != 1) {
@@ -3861,7 +3862,7 @@ s32 WifiClub_State_VoiceChatModePrompt(WifiClubApp *app, s32 mainState) {
                         Comm_SetWifiContinuousSend(0);
                         WifiClub_SetStatusAndSend(app, temp_r0);
                         WifiClub_BufferFriendName(app, app->partnerId - 1);
-                        WifiClub_PrintMessage(app, 17, 0);
+                        WifiClub_PrintMessage(app, msg_0778_00017, 0);
                         GF_ASSERT(app->waitingIcon == 0);
                         app->waitingIcon = WaitingIcon_New(&app->msgWindow, 482);
                         if (temp_r0 != 1) {
@@ -3908,11 +3909,11 @@ void WifiClub_PrintMessage(WifiClubApp *app, s32 msgId, s32 isConnectionMsg) {
     u8 textSpeed = textSpeed_int;
     WifiClub_DeleteWaitingIcon(app);
     if (WindowIsInUse(&app->noticeWindow) != 0) {
-        ClearFrameAndWindow2(&app->noticeWindow, 0);
+        ClearFrameAndWindow2(&app->noticeWindow, FALSE);
         RemoveWindow(&app->noticeWindow);
     }
     if (WindowIsInUse(&app->msgWindow) != 0) {
-        ClearFrameAndWindow2(&app->msgWindow, 0);
+        ClearFrameAndWindow2(&app->msgWindow, FALSE);
         RemoveWindow(&app->msgWindow);
     }
     s32 printerId = app->textPrinterId;
@@ -3928,10 +3929,10 @@ void WifiClub_PrintMessage(WifiClubApp *app, s32 msgId, s32 isConnectionMsg) {
     }
     StringExpandPlaceholders(app->msgFormat, app->msgExpanded, app->msgRaw);
     FillWindowPixelBuffer(&app->msgWindow, 15);
-    DrawFrameAndWindow2(&app->msgWindow, 1, 482, 10);
-    TextFlags_SetCanABSpeedUpPrint(1);
+    DrawFrameAndWindow2(&app->msgWindow, TRUE, 482, 10);
+    TextFlags_SetCanABSpeedUpPrint(TRUE);
     TextFlags_SetAutoScrollParam(0);
-    TextFlags_SetCanTouchSpeedUpPrint(1);
+    TextFlags_SetCanTouchSpeedUpPrint(TRUE);
     app->textPrinterId = AddTextPrinterParameterized(&app->msgWindow, 1, app->msgExpanded, 0, 0, textSpeed, 0);
     ScheduleWindowCopyToVram(&app->msgWindow);
 }
@@ -3939,11 +3940,11 @@ void WifiClub_PrintMessage(WifiClubApp *app, s32 msgId, s32 isConnectionMsg) {
 void WifiClub_ShowConnectionNotice(WifiClubApp *app, s32 msgId) {
     WifiClub_DeleteWaitingIcon(app);
     if (WindowIsInUse(&app->noticeWindow) != 0) {
-        ClearFrameAndWindow2(&app->noticeWindow, 0);
+        ClearFrameAndWindow2(&app->noticeWindow, FALSE);
         RemoveWindow(&app->noticeWindow);
     }
     if (WindowIsInUse(&app->msgWindow) != 0) {
-        ClearFrameAndWindow2(&app->msgWindow, 0);
+        ClearFrameAndWindow2(&app->msgWindow, FALSE);
         RemoveWindow(&app->msgWindow);
     }
     s32 printerId = app->textPrinterId;
@@ -3955,8 +3956,8 @@ void WifiClub_ShowConnectionNotice(WifiClubApp *app, s32 msgId) {
     ReadMsgDataIntoString(app->connectionMsgData, msgId, app->msgRaw);
     StringExpandPlaceholders(app->msgFormat, app->msgExpanded, app->msgRaw);
     FillWindowPixelBuffer(&app->noticeWindow, 15);
-    DrawFrameAndWindow1(&app->noticeWindow, 1, 473, 11);
-    app->textPrinterId = AddTextPrinterParameterized(&app->noticeWindow, 1, app->msgExpanded, 0, 0, 255, 0);
+    DrawFrameAndWindow1(&app->noticeWindow, TRUE, 473, 11);
+    app->textPrinterId = AddTextPrinterParameterized(&app->noticeWindow, 1, app->msgExpanded, 0, 0, TEXT_SPEED_NOTRANSFER, 0);
     ScheduleWindowCopyToVram(&app->noticeWindow);
 }
 
@@ -3979,7 +3980,7 @@ void WifiClub_CloseMessage(WifiClubApp *app) {
         app->textPrinterId = 8;
     }
     if (WindowIsInUse(&app->msgWindow) != 0) {
-        ClearFrameAndWindow2(&app->msgWindow, 0);
+        ClearFrameAndWindow2(&app->msgWindow, FALSE);
         RemoveWindow(&app->msgWindow);
     }
 }
@@ -4035,7 +4036,7 @@ void WifiClub_DeleteWaitingIcon(WifiClubApp *app) {
         WaitingIcon_DeleteWithoutRestore();
         app->waitingIcon = 0;
         if (WindowIsInUse(&app->msgWindow) != 0) {
-            ClearFrameAndWindow2(&app->msgWindow, 0);
+            ClearFrameAndWindow2(&app->msgWindow, FALSE);
             RemoveWindow(&app->msgWindow);
         }
     }
@@ -4062,10 +4063,10 @@ s32 WifiClub_IsRosterScreenActive(WifiClubApp *app) {
 
 void WifiClub_InitRosterScreen(WifiClubApp *app, NARC *narc, enum HeapID heapID) {
     memset(&app->roster, 0, sizeof(WifiClubRoster));
-    GfGfx_EngineBTogglePlanes(1, 1);
-    GfGfx_EngineBTogglePlanes(2, 1);
-    GfGfx_EngineBTogglePlanes(4, 1);
-    GfGfx_EngineBTogglePlanes(8, 0);
+    GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
+    GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
+    GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
+    GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
     app->roster.slotHitboxes = TouchHitboxController_Create(sRosterSlotHitboxes, 8, (TouchHitboxControllerCallback)WifiClub_RosterHitboxCallback, app, heapID);
     app->roster.msgFormat = MessageFormat_New(heapID);
     WifiClub_LoadRosterGraphics(app, narc, heapID);
@@ -4081,10 +4082,10 @@ void WifiClub_FreeRosterScreen(WifiClubApp *app) {
         app->roster.slotHitboxes = NULL;
         MessageFormat_Delete(app->roster.msgFormat);
         app->roster.msgFormat = NULL;
-        GfGfx_EngineBTogglePlanes(1, 1);
-        GfGfx_EngineBTogglePlanes(2, 0);
-        GfGfx_EngineBTogglePlanes(4, 0);
-        GfGfx_EngineBTogglePlanes(8, 0);
+        GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
+        GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
+        GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
+        GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
     }
 }
 
@@ -4201,18 +4202,18 @@ void WifiClub_LoadRosterGraphics(WifiClubApp *app, NARC *narc, enum HeapID heapI
     BgClearTilemapBufferAndCommit(app->bgConfig, 4);
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 17, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 128, heapID);
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 20, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_4_OFFSET, 160, heapID);
-    GfGfxLoader_LoadCharDataFromOpenNarc(narc, 16, app->bgConfig, GF_BG_LYR_SUB_0, 0, 0, 0, heapID);
-    GfGfxLoader_LoadCharDataFromOpenNarc(narc, 19, app->bgConfig, GF_BG_LYR_SUB_2, 48, 0, 0, heapID);
-    GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 18, app->bgConfig, GF_BG_LYR_SUB_0, 0, 0, 0, heapID);
-    app->roster.slotScreenRaw = GfGfxLoader_GetScrnDataFromOpenNarc(narc, 21, 0, &app->roster.slotScreen, heapID);
+    GfGfxLoader_LoadCharDataFromOpenNarc(narc, 16, app->bgConfig, GF_BG_LYR_SUB_0, 0, 0, FALSE, heapID);
+    GfGfxLoader_LoadCharDataFromOpenNarc(narc, 19, app->bgConfig, GF_BG_LYR_SUB_2, 48, 0, FALSE, heapID);
+    GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 18, app->bgConfig, GF_BG_LYR_SUB_0, 0, 0, FALSE, heapID);
+    app->roster.slotScreenRaw = GfGfxLoader_GetScrnDataFromOpenNarc(narc, 21, FALSE, &app->roster.slotScreen, heapID);
     WifiClub_OffsetScreenTiles(app->roster.slotScreen, 48);
 
     for (i = 0; i < 7; i++) {
-        app->roster.pageScreensRaw[i] = GfGfxLoader_GetScrnDataFromOpenNarc(narc, i + 22, 0, &app->roster.pageScreens[i], heapID);
+        app->roster.pageScreensRaw[i] = GfGfxLoader_GetScrnDataFromOpenNarc(narc, i + 22, FALSE, &app->roster.pageScreens[i], heapID);
         WifiClub_OffsetScreenTiles(app->roster.pageScreens[i], 48);
     }
 
-    app->roster.tabCoverRaw = GfGfxLoader_GetScrnDataFromOpenNarc(narc, 29, 0, &app->roster.tabCoverScreen, heapID);
+    app->roster.tabCoverRaw = GfGfxLoader_GetScrnDataFromOpenNarc(narc, 29, FALSE, &app->roster.tabCoverScreen, heapID);
     WifiClub_OffsetScreenTiles(app->roster.tabCoverScreen, 48);
     LoadFontPal1(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_15_OFFSET, heapID);
 
@@ -4223,18 +4224,18 @@ void WifiClub_LoadRosterGraphics(WifiClubApp *app, NARC *narc, enum HeapID heapI
         r5 = i / 4;
         row = i % 4;
 
-        AddWindowParameterized(app->bgConfig, &app->roster.nameWindows[i], 5, r5 * 16 + 4, row * 6 + 1, 9, 3, 15, 1 + (i * 27));
+        AddWindowParameterized(app->bgConfig, &app->roster.nameWindows[i], GF_BG_LYR_SUB_1, r5 * 16 + 4, row * 6 + 1, 9, 3, 15, 1 + (i * 27));
         FillWindowPixelBuffer(&app->roster.nameWindows[i], 0);
         ScheduleWindowCopyToVram(&app->roster.nameWindows[i]);
 
         for (j = 0; j < 2; j++) {
             InitWindow(&app->roster.iconWindows[i][j]);
-            AddWindowParameterized(app->bgConfig, &app->roster.iconWindows[i][j], 5, r5 * 16 + 1 + j * 12, row * 6 + 1, 2, 3, 13, 6 * (j + i * 2) + 218);
+            AddWindowParameterized(app->bgConfig, &app->roster.iconWindows[i][j], GF_BG_LYR_SUB_1, r5 * 16 + 1 + j * 12, row * 6 + 1, 2, 3, 13, 6 * (j + i * 2) + 218);
             FillWindowPixelBuffer(&app->roster.iconWindows[i][j], 0);
             ScheduleWindowCopyToVram(&app->roster.iconWindows[i][j]);
         }
     }
-    AddWindowParameterized(app->bgConfig, &app->roster.profileWindow, 7, 1, 1, 30, 21, 15, 1);
+    AddWindowParameterized(app->bgConfig, &app->roster.profileWindow, GF_BG_LYR_SUB_3, 1, 1, 30, 21, 15, 1);
     FillWindowPixelBuffer(&app->roster.profileWindow, 0);
     ScheduleWindowCopyToVram(&app->roster.profileWindow);
     WifiClub_CreateProfileButtons(app, narc, heapID);
@@ -4314,7 +4315,7 @@ void WifiClub_DrawRosterPage(WifiClubApp *app) {
     if (app->roster.redrawAll == 1) {
         app->roster.redrawAll = 0;
         redrawAll = 1;
-        FillBgTilemapRect(app->bgConfig, 6, 0, 0, 0, 32, 24, 0);
+        FillBgTilemapRect(app->bgConfig, GF_BG_LYR_SUB_2, 0, 0, 0, 32, 24, 0);
     } else {
         redrawAll = 0;
     }
@@ -4358,9 +4359,9 @@ void WifiClub_DrawRosterPage(WifiClubApp *app) {
             }
         }
     }
-    ScheduleBgTilemapBufferTransfer(app->bgConfig, 6);
-    GfGfx_EngineBTogglePlanes(2, 1);
-    GfGfx_EngineBTogglePlanes(8, 0);
+    ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_SUB_2);
+    GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
+    GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
 }
 
 void WifiClub_DrawProfilePage(WifiClubApp *app, enum HeapID heapID) {
@@ -4371,18 +4372,18 @@ void WifiClub_DrawProfilePage(WifiClubApp *app, enum HeapID heapID) {
         var_r4 = 8;
     }
     NNSG2dScreenData *pageScreen = app->roster.pageScreens[app->roster.profilePage];
-    BG_LoadScreenTilemapData(app->bgConfig, 6, &pageScreen->rawData[0], pageScreen->szByte);
-    BgTilemapRectChangePalette(app->bgConfig, 6, 0, 0, 32, 24, var_r4);
-    BgClearTilemapBufferAndCommit(app->bgConfig, 7);
+    BG_LoadScreenTilemapData(app->bgConfig, GF_BG_LYR_SUB_2, &pageScreen->rawData[0], pageScreen->szByte);
+    BgTilemapRectChangePalette(app->bgConfig, GF_BG_LYR_SUB_2, 0, 0, 32, 24, var_r4);
+    BgClearTilemapBufferAndCommit(app->bgConfig, GF_BG_LYR_SUB_3);
     if (WifiClub_HasBattleFrontier(app) == 0) {
         WifiClub_CoverFrontierPageTabs(app);
     }
     FillWindowPixelBuffer(&app->roster.profileWindow, 0);
     WifiClubProfilePageFuncs[app->roster.profilePage](app, heapID);
-    ScheduleBgTilemapBufferTransfer(app->bgConfig, 6);
+    ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_SUB_2);
     ScheduleWindowCopyToVram(&app->roster.profileWindow);
-    GfGfx_EngineBTogglePlanes(2, 0);
-    GfGfx_EngineBTogglePlanes(8, 1);
+    GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
+    GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
 }
 
 void WifiClub_DrawProfileSummary(WifiClubApp *app, enum HeapID heapID) {
@@ -4397,64 +4398,64 @@ void WifiClub_DrawProfileSummary(WifiClubApp *app, enum HeapID heapID) {
     // {STRVAR_1 3, 0, 0}
     ReadMsgDataIntoString(app->msgData, msg_0778_00042, app->msgRaw);
     StringExpandPlaceholders(app->roster.msgFormat, app->tmpString, app->msgRaw);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 1, app->tmpString, 32, 8, 255, color, 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 1, app->tmpString, 32, 8, TEXT_SPEED_NOTRANSFER, color, 0);
     WifiClubPlayerStatus *friendStatusData = WifiClub_GetFriendStatusData(app, friendIndex);
     u32 friendStatus = WifiClub_GetPlayerStatus(app, friendStatusData);
     ReadMsgDataIntoString(app->msgData, WifiClub_GetStatusLabel(friendStatus, &color), app->msgRaw);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->msgRaw, 104, 8, 255, color, 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->msgRaw, 104, 8, TEXT_SPEED_NOTRANSFER, color, 0);
     PlayerProfile *playerProfile = PlayerProfile_New(HEAP_ID_53);
     Save_Profile_PlayerName_Set(playerProfile, FriendRoster_GetGroupName(app->friendRoster, friendIndex));
     BufferPlayersName(app->roster.msgFormat, 0, playerProfile);
     Heap_Free(playerProfile);
     // GROUP
     ReadMsgDataIntoString(app->msgData, msg_0778_00043, app->tmpString);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 32, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 32, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     // {STRVAR_1 3, 0, 0}
     ReadMsgDataIntoString(app->msgData, msg_0778_00150, app->msgRaw);
     StringExpandPlaceholders(app->roster.msgFormat, app->tmpString, app->msgRaw);
 
     u32 width = 232 - FontID_String_GetWidth(0, app->tmpString, 0);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, width, 32, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, width, 32, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     // BATTLE RECORD
     ReadMsgDataIntoString(app->msgData, msg_0778_00044, app->tmpString);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 56, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 56, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     BufferIntegerAsString(app->roster.msgFormat, 0, FriendRoster_GetEntryField(app->friendRoster, friendIndex, 1), 4, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     // W: {STRVAR_1 53, 0, 0}
     ReadMsgDataIntoString(app->msgData, msg_0778_00045, app->msgRaw);
     StringExpandPlaceholders(app->roster.msgFormat, app->tmpString, app->msgRaw);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 120, 56, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 120, 56, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     BufferIntegerAsString(app->roster.msgFormat, 0, FriendRoster_GetEntryField(app->friendRoster, friendIndex, 2), 4, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     // L: {STRVAR_1 53, 0, 0}
     ReadMsgDataIntoString(app->msgData, msg_0778_00046, app->msgRaw);
     StringExpandPlaceholders(app->roster.msgFormat, app->tmpString, app->msgRaw);
 
     width = 232 - FontID_String_GetWidth(0, app->tmpString, 0);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, width, 56, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, width, 56, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     // POKéMON TRADES
     ReadMsgDataIntoString(app->msgData, msg_0778_00047, app->tmpString);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 80, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 80, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     BufferIntegerAsString(app->roster.msgFormat, 0, FriendRoster_GetEntryField(app->friendRoster, friendIndex, 3), 4, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     // {STRVAR_1 53, 0, 0}
     ReadMsgDataIntoString(app->msgData, msg_0778_00048, app->msgRaw);
     StringExpandPlaceholders(app->roster.msgFormat, app->tmpString, app->msgRaw);
 
     width = 232 - FontID_String_GetWidth(0, app->tmpString, 0);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, width, 80, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, width, 80, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     if (WifiClub_IsPoffinCookingAvailable(app) == 1) {
         // POFFIN SESSIONS
         ReadMsgDataIntoString(app->msgData, msg_0778_00049, app->tmpString);
-        AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 104, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+        AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 104, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
         BufferIntegerAsString(app->roster.msgFormat, 0, FriendRoster_GetEntryField(app->friendRoster, friendIndex, 9), 4, PRINTING_MODE_RIGHT_ALIGN, TRUE);
         // {STRVAR_1 53, 0, 0}
         ReadMsgDataIntoString(app->msgData, msg_0778_00050, app->msgRaw);
         StringExpandPlaceholders(app->roster.msgFormat, app->tmpString, app->msgRaw);
 
         width = 232 - FontID_String_GetWidth(0, app->tmpString, 0);
-        AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, width, 104, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+        AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, width, 104, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     }
     // DATE LAST PLAYED
     ReadMsgDataIntoString(app->msgData, msg_0778_00051, app->tmpString);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 128, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 128, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     s32 temp_r0_2 = FriendRoster_GetEntryField(app->friendRoster, friendIndex, 6);
     if (temp_r0_2 != 0) {
         BufferIntegerAsString(app->roster.msgFormat, 2, temp_r0_2, 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
@@ -4465,7 +4466,7 @@ void WifiClub_DrawProfileSummary(WifiClubApp *app, enum HeapID heapID) {
         StringExpandPlaceholders(app->roster.msgFormat, app->tmpString, app->msgRaw);
 
         width = 232 - FontID_String_GetWidth(0, app->tmpString, 0);
-        AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, width, 128, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+        AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, width, 128, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     }
     WifiClub_DrawStatusIconToBg(app->bgConfig, &app->statusIcons, 6, 2, 2, friendStatus);
 
@@ -4482,13 +4483,13 @@ void WifiClub_DrawProfileBattleTower(WifiClubApp *app, enum HeapID heapID) {
     s32 friendIndex = app->roster.selectedFriend - 1;
     // BATTLE TOWER
     ReadMsgDataIntoString(app->msgData, msg_0778_00052, app->tmpString);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 0, 255, MAKE_TEXT_COLOR(15, 14, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), 0);
     WifiClub_GetFrontierStreakLabel(app, app->tmpString, 0, friendIndex);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 24, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 24, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     WifiClub_PrintFrontierStat(app, msg_0778_00065, 113, friendIndex, 120, 24);
     // RECORD
     ReadMsgDataIntoString(app->msgData, msg_0778_00059, app->tmpString);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 48, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 48, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     WifiClub_PrintFrontierStat(app, msg_0778_00065, 112, friendIndex, 120, 48);
 }
 
@@ -4496,39 +4497,39 @@ void WifiClub_DrawProfileBattleFactory(WifiClubApp *app, enum HeapID heapID) {
     s32 friendIndex = app->roster.selectedFriend - 1;
     // BATTLE FACTORY
     ReadMsgDataIntoString(app->msgData, msg_0778_00053, app->tmpString);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 0, 255, MAKE_TEXT_COLOR(15, 14, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), 0);
     // LEVEL 50
     ReadMsgDataIntoString(app->msgData, msg_0778_00060, app->tmpString);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 24, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 24, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     // RENTAL/TRADE
     ReadMsgDataIntoString(app->msgData, msg_0778_00062, app->tmpString);
 
     u32 width = 232 - FontID_String_GetWidth(0, app->tmpString, 0);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, width, 24, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, width, 24, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     WifiClub_GetFrontierStreakLabel(app, app->tmpString, 1, friendIndex);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 48, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 48, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     WifiClub_PrintFrontierStat(app, msg_0778_00065, 115, friendIndex, 104, 48);
     WifiClub_PrintFrontierStat(app, msg_0778_00066, 117, friendIndex, 212, 48);
     // RECORD
     ReadMsgDataIntoString(app->msgData, msg_0778_00059, app->tmpString);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 64, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 64, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     WifiClub_PrintFrontierStat(app, msg_0778_00065, 114, friendIndex, 104, 64);
     WifiClub_PrintFrontierStat(app, msg_0778_00066, 116, friendIndex, 212, 64);
     // OPEN LEVEL
     ReadMsgDataIntoString(app->msgData, msg_0778_00061, app->tmpString);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 88, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 88, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     // RENTAL/TRADE
     ReadMsgDataIntoString(app->msgData, msg_0778_00062, app->tmpString);
 
     width = 232 - FontID_String_GetWidth(0, app->tmpString, 0);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, width, 88, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, width, 88, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     WifiClub_GetFrontierStreakLabel(app, app->tmpString, 2, friendIndex);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 112, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 112, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     WifiClub_PrintFrontierStat(app, msg_0778_00065, 119, friendIndex, 104, 112);
     WifiClub_PrintFrontierStat(app, msg_0778_00066, 121, friendIndex, 212, 112);
     // RECORD
     ReadMsgDataIntoString(app->msgData, msg_0778_00059, app->tmpString);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 128, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 128, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     WifiClub_PrintFrontierStat(app, msg_0778_00065, 118, friendIndex, 104, 128);
     WifiClub_PrintFrontierStat(app, msg_0778_00066, 120, friendIndex, 212, 128);
 }
@@ -4537,19 +4538,19 @@ void WifiClub_DrawProfileBattleCastle(WifiClubApp *app, enum HeapID heapID) {
     s32 friendIndex = app->roster.selectedFriend - 1;
     // BATTLE CASTLE
     ReadMsgDataIntoString(app->msgData, msg_0778_00054, app->tmpString);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 0, 255, MAKE_TEXT_COLOR(15, 14, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), 0);
     // CASTLE POINTS
     ReadMsgDataIntoString(app->msgData, msg_0778_00063, app->tmpString);
 
     u32 width = 180 - (FontID_String_GetWidth(0, app->tmpString, 0) + 1) / 2;
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, width, 24, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, width, 24, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     WifiClub_GetFrontierStreakLabel(app, app->tmpString, 3, friendIndex);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 48, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 48, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     WifiClub_PrintFrontierStat(app, msg_0778_00068, 135, friendIndex, 104, 48);
     WifiClub_PrintFrontierStat(app, msg_0778_00067, 136, friendIndex, 212, 48);
     // RECORD
     ReadMsgDataIntoString(app->msgData, msg_0778_00059, app->tmpString);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 80, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 80, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     WifiClub_PrintFrontierStat(app, msg_0778_00068, 134, friendIndex, 104, 80);
     WifiClub_PrintFrontierStat(app, msg_0778_00067, 138, friendIndex, 212, 80);
 }
@@ -4559,17 +4560,17 @@ void WifiClub_DrawProfileBattleHall(WifiClubApp *app, enum HeapID heapID) {
     s32 friendIndex = app->roster.selectedFriend - 1;
     // BATTLE HALL
     ReadMsgDataIntoString(app->msgData, msg_0778_00055, app->tmpString);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 0, 255, MAKE_TEXT_COLOR(15, 14, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), 0);
     String *speciesName = GetSpeciesName(FrontierSave_GetStat(frontierSave, 124, friendIndex), heapID);
     u32 width = 33 - (FontID_String_GetWidth(0, speciesName, 0) + 1) / 2;
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, speciesName, width, 24, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, speciesName, width, 24, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     String_Delete(speciesName);
     WifiClub_GetFrontierStreakLabel(app, app->tmpString, 4, friendIndex);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 48, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 48, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     WifiClub_PrintFrontierStat(app, msg_0778_00065, 123, friendIndex, 108, 48);
     // RECORD
     ReadMsgDataIntoString(app->msgData, msg_0778_00059, app->tmpString);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 80, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 80, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     WifiClub_PrintFrontierStat(app, msg_0778_00065, 122, friendIndex, 108, 80);
 }
 
@@ -4577,13 +4578,13 @@ void WifiClub_DrawProfileBattleArcade(WifiClubApp *app, enum HeapID heapID) {
     s32 friendIndex = app->roster.selectedFriend - 1;
     // BATTLE ARCADE
     ReadMsgDataIntoString(app->msgData, msg_0778_00056, app->tmpString);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 0, 255, MAKE_TEXT_COLOR(15, 14, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), 0);
     WifiClub_GetFrontierStreakLabel(app, app->tmpString, 5, friendIndex);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 24, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 24, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     WifiClub_PrintFrontierStat(app, msg_0778_00069, 143, friendIndex, 112, 24);
     // RECORD
     ReadMsgDataIntoString(app->msgData, msg_0778_00059, app->tmpString);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 48, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 48, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     WifiClub_PrintFrontierStat(app, msg_0778_00069, 142, friendIndex, 112, 48);
 }
 
@@ -4592,35 +4593,35 @@ void WifiClub_DrawProfilePlazaGames(WifiClubApp *app, enum HeapID heapID) {
     s32 friendIndex = app->roster.selectedFriend - 1;
     // PLAZA GAMES PLAYED
     ReadMsgDataIntoString(app->msgData, msg_0778_00070, app->tmpString);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 0, 255, MAKE_TEXT_COLOR(15, 14, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), 0);
     BufferWiFiPlazaActivityName(app->roster.msgFormat, 0, 0);
     // {STRVAR_3 0, 0, 0}
     ReadMsgDataIntoString(app->msgData, msg_0778_00071, app->msgRaw);
     StringExpandPlaceholders(app->roster.msgFormat, app->tmpString, app->msgRaw);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 24, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 24, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     // {STRVAR_1 53, 0, 0}
     WifiClub_PrintCenteredNumber(app, msg_0778_00072, FriendRoster_GetEntryField(friendRoster, friendIndex, 10), 164, 24);
     BufferWiFiPlazaActivityName(app->roster.msgFormat, 0, 1);
     // {STRVAR_3 0, 0, 0}
     ReadMsgDataIntoString(app->msgData, msg_0778_00071, app->msgRaw);
     StringExpandPlaceholders(app->roster.msgFormat, app->tmpString, app->msgRaw);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 48, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 48, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     // {STRVAR_1 53, 0, 0}
     WifiClub_PrintCenteredNumber(app, msg_0778_00072, FriendRoster_GetEntryField(friendRoster, friendIndex, 11), 164, 48);
     BufferWiFiPlazaActivityName(app->roster.msgFormat, 0, 2);
     // {STRVAR_3 0, 0, 0}
     ReadMsgDataIntoString(app->msgData, msg_0778_00071, app->msgRaw);
     StringExpandPlaceholders(app->roster.msgFormat, app->tmpString, app->msgRaw);
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 72, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, 8, 72, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     // {STRVAR_1 53, 0, 0}
     WifiClub_PrintCenteredNumber(app, msg_0778_00072, FriendRoster_GetEntryField(friendRoster, friendIndex, 12), 164, 72);
 }
 
 void WifiClub_CoverFrontierPageTabs(WifiClubApp *app) {
     for (s32 i = 0; i < 5; i++) {
-        CopyToBgTilemapRect(app->bgConfig, 6, i + 26, 0, 1, 1, &app->roster.tabCoverScreen->rawData[0], 0, 0, app->roster.tabCoverScreen->screenWidth / 8, app->roster.tabCoverScreen->screenHeight / 8);
+        CopyToBgTilemapRect(app->bgConfig, GF_BG_LYR_SUB_2, i + 26, 0, 1, 1, &app->roster.tabCoverScreen->rawData[0], 0, 0, app->roster.tabCoverScreen->screenWidth / 8, app->roster.tabCoverScreen->screenHeight / 8);
     }
-    BgTilemapRectChangePalette(app->bgConfig, 6, 26, 0, 5, 1, 6);
+    BgTilemapRectChangePalette(app->bgConfig, GF_BG_LYR_SUB_2, 26, 0, 5, 1, 6);
 }
 
 void WifiClub_PrintFrontierStat(WifiClubApp *app, s32 msgId, s32 stat, s32 friendIndex, s32 x, s32 y) {
@@ -4646,7 +4647,7 @@ void WifiClub_PrintCenteredNumber(WifiClubApp *app, s32 msgId, s32 value, s32 ce
     ReadMsgDataIntoString(app->msgData, msgId, app->msgRaw);
     StringExpandPlaceholders(app->roster.msgFormat, app->tmpString, app->msgRaw);
     u32 width = centerX - (FontID_String_GetWidth(0, app->tmpString, 0) + 1) / 2;
-    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, width, y, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&app->roster.profileWindow, 0, app->tmpString, width, y, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
 }
 
 void WifiClub_DrawRosterSlotFrame(WifiClubApp *app, u8 x, u8 y, u8 frameStyle, u8 animStep) {
@@ -4655,12 +4656,12 @@ void WifiClub_DrawRosterSlotFrame(WifiClubApp *app, u8 x, u8 y, u8 frameStyle, u
         animStep = 1;
     }
     if (animStep < 2) {
-        CopyToBgTilemapRect(app->bgConfig, 6, x, y, 16, 6, &app->roster.slotScreen->rawData, (u16)(animStep << 4), (u16)(frameStyle * 6), 32, 18);
+        CopyToBgTilemapRect(app->bgConfig, GF_BG_LYR_SUB_2, x, y, 16, 6, &app->roster.slotScreen->rawData, (u16)(animStep << 4), (u16)(frameStyle * 6), 32, 18);
     } else {
         s64 offset = 18 << 4;
-        CopyToBgTilemapRect(app->bgConfig, 6, x, y, 16, 6, &app->roster.slotScreen->rawData + offset, 0, (u16)(frameStyle * 6), 16, 18);
+        CopyToBgTilemapRect(app->bgConfig, GF_BG_LYR_SUB_2, x, y, 16, 6, &app->roster.slotScreen->rawData + offset, 0, (u16)(frameStyle * 6), 16, 18);
     }
-    BgTilemapRectChangePalette(app->bgConfig, 6, x, y, 16, 6, frameStyle + 4);
+    BgTilemapRectChangePalette(app->bgConfig, GF_BG_LYR_SUB_2, x, y, 16, 6, frameStyle + 4);
 }
 
 s32 WifiClub_GetStatusLabel(u32 status, u32 *color) {
@@ -4750,7 +4751,7 @@ void WifiClub_PrintRosterSlotName(WifiClubApp *app, Window *window, s32 friendId
     // {STRVAR_1 3, 0, 0}
     ReadMsgDataIntoString(app->msgData, msg_0778_00042, app->msgRaw);
     StringExpandPlaceholders(app->roster.msgFormat, app->tmpString, app->msgRaw);
-    AddTextPrinterParameterizedWithColor(window, 1, app->tmpString, 0, textY, 255, color, 0);
+    AddTextPrinterParameterizedWithColor(window, 1, app->tmpString, 0, textY, TEXT_SPEED_NOTRANSFER, color, 0);
     ScheduleWindowCopyToVram(window);
 }
 
@@ -4824,7 +4825,7 @@ void WifiClub_CreateProfileButtons(WifiClubApp *app, NARC *narc, enum HeapID hea
          .heapID = HEAP_ID_DEFAULT,
          },
     };
-    GfGfx_EngineBTogglePlanes(16, 0);
+    GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
     app->roster.buttonResources[0] = AddCharResObjFromOpenNarc(app->gfxResMan[0], narc, NARC_a_0_4_3, FALSE, 30, NNS_G2D_VRAM_TYPE_2DSUB, heapID);
     app->roster.buttonResources[1] = AddPlttResObjFromOpenNarc(app->gfxResMan[1], narc, NARC_a_0_4_4, FALSE, 30, NNS_G2D_VRAM_TYPE_2DSUB, 8, heapID);
     app->roster.buttonResources[2] = AddCellOrAnimResObjFromOpenNarc(app->gfxResMan[2], narc, NARC_fielddata_mapmatrix_map_matrix, FALSE, 30, GF_GFX_RES_TYPE_CELL, heapID);
@@ -4850,7 +4851,7 @@ void WifiClub_CreateProfileButtons(WifiClubApp *app, NARC *narc, enum HeapID hea
     String *string = String_New(64, heapID);
     // CLOSE
     ReadMsgDataIntoString(app->msgData, msg_0778_00073, string);
-    AddTextPrinterParameterizedWithColor(&window, 2, string, FontID_String_GetCenterAlignmentX(2, string, 0, 64), 0, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    AddTextPrinterParameterizedWithColor(&window, 2, string, FontID_String_GetCenterAlignmentX(2, string, 0, 64), 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     String_Delete(string);
     TextOBJLayout *textLayout = TextOBJLayout_New(&window, heapID);
     GF_ASSERT(ObjCharTransfer_ReserveCharSpace(TextOBJLayout_GetCharSize(textLayout, NNS_G2D_VRAM_TYPE_2DSUB), TRUE, NNS_G2D_VRAM_TYPE_2DSUB, &app->roster.closeTextCharSpace) != 0);
@@ -4893,7 +4894,7 @@ void WifiClub_DeleteProfileButtons(WifiClubApp *app) {
 
 void WifiClub_ShowProfileButtons(WifiClubApp *app) {
     app->roster.buttonsShown = 1;
-    GfGfx_EngineBTogglePlanes(16, 1);
+    GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     app->roster.touchedButton = 0;
     for (s32 i = 0; i < 3; i++) {
         WifiClub_ResetProfileButton(&app->roster, i);
@@ -4902,11 +4903,11 @@ void WifiClub_ShowProfileButtons(WifiClubApp *app) {
 
 void WifiClub_HideProfileButtons(WifiClubApp *app) {
     if (app->roster.buttonsShown == 2) {
-        Sprite_SetDrawFlag(app->roster.buttonSprites[1], 1);
-        TextOBJ_SetSpritesDrawFlag(app->roster.closeText, 1);
+        Sprite_SetDrawFlag(app->roster.buttonSprites[1], TRUE);
+        TextOBJ_SetSpritesDrawFlag(app->roster.closeText, TRUE);
     }
     app->roster.buttonsShown = 0;
-    GfGfx_EngineBTogglePlanes(16, 0);
+    GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
 }
 
 s32 WifiClub_GetPressedProfileButton(WifiClubApp *app) {
@@ -5008,7 +5009,7 @@ void WifiClub_StartSeeking(WifiClubApp *app, s32 showMessage) {
         app->isSeeking = 1;
         WifiClubRoom_SetInputLocked(&app->room, 1);
         if (showMessage == 1) {
-            WifiClub_PrintMessage(app, 9, 0);
+            WifiClub_PrintMessage(app, msg_0778_00009, 0);
         }
     }
 }

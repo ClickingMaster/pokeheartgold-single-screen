@@ -1,3 +1,6 @@
+#include "msgdata/msg/msg_0776.h"
+#include "msgdata/msg/msg_0777.h"
+
 #include "wifi_plaza_game_entry.h"
 
 #include "global.h"
@@ -145,7 +148,7 @@ BOOL WiFiPlazaGameEntry_Register(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork 
         break;
     case 2: // "Would you like to play ...?"
         WiFiPlazaRoom_BufferActivityName(room, param->game, 0);
-        WiFiPlazaGameEntry_PrintMessage(entry, savedState, room, 0, 3);
+        WiFiPlazaGameEntry_PrintMessage(entry, savedState, room, msg_0776_00000, 3);
         break;
     case 3: // JOIN / RULES / CANCEL
         WiFiPlazaGameEntry_InitMenu(entry, room, 3, 1);
@@ -199,10 +202,10 @@ join:
             entry->timeLeft = WiFiPlazaLobbyClient_GetMatchTimer(param->slot);
             entry->timeout = 30 * 30;
             if (entry->timeLeft > 330) {
-                message = WiFiPlazaRoom_GetMsgString(room, 0, 10);
+                message = WiFiPlazaRoom_GetMsgString(room, 0, msg_0776_00010);
             } else {
                 entry->startingSoon = TRUE;
-                message = WiFiPlazaRoom_GetMsgString(room, 0, 11);
+                message = WiFiPlazaRoom_GetMsgString(room, 0, msg_0776_00011);
             }
             WiFiPlazaRoom_PrintMessageInstant(room, message);
             WiFiPlazaRoom_ShowWaitingIcon(room);
@@ -224,7 +227,7 @@ join:
         if (entry->timeLeft <= 330 && entry->startingSoon == FALSE) {
             WiFiPlazaRoom_HideWaitingIcon(room);
             entry->startingSoon = TRUE;
-            WiFiPlazaRoom_PrintMessageInstant(room, WiFiPlazaRoom_GetMsgString(room, 0, 11));
+            WiFiPlazaRoom_PrintMessageInstant(room, WiFiPlazaRoom_GetMsgString(room, 0, msg_0776_00011));
             WiFiPlazaRoom_ShowWaitingIcon(room);
         }
         WiFiPlazaGameStatus_Update(&entry->status, room, FALSE);
@@ -234,9 +237,9 @@ join:
         } else if (connection == 2) {
             param->result = WIFI_PLAZA_GAME_ENTRY_STARTED;
             if (members == 4) {
-                msgId2 = 16;
+                msgId2 = msg_0776_00016;
             } else {
-                msgId2 = 18;
+                msgId2 = msg_0776_00018;
             }
             WiFiPlazaRoom_HideWaitingIcon(room);
             WiFiPlazaRoom_PrintMessageInstant(room, WiFiPlazaRoom_GetMsgString(room, 0, msgId2));
@@ -277,7 +280,7 @@ checkSession:
             } else if (entry->timeLeft == 0) {
                 WiFiPlazaPlayerState_SetStep(savedState, 8);
                 WiFiPlazaRoom_HideWaitingIcon(room);
-                WiFiPlazaRoom_PrintMessageInstant(room, WiFiPlazaRoom_GetMsgString(room, 0, 18));
+                WiFiPlazaRoom_PrintMessageInstant(room, WiFiPlazaRoom_GetMsgString(room, 0, msg_0776_00018));
                 WiFiPlazaRoom_ShowWaitingIcon(room);
             }
         }
@@ -430,7 +433,7 @@ next:
         WiFiPlazaGameEntry_StartSync(entry, savedState, 28, 18);
         break;
     case 16: // the host drops out: "If you drop out, the group will be disbanded. Is that OK?"
-        WiFiPlazaRoom_PrintMessage(room, WiFiPlazaRoom_GetMsgString(room, 0, 26));
+        WiFiPlazaRoom_PrintMessage(room, WiFiPlazaRoom_GetMsgString(room, 0, msg_0776_00026));
         WiFiPlazaPlayerState_SetStep(savedState, 17);
         WiFiPlazaGameStatus_Close(&entry->status, room);
         break;
@@ -469,10 +472,10 @@ next:
         WiFiPlazaGameStatus_Open(&entry->status, room, param->game, TRUE, entry->timeLeft);
         WiFiPlazaGameStatus_UpdateInPlay(&entry->status, room, TRUE);
         if (entry->timeLeft > 330) {
-            message2 = WiFiPlazaRoom_GetMsgString(room, 0, 10);
+            message2 = WiFiPlazaRoom_GetMsgString(room, 0, msg_0776_00010);
         } else {
             entry->startingSoon = TRUE;
-            message2 = WiFiPlazaRoom_GetMsgString(room, 0, 11);
+            message2 = WiFiPlazaRoom_GetMsgString(room, 0, msg_0776_00011);
         }
         WiFiPlazaRoom_PrintMessageInstant(room, message2);
         WiFiPlazaRoom_ShowWaitingIcon(room);
@@ -482,9 +485,9 @@ next:
         members3 = WiFiPlazaLobbyClient_GetMatchPlayerCount(param->slot);
         param->result = WIFI_PLAZA_GAME_ENTRY_STARTED;
         if (members3 == 4) {
-            msgId = 16;
+            msgId = msg_0776_00016;
         } else {
-            msgId = 18;
+            msgId = msg_0776_00018;
         }
         WiFiPlazaRoom_PrintMessageInstant(room, WiFiPlazaRoom_GetMsgString(room, 0, msgId));
         WiFiPlazaRoom_ShowWaitingIcon(room);
@@ -493,7 +496,7 @@ next:
         WiFiPlazaGameStatus_UpdateInPlay(&entry->status, room, TRUE);
         break;
     case 22: // the time ran out while the question was open
-        WiFiPlazaRoom_PrintMessageInstant(room, WiFiPlazaRoom_GetMsgString(room, 0, 18));
+        WiFiPlazaRoom_PrintMessageInstant(room, WiFiPlazaRoom_GetMsgString(room, 0, msg_0776_00018));
         WiFiPlazaRoom_ShowWaitingIcon(room);
         WiFiPlazaGameStatus_Open(&entry->status, room, param->game, TRUE, 0);
         WiFiPlazaGameStatus_SetFrames(&entry->status, 0);
@@ -578,15 +581,15 @@ BOOL WiFiPlazaGameEntry_ReadSign(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork 
         newStatus = WiFiPlazaPlayerState_AllocWork(state, sizeof(WiFiPlazaGameStatus));
         switch (WiFiPlazaRoom_GetActionTile(room)) {
         case 0x27:
-            msgId = 0x2A;
+            msgId = msg_0777_00042;
             game = 0;
             break;
         case 0x28:
-            msgId = 0x29;
+            msgId = msg_0777_00041;
             game = 1;
             break;
         case 0x29:
-            msgId = 0x2B;
+            msgId = msg_0777_00043;
             game = 2;
             break;
         default:
@@ -783,13 +786,13 @@ void WiFiPlazaGameStatus_Draw(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *ro
     if (status->redraw & WIFI_PLAZA_GAME_STATUS_TITLE) {
         WiFiPlazaRoom_FillTextWindowRect(room, 0, 0, 104, 16);
         WiFiPlazaRoom_BufferActivityName(room, status->game, 0);
-        message = WiFiPlazaRoom_GetMsgString(room, 1, 0x36);
+        message = WiFiPlazaRoom_GetMsgString(room, 1, msg_0777_00054);
         WiFiPlazaRoom_PrintTextWindow(room, message, 0, 0);
     }
     if (status->redraw & WIFI_PLAZA_GAME_STATUS_STATE) {
         WiFiPlazaRoom_FillTextWindowRect(room, 0, 16, 104, 16);
         if (savedShowInPlay == TRUE && status->accepting == FALSE && status->sessionActive == TRUE) {
-            message = WiFiPlazaRoom_GetMsgString(room, 1, 0x45); // "GAME IN PLAY..."
+            message = WiFiPlazaRoom_GetMsgString(room, 1, msg_0777_00069); // "GAME IN PLAY..."
             x = 104 - FontID_String_GetWidth(0, message, 0);
             WiFiPlazaRoom_PrintTextWindow(room, message, x, 16);
         }
@@ -798,13 +801,13 @@ void WiFiPlazaGameStatus_Draw(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *ro
         WiFiPlazaRoom_FillTextWindowRect(room, 0, 32, 104, 32);
         WiFiPlazaRoom_BufferInt(room, status->space, 1, 1, 2);
         WiFiPlazaRoom_BufferInt(room, 4 - status->space, 1, 0, 2);
-        message = WiFiPlazaRoom_GetMsgString(room, 1, 0x44); // "PLAYERS: / SPACE:"
+        message = WiFiPlazaRoom_GetMsgString(room, 1, msg_0777_00068); // "PLAYERS: / SPACE:"
         WiFiPlazaRoom_PrintTextWindow(room, message, 0, 32);
     }
     if (status->showSeconds == TRUE && (status->redraw & WIFI_PLAZA_GAME_STATUS_SECONDS)) {
         WiFiPlazaRoom_FillTextWindowRect(room, 0, 64, 104, 16);
         WiFiPlazaRoom_BufferInt(room, status->seconds, 2, 0, 2);
-        message = WiFiPlazaRoom_GetMsgString(room, 0, 15); // "... seconds to go"
+        message = WiFiPlazaRoom_GetMsgString(room, 0, msg_0776_00015); // "... seconds to go"
         WiFiPlazaRoom_PrintTextWindow(room, message, 0, 64);
     }
     status->redraw = 0;

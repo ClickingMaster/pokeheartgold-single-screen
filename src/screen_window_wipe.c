@@ -62,9 +62,9 @@ void ClockWipe_Init(ClockWipe *wipe, const ClockWipeConfig *config, int steps, i
     // first scanline's span
     ScreenFade_SetWindow(regQueue, config->insideMask, config->outsideMask, config->window, screen, buffer->nextLeft[0], 0, buffer->nextRight[0], 192, wipe->queued);
     if (config->window == 0) {
-        ScreenFade_SetWindowVisible(regQueue, 1, screen, wipe->queued);
+        ScreenFade_SetWindowVisible(regQueue, GX_WNDMASK_W0, screen, wipe->queued);
     } else {
-        ScreenFade_SetWindowVisible(regQueue, 2, screen, wipe->queued);
+        ScreenFade_SetWindowVisible(regQueue, GX_WNDMASK_W1, screen, wipe->queued);
     }
     FadeBlankPair_StartOnVBlank(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
 }

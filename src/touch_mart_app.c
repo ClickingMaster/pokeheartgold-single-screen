@@ -427,8 +427,8 @@ void TouchMartApp_LoadGraphics(TouchMartAppData *data) {
     GfGfxLoader_GXLoadPal(NARC_a_0_6_0, 15, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0, HEAP_ID_8);
     GfGfxLoader_LoadCharData(NARC_a_0_6_0, 16, data->bgConfig, GF_BG_LYR_SUB_1, 0, 0, FALSE, HEAP_ID_8);
     TouchMartApp_LoadMainTilemap(data, 0);
-    LoadFontPal1(GF_PAL_LOCATION_SUB_BG, (enum GFPalSlotOffset)0x160, HEAP_ID_8);
-    LoadFontPal0(GF_PAL_LOCATION_SUB_BG, (enum GFPalSlotOffset)0x180, HEAP_ID_8);
+    LoadFontPal1(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_11_OFFSET, HEAP_ID_8);
+    LoadFontPal0(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_12_OFFSET, HEAP_ID_8);
     TouchMartApp_AddWindows(data);
     TouchMartApp_AddItemWindows(data);
 }

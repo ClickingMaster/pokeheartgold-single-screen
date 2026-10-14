@@ -113,13 +113,13 @@ void TextureAnimation_SetFrameIndex(TextureAnimation *animation, u16 frame) {
 void TextureAnimation_LoadTexture(TextureAnimation *animation, TextureFrame *indices) {
     void *data = TextureAnimation_GetTextureData(animation, indices);
     u32 key = animation->textureKey;
-    GF_CreateNewVramTransferTask((NNS_GFD_DST_TYPE)0, (key & 0xFFFF) << 3, data, ((key & 0x7FFF0000) >> 16) << 4);
+    GF_CreateNewVramTransferTask(NNS_GFD_DST_3D_TEX_VRAM, (key & 0xFFFF) << 3, data, ((key & 0x7FFF0000) >> 16) << 4);
     animation->textureIndex = indices->texture;
 }
 void TextureAnimation_LoadPalette(TextureAnimation *animation, TextureFrame *indices) {
     void *data = TextureAnimation_GetPaletteData(animation, indices);
     u32 key = animation->paletteKey;
-    GF_CreateNewVramTransferTask((NNS_GFD_DST_TYPE)1, (key & 0xFFFF) << 3, data, ((key & 0xFFFF0000) >> 16) << 3);
+    GF_CreateNewVramTransferTask(NNS_GFD_DST_3D_TEX_PLTT, (key & 0xFFFF) << 3, data, ((key & 0xFFFF0000) >> 16) << 3);
     animation->paletteIndex = indices->palette;
 }
 void *TextureAnimation_GetTextureData(TextureAnimation *animation, TextureFrame *indices) {

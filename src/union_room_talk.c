@@ -3,6 +3,7 @@
 #include "global.h"
 
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0738_UNION.h"
 
 #include "assert.h"
 #include "comm_state.h"
@@ -467,7 +468,7 @@ void UnionRoom_BufferPartnerLanguage(MessageFormat *msgFmt, u16 mode, u16 objId,
     int msgNo;
     String *str;
 
-    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 0x2E2, HEAP_ID_FIELD1);
+    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0738_UNION_bin, HEAP_ID_FIELD1);
     if (mode == 0) {
         partner = CommWireless_GetParentProfile(objId - 1);
     } else {
@@ -488,25 +489,25 @@ void UnionRoom_BufferPartnerLanguage(MessageFormat *msgFmt, u16 mode, u16 objId,
     }
     switch (language) {
     case 1:
-        msgNo = 0xD3;
+        msgNo = msg_0738_UNION_00211;
         break;
     case 2:
-        msgNo = 0xD4;
+        msgNo = msg_0738_UNION_00212;
         break;
     case 3:
-        msgNo = 0xD5;
+        msgNo = msg_0738_UNION_00213;
         break;
     case 4:
-        msgNo = 0xD6;
+        msgNo = msg_0738_UNION_00214;
         break;
     case 5:
-        msgNo = 0xD7;
+        msgNo = msg_0738_UNION_00215;
         break;
     case 7:
-        msgNo = 0xD8;
+        msgNo = msg_0738_UNION_00216;
         break;
     default:
-        msgNo = 0xD9;
+        msgNo = msg_0738_UNION_00217;
         break;
     }
     str = NewString_ReadMsgData(msgData, msgNo);

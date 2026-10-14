@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include "msgdata/msg/msg_0777.h"
+
 #include "assert.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
@@ -449,34 +451,34 @@ void WiFiPlazaPlayerCard_Show(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWindow *sig
     WiFiPlazaInfoPanel_LoadScreen(graphics, narc, 92, GF_BG_LYR_SUB_0, 0, heapID);
     profile = PlayerProfile_New(heapID);
     WiFiPlazaPlayer_CopyToProfile(player, profile, heapID);
-    WiFiPlazaPlayerCard_Print(card, msg, 0, 44, 0, 0, color);
+    WiFiPlazaPlayerCard_Print(card, msg, 0, msg_0777_00044, 0, 0, color);
     WiFiPlazaRoomMsg_BufferInt(msg, PlayerProfile_GetTrainerID_VisibleHalf(profile), 5, 0, 2);
-    WiFiPlazaPlayerCard_PrintRightAligned(card, msg, 0, 49, 122, 0, MAKE_TEXT_COLOR(1, 2, 0));
-    WiFiPlazaPlayerCard_Print(card, msg, 0, 45, 0, 16, color);
+    WiFiPlazaPlayerCard_PrintRightAligned(card, msg, 0, msg_0777_00049, 122, 0, MAKE_TEXT_COLOR(1, 2, 0));
+    WiFiPlazaPlayerCard_Print(card, msg, 0, msg_0777_00045, 0, 16, color);
     WiFiPlazaPlayerCard_BufferName(card, msg, profile);
-    WiFiPlazaPlayerCard_PrintRightAligned(card, msg, 0, 50, 122, 16, MAKE_TEXT_COLOR(1, 2, 0));
+    WiFiPlazaPlayerCard_PrintRightAligned(card, msg, 0, msg_0777_00050, 122, 16, MAKE_TEXT_COLOR(1, 2, 0));
     WiFiPlazaPlayerCard_CopyWindow(card, 0);
-    WiFiPlazaPlayerCard_Print(card, msg, 1, 46, 0, 0, color);
+    WiFiPlazaPlayerCard_Print(card, msg, 1, msg_0777_00046, 0, 0, color);
     if (!WiFiPlazaPlayer_GetCountry(player)) {
-        WiFiPlazaPlayerCard_Print(card, msg, 1, 55, 32, 16, MAKE_TEXT_COLOR(1, 2, 0));
+        WiFiPlazaPlayerCard_Print(card, msg, 1, msg_0777_00055, 32, 16, MAKE_TEXT_COLOR(1, 2, 0));
     } else {
         WiFiPlazaPlayerCard_BufferLocation(card, msg, player);
-        WiFiPlazaPlayerCard_Print(card, msg, 1, 51, 32, 16, MAKE_TEXT_COLOR(1, 2, 0));
+        WiFiPlazaPlayerCard_Print(card, msg, 1, msg_0777_00051, 32, 16, MAKE_TEXT_COLOR(1, 2, 0));
     }
     WiFiPlazaPlayerCard_CopyWindow(card, 1);
     if (hasMessage) {
         card->showsMessage = TRUE;
         WiFiPlazaPlayerCard_BufferName(card, msg, profile);
-        WiFiPlazaPlayerCard_Print(card, msg, 4, 56, 8, 0, color);
+        WiFiPlazaPlayerCard_Print(card, msg, 4, msg_0777_00056, 8, 0, color);
         WiFiPlazaPlayerCard_BufferMessage(card, msg, message);
-        WiFiPlazaPlayerCard_Print(card, msg, 4, 59, 6, 24, MAKE_TEXT_COLOR(1, 2, 0));
-        WiFiPlazaPlayerCard_Print(card, msg, 4, 60, 90, 24, MAKE_TEXT_COLOR(1, 2, 0));
-        WiFiPlazaPlayerCard_Print(card, msg, 4, 61, 6, 44, MAKE_TEXT_COLOR(1, 2, 0));
-        WiFiPlazaPlayerCard_Print(card, msg, 4, 62, 90, 44, MAKE_TEXT_COLOR(1, 2, 0));
+        WiFiPlazaPlayerCard_Print(card, msg, 4, msg_0777_00059, 6, 24, MAKE_TEXT_COLOR(1, 2, 0));
+        WiFiPlazaPlayerCard_Print(card, msg, 4, msg_0777_00060, 90, 24, MAKE_TEXT_COLOR(1, 2, 0));
+        WiFiPlazaPlayerCard_Print(card, msg, 4, msg_0777_00061, 6, 44, MAKE_TEXT_COLOR(1, 2, 0));
+        WiFiPlazaPlayerCard_Print(card, msg, 4, msg_0777_00062, 90, 44, MAKE_TEXT_COLOR(1, 2, 0));
         WiFiPlazaPlayerCard_CopyWindow(card, 4);
     } else {
         card->showsMessage = FALSE;
-        WiFiPlazaPlayerCard_Print(card, msg, 4, 48, 8, 0, color);
+        WiFiPlazaPlayerCard_Print(card, msg, 4, msg_0777_00048, 8, 0, color);
         WiFiPlazaPlayerCard_CopyWindow(card, 4);
         WiFiPlazaPlayerCard_LoadMons(card, graphics, narc, heapID, player, myPlayer);
     }
@@ -723,7 +725,7 @@ void WiFiPlazaPlayerCard_BufferMessage(WiFiPlazaPlayerCard *card, WiFiPlazaRoomM
 #pragma force_active on
 
 void WiFiPlazaPlayerCard_LoadMons(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics, NARC *panelNarc, enum HeapID heapID, struct WiFiPlazaPlayer *player, struct WiFiPlazaPlayer *myPlayer) {
-    NARC *narc = NARC_New((NarcId)215, heapID);
+    NARC *narc = NARC_New(NARC_a_2_1_3, heapID);
     int gender;
     const VecFx32 *pos;
     int version = WiFiPlazaPlayer_GetLobbyId(myPlayer);
@@ -898,7 +900,7 @@ void WiFiPlazaPanelButton_ShowOwnCard(WiFiPlazaPanelButton *button, WiFiPlazaRoo
     button->graphic = WiFiPlazaPlayer_GetTapToy(player);
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, button->graphic, graphics->bgConfig, GF_BG_LYR_SUB_2, 0x140, 0, FALSE, heapID);
     WiFiPlazaInfoPanel_LoadScreen(graphics, narc, button->graphic + 0x1B, GF_BG_LYR_SUB_2, 0x140, heapID);
-    text = WiFiPlazaRoomMsg_GetString(msg, 1, 0x3F);
+    text = WiFiPlazaRoomMsg_GetString(msg, 1, msg_0777_00063);
     FillWindowPixelBuffer(&button->window, 0);
     AddTextPrinterParameterizedWithColor(&button->window, 0, text, 0, 4, TEXT_SPEED_INSTANT, MAKE_TEXT_COLOR(15, 14, 0), NULL);
     if (button->active == FALSE) {

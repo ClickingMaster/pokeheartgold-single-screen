@@ -1080,7 +1080,7 @@ void ScreenFade_SetEndWindows(BOOL cover, WindowRegisterQueue *regQueue, int scr
         ScreenWindow_QueueSetVisible(regQueue, 0, screen);
         return;
     }
-    ScreenWindow_QueueSetVisible(regQueue, 1, screen);
+    ScreenWindow_QueueSetVisible(regQueue, GX_WNDMASK_W0, screen);
     ScreenWindow_QueueSetInside(regQueue, 0x3F, FALSE, 0, screen);
     ScreenWindow_QueueSetRect(regQueue, 0, 0, 0, 0, 0, screen);
     ScreenWindow_QueueSetOutside(regQueue, 0x20, FALSE, screen);

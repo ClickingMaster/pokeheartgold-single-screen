@@ -82,7 +82,7 @@ WiFiPlazaMap *WiFiPlazaMap_Create(enum HeapID heapID) {
 
     map = Heap_Alloc(heapID, sizeof(*map));
     map->grid = Field2DMap_New(0x23, 0x2A, heapID);
-    file = GfGfxLoader_LoadFromNarc((NarcId)0xCA, 0, FALSE, heapID, TRUE);
+    file = GfGfxLoader_LoadFromNarc(NARC_a_2_0_0, 0, FALSE, heapID, TRUE);
     Field2DMap_Load(map->grid, file);
     Heap_Free(file);
     return map;

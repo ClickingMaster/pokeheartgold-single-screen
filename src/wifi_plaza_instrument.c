@@ -1315,7 +1315,7 @@ BOOL WiFiPlazaInstrument_UpdateBalloonFall(WiFiPlazaInstrumentManager *manager, 
             effect->work.hop.stage = 4;
             effect->work.hop.timer = 0;
             effect->work.hop.baseY = objPos.y;
-            WiFiPlazaInstrument_PlaySE(manager, effect, 0x5C2);
+            WiFiPlazaInstrument_PlaySE(manager, effect, SEQ_SE_PL_SUTYA);
         }
         break;
     case 4: {
@@ -1356,7 +1356,7 @@ BOOL WiFiPlazaInstrument_UpdateBalloonFall(WiFiPlazaInstrumentManager *manager, 
                 modelPos.x += sway;
                 ModelInstance_SetPosition(&effect->models[i], modelPos.x, modelPos.y, modelPos.z);
             } else if (WiFiPlazaInstrument_SetBalloonAnim(manager, effect, i, 4) == TRUE) {
-                WiFiPlazaInstrument_PlaySE(manager, effect, 0x5A8);
+                WiFiPlazaInstrument_PlaySE(manager, effect, SEQ_SE_PL_HIROBA20);
             }
             WiFiPlazaInstrument_UpdateBalloonAnim(manager, effect, i);
             tween++;
@@ -1379,7 +1379,7 @@ BOOL WiFiPlazaInstrument_UpdateBalloonDrop(WiFiPlazaInstrumentManager *manager, 
     }
     switch (effect->work.hop.stage) {
     case 0:
-        WiFiPlazaInstrument_PlaySE(manager, effect, 0x5A8);
+        WiFiPlazaInstrument_PlaySE(manager, effect, SEQ_SE_PL_HIROBA20);
         for (i = 0; i < effect->work.hop.count; i++) {
             WiFiPlazaInstrument_SetBalloonAnim(manager, effect, i, 4);
         }
@@ -1409,7 +1409,7 @@ BOOL WiFiPlazaInstrument_UpdateBalloonDrop(WiFiPlazaInstrumentManager *manager, 
         if (result == TRUE) {
             effect->work.hop.timer = 0;
             effect->work.hop.baseY = pos.y;
-            WiFiPlazaInstrument_PlaySE(manager, effect, 0x5C2);
+            WiFiPlazaInstrument_PlaySE(manager, effect, SEQ_SE_PL_SUTYA);
             WiFiPlazaObj_SetAvatarMode(effect->obj, TRUE);
             if (effect->obj == WiFiPlazaObj_GetOwnPlayer(manager->objManager)) {
                 WiFiPlazaCamera_SetFollowObject(manager->camera, effect->obj);

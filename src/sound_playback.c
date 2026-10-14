@@ -176,8 +176,8 @@ void StopBGM(u16 seqNo, int fadeFrames) {
 
 void ClearPlayingBGM(void) {
     SndRadio_StopSeq(0);
-    Sound_SetCurrentBGM(0);
-    GF_SetCurrentPlayingBGM(0);
+    Sound_SetCurrentBGM(SEQ_NONE);
+    GF_SetCurrentPlayingBGM(SEQ_NONE);
     Sound_SetPlayingGBSeqNo(0);
     GF_SndSetState(0);
 }
@@ -446,14 +446,14 @@ BOOL PlayCryEx(u32 pattern, u16 species, int pan, int volume, int heapId, u8 for
         case 12:
             PlayCry(SPECIES_CHATOT, form);
             if (*chatotMode == 0) {
-                GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-                Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
+                GF_SndHandleSetTrackPan(SND_HANDLE_PV, 0xFFFF, pan);
+                Sound_SetInitialVolumeWithVoiceChat(species, SND_HANDLE_PV, volume);
             } else if (*firstActive == 1) {
                 Sound_SetWaveOutPan(14, wavePan);
                 Sound_SetWaveOutVolume(14, volume);
             } else {
-                GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-                Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
+                GF_SndHandleSetTrackPan(SND_HANDLE_PV, 0xFFFF, pan);
+                Sound_SetInitialVolumeWithVoiceChat(species, SND_HANDLE_PV, volume);
             }
             return TRUE;
         default:
@@ -464,33 +464,33 @@ BOOL PlayCryEx(u32 pattern, u16 species, int pan, int volume, int heapId, u8 for
     switch (pattern) {
     case 0:
         PlayCry(species, form);
-        GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-        Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
+        GF_SndHandleSetTrackPan(SND_HANDLE_PV, 0xFFFF, pan);
+        Sound_SetInitialVolumeWithVoiceChat(species, SND_HANDLE_PV, volume);
         break;
     case 1:
         PlayCry(species, form);
-        GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-        Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
+        GF_SndHandleSetTrackPan(SND_HANDLE_PV, 0xFFFF, pan);
+        Sound_SetInitialVolumeWithVoiceChat(species, SND_HANDLE_PV, volume);
         StartCryStopTask(20, heapId);
         break;
     case 2:
         PlayCry(species, form);
-        GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-        Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
-        GF_SndHandleSetTrackPitch(1, 0xFFFF, 64);
+        GF_SndHandleSetTrackPan(SND_HANDLE_PV, 0xFFFF, pan);
+        Sound_SetInitialVolumeWithVoiceChat(species, SND_HANDLE_PV, volume);
+        GF_SndHandleSetTrackPitch(SND_HANDLE_PV, 0xFFFF, 64);
         PlayChorusCryWithPitch(species, 20, form);
-        GF_SndHandleSetTrackPan(8, 0xFFFF, pan);
-        Sound_SetInitialVolumeWithVoiceChat(species, 8, chorusVolume);
+        GF_SndHandleSetTrackPan(SND_HANDLE_CHORUS, 0xFFFF, pan);
+        Sound_SetInitialVolumeWithVoiceChat(species, SND_HANDLE_CHORUS, chorusVolume);
         break;
     case 3:
         PlayCry(species, form);
-        GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-        Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
+        GF_SndHandleSetTrackPan(SND_HANDLE_PV, 0xFFFF, pan);
+        Sound_SetInitialVolumeWithVoiceChat(species, SND_HANDLE_PV, volume);
         StartCryStopTask(30, heapId);
-        GF_SndHandleSetTrackPitch(1, 0xFFFF, 192);
+        GF_SndHandleSetTrackPitch(SND_HANDLE_PV, 0xFFFF, 192);
         PlayChorusCryWithPitch(species, 16, form);
-        GF_SndHandleSetTrackPan(8, 0xFFFF, pan);
-        Sound_SetInitialVolumeWithVoiceChat(species, 8, chorusVolume);
+        GF_SndHandleSetTrackPan(SND_HANDLE_CHORUS, 0xFFFF, pan);
+        Sound_SetInitialVolumeWithVoiceChat(species, SND_HANDLE_CHORUS, chorusVolume);
         break;
     case 4:
         Sound_AllocWaveOutChannel(14);
@@ -503,32 +503,32 @@ BOOL PlayCryEx(u32 pattern, u16 species, int pan, int volume, int heapId, u8 for
         break;
     case 5:
         PlayCry(species, form);
-        GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-        Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
-        GF_SndHandleSetTrackPitch(1, 0xFFFF, -224);
+        GF_SndHandleSetTrackPan(SND_HANDLE_PV, 0xFFFF, pan);
+        Sound_SetInitialVolumeWithVoiceChat(species, SND_HANDLE_PV, volume);
+        GF_SndHandleSetTrackPitch(SND_HANDLE_PV, 0xFFFF, -224);
         break;
     case 6:
         PlayCry(species, form);
-        GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-        Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
-        GF_SndHandleSetTrackPitch(1, 0xFFFF, 44);
+        GF_SndHandleSetTrackPan(SND_HANDLE_PV, 0xFFFF, pan);
+        Sound_SetInitialVolumeWithVoiceChat(species, SND_HANDLE_PV, volume);
+        GF_SndHandleSetTrackPitch(SND_HANDLE_PV, 0xFFFF, 44);
         PlayChorusCryWithPitch(species, -64, form);
-        GF_SndHandleSetTrackPan(8, 0xFFFF, pan);
-        Sound_SetInitialVolumeWithVoiceChat(species, 8, chorusVolume);
+        GF_SndHandleSetTrackPan(SND_HANDLE_CHORUS, 0xFFFF, pan);
+        Sound_SetInitialVolumeWithVoiceChat(species, SND_HANDLE_CHORUS, chorusVolume);
         break;
     case 7:
         PlayCry(species, form);
-        GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-        Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
+        GF_SndHandleSetTrackPan(SND_HANDLE_PV, 0xFFFF, pan);
+        Sound_SetInitialVolumeWithVoiceChat(species, SND_HANDLE_PV, volume);
         StartCryStopTask(11, heapId);
-        GF_SndHandleSetTrackPitch(1, 0xFFFF, -128);
+        GF_SndHandleSetTrackPitch(SND_HANDLE_PV, 0xFFFF, -128);
         break;
     case 8:
         PlayCry(species, form);
-        GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-        Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
+        GF_SndHandleSetTrackPan(SND_HANDLE_PV, 0xFFFF, pan);
+        Sound_SetInitialVolumeWithVoiceChat(species, SND_HANDLE_PV, volume);
         StartCryStopTask(60, heapId);
-        GF_SndHandleSetTrackPitch(1, 0xFFFF, 60);
+        GF_SndHandleSetTrackPitch(SND_HANDLE_PV, 0xFFFF, 60);
         break;
     case 9:
         Sound_AllocWaveOutChannel(14);
@@ -539,29 +539,29 @@ BOOL PlayCryEx(u32 pattern, u16 species, int pan, int volume, int heapId, u8 for
         break;
     case 10:
         PlayCry(species, form);
-        GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-        Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
+        GF_SndHandleSetTrackPan(SND_HANDLE_PV, 0xFFFF, pan);
+        Sound_SetInitialVolumeWithVoiceChat(species, SND_HANDLE_PV, volume);
         StartCryStopTask(100, heapId);
-        GF_SndHandleSetTrackPitch(1, 0xFFFF, -44);
+        GF_SndHandleSetTrackPitch(SND_HANDLE_PV, 0xFFFF, -44);
         break;
     case 11:
         PlayCry(species, form);
-        GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-        Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
-        GF_SndHandleSetTrackPitch(1, 0xFFFF, -96);
+        GF_SndHandleSetTrackPan(SND_HANDLE_PV, 0xFFFF, pan);
+        Sound_SetInitialVolumeWithVoiceChat(species, SND_HANDLE_PV, volume);
+        GF_SndHandleSetTrackPitch(SND_HANDLE_PV, 0xFFFF, -96);
         break;
     case 12:
         PlayCry(species, form);
-        GF_SndHandleSetTrackPan(1, 0xFFFF, pan);
-        Sound_SetInitialVolumeWithVoiceChat(species, 1, volume);
+        GF_SndHandleSetTrackPan(SND_HANDLE_PV, 0xFFFF, pan);
+        Sound_SetInitialVolumeWithVoiceChat(species, SND_HANDLE_PV, volume);
         StartCryStopTask(20, heapId);
-        GF_SndHandleSetTrackPitch(1, 0xFFFF, -96);
+        GF_SndHandleSetTrackPitch(SND_HANDLE_PV, 0xFFFF, -96);
         break;
     case 13:
         PlayCry(species, form);
-        Sound_SetInitialVolumeWithVoiceChat(species, 1, 127);
+        Sound_SetInitialVolumeWithVoiceChat(species, SND_HANDLE_PV, 127);
         PlayChorusCryWithPitch(species, 20, form);
-        GF_SndHandleSetTrackPan(8, 0xFFFF, pan);
+        GF_SndHandleSetTrackPan(SND_HANDLE_CHORUS, 0xFFFF, pan);
         GF_SndHandleMoveVolume(8, volume, 0);
         break;
     case 14:

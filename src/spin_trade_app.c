@@ -948,7 +948,7 @@ BOOL SpinTrade_State_WaitEggsLanded(SpinTradeApp *app) {
     SpinTradeObjects *objects = &app->objects;
 
     do {
-        if (objects->eggs[i].dropped == 1) {
+        if (objects->eggs[i].dropped == TRUE) {
             landed++;
         }
         i++;
@@ -1082,7 +1082,7 @@ BOOL SpinTrade_State_SpinHost(SpinTradeApp *app) {
 #pragma force_active reset
 
 BOOL SpinTrade_State_SpinClient(SpinTradeApp *app) {
-    if (app->spinReceived == 1) {
+    if (app->spinReceived == TRUE) {
         app->machine.angle = app->spinData.angle << FX32_SHIFT;
         app->machine.speed = app->spinData.speed << FX32_SHIFT;
         app->frame = app->spinData.frame;
@@ -1091,7 +1091,7 @@ BOOL SpinTrade_State_SpinClient(SpinTradeApp *app) {
         app->state = SPIN_TRADE_STATE_STOP_SPIN;
         return TRUE;
     }
-    if (app->remoteJump != 0 && SpinTrade_IsJumping(app) == FALSE) {
+    if (app->remoteJump != FALSE && SpinTrade_IsJumping(app) == FALSE) {
         SpinTrade_StartJump(app);
     }
     if (SpinTrade_IsButtonFlashing(app) == 0 && SpinTrade_IsButtonTouched(app) == TRUE) {
@@ -1101,7 +1101,7 @@ BOOL SpinTrade_State_SpinClient(SpinTradeApp *app) {
         }
         SpinTrade_StartButtonFlash(app);
     }
-    if (app->sendJump != 0) {
+    if (app->sendJump != FALSE) {
         SpinTradeArgs *args = app->args;
         if (SpinTradeLink_SendCommand(args->menu, SPIN_TRADE_CMD_JUMP, &app->sendJump, 1) == TRUE) {
             app->sendJump = FALSE;
@@ -1219,7 +1219,7 @@ BOOL SpinTrade_State_ReceiveResult(SpinTradeApp *app) {
     SpinTradeEgg *egg;
     u16 *result;
 
-    if (app->resultReceived == 1) {
+    if (app->resultReceived == TRUE) {
         app->machine.angle = app->result[0] << FX32_SHIFT;
         result = app->result;
         i = 0;
@@ -1391,7 +1391,7 @@ BOOL SpinTrade_State_WaitCancelMessage(SpinTradeApp *app) {
 }
 
 BOOL SpinTrade_State_StartExitSync(SpinTradeApp *app) {
-    if (app->unk_018 == 0) {
+    if (app->unk_018 == FALSE) {
         LinkSync_StartSync(SPIN_TRADE_LINK_SYNC_NO);
     }
     SpinTrade_PrintMessage(app, msg_0206_00010);
@@ -1401,7 +1401,7 @@ BOOL SpinTrade_State_StartExitSync(SpinTradeApp *app) {
 
 #pragma force_active on
 BOOL SpinTrade_State_WaitExitSync(SpinTradeApp *app) {
-    if (app->unk_018 == 0) {
+    if (app->unk_018 == FALSE) {
         if (LinkSync_IsSynced(SPIN_TRADE_LINK_SYNC_NO)) {
             CommState_SetErrorWatch(0, 0);
             CommState_SetMaxEntries(1);

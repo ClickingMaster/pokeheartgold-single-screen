@@ -1,5 +1,8 @@
 #include "global.h"
 
+#include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0432.h"
+
 #include "bg_window.h"
 #include "filesystem.h"
 #include "font.h"
@@ -298,7 +301,7 @@ BOOL ScratchOffCards_Init(OverlayManager *man, int *state) {
     work->matchFrame = 0;
     ScratchOffCards_InitResources(work);
     *state = 0;
-    Sound_SetSceneAndPlayBGM(66, 0, 0);
+    Sound_SetSceneAndPlayBGM(66, SEQ_NONE, 0);
     return TRUE;
 }
 #pragma force_active reset
@@ -1012,18 +1015,18 @@ void ScratchOffCards_InitResources(ScratchOffCardsWork *work) {
     work->narc = NARC_New(NARC_a_2_0_5, HEAP_ID_122);
     ScratchOffCards_InitBgGraphics(work);
     ScratchOffCards_InitSpriteGraphics(work);
-    work->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 0x1B0, HEAP_ID_122);
+    work->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0432_bin, HEAP_ID_122);
     work->msgFormat = MessageFormat_New(HEAP_ID_122);
     work->string = String_New(600, HEAP_ID_122);
     work->stringBuffer = String_New(600, HEAP_ID_122);
-    LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, (enum GFPalSlotOffset)0x1A0, HEAP_ID_122);
-    LoadFontPal0(GF_PAL_LOCATION_SUB_BG, (enum GFPalSlotOffset)0x1A0, HEAP_ID_122);
-    LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, (enum GFPalSlotOffset)0x180, HEAP_ID_122);
-    LoadFontPal1(GF_PAL_LOCATION_SUB_BG, (enum GFPalSlotOffset)0x180, HEAP_ID_122);
+    LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_13_OFFSET, HEAP_ID_122);
+    LoadFontPal0(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_13_OFFSET, HEAP_ID_122);
+    LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_12_OFFSET, HEAP_ID_122);
+    LoadFontPal1(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_12_OFFSET, HEAP_ID_122);
     FontID_Alloc(2, HEAP_ID_122);
     work->messagePrinter = MessagePrinter_New(15, 14, 0, HEAP_ID_122);
     ScratchOffCards_AddWindows(work->bgConfig, work->windows);
-    work->paletteFadeTask = PaletteBlink_New(NULL, 1, 12, HEAP_ID_122);
+    work->paletteFadeTask = PaletteBlink_New(NULL, PM_LCD_BOTTOM, 12, HEAP_ID_122);
     ScratchOffCards_LoadScratchLayer(work);
     ScratchOffCards_AllocScratchPixels(work);
     ScratchOffCards_ResetScratchPixels(work);
@@ -1218,7 +1221,7 @@ int ScratchOffCards_PrintMessageCentered(ScratchOffCardsWork *work, Window *wind
 int ScratchOffCards_PrintStopPrompt(ScratchOffCardsWork *work) {
     int ret;
     ScratchOffCards_DrawMessageFrame(work->bgConfig, &work->windows[0]);
-    ret = ScratchOffCards_PrintMessage(work, &work->windows[0], 6, 1, 1, TEXT_SPEED_INSTANT, 1, 2, 15, 0);
+    ret = ScratchOffCards_PrintMessage(work, &work->windows[0], msg_0432_00006, 1, 1, TEXT_SPEED_INSTANT, 1, 2, 15, 0);
     ScheduleWindowCopyToVram(&work->windows[0]);
     return ret;
 }
@@ -1226,7 +1229,7 @@ int ScratchOffCards_PrintStopPrompt(ScratchOffCardsWork *work) {
 int ScratchOffCards_PrintSelectCardMessage(ScratchOffCardsWork *work) {
     int ret;
     ScratchOffCards_BufferNumber(work, 0, work->cardNo + 1);
-    ret = ScratchOffCards_PrintMessage(work, &work->windows[15], 12, 1, 1, TEXT_SPEED_INSTANT, 1, 2, 15, 1);
+    ret = ScratchOffCards_PrintMessage(work, &work->windows[15], msg_0432_00012, 1, 1, TEXT_SPEED_INSTANT, 1, 2, 15, 1);
     ScheduleWindowCopyToVram(&work->windows[15]);
     return ret;
 }
@@ -1234,7 +1237,7 @@ int ScratchOffCards_PrintSelectCardMessage(ScratchOffCardsWork *work) {
 int ScratchOffCards_PrintStartCardMessage(ScratchOffCardsWork *work) {
     int ret;
     ScratchOffCards_BufferNumber(work, 0, work->cardNo + 1);
-    ret = ScratchOffCards_PrintMessageCentered(work, &work->windows[10], 9, 0x30, 5, TEXT_SPEED_INSTANT, 1, 2, 0, 0);
+    ret = ScratchOffCards_PrintMessageCentered(work, &work->windows[10], msg_0432_00009, 0x30, 5, TEXT_SPEED_INSTANT, 1, 2, 0, 0);
     ScheduleWindowCopyToVram(&work->windows[10]);
     return ret;
 }
@@ -1256,21 +1259,21 @@ int ScratchOffCards_ShowResult(ScratchOffCardsWork *work) {
 int ScratchOffCards_PrintTooBadMessage(ScratchOffCardsWork *work) {
     int ret;
     PlaySE(SEQ_SE_DP_BOX03);
-    ret = ScratchOffCards_PrintMessageCentered(work, &work->windows[12], 11, 0x30, 5, TEXT_SPEED_INSTANT, 1, 2, 0, 0);
+    ret = ScratchOffCards_PrintMessageCentered(work, &work->windows[12], msg_0432_00011, 0x30, 5, TEXT_SPEED_INSTANT, 1, 2, 0, 0);
     ScheduleWindowCopyToVram(&work->windows[12]);
     return ret;
 }
 
 int ScratchOffCards_PrintNextCardButton(ScratchOffCardsWork *work) {
     int ret;
-    ret = ScratchOffCards_PrintMessageCentered(work, &work->windows[13], 4, 0x30, 1, TEXT_SPEED_INSTANT, 1, 1, 0, 2);
+    ret = ScratchOffCards_PrintMessageCentered(work, &work->windows[13], msg_0432_00004, 0x30, 1, TEXT_SPEED_INSTANT, 1, 1, 0, 2);
     ScheduleWindowCopyToVram(&work->windows[13]);
     return ret;
 }
 
 int ScratchOffCards_PrintCancelButton(ScratchOffCardsWork *work) {
     int ret;
-    ret = ScratchOffCards_PrintMessageCentered(work, &work->windows[14], 5, 0x18, 1, TEXT_SPEED_INSTANT, 1, 1, 0, 2);
+    ret = ScratchOffCards_PrintMessageCentered(work, &work->windows[14], msg_0432_00005, 0x18, 1, TEXT_SPEED_INSTANT, 1, 1, 0, 2);
     ScheduleWindowCopyToVram(&work->windows[14]);
     return ret;
 }
@@ -1279,7 +1282,7 @@ int ScratchOffCards_PrintCancelButton(ScratchOffCardsWork *work) {
 int ScratchOffCards_PrintPrizeName(ScratchOffCardsWork *work, int prizeNo) {
     int ret;
     BufferItemName(work->msgFormat, 0, work->prizes[prizeNo]);
-    ret = ScratchOffCards_PrintMessageCentered(work, &work->windows[prizeNo + 2], 1, 44, sScratchOffCardsPrizeNameY[prizeNo], TEXT_SPEED_INSTANT, 1, 2, 0, 0);
+    ret = ScratchOffCards_PrintMessageCentered(work, &work->windows[prizeNo + 2], msg_0432_00001, 44, sScratchOffCardsPrizeNameY[prizeNo], TEXT_SPEED_INSTANT, 1, 2, 0, 0);
     ScheduleWindowCopyToVram(&work->windows[prizeNo + 2]);
     return ret;
 }

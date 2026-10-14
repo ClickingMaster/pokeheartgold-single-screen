@@ -118,7 +118,7 @@ void Sound_SetCurrentBGM(u16 seqNo) {
     } else {
         *currentSeqNo = seqNo;
     }
-    GF_SetCurrentPlayingBGM(0);
+    GF_SetCurrentPlayingBGM(SEQ_NONE);
 }
 
 u16 GF_GetCurrentPlayingBGM(void) {
@@ -929,7 +929,7 @@ void Sound_StopWaveOutAndFreeBuffer(int channel) {
 
 BOOL Sound_IsCaptureActive(void) {
     BOOL active = NNS_SndCaptureIsActive();
-    if (active == 1) {
+    if (active == TRUE) {
         Sound_GetCaptureType();
     }
     return active;
@@ -980,7 +980,7 @@ BOOL GF_SndGetAfterFadeDelayTimer(void) {
     u16 *timer = GF_SdatGetAttrPtr(8);
     if (*timer == 0) {
         *timer = 0;
-        return 0;
+        return FALSE;
     }
     --*timer;
     return *timer;
@@ -1025,7 +1025,7 @@ BOOL GF_FadeStartMusicIdEx(int scene, u16 seqNo, u16 fadeOutFrames, int delay, i
 void Sound_PrepareBGMChange(int scene, u16 seqNo, u16 fadeOutFrames, int delay, u8 reload, int unused) {
     const struct NNSSndArcBankInfo **bank = GF_SdatGetAttrPtr(2);
     GF_SndStartFadeOutBGM(0, fadeOutFrames);
-    Sound_SetCurrentBGM(0);
+    Sound_SetCurrentBGM(SEQ_NONE);
     GF_SetCurrentPlayingBGM(seqNo);
     GF_SndSetAfterFadeDelayTimer(delay);
     *bank = GF_GetBankInfoBySeqNo(seqNo);

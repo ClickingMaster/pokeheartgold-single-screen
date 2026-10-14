@@ -67,7 +67,7 @@ UnionRoomMessage *UnionRoomMessages_New(int heapID);
 void UnionRoomMessages_Free(UnionRoomMessage *messages);
 
 UnionRoomObjects *UnionRoomObjects_New(struct UnionRoom *unionRoom) {
-    UnionRoomObjects *objects = Heap_Alloc((enum HeapID)0x1F, sizeof(UnionRoomObjects));
+    UnionRoomObjects *objects = Heap_Alloc(HEAP_ID_31, sizeof(UnionRoomObjects));
     MIi_CpuClearFast(0, (u32 *)objects, sizeof(UnionRoomObjects));
     objects->unionRoom = unionRoom;
     objects->enabled = 1;
@@ -75,7 +75,7 @@ UnionRoomObjects *UnionRoomObjects_New(struct UnionRoom *unionRoom) {
     objects->fieldSystem = UnionRoom_GetFieldSystem(unionRoom);
     objects->palPad = SaveArray_Get(objects->fieldSystem->saveData, 8);
     objects->avatar = objects->fieldSystem->playerAvatar;
-    Heap_CreateAtEnd((enum HeapID)11, (enum HeapID)0x57, 0x2710);
+    Heap_CreateAtEnd(HEAP_ID_FIELD2, HEAP_ID_87, 0x2710);
     objects->messages = UnionRoomMessages_New(0x57);
     UnionRoomObjects_ResetSlots(objects);
     return objects;
@@ -103,7 +103,7 @@ void UnionRoomObjects_ResetSlots(UnionRoomObjects *objects) {
 void UnionRoomObjects_Delete(UnionRoomObjects *objects) {
     SysTask_Destroy(objects->task);
     UnionRoomMessages_Free(objects->messages);
-    Heap_Destroy((enum HeapID)0x57);
+    Heap_Destroy(HEAP_ID_87);
     Heap_Free(objects);
 }
 
@@ -333,7 +333,7 @@ void UnionRoomSlot_Appear(UnionRoomSlot *slot, LocalMapObject *object, u32 x, u3
     u32 initialZ = MapObject_GetInitialZ(object);
 
     if (initialX != x || initialZ != z) {
-        PlaySE(0x64E);
+        PlaySE(SEQ_SE_DP_TELE2);
         MapObject_ChangeSprite(object, slot->sprite);
         UnionRoomSlot_DestroyEffects(slot, FALSE);
         MapObject_SetPositionFromXYZAndDirection(object, initialX, initialY, initialZ, TRUE);
@@ -420,7 +420,7 @@ void UnionRoomObjects_RestoreAfterScript(MapObjectManager *mapObjectManager, Uni
 }
 
 void UnionRoomMessage_Init(UnionRoomMessage *message) {
-    message->name = String_New(8, (enum HeapID)0x57);
+    message->name = String_New(8, HEAP_ID_87);
     message->string1 = NULL;
     message->string2 = NULL;
     MailMsg_Init_WithBank(&message->mail, 0);

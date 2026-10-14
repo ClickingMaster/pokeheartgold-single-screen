@@ -660,7 +660,7 @@ void WiFiPlazaObj_HandlerRiseOut(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager
         if (obj->work.lift.frame == 0) {
             obj->step++;
             obj->work.lift.frame = 0;
-            PlaySE(0x64E);
+            PlaySE(SEQ_SE_DP_TELE2);
         }
         break;
     case 2:
@@ -692,7 +692,7 @@ void WiFiPlazaObj_HandlerDropIn(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager)
         WiFiPlazaObj_InitTween(&obj->work.lift.tween, 0x1F4000, 0, 0x18);
         obj->work.lift.frame = 0;
         obj->step++;
-        PlaySE(0x64E);
+        PlaySE(SEQ_SE_DP_TELE2);
         // fallthrough
     case 1:
         done = WiFiPlazaObj_UpdateTween(&obj->work.lift.tween, obj->work.lift.frame);

@@ -14,9 +14,9 @@ void RectWipe_Begin(ScreenFade *fade, const RectWipeConfig *config) {
     wipe = fade->effect;
     RectWipe_Init(wipe, config, fade->steps, fade->framesPerStep, fade->screen, fade->regQueue);
     if (config->window == 0) {
-        ScreenFade_SetWindowVisible(fade->regQueue, 1, wipe->screen, wipe->queued);
+        ScreenFade_SetWindowVisible(fade->regQueue, GX_WNDMASK_W0, wipe->screen, wipe->queued);
     } else {
-        ScreenFade_SetWindowVisible(fade->regQueue, 2, wipe->screen, wipe->queued);
+        ScreenFade_SetWindowVisible(fade->regQueue, GX_WNDMASK_W1, wipe->screen, wipe->queued);
     }
     fade->state++;
 }
@@ -52,7 +52,7 @@ void DoubleRectWipe_Begin(ScreenFade *fade, const RectWipeConfig *config0, const
     wipes = fade->effect;
     RectWipe_Init(&wipes[0], config0, fade->steps, fade->framesPerStep, fade->screen, fade->regQueue);
     RectWipe_Init(&wipes[1], config1, fade->steps, fade->framesPerStep, fade->screen, fade->regQueue);
-    ScreenFade_SetWindowVisible(fade->regQueue, 3, fade->screen, wipes[0].queued);
+    ScreenFade_SetWindowVisible(fade->regQueue, GX_WNDMASK_W0 | GX_WNDMASK_W1, fade->screen, wipes[0].queued);
     fade->state++;
 }
 
@@ -168,9 +168,9 @@ void CircleWipe_Init(CircleWipe *wipe, const CircleWipeConfig *config, int steps
     buffer = ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 0);
     ScreenFade_SetWindow(regQueue, config->insideMask, config->outsideMask, config->window, screen, buffer->nextLeft[0], 0, buffer->nextRight[0], 192, wipe->queued);
     if (config->window == 0) {
-        ScreenFade_SetWindowVisible(regQueue, 1, screen, wipe->queued);
+        ScreenFade_SetWindowVisible(regQueue, GX_WNDMASK_W0, screen, wipe->queued);
     } else {
-        ScreenFade_SetWindowVisible(regQueue, 2, screen, wipe->queued);
+        ScreenFade_SetWindowVisible(regQueue, GX_WNDMASK_W1, screen, wipe->queued);
     }
     FadeBlankPair_StartOnVBlank(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
 }
@@ -296,9 +296,9 @@ void WedgeWipe_Init(WedgeWipe *wipe, const AngleWipeConfig *config, int steps, i
     buffer = ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 0);
     ScreenFade_SetWindow(regQueue, config->insideMask, config->outsideMask, config->window, screen, buffer->nextLeft[0], 0, buffer->nextRight[0], 192, wipe->queued);
     if (config->window == 0) {
-        ScreenFade_SetWindowVisible(regQueue, 1, screen, wipe->queued);
+        ScreenFade_SetWindowVisible(regQueue, GX_WNDMASK_W0, screen, wipe->queued);
     } else {
-        ScreenFade_SetWindowVisible(regQueue, 2, screen, wipe->queued);
+        ScreenFade_SetWindowVisible(regQueue, GX_WNDMASK_W1, screen, wipe->queued);
     }
     FadeBlankPair_StartOnVBlank(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
 }
@@ -388,9 +388,9 @@ void SlopeWipe_Init(SlopeWipe *wipe, const AngleWipeConfig *config, int steps, i
     buffer = ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 0);
     ScreenFade_SetWindow(regQueue, config->insideMask, config->outsideMask, config->window, screen, buffer->nextLeft[96], 0, buffer->nextRight[96], 192, wipe->queued);
     if (config->window == 0) {
-        ScreenFade_SetWindowVisible(regQueue, 1, screen, wipe->queued);
+        ScreenFade_SetWindowVisible(regQueue, GX_WNDMASK_W0, screen, wipe->queued);
     } else {
-        ScreenFade_SetWindowVisible(regQueue, 2, screen, wipe->queued);
+        ScreenFade_SetWindowVisible(regQueue, GX_WNDMASK_W1, screen, wipe->queued);
     }
     FadeBlankPair_StartOnVBlank(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
 }
@@ -512,9 +512,9 @@ void MultiRectWipe_Init(MultiRectWipe *wipe, const MultiRectWipeConfig *config, 
     buffer = ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 0);
     ScreenFade_SetWindow(regQueue, config->insideMask, config->outsideMask, config->window, screen, buffer->nextLeft[0], 0, buffer->nextRight[0], 192, wipe->queued);
     if (config->window == 0) {
-        ScreenFade_SetWindowVisible(wipe->regQueue, 1, screen, wipe->queued);
+        ScreenFade_SetWindowVisible(wipe->regQueue, GX_WNDMASK_W0, screen, wipe->queued);
     } else {
-        ScreenFade_SetWindowVisible(wipe->regQueue, 2, screen, wipe->queued);
+        ScreenFade_SetWindowVisible(wipe->regQueue, GX_WNDMASK_W1, screen, wipe->queued);
     }
     FadeBlankPair_StartOnVBlank(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
 }
@@ -635,7 +635,7 @@ void SectorWipe_Init(SectorWipe *wipe, const SectorWipeConfig *config, int steps
     buffer1 = ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 1);
     ScreenFade_SetWindow(regQueue, config->insideMask, config->outsideMask, 0, screen, buffer0->nextLeft[0], 0, buffer0->nextRight[0], 192, wipe->queued);
     ScreenFade_SetWindow(regQueue, config->insideMask, config->outsideMask, 1, screen, buffer1->nextLeft[0], 0, buffer1->nextRight[0], 192, wipe->queued);
-    ScreenFade_SetWindowVisible(regQueue, 3, screen, wipe->queued);
+    ScreenFade_SetWindowVisible(regQueue, GX_WNDMASK_W0 | GX_WNDMASK_W1, screen, wipe->queued);
     FadeBlankPair_StartOnVBlank(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
 }
 
@@ -772,7 +772,7 @@ void MirroredSectorWipe_Init(SectorWipe *wipe, const SectorWipeConfig *config, i
     ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 1);
     ScreenFade_SetWindow(regQueue, config->insideMask, config->outsideMask, 0, screen, 0, 0, 255, 192, wipe->queued);
     ScreenFade_SetWindow(regQueue, config->insideMask, config->outsideMask, 1, screen, 0, 0, 255, 192, wipe->queued);
-    ScreenFade_SetWindowVisible(regQueue, 3, screen, wipe->queued);
+    ScreenFade_SetWindowVisible(regQueue, GX_WNDMASK_W0 | GX_WNDMASK_W1, screen, wipe->queued);
     FadeBlankPair_StartOnVBlank(wipe->blankPair, wipe, ScreenWipeScanlines_HBlankCallback, screen, heapId);
 }
 
@@ -904,7 +904,7 @@ void LineShutterWipe_Init(LineShutterWipe *wipe, const LineShutterConfig *config
     } else {
         ScreenFade_SetWindow(regQueue, 0x3F, 0x20, 0, screen, 0, 0, 0, 0, config->queued);
     }
-    ScreenFade_SetWindowVisible(regQueue, 1, screen, wipe->queued);
+    ScreenFade_SetWindowVisible(regQueue, GX_WNDMASK_W0, screen, wipe->queued);
 }
 
 BOOL LineShutterWipe_Step(LineShutterWipe *wipe) {
@@ -1026,9 +1026,9 @@ void RectShutterWipe_InitRectFirst(RectShutterWipe *wipe, const RectShutterWipeC
     RectWipe_Init(&wipe->rect, &config->rect, rectSteps, framesPerStep, screen, regQueue);
 
     if (config->rect.window == 0) {
-        ScreenFade_SetWindowVisible(regQueue, 1, screen, config->rect.queued);
+        ScreenFade_SetWindowVisible(regQueue, GX_WNDMASK_W0, screen, config->rect.queued);
     } else {
-        ScreenFade_SetWindowVisible(regQueue, 2, screen, config->rect.queued);
+        ScreenFade_SetWindowVisible(regQueue, GX_WNDMASK_W1, screen, config->rect.queued);
     }
 
     wipe->phase = 0;
@@ -1082,9 +1082,9 @@ BOOL RectShutterWipe_StepShutterFirst(RectShutterWipe *wipe, ScreenFade *fade) {
             RectWipe_Init(&wipe->rect, &wipe->config->rect, wipe->laterSteps, fade->framesPerStep, fade->screen, fade->regQueue);
 
             if (wipe->config->rect.window == 0) {
-                ScreenFade_SetWindowVisible(fade->regQueue, 1, fade->screen, wipe->config->rect.queued);
+                ScreenFade_SetWindowVisible(fade->regQueue, GX_WNDMASK_W0, fade->screen, wipe->config->rect.queued);
             } else {
-                ScreenFade_SetWindowVisible(fade->regQueue, 2, fade->screen, wipe->config->rect.queued);
+                ScreenFade_SetWindowVisible(fade->regQueue, GX_WNDMASK_W1, fade->screen, wipe->config->rect.queued);
             }
         }
         break;

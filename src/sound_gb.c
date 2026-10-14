@@ -33,7 +33,7 @@ BOOL GF_SndReadSeqVariable(u16 seqNo, u32 variable, s16 *value) {
 void Sound_ApplyFootstepVariation(u16 seqNo) {
     u8 *state = GF_SdatGetAttrPtr(55);
     GF_SetVolumeBySeqNo(seqNo, sSoundFootstepVariations[state[0]][1]);
-    GF_SndHandleSetTrackPitch(4, 65535, sSoundFootstepVariations[state[0]][0]);
+    GF_SndHandleSetTrackPitch(SND_HANDLE_SE_2, 65535, sSoundFootstepVariations[state[0]][0]);
     if (state[1] >= 8) {
         state[1] = 0;
     }

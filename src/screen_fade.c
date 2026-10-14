@@ -230,10 +230,10 @@ void FillScreenWithColor(int screen, u16 color) {
     } else {
         GXS_LoadBGPltt(&color, 0, sizeof(u16));
     }
-    ScreenWindow_QueueSetVisible(&gPaletteFade.regQueue, 1, screen);
-    ScreenWindow_QueueSetInside(&gPaletteFade.regQueue, 0x3F, 0, 0, screen);
+    ScreenWindow_QueueSetVisible(&gPaletteFade.regQueue, GX_WNDMASK_W0, screen);
+    ScreenWindow_QueueSetInside(&gPaletteFade.regQueue, 0x3F, FALSE, 0, screen);
     ScreenWindow_QueueSetRect(&gPaletteFade.regQueue, 0, 0, 0, 0, 0, screen);
-    ScreenWindow_QueueSetOutside(&gPaletteFade.regQueue, 0x20, 0, screen);
+    ScreenWindow_QueueSetOutside(&gPaletteFade.regQueue, 0x20, FALSE, screen);
 }
 
 void SetBothBackdropColors(u16 color) {

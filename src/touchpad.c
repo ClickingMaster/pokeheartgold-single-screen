@@ -27,18 +27,18 @@ BOOL GF_TouchpadStartRecording(TPData *data, u32 capacity, u32 frequency) {
     int result;
     if (gTouchpadState.paused) {
         GF_TouchpadSetSamplingState(1, 1, data, capacity, 0, frequency * 2);
-        return 1;
+        return TRUE;
     }
     if (frequency >= 5 || frequency == 0) {
-        return 0;
+        return FALSE;
     }
     if (gTouchpadState.mode != 0) {
-        return 0;
+        return FALSE;
     }
     result = GF_TouchpadStartAutoSampling(frequency);
     if (result == 1) {
         GF_TouchpadSetSamplingState(1, 1, data, capacity, 0, frequency * 2);
-        return 1;
+        return TRUE;
     }
     return result;
 }
@@ -47,18 +47,18 @@ BOOL GF_TouchpadStartSampling(int frequency) {
     int result;
     if (gTouchpadState.paused) {
         GF_TouchpadSetSamplingState(2, 1, NULL, 0, 0, frequency * 2);
-        return 1;
+        return TRUE;
     }
     if ((u32)frequency >= 5 || frequency == 0) {
-        return 0;
+        return FALSE;
     }
     if (gTouchpadState.mode != 0) {
-        return 0;
+        return FALSE;
     }
     result = GF_TouchpadStartAutoSampling(frequency);
     if (result == 1) {
         GF_TouchpadSetSamplingState(2, 1, NULL, 0, 0, frequency * 2);
-        return 1;
+        return TRUE;
     }
     return result;
 }
@@ -104,7 +104,7 @@ BOOL GF_TouchpadStopSampling(void) {
     int result;
     if (gTouchpadState.paused) {
         GF_TouchpadSetSamplingState(0, 0, NULL, 0, 0, 0);
-        return 1;
+        return TRUE;
     }
     result = GF_TouchpadStopAutoSampling();
     if (result == 1) {

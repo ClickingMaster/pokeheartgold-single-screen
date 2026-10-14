@@ -73,7 +73,7 @@ int VsRecorderMenu_InitCommon(OverlayManager *manager, int *state, BOOL fromTerm
     GF_SndHandleSetPlayerVolume(1, 0x2A);
     GF_SndHandleSetPlayerVolume(7, 0x2A);
     if (fromTerminal != FALSE) {
-        FieldBGM_Play(NULL, 0x482);
+        FieldBGM_Play(NULL, SEQ_GS_WIFITOWER);
     }
     if (fromTerminal == FALSE) {
         SaveMisc_GetVsRecorderColorScheme(Save_Misc_Get(recorder->saveData), &recorder->colorScheme);

@@ -1,5 +1,10 @@
 #include "global.h"
 
+#include "constants/sndseq.h"
+
+#include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0777.h"
+
 #include "font.h"
 #include "msgdata.h"
 #include "player_data.h"
@@ -9,11 +14,11 @@
 
 void WiFiPlazaWork_PlayBGM(WiFiPlazaWork *work) {
     if (work->eventSchedule.flag4 == 1 && work->eventSchedule.paradeDelay <= 0) {
-        Sound_SetSceneAndPlayBGM(0x15, 0x481, 0);
+        Sound_SetSceneAndPlayBGM(0x15, SEQ_GS_WIFIPARADE, 0);
         WiFiPlazaEventSchedule_ApplyVolume(&work->eventSchedule);
         return;
     }
-    Sound_SetSceneAndPlayBGM(0x15, 0x47f, 0);
+    Sound_SetSceneAndPlayBGM(0x15, SEQ_GS_WIFIUNION, 0);
     WiFiPlazaEventSchedule_ApplyVolume(&work->eventSchedule);
 }
 
@@ -192,8 +197,8 @@ void WiFiPlazaPlayer_CopyToProfile(WiFiPlazaPlayer *player, PlayerProfile *profi
         invalid = TRUE;
     }
     if (invalid) {
-        MsgData *msg = NewMsgDataFromNarc((MsgDataLoadType)1, (NarcId)0x1b, 0x309, heapID);
-        String *name = NewString_ReadMsgData(msg, 0x40);
+        MsgData *msg = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0777_bin, heapID);
+        String *name = NewString_ReadMsgData(msg, msg_0777_00064);
         PlayerName_StringToFlat(profile, name);
         String_Delete(name);
         DestroyMsgData(msg);

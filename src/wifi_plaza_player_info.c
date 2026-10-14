@@ -20,8 +20,8 @@ WiFiPlazaPlayerInfo *WiFiPlazaPlayerInfo_New(PlayerProfile *profile, enum HeapID
 void WiFiPlazaPlayerInfo_Free(void *ptr);
 
 WiFiPlazaPlayerInfo *WiFiPlazaPlayerInfo_New(PlayerProfile *profile, enum HeapID heapId) {
-    WiFiPlazaPlayerInfo *ptr = Heap_Alloc(heapId, 0x24);
-    memset(ptr, 0, 0x24);
+    WiFiPlazaPlayerInfo *ptr = Heap_Alloc(heapId, sizeof(WiFiPlazaPlayerInfo));
+    memset(ptr, 0, sizeof(WiFiPlazaPlayerInfo));
     ptr->unk1B = 0x1C;
     ptr->gender = PlayerProfile_GetTrainerGender(profile);
     ptr->avatar = PlayerProfile_GetAvatar(profile);
