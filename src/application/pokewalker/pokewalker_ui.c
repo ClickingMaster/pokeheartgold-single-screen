@@ -137,7 +137,7 @@ int PokewalkerApp_GetWattsToNextCourse(PokewalkerApp *app, int watts) {
 }
 
 void PokewalkerApp_ShowYesNoMenu(PokewalkerApp *app, int selection) {
-    PokewalkerApp_LoadTilemap(app, 2, 13);
+    PokewalkerApp_LoadTilemap(app, GF_BG_LYR_MAIN_2, 13);
     PokewalkerApp_SetCursorPosition(app, 0);
     PokewalkerApp_PrintString(app, 3, app->yesText, 4, MAKE_TEXT_COLOR(15, 1, 0));
     PokewalkerApp_PrintString(app, 4, app->noText, 4, MAKE_TEXT_COLOR(15, 1, 0));
@@ -149,7 +149,7 @@ void PokewalkerApp_ShowYesNoMenu(PokewalkerApp *app, int selection) {
 void PokewalkerApp_ShowSaveEraseStepsMenu(PokewalkerApp *app, int selection) {
     String *saveSteps = NewString_ReadMsgData(app->msgData, msg_0274_00150);
     String *eraseSteps = NewString_ReadMsgData(app->msgData, msg_0274_00151);
-    PokewalkerApp_LoadTilemap(app, 2, 13);
+    PokewalkerApp_LoadTilemap(app, GF_BG_LYR_MAIN_2, 13);
     PokewalkerApp_SetCursorPosition(app, 0);
     PokewalkerApp_PrintString(app, 3, saveSteps, 4, MAKE_TEXT_COLOR(15, 1, 0));
     PokewalkerApp_PrintString(app, 4, eraseSteps, 4, MAKE_TEXT_COLOR(15, 1, 0));
@@ -225,7 +225,7 @@ int PokewalkerApp_GetTouchedButton(int index) {
 }
 
 void PokewalkerApp_LoadSubBg1Tilemap(PokewalkerApp *app) {
-    NARC *narc = NARC_New((NarcId)0xF9, HEAP_ID_154);
+    NARC *narc = NARC_New(NARC_a_2_4_7, HEAP_ID_154);
     ToggleBgLayer(GF_BG_LYR_SUB_1, GF_PLANE_TOGGLE_OFF);
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 0x12, app->bgConfig, GF_BG_LYR_SUB_1, 0, 0, TRUE, HEAP_ID_154);
     ToggleBgLayer(GF_BG_LYR_SUB_1, GF_PLANE_TOGGLE_ON);
@@ -529,7 +529,7 @@ void PokewalkerApp_InitSpriteSystem(PokewalkerApp *app) {
 }
 
 void PokewalkerApp_LoadSpriteResources(PokewalkerApp *app) {
-    NARC *narc = NARC_New((NarcId)0xF9, HEAP_ID_154);
+    NARC *narc = NARC_New(NARC_a_2_4_7, HEAP_ID_154);
 
     SpriteSystem_LoadCharResObjFromOpenNarc(app->spriteSystem, app->spriteManager, narc, 7, TRUE, NNS_G2D_VRAM_TYPE_2DSUB, 0xC226);
     SpriteSystem_LoadPlttResObjFromOpenNarc(app->spriteSystem, app->spriteManager, narc, 3, FALSE, 2, NNS_G2D_VRAM_TYPE_2DSUB, 0xC226);
@@ -853,7 +853,7 @@ BOOL PokewalkerApp_UpdateMotion(PokewalkerApp *app, PokewalkerAppMotion *motion)
 }
 
 void PokewalkerApp_LoadMonIconPalettes(void) {
-    GfGfxLoader_GXLoadPal(NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), GF_PAL_LOCATION_MAIN_OBJ, (enum GFPalSlotOffset)0xA0, 0x60, HEAP_ID_154);
+    GfGfxLoader_GXLoadPal(NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), GF_PAL_LOCATION_MAIN_OBJ, GF_PAL_SLOT_5_OFFSET, 0x60, HEAP_ID_154);
 }
 
 void PokewalkerApp_LoadMonIcon(PokewalkerApp *app, int slot, int species, int form) {

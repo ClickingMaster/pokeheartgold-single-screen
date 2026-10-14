@@ -3,6 +3,7 @@
 #include "global.h"
 
 #include "application/vs_recorder/vs_recorder_internal.h"
+#include "msgdata/msg/msg_0013.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -45,7 +46,7 @@ void VsRecorder_SetMenuRowText(VsRecorderWork *work, VsRecorderMenuRow *row, int
             str = NewString_ReadMsgData(msgData, msgId);
         } else {
             MessageFormat *format = VsRecorder_NewMessageFormat(HEAP_ID_109);
-            String *template = NewString_ReadMsgData(work->msgData, 7);
+            String *template = NewString_ReadMsgData(work->msgData, msg_0013_00007);
             String *name = FrontierCard_NewNameString((const u16 *)work->videoOwners[entry->selection], HEAP_ID_109);
             VsRecorder_SanitizeName(work, name);
             str = String_New(0xFF, HEAP_ID_109);
@@ -61,7 +62,7 @@ void VsRecorder_SetMenuRowText(VsRecorderWork *work, VsRecorderMenuRow *row, int
             str = NewString_ReadMsgData(msgData, msgId);
         } else {
             MessageFormat *format = VsRecorder_NewMessageFormat(HEAP_ID_109);
-            String *template = NewString_ReadMsgData(work->msgData, 7);
+            String *template = NewString_ReadMsgData(work->msgData, msg_0013_00007);
             String *name = FrontierCard_NewNameString((const u16 *)work->videoOwners[entry->selection], HEAP_ID_109);
             VsRecorder_SanitizeName(work, name);
             str = String_New(0xFF, HEAP_ID_109);

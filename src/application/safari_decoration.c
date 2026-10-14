@@ -3,6 +3,7 @@
 #include "constants/sndseq.h"
 
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0430.h"
 
 #include "bg_window.h"
 #include "camera.h"
@@ -1106,8 +1107,8 @@ void SafariDecoration_CreateStrings(SafariDecoration *decor) {
     decor->msgFormat = MessageFormat_New_Custom(2, 16, decor->heapId);
     decor->tmpString = String_New(256, decor->heapId);
     decor->string = String_New(256, decor->heapId);
-    decor->pageTemplate = NewString_ReadMsgData(decor->msgData, 12);
-    decor->backText = NewString_ReadMsgData(decor->msgData, 8);
+    decor->pageTemplate = NewString_ReadMsgData(decor->msgData, msg_0430_00012);
+    decor->backText = NewString_ReadMsgData(decor->msgData, msg_0430_00008);
     for (i = 0; i < 4; i++) {
         decor->placeMessages[i] = NewString_ReadMsgData(decor->msgData, i);
     }

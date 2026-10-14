@@ -85,7 +85,7 @@ int PokewalkerApp_Link_Start(PokewalkerApp *app) {
 
 int PokewalkerApp_Link_PrintPointAtCard(PokewalkerApp *app) {
     BgClearTilemapBufferAndCommit(app->bgConfig, GF_BG_LYR_MAIN_1);
-    PokewalkerApp_LoadTilemap(app, 2, 14);
+    PokewalkerApp_LoadTilemap(app, GF_BG_LYR_MAIN_2, 14);
     PokewalkerApp_PrintExit(app, 1);
     app->textPrinterId = PokewalkerApp_StartMessageBox(app, 0, msg_0274_00005);
     PokewalkerApp_StartSubBgScroll(app);
@@ -212,8 +212,8 @@ int PokewalkerApp_ListUnlockedCourses(PokewalkerApp *app) {
 
 int PokewalkerApp_Link_ShowCourseMenu(PokewalkerApp *app) {
     FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 16, 32, 8, TILEMAP_FILL_KEEP_PAL);
-    PokewalkerApp_LoadTilemap(app, 5, 17);
-    PokewalkerApp_LoadTilemap(app, 2, 23);
+    PokewalkerApp_LoadTilemap(app, GF_BG_LYR_SUB_1, 17);
+    PokewalkerApp_LoadTilemap(app, GF_BG_LYR_MAIN_2, 23);
     app->numCourses = PokewalkerApp_ListUnlockedCourses(app);
     PokewalkerApp_PrintCoursePage(app);
     PokewalkerApp_PrintExit(app, 6);
@@ -426,7 +426,7 @@ int PokewalkerApp_Link_PrintInstructions(PokewalkerApp *app) {
 
 int PokewalkerApp_Link_WaitInstructions(PokewalkerApp *app) {
     if (!TextPrinterCheckActive(app->textPrinterId) && app->monPicAlpha == 31 && app->subBgScrollX == 256) {
-        PokewalkerApp_LoadTilemap(app, 2, 14);
+        PokewalkerApp_LoadTilemap(app, GF_BG_LYR_MAIN_2, 14);
         PokewalkerApp_PrintExit(app, 1);
         return 24;
     }
@@ -456,7 +456,7 @@ int PokewalkerApp_Link_PrintWillConnect(PokewalkerApp *app) {
 
 int PokewalkerApp_Link_PrintPointAtCardForStroll(PokewalkerApp *app) {
     BgClearTilemapBufferAndCommit(app->bgConfig, GF_BG_LYR_MAIN_1);
-    PokewalkerApp_LoadTilemap(app, 2, 14);
+    PokewalkerApp_LoadTilemap(app, GF_BG_LYR_MAIN_2, 14);
     PokewalkerApp_PrintExit(app, 1);
     app->textPrinterId = PokewalkerApp_StartMessageBox(app, 0, msg_0274_00005);
     PokewalkerApp_StartSubBgScroll(app);
@@ -513,7 +513,7 @@ int PokewalkerApp_Link_PrintPointAtCardForGifts(PokewalkerApp *app) {
     PokewalkerApp_RemoveWindowBank(app, 3);
     PokewalkerApp_AddWindowBank(app, 0);
     PokewalkerApp_AddWindowBank(app, 1);
-    PokewalkerApp_LoadTilemap(app, 2, 14);
+    PokewalkerApp_LoadTilemap(app, GF_BG_LYR_MAIN_2, 14);
     PokewalkerApp_PrintExit(app, 1);
     PokewalkerApp_HideSprite(app, 3);
     PokewalkerApp_HideSprite(app, 4);
@@ -539,7 +539,7 @@ void PokewalkerApp_ResetLinkError(PokewalkerApp *app) {
 int PokewalkerApp_Link_StartUpload(PokewalkerApp *app) {
     MIi_CpuClearFast(0, (u32 *)&app->irBlocks, sizeof(PokewalkerIrBlocks));
     MIi_CpuClearFast(0, (u32 *)&app->irStatus, sizeof(PokewalkerIrStatus));
-    PokewalkerApp_LoadTilemap(app, 2, 14);
+    PokewalkerApp_LoadTilemap(app, GF_BG_LYR_MAIN_2, 14);
     PokewalkerApp_PrintExit(app, 1);
     PokewalkerApp_BuildUploadData(app);
     PokewalkerIr_RequestUpload(app->uploadImage, (u8 *)&app->strollData, (u8 *)&app->unk_F1D0);

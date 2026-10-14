@@ -3,6 +3,7 @@
 #include "constants/sndseq.h"
 
 #include "application/vs_recorder/vs_recorder_screens.h"
+#include "msgdata/msg/msg_0013.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -219,7 +220,7 @@ BOOL VsRecorder_VideoListDownloadVideo(VsRecorderWork *work) {
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 0xC, (u8)listWork->fade, (u16)work->blendColor);
         break;
     case 2:
-        VsRecorder_ShowTopMessage(work, 0x75);
+        VsRecorder_ShowTopMessage(work, msg_0013_00117);
         VsRecorder_PlaceOrbitCursor(work, work->orbitCursors[0], 128, 96);
         OrbitCursor_SetVisible(work->orbitCursors[0], TRUE);
         OrbitCursor_SetRadius(work->orbitCursors[0], 24, 24);
@@ -667,10 +668,10 @@ void VsRecorder_SetSlotButtonName(VsRecorderTextSprite *button, VsRecorderWork *
     MsgData *msgData = work->msgData;
 
     if (owner == NULL) {
-        text = NewString_ReadMsgData(msgData, 8);
+        text = NewString_ReadMsgData(msgData, msg_0013_00008);
     } else {
         MessageFormat *msgFormat = VsRecorder_NewMessageFormat(HEAP_ID_109);
-        String *template = NewString_ReadMsgData(work->msgData, 7);
+        String *template = NewString_ReadMsgData(work->msgData, msg_0013_00007);
         String *name = FrontierCard_NewNameString((const u16 *)work->videoOwners[slot], HEAP_ID_109);
 
         VsRecorder_SanitizeName(work, name);
@@ -891,9 +892,9 @@ BOOL VsRecorder_VideoListDownloadList(VsRecorderWork *work) {
         OrbitCursor_SetVisible(work->orbitCursors[0], TRUE);
         OrbitCursor_SetRadius(work->orbitCursors[0], 24, 24);
         if (work->selection == 300 || work->selection == 301) {
-            VsRecorder_ShowTopMessage(work, 0x117);
+            VsRecorder_ShowTopMessage(work, msg_0013_00279);
         } else {
-            VsRecorder_ShowTopMessage(work, 0x124);
+            VsRecorder_ShowTopMessage(work, msg_0013_00292);
         }
         PlaySE(SEQ_SE_PL_BREC80);
         work->step++;
@@ -1012,7 +1013,7 @@ void VsRecorder_CreateVideoListWindows(VsRecorderWork *work) {
     InitWindow(window);
     AddWindowParameterized(work->bgConfig, window, GF_BG_LYR_SUB_2, 11, 6, 10, 4, 14, 0x100);
     FillWindowPixelBuffer(window, 0);
-    str = NewString_ReadMsgData(work->msgData, 0x5F);
+    str = NewString_ReadMsgData(work->msgData, msg_0013_00095);
     x = (80 - FontID_String_GetWidthMultiline(0, str, 0)) / 2;
     AddTextPrinterParameterizedWithColor(window, 0, str, x, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 13, 0), NULL);
     ScheduleWindowCopyToVram(window);
@@ -1490,7 +1491,7 @@ BOOL VsRecorder_VideoListShowSlots(VsRecorderWork *work) {
             PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 0xC, (u8)listWork->fade, (u16)work->blendColor);
             break;
         case 2:
-            VsRecorder_ShowTopMessage(work, 0x115);
+            VsRecorder_ShowTopMessage(work, msg_0013_00277);
             work->step++;
             break;
         case 3:
@@ -1651,7 +1652,7 @@ void VsRecorder_CreateOverwriteWindows(VsRecorderWork *work) {
     InitWindow(window);
     AddWindowParameterized(work->bgConfig, window, GF_BG_LYR_SUB_2, 4, 6, 10, 2, 14, 1);
     FillWindowPixelBuffer(window, 0);
-    str = NewString_ReadMsgData(work->msgData, 130);
+    str = NewString_ReadMsgData(work->msgData, msg_0013_00130);
     AddTextPrinterParameterizedWithColor(window, 0, str, VsRecorder_GetCenteredTextX(window, str), 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 13, 0), NULL);
     String_Delete(str);
     ScheduleWindowCopyToVram(window);
@@ -1659,7 +1660,7 @@ void VsRecorder_CreateOverwriteWindows(VsRecorderWork *work) {
     InitWindow(window);
     AddWindowParameterized(work->bgConfig, window, GF_BG_LYR_SUB_2, 18, 6, 10, 2, 14, 21);
     FillWindowPixelBuffer(window, 0);
-    str = NewString_ReadMsgData(work->msgData, 131);
+    str = NewString_ReadMsgData(work->msgData, msg_0013_00131);
     AddTextPrinterParameterizedWithColor(window, 0, str, VsRecorder_GetCenteredTextX(window, str), 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 13, 0), NULL);
     String_Delete(str);
     ScheduleWindowCopyToVram(window);

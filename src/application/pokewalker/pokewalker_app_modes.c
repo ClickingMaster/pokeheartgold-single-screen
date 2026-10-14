@@ -8,9 +8,12 @@
 
 #include "global.h"
 
+#include "constants/items.h"
 #include "constants/pokemon.h"
 #include "constants/sndseq.h"
+#include "constants/species.h"
 
+#include "application/choose_starter/choose_starter_sub_res.naix"
 #include "application/pokewalker/pokewalker_modes2.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0274.h"
@@ -213,8 +216,8 @@ int PokewalkerApp_LinkSave_SetNextMode2(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_LinkSave_End(PokewalkerApp *app) {
-    FillBgTilemapRect(app->bgConfig, 1, 0, 0, 0, 32, 24, 16);
-    BgCommitTilemapBufferToVram(app->bgConfig, 1);
+    FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
+    BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_1);
     PokewalkerApp_HideSprite(app, 6);
     return 11;
 }
@@ -353,11 +356,11 @@ BOOL PokewalkerApp_SelectMon_GetBoxMon(PCStorage *storage, u32 box, u32 slot, Po
         mon->markings = GetBoxMonData(boxMon, MON_DATA_MARKINGS, NULL);
         return TRUE;
     }
-    mon->species = 0;
+    mon->species = SPECIES_NONE;
     mon->personality = 0;
     mon->isEgg = 0;
     mon->form = 0;
-    mon->heldItem = 0;
+    mon->heldItem = ITEM_NONE;
     mon->unk_0E = 0;
     mon->isShiny = 0;
     mon->gender = 0;
@@ -372,7 +375,7 @@ BOOL PokewalkerApp_SelectMon_GetBoxMonIcon(PCStorage *storage, u32 box, u32 slot
         mon->personality = 0;
         mon->isEgg = GetBoxMonData(boxMon, MON_DATA_IS_EGG, NULL);
         mon->form = GetBoxMonData(boxMon, MON_DATA_FORM, NULL);
-        mon->heldItem = 0;
+        mon->heldItem = ITEM_NONE;
         mon->unk_0E = 0;
         mon->isShiny = 0;
         mon->gender = 0;
@@ -380,11 +383,11 @@ BOOL PokewalkerApp_SelectMon_GetBoxMonIcon(PCStorage *storage, u32 box, u32 slot
         mon->markings = 0;
         return TRUE;
     }
-    mon->species = 0;
+    mon->species = SPECIES_NONE;
     mon->personality = 0;
     mon->isEgg = 0;
     mon->form = 0;
-    mon->heldItem = 0;
+    mon->heldItem = ITEM_NONE;
     mon->unk_0E = 0;
     mon->isShiny = 0;
     mon->gender = 0;
@@ -568,24 +571,24 @@ int PokewalkerApp_StrollReport_Update(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_StrollReport_Exit(PokewalkerApp *app) {
-    FillBgTilemapRect(app->bgConfig, 1, 0, 0, 0, 32, 24, 16);
-    FillBgTilemapRect(app->bgConfig, 2, 0, 0, 0, 32, 24, 16);
-    BgCommitTilemapBufferToVram(app->bgConfig, 1);
-    BgCommitTilemapBufferToVram(app->bgConfig, 2);
+    FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
+    FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
+    BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_1);
+    BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_2);
     PokewalkerApp_RemoveWindowBank(app, 6);
     PokewalkerApp_AddWindowBank(app, 1);
     return 1;
 }
 
 int PokewalkerApp_StrollReport_Start(PokewalkerApp *app) {
-    FillBgTilemapRect(app->bgConfig, 1, 0, 0, 0, 32, 24, 16);
+    FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
     if (app->linkAction == 2) {
         return STROLL_REPORT_GIFTS_FADE_OUT;
     }
     if (app->linkAction == 3) {
         return STROLL_REPORT_RECORDS_FADE_OUT;
     }
-    PokewalkerApp_LoadTilemap(app, 2, 15);
+    PokewalkerApp_LoadTilemap(app, GF_BG_LYR_MAIN_2, 15);
     PokewalkerApp_PrintStringDefaultColor(app, 1, app->strollResultsText, 0);
     return STROLL_REPORT_SHOW_RESULTS;
 }
@@ -740,12 +743,12 @@ int PokewalkerApp_StrollReport_ShowCaughtMons(PokewalkerApp *app) {
 
     PokewalkerApp_RemoveWindowBank(app, 4);
     PokewalkerApp_AddWindowBank(app, 5);
-    FillBgTilemapRect(app->bgConfig, 1, 0, 0, 0, 32, 24, 16);
+    FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
     if (!PokewalkerApp_CountReceivedMons(&app->irStatus, &app->irBlocks)) {
         PokewalkerApp_HideSprite(app, 9);
         return STROLL_REPORT_SHOW_ITEMS;
     }
-    PokewalkerApp_LoadTilemap(app, 2, 15);
+    PokewalkerApp_LoadTilemap(app, GF_BG_LYR_MAIN_2, 15);
     PokewalkerApp_PrintStringDefaultColor(app, 1, app->yourPokemonText, 0);
     PokewalkerApp_PrintStringDefaultColor(app, 1, app->yourPokemonText, 0);
     for (i = 0; i < 4; i++) {
@@ -850,8 +853,8 @@ int PokewalkerApp_StrollReport_ShowItems(PokewalkerApp *app) {
     if (!PokewalkerApp_CountReceivedItems(app)) {
         return STROLL_REPORT_END;
     }
-    FillBgTilemapRect(app->bgConfig, 1, 0, 0, 0, 32, 24, 16);
-    PokewalkerApp_LoadTilemap(app, 2, 15);
+    FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
+    PokewalkerApp_LoadTilemap(app, GF_BG_LYR_MAIN_2, 15);
     PokewalkerApp_PrintStringDefaultColor(app, 1, app->itemsObtainedText, 0);
     MI_CpuClearFast(items, sizeof(items));
     for (i = 0; i < 3; i++) {
@@ -925,8 +928,8 @@ int PokewalkerApp_StrollReport_ShowGifts(PokewalkerApp *app) {
     u32 currentSteps;
     u32 startSteps;
 
-    FillBgTilemapRect(app->bgConfig, 1, 0, 0, 0, 32, 24, 16);
-    PokewalkerApp_LoadTilemap(app, 2, 15);
+    FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
+    PokewalkerApp_LoadTilemap(app, GF_BG_LYR_MAIN_2, 15);
     PokewalkerApp_PrintStringDefaultColor(app, 1, app->giftsReceivedText, 0);
     BufferPokewalkerCourseName(app->msgFormat, 2, (u8)Pokewalker_GetCourse(app->pokewalker));
     currentSteps = app->peerIdentity.steps;
@@ -1009,8 +1012,8 @@ int PokewalkerApp_StrollReport_ShowRecords(PokewalkerApp *app) {
     u32 currentSteps;
     u32 startSteps;
 
-    FillBgTilemapRect(app->bgConfig, 1, 0, 0, 0, 32, 24, 16);
-    PokewalkerApp_LoadTilemap(app, 2, 15);
+    FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
+    PokewalkerApp_LoadTilemap(app, GF_BG_LYR_MAIN_2, 15);
     PokewalkerApp_PrintStringDefaultColor(app, 1, app->walkerRecordsText, 0);
     BufferPokewalkerCourseName(app->msgFormat, 2, (u8)Pokewalker_GetCourse(app->pokewalker));
     currentSteps = app->peerIdentity.steps;
@@ -1273,10 +1276,10 @@ void PokewalkerBoxDisplay_InitSprites(PokewalkerBoxDisplaySprites *sprites) {
     sprites->resObjs[0][GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromNarc(sprites->resMan[GF_GFX_RES_TYPE_ANIM], NARC_a_2_5_7, 5, TRUE, 1, GF_GFX_RES_TYPE_ANIM, sprites->heapId);
     SpriteTransfer_CreateCharTransferTask_AllocAtEnd(sprites->resObjs[0][GF_GFX_RES_TYPE_CHAR]);
     SpriteTransfer_CreateExtPlttTransferTask(sprites->resObjs[0][GF_GFX_RES_TYPE_PLTT]);
-    sprites->resObjs[1][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromNarc(sprites->resMan[GF_GFX_RES_TYPE_CHAR], NARC_application_choose_starter_choose_starter_sub_res, 9, FALSE, 2, NNS_G2D_VRAM_TYPE_2DSUB, sprites->heapId);
-    sprites->resObjs[1][GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(sprites->resMan[GF_GFX_RES_TYPE_PLTT], NARC_application_choose_starter_choose_starter_sub_res, 6, FALSE, 2, NNS_G2D_VRAM_TYPE_2DSUB, 4, sprites->heapId);
-    sprites->resObjs[1][GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromNarc(sprites->resMan[GF_GFX_RES_TYPE_CELL], NARC_application_choose_starter_choose_starter_sub_res, 10, FALSE, 2, GF_GFX_RES_TYPE_CELL, sprites->heapId);
-    sprites->resObjs[1][GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromNarc(sprites->resMan[GF_GFX_RES_TYPE_ANIM], NARC_application_choose_starter_choose_starter_sub_res, 10, FALSE, 2, GF_GFX_RES_TYPE_ANIM, sprites->heapId);
+    sprites->resObjs[1][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromNarc(sprites->resMan[GF_GFX_RES_TYPE_CHAR], NARC_application_choose_starter_choose_starter_sub_res, NARC_choose_starter_sub_res_choose_starter_sub_res_00000009_NCGR, FALSE, 2, NNS_G2D_VRAM_TYPE_2DSUB, sprites->heapId);
+    sprites->resObjs[1][GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(sprites->resMan[GF_GFX_RES_TYPE_PLTT], NARC_application_choose_starter_choose_starter_sub_res, NARC_choose_starter_sub_res_choose_starter_sub_res_00000006_NCLR, FALSE, 2, NNS_G2D_VRAM_TYPE_2DSUB, 4, sprites->heapId);
+    sprites->resObjs[1][GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromNarc(sprites->resMan[GF_GFX_RES_TYPE_CELL], NARC_application_choose_starter_choose_starter_sub_res, NARC_choose_starter_sub_res_choose_starter_sub_res_00000010_NCER, FALSE, 2, GF_GFX_RES_TYPE_CELL, sprites->heapId);
+    sprites->resObjs[1][GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromNarc(sprites->resMan[GF_GFX_RES_TYPE_ANIM], NARC_application_choose_starter_choose_starter_sub_res, NARC_choose_starter_sub_res_choose_starter_sub_res_00000010_NCER, FALSE, 2, GF_GFX_RES_TYPE_ANIM, sprites->heapId);
     SpriteTransfer_CreateCharTransferTask_AllocAtEnd(sprites->resObjs[1][GF_GFX_RES_TYPE_CHAR]);
     SpriteTransfer_CreateExtPlttTransferTask(sprites->resObjs[1][GF_GFX_RES_TYPE_PLTT]);
 }

@@ -388,9 +388,9 @@ s32 WobbuffetPopBalloon_CalcMeshAreaPercent(WobbuffetPopBalloon *balloon) {
 }
 
 void WobbuffetPop_LoadHandleSpriteResources(WobbuffetPop *game) {
-    NARC *narc = NARC_New((NarcId)0xc9, (enum HeapID)0x75);
+    NARC *narc = NARC_New(NARC_a_1_9_9, HEAP_ID_117);
 
-    SpriteSystem_LoadPaletteBufferFromOpenNarc(game->paletteData, (PaletteBufferId)2, game->spriteSystem, game->spriteManager, narc, 0x3a, FALSE, 1, 1, 0x2715);
+    SpriteSystem_LoadPaletteBufferFromOpenNarc(game->paletteData, PLTTBUF_MAIN_OBJ, game->spriteSystem, game->spriteManager, narc, 0x3a, FALSE, 1, 1, 0x2715);
     SpriteSystem_LoadCharResObjFromOpenNarc(game->spriteSystem, game->spriteManager, narc, 0x37, FALSE, 1, 0x2713);
     SpriteSystem_LoadCellResObjFromOpenNarc(game->spriteSystem, game->spriteManager, narc, 0x39, FALSE, 0x2713);
     SpriteSystem_LoadAnimResObjFromOpenNarc(game->spriteSystem, game->spriteManager, narc, 0x38, FALSE, 0x2713);

@@ -3,6 +3,7 @@
 #include "constants/sndseq.h"
 
 #include "application/vs_recorder/vs_recorder_screens.h"
+#include "msgdata/msg/msg_0013.h"
 
 #include "bg_window.h"
 #include "font.h"
@@ -109,7 +110,7 @@ BOOL VsRecorder_VideoSearchDownloadVideo(VsRecorderWork *work) {
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 0xC, (u8)search->fade, (u16)work->blendColor);
         break;
     case 2:
-        VsRecorder_ShowTopMessage(work, 0x75);
+        VsRecorder_ShowTopMessage(work, msg_0013_00117);
         VsRecorder_PlaceOrbitCursor(work, work->orbitCursors[0], 128, 96);
         OrbitCursor_SetVisible(work->orbitCursors[0], TRUE);
         OrbitCursor_SetRadius(work->orbitCursors[0], 24, 24);
@@ -349,7 +350,7 @@ BOOL VsRecorder_NumberSearchShowPad(VsRecorderWork *work) {
     case 2:
         VsRecorder_StepFade(&search->fade, 0);
         if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 0)) {
-            VsRecorder_ShowNotice(work, 0x70);
+            VsRecorder_ShowNotice(work, msg_0013_00112);
             work->step++;
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 0xC, (u8)search->fade, (u16)work->blendColor);
@@ -438,7 +439,7 @@ BOOL VsRecorder_NumberSearchDownloadVideo(VsRecorderWork *work) {
 
     switch (work->step) {
     case 0:
-        VsRecorder_ShowNotice(work, 0x75);
+        VsRecorder_ShowNotice(work, msg_0013_00117);
         VsRecorder_PlaceOrbitCursor(work, work->orbitCursors[1], 128, 96);
         OrbitCursor_SetVisible(work->orbitCursors[1], TRUE);
         OrbitCursor_SetRadius(work->orbitCursors[1], 24, 24);
@@ -687,10 +688,10 @@ void VsRecorder_SetSearchSlotButtonName(VsRecorderTextSprite *button, VsRecorder
     MsgData *msgData = work->msgData;
 
     if (work->videoOwners[slot] == NULL) {
-        text = NewString_ReadMsgData(msgData, 8);
+        text = NewString_ReadMsgData(msgData, msg_0013_00008);
     } else {
         MessageFormat *msgFormat = VsRecorder_NewMessageFormat(HEAP_ID_109);
-        String *template = NewString_ReadMsgData(work->msgData, 7);
+        String *template = NewString_ReadMsgData(work->msgData, msg_0013_00007);
         String *name = FrontierCard_NewNameString((const u16 *)work->videoOwners[slot], HEAP_ID_109);
 
         VsRecorder_SanitizeName(work, name);
@@ -877,7 +878,7 @@ BOOL VsRecorder_NumberSearchShowSlots(VsRecorderWork *work) {
             PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 0xC, (u8)search->fade, (u16)work->blendColor);
             break;
         case 2:
-            VsRecorder_ShowTopMessage(work, 0x115);
+            VsRecorder_ShowTopMessage(work, msg_0013_00277);
             work->step++;
             break;
         case 3:
@@ -1093,7 +1094,7 @@ BOOL VsRecorder_SendVideoUpload(VsRecorderWork *work) {
 
     switch (work->step) {
     case 0:
-        VsRecorder_ShowTopMessage(work, 0x77);
+        VsRecorder_ShowTopMessage(work, msg_0013_00119);
         PlaySE(SEQ_SE_PL_BREC80);
         work->step++;
         break;
@@ -1122,7 +1123,7 @@ BOOL VsRecorder_SendVideoUpload(VsRecorderWork *work) {
             OrbitCursor_SetRadius(work->orbitCursors[0], 0, 0);
             work->step = 0xFF;
         } else {
-            VsRecorder_ShowTopMessage(work, 0x77);
+            VsRecorder_ShowTopMessage(work, msg_0013_00119);
             VsRecorder_PrintVideoNumber(search, work);
             StopSE(SEQ_SE_PL_BREC80, 0);
             PlaySE(SEQ_SE_PL_BREC12);
@@ -1215,7 +1216,7 @@ void VsRecorder_CreateSearchOverwriteWindows(VsRecorderWork *work) {
     InitWindow(window);
     AddWindowParameterized(work->bgConfig, window, GF_BG_LYR_SUB_2, 4, 6, 10, 2, 14, 1);
     FillWindowPixelBuffer(window, 0);
-    str = NewString_ReadMsgData(work->msgData, 130);
+    str = NewString_ReadMsgData(work->msgData, msg_0013_00130);
     AddTextPrinterParameterizedWithColor(window, 0, str, VsRecorder_GetCenteredTextX(window, str), 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 13, 0), NULL);
     String_Delete(str);
     ScheduleWindowCopyToVram(window);
@@ -1223,7 +1224,7 @@ void VsRecorder_CreateSearchOverwriteWindows(VsRecorderWork *work) {
     InitWindow(window);
     AddWindowParameterized(work->bgConfig, window, GF_BG_LYR_SUB_2, 18, 6, 10, 2, 14, 21);
     FillWindowPixelBuffer(window, 0);
-    str = NewString_ReadMsgData(work->msgData, 131);
+    str = NewString_ReadMsgData(work->msgData, msg_0013_00131);
     AddTextPrinterParameterizedWithColor(window, 0, str, VsRecorder_GetCenteredTextX(window, str), 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 13, 0), NULL);
     String_Delete(str);
     ScheduleWindowCopyToVram(window);
@@ -1336,7 +1337,7 @@ void VsRecorder_OnSearchConditionTouch(u32 index, u32 event, void *arg) {
         VsRecorder_OnTouchConfirm(work);
         if (country == 0) {
             PlaySE(SEQ_SE_PL_BREC58);
-            VsRecorder_SetMessageText(work, 0x80);
+            VsRecorder_SetMessageText(work, msg_0013_00128);
         } else {
             if (search->country == 0xFF) {
                 search->country = FrontierCard_GetCountry(work->videoOwners[0]);
@@ -1358,7 +1359,7 @@ void VsRecorder_OnSearchConditionTouch(u32 index, u32 event, void *arg) {
         VsRecorder_OnTouchConfirm(work);
         if (VsRecorder_HasSearchConditions(work) == FALSE) {
             PlaySE(SEQ_SE_PL_BREC58);
-            VsRecorder_SetMessageText(work, 0x74);
+            VsRecorder_SetMessageText(work, msg_0013_00116);
         } else {
             VsRecorder_SetSubState(work, SEARCH_REQUEST);
         }

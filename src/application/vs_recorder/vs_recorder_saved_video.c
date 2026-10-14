@@ -3,6 +3,7 @@
 #include "global.h"
 
 #include "application/vs_recorder/vs_recorder_internal.h"
+#include "msgdata/msg/msg_0013.h"
 
 #include "bg_window.h"
 #include "font.h"
@@ -260,7 +261,7 @@ void VsRecorder_ShowYesNoWindows(VsRecorderWork *work) {
     InitWindow(window);
     AddWindowParameterized(work->bgConfig, window, GF_BG_LYR_SUB_2, 4, 6, 10, 2, 0xE, 1);
     FillWindowPixelBuffer(window, 0);
-    str = NewString_ReadMsgData(work->msgData, 0x82); // YES
+    str = NewString_ReadMsgData(work->msgData, msg_0013_00130); // YES
     AddTextPrinterParameterizedWithColor(window, 0, str, VsRecorder_GetCenteredTextX(window, str), 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 13, 0), NULL);
     String_Delete(str);
     ScheduleWindowCopyToVram(window);
@@ -268,7 +269,7 @@ void VsRecorder_ShowYesNoWindows(VsRecorderWork *work) {
     InitWindow(window);
     AddWindowParameterized(work->bgConfig, window, GF_BG_LYR_SUB_2, 18, 6, 10, 2, 0xE, 21);
     FillWindowPixelBuffer(window, 0);
-    str = NewString_ReadMsgData(work->msgData, 0x83); // NO
+    str = NewString_ReadMsgData(work->msgData, msg_0013_00131); // NO
     AddTextPrinterParameterizedWithColor(window, 0, str, VsRecorder_GetCenteredTextX(window, str), 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 13, 0), NULL);
     String_Delete(str);
     ScheduleWindowCopyToVram(window);
@@ -315,7 +316,7 @@ BOOL VsRecorder_SavedVideoSavePrompt(VsRecorderWork *work) {
         break;
     case 2:
         VsRecorder_ShowYesNoWindows(work);
-        VsRecorder_ShowTopMessage(work, 0x128);
+        VsRecorder_ShowTopMessage(work, msg_0013_00296);
         GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, 84, work->bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, HEAP_ID_109);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
@@ -335,9 +336,9 @@ BOOL VsRecorder_SavedVideoSavePrompt(VsRecorderWork *work) {
             savedVideo->exitMode = 1;
             VsRecorder_OnTouchConfirm(work);
             if (Save_NumModifiedPCBoxesIsMany(work->saveData)) {
-                VsRecorder_SetMessageText(work, 0x12A);
+                VsRecorder_SetMessageText(work, msg_0013_00298);
             } else {
-                VsRecorder_SetMessageText(work, 0x12B);
+                VsRecorder_SetMessageText(work, msg_0013_00299);
             }
             work->step++;
         } else if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderSaveNoHitbox) != FALSE) {
@@ -381,7 +382,7 @@ BOOL VsRecorder_SavedVideoSavePrompt(VsRecorderWork *work) {
 BOOL VsRecorder_SavedVideoSave(VsRecorderWork *work) {
     switch (work->step) {
     case 0:
-        VsRecorder_ShowTopMessage(work, 0x12B);
+        VsRecorder_ShowTopMessage(work, msg_0013_00299);
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, 0, 6, 1, HEAP_ID_109);
         work->step++;
         break;
@@ -607,7 +608,7 @@ void VsRecorder_ShowProfileButton(VsRecorderWork *work) {
     Window *window = &savedVideo->windows[0];
     InitWindow(window);
     AddWindowParameterized(work->bgConfig, window, GF_BG_LYR_SUB_2, 8, 3, 16, 2, 0xE, 1);
-    VsRecorder_PrintProfileButton(work, 0x79); // VIEW PROFILE
+    VsRecorder_PrintProfileButton(work, msg_0013_00121); // VIEW PROFILE
 }
 
 void VsRecorder_RemoveProfileButton(VsRecorderWork *work) {

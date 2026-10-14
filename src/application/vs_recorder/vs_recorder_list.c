@@ -1,6 +1,7 @@
 #include "global.h"
 
 #include "application/vs_recorder/vs_recorder_internal.h"
+#include "msgdata/msg/msg_0013.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -35,17 +36,17 @@ void VsRecorder_PrintListLocation(VsRecorderListWindow *list, VsRecorderWork *wo
     Window *window = &list->window;
 
     if (country == 0 && city == 0) {
-        str = NewString_ReadMsgData(work->msgData, 0x7D);
+        str = NewString_ReadMsgData(work->msgData, msg_0013_00125);
     } else {
         fmt = VsRecorder_NewMessageFormat(HEAP_ID_109);
         if (city != 0) {
             str = String_New(0xFF, HEAP_ID_109);
-            template = NewString_ReadMsgData(work->msgData, 0x17);
+            template = NewString_ReadMsgData(work->msgData, msg_0013_00023);
             BufferCityName(fmt, 0, country, city);
             StringExpandPlaceholders(fmt, str, template);
         } else {
             str = String_New(0xFF, HEAP_ID_109);
-            template = NewString_ReadMsgData(work->msgData, 0x16);
+            template = NewString_ReadMsgData(work->msgData, msg_0013_00022);
             BufferCountryName(fmt, 0, country);
             StringExpandPlaceholders(fmt, str, template);
         }
@@ -134,7 +135,7 @@ void VsRecorder_InitList(VsRecorderListWindow *list, VsRecorderWork *work, MsgDa
             do {
                 String *name = String_New(0xFF, HEAP_ID_109);
                 String *number = String_New(0xFF, HEAP_ID_109);
-                String *template = NewString_ReadMsgData(work->msgData, 0x63);
+                String *template = NewString_ReadMsgData(work->msgData, msg_0013_00099);
                 u32 width;
 
                 String16_FormatInteger(number, i + 1, 2, PRINTING_MODE_RIGHT_ALIGN, TRUE);
@@ -528,7 +529,7 @@ int VsRecorder_RedrawNameList(VsRecorderListWindow *list, VsRecorderWork *work) 
         do {
             String *nameStr = String_New(0xFF, HEAP_ID_109);
             String *number = String_New(0xFF, HEAP_ID_109);
-            String *message = NewString_ReadMsgData(work->msgData, 0x63);
+            String *message = NewString_ReadMsgData(work->msgData, msg_0013_00099);
             int width;
             String16_FormatInteger(number, start + i + 1, 2, PRINTING_MODE_RIGHT_ALIGN, TRUE);
             CopyU16ArrayToString(nameStr, (const u16 *)item->net.videoList.headers[0]);

@@ -5,9 +5,9 @@
 #include "application/pokewalker/pokewalker_ir.h"
 #include "application/pokewalker/pokewalker_ir_internal.h"
 
-void PokewalkerIr_RequestReceiveGifts(void *a, void *b) {
-    ov112_021FFAA4.status = a;
-    ov112_021FFAA4.records = b;
+void PokewalkerIr_RequestReceiveGifts(PokewalkerIrStatus *status, void *records) {
+    ov112_021FFAA4.status = status;
+    ov112_021FFAA4.records = records;
     ov112_021FFB24.command = 0x60;
     ov112_021FFB24.step = 0x20;
     PokewalkerIr_BeginTransfer(NULL, 0, 0xD4C);

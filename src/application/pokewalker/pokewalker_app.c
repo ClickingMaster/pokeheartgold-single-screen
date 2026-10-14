@@ -5,6 +5,8 @@
 
 #include "global.h"
 
+#include "msgdata/msg.naix"
+
 #include "font.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
@@ -77,7 +79,7 @@ void PokewalkerApp_Setup(PokewalkerApp *app) {
     PokewalkerApp_LoadStrings(app);
     Main_SetVBlankIntrCB(PokewalkerApp_VBlankCB, app);
     *(volatile u16 *)0x04000304 &= 0xFFFF7FFF;
-    ToggleBgLayer(4, 1);
+    ToggleBgLayer(GF_BG_LYR_SUB_0, 1);
 }
 
 void PokewalkerApp_Teardown(PokewalkerApp *app) {
@@ -109,7 +111,7 @@ BOOL PokewalkerApp_Main(OverlayManager *manager, int *state) {
         break;
     case 2:
         *state = sPokewalkerAppModeUpdate[app->mode].func(app);
-        BgSetPosTextAndCommit(app->bgConfig, 5, BG_POS_OP_SET_X, app->subBgScrollX);
+        BgSetPosTextAndCommit(app->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_X, app->subBgScrollX);
         break;
     case 3:
         *state = sPokewalkerAppModeExit[app->mode].func(app);
@@ -181,32 +183,32 @@ void PokewalkerApp_SetGxBanks(void) {
 void PokewalkerApp_InitBgs(BgConfig *bgConfig) {
     GraphicsModes modes = sPokewalkerAppGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    InitBgFromTemplate(bgConfig, 1, &sPokewalkerAppBgTemplate_Main1, 0);
-    InitBgFromTemplate(bgConfig, 2, &sPokewalkerAppBgTemplate_Main2, 0);
-    InitBgFromTemplate(bgConfig, 3, &sPokewalkerAppBgTemplate_Main3, 0);
-    BgClearTilemapBufferAndCommit(bgConfig, 1);
-    BgClearTilemapBufferAndCommit(bgConfig, 2);
-    BgClearTilemapBufferAndCommit(bgConfig, 3);
-    InitBgFromTemplate(bgConfig, 4, &sPokewalkerAppBgTemplate_Sub0, 0);
-    InitBgFromTemplate(bgConfig, 5, &sPokewalkerAppBgTemplate_Sub1, 0);
-    InitBgFromTemplate(bgConfig, 6, &sPokewalkerAppBgTemplate_Sub2, 0);
-    BgClearTilemapBufferAndCommit(bgConfig, 4);
-    BgClearTilemapBufferAndCommit(bgConfig, 5);
-    BgClearTilemapBufferAndCommit(bgConfig, 6);
-    BG_ClearCharDataRange(4, 0x20, 0, HEAP_ID_154);
-    BG_ClearCharDataRange(5, 0x20, 0, HEAP_ID_154);
-    BG_ClearCharDataRange(6, 0x20, 0, HEAP_ID_154);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &sPokewalkerAppBgTemplate_Main1, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &sPokewalkerAppBgTemplate_Main2, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &sPokewalkerAppBgTemplate_Main3, GF_BG_TYPE_TEXT);
+    BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
+    BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
+    BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &sPokewalkerAppBgTemplate_Sub0, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &sPokewalkerAppBgTemplate_Sub1, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &sPokewalkerAppBgTemplate_Sub2, GF_BG_TYPE_TEXT);
+    BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
+    BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
+    BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_2);
+    BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 0x20, 0, HEAP_ID_154);
+    BG_ClearCharDataRange(GF_BG_LYR_SUB_1, 0x20, 0, HEAP_ID_154);
+    BG_ClearCharDataRange(GF_BG_LYR_SUB_2, 0x20, 0, HEAP_ID_154);
 }
 
 void PokewalkerApp_FreeBgs(BgConfig *bgConfig) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0 | GX_PLANEMASK_BG1 | GX_PLANEMASK_BG2 | GX_PLANEMASK_BG3 | GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0 | GX_PLANEMASK_BG1 | GX_PLANEMASK_BG3 | GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
-    FreeBgTilemapBuffer(bgConfig, 6);
-    FreeBgTilemapBuffer(bgConfig, 5);
-    FreeBgTilemapBuffer(bgConfig, 4);
-    FreeBgTilemapBuffer(bgConfig, 3);
-    FreeBgTilemapBuffer(bgConfig, 2);
-    FreeBgTilemapBuffer(bgConfig, 1);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_2);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_1);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_0);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_3);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_2);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_1);
     Heap_FreeExplicit(HEAP_ID_154, bgConfig);
 }
 
@@ -230,8 +232,8 @@ void PokewalkerApp_LoadBgGraphics(PokewalkerApp *app) {
 #pragma force_active reset
 
 void PokewalkerApp_InitMessages(PokewalkerApp *app) {
-    app->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 0x112, HEAP_ID_154);
-    app->msgDataItemNames = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 0xDE, HEAP_ID_154);
+    app->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0274_bin, HEAP_ID_154);
+    app->msgDataItemNames = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0222_bin, HEAP_ID_154);
     app->msgFormat = MessageFormat_New_Custom(16, 32, HEAP_ID_154);
     app->string = String_New(400, HEAP_ID_154);
 }

@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include "constants/species.h"
+
 #include "application/vs_recorder/vs_recorder_internal.h"
 
 #include "assert.h"
@@ -447,7 +449,7 @@ ManagedSprite *VsRecorder_NewMonIcon(VsRecorderWork *work, NARC *narc, int index
     ManagedSpriteTemplate template;
     ManagedSprite *sprite;
     spriteManager = work->spriteManager;
-    if (species == 0) {
+    if (species == SPECIES_NONE) {
         return NULL;
     }
     f = form;

@@ -414,7 +414,7 @@ int PokewalkerApp_Link_RetryInstructions(PokewalkerApp *app) {
 int PokewalkerApp_Link_RetryPointAtCardForStroll(PokewalkerApp *app) {
     BgClearTilemapBufferAndCommit(app->bgConfig, GF_BG_LYR_MAIN_1);
     app->textPrinterId = PokewalkerApp_StartMessageBox(app, 0, msg_0274_00005);
-    PokewalkerApp_LoadTilemap(app, 2, 14);
+    PokewalkerApp_LoadTilemap(app, GF_BG_LYR_MAIN_2, 14);
     PokewalkerApp_PrintExit(app, 1);
     return 21;
 }
@@ -422,7 +422,7 @@ int PokewalkerApp_Link_RetryPointAtCardForStroll(PokewalkerApp *app) {
 int PokewalkerApp_Link_RetryPointAtCard(PokewalkerApp *app) {
     BgClearTilemapBufferAndCommit(app->bgConfig, GF_BG_LYR_MAIN_1);
     app->textPrinterId = PokewalkerApp_StartMessageBox(app, 0, msg_0274_00005);
-    PokewalkerApp_LoadTilemap(app, 2, 14);
+    PokewalkerApp_LoadTilemap(app, GF_BG_LYR_MAIN_2, 14);
     PokewalkerApp_PrintExit(app, 1);
     return 2;
 }
@@ -430,7 +430,7 @@ int PokewalkerApp_Link_RetryPointAtCard(PokewalkerApp *app) {
 int PokewalkerApp_Link_RetryPointAtCardForGifts(PokewalkerApp *app) {
     BgClearTilemapBufferAndCommit(app->bgConfig, GF_BG_LYR_MAIN_1);
     app->textPrinterId = PokewalkerApp_StartMessageBox(app, 0, msg_0274_00005);
-    PokewalkerApp_LoadTilemap(app, 2, 14);
+    PokewalkerApp_LoadTilemap(app, GF_BG_LYR_MAIN_2, 14);
     PokewalkerApp_PrintExit(app, 1);
     return 23;
 }
@@ -610,7 +610,7 @@ int PokewalkerApp_Link_WaitWillSendBack(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_Link_ShowSendBackMenu(PokewalkerApp *app) {
-    PokewalkerApp_LoadTilemap(app, 2, 10);
+    PokewalkerApp_LoadTilemap(app, GF_BG_LYR_MAIN_2, 10);
     PokewalkerApp_PrintString(app, 5, app->sendHomeText, 4, MAKE_TEXT_COLOR(15, 1, 0));
     PokewalkerApp_PrintExit(app, 1);
     app->menuSelection = 0;

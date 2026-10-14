@@ -5,6 +5,7 @@
 #include "constants/sndseq.h"
 
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0429.h"
 
 #include "bg_window.h"
 #include "filesystem.h"
@@ -531,16 +532,16 @@ int SafariAreaCustomizer_HandleSlotMenu(SafariAreaCustomizer *s) {
         s->cursorPos = 0;
         return 2;
     case 1:
-        SafariAreaCustomizer_DrawSelectFrame(s, 1, 0, FALSE);
-        SafariAreaCustomizer_DrawSelectFrame(s, 4, 0, FALSE);
+        SafariAreaCustomizer_DrawSelectFrame(s, GF_BG_LYR_MAIN_1, 0, FALSE);
+        SafariAreaCustomizer_DrawSelectFrame(s, GF_BG_LYR_SUB_0, 0, FALSE);
         s->cursorPos = s->selectedSlot;
         SafariAreaCustomizer_StartMove(s);
         s->nextState = 4;
         return 4;
     case 2:
     default:
-        SafariAreaCustomizer_DrawSelectFrame(s, 1, 0, FALSE);
-        SafariAreaCustomizer_DrawSelectFrame(s, 4, 0, FALSE);
+        SafariAreaCustomizer_DrawSelectFrame(s, GF_BG_LYR_MAIN_1, 0, FALSE);
+        SafariAreaCustomizer_DrawSelectFrame(s, GF_BG_LYR_SUB_0, 0, FALSE);
         return 0;
     }
 }
@@ -625,7 +626,7 @@ int SafariAreaCustomizer_HandleConfirmArea(SafariAreaCustomizer *s) {
     ClearWindowTilemapAndCopyToVram(&s->windows[1]);
     SafariAreaCustomizer_DrawPageScreenPart(s, 0);
     SafariAreaCustomizer_PrintWindowText(s, 0, 1, TRUE);
-    SafariAreaCustomizer_DrawSelectFrame(s, 1, 0, FALSE);
+    SafariAreaCustomizer_DrawSelectFrame(s, GF_BG_LYR_MAIN_1, 0, FALSE);
     if (yes) {
         return 2;
     }
@@ -833,7 +834,7 @@ int SafariAreaCustomizer_ChooseArea(SafariAreaCustomizer *s) {
     s->modified = TRUE;
     SafariZone_InitAreaInSet(&s->areaSet, s->selectedSlot, area);
     SafariAreaCustomizer_LoadAreaPicture(s, s->selectedSlot, s->areaSet.areas[s->selectedSlot].area_no);
-    SafariAreaCustomizer_DrawSelectFrame(s, 1, 0, FALSE);
+    SafariAreaCustomizer_DrawSelectFrame(s, GF_BG_LYR_MAIN_1, 0, FALSE);
     return 2;
 }
 
@@ -1065,8 +1066,8 @@ void SafariAreaCustomizer_OpenSlotMenu(SafariAreaCustomizer *s) {
     y = ov108_021EA74A[s->selectedSlot * 2];
     x = sSafariAreaCustomizerSlotMenuPositions[s->selectedSlot * 2];
     s->listMenu = TouchscreenListMenu_Create(s->listMenuSpawner, &header, s->touchMode, x, y, 0, 0);
-    SafariAreaCustomizer_DrawSelectFrame(s, 1, s->selectedSlot, TRUE);
-    SafariAreaCustomizer_DrawSelectFrame(s, 4, s->selectedSlot, TRUE);
+    SafariAreaCustomizer_DrawSelectFrame(s, GF_BG_LYR_MAIN_1, s->selectedSlot, TRUE);
+    SafariAreaCustomizer_DrawSelectFrame(s, GF_BG_LYR_SUB_0, s->selectedSlot, TRUE);
 }
 #pragma force_active reset
 
@@ -1083,7 +1084,7 @@ void SafariAreaCustomizer_AskConfirmArea(SafariAreaCustomizer *s) {
     template.ignoreTouchFlag = (u8)s->touchMode;
     template.initialCursorPos = 0;
     YesNoPrompt_InitFromTemplate(s->yesNoPrompt, &template);
-    SafariAreaCustomizer_DrawSelectFrame(s, 1, s->cursorPos, TRUE);
+    SafariAreaCustomizer_DrawSelectFrame(s, GF_BG_LYR_MAIN_1, s->cursorPos, TRUE);
     SafariAreaCustomizer_LoadAreaPicture(s, s->selectedSlot, (u8)(s->cursorPos + NUM_AREA_SLOTS * s->page));
     SafariAreaCustomizer_DrawPageScreenPart(s, 1);
     SafariAreaCustomizer_PrintWindowText(s, 1, 3, TRUE);
@@ -1189,8 +1190,8 @@ void SafariAreaCustomizer_CreateStrings(SafariAreaCustomizer *s) {
     s->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0429_bin, s->heapId);
     s->msgFormat = MessageFormat_New_Custom(1, 17, s->heapId);
     s->string = String_New(81, s->heapId);
-    s->pageTemplate = NewString_ReadMsgData(s->msgData, 9);
-    s->countTemplate = NewString_ReadMsgData(s->msgData, 15);
+    s->pageTemplate = NewString_ReadMsgData(s->msgData, msg_0429_00009);
+    s->countTemplate = NewString_ReadMsgData(s->msgData, msg_0429_00015);
     for (i = 0; i < 5; i++) {
         s->labelStrings[i] = NewString_ReadMsgData(s->msgData, i + 4);
     }
@@ -1262,11 +1263,11 @@ void SafariAreaCustomizer_RemoveWindows(SafariAreaCustomizer *s) {
 void SafariAreaCustomizer_CreateMenuItems(SafariAreaCustomizer *s) {
     s->areaMenuItems = ListMenuItems_New(3, s->heapId);
     s->confirmMenuItems = ListMenuItems_New(2, s->heapId);
-    ListMenuItems_AppendFromMsgData(s->areaMenuItems, s->msgData, 7, 0);
-    ListMenuItems_AppendFromMsgData(s->areaMenuItems, s->msgData, 8, 1);
-    ListMenuItems_AppendFromMsgData(s->areaMenuItems, s->msgData, 6, 2);
-    ListMenuItems_AppendFromMsgData(s->confirmMenuItems, s->msgData, 5, 0);
-    ListMenuItems_AppendFromMsgData(s->confirmMenuItems, s->msgData, 6, 1);
+    ListMenuItems_AppendFromMsgData(s->areaMenuItems, s->msgData, msg_0429_00007, 0);
+    ListMenuItems_AppendFromMsgData(s->areaMenuItems, s->msgData, msg_0429_00008, 1);
+    ListMenuItems_AppendFromMsgData(s->areaMenuItems, s->msgData, msg_0429_00006, 2);
+    ListMenuItems_AppendFromMsgData(s->confirmMenuItems, s->msgData, msg_0429_00005, 0);
+    ListMenuItems_AppendFromMsgData(s->confirmMenuItems, s->msgData, msg_0429_00006, 1);
 }
 
 void SafariAreaCustomizer_DeleteMenuItems(SafariAreaCustomizer *s) {
@@ -1375,7 +1376,7 @@ void SafariAreaCustomizer_DeleteCancelTextObj(SafariAreaCustomizer *s) {
 void SafariAreaCustomizer_DrawPageScreenPart(SafariAreaCustomizer *s, int value) {
     NNSG2dScreenData *screen;
 
-    FillBgTilemapRect(s->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 19, 24, 5, 17);
+    FillBgTilemapRect(s->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 19, 24, 5, TILEMAP_FILL_OVWT_PAL);
     screen = s->pageScreen;
     CopyToBgTilemapRect(s->bgConfig, GF_BG_LYR_MAIN_0, 0, (u8)(21u - (u32)value * 2), 24, (u8)((u32)value * 2 + 3), screen->rawData, 0, (u8)((u32)value * 3), (u8)(screen->screenWidth >> 3), (u8)(screen->screenHeight >> 3));
     ScheduleBgTilemapBufferTransfer(s->bgConfig, GF_BG_LYR_MAIN_0);
@@ -1500,7 +1501,7 @@ void SafariAreaCustomizer_DrawSelectFrame(SafariAreaCustomizer *s, u8 layer, int
         frame.x = (u8)((u32)(pos % 3) * 10 + 2);
         frame.y = (u8)((u32)(pos / 3) * 9 + 27);
     }
-    FillBgTilemapRect(s->bgConfig, layer, 0, frame.x, frame.y, 8, 8, 17);
+    FillBgTilemapRect(s->bgConfig, layer, 0, frame.x, frame.y, 8, 8, TILEMAP_FILL_OVWT_PAL);
     ScheduleBgTilemapBufferTransfer(s->bgConfig, layer);
 }
 #pragma force_active reset
@@ -1522,7 +1523,7 @@ void SafariAreaCustomizer_InitSlotTilemaps(SafariAreaCustomizer *s) {
             u8 xPos = x;
             column = 0;
             while (column < 8) {
-                FillBgTilemapRect(s->bgConfig, GF_BG_LYR_SUB_1, tile++, (u8)(y + column), xPos, 1, 1, 17);
+                FillBgTilemapRect(s->bgConfig, GF_BG_LYR_SUB_1, tile++, (u8)(y + column), xPos, 1, 1, TILEMAP_FILL_OVWT_PAL);
                 column++;
             }
             x++;
@@ -1659,7 +1660,7 @@ void SafariAreaCustomizer_StartPageScroll(SafariAreaCustomizer *s) {
     u32 ctrl;
 
     if (s->mode == 0) {
-        FillBgTilemapRect(s->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 21, 32, 3, 17);
+        FillBgTilemapRect(s->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 21, 32, 3, TILEMAP_FILL_OVWT_PAL);
         ScheduleBgTilemapBufferTransfer(s->bgConfig, GF_BG_LYR_MAIN_1);
         s->subBgY = -192;
         s->scrollPending = TRUE;
@@ -1668,7 +1669,7 @@ void SafariAreaCustomizer_StartPageScroll(SafariAreaCustomizer *s) {
         SafariAreaCustomizer_MoveCursor(s, 2, s->selectedSlot);
         SafariAreaCustomizer_PrintPageNumber(s);
     } else {
-        SafariAreaCustomizer_DrawSelectFrame(s, 1, 0xFF, FALSE);
+        SafariAreaCustomizer_DrawSelectFrame(s, GF_BG_LYR_MAIN_1, 0xFF, FALSE);
         SafariAreaCustomizer_SetCursorAnim(s, 1, 0, FALSE);
         i = 0;
         bank = s->spriteBank * NUM_AREA_SLOTS;

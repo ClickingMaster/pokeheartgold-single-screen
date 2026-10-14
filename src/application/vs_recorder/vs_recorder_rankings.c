@@ -6,6 +6,7 @@
 #include "constants/species.h"
 
 #include "application/vs_recorder/vs_recorder_internal.h"
+#include "msgdata/msg/msg_0013.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -221,7 +222,7 @@ void VsRecorder_CreateRankingsWindows(VsRecorderWork *work) {
             baseTile += lastWeekRect->width * lastWeekRect->height;
         }
         FillWindowPixelBuffer(window, 0);
-        str = NewString_ReadMsgData(work->msgData, 67);
+        str = NewString_ReadMsgData(work->msgData, msg_0013_00067);
         AddTextPrinterParameterizedWithColor(window, 0, str, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 13, 0), NULL);
         ScheduleWindowCopyToVram(window);
         String_Delete(str);
@@ -283,7 +284,7 @@ void VsRecorder_PrintRankingsInfo(VsRecorderWork *work) {
     if (rankings->lastWeek == FALSE) {
         template = NewString_ReadMsgData(work->msgData, rankings->team + 82); // Team: Trainer type / Birth month / Favorite Pokemon
     } else {
-        template = NewString_ReadMsgData(work->msgData, 91); // LAST WEEK'S RESULTS!
+        template = NewString_ReadMsgData(work->msgData, msg_0013_00091); // LAST WEEK'S RESULTS!
     }
     AddTextPrinterParameterizedWithColor(&rankings->windows[1], 0, template, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 13, 0), NULL);
     ScheduleWindowCopyToVram(&rankings->windows[1]);
@@ -293,29 +294,29 @@ void VsRecorder_PrintRankingsInfo(VsRecorderWork *work) {
     switch (rankings->team) {
     case VS_RECORDER_RANKING_TEAM_TRAINER_TYPE:
         avatar = FrontierCard_GetAvatar(work->videoOwners[0]);
-        template = NewString_ReadMsgData(work->msgData, 85);
+        template = NewString_ReadMsgData(work->msgData, msg_0013_00085);
         team = NewString_ReadMsgData(rankings->msgData, VsRecorder_GetAvatarFileId(avatar, 4));
         BufferString(msgFormat, 0, team, 0, 1, 2);
         break;
     case VS_RECORDER_RANKING_TEAM_BIRTH_MONTH:
         month = FrontierCard_GetBirthdayMonth(work->videoOwners[0]);
-        template = NewString_ReadMsgData(work->msgData, 86);
+        template = NewString_ReadMsgData(work->msgData, msg_0013_00086);
         team = String_New(255, HEAP_ID_109);
         BufferMonthNameAbbr(msgFormat, 0, month);
         break;
     case VS_RECORDER_RANKING_TEAM_SPECIES:
         species = FrontierCard_GetSpecies(work->videoOwners[0]);
         isEgg = FrontierCard_IsEgg(work->videoOwners[0]);
-        template = NewString_ReadMsgData(work->msgData, 87);
+        template = NewString_ReadMsgData(work->msgData, msg_0013_00087);
         if (isEgg != 0) {
             species = SPECIES_EGG;
         }
-        if (species != 0) {
+        if (species != SPECIES_NONE) {
             team = String_New(255, HEAP_ID_109);
             GetSpeciesNameIntoArrayInt(species, HEAP_ID_109, speciesName);
             CopyU16ArrayToString(team, speciesName);
         } else {
-            team = NewString_ReadMsgData(work->msgData, 21); // Unregistered
+            team = NewString_ReadMsgData(work->msgData, msg_0013_00021); // Unregistered
         }
         BufferString(msgFormat, 0, team, 0, 1, 2);
         break;
@@ -488,7 +489,7 @@ BOOL VsRecorder_RankingsDownload(VsRecorderWork *work) {
         VsRecorder_PlaceOrbitCursor(work, work->orbitCursors[0], 128, 96);
         OrbitCursor_SetVisible(work->orbitCursors[0], TRUE);
         OrbitCursor_SetRadius(work->orbitCursors[0], 24, 24);
-        VsRecorder_ShowTopMessage(work, 279); // Receiving ranking data...
+        VsRecorder_ShowTopMessage(work, msg_0013_00279); // Receiving ranking data...
         PlaySE(SEQ_SE_PL_BREC80);
         work->step++;
         break;

@@ -2,6 +2,7 @@
 
 #include "global.h"
 
+#include "graphic/zukan_gra.naix"
 #include "msgdata/msg.naix"
 
 #include "dex_mon_measures.h"
@@ -108,9 +109,9 @@ void PokedexEntryPopup_InitBgs(PokedexEntryPopup *popup) {
         BgTemplate bg3 = sEntryPopupBg3Template;
         InitBgFromTemplate(popup->bgConfig, GF_BG_LYR_MAIN_3, &bg3, GF_BG_TYPE_TEXT);
     }
-    GfGfxLoader_LoadCharDataFromOpenNarc(popup->gfxNarc, 19, popup->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, TRUE, popup->heapId);
-    GfGfxLoader_LoadScrnDataFromOpenNarc(popup->gfxNarc, 20, popup->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, TRUE, popup->heapId);
-    PaletteData_LoadOpenNarc(popup->paletteData, popup->gfxNarc, 18, popup->heapId, PLTTBUF_MAIN_BG, 0, 0);
+    GfGfxLoader_LoadCharDataFromOpenNarc(popup->gfxNarc, NARC_zukan_gra_zukan_gra_00000019_NCGR_lz, popup->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, TRUE, popup->heapId);
+    GfGfxLoader_LoadScrnDataFromOpenNarc(popup->gfxNarc, NARC_zukan_gra_zukan_gra_00000020_NSCR_lz, popup->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, TRUE, popup->heapId);
+    PaletteData_LoadOpenNarc(popup->paletteData, popup->gfxNarc, NARC_zukan_gra_zukan_gra_00000018_NCLR, popup->heapId, PLTTBUF_MAIN_BG, 0, 0);
 }
 
 void PokedexEntryPopup_FreeBgs(PokedexEntryPopup *popup) {
@@ -204,7 +205,7 @@ void PokedexEntryPopup_RemoveWindows(PokedexEntryPopup *popup) {
 void PokedexEntryPopup_InitObjCharTransfer(PokedexEntryPopup *popup) {
     ObjCharTransferTemplate template = sEntryPopupObjCharTransferTemplate;
     template.heapID = popup->heapId;
-    ObjCharTransfer_InitEx(&template, GX_OBJVRAMMODE_CHAR_1D_64K, (GXOBJVRamModeChar)16);
+    ObjCharTransfer_InitEx(&template, GX_OBJVRAMMODE_CHAR_1D_64K, GX_OBJVRAMMODE_CHAR_1D_32K);
 }
 
 void PokedexEntryPopup_DestroyObjCharTransfer(void) {

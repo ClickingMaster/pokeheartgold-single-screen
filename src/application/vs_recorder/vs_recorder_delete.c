@@ -1,6 +1,7 @@
 #include "global.h"
 
 #include "application/vs_recorder/vs_recorder_screens.h"
+#include "msgdata/msg/msg_0013.h"
 
 #include "bg_window.h"
 #include "font.h"
@@ -72,7 +73,7 @@ void VsRecorder_ShowDeleteYesNo(VsRecorderWork *work) {
     InitWindow(window);
     AddWindowParameterized(work->bgConfig, window, GF_BG_LYR_SUB_2, 4, 6, 0xA, 2, 0xE, 1);
     FillWindowPixelBuffer(window, 0);
-    str = NewString_ReadMsgData(work->msgData, 0x82);
+    str = NewString_ReadMsgData(work->msgData, msg_0013_00130);
     AddTextPrinterParameterizedWithColor(window, 0, str, VsRecorder_GetCenteredTextX(window, str), 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 13, 0), NULL);
     String_Delete(str);
     ScheduleWindowCopyToVram(window);
@@ -80,7 +81,7 @@ void VsRecorder_ShowDeleteYesNo(VsRecorderWork *work) {
     InitWindow(window);
     AddWindowParameterized(work->bgConfig, window, GF_BG_LYR_SUB_2, 0x12, 6, 0xA, 2, 0xE, 0x15);
     FillWindowPixelBuffer(window, 0);
-    str = NewString_ReadMsgData(work->msgData, 0x83);
+    str = NewString_ReadMsgData(work->msgData, msg_0013_00131);
     AddTextPrinterParameterizedWithColor(window, 0, str, VsRecorder_GetCenteredTextX(window, str), 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 13, 0), NULL);
     String_Delete(str);
     ScheduleWindowCopyToVram(window);

@@ -5,6 +5,7 @@
 #include "constants/species.h"
 
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0001.h"
 
 #include "bg_window.h"
 #include "font.h"
@@ -558,13 +559,13 @@ void UnownReport_DrawCoverPage(UnownReportApp *app) {
     for (i = 0; i < UNOWN_ICONS_PER_SPREAD; i++) {
         ManagedSprite_SetDrawFlag(app->icons[i], FALSE);
     }
-    ReadMsgDataIntoString(app->msgData, 1, app->buffer);
+    ReadMsgDataIntoString(app->msgData, msg_0001_00001, app->buffer);
     UnownReport_PrintTextFont0(&app->windows[UNOWN_REPORT_WIN_LEFT_PAGE], app->buffer, 0, 56);
     width = FontID_String_GetWidth(0, app->playerName, 0);
     UnownReport_PrintTextFont0(&app->windows[UNOWN_REPORT_WIN_LEFT_PAGE], app->playerName, (u16)(176 - width), 72);
-    ReadMsgDataIntoString(app->msgData, 3, app->buffer);
+    ReadMsgDataIntoString(app->msgData, msg_0001_00003, app->buffer);
     UnownReport_PrintTextFont0(&app->windows[UNOWN_REPORT_WIN_RIGHT_PAGE], app->buffer, 4, 60);
-    ReadMsgDataIntoString(app->msgData, 4, app->template);
+    ReadMsgDataIntoString(app->msgData, msg_0001_00004, app->template);
     BufferIntegerAsString(app->msgFormat, 0, app->numSeenForms, 2, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     StringExpandPlaceholders(app->msgFormat, app->buffer, app->template);
     UnownReport_PrintTextFont0(&app->windows[UNOWN_REPORT_WIN_RIGHT_PAGE], app->buffer, 4, 76);
@@ -773,8 +774,8 @@ void UnownReport_InitMessages(UnownReportApp *app) {
     app->msgFormat = MessageFormat_New_Custom(16, 16, app->heapID);
     app->template = String_New(512, app->heapID);
     app->buffer = String_New(512, app->heapID);
-    app->title = NewString_ReadMsgData(app->msgData, 0);
-    app->pageNumberTemplate = NewString_ReadMsgData(app->msgData, 5);
+    app->title = NewString_ReadMsgData(app->msgData, msg_0001_00000);
+    app->pageNumberTemplate = NewString_ReadMsgData(app->msgData, msg_0001_00005);
     app->playerName = PlayerProfile_GetPlayerName_NewString(Save_PlayerData_GetProfile(app->args->saveData), app->heapID);
 }
 #pragma force_active reset

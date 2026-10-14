@@ -4,6 +4,7 @@
 
 #include "application/vs_recorder/vs_recorder_screens.h"
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0013.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -397,7 +398,7 @@ void VsRecorder_PrintSearchFacility(VsRecorderWork *work, u32 facility) {
 
     FillWindowPixelBuffer(window, 0);
     if (facility == SEARCH_ANY) {
-        str = NewString_ReadMsgData(work->msgData, 0x7D);
+        str = NewString_ReadMsgData(work->msgData, msg_0013_00125);
     } else if (facility - 0xFA <= 3) {
         str = NewString_ReadMsgData(work->msgData, facility - 0x55);
     } else {
@@ -416,7 +417,7 @@ void VsRecorder_PrintSearchSpecies(VsRecorderWork *work, u16 species) {
 
     FillWindowPixelBuffer(window, 0);
     if (species == SEARCH_ANY_SPECIES) {
-        str = NewString_ReadMsgData(work->msgData, 0x7D);
+        str = NewString_ReadMsgData(work->msgData, msg_0013_00125);
     } else {
         str = String_New(255, HEAP_ID_109);
         GetSpeciesNameIntoArray(species, HEAP_ID_109, name);
@@ -435,17 +436,17 @@ void VsRecorder_PrintSearchLocation(VsRecorderWork *work, u32 country, u32 regio
 
     FillWindowPixelBuffer(&search->windows[5], 0);
     if (country == SEARCH_ANY && region == SEARCH_ANY) {
-        str = NewString_ReadMsgData(work->msgData, 0x7D);
+        str = NewString_ReadMsgData(work->msgData, msg_0013_00125);
     } else {
         msgFormat = VsRecorder_NewMessageFormat(HEAP_ID_109);
         if (region != 0) {
             str = String_New(255, HEAP_ID_109);
-            template = NewString_ReadMsgData(work->msgData, 0x17);
+            template = NewString_ReadMsgData(work->msgData, msg_0013_00023);
             BufferCityName(msgFormat, 0, country, region);
             StringExpandPlaceholders(msgFormat, str, template);
         } else {
             str = String_New(255, HEAP_ID_109);
-            template = NewString_ReadMsgData(work->msgData, 0x16);
+            template = NewString_ReadMsgData(work->msgData, msg_0013_00022);
             BufferCountryName(msgFormat, 0, country);
             StringExpandPlaceholders(msgFormat, str, template);
         }
@@ -555,7 +556,7 @@ void VsRecorder_CreateSearchResultWindows(VsRecorderWork *work) {
     InitWindow(window);
     AddWindowParameterized(work->bgConfig, window, GF_BG_LYR_MAIN_2, 3, 3, 20, 4, 14, 0x20);
     FillWindowPixelBuffer(window, 0);
-    str = NewString_ReadMsgData(work->msgData, 0x7E);
+    str = NewString_ReadMsgData(work->msgData, msg_0013_00126);
     AddTextPrinterParameterizedWithColor(window, 0, str, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 13, 0), NULL);
     ScheduleWindowCopyToVram(window);
     String_Delete(str);
@@ -563,7 +564,7 @@ void VsRecorder_CreateSearchResultWindows(VsRecorderWork *work) {
     InitWindow(window);
     AddWindowParameterized(work->bgConfig, window, GF_BG_LYR_SUB_2, 11, 6, 10, 4, 14, 0x100);
     FillWindowPixelBuffer(window, 0);
-    str = NewString_ReadMsgData(work->msgData, 0x5F);
+    str = NewString_ReadMsgData(work->msgData, msg_0013_00095);
     x = (80 - FontID_String_GetWidthMultiline(0, str, 0)) / 2;
     AddTextPrinterParameterizedWithColor(window, 0, str, x, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 13, 0), NULL);
     ScheduleWindowCopyToVram(window);
@@ -595,7 +596,7 @@ BOOL VsRecorder_VideoSearchShowConditions(VsRecorderWork *work) {
     case 1:
         VsRecorder_StepFade(&search->fade, 0);
         if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 0)) {
-            VsRecorder_ShowTopMessage(work, 0x7C);
+            VsRecorder_ShowTopMessage(work, msg_0013_00124);
             search->species = SEARCH_ANY_SPECIES;
             search->facility = SEARCH_ANY;
             search->country = SEARCH_ANY;
@@ -714,7 +715,7 @@ BOOL VsRecorder_VideoSearchSelectFacility(VsRecorderWork *work) {
 
     switch (work->step) {
     case 0:
-        VsRecorder_SetMessageText(work, 0x71);
+        VsRecorder_SetMessageText(work, msg_0013_00113);
         search->facility = SEARCH_ANY;
         VsRecorder_PrintSearchFacility(work, search->facility);
         VsRecorder_SetSearchButtonsMode(work, TRUE);
@@ -783,7 +784,7 @@ BOOL VsRecorder_VideoSearchClearSpecies(VsRecorderWork *work) {
     VsRecorderVideoSearch *search = work->screenWork;
 
     if (work->step == 0) {
-        VsRecorder_SetMessageText(work, 0x72);
+        VsRecorder_SetMessageText(work, msg_0013_00114);
         search->species = SEARCH_ANY_SPECIES;
         VsRecorder_PrintSearchSpecies(work, search->species);
         VsRecorder_SetSearchButtonsMode(work, TRUE);
@@ -905,7 +906,7 @@ BOOL VsRecorder_VideoSearchSelectSpecies(VsRecorderWork *work) {
 
     switch (work->step) {
     case 0:
-        VsRecorder_SetMessageText(work, 0x72);
+        VsRecorder_SetMessageText(work, msg_0013_00114);
         VsRecorder_SetSearchButtonsMode(work, TRUE);
         VsRecorder_LoadScreen(work, 0x3A, GF_BG_LYR_SUB_3);
         work->step++;
@@ -1068,7 +1069,7 @@ BOOL VsRecorder_VideoSearchSelectLocation(VsRecorderWork *work) {
 
     switch (work->step) {
     case 0:
-        VsRecorder_SetMessageText(work, 0x73);
+        VsRecorder_SetMessageText(work, msg_0013_00115);
         search->country = SEARCH_ANY;
         search->region = SEARCH_ANY;
         VsRecorder_PrintSearchLocation(work, search->country, search->region);
@@ -1136,7 +1137,7 @@ BOOL VsRecorder_VideoSearchReturnToConditions(VsRecorderWork *work) {
     case 1:
         VsRecorder_StepFade(&search->fade, 0);
         if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 2)) {
-            VsRecorder_SetMessageText(work, 0x7C);
+            VsRecorder_SetMessageText(work, msg_0013_00124);
             VsRecorder_CreateSearchButtonWindows(work, 0);
             work->step++;
         }
@@ -1158,7 +1159,7 @@ BOOL VsRecorder_VideoSearchRequest(VsRecorderWork *work) {
     }
     switch (work->step) {
     case 0:
-        VsRecorder_SetMessageText(work, 0x75);
+        VsRecorder_SetMessageText(work, msg_0013_00117);
         PlaySE(SEQ_SE_PL_BREC80);
         work->step++;
         break;
@@ -1376,7 +1377,7 @@ BOOL VsRecorder_VideoSearchResultsBack(VsRecorderWork *work) {
     case 1:
         VsRecorder_StepFade(&search->fade, 0);
         if (VsRecorder_StepBlend(&search->eva, &search->evb, 0, 0)) {
-            VsRecorder_ShowTopMessage(work, 0x7C);
+            VsRecorder_ShowTopMessage(work, msg_0013_00124);
             VsRecorder_CreateSearchConditionWindows(work, 0);
             VsRecorder_PrintSearchSpecies(work, search->species);
             VsRecorder_PrintSearchFacility(work, search->facility);
@@ -1538,7 +1539,7 @@ BOOL VsRecorder_VideoSearchShowSlots(VsRecorderWork *work) {
             PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 0xC, (u8)search->fade, (u16)work->blendColor);
             break;
         case 2:
-            VsRecorder_ShowTopMessage(work, 0x115);
+            VsRecorder_ShowTopMessage(work, msg_0013_00277);
             work->step++;
             break;
         case 3:

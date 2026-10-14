@@ -1,6 +1,8 @@
 #include "global.h"
 
 #include "application/vs_recorder/vs_recorder_internal.h"
+#include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0013.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -102,7 +104,7 @@ void VsRecorder_PrintVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work) 
     window = &info->windows[0];
     nameStr = FrontierCard_NewNameString(ownerName, HEAP_ID_109);
     VsRecorder_SanitizeName(work, nameStr);
-    bodyStr = NewString_ReadMsgData(work->msgData, 7);
+    bodyStr = NewString_ReadMsgData(work->msgData, msg_0013_00007);
     out = String_New(0xFF, HEAP_ID_109);
     BufferString(fmt, 0, nameStr, 0, 1, 2);
     StringExpandPlaceholders(fmt, out, bodyStr);
@@ -125,7 +127,7 @@ void VsRecorder_PrintVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work) 
     if (value != 0) {
         window = &info->windows[2];
         numberStr = String_New(0xFF, HEAP_ID_109);
-        unitStr = NewString_ReadMsgData(work->msgData, 9);
+        unitStr = NewString_ReadMsgData(work->msgData, msg_0013_00009);
         out = String_New(0xFF, HEAP_ID_109);
         String16_FormatInteger(numberStr, value, 4, PRINTING_MODE_LEFT_ALIGN, TRUE);
         BufferString(fmt, 0, numberStr, 0, 1, 2);
@@ -155,9 +157,9 @@ void VsRecorder_PrintVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work) 
     rest /= 100000;
     hi = (u32)rest;
     if (hi / 10 % 10 == 0 && total != 0) {
-        str = NewString_ReadMsgData(work->msgData, 12);
+        str = NewString_ReadMsgData(work->msgData, msg_0013_00012);
     } else {
-        str = NewString_ReadMsgData(work->msgData, 11);
+        str = NewString_ReadMsgData(work->msgData, msg_0013_00011);
     }
     out = String_New(0xFF, HEAP_ID_109);
     String16_FormatInteger(digitsLo, lo, 5, PRINTING_MODE_LEADING_ZEROS, TRUE);
@@ -866,8 +868,8 @@ void VsRecorder_SanitizeName(VsRecorderWork *work, String *str) {
 void VsRecorder_SetPlaceholderName(String *str, enum HeapID heapID) {
     MsgData *msgData;
     String_SetEmpty(str);
-    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 0xD, heapID);
-    ReadMsgDataIntoString(msgData, 0x14C, str);
+    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0013_bin, heapID);
+    ReadMsgDataIntoString(msgData, msg_0013_00332, str);
     DestroyMsgData(msgData);
 }
 
@@ -877,7 +879,7 @@ void VsRecorder_ShowTouchHere(VsRecorderWork *work) {
     InitWindow(window);
     AddWindowParameterized(work->bgConfig, window, GF_BG_LYR_MAIN_2, 8, 0x10, 0x10, 2, 0xE, 0x12C);
     FillWindowPixelBuffer(window, 0);
-    str = NewString_ReadMsgData(work->msgData, 0xC0);
+    str = NewString_ReadMsgData(work->msgData, msg_0013_00192);
     AddTextPrinterParameterizedWithColor(window, 0, str, VsRecorder_GetCenteredTextX(window, str), 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 14, 0), NULL);
     String_Delete(str);
     ScheduleWindowCopyToVram(window);

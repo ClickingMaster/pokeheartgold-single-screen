@@ -3,6 +3,7 @@
 #include "constants/sndseq.h"
 
 #include "application/vs_recorder/vs_recorder_screens.h"
+#include "msgdata/msg/msg_0013.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -62,7 +63,7 @@ void VsRecorder_PrintVideoNumber(VsRecorderVideoSearch *search, VsRecorderWork *
     String *mid = String_New(255, HEAP_ID_109);
     String *high = String_New(255, HEAP_ID_109);
     upper /= 100000;
-    String *msg = NewString_ReadMsgData(work->msgData, 0x127);
+    String *msg = NewString_ReadMsgData(work->msgData, msg_0013_00295);
     String *out = String_New(255, HEAP_ID_109);
 
     String16_FormatInteger(low, value % 100000, 5, PRINTING_MODE_LEADING_ZEROS, 1);

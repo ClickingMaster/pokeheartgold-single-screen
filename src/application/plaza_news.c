@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+#include "msgdata/msg.naix"
+
 #include "bg_window.h"
 #include "filesystem.h"
 #include "font.h"
@@ -342,12 +344,12 @@ void PlazaNewsGraphics_InitBgs(PlazaNewsGraphics *graphics, enum HeapID heapID) 
     gSystem.screensFlipped = FALSE;
     GfGfx_SwapDisplay();
     for (i = 0; i < 5; i++) {
-        InitBgFromTemplate(graphics->bgConfig, (u8)sPlazaNewsBgIds[i], &sPlazaNewsBgTemplates[i], 0);
+        InitBgFromTemplate(graphics->bgConfig, (u8)sPlazaNewsBgIds[i], &sPlazaNewsBgTemplates[i], GF_BG_TYPE_TEXT);
         BG_ClearCharDataRange((u8)sPlazaNewsBgIds[i], 0x20, 0, heapID);
         BgClearTilemapBufferAndCommit(graphics->bgConfig, (u8)sPlazaNewsBgIds[i]);
     }
     GfGfxLoader_GXLoadPalFromOpenNarc(graphics->narc, 0, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0, heapID);
-    LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, (enum GFPalSlotOffset)0x140, heapID);
+    LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_10_OFFSET, heapID);
     GfGfxLoader_LoadCharDataFromOpenNarc(graphics->narc, 1, graphics->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, heapID);
     GfGfxLoader_LoadScrnDataFromOpenNarc(graphics->narc, 3, graphics->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, heapID);
     GfGfxLoader_LoadScrnDataFromOpenNarc(graphics->narc, 4, graphics->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, FALSE, heapID);
@@ -411,8 +413,8 @@ void PlazaNewsTileset_Free(PlazaNewsTileset *tileset) {
 
 void PlazaNewsClock_DrawCell(PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics, u32 tile, u8 col, u8 row) {
     NNSG2dScreenData *screen = tileset->screenData;
-    CopyToBgTilemapRect(graphics->bgConfig, 3, (u8)(col + 5), (u8)(row * 2 + 4), 1, 2, screen->rawData, (u8)(tile + 6), 0, (u8)(screen->screenWidth >> 3), (u8)(screen->screenHeight >> 3));
-    ScheduleBgTilemapBufferTransfer(graphics->bgConfig, 3);
+    CopyToBgTilemapRect(graphics->bgConfig, GF_BG_LYR_MAIN_3, (u8)(col + 5), (u8)(row * 2 + 4), 1, 2, screen->rawData, (u8)(tile + 6), 0, (u8)(screen->screenWidth >> 3), (u8)(screen->screenHeight >> 3));
+    ScheduleBgTilemapBufferTransfer(graphics->bgConfig, GF_BG_LYR_MAIN_3);
 }
 
 void PlazaNewsPeople_DrawIcon(PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics, u32 col, u32 row, u32 tile, u32 altRow, u32 usePalette3, u32 altPage, u32 usePalette4) {
@@ -430,13 +432,13 @@ void PlazaNewsPeople_DrawIcon(PlazaNewsTileset *tileset, PlazaNewsGraphics *grap
     screen = tileset->screenData;
     y = row * 2 + 4;
     x = col * 2 + 0x15;
-    CopyToBgTilemapRect(graphics->bgConfig, 3, (u8)x, (u8)y, 2, 2, screen->rawData, (u8)(srcX * 2), (u8)(srcY * 2), (u8)(screen->screenWidth >> 3), (u8)(screen->screenHeight >> 3));
+    CopyToBgTilemapRect(graphics->bgConfig, GF_BG_LYR_MAIN_3, (u8)x, (u8)y, 2, 2, screen->rawData, (u8)(srcX * 2), (u8)(srcY * 2), (u8)(screen->screenWidth >> 3), (u8)(screen->screenHeight >> 3));
     if (usePalette4 != 0) {
-        BgTilemapRectChangePalette(graphics->bgConfig, 3, (u8)x, (u8)y, 2, 2, 4);
+        BgTilemapRectChangePalette(graphics->bgConfig, GF_BG_LYR_MAIN_3, (u8)x, (u8)y, 2, 2, 4);
     } else if (usePalette3 != 0) {
-        BgTilemapRectChangePalette(graphics->bgConfig, 3, (u8)x, (u8)y, 2, 2, 3);
+        BgTilemapRectChangePalette(graphics->bgConfig, GF_BG_LYR_MAIN_3, (u8)x, (u8)y, 2, 2, 3);
     }
-    ScheduleBgTilemapBufferTransfer(graphics->bgConfig, 3);
+    ScheduleBgTilemapBufferTransfer(graphics->bgConfig, GF_BG_LYR_MAIN_3);
 }
 
 void PlazaNewsClock_Init(PlazaNewsClock *clock, PlazaNewsGraphics *graphics, PlazaNewsTileset *tileset, void *newsData, const PlazaNewsTime *endTime, void *lobby, enum HeapID heapID) {
@@ -503,8 +505,8 @@ void PlazaNewsClock_DrawGauge(PlazaNewsClock *clock, PlazaNewsTileset *tileset, 
         int j;
         clock->blinkTimer = 0;
         clock->needsRedraw = FALSE;
-        FillBgTilemapRect(graphics->bgConfig, 3, 0, 5, 4, 10, 8, 0);
-        ScheduleBgTilemapBufferTransfer(graphics->bgConfig, 3);
+        FillBgTilemapRect(graphics->bgConfig, GF_BG_LYR_MAIN_3, 0, 5, 4, 10, 8, 0);
+        ScheduleBgTilemapBufferTransfer(graphics->bgConfig, GF_BG_LYR_MAIN_3);
         for (i = 0; i < 4; i++) {
             int row = 3 - i;
             for (j = 0; j < 10; j++) {
@@ -619,7 +621,7 @@ void PlazaNewsPeople_DrawGrid(PlazaNewsTileset *tileset, PlazaNewsGraphics *grap
     int col;
     int base;
     int nextRow;
-    FillBgTilemapRect(graphics->bgConfig, 3, 0, 21, 4, 10, 8, 0);
+    FillBgTilemapRect(graphics->bgConfig, GF_BG_LYR_MAIN_3, 0, 21, 4, 10, 8, 0);
     base = 0;
     f.row = 0;
     do {
@@ -718,7 +720,7 @@ void PlazaNewsHeadlines_Init(PlazaNewsHeadlines *headlines, PlazaNewsGraphics *g
 
     for (; i < 3; i++) {
         PlazaNewsTicker_Init(ticker, graphics, i, heapID);
-        AddWindowParameterized(graphics->bgConfig, window, 3, 1, *top, 30, 2, i + 7, baseTile);
+        AddWindowParameterized(graphics->bgConfig, window, GF_BG_LYR_MAIN_3, 1, *top, 30, 2, i + 7, baseTile);
         FillWindowPixelBuffer(window, 0);
         ScheduleWindowCopyToVram(window);
         ticker++;
@@ -820,7 +822,7 @@ void PlazaNewsTicker_Init(PlazaNewsTicker *ticker, PlazaNewsGraphics *graphics, 
     ticker->position = 0;
     ticker->text = String_New(0x100, heapID);
     ticker->paletteNum = row + 7;
-    AddWindowParameterized(graphics->bgConfig, &ticker->bitmap, 3, 0, 0, 180, 2, 7, 0);
+    AddWindowParameterized(graphics->bgConfig, &ticker->bitmap, GF_BG_LYR_MAIN_3, 0, 0, 180, 2, 7, 0);
 }
 
 void PlazaNewsTicker_Free(PlazaNewsTicker *ticker) {
@@ -898,7 +900,7 @@ void PlazaNewsTitles_Init(PlazaNewsTitles *titles, PlazaNewsGraphics *graphics, 
     const PlazaNewsTitleTemplate *titleTemplate;
 
     memset(titles, 0, sizeof(PlazaNewsTitles));
-    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 0x2F5, heapID);
+    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0757_bin, heapID);
     message = String_New(0x80, heapID);
     messageNo = 0;
     sound = sPlazaNewsTitleSEs;
@@ -912,7 +914,7 @@ void PlazaNewsTitles_Init(PlazaNewsTitles *titles, PlazaNewsGraphics *graphics, 
         int y;
 
         PlazaNewsFlash_Init(flash, *paletteOffset, *sound);
-        AddWindowParameterized(graphics->bgConfig, window, 0, titleTemplate->left, titleTemplate->top, titleTemplate->width, titleTemplate->height, titleTemplate->palette, titleTemplate->baseTile);
+        AddWindowParameterized(graphics->bgConfig, window, GF_BG_LYR_MAIN_0, titleTemplate->left, titleTemplate->top, titleTemplate->width, titleTemplate->height, titleTemplate->palette, titleTemplate->baseTile);
         FillWindowPixelBuffer(window, 0);
         ReadMsgDataIntoString(msgData, messageNo, message);
         lineCount = String_CountLines(message);

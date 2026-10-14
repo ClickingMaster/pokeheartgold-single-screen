@@ -201,7 +201,7 @@ void PokewalkerApp_WriteUploadBlocks(u8 *dst);
 void PokewalkerApp_BuildUploadImage(PokewalkerApp *app, u8 *dst) {
     Window window;
     u8 *buf = Heap_Alloc(HEAP_ID_154, 0x180);
-    AddWindowParameterized(app->bgConfig, &window, 1, 0, 0, 10, 2, 0, 0);
+    AddWindowParameterized(app->bgConfig, &window, GF_BG_LYR_MAIN_1, 0, 0, 10, 2, 0, 0);
     FillWindowPixelBuffer(&window, 0);
     MI_CpuCopy8(sPokewalkerUploadImageDigit0, dst, 0x20);
     MI_CpuCopy8(sPokewalkerUploadImageDigit1, dst + 0x20, 0x20);
@@ -440,7 +440,7 @@ void PokewalkerApp_BuildStrollData(PokewalkerStrollData *data, PokewalkerApp *ap
     courseId = app->courseId;
     buf = Heap_Alloc(HEAP_ID_154, 0x180);
     for (i = 0; i < NELEMS(windows); i++) {
-        AddWindowParameterized(app->bgConfig, &windows[i], 1, 0, 0, sStrollTextWindowWidths[i], 2, 0, 0);
+        AddWindowParameterized(app->bgConfig, &windows[i], GF_BG_LYR_MAIN_1, 0, 0, sStrollTextWindowWidths[i], 2, 0, 0);
         FillWindowPixelBuffer(&windows[i], 0);
     }
     data->mon.species = app->strollMonSpecies;
@@ -559,10 +559,10 @@ int PokewalkerApp_LoadMonPicture(BoxPokemon *boxMon, void *buffer, PokepicTempla
     DC_FlushRange(buffer, 0xC80);
     if (screen == 0) {
         GX_LoadOBJ(buffer, 0xB80, 0xC80);
-        GfGfxLoader_GXLoadPal((NarcId) template->narcID, template->palDataID, GF_PAL_LOCATION_MAIN_OBJ, (enum GFPalSlotOffset)0x80, 0x20, HEAP_ID_154);
+        GfGfxLoader_GXLoadPal((NarcId) template->narcID, template->palDataID, GF_PAL_LOCATION_MAIN_OBJ, GF_PAL_SLOT_4_OFFSET, 0x20, HEAP_ID_154);
     } else {
         GXS_LoadOBJ(buffer, 0xC40, 0xC80);
-        GfGfxLoader_GXLoadPal((NarcId) template->narcID, template->palDataID, GF_PAL_LOCATION_SUB_OBJ, (enum GFPalSlotOffset)0x20, 0x20, HEAP_ID_154);
+        GfGfxLoader_GXLoadPal((NarcId) template->narcID, template->palDataID, GF_PAL_LOCATION_SUB_OBJ, GF_PAL_SLOT_1_OFFSET, 0x20, HEAP_ID_154);
     }
     return 0;
 }

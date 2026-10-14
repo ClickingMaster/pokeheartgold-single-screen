@@ -7,6 +7,7 @@
 #include "application/dress_up/accessory_portrait.h"
 #include "application/vs_recorder/vs_recorder_internal.h"
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0013.h"
 
 #include "bg_window.h"
 #include "fashion_case.h"
@@ -302,7 +303,7 @@ BOOL VsRecorder_DressUpSendUpload(VsRecorderWork *work) {
         VsRecorder_PlaceOrbitCursor(work, work->orbitCursors[0], 128, 96);
         OrbitCursor_SetVisible(work->orbitCursors[0], TRUE);
         OrbitCursor_SetRadius(work->orbitCursors[0], 24, 24);
-        VsRecorder_ShowTopMessage(work, 286);
+        VsRecorder_ShowTopMessage(work, msg_0013_00286);
         dressUp->uploadCard = FrontierCard_New(HEAP_ID_109);
         FrontierCard_InitFromSave(dressUp->uploadCard, work->saveData);
         PlaySE(SEQ_SE_PL_BREC80);
@@ -474,7 +475,7 @@ BOOL VsRecorder_DressUpViewSelectCategory(VsRecorderWork *work) {
     case 1:
         VsRecorder_StepFade(&dressUp->fade, 0);
         if (VsRecorder_StepBlend(&dressUp->eva, &dressUp->evb, FALSE, 0)) {
-            VsRecorder_ShowTopMessage(work, 114);
+            VsRecorder_ShowTopMessage(work, msg_0013_00114);
             VsRecorder_CreateDressUpCategoryWindows(work);
             work->step++;
         }
@@ -528,7 +529,7 @@ BOOL VsRecorder_DressUpViewSelectSpecies(VsRecorderWork *work) {
         break;
     case 1:
         if (VsRecorder_StepBlend(&dressUp->eva, &dressUp->evb, FALSE, 2)) {
-            VsRecorder_ShowTopMessage(work, 114);
+            VsRecorder_ShowTopMessage(work, msg_0013_00114);
             VsRecorder_SetVBlankPaused(work, TRUE);
             VsRecorder_CreateTouchScrollSprites(&work->touchScroll, work);
             dressUp->listConfig = sVsRecorderDressUpSpeciesListConfig;
@@ -671,7 +672,7 @@ BOOL VsRecorder_DressUpViewDownload(VsRecorderWork *work) {
         VsRecorder_PlaceOrbitCursor(work, work->orbitCursors[0], 128, 96);
         OrbitCursor_SetVisible(work->orbitCursors[0], TRUE);
         OrbitCursor_SetRadius(work->orbitCursors[0], 24, 24);
-        VsRecorder_ShowTopMessage(work, 287);
+        VsRecorder_ShowTopMessage(work, msg_0013_00287);
         PlaySE(SEQ_SE_PL_BREC80);
         work->step++;
         break;
@@ -710,7 +711,7 @@ BOOL VsRecorder_DressUpViewDownload(VsRecorderWork *work) {
             dressUp->unk_230 = 0;
             VsRecorder_SetSubState(work, 7);
         } else {
-            VsRecorder_ShowTopMessage(work, 293); // no photos
+            VsRecorder_ShowTopMessage(work, msg_0013_00293); // no photos
             work->step++;
             work->counter = 0;
         }
@@ -1042,7 +1043,7 @@ void VsRecorder_CreateDressUpToggleWindow(VsRecorderWork *work) {
     Window *window = &((VsRecorderDressUp *)work->screenWork)->windows[0];
     InitWindow(window);
     AddWindowParameterized(work->bgConfig, window, GF_BG_LYR_SUB_2, 8, 3, 16, 2, 14, 1);
-    VsRecorder_PrintDressUpToggleLabel(work, 121); // the photo is shown
+    VsRecorder_PrintDressUpToggleLabel(work, msg_0013_00121); // the photo is shown
 }
 
 void VsRecorder_DressUpVBlankCB(void *data) {
@@ -1141,7 +1142,7 @@ void VsRecorder_PrintOwnPhotoCaption(VsRecorderWork *work) {
     FillWindowPixelBuffer(window, 0);
     msgFormat = VsRecorder_NewMessageFormat(HEAP_ID_109);
     formatted = String_New(255, HEAP_ID_109);
-    template = NewString_ReadMsgData(work->msgData, 56);
+    template = NewString_ReadMsgData(work->msgData, msg_0013_00056);
     line = String_New(255, HEAP_ID_109);
     FashionEntry_GetMonSecondText(dressUp->ownPhoto, line);
     VsRecorder_SanitizeName(work, line);
@@ -1187,7 +1188,7 @@ void VsRecorder_PrintPhotoCaption(VsRecorderWork *work, int index) {
     FillWindowPixelBuffer(window, 0);
     msgFormat = VsRecorder_NewMessageFormat(HEAP_ID_109);
     formatted = String_New(255, HEAP_ID_109);
-    template = NewString_ReadMsgData(work->msgData, 56);
+    template = NewString_ReadMsgData(work->msgData, msg_0013_00056);
     line = String_New(255, HEAP_ID_109);
     FashionEntry_GetMonSecondText(dressUp->photo, line);
     VsRecorder_SanitizeName(work, line);

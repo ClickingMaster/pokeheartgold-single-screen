@@ -3,6 +3,7 @@
 #include "constants/sndseq.h"
 
 #include "application/vs_recorder/vs_recorder_internal.h"
+#include "msgdata/msg/msg_0013.h"
 
 #include "bg_window.h"
 #include "gf_gfx_loader.h"
@@ -54,7 +55,7 @@ BOOL VsRecorder_BoxDataViewDownload(VsRecorderWork *work) {
         VsRecorder_PlaceOrbitCursor(work, work->orbitCursors[0], 128, 96);
         OrbitCursor_SetVisible(work->orbitCursors[0], TRUE);
         OrbitCursor_SetRadius(work->orbitCursors[0], 24, 24);
-        VsRecorder_ShowTopMessage(work, 289); // Receiving Box Data...
+        VsRecorder_ShowTopMessage(work, msg_0013_00289); // Receiving Box Data...
         PlaySE(SEQ_SE_PL_BREC80);
         work->step++;
         break;
@@ -92,7 +93,7 @@ BOOL VsRecorder_BoxDataViewDownload(VsRecorderWork *work) {
         if (boxData->downloadCount == 0) {
             work->step++;
             work->counter = 0;
-            VsRecorder_ShowTopMessage(work, 294); // No matching Box Data was found...
+            VsRecorder_ShowTopMessage(work, msg_0013_00294); // No matching Box Data was found...
         } else {
             work->step = 0xFF;
         }
@@ -128,7 +129,7 @@ BOOL VsRecorder_BoxDataViewDownload(VsRecorderWork *work) {
         VsRecorder_StepFade(&boxData->fade, 0);
         if (VsRecorder_StepBlend(&boxData->eva, &boxData->evb, FALSE, 2)) {
             VsRecorder_LoadBoxDataMessageBg(work, GF_BG_LYR_MAIN_2);
-            VsRecorder_PrintBoxDataMessage(work, 275); // Which category would you like to see?
+            VsRecorder_PrintBoxDataMessage(work, msg_0013_00275); // Which category would you like to see?
             VsRecorder_CreateBoxDataCategoryButtons(work);
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
             GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
@@ -262,7 +263,7 @@ BOOL VsRecorder_BoxListBack(VsRecorderWork *work) {
         VsRecorder_LoadBoxDataMessageBg(work, GF_BG_LYR_MAIN_2);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
-        VsRecorder_PrintBoxDataMessage(work, 275); // Which category would you like to see?
+        VsRecorder_PrintBoxDataMessage(work, msg_0013_00275); // Which category would you like to see?
         VsRecorder_CreateBoxDataCategoryButtons(work);
         VsRecorder_SetSubState(work, 3);
         break;

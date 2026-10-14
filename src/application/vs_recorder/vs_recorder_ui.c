@@ -2,6 +2,7 @@
 
 #include "application/vs_recorder/vs_recorder_internal.h"
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0013.h"
 
 #include "assert.h"
 #include "fashion_case.h"
@@ -153,7 +154,7 @@ BOOL VsRecorder_MenuCanSelect(VsRecorderWork *work) {
     switch (work->mode) {
     default:
         if (selection <= 3 && work->savedVideos[selection] == NULL) {
-            VsRecorder_ShowNotice(work, 0x10D);
+            VsRecorder_ShowNotice(work, msg_0013_00269);
             result = FALSE;
         }
         break;
@@ -162,19 +163,19 @@ BOOL VsRecorder_MenuCanSelect(VsRecorderWork *work) {
             SaveFashionData *fashionData = Save_FashionData_Get(work->saveData);
             result = FashionEntry_IsSaved(Save_FashionData_GetEntry(fashionData, selection));
             if (!result) {
-                VsRecorder_ShowNotice(work, 0x122);
+                VsRecorder_ShowNotice(work, msg_0013_00290);
             }
         }
         break;
     case 6:
         if (selection == 100 && ((BOOL(*)(void))VsRecorder_IsBoxUploaded)()) {
-            VsRecorder_ShowNotice(work, 0x111);
+            VsRecorder_ShowNotice(work, msg_0013_00273);
             result = FALSE;
         }
         break;
     case 2:
         if (selection == 9999 && work->savedVideos[0] == NULL) {
-            VsRecorder_ShowNotice(work, 0x81);
+            VsRecorder_ShowNotice(work, msg_0013_00129);
             result = FALSE;
         }
         break;
@@ -222,11 +223,11 @@ void VsRecorder_OnMenuTouch(u32 index, u32 event, void *arg) {
         OrbitCursor_SetVisible(work->orbitCursors[0], 1);
     }
     if (work->selection == 999) {
-        VsRecorder_ShowMenuNotice(work, 193);
+        VsRecorder_ShowMenuNotice(work, msg_0013_00193);
         return;
     }
     if (work->selection == 9999) {
-        VsRecorder_ShowMenuNotice(work, 301);
+        VsRecorder_ShowMenuNotice(work, msg_0013_00301);
         return;
     }
     if (work->menuNoticeShown) {

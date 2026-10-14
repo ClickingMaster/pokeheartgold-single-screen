@@ -6,6 +6,7 @@
 #include "constants/species.h"
 
 #include "application/vs_recorder/vs_recorder_internal.h"
+#include "msgdata/msg/msg_0013.h"
 
 #include "bg_window.h"
 #include "font.h"
@@ -172,7 +173,7 @@ void VsRecorder_OnBoxDataSendTouch(u32 index, u32 event, void *arg) {
             if (VsRecorder_BoxFormHasMon(&boxData->form)) {
                 VsRecorder_SetSubState(work, 5);
             } else {
-                VsRecorder_PrintBoxDataMessage(work, 271); // An empty Box's Data can't be sent.
+                VsRecorder_PrintBoxDataMessage(work, msg_0013_00271); // An empty Box's Data can't be sent.
             }
         }
         break;
@@ -405,7 +406,7 @@ BOOL VsRecorder_BoxDataSendChangeBox(VsRecorderWork *work) {
         if (VsRecorder_StepBlend(&boxData->eva, &boxData->evb, FALSE, 1)) {
             VsRecorder_PrintBoxMonName(work, boxData->cursor);
             VsRecorder_PrintBoxName(work);
-            VsRecorder_PrintBoxDataMessage(work, 270); // Please choose a Box.
+            VsRecorder_PrintBoxDataMessage(work, msg_0013_00270); // Please choose a Box.
             VsRecorder_SetBoxMonPicVanished(work, FALSE);
             VsRecorder_SetBoxMonIconsDrawFlag(work, TRUE);
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
@@ -460,7 +461,7 @@ BOOL VsRecorder_BoxDataSendShowCategories(VsRecorderWork *work) {
         if (VsRecorder_StepBlend(&boxData->eva, &boxData->evb, FALSE, 2)) {
             GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
             VsRecorder_SetSubState(work, 6);
-            VsRecorder_PrintBoxDataMessage(work, 272); // Where would you like to send this?
+            VsRecorder_PrintBoxDataMessage(work, msg_0013_00272); // Where would you like to send this?
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, boxData->fade, work->blendColor);
         break;
@@ -517,7 +518,7 @@ BOOL VsRecorder_BoxDataSendUpload(VsRecorderWork *work) {
         VsRecorder_PlaceOrbitCursor(work, work->orbitCursors[0], 128, 96);
         OrbitCursor_SetVisible(work->orbitCursors[0], TRUE);
         OrbitCursor_SetRadius(work->orbitCursors[0], 24, 24);
-        VsRecorder_ShowTopMessage(work, 288); // Sending your Box Data...
+        VsRecorder_ShowTopMessage(work, msg_0013_00288); // Sending your Box Data...
         PlaySE(SEQ_SE_PL_BREC80);
         work->step++;
         break;
@@ -576,7 +577,7 @@ BOOL VsRecorder_BoxDataSendCancelCategory(VsRecorderWork *work) {
     case 2:
         VsRecorder_StepFade(&boxData->fade, 0);
         if (VsRecorder_StepBlend(&boxData->eva, &boxData->evb, FALSE, 2)) {
-            VsRecorder_PrintBoxDataMessage(work, 270); // Please choose a Box.
+            VsRecorder_PrintBoxDataMessage(work, msg_0013_00270); // Please choose a Box.
             VsRecorder_SetSubState(work, 3);
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)boxData->fade, (u16)work->blendColor);
@@ -784,7 +785,7 @@ void VsRecorder_PrintBoxMonName(VsRecorderWork *work, int slot) {
 
     FillWindowPixelBuffer(window, 0);
     species = boxData->form.species[slot];
-    if (species == 0) {
+    if (species == SPECIES_NONE) {
         ScheduleWindowCopyToVram(window);
         return;
     }
@@ -823,7 +824,7 @@ void VsRecorder_CreateBoxMonIcons(VsRecorderWork *work) {
         u16 species = boxData->form.species[i];
         u32 form = boxData->form.forms[i];
         int isEgg = VsRecorder_HasAllBits(boxData->form.eggFlags, 1 << i);
-        if (species != 0) {
+        if (species != SPECIES_NONE) {
             SpriteSystem_LoadCharResObjAtEndWithHardwareMappingType(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconNaixEx(species, isEgg, form), FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 100000 + i);
             template.x = 110 + (i % 6) * 24;
             template.y = 48 + (i / 6) * 22;
@@ -893,7 +894,7 @@ void VsRecorder_CreateBoxMonPic(VsRecorderWork *work) {
     u8 shiny;
     PokepicTemplate template;
 
-    if (species == 0) {
+    if (species == SPECIES_NONE) {
         boxData->pokepic = NULL;
         return;
     }
@@ -954,7 +955,7 @@ void VsRecorder_ShowBox(VsRecorderWork *work) {
     VsRecorder_LoadBoxGfx(work, boxData);
     VsRecorder_PrintBoxMonName(work, boxData->cursor);
     VsRecorder_PrintBoxName(work);
-    VsRecorder_PrintBoxDataMessage(work, 270); // Please choose a Box.
+    VsRecorder_PrintBoxDataMessage(work, msg_0013_00270); // Please choose a Box.
 }
 
 // a box of the player's PC: bonus wallpapers only once unlocked
@@ -1080,7 +1081,7 @@ BOOL VsRecorder_BoxDataViewShow(VsRecorderWork *work) {
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_LoadBoxDataMessageBg(work, GF_BG_LYR_MAIN_2);
         VsRecorder_CreateBoxDataWindows(work);
-        VsRecorder_PrintBoxDataMessage(work, 275); // Which category would you like to see?
+        VsRecorder_PrintBoxDataMessage(work, msg_0013_00275); // Which category would you like to see?
         GfGfxLoader_LoadCharDataFromOpenNarc(work->narc, 62, work->bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, HEAP_ID_109);
         GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, 79, work->bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, HEAP_ID_109);
         VsRecorder_CreateBoxDataCategoryButtons(work);
@@ -1180,7 +1181,7 @@ void VsRecorder_CreateNextMonButton(VsRecorderWork *work) {
     InitWindow(window);
     AddWindowParameterized(work->bgConfig, window, GF_BG_LYR_SUB_2, 12, 6, 8, 4, 14, 1);
     FillWindowPixelBuffer(window, 0);
-    str = NewString_ReadMsgData(work->msgData, 34); // Next Pokemon
+    str = NewString_ReadMsgData(work->msgData, msg_0013_00034); // Next Pokemon
     x = (64 - FontID_String_GetWidthMultiline(0, str, 0)) >> 1;
     AddTextPrinterParameterizedWithColor(window, 0, str, x, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 13, 0), NULL);
     ScheduleWindowCopyToVram(window);

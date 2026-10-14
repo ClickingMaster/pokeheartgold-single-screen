@@ -4,6 +4,7 @@
 #include "constants/species.h"
 
 #include "application/pokedex/pokedex_internal.h"
+#include "graphic/zukan_gra.naix"
 
 #include "player_data.h"
 #include "pokemon_icon_idx.h"
@@ -58,25 +59,25 @@ void PokedexApp_LoadSizeCheckResources(PokedexAppData *pokedexApp) {
     int palette;
 
     PokedexApp_LoadMonIconResources(pokedexApp, 1);
-    SpriteSystem_LoadCharResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, 76, TRUE, NNS_G2D_VRAM_TYPE_2DSUB, 0xC551);
+    SpriteSystem_LoadCharResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000076_NCGR_lz, TRUE, NNS_G2D_VRAM_TYPE_2DSUB, 0xC551);
     palette = GetMonIconPlttNaix();
     SpriteSystem_LoadPaletteBufferFromOpenNarc(pokedexApp->paletteData, PLTTBUF_SUB_OBJ, pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->iconNarc, palette, FALSE, 3, NNS_G2D_VRAM_TYPE_2DSUB, 0xC551);
-    SpriteSystem_LoadCellResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, 106, TRUE, 0xC55A);
-    SpriteSystem_LoadAnimResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, 107, TRUE, 0xC55A);
-    SpriteSystem_LoadCellResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, 112, TRUE, 0xC55B);
-    SpriteSystem_LoadAnimResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, 113, TRUE, 0xC55B);
+    SpriteSystem_LoadCellResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000106_NCER_lz, TRUE, 0xC55A);
+    SpriteSystem_LoadAnimResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000107_NANR_lz, TRUE, 0xC55A);
+    SpriteSystem_LoadCellResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000112_NCER_lz, TRUE, 0xC55B);
+    SpriteSystem_LoadAnimResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000113_NANR_lz, TRUE, 0xC55B);
     if (PlayerProfile_GetTrainerGender(pokedexApp->args->playerProfile) == PLAYER_GENDER_MALE) {
-        SpriteSystem_LoadCharResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, 105, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, 0xC59B);
-        SpriteSystem_LoadCharResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, 105, TRUE, NNS_G2D_VRAM_TYPE_2DSUB, 0xC59C);
-        SpriteSystem_LoadCharResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, 111, TRUE, NNS_G2D_VRAM_TYPE_2DSUB, 0xC59D);
-        SpriteSystem_LoadPaletteBufferFromOpenNarc(pokedexApp->paletteData, PLTTBUF_MAIN_OBJ, pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, 108, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 0xC55D);
-        SpriteSystem_LoadPaletteBufferFromOpenNarc(pokedexApp->paletteData, PLTTBUF_SUB_OBJ, pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, 108, FALSE, 1, NNS_G2D_VRAM_TYPE_2DSUB, 0xC55E);
+        SpriteSystem_LoadCharResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000105_NCGR_lz, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, 0xC59B);
+        SpriteSystem_LoadCharResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000105_NCGR_lz, TRUE, NNS_G2D_VRAM_TYPE_2DSUB, 0xC59C);
+        SpriteSystem_LoadCharResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000111_NCGR_lz, TRUE, NNS_G2D_VRAM_TYPE_2DSUB, 0xC59D);
+        SpriteSystem_LoadPaletteBufferFromOpenNarc(pokedexApp->paletteData, PLTTBUF_MAIN_OBJ, pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000108_NCLR, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 0xC55D);
+        SpriteSystem_LoadPaletteBufferFromOpenNarc(pokedexApp->paletteData, PLTTBUF_SUB_OBJ, pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000108_NCLR, FALSE, 1, NNS_G2D_VRAM_TYPE_2DSUB, 0xC55E);
     } else {
-        SpriteSystem_LoadCharResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, 109, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, 0xC59B);
-        SpriteSystem_LoadCharResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, 109, TRUE, NNS_G2D_VRAM_TYPE_2DSUB, 0xC59C);
-        SpriteSystem_LoadCharResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, 114, TRUE, NNS_G2D_VRAM_TYPE_2DSUB, 0xC59D);
-        SpriteSystem_LoadPaletteBufferFromOpenNarc(pokedexApp->paletteData, PLTTBUF_MAIN_OBJ, pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, 110, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 0xC55D);
-        SpriteSystem_LoadPaletteBufferFromOpenNarc(pokedexApp->paletteData, PLTTBUF_SUB_OBJ, pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, 110, FALSE, 1, NNS_G2D_VRAM_TYPE_2DSUB, 0xC55E);
+        SpriteSystem_LoadCharResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000109_NCGR_lz, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, 0xC59B);
+        SpriteSystem_LoadCharResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000109_NCGR_lz, TRUE, NNS_G2D_VRAM_TYPE_2DSUB, 0xC59C);
+        SpriteSystem_LoadCharResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000114_NCGR_lz, TRUE, NNS_G2D_VRAM_TYPE_2DSUB, 0xC59D);
+        SpriteSystem_LoadPaletteBufferFromOpenNarc(pokedexApp->paletteData, PLTTBUF_MAIN_OBJ, pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000110_NCLR, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 0xC55D);
+        SpriteSystem_LoadPaletteBufferFromOpenNarc(pokedexApp->paletteData, PLTTBUF_SUB_OBJ, pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000110_NCLR, FALSE, 1, NNS_G2D_VRAM_TYPE_2DSUB, 0xC55E);
     }
 }
 

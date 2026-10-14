@@ -7,6 +7,8 @@
 #include "constants/sndseq.h"
 
 #include "application/plaza_game.h"
+#include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0230.h"
 
 #include "bg_window.h"
 #include "brightness.h"
@@ -463,7 +465,7 @@ void SwalotPlop_LoadSharedData(SwalotPlopApp *app, int heapId) {
     int i;
     SwalotPlopApp *walker;
     PlazaGameRoster *roster;
-    app->shared.levelTable.levels = GfGfxLoader_LoadFromNarc_GetSizeOut((NarcId)212, 0, FALSE, (enum HeapID)heapId, FALSE, &size);
+    app->shared.levelTable.levels = GfGfxLoader_LoadFromNarc_GetSizeOut(NARC_a_2_1_0, 0, FALSE, (enum HeapID)heapId, FALSE, &size);
     app->shared.levelTable.count = size / sizeof(SwalotPlopLevel);
     i = 0;
     if (i < app->roster.count) {
@@ -1154,7 +1156,7 @@ void SwalotPlopIntro_Init(SwalotPlopIntro *intro, SwalotPlopGfx *gfx, SwalotPlop
     AddWindowParameterized(gfx->bgConfig, &intro->window, GF_BG_LYR_MAIN_1, 2, 19, 28, 4, 5, 10);
     FillWindowPixelRect(&intro->window, 15, 0, 0, 224, 32);
     String *string = String_New(128, heapId);
-    ReadMsgDataIntoString(gfx->msgData, 0, string);
+    ReadMsgDataIntoString(gfx->msgData, msg_0230_00000, string);
     AddTextPrinterParameterizedWithColor(&intro->window, 0, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 15), NULL);
     String_Delete(string);
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 18, gfx->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, FALSE, heapId);
@@ -2132,7 +2134,7 @@ void SwalotPlopDemo_Init(SwalotPlopDemo *demo, SwalotPlopGfx *gfx, enum HeapID h
     SimpleSpriteTemplate template;
     NARC *narc;
     memset(demo, 0, sizeof(SwalotPlopDemo));
-    narc = NARC_New((NarcId)200, heapId);
+    narc = NARC_New(NARC_a_1_9_8, heapId);
     demo->res[GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CHAR], narc, 21, FALSE, 120, NNS_G2D_VRAM_TYPE_2DSUB, heapId);
     demo->res[GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], narc, 20, FALSE, 120, NNS_G2D_VRAM_TYPE_2DSUB, 2, heapId);
     demo->res[GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CELL], narc, 22, FALSE, 120, GF_GFX_RES_TYPE_CELL, heapId);
@@ -2297,7 +2299,7 @@ void SwalotPlopGfx_Setup3D(void) {
     *reg &= 0xCFFB;
     *reg = (*reg & ~0x3000) | 8;
     *reg = (*reg & ~0x3000) | 32;
-    G3X_SetFog(FALSE, (GXFogBlend)0, (GXFogSlope)0, 0);
+    G3X_SetFog(FALSE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x8000, 0);
     G3X_SetClearColor(0x6B5A, 0, 0x7FFF, 63, FALSE);
     reg_G3_VIEWPORT = 0xBFFF0000;
 }
@@ -2321,7 +2323,7 @@ void SwalotPlopGame_InitGfx(SwalotPlopGame *game, enum HeapID heapId) {
     SwalotPlopGfx_InitBgs(&game->gfx.bgConfig, heapId);
     SwalotPlopGfx_InitSprites(&game->gfx, heapId);
     SwalotPlopGfx_InitText(&game->gfx, heapId);
-    NARC *narc = NARC_New((NarcId)0xBD, heapId);
+    NARC *narc = NARC_New(NARC_a_1_8_9, heapId);
     SwalotPlopGfx_LoadSpriteRes(&game->gfx, narc, heapId);
     SwalotPlopStage_Init(&game->gfx.stage, &game->gfx, narc, game->playerCount, game->localIndex, heapId, &game->allocator);
     SwalotPlopScene_Init(&game->gfx.scene, narc, heapId, &game->allocator);
@@ -2519,7 +2521,7 @@ void SwalotPlopGfx_FreeSpriteRes(SwalotPlopGfx *gfx) {
 
 void SwalotPlopGfx_InitText(SwalotPlopGfx *gfx, enum HeapID heapId) {
     gfx->msgFormat = MessageFormat_New(heapId);
-    gfx->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 230, heapId);
+    gfx->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0230_bin, heapId);
     gfx->string1 = String_New(0x80, heapId);
     gfx->string2 = String_New(0x80, heapId);
 }

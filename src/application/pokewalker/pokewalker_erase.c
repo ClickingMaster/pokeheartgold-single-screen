@@ -137,7 +137,7 @@ int PokewalkerApp_EraseRecords_PrintWillErase(PokewalkerApp *app) {
 int PokewalkerApp_EraseRecords_ShowEraseMenu(PokewalkerApp *app) {
     if (!TextPrinterCheckActive(app->textPrinterId)) {
         PokewalkerApp_PrintString(app, 5, app->eraseRecordsText, 4, MAKE_TEXT_COLOR(15, 1, 0));
-        PokewalkerApp_LoadTilemap(app, 2, 10);
+        PokewalkerApp_LoadTilemap(app, GF_BG_LYR_MAIN_2, 10);
         PokewalkerApp_PrintExit(app, 1);
         PokewalkerApp_SetCursorPosition(app, 2);
         return 5;
@@ -254,7 +254,7 @@ int PokewalkerApp_EraseRecords_WaitMessage(PokewalkerApp *app) {
 int PokewalkerApp_EraseRecords_PrintPointAtCard(PokewalkerApp *app) {
     BgClearTilemapBufferAndCommit(app->bgConfig, GF_BG_LYR_MAIN_1);
     FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
-    PokewalkerApp_LoadTilemap(app, 2, 14);
+    PokewalkerApp_LoadTilemap(app, GF_BG_LYR_MAIN_2, 14);
     PokewalkerApp_PrintExit(app, 1);
     PokewalkerApp_StartSubBgScroll(app);
     app->textPrinterId = PokewalkerApp_StartMessageBox(app, 0, msg_0274_00005);

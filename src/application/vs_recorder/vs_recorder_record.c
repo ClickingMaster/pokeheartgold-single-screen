@@ -2,6 +2,7 @@
 
 #include "application/vs_recorder/vs_recorder_screens.h"
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0013.h"
 
 #include "assert.h"
 #include "msgdata.h"
@@ -25,7 +26,7 @@ void VsRecorder_LoadPlaceholderTrainerName(String *str, enum HeapID heapID) {
     MsgData *msgData;
     String_SetEmpty(str);
     msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0013_bin, heapID);
-    ReadMsgDataIntoString(msgData, 332, str);
+    ReadMsgDataIntoString(msgData, msg_0013_00332, str);
     DestroyMsgData(msgData);
 }
 

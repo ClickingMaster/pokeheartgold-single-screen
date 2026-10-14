@@ -3,6 +3,7 @@
 #include "global.h"
 
 #include "application/vs_recorder/vs_recorder_internal.h"
+#include "msgdata/msg/msg_0013.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -195,7 +196,7 @@ void VsRecorder_PrintProfile(VsRecorderProfile *profile, VsRecorderWork *work) {
     window = &profile->windows[0];
     nameStr = FrontierCard_NewNameString((const u16 *)card, HEAP_ID_109);
     VsRecorder_SanitizeName(work, nameStr);
-    nameTemplate = NewString_ReadMsgData(work->msgData, 13);
+    nameTemplate = NewString_ReadMsgData(work->msgData, msg_0013_00013);
     str = String_New(0xFF, HEAP_ID_109);
     BufferString(fmt, 0, nameStr, 0, 1, 2);
     StringExpandPlaceholders(fmt, str, nameTemplate);
@@ -209,7 +210,7 @@ void VsRecorder_PrintProfile(VsRecorderProfile *profile, VsRecorderWork *work) {
 
     month = FrontierCard_GetBirthdayMonth(card);
     window = &profile->windows[2];
-    monthTemplate = NewString_ReadMsgData(work->msgData, 15);
+    monthTemplate = NewString_ReadMsgData(work->msgData, msg_0013_00015);
     dateStr = FrontierCard_NewNameString((const u16 *)card, HEAP_ID_109);
     VsRecorder_SanitizeName(work, dateStr);
     str = String_New(0xFF, HEAP_ID_109);
@@ -224,7 +225,7 @@ void VsRecorder_PrintProfile(VsRecorderProfile *profile, VsRecorderWork *work) {
     MessageFormat_ResetBuffers(fmt);
 
     window = &profile->windows[3];
-    str = NewString_ReadMsgData(work->msgData, 16);
+    str = NewString_ReadMsgData(work->msgData, msg_0013_00016);
     FillWindowPixelBuffer(window, 0);
     AddTextPrinterParameterizedWithColor(window, 0, str, VsRecorder_GetCenteredTextX(window, str), 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 13, 0), NULL);
     ScheduleWindowCopyToVram(window);
@@ -235,13 +236,13 @@ void VsRecorder_PrintProfile(VsRecorderProfile *profile, VsRecorderWork *work) {
     window = &profile->windows[4];
     FillWindowPixelBuffer(window, 0);
     if (country == 0) {
-        str = NewString_ReadMsgData(work->msgData, 21);
+        str = NewString_ReadMsgData(work->msgData, msg_0013_00021);
         AddTextPrinterParameterizedWithColor(window, 0, str, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 13, 0), NULL);
         ScheduleWindowCopyToVram(window);
         String_Delete(str);
     } else {
         countryStr = String_New(0xFF, HEAP_ID_109);
-        countryTemplate = NewString_ReadMsgData(work->msgData, 22);
+        countryTemplate = NewString_ReadMsgData(work->msgData, msg_0013_00022);
         BufferCountryName(fmt, 0, country);
         StringExpandPlaceholders(fmt, countryStr, countryTemplate);
         AddTextPrinterParameterizedWithColor(window, 0, countryStr, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 13, 0), NULL);
@@ -252,7 +253,7 @@ void VsRecorder_PrintProfile(VsRecorderProfile *profile, VsRecorderWork *work) {
             window2 = &profile->windows[5];
             FillWindowPixelBuffer(window2, 0);
             str = String_New(0xFF, HEAP_ID_109);
-            cityTemplate = NewString_ReadMsgData(work->msgData, 23);
+            cityTemplate = NewString_ReadMsgData(work->msgData, msg_0013_00023);
             BufferCityName(fmt, 0, country, city);
             StringExpandPlaceholders(fmt, str, cityTemplate);
             AddTextPrinterParameterizedWithColor(window2, 0, str, 4, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 13, 0), NULL);
@@ -264,7 +265,7 @@ void VsRecorder_PrintProfile(VsRecorderProfile *profile, VsRecorderWork *work) {
 
     MessageFormat_ResetBuffers(fmt);
     window = &profile->windows[6];
-    str = NewString_ReadMsgData(work->msgData, 17);
+    str = NewString_ReadMsgData(work->msgData, msg_0013_00017);
     FillWindowPixelBuffer(window, 0);
     AddTextPrinterParameterizedWithColor(window, 0, str, VsRecorder_GetCenteredTextX(window, str), 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 13, 0), NULL);
     ScheduleWindowCopyToVram(window);

@@ -417,7 +417,7 @@ void PokewalkerIr_StoreCurrentTime(void) {
 
 #pragma force_active reset
 
-void PokewalkerIr_SetIdentities(void *identity, void *peerIdentity) {
+void PokewalkerIr_SetIdentities(PokewalkerIrIdentity *identity, PokewalkerIrIdentity *peerIdentity) {
     ov112_021FFAA4.identity = identity;
     ov112_021FFAA4.peerIdentity = peerIdentity;
 }
@@ -499,7 +499,7 @@ void PokewalkerIr_OnSendComplete(void) {
         break;
     case 0x3C:
         ov112_021FFB24.step = 0x3E;
-        MI_CpuCopy8((u8 *)ov112_021FFAA4.peerIdentity + 0x10, ov112_021FFAA4.records + 8, 0x28);
+        MI_CpuCopy8(&ov112_021FFAA4.peerIdentity->clock, ov112_021FFAA4.records + 8, sizeof(PokewalkerIrClock));
         PokewalkerIr_BeginTransfer(ov112_021FFAA4.records, 0xD480, 0x224);
         PokewalkerIr_SendChunk();
         break;

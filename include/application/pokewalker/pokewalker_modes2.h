@@ -43,7 +43,7 @@ typedef struct PokewalkerSelectMonInfo {
 typedef struct PokewalkerSelectMonWork {
     int state;
     void *boxSelector;
-    void *boxDisplay;
+    struct PokewalkerBoxDisplay *boxDisplay;
     u32 box; // 18 = party
     u32 slot;
     u32 cancelled;

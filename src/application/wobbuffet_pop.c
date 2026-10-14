@@ -704,7 +704,7 @@ void WobbuffetPop_ShowMessage(WobbuffetPop *game) {
 }
 
 void WobbuffetPop_HideMessageWindow(WobbuffetPop *game) {
-    FillBgTilemapRect(game->bgConfig, GF_BG_LYR_SUB_0, 0x3FF, 1, 18, 30, 6, 17);
+    FillBgTilemapRect(game->bgConfig, GF_BG_LYR_SUB_0, 0x3FF, 1, 18, 30, 6, TILEMAP_FILL_OVWT_PAL);
     ScheduleBgTilemapBufferTransfer(game->bgConfig, GF_BG_LYR_SUB_0);
 }
 
@@ -748,17 +748,17 @@ void WobbuffetPop_PrintPlayerNames(WobbuffetPop *game) {
 
 void WobbuffetPop_ClearPlayerPanels(WobbuffetPop *game, int started) {
     if (started == TRUE) {
-        FillBgTilemapRect(game->bgConfig, GF_BG_LYR_SUB_0, 0x3FF, 0, 13, 12, 4, 17);
-        FillBgTilemapRect(game->bgConfig, GF_BG_LYR_SUB_0, 0x3FF, 17, 0, 12, 4, 17);
-        FillBgTilemapRect(game->bgConfig, GF_BG_LYR_SUB_0, 0x3FF, 20, 13, 12, 4, 17);
+        FillBgTilemapRect(game->bgConfig, GF_BG_LYR_SUB_0, 0x3FF, 0, 13, 12, 4, TILEMAP_FILL_OVWT_PAL);
+        FillBgTilemapRect(game->bgConfig, GF_BG_LYR_SUB_0, 0x3FF, 17, 0, 12, 4, TILEMAP_FILL_OVWT_PAL);
+        FillBgTilemapRect(game->bgConfig, GF_BG_LYR_SUB_0, 0x3FF, 20, 13, 12, 4, TILEMAP_FILL_OVWT_PAL);
     } else {
         switch (game->app->playerCount) {
         case 2:
-            FillBgTilemapRect(game->bgConfig, GF_BG_LYR_SUB_0, 0x3FF, 0, 13, 12, 4, 17);
-            FillBgTilemapRect(game->bgConfig, GF_BG_LYR_SUB_0, 0x3FF, 20, 13, 12, 4, 17);
+            FillBgTilemapRect(game->bgConfig, GF_BG_LYR_SUB_0, 0x3FF, 0, 13, 12, 4, TILEMAP_FILL_OVWT_PAL);
+            FillBgTilemapRect(game->bgConfig, GF_BG_LYR_SUB_0, 0x3FF, 20, 13, 12, 4, TILEMAP_FILL_OVWT_PAL);
             break;
         case 3:
-            FillBgTilemapRect(game->bgConfig, GF_BG_LYR_SUB_0, 0x3FF, 17, 0, 12, 4, 17);
+            FillBgTilemapRect(game->bgConfig, GF_BG_LYR_SUB_0, 0x3FF, 17, 0, 12, 4, TILEMAP_FILL_OVWT_PAL);
             break;
         }
     }

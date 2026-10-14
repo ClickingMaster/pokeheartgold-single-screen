@@ -18,8 +18,8 @@ typedef struct PokewalkerIrWorkHeader {
 
 typedef struct PokewalkerIrWorkBuffers {
     OSMessage messages[1]; // 0x021FFAC0
-    void *identity;
-    void *peerIdentity;
+    PokewalkerIrIdentity *identity;
+    PokewalkerIrIdentity *peerIdentity;
     void *unk_28;
     u8 *strollData;
     u8 *records;
