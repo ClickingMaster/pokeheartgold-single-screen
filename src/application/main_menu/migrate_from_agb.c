@@ -7,6 +7,7 @@
 #include "application/main_menu/agb_cartridge.h"
 #include "application/main_menu/main_menu_shared.h"
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0301.h"
 
 #include "bg_window.h"
 #include "config.h"
@@ -911,12 +912,12 @@ void MigrateFromAgb_PrintMonInfo(MigrateFromAgbApp *app, AgbBoxMon *mon) {
     text.fontId = 1;
     text.baseTile = 188;
     text.color = 0x0F0200;
-    text.msgId = 44;
+    text.msgId = msg_0301_00044;
     text.printX = 144;
     text.chars = NULL;
     text.printY = 0;
     MigrateFromAgb_PrintText(app, &text, 4);
-    text.msgId = 43;
+    text.msgId = msg_0301_00043;
     text.printX = 80;
     text.printY = 8;
     MigrateFromAgb_PrintText(app, &text, 6);
@@ -1083,7 +1084,7 @@ void MigrateFromAgb_ShowConfirmScreen(MigrateFromAgbApp *app) {
     LoadUserFrameGfx1(app->bgConfig, GF_BG_LYR_MAIN_0, 0x3F0, 14, 0, HEAP_ID_76);
     LoadUserFrameGfx2(app->bgConfig, GF_BG_LYR_MAIN_0, 0x3D2, 13, app->frame, HEAP_ID_76);
     MigrateFromAgb_InitMsgBox(app);
-    app->msgBox.msgId = 10;
+    app->msgBox.msgId = msg_0301_00010;
     MigrateFromAgb_PrintText(app, &app->msgBox, 24);
 }
 
@@ -1380,9 +1381,9 @@ BOOL MigrateFromAgb_Main(OverlayManager *man, int *state) {
         case YESNORESPONSE_YES:
             YesNoPrompt_Reset(app->yesNoPrompt);
 #ifdef HEARTGOLD
-            app->pendingMsgId = 34;
+            app->pendingMsgId = msg_0301_00034;
 #else
-            app->pendingMsgId = 35;
+            app->pendingMsgId = msg_0301_00035;
 #endif
             *state = 4;
             break;
@@ -1410,7 +1411,7 @@ BOOL MigrateFromAgb_Main(OverlayManager *man, int *state) {
                     *state = 11;
                 }
             } else {
-                app->pendingMsgId = 6;
+                app->pendingMsgId = msg_0301_00006;
                 *state = 6;
             }
             break;
@@ -1440,7 +1441,7 @@ BOOL MigrateFromAgb_Main(OverlayManager *man, int *state) {
         case YESNORESPONSE_YES:
             YesNoPrompt_Reset(app->yesNoPrompt);
             app->msgBox.textSpeed = 0;
-            app->msgBox.msgId = 40;
+            app->msgBox.msgId = msg_0301_00040;
             MigrateFromAgb_PrintText(app, &app->msgBox, 0);
             app->waitingIcon = WaitingIcon_New(&app->msgWindow, 0x3D2);
             *state = 10;
@@ -1486,16 +1487,16 @@ BOOL MigrateFromAgb_Main(OverlayManager *man, int *state) {
                 } else if (result == 2) {
                     MigrateFromAgb_PrintMonInfo(app, NULL);
                 } else if (result == 4) {
-                    app->pendingMsgId = 8;
+                    app->pendingMsgId = msg_0301_00008;
                     *state = 14;
                 } else if (result == 5) {
-                    app->pendingMsgId = 9;
+                    app->pendingMsgId = msg_0301_00009;
                     *state = 14;
                 } else if (result == 6) {
-                    app->pendingMsgId = 38;
+                    app->pendingMsgId = msg_0301_00038;
                     *state = 14;
                 } else if (result == 7) {
-                    app->pendingMsgId = 38;
+                    app->pendingMsgId = msg_0301_00038;
                     *state = 14;
                 }
             } else {
@@ -1556,7 +1557,7 @@ BOOL MigrateFromAgb_Main(OverlayManager *man, int *state) {
         }
         break;
     case 18:
-        app->msgBox.msgId = 11;
+        app->msgBox.msgId = msg_0301_00011;
         MigrateFromAgb_PrintText(app, &app->msgBox, 0);
         MigrateFromAgb_ShowYesNo(app);
         PlaySE(SEQ_SE_DP_SELECT);
@@ -1590,12 +1591,12 @@ BOOL MigrateFromAgb_Main(OverlayManager *man, int *state) {
             PlaySE(SEQ_SE_DP_SAVE);
             if (result == 11) {
 #ifdef HEARTGOLD
-                app->msgBox.msgId = 29;
+                app->msgBox.msgId = msg_0301_00029;
 #else
-                app->msgBox.msgId = 30;
+                app->msgBox.msgId = msg_0301_00030;
 #endif
             } else {
-                app->msgBox.msgId = 36;
+                app->msgBox.msgId = msg_0301_00036;
             }
             MigrateFromAgb_PrintText(app, &app->msgBox, 0);
             *state = 22;
@@ -1635,6 +1636,6 @@ BOOL MigrateFromAgb_Exit(OverlayManager *man, int *state) {
     RegisterMainOverlay(FS_OVERLAY_ID(intro_title), &gApplication_TitleScreen);
     OverlayManager_FreeData(man);
     Heap_Destroy(HEAP_ID_76);
-    MainMenuUtil_EnableCartridgePullOutCheck(0);
+    MainMenuUtil_EnableCartridgePullOutCheck(FALSE);
     return TRUE;
 }

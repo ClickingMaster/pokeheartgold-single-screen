@@ -207,7 +207,7 @@ extern int swprintf(u16 *buf, u32 n, const u16 *fmt, ...);
 #define SET_PRI3(a) REG16(a) = (u16)((REG16(a) & ~3) | 3)
 
 void WifiSetupClient_Start(void) {
-    gWifiSetupClientStatus = WifiSetupHeap_AllocZeroed(0xc, -4);
+    gWifiSetupClientStatus = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupClientStatus), -4);
     if (WifiSetup_StartSimpleStart(0xf, 0x40, WifiSetupClient_OnStatus, WifiSetupClient_Alloc, WifiSetupClient_Free, 0x800) != 1) {
         OS_Terminate();
     }
@@ -2208,7 +2208,7 @@ void WifiSetupAossDone_UpdateTimer(void) {
 
 void WifiSetupListScreen_Init(void) {
     int result;
-    gWifiSetupListScreen.work = WifiSetupHeap_AllocZeroed(0x5c, 4);
+    gWifiSetupListScreen.work = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupListWork), 4);
     WifiSetupApp_GetScreenArgs(&result, 0);
     if (result == 0) {
         gWifiSetupListScreen.selected = 0;
@@ -2854,7 +2854,7 @@ void WifiSetupListScreen_WaitErrorDialogClosed(void) {
 void WifiSetupTextEntry_Init(void) {
     WifiSetupBytePair p = *(const WifiSetupBytePair *)gWifiSetupTextEntryParams;
     int a, b;
-    gWifiSetupTextEntry = WifiSetupHeap_AllocZeroed(44, 4);
+    gWifiSetupTextEntry = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupTextEntry), 4);
     WifiSetupApp_GetScreenArgs(&a, &b);
     if (a == 0) {
         WifiSetupConnections_GetSsid(gWifiSetupTextEntry->text);

@@ -15,6 +15,7 @@
 #include "heap.h"
 #include "message_format.h"
 #include "msgdata.h"
+#include "mystery_gift.h"
 #include "oam_manager.h"
 #include "obj_char_transfer.h"
 #include "obj_pltt_transfer.h"
@@ -614,17 +615,17 @@ void MainMenuUtil_ShowGiftPokemon(MainMenuUtilWork *work, int giftType, void *gi
     work->giftSprite = MainMenuUtil_CreateSprite(1, work->giftSprite, 128, 0, 1);
     mon = ((MainMenuUtilGift *)gift)->mon;
     switch (giftType) {
-    case 1:
-    case 13: {
+    case MG_TAG_POKEMON:
+    case MG_TAG_POKEMON_MOVIE: {
         u32 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
         u32 form = GetMonData(mon, MON_DATA_FORM, NULL);
         MainMenuUtil_LoadGiftMonSprite(work->giftSprite, mon, species, form, work->monCharData, work->narcIds);
         break;
     }
-    case 2:
+    case MG_TAG_EGG:
         MainMenuUtil_LoadGiftMonSprite(work->giftSprite, mon, SPECIES_EGG, 0, work->monCharData, work->narcIds);
         break;
-    case 7:
+    case MG_TAG_MANAPHY_EGG:
         MainMenuUtil_LoadGiftMonSprite(work->giftSprite, mon, SPECIES_EGG, 1, work->monCharData, work->narcIds);
         break;
     }
@@ -640,25 +641,25 @@ void MainMenuUtil_ShowGiftItem(MainMenuUtilWork *work, int giftType, void *gift)
     u32 cell;
     u32 anim;
     switch (giftType) {
-    case 3:
+    case MG_TAG_ITEM:
         item = ((MainMenuUtilGift *)gift)->itemId;
         break;
-    case 8:
+    case MG_TAG_MEMBER_CARD:
         item = ITEM_MEMBER_CARD;
         break;
-    case 9:
+    case MG_TAG_OAKS_LETTER:
         item = ITEM_OAKS_LETTER;
         break;
-    case 10:
+    case MG_TAG_AZURE_FLUTE:
         item = ITEM_AZURE_FLUTE;
         break;
-    case 12:
+    case MG_TAG_SECRET_KEY:
         item = ITEM_SECRET_KEY;
         break;
-    case 14:
+    case MG_TAG_POKEWALKER_COURSE:
         item = ITEM_TOWN_MAP;
         break;
-    case 15:
+    case MG_TAG_MEMORIAL_PHOTO:
         item = ITEM_PHOTO_ALBUM;
         break;
     }

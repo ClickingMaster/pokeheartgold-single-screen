@@ -6,6 +6,9 @@
 #include "constants/sndseq.h"
 #include "constants/species.h"
 
+#include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0000.h"
+
 #include "bg_window.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
@@ -508,7 +511,7 @@ void PhotoAlbumApp_DrawInitialScreen(PhotoAlbumApp *app) {
     PhotoAlbumApp_DrawPage(app, 3, 3, app->curPage);
     PhotoAlbumApp_UpdatePageArrows(app);
     PhotoAlbumApp_PrintCloseButton(app, 0);
-    PhotoAlbumApp_PrintMessage(app, 0, 1, 0);
+    PhotoAlbumApp_PrintMessage(app, 0, TRUE, 0);
     PhotoAlbumApp_SetCursorPos(app, app->cursorX, app->cursorY, 1);
     ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_3);
     ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_2);
@@ -666,7 +669,7 @@ int PhotoAlbumApp_RunMoveDone(PhotoAlbumApp *app) {
             return 0;
         }
         PhotoAlbumApp_DrawPage(app, 3, 3, app->curPage);
-        PhotoAlbumApp_PrintMessage(app, 3, 0, app->textDelay);
+        PhotoAlbumApp_PrintMessage(app, 3, FALSE, app->textDelay);
         app->timer = 0;
         app->subState++;
         break;
@@ -684,8 +687,8 @@ int PhotoAlbumApp_RunMoveDone(PhotoAlbumApp *app) {
         app->mode = 0;
         PlaySE(0x5DC);
         PhotoAlbumApp_SetCursorPos(app, app->cursorX, app->cursorY, 1);
-        PhotoAlbumApp_PrintMessage(app, 0, 0, 0);
-        ScheduleBgTilemapBufferTransfer(app->bgConfig, 3);
+        PhotoAlbumApp_PrintMessage(app, 0, FALSE, 0);
+        ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_3);
         app->timer = 0;
         app->subState = 0;
         return 1;
@@ -701,7 +704,7 @@ int PhotoAlbumApp_HandleMoveSelection(PhotoAlbumApp *app, u32 input) {
         PhotoAlbumApp_PrintPhotoDetails(app, 0);
         PhotoAlbumApp_UpdateSelectionSprite(app, 0);
         PhotoAlbumApp_StartCloseButtonAnim(app);
-        PhotoAlbumApp_PrintMessage(app, 0, 0, 0);
+        PhotoAlbumApp_PrintMessage(app, 0, FALSE, 0);
         app->mode = 0;
         return 1;
     case 13:
@@ -734,7 +737,7 @@ int PhotoAlbumApp_HandleMoveSelection(PhotoAlbumApp *app, u32 input) {
             return 6;
         }
         app->mode = 0;
-        PhotoAlbumApp_PrintMessage(app, 0, 0, 0);
+        PhotoAlbumApp_PrintMessage(app, 0, FALSE, 0);
         return 1;
     }
 }
@@ -1029,30 +1032,30 @@ void PhotoAlbumApp_InitBgs(PhotoAlbumApp *app) {
 
 void PhotoAlbumApp_FreeBgs(PhotoAlbumApp *app) {
     vu16 *reg = (vu16 *)0x04000304;
-    BgSetPosTextAndCommit(app->bgConfig, 7, (enum BgPosAdjustOp)0, 0);
-    FreeBgTilemapBuffer(app->bgConfig, 3);
-    FreeBgTilemapBuffer(app->bgConfig, 2);
-    FreeBgTilemapBuffer(app->bgConfig, 1);
-    FreeBgTilemapBuffer(app->bgConfig, 0);
-    FreeBgTilemapBuffer(app->bgConfig, 6);
-    FreeBgTilemapBuffer(app->bgConfig, 7);
-    FreeBgTilemapBuffer(app->bgConfig, 4);
+    BgSetPosTextAndCommit(app->bgConfig, GF_BG_LYR_SUB_3, (enum BgPosAdjustOp)0, 0);
+    FreeBgTilemapBuffer(app->bgConfig, GF_BG_LYR_MAIN_3);
+    FreeBgTilemapBuffer(app->bgConfig, GF_BG_LYR_MAIN_2);
+    FreeBgTilemapBuffer(app->bgConfig, GF_BG_LYR_MAIN_1);
+    FreeBgTilemapBuffer(app->bgConfig, GF_BG_LYR_MAIN_0);
+    FreeBgTilemapBuffer(app->bgConfig, GF_BG_LYR_SUB_2);
+    FreeBgTilemapBuffer(app->bgConfig, GF_BG_LYR_SUB_3);
+    FreeBgTilemapBuffer(app->bgConfig, GF_BG_LYR_SUB_0);
     Heap_Free(app->bgConfig);
     *reg |= (u32)reg >> 11;
 }
 
 void PhotoAlbumApp_LoadBgGfx(PhotoAlbumApp *app) {
-    NARC *narc = NARC_New((NarcId)0xAB, (enum HeapID)app->heapId);
+    NARC *narc = NARC_New(NARC_a_1_7_1, (enum HeapID)app->heapId);
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 4, (enum GFPalLoadLocation)0, (enum GFPalSlotOffset)0, 0, (enum HeapID)app->heapId);
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 4, (enum GFPalLoadLocation)4, (enum GFPalSlotOffset)0, 0, (enum HeapID)app->heapId);
-    GfGfxLoader_LoadCharDataFromOpenNarc(narc, 9, app->bgConfig, (GFBgLayer)6, 0, 0, 0, (enum HeapID)app->heapId);
-    GfGfxLoader_LoadCharDataFromOpenNarc(narc, 5, app->bgConfig, (GFBgLayer)7, 0, 0, 0, (enum HeapID)app->heapId);
-    GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 10, app->bgConfig, (GFBgLayer)6, 0, 0, 0, (enum HeapID)app->heapId);
-    GfGfxLoader_LoadCharDataFromOpenNarc(narc, 5, app->bgConfig, (GFBgLayer)3, 0, 0, 0, (enum HeapID)app->heapId);
-    GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 6, app->bgConfig, (GFBgLayer)3, 0, 0, 0, (enum HeapID)app->heapId);
-    app->screenFile_B0 = GfGfxLoader_GetScrnDataFromOpenNarc(narc, 8, 0, &app->screen_AC, (enum HeapID)app->heapId);
-    app->photoIconsFile = GfGfxLoader_GetScrnDataFromOpenNarc(narc, 8, 0, &app->photoIcons, (enum HeapID)app->heapId);
-    app->pageArrowsFile = GfGfxLoader_GetScrnDataFromOpenNarc(narc, 7, 0, &app->pageArrows, (enum HeapID)app->heapId);
+    GfGfxLoader_LoadCharDataFromOpenNarc(narc, 9, app->bgConfig, (GFBgLayer)6, 0, 0, FALSE, (enum HeapID)app->heapId);
+    GfGfxLoader_LoadCharDataFromOpenNarc(narc, 5, app->bgConfig, (GFBgLayer)7, 0, 0, FALSE, (enum HeapID)app->heapId);
+    GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 10, app->bgConfig, (GFBgLayer)6, 0, 0, FALSE, (enum HeapID)app->heapId);
+    GfGfxLoader_LoadCharDataFromOpenNarc(narc, 5, app->bgConfig, (GFBgLayer)3, 0, 0, FALSE, (enum HeapID)app->heapId);
+    GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 6, app->bgConfig, (GFBgLayer)3, 0, 0, FALSE, (enum HeapID)app->heapId);
+    app->screenFile_B0 = GfGfxLoader_GetScrnDataFromOpenNarc(narc, 8, FALSE, &app->screen_AC, (enum HeapID)app->heapId);
+    app->photoIconsFile = GfGfxLoader_GetScrnDataFromOpenNarc(narc, 8, FALSE, &app->photoIcons, (enum HeapID)app->heapId);
+    app->pageArrowsFile = GfGfxLoader_GetScrnDataFromOpenNarc(narc, 7, FALSE, &app->pageArrows, (enum HeapID)app->heapId);
     NARC_Delete(narc);
     LoadFontPal1((enum GFPalLoadLocation)0, (enum GFPalSlotOffset)0x180, (enum HeapID)app->heapId);
     LoadUserFrameGfx2(app->bgConfig, (GFBgLayer)0, 1, 0xD, app->frame, (enum HeapID)app->heapId);
@@ -1067,10 +1070,10 @@ void PhotoAlbumApp_FreeScreenData(PhotoAlbumApp *app) {
 void PhotoAlbumApp_LoadStrings(PhotoAlbumApp *app) {
     int i;
     FontID_Alloc(4, app->heapId);
-    app->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, (NarcId)0x1B, 0, app->heapId);
+    app->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0000_bin, app->heapId);
     app->messageFormat = MessageFormat_New_Custom(6, 0x16, app->heapId);
     app->str_2C = String_New(0x80, app->heapId);
-    app->str_30 = NewString_ReadMsgData(app->msgData, 0);
+    app->str_30 = NewString_ReadMsgData(app->msgData, msg_0000_00000);
     for (i = 0; i < 5; i++) {
         app->strs_34[i] = NewString_ReadMsgData(app->msgData, i + 5);
     }
@@ -1263,7 +1266,7 @@ void PhotoAlbumApp_RedrawSwappedIcons(PhotoAlbumApp *app, int oldIndex, int newI
         packed = gPhotoAlbumSlotGridPositions[newIndex % 12];
         PhotoAlbumApp_DrawGridIcon(app, NULL, 3, packed % 4, packed >> 2);
     }
-    ScheduleBgTilemapBufferTransfer(app->bgConfig, 3);
+    ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_3);
 }
 
 #pragma force_active on
@@ -1414,12 +1417,12 @@ int PhotoAlbumApp_HandleContextMenu(PhotoAlbumApp *app) {
         app->args->cursorPos = app->slotIdx;
         return 8;
     case 1:
-        PhotoAlbumApp_PrintMessage(app, 4, 0, 0);
+        PhotoAlbumApp_PrintMessage(app, 4, FALSE, 0);
         app->mode = 2;
         return 7;
     case 2:
         PhotoAlbumApp_SetCursorPos(app, app->cursorX, app->cursorY, 1);
-        PhotoAlbumApp_PrintMessage(app, 2, 0, 0);
+        PhotoAlbumApp_PrintMessage(app, 2, FALSE, 0);
         app->mode = 1;
         return 5;
     default:
@@ -1469,7 +1472,7 @@ int PhotoAlbumApp_HandleDeletePrompt(PhotoAlbumApp *app) {
     }
     PhotoAlbumApp_SetCursorPos(app, app->cursorX, app->cursorY, 1);
     PhotoAlbumApp_PrintPhotoDetails(app, 0);
-    PhotoAlbumApp_PrintMessage(app, 0, 0, 0);
+    PhotoAlbumApp_PrintMessage(app, 0, FALSE, 0);
     app->mode = 0;
     return 1;
 }

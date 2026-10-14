@@ -88,7 +88,7 @@ typedef struct PCBoxReleaseWork {
 
 // One mon icon moving between two slots (PCBox_AnimateMonMove).
 typedef struct PCBoxMoveEntry {
-    void *mon;
+    Pokemon *mon;
     u32 from;
     u32 to;
     u32 active;
@@ -826,8 +826,8 @@ void PCBox_CopyWindowToTextObj(PCBoxView *view, Window *window, u32 index);
 void PCBox_AddWindows(PCBoxWork *work);
 void PCBox_RemoveWindows(PCBoxWork *work);
 void PCBox_PrintAligned(Window *window, String *str, s32 x, s32 y, u32 font, u32 color, u32 align);
-void PCBox_PrintMsg(PCBoxView *view, void *msgData, u32 win, u32 msgId, s32 x, s32 y, u32 font, u32 color, u32 align);
-void PCBox_PrintExpandedMsg(PCBoxView *view, void *msgData, u32 win, u32 msgId, s32 x, s32 y, u32 font, u32 color, u32 align);
+void PCBox_PrintMsg(PCBoxView *view, MsgData *msgData, u32 win, u32 msgId, s32 x, s32 y, u32 font, u32 color, u32 align);
+void PCBox_PrintExpandedMsg(PCBoxView *view, MsgData *msgData, u32 win, u32 msgId, s32 x, s32 y, u32 font, u32 color, u32 align);
 void PCBox_PrintSpeciesName(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win);
 void PCBox_PrintNickname(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win);
 void PCBox_PrintLevel(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win);

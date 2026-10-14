@@ -3,6 +3,7 @@
 #include "constants/sndseq.h"
 
 #include "application/palpad/palpad_internal.h"
+#include "msgdata/msg/msg_0779.h"
 
 #include "brightness.h"
 #include "gf_g2d_renderer.h"
@@ -319,7 +320,7 @@ void PalPadRoster_Setup(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *g
     roster->trainerIcons = CharSpriteManager_New(gfx->spriteList, NULL, 16, heapId);
     CharSpriteManager_LoadAvatarChars(roster->trainerIcons, 1, 2, heapId);
     PalPad_AddWindow(gfx->bgConfig, &roster->returnWindow, GF_BG_LYR_MAIN_1, 21, 21, 9, 2, 11, 0x14F, 0);
-    string = NewString_ReadMsgData(gfx->msgData, 7);
+    string = NewString_ReadMsgData(gfx->msgData, msg_0779_00007);
     AddTextPrinterParameterizedWithColor(&roster->returnWindow, 4, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 15, 0), NULL);
     String_Delete(string);
     for (i = 0; i < 2; i++) {
@@ -361,7 +362,7 @@ void PalPadRoster_Teardown(PalPadRoster *roster, PalPadShared *shared, PalPadGfx
 void PalPadRoster_Show(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     NNSG2dScreenData *screen;
 
-    PalPadGfx_PrintTitle(gfx, &gfx->titleWindow, 5);
+    PalPadGfx_PrintTitle(gfx, &gfx->titleWindow, msg_0779_00005);
     screen = gfx->screens.data[1];
     CopyToBgTilemapRect(gfx->bgConfig, GF_BG_LYR_MAIN_0, 17, 20, 14, 4, screen->rawData, 3, 0, (u8)(screen->screenWidth >> 3), (u8)(screen->screenHeight >> 3));
     ScheduleWindowCopyToVram(&roster->returnWindow);
@@ -653,7 +654,7 @@ void PalPadRoster_OpenFriendMenu(PalPadRoster *roster, PalPadShared *shared, Pal
     header.numWindows = 4;
     roster->menu = TouchscreenListMenu_CreateWithCallback(gfx->listMenuSpawner, &header, (u8)shared->inputState, 13, 5, 17, 0, PalPadRoster_MenuCallback, NULL, TRUE);
     PalPadGfx_BufferFriendName(gfx, shared->saveData, slots[index], heapId);
-    PalPadRoster_PrintMessage(roster, gfx, 12, heapId);
+    PalPadRoster_PrintMessage(roster, gfx, msg_0779_00012, heapId);
     PalPadGfx_SetArrowsVisible(gfx, FALSE);
     StartBrightnessTransition(4, 8, 0, (GXBlendPlaneMask)61, SCREEN_MASK_MAIN);
 }
@@ -715,7 +716,7 @@ void PalPadRoster_ConfirmDelete(PalPadRoster *roster, PalPadShared *shared, PalP
     int index = PalPadRoster_GetSelectedIndex(roster);
 
     PalPadGfx_BufferFriendName(gfx, shared->saveData, shared->friends.slots[index], heapId);
-    PalPadRoster_PrintMessage(roster, gfx, 57, heapId);
+    PalPadRoster_PrintMessage(roster, gfx, msg_0779_00057, heapId);
 }
 
 BOOL PalPadRoster_StartDeletePrompt(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx) {

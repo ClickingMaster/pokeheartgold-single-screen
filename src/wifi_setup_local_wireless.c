@@ -2248,7 +2248,7 @@ void WifiSetupBanner_Open(int kind) {
     const u8 *anim;
     int i;
 
-    gWifiSetupBanner.banner = WifiSetupHeap_AllocZeroed(0x1c, 4);
+    gWifiSetupBanner.banner = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupBanner), 4);
     res = gWifiSetupBannerLetterTemplates[kind];
     anim = gWifiSetupBannerLetterPalettes[kind];
     for (i = 0; i < 5; i++) {

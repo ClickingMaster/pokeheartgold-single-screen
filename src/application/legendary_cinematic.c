@@ -245,8 +245,8 @@ int ArceusScriptCmd_Nop(void);
 void LegendaryCinematic_Init3D(LegendaryCinematic *cinematic) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
-    GfGfx_EngineASetPlanes(0);
-    GfGfx_EngineBSetPlanes(0);
+    GfGfx_EngineASetPlanes(GX_PLANEMASK_NONE);
+    GfGfx_EngineBSetPlanes(GX_PLANEMASK_NONE);
     G2_BlendNone();
     G2S_BlendNone();
     reg_GX_POWCNT |= REG_GX_POWCNT_DSEL_MASK;
@@ -899,8 +899,8 @@ int ArceusCinematic_Init(LegendaryCinematic *cinematic) {
     ArceusCinematic *arceus;
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
-    GfGfx_EngineASetPlanes(0);
-    GfGfx_EngineBSetPlanes(0);
+    GfGfx_EngineASetPlanes(GX_PLANEMASK_NONE);
+    GfGfx_EngineBSetPlanes(GX_PLANEMASK_NONE);
     G2_BlendNone();
     G2S_BlendNone();
     reg_GX_POWCNT |= REG_GX_POWCNT_DSEL_MASK;

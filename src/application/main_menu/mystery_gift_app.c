@@ -250,7 +250,7 @@ int MysteryGiftApp_StartSearch(OverlayManager *manager) {
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
 
     if (data->receiveMode != 2) {
-        MysteryGiftApp_PrintMessage(manager, &data->messageWindow, 3);
+        MysteryGiftApp_PrintMessage(manager, &data->messageWindow, msg_0247_00003);
     }
     MysteryGiftApp_EraseWindowIfInUse(&data->windows[2], FALSE);
     if (data->receiveMode != 2) {
@@ -280,7 +280,7 @@ int MysteryGiftApp_AcceptGift(OverlayManager *manager) {
     if (data->receiveMode == 1) {
         MysteryGiftComm_ConnectToChannel(data->channel);
     }
-    MysteryGiftApp_PrintMessage(manager, &data->messageWindow, 6);
+    MysteryGiftApp_PrintMessage(manager, &data->messageWindow, msg_0247_00006);
     MysteryGiftApp_EraseWindowIfInUse(&data->windows[2], FALSE);
     if (data->receiveMode == 1) {
         MysteryGiftApp_SetSpriteAnim(data, 0);
@@ -396,7 +396,7 @@ void MysteryGiftApp_ShowReceivePrompt(OverlayManager *manager, int mode) {
     Window *window;
 
     if (mode == 0) {
-        msgId = 4;
+        msgId = msg_0247_00004;
     } else {
         msgId = -1;
     }
@@ -2071,7 +2071,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         MysteryGiftApp_EraseWindowIfInUse(&data->windows[2], FALSE);
         break;
     case 50:
-        *state = MysteryGiftApp_PrintMessageAndWait(manager, NULL, 0, *state);
+        *state = MysteryGiftApp_PrintMessageAndWait(manager, NULL, msg_0247_00000, *state);
         break;
     case 51:
         if (gSystem.newKeys) {

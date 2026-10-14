@@ -316,7 +316,7 @@ void PalPadGfx_InitBgs(PalPadGfx *gfx, enum HeapID heapId) {
     modes = sPalPadGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     for (i = 0; i < 7; i++) {
-        InitBgFromTemplate(gfx->bgConfig, i, &sPalPadBgTemplates[i], 0);
+        InitBgFromTemplate(gfx->bgConfig, i, &sPalPadBgTemplates[i], GF_BG_TYPE_TEXT);
         BG_ClearCharDataRange(i, 0x20, 0, heapId);
         BgClearTilemapBufferAndCommit(gfx->bgConfig, i);
     }

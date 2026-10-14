@@ -351,8 +351,8 @@ void FootprintStamp_DrawVanish(FootprintStampBoard *board, FootprintStampObj *st
 
     if (vanish->polygonId != 0xFF) {
         NNS_G3dGlbPolygonAttr(0, GX_POLYGONMODE_MODULATE, GX_CULL_ALL, vanish->polygonId, vanish->alpha >> 8, 0);
-        NNSi_G3dModifyPolygonAttrMask(stamp->model.model, 0, 0x3F000000);
-        NNSi_G3dModifyPolygonAttrMask(stamp->model.model, 0, 0x1F0000);
+        NNSi_G3dModifyPolygonAttrMask(stamp->model.model, FALSE, 0x3F000000);
+        NNSi_G3dModifyPolygonAttrMask(stamp->model.model, FALSE, 0x1F0000);
     }
     ModelInstance_Draw(&stamp->instance);
 }
@@ -622,8 +622,8 @@ void FootprintStamp_DrawRise(FootprintStampBoard *board, FootprintStampObj *stam
 
     if (polygonId != 0xFF) {
         NNS_G3dGlbPolygonAttr(0, GX_POLYGONMODE_MODULATE, GX_CULL_ALL, polygonId, 8, 0);
-        NNSi_G3dModifyPolygonAttrMask(stamp->model.model, 0, 0x3F000000);
-        NNSi_G3dModifyPolygonAttrMask(stamp->model.model, 0, 0x001F0000);
+        NNSi_G3dModifyPolygonAttrMask(stamp->model.model, FALSE, 0x3F000000);
+        NNSi_G3dModifyPolygonAttrMask(stamp->model.model, FALSE, 0x001F0000);
     }
     for (i = 0, copy = rise->trail; i < 3; i++, copy++) {
         ModelInstance_Draw(copy);
@@ -631,8 +631,8 @@ void FootprintStamp_DrawRise(FootprintStampBoard *board, FootprintStampObj *stam
     polygonId = rise->polygonId;
     if (polygonId != 0xFF) {
         NNS_G3dGlbPolygonAttr(0, GX_POLYGONMODE_MODULATE, GX_CULL_ALL, polygonId, 31, 0);
-        NNSi_G3dModifyPolygonAttrMask(stamp->model.model, 0, 0x3F000000);
-        NNSi_G3dModifyPolygonAttrMask(stamp->model.model, 0, 0x001F0000);
+        NNSi_G3dModifyPolygonAttrMask(stamp->model.model, FALSE, 0x3F000000);
+        NNSi_G3dModifyPolygonAttrMask(stamp->model.model, FALSE, 0x001F0000);
     }
     ModelInstance_Draw(&stamp->instance);
 }
@@ -773,8 +773,8 @@ void FootprintStamp_DrawSpreadX(FootprintStampBoard *board, FootprintStampObj *s
     spread = &stamp->effect.spread;
     if (spread->polygonId != 0xFF) {
         NNS_G3dGlbPolygonAttr(0, GX_POLYGONMODE_MODULATE, GX_CULL_ALL, spread->polygonId, spread->alpha >> 8, 0);
-        NNSi_G3dModifyPolygonAttrMask(stamp->model.model, 0, 0x3F << 24);
-        NNSi_G3dModifyPolygonAttrMask(stamp->model.model, 0, 0x1F << 16);
+        NNSi_G3dModifyPolygonAttrMask(stamp->model.model, FALSE, 0x3F << 24);
+        NNSi_G3dModifyPolygonAttrMask(stamp->model.model, FALSE, 0x1F << 16);
     }
     i = 0;
     do {
@@ -867,8 +867,8 @@ void FootprintStamp_DrawSpreadY(FootprintStampBoard *board, FootprintStampObj *s
     spread = &stamp->effect.spread;
     if (spread->polygonId != 0xFF) {
         NNS_G3dGlbPolygonAttr(0, GX_POLYGONMODE_MODULATE, GX_CULL_ALL, spread->polygonId, spread->alpha >> 8, 0);
-        NNSi_G3dModifyPolygonAttrMask(stamp->model.model, 0, 0x3F << 24);
-        NNSi_G3dModifyPolygonAttrMask(stamp->model.model, 0, 0x1F << 16);
+        NNSi_G3dModifyPolygonAttrMask(stamp->model.model, FALSE, 0x3F << 24);
+        NNSi_G3dModifyPolygonAttrMask(stamp->model.model, FALSE, 0x1F << 16);
     }
     i = 0;
     do {

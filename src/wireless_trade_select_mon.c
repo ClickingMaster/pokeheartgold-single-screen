@@ -9,6 +9,8 @@
 #include "constants/species.h"
 
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0183.h"
+#include "msgdata/msg/msg_0779.h"
 
 #include "bag.h"
 #include "bg_window.h"
@@ -432,7 +434,7 @@ BOOL WirelessTradeSelectMon_Init(OverlayManager *man, int *state) {
         work->fieldSystem = fieldSystem;
         WirelessTrade_SetWork(fieldSystem, work);
     }
-    WirelessTradeSelectMon_PrintMessage(&work->windows[23], 20, 1, work->msgData, work->msgFormat); // "Communicating. Please stand by..."
+    WirelessTradeSelectMon_PrintMessage(&work->windows[23], msg_0183_00020, 1, work->msgData, work->msgFormat); // "Communicating. Please stand by..."
     WirelessTrade_RegisterCommands(work->fieldSystem);
     ToggleBgLayer(GF_BG_LYR_MAIN_0, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
@@ -455,7 +457,7 @@ void WirelessTradeSelectMon_PrintPlayerNames(WirelessTradeSelectMon *work) {
     PlayerProfile *partnerProfile = CommPlayerInfo_GetProfile(Comm_GetLocalNetId() ^ 1);
     String *name = PlayerProfile_GetPlayerName_NewString(profile, HEAP_ID_26);
     String *partnerName = PlayerProfile_GetPlayerName_NewString(partnerProfile, HEAP_ID_26);
-    String *quit = NewString_ReadMsgData(work->msgData, 50); // "Quit"
+    String *quit = NewString_ReadMsgData(work->msgData, msg_0183_00050); // "Quit"
 
     WirelessTradeSelectMon_PrintString(&work->windows[0], name, 10, 0, 1, 1);
     WirelessTradeSelectMon_PrintString(&work->windows[1], partnerName, 10, 0, 1, 1);
@@ -476,7 +478,7 @@ void WirelessTradeSelectMon_ReloadScreen(WirelessTradeSelectMon *work) {
     WirelessTradeSelectMon_PrintPlayerNames(work);
     LoadUserFrameGfx2(work->bgConfig, GF_BG_LYR_MAIN_0, 985, 10, Options_GetFrame(work->args->options), HEAP_ID_26);
     LoadUserFrameGfx1(work->bgConfig, GF_BG_LYR_MAIN_0, 1015, 11, 0, HEAP_ID_26);
-    WirelessTradeSelectMon_PrintMessage(&work->windows[21], 15, 1, work->msgData, work->msgFormat); // "Choose a Pokémon."
+    WirelessTradeSelectMon_PrintMessage(&work->windows[21], msg_0183_00015, 1, work->msgData, work->msgFormat); // "Choose a Pokémon."
     ToggleBgLayer(GF_BG_LYR_SUB_0, GF_PLANE_TOGGLE_ON);
     ToggleBgLayer(GF_BG_LYR_SUB_1, GF_PLANE_TOGGLE_ON);
     ToggleBgLayer(GF_BG_LYR_SUB_2, GF_PLANE_TOGGLE_ON);
@@ -810,7 +812,7 @@ BOOL WirelessTradeSelectMon_ExchangeData(WirelessTradeSelectMon *work) {
         if (IsBrightnessTransitionActive(2)) {
             ClearFrameAndWindow2(&work->windows[23], TRUE);
             FillBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, 32, 24, 0);
-            WirelessTradeSelectMon_PrintMessage(&work->windows[21], 15, 1, work->msgData, work->msgFormat); // "Choose a Pokémon."
+            WirelessTradeSelectMon_PrintMessage(&work->windows[21], msg_0183_00015, 1, work->msgData, work->msgFormat); // "Choose a Pokémon."
             Sys_ClearSoftResetDisableFlag(2);
             return TRUE;
         }
@@ -1099,7 +1101,7 @@ void WirelessTradeSelectMon_InitWork(WirelessTradeSelectMon *work, OverlayManage
     size = SaveArray_Party_sizeof();
     memset(work->partnerParty, 0xFF, size);
     work->playerName = PlayerProfile_GetPlayerName_NewString(args->profile, HEAP_ID_26);
-    work->itemLabel = NewString_ReadMsgData(work->msgData, 42); // "ITEM"
+    work->itemLabel = NewString_ReadMsgData(work->msgData, msg_0183_00042); // "ITEM"
     Comm_RecordPlayerLocations(args->wifiHistory);
 }
 
@@ -1296,7 +1298,7 @@ void WirelessTradeSelectMon_ShowMonDetails(Window *windows, int side, Party *par
         string = String_New(10, HEAP_ID_26);
         f.windowOffset = (side + 28) * sizeof(Window);
         FillWindowPixelBuffer((Window *)((u8 *)windows + f.windowOffset), 0);
-        ReadMsgDataIntoString(work->msgData, 41, string); // "Lv."
+        ReadMsgDataIntoString(work->msgData, msg_0183_00041, string); // "Lv."
         WirelessTradeSelectMon_PrintString((Window *)((u8 *)windows + f.windowOffset), string, 9, 255, 6, 0);
         value = (u16)GetMonData(Party_GetMonByIndex(f.party, f.slot), MON_DATA_LEVEL, NULL);
         String16_FormatInteger(string, value, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
@@ -1677,7 +1679,7 @@ void WirelessTradeSelectMon_OpenSummary(WirelessTradeSelectMon *work, u32 ofPart
 
 int WirelessTradeSelectMon_AskQuit(WirelessTradeSelectMon *work) {
     FillBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, 32, 24, 0);
-    WirelessTradeSelectMon_PrintMessage(&work->windows[23], 25, 1, work->msgData, work->msgFormat); // "Cancel trading?"
+    WirelessTradeSelectMon_PrintMessage(&work->windows[23], msg_0183_00025, 1, work->msgData, work->msgFormat); // "Cancel trading?"
     work->callback = WirelessTradeSelectMon_HandleQuitPrompt;
     return 0;
 }
@@ -1687,7 +1689,7 @@ int WirelessTradeSelectMon_HandleQuitPrompt(WirelessTradeSelectMon *work) {
     case YESNORESPONSE_YES:
     case YESNORESPONSE_YES_TOUCH:
         FillBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, 32, 24, 0);
-        WirelessTradeSelectMon_PrintMessage(&work->windows[23], 28, 1, work->msgData, work->msgFormat); // "Waiting for your friend to finish..."
+        WirelessTradeSelectMon_PrintMessage(&work->windows[23], msg_0183_00028, 1, work->msgData, work->msgFormat); // "Waiting for your friend to finish..."
         WirelessTradeSelectMon_SendCommandIfChanged(work, WIRELESS_TRADE_CMD_ANSWER, WIRELESS_TRADE_ANSWER_QUIT);
         work->callback = WirelessTradeSelectMon_WaitQuitAnswers;
         work->tradeAccepted = FALSE;
@@ -1695,7 +1697,7 @@ int WirelessTradeSelectMon_HandleQuitPrompt(WirelessTradeSelectMon *work) {
     case YESNORESPONSE_NO:
     case YESNORESPONSE_NO_TOUCH:
         FillBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, 32, 24, 0);
-        WirelessTradeSelectMon_PrintMessage(&work->windows[21], 15, 1, work->msgData, work->msgFormat); // "Choose a Pokémon."
+        WirelessTradeSelectMon_PrintMessage(&work->windows[21], msg_0183_00015, 1, work->msgData, work->msgFormat); // "Choose a Pokémon."
         work->callback = WirelessTradeSelectMon_SelectMon;
         break;
     }
@@ -1712,7 +1714,7 @@ int WirelessTradeSelectMon_ShowResultMessage(WirelessTradeSelectMon *work) {
 int WirelessTradeSelectMon_WaitResultMessage(WirelessTradeSelectMon *work) {
     if ((gSystem.newKeys & PAD_BUTTON_A) || gSystem.touchNew != 0) {
         FillBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, 32, 24, 0);
-        WirelessTradeSelectMon_PrintMessage(&work->windows[21], 15, 1, work->msgData, work->msgFormat); // "Choose a Pokémon."
+        WirelessTradeSelectMon_PrintMessage(&work->windows[21], msg_0183_00015, 1, work->msgData, work->msgFormat); // "Choose a Pokémon."
         work->callback = WirelessTradeSelectMon_SelectMon;
         WirelessTradeSelectMon_RestoreIcons(work);
     }
@@ -1733,7 +1735,7 @@ int WirelessTradeSelectMon_HandleGiveUpPrompt(WirelessTradeSelectMon *work) {
         break;
     case YESNORESPONSE_NO:
     case YESNORESPONSE_NO_TOUCH:
-        WirelessTradeSelectMon_PrintRosterMessage(work, 63); // "Your Friend Roster is full. Will you delete someone?"
+        WirelessTradeSelectMon_PrintRosterMessage(work, msg_0779_00063); // "Your Friend Roster is full. Will you delete someone?"
         work->callback = WirelessTradeSelectMon_HandleRosterFullPrompt;
         break;
     }
@@ -1754,7 +1756,7 @@ int WirelessTradeSelectMon_HandleDeletePrompt(WirelessTradeSelectMon *work) {
     case YESNORESPONSE_NO:
     case YESNORESPONSE_NO_TOUCH:
         BufferPlayersName(work->rosterMsgFormat, 0, CommPlayerInfo_GetProfile(work->friendNetId));
-        WirelessTradeSelectMon_PrintRosterMessage(work, 64); // "Give up on registering {name}?"
+        WirelessTradeSelectMon_PrintRosterMessage(work, msg_0779_00064); // "Give up on registering {name}?"
         work->callback = WirelessTradeSelectMon_HandleGiveUpPrompt;
         break;
     }
@@ -1772,7 +1774,7 @@ int WirelessTradeSelectMon_HandleRosterListInput(WirelessTradeSelectMon *work) {
     case LIST_CANCEL:
         PlaySE(SEQ_SE_DP_SELECT);
         BufferPlayersName(work->rosterMsgFormat, 0, CommPlayerInfo_GetProfile(work->friendNetId));
-        WirelessTradeSelectMon_PrintRosterMessage(work, 64); // "Give up on registering {name}?"
+        WirelessTradeSelectMon_PrintRosterMessage(work, msg_0779_00064); // "Give up on registering {name}?"
         work->callback = WirelessTradeSelectMon_HandleGiveUpPrompt;
         break;
     default: {
@@ -1782,7 +1784,7 @@ int WirelessTradeSelectMon_HandleRosterListInput(WirelessTradeSelectMon *work) {
         Save_Profile_PlayerName_Set(profile, FriendRoster_GetPlayerName(work->roster, choice));
         BufferPlayersName(work->rosterMsgFormat, 0, profile);
         Heap_Free(profile);
-        WirelessTradeSelectMon_PrintRosterMessage(work, 65); // "Delete {name}'s data from your Friend Roster?"
+        WirelessTradeSelectMon_PrintRosterMessage(work, msg_0779_00065); // "Delete {name}'s data from your Friend Roster?"
         work->callback = WirelessTradeSelectMon_HandleDeletePrompt;
         break;
     }
@@ -1804,7 +1806,7 @@ int WirelessTradeSelectMon_ShowRosterList(WirelessTradeSelectMon *work) {
             ListMenuItems_AddItem(work->rosterItems, name, i);
         }
     }
-    ListMenuItems_AppendFromMsgData(work->rosterItems, work->rosterMsgData, 11, LIST_CANCEL); // "CANCEL"
+    ListMenuItems_AppendFromMsgData(work->rosterItems, work->rosterMsgData, msg_0779_00011, LIST_CANCEL); // "CANCEL"
     String_Delete(name);
     work->rosterMenu = WirelessTradeSelectMon_CreateRosterListMenu(work->rosterItems, count, &work->rosterWindow, work->bgConfig);
     work->callback = WirelessTradeSelectMon_HandleRosterListInput;
@@ -1824,7 +1826,7 @@ int WirelessTradeSelectMon_HandleRosterFullPrompt(WirelessTradeSelectMon *work) 
     case YESNORESPONSE_NO:
     case YESNORESPONSE_NO_TOUCH:
         BufferPlayersName(work->rosterMsgFormat, 0, CommPlayerInfo_GetProfile(work->friendNetId));
-        WirelessTradeSelectMon_PrintRosterMessage(work, 64); // "Give up on registering {name}?"
+        WirelessTradeSelectMon_PrintRosterMessage(work, msg_0779_00064); // "Give up on registering {name}?"
         work->callback = WirelessTradeSelectMon_HandleGiveUpPrompt;
         break;
     }
@@ -1846,7 +1848,7 @@ int WirelessTradeSelectMon_HandleRegisterPrompt(WirelessTradeSelectMon *work) {
             }
         }
         if (i == 32) {
-            WirelessTradeSelectMon_PrintRosterMessage(work, 63); // "Your Friend Roster is full. Will you delete someone?"
+            WirelessTradeSelectMon_PrintRosterMessage(work, msg_0779_00063); // "Your Friend Roster is full. Will you delete someone?"
             work->callback = WirelessTradeSelectMon_HandleRosterFullPrompt;
             return 0;
         }
@@ -1881,13 +1883,13 @@ int WirelessTradeSelectMon_RegisterNextFriend(WirelessTradeSelectMon *work) {
         DestroyMsgData(work->rosterMsgData);
         MessageFormat_Delete(work->rosterMsgFormat);
         LinkSync_StartSync(0x13);
-        WirelessTradeSelectMon_PrintMessage(&work->windows[23], 28, 1, work->msgData, work->msgFormat); // "Waiting for your friend to finish..."
+        WirelessTradeSelectMon_PrintMessage(&work->windows[23], msg_0183_00028, 1, work->msgData, work->msgFormat); // "Waiting for your friend to finish..."
         work->callback = WirelessTradeSelectMon_WaitQuitSync;
         return 0;
     }
     if (Bag_HasItem(Save_Bag_Get(work->saveData), ITEM_PAL_PAD, 1, HEAP_ID_26) == TRUE) {
         BufferPlayersName(work->rosterMsgFormat, 0, CommPlayerInfo_GetProfile(work->friendNetId));
-        WirelessTradeSelectMon_PrintRosterMessage(work, 62); // "Register {name} in your Pal Pad?"
+        WirelessTradeSelectMon_PrintRosterMessage(work, msg_0779_00062); // "Register {name} in your Pal Pad?"
         work->callback = WirelessTradeSelectMon_HandleRegisterPrompt;
         return 0;
     }
@@ -1906,7 +1908,7 @@ int WirelessTradeSelectMon_StartFriendRegistration(WirelessTradeSelectMon *work)
     // unk_02037C94.h declares Comm_RegisterLinkedFriends as void, but it returns whether anyone can be registered.
     if (!((s32(*)(SaveData *, void *, enum HeapID))Comm_RegisterLinkedFriends)(work->saveData, work->friendStates, HEAP_ID_26)) {
         LinkSync_StartSync(0x13);
-        WirelessTradeSelectMon_PrintMessage(&work->windows[23], 28, 1, work->msgData, work->msgFormat); // "Waiting for your friend to finish..."
+        WirelessTradeSelectMon_PrintMessage(&work->windows[23], msg_0183_00028, 1, work->msgData, work->msgFormat); // "Waiting for your friend to finish..."
         work->callback = WirelessTradeSelectMon_WaitQuitSync;
         return 0;
     }
@@ -1926,7 +1928,7 @@ int WirelessTradeSelectMon_WaitQuitAnswers(WirelessTradeSelectMon *work) {
         }
         work->answers[0] = 0;
         work->answers[1] = 0;
-        work->resultMsg = 29; // "Your friend apparently wants to trade a Pokémon with you."
+        work->resultMsg = msg_0183_00029; // "Your friend apparently wants to trade a Pokémon with you."
     }
     return 0;
 }
@@ -1949,11 +1951,11 @@ TouchscreenListMenu *WirelessTradeSelectMon_CreateTouchMenu(WirelessTradeSelectM
 int WirelessTradeSelectMon_ShowOwnMonMenu(WirelessTradeSelectMon *work) {
     BufferBoxMonNickname(work->nicknameFormat, 0, Mon_GetBoxMon(Party_GetMonByIndex(work->party, work->cursor)));
     FillBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, 32, 24, 0);
-    WirelessTradeSelectMon_PrintMessage(&work->windows[22], 16, 1, work->msgData, work->nicknameFormat); // "{nickname} is selected."
+    WirelessTradeSelectMon_PrintMessage(&work->windows[22], msg_0183_00016, 1, work->msgData, work->nicknameFormat); // "{nickname} is selected."
     work->menuItems = ListMenuItems_New(3, HEAP_ID_26);
-    ListMenuItems_AppendFromMsgData(work->menuItems, work->msgData, 17, 0); // "SUMMARY"
-    ListMenuItems_AppendFromMsgData(work->menuItems, work->msgData, 18, 1); // "TRADE"
-    ListMenuItems_AppendFromMsgData(work->menuItems, work->msgData, 19, 2); // "CANCEL"
+    ListMenuItems_AppendFromMsgData(work->menuItems, work->msgData, msg_0183_00017, 0); // "SUMMARY"
+    ListMenuItems_AppendFromMsgData(work->menuItems, work->msgData, msg_0183_00018, 1); // "TRADE"
+    ListMenuItems_AppendFromMsgData(work->menuItems, work->msgData, msg_0183_00019, 2); // "CANCEL"
     work->touchMenu = WirelessTradeSelectMon_CreateTouchMenu(work, 3, 9);
     work->callback = WirelessTradeSelectMon_HandleOwnMonMenu;
     return 0;
@@ -1965,14 +1967,14 @@ int WirelessTradeSelectMon_HandleOwnMonMenu(WirelessTradeSelectMon *work) {
     switch (input) {
     case 0: // summary
         FillBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, 32, 24, 0);
-        WirelessTradeSelectMon_PrintMessage(&work->windows[21], 15, 1, work->msgData, work->msgFormat); // "Choose a Pokémon."
+        WirelessTradeSelectMon_PrintMessage(&work->windows[21], msg_0183_00015, 1, work->msgData, work->msgFormat); // "Choose a Pokémon."
         WirelessTradeSelectMon_DestroyTouchMenu(work);
         ListMenuItems_Delete(work->menuItems);
         work->callback = WirelessTradeSelectMon_SelectMon;
         return 3;
     case 1: // trade
         FillBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, 32, 24, 0);
-        WirelessTradeSelectMon_PrintMessage(&work->windows[23], 20, 1, work->msgData, work->msgFormat); // "Communicating. Please stand by..."
+        WirelessTradeSelectMon_PrintMessage(&work->windows[23], msg_0183_00020, 1, work->msgData, work->msgFormat); // "Communicating. Please stand by..."
         WirelessTradeSelectMon_DestroyTouchMenu(work);
         ListMenuItems_Delete(work->menuItems);
         work->callback = WirelessTradeSelectMon_OfferTrade;
@@ -1980,7 +1982,7 @@ int WirelessTradeSelectMon_HandleOwnMonMenu(WirelessTradeSelectMon *work) {
     case 2: // cancel
     case (u32)LIST_CANCEL:
         FillBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, 32, 24, 0);
-        WirelessTradeSelectMon_PrintMessage(&work->windows[21], 15, 1, work->msgData, work->msgFormat); // "Choose a Pokémon."
+        WirelessTradeSelectMon_PrintMessage(&work->windows[21], msg_0183_00015, 1, work->msgData, work->msgFormat); // "Choose a Pokémon."
         WirelessTradeSelectMon_DestroyTouchMenu(work);
         ListMenuItems_Delete(work->menuItems);
         work->callback = WirelessTradeSelectMon_SelectMon;
@@ -1991,7 +1993,7 @@ int WirelessTradeSelectMon_HandleOwnMonMenu(WirelessTradeSelectMon *work) {
 
 int WirelessTradeSelectMon_OfferTrade(WirelessTradeSelectMon *work) {
     FillBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, 32, 24, 0);
-    WirelessTradeSelectMon_PrintMessage(&work->windows[23], 20, 1, work->msgData, work->msgFormat); // "Communicating. Please stand by..."
+    WirelessTradeSelectMon_PrintMessage(&work->windows[23], msg_0183_00020, 1, work->msgData, work->msgFormat); // "Communicating. Please stand by..."
     WirelessTradeSelectMon_SendCommandIfChanged(work, WIRELESS_TRADE_CMD_ANSWER, WIRELESS_TRADE_ANSWER_OFFER);
     work->callback = WirelessTradeSelectMon_WaitOfferAnswers;
     return 0;
@@ -2004,7 +2006,7 @@ int WirelessTradeSelectMon_WaitOfferAnswers(WirelessTradeSelectMon *work) {
         } else {
             work->callback = WirelessTradeSelectMon_ShowResultMessage;
         }
-        work->resultMsg = 24; // "The trade has been canceled."
+        work->resultMsg = msg_0183_00024; // "The trade has been canceled."
         work->answers[0] = 0;
         work->answers[1] = 0;
     }
@@ -2140,7 +2142,7 @@ int WirelessTradeSelectMon_AskTradeConfirm(WirelessTradeSelectMon *work) {
     BufferBoxMonNickname(work->nicknameFormat, 0, Mon_GetBoxMon(mon));
     mon = Party_GetMonByIndex(work->partnerParty, work->partnerCursor - 6);
     BufferBoxMonNickname(work->nicknameFormat, 1, Mon_GetBoxMon(mon));
-    WirelessTradeSelectMon_PrintMessage(&work->windows[23], 21, 1, work->msgData, work->nicknameFormat); // "Trade {0} in return for {1}?"
+    WirelessTradeSelectMon_PrintMessage(&work->windows[23], msg_0183_00021, 1, work->msgData, work->nicknameFormat); // "Trade {0} in return for {1}?"
     work->callback = WirelessTradeSelectMon_HandleTradeConfirm;
     return 0;
 }
@@ -2166,19 +2168,19 @@ int WirelessTradeSelectMon_HandleTradeConfirm(WirelessTradeSelectMon *work) {
             case 0:
                 if (work->mons[work->cursor].capsule == 0) {
                     WirelessTradeSelectMon_AcceptTrade(work);
-                    WirelessTradeSelectMon_PrintMessageInWindow(work, 23, 20); // "Communicating. Please stand by..."
+                    WirelessTradeSelectMon_PrintMessageInWindow(work, 23, msg_0183_00020); // "Communicating. Please stand by..."
                     work->callback = WirelessTradeSelectMon_WaitConfirmAnswers;
                 } else {
                     work->callback = WirelessTradeSelectMon_AskDetachCapsule;
                 }
                 break;
             case 1:
-                WirelessTradeSelectMon_PrintMessageInWindow(work, 23, 37); // "There is a Pokémon that cannot be traded in your party."
+                WirelessTradeSelectMon_PrintMessageInWindow(work, 23, msg_0183_00037); // "There is a Pokémon that cannot be traded in your party."
                 work->callback = WirelessTradeSelectMon_WaitConfirmAnswers;
                 WirelessTradeSelectMon_SendCommandIfChanged(work, WIRELESS_TRADE_CMD_ANSWER, WIRELESS_TRADE_ANSWER_REFUSE);
                 break;
             case 2:
-                WirelessTradeSelectMon_PrintMessageInWindow(work, 23, 38); // "There is a Pokémon that cannot be traded in the other Trainer's party."
+                WirelessTradeSelectMon_PrintMessageInWindow(work, 23, msg_0183_00038); // "There is a Pokémon that cannot be traded in the other Trainer's party."
                 work->callback = WirelessTradeSelectMon_WaitConfirmAnswers;
                 WirelessTradeSelectMon_SendCommandIfChanged(work, WIRELESS_TRADE_CMD_ANSWER, WIRELESS_TRADE_ANSWER_REFUSE);
                 break;
@@ -2191,7 +2193,7 @@ int WirelessTradeSelectMon_HandleTradeConfirm(WirelessTradeSelectMon *work) {
     case YESNORESPONSE_NO:
     case YESNORESPONSE_NO_TOUCH:
         FillBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, 32, 24, 0);
-        WirelessTradeSelectMon_PrintMessage(&work->windows[23], 20, 1, work->msgData, work->msgFormat); // "Communicating. Please stand by..."
+        WirelessTradeSelectMon_PrintMessage(&work->windows[23], msg_0183_00020, 1, work->msgData, work->msgFormat); // "Communicating. Please stand by..."
         work->callback = WirelessTradeSelectMon_WaitConfirmAnswers;
         WirelessTradeSelectMon_SendCommandIfChanged(work, WIRELESS_TRADE_CMD_ANSWER, WIRELESS_TRADE_ANSWER_REFUSE);
         break;
@@ -2201,7 +2203,7 @@ int WirelessTradeSelectMon_HandleTradeConfirm(WirelessTradeSelectMon *work) {
 
 int WirelessTradeSelectMon_AskDetachCapsule(WirelessTradeSelectMon *work) {
     FillBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, 32, 24, 0);
-    WirelessTradeSelectMon_PrintMessage(&work->windows[23], 36, 1, work->msgData, work->nicknameFormat); // "The Ball Capsule will become detached. Is that OK?"
+    WirelessTradeSelectMon_PrintMessage(&work->windows[23], msg_0183_00036, 1, work->msgData, work->nicknameFormat); // "The Ball Capsule will become detached. Is that OK?"
     work->callback = WirelessTradeSelectMon_HandleCapsulePrompt;
     return 0;
 }
@@ -2213,13 +2215,13 @@ int WirelessTradeSelectMon_HandleCapsulePrompt(WirelessTradeSelectMon *work) {
     case YESNORESPONSE_YES:
     case YESNORESPONSE_YES_TOUCH:
         WirelessTradeSelectMon_AcceptTrade(work);
-        WirelessTradeSelectMon_PrintMessageInWindow(work, 23, 20); // "Communicating. Please stand by..."
+        WirelessTradeSelectMon_PrintMessageInWindow(work, 23, msg_0183_00020); // "Communicating. Please stand by..."
         work->callback = WirelessTradeSelectMon_WaitConfirmAnswers;
         break;
     case YESNORESPONSE_NO:
     case YESNORESPONSE_NO_TOUCH:
         FillBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, 32, 24, 0);
-        WirelessTradeSelectMon_PrintMessage(&work->windows[23], 20, 1, work->msgData, work->msgFormat); // "Communicating. Please stand by..."
+        WirelessTradeSelectMon_PrintMessage(&work->windows[23], msg_0183_00020, 1, work->msgData, work->msgFormat); // "Communicating. Please stand by..."
         work->callback = WirelessTradeSelectMon_WaitConfirmAnswers;
         WirelessTradeSelectMon_SendCommandIfChanged(work, WIRELESS_TRADE_CMD_ANSWER, WIRELESS_TRADE_ANSWER_REFUSE);
         break;
@@ -2238,9 +2240,9 @@ int WirelessTradeSelectMon_WaitConfirmAnswers(WirelessTradeSelectMon *work) {
         work->answers[0] = 0;
         work->answers[1] = 0;
         if (WirelessTradeSelectMon_HasOtherNonEggMon(work)) {
-            work->resultMsg = 24; // "The trade has been canceled."
+            work->resultMsg = msg_0183_00024; // "The trade has been canceled."
         } else {
-            work->resultMsg = 34; // "If you trade that Pokémon, you'll get stuck in your adventure!"
+            work->resultMsg = msg_0183_00034; // "If you trade that Pokémon, you'll get stuck in your adventure!"
         }
     }
     return 0;
@@ -2258,10 +2260,10 @@ int WirelessTradeSelectMon_ShowPartnerMonMenu(WirelessTradeSelectMon *work) {
 
     BufferBoxMonNickname(work->nicknameFormat, 0, Mon_GetBoxMon(mon));
     FillBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, 32, 24, 0);
-    WirelessTradeSelectMon_PrintMessage(&work->windows[22], 16, 1, work->msgData, work->nicknameFormat); // "{nickname} is selected."
+    WirelessTradeSelectMon_PrintMessage(&work->windows[22], msg_0183_00016, 1, work->msgData, work->nicknameFormat); // "{nickname} is selected."
     work->menuItems = ListMenuItems_New(2, HEAP_ID_26);
-    ListMenuItems_AppendFromMsgData(work->menuItems, work->msgData, 17, 0); // "SUMMARY"
-    ListMenuItems_AppendFromMsgData(work->menuItems, work->msgData, 19, 1); // "CANCEL"
+    ListMenuItems_AppendFromMsgData(work->menuItems, work->msgData, msg_0183_00017, 0); // "SUMMARY"
+    ListMenuItems_AppendFromMsgData(work->menuItems, work->msgData, msg_0183_00019, 1); // "CANCEL"
     work->touchMenu = WirelessTradeSelectMon_CreateTouchMenu(work, 2, 12);
     work->callback = WirelessTradeSelectMon_HandlePartnerMonMenu;
     return 0;
@@ -2279,7 +2281,7 @@ int WirelessTradeSelectMon_HandlePartnerMonMenu(WirelessTradeSelectMon *work) {
     switch (input) {
     case 0: // summary
         FillBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, 32, 24, 0);
-        WirelessTradeSelectMon_PrintMessage(&work->windows[21], 15, 1, work->msgData, work->msgFormat); // "Choose a Pokémon."
+        WirelessTradeSelectMon_PrintMessage(&work->windows[21], msg_0183_00015, 1, work->msgData, work->msgFormat); // "Choose a Pokémon."
         work->callback = WirelessTradeSelectMon_SelectMon;
         WirelessTradeSelectMon_DestroyTouchMenu(work);
         ListMenuItems_Delete(work->menuItems);
@@ -2287,7 +2289,7 @@ int WirelessTradeSelectMon_HandlePartnerMonMenu(WirelessTradeSelectMon *work) {
     case 1: // cancel
     case (u32)LIST_CANCEL:
         FillBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, 32, 24, 0);
-        WirelessTradeSelectMon_PrintMessage(&work->windows[21], 15, 1, work->msgData, work->msgFormat); // "Choose a Pokémon."
+        WirelessTradeSelectMon_PrintMessage(&work->windows[21], msg_0183_00015, 1, work->msgData, work->msgFormat); // "Choose a Pokémon."
         WirelessTradeSelectMon_DestroyTouchMenu(work);
         ListMenuItems_Delete(work->menuItems);
         work->callback = WirelessTradeSelectMon_SelectMon;

@@ -3,6 +3,7 @@
 #include "constants/sndseq.h"
 
 #include "application/palpad/palpad_internal.h"
+#include "msgdata/msg/msg_0779.h"
 
 #include "ascii_util.h"
 #include "font.h"
@@ -205,19 +206,19 @@ void PalPadFriendCode_Setup(PalPadFriendCode *friendCode, PalPadShared *shared, 
     buffer = String_New(0x80, heapId);
     ownCode = DWC_CreateFriendKey(FriendRoster_GetUserData(Save_FriendRoster_Get(shared->saveData)));
     if (ownCode) {
-        ReadMsgDataIntoString(gfx->msgData, 53, text);
+        ReadMsgDataIntoString(gfx->msgData, msg_0779_00053, text);
         x = (192 - FontID_String_GetWidthMultiline(0, text, 0)) / 2;
         AddTextPrinterParameterizedWithColor(&friendCode->windows[0], 0, text, x, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
         PalPadGfx_BufferFriendCode(gfx, ownCode);
-        ReadMsgDataIntoString(gfx->msgData, 52, buffer);
+        ReadMsgDataIntoString(gfx->msgData, msg_0779_00052, buffer);
         StringExpandPlaceholders(gfx->msgFormat, text, buffer);
         AddTextPrinterParameterizedWithColor(&friendCode->windows[1], 0, text, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 2, 0), NULL);
     } else { // no friend code yet (never connected)
-        ReadMsgDataIntoString(gfx->msgData, 54, text);
+        ReadMsgDataIntoString(gfx->msgData, msg_0779_00054, text);
         x = (192 - FontID_String_GetWidthMultiline(0, text, 0)) / 2;
         AddTextPrinterParameterizedWithColor(&friendCode->windows[0], 0, text, x, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     }
-    ReadMsgDataIntoString(gfx->msgData, 51, text);
+    ReadMsgDataIntoString(gfx->msgData, msg_0779_00051, text);
     AddTextPrinterParameterizedWithColor(&friendCode->windows[2], 4, text, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 15, 0), NULL);
     String_Delete(text);
     String_Delete(buffer);
@@ -237,7 +238,7 @@ void PalPadFriendCode_Show(PalPadFriendCode *friendCode, PalPadShared *shared, P
     NNSG2dScreenData *screen;
 
     BufferPlayersName(gfx->msgFormat, 0, Save_PlayerData_GetProfile(shared->saveData));
-    PalPadGfx_PrintTitle(gfx, &gfx->titleWindow, 50);
+    PalPadGfx_PrintTitle(gfx, &gfx->titleWindow, msg_0779_00050);
     screen = friendCode->screen;
     LoadRectToBgTilemapRect(gfx->bgConfig, GF_BG_LYR_MAIN_2, screen->rawData, 0, 0, screen->screenWidth >> 3, screen->screenHeight >> 3);
     ScheduleBgTilemapBufferTransfer(gfx->bgConfig, GF_BG_LYR_MAIN_2);

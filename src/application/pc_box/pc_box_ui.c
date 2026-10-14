@@ -1,5 +1,6 @@
 #include "global.h"
 
+#include "constants/items.h"
 #include "constants/pokemon.h"
 #include "constants/sndseq.h"
 
@@ -256,7 +257,7 @@ void PCBox_PlacePartyPanelRight(BgCellManager *panels) {
 
 void PCBox_ClearPartyPanelTiles(PCBoxWork *work) {
     PCBoxView *view = work->view;
-    FillBgTilemapRect(view->bgConfig, 1, 0, 2, 0x15, 0x0B, 0x12, 0x10);
+    FillBgTilemapRect(view->bgConfig, GF_BG_LYR_MAIN_1, 0, 2, 0x15, 0x0B, 0x12, 0x10);
 }
 
 void PCBox_PlacePartyPanelLeftHidden(BgCellManager *panels) {
@@ -704,9 +705,9 @@ void PCBox_DrawMarkings(PCBoxWork *work, u32 mask) {
         } else {
             v = i + 0x1a;
         }
-        FillBgTilemapRect(work->view->bgConfig, 5, v, (u8)(i + 0xf), 0x12, 1, 1, 0);
+        FillBgTilemapRect(work->view->bgConfig, GF_BG_LYR_SUB_1, v, (u8)(i + 0xf), 0x12, 1, 1, 0);
     }
-    ScheduleBgTilemapBufferTransfer(work->view->bgConfig, 5);
+    ScheduleBgTilemapBufferTransfer(work->view->bgConfig, GF_BG_LYR_SUB_1);
 }
 
 u32 PCBox_StartSummaryApp(PCBoxWork *work) {
@@ -783,9 +784,9 @@ u32 PCBox_StartNamingScreenApp(PCBoxWork *work) {
 }
 
 u32 PCBox_EndNamingScreenApp(PCBoxWork *work) {
-    void *w = work->subAppArgs;
-    PCStorage_SetBoxName(work->storage, work->trayBox, (*(void **)((u8 *)(w) + 0x18)));
-    work->itemId = (*(u32 *)((u8 *)(w) + 0x14));
+    NamingScreenArgs *w = work->subAppArgs;
+    PCStorage_SetBoxName(work->storage, work->trayBox, w->nameInputString);
+    work->itemId = w->noInput;
     NamingScreen_DeleteArgs(work->subAppArgs);
     return 0;
 }
@@ -802,7 +803,7 @@ u32 PCBox_UpdateMoveModeBoxDrag(PCBoxWork *work) {
     d = BgCellManager_UpdateCellMove(work->view->panels, 0xa);
     switch (view->subState) {
     case 0:
-        if (System_GetTouchHeldCoords(&x, &y) == 0) {
+        if (System_GetTouchHeldCoords(&x, &y) == FALSE) {
             a = 0xff;
             if (work->trayOpen != 0) {
                 a = PCBox_GetTouchedTrayBox(work->view->touchX, work->view->touchY);
@@ -857,7 +858,7 @@ u32 PCBox_UpdateMoveModePartyDrag(PCBoxWork *work) {
             PCBox_DrawWindowFrame(work, 0x28);
             PCBox_SetIconsTranslucent(work, 1, 0);
         }
-        if (System_GetTouchHeldCoords(&x, &y) == 0) {
+        if (System_GetTouchHeldCoords(&x, &y) == FALSE) {
             u32 r;
             ManagedSprite_SetPositionXY(work->view->sprites[work->view->slotIcons[work->selectedSlot]], sx, sy);
             if (work->view->partyPanelLowered == 2) {
@@ -941,7 +942,7 @@ u32 PCBox_UpdateBoxTrayDrag(PCBoxWork *work) {
     u32 b = BgCellManager_UpdateCellMove(work->view->panels, 0xf);
     switch (view->subState) {
     case 0:
-        if (System_GetTouchHeldCoords(&x, &y) == 0) {
+        if (System_GetTouchHeldCoords(&x, &y) == FALSE) {
             a = 0xff;
             if (work->trayOpen != 0) {
                 a = PCBox_GetTouchedTrayBox(work->view->touchX, work->view->touchY);
@@ -968,9 +969,9 @@ u32 PCBox_UpdateBoxTrayDrag(PCBoxWork *work) {
         break;
     case 1:
         if (a == 0 && b == 0) {
-            void *m = view->temp;
-            if ((*(u32 *)((u8 *)(m) + 0xe8)) != 0xff && ((*(u32 *)((u8 *)(m) + 0xe8)) & 0x80)) {
-                if ((*(u32 *)((u8 *)(m) + 0xe4)) >= 0x1e && (*(u32 *)((u8 *)(m) + 0xe4)) - 0x1e < (u32)(Party_GetCount(work->party) - 1)) {
+            PCBoxMoveWork *m = view->temp;
+            if (m->to != 0xff && (m->to & 0x80)) {
+                if (m->from >= 0x1e && m->from - 0x1e < (u32)(Party_GetCount(work->party) - 1)) {
                     PCBox_SlideInSummaryButton(work->view->panels);
                 }
             } else {
@@ -1048,9 +1049,9 @@ u32 PCBox_AnimateMoveToFirstEmptySlot(PCBoxWork *work) {
         break;
     case 1:
         if (PCBox_AnimateMonMove(work) == 0) {
-            void *m = view->temp;
-            PCBox_SetSlotIconTranslucent(work->view, (*(u32 *)((u8 *)(m) + 0xe4)), 1);
-            PCBox_ApplyMoveEntryIcons(work, m);
+            PCBoxMoveWork *m = view->temp;
+            PCBox_SetSlotIconTranslucent(work->view, m->from, 1);
+            PCBox_ApplyMoveEntryIcons(work, m->entries);
             view->subState = 0;
             return 0;
         }
@@ -1063,14 +1064,14 @@ u32 PCBox_UpdateScrollToPrevBox(PCBoxWork *work) {
     u32 a;
     u32 b;
     if (work->view->counter == 0x17) {
-        if (GridInputHandler_IsButtonInputMode(work->view->gridInput) == 1) {
-            GridInputHandler_SetButtonInputMode(work->view->gridInput, 1);
+        if (GridInputHandler_IsButtonInputMode(work->view->gridInput) == TRUE) {
+            GridInputHandler_SetButtonInputMode(work->view->gridInput, TRUE);
         }
         work->view->counter = 0;
         work->view->subState = 0;
         return 0;
     }
-    ScheduleSetBgPosText(work->view->bgConfig, 3, BG_POS_OP_SUB_X, 8);
+    ScheduleSetBgPosText(work->view->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SUB_X, 8);
     PCBox_ScrollBoxIcons(work, 8);
     BgCellManager_UpdateCellMove(work->view->panels, 0xe);
     BgCellManager_UpdateCellMove(work->view->panels, 0xa);
@@ -1090,14 +1091,14 @@ u32 PCBox_UpdateScrollToNextBox(PCBoxWork *work) {
     u32 a;
     u32 b;
     if (work->view->counter == 0x17) {
-        if (GridInputHandler_IsButtonInputMode(work->view->gridInput) == 1) {
-            GridInputHandler_SetButtonInputMode(work->view->gridInput, 1);
+        if (GridInputHandler_IsButtonInputMode(work->view->gridInput) == TRUE) {
+            GridInputHandler_SetButtonInputMode(work->view->gridInput, TRUE);
         }
         work->view->counter = 0;
         work->view->subState = 0;
         return 0;
     }
-    ScheduleSetBgPosText(work->view->bgConfig, 3, BG_POS_OP_ADD_X, 8);
+    ScheduleSetBgPosText(work->view->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_ADD_X, 8);
     PCBox_ScrollBoxIcons(work, -8);
     BgCellManager_UpdateCellMove(work->view->panels, 0xe);
     BgCellManager_UpdateCellMove(work->view->panels, 0xa);
@@ -1143,9 +1144,9 @@ int PCBox_WaitBottomButtonsSlide(PCBoxWork *work) {
     int c = BgCellManager_UpdateCellMove(work->view->panels, 10);
     int d = BgCellManager_UpdateCellMove(work->view->panels, 11);
     if (a == 0 && b == 0 && c == 0 && d == 0) {
-        return 0;
+        return FALSE;
     }
-    return 1;
+    return TRUE;
 }
 
 #pragma force_active reset
@@ -1205,7 +1206,7 @@ int PCBox_WaitActionMenuThenTitleSlide(PCBoxWork *work) {
         }
         break;
     case 1:
-        if (BgCellManager_UpdateCellMove(view->panels, 12) == 0) {
+        if (BgCellManager_UpdateCellMove(view->panels, 12) == FALSE) {
             view->subState = 0;
             return 0;
         }
@@ -1240,7 +1241,7 @@ u32 PCBox_WaitBoxMenuThenWallpaperList(PCBoxWork *work) {
         break;
     case 1:
         PCBox_MoveWallpaperMenuSprites(view, 8);
-        if (BgCellManager_UpdateCellMove(work->view->panels, 0xd) == 0) {
+        if (BgCellManager_UpdateCellMove(work->view->panels, 0xd) == FALSE) {
             view->subState = 0;
             return 0;
         }
@@ -1261,46 +1262,46 @@ int PCBox_AnimateDepositBoxSelectOpen(PCBoxWork *work) {
     void *tiles = BgCellManager_GetCellTilemap(view->panels, 0);
     switch (view->subState) {
     case 0:
-        CopyToBgTilemapRect(work->view->bgConfig, 0, 0, 9, 32, 1, tiles, 0, 3, 32, 7);
+        CopyToBgTilemapRect(work->view->bgConfig, GF_BG_LYR_MAIN_0, 0, 9, 32, 1, tiles, 0, 3, 32, 7);
         break;
     case 1:
-        CopyToBgTilemapRect(work->view->bgConfig, 0, 0, 8, 32, 1, tiles, 0, 0, 32, 7);
-        CopyToBgTilemapRect(work->view->bgConfig, 0, 0, 10, 32, 1, tiles, 0, 6, 32, 7);
+        CopyToBgTilemapRect(work->view->bgConfig, GF_BG_LYR_MAIN_0, 0, 8, 32, 1, tiles, 0, 0, 32, 7);
+        CopyToBgTilemapRect(work->view->bgConfig, GF_BG_LYR_MAIN_0, 0, 10, 32, 1, tiles, 0, 6, 32, 7);
         break;
     case 2:
-        CopyToBgTilemapRect(work->view->bgConfig, 0, 0, 7, 32, 2, tiles, 0, 0, 32, 7);
-        CopyToBgTilemapRect(work->view->bgConfig, 0, 0, 10, 32, 2, tiles, 0, 5, 32, 7);
+        CopyToBgTilemapRect(work->view->bgConfig, GF_BG_LYR_MAIN_0, 0, 7, 32, 2, tiles, 0, 0, 32, 7);
+        CopyToBgTilemapRect(work->view->bgConfig, GF_BG_LYR_MAIN_0, 0, 10, 32, 2, tiles, 0, 5, 32, 7);
         break;
     case 10:
-        FillBgTilemapRect(work->view->bgConfig, 0, 0, 0, 4, 32, 11, 16);
+        FillBgTilemapRect(work->view->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 4, 32, 11, 16);
     case 3:
-        CopyToBgTilemapRect(work->view->bgConfig, 0, 0, 6, 32, 7, tiles, 0, 0, 32, 7);
+        CopyToBgTilemapRect(work->view->bgConfig, GF_BG_LYR_MAIN_0, 0, 6, 32, 7, tiles, 0, 0, 32, 7);
         break;
     case 4:
-        CopyToBgTilemapRect(work->view->bgConfig, 0, 0, 5, 32, 2, tiles, 0, 0, 32, 7);
-        CopyToBgTilemapRect(work->view->bgConfig, 0, 0, 12, 32, 2, tiles, 0, 5, 32, 7);
+        CopyToBgTilemapRect(work->view->bgConfig, GF_BG_LYR_MAIN_0, 0, 5, 32, 2, tiles, 0, 0, 32, 7);
+        CopyToBgTilemapRect(work->view->bgConfig, GF_BG_LYR_MAIN_0, 0, 12, 32, 2, tiles, 0, 5, 32, 7);
         break;
     case 5:
-        CopyToBgTilemapRect(work->view->bgConfig, 0, 0, 4, 32, 2, tiles, 0, 0, 32, 7);
-        CopyToBgTilemapRect(work->view->bgConfig, 0, 0, 13, 32, 2, tiles, 0, 5, 32, 7);
+        CopyToBgTilemapRect(work->view->bgConfig, GF_BG_LYR_MAIN_0, 0, 4, 32, 2, tiles, 0, 0, 32, 7);
+        CopyToBgTilemapRect(work->view->bgConfig, GF_BG_LYR_MAIN_0, 0, 13, 32, 2, tiles, 0, 5, 32, 7);
         break;
     }
-    ScheduleBgTilemapBufferTransfer(work->view->bgConfig, 0);
+    ScheduleBgTilemapBufferTransfer(work->view->bgConfig, GF_BG_LYR_MAIN_0);
     if (view->subState == 10) {
         view->subState = 0;
-        return 0;
+        return FALSE;
     }
     view->subState++;
-    return 1;
+    return TRUE;
 }
 
 #pragma force_active reset
 
 u32 PCBox_AnimateDepositBoxSelectClose(PCBoxWork *work) {
     PCBoxView *view = work->view;
-    FillBgTilemapRect(view->bgConfig, 0, 0, 0, (u8)(view->subState + 6), 0x20, 1, 0x10);
-    FillBgTilemapRect(work->view->bgConfig, 0, 0, 0, (u8)(0xc - view->subState), 0x20, 1, 0x10);
-    ScheduleBgTilemapBufferTransfer(work->view->bgConfig, 0);
+    FillBgTilemapRect(view->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, (u8)(view->subState + 6), 0x20, 1, 0x10);
+    FillBgTilemapRect(work->view->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, (u8)(0xc - view->subState), 0x20, 1, 0x10);
+    ScheduleBgTilemapBufferTransfer(work->view->bgConfig, GF_BG_LYR_MAIN_0);
     if (view->subState == 3) {
         view->subState = 0;
         return 0;
@@ -1313,13 +1314,13 @@ u32 PCBox_WaitSummaryOutChangeBoxIn(PCBoxWork *work) {
     PCBoxView *view = work->view;
     switch (view->subState) {
     case 0:
-        if (BgCellManager_UpdateCellMove(view->panels, 0xf) == 0) {
+        if (BgCellManager_UpdateCellMove(view->panels, 0xf) == FALSE) {
             PCBox_SlideInChangeBoxButton(work->view->panels);
             view->subState++;
         }
         break;
     case 1:
-        if (BgCellManager_UpdateCellMove(view->panels, 0xe) == 0) {
+        if (BgCellManager_UpdateCellMove(view->panels, 0xe) == FALSE) {
             view->subState = 0;
             return 0;
         }
@@ -1329,7 +1330,7 @@ u32 PCBox_WaitSummaryOutChangeBoxIn(PCBoxWork *work) {
 }
 
 u32 PCBox_WaitTrayButtonsSlide(PCBoxWork *work) {
-    if (BgCellManager_UpdateCellMove(work->view->panels, 0xf) == 0 && BgCellManager_UpdateCellMove(work->view->panels, 0xe) == 0) {
+    if (BgCellManager_UpdateCellMove(work->view->panels, 0xf) == FALSE && BgCellManager_UpdateCellMove(work->view->panels, 0xe) == FALSE) {
         return 0;
     }
     return 1;
@@ -1339,13 +1340,13 @@ u32 PCBox_WaitChangeBoxOutSummaryIn(PCBoxWork *work) {
     PCBoxView *view = work->view;
     switch (view->subState) {
     case 0:
-        if (BgCellManager_UpdateCellMove(view->panels, 0xe) == 0) {
+        if (BgCellManager_UpdateCellMove(view->panels, 0xe) == FALSE) {
             PCBox_SlideInSummaryButton(work->view->panels);
             view->subState++;
         }
         break;
     case 1:
-        if (BgCellManager_UpdateCellMove(view->panels, 0xf) == 0) {
+        if (BgCellManager_UpdateCellMove(view->panels, 0xf) == FALSE) {
             view->subState = 0;
             return 0;
         }
@@ -1608,7 +1609,7 @@ u32 PCBox_WaitSelectWithActionMenu(PCBoxWork *work) {
     PCBoxView *view = work->view;
     switch (view->subState) {
     case 0:
-        if (BgCellManager_UpdateCellMove(view->panels, 0xa) == 0) {
+        if (BgCellManager_UpdateCellMove(view->panels, 0xa) == FALSE) {
             view->subState++;
         }
         break;
@@ -1662,7 +1663,7 @@ u32 PCBox_WaitDeselectThenReturnButton(PCBoxWork *work) {
         break;
     }
     case 1:
-        if (BgCellManager_UpdateCellMove(view->panels, 0xa) == 0) {
+        if (BgCellManager_UpdateCellMove(view->panels, 0xa) == FALSE) {
             view->subState = 0;
             return 0;
         }
@@ -1783,7 +1784,7 @@ u32 PCBox_WaitItemModeSelect(PCBoxWork *work) {
     PCBoxView *view = work->view;
     switch (view->subState) {
     case 0:
-        if (view->heldItem != 0) {
+        if (view->heldItem != ITEM_NONE) {
             PCBox_SetHeldItemIconAffine(view, 1);
             PCBox_SetSpriteAnim(work->view, 0xb, 1);
             PCBox_SetSpriteVisible(work->view, 0xb, 1);
@@ -1802,7 +1803,7 @@ u32 PCBox_WaitItemModeSelect(PCBoxWork *work) {
         u32 a = PCBox_UpdateCursorSlide(work);
         u32 b = PCBox_UpdateActionMenuSlide(work->view->panels);
         if (a == 0 && b == 0) {
-            if (work->view->heldItem != 0) {
+            if (work->view->heldItem != ITEM_NONE) {
                 PCBox_SetHeldItemIconAffine(work->view, 0);
                 PCBox_ShowHeldItemIconOutline(work->view);
             }
@@ -1892,7 +1893,7 @@ u32 PCBox_WaitItemModeDeselect(PCBoxWork *work) {
     PCBoxView *view = work->view;
     switch (view->subState) {
     case 0:
-        if (view->heldItem != 0) {
+        if (view->heldItem != ITEM_NONE) {
             PCBox_SetHeldItemIconAffine(view, 1);
             PCBox_SetSpriteAnim(work->view, 0xb, 2);
         }
@@ -1910,7 +1911,7 @@ u32 PCBox_WaitItemModeDeselect(PCBoxWork *work) {
         u32 b = BgCellManager_UpdateCellMove(work->view->panels, 9);
         u32 c = BgCellManager_UpdateCellMove(work->view->panels, 0xa);
         if (a == 0 && b == 0 && c == 0) {
-            if (work->view->heldItem != 0) {
+            if (work->view->heldItem != ITEM_NONE) {
                 PCBox_SetHeldItemIconAffine(work->view, 0);
                 PCBox_SetSpriteVisible(work->view, 0xb, 0);
             }
@@ -2106,7 +2107,7 @@ int PCBox_AnimateTrayItemPickUp(PCBoxWork *work) {
         if (view->counter == 4) {
             view->counter = 0;
             view->subState = 0;
-            return 0;
+            return FALSE;
         }
         ManagedSprite_GetPositionXY(work->view->sprites[9], &pos.x, &pos.y);
         ManagedSprite_SetPositionXY(work->view->sprites[9], pos.x, (s16)(pos.y - 2));
@@ -2117,7 +2118,7 @@ int PCBox_AnimateTrayItemPickUp(PCBoxWork *work) {
     default:
         break;
     }
-    return 1;
+    return TRUE;
 }
 
 #pragma force_active reset

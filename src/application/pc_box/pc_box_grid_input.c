@@ -708,7 +708,7 @@ u32 PCBox_IsSummaryShortcutPressed(PCBoxWork *work) {
     if (gSystem.newKeys & PAD_BUTTON_Y) {
         return 1;
     }
-    if (TouchscreenHitbox_TouchNewIsIn(sPCBoxSummaryShortcutHitbox) == 1) {
+    if (TouchscreenHitbox_TouchNewIsIn(sPCBoxSummaryShortcutHitbox) == TRUE) {
         return 1;
     }
     return 0;

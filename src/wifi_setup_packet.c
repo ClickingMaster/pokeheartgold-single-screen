@@ -655,11 +655,11 @@ int WifiSetup_StoreSimpleStartResult(void) {
         break;
     case 2:
         *(u32 *)(ov13_0224E0B0 + 0xC) = 4;
-        memcpy(&ov13_0224E144, &ov13_0224E380, 64);
+        memcpy(&ov13_0224E144, &ov13_0224E380, sizeof(WifiSetupSettings64));
         break;
     case 3:
         *(u32 *)(ov13_0224E0B0 + 0xC) = 5;
-        memcpy(&ov13_0224E144, &ov13_0224E380, 64);
+        memcpy(&ov13_0224E144, &ov13_0224E380, sizeof(WifiSetupSettings64));
         break;
     default:
         result = -7;

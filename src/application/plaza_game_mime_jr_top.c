@@ -5,6 +5,8 @@
 #include "global.h"
 
 #include "application/plaza_game.h"
+#include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0235.h"
 
 #include "bg_window.h"
 #include "camera.h"
@@ -447,8 +449,8 @@ void MimeJrTopGame_RubDemo(MimeJrTopGame *game, int x, int y) {
         }
         game->top.spinX = 0;
         game->top.spinY = 0;
-        MimeJrTopModel_Turn(&game->top, game->lastTouchX, game->lastTouchY, game->lastTouchX, game->lastTouchY, 1.88f, 0);
-        MimeJrTopModel_Turn(&game->mimeJr[0], game->lastTouchX, game->lastTouchY, game->lastTouchX, game->lastTouchY, 0.22f, 0);
+        MimeJrTopModel_Turn(&game->top, game->lastTouchX, game->lastTouchY, game->lastTouchX, game->lastTouchY, 1.88f, FALSE);
+        MimeJrTopModel_Turn(&game->mimeJr[0], game->lastTouchX, game->lastTouchY, game->lastTouchX, game->lastTouchY, 0.22f, FALSE);
         return;
     }
     v = game->tilt.y >> 12;
@@ -460,7 +462,7 @@ void MimeJrTopGame_RubDemo(MimeJrTopGame *game, int x, int y) {
         game->lastTouchX = x;
         game->lastTouchY = y;
     }
-    MimeJrTopModel_Turn(&game->top, x, y, game->lastTouchX, game->lastTouchY, 2.0f, 1);
+    MimeJrTopModel_Turn(&game->top, x, y, game->lastTouchX, game->lastTouchY, 2.0f, TRUE);
     vec2 = ov92_02263878;
     MTX_MultVec43(&vec2, &game->mimeJr[0].rotationFx, &game->tilt);
     if (!IsSEPlaying(SEQ_SE_PL_KIRAKIRA)) {
@@ -501,8 +503,8 @@ BOOL MimeJrTopGame_RunDemo(MimeJrTopGame *game) {
         ManagedSprite_SetAnimNoRestart(game->demoHand, 2);
         MimeJrTop_QuatIdentity(&game->top.rotation);
         MimeJrTop_QuatIdentity(&game->top.lastTurn);
-        MimeJrTopModel_Turn(&game->top, 0, 0, 5, 5, 0.8f, 0);
-        MimeJrTopModel_Turn(&game->top, 0, 0, -5, -5, 0.8f, 0);
+        MimeJrTopModel_Turn(&game->top, 0, 0, 5, 5, 0.8f, FALSE);
+        MimeJrTopModel_Turn(&game->top, 0, 0, -5, -5, 0.8f, FALSE);
     }
     if (game->demoStep == 3 && frame == 11) {
         game->demoFrame = 0;
@@ -510,8 +512,8 @@ BOOL MimeJrTopGame_RunDemo(MimeJrTopGame *game) {
         ManagedSprite_SetDrawFlag(game->demoHand, FALSE);
         MimeJrTop_QuatIdentity(&game->top.rotation);
         MimeJrTop_QuatIdentity(&game->top.lastTurn);
-        MimeJrTopModel_Turn(&game->top, 0, 0, 5, 5, 0.8f, 0);
-        MimeJrTopModel_Turn(&game->top, 0, 0, -5, -5, 0.8f, 0);
+        MimeJrTopModel_Turn(&game->top, 0, 0, 5, 5, 0.8f, FALSE);
+        MimeJrTopModel_Turn(&game->top, 0, 0, -5, -5, 0.8f, FALSE);
         return TRUE;
     }
     ManagedSprite_TickTwoFrames(game->demoHand);
@@ -1069,8 +1071,8 @@ void MimeJrTop_DrawScene(MimeJrTopApp *app) {
     VEC_Normalize(&light, &light);
     NNS_G3dGlbLightVector(GX_LIGHTID_0, (s16)light.x, (s16)light.y, (s16)light.z);
     NNS_G3dGlbLightColor(GX_LIGHTID_0, 32767);
-    NNS_G3dGlbMaterialColorDiffAmb(32767, 32767, 0);
-    NNS_G3dGlbMaterialColorSpecEmi(32767, 32767, 0);
+    NNS_G3dGlbMaterialColorDiffAmb(32767, 32767, FALSE);
+    NNS_G3dGlbMaterialColorSpecEmi(32767, 32767, FALSE);
     for (i = 0; i < 8; i++) {
         model = &app->game->audience[i];
         NNS_G3dGeBufferOP_N(G3OP_MTX_PUSH, NULL, 0);
@@ -1318,8 +1320,8 @@ void MimeJrTopGame_ShowInstructions(MimeJrTopGame *game) {
     InitWindow(&game->instructions);
     AddWindowParameterized(game->resources->bgConfig, &game->instructions, GF_BG_LYR_SUB_3, 2, 0x13, 0x1C, 4, 0xE, 0x130);
     FillWindowPixelBuffer(&game->instructions, 0xFF);
-    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 0xEB, HEAP_ID_113);
-    string = NewString_ReadMsgData(msgData, 0);
+    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0235_bin, HEAP_ID_113);
+    string = NewString_ReadMsgData(msgData, msg_0235_00000);
     AddTextPrinterParameterized(&game->instructions, 0, string, 0, 0, 0, NULL);
     String_Delete(string);
     DestroyMsgData(msgData);
@@ -1671,18 +1673,18 @@ void MimeJrTopGame_ResetBalance(MimeJrTopGame *game) {
     do {
         MimeJrTop_QuatIdentity(rotation);
         MimeJrTop_QuatIdentity(lastTurn);
-        MimeJrTopModel_Turn(model, 0, 0, 5, 5, 0.8f, 0);
-        MimeJrTopModel_Turn(model, 0, 0, -5, -5, 0.8f, 0);
+        MimeJrTopModel_Turn(model, 0, 0, 5, 5, 0.8f, FALSE);
+        MimeJrTopModel_Turn(model, 0, 0, -5, -5, 0.8f, FALSE);
         rotation = (MimeJrTopQuat *)((u8 *)rotation + sizeof(MimeJrTopModel));
         lastTurn = (MimeJrTopQuat *)((u8 *)lastTurn + sizeof(MimeJrTopModel));
         model++;
     } while (++i < 8);
-    MimeJrTopModel_Turn(&game->top, 0, 0, 5, 5, 1.88f, 0);
-    MimeJrTopModel_Turn(&game->top, 0, 0, -5, -5, 1.88f, 0);
-    MimeJrTopModel_Turn(&game->mimeJr[0], 0, 0, 5, 5, 0.8f, 0);
-    MimeJrTopModel_Turn(&game->mimeJr[0], 0, 0, -5, -5, 0.8f, 0);
-    MimeJrTopModel_Turn(&game->stage, 0, 0, 5, 5, 1.88f, 0);
-    MimeJrTopModel_Turn(&game->stage, 0, 0, -5, -5, 0.8f, 0);
+    MimeJrTopModel_Turn(&game->top, 0, 0, 5, 5, 1.88f, FALSE);
+    MimeJrTopModel_Turn(&game->top, 0, 0, -5, -5, 1.88f, FALSE);
+    MimeJrTopModel_Turn(&game->mimeJr[0], 0, 0, 5, 5, 0.8f, FALSE);
+    MimeJrTopModel_Turn(&game->mimeJr[0], 0, 0, -5, -5, 0.8f, FALSE);
+    MimeJrTopModel_Turn(&game->stage, 0, 0, 5, 5, 1.88f, FALSE);
+    MimeJrTopModel_Turn(&game->stage, 0, 0, -5, -5, 0.8f, FALSE);
 }
 
 #pragma force_active reset
@@ -1817,8 +1819,8 @@ void MimeJrTopFall_Task(SysTask *sysTask, MimeJrTopFallTask *task) {
             *task->pose = 1;
             MimeJrTop_QuatIdentity(&task->mimeJr->rotation);
             MimeJrTop_QuatIdentity(&task->mimeJr->lastTurn);
-            MimeJrTopModel_Turn(task->mimeJr, 0, 0, 5, 5, 0.8f, 0);
-            MimeJrTopModel_Turn(task->mimeJr, 0, 0, -5, -5, 0.8f, 0);
+            MimeJrTopModel_Turn(task->mimeJr, 0, 0, 5, 5, 0.8f, FALSE);
+            MimeJrTopModel_Turn(task->mimeJr, 0, 0, -5, -5, 0.8f, FALSE);
             MimeJrTopTween_Init(&task->tweenY, task->mimeJr->position.y, task->mimeJr->position.y - 0x30000, 8);
             if (direction > 0) {
                 MimeJrTopTween_Init(&task->tweenZ, task->mimeJr->position.z, task->mimeJr->position.z + 0x10000, 8);
@@ -2069,8 +2071,8 @@ void MimeJrTopTierModels_Task(SysTask *sysTask, MimeJrTopTierModelsTask *task) {
         a->animate = FALSE;
         MimeJrTop_QuatIdentity(&a->rotation);
         MimeJrTop_QuatIdentity(&a->lastTurn);
-        MimeJrTopModel_Turn(a, 0, 0, 5, 5, 0.8f, 0);
-        MimeJrTopModel_Turn(a, 0, 0, -5, -5, 0.8f, 0);
+        MimeJrTopModel_Turn(a, 0, 0, 5, 5, 0.8f, FALSE);
+        MimeJrTopModel_Turn(a, 0, 0, -5, -5, 0.8f, FALSE);
         task->state++;
         return;
     case 2:
@@ -2089,8 +2091,8 @@ void MimeJrTopTierModels_Task(SysTask *sysTask, MimeJrTopTierModelsTask *task) {
         b->animate = TRUE;
         MimeJrTop_QuatIdentity(&b->rotation);
         MimeJrTop_QuatIdentity(&b->lastTurn);
-        MimeJrTopModel_Turn(b, 0, 0, 5, 5, 0.8f, 0);
-        MimeJrTopModel_Turn(b, 0, 0, -5, -5, 0.8f, 0);
+        MimeJrTopModel_Turn(b, 0, 0, 5, 5, 0.8f, FALSE);
+        MimeJrTopModel_Turn(b, 0, 0, -5, -5, 0.8f, FALSE);
         if (task->selection) {
             ModelInstance_SetPosition(&a->instance, 0, -0x8000, 0);
             ModelInstance_SetPosition(&b->instance, 0, -0x8000, 0);
@@ -2334,8 +2336,8 @@ void MimeJrTopGame_HandleTouch(MimeJrTopGame *game) {
         }
         game->top.spinX = 0;
         game->top.spinY = 0;
-        MimeJrTopModel_Turn(&game->top, game->lastTouchX, game->lastTouchY, game->lastTouchX, game->lastTouchY, 1.88f, 0);
-        MimeJrTopModel_Turn(&game->mimeJr[0], game->lastTouchX, game->lastTouchY, game->lastTouchX, game->lastTouchY, 0.22f, 0);
+        MimeJrTopModel_Turn(&game->top, game->lastTouchX, game->lastTouchY, game->lastTouchX, game->lastTouchY, 1.88f, FALSE);
+        MimeJrTopModel_Turn(&game->mimeJr[0], game->lastTouchX, game->lastTouchY, game->lastTouchX, game->lastTouchY, 0.22f, FALSE);
         return;
     }
     v = game->tilt.y >> 12;
@@ -2352,8 +2354,8 @@ void MimeJrTopGame_HandleTouch(MimeJrTopGame *game) {
         game->lastTouchX = x;
         game->lastTouchY = y;
     }
-    MimeJrTopModel_Turn(&game->top, x, y, game->lastTouchX, game->lastTouchY, 2.0f, 1);
-    MimeJrTopModel_Turn(&game->mimeJr[0], x, y, game->lastTouchX, game->lastTouchY, b, 1);
+    MimeJrTopModel_Turn(&game->top, x, y, game->lastTouchX, game->lastTouchY, 2.0f, TRUE);
+    MimeJrTopModel_Turn(&game->mimeJr[0], x, y, game->lastTouchX, game->lastTouchY, b, TRUE);
     vec2 = ov92_02263C68;
     MTX_MultVec43(&vec2, &game->mimeJr[0].rotationFx, &game->tilt);
     game->touched = TRUE;
@@ -2448,8 +2450,8 @@ void MimeJrTopGame_UpdateWobble(MimeJrTopGame *game) {
                 game->settleY.value -= oldY;
             }
         }
-        MimeJrTopModel_Turn(&game->top, 0, 0, x, y, 1.88f, 0);
-        if (MimeJrTopModel_Turn(&game->mimeJr[0], 0, 0, x, y, 0.8f, 0)) {
+        MimeJrTopModel_Turn(&game->top, 0, 0, x, y, 1.88f, FALSE);
+        if (MimeJrTopModel_Turn(&game->mimeJr[0], 0, 0, x, y, 0.8f, FALSE)) {
             v1 = ov92_02263C8C;
             MTX_MultVec43(&v1, &game->mimeJr[0].rotationFx, &game->tilt);
         }
@@ -2464,16 +2466,16 @@ void MimeJrTopGame_UpdateWobble(MimeJrTopGame *game) {
     if (game->touched == FALSE && game->settled == TRUE) {
         y = (s16)(game->settleY.value >> 12);
         x = (s16)(game->settleX.value >> 12);
-        MimeJrTopModel_Turn(&game->top, 0, 0, x, y, 1.88f, 0);
-        if (MimeJrTopModel_Turn(&game->mimeJr[0], 0, 0, x, y, 0.8f, 0)) {
+        MimeJrTopModel_Turn(&game->top, 0, 0, x, y, 1.88f, FALSE);
+        if (MimeJrTopModel_Turn(&game->mimeJr[0], 0, 0, x, y, 0.8f, FALSE)) {
             v2 = ov92_02263C74;
             MTX_MultVec43(&v2, &game->mimeJr[0].rotationFx, &game->tilt);
         }
     } else if (game->touched == TRUE && game->settled == TRUE) {
         y = (s16)(game->settleY.value >> 12);
         x = (s16)(game->settleX.value >> 12);
-        MimeJrTopModel_Turn(&game->top, 0, 0, x, y, 1.88f, 0);
-        if (MimeJrTopModel_Turn(&game->mimeJr[0], 0, 0, x, y, 0.8f, 0)) {
+        MimeJrTopModel_Turn(&game->top, 0, 0, x, y, 1.88f, FALSE);
+        if (MimeJrTopModel_Turn(&game->mimeJr[0], 0, 0, x, y, 0.8f, FALSE)) {
             v3 = ov92_02263C80;
             MTX_MultVec43(&v3, &game->mimeJr[0].rotationFx, &game->tilt);
         }

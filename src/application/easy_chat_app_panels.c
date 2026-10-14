@@ -1,5 +1,9 @@
 #include "global.h"
 
+#include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0282.h"
+#include "msgdata/msg/msg_0283.h"
+
 #include "bg_window.h"
 #include "easy_chat.h"
 #include "easy_chat_app_internal.h"
@@ -343,7 +347,7 @@ EasyChatSentenceView *EasyChatSentenceView_Create(EasyChatAppView *view, EasyCha
     sentence->sliderBar = NULL;
     sentence->sliderThumb = NULL;
     sentence->string = String_New(128, HEAP_ID_35);
-    sentence->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 283, HEAP_ID_35);
+    sentence->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0283_bin, HEAP_ID_35);
     sentence->listCursor = ListMenuCursorNew(HEAP_ID_35);
     sentence->mainScrollY = 0;
     sentence->subScrollY = 0;
@@ -816,15 +820,15 @@ void EasyChatSentenceView_PrintMessage(EasyChatSentenceView *sentence, u32 messa
         MessageFormat_Delete(msgFormat);
         break;
     case 2:
-        ReadMsgDataIntoString(sentence->msgData, 6, sentence->string);
+        ReadMsgDataIntoString(sentence->msgData, msg_0283_00006, sentence->string);
         AddTextPrinterParameterizedWithColor(sentence->messageWindow, 1, sentence->string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 9), NULL);
         break;
     case 1:
-        ReadMsgDataIntoString(sentence->msgData, 7, sentence->string);
+        ReadMsgDataIntoString(sentence->msgData, msg_0283_00007, sentence->string);
         AddTextPrinterParameterizedWithColor(sentence->messageWindow, 1, sentence->string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 9), NULL);
         break;
     case 3:
-        ReadMsgDataIntoString(sentence->msgData, 8, sentence->string);
+        ReadMsgDataIntoString(sentence->msgData, msg_0283_00008, sentence->string);
         AddTextPrinterParameterizedWithColor(sentence->messageWindow, 1, sentence->string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 9), NULL);
         break;
     }
@@ -968,7 +972,7 @@ EasyChatMenuView *EasyChatMenuView_Create(EasyChatAppView *view, EasyChatApp *ap
     menuView->cursor = NULL;
     menuView->modeSwitchTask = NULL;
     menuView->bgConfig = EasyChatAppView_GetBgConfig(menuView->view);
-    menuView->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 284, HEAP_ID_35);
+    menuView->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0284_bin, HEAP_ID_35);
     return menuView;
 }
 
@@ -1208,7 +1212,7 @@ void EasyChatCategoryView_Load(EasyChatCategoryView *categories, NARC *narc) {
 u32 EasyChatCategoryView_DrawCategories(EasyChatCategoryView *categories, BgConfig *bgConfig, u32 tile) {
     Window window;
     int y;
-    MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 282, HEAP_ID_35);
+    MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0282_bin, HEAP_ID_35);
     int x = 1, i;
 
     y = 9;
@@ -1224,7 +1228,7 @@ u32 EasyChatCategoryView_DrawCategories(EasyChatCategoryView *categories, BgConf
             string = NewString_ReadMsgData(msgData, i);
             color = MAKE_TEXT_COLOR(1, 2, 15);
         } else {
-            string = NewString_ReadMsgData(msgData, 12);
+            string = NewString_ReadMsgData(msgData, msg_0282_00012);
             color = MAKE_TEXT_COLOR(3, 4, 15);
         }
         GF_ASSERT(tile < 1006);

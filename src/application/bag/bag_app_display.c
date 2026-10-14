@@ -4,6 +4,7 @@
 #include "constants/sndseq.h"
 
 #include "application/bag/bag_app.h"
+#include "msgdata/msg/msg_0010.h"
 
 #include "bag.h"
 #include "bg_window.h"
@@ -88,22 +89,22 @@ void BagApp_DrawRegisteredItemIcon(BagApp *app, Window *window, int y, BOOL seco
 #pragma force_active reset
 
 void BagApp_LoadItemMenuStrings(BagApp *app) {
-    app->menuStrings[0] = NewString_ReadMsgData(app->msgData, 0);
-    app->menuStrings[1] = NewString_ReadMsgData(app->msgData, 6);
-    app->menuStrings[2] = NewString_ReadMsgData(app->msgData, 16);
-    app->menuStrings[3] = NewString_ReadMsgData(app->msgData, 98);
-    app->menuStrings[4] = NewString_ReadMsgData(app->msgData, 99);
-    app->menuStrings[5] = NewString_ReadMsgData(app->msgData, 1);
-    app->menuStrings[6] = NewString_ReadMsgData(app->msgData, 2);
-    app->menuStrings[7] = NewString_ReadMsgData(app->msgData, 18);
-    app->menuStrings[8] = NewString_ReadMsgData(app->msgData, 3);
-    app->menuStrings[9] = NewString_ReadMsgData(app->msgData, 4);
-    app->menuStrings[10] = NewString_ReadMsgData(app->msgData, 5);
-    app->menuStrings[11] = NewString_ReadMsgData(app->msgData, 8);
-    app->menuStrings[12] = NewString_ReadMsgData(app->msgData, 75);
-    app->menuStrings[13] = NewString_ReadMsgData(app->msgData, 86);
-    app->menuStrings[14] = NewString_ReadMsgData(app->msgData, 0);
-    app->menuStrings[15] = NewString_ReadMsgData(app->msgData, 128);
+    app->menuStrings[0] = NewString_ReadMsgData(app->msgData, msg_0010_00000);
+    app->menuStrings[1] = NewString_ReadMsgData(app->msgData, msg_0010_00006);
+    app->menuStrings[2] = NewString_ReadMsgData(app->msgData, msg_0010_00016);
+    app->menuStrings[3] = NewString_ReadMsgData(app->msgData, msg_0010_00098);
+    app->menuStrings[4] = NewString_ReadMsgData(app->msgData, msg_0010_00099);
+    app->menuStrings[5] = NewString_ReadMsgData(app->msgData, msg_0010_00001);
+    app->menuStrings[6] = NewString_ReadMsgData(app->msgData, msg_0010_00002);
+    app->menuStrings[7] = NewString_ReadMsgData(app->msgData, msg_0010_00018);
+    app->menuStrings[8] = NewString_ReadMsgData(app->msgData, msg_0010_00003);
+    app->menuStrings[9] = NewString_ReadMsgData(app->msgData, msg_0010_00004);
+    app->menuStrings[10] = NewString_ReadMsgData(app->msgData, msg_0010_00005);
+    app->menuStrings[11] = NewString_ReadMsgData(app->msgData, msg_0010_00008);
+    app->menuStrings[12] = NewString_ReadMsgData(app->msgData, msg_0010_00075);
+    app->menuStrings[13] = NewString_ReadMsgData(app->msgData, msg_0010_00086);
+    app->menuStrings[14] = NewString_ReadMsgData(app->msgData, msg_0010_00000);
+    app->menuStrings[15] = NewString_ReadMsgData(app->msgData, msg_0010_00128);
 }
 
 void BagApp_FreeItemMenuStrings(BagApp *app) {
@@ -130,9 +131,9 @@ void BagApp_PrintItemSelectedMessage(BagApp *app, const u8 *actions, int count) 
     FillWindowPixelBuffer(&app->windows[2], 15);
     pocket = &app->bagView->pockets[app->bagView->pocketIndex];
     if (app->bagView->mode == 6 && BagApp_IsBerryOrMulch(pocket->pocketId, app->bagView->itemId) == FALSE) {
-        template = NewString_ReadMsgData(app->msgData, 106);
+        template = NewString_ReadMsgData(app->msgData, msg_0010_00106);
     } else {
-        template = NewString_ReadMsgData(app->msgData, 43);
+        template = NewString_ReadMsgData(app->msgData, msg_0010_00043);
     }
     string = String_New(108, HEAP_ID_6);
     BagApp_BufferSlotItemName(app, pocket->scroll + app->cursorButton - 8, 0);
@@ -181,7 +182,7 @@ void BagApp_CloseItemActionWindows(BagApp *app) {
 
 void BagApp_PrintMoveItemPrompt(BagApp *app) {
     FillWindowPixelBuffer(&app->windows[2], 0xFF);
-    String *template = NewString_ReadMsgData(app->msgData, 46);
+    String *template = NewString_ReadMsgData(app->msgData, msg_0010_00046);
     String *string = String_New(0x82, HEAP_ID_6);
     BagApp_BufferSlotItemName(app, app->moveSource, 0);
     StringExpandPlaceholders(app->msgFormat, string, template);
@@ -221,7 +222,7 @@ void BagApp_PrintQuantityDigits(BagApp *app, u32 numDigits) {
 }
 
 void BagApp_PrintTrashConfirmMessage(BagApp *app) {
-    String *template = NewString_ReadMsgData(app->msgData, 55);
+    String *template = NewString_ReadMsgData(app->msgData, msg_0010_00055);
     BagView *bagView = app->bagView;
     BagViewPocket *pocket = &bagView->pockets[bagView->pocketIndex];
     if (app->quantity > 1) {
@@ -300,7 +301,7 @@ void BagApp_PrintSellPrice(BagApp *app) {
     Window *window = &app->dynWindows[23];
 
     FillWindowPixelBuffer(window, 0);
-    template = NewString_ReadMsgData(app->msgData, 83);
+    template = NewString_ReadMsgData(app->msgData, msg_0010_00083);
     BufferIntegerAsString(app->msgFormat, 0, app->sellPrice * app->quantity, 6, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     StringExpandPlaceholders(app->msgFormat, app->msgBuf, template);
     FontID_String_GetWidth(0, app->msgBuf, 0);
@@ -316,13 +317,13 @@ void BagApp_PrintMoney(BagApp *app, BOOL skipLabel) {
     Window *window = &app->dynWindows[22];
     if (skipLabel == FALSE) {
         FillWindowPixelBuffer(window, 0);
-        String *label = NewString_ReadMsgData(app->msgData, 80);
+        String *label = NewString_ReadMsgData(app->msgData, msg_0010_00080);
         AddTextPrinterParameterizedWithColor(window, 0, label, 4, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
         String_Delete(label);
     } else {
         FillWindowPixelRect(window, 0, 0, 16, 72, 16);
     }
-    String *template = NewString_ReadMsgData(app->msgData, 81);
+    String *template = NewString_ReadMsgData(app->msgData, msg_0010_00081);
     u32 money = PlayerProfile_GetMoney(app->profile);
     BufferIntegerAsString(app->msgFormat, 0, money, 6, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     StringExpandPlaceholders(app->msgFormat, string, template);
@@ -337,10 +338,10 @@ void BagApp_PrintMsg115And116(BagApp *app) {
     Window *window = &app->windows[5];
     FillWindowPixelBuffer(window, 15);
     DrawFrameAndWindow1(window, TRUE, 0x3F7, 14);
-    String *string = NewString_ReadMsgData(app->msgData, 115);
+    String *string = NewString_ReadMsgData(app->msgData, msg_0010_00115);
     AddTextPrinterParameterized(window, 0, string, 0, 0, TEXT_SPEED_NOTRANSFER, NULL);
     String_Delete(string);
-    string = NewString_ReadMsgData(app->msgData, 116);
+    string = NewString_ReadMsgData(app->msgData, msg_0010_00116);
     BufferIntegerAsString(app->msgFormat, 0, 0, 3, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     StringExpandPlaceholders(app->msgFormat, app->msgBuf, string);
     String_Delete(string);
@@ -350,7 +351,7 @@ void BagApp_PrintMsg115And116(BagApp *app) {
 }
 
 void BagApp_PrintCancelButton(BagApp *app, BOOL left) {
-    String *string = NewString_ReadMsgData(app->msgData, 8);
+    String *string = NewString_ReadMsgData(app->msgData, msg_0010_00008);
     FillWindowPixelBuffer(&app->windows[7], 0);
     if (left == FALSE) {
         u32 width = FontID_String_GetWidth(0, string, 0);
@@ -499,7 +500,7 @@ void BagApp_PrintPageNumber(BagApp *app, s32 itemCount, s32 scroll, s32 slot) {
     FillWindowPixelBuffer(&app->windows[6], 0);
     BufferIntegerAsString(app->msgFormat, 0, page + 1, 3, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     BufferIntegerAsString(app->msgFormat, 1, numPages, 3, PRINTING_MODE_RIGHT_ALIGN, TRUE);
-    String *string = ReadMsgData_ExpandPlaceholders(app->msgFormat, app->msgData, 22, HEAP_ID_6);
+    String *string = ReadMsgData_ExpandPlaceholders(app->msgFormat, app->msgData, msg_0010_00022, HEAP_ID_6);
     AddTextPrinterParameterizedWithColor(&app->windows[6], 0, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 1, 0), NULL);
     ScheduleWindowCopyToVram(&app->windows[6]);
     String_Delete(string);

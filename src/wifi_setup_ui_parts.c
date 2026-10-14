@@ -75,7 +75,7 @@ void WifiSetupBusyIcon_Task(void *task) {
 
 void WifiSetupButtonBar_Create(int type) {
     int count = gWifiSetupButtonBarButtonCounts[type], i;
-    gWifiSetupButtonBar = WifiSetupHeap_AllocZeroed(28, 4);
+    gWifiSetupButtonBar = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupButtonBar), 4);
     gWifiSetupButtonBar->selected = -2;
     gWifiSetupButtonBar->type = type;
     for (i = 0; i < count; i++) {
@@ -432,7 +432,7 @@ void WifiSetupSignalIcon_Create(int type) {
         return;
     }
     {
-        WifiSetupSignalIcon *icon = WifiSetupHeap_AllocZeroed(12, 4);
+        WifiSetupSignalIcon *icon = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupSignalIcon), 4);
         templ = *(volatile u8 *)&gWifiSetupSignalIconTemplates[type][0];
         gWifiSetupSignalIcon = icon;
         icon->type = type;
@@ -486,7 +486,7 @@ void WifiSetupKeyboard_Create(void) {
     int i, j, k;
     box.width = 17;
     box.height = 18;
-    gWifiSetupKeyboard = WifiSetupHeap_AllocZeroed(296, 4);
+    gWifiSetupKeyboard = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupKeyboard), 4);
     gWifiSetupKeyboard->input = 255;
     gWifiSetupKeyboard->cursorKey = 0;
     gWifiSetupKeyboard->canDelete = 1;

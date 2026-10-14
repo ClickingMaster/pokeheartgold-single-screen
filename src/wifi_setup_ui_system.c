@@ -655,7 +655,7 @@ void WifiSetupFade_DelayTask(void *task, WifiSetupFade *fade) {
 void WifiSetupText_Init(void) {
     WifiSetupTextState *text;
     int i;
-    gWifiSetupText = text = WifiSetupHeap_AllocZeroed(0x680, 4);
+    gWifiSetupText = text = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupTextState), 4);
     gWifiSetupText->objCanvasPool = WifiSetupPool_NewWithItems(0x20, text->objCanvases, 0x30);
     if (WifiSetupApp_GetLanguage() == 6) {
         for (i = 0; i < 2; i++) {
@@ -1004,7 +1004,7 @@ void WifiSetupHeap_Free(void *mem) {
 
 void WifiSetupInput_Init(void) {
     TPCalibrateParam calibrate;
-    gWifiSetupInput.state = WifiSetupHeap_AllocZeroed(0x3A, 4);
+    gWifiSetupInput.state = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupInputState), 4);
     if (!TP_GetUserInfo(&calibrate)) {
         OS_Terminate();
     }

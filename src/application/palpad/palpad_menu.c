@@ -3,6 +3,7 @@
 #include "constants/sndseq.h"
 
 #include "application/palpad/palpad_internal.h"
+#include "msgdata/msg/msg_0779.h"
 
 #include "font.h"
 #include "gf_gfx_loader.h"
@@ -93,7 +94,7 @@ int PalPadMenu_Main(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx, enum
                     return 1;
                 }
             } else if (menu->selection == PALPAD_MENU_REGISTER) {
-                PalPadMenu_PrintMessage(menu, gfx, 58, heapId); // roster is full
+                PalPadMenu_PrintMessage(menu, gfx, msg_0779_00058, heapId); // roster is full
                 shared->subState = 11;
             }
         }
@@ -123,10 +124,10 @@ int PalPadMenu_Main(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx, enum
             friendCode = String_atoi(shared->code, &valid);
             if (valid) {
                 PalPadGfx_BufferFriendCode(gfx, friendCode);
-                PalPadMenu_PrintMessage(menu, gfx, 55, heapId); // register this friend?
+                PalPadMenu_PrintMessage(menu, gfx, msg_0779_00055, heapId); // register this friend?
                 shared->subState = 9;
             } else {
-                PalPadMenu_PrintMessage(menu, gfx, 56, heapId); // invalid friend code
+                PalPadMenu_PrintMessage(menu, gfx, msg_0779_00056, heapId); // invalid friend code
                 shared->subState = 11;
             }
         }
@@ -216,7 +217,7 @@ void PalPadMenu_Teardown(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx)
 void PalPadMenu_Show(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx) {
     NNSG2dScreenData *screen;
 
-    PalPadGfx_PrintTitle(gfx, &gfx->titleWindow, 0);
+    PalPadGfx_PrintTitle(gfx, &gfx->titleWindow, msg_0779_00000);
     ScheduleWindowCopyToVram(&menu->menuWindow);
     screen = menu->screen;
     LoadRectToBgTilemapRect(gfx->bgConfig, GF_BG_LYR_MAIN_2, screen->rawData, 0, 0, screen->screenWidth >> 3, screen->screenHeight >> 3);

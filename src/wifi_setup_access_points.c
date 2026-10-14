@@ -565,7 +565,7 @@ int WifiSetup_HexDigitValue(u8 c) {
 
 void WifiSetupSound_Init(void) {
     u32 size;
-    gWifiSetupSound = WifiSetupHeap_AllocZeroed(0xa0, 4);
+    gWifiSetupSound = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupSound), 4);
     gWifiSetupSound->data = WifiSetupFile_Load(gWifiSetupSoundArchivePath, &size, 0x20);
     NNS_SndInit();
     NNS_SndArcInitOnMemory(gWifiSetupSound, gWifiSetupSound->data);

@@ -71,7 +71,7 @@ BOOL PCBox_Init(OverlayManager *manager, int *state) {
 BOOL PCBox_Main(OverlayManager *manager, int *state) {
     PCBoxWork *work = OverlayManager_GetData(manager);
 
-    if (PCBox_RunStateMachine(work, state) == 0) {
+    if (PCBox_RunStateMachine(work, state) == FALSE) {
         return TRUE;
     }
     return FALSE;
@@ -89,7 +89,7 @@ BOOL PCBox_Exit(OverlayManager *manager, int *state) {
 void PCBox_VBlankCallback(SysTask *task, void *data) {
     PCBoxWork *work = data;
 
-    if (work->view->updateFunc != NULL && work->view->updateFunc(work) == 0) {
+    if (work->view->updateFunc != NULL && work->view->updateFunc(work) == FALSE) {
         work->view->updateFunc = NULL;
     }
     PCBox_UpdateDetailPanel(work);
@@ -146,58 +146,58 @@ void PCBox_InitBgLayers(PCBoxWork *work) {
     SetBothScreensModesAndDisable(&modes);
 
     bg0 = sPCBoxBgTemplate0;
-    InitBgFromTemplate(work->view->bgConfig, 0, &bg0, 0);
-    BgClearTilemapBufferAndCommit(work->view->bgConfig, 0);
-    BG_ClearCharDataRange(0, 0x20, 0, HEAP_ID_10);
+    InitBgFromTemplate(work->view->bgConfig, GF_BG_LYR_MAIN_0, &bg0, GF_BG_TYPE_TEXT);
+    BgClearTilemapBufferAndCommit(work->view->bgConfig, GF_BG_LYR_MAIN_0);
+    BG_ClearCharDataRange(GF_BG_LYR_MAIN_0, 0x20, 0, HEAP_ID_10);
 
     bg1 = sPCBoxBgTemplate1;
-    InitBgFromTemplate(work->view->bgConfig, 1, &bg1, 0);
-    BgClearTilemapBufferAndCommit(work->view->bgConfig, 1);
-    BG_ClearCharDataRange(1, 0x20, 0, HEAP_ID_10);
+    InitBgFromTemplate(work->view->bgConfig, GF_BG_LYR_MAIN_1, &bg1, GF_BG_TYPE_TEXT);
+    BgClearTilemapBufferAndCommit(work->view->bgConfig, GF_BG_LYR_MAIN_1);
+    BG_ClearCharDataRange(GF_BG_LYR_MAIN_1, 0x20, 0, HEAP_ID_10);
 
     bg2 = sPCBoxBgTemplate2;
-    InitBgFromTemplate(work->view->bgConfig, 2, &bg2, 0);
+    InitBgFromTemplate(work->view->bgConfig, GF_BG_LYR_MAIN_2, &bg2, GF_BG_TYPE_TEXT);
 
     bg3 = sPCBoxBgTemplate3;
-    InitBgFromTemplate(work->view->bgConfig, 3, &bg3, 0);
+    InitBgFromTemplate(work->view->bgConfig, GF_BG_LYR_MAIN_3, &bg3, GF_BG_TYPE_TEXT);
 
     bg4 = sPCBoxBgTemplate4;
-    InitBgFromTemplate(work->view->bgConfig, 4, &bg4, 0);
-    BgClearTilemapBufferAndCommit(work->view->bgConfig, 4);
-    BG_ClearCharDataRange(4, 0x20, 0, HEAP_ID_10);
+    InitBgFromTemplate(work->view->bgConfig, GF_BG_LYR_SUB_0, &bg4, GF_BG_TYPE_TEXT);
+    BgClearTilemapBufferAndCommit(work->view->bgConfig, GF_BG_LYR_SUB_0);
+    BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 0x20, 0, HEAP_ID_10);
 
     bg5 = sPCBoxBgTemplate5;
-    InitBgFromTemplate(work->view->bgConfig, 5, &bg5, 0);
+    InitBgFromTemplate(work->view->bgConfig, GF_BG_LYR_SUB_1, &bg5, GF_BG_TYPE_TEXT);
 
     bg6 = sPCBoxBgTemplate6;
-    InitBgFromTemplate(work->view->bgConfig, 6, &bg6, 0);
-    BgClearTilemapBufferAndCommit(work->view->bgConfig, 6);
-    BG_ClearCharDataRange(6, 0x20, 0, HEAP_ID_10);
+    InitBgFromTemplate(work->view->bgConfig, GF_BG_LYR_SUB_2, &bg6, GF_BG_TYPE_TEXT);
+    BgClearTilemapBufferAndCommit(work->view->bgConfig, GF_BG_LYR_SUB_2);
+    BG_ClearCharDataRange(GF_BG_LYR_SUB_2, 0x20, 0, HEAP_ID_10);
 }
 
 void PCBox_FreeBgLayers(PCBoxWork *work) {
-    FreeBgTilemapBuffer(work->view->bgConfig, 6);
-    FreeBgTilemapBuffer(work->view->bgConfig, 5);
-    FreeBgTilemapBuffer(work->view->bgConfig, 4);
-    FreeBgTilemapBuffer(work->view->bgConfig, 3);
-    FreeBgTilemapBuffer(work->view->bgConfig, 2);
-    FreeBgTilemapBuffer(work->view->bgConfig, 1);
-    FreeBgTilemapBuffer(work->view->bgConfig, 0);
+    FreeBgTilemapBuffer(work->view->bgConfig, GF_BG_LYR_SUB_2);
+    FreeBgTilemapBuffer(work->view->bgConfig, GF_BG_LYR_SUB_1);
+    FreeBgTilemapBuffer(work->view->bgConfig, GF_BG_LYR_SUB_0);
+    FreeBgTilemapBuffer(work->view->bgConfig, GF_BG_LYR_MAIN_3);
+    FreeBgTilemapBuffer(work->view->bgConfig, GF_BG_LYR_MAIN_2);
+    FreeBgTilemapBuffer(work->view->bgConfig, GF_BG_LYR_MAIN_1);
+    FreeBgTilemapBuffer(work->view->bgConfig, GF_BG_LYR_MAIN_0);
     Heap_Free(work->view->bgConfig);
 }
 
 void PCBox_LoadBgGraphics(PCBoxWork *work) {
-    GfGfxLoader_LoadCharData(NARC_a_0_1_9, 0xe, work->view->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 1, HEAP_ID_10);
-    GfGfxLoader_LoadCharData(NARC_a_0_1_9, 0xe, work->view->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 1, HEAP_ID_10);
-    GfGfxLoader_LoadCharData(NARC_a_0_1_9, 3, work->view->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 1, HEAP_ID_10);
-    GfGfxLoader_LoadScrnData(NARC_a_0_1_9, 2, work->view->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 1, HEAP_ID_10);
-    GfGfxLoader_LoadCharData(NARC_a_0_1_9, 1, work->view->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, 1, HEAP_ID_10);
-    GfGfxLoader_LoadScrnData(NARC_a_0_1_9, 0, work->view->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, 1, HEAP_ID_10);
+    GfGfxLoader_LoadCharData(NARC_a_0_1_9, 0xe, work->view->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, TRUE, HEAP_ID_10);
+    GfGfxLoader_LoadCharData(NARC_a_0_1_9, 0xe, work->view->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, TRUE, HEAP_ID_10);
+    GfGfxLoader_LoadCharData(NARC_a_0_1_9, 3, work->view->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, TRUE, HEAP_ID_10);
+    GfGfxLoader_LoadScrnData(NARC_a_0_1_9, 2, work->view->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, TRUE, HEAP_ID_10);
+    GfGfxLoader_LoadCharData(NARC_a_0_1_9, 1, work->view->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, HEAP_ID_10);
+    GfGfxLoader_LoadScrnData(NARC_a_0_1_9, 0, work->view->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, HEAP_ID_10);
     GfGfxLoader_GXLoadPal(NARC_a_0_1_9, 4, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0x80, HEAP_ID_10);
-    GfGfxLoader_LoadCharData(NARC_a_0_1_9, 6, work->view->bgConfig, GF_BG_LYR_SUB_1, 0, 0, 1, HEAP_ID_10);
-    GfGfxLoader_LoadScrnData(NARC_a_0_1_9, 5, work->view->bgConfig, GF_BG_LYR_SUB_1, 0, 0, 1, HEAP_ID_10);
+    GfGfxLoader_LoadCharData(NARC_a_0_1_9, 6, work->view->bgConfig, GF_BG_LYR_SUB_1, 0, 0, TRUE, HEAP_ID_10);
+    GfGfxLoader_LoadScrnData(NARC_a_0_1_9, 5, work->view->bgConfig, GF_BG_LYR_SUB_1, 0, 0, TRUE, HEAP_ID_10);
     GfGfxLoader_GXLoadPal(NARC_a_0_1_9, 7, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0, HEAP_ID_10);
-    GfGfxLoader_LoadCharData(NARC_a_0_1_9, 6, work->view->bgConfig, GF_BG_LYR_SUB_2, 0, 0, 1, HEAP_ID_10);
+    GfGfxLoader_LoadCharData(NARC_a_0_1_9, 6, work->view->bgConfig, GF_BG_LYR_SUB_2, 0, 0, TRUE, HEAP_ID_10);
 }
 
 void PCBox_CreateMsgResources(PCBoxWork *work) {
@@ -216,8 +216,8 @@ void PCBox_DestroyMsgResources(PCBoxWork *work) {
 
 void PCBox_LoadWindowGraphics(PCBoxWork *work) {
     PCBoxView *view = work->view;
-    GfGfxLoader_LoadCharData(NARC_a_0_1_9, 0x40, view->bgConfig, GF_BG_LYR_MAIN_0, 0x3e8, 0x300, 1, HEAP_ID_10);
-    GfGfxLoader_LoadCharData(NARC_a_0_1_9, 0x40, view->bgConfig, GF_BG_LYR_MAIN_1, 0x3e8, 0x300, 1, HEAP_ID_10);
+    GfGfxLoader_LoadCharData(NARC_a_0_1_9, 0x40, view->bgConfig, GF_BG_LYR_MAIN_0, 0x3e8, 0x300, TRUE, HEAP_ID_10);
+    GfGfxLoader_LoadCharData(NARC_a_0_1_9, 0x40, view->bgConfig, GF_BG_LYR_MAIN_1, 0x3e8, 0x300, TRUE, HEAP_ID_10);
     GfGfxLoader_GXLoadPal(NARC_a_0_1_9, 0x41, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_12_OFFSET, 0x40, HEAP_ID_10);
     LoadUserFrameGfx2(view->bgConfig, GF_BG_LYR_MAIN_0, 0x38e, 0xa, (u8)Options_GetFrame(work->options), HEAP_ID_10);
     LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_11_OFFSET, HEAP_ID_10);
@@ -225,7 +225,7 @@ void PCBox_LoadWindowGraphics(PCBoxWork *work) {
 }
 
 void PCBox_CreatePaletteData(PCBoxWork *work) {
-    void *palette = PaletteData_Init(HEAP_ID_10);
+    PaletteData *palette = PaletteData_Init(HEAP_ID_10);
     work->view->paletteData = palette;
     PaletteData_AllocBuffers(work->view->paletteData, PLTTBUF_MAIN_BG, 0x200, HEAP_ID_10);
 }
@@ -306,7 +306,7 @@ u32 PCBox_AnimatePaletteFlash(PCBoxWork *work) {
 }
 
 void PCBox_SaveMenuInputState(PCBoxWork *work) {
-    if (GridInputHandler_IsButtonInputMode(work->view->gridInput) == 1) {
+    if (GridInputHandler_IsButtonInputMode(work->view->gridInput) == TRUE) {
         MenuInputStateMgr_SetState(work->args->menuInputStatePtr, MENU_INPUT_STATE_BUTTONS);
     } else {
         MenuInputStateMgr_SetState(work->args->menuInputStatePtr, MENU_INPUT_STATE_TOUCH);
@@ -314,7 +314,7 @@ void PCBox_SaveMenuInputState(PCBoxWork *work) {
 }
 
 u32 PCBox_GetSlotMonData(PCBoxWork *work, u32 idx, u32 field, void *dest) {
-    void *boxmon = PCBox_GetSlotBoxMon(work, work->activeBox, idx);
+    BoxPokemon *boxmon = PCBox_GetSlotBoxMon(work, work->activeBox, idx);
     if (boxmon == NULL) {
         return 0;
     }
@@ -322,7 +322,7 @@ u32 PCBox_GetSlotMonData(PCBoxWork *work, u32 idx, u32 field, void *dest) {
 }
 
 void PCBox_SetSlotMonData(PCBoxWork *work, u32 idx, u32 field, void *src) {
-    void *boxmon = PCBox_GetSlotBoxMon(work, work->activeBox, idx);
+    BoxPokemon *boxmon = PCBox_GetSlotBoxMon(work, work->activeBox, idx);
     if (boxmon != NULL) {
         SetBoxMonData(boxmon, field, src);
         if (idx < 30) {
@@ -379,7 +379,7 @@ void PCBox_MoveBoxMonToParty(PCBoxWork *work, PCBoxMoveEntry *e) {
 
 void PCBox_MovePartyMonToBox(PCBoxWork *work, PCBoxMoveEntry *e) {
     u8 mood;
-    void *mon;
+    Pokemon *mon;
     mon = Party_GetMonByIndex(work->party, e->from - 30);
     mood = 0;
     SetMonData(mon, MON_DATA_MOOD, &mood);
@@ -418,7 +418,7 @@ void PCBox_MovePartyMonToEnd(PCBoxWork *work, PCBoxMoveEntry *e) {
 }
 
 void PCBox_MoveBoxMonToOtherBox(PCBoxWork *work, PCBoxMoveEntry *e) {
-    void *mon = PCBox_GetSlotBoxMon(work, work->activeBox, e->from);
+    BoxPokemon *mon = PCBox_GetSlotBoxMon(work, work->activeBox, e->from);
     u32 box = PCBox_GetTargetBoxId(work, e->to);
     PCStorage_PlaceMonInBoxFirstEmptySlot(work->storage, box, mon);
     PCStorage_DeleteBoxMonByIndexPair(work->storage, work->activeBox, e->from);
@@ -483,7 +483,7 @@ u32 PCBox_GetTargetBoxId(PCBoxWork *work, u32 v) {
 
 u32 PCBox_PartyHasOtherUsableMon(PCBoxWork *work, u32 skip) {
     u32 i;
-    void *mon;
+    Pokemon *mon;
     for (i = 0; i < Party_GetCount(work->party); i++) {
         if (i == skip) {
             continue;
@@ -646,7 +646,7 @@ u32 PCBox_AnimateMoveEntries(PCBoxWork *work) {
 u32 PCBox_CanMoveMon(PCBoxWork *work, u32 a, u32 b) {
     u32 box;
     u32 t;
-    void *mon;
+    Pokemon *mon;
     PCBox_GetSlotMonData(work, b, MON_DATA_SPECIES_EXISTS, NULL);
     if ((b & 0x80) != 0) {
         box = PCBox_GetTargetBoxId(work, b);
@@ -671,7 +671,7 @@ u32 PCBox_CanMoveMon(PCBoxWork *work, u32 a, u32 b) {
         }
         if (b < 30) {
             mon = Party_GetMonByIndex(work->party, a - 30);
-            if (ItemIdIsMail((u16)GetMonData(mon, MON_DATA_HELD_ITEM, NULL)) == 1) {
+            if (ItemIdIsMail((u16)GetMonData(mon, MON_DATA_HELD_ITEM, NULL)) == TRUE) {
                 return 0;
             }
             if (GetMonData(mon, MON_DATA_BALL_CAPSULE_ID, NULL) != 0) {
@@ -680,7 +680,7 @@ u32 PCBox_CanMoveMon(PCBoxWork *work, u32 a, u32 b) {
         }
     } else if (b >= 30 && t != 0) {
         mon = Party_GetMonByIndex(work->party, b - 30);
-        if (ItemIdIsMail((u16)GetMonData(mon, MON_DATA_HELD_ITEM, NULL)) == 1) {
+        if (ItemIdIsMail((u16)GetMonData(mon, MON_DATA_HELD_ITEM, NULL)) == TRUE) {
             return 0;
         }
         if (GetMonData(mon, MON_DATA_BALL_CAPSULE_ID, NULL) != 0) {
@@ -694,7 +694,7 @@ u32 PCBox_CanMoveMon(PCBoxWork *work, u32 a, u32 b) {
 }
 
 u32 PCBox_CanMovePartyMonToEmptySlot(PCBoxWork *work, u32 a, u32 b) {
-    void *mon;
+    Pokemon *mon;
     if (PCBox_GetSlotMonData(work, b, MON_DATA_SPECIES_EXISTS, NULL) != 0) {
         return 0;
     }
@@ -702,7 +702,7 @@ u32 PCBox_CanMovePartyMonToEmptySlot(PCBoxWork *work, u32 a, u32 b) {
         return 0;
     }
     mon = Party_GetMonByIndex(work->party, a - 30);
-    if (ItemIdIsMail((u16)GetMonData(mon, MON_DATA_HELD_ITEM, NULL)) == 1) {
+    if (ItemIdIsMail((u16)GetMonData(mon, MON_DATA_HELD_ITEM, NULL)) == TRUE) {
         return 0;
     }
     if (GetMonData(mon, MON_DATA_BALL_CAPSULE_ID, NULL) != 0) {
@@ -721,11 +721,11 @@ u32 PCBox_CanSwapHeldItems(PCBoxWork *work, u32 a, u32 b) {
         return 0;
     }
     itemA = PCBox_GetSlotMonData(work, a, MON_DATA_HELD_ITEM, NULL);
-    if (ItemIdIsMail(itemA) == 1) {
+    if (ItemIdIsMail(itemA) == TRUE) {
         return 0;
     }
     itemB = PCBox_GetSlotMonData(work, b, MON_DATA_HELD_ITEM, NULL);
-    if (ItemIdIsMail(itemB) == 1) {
+    if (ItemIdIsMail(itemB) == TRUE) {
         return 0;
     }
     if (itemA == ITEM_GRISEOUS_ORB && PCBox_GetSlotMonData(work, b, MON_DATA_SPECIES, NULL) != SPECIES_GIRATINA) {
@@ -1032,10 +1032,10 @@ s32 PCBox_GetReleaseCheckMoveIndex(u16 v) {
 void PCBox_StartReleaseMoveCheck(PCBoxWork *work) {
     PCBoxView *q;
     PCBoxReleaseWork *r;
-    void *boxmon;
+    BoxPokemon *boxmon;
     u32 i;
     s32 idx;
-    work->view->releaseWork = Heap_AllocAtEnd(HEAP_ID_10, 12);
+    work->view->releaseWork = Heap_AllocAtEnd(HEAP_ID_10, sizeof(PCBoxReleaseWork));
     q = work->view;
     r = q->releaseWork;
     r->sprite = q->sprites[q->slotIcons[work->selectedSlot]];
@@ -1059,7 +1059,7 @@ u32 PCBox_RunReleaseMoveCheck(PCBoxWork *work) {
     PCBoxReleaseWork *r;
     u16 idx;
     u32 count;
-    void *boxmon;
+    BoxPokemon *boxmon;
     u32 i;
     s32 bit;
     u32 boxId;
@@ -1161,7 +1161,7 @@ void PCBox_DrawMonInfo(PCBoxWork *work, PCBoxMonInfo *monInfo) {
 void PCBox_DrawMonItemInfo(PCBoxWork *work, PCBoxMonInfo *monInfo) {
     u32 base;
 
-    if (monInfo->heldItem != 0) {
+    if (monInfo->heldItem != ITEM_NONE) {
         base = PCBox_PrintItemNameAndDesc(work, monInfo->heldItem);
         BgCellManager_PutWindowTiles(work->view->panels, 0x10, &work->view->windows[base]);
         BgCellManager_PutWindowTiles(work->view->panels, 0x10, &work->view->windows[base + 1]);
@@ -1179,7 +1179,7 @@ void PCBox_DrawMonItemInfo(PCBoxWork *work, PCBoxMonInfo *monInfo) {
 BOOL PCBox_ShowSlotMonInfo(PCBoxWork *work, u32 index) {
     PCBoxMonInfo *monInfo;
     u32 lock;
-    void *boxMon = PCBox_GetSlotBoxMon(work, work->activeBox, index);
+    BoxPokemon *boxMon = PCBox_GetSlotBoxMon(work, work->activeBox, index);
 
     if (boxMon != NULL) {
         lock = AcquireBoxMonLock(boxMon);
@@ -1205,7 +1205,7 @@ BOOL PCBox_ShowSlotMonInfo(PCBoxWork *work, u32 index) {
 }
 
 void PCBox_RedrawSlotMonInfo(PCBoxWork *work, u32 index) {
-    void *boxMon = PCBox_GetSlotBoxMon(work, work->activeBox, index);
+    BoxPokemon *boxMon = PCBox_GetSlotBoxMon(work, work->activeBox, index);
     u32 lock = AcquireBoxMonLock(boxMon);
     PCBoxMonInfo *monInfo = PCBox_CreateMonInfo(boxMon);
 
@@ -1240,9 +1240,9 @@ void PCBox_ClearMonInfoAndSelection(PCBoxWork *work) {
 
 void PCBox_LoadWallpaperChars(PCBoxWork *work, s32 member, u32 unused, u32 offset) {
     NNSG2dCharacterData *data;
-    void *allocation = GfGfxLoader_GetCharData(NARC_a_0_1_9, member + 0x10, 1, &data, HEAP_ID_10);
+    void *allocation = GfGfxLoader_GetCharData(NARC_a_0_1_9, member + 0x10, TRUE, &data, HEAP_ID_10);
 
-    BG_LoadCharTilesData(work->view->bgConfig, 3, data->pRawData, data->szByte, offset);
+    BG_LoadCharTilesData(work->view->bgConfig, GF_BG_LYR_MAIN_3, data->pRawData, data->szByte, offset);
     PCBox_DrawBoxNameOnWallpaper(work, (u8 *)data->pRawData + 0x2a0, offset + 0x15, 0x15, 3);
     Heap_Free(allocation);
 }
@@ -1261,7 +1261,7 @@ void PCBox_LoadWallpaperTilemap(PCBoxWork *work, s32 unused, u32 tile, u32 adden
     u16 *src;
     u16 value;
 
-    allocation = GfGfxLoader_GetScrnData(NARC_a_0_1_9, 0xf, 1, &screen, HEAP_ID_10);
+    allocation = GfGfxLoader_GetScrnData(NARC_a_0_1_9, 0xf, TRUE, &screen, HEAP_ID_10);
     raw = (u16 *)screen->rawData;
     for (row = 0; row < 0x14; row++) {
         src = raw + row * 0x15;
@@ -1269,7 +1269,7 @@ void PCBox_LoadWallpaperTilemap(PCBoxWork *work, s32 unused, u32 tile, u32 adden
         column = 0;
         do {
             value = (src[column] & 0xfff) + (palette << 12) + addend;
-            LoadRectToBgTilemapRect(work->view->bgConfig, 3, &value, x, row + 1, 1, 1);
+            LoadRectToBgTilemapRect(work->view->bgConfig, GF_BG_LYR_MAIN_3, &value, x, row + 1, 1, 1);
             x++;
             if (x >= 0x40) {
                 x = 0;
@@ -1278,14 +1278,14 @@ void PCBox_LoadWallpaperTilemap(PCBoxWork *work, s32 unused, u32 tile, u32 adden
         } while (column < 0x15);
     }
     Heap_Free(allocation);
-    FillBgTilemapRect(work->view->bgConfig, 3, 0x1001, x, 0, 2, 0x14, 0x11);
+    FillBgTilemapRect(work->view->bgConfig, GF_BG_LYR_MAIN_3, 0x1001, x, 0, 2, 0x14, 0x11);
 }
 
 void PCBox_LoadWallpaper(PCBoxWork *work, s32 member, u32 a2, u32 a3, u32 palette) {
     PCBox_LoadWallpaperChars(work, member, a2, a3);
     PCBox_LoadWallpaperPalette(work, member, palette);
     PCBox_LoadWallpaperTilemap(work, member, a2, a3, palette);
-    ScheduleBgTilemapBufferTransfer(work->view->bgConfig, 3);
+    ScheduleBgTilemapBufferTransfer(work->view->bgConfig, GF_BG_LYR_MAIN_3);
 }
 
 void PCBox_LoadScrolledWallpaper(PCBoxWork *work, s32 member, u32 direction) {
@@ -1329,7 +1329,7 @@ void PCBox_SwapWallpaper(PCBoxWork *work, s32 member) {
     PCBox_LoadWallpaperChars(work, member, work->view->wallpaperScroll, x);
     PaletteData_LoadNarc(work->view->paletteData, NARC_a_0_1_9, member + 0x28, HEAP_ID_10, PLTTBUF_MAIN_BG, 0x20, tile << 4);
     PCBox_LoadWallpaperTilemap(work, member, work->view->wallpaperScroll, x, tile);
-    ScheduleBgTilemapBufferTransfer(work->view->bgConfig, 3);
+    ScheduleBgTilemapBufferTransfer(work->view->bgConfig, GF_BG_LYR_MAIN_3);
 }
 
 u32 PCBox_GetWallpaperGfxIndex(PCBoxWork *work, u32 box) {

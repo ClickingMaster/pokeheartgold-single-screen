@@ -315,10 +315,10 @@ BOOL PlazaGameRoster_CheckConnectionLost(PlazaGameRoster *roster) {
 BOOL PlazaGameRoster_ProcessConnectionLost(PlazaGameRoster *roster) {
     GF_ASSERT(roster->args != NULL);
     GF_ASSERT(roster->args->connectionLost == TRUE);
-    if (CommPlayerInfo_Exists() == 1) {
+    if (CommPlayerInfo_Exists() == TRUE) {
         CommPlayerInfo_Free();
         CommState_EndPlazaMatch();
-    } else if (CommState_IsWifiInLobby() == 1) {
+    } else if (CommState_IsWifiInLobby() == TRUE) {
         return TRUE;
     }
     return FALSE;
@@ -666,7 +666,7 @@ void PlazaGameMessageBox_Init(PlazaGameMessageBox *messageBox, PlazaGameBg *bg, 
     int frame = Options_GetFrame(Save_PlayerData_GetOptionsAddr(saveData));
     Window *window;
     int i;
-    TextFlags_BeginAutoScroll(1);
+    TextFlags_BeginAutoScroll(TRUE);
     LoadUserFrameGfx2(bg->bgConfig, GF_BG_LYR_MAIN_2, 1, 13, frame, heapId);
     LoadUserFrameGfx2(bg->bgConfig, GF_BG_LYR_SUB_0, 1, 13, frame, heapId);
     window = messageBox->windows;

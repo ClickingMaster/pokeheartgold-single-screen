@@ -629,8 +629,8 @@ BOOL MailboxApp_RunState(MailboxApp *app, int *state) {
 int MailboxApp_State_Setup(MailboxApp *app) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
-    GfGfx_EngineASetPlanes(0);
-    GfGfx_EngineBSetPlanes(0);
+    GfGfx_EngineASetPlanes(GX_PLANEMASK_NONE);
+    GfGfx_EngineBSetPlanes(GX_PLANEMASK_NONE);
     G2_BlendNone();
     G2S_BlendNone();
     GF_TouchpadResetSampling();
@@ -672,8 +672,8 @@ int MailboxApp_State_Teardown(MailboxApp *app) {
     GF_TouchpadStopSampling();
     G2_BlendNone();
     G2S_BlendNone();
-    GfGfx_EngineASetPlanes(0);
-    GfGfx_EngineBSetPlanes(0);
+    GfGfx_EngineASetPlanes(GX_PLANEMASK_NONE);
+    GfGfx_EngineBSetPlanes(GX_PLANEMASK_NONE);
     Heap_Free(app->data);
     app->data = NULL;
     Heap_Destroy(HEAP_ID_157);

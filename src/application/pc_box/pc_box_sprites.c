@@ -100,7 +100,7 @@ void PCBox_SetSpriteVisible(PCBoxView *view, int index, int state) {
 }
 
 int PCBox_IsSpriteVisible(PCBoxView *view, int index) {
-    if (ManagedSprite_GetDrawFlag(view->sprites[index]) == 1) {
+    if (ManagedSprite_GetDrawFlag(view->sprites[index]) == TRUE) {
         return 1;
     }
     return 0;

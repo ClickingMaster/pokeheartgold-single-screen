@@ -3,7 +3,9 @@
 #include "constants/sndseq.h"
 
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0038.h"
 #include "msgdata/msg/msg_0188.h"
+#include "msgdata/msg/msg_0775.h"
 #include "msgdata/msg/msg_0778.h"
 #include "msgdata/msg/msg_0800.h"
 
@@ -606,7 +608,7 @@ void *WiiMessageSettings_CreateWiiNumberEntryArgs(WiiMessageSettings *app) {
     groups[1] = 4;
     groups[2] = 4;
     groups[3] = 4;
-    app->childArgs = CodeEntryArgs_New(HEAP_ID_115, 16, groups, Save_PlayerData_GetOptionsAddr(app->saveData), 4, 0);
+    app->childArgs = CodeEntryArgs_New(HEAP_ID_115, 16, groups, Save_PlayerData_GetOptionsAddr(app->saveData), msg_0038_00004, 0);
     return app->childArgs;
 }
 
@@ -635,7 +637,7 @@ void *WiiMessageSettings_CreateRegistrationCodeEntryArgs(WiiMessageSettings *app
     groups[1] = 4;
     groups[2] = 0;
     groups[3] = 0;
-    app->childArgs = CodeEntryArgs_NewWithFixedDigits(HEAP_ID_115, 7, groups, Save_PlayerData_GetOptionsAddr(app->saveData), 5, 1, 1, app->registrationCodePrefix);
+    app->childArgs = CodeEntryArgs_NewWithFixedDigits(HEAP_ID_115, 7, groups, Save_PlayerData_GetOptionsAddr(app->saveData), msg_0038_00005, 1, 1, app->registrationCodePrefix);
     return app->childArgs;
 }
 
@@ -656,7 +658,7 @@ void *WiiMessageSettings_CreatePasswordEntryArgs(WiiMessageSettings *app) {
     groups[1] = 0;
     groups[2] = 0;
     groups[3] = 0;
-    app->childArgs = CodeEntryArgs_New(HEAP_ID_115, 4, groups, Save_PlayerData_GetOptionsAddr(app->saveData), 6, 0);
+    app->childArgs = CodeEntryArgs_New(HEAP_ID_115, 4, groups, Save_PlayerData_GetOptionsAddr(app->saveData), msg_0038_00006, 0);
     return app->childArgs;
 }
 
@@ -722,7 +724,7 @@ BOOL WiiMessageSettingsScreen_Init(OverlayManager *man, int *state) {
     screen->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0188_bin, HEAP_ID_116);
     screen->messageBuffer = String_New(270, HEAP_ID_116);
     screen->errorBuffer = String_New(256, HEAP_ID_116);
-    screen->title = NewString_ReadMsgData(screen->gtsMsgData, 31); // "Nintendo Wi-Fi Connection"
+    screen->title = NewString_ReadMsgData(screen->gtsMsgData, msg_0775_00031); // "Nintendo Wi-Fi Connection"
     WiiMessageSettingsScreen_LoadGraphics(screen);
     WiiMessageSettingsScreen_AddWindows(screen);
 
@@ -2192,39 +2194,39 @@ BOOL WiiMessageSettingsScreen_ShowRegistrationError(WiiMessageSettingsScreen *sc
         msgId = msg_0188_00056;
         break;
     case -5001:
-        msgId = 181;
+        msgId = msg_0775_00181;
         fromGtsMsgs++;
         break;
     case -5002:
-        msgId = 182;
+        msgId = msg_0775_00182;
         fromGtsMsgs++;
         break;
     case -5003:
-        msgId = 182;
+        msgId = msg_0775_00182;
         fromGtsMsgs++;
         break;
     case -5004:
-        msgId = 183;
+        msgId = msg_0775_00183;
         fromGtsMsgs++;
         break;
     case -5005:
-        msgId = 184;
+        msgId = msg_0775_00184;
         fromGtsMsgs++;
         break;
     case -5006:
-        msgId = 182;
+        msgId = msg_0775_00182;
         fromGtsMsgs++;
         break;
     case -5007:
-        msgId = 182;
+        msgId = msg_0775_00182;
         fromGtsMsgs++;
         break;
     case -5010:
-        msgId = 183;
+        msgId = msg_0775_00183;
         fromGtsMsgs++;
         break;
     case -5011:
-        msgId = 184;
+        msgId = msg_0775_00184;
         fromGtsMsgs++;
         break;
     }
@@ -2419,7 +2421,7 @@ void WiiMessageSettingsScreen_PrintError(WiiMessageSettingsScreen *screen, int m
 
 void WiiMessageSettingsScreen_PrintErrorCode(WiiMessageSettingsScreen *screen, int msgId, int errorCode) {
     if (msgId == -1) {
-        msgId = 11;
+        msgId = msg_0800_00011;
     }
     BufferIntegerAsString(screen->msgFormat, 0, errorCode, 5, PRINTING_MODE_LEADING_ZEROS, TRUE);
     ClearFrameAndWindow2(&screen->messageWindow, TRUE);
