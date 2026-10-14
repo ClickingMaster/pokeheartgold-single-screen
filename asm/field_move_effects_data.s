@@ -1623,7 +1623,7 @@
 	.public sScriptFieldMoveEffectDeleteFuncs
 	.public sScriptFieldMoveEffectCreateFuncs
 	.public sScriptFieldMoveEffectIsFinishedFuncs
-	.public ov02_02253A4C
+	.public gSafariZonePlacementOffsets
 	.public sShinyLeafMasks
 	.public sShinyLeafMonDataIds
 	.public sFollowMonJumpOnSpotMovements
@@ -2190,7 +2190,7 @@ sScriptFieldMoveEffectIsFinishedFuncs: ; 0x02253A34
 	.word HeadbuttEffect_IsFinished
 	.word HeadbuttEffect_IsFinished
 
-ov02_02253A4C: ; 0x02253A4C
+gSafariZonePlacementOffsets: ; 0x02253A4C
 	.byte 0xFF, 0x01, 0xFF, 0x01
 	.byte 0x01, 0xFF, 0x00, 0x00
 

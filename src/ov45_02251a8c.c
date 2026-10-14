@@ -73,10 +73,10 @@ void ciNickError(ChatConnection *chat, int type, const char *nick, int unk_0C, i
     }
     if (chat->nickErrorCallback) {
         ChatNickErrorArgs args = { 0 };
-        args.unk_0C = unk_10;
+        args.suggestedNicks = unk_10;
         args.type = type;
         args.nick = nick;
-        args.unk_08 = unk_0C;
+        args.numSuggestedNicks = unk_0C;
         ciAddCallback_(chat, 25, chat->nickErrorCallback, (u32 *)&args, chat->connectParam, 0, NULL, sizeof(args));
         return;
     }

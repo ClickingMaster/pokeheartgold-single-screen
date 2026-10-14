@@ -282,43 +282,43 @@ typedef struct BattleCastleOpponentAppArgs {
 } BattleCastleOpponentAppArgs;
 
 // Tables still defined in the overlay's data asm
-extern const u8 ov83_02247E64[][4]; // party app button rects (x, y, width, height in tiles)
-extern const u8 ov83_02248010[];    // list menu y, by number of entries
-extern const TouchscreenListMenuTemplate ov83_02248018;
-extern const u16 ov83_02248024[2]; // SUMMARY menu help messages, by "moves can be bought" (0) or not (1)
-extern const u16 ov83_02248028[2];
-extern const u16 ov83_0224802C[2];
-extern const u16 ov83_02248030[2];
-extern const GraphicsModes ov83_02248044;
-extern const u16 ov83_02248054[][3]; // "gained the ability to..." messages, by rank kind and rank
-extern const BgTemplate ov83_02248068;
-extern const BgTemplate ov83_02248084;
-extern const BgTemplate ov83_022480A0;
-extern const BgTemplate ov83_022480BC;
-extern const BgTemplate ov83_022480D8;
-extern const BgTemplate ov83_022480F4;
-extern const GraphicsBanks ov83_02248150;
-extern const u8 ov83_02248178[4]; // sprite resource manager sizes
-extern const ObjCharTransferTemplate ov83_0224817C;
-extern const TileRect ov83_0224818C;
+extern const u8 gBattleCastlePartyAppButtonRects[][4]; // party app button rects (x, y, width, height in tiles)
+extern const u8 gBattleCastleOpponentAppListMenuY[];    // list menu y, by number of entries
+extern const TouchscreenListMenuTemplate gBattleCastleOpponentAppListMenuTemplate;
+extern const u16 gBattleCastleOpponentAppStatsHelpMessages[2]; // SUMMARY menu help messages, by "moves can be bought" (0) or not (1)
+extern const u16 gBattleCastleOpponentAppMovesHelpMessages[2];
+extern const u16 gBattleCastleOpponentAppRankUpHelpMessages[2];
+extern const u16 gBattleCastleOpponentAppCancelHelpMessages[2];
+extern const GraphicsModes gBattleCastleOpponentAppGraphicsModes;
+extern const u16 gBattleCastleOpponentAppRankUpMessages[][3]; // "gained the ability to..." messages, by rank kind and rank
+extern const BgTemplate gBattleCastleOpponentAppBgTemplate_Main1;
+extern const BgTemplate gBattleCastleOpponentAppBgTemplate_Main0;
+extern const BgTemplate gBattleCastleOpponentAppBgTemplate_Main2;
+extern const BgTemplate gBattleCastleOpponentAppBgTemplate_Main3;
+extern const BgTemplate gBattleCastleOpponentAppBgTemplate_Sub0;
+extern const BgTemplate gBattleCastleOpponentAppBgTemplate_Sub1;
+extern const GraphicsBanks gBattleCastleOpponentAppGraphicsBanks;
+extern const u8 gBattleCastleSpriteResManSizes[4]; // sprite resource manager sizes
+extern const ObjCharTransferTemplate gBattleCastleObjCharTransferTemplate;
+extern const TileRect gBattleCastleMonPicRect;
 extern const struct {
     const WindowTemplate *templates;
     u32 count;
-} ov83_0224819C[2];                             // window sets
-extern const TouchscreenHitbox ov83_022484F4[]; // rental item grid page arrows
+} gBattleCastleWindowSets[2];                             // window sets
+extern const TouchscreenHitbox gBattleCastleItemGridArrowHitboxes[]; // rental item grid page arrows
 extern const GridCallbacks gBattleCastlePartyAppPartyGridCallbacks;       // party app party grid
 extern const GridCallbacks gBattleCastleOpponentAppPartyGridCallbacks;       // opponent app party grid
 extern const GridCallbacks gBattleCastleItemGridCallbacks;       // rental item grid
-extern const TouchscreenHitbox ov83_02248530[]; // party grid, 3 mons
-extern const int ov83_02248544[];               // party grid position -> slot
-extern const TouchscreenHitbox ov83_02248558[]; // party grid, 4 mons
-extern const u32 ov83_02248570[];               // rental item grid cursor animations
-extern const int ov83_0224858C[];               // rental item grid position -> button
-extern const DpadMenuBox ov83_022485A8[];
-extern const TouchscreenHitbox ov83_022485C8[];
-extern const DpadMenuBox ov83_022485E8[];
-extern const DpadMenuBox ov83_02248610[]; // rental item grid
-extern const u8 ov83_02248611[];          // = &ov83_02248610[0].top, referenced by its own label
+extern const TouchscreenHitbox gBattleCastlePartyGrid3Hitboxes[]; // party grid, 3 mons
+extern const int gBattleCastlePartyGridSlots[];               // party grid position -> slot
+extern const TouchscreenHitbox gBattleCastlePartyGrid4Hitboxes[]; // party grid, 4 mons
+extern const u32 gBattleCastleItemGridCursorAnims[];               // rental item grid cursor animations
+extern const int gBattleCastleItemGridButtons[];               // rental item grid position -> button
+extern const DpadMenuBox gBattleCastlePartyGrid3Boxes[];
+extern const TouchscreenHitbox gBattleCastleItemGridHitboxes[];
+extern const DpadMenuBox gBattleCastlePartyGrid4Boxes[];
+extern const DpadMenuBox gBattleCastleItemGridBoxes[]; // rental item grid
+extern const u8 ov83_02248611[];          // = &gBattleCastleItemGridBoxes[0].top, referenced by its own label
 
 // Frontier overlay (80) helpers
 void Frontier_SetSpriteAnim(Sprite *sprite, int value);
@@ -450,7 +450,7 @@ void BattleCastlePartyApp_ShowItemDescription(BattleCastlePartyApp *app, int ind
 
 // Palette flash of the party app's pressed button (app->pressedButton); FALSE when done
 BOOL BattleCastlePartyApp_AnimatePressedButton(BattleCastlePartyApp *app) {
-    const u8 *rect = ov83_02247E64[app->pressedButton];
+    const u8 *rect = gBattleCastlePartyAppButtonRects[app->pressedButton];
 
     switch (app->buttonAnimState) {
     case 0:
@@ -1365,7 +1365,7 @@ void BattleCastleOpponentApp_VBlankCallback(void *arg) {
 #pragma force_active reset
 
 void BattleCastleOpponentApp_SetGraphicsBanks(void) {
-    GraphicsBanks banks = ov83_02248150;
+    GraphicsBanks banks = gBattleCastleOpponentAppGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
@@ -1379,28 +1379,28 @@ void BattleCastleOpponentApp_InitBgLayers(BgConfig *bgConfig) {
     BgTemplate sub0;
     BgTemplate sub1;
 
-    modes = ov83_02248044;
+    modes = gBattleCastleOpponentAppGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    main1 = ov83_02248068;
+    main1 = gBattleCastleOpponentAppBgTemplate_Main1;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &main1, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_1, 0x20, 0, HEAP_ID_107);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
-    main0 = ov83_02248084;
+    main0 = gBattleCastleOpponentAppBgTemplate_Main0;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &main0, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_0, 0x20, 0, HEAP_ID_107);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
-    main2 = ov83_022480A0;
+    main2 = gBattleCastleOpponentAppBgTemplate_Main2;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &main2, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_2, 0x20, 0, HEAP_ID_107);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
-    main3 = ov83_022480BC;
+    main3 = gBattleCastleOpponentAppBgTemplate_Main3;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &main3, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_3, 0x20, 0, HEAP_ID_107);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
-    sub0 = ov83_022480D8;
+    sub0 = gBattleCastleOpponentAppBgTemplate_Sub0;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &sub0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
-    sub1 = ov83_022480F4;
+    sub1 = gBattleCastleOpponentAppBgTemplate_Sub1;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &sub1, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_1, 0x20, 0, HEAP_ID_107);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
@@ -2333,7 +2333,7 @@ void BattleCastleOpponentApp_RankUp(BattleCastleOpponentApp *app, u8 slot, int a
     BattleCastleOpponentApp_CloseMenus(app);
     BattleCastleOpponentApp_PrintCastlePoints(app, &app->windows[CASTLE_OPP_WIN_POINTS]);
     BattleCastle_DrawWindowFrame(&app->windows[CASTLE_OPP_WIN_MESSAGE], Options_GetFrame(app->options));
-    app->printerId = BattleCastleOpponentApp_ShowMessage(app, ov83_02248054[kind][slot], 1);
+    app->printerId = BattleCastleOpponentApp_ShowMessage(app, gBattleCastleOpponentAppRankUpMessages[kind][slot], 1);
 }
 #pragma force_active reset
 
@@ -2625,7 +2625,7 @@ void BattleCastleOpponentApp_CreateListMenu(BattleCastleOpponentApp *app, u8 cou
     int numMons;
 
     BattleCastle_GetMenuTiles(&tileStart, &tileCount);
-    template = ov83_02248018;
+    template = gBattleCastleOpponentAppListMenuTemplate;
     template.baseTile = tileStart;
     template.charOffset = tileStart + tileCount - 27;
     template.unkA = tileCount;
@@ -2662,7 +2662,7 @@ void BattleCastleOpponentApp_CreateMainMenuList(BattleCastleOpponentApp *app) {
     }
     ListMenuItems_AppendFromMsgData(app->listMenuItems, app->msgData, msg_0033_00011, LIST_CANCEL);
     count++;
-    BattleCastleOpponentApp_CreateListMenu(app, count, 17, ov83_02248010[count], 13);
+    BattleCastleOpponentApp_CreateListMenu(app, count, 17, gBattleCastleOpponentAppListMenuY[count], 13);
 }
 
 // SUMMARY (until bought) / MOVES (until bought, needs info rank 2) / RANK UP (below rank 2) / CANCEL
@@ -2689,7 +2689,7 @@ void BattleCastleOpponentApp_CreateSummaryMenuList(BattleCastleOpponentApp *app)
     }
     ListMenuItems_AppendFromMsgData(app->listMenuItems, app->msgData, msg_0033_00036, LIST_CANCEL);
     count++;
-    BattleCastleOpponentApp_CreateListMenu(app, count, 17, ov83_02248010[count], 13);
+    BattleCastleOpponentApp_CreateListMenu(app, count, 17, gBattleCastleOpponentAppListMenuY[count], 13);
 }
 
 // LEVEL +5 / LEVEL -5 / CANCEL
@@ -2744,16 +2744,16 @@ void BattleCastleOpponentApp_PrintSummaryMenuHelp(BattleCastleOpponentApp *app) 
         variant = BattleCastle_GetRank(app->saveData, app->frontierType, CASTLE_RANK_INFO) == 1 ? 0 : 1;
         switch ((u32)app->listMenuItems[app->listMenu->cursorPos].value) {
         case CASTLE_OPP_ACTION_STATS:
-            msgNo = ov83_02248024[variant];
+            msgNo = gBattleCastleOpponentAppStatsHelpMessages[variant];
             break;
         case CASTLE_OPP_ACTION_MOVES:
-            msgNo = ov83_02248028[variant];
+            msgNo = gBattleCastleOpponentAppMovesHelpMessages[variant];
             break;
         case CASTLE_OPP_ACTION_RANK_UP:
-            msgNo = ov83_0224802C[variant];
+            msgNo = gBattleCastleOpponentAppRankUpHelpMessages[variant];
             break;
         case (u32)LIST_CANCEL:
-            msgNo = ov83_02248030[variant];
+            msgNo = gBattleCastleOpponentAppCancelHelpMessages[variant];
             break;
         }
         BattleCastleOpponentApp_PrintMessage(app, &app->windows[CASTLE_OPP_WIN_MESSAGE], msgNo, 1, 1, TEXT_SPEED_NOTRANSFER, 1, 2, 15, 1);
@@ -2779,7 +2779,7 @@ void BattleCastle_InitSpriteGfx(BattleCastleSpriteGfx *gfx, Party *party, u8 isL
     OamManager_Create(0, 128, 0, 32, 0, 128, 0, 32, HEAP_ID_107);
     gfx->spriteList = G2dRenderer_Init(40, &gfx->renderer, HEAP_ID_107);
     for (i = 0; i < 4; i++) {
-        gfx->resMan[i] = Create2DGfxResObjMan(ov83_02248178[i], (GfGfxResType)i, HEAP_ID_107);
+        gfx->resMan[i] = Create2DGfxResObjMan(gBattleCastleSpriteResManSizes[i], (GfGfxResType)i, HEAP_ID_107);
     }
     BattleCastle_LoadMonPicGfx(gfx);
     gfx->resObj[0][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_CHAR], NARC_a_1_8_4, 15, TRUE, 0, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_107);
@@ -2902,7 +2902,7 @@ void BattleCastle_LoadItemIconPalette(BattleCastleSpriteGfx *gfx, int resId, u16
 }
 
 void BattleCastle_InitSpriteTransfer(void) {
-    ObjCharTransferTemplate template = ov83_0224817C;
+    ObjCharTransferTemplate template = gBattleCastleObjCharTransferTemplate;
 
     ObjCharTransfer_InitEx(&template, GX_OBJVRAMMODE_CHAR_1D_32K, GX_OBJVRAMMODE_CHAR_1D_64K);
     ObjPlttTransfer_Init(32, HEAP_ID_107);
@@ -3023,7 +3023,7 @@ void ov83_02247630(BattleCastleSprite *sprite, int x, u32 y) {
 // Front picture of a mon into the sub screen sprite; species SPECIES_NONE shows a placeholder
 void BattleCastleSprite_LoadMonPic(BattleCastleSprite *sprite, BoxPokemon *boxMon, u16 species, u32 personality) {
     PokepicTemplate pokepic;
-    TileRect rect = ov83_0224818C;
+    TileRect rect = gBattleCastleMonPicRect;
     NNSG2dCharacterData *charData;
     void *file;
     void *buffer;
@@ -3170,9 +3170,9 @@ void BattleCastlePrompt_Hide(BattleCastlePrompt *prompt) {
 #pragma force_active on
 // Window set 0 (party app, 70 windows) or 1 (opponent app, 35 windows)
 void BattleCastle_AddWindows(BgConfig *bgConfig, Window *windows, u32 set) {
-    const WindowTemplate *templates = ov83_0224819C[set].templates;
+    const WindowTemplate *templates = gBattleCastleWindowSets[set].templates;
     u8 i = 0;
-    u32 count = *(u32 *)((u8 *)ov83_0224819C + 4 + set * 8); // = ov83_0224819C[set].count
+    u32 count = *(u32 *)((u8 *)gBattleCastleWindowSets + 4 + set * 8); // = gBattleCastleWindowSets[set].count
 
     for (; i < count; i++) {
         AddWindow(bgConfig, &windows[i], &templates[i]);
@@ -3182,7 +3182,7 @@ void BattleCastle_AddWindows(BgConfig *bgConfig, Window *windows, u32 set) {
 
 void BattleCastle_RemoveWindows(Window *windows, u32 set) {
     u16 i;
-    u32 count = *(u32 *)((u8 *)ov83_0224819C + 4 + set * 8);
+    u32 count = *(u32 *)((u8 *)gBattleCastleWindowSets + 4 + set * 8);
 
     i = 0;
     for (; i < count; i++) {
@@ -3232,16 +3232,16 @@ void BattleCastle_GridCallbackNoOp(void) {
 
 GridInputHandler *BattleCastlePartyApp_CreatePartyGrid(BattleCastlePartyApp *app, int initialPos, int numMons) {
     if (numMons == 3) {
-        return GridInputHandler_Create(ov83_02248530, ov83_022485A8, &gBattleCastlePartyAppPartyGridCallbacks, app, TRUE, initialPos, HEAP_ID_107);
+        return GridInputHandler_Create(gBattleCastlePartyGrid3Hitboxes, gBattleCastlePartyGrid3Boxes, &gBattleCastlePartyAppPartyGridCallbacks, app, TRUE, initialPos, HEAP_ID_107);
     }
-    return GridInputHandler_Create(ov83_02248558, ov83_022485E8, &gBattleCastlePartyAppPartyGridCallbacks, app, TRUE, initialPos, HEAP_ID_107);
+    return GridInputHandler_Create(gBattleCastlePartyGrid4Hitboxes, gBattleCastlePartyGrid4Boxes, &gBattleCastlePartyAppPartyGridCallbacks, app, TRUE, initialPos, HEAP_ID_107);
 }
 
 GridInputHandler *BattleCastleOpponentApp_CreatePartyGrid(BattleCastleOpponentApp *app, int initialPos, int numMons) {
     if (numMons == 3) {
-        return GridInputHandler_Create(ov83_02248530, ov83_022485A8, &gBattleCastleOpponentAppPartyGridCallbacks, app, TRUE, initialPos, HEAP_ID_107);
+        return GridInputHandler_Create(gBattleCastlePartyGrid3Hitboxes, gBattleCastlePartyGrid3Boxes, &gBattleCastleOpponentAppPartyGridCallbacks, app, TRUE, initialPos, HEAP_ID_107);
     }
-    return GridInputHandler_Create(ov83_02248558, ov83_022485E8, &gBattleCastleOpponentAppPartyGridCallbacks, app, TRUE, initialPos, HEAP_ID_107);
+    return GridInputHandler_Create(gBattleCastlePartyGrid4Hitboxes, gBattleCastlePartyGrid4Boxes, &gBattleCastleOpponentAppPartyGridCallbacks, app, TRUE, initialPos, HEAP_ID_107);
 }
 
 // Party grid input: the selected slot (CASTLE_*_GRID_EXIT for EXIT) or a GRID_MENU_* code
@@ -3255,7 +3255,7 @@ int BattleCastle_HandlePartyGridInput(GridInputHandler *grid) {
     case GRID_MENU_NOTHING_CHOSEN:
         return input;
     }
-    return ov83_02248544[input];
+    return gBattleCastlePartyGridSlots[input];
 }
 
 void ov83_02247B04(GridInputHandler *grid) {
@@ -3264,23 +3264,23 @@ void ov83_02247B04(GridInputHandler *grid) {
 }
 
 void BattleCastlePartyApp_OnPartyGridKeyMove(BattleCastlePartyApp *app, int newTarget, int prevTarget) {
-    BattleCastlePartyApp_SetCursorPos(app, ov83_02248544[newTarget], ov83_02248544[prevTarget]);
+    BattleCastlePartyApp_SetCursorPos(app, gBattleCastlePartyGridSlots[newTarget], gBattleCastlePartyGridSlots[prevTarget]);
 }
 
 void BattleCastlePartyApp_OnPartyGridTouch(BattleCastlePartyApp *app, int newTarget, int prevTarget) {
-    BattleCastlePartyApp_SetCursorPos(app, ov83_02248544[newTarget], ov83_02248544[prevTarget]);
+    BattleCastlePartyApp_SetCursorPos(app, gBattleCastlePartyGridSlots[newTarget], gBattleCastlePartyGridSlots[prevTarget]);
 }
 
 void BattleCastleOpponentApp_OnPartyGridKeyMove(BattleCastleOpponentApp *app, int newTarget, int prevTarget) {
-    BattleCastleOpponentApp_SetCursorPos(app, ov83_02248544[newTarget], ov83_02248544[prevTarget]);
+    BattleCastleOpponentApp_SetCursorPos(app, gBattleCastlePartyGridSlots[newTarget], gBattleCastlePartyGridSlots[prevTarget]);
 }
 
 void BattleCastleOpponentApp_OnPartyGridTouch(BattleCastleOpponentApp *app, int newTarget, int prevTarget) {
-    BattleCastleOpponentApp_SetCursorPos(app, ov83_02248544[newTarget], ov83_02248544[prevTarget]);
+    BattleCastleOpponentApp_SetCursorPos(app, gBattleCastlePartyGridSlots[newTarget], gBattleCastlePartyGridSlots[prevTarget]);
 }
 
 GridInputHandler *BattleCastlePartyApp_CreateItemGrid(BattleCastlePartyApp *app) {
-    GridInputHandler *grid = GridInputHandler_Create(ov83_022485C8, ov83_02248610, &gBattleCastleItemGridCallbacks, app, TRUE, 0, HEAP_ID_107);
+    GridInputHandler *grid = GridInputHandler_Create(gBattleCastleItemGridHitboxes, gBattleCastleItemGridBoxes, &gBattleCastleItemGridCallbacks, app, TRUE, 0, HEAP_ID_107);
 
     BattleCastlePartyApp_SetItemCursor(app, 64, 52, 3);
     BattleCastlePartyApp_ShowItemDescription(app, 0);
@@ -3312,9 +3312,9 @@ int BattleCastle_HandleItemGridInput(GridInputHandler *grid) {
         }
         break;
     default:
-        return ov83_0224858C[input];
+        return gBattleCastleItemGridButtons[input];
     }
-    touched = TouchscreenHitbox_FindRectAtTouchNew(ov83_022484F4);
+    touched = TouchscreenHitbox_FindRectAtTouchNew(gBattleCastleItemGridArrowHitboxes);
     if (touched == 0) {
         return 6;
     }
@@ -3325,12 +3325,12 @@ int BattleCastle_HandleItemGridInput(GridInputHandler *grid) {
 }
 
 void BattleCastlePartyApp_OnItemGridKeyMove(BattleCastlePartyApp *app, int newTarget) {
-    BattleCastlePartyApp_SetItemCursor(app, ov83_02248610[newTarget].left, ov83_02248611[newTarget * sizeof(DpadMenuBox)], ov83_02248570[newTarget]);
+    BattleCastlePartyApp_SetItemCursor(app, gBattleCastleItemGridBoxes[newTarget].left, ov83_02248611[newTarget * sizeof(DpadMenuBox)], gBattleCastleItemGridCursorAnims[newTarget]);
     BattleCastlePartyApp_ShowItemDescription(app, newTarget);
 }
 
 void BattleCastlePartyApp_OnItemGridTouch(BattleCastlePartyApp *app, int newTarget) {
-    BattleCastlePartyApp_SetItemCursor(app, ov83_02248610[newTarget].left, ov83_02248611[newTarget * sizeof(DpadMenuBox)], ov83_02248570[newTarget]);
+    BattleCastlePartyApp_SetItemCursor(app, gBattleCastleItemGridBoxes[newTarget].left, ov83_02248611[newTarget * sizeof(DpadMenuBox)], gBattleCastleItemGridCursorAnims[newTarget]);
     BattleCastlePartyApp_ShowItemDescription(app, newTarget);
 }
 

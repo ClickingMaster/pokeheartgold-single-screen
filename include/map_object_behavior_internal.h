@@ -77,11 +77,11 @@ extern const DirectionMovementTable gTypeBehaviorSpinOrders;
 extern const MapObjectAction gMapObjectTypeBehaviorInits[];
 extern const MapObjectPredicate gMapObjectTypeBehaviorChecks[];
 extern const MapObjectPredicate gMapObjectTypeBehaviorUpdates[];
-extern const TrainerSightFunc _020FE194[];
+extern const TrainerSightFunc gTrainerSightDistanceFuncs[];
 extern const TrainerApproachStateFunc gTrainerApproachStateFuncs[];
 
 // Defined elsewhere without a header yet.
-extern const u32 ov01_02207274[];
+extern const u32 gApricornTreeSpriteIds[];
 int MapObject_RequestBillboard(LocalMapObject *object, void **billboard, u32 spriteId);
 void MapObject_CancelAndFreeBillboard(LocalMapObject *object, void **billboard, u32 spriteId);
 BOOL MapObject_IsBillboardAnimPaused(LocalMapObject *object);

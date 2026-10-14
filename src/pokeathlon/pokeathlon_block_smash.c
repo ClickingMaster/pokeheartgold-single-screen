@@ -64,21 +64,21 @@ typedef struct PokeathlonBlockSmashBannerPosition {
     u16 y;
 } PokeathlonBlockSmashBannerPosition;
 
-extern const PokeathlonBlockSmashBannerPosition ov96_0221CC00;
-extern const TouchscreenHitbox ov96_0221CC04[];
-extern const GraphicsModes ov96_0221CC0C;
-extern const OamCharTransferParam ov96_0221CC1C;
-extern const SpriteResourceCountsListUnion ov96_0221CC30;
-extern const u32 ov96_0221CC48[6];
-extern const WindowTemplate ov96_0221CC60[4];
-extern const OamManagerParam ov96_0221CC80;
-extern const GraphicsBanks ov96_0221CCA0;
+extern const PokeathlonBlockSmashBannerPosition gPokeathlonBlockSmashBannerPosition;
+extern const TouchscreenHitbox gPokeathlonBlockSmashSwipeHitboxes[];
+extern const GraphicsModes gPokeathlonBlockSmashGraphicsModes;
+extern const OamCharTransferParam gPokeathlonBlockSmashOamCharTransferParam;
+extern const SpriteResourceCountsListUnion gPokeathlonBlockSmashSpriteResourceCounts;
+extern const u32 gPokeathlonBlockSmashBgLayers[6];
+extern const WindowTemplate gPokeathlonBlockSmashWindowTemplates[4];
+extern const OamManagerParam gPokeathlonBlockSmashOamManagerParam;
+extern const GraphicsBanks gPokeathlonBlockSmashGraphicsBanks;
 
 typedef struct PokeathlonBlockSmashBgTemplates {
     BgTemplate templates[6];
 } PokeathlonBlockSmashBgTemplates;
 
-extern const PokeathlonBlockSmashBgTemplates ov96_0221CCF8;
+extern const PokeathlonBlockSmashBgTemplates gPokeathlonBlockSmashBgTemplates;
 
 // sound_system.c (no header declares it)
 void GF_SndSetTrackPitchBySeqNo(u16 seqNo, u32 trackMask, int pitch);
@@ -109,11 +109,11 @@ void PokeathlonBlockSmashCpu_WriteReports(PokeathlonBlockSmashCpu *cpu);
 ManagedSprite *PokeathlonBlockSmash_NewMainSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u16 anim, u16 priority);
 ManagedSprite *PokeathlonBlockSmash_NewSubSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u16 anim, u8 priority);
 
-extern const TouchscreenHitbox *ov96_0221DC68[3];
-extern const u8 ov96_0221CDA0[3];
-extern const s16 ov96_0221CDC8[4][2]; // x, y of the four weak spot positions
-extern const s16 ov96_0221CDCA[];     // their y (the second half of each ov96_0221CDC8 entry)
-extern const s16 ov96_0221CDD8[4][2];
+extern const TouchscreenHitbox *gPokeathlonBlockSmashSpotHitboxes[3];
+extern const u8 gPokeathlonBlockSmashSpotHitboxCounts[3];
+extern const s16 gPokeathlonBlockSmashSpotPositions[4][2]; // x, y of the four weak spot positions
+extern const s16 ov96_0221CDCA[];     // their y (the second half of each gPokeathlonBlockSmashSpotPositions entry)
+extern const s16 gPokeathlonBlockSmashBlockTouchOffsets[4][2];
 
 // The sprites of a participant's row on the top screen
 typedef struct PokeathlonBlockSmashRowSprites {
@@ -122,7 +122,7 @@ typedef struct PokeathlonBlockSmashRowSprites {
     u32 star;
 } PokeathlonBlockSmashRowSprites;
 
-extern const PokeathlonBlockSmashRowSprites ov96_0221CCC8[4];
+extern const PokeathlonBlockSmashRowSprites gPokeathlonBlockSmashRowSprites[4];
 
 // The Pennant Capture CPU's cell checks (used by pokeathlon_pennant_capture_cpu.c) are compiled at the
 // head of this unit.
@@ -173,7 +173,7 @@ BOOL PokeathlonBlockSmash_Intro(PokeathlonCourseData *course, u8 *state) {
         if (PokeathlonBlockSmashBlocks_GetState(work->blocks) == 2) {
             PokeathlonBlockSmashBannerPosition position;
             void *spriteList;
-            position = ov96_0221CC00;
+            position = gPokeathlonBlockSmashBannerPosition;
             spriteList = SpriteManager_GetSpriteList(work->spriteManager);
             PokeathlonCourse_CreateStartSprites(course, 0, work->iconResources, spriteList, 1, 1, &position);
             (*state)++;
@@ -486,14 +486,14 @@ BOOL PokeathlonBlockSmash_Exit(PokeathlonCourseData *course) {
 }
 
 void PokeathlonBlockSmash_SetVramBanks(void) {
-    GraphicsBanks banks = ov96_0221CCA0;
+    GraphicsBanks banks = gPokeathlonBlockSmashGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
 void PokeathlonBlockSmash_InitSpriteSystem(PokeathlonBlockSmash *work) {
-    SpriteResourceCountsListUnion counts = ov96_0221CC30;
-    OamManagerParam oamParam = ov96_0221CC80;
-    OamCharTransferParam transferParam = ov96_0221CC1C;
+    SpriteResourceCountsListUnion counts = gPokeathlonBlockSmashSpriteResourceCounts;
+    OamManagerParam oamParam = gPokeathlonBlockSmashOamManagerParam;
+    OamCharTransferParam transferParam = gPokeathlonBlockSmashOamCharTransferParam;
     transferParam.maxTasks = 128;
     work->spriteSystem = SpriteSystem_Alloc(work->heapId);
     work->spriteManager = SpriteManager_New(work->spriteSystem);
@@ -629,15 +629,15 @@ void PokeathlonBlockSmash_StopHudAnims(PokeathlonBlockSmash *work) {
 }
 
 void PokeathlonBlockSmash_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {
-    GraphicsModes modes = ov96_0221CC0C;
+    GraphicsModes modes = gPokeathlonBlockSmashGraphicsModes;
     s32 i;
     SetBothScreensModesAndDisable(&modes);
     {
-        PokeathlonBlockSmashBgTemplates templates = ov96_0221CCF8;
+        PokeathlonBlockSmashBgTemplates templates = gPokeathlonBlockSmashBgTemplates;
         for (i = 0; i < 6; i++) {
-            InitBgFromTemplate(bgConfig, (u8)ov96_0221CC48[i], &templates.templates[i], GF_BG_TYPE_TEXT);
-            BgClearTilemapBufferAndCommit(bgConfig, (u8)ov96_0221CC48[i]);
-            BG_ClearCharDataRange((u8)ov96_0221CC48[i], 0x20, 0, heapId);
+            InitBgFromTemplate(bgConfig, (u8)gPokeathlonBlockSmashBgLayers[i], &templates.templates[i], GF_BG_TYPE_TEXT);
+            BgClearTilemapBufferAndCommit(bgConfig, (u8)gPokeathlonBlockSmashBgLayers[i]);
+            BG_ClearCharDataRange((u8)gPokeathlonBlockSmashBgLayers[i], 0x20, 0, heapId);
         }
         FontID_Alloc(4, heapId);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
@@ -657,7 +657,7 @@ void PokeathlonBlockSmash_FreeBgsAndText(PokeathlonBlockSmash *work) {
         RemoveWindow(&work->windows[i]);
     }
     for (i = 0; i < 6; i++) {
-        FreeBgTilemapBuffer(work->bgConfig, (u8)ov96_0221CC48[i]);
+        FreeBgTilemapBuffer(work->bgConfig, (u8)gPokeathlonBlockSmashBgLayers[i]);
     }
     FontID_Release(4);
     Heap_Free(work->bgConfig);
@@ -684,7 +684,7 @@ void PokeathlonBlockSmash_InitText(PokeathlonCourseData *course) {
     work->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0309_bin, work->heapId);
     work->msgFormat = MessageFormat_New(work->heapId);
     for (i = 0; i < 4; i++) {
-        AddWindow(work->bgConfig, &work->windows[i], &ov96_0221CC60[i]);
+        AddWindow(work->bgConfig, &work->windows[i], &gPokeathlonBlockSmashWindowTemplates[i]);
         FillWindowPixelBuffer(&work->windows[i], 0);
         ClearWindowTilemap(&work->windows[i]);
     }
@@ -746,7 +746,7 @@ void PokeathlonBlockSmash_CreateTeamRows(PokeathlonCourseData *course) {
     GF_ASSERT(work->spriteSystem != NULL);
     GF_ASSERT(work->spriteManager != NULL);
     GF_ASSERT(work->rivals != NULL);
-    for (i = 0, row = work->icons.rows, x = 120, sprites = ov96_0221CCC8; i < 4; row++, x += 32, sprites++, i++) {
+    for (i = 0, row = work->icons.rows, x = 120, sprites = gPokeathlonBlockSmashRowSprites; i < 4; row++, x += 32, sprites++, i++) {
         s16 iconX = x;
         row->icon = PokeathlonBlockSmash_NewSubSprite(work->spriteSystem, work->spriteManager, iconX, 152, i + 13, 3);
         PokeathlonBlockSmash_SetTeamRowIcon(course, (u8)i, 0);
@@ -901,7 +901,7 @@ void PokeathlonBlockSmash_HandleSwipe(PokeathlonBlockSmash *work, BOOL anywhere)
         }
     }
     if (System_GetTouchNew() || System_GetTouchHeld() <= 0) {
-        if (TouchscreenHitbox_FindRectAtTouchNew(ov96_0221CC04) != -1) {
+        if (TouchscreenHitbox_FindRectAtTouchNew(gPokeathlonBlockSmashSwipeHitboxes) != -1) {
             if (PokeathlonBlockSmashMon_CanSwitch(work->mon)) {
                 anim = 20;
                 PlaySE(SEQ_SE_GS_CHANGE1);
@@ -1096,7 +1096,7 @@ typedef struct PokeathlonBlockSmashVec {
 } PokeathlonBlockSmashVec;
 
 // Whether the new touch is on the top block: within its height and inside the trapezoid
-// ov96_0221CDD8 (offsets from the block's position).
+// gPokeathlonBlockSmashBlockTouchOffsets (offsets from the block's position).
 BOOL PokeathlonBlockSmashBlocks_IsTopBlockTouched(PokeathlonBlockSmashBlocks *blocks) {
     PokeathlonBlockSmashVec points[4];
     u32 touchX;
@@ -1129,16 +1129,16 @@ BOOL PokeathlonBlockSmashBlocks_IsTopBlockTouched(PokeathlonBlockSmashBlocks *bl
         }
         fixedY = (s32)converted;
         for (i = 0; i < 4; i++) {
-            if (position[1] + ov96_0221CDD8[i][0] > 0) {
-                converted = (float)((position[1] + ov96_0221CDD8[i][0]) << FX32_SHIFT) + 0.5f;
+            if (position[1] + gPokeathlonBlockSmashBlockTouchOffsets[i][0] > 0) {
+                converted = (float)((position[1] + gPokeathlonBlockSmashBlockTouchOffsets[i][0]) << FX32_SHIFT) + 0.5f;
             } else {
-                converted = (float)((position[1] + ov96_0221CDD8[i][0]) << FX32_SHIFT) - 0.5f;
+                converted = (float)((position[1] + gPokeathlonBlockSmashBlockTouchOffsets[i][0]) << FX32_SHIFT) - 0.5f;
             }
             points[i].x = (s32)converted;
-            if (position[0] + ov96_0221CDD8[i][1] > 0) {
-                converted = (float)((position[0] + ov96_0221CDD8[i][1]) << FX32_SHIFT) + 0.5f;
+            if (position[0] + gPokeathlonBlockSmashBlockTouchOffsets[i][1] > 0) {
+                converted = (float)((position[0] + gPokeathlonBlockSmashBlockTouchOffsets[i][1]) << FX32_SHIFT) + 0.5f;
             } else {
-                converted = (float)((position[0] + ov96_0221CDD8[i][1]) << FX32_SHIFT) - 0.5f;
+                converted = (float)((position[0] + gPokeathlonBlockSmashBlockTouchOffsets[i][1]) << FX32_SHIFT) - 0.5f;
             }
             points[i].y = (s32)converted;
         }
@@ -1360,7 +1360,7 @@ void PokeathlonBlockSmashBlock_MoveSpot(PokeathlonBlockSmashBlock *block) {
         slot++;
     }
     block->spotSlot = slot;
-    block->spotX = ov96_0221CDC8[block->spotSlot][0] + (MTRandom() & 15);
+    block->spotX = gPokeathlonBlockSmashSpotPositions[block->spotSlot][0] + (MTRandom() & 15);
     block->spotY = ov96_0221CDCA[block->spotSlot * 2] + MTRandom() % 12;
 }
 
@@ -1377,7 +1377,7 @@ void PokeathlonBlockSmashBlock_UpdateSpot(PokeathlonBlockSmashBlock *block) {
 
 #pragma force_active on
 
-// The touch areas of the weak spot (ov96_0221DC68[kind], ov96_0221CDA0[kind] entries) around it.
+// The touch areas of the weak spot (gPokeathlonBlockSmashSpotHitboxes[kind], gPokeathlonBlockSmashSpotHitboxCounts[kind] entries) around it.
 BOOL PokeathlonBlockSmashBlock_IsSpotTouched(PokeathlonBlockSmashBlock *block, int kind) {
     TouchscreenHitbox hitboxes[3] = {
         { 0, 0, 0, 0 },
@@ -1393,8 +1393,8 @@ BOOL PokeathlonBlockSmashBlock_IsSpotTouched(PokeathlonBlockSmashBlock *block, i
     const TouchscreenHitbox *area;
     int i;
     GF_ASSERT(kind < 3);
-    area = ov96_0221DC68[kind];
-    count = (u8)(ov96_0221CDA0[kind] - 1);
+    area = gPokeathlonBlockSmashSpotHitboxes[kind];
+    count = (u8)(gPokeathlonBlockSmashSpotHitboxCounts[kind] - 1);
     ManagedSprite_GetPositionXY(block->spot, &position.y, &position.x);
     i = 0;
     if ((s32)count > 0) {

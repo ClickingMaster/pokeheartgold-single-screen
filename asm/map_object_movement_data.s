@@ -47,26 +47,26 @@
 gPathMovementStateFuncs:
 	.word PathMovement_Step
 	.word PathMovement_WaitStep
-	.public _020FD4F4
-_020FD4F4:
+	.public gDirectionTable01
+gDirectionTable01:
 	.word 0, 2, -1
-	.public _020FD500
-_020FD500:
+	.public gDirectionTable03
+gDirectionTable03:
 	.word 1, 2, -1
-	.public _020FD50C
-_020FD50C:
+	.public gDirectionTable13
+gDirectionTable13:
 	.word 2, 3, -1
-	.public _020FD518
-_020FD518:
+	.public gDirectionTable02
+gDirectionTable02:
 	.word 0, 3, -1
-	.public _020FD524
-_020FD524:
+	.public gDirectionTable04
+gDirectionTable04:
 	.word 1, 3, -1
-	.public _020FD530
-_020FD530:
+	.public gDirectionTable12
+gDirectionTable12:
 	.word 0, 1, -1
-	.public _020FD53C
-_020FD53C:
+	.public gDirectionTable10
+gDirectionTable10:
 	.word 2, 3, -1
 	.public gBackAndForthMovementStateFuncs
 	.public gBackAndForthMovementStateFuncs
@@ -74,20 +74,20 @@ gBackAndForthMovementStateFuncs:
 	.word BackAndForthMovement_FaceStart
 	.word BackAndForthMovement_Step
 	.word BackAndForthMovement_WaitStep
-	.public _020FD554
-_020FD554:
+	.public gDirectionTable09
+gDirectionTable09:
 	.word 0, 1, -1
-	.public _020FD560
-_020FD560:
+	.public gDirectionTable20
+gDirectionTable20:
 	.word 1, 0, 2, 3
-	.public _020FD570
-_020FD570:
+	.public gDirectionTable28
+gDirectionTable28:
 	.word 2, 3, 0, 1
-	.public _020FD580
-_020FD580:
+	.public gDirectionTable27
+gDirectionTable27:
 	.word 0, 1, 2, 3
-	.public _020FD590
-_020FD590:
+	.public gDirectionTable34
+gDirectionTable34:
 	.word 0, 3, 1, 2
 	.public gAlternatingSpinMovementStateFuncs
 	.public gAlternatingSpinMovementStateFuncs
@@ -96,11 +96,11 @@ gAlternatingSpinMovementStateFuncs:
 	.word AlternatingSpinMovement_WaitFace
 	.word AlternatingSpinMovement_Wait
 	.word AlternatingSpinMovement_Turn
-	.public _020FD5B0
-_020FD5B0:
+	.public gDirectionTable29
+gDirectionTable29:
 	.word 1, 2, 3, 0
-	.public _020FD5C0
-_020FD5C0:
+	.public gDirectionTable31
+gDirectionTable31:
 	.word 1, 3, 0, 2
 	.public gSpinMovementStateFuncs
 gSpinMovementStateFuncs:
@@ -108,74 +108,74 @@ gSpinMovementStateFuncs:
 	.word SpinMovement_WaitFace
 	.word SpinMovement_Wait
 	.word SpinMovement_Turn
-	.public _020FD5E0
-_020FD5E0:
+	.public gDirectionTable35
+gDirectionTable35:
 	.word 0x00000001, 0x00000002, 0x00000000, 0x00000003
-	.public _020FD5F0
-_020FD5F0:
+	.public gDirectionTable36
+gDirectionTable36:
 	.word 0x00000002, 0x00000000, 0x00000003, 0x00000001
-	.public _020FD600
-_020FD600:
+	.public gDirectionTable19
+gDirectionTable19:
 	.word 0x00000002, 0x00000003, 0x00000001, 0x00000000
-	.public _020FD610
-_020FD610:
+	.public gDirectionTable30
+gDirectionTable30:
 	.word 0x00000000, 0x00000002, 0x00000001, 0x00000003
-	.public _020FD620
-_020FD620:
+	.public gDirectionTable16
+gDirectionTable16:
 	.word 0x00000001, 0x00000000, 0x00000003, 0x00000002
-	.public _020FD630
-_020FD630:
+	.public gDirectionTable17
+gDirectionTable17:
 	.word 0x00000002, 0x00000001, 0x00000000, 0x00000003
-	.public _020FD640
-_020FD640:
+	.public gDirectionTable15
+gDirectionTable15:
 	.word 0x00000003, 0x00000002, 0x00000001, 0x00000000
-	.public _020FD650
-_020FD650:
+	.public gDirectionTable14
+gDirectionTable14:
 	.word 0x00000000, 0x00000003, 0x00000002, 0x00000001
-	.public _020FD660
-_020FD660:
+	.public gDirectionTable22
+gDirectionTable22:
 	.word 0x00000002, 0x00000000, 0x00000001, 0x00000003
-	.public _020FD670
-_020FD670:
+	.public gDirectionTable23
+gDirectionTable23:
 	.word 0x00000000, 0x00000001, 0x00000003, 0x00000002
-	.public _020FD680
-_020FD680:
+	.public gDirectionTable26
+gDirectionTable26:
 	.word 0x00000003, 0x00000000, 0x00000001, 0x00000002
-	.public _020FD690
-_020FD690:
+	.public gDirectionTable32
+gDirectionTable32:
 	.word 0x00000002, 0x00000001, 0x00000003, 0x00000000
-	.public _020FD6A0
-_020FD6A0:
+	.public gDirectionTable06
+gDirectionTable06:
 	.word 0x00000000, 0x00000001, 0x00000003, 0xFFFFFFFF
-	.public _020FD6B0
-_020FD6B0:
+	.public gDirectionTable07
+gDirectionTable07:
 	.word 0x00000000, 0x00000002, 0x00000003, 0xFFFFFFFF
-	.public _020FD6C0
-_020FD6C0:
+	.public gDirectionTable24
+gDirectionTable24:
 	.word 0x00000003, 0x00000002, 0x00000000, 0x00000001
-	.public _020FD6D0
-_020FD6D0:
+	.public gDirectionTable08
+gDirectionTable08:
 	.word 0x00000001, 0x00000002, 0x00000003, 0xFFFFFFFF
-	.public _020FD6E0
-_020FD6E0:
+	.public gDirectionTable05
+gDirectionTable05:
 	.word 0x00000000, 0x00000001, 0x00000002, 0xFFFFFFFF
-	.public _020FD6F0
-_020FD6F0:
+	.public gDirectionTable25
+gDirectionTable25:
 	.word 0x00000001, 0x00000003, 0x00000002, 0x00000000
-	.public _020FD700
-_020FD700:
+	.public gDirectionTable33
+gDirectionTable33:
 	.word 0x00000003, 0x00000000, 0x00000002, 0x00000001
-	.public _020FD710
-_020FD710:
+	.public gDirectionTable37
+gDirectionTable37:
 	.word 0x00000003, 0x00000001, 0x00000002, 0x00000000
-	.public _020FD720
-_020FD720:
+	.public gDirectionTable18
+gDirectionTable18:
 	.word 0x00000002, 0x00000003, 0x00000001, 0x00000000
-	.public _020FD730
-_020FD730:
+	.public gDirectionTable21
+gDirectionTable21:
 	.word 0x00000003, 0x00000001, 0x00000000, 0x00000002
-	.public _020FD740
-_020FD740:
+	.public gDirectionTable11
+gDirectionTable11:
 	.word 0x00000000, 0x00000001, 0x00000002, 0x00000003
 	.word 0xFFFFFFFF
 	.public gSpinCounterclockwiseOrder
@@ -190,8 +190,8 @@ gSpinClockwiseOrder:
 gAlternatingSpinCounterclockwiseOrder:
 	.word 0x00000000
 	.word 0x00000002, 0x00000001, 0x00000003, 0xFFFFFFFF
-	.public _020FD790
-_020FD790:
+	.public gDirectionTable38
+gDirectionTable38:
 	.word 0x00000000, 0x00000001, 0x00000002, 0x00000003
 	.word 0xFFFFFFFF
 	.public gAlternatingSpinClockwiseOrder
@@ -203,8 +203,8 @@ gAlternatingSpinClockwiseOrder:
 gRandomLookDelays:
 	.word 0x00000010, 0x00000020
 	.word 0x00000030, 0x00000040, 0xFFFFFFFF
-	.public _020FD7CC
-_020FD7CC:
+	.public gDirectionTable00
+gDirectionTable00:
 	.word 0x00000000
 	.word 0x00000001, 0x00000002, 0x00000003, 0xFFFFFFFF
 	.public gWalkingSpinOrders
@@ -219,43 +219,43 @@ gPlayerAwareMovementTypes:
 	.byte 0x13, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00
 	.public gMovementDirectionTables
 gMovementDirectionTables:
-	.word 0, _020FD7CC
-	.word 0x00000001, _020FD4F4
-	.word 0x00000002, _020FD518
-	.word 0x00000003, _020FD500
-	.word 0x00000004, _020FD524
-	.word 0x00000005, _020FD6E0
-	.word 0x00000006, _020FD6A0
-	.word 0x00000007, _020FD6B0
-	.word 0x00000008, _020FD6D0
-	.word 0x00000009, _020FD554
-	.word 0x0000000A, _020FD53C
-	.word 0x0000000B, _020FD740
-	.word 0x0000000C, _020FD530
-	.word 0x0000000D, _020FD50C
-	.word 0x0000000E, _020FD650
-	.word 0x0000000F, _020FD640
-	.word 0x00000010, _020FD620
-	.word 0x00000011, _020FD630
-	.word 0x00000012, _020FD720
-	.word 0x00000013, _020FD600
-	.word 0x00000014, _020FD560
-	.word 0x00000015, _020FD730
-	.word 0x00000016, _020FD660
-	.word 0x00000017, _020FD670
-	.word 0x00000018, _020FD6C0
-	.word 0x00000019, _020FD6F0
-	.word 0x0000001A, _020FD680
-	.word 0x0000001B, _020FD580
-	.word 0x0000001C, _020FD570
-	.word 0x0000001D, _020FD5B0
-	.word 0x0000001E, _020FD610
-	.word 0x0000001F, _020FD5C0
-	.word 0x00000020, _020FD690
-	.word 0x00000021, _020FD700
-	.word 0x00000022, _020FD590
-	.word 0x00000023, _020FD5E0
-	.word 0x00000024, _020FD5F0
-	.word 0x00000025, _020FD710
-	.word 0x00000026, _020FD790
+	.word 0, gDirectionTable00
+	.word 0x00000001, gDirectionTable01
+	.word 0x00000002, gDirectionTable02
+	.word 0x00000003, gDirectionTable03
+	.word 0x00000004, gDirectionTable04
+	.word 0x00000005, gDirectionTable05
+	.word 0x00000006, gDirectionTable06
+	.word 0x00000007, gDirectionTable07
+	.word 0x00000008, gDirectionTable08
+	.word 0x00000009, gDirectionTable09
+	.word 0x0000000A, gDirectionTable10
+	.word 0x0000000B, gDirectionTable11
+	.word 0x0000000C, gDirectionTable12
+	.word 0x0000000D, gDirectionTable13
+	.word 0x0000000E, gDirectionTable14
+	.word 0x0000000F, gDirectionTable15
+	.word 0x00000010, gDirectionTable16
+	.word 0x00000011, gDirectionTable17
+	.word 0x00000012, gDirectionTable18
+	.word 0x00000013, gDirectionTable19
+	.word 0x00000014, gDirectionTable20
+	.word 0x00000015, gDirectionTable21
+	.word 0x00000016, gDirectionTable22
+	.word 0x00000017, gDirectionTable23
+	.word 0x00000018, gDirectionTable24
+	.word 0x00000019, gDirectionTable25
+	.word 0x0000001A, gDirectionTable26
+	.word 0x0000001B, gDirectionTable27
+	.word 0x0000001C, gDirectionTable28
+	.word 0x0000001D, gDirectionTable29
+	.word 0x0000001E, gDirectionTable30
+	.word 0x0000001F, gDirectionTable31
+	.word 0x00000020, gDirectionTable32
+	.word 0x00000021, gDirectionTable33
+	.word 0x00000022, gDirectionTable34
+	.word 0x00000023, gDirectionTable35
+	.word 0x00000024, gDirectionTable36
+	.word 0x00000025, gDirectionTable37
+	.word 0x00000026, gDirectionTable38
 	.word 0x00000027, 0

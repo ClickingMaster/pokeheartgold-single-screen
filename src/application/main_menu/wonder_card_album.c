@@ -52,7 +52,7 @@ struct WonderCardAlbum {
     BgConfig *bgConfig;                        // 0x29FC
     MessageFormat *msgFormat;                  // 0x2A00
     MsgData *msgData;                          // 0x2A04
-    Window windows[19];                        // 0x2A08, card text boxes (ov74_0223C340)
+    Window windows[19];                        // 0x2A08, card text boxes (sWonderCardAlbumTextBoxes)
     u8 unk_2B38[0x10];                         // 0x2B38
     u32 baseTiles[19];                         // 0x2B48
     u32 unk_2B94;                              // 0x2B94
@@ -110,12 +110,12 @@ extern void CommState_SetErrorWatch(u32 a0, u32 a1);
 extern PlayerProfile *CommPlayerInfo_GetProfile(int netId);
 
 extern const OverlayManagerTemplate gApp_MainMenu_SelectOption_MysteryGift;
-extern const MysteryGiftMenuItem ov74_0223C2D0[10];
-extern const MysteryGiftMenuItem ov74_0223C2E0[];
-extern const MysteryGiftMenuItem ov74_0223C2F0[];
-extern const ListMenuTemplate ov74_0223C320;
-extern const WonderCardTextBox ov74_0223C340[19];
-extern u32 ov74_0223D0BC;
+extern const MysteryGiftMenuItem sWonderCardAlbumMenuItems[10];
+extern const MysteryGiftMenuItem sWonderCardAlbumWirelessYesNoItems[];
+extern const MysteryGiftMenuItem sWonderCardAlbumShareYesNoItems[];
+extern const ListMenuTemplate sWonderCardAlbumListMenuTemplate;
+extern const WonderCardTextBox sWonderCardAlbumTextBoxes[19];
+extern u32 sWonderCardAlbumMenuInput;
 
 void WonderCardAlbum_LoadShareSprites(WonderCardAlbum *album) {
     WonderCardAlbum_DeleteSprites(album);
@@ -192,7 +192,7 @@ void WonderCardAlbum_CreateListMenu(WonderCardAlbum *album, const MysteryGiftMen
         } while (i < count);
     }
     DestroyMsgData(album->msgData);
-    template = ov74_0223C320;
+    template = sWonderCardAlbumListMenuTemplate;
     template.items = album->listMenuItems;
     template.totalItems = count;
     template.window = window;
@@ -379,12 +379,12 @@ BOOL WonderCardAlbum_ShowCardMenu(WonderCardAlbum *album, Window *window, u32 co
     int shrink;
 
     count = 0;
-    items[count++] = ov74_0223C2D0[6];
+    items[count++] = sWonderCardAlbumMenuItems[6];
     if (album->cards[album->cardIndex]->shareMax) {
-        items[count++] = ov74_0223C2D0[7];
+        items[count++] = sWonderCardAlbumMenuItems[7];
     }
-    items[count] = ov74_0223C2D0[8];
-    items[count + 1] = ov74_0223C2D0[9];
+    items[count] = sWonderCardAlbumMenuItems[8];
+    items[count + 1] = sWonderCardAlbumMenuItems[9];
     box = album->box;
     ClearWindowTilemapAndCopyToVram(window);
     RemoveWindow(window);
@@ -397,18 +397,18 @@ BOOL WonderCardAlbum_ShowCardMenu(WonderCardAlbum *album, Window *window, u32 co
 #pragma force_active reset
 
 BOOL WonderCardAlbum_ShowTrashYesNo(WonderCardAlbum *album, Window *window, u32 color) {
-    WonderCardAlbum_CreateListMenu(album, ov74_0223C2D0, 2, window, 1);
+    WonderCardAlbum_CreateListMenu(album, sWonderCardAlbumMenuItems, 2, window, 1);
     return TRUE;
 }
 
 BOOL WonderCardAlbum_ShowShareYesNo(WonderCardAlbum *album, Window *window, u32 color) {
-    WonderCardAlbum_CreateListMenu(album, ov74_0223C2F0, 2, window, 0);
+    WonderCardAlbum_CreateListMenu(album, sWonderCardAlbumShareYesNoItems, 2, window, 0);
     return TRUE;
 }
 
 BOOL WonderCardAlbum_ShowWirelessYesNo(WonderCardAlbum *album, Window *window, u32 color) {
     WonderCardAlbum_PrintMessage(&album->messageWindow, msg_0247_00002);
-    WonderCardAlbum_CreateListMenu(album, ov74_0223C2E0, 2, window, 0);
+    WonderCardAlbum_CreateListMenu(album, sWonderCardAlbumWirelessYesNoItems, 2, window, 0);
     return TRUE;
 }
 
@@ -428,7 +428,7 @@ void WonderCardAlbum_StartFade(WonderCardAlbum *album, enum FadeType fadeType, i
 }
 
 void WonderCardAlbum_DrawCard(WonderCardAlbum *album, int unused, int page) {
-    const WonderCardTextBox *boxes = ov74_0223C340;
+    const WonderCardTextBox *boxes = sWonderCardAlbumTextBoxes;
     u32 i;
     u32 baseTile;
     u32 color;
@@ -475,7 +475,7 @@ void WonderCardAlbum_DrawCard(WonderCardAlbum *album, int unused, int page) {
 }
 
 int WonderCardAlbum_PrintTextBox(WonderCardAlbum *album, Window *window, int boxId, int baseTile) {
-    const WonderCardTextBox *box = &ov74_0223C340[boxId];
+    const WonderCardTextBox *box = &sWonderCardAlbumTextBoxes[boxId];
     String *string;
 
     if (window->bgConfig == NULL) {
@@ -576,7 +576,7 @@ void WonderCardAlbum_HandleListMenuInput(OverlayManager *manager, int *state, My
                 *state = input;
                 return;
             }
-            ov74_0223D0BC = input;
+            sWonderCardAlbumMenuInput = input;
             nextState = ((MysteryGiftMenuFunc)input)(manager);
             if (nextState != -1) {
                 *state = nextState;

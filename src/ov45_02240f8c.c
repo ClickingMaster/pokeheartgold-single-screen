@@ -238,7 +238,7 @@ static inline void FindIfP(Iter *first, Node *last, Pred p) {
 }
 
 typedef struct Ctx {
-    void *unk0;
+    void *connection;
     int state;
     u8 unk8[0x58];
     int unk60;
@@ -483,7 +483,7 @@ int LobbyChat_Shutdown(void) {
     }
     LobbyMem_ReleaseReserve();
     if (gLobbyChatManager->unk60 != 0) {
-        chatDisconnect(gLobbyChatManager->unk0);
+        chatDisconnect(gLobbyChatManager->connection);
         if (gLobbyChatManager != NULL) {
             Ctx *d = gLobbyChatManager;
             if (d != NULL) {
@@ -494,7 +494,7 @@ int LobbyChat_Shutdown(void) {
         }
     } else {
         gLobbyChatManager->state = 4;
-        chatDisconnect(gLobbyChatManager->unk0);
+        chatDisconnect(gLobbyChatManager->connection);
     }
     return 0;
 }

@@ -34,8 +34,8 @@
 typedef Field2DObject *(*FrontierMapGetObjectFunc)(Field2DObjectManager *objectManager, u16 id);
 
 // Result of the comparison commands (0: less, 1: equal, 2: greater) x the condition byte of a jump/call.
-extern const u8 ov80_0223B9D8[][3];
-extern const WindowTemplate ov80_0223B9D0;
+extern const u8 gFrontierScriptConditionTable[][3];
+extern const WindowTemplate gFrontierYesNoWindowTemplate;
 
 void *Frontier_GetMap(void *frontierWork);
 void Frontier_RequestExit(void *frontierWork);
@@ -265,7 +265,7 @@ BOOL FrtCmd_GoTo(FrontierScriptContext *ctx) {
 BOOL FrtCmd_GoToIf(FrontierScriptContext *ctx) {
     u8 condition = FrontierScriptContext_ReadByte(ctx);
     u32 offset = FrontierScriptContext_ReadWord(ctx);
-    if (ov80_0223B9D8[condition][ctx->comparisonResult] == TRUE) {
+    if (gFrontierScriptConditionTable[condition][ctx->comparisonResult] == TRUE) {
         FrontierScript_Jump(ctx, ctx->scriptPtr + offset);
     }
     return FALSE;
@@ -286,7 +286,7 @@ BOOL FrtCmd_Return(FrontierScriptContext *ctx) {
 BOOL FrtCmd_CallIf(FrontierScriptContext *ctx) {
     int condition = FrontierScriptContext_ReadByte(ctx);
     int offset = FrontierScriptContext_ReadWord(ctx);
-    if (ov80_0223B9D8[condition][ctx->comparisonResult] == TRUE) {
+    if (gFrontierScriptConditionTable[condition][ctx->comparisonResult] == TRUE) {
         FrontierScriptContext_Call(ctx, ctx->scriptPtr + offset);
     }
     return FALSE;
@@ -473,7 +473,7 @@ BOOL FrtCmd_YesNo(FrontierScriptContext *ctx) {
     FrontierMap *map = FrontierSystem_GetFrontierMap(system);
     u16 varId = FrontierScriptContext_ReadHalfWord(ctx);
     u8 initialSelection = FrontierScriptContext_ReadByte(ctx);
-    system->yesNoMenu = CreateYesNoMenu(map->bgConfig, &ov80_0223B9D0, 985, 12, initialSelection, system->heapId);
+    system->yesNoMenu = CreateYesNoMenu(map->bgConfig, &gFrontierYesNoWindowTemplate, 985, 12, initialSelection, system->heapId);
     ctx->data[0] = varId;
     FrontierScriptContext_Pause(ctx, FrontierScriptNative_WaitYesNo);
     return TRUE;

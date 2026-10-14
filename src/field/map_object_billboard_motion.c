@@ -95,7 +95,7 @@ extern const BillboardMotionFunc gPlayerFishingBillboardMotions[4];
 extern const struct {
     BillboardMotionFunc stand[1];
     BillboardMotionFunc walk[2];
-} ov01_022089CC;
+} sPlayerApricornLadderBillboardMotions;
 extern const u32 gPlayerFishingSequences[];
 extern const u32 gPlayerLadderSequences[];
 extern const u32 gPlayerApricornShakeSequences[];
@@ -1130,7 +1130,7 @@ void PlayerDraw_UpdateLadder(void *object) {
         if (movement >= 2) {
             GF_AssertFail();
         }
-        func = ov01_022089CC.walk[movement];
+        func = sPlayerApricornLadderBillboardMotions.walk[movement];
         func(object, billboard, work, facing);
         PlayerDraw_SetLadderOffset(object, billboard, facing);
         work[0] = facing;
@@ -1295,7 +1295,7 @@ void PlayerDraw_UpdateApricornShake(void *object) {
         if (movement >= 1) {
             GF_AssertFail();
         }
-        ov01_022089CC.stand[movement](object, billboard, work, facing);
+        sPlayerApricornLadderBillboardMotions.stand[movement](object, billboard, work, facing);
         PlayerDraw_SetApricornShakeOffset(object, billboard, facing);
         work->facing = facing;
         work->movement = MapObject_GetAnimation(object);

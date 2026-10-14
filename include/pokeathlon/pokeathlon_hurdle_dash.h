@@ -9,8 +9,8 @@
 #include "sprite.h"
 
 // Hurdle Dash (Pokeathlon event 0): the three Pokemon of each team race over a track of hurdles; the team's
-// result is the sum of its Pokemon's times. Event template ov96_0221A90C = {Init, Draw, ShowResults, Exit},
-// states ov96_0221DC30 = {Start, Play, CalcScores}. The race: pokeathlon_hurdle_dash_race.c.
+// result is the sum of its Pokemon's times. Event template gPokeathlonHurdleDashEvent = {Init, Draw, ShowResults, Exit},
+// states gPokeathlonHurdleDashStates = {Start, Play, CalcScores}. The race: pokeathlon_hurdle_dash_race.c.
 
 // A Pokemon on its lane (0x40, at 0x24 of its runner).
 typedef struct PokeathlonHurdleDashMon {

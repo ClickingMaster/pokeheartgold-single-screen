@@ -45,10 +45,10 @@ typedef u32 (*FrontierObjectGetPosFunc)(Field2DObject *object);
 #define FRONTIER_MON_SPRITE_ID_BASE 50000
 #define FRONTIER_MON_ICON_ID_BASE   2000
 
-extern const u8 ov80_0223BD44[];
+extern const u8 gFrontierMovementWaitFrames[];
 extern const ManagedSpriteTemplate gFrontierMapItemIconTemplate;
 extern const ManagedSpriteTemplate gFrontierMapMonIconTemplate;
-extern const u16 _0223DC20[];
+extern const u16 gFrontierMovementSteps[];
 extern const u16 ov80_0223DC22[];
 
 #pragma force_active on
@@ -574,7 +574,7 @@ void FrontierScript_MovementTask(SysTask *task, FrontierMovementTask *data) {
         }
         if (opcode >= 0x20 && opcode <= 0x26) {
             data->wait++;
-            if (data->wait >= ov80_0223BD44[opcode - 0x20]) {
+            if (data->wait >= gFrontierMovementWaitFrames[opcode - 0x20]) {
                 data->wait = 0;
                 data->script += 2;
                 return;
@@ -620,7 +620,7 @@ void FrontierScript_MovementTask(SysTask *task, FrontierMovementTask *data) {
 void FrontierScript_GetMovementStep(FrontierMovementStep *step, Field2DObject *object, u16 id, s32 opcode) {
     step->id = id;
     step->direction = ov80_0223DC22[opcode * 2];
-    step->sequence = _0223DC20[opcode * 2];
+    step->sequence = gFrontierMovementSteps[opcode * 2];
     if (step->sequence == 2 || step->sequence == 3 || step->sequence == 6) {
         volatile u16 position[2];
         u32 raw = ((FrontierObjectGetPosFunc)Field2DObject_GetPrevPos)(object);

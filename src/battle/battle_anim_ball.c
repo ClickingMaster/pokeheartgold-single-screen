@@ -158,19 +158,19 @@ extern const BallThrowBounceSound sBallThrowBounceSounds[];
 extern const BallThrowSpinningKinds sBallThrowSpinningKinds;
 extern const s16 sBallThrowShakeOffsets[];
 extern const BallThrowFunc sBallThrowCaptureStateFuncs[];
-extern const s16 ov07_0223730E[]; // bounce steps of 6 bytes: y offset, then (ov07_02237310) the animation frame
+extern const s16 gBallThrowBounceSteps[]; // bounce steps of 6 bytes: y offset, then (ov07_02237310) the animation frame
 extern const u16 ov07_02237310[];
 // Per ball (BallAnim_GetBallTableIndex) tables; the inner labels are offsets into the same rows
-extern const u32 ov07_0223738C[][2]; // seal particle resource
+extern const u32 gBallAnimSealParticles[][2]; // seal particle resource
 extern const u32 ov07_02237390[][2]; // seal particle emitter count
-extern const u32 ov07_0223746C[][3]; // burst particle resource
+extern const u32 gBallAnimBurstParticles[][3]; // burst particle resource
 extern const u32 ov07_02237470[][3]; // emitter skipped by the burst
 extern const u32 ov07_02237474[][3]; // burst particle emitter count
 extern const u32 sBallSpriteResources[][4];
 extern const BallSealEmitDelays sBallSealEmitDelays;
 extern const BattleAnimEmitterCounts sBattleAnimEmitterCounts;
-extern const s16 ov07_022377DC[][2];
-extern const s16 ov07_022377F4[][3];
+extern const s16 gBattlerSlideInTargetX[][2];
+extern const s16 gBattlerPokepicPositions[][3];
 
 int BallAnim_GetBallTableIndex(int ball) {
     if (ball >= 1 && ball <= 24) {
@@ -231,7 +231,7 @@ BOOL BallThrow_ShouldAnimateSprite(u32 kind) {
 }
 
 u32 BallAnim_GetSealParticleResource(int ball) {
-    return ov07_0223738C[BallAnim_GetBallTableIndex(ball)][0];
+    return gBallAnimSealParticles[BallAnim_GetBallTableIndex(ball)][0];
 }
 
 u32 BallAnim_GetSealParticleEmitterCount(int ball) {
@@ -239,7 +239,7 @@ u32 BallAnim_GetSealParticleEmitterCount(int ball) {
 }
 
 u32 BallAnim_GetBurstParticleResource(int ball) {
-    return ov07_0223746C[BallAnim_GetBallTableIndex(ball)][0];
+    return gBallAnimBurstParticles[BallAnim_GetBallTableIndex(ball)][0];
 }
 
 u32 BallAnim_GetBurstParticleEmitterCount(int ball) {
@@ -911,7 +911,7 @@ BOOL BallThrow_CaptureStateBounce(BallThrow *data) {
     case 1: {
         int index = data->stateFrames;
         int offset = index * 6;
-        s16 dy = *(const s16 *)((const u8 *)ov07_0223730E + offset);
+        s16 dy = *(const s16 *)((const u8 *)gBallThrowBounceSteps + offset);
         int frame = *(const u16 *)((const u8 *)ov07_02237310 + offset);
         ManagedSprite_SetAnimationFrame(data->managedSprite, frame);
         data->stateFrames++;
@@ -1994,7 +1994,7 @@ void BattleAnimUtil_LoadSubstituteIntoPic(BattleAnimBattlerPicParams *params, en
 
 s16 ov07_02234B5C(u32 battlerType, u32 index) {
     if (index == 0) {
-        return ov07_022377DC[battlerType][0];
+        return gBattlerSlideInTargetX[battlerType][0];
     }
-    return ov07_022377F4[battlerType][index];
+    return gBattlerPokepicPositions[battlerType][index];
 }

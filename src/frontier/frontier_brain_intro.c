@@ -24,7 +24,7 @@
 // band opens in the middle (hardware windows 0/1), four sprites scale in, the Brain's picture slides in from the
 // right, the Brain's name is shown and the screen fades to white.
 
-// One entry per Brain (ov80_0223DB98).
+// One entry per Brain (gFrontierBrainIntroArgs).
 typedef struct FrontierBrainIntroArgs {
     u32 nameMsgId; // trainer name, message bank 729
     u8 spritePalette;
@@ -118,9 +118,9 @@ typedef struct FrontierBrainIntro {
     u32 paletteMask;
 } FrontierBrainIntro; // size: 0x168
 
-extern const ManagedSpriteTemplate ov80_0223DB30;
-extern const ManagedSpriteTemplate ov80_0223DB64;
-extern const FrontierBrainIntroArgs ov80_0223DB98[];
+extern const ManagedSpriteTemplate gFrontierBrainIntroBrainSpriteTemplate;
+extern const ManagedSpriteTemplate gFrontierBrainIntroBurstSpriteTemplate;
+extern const FrontierBrainIntroArgs gFrontierBrainIntroArgs[];
 
 void FrontierBrainIntro_Finish(FrontierBrainIntro *intro, SysTask *task);
 void FrontierBrainIntro_UpdateWindows(SysTask *task, void *data);
@@ -160,7 +160,7 @@ void FrontierBrainIntro_Start(int brain, BgConfig *bgConfig, SpriteSystem *sprit
     MIi_CpuClear32(0, BgGetCharPtr(GF_BG_LYR_MAIN_1), 0x8000);
     ScheduleSetBgPosText(bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_X, 0);
     ScheduleSetBgPosText(bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_Y, 0);
-    FrontierBrainIntro_LoadBackground(intro, &ov80_0223DB98[intro->brain]);
+    FrontierBrainIntro_LoadBackground(intro, &gFrontierBrainIntroArgs[intro->brain]);
     intro->windowTask = SysTask_CreateOnVWaitQueue(FrontierBrainIntro_UpdateWindows, intro, 1);
 }
 
@@ -182,7 +182,7 @@ void FrontierBrainIntro_UpdateWindows(SysTask *task, void *data) {
 
 void FrontierBrainIntro_MainTask(SysTask *task, void *data) {
     FrontierBrainIntro *intro = data;
-    if (FrontierBrainIntro_Run(data, HEAP_ID_101, &ov80_0223DB98[intro->brain]) == TRUE) {
+    if (FrontierBrainIntro_Run(data, HEAP_ID_101, &gFrontierBrainIntroArgs[intro->brain]) == TRUE) {
         FrontierBrainIntro_Finish(data, task);
     }
 }
@@ -226,7 +226,7 @@ BOOL FrontierBrainIntro_Run(FrontierBrainIntro *intro, enum HeapID heapID, const
         SpriteSystem_LoadCharResObjFromOpenNarc(intro->spriteSystem, intro->spriteManager, intro->narc, 204, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 2011);
         SpriteSystem_LoadCellResObjFromOpenNarc(intro->spriteSystem, intro->spriteManager, intro->narc, 205, FALSE, 2003);
         SpriteSystem_LoadAnimResObjFromOpenNarc(intro->spriteSystem, intro->spriteManager, intro->narc, 206, FALSE, 2003);
-        sprites->brainSprite = SpriteSystem_NewSprite(intro->spriteSystem, intro->spriteManager, &ov80_0223DB30);
+        sprites->brainSprite = SpriteSystem_NewSprite(intro->spriteSystem, intro->spriteManager, &gFrontierBrainIntroBrainSpriteTemplate);
         ManagedSprite_SetDrawFlag(sprites->brainSprite, FALSE);
         Sprite_TickFrame(sprites->brainSprite->sprite);
 
@@ -419,7 +419,7 @@ void FrontierBrainIntro_GetTextSize(String *string, u32 fontId, int *width, int 
 }
 
 void FrontierBrainIntro_CreateBurst(FrontierBrainIntro *intro, FrontierBrainIntroBurst *burst, fx32 x, fx32 y, enum HeapID heapID) {
-    ManagedSpriteTemplate template = ov80_0223DB64;
+    ManagedSpriteTemplate template = gFrontierBrainIntroBurstSpriteTemplate;
     int i;
 
     template.x = x >> FX32_SHIFT;

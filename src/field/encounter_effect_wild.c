@@ -154,16 +154,16 @@ void WildEffect_RunWave(SysTask *task, EncounterEffectTask *effect, BOOL white);
 
 void SetBothScreensBrightnessByColor(u16 color);
 
-extern const u32 ov120_022601F4[];
+extern const u32 gRedEffectSpriteResources[];
 extern const u32 ov120_022601F8[];
 extern const u32 ov120_022601FC[];
 extern const u32 ov120_02260200[];
-extern const BgTemplate ov120_022601BC;
-extern const BgTemplate ov120_022601D8;
-extern const u8 ov120_022602E4[];
-extern const u8 ov120_022602FC[];
-extern const u8 ov120_02260314[];
-extern const u8 ov120_0226032C[];
+extern const BgTemplate gWildEffectWaveBgTemplate_Main1;
+extern const BgTemplate gWildEffectWaveBgTemplate_Main3;
+extern const u8 gWildEffectCellGridDiagonalsB[];
+extern const u8 gWildEffectCellGridRows[];
+extern const u8 gWildEffectCellGridDiagonalsA[];
+extern const u8 gWildEffectCellGridRowsReverse[];
 
 WildEffectCell *WildEffectCell_New(enum HeapID heapID) {
     WildEffectCell *cell = Heap_Alloc(heapID, sizeof(WildEffectCell));
@@ -344,15 +344,15 @@ BOOL WildEffectCellGrid_UpdateRows(WildEffectCellGrid *grid) {
         if (grid->timer <= 0) {
             grid->timer = grid->delay;
             if (grid->reverse) {
-                index = ov120_0226032C[grid->started];
+                index = gWildEffectCellGridRowsReverse[grid->started];
             } else {
-                index = ov120_022602FC[grid->started];
+                index = gWildEffectCellGridRows[grid->started];
             }
             CellGrid_StartCell(grid, index, FALSE);
             if (grid->reverse) {
-                index = ov120_0226032C[grid->started];
+                index = gWildEffectCellGridRowsReverse[grid->started];
             } else {
-                index = ov120_022602FC[grid->started];
+                index = gWildEffectCellGridRows[grid->started];
             }
             index = CELL_GRID_SIZE - 1 - index;
             CellGrid_StartCell(grid, index, FALSE);
@@ -361,10 +361,10 @@ BOOL WildEffectCellGrid_UpdateRows(WildEffectCellGrid *grid) {
     }
     for (i = grid->finished; i < grid->started; i++) {
         if (grid->reverse) {
-            index = ov120_0226032C[i];
+            index = gWildEffectCellGridRowsReverse[i];
             mirror = CELL_GRID_SIZE - 1 - index;
         } else {
-            index = ov120_022602FC[i];
+            index = gWildEffectCellGridRows[i];
             mirror = CELL_GRID_SIZE - 1 - index;
         }
         done = WildEffectCell_Update(grid->cells[index]);
@@ -396,15 +396,15 @@ BOOL WildEffectCellGrid_UpdateDiagonals(WildEffectCellGrid *grid) {
         if (grid->timer <= 0) {
             grid->timer = grid->delay;
             if (grid->reverse) {
-                index = ov120_02260314[grid->started];
+                index = gWildEffectCellGridDiagonalsA[grid->started];
             } else {
-                index = CELL_GRID_SIZE - 1 - ov120_02260314[grid->started];
+                index = CELL_GRID_SIZE - 1 - gWildEffectCellGridDiagonalsA[grid->started];
             }
             CellGrid_StartCell(grid, index, TRUE);
             if (grid->reverse) {
-                index = ov120_022602E4[grid->started];
+                index = gWildEffectCellGridDiagonalsB[grid->started];
             } else {
-                index = CELL_GRID_SIZE - 1 - ov120_022602E4[grid->started];
+                index = CELL_GRID_SIZE - 1 - gWildEffectCellGridDiagonalsB[grid->started];
             }
             CellGrid_StartCell(grid, index, TRUE);
             grid->started++;
@@ -412,11 +412,11 @@ BOOL WildEffectCellGrid_UpdateDiagonals(WildEffectCellGrid *grid) {
     }
     for (i = grid->finished; i < grid->started; i++) {
         if (grid->reverse) {
-            index = ov120_02260314[i];
-            other = ov120_022602E4[i];
+            index = gWildEffectCellGridDiagonalsA[i];
+            other = gWildEffectCellGridDiagonalsB[i];
         } else {
-            index = CELL_GRID_SIZE - 1 - ov120_02260314[i];
-            other = CELL_GRID_SIZE - 1 - ov120_022602E4[i];
+            index = CELL_GRID_SIZE - 1 - gWildEffectCellGridDiagonalsA[i];
+            other = CELL_GRID_SIZE - 1 - gWildEffectCellGridDiagonalsB[i];
         }
         done = WildEffectCell_Update(grid->cells[index]);
         done |= WildEffectCell_Update(grid->cells[other]);
@@ -595,7 +595,7 @@ BOOL RedEffect_SecondFlash(RedEffectWork *work, u32 *state) {
 
 void RedEffect_CreateSprite(NARC *narc, Sprite **sprite, EncounterEffectSpriteManager *spriteManager, EncounterEffectSpriteResources *spriteResources, int variant) {
     GF_ASSERT(variant != 2);
-    EncounterEffect_LoadSpriteResources(narc, spriteManager, spriteResources, ov120_02260200[variant * 4], 1, ov120_022601F4[variant * 4], ov120_022601FC[variant * 4], ov120_022601F8[variant * 4], 600000);
+    EncounterEffect_LoadSpriteResources(narc, spriteManager, spriteResources, ov120_02260200[variant * 4], 1, gRedEffectSpriteResources[variant * 4], ov120_022601FC[variant * 4], ov120_022601F8[variant * 4], 600000);
     *sprite = EncounterEffect_CreateSprite(spriteManager, spriteResources, FX32_CONST(128), FX32_CONST(96), 0, 0);
     Sprite_SetDrawFlag(*sprite, TRUE);
     Sprite_SetDrawPriority(*sprite, 16);
@@ -856,10 +856,10 @@ void WildEffect_RunWave(SysTask *task, EncounterEffectTask *effect, BOOL white) 
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
         reg_GX_DISPCNT = (reg_GX_DISPCNT & 0xFFFFE0FF) | 0x1500;
         FreeBgTilemapBuffer(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1);
-        InitBgFromTemplate(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1, &ov120_022601BC, GF_BG_TYPE_TEXT);
+        InitBgFromTemplate(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1, &gWildEffectWaveBgTemplate_Main1, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1);
         FreeBgTilemapBuffer(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3);
-        InitBgFromTemplate(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, &ov120_022601D8, GF_BG_TYPE_TEXT);
+        InitBgFromTemplate(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, &gWildEffectWaveBgTemplate_Main3, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3);
         SetBgPriority(2, 0);
         SetBgPriority(8, 0);

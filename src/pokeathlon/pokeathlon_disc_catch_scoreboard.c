@@ -14,9 +14,9 @@
 #include "sprite_system.h"
 #include "text.h"
 
-extern const s16 ov96_0221D14C[DISC_CATCH_PARTICIPANTS - 1][2]; // where the other players' badges go
-extern const WindowTemplate ov96_0221D15C[DISC_CATCH_PARTICIPANTS];
-extern const ManagedSpriteTemplate ov96_0221D17C;
+extern const s16 gPokeathlonDiscCatchScoreboardBadgePositions[DISC_CATCH_PARTICIPANTS - 1][2]; // where the other players' badges go
+extern const WindowTemplate gPokeathlonDiscCatchScoreboardWindowTemplates[DISC_CATCH_PARTICIPANTS];
+extern const ManagedSpriteTemplate gPokeathlonDiscCatchScoreboardSpriteTemplate;
 
 #pragma force_active on
 
@@ -159,7 +159,7 @@ u16 PokeathlonDiscCatchScoreboard_GetOwnScore(PokeathlonDiscCatchScoreboard *sco
 #pragma force_active on
 
 ManagedSprite *PokeathlonDiscCatchScoreboard_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u16 animation, u16 priority) {
-    ManagedSpriteTemplate template = ov96_0221D17C;
+    ManagedSpriteTemplate template = gPokeathlonDiscCatchScoreboardSpriteTemplate;
     ManagedSprite *sprite;
     GF_ASSERT(spriteSystem != NULL);
     GF_ASSERT(spriteManager != NULL);
@@ -179,7 +179,7 @@ void PokeathlonDiscCatchScoreboard_InitWindows(PokeathlonDiscCatchScoreboard *sc
     GF_ASSERT(scoreboard != NULL);
     GF_ASSERT(scoreboard->bgConfig != NULL);
     for (i = 0; i < DISC_CATCH_PARTICIPANTS; i++) {
-        AddWindow(scoreboard->bgConfig, &scoreboard->windows[i], &ov96_0221D15C[i]);
+        AddWindow(scoreboard->bgConfig, &scoreboard->windows[i], &gPokeathlonDiscCatchScoreboardWindowTemplates[i]);
     }
     BG_FillCharDataRange(scoreboard->bgConfig, GF_BG_LYR_SUB_3, 0, 1, 0);
     LoadFontPal0(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_15_OFFSET, scoreboard->heapId);
@@ -234,8 +234,8 @@ void PokeathlonDiscCatchScoreboard_PrintNames(PokeathlonDiscCatchScoreboard *sco
             y = 72;
         } else {
             window = other + 1;
-            x = ov96_0221D14C[other][0];
-            y = ov96_0221D14C[other][1];
+            x = gPokeathlonDiscCatchScoreboardBadgePositions[other][0];
+            y = gPokeathlonDiscCatchScoreboardBadgePositions[other][1];
             other = window;
         }
         name = PlayerProfile_GetPlayerName_NewString(PokeathlonCourse_GetPlayerProfileFromData(scoreboard->course, i), scoreboard->heapId);

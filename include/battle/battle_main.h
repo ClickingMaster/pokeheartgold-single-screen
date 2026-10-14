@@ -22,8 +22,8 @@ typedef struct BattleBgTemplateSet {
     BgTemplate templates[3];
 } BattleBgTemplateSet;
 
-extern const BattleBgTemplateSet ov12_0226C120;
-extern const BattleBgTemplateSet ov12_0226C174;
+extern const BattleBgTemplateSet gBattleReinitBgTemplates;
+extern const BattleBgTemplateSet gBattleBgTemplates;
 extern const GraphicsBanks sBattleGraphicsBanks;
 extern const GraphicsModes sBattleGraphicsModes;
 

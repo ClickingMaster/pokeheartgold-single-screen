@@ -53,7 +53,7 @@
 .public sSpriteEffectFlags
 .public gCameraFocusObjectDrawCallbacks
 .public gResidentBillboardModelIds
-.public ov01_02207274
+.public gApricornTreeSpriteIds
 .public gBillboardModelNarcMembers
 .public gBillboardSequenceNarcMembers
 .public gSpriteBillboardInfos

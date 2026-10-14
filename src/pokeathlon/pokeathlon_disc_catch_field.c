@@ -51,9 +51,9 @@ void PokeathlonCourseObject_GroundToCenter(void *monPic, int x, int y, int *outX
 void PokeathlonCourseObject_CenterToGround(void *monPic, int x, int y, int *outX, int *outY);
 int PokeathlonCourseObject_GetCollisionRadius(void *monPic);
 
-extern const u32 ov96_0221CF1C[4];
-extern const s16 ov96_0221CFBC[DISC_CATCH_PARTICIPANTS][DISC_CATCH_TEAM_SIZE][2];
-extern const WindowTemplate ov96_0221CEEC;
+extern const u32 gPokeathlonDiscCatchPhaseSeconds[4];
+extern const s16 gPokeathlonDiscCatchMonStartPositions[DISC_CATCH_PARTICIPANTS][DISC_CATCH_TEAM_SIZE][2];
+extern const WindowTemplate gPokeathlonDiscCatchScoreWindowTemplate;
 
 // Each frame (every participant): sends the own touch and shows the host's frame packet; returns TRUE
 // once the host reports the end.
@@ -220,8 +220,8 @@ void PokeathlonDiscCatch_InitMons(PokeathlonDiscCatch *work) {
         info = PokeathlonCourseMonGfx_GetInfo(PokeathlonCourseMonObject_GetGfx(pic));
         PokeathlonDiscCatch_SetMonScaleCenter(pic, FALSE);
         PokeathlonCourseObject_SetScale(pic, 1.0f, 1.0f);
-        groundX = ov96_0221CFBC[participant][member][0];
-        groundY = ov96_0221CFBC[participant][member][1];
+        groundX = gPokeathlonDiscCatchMonStartPositions[participant][member][0];
+        groundY = gPokeathlonDiscCatchMonStartPositions[participant][member][1];
         PokeathlonCourseMonObject_SetAnimState(pic);
         PokeathlonCourseObject_SetGroundPosition(pic, groundX, groundY);
         PokeathlonCourseObject_SetTouchRadius(pic, PokeathlonCourse_GetTouchRadius());
@@ -586,7 +586,7 @@ void PokeathlonDiscCatchDiscs_Init(PokeathlonDiscCatchDiscs *discs, PokeathlonDi
 int PokeathlonDiscCatch_GetPhase(u32 seconds) {
     s32 i;
     for (i = 0; i < 4; i++) {
-        if (ov96_0221CF1C[i] <= seconds) {
+        if (gPokeathlonDiscCatchPhaseSeconds[i] <= seconds) {
             return i;
         }
     }
@@ -715,5 +715,5 @@ void PokeathlonDiscCatchSprites_Delete(PokeathlonDiscCatchSprites *sprites) {
 }
 
 void PokeathlonDiscCatch_AddScoreWindow(PokeathlonDiscCatch *work) {
-    AddWindow(work->bgConfig, &work->window, &ov96_0221CEEC);
+    AddWindow(work->bgConfig, &work->window, &gPokeathlonDiscCatchScoreWindowTemplate);
 }

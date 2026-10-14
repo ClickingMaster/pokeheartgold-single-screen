@@ -369,7 +369,7 @@ u32 GetApricornTreeSpriteId(int apricorn, int apricornCount) {
     if (apricorn == 0) {
         GF_AssertFail();
     }
-    return ov01_02207274[apricorn];
+    return gApricornTreeSpriteIds[apricorn];
 }
 
 BOOL TryGetSeenByNpcTrainers(FieldSystem *fieldSystem, BOOL doublesEligible) {
@@ -489,7 +489,7 @@ int TrainerSight_FindPlayer(LocalMapObject *object, PlayerAvatar *player, int *o
 }
 
 int TrainerSight_GetDistanceInDirection(LocalMapObject *object, int direction, int range, int targetX, int targetZ, int unused) {
-    return _020FE194[direction](object, range, targetX, targetZ, unused);
+    return gTrainerSightDistanceFuncs[direction](object, range, targetX, targetZ, unused);
 }
 
 int TrainerSight_GetDistanceNorth(LocalMapObject *object, int range, int targetX, int targetZ, int unused) {

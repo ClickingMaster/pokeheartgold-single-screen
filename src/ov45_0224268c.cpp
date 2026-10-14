@@ -56,8 +56,8 @@ struct NameTable {
 };
 
 struct Obj {
-    u32 unk0;
-    u32 unk4;
+    u32 connection;
+    u32 state;
     u32 unk8;
     String strC;
     String str18;
@@ -65,7 +65,7 @@ struct Obj {
     String str30;
     String str3C;
     String str48;
-    u32 unk54, unk58, unk5C, unk60;
+    u32 unk54, lastError, connectedFrames, unk60;
     Triple unk64;
     u32 unk70, unk74, unk78;
     void *unk7C;
@@ -84,8 +84,8 @@ extern "C" Obj *LobbyChatManager_Init(Obj *obj, const String &a1, const String &
 #pragma opt_propagation off
 
 extern "C" Obj *LobbyChatManager_Init(Obj *obj, const String &a1, const String &a2, int idx, u32 v8, const String &aC, const String &a18, const String &a24, const Triple *t) {
-    obj->unk0 = 0;
-    obj->unk4 = 0;
+    obj->connection = 0;
+    obj->state = 0;
     obj->unk8 = v8;
     LobbyString_InitCopy(&obj->strC, &aC);
     LobbyString_InitCopy(&obj->str18, &a18);
@@ -99,8 +99,8 @@ extern "C" Obj *LobbyChatManager_Init(Obj *obj, const String &a1, const String &
         i++;
     } while (i < 3);
     obj->unk54 = 0;
-    obj->unk58 = 0;
-    obj->unk5C = 0;
+    obj->lastError = 0;
+    obj->connectedFrames = 0;
     obj->unk60 = 0;
     obj->unk64 = *t;
     obj->unk70 = 0;

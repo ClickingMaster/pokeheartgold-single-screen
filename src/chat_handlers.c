@@ -1973,8 +1973,8 @@ void ciRplLoginHandler(ChatConnection *chat, ChatMessage *message) {
     if (message->paramCount < 3) {
         return;
     }
-    chat->unk_8AC[0] = atol(message->params[1]);
-    chat->unk_8AC[1] = atol(message->params[2]);
+    chat->loginIds[0] = atol(message->params[1]);
+    chat->loginIds[1] = atol(message->params[2]);
     if (chat->fillInUserCallback) {
         ciSocketSend(&chat->socket, sStr_USRIP);
     } else {

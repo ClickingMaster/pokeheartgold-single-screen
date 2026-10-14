@@ -42,11 +42,11 @@ typedef struct PCBoxGridLayout {
     const GridCallbacks *callbacks;
 } PCBoxGridLayout;
 
-extern const u8 ov14_021F8080[];
+extern const u8 sPCBoxThumbnailTiles[];
 extern const WindowTemplate sPCBoxWindowTemplates[];
 extern const TouchscreenHitbox sPCBoxSlotHitboxes[];
 extern const TouchscreenHitbox sPCBoxPartyHitboxes[];
-extern const TouchscreenHitbox ov14_021F8630[];
+extern const TouchscreenHitbox sPCBoxTrayPartyHitboxes[];
 extern const PCBoxGridLayout sPCBoxGridLayouts[];
 
 void PCBox_LoadTrayPageThumbnails(PCBoxWork *work) {
@@ -109,7 +109,7 @@ void PCBox_DrawBoxThumbnailMons(PCBoxWork *work, u32 box, void *dst) {
                 } else {
                     type = 8;
                 }
-                tile = (u16)(ov14_021F8080[type] + 0x20);
+                tile = (u16)(sPCBoxThumbnailTiles[type] + 0x20);
                 tile = (u16)((tile << 8) | tile);
                 for (yy = y; (s32)yy < (s32)(y + 2); yy = (u8)(yy + 1)) {
                     MIi_CpuClear16(tile, (u16 *)((u8 *)dst + ((x & 7) + ((yy & 7) * 8 + (u32)((u8 *)(((s32)yy >> 3) * 4) + (x >> 3)) * 64))), 2);
@@ -1169,7 +1169,7 @@ s32 PCBox_FindTouchedPartySlot(void) {
 }
 
 s32 PCBox_FindTouchedTrayPartySlot(void) {
-    return TouchscreenHitbox_FindRectAtTouchNew(ov14_021F8630);
+    return TouchscreenHitbox_FindRectAtTouchNew(sPCBoxTrayPartyHitboxes);
 }
 
 #pragma force_active on

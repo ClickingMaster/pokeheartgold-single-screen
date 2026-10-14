@@ -233,32 +233,32 @@ typedef struct BattleCastleMenuItem {
 } BattleCastleMenuItem;
 
 // Tables still defined in the overlay's data asm
-extern const u16 _02247D0C[];         // heal result messages, by action - 1; bytes 0x1E.. hold the list menu template
-extern const u16 ov83_02247D12[];     // number of rentable berries, by rental rank - 1
-extern const u16 ov83_02247D18[];     // CP cost of RESTORE HP / PP / ALL
-extern const u16 ov83_02247D1E[];     // main menu help messages, by cursor position
-extern const u16 ov83_02247D24[];     // number of rentable items, by rental rank - 1
-extern const u16 ov83_02247D48[2][3]; // CP cost of the next rank, by rank kind (CASTLE_RANK_*) and rank
-extern const u16 ov83_02247D4E[];     // = ov83_02247D48[CASTLE_RANK_RENTAL] (referenced by its own label)
-extern const u16 ov83_02247D5A[2][3]; // "gained the ability to..." messages, by rank kind and rank
-extern const BattleCastleMenuItem ov83_02247D6C[];
-extern const BattleCastleMenuOption ov83_02247EB0[]; // BERRIES / ITEMS / RANK UP / CANCEL
-extern const u16 ov83_02247EE0[];                    // rentable items
-extern const u16 ov83_02247F16[];                    // item costs in CP
-extern const BattleCastleMenuOption ov83_02247F4C[]; // RESTORE HP / PP / ALL / RANK UP / CANCEL
-extern const u16 ov83_02247F88[];                    // rentable berries
-extern const u16 ov83_02247FC8[];                    // berry costs in CP
-extern const u8 ov83_02248008[];                     // list menu y, by number of entries
-extern const GraphicsModes ov83_02247D38;
-extern const BgTemplate ov83_02247D84;
-extern const BgTemplate ov83_02247DA0;
-extern const BgTemplate ov83_02247DBC;
-extern const BgTemplate ov83_02247DD8;
-extern const BgTemplate ov83_02247DF4;
-extern const BgTemplate ov83_02247E10;
-extern const BgTemplate ov83_02247E2C;
-extern const BgTemplate ov83_02247E48;
-extern const GraphicsBanks ov83_02247E88;
+extern const u16 gBattleCastlePartyAppHealMessages[];         // heal result messages, by action - 1; bytes 0x1E.. hold the list menu template
+extern const u16 gBattleCastlePartyAppBerryCounts[];     // number of rentable berries, by rental rank - 1
+extern const u16 gBattleCastlePartyAppHealCosts[];     // CP cost of RESTORE HP / PP / ALL
+extern const u16 gBattleCastlePartyAppMainMenuHelpMessages[];     // main menu help messages, by cursor position
+extern const u16 gBattleCastlePartyAppItemCounts[];     // number of rentable items, by rental rank - 1
+extern const u16 gBattleCastlePartyAppRankUpCosts[2][3]; // CP cost of the next rank, by rank kind (CASTLE_RANK_*) and rank
+extern const u16 ov83_02247D4E[];     // = gBattleCastlePartyAppRankUpCosts[CASTLE_RANK_RENTAL] (referenced by its own label)
+extern const u16 gBattleCastlePartyAppRankUpMessages[2][3]; // "gained the ability to..." messages, by rank kind and rank
+extern const BattleCastleMenuItem gBattleCastlePartyAppMainMenuItems[];
+extern const BattleCastleMenuOption gBattleCastlePartyAppRentalMenuOptions[]; // BERRIES / ITEMS / RANK UP / CANCEL
+extern const u16 gBattleCastleRentalItems[];                    // rentable items
+extern const u16 gBattleCastleRentalItemCosts[];                    // item costs in CP
+extern const BattleCastleMenuOption gBattleCastlePartyAppHealMenuOptions[]; // RESTORE HP / PP / ALL / RANK UP / CANCEL
+extern const u16 gBattleCastleRentalBerries[];                    // rentable berries
+extern const u16 gBattleCastleRentalBerryCosts[];                    // berry costs in CP
+extern const u8 gBattleCastlePartyAppListMenuY[];                     // list menu y, by number of entries
+extern const GraphicsModes gBattleCastlePartyAppGraphicsModes;
+extern const BgTemplate gBattleCastlePartyAppBgTemplate_Sub2;
+extern const BgTemplate gBattleCastlePartyAppBgTemplate_Main1;
+extern const BgTemplate gBattleCastlePartyAppBgTemplate_Main0;
+extern const BgTemplate gBattleCastlePartyAppBgTemplate_Sub3;
+extern const BgTemplate gBattleCastlePartyAppBgTemplate_Main2;
+extern const BgTemplate gBattleCastlePartyAppBgTemplate_Main3;
+extern const BgTemplate gBattleCastlePartyAppBgTemplate_Sub0;
+extern const BgTemplate gBattleCastlePartyAppBgTemplate_Sub1;
+extern const GraphicsBanks gBattleCastlePartyAppGraphicsBanks;
 
 // Frontier overlay (80) helpers
 u32 Frontier_GetHpGaugeFrame(u16 hp, u16 maxHp);
@@ -662,12 +662,12 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
             BattleCastlePartyApp_CloseHealMenu(app);
             BattleCastle_DrawWindowFrame(&app->windows[CASTLE_PARTY_WIN_MESSAGE], Options_GetFrame(app->options));
             rank = BattleCastle_GetRank(app->saveData, app->frontierType, CASTLE_RANK_HEAL);
-            if (rank < ov83_02247F4C[app->listCursorPos].minRank) {
+            if (rank < gBattleCastlePartyAppHealMenuOptions[app->listCursorPos].minRank) {
                 app->printerId = BattleCastlePartyApp_ShowMessage(app, msg_0031_00033, 1);
                 app->subState = CASTLE_PARTY_STATE_HEAL_MENU_MESSAGE;
                 break;
             }
-            BattleCastlePartyApp_BufferNumber(app, 0, ov83_02247D18[app->listCursorPos], 3, 0);
+            BattleCastlePartyApp_BufferNumber(app, 0, gBattleCastlePartyAppHealCosts[app->listCursorPos], 3, 0);
             app->printerId = BattleCastlePartyApp_ShowMessage(app, msg_0031_00055, 1);
             BattleCastlePartyApp_ShowYesNoPrompt(app);
             app->subState = CASTLE_PARTY_STATE_CONFIRM_HEAL;
@@ -683,7 +683,7 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
             BattleCastlePartyApp_CloseHealMenu(app);
             cpStat = BattleCastle_GetPointsStat(app->frontierType);
             points = FrontierSave_GetStat(app->frontierSave, cpStat, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(app->frontierType)));
-            BattleCastlePartyApp_BufferNumber(app, 0, ov83_02247D48[CASTLE_RANK_HEAL][rank], 4, 0);
+            BattleCastlePartyApp_BufferNumber(app, 0, gBattleCastlePartyAppRankUpCosts[CASTLE_RANK_HEAL][rank], 4, 0);
             app->printerId = BattleCastlePartyApp_ShowMessage(app, msg_0031_00038, 1);
             BattleCastlePartyApp_ShowYesNoPrompt(app);
             app->subState = CASTLE_PARTY_STATE_CONFIRM_HEAL_RANK_UP;
@@ -706,13 +706,13 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
             points = FrontierSave_GetStat(app->frontierSave, cpStat, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(app->frontierType)));
             rank = BattleCastle_GetRank(app->saveData, app->frontierType, CASTLE_RANK_HEAL);
             healOption = app->listCursorPos;
-            if (rank < ov83_02247F4C[healOption].minRank) {
+            if (rank < gBattleCastlePartyAppHealMenuOptions[healOption].minRank) {
                 BattleCastle_DrawWindowFrame(&app->windows[CASTLE_PARTY_WIN_MESSAGE], Options_GetFrame(app->options));
                 app->printerId = BattleCastlePartyApp_ShowMessage(app, msg_0031_00033, 1);
                 app->subState = CASTLE_PARTY_STATE_HEAL_MENU_MESSAGE;
                 break;
             }
-            if (points < ov83_02247D18[healOption]) {
+            if (points < gBattleCastlePartyAppHealCosts[healOption]) {
                 BattleCastle_DrawWindowFrame(&app->windows[CASTLE_PARTY_WIN_MESSAGE], Options_GetFrame(app->options));
                 app->printerId = BattleCastlePartyApp_ShowMessage(app, msg_0031_00032, 1);
                 app->subState = CASTLE_PARTY_STATE_HEAL_MENU_MESSAGE;
@@ -740,7 +740,7 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
                 }
             }
             if (!BattleCastle_IsMultiType(app->frontierType)) {
-                BattleCastle_SpendPoints(app->frontierSave, app->frontierType, ov83_02247D18[app->action - 1]);
+                BattleCastle_SpendPoints(app->frontierSave, app->frontierType, gBattleCastlePartyAppHealCosts[app->action - 1]);
                 BattleCastlePartyApp_PrintCastlePoints(app, &app->windows[0]);
                 BattleCastlePartyApp_HealMon(app, app->cursorPos, app->action);
                 app->subState = CASTLE_PARTY_STATE_APPLY_ACTION;
@@ -764,7 +764,7 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
             cpStat = BattleCastle_GetPointsStat(app->frontierType);
             points = FrontierSave_GetStat(app->frontierSave, cpStat, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(app->frontierType)));
             rank = BattleCastle_GetRank(app->saveData, app->frontierType, CASTLE_RANK_HEAL);
-            if (points < ov83_02247D48[CASTLE_RANK_HEAL][rank]) {
+            if (points < gBattleCastlePartyAppRankUpCosts[CASTLE_RANK_HEAL][rank]) {
                 BattleCastle_DrawWindowFrame(&app->windows[CASTLE_PARTY_WIN_MESSAGE], Options_GetFrame(app->options));
                 app->printerId = BattleCastlePartyApp_ShowMessage(app, msg_0031_00041, 1);
                 app->subState = CASTLE_PARTY_STATE_HEAL_MENU_MESSAGE;
@@ -1412,7 +1412,7 @@ void BattleCastlePartyApp_VBlankCallback(void *arg) {
 }
 
 void BattleCastlePartyApp_SetGraphicsBanks(void) {
-    GraphicsBanks banks = ov83_02247E88;
+    GraphicsBanks banks = gBattleCastlePartyAppGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
@@ -1427,36 +1427,36 @@ void BattleCastlePartyApp_InitBgLayers(BgConfig *bgConfig) {
     BgTemplate sub2;
     BgTemplate sub3;
 
-    modes = ov83_02247D38;
+    modes = gBattleCastlePartyAppGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    main1 = ov83_02247DA0;
+    main1 = gBattleCastlePartyAppBgTemplate_Main1;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &main1, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_1, 0x20, 0, HEAP_ID_107);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
-    main0 = ov83_02247DBC;
+    main0 = gBattleCastlePartyAppBgTemplate_Main0;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &main0, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_0, 0x20, 0, HEAP_ID_107);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
-    main2 = ov83_02247DF4;
+    main2 = gBattleCastlePartyAppBgTemplate_Main2;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &main2, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_2, 0x20, 0, HEAP_ID_107);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
-    main3 = ov83_02247E10;
+    main3 = gBattleCastlePartyAppBgTemplate_Main3;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &main3, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_3, 0x20, 0, HEAP_ID_107);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
-    sub0 = ov83_02247E2C;
+    sub0 = gBattleCastlePartyAppBgTemplate_Sub0;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &sub0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
-    sub1 = ov83_02247E48;
+    sub1 = gBattleCastlePartyAppBgTemplate_Sub1;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &sub1, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_1, 0x20, 0, HEAP_ID_107);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
-    sub2 = ov83_02247D84;
+    sub2 = gBattleCastlePartyAppBgTemplate_Sub2;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &sub2, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_2, 0x20, 0, HEAP_ID_107);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_2);
-    sub3 = ov83_02247DD8;
+    sub3 = gBattleCastlePartyAppBgTemplate_Sub3;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_3, &sub3, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_3, 0x20, 0, HEAP_ID_107);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_3);
@@ -1981,11 +1981,11 @@ void BattleCastlePartyApp_SetupItemGrid(BattleCastlePartyApp *app, int mode) {
     u16 i;
 
     if (mode == CASTLE_PARTY_ACTION_RENT_BERRY) {
-        app->numItems = ov83_02247D12[rank - 1];
-        items = ov83_02247F88;
+        app->numItems = gBattleCastlePartyAppBerryCounts[rank - 1];
+        items = gBattleCastleRentalBerries;
     } else {
-        app->numItems = ov83_02247D24[rank - 1];
-        items = ov83_02247EE0;
+        app->numItems = gBattleCastlePartyAppItemCounts[rank - 1];
+        items = gBattleCastleRentalItems;
     }
     app->itemList = ListMenuItems_New(app->numItems, HEAP_ID_107);
     for (i = 0; i < app->numItems; i++) {
@@ -2147,22 +2147,22 @@ void BattleCastlePartyApp_GetCursorPos(BattleCastlePartyApp *app, int *x, int *y
 u16 BattleCastlePartyApp_GetRentalCost(BattleCastlePartyApp *app, int index, int kind) {
     BattleCastle_GetRank(app->saveData, app->frontierType, CASTLE_RANK_RENTAL);
     if (kind == CASTLE_PARTY_ACTION_RENT_BERRY) {
-        return ov83_02247FC8[index];
+        return gBattleCastleRentalBerryCosts[index];
     }
-    return ov83_02247F16[index];
+    return gBattleCastleRentalItemCosts[index];
 }
 
 u16 BattleCastlePartyApp_GetRentalCostByItemId(u16 itemId) {
     u32 i;
 
     for (i = 0; i < CASTLE_ITEM_GRID_NUM_ITEMS; i++) {
-        if (itemId == ov83_02247EE0[i]) {
-            return ov83_02247F16[i];
+        if (itemId == gBattleCastleRentalItems[i]) {
+            return gBattleCastleRentalItemCosts[i];
         }
     }
     for (i = 0; i < CASTLE_ITEM_GRID_NUM_BERRIES; i++) {
-        if (itemId == ov83_02247F88[i]) {
-            return ov83_02247FC8[i];
+        if (itemId == gBattleCastleRentalBerries[i]) {
+            return gBattleCastleRentalBerryCosts[i];
         }
     }
     GF_AssertFail();
@@ -2173,9 +2173,9 @@ u16 BattleCastlePartyApp_GetRentalCostByItemId(u16 itemId) {
 u16 BattleCastlePartyApp_GetRentalItemId(BattleCastlePartyApp *app, int index, int kind) {
     BattleCastle_GetRank(app->saveData, app->frontierType, CASTLE_RANK_RENTAL);
     if (kind == CASTLE_PARTY_ACTION_RENT_BERRY) {
-        return ov83_02247F88[index];
+        return gBattleCastleRentalBerries[index];
     }
-    return ov83_02247EE0[index];
+    return gBattleCastleRentalItems[index];
 }
 
 // Positions of the player's and the partner's name
@@ -2530,7 +2530,7 @@ void BattleCastlePartyApp_HealMon(BattleCastlePartyApp *app, int slot, int actio
     BattleCastle_GetRank(app->saveData, app->frontierType, 0);
     BattleCastlePartyApp_BufferMonNickname(app, 0, Mon_GetBoxMon(mon));
     BattleCastle_DrawWindowFrame(&app->windows[6], Options_GetFrame(app->options));
-    app->printerId = BattleCastlePartyApp_ShowMessage(app, _02247D0C[action - 1], 1);
+    app->printerId = BattleCastlePartyApp_ShowMessage(app, gBattleCastlePartyAppHealMessages[action - 1], 1);
     switch (action) {
     case 1:
         BattleCastlePartyApp_UseItemOnMon(mon, ITEM_MAX_POTION);
@@ -2631,7 +2631,7 @@ void BattleCastlePartyApp_ApplyAction(BattleCastlePartyApp *app, u32 slot, u8 ac
     case 1:
     case 2:
     case 3:
-        cost = ov83_02247D18[action - 1];
+        cost = gBattleCastlePartyAppHealCosts[action - 1];
         break;
     case 6:
     case 7:
@@ -2756,7 +2756,7 @@ void BattleCastlePartyApp_RankUp(BattleCastlePartyApp *app, u8 slot, u16 action)
 
             BattleCastlePartyApp_BufferPlayerName(app, 5);
             rank = BattleCastle_GetRank(app->saveData, app->frontierType, kind);
-            BattleCastle_SpendPoints(app->frontierSave, app->frontierType, ov83_02247D48[kind][rank]);
+            BattleCastle_SpendPoints(app->frontierSave, app->frontierType, gBattleCastlePartyAppRankUpCosts[kind][rank]);
             rank = BattleCastle_GetRank(app->saveData, app->frontierType, kind);
             frontierSave = Save_Frontier_GetStatic(app->saveData);
             stat = BattleCastle_GetRankStat(app->frontierType, kind);
@@ -2771,14 +2771,14 @@ void BattleCastlePartyApp_RankUp(BattleCastlePartyApp *app, u8 slot, u16 action)
         } else {
             BattleCastle_BufferPartnerName(app->msgFormat, 5);
             rank = app->partnerRanks[kind];
-            app->partnerPoints -= ov83_02247D48[kind][rank];
+            app->partnerPoints -= gBattleCastlePartyAppRankUpCosts[kind][rank];
             app->partnerRanks[kind]++;
         }
     } else {
         if (slot < numOwnMons) {
             BattleCastle_BufferPartnerName(app->msgFormat, 5);
             rank = app->partnerRanks[kind];
-            app->partnerPoints -= ov83_02247D48[kind][rank];
+            app->partnerPoints -= gBattleCastlePartyAppRankUpCosts[kind][rank];
             app->partnerRanks[kind]++;
         } else {
             FrontierSave *frontierSave;
@@ -2786,7 +2786,7 @@ void BattleCastlePartyApp_RankUp(BattleCastlePartyApp *app, u8 slot, u16 action)
 
             BattleCastlePartyApp_BufferPlayerName(app, 5);
             rank = BattleCastle_GetRank(app->saveData, app->frontierType, kind);
-            BattleCastle_SpendPoints(app->frontierSave, app->frontierType, ov83_02247D48[kind][rank]);
+            BattleCastle_SpendPoints(app->frontierSave, app->frontierType, gBattleCastlePartyAppRankUpCosts[kind][rank]);
             rank = BattleCastle_GetRank(app->saveData, app->frontierType, kind);
             frontierSave = Save_Frontier_GetStatic(app->saveData);
             stat = BattleCastle_GetRankStat(app->frontierType, kind);
@@ -2803,7 +2803,7 @@ void BattleCastlePartyApp_RankUp(BattleCastlePartyApp *app, u8 slot, u16 action)
     BattleCastlePartyApp_CloseMenus(app);
     BattleCastlePartyApp_PrintCastlePoints(app, &app->windows[CASTLE_PARTY_WIN_POINTS]);
     BattleCastle_DrawWindowFrame(&app->windows[CASTLE_PARTY_WIN_MESSAGE], Options_GetFrame(app->options));
-    app->printerId = BattleCastlePartyApp_ShowMessage(app, ov83_02247D5A[kind][rank], 1);
+    app->printerId = BattleCastlePartyApp_ShowMessage(app, gBattleCastlePartyAppRankUpMessages[kind][rank], 1);
 }
 #pragma force_active reset
 
@@ -3136,7 +3136,7 @@ void BattleCastlePartyApp_CreateListMenu(BattleCastlePartyApp *app, int count, u
     int numMons;
 
     BattleCastle_GetMenuTiles(&tileStart, &tileCount);
-    template = *(const TouchscreenListMenuTemplate *)&_02247D0C[15];
+    template = *(const TouchscreenListMenuTemplate *)&gBattleCastlePartyAppHealMessages[15];
     template.baseTile = tileStart;
     template.charOffset = tileStart + tileCount - 27;
     template.unkA = tileCount;
@@ -3156,7 +3156,7 @@ void BattleCastlePartyApp_CreateMainMenuList(BattleCastlePartyApp *app) {
 
     app->listMenuItems = ListMenuItems_New(3, HEAP_ID_107);
     for (i = 0; i < 3; i++) {
-        ListMenuItems_AppendFromMsgData(app->listMenuItems, app->msgData, ov83_02247D6C[i].msgId, ov83_02247D6C[i].value);
+        ListMenuItems_AppendFromMsgData(app->listMenuItems, app->msgData, gBattleCastlePartyAppMainMenuItems[i].msgId, gBattleCastlePartyAppMainMenuItems[i].value);
     }
     BattleCastlePartyApp_CreateListMenu(app, 3, 17, 8, 13);
 }
@@ -3171,28 +3171,28 @@ void BattleCastlePartyApp_CreateHealMenuList(BattleCastlePartyApp *app) {
     rank = BattleCastle_GetRank(app->saveData, app->frontierType, CASTLE_RANK_HEAL);
     count = 0;
     for (i = 0; i < 5; i++) {
-        switch (ov83_02247F4C[i].value) {
+        switch (gBattleCastlePartyAppHealMenuOptions[i].value) {
         case 1:
         case 2:
         case 3:
-            if (rank >= ov83_02247F4C[i].minRank) {
-                ListMenuItems_AppendFromMsgData(app->listMenuItems, app->msgData, ov83_02247F4C[i].msgId, ov83_02247F4C[i].value);
+            if (rank >= gBattleCastlePartyAppHealMenuOptions[i].minRank) {
+                ListMenuItems_AppendFromMsgData(app->listMenuItems, app->msgData, gBattleCastlePartyAppHealMenuOptions[i].msgId, gBattleCastlePartyAppHealMenuOptions[i].value);
                 count++;
             }
             break;
         case CASTLE_PARTY_ACTION_HEAL_RANK_UP:
             if (rank != CASTLE_RANK_MAX) {
-                ListMenuItems_AppendFromMsgData(app->listMenuItems, app->msgData, ov83_02247F4C[i].msgId, ov83_02247F4C[i].value);
+                ListMenuItems_AppendFromMsgData(app->listMenuItems, app->msgData, gBattleCastlePartyAppHealMenuOptions[i].msgId, gBattleCastlePartyAppHealMenuOptions[i].value);
                 count++;
             }
             break;
         default:
-            ListMenuItems_AppendFromMsgData(app->listMenuItems, app->msgData, ov83_02247F4C[i].msgId, ov83_02247F4C[i].value);
+            ListMenuItems_AppendFromMsgData(app->listMenuItems, app->msgData, gBattleCastlePartyAppHealMenuOptions[i].msgId, gBattleCastlePartyAppHealMenuOptions[i].value);
             count++;
             break;
         }
     }
-    BattleCastlePartyApp_CreateListMenu(app, count, 17, ov83_02248008[count], 13);
+    BattleCastlePartyApp_CreateListMenu(app, count, 17, gBattleCastlePartyAppListMenuY[count], 13);
 }
 
 // Options above the current rental rank are left out; RANK UP is left out at the max rank
@@ -3205,27 +3205,27 @@ void BattleCastlePartyApp_CreateRentalMenuList(BattleCastlePartyApp *app) {
     rank = BattleCastle_GetRank(app->saveData, app->frontierType, CASTLE_RANK_RENTAL);
     count = 0;
     for (i = 0; i < 4; i++) {
-        switch (ov83_02247EB0[i].value) {
+        switch (gBattleCastlePartyAppRentalMenuOptions[i].value) {
         case CASTLE_PARTY_ACTION_RENT_BERRY:
         case CASTLE_PARTY_ACTION_RENT_ITEM:
-            if (rank >= ov83_02247EB0[i].minRank) {
-                ListMenuItems_AppendFromMsgData(app->listMenuItems, app->msgData, ov83_02247EB0[i].msgId, ov83_02247EB0[i].value);
+            if (rank >= gBattleCastlePartyAppRentalMenuOptions[i].minRank) {
+                ListMenuItems_AppendFromMsgData(app->listMenuItems, app->msgData, gBattleCastlePartyAppRentalMenuOptions[i].msgId, gBattleCastlePartyAppRentalMenuOptions[i].value);
                 count++;
             }
             break;
         case CASTLE_PARTY_ACTION_RENTAL_RANK_UP:
             if (rank != CASTLE_RANK_MAX) {
-                ListMenuItems_AppendFromMsgData(app->listMenuItems, app->msgData, ov83_02247EB0[i].msgId, ov83_02247EB0[i].value);
+                ListMenuItems_AppendFromMsgData(app->listMenuItems, app->msgData, gBattleCastlePartyAppRentalMenuOptions[i].msgId, gBattleCastlePartyAppRentalMenuOptions[i].value);
                 count++;
             }
             break;
         default:
-            ListMenuItems_AppendFromMsgData(app->listMenuItems, app->msgData, ov83_02247EB0[i].msgId, ov83_02247EB0[i].value);
+            ListMenuItems_AppendFromMsgData(app->listMenuItems, app->msgData, gBattleCastlePartyAppRentalMenuOptions[i].msgId, gBattleCastlePartyAppRentalMenuOptions[i].value);
             count++;
             break;
         }
     }
-    BattleCastlePartyApp_CreateListMenu(app, count, 17, ov83_02248008[count], 13);
+    BattleCastlePartyApp_CreateListMenu(app, count, 17, gBattleCastlePartyAppListMenuY[count], 13);
 }
 
 void BattleCastlePartyApp_DestroyListMenu(BattleCastlePartyApp *app) {
@@ -3243,7 +3243,7 @@ void BattleCastlePartyApp_PrintMainMenuHelp(BattleCastlePartyApp *app) {
     u8 cursorPos = app->listMenu->cursorPos;
 
     if (app->listCursorPos != cursorPos) {
-        BattleCastlePartyApp_PrintMessage(app, &app->windows[CASTLE_PARTY_WIN_MESSAGE], ov83_02247D1E[cursorPos], 1, 1, TEXT_SPEED_NOTRANSFER, 1, 2, 15, 1);
+        BattleCastlePartyApp_PrintMessage(app, &app->windows[CASTLE_PARTY_WIN_MESSAGE], gBattleCastlePartyAppMainMenuHelpMessages[cursorPos], 1, 1, TEXT_SPEED_NOTRANSFER, 1, 2, 15, 1);
         app->listCursorPos = app->listMenu->cursorPos;
     }
 }

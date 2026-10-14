@@ -29,7 +29,7 @@
 #define GRID_TO_FX32(n) ((fx32)(((n) * 16 + 8) > 0 ? (float)(((n) * 16 + 8) << 12) + 0.5f : (float)(((n) * 16 + 8) << 12) - 0.5f))
 
 // Placement offsets: [0..1] across for 2x1 objects, [2..3] along for 1x2 objects, [4..5] for 2x2 objects.
-extern const u8 ov02_02253A4C[];
+extern const u8 gSafariZonePlacementOffsets[];
 
 BOOL MapId_IsSafariZone(u32 mapId);
 int SafariZone_GetAreaIndexAt(s32 x, s32 z);
@@ -276,8 +276,8 @@ BOOL SafariZone_FindSpotFor1x2Object(FieldSystem *fieldSystem, s16 x, s16 z, u8 
     s8 *offsets;
 
     offsets = (s8 *)query;
-    offsets[1] = ov02_02253A4C[2];
-    offsets[2] = ov02_02253A4C[3];
+    offsets[1] = gSafariZonePlacementOffsets[2];
+    offsets[2] = gSafariZonePlacementOffsets[3];
     *outX = x;
     *outZ = z;
     switch (direction) {
@@ -348,8 +348,8 @@ BOOL SafariZone_FindSpotFor2x1Object(FieldSystem *fieldSystem, s16 x, s16 z, u8 
     s8 *offsets;
 
     offsets = (s8 *)query;
-    offsets[1] = ov02_02253A4C[0];
-    offsets[2] = ov02_02253A4C[1];
+    offsets[1] = gSafariZonePlacementOffsets[0];
+    offsets[2] = gSafariZonePlacementOffsets[1];
     *outX = x;
     *outZ = z;
     switch (direction) {
@@ -406,8 +406,8 @@ BOOL SafariZone_FindSpotFor2x2Object(FieldSystem *fieldSystem, s16 x, s16 z, u8 
     s8 offsets[2];
     int i;
 
-    offsets[0] = ov02_02253A4C[4];
-    offsets[1] = ov02_02253A4C[5];
+    offsets[0] = gSafariZonePlacementOffsets[4];
+    offsets[1] = gSafariZonePlacementOffsets[5];
     *outX = x;
     *outZ = z;
     switch (direction) {

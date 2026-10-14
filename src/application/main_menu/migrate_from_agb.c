@@ -64,19 +64,19 @@ void Sys_SetSoftResetDisableFlag(int a0);
 void Sys_ClearSoftResetDisableFlag(int a0);
 
 extern int _02111864;
-extern const ObjCharTransferTemplate _0223B4E8;
-extern const GraphicsModes _0223B4F8;
-extern const BgTemplate _0223B508;
-extern const BgTemplate _0223B524;
-extern const BgTemplate _0223B540;
-extern const BgTemplate _0223B55C;
-extern const GraphicsBanks _0223B578;
-extern const u8 ov74_0223C960[];
-extern const int ov74_0223C968[];
-extern const int ov74_0223C980[];
+extern const ObjCharTransferTemplate sMigrateFromAgbObjCharTransferTemplate;
+extern const GraphicsModes gMigrateFromAgbGraphicsModes;
+extern const BgTemplate sMigrateFromAgbBgTemplate0;
+extern const BgTemplate sMigrateFromAgbBgTemplate1;
+extern const BgTemplate sMigrateFromAgbBgTemplate2;
+extern const BgTemplate sMigrateFromAgbBgTemplate3;
+extern const GraphicsBanks gMigrateFromAgbGraphicsBanks;
+extern const u8 sMigrateFromAgbBoxBgPalettes[];
+extern const int sMigrateFromAgbMainMessages[];
+extern const int sMigrateFromAgbIntroMessages[];
 extern const u32 sMigrateFromAgbHMMoves[];
 extern const u16 ov74_0223C9A8[];
-extern const int ov74_0223C9B8[];
+extern const int sMigrateFromAgbResultMessages[];
 extern const u16 sMigrateFromAgbBlockedItems[];
 extern MigrateFromAgbIcon *sMigrateFromAgbIcons;
 
@@ -409,7 +409,7 @@ void MigrateFromAgb_PrintText(MigrateFromAgbApp *app, MigrateFromAgbText *text, 
 #pragma force_active reset
 
 void MigrateFromAgb_InitObjTransfer(void) {
-    ObjCharTransferTemplate template = _0223B4E8;
+    ObjCharTransferTemplate template = sMigrateFromAgbObjCharTransferTemplate;
     ObjCharTransfer_Init(&template);
     ObjPlttTransfer_Init(20, HEAP_ID_76);
     ObjCharTransfer_ClearBuffers();
@@ -992,24 +992,24 @@ void MigrateFromAgb_StartFadeWhite(MigrateFromAgbApp *app, enum FadeType fadeTyp
 #pragma force_active on
 
 void MigrateFromAgb_InitBgs(BgConfig *bgConfig) {
-    GraphicsModes modes = _0223B4F8;
+    GraphicsModes modes = gMigrateFromAgbGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    BgTemplate bg0 = _0223B508;
+    BgTemplate bg0 = sMigrateFromAgbBgTemplate0;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &bg0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
-    BgTemplate bg1 = _0223B524;
+    BgTemplate bg1 = sMigrateFromAgbBgTemplate1;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &bg1, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
-    BgTemplate bg2 = _0223B540;
+    BgTemplate bg2 = sMigrateFromAgbBgTemplate2;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &bg2, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
-    BgTemplate bg3 = _0223B55C;
+    BgTemplate bg3 = sMigrateFromAgbBgTemplate3;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &bg3, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
 }
 
 void MigrateFromAgb_InitGraphics(MigrateFromAgbApp *app) {
-    GraphicsBanks banks = _0223B578;
+    GraphicsBanks banks = gMigrateFromAgbGraphicsBanks;
     GfGfx_SetBanks(&banks);
     MigrateFromAgb_InitBgs(app->bgConfig);
     gSystem.screensFlipped = TRUE;
@@ -1024,7 +1024,7 @@ void MigrateFromAgb_InitGraphics(MigrateFromAgbApp *app) {
 // The box screen background, in the colour of the game
 void MigrateFromAgb_LoadBoxBg(MigrateFromAgbApp *app) {
     GfGfxLoader_LoadScrnData(NARC_a_1_1_3, 24, app->bgConfig, GF_BG_LYR_MAIN_2, 0, 0x600, TRUE, HEAP_ID_76);
-    BgTilemapRectChangePalette(app->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 32, 24, ov74_0223C960[app->agbVersion]);
+    BgTilemapRectChangePalette(app->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 32, 24, sMigrateFromAgbBoxBgPalettes[app->agbVersion]);
     BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_2);
 }
 
@@ -1076,7 +1076,7 @@ void MigrateFromAgb_ShowConfirmScreen(MigrateFromAgbApp *app) {
         MigrateFromAgb_LoadMonIcon(species, isEgg, MigrateFromAgb_GetBoxMonPersonality(app, app->picks[i].box, app->picks[i].slot), gSystem.agbCartridgeVersion, i, app->pickIcons[i]);
     }
     GfGfxLoader_LoadScrnData(NARC_a_1_1_3, 25, app->bgConfig, GF_BG_LYR_MAIN_2, 0, 0x600, TRUE, HEAP_ID_76);
-    BgTilemapRectChangePalette(app->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 32, 24, ov74_0223C960[app->agbVersion]);
+    BgTilemapRectChangePalette(app->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 32, 24, sMigrateFromAgbBoxBgPalettes[app->agbVersion]);
     BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_2);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
     LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_14_OFFSET, HEAP_ID_76);
@@ -1197,7 +1197,7 @@ void MigrateFromAgb_PrintIntro(MigrateFromAgbApp *app) {
     CopyU16ArrayToString(string, name);
     BufferString(msgFormat, 1, string, 0, 1, 2);
     MigrateFromAgb_InitMsgBox(app);
-    app->msgBox.msgId = ov74_0223C980[app->agbVersion];
+    app->msgBox.msgId = sMigrateFromAgbIntroMessages[app->agbVersion];
     app->msgBox.msgFormat = msgFormat;
     MigrateFromAgb_PrintText(app, &app->msgBox, 24);
     String_Delete(string);
@@ -1245,12 +1245,12 @@ int MigrateFromAgb_CheckCanMigrate(MigrateFromAgbApp *app) {
     return 0;
 }
 
-// Prints message ov74_0223C9B8[index] (once) and waits for it: TRUE when done
+// Prints message sMigrateFromAgbResultMessages[index] (once) and waits for it: TRUE when done
 BOOL MigrateFromAgb_PrintResultMsg(MigrateFromAgbApp *app, int index) {
     if (app->pendingMsg != 0) {
         MigrateFromAgb_InitMsgBox(app);
         TextFlags_SetCanTouchSpeedUpPrint(TRUE);
-        app->msgBox.msgId = ov74_0223C9B8[index];
+        app->msgBox.msgId = sMigrateFromAgbResultMessages[index];
         app->msgBox.textSpeed = 1;
         MigrateFromAgb_PrintText(app, &app->msgBox, 24);
         app->pendingMsg = 0;
@@ -1266,7 +1266,7 @@ BOOL MigrateFromAgb_PrintResultMsgWithYesNo(MigrateFromAgbApp *app, int index) {
     if (app->pendingMsg != 0) {
         MigrateFromAgb_InitMsgBox(app);
         TextFlags_SetCanTouchSpeedUpPrint(TRUE);
-        app->msgBox.msgId = ov74_0223C9B8[index];
+        app->msgBox.msgId = sMigrateFromAgbResultMessages[index];
         app->msgBox.textSpeed = 1;
         MigrateFromAgb_PrintText(app, &app->msgBox, 24);
         app->pendingMsg = 0;
@@ -1565,7 +1565,7 @@ BOOL MigrateFromAgb_Main(OverlayManager *man, int *state) {
     case 19:
         switch (YesNoPrompt_HandleInput(app->yesNoPrompt)) {
         case YESNORESPONSE_YES:
-            app->msgBox.msgId = ov74_0223C968[app->agbVersion];
+            app->msgBox.msgId = sMigrateFromAgbMainMessages[app->agbVersion];
             MigrateFromAgb_PrintText(app, &app->msgBox, 0);
             YesNoPrompt_Reset(app->yesNoPrompt);
             app->save.state = 0;

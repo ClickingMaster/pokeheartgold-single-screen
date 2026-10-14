@@ -112,7 +112,7 @@ typedef struct BattleRoomResultsGraphicsBanks {
     u32 banks[10];
 } BattleRoomResultsGraphicsBanks;
 
-extern const TouchscreenHitbox _021E6D4C[];
+extern const TouchscreenHitbox gBattleRoomResultsHitbox[];
 extern const TouchscreenHitbox sBattleRoomResultsPageHitboxes[];
 extern const GraphicsModes sBattleRoomResultsGraphicsModes;
 extern const GridCallbacks sBattleRoomResultsGridCallbacks;
@@ -336,7 +336,7 @@ void BattleRoomResults_VBlankCB(BattleRoomResults *results) {
 #pragma force_active reset
 
 int BattleRoomResults_HandleResultsInput(BattleRoomResults *results) {
-    if (TouchscreenHitbox_TouchNewIsIn(_021E6D4C) == TRUE || (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B))) {
+    if (TouchscreenHitbox_TouchNewIsIn(gBattleRoomResultsHitbox) == TRUE || (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B))) {
         PlaySE(SEQ_SE_DP_DECIDE);
         BattleRoomResults_StartExitButtonFlash(results);
         results->nextState = 6;

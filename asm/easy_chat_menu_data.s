@@ -18,16 +18,16 @@
 	.public ECMenuBuild_Generic
 	.rodata
 
-_02106944:
+gECMenuInitialList26:
 	.short 0x0508
 	.short 0xFFFF
 
-_02106948:
+gECMenuInitialList23:
 	.short 0x0384
 	.short 0x00B2
 	.short 0xFFFF
 
-_0210694E:
+gECMenuInitialList16:
 	.short 0x00C3
 	.short 0x0252
 	.short 0x0435
@@ -35,7 +35,7 @@ _0210694E:
 	.short 0x00D3
 	.short 0xFFFF
 
-_0210695A:
+gECMenuInitialList25:
 	.short 0x014F
 	.short 0x02B0
 	.short 0x0091
@@ -44,7 +44,7 @@ _0210695A:
 	.short 0x0029
 	.short 0xFFFF
 
-_02106968:
+gECMenuInitialList09:
 	.short 0x0027
 	.short 0x0181
 	.short 0x050D
@@ -54,7 +54,7 @@ _02106968:
 	.short 0x007C
 	.short 0xFFFF
 
-_02106978:
+gECMenuInitialList24:
 	.short 0x04C9
 	.short 0x04FD
 	.short 0x00C1
@@ -70,7 +70,7 @@ _02106978:
 	.short 0x047A
 	.short 0xFFFF
 
-_02106994:
+gECMenuInitialList20:
 	.short 0x0361
 	.short 0x05BE
 	.short 0x04CD
@@ -89,7 +89,7 @@ _02106994:
 	.short 0x01E0
 	.short 0xFFFF
 
-_021069B6:
+gECMenuInitialList10:
 	.short 0x008C
 	.short 0x008D
 	.short 0x0040
@@ -140,7 +140,7 @@ sECMenu_Misc:
 	.short EC_WORD_UNION_WI_FI
 	.short 0xFFFF
 
-_02106A14:
+gECMenuInitialList14:
 	.short 0x03E2
 	.short 0x02AE
 	.short 0x00E0
@@ -167,7 +167,7 @@ _02106A14:
 	.short 0x03EA
 	.short 0xFFFF
 
-_02106A46:
+gECMenuInitialList21:
 	.short 0x056D
 	.short 0x038A
 	.short 0x0086
@@ -266,7 +266,7 @@ sECMenu_Greetings:
 	.short EC_WORD_PEOPLE_YOU
 	.short 0xFFFF
 
-_02106B00:
+gECMenuInitialList08:
 	.short 0x049C
 	.short 0x04D0
 	.short 0x04D4
@@ -345,7 +345,7 @@ sECMenu_People:
 	.short EC_WORD_TRAINER_WINS
 	.short 0xFFFF
 
-_02106B96:
+gECMenuInitialList13:
 	.short 0x054F
 	.short 0x0557
 	.short 0x0391
@@ -388,7 +388,7 @@ _02106B96:
 	.short 0x0112
 	.short 0xFFFF
 
-_02106BE8:
+gECMenuInitialList04:
 	.short 0x0406
 	.short 0x038E
 	.short 0x05A0
@@ -483,35 +483,35 @@ sECMenu_ToughWords:
 	.short 0xFFFF
 
 gECMenuInitialLists:
-	.word _02106F08
-	.word _021070B8
-	.word _02107590
-	.word _02107152
-	.word _02106BE8
-	.word _02106E7C
-	.word _02106F98
-	.word _0210728C
-	.word _02106B00
-	.word _02106968
-	.word _021069B6
-	.word _02106D7C
-	.word _02107664
-	.word _02106B96
-	.word _02106A14
-	.word _02107334
-	.word _0210694E
-	.word _02106DF4
-	.word _02107864
-	.word _021071EC
-	.word _02106994
-	.word _02106A46
-	.word _02106D08
-	.word _02106948
-	.word _02106978
-	.word _0210695A
-	.word _02106944
+	.word gECMenuInitialList00
+	.word gECMenuInitialList01
+	.word gECMenuInitialList02
+	.word gECMenuInitialList03
+	.word gECMenuInitialList04
+	.word gECMenuInitialList05
+	.word gECMenuInitialList06
+	.word gECMenuInitialList07
+	.word gECMenuInitialList08
+	.word gECMenuInitialList09
+	.word gECMenuInitialList10
+	.word gECMenuInitialList11
+	.word gECMenuInitialList12
+	.word gECMenuInitialList13
+	.word gECMenuInitialList14
+	.word gECMenuInitialList15
+	.word gECMenuInitialList16
+	.word gECMenuInitialList17
+	.word gECMenuInitialList18
+	.word gECMenuInitialList19
+	.word gECMenuInitialList20
+	.word gECMenuInitialList21
+	.word gECMenuInitialList22
+	.word gECMenuInitialList23
+	.word gECMenuInitialList24
+	.word gECMenuInitialList25
+	.word gECMenuInitialList26
 
-_02106D08:
+gECMenuInitialList22:
 	.short 0x0507
 	.short 0x0504
 	.short 0x0140
@@ -571,7 +571,7 @@ _02106D08:
 	.short 0x0168
 	.short 0xFFFF
 
-_02106D7C:
+gECMenuInitialList11:
 	.short 0x0131
 	.short 0x0502
 	.short 0x00AB
@@ -633,7 +633,7 @@ _02106D7C:
 	.short 0x0195
 	.short 0xFFFF
 
-_02106DF4:
+gECMenuInitialList17:
 	.short 0x056B
 	.short 0x0253
 	.short 0x001A
@@ -703,7 +703,7 @@ _02106DF4:
 	.short 0x0408
 	.short 0xFFFF
 
-_02106E7C:
+gECMenuInitialList05:
 	.short 0x02F7
 	.short 0x02A9
 	.short 0x02EC
@@ -775,7 +775,7 @@ _02106E7C:
 	.short 0x02E8
 	.short 0xFFFF
 
-_02106F08:
+gECMenuInitialList00:
 	.short 0x04A5
 	.short 0x01CC
 	.short 0x003F
@@ -849,7 +849,7 @@ _02106F08:
 	.short 0x012A
 	.short 0xFFFF
 
-_02106F98:
+gECMenuInitialList06:
 	.short 0x01BC
 	.short 0x0489
 	.short 0x01DB
@@ -937,7 +937,7 @@ sECMenuSpecs:
 	.word ECMenuBuild_TrendySayings, sECMenu_TrendySayings, 0x00000020
 	.word ECMenuBuild_Generic, sECMenu_Misc, 0x00000017
 
-_021070B8:
+gECMenuInitialList01:
 	.short 0x049D
 	.short 0x0173
 	.short 0x055D
@@ -1016,7 +1016,7 @@ _021070B8:
 	.short 0x04E7
 	.short 0xFFFF
 
-_02107152:
+gECMenuInitialList03:
 	.short 0x0538
 	.short 0x03DC
 	.short 0x0541
@@ -1095,7 +1095,7 @@ _02107152:
 	.short 0x02CF
 	.short 0xFFFF
 
-_021071EC:
+gECMenuInitialList19:
 	.short 0x0211
 	.short 0x0316
 	.short 0x0217
@@ -1177,7 +1177,7 @@ _021071EC:
 	.short 0x00EC
 	.short 0xFFFF
 
-_0210728C:
+gECMenuInitialList07:
 	.short 0x0524
 	.short 0x04E9
 	.short 0x02F2
@@ -1263,7 +1263,7 @@ _0210728C:
 	.short 0x024F
 	.short 0xFFFF
 
-_02107334:
+gECMenuInitialList15:
 	.short 0x01A1
 	.short 0x02CC
 	.short 0x01E4
@@ -1571,7 +1571,7 @@ sECMenu_Feelings:
 	.short EC_WORD_LIFESTYLE_YESTERDAY
 	.short 0xFFFF
 
-_02107590:
+gECMenuInitialList02:
 	.short 0x014B
 	.short 0x014C
 	.short 0x05A7
@@ -1679,7 +1679,7 @@ _02107590:
 	.short 0x009B
 	.short 0xFFFF
 
-_02107664:
+gECMenuInitialList12:
 	.short 0x02A7
 	.short 0x0044
 	.short 0x055F
@@ -1939,7 +1939,7 @@ sECMenu_TypesAndAbilities:
 	.short EC_WORD_ABILITY(ABILITY_WONDER_GUARD)
 	.short 0xFFFF
 
-_02107864:
+gECMenuInitialList18:
 	.short 0x012E
 	.short 0x02CD
 	.short 0x0577

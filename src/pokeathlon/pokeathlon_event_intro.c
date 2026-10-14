@@ -33,37 +33,37 @@ void GF_SndReadSeqVariable(u16 seqNo, u32 variable, s16 *value);
 extern const struct {
     int trainerClass;
     int unused;
-} ov96_0221B1D4[];
+} gPokeathlonNpcTrainerClasses[];
 
 extern const struct {
     int fileId;
     int unused;
 } ov96_0221B1D8[];
 
-extern const GraphicsBanks ov96_0221B9E8;
-extern const GraphicsModes ov96_0221B9BC;
-extern const BgTemplate ov96_0221B9CC;
-extern const GraphicsBanks ov96_0221BAC0;
-extern const u8 ov96_0221BA18[7];
-extern const u8 ov96_0221BA10[7];
-extern const GraphicsModes ov96_0221BA44;
+extern const GraphicsBanks gPokeathlonCourseWaitGraphicsBanks;
+extern const GraphicsModes gPokeathlonCourseWaitGraphicsModes;
+extern const BgTemplate gPokeathlonCourseWaitBgTemplate;
+extern const GraphicsBanks gPokeathlonEventIntroGraphicsBanks;
+extern const u8 gPokeathlonEventIntroBgLayers[7];
+extern const u8 gPokeathlonEventIntroBgTypes[7];
+extern const GraphicsModes gPokeathlonEventIntroGraphicsModes;
 
 // Copied as a whole (one block copy).
 typedef struct EventIntroBgTemplates {
     BgTemplate templates[7];
 } EventIntroBgTemplates;
 
-extern const EventIntroBgTemplates ov96_0221BB98;
-extern const WindowTemplate ov96_0221BB38[12];
-extern const SpriteResourceCountsListUnion ov96_0221BA68;
-extern const OamManagerParam ov96_0221BAA0;
-extern const OamCharTransferParam ov96_0221BA54;
-extern ManagedSpriteTemplate ov96_0221DA80[4];
-extern const s16 ov96_0221BA80[8][2];
-extern const int ov96_0221BAE8[][2];
-extern const TouchscreenHitbox ov96_0221BA20[];
-extern const TouchscreenHitbox ov96_0221BA2C[];
-extern const TouchscreenHitbox ov96_0221BA38[];
+extern const EventIntroBgTemplates gPokeathlonEventIntroBgTemplates;
+extern const WindowTemplate gPokeathlonEventIntroWindowTemplates[12];
+extern const SpriteResourceCountsListUnion gPokeathlonEventIntroSpriteResourceCounts;
+extern const OamManagerParam gPokeathlonEventIntroOamManagerParam;
+extern const OamCharTransferParam gPokeathlonEventIntroOamCharTransferParam;
+extern ManagedSpriteTemplate gPokeathlonEventIntroSpriteTemplates[4];
+extern const s16 gPokeathlonEventIntroSpritePositions[8][2];
+extern const int gPokeathlonEventIntroMascotAnims[][2];
+extern const TouchscreenHitbox gPokeathlonEventIntroDetailsHitboxes[];
+extern const TouchscreenHitbox gPokeathlonEventIntroRulesHitboxes[];
+extern const TouchscreenHitbox gPokeathlonEventIntroControlsHitboxes[];
 
 void PokeathlonCourse_LoadSpritePalette(ManagedSprite *sprite, NarcId narcId, int fileId, BOOL mainScreen, BOOL grayScale, enum HeapID heapId) {
     int vramType;
@@ -97,7 +97,7 @@ int PokeathlonCourse_GetNpcTrainerPicFileId(int trainerClass) {
         if (i == 0xFFFF) {
             return 0;
         }
-        if (trainerClass == ov96_0221B1D4[i].trainerClass) {
+        if (trainerClass == gPokeathlonNpcTrainerClasses[i].trainerClass) {
             return ov96_0221B1D8[i].fileId;
         }
     }
@@ -150,7 +150,7 @@ BOOL PokeathlonCourseWait_Exit(PokeathlonCourseData *course) {
 }
 
 void PokeathlonCourseWait_SetBanks(void) {
-    GraphicsBanks banks = ov96_0221B9E8;
+    GraphicsBanks banks = gPokeathlonCourseWaitGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
@@ -162,10 +162,10 @@ void PokeathlonCourseWait_VBlankCallback(void *data) {
 }
 
 void PokeathlonCourseWait_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {
-    GraphicsModes modes = ov96_0221B9BC;
+    GraphicsModes modes = gPokeathlonCourseWaitGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     {
-        BgTemplate template = ov96_0221B9CC;
+        BgTemplate template = gPokeathlonCourseWaitBgTemplate;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &template, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
         BG_ClearCharDataRange(GF_BG_LYR_MAIN_0, 0x40, 0, heapId);
@@ -291,7 +291,7 @@ BOOL PokeathlonEventIntro_Exit(PokeathlonCourseData *course) {
     PokeathlonEventBanner_Free(intro->banner);
     PokeathlonUtil_FreeTextContext(intro->text, 12);
     for (i = 0; i < 7; i++) {
-        FreeBgTilemapBuffer(intro->bgConfig, ov96_0221BA18[i]);
+        FreeBgTilemapBuffer(intro->bgConfig, gPokeathlonEventIntroBgLayers[i]);
     }
     Heap_Free(intro->bgConfig);
     for (i = 0; i < 4; i++) {
@@ -321,7 +321,7 @@ void PokeathlonEventIntro_VBlankCallback(PokeathlonEventIntro *intro) {
 }
 
 void PokeathlonEventIntro_SetBanks(void) {
-    GraphicsBanks banks = ov96_0221BAC0;
+    GraphicsBanks banks = gPokeathlonEventIntroGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
@@ -419,13 +419,13 @@ void PokeathlonEventIntro_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {
     GraphicsModes modes;
     int i;
 
-    modes = ov96_0221BA44;
+    modes = gPokeathlonEventIntroGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    templates = ov96_0221BB98;
+    templates = gPokeathlonEventIntroBgTemplates;
     for (i = 0; i < 7; i++) {
-        InitBgFromTemplate(bgConfig, ov96_0221BA18[i], &templates.templates[i], ov96_0221BA10[i]);
-        BgClearTilemapBufferAndCommit(bgConfig, ov96_0221BA18[i]);
-        BG_ClearCharDataRange(ov96_0221BA18[i], 0x40, 0, heapId);
+        InitBgFromTemplate(bgConfig, gPokeathlonEventIntroBgLayers[i], &templates.templates[i], gPokeathlonEventIntroBgTypes[i]);
+        BgClearTilemapBufferAndCommit(bgConfig, gPokeathlonEventIntroBgLayers[i]);
+        BG_ClearCharDataRange(gPokeathlonEventIntroBgLayers[i], 0x40, 0, heapId);
     }
 }
 
@@ -438,7 +438,7 @@ void PokeathlonEventIntro_LoadGraphics(PokeathlonEventIntro *intro) {
         GfGfxLoader_LoadScrnDataFromOpenNarc(intro->narc, 8, intro->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, TRUE, intro->heapId);
     }
     PokeathlonEventIntro_LoadDetailsBg(intro);
-    intro->text = PokeathlonUtil_CreateTextContext(intro->heapId, intro->bgConfig, 12, ov96_0221BB38, 309);
+    intro->text = PokeathlonUtil_CreateTextContext(intro->heapId, intro->bgConfig, 12, gPokeathlonEventIntroWindowTemplates, 309);
     PokeathlonEventIntro_PrintDetails(intro);
 }
 
@@ -508,9 +508,9 @@ void PokeathlonEventIntro_PrintControls(PokeathlonEventIntro *intro) {
 #pragma force_active on
 
 void PokeathlonEventIntro_InitSprites(PokeathlonEventIntro *intro) {
-    SpriteResourceCountsListUnion counts = ov96_0221BA68;
-    OamManagerParam oamManagerParam = ov96_0221BAA0;
-    OamCharTransferParam charTransferParam = ov96_0221BA54;
+    SpriteResourceCountsListUnion counts = gPokeathlonEventIntroSpriteResourceCounts;
+    OamManagerParam oamManagerParam = gPokeathlonEventIntroOamManagerParam;
+    OamCharTransferParam charTransferParam = gPokeathlonEventIntroOamCharTransferParam;
     charTransferParam.maxTasks = 4;
     intro->spriteSystem = SpriteSystem_Alloc(intro->heapId);
     intro->spriteManager = SpriteManager_New(intro->spriteSystem);
@@ -550,7 +550,7 @@ void PokeathlonEventIntro_UpdateMascot(PokeathlonEventIntro *intro) {
 
 void PokeathlonEventIntro_PlaceSprites(PokeathlonEventIntro *intro, int layout) {
     int i = 0;
-    const s16(*position)[2] = ov96_0221BA80 + layout * 4;
+    const s16(*position)[2] = gPokeathlonEventIntroSpritePositions + layout * 4;
     do {
         ManagedSprite_SetPositionXYWithSubscreenOffset(intro->sprites[i], (*position)[0], (*position)[1], 2 << 20);
         position++;
@@ -569,11 +569,11 @@ void PokeathlonEventIntro_ResetMascot(PokeathlonEventIntro *intro) {
 #pragma force_active on
 
 void PokeathlonEventIntro_CreateSprites(PokeathlonEventIntro *intro) {
-    const s16(*position)[2] = ov96_0221BA80;
+    const s16(*position)[2] = gPokeathlonEventIntroSpritePositions;
     int i = 0;
-    s16 *coords = &ov96_0221DA80[0].x;
+    s16 *coords = &gPokeathlonEventIntroSpriteTemplates[0].x;
     PokeathlonEventIntro *cursor = intro;
-    ManagedSpriteTemplate *template = ov96_0221DA80;
+    ManagedSpriteTemplate *template = gPokeathlonEventIntroSpriteTemplates;
     for (; i < 4; i++) {
         SpriteSystem *spriteSystem = intro->spriteSystem;
         SpriteManager *spriteManager = intro->spriteManager;
@@ -591,7 +591,7 @@ void PokeathlonEventIntro_CreateSprites(PokeathlonEventIntro *intro) {
 }
 
 void PokeathlonEventIntro_SetMascotAnim(PokeathlonEventIntro *intro) {
-    ManagedSprite_SetAnim(intro->sprites[2], ov96_0221BAE8[intro->event][intro->animStep]);
+    ManagedSprite_SetAnim(intro->sprites[2], gPokeathlonEventIntroMascotAnims[intro->event][intro->animStep]);
 }
 
 #pragma force_active reset
@@ -801,7 +801,7 @@ BOOL PokeathlonEventIntro_DetailsPage(PokeathlonCourseData *course, u8 *state) {
     switch (*state) {
     case 0:
         if (IsPaletteFadeFinished()) {
-            int button = TouchscreenHitbox_FindRectAtTouchNew(ov96_0221BA20);
+            int button = TouchscreenHitbox_FindRectAtTouchNew(gPokeathlonEventIntroDetailsHitboxes);
             if (button != -1) {
                 switch (button) {
                 case 0:
@@ -841,7 +841,7 @@ BOOL PokeathlonEventIntro_RulesPage(PokeathlonCourseData *course, u8 *state) {
         // fallthrough
     case 1:
         if (IsPaletteFadeFinished()) {
-            int button = TouchscreenHitbox_FindRectAtTouchNew(ov96_0221BA2C);
+            int button = TouchscreenHitbox_FindRectAtTouchNew(gPokeathlonEventIntroRulesHitboxes);
             if (button == 0) {
                 PlaySE(SEQ_SE_DP_SELECT);
                 PokeathlonEventIntro_FadeToPage(course, EVENT_INTRO_PAGE_CONTROLS);
@@ -875,7 +875,7 @@ BOOL PokeathlonEventIntro_ControlsPage(PokeathlonCourseData *course, u8 *state) 
         // fallthrough
     case 1:
         if (IsPaletteFadeFinished()) {
-            int button = TouchscreenHitbox_FindRectAtTouchNew(ov96_0221BA38);
+            int button = TouchscreenHitbox_FindRectAtTouchNew(gPokeathlonEventIntroControlsHitboxes);
             if (button == 0) {
                 PlaySE(SEQ_SE_DP_SELECT);
                 PokeathlonEventIntro_FadeToPage(course, EVENT_INTRO_PAGE_RULES);

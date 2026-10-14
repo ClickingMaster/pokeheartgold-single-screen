@@ -468,13 +468,13 @@ extern const PokeathlonCourseStepFunc gPokeathlonCourseClosingSteps[];
 extern const PokeathlonCourseStepFunc gPokeathlonCourseWaitSteps[];
 extern const PokeathlonCourseStepFunc gPokeathlonEventIntroSteps[];
 extern const PokeathlonCourseStepFunc gPokeathlonResultsAnnouncementSteps[];
-extern const u8 _0221A7D8[];        // score order of each event (0: higher is better, 1: lower)
-extern const u16 ov96_0221A894[];   // target score of each event
+extern const u8 gPokeathlonEventScoreOrders[];        // score order of each event (0: higher is better, 1: lower)
+extern const u16 gPokeathlonEventTargetScores[];   // target score of each event
 extern const u8 gPokeathlonCourseEventIds[][4]; // events of the courses 0..9
-extern const u8 ov96_0221A95C[][4]; // the 10 event sets of course 10
+extern const u8 gPokeathlonCourse10EventSets[][4]; // the 10 event sets of course 10
 extern const u16 gPokeathlonNpcTeamSpriteIds[];   // per NPC team
 extern const u16 gPokeathlonPerformanceFileIds[];   // performance file of each species' first form
-extern const PokeathlonCourseCmd ov96_0221AEC4[];
+extern const PokeathlonCourseCmd gPokeathlonCourseCmds[];
 
 SpriteList *PokeathlonCourseSpritePool_GetSpriteList(void *eventGfx);
 BOOL PokeathlonCourseObject_IsDrawn(PokeathlonCourseMonObject *object);

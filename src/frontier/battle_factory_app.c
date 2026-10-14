@@ -202,40 +202,40 @@ typedef struct BattleFactoryApp {
     u8 flashNextState;                    // 0x48B
 } BattleFactoryApp;
 
-extern const u8 _02243458[];
-extern const u16 ov81_0224345C[];
+extern const u8 gBattleFactoryAppSummaryPages[];
+extern const u16 gBattleFactoryBallPositions_Multi2[];
 extern const u16 ov81_0224345E[];
-extern const u16 ov81_02243464[];
+extern const u16 gBattleFactoryBallPositions_Single[];
 extern const u16 ov81_02243466[];
-extern const u16 ov81_02243470[];
+extern const u16 gBattleFactoryBallPositions_Multi[];
 extern const u16 ov81_02243472[];
-extern const GraphicsModes ov81_02243480;
-extern const u16 ov81_02243490[];
+extern const GraphicsModes gBattleFactoryAppGraphicsModes;
+extern const u16 gBattleFactoryBallPositions_Rental[];
 extern const u16 ov81_02243492[];
-extern const BgTemplate ov81_022434A8;
-extern const BgTemplate ov81_022434C4;
-extern const BgTemplate ov81_022434E0;
-extern const BgTemplate ov81_022434FC;
-extern const BgTemplate ov81_02243518;
-extern const BgTemplate ov81_02243534;
-extern const BgTemplate ov81_02243550;
-extern const GraphicsBanks ov81_0224356C;
-extern const u8 ov81_02243594[4];
-extern const ObjCharTransferTemplate ov81_02243598;
-extern const WindowTemplate ov81_022435A8[18];
-extern const GridCallbacks ov81_02243638;
-extern const GridCallbacks ov81_02243648;
-extern const GridCallbacks ov81_02243658;
-extern const TouchscreenHitbox ov81_02243668[];
-extern const TouchscreenHitbox ov81_02243688[];
-extern const TouchscreenHitbox ov81_022436A8[];
-extern const TouchscreenHitbox ov81_022436CC[];
-extern const TouchscreenHitbox ov81_022436F0[];
-extern const DpadMenuBox ov81_02243718[];
-extern const DpadMenuBox ov81_02243750[];
-extern const DpadMenuBox ov81_02243788[];
-extern const DpadMenuBox ov81_022437C8[];
-extern const DpadMenuBox ov81_02243808[];
+extern const BgTemplate gBattleFactoryAppBgTemplate_Main1;
+extern const BgTemplate gBattleFactoryAppBgTemplate_Main2;
+extern const BgTemplate gBattleFactoryAppBgTemplate_Sub1;
+extern const BgTemplate gBattleFactoryAppBgTemplate_Main3;
+extern const BgTemplate gBattleFactoryAppBgTemplate_Sub0;
+extern const BgTemplate gBattleFactoryAppBgTemplate_Sub2;
+extern const BgTemplate gBattleFactoryAppBgTemplate_Sub3;
+extern const GraphicsBanks gBattleFactoryAppGraphicsBanks;
+extern const u8 gBattleFactorySpriteResManSizes[4];
+extern const ObjCharTransferTemplate gBattleFactoryObjCharTransferTemplate;
+extern const WindowTemplate gBattleFactoryAppWindowTemplates[18];
+extern const GridCallbacks gBattleFactorySwapInGridCallbacks;
+extern const GridCallbacks gBattleFactorySwapOutGridCallbacks;
+extern const GridCallbacks gBattleFactoryRentalGridCallbacks;
+extern const TouchscreenHitbox gBattleFactorySwapOutGridHitboxes[];
+extern const TouchscreenHitbox gBattleFactoryLinkSwapOutGridHitboxes[];
+extern const TouchscreenHitbox gBattleFactorySwapInGridHitboxesB[];
+extern const TouchscreenHitbox gBattleFactorySwapInGridHitboxesA[];
+extern const TouchscreenHitbox gBattleFactoryRentalGridHitboxes[];
+extern const DpadMenuBox gBattleFactoryLinkSwapOutGridBoxes[];
+extern const DpadMenuBox gBattleFactorySwapOutGridBoxes[];
+extern const DpadMenuBox gBattleFactorySwapInGridBoxesA[];
+extern const DpadMenuBox gBattleFactorySwapInGridBoxesB[];
+extern const DpadMenuBox gBattleFactoryRentalGridBoxes[];
 
 // Frontier overlay (80) helpers
 int BattleFactory_GetPartySize(int frontierType);
@@ -1881,50 +1881,50 @@ void BattleFactoryApp_VBlankCallback(BattleFactoryApp *app) {
 }
 
 void BattleFactoryApp_SetGraphicsBanks(void) {
-    GraphicsBanks banks = ov81_0224356C;
+    GraphicsBanks banks = gBattleFactoryAppGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
 void BattleFactoryApp_InitBgLayers(BgConfig *bgConfig) {
     {
-        GraphicsModes modes = ov81_02243480;
+        GraphicsModes modes = gBattleFactoryAppGraphicsModes;
         SetBothScreensModesAndDisable(&modes);
     }
     {
-        BgTemplate template = ov81_022434A8;
+        BgTemplate template = gBattleFactoryAppBgTemplate_Main1;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &template, GF_BG_TYPE_TEXT);
     }
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_1, 0x20, 0, HEAP_ID_100);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
     {
-        BgTemplate template = ov81_022434C4;
+        BgTemplate template = gBattleFactoryAppBgTemplate_Main2;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &template, GF_BG_TYPE_TEXT);
     }
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
     {
-        BgTemplate template = ov81_022434FC;
+        BgTemplate template = gBattleFactoryAppBgTemplate_Main3;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &template, GF_BG_TYPE_TEXT);
     }
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
     {
-        BgTemplate template = ov81_02243518;
+        BgTemplate template = gBattleFactoryAppBgTemplate_Sub0;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &template, GF_BG_TYPE_TEXT);
     }
     BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 0x20, 0, HEAP_ID_100);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
     {
-        BgTemplate template = ov81_022434E0;
+        BgTemplate template = gBattleFactoryAppBgTemplate_Sub1;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &template, GF_BG_TYPE_TEXT);
     }
     BG_ClearCharDataRange(GF_BG_LYR_SUB_1, 0x20, 0, HEAP_ID_100);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
     {
-        BgTemplate template = ov81_02243534;
+        BgTemplate template = gBattleFactoryAppBgTemplate_Sub2;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &template, GF_BG_TYPE_TEXT);
     }
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_2);
     {
-        BgTemplate template = ov81_02243550;
+        BgTemplate template = gBattleFactoryAppBgTemplate_Sub3;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_3, &template, GF_BG_TYPE_TEXT);
     }
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_3);
@@ -2330,7 +2330,7 @@ void BattleFactoryApp_CreateSummaryArgs(BattleFactoryApp *app) {
     app->summaryArgs->natDexEnabled = SaveArray_IsNatDexEnabled(app->saveData);
     app->summaryArgs->unk2C = 0;
     app->summaryArgs->isFlag982Set = 0;
-    PokemonSummary_SetPages(app->summaryArgs, _02243458);
+    PokemonSummary_SetPages(app->summaryArgs, gBattleFactoryAppSummaryPages);
     PokemonSummaryArgs_SetPlayer(app->summaryArgs, Save_PlayerData_GetProfile(app->saveData));
 }
 
@@ -2511,16 +2511,16 @@ BattleFactoryBall *BattleFactoryApp_CreateBall(BattleFactoryApp *app, int index)
     u16 y;
 
     if (BattleFactoryApp_IsScreen(app, FACTORY_SCREEN_RENTAL) == TRUE) {
-        x = ov81_02243490[index * 2];
+        x = gBattleFactoryBallPositions_Rental[index * 2];
         y = ov81_02243492[index * 2];
     } else if (BattleFactory_IsMultiType(app->frontierType) == FALSE) {
-        x = ov81_02243464[index * 2];
+        x = gBattleFactoryBallPositions_Single[index * 2];
         y = ov81_02243466[index * 2];
     } else if (app->numBalls == 2) {
-        x = ov81_0224345C[index * 2];
+        x = gBattleFactoryBallPositions_Multi2[index * 2];
         y = ov81_0224345E[index * 2];
     } else {
-        x = ov81_02243470[index * 2];
+        x = gBattleFactoryBallPositions_Multi[index * 2];
         y = ov81_02243472[index * 2];
     }
     return BattleFactoryBall_Create(&app->spriteGfx, x, y, HEAP_ID_100);
@@ -3261,7 +3261,7 @@ void BattleFactorySpriteGfx_Init(BattleFactorySpriteGfx *gfx) {
     gfx->spriteList = G2dRenderer_Init(32, &gfx->renderer, HEAP_ID_100);
     G2dRenderer_SetSubSurfaceCoords(&gfx->renderer, 0, 2 << 20);
     for (i = 0; i < 4; i++) {
-        gfx->resMan[i] = Create2DGfxResObjMan(ov81_02243594[i], (GfGfxResType)i, HEAP_ID_100);
+        gfx->resMan[i] = Create2DGfxResObjMan(gBattleFactorySpriteResManSizes[i], (GfGfxResType)i, HEAP_ID_100);
     }
     gfx->resObj[1][0] = AddCharResObjFromNarc(gfx->resMan[0], NARC_a_1_8_4, 0x28, TRUE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_100);
     gfx->resObj[1][1] = AddPlttResObjFromNarc(gfx->resMan[1], NARC_a_1_8_4, 0x3E, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 4, HEAP_ID_100);
@@ -3341,7 +3341,7 @@ void BattleFactorySpriteGfx_Free(BattleFactorySpriteGfx *gfx) {
 }
 
 void BattleFactoryApp_InitObjTransfers(void) {
-    ObjCharTransferTemplate template = ov81_02243598;
+    ObjCharTransferTemplate template = gBattleFactoryObjCharTransferTemplate;
     ObjCharTransfer_InitEx(&template, GX_OBJVRAMMODE_CHAR_1D_64K, GX_OBJVRAMMODE_CHAR_1D_64K);
     ObjPlttTransfer_Init(8, HEAP_ID_100);
     ObjCharTransfer_ClearBuffers();
@@ -3595,7 +3595,7 @@ void BattleFactoryApp_AddWindows(BgConfig *bgConfig, Window *windows) {
     u8 i;
 
     for (i = 0; i < 18; i++) {
-        AddWindow(bgConfig, &windows[i], &ov81_022435A8[i]);
+        AddWindow(bgConfig, &windows[i], &gBattleFactoryAppWindowTemplates[i]);
         FillWindowPixelBuffer(&windows[i], 0);
     }
 }
@@ -3700,7 +3700,7 @@ void BattleFactory_GridNop(void) {
 
 #pragma force_active on
 GridInputHandler *BattleFactoryApp_CreateRentalGrid(BattleFactoryApp *app, int cursor) {
-    return GridInputHandler_Create(ov81_022436F0, ov81_02243808, &ov81_02243658, app, TRUE, (u8)cursor, HEAP_ID_100);
+    return GridInputHandler_Create(gBattleFactoryRentalGridHitboxes, gBattleFactoryRentalGridBoxes, &gBattleFactoryRentalGridCallbacks, app, TRUE, (u8)cursor, HEAP_ID_100);
 }
 
 void BattleFactory_SetRentalGridMenu(GridInputHandler *grid, int menuOpen) {
@@ -3724,11 +3724,11 @@ void BattleFactoryApp_OnRentalCursorMove(BattleFactoryApp *app, int target) {
 
 #pragma force_active on
 GridInputHandler *BattleFactoryApp_CreateSwapOutGrid(BattleFactoryApp *app, int cursor) {
-    return GridInputHandler_Create(ov81_02243668, ov81_02243750, &ov81_02243648, app, TRUE, (u8)cursor, HEAP_ID_100);
+    return GridInputHandler_Create(gBattleFactorySwapOutGridHitboxes, gBattleFactorySwapOutGridBoxes, &gBattleFactorySwapOutGridCallbacks, app, TRUE, (u8)cursor, HEAP_ID_100);
 }
 
 GridInputHandler *BattleFactoryApp_CreateLinkSwapOutGrid(BattleFactoryApp *app, int cursor) {
-    GridInputHandler *grid = GridInputHandler_Create(ov81_02243688, ov81_02243718, &ov81_02243648, app, TRUE, (u8)cursor, HEAP_ID_100);
+    GridInputHandler *grid = GridInputHandler_Create(gBattleFactoryLinkSwapOutGridHitboxes, gBattleFactoryLinkSwapOutGridBoxes, &gBattleFactorySwapOutGridCallbacks, app, TRUE, (u8)cursor, HEAP_ID_100);
     GridInputHandler_ClearEnabledFlag(grid, 2);
     return grid;
 }
@@ -3769,9 +3769,9 @@ GridInputHandler *BattleFactoryApp_RecreateSwapOutGrid(BattleFactoryApp *app, Gr
 GridInputHandler *BattleFactoryApp_CreateSwapInGrid(BattleFactoryApp *app, GridInputHandler *grid) {
     BattleFactory_FreeGrid(grid);
     if (BattleFactoryApp_IsLinkMode(app) == TRUE) {
-        return GridInputHandler_Create(ov81_022436CC, ov81_02243788, &ov81_02243638, app, TRUE, 0, HEAP_ID_100);
+        return GridInputHandler_Create(gBattleFactorySwapInGridHitboxesA, gBattleFactorySwapInGridBoxesA, &gBattleFactorySwapInGridCallbacks, app, TRUE, 0, HEAP_ID_100);
     }
-    return GridInputHandler_Create(ov81_022436A8, ov81_022437C8, &ov81_02243638, app, TRUE, 0, HEAP_ID_100);
+    return GridInputHandler_Create(gBattleFactorySwapInGridHitboxesB, gBattleFactorySwapInGridBoxesB, &gBattleFactorySwapInGridCallbacks, app, TRUE, 0, HEAP_ID_100);
 }
 
 void BattleFactory_SetSwapInGridMenu(GridInputHandler *grid, int menuOpen, int frontierType) {

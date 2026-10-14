@@ -3,7 +3,7 @@
 	.include "global.inc"
 	.public FrontierMapBgAnim_CreateTileAnim
 	.public FrontierMapBgAnim_TileTask
-	.public ov80_0223DB2C
+	.public gFrontierMapBgAnimScreens
 
 
     .text
@@ -15,5 +15,5 @@
 	.public FrontierMapBgAnim_PaletteTask
     .rodata
 
-ov80_0223DB2C: ; 0x0223DB2C
+gFrontierMapBgAnimScreens: ; 0x0223DB2C
 	.byte 0x14, 0x00, 0x15, 0x00

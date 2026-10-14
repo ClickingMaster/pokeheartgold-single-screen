@@ -91,7 +91,7 @@ typedef struct HatchEggApp {
     SpriteManager *spriteManager;   // 0x50
     SpriteSystem *spriteSystem;     // 0x54
     PokepicAnimManager *picManager;         // 0x58
-    u32 sceneType;                  // 0x5C: index into ov95_021E7810
+    u32 sceneType;                  // 0x5C: index into gHatchEggSceneFuncs
     u32 state;                      // 0x60
     s32 timer;                      // 0x64
     u32 subState;                   // 0x68
@@ -123,22 +123,22 @@ typedef struct HatchEggSpriteFiles {
 
 typedef BOOL (*HatchEggSceneFunc)(HatchEggApp *app);
 
-extern const GraphicsModes ov95_021E7538;
-extern const OamCharTransferParam ov95_021E7548;
-extern const SpriteResourceCountsListUnion ov95_021E755C;
-extern const OamManagerParam ov95_021E7574;
-extern const HatchEggSpriteFiles ov95_021E7594;
-extern const GraphicsBanks ov95_021E75B4;
-extern const s16 ov95_021E75DC[][10];
-extern const s16 ov95_021E762C[][10];
-extern const HatchEggBgTemplates ov95_021E767C;
-extern const f32 ov95_021E76D0[][10];
-extern const f32 ov95_021E7770[][10];
-extern const HatchEggSceneFunc ov95_021E7810[];
-extern const s16 ov95_021E7818[2][2];
-extern const TouchscreenHitbox ov95_021E7820[];
-extern const ManagedSpriteTemplate ov95_021E782C;
-extern const HatchEggBgTemplates ov95_021E7860;
+extern const GraphicsModes gHatchEggAppGraphicsModes;
+extern const OamCharTransferParam gHatchEggAppOamCharTransferParam;
+extern const SpriteResourceCountsListUnion gHatchEggAppSpriteResourceCounts;
+extern const OamManagerParam gHatchEggAppOamManagerParam;
+extern const HatchEggSpriteFiles gHatchEggSpriteFiles;
+extern const GraphicsBanks gHatchEggAppGraphicsBanks;
+extern const s16 gHatchEggShakeOffsetsX[][10];
+extern const s16 gHatchEggShakeOffsetsY[][10];
+extern const HatchEggBgTemplates gHatchEggBgTemplates;
+extern const f32 gHatchEggShakeScalesX[][10];
+extern const f32 gHatchEggShakeScalesY[][10];
+extern const HatchEggSceneFunc gHatchEggSceneFuncs[];
+extern const s16 gHatchEggYesNoCursorPositions[2][2];
+extern const TouchscreenHitbox gHatchEggYesNoHitboxes[];
+extern const ManagedSpriteTemplate gHatchEggYesNoCursorTemplate;
+extern const HatchEggBgTemplates gHatchEggYesNoBgTemplates;
 
 u32 GetUserFrameGfx2PaletteMember(u32 frame);
 void NNS_G2dSetupSoftwareSpriteCamera(void);
@@ -251,15 +251,15 @@ void HatchEggApp_InitBgs(BgConfig *bgConfig) {
     GraphicsModes modes;
     HatchEggBgTemplates templates;
     GfGfx_DisableEngineAPlanes();
-    banks = ov95_021E75B4;
+    banks = gHatchEggAppGraphicsBanks;
     GfGfx_SetBanks(&banks);
     MI_CpuClear32((void *)HW_BG_VRAM, 0x80000);
     MI_CpuClear32((void *)HW_DB_BG_VRAM, 0x20000);
     MI_CpuClear32((void *)HW_OBJ_VRAM, 0x40000);
     MI_CpuClear32((void *)HW_DB_OBJ_VRAM, 0x20000);
-    modes = ov95_021E7538;
+    modes = gHatchEggAppGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    templates = ov95_021E767C;
+    templates = gHatchEggBgTemplates;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &templates.templates[0], GF_BG_TYPE_TEXT);
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &templates.templates[1], GF_BG_TYPE_TEXT);
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &templates.templates[2], GF_BG_TYPE_TEXT);
@@ -426,7 +426,7 @@ void HatchEggParticles_Free(HatchEggParticles *particles) {
 }
 
 void HatchEggApp_LoadSpriteResources(HatchEggApp *app) {
-    HatchEggSpriteFiles eggFiles = ov95_021E7594;
+    HatchEggSpriteFiles eggFiles = gHatchEggSpriteFiles;
     SpriteSystem *spriteSystem = app->spriteSystem;
     SpriteManager *spriteManager = app->spriteManager;
     PaletteData *paletteData = app->paletteData;
@@ -478,8 +478,8 @@ void HatchEggApp_CreateSprites(HatchEggApp *app) {
 }
 #pragma force_active reset
 
-// Plays one frame of shake pattern `pattern` (tables ov95_021E75DC/762C: position offsets, 0xFF = end;
-// ov95_021E76D0/7770: affine scale, 0 = end). Returns FALSE when the pattern has ended.
+// Plays one frame of shake pattern `pattern` (tables gHatchEggShakeOffsetsX/762C: position offsets, 0xFF = end;
+// gHatchEggShakeScalesX/7770: affine scale, 0 = end). Returns FALSE when the pattern has ended.
 BOOL HatchEggApp_StepEggShake(HatchEggApp *app, int pattern) {
     int *shake = &app->shakeState;
     int finished;
@@ -493,10 +493,10 @@ BOOL HatchEggApp_StepEggShake(HatchEggApp *app, int pattern) {
             shake[1] = 0;
         } else {
             finished = 0;
-            x = ov95_021E75DC[pattern][shake[1]];
-            y = ov95_021E762C[pattern][shake[1]];
-            scaleX = ov95_021E76D0[pattern][shake[1]];
-            scaleY = ov95_021E7770[pattern][shake[1]];
+            x = gHatchEggShakeOffsetsX[pattern][shake[1]];
+            y = gHatchEggShakeOffsetsY[pattern][shake[1]];
+            scaleX = gHatchEggShakeScalesX[pattern][shake[1]];
+            scaleY = gHatchEggShakeScalesY[pattern][shake[1]];
             if (x == 0xFF) {
                 x = 0;
                 finished++;
@@ -552,10 +552,10 @@ void HatchEggApp_InitSpriteSystem(HatchEggAppFromBgConfig *app) {
     OamCharTransferParam oamTransferParam;
     SpriteResourceCountsListUnion resourceCounts;
     app->spriteSystem = SpriteSystem_Alloc(HEAP_ID_70);
-    oamManagerParam = ov95_021E7574;
-    oamTransferParam = ov95_021E7548;
+    oamManagerParam = gHatchEggAppOamManagerParam;
+    oamTransferParam = gHatchEggAppOamCharTransferParam;
     SpriteSystem_Init(app->spriteSystem, &oamManagerParam, &oamTransferParam, 32);
-    resourceCounts = ov95_021E755C;
+    resourceCounts = gHatchEggAppSpriteResourceCounts;
     app->spriteManager = SpriteManager_New(app->spriteSystem);
     GF_ASSERT(SpriteSystem_InitSprites(app->spriteSystem, app->spriteManager, 255));
     GF_ASSERT(SpriteSystem_InitManagerWithCapacities(app->spriteSystem, app->spriteManager, &resourceCounts));
@@ -597,7 +597,7 @@ void HatchEggApp_SetPokepicVanished(HatchEggApp *app, int vanished) {
 }
 
 BOOL HatchEggApp_RunScene(HatchEggApp *app) {
-    return ov95_021E7810[app->sceneType](app);
+    return gHatchEggSceneFuncs[app->sceneType](app);
 }
 
 BOOL HatchEggApp_RunEggScene(HatchEggApp *app) {
@@ -1226,7 +1226,7 @@ BOOL HatchEggApp_Exit(OverlayManager *man, int *state) {
 }
 
 void HatchEggYesNoMenu_InitBgs(BgConfig *bgConfig) {
-    HatchEggBgTemplates templates = ov95_021E7860;
+    HatchEggBgTemplates templates = gHatchEggYesNoBgTemplates;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &templates.templates[0], GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &templates.templates[1], GF_BG_TYPE_TEXT);
@@ -1368,7 +1368,7 @@ void HatchEggYesNoMenu_PrintButton(HatchEggYesNoMenu *menu, Window *window, u32 
 }
 
 void HatchEggYesNoMenu_CreateCursor(HatchEggYesNoMenu *menu, int charResId, int plttResId, int cellResId, int animResId) {
-    ManagedSpriteTemplate template = ov95_021E782C;
+    ManagedSpriteTemplate template = gHatchEggYesNoCursorTemplate;
     ManagedSprite *sprite;
     SpriteSystem *spriteSystem = menu->spriteSystem;
     SpriteManager *spriteManager = menu->spriteManager;
@@ -1409,12 +1409,12 @@ void HatchEggYesNoMenu_UpdateCursor(HatchEggYesNoMenu *menu) {
         GF_AssertFail();
         break;
     }
-    ManagedSprite_SetPositionXY(menu->cursor, ov95_021E7818[index][0], ov95_021E7818[index][1]);
+    ManagedSprite_SetPositionXY(menu->cursor, gHatchEggYesNoCursorPositions[index][0], gHatchEggYesNoCursorPositions[index][1]);
 }
 
 BOOL HatchEggYesNoMenu_HandleInput(HatchEggYesNoMenu *menu) {
     BOOL pressed = FALSE;
-    int hit = TouchscreenHitbox_FindRectAtTouchNew(ov95_021E7820);
+    int hit = TouchscreenHitbox_FindRectAtTouchNew(gHatchEggYesNoHitboxes);
     if (hit != -1) {
         PlaySE(SEQ_SE_DP_SELECT);
         switch (hit) {

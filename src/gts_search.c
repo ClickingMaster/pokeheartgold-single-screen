@@ -95,7 +95,7 @@ typedef struct GtsSearchCursorColumn {
 extern const GtsSearchCursorColumn sGtsSearchCursorX[];
 extern const GtsSearchCursorColumn sGtsSearchCursorY[];
 extern const GtsSearchCursorColumn sGtsSearchCursorAnims[];
-extern int ov70_0224590C[];
+extern int gGtsCountryCount[];
 
 // Not declared in a public header.
 u32 GtsSave_GetDepositDate(void *gtsSave);
@@ -863,7 +863,7 @@ int GtsSearch_OpenCountrySelector(GtsApp *app) {
 int GtsSearch_HandleCountrySelector(GtsApp *app) {
     int selection = GtsSelector_Main(app->selector);
     if (selection != -1) {
-        if (selection == -2 || selection == ov70_0224590C[0] + 1) {
+        if (selection == -2 || selection == gGtsCountryCount[0] + 1) {
             GtsSearch_SetBlendBrightness(0);
             ClearFrameAndWindow2(&app->waitingIconWindow, FALSE);
             app->state = GTS_SEARCH_STATE_START;

@@ -22,7 +22,7 @@
 typedef struct PokeathlonCourseCeremonyIntro {
     u32 msgId;      // msg 311 # (NPC team) or msg 309 # (player)
     u32 value : 24; // the number in the line
-    u32 cheer : 8;  // 0..12: pitch of the crowd's cheer (ov96_0221B088)
+    u32 cheer : 8;  // 0..12: pitch of the crowd's cheer (gPokeathlonCourseCeremonyCheerPitches)
 } PokeathlonCourseCeremonyIntro;
 
 // What the host sends for the opening (at course data copy area + 0x28).

@@ -24,24 +24,24 @@ void PokeathlonCourseObject_GetCollisionCircle(void *object, fx32 x, fx32 y, fx3
 void PokeathlonCourseSpritePoolSprite_Show(PokeathlonGoalRollSprite *sprite, BOOL shown, BOOL show);
 void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonGoalRollSprite *sprite, int anim);
 
-extern const VecFx32 ov96_0221D214;
-extern const VecFx32 ov96_0221D22C;
-extern const VecFx32 ov96_0221D244;
-extern const VecFx32 ov96_0221D25C;
-extern const VecFx32 ov96_0221D268;
-extern const VecFx32 ov96_0221D274;
-extern const VecFx32 ov96_0221D280;
-extern const WindowTemplate ov96_0221D360[];
-extern const s16 ov96_0221D438[];
+extern const VecFx32 gPokeathlonGoalRollNormalTopLeft;
+extern const VecFx32 gPokeathlonGoalRollNormalBottomRight;
+extern const VecFx32 gPokeathlonGoalRollNormalBottomLeft;
+extern const VecFx32 gPokeathlonGoalRollUp;
+extern const VecFx32 gPokeathlonGoalRollFrameLeft;
+extern const VecFx32 gPokeathlonGoalRollNormalTopRight;
+extern const VecFx32 gPokeathlonGoalRollFrameRight;
+extern const WindowTemplate gPokeathlonGoalRollNameWindowTemplates[];
+extern const s16 gPokeathlonGoalRollBallSpawnPoints[];
 extern const s16 ov96_0221D43A[];
-extern const Point2D ov96_0221D474[4][2]; // the goal line of each corner
-extern const VecFx32 ov96_0221D4B4[4][2];
-extern const u8 ov96_0221D514[][30];
-extern const u8 ov96_0221D5AA[][30];
-extern const u8 ov96_0221D640[];
+extern const Point2D gPokeathlonGoalRollGoalLines[4][2]; // the goal line of each corner
+extern const VecFx32 gPokeathlonGoalRollGoalPosts[4][2];
+extern const u8 gPokeathlonGoalRollBallSpeedsA[][30];
+extern const u8 gPokeathlonGoalRollBallSpeedsB[][30];
+extern const u8 gPokeathlonGoalRollKickSpeeds[];
 extern const u8 gPokeathlonGoalRollBounceOffsets[];
 
-extern const PokeathlonGoalRollWindowData ov96_0221D1F8;
+extern const PokeathlonGoalRollWindowData gPokeathlonGoalRollWindowData;
 
 #pragma force_active on
 
@@ -175,7 +175,7 @@ void PokeathlonGoalRoll_MoveMons(PokeathlonCourseData *course) {
             VEC_Add(&delta, &position, &position);
         }
         if (distance != 0) {
-            VecFx32 up = ov96_0221D25C;
+            VecFx32 up = gPokeathlonGoalRollUp;
             VecFx32 heading;
 
             heading.x = direction.y;
@@ -293,7 +293,7 @@ void PokeathlonGoalRoll_CollideBalls(PokeathlonCourseData *course) {
                             ball->speedRow = mon->kickRow;
                             ball->strength = mon->kickPower;
                             ball->kickLevel = mon->kickLevel;
-                            speed = ov96_0221D514[ball->speedRow][0];
+                            speed = gPokeathlonGoalRollBallSpeedsA[ball->speedRow][0];
                             mon->motion = GOAL_ROLL_MOTION_RECOIL;
                             mon->motionStep = normal;
                             mon->motionStep.x *= -1;
@@ -306,7 +306,7 @@ void PokeathlonGoalRoll_CollideBalls(PokeathlonCourseData *course) {
                         } else {
                             ball->speedTable = 1;
                             ball->speedRow = mon->kickRow;
-                            speed = ov96_0221D5AA[ball->speedRow][0];
+                            speed = gPokeathlonGoalRollBallSpeedsB[ball->speedRow][0];
                             ball->step = 1;
                             ball->steps = 30;
                         }
@@ -322,7 +322,7 @@ void PokeathlonGoalRoll_CollideBalls(PokeathlonCourseData *course) {
         }
         for (i = 0; i < 8; i++) {
             VecFx32 normal;
-            const VecFx32 *post = &ov96_0221D4B4[i % 4][i / 4];
+            const VecFx32 *post = &gPokeathlonGoalRollGoalPosts[i % 4][i / 4];
             if (PokeathlonGoalRoll_CirclesOverlap(post, 2 * FX32_ONE * 4, &ball->position, ballRadius)) {
                 VEC_Subtract(post, &ball->position, &normal);
                 VEC_Normalize(&normal, &normal);
@@ -408,7 +408,7 @@ void PokeathlonGoalRoll_MoveBalls(PokeathlonCourseData *course) {
             previous = ball->position;
             ball->position.x += ball->velocity.x;
             ball->position.y += ball->velocity.y;
-            if (speed >= ov96_0221D640[ball->kickLevel] << 12) {
+            if (speed >= gPokeathlonGoalRollKickSpeeds[ball->kickLevel] << 12) {
                 if (ball->speedTable == 2) {
                     ball->state = GOAL_ROLL_BALL_KICKED;
                 } else {
@@ -426,9 +426,9 @@ void PokeathlonGoalRoll_MoveBalls(PokeathlonCourseData *course) {
                 int next;
                 int step = ball->step;
                 if (ball->speedTable == 2) {
-                    next = ov96_0221D514[ball->speedRow][step];
+                    next = gPokeathlonGoalRollBallSpeedsA[ball->speedRow][step];
                 } else if (ball->speedTable == 1) {
-                    next = ov96_0221D5AA[ball->speedRow][step];
+                    next = gPokeathlonGoalRollBallSpeedsB[ball->speedRow][step];
                 } else {
                     GF_AssertFail();
                     next = 0;
@@ -553,8 +553,8 @@ void PokeathlonGoalRoll_BounceBallOff(PokeathlonGoalRollBall *ball, const Pokeat
     }
     VEC_Subtract(&ball->position, &other->position, &ball->direction);
     if (VEC_Mag(&ball->direction) == 0) {
-        frame.left = ov96_0221D268;
-        frame.right = ov96_0221D280;
+        frame.left = gPokeathlonGoalRollFrameLeft;
+        frame.right = gPokeathlonGoalRollFrameRight;
         if (frame.side == 0) {
             ball->direction = frame.left;
         } else {
@@ -584,7 +584,7 @@ void PokeathlonGoalRoll_CheckGoals(PokeathlonCourseData *course) {
             point.x = (s32)ball->position.x / 4096;
             point.y = (s32)ball->position.y / 4096;
             goal = PokeathlonGoalRoll_GetBallQuadrant(ball);
-            if (!(u8)Point2D_IsLeftOfLine(&ov96_0221D474[goal][0], &ov96_0221D474[goal][1], &point)) {
+            if (!(u8)Point2D_IsLeftOfLine(&gPokeathlonGoalRollGoalLines[goal][0], &gPokeathlonGoalRollGoalLines[goal][1], &point)) {
                 continue;
             }
             ball->state = GOAL_ROLL_BALL_SCORED;
@@ -786,9 +786,9 @@ void PokeathlonGoalRoll_InitMonStats(PokeathlonCourseData *course, PokeathlonGoa
 
 void PokeathlonGoalRoll_InitWindows(PokeathlonGoalRoll *goalRoll) {
     u32 i;
-    AddWindow(goalRoll->bgConfig, &goalRoll->scoreWindow, &ov96_0221D1F8.window);
+    AddWindow(goalRoll->bgConfig, &goalRoll->scoreWindow, &gPokeathlonGoalRollWindowData.window);
     for (i = 0; (s32)i < 4; i++) {
-        AddWindow(goalRoll->bgConfig, &goalRoll->nameWindows[i], &ov96_0221D360[i]);
+        AddWindow(goalRoll->bgConfig, &goalRoll->nameWindows[i], &gPokeathlonGoalRollNameWindowTemplates[i]);
     }
     BG_FillCharDataRange(goalRoll->bgConfig, GF_BG_LYR_MAIN_3, 0, 1, 0);
     BG_FillCharDataRange(goalRoll->bgConfig, GF_BG_LYR_MAIN_0, 0, 1, 0);
@@ -823,7 +823,7 @@ void PokeathlonGoalRoll_PrintTotalPoints(PokeathlonGoalRoll *goalRoll, u32 score
 // the corrected position in `out`. The field is 256 x 184 with its centre at (128, 112).
 int PokeathlonGoalRoll_CollideWithWalls(VecFx32 *position, VecFx32 *previous, s32 radius, int checkCorners, VecFx32 *out) {
     VecFx32 edgeStart = { 0 }, edgeEnd = { 0 }, hit, normal, cornerStart = { 0 }, cornerEnd = { 0 };
-    VecFx32 normalTopLeft = ov96_0221D214, normalTopRight = ov96_0221D274, normalBottomLeft = ov96_0221D244, normalBottomRight = ov96_0221D22C;
+    VecFx32 normalTopLeft = gPokeathlonGoalRollNormalTopLeft, normalTopRight = gPokeathlonGoalRollNormalTopRight, normalBottomLeft = gPokeathlonGoalRollNormalBottomLeft, normalBottomRight = gPokeathlonGoalRollNormalBottomRight;
     Point2D cornerA, cornerB, previousPoint, positionPoint, crossing;
     out->x = 0;
     out->y = 0;
@@ -1144,7 +1144,7 @@ void PokeathlonGoalRoll_PickBallSpawn(PokeathlonGoalRoll *goalRoll, PokeathlonGo
     }
     {
         u8 selected = candidates[(u8)(LCRandom() % count)];
-        ball->position.x = ov96_0221D438[selected * 2] << 12;
+        ball->position.x = gPokeathlonGoalRollBallSpawnPoints[selected * 2] << 12;
         ball->position.y = ov96_0221D43A[selected * 2] << 12;
         ball->spawnPoint = selected;
     }

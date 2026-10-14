@@ -10,8 +10,8 @@
 #include "bg_window.h"
 #include "sys_task_api.h"
 
-// Circle Push (Pokeathlon event 2; template ov96_0221A7F4 = {Init, Main, CalcResults, Exit},
-// states ov96_0221DB50 = {FadeIn, Play, End}). The twelve Pokemon of the four teams push each
+// Circle Push (Pokeathlon event 2; template gPokeathlonCirclePushEvent = {Init, Main, CalcResults, Exit},
+// states gPokeathlonCirclePushStates = {FadeIn, Play, End}). The twelve Pokemon of the four teams push each
 // other in a ring; dragging a Pokemon makes it run after the stylus. Pokemon in the bonus zones
 // score when the round's timer runs out (six rounds); Pokemon pushed out of the ring come back
 // at their start. The host moves every Pokemon (the players send their touches) and sends the
@@ -59,9 +59,9 @@ typedef struct PokeathlonCirclePushTouch {
     u8 unk8[4];   // 0x8
 } PokeathlonCirclePushTouch;
 
-// A bonus zone of a layout (ov96_0221DBC8[layout], up to 4).
+// A bonus zone of a layout (gPokeathlonCirclePushLayoutZones[layout], up to 4).
 typedef struct PokeathlonCirclePushZone {
-    u32 kind; // 0: none; ov96_0221DBB8[kind - 1] = radius, points
+    u32 kind; // 0: none; gPokeathlonCirclePushZoneKinds[kind - 1] = radius, points
     u16 x;
     u16 y;
 } PokeathlonCirclePushZone;

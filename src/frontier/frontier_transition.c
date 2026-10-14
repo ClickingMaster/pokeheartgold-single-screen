@@ -63,8 +63,8 @@ struct FrontierWipe {
     u8 active;
 };
 
-extern const u8 ov80_0223DBE0[2][6];
-extern const u8 ov80_0223DBEC[2][16];
+extern const u8 gFrontierWipeRows[2][6];
+extern const u8 gFrontierWipeColumns[2][16];
 
 void FrontierTransition_FlashTask(SysTask *task, void *data);
 void FrontierTransition_SetBrightness(u32 screen, s32 brightness);
@@ -305,19 +305,19 @@ BOOL FrontierWipe_UpdateHorizontal(FrontierWipe *wipe) {
         wipe->timer--;
         if (wipe->timer <= 0) {
             wipe->timer = wipe->delay;
-            x = ov80_0223DBEC[wipe->side][wipe->column] * 32;
+            x = gFrontierWipeColumns[wipe->side][wipe->column] * 32;
             x1 = x + 32;
             y = wipe->row * 16 + 8;
             FrontierWipeBox_Start(wipe->boxes[wipe->started], x, x1, y, y, wipe->duration, wipe->window, 32, 16, wipe->color);
-            x = ov80_0223DBEC[wipe->side ^ 1][wipe->column] * 32;
+            x = gFrontierWipeColumns[wipe->side ^ 1][wipe->column] * 32;
             x1 = x + 32;
             y = (5 - wipe->row) * 16 + 8;
             FrontierWipeBox_Start(wipe->boxes[wipe->started + 1], x, x1, y, y, wipe->duration, wipe->window, 32, 16, wipe->color);
-            x = ov80_0223DBEC[wipe->side][wipe->column] * 32;
+            x = gFrontierWipeColumns[wipe->side][wipe->column] * 32;
             x1 = x + 32;
             y = (wipe->row + 6) * 16 + 8;
             FrontierWipeBox_Start(wipe->boxes[wipe->started + 2], x, x1, y, y, wipe->duration, wipe->window, 32, 16, wipe->color);
-            x = ov80_0223DBEC[wipe->side ^ 1][wipe->column] * 32;
+            x = gFrontierWipeColumns[wipe->side ^ 1][wipe->column] * 32;
             x1 = x + 32;
             y = (11 - wipe->row) * 16 + 8;
             FrontierWipeBox_Start(wipe->boxes[wipe->started + 3], x, x1, y, y, wipe->duration, wipe->window, 32, 16, wipe->color);
@@ -356,16 +356,16 @@ BOOL FrontierWipe_UpdateVertical(FrontierWipe *wipe) {
         s32 y;
         wipe->timer = wipe->delay;
         x = wipe->column * 16 + 8;
-        y = ov80_0223DBE0[wipe->side][wipe->row] * 32;
+        y = gFrontierWipeRows[wipe->side][wipe->row] * 32;
         FrontierWipeBox_Start(wipe->boxes[wipe->started], x, x, y, y + 32, wipe->duration, wipe->window, 16, 32, wipe->color);
         x = (7 - wipe->column) * 16 + 8;
-        y = ov80_0223DBE0[wipe->side ^ 1][wipe->row] * 32;
+        y = gFrontierWipeRows[wipe->side ^ 1][wipe->row] * 32;
         FrontierWipeBox_Start(wipe->boxes[wipe->started + 1], x, x, y, y + 32, wipe->duration, wipe->window, 16, 32, wipe->color);
         x = (wipe->column + 8) * 16 + 8;
-        y = ov80_0223DBE0[wipe->side][wipe->row] * 32;
+        y = gFrontierWipeRows[wipe->side][wipe->row] * 32;
         FrontierWipeBox_Start(wipe->boxes[wipe->started + 2], x, x, y, y + 32, wipe->duration, wipe->window, 16, 32, wipe->color);
         x = (15 - wipe->column) * 16 + 8;
-        y = ov80_0223DBE0[wipe->side ^ 1][wipe->row] * 32;
+        y = gFrontierWipeRows[wipe->side ^ 1][wipe->row] * 32;
         FrontierWipeBox_Start(wipe->boxes[wipe->started + 3], x, x, y, y + 32, wipe->duration, wipe->window, 16, 32, wipe->color);
         wipe->started += 4;
         wipe->row++;

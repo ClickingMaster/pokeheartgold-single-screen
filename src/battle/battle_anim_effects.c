@@ -473,8 +473,8 @@ struct BattleAnimObjWindowBgWork {
     u8 timer;                    // 0x40
 }; // size: 0x44
 
-extern const u16 ov07_02236800[6];
-extern const u32 ov07_0223680C[];
+extern const u16 gBattleAnimDarkSpriteDrawFlags[6];
+extern const u32 gBattleAnimObjWindowBgGraphics[];
 extern const u32 ov07_02236810[];
 extern const u32 ov07_02236814[];
 
@@ -2287,7 +2287,7 @@ void BattleAnimTask_DarkSpriteJumpStartRise(BattleAnimDarkSpriteJumpWork *work) 
     BattleAnimUtil_InitScaleMotion(&work->scale, 10, 10, 1, 4);
     work->partState = 0;
     work->partTimer = 6;
-    ManagedSprite_SetDrawFlag(work->sprites[2], ov07_02236800[BattleAnimUtil_GetBattlerType(work->system, BattleAnimSystem_GetAttacker(work->system))]);
+    ManagedSprite_SetDrawFlag(work->sprites[2], gBattleAnimDarkSpriteDrawFlags[BattleAnimUtil_GetBattlerType(work->system, BattleAnimSystem_GetAttacker(work->system))]);
     ManagedSprite_SetDrawFlag(work->sprites[0], TRUE);
     BattleAnimUtil_GetScaleFloat(&work->stretch, &x, &y);
     if (work->flipRise == TRUE) {
@@ -2360,7 +2360,7 @@ void BattleAnimTask_DarkSpriteJumpStartDrop(BattleAnimDarkSpriteJumpWork *work) 
     BattleAnimUtil_UpdateLinearMotionSprite(&work->drop, work->sprites[1]);
     work->partState = 0;
     work->partTimer = 6;
-    ManagedSprite_SetDrawFlag(work->sprites[3], ov07_02236800[BattleAnimUtil_GetBattlerType(work->system, BattleAnimSystem_GetDefender(work->system))]);
+    ManagedSprite_SetDrawFlag(work->sprites[3], gBattleAnimDarkSpriteDrawFlags[BattleAnimUtil_GetBattlerType(work->system, BattleAnimSystem_GetDefender(work->system))]);
     ManagedSprite_SetDrawFlag(work->sprites[1], TRUE);
     BattleAnimTask_DarkSpriteJumpDarkenSprite(work, work->sprites[1]);
 }
@@ -3613,7 +3613,7 @@ void BattleAnimObjWindowBg_SetBlend(BattleAnimObjWindowBgParams *params, s16 eva
 void BattleAnimObjWindowBg_LoadGraphics(BattleAnimObjWindowBgWork *work, int bgLayer) {
     enum HeapID heapId = BattleAnimSystem_GetHeapID(work->common.system);
     SetBgPriority((u8)bgLayer, (u8)BattleAnimSystem_GetBgPriority(work->common.system, 3));
-    GfGfxLoader_LoadCharData(work->params.narcId, ov07_0223680C[work->params.graphic * 4], work->common.bgConfig, (GFBgLayer)bgLayer, 0, 0, TRUE, heapId);
+    GfGfxLoader_LoadCharData(work->params.narcId, gBattleAnimObjWindowBgGraphics[work->params.graphic * 4], work->common.bgConfig, (GFBgLayer)bgLayer, 0, 0, TRUE, heapId);
     PaletteData_LoadNarc(work->common.paletteData, work->params.narcId, ov07_02236810[work->params.graphic * 4], heapId, PLTTBUF_MAIN_BG, 32, 128);
     BgClearTilemapBufferAndCommit(work->common.bgConfig, (u8)bgLayer);
     GfGfxLoader_LoadScrnData(work->params.narcId, ov07_02236814[work->params.graphic * 4], work->common.bgConfig, (GFBgLayer)bgLayer, 0, 0, TRUE, heapId);

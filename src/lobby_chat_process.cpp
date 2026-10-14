@@ -65,12 +65,12 @@ struct Tree {
 extern "C" It LobbyTimerMap_Erase(Tree *t, It pos);
 
 struct Mgr {
-    void *unk0;
+    void *connection;
     int state;
     u8 pad8[0x54 - 0x8];
     u32 unk54;
-    u32 unk58;
-    int unk5C;
+    u32 lastError;
+    int connectedFrames;
     u8 pad60[0x9C - 0x60];
     Tree tree;
 };
@@ -96,7 +96,7 @@ static inline bool Tick(Node *n, const s64 &now) {
 }
 
 static inline void SetError(Mgr *m, u32 code) {
-    m->unk58 = code;
+    m->lastError = code;
     m->state = 5;
 }
 
@@ -108,8 +108,8 @@ static inline void UpdateState(Mgr *m) {
     case 4:
         break;
     case 2:
-        if (m->unk5C++ == 60) {
-            m->unk5C = 0;
+        if (m->connectedFrames++ == 60) {
+            m->connectedFrames = 0;
             if (m->state != 5) {
                 m->state = 3;
             }
@@ -146,7 +146,7 @@ extern "C" int LobbyChat_Process(void) {
     if (g != NULL && g->state == 5) {
         return 5;
     }
-    void *p = g->unk0;
+    void *p = g->connection;
     if (p != NULL) {
         chatThink(p);
     }

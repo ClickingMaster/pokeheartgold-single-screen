@@ -33,7 +33,7 @@ void PokeathlonCourseObject_CenterToGround(void *object, s32 x, s32 y, s32 *outX
 void PokeathlonCourseObjects_PauseAnims(void *monObjects, int paused);
 void PokeathlonEvent_CalcPoints(void *gfx, int event);
 
-extern const GraphicsBanks ov96_0221D774;
+extern const GraphicsBanks gPokeathlonRingDropGraphicsBanks;
 
 void PokeathlonScreenShake_Task(SysTask *task, PokeathlonScreenShake *shake);
 
@@ -395,7 +395,7 @@ int PokeathlonRingDrop_GetDirection(const VecFx32 *vec) {
 }
 
 void PokeathlonRingDrop_SetGfxBanks(void) {
-    GraphicsBanks banks = ov96_0221D774;
+    GraphicsBanks banks = gPokeathlonRingDropGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 

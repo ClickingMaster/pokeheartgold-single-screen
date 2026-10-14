@@ -177,27 +177,27 @@ typedef struct SafariDecorationObjectGroup {
     const u8 *objects;
 } SafariDecorationObjectGroup;
 
-extern const CameraAngle ov108_021EA9C4;
-extern const VecFx32 ov108_021EA9D8;
-extern const SafariDecorationCameraPos ov108_021EA9E4[];
-extern const u32 ov108_021EAAA4[];
-extern const ResdatIdList ov108_021EAAB0;
-extern const GraphicsModes ov108_021EAAC0;
-extern const OamCharTransferParam ov108_021EAAD0;
-extern const BgTemplate ov108_021EAAE4;
-extern const BgTemplate ov108_021EAB00;
-extern const BgTemplate ov108_021EAB1C;
-extern const BgTemplate ov108_021EAB38;
-extern const BgTemplate ov108_021EAB54;
-extern const BgTemplate ov108_021EAB70;
-extern const BgTemplate ov108_021EAB8C;
-extern const OamManagerParam ov108_021EABA8;
-extern const GraphicsBanks ov108_021EABC8;
-extern const TouchscreenHitbox ov108_021EABF0[];
-extern const WindowTemplate ov108_021EAC18[];
-extern const UnmanagedSpriteTemplate ov108_021EAC48[];
-extern const SafariDecorationObjectGroup ov108_021EAD08[];
-extern const u8 ov108_021EAD28[][4];
+extern const CameraAngle gSafariDecorationCameraAngle;
+extern const VecFx32 gSafariDecorationCameraOffset;
+extern const SafariDecorationCameraPos gSafariDecorationObjectCameraPositions[];
+extern const u32 gSafariDecorationBackButtonColors[];
+extern const ResdatIdList gSafariDecorationSpriteResources;
+extern const GraphicsModes gSafariDecorationGraphicsModes;
+extern const OamCharTransferParam gSafariDecorationOamCharTransferParam;
+extern const BgTemplate gSafariDecorationBgTemplate_Sub1;
+extern const BgTemplate gSafariDecorationBgTemplate_Sub2;
+extern const BgTemplate gSafariDecorationBgTemplate_Main2;
+extern const BgTemplate gSafariDecorationBgTemplate_Main3;
+extern const BgTemplate gSafariDecorationBgTemplate_Main1;
+extern const BgTemplate gSafariDecorationBgTemplate_Sub3;
+extern const BgTemplate gSafariDecorationBgTemplate_Sub0;
+extern const OamManagerParam gSafariDecorationOamManagerParam;
+extern const GraphicsBanks gSafariDecorationGraphicsBanks;
+extern const TouchscreenHitbox gSafariDecorationListHitboxes[];
+extern const WindowTemplate gSafariDecorationWindowTemplates[];
+extern const UnmanagedSpriteTemplate gSafariDecorationSpriteTemplates[];
+extern const SafariDecorationObjectGroup gSafariDecorationObjectGroups[];
+extern const u8 gSafariDecorationTrainerGroups[][4];
 
 void SafariDecoration_InitFromArgs(SafariDecoration *decor, SafariDecorationArgsView *args);
 void SafariDecoration_SaveResults(SafariDecoration *decor);
@@ -623,7 +623,7 @@ void SafariDecorationModelView_LoadObject(SafariDecorationModelView *view, int o
             model->numAnims++;
         }
     }
-    pos = &ov108_021EA9E4[objectId];
+    pos = &gSafariDecorationObjectCameraPositions[objectId];
     view->target.x = SafariDecoration_RoundS16ToFx32(pos->x);
     view->target.y = SafariDecoration_RoundS16ToFx32(pos->y);
     view->target.z = SafariDecoration_RoundS16ToFx32(pos->z);
@@ -706,10 +706,10 @@ void SafariDecorationModelView_InitCamera(SafariDecorationModelView *view, enum 
     view->target.x = 0;
     view->target.y = 0;
     view->target.z = 0;
-    Camera_Init_FromTargetDistanceAndAngle(&view->target, 0x15B000, &ov108_021EA9C4, 0x5C1, 0, TRUE, view->camera);
+    Camera_Init_FromTargetDistanceAndAngle(&view->target, 0x15B000, &gSafariDecorationCameraAngle, 0x5C1, 0, TRUE, view->camera);
     Camera_SetStaticPtr(view->camera);
     Camera_SetPerspectiveClippingPlane(0x64000, 0x4B0000, view->camera);
-    Camera_OffsetLookAtPosAndTarget(&ov108_021EA9D8, view->camera);
+    Camera_OffsetLookAtPosAndTarget(&gSafariDecorationCameraOffset, view->camera);
 }
 
 BOOL SafariDecoration_Setup(SafariDecoration *decor) {
@@ -945,7 +945,7 @@ int SafariDecoration_HandleListButtons(SafariDecoration *decor) {
 #pragma force_active reset
 
 int SafariDecoration_HandleListTouch(SafariDecoration *decor, u32 *touched) {
-    int hit = TouchscreenHitbox_FindRectAtTouchNew(ov108_021EABF0);
+    int hit = TouchscreenHitbox_FindRectAtTouchNew(gSafariDecorationListHitboxes);
 
     if (hit == -1) {
         *touched = FALSE;
@@ -999,7 +999,7 @@ void SafariDecoration_VBlankCB(void *cbArg) {
 }
 
 void SafariDecoration_SetGfxBanks(void) {
-    GraphicsBanks banks = ov108_021EABC8;
+    GraphicsBanks banks = gSafariDecorationGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
@@ -1017,27 +1017,27 @@ void SafariDecoration_InitBgLayers(SafariDecoration *decor) {
     SafariDecoration_SetGfxBanks();
     reg_GX_POWCNT |= REG_GX_POWCNT_DSEL_MASK;
     decor->bgConfig = BgConfig_Alloc(decor->heapId);
-    modes = ov108_021EAAC0;
+    modes = gSafariDecorationGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    main1 = ov108_021EAB54;
+    main1 = gSafariDecorationBgTemplate_Main1;
     InitBgFromTemplate(decor->bgConfig, GF_BG_LYR_MAIN_1, &main1, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(decor->bgConfig, GF_BG_LYR_MAIN_1);
-    main2 = ov108_021EAB1C;
+    main2 = gSafariDecorationBgTemplate_Main2;
     InitBgFromTemplate(decor->bgConfig, GF_BG_LYR_MAIN_2, &main2, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(decor->bgConfig, GF_BG_LYR_MAIN_2);
-    main3 = ov108_021EAB38;
+    main3 = gSafariDecorationBgTemplate_Main3;
     InitBgFromTemplate(decor->bgConfig, GF_BG_LYR_MAIN_3, &main3, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(decor->bgConfig, GF_BG_LYR_MAIN_3);
-    sub0 = ov108_021EAB8C;
+    sub0 = gSafariDecorationBgTemplate_Sub0;
     InitBgFromTemplate(decor->bgConfig, GF_BG_LYR_SUB_0, &sub0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(decor->bgConfig, GF_BG_LYR_SUB_0);
-    sub1 = ov108_021EAAE4;
+    sub1 = gSafariDecorationBgTemplate_Sub1;
     InitBgFromTemplate(decor->bgConfig, GF_BG_LYR_SUB_1, &sub1, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(decor->bgConfig, GF_BG_LYR_SUB_1);
-    sub2 = ov108_021EAB00;
+    sub2 = gSafariDecorationBgTemplate_Sub2;
     InitBgFromTemplate(decor->bgConfig, GF_BG_LYR_SUB_2, &sub2, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(decor->bgConfig, GF_BG_LYR_SUB_2);
-    sub3 = ov108_021EAB70;
+    sub3 = gSafariDecorationBgTemplate_Sub3;
     InitBgFromTemplate(decor->bgConfig, GF_BG_LYR_SUB_3, &sub3, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(decor->bgConfig, GF_BG_LYR_SUB_3);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_3, 32, 0, decor->heapId);
@@ -1135,7 +1135,7 @@ void SafariDecoration_AddWindows(SafariDecoration *decor) {
     u16 baseTile;
 
     for (i = 0; i <= 5; i++) {
-        AddWindow(decor->bgConfig, &decor->windows[i], &ov108_021EAC18[i]);
+        AddWindow(decor->bgConfig, &decor->windows[i], &gSafariDecorationWindowTemplates[i]);
         FillWindowPixelBuffer(&decor->windows[i], 0);
     }
     baseTile = 0x2E2;
@@ -1160,10 +1160,10 @@ void SafariDecoration_RemoveWindows(SafariDecoration *decor) {
 void SafariDecoration_InitSprites(SafariDecoration *decor) {
     GF_CreateVramTransferManager(32, decor->heapId);
     decor->spriteSystem = SpriteSystem_Alloc(decor->heapId);
-    SpriteSystem_Init(decor->spriteSystem, &ov108_021EABA8, &ov108_021EAAD0, 1);
+    SpriteSystem_Init(decor->spriteSystem, &gSafariDecorationOamManagerParam, &gSafariDecorationOamCharTransferParam, 1);
     decor->spriteManager = SpriteManager_New(decor->spriteSystem);
     SpriteSystem_InitSprites(decor->spriteSystem, decor->spriteManager, 4);
-    SpriteSystem_LoadResourceDataFromFileIdListEx(decor->spriteSystem, decor->spriteManager, &ov108_021EAAB0, 0, 0);
+    SpriteSystem_LoadResourceDataFromFileIdListEx(decor->spriteSystem, decor->spriteManager, &gSafariDecorationSpriteResources, 0, 0);
     thunk_ClearMainOAM(decor->heapId);
     thunk_ClearSubOAM(decor->heapId);
 }
@@ -1179,7 +1179,7 @@ void SafariDecoration_FreeSprites(SafariDecoration *decor) {
 }
 
 void SafariDecoration_CreateSprites(SafariDecoration *decor) {
-    const UnmanagedSpriteTemplate *template = ov108_021EAC48;
+    const UnmanagedSpriteTemplate *template = gSafariDecorationSpriteTemplates;
     int i;
 
     for (i = 0; i < 4; i++) {
@@ -1205,7 +1205,7 @@ void SafariDecoration_SetBackButtonState(SafariDecoration *decor, int state) {
     Sprite_ResetAnimCtrlState(decor->sprites[1]);
     FillWindowPixelBuffer(&decor->windows[2], 0);
     width = FontID_String_GetWidth(4, decor->backText, 0);
-    AddTextPrinterParameterizedWithColor(&decor->windows[2], 4, decor->backText, (u32)(48 - width) / 2, 4, TEXT_SPEED_NOTRANSFER, ov108_021EAAA4[state], NULL);
+    AddTextPrinterParameterizedWithColor(&decor->windows[2], 4, decor->backText, (u32)(48 - width) / 2, 4, TEXT_SPEED_NOTRANSFER, gSafariDecorationBackButtonColors[state], NULL);
     ScheduleWindowCopyToVram(&decor->windows[2]);
 }
 
@@ -1423,10 +1423,10 @@ SafariDecorationObject *SafariDecoration_CreateObjectList(u32 trainerId, int unl
     int i;
     int j;
     SafariDecorationObject *objects;
-    const u8 *groups = ov108_021EAD28[trainerId % 10];
+    const u8 *groups = gSafariDecorationTrainerGroups[trainerId % 10];
 
     for (i = 0; i < unlockLevel; i++) {
-        const SafariDecorationObjectGroup *group = &ov108_021EAD08[groups[i]];
+        const SafariDecorationObjectGroup *group = &gSafariDecorationObjectGroups[groups[i]];
         for (j = 0; j < group->count; j++) {
             mask |= 1 << group->objects[j];
             count++;

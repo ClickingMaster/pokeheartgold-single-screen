@@ -6,12 +6,12 @@
     .data
 
 gBattleArcadeEventItemLists: ; 0x0223DCA0
-	.word ov80_0223BEA8
-	.word ov80_0223BF32
-	.word ov80_0223BED8
-	.word ov80_0223BEEC
-	.word ov80_0223BF18
-	.word ov80_0223BF02
+	.word gBattleArcadeBerries_Rank0
+	.word gBattleArcadeBerries_Rank3
+	.word gBattleArcadeBerries_Rank6
+	.word gBattleArcadeItems_Rank0
+	.word gBattleArcadeItems_Rank3
+	.word gBattleArcadeItems_Rank6
 
 gBattleArcadeEventFuncs: ; 0x0223DCB8
 	.word BattleArcade_Event_LowerHp

@@ -115,28 +115,28 @@ BOOL EncounterEffect_UpdateParticles(void);
 BOOL EncounterEffect_AreParticlesDone(void);
 void EncounterEffect_FreeParticles(void);
 
-extern const GymLeaderIntroParams _02260374;
-extern const EliteFourIntroParams ov115_02260388;
-extern const EliteFourIntroParams ov115_02260390;
-extern const EliteFourIntroParams ov115_02260398;
-extern const EliteFourIntroParams ov115_022603A0;
-extern const EliteFourIntroParams ov115_022603A8;
-extern const GymLeaderIntroParams ov115_022603B0;
-extern const GymLeaderIntroParams ov115_022603C4;
-extern const GymLeaderIntroParams ov115_022603D8;
-extern const GymLeaderIntroParams ov115_022603EC;
-extern const GymLeaderIntroParams ov115_02260400;
-extern const GymLeaderIntroParams ov115_02260414;
-extern const GymLeaderIntroParams ov115_02260428;
-extern const GymLeaderIntroParams ov115_0226043C;
-extern const GymLeaderIntroParams ov115_02260450;
-extern const GymLeaderIntroParams ov115_02260464;
-extern const GymLeaderIntroParams ov115_02260478;
-extern const GymLeaderIntroParams ov115_0226048C;
-extern const GymLeaderIntroParams ov115_022604A0;
-extern const GymLeaderIntroParams ov115_022604B4;
-extern const GymLeaderIntroParams ov115_022604C8;
-extern const GymLeaderIntroParams ov115_022604DC;
+extern const GymLeaderIntroParams gEncounterRivalIntroParams;
+extern const EliteFourIntroParams gEncounterEliteFourWillIntroParams;
+extern const EliteFourIntroParams gEncounterEliteFourKogaIntroParams;
+extern const EliteFourIntroParams gEncounterEliteFourBrunoIntroParams;
+extern const EliteFourIntroParams gEncounterEliteFourKarenIntroParams;
+extern const EliteFourIntroParams gEncounterChampionIntroParams;
+extern const GymLeaderIntroParams gEncounterLeaderFalknerIntroParams;
+extern const GymLeaderIntroParams gEncounterLeaderBugsyIntroParams;
+extern const GymLeaderIntroParams gEncounterLeaderWhitneyIntroParams;
+extern const GymLeaderIntroParams gEncounterLeaderMortyIntroParams;
+extern const GymLeaderIntroParams gEncounterLeaderJasmineIntroParams;
+extern const GymLeaderIntroParams gEncounterLeaderChuckIntroParams;
+extern const GymLeaderIntroParams gEncounterLeaderPryceIntroParams;
+extern const GymLeaderIntroParams gEncounterLeaderClairIntroParams;
+extern const GymLeaderIntroParams gEncounterLeaderBrockIntroParams;
+extern const GymLeaderIntroParams gEncounterLeaderMistyIntroParams;
+extern const GymLeaderIntroParams gEncounterLeaderLtSurgeIntroParams;
+extern const GymLeaderIntroParams gEncounterLeaderErikaIntroParams;
+extern const GymLeaderIntroParams gEncounterLeaderJanineIntroParams;
+extern const GymLeaderIntroParams gEncounterLeaderSabrinaIntroParams;
+extern const GymLeaderIntroParams gEncounterLeaderBlaineIntroParams;
+extern const GymLeaderIntroParams gEncounterLeaderBlueIntroParams;
 
 void ScaleSprites_Init(ScaleSprites *scaleSprites, EncounterEffectSpriteManager *spriteManager, EncounterEffectSpriteResources *resources, fx32 x, fx32 y, enum HeapID heapID) {
     int i;
@@ -383,103 +383,103 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
 #pragma force_active reset
 
 void EncounterEffect_LeaderFalkner(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_022603B0) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderFalknerIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderBugsy(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_022603C4) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderBugsyIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderWhitney(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_022603D8) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderWhitneyIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderMorty(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_022603EC) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderMortyIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderJasmine(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_02260400) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderJasmineIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderChuck(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_02260414) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderChuckIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderPryce(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_02260428) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderPryceIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderClair(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_0226043C) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderClairIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderBrock(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_02260450) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderBrockIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderMisty(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_02260464) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderMistyIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderLtSurge(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_02260478) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderLtSurgeIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderErika(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_0226048C) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderErikaIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderJanine(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_022604A0) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderJanineIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderSabrina(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_022604B4) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderSabrinaIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderBlaine(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_022604C8) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderBlaineIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderBlue(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &ov115_022604DC) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderBlueIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_Rival(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &_02260374) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterRivalIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
@@ -776,31 +776,31 @@ void LeadersEffect_LoadBlendedSpritePalette(Sprite *sprite, enum HeapID heapID, 
 }
 
 void EncounterEffect_EliteFourWill(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &ov115_02260388) == TRUE) {
+    if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &gEncounterEliteFourWillIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_EliteFourKoga(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &ov115_02260390) == TRUE) {
+    if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &gEncounterEliteFourKogaIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_EliteFourBruno(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &ov115_02260398) == TRUE) {
+    if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &gEncounterEliteFourBrunoIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_EliteFourKaren(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &ov115_022603A0) == TRUE) {
+    if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &gEncounterEliteFourKarenIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_Champion(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &ov115_022603A8) == TRUE) {
+    if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &gEncounterChampionIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }

@@ -35,7 +35,7 @@ extern const WindowTemplate ov96_0221C028[5];
 extern const PokeathlonCirclePushPicKeys ov96_0221C01C;
 extern const VecFx32 ov96_0221C050[4];
 extern const VecFx32 ov96_0221C080[4];
-extern const u32 ov96_0221DC04[3];
+extern const u32 gPokeathlonCirclePushDisplayIdleAnims[3];
 
 #pragma force_active on
 
@@ -468,7 +468,7 @@ void PokeathlonCirclePushDisplayAnim_StartZoom(PokeathlonCirclePushDisplayAnim *
 
 void PokeathlonCirclePushDisplayAnim_StartIdle(PokeathlonCirclePushDisplayAnim *anim, BgConfig *bgConfig) {
     PokeathlonCirclePushDisplayAnim_Stop(anim);
-    if (ov96_0221DC04[anim->idleCount] == CIRCLE_PUSH_DISPLAY_MATCHUP) {
+    if (gPokeathlonCirclePushDisplayIdleAnims[anim->idleCount] == CIRCLE_PUSH_DISPLAY_MATCHUP) {
         PokeathlonCirclePushDisplayAnim_StartMatchup(anim, bgConfig);
     } else {
         PokeathlonCirclePushDisplayAnim_StartZoom(anim, bgConfig);

@@ -180,8 +180,8 @@ extern const TouchscreenHitbox sGtsSelectorGenderHitboxes[];
 extern const TouchscreenHitbox sGtsSelectorCountryListHitboxes[];
 extern const TouchscreenHitbox sGtsSelectorLetterHitboxes[];
 // The first letter of each letter group.
-extern const int ov70_02245E84[];
-extern const GtsSelectorLetterGroup ov70_02245F58[];
+extern const int gGtsSelectorGroupStarts[];
+extern const GtsSelectorLetterGroup gGtsSelectorLetterGroups[];
 // The same table read from its second word: ov70_02245F5C[group][0] is the letter count of the group.
 extern const int ov70_02245F5C[][2];
 // The message of each letter, A .. Z.
@@ -668,7 +668,7 @@ int GtsSelector_HandleLetterInput(GtsSelector *selector, const u8 *enabled) {
             return button;
         }
         // enabled[first letter + button], indexed the other way round.
-        if (button != -2 && enabled && !ov70_02245E84[selector->group][enabled + button]) {
+        if (button != -2 && enabled && !gGtsSelectorGroupStarts[selector->group][enabled + button]) {
             goto none;
         }
         PlaySE(SEQ_SE_DP_SELECT);
@@ -679,7 +679,7 @@ int GtsSelector_HandleLetterInput(GtsSelector *selector, const u8 *enabled) {
             return button;
         }
         // enabled[first letter + button], indexed the other way round.
-        if (button != -2 && enabled && !ov70_02245E84[selector->group][enabled + button]) {
+        if (button != -2 && enabled && !gGtsSelectorGroupStarts[selector->group][enabled + button]) {
             goto none;
         }
         PlaySE(SEQ_SE_DP_SELECT);
@@ -1398,16 +1398,16 @@ int GtsSelector_OpenSpeciesLetters(GtsSelector *selector) {
     i = 1;
     if (i <= ov70_02245F5C[selector->group][0]) {
         do {
-            if (GtsSelector_CountSeenSpeciesOfLetter(selector, ov70_02245E84[selector->group] + i - 1) > 0) {
+            if (GtsSelector_CountSeenSpeciesOfLetter(selector, gGtsSelectorGroupStarts[selector->group] + i - 1) > 0) {
                 color = MAKE_TEXT_COLOR(15, 14, 2);
-                selector->enabled[ov70_02245E84[selector->group] + i - 1] = TRUE;
+                selector->enabled[gGtsSelectorGroupStarts[selector->group] + i - 1] = TRUE;
             } else {
                 color = MAKE_TEXT_COLOR(8, 9, 2);
-                selector->enabled[ov70_02245E84[selector->group] + i - 1] = FALSE;
+                selector->enabled[gGtsSelectorGroupStarts[selector->group] + i - 1] = FALSE;
             }
-            GtsSelector_PrintMessage(selector->cellManager, selector->gtsMsgData, &selector->windows[i], sGtsSelectorLetterMsgs[ov70_02245F58[selector->group].first + i - 1], 5, color);
+            GtsSelector_PrintMessage(selector->cellManager, selector->gtsMsgData, &selector->windows[i], sGtsSelectorLetterMsgs[gGtsSelectorLetterGroups[selector->group].first + i - 1], 5, color);
             i++;
-        } while (i <= ov70_02245F58[selector->group].count);
+        } while (i <= gGtsSelectorLetterGroups[selector->group].count);
     }
     GtsSelector_PrintButtonLabel(selector->cellManager, selector->gtsMsgData, &selector->windows[14], 68);
     BgCellManager_DrawCellAt(selector->cellManager, 0, 16, 0);
@@ -1549,7 +1549,7 @@ int GtsSelector_OpenSpeciesList(GtsSelector *selector) {
     BgCellManager_LoadCellTilemap(selector->cellManager, 0, NARC_a_1_0_0, 35, 1);
     BgCellManager_GetCellTilemap(selector->cellManager, 0);
     GtsSelector_AddWindows(selector, GTS_SELECTOR_PAGE_SPECIES_LIST);
-    value = selector->letter + ov70_02245E84[selector->group];
+    value = selector->letter + gGtsSelectorGroupStarts[selector->group];
     selector->count = GtsSelector_CreateSpeciesListItems(&selector->listItems, selector->speciesNames, selector->gtsMsgData, selector->johtoDexFlags, value, selector->pokedex);
     selector->page = 0;
     GtsSelector_PrintListPage(selector, 0, selector->count);
@@ -1721,14 +1721,14 @@ int GtsSelector_OpenCountryLetters(GtsSelector *selector) {
     offset = sizeof(Window);
     do {
         int color;
-        if (GtsSelector_CountCountriesOfLetter(selector, ov70_02245E84[selector->group] + i - 1) > 0) {
+        if (GtsSelector_CountCountriesOfLetter(selector, gGtsSelectorGroupStarts[selector->group] + i - 1) > 0) {
             color = MAKE_TEXT_COLOR(15, 14, 2);
-            selector->enabled[ov70_02245E84[selector->group] + i - 1] = TRUE;
+            selector->enabled[gGtsSelectorGroupStarts[selector->group] + i - 1] = TRUE;
         } else {
             color = MAKE_TEXT_COLOR(8, 9, 2);
-            selector->enabled[ov70_02245E84[selector->group] + i - 1] = FALSE;
+            selector->enabled[gGtsSelectorGroupStarts[selector->group] + i - 1] = FALSE;
         }
-        GtsSelector_PrintMessage(selector->cellManager, selector->gtsMsgData, (Window *)((u8 *)selector->windows + offset), sGtsSelectorLetterMsgs[ov70_02245F58[selector->group].first + i - 1], 5, color);
+        GtsSelector_PrintMessage(selector->cellManager, selector->gtsMsgData, (Window *)((u8 *)selector->windows + offset), sGtsSelectorLetterMsgs[gGtsSelectorLetterGroups[selector->group].first + i - 1], 5, color);
         i++;
         offset += sizeof(Window);
     } while (i < 4);
@@ -1807,7 +1807,7 @@ int GtsSelector_OpenCountryList(GtsSelector *selector) {
     BgCellManager_LoadCellTilemap(selector->cellManager, 0, NARC_a_1_0_0, 30, 1);
     BgCellManager_GetCellTilemap(selector->cellManager, 0);
     GtsSelector_AddWindows(selector, GTS_SELECTOR_PAGE_COUNTRY_LIST);
-    selector->count = Gts_CreateCountryListItems(&selector->listItems, selector->countryNames, selector->letter + ov70_02245E84[selector->group]);
+    selector->count = Gts_CreateCountryListItems(&selector->listItems, selector->countryNames, selector->letter + gGtsSelectorGroupStarts[selector->group]);
     GtsSelector_PrintCountryPage(selector, 0, selector->count);
     selector->page = 0;
     GtsSelector_PrintPageNumber(selector->cellManager, selector->printer, &selector->windows[5], selector->page, GtsSelector_CountPages(selector->count, 5));
@@ -1991,7 +1991,7 @@ int GtsSelector_CountSeenSpeciesOfLetter(GtsSelector *selector, int letter) {
 #pragma force_active on
 
 BOOL GtsSelector_GroupHasSeenSpecies(GtsSelector *selector, int group) {
-    int first = ov70_02245E84[group];
+    int first = gGtsSelectorGroupStarts[group];
     int count = ov70_02245F5C[group][0];
     if (count > 0) {
         int i;
@@ -1999,7 +1999,7 @@ BOOL GtsSelector_GroupHasSeenSpecies(GtsSelector *selector, int group) {
             if (GtsSelector_CountSeenSpeciesOfLetter(selector, first + i) > 0) {
                 return TRUE;
             }
-            count = ov70_02245F58[group].count;
+            count = gGtsSelectorLetterGroups[group].count;
         }
     } else if (GtsSelector_CountSeenSpeciesOfLetter(selector, first) > 0) {
         return TRUE;

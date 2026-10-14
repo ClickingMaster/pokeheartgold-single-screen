@@ -37,15 +37,15 @@
 extern const GraphicsBanks sPCBoxGfxBanks;
 extern const u8 sPCBoxSlotHitboxes[];
 extern const u8 sPCBoxPartyHitboxes[];
-extern const u8 ov14_021F8630[];
-extern const GraphicsModes ov14_021F7BC8;
-extern const BgTemplate ov14_021F7C20;
-extern const BgTemplate ov14_021F7C3C;
-extern const BgTemplate ov14_021F7C58;
-extern const BgTemplate ov14_021F7C74;
-extern const BgTemplate ov14_021F7C90;
-extern const BgTemplate ov14_021F7CAC;
-extern const BgTemplate ov14_021F7CC8;
+extern const u8 sPCBoxTrayPartyHitboxes[];
+extern const GraphicsModes gPCBoxGraphicsModes;
+extern const BgTemplate sPCBoxBgTemplate0;
+extern const BgTemplate sPCBoxBgTemplate1;
+extern const BgTemplate sPCBoxBgTemplate4;
+extern const BgTemplate sPCBoxBgTemplate2;
+extern const BgTemplate sPCBoxBgTemplate3;
+extern const BgTemplate sPCBoxBgTemplate5;
+extern const BgTemplate sPCBoxBgTemplate6;
 extern const u16 sPCBoxReleaseCheckMoves[];
 extern const u8 sPCBoxSlotGridRect[];
 extern const u8 sPCBoxTrayRects[];
@@ -142,34 +142,34 @@ void PCBox_InitBgLayers(PCBoxWork *work) {
     BgTemplate bg6;
 
     work->view->bgConfig = BgConfig_Alloc(HEAP_ID_10);
-    modes = ov14_021F7BC8;
+    modes = gPCBoxGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
 
-    bg0 = ov14_021F7C20;
+    bg0 = sPCBoxBgTemplate0;
     InitBgFromTemplate(work->view->bgConfig, 0, &bg0, 0);
     BgClearTilemapBufferAndCommit(work->view->bgConfig, 0);
     BG_ClearCharDataRange(0, 0x20, 0, HEAP_ID_10);
 
-    bg1 = ov14_021F7C3C;
+    bg1 = sPCBoxBgTemplate1;
     InitBgFromTemplate(work->view->bgConfig, 1, &bg1, 0);
     BgClearTilemapBufferAndCommit(work->view->bgConfig, 1);
     BG_ClearCharDataRange(1, 0x20, 0, HEAP_ID_10);
 
-    bg2 = ov14_021F7C74;
+    bg2 = sPCBoxBgTemplate2;
     InitBgFromTemplate(work->view->bgConfig, 2, &bg2, 0);
 
-    bg3 = ov14_021F7C90;
+    bg3 = sPCBoxBgTemplate3;
     InitBgFromTemplate(work->view->bgConfig, 3, &bg3, 0);
 
-    bg4 = ov14_021F7C58;
+    bg4 = sPCBoxBgTemplate4;
     InitBgFromTemplate(work->view->bgConfig, 4, &bg4, 0);
     BgClearTilemapBufferAndCommit(work->view->bgConfig, 4);
     BG_ClearCharDataRange(4, 0x20, 0, HEAP_ID_10);
 
-    bg5 = ov14_021F7CAC;
+    bg5 = sPCBoxBgTemplate5;
     InitBgFromTemplate(work->view->bgConfig, 5, &bg5, 0);
 
-    bg6 = ov14_021F7CC8;
+    bg6 = sPCBoxBgTemplate6;
     InitBgFromTemplate(work->view->bgConfig, 6, &bg6, 0);
     BgClearTilemapBufferAndCommit(work->view->bgConfig, 6);
     BG_ClearCharDataRange(6, 0x20, 0, HEAP_ID_10);

@@ -36,7 +36,7 @@
 	.public GeonetGlobe_CountryHasRegions
 	.public GeonetGlobe_WrapPosition
 	.public GeonetGlobe_CalcDistance
-	.public _021E7644
+	.public gGeonetGlobeListWindowTemplate
 	.public sGeonetLocationWindowTemplate
 	.public sGeonetInfoButtonWindowTemplate
 	.public sGeonetExitButtonWindowTemplate
@@ -72,7 +72,7 @@
 	.public GeonetGlobe_CalcDistance
 	.rodata
 
-_021E7644:
+gGeonetGlobeListWindowTemplate:
 	.byte 0x06, 0x13, 0x0B, 0x0C, 0x06, 0x04, 0x25, 0x01
 
 sGeonetLocationWindowTemplate: ; 0x021E764C

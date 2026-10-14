@@ -58,19 +58,19 @@ void WiFiPlaza_SendMinigameResultNews(void *lobby, u8 game, int count, u32 id0, 
 extern const u8 sPlazaGameMimeJrTopSelectionWeights[];
 extern const u8 sPlazaGameWobbuffetPopSelectionWeights[];
 extern const u8 sPlazaGameSwalotPlopSelectionWeights[];
-extern const u8 ov90_0225C1EC[];
+extern const u8 sPlazaGameResultsFlashSlots[];
 extern const s16 sPlazaGameResultsRankOffsets[];
-extern const fx32 ov90_0225C1F8[];
-extern const fx32 ov90_0225C204[];
+extern const fx32 sPlazaGameTitleSlideOutEndX[];
+extern const fx32 sPlazaGameTitleSlideOutVelocity[];
 extern const u32 sPlazaGameTitleColors[];
-extern const fx32 ov90_0225C21C[];
-extern const fx32 ov90_0225C228[];
-extern const fx32 ov90_0225C234[];
-extern const fx32 ov90_0225C240[];
-extern const fx32 ov90_0225C24C[];
-extern const fx32 ov90_0225C258[];
+extern const fx32 sPlazaGameTitleSlideInVelocity[];
+extern const fx32 sPlazaGameTitleRestX[];
+extern const fx32 sPlazaGameTitleBounceX[];
+extern const fx32 sPlazaGameTitleBounceOutVelocity[];
+extern const fx32 sPlazaGameTitleBounceBackVelocity[];
+extern const fx32 sPlazaGameTitleSlideInStartX[];
 extern const GraphicsModes sPlazaGameResultsGraphicsModes;
-extern const s16 ov90_0225C274[];
+extern const s16 sPlazaGamePlayerSpritePositions[];
 extern const s16 ov90_0225C276[];
 extern const u8 sPlazaGameSeatOrders[][4];
 extern const ObjCharTransferTemplate sPlazaGameObjCharTransfer;
@@ -1042,7 +1042,7 @@ void PlazaGamePlayer_Init(PlazaGamePlayer *player, int count, int game, NNSG2dSc
     y = row * 8;
     anim = ((const u8 *)ov90_0225C318 + tableOffset)[seat];
     spriteY = ov90_0225C276[anim * 2];
-    Sprite_SetAnimCtrlSeq(player->sprite = PlazaGameGfx_CreateSprite(gfxRes, sprites->spriteList, (u8)ov90_0225C274[anim * 2], (u8)(spriteY + y), 0, heapId), anim);
+    Sprite_SetAnimCtrlSeq(player->sprite = PlazaGameGfx_CreateSprite(gfxRes, sprites->spriteList, (u8)sPlazaGamePlayerSpritePositions[anim * 2], (u8)(spriteY + y), 0, heapId), anim);
     Sprite_SetPalOffset(player->sprite, index);
     Sprite_SetDrawFlag(player->sprite, FALSE);
     Sprite_SetAnimActiveFlag(player->sprite, TRUE);
@@ -1172,7 +1172,7 @@ void PlazaGamePlayer_SetSpritePos(PlazaGamePlayer *player, u32 x) {
     const u8(*anims)[12] = ov90_0225C324;
     u8 anim = anims[table][player->seat];
     u8 y = ov90_0225C276[anim * 2] + rows[table][player->seat] * 8;
-    u8 spriteX = ov90_0225C274[anim * 2];
+    u8 spriteX = sPlazaGamePlayerSpritePositions[anim * 2];
     pos.x = (spriteX + x) << FX32_SHIFT;
     pos.y = y << FX32_SHIFT;
     Sprite_SetMatrix(player->sprite, &pos);
@@ -1338,7 +1338,7 @@ void PlazaGameTitle_StartSlideIn(PlazaGameTitle *title, PlazaGameBg *bg, enum He
     u32 width;
     title->frame = 0;
     title->state = 0;
-    PlazaGameMotion_Init(&title->motion, ov90_0225C258[title->game], ov90_0225C228[title->game], ov90_0225C21C[title->game], 16);
+    PlazaGameMotion_Init(&title->motion, sPlazaGameTitleSlideInStartX[title->game], sPlazaGameTitleRestX[title->game], sPlazaGameTitleSlideInVelocity[title->game], 16);
     PlazaGameTitle_SetScroll(title, bg, title->motion.current >> FX32_SHIFT);
     FontID_Alloc(2, heapId);
     width = FontID_String_GetWidth(2, title->string, 0);
@@ -1350,7 +1350,7 @@ void PlazaGameTitle_StartSlideIn(PlazaGameTitle *title, PlazaGameBg *bg, enum He
 void PlazaGameTitle_StartSlideOut(PlazaGameTitle *title, PlazaGameBg *bg) {
     title->frame = 0;
     title->state = 0;
-    PlazaGameMotion_Init(&title->motion, ov90_0225C228[title->game], ov90_0225C1F8[title->game], ov90_0225C204[title->game], 8);
+    PlazaGameMotion_Init(&title->motion, sPlazaGameTitleRestX[title->game], sPlazaGameTitleSlideOutEndX[title->game], sPlazaGameTitleSlideOutVelocity[title->game], 8);
     PlazaGameTitle_ScheduleScroll(title, bg, title->motion.current >> FX32_SHIFT);
 }
 
@@ -1364,7 +1364,7 @@ BOOL PlazaGameTitle_UpdateSlideIn(PlazaGameTitle *title, PlazaGameBg *bg) {
         title->frame++;
         if (done == 1) {
             PlaySE(SEQ_SE_PL_FCALL);
-            PlazaGameMotion_Init(&title->motion, ov90_0225C228[title->game], ov90_0225C234[title->game], ov90_0225C240[title->game], 4);
+            PlazaGameMotion_Init(&title->motion, sPlazaGameTitleRestX[title->game], sPlazaGameTitleBounceX[title->game], sPlazaGameTitleBounceOutVelocity[title->game], 4);
             title->state++;
             title->frame = 0;
         }
@@ -1374,7 +1374,7 @@ BOOL PlazaGameTitle_UpdateSlideIn(PlazaGameTitle *title, PlazaGameBg *bg) {
         PlazaGameTitle_ScheduleScroll(title, bg, title->motion.current >> FX32_SHIFT);
         title->frame++;
         if (done == 1) {
-            PlazaGameMotion_Init(&title->motion, ov90_0225C234[title->game], ov90_0225C228[title->game], ov90_0225C24C[title->game], 4);
+            PlazaGameMotion_Init(&title->motion, sPlazaGameTitleBounceX[title->game], sPlazaGameTitleRestX[title->game], sPlazaGameTitleBounceBackVelocity[title->game], 4);
             title->state++;
             title->frame = 0;
         }
@@ -2047,7 +2047,7 @@ void PlazaGameResults_UpdateFlash(PlazaGameResults *results) {
             const u8 *slot;
             i = 0;
             if (i < results->roster.count) {
-                slot = ov90_0225C1EC;
+                slot = sPlazaGameResultsFlashSlots;
                 do {
                     if (results->data.ranks[i] == 0) {
                         u32 index = *slot;

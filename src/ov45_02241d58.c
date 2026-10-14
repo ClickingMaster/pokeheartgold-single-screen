@@ -238,7 +238,7 @@ static inline void FindIfP(Iter *first, Node *last, Pred p) {
 }
 
 typedef struct Ctx {
-    void *unk0;
+    void *connection;
     int state;
     u8 unk8[0x58];
     int unk60;
@@ -484,7 +484,7 @@ int LobbyChat_SetChannelMode(const char *name, int arg) {
     }
     LobbyString_InitFromCStr(&s1, name);
     LobbyChat_GetFullChannelName(&s2, gLobbyChatManager, &s1);
-    chatSetChannelModeA(gLobbyChatManager->unk0, StrData(&s2), arg);
+    chatSetChannelModeA(gLobbyChatManager->connection, StrData(&s2), arg);
     LobbyString_Destroy(&s2);
     LobbyString_Destroy(&s1);
     return 0;

@@ -2,35 +2,35 @@
 	.include "overlay_96.inc"
 	.include "global.inc"
 	.include "overlay_96_exact_bank.inc"
-	.extern ov96_0221A7F4
-	.extern ov96_0221A81C
-	.extern ov96_0221A830
-	.extern ov96_0221A858
-	.extern ov96_0221A880
-	.extern ov96_0221A8A8
-	.extern ov96_0221A8D0
-	.extern ov96_0221A8F8
-	.extern ov96_0221A90C
-	.extern ov96_0221A920
-	.extern ov96_0221BE04
-	.extern ov96_0221BE08
-	.extern ov96_0221BE0C
-	.extern ov96_0221BE10
-	.extern ov96_0221BE14
-	.extern ov96_0221BE34
-	.extern ov96_0221BE54
-	.extern ov96_0221BE74
-	.extern ov96_0221BE94
-	.extern ov96_0221BEB4
-	.extern ov96_0221BED4
-	.extern ov96_0221BEF4
-	.extern ov96_0221BF14
-	.extern ov96_0221BF34
-	.extern ov96_0221BF54
-	.extern ov96_0221BF74
-	.extern ov96_0221BF94
-	.extern ov96_0221BFB4
-	.extern ov96_0221BFD4
+	.extern gPokeathlonCirclePushEvent
+	.extern gPokeathlonGoalRollEvent
+	.extern gPokeathlonBlockSmashEvent
+	.extern gPokeathlonSnowThrowEvent
+	.extern gPokeathlonRingDropEvent
+	.extern gPokeathlonDiscCatchEvent
+	.extern gPokeathlonPennantCaptureEvent
+	.extern gPokeathlonRelayRunEvent
+	.extern gPokeathlonHurdleDashEvent
+	.extern gPokeathlonLampJumpEvent
+	.extern gPokeathlonCirclePushZoneKind3
+	.extern gPokeathlonCirclePushZoneKind4
+	.extern gPokeathlonCirclePushZoneKind2
+	.extern gPokeathlonCirclePushZoneKind1
+	.extern gPokeathlonCirclePushZones_Layout9
+	.extern gPokeathlonCirclePushZones_Layout10
+	.extern gPokeathlonCirclePushZones_Layout13
+	.extern gPokeathlonCirclePushZones_Layout5
+	.extern gPokeathlonCirclePushZones_Layout6
+	.extern gPokeathlonCirclePushZones_Layout4
+	.extern gPokeathlonCirclePushZones_Layout3
+	.extern gPokeathlonCirclePushZones_Layout2
+	.extern gPokeathlonCirclePushZones_Layout1
+	.extern gPokeathlonCirclePushZones_Layout11
+	.extern gPokeathlonCirclePushZones_Layout7
+	.extern gPokeathlonCirclePushZones_Layout0
+	.extern gPokeathlonCirclePushZones_Layout8
+	.extern gPokeathlonCirclePushZones_Layout12
+	.extern gPokeathlonCirclePushZones_Layout14
 	.extern PokeathlonCourse_AllocPtr4FromHeap
 	.extern PokeathlonCourse_FreePtr4HeapAlloc
 	.extern PokeathlonCourse_GetCurrentParticipantIndex
@@ -124,37 +124,37 @@
 	.public gPokeathlonCourseClosingSteps
 	.public gPokeathlonCourseWaitSteps
 	.public gPokeathlonEventIntroSteps
-	.public ov96_0221DA80
-	.public ov96_0221DB50
-	.public ov96_0221DB5C
-	.public ov96_0221DB70
-	.public ov96_0221DBB8
-	.public ov96_0221DBC8
-	.public ov96_0221DC04
+	.public gPokeathlonEventIntroSpriteTemplates
+	.public gPokeathlonCirclePushStates
+	.public gPokeathlonCirclePushBounceOffsets
+	.public gPokeathlonCirclePushShakeOffsets
+	.public gPokeathlonCirclePushZoneKinds
+	.public gPokeathlonCirclePushLayoutZones
+	.public gPokeathlonCirclePushDisplayIdleAnims
 	.data
 gPokeathlonCourseEventSteps:
-	.word ov96_0221DC30
-	.word ov96_0221DC50
-	.word ov96_0221DB50
-	.word ov96_0221DC5C
-	.word ov96_0221DC74
-	.word ov96_0221DC1C
-	.word ov96_0221DC3C
+	.word gPokeathlonHurdleDashStates
+	.word gPokeathlonPennantCaptureStates
+	.word gPokeathlonCirclePushStates
+	.word gPokeathlonBlockSmashStates
+	.word gPokeathlonDiscCatchStates
+	.word gPokeathlonLampJumpStates
+	.word gPokeathlonRelayRunStates
 	.word gPokeathlonRingDropStates
-	.word ov96_0221DC48
+	.word gPokeathlonSnowThrowStates
 	.word gPokeathlonGoalRollStates
 
 gPokeathlonCourseEvents: ; 0x0221DA28
-	.word ov96_0221A90C
-	.word ov96_0221A8D0
-	.word ov96_0221A7F4
-	.word ov96_0221A830
-	.word ov96_0221A8A8
-	.word ov96_0221A920
-	.word ov96_0221A8F8
-	.word ov96_0221A880
-	.word ov96_0221A858
-	.word ov96_0221A81C
+	.word gPokeathlonHurdleDashEvent
+	.word gPokeathlonPennantCaptureEvent
+	.word gPokeathlonCirclePushEvent
+	.word gPokeathlonBlockSmashEvent
+	.word gPokeathlonDiscCatchEvent
+	.word gPokeathlonLampJumpEvent
+	.word gPokeathlonRelayRunEvent
+	.word gPokeathlonRingDropEvent
+	.word gPokeathlonSnowThrowEvent
+	.word gPokeathlonGoalRollEvent
 
 gPokeathlonCourseOpeningSteps: ; 0x0221DA50
 	.word PokeathlonCourseOpening_FadeIn
@@ -176,7 +176,7 @@ gPokeathlonEventIntroSteps: ; 0x0221DA6C
 	.word PokeathlonEventIntro_ControlsPage
 	.word PokeathlonEventIntro_FadeOut
 
-ov96_0221DA80: ; 0x0221DA80
+gPokeathlonEventIntroSpriteTemplates: ; 0x0221DA80
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -191,45 +191,45 @@ ov96_0221DA80: ; 0x0221DA80
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov96_0221DB50:
+gPokeathlonCirclePushStates:
 	.word PokeathlonCirclePush_FadeIn
 	.word PokeathlonCirclePush_Play
 	.word PokeathlonCirclePush_End
 
-ov96_0221DB5C: ; 0x0221DB5C
+gPokeathlonCirclePushBounceOffsets: ; 0x0221DB5C
 	.byte 0xFC, 0xFF, 0xFF, 0xFF
 	.byte 0xFE, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00
 
-ov96_0221DB70: ; 0x0221DB70
+gPokeathlonCirclePushShakeOffsets: ; 0x0221DB70
 	.byte 0xFD, 0xFF, 0xFF, 0xFF, 0xFE, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x01, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0xFD, 0xFF, 0xFF, 0xFF, 0xFE, 0xFF, 0xFF, 0xFF
 	.byte 0xFF, 0xFF, 0xFF, 0xFF, 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 	.byte 0xFD, 0xFF, 0xFF, 0xFF, 0xFE, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x01, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 
-ov96_0221DBB8: ; 0x0221DBB8
-	.word ov96_0221BE10
-	.word ov96_0221BE0C
-	.word ov96_0221BE04
-	.word ov96_0221BE08
+gPokeathlonCirclePushZoneKinds: ; 0x0221DBB8
+	.word gPokeathlonCirclePushZoneKind1
+	.word gPokeathlonCirclePushZoneKind2
+	.word gPokeathlonCirclePushZoneKind3
+	.word gPokeathlonCirclePushZoneKind4
 
-ov96_0221DBC8: ; 0x0221DBC8
-	.word ov96_0221BF74
-	.word ov96_0221BF14
-	.word ov96_0221BEF4
-	.word ov96_0221BED4
-	.word ov96_0221BEB4
-	.word ov96_0221BE74
-	.word ov96_0221BE94
-	.word ov96_0221BF54
-	.word ov96_0221BF94
-	.word ov96_0221BE14
-	.word ov96_0221BE34
-	.word ov96_0221BF34
-	.word ov96_0221BFB4
-	.word ov96_0221BE54
-	.word ov96_0221BFD4
+gPokeathlonCirclePushLayoutZones: ; 0x0221DBC8
+	.word gPokeathlonCirclePushZones_Layout0
+	.word gPokeathlonCirclePushZones_Layout1
+	.word gPokeathlonCirclePushZones_Layout2
+	.word gPokeathlonCirclePushZones_Layout3
+	.word gPokeathlonCirclePushZones_Layout4
+	.word gPokeathlonCirclePushZones_Layout5
+	.word gPokeathlonCirclePushZones_Layout6
+	.word gPokeathlonCirclePushZones_Layout7
+	.word gPokeathlonCirclePushZones_Layout8
+	.word gPokeathlonCirclePushZones_Layout9
+	.word gPokeathlonCirclePushZones_Layout10
+	.word gPokeathlonCirclePushZones_Layout11
+	.word gPokeathlonCirclePushZones_Layout12
+	.word gPokeathlonCirclePushZones_Layout13
+	.word gPokeathlonCirclePushZones_Layout14
 
-ov96_0221DC04: ; 0x0221DC04
+gPokeathlonCirclePushDisplayIdleAnims: ; 0x0221DC04
 	.byte 0x04, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 

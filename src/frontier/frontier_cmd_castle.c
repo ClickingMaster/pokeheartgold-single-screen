@@ -25,7 +25,7 @@ u16 *FrontierScript_GetVarPtr(FrontierScriptContext *ctx, u32 index);
 u16 FrontierScript_GetVar(FrontierScriptContext *ctx, u16 index);
 void FrontierScript_PrintMessageEntry(FrontierScriptContext *ctx, u16 *message);
 
-extern const OverlayManagerTemplate ov80_0223BE24;
+extern const OverlayManagerTemplate gBattleCastleEmptyAppTemplate;
 extern const OverlayManagerTemplate gOverlayTemplate_BattleCastlePartyApp;
 extern const OverlayManagerTemplate gOverlayTemplate_BattleCastleOpponentApp;
 
@@ -109,7 +109,7 @@ BOOL FrtCmd_CastleLaunchPartyApp(FrontierScriptContext *ctx) {
 }
 
 BOOL FrtCmd_CastleLaunchEmptyApp(FrontierScriptContext *ctx) {
-    return BattleCastle_LaunchApp(ctx, &ov80_0223BE24);
+    return BattleCastle_LaunchApp(ctx, &gBattleCastleEmptyAppTemplate);
 }
 
 BOOL FrtCmd_CastleEndBattle(FrontierScriptContext *ctx) {

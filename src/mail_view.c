@@ -98,7 +98,7 @@ typedef struct MailView {
     ManagedSprite *icons[3];                   // 0xB8
 } MailView;                                    // size: 0xC4
 
-extern const GraphicsModes _021E6DD4;
+extern const GraphicsModes gMailViewGraphicsModes;
 extern int (*const sMailViewScreenFuncs[])(MailView *);
 extern const OamCharTransferParam sMailViewOamCharTransferParam;
 extern const SpriteResourceCountsListUnion sMailViewSpriteResourceCounts;
@@ -637,7 +637,7 @@ void MailView_InitBgs(MailView *mailView) {
 
     MailView_SetGfxBanks();
     mailView->bgConfig = BgConfig_Alloc(mailView->heapID);
-    modes = _021E6DD4;
+    modes = gMailViewGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     GX_SetDispSelect(GX_DISP_SELECT_SUB_MAIN);
     templates = sMailViewBgTemplates;

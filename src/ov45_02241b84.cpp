@@ -53,7 +53,7 @@ extern "C" HandlerVtbl gLobbyRequestVtable, gLobbyEnumUsersRequestVtable;
 extern "C" const u32 gLobbyChatNextRequestId;
 
 struct Mgr {
-    void *unk0;
+    void *connection;
     u32 state;
     u8 pad[0x88];
     u8 list[1];
@@ -132,7 +132,7 @@ extern "C" int LobbyChat_EnumUsersAsync(const char *name, u32 a, u32 b) {
     {
         Str s(name);
         Str t = LobbyChat_GetFullChannelName(GetMgr(), s);
-        BOOL exists = chatInChannelA(GetMgr()->unk0, t.c_str()) == 0;
+        BOOL exists = chatInChannelA(GetMgr()->connection, t.c_str()) == 0;
         t.destroy();
         s.destroy();
         if (exists) {
@@ -146,7 +146,7 @@ extern "C" int LobbyChat_EnumUsersAsync(const char *name, u32 a, u32 b) {
     u32 id = GetId(h, IdTag(), IdTag());
     Str s(name);
     Str t = LobbyChat_GetFullChannelName(GetMgr(), s);
-    chatEnumUsersA(GetMgr()->unk0, t.c_str(), LobbyChat_OnEnumUsers, id, 0);
+    chatEnumUsersA(GetMgr()->connection, t.c_str(), LobbyChat_OnEnumUsers, id, 0);
     t.destroy();
     s.destroy();
     return 0;

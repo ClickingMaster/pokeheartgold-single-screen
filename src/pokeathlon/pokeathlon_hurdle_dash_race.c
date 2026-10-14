@@ -62,8 +62,8 @@ void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *entry, int priority)
 
 extern const s8 ov96_0221C55C[][9];                   // height of a rising jump per frame, by jump stat
 extern const s8 ov96_0221C589[][9];                   // height of a falling jump per frame, by jump stat
-extern u8 ov96_0221DC2C[];                            // sound player of each lane
-extern const s8 ov96_0221DC28[];                      // pan of each lane
+extern u8 gPokeathlonHurdleDashLaneSoundPlayers[];                            // sound player of each lane
+extern const s8 gPokeathlonHurdleDashLanePans[];                      // pan of each lane
 extern const PokeathlonHurdleDashLaneX ov96_0221C41C; // x of each lane (touch)
 extern const PokeathlonHurdleDashLaneX ov96_0221C428; // x of each lane (dust)
 extern const WindowTemplate ov96_0221C3FC;            // the time window
@@ -173,8 +173,8 @@ void PokeathlonHurdleDash_UpdateRunner(PokeathlonCourseData *course, PokeathlonH
                     PokeathlonHurdle_GetRect(hurdle, &rect2);
                     if (PokeathlonHurdleDash_IsTouchingHurdle(runner->mon.groundY + 0x110 - PokeathlonCourseObject_GetCollisionOffsetY(monObject), (u8)PokeathlonCourseObject_GetCollisionRadius(monObject), &rect2)) {
                         PokeathlonHurdle_KnockDown(hurdle);
-                        PlaySEOnPlayer(SEQ_SE_GS_W436, ov96_0221DC2C[runner->lane]);
-                        SetPlayerPan(ov96_0221DC2C[runner->lane], ov96_0221DC28[runner->lane]);
+                        PlaySEOnPlayer(SEQ_SE_GS_W436, gPokeathlonHurdleDashLaneSoundPlayers[runner->lane]);
+                        SetPlayerPan(gPokeathlonHurdleDashLaneSoundPlayers[runner->lane], gPokeathlonHurdleDashLanePans[runner->lane]);
                         if (runner->mon.jumpQueued == 1 && runner->mon.queuedJumps == 1) {
                             PokeathlonCourse_AddMonCounter(course, (u8)PokeathlonCourse_GetNetId(course), runner->lane, 2, 1);
                             runner->mon.timer = 3;
@@ -199,7 +199,7 @@ void PokeathlonHurdleDash_UpdateRunner(PokeathlonCourseData *course, PokeathlonH
         if (runner->finished != TRUE && runner->distance >= 0x1000) {
             runner->finished = TRUE;
             runner->time = hurdleDash->frame;
-            PlaySEOnPlayer(SEQ_SE_GS_MYGOAL, ov96_0221DC2C[runner->lane]);
+            PlaySEOnPlayer(SEQ_SE_GS_MYGOAL, gPokeathlonHurdleDashLaneSoundPlayers[runner->lane]);
             hurdleDash->rankTimer = 30;
         }
     }
@@ -253,12 +253,12 @@ BOOL PokeathlonHurdleDash_UpdateRunners(PokeathlonCourseData *course, Pokeathlon
 void PokeathlonHurdleDashMon_StartJump(PokeathlonCourseData *course, u32 unused, u32 lane, PokeathlonHurdleDashMon *mon) {
     if (mon->state == 0) {
         if (mon->jumpStat != 0) {
-            PlaySEOnPlayer(SEQ_SE_DP_DANSA, ov96_0221DC2C[lane]);
+            PlaySEOnPlayer(SEQ_SE_DP_DANSA, gPokeathlonHurdleDashLaneSoundPlayers[lane]);
             PokeathlonCourse_AddMonCounter(course, (u8)PokeathlonCourse_GetNetId(course), lane, 2, 1);
         } else {
-            PlaySEOnPlayer(SEQ_SE_GS_MOGURU, ov96_0221DC2C[lane]);
+            PlaySEOnPlayer(SEQ_SE_GS_MOGURU, gPokeathlonHurdleDashLaneSoundPlayers[lane]);
         }
-        SetPlayerPan(ov96_0221DC2C[lane], ov96_0221DC28[lane]);
+        SetPlayerPan(gPokeathlonHurdleDashLaneSoundPlayers[lane], gPokeathlonHurdleDashLanePans[lane]);
         mon->state = 1;
         mon->timer = 0;
         mon->phase = 1;
@@ -299,8 +299,8 @@ void PokeathlonHurdleDashMon_Update(int lane, PokeathlonHurdleDashMon *mon, f32 
                 mon->timer = 0;
                 if (mon->jumpStat == 0) {
                     PokeathlonCourseMonObject_SetMonDrawFlag(mon->monObject, TRUE);
-                    PlaySEOnPlayer(SEQ_SE_GS_MOGURU, ov96_0221DC2C[lane]);
-                    SetPlayerPan(ov96_0221DC2C[lane], ov96_0221DC28[lane]);
+                    PlaySEOnPlayer(SEQ_SE_GS_MOGURU, gPokeathlonHurdleDashLaneSoundPlayers[lane]);
+                    SetPlayerPan(gPokeathlonHurdleDashLaneSoundPlayers[lane], gPokeathlonHurdleDashLanePans[lane]);
                 }
             }
             break;
@@ -320,8 +320,8 @@ void PokeathlonHurdleDashMon_Update(int lane, PokeathlonHurdleDashMon *mon, f32 
                 mon->timer = 0;
                 PokeathlonCourseMonObject_SetPosition(mon->monObject, mon->x, mon->y, FALSE);
                 if (mon->jumpStat != 0) {
-                    PlaySEOnPlayer(SEQ_SE_GS_SUTYA, ov96_0221DC2C[lane]);
-                    SetPlayerPan(ov96_0221DC2C[lane], ov96_0221DC28[lane]);
+                    PlaySEOnPlayer(SEQ_SE_GS_SUTYA, gPokeathlonHurdleDashLaneSoundPlayers[lane]);
+                    SetPlayerPan(gPokeathlonHurdleDashLaneSoundPlayers[lane], gPokeathlonHurdleDashLanePans[lane]);
                 }
                 PokeathlonHurdleDashMon_ScaleForHeight(mon, 0);
                 mon->jumpQueued = 0;
@@ -1165,18 +1165,18 @@ void PokeathlonHurdleDashRunner_Boost(PokeathlonCourseData *course, PokeathlonHu
         sprite = PokeathlonCourseSpritePoolSprite_GetSprite(runner->mon.boostEffect);
         runner->boostLevel++;
         if (runner->boostLevel == 1) {
-            PlaySEOnPlayer(SEQ_SE_GS_FW015_1, ov96_0221DC2C[runner->lane]);
-            SetPlayerPan(ov96_0221DC2C[runner->lane], ov96_0221DC28[runner->lane]);
+            PlaySEOnPlayer(SEQ_SE_GS_FW015_1, gPokeathlonHurdleDashLaneSoundPlayers[runner->lane]);
+            SetPlayerPan(gPokeathlonHurdleDashLaneSoundPlayers[runner->lane], gPokeathlonHurdleDashLanePans[runner->lane]);
             PokeathlonCourseMonObject_SetAnimState(runner->mon.monObject, 5);
             Sprite_SetAnimCtrlSeq(sprite, 1);
         } else if (runner->boostLevel == 4) {
-            PlaySEOnPlayer(SEQ_SE_GS_186, ov96_0221DC2C[runner->lane]);
-            SetPlayerPan(ov96_0221DC2C[runner->lane], ov96_0221DC28[runner->lane]);
+            PlaySEOnPlayer(SEQ_SE_GS_186, gPokeathlonHurdleDashLaneSoundPlayers[runner->lane]);
+            SetPlayerPan(gPokeathlonHurdleDashLaneSoundPlayers[runner->lane], gPokeathlonHurdleDashLanePans[runner->lane]);
             PokeathlonCourseMonObject_SetAnimState(runner->mon.monObject, 6);
             Sprite_SetAnimCtrlSeq(sprite, 2);
         } else if (runner->boostLevel == 2 || runner->boostLevel == 3) {
-            PlaySEOnPlayer(SEQ_SE_GS_FW015_2, ov96_0221DC2C[runner->lane]);
-            SetPlayerPan(ov96_0221DC2C[runner->lane], ov96_0221DC28[runner->lane]);
+            PlaySEOnPlayer(SEQ_SE_GS_FW015_2, gPokeathlonHurdleDashLaneSoundPlayers[runner->lane]);
+            SetPlayerPan(gPokeathlonHurdleDashLaneSoundPlayers[runner->lane], gPokeathlonHurdleDashLanePans[runner->lane]);
         }
         if (runner->speed < 10.0) {
             runner->speed = runner->mon.topSpeed + ov96_0221C444[runner->boostLevel - 1];

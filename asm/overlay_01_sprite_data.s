@@ -315,8 +315,8 @@ gResidentBillboardModelIds: ; 0x02207260
 	.word 0x00000000, 0x00000001, 0x00000002, 0x0000000A
 	.word 0x000000FF
 
-	.public ov01_02207274
-ov01_02207274:
+	.public gApricornTreeSpriteIds
+gApricornTreeSpriteIds:
 	.word SPRITE_BONGURI
 	.word SPRITE_BONGURI_R
 	.word SPRITE_BONGURI_Y

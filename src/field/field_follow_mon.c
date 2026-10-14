@@ -130,10 +130,10 @@ extern const MovementTable sFollowMonFastMovements;
 extern const MovementTable sFollowMonSlowMovements;
 extern const MovementTable sFollowMonStepMovements;
 extern const MovementTable sFollowMonRunMovements;
-extern const HopHeightTable ov01_02209750;
-extern const HopOffsets ov01_022096F0;
+extern const HopHeightTable gFollowMonHopHeights;
+extern const HopOffsets gFollowMonHopIntoBallZOffsets;
 extern const VecFx32 sFollowMonRecallScale;
-extern const VecFx32 ov01_02209704;
+extern const VecFx32 gFollowMonHopIntoBallScale;
 
 const HopTable sFollowMonHopIntoBallTable = { { 1, 2, 2, 3, 3, 2, 2, 0 }, { 14, 12 } };
 
@@ -185,7 +185,7 @@ u32 FollowMon_GetFasterMovement(u32 direction, u32 movement) {
 }
 
 fx32 FollowMon_GetHopHeight(LocalMapObject *object) {
-    HopHeightTable table = ov01_02209750;
+    HopHeightTable table = gFollowMonHopHeights;
     LocalMapObject *mapObject = object;
     u8 row = ov01_02205584(mapObject);
     s32 index;
@@ -571,7 +571,7 @@ BOOL Task_FollowMonHopIntoBall(TaskManager *taskMan) {
         env->state++;
         break;
     case 4: {
-        zOffsets = ov01_022096F0;
+        zOffsets = gFollowMonHopIntoBallZOffsets;
         yOffsets = sFollowMonHopIntoBallTable.yOffsets;
         mapObject = FollowMon_GetMapObject(fieldSystem);
         delta = FX32_ONE * 2;
@@ -599,7 +599,7 @@ BOOL Task_FollowMonHopIntoBall(TaskManager *taskMan) {
             break;
         }
         FollowMon_MoveToPlayer(fieldSystem, DIR_NORTH);
-        scale = ov01_02209704;
+        scale = gFollowMonHopIntoBallScale;
         BillboardObject_SetScale(MapObjectManager_GetFollowMonBillboard(fieldSystem->mapObjectManager), &scale);
         FollowMon_SetReleaseBallPending(fieldSystem->followMon.mapObject, 1);
         env->state++;

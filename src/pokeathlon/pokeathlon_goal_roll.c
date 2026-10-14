@@ -89,25 +89,25 @@ void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonGoalRollSprite *
 void PokeathlonCourseSpritePool_PauseAnims(PokeathlonGoalRollSpritePool *pool);
 void PokeathlonEvent_CalcPoints(void *gfx, int event);
 
-extern const VecFx32 ov96_0221D208;
-extern const VecFx32 ov96_0221D220;
-extern const PokeathlonGoalRollSpritePoolConfig ov96_0221D238;
-extern const VecFx32 ov96_0221D250;
-extern const GraphicsModes ov96_0221D28C;
-extern const BgTemplate ov96_0221D29C;
-extern const BgTemplate ov96_0221D2B8;
-extern const BgTemplate ov96_0221D2D4;
-extern const BgTemplate ov96_0221D2F0;
-extern const BgTemplate ov96_0221D30C;
-extern const BgTemplate ov96_0221D328;
-extern const BgTemplate ov96_0221D344;
-extern const GraphicsBanks ov96_0221D380;
-extern const VecFx32 ov96_0221D3A8[4];
-extern const VecFx32 ov96_0221D3D8[4];
-extern const u16 ov96_0221D408[GOAL_ROLL_PARTICIPANTS][GOAL_ROLL_TEAM_SIZE][2];
-extern const VecFx32 ov96_0221D4B4[4][2];
+extern const VecFx32 gPokeathlonGoalRollWallPost;
+extern const VecFx32 gPokeathlonGoalRollWallNormal;
+extern const PokeathlonGoalRollSpritePoolConfig gPokeathlonGoalRollSpritePoolConfig;
+extern const VecFx32 gPokeathlonGoalRollWallCorner;
+extern const GraphicsModes gPokeathlonGoalRollGraphicsModes;
+extern const BgTemplate gPokeathlonGoalRollBgTemplate_Main3;
+extern const BgTemplate gPokeathlonGoalRollBgTemplate_Sub0;
+extern const BgTemplate gPokeathlonGoalRollBgTemplate_Sub1;
+extern const BgTemplate gPokeathlonGoalRollBgTemplate_Sub2;
+extern const BgTemplate gPokeathlonGoalRollBgTemplate_Main0;
+extern const BgTemplate gPokeathlonGoalRollBgTemplate_Main1;
+extern const BgTemplate gPokeathlonGoalRollBgTemplate_Main2;
+extern const GraphicsBanks gPokeathlonGoalRollGraphicsBanks;
+extern const VecFx32 gPokeathlonGoalRollLabelPositions[4];
+extern const VecFx32 gPokeathlonGoalRollGoalPositions[4];
+extern const u16 gPokeathlonGoalRollMonStartPositions[GOAL_ROLL_PARTICIPANTS][GOAL_ROLL_TEAM_SIZE][2];
+extern const VecFx32 gPokeathlonGoalRollGoalPosts[4][2];
 
-extern const PokeathlonGoalRollPaletteData ov96_0221D1F4;
+extern const PokeathlonGoalRollPaletteData gPokeathlonGoalRollPaletteData;
 
 // A Pokemon as PokeathlonCourse_GetMonInfo describes it to the 3D object list.
 typedef struct PokeathlonGoalRollMonView {
@@ -256,7 +256,7 @@ BOOL PokeathlonGoalRoll_Init(PokeathlonCourseData *course) {
         break;
     }
     case 2: {
-        work.poolConfig = ov96_0221D238;
+        work.poolConfig = gPokeathlonGoalRollSpritePoolConfig;
         goalRoll->spritePool = PokeathlonCourseSpritePool_New(goalRoll->heapId, &work.poolConfig);
         PokeathlonCourseSpritePool_SetSurfaceCoords(goalRoll->spritePool, 0, 0, 0, 0x200000);
         goalRoll->monObjects = PokeathlonCourseMonObjects_Create(goalRoll->heapId, 12, 8, goalRoll->resources, PokeathlonCourseSpritePool_GetSpriteList((u8 *)goalRoll->spritePool));
@@ -301,14 +301,14 @@ BOOL PokeathlonGoalRoll_Init(PokeathlonCourseData *course) {
                 ball->kind = GOAL_ROLL_BALL_SMALL;
             }
         }
-        goalPalettes[0] = ov96_0221D1F4.data.goalPalettes[0];
-        goalPalettes[1] = ov96_0221D1F4.data.goalPalettes[1];
-        goalPalettes[2] = ov96_0221D1F4.data.goalPalettes[2];
-        goalPalettes[3] = ov96_0221D1F4.data.goalPalettes[3];
-        *(PokeathlonGoalRollVec4 *)work.goalPositions = *(const PokeathlonGoalRollVec4 *)ov96_0221D3D8;
+        goalPalettes[0] = gPokeathlonGoalRollPaletteData.data.goalPalettes[0];
+        goalPalettes[1] = gPokeathlonGoalRollPaletteData.data.goalPalettes[1];
+        goalPalettes[2] = gPokeathlonGoalRollPaletteData.data.goalPalettes[2];
+        goalPalettes[3] = gPokeathlonGoalRollPaletteData.data.goalPalettes[3];
+        *(PokeathlonGoalRollVec4 *)work.goalPositions = *(const PokeathlonGoalRollVec4 *)gPokeathlonGoalRollGoalPositions;
         {
             int n;
-            for (n = 0, goal = goalRoll, goalPosition = work.goalPositions, goalPalette = goalPalettes, markAnim = 2, markPosition = ov96_0221D4B4[0], labelPosition = ov96_0221D3A8; n < 4; goal = GOAL_CURSOR_NEXT(goal), goalPosition++, goalPalette++, markAnim += 2, markPosition += 2, labelPosition++, n++) {
+            for (n = 0, goal = goalRoll, goalPosition = work.goalPositions, goalPalette = goalPalettes, markAnim = 2, markPosition = gPokeathlonGoalRollGoalPosts[0], labelPosition = gPokeathlonGoalRollLabelPositions; n < 4; goal = GOAL_CURSOR_NEXT(goal), goalPosition++, goalPalette++, markAnim += 2, markPosition += 2, labelPosition++, n++) {
                 goal->goalSprites[0] = PokeathlonCourseSpritePool_CreateAndTake(goalRoll->spritePool, 1, 1, 101, 5);
                 PokeathlonCourseSpritePoolSprite_Show(goal->goalSprites[0], TRUE, TRUE);
                 PokeathlonCourseSpritePoolSprite_SetAnim(goal->goalSprites[0], 1);
@@ -376,8 +376,8 @@ BOOL PokeathlonGoalRoll_Init(PokeathlonCourseData *course) {
             mon->radius = PokeathlonCourseObject_GetCollisionRadius(object);
             mon->mode = GOAL_ROLL_MODE_WALK;
             PokeathlonCourseMonGfx_GetTopRow(image);
-            x = ov96_0221D408[row][member][0];
-            y = ov96_0221D408[row][member][1];
+            x = gPokeathlonGoalRollMonStartPositions[row][member][0];
+            y = gPokeathlonGoalRollMonStartPositions[row][member][1];
             mon->facing = 2;
             PokeathlonCourseMonObject_SetAnimState(object, 2);
             PokeathlonCourseObject_SetGroundPosition(object, x, y);
@@ -415,13 +415,13 @@ BOOL PokeathlonGoalRoll_Init(PokeathlonCourseData *course) {
             PokeathlonGoalRollCpu_SetBalls(goalRoll->cpu, goalRoll->balls);
             PokeathlonGoalRollCpu_ChooseAllRoles(goalRoll->cpu->teams);
             flip = -1;
-            wall.normal = ov96_0221D220;
+            wall.normal = gPokeathlonGoalRollWallNormal;
             VEC_Normalize(&wall.normal, &wall.normal);
-            wall.corner = ov96_0221D250;
+            wall.corner = gPokeathlonGoalRollWallCorner;
             goalRoll->walls[0] = wall.corner;
             goalRoll->walls[1] = wall.corner;
             goalRoll->walls[1].x *= flip;
-            wall.post = ov96_0221D208;
+            wall.post = gPokeathlonGoalRollWallPost;
             goalRoll->walls[2] = wall.post;
             goalRoll->walls[3] = wall.post;
             goalRoll->walls[3].y *= flip;
@@ -530,7 +530,7 @@ BOOL PokeathlonGoalRoll_Exit(PokeathlonCourseData *course) {
 }
 
 void PokeathlonGoalRoll_SetGfxBanks(void) {
-    GraphicsBanks banks = ov96_0221D380;
+    GraphicsBanks banks = gPokeathlonGoalRollGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
@@ -593,27 +593,27 @@ void PokeathlonGoalRoll_InitBgs(BgConfig *bgConfig) {
     BgTemplate sub1;
     BgTemplate sub2;
 
-    modes = ov96_0221D28C;
+    modes = gPokeathlonGoalRollGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    main0 = ov96_0221D30C;
+    main0 = gPokeathlonGoalRollBgTemplate_Main0;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &main0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
-    main1 = ov96_0221D328;
+    main1 = gPokeathlonGoalRollBgTemplate_Main1;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &main1, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
-    main2 = ov96_0221D344;
+    main2 = gPokeathlonGoalRollBgTemplate_Main2;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &main2, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
-    main3 = ov96_0221D29C;
+    main3 = gPokeathlonGoalRollBgTemplate_Main3;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &main3, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
-    sub0 = ov96_0221D2B8;
+    sub0 = gPokeathlonGoalRollBgTemplate_Sub0;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &sub0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
-    sub1 = ov96_0221D2D4;
+    sub1 = gPokeathlonGoalRollBgTemplate_Sub1;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &sub1, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
-    sub2 = ov96_0221D2F0;
+    sub2 = gPokeathlonGoalRollBgTemplate_Sub2;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &sub2, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_2);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);

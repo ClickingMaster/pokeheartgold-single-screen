@@ -30,7 +30,7 @@ extern BOOL FrontierLinkLobby_SendChoice(FrontierLinkLobby *lobby, u16 choice);
 extern BOOL FrontierLinkLobby_SendParty(FrontierLinkLobby *lobby, u16 first, u16 second);
 extern BOOL FrontierLinkLobby_SendValue74(FrontierLinkLobby *lobby, u16 value);
 extern BOOL FrontierLinkLobby_SendValue71(FrontierLinkLobby *lobby, u16 value);
-extern const u8 ov80_0223C040[];
+extern const u8 gFrontierLinkLobbySummaryPages[];
 
 void FrontierLinkLobby_New(SaveData *saveData);
 void FrontierLinkLobby_LaunchPartyMenu(void *frontierWork, FrontierLinkLobby *lobby, FieldSystem *fieldSystem, enum HeapID heapId);
@@ -174,7 +174,7 @@ void FrontierLinkLobby_LaunchSummary(void *frontierWork, FrontierLinkLobby *lobb
     lobby->summaryArgs->mode = 0;
     lobby->summaryArgs->ribbons = Save_SpecialRibbons_Get(lobby->saveData);
     lobby->summaryArgs->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(lobby->saveData);
-    PokemonSummary_SetPages(lobby->summaryArgs, ov80_0223C040);
+    PokemonSummary_SetPages(lobby->summaryArgs, gFrontierLinkLobbySummaryPages);
     PokemonSummaryArgs_SetPlayer(lobby->summaryArgs, Save_PlayerData_GetProfile(lobby->saveData));
     Frontier_LaunchApplication(frontierWork, &gOverlayTemplate_PokemonSummary, lobby->summaryArgs, 0, NULL);
 }

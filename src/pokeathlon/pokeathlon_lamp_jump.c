@@ -108,7 +108,7 @@ extern const BgTemplate ov96_0221C178;
 extern const BgTemplate ov96_0221C194;
 extern const BgTemplate ov96_0221C1B0;
 extern const GraphicsBanks ov96_0221C1F4;
-extern const u8 ov96_0221DC18[]; // sound player of each Pokemon
+extern const u8 gPokeathlonLampJumpSoundPlayers[]; // sound player of each Pokemon
 
 #pragma force_active on
 
@@ -619,8 +619,8 @@ void PokeathlonLampJump_UpdateMonSprites(PokeathlonCourseData *course) {
         if (mon->stunned) {
             PokeathlonCourseSpritePoolSprite_Show(mon->effectSprite, 1, 1);
             ov96_021EAD08(mon->sprite, 20);
-            if (!GF_SndCountPlayingSeqOnPlayer(ov96_0221DC18[i])) {
-                PlaySEOnPlayer(SEQ_SE_GS_W146, ov96_0221DC18[i]);
+            if (!GF_SndCountPlayingSeqOnPlayer(gPokeathlonLampJumpSoundPlayers[i])) {
+                PlaySEOnPlayer(SEQ_SE_GS_W146, gPokeathlonLampJumpSoundPlayers[i]);
             }
         } else {
             PokeathlonCourseSpritePoolSprite_Show(mon->effectSprite, 1, 0);
@@ -758,7 +758,7 @@ void PokeathlonLampJump_LaunchMon(PokeathlonLampJump *lampJump, s32 mon, VecFx32
             jump->velocity = -velocity;
             jump->launchVelocity = -velocity;
             jump->jumping = TRUE;
-            PlaySEOnPlayer(SEQ_SE_GS_GUGU, ov96_0221DC18[mon]);
+            PlaySEOnPlayer(SEQ_SE_GS_GUGU, gPokeathlonLampJumpSoundPlayers[mon]);
         }
     }
 }

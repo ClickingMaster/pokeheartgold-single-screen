@@ -15,7 +15,7 @@ s32 PokeathlonCourseObject_GetCollisionRadius(void *object);
 void PokeathlonCourseSpritePoolSprite_Show(PokeathlonGoalRollSprite *sprite, BOOL shown, BOOL show);
 
 // Per goal (indexed by participant - 1 or by 3 - quadrant): three guard points (x, y) in front of it.
-extern const u16 ov96_0221D678[][3][2];
+extern const u16 gPokeathlonGoalRollCpuGuardPoints[][3][2];
 extern const u16 ov96_0221D67A[][3][2];
 extern const u16 ov96_0221D67C[][3][2];
 extern const u16 ov96_0221D680[][3][2];
@@ -275,7 +275,7 @@ int PokeathlonGoalRollCpu_ApplyChaserDecision(PokeathlonGoalRollMon *mon, const 
     case 9:
         if (quadrant != 4) {
             u8 goal = 3 - quadrant;
-            mon->target.x = ov96_0221D678[goal][0][0] << 12;
+            mon->target.x = gPokeathlonGoalRollCpuGuardPoints[goal][0][0] << 12;
             mon->target.y = ov96_0221D67A[goal][0][0] << 12;
         } else {
             GF_AssertFail();
@@ -361,7 +361,7 @@ int PokeathlonGoalRollCpu_ApplyGuardDecision(PokeathlonGoalRollMon *mon, Pokeath
     switch (decision) {
     case 6:
     case 11: {
-        const u16(*points)[2] = ov96_0221D678[participant - 1];
+        const u16(*points)[2] = gPokeathlonGoalRollCpuGuardPoints[participant - 1];
 
         if (PokeathlonGoalRollCpu_IsNearPoint(mon->position.x / FX32_ONE, mon->position.y / FX32_ONE, points)) {
             return 0;

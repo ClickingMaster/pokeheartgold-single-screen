@@ -108,10 +108,10 @@ u16 gConnectToRanger_PlayerName[8]; // player name in Pokemon Ranger's character
 u16 gConnectToRanger_TrainerId[10]; // trainer ID as five digits
 
 extern const u16 sRangerCharTable[0x123][2]; // { Ranger character, game character }
-extern const u8 ov74_0223BD5C[];
-extern const u8 ov74_0223C1F4[];
+extern const u8 sConnectToRangerLinkParams[];
+extern const u8 sConnectToRangerLinkCommand[];
 extern const GraphicsModes _0223B330;
-extern const GraphicsBanks _0223B340;
+extern const GraphicsBanks gConnectToRangerGraphicsBanks;
 
 extern void CommWireless_Terminate(void);
 extern void WirelessStatusIcon_SetLevel(int level);
@@ -156,7 +156,7 @@ void ConnectToRanger_EncodePlayerData(ConnectToRangerApp *app) {
 }
 
 void ConnectToRanger_SetupGraphics(ConnectToRangerApp *app) {
-    GraphicsBanks banks = _0223B340;
+    GraphicsBanks banks = gConnectToRangerGraphicsBanks;
     GraphicsModes modes = _0223B330;
 
     GfGfx_SetBanks(&banks);
@@ -503,7 +503,7 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         break;
     case RANGER_CONNECT_WAIT_LINK:
         if (CommWireless_IsStartedUp()) {
-            RangerLink_Init(ov74_0223BD5C, app->linkWork);
+            RangerLink_Init(sConnectToRangerLinkParams, app->linkWork);
             app->linkInitialised = TRUE;
             WirelessStatusIcon_Create();
             CONNECT_STATE = RANGER_CONNECT_SEARCH;
@@ -582,7 +582,7 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         ConnectToRanger_CheckTimeoutOrCancel(app, &CONNECT_STATE, TRUE, PAD_BUTTON_B);
         break;
     case RANGER_CONNECT_SEND_PLAYER:
-        RangerLink_StartCommand(ov74_0223C1F4, 42, 1);
+        RangerLink_StartCommand(sConnectToRangerLinkCommand, 42, 1);
         CONNECT_STATE = RANGER_CONNECT_WAIT_PLAYER_SENT;
         app->timer = 3200;
         break;
@@ -615,7 +615,7 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         }
         break;
     case RANGER_CONNECT_SEND_SAVED:
-        RangerLink_StartCommand(ov74_0223C1F4, 42, 2);
+        RangerLink_StartCommand(sConnectToRangerLinkCommand, 42, 2);
         CONNECT_STATE = RANGER_CONNECT_WAIT_ACK;
         app->timer = 1200;
         break;

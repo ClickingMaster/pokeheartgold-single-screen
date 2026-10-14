@@ -133,50 +133,50 @@
 	.public gAlternatingSpinMovementStateFuncs
 	.public gRandomLookDelays
 
-	.public _020FD4F4
-	.public _020FD500
-	.public _020FD50C
-	.public _020FD518
-	.public _020FD524
-	.public _020FD530
-	.public _020FD53C
-	.public _020FD554
-	.public _020FD560
-	.public _020FD570
-	.public _020FD580
-	.public _020FD590
-	.public _020FD5B0
-	.public _020FD5C0
+	.public gDirectionTable01
+	.public gDirectionTable03
+	.public gDirectionTable13
+	.public gDirectionTable02
+	.public gDirectionTable04
+	.public gDirectionTable12
+	.public gDirectionTable10
+	.public gDirectionTable09
+	.public gDirectionTable20
+	.public gDirectionTable28
+	.public gDirectionTable27
+	.public gDirectionTable34
+	.public gDirectionTable29
+	.public gDirectionTable31
 	.public gSpinMovementStateFuncs
-	.public _020FD5E0
-	.public _020FD5F0
-	.public _020FD600
-	.public _020FD610
-	.public _020FD620
-	.public _020FD630
-	.public _020FD640
-	.public _020FD650
-	.public _020FD660
-	.public _020FD670
-	.public _020FD680
-	.public _020FD690
-	.public _020FD6A0
-	.public _020FD6B0
-	.public _020FD6C0
-	.public _020FD6D0
-	.public _020FD6E0
-	.public _020FD6F0
-	.public _020FD700
-	.public _020FD710
-	.public _020FD720
-	.public _020FD730
-	.public _020FD740
+	.public gDirectionTable35
+	.public gDirectionTable36
+	.public gDirectionTable19
+	.public gDirectionTable30
+	.public gDirectionTable16
+	.public gDirectionTable17
+	.public gDirectionTable15
+	.public gDirectionTable14
+	.public gDirectionTable22
+	.public gDirectionTable23
+	.public gDirectionTable26
+	.public gDirectionTable32
+	.public gDirectionTable06
+	.public gDirectionTable07
+	.public gDirectionTable24
+	.public gDirectionTable08
+	.public gDirectionTable05
+	.public gDirectionTable25
+	.public gDirectionTable33
+	.public gDirectionTable37
+	.public gDirectionTable18
+	.public gDirectionTable21
+	.public gDirectionTable11
 	.public gSpinCounterclockwiseOrder
 	.public gSpinClockwiseOrder
 	.public gAlternatingSpinCounterclockwiseOrder
-	.public _020FD790
+	.public gDirectionTable38
 	.public gAlternatingSpinClockwiseOrder
-	.public _020FD7CC
+	.public gDirectionTable00
 	.public gWalkingSpinOrders
 	.public gPlayerAwareMovementTypes
 	.public gMovementDirectionTables

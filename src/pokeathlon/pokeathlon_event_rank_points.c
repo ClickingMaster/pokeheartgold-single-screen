@@ -4,7 +4,7 @@
 
 // Points by rank (100, 80, 70, 60); tied participants get the points of the lowest of their places. Every point
 // of the event score adds 5. At most 200.
-extern const u8 ov96_0221D99C[4];
+extern const u8 gPokeathlonEventRankPoints[4];
 
 // PokeathlonCourseScoreList_GetRanked (pokeathlon_course_internal.h)
 PokeathlonEventPointsEntry *PokeathlonCourseScoreList_GetRanked(void *list, int index);
@@ -20,10 +20,10 @@ void PokeathlonEvent_CalcRankPoints(void *list) {
     u16 points;
     u8 last;
 
-    table[0] = ov96_0221D99C[0];
-    table[1] = ov96_0221D99C[1];
-    last = ov96_0221D99C[3];
-    table[2] = ov96_0221D99C[2];
+    table[0] = gPokeathlonEventRankPoints[0];
+    table[1] = gPokeathlonEventRankPoints[1];
+    last = gPokeathlonEventRankPoints[3];
+    table[2] = gPokeathlonEventRankPoints[2];
     table[3] = last;
     for (i = 0; i < 4; i++) {
         ranks[i] = PokeathlonCourseScoreList_GetRanked(list, i)->rank;

@@ -58,7 +58,7 @@ void EncounterEffectHBlankWave_AlternateDirection(EncounterEffectHBlankWave *wav
 
 // One entry per grunt sprite, 8 words apart: start/end/velocity of x, start/end/velocity of y,
 // delay before the sprite appears, rotation
-extern const s32 ov117_0225FAF4[];
+extern const s32 gEncounterTeamRocketSteps[];
 extern const s32 ov117_0225FAF8[];
 extern const s32 ov117_0225FAFC[];
 extern const s32 ov117_0225FB00[];
@@ -66,11 +66,11 @@ extern const s32 ov117_0225FB04[];
 extern const s32 ov117_0225FB08[];
 extern const s32 ov117_0225FB0C[];
 extern const s32 ov117_0225FB10[];
-extern const RocketExecutiveIntroParams _0225FACC;
-extern const RocketExecutiveIntroParams ov117_0225FAD4;
-extern const RocketExecutiveIntroParams ov117_0225FADC;
-extern const RocketExecutiveIntroParams ov117_0225FAE4;
-extern const RocketExecutiveIntroParams ov117_0225FAEC;
+extern const RocketExecutiveIntroParams gEncounterExecutivePetrelIntroParams;
+extern const RocketExecutiveIntroParams gEncounterExecutiveProtonIntroParams;
+extern const RocketExecutiveIntroParams gEncounterExecutiveArcherIntroParams;
+extern const RocketExecutiveIntroParams gEncounterExecutiveArianaIntroParams;
+extern const RocketExecutiveIntroParams gEncounterRocketBossIntroParams;
 
 // Six "R" sprites fly in one after another, then the screen fades to black.
 void EncounterEffect_TeamRocket(SysTask *task, EncounterEffectTask *effect) {
@@ -107,12 +107,12 @@ void EncounterEffect_TeamRocket(SysTask *task, EncounterEffectTask *effect) {
         break;
     case 3:
         if (--work->timer < 0) {
-            EncounterEffectQuadInterp_Init(&work->x[work->next], ov117_0225FAF4[work->next * 8], ov117_0225FAF8[work->next * 8], ov117_0225FAFC[work->next * 8], 8);
+            EncounterEffectQuadInterp_Init(&work->x[work->next], gEncounterTeamRocketSteps[work->next * 8], ov117_0225FAF8[work->next * 8], ov117_0225FAFC[work->next * 8], 8);
             EncounterEffectQuadInterp_Init(&work->y[work->next], ov117_0225FB00[work->next * 8], ov117_0225FB04[work->next * 8], ov117_0225FB08[work->next * 8], 8);
             EncounterEffectQuadInterp_Init(&work->scale[work->next], FX32_CONST(2), 41, -0x666, 8);
             EncounterEffectInterp_Init(&work->rotation[work->next], 0, ov117_0225FB10[work->next * 8], 8);
             Sprite_SetDrawFlag(work->sprites[work->next], TRUE);
-            EncounterEffect_SetVecFx32(&position, ov117_0225FAF4[work->next * 8], ov117_0225FB00[work->next * 8], 0);
+            EncounterEffect_SetVecFx32(&position, gEncounterTeamRocketSteps[work->next * 8], ov117_0225FB00[work->next * 8], 0);
             Sprite_SetMatrix(work->sprites[work->next], &position);
             EncounterEffect_SetVecFx32(&scale, FX32_CONST(2), FX32_CONST(2), 0);
             Sprite_SetScaleAndAffineType(work->sprites[work->next], &scale, 2);
@@ -201,23 +201,23 @@ String *RocketEffect_GetTrainerNameString(u32 trainerId, enum HeapID heapID) {
 }
 
 void EncounterEffect_ExecutivePetrel(SysTask *task, EncounterEffectTask *effect) {
-    RocketEffect_RunExecutiveIntro(task, effect, &_0225FACC);
+    RocketEffect_RunExecutiveIntro(task, effect, &gEncounterExecutivePetrelIntroParams);
 }
 
 void EncounterEffect_ExecutiveProton(SysTask *task, EncounterEffectTask *effect) {
-    RocketEffect_RunExecutiveIntro(task, effect, &ov117_0225FAD4);
+    RocketEffect_RunExecutiveIntro(task, effect, &gEncounterExecutiveProtonIntroParams);
 }
 
 void EncounterEffect_ExecutiveArcher(SysTask *task, EncounterEffectTask *effect) {
-    RocketEffect_RunExecutiveIntro(task, effect, &ov117_0225FADC);
+    RocketEffect_RunExecutiveIntro(task, effect, &gEncounterExecutiveArcherIntroParams);
 }
 
 void EncounterEffect_ExecutiveAriana(SysTask *task, EncounterEffectTask *effect) {
-    RocketEffect_RunExecutiveIntro(task, effect, &ov117_0225FAE4);
+    RocketEffect_RunExecutiveIntro(task, effect, &gEncounterExecutiveArianaIntroParams);
 }
 
 void EncounterEffect_RocketBoss(SysTask *task, EncounterEffectTask *effect) {
-    RocketEffect_RunExecutiveIntro(task, effect, &ov117_0225FAEC);
+    RocketEffect_RunExecutiveIntro(task, effect, &gEncounterRocketBossIntroParams);
 }
 
 // The trainer's picture slides in behind a window that opens from the middle of the screen,

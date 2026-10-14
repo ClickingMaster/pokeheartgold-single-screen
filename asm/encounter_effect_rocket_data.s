@@ -30,14 +30,14 @@
 	.public _0225F394
 	.public _0225F3E4
 	.public _0225F41A
-	.public _0225FACC
+	.public gEncounterExecutivePetrelIntroParams
 	.public EncounterEffect_TeamRocket
 	.public RocketEffect_RunExecutiveIntro
-	.public ov117_0225FAD4
-	.public ov117_0225FADC
-	.public ov117_0225FAE4
-	.public ov117_0225FAEC
-	.public ov117_0225FAF4
+	.public gEncounterExecutiveProtonIntroParams
+	.public gEncounterExecutiveArcherIntroParams
+	.public gEncounterExecutiveArianaIntroParams
+	.public gEncounterRocketBossIntroParams
+	.public gEncounterTeamRocketSteps
 	.public ov117_0225FAF8
 	.public ov117_0225FAFC
 	.public ov117_0225FB00
@@ -45,7 +45,7 @@
 	.public ov117_0225FB08
 	.public ov117_0225FB0C
 	.public ov117_0225FB10
-	.public _0225FACC
+	.public gEncounterExecutivePetrelIntroParams
 	.public EncounterEffect_TeamRocket
 	.public RocketEffect_LoadBgScreen
 	.public RocketEffect_GetTrainerNameString
@@ -61,25 +61,25 @@
 .text
 	.rodata
 
-_0225FACC:
+gEncounterExecutivePetrelIntroParams:
 	.byte 0xDE, 0xDF, 0xE0, 0xE1
 	.byte 0xE8, 0x01, 0x00, 0x00
 
-ov117_0225FAD4: ; 0x0225FAD4
+gEncounterExecutiveProtonIntroParams: ; 0x0225FAD4
 	.byte 0xE2, 0xE3, 0xE4, 0xE5, 0xE6, 0x01, 0x00, 0x00
 
-ov117_0225FADC: ; 0x0225FADC
+gEncounterExecutiveArcherIntroParams: ; 0x0225FADC
 	.byte 0xE6, 0xE7, 0xE8, 0xE9
 	.byte 0xE5, 0x01, 0x00, 0x00
 
-ov117_0225FAE4: ; 0x0225FAE4
+gEncounterExecutiveArianaIntroParams: ; 0x0225FAE4
 	.byte 0xEA, 0xEB, 0xEC, 0xED, 0xDF, 0x01, 0x00, 0x00
 
-ov117_0225FAEC: ; 0x0225FAEC
+gEncounterRocketBossIntroParams: ; 0x0225FAEC
 	.byte 0xEE, 0xEF, 0xF0, 0xF1
 	.byte 0xBC, 0x02, 0x00, 0x00
 
-ov117_0225FAF4: ; 0x0225FAF4
+gEncounterTeamRocketSteps: ; 0x0225FAF4
 	.byte 0x00, 0x40, 0x10, 0x00
 
 ov117_0225FAF8: ; 0x0225FAF8

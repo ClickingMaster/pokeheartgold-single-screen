@@ -146,7 +146,7 @@ typedef union GeonetGlobePosition {
     int values[2];
 } GeonetGlobePosition;
 
-extern const WindowTemplate _021E7644;
+extern const WindowTemplate gGeonetGlobeListWindowTemplate;
 extern const WindowTemplate sGeonetLocationWindowTemplate;
 extern const WindowTemplate sGeonetInfoButtonWindowTemplate;
 extern const WindowTemplate sGeonetExitButtonWindowTemplate;
@@ -301,7 +301,7 @@ BOOL GeonetGlobe_Main(OverlayManager *man, int *state) {
         break;
     case 3:
         if (GeonetGlobe_PrintMessage(globe, 1, TRUE) == TRUE) {
-            GeonetGlobe_CreateMenu(globe, &globe->windows[GEONET_GLOBE_WINDOW_LIST], &_021E7644, &sGeonetMenuTemplate, sGeonetMenuEntries);
+            GeonetGlobe_CreateMenu(globe, &globe->windows[GEONET_GLOBE_WINDOW_LIST], &gGeonetGlobeListWindowTemplate, &sGeonetMenuTemplate, sGeonetMenuEntries);
             *state = 4;
         }
         break;

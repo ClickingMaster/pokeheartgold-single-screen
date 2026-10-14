@@ -76,9 +76,9 @@ extern G2dRenderer ov74_0223D48C;         // = &gMainMenuUtilWork.sprites.render
 extern u32 ov74_0223D654[];               // = gMainMenuUtilWork + 0x200
 extern u32 ov74_0223E2D4[];               // = gMainMenuUtilWork + 0xE80
 extern const u8 sGiftCartridgePublicKey[];
-extern const ObjCharTransferTemplate _0223B710;
-extern const BgTemplate _0223B720;
-extern const MainMenuUtilGiftPalettes _0223B73C;
+extern const ObjCharTransferTemplate sMainMenuUtilObjCharTransferTemplate;
+extern const BgTemplate sMainMenuUtilBgTemplate;
+extern const MainMenuUtilGiftPalettes sMainMenuUtilGiftPalettes;
 extern u32 sGiftCartridgeGameCodes[];
 extern u16 ov74_0223CC5E[];
 
@@ -188,7 +188,7 @@ void *MainMenuUtil_CreateAppData(OverlayManager *manager, enum HeapID heapID, u3
 #pragma force_active on
 
 void MainMenuUtil_InitBg(BgConfig *bgConfig, int bgId, u32 screenSize, u32 screenBase, u32 charBase) {
-    BgTemplate template = _0223B720;
+    BgTemplate template = sMainMenuUtilBgTemplate;
     template.size = screenSize;
     switch (screenSize) {
     case GF_BG_SCR_SIZE_256x256:
@@ -357,7 +357,7 @@ u32 MainMenuTextPrinter_GetTileCount(MainMenuTextPrinter *printer) {
 #pragma force_active on
 
 void MainMenuUtil_InitObjTransfer(void) {
-    ObjCharTransferTemplate template = _0223B710;
+    ObjCharTransferTemplate template = sMainMenuUtilObjCharTransferTemplate;
     template.heapID = gMainMenuUtilWork.heapId;
     ObjCharTransfer_InitEx(&template, GX_OBJVRAMMODE_CHAR_1D_32K, GX_OBJVRAMMODE_CHAR_1D_32K);
     ObjPlttTransfer_Init(30, gMainMenuUtilWork.heapId);
@@ -561,9 +561,9 @@ void MainMenuUtil_VBlankCB(void) {
     }
 }
 
-// Palette of the gift graphics per gift type (pairs in _0223B73C, 0xFF-terminated)
+// Palette of the gift graphics per gift type (pairs in sMainMenuUtilGiftPalettes, 0xFF-terminated)
 int MainMenuUtil_GetGiftPalette(int giftType) {
-    MainMenuUtilGiftPalettes palettes = _0223B73C;
+    MainMenuUtilGiftPalettes palettes = sMainMenuUtilGiftPalettes;
     int i;
     u8 *entry;
     i = 0;

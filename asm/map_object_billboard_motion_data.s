@@ -2,7 +2,7 @@
 	.include "asm/macros.inc"
 	.include "global.inc"
 
-	.public ov01_022089CC
+	.public sPlayerApricornLadderBillboardMotions
 	.public gPlayerWalkSlightlyFasterFrameSteps
 	.public gPlayerFishingBillboardMotions
 	.public gPlayerFishingSequences
@@ -51,7 +51,7 @@
 	.text
 	.rodata
 
-ov01_022089CC: ; 0x022089CC
+sPlayerApricornLadderBillboardMotions: ; 0x022089CC
 	.word PlayerBillboardMotion_ApricornShake
 	.word PlayerBillboardMotion_Ladder0
 	.word PlayerBillboardMotion_Ladder1

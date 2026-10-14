@@ -23,7 +23,7 @@ void *gPokeathlonRingDropStates[] = {
     NULL
 };
 
-// u8 _0221DCA0[0x900]; // Non-matching yet if moved here (not sure why)
+// u8 gPokeathlonCirclePushContacts[0x900]; // Non-matching yet if moved here (not sure why)
 
 u8 gPokeathlonLampJumpTrampolineRed[4];
 u8 gPokeathlonBlockSmashFramesSinceHit[0x1c];

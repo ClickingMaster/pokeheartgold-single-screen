@@ -62,8 +62,8 @@
 	.public _0223B4EA
 	.public _0223B4F4
 	.public _0223B4FE
-	.public _0223B524
-	.public _0223B540
+	.public sMigrateFromAgbBgTemplate1
+	.public sMigrateFromAgbBgTemplate2
 	.public _0223B568
 	.public _0223B584
 	.public _0223B58E
@@ -108,8 +108,8 @@
 	.public FrontierHBlankDma_New
 	.public FrontierHBlankDma_Delete
 	.public FrontierHBlankDma_GetBuffer
-	.public ov80_0223DBE0
-	.public ov80_0223DBEC
+	.public gFrontierWipeRows
+	.public gFrontierWipeColumns
 	.include "frontier_transition_data.inc"
 	.include "global.inc"
 
@@ -146,10 +146,10 @@
 	.public FrontierHBlankDma_GetBuffer
     .rodata
 
-ov80_0223DBE0: ; 0x0223DBE0
+gFrontierWipeRows: ; 0x0223DBE0
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x05, 0x04, 0x03, 0x02, 0x01, 0x00
 
-ov80_0223DBEC: ; 0x0223DBEC
+gFrontierWipeColumns: ; 0x0223DBEC
 	.byte 0x00, 0x01, 0x02, 0x03
 	.byte 0x04, 0x05, 0x06, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 0x06, 0x05, 0x04
 	.byte 0x03, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00

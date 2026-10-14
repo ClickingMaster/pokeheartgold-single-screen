@@ -137,7 +137,7 @@ typedef struct PokeathlonGoalRollMon {
     u8 kickPower;                              // 0x72
     u8 kickRow;                                // 0x73: row of the ball speed tables
     u8 unk74;                                  // 0x74
-    u8 kickLevel;                              // 0x75: how long a kicked ball keeps going (ov96_0221D640)
+    u8 kickLevel;                              // 0x75: how long a kicked ball keeps going (gPokeathlonGoalRollKickSpeeds)
     u8 unk76[2];                               // 0x76
     int mode;                                  // 0x78
 } PokeathlonGoalRollMon;                       // size: 0x7C
@@ -170,7 +170,7 @@ typedef struct PokeathlonGoalRollBall {
     u8 scored;                              // 0x3F
     u8 speed;                               // 0x40
     u8 speedRow;                            // 0x41
-    u8 spawnPoint;                          // 0x42: where it last appeared (ov96_0221D438)
+    u8 spawnPoint;                          // 0x42: where it last appeared (gPokeathlonGoalRollBallSpawnPoints)
     u8 wait;                                // 0x43
     u8 shownState;                          // 0x44: state shown last (every participant)
     u8 strength;                            // 0x45
@@ -283,8 +283,8 @@ typedef struct PokeathlonGoalRollFramePacket {
     s32 flags;                   // 0x20: 2 bits mode per mon, time up (bit 24), score (<< 25)
 } PokeathlonGoalRollFramePacket; // size: 0x24
 
-// ov96_0221D1F4: the plate flash palettes (two for a lost point, two for a goal), followed by the
-// total points window template (ov96_0221D1F8) and the four goal palettes.
+// gPokeathlonGoalRollPaletteData: the plate flash palettes (two for a lost point, two for a goal), followed by the
+// total points window template (gPokeathlonGoalRollWindowData) and the four goal palettes.
 typedef struct PokeathlonGoalRollWindowData {
     WindowTemplate window;
     u16 goalPalettes[GOAL_ROLL_PARTICIPANTS];

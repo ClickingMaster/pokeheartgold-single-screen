@@ -94,9 +94,9 @@ extern const u32 _020FDA28[4];
 extern const u32 *const _020FD198[];
 extern const MovementCommandFunc *const gMovementCmdTable[];
 extern const fx32 *gJumpHeightTables[];
-extern const u32 _020FDA1C[];
-extern const u32 _020FDA50[];
-extern const u32 _020FDA68[];
+extern const u32 gVariableSpeedWalk_Cmd082[];
+extern const u32 gVariableSpeedWalk_Cmd076[];
+extern const u32 gVariableSpeedWalk_Cmd098[];
 
 BOOL MapObject_AreBitsSetForMovementScriptInit(LocalMapObject *object) {
     if (!MapObject_TestFlagsBits(object, MAPOBJECTFLAG_ACTIVE)) {
@@ -1067,7 +1067,7 @@ BOOL MapObjectMovementCmd079_Step0(LocalMapObject *object) {
 }
 
 BOOL MapObjectMovementCmd076_Step1(LocalMapObject *object) {
-    if (MapObject_UpdateVariableSpeedWalk(object, _020FDA50) == TRUE) {
+    if (MapObject_UpdateVariableSpeedWalk(object, gVariableSpeedWalk_Cmd076) == TRUE) {
         return TRUE;
     }
     return FALSE;
@@ -1094,7 +1094,7 @@ BOOL MapObjectMovementCmd083_Step0(LocalMapObject *object) {
 }
 
 BOOL MapObjectMovementCmd082_Step1(LocalMapObject *object) {
-    if (MapObject_UpdateVariableSpeedWalk(object, _020FDA1C) == TRUE) {
+    if (MapObject_UpdateVariableSpeedWalk(object, gVariableSpeedWalk_Cmd082) == TRUE) {
         return TRUE;
     }
     return FALSE;
@@ -1121,7 +1121,7 @@ BOOL MapObjectMovementCmd099_Step0(LocalMapObject *object) {
 }
 
 BOOL MapObjectMovementCmd098_Step1(LocalMapObject *object) {
-    if (MapObject_UpdateVariableSpeedWalk(object, _020FDA68) == TRUE) {
+    if (MapObject_UpdateVariableSpeedWalk(object, gVariableSpeedWalk_Cmd098) == TRUE) {
         return TRUE;
     }
     return FALSE;

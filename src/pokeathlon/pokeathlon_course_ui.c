@@ -20,9 +20,9 @@ u8 TextPrinterCheckActive(u8 printerId);
 void RemoveTextPrinter(u8 printerId);
 void ResetAllTextPrinters(void);
 
-extern const WindowTemplate ov96_0221B19A[2];
-extern const u32 ov96_0221B1BC[6];
-extern const TileRect ov96_0221B1AC;
+extern const WindowTemplate gPokeathlonEventBannerWindowTemplates[2];
+extern const u32 gPokeathlonCourseTrainerPicFileIds[6];
+extern const TileRect gPokeathlonCourseMonPicRect;
 
 static inline void *GetTexDictData(NNSG3dResTex *tex, u32 index) {
     if (tex) {
@@ -84,7 +84,7 @@ void PokeathlonEventBanner_Free(PokeathlonEventBanner *banner) {
 }
 
 void PokeathlonEventBanner_AddWindows(PokeathlonEventBanner *banner, BgConfig *bgConfig) {
-    const WindowTemplate *template = ov96_0221B19A;
+    const WindowTemplate *template = gPokeathlonEventBannerWindowTemplates;
     Window *window;
     int i;
     banner->bgConfig = bgConfig;
@@ -332,7 +332,7 @@ u16 PokeathlonCourse_GetTrainerPicFileId(u32 kind) {
     if (kind >= 6) {
         GF_AssertFail();
     }
-    return ov96_0221B1BC[kind];
+    return gPokeathlonCourseTrainerPicFileIds[kind];
 }
 
 void PokeathlonCourse_LoadMonPic(ManagedSprite *sprite, PokeathlonCourseObjectInfo *info, BOOL mainScreen, u32 palette, enum HeapID heapId) {
@@ -355,7 +355,7 @@ void PokeathlonCourse_LoadMonPicEx(ManagedSprite *sprite, PokeathlonCourseObject
         return;
     }
     GetMonSpriteCharAndPlttNarcIdsEx(&template, info->species, info->gender, 2, info->shiny, (u8)info->form, info->personality);
-    rect = ov96_0221B1AC;
+    rect = gPokeathlonCourseMonPicRect;
     buffer = Heap_AllocAtEnd(heapId, 0xC80);
     CharTiles_LoadMonRectAsObjFromNarc((NarcId) template.narcID, template.charDataID, heapId, &rect, buffer, info->personality, FALSE, 2, info->species);
     PokeathlonCourse_LoadSpriteChars(sprite->sprite, buffer, 0xC80);

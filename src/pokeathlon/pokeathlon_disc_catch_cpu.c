@@ -6,10 +6,10 @@
 #include "heap.h"
 #include "math_util.h"
 
-extern const u8 ov96_0221D1B0[];                                                  // per member: first home row (tiles) of its band ...
+extern const u8 gPokeathlonDiscCatchCpuHomeRowStarts[];                                                  // per member: first home row (tiles) of its band ...
 extern const u8 ov96_0221D1B1[];                                                  // ... and the band's rows
-extern const int ov96_0221D1B8[DISC_CATCH_TEAM_SIZE];                             // per member: chance (%) to jump at a disc in reach
-extern const s16 ov96_0221D1C4[DISC_CATCH_PARTICIPANTS][DISC_CATCH_TEAM_SIZE][2]; // home x
+extern const int gPokeathlonDiscCatchCpuJumpChances[DISC_CATCH_TEAM_SIZE];                             // per member: chance (%) to jump at a disc in reach
+extern const s16 gPokeathlonDiscCatchCpuHomePositions[DISC_CATCH_PARTICIPANTS][DISC_CATCH_TEAM_SIZE][2]; // home x
 
 static inline int GetParticipantCount(PokeathlonCourseData *course) {
     return PokeathlonCourse_GetParticipantCount(course);
@@ -94,9 +94,9 @@ void PokeathlonDiscCatchCpuTeam_Update(PokeathlonDiscCatchCpuMon *mons, u16 aver
 // A new home spot: a random row of the member's band and the team's column, give or take two tiles.
 void PokeathlonDiscCatchCpuMon_PickHome(PokeathlonDiscCatchCpuMon *mon) {
     int band = mon->member * 2;
-    mon->targetY = ov96_0221D1B0[band] + MTRandom() % ov96_0221D1B1[band];
+    mon->targetY = gPokeathlonDiscCatchCpuHomeRowStarts[band] + MTRandom() % ov96_0221D1B1[band];
     mon->targetY = mon->targetY * 8;
-    mon->homeX = ov96_0221D1C4[mon->participant][mon->member][0];
+    mon->homeX = gPokeathlonDiscCatchCpuHomePositions[mon->participant][mon->member][0];
     mon->homeX = mon->homeX + (MTRandom() % 5 - 2) * 8;
     mon->chasing = FALSE;
     mon->state = 0;
@@ -185,7 +185,7 @@ void PokeathlonDiscCatchCpuMon_Update(PokeathlonDiscCatchCpuMon *mon, u16 averag
     if (average + 20 < score) {
         chance = 0;
     } else {
-        chance = ov96_0221D1B8[mon->member];
+        chance = gPokeathlonDiscCatchCpuJumpChances[mon->member];
     }
     if (roll < chance) {
         PokeathlonDiscCatch_MakeMonJump(work, (u8)mon->participant, (u8)mon->member);

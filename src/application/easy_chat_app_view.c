@@ -71,16 +71,16 @@ typedef struct EasyChatViewCommand {
 
 typedef void (*EasyChatViewCommandFunc)(SysTask *task, EasyChatViewCommand *command);
 
-extern const ObjCharTransferTemplate ov102_021EC698;
-extern const GraphicsModes ov102_021EC6A8;
-extern const BgTemplate ov102_021EC6B8;
-extern const BgTemplate ov102_021EC6D4;
-extern const BgTemplate ov102_021EC6F0;
-extern const BgTemplate ov102_021EC70C;
-extern const BgTemplate ov102_021EC728;
-extern const BgTemplate ov102_021EC744;
-extern const GraphicsBanks ov102_021EC760;
-extern const EasyChatViewCommandFunc ov102_021EC788[];
+extern const ObjCharTransferTemplate gEasyChatObjCharTransferTemplate;
+extern const GraphicsModes gEasyChatAppViewGraphicsModes;
+extern const BgTemplate gEasyChatBgTemplate_Main2;
+extern const BgTemplate gEasyChatBgTemplate_Main1;
+extern const BgTemplate gEasyChatBgTemplate_Sub1;
+extern const BgTemplate gEasyChatBgTemplate_Main3;
+extern const BgTemplate gEasyChatBgTemplate_Main0;
+extern const BgTemplate gEasyChatBgTemplate_Sub0;
+extern const GraphicsBanks gEasyChatAppViewGraphicsBanks;
+extern const EasyChatViewCommandFunc gEasyChatViewCommandFuncs[];
 
 EasyChatSentenceView *EasyChatSentenceView_Create(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu);
 void EasyChatSentenceView_Delete(EasyChatSentenceView *sentence);
@@ -254,7 +254,7 @@ void EasyChatAppView_Delete(EasyChatAppView *view) {
 
 void EasyChatAppView_InitCharTransfer(EasyChatAppView *view) {
 #pragma unused(view)
-    ObjCharTransferTemplate template = ov102_021EC698;
+    ObjCharTransferTemplate template = gEasyChatObjCharTransferTemplate;
 
     ObjCharTransfer_Init(&template);
     ObjCharTransfer_ClearBuffers();
@@ -369,7 +369,7 @@ void EasyChatAppView_StartCommand(EasyChatAppView *view, u32 command) {
             for (i = 0; i < 4; i++) {
                 if (view->commandTasks[i] == NULL) {
                     cmd->slot = i;
-                    view->commandTasks[i] = SysTask_CreateOnMainQueue((SysTaskFunc)ov102_021EC788[command], cmd, 1);
+                    view->commandTasks[i] = SysTask_CreateOnMainQueue((SysTaskFunc)gEasyChatViewCommandFuncs[command], cmd, 1);
                     return;
                 }
             }
@@ -504,14 +504,14 @@ void EasyChatAppView_InitBgs(EasyChatViewCommand *command) {
 
     reg_GX_POWCNT &= ~0x8000;
     GX_SetGraphicsMode(GX_DISPMODE_GRAPHICS, GX_BGMODE_0, GX_BG0_AS_3D);
-    GfGfx_SetBanks(&ov102_021EC760);
-    SetBothScreensModesAndDisable(&ov102_021EC6A8);
-    InitBgFromTemplate(view->bgConfig, GF_BG_LYR_MAIN_0, &ov102_021EC728, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(view->bgConfig, GF_BG_LYR_MAIN_1, &ov102_021EC6D4, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(view->bgConfig, GF_BG_LYR_MAIN_2, &ov102_021EC6B8, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(view->bgConfig, GF_BG_LYR_MAIN_3, &ov102_021EC70C, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(view->bgConfig, GF_BG_LYR_SUB_0, &ov102_021EC744, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(view->bgConfig, GF_BG_LYR_SUB_1, &ov102_021EC6F0, GF_BG_TYPE_TEXT);
+    GfGfx_SetBanks(&gEasyChatAppViewGraphicsBanks);
+    SetBothScreensModesAndDisable(&gEasyChatAppViewGraphicsModes);
+    InitBgFromTemplate(view->bgConfig, GF_BG_LYR_MAIN_0, &gEasyChatBgTemplate_Main0, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(view->bgConfig, GF_BG_LYR_MAIN_1, &gEasyChatBgTemplate_Main1, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(view->bgConfig, GF_BG_LYR_MAIN_2, &gEasyChatBgTemplate_Main2, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(view->bgConfig, GF_BG_LYR_MAIN_3, &gEasyChatBgTemplate_Main3, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(view->bgConfig, GF_BG_LYR_SUB_0, &gEasyChatBgTemplate_Sub0, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(view->bgConfig, GF_BG_LYR_SUB_1, &gEasyChatBgTemplate_Sub1, GF_BG_TYPE_TEXT);
     for (i = 0; i < 6; i++) {
         BgClearTilemapBufferAndCommit(view->bgConfig, i);
     }

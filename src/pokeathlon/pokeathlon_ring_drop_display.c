@@ -27,13 +27,13 @@ typedef struct PokeathlonRingDropDepth {
     void *monObject;
 } PokeathlonRingDropDepth;
 
-extern const GraphicsModes ov96_0221D6C4;
-extern const OamCharTransferParam ov96_0221D6F4;
-extern const SpriteResourceCountsListUnion ov96_0221D720;
-extern const u32 ov96_0221D738[7];
-extern const OamManagerParam ov96_0221D754;
-extern const ManagedSpriteTemplate ov96_0221D79C;
-extern const PokeathlonRingDropBgTemplates ov96_0221D834;
+extern const GraphicsModes gPokeathlonRingDropGraphicsModes;
+extern const OamCharTransferParam gPokeathlonRingDropOamCharTransferParam;
+extern const SpriteResourceCountsListUnion gPokeathlonRingDropSpriteResourceCounts;
+extern const u32 gPokeathlonRingDropBgLayers[7];
+extern const OamManagerParam gPokeathlonRingDropOamManagerParam;
+extern const ManagedSpriteTemplate gPokeathlonRingDropSpriteTemplate;
+extern const PokeathlonRingDropBgTemplates gPokeathlonRingDropBgTemplates;
 
 // Sound (declared by no header)
 BOOL PlaySE_SetVolume(u16 seqNo, int volume);
@@ -65,9 +65,9 @@ void PokeathlonCourseObject_SetScale(void *object, f32 scaleX, f32 scaleY);
 #pragma force_active on
 
 void PokeathlonRingDrop_InitSprites(PokeathlonRingDrop *ringDrop) {
-    SpriteResourceCountsListUnion counts = ov96_0221D720;
-    OamManagerParam oamParam = ov96_0221D754;
-    OamCharTransferParam transferParam = ov96_0221D6F4;
+    SpriteResourceCountsListUnion counts = gPokeathlonRingDropSpriteResourceCounts;
+    OamManagerParam oamParam = gPokeathlonRingDropOamManagerParam;
+    OamCharTransferParam transferParam = gPokeathlonRingDropOamCharTransferParam;
 
     transferParam.maxTasks = 128;
     ringDrop->spriteSystem = SpriteSystem_Alloc(ringDrop->heapId);
@@ -127,7 +127,7 @@ void PokeathlonRingDrop_LoadSpriteResources(PokeathlonRingDrop *ringDrop) {
 #pragma force_active reset
 
 ManagedSprite *PokeathlonRingDrop_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u16 animation, u16 drawPriority) {
-    ManagedSpriteTemplate template = ov96_0221D79C;
+    ManagedSpriteTemplate template = gPokeathlonRingDropSpriteTemplate;
     ManagedSprite *sprite;
 
     GF_ASSERT(spriteSystem != NULL);
@@ -150,13 +150,13 @@ void PokeathlonRingDrop_InitBgs(PokeathlonRingDrop *ringDrop) {
     enum HeapID heapId = ringDrop->heapId;
     int i;
 
-    modes = ov96_0221D6C4;
+    modes = gPokeathlonRingDropGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    templates = ov96_0221D834;
+    templates = gPokeathlonRingDropBgTemplates;
     for (i = 0; i < 7; i++) {
-        InitBgFromTemplate(bgConfig, (u8)ov96_0221D738[i], &templates.templates[i], GF_BG_TYPE_TEXT);
-        BgClearTilemapBufferAndCommit(bgConfig, (u8)ov96_0221D738[i]);
-        BG_ClearCharDataRange((u8)ov96_0221D738[i], 0x20, 0, heapId);
+        InitBgFromTemplate(bgConfig, (u8)gPokeathlonRingDropBgLayers[i], &templates.templates[i], GF_BG_TYPE_TEXT);
+        BgClearTilemapBufferAndCommit(bgConfig, (u8)gPokeathlonRingDropBgLayers[i]);
+        BG_ClearCharDataRange((u8)gPokeathlonRingDropBgLayers[i], 0x20, 0, heapId);
     }
     ringDrop->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0309_bin, ringDrop->heapId);
     ringDrop->msgFormat = MessageFormat_New(ringDrop->heapId);
@@ -173,7 +173,7 @@ void PokeathlonRingDrop_FreeBgs(PokeathlonRingDrop *ringDrop) {
     MessageFormat_Delete(ringDrop->msgFormat);
     DestroyMsgData(ringDrop->msgData);
     for (i = 0; i < 7; i++) {
-        FreeBgTilemapBuffer(ringDrop->bgConfig, (u8)ov96_0221D738[i]);
+        FreeBgTilemapBuffer(ringDrop->bgConfig, (u8)gPokeathlonRingDropBgLayers[i]);
     }
     FontID_Release((FontID)4);
     Heap_Free(ringDrop->bgConfig);

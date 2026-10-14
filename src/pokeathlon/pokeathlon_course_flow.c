@@ -1233,7 +1233,7 @@ void PokeathlonCourse_SaveSoloEventRecords(PokeathlonCourseData *course, Pokeath
         if (record->timesPlayed < 9999999) {
             record->timesPlayed++;
         }
-        int order = _0221A7D8[event];
+        int order = gPokeathlonEventScoreOrders[event];
         for (u8 j = 0; j < 5; j++) {
             top[j].score = record->top[j].score;
             for (u8 k = 0; k < 3; k++) {
@@ -1279,7 +1279,7 @@ void PokeathlonCourse_SaveLinkEventRecords(PokeathlonCourseData *course, Pokeath
         if (record->timesPlayed < 9999999) {
             record->timesPlayed++;
         }
-        order = _0221A7D8[event];
+        order = gPokeathlonEventScoreOrders[event];
         for (j = 0; j < 5; j++) {
             top[j].score = record->top[j].score;
             for (k = 0; k < 3; k++) {
@@ -1325,7 +1325,7 @@ void PokeathlonCourse_SaveSoloEventBests(PokeathlonCourseData *course, Pokeathlo
 
     for (i = 0; i < 3; i++) {
         event = (u8)layout->roundEvents[i];
-        if (PokeathlonCourse_BeatsRecord(records[event].entries[0].score, layout->results.eventScores[0][i], _0221A7D8[event])) {
+        if (PokeathlonCourse_BeatsRecord(records[event].entries[0].score, layout->results.eventScores[0][i], gPokeathlonEventScoreOrders[event])) {
             bests[event] = layout->results.eventPoints[0][i];
         }
     }
@@ -1596,7 +1596,7 @@ BOOL PokeathlonCourse_BeatsAllEventTargets(PokeathlonCourseData *course) {
         if (record == 0xFFFF) {
             return FALSE;
         }
-        if (!PokeathlonCourse_BeatsRecordInOrder(ov96_0221A894[i], record, _0221A7D8[i])) {
+        if (!PokeathlonCourse_BeatsRecordInOrder(gPokeathlonEventTargetScores[i], record, gPokeathlonEventScoreOrders[i])) {
             return FALSE;
         }
         i++;
@@ -1643,7 +1643,7 @@ void PokeathlonCourse_ChooseEvents(PokeathlonCourseArgsLayout *args, u32 rounds,
         if (courseId == 10) {
             u8 set = (u8)((s32)LCRandom() % 10);
             for (i = 0; i < rounds; i++) {
-                eventIds[i] = ov96_0221A95C[set][i];
+                eventIds[i] = gPokeathlonCourse10EventSets[set][i];
             }
         } else {
             for (i = 0; i < rounds; i++) {
@@ -1791,7 +1791,7 @@ BOOL PokeathlonCourse_IsNewRecord(PokeathlonCourseData *course) {
     if (value == 0xFFFF) {
         return TRUE;
     }
-    if (_0221A7D8[event] == 0) {
+    if (gPokeathlonEventScoreOrders[event] == 0) {
         if (value < layout->recordScore) {
             return TRUE;
         }
@@ -2136,7 +2136,7 @@ u8 *PokeathlonCourse_ToBytes(void *ptr) {
 }
 
 int PokeathlonCourseCmd_GetTable(void) {
-    return (int)ov96_0221AEC4;
+    return (int)gPokeathlonCourseCmds;
 }
 
 int PokeathlonCourseCmd_GetCount(void) {

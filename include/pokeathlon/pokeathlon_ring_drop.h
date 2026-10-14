@@ -53,7 +53,7 @@ typedef struct PokeathlonRingDropMemberParams {
     fx32 speed;                   // 0x0C: walking speed
     s32 pressPower;               // 0x10: push of landing on a Pokemon
     s32 pressDamage;              // 0x14
-    u8 jumpType;                  // 0x18: row of ov96_0221D7D0 (jump heights) and ov96_0221D69C (fall speeds)
+    u8 jumpType;                  // 0x18: row of gPokeathlonRingDropJumpHeights (jump heights) and gPokeathlonRingDropFallSpeeds (fall speeds)
 } PokeathlonRingDropMemberParams; // size: 0x1C
 
 // A team member's 3D object and stamina.

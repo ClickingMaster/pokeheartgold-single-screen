@@ -103,34 +103,34 @@ typedef struct BattleAnimEmitterFlagMasks {
     int masks[15];
 } BattleAnimEmitterFlagMasks;
 
-extern const BattleAnimEmitterOffsetTable ov07_02235440;
-extern const BattleAnimEmitterOffsetTable ov07_02235488;
-extern const BattleAnimEmitterAxisRow ov07_022354D0;
-extern const BattleAnimScreenPosTable6 ov07_022354E0;
-extern const BattleAnimEmitterAxisPositions ov07_02235510;
-extern const BattleAnimScreenPosTable7 ov07_02235540;
-extern const BattleAnimScreenPosTable7 ov07_02235578;
-extern const BattleAnimEmitterAxisRows ov07_022355B0;
-extern const BattleAnimEmitterAxisEntry ov07_02235CE0[6][6];
+extern const BattleAnimEmitterOffsetTable gBattleAnimEmitterOffsetsX;
+extern const BattleAnimEmitterOffsetTable gBattleAnimEmitterOffsetsY;
+extern const BattleAnimEmitterAxisRow gBattleAnimEmitterAxisBase;
+extern const BattleAnimScreenPosTable6 gBattleAnimEmitterPositions_Mode31;
+extern const BattleAnimEmitterAxisPositions gBattleAnimEmitterAxisPositions;
+extern const BattleAnimScreenPosTable7 gBattleAnimEmitterPositions_Mode32;
+extern const BattleAnimScreenPosTable7 gBattleAnimEmitterPositions_Mode30;
+extern const BattleAnimEmitterAxisRows gBattleAnimEmitterAxisRows;
+extern const BattleAnimEmitterAxisEntry gBattleAnimEmitterAxes_Mode1[6][6];
 extern const BattleAnimEmitterAxisEntry ov07_02235CE4[6][6];
 extern const BattleAnimEmitterAxisEntry ov07_02235CE8[6][6];
-extern const BattleAnimEmitterAxisEntry ov07_02235620[6][6];
+extern const BattleAnimEmitterAxisEntry gBattleAnimEmitterAxes_Mode8[6][6];
 extern const BattleAnimEmitterAxisEntry ov07_02235624[6][6];
 extern const BattleAnimEmitterAxisEntry ov07_02235628[6][6];
-extern const BattleAnimEmitterAxisEntry ov07_022357D0[6][6];
-extern const BattleAnimEmitterAxisEntry ov07_02235B30[6][6];
+extern const BattleAnimEmitterAxisEntry gBattleAnimEmitterAxes_Mode10[6][6];
+extern const BattleAnimEmitterAxisEntry gBattleAnimEmitterAxes_Mode12[6][6];
 extern const BattleAnimEmitterAxisEntry ov07_02235B34[6][6];
 extern const BattleAnimEmitterAxisEntry ov07_02235B38[6][6];
-extern const BattleAnimEmitterAxisEntry ov07_02235E90[6][6];
+extern const BattleAnimEmitterAxisEntry gBattleAnimEmitterAxes_Mode14[6][6];
 extern const BattleAnimEmitterAxisEntry ov07_02235E94[6][6];
 extern const BattleAnimEmitterAxisEntry ov07_02235E98[6][6];
-extern const BattleAnimEmitterAxisEntry ov07_02235980[6][6];
+extern const BattleAnimEmitterAxisEntry gBattleAnimEmitterAxes_Mode16[6][6];
 extern const BattleAnimEmitterAxisEntry ov07_02235984[6][6];
 extern const BattleAnimEmitterAxisEntry ov07_02235988[6][6];
-extern const BattleAnimEmitterAxisEntry ov07_02236040[6][6];
+extern const BattleAnimEmitterAxisEntry gBattleAnimEmitterAxes_Mode18[6][6];
 extern const BattleAnimEmitterAxisEntry ov07_02236044[6][6];
 extern const BattleAnimEmitterAxisEntry ov07_02236048[6][6];
-extern const BattleAnimEmitterAxisEntry ov07_022361F0[6][6];
+extern const BattleAnimEmitterAxisEntry gBattleAnimEmitterAxes_Mode20[6][6];
 extern const BattleAnimEmitterAxisEntry ov07_022361F4[6][6];
 extern const BattleAnimEmitterAxisEntry ov07_022361F8[6][6];
 extern BattleAnimEmitterConfigCb sBattleAnimEmitterFlagCallbacks[];
@@ -138,7 +138,7 @@ extern const BattleAnimEmitterFlagMasks sBattleAnimEmitterFlagMasks; // 0xFEFE-t
 extern CameraAngle sBattleAnimEmitterCameraAngles[];
 extern BattleAnimEmitterConfigCb sBattleAnimEmitterCameraCallbacks[];
 // s16 [2][6][2]: (x, y) per battler slot, set 0 singles (+2: the 0221BFC0 mode), set 1 doubles; y read via its own label
-extern const s16 ov07_02236468[][12];
+extern const s16 gBattleAnimBattlerScreenPositions[][12];
 extern const s16 ov07_0223646A[][12];
 
 void BattleAnimEmitterCb_SetPositionAtFirstOpponent(SPLEmitter *emitter) {
@@ -243,8 +243,8 @@ void BattleAnimEmitterCb_SetPositionByBattlerTypes(SPLEmitter *emitter) {
     int attackerType, defenderType;
     u32 offsetX, offsetY;
 
-    offsetsX = ov07_02235440;
-    offsetsY = ov07_02235488;
+    offsetsX = gBattleAnimEmitterOffsetsX;
+    offsetsY = gBattleAnimEmitterOffsetsY;
     system = ParticleSystem_GetEmitterParam();
     attacker = BattleAnimSystem_GetAttacker(system);
     defender = BattleAnimSystem_GetDefender(system);
@@ -705,7 +705,7 @@ void BattleAnimEmitter_ApplyConfiguredPosition(SPLEmitter *emitter, BattleAnimEm
         BattleAnimUtil_GetBattlerEmitterPositionKind0(config->system, config->battlerA, &pos);
         break;
     case 31:
-        positions6 = ov07_022354E0;
+        positions6 = gBattleAnimEmitterPositions_Mode31;
         {
             int type = BattleAnimUtil_GetBattlerType(config->system, config->battlerA);
             pos.x = positions6.pos[type].x;
@@ -714,7 +714,7 @@ void BattleAnimEmitter_ApplyConfiguredPosition(SPLEmitter *emitter, BattleAnimEm
         pos.z = 0;
         break;
     case 30:
-        positions7 = ov07_02235578;
+        positions7 = gBattleAnimEmitterPositions_Mode30;
         {
             int type;
             if (ov07_0221BFC0(config->system) == 1) {
@@ -728,7 +728,7 @@ void BattleAnimEmitter_ApplyConfiguredPosition(SPLEmitter *emitter, BattleAnimEm
         pos.z = 0;
         break;
     case 32:
-        positions7b = ov07_02235540;
+        positions7b = gBattleAnimEmitterPositions_Mode32;
         {
             int type;
             if (ov07_0221BFC0(config->system) == 1) {
@@ -781,14 +781,14 @@ void BattleAnimEmitter_ApplyConfiguredAxis(SPLEmitter *emitter, BattleAnimEmitte
                 SET_AXIS(2336, -1440, 736);
             }
         } else {
-            SET_AXIS_FROM_TABLES(ov07_02235CE0, ov07_02235CE4, ov07_02235CE8, 2, 1);
+            SET_AXIS_FROM_TABLES(gBattleAnimEmitterAxes_Mode1, ov07_02235CE4, ov07_02235CE8, 2, 1);
         }
         break;
     case 4:
         if (ov07_0221BFC0(config->system) == 1) {
-            SET_AXIS_FROM_TABLES(ov07_02235CE0, ov07_02235CE4, ov07_02235CE8, 2, -1);
+            SET_AXIS_FROM_TABLES(gBattleAnimEmitterAxes_Mode1, ov07_02235CE4, ov07_02235CE8, 2, -1);
         } else if (BattleAnimUtil_GetBattlerSide(config->system, config->battlerA) == BattleAnimUtil_GetBattlerSide(config->system, config->battlerB)) {
-            SET_AXIS_FROM_TABLES(ov07_02235CE0, ov07_02235CE4, ov07_02235CE8, 2, 1);
+            SET_AXIS_FROM_TABLES(gBattleAnimEmitterAxes_Mode1, ov07_02235CE4, ov07_02235CE8, 2, 1);
         } else if (BattleAnimUtil_GetBattlerSide(config->system, config->battlerA) == 3) {
             SET_AXIS(3776, 2112, 1532);
         } else {
@@ -797,9 +797,9 @@ void BattleAnimEmitter_ApplyConfiguredAxis(SPLEmitter *emitter, BattleAnimEmitte
         break;
     case 5:
         if (ov07_0221BFC0(config->system) == 1) {
-            SET_AXIS_FROM_TABLES(ov07_02235CE0, ov07_02235CE4, ov07_02235CE8, 2, -1);
+            SET_AXIS_FROM_TABLES(gBattleAnimEmitterAxes_Mode1, ov07_02235CE4, ov07_02235CE8, 2, -1);
         } else if (BattleAnimUtil_GetBattlerSide(config->system, config->battlerA) == BattleAnimUtil_GetBattlerSide(config->system, config->battlerB)) {
-            SET_AXIS_FROM_TABLES(ov07_02235CE0, ov07_02235CE4, ov07_02235CE8, 2, 1);
+            SET_AXIS_FROM_TABLES(gBattleAnimEmitterAxes_Mode1, ov07_02235CE4, ov07_02235CE8, 2, 1);
         } else if (BattleAnimUtil_GetBattlerSide(config->system, config->battlerA) == 3) {
             SET_AXIS(3776, 2112, 1532);
         } else {
@@ -815,7 +815,7 @@ void BattleAnimEmitter_ApplyConfiguredAxis(SPLEmitter *emitter, BattleAnimEmitte
                 SET_AXIS(2336, -1440, 736);
             }
         } else {
-            SET_AXIS_FROM_TABLES(ov07_02235620, ov07_02235624, ov07_02235628, 2, 1);
+            SET_AXIS_FROM_TABLES(gBattleAnimEmitterAxes_Mode8, ov07_02235624, ov07_02235628, 2, 1);
         }
         break;
     case 10:
@@ -823,7 +823,7 @@ void BattleAnimEmitter_ApplyConfiguredAxis(SPLEmitter *emitter, BattleAnimEmitte
         if (ov07_0221BFC0(config->system) == 1) {
             SET_AXIS(-2336, 1440, 736);
         } else {
-            SET_AXIS_FROM_TABLES(ov07_022357D0, ov07_02235624, ov07_02235628, 2, 1);
+            SET_AXIS_FROM_TABLES(gBattleAnimEmitterAxes_Mode10, ov07_02235624, ov07_02235628, 2, 1);
         }
         break;
     case 12:
@@ -831,7 +831,7 @@ void BattleAnimEmitter_ApplyConfiguredAxis(SPLEmitter *emitter, BattleAnimEmitte
         if (ov07_0221BFC0(config->system) == 1) {
             SET_AXIS(-2936, 1440, 736);
         } else {
-            SET_AXIS_FROM_TABLES(ov07_02235B30, ov07_02235B34, ov07_02235B38, 1, 1);
+            SET_AXIS_FROM_TABLES(gBattleAnimEmitterAxes_Mode12, ov07_02235B34, ov07_02235B38, 1, 1);
         }
         break;
     case 14:
@@ -839,7 +839,7 @@ void BattleAnimEmitter_ApplyConfiguredAxis(SPLEmitter *emitter, BattleAnimEmitte
         if (ov07_0221BFC0(config->system) == 1) {
             SET_AXIS(-2336, 1440, 736);
         } else {
-            SET_AXIS_FROM_TABLES(ov07_02235E90, ov07_02235E94, ov07_02235E98, 1, 1);
+            SET_AXIS_FROM_TABLES(gBattleAnimEmitterAxes_Mode14, ov07_02235E94, ov07_02235E98, 1, 1);
         }
         break;
     case 16:
@@ -847,7 +847,7 @@ void BattleAnimEmitter_ApplyConfiguredAxis(SPLEmitter *emitter, BattleAnimEmitte
         if (ov07_0221BFC0(config->system) == 1) {
             SET_AXIS(-2336, 1440, 736);
         } else {
-            SET_AXIS_FROM_TABLES(ov07_02235980, ov07_02235984, ov07_02235988, 1, 1);
+            SET_AXIS_FROM_TABLES(gBattleAnimEmitterAxes_Mode16, ov07_02235984, ov07_02235988, 1, 1);
         }
         break;
     case 18:
@@ -855,7 +855,7 @@ void BattleAnimEmitter_ApplyConfiguredAxis(SPLEmitter *emitter, BattleAnimEmitte
         if (ov07_0221BFC0(config->system) == 1) {
             SET_AXIS(-2336, 1440, 736);
         } else {
-            SET_AXIS_FROM_TABLES(ov07_02236040, ov07_02236044, ov07_02236048, 1, 1);
+            SET_AXIS_FROM_TABLES(gBattleAnimEmitterAxes_Mode18, ov07_02236044, ov07_02236048, 1, 1);
         }
         break;
     case 20:
@@ -863,13 +863,13 @@ void BattleAnimEmitter_ApplyConfiguredAxis(SPLEmitter *emitter, BattleAnimEmitte
         if (ov07_0221BFC0(config->system) == 1) {
             SET_AXIS(-4336, 1440, 736);
         } else {
-            SET_AXIS_FROM_TABLES(ov07_022361F0, ov07_022361F4, ov07_022361F8, 1, 1);
+            SET_AXIS_FROM_TABLES(gBattleAnimEmitterAxes_Mode20, ov07_022361F4, ov07_022361F8, 1, 1);
         }
         break;
     case 6:
     case 7:
-        table = ov07_022355B0;
-        base = ov07_022354D0;
+        table = gBattleAnimEmitterAxisRows;
+        base = gBattleAnimEmitterAxisBase;
         for (i = 0; i < 4; i++) {
             a.v[i] = table.rows[0].v[i];
             b.v[i] = table.rows[1].v[i];
@@ -981,7 +981,7 @@ void BattleAnimEmitter_ApplyConfiguredAxis(SPLEmitter *emitter, BattleAnimEmitte
         }
         break;
     case 24:
-        positions = ov07_02235510;
+        positions = gBattleAnimEmitterAxisPositions;
         type = BattleAnimUtil_GetBattlerType(config->system, config->battlerA);
         SET_AXIS(positions.pos[type][0], positions.pos[type][1], 0);
         break;
@@ -1582,7 +1582,7 @@ void BattleAnimEmitter_RunCameraCallback(int index, SPLEmitter *emitter, BattleA
 
 void BattleAnimUtil_LookupScreenPos(int set, int index, s16 *x, s16 *y) {
     if (x != NULL) {
-        *x = ov07_02236468[set][index * 2];
+        *x = gBattleAnimBattlerScreenPositions[set][index * 2];
     }
     if (y != NULL) {
         *y = ov07_0223646A[set][index * 2];
@@ -1610,7 +1610,7 @@ s16 BattleAnimSystem_GetBattlerScreenCoord(BattleAnimSystem *system, int battler
     switch (coord) {
     case 0:
     case 2:
-        return ov07_02236468[set][index * 2];
+        return gBattleAnimBattlerScreenPositions[set][index * 2];
     case 1:
     case 3:
         return ov07_0223646A[set][index * 2];

@@ -28,13 +28,13 @@ void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonGoalRollSprite *spri
 SpriteList *PokeathlonCourseSpritePool_GetSpriteList(PokeathlonGoalRollSpritePool *pool);
 
 // declared writable here: the plate task was built so (the loads stay in order with the stores)
-extern PokeathlonGoalRollPaletteData ov96_0221D1F4;
-extern const u8 ov96_0221D648[2];
-extern const u8 ov96_0221D64C[2];
-extern const WindowTemplate ov96_0221D650;
-extern const WindowTemplate ov96_0221D658;
-extern const VecFx32 ov96_0221D660;
-extern const VecFx32 ov96_0221D66C;
+extern PokeathlonGoalRollPaletteData gPokeathlonGoalRollPaletteData;
+extern const u8 gPokeathlonGoalRollTimerDigitX[2];
+extern const u8 gPokeathlonGoalRollTimerDigitAnims[2];
+extern const WindowTemplate gPokeathlonGoalRollNameWindowTemplate;
+extern const WindowTemplate gPokeathlonGoalRollMessageWindowTemplate;
+extern const VecFx32 gPokeathlonGoalRollNumberPosition;
+extern const VecFx32 gPokeathlonGoalRollLabelPosition;
 
 // BgTilemapRectChangePalette as the plate task was built: with int arguments.
 typedef void (*PokeathlonGoalRollChangePaletteFunc)(BgConfig *bgConfig, int bgId, int x, int y, int width, int height, int palette);
@@ -85,12 +85,12 @@ void PokeathlonGoalRoll_PlateTask(SysTask *task, PokeathlonGoalRollPlate *plate)
             } palettes;
 
             u8 *gainedPalettes = palettes.gained;
-            palettes.gained[0] = ov96_0221D1F4.plateFlash[2];
-            palettes.gained[1] = ov96_0221D1F4.plateFlash[3];
-            u8 first = ov96_0221D1F4.plateFlash[0];
+            palettes.gained[0] = gPokeathlonGoalRollPaletteData.plateFlash[2];
+            palettes.gained[1] = gPokeathlonGoalRollPaletteData.plateFlash[3];
+            u8 first = gPokeathlonGoalRollPaletteData.plateFlash[0];
             u8 *lostPalettes = palettes.lost;
             palettes.lost[0] = first;
-            palettes.lost[1] = ov96_0221D1F4.plateFlash[1];
+            palettes.lost[1] = gPokeathlonGoalRollPaletteData.plateFlash[1];
             int palette;
             plate->toggle = (plate->toggle + 1) % 2;
             plate->delay = 5;
@@ -336,8 +336,8 @@ void PokeathlonGoalRollDisplay_LoadBgGfx(PokeathlonGoalRollDisplay *display) {
 }
 
 void PokeathlonGoalRollDisplay_CreateSprites(PokeathlonGoalRollSpritePool *pool, PokeathlonGoalRollDisplay *display, PokeathlonGoalRollResources *resources) {
-    VecFx32 numberPosition = ov96_0221D660;
-    VecFx32 labelPosition = ov96_0221D66C;
+    VecFx32 numberPosition = gPokeathlonGoalRollNumberPosition;
+    VecFx32 labelPosition = gPokeathlonGoalRollLabelPosition;
     PokeathlonGoalRollSprite *sprite;
     u8 i;
 
@@ -356,11 +356,11 @@ void PokeathlonGoalRollDisplay_CreateSprites(PokeathlonGoalRollSpritePool *pool,
         VecFx32 position;
         display->timerDigits[i] = PokeathlonCourseSprites_CreateTimerDigit(resources, PokeathlonCourseSpritePool_GetSpriteList(pool), 0, display->heapId);
         Sprite_SetDrawFlag(display->timerDigits[i], TRUE);
-        position.x = ov96_0221D648[i] << 12;
+        position.x = gPokeathlonGoalRollTimerDigitX[i] << 12;
         position.y = 10 << 18;
         position.z = 0;
         Sprite_SetMatrix(display->timerDigits[i], &position);
-        Sprite_SetAnimCtrlSeq(display->timerDigits[i], ov96_0221D64C[i]);
+        Sprite_SetAnimCtrlSeq(display->timerDigits[i], gPokeathlonGoalRollTimerDigitAnims[i]);
     }
 }
 
@@ -385,8 +385,8 @@ void PokeathlonGoalRollDisplay_PrintSecondWind(PokeathlonGoalRollDisplay *displa
 }
 
 void PokeathlonGoalRollDisplay_InitWindows(PokeathlonGoalRollDisplay *display) {
-    AddWindow(display->bgConfig, &display->nameWindow, &ov96_0221D650);
-    AddWindow(display->bgConfig, &display->messageWindow, &ov96_0221D658);
+    AddWindow(display->bgConfig, &display->nameWindow, &gPokeathlonGoalRollNameWindowTemplate);
+    AddWindow(display->bgConfig, &display->messageWindow, &gPokeathlonGoalRollMessageWindowTemplate);
     BG_FillCharDataRange(display->bgConfig, GF_BG_LYR_SUB_0, 0, 1, 0);
     LoadFontPal0(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_15_OFFSET, display->heapId);
 }

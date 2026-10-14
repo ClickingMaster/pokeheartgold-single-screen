@@ -86,7 +86,7 @@
 	.public _0222A82E
 	.public _0222A836
 	.public _0222A83C
-	.public _0223B620
+	.public gFrontierMonItems
 	.public FrontierData_AllocMember
 	.public FrontierData_ReadMember
 	.public FrontierTrainer_Load
@@ -130,7 +130,7 @@
 	.public Frontier_RecordLinkPlayerLocations
     .rodata
 
-_0223B620: ; 0x0223B620
+gFrontierMonItems: ; 0x0223B620
 	.byte 0xD5, 0x00, 0x9D, 0x00, 0xEA, 0x00, 0xD9, 0x00
 
 gFrontierTrainerClassSprites: ; 0x0223B628

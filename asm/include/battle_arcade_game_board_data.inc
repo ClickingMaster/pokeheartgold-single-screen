@@ -1,6 +1,6 @@
 #include <nitro/fs/overlay.h>
 #pragma once
-.public _0223F900
+.public gBattleArcadeEventColorThresholds
 .public gBattleArcadeEventStreakFlags
 .public gBattleArcadeGameBoardButtonHitbox
 .public gBattleArcadeCursorDelays

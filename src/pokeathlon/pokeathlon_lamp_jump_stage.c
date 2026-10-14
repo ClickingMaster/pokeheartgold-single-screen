@@ -63,7 +63,7 @@ extern const u32 ov96_0221C110[]; // pitch of the lamp sound per points
 extern const WindowTemplate ov96_0221C1CC[5];
 extern const u16 ov96_0221C21C[29][2]; // lamp positions, in half pixels
 extern const WindowTemplate ov96_0221C2A0;
-extern u8 ov96_0221DC18[]; // sound player of each Pokemon (not const: reloaded after every call)
+extern u8 gPokeathlonLampJumpSoundPlayers[]; // sound player of each Pokemon (not const: reloaded after every call)
 
 #pragma force_active on
 
@@ -291,7 +291,7 @@ void PokeathlonLampJump_UpdateJumps(PokeathlonCourseData *course, PokeathlonLamp
     monRow = lampJump;
     jumpRow = lampJump;
     mon = lampJump->mons;
-    soundPlayer = ov96_0221DC18;
+    soundPlayer = gPokeathlonLampJumpSoundPlayers;
     while (i < 3) {
         void *sprite = monRow->mons[0].sprite;
         PokeathlonCourseObject_GroundToCenter(sprite, monRow->mons[0].x / FX32_ONE, (FX32_CONST(288) - (jumpRow->jumps[0].height << 6)) / FX32_ONE, &hit.screenX, &hit.screenY);
@@ -425,7 +425,7 @@ void PokeathlonLampJump_UpdateJump(PokeathlonCourseData *course, PokeathlonLampJ
             jump->velocity = jump->velocity * 9 / 10;
             if (jump->velocity == 0) {
                 if (lampJump->mons[mon].unk28) {
-                    PlaySEOnPlayer(SEQ_SE_DP_BOX03, ov96_0221DC18[3]);
+                    PlaySEOnPlayer(SEQ_SE_DP_BOX03, gPokeathlonLampJumpSoundPlayers[3]);
                 }
                 jump->airborne = FALSE;
                 jump->height = heights[column];
@@ -444,7 +444,7 @@ void PokeathlonLampJump_UpdateJump(PokeathlonCourseData *course, PokeathlonLampJ
                     jump->airborne = TRUE;
                     jump->launchVelocity = jump->velocity;
                     lampJump->mons[mon].unk28 = FALSE;
-                    PlaySEOnPlayer(SEQ_SE_DP_DANSA5, ov96_0221DC18[3]);
+                    PlaySEOnPlayer(SEQ_SE_DP_DANSA5, gPokeathlonLampJumpSoundPlayers[3]);
                     PokeathlonCourse_AddMonCounter(course, participant, mon, 2, 1);
                 }
             }
@@ -803,7 +803,7 @@ BOOL PokeathlonLampJump_CollideMons(PokeathlonCourseData *course, PokeathlonLamp
             }
             lampJump->effectPending[lampJump->nextEffect] = TRUE;
             lampJump->nextEffect = (lampJump->nextEffect + 1) % 3;
-            PlaySEOnPlayer(SEQ_SE_GS_THLON06, ov96_0221DC18[3]);
+            PlaySEOnPlayer(SEQ_SE_GS_THLON06, gPokeathlonLampJumpSoundPlayers[3]);
             PokeathlonCourse_AddMonCounter(course, participant, (u8)i, 4, 1);
             PokeathlonCourse_AddMonCounter(course, participant, (u8)j, 4, 1);
             PokeathlonCourse_AddMonCounter(course, participant, (u8)i, 1, 1);

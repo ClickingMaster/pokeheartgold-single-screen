@@ -53,7 +53,7 @@ extern "C" HandlerVtbl gLobbyRequestVtable, gLobbyEnumChannelsRequestVtable;
 extern "C" const u32 gLobbyChatNextRequestId;
 
 struct Mgr {
-    void *unk0;
+    void *connection;
     u32 state;
     u8 pad[0x88];
     u8 list[1];
@@ -135,7 +135,7 @@ extern "C" int LobbyChat_EnumChannelsAsync(const char *name, u32 a, u32 b) {
     u32 id = GetId(h, IdTag(), IdTag());
     Str s(name);
     Str t = LobbyChat_GetFullChannelName(GetMgr(), s);
-    chatEnumChannelsA(GetMgr()->unk0, t.c_str(), LobbyChat_OnEnumChannelsEach, LobbyChat_OnEnumChannels, id, 0);
+    chatEnumChannelsA(GetMgr()->connection, t.c_str(), LobbyChat_OnEnumChannelsEach, LobbyChat_OnEnumChannels, id, 0);
     t.destroy();
     s.destroy();
     return 0;

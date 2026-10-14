@@ -137,8 +137,8 @@
 .public BattleAnimUtil_RestorePic
 .public BattleAnimUtil_LoadSubstituteIntoPic
 .public ov07_02234B5C
-.public ov07_022377DC
-.public ov07_022377F4
+.public gBattlerSlideInTargetX
+.public gBattlerPokepicPositions
 .public BattleBagMenu_Create
 .public TrainerAI_Init
 .public TrainerAI_SelectMove

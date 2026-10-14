@@ -92,20 +92,20 @@ extern void CommState_StopBeaconWatch(void);
 extern u32 CommState_GetSeenGames(void);
 extern void CommState_SetErrorWatch(s8 a0, s8 a1);
 
-extern MysteryGiftLinkState ov74_0223D0A8;
+extern MysteryGiftLinkState sMysteryGiftLinkState;
 
-extern const GraphicsModes _0223B390;
-extern const BgTemplate _0223B3A0;
-extern const MysteryGiftMenuTables ov74_0223C220;
-extern const MysteryGiftMenuItem ov74_0223C230[];
-extern const MysteryGiftMenuItem ov74_0223C240[];
-extern const MysteryGiftMenuItem ov74_0223C250[];
-extern const MysteryGiftMenuItem ov74_0223C260[];
-extern const ListMenuTemplate ov74_0223C270;
-extern const OverlayManagerTemplate _0223B410;
-extern const OverlayManagerTemplate _0223B420;
-extern const MysteryGiftMenuItem ov74_0223C2A0[];
-extern const MysteryGiftMenuItem ov74_0223C2B0[];
+extern const GraphicsModes gMysteryGiftAppGraphicsModes;
+extern const BgTemplate sMysteryGiftAppBgTemplate;
+extern const MysteryGiftMenuTables sMysteryGiftMenuTables;
+extern const MysteryGiftMenuItem sMysteryGiftWirelessMenuItems[];
+extern const MysteryGiftMenuItem sMysteryGiftAskReceiveMenuItems[];
+extern const MysteryGiftMenuItem sMysteryGiftFromFriendMenuItems[];
+extern const MysteryGiftMenuItem sMysteryGiftReceivePromptMenuItems[];
+extern const ListMenuTemplate sMysteryGiftListMenuTemplate;
+extern const OverlayManagerTemplate sWonderCardAlbumOverlayTemplate;
+extern const OverlayManagerTemplate sLockCapsuleCardOverlayTemplate;
+extern const MysteryGiftMenuItem sMysteryGiftMainMenuExtraItems[];
+extern const MysteryGiftMenuItem sMysteryGiftReceiveMenuItems[];
 
 #define MYSTERY_GIFT_PARTICLE_COUNT 80
 
@@ -405,7 +405,7 @@ void MysteryGiftApp_ShowReceivePrompt(OverlayManager *manager, int mode) {
         AddWindowParameterized(data->bgConfig, window, GF_BG_LYR_MAIN_0, 23, 10, 6, 4, 0, 428);
     }
     DrawFrameAndWindow1(window, TRUE, 31, 3);
-    MysteryGiftApp_CreateListMenu(manager, ov74_0223C260, 2, window, msgId);
+    MysteryGiftApp_CreateListMenu(manager, sMysteryGiftReceivePromptMenuItems, 2, window, msgId);
 }
 
 int MysteryGiftApp_DeclineSearch(OverlayManager *manager) {
@@ -433,7 +433,7 @@ int MysteryGiftApp_SelectGetFromFriend(OverlayManager *manager) {
         AddWindowParameterized(data->bgConfig, window, GF_BG_LYR_MAIN_0, 23, 10, 6, 4, 0, 428);
     }
     DrawFrameAndWindow1(window, TRUE, 31, 3);
-    MysteryGiftApp_CreateListMenu(manager, ov74_0223C250, 2, window, msg_0247_00002);
+    MysteryGiftApp_CreateListMenu(manager, sMysteryGiftFromFriendMenuItems, 2, window, msg_0247_00002);
     return 5;
 }
 
@@ -447,7 +447,7 @@ int MysteryGiftApp_SelectGetViaWfc(OverlayManager *manager) {
         AddWindowParameterized(data->bgConfig, window, GF_BG_LYR_MAIN_0, 23, 10, 6, 4, 0, 428);
     }
     DrawFrameAndWindow1(window, TRUE, 31, 3);
-    MysteryGiftApp_CreateListMenu(manager, ov74_0223C220.wfcPromptItems, 2, window, msg_0247_00080);
+    MysteryGiftApp_CreateListMenu(manager, sMysteryGiftMenuTables.wfcPromptItems, 2, window, msg_0247_00080);
     return 5;
 }
 
@@ -461,7 +461,7 @@ int MysteryGiftApp_SelectGetViaWireless(OverlayManager *manager) {
         AddWindowParameterized(data->bgConfig, window, GF_BG_LYR_MAIN_0, 23, 10, 6, 4, 0, 428);
     }
     DrawFrameAndWindow1(window, TRUE, 31, 3);
-    MysteryGiftApp_CreateListMenu(manager, ov74_0223C230, 2, window, msg_0247_00079);
+    MysteryGiftApp_CreateListMenu(manager, sMysteryGiftWirelessMenuItems, 2, window, msg_0247_00079);
     return 5;
 }
 
@@ -473,7 +473,7 @@ void MysteryGiftApp_AskReceiveGift(OverlayManager *manager) {
         AddWindowParameterized(data->bgConfig, window, GF_BG_LYR_MAIN_0, 23, 10, 6, 4, 0, 428);
     }
     DrawFrameAndWindow1(window, TRUE, 31, 3);
-    MysteryGiftApp_CreateListMenu(manager, ov74_0223C240, 2, window, msg_0247_00004);
+    MysteryGiftApp_CreateListMenu(manager, sMysteryGiftAskReceiveMenuItems, 2, window, msg_0247_00004);
 }
 
 #pragma force_active reset
@@ -498,7 +498,7 @@ int MysteryGiftApp_ConfirmWirelessSearch(OverlayManager *manager) {
     MysteryGiftApp_PrintMessage(manager, &data->messageWindow, msg_0247_00003);
     MysteryGiftApp_EraseWindowIfInUse(&data->windows[2], FALSE);
     MysteryGiftApp_SetWaitingIconVisible(data, TRUE);
-    ov74_0223D0A8.state = 37;
+    sMysteryGiftLinkState.state = 37;
     return 32;
 }
 
@@ -518,12 +518,12 @@ int MysteryGiftApp_ConfirmReceiveGift(OverlayManager *manager) {
 #pragma force_active on
 
 int MysteryGiftApp_DeclineReceiveGift(OverlayManager *manager) {
-    switch (ov74_0223D0A8.state) {
+    switch (sMysteryGiftLinkState.state) {
     case 40:
     case 41:
     case 48:
         if (MysteryGiftBeacon_Stop()) {
-            ov74_0223D0A8.state = 43;
+            sMysteryGiftLinkState.state = 43;
         }
         break;
     }
@@ -569,7 +569,7 @@ int MysteryGiftApp_SelectReceiveGift(OverlayManager *manager) {
         AddWindowParameterized(data->bgConfig, window, GF_BG_LYR_MAIN_0, 15, 9, 16, 8, 0, 292);
     }
     DrawFrameAndWindow1(window, TRUE, 31, 3);
-    MysteryGiftApp_CreateListMenu(manager, ov74_0223C2B0, 4, window, msg_0247_00001);
+    MysteryGiftApp_CreateListMenu(manager, sMysteryGiftReceiveMenuItems, 4, window, msg_0247_00001);
     return 4;
 }
 
@@ -609,7 +609,7 @@ int MysteryGiftApp_SelectExit(OverlayManager *manager) {
 }
 
 void MysteryGiftApp_InitBgLayer(BgConfig *bgConfig, GFBgLayer bgId, u32 screenOffset, u32 charOffset) {
-    BgTemplate template = _0223B3A0;
+    BgTemplate template = sMysteryGiftAppBgTemplate;
 
     template.screenBase = screenOffset >> 11;
     template.charBase = charOffset >> 14;
@@ -618,7 +618,7 @@ void MysteryGiftApp_InitBgLayer(BgConfig *bgConfig, GFBgLayer bgId, u32 screenOf
 }
 
 void MysteryGiftApp_InitBgLayers(BgConfig *bgConfig) {
-    GraphicsModes modes = _0223B390;
+    GraphicsModes modes = gMysteryGiftAppGraphicsModes;
 
     SetBothScreensModesAndDisable(&modes);
     MysteryGiftApp_InitBgLayer(bgConfig, GF_BG_LYR_MAIN_0, 0xF000, 0);
@@ -663,7 +663,7 @@ void MysteryGiftApp_CreateListMenu(OverlayManager *manager, const MysteryGiftMen
         } while (i < count);
     }
     DestroyMsgData(data->msgData);
-    ListMenuTemplate template = ov74_0223C270;
+    ListMenuTemplate template = sMysteryGiftListMenuTemplate;
     template.items = data->listMenuItems;
     template.maxShowed = count;
     template.totalItems = template.maxShowed;
@@ -684,14 +684,14 @@ void MysteryGiftApp_ShowMainMenu(OverlayManager *manager, int baseTile, int msgI
     MysteryGiftMenuItem items[4];
     Window *window = &data->windows[0];
 
-    items[count++] = ov74_0223C220.mainMenuItems[0];
+    items[count++] = sMysteryGiftMenuTables.mainMenuItems[0];
     if (SaveMysteryGift_HasAnyCard(mysteryGift)) {
-        items[count++] = ov74_0223C220.mainMenuItems[1];
+        items[count++] = sMysteryGiftMenuTables.mainMenuItems[1];
     }
     if (SaveMysteryGift_SpecialCardTagIsValid(mysteryGift)) {
-        items[count++] = ov74_0223C2A0[0];
+        items[count++] = sMysteryGiftMainMenuExtraItems[0];
     }
-    items[count] = ov74_0223C2A0[1];
+    items[count] = sMysteryGiftMainMenuExtraItems[1];
     if (window->bgConfig == NULL) {
         AddWindowParameterized(data->bgConfig, window, GF_BG_LYR_MAIN_0, 6, 7, 20, (u8)(2 * (count + 1)), 0, (u16)baseTile);
     }
@@ -754,7 +754,7 @@ void MysteryGiftApp_HandleListMenuInput(OverlayManager *manager, int *state, Mys
     default:
         PlaySE(SEQ_SE_DP_SELECT);
         if (input != 0) {
-            ov74_0223D0A8.selectedFunc = (MysteryGiftMenuFunc)input;
+            sMysteryGiftLinkState.selectedFunc = (MysteryGiftMenuFunc)input;
             nextState = ((MysteryGiftMenuFunc)input)(manager);
             if (nextState != -1) {
                 *state = nextState;
@@ -1766,7 +1766,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         break;
     case 32:
         MysteryGiftApp_UpdateWirelessSearch(data);
-        if (ov74_0223D0A8.state == 45) {
+        if (sMysteryGiftLinkState.state == 45) {
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
             MysteryGiftApp_GetReceivedCard(manager);
             data->giftCheckResult = MysteryGift_CheckCanReceive(data->saveData, &data->receivedHeader);
@@ -1783,7 +1783,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
                 *state = 31;
             }
         }
-        if ((u32)(ov74_0223D0A8.state - 46) <= 1) {
+        if ((u32)(sMysteryGiftLinkState.state - 46) <= 1) {
             MysteryGiftApp_StopWirelessLink();
             *state = 17;
         }
@@ -1848,7 +1848,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         break;
     case 36:
         MysteryGiftApp_UpdateWirelessSearch(data);
-        result = ov74_0223D0A8.state;
+        result = sMysteryGiftLinkState.state;
         if ((u32)(result - 45) <= 2) {
             if (result == 47) {
                 MysteryGiftApp_StopWirelessLink();
@@ -2135,11 +2135,11 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
 #pragma force_active reset
 
 OverlayManager *MysteryGiftApp_GetOverlayManager(void) {
-    return ov74_0223D0A8.manager;
+    return sMysteryGiftLinkState.manager;
 }
 
 void MysteryGiftApp_SetOverlayManager(OverlayManager *manager) {
-    ov74_0223D0A8.manager = manager;
+    sMysteryGiftLinkState.manager = manager;
 }
 
 #pragma force_active on
@@ -2151,9 +2151,9 @@ BOOL MysteryGiftApp_Exit(OverlayManager *manager, int *state) {
     if (exitTarget == 0) {
         RegisterMainOverlay(FS_OVERLAY_ID(intro_title), &gApplication_TitleScreen);
     } else if (exitTarget == 1) {
-        RegisterMainOverlay(FS_OVERLAY_ID(OVY_74), &_0223B410);
+        RegisterMainOverlay(FS_OVERLAY_ID(OVY_74), &sWonderCardAlbumOverlayTemplate);
     } else if (exitTarget == 2) {
-        RegisterMainOverlay(FS_OVERLAY_ID(OVY_74), &_0223B420);
+        RegisterMainOverlay(FS_OVERLAY_ID(OVY_74), &sLockCapsuleCardOverlayTemplate);
     }
     Heap_Destroy(HEAP_ID_89);
     OverlayManager_FreeData(manager);
@@ -2190,23 +2190,23 @@ void MysteryGiftApp_UpdateBeaconWatch(MysteryGiftAppData *data) {
 void MysteryGiftApp_BeaconCallback(int choice) {
     switch (choice) {
     case 0:
-        ov74_0223D0A8.state = 40;
+        sMysteryGiftLinkState.state = 40;
         break;
     case 1:
-        ov74_0223D0A8.state = 41;
+        sMysteryGiftLinkState.state = 41;
         break;
     case 2:
-        ov74_0223D0A8.state = 42;
+        sMysteryGiftLinkState.state = 42;
         break;
     case 3:
-        if (ov74_0223D0A8.state == 42) {
-            ov74_0223D0A8.state = 44;
+        if (sMysteryGiftLinkState.state == 42) {
+            sMysteryGiftLinkState.state = 44;
         } else {
-            ov74_0223D0A8.state = 47;
+            sMysteryGiftLinkState.state = 47;
         }
         break;
     case 4:
-        ov74_0223D0A8.state = 48;
+        sMysteryGiftLinkState.state = 48;
         break;
     }
 }
@@ -2215,9 +2215,9 @@ void MysteryGiftApp_BeaconCallback(int choice) {
 
 void MysteryGiftApp_StopWirelessLink(void) {
     CommWireless_Terminate();
-    Heap_Free(ov74_0223D0A8.linkWork);
+    Heap_Free(sMysteryGiftLinkState.linkWork);
     WirelessStatusIcon_Destroy();
-    ov74_0223D0A8.linkWork = NULL;
+    sMysteryGiftLinkState.linkWork = NULL;
 }
 
 #pragma force_active on
@@ -2225,37 +2225,37 @@ void MysteryGiftApp_StopWirelessLink(void) {
 void MysteryGiftApp_UpdateWirelessSearch(MysteryGiftAppData *data) {
     u32 state;
 
-    if (ov74_0223D0A8.state == 44) {
+    if (sMysteryGiftLinkState.state == 44) {
         MysteryGiftApp_StopWirelessLink();
         if (MysteryGiftBeacon_DecryptGift()) {
-            ov74_0223D0A8.state = 45;
+            sMysteryGiftLinkState.state = 45;
         } else {
-            ov74_0223D0A8.state = 46;
+            sMysteryGiftLinkState.state = 46;
         }
     }
-    state = ov74_0223D0A8.state;
+    state = sMysteryGiftLinkState.state;
     if (state == 37 || state == 38 || state == 39 || state == 40 || state == 41 || state == 43) {
         WirelessStatusIcon_SetLevel(3 - WM_GetLinkLevel());
     }
-    switch (ov74_0223D0A8.state) {
+    switch (sMysteryGiftLinkState.state) {
     case 37:
         CommWireless_StartUp();
-        ov74_0223D0A8.state = 38;
+        sMysteryGiftLinkState.state = 38;
         break;
     case 38:
         if (CommWireless_IsStartedUp() == TRUE) {
             void *linkWork;
 
-            ov74_0223D0A8.count = 0;
+            sMysteryGiftLinkState.count = 0;
             linkWork = Heap_Alloc(HEAP_ID_84, MysteryGiftBeacon_GetWorkSize());
-            ov74_0223D0A8.linkWork = linkWork;
+            sMysteryGiftLinkState.linkWork = linkWork;
             MysteryGiftBeacon_Init(data->recvBuffer, MysteryGiftApp_BeaconCallback, linkWork);
-            ov74_0223D0A8.state = 39;
+            sMysteryGiftLinkState.state = 39;
             WirelessStatusIcon_Create();
         }
         break;
     case 41:
-        ov74_0223D0A8.count++;
+        sMysteryGiftLinkState.count++;
         break;
     case 47:
         return;
@@ -2270,12 +2270,12 @@ void MysteryGiftApp_UpdateWirelessSearch(MysteryGiftAppData *data) {
         break;
     }
     if (gSystem.newKeys & PAD_BUTTON_B) {
-        switch (ov74_0223D0A8.state) {
+        switch (sMysteryGiftLinkState.state) {
         case 40:
         case 41:
         case 48:
             if (MysteryGiftBeacon_Stop()) {
-                ov74_0223D0A8.state = 43;
+                sMysteryGiftLinkState.state = 43;
             }
             break;
         case 42:

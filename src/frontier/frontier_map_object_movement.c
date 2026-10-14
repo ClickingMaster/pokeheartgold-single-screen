@@ -10,7 +10,7 @@ FrontierMap *Frontier_GetMap(void *frontier);
 FrontierMapObject *Frontier_GetMapObjects(void *frontier);
 void FrontierScript_GetMovementStep(Field2DMoveQueueEntry *command, Field2DObject *object, u16 id, s32 direction);
 
-extern const FrontierMapMovementFunc ov80_0223DB24[];
+extern const FrontierMapMovementFunc gFrontierMapMovementFuncs[];
 
 void FrontierMap_SetObjectMovement(void *frontier, u32 id, u32 type, const s16 *params, s32 count) {
     FrontierMapObject *object = FrontierMap_FindObject(frontier, id);
@@ -24,7 +24,7 @@ void FrontierMap_SetObjectMovement(void *frontier, u32 id, u32 type, const s16 *
 }
 
 void FrontierMap_RunObjectMovement(void *frontier, FrontierMapObject *object) {
-    FrontierMapMovementFunc func = ov80_0223DB24[object->movement.type];
+    FrontierMapMovementFunc func = gFrontierMapMovementFuncs[object->movement.type];
 
     if (func != NULL && func(frontier, object) == TRUE) {
         MI_CpuFill8(&object->movement, 0, sizeof(FrontierMapObjectMovement));

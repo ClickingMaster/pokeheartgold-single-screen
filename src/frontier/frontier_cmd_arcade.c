@@ -436,11 +436,11 @@ static void BattleArcade_CreateParticleEmitter(FrontierScriptContext *ctx, Arcad
     ParticleSystem_CreateEmitterWithParam(FrontierParticles_GetSystem(map->particleManager, 0), resourceId, BattleArcade_ParticleEmitterCallback, arcadeCtx);
 }
 
-extern const VecFx32 ov80_0223BE6C; //{-1, 0, 0}
+extern const VecFx32 gBattleArcadeParticlePosition; //{-1, 0, 0}
 static void BattleArcade_ParticleEmitterCallback(SPLEmitter *emitter) {
     VecFx16 axis;
     ArcadeContext *ctx = ParticleSystem_GetEmitterParam();
-    const VecFx32 pos = ov80_0223BE6C;
+    const VecFx32 pos = gBattleArcadeParticlePosition;
 
     if (ctx->mirrorParticles == 1) {
         ParticleEmitter_GetAxis(emitter, &axis);

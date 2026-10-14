@@ -238,7 +238,7 @@ static inline void FindIfP(Iter *first, Node *last, Pred p) {
 }
 
 typedef struct Ctx {
-    void *unk0;
+    void *connection;
     int state;
     u8 unk8[0x58];
     int unk60;
@@ -486,7 +486,7 @@ int LobbyChat_LeaveChannel(const char *name) {
     CTX_CHECK(c);
     LobbyString_InitFromCStr(&s1, name);
     LobbyChat_GetFullChannelName(&s2, gLobbyChatManager, &s1);
-    chatLeaveChannelA(gLobbyChatManager->unk0, StrData(&s2), 0);
+    chatLeaveChannelA(gLobbyChatManager->connection, StrData(&s2), 0);
     LobbyString_Destroy(&s2);
     LobbyString_Destroy(&s1);
     LobbyString_InitFromCStr(&s3, name);
@@ -507,7 +507,7 @@ int LobbyChat_SendChannelMessage(const char *name, const char *msg) {
     }
     LobbyString_InitFromCStr(&s1, name);
     LobbyChat_GetFullChannelName(&s2, gLobbyChatManager, &s1);
-    chatSendChannelMessageA(gLobbyChatManager->unk0, StrData(&s2), msg, 3);
+    chatSendChannelMessageA(gLobbyChatManager->connection, StrData(&s2), msg, 3);
     LobbyString_Destroy(&s2);
     LobbyString_Destroy(&s1);
     return 0;
@@ -525,7 +525,7 @@ int LobbyChat_SendUserMessage(int a, const char *msg) {
         LobbyString_Destroy(&s);
         return 3;
     }
-    chatSendUserMessageA(gLobbyChatManager->unk0, StrData(&s), msg, 3);
+    chatSendUserMessageA(gLobbyChatManager->connection, StrData(&s), msg, 3);
     LobbyString_Destroy(&s);
     return 0;
 }
@@ -554,7 +554,7 @@ int LobbyChat_SetChannelKey(const char *name, int a, const char *key, const char
     }
     LobbyString_InitFromCStr(&s1, name);
     LobbyChat_GetFullChannelName(&s2, gLobbyChatManager, &s1);
-    chatSetChannelKeysA(gLobbyChatManager->unk0, StrData(&s2), StrData(&s), 1, &key, &val);
+    chatSetChannelKeysA(gLobbyChatManager->connection, StrData(&s2), StrData(&s), 1, &key, &val);
     LobbyString_Destroy(&s2);
     LobbyString_Destroy(&s1);
     LobbyString_Destroy(&s);

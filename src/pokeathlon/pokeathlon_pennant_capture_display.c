@@ -43,7 +43,7 @@ void PokeathlonPennantCaptureDisplay_CreatePicSprites(void *pool, PokeathlonPenn
 extern const u8 ov96_0221CBC4[];
 extern const u8 ov96_0221CBC8[];
 extern const PokeathlonPennantCaptureSpriteIds gPokeathlonPennantCaptureSpriteIds[];
-extern const VecFx32 ov96_0221CBF4;
+extern const VecFx32 gPokeathlonPennantCaptureInitialPosition;
 
 // Several loops below walk a display-typed cursor by one array element per step instead of indexing
 // (fields are read at their offset from the cursor); that is the form the code matches with.
@@ -172,7 +172,7 @@ void PokeathlonPennantCaptureDisplay_CreateSprites(PokeathlonPennantCaptureDispl
         status += 4;
         point += 2;
     }
-    initialPosition = ov96_0221CBF4;
+    initialPosition = gPokeathlonPennantCaptureInitialPosition;
     display->goalSprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, 2, 0x65, 22);
     PokeathlonCourseSpritePoolSprite_SetAnim(display->goalSprite, 4);
     PokeathlonCourseSpritePoolSprite_Show(display->goalSprite, 1, 1);

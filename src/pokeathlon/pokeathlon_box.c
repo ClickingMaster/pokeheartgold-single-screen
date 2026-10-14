@@ -28,24 +28,24 @@ void BoxMonSelector_Init(u32, BgConfig *, PCStorage *, Party *, u32, u32, BOOL, 
 void BoxMonSelector_VBlank(u32);
 s8 PokemonSummary_GetPokeathlonStarStates(void *, u8, u8, u32, s8);
 
-#define pokeathlonBoxObjCharTransferTemplate _0221FC98
-#define pokeathlonBoxGraphicsModes           ov97_0221FCA8
-#define pokeathlonBoxGraphicsBanks           ov97_0221FCCC
-#define pokeathlonBoxBgTemplate3             ov97_0221FD04
-#define pokeathlonBoxBgTemplate1             ov97_0221FD20
-#define pokeathlonBoxBgTemplate2             ov97_0221FD3C
-#define pokeathlonBoxBgTemplate4             ov97_0221FD58
+#define pokeathlonBoxObjCharTransferTemplate gPokeathlonBoxObjCharTransferTemplate
+#define pokeathlonBoxGraphicsModes           gPokeathlonBoxGraphicsModes
+#define pokeathlonBoxGraphicsBanks           gPokeathlonBoxGraphicsBanks
+#define pokeathlonBoxBgTemplate3             gPokeathlonBoxBgTemplate3
+#define pokeathlonBoxBgTemplate1             gPokeathlonBoxBgTemplate1
+#define pokeathlonBoxBgTemplate2             gPokeathlonBoxBgTemplate2
+#define pokeathlonBoxBgTemplate4             gPokeathlonBoxBgTemplate4
 
 extern const GraphicsBanks pokeathlonBoxGraphicsBanks;
 extern const GraphicsModes pokeathlonBoxGraphicsModes;
 extern const ObjCharTransferTemplate pokeathlonBoxObjCharTransferTemplate;
-extern const u32 ov97_0221FCB8[5];
+extern const u32 gPokeathlonBoxMedalShifts[5];
 extern const BgTemplate pokeathlonBoxBgTemplate3;
 extern const BgTemplate pokeathlonBoxBgTemplate1;
 extern const BgTemplate pokeathlonBoxBgTemplate2;
 extern const BgTemplate pokeathlonBoxBgTemplate4;
-extern const u8 ov97_0221FCF4[5];
-extern const u8 ov97_0221FCFC[5];
+extern const u8 gPokeathlonBoxSpriteRows[5];
+extern const u8 gPokeathlonBoxMonSpriteRows[5];
 
 BOOL PokeathlonBox_Init(OverlayManager *manager) {
     if (PokeathlonBox_RunSetup(manager)) {
@@ -345,7 +345,7 @@ void PokeathlonBox_ShowMonInfo(int boxno, u8 slot, PokeathlonBox *data) {
 
     PartyAprijuiceModifier emptyAprijuiceModifier;
 
-    medalShifts = ov97_0221FCB8;
+    medalShifts = gPokeathlonBoxMedalShifts;
     if (boxno != -1 && slot != -1) {
         monInfo.unk9 = 2;
         if (boxno == NUM_BOXES) {
@@ -607,7 +607,7 @@ void PokeathlonBox_ShowMonSprites(PokeathlonBox_Graphics *graphics, PokeathlonBo
     PokeathlonBox_TransferMonPic(&graphics->sub);
     Sprite_SetDrawFlag(graphics->sub.monPicSprite, 1);
     PokeathlonBox_ShowStatStars(&graphics->sub, mon);
-    subroutine_arg0 = ov97_0221FCFC;
+    subroutine_arg0 = gPokeathlonBoxMonSpriteRows;
     for (i = 0; i < 5; i++) {
         if (mon->medals[subroutine_arg0[i]] != 0) {
             Sprite_SetDrawFlag(sub->sprites[subroutine_arg0[i]], 1);
@@ -729,7 +729,7 @@ void PokeathlonBox_CreateSprites(PokeathlonBox_SubGraphics *sub) {
         sub->unk1C8[i] = PokeathlonBox_CreateSprite(sub, 1, 1, 0, x, 168, 5, FALSE);
     }
     for (i = 0; i < 5; i++) {
-        y = ov97_0221FCF4[i] * 16 + 48;
+        y = gPokeathlonBoxSpriteRows[i] * 16 + 48;
         sub->statRows[i].sprite = PokeathlonBox_CreateSprite(sub, 2, 1, 0, 96, y, 4, FALSE);
         for (j = 0; j < 5; j++) {
             sub->statRows[i].sprites[j] = PokeathlonBox_CreateSprite(sub, 2, 2, 0, j * 16 + 168, y, 3, FALSE);

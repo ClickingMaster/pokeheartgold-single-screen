@@ -6,7 +6,7 @@
 
 // The four extra sprite kinds frontier scripts can put on the map (NARC a/1/8/4).
 
-extern const ManagedSpriteTemplate ov80_0223DA54[4];
+extern const ManagedSpriteTemplate gFrontierMapSpriteTemplates[4];
 
 void FrontierMapSprite_LoadResources(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NARC *narc, PaletteData *paletteData, u16 kind) {
     const ManagedSpriteTemplate *template;
@@ -14,7 +14,7 @@ void FrontierMapSprite_LoadResources(SpriteSystem *spriteSystem, SpriteManager *
     if (kind >= 4) {
         GF_AssertFail();
     }
-    template = &ov80_0223DA54[kind];
+    template = &gFrontierMapSpriteTemplates[kind];
     SpriteSystem_LoadCharResObjFromOpenNarc(spriteSystem, spriteManager, narc, template->resIdList[GF_GFX_RES_TYPE_CHAR], TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, template->resIdList[GF_GFX_RES_TYPE_CHAR]);
     SpriteSystem_LoadPaletteBufferFromOpenNarc(paletteData, PLTTBUF_MAIN_OBJ, spriteSystem, spriteManager, narc, template->resIdList[GF_GFX_RES_TYPE_PLTT], FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, template->resIdList[GF_GFX_RES_TYPE_PLTT]);
     SpriteSystem_LoadCellResObjFromOpenNarc(spriteSystem, spriteManager, narc, template->resIdList[GF_GFX_RES_TYPE_CELL], TRUE, template->resIdList[GF_GFX_RES_TYPE_CELL]);
@@ -27,7 +27,7 @@ void FrontierMapSprite_UnloadResources(SpriteManager *spriteManager, u32 kind) {
     if (kind >= 4) {
         GF_AssertFail();
     }
-    template = &ov80_0223DA54[kind];
+    template = &gFrontierMapSpriteTemplates[kind];
     SpriteManager_UnloadCharObjById(spriteManager, template->resIdList[GF_GFX_RES_TYPE_CHAR]);
     SpriteManager_UnloadPlttObjById(spriteManager, template->resIdList[GF_GFX_RES_TYPE_PLTT]);
     SpriteManager_UnloadCellObjById(spriteManager, template->resIdList[GF_GFX_RES_TYPE_CELL]);
@@ -40,7 +40,7 @@ ManagedSprite *FrontierMapSprite_Create(SpriteSystem *spriteSystem, SpriteManage
     if (kind >= 4) {
         GF_AssertFail();
     }
-    sprite = SpriteSystem_NewSprite(spriteSystem, spriteManager, &ov80_0223DA54[kind]);
+    sprite = SpriteSystem_NewSprite(spriteSystem, spriteManager, &gFrontierMapSpriteTemplates[kind]);
     Sprite_TickFrame(sprite->sprite);
     return sprite;
 }

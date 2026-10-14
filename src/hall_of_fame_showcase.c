@@ -70,7 +70,7 @@ typedef struct HallOfFameShowcase {
     int nextState;                                    // 0x1CC
 } HallOfFameShowcase;                                 // size: 0x1D0
 
-extern const TouchscreenHitbox _021E6E7C[];
+extern const TouchscreenHitbox gHallOfFameShowcaseHitboxes[];
 extern const GraphicsModes sShowcaseGraphicsModes;
 extern const OamCharTransferParam sShowcaseOamCharTransferParam;
 extern const SpriteResourceCountsListUnion sShowcaseSpriteResourceCounts;
@@ -475,7 +475,7 @@ int HallOfFameShowcase_HandleInput(HallOfFameShowcase *showcase) {
 
     switch (showcase->state) {
     case 0: {
-        int hit = TouchscreenHitbox_FindRectAtTouchNew(_021E6E7C);
+        int hit = TouchscreenHitbox_FindRectAtTouchNew(gHallOfFameShowcaseHitboxes);
         if (hit == 0) {
             if (showcase->record > 0) {
                 HallOfFameShowcase_StartPrevPage(showcase);

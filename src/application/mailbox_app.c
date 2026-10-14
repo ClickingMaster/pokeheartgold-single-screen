@@ -109,7 +109,7 @@ typedef struct MailboxApp {
     MailboxAppData *data;     // 0x0C
     OverlayManager *subApp;   // 0x10
     void *subAppArgs;         // 0x14
-    u32 subAppId;             // 0x18: index into ov103_021EEC78
+    u32 subAppId;             // 0x18: index into gMailboxSubApps
     u16 page;                 // 0x1C
     u8 cursorPos;             // 0x1E
     u8 selectedMail;          // 0x1F
@@ -129,31 +129,31 @@ typedef struct MailboxAppSubApp {
     int nextState;
 } MailboxAppSubApp;
 
-extern const TouchscreenListMenuTemplate _021EEB34;
-extern const GraphicsModes ov103_021EEB40;
-extern const BgTemplate ov103_021EEB50;
-extern const BgTemplate ov103_021EEB6C;
-extern const BgTemplate ov103_021EEB88;
-extern const BgTemplate ov103_021EEBA4;
-extern const BgTemplate ov103_021EEBC0;
-extern const BgTemplate ov103_021EEBDC;
-extern const BgTemplate ov103_021EEBF8;
-extern const BgTemplate ov103_021EEC14;
-extern const GraphicsBanks ov103_021EEC30;
-extern const OverlayManagerTemplate ov103_021EEC58;
-extern const MailboxAppStateFunc ov103_021EEC68[][2];
-extern const MailboxAppSubApp ov103_021EEC78[];
-extern const MailboxAppStateFunc ov103_021EECA8[];
-extern const OamCharTransferParam ov103_021EED0C;
-extern const SpriteResourceCountsListUnion ov103_021EED20;
-extern const OamManagerParam ov103_021EED38;
-extern const ManagedSpriteTemplate ov103_021EED58[MAILBOX_NUM_SPRITES];
-extern const WindowTemplate ov103_021EEEC4[MAILBOX_NUM_WINDOWS];
-extern const TouchscreenHitbox ov103_021EEFB4[];
-extern const TouchscreenHitbox ov103_021EEFBC[];
-extern const GridCallbacks ov103_021EEFC8;
-extern const TouchscreenHitbox ov103_021EEFD8[];
-extern const DpadMenuBox ov103_021EF008[];
+extern const TouchscreenListMenuTemplate gMailboxMailMenuTemplate;
+extern const GraphicsModes gMailboxAppGraphicsModes;
+extern const BgTemplate gMailboxBgTemplate1;
+extern const BgTemplate gMailboxBgTemplate2;
+extern const BgTemplate gMailboxBgTemplate6;
+extern const BgTemplate gMailboxBgTemplate5;
+extern const BgTemplate gMailboxBgTemplate4;
+extern const BgTemplate gMailboxBgTemplate0;
+extern const BgTemplate gMailboxBgTemplate3;
+extern const BgTemplate gMailboxBgTemplate7;
+extern const GraphicsBanks gMailboxAppGraphicsBanks;
+extern const OverlayManagerTemplate gMailboxUseMailOverlayTemplate;
+extern const MailboxAppStateFunc gMailboxYesNoHandlers[][2];
+extern const MailboxAppSubApp gMailboxSubApps[];
+extern const MailboxAppStateFunc gMailboxStateFuncs[];
+extern const OamCharTransferParam gMailboxAppDataOamCharTransferParam;
+extern const SpriteResourceCountsListUnion gMailboxAppDataSpriteResourceCounts;
+extern const OamManagerParam gMailboxAppDataOamManagerParam;
+extern const ManagedSpriteTemplate gMailboxSpriteTemplates[MAILBOX_NUM_SPRITES];
+extern const WindowTemplate gMailboxWindowTemplates[MAILBOX_NUM_WINDOWS];
+extern const TouchscreenHitbox gMailboxCloseMailHitboxes[];
+extern const TouchscreenHitbox gMailboxPageArrowHitboxes[];
+extern const GridCallbacks gMailboxGridCallbacks;
+extern const TouchscreenHitbox gMailboxGridHitboxes[];
+extern const DpadMenuBox gMailboxGridBoxes[];
 
 void MailboxApp_VBlankCB(void *cbArg);
 void MailboxApp_SetGfxBanks(void);
@@ -323,7 +323,7 @@ void MailboxApp_VBlankCB(void *cbArg) {
 #pragma force_active reset
 
 void MailboxApp_SetGfxBanks(void) {
-    GfGfx_SetBanks(&ov103_021EEC30);
+    GfGfx_SetBanks(&gMailboxAppGraphicsBanks);
 }
 
 void MailboxApp_InitBgLayers(MailboxApp *app) {
@@ -331,34 +331,34 @@ void MailboxApp_InitBgLayers(MailboxApp *app) {
     BgTemplate bg4, bg5, bg6, bg7, bg0, bg1, bg2, bg3;
 
     app->data->bgConfig = BgConfig_Alloc(HEAP_ID_157);
-    modes = ov103_021EEB40;
+    modes = gMailboxAppGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    bg4 = ov103_021EEBC0;
+    bg4 = gMailboxBgTemplate4;
     InitBgFromTemplate(app->data->bgConfig, GF_BG_LYR_SUB_0, &bg4, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(app->data->bgConfig, GF_BG_LYR_SUB_0);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 0x20, 0, HEAP_ID_157);
-    bg5 = ov103_021EEBA4;
+    bg5 = gMailboxBgTemplate5;
     InitBgFromTemplate(app->data->bgConfig, GF_BG_LYR_SUB_1, &bg5, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(app->data->bgConfig, GF_BG_LYR_SUB_1);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_1, 0x20, 0, HEAP_ID_157);
-    bg6 = ov103_021EEB88;
+    bg6 = gMailboxBgTemplate6;
     InitBgFromTemplate(app->data->bgConfig, GF_BG_LYR_SUB_2, &bg6, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(app->data->bgConfig, GF_BG_LYR_SUB_2);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_2, 0x20, 0, HEAP_ID_157);
-    bg7 = ov103_021EEC14;
+    bg7 = gMailboxBgTemplate7;
     InitBgFromTemplate(app->data->bgConfig, GF_BG_LYR_SUB_3, &bg7, GF_BG_TYPE_TEXT);
-    bg0 = ov103_021EEBDC;
+    bg0 = gMailboxBgTemplate0;
     InitBgFromTemplate(app->data->bgConfig, GF_BG_LYR_MAIN_0, &bg0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(app->data->bgConfig, GF_BG_LYR_MAIN_0);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_0, 0x20, 0, HEAP_ID_157);
-    bg1 = ov103_021EEB50;
+    bg1 = gMailboxBgTemplate1;
     InitBgFromTemplate(app->data->bgConfig, GF_BG_LYR_MAIN_1, &bg1, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(app->data->bgConfig, GF_BG_LYR_MAIN_1);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_1, 0x20, 0, HEAP_ID_157);
-    bg2 = ov103_021EEB6C;
+    bg2 = gMailboxBgTemplate2;
     InitBgFromTemplate(app->data->bgConfig, GF_BG_LYR_MAIN_2, &bg2, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(app->data->bgConfig, GF_BG_LYR_MAIN_2);
-    bg3 = ov103_021EEBF8;
+    bg3 = gMailboxBgTemplate3;
     InitBgFromTemplate(app->data->bgConfig, GF_BG_LYR_MAIN_3, &bg3, GF_BG_TYPE_TEXT);
 }
 
@@ -489,7 +489,7 @@ void MailboxApp_DeleteMailMenuItems(MailboxApp *app) {
 
 void MailboxApp_OpenMailMenu(MailboxApp *app) {
     TouchscreenListMenuHeader header;
-    TouchscreenListMenuTemplate template = _021EEB34;
+    TouchscreenListMenuTemplate template = gMailboxMailMenuTemplate;
 
     header.template = template;
     header.listMenuItems = app->data->listMenuItems;
@@ -614,7 +614,7 @@ u32 MailboxApp_GetMailMenuItemCount(MailboxApp *app) {
 }
 
 BOOL MailboxApp_RunState(MailboxApp *app, int *state) {
-    *state = ov103_021EECA8[*state](app);
+    *state = gMailboxStateFuncs[*state](app);
     if (*state == MAILBOX_STATE_FINISHED) {
         return FALSE;
     }
@@ -708,10 +708,10 @@ int MailboxApp_State_YesNo(MailboxApp *app) {
     switch (YesNoPrompt_HandleInput(app->data->yesNoPrompt)) {
     case YESNORESPONSE_YES:
         YesNoPrompt_Reset(app->data->yesNoPrompt);
-        return ov103_021EEC68[app->data->yesNoQuestion][0](app);
+        return gMailboxYesNoHandlers[app->data->yesNoQuestion][0](app);
     case YESNORESPONSE_NO:
         YesNoPrompt_Reset(app->data->yesNoPrompt);
-        return ov103_021EEC68[app->data->yesNoQuestion][1](app);
+        return gMailboxYesNoHandlers[app->data->yesNoQuestion][1](app);
     default:
         return 4;
     }
@@ -725,7 +725,7 @@ int MailboxApp_State_PaletteFlash(MailboxApp *app) {
 }
 
 int MailboxApp_State_StartSubApp(MailboxApp *app) {
-    ov103_021EEC78[app->subAppId].start(app);
+    gMailboxSubApps[app->subAppId].start(app);
     return 7;
 }
 
@@ -734,8 +734,8 @@ int MailboxApp_State_RunSubApp(MailboxApp *app) {
         return 7;
     }
     OverlayManager_Delete(app->subApp);
-    app->nextState = ov103_021EEC78[app->subAppId].finish(app);
-    return ov103_021EEC78[app->subAppId].nextState;
+    app->nextState = gMailboxSubApps[app->subAppId].finish(app);
+    return gMailboxSubApps[app->subAppId].nextState;
 }
 
 int MailboxApp_State_FadeIn(MailboxApp *app) {
@@ -1100,7 +1100,7 @@ int MailboxApp_StartUseMail(MailboxApp *app) {
 
     args->menuInputStatePtr = app->args->menuInputStatePtr;
     app->subAppArgs = args;
-    app->subApp = OverlayManager_New(&ov103_021EEC58, app->subAppArgs, HEAP_ID_156);
+    app->subApp = OverlayManager_New(&gMailboxUseMailOverlayTemplate, app->subAppArgs, HEAP_ID_156);
     return 0;
 }
 
@@ -1161,7 +1161,7 @@ void MailboxApp_CreateSprites(MailboxApp *app) {
     MailboxAppData_LoadSpriteResources(app->data);
     MailboxAppData_LoadMonIconResources(app->data);
     for (i = 0; i < MAILBOX_NUM_SPRITES; i++) {
-        app->data->sprites[i] = MailboxAppData_NewSprite(app->data, &ov103_021EED58[i]);
+        app->data->sprites[i] = MailboxAppData_NewSprite(app->data, &gMailboxSpriteTemplates[i]);
     }
     if (app->data->mailCount <= MAILBOX_MAIL_PER_PAGE) {
         MailboxAppData_SetSpriteDrawFlag(app->data, 0, FALSE);
@@ -1199,10 +1199,10 @@ void MailboxAppData_InitSpriteSystem(MailboxAppData *data) {
 
     data->spriteSystem = SpriteSystem_Alloc(HEAP_ID_157);
     data->spriteManager = SpriteManager_New(data->spriteSystem);
-    oamManagerParam = ov103_021EED38;
-    oamCharTransferParam = ov103_021EED0C;
+    oamManagerParam = gMailboxAppDataOamManagerParam;
+    oamCharTransferParam = gMailboxAppDataOamCharTransferParam;
     SpriteSystem_Init(data->spriteSystem, &oamManagerParam, &oamCharTransferParam, 0x20);
-    resourceCounts = ov103_021EED20;
+    resourceCounts = gMailboxAppDataSpriteResourceCounts;
     SpriteSystem_InitSprites(data->spriteSystem, data->spriteManager, MAILBOX_NUM_SPRITES);
     SpriteSystem_InitManagerWithCapacities(data->spriteSystem, data->spriteManager, &resourceCounts);
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(data->spriteSystem), 0, FX32_CONST(512));
@@ -1332,7 +1332,7 @@ void MailboxApp_AddWindows(MailboxApp *app) {
 
     FontID_Alloc(4, HEAP_ID_157);
     for (i = 0; i < MAILBOX_NUM_WINDOWS; i++) {
-        AddWindow(app->data->bgConfig, &app->data->windows[i], &ov103_021EEEC4[i]);
+        AddWindow(app->data->bgConfig, &app->data->windows[i], &gMailboxWindowTemplates[i]);
     }
 }
 
@@ -1528,7 +1528,7 @@ int MailboxApp_GetTouchedPageArrow(MailboxApp *app) {
     if (app->data->lastPage == 0) {
         return -1;
     }
-    return TouchscreenHitbox_FindRectAtTouchNew(ov103_021EEFBC);
+    return TouchscreenHitbox_FindRectAtTouchNew(gMailboxPageArrowHitboxes);
 }
 
 void MailboxApp_CreateGridInput(MailboxApp *app) {
@@ -1540,7 +1540,7 @@ void MailboxApp_CreateGridInput(MailboxApp *app) {
     } else {
         cursorPos = app->cursorPos;
     }
-    app->data->gridInput = GridInputHandler_Create(ov103_021EEFD8, ov103_021EF008, &ov103_021EEFC8, app, TRUE, (u8)cursorPos, HEAP_ID_157);
+    app->data->gridInput = GridInputHandler_Create(gMailboxGridHitboxes, gMailboxGridBoxes, &gMailboxGridCallbacks, app, TRUE, (u8)cursorPos, HEAP_ID_157);
     MailboxApp_MoveCursor(app, cursorPos);
 }
 
@@ -1575,7 +1575,7 @@ void MailboxApp_MoveCursor(MailboxApp *app, u32 input) {
 
 // The mail being read is closed by touching the CLOSE button or pressing A or B.
 BOOL MailboxApp_IsCloseMailInput(void) {
-    if (TouchscreenHitbox_FindRectAtTouchNew(ov103_021EEFB4) != -1) {
+    if (TouchscreenHitbox_FindRectAtTouchNew(gMailboxCloseMailHitboxes) != -1) {
         return TRUE;
     }
     if (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) {

@@ -3,7 +3,7 @@
 	.include "global.inc"
 	.public HallOfFameShowcase_Init
 	.public HallOfFameShowcase_Main
-	.public _021E6E7C
+	.public gHallOfFameShowcaseHitboxes
 	.public HallOfFameShowcase_InitBgs
 	.public HallOfFameShowcase_InitSprites
 	.public HallOfFameShowcase_InitStrings
@@ -65,7 +65,7 @@
 	.public HallOfFameShowcase_GetOverworldModelFileId
 	.rodata
 
-_021E6E7C:
+gHallOfFameShowcaseHitboxes:
 	.byte 0x58, 0x77, 0x00, 0x17
 	.byte 0x58, 0x77, 0xE8, 0xFF, 0xFF, 0x00, 0x00, 0x00
 

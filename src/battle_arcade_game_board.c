@@ -1054,13 +1054,13 @@ static void BattleArcadeGameBoard_BuildEventPool(GAME_BOARD_WORK *work) {
     }
 }
 
-extern const u8 _0223F900[4];
+extern const u8 gBattleArcadeEventColorThresholds[4];
 
 static void BattleArcadeGameBoard_CountEventColors(GAME_BOARD_WORK *work) {
     int i;
 
-    for (i = 0; i < NELEMS(_0223F900); i++) {
-        if (work->bpGain >= _0223F900[i]) {
+    for (i = 0; i < NELEMS(gBattleArcadeEventColorThresholds); i++) {
+        if (work->bpGain >= gBattleArcadeEventColorThresholds[i]) {
             break;
         }
     }

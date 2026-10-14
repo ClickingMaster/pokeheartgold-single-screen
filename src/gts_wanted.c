@@ -848,7 +848,7 @@ void Gts_SetSearchCountry(GtsApp *app, int index) {
         return;
     }
     index--;
-    if ((u32)index < 130) { // the count of countries (ov70_0224590C)
+    if ((u32)index < 130) { // the count of countries (gGtsCountryCount)
         app->searchCountry = sGtsCountries[index];
     }
 }

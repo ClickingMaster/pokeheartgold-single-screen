@@ -83,24 +83,24 @@ void PokeathlonCirclePushDisplay_CreatePicSprites(PokeathlonCourseSpritePool *po
 int PokeathlonCourse_GetTouchRadius(); // called with and without an argument
 Sprite **PokeathlonCourse_CreateHudSpritesInPool(PokeathlonCourseData *course, int baseY, void *resources, PokeathlonCourseSpritePool *pool);
 
-extern const PokeathlonCourseSpritePoolTemplate ov96_0221BC70;
+extern const PokeathlonCourseSpritePoolTemplate gPokeathlonCirclePushSpritePoolTemplate;
 
 extern const struct {
     u16 x;
     u16 y;
-} ov96_0221BDD4[4][3];
+} gPokeathlonCirclePushMonStartPositions[4][3];
 
-extern const GraphicsBanks ov96_0221BDAC;
-extern const GraphicsModes ov96_0221BC7C;
-extern const BgTemplate ov96_0221BCE8;
-extern const BgTemplate ov96_0221BD04;
-extern const BgTemplate ov96_0221BD3C;
-extern const BgTemplate ov96_0221BD58;
-extern const BgTemplate ov96_0221BD74;
-extern const BgTemplate ov96_0221BD90;
-extern const BgTemplate ov96_0221BCCC;
-extern const BgTemplate ov96_0221BD20;
-extern const VecFx32 ov96_0221BC64;
+extern const GraphicsBanks gPokeathlonCirclePushGraphicsBanks;
+extern const GraphicsModes gPokeathlonCirclePushGraphicsModes;
+extern const BgTemplate gPokeathlonCirclePushBgTemplate_Main0;
+extern const BgTemplate gPokeathlonCirclePushBgTemplate_Main1;
+extern const BgTemplate gPokeathlonCirclePushBgTemplate_Main2;
+extern const BgTemplate gPokeathlonCirclePushBgTemplate_Main3;
+extern const BgTemplate gPokeathlonCirclePushBgTemplate_Sub0;
+extern const BgTemplate gPokeathlonCirclePushBgTemplate_Sub1;
+extern const BgTemplate gPokeathlonCirclePushBgTemplate_Sub3;
+extern const BgTemplate gPokeathlonCirclePushBgTemplate_Sub2;
+extern const VecFx32 gPokeathlonCirclePushDirectionReference;
 
 // Copied as a whole (block copies).
 typedef struct CirclePushTimerTiles {
@@ -115,14 +115,14 @@ typedef struct CirclePushFallOffsets {
     int offsets[6];
 } CirclePushFallOffsets;
 
-extern const CirclePushTimerTiles ov96_0221BC8C;
-extern const CirclePushFallScales ov96_0221BC9C;
-extern const CirclePushFallOffsets ov96_0221BCB4;
-extern const s32 ov96_0221DB70[18];
-extern const s32 ov96_0221DB5C[5];
-extern const WindowTemplate ov96_0221BC5C;
-extern const PokeathlonCirclePushZone *ov96_0221DBC8[];
-extern const u16 *ov96_0221DBB8[];
+extern const CirclePushTimerTiles gPokeathlonCirclePushTimerTiles;
+extern const CirclePushFallScales gPokeathlonCirclePushFallScales;
+extern const CirclePushFallOffsets gPokeathlonCirclePushFallOffsets;
+extern const s32 gPokeathlonCirclePushShakeOffsets[18];
+extern const s32 gPokeathlonCirclePushBounceOffsets[5];
+extern const WindowTemplate gPokeathlonCirclePushScoreWindowTemplate;
+extern const PokeathlonCirclePushZone *gPokeathlonCirclePushLayoutZones[];
+extern const u16 *gPokeathlonCirclePushZoneKinds[];
 extern const u32 gPokeathlonCirclePushNameplateCoords[];
 
 // Contacts between the Pokemon of this frame.
@@ -133,7 +133,7 @@ typedef struct PokeathlonCirclePushContact {
     int unk0C;
 } PokeathlonCirclePushContact;
 
-extern PokeathlonCirclePushContact _0221DCA0[12][12];
+extern PokeathlonCirclePushContact gPokeathlonCirclePushContacts[12][12];
 
 // Collision circle of a Pokemon size (NARC a/1/7/0 #11).
 typedef struct CirclePushCollision {
@@ -204,7 +204,7 @@ BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
     }
     case 2: {
         int i;
-        PokeathlonCourseSpritePoolTemplate template = ov96_0221BC70;
+        PokeathlonCourseSpritePoolTemplate template = gPokeathlonCirclePushSpritePoolTemplate;
         circlePush->spritePool = PokeathlonCourseSpritePool_New(circlePush->heapId, &template);
         PokeathlonCourseSpritePool_SetSurfaceCoords(circlePush->spritePool, 0, 0, 0, 0x200000);
         circlePush->objects = PokeathlonCourseMonObjects_Create(circlePush->heapId, 12, 5, circlePush->spriteResources, PokeathlonCourseSpritePool_GetSpriteList(circlePush->spritePool));
@@ -326,8 +326,8 @@ BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
                 scale.x = 0x10000;
                 scale.y = (topRow + (32 - topRow) / 2) << FX32_SHIFT;
             }
-            startX = ov96_0221BDD4[team][member].x;
-            startY = ov96_0221BDD4[team][member].y;
+            startX = gPokeathlonCirclePushMonStartPositions[team][member].x;
+            startY = gPokeathlonCirclePushMonStartPositions[team][member].y;
             mon->direction = 2;
             PokeathlonCourseMonObject_SetAnimState(object, 2);
             PokeathlonCourseObject_SetGroundPosition(object, startX, startY);
@@ -454,7 +454,7 @@ BOOL PokeathlonCirclePush_Exit(PokeathlonCourseData *course) {
 #pragma force_active reset
 
 void PokeathlonCirclePush_SetBanks(void) {
-    GraphicsBanks banks = ov96_0221BDAC;
+    GraphicsBanks banks = gPokeathlonCirclePushGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
@@ -543,30 +543,30 @@ void PokeathlonCirclePush_InitBgs(BgConfig *bgConfig) {
     BgTemplate sub3;
     BgTemplate sub2;
 
-    modes = ov96_0221BC7C;
+    modes = gPokeathlonCirclePushGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    main0 = ov96_0221BCE8;
+    main0 = gPokeathlonCirclePushBgTemplate_Main0;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &main0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
-    main1 = ov96_0221BD04;
+    main1 = gPokeathlonCirclePushBgTemplate_Main1;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &main1, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
-    main2 = ov96_0221BD3C;
+    main2 = gPokeathlonCirclePushBgTemplate_Main2;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &main2, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
-    main3 = ov96_0221BD58;
+    main3 = gPokeathlonCirclePushBgTemplate_Main3;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &main3, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
-    sub0 = ov96_0221BD74;
+    sub0 = gPokeathlonCirclePushBgTemplate_Sub0;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &sub0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
-    sub1 = ov96_0221BD90;
+    sub1 = gPokeathlonCirclePushBgTemplate_Sub1;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &sub1, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
-    sub3 = ov96_0221BCCC;
+    sub3 = gPokeathlonCirclePushBgTemplate_Sub3;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_3, &sub3, GF_BG_TYPE_AFFINE);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_3);
-    sub2 = ov96_0221BD20;
+    sub2 = gPokeathlonCirclePushBgTemplate_Sub2;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &sub2, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_2);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
@@ -1014,7 +1014,7 @@ void PokeathlonCirclePush_UpdateScreen(PokeathlonCourseData *course) {
         }
         PokeathlonCirclePush_DrawTimer(timer, circlePush->bgConfig);
     } else {
-        CirclePushTimerTiles tiles = ov96_0221BC8C;
+        CirclePushTimerTiles tiles = gPokeathlonCirclePushTimerTiles;
         LoadRectToBgTilemapRect(circlePush->bgConfig, GF_BG_LYR_MAIN_1, &tiles, 14, 2, 4, 2);
         PokeathlonCirclePush_DrawTimer(42, circlePush->bgConfig);
     }
@@ -1036,8 +1036,8 @@ void PokeathlonCirclePush_UpdateScreen(PokeathlonCourseData *course) {
                 circlePush->falls[i].state = 1;
             } else if (circlePush->falls[i].state == 1) {
                 VecFx32 scale;
-                CirclePushFallScales scales = ov96_0221BC9C;
-                CirclePushFallOffsets offsets = ov96_0221BCB4;
+                CirclePushFallScales scales = gPokeathlonCirclePushFallScales;
+                CirclePushFallOffsets offsets = gPokeathlonCirclePushFallOffsets;
                 int groundX;
                 int groundY;
                 scale.x = 4096.0f * scales.scales[circlePush->falls[i].timer / 2];
@@ -1239,7 +1239,7 @@ void PokeathlonCirclePush_MoveMons(PokeathlonCourseData *course) {
             }
         }
         if (distance != 0) {
-            VecFx32 reference = ov96_0221BC64;
+            VecFx32 reference = gPokeathlonCirclePushDirectionReference;
             VecFx32 facing;
             u16 angle;
             facing.x = direction.y;
@@ -1366,26 +1366,26 @@ void PokeathlonCirclePush_UpdateContacts(PokeathlonCirclePush *circlePush) {
     for (i = 0; i < 12; i++) {
         for (j = 0; j < 12; j++) {
             if (i == j) {
-                _0221DCA0[i][j].touching = FALSE;
-                _0221DCA0[i][j].other = NULL;
+                gPokeathlonCirclePushContacts[i][j].touching = FALSE;
+                gPokeathlonCirclePushContacts[i][j].other = NULL;
             } else if (j >= i) {
                 PokeathlonCirclePushMon *a = &circlePush->mons[i / 3][i % 3];
                 PokeathlonCirclePushMon *b = &circlePush->mons[j / 3][j % 3];
                 if (a->state != 1 || b->state != 1) {
-                    _0221DCA0[i][j].touching = FALSE;
-                    _0221DCA0[j][i].touching = FALSE;
-                    _0221DCA0[i][j].other = NULL;
-                    _0221DCA0[j][i].other = NULL;
+                    gPokeathlonCirclePushContacts[i][j].touching = FALSE;
+                    gPokeathlonCirclePushContacts[j][i].touching = FALSE;
+                    gPokeathlonCirclePushContacts[i][j].other = NULL;
+                    gPokeathlonCirclePushContacts[j][i].other = NULL;
                 } else if (PokeathlonCirclePush_MonsCollide(a, b)) {
-                    _0221DCA0[i][j].touching = TRUE;
-                    _0221DCA0[j][i].touching = TRUE;
-                    _0221DCA0[i][j].other = b;
-                    _0221DCA0[j][i].other = a;
+                    gPokeathlonCirclePushContacts[i][j].touching = TRUE;
+                    gPokeathlonCirclePushContacts[j][i].touching = TRUE;
+                    gPokeathlonCirclePushContacts[i][j].other = b;
+                    gPokeathlonCirclePushContacts[j][i].other = a;
                 } else {
-                    _0221DCA0[i][j].touching = FALSE;
-                    _0221DCA0[j][i].touching = FALSE;
-                    _0221DCA0[i][j].other = NULL;
-                    _0221DCA0[j][i].other = NULL;
+                    gPokeathlonCirclePushContacts[i][j].touching = FALSE;
+                    gPokeathlonCirclePushContacts[j][i].touching = FALSE;
+                    gPokeathlonCirclePushContacts[i][j].other = NULL;
+                    gPokeathlonCirclePushContacts[j][i].other = NULL;
                 }
             }
         }
@@ -1398,7 +1398,7 @@ void PokeathlonCirclePush_UpdateContacts(PokeathlonCirclePush *circlePush) {
 BOOL PokeathlonCirclePush_CanMove(PokeathlonCirclePush *circlePush, PokeathlonCirclePushMon *mon, u32 index, const VecFx32 *delta) {
     VecFx32 toOther;
     u8 i = 0;
-    PokeathlonCirclePushContact *contacts = _0221DCA0[index];
+    PokeathlonCirclePushContact *contacts = gPokeathlonCirclePushContacts[index];
 #pragma unused(circlePush)
     for (; i < 12; i++) {
         if (contacts[i].touching != FALSE) {
@@ -1478,8 +1478,8 @@ void PokeathlonCirclePush_PushMons(PokeathlonCirclePush *circlePush) {
                 node->next.count = 0;
                 node->next.index = 0;
                 for (i = 0; i < 12; i++) {
-                    if (_0221DCA0[current][i].touching) {
-                        VEC_Subtract(&_0221DCA0[current][i].other->position, position, &delta);
+                    if (gPokeathlonCirclePushContacts[current][i].touching) {
+                        VEC_Subtract(&gPokeathlonCirclePushContacts[current][i].other->position, position, &delta);
                         if (VEC_DotProduct(&push, &delta) > 0) {
                             node->next.mons[node->next.count] = i;
                             node->delta[node->next.count] = delta;
@@ -1694,7 +1694,7 @@ void PokeathlonCirclePush_RespawnMons(PokeathlonCirclePush *circlePush) {
             PokeathlonCirclePushMon *mon = &circlePush->mons[team][member];
             if (mon->state == 0) {
                 mon->state = 2;
-                PokeathlonCourseObject_GroundToCenter(mon->object, ov96_0221BDD4[team][member].x, ov96_0221BDD4[team][member].y, &x, &y);
+                PokeathlonCourseObject_GroundToCenter(mon->object, gPokeathlonCirclePushMonStartPositions[team][member].x, gPokeathlonCirclePushMonStartPositions[team][member].y, &x, &y);
                 mon->position.x = x << FX32_SHIFT;
                 mon->position.y = y << FX32_SHIFT;
                 mon->target = mon->position;
@@ -1855,7 +1855,7 @@ void PokeathlonCirclePush_ShakeTask(SysTask *task, void *data) {
     PokeathlonCirclePushEffects *effects = data;
     s16 offset = effects->shakeOffset;
     u16 step = effects->shakeStep;
-    effects->shakeOffset = offset + ov96_0221DB70[step];
+    effects->shakeOffset = offset + gPokeathlonCirclePushShakeOffsets[step];
     effects->shakeStep++;
     if (effects->shakeStep >= 18) {
         effects->shakeOffset = 0;
@@ -1917,7 +1917,7 @@ void PokeathlonCirclePush_BounceTask(SysTask *task, void *data) {
     PokeathlonCirclePushEffects *effects = data;
     s16 offset = effects->bounceOffset;
     u16 step = effects->bounceStep;
-    effects->bounceOffset = offset + ov96_0221DB5C[step];
+    effects->bounceOffset = offset + gPokeathlonCirclePushBounceOffsets[step];
     effects->bounceStep++;
     if (effects->bounceStep >= 5) {
         effects->bounceOffset = 0;
@@ -1940,7 +1940,7 @@ void PokeathlonCirclePush_ApplyBounce(PokeathlonCourseData *course, PokeathlonCi
 }
 
 void PokeathlonCirclePush_AddScoreWindow(PokeathlonCirclePush *circlePush) {
-    AddWindow(circlePush->bgConfig, &circlePush->scoreWindow, &ov96_0221BC5C);
+    AddWindow(circlePush->bgConfig, &circlePush->scoreWindow, &gPokeathlonCirclePushScoreWindowTemplate);
     BG_FillCharDataRange(circlePush->bgConfig, GF_BG_LYR_MAIN_3, 0, 1, 0);
     LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_15_OFFSET, circlePush->heapId);
 }
@@ -2093,14 +2093,14 @@ int PokeathlonCirclePush_GetZonePoints(u8 layout, u16 x, u16 y, u8 *zone) {
     i = 0;
     points = 0;
     for (; i < 4; i++) {
-        const PokeathlonCirclePushZone *zones = ov96_0221DBC8[layout];
+        const PokeathlonCirclePushZone *zones = gPokeathlonCirclePushLayoutZones[layout];
         const PokeathlonCirclePushZone *entry = &zones[i];
         u32 kind = entry->kind;
         if (!kind) {
             break;
         }
         {
-            const u16 *kindData = ov96_0221DBB8[kind - 1];
+            const u16 *kindData = gPokeathlonCirclePushZoneKinds[kind - 1];
             if (PokeathlonCirclePush_IsInCircle(x, y, entry->x, entry->y, kindData[0])) {
                 points = (u8)kindData[1];
                 *zone = i;
@@ -2116,7 +2116,7 @@ void PokeathlonCirclePushZoneMarkers_Show(PokeathlonCirclePushZoneMarkers *marke
     // The volatile layout copy and the volatile read of next keep the original's loads.
     vs32 savedLayout = layout;
     int i = 0;
-    const PokeathlonCirclePushZone *zone = ov96_0221DBC8[savedLayout];
+    const PokeathlonCirclePushZone *zone = gPokeathlonCirclePushLayoutZones[savedLayout];
     for (; i < 4; i++, zone++) {
         if (zone->kind) {
             Sprite *sprite;
@@ -2206,7 +2206,7 @@ u8 PokeathlonCirclePush_GetZoneCircles(int layout, PokeathlonCirclePushAiZone *c
     offset = count;
     tableOffset = layout << 2;
     for (; i < 4; i++, offset += 8, circles++) {
-        const u8 *zones = *(const u8 *volatile *)((u8 *)ov96_0221DBC8 + tableOffset);
+        const u8 *zones = *(const u8 *volatile *)((u8 *)gPokeathlonCirclePushLayoutZones + tableOffset);
         const PokeathlonCirclePushZone *zone = (const PokeathlonCirclePushZone *)(zones + offset);
         u32 kind = zone->kind;
         if (!kind) {
@@ -2214,7 +2214,7 @@ u8 PokeathlonCirclePush_GetZoneCircles(int layout, PokeathlonCirclePushAiZone *c
             circles->x = 0;
             circles->y = 0;
         } else {
-            const u16 *kindData = *(const u16 *volatile *)((u8 *)ov96_0221DBB8 + kind * 4 - 4);
+            const u16 *kindData = *(const u16 *volatile *)((u8 *)gPokeathlonCirclePushZoneKinds + kind * 4 - 4);
             circles->radius = kindData[0];
             circles->x = zone->x;
             circles->y = zone->y;

@@ -44,7 +44,7 @@ struct LockCapsuleCardView {
     BgConfig *bgConfig;                          // 0x29FC
     MessageFormat *msgFormat;                    // 0x2A00
     MsgData *msgData;                            // 0x2A04
-    Window windows[11];                          // 0x2A08, card text boxes (ov74_0223C700)
+    Window windows[11];                          // 0x2A08, card text boxes (sLockCapsuleCardTextBoxes)
     u8 unk_2AB8[0x90];                           // 0x2AB8
     u32 baseTiles[11];                           // 0x2B48
     u8 unk_2B74[0x24];                           // 0x2B74
@@ -90,16 +90,16 @@ extern BOOL CommState_Exists(void);
 extern void OS_ResetSystem(u32 parameter);
 
 extern const OverlayManagerTemplate gApp_MainMenu_SelectOption_MysteryGift;
-extern const MysteryGiftMenuItem ov74_0223C6D0[2];
-extern const ListMenuTemplate ov74_0223C6E0;
-extern const WonderCardTextBox ov74_0223C700[11];
-extern u32 ov74_0223D0C0;
-extern const GraphicsModes _0223B430;
-extern const BgTemplate _0223B440;
-extern const BgTemplate _0223B45C;
-extern const BgTemplate _0223B478;
-extern const BgTemplate _0223B494;
-extern const GraphicsBanks _0223B4B0;
+extern const MysteryGiftMenuItem sLockCapsuleCardMenuItems[2];
+extern const ListMenuTemplate sLockCapsuleCardListMenuTemplate;
+extern const WonderCardTextBox sLockCapsuleCardTextBoxes[11];
+extern u32 sLockCapsuleCardMenuInput;
+extern const GraphicsModes gWonderCardGraphicsModes;
+extern const BgTemplate sWonderCardBgTemplate_Main3;
+extern const BgTemplate sWonderCardBgTemplate_Main0;
+extern const BgTemplate sWonderCardBgTemplate_Main2;
+extern const BgTemplate sWonderCardBgTemplate_Main1;
+extern const GraphicsBanks gWonderCardGraphicsBanks;
 
 #pragma force_active on
 
@@ -156,7 +156,7 @@ void LockCapsuleCard_CreateListMenu(LockCapsuleCardView *view, const MysteryGift
         ListMenuItems_AppendFromMsgData(view->listMenuItems, view->msgData, items[i].msgId, (int)items[i].func);
     }
     DestroyMsgData(view->msgData);
-    template = ov74_0223C6E0;
+    template = sLockCapsuleCardListMenuTemplate;
     template.items = view->listMenuItems;
     template.totalItems = count;
     template.window = window;
@@ -230,8 +230,8 @@ BOOL LockCapsuleCard_ShowCardMenu(LockCapsuleCardView *view, Window *window, u32
     MysteryGiftMenuItem items[2];
     const WonderCardTextBox *box;
 
-    items[0] = ov74_0223C6D0[0];
-    items[1] = ov74_0223C6D0[1];
+    items[0] = sLockCapsuleCardMenuItems[0];
+    items[1] = sLockCapsuleCardMenuItems[1];
     box = view->box;
 
     ClearWindowTilemapAndCopyToVram(window);
@@ -254,7 +254,7 @@ void LockCapsuleCard_StartFade(LockCapsuleCardView *view, enum FadeType fadeType
 #pragma force_active on
 
 void LockCapsuleCard_DrawCard(LockCapsuleCardView *view, int unused, int page) {
-    const WonderCardTextBox *boxes = ov74_0223C700;
+    const WonderCardTextBox *boxes = sLockCapsuleCardTextBoxes;
     u32 i;
     u32 baseTile;
     u32 color;
@@ -296,7 +296,7 @@ void LockCapsuleCard_DrawCard(LockCapsuleCardView *view, int unused, int page) {
 }
 
 int LockCapsuleCard_PrintTextBox(LockCapsuleCardView *view, Window *window, int boxId, int baseTile) {
-    const WonderCardTextBox *box = &ov74_0223C700[boxId];
+    const WonderCardTextBox *box = &sLockCapsuleCardTextBoxes[boxId];
 
     if (window->bgConfig == NULL) {
         AddWindowParameterized(view->bgConfig, window, GF_BG_LYR_MAIN_2, box->x, box->y, box->width, box->height, 15, baseTile);
@@ -382,7 +382,7 @@ void LockCapsuleCard_HandleListMenuInput(OverlayManager *manager, int *state, My
             *state = input;
             break;
         }
-        ov74_0223D0C0 = input;
+        sLockCapsuleCardMenuInput = input;
         nextState = ((MysteryGiftMenuFunc)input)(manager);
         if (nextState != -1) {
             *state = nextState;
@@ -733,32 +733,32 @@ void LockCapsuleCard_DrawCardOnBg(BgConfig *bgConfig, WonderCard *card, enum Hea
 #pragma force_active reset
 
 void WonderCard_SetGraphicsBanks(void) {
-    GraphicsBanks banks = _0223B4B0;
+    GraphicsBanks banks = gWonderCardGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
 void WonderCard_InitBgLayers(BgConfig *bgConfig) {
     {
-        GraphicsModes modes = _0223B430;
+        GraphicsModes modes = gWonderCardGraphicsModes;
         SetBothScreensModesAndDisable(&modes);
     }
     {
-        BgTemplate template = _0223B45C;
+        BgTemplate template = sWonderCardBgTemplate_Main0;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &template, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
     }
     {
-        BgTemplate template = _0223B494;
+        BgTemplate template = sWonderCardBgTemplate_Main1;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &template, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
     }
     {
-        BgTemplate template = _0223B478;
+        BgTemplate template = sWonderCardBgTemplate_Main2;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &template, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
     }
     {
-        BgTemplate template = _0223B440;
+        BgTemplate template = sWonderCardBgTemplate_Main3;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &template, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
     }

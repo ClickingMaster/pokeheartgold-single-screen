@@ -45,7 +45,7 @@
 	.public gMapObjectTypeBehaviorInits
 	.public gMapObjectTypeBehaviorChecks
 	.public gMapObjectTypeBehaviorUpdates
-	.public _020FE194
+	.public gTrainerSightDistanceFuncs
 	.public gTrainerApproachStateFuncs
 
 	.text
@@ -108,8 +108,8 @@ gMapObjectTypeBehaviorUpdates:
 	.word TypeBehavior_NoOpUpdate
 	.word TypeBehavior_NoOpUpdate
 	; File boundary?
-	.public _020FE194
-_020FE194:
+	.public gTrainerSightDistanceFuncs
+gTrainerSightDistanceFuncs:
 	.word TrainerSight_GetDistanceNorth
 	.word TrainerSight_GetDistanceSouth
 	.word TrainerSight_GetDistanceWest

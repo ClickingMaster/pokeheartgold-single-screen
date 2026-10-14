@@ -12,23 +12,23 @@
 	.rodata
 
 	; File boundary
-_0210841C:
+gGridPanel6Dimensions:
 	.byte 0x06, 0x01, 0x06, 0x06
-_02108420:
+gGridPanel4Dimensions:
 	.byte 0x01, 0x03, 0x03, 0x04
-_02108424:
+gGridPanel5Dimensions:
 	.byte 0x01, 0x01, 0x01, 0x05
-_02108428:
+gGridPanel3Dimensions:
 	.byte 0x01, 0x03, 0x03, 0x03
-_0210842C:
+gGridPanel1Dimensions:
 	.byte 0x01, 0x01, 0x01, 0x01
-_02108430:
+gGridPanel2Dimensions:
 	.byte 0x06, 0x05, 0x1E, 0x02
 	.public gGridCursorPanels
 gGridCursorPanels:
-	.word _02108430, GridPanel2_Move, GridPanel2_Enter
-	.word _0210842C, GridPanel1_Move, GridPanel1_Enter
-	.word _02108428, GridPanel3_Move, GridPanel3_Enter
-	.word _02108420, GridPanel4_Move, GridPanel4_Enter
-	.word _02108424, GridPanel5_Move, GridPanel5_Enter
-	.word _0210841C, GridPanel6_Move, GridPanel6_Enter
+	.word gGridPanel2Dimensions, GridPanel2_Move, GridPanel2_Enter
+	.word gGridPanel1Dimensions, GridPanel1_Move, GridPanel1_Enter
+	.word gGridPanel3Dimensions, GridPanel3_Move, GridPanel3_Enter
+	.word gGridPanel4Dimensions, GridPanel4_Move, GridPanel4_Enter
+	.word gGridPanel5Dimensions, GridPanel5_Move, GridPanel5_Enter
+	.word gGridPanel6Dimensions, GridPanel6_Move, GridPanel6_Enter

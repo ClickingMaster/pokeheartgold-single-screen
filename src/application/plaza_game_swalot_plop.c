@@ -59,7 +59,7 @@ void NNS_G3dAnmObjEnableID(NNSG3dAnmObj *anmObj, int id);
 int NNS_G3dGetResDictIdxByName(const NNSG3dResDict *dict, const NNSG3dResName *name);
 
 // Tables in asm/plaza_game_swalot_plop_data.s.
-extern const u8 _02261BE8[];
+extern const u8 sSwalotPlopModelIds[];
 extern const u8 sSwalotPlopSubBgPalettes[];
 extern const u8 sSwalotPlopShotModelFiles[];
 extern const u16 sSwalotPlopStageAnimFiles[];
@@ -69,7 +69,7 @@ extern const u16 sSwalotPlopStageFiles[];
 extern const u8 sSwalotPlopSpecialAnimStarts[];
 extern const u8 sSwalotPlopSpecialAnimEnds[];
 extern const u16 sSwalotPlopSceneAnimFiles[6];
-extern const VecFx32 ov91_02261C28;
+extern const VecFx32 sSwalotPlopBodyOffset;
 extern const u32 sSwalotPlopHitPoints[];
 extern const u32 sSwalotPlopPhaseFrames[];
 extern const VecFx32 sSwalotPlopBodyBaseNormal;
@@ -87,7 +87,7 @@ extern const u16 sSwalotPlopSeatAngles[][4];
 extern const u16 sSwalotPlopCameraAngles[][4];
 extern const u16 sSwalotPlopStageRotations[][4];
 extern const GraphicsBanks sSwalotPlopBanks;
-extern const u32 ov91_02261DAC[];
+extern const u32 sSwalotPlopIntroNamePositions[];
 extern const u8 sSwalotPlopPopupPosX[];
 extern const u8 sSwalotPlopPopupPosY[];
 extern const NNSG3dResName sSwalotPlopSceneNodeNames[6][15];
@@ -1168,7 +1168,7 @@ void SwalotPlopIntro_Init(SwalotPlopIntro *intro, SwalotPlopGfx *gfx, SwalotPlop
     string = String_New(128, heapId);
     u32 i;
     for (i = 0; i < playerCount; i++) {
-        const u32 *table = ov91_02261DAC + localIndex * 32 + playerCount * 8 + i * 2;
+        const u32 *table = sSwalotPlopIntroNamePositions + localIndex * 32 + playerCount * 8 + i * 2;
         if (i != localIndex) {
             x = table[-8];
             u32 y = table[-7];
@@ -1274,7 +1274,7 @@ void SwalotPlopBody_Init(SwalotPlopGame *game, SwalotPlopBody *body) {
     body->pushRadius = 0xC8000;
     body->pushStrength = 123;
     body->mouthDepth = 0x50000;
-    offset = ov91_02261C28;
+    offset = sSwalotPlopBodyOffset;
     body->offset = offset;
     SwalotPlopBody_SetScale(body, 0x9C4);
     body->position = offset;
@@ -2632,7 +2632,7 @@ void SwalotPlopScene_Init(SwalotPlopScene *scene, NARC *narc, enum HeapID heapId
             }
         }
     }
-    modelId = _02261BE8[0];
+    modelId = sSwalotPlopModelIds[0];
     special = &scene->special;
     ModelAnimation_LoadFromNarc(special, &scene->resources[modelId], narc, 32, heapId, allocator);
     ModelInstance_AddAnimation(&scene->models[modelId], special);

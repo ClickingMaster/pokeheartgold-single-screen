@@ -69,8 +69,8 @@ typedef struct GtsLetterGroup {
     int count;
 } GtsLetterGroup;
 
-extern const int ov70_02245E84[];
-extern const GtsLetterGroup ov70_02245F58[];
+extern const int gGtsSelectorGroupStarts[];
+extern const GtsLetterGroup gGtsSelectorLetterGroups[];
 extern const int ov70_02245F5C[][2];
 
 extern int (*const sGtsConnectionStates[])(GtsApp *app);
@@ -147,7 +147,7 @@ void GtsConnection_PrintErrorCode(GtsApp *app, int msgId, int errorCode);
 
 // The last function of the selector (gts_selector.c), linked with screen 0.
 BOOL GtsSelector_HasCountriesInGroup(GtsSelector *selector, int group) {
-    int first = ov70_02245E84[group];
+    int first = gGtsSelectorGroupStarts[group];
     int count = ov70_02245F5C[group][0];
     if (count > 0) {
         int i = 0;
@@ -157,7 +157,7 @@ BOOL GtsSelector_HasCountriesInGroup(GtsSelector *selector, int group) {
                     return TRUE;
                 }
                 i++;
-            } while (i < ov70_02245F58[group].count);
+            } while (i < gGtsSelectorLetterGroups[group].count);
         }
     } else if (GtsSelector_CountCountriesOfLetter(selector, first) > 0) {
         return TRUE;

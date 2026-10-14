@@ -13,7 +13,7 @@
 
 // Script command table of the frontier scripts and its size (frontier script commands' data).
 extern const FrontierScrCmdFunc gFrontierCommandTable[];
-extern const u32 ov80_0223B9CC;
+extern const u32 gFrontierScriptInitArg;
 
 u32 FrontierMap_GetParam(u32 mapId, u32 field);
 FrontierMap *Frontier_GetMap(void *frontierWork);
@@ -68,7 +68,7 @@ void FrontierSystem_Delete(FrontierSystem *system) {
 void FrontierSystem_AddTask(FrontierSystem *system, u16 mapId, u32 scriptIndex) {
     FrontierScriptContext *task = Heap_Alloc(system->heapId, sizeof(FrontierScriptContext));
     MI_CpuFill8(task, 0, sizeof(FrontierScriptContext));
-    FrontierScriptContext_Init(task, gFrontierCommandTable, ov80_0223B9CC);
+    FrontierScriptContext_Init(task, gFrontierCommandTable, gFrontierScriptInitArg);
     task->frontierSystem = system;
     if (mapId == 0xFFFF || system->mapId == mapId) {
         task->scripts = system->scripts;

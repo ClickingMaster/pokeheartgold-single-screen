@@ -1347,7 +1347,7 @@
 	.public _02261BBA
 	.public _02261BD0
 	.public _02261BDE
-	.public _02261BE8
+	.public sSwalotPlopModelIds
 	.public _02261BFA
 	.public _02261C0C
 	.public _02261C3C

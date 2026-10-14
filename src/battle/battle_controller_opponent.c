@@ -104,9 +104,9 @@ void BattleAnimEmitter_Start(void *emitter);
 u32 BattleAnimEmitter_IsActive(void *emitter);
 s16 ov07_02234B5C(u32 battlerType, u32 index);
 
-extern const s16 ov07_022377DC[][2];
+extern const s16 gBattlerSlideInTargetX[][2];
 // Pokemon/trainer positions (x, y, z) by battler type: [0] on the field, [1] off screen where a slide-in starts.
-extern const s16 ov07_022377F4[2][6][3];
+extern const s16 gBattlerPokepicPositions[2][6][3];
 
 // Data in asm/battle_controller_opponent_data.s
 typedef void (*OpponentCommandHandler)(BattleSystem *battleSystem, OpponentData *opponentData);
@@ -116,16 +116,16 @@ typedef struct OpponentBallKindTable {
 } OpponentBallKindTable;
 
 extern const OpponentCommandHandler sOpponentCommandHandlers[];
-extern const u8 ov12_0226D120[];
-extern const OpponentBallKindTable ov12_0226D128;
+extern const u8 gOpponentBallKinds[];
+extern const OpponentBallKindTable gOpponentRecallBallKinds;
 // not const: Task_SafariSelectCommand reads them before BattleSystem_Random, a const table would be read after it
-extern u8 ov12_0226D140[][2];
+extern u8 gSafariFleeRateStages[][2];
 extern u8 ov12_0226D141[][2];
 extern const u16 sBallColors[];
-extern const u32 ov12_0226D18C[];
-extern const s16 ov12_0226D1E8[][6][2];
+extern const u32 gBattleEncounterFadeColors[];
+extern const s16 gBallThrowOffsets[][6][2];
 extern const s16 ov12_0226D1EA[][6][2];
-extern const u8 ov12_0226D350[];
+extern const u8 gBattleEncounterTerrains[];
 
 // Commands received from the battle controller (the BattleController_Emit* packets).
 typedef struct BattleControllerPacketEncounterAnimation {
@@ -1421,7 +1421,7 @@ void OpponentData_CreateBallData(BattleSystem *battleSystem, OpponentData *oppon
 
     if ((BattleSystem_GetBattleType(battleSystem) & (BATTLE_TYPE_SAFARI | BATTLE_TYPE_PAL_PARK)) == 0) {
         if ((opponentData->battlerType & BATTLER_TYPE_IS_ENEMY) == 0 || (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_TRAINER)) {
-            ballParams.kind = ov12_0226D120[opponentData->battlerType];
+            ballParams.kind = gOpponentBallKinds[opponentData->battlerType];
             ballParams.heapID = HEAP_ID_BATTLE;
             ballParams.mode = 4;
             ballParams.resTagOffset = opponentData->battlerId;
@@ -2026,11 +2026,11 @@ void OpponentData_PokemonEncounter(BattleSystem *battleSystem, OpponentData *opp
     if (opponentData->battlerType & BATTLER_TYPE_IS_ENEMY) {
         work->facing = 2;
         work->terrain = BattleSystem_GetBattleTerrain(battleSystem, 1);
-        ManagedSprite_SetPositionXY(work->terrain->sprite, ov07_022377F4[0][opponentData->battlerType & BATTLER_TYPE_IS_ENEMY][0], 88);
+        ManagedSprite_SetPositionXY(work->terrain->sprite, gBattlerPokepicPositions[0][opponentData->battlerType & BATTLER_TYPE_IS_ENEMY][0], 88);
     } else {
         work->facing = 0;
         work->terrain = BattleSystem_GetBattleTerrain(battleSystem, 0);
-        ManagedSprite_SetPositionXY(work->terrain->sprite, ov07_022377F4[0][opponentData->battlerType & BATTLER_TYPE_IS_ENEMY][0], 136);
+        ManagedSprite_SetPositionXY(work->terrain->sprite, gBattlerPokepicPositions[0][opponentData->battlerType & BATTLER_TYPE_IS_ENEMY][0], 136);
     }
 
     GetMonSpriteCharAndPlttNarcIdsEx(&pokepicTemplate, packet->species, packet->gender, work->facing, packet->shiny != 0, packet->form, packet->personality);
@@ -2042,7 +2042,7 @@ void OpponentData_PokemonEncounter(BattleSystem *battleSystem, OpponentData *opp
 
     battlerType = opponentData->battlerType;
     // volatile only to match: the new pokepic is stored and read back
-    *(Pokepic *volatile *)&opponentData->pokepic = BattleControllerOpponent_CreatePokepic(battleSystem, pokepicManager, &pokepicTemplate, ov07_022377F4[0][battlerType][0], ov07_022377F4[0][battlerType][1], ov07_022377F4[0][battlerType][2], height, anim.shadowHeight, anim.shadowXOffset, anim.shadowSize, opponentData->battlerId, anim.scripts, NULL);
+    *(Pokepic *volatile *)&opponentData->pokepic = BattleControllerOpponent_CreatePokepic(battleSystem, pokepicManager, &pokepicTemplate, gBattlerPokepicPositions[0][battlerType][0], gBattlerPokepicPositions[0][battlerType][1], gBattlerPokepicPositions[0][battlerType][2], height, anim.shadowHeight, anim.shadowXOffset, anim.shadowSize, opponentData->battlerId, anim.scripts, NULL);
     work->pokepic = *(Pokepic *volatile *)&opponentData->pokepic;
 
     if (work->facing == 2) {
@@ -2055,7 +2055,7 @@ void OpponentData_PokemonEncounter(BattleSystem *battleSystem, OpponentData *opp
         Pokepic_SetAttr(work->pokepic, POKEPIC_Y, y - 136);
         work->target = y;
     } else {
-        work->target = ov07_022377DC[opponentData->battlerType][0];
+        work->target = gBattlerSlideInTargetX[opponentData->battlerType][0];
     }
 
     work->battleSystem = battleSystem;
@@ -2239,11 +2239,11 @@ void OpponentData_TrainerEncounter(BattleSystem *battleSystem, OpponentData *opp
     if (opponentData->battlerType & BATTLER_TYPE_IS_ENEMY) {
         work->facing = 2;
         work->terrain = BattleSystem_GetBattleTerrain(battleSystem, 1);
-        ManagedSprite_SetPositionXY(work->terrain->sprite, ov07_022377F4[0][opponentData->battlerType & BATTLER_TYPE_IS_ENEMY][0], 88);
+        ManagedSprite_SetPositionXY(work->terrain->sprite, gBattlerPokepicPositions[0][opponentData->battlerType & BATTLER_TYPE_IS_ENEMY][0], 88);
     } else {
         work->facing = 0;
         work->terrain = BattleSystem_GetBattleTerrain(battleSystem, 0);
-        ManagedSprite_SetPositionXY(work->terrain->sprite, ov07_022377F4[0][opponentData->battlerType & BATTLER_TYPE_IS_ENEMY][0], 136);
+        ManagedSprite_SetPositionXY(work->terrain->sprite, gBattlerPokepicPositions[0][opponentData->battlerType & BATTLER_TYPE_IS_ENEMY][0], 136);
     }
     if ((BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_MULTI) || ((BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_TAG) && (opponentData->battlerType & BATTLER_TYPE_IS_ENEMY))) {
         position = opponentData->battlerType;
@@ -2260,8 +2260,8 @@ void OpponentData_TrainerEncounter(BattleSystem *battleSystem, OpponentData *opp
             isLink = TRUE;
         }
     }
-    x = ov07_022377F4[0][position][0];
-    y = ov07_022377F4[0][position][1];
+    x = gBattlerPokepicPositions[0][position][0];
+    y = gBattlerPokepicPositions[0][position][1];
     opponentData->managedSprite = BattleControllerOpponent_CreateTrainerSprite(battleSystem, position, packet->trainerClass, opponentData->battlerType, isLink, x, y);
     work->managedSprite = opponentData->managedSprite;
     if (work->facing == 0 && (BattleSystem_GetBattleType(battleSystem) == BATTLE_TYPE_NONE || BattleSystem_GetBattleType(battleSystem) == BATTLE_TYPE_SAFARI || BattleSystem_GetBattleType(battleSystem) == BATTLE_TYPE_ROAMER || BattleSystem_GetBattleType(battleSystem) == BATTLE_TYPE_PAL_PARK || BattleSystem_GetBattleType(battleSystem) == BATTLE_TYPE_TUTORIAL || BattleSystem_GetBattleType(battleSystem) == BATTLE_TYPE_BUG_CONTEST)) {
@@ -2273,11 +2273,11 @@ void OpponentData_TrainerEncounter(BattleSystem *battleSystem, OpponentData *opp
         template.species = SPECIES_NONE;
         template.isAnimated = FALSE;
         template.personality = 0;
-        work->pokepic = PokepicManager_CreatePokepic(pokepicManager, &template, x, y, ov07_022377F4[0][position][2], opponentData->battlerId, NULL, NULL);
+        work->pokepic = PokepicManager_CreatePokepic(pokepicManager, &template, x, y, gBattlerPokepicPositions[0][position][2], opponentData->battlerId, NULL, NULL);
     } else {
         work->pokepic = NULL;
     }
-    work->targetX = ov07_022377DC[position][0];
+    work->targetX = gBattlerSlideInTargetX[position][0];
     work->battleSystem = battleSystem;
     work->command = packet->command;
     work->battlerId = opponentData->battlerId;
@@ -2348,9 +2348,9 @@ void OpponentData_TrainerSlideIn(BattleSystem *battleSystem, OpponentData *oppon
     } else {
         work->facing = 0;
     }
-    opponentData->managedSprite = BattleControllerOpponent_CreateTrainerSprite(battleSystem, opponentData->battlerType & BATTLER_TYPE_IS_ENEMY, packet->trainerClass, opponentData->battlerType, FALSE, ov07_022377F4[1][opponentData->battlerType & BATTLER_TYPE_IS_ENEMY][0], ov07_022377F4[1][opponentData->battlerType & BATTLER_TYPE_IS_ENEMY][1]);
+    opponentData->managedSprite = BattleControllerOpponent_CreateTrainerSprite(battleSystem, opponentData->battlerType & BATTLER_TYPE_IS_ENEMY, packet->trainerClass, opponentData->battlerType, FALSE, gBattlerPokepicPositions[1][opponentData->battlerType & BATTLER_TYPE_IS_ENEMY][0], gBattlerPokepicPositions[1][opponentData->battlerType & BATTLER_TYPE_IS_ENEMY][1]);
     work->managedSprite = opponentData->managedSprite;
-    work->targetX = ov07_022377DC[opponentData->battlerType & BATTLER_TYPE_IS_ENEMY][packet->index];
+    work->targetX = gBattlerSlideInTargetX[opponentData->battlerType & BATTLER_TYPE_IS_ENEMY][packet->index];
     work->battleSystem = battleSystem;
     work->command = packet->command;
     work->battlerId = opponentData->battlerId;
@@ -3320,7 +3320,7 @@ void Task_PokemonSlideIn(SysTask *task, void *data) {
         }
         pokepicManager = BattleSystem_GetPokepicManager(work->battleSystem);
         NARC_ReadPokepicAnimScript((NARC *)work->opponentData->pokepicAnimNarc, scripts, work->species, work->battlerType);
-        work->opponentData->pokepic = BattleControllerOpponent_CreatePokepic(work->battleSystem, pokepicManager, &work->pokepicTemplate, ov07_022377DC[work->battlerType][0], ov07_022377F4[0][work->battlerType][1], ov07_022377F4[0][work->battlerType][2], work->height, work->shadowHeight, work->shadowXOffset, work->shadowSize, work->battlerId, scripts, NULL);
+        work->opponentData->pokepic = BattleControllerOpponent_CreatePokepic(work->battleSystem, pokepicManager, &work->pokepicTemplate, gBattlerSlideInTargetX[work->battlerType][0], gBattlerPokepicPositions[0][work->battlerType][1], gBattlerPokepicPositions[0][work->battlerType][2], work->height, work->shadowHeight, work->shadowXOffset, work->shadowSize, work->battlerId, scripts, NULL);
         Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_AFFINEW, 0);
         Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_AFFINEH, 0);
         Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_SHADOW_YADJ_REQ, 0);
@@ -3443,7 +3443,7 @@ void Task_FollowMonSlideIn(SysTask *task, void *data) {
         }
         pokepicManager = BattleSystem_GetPokepicManager(work->battleSystem);
         NARC_ReadPokepicAnimScript((NARC *)work->opponentData->pokepicAnimNarc, scripts, work->species, work->battlerType);
-        work->opponentData->pokepic = BattleControllerOpponent_CreatePokepic(work->battleSystem, pokepicManager, &work->pokepicTemplate, ov07_022377F4[1][work->battlerType][0], ov07_022377F4[1][work->battlerType][1], ov07_022377F4[0][work->battlerType][2], work->height, work->shadowHeight, work->shadowXOffset, work->shadowSize, work->battlerId, scripts, NULL);
+        work->opponentData->pokepic = BattleControllerOpponent_CreatePokepic(work->battleSystem, pokepicManager, &work->pokepicTemplate, gBattlerPokepicPositions[1][work->battlerType][0], gBattlerPokepicPositions[1][work->battlerType][1], gBattlerPokepicPositions[0][work->battlerType][2], work->height, work->shadowHeight, work->shadowXOffset, work->shadowSize, work->battlerId, scripts, NULL);
         Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_AFFINEW, 0x100);
         Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_AFFINEH, 0x100);
         Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_SHADOW_YADJ_REQ, 0);
@@ -3526,7 +3526,7 @@ void Task_PokemonSendOut(SysTask *task, void *data) {
     state = work->state;
     switch (state) {
     case 0:
-        ballParams.kind = ov12_0226D120[work->battlerType];
+        ballParams.kind = gOpponentBallKinds[work->battlerType];
         ballParams.heapID = HEAP_ID_BATTLE;
         ballParams.resTagOffset = work->battlerId;
         ballParams.ball = work->ball;
@@ -3543,7 +3543,7 @@ void Task_PokemonSendOut(SysTask *task, void *data) {
         {
             PokepicManager *pokepicManager = BattleSystem_GetPokepicManager(work->battleSystem);
             NARC_ReadPokepicAnimScript((NARC *)work->opponentData->pokepicAnimNarc, scripts, work->species, work->battlerType);
-            work->opponentData->pokepic = BattleControllerOpponent_CreatePokepic(work->battleSystem, pokepicManager, &work->pokepicTemplate, ov07_022377DC[work->battlerType][0], ov07_022377F4[0][work->battlerType][1], ov07_022377F4[0][work->battlerType][2], work->height, work->shadowHeight, work->shadowXOffset, work->shadowSize, work->battlerId, scripts, NULL);
+            work->opponentData->pokepic = BattleControllerOpponent_CreatePokepic(work->battleSystem, pokepicManager, &work->pokepicTemplate, gBattlerSlideInTargetX[work->battlerType][0], gBattlerPokepicPositions[0][work->battlerType][1], gBattlerPokepicPositions[0][work->battlerType][2], work->height, work->shadowHeight, work->shadowXOffset, work->shadowSize, work->battlerId, scripts, NULL);
         }
         Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_AFFINEW, 0);
         Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_AFFINEH, 0);
@@ -3674,7 +3674,7 @@ void Task_FollowMonSendOut(SysTask *task, void *data) {
     case 0: {
         PokepicManager *pokepicManager = BattleSystem_GetPokepicManager(work->battleSystem);
         NARC_ReadPokepicAnimScript((NARC *)work->opponentData->pokepicAnimNarc, scripts, work->species, work->battlerType);
-        work->opponentData->pokepic = BattleControllerOpponent_CreatePokepic(work->battleSystem, pokepicManager, &work->pokepicTemplate, ov07_022377F4[1][work->battlerType][0], ov07_022377F4[1][work->battlerType][1], ov07_022377F4[0][work->battlerType][2], work->height, work->shadowHeight, work->shadowXOffset, work->shadowSize, work->battlerId, scripts, NULL);
+        work->opponentData->pokepic = BattleControllerOpponent_CreatePokepic(work->battleSystem, pokepicManager, &work->pokepicTemplate, gBattlerPokepicPositions[1][work->battlerType][0], gBattlerPokepicPositions[1][work->battlerType][1], gBattlerPokepicPositions[0][work->battlerType][2], work->height, work->shadowHeight, work->shadowXOffset, work->shadowSize, work->battlerId, scripts, NULL);
         Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_AFFINEW, 0x100);
         Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_AFFINEH, 0x100);
         Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_SHADOW_YADJ_REQ, 0);
@@ -3781,7 +3781,7 @@ void Task_RecallPokemon(SysTask *task, void *data) {
     case 4: {
         int battlerType = work->battlerType;
         if (battlerType & BATTLER_TYPE_IS_ENEMY) {
-            enemyBallParams.kind = ov12_0226D120[battlerType];
+            enemyBallParams.kind = gOpponentBallKinds[battlerType];
             enemyBallParams.heapID = HEAP_ID_BATTLE;
             enemyBallParams.mode = 5;
             enemyBallParams.resTagOffset = work->battlerId;
@@ -3792,7 +3792,7 @@ void Task_RecallPokemon(SysTask *task, void *data) {
             enemyBallParams.keepSubSurface = 0;
             work->ballData = BallThrow_New(&enemyBallParams);
         } else {
-            ballKinds = ov12_0226D128;
+            ballKinds = gOpponentRecallBallKinds;
             playerBallParams.kind = ballKinds.kinds[battlerType];
             playerBallParams.heapID = HEAP_ID_BATTLE;
             playerBallParams.mode = 5;
@@ -4122,15 +4122,15 @@ void Task_ThrowPokeball(SysTask *task, void *data) {
         ManagedSprite_GetPositionXY(work->opponentData->managedSprite, &x, &y);
         if (work->opponentData->ballData) {
             animFrame = ManagedSprite_GetAnimationFrame(work->opponentData->managedSprite);
-            if (ov12_0226D1E8[work->backpic][animFrame][0] != 0x7FFF) {
+            if (gBallThrowOffsets[work->backpic][animFrame][0] != 0x7FFF) {
                 BallThrow_SetDrawFlag(work->opponentData->ballData, 1);
-                BallThrow_SetPosition(work->opponentData->ballData, x + ov12_0226D1E8[work->backpic][animFrame][0], y + ov12_0226D1EA[work->backpic][animFrame][0]);
+                BallThrow_SetPosition(work->opponentData->ballData, x + gBallThrowOffsets[work->backpic][animFrame][0], y + ov12_0226D1EA[work->backpic][animFrame][0]);
                 if (animFrame == 3 && BallThrow_GetMode(work->opponentData->ballData) != 0) {
                     BallThrow_SetMode(work->opponentData->ballData, 0);
                     BallThrow_SetAnimateSprite(work->opponentData->ballData, 1);
                     if ((battleType & BATTLE_TYPE_DOUBLES) && !(battleType & BATTLE_TYPE_MULTI)) {
                         OpponentData *partner = BattleSystem_GetOpponentData(work->battleSystem, BattleSystem_GetBattlerIdPartner(work->battleSystem, work->battlerId));
-                        BallThrow_SetPosition(partner->ballData, x + ov12_0226D1E8[work->backpic][animFrame][0], y + ov12_0226D1EA[work->backpic][animFrame][0]);
+                        BallThrow_SetPosition(partner->ballData, x + gBallThrowOffsets[work->backpic][animFrame][0], y + ov12_0226D1EA[work->backpic][animFrame][0]);
                         BallThrow_SetDrawFlag(partner->ballData, 1);
                         BallThrow_SetMode(partner->ballData, 0);
                         BallThrow_SetAnimateSprite(partner->ballData, 1);
@@ -4155,8 +4155,8 @@ void Task_ThrowPokeball(SysTask *task, void *data) {
         if (animFrame == 4) {
             work->delay = 8;
             work->state = 4;
-        } else if (work->opponentData->ballData && ov12_0226D1E8[work->backpic][animFrame][0] != 0x7FFF) {
-            BallThrow_SetPosition(work->opponentData->ballData, x + ov12_0226D1E8[work->backpic][animFrame][0], y + ov12_0226D1EA[work->backpic][animFrame][0]);
+        } else if (work->opponentData->ballData && gBallThrowOffsets[work->backpic][animFrame][0] != 0x7FFF) {
+            BallThrow_SetPosition(work->opponentData->ballData, x + gBallThrowOffsets[work->backpic][animFrame][0], y + ov12_0226D1EA[work->backpic][animFrame][0]);
             if (animFrame == 3 && BallThrow_GetMode(work->opponentData->ballData) != work->ballTargetState) {
                 BallThrow_SetMode(work->opponentData->ballData, work->ballTargetState);
                 BallThrow_SetPriority(work->opponentData->ballData, 1);
@@ -4223,10 +4223,10 @@ void Task_ThrowPokeballWithFollowMon(SysTask *task, void *data) {
         ManagedSprite_GetPositionXY(work->opponentData->managedSprite, &x, &y);
         if (work->opponentData->ballData && (battleType & BATTLE_TYPE_DOUBLES) && !(battleType & BATTLE_TYPE_MULTI)) {
             int frame = ManagedSprite_GetAnimationFrame(work->opponentData->managedSprite);
-            if (ov12_0226D1E8[work->backpic][frame][0] != 0x7FFF) {
+            if (gBallThrowOffsets[work->backpic][frame][0] != 0x7FFF) {
                 OpponentData *partner = BattleSystem_GetOpponentData(work->battleSystem, BattleSystem_GetBattlerIdPartner(work->battleSystem, work->battlerId));
                 if (frame == 3 && BallThrow_GetMode(partner->ballData) != 0) {
-                    BallThrow_SetPosition(partner->ballData, x + ov12_0226D1E8[work->backpic][frame][0], y + ov12_0226D1EA[work->backpic][frame][0]);
+                    BallThrow_SetPosition(partner->ballData, x + gBallThrowOffsets[work->backpic][frame][0], y + ov12_0226D1EA[work->backpic][frame][0]);
                     BallThrow_SetDrawFlag(partner->ballData, 1);
                     BallThrow_SetMode(partner->ballData, 0);
                     BallThrow_SetAnimateSprite(partner->ballData, 1);
@@ -4600,7 +4600,7 @@ void Task_SafariSelectCommand(SysTask *task, void *data) {
     int stage = BattleSystem_GetSafariRunAttempts(work->battleSystem);
     u16 species = GetBattlerVar(BattleSystem_GetBattleContext(work->battleSystem), work->battlerId, BMON_DATA_SPECIES, NULL);
     int fleeRate = GetMonBaseStat(species, BASE_GREAT_MARSH_RATE);
-    int scaled = ov12_0226D140[stage][0] * fleeRate;
+    int scaled = gSafariFleeRateStages[stage][0] * fleeRate;
     int chance = scaled / ov12_0226D141[stage][0];
     if (BattleSystem_Random(work->battleSystem) % 0xFF <= chance) {
         BattleController_ReplyCommandSelection(work->battleSystem, work->battlerId, 4);
@@ -6212,13 +6212,13 @@ void Task_PlayEncounterAnimation(SysTask *task, void *data) {
     BattleSystem_GetBgConfig(work->battleSystem);
     palette = BattleSystem_GetPaletteData(work->battleSystem);
     terrain = BattleSystem_GetTerrainId(work->battleSystem);
-    color = ov12_0226D18C[BattleSystem_GetBackgroundId(work->battleSystem)];
+    color = gBattleEncounterFadeColors[BattleSystem_GetBackgroundId(work->battleSystem)];
     work->timer++;
 
     switch (work->state) {
     case 0:
         work->emitterManager = BattleAnimEmitterManager_New(HEAP_ID_BATTLE, 0);
-        terrain = ov12_0226D350[terrain];
+        terrain = gBattleEncounterTerrains[terrain];
         emitter.index = terrain;
         emitter.unk_04 = 1;
         work->firstEmitter = BattleAnimEmitterManager_AddEmitter(work->emitterManager, &emitter);

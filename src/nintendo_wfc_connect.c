@@ -178,7 +178,7 @@ typedef struct NintendoWfcHttp {
     s32 result;         // 0x04
     u32 profileId;      // 0x08
     u64 friendKey;      // 0x0C
-    u8 rank;            // 0x14, first byte of the request buffer ov72_0223B834
+    u8 rank;            // 0x14, first byte of the request buffer gNintendoWfcHttpRequestBuffer
     u8 room;            // 0x15
 } NintendoWfcHttp;
 
@@ -249,10 +249,10 @@ void BattleRoomDownload_SetLeaders(BattleRoomDownload *data, void *records, u32 
 
 extern NintendoWfcHttp sNintendoWfcHttp;
 extern u8 ov72_0223B82C[];
-extern u8 ov72_0223B834[];
+extern u8 gNintendoWfcHttpRequestBuffer[];
 extern u8 ov72_0223B900[];
 extern u8 ov72_0223B91B[];
-extern NintendoWfcHttpResponse ov72_0223B920;
+extern NintendoWfcHttpResponse gNintendoWfcHttpResponse;
 extern u8 ov72_0223B923[];
 extern NintendoWfcGlobal sNintendoWfcGlobal;
 extern const char sNintendoWfcRoomNumUrl[];
@@ -274,22 +274,22 @@ extern const BgTemplate sNintendoWfcBgTemplate_Sub2;
 extern const BgTemplate sNintendoWfcBgTemplate_Main1;
 extern const BgTemplate sNintendoWfcBgTemplate_Main0;
 extern const BgTemplate sNintendoWfcBgTemplate_Sub0;
-extern const u16 ov72_0223B338[][2];
-extern const u16 ov72_0223B364[][3][2];
+extern const u16 gNintendoWfcButtonSpritePositions[][2];
+extern const u16 gNintendoWfcDigitSpritePositions[][3][2];
 extern const u16 ov72_0223B366[][3][2];
-extern const u16 ov72_0223B3A4[][2];
+extern const u16 gNintendoWfcPadCursorPositions[][2];
 extern const u16 ov72_0223B3A6[][2];
 extern const u8 ov72_0223B464[];
 extern const u8 ov72_0223B466[];
 extern const u8 ov72_0223B468[];
 extern const u8 ov72_0223B46A[];
-extern const int ov72_0223B46C[];
-extern const u8 ov72_0223B478[];
+extern const int gNintendoWfcNumberInputWindowX[];
+extern const u8 gNintendoWfcPadKeyFlashes[];
 extern const u8 ov72_0223B479[];
-extern const u8 ov72_0223B48C[][4];
-extern const TouchscreenHitbox ov72_0223B4C8[];
-extern const TouchscreenHitbox ov72_0223B774[];
-extern const TouchscreenHitbox ov72_0223B7B8[];
+extern const u8 gNintendoWfcPadNeighbors[][4];
+extern const TouchscreenHitbox gNintendoWfcYesNoHitboxes[];
+extern const TouchscreenHitbox gNintendoWfcPadHitboxes_Max100[];
+extern const TouchscreenHitbox gNintendoWfcPadHitboxes[];
 
 void NintendoWfcHttp_Update(void);
 s32 NintendoWfcHttp_GetResult(void);
@@ -471,7 +471,7 @@ void NintendoWfcHttp_Update(void) {
         case 7:
             sNintendoWfcHttp.state = 12;
             if (GameStats_GetResponseLength() > 0) {
-                sNintendoWfcHttp.result = ov72_0223B920.status;
+                sNintendoWfcHttp.result = gNintendoWfcHttpResponse.status;
             } else {
                 sNintendoWfcHttp.result = -2;
             }
@@ -491,7 +491,7 @@ void NintendoWfcHttp_Update(void) {
             if (GameStats_GetResponseLength() == 2616) {
                 sNintendoWfcHttp.result = 0;
             } else {
-                switch (*ov72_0223B920.buffer) {
+                switch (*gNintendoWfcHttpResponse.buffer) {
                 case 2:
                     sNintendoWfcHttp.result = -3;
                     break;
@@ -516,7 +516,7 @@ void NintendoWfcHttp_Update(void) {
             break;
         case 7:
             sNintendoWfcHttp.state = 12;
-            switch (ov72_0223B920.status) {
+            switch (gNintendoWfcHttpResponse.status) {
             case 1:
                 sNintendoWfcHttp.result = 0;
                 break;
@@ -546,7 +546,7 @@ void NintendoWfcHttp_Update(void) {
             break;
         case 7:
             sNintendoWfcHttp.state = 12;
-            switch (ov72_0223B920.status) {
+            switch (gNintendoWfcHttpResponse.status) {
             case 1:
                 sNintendoWfcHttp.result = 0;
                 break;
@@ -579,7 +579,7 @@ void NintendoWfcHttp_Update(void) {
             if (GameStats_GetResponseLength() == 8) {
                 sNintendoWfcHttp.result = 0;
             } else {
-                switch (ov72_0223B920.status) {
+                switch (gNintendoWfcHttpResponse.status) {
                 case 1:
                     sNintendoWfcHttp.result = 0;
                     break;
@@ -634,7 +634,7 @@ s32 NintendoWfcHttp_GetResult(void) {
 void NintendoWfcHttp_RequestRoomCount(int rank) {
     GameStats_Start();
     sNintendoWfcHttp.rank = rank - 1;
-    if (NintendoWfcHttp_StartRequest(sNintendoWfcRoomNumUrl, ov72_0223B834, 1, ov72_0223B923, 2)) {
+    if (NintendoWfcHttp_StartRequest(sNintendoWfcRoomNumUrl, gNintendoWfcHttpRequestBuffer, 1, ov72_0223B923, 2)) {
         sNintendoWfcHttp.state = 2;
     } else {
         sNintendoWfcHttp.state = 12;
@@ -644,11 +644,11 @@ void NintendoWfcHttp_RequestRoomCount(int rank) {
 }
 
 void NintendoWfcHttp_RequestDownload(int rank, int room, void *buffer) {
-    ov72_0223B920.buffer = buffer;
+    gNintendoWfcHttpResponse.buffer = buffer;
     GameStats_Start();
     sNintendoWfcHttp.rank = rank - 1;
     sNintendoWfcHttp.room = room - 1;
-    if (NintendoWfcHttp_StartRequest(sNintendoWfcDownloadUrl, ov72_0223B834, 2, buffer, 0xA38)) {
+    if (NintendoWfcHttp_StartRequest(sNintendoWfcDownloadUrl, gNintendoWfcHttpRequestBuffer, 2, buffer, 0xA38)) {
         sNintendoWfcHttp.state = 4;
     } else {
         sNintendoWfcHttp.state = 12;
@@ -664,7 +664,7 @@ void NintendoWfcHttp_RequestUpload(int rank, int room, int winCount, FrontierWif
     u8 *src;
     u32 n;
     GameStats_Start();
-    memcpy(ov72_0223B834, record, sizeof(FrontierWifiUploadRecord));
+    memcpy(gNintendoWfcHttpRequestBuffer, record, sizeof(FrontierWifiUploadRecord));
     // the request continues after the record: rank, room, winCount and the friend key
     ov72_0223B900[0x18] = rank - 1;
     ov72_0223B900[0x19] = room - 1;
@@ -675,7 +675,7 @@ void NintendoWfcHttp_RequestUpload(int rank, int room, int winCount, FrontierWif
     do {
         *dst++ = *src++;
     } while (--n);
-    if (NintendoWfcHttp_StartRequest(sNintendoWfcUploadUrl, ov72_0223B834, 239, ov72_0223B923, 2)) {
+    if (NintendoWfcHttp_StartRequest(sNintendoWfcUploadUrl, gNintendoWfcHttpRequestBuffer, 239, ov72_0223B923, 2)) {
         sNintendoWfcHttp.state = 6;
     } else {
         sNintendoWfcHttp.state = 12;
@@ -688,7 +688,7 @@ void NintendoWfcHttp_RequestUpload(int rank, int room, int winCount, FrontierWif
 
 void NintendoWfcHttp_RequestInfo(void) {
     GameStats_Start();
-    if (NintendoWfcHttp_StartRequest(sNintendoWfcInfoUrl, ov72_0223B834, 0, ov72_0223B923, 2)) {
+    if (NintendoWfcHttp_StartRequest(sNintendoWfcInfoUrl, gNintendoWfcHttpRequestBuffer, 0, ov72_0223B923, 2)) {
         sNintendoWfcHttp.state = 8;
     } else {
         sNintendoWfcHttp.state = 12;
@@ -699,10 +699,10 @@ void NintendoWfcHttp_RequestInfo(void) {
 
 void NintendoWfcHttp_RequestSetProfile(WifiServerProfile *profile, u32 *response) {
     OS_GetMacAddress(profile->macAddress);
-    memcpy(ov72_0223B834, profile, sizeof(WifiServerProfile));
-    ov72_0223B920.buffer = (u8 *)response;
+    memcpy(gNintendoWfcHttpRequestBuffer, profile, sizeof(WifiServerProfile));
+    gNintendoWfcHttpResponse.buffer = (u8 *)response;
     GameStats_Start();
-    if (NintendoWfcHttp_StartRequest(sNintendoWfcSetProfileUrl, ov72_0223B834, sizeof(WifiServerProfile), ov72_0223B920.buffer, 8)) {
+    if (NintendoWfcHttp_StartRequest(sNintendoWfcSetProfileUrl, gNintendoWfcHttpRequestBuffer, sizeof(WifiServerProfile), gNintendoWfcHttpResponse.buffer, 8)) {
         sNintendoWfcHttp.state = 10;
     } else {
         sNintendoWfcHttp.state = 12;
@@ -987,8 +987,8 @@ void NintendoWfc_CreateSprites(NintendoWfcConnect *wfc) {
     CreateSpriteResourcesHeader(&wfc->spriteHeaders[2], 2, 2, 2, 2, -1, -1, 0, 0, wfc->resMan[0], wfc->resMan[1], wfc->resMan[2], wfc->resMan[3], NULL, NULL);
     NintendoWfc_InitSpriteTemplate(&template, wfc, &wfc->spriteHeaders[0], NNS_G2D_VRAM_TYPE_2DSUB);
     for (i = 0; i < 3; i++) {
-        template.position.x = ov72_0223B364[0][i][0] << FX32_SHIFT;
-        template.position.y = (ov72_0223B364[0][i][1] << FX32_SHIFT) + (256 << FX32_SHIFT);
+        template.position.x = gNintendoWfcDigitSpritePositions[0][i][0] << FX32_SHIFT;
+        template.position.y = (gNintendoWfcDigitSpritePositions[0][i][1] << FX32_SHIFT) + (256 << FX32_SHIFT);
         wfc->sprites[NINTENDO_WFC_SPRITE_DIGIT_0 + i] = Sprite_CreateAffine(&template);
         Sprite_SetAnimActiveFlag(wfc->sprites[NINTENDO_WFC_SPRITE_DIGIT_0 + i], TRUE);
         Sprite_SetAnimCtrlSeq(wfc->sprites[NINTENDO_WFC_SPRITE_DIGIT_0 + i], 0);
@@ -1008,8 +1008,8 @@ void NintendoWfc_CreateSprites(NintendoWfcConnect *wfc) {
     Sprite_SetAnimCtrlSeq(wfc->sprites[NINTENDO_WFC_SPRITE_DIGIT_CURSOR], 0);
     Sprite_SetDrawFlag(wfc->sprites[NINTENDO_WFC_SPRITE_DIGIT_CURSOR], FALSE);
     for (i = 0; i < 3; i++) {
-        template.position.x = ov72_0223B338[i][0] << FX32_SHIFT;
-        template.position.y = (ov72_0223B338[i][1] << FX32_SHIFT) + (256 << FX32_SHIFT);
+        template.position.x = gNintendoWfcButtonSpritePositions[i][0] << FX32_SHIFT;
+        template.position.y = (gNintendoWfcButtonSpritePositions[i][1] << FX32_SHIFT) + (256 << FX32_SHIFT);
         wfc->sprites[NINTENDO_WFC_SPRITE_BUTTON_0 + i] = Sprite_CreateAffine(&template);
         Sprite_SetAnimActiveFlag(wfc->sprites[NINTENDO_WFC_SPRITE_BUTTON_0 + i], TRUE);
         Sprite_SetAnimCtrlSeq(wfc->sprites[NINTENDO_WFC_SPRITE_BUTTON_0 + i], 3);
@@ -1063,7 +1063,7 @@ void NintendoWfc_SetSpritePosition(Sprite *sprite, int x, int y) {
 }
 
 void NintendoWfc_MovePadCursor(Sprite *sprite, int key) {
-    NintendoWfc_SetSpritePosition(sprite, ov72_0223B3A4[key][0], ov72_0223B3A6[key][0] + 256);
+    NintendoWfc_SetSpritePosition(sprite, gNintendoWfcPadCursorPositions[key][0], ov72_0223B3A6[key][0] + 256);
     if (key < 10) {
         Sprite_SetAnimCtrlSeq(sprite, 1);
     } else {
@@ -1072,11 +1072,11 @@ void NintendoWfc_MovePadCursor(Sprite *sprite, int key) {
 }
 
 void NintendoWfc_MoveDigitCursor(Sprite *sprite, int index, int twoDigits) {
-    NintendoWfc_SetSpritePosition(sprite, ov72_0223B364[twoDigits][index][0], 0x129);
+    NintendoWfc_SetSpritePosition(sprite, gNintendoWfcDigitSpritePositions[twoDigits][index][0], 0x129);
 }
 
 void NintendoWfc_SetDigitSpritePosition(Sprite *sprite, int index, int twoDigits) {
-    NintendoWfc_SetSpritePosition(sprite, ov72_0223B364[twoDigits][index][0], ov72_0223B366[twoDigits][index][0] + 256);
+    NintendoWfc_SetSpritePosition(sprite, gNintendoWfcDigitSpritePositions[twoDigits][index][0], ov72_0223B366[twoDigits][index][0] + 256);
 }
 
 void *NintendoWfc_Alloc(void *unused, u32 size, int alignment) {
@@ -2526,13 +2526,13 @@ int NintendoWfc_NumberInput_WaitFadeIn(NintendoWfcConnect *wfc) {
 
 int NintendoWfc_GetTouchedPadKey(NintendoWfcConnect *wfc) {
     if (wfc->numberInput.maxValue == 100) {
-        return TouchscreenHitbox_FindRectAtTouchNew(ov72_0223B774);
+        return TouchscreenHitbox_FindRectAtTouchNew(gNintendoWfcPadHitboxes_Max100);
     }
-    return TouchscreenHitbox_FindRectAtTouchNew(ov72_0223B7B8);
+    return TouchscreenHitbox_FindRectAtTouchNew(gNintendoWfcPadHitboxes);
 }
 
 u8 NintendoWfc_GetPadNeighbor(u32 key, u32 direction, u16 *padColumn) {
-    u8 next = ov72_0223B48C[key][direction];
+    u8 next = gNintendoWfcPadNeighbors[key][direction];
 
     if (next == 13) {
         next = ov72_0223B464[padColumn[0]];
@@ -2644,7 +2644,7 @@ void NintendoWfc_PressPadKey(NintendoWfcConnect *wfc, int key) {
             wfc->numberInput.cursor = NintendoWfc_GetCursorAfterDigit(&wfc->numberInput);
             NintendoWfc_MovePadCursor(wfc->sprites[NINTENDO_WFC_SPRITE_PAD_CURSOR], wfc->numberInput.cursor);
             PlaySE(SEQ_SE_DP_SELECT);
-            NintendoWfc_StartButtonFlash(wfc, ov72_0223B478[(key - 3) * 2], ov72_0223B479[(key - 3) * 2], 3);
+            NintendoWfc_StartButtonFlash(wfc, gNintendoWfcPadKeyFlashes[(key - 3) * 2], ov72_0223B479[(key - 3) * 2], 3);
         } else {
             PlaySE(SEQ_SE_DP_CUSTOM06);
         }
@@ -2792,7 +2792,7 @@ int NintendoWfc_NumberInput_Finish(void) {
 void NintendoWfc_AddNumberInputWindows(NintendoWfcConnect *wfc) {
     int i;
     int baseTile;
-    const int *x = ov72_0223B46C;
+    const int *x = gNintendoWfcNumberInputWindowX;
     Window *window;
     i = 0;
     baseTile = 31;
@@ -2922,7 +2922,7 @@ int NintendoWfcYesNo_Start(NintendoWfcYesNoMenu *menu) {
 #pragma force_active on
 
 int NintendoWfcYesNo_HandleInput(NintendoWfcYesNoMenu *menu) {
-    int hit = TouchscreenHitbox_FindRectAtTouchNew(ov72_0223B4C8);
+    int hit = TouchscreenHitbox_FindRectAtTouchNew(gNintendoWfcYesNoHitboxes);
     if (hit != -1) {
         PlaySE(SEQ_SE_DP_SELECT);
         if (hit == 0) {

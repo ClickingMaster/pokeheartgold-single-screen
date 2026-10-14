@@ -42,9 +42,9 @@ typedef struct PCBoxSubApp {
 } PCBoxSubApp;
 
 extern const PCBoxStateFunc sPCBoxStateTable[];
-// {yes, no} handler pairs of the yes/no prompts; the asm labels the "no" column separately (ov14_021F7D78).
+// {yes, no} handler pairs of the yes/no prompts; the asm labels the "no" column separately (sPCBoxYesNoNoHandlers).
 extern const PCBoxStateFunc sPCBoxYesNoHandlers[];
-extern const PCBoxStateFunc ov14_021F7D78[];
+extern const PCBoxStateFunc sPCBoxYesNoNoHandlers[];
 extern const PCBoxSubApp sPCBoxSubApps[];
 extern const PCBoxMenuEntry sPCBoxDepositMenu[];
 extern const PCBoxMenuEntry sPCBoxWithdrawMenu[];
@@ -171,7 +171,7 @@ u32 PCBox_State_HandleYesNo(PCBoxWork *work) {
         return sPCBoxYesNoHandlers[work->view->yesNoHandler * 2](work);
     case YESNORESPONSE_NO:
         YesNoPrompt_Reset(work->view->yesNoPrompt);
-        return ov14_021F7D78[work->view->yesNoHandler * 2](work);
+        return sPCBoxYesNoNoHandlers[work->view->yesNoHandler * 2](work);
     default:
         return 7;
     }

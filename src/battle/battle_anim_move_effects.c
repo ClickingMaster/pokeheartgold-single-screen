@@ -154,29 +154,29 @@ typedef struct BattleAnimAttackerLeapOffscreenWork {
 } BattleAnimAttackerLeapOffscreenWork; // size: 0x34
 
 // Per sprite: frame from which it blinks, frames per blink toggle
-extern const u8 ov07_022366D2[][2];
+extern const u8 gBattleAnimBlinkScaleFadeTimings[][2];
 // Afterimage passes: start offset, end offset, duration (two rows per pass parity)
-extern const s16 ov07_02236732[][3];
+extern const s16 gBattleAnimAttackerAfterimageMotions[][3];
 extern const s16 ov07_02236734[][3];
 extern const s16 ov07_02236736[][3];
 // Pulses (dim / back): start scale, end scale, duration
-extern const u8 ov07_022366CC[][3];
+extern const u8 gBattleAnimPulseWhiteScales[][3];
 extern const u8 ov07_022366CD[][3];
 extern const u8 ov07_022366CE[][3];
 // Stretch steps: start x scale, end x scale, start y scale, end y scale, duration
-extern const u8 ov07_02236713[][5];
+extern const u8 gBattleAnimAttackerStretchSteps[][5];
 extern const u8 ov07_02236714[][5];
 extern const u8 ov07_02236715[][5];
 extern const u8 ov07_02236716[][5];
 extern const u8 ov07_02236717[][5];
 // Leap steps: start x scale, end x scale, start y scale, end y scale, duration
-extern const u8 ov07_022366EB[][5];
+extern const u8 gBattleAnimLeapOffscreenScales[][5];
 extern const u8 ov07_022366EC[][5];
 extern const u8 ov07_022366ED[][5];
 extern const u8 ov07_022366EE[][5];
 extern const u8 ov07_022366EF[][5];
 // Draw priority of the four effect sprites
-extern const int ov07_022378B0[4];
+extern const int gBattleAnimSpriteDrawPriorities[4];
 
 static inline void BattleAnimTask_AttackerSquashStretchApply(BattleAnimAttackerSquashStretchWork *work) {
     Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEW, work->scale.x);
@@ -451,7 +451,7 @@ void BattleAnimFunc_AnimateSprites(BattleAnimSystem *system) {
     } else {
         work->timer = BattleAnimSystem_GetArg(system, 0);
     }
-    drawPriorities = ov07_022378B0;
+    drawPriorities = gBattleAnimSpriteDrawPriorities;
     for (i = 0; i < 4; i++) {
         work->sprites[i] = BattleAnimSystem_GetBattlerSprite(work->common.system, i);
         if (work->sprites[i] != NULL) {
@@ -515,9 +515,9 @@ void BattleAnimTask_BlinkScaleFadeSprites(SysTask *task, void *data) {
         work->timer++;
         for (i = 0; i < (int)BattleAnimSystem_GetArg(work->system, 0); i++) {
             ManagedSprite_GetPositionXY(work->sprites[i], &x, &y);
-            if (work->timer >= ov07_022366D2[i][0]) {
+            if (work->timer >= gBattleAnimBlinkScaleFadeTimings[i][0]) {
                 work->blinkTimers[i]++;
-                if (work->blinkTimers[i] >= ov07_022366D2[i][1]) {
+                if (work->blinkTimers[i] >= gBattleAnimBlinkScaleFadeTimings[i][1]) {
                     work->blinkTimers[i] = 0;
                     if (ManagedSprite_GetDrawFlag(work->sprites[i]) == TRUE) {
                         ManagedSprite_SetDrawFlag(work->sprites[i], FALSE);
@@ -788,11 +788,11 @@ void BattleAnimTask_AttackerAfterimages(SysTask *task, void *data) {
         row = (work->count % 2) * 2;
         delay = (work->count + 1) / 2;
         duration = ov07_02236736[row][0] - delay;
-        BattleAnimUtil_InitLinearMotion(&work->motions[0], work->x + ov07_02236732[row][0], work->x + ov07_02236734[row][0], work->y, work->y, duration);
-        BattleAnimUtil_InitLinearMotion(&work->motions[1], work->x - ov07_02236732[row][0], work->x - ov07_02236734[row][0], work->y, work->y, duration);
+        BattleAnimUtil_InitLinearMotion(&work->motions[0], work->x + gBattleAnimAttackerAfterimageMotions[row][0], work->x + ov07_02236734[row][0], work->y, work->y, duration);
+        BattleAnimUtil_InitLinearMotion(&work->motions[1], work->x - gBattleAnimAttackerAfterimageMotions[row][0], work->x - ov07_02236734[row][0], work->y, work->y, duration);
         duration2 = ov07_02236736[row + 1][0] - delay;
-        BattleAnimUtil_InitLinearMotion(&work->motions[2], work->x + ov07_02236732[row + 1][0], work->x + ov07_02236734[row + 1][0], work->y, work->y, duration2);
-        BattleAnimUtil_InitLinearMotion(&work->motions[3], work->x - ov07_02236732[row + 1][0], work->x - ov07_02236734[row + 1][0], work->y, work->y, duration2);
+        BattleAnimUtil_InitLinearMotion(&work->motions[2], work->x + gBattleAnimAttackerAfterimageMotions[row + 1][0], work->x + ov07_02236734[row + 1][0], work->y, work->y, duration2);
+        BattleAnimUtil_InitLinearMotion(&work->motions[3], work->x - gBattleAnimAttackerAfterimageMotions[row + 1][0], work->x - ov07_02236734[row + 1][0], work->y, work->y, duration2);
         work->count++;
         work->state++;
         // fallthrough
@@ -908,7 +908,7 @@ void BattleAnimTask_AttackerPulseWhite(SysTask *task, void *data) {
     switch (work->state) {
     case 0: {
         int i = work->whitened;
-        BattleAnimUtil_InitScaleMotion(&work->scale, ov07_022366CC[i][0], 100, ov07_022366CD[i][0], ov07_022366CE[i][0]);
+        BattleAnimUtil_InitScaleMotion(&work->scale, gBattleAnimPulseWhiteScales[i][0], 100, ov07_022366CD[i][0], ov07_022366CE[i][0]);
         if (work->whitened == FALSE) {
             Pokepic_StartPaletteFade(work->pokepic, 0, 6, 0, 0x7FFF);
         } else {
@@ -956,7 +956,7 @@ void BattleAnimTask_AttackerStretchSteps(SysTask *task, void *data) {
 
     switch (work->state) {
     case 0:
-        BattleAnimUtil_InitScaleMotionXY(&work->scale, ov07_02236713[work->step][0], ov07_02236714[work->step][0], ov07_02236715[work->step][0], ov07_02236716[work->step][0], 100, ov07_02236717[work->step][0]);
+        BattleAnimUtil_InitScaleMotionXY(&work->scale, gBattleAnimAttackerStretchSteps[work->step][0], ov07_02236714[work->step][0], ov07_02236715[work->step][0], ov07_02236716[work->step][0], 100, ov07_02236717[work->step][0]);
         work->step++;
         work->state++;
         break;
@@ -1000,7 +1000,7 @@ void BattleAnimTask_AttackerLeapOffscreen(SysTask *task, void *data) {
     switch (work->state) {
     case 0: {
         int i = work->step;
-        BattleAnimUtil_InitScaleMotionXY(&work->motion, ov07_022366EB[i][0], ov07_022366EC[i][0], ov07_022366ED[i][0], ov07_022366EE[i][0], 100, ov07_022366EF[i][0]);
+        BattleAnimUtil_InitScaleMotionXY(&work->motion, gBattleAnimLeapOffscreenScales[i][0], ov07_022366EC[i][0], ov07_022366ED[i][0], ov07_022366EE[i][0], 100, ov07_022366EF[i][0]);
         work->step++;
         work->state++;
         break;
@@ -1025,7 +1025,7 @@ void BattleAnimTask_AttackerLeapOffscreen(SysTask *task, void *data) {
         break;
     case 4: {
         int i = work->step;
-        BattleAnimUtil_InitScaleMotionXY(&work->motion, ov07_022366EB[i][0], ov07_022366EC[i][0], ov07_022366ED[i][0], ov07_022366EE[i][0], 100, ov07_022366EF[i][0]);
+        BattleAnimUtil_InitScaleMotionXY(&work->motion, gBattleAnimLeapOffscreenScales[i][0], ov07_022366EC[i][0], ov07_022366ED[i][0], ov07_022366EE[i][0], 100, ov07_022366EF[i][0]);
         work->y = Pokepic_GetAttr(work->pokepic, POKEPIC_Y);
         work->state++;
         break;
@@ -1209,19 +1209,19 @@ typedef struct BattleAnimThrowSpriteArcWork {
 } BattleAnimThrowSpriteArcWork;     // size: 0xE8
 
 // [row][0]: x scale, y scale, ... (5 per row)
-extern const u8 ov07_022366F5[];
+extern const u8 gBattleAnimAttackerHopScales[];
 extern const u8 ov07_022366F6[];
 extern const u8 ov07_022366F7[];
 extern const u8 ov07_022366F8[];
 extern const u8 ov07_022366F9[];
 // [row * 3]: hop start y, end y, duration
-extern const u8 ov07_022366D8[];
+extern const u8 gBattleAnimAttackerHopOffsets[];
 extern const u8 ov07_022366D9[];
 extern const u8 ov07_022366DA[];
-extern const u8 ov07_022366C8[];
-extern const s16 ov07_02236722[];
+extern const u8 gBattleAnimSquashAfterimageDelays[];
+extern const s16 gBattleAnimShakeBattlefieldAmplitudes[];
 // {angle, duration} pairs; ov07_02236750 is the duration column
-extern const int ov07_0223674C[][2];
+extern const int gBattleAnimRockAttackerSteps[][2];
 extern const int ov07_02236750[][2];
 
 #pragma force_active on
@@ -1284,11 +1284,11 @@ void BattleAnimTask_AttackerHop(SysTask *task, void *data) {
     switch (work->state) {
     case 0: {
         int row = work->hop * 5;
-        BattleAnimUtil_InitScaleMotionXY(&work->scale, ov07_022366F5[row], ov07_022366F6[row], ov07_022366F7[row], ov07_022366F8[row], 100, ov07_022366F9[row]);
+        BattleAnimUtil_InitScaleMotionXY(&work->scale, gBattleAnimAttackerHopScales[row], ov07_022366F6[row], ov07_022366F7[row], ov07_022366F8[row], 100, ov07_022366F9[row]);
         row = work->hop * 3;
         {
             int y = work->y;
-            BattleAnimUtil_InitLinearMotion(&work->offset, 0, 0, (s16)(y + ov07_022366D8[row]), (s16)(y + ov07_022366D9[row]), ov07_022366DA[row]);
+            BattleAnimUtil_InitLinearMotion(&work->offset, 0, 0, (s16)(y + gBattleAnimAttackerHopOffsets[row]), (s16)(y + ov07_022366D9[row]), ov07_022366DA[row]);
         }
         work->hop++;
         work->state++;
@@ -1426,7 +1426,7 @@ void BattleAnimTask_AttackerSquashAfterimages(SysTask *task, void *data) {
             switch (work->afterimages[i].state) {
             case 0:
                 work->afterimages[i].timer++;
-                if (work->afterimages[i].timer >= ov07_022366C8[i]) {
+                if (work->afterimages[i].timer >= gBattleAnimSquashAfterimageDelays[i]) {
                     BattleAnimUtil_InitScaleMotionXY(&work->afterimages[i].scale, 100, 5, 100, 5, 100, 5);
                     work->afterimages[i].state++;
                 }
@@ -1558,7 +1558,7 @@ void BattleAnimTask_ShakeBattlefieldFlashing(SysTask *task, void *data) {
         }
         work->state++;
     case 2:
-        BattleAnimUtil_InitShake(&work->shake, ov07_02236722[work->shakeCount], 0, 0, 5);
+        BattleAnimUtil_InitShake(&work->shake, gBattleAnimShakeBattlefieldAmplitudes[work->shakeCount], 0, 0, 5);
         if (!work->white) {
             PaletteData_BlendPalettes(BattleAnimSystem_GetPaletteData(work->system), PLTTBUF_MAIN_BG, 0xFF, 10, 0);
         } else {
@@ -1682,10 +1682,10 @@ void BattleAnimTask_RockAttacker(SysTask *task, void *data) {
         int from;
         int to;
         if (work->common.state[1] == 0) {
-            to = ov07_0223674C[work->common.state[2]][0];
+            to = gBattleAnimRockAttackerSteps[work->common.state[2]][0];
             from = -to;
         } else {
-            from = ov07_0223674C[work->common.state[2]][0];
+            from = gBattleAnimRockAttackerSteps[work->common.state[2]][0];
             to = -from;
         }
         BattleAnimUtil_InitValueMotion(&work->rotation, from, to, ov07_02236750[work->common.state[2]][0]);
@@ -2119,24 +2119,24 @@ typedef struct BattleAnimSpriteTrailToDefenderWork {
     BattleAnimLinearMotion motion;     // 0x50
 } BattleAnimSpriteTrailToDefenderWork; // size: 0x74
 
-extern const u8 ov07_02236704[];
+extern const u8 gBattleAnimCrossingSpritesScales[];
 extern const u8 ov07_02236705[];
 extern const u8 ov07_02236706[];
 extern const u8 ov07_02236707[];
 extern const u8 ov07_02236708[];
-extern const s8 ov07_022366E1[5][2];
-extern const u8 ov07_02236774[];
+extern const s8 gBattleAnimCrossingSpritesArcSigns[5][2];
+extern const u8 gBattleAnimSlidingSpritePairDurations[];
 // {start frame, blink interval} per sprite
-extern const u8 ov07_02236778[][2];
-extern const s16 ov07_0223677E[][2];
+extern const u8 gBattleAnimBlinkCenterTimings[][2];
+extern const s16 gBattleAnimScatterTargets[][2];
 extern const s16 ov07_02236780[][2];
-extern const s16 ov07_02236796[][2];
+extern const s16 gBattleAnimSlidingSpritePairPositions[][2];
 // {x, y, x2, y2} per pair; each label points at one column
-extern const s16 ov07_022367AE[][4];
+extern const s16 gBattleAnimSlidingSpritePairTargets[][4];
 extern const s16 ov07_022367B0[][4];
 extern const s16 ov07_022367B2[][4];
 extern const s16 ov07_022367B4[][4];
-extern const BattleAnimScatterArea ov07_022367CE[];
+extern const BattleAnimScatterArea gBattleAnimScatterAreas[];
 
 static inline void BattleAnimTask_SlidingSpritePairsSetBlend(int eva, int evb) {
     vu16 *bldalpha = &reg_G2_BLDALPHA;
@@ -2284,7 +2284,7 @@ void BattleAnimTask_CrossingSprites(SysTask *task, void *data) {
     switch (work->state) {
     case 0: {
         int row = work->round * 5;
-        BattleAnimUtil_InitScaleMotionXY(&work->scale, ov07_02236704[row], ov07_02236705[row], ov07_02236706[row], ov07_02236707[row], 100, ov07_02236708[row]);
+        BattleAnimUtil_InitScaleMotionXY(&work->scale, gBattleAnimCrossingSpritesScales[row], ov07_02236705[row], ov07_02236706[row], ov07_02236707[row], 100, ov07_02236708[row]);
         work->round++;
         work->state++;
         break;
@@ -2354,7 +2354,7 @@ void BattleAnimTask_CrossingSprites(SysTask *task, void *data) {
         break;
     case 6: {
         s8 arcSigns[5][2];
-        ARRAY_ASSIGN(arcSigns, ov07_022366E1);
+        ARRAY_ASSIGN(arcSigns, gBattleAnimCrossingSpritesArcSigns);
         ManagedSprite_GetPositionXY(work->sprites[0].sprite, &pos6a.x, &pos6a.y);
         ManagedSprite_GetPositionXY(work->sprites[1].sprite, &pos6b.x, &pos6b.y);
         BattleAnimUtil_InitLinearSinMotion(&work->sprites[0].path, &work->sprites[0].arc, pos6a.x, pos6b.x, pos6a.y, pos6b.y, 10, work->distance * arcSigns[work->round][0]);
@@ -2482,9 +2482,9 @@ void BattleAnimTask_BlinkSpritesCenter(SysTask *task, void *data) {
         work->timer++;
         for (i = 0; i < work->count; i++) {
             ManagedSprite_GetPositionXY(work->sprites[i], &x, &y);
-            if (work->timer >= ov07_02236778[i][0]) {
+            if (work->timer >= gBattleAnimBlinkCenterTimings[i][0]) {
                 work->blinkTimers[i]++;
-                if (work->blinkTimers[i] >= ov07_02236778[i][1]) {
+                if (work->blinkTimers[i] >= gBattleAnimBlinkCenterTimings[i][1]) {
                     work->blinkTimers[i] = 0;
                 }
             }
@@ -2620,9 +2620,9 @@ void BattleAnimTask_SlidingSpritePairs(SysTask *task, void *data) {
             break;
         }
         ManagedSprite_GetPositionXY(work->first, &x, &y);
-        BattleAnimUtil_InitLinearMotion(&work->firstMotion, x, ov07_022367AE[work->pair][0], y, ov07_022367B0[work->pair][0], ov07_02236774[work->pair]);
+        BattleAnimUtil_InitLinearMotion(&work->firstMotion, x, gBattleAnimSlidingSpritePairTargets[work->pair][0], y, ov07_022367B0[work->pair][0], gBattleAnimSlidingSpritePairDurations[work->pair]);
         ManagedSprite_GetPositionXY(work->second, &x, &y);
-        BattleAnimUtil_InitLinearMotion(&work->secondMotion, x, ov07_022367B2[work->pair][0], y, ov07_022367B4[work->pair][0], ov07_02236774[work->pair]);
+        BattleAnimUtil_InitLinearMotion(&work->secondMotion, x, ov07_022367B2[work->pair][0], y, ov07_022367B4[work->pair][0], gBattleAnimSlidingSpritePairDurations[work->pair]);
         work->pair++;
         work->state++;
     } break;
@@ -2712,7 +2712,7 @@ void BattleAnimSpriteFunc_SlidingSpritePairs(BattleAnimSystem *system, SpriteSys
     ManagedSprite_SetFlipMode(work->sprites[3], 1);
     for (i = 0; i < work->count; i++) {
         ManagedSprite_SetAnimateFlag(work->sprites[i], TRUE);
-        ManagedSprite_SetPositionXY(work->sprites[i], ov07_02236796[i][0], ov07_02236796[i][1]);
+        ManagedSprite_SetPositionXY(work->sprites[i], gBattleAnimSlidingSpritePairPositions[i][0], gBattleAnimSlidingSpritePairPositions[i][1]);
         ManagedSprite_SetOamMode(work->sprites[i], GX_OAM_MODE_XLU);
     }
     ManagedSprite_SetDrawFlag(work->sprites[1], FALSE);
@@ -2782,7 +2782,7 @@ void BattleAnimTask_PopAndScatterSprite(SysTask *task, void *data) {
         s16 y;
         s16 x;
         ManagedSprite_GetPositionXY(work->sprite, &x, &y);
-        BattleAnimUtil_InitLinearMotion(&work->motion, x, ov07_0223677E[work->target][0], y, ov07_02236780[work->target][0], duration);
+        BattleAnimUtil_InitLinearMotion(&work->motion, x, gBattleAnimScatterTargets[work->target][0], y, ov07_02236780[work->target][0], duration);
         work->state++;
     } break;
     case 7:
@@ -2886,8 +2886,8 @@ void BattleAnimSpriteFunc_PopAndScatterSprites(BattleAnimSystem *system, SpriteS
         work->sprites[i].spriteSystem = work->spriteSystem;
         work->sprites[i].spriteManager = work->spriteManager;
         work->sprites[i].status = &work->status[i];
-        x = ov07_022367CE[area].x + LCRandom() % ov07_022367CE[area].xRange;
-        y = ov07_022367CE[area].y + LCRandom() % ov07_022367CE[area].yRange;
+        x = gBattleAnimScatterAreas[area].x + LCRandom() % gBattleAnimScatterAreas[area].xRange;
+        y = gBattleAnimScatterAreas[area].y + LCRandom() % gBattleAnimScatterAreas[area].yRange;
         ManagedSprite_SetPositionXY(sprite, x, y);
         ManagedSprite_SetAffineOverwriteMode(sprite, 2);
         ManagedSprite_SetAffineScale(sprite, work->sprites[i].scale, work->sprites[i].scale);

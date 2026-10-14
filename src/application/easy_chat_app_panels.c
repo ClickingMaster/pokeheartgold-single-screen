@@ -206,8 +206,8 @@ void DrawFrame2AroundWindow(Window *window, u32 baseTile, u32 paletteNum);
 u32 ECMenu_GetCategoryCount(ECMenu *menu, u32 category);
 u32 ECMenu_GetInitialCount(ECMenu *menu, u32 group);
 
-extern const WindowTemplate ov102_021EC808[3];
-extern const EasyChatInitialGridCell ov102_021EC820[EC_INITIAL_GRID_CELLS];
+extern const WindowTemplate gEasyChatMenuViewWindowTemplates[3];
+extern const EasyChatInitialGridCell gEasyChatInitialGridCells[EC_INITIAL_GRID_CELLS];
 
 BgConfig *EasyChatAppView_GetBgConfig(EasyChatAppView *view);
 SpriteList *EasyChatAppView_GetSpriteList(EasyChatAppView *view);
@@ -1056,7 +1056,7 @@ void EasyChatMenuView_AddWindows(EasyChatMenuView *menuView, BgConfig *bgConfig)
     const WindowTemplate *template;
     Window *window;
 
-    template = ov102_021EC808;
+    template = gEasyChatMenuViewWindowTemplates;
     for (i = 0, window = menuView->windows; i < 3; i++) {
         AddWindow(bgConfig, window, template);
         menuView->labels[i] = NewString_ReadMsgData(menuView->msgData, i);
@@ -1857,43 +1857,43 @@ u32 EasyChatInitialGrid_GetCount(void) {
 
 void EasyChatInitialGrid_GetLetter(u32 cell, String *dest) {
     GF_ASSERT(cell < EC_INITIAL_GRID_CELLS);
-    CopyU16ArrayToStringN(dest, &ov102_021EC820[cell].letter, 2);
+    CopyU16ArrayToStringN(dest, &gEasyChatInitialGridCells[cell].letter, 2);
 }
 
 void EasyChatInitialGrid_GetPosition(u32 cell, u32 *x, u32 *y) {
     GF_ASSERT(cell < EC_INITIAL_GRID_CELLS);
-    *x = ov102_021EC820[cell].x;
-    *y = ov102_021EC820[cell].y;
+    *x = gEasyChatInitialGridCells[cell].x;
+    *y = gEasyChatInitialGridCells[cell].y;
 }
 
 u8 EasyChatInitialGrid_GetUp(u32 cell) {
     GF_ASSERT(cell < EC_INITIAL_GRID_CELLS);
-    return ov102_021EC820[cell].up;
+    return gEasyChatInitialGridCells[cell].up;
 }
 
 u8 EasyChatInitialGrid_GetDown(u32 cell) {
     GF_ASSERT(cell < EC_INITIAL_GRID_CELLS);
-    return ov102_021EC820[cell].down;
+    return gEasyChatInitialGridCells[cell].down;
 }
 
 u8 EasyChatInitialGrid_GetLeft(u32 cell) {
     GF_ASSERT(cell < EC_INITIAL_GRID_CELLS);
-    return ov102_021EC820[cell].left;
+    return gEasyChatInitialGridCells[cell].left;
 }
 
 u8 EasyChatInitialGrid_GetRight(u32 cell) {
     GF_ASSERT(cell < EC_INITIAL_GRID_CELLS);
-    return ov102_021EC820[cell].right;
+    return gEasyChatInitialGridCells[cell].right;
 }
 
 u8 EasyChatInitialGrid_GetBelowButton(u32 cell) {
     GF_ASSERT(cell < EC_INITIAL_GRID_CELLS);
-    return ov102_021EC820[cell].belowButton;
+    return gEasyChatInitialGridCells[cell].belowButton;
 }
 
 u8 EasyChatInitialGrid_GetAboveButton(u32 cell) {
     GF_ASSERT(cell < EC_INITIAL_GRID_CELLS);
-    return ov102_021EC820[cell].aboveButton;
+    return gEasyChatInitialGridCells[cell].aboveButton;
 }
 
 #pragma force_active on
@@ -1901,7 +1901,7 @@ int EasyChatInitialGrid_FindCellAt(u32 x, u32 y) {
     u32 i;
     const EasyChatInitialGridCell *cell;
 
-    for (i = 0, cell = ov102_021EC820; i < EC_INITIAL_GRID_CELLS; i++, cell++) {
+    for (i = 0, cell = gEasyChatInitialGridCells; i < EC_INITIAL_GRID_CELLS; i++, cell++) {
         if (cell->x <= x && x < cell->x + 16 && cell->y <= y && y < cell->y + 16) {
             return i;
         }

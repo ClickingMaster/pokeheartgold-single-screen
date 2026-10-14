@@ -143,7 +143,7 @@
 .public ApricornRegrowth_Spawn
 .public EmoteMark_IsDone
 .public EmoteMark_Spawn
-.public ov01_02207274
+.public gApricornTreeSpriteIds
 
 	.public MapObject_StartJumpByOffsetMovement
 	.public MapObject_CallTypeBehaviorInit
@@ -201,5 +201,5 @@
 	.public gMapObjectTypeBehaviorInits
 	.public gMapObjectTypeBehaviorChecks
 	.public gMapObjectTypeBehaviorUpdates
-	.public _020FE194
+	.public gTrainerSightDistanceFuncs
 	.public gTrainerApproachStateFuncs

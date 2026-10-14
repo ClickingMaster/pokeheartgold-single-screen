@@ -188,12 +188,12 @@
 	.public MapObject_StartEmoteMovement
 	.public MapObject_StartVariableSpeedWalk
 	.public MapObject_UpdateVariableSpeedWalk
-	.public _020FDA1C
+	.public gVariableSpeedWalk_Cmd082
 	.public _020FDA28
-	.public _020FDA50
-	.public _020FDA68
-	.public _020FDA84
-	.public _020FDAC4
-	.public _020FDB04
+	.public gVariableSpeedWalk_Cmd076
+	.public gVariableSpeedWalk_Cmd098
+	.public gJumpHeightTable0
+	.public gJumpHeightTable1
+	.public gJumpHeightTable2
 	.public gJumpHeightTables
 	.public sMovementScriptMachineStateFuncs

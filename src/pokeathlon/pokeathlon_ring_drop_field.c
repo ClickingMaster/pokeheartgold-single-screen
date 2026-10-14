@@ -27,7 +27,7 @@ typedef struct PokeathlonRingDropCollision {
 } PokeathlonRingDropCollision;
 
 // The Pokemon start positions (ground x, y) and the switch spots: x, y, radius.
-extern const s16 ov96_0221D6E4[RING_DROP_PARTICIPANTS][2];
+extern const s16 gPokeathlonRingDropMonStartPositions[RING_DROP_PARTICIPANTS][2];
 
 typedef struct PokeathlonRingDropSwitchSpot {
     s16 x;
@@ -35,12 +35,12 @@ typedef struct PokeathlonRingDropSwitchSpot {
     s16 radius;
 } PokeathlonRingDropSwitchSpot;
 
-// ov96_0221D708[participant] (the code reads y and radius through the labels ov96_0221D70A and ov96_0221D70C).
-extern const PokeathlonRingDropSwitchSpot ov96_0221D708[], ov96_0221D70A[], ov96_0221D70C[];
+// gPokeathlonRingDropSwitchSpots[participant] (the code reads y and radius through the labels ov96_0221D70A and ov96_0221D70C).
+extern const PokeathlonRingDropSwitchSpot gPokeathlonRingDropSwitchSpots[], ov96_0221D70A[], ov96_0221D70C[];
 // The direction 4 (PokeathlonRingDrop_GetDirection measures the angle from it).
-extern VecFx32 ov96_0221D6B8;
+extern VecFx32 gPokeathlonRingDropDirectionReference;
 // The ring's edge: two lines (x, y pairs) the Pokemon must stay right of between y 64 and 160.
-extern const s16 ov96_0221D6D4[4][2];
+extern const s16 gPokeathlonRingDropRingEdge[4][2];
 
 BOOL PokeathlonRingDrop_IsAttackState(int state) {
     if (state == RING_DROP_MON_DASH || state == RING_DROP_MON_JUMP_FALL) {
@@ -193,8 +193,8 @@ void PokeathlonRingDrop_InitMons(PokeathlonRingDrop *ringDrop, PokeathlonCourseD
         PokeathlonCourseMonObject_GetGfx(object);
         PokeathlonCourseMonObject_SetAffineOverwriteMode(object, 2);
         PokeathlonRingDrop_SetMonAffineCenter(object, TRUE);
-        x = ov96_0221D6E4[participant][0];
-        y = ov96_0221D6E4[participant][1];
+        x = gPokeathlonRingDropMonStartPositions[participant][0];
+        y = gPokeathlonRingDropMonStartPositions[participant][1];
         if (participant == PokeathlonCourse_GetNetId(course)) {
             t.own.x = x;
             t.own.y = y;
@@ -216,7 +216,7 @@ void PokeathlonRingDrop_InitMons(PokeathlonRingDrop *ringDrop, PokeathlonCourseD
         mon->member = ringDrop->players[i].mon.members;
         mon->ui = ringDrop->ui;
         mon->course = course;
-        PokeathlonCourseObject_GroundToCenter(mon->member->object, ov96_0221D6E4[i][0], ov96_0221D6E4[i][1], &t.startX, &t.startY);
+        PokeathlonCourseObject_GroundToCenter(mon->member->object, gPokeathlonRingDropMonStartPositions[i][0], gPokeathlonRingDropMonStartPositions[i][1], &t.startX, &t.startY);
         PokeathlonRingDropMon_SetState(mon, RING_DROP_MON_STAND);
         mon->flags.bits.direction = 2;
         mon->position.x = t.startX << FX32_SHIFT;
@@ -600,7 +600,7 @@ BOOL PokeathlonRingDropMon_CanSwitch(PokeathlonRingDropMon *mon) {
     if (PokeathlonRingDropMon_CanAct(mon)) {
         VecFx32 spot = { 0, 0, 0 };
         u8 participant = mon->flags.bits.participant;
-        spot.x = ov96_0221D708[participant].x * FX32_ONE;
+        spot.x = gPokeathlonRingDropSwitchSpots[participant].x * FX32_ONE;
         spot.y = ov96_0221D70A[participant].x * FX32_ONE;
         return PokeathlonRingDrop_IsWithinDistance(&mon->position, &spot, ov96_0221D70C[participant].x * FX32_ONE);
     }
@@ -627,11 +627,11 @@ void PokeathlonRingDropMon_SetDestination(PokeathlonRingDropMon *mon, const s16 
     mon->destination.y = position[1] << FX32_SHIFT;
 }
 
-// 1..4 by the angle of vec (x, y): 4 within 45 degrees of ov96_0221D6B8, 2 and 3 the next quarters, 1 the last.
+// 1..4 by the angle of vec (x, y): 4 within 45 degrees of gPokeathlonRingDropDirectionReference, 2 and 3 the next quarters, 1 the last.
 #pragma force_active on
 
 int PokeathlonRingDrop_VecToDirection(const VecFx32 *vec) {
-    VecFx32 reference = ov96_0221D6B8;
+    VecFx32 reference = gPokeathlonRingDropDirectionReference;
     VecFx32 v = { 0, 0, 0 };
     u16 angle;
     v.x = vec->y;
@@ -731,7 +731,7 @@ void PokeathlonRingDropMon_Move(PokeathlonRingDropMon *mon, PokeathlonCourseData
 
 static inline void PokeathlonRingDrop_LoadRingEdge(VecFx32 *points) {
     VecFx32 *cursor;
-    const s16(*source)[2] = ov96_0221D6D4;
+    const s16(*source)[2] = gPokeathlonRingDropRingEdge;
     int i = 0;
     cursor = points;
     for (; i < 4; i++) {

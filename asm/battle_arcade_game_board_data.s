@@ -6,9 +6,9 @@
 
 	.rodata
 
-.public _0223F900
+.public gBattleArcadeEventColorThresholds
 
-_0223F900:
+gBattleArcadeEventColorThresholds:
 	.byte 0x15, 0x10, 0x0A, 0x05
 
 .public gBattleArcadeEventStreakFlags

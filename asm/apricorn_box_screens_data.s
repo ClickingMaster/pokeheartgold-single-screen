@@ -1,4 +1,4 @@
-	.public ov59_0223CB58
+	.public gAprijuiceSceneCameraPosition
 	.public _02237D52
 	.public _02237D94
 	.public _02237DA4
@@ -509,12 +509,12 @@
 	.public _0223B3D8
 	.public _0223B3EE
 	.public _0223B40C
-	.public _0223B410
+	.public sWonderCardAlbumOverlayTemplate
 	.public _0223B41E
-	.public _0223B430
+	.public gWonderCardGraphicsModes
 	.public _0223B538
 	.public _0223B53C
-	.public _0223B540
+	.public sMigrateFromAgbBgTemplate2
 	.public _0223B544
 	.public _0223B548
 	.public _0223B54C
@@ -767,8 +767,8 @@
 	.public AprijuiceScene_InitParticles
 	.public AprijuiceScene_InitCamera
 	.public sApricornBoxQuantityDigitX
-	.public ov59_0223C628
-	.public ov59_0223C62C
+	.public sApricornBoxListMenu1Messages
+	.public sApricornBoxListMenu0Messages
 	.public sApricornBoxListMenuTemplates
 	.public sApricornBoxSpriteResources
 	.public sApricornBoxGraphicsModes
@@ -811,7 +811,7 @@
 	.public sAprijuiceSpriteTemplates
 	.public sAprijuiceModifierSpriteTemplate
 	.public sAprijuiceStarSpriteTemplate
-	.public ov59_0223CB58
+	.public gAprijuiceSceneCameraPosition
 	.public sApricornBoxConfirmButtonColors
 	.public ApricornBoxScreen_Init
 	.public ApricornBoxScreen_Main
@@ -977,8 +977,8 @@
 	.public AprijuiceScene_FreeParticles
 	.public AprijuiceScene_InitCamera
 	.public sApricornBoxQuantityDigitX
-	.public ov59_0223C628
-	.public ov59_0223C62C
+	.public sApricornBoxListMenu1Messages
+	.public sApricornBoxListMenu0Messages
 	.public ApricornBoxScreen_ViewState
 	.public ApricornBoxScreen_KurtState
 	.public ApricornBoxScreen_WaitMessageState
@@ -1007,10 +1007,10 @@
 sApricornBoxQuantityDigitX:
 	.byte 0x02, 0x08, 0x00, 0x00
 
-ov59_0223C628:
+sApricornBoxListMenu1Messages:
 	.byte 0x05, 0x06, 0x00, 0x00
 
-ov59_0223C62C:
+sApricornBoxListMenu0Messages:
 	.byte 0x02, 0x03, 0x04, 0x00
 
 sApricornBoxListMenuTemplates: ; 0x0223C630
@@ -1033,9 +1033,9 @@ sApricornBoxListMenuX: ; 0x0223C66A
 
 sApricornBoxListMenuY: ; 0x0223C66B
 	.byte 0x0E
-	.word ov59_0223C62C
+	.word sApricornBoxListMenu0Messages
 	.byte 0x02, 0x00, 0x11, 0x0C
-	.word ov59_0223C628
+	.word sApricornBoxListMenu1Messages
 
 sApricornBoxOamCharTransferParam: ; 0x0223C678
 	.byte 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00
@@ -1211,7 +1211,7 @@ sAprijuiceStarSpriteTemplate: ; 0x0223CB30
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov59_0223CB58: ; 0x0223CB58
+gAprijuiceSceneCameraPosition: ; 0x0223CB58
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x01, 0x00
 

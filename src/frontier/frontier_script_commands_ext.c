@@ -82,7 +82,7 @@ typedef struct FrontierCameraPos {
     s16 x;
 } FrontierCameraPos;
 
-extern BOOL (*const ov80_0223B9EC[])(FrontierTransitionWork *work);
+extern BOOL (*const gFrontierTransitionFuncs[])(FrontierTransitionWork *work);
 
 void *Frontier_GetMap(void *frontierWork);
 BOOL FrontierLinkLobby_SendValue74(u8 *data, u16 value);
@@ -1164,7 +1164,7 @@ BOOL FrontierTransition_Wave(FrontierTransitionWork *work) {
     return TRUE;
 }
 
-// Runs screen transition var (table ov80_0223B9EC) while the frontier app's data points to its work.
+// Runs screen transition var (table gFrontierTransitionFuncs) while the frontier app's data points to its work.
 BOOL FrtCmd_BattleTransition(FrontierScriptContext *ctx) {
     FrontierTransitionWork *work;
     Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
@@ -1185,7 +1185,7 @@ BOOL FrontierScriptNative_WaitTransition(FrontierScriptContext *ctx) {
     FrontierTransitionWork *work;
     BOOL running;
     work = Frontier_GetData(ctx->frontierSystem->frontierWork);
-    running = ov80_0223B9EC[work->transition](work);
+    running = gFrontierTransitionFuncs[work->transition](work);
     if (running == FALSE) {
         SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
         SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);

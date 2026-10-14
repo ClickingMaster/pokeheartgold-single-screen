@@ -26,7 +26,7 @@ typedef struct BattleAnimScaleSprite {
 // Parameters of the OBJ window BG scroll effects (BattleAnimObjWindowBg_Start)
 typedef struct BattleAnimObjWindowBgParams {
     NarcId narcId;
-    int graphic; // row of the ov07_0223680C/10/14 graphic tables
+    int graphic; // row of the gBattleAnimObjWindowBgGraphics/10/14 graphic tables
     int target;  // 0: attacker, otherwise defender
     s16 velocityX;
     s16 velocityY;

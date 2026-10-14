@@ -126,17 +126,17 @@ typedef struct BugContestSwapMonBgTemplates {
     BgTemplate templates[5];
 } BugContestSwapMonBgTemplates;
 
-extern const u8 _021E6B74[5];
-extern const GraphicsModes ov111_021E6B7C;
-extern const OamCharTransferParam ov111_021E6B8C;
-extern const SpriteResourceCountsListUnion ov111_021E6BA0;
-extern const OamManagerParam ov111_021E6BB8;
-extern const GraphicsBanks ov111_021E6BD8;
-extern const ManagedSpriteTemplate ov111_021E6C00;
-extern const ManagedSpriteTemplate ov111_021E6C34;
-extern const SwapMonPanelWindowTemplate ov111_021E6C68[SWAP_MON_PANEL_WINDOWS];
-extern const BugContestSwapMonBgTemplates ov111_021E6CA4;
-extern const BugContestSwapMonStateFunc _021E6D40[];
+extern const u8 gBugContestSwapMonBgIds[5];
+extern const GraphicsModes gBugContestSwapMonGraphicsModes;
+extern const OamCharTransferParam gBugContestSwapMonOamCharTransferParam;
+extern const SpriteResourceCountsListUnion gBugContestSwapMonSpriteResourceCounts;
+extern const OamManagerParam gBugContestSwapMonOamManagerParam;
+extern const GraphicsBanks gBugContestSwapMonGraphicsBanks;
+extern const ManagedSpriteTemplate gBugContestSwapMonIconSpriteTemplate;
+extern const ManagedSpriteTemplate gBugContestSwapMonSpriteTemplate;
+extern const SwapMonPanelWindowTemplate gSwapMonPanelWindowTemplates[SWAP_MON_PANEL_WINDOWS];
+extern const BugContestSwapMonBgTemplates gBugContestSwapMonBgTemplates;
+extern const BugContestSwapMonStateFunc gBugContestSwapMonStateFuncs[];
 
 BOOL BugContestSwapMon_ShowCaughtMon(BugContestSwapMon *swapMon);
 BOOL BugContestSwapMon_ChooseMon(BugContestSwapMon *swapMon);
@@ -236,7 +236,7 @@ BOOL BugContestSwapMon_Main(OverlayManager *man, int *state) {
     if (swapMon == NULL) {
         GF_AssertFail();
     }
-    if (_021E6D40[swapMon->state](swapMon)) {
+    if (gBugContestSwapMonStateFuncs[swapMon->state](swapMon)) {
         return TRUE;
     }
     return FALSE;
@@ -394,7 +394,7 @@ invalid:
 }
 
 void BugContestSwapMon_SetBanks(void) {
-    GraphicsBanks banks = ov111_021E6BD8;
+    GraphicsBanks banks = gBugContestSwapMonGraphicsBanks;
 
     GfGfx_SetBanks(&banks);
 }
@@ -541,10 +541,10 @@ void BugContestSwapMon_InitBgs(BugContestSwapMon *swapMon) {
     const BgTemplate *bgTemplate;
 
     swapMon->bgConfig = BgConfig_Alloc(swapMon->heapID);
-    modes = ov111_021E6B7C;
+    modes = gBugContestSwapMonGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    templates = ov111_021E6CA4;
-    bgIds = _021E6B74;
+    templates = gBugContestSwapMonBgTemplates;
+    bgIds = gBugContestSwapMonBgIds;
     i = 0;
     bgTemplate = templates.templates;
     for (; i < 5; bgTemplate++, bgIds++, i++) {
@@ -560,7 +560,7 @@ void BugContestSwapMon_FreeBgs(BugContestSwapMon *swapMon) {
     int i;
     NARC_Delete(swapMon->narc);
     for (i = 0; i < 5; i++) {
-        FreeBgTilemapBuffer(swapMon->bgConfig, _021E6B74[i]);
+        FreeBgTilemapBuffer(swapMon->bgConfig, gBugContestSwapMonBgIds[i]);
     }
     Heap_Free(swapMon->bgConfig);
 }
@@ -586,12 +586,12 @@ void BugContestSwapMon_InitSpriteSystem(BugContestSwapMon *swapMon) {
 
     swapMon->spriteSystem = SpriteSystem_Alloc(swapMon->heapID);
     swapMon->spriteManager = SpriteManager_New(swapMon->spriteSystem);
-    oamManagerParam = ov111_021E6BB8;
-    oamCharTransferParam = ov111_021E6B8C;
+    oamManagerParam = gBugContestSwapMonOamManagerParam;
+    oamCharTransferParam = gBugContestSwapMonOamCharTransferParam;
     oamCharTransferParam.maxTasks = 32;
     SpriteSystem_Init(swapMon->spriteSystem, &oamManagerParam, &oamCharTransferParam, 32);
     SpriteSystem_InitSprites(swapMon->spriteSystem, swapMon->spriteManager, 32);
-    resourceCounts = ov111_021E6BA0;
+    resourceCounts = gBugContestSwapMonSpriteResourceCounts;
     SpriteSystem_InitManagerWithCapacities(swapMon->spriteSystem, swapMon->spriteManager, &resourceCounts);
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(swapMon->spriteSystem), 0, FX32_CONST(524));
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
@@ -658,7 +658,7 @@ void BugContestSwapMon_LoadSpriteChar(ManagedSprite *sprite, void *data, u32 siz
 }
 
 ManagedSprite *BugContestSwapMon_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u8 animation, u8 priority) {
-    ManagedSpriteTemplate template = ov111_021E6C34;
+    ManagedSpriteTemplate template = gBugContestSwapMonSpriteTemplate;
     ManagedSprite *sprite;
 
     template.x = x;
@@ -671,7 +671,7 @@ ManagedSprite *BugContestSwapMon_NewSprite(SpriteSystem *spriteSystem, SpriteMan
 }
 
 ManagedSprite *BugContestSwapMon_NewMonIconSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u8 slot) {
-    ManagedSpriteTemplate template = ov111_021E6C00;
+    ManagedSpriteTemplate template = gBugContestSwapMonIconSpriteTemplate;
 
     if (slot >= 2) {
         GF_AssertFail();
@@ -695,7 +695,7 @@ SwapMonPanel *SwapMonPanel_New(SwapMonPanels *panels, u16 x, u16 y, int slot, Po
     panel->sprites[0] = BugContestSwapMon_NewSprite(panels->spriteSystem, panels->spriteManager, panel->x, panel->y, 0, 1);
     panel->sprites[1] = BugContestSwapMon_NewMonIconSprite(panels->spriteSystem, panels->spriteManager, panel->x - 44, panel->y - 8, slot);
     for (i = 0; i < SWAP_MON_PANEL_WINDOWS; i++) {
-        AddWindowParameterized(panels->bgConfig, &panel->windows[i], bgId, (u8)((u8)(x >> 3) + ov111_021E6C68[i].x), (u8)((u8)(y >> 3) + ov111_021E6C68[i].y), ov111_021E6C68[i].width, ov111_021E6C68[i].height, ov111_021E6C68[i].palette, ov111_021E6C68[i].baseTile);
+        AddWindowParameterized(panels->bgConfig, &panel->windows[i], bgId, (u8)((u8)(x >> 3) + gSwapMonPanelWindowTemplates[i].x), (u8)((u8)(y >> 3) + gSwapMonPanelWindowTemplates[i].y), gSwapMonPanelWindowTemplates[i].width, gSwapMonPanelWindowTemplates[i].height, gSwapMonPanelWindowTemplates[i].palette, gSwapMonPanelWindowTemplates[i].baseTile);
     }
     return panel;
 }

@@ -30,7 +30,7 @@
 	.public MailView_PrintTexts
 	.public MailView_CreateMonIcons
 	.public MailView_DeleteMonIcons
-	.public _021E6DD4
+	.public gMailViewGraphicsModes
 	.public sMailViewScreenFuncs
 	.public sMailViewOamCharTransferParam
 	.public sMailViewSpriteResourceCounts
@@ -44,7 +44,7 @@
 	.text
 	.rodata
 
-_021E6DD4:
+gMailViewGraphicsModes:
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 

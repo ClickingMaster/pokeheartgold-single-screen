@@ -84,7 +84,7 @@ typedef struct FrontierMonParam {
     u16 move;
 } FrontierMonParam;
 
-extern const u16 _0223B620[];
+extern const u16 gFrontierMonItems[];
 extern const u16 gFrontierTrainerClassSprites[];
 extern const u16 gFrontierTrainerClassSpriteValues[];
 
@@ -149,7 +149,7 @@ u32 FrontierMon_Generate(FrontierMon *mon, u32 setId, u32 otId, u32 pid, u8 iv, 
         if (itemIndex >= 4) {
             itemIndex = itemIndex & 3;
         }
-        mon->item = _0223B620[itemIndex];
+        mon->item = gFrontierMonItems[itemIndex];
     } else {
         mon->item = set.item;
     }

@@ -53,15 +53,15 @@ void FrontierParticles_Update(void);
 ManagedSprite *FrontierMap_CreateSprite(FrontierMap *map, u16 index, u16 resourceId);
 void FrontierMap_SetSpriteAnimActive(FrontierMap *map, u16 index, u32 active);
 
-extern const Field2DBgLayerTemplate ov80_0223D554;
-extern const GraphicsModes ov80_0223D560;
-extern const OamCharTransferParam ov80_0223D570;
-extern const SpriteResourceCountsListUnion ov80_0223D584;
-extern const BgTemplate ov80_0223D59C;
-extern const OamManagerParam ov80_0223D5B8;
-extern const GraphicsBanks ov80_0223D5D8;
-extern const FrontierMapMainBgTemplates ov80_0223D600;
-extern const u8 ov80_0223D654[];
+extern const Field2DBgLayerTemplate gFrontierMapLayerTemplate;
+extern const GraphicsModes gFrontierMapGraphicsModes;
+extern const OamCharTransferParam gFrontierMapOamCharTransferParam;
+extern const SpriteResourceCountsListUnion gFrontierMapSpriteResourceCounts;
+extern const BgTemplate gFrontierMapSubBgTemplate;
+extern const OamManagerParam gFrontierMapOamManagerParam;
+extern const GraphicsBanks gFrontierMapGraphicsBanks;
+extern const FrontierMapMainBgTemplates gFrontierMapMainBgTemplates;
+extern const u8 gFrontierMapLayout[];
 
 // Map parameter table fields (FrontierMap_GetParam)
 #define MAP_PARAM_BG_MODE     0
@@ -343,16 +343,16 @@ void FrontierMap_SetVramBank(BgConfig *bgConfig, u32 mapId) {
     u16 bgSize;
 
     GfGfx_DisableEngineAPlanes();
-    banks = ov80_0223D5D8;
+    banks = gFrontierMapGraphicsBanks;
     GfGfx_SetBanks(&banks);
     MI_CpuClear32((void *)HW_BG_VRAM, HW_BG_VRAM_SIZE);
     MI_CpuClear32((void *)HW_DB_BG_VRAM, HW_DB_BG_VRAM_SIZE);
     MI_CpuClear32((void *)HW_OBJ_VRAM, HW_OBJ_VRAM_SIZE);
     MI_CpuClear32((void *)HW_DB_OBJ_VRAM, HW_DB_OBJ_VRAM_SIZE);
-    graphicsModes = ov80_0223D560;
+    graphicsModes = gFrontierMapGraphicsModes;
     graphicsModes.bgMode = (GXBGMode)bgMode;
     SetBothScreensModesAndDisable(&graphicsModes);
-    main = ov80_0223D600;
+    main = gFrontierMapMainBgTemplates;
     if (bgMode == GX_BGMODE_0) {
         main.bg2.colorMode = GX_BG_COLORMODE_16;
         main.bg3.colorMode = GX_BG_COLORMODE_16;
@@ -393,7 +393,7 @@ void FrontierMap_SetVramBank(BgConfig *bgConfig, u32 mapId) {
     }
     G2_SetBG0Priority(0);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
-    subTemplate = ov80_0223D59C;
+    subTemplate = gFrontierMapSubBgTemplate;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &subTemplate, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
     BgSetPosTextAndCommit(bgConfig, GF_BG_LYR_SUB_0, BG_POS_OP_SET_X, 0);
@@ -434,7 +434,7 @@ void FrontierMap_InitMapObjects(FrontierMap *map, u32 mapId, void *profile) {
     map->unk18 = Field2DMap_New(16, 16, HEAP_ID_101);
     Field2DCamera_Init(&map->camera);
     map->objectGfx = Field2DObjectSpriteManager_NewWithShadow(SpriteManager_GetSpriteList(map->spriteManager), map->paletteData, 32, Frontier_GetPlayerSpriteId(profile), 0, 1, HEAP_ID_101);
-    layerTemplate = ov80_0223D554;
+    layerTemplate = gFrontierMapLayerTemplate;
     layerTemplate.narcId = FrontierMap_GetParam(mapId, MAP_PARAM_NARC);
     layerTemplate.fileId = FrontierMap_GetParam(mapId, MAP_PARAM_BG3_SCREEN);
     scrollMode = FrontierMap_GetParam(mapId, MAP_PARAM_SCROLL_MODE);
@@ -453,7 +453,7 @@ void FrontierMap_InitMapObjects(FrontierMap *map, u32 mapId, void *profile) {
     }
     map->unk2C = Field2DCommandQueue_New(128, HEAP_ID_101);
     map->unk30 = (Field2DMoveQueue *)Field2DMoveQueue_New(128, HEAP_ID_101);
-    Field2DMap_Load(map->unk18, ov80_0223D654);
+    Field2DMap_Load(map->unk18, gFrontierMapLayout);
     bgMode = FrontierMap_GetParam(mapId, MAP_PARAM_BG_MODE);
     narcId = (NarcId)FrontierMap_GetParam(mapId, MAP_PARAM_NARC);
     narc = NARC_New(narcId, HEAP_ID_101);
@@ -537,12 +537,12 @@ void FrontierMap_Delete3DVramMan(GF3DVramMan *vramMan) {
 
 void FrontierMap_InitSpriteSystem(FrontierMap *map) {
     map->spriteSystem = SpriteSystem_Alloc(HEAP_ID_101);
-    SpriteSystem_Init(map->spriteSystem, &ov80_0223D5B8, &ov80_0223D570, 32);
+    SpriteSystem_Init(map->spriteSystem, &gFrontierMapOamManagerParam, &gFrontierMapOamCharTransferParam, 32);
     G2dRenderer_SetObjCharTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN, GX_OBJVRAMMODE_CHAR_1D_128K);
     G2dRenderer_SetPlttTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN);
     map->spriteManager = SpriteManager_New(map->spriteSystem);
     SpriteSystem_InitSprites(map->spriteSystem, map->spriteManager, 128);
-    SpriteSystem_InitManagerWithCapacities(map->spriteSystem, map->spriteManager, (SpriteResourceCountsListUnion *)&ov80_0223D584);
+    SpriteSystem_InitManagerWithCapacities(map->spriteSystem, map->spriteManager, (SpriteResourceCountsListUnion *)&gFrontierMapSpriteResourceCounts);
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(map->spriteSystem), 0, FX32_CONST(512));
 }
 

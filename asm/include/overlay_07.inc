@@ -232,8 +232,8 @@
 .public BattleAnimUtil_RestorePic
 .public BattleAnimUtil_LoadSubstituteIntoPic
 .public ov07_02234B5C
-.public ov07_022377DC
-.public ov07_022377F4
+.public gBattlerSlideInTargetX
+.public gBattlerPokepicPositions
 .public BattleSystem_GetSpriteSystem
 .public BattleSystem_GetSpriteManager
 .public BattleSystem_GetPaletteData

@@ -55,7 +55,7 @@ extern "C" HandlerVtbl gLobbyRequestVtable, gLobbyEnterChannelRequestVtable;
 extern "C" const u32 gLobbyChatNextRequestId;
 
 struct Mgr {
-    void *unk0;
+    void *connection;
     u32 state;
     u8 pad[0x88];
     u8 list[1];
@@ -189,7 +189,7 @@ extern "C" int LobbyChat_EnterChannelAsync(const char *name, u32 p1, u32 p2, Arg
     cb.f2C = p3->unk14;
     Str s2(name);
     Str t2 = LobbyChat_GetFullChannelName(GetMgr(), s2);
-    chatEnterChannelA(GetMgr()->unk0, t2.c_str(), p1, &cb, LobbyChat_OnEnterChannel, id, 0);
+    chatEnterChannelA(GetMgr()->connection, t2.c_str(), p1, &cb, LobbyChat_OnEnterChannel, id, 0);
     t2.destroy();
     s2.destroy();
     return 0;

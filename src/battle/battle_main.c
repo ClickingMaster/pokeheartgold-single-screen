@@ -102,8 +102,8 @@ extern const OamManagerParam sBattleOamManagerParam;
 extern const OamCharTransferParam sBattleOamCharTransferParam;
 extern SpriteResourceCountsListUnion sBattleSpriteResourceCounts;
 extern const u32 sBattleBgFillColors[23][3];
-extern const GraphicsBanks ov12_0226C0D0;
-extern const GraphicsBanks ov12_0226C0F8;
+extern const GraphicsBanks gBattleGraphicsBanks;
+extern const GraphicsBanks gBattleGraphicsBanks2;
 extern const GraphicsBanks sLinkGraphicsBanks;
 extern const GraphicsModes sLinkGraphicsModes;
 extern const BgTemplate sLinkBgTemplate;
@@ -397,7 +397,7 @@ void Battle_InitBackgrounds(BattleSystem *battleSystem, BgConfig *bgConfig) {
 
     battleSystem->resetBlendRequested = 1;
 
-    templates = ov12_0226C174;
+    templates = gBattleBgTemplates;
 
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &templates.templates[0], 0);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
@@ -884,12 +884,12 @@ void Battle_VBlankCallback(void *data) {
     }
     if (battleSystem->battleBanksRequested) {
         battleSystem->battleBanksRequested = 0;
-        banks = ov12_0226C0D0;
+        banks = gBattleGraphicsBanks;
         GfGfx_SetBanks(&banks);
     }
     if (battleSystem->subMenuBanksRequested) {
         battleSystem->subMenuBanksRequested = 0;
-        banks2 = ov12_0226C0F8;
+        banks2 = gBattleGraphicsBanks2;
         GfGfx_SetBanks(&banks2);
     }
     PokepicManager_HandleLoadImgAndOrPltt(battleSystem->pokepicManager);

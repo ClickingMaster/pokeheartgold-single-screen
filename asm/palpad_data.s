@@ -665,25 +665,25 @@
 	.public PalPadDetailsSlot_Print
 	.public PalPadDetails_PrintProfileText
 	.public PalPadDetails_MovePage
-	.public ov43_0222ED5F
-	.public ov43_0222ED63
-	.public ov43_0222ED67
-	.public ov43_0222ED6B
-	.public ov43_0222ED6F
+	.public sPalPadDetailsPage4WindowSpecs
+	.public sPalPadDetailsPage7WindowSpecs
+	.public sPalPadDetailsPage6WindowSpecs
+	.public sPalPadDetailsPage5WindowSpecs
+	.public sPalPadDetailsPage1WindowSpecs
 	.public sPalPadRosterPageBaseTiles
 	.public sPalPadFriendCodeHitboxes
-	.public ov43_0222ED82
+	.public sPalPadDetailsPage2WindowSpecs
 	.public sPalPadRosterNameColors
 	.public sPalPadRosterFriendMenuTemplate
 	.public sPalPadDetailsSlotBaseTiles
 	.public sPalPadDetailsTabX
 	.public sPalPadGraphicsModes
 	.public sPalPadObjCharTransferTemplate
-	.public ov43_0222EDE8
+	.public sPalPadDetailsPage0WindowSpecs
 	.public sPalPadDetailsTabWidths
 	.public sPalPadPanelLayouts
 	.public sPalPadMenuHitboxes
-	.public ov43_0222EE2E
+	.public sPalPadDetailsPage3WindowSpecs
 	.public sPalPadDetailsHitboxes
 	.public sPalPadGraphicsBanks
 	.public sPalPadDetailsFrontierHitboxes
@@ -779,15 +779,15 @@
 
 _0222ED5C:
 	.byte 0x02, 0x02, 0x09
-ov43_0222ED5F:
+sPalPadDetailsPage4WindowSpecs:
 	.byte 0x02, 0x05, 0x1A, 0x0B
-ov43_0222ED63:
+sPalPadDetailsPage7WindowSpecs:
 	.byte 0x01, 0x05, 0x1B, 0x02
-ov43_0222ED67:
+sPalPadDetailsPage6WindowSpecs:
 	.byte 0x02, 0x05, 0x1A, 0x0B
-ov43_0222ED6B:
+sPalPadDetailsPage5WindowSpecs:
 	.byte 0x02, 0x05, 0x1A, 0x0B
-ov43_0222ED6F:
+sPalPadDetailsPage1WindowSpecs:
 	.byte 0x02, 0x05, 0x16, 0x0B, 0x00
 
 sPalPadRosterPageBaseTiles: ; 0x0222ED74
@@ -797,7 +797,7 @@ sPalPadFriendCodeHitboxes: ; 0x0222ED7A
 	.byte 0xA0, 0xC0, 0x88, 0xF8, 0xFF, 0x00
 	.byte 0x00, 0x00
 
-ov43_0222ED82:
+sPalPadDetailsPage2WindowSpecs:
 	.byte 0x05, 0x05, 0x0B, 0x02, 0x05, 0x09, 0x1A, 0x05, 0x0D, 0x00, 0x0C, 0x00, 0x0A, 0x00
 	.byte 0x09, 0x00, 0x00, 0x00
 
@@ -824,7 +824,7 @@ sPalPadObjCharTransferTemplate: ; 0x0222EDD8
 	.byte 0x40, 0x00, 0x00, 0x00, 0x00, 0x40, 0x01, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov43_0222EDE8:
+sPalPadDetailsPage0WindowSpecs:
 	.byte 0x02, 0x05, 0x10, 0x02, 0x02, 0x0C, 0x10, 0x02
 	.byte 0x13, 0x05, 0x08, 0x05, 0x17, 0x0C, 0x04, 0x02
 
@@ -840,7 +840,7 @@ sPalPadMenuHitboxes: ; 0x0222EE1A
 	.byte 0x22, 0x3E, 0x12, 0xEE, 0x4A, 0x66
 	.byte 0x12, 0xEE, 0x72, 0x8E, 0x12, 0xEE, 0x9A, 0xB6, 0x12, 0xEE, 0xFF, 0x00, 0x00, 0x00
 
-ov43_0222EE2E:
+sPalPadDetailsPage3WindowSpecs:
 	.byte 0x02, 0x01
 	.byte 0x0E, 0x02, 0x02, 0x04, 0x1A, 0x02, 0x02, 0x07, 0x1A, 0x04, 0x02, 0x0C, 0x1A, 0x02, 0x02, 0x0F
 	.byte 0x1A, 0x04
@@ -940,14 +940,14 @@ sPalPadRenderSurfaceRect: ; 0x0222F0FC
 	.byte 0x00, 0x00, 0x10, 0x00, 0x00, 0xF0, 0x0F, 0x00, 0x00, 0x00, 0x0C, 0x00
 
 sPalPadDetailsPageWindowSpecs: ; 0x0222F10C
-	.word ov43_0222EDE8
-	.word ov43_0222ED6F
-	.word ov43_0222ED82
-	.word ov43_0222EE2E
-	.word ov43_0222ED5F
-	.word ov43_0222ED6B
-	.word ov43_0222ED67
-	.word ov43_0222ED63
+	.word sPalPadDetailsPage0WindowSpecs
+	.word sPalPadDetailsPage1WindowSpecs
+	.word sPalPadDetailsPage2WindowSpecs
+	.word sPalPadDetailsPage3WindowSpecs
+	.word sPalPadDetailsPage4WindowSpecs
+	.word sPalPadDetailsPage5WindowSpecs
+	.word sPalPadDetailsPage6WindowSpecs
+	.word sPalPadDetailsPage7WindowSpecs
 
 sPalPadDetailsFrontierPagePrinters: ; 0x0222F12C
 	.word PalPadDetails_PrintUnionRoomPage

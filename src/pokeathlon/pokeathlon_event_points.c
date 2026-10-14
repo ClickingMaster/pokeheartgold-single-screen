@@ -6,25 +6,25 @@
 #include "math_util.h"
 
 // The course points (at most 200) every participant gets for an event: events 0-8 convert each participant's
-// event score (ov96_0221D9C8[event]), event 9 (Goal Roll) gives points by rank.
+// event score (gPokeathlonEventScorePointsFuncs[event]), event 9 (Goal Roll) gives points by rank.
 
 // PokeathlonCourseScoreList_GetRanked entries (pokeathlon_course_internal.h)
 void *PokeathlonCourseScoreList_GetRanked(void *list, u8 index);
 
 typedef u32 (*PokeathlonEventPointsFunc)(u32 score);
-extern void (*const ov96_0221D9A0[])(void *list, int event);
-extern const PokeathlonEventPointsFunc ov96_0221D9C8[];
+extern void (*const gPokeathlonEventPointsCalcFuncs[])(void *list, int event);
+extern const PokeathlonEventPointsFunc gPokeathlonEventScorePointsFuncs[];
 
 #pragma force_active on
 
 void PokeathlonEvent_CalcPoints(void *list, int event) {
-    ov96_0221D9A0[event](list, event);
+    gPokeathlonEventPointsCalcFuncs[event](list, event);
 }
 
 #pragma force_active reset
 
 void PokeathlonEvent_CalcPointsFromScores(void *list, int event) {
-    PokeathlonEventPointsFunc func = ov96_0221D9C8[event];
+    PokeathlonEventPointsFunc func = gPokeathlonEventScorePointsFuncs[event];
     u8 i;
     if (func != NULL) {
         for (i = 0; i < 4; i++) {
@@ -37,7 +37,7 @@ void PokeathlonEvent_CalcPointsFromScores(void *list, int event) {
 }
 
 void PokeathlonEvent_CalcPointsFromRanks(void *list, int event) {
-    if (ov96_0221D9C8[event] == NULL) {
+    if (gPokeathlonEventScorePointsFuncs[event] == NULL) {
         PokeathlonEvent_CalcRankPoints(list);
     } else {
         GF_AssertFail();

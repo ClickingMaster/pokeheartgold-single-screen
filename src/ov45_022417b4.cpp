@@ -68,7 +68,7 @@ extern "C" HandlerVtbl gLobbyRequestVtable, gLobbyGetChannelKeysRequestVtable;
 extern "C" const u32 gLobbyChatNextRequestId;
 
 struct Mgr {
-    void *unk0;
+    void *connection;
     u32 state;
     u8 pad[0x88];
     u8 list[1];
@@ -168,7 +168,7 @@ extern "C" int LobbyChat_GetChannelKeysAsync(const char *name, int idx, const ch
     u32 id = GetId(h, IdTag(), IdTag());
     Str s(name);
     Str t = LobbyChat_GetFullChannelName(GetMgr(), s);
-    chatGetChannelKeysA(GetMgr()->unk0, t.c_str(), msg.c_str(), 1, &desc, LobbyChat_OnGetChannelKeys, id, 0);
+    chatGetChannelKeysA(GetMgr()->connection, t.c_str(), msg.c_str(), 1, &desc, LobbyChat_OnGetChannelKeys, id, 0);
     t.destroy();
     s.destroy();
     msg.destroy();

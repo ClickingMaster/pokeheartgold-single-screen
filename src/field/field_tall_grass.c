@@ -80,12 +80,12 @@ void TallGrassUnusedEffect_Update(FieldEffect *effect, UnkOv01_0220914C_Effect *
 void TallGrassUnusedEffect_Draw(FieldEffect *effect, UnkOv01_0220914C_Effect *work);
 
 // In asm/overlay_01_021FEEEC_data_local.s (its order of these objects is not one MWCC reproduces).
-extern const FieldEffectBasicTemplate ov01_02209138; // tall grass effect
+extern const FieldEffectBasicTemplate gTallGrassEffectTemplate; // tall grass effect
 extern const FieldEffectBasicTemplate sTallGrassUnusedEffectTemplate; // created nowhere
-extern const u32 ov01_02209160[6];                   // record 6 params
-extern const u32 ov01_02209178[6];                   // tall grass record params
-extern const u32 ov01_02209190[6];                   // record 5 params
-extern const u32 ov01_022091A8[6];                   // record 7 params
+extern const u32 gTallGrassRecord6Params[6];                   // record 6 params
+extern const u32 gTallGrassRecordParams[6];                   // tall grass record params
+extern const u32 gTallGrassRecord5Params[6];                   // record 5 params
+extern const u32 gTallGrassRecord7Params[6];                   // record 7 params
 
 TallGrass *TallGrass_New(FieldEffectManager *manager) {
     TallGrass *grass = FieldEffectManager_HeapAllocAndFill(manager, sizeof(TallGrass), FALSE, 0);
@@ -110,10 +110,10 @@ void TallGrass_LoadGfx(TallGrass *grass) {
     FieldEffectManager_LoadTexResource(grass->manager, 4, 0x10, TRUE);
     FieldEffectManager_LoadTexResource(grass->manager, 5, 0, TRUE);
     FieldEffectManager_LoadTexResource(grass->manager, 6, 1, TRUE);
-    FieldEffectManager_AddRecord(grass->manager, TALL_GRASS_RECORD, 0, 0, 0, 0, ov01_02209178);
-    FieldEffectManager_AddRecord(grass->manager, 5, 5, 3, 4, 0, ov01_02209190);
-    FieldEffectManager_AddRecord(grass->manager, 6, 5, 4, 5, 0, ov01_02209160);
-    FieldEffectManager_AddRecord(grass->manager, 7, 5, 5, 6, 0, ov01_022091A8);
+    FieldEffectManager_AddRecord(grass->manager, TALL_GRASS_RECORD, 0, 0, 0, 0, gTallGrassRecordParams);
+    FieldEffectManager_AddRecord(grass->manager, 5, 5, 3, 4, 0, gTallGrassRecord5Params);
+    FieldEffectManager_AddRecord(grass->manager, 6, 5, 4, 5, 0, gTallGrassRecord6Params);
+    FieldEffectManager_AddRecord(grass->manager, 7, 5, 5, 6, 0, gTallGrassRecord7Params);
 }
 
 void TallGrass_FreeGfx(TallGrass *grass) {
@@ -149,7 +149,7 @@ void TallGrass_Spawn(LocalMapObject *mapObject, BOOL animate) {
     args.grass = FieldEffectManager_GetRendererData(manager, 8);
     args.mapObject = mapObject;
     MapObject_CopyPositionVector(mapObject, &position);
-    FieldEffectManager_CreateEffect(manager, &ov01_02209138, &position, animate, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
+    FieldEffectManager_CreateEffect(manager, &gTallGrassEffectTemplate, &position, animate, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 
 #pragma force_active on
@@ -173,7 +173,7 @@ FieldEffect *TallGrass_SpawnAt(LocalMapObject *mapObject, BOOL animate, int x, i
     args.grass = FieldEffectManager_GetRendererData(manager, 8);
     args.mapObject = mapObject;
     MapObject_CopyPositionVector(mapObject, &position);
-    return FieldEffectManager_CreateEffect(manager, &ov01_02209138, &position, animate, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
+    return FieldEffectManager_CreateEffect(manager, &gTallGrassEffectTemplate, &position, animate, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 #pragma force_active reset
 

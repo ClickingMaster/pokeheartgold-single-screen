@@ -1991,7 +1991,7 @@
 	.public _0223B65A
 	.public _0223B6A4
 	.public _0223B700
-	.public _0223B73C
+	.public sMainMenuUtilGiftPalettes
 	.public _0223B74E
 	.public _0223B756
 	.public _0223B776

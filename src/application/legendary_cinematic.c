@@ -127,31 +127,31 @@ enum ArceusScriptResult {
 
 typedef int (*ArceusScriptCmd)(LegendaryCinematic *cinematic, const int *cmd);
 
-extern const VecFx32 _021E6D70;
-extern const GraphicsModes ov106_021E6D7C;
-extern const MtxFx33 ov106_021E6D8C;
-extern const GraphicsBanks ov106_021E6DB0;
-extern const LegendaryCinematicCaptureConfig ov106_021E6DD8;
-extern const GXRgb ov106_021E6E04[8];
-extern const LegendaryCinematicModelSpec ov106_021E6E2C[];
-extern const LegendaryCinematicModelSpec ov106_021E6E50[];
-extern const LegendaryCinematicCamera ov106_021E6E74;
-extern const LegendaryCinematicCamera ov106_021E6E9C;
-extern const GXRgb ov106_021E6EC4[8];
-extern const LegendaryCinematicModelSpec ov106_021E6EE4[];
-extern const LegendaryCinematicCamera ov106_021E6EFC;
-extern const GraphicsModes ov106_021E6F24;
-extern const OamCharTransferParam ov106_021E6F48;
-extern const SpriteResourceCountsListUnion ov106_021E6F5C;
-extern const BgTemplate ov106_021E6F74;
-extern const BgTemplate ov106_021E6F90;
-extern const BgTemplate ov106_021E6FAC;
-extern const OamManagerParam ov106_021E6FC8;
-extern const GraphicsBanks ov106_021E6FE8;
-extern const ManagedSpriteTemplate ov106_021E7010;
-extern const ArceusScriptCmd ov106_021E7044[];
-extern const int ov106_021E7090[];
-extern const int ov106_021E70E0[];
+extern const VecFx32 gLegendaryCinematicModelScale;
+extern const GraphicsModes gLegendaryCinematicGraphicsModes;
+extern const MtxFx33 gLegendaryCinematicModelRotation;
+extern const GraphicsBanks gLegendaryCinematicGraphicsBanks;
+extern const LegendaryCinematicCaptureConfig gLegendaryCinematicCaptureConfig;
+extern const GXRgb gHoOhCinematicEdgeColors[8];
+extern const LegendaryCinematicModelSpec gHoOhCinematicSecondSceneModels[];
+extern const LegendaryCinematicModelSpec gHoOhCinematicModels[];
+extern const LegendaryCinematicCamera gHoOhCinematicCamera;
+extern const LegendaryCinematicCamera gHoOhCinematicSecondSceneCamera;
+extern const GXRgb gLugiaCinematicEdgeColors[8];
+extern const LegendaryCinematicModelSpec gLugiaCinematicModels[];
+extern const LegendaryCinematicCamera gLugiaCinematicCamera;
+extern const GraphicsModes gArceusCinematicGraphicsModes;
+extern const OamCharTransferParam gArceusCinematicOamCharTransferParam;
+extern const SpriteResourceCountsListUnion gArceusCinematicSpriteResourceCounts;
+extern const BgTemplate gArceusCinematicBgTemplate0;
+extern const BgTemplate gArceusCinematicBgTemplate1;
+extern const BgTemplate gArceusCinematicBgTemplate2;
+extern const OamManagerParam gArceusCinematicOamManagerParam;
+extern const GraphicsBanks gArceusCinematicGraphicsBanks;
+extern const ManagedSpriteTemplate gArceusCinematicSpriteTemplate;
+extern const ArceusScriptCmd gArceusCinematicScriptCmds[];
+extern const int gArceusCinematicScriptCmdSizes[];
+extern const int gArceusCinematicScript[];
 extern int (*const sScriptCinematicSubs_HoOh[])(LegendaryCinematic *);
 extern int (*const sScriptCinematicSubs_Lugia[])(LegendaryCinematic *);
 extern int (*const sScriptCinematicSubs_Arceus[])(LegendaryCinematic *);
@@ -365,8 +365,8 @@ void LegendaryCinematic_FreeModels(LegendaryCinematic *cinematic) {
 }
 
 void LegendaryCinematic_DrawModels(LegendaryCinematic *cinematic) {
-    MtxFx33 rotation = ov106_021E6D8C;
-    VecFx32 scale = _021E6D70;
+    MtxFx33 rotation = gLegendaryCinematicModelRotation;
+    VecFx32 scale = gLegendaryCinematicModelScale;
     VecFx32 translation = { 0, 0, 0 };
     u32 i;
     Thunk_G3X_Reset();
@@ -428,11 +428,11 @@ BOOL LegendaryCinematic_AreModelsAnimating(LegendaryCinematic *cinematic) {
 }
 
 void LegendaryCinematic_SetBanks(void) {
-    GfGfx_SetBanks(&ov106_021E6DB0);
+    GfGfx_SetBanks(&gLegendaryCinematicGraphicsBanks);
 }
 
 void LegendaryCinematic_SetGraphicsModes(void) {
-    GraphicsModes modes = ov106_021E6D7C;
+    GraphicsModes modes = gLegendaryCinematicGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     BG_SetMaskColor(GF_BG_LYR_SUB_0, 0);
 }
@@ -547,7 +547,7 @@ LegendaryCinematicCapture *LegendaryCinematic_StartMotionBlur(int eva, int evb) 
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
     GX_ResetBankForBG();
-    config = ov106_021E6DD8;
+    config = gLegendaryCinematicCaptureConfig;
     config.eva = eva;
     config.evb = evb;
     return LegendaryCinematic_StartCapture(&config);
@@ -573,10 +573,10 @@ int HoOhCinematic_Init(LegendaryCinematic *cinematic) {
     u32 variant;
     LegendaryCinematic_Init3D(cinematic);
     LegendaryCinematic_SetLights((ModelAttributes *)&cinematic->args->modelAttributes);
-    LegendaryCinematic_SetEdgeMarking(ov106_021E6E04);
-    LegendaryCinematic_SetCamera(cinematic, &ov106_021E6E74);
+    LegendaryCinematic_SetEdgeMarking(gHoOhCinematicEdgeColors);
+    LegendaryCinematic_SetCamera(cinematic, &gHoOhCinematicCamera);
     variant = cinematic->args->timeOfDay;
-    LegendaryCinematic_LoadModels(cinematic, NARC_a_2_4_3, &ov106_021E6E50[variant], 1);
+    LegendaryCinematic_LoadModels(cinematic, NARC_a_2_4_3, &gHoOhCinematicModels[variant], 1);
     LegendaryCinematic_FadeInFromWhite(cinematic, 6, 1, 3);
     return 2;
 }
@@ -620,9 +620,9 @@ int HoOhCinematic_PlayFirstScene(LegendaryCinematic *cinematic) {
 int HoOhCinematic_LoadSecondScene(LegendaryCinematic *cinematic) {
     u32 variant;
     LegendaryCinematic_FreeModels(cinematic);
-    LegendaryCinematic_SetCamera(cinematic, &ov106_021E6E9C);
+    LegendaryCinematic_SetCamera(cinematic, &gHoOhCinematicSecondSceneCamera);
     variant = cinematic->args->timeOfDay;
-    LegendaryCinematic_LoadModels(cinematic, NARC_a_2_4_3, &ov106_021E6E2C[variant], 1);
+    LegendaryCinematic_LoadModels(cinematic, NARC_a_2_4_3, &gHoOhCinematicSecondSceneModels[variant], 1);
     LegendaryCinematic_FadeInFromBlack(cinematic, 6, 1, 5);
     return 2;
 }
@@ -655,10 +655,10 @@ int ScriptCinematic_Lugia(void *data) {
 #pragma force_active on
 int LugiaCinematic_Init(LegendaryCinematic *cinematic) {
     LegendaryCinematic_Init3D(cinematic);
-    LegendaryCinematic_SetCamera(cinematic, &ov106_021E6EFC);
+    LegendaryCinematic_SetCamera(cinematic, &gLugiaCinematicCamera);
     LegendaryCinematic_SetLights((ModelAttributes *)&cinematic->args->modelAttributes);
-    LegendaryCinematic_SetEdgeMarking(ov106_021E6EC4);
-    LegendaryCinematic_LoadModels(cinematic, NARC_a_2_4_4, ov106_021E6EE4, 2);
+    LegendaryCinematic_SetEdgeMarking(gLugiaCinematicEdgeColors);
+    LegendaryCinematic_LoadModels(cinematic, NARC_a_2_4_4, gLugiaCinematicModels, 2);
     LegendaryCinematic_FadeInFromBlack(cinematic, 6, 1, 3);
     return 2;
 }
@@ -729,7 +729,7 @@ void ArceusCinematic_VBlank(ArceusCinematic *arceus) {
 }
 
 void ArceusCinematic_SetBanks(void) {
-    GfGfx_SetBanks(&ov106_021E6FE8);
+    GfGfx_SetBanks(&gArceusCinematicGraphicsBanks);
 }
 
 #pragma force_active on
@@ -740,17 +740,17 @@ void ArceusCinematic_InitBgs(ArceusCinematic *arceus) {
     BgTemplate bg2;
 
     arceus->bgConfig = BgConfig_Alloc(HEAP_ID_153);
-    modes = ov106_021E6F24;
+    modes = gArceusCinematicGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    bg0 = ov106_021E6F74;
+    bg0 = gArceusCinematicBgTemplate0;
     InitBgFromTemplate(arceus->bgConfig, GF_BG_LYR_MAIN_0, &bg0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(arceus->bgConfig, GF_BG_LYR_MAIN_0);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_0, 64, 0, HEAP_ID_153);
-    bg1 = ov106_021E6F90;
+    bg1 = gArceusCinematicBgTemplate1;
     InitBgFromTemplate(arceus->bgConfig, GF_BG_LYR_MAIN_1, &bg1, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(arceus->bgConfig, GF_BG_LYR_MAIN_1);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_1, 64, 0, HEAP_ID_153);
-    bg2 = ov106_021E6FAC;
+    bg2 = gArceusCinematicBgTemplate2;
     InitBgFromTemplate(arceus->bgConfig, GF_BG_LYR_MAIN_2, &bg2, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(arceus->bgConfig, GF_BG_LYR_MAIN_2);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_2, 64, 0, HEAP_ID_153);
@@ -775,10 +775,10 @@ void ArceusCinematic_InitSprites(LegendaryCinematic *cinematic) {
 
     arceus->spriteSystem = SpriteSystem_Alloc(HEAP_ID_153);
     arceus->spriteManager = SpriteManager_New(arceus->spriteSystem);
-    oamManagerParam = ov106_021E6FC8;
-    oamCharTransferParam = ov106_021E6F48;
+    oamManagerParam = gArceusCinematicOamManagerParam;
+    oamCharTransferParam = gArceusCinematicOamCharTransferParam;
     SpriteSystem_Init(arceus->spriteSystem, &oamManagerParam, &oamCharTransferParam, 32);
-    resourceCounts = ov106_021E6F5C;
+    resourceCounts = gArceusCinematicSpriteResourceCounts;
     SpriteSystem_InitSprites(arceus->spriteSystem, arceus->spriteManager, 1);
     SpriteSystem_InitManagerWithCapacities(arceus->spriteSystem, arceus->spriteManager, &resourceCounts);
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(arceus->spriteSystem), 0, FX32_CONST(1024));
@@ -786,7 +786,7 @@ void ArceusCinematic_InitSprites(LegendaryCinematic *cinematic) {
     SpriteSystem_LoadAnimResObjFromOpenNarc(arceus->spriteSystem, arceus->spriteManager, arceus->narc, 206, TRUE, 51433);
     SpriteSystem_LoadPlttResObjFromOpenNarc(arceus->spriteSystem, arceus->spriteManager, arceus->narc, 207, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 51433);
     SpriteSystem_LoadCharResObjFromOpenNarc(arceus->spriteSystem, arceus->spriteManager, arceus->narc, 204, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, 51433);
-    arceus->sprites[0] = SpriteSystem_NewSprite(arceus->spriteSystem, arceus->spriteManager, &ov106_021E7010);
+    arceus->sprites[0] = SpriteSystem_NewSprite(arceus->spriteSystem, arceus->spriteManager, &gArceusCinematicSpriteTemplate);
     ManagedSprite_SetDrawFlag(arceus->sprites[0], FALSE);
     ArceusCinematic_LoadArceusSprite(cinematic);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
@@ -907,7 +907,7 @@ int ArceusCinematic_Init(LegendaryCinematic *cinematic) {
     cinematic->arceus = Heap_Alloc(HEAP_ID_153, sizeof(ArceusCinematic));
     MI_CpuFill8(cinematic->arceus, 0, sizeof(ArceusCinematic));
     arceus = cinematic->arceus;
-    arceus->scriptPos = ov106_021E70E0;
+    arceus->scriptPos = gArceusCinematicScript;
     arceus->narc = NARC_New(NARC_a_2_4_5, HEAP_ID_153);
     ArceusCinematic_SetBanks();
     ArceusCinematic_InitBgs(arceus);
@@ -979,16 +979,16 @@ int ArceusCinematic_RunScript(LegendaryCinematic *cinematic) {
         if (opcode == ARCEUS_SCRIPT_END) {
             return 1;
         }
-        result = ov106_021E7044[opcode](cinematic, cmd);
+        result = gArceusCinematicScriptCmds[opcode](cinematic, cmd);
         if (result == ARCEUS_SCRIPT_WAIT) {
             break;
         }
         if (result == ARCEUS_SCRIPT_CONTINUE) {
-            arceus->scriptPos += ov106_021E7090[*arceus->scriptPos];
+            arceus->scriptPos += gArceusCinematicScriptCmdSizes[*arceus->scriptPos];
             continue;
         }
         if (result == ARCEUS_SCRIPT_YIELD) {
-            arceus->scriptPos += ov106_021E7090[*arceus->scriptPos];
+            arceus->scriptPos += gArceusCinematicScriptCmdSizes[*arceus->scriptPos];
             break;
         }
     }

@@ -94,25 +94,25 @@ PokeathlonDiscCatchCpu *PokeathlonDiscCatchCpu_New(PokeathlonCourseData *course,
 void PokeathlonDiscCatchCpu_Delete(PokeathlonDiscCatchCpu *cpu);
 void PokeathlonDiscCatchCpu_Update(PokeathlonDiscCatchCpu *cpu);
 
-extern const VecFx32 ov96_0221CEF4;
-extern const VecFx32 ov96_0221CF00;
-extern const GraphicsModes ov96_0221CF0C;
-extern const SpriteResourceCountsListUnion ov96_0221CF40;
-extern const OamManagerParam ov96_0221CF74;
-extern const OamCharTransferParam ov96_0221CF2C;
-extern const u32 ov96_0221CF58[7];
-extern const GraphicsBanks ov96_0221CF94;
-extern const s16 ov96_0221CFBC[DISC_CATCH_PARTICIPANTS][DISC_CATCH_TEAM_SIZE][2]; // where the Pokemon start
+extern const VecFx32 gPokeathlonDiscCatchTouchDistances;
+extern const VecFx32 gPokeathlonDiscCatchFacingReference;
+extern const GraphicsModes gPokeathlonDiscCatchGraphicsModes;
+extern const SpriteResourceCountsListUnion gPokeathlonDiscCatchSpriteResourceCounts;
+extern const OamManagerParam gPokeathlonDiscCatchOamManagerParam;
+extern const OamCharTransferParam gPokeathlonDiscCatchOamCharTransferParam;
+extern const u32 gPokeathlonDiscCatchBgLayers[7];
+extern const GraphicsBanks gPokeathlonDiscCatchGraphicsBanks;
+extern const s16 gPokeathlonDiscCatchMonStartPositions[DISC_CATCH_PARTICIPANTS][DISC_CATCH_TEAM_SIZE][2]; // where the Pokemon start
 extern const s16 ov96_0221CFBE[][3][2];                                           // their y (the second half of each entry)
-extern const ManagedSpriteTemplate ov96_0221CFEC;
-extern const ManagedSpriteTemplate ov96_0221D020;
-extern const ManagedSpriteTemplate ov96_0221D054;
+extern const ManagedSpriteTemplate gPokeathlonDiscCatchDiscTopSpriteTemplate;
+extern const ManagedSpriteTemplate gPokeathlonDiscCatchDiscTouchSpriteTemplate;
+extern const ManagedSpriteTemplate gPokeathlonDiscCatchEffectSpriteTemplate;
 
 typedef struct PokeathlonDiscCatchBgTemplates {
     BgTemplate templates[7];
 } PokeathlonDiscCatchBgTemplates;
 
-extern const PokeathlonDiscCatchBgTemplates ov96_0221D088;
+extern const PokeathlonDiscCatchBgTemplates gPokeathlonDiscCatchBgTemplates;
 
 // The loops over the teams' results step a pointer to the result itself.
 #define NEXT_TEAM_RESULT(result) ((PokeathlonDiscCatchResult *)((u8 *)(result) + sizeof(PokeathlonDiscCatchTeam)))
@@ -288,7 +288,7 @@ void PokeathlonDiscCatchMon_SetTarget(PokeathlonDiscCatchMon *mon, const s16 *po
 
 // 4: right, 2: down, 3: left, 1: up
 int PokeathlonDiscCatch_GetFacing(const VecFx32 *direction) {
-    VecFx32 reference = ov96_0221CF00;
+    VecFx32 reference = gPokeathlonDiscCatchFacingReference;
     VecFx32 vec = { 0 };
     u16 angle;
     vec.x = direction->y;
@@ -397,7 +397,7 @@ void PokeathlonDiscCatchMon_Respawn(PokeathlonDiscCatchMon *mon) {
     index = mon->index;
     member = index % 3;
     participant = index / 3;
-    PokeathlonCourseObject_GroundToCenter(mon->monPic, ov96_0221CFBC[participant][member][0], ov96_0221CFBE[participant][member][0], &x, &y);
+    PokeathlonCourseObject_GroundToCenter(mon->monPic, gPokeathlonDiscCatchMonStartPositions[participant][member][0], ov96_0221CFBE[participant][member][0], &x, &y);
     mon->position.x = x << FX32_SHIFT;
     mon->position.y = y << FX32_SHIFT;
     mon->target.x = x << FX32_SHIFT;
@@ -462,7 +462,7 @@ int PokeathlonDiscCatch_FindTouchedMon(PokeathlonDiscCatchMon *mons, s16 x, s16 
     int i;
 
     best = DISC_CATCH_NO_MON;
-    distances = ov96_0221CEF4;
+    distances = gPokeathlonDiscCatchTouchDistances;
     min = 1 << 20;
     for (i = 0; i < DISC_CATCH_TEAM_SIZE; i++) {
         if (PokeathlonCourseObject_IsInTouchRange(mons->monPic, mons->position.x, mons->position.y, x, y)) {
@@ -1029,7 +1029,7 @@ u8 PokeathlonDiscCatch_GetTeamScore(PokeathlonDiscCatch *work, int participant) 
 #pragma force_active on
 
 void PokeathlonDiscCatch_SetVramBanks(void) {
-    GraphicsBanks banks = ov96_0221CF94;
+    GraphicsBanks banks = gPokeathlonDiscCatchGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
@@ -1125,9 +1125,9 @@ void PokeathlonDiscCatch_PrintScore(PokeathlonCourseData *course, int score) {
 }
 
 void PokeathlonDiscCatch_InitSpriteSystem(PokeathlonDiscCatch *work) {
-    SpriteResourceCountsListUnion counts = ov96_0221CF40;
-    OamManagerParam oamParam = ov96_0221CF74;
-    OamCharTransferParam transferParam = ov96_0221CF2C;
+    SpriteResourceCountsListUnion counts = gPokeathlonDiscCatchSpriteResourceCounts;
+    OamManagerParam oamParam = gPokeathlonDiscCatchOamManagerParam;
+    OamCharTransferParam transferParam = gPokeathlonDiscCatchOamCharTransferParam;
     transferParam.maxTasks = 128;
     work->spriteSystem = SpriteSystem_Alloc(work->heapId);
     work->spriteManager = SpriteManager_New(work->spriteSystem);
@@ -1211,8 +1211,8 @@ void PokeathlonDiscCatch_LoadSpriteResources(PokeathlonDiscCatch *work) {
 
 // A disc sprite (the top screen's template, or the touch screen's for onTouchScreen).
 ManagedSprite *PokeathlonDiscCatch_NewDiscSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u16 anim, u16 priority, BOOL onTouchScreen) {
-    ManagedSpriteTemplate topTemplate = ov96_0221CFEC;
-    ManagedSpriteTemplate touchTemplate = ov96_0221D020;
+    ManagedSpriteTemplate topTemplate = gPokeathlonDiscCatchDiscTopSpriteTemplate;
+    ManagedSpriteTemplate touchTemplate = gPokeathlonDiscCatchDiscTouchSpriteTemplate;
     ManagedSpriteTemplate *template = onTouchScreen ? &touchTemplate : &topTemplate;
     ManagedSprite *sprite;
     GF_ASSERT(spriteSystem != NULL);
@@ -1229,7 +1229,7 @@ ManagedSprite *PokeathlonDiscCatch_NewDiscSprite(SpriteSystem *spriteSystem, Spr
 }
 
 ManagedSprite *PokeathlonDiscCatch_NewEffectSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u16 anim, u16 priority) {
-    ManagedSpriteTemplate template = ov96_0221D054;
+    ManagedSpriteTemplate template = gPokeathlonDiscCatchEffectSpriteTemplate;
     ManagedSprite *sprite;
     GF_ASSERT(spriteSystem != NULL);
     GF_ASSERT(spriteManager != NULL);
@@ -1246,16 +1246,16 @@ ManagedSprite *PokeathlonDiscCatch_NewEffectSprite(SpriteSystem *spriteSystem, S
 void PokeathlonDiscCatch_InitBgs(PokeathlonDiscCatch *work) {
     BgConfig *bgConfig = work->bgConfig;
     enum HeapID heapId = work->heapId;
-    GraphicsModes modes = ov96_0221CF0C;
+    GraphicsModes modes = gPokeathlonDiscCatchGraphicsModes;
     int i;
 
     SetBothScreensModesAndDisable(&modes);
 
-    PokeathlonDiscCatchBgTemplates templates = ov96_0221D088;
+    PokeathlonDiscCatchBgTemplates templates = gPokeathlonDiscCatchBgTemplates;
     for (i = 0; i < 7; i++) {
-        InitBgFromTemplate(bgConfig, (u8)ov96_0221CF58[i], &templates.templates[i], GF_BG_TYPE_TEXT);
-        BgClearTilemapBufferAndCommit(bgConfig, (u8)ov96_0221CF58[i]);
-        BG_ClearCharDataRange((u8)ov96_0221CF58[i], 0x20, 0, heapId);
+        InitBgFromTemplate(bgConfig, (u8)gPokeathlonDiscCatchBgLayers[i], &templates.templates[i], GF_BG_TYPE_TEXT);
+        BgClearTilemapBufferAndCommit(bgConfig, (u8)gPokeathlonDiscCatchBgLayers[i]);
+        BG_ClearCharDataRange((u8)gPokeathlonDiscCatchBgLayers[i], 0x20, 0, heapId);
     }
     work->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0309_bin, work->heapId);
     work->messageFormat = MessageFormat_New(work->heapId);
@@ -1270,7 +1270,7 @@ void PokeathlonDiscCatch_FreeBgs(PokeathlonDiscCatch *work) {
     MessageFormat_Delete(work->messageFormat);
     DestroyMsgData(work->msgData);
     for (i = 0; i < 7; i++) {
-        FreeBgTilemapBuffer(work->bgConfig, (u8)ov96_0221CF58[i]);
+        FreeBgTilemapBuffer(work->bgConfig, (u8)gPokeathlonDiscCatchBgLayers[i]);
     }
     FontID_Release(4);
     Heap_Free(work->bgConfig);

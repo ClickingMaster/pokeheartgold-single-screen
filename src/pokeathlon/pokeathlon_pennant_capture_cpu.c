@@ -21,7 +21,7 @@ void **PokeathlonCourseSpritePool_GetResourceSlot(void *pool, int id, int kind);
 BOOL PokeathlonPennantCaptureCpu_IsNearCellTarget(PokeathlonPennantCaptureCpuCell *cell, s32 x, s32 y);
 BOOL PokeathlonPennantCaptureCpu_IsCellTargetOnField(PokeathlonPennantCaptureCpuCell *cell);
 
-extern const WindowTemplate ov96_0221CBEC;
+extern const WindowTemplate gPokeathlonPennantCaptureWindowTemplate;
 extern const PokeathlonPennantCaptureSpriteIds gPokeathlonPennantCaptureSpriteIds[];
 
 typedef struct PokeathlonPennantCaptureCpuPoint {
@@ -54,7 +54,7 @@ void PokeathlonPennantCaptureDisplay_GetPicVramOffsets(void *pool, PokeathlonPen
 #pragma force_active reset
 
 void PokeathlonPennantCaptureDisplay_InitWindow(PokeathlonPennantCaptureDisplay *display) {
-    AddWindow(display->bgConfig, &display->window, &ov96_0221CBEC);
+    AddWindow(display->bgConfig, &display->window, &gPokeathlonPennantCaptureWindowTemplate);
     BG_FillCharDataRange(display->bgConfig, GF_BG_LYR_SUB_0, 0, 1, 0);
     LoadFontPal0(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_15_OFFSET, display->heapId);
 }

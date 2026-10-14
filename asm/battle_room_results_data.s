@@ -19,7 +19,7 @@
 	.public sBattleRoomResultsSpriteTemplates
 	.public sBattleRoomResultsLeaderWindowTemplates
 
-	.public _021E6D4C
+	.public gBattleRoomResultsHitbox
 
 	.text
 	.public BattleRoomResults_Init
@@ -67,7 +67,7 @@
 	.public BattleRoomResults_GridOnTouch
 	.rodata
 
-_021E6D4C:
+gBattleRoomResultsHitbox:
 	.byte 0xA4, 0xBB, 0xC1, 0xFE
 
 sBattleRoomResultsPageHitboxes: ; 0x021E6D50

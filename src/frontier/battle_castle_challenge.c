@@ -60,8 +60,8 @@ BOOL BattleCastleLink_SendValueA(BattleCastleData *data, u16 value);
 BOOL BattleCastleLink_SendValueB(BattleCastleData *data, u16 value);
 BOOL BattleCastleLink_SendPartyMons(BattleCastleData *data);
 
-extern const u8 ov80_0223BE54[];
-extern const u8 ov80_0223BE60[];
+extern const u8 gBattleCastleRoundValues_Single[];
+extern const u8 gBattleCastleRoundValues_Multi[];
 
 void BattleCastleData_SetupNewChallenge(BattleCastleData *data);
 void BattleCastleData_RestoreChallenge(BattleCastleData *data);
@@ -731,15 +731,15 @@ void BattleCastle_PrintPlayerPoints(FrontierSystem *system, Window *window, Play
 }
 #pragma force_active reset
 
-// Value of the current round from ov80_0223BE54 / ov80_0223BE60 (0x14 at 21 / 49 wins of the single challenge).
+// Value of the current round from gBattleCastleRoundValues_Single / gBattleCastleRoundValues_Multi (0x14 at 21 / 49 wins of the single challenge).
 u32 ov80_02233648(BattleCastleData *data) {
     u32 type = data->type;
     u32 round = data->round;
     u32 result;
     if (type <= 1) {
-        result = round >= 8 ? 7 : ov80_0223BE54[round];
+        result = round >= 8 ? 7 : gBattleCastleRoundValues_Single[round];
     } else {
-        result = round >= 8 ? 0x12 : ov80_0223BE60[round];
+        result = round >= 8 ? 0x12 : gBattleCastleRoundValues_Multi[round];
     }
     if (type == 0) {
         u16 winStreak = data->winStreak;

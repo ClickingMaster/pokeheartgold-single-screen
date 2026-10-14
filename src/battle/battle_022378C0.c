@@ -269,7 +269,7 @@ void BattleSystem_ReinitMainBgLayers(BattleSystem *battleSystem) {
 
     battleSystem->resetBlendRequested = 1;
 
-    templates = ov12_0226C120;
+    templates = gBattleReinitBgTemplates;
 
     InitBgFromTemplate(battleSystem->bgConfig, GF_BG_LYR_MAIN_1, &templates.templates[0], 0);
     BgClearTilemapBufferAndCommit(battleSystem->bgConfig, GF_BG_LYR_MAIN_1);

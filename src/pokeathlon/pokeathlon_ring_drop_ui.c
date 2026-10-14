@@ -62,9 +62,9 @@ void PokeathlonCourse_LoadMonPic(void *sprite, void *info, u32 mainScreen, u32 p
 Sprite *PokeathlonCourse_CreateTimerDigitSprite(void *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
 
 // Sprite templates (resources 10001 and 10000) and the windows: name, next name, label.
-extern const ManagedSpriteTemplate ov96_0221D910;
-extern const ManagedSpriteTemplate ov96_0221D944;
-extern const WindowTemplate ov96_0221D8F8[3];
+extern const ManagedSpriteTemplate gPokeathlonRingDropUiSpriteTemplate;
+extern const ManagedSpriteTemplate gPokeathlonRingDropUiTimerSpriteTemplate;
+extern const WindowTemplate gPokeathlonRingDropUiWindowTemplates[3];
 
 #pragma force_active on
 
@@ -337,7 +337,7 @@ void PokeathlonRingDropUi_SetSwitching(PokeathlonRingDropUi *ui, u8 participant,
 #pragma force_active on
 
 ManagedSprite *PokeathlonRingDropUi_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u16 animation, u16 priority) {
-    ManagedSpriteTemplate template = ov96_0221D910;
+    ManagedSpriteTemplate template = gPokeathlonRingDropUiSpriteTemplate;
     ManagedSprite *sprite;
     GF_ASSERT(spriteSystem);
     GF_ASSERT(spriteManager);
@@ -361,7 +361,7 @@ void PokeathlonRingDropUi_AddWindows(PokeathlonRingDropUi *ui) {
         GF_AssertFail();
     }
     for (i = 0; i < 3; i++) {
-        AddWindow(ui->bgConfig, &(&ui->nameWindow)[i], &ov96_0221D8F8[i]);
+        AddWindow(ui->bgConfig, &(&ui->nameWindow)[i], &gPokeathlonRingDropUiWindowTemplates[i]);
     }
     BG_FillCharDataRange(ui->bgConfig, GF_BG_LYR_SUB_1, 0, 1, 0);
     LoadFontPal0(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_15_OFFSET, ui->heapId);
@@ -472,7 +472,7 @@ void PokeathlonRingDropUi_LoadMonIcon(PokeathlonRingDropUi *ui, s32 participant,
 }
 
 void *PokeathlonRingDropUi_NewTimerSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u16 animation, u16 priority) {
-    ManagedSpriteTemplate template = ov96_0221D944;
+    ManagedSpriteTemplate template = gPokeathlonRingDropUiTimerSpriteTemplate;
     void *sprite;
     if (spriteSystem == NULL) {
         GF_AssertFail();

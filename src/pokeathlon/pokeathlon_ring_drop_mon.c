@@ -18,12 +18,12 @@ void PokeathlonCourse_AddMonCounter(void *course, u8 participant, u8 member, int
 u8 *PokeathlonCourse_GetMonStats(void *course, int participant, int member);
 BOOL PlaySEOnPlayer(u16 seqNo, int player);
 
-extern const s16 ov96_0221D6E4[];
+extern const s16 gPokeathlonRingDropMonStartPositions[];
 extern const s16 ov96_0221D6E6[];
 // Jump heights by frame (jump type, frame) and fall speeds by jump type.
-extern const s16 ov96_0221D7D0[5][10];
-extern const u8 ov96_0221D69C[8];
-extern const WindowTemplate ov96_0221D6A4;
+extern const s16 gPokeathlonRingDropJumpHeights[5][10];
+extern const u8 gPokeathlonRingDropFallSpeeds[8];
+extern const WindowTemplate gPokeathlonRingDropScoreWindowTemplate;
 
 void PokeathlonRingDropMon_Respawn(PokeathlonRingDropMon *mon) {
     PokeathlonRingDropMember *member = mon->member;
@@ -36,7 +36,7 @@ void PokeathlonRingDropMon_Respawn(PokeathlonRingDropMon *mon) {
 
 void PokeathlonRingDropMon_ResetToStart(PokeathlonRingDropMon *mon) {
     int x, y;
-    PokeathlonCourseObject_GroundToCenter(mon->member->object, ov96_0221D6E4[mon->flags.bits.participant * 2], ov96_0221D6E6[mon->flags.bits.participant * 2], &x, &y);
+    PokeathlonCourseObject_GroundToCenter(mon->member->object, gPokeathlonRingDropMonStartPositions[mon->flags.bits.participant * 2], ov96_0221D6E6[mon->flags.bits.participant * 2], &x, &y);
     mon->position.x = x << FX32_SHIFT;
     mon->position.y = y << FX32_SHIFT;
     mon->destination.x = x << FX32_SHIFT;
@@ -152,7 +152,7 @@ void PokeathlonRingDropMon_Update(PokeathlonRingDropMon *mon, PokeathlonCourseDa
         }
         break;
     case RING_DROP_MON_JUMP_RISE:
-        mon->height = (s32)((u32)(s32)ov96_0221D7D0[mon->member->params->jumpType][mon->jumpFrames] << FX32_SHIFT);
+        mon->height = (s32)((u32)(s32)gPokeathlonRingDropJumpHeights[mon->member->params->jumpType][mon->jumpFrames] << FX32_SHIFT);
         mon->jumpFrames++;
         if (mon->jumpFrames >= 10) {
             mon->jumpFrames = 10;
@@ -173,7 +173,7 @@ void PokeathlonRingDropMon_Update(PokeathlonRingDropMon *mon, PokeathlonCourseDa
                 PokeathlonRingDropMon_FallOut(mon);
             }
         } else {
-            mon->height = (s32)((u32)mon->height - ((u32)ov96_0221D69C[mon->member->params->jumpType] << FX32_SHIFT));
+            mon->height = (s32)((u32)mon->height - ((u32)gPokeathlonRingDropFallSpeeds[mon->member->params->jumpType] << FX32_SHIFT));
             if (mon->height <= 0) {
                 mon->height = 0;
             }
@@ -440,7 +440,7 @@ BOOL PokeathlonRingDrop_PlaySE(u32 seqNo, BOOL own) {
 }
 
 void PokeathlonRingDrop_AddScoreWindow(PokeathlonRingDrop *ringDrop) {
-    AddWindow(ringDrop->bgConfig, &ringDrop->window, &ov96_0221D6A4);
+    AddWindow(ringDrop->bgConfig, &ringDrop->window, &gPokeathlonRingDropScoreWindowTemplate);
 }
 
 void PokeathlonRingDrop_PrintScore(PokeathlonCourseData *course, u32 score) {

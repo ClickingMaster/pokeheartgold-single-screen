@@ -150,7 +150,7 @@ typedef struct SpriteChangeWork {
 extern const VecFx32 gMapObjectBillboardScale;
 extern const u32 gFacingBillboardStandSequences[];
 extern const u32 gFacingBillboardWalkSequences[];
-extern const u32 ov01_02208B90[];
+extern const u32 sMapObjectFacingSequences[];
 extern const BillboardModelEntry gBillboardModelNarcMembers[];
 extern const BillboardModelEntry gBillboardSequenceNarcMembers[];
 extern const u32 gResidentBillboardModelIds[];
@@ -1262,7 +1262,7 @@ u32 Facing_GetBillboardWalkSequence(u32 facing) {
 }
 
 u32 MapObjectRender_GetFacingSequence(u32 facing) {
-    return ov01_02208B90[facing];
+    return sMapObjectFacingSequences[facing];
 }
 
 #pragma force_active on

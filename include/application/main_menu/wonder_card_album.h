@@ -16,8 +16,8 @@ typedef struct WonderCardAlbum WonderCardAlbum;
 // Prints the variable part of a text box; returns TRUE if the box's message should be printed after it.
 typedef BOOL (*WonderCardTextBoxFunc)(void *data, Window *window, u32 color);
 
-// A text box of the Wonder Card screens (tables in asm data: ov74_0223C340 for the album,
-// ov74_0223C700 for the special card).
+// A text box of the Wonder Card screens (tables in asm data: sWonderCardAlbumTextBoxes for the album,
+// sLockCapsuleCardTextBoxes for the special card).
 typedef struct WonderCardTextBox {
     int page;                   // 0x00, card side it belongs to (0: front, 1: back); 2: kept on both sides
     u32 x;                      // 0x04

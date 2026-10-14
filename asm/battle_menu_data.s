@@ -372,7 +372,7 @@
 	.public _0221DC82
 	.public _0221DC8C
 	.public _0221DC96
-	.public _0221DCA0
+	.public gPokeathlonCirclePushContacts
 	.public _0221DCAA
 	.public _0221DCB4
 	.public _0221DCBC
@@ -1525,52 +1525,52 @@
 	.public sBattlePartyCheckMovesTypeIconPos
 	.public sBattlePartyMoveDetailTypeIconPos
 	.public sBattlePartySummaryTypeIconPos
-	.public ov08_02225404
+	.public sBattlePartyPage7CursorBoxes
 	.public sBattlePartySpriteCapacities
-	.public ov08_02225434
+	.public sBattlePartyPage2CursorBoxes
 	.public sBattlePartyCheckMovesMoveIconPos
-	.public ov08_02225474
-	.public ov08_02225494
+	.public sBattlePartyPage1CursorBoxes
+	.public sBattlePartyPage4CursorBoxes
 	.public sBattlePartyPageCursorBoxes
-	.public ov08_022254E4
+	.public sBattlePartyPage5CursorBoxes
 	.public sBattlePartyLearnMoveMoveIconPos
 	.public sBattlePartyListIconPos
 	.public sBattlePartyListStatusIconPos
-	.public ov08_02225594
-	.public ov08_022255CC
-	.public ov08_02225604
+	.public sBattlePartyPage0CursorBoxes
+	.public sBattlePartyPage6CursorBoxes
+	.public sBattlePartyPage3CursorBoxes
 	.public sBattlePartySpriteTemplates
 	.public sBattlePartySpriteTemplatesPltt
 	.public sBattlePartySpriteTemplatesCell
 	.public sBattlePartySpriteTemplatesAnim
 	.public sBattlePartySpriteTemplatesPriority
-	.public ov08_02225950
-	.public ov08_02225954
-	.public ov08_02225958
-	.public ov08_0222595C
-	.public ov08_02225960
-	.public ov08_02225964
-	.public ov08_02225968
-	.public ov08_0222596C
-	.public ov08_02225970
-	.public ov08_02225974
-	.public ov08_02225978
-	.public ov08_0222597C
-	.public ov08_02225980
-	.public ov08_02225984
-	.public ov08_02225988
-	.public ov08_0222598C
-	.public ov08_02225990
-	.public ov08_02225994
-	.public ov08_02225998
-	.public ov08_0222599C
-	.public ov08_022259A0
-	.public ov08_022259A4
-	.public ov08_022259A8
+	.public sBattlePartyButton8Windows
+	.public sBattlePartyButton10Windows
+	.public sBattlePartyButton4Windows
+	.public sBattlePartyButton23Windows
+	.public sBattlePartyButton1Windows
+	.public sBattlePartyButton28Windows
+	.public sBattlePartyButton0Windows
+	.public sBattlePartyButton3Windows
+	.public sBattlePartyButton5Windows
+	.public sBattlePartyButton24Windows
+	.public sBattlePartyButton29Windows
+	.public sBattlePartyButton22Windows
+	.public sBattlePartyButton21Windows
+	.public sBattlePartyButton20Windows
+	.public sBattlePartyButton27Windows
+	.public sBattlePartyButton19Windows
+	.public sBattlePartyButton26Windows
+	.public sBattlePartyButton2Windows
+	.public sBattlePartyButton25Windows
+	.public sBattlePartyButton9Windows
+	.public sBattlePartyButton11Windows
+	.public sBattlePartyButton7Windows
+	.public sBattlePartyButton14Windows
 	.public sBattlePartyButtonScrollAmounts
-	.public ov08_022259B0
-	.public ov08_022259B4
-	.public ov08_022259B8
+	.public sBattlePartyButton15Windows
+	.public sBattlePartyButton16Windows
+	.public sBattlePartyButton17Windows
 	.public sBattlePartySlotButtonScrollAmounts
 	.public sBattlePartyButtonSpriteOffsets
 	.public sBattlePartySlotButtonSpriteOffsets
@@ -1595,36 +1595,36 @@
 	.public sBattleBagPocketOrder
 	.public ov08_02225CE8
 	.public sBattleBagPageCursorBoxes
-	.public ov08_02225D04
+	.public sBattleBagPage2CursorBoxes
 	.public sBattleBagSpriteCapacities
 	.public sBattleBagTutorialFingerPos
 	.public sBattleBagTutorialFingerPosY
-	.public ov08_02225D44
+	.public sBattleBagPage0CursorBoxes
 	.public sBattleBagItemListIconPos
-	.public ov08_02225DA4
+	.public sBattleBagPage1CursorBoxes
 	.public sBattleBagSpriteTemplates
 	.public sBattleBagSpriteTemplatesPltt
 	.public sBattleBagSpriteTemplatesCell
 	.public sBattleBagSpriteTemplatesAnim
 	.public sBattleBagSpriteTemplatesPriority
-	.public ov08_02225E54
-	.public ov08_02225E58
-	.public ov08_02225E5C
-	.public ov08_02225E60
-	.public ov08_02225E64
-	.public ov08_02225E68
-	.public ov08_02225E6C
-	.public ov08_02225E70
-	.public ov08_02225E74
-	.public ov08_02225E78
-	.public ov08_02225E7C
-	.public ov08_02225E80
-	.public ov08_02225E84
-	.public ov08_02225E88
-	.public ov08_02225E8C
-	.public ov08_02225E90
-	.public ov08_02225E94
-	.public ov08_02225E98
+	.public sBattleBagButton3Windows
+	.public sBattleBagButton15Windows
+	.public sBattleBagButton1Windows
+	.public sBattleBagButton4Windows
+	.public sBattleBagButton2Windows
+	.public sBattleBagButton0Windows
+	.public sBattleBagButton18Windows
+	.public sBattleBagButton19Windows
+	.public sBattleBagButton22Windows
+	.public sBattleBagButton9Windows
+	.public sBattleBagButton8Windows
+	.public sBattleBagButton7Windows
+	.public sBattleBagButton6Windows
+	.public sBattleBagButton10Windows
+	.public sBattleBagButton20Windows
+	.public sBattleBagButton11Windows
+	.public sBattleBagButton17Windows
+	.public sBattleBagButton21Windows
 	.public sBattleBagButtonRects
 	.public sBattleBagButtonRectsY
 	.public sBattleBagButtonRectsWidth
@@ -1820,7 +1820,7 @@ sBattlePartySummaryTypeIconPos: ; 0x022253F4
 	.byte 0x82, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0xA4, 0x00, 0x00, 0x00
 	.byte 0x10, 0x00, 0x00, 0x00
 
-ov08_02225404:
+sBattlePartyPage7CursorBoxes:
 	.byte 0x08, 0xA0, 0xC8, 0xB8, 0x01, 0x00, 0x00, 0x02, 0xC0, 0x08, 0xF8, 0x18
 	.byte 0x01, 0x82, 0x00, 0x01, 0xE0, 0xA0, 0xF8, 0xB8, 0x01, 0x02, 0x00, 0x02
 
@@ -1829,7 +1829,7 @@ sBattlePartySpriteCapacities: ; 0x0222541C
 	.byte 0x06, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov08_02225434:
+sBattlePartyPage2CursorBoxes:
 	.byte 0x08, 0xA0, 0x20, 0xB8, 0x00, 0x00, 0x00, 0x01, 0x30, 0xA0, 0x48, 0xB8
 	.byte 0x01, 0x01, 0x00, 0x02, 0x68, 0xA0, 0xC0, 0xB8, 0x02, 0x02, 0x01, 0x03, 0xE0, 0xA0, 0xF8, 0xB8
 	.byte 0x03, 0x03, 0x02, 0x03
@@ -1839,29 +1839,29 @@ sBattlePartyCheckMovesMoveIconPos: ; 0x02225454
 	.byte 0x50, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x98, 0x00, 0x00, 0x00
 	.byte 0x80, 0x00, 0x00, 0x00
 
-ov08_02225474:
+sBattlePartyPage1CursorBoxes:
 	.byte 0x10, 0x10, 0xF0, 0x88, 0x00, 0x81, 0x00, 0x00, 0x08, 0xA0, 0x60, 0xB8
 	.byte 0x00, 0x01, 0x01, 0x02, 0x70, 0xA0, 0xC8, 0xB8, 0x00, 0x02, 0x01, 0x03, 0xE0, 0xA0, 0xF8, 0xB8
 	.byte 0x00, 0x03, 0x02, 0x03
 
-ov08_02225494:
+sBattlePartyPage4CursorBoxes:
 	.byte 0x5C, 0x9D, 0x7C, 0xA5, 0x00, 0x02, 0x00, 0x01, 0x84, 0x9D, 0xA4, 0xA5
 	.byte 0x01, 0x03, 0x00, 0x04, 0x5C, 0xAD, 0x7C, 0xB5, 0x00, 0x02, 0x02, 0x03, 0x84, 0xAD, 0xA4, 0xB5
 	.byte 0x01, 0x03, 0x02, 0x04, 0xE0, 0xA0, 0xF8, 0xB8, 0x04, 0x04, 0x83, 0x04
 
 sBattlePartyPageCursorBoxes: ; 0x022254BC
-	.word ov08_02225594
-	.word ov08_02225474
-	.word ov08_02225434
-	.word ov08_02225604
-	.word ov08_02225494
-	.word ov08_022254E4
-	.word ov08_022255CC
-	.word ov08_02225404
-	.word ov08_022255CC
-	.word ov08_02225404
+	.word sBattlePartyPage0CursorBoxes
+	.word sBattlePartyPage1CursorBoxes
+	.word sBattlePartyPage2CursorBoxes
+	.word sBattlePartyPage3CursorBoxes
+	.word sBattlePartyPage4CursorBoxes
+	.word sBattlePartyPage5CursorBoxes
+	.word sBattlePartyPage6CursorBoxes
+	.word sBattlePartyPage7CursorBoxes
+	.word sBattlePartyPage6CursorBoxes
+	.word sBattlePartyPage7CursorBoxes
 
-ov08_022254E4:
+sBattlePartyPage5CursorBoxes:
 	.byte 0x08, 0x38, 0x78, 0x58, 0x00, 0x02, 0x00, 0x01, 0x88, 0x38, 0xF8, 0x58
 	.byte 0x01, 0x03, 0x00, 0x01, 0x08, 0x68, 0x78, 0x88, 0x00, 0x04, 0x02, 0x03, 0x88, 0x68, 0xF8, 0x88
 	.byte 0x01, 0x04, 0x02, 0x03, 0xE0, 0xA0, 0xF8, 0xB8, 0x83, 0x04, 0x04, 0x04
@@ -1884,20 +1884,20 @@ sBattlePartyListStatusIconPos: ; 0x02225564
 	.byte 0x60, 0x00, 0x00, 0x00, 0x1C, 0x00, 0x00, 0x00, 0x88, 0x00, 0x00, 0x00, 0x9C, 0x00, 0x00, 0x00
 	.byte 0x90, 0x00, 0x00, 0x00
 
-ov08_02225594:
+sBattlePartyPage0CursorBoxes:
 	.byte 0x08, 0x08, 0x78, 0x28, 0x06, 0x02, 0x06, 0x01, 0x88, 0x10, 0xF8, 0x30
 	.byte 0x04, 0x03, 0x00, 0x02, 0x08, 0x38, 0x78, 0x58, 0x00, 0x04, 0x01, 0x03, 0x88, 0x40, 0xF8, 0x60
 	.byte 0x01, 0x05, 0x02, 0x04, 0x08, 0x68, 0x78, 0x88, 0x02, 0x01, 0x03, 0x05, 0x88, 0x70, 0xF8, 0x90
 	.byte 0x03, 0x06, 0x04, 0x06, 0xE0, 0xA0, 0xF8, 0xB8, 0x05, 0x00, 0x05, 0x00
 
-ov08_022255CC:
+sBattlePartyPage6CursorBoxes:
 	.byte 0x08, 0x38, 0x78, 0x58
 	.byte 0x05, 0x02, 0x00, 0x01, 0x88, 0x38, 0xF8, 0x58, 0x05, 0x03, 0x00, 0x01, 0x08, 0x68, 0x78, 0x88
 	.byte 0x00, 0x04, 0x02, 0x03, 0x88, 0x68, 0xF8, 0x88, 0x01, 0x06, 0x02, 0x03, 0x48, 0x98, 0xB8, 0xB8
 	.byte 0x02, 0x04, 0x04, 0x06, 0xC0, 0x08, 0xF8, 0x18, 0x05, 0x81, 0x00, 0x05, 0xE0, 0xA0, 0xF8, 0xB8
 	.byte 0x03, 0x06, 0x04, 0x06
 
-ov08_02225604:
+sBattlePartyPage3CursorBoxes:
 	.byte 0x08, 0x38, 0x78, 0x58, 0x00, 0x02, 0x00, 0x01, 0x88, 0x38, 0xF8, 0x58
 	.byte 0x01, 0x03, 0x00, 0x01, 0x08, 0x68, 0x78, 0x88, 0x00, 0x84, 0x02, 0x03, 0x88, 0x68, 0xF8, 0x88
 	.byte 0x01, 0x87, 0x02, 0x03, 0x08, 0xA0, 0x20, 0xB8, 0x02, 0x04, 0x04, 0x05, 0x30, 0xA0, 0x48, 0xB8
@@ -1966,85 +1966,85 @@ sBattlePartySpriteTemplatesPriority: ; 0x02225654
 	.byte 0x0A, 0xB0, 0x00, 0x00, 0x0A, 0xB0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x16, 0xB0, 0x00, 0x00
 	.byte 0x0A, 0xB0, 0x00, 0x00, 0x0A, 0xB0, 0x00, 0x00, 0x0A, 0xB0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov08_02225950:
+sBattlePartyButton8Windows:
 	.byte 0x02, 0xFF, 0x00, 0x00
 
-ov08_02225954:
+sBattlePartyButton10Windows:
 	.byte 0x03, 0xFF, 0x00, 0x00
 
-ov08_02225958:
+sBattlePartyButton4Windows:
 	.byte 0x04, 0xFF, 0x00, 0x00
 
-ov08_0222595C:
+sBattlePartyButton23Windows:
 	.byte 0x01, 0xFF, 0x00, 0x00
 
-ov08_02225960:
+sBattlePartyButton1Windows:
 	.byte 0x01, 0xFF, 0x00, 0x00
 
-ov08_02225964:
+sBattlePartyButton28Windows:
 	.byte 0x0B, 0xFF, 0x00, 0x00
 
-ov08_02225968:
+sBattlePartyButton0Windows:
 	.byte 0x00, 0xFF, 0x00, 0x00
 
-ov08_0222596C:
+sBattlePartyButton3Windows:
 	.byte 0x03, 0xFF, 0x00, 0x00
 
-ov08_02225970:
+sBattlePartyButton5Windows:
 	.byte 0x05, 0xFF, 0x00, 0x00
 
-ov08_02225974:
+sBattlePartyButton24Windows:
 	.byte 0x02, 0xFF, 0x00, 0x00
 
-ov08_02225978:
+sBattlePartyButton29Windows:
 	.byte 0x06, 0xFF, 0x00, 0x00
 
-ov08_0222597C:
+sBattlePartyButton22Windows:
 	.byte 0x04, 0xFF, 0x00, 0x00
 
-ov08_02225980:
+sBattlePartyButton21Windows:
 	.byte 0x03, 0xFF, 0x00, 0x00
 
-ov08_02225984:
+sBattlePartyButton20Windows:
 	.byte 0x02, 0xFF, 0x00, 0x00
 
-ov08_02225988:
+sBattlePartyButton27Windows:
 	.byte 0x05, 0xFF, 0x00, 0x00
 
-ov08_0222598C:
+sBattlePartyButton19Windows:
 	.byte 0x01, 0xFF, 0x00, 0x00
 
-ov08_02225990:
+sBattlePartyButton26Windows:
 	.byte 0x04, 0xFF, 0x00, 0x00
 
-ov08_02225994:
+sBattlePartyButton2Windows:
 	.byte 0x02, 0xFF, 0x00, 0x00
 
-ov08_02225998:
+sBattlePartyButton25Windows:
 	.byte 0x03, 0xFF, 0x00, 0x00
 
-ov08_0222599C:
+sBattlePartyButton9Windows:
 	.byte 0x05, 0xFF, 0x00, 0x00
 
-ov08_022259A0:
+sBattlePartyButton11Windows:
 	.byte 0x15, 0xFF, 0x00, 0x00
 
-ov08_022259A4:
+sBattlePartyButton7Windows:
 	.byte 0x00, 0x01, 0xFF, 0x00
 
-ov08_022259A8:
+sBattlePartyButton14Windows:
 	.byte 0x07, 0x01, 0xFF, 0x00
 
 sBattlePartyButtonScrollAmounts: ; 0x022259AC
 	.byte 0x02, 0x04, 0x02, 0x00
 
-ov08_022259B0:
+sBattlePartyButton15Windows:
 	.byte 0x08, 0x02, 0xFF, 0x00
 
-ov08_022259B4:
+sBattlePartyButton16Windows:
 	.byte 0x09, 0x03, 0xFF, 0x00
 
-ov08_022259B8:
+sBattlePartyButton17Windows:
 	.byte 0x0A, 0x04, 0xFF, 0x00
 
 sBattlePartySlotButtonScrollAmounts: ; 0x022259BC
@@ -2057,36 +2057,36 @@ sBattlePartySlotButtonSpriteOffsets: ; 0x022259C6
 	.byte 0x02, 0x00, 0xFD, 0xFF, 0x01, 0x00
 
 sBattlePartyButtonWindowLists: ; 0x022259CC
-	.word ov08_02225968
-	.word ov08_02225960
-	.word ov08_02225994
-	.word ov08_0222596C
-	.word ov08_02225958
-	.word ov08_02225970
+	.word sBattlePartyButton0Windows
+	.word sBattlePartyButton1Windows
+	.word sBattlePartyButton2Windows
+	.word sBattlePartyButton3Windows
+	.word sBattlePartyButton4Windows
+	.word sBattlePartyButton5Windows
 	.word 0
-	.word ov08_022259A4
-	.word ov08_02225950
-	.word ov08_0222599C
-	.word ov08_02225954
-	.word ov08_022259A0
+	.word sBattlePartyButton7Windows
+	.word sBattlePartyButton8Windows
+	.word sBattlePartyButton9Windows
+	.word sBattlePartyButton10Windows
+	.word sBattlePartyButton11Windows
 	.word 0
 	.word 0
-	.word ov08_022259A8
-	.word ov08_022259B0
-	.word ov08_022259B4
-	.word ov08_022259B8
+	.word sBattlePartyButton14Windows
+	.word sBattlePartyButton15Windows
+	.word sBattlePartyButton16Windows
+	.word sBattlePartyButton17Windows
 	.word 0
-	.word ov08_0222598C
-	.word ov08_02225984
-	.word ov08_02225980
-	.word ov08_0222597C
-	.word ov08_0222595C
-	.word ov08_02225974
-	.word ov08_02225998
-	.word ov08_02225990
-	.word ov08_02225988
-	.word ov08_02225964
-	.word ov08_02225978
+	.word sBattlePartyButton19Windows
+	.word sBattlePartyButton20Windows
+	.word sBattlePartyButton21Windows
+	.word sBattlePartyButton22Windows
+	.word sBattlePartyButton23Windows
+	.word sBattlePartyButton24Windows
+	.word sBattlePartyButton25Windows
+	.word sBattlePartyButton26Windows
+	.word sBattlePartyButton27Windows
+	.word sBattlePartyButton28Windows
+	.word sBattlePartyButton29Windows
 	.word 0
 	.word 0
 	.word 0
@@ -2187,11 +2187,11 @@ ov08_02225CE8:
 	.byte 0x18, 0x00, 0x00, 0x00, 0xB2, 0x00, 0x00, 0x00
 
 sBattleBagPageCursorBoxes: ; 0x02225CF8
-	.word ov08_02225D44
-	.word ov08_02225DA4
-	.word ov08_02225D04
+	.word sBattleBagPage0CursorBoxes
+	.word sBattleBagPage1CursorBoxes
+	.word sBattleBagPage2CursorBoxes
 
-ov08_02225D04:
+sBattleBagPage2CursorBoxes:
 	.byte 0x08, 0xA0, 0xC8, 0xB8, 0x00, 0x00, 0x00, 0x01, 0xE0, 0xA0, 0xF8, 0xB8, 0x01, 0x01, 0x00, 0x01
 
 sBattleBagSpriteCapacities: ; 0x02225D14
@@ -2205,7 +2205,7 @@ sBattleBagTutorialFingerPosY: ; 0x02225D30
 	.byte 0x18, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x68, 0x00, 0x00, 0x00
 	.byte 0x98, 0x00, 0x00, 0x00
 
-ov08_02225D44:
+sBattleBagPage0CursorBoxes:
 	.byte 0x08, 0x10, 0x78, 0x48, 0x00, 0x01, 0x00, 0x02, 0x08, 0x58, 0x78, 0x90
 	.byte 0x00, 0x04, 0x01, 0x03, 0x88, 0x10, 0xF8, 0x48, 0x02, 0x03, 0x00, 0x02, 0x88, 0x58, 0xF8, 0x90
 	.byte 0x02, 0x05, 0x01, 0x03, 0x08, 0xA0, 0xC8, 0xB8, 0x01, 0x04, 0x04, 0x05, 0xE0, 0xA0, 0xF8, 0xB8
@@ -2217,7 +2217,7 @@ sBattleBagItemListIconPos: ; 0x02225D74
 	.byte 0x5D, 0x00, 0x00, 0x00, 0x2C, 0x00, 0x00, 0x00, 0x8D, 0x00, 0x00, 0x00, 0xAC, 0x00, 0x00, 0x00
 	.byte 0x8D, 0x00, 0x00, 0x00
 
-ov08_02225DA4:
+sBattleBagPage1CursorBoxes:
 	.byte 0x08, 0x10, 0x78, 0x30, 0x00, 0x02, 0x00, 0x01, 0x88, 0x10, 0xF8, 0x30
 	.byte 0x01, 0x03, 0x00, 0x01, 0x08, 0x40, 0x78, 0x60, 0x00, 0x04, 0x02, 0x03, 0x88, 0x40, 0xF8, 0x60
 	.byte 0x01, 0x05, 0x02, 0x03, 0x08, 0x70, 0x78, 0x90, 0x02, 0x06, 0x04, 0x05, 0x88, 0x70, 0xF8, 0x90
@@ -2245,58 +2245,58 @@ sBattleBagSpriteTemplatesPriority: ; 0x02225DEC
 	.byte 0xBC, 0xB4, 0x00, 0x00, 0xBC, 0xB4, 0x00, 0x00, 0xB7, 0xB4, 0x00, 0x00, 0xB7, 0xB4, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00
 
-ov08_02225E54:
+sBattleBagButton3Windows:
 	.byte 0x03, 0xFF, 0x00, 0x00
 
-ov08_02225E58:
+sBattleBagButton15Windows:
 	.byte 0x03, 0xFF, 0x00, 0x00
 
-ov08_02225E5C:
+sBattleBagButton1Windows:
 	.byte 0x01, 0xFF, 0x00, 0x00
 
-ov08_02225E60:
+sBattleBagButton4Windows:
 	.byte 0x04, 0xFF, 0x00, 0x00
 
-ov08_02225E64:
+sBattleBagButton2Windows:
 	.byte 0x02, 0xFF, 0x00, 0x00
 
-ov08_02225E68:
+sBattleBagButton0Windows:
 	.byte 0x00, 0xFF, 0x00, 0x00
 
-ov08_02225E6C:
+sBattleBagButton18Windows:
 	.byte 0x0E, 0x0F, 0xFF, 0x00
 
-ov08_02225E70:
+sBattleBagButton19Windows:
 	.byte 0x10, 0x11, 0xFF, 0x00
 
-ov08_02225E74:
+sBattleBagButton22Windows:
 	.byte 0x16, 0x17, 0xFF, 0x00
 
-ov08_02225E78:
+sBattleBagButton9Windows:
 	.byte 0x06, 0x07, 0xFF, 0x00
 
-ov08_02225E7C:
+sBattleBagButton8Windows:
 	.byte 0x04, 0x05, 0xFF, 0x00
 
-ov08_02225E80:
+sBattleBagButton7Windows:
 	.byte 0x02, 0x03, 0xFF, 0x00
 
-ov08_02225E84:
+sBattleBagButton6Windows:
 	.byte 0x00, 0x01, 0xFF, 0x00
 
-ov08_02225E88:
+sBattleBagButton10Windows:
 	.byte 0x08, 0x09, 0xFF, 0x00
 
-ov08_02225E8C:
+sBattleBagButton20Windows:
 	.byte 0x12, 0x13, 0xFF, 0x00
 
-ov08_02225E90:
+sBattleBagButton11Windows:
 	.byte 0x0A, 0x0B, 0xFF, 0x00
 
-ov08_02225E94:
+sBattleBagButton17Windows:
 	.byte 0x0C, 0x0D, 0xFF, 0x00
 
-ov08_02225E98:
+sBattleBagButton21Windows:
 	.byte 0x14, 0x15, 0xFF, 0x00
 
 sBattleBagButtonRects: ; 0x02225E9C
@@ -2316,26 +2316,26 @@ sBattleBagButtonRectsHeight: ; 0x02225E9F
 	.byte 0x25, 0x13, 0x05, 0x05, 0x3B, 0x13, 0x05, 0x05, 0x00, 0x33, 0x1A, 0x05, 0x1B, 0x33, 0x05, 0x05
 
 sBattleBagButtonWindowLists: ; 0x02225EE0
-	.word ov08_02225E68
-	.word ov08_02225E5C
-	.word ov08_02225E64
-	.word ov08_02225E54
-	.word ov08_02225E60
+	.word sBattleBagButton0Windows
+	.word sBattleBagButton1Windows
+	.word sBattleBagButton2Windows
+	.word sBattleBagButton3Windows
+	.word sBattleBagButton4Windows
 	.word 0
-	.word ov08_02225E84
-	.word ov08_02225E80
-	.word ov08_02225E7C
-	.word ov08_02225E78
-	.word ov08_02225E88
-	.word ov08_02225E90
+	.word sBattleBagButton6Windows
+	.word sBattleBagButton7Windows
+	.word sBattleBagButton8Windows
+	.word sBattleBagButton9Windows
+	.word sBattleBagButton10Windows
+	.word sBattleBagButton11Windows
 	.word 0
 	.word 0
 	.word 0
-	.word ov08_02225E58
+	.word sBattleBagButton15Windows
 	.word 0
-	.word ov08_02225E94
-	.word ov08_02225E6C
-	.word ov08_02225E70
-	.word ov08_02225E8C
-	.word ov08_02225E98
-	.word ov08_02225E74
+	.word sBattleBagButton17Windows
+	.word sBattleBagButton18Windows
+	.word sBattleBagButton19Windows
+	.word sBattleBagButton20Windows
+	.word sBattleBagButton21Windows
+	.word sBattleBagButton22Windows

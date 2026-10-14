@@ -53,7 +53,7 @@ extern "C" HandlerVtbl gLobbyRequestVtable, gLobbyGetChannelModeRequestVtable;
 extern "C" const u32 gLobbyChatNextRequestId;
 
 struct Mgr {
-    void *unk0;
+    void *connection;
     u32 state;
     u8 pad[0x88];
     u8 list[1];
@@ -135,7 +135,7 @@ extern "C" int LobbyChat_GetChannelModeAsync(const char *name, u32 a, u32 b) {
     u32 id = GetId(h, IdTag(), IdTag());
     Str s(name);
     Str t = LobbyChat_GetFullChannelName(GetMgr(), s);
-    chatGetChannelModeA(GetMgr()->unk0, t.c_str(), LobbyChat_OnGetChannelMode, id, 0);
+    chatGetChannelModeA(GetMgr()->connection, t.c_str(), LobbyChat_OnGetChannelMode, id, 0);
     t.destroy();
     s.destroy();
     return 0;

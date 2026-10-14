@@ -325,7 +325,7 @@
 .public DWC_NASLoginProcess
 .public DWC_ShutdownFriendsMatch
 .public DWC_ShutdownGHTTP
-.public _0223F900
+.public gBattleArcadeEventColorThresholds
 .public GameStats_Start
 .public GameStats_PrepareRequest
 .public GameStats_Update

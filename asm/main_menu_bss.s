@@ -91,9 +91,9 @@
 	.extern RangerLink_GetSsid
 	.extern RangerLink_GetPacketHeaderSize
 	.public sMysteryGiftCommWork
-	.public ov74_0223D0A8
-	.public ov74_0223D0BC
-	.public ov74_0223D0C0
+	.public sMysteryGiftLinkState
+	.public sWonderCardAlbumMenuInput
+	.public sLockCapsuleCardMenuInput
 	.public gRangerLinkWork
 	.public sMigrateFromAgbIcons
 	.public sPmAgbSave
@@ -104,13 +104,13 @@
 sMysteryGiftCommWork: ; 0x0223D0A4
 	.space 0x4
 
-ov74_0223D0A8: ; 0x0223D0A8
+sMysteryGiftLinkState: ; 0x0223D0A8
 	.space 0x14
 
-ov74_0223D0BC: ; 0x0223D0BC
+sWonderCardAlbumMenuInput: ; 0x0223D0BC
 	.space 0x4
 
-ov74_0223D0C0: ; 0x0223D0C0
+sLockCapsuleCardMenuInput: ; 0x0223D0C0
 	.space 0x4
 
 	.public gRangerLinkWork
