@@ -1107,14 +1107,14 @@ void BattlePartyMenu_InitBgs(BattlePartyMenu *menu) {
     graphicsModes = sBattlePartyGraphicsModes;
     SetScreenModeAndDisable(&graphicsModes, SCREEN_SUB);
     template3 = sBattlePartyBgTemplateSub3;
-    InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_3, &template3, 0);
+    InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_3, &template3, GF_BG_TYPE_TEXT);
     template2 = sBattlePartyBgTemplateSub2;
-    InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_2, &template2, 0);
+    InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_2, &template2, GF_BG_TYPE_TEXT);
     template1 = sBattlePartyBgTemplateSub1;
-    InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_1, &template1, 0);
+    InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_1, &template1, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(menu->bgConfig, GF_BG_LYR_SUB_1);
     template0 = sBattlePartyBgTemplateSub0;
-    InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_0, &template0, 0);
+    InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_0, &template0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(menu->bgConfig, GF_BG_LYR_SUB_0);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_1, 0x20, 0, menu->context->heapID);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 0x20, 0, menu->context->heapID);
@@ -2654,7 +2654,7 @@ void BattlePartyMenu_PrintMessage(BattlePartyMenu *menu) {
 void BattlePartyMenu_BufferItemResultMessage(BattlePartyMenu *menu) {
     BattlePartyContext *context = menu->context;
     Pokemon *mon;
-    void *itemData;
+    ItemData *itemData;
     u16 hp;
     u8 healed;
     u16 prevHp;

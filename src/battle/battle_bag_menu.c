@@ -690,16 +690,16 @@ void BattleBagMenu_InitBgs(BattleBagMenu *menu) {
     SetScreenModeAndDisable(&graphicsModes, SCREEN_SUB);
     {
         BgTemplate template = sBattleBagBgTemplateSub2;
-        InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_2, &template, 0);
+        InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_2, &template, GF_BG_TYPE_TEXT);
     }
     {
         BgTemplate template = sBattleBagBgTemplateSub1;
-        InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_1, &template, 0);
+        InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_1, &template, GF_BG_TYPE_TEXT);
     }
     BgClearTilemapBufferAndCommit(menu->bgConfig, GF_BG_LYR_SUB_1);
     {
         BgTemplate template = sBattleBagBgTemplateSub0;
-        InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_0, &template, 0);
+        InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_0, &template, GF_BG_TYPE_TEXT);
     }
     BgClearTilemapBufferAndCommit(menu->bgConfig, GF_BG_LYR_SUB_0);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_1, 0x20, 0, menu->context->heapID);

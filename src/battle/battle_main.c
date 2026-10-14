@@ -402,11 +402,11 @@ void Battle_InitBackgrounds(BattleSystem *battleSystem, BgConfig *bgConfig) {
 
     templates = gBattleBgTemplates;
 
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &templates.templates[0], 0);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &templates.templates[0], GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &templates.templates[1], 0);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &templates.templates[1], GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &templates.templates[2], 0);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &templates.templates[2], GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
 
     G2_SetBG0Priority(1);
@@ -1034,7 +1034,7 @@ void Battle_LinkInit(OverlayManager *man, BattleSetup *setup) {
     modes = sLinkGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     bgTemplate = sLinkBgTemplate;
-    InitBgFromTemplate(work->bgConfig, GF_BG_LYR_MAIN_1, &bgTemplate, 0);
+    InitBgFromTemplate(work->bgConfig, GF_BG_LYR_MAIN_1, &bgTemplate, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_MAIN_1);
     frame = Options_GetFrame(setup->options);
     LoadUserFrameGfx2WithFill(work->bgConfig, GF_BG_LYR_MAIN_1, 1, 10, (u8)frame, HEAP_ID_BATTLE);

@@ -1688,7 +1688,7 @@ void BallThrow_CreateSprite(BallThrow *data) {
     }
     data->managedSprite = SpriteSystem_NewSprite(data->params.spriteSystem, data->spriteManager, &template);
     ManagedSprite_SetDrawFlag(data->managedSprite, TRUE);
-    ManagedSprite_SetAffineOverwriteMode(data->managedSprite, 2);
+    ManagedSprite_SetAffineOverwriteMode(data->managedSprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     ManagedSprite_SetAnimationFrame(data->managedSprite, 0);
     ManagedSprite_SetAnim(data->managedSprite, 0);
     ManagedSprite_TickFrame(data->managedSprite);

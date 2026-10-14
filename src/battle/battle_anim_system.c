@@ -106,7 +106,7 @@ typedef struct BattleAnimBgWaveBand {
 
 typedef struct BattleAnimBgWaveBands {
     BattleAnimBgWaveBand bands[16];
-    void *scanline;
+    BattleAnimScanline *scanline;
 } BattleAnimBgWaveBands;
 
 // Background effect kind 2: BG wave through the HBlank scanline buffer
@@ -1418,7 +1418,7 @@ static inline u32 ReadScriptWord(BattleAnimSystem *system) {
 #pragma force_active on
 
 void BattleAnimScriptCmd_CreateBattlerSprite(BattleAnimSystem *system) {
-    void *pixels;
+    u8 *pixels;
     u32 role, follow, slot, resId;
     int battler;
     u32 resIds[6];
@@ -3095,7 +3095,7 @@ BattleAnimBattlerSprites *BattleAnimBattlerSprites_New(BattleSystem *battleSyste
     }
     NARC_Delete(narc);
     for (slot = 0; slot < 4; slot++) {
-        void *pixels;
+        u8 *pixels;
         int x;
         if (slot != sprites->battler && sprites->battler != 0xFF) {
             continue;

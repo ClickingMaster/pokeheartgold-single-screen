@@ -113,7 +113,7 @@ static const u16 sTerrainPaletteFiles[][3] __attribute__((aligned(4))) = {
 
 void BattleTerrain_LoadResources(BattleTerrain *terrain) {
     u32 r6;
-    void *narc = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
+    NARC *narc = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
 
     SpriteSystem *spriteSystem = BattleSystem_GetSpriteSystem(terrain->battleSystem);
     SpriteManager *spriteManager = BattleSystem_GetSpriteManager(terrain->battleSystem);
@@ -138,7 +138,7 @@ void BattleTerrain_LoadResources(BattleTerrain *terrain) {
     }
     SpriteSystem_LoadCharResObjFromOpenNarc(spriteSystem, spriteManager, narc, charFile, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, charResId);
 
-    void *palette = BattleSystem_GetPaletteData(terrain->battleSystem);
+    PaletteData *palette = BattleSystem_GetPaletteData(terrain->battleSystem);
     SpriteSystem_LoadPaletteBufferFromOpenNarc(palette, PLTTBUF_MAIN_OBJ, spriteSystem, spriteManager, narc, sTerrainPaletteFiles[terrain->terrainId][subfile], FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, UNK_RES_4E29);
 
     palette = BattleSystem_GetPaletteData(terrain->battleSystem);

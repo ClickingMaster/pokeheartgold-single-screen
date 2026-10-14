@@ -707,7 +707,7 @@ void BattleAnimFunc_FadeInShrinkSprite(BattleAnimSystem *system) {
     BattleAnimUtil_InitValueMotionFx(&work->blend, 0, 16, 8);
     ManagedSprite_SetOamMode(work->sprite, GX_OAM_MODE_XLU);
     BattleAnimUtil_SetBlendWithBattleBg(work->system, 0, 31);
-    ManagedSprite_SetAffineOverwriteMode(work->sprite, 2);
+    ManagedSprite_SetAffineOverwriteMode(work->sprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     if (work->flipX == TRUE) {
         ManagedSprite_SetAffineScale(work->sprite, -1.4f, 1.4f);
     } else {
@@ -940,7 +940,7 @@ void BattleAnimSpriteFunc_GrowRockShrinkSprite(BattleAnimSystem *system, SpriteS
     s16 x = BattleAnimSystem_GetBattlerScreenCoord(system, BattleAnimSystem_GetAttacker(work->system), 0);
     s16 y = BattleAnimSystem_GetBattlerScreenCoord(system, BattleAnimSystem_GetAttacker(work->system), 1);
     work->sprite = sprite;
-    ManagedSprite_SetAffineOverwriteMode(sprite, 2);
+    ManagedSprite_SetAffineOverwriteMode(sprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     ManagedSprite_SetAffineScale(work->sprite, 1.0f, 1.0f);
     ManagedSprite_SetPositionXY(work->sprite, x, y);
     ManagedSprite_OffsetPositionXY(work->sprite, (s16)(direction * 40), 0);
@@ -974,7 +974,7 @@ void BattleAnimScaleSprite_Init(BattleAnimScaleSprite *scaleSprite, ManagedSprit
     scaleSprite->flip = flip;
     ManagedSprite_SetPositionXY(scaleSprite->sprite, x, y);
     ManagedSprite_SetPositionXY(scaleSprite->sprite, x, y);
-    ManagedSprite_SetAffineOverwriteMode(scaleSprite->sprite, 2);
+    ManagedSprite_SetAffineOverwriteMode(scaleSprite->sprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     ManagedSprite_SetDrawPriority(scaleSprite->sprite, 100);
     ManagedSprite_SetPriority(scaleSprite->sprite, 1);
     if (flip) {
@@ -1329,7 +1329,7 @@ void BattleAnimSpriteFunc_RisingSpriteStretchAttacker(BattleAnimSystem *system, 
     BattleAnimUtil_InitScaleMotion(&work->picScale, 10, 10, 15, 12);
     work->sprite = sprite;
     ManagedSprite_SetAnimateFlag(sprite, TRUE);
-    ManagedSprite_SetAffineOverwriteMode(work->sprite, 2);
+    ManagedSprite_SetAffineOverwriteMode(work->sprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     ManagedSprite_SetOamMode(work->sprite, GX_OAM_MODE_XLU);
     ManagedSprite_SetDrawPriority(work->sprite, 100);
     ManagedSprite_SetPriority(work->sprite, 1);
@@ -1886,7 +1886,7 @@ void BattleAnimSpriteFunc_PulseSpriteBrightnessFlash(BattleAnimSystem *system, S
     work->sprite = sprite;
     ManagedSprite_SetDrawPriority(work->sprite, 100);
     ManagedSprite_SetPriority(work->sprite, 1);
-    ManagedSprite_SetAffineOverwriteMode(work->sprite, 2);
+    ManagedSprite_SetAffineOverwriteMode(work->sprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     ManagedSprite_SetOamMode(work->sprite, GX_OAM_MODE_XLU);
     ManagedSprite_SetAnimationFrame(work->sprite, 4);
     work->repeats = 3;
@@ -2477,14 +2477,14 @@ void BattleAnimFunc_DarkSpriteJump(BattleAnimSystem *system) {
     ManagedSprite_SetPositionXY(work->sprites[0], x, y);
     ManagedSprite_SetDrawFlag(work->sprites[0], FALSE);
     ManagedSprite_SetOamMode(work->sprites[0], GX_OAM_MODE_XLU);
-    ManagedSprite_SetAffineOverwriteMode(work->sprites[0], 2);
+    ManagedSprite_SetAffineOverwriteMode(work->sprites[0], NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     work->sprites[1] = BattleAnimSystem_GetBattlerSprite(work->system, 1);
     ManagedSprite_SetDrawPriority(work->sprites[1], 100);
     ManagedSprite_SetPriority(work->sprites[1], 1);
     ManagedSprite_SetPositionXY(work->sprites[1], defenderX, defenderY);
     ManagedSprite_SetDrawFlag(work->sprites[1], FALSE);
     ManagedSprite_SetOamMode(work->sprites[1], GX_OAM_MODE_XLU);
-    ManagedSprite_SetAffineOverwriteMode(work->sprites[1], 2);
+    ManagedSprite_SetAffineOverwriteMode(work->sprites[1], NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     ManagedSprite_SetAffineTranslation(work->sprites[1], 0, 40);
     work->flipRise = BattleAnimSystem_ShouldFlipSide(work->system, 0);
     work->flipDrop = BattleAnimSystem_ShouldFlipSide(work->system, 1);
@@ -2571,7 +2571,7 @@ void BattleAnimSpriteFunc_ScaleSpritesOverDefender(BattleAnimSystem *system, Spr
         ManagedSprite_SetPriority(work->sprites[i], 1);
         ManagedSprite_SetPositionXY(work->sprites[i], work->x, work->y);
         ManagedSprite_SetDrawFlag(work->sprites[i], FALSE);
-        ManagedSprite_SetAffineOverwriteMode(work->sprites[i], 2);
+        ManagedSprite_SetAffineOverwriteMode(work->sprites[i], NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     }
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_ScaleSpritesOverDefender, work);
 }
@@ -2781,7 +2781,7 @@ void BattleAnimSpriteFunc_FloatingSpriteStream(BattleAnimSystem *system, SpriteS
         }
         ManagedSprite_SetDrawPriority(work->sprites[i], 100);
         ManagedSprite_SetPriority(work->sprites[i], 1);
-        ManagedSprite_SetAffineOverwriteMode(work->sprites[i], 2);
+        ManagedSprite_SetAffineOverwriteMode(work->sprites[i], NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
         ManagedSprite_SetDrawFlag(work->sprites[i], FALSE);
         ManagedSprite_SetPositionXY(work->sprites[i], x, y);
         ManagedSprite_SetAnim(work->sprites[i], i % 3);
@@ -3337,7 +3337,7 @@ void BattleAnimTask_RisingShrinkSpritesLaunch(ManagedSprite *sprite, BattleAnimL
     s16 x;
     s16 y;
 
-    ManagedSprite_SetAffineOverwriteMode(sprite, 2);
+    ManagedSprite_SetAffineOverwriteMode(sprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     ManagedSprite_SetDrawFlag(sprite, TRUE);
     ManagedSprite_GetPositionXY(sprite, &x, &y);
     BattleAnimUtil_InitLinearMotion(move, x, (s16)(x + direction * 16), y, (s16)(y - 32), 32);

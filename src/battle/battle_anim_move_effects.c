@@ -611,7 +611,7 @@ void BattleAnimSpriteFunc_BlinkScaleFadeSprites(BattleAnimSystem *system, Sprite
     ManagedSprite_SetPositionXY(work->sprites[0], pos.x, pos.y);
     for (i = 0; i < (int)BattleAnimSystem_GetArg(work->system, 0); i++) {
         work->blinkTimers[i] = 0;
-        ManagedSprite_SetAffineOverwriteMode(work->sprites[i], 2);
+        ManagedSprite_SetAffineOverwriteMode(work->sprites[i], NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
         ManagedSprite_OffsetPositionXY(work->sprites[i], 0, 32 - i * 4);
         ManagedSprite_SetOamMode(work->sprites[i], GX_OAM_MODE_XLU);
     }
@@ -1523,7 +1523,7 @@ void BattleAnimFunc_AttackerSquashAfterimages(BattleAnimSystem *system) {
         work->afterimages[i].state = 0;
         work->afterimages[i].timer = 0;
         work->afterimages[i].sprite = BattleAnimSystem_GetBattlerSprite(work->system, i);
-        ManagedSprite_SetAffineOverwriteMode(work->afterimages[i].sprite, 2);
+        ManagedSprite_SetAffineOverwriteMode(work->afterimages[i].sprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
         ManagedSprite_SetOamMode(work->afterimages[i].sprite, GX_OAM_MODE_XLU);
         ManagedSprite_SetDrawPriorityInt(work->afterimages[i].sprite, i + 1);
     }
@@ -1898,7 +1898,7 @@ void BattleAnimSpriteFunc_ThrowSpriteArc(BattleAnimSystem *system, SpriteSystem 
     work->height = (s32)BattleAnimSystem_GetArg(system, 3);
     sign = BattleAnimUtil_GetBattlerSideSignByMode(system, BattleAnimSystem_GetAttacker(system));
     work->sprite = sprite;
-    ManagedSprite_SetAffineOverwriteMode(sprite, 2);
+    ManagedSprite_SetAffineOverwriteMode(sprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     work->attacker.pokepic = BattleAnimSystem_GetBattlerPokepic(system, BattleAnimSystem_GetAttacker(system));
     work->defender.pokepic = BattleAnimSystem_GetBattlerPokepic(system, BattleAnimSystem_GetDefender(system));
     BattleAnimUtil_GetPicPosition(work->attacker.pokepic, work->attacker.pos);
@@ -2259,7 +2259,7 @@ void BattleAnimFunc_StretchFadeSprite(BattleAnimSystem *system) {
         work->direction = 1;
     }
     ManagedSprite_SetPositionXY(work->sprite, work->x, work->y);
-    ManagedSprite_SetAffineOverwriteMode(work->sprite, 2);
+    ManagedSprite_SetAffineOverwriteMode(work->sprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     ManagedSprite_SetOamMode(work->sprite, GX_OAM_MODE_XLU);
     BattleAnimUtil_InitScaleMotionXYS16(&work->scale, work->direction * 100, work->direction * 100, 100, 5, 100, 1);
     BattleAnimUtil_UpdateScaleMotionXY(&work->scale);
@@ -2564,7 +2564,7 @@ void BattleAnimSpriteFunc_BlinkSpritesCenter(BattleAnimSystem *system, SpriteSys
     }
     for (i = 0; i < work->count; i++) {
         work->blinkTimers[i] = 0;
-        ManagedSprite_SetAffineOverwriteMode(work->sprites[i], 2);
+        ManagedSprite_SetAffineOverwriteMode(work->sprites[i], NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
         ManagedSprite_SetOamMode(work->sprites[i], GX_OAM_MODE_XLU);
         if (BattleAnimSystem_GetField08(work->system) == 1) {
             ManagedSprite_SetAffineScale(work->sprites[i], -1.0f, 1.0f);
@@ -2889,7 +2889,7 @@ void BattleAnimSpriteFunc_PopAndScatterSprites(BattleAnimSystem *system, SpriteS
         x = gBattleAnimScatterAreas[area].x + LCRandom() % gBattleAnimScatterAreas[area].xRange;
         y = gBattleAnimScatterAreas[area].y + LCRandom() % gBattleAnimScatterAreas[area].yRange;
         ManagedSprite_SetPositionXY(sprite, x, y);
-        ManagedSprite_SetAffineOverwriteMode(sprite, 2);
+        ManagedSprite_SetAffineOverwriteMode(sprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
         ManagedSprite_SetAffineScale(sprite, work->sprites[i].scale, work->sprites[i].scale);
         ManagedSprite_SetDrawFlag(sprite, FALSE);
         BattleAnimSystem_CreateTask(system, BattleAnimTask_PopAndScatterSprite, &work->sprites[i], 1099);
@@ -3176,7 +3176,7 @@ void BattleAnimFunc_ShrinkSpriteOnDefender(BattleAnimSystem *system) {
     work->sprite = BattleAnimSystem_GetBattlerSprite(system, 0);
     work->sprite2 = BattleAnimSystem_GetBattlerSprite(system, 1);
     work->sprite3 = BattleAnimSystem_GetBattlerSprite(system, 2);
-    ManagedSprite_SetAffineOverwriteMode(work->sprite, 2);
+    ManagedSprite_SetAffineOverwriteMode(work->sprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     ManagedSprite_SetPriority(work->sprite, BattleAnimSystem_GetBasePriority(system));
     ManagedSprite_SetPriority(work->sprite2, BattleAnimSystem_GetBasePriority(system));
     ManagedSprite_SetPriority(work->sprite3, BattleAnimSystem_GetBasePriority(system));
@@ -3578,7 +3578,7 @@ void BattleAnimFunc_SquashSprite(BattleAnimSystem *system) {
     }
     ManagedSprite_GetPositionXY(work->sprites[1], &originX, &originY);
     ManagedSprite_SetPositionXY(work->sprites[0], originX + offset, originY);
-    ManagedSprite_SetAffineOverwriteMode(work->sprites[0], 2);
+    ManagedSprite_SetAffineOverwriteMode(work->sprites[0], NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     ManagedSprite_SetAffineScale(work->sprites[0], work->scaleX * (f32)work->direction, work->scaleY);
     paletteOffset = ObjPlttTransfer_GetPaletteVramOffset(Sprite_GetPaletteProxy(work->sprites[0]->sprite), NNS_G2D_VRAM_TYPE_2DMAIN);
     work->paletteBlends[0] = BattleAnimUtil_StartPaletteBlend(work->common.paletteData, BattleAnimSystem_GetHeapID(system), PLTTBUF_MAIN_OBJ, (u16)(paletteOffset << 4), 16, 0, 1, 0, 15, 0xFFFF, 1100);
@@ -4157,7 +4157,7 @@ void BattleAnimFunc_ShakeDefenderWithOverlay(BattleAnimSystem *system) {
     BattleAnimUtil_InitShake(&work->shake, 2, 0, 1, 6);
     work->sprite = BattleAnimSystem_GetBattlerSprite(work->system, 0);
     ManagedSprite_SetOamMode(work->sprite, GX_OAM_MODE_XLU);
-    ManagedSprite_SetAffineOverwriteMode(work->sprite, 2);
+    ManagedSprite_SetAffineOverwriteMode(work->sprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     ManagedSprite_SetDrawPriority(work->sprite, 100);
     ManagedSprite_SetPriority(work->sprite, 1);
     BattleAnimUtil_InitScaleMotionXY(&work->scale, 10, 12, 10, 15, 10, 7);

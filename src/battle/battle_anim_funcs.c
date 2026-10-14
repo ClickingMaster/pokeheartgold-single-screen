@@ -1016,7 +1016,7 @@ void BattleAnimSpriteFunc_SpritePops(BattleAnimSystem *system, SpriteSystem *spr
     work->sprite = sprite;
     ManagedSprite_SetDrawPriority(work->sprite, 100);
     ManagedSprite_SetPriority(work->sprite, 1);
-    ManagedSprite_SetAffineOverwriteMode(work->sprite, 2);
+    ManagedSprite_SetAffineOverwriteMode(work->sprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     ManagedSprite_SetDrawFlag(work->sprite, FALSE);
     work->delay = 4;
     work->side = BattleAnimUtil_GetBattlerSideSignByMode(work->system, BattleAnimSystem_GetAttacker(work->system));
@@ -1275,7 +1275,7 @@ void BattleAnimFunc_PulseBattlerSprite(BattleAnimSystem *system) {
     ManagedSprite_SetDrawPriority(work->sprite, 100);
     ManagedSprite_SetPriority(work->sprite, 1);
     ManagedSprite_SetOamMode(work->sprite, GX_OAM_MODE_XLU);
-    ManagedSprite_SetAffineOverwriteMode(work->sprite, 2);
+    ManagedSprite_SetAffineOverwriteMode(work->sprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     BattleAnimUtil_SetBlendWithBattleBg(work->system, work->eva, 16 - work->eva);
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_PulseBattlerSprite, work);
     int side = BattleAnimSystem_GetArg(system, 0) != 0;
@@ -1801,7 +1801,7 @@ void BattleAnimFunc_ShowBattleBgInObjWindow(BattleAnimSystem *system) {
     BattleAnimBackground_LoadBattleBgToLayerDefault(work->common.system, GF_BG_LYR_MAIN_2);
     work->sprite = BattleAnimSystem_GetBattlerSprite(work->common.system, 0);
     ManagedSprite_SetOamMode(work->sprite, GX_OAM_MODE_OBJWND);
-    ManagedSprite_SetAffineOverwriteMode(work->sprite, 2);
+    ManagedSprite_SetAffineOverwriteMode(work->sprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     ManagedSprite_SetAffineScale(work->sprite, 1.2f, 1.2f);
     reg_GX_DISPCNT = (reg_GX_DISPCNT & ~(REG_GX_DISPCNT_W0_MASK | REG_GX_DISPCNT_W1_MASK | REG_GX_DISPCNT_OW_MASK)) | REG_GX_DISPCNT_OW_MASK;
     reg_G2_WINOUT = (reg_G2_WINOUT & ~0x3F) | (GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ);
@@ -2744,7 +2744,7 @@ void BattleAnimTask_SpriteOrbit(SysTask *task, void *data) {
             }
             ManagedSprite_OffsetPositionXY(work->sprite, dx, 0);
         } else {
-            ManagedSprite_SetAffineOverwriteMode(work->sprite, 2);
+            ManagedSprite_SetAffineOverwriteMode(work->sprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
             BattleAnimUtil_InitValueMotion(&work->angle, 0, 0xE38, 4);
             ManagedSprite_SetAffineTranslation(work->sprite, -8, 16);
             work->step = 0;
