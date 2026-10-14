@@ -551,7 +551,7 @@ void BattleAnimTask_SkewSlideAttackerBg(SysTask *task, void *data) {
         BattleAnimScanline_FreeWave(work->wave);
         bgLayer = BattleAnimSystem_GetBgLayer(work->system, 1);
         SetBgPriority((u8)bgLayer, (u8)BattleAnimSystem_GetBgPriority(work->system, 1));
-        SetBgPriority(0, (u8)BattleAnimSystem_GetBasePriority(work->system));
+        SetBgPriority(GF_BG_LYR_MAIN_0, (u8)BattleAnimSystem_GetBasePriority(work->system));
         bgLayer = BattleAnimSystem_GetBgLayer(work->system, 1);
         BG_ClearCharDataRange((u8)bgLayer, 0x4000, 0, BattleAnimSystem_GetHeapID(work->system));
         BgClearTilemapBufferAndCommit(BattleAnimSystem_GetBgConfig(work->system), BattleAnimSystem_GetBgLayer(work->system, 1));
@@ -602,7 +602,7 @@ void BattleAnimFunc_SkewSlideAttackerBg(BattleAnimSystem *system) {
     if (type == BATTLER_TYPE_ENEMY_SIDE_SLOT_1 || type == BATTLER_TYPE_PLAYER_SIDE_SLOT_2) {
         bgLayer = BattleAnimSystem_GetBgLayer(work->system, 1);
         SetBgPriority(bgLayer, (u8)BattleAnimSystem_GetBasePriority(work->system));
-        SetBgPriority(0, (u8)(BattleAnimSystem_GetBasePriority(work->system) + 1));
+        SetBgPriority(GF_BG_LYR_MAIN_0, (u8)(BattleAnimSystem_GetBasePriority(work->system) + 1));
     }
     BattleAnimTask_SkewSlideAttackerBg(task, work);
 }
@@ -810,7 +810,7 @@ void BattleAnimTask_WaveDefenderOnBg(SysTask *task, void *data) {
         int bgLayer = BattleAnimSystem_GetBgLayer(work->system, 1);
         int priority = BattleAnimSystem_GetBgPriority(work->system, 1);
         SetBgPriority((u8)bgLayer, (u8)priority);
-        SetBgPriority(0, (u8)BattleAnimSystem_GetBasePriority(work->system));
+        SetBgPriority(GF_BG_LYR_MAIN_0, (u8)BattleAnimSystem_GetBasePriority(work->system));
         int defender = BattleAnimSystem_GetDefender(work->system);
         if (BattleAnimSystem_IsBattlerSemiInvulnerable(work->system, defender) == FALSE) {
             Pokepic_SetAttr(work->pokepic, POKEPIC_VANISHED, FALSE);
@@ -852,7 +852,7 @@ void BattleAnimFunc_WaveDefenderOnBg(BattleAnimSystem *system) {
     } else {
         int bgLayer = BattleAnimSystem_GetBgLayer(work->system, 1);
         SetBgPriority((u8)bgLayer, (u8)BattleAnimSystem_GetBasePriority(work->system));
-        SetBgPriority(0, (u8)(BattleAnimSystem_GetBasePriority(work->system) + 1));
+        SetBgPriority(GF_BG_LYR_MAIN_0, (u8)(BattleAnimSystem_GetBasePriority(work->system) + 1));
         ManagedSprite_SetDrawFlag(work->sprite, FALSE);
     }
     bottom = y + 80;
@@ -1342,7 +1342,7 @@ void BattleAnimSpriteFunc_RisingSpriteStretchAttacker(BattleAnimSystem *system, 
     }
     BattleAnimUtil_InitLinearMotion(&work->rise, 0, 0, 0, (s16)(rise * dirY), 32);
     BattleAnimUtil_InitScaleMotion(&work->spriteScale, 5, 10, 12, 32);
-    G2_SetBlendAlpha(0, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ | GX_BLEND_PLANEMASK_BD, 31, 26);
+    G2_SetBlendAlpha(GX_BLEND_PLANEMASK_NONE, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ | GX_BLEND_PLANEMASK_BD, 31, 26);
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_RisingSpriteStretchAttacker, work);
 }
 
@@ -1567,7 +1567,7 @@ void BattleAnimSpriteFunc_ZigzagFlash(BattleAnimSystem *system, SpriteSystem *sp
     ManagedSprite_SetPositionXY(work->sprite, work->x, work->y);
     ManagedSprite_SetOamMode(work->sprite, GX_OAM_MODE_XLU);
     work->timer = -16;
-    G2_SetBlendAlpha(0, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ | GX_BLEND_PLANEMASK_BD, 31, 26);
+    G2_SetBlendAlpha(GX_BLEND_PLANEMASK_NONE, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ | GX_BLEND_PLANEMASK_BD, 31, 26);
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_ZigzagFlash, work);
 }
 
@@ -2894,7 +2894,7 @@ void BattleAnimTask_WobbleDefenderOnBg(SysTask *task, void *data) {
         BattleAnimScanline_Free(work->scanline);
         bgLayer = BattleAnimSystem_GetBgLayer(work->system, 1);
         SetBgPriority(bgLayer, (u8)BattleAnimSystem_GetBgPriority(work->system, 1));
-        SetBgPriority(0, (u8)BattleAnimSystem_GetBasePriority(work->system));
+        SetBgPriority(GF_BG_LYR_MAIN_0, (u8)BattleAnimSystem_GetBasePriority(work->system));
         bgLayer = BattleAnimSystem_GetBgLayer(work->system, 1);
         BG_ClearCharDataRange(bgLayer, 0x4000, 0, BattleAnimSystem_GetHeapID(work->system));
         bgConfig = BattleAnimSystem_GetBgConfig(work->system);

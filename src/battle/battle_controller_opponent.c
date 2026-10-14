@@ -7243,22 +7243,22 @@ void Task_FlashBrightness(SysTask *task, s32 *state) {
     current = *state;
     switch (current) {
     case 0:
-        if (IsBrightnessTransitionActive(1) == FALSE) {
+        if (IsBrightnessTransitionActive(SCREEN_MASK_MAIN) == FALSE) {
             *state = 2;
             return;
         }
-        StartBrightnessTransition(4, 16, 0, (GXBlendPlaneMask)0x3D, 1);
+        StartBrightnessTransition(4, 16, 0, (GXBlendPlaneMask)(GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ | GX_BLEND_PLANEMASK_BD), SCREEN_MASK_MAIN);
         *state += 1;
         return;
     case 1:
-        if (IsBrightnessTransitionActive(1) == TRUE) {
-            StartBrightnessTransition(4, 0, 16, (GXBlendPlaneMask)0x3D, 1);
+        if (IsBrightnessTransitionActive(SCREEN_MASK_MAIN) == TRUE) {
+            StartBrightnessTransition(4, 0, 16, (GXBlendPlaneMask)(GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ | GX_BLEND_PLANEMASK_BD), SCREEN_MASK_MAIN);
             *state += 1;
             return;
         }
         return;
     case 2:
-        if (IsBrightnessTransitionActive(1) == TRUE) {
+        if (IsBrightnessTransitionActive(SCREEN_MASK_MAIN) == TRUE) {
             Heap_Free(state);
             SysTask_Destroy(task);
         }

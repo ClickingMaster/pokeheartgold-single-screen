@@ -8,6 +8,7 @@
 #include "constants/sndseq.h"
 #include "constants/species.h"
 
+#include "graphic/plist_gra.naix"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0300.h"
 #include "msgdata/msg/msg_0638.h"
@@ -1441,9 +1442,9 @@ void LinkBattleScreen_LoadPartyBgGraphics(LinkBattleScreen *screen) {
     NARC *narc = NARC_New(NARC_graphic_plist_gra, screen->args->heapId);
     void *nclrFile;
     NNSG2dPaletteData *paletteData;
-    GfGfxLoader_LoadCharDataFromOpenNarc(narc, 15, screen->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, FALSE, screen->args->heapId);
-    GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 17, screen->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, FALSE, screen->args->heapId);
-    nclrFile = NARC_AllocAndReadWholeMember(narc, 16, screen->args->heapId);
+    GfGfxLoader_LoadCharDataFromOpenNarc(narc, NARC_plist_gra_plist_gra_00000015_NCGR, screen->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, FALSE, screen->args->heapId);
+    GfGfxLoader_LoadScrnDataFromOpenNarc(narc, NARC_plist_gra_plist_gra_00000017_NSCR, screen->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, FALSE, screen->args->heapId);
+    nclrFile = NARC_AllocAndReadWholeMember(narc, NARC_plist_gra_plist_gra_00000016_NCLR, screen->args->heapId);
     NNS_G2dGetUnpackedPaletteData(nclrFile, &paletteData);
     BG_LoadPlttData(GF_BG_LYR_MAIN_3, paletteData->pRawData, (u16)paletteData->szByte, 0);
     memcpy(screen->panelPalettes, (u8 *)paletteData->pRawData + 0x60, sizeof(screen->panelPalettes));
@@ -1660,10 +1661,10 @@ void LinkBattleScreen_LoadMonIconGfx(LinkBattleScreen *screen) {
 
 void LinkBattleScreen_LoadItemIconGfx(LinkBattleScreen *screen) {
     NARC *narc = NARC_New(NARC_graphic_plist_gra, screen->args->heapId);
-    SpriteSystem_LoadCharResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, 0x14, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB80F);
-    SpriteSystem_LoadPlttResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, 0x15, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB809);
-    SpriteSystem_LoadCellResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, 0x13, FALSE, 0xB80A);
-    SpriteSystem_LoadAnimResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, 0x12, FALSE, 0xB80A);
+    SpriteSystem_LoadCharResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, NARC_plist_gra_plist_gra_00000020_NCGR, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB80F);
+    SpriteSystem_LoadPlttResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, NARC_plist_gra_plist_gra_00000021_NCLR, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB809);
+    SpriteSystem_LoadCellResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, NARC_plist_gra_plist_gra_00000019_NCER, FALSE, 0xB80A);
+    SpriteSystem_LoadAnimResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, NARC_plist_gra_plist_gra_00000018_NANR, FALSE, 0xB80A);
     NARC_Delete(narc);
 }
 
@@ -1678,10 +1679,10 @@ void LinkBattleScreen_LoadStatusIconGfx(LinkBattleScreen *screen) {
 
 void LinkBattleScreen_LoadPlistSpriteRes(LinkBattleScreen *screen) {
     NARC *narc = NARC_New(NARC_graphic_plist_gra, screen->args->heapId);
-    SpriteSystem_LoadCharResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, 2, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB811);
-    SpriteSystem_LoadPlttResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, 8, FALSE, 2, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB80B);
-    SpriteSystem_LoadCellResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, 1, FALSE, 0xB80C);
-    SpriteSystem_LoadAnimResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, 0, FALSE, 0xB80C);
+    SpriteSystem_LoadCharResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, NARC_plist_gra_plist_gra_00000002_NCGR, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB811);
+    SpriteSystem_LoadPlttResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, NARC_plist_gra_plist_gra_00000008_NCLR, FALSE, 2, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB80B);
+    SpriteSystem_LoadCellResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, NARC_plist_gra_plist_gra_00000001_NCER, FALSE, 0xB80C);
+    SpriteSystem_LoadAnimResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, NARC_plist_gra_plist_gra_00000000_NANR, FALSE, 0xB80C);
     NARC_Delete(narc);
 }
 

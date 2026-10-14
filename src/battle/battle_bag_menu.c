@@ -690,29 +690,29 @@ void BattleBagMenu_InitBgs(BattleBagMenu *menu) {
     SetScreenModeAndDisable(&graphicsModes, SCREEN_SUB);
     {
         BgTemplate template = sBattleBagBgTemplateSub2;
-        InitBgFromTemplate(menu->bgConfig, 6, &template, 0);
+        InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_2, &template, 0);
     }
     {
         BgTemplate template = sBattleBagBgTemplateSub1;
-        InitBgFromTemplate(menu->bgConfig, 5, &template, 0);
+        InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_1, &template, 0);
     }
-    BgClearTilemapBufferAndCommit(menu->bgConfig, 5);
+    BgClearTilemapBufferAndCommit(menu->bgConfig, GF_BG_LYR_SUB_1);
     {
         BgTemplate template = sBattleBagBgTemplateSub0;
-        InitBgFromTemplate(menu->bgConfig, 4, &template, 0);
+        InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_0, &template, 0);
     }
-    BgClearTilemapBufferAndCommit(menu->bgConfig, 4);
-    BG_ClearCharDataRange(5, 0x20, 0, menu->context->heapID);
-    BG_ClearCharDataRange(4, 0x20, 0, menu->context->heapID);
-    ScheduleBgTilemapBufferTransfer(menu->bgConfig, 5);
-    ScheduleBgTilemapBufferTransfer(menu->bgConfig, 4);
+    BgClearTilemapBufferAndCommit(menu->bgConfig, GF_BG_LYR_SUB_0);
+    BG_ClearCharDataRange(GF_BG_LYR_SUB_1, 0x20, 0, menu->context->heapID);
+    BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 0x20, 0, menu->context->heapID);
+    ScheduleBgTilemapBufferTransfer(menu->bgConfig, GF_BG_LYR_SUB_1);
+    ScheduleBgTilemapBufferTransfer(menu->bgConfig, GF_BG_LYR_SUB_0);
 }
 
 void BattleBagMenu_FreeBgs(BgConfig *bgConfig) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0 | GX_PLANEMASK_BG1 | GX_PLANEMASK_BG2 | GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
-    FreeBgTilemapBuffer(bgConfig, 4);
-    FreeBgTilemapBuffer(bgConfig, 5);
-    FreeBgTilemapBuffer(bgConfig, 6);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_0);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_1);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_2);
 }
 
 void BattleBagMenu_LoadBgGraphics(BattleBagMenu *menu) {
@@ -754,32 +754,32 @@ void BattleBagMenu_FreeText(BattleBagMenu *menu) {
 void BattleBagMenu_SetPageBgOffset(BattleBagMenu *menu, int page) {
     switch (page) {
     case 0:
-        ScheduleSetBgPosText(menu->bgConfig, 6, BG_POS_OP_SET_X, 0);
-        ScheduleSetBgPosText(menu->bgConfig, 6, BG_POS_OP_SET_Y, 0);
+        ScheduleSetBgPosText(menu->bgConfig, GF_BG_LYR_SUB_2, BG_POS_OP_SET_X, 0);
+        ScheduleSetBgPosText(menu->bgConfig, GF_BG_LYR_SUB_2, BG_POS_OP_SET_Y, 0);
         break;
     case 1:
-        ScheduleSetBgPosText(menu->bgConfig, 6, BG_POS_OP_SET_X, 0x100);
-        ScheduleSetBgPosText(menu->bgConfig, 6, BG_POS_OP_SET_Y, 0);
+        ScheduleSetBgPosText(menu->bgConfig, GF_BG_LYR_SUB_2, BG_POS_OP_SET_X, 0x100);
+        ScheduleSetBgPosText(menu->bgConfig, GF_BG_LYR_SUB_2, BG_POS_OP_SET_Y, 0);
         break;
     case 2:
-        ScheduleSetBgPosText(menu->bgConfig, 6, BG_POS_OP_SET_X, 0);
-        ScheduleSetBgPosText(menu->bgConfig, 6, BG_POS_OP_SET_Y, 0x100);
+        ScheduleSetBgPosText(menu->bgConfig, GF_BG_LYR_SUB_2, BG_POS_OP_SET_X, 0);
+        ScheduleSetBgPosText(menu->bgConfig, GF_BG_LYR_SUB_2, BG_POS_OP_SET_Y, 0x100);
         break;
     }
 }
 
 void BattleBagMenu_SetUseItemPagePalette(BattleBagMenu *menu, int page) {
     if (page == 2) {
-        BgTilemapRectChangePalette(menu->bgConfig, 6, 2, 0x23, 0x1C, 4, menu->pocket + 8);
-        BgTilemapRectChangePalette(menu->bgConfig, 6, 2, 0x28, 0x1C, 8, menu->pocket + 8);
+        BgTilemapRectChangePalette(menu->bgConfig, GF_BG_LYR_SUB_2, 2, 0x23, 0x1C, 4, menu->pocket + 8);
+        BgTilemapRectChangePalette(menu->bgConfig, GF_BG_LYR_SUB_2, 2, 0x28, 0x1C, 8, menu->pocket + 8);
     }
 }
 
 void BattleBagMenu_ChangePage(BattleBagMenu *menu, u8 page) {
     BattleBagMenu_SetUseItemPagePalette(menu, page);
     BattleBagMenu_SetPageBgOffset(menu, page);
-    BgFillTilemapBufferAndSchedule(menu->bgConfig, 4, 0);
-    BgFillTilemapBufferAndSchedule(menu->bgConfig, 5, 0);
+    BgFillTilemapBufferAndSchedule(menu->bgConfig, GF_BG_LYR_SUB_0, 0);
+    BgFillTilemapBufferAndSchedule(menu->bgConfig, GF_BG_LYR_SUB_1, 0);
     BattleBagMenu_RemovePageWindows(menu);
     BattleBagMenu_AddPageWindows(menu, page);
     BattleBagMenu_PrintPageText(menu, page);
@@ -947,7 +947,7 @@ void BattleBagMenu_PrintItemListEntry(BattleBagMenu *menu, int entry) {
 void BattleBagMenu_PrintItemList(BattleBagMenu *menu) {
     u16 i;
 
-    FillBgTilemapRect(menu->bgConfig, 5, 0, 0, 0, 0x20, 0x13, 0x11);
+    FillBgTilemapRect(menu->bgConfig, GF_BG_LYR_SUB_1, 0, 0, 0, 0x20, 0x13, 0x11);
     for (i = 0; i < 6; i++) {
         BattleBagMenu_PrintItemListEntry(menu, i);
     }
@@ -1493,8 +1493,8 @@ void BattleBagMenu_DrawButton(BattleBagMenu *menu, u8 button, u8 frame, u8 page)
     int width = sBattleBagButtonRectsWidth[index];
     u16 *buffer = Heap_Alloc(menu->context->heapID, width * height * 2);
     BattleBagMenu_BuildButtonTilemap(menu, buffer, button, frame, page);
-    LoadRectToBgTilemapRect(menu->bgConfig, 6, buffer, ((const u8 *)sBattleBagButtonRects)[index], sBattleBagButtonRectsY[index], width, height);
-    ScheduleBgTilemapBufferTransfer(menu->bgConfig, 6);
+    LoadRectToBgTilemapRect(menu->bgConfig, GF_BG_LYR_SUB_2, buffer, ((const u8 *)sBattleBagButtonRects)[index], sBattleBagButtonRectsY[index], width, height);
+    ScheduleBgTilemapBufferTransfer(menu->bgConfig, GF_BG_LYR_SUB_2);
     Heap_Free(buffer);
 }
 

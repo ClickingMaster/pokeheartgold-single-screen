@@ -1107,27 +1107,27 @@ void BattlePartyMenu_InitBgs(BattlePartyMenu *menu) {
     graphicsModes = sBattlePartyGraphicsModes;
     SetScreenModeAndDisable(&graphicsModes, SCREEN_SUB);
     template3 = sBattlePartyBgTemplateSub3;
-    InitBgFromTemplate(menu->bgConfig, 7, &template3, 0);
+    InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_3, &template3, 0);
     template2 = sBattlePartyBgTemplateSub2;
-    InitBgFromTemplate(menu->bgConfig, 6, &template2, 0);
+    InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_2, &template2, 0);
     template1 = sBattlePartyBgTemplateSub1;
-    InitBgFromTemplate(menu->bgConfig, 5, &template1, 0);
-    BgClearTilemapBufferAndCommit(menu->bgConfig, 5);
+    InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_1, &template1, 0);
+    BgClearTilemapBufferAndCommit(menu->bgConfig, GF_BG_LYR_SUB_1);
     template0 = sBattlePartyBgTemplateSub0;
-    InitBgFromTemplate(menu->bgConfig, 4, &template0, 0);
-    BgClearTilemapBufferAndCommit(menu->bgConfig, 4);
-    BG_ClearCharDataRange(5, 0x20, 0, menu->context->heapID);
-    BG_ClearCharDataRange(4, 0x20, 0, menu->context->heapID);
-    ScheduleBgTilemapBufferTransfer(menu->bgConfig, 5);
-    ScheduleBgTilemapBufferTransfer(menu->bgConfig, 4);
+    InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_0, &template0, 0);
+    BgClearTilemapBufferAndCommit(menu->bgConfig, GF_BG_LYR_SUB_0);
+    BG_ClearCharDataRange(GF_BG_LYR_SUB_1, 0x20, 0, menu->context->heapID);
+    BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 0x20, 0, menu->context->heapID);
+    ScheduleBgTilemapBufferTransfer(menu->bgConfig, GF_BG_LYR_SUB_1);
+    ScheduleBgTilemapBufferTransfer(menu->bgConfig, GF_BG_LYR_SUB_0);
 }
 
 void BattlePartyMenu_FreeBgs(BgConfig *bgConfig) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0 | GX_PLANEMASK_BG1 | GX_PLANEMASK_BG2 | GX_PLANEMASK_BG3 | GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
-    FreeBgTilemapBuffer(bgConfig, 4);
-    FreeBgTilemapBuffer(bgConfig, 5);
-    FreeBgTilemapBuffer(bgConfig, 6);
-    FreeBgTilemapBuffer(bgConfig, 7);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_0);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_1);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_2);
+    FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_3);
 }
 
 void BattlePartyMenu_LoadBgGraphics(BattlePartyMenu *menu) {
@@ -1403,21 +1403,21 @@ void BattlePartyMenu_DrawExpBar(BattlePartyMenu *menu, int page) {
             pixels -= 8;
         }
     }
-    ScheduleBgTilemapBufferTransfer(menu->bgConfig, 7);
+    ScheduleBgTilemapBufferTransfer(menu->bgConfig, GF_BG_LYR_SUB_3);
 }
 
 void BattlePartyMenu_SetExpBarTile(BattlePartyMenu *menu, u16 tile, u16 x, int y) {
-    FillBgTilemapRect(menu->bgConfig, 7, tile, (u8)x, (u8)y, 1, 1, TILEMAP_FILL_KEEP_PAL);
+    FillBgTilemapRect(menu->bgConfig, GF_BG_LYR_SUB_3, tile, (u8)x, (u8)y, 1, 1, TILEMAP_FILL_KEEP_PAL);
 }
 
 #pragma force_active on
 
 // writes the 2x2 tile block at row 14 of background 7 for one of six slots
 void BattlePartyMenu_SetContestInfoTile(BattlePartyMenu *menu, u16 tile, int pos) {
-    FillBgTilemapRect(menu->bgConfig, 7, tile, pos * 2 + 2, 14, 1, 1, TILEMAP_FILL_KEEP_PAL);
-    FillBgTilemapRect(menu->bgConfig, 7, tile + 1, pos * 2 + 3, 14, 1, 1, TILEMAP_FILL_KEEP_PAL);
-    FillBgTilemapRect(menu->bgConfig, 7, tile + 32, pos * 2 + 2, 15, 1, 1, TILEMAP_FILL_KEEP_PAL);
-    FillBgTilemapRect(menu->bgConfig, 7, tile + 33, pos * 2 + 3, 15, 1, 1, TILEMAP_FILL_KEEP_PAL);
+    FillBgTilemapRect(menu->bgConfig, GF_BG_LYR_SUB_3, tile, pos * 2 + 2, 14, 1, 1, TILEMAP_FILL_KEEP_PAL);
+    FillBgTilemapRect(menu->bgConfig, GF_BG_LYR_SUB_3, tile + 1, pos * 2 + 3, 14, 1, 1, TILEMAP_FILL_KEEP_PAL);
+    FillBgTilemapRect(menu->bgConfig, GF_BG_LYR_SUB_3, tile + 32, pos * 2 + 2, 15, 1, 1, TILEMAP_FILL_KEEP_PAL);
+    FillBgTilemapRect(menu->bgConfig, GF_BG_LYR_SUB_3, tile + 33, pos * 2 + 3, 15, 1, 1, TILEMAP_FILL_KEEP_PAL);
 }
 
 #pragma force_active reset
@@ -1432,8 +1432,8 @@ void BattlePartyMenu_ClearContestInfoTiles(BattlePartyMenu *menu) {
 
 void BattlePartyMenu_ChangePage(BattlePartyMenu *menu, int page) {
     BattlePartyMenu_LoadPageTilemaps(menu, page);
-    BgFillTilemapBufferAndSchedule(menu->bgConfig, 4, 0);
-    BgFillTilemapBufferAndSchedule(menu->bgConfig, 5, 0);
+    BgFillTilemapBufferAndSchedule(menu->bgConfig, GF_BG_LYR_SUB_0, 0);
+    BgFillTilemapBufferAndSchedule(menu->bgConfig, GF_BG_LYR_SUB_1, 0);
     BattlePartyMenu_ShowPageSprites(menu, page);
     BattlePartyMenu_RemovePageWindows(menu);
     BattlePartyMenu_AddPageWindows(menu, page);
@@ -1617,7 +1617,7 @@ void BattlePartyMenu_ClearBattleMoveInfo(BattlePartyMenu *menu) {
 
 void BattlePartyMenu_ClearContestMoveInfo(BattlePartyMenu *menu) {
     BattlePartyMenu_ClearContestInfoTiles(menu);
-    ScheduleBgTilemapBufferTransfer(menu->bgConfig, 7);
+    ScheduleBgTilemapBufferTransfer(menu->bgConfig, GF_BG_LYR_SUB_3);
 }
 
 #pragma force_active reset
@@ -3457,8 +3457,8 @@ void BattlePartyMenu_DrawButton(BattlePartyMenu *menu, u8 button, u8 frame, u8 p
     u16 *buffer = Heap_Alloc(menu->context->heapID, width * height * 2);
 
     BattlePartyMenu_BuildButtonTilemap(menu, buffer, button, frame, palette);
-    LoadRectToBgTilemapRect(menu->bgConfig, 6, buffer, sBattlePartyButtonRects[index], sBattlePartyButtonRectsY[index], width, height);
-    ScheduleBgTilemapBufferTransfer(menu->bgConfig, 6);
+    LoadRectToBgTilemapRect(menu->bgConfig, GF_BG_LYR_SUB_2, buffer, sBattlePartyButtonRects[index], sBattlePartyButtonRectsY[index], width, height);
+    ScheduleBgTilemapBufferTransfer(menu->bgConfig, GF_BG_LYR_SUB_2);
     Heap_Free(buffer);
 }
 

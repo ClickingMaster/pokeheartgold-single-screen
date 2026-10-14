@@ -3,6 +3,7 @@
 #include "global.h"
 
 #include "constants/battle.h"
+#include "constants/game_stats.h"
 #include "constants/pokemon.h"
 #include "constants/sndseq.h"
 
@@ -170,12 +171,12 @@ void Battle_BattleInit(OverlayManager *manager) {
     NARC_Delete(archive8);
 
     Battle_InitBackgrounds(battleSystem, battleSystem->bgConfig);
-    AddWindowParameterized(battleSystem->bgConfig, battleSystem->window, 1, 2, 19, 27, 4, 11, 31);
+    AddWindowParameterized(battleSystem->bgConfig, battleSystem->window, GF_BG_LYR_MAIN_1, 2, 19, 27, 4, 11, 31);
     FillWindowPixelBuffer(battleSystem->window, 255);
     DrawFrameAndWindow2(battleSystem->window, FALSE, 1, 10);
     battleSystem->spriteRenderer = SpriteSystem_Alloc(HEAP_ID_BATTLE);
     SpriteSystem_Init(battleSystem->spriteRenderer, &sBattleOamManagerParam, &sBattleOamCharTransferParam, 32);
-    G2dRenderer_SetObjCharTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN, (GXOBJVRamModeChar)0x100010);
+    G2dRenderer_SetObjCharTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN, GX_OBJVRAMMODE_CHAR_1D_64K);
     G2dRenderer_SetPlttTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN);
     battleSystem->gfxHandler = SpriteManager_New(battleSystem->spriteRenderer);
     SpriteSystem_InitSprites(battleSystem->spriteRenderer, battleSystem->gfxHandler, 128);
@@ -211,7 +212,7 @@ void Battle_BattleInit(OverlayManager *manager) {
     PaletteData_FillPaletteInBuffer(battleSystem->palette, PLTTBUF_MAIN_BG, PLTTSEL_TRANSPARENT, 0, 160, 192);
     PaletteData_FillPaletteInBuffer(battleSystem->palette, PLTTBUF_SUB_BG, PLTTSEL_TRANSPARENT, 0, 0, 255);
     PaletteData_FillPaletteInBuffer(battleSystem->palette, PLTTBUF_SUB_OBJ, PLTTSEL_TRANSPARENT, 65535, 0, 255);
-    battleSystem->msgIcon = PaletteBlink_New(battleSystem->palette, (PMLCDTarget)0, 11, HEAP_ID_BATTLE);
+    battleSystem->msgIcon = PaletteBlink_New(battleSystem->palette, PM_LCD_TOP, 11, HEAP_ID_BATTLE);
     PaletteBlink_SetState(battleSystem->msgIcon, 1);
     battleSystem->drawGraphicsTask = (u32)SysTask_CreateOnMainQueue(Task_DrawBattleGraphics, battleSystem, 60000);
     battleSystem->criticalHpMusicTask = (u32)SysTask_CreateOnMainQueue(Task_UpdateCriticalHpMusic, battleSystem, 50000);
@@ -288,8 +289,8 @@ void Battle_BattleExit(OverlayManager *man) {
     } else {
         color = 0;
     }
-    SetMasterBrightnessByColor(0, color);
-    SetMasterBrightnessByColor(1, color);
+    SetMasterBrightnessByColor(PM_LCD_TOP, color);
+    SetMasterBrightnessByColor(PM_LCD_BOTTOM, color);
     BattleSystem_TryChangeForm(battleSystem);
     if (battleSystem->battleOutcomeFlag != 4) {
         BattleSystem_EmptyMonFunc(battleSystem, Party_GetMonByIndex(battleSystem->trainerParty[1], 0));
@@ -386,13 +387,13 @@ void Battle_InitBackgrounds(BattleSystem *battleSystem, BgConfig *bgConfig) {
     banks = sBattleGraphicsBanks;
     GfGfx_SetBanks(&banks);
 
-    MI_CpuClear32((void *)0x06000000, 0x80000);
-    MI_CpuClear32((void *)0x06200000, 0x20000);
-    MI_CpuClear32((void *)0x06400000, 0x40000);
-    MI_CpuClear32((void *)0x06600000, 0x20000);
+    MI_CpuClear32((void *)HW_BG_VRAM, HW_BG_VRAM_SIZE);
+    MI_CpuClear32((void *)HW_DB_BG_VRAM, HW_DB_BG_VRAM_SIZE);
+    MI_CpuClear32((void *)HW_OBJ_VRAM, HW_OBJ_VRAM_SIZE);
+    MI_CpuClear32((void *)HW_DB_OBJ_VRAM, HW_DB_OBJ_VRAM_SIZE);
 
-    SetMasterBrightnessNeutral(0);
-    SetMasterBrightnessNeutral(1);
+    SetMasterBrightnessNeutral(PM_LCD_TOP);
+    SetMasterBrightnessNeutral(PM_LCD_BOTTOM);
 
     modes = sBattleGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
@@ -417,9 +418,9 @@ void Battle_InitBackgrounds(BattleSystem *battleSystem, BgConfig *bgConfig) {
     LoadUserFrameGfx2WithFill(bgConfig, GF_BG_LYR_MAIN_1, 1, 10, frame, HEAP_ID_BATTLE);
 
     GfGfxLoader_LoadCharData(NARC_a_0_0_7, battleSystem->backgroundId + 3, bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, HEAP_ID_BATTLE);
-    PaletteData_LoadNarc(battleSystem->palette, NARC_a_0_0_7, battleSystem->backgroundId * 3 + 0xB0 + BattleSystem_GetBgTimeOfDay(battleSystem), HEAP_ID_BATTLE, (PaletteBufferId)0, 0, 0);
-    PaletteData_LoadNarc(battleSystem->palette, NARC_a_0_3_8, GetUserFrameGfx2PaletteMember(frame), HEAP_ID_BATTLE, (PaletteBufferId)0, 0x20, 0xA0);
-    PaletteData_LoadNarc(battleSystem->palette, NARC_graphic_font, 8, HEAP_ID_BATTLE, (PaletteBufferId)0, 0x20, 0xB0);
+    PaletteData_LoadNarc(battleSystem->palette, NARC_a_0_0_7, battleSystem->backgroundId * 3 + 0xB0 + BattleSystem_GetBgTimeOfDay(battleSystem), HEAP_ID_BATTLE, PLTTBUF_MAIN_BG, 0, 0);
+    PaletteData_LoadNarc(battleSystem->palette, NARC_a_0_3_8, GetUserFrameGfx2PaletteMember(frame), HEAP_ID_BATTLE, PLTTBUF_MAIN_BG, 0x20, 0xA0);
+    PaletteData_LoadNarc(battleSystem->palette, NARC_graphic_font, 8, HEAP_ID_BATTLE, PLTTBUF_MAIN_BG, 0x20, 0xB0);
     GfGfxLoader_LoadScrnData(NARC_a_0_0_7, 2, bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, HEAP_ID_BATTLE);
 
     GX_SetVisibleWnd(GX_WNDMASK_NONE);
@@ -1017,33 +1018,33 @@ void Battle_LinkInit(OverlayManager *man, BattleSetup *setup) {
     work->timer = 0;
     work->palette = PaletteData_Init(HEAP_ID_BATTLE);
     PaletteData_SetAutoTransparent(work->palette, TRUE);
-    PaletteData_AllocBuffers(work->palette, (PaletteBufferId)0, 0x200, HEAP_ID_BATTLE);
-    PaletteData_FillPaletteInBuffer(work->palette, (PaletteBufferId)0, (PaletteSelector)2, 0, 0, 0x100);
+    PaletteData_AllocBuffers(work->palette, PLTTBUF_MAIN_BG, 0x200, HEAP_ID_BATTLE);
+    PaletteData_FillPaletteInBuffer(work->palette, PLTTBUF_MAIN_BG, PLTTSEL_BOTH, 0, 0, 0x100);
     work->bgConfig = BgConfig_Alloc(HEAP_ID_BATTLE);
     work->window = AllocWindows(HEAP_ID_BATTLE, 1);
     BattleLink_RegisterSetupCommands((BattleLinkWork *)work);
     GfGfx_DisableEngineAPlanes();
     banks = sLinkGraphicsBanks;
     GfGfx_SetBanks(&banks);
-    MIi_CpuClear32(0, (void *)0x06000000, 0x80000);
-    MIi_CpuClear32(0, (void *)0x06200000, 0x20000);
-    MIi_CpuClear32(0, (void *)0x06400000, 0x40000);
-    MIi_CpuClear32(0, (void *)0x06600000, 0x20000);
+    MIi_CpuClear32(0, (void *)HW_BG_VRAM, HW_BG_VRAM_SIZE);
+    MIi_CpuClear32(0, (void *)HW_DB_BG_VRAM, HW_DB_BG_VRAM_SIZE);
+    MIi_CpuClear32(0, (void *)HW_OBJ_VRAM, HW_OBJ_VRAM_SIZE);
+    MIi_CpuClear32(0, (void *)HW_DB_OBJ_VRAM, HW_DB_OBJ_VRAM_SIZE);
     MIi_CpuClear16(0, (void *)0x05000000, 0x200);
     modes = sLinkGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     bgTemplate = sLinkBgTemplate;
-    InitBgFromTemplate(work->bgConfig, 1, &bgTemplate, 0);
-    BgClearTilemapBufferAndCommit(work->bgConfig, 1);
+    InitBgFromTemplate(work->bgConfig, GF_BG_LYR_MAIN_1, &bgTemplate, 0);
+    BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_MAIN_1);
     frame = Options_GetFrame(setup->options);
-    LoadUserFrameGfx2WithFill(work->bgConfig, 1, 1, 10, (u8)frame, HEAP_ID_BATTLE);
-    PaletteData_LoadNarc(work->palette, (NarcId)0x10, 8, HEAP_ID_BATTLE, (PaletteBufferId)0, 0x20, 0xB0);
-    PaletteData_LoadNarc(work->palette, (NarcId)0x26, GetUserFrameGfx2PaletteMember(frame), HEAP_ID_BATTLE, (PaletteBufferId)0, 0x20, 0xA0);
-    PaletteData_FillPaletteInBuffer(work->palette, (PaletteBufferId)0, (PaletteSelector)0, 0, 0, 0x100);
+    LoadUserFrameGfx2WithFill(work->bgConfig, GF_BG_LYR_MAIN_1, 1, 10, (u8)frame, HEAP_ID_BATTLE);
+    PaletteData_LoadNarc(work->palette, NARC_graphic_font, 8, HEAP_ID_BATTLE, PLTTBUF_MAIN_BG, 0x20, 0xB0);
+    PaletteData_LoadNarc(work->palette, NARC_a_0_3_8, GetUserFrameGfx2PaletteMember(frame), HEAP_ID_BATTLE, PLTTBUF_MAIN_BG, 0x20, 0xA0);
+    PaletteData_FillPaletteInBuffer(work->palette, PLTTBUF_MAIN_BG, PLTTSEL_TRANSPARENT, 0, 0, 0x100);
     GfGfx_BothDispOn();
-    GfGfx_EngineATogglePlanes(0x10, TRUE);
-    *(volatile u16 *)0x04000304 |= 0x8000;
-    AddWindowParameterized(work->bgConfig, work->window, 1, 2, 0x13, 0x1B, 4, 0xB, 0x1F);
+    GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, TRUE);
+    reg_GX_POWCNT |= REG_GX_POWCNT_DSEL_MASK;
+    AddWindowParameterized(work->bgConfig, work->window, GF_BG_LYR_MAIN_1, 2, 0x13, 0x1B, 4, 0xB, 0x1F);
     FillWindowPixelBuffer(work->window, 0xFF);
     DrawFrameAndWindow2(work->window, FALSE, 1, 0xA);
     msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0197_bin, HEAP_ID_BATTLE);
@@ -1067,7 +1068,7 @@ BOOL Battle_LinkMain(OverlayManager *man) {
     done = FALSE;
     switch (work->state) {
     case 0:
-        SetMasterBrightnessNeutral(0);
+        SetMasterBrightnessNeutral(PM_LCD_TOP);
         Comm_SetWifiContinuousSendAndMuteVoice(1);
         work->state++;
         break;
@@ -1287,7 +1288,7 @@ void Battle_LinkExit(OverlayManager *man) {
     BattleLinkStageWork *work = OverlayManager_GetData(man);
 
     Main_SetVBlankIntrCB(NULL, NULL);
-    SetMasterBrightnessByColor(0, 0);
+    SetMasterBrightnessByColor(PM_LCD_TOP, 0);
     PaletteData_FreeBuffers(work->palette, PLTTBUF_MAIN_BG);
     PaletteData_Free(work->palette);
     WindowArray_Delete(work->window, 1);
@@ -1447,24 +1448,24 @@ BOOL Battle_EndInit(OverlayManager *man) {
     switch (setup->winFlag) {
     case 1:
         if (!CommState_IsWifi()) {
-            GameStats_Inc(setup->gameStats, 22);
+            GameStats_Inc(setup->gameStats, GAME_STAT_LOCAL_LINK_BATTLE_WINS);
         } else {
-            GameStats_Inc(setup->gameStats, 27);
+            GameStats_Inc(setup->gameStats, GAME_STAT_WIFI_BATTLE_WINS);
         }
         break;
     case 2:
         if (!CommState_IsWifi()) {
-            GameStats_Inc(setup->gameStats, 23);
+            GameStats_Inc(setup->gameStats, GAME_STAT_LOCAL_LINK_BATTLE_LOSSES);
         } else {
-            GameStats_Inc(setup->gameStats, 28);
+            GameStats_Inc(setup->gameStats, GAME_STAT_WIFI_BATTLE_LOSSES);
         }
         break;
     case 3:
     case 5:
         if (!CommState_IsWifi()) {
-            GameStats_Inc(setup->gameStats, 24);
+            GameStats_Inc(setup->gameStats, GAME_STAT_LOCAL_LINK_BATTLE_DRAWS);
         } else {
-            GameStats_Inc(setup->gameStats, 29);
+            GameStats_Inc(setup->gameStats, GAME_STAT_WIFI_BATTLE_DRAWS);
         }
         break;
     case 0:
