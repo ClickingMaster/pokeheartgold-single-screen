@@ -5,6 +5,10 @@
 #include "constants/maps.h"
 #include "constants/sndseq.h"
 
+#include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0191.h"
+#include "msgdata/msg/msg_0435.h"
+
 #include "font.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
@@ -76,7 +80,7 @@ void ScriptMenu_Init(FieldSystem *fieldSystem, ScriptMenu *menu, u8 x, u8 y, u8 
     int i;
 
     if (msgData == NULL) {
-        menu->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 191, HEAP_ID_FIELD1);
+        menu->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0191_bin, HEAP_ID_FIELD1);
         menu->ownMsgData = TRUE;
     } else {
         menu->msgData = msgData;
@@ -143,7 +147,7 @@ void ScriptMenu_ShowMultichoice(ScriptMenu *menu) {
     }
     AddWindowParameterized(menu->fieldSystem->bgConfig, &menu->window, GF_BG_LYR_MAIN_3, menu->x, menu->y, (u8)width, (u8)(menu->count * 2), 13, 0x3D);
     LoadUserFrameGfx1(menu->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0x3D9, 11, 0, HEAP_ID_FIELD1);
-    DrawFrameAndWindow1(&menu->window, 1, 0x3D9, 11);
+    DrawFrameAndWindow1(&menu->window, TRUE, 0x3D9, 11);
     ScriptMenu_SetupMultichoiceTemplate(menu);
     menu->menu2dPtr = Create2dMenu(&menu->menu2d, menu->initCursorPos, HEAP_ID_FIELD1);
     menu->task = SysTask_CreateOnMainQueue((SysTaskFunc)ScriptMenu_MultichoiceTask, menu, 0);
@@ -232,7 +236,7 @@ void ScriptMenu_Free(ScriptMenu *menu) {
 void ScriptMenu_CloseMultichoice(ScriptMenu *menu) {
     PlaySE(SEQ_SE_DP_SELECT);
     Delete2dMenu(menu->menu2dPtr, NULL);
-    EraseFrameAndWindow1(menu->menu2d.window, 0);
+    EraseFrameAndWindow1(menu->menu2d.window, FALSE);
     RemoveWindow(menu->menu2d.window);
     SysTask_Destroy(menu->task);
     ScriptMenu_Free(menu);
@@ -281,7 +285,7 @@ void ScriptMenu_OpenListWindow(ScriptMenu *menu, u32 width) {
         AddWindowParameterized(menu->fieldSystem->bgConfig, &menu->window, GF_BG_LYR_MAIN_3, menu->x, menu->y, (u8)width, (u8)(menu->count * 2), 13, 0x3D);
     }
     LoadUserFrameGfx1(menu->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0x3D9, 11, 0, HEAP_ID_FIELD1);
-    DrawFrameAndWindow1(&menu->window, 1, 0x3D9, 11);
+    DrawFrameAndWindow1(&menu->window, TRUE, 0x3D9, 11);
     ScriptMenu_SetupListTemplate(menu);
     menu->listMenu = ListMenuInit(&menu->listTemplate, 0, menu->initCursorPos, HEAP_ID_FIELD1);
     ScriptMenu_PrintCursorHelpMessage(menu);
@@ -394,7 +398,7 @@ void ScriptMenu_ListMoveCursorCallback(ListMenu *listMenu, s32 itemId, u8 onInit
 
     row = 0;
     scroll = 0;
-    menu = (ScriptMenu *)ListMenuGetTemplateField(listMenu, (enum ListMenuAttr)0x13);
+    menu = (ScriptMenu *)ListMenuGetTemplateField(listMenu, LISTMENUATTR_DATA);
     ListMenuGetScrollAndRow(listMenu, &row, &scroll);
     if (menu->scroll_p != NULL && menu->row_p != NULL) {
         *menu->scroll_p = row;
@@ -440,7 +444,7 @@ void ScriptMenu_CloseList(ScriptMenu *menu) {
 
     PlaySE(SEQ_SE_DP_SELECT);
     DestroyListMenu(menu->listMenu, NULL, NULL);
-    EraseFrameAndWindow1(menu->listTemplate.window, 0);
+    EraseFrameAndWindow1(menu->listTemplate.window, FALSE);
     RemoveWindow(&menu->window);
     for (i = 0; i < 28; i++) {
         String_Delete(menu->strbufs[i]);
@@ -458,7 +462,7 @@ void ScriptMenu_PrintHelpMessage(ScriptMenu *menu, u32 msgId, u32 textSpeed) {
     FillWindowPixelBuffer(menu->printWindow, 15);
     ReadMsgDataIntoString(menu->msgData, msgId, tmp);
     StringExpandPlaceholders(menu->msgFmt, dest, tmp);
-    AddTextPrinterParameterized(menu->printWindow, 1, dest, 0, 0, textSpeed, 0);
+    AddTextPrinterParameterized(menu->printWindow, 1, dest, 0, 0, textSpeed, NULL);
     String_Delete(tmp);
     String_Delete(dest);
 }
@@ -495,7 +499,7 @@ void PrintCurFloorInNewWindow(FieldSystem *fieldSystem, u8 x, u8 y, u16 *p_ret, 
     LoadUserFrameGfx1(menu->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 985, 11, 0, HEAP_ID_FIELD1);
     DrawFrameAndWindow1(&menu->window, TRUE, 985, 11);
     FillWindowPixelRect(&menu->window, 15, 0, 0, tiles * 8, 32);
-    ScriptMenu_PrintMessage(menu, 16, 0, 0);
+    ScriptMenu_PrintMessage(menu, msg_0191_00016, 0, 0);
     msg = GetFloorNameMessage(fieldSystem->location->mapId, floor, &flag);
     ScriptMenu_PrintMessage(menu, (u16)msg, flag, 16);
     menu->menu2d.window = &menu->window;
@@ -511,7 +515,7 @@ void ScriptMenu_PrintMessage(ScriptMenu *menu, u16 msgId, u8 x, u8 y) {
     String *dest = String_New(90, HEAP_ID_FIELD1);
     ReadMsgDataIntoString(menu->msgData, msgId, tmp);
     StringExpandPlaceholders(menu->msgFmt, dest, tmp);
-    AddTextPrinterParameterized(&menu->window, 0, dest, x, y, TEXT_SPEED_NOTRANSFER, 0);
+    AddTextPrinterParameterized(&menu->window, 0, dest, x, y, TEXT_SPEED_NOTRANSFER, NULL);
     String_Delete(tmp);
     String_Delete(dest);
 }
@@ -523,7 +527,7 @@ void ScriptMenu_FloorWindowTask(SysTask *task, ScriptMenu *menu) {
     if (*menu->ret_p != 0xFFFF) {
         return;
     }
-    EraseFrameAndWindow1(menu->menu2d.window, 0);
+    EraseFrameAndWindow1(menu->menu2d.window, FALSE);
     RemoveWindow(menu->menu2d.window);
     for (i = 0; i < 28; i++) {
         String_Delete(menu->strbufs[i]);
@@ -591,22 +595,22 @@ int MapNumToFloorNo(int mapId) {
 
 int GetFloorNameMessage(u32 mapId, int floor, u8 *width_p) {
     switch (mapId) {
-    case 0x1B9:
+    case MAP_GOLDENROD_DEPARTMENT_STORE_ELEVATOR:
         if (floor == 0) {
             *width_p = 0x20;
-            return 0x7A;
+            return msg_0191_00122;
         }
         break;
-    case 0x1BB:
-    case 0x1BC:
+    case MAP_CELADON_CONDOMINIUMS_LEFT_ELEVATOR:
+    case MAP_CELADON_CONDOMINIUMS_RIGHT_ELEVATOR:
         if (floor == 3) {
             *width_p = 0x10;
-            return 0x7D;
+            return msg_0191_00125;
         }
         break;
     }
     *width_p = 0x20;
-    return 0x11;
+    return msg_0191_00017;
 }
 
 void ScriptMenu_ShowMultichoiceGrid(ScriptMenu *menu, u8 numColumns) {
@@ -652,9 +656,9 @@ Window *FieldSystem_ShowMoneyBox(FieldSystem *fieldSystem, u8 x, u8 y) {
     LoadUserFrameGfx1(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0x3D9, 11, 0, HEAP_ID_FIELD1);
     DrawFrameAndWindow1(window, TRUE, 0x3D9, 11);
     FillWindowPixelBuffer(window, 15);
-    msgData = NewMsgDataFromNarc((MsgDataLoadType)0, NARC_msgdata_msg, 0x1B3, HEAP_ID_FIELD1);
-    string = NewString_ReadMsgData(msgData, 30);
-    AddTextPrinterParameterized(window, 0, string, 0, 0, 0xFF, 0);
+    msgData = NewMsgDataFromNarc((MsgDataLoadType)0, NARC_msgdata_msg, NARC_msg_msg_0435_bin, HEAP_ID_FIELD1);
+    string = NewString_ReadMsgData(msgData, msg_0435_00030);
+    AddTextPrinterParameterized(window, 0, string, 0, 0, 0xFF, NULL);
     DestroyMsgData(msgData);
     String_Delete(string);
     MoneyBoxSys_Update(fieldSystem, window);
@@ -662,7 +666,7 @@ Window *FieldSystem_ShowMoneyBox(FieldSystem *fieldSystem, u8 x, u8 y) {
 }
 
 void MoneyBoxSys_Delete(Window *moneybox) {
-    EraseFrameAndWindow1(moneybox, 0);
+    EraseFrameAndWindow1(moneybox, FALSE);
     WindowArray_Delete(moneybox, 1);
 }
 
@@ -675,10 +679,10 @@ void MoneyBoxSys_Update(FieldSystem *fieldSystem, Window *moneybox) {
     int x;
 
     FillWindowPixelRect(moneybox, 15, 0, 16, 80, 16);
-    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 0x1B3, HEAP_ID_FIELD1);
+    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0435_bin, HEAP_ID_FIELD1);
     msgFmt = MessageFormat_New(HEAP_ID_FIELD1);
     string = String_New(16, HEAP_ID_FIELD1);
-    template = NewString_ReadMsgData(msgData, 31);
+    template = NewString_ReadMsgData(msgData, msg_0435_00031);
     BufferIntegerAsString(msgFmt, 0, PlayerProfile_GetMoney(Save_PlayerData_GetProfile(fieldSystem->saveData)), 6, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     StringExpandPlaceholders(msgFmt, string, template);
     x = 80 - FontID_String_GetWidth(0, string, 0);
@@ -702,7 +706,7 @@ Window *PointsBox_New(FieldSystem *fieldSystem, u8 type, u8 x, u8 y) {
 #pragma force_active reset
 
 void PointsBox_Delete(Window *window) {
-    EraseFrameAndWindow1(window, 0);
+    EraseFrameAndWindow1(window, FALSE);
     WindowArray_Delete(window, 1);
 }
 
@@ -717,21 +721,21 @@ void PointsBox_Update(FieldSystem *fieldSystem, Window *window, u8 type) {
     int x;
 
     FillWindowPixelBuffer(window, 15);
-    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 191, HEAP_ID_FIELD1);
+    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0191_bin, HEAP_ID_FIELD1);
     msgFmt = MessageFormat_New(HEAP_ID_FIELD1);
     string = String_New(16, HEAP_ID_FIELD1);
     switch (type) {
     case 0:
-        template = NewString_ReadMsgData(msgData, 193);
+        template = NewString_ReadMsgData(msgData, msg_0191_00193);
         value = Coins_GetValue(Save_PlayerData_GetCoinsAddr(fieldSystem->saveData));
         break;
     case 1:
-        template = NewString_ReadMsgData(msgData, 220);
+        template = NewString_ReadMsgData(msgData, msg_0191_00220);
         value = FrontierData_BattlePointAction(Save_FrontierData_Get(fieldSystem->saveData), 0, 0);
         break;
     case 2:
     default:
-        template = NewString_ReadMsgData(msgData, 223);
+        template = NewString_ReadMsgData(msgData, msg_0191_00223);
         value = PokeathlonSave_GetAthletePoints(Save_Pokeathlon_Get(fieldSystem->saveData));
         break;
     }
@@ -755,11 +759,11 @@ Window *SavingsBox_New(FieldSystem *fieldSystem, u8 x, u8 y) {
     LoadUserFrameGfx1(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0x3D9, 11, 0, HEAP_ID_FIELD1);
     DrawFrameAndWindow1(window, TRUE, 0x3D9, 11);
     FillWindowPixelBuffer(window, 15);
-    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 191, HEAP_ID_FIELD1);
-    string = NewString_ReadMsgData(msgData, 330);
+    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0191_bin, HEAP_ID_FIELD1);
+    string = NewString_ReadMsgData(msgData, msg_0191_00330);
     AddTextPrinterParameterized(window, 0, string, 0, 0, TEXT_SPEED_NOTRANSFER, NULL);
     String_Delete(string);
-    string = NewString_ReadMsgData(msgData, 331);
+    string = NewString_ReadMsgData(msgData, msg_0191_00331);
     AddTextPrinterParameterized(window, 0, string, 0, 32, TEXT_SPEED_NOTRANSFER, NULL);
     String_Delete(string);
     DestroyMsgData(msgData);
@@ -769,7 +773,7 @@ Window *SavingsBox_New(FieldSystem *fieldSystem, u8 x, u8 y) {
 #pragma force_active reset
 
 void SavingsBox_Delete(Window *window) {
-    EraseFrameAndWindow1(window, 0);
+    EraseFrameAndWindow1(window, FALSE);
     WindowArray_Delete(window, 1);
 }
 
@@ -777,10 +781,10 @@ void SavingsBox_Delete(Window *window) {
 void SavingsBox_Update(FieldSystem *fieldSystem, Window *window) {
     FillWindowPixelRect(window, 15, 0, 128, 128, 16);
     FillWindowPixelRect(window, 15, 0, 384, 128, 16);
-    MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 191, HEAP_ID_FIELD1);
+    MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0191_bin, HEAP_ID_FIELD1);
     MessageFormat *msgFmt = MessageFormat_New(HEAP_ID_FIELD1);
     String *string = String_New(16, HEAP_ID_FIELD1);
-    String *template = NewString_ReadMsgData(msgData, 332);
+    String *template = NewString_ReadMsgData(msgData, msg_0191_00332);
     u32 money = PhoneCallPersistentState_MomSavings_BalanceAction(SaveData_GetPhoneCallPersistentState(fieldSystem->saveData), 0, 0);
     BufferIntegerAsString(msgFmt, 0, money, 6, PRINTING_MODE_LEFT_ALIGN, TRUE);
     StringExpandPlaceholders(msgFmt, string, template);
@@ -814,7 +818,7 @@ Window *BattleRegulationWindow_New(FieldSystem *fieldSystem, u16 ruleset) {
 }
 
 void BattleRegulationWindow_Delete(Window *window) {
-    EraseFrameAndWindow1(window, 0);
+    EraseFrameAndWindow1(window, FALSE);
     WindowArray_Delete(window, 1);
 }
 
@@ -830,7 +834,7 @@ void ScriptMenu_PrintItemHelpMessage(ScriptMenu *menu, int idx) {
     FillWindowPixelBuffer(menu->printWindow, 15);
     ReadMsgDataIntoString(menu->msgData, menu->msgIds[idx], tmp);
     StringExpandPlaceholders(menu->msgFmt, dest, tmp);
-    AddTextPrinterParameterized(menu->printWindow, 1, dest, 0, 0, 0, 0);
+    AddTextPrinterParameterized(menu->printWindow, 1, dest, 0, 0, 0, NULL);
     String_Delete(tmp);
     String_Delete(dest);
 }

@@ -83,7 +83,7 @@ void FollowMonBillboard_Update(LocalMapObject *object, Sprite *billboard, void *
         MapObject_CopyFacingVector(object, &offset);
         offset.y = billboardWork->height << 12;
     } else {
-        if (paused != 0 || flag4 != 0 || hasFollowMonSprite != 0) {
+        if (paused != FALSE || flag4 != FALSE || hasFollowMonSprite != 0) {
             MapObject_CopyFacingVector(object, &offset);
             offset.x = 0;
             offset.z = 0;
@@ -102,7 +102,7 @@ void FollowMonBillboard_Update(LocalMapObject *object, Sprite *billboard, void *
         BillboardObject_SetSequenceFrame(billboard, 0);
         billboardWork->bobbing = 0;
     }
-    if (paused == 0 && flag4 == 0) {
+    if (paused == FALSE && flag4 == FALSE) {
         BillboardObject_AdvanceFrame(billboard, FX32_ONE);
         if (FollowMonBillboard_IsBobFrame((u8)direction, object, billboard)) {
             offset.y -= 2 * FX32_ONE;
@@ -335,14 +335,14 @@ void MapObjectManager_InitRender(MapObjectManager *mapObjectManager, int texture
     u32 count;
     u32 priority;
 
-    if (MapObjectManager_GetFlagsBitsMask(mapObjectManager, (MapObjectFlagBits)1) != 0) {
+    if (MapObjectManager_GetFlagsBitsMask(mapObjectManager, MAPOBJECTFLAG_ACTIVE) != 0) {
         GF_AssertFail();
     }
     FldObjSys_OpenMModelNarc(mapObjectManager);
     count = MapObjectManager_GetObjectCount(mapObjectManager);
     priority = MapObjectManager_GetPriority(mapObjectManager) - 1;
     MapObjectRender_Init(MapObjectManager_GetRender(mapObjectManager), mapObjectManager, count, priority, textureCount, objectsToPreload, objectIDs, loadsPerFrame);
-    MapObjectManager_SetFlagsBits(mapObjectManager, (MapObjectFlagBits)1);
+    MapObjectManager_SetFlagsBits(mapObjectManager, MAPOBJECTFLAG_ACTIVE);
 }
 
 void MapObjectManager_FreeRender(MapObjectManager *mapObjectManager) {
@@ -350,7 +350,7 @@ void MapObjectManager_FreeRender(MapObjectManager *mapObjectManager) {
         GF_AssertFail();
     }
     MapObjectRender_Free(MapObjectManager_GetRender(mapObjectManager));
-    MapObjectManager_ClearFlagsBits(mapObjectManager, (MapObjectFlagBits)1);
+    MapObjectManager_ClearFlagsBits(mapObjectManager, MAPOBJECTFLAG_ACTIVE);
     FldObjSys_CloseMModelNarc(mapObjectManager);
 }
 
@@ -363,7 +363,7 @@ void FldObjSys_CloseMModelNarc(MapObjectManager *manager) {
 }
 
 void MapObject_TryUpdateDraw(LocalMapObject *object) {
-    if (MapObjectManager_GetFlagsBitsMask(MapObject_GetManager(object), (MapObjectFlagBits)4) != 0) {
+    if (MapObjectManager_GetFlagsBitsMask(MapObject_GetManager(object), MAPOBJECTFLAG_START_MOVEMENT) != 0) {
         return;
     }
     if (MapObject_GetFlagsBitsMask(object, MAPOBJECTFLAG_UNK14) == 0) {

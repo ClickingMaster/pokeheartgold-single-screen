@@ -2,6 +2,7 @@
 
 #include "constants/sndseq.h"
 
+#include "application/choose_starter/choose_starter_sub_res.naix"
 #include "field/field_effect_helpers.h"
 #include "field/field_move_cut_in.h"
 #include "field/fly_landing_effect.h"
@@ -679,13 +680,13 @@ void FieldMoveCutIn_InitBannerGraphics(FieldMoveCutIn *cutIn) {
     G2_SetBG3Priority(0);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
 #ifdef HEARTGOLD
-    CutInBanner_LoadPalette(narc, 2, &cutIn->bannerPltt);
-    CutInBanner_LoadChar(cutIn->fieldSystem->bgConfig, narc, 0, &cutIn->bannerChar);
-    CutInBanner_LoadScreen(cutIn->fieldSystem->bgConfig, narc, 1, &cutIn->bannerScreen);
+    CutInBanner_LoadPalette(narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000002_NCLR, &cutIn->bannerPltt);
+    CutInBanner_LoadChar(cutIn->fieldSystem->bgConfig, narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000000_NCGR, &cutIn->bannerChar);
+    CutInBanner_LoadScreen(cutIn->fieldSystem->bgConfig, narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000001_NSCR, &cutIn->bannerScreen);
 #else
-    CutInBanner_LoadPalette(narc, 5, &cutIn->bannerPltt);
-    CutInBanner_LoadChar(cutIn->fieldSystem->bgConfig, narc, 3, &cutIn->bannerChar);
-    CutInBanner_LoadScreen(cutIn->fieldSystem->bgConfig, narc, 4, &cutIn->bannerScreen);
+    CutInBanner_LoadPalette(narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000005_NCLR, &cutIn->bannerPltt);
+    CutInBanner_LoadChar(cutIn->fieldSystem->bgConfig, narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000003_NCGR, &cutIn->bannerChar);
+    CutInBanner_LoadScreen(cutIn->fieldSystem->bgConfig, narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000004_NSCR, &cutIn->bannerScreen);
 #endif
     FieldMoveCutIn_LoadSpriteResources(cutIn, narc);
     NARC_Delete(narc);
@@ -745,12 +746,12 @@ void FieldMoveCutIn_LoadSpriteResources(FieldMoveCutIn *cutIn, NARC *narc) {
     cutIn->resMan[GF_GFX_RES_TYPE_CELL] = Create2DGfxResObjMan(4, GF_GFX_RES_TYPE_CELL, HEAP_ID_FIELD1);
     cutIn->resMan[GF_GFX_RES_TYPE_ANIM] = Create2DGfxResObjMan(2, GF_GFX_RES_TYPE_ANIM, HEAP_ID_FIELD1);
 
-    cutIn->charResources[0] = AddCharResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CHAR], narc, 14, FALSE, 1, 1, HEAP_ID_FIELD1);
+    cutIn->charResources[0] = AddCharResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CHAR], narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000014_NCGR, FALSE, 1, 1, HEAP_ID_FIELD1);
     cutIn->charResources[1] = AddCharResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CHAR], narc, sCutInTrainerCharFiles[cutIn->trainerGraphics], FALSE, 2, 1, HEAP_ID_FIELD1);
     cutIn->charResources[2] = FieldMoveCutIn_AddMonCharResource(cutIn, narc);
 
     i = 0;
-    cutIn->plttResources[i] = AddPlttResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_PLTT], narc, 6, FALSE, 0, 1, 1, HEAP_ID_FIELD1);
+    cutIn->plttResources[i] = AddPlttResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_PLTT], narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000006_NCLR, FALSE, 0, 1, 1, HEAP_ID_FIELD1);
     i++;
     if (cutIn->trainerGraphics != 0) {
         cutIn->plttResources[i] = AddPlttResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_PLTT], narc, sCutInTrainerPlttFiles[cutIn->trainerGraphics - 1], FALSE, 1, 1, 1, HEAP_ID_FIELD1);
@@ -758,10 +759,10 @@ void FieldMoveCutIn_LoadSpriteResources(FieldMoveCutIn *cutIn, NARC *narc) {
     }
     cutIn->plttResources[i] = FieldMoveCutIn_AddMonPlttResource(cutIn, narc);
 
-    cutIn->cellResources[0] = AddCellOrAnimResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CELL], narc, 15, FALSE, 1, GF_GFX_RES_TYPE_CELL, HEAP_ID_FIELD1);
+    cutIn->cellResources[0] = AddCellOrAnimResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CELL], narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000015_NCER, FALSE, 1, GF_GFX_RES_TYPE_CELL, HEAP_ID_FIELD1);
     cutIn->cellResources[1] = AddCellOrAnimResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CELL], narc, sCutInTrainerCellFiles[cutIn->trainerGraphics], FALSE, 2, GF_GFX_RES_TYPE_CELL, HEAP_ID_FIELD1);
-    cutIn->cellResources[2] = AddCellOrAnimResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CELL], narc, 10, FALSE, 3, GF_GFX_RES_TYPE_CELL, HEAP_ID_FIELD1);
-    cutIn->animResources[0] = AddCellOrAnimResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_ANIM], narc, 16, FALSE, 0, GF_GFX_RES_TYPE_ANIM, HEAP_ID_FIELD1);
+    cutIn->cellResources[2] = AddCellOrAnimResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CELL], narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000010_NCER, FALSE, 3, GF_GFX_RES_TYPE_CELL, HEAP_ID_FIELD1);
+    cutIn->animResources[0] = AddCellOrAnimResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_ANIM], narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000016_NANR, FALSE, 0, GF_GFX_RES_TYPE_ANIM, HEAP_ID_FIELD1);
     cutIn->animResources[1] = AddCellOrAnimResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_ANIM], narc, sCutInTrainerAnimFiles[cutIn->trainerGraphics], FALSE, 1, GF_GFX_RES_TYPE_ANIM, HEAP_ID_FIELD1);
 
     cutIn->monCharData = FieldMoveCutIn_LoadMonChar(cutIn->mon, &cutIn->pokepicTemplate, HEAP_ID_FIELD1);
@@ -869,14 +870,14 @@ void FieldMoveCutIn_LoadFlyResources(FieldMoveCutIn *cutIn) {
     int i;
     for (i = 0; i < 4; i++) {
         if (cutIn->charResources[i] == NULL) {
-            cutIn->charResources[i] = AddCharResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CHAR], narc, 11, FALSE, 0, 1, HEAP_ID_FIELD1);
+            cutIn->charResources[i] = AddCharResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CHAR], narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000011_NCGR, FALSE, 0, 1, HEAP_ID_FIELD1);
             break;
         }
     }
     GF_ASSERT(i < 4);
     for (i = 0; i < 4; i++) {
         if (cutIn->cellResources[i] == NULL) {
-            cutIn->cellResources[i] = AddCellOrAnimResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CELL], narc, 12, FALSE, 0, GF_GFX_RES_TYPE_CELL, HEAP_ID_FIELD1);
+            cutIn->cellResources[i] = AddCellOrAnimResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CELL], narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000012_NCER, FALSE, 0, GF_GFX_RES_TYPE_CELL, HEAP_ID_FIELD1);
             break;
         }
     }

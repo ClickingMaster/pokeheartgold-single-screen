@@ -546,11 +546,11 @@ BOOL MapObjectManager_IsSpriteUsedByOtherActiveObject(MapObjectManager *manager,
 }
 
 void MapObjectRender_CreateResourceBanks(MapObjectRender *render, u32 modelCount, u32 residentModelCount, u32 sequenceCount, u32 residentSequenceCount, u32 textureCount, u32 residentTextureCount) {
-    render->modelBank = ResourceBank_Create(HEAP_ID_FIELD1, (enum HeapID)0x3F, modelCount << 12, modelCount);
+    render->modelBank = ResourceBank_Create(HEAP_ID_FIELD1, HEAP_ID_63, modelCount << 12, modelCount);
     MapObjectRender_ClearModelIds(render);
     MapObjectRender_SetResidentModelCount(render, residentModelCount);
     MapObjectRender_SetDynamicModelCount(render, modelCount - residentModelCount);
-    render->sequenceBank = ResourceBank_Create(HEAP_ID_FIELD1, (enum HeapID)0x40, sequenceCount << 7, sequenceCount);
+    render->sequenceBank = ResourceBank_Create(HEAP_ID_FIELD1, HEAP_ID_64, sequenceCount << 7, sequenceCount);
     MapObjectRender_ClearSequenceIds(render);
     MapObjectRender_SetResidentSequenceCount(render, residentSequenceCount);
     MapObjectRender_SetDynamicSequenceCount(render, sequenceCount - residentSequenceCount);
@@ -1643,7 +1643,7 @@ void MapObject_ChangeBillboardSpriteKeepingCopy(LocalMapObject *object, u32 spri
     work->billboard = MapObjectBillboards_CreateBillboard(billboards, &work->resource, &position);
     GF_ASSERT(work->billboard != NULL);
     if (fog == 0) {
-        NNS_G3dMdlSetMdlFogEnableFlagAll(BillboardObject_GetModel(work->billboard), 0);
+        NNS_G3dMdlSetMdlFogEnableFlagAll(BillboardObject_GetModel(work->billboard), FALSE);
     }
     BillboardObject_SetSequence(work->billboard, BillboardObject_GetSequence(oldBillboard));
     BillboardObject_SetSequenceFrame(work->billboard, BillboardObject_GetSequenceFrame(oldBillboard));

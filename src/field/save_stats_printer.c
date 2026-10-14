@@ -2,6 +2,9 @@
 
 #include "constants/maps.h"
 
+#include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0423.h"
+
 #include "assert.h"
 #include "bg_window.h"
 #include "field_system.h"
@@ -137,7 +140,7 @@ void SaveStatsPrinter_PrintStats(struct SaveStatsPrinter *printer) {
     lineHeight = GetFontAttribute(0, 1) + GetFontAttribute(0, 3);
     y = 0;
 
-    str = ReadMsgData_ExpandPlaceholders(printer->msgFmt, printer->msgData, 0, printer->heapId);
+    str = ReadMsgData_ExpandPlaceholders(printer->msgFmt, printer->msgData, msg_0423_00000, printer->heapId);
     AddTextPrinterParameterized(printer->window, 0, str, 0, 0, 0xFF, NULL);
     String_Delete(str);
 
@@ -181,7 +184,7 @@ struct SaveStatsPrinter *Field_SaveStatsPrinter_New(FieldSystem *fieldSystem, en
     printer->bgId = bgId;
     printer->bgConfig = fieldSystem->bgConfig;
     printer->msgFmt = MessageFormat_New(heapId);
-    printer->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 0x1A7, heapId);
+    printer->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0423_bin, heapId);
     SaveStatsPrinter_GetStats(&printer->stats, printer->fieldSystem);
     SaveStatsPrinter_BufferStats(printer->msgFmt, &printer->stats);
     printer->width = 0xD;
@@ -249,7 +252,7 @@ struct SaveStatsPrinter *Field_SaveStatsPrinter_NewTouchSave(FieldSystem *fieldS
     printer->bgId = bgId;
     printer->bgConfig = fieldSystem->bgConfig;
     printer->msgFmt = MessageFormat_New(heapID);
-    printer->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 0x1A7, heapID);
+    printer->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0423_bin, heapID);
     TextFlags_SetCanABSpeedUpPrint(TRUE);
     TextFlags_SetAutoScrollParam(0);
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);

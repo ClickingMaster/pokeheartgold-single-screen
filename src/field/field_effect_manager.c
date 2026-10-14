@@ -260,8 +260,8 @@ void FieldEffectManager_CreateGfx(FieldEffectManager *manager, enum HeapID heapI
     gfx->resourceCount = resourceCount;
     gfx->sequenceCount = sequenceCount;
     gfx->resCount = resCount;
-    gfx->resourceBank = ResourceBank_Create(heapID, (enum HeapID)0x44, resourceHeapSize, resourceCount);
-    gfx->sequenceBank = ResourceBank_Create(heapID, (enum HeapID)0x45, sequenceHeapSize, sequenceCount);
+    gfx->resourceBank = ResourceBank_Create(heapID, HEAP_ID_68, resourceHeapSize, resourceCount);
+    gfx->sequenceBank = ResourceBank_Create(heapID, HEAP_ID_69, sequenceHeapSize, sequenceCount);
     gfx->resMan = GF3dGfxRawResMan_Create(resCount, heapID);
     FieldEffectGfx_InitRecords(manager, gfx, recordCount);
     template.count = recordCount;

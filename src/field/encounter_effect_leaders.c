@@ -4,6 +4,7 @@
 
 #include "field/encounter_effect.h"
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0189.h"
 
 #include "bg_window.h"
 #include "brightness.h"
@@ -202,7 +203,7 @@ String *LeadersEffect_GetTrainerNameString(u32 trainerId, enum HeapID heapID) {
     String *string = String_New(128, heapID);
     String *template = String_New(128, heapID);
 
-    ReadMsgDataIntoString(msgData, 0, template);
+    ReadMsgDataIntoString(msgData, msg_0189_00000, template);
     BufferTrainerName(msgFormat, 0, trainerId);
     StringExpandPlaceholders(msgFormat, string, template);
     DestroyMsgData(msgData);
@@ -217,7 +218,7 @@ String *LeadersEffect_GetRivalNameString(SaveData *saveData, enum HeapID heapID)
     String *string = String_New(128, heapID);
     String *template = String_New(128, heapID);
 
-    ReadMsgDataIntoString(msgData, 0, template);
+    ReadMsgDataIntoString(msgData, msg_0189_00000, template);
     BufferRivalsName(msgFormat, 0, saveData);
     StringExpandPlaceholders(msgFormat, string, template);
     DestroyMsgData(msgData);
@@ -367,7 +368,7 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
         EncounterEffect_FreeSprites(&work->spriteManager);
         RemoveWindow(&work->window);
         reg_GX_DISPCNT &= 0xFFFF1FFF;
-        SetBlendBrightness(0, (GXBlendPlaneMask)0, 1);
+        SetBlendBrightness(0, GX_BLEND_PLANEMASK_NONE, 1);
         BgSetPosTextAndCommit(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_SET_X, 0);
         return TRUE;
     }

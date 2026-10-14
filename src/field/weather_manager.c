@@ -212,7 +212,7 @@ BOOL WeatherManager_ChangeWeather(WeatherManager *weatherManager, s32 weather) {
     GF_ASSERT(weatherManager->task == NULL);
 
     weatherManager->nextWeather = weather;
-    if (Weather_ShouldOverlapChange(weatherManager->weather, weatherManager->nextWeather) == 0) {
+    if (Weather_ShouldOverlapChange(weatherManager->weather, weatherManager->nextWeather) == FALSE) {
         weatherManager->state = 0;
         weatherManager->task = SysTask_CreateOnMainQueue(WeatherTask_ChangeWeather, weatherManager, 0);
     } else {
@@ -347,7 +347,7 @@ static void WeatherDrawTask_RendAndAnimateSprites(SysTask *task, void *data) {
 
 static void Weather_Init2DGfxRes(GF_2DGfxResHeader *headerList, u32 index, u32 fileId) {
     GF_2DGfxResHeader *header = GF2DGfxResHeader_GetByIndex(headerList, index);
-    GF_2DGfxResHeaderNarcList *headerNarcList = GfGfxLoader_LoadFromNarc(NARC_a_0_6_3, fileId, 0, HEAP_ID_FIELD1, 1);
+    GF_2DGfxResHeaderNarcList *headerNarcList = GfGfxLoader_LoadFromNarc(NARC_a_0_6_3, fileId, FALSE, HEAP_ID_FIELD1, TRUE);
     GF2DGfxResHeader_Init(headerNarcList, header, HEAP_ID_FIELD1);
     Heap_Free(headerNarcList);
 }
@@ -646,7 +646,7 @@ static BOOL WeatherSystem_Process(WeatherSystem *weatherSystem, int state, int w
         ret = WeatherSystem_Start(weatherSystem, weather, 2, 1);
         break;
     case 4:
-        if (Fog_IsEnabled(weatherSystem->fieldSystem->fog) == 1) {
+        if (Fog_IsEnabled(weatherSystem->fieldSystem->fog) == TRUE) {
             ret = WeatherSystem_Start(weatherSystem, weather, 0, 2);
         } else {
             ret = WeatherSystem_Start(weatherSystem, weather, 0, 1);
@@ -801,7 +801,7 @@ static BOOL WeatherSystem_LoadAsync(WeatherSystem *weatherSystem, int weather) {
         return TRUE;
     }
 
-    if (WeatherSystem_AllocWork(weatherSystem, entry) == 0) {
+    if (WeatherSystem_AllocWork(weatherSystem, entry) == FALSE) {
         return FALSE;
     }
 
@@ -1058,19 +1058,19 @@ static BOOL WeatherEntry_AllocSpriteResources(WeatherEntry *entry) {
 
 static void WeatherSystem_LoadCellResource(WeatherSystem *weatherSystem, u32 headerIndex, WeatherSpriteResources *spriteResources) {
     if (headerIndex != 0xFFFF) {
-        spriteResources->charResObj[GF_GFX_RES_TYPE_CELL] = Weather_AddResObjFromOpenNarc(weatherSystem->weatherDraw.header, GF_GFX_RES_TYPE_CELL, headerIndex, weatherSystem->weatherDraw.resMan[GF_GFX_RES_TYPE_CELL], weatherSystem->narc, 0);
+        spriteResources->charResObj[GF_GFX_RES_TYPE_CELL] = Weather_AddResObjFromOpenNarc(weatherSystem->weatherDraw.header, GF_GFX_RES_TYPE_CELL, headerIndex, weatherSystem->weatherDraw.resMan[GF_GFX_RES_TYPE_CELL], weatherSystem->narc, FALSE);
     }
 }
 
 static void WeatherSystem_LoadAnimResource(WeatherSystem *weatherSystem, u32 headerIndex, WeatherSpriteResources *spriteResources) {
     if (headerIndex != 0xFFFF) {
-        spriteResources->charResObj[GF_GFX_RES_TYPE_ANIM] = Weather_AddResObjFromOpenNarc(weatherSystem->weatherDraw.header, GF_GFX_RES_TYPE_ANIM, headerIndex, weatherSystem->weatherDraw.resMan[GF_GFX_RES_TYPE_ANIM], weatherSystem->narc, 0);
+        spriteResources->charResObj[GF_GFX_RES_TYPE_ANIM] = Weather_AddResObjFromOpenNarc(weatherSystem->weatherDraw.header, GF_GFX_RES_TYPE_ANIM, headerIndex, weatherSystem->weatherDraw.resMan[GF_GFX_RES_TYPE_ANIM], weatherSystem->narc, FALSE);
     }
 }
 
 static void WeatherSystem_LoadCharResource(WeatherSystem *weatherSystem, u32 headerIndex, WeatherSpriteResources *spriteResources) {
     if (headerIndex != 0xFFFF) {
-        spriteResources->charResObj[GF_GFX_RES_TYPE_CHAR] = Weather_AddResObjFromOpenNarc(weatherSystem->weatherDraw.header, GF_GFX_RES_TYPE_CHAR, headerIndex, weatherSystem->weatherDraw.resMan[GF_GFX_RES_TYPE_CHAR], weatherSystem->narc, 1);
+        spriteResources->charResObj[GF_GFX_RES_TYPE_CHAR] = Weather_AddResObjFromOpenNarc(weatherSystem->weatherDraw.header, GF_GFX_RES_TYPE_CHAR, headerIndex, weatherSystem->weatherDraw.resMan[GF_GFX_RES_TYPE_CHAR], weatherSystem->narc, TRUE);
         SpriteTransfer_CreateCharTransferTask_AllocAtEnd(spriteResources->charResObj[GF_GFX_RES_TYPE_CHAR]);
         GF2DGfxResObj_FreeData(spriteResources->charResObj[GF_GFX_RES_TYPE_CHAR]);
     }
@@ -1078,7 +1078,7 @@ static void WeatherSystem_LoadCharResource(WeatherSystem *weatherSystem, u32 hea
 
 static void WeatherSystem_LoadPlttResource(WeatherSystem *weatherSystem, u32 headerIndex, WeatherSpriteResources *spriteResources) {
     if (headerIndex != 0xFFFF) {
-        spriteResources->charResObj[GF_GFX_RES_TYPE_PLTT] = Weather_AddResObjFromOpenNarc(weatherSystem->weatherDraw.header, GF_GFX_RES_TYPE_PLTT, headerIndex, weatherSystem->weatherDraw.resMan[GF_GFX_RES_TYPE_PLTT], weatherSystem->narc, 1);
+        spriteResources->charResObj[GF_GFX_RES_TYPE_PLTT] = Weather_AddResObjFromOpenNarc(weatherSystem->weatherDraw.header, GF_GFX_RES_TYPE_PLTT, headerIndex, weatherSystem->weatherDraw.resMan[GF_GFX_RES_TYPE_PLTT], weatherSystem->narc, TRUE);
         SpriteTransfer_CreatePlttTransferTask(spriteResources->charResObj[GF_GFX_RES_TYPE_PLTT]);
         GF2DGfxResObj_FreeData(spriteResources->charResObj[GF_GFX_RES_TYPE_PLTT]);
     }
@@ -1100,7 +1100,7 @@ static void WeatherSystem_InitSpriteTemplate(WeatherSystem *weatherSystem, Weath
 static void WeatherWork_CreateSprites(WeatherWork *work) {
     for (int i = 0; i < 64; i++) {
         work->linkedList[i].sprite = Sprite_CreateAffine(&work->spriteResources->spriteTemplate);
-        Sprite_SetDrawFlag(work->linkedList[i].sprite, 0);
+        Sprite_SetDrawFlag(work->linkedList[i].sprite, FALSE);
         GF_ASSERT(work->linkedList[i].sprite);
     }
 }
@@ -1182,7 +1182,7 @@ static void *WeatherSystem_AddObject(WeatherWork *work, int size) {
     }
 
     GF_ASSERT(object->sprite);
-    Sprite_SetDrawFlag(object->sprite, 1);
+    Sprite_SetDrawFlag(object->sprite, TRUE);
     return object;
 }
 
@@ -1200,7 +1200,7 @@ static void WeatherObject_Delete(WeatherObject *object) {
     object->prev->next = object->next;
     object->next->prev = object->prev;
 
-    Sprite_SetDrawFlag(object->sprite, 0);
+    Sprite_SetDrawFlag(object->sprite, FALSE);
     WeatherObject_ClearData(object);
 
     Sprite *temp = object->sprite;
@@ -1436,7 +1436,7 @@ static BOOL WeatherFog_Update(WeatherFogChange *fogChange, WeatherFogTableFade *
         if (fogMode == 1) {
             done = WeatherFogTableFade_Update(tableFade);
         } else if (fogMode == 2) {
-            if (WeatherFogChange_Step(fogChange) == 0) {
+            if (WeatherFogChange_Step(fogChange) == FALSE) {
                 done = 0;
             }
         }

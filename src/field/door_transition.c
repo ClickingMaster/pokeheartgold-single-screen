@@ -430,7 +430,7 @@ BOOL DoorTransition_WalkOutOfSideDoor(FieldSystem *fieldSystem, FieldTransitionW
             texture = AreaDataManager_GetMapPropTexture(fieldSystem->areaDataManager);
             renderObj = MapProp_GetRenderSurface(prop);
             model = MapProp_GetResModel(prop);
-            MapPropOneShotAnimationManager_LoadPropAnimations(fieldSystem->mapPropAnimationManager, fieldSystem->mapPropOneShotAnimationManager, SIDE_DOOR_ANIM_TAG, modelId, renderObj, model, texture, 1, 1, 1);
+            MapPropOneShotAnimationManager_LoadPropAnimations(fieldSystem->mapPropAnimationManager, fieldSystem->mapPropOneShotAnimationManager, SIDE_DOOR_ANIM_TAG, modelId, renderObj, model, texture, 1, 1, TRUE);
         } else {
             GF_ASSERT(FALSE);
             return TRUE;
@@ -513,7 +513,7 @@ BOOL DoorTransition_WalkIntoSideDoor(FieldSystem *fieldSystem, FieldTransitionWo
             texture = AreaDataManager_GetMapPropTexture(fieldSystem->areaDataManager);
             renderObj = MapProp_GetRenderSurface(prop);
             model = MapProp_GetResModel(prop);
-            MapPropOneShotAnimationManager_LoadPropAnimations(fieldSystem->mapPropAnimationManager, fieldSystem->mapPropOneShotAnimationManager, SIDE_DOOR_ANIM_TAG, modelId, renderObj, model, texture, 1, 1, 0);
+            MapPropOneShotAnimationManager_LoadPropAnimations(fieldSystem->mapPropAnimationManager, fieldSystem->mapPropOneShotAnimationManager, SIDE_DOOR_ANIM_TAG, modelId, renderObj, model, texture, 1, 1, FALSE);
         } else {
             GF_ASSERT(FALSE);
             return TRUE;

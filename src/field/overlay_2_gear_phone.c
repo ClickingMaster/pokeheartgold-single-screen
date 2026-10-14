@@ -124,7 +124,7 @@ BOOL GearPhoneRingManager_TryStartCall(GearPhoneRingManager *gearPhone) {
             StartMapSceneScript(gearPhone->sys, 0x7FF, 0);
             return TRUE;
         }
-        GearPhoneRingManager_SetRinging(gearPhone, 1);
+        GearPhoneRingManager_SetRinging(gearPhone, TRUE);
         return FALSE;
     }
     u32 rand = MTRandom() % 100;
@@ -213,7 +213,7 @@ u32 GearPhoneRingManager_TryRandomCall(GearPhoneRingManager *gearPhone, PhoneBoo
                 continue;
             }
         }
-        if (phoneBook->entries[candidates[i]].mapId == 0x60 && bugContest) {
+        if (phoneBook->entries[candidates[i]].mapId == MAP_NATIONAL_PARK && bugContest) {
             continue;
         }
         contacts[numCallers++].id = candidates[i];
@@ -248,7 +248,7 @@ static u8 GearPhoneRingManager_PickCallTrigger(GearPhoneRingManager *gearPhone, 
 
     int cnt = 0;
     for (int i = 0; i < NUM_CALL_TRIGGERS; i++) {
-        if (PhoneCallPersistentState_CheckCallTriggerFlag(gearPhone->savingsData, i) == 0) {
+        if (PhoneCallPersistentState_CheckCallTriggerFlag(gearPhone->savingsData, i) == FALSE) {
             continue;
         }
         PhoneBookEntry *entry = &phoneBook->entries[sPhoneCallTriggers[i].callerId];

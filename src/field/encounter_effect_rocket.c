@@ -2,6 +2,7 @@
 
 #include "field/encounter_effect.h"
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0189.h"
 
 #include "bg_window.h"
 #include "brightness.h"
@@ -191,7 +192,7 @@ String *RocketEffect_GetTrainerNameString(u32 trainerId, enum HeapID heapID) {
     String *string = String_New(128, heapID);
     String *template = String_New(128, heapID);
 
-    ReadMsgDataIntoString(msgData, 0, template);
+    ReadMsgDataIntoString(msgData, msg_0189_00000, template);
     BufferTrainerName(msgFormat, 0, trainerId);
     StringExpandPlaceholders(msgFormat, string, template);
     DestroyMsgData(msgData);

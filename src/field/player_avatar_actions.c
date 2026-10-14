@@ -1317,7 +1317,7 @@ LocalMapObject *Field_PlayerAvatar_GetFacingMapObject(PlayerAvatar *playerAvatar
     int dx = GetDeltaXByFacingDirection(direction);
     int z = PlayerAvatar_GetZCoord(playerAvatar);
     int dz = GetDeltaYByFacingDirection(direction);
-    return MapObjectManager_GetFirstObjectWithXAndZ(MapObject_GetManager(PlayerAvatar_GetMapObject(playerAvatar)), x + dx, z + dz, 0);
+    return MapObjectManager_GetFirstObjectWithXAndZ(MapObject_GetManager(PlayerAvatar_GetMapObject(playerAvatar)), x + dx, z + dz, FALSE);
 }
 
 void *FieldMoveTask_AllocWork(u32 size) {

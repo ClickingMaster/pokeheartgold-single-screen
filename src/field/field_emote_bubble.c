@@ -226,9 +226,9 @@ BOOL EmoteBubbleEffect_Init(FieldEffect *effect, EmoteBubbleEffect *work) {
     NNSG3dResTex *tex = FieldEffectManager_GetTexture(work->args.manager, EMOTE_BUBBLE_TEXTURE);
     work->anim.imageSize = Texture_GetImageSizeByIndex(tex, 0);
     work->anim.vramOffset = Texture_GetImageVramOffsetByIndex(tex, 0);
-    GF_CreateNewVramTransferTask((NNS_GFD_DST_TYPE)0, work->anim.vramOffset, Texture_GetImageData(work->anim.tex, 0), work->anim.imageSize);
+    GF_CreateNewVramTransferTask(NNS_GFD_DST_3D_TEX_VRAM, work->anim.vramOffset, Texture_GetImageData(work->anim.tex, 0), work->anim.imageSize);
     u32 plttAddr = NNS_GfdGetTexKeyAddr(tex->plttInfo.vramKey);
-    GF_CreateNewVramTransferTask((NNS_GFD_DST_TYPE)1, plttAddr, Texture_GetPaletteData(work->anim.tex, 0), 0x20);
+    GF_CreateNewVramTransferTask(NNS_GFD_DST_3D_TEX_PLTT, plttAddr, Texture_GetPaletteData(work->anim.tex, 0), 0x20);
     FieldEffect_GetPosition(effect, &position);
     work->billboard = EmoteBubble_CreateBillboard(work->args.manager, &position);
     BillboardObject_SetVisible(work->billboard, 0);
@@ -314,7 +314,7 @@ BOOL EmoteBubbleAnim_Advance(EmoteBubbleAnim *anim) {
         if (anim->frame >= anim->frameCount) {
             return TRUE;
         }
-        GF_CreateNewVramTransferTask((NNS_GFD_DST_TYPE)0, anim->vramOffset, Texture_GetImageData(anim->tex, anim->frames[anim->frame]), anim->imageSize);
+        GF_CreateNewVramTransferTask(NNS_GFD_DST_3D_TEX_VRAM, anim->vramOffset, Texture_GetImageData(anim->tex, anim->frames[anim->frame]), anim->imageSize);
     }
     return FALSE;
 }

@@ -181,7 +181,7 @@ void FieldShadow_UpdateTask(SysTask *task, FieldShadow *shadow) {
 void FieldShadow_LoadModels(FieldShadow *shadow) {
     int i;
     for (i = 0; i < 4; i++) {
-        FieldEffectManager_LoadRenderModel(shadow->manager, &shadow->models[i], 0, sShadowModelFiles[i], 0);
+        FieldEffectManager_LoadRenderModel(shadow->manager, &shadow->models[i], 0, sShadowModelFiles[i], FALSE);
         RenderObj_InitFromModel(&shadow->renderObjs[i], &shadow->models[i]);
     }
 }
@@ -194,7 +194,7 @@ void FieldShadow_FreeModels(FieldShadow *shadow) {
 }
 
 void FieldShadow_SetAlpha(FieldShadow *shadow, u32 alpha) {
-    NNSi_G3dModifyPolygonAttrMask(shadow->models[0].model, 1, 0x1F << 16);
+    NNSi_G3dModifyPolygonAttrMask(shadow->models[0].model, TRUE, 0x1F << 16);
     NNS_G3dMdlSetMdlAlphaAll(shadow->models[0].model, alpha);
 }
 
@@ -243,12 +243,12 @@ void FieldShadowEffect_Update(FieldEffect *effect, FieldShadowEffect *work) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }
-    if (MapObject_GetManagerFlagsBitsMask(object, (MapObjectFlagBits)8)) {
+    if (MapObject_GetManagerFlagsBitsMask(object, MAPOBJECTFLAG_END_MOVEMENT)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
     }
     work->hidden = 0;
-    if (MapObject_TestFlagsBits(object, (MapObjectFlagBits)0x00100200) == TRUE) {
+    if (MapObject_TestFlagsBits(object, (MapObjectFlagBits)(MAPOBJECTFLAG_UNK20 | MAPOBJECTFLAG_VISIBLE)) == TRUE) {
         work->hidden = 1;
         return;
     }
@@ -305,7 +305,7 @@ void FieldShadowEffect_DrawFollowMon(FieldEffect *effect, FieldShadowEffect *wor
     object = work->args.mapObject;
     renderObj = &shadow->renderObjs[0];
     FieldShadow_GetScale(shadow, &scale);
-    if (FollowMonBillboard_IsShadowFollowing(object) != 0) {
+    if (FollowMonBillboard_IsShadowFollowing(object) != FALSE) {
         FieldEffect_GetPosition(effect, &pos);
         pos.x -= 0x800;
         pos.y -= 0x4000;
@@ -342,7 +342,7 @@ void FieldShadowEffect_UpdateFriendShadow(FieldEffect *effect, FieldShadowEffect
         return;
     }
     work->hidden = 0;
-    if (MapObject_TestFlagsBits(object, (MapObjectFlagBits)0x00100200) == TRUE) {
+    if (MapObject_TestFlagsBits(object, (MapObjectFlagBits)(MAPOBJECTFLAG_UNK20 | MAPOBJECTFLAG_VISIBLE)) == TRUE) {
         work->hidden = 1;
         return;
     }

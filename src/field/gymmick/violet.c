@@ -73,10 +73,10 @@ void VioletGymmick_ElevatorAction(FieldSystem *fieldSystem) {
     PlayerAvatar_CopyPositionVector(fieldSystem->playerAvatar, &playerPosition);
     if (playerPosition.y == ELEVATOR_Y_DOWN) {
         TaskManager_Call(fieldSystem->taskman, Task_VioletGymmick_ElevatorUp, taskData);
-        gymmick->violet.liftState = 1;
+        gymmick->violet.liftState = TRUE;
     } else {
         TaskManager_Call(fieldSystem->taskman, Task_VioletGymmick_ElevatorDown, taskData);
-        gymmick->violet.liftState = 0;
+        gymmick->violet.liftState = FALSE;
     }
 }
 

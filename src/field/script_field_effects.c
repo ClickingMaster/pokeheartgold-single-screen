@@ -3,6 +3,7 @@
 #include "constants/sndseq.h"
 #include "constants/species.h"
 
+#include "demo/legend.naix"
 #include "field/area_light.h"
 #include "field/field_3d_model.h"
 #include "msgdata/msg.naix"
@@ -257,9 +258,9 @@ BOOL Task_ShowLighthouseLightUp(TaskManager *taskManager) {
 
 void LighthouseLightUp_Load(LighthouseLightUpEnv *env) {
     HeapExp_FndInitAllocator(&env->allocator, env->heapId, 32);
-    Field3dModel_LoadFromFilesystem(&env->model, NARC_demo_legend, 0, env->heapId);
-    Field3dModelAnimation_LoadFromFilesystem(&env->anims[0], &env->model, NARC_demo_legend, 1, env->heapId, &env->allocator);
-    Field3dModelAnimation_LoadFromFilesystem(&env->anims[1], &env->model, NARC_demo_legend, 2, env->heapId, &env->allocator);
+    Field3dModel_LoadFromFilesystem(&env->model, NARC_demo_legend, NARC_legend_legend_00000000_NSBMD, env->heapId);
+    Field3dModelAnimation_LoadFromFilesystem(&env->anims[0], &env->model, NARC_demo_legend, NARC_legend_legend_00000001_NSBCA, env->heapId, &env->allocator);
+    Field3dModelAnimation_LoadFromFilesystem(&env->anims[1], &env->model, NARC_demo_legend, NARC_legend_legend_00000002_NSBTP, env->heapId, &env->allocator);
     Field3dObject_InitFromModel(&env->object, &env->model);
     Field3dObject_AddAnimation(&env->object, &env->anims[0]);
     Field3dObject_AddAnimation(&env->object, &env->anims[1]);
@@ -510,9 +511,9 @@ void HideoutAlarm_Load(HideoutAlarmEnv *env) {
     env->blend = 0;
     G2_SetBlendAlpha(GX_BLEND_PLANEMASK_BG1, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG2, env->blend, 31 - env->blend);
     narc = NARC_New(NARC_demo_legend, env->heapId);
-    GfGfxLoader_GXLoadPalFromOpenNarc(narc, 12, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 32, env->heapId);
-    GfGfxLoader_LoadCharDataFromOpenNarc(narc, 13, env->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1, 0, 64, FALSE, env->heapId);
-    GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 14, env->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, env->heapId);
+    GfGfxLoader_GXLoadPalFromOpenNarc(narc, NARC_legend_legend_00000012_NCLR, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 32, env->heapId);
+    GfGfxLoader_LoadCharDataFromOpenNarc(narc, NARC_legend_legend_00000013_NCGR, env->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1, 0, 64, FALSE, env->heapId);
+    GfGfxLoader_LoadScrnDataFromOpenNarc(narc, NARC_legend_legend_00000014_NSCR, env->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, env->heapId);
     env->bg0Priority = GetBgPriority(env->fieldSystem->bgConfig, GF_BG_LYR_MAIN_0);
     env->bg1Priority = GetBgPriority(env->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1);
     SetBgPriority(GF_BG_LYR_MAIN_0, 1);
@@ -714,9 +715,9 @@ void AlphHiddenRoom_ShowMessage(AlphHiddenRoomEnv *env) {
     int x;
 
     narc = NARC_New(NARC_demo_legend, env->heapId);
-    GfGfxLoader_GXLoadPalFromOpenNarc(narc, 15, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 32, env->heapId);
-    GfGfxLoader_LoadCharDataFromOpenNarc(narc, 16, env->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, env->heapId);
-    GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 17, env->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, env->heapId);
+    GfGfxLoader_GXLoadPalFromOpenNarc(narc, NARC_legend_legend_00000015_NCLR, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 32, env->heapId);
+    GfGfxLoader_LoadCharDataFromOpenNarc(narc, NARC_legend_legend_00000016_NCGR, env->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, env->heapId);
+    GfGfxLoader_LoadScrnDataFromOpenNarc(narc, NARC_legend_legend_00000017_NSCR, env->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, env->heapId);
     env->bg1Priority = GetBgPriority(env->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1);
     SetBgPriority(GF_BG_LYR_MAIN_1, 0);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);

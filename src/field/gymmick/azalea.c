@@ -304,11 +304,11 @@ void FlipAzaleaGymSwitch(FieldSystem *fieldSystem, u8 switchNo) {
         MapPropAnimationManager_RemoveAnimationFromRenderObj(fieldSystem->mapPropAnimationManager, &switch2->renderObj, 117, switchStateBefore);
         u8 r0 = (gymmickUnion->azalea.switches >> 0) & 1;
         if (r0) {
-            MapPropAnimationManager_AddAnimationToRenderObj(116, 1, 1, &switch1->renderObj, fieldSystem->mapPropAnimationManager);
-            MapPropAnimationManager_AddAnimationToRenderObj(117, 1, 1, &switch2->renderObj, fieldSystem->mapPropAnimationManager);
+            MapPropAnimationManager_AddAnimationToRenderObj(116, 1, TRUE, &switch1->renderObj, fieldSystem->mapPropAnimationManager);
+            MapPropAnimationManager_AddAnimationToRenderObj(117, 1, TRUE, &switch2->renderObj, fieldSystem->mapPropAnimationManager);
         } else {
-            MapPropAnimationManager_AddAnimationToRenderObj(116, 0, 1, &switch1->renderObj, fieldSystem->mapPropAnimationManager);
-            MapPropAnimationManager_AddAnimationToRenderObj(117, 0, 1, &switch2->renderObj, fieldSystem->mapPropAnimationManager);
+            MapPropAnimationManager_AddAnimationToRenderObj(116, 0, TRUE, &switch1->renderObj, fieldSystem->mapPropAnimationManager);
+            MapPropAnimationManager_AddAnimationToRenderObj(117, 0, TRUE, &switch2->renderObj, fieldSystem->mapPropAnimationManager);
         }
     } else if (switchNo == 1) {
         switchStateBefore = (gymmickUnion->azalea.switches >> 1) & 1;
@@ -319,11 +319,11 @@ void FlipAzaleaGymSwitch(FieldSystem *fieldSystem, u8 switchNo) {
         MapPropAnimationManager_RemoveAnimationFromRenderObj(fieldSystem->mapPropAnimationManager, &switch2->renderObj, 122, switchStateBefore);
         u8 switchStateAfter = (gymmickUnion->azalea.switches >> 1) & 1;
         if (switchStateAfter) {
-            MapPropAnimationManager_AddAnimationToRenderObj(115, 1, 1, &switch1->renderObj, fieldSystem->mapPropAnimationManager);
-            MapPropAnimationManager_AddAnimationToRenderObj(122, 1, 1, &switch2->renderObj, fieldSystem->mapPropAnimationManager);
+            MapPropAnimationManager_AddAnimationToRenderObj(115, 1, TRUE, &switch1->renderObj, fieldSystem->mapPropAnimationManager);
+            MapPropAnimationManager_AddAnimationToRenderObj(122, 1, TRUE, &switch2->renderObj, fieldSystem->mapPropAnimationManager);
         } else {
-            MapPropAnimationManager_AddAnimationToRenderObj(115, 0, 1, &switch1->renderObj, fieldSystem->mapPropAnimationManager);
-            MapPropAnimationManager_AddAnimationToRenderObj(122, 0, 1, &switch2->renderObj, fieldSystem->mapPropAnimationManager);
+            MapPropAnimationManager_AddAnimationToRenderObj(115, 0, TRUE, &switch1->renderObj, fieldSystem->mapPropAnimationManager);
+            MapPropAnimationManager_AddAnimationToRenderObj(122, 0, TRUE, &switch2->renderObj, fieldSystem->mapPropAnimationManager);
         }
     } else {
         GF_ASSERT(FALSE);

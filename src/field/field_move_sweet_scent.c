@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+#include "constants/pokemon.h"
+
 #include "field/field_follow_mon.h"
 #include "field/field_3d_model.h"
 
@@ -87,7 +89,7 @@ BOOL Task_UseSweetScentInField(TaskManager *taskManager) {
         break;
     case 4: {
         u8 kind;
-        if (FieldSystem_FirstAliveMonHasType(fieldSystem, 12)) {
+        if (FieldSystem_FirstAliveMonHasType(fieldSystem, TYPE_GRASS)) {
             kind = 2;
             FollowMonMood_Add(fieldSystem->followMonMood, 1);
         } else {

@@ -117,10 +117,10 @@ void AreaLight_ApplyEntry(AreaLightEntry *entry, ModelAttributes *modelAttribute
             ModelAttributes_SetLightColor(modelAttributes, i, 0);
         }
     }
-    ModelAttributes_SetDiffuse(modelAttributes, entry->diffuse, 0, 0);
-    ModelAttributes_SetAmbient(modelAttributes, entry->ambient, 1);
-    ModelAttributes_SetSpecular(modelAttributes, entry->specular, 0, 0);
-    ModelAttributes_SetEmission(modelAttributes, entry->emission, 1);
+    ModelAttributes_SetDiffuse(modelAttributes, entry->diffuse, FALSE, FALSE);
+    ModelAttributes_SetAmbient(modelAttributes, entry->ambient, TRUE);
+    ModelAttributes_SetSpecular(modelAttributes, entry->specular, FALSE, FALSE);
+    ModelAttributes_SetEmission(modelAttributes, entry->emission, TRUE);
 }
 
 void AreaLightManager_ApplyActiveEntry(AreaLightManager *areaLightManager) {

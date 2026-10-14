@@ -1,3 +1,4 @@
+#include "demo/legend.naix"
 #include "field/field_3d_model.h"
 
 #include "field_system.h"
@@ -69,14 +70,14 @@ static void SinjohGymmick_Load3dGraphics(SinjohGymmickLocalData *localData) {
     enum HeapID heapID = HEAP_ID_FIELD1;
 
     const int animIds[3][2] = {
-        { 102, 103 },
-        { 105, 106 },
-        { 108, 109 },
+        { NARC_legend_legend_00000102_NSBCA, NARC_legend_legend_00000103_NSBTA },
+        { NARC_legend_legend_00000105_NSBCA, NARC_legend_legend_00000106_NSBTA },
+        { NARC_legend_legend_00000108_NSBCA, NARC_legend_legend_00000109_NSBTA },
     };
     const int modelIds[3] = {
-        101,
-        104,
-        107,
+        NARC_legend_legend_00000101_NSBMD,
+        NARC_legend_legend_00000104_NSBMD,
+        NARC_legend_legend_00000107_NSBMD,
     };
 
     HeapExp_FndInitAllocator(&localData->allocator, heapID, 0x20);
@@ -161,7 +162,7 @@ static void SysTask_SinjohGymmick(SysTask *sysTask, void *taskData) {
     }
 
     if (isFinished) {
-        localData->active = 0;
+        localData->active = FALSE;
     }
 
     // Require all anims be synchronized

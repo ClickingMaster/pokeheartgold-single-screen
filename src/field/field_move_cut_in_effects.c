@@ -1,5 +1,6 @@
 #include "global.h"
 
+#include "application/choose_starter/choose_starter_sub_res.naix"
 #include "field/field_camera_zoom.h"
 #include "field/field_effect_helpers.h"
 #include "field/field_move_cut_in.h"
@@ -823,24 +824,24 @@ BOOL FlyLanding_LoadGraphics(FlyLanding *landing) {
     landing->effectPool = FieldEffectPool_New(HEAP_ID_FIELD1, 0x20);
     SpriteGfxManager_Init(&landing->gfx, 0x20, 2, 2, 2, 1, 4, 4, 4, 2);
     narc = FlyLanding_OpenNarc();
-    SpriteGfxManager_LoadChar(&landing->gfx, narc, 0xb, 0);
-    SpriteGfxManager_LoadPltt(&landing->gfx, narc, 6, 0);
-    SpriteGfxManager_LoadCell(&landing->gfx, narc, 0xc, 0);
+    SpriteGfxManager_LoadChar(&landing->gfx, narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000011_NCGR, 0);
+    SpriteGfxManager_LoadPltt(&landing->gfx, narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000006_NCLR, 0);
+    SpriteGfxManager_LoadCell(&landing->gfx, narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000012_NCER, 0);
     SpriteGfxManager_TransferChar(&landing->gfx, 0);
     SpriteGfxManager_TransferPltt(&landing->gfx, 0);
     SpriteGfxManager_ReleaseCharData(&landing->gfx, 0);
     SpriteGfxManager_ReleasePlttData(&landing->gfx, 0);
     if (landing->gender == 0) {
-        SpriteGfxManager_LoadChar(&landing->gfx, narc, 0x11, 2);
-        SpriteGfxManager_LoadCell(&landing->gfx, narc, 0x12, 2);
-        SpriteGfxManager_LoadAnim(&landing->gfx, narc, 0x13, 1);
+        SpriteGfxManager_LoadChar(&landing->gfx, narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000017_NCGR, 2);
+        SpriteGfxManager_LoadCell(&landing->gfx, narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000018_NCER, 2);
+        SpriteGfxManager_LoadAnim(&landing->gfx, narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000019_NANR, 1);
         SpriteGfxManager_TransferChar(&landing->gfx, 2);
         SpriteGfxManager_ReleaseCharData(&landing->gfx, 2);
     } else {
-        SpriteGfxManager_LoadChar(&landing->gfx, narc, 0x14, 2);
-        SpriteGfxManager_LoadPltt(&landing->gfx, narc, 7, 1);
-        SpriteGfxManager_LoadCell(&landing->gfx, narc, 0x15, 2);
-        SpriteGfxManager_LoadAnim(&landing->gfx, narc, 0x16, 1);
+        SpriteGfxManager_LoadChar(&landing->gfx, narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000020_NCGR, 2);
+        SpriteGfxManager_LoadPltt(&landing->gfx, narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000007_NCLR, 1);
+        SpriteGfxManager_LoadCell(&landing->gfx, narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000021_NCER, 2);
+        SpriteGfxManager_LoadAnim(&landing->gfx, narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000022_NANR, 1);
         SpriteGfxManager_TransferChar(&landing->gfx, 2);
         SpriteGfxManager_TransferPltt(&landing->gfx, 1);
         SpriteGfxManager_ReleaseCharData(&landing->gfx, 2);

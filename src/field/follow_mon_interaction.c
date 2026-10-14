@@ -10,6 +10,7 @@
 
 #include "field/field_effect_helpers.h"
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0040.h"
 #include "overlay_2/overlay_02_field_utils.h"
 
 #include "bg_window.h"
@@ -883,17 +884,17 @@ void FollowMon_ExpandGiftMessage(FieldSystem *fieldSystem, String *dest, enum He
         BufferPlayersName(messageFormat, 0, Save_PlayerData_GetProfile(fieldSystem->saveData));
         if (flags & 1) {
             BufferFashionName(messageFormat, 1, accessory - 1);
-            msgNo = 0x20;
+            msgNo = msg_0040_00032;
         } else {
             BufferFashionNameWithArticle(messageFormat, 1, accessory - 1);
-            msgNo = 0x5F;
+            msgNo = msg_0040_00095;
         }
     } else {
         Pokemon *mon = GetFirstAliveMonInParty_CrashIfNone(SaveArray_Party_Get(fieldSystem->saveData));
         BoxPokemon *boxMon = Mon_GetBoxMon(mon);
         BufferPlayersName(messageFormat, 0, Save_PlayerData_GetProfile(fieldSystem->saveData));
         BufferBoxMonNickname(messageFormat, 1, boxMon);
-        msgNo = (flags & 1) ? 0x61 : 0x62;
+        msgNo = (flags & 1) ? msg_0040_00097 : msg_0040_00098;
     }
     string = NewString_ReadMsgData(msgData, msgNo);
     StringExpandPlaceholders(messageFormat, dest, string);
