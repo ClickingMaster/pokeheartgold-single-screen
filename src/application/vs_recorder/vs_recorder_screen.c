@@ -354,7 +354,7 @@ int VsRecorder_GetCenteredTextX(Window *window, String *str) {
 #pragma force_active reset
 
 void VsRecorder_ResetRecordSave(VsRecorderWork *work) {
-    work->recordWriteStep = 0;
+    work->recordSaveState = 0;
     work->recordWriteState = 0;
 }
 

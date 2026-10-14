@@ -94,7 +94,7 @@ struct DrawingSessionWork {
     DrawingSessionStroke strokes[DRAWING_SESSION_MAX_MEMBERS];   // 0x4382
     DrawingSessionPoint lastPoints[DRAWING_SESSION_MAX_MEMBERS]; // 0x43B4
     void *unk_43C8;
-    u32 pictureChunk;
+    u32 pictureChunkIndex;
     u8 unk_43D0[0x93B0 - 0x43D0];
     u32 leaveConnectedCount;
     u32 leavingMask;

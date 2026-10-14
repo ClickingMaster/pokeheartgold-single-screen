@@ -487,7 +487,7 @@ struct VsRecorderWork {
     const VsRecorderMenuEntry *menu;         // 0x0818, current choices
     const VsRecorderMenuEntry *menuStack[5]; // 0x081C
     SaveData *saveData;                      // 0x0830
-    u16 recordWriteStep;                     // 0x0834
+    u16 recordSaveState;                     // 0x0834
     u16 recordWriteState;                    // 0x0836
     u32 hasResumeScreen;                     // 0x0838
     u32 resumeScreen;                        // 0x083C

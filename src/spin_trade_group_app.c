@@ -48,9 +48,9 @@ typedef struct SpinTradeGroupMenu {
     u8 unk_00[0x20];
     u32 count;            // 0x20
     u32 state;            // 0x24
-    u32 remoteValue;      // 0x28
+    u32 leaderJoinPending;      // 0x28
     u32 participantCount; // 0x2C
-    u32 participantMask;  // 0x30
+    u32 leavingMask;  // 0x30
     u32 unk_34;           // 0x34
     u16 assignedCount;           // 0x38
 } SpinTradeGroupMenu;
@@ -313,9 +313,9 @@ BOOL SpinTradeGroupApp_Main(OverlayManager *man, int *state) {
     if (System_GetTouchNew()) {
         gSystem.simulatedInputs = 1;
     }
-    if (Comm_GetLocalNetId() == 0 && app->menu->participantMask) {
+    if (Comm_GetLocalNetId() == 0 && app->menu->leavingMask) {
         u32 mask = Wireless_GetConnectedBitmap();
-        app->menu->participantMask = mask & app->menu->participantMask;
+        app->menu->leavingMask = mask & app->menu->leavingMask;
     }
     mode = app->state;
     switch (mode) {
@@ -619,7 +619,7 @@ void SpinTradeGroup_HandleButtons(SpinTradeGroupApp *app) {
 
     if (gSystem.newKeys & 1) {
         if (!Comm_GetLocalNetId()) {
-            if (app->menu->participantCount == (u32)SpinTradeGroup_CountMembers() && app->menu->participantMask == 0) {
+            if (app->menu->participantCount == (u32)SpinTradeGroup_CountMembers() && app->menu->leavingMask == 0) {
                 a = 1;
                 SpinTradeGroup_PrintMessage(app, 3, 0);
                 SpinTradeGroup_WaitPrinterThen(app, 0x16);
@@ -631,14 +631,14 @@ void SpinTradeGroup_HandleButtons(SpinTradeGroupApp *app) {
         }
     } else if (gSystem.newKeys & 2) {
         if (Comm_GetLocalNetId()) {
-            if (app->menu->remoteValue == 0) {
+            if (app->menu->leaderJoinPending == 0) {
                 SpinTradeGroup_PrintMessage(app, 4, 0);
                 SpinTradeGroup_WaitPrinterThen(app, 4);
             } else {
                 PlaySE(0x5F2);
             }
         } else {
-            if (app->menu->participantCount == Comm_CountConnected() && app->menu->participantMask == 0) {
+            if (app->menu->participantCount == Comm_CountConnected() && app->menu->leavingMask == 0) {
                 b = 1;
                 SpinTradeGroup_PrintMessage(app, 4, 0);
                 SpinTradeGroup_WaitPrinterThen(app, 4);
@@ -703,7 +703,7 @@ int SpinTradeGroup_State_HandleCancelYesNo(SpinTradeGroupApp *app, int state) {
     int input;
 
     if (Comm_GetLocalNetId()) {
-        if (app->menu->remoteValue) {
+        if (app->menu->leaderJoinPending) {
             if (gSystem.newKeys & 0xC3) {
                 PlaySE(0x5F2);
             }
@@ -711,7 +711,7 @@ int SpinTradeGroup_State_HandleCancelYesNo(SpinTradeGroupApp *app, int state) {
             return state;
         }
     } else {
-        if (app->menu->participantMask) {
+        if (app->menu->leavingMask) {
             if (gSystem.newKeys & 0xC3) {
                 PlaySE(0x5F2);
             }
@@ -793,7 +793,7 @@ int SpinTradeGroup_State_ShowConfirmYesNo(SpinTradeGroupApp *app, int state) {
 
 int SpinTradeGroup_State_HandleConfirmYesNo(SpinTradeGroupApp *app, int state) {
     SpinTradeGroupMenu *p = app->menu;
-    if (p->participantCount != SpinTradeGroup_CountMembers() || p->participantMask != 0) {
+    if (p->participantCount != SpinTradeGroup_CountMembers() || p->leavingMask != 0) {
         if (0xC3 & gSystem.newKeys) {
             PlaySE(0x5F2);
         }
@@ -904,7 +904,7 @@ int SpinTradeGroup_State_ShowDisbandYesNo(SpinTradeGroupApp *app, int state) {
 
 int SpinTradeGroup_State_HandleDisbandYesNo(SpinTradeGroupApp *app, int state) {
     SpinTradeGroupMenu *p = app->menu;
-    if (p->participantCount != SpinTradeGroup_CountMembers() || p->participantMask != 0) {
+    if (p->participantCount != SpinTradeGroup_CountMembers() || p->leavingMask != 0) {
         if (0xC3 & gSystem.newKeys) {
             PlaySE(0x5F2);
         }
@@ -1081,7 +1081,7 @@ void SpinTradeGroup_HandleLinkEvent(SpinTradeGroupApp *app, int msg, int value) 
             app->yesNoMenu = NULL;
         }
         if (Comm_GetLocalNetId() == 0) {
-            app->menu->participantMask &= 0xFFFF ^ value;
+            app->menu->leavingMask &= 0xFFFF ^ value;
         }
         break;
     case 0x1F:
@@ -1109,7 +1109,7 @@ void SpinTradeGroup_HandleMemberEvent(SpinTradeGroupApp *app, int event, int net
             app->subState = event;
             app->menu->participantCount = Comm_CountConnected();
             p = app->menu;
-            p->participantMask = 0;
+            p->leavingMask = 0;
             if (Comm_GetLocalNetId() == 0) {
                 u32 v = 1;
                 SpinTradeLink_SendCommand(app->menu, 7, &v, 1);
@@ -1121,7 +1121,7 @@ void SpinTradeGroup_HandleMemberEvent(SpinTradeGroupApp *app, int event, int net
             if (netId != Comm_GetLocalNetId()) {
                 if (Comm_GetLocalNetId() == 0) {
                     SpinTradeGroupMenu *p = app->menu;
-                    p->participantMask = (0xFFFF ^ netId) & p->participantMask;
+                    p->leavingMask = (0xFFFF ^ netId) & p->leavingMask;
                 }
                 app->subState = event;
             }
@@ -1131,7 +1131,7 @@ void SpinTradeGroup_HandleMemberEvent(SpinTradeGroupApp *app, int event, int net
             break;
         }
     } else if (event == 1) {
-        app->menu->participantMask = 0;
+        app->menu->leavingMask = 0;
         app->menu->participantCount = Comm_CountConnected();
     }
 }

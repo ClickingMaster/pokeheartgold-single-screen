@@ -18,7 +18,7 @@ typedef struct SpinTradeLinkPacket {
 typedef struct SpinTradeLink {
     SpinTradeArgs *parent;
     SpinTradeLinkPacket packet;
-    u32 blocked, count, state, remoteValue, participantCount, participantMask, unk34;
+    u32 blocked, count, state, leaderJoinPending, participantCount, leavingMask, unk34;
     u16 assignedCount;
     u8 pad3a[6];
     u16 receivedStatus, memberMask, flags44;
@@ -139,7 +139,7 @@ void SpinTradeLink_ReceiveParty(int sender, int unused, void *data, SpinTradeLin
 
 void SpinTradeLink_HandleLeaderMenuState(int sender, int unused, void *data, SpinTradeLink *menu) {
     if (sender == 0) {
-        menu->remoteValue = *(u8 *)data;
+        menu->leaderJoinPending = *(u8 *)data;
     }
 }
 
@@ -174,7 +174,7 @@ void SpinTradeLink_HandleJoinRequest(int sender, int unused, void *data, SpinTra
             if (menu->participantCount != Comm_CountConnected() || menu->participantCount != SpinTradeLink_CountMemberProfiles() || menu->participantCount != MATH_CountPopulation(Wireless_GetConnectedBitmap())) {
                 packet.accepted = 0;
             } else {
-                menu->participantMask |= 1 << sender;
+                menu->leavingMask |= 1 << sender;
                 packet.accepted = 1;
                 CommState_SetMaxEntries(Comm_CountConnected());
             }

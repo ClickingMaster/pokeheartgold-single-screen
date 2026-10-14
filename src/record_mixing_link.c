@@ -5,18 +5,18 @@ void RecordMixingLink_RegisterCommands(RecordMixingLinkWork *room) {
 }
 
 void RecordMixingLink_RecvRecords(int sender, int unused, void *data, RecordMixingLinkWork *room) {
-    room->count++;
+    room->recordsReceived++;
 }
 
 void RecordMixingLink_RecvLeaderMenuState(int sender, int unused, u8 *data, RecordMixingLinkWork *room) {
     if (sender == 0) {
-        room->remote = *data;
+        room->leaderJoinPending = *data;
     }
 }
 
 void RecordMixingLink_RecvStartMixing(int sender, int unused, void *data, RecordMixingLinkWork *room) {
-    room->count = 0;
-    room->active = 1;
+    room->recordsReceived = 0;
+    room->isMixing = 1;
     RecordMixingLink_SendRecords(room, Comm_GetLocalNetId());
     RecordMixing_StartFlash(room);
     RecordMixing_SetStateFromLink(room, 25, (u8)sender);
@@ -43,7 +43,7 @@ void RecordMixingLink_HandleJoinRequest(int sender, int unused, void *data, Reco
             if (room->participantCount != Comm_CountConnected() || room->participantCount != RecordMixing_GetMemberCount() || room->participantCount != MATH_CountPopulation(Wireless_GetConnectedBitmap())) {
                 packet.accepted = 0;
             } else {
-                room->participantMask |= 1 << sender;
+                room->leavingMask |= 1 << sender;
                 packet.accepted = 1;
                 CommState_SetMaxEntries(Comm_CountConnected());
             }

@@ -15,10 +15,10 @@ typedef struct RecordMixingLinkWork {
     u32 send[0x2EE];
     u32 checksum, random;
     u8 receive[5][0xBC0];
-    u32 count, unk4a0c, remote;
-    u8 active;
+    u32 recordsReceived, unk4a0c, leaderJoinPending;
+    u8 isMixing;
     u8 pad4a15[7];
-    u32 participantCount, unk4a20, participantMask;
+    u32 participantCount, joinPending, leavingMask;
     u8 pad4a28[8];
     u16 assignedCount;
 } RecordMixingLinkWork;
