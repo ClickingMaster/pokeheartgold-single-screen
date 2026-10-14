@@ -4,6 +4,7 @@
 
 #include "global.h"
 
+#include "wifi_setup_access_points.h"
 #include "wifi_setup_ui.h"
 
 // The code below is compiled as ARM (32-bit) code.
@@ -53,7 +54,6 @@ extern void *WifiSetupText_GetString(void *, int);
 extern void *WifiSetupText_GetStringWithDigit(void *, int, int, int);
 extern void WifiSetupBanner_Open(int);
 extern void WifiSetupBanner_SetKind(int);
-extern u8 *WifiSetupConnections_GetEdit(void);
 
 void WifiSetupBusyIcon_Task(void *task) {
     GXOamAttr *oam;
@@ -413,11 +413,11 @@ void WifiSetupBackground_LoadHeader(int n) {
 }
 
 void WifiSetupBackground_LoadSlotHeader(void) {
-    WifiSetupBackground_LoadHeader(WifiSetupConnections_GetEdit()[244] + 5);
+    WifiSetupBackground_LoadHeader(WifiSetupConnections_GetEdit()->index + 5);
 }
 
 void WifiSetupBackground_LoadSlotListHeader(void) {
-    WifiSetupBackground_LoadHeader(WifiSetupConnections_GetEdit()[244] + 2);
+    WifiSetupBackground_LoadHeader(WifiSetupConnections_GetEdit()->index + 2);
 }
 
 void WifiSetupBackground_TransferTask(void *task) {

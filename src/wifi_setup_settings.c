@@ -6,6 +6,7 @@
 #include "global.h"
 
 #include "wifi_setup_app.h"
+#include "wifi_setup_connection.h"
 #include "wifi_setup_keyboard.h"
 #include "wifi_setup_screens.h"
 #include "wifi_setup_ui.h"
@@ -15,17 +16,6 @@
 
 // Connection settings screen (0x02232E04-0x022347E4). The item handlers, the scroll tasks and the
 // drawing tasks follow in src/wifi_setup_auto_setup.c.
-
-// Setup record of the access point being edited (WifiSetupConnections_GetEdit); only the members used here.
-typedef struct WifiSetupSettingsRecord {
-    u8 unk_00[0x40];
-    u8 ssid[0xA6];    // 0x40
-    u8 keyType : 2;   // 0xE6, 0 none, 1 WEP 40, 2 WEP 104, 3 WEP 128
-    u8 keyFormat : 6; // 1 = text, half the length of the hex key
-    u8 unk_E7[14];
-    u8 autoAddress; // 0xF5
-    u8 autoDns;     // 0xF6
-} WifiSetupSettingsRecord;
 
 typedef struct WifiSetupGraphicsPath21 {
     char text[21];
@@ -66,7 +56,7 @@ extern void WifiSetup_LoadGraphics(const void *path, void *load);
 extern void *WifiSetup_LocalizePath(const void *path);
 extern void WifiSetupCursor_Hide(void);
 
-extern u8 *WifiSetupConnections_GetEdit(); // also called with arguments
+extern WifiSetupConnection *WifiSetupConnections_GetEdit(void);
 extern void WifiSetupBgScreen_Create(void *);
 extern void WifiSetupBgScreen_MarkDirty(void);
 extern void WifiSetupBgScreen_CopyRect(void *, int, int, int);
@@ -106,15 +96,15 @@ extern void WifiSetupConnectionTest_Init(void);
 extern void WifiSetupAddressEntry_Init(void);
 
 void WifiSetupSettings_Init(void) {
-    u8 *record = WifiSetupConnections_GetEdit();
+    WifiSetupConnection *record = WifiSetupConnections_GetEdit();
     int i;
     gWifiSetupSettings.work = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupSettingsWork), 4);
-    gWifiSetupSettings.work->autoDns = record[0xF6];
+    gWifiSetupSettings.work->autoDns = record->autoDns;
     gWifiSetupSettings.work->lastButton = 12;
     WifiSetupSettings_ResetPosition();
     WifiSetupSettings_LoadGraphics();
     if (!gWifiSetupSettings.fromMenu) {
-        WifiSetupMessage_Show(48, gWifiSetupSettingsDigitPositions[WifiSetupApp_GetLanguage()], record[0xF4] + 1);
+        WifiSetupMessage_Show(48, gWifiSetupSettingsDigitPositions[WifiSetupApp_GetLanguage()], record->index + 1);
     } else {
         WifiSetupMessage_Show(69, -1, 0);
     }
@@ -125,7 +115,7 @@ void WifiSetupSettings_Init(void) {
     for (i = 0; i < 7; i++) { // rows and the two switches
         gWifiSetupSettings.work->rows[i] = WifiSetupOamTemplate_AllocOam(0, 41);
     }
-    switch (record[0xE7]) {
+    switch (record->setupMethod) {
     case 1:
         gWifiSetupSettings.work->ssidIcon = WifiSetupOamTemplate_AllocOam(0, 80);
         gWifiSetupSettings.work->ssidIcon->attr2 = (gWifiSetupSettings.work->ssidIcon->attr2 & ~0xc00) | 0xc00;
@@ -361,14 +351,14 @@ void WifiSetupSettings_SelectItem(int item) {
 
 void WifiSetupSettings_SetAutoAddress(u32 on) {
     int autoDns;
-    u8 *record = WifiSetupConnections_GetEdit();
-    if (record[0xF5] == on) {
+    WifiSetupConnection *record = WifiSetupConnections_GetEdit();
+    if (record->autoAddress == on) {
         return;
     }
     if (on) {
         autoDns = gWifiSetupSettings.work->autoDns != 0;
     } else {
-        gWifiSetupSettings.work->autoDns = record[0xF6];
+        gWifiSetupSettings.work->autoDns = record->autoDns;
         autoDns = 0;
     }
     WifiSetupConnections_SetAutoAddress(on);
@@ -377,7 +367,7 @@ void WifiSetupSettings_SetAutoAddress(u32 on) {
 }
 
 void WifiSetupSettings_SetAutoDns(int on) {
-    u32 old = WifiSetupConnections_GetEdit()[0xF6];
+    u32 old = WifiSetupConnections_GetEdit()->autoDns;
     if (old == (u32)on) {
         return;
     }
@@ -532,16 +522,16 @@ void WifiSetupSettings_Exit(void) {
         break;
     }
     case 11: {
-        u8 *record = WifiSetupConnections_GetEdit();
-        record[0xd0] = DWCi_BACKUPlConvMaskCidr(record + 0xf0);
-        if (record[0xf5]) {
-            MI_CpuFill8(record + 0xc0, 0, 4);
-            MI_CpuFill8(record + 0xc4, 0, 4);
-            MI_CpuFill8(record + 0xf0, 0, 4);
-            record[0xd0] = 0;
+        WifiSetupConnection *record = WifiSetupConnections_GetEdit();
+        record->cidr = DWCi_BACKUPlConvMaskCidr(record->mask);
+        if (record->autoAddress) {
+            MI_CpuFill8(record->ip, 0, 4);
+            MI_CpuFill8(record->gateway, 0, 4);
+            MI_CpuFill8(record->mask, 0, 4);
+            record->cidr = 0;
         }
-        if (record[0xf6]) {
-            MI_CpuFill8(record + 0xc8, 0, 8);
+        if (record->autoDns) {
+            MI_CpuFill8(record->dns1, 0, 8);
         }
         WifiSetupApp_SetTransition(2, 0);
         WifiSetupApp_SetScreenArgs(0, 0);
@@ -557,7 +547,7 @@ void WifiSetupSettings_Exit(void) {
             WifiSetupApp_SetTransition(2, 1);
             WifiSetupApp_SetStateFunc(WifiSetupConnectionList_Init);
         } else {
-            WifiSetupConnections_Edit(WifiSetupConnections_GetEdit()[0xf4]);
+            WifiSetupConnections_Edit(WifiSetupConnections_GetEdit()->index);
             WifiSetupApp_SetTransition(0, 1);
             WifiSetupApp_SetStateFunc(WifiSetupMethodMenu_Init);
         }
@@ -573,22 +563,22 @@ void WifiSetupSettings_DrawRows(void) {
     item = first;
     row = 0;
     for (; row < 5; row++, item++) {
-        WifiSetupSettings_DrawValue(item, (void *)row);
+        WifiSetupSettings_DrawValue(item, row);
     }
     WifiSetupBgScreen_CopyRect(gWifiSetupSettings.work->screenData + gWifiSetupSettingsRowTileOffsets[first], 0, 30, 19);
     for (item = 0; item < 5; item++, first++) {
-        WifiSetupSettings_DrawButtons(first, (void *)item);
+        WifiSetupSettings_DrawButtons(first, item);
     }
     WifiSetupBgScreen_MarkDirty();
     WifiSetupText_MarkDirty(gWifiSetupSettings.work->canvas);
     WifiSetupSettings_UpdateObjects();
 }
 
-void WifiSetupSettings_DrawValue(u32 item, void *row) {
-    WifiSetupSettingsRecord *record = (WifiSetupSettingsRecord *)WifiSetupConnections_GetEdit(item, row);
+void WifiSetupSettings_DrawValue(u32 item, int row) {
+    WifiSetupConnection *record = WifiSetupConnections_GetEdit();
     switch (item) {
     case 0:
-        WifiSetupSettings_DrawText((u8 *)record + 0x40, (int)row);
+        WifiSetupSettings_DrawText(record->ssid, row);
         return;
     case 1: {
         int len;
@@ -611,45 +601,45 @@ void WifiSetupSettings_DrawValue(u32 item, void *row) {
         }
         MI_CpuFill8(buf, 0, 33);
         memset(buf, '*', len);
-        WifiSetupSettings_DrawText(buf, (int)row);
+        WifiSetupSettings_DrawText(buf, row);
         return;
     }
     case 3:
         if (record->autoAddress) {
             return;
         }
-        WifiSetupSettings_DrawAddress((u8 *)record + 0xc0, (int)row);
+        WifiSetupSettings_DrawAddress(record->ip, row);
         return;
     case 4:
         if (record->autoAddress) {
             return;
         }
-        WifiSetupSettings_DrawAddress((u8 *)record + 0xf0, (int)row);
+        WifiSetupSettings_DrawAddress(record->mask, row);
         return;
     case 5:
         if (record->autoAddress) {
             return;
         }
-        WifiSetupSettings_DrawAddress((u8 *)record + 0xc4, (int)row);
+        WifiSetupSettings_DrawAddress(record->gateway, row);
         return;
     case 7:
         if (record->autoDns) {
             return;
         }
-        WifiSetupSettings_DrawAddress((u8 *)record + 0xc8, (int)row);
+        WifiSetupSettings_DrawAddress(record->dns1, row);
         return;
     case 8:
         if (record->autoDns) {
             return;
         }
-        WifiSetupSettings_DrawAddress((u8 *)record + 0xcc, (int)row);
+        WifiSetupSettings_DrawAddress(record->dns2, row);
     }
 }
 
 #pragma opt_propagation off
 
-void WifiSetupSettings_DrawButtons(u32 item, void *row) {
-    WifiSetupSettingsRecord *record = (WifiSetupSettingsRecord *)WifiSetupConnections_GetEdit(item, row);
+void WifiSetupSettings_DrawButtons(u32 item, int row) {
+    WifiSetupConnection *record = WifiSetupConnections_GetEdit();
     int type, option;
     switch (item) {
     case 0:
@@ -681,7 +671,7 @@ void WifiSetupSettings_DrawButtons(u32 item, void *row) {
         if (work->buttonStates[1]) {
             pressed = 1;
         }
-        WifiSetupSettings_SetButtonOam(otherType, pressed, (int)row);
+        WifiSetupSettings_SetButtonOam(otherType, pressed, row);
         break;
     }
     case 3:
@@ -711,7 +701,7 @@ void WifiSetupSettings_DrawButtons(u32 item, void *row) {
         if (work->buttonStates[3]) {
             pressed = 1;
         }
-        WifiSetupSettings_SetButtonOam(otherType, pressed, (int)row);
+        WifiSetupSettings_SetButtonOam(otherType, pressed, row);
         break;
     }
     case 7:
@@ -723,36 +713,36 @@ void WifiSetupSettings_DrawButtons(u32 item, void *row) {
         type = 0;
         option = 2;
     }
-    WifiSetupSettings_SetButtonOam(type, option, (int)row);
+    WifiSetupSettings_SetButtonOam(type, option, row);
 }
 
 #pragma opt_propagation reset
 
 int WifiSetupSettings_IsItemEnabled(int item) {
-    u8 *record = WifiSetupConnections_GetEdit();
+    WifiSetupConnection *record = WifiSetupConnections_GetEdit();
     int enabled = 1;
     switch (item) {
     case WIFI_SETUP_SETTINGS_ITEM_AUTO_DNS_ON:
-        if (!record[0xF5]) {
+        if (!record->autoAddress) {
             enabled = 0;
         }
         break;
     case 0:
     case 1:
-        if ((u8)(record[0xE7] + 255) <= 1) {
+        if ((u8)(record->setupMethod + 255) <= 1) {
             enabled = 0;
         }
         break;
     case 4:
     case 5:
     case 6:
-        if (record[0xF5]) {
+        if (record->autoAddress) {
             enabled = 0;
         }
         break;
     case 9:
     case 10:
-        if (record[0xF6]) {
+        if (record->autoDns) {
             enabled = 0;
         }
         break;

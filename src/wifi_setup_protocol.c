@@ -734,7 +734,7 @@ int WifiSetup_SendJoinRequest(void *unused, const u8 *src, void *arg) {
     header.flag = 0;
     work = gWifiSetupState.data;
     WifiSetup_MemFill(work, 0, 0x5DC);
-    payload = (u8 *)WifiSetup_Alloc(0x210);
+    payload = WifiSetup_Alloc(0x210);
     if (payload == NULL) {
         WifiSetup_SetError(2);
         return -1;
