@@ -5,6 +5,8 @@
 
 #include "global.h"
 
+#include "WM.h"
+
 // Local wireless manager (ARM9 static 0x02032844-0x02033AE0): drives the WM library for the communication layer.
 // A parent sets its parent parameters, starts the parent and MP communication and accepts or refuses the
 // children that connect; a child scans for a parent (all allowed channels in turn, or one), connects to it and
@@ -285,7 +287,7 @@ BOOL Wireless_SendParentParameter(void) {
 
 void Wireless_OnParentParameterSet(void *arg) {
     WirelessEvent *event = arg;
-    if (event->errcode != 0) {
+    if (event->errcode != WM_ERRCODE_SUCCESS) {
         Wireless_SetError(event->errcode);
         Wireless_SetState(WIRELESS_STATE_ERROR);
     } else if (!Wireless_StartParentRun()) {
@@ -388,7 +390,7 @@ void Wireless_OnParentMPEvent(void *arg) {
     u16 error = event->errcode;
     u16 state;
 
-    if (error != 0) {
+    if (error != WM_ERRCODE_SUCCESS) {
         Wireless_SetError(error);
         Wireless_SetState(WIRELESS_STATE_ERROR);
         return;
@@ -426,7 +428,7 @@ BOOL Wireless_EndParent(void) {
 
 void Wireless_OnParentMPEnded(void *arg) {
     WirelessEvent *event = arg;
-    if (event->errcode != 0) {
+    if (event->errcode != WM_ERRCODE_SUCCESS) {
         Wireless_SetError(event->errcode);
         Wireless_ForceReset();
     } else if (!Wireless_EndParentRun()) {
@@ -445,7 +447,7 @@ BOOL Wireless_EndParentRun(void) {
 
 void Wireless_OnParentEnded(void *arg) {
     WirelessEvent *event = arg;
-    if (event->errcode != 0) {
+    if (event->errcode != WM_ERRCODE_SUCCESS) {
         Wireless_SetError(event->errcode);
     } else {
         Wireless_SetState(WIRELESS_STATE_IDLE);
@@ -560,7 +562,7 @@ void Wireless_OnScanEvent(void *input) {
     WirelessWork *work;
     u16 errcode = event->errcode;
 
-    if (errcode != 0) {
+    if (errcode != WM_ERRCODE_SUCCESS) {
         Wireless_SetError(errcode);
         Wireless_SetState(WIRELESS_STATE_ERROR);
         return;
@@ -631,7 +633,7 @@ BOOL Wireless_EndScan(void) {
 
 void Wireless_OnScanEnded(void *arg) {
     WirelessEvent *event = arg;
-    if (event->errcode != 0) {
+    if (event->errcode != WM_ERRCODE_SUCCESS) {
         Wireless_SetError(event->errcode);
         return;
     }
@@ -662,17 +664,17 @@ BOOL Wireless_StartConnect(void) {
 void Wireless_OnConnectEvent(void *arg) {
     WirelessConnectEvent *event = arg;
     u16 code;
-    if (event->errcode != 0) {
+    if (event->errcode != WM_ERRCODE_SUCCESS) {
         Wireless_SetError(event->errcode);
-        if (event->errcode == 12) {
+        if (event->errcode == WM_ERRCODE_OVER_MAX_ENTRY) {
             Wireless_SetState(WIRELESS_STATE_ERROR);
             return;
         }
-        if (event->errcode == 11) {
+        if (event->errcode == WM_ERRCODE_NO_ENTRY) {
             Wireless_SetState(WIRELESS_STATE_ERROR);
             return;
         }
-        if (event->errcode == 1) {
+        if (event->errcode == WM_ERRCODE_FAILED) {
             if (CommState_ReportsErrors()) {
                 Wireless_SetState(WIRELESS_STATE_ERROR);
                 return;
@@ -730,8 +732,8 @@ void Wireless_OnChildMPEvent(void *arg) {
     WirelessEvent *event = arg;
     u16 error = event->errcode;
     u16 state;
-    if (error != 0) {
-        if (error == 15 || error == 9 || error == 13) {
+    if (error != WM_ERRCODE_SUCCESS) {
+        if (error == WM_ERRCODE_SEND_FAILED || error == WM_ERRCODE_TIMEOUT || error == WM_ERRCODE_INVALID_POLLBITMAP) {
             return;
         }
         Wireless_SetError(error);
@@ -767,7 +769,7 @@ BOOL Wireless_EndChild(void) {
 void Wireless_OnChildMPEnded(void *arg) {
     WirelessEvent *event = arg;
     u16 error = event->errcode;
-    if (error != 0) {
+    if (error != WM_ERRCODE_SUCCESS) {
         Wireless_SetError(error);
         Wireless_Stop();
     } else if (!Wireless_Disconnect()) {
@@ -790,7 +792,7 @@ BOOL Wireless_Disconnect(void) {
 void Wireless_OnDisconnected(void *arg) {
     WirelessEvent *event = arg;
     u16 error = event->errcode;
-    if (error != 0) {
+    if (error != WM_ERRCODE_SUCCESS) {
         Wireless_SetError(error);
     } else {
         Wireless_SetState(WIRELESS_STATE_IDLE);
@@ -810,7 +812,7 @@ BOOL Wireless_Reset(void) {
 
 void Wireless_OnReset(void *arg) {
     WirelessEvent *event = arg;
-    if (event->errcode != 0) {
+    if (event->errcode != WM_ERRCODE_SUCCESS) {
         Wireless_SetState(WIRELESS_STATE_ERROR);
         Wireless_SetError(event->errcode);
     } else {
@@ -832,12 +834,12 @@ BOOL Wireless_SetSendData(const void *data, u32 length, int port, WirelessSentFu
 void Wireless_OnDataSent(void *arg) {
     WirelessSendEvent *event = arg;
     u16 error = event->errcode;
-    if (error != 0 && error != 15) {
+    if (error != WM_ERRCODE_SUCCESS && error != WM_ERRCODE_SEND_FAILED) {
         Wireless_SetError(error);
         return;
     }
     if (event->callback != NULL) {
-        (event->callback)(error == 0);
+        (event->callback)(error == WM_ERRCODE_SUCCESS);
     }
 }
 
@@ -845,7 +847,7 @@ void Wireless_OnPortEvent(void *arg) {
     WirelessPortEvent *event = arg;
     u16 error = event->errcode;
     WirelessReceiveFunc callback;
-    if (error != 0) {
+    if (error != WM_ERRCODE_SUCCESS) {
         Wireless_SetError(error);
         return;
     }
@@ -867,7 +869,7 @@ void WVR_TerminateAsync(void (*callback)(void *), void *arg);
 
 void Wireless_OnEnded(void *arg) {
     WirelessEvent *event = arg;
-    if (event->errcode != 0) {
+    if (event->errcode != WM_ERRCODE_SUCCESS) {
         Wireless_SetState(WIRELESS_STATE_FATAL);
     } else {
         WVR_TerminateAsync(NULL, NULL);
@@ -980,7 +982,7 @@ void Wireless_OnChannelMeasured(void *arg) {
     u16 ratio;
     u16 ret;
 
-    if (event->errcode != 0) {
+    if (event->errcode != WM_ERRCODE_SUCCESS) {
         Wireless_SetError(event->errcode);
         Wireless_SetState(WIRELESS_STATE_ERROR);
         CommState_SetError(1);
@@ -1083,7 +1085,7 @@ u32 Wireless_GetWorkSize(void) {
 
 void Wireless_OnIndication(void *arg) {
     WirelessEvent *event = arg;
-    if (event->errcode == 8) {
+    if (event->errcode == WM_ERRCODE_FIFO_ERROR) {
         Wireless_SetState(WIRELESS_STATE_ERROR);
         Wireless_SetError(25);
     }
@@ -1108,14 +1110,14 @@ BOOL Wireless_Initialize(int mode) {
 void Wireless_OnInitialized(void *arg) {
     WirelessEvent *event = arg;
     int result;
-    if (event->errcode != 0) {
+    if (event->errcode != WM_ERRCODE_SUCCESS) {
         Wireless_SetError(event->errcode);
         Wireless_SetState(WIRELESS_STATE_FATAL);
         CommState_SetError(5);
         return;
     }
     result = WM_SetIndCallback(Wireless_OnIndication);
-    if (result != 0) {
+    if (result != WM_ERRCODE_SUCCESS) {
         Wireless_SetError(result);
         Wireless_SetState(WIRELESS_STATE_FATAL);
         CommState_SetError(5);
@@ -1191,7 +1193,7 @@ void Wireless_SetReceiveCallback(void *callback, int port) {
     int result;
     gWirelessManager.work->receiveCallback = callback;
     result = WM_SetPortCallback((u16)port, Wireless_OnPortEvent, NULL);
-    if (result != 0) {
+    if (result != WM_ERRCODE_SUCCESS) {
         Wireless_SetState(WIRELESS_STATE_ERROR);
         for (;;) {}
     }
@@ -1301,7 +1303,7 @@ void Wireless_UpdateGameInfo(const void *gameInfo, int length, u32 ggid, int tgi
 
 void Wireless_OnEntrySet(void *arg) {
     WirelessEvent *event = arg;
-    if (event->errcode == 0) {
+    if (event->errcode == WM_ERRCODE_SUCCESS) {
         gWirelessManager.work->entrySet = 1;
     }
 }

@@ -6,6 +6,8 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
+#include "WM.h"
+
 // Access-point data (0x02239B68-0x0223ABB4): the scan for access points over WM, the saved
 // connection settings (read with DWCi_BACKUPlRead, one page copied to an edit copy and written back
 // with a CRC per page), helpers that parse an address from the address entry's 12 characters, and
@@ -120,7 +122,7 @@ void WifiSetupApScan_StoreResults(WifiSetupScanCallback *cb);
 int WifiSetupApScan_Start(void) {
     WifiSetupApScan *w;
     MIi_CpuClear16(0, (u16 *)gWifiSetupApScan->entries, sizeof(gWifiSetupApScan->entries));
-    if (WM_Initialize(gWifiSetupApScan, WifiSetupApScan_Callback, 3) != 2) {
+    if (WM_Initialize(gWifiSetupApScan, WifiSetupApScan_Callback, 3) != WM_ERRCODE_OPERATING) {
         return 0;
     }
     do {
@@ -134,21 +136,21 @@ int WifiSetupApScan_Start(void) {
 }
 
 int WifiSetupApScan_Continue(void) {
-    return WM_StartScanEx(WifiSetupApScan_Callback, &gWifiSetupApScan->param) == 2 ? 1 : 0;
+    return WM_StartScanEx(WifiSetupApScan_Callback, &gWifiSetupApScan->param) == WM_ERRCODE_OPERATING ? 1 : 0;
 }
 
 int WifiSetupApScan_End(void) {
     gWifiSetupApScan->ending = 1;
     WM_ReadStatus(&gWifiSetupApScan->status);
     if (gWifiSetupApScan->status.state != 2) {
-        if (WM_Reset(WifiSetupApScan_Callback) != 2) {
+        if (WM_Reset(WifiSetupApScan_Callback) != WM_ERRCODE_OPERATING) {
             return 0;
         }
         do {
             WM_ReadStatus(&gWifiSetupApScan->status);
         } while (gWifiSetupApScan->status.state != 2);
     }
-    if (WM_End(WifiSetupApScan_Callback) != 2) {
+    if (WM_End(WifiSetupApScan_Callback) != WM_ERRCODE_OPERATING) {
         return 0;
     }
     return 1;
@@ -169,7 +171,7 @@ int WifiSetupApScan_GetEntries(WifiSetupScanEntry **out) {
 
 void WifiSetupApScan_Callback(void *arg) {
     WifiSetupWmCallback *cb = arg;
-    if (cb->errcode != 0) {
+    if (cb->errcode != WM_ERRCODE_SUCCESS) {
         return;
     }
     if (gWifiSetupApScan->ending != 0 || cb->apiid != 0x26) {

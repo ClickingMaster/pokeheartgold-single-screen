@@ -3,6 +3,7 @@
 
 #include "global.h"
 
+#include "WM.h"
 #include "wifi_setup_access_points.h"
 #include "wifi_setup_app.h"
 #include "wifi_setup_local_wireless.h"
@@ -147,7 +148,7 @@ int WifiSetupWh_SetParentParameter(void) {
     int result;
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_BUSY);
     result = WM_SetParentParameter((WifiSetupWhCallback)WifiSetupWh_SetParentParameterCallback, &gWifiSetupWh.work->parentParam);
-    if (result == 2) {
+    if (result == WM_ERRCODE_OPERATING) {
         return 1;
     }
     WifiSetupWh_SetError(result);
@@ -156,7 +157,7 @@ int WifiSetupWh_SetParentParameter(void) {
 }
 
 void WifiSetupWh_SetParentParameterCallback(WifiSetupWhCallbackArg *arg) {
-    if (arg->result != 0) {
+    if (arg->result != WM_ERRCODE_SUCCESS) {
         WifiSetupWh_SetError(arg->result);
         WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_ERROR);
         return;
@@ -179,7 +180,7 @@ int WifiSetupWh_SetWepKey(void) {
     getWepKey = work->getWepKey;
     mode = getWepKey(work->wepKey, work);
     result = WM_SetWEPKey((WifiSetupWhCallback)WifiSetupWh_SetWepKeyCallback, mode, gWifiSetupWh.work->wepKey);
-    if (result == 2) {
+    if (result == WM_ERRCODE_OPERATING) {
         return 1;
     }
     WifiSetupWh_SetError(result);
@@ -188,7 +189,7 @@ int WifiSetupWh_SetWepKey(void) {
 }
 
 void WifiSetupWh_SetWepKeyCallback(WifiSetupWhCallbackArg *arg) {
-    if (arg->result != 0) {
+    if (arg->result != WM_ERRCODE_SUCCESS) {
         WifiSetupWh_SetError(arg->result);
         WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_ERROR);
         return;
@@ -205,7 +206,7 @@ int WifiSetupWh_StartParent(void) {
         return 1;
     }
     result = WM_StartParent((WifiSetupWhCallback)WifiSetupWh_StartParentCallback);
-    if (result != 2) {
+    if (result != WM_ERRCODE_OPERATING) {
         WifiSetupWh_SetError(result);
         return 0;
     }
@@ -239,7 +240,7 @@ void WifiSetupWh_StartParentCallback(WifiSetupWhParentArg *arg) {
         }
         if (gWifiSetupWh.work->judgeChild && gWifiSetupWh.work->judgeChild(frame.arg) == 0) {
             int result = WM_Disconnect(NULL, frame.arg->aid);
-            if (result == 2) {
+            if (result == WM_ERRCODE_OPERATING) {
                 return;
             }
             WifiSetupWh_SetError(result);
@@ -276,7 +277,7 @@ int WifiSetupWh_StartMp(void) {
     }
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_CONNECTED);
     result = WM_StartMP((WifiSetupWhCallback)WifiSetupWh_StartMpCallback, gWifiSetupWh.work->recvBuffer, (u16)gWifiSetupWh.work->recvBufferSize, gWifiSetupWh.work->sendBuffer, (u16)gWifiSetupWh.work->sendBufferSize, 1);
-    if (result == 2) {
+    if (result == WM_ERRCODE_OPERATING) {
         return 1;
     }
     WifiSetupWh_SetError(result);
@@ -334,7 +335,7 @@ int WifiSetupWh_StartKeySharing(void) {
     int result;
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_KEYSHARING);
     result = WM_StartKeySharing(gWifiSetupWh.work->keySharing, 13);
-    if (result == 2) {
+    if (result == WM_ERRCODE_OPERATING) {
         return 1;
     }
     WifiSetupWh_SetError(result);
@@ -344,7 +345,7 @@ int WifiSetupWh_StartKeySharing(void) {
 int WifiSetupWh_EndKeySharing(void) {
     int result;
     result = WM_EndKeySharing(gWifiSetupWh.work->keySharing);
-    if (result == 2) {
+    if (result == WM_ERRCODE_OPERATING) {
         return 1;
     }
     WifiSetupWh_SetError(result);
@@ -355,7 +356,7 @@ int WifiSetupWh_EndMp(void) {
     int result;
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_BUSY);
     result = WM_EndMP((WifiSetupWhCallback)WifiSetupWh_EndMpCallback);
-    if (result == 2) {
+    if (result == WM_ERRCODE_OPERATING) {
         return 1;
     }
     WifiSetupWh_SetError(result);
@@ -363,7 +364,7 @@ int WifiSetupWh_EndMp(void) {
 }
 
 void WifiSetupWh_EndMpCallback(WifiSetupWhCallbackArg *arg) {
-    if (arg->result != 0) {
+    if (arg->result != WM_ERRCODE_SUCCESS) {
         WifiSetupWh_SetError(arg->result);
         WifiSetupWh_TryReset();
         return;
@@ -380,7 +381,7 @@ void WifiSetupWh_EndMpCallback(WifiSetupWhCallbackArg *arg) {
 int WifiSetupWh_EndParent(void) {
     int result;
     result = WM_EndParent((WifiSetupWhCallback)WifiSetupWh_EndParentCallback);
-    if (result == 2) {
+    if (result == WM_ERRCODE_OPERATING) {
         return 1;
     }
     WifiSetupWh_SetError(result);
@@ -388,7 +389,7 @@ int WifiSetupWh_EndParent(void) {
 }
 
 void WifiSetupWh_EndParentCallback(WifiSetupWhCallbackArg *arg) {
-    if (arg->result != 0) {
+    if (arg->result != WM_ERRCODE_SUCCESS) {
         WifiSetupWh_SetError(arg->result);
         return;
     }
@@ -402,7 +403,7 @@ int WifiSetupWh_StopKeySharing(void) {
     }
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_BUSY);
     result = WM_EndKeySharing(gWifiSetupWh.work->keySharing);
-    if (result == 2) {
+    if (result == WM_ERRCODE_OPERATING) {
         return 1;
     }
     WifiSetupWh_SetError(result);
@@ -413,7 +414,7 @@ int WifiSetupWh_EndMpForDisconnect(void) {
     int result;
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_BUSY);
     result = WM_EndMP((WifiSetupWhCallback)WifiSetupWh_EndMpForDisconnectCallback);
-    if (result == 2) {
+    if (result == WM_ERRCODE_OPERATING) {
         return 1;
     }
     WifiSetupWh_SetError(result);
@@ -421,7 +422,7 @@ int WifiSetupWh_EndMpForDisconnect(void) {
 }
 
 void WifiSetupWh_EndMpForDisconnectCallback(WifiSetupWhCallbackArg *arg) {
-    if (arg->result != 0) {
+    if (arg->result != WM_ERRCODE_SUCCESS) {
         WifiSetupWh_SetError(arg->result);
         WifiSetupWh_Finalize();
         return;
@@ -435,7 +436,7 @@ int WifiSetupWh_Disconnect(void) {
     int result;
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_BUSY);
     result = WM_Disconnect((WifiSetupWhCallback)WifiSetupWh_DisconnectCallback, 0);
-    if (result == 2) {
+    if (result == WM_ERRCODE_OPERATING) {
         return 1;
     }
     WifiSetupWh_SetError(result);
@@ -444,7 +445,7 @@ int WifiSetupWh_Disconnect(void) {
 }
 
 void WifiSetupWh_DisconnectCallback(WifiSetupWhCallbackArg *arg) {
-    if (arg->result != 0) {
+    if (arg->result != WM_ERRCODE_SUCCESS) {
         WifiSetupWh_SetError(arg->result);
         return;
     }
@@ -455,7 +456,7 @@ int WifiSetupWh_Reset(void) {
     int result;
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_BUSY);
     result = WM_Reset((WifiSetupWhCallback)WifiSetupWh_ResetCallback);
-    if (result == 2) {
+    if (result == WM_ERRCODE_OPERATING) {
         return 1;
     }
     WifiSetupWh_SetError(result);
@@ -463,7 +464,7 @@ int WifiSetupWh_Reset(void) {
 }
 
 void WifiSetupWh_ResetCallback(WifiSetupWhCallbackArg *arg) {
-    if (arg->result != 0) {
+    if (arg->result != WM_ERRCODE_SUCCESS) {
         WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_ERROR);
         WifiSetupWh_SetError(arg->result);
         return;
@@ -472,7 +473,7 @@ void WifiSetupWh_ResetCallback(WifiSetupWhCallbackArg *arg) {
 }
 
 void WifiSetupWh_EndCallback(WifiSetupWhCallbackArg *arg) {
-    if (arg->result != 0) {
+    if (arg->result != WM_ERRCODE_SUCCESS) {
         WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_FATAL);
         return;
     }
@@ -541,7 +542,7 @@ u16 WifiSetupWh_MeasureNextChannel(u16 channel) {
 void WifiSetupWh_MeasureChannelCallback(WifiSetupWhMeasureArg *arg) {
     u16 channel, busyRatio;
     int result;
-    if (arg->result != 0) {
+    if (arg->result != WM_ERRCODE_SUCCESS) {
         WifiSetupWh_SetError(arg->result);
         WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_ERROR);
         return;
@@ -562,7 +563,7 @@ void WifiSetupWh_MeasureChannelCallback(WifiSetupWhMeasureArg *arg) {
         WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_MEASURECHANNEL);
         return;
     }
-    if (result == 2) {
+    if (result == WM_ERRCODE_OPERATING) {
         return;
     }
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_ERROR);
@@ -631,7 +632,7 @@ int WifiSetupWh_Start(void) {
 #pragma pop
 
 void WifiSetupWh_IndicationCallback(WifiSetupWhCallbackArg *arg) {
-    if (arg->result != 8) {
+    if (arg->result != WM_ERRCODE_FIFO_ERROR) {
         return;
     }
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_ERROR);
@@ -642,7 +643,7 @@ int WifiSetupWh_InitializeWm(void) {
     int result;
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_BUSY);
     result = WM_Initialize(gWifiSetupWh.work->wmWork, (WifiSetupWhCallback)WifiSetupWh_InitializeCallback, 2);
-    if (result == 2) {
+    if (result == WM_ERRCODE_OPERATING) {
         return 1;
     }
     WifiSetupWh_SetError(result);
@@ -652,13 +653,13 @@ int WifiSetupWh_InitializeWm(void) {
 
 void WifiSetupWh_InitializeCallback(WifiSetupWhCallbackArg *arg) {
     int result;
-    if (arg->result != 0) {
+    if (arg->result != WM_ERRCODE_SUCCESS) {
         WifiSetupWh_SetError(arg->result);
         WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_FATAL);
         return;
     }
     result = WM_SetIndCallback((WifiSetupWhCallback)WifiSetupWh_IndicationCallback);
-    if (result != 0) {
+    if (result != WM_ERRCODE_SUCCESS) {
         WifiSetupWh_SetError(result);
         WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_FATAL);
         return;
@@ -713,20 +714,20 @@ void *WifiSetupWh_GetSharedData(u16 aid) {
 
 int WifiSetupWh_StepDataSharing(void *data) {
     int result = WM_StepDataSharing(gWifiSetupWh.work->dataSharingInfo, data, gWifiSetupWh.work->dataSet);
-    if (result == 7) {
+    if (result == WM_ERRCODE_NO_CHILD) {
         if (gWifiSetupWh.log) {
             gWifiSetupWh.log(WH_LOG_LEVEL, gWifiSetupWhStr_StepNoChild);
         }
         return 0;
     }
-    if (result == 5) {
+    if (result == WM_ERRCODE_NO_DATASET) {
         if (gWifiSetupWh.log) {
             gWifiSetupWh.log(WH_LOG_LEVEL, gWifiSetupWhStr_StepNoDataSet);
         }
         WifiSetupWh_SetError(result);
         return 0;
     }
-    if (result == 0) {
+    if (result == WM_ERRCODE_SUCCESS) {
         return 1;
     }
     WifiSetupWh_SetError(result);
@@ -789,7 +790,7 @@ int WifiSetupWh_End(void) {
     }
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_BUSY);
     result = WM_End((WifiSetupWhCallback)WifiSetupWh_EndCallback);
-    if (result == 2) {
+    if (result == WM_ERRCODE_OPERATING) {
         return 1;
     }
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_ERROR);

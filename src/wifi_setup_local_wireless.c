@@ -3,6 +3,7 @@
 
 #include "global.h"
 
+#include "WM.h"
 #include "wifi_setup_access_points.h"
 #include "wifi_setup_app.h"
 #include "wifi_setup_ui.h"
@@ -2511,7 +2512,7 @@ BOOL WifiSetupUsbScan_Start(void (*cb)(int)) {
     gWifiSetupUsbScan = w;
     w->callback = cb;
     (*(WifiSetupUsbScan *volatile *)&gWifiSetupUsbScan)->startTick = OS_GetTick();
-    if (WM_Initialize(gWifiSetupUsbScan, WifiSetupUsbScan_WmCallback, 3) == 2) {
+    if (WM_Initialize(gWifiSetupUsbScan, WifiSetupUsbScan_WmCallback, 3) == WM_ERRCODE_OPERATING) {
         do {
             WM_ReadStatus(&gWifiSetupUsbScan->status);
         } while (gWifiSetupUsbScan->status.state != 2);
@@ -2532,21 +2533,21 @@ BOOL WifiSetupUsbScan_Start(void (*cb)(int)) {
 }
 
 BOOL WifiSetupUsbScan_StartScan(void) {
-    return WM_StartScanEx(WifiSetupUsbScan_WmCallback, &gWifiSetupUsbScan->param) == 2;
+    return WM_StartScanEx(WifiSetupUsbScan_WmCallback, &gWifiSetupUsbScan->param) == WM_ERRCODE_OPERATING;
 }
 
 BOOL WifiSetupUsbScan_End(void) {
     gWifiSetupUsbScan->endState = 1;
     WM_ReadStatus(&gWifiSetupUsbScan->status);
     if (gWifiSetupUsbScan->status.state != 2) {
-        if (WM_Reset(WifiSetupUsbScan_WmCallback) != 2) {
+        if (WM_Reset(WifiSetupUsbScan_WmCallback) != WM_ERRCODE_OPERATING) {
             return FALSE;
         }
         do {
             WM_ReadStatus(&gWifiSetupUsbScan->status);
         } while (gWifiSetupUsbScan->status.state != 2);
     }
-    if (WM_End(WifiSetupUsbScan_WmCallback) != 2) {
+    if (WM_End(WifiSetupUsbScan_WmCallback) != WM_ERRCODE_OPERATING) {
         return FALSE;
     }
     if (gWifiSetupUsbScan->task != NULL) {
@@ -2563,7 +2564,7 @@ void WifiSetupUsbScan_SetCallback(void (*cb)(int)) {
 }
 
 void WifiSetupUsbScan_WmCallback(WifiSetupUsbScanCallbackArg *arg) {
-    if (arg->errcode != 0) {
+    if (arg->errcode != WM_ERRCODE_SUCCESS) {
         return;
     }
     if (gWifiSetupUsbScan->endState != 0) {
