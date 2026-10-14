@@ -4,6 +4,7 @@
 
 #include "constants/abilities.h"
 #include "constants/battle.h"
+#include "constants/moves.h"
 #include "constants/pokemon.h"
 #include "constants/species.h"
 
@@ -1224,13 +1225,13 @@ void BattleController_EmitPrintTrainerMessage(BattleSystem *battleSystem, int ba
 
 void BattleController_EmitSetStatus2Effect(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int status) {
     MoveAnimData packet;
-    BattleController_InitMoveAnimData(battleSystem, ctx, &packet, 1, status, battlerId, battlerId, 0);
+    BattleController_InitMoveAnimData(battleSystem, ctx, &packet, 1, status, battlerId, battlerId, MOVE_NONE);
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
 
 void BattleController_EmitCopyStatus2Effect(BattleSystem *battleSystem, BattleContext *ctx, int battlerIdA, int battlerIdB, int status) {
     MoveAnimData packet;
-    BattleController_InitMoveAnimData(battleSystem, ctx, &packet, 1, status, battlerIdA, battlerIdB, 0);
+    BattleController_InitMoveAnimData(battleSystem, ctx, &packet, 1, status, battlerIdA, battlerIdB, MOVE_NONE);
     BattleController_EmitPacket(battleSystem, 1, battlerIdA, &packet, sizeof(packet));
 }
 

@@ -335,7 +335,7 @@ void LinkBattleScreen_UpdateBattleVideoPrompt(LinkBattleScreen *screen) {
     case 1:
         LinkBattleScreen_DrawMessageBox(screen);
         ReadMsgDataIntoString(screen->msgData, msg_0638_00000, screen->string);
-        screen->printerId = AddTextPrinterParameterized(&screen->msgWindow, 1, screen->string, 0, 0, 0, NULL);
+        screen->printerId = AddTextPrinterParameterized(&screen->msgWindow, 1, screen->string, 0, 0, TEXT_SPEED_INSTANT, NULL);
         ScheduleBgTilemapBufferTransfer(screen->bgConfig, GF_BG_LYR_MAIN_0);
         screen->videoPromptState = 2;
         break;
@@ -352,7 +352,7 @@ void LinkBattleScreen_UpdateBattleVideoPrompt(LinkBattleScreen *screen) {
         }
         FillWindowPixelRect(&screen->yesNoWindow, 15, 0, 0, 216, 32);
         DrawFrameAndWindow2(&screen->yesNoWindow, FALSE, 1, 15);
-        screen->printerId = AddTextPrinterParameterized(&screen->yesNoWindow, 1, screen->string, 0, 0, 0, NULL);
+        screen->printerId = AddTextPrinterParameterized(&screen->yesNoWindow, 1, screen->string, 0, 0, TEXT_SPEED_INSTANT, NULL);
         screen->yesNoMenu = CreateYesNoMenu(screen->bgConfig, &sBattleVideoYesNoTemplate, 31, 14, 1, screen->args->heapId);
         ScheduleBgTilemapBufferTransfer(screen->bgConfig, GF_BG_LYR_MAIN_0);
         screen->videoPromptState = 4;
@@ -372,7 +372,7 @@ void LinkBattleScreen_UpdateBattleVideoPrompt(LinkBattleScreen *screen) {
     case 5:
         LinkBattleScreen_DrawMessageBox(screen);
         ReadMsgDataIntoString(screen->msgData, msg_0638_00005, screen->string);
-        screen->printerId = AddTextPrinterParameterized(&screen->msgWindow, 1, screen->string, 0, 0, 0, NULL);
+        screen->printerId = AddTextPrinterParameterized(&screen->msgWindow, 1, screen->string, 0, 0, TEXT_SPEED_INSTANT, NULL);
         ScheduleBgTilemapBufferTransfer(screen->bgConfig, GF_BG_LYR_MAIN_0);
         screen->videoPromptState = 6;
         break;
@@ -792,7 +792,7 @@ int LinkBattleScreen_SaveBattleVideo(LinkBattleScreen *screen) {
     case 0:
         LinkBattleScreen_DrawMessageBox(screen);
         ReadMsgDataIntoString(screen->msgData, msg_0638_00008, screen->string);
-        screen->printerId = AddTextPrinterParameterized(&screen->msgWindow, 1, screen->string, 0, 0, 0, NULL);
+        screen->printerId = AddTextPrinterParameterized(&screen->msgWindow, 1, screen->string, 0, 0, TEXT_SPEED_INSTANT, NULL);
         LinkBattleScreen_ShowWaitingIcon(screen);
         screen->frame++;
         break;
@@ -808,7 +808,7 @@ int LinkBattleScreen_SaveBattleVideo(LinkBattleScreen *screen) {
         }
         LinkBattleScreen_HideWaitingIcon(screen);
         FillWindowPixelRect(&screen->msgWindow, 15, 0, 0, 216, 32);
-        screen->printerId = AddTextPrinterParameterized(&screen->msgWindow, 1, screen->string, 0, 0, 0, NULL);
+        screen->printerId = AddTextPrinterParameterized(&screen->msgWindow, 1, screen->string, 0, 0, TEXT_SPEED_INSTANT, NULL);
         screen->delayFrames = 0;
         screen->frame++;
         break;
@@ -838,7 +838,7 @@ int LinkBattleScreen_WaitForPartner(LinkBattleScreen *screen) {
         }
         LinkBattleScreen_DrawMessageBox(screen);
         ReadMsgDataIntoString(screen->msgData, msg_0638_00009, screen->string);
-        screen->printerId = AddTextPrinterParameterized(&screen->msgWindow, 1, screen->string, 0, 0, 0, NULL);
+        screen->printerId = AddTextPrinterParameterized(&screen->msgWindow, 1, screen->string, 0, 0, TEXT_SPEED_INSTANT, NULL);
         LinkSync_StartSync(0x3E);
         if (screen->canSaveVideo == FALSE && LinkBattleScreen_IsBattleRecordActive(screen) == TRUE) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, TRUE);
@@ -1174,9 +1174,9 @@ void LinkBattleScreen_SetPartyBallAnims(LinkBattleScreen *screen, Party *party, 
             mon = Party_GetMonByIndex(party, i);
             if (GetMonData(mon, MON_DATA_SPECIES, NULL) != SPECIES_NONE && GetMonData(mon, MON_DATA_IS_EGG, NULL) == FALSE) {
                 statusIcon = Pokemon_GetStatusIconId(mon);
-                if (statusIcon == 6) {
+                if (statusIcon == PARTY_MON_STATUS_ICON_FNT) {
                     ManagedSprite_SetAnim(screen->sprites[firstSprite + shown], 3);
-                } else if (statusIcon != 7) {
+                } else if (statusIcon != PARTY_MON_STATUS_ICON_OK) {
                     ManagedSprite_SetAnim(screen->sprites[firstSprite + shown], 2);
                 } else {
                     ManagedSprite_SetAnim(screen->sprites[firstSprite + shown], 1);
@@ -1579,7 +1579,7 @@ u32 LinkBattleScreen_GetMonIconAnim(LinkBattleScreen *screen, u32 index) {
     if (hp == 0) {
         return 0;
     }
-    if (screen->monInfo[index].statusIcon != 7 && screen->monInfo[index].statusIcon != 0) {
+    if (screen->monInfo[index].statusIcon != PARTY_MON_STATUS_ICON_OK && screen->monInfo[index].statusIcon != PARTY_MON_STATUS_ICON_UNSET) {
         return 5;
     }
     switch (CalculateHpBarColor(hp, screen->monInfo[index].maxHp, 48)) {
@@ -1622,7 +1622,7 @@ void LinkBattleScreen_CreateMonSprites(LinkBattleScreen *screen, u32 index) {
     } else {
         ManagedSprite_SetAnim(screen->sprites[index * 5 + 2], 2);
     }
-    if (screen->monInfo[index].statusIcon == 7) {
+    if (screen->monInfo[index].statusIcon == PARTY_MON_STATUS_ICON_OK) {
         ManagedSprite_SetDrawFlag(screen->sprites[index * 5 + 3], FALSE);
     } else {
         // reads the record at the loop counter (always 5), not at index

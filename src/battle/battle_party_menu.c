@@ -992,7 +992,7 @@ int BattlePartyMenu_AnimateItemEffect(BattlePartyMenu *menu) {
         } else {
             int status = Pokemon_GetStatusIconId(menu->mons[context->selectedMon].mon);
             menu->mons[context->selectedMon].status = status;
-            if (menu->mons[context->selectedMon].status == 7) {
+            if (menu->mons[context->selectedMon].status == PARTY_MON_STATUS_ICON_OK) {
                 ManagedSprite_SetDrawFlag(menu->sprites[context->selectedMon + 13], FALSE);
                 BattlePartyMenu_PrintPartyMonLevel(menu, context->selectedMon);
             }
@@ -2893,7 +2893,7 @@ void BattlePartyMenu_SetMoveCategoryIcon(BattlePartyMenu *menu, ManagedSprite *s
 }
 
 void BattlePartyMenu_ShowStatusIcon(int status, ManagedSprite *sprite, int x, int y) {
-    if (status != 7) {
+    if (status != PARTY_MON_STATUS_ICON_OK) {
         ManagedSprite_SetAnim(sprite, status);
         BattlePartyMenu_ShowSpriteAt(sprite, x, y);
     }
@@ -3140,7 +3140,7 @@ int BattlePartyMenu_GetMonIconAnim(BattlePartyMenuMon *mon) {
     if (mon->hp == 0) {
         return 0;
     }
-    if (mon->status != 7 && mon->status != 6) {
+    if (mon->status != PARTY_MON_STATUS_ICON_OK && mon->status != PARTY_MON_STATUS_ICON_FNT) {
         return 5;
     }
     switch (CalculateHpBarColor(mon->hp, mon->maxHp, 48)) {

@@ -6,6 +6,7 @@
 #include "constants/gx.h"
 #include "constants/pokemon.h"
 #include "constants/sndseq.h"
+#include "constants/species.h"
 
 #include "battle/battle.h"
 
@@ -1982,7 +1983,7 @@ void BattleAnimUtil_LoadSubstituteIntoPic(BattleAnimBattlerPicParams *params, en
     Pokepic_Push(params->pokepics[params->battler]);
     template.narcID = NARC_poketool_pokegra_otherpoke;
     template.palDataID = 258;
-    template.species = 0;
+    template.species = SPECIES_NONE;
     template.isAnimated = FALSE;
     template.personality = 0;
     if (params->battlerTypes[params->battler] & BATTLER_TYPE_IS_ENEMY) {

@@ -1030,7 +1030,7 @@ void Battle_LinkInit(OverlayManager *man, BattleSetup *setup) {
     MIi_CpuClear32(0, (void *)HW_DB_BG_VRAM, HW_DB_BG_VRAM_SIZE);
     MIi_CpuClear32(0, (void *)HW_OBJ_VRAM, HW_OBJ_VRAM_SIZE);
     MIi_CpuClear32(0, (void *)HW_DB_OBJ_VRAM, HW_DB_OBJ_VRAM_SIZE);
-    MIi_CpuClear16(0, (void *)0x05000000, 0x200);
+    MIi_CpuClear16(0, (void *)HW_BG_PLTT, HW_BG_PLTT_SIZE);
     modes = sLinkGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     bgTemplate = sLinkBgTemplate;
@@ -1050,7 +1050,7 @@ void Battle_LinkInit(OverlayManager *man, BattleSetup *setup) {
     msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0197_bin, HEAP_ID_BATTLE);
     string = String_New(0x100, HEAP_ID_BATTLE);
     ReadMsgDataIntoString(msgData, msg_0197_00923, string);
-    AddTextPrinterParameterized(work->window, 1, string, 0, 0, 0, NULL);
+    AddTextPrinterParameterized(work->window, 1, string, 0, 0, TEXT_SPEED_INSTANT, NULL);
     String_Delete(string);
     DestroyMsgData(msgData);
     Main_SetVBlankIntrCB(Battle_LinkVBlankCallback, work);
