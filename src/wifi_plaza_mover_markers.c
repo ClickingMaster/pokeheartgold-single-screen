@@ -6,8 +6,8 @@
 // which this file does not include: the layout below keeps the original's accesses).
 typedef struct WiFiPlazaMoverMarkerWork {
     int room;
-    void *lobby;  // 0x04
-    void *models; // 0x08
+    struct WiFiPlazaWork *lobby;    // 0x04
+    struct WiFiPlazaModels *models; // 0x08
     u8 gap[0x9E];
 
     struct {
@@ -19,9 +19,9 @@ typedef struct WiFiPlazaMoverMarkerPos {
     int x, y, z;
 } WiFiPlazaMoverMarkerPos;
 
-extern int WiFiPlazaWork_GetGroupMarkerCount(void *lobby, int slot);
-extern void WiFiPlazaModels_GetMoverFrontPos(void *models, int index, int side, WiFiPlazaMoverMarkerPos *position);
-extern void WiFiPlazaWork_SetGroupMarkerPassed(void *lobby, int slot, int marker);
+extern int WiFiPlazaWork_GetGroupMarkerCount(struct WiFiPlazaWork *lobby, int slot);
+extern void WiFiPlazaModels_GetMoverFrontPos(struct WiFiPlazaModels *models, int index, int side, WiFiPlazaMoverMarkerPos *position);
+extern void WiFiPlazaWork_SetGroupMarkerPassed(struct WiFiPlazaWork *lobby, int slot, int marker);
 
 void WiFiPlazaEvent_UpdateMoverMarkers(void *parent, int index);
 

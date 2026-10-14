@@ -273,7 +273,7 @@ void WiFiPlazaNewsSlots_SetFlags(WiFiPlazaNewsSlots *slots, int slot, int flags)
     if ((u32)slot >= 20) {
         GF_AssertFail();
     }
-    *(u16 *)((u8 *)slots + slot * 4 + 2) = flags;
+    slots->slots[slot].flags = flags;
 }
 
 // 1: a player came, 2: a player left.
@@ -299,28 +299,28 @@ int WiFiPlazaNewsSlots_GetGender(WiFiPlazaNewsSlots *slots, int slot) {
     if ((u32)slot >= 20) {
         GF_AssertFail();
     }
-    return *(u16 *)((u8 *)slots + slot * 4);
+    return slots->slots[slot].state;
 }
 
 BOOL WiFiPlazaNewsSlots_IsOwn(WiFiPlazaNewsSlots *slots, int slot) {
     if ((u32)slot >= 20) {
         GF_AssertFail();
     }
-    return (*(u16 *)((u8 *)slots + slot * 4 + 2) & 1) != 0;
+    return (slots->slots[slot].flags & 1) != 0;
 }
 
 BOOL WiFiPlazaNewsSlots_IsOldest(WiFiPlazaNewsSlots *slots, int slot) {
     if ((u32)slot >= 20) {
         GF_AssertFail();
     }
-    return (*(u16 *)((u8 *)slots + slot * 4 + 2) & 2) != 0;
+    return (slots->slots[slot].flags & 2) != 0;
 }
 
 int WiFiPlazaNewsSlots_GetFlags(WiFiPlazaNewsSlots *slots, int slot) {
     if ((u32)slot >= 20) {
         GF_AssertFail();
     }
-    return *(u16 *)((u8 *)slots + slot * 4 + 2);
+    return slots->slots[slot].flags;
 }
 
 u16 WiFiPlazaNewsSlots_GetChange(WiFiPlazaNewsSlots *slots) {

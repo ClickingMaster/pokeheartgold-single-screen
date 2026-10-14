@@ -308,7 +308,7 @@ int UnionRoom_GetPlayerActivityType(struct UnionRoom *unionRoom, int objId) {
     if (record == NULL) {
         return 5;
     }
-    info = (UnionRoomRecordInfo *)((u8 *)record + 0x50);
+    info = &record->info;
     _021D41CC.lastActivity = (UnionRoomActivity *)((u8 *)info + 0x30);
     switch (_021D41CC.lastActivity->kind) {
     case 0:

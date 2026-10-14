@@ -16,7 +16,7 @@ typedef struct SpinTradeFlow {
     u8 sendData[4];
     u32 frame;
     SaveData *saveData;
-    void *unionRoomObjects;
+    struct UnionRoomObjects *unionRoomObjects;
     Options *options;
     GameStats *gameStats;
     FieldSystem *fieldSystem2;

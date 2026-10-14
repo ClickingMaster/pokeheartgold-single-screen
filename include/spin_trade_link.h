@@ -3,16 +3,20 @@
 
 #include "global.h"
 
+#include "field_types_def.h"
+#include "game_stats.h"
 #include "heap.h"
+#include "options.h"
+#include "save.h"
 
 typedef struct SpinTradeCommonArgs {
     u8 sendData[4];
     u32 frame;
-    void *saveData;
-    void *communication;
-    void *options;
-    void *gameStats;
-    void *fieldSystem;
+    SaveData *saveData;
+    struct UnionRoomObjects *communication;
+    Options *options;
+    GameStats *gameStats;
+    FieldSystem *fieldSystem;
 } SpinTradeCommonArgs;
 
 typedef struct SpinTradeArgs {
@@ -20,8 +24,8 @@ typedef struct SpinTradeArgs {
     u32 result;
     SpinTradeCommonArgs input;
     void *menu;
-    void *tradeApp;
-    void *groupApp;
+    struct SpinTradeApp *tradeApp;
+    struct SpinTradeGroupApp *groupApp;
 } SpinTradeArgs;
 
 void *SpinTradeLink_New(SpinTradeArgs *work, enum HeapID heapID);

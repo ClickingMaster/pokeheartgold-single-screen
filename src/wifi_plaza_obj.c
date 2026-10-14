@@ -191,11 +191,11 @@ WiFiPlazaObj *WiFiPlazaObj_FindById(WiFiPlazaObjManager *manager, int id) {
     int objId;
 
     for (i = 0; i < manager->count; i++) {
-        gridObj = *(Field2DObject **)((u8 *)manager->objs + i * (int)sizeof(WiFiPlazaObj));
+        gridObj = manager->objs[i].gridObj;
         if (gridObj != NULL) {
             objId = Field2DObject_GetParam(gridObj, 4);
             if (objId == id) {
-                return (WiFiPlazaObj *)((u8 *)manager->objs + (int)sizeof(WiFiPlazaObj) * i);
+                return &manager->objs[i];
             }
         }
     }
@@ -318,7 +318,7 @@ WiFiPlazaObj *WiFiPlazaObj_FindAt(WiFiPlazaObjManager *manager, s32 x, s32 y) {
         entry = (u8 *)volatileManager->objs;
         do {
             if (*(Field2DObject **)entry == gridObj) {
-                return (WiFiPlazaObj *)((u8 *)volatileManager->objs + i * sizeof(WiFiPlazaObj));
+                return &volatileManager->objs[i];
             }
             i++;
             entry += sizeof(WiFiPlazaObj);
@@ -531,12 +531,12 @@ WiFiPlazaObj *WiFiPlazaObj_AllocObj(WiFiPlazaObjManager *manager) {
     int i;
 
     for (i = 0; i < manager->count; i++) {
-        if (WiFiPlazaObj_IsFree((WiFiPlazaObj *)((u8 *)manager->objs + i * (int)sizeof(WiFiPlazaObj)))) {
-            return (WiFiPlazaObj *)((u8 *)manager->objs + i * (int)sizeof(WiFiPlazaObj));
+        if (WiFiPlazaObj_IsFree(&manager->objs[i])) {
+            return &manager->objs[i];
         }
     }
     GF_AssertFail();
-    return (WiFiPlazaObj *)((u8 *)manager->objs + i * (int)sizeof(WiFiPlazaObj));
+    return &manager->objs[i];
 }
 
 BOOL WiFiPlazaObj_IsFree(WiFiPlazaObj *obj) {

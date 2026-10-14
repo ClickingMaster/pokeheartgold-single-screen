@@ -61,7 +61,7 @@ typedef struct WiFiPlazaConnectArgs {
     SaveData *save;
     WiFiPlazaWork *work;
     u32 skipPrompt; // WiFiPlazaApps.skipPrompt
-    void *loginTime;
+    s64 *loginTime;
     u32 result; // 0: not connected
 } WiFiPlazaConnectArgs;
 

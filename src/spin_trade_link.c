@@ -34,15 +34,15 @@ typedef struct SpinTradeJoinRequest {
 
 u32 MATH_CountPopulation(u32 value);
 void CommState_SetMaxEntries(int count);
-void UnionRoomObjects_ResetSlots(void *ptr);
-void SpinTradeGroup_HandleLinkEvent(void *ptr, int event, int value);
-void SpinTradeGroup_HandleMemberEvent(void *ptr, int event, int value);
-void SpinTrade_ReceiveMemberSlot(void *ptr, void *data);
-void SpinTrade_ReceivePlayerCount(void *ptr, u32 data);
-void SpinTrade_ReceiveJump(void *ptr, u8 data);
-void SpinTrade_ReceiveSpinData(void *ptr, void *data);
-void SpinTrade_ReceiveTradeSlot(void *ptr, int sender, u32 data);
-void SpinTrade_ReceiveResult(void *ptr, void *data);
+void UnionRoomObjects_ResetSlots(struct UnionRoomObjects *objects);
+void SpinTradeGroup_HandleLinkEvent(struct SpinTradeGroupApp *app, int event, int value);
+void SpinTradeGroup_HandleMemberEvent(struct SpinTradeGroupApp *app, int event, int value);
+void SpinTrade_ReceiveMemberSlot(struct SpinTradeApp *app, void *data);
+void SpinTrade_ReceivePlayerCount(struct SpinTradeApp *app, u32 data);
+void SpinTrade_ReceiveJump(struct SpinTradeApp *app, u8 data);
+void SpinTrade_ReceiveSpinData(struct SpinTradeApp *app, const u16 *data);
+void SpinTrade_ReceiveTradeSlot(struct SpinTradeApp *app, int sender, u32 data);
+void SpinTrade_ReceiveResult(struct SpinTradeApp *app, const u16 *data);
 extern const u32 gSpinTradeLinkCommands[];
 typedef void (*SpinTradeLinkPacketHandler)(int, int, void *, SpinTradeLink *);
 extern const SpinTradeLinkPacketHandler gSpinTradeLinkPacketHandlers[];

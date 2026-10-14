@@ -388,7 +388,7 @@ void WiFiPlazaInstrument_SetModel(WiFiPlazaInstrumentManager *manager, WiFiPlaza
         GF_AssertFail();
     }
     *(const WiFiPlazaInstrumentModelDesc **)((u8 *)descs + offset) = desc;
-    ModelInstance_Init((ModelInstance *)((u8 *)effect + 0xC + index * sizeof(ModelInstance)), (ModelResource *)((u8 *)manager + 0x10550 + desc->model * sizeof(ModelResource)));
+    ModelInstance_Init(&effect->models[index], &manager->models[desc->model]);
 }
 
 #pragma force_active on
@@ -440,7 +440,7 @@ BOOL WiFiPlazaInstrument_PlayAnim(WiFiPlazaInstrumentManager *manager, WiFiPlaza
 
 void WiFiPlazaInstrument_LoopAnimBy(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, u32 index, u32 anim, fx32 step) {
     const WiFiPlazaInstrumentModelDesc *desc = effect->descs[index];
-    fx32 frameCount = ModelAnimation_GetFrameCount((ModelAnimation *)((u8 *)manager + 0x106DC + desc->anims[anim] * sizeof(ModelAnimation)));
+    fx32 frameCount = ModelAnimation_GetFrameCount(&manager->anims[desc->anims[anim]]);
     fx32 next = effect->animFrames[index][anim] + step;
 
     if (next < frameCount) {
@@ -469,7 +469,7 @@ BOOL WiFiPlazaInstrument_PlayAnimBy(WiFiPlazaInstrumentManager *manager, WiFiPla
 
 void WiFiPlazaInstrument_SetAnimFrame(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, u32 index, u32 anim, fx32 frame) {
     const WiFiPlazaInstrumentModelDesc *desc = effect->descs[index];
-    fx32 frameCount = ModelAnimation_GetFrameCount((ModelAnimation *)((u8 *)manager + 0x106DC + desc->anims[anim] * sizeof(ModelAnimation)));
+    fx32 frameCount = ModelAnimation_GetFrameCount(&manager->anims[desc->anims[anim]]);
 
     if (frameCount < frame) {
         effect->animFrames[index][anim] = frameCount - FX32_CONST(0.5);
@@ -480,7 +480,7 @@ void WiFiPlazaInstrument_SetAnimFrame(WiFiPlazaInstrumentManager *manager, WiFiP
 
 fx32 WiFiPlazaInstrument_GetAnimFrame(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, u32 index, u32 anim) {
     const WiFiPlazaInstrumentModelDesc *desc = effect->descs[index];
-    return ModelAnimation_GetFrame((ModelAnimation *)((u8 *)manager + 0x106DC + desc->anims[anim] * sizeof(ModelAnimation)));
+    return ModelAnimation_GetFrame(&manager->anims[desc->anims[anim]]);
 }
 
 void WiFiPlazaInstrument_InitRipple01(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {

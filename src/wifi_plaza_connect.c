@@ -46,7 +46,7 @@
 // Arguments of the connect screen (built by OVY_45).
 typedef struct WiFiPlazaConnectArgs {
     SaveData *saveData;
-    void *lobby;
+    struct WiFiPlazaWork *lobby;
     BOOL skipPrompt;
     s64 *loginTime;
     BOOL connected;
@@ -55,7 +55,7 @@ typedef struct WiFiPlazaConnectArgs {
 // Arguments of the disconnect screen (built by OVY_45).
 typedef struct WiFiPlazaDisconnectArgs {
     SaveData *saveData;
-    void *lobby;
+    struct WiFiPlazaWork *lobby;
     BOOL mode;
 } WiFiPlazaDisconnectArgs;
 
@@ -101,9 +101,9 @@ extern void CommState_StartWifiPlaza(SaveData *saveData, s32 profileId);
 extern void CommState_LeaveWifiPlaza(void);
 extern int CommState_HasPlazaLobbyStarted(void);
 extern BOOL CommState_HasPlazaLobbyFailed(void);
-extern void *WiFiPlazaWork_GetMyPlayer(void *lobby);
-extern void WiFiPlazaWork_NewPlayerInfo(void *lobby);
-extern void WiFiPlazaWork_FreePlayerInfo(void *lobby);
+extern void *WiFiPlazaWork_GetMyPlayer(struct WiFiPlazaWork *lobby);
+extern void WiFiPlazaWork_NewPlayerInfo(struct WiFiPlazaWork *lobby);
+extern void WiFiPlazaWork_FreePlayerInfo(struct WiFiPlazaWork *lobby);
 extern int WiFiPlaza_GetErrorMessageClass(u32 errorCode, u32 errorType);
 extern BOOL WiFiPlaza_IsErrorRecoverable(u32 errorCode, u32 errorType);
 extern void WiFiPlazaLobbyClient_GetLastError(void);
