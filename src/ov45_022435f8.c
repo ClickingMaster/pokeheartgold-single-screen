@@ -28,7 +28,7 @@ extern void LobbyString_InitFromCStr(String *, const char *);
 extern char ov45_022553A8[];
 extern void LobbyString_InitCopy(String *, const void *);
 extern void LobbyUserMap_EraseKey(void *, int *);
-extern void ov45_02243780(Pair *, int, const String *);
+extern void LobbyUserMap_MakeEntry(Pair *, int, const String *);
 extern void LobbyUserMap_Insert(void *, void *, const Pair *);
 extern void LobbyString_Destroy(String *);
 int LobbyChat_FindUserIdByNick(Work *, const String *);

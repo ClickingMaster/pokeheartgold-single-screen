@@ -37,7 +37,7 @@ typedef struct VsRecorderAngles {
 BOOL FashionEntry_IsSaved(SaveFashionDataSub *entry);
 void TextOBJ_SetParentSprite(TextOBJ *textOBJ, const Sprite *sprite);
 
-extern const u8 ov40_02244DA8[];
+extern const u8 gVsRecorderDecorSpriteXOffsets[];
 extern const u8 ov40_02244DC0[];
 extern const VsRecorderAngles ov40_02244DD8;
 extern const VsRecorderF32x6 ov40_02244DF0;
@@ -445,9 +445,9 @@ void VsRecorder_CreateDecorSprites(VsRecorderWork *work) {
     template.resIdList[3] = 9999;
     template.resIdList[4] = -1;
     template.resIdList[5] = -1;
-    ys = *(const VsRecorderS16x6 *)(ov40_02244DA8 + 0x22);
+    ys = *(const VsRecorderS16x6 *)(gVsRecorderDecorSpriteXOffsets + 0x22);
     scales = ov40_02244DF0;
-    xs = *(const VsRecorderS8x6 *)ov40_02244DA8;
+    xs = *(const VsRecorderS8x6 *)gVsRecorderDecorSpriteXOffsets;
     for (i = 0; i < 6; i++) {
         for (j = 0; j < 2; j++) {
             if (j == 0) {

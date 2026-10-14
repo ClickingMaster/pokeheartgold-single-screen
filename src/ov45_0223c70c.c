@@ -20,10 +20,10 @@ static inline void Copy(int *first, int *last, int *dest) {
     memmove(dest - count, first, count * 4);
 }
 
-void ov45_0223C70C(Iterator *, Iterator *, Iterator *, Iterator *);
+void LobbyEventDequeMap_CopyBackward(Iterator *, Iterator *, Iterator *, Iterator *);
 #pragma opt_propagation off
 
-void ov45_0223C70C(Iterator *out, Iterator *first, Iterator *last, Iterator *dest) {
+void LobbyEventDequeMap_CopyBackward(Iterator *out, Iterator *first, Iterator *last, Iterator *dest) {
     while (first->cur != last->cur) {
         int cap, amount;
         if (last->cur == last->begin) {

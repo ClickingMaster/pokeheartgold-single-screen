@@ -230,25 +230,25 @@ void Camera_Init_FromTargetAndPos(const VecFx32 *target, const VecFx32 *pos, u16
 
     VEC_Subtract(pos, target, &vec_from_pos_to_target);
     camera->distance = VEC_Mag(&vec_from_pos_to_target);
-    VecFx32 sp24 = { 0, 0, 0 }; // unused
-    VecFx32 sp18 = { 0, 0, 0 }; // unused
-    VecFx32 sp0C = { 0, 0, 0 };
-    VecFx32 sp00;
+    VecFx32 unusedVec1 = { 0, 0, 0 }; // unused
+    VecFx32 unusedVec2 = { 0, 0, 0 }; // unused
+    VecFx32 dir = { 0, 0, 0 };
+    VecFx32 axis;
 
-    sp00.x = 0;
-    sp00.y = 0;
-    sp00.z = FX32_ONE;
-    sp0C = vec_from_pos_to_target;
-    sp0C.y = 0;
-    camera->angle.y = CalcAngleBetweenVecs(&sp00, &sp0C);
+    axis.x = 0;
+    axis.y = 0;
+    axis.z = FX32_ONE;
+    dir = vec_from_pos_to_target;
+    dir.y = 0;
+    camera->angle.y = CalcAngleBetweenVecs(&axis, &dir);
 
-    sp00.x = FX32_ONE;
-    sp00.y = 0;
-    sp00.z = 0;
-    sp0C.x = vec_from_pos_to_target.z;
-    sp0C.z = vec_from_pos_to_target.y;
-    sp0C.y = 0;
-    camera->angle.x = CalcAngleBetweenVecs(&sp00, &sp0C);
+    axis.x = FX32_ONE;
+    axis.y = 0;
+    axis.z = 0;
+    dir.x = vec_from_pos_to_target.z;
+    dir.z = vec_from_pos_to_target.y;
+    dir.y = 0;
+    camera->angle.x = CalcAngleBetweenVecs(&axis, &dir);
 
     camera->angle.z = 0;
     Camera_ApplyPerspectiveType(perspectiveType, camera);

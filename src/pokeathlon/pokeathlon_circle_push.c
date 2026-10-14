@@ -123,7 +123,7 @@ extern const s32 ov96_0221DB5C[5];
 extern const WindowTemplate ov96_0221BC5C;
 extern const PokeathlonCirclePushZone *ov96_0221DBC8[];
 extern const u16 *ov96_0221DBB8[];
-extern const u32 ov96_0221BFF4[];
+extern const u32 gPokeathlonCirclePushNameplateCoords[];
 
 // Contacts between the Pokemon of this frame.
 typedef struct PokeathlonCirclePushContact {
@@ -2749,8 +2749,8 @@ void PokeathlonCirclePushDisplay_LoadSpriteResources(PokeathlonCourseSpritePool 
     u32 resIds[2];
     u32 *resId = resIds;
     int i;
-    resIds[0] = ov96_0221BFF4[2];
-    resIds[1] = ov96_0221BFF4[3];
+    resIds[0] = gPokeathlonCirclePushNameplateCoords[2];
+    resIds[1] = gPokeathlonCirclePushNameplateCoords[3];
     for (i = 0; i < 2; i++) {
         PokeathlonCourseSpritePool_LoadChar(pool, NARC_application_choose_starter_choose_starter_sub_res, 9, *resId, 2);
         PokeathlonCourseSpritePool_LoadPltt(pool, NARC_application_choose_starter_choose_starter_sub_res, 6, *resId, 2, 1);

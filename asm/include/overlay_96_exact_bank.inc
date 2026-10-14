@@ -1530,7 +1530,7 @@
 	.public ov96_0221BF94
 	.public ov96_0221BFB4
 	.public ov96_0221BFD4
-	.public ov96_0221BFF4
+	.public gPokeathlonCirclePushNameplateCoords
 	.public ov96_0221C01C
 	.public ov96_0221C028
 	.public ov96_0221C050
@@ -1604,7 +1604,7 @@
 	.public ov96_0221C6F0
 	.public ov96_0221C718
 	.public ov96_0221C720
-	.public ov96_0221C728
+	.public gPokeathlonRelayRunPicIds
 	.public ov96_0221C748
 	.public ov96_0221C754
 	.public ov96_0221C760
@@ -1646,7 +1646,7 @@
 	.public ov96_0221CB9C
 	.public ov96_0221CBC4
 	.public ov96_0221CBC8
-	.public ov96_0221CBCC
+	.public gPokeathlonPennantCaptureSpriteIds
 	.public ov96_0221CBEC
 	.public ov96_0221CBF4
 	.public ov96_0221CC00
@@ -1845,8 +1845,8 @@
 	.extern PokeathlonCourse_SetStateTransitionType
 	.extern PokeathlonCourse_SetVBlankIntrCB
 	.extern PokeathlonCourse_GetGraphicsSystem
-	.extern ov96_0221DC80
-	.extern ov96_0221DC88
-	.extern ov96_0221DC90
-	.extern ov96_0221E5A0
-	.extern ov96_0221E5A4
+	.extern gPokeathlonGoalRollBounceOffsets
+	.extern gPokeathlonGoalRollStates
+	.extern gPokeathlonRingDropStates
+	.extern gPokeathlonLampJumpTrampolineRed
+	.extern gPokeathlonBlockSmashFramesSinceHit

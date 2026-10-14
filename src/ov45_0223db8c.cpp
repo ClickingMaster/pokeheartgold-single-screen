@@ -61,12 +61,12 @@ struct Alloc {
     }
 };
 
-extern "C" u32 ov45_02237890(Vec8 *v, u32 n);
-extern "C" void ov45_022389CC(Buf *b, u32 n, Tag t);
-extern "C" void ov45_022389B0(Buf *b);
+extern "C" u32 LobbyCharVector_RecommendSize(Vec8 *v, u32 n);
+extern "C" void LobbyCharVectorBuffer_Allocate(Buf *b, u32 n, Tag t);
+extern "C" void LobbyCharVectorBuffer_Destroy(Buf *b);
 
 inline void Allocate(Buf *b, u32 n, Tag t) {
-    ov45_022389CC(b, n, t);
+    LobbyCharVectorBuffer_Allocate(b, n, t);
 }
 
 inline void Swap(u32 &a, u32 &b) {
@@ -81,11 +81,11 @@ inline void Swap(u8 *&a, u8 *&b) {
     b = t;
 }
 
-extern "C" void ov45_0223DB8C(Vec8 *v, u32 n, const u8 *val);
+extern "C" void LobbyCharVector_AppendFillSlow(Vec8 *v, u32 n, const u8 *val);
 
-extern "C" void ov45_0223DB8C(Vec8 *v, u32 n, const u8 *val) {
+extern "C" void LobbyCharVector_AppendFillSlow(Vec8 *v, u32 n, const u8 *val) {
     Buf tmp(&v->cap);
-    u32 c = ov45_02237890(v, v->size + n - v->cap);
+    u32 c = LobbyCharVector_RecommendSize(v, v->size + n - v->cap);
     Allocate(&tmp, c, Tag(Tag()));
     tmp.start = v->size;
     Alloc a = Alloc();
@@ -103,5 +103,5 @@ extern "C" void ov45_0223DB8C(Vec8 *v, u32 n, const u8 *val) {
     Swap(v->cap, tc);
     Swap(v->ptr, tmp.ptr);
     Swap(v->size, tmp.size);
-    ov45_022389B0(&tmp);
+    LobbyCharVectorBuffer_Destroy(&tmp);
 }

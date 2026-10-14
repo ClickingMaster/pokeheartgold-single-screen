@@ -168,14 +168,14 @@ void CommState_SetEntry(u32 enabled) {
 }
 
 s32 CommState_IsLinked(void) {
-    void (*const sp0[3])(void);
-    ARRAY_ASSIGN(sp0, gCommLinkedStates);
+    void (*const linkedStates[3])(void);
+    ARRAY_ASSIGN(linkedStates, gCommLinkedStates);
     void (*func)(void) = gCommState->stateFunc;
     if (!gCommState) {
         return 0;
     }
-    for (int i = 0; sp0[i] != NULL; i++) {
-        if (func == sp0[i]) {
+    for (int i = 0; linkedStates[i] != NULL; i++) {
+        if (func == linkedStates[i]) {
             return 1;
         }
     }
@@ -529,8 +529,8 @@ void CommState_AlternateStartScan(void) {
         sub_02035FD8();
         // Equivalent to u32 rand = MATH_Rand32(&gCommState->mathRandContext, 32)
         MATHRandContext32 *mathRandContext = &gCommState->mathRandContext;
-        u64 r0 = (mathRandContext->mul * mathRandContext->x) + mathRandContext->add;
-        mathRandContext->x = r0;
+        u64 nextX = (mathRandContext->mul * mathRandContext->x) + mathRandContext->add;
+        mathRandContext->x = nextX;
         u32 rand = (u32)(((mathRandContext->x >> 32) * 32) >> 32);
         //
         CommState_SetState(CommState_AlternateScan, rand);
@@ -758,14 +758,14 @@ void CommState_ReconnectWaitLinked(void) {
 void CommState_RecvJoinRequest(u8 netId, u8 size, u8 *data) {
     u32 i;
     if (!Comm_GetLocalNetId()) {
-        BOOL var_r3 = TRUE;
+        BOOL matches = TRUE;
         for (i = 0; i < 6; i++) {
             if (sJoinRequest[i] != data[i]) {
-                var_r3 = FALSE;
+                matches = FALSE;
                 break;
             }
         }
-        if (var_r3 && !gCommState->refuseJoins) {
+        if (matches && !gCommState->refuseJoins) {
             sJoinAccepted[0] = netId;
             Comm_SendFixedParentCommand(7, sJoinAccepted);
         } else {
@@ -777,30 +777,30 @@ void CommState_RecvJoinRequest(u8 netId, u8 size, u8 *data) {
 
 void CommState_RecvJoinReply(u32 netId, u32 size, u8 *data) {
     u32 i;
-    BOOL var_r4 = TRUE;
+    BOOL matches = TRUE;
     for (i = 1; i < 6; i++) {
         if (sJoinAccepted[i] != data[i]) {
-            var_r4 = FALSE;
+            matches = FALSE;
             break;
         }
     }
-    if (var_r4) {
-        u8 temp_r4 = *data;
-        if (temp_r4 == Comm_GetLocalNetId()) {
+    if (matches) {
+        u8 acceptedNetId = *data;
+        if (acceptedNetId == Comm_GetLocalNetId()) {
             gCommState->joinReply = 1;
         }
     } else {
-        var_r4 = TRUE;
+        matches = TRUE;
         for (i = 1; i < 6; i++) {
             if (sJoinRefused[i] != data[i]) {
-                var_r4 = FALSE;
+                matches = FALSE;
                 break;
             }
         }
-        if (var_r4) {
-            u8 temp_r4_2 = *data;
-            u8 r0 = Comm_GetLocalNetId();
-            if (temp_r4_2 == r0) {
+        if (matches) {
+            u8 refusedNetId = *data;
+            u8 localNetId = Comm_GetLocalNetId();
+            if (refusedNetId == localNetId) {
                 gCommState->joinReply = 2;
             }
         }
@@ -936,20 +936,20 @@ void CommState_WifiCancelled(void) {
 
 void CommState_WifiConnected(void) {
     Comm_SetWifiConnected(1);
-    s32 temp_r0 = WifiConnection_Update(0);
-    if ((temp_r0 >= 10) && (temp_r0 < 20)) {
+    s32 status = WifiConnection_Update(0);
+    if ((status >= 10) && (status < 20)) {
         CommState_SetState(CommState_WifiCancelled, 0);
-    } else if (temp_r0 < 0) {
+    } else if (status < 0) {
         CommState_SetState(CommState_WifiFailed, 0);
-    } else if (temp_r0 == 23) {
+    } else if (status == 23) {
         CommState_SetState(CommState_WifiTimedOut, 0);
-    } else if (temp_r0 == 24) {
+    } else if (status == 24) {
         if (gCommState->watchMembers) {
             CommState_SetState(CommState_WifiFailed, 0);
         } else {
             CommState_SetState(CommState_WifiDisconnected, 0);
         }
-    } else if (temp_r0 == 21) {
+    } else if (status == 21) {
         if (gCommState->watchMembers) {
             CommState_SetState(CommState_WifiFailed, 0);
         } else {
@@ -973,18 +973,18 @@ void CommState_SetWifiError(u32 error, s32 type, s32 status) {
 }
 
 void CommState_WifiLobby(void) {
-    s32 temp_r0 = WifiConnection_Update(0);
-    if ((temp_r0 >= 10) && (temp_r0 < 20)) {
+    s32 status = WifiConnection_Update(0);
+    if ((status >= 10) && (status < 20)) {
         CommState_SetState(CommState_WifiCancelled, 0);
-    } else if (temp_r0 < 0) {
+    } else if (status < 0) {
         CommState_SetState(CommState_WifiFailed, 0);
-    } else if (temp_r0 == 20) {
+    } else if (status == 20) {
         CommState_SetState(CommState_WifiConnected, 0);
-    } else if (temp_r0 == 21) {
+    } else if (status == 21) {
         CommState_SetState(CommState_WifiDisconnected, 0);
-    } else if (temp_r0 == 22) {
+    } else if (status == 22) {
         CommState_SetState(CommState_WifiCancelled, 0);
-    } else if (temp_r0 == 24) {
+    } else if (status == 24) {
         CommState_SetState(CommState_WifiDisconnected, 0);
     }
 }
@@ -994,8 +994,8 @@ void CommState_WifiStartMatch(void) {
         CommState_SetState(CommState_WifiFailed, 0);
         return;
     }
-    u32 temp_r0 = WifiConnection_StartMatchmaking(gCommState->matchFriendIndex, Comm_GetMaxChildren(gCommState->linkMode) + 1, 0) + 3;
-    switch (temp_r0) {
+    u32 result = WifiConnection_StartMatchmaking(gCommState->matchFriendIndex, Comm_GetMaxChildren(gCommState->linkMode) + 1, 0) + 3;
+    switch (result) {
     case 3:
         Comm_ResetWork();
         CommState_SetState(CommState_WifiLobby, 0);
@@ -1062,10 +1062,10 @@ void CommState_WifiJoinLobby(void) {
     case 2:
         break;
     }
-    s32 temp_r0_2 = WifiConnection_CheckError();
-    if (temp_r0_2 < 0) {
+    s32 error = WifiConnection_CheckError();
+    if (error < 0) {
         CommState_SetState(CommState_WifiFailed, 0);
-    } else if (temp_r0_2 == 26) {
+    } else if (error == 26) {
         CommState_SetState(CommState_WifiFailed, 0);
     }
 }
@@ -1162,8 +1162,8 @@ void CommState_EndWifiMatch(void) {
 }
 
 void CommState_SendWifiDisconnect(void) {
-    u8 r1 = Comm_GetLocalNetId();
-    Comm_SendFixedCommand(21, &r1);
+    u8 netId = Comm_GetLocalNetId();
+    Comm_SendFixedCommand(21, &netId);
 }
 
 BOOL CommState_HasWifiFailed(void) {
@@ -1256,23 +1256,23 @@ BOOL CommState_CheckDwcError(void) {
     if (gCommState == NULL) {
         return FALSE;
     }
-    s32 sp4;
-    s32 sp0;
+    s32 errorCode;
+    s32 errorCategory;
     if (gCommState->linkMode == 24 || gCommState->linkMode == 36) {
-        if (DWC_GetLastErrorEx(&sp4, &sp0)) {
+        if (DWC_GetLastErrorEx(&errorCode, &errorCategory)) {
             DWC_ClearError();
             return TRUE;
         }
-    } else if ((gCommState->linkMode == 25) && DWC_GetLastErrorEx(&sp4, &sp0) && (sp0 == 7)) {
+    } else if ((gCommState->linkMode == 25) && DWC_GetLastErrorEx(&errorCode, &errorCategory) && (errorCategory == 7)) {
         return TRUE;
     }
     return FALSE;
 }
 
 void CommState_WifiLogin(void) {
-    s32 temp_r0 = WifiConnection_UpdateLogin();
+    s32 loginState = WifiConnection_UpdateLogin();
     gCommState->timer--;
-    if (temp_r0 == 27) {
+    if (loginState == 27) {
         if (gCommState->linkMode == 33) {
             if (WiFiPlazaLobbyClient_Initialize(gCommState->plazaProfileId) == 1) {
                 gCommState->plazaLobbyStarted = 1;
@@ -1284,7 +1284,7 @@ void CommState_WifiLogin(void) {
             CommState_SetState(CommState_WifiJoinLobby, 0);
         }
     } else {
-        if (temp_r0) {
+        if (loginState) {
             CommState_SetState(CommState_WifiFailed, 0);
         }
         if (gCommState->timer <= 0) {
@@ -1576,18 +1576,18 @@ void CommState_PlazaLobby(void) {
 }
 
 s32 CommState_PlazaCheckWifiResult(s32 result) {
-    s32 var_r4 = 1;
+    s32 ok = 1;
     if ((result >= 10) && (result < 20)) {
         CommState_SetState(CommState_WifiCancelled, 0);
-        var_r4 = 0;
+        ok = 0;
     } else if (result < 0) {
         CommState_SetState(CommState_WifiFailed, 0);
-        var_r4 = 0;
+        ok = 0;
     } else if (result == 23) {
         CommState_SetState(CommState_PlazaTimedOut, 0);
-        var_r4 = 0;
+        ok = 0;
     } else if (result == 24) {
-        var_r4 = 0;
+        ok = 0;
         if (gCommState->watchMembers) {
             CommState_SetState(CommState_WifiFailed, 0);
         } else {
@@ -1596,15 +1596,15 @@ s32 CommState_PlazaCheckWifiResult(s32 result) {
     }
     if (gCommState->watchMembers && (gCommState->memberCount != Comm_CountConnected())) {
         CommState_SetState(CommState_WifiFailed, 0);
-        var_r4 = 0;
+        ok = 0;
     }
-    return var_r4;
+    return ok;
 }
 
 s32 CommState_PlazaUpdateLobby(void) {
-    s32 var_r4 = 1;
-    u32 temp_r0 = WiFiPlazaLobbyClient_Update();
-    switch (temp_r0) {
+    s32 ok = 1;
+    u32 lobbyState = WiFiPlazaLobbyClient_Update();
+    switch (lobbyState) {
     case 0:
     case 1:
     case 2:
@@ -1612,10 +1612,10 @@ s32 CommState_PlazaUpdateLobby(void) {
         break;
     case 4:
         CommState_SetState(CommState_PlazaLobbyFailed, 0);
-        var_r4 = 0;
+        ok = 0;
         break;
     }
-    return var_r4;
+    return ok;
 }
 
 int CommState_PlazaUpdate(void) {
@@ -1627,12 +1627,12 @@ int CommState_PlazaUpdate(void) {
 }
 
 void CommState_PlazaUpdateMatch(s32 *matchResult) {
-    s32 temp_r0 = WifiConnection_Update(0);
-    if (temp_r0 >= 20) {
-        *matchResult = temp_r0;
+    s32 status = WifiConnection_Update(0);
+    if (status >= 20) {
+        *matchResult = status;
     } else {
         *matchResult = 0;
-        if (!CommState_PlazaCheckWifiResult(temp_r0)) {
+        if (!CommState_PlazaCheckWifiResult(status)) {
             return;
         }
     }
@@ -1673,10 +1673,10 @@ void CommState_PlazaMatching(void) {
         CommState_SetState(CommState_PlazaEndMatch, 0);
         return;
     }
-    s32 sp0;
-    CommState_PlazaUpdateMatch(&sp0);
-    if (sp0) {
-        if (sp0 == 20) {
+    s32 matchResult;
+    CommState_PlazaUpdateMatch(&matchResult);
+    if (matchResult) {
+        if (matchResult == 20) {
             CommState_SetState(CommState_PlazaMatchConnected, 0);
             return;
         }
@@ -1726,12 +1726,12 @@ s32 Comm_SyncedSave(SaveData *saveData, s32 arg1, u32 *state) {
         }
         break;
     case 2:
-        s32 temp_r0 = Save_WriteFileAsync(saveData);
-        GF_ASSERT(temp_r0 != 2);
-        if (temp_r0 == 1) {
+        s32 result = Save_WriteFileAsync(saveData);
+        GF_ASSERT(result != 2);
+        if (result == 1) {
             *state = 3;
             LinkSync_StartSync(112);
-        } else if (temp_r0 == 3) {
+        } else if (result == 3) {
             *state = 7;
         }
         break;
@@ -1741,11 +1741,11 @@ s32 Comm_SyncedSave(SaveData *saveData, s32 arg1, u32 *state) {
         }
         break;
     case 4:
-        temp_r0 = Save_WriteFileAsync(saveData);
-        GF_ASSERT(temp_r0 != 1);
-        if (temp_r0 == 2) {
+        result = Save_WriteFileAsync(saveData);
+        GF_ASSERT(result != 1);
+        if (result == 2) {
             *state = 5;
-        } else if (temp_r0 == 3) {
+        } else if (result == 3) {
             *state = 7;
         }
         break;
@@ -1759,9 +1759,9 @@ s32 Comm_SyncedSave(SaveData *saveData, s32 arg1, u32 *state) {
 }
 
 void Comm_RecordPlayerLocations(SaveWiFiHistory *wifiHistory) {
-    s32 temp_r7 = Comm_CountConnected();
+    s32 connectedCount = Comm_CountConnected();
     if (CommPlayerInfo_GetProfile(0)) {
-        for (int i = 0; i < temp_r7; i++) {
+        for (int i = 0; i < connectedCount; i++) {
             if (i != Comm_GetLocalNetId()) {
                 Comm_MarkLocationSeen(wifiHistory, CommPlayerInfo_GetCountry(i), CommPlayerInfo_GetRegion(i), PlayerProfile_GetLanguage(CommPlayerInfo_GetProfile(i)));
             }
@@ -1776,19 +1776,19 @@ void Comm_MarkLocationSeen(SaveWiFiHistory *history, s32 country, s32 region, u8
 }
 
 s32 Comm_InitDwc(enum HeapID heapID) {
-    void *temp_r0 = Heap_Alloc(heapID, 1824);
-    s32 temp_r5 = DWC_Init(((u32)temp_r0 + 31) & ~31); // TODO
-    Heap_Free(temp_r0);
-    return temp_r5;
+    void *work = Heap_Alloc(heapID, 1824);
+    s32 result = DWC_Init(((u32)work + 31) & ~31); // TODO
+    Heap_Free(work);
+    return result;
 }
 
 s32 Comm_LoadAndInitDwc(enum HeapID heapID) {
     LoadDwcOverlay();
     LoadOVY38();
-    s32 temp_r4 = Comm_InitDwc(heapID);
+    s32 result = Comm_InitDwc(heapID);
     UnloadDwcOverlay();
     UnloadOVY38();
-    return temp_r4;
+    return result;
 }
 
 void Comm_EnsureDwcUserData(WiFiList *wifiList) {
@@ -1867,31 +1867,31 @@ int Comm_FindFriendSlotByKey(SaveData *saveData, u64 friendKey, int *slot) {
 }
 
 s32 Comm_RegisterLinkedFriends(SaveData *saveData, s32 *results, enum HeapID heapID) {
-    s32 spC = 0;
+    s32 hasNewFriend = 0;
     DWCFriendData *friendData = FriendRoster_GetDwcFriendData(Save_FriendRoster_Get(saveData), 0);
     for (int i = 0; i < Comm_CountConnected(); i++) {
         if (i != Comm_GetLocalNetId()) {
-            DWCFriendData *temp_r0 = CommPlayerInfo_GetExchangeToken(i);
-            if (temp_r0) {
-                s32 sp10;
-                results[i] = Comm_FindFriendSlot(saveData, temp_r0, &sp10);
+            DWCFriendData *exchangeToken = CommPlayerInfo_GetExchangeToken(i);
+            if (exchangeToken) {
+                s32 slot;
+                results[i] = Comm_FindFriendSlot(saveData, exchangeToken, &slot);
                 GF_ASSERT(results[i] != 3);
                 if (results[i] == 0) {
-                    Comm_StoreFriendFromPlayer(saveData, i, sp10, heapID, 2);
+                    Comm_StoreFriendFromPlayer(saveData, i, slot, heapID, 2);
                     CommPlayerInfo_SaveRecords(saveData);
                 } else if (results[i] == 1) {
                     if (!CommState_IsWifi()) {
-                        Comm_StoreFriendFromPlayer(saveData, i, sp10, heapID, 1);
-                        MI_CpuCopy8(temp_r0, &friendData[sp10], sizeof(DWCFriendData));
+                        Comm_StoreFriendFromPlayer(saveData, i, slot, heapID, 1);
+                        MI_CpuCopy8(exchangeToken, &friendData[slot], sizeof(DWCFriendData));
                         CommPlayerInfo_SaveRecords(saveData);
                     }
                 } else if (results[i] == 2) {
-                    spC = 1;
+                    hasNewFriend = 1;
                 }
             }
         }
     }
-    return spC;
+    return hasNewFriend;
 }
 
 void Comm_StoreFriendFromPlayer(SaveData *saveData, s32 netId, s32 slot, enum HeapID heapID, u32 mode) {
@@ -1922,10 +1922,10 @@ void Comm_StoreFriendFromPlayer(SaveData *saveData, s32 netId, s32 slot, enum He
 s32 Comm_FindFriendIndexOfPlayer(SaveData *saveData, s32 netId) {
     int i;
     DWCFriendData *friendData = CommPlayerInfo_GetExchangeToken(netId);
-    WiFiList *r5 = Save_FriendRoster_Get(saveData);
+    WiFiList *wifiList = Save_FriendRoster_Get(saveData);
 
     for (i = 0; i < 32; i++) {
-        if (DWC_IsEqualFriendData(friendData, FriendRoster_GetDwcFriendData(r5, i))) {
+        if (DWC_IsEqualFriendData(friendData, FriendRoster_GetDwcFriendData(wifiList, i))) {
             return i;
         }
     }

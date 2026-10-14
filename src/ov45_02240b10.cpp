@@ -48,10 +48,10 @@ extern "C" void LobbyString_InitFromCStr(String *s, const char *p);
 extern "C" void LobbyChat_FormatNick(String *s, void *user);
 extern "C" void LobbyString_ConcatCStr(String *out, const String *a, const char *b);
 struct Root;
-extern "C" void ov45_02240F6C(String *, Root *);
-extern "C" void ov45_0223FC5C(String *, Root *);
-extern "C" void ov45_02240F7C(String *, Root *);
-extern "C" void ov45_02240F8C(String *, Root *);
+extern "C" void LobbyChatManager_GetGameName(String *, Root *);
+extern "C" void LobbyChatManager_GetNick(String *, Root *);
+extern "C" void LobbyChatManager_GetRealName(String *, Root *);
+extern "C" void LobbyChatManager_GetGameKey(String *, Root *);
 
 struct Task {
     s64 time;
@@ -120,12 +120,12 @@ extern "C" void OSi_ReferSymbol(const void *);
 extern "C" const char ov45_02255308[], ov45_02255310[], ov45_02255318[], ov45_0225531C[];
 extern "C" void *LobbyMem_Alloc(u32);
 extern "C" Root *LobbyChatManager_Init(Root *, String *, String *, int, void *, String *, String *, String *, void *);
-extern "C" int ov45_0224246C(void);
+extern "C" int LobbyMem_InstallOutOfMemoryHandler(void);
 extern "C" void LobbyChat_OnRaw(void), LobbyChat_OnDisconnected(void), LobbyChat_OnInvited(void), LobbyChat_OnPrivateMessage(void), LobbyChat_OnNickError(void), LobbyChat_OnFillInUser(void), LobbyChat_OnConnected(void);
-extern "C" int ov45_02240850(void);
+extern "C" int LobbyChat_TimerConnectTimeout(void);
 extern "C" u32 chatConnectSpecialA(const char *, int, const char *, const char *, const char *, const char *, Callbacks *, void (*)(void), void (*)(void), void (*)(void), void *, int);
 extern "C" void DWC_GetDateTime(RTCDate *, RTCTime *);
-extern "C" void ov45_022424DC(void), LobbyChatManager_Destroy(Root *), DWC_Free(int, void *, int);
+extern "C" void LobbyMem_ReleaseReserve(void), LobbyChatManager_Destroy(Root *), DWC_Free(int, void *, int);
 
 inline void Free(void *p) {
     if (p) {
@@ -184,7 +184,7 @@ extern "C" int LobbyChat_Initialize(const char *a, const char *b, int n, u8 *con
         outer1.destroy();
         return 1;
     }
-    if (!ov45_0224246C()) {
+    if (!LobbyMem_InstallOutOfMemoryHandler()) {
         error = 1;
         goto failure;
     }
@@ -195,13 +195,13 @@ extern "C" int LobbyChat_Initialize(const char *a, const char *b, int n, u8 *con
         callbacks.f[2] = LobbyChat_OnPrivateMessage;
         callbacks.f[3] = LobbyChat_OnInvited;
         callbacks.data = *(void **)(config + 8);
-        ov45_02240F6C(&s7, ov45_022577DC);
+        LobbyChatManager_GetGameName(&s7, ov45_022577DC);
         LobbyString_ConcatCStr(&s6, &s7, ov45_02255318);
         LobbyString_ConcatCStr(&s5, &s6, ov45_0225531C);
-        ov45_0223FC5C(&s4, ov45_022577DC);
-        ov45_02240F7C(&s3, ov45_022577DC);
-        ov45_02240F6C(&s2, ov45_022577DC);
-        ov45_02240F8C(&s1, ov45_022577DC);
+        LobbyChatManager_GetNick(&s4, ov45_022577DC);
+        LobbyChatManager_GetRealName(&s3, ov45_022577DC);
+        LobbyChatManager_GetGameName(&s2, ov45_022577DC);
+        LobbyChatManager_GetGameKey(&s1, ov45_022577DC);
         u32 connection = chatConnectSpecialA(s5.c_str(), 0x1a0b, s4.c_str(), s3.c_str(), s2.c_str(), s1.c_str(), &callbacks, LobbyChat_OnNickError, LobbyChat_OnFillInUser, LobbyChat_OnConnected, *(void **)(config + 8), 0);
         s1.destroy();
         s2.destroy();
@@ -222,14 +222,14 @@ extern "C" int LobbyChat_Initialize(const char *a, const char *b, int n, u8 *con
     {
         root = ov45_022577DC;
         DWC_GetDateTime(&date, &time);
-        root->queue.insert(LobbyTimerMap_MakeEntry(0, Task(RTC_ConvertDateTimeToSecond(&date, &time), root, ov45_02240850)));
+        root->queue.insert(LobbyTimerMap_MakeEntry(0, Task(RTC_ConvertDateTimeToSecond(&date, &time), root, LobbyChat_TimerConnectTimeout)));
     }
     outer3.destroy();
     outer2.destroy();
     outer1.destroy();
     return 0;
 failure:
-    ov45_022424DC();
+    LobbyMem_ReleaseReserve();
     root = ov45_022577DC;
     if (root) {
         DeleteRoot(root);

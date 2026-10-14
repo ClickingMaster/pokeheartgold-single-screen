@@ -93,7 +93,7 @@ struct Iter {
     }
 };
 struct Vec;
-extern "C" void ov45_022327B8(Vec *, Iter, Iter, TD);
+extern "C" void LobbyCharVector_AssignIterRange(Vec *, Iter, Iter, TD);
 extern "C" const u8 *LobbyByteVector_Data(const Vec *);
 
 struct Vec {
@@ -111,7 +111,7 @@ struct Vec {
     }
 
     void Assign(Iter first, Iter last, const TA &, const TB &) {
-        ov45_022327B8(this, first, last, TD());
+        LobbyCharVector_AssignIterRange(this, first, last, TD());
     }
 };
 
@@ -147,7 +147,7 @@ struct OpVtbl {
 };
 
 extern "C" const OpVtbl ov45_02254FC0;
-extern "C" void ov45_022354AC(void);
+extern "C" void PPWLobby_OnSubmitQuestionnaire(void);
 
 struct Op {
     const OpVtbl *vtbl;
@@ -169,7 +169,7 @@ struct Op {
         , b(h)
         , id(i)
         , vec()
-        , cb(ov45_022354AC)
+        , cb(PPWLobby_OnSubmitQuestionnaire)
         , x38(0)
         , x3c(0) {
         vec.Assign(Iter(first), Iter(last));
@@ -177,7 +177,7 @@ struct Op {
 };
 
 extern "C" void *LobbyMem_Alloc(u32);
-extern "C" int ov45_0223AEDC(void *, void *);
+extern "C" int PPWLobbySchedule_GetQuestionnaire(void *, void *);
 extern "C" void StatsUpload_Start(int, const char *);
 extern "C" int StatsUpload_UploadWithLastHash(const char *, int, const u8 *, u32, int);
 extern "C" int StatsUpload_Upload(const char *, int, const u8 *, u32, int);
@@ -236,7 +236,7 @@ extern "C" int PPW_LobbySubmitQuestionnaire(int mode) {
         return 3;
     }
     Out out;
-    if (!ov45_0223AEDC(w->x144, &out) || _022577C4->x6c != 0) {
+    if (!PPWLobbySchedule_GetQuestionnaire(w->x144, &out) || _022577C4->x6c != 0) {
         return 4;
     }
     const Data *d = GetData(_022577C4);
@@ -363,36 +363,36 @@ extern Node *LobbyTimerMap_LowerBound(u8 *, u32 *, Node *, Node *);
 extern void LobbyTimerMap_Find(Node **, u8 *, u32 *);
 extern int DWC_Free();
 extern int DWC_GetDateTime();
-extern int ov45_02231144();
+extern int PPWLobby_Initialize();
 extern int PPWLobby_SendMessage();
 extern int PPWLobby_SetChannelData();
-extern int ov45_02236B88();
+extern int PPWLobbyPlayerSet_Destroy();
 extern int LobbyTimerMap_Clear();
 extern int LobbyCharVector_Grow();
-extern int ov45_02237820();
-extern int ov45_02237890();
+extern int LobbyCharVector_Reallocate();
+extern int LobbyCharVector_RecommendSize();
 extern int LobbyCharVector_Destroy();
 extern int LobbyString_InitFromCStr();
 extern int LobbyString_Destroy();
 extern int PPWLobbySchedule_Copy();
-extern int ov45_0223DF4C();
+extern int PPWLobbyPlayers_Clear();
 extern int LobbyChat_ToErrorCode(int);
 extern int LobbyChat_IsInChannel();
 extern int LobbyChat_Shutdown();
 u8 *PPWLobby_GetWork(void);
 int PPW_LobbyInitializeAsync(void *a, void *b, void *c, void *d, u8 *user, void *e, void *g);
-u8 *ov45_02231448(u8 *p);
-u8 *ov45_02231460(u8 *p);
-u8 *ov45_02231C38(u8 *p);
-void *ov45_02231EB0(u8 *p, u8 *q);
-void *ov45_022320B4(u8 *p, u8 *q);
+u8 *PPWLobbyPlayer_Destroy(u8 *p);
+u8 *PPWLobbyPlayers_Destroy(u8 *p);
+u8 *PPWLobbyWebRequest_Delete(u8 *p);
+void *PPWLobby_GetChannelBaseName(u8 *p, u8 *q);
+void *PPWLobbyChannel_GetName(u8 *p, u8 *q);
 int PPW_LobbyGetTimeInfo(u64 *out);
 int PPW_LobbyGetSchedule(void *p, u32 *size);
 int PPW_LobbySetChannelData(void *a, void *b, void *c, void *d, void *e);
 int PPW_LobbySendChannelBinaryMessage(int a, void *b, void *c, void *d);
 int PPW_LobbySendPlayerBinaryMessage(int a, void *b, void *c, void *d);
 int PPW_LobbyGetMyUserId(void);
-void ov45_02232760(Vec *p, char *first, char *last);
+void LobbyCharVector_AssignRange(Vec *p, char *first, char *last);
 void LobbyTimerMap_MakeEntry(Record *p, int type, Body *q);
 void LobbyString_FormatN(u8 *p, int n, char *fmt, ...);
 int LobbyTimerMap_EraseKey(u8 *p, u32 *key);
@@ -404,7 +404,7 @@ int ov45_02233220(int x);
 int PPW_LobbyShutdownAsync(void);
 int PPW_LobbyStopRecruit(void);
 int PPW_LobbyGetSubChannelState(void);
-void ov45_02232434(S *p, u8 *q, int x);
+void PPWLobby_GetChannelName(S *p, u8 *q, int x);
 int PPW_LobbyUpdateRecruitInfo(u8 *p);
 
 int PPW_LobbyGetLastError(void) {
@@ -504,7 +504,7 @@ struct Work {
 
 extern "C" Work *_022577C4;
 extern "C" char ov45_022550B4[];
-extern "C" Str ov45_02232434(u8 *, int);
+extern "C" Str PPWLobby_GetChannelName(u8 *, int);
 extern "C" int PPWLobby_EncodeMessage(int, int, int, int, int, Str *);
 extern "C" int LobbyChat_SendUserMessage(int, const char *);
 extern "C" int LobbyChat_SendChannelMessage(const char *, const char *);
@@ -555,7 +555,7 @@ extern "C" int PPWLobby_SendMessage(int id, int key, int a, int b, int c, int d,
         value.Destroy();
         return result;
     }
-    Str name = ov45_02232434(_022577C4->names, key);
+    Str name = PPWLobby_GetChannelName(_022577C4->names, key);
     if (name == ov45_022550B4) {
         name.Destroy();
         value.Destroy();
@@ -600,7 +600,7 @@ typedef struct {
 extern Global *_022577C4;
 extern char ov45_022550B4[];
 extern int PPWLobby_EncodeMessage(void *, void *, void *, void *, void *, String *), LobbyChat_SendUserMessage(int, char *), LobbyChat_SendChannelMessage(char *, char *), LobbyString_CompareCStr(String *, char *), LobbyChat_SetChannelKey(char *, int, int, void *);
-extern void LobbyString_Destroy(String *), ov45_02232434(String *, void *, int), LobbyCharVector_Grow(String *, u32), LobbyCharVector_Destroy(String *);
+extern void LobbyString_Destroy(String *), PPWLobby_GetChannelName(String *, void *, int), LobbyCharVector_Grow(String *, u32), LobbyCharVector_Destroy(String *);
 extern void *LobbyCharVector_Data(String *);
 extern int DWC_Base64Encode(void *, u32, void *, u32);
 
@@ -649,7 +649,7 @@ int PPWLobby_SetChannelData(int id, int key, int mode, void *data, u32 length) {
     String name, encoded;
     int result;
     char *text;
-    ov45_02232434(&name, _022577C4->names, key);
+    PPWLobby_GetChannelName(&name, _022577C4->names, key);
     if (Empty(&name)) {
         LobbyString_Destroy(&name);
         return 5;
@@ -738,7 +738,7 @@ struct Iter {
     }
 };
 struct Vec;
-extern "C" void ov45_022327B8(Vec *, Iter, Iter, TD);
+extern "C" void LobbyCharVector_AssignIterRange(Vec *, Iter, Iter, TD);
 extern "C" const char *LobbyByteVector_Data(const void *);
 
 struct Vec {
@@ -756,7 +756,7 @@ struct Vec {
     }
 
     void Assign(Iter first, Iter last, const TA &, const TB &) {
-        ov45_022327B8(this, first, last, TD());
+        LobbyCharVector_AssignIterRange(this, first, last, TD());
     }
 };
 
@@ -806,7 +806,7 @@ struct ObjVtbl {
 };
 
 extern "C" const ObjVtbl ov45_02254FC0;
-extern "C" void ov45_02234A88(int, int, int);
+extern "C" void PPWLobby_OnCheckProfile(int, int, int);
 
 struct Obj {
     const ObjVtbl *vtbl;
@@ -828,7 +828,7 @@ struct Obj {
         , host(h)
         , x(x_)
         , data()
-        , cb(ov45_02234A88)
+        , cb(PPWLobby_OnCheckProfile)
         , x38(0)
         , x3c(0) {
         data.Assign(Iter((const u8 *)&info), Iter((const u8 *)&info + sizeof(Info)));
@@ -921,13 +921,13 @@ extern "C" {
 #define P(p, o) (*(void **)((u8 *)(p) + (o)))
 extern void *_022577C4;
 extern char *_02254D04[];
-extern void ov45_022320B4(Str *, void *), LobbyString_Reserve(Str *, u32);
-extern int LobbyString_Compare(Str *, Str *), LobbyChat_IsInChannel(const char *), ov45_0223E4A8(void *), PPWLobby_SetChannelData(u32, u32, const void *, const void *, u32);
+extern void PPWLobbyChannel_GetName(Str *, void *), LobbyString_Reserve(Str *, u32);
+extern int LobbyString_Compare(Str *, Str *), LobbyChat_IsInChannel(const char *), PPWLobbyPlayers_AllHaveProfiles(void *), PPWLobby_SetChannelData(u32, u32, const void *, const void *, u32);
 extern void *LobbyByteVector_Data(void *);
 extern u32 current_time(void);
 extern void LobbyString_Format(Str *, const char *, ...);
 extern void PPWLobby_SendMessage(u32, u32, u32, u32, u32, const void *, u32), LobbyChat_GetChannelModeAsync(const char *, void (*)(void), s32), LobbyChat_GetChannelKeysAsync(const char *, s32, const char *, void (*)(void), s32);
-extern void PPWLobby_OnGetChannelMode(void), PPWLobby_OnGetChannelTime(void), PPWLobby_OnGetLobbyData(void), ov45_0223AF04(void *, void *);
+extern void PPWLobby_OnGetChannelMode(void), PPWLobby_OnGetChannelTime(void), PPWLobby_OnGetLobbyData(void), PPWLobbySchedule_SetQuestionnaire(void *, void *);
 extern Str *LobbyString_ConcatCStr(Str *, Str *, char *);
 extern Str *LobbyString_Concat(Str *, Str *, Str *);
 extern char ov45_022550B8[];
@@ -936,20 +936,20 @@ extern char ov45_022550C4[];
 extern char ov45_022550D4[];
 extern char ov45_022550E4[];
 extern char ov45_022550F4[];
-void ov45_02233994(Str *out, u32 id, Str *s);
-void ov45_02233B74(Str *out);
+void PPWLobby_MakeChannelName(Str *out, u32 id, Str *s);
+void PPWLobby_GenerateChannelBaseName(Str *out);
 int LobbyString_Equals(Str *a, Str *b);
-int ov45_02234688(void);
-int ov45_02234764(void);
+int PPWLobby_IsMainChannelReady(void);
+int PPWLobby_TimerUploadUserProfile(void);
 int PPWLobby_TimerUploadSystemProfile(void);
 int PPWLobby_TimerSendRecruitInfo(void);
 int PPWLobby_TimerPollChannelMode(void);
 int PPWLobby_TimerRequestChannelTime(void);
 int PPWLobby_TimerRequestLobbyData(void);
-int ov45_022349CC(u32 type);
-int ov45_02234A24(int valid, u8 *data, u32 size, void **output, u32 *length);
-void ov45_022353F0(int valid, u8 *data, u32 size);
-void ov45_022354AC(int status);
+int PPWLobby_GetWebResultError(u32 type);
+int PPWLobby_ParseWebResponse(int valid, u8 *data, u32 size, void **output, u32 *length);
+void PPWLobby_OnGetQuestionnaire(int valid, u8 *data, u32 size);
+void PPWLobby_OnSubmitQuestionnaire(int status);
 
 #pragma warn_uninitializedvar off
 extern Str *LobbyString_ReplaceRange(Str *, u32, u32, const char *, const char *, u8);
@@ -961,7 +961,7 @@ static inline u32 short_length(Str *p) {
     return p->s.size;
 }
 
-void ov45_02233994(Str *out, u32 id, Str *s) {
+void PPWLobby_MakeChannelName(Str *out, u32 id, Str *s) {
     Str b, a;
     LobbyString_InitFromCStr(&b, _02254D04[id]);
     LobbyString_ConcatCStr(&a, &b, ov45_022550B8);
@@ -1112,13 +1112,13 @@ extern "C" {
 #define P(p, o) (*(void **)((u8 *)(p) + (o)))
 extern void *_022577C4;
 extern char *_02254D04[];
-extern void ov45_022320B4(Str *, void *), LobbyString_Reserve(Str *, u32);
-extern int LobbyString_Compare(Str *, Str *), LobbyChat_IsInChannel(const char *), ov45_0223E4A8(void *), PPWLobby_SetChannelData(u32, u32, const void *, const void *, u32);
+extern void PPWLobbyChannel_GetName(Str *, void *), LobbyString_Reserve(Str *, u32);
+extern int LobbyString_Compare(Str *, Str *), LobbyChat_IsInChannel(const char *), PPWLobbyPlayers_AllHaveProfiles(void *), PPWLobby_SetChannelData(u32, u32, const void *, const void *, u32);
 extern void *LobbyByteVector_Data(void *);
 extern u32 current_time(void);
 extern void LobbyString_Format(Str *, const char *, ...);
 extern void PPWLobby_SendMessage(u32, u32, u32, u32, u32, const void *, u32), LobbyChat_GetChannelModeAsync(const char *, void (*)(void), s32), LobbyChat_GetChannelKeysAsync(const char *, s32, const char *, void (*)(void), s32);
-extern void PPWLobby_OnGetChannelMode(void), PPWLobby_OnGetChannelTime(void), PPWLobby_OnGetLobbyData(void), ov45_0223AF04(void *, void *);
+extern void PPWLobby_OnGetChannelMode(void), PPWLobby_OnGetChannelTime(void), PPWLobby_OnGetLobbyData(void), PPWLobbySchedule_SetQuestionnaire(void *, void *);
 extern Str *LobbyString_ConcatCStr(Str *, Str *, char *);
 extern Str *LobbyString_Concat(Str *, Str *, Str *);
 extern char ov45_022550B8[];
@@ -1127,20 +1127,20 @@ extern char ov45_022550C4[];
 extern char ov45_022550D4[];
 extern char ov45_022550E4[];
 extern char ov45_022550F4[];
-void ov45_02233994(Str *out, u32 id, Str *s);
-void ov45_02233B74(Str *out);
+void PPWLobby_MakeChannelName(Str *out, u32 id, Str *s);
+void PPWLobby_GenerateChannelBaseName(Str *out);
 int LobbyString_Equals(Str *a, Str *b);
-int ov45_02234688(void);
-int ov45_02234764(void);
+int PPWLobby_IsMainChannelReady(void);
+int PPWLobby_TimerUploadUserProfile(void);
 int PPWLobby_TimerUploadSystemProfile(void);
 int PPWLobby_TimerSendRecruitInfo(void);
 int PPWLobby_TimerPollChannelMode(void);
 int PPWLobby_TimerRequestChannelTime(void);
 int PPWLobby_TimerRequestLobbyData(void);
-int ov45_022349CC(u32 type);
-int ov45_02234A24(int valid, u8 *data, u32 size, void **output, u32 *length);
-void ov45_022353F0(int valid, u8 *data, u32 size);
-void ov45_022354AC(int status);
+int PPWLobby_GetWebResultError(u32 type);
+int PPWLobby_ParseWebResponse(int valid, u8 *data, u32 size, void **output, u32 *length);
+void PPWLobby_OnGetQuestionnaire(int valid, u8 *data, u32 size);
+void PPWLobby_OnSubmitQuestionnaire(int status);
 
 #pragma warn_uninitializedvar off
 extern Str *LobbyString_ReplaceRange(Str *, u32, u32, const char *, const char *, u8);
@@ -1152,7 +1152,7 @@ static inline u32 short_length(Str *p) {
     return p->s.size;
 }
 
-void ov45_02233B74(Str *out) {
+void PPWLobby_GenerateChannelBaseName(Str *out) {
     u32 id = I(_022577C4, 0x4c);
     u32 tick = current_time();
     LobbyString_Format(out, ov45_022550BC, id, tick % 1000);
@@ -1191,7 +1191,7 @@ struct Vector {
 
     void resize(u32 count) {
         if (count > repr.size) {
-            ov45_0223795C(&repr, count - repr.size, ResizeDispatch());
+            LobbyCharVector_AppendZeros(&repr, count - repr.size, ResizeDispatch());
         } else if (count < repr.size) {
             shrink(repr.size - count, ResizeDispatch());
         }
@@ -1322,8 +1322,8 @@ struct Callbacks {
 
 extern "C" Work *_022577C4;
 extern "C" void PPWLobby_OnPlayerJoined(), PPWLobby_OnPlayerLeft(), PPWLobby_OnMessage(), PPWLobby_OnChannelDataChanged(), PPWLobby_OnTopicChanged(), PPWLobby_OnEnterMainChannel();
-extern "C" Str ov45_02231EB0(Work *, int);
-extern "C" Str ov45_02233994(int, const Str &);
+extern "C" Str PPWLobby_GetChannelBaseName(Work *, int);
+extern "C" Str PPWLobby_MakeChannelName(int, const Str &);
 extern "C" int LobbyChat_EnterChannelAsync(const char *, int, int, Callbacks *, void (*)(), int);
 extern "C" int PPWLobby_EnterMainChannel(void);
 
@@ -1356,7 +1356,7 @@ inline void SetSelf(const Str &n) {
 }
 
 inline Str Build(Str t) {
-    Str n = ov45_02233994(0, t);
+    Str n = PPWLobby_MakeChannelName(0, t);
     t.Destroy();
     return n;
 }
@@ -1404,7 +1404,7 @@ inline void SetSelfK(const Str &n) {
 
 extern "C" int PPWLobby_EnterMainChannel(void) {
     Callbacks cb(PPWLobby_OnPlayerJoined, PPWLobby_OnPlayerLeft, PPWLobby_OnMessage, PPWLobby_OnChannelDataChanged, PPWLobby_OnTopicChanged);
-    Str name = Build(ov45_02231EB0(_022577C4, 0));
+    Str name = Build(PPWLobby_GetChannelBaseName(_022577C4, 0));
     int result = LobbyChat_EnterChannelAsync(name.CStr(), 0, 0x14, &cb, PPWLobby_OnEnterMainChannel, 0);
     {
         Work *w = _022577C4;
@@ -1496,7 +1496,7 @@ struct Work {
 };
 
 extern "C" Work *_022577C4;
-extern "C" Str ov45_022320B4(Entry *);
+extern "C" Str PPWLobbyChannel_GetName(Entry *);
 extern "C" int LobbyString_Equals(const Str &, const Str &);
 extern "C" int PPWLobby_DecodeMessageData(const char *, Vec *);
 extern "C" char *LobbyByteVector_Data(Vec *);
@@ -1508,7 +1508,7 @@ inline int Find(Work *w, const Str &name) {
     const Str &n = name;
     int eq;
     {
-        Str t = ov45_022320B4(&w->a);
+        Str t = PPWLobbyChannel_GetName(&w->a);
         eq = LobbyString_Equals(t, n);
         t.Destroy();
     }
@@ -1516,7 +1516,7 @@ inline int Find(Work *w, const Str &name) {
         return w->a.id;
     }
     {
-        Str t = ov45_022320B4(&w->b);
+        Str t = PPWLobbyChannel_GetName(&w->b);
         eq = LobbyString_Equals(t, n);
         t.Destroy();
     }
@@ -1594,7 +1594,7 @@ struct Vec {
     u32 size, cap;
 };
 
-extern "C" void ov45_0223795C(Vec *, u32, ResizeDispatch);
+extern "C" void LobbyCharVector_AppendZeros(Vec *, u32, ResizeDispatch);
 extern "C" char *LobbyByteVector_Data(Vec *);
 extern "C" int DWC_Base64Decode(const char *, u32, char *, u32);
 extern "C" int PPWLobby_DecodeMessageData(const char *, Vec *);
@@ -1606,7 +1606,7 @@ inline void Shrink(Vec *v, u32 count, ResizeDispatch) {
 inline void Resize(Vec *v, u32 count) {
     u32 size = v->size;
     if (count > size) {
-        ov45_0223795C(v, count - size, ResizeDispatch());
+        LobbyCharVector_AppendZeros(v, count - size, ResizeDispatch());
     } else if (count < size) {
         Shrink(v, size - count, ResizeDispatch());
     }
@@ -1702,9 +1702,9 @@ struct Iter {
     }
 };
 struct Vec;
-extern "C" void ov45_022327B8(Vec *, Iter, Iter, TD);
-extern "C" void ov45_022383E0(Vec *, const u8 *, const u8 *, TU);
-extern "C" void ov45_02232760(Vec *, const u8 *, const u8 *, TE);
+extern "C" void LobbyCharVector_AssignIterRange(Vec *, Iter, Iter, TD);
+extern "C" void LobbyCharVector_InitRange(Vec *, const u8 *, const u8 *, TU);
+extern "C" void LobbyCharVector_AssignRange(Vec *, const u8 *, const u8 *, TE);
 extern "C" const u8 *LobbyByteVector_Data(const Vec *);
 extern "C" void LobbyCharVector_Destroy(const Vec *);
 
@@ -1727,19 +1727,19 @@ struct Vec {
     }
 
     void Assign(Iter first, Iter last, const TA &, const TB &) {
-        ov45_022327B8(this, first, last, TD());
+        LobbyCharVector_AssignIterRange(this, first, last, TD());
     }
 
     void InitCopy(const Vec &o, TU al) {
         ptr = 0;
         size = 0;
         cap = 0;
-        ov45_022383E0(this, o.ptr, o.ptr + o.size, al);
+        LobbyCharVector_InitRange(this, o.ptr, o.ptr + o.size, al);
     }
 
     void AssignVec(const Vec &o) {
         if (this != &o) {
-            ov45_02232760(this, o.ptr, o.ptr + o.size, TE());
+            LobbyCharVector_AssignRange(this, o.ptr, o.ptr + o.size, TE());
         }
     }
 };
@@ -1976,15 +1976,15 @@ typedef struct {
 
 extern u8 *_022577C4;
 Record *PPWLobbyPlayers_Find(void *, int);
-void ov45_0223B1C8(void *);
+void PPWLobbySchedule_Start(void *);
 
 static inline BOOL RecordValid(Record *r) {
     return r && r->valid != 0;
 }
 
-int ov45_0223454C(Obj *, int, int, void *, int);
+int PPWLobby_HandleSystemMessage(Obj *, int, int, void *, int);
 
-int ov45_0223454C(Obj *obj, int id, int flag, void *payload, int message) {
+int PPWLobby_HandleSystemMessage(Obj *obj, int id, int flag, void *payload, int message) {
     Record *r;
     BOOL valid;
     if (flag) {
@@ -2025,7 +2025,7 @@ int ov45_0223454C(Obj *obj, int id, int flag, void *payload, int message) {
         break;
     case 0:
         if (obj->mode == 1 && message == 4) {
-            ov45_0223B1C8(_022577C4 + 0x144);
+            PPWLobbySchedule_Start(_022577C4 + 0x144);
         }
         break;
     }
@@ -2069,9 +2069,9 @@ typedef struct {
 } W30615Context;
 
 extern W30615Context *_022577C4;
-extern void ov45_022320B4(W30615String *, void *), LobbyString_Destroy(W30615String *);
-extern int LobbyChat_IsInChannel(char *), ov45_0223E4A8(void *);
-int ov45_02234688(void);
+extern void PPWLobbyChannel_GetName(W30615String *, void *), LobbyString_Destroy(W30615String *);
+extern int LobbyChat_IsInChannel(char *), PPWLobbyPlayers_AllHaveProfiles(void *);
+int PPWLobby_IsMainChannelReady(void);
 
 static inline int enough(s32 n) {
     int result;
@@ -2085,11 +2085,11 @@ static inline int enough(s32 n) {
 
 #pragma opt_propagation off
 
-int ov45_02234688(void) {
+int PPWLobby_IsMainChannelReady(void) {
     W30615String local;
     int empty;
     W30615Context *c;
-    ov45_022320B4(&local, &_022577C4->name);
+    PPWLobbyChannel_GetName(&local, &_022577C4->name);
     empty = LobbyChat_IsInChannel(!local.heap.large ? local.small.data : local.heap.ptr) == 0;
     LobbyString_Destroy(&local);
     if (empty) {
@@ -2108,7 +2108,7 @@ int ov45_02234688(void) {
     if (!enough(c->count)) {
         return 0;
     }
-    return ov45_0223E4A8(c->collection) != 0;
+    return PPWLobbyPlayers_AllHaveProfiles(c->collection) != 0;
 }
 }
 }
@@ -2153,7 +2153,7 @@ extern int LobbyString_Compare(Str *, Str *);
 extern void *LobbyByteVector_Data(void *);
 extern void PPWLobby_SetChannelData(u32, u32, char *, void *, u32);
 int LobbyString_Equals(Str *, Str *);
-int ov45_02234764(void);
+int PPWLobby_TimerUploadUserProfile(void);
 
 static inline u32 strsize(Str *s) {
     if (s->f.large) {
@@ -2175,17 +2175,17 @@ static inline int flush(u8 *c) {
     return 1;
 }
 
-extern void ov45_022320B4(Str *, void *);
+extern void PPWLobbyChannel_GetName(Str *, void *);
 extern int LobbyChat_IsInChannel(char *);
 extern void LobbyString_Destroy(Str *);
-extern int ov45_0223E4A8(void *);
-int ov45_02234688(void);
+extern int PPWLobbyPlayers_AllHaveProfiles(void *);
+int PPWLobby_IsMainChannelReady(void);
 
 static inline BOOL ready(int n) {
     return n >= 4;
 }
 
-int ov45_02234764(void) {
+int PPWLobby_TimerUploadUserProfile(void) {
     return flush(_022577C4);
 }
 }
@@ -2205,13 +2205,13 @@ extern "C" {
 #define P(p, o) (*(void **)((u8 *)(p) + (o)))
 extern void *_022577C4;
 extern char *_02254D04[];
-extern void ov45_022320B4(Str *, void *), LobbyString_Reserve(Str *, u32);
-extern int LobbyString_Compare(Str *, Str *), LobbyChat_IsInChannel(const char *), ov45_0223E4A8(void *), PPWLobby_SetChannelData(u32, u32, const void *, const void *, u32);
+extern void PPWLobbyChannel_GetName(Str *, void *), LobbyString_Reserve(Str *, u32);
+extern int LobbyString_Compare(Str *, Str *), LobbyChat_IsInChannel(const char *), PPWLobbyPlayers_AllHaveProfiles(void *), PPWLobby_SetChannelData(u32, u32, const void *, const void *, u32);
 extern void *LobbyByteVector_Data(void *);
 extern u32 current_time(void);
 extern void LobbyString_Format(Str *, const char *, ...);
 extern void PPWLobby_SendMessage(u32, u32, u32, u32, u32, const void *, u32), LobbyChat_GetChannelModeAsync(const char *, void (*)(void), s32), LobbyChat_GetChannelKeysAsync(const char *, s32, const char *, void (*)(void), s32);
-extern void PPWLobby_OnGetChannelMode(void), PPWLobby_OnGetChannelTime(void), PPWLobby_OnGetLobbyData(void), ov45_0223AF04(void *, void *);
+extern void PPWLobby_OnGetChannelMode(void), PPWLobby_OnGetChannelTime(void), PPWLobby_OnGetLobbyData(void), PPWLobbySchedule_SetQuestionnaire(void *, void *);
 extern Str *LobbyString_ConcatCStr(Str *, Str *, char *);
 extern Str *LobbyString_Concat(Str *, Str *, Str *);
 extern char ov45_022550B8[];
@@ -2220,20 +2220,20 @@ extern char ov45_022550C4[];
 extern char ov45_022550D4[];
 extern char ov45_022550E4[];
 extern char ov45_022550F4[];
-void ov45_02233994(Str *out, u32 id, Str *s);
-void ov45_02233B74(Str *out);
+void PPWLobby_MakeChannelName(Str *out, u32 id, Str *s);
+void PPWLobby_GenerateChannelBaseName(Str *out);
 int LobbyString_Equals(Str *a, Str *b);
-int ov45_02234688(void);
-int ov45_02234764(void);
+int PPWLobby_IsMainChannelReady(void);
+int PPWLobby_TimerUploadUserProfile(void);
 int PPWLobby_TimerUploadSystemProfile(void);
 int PPWLobby_TimerSendRecruitInfo(void);
 int PPWLobby_TimerPollChannelMode(void);
 int PPWLobby_TimerRequestChannelTime(void);
 int PPWLobby_TimerRequestLobbyData(void);
-int ov45_022349CC(u32 type);
-int ov45_02234A24(int valid, u8 *data, u32 size, void **output, u32 *length);
-void ov45_022353F0(int valid, u8 *data, u32 size);
-void ov45_022354AC(int status);
+int PPWLobby_GetWebResultError(u32 type);
+int PPWLobby_ParseWebResponse(int valid, u8 *data, u32 size, void **output, u32 *length);
+void PPWLobby_OnGetQuestionnaire(int valid, u8 *data, u32 size);
+void PPWLobby_OnSubmitQuestionnaire(int status);
 
 #pragma warn_uninitializedvar off
 extern Str *LobbyString_ReplaceRange(Str *, u32, u32, const char *, const char *, u8);
@@ -2266,7 +2266,7 @@ int PPWLobby_TimerSendRecruitInfo(void) {
 
 int PPWLobby_TimerPollChannelMode(void) {
     Str s;
-    ov45_022320B4(&s, (u8 *)_022577C4 + 0xb8);
+    PPWLobbyChannel_GetName(&s, (u8 *)_022577C4 + 0xb8);
     LobbyChat_GetChannelModeAsync(!s.l.flag ? s.s.data : s.l.data, PPWLobby_OnGetChannelMode, 0);
     LobbyString_Destroy(&s);
     return 1;
@@ -2277,7 +2277,7 @@ int PPWLobby_TimerRequestChannelTime(void) {
     if (I(_022577C4, 328) != 0) {
         return 0;
     }
-    ov45_022320B4(&s, (u8 *)_022577C4 + 0xb8);
+    PPWLobbyChannel_GetName(&s, (u8 *)_022577C4 + 0xb8);
     LobbyChat_GetChannelKeysAsync(!s.l.flag ? s.s.data : s.l.data, -1, ov45_022550E4, PPWLobby_OnGetChannelTime, 0);
     LobbyString_Destroy(&s);
     return 1;
@@ -2297,7 +2297,7 @@ extern "C" {
 #pragma force_active on
 extern u8 *_022577C4;
 extern u8 ov45_022550F4[];
-extern void PPWLobby_OnGetLobbyData(void), ov45_022320B4(void *, void *), LobbyString_Destroy(void *), LobbyChat_GetChannelKeysAsync(void *, int, void *, void (*)(void), int);
+extern void PPWLobby_OnGetLobbyData(void), PPWLobbyChannel_GetName(void *, void *), LobbyString_Destroy(void *), LobbyChat_GetChannelKeysAsync(void *, int, void *, void (*)(void), int);
 
 typedef union {
     struct {
@@ -2327,7 +2327,7 @@ int PPWLobby_TimerRequestLobbyData(void) {
     default:
         return 0;
     }
-    ov45_022320B4(&s, _022577C4 + 0xb8);
+    PPWLobbyChannel_GetName(&s, _022577C4 + 0xb8);
     LobbyChat_GetChannelKeysAsync(s.longform.flag == 0 ? s.shortform.data : s.longform.pointer, -1, ov45_022550F4, PPWLobby_OnGetLobbyData, 0);
     LobbyString_Destroy(&s);
     return 1;
@@ -2348,13 +2348,13 @@ extern "C" {
 #define P(p, o) (*(void **)((u8 *)(p) + (o)))
 extern void *_022577C4;
 extern char *_02254D04[];
-extern void ov45_022320B4(Str *, void *), LobbyString_Reserve(Str *, u32);
-extern int LobbyString_Compare(Str *, Str *), LobbyChat_IsInChannel(const char *), ov45_0223E4A8(void *), PPWLobby_SetChannelData(u32, u32, const void *, const void *, u32);
+extern void PPWLobbyChannel_GetName(Str *, void *), LobbyString_Reserve(Str *, u32);
+extern int LobbyString_Compare(Str *, Str *), LobbyChat_IsInChannel(const char *), PPWLobbyPlayers_AllHaveProfiles(void *), PPWLobby_SetChannelData(u32, u32, const void *, const void *, u32);
 extern void *LobbyByteVector_Data(void *);
 extern u32 current_time(void);
 extern void LobbyString_Format(Str *, const char *, ...);
 extern void PPWLobby_SendMessage(u32, u32, u32, u32, u32, const void *, u32), LobbyChat_GetChannelModeAsync(const char *, void (*)(void), s32), LobbyChat_GetChannelKeysAsync(const char *, s32, const char *, void (*)(void), s32);
-extern void PPWLobby_OnGetChannelMode(void), PPWLobby_OnGetChannelTime(void), PPWLobby_OnGetLobbyData(void), ov45_0223AF04(void *, void *);
+extern void PPWLobby_OnGetChannelMode(void), PPWLobby_OnGetChannelTime(void), PPWLobby_OnGetLobbyData(void), PPWLobbySchedule_SetQuestionnaire(void *, void *);
 extern Str *LobbyString_ConcatCStr(Str *, Str *, char *);
 extern Str *LobbyString_Concat(Str *, Str *, Str *);
 extern char ov45_022550B8[];
@@ -2363,20 +2363,20 @@ extern char ov45_022550C4[];
 extern char ov45_022550D4[];
 extern char ov45_022550E4[];
 extern char ov45_022550F4[];
-void ov45_02233994(Str *out, u32 id, Str *s);
-void ov45_02233B74(Str *out);
+void PPWLobby_MakeChannelName(Str *out, u32 id, Str *s);
+void PPWLobby_GenerateChannelBaseName(Str *out);
 int LobbyString_Equals(Str *a, Str *b);
-int ov45_02234688(void);
-int ov45_02234764(void);
+int PPWLobby_IsMainChannelReady(void);
+int PPWLobby_TimerUploadUserProfile(void);
 int PPWLobby_TimerUploadSystemProfile(void);
 int PPWLobby_TimerSendRecruitInfo(void);
 int PPWLobby_TimerPollChannelMode(void);
 int PPWLobby_TimerRequestChannelTime(void);
 int PPWLobby_TimerRequestLobbyData(void);
-int ov45_022349CC(u32 type);
-int ov45_02234A24(int valid, u8 *data, u32 size, void **output, u32 *length);
-void ov45_022353F0(int valid, u8 *data, u32 size);
-void ov45_022354AC(int status);
+int PPWLobby_GetWebResultError(u32 type);
+int PPWLobby_ParseWebResponse(int valid, u8 *data, u32 size, void **output, u32 *length);
+void PPWLobby_OnGetQuestionnaire(int valid, u8 *data, u32 size);
+void PPWLobby_OnSubmitQuestionnaire(int status);
 
 #pragma warn_uninitializedvar off
 extern Str *LobbyString_ReplaceRange(Str *, u32, u32, const char *, const char *, u8);
@@ -2388,7 +2388,7 @@ static inline u32 short_length(Str *p) {
     return p->s.size;
 }
 
-int ov45_022349CC(u32 type) {
+int PPWLobby_GetWebResultError(u32 type) {
     switch (type) {
     case 0:
         return 0;
@@ -2404,7 +2404,7 @@ int ov45_022349CC(u32 type) {
     }
 }
 
-int ov45_02234A24(int valid, u8 *data, u32 size, void **output, u32 *length) {
+int PPWLobby_ParseWebResponse(int valid, u8 *data, u32 size, void **output, u32 *length) {
     int e;
     *output = 0;
     *length = 0;
@@ -2414,7 +2414,7 @@ int ov45_02234A24(int valid, u8 *data, u32 size, void **output, u32 *length) {
     if (size < 4) {
         return 2;
     }
-    e = ov45_022349CC(*data);
+    e = PPWLobby_GetWebResultError(*data);
     if (e == 2) {
         return e;
     }
@@ -2491,7 +2491,7 @@ struct Iter {
     }
 };
 struct Vec;
-extern "C" void ov45_022327B8(Vec *, Iter, Iter, TD);
+extern "C" void LobbyCharVector_AssignIterRange(Vec *, Iter, Iter, TD);
 extern "C" const char *LobbyByteVector_Data(const Vec *);
 
 struct Vec {
@@ -2509,7 +2509,7 @@ struct Vec {
     }
 
     void Assign(Iter first, Iter last, const TA &, const TB &) {
-        ov45_022327B8(this, first, last, TD());
+        LobbyCharVector_AssignIterRange(this, first, last, TD());
     }
 
     void Assign(const u8 *first, const u8 *last) {
@@ -2533,7 +2533,7 @@ struct ObjVtbl {
 };
 
 extern "C" const ObjVtbl ov45_02254FC0;
-extern "C" void ov45_02234D68(void);
+extern "C" void PPWLobby_OnGetSchedule(void);
 
 struct Obj {
     const ObjVtbl *vtbl;
@@ -2555,7 +2555,7 @@ struct Obj {
         , host(h)
         , x(x_)
         , data()
-        , cb(ov45_02234D68)
+        , cb(PPWLobby_OnGetSchedule)
         , x38(0)
         , x3c(1) {
         data.Assign(Iter((const u8 *)&info), Iter((const u8 *)&info + sizeof(Info)));
@@ -2580,17 +2580,17 @@ struct Work {
 
 extern "C" Work *_022577C4;
 extern "C" Obj *ov45_022577D4;
-extern "C" int ov45_02234A24(int, int, int, void **, u32 *);
+extern "C" int PPWLobby_ParseWebResponse(int, int, int, void **, u32 *);
 extern "C" void *LobbyMem_Alloc(u32);
 extern "C" void StatsUpload_Start(int, const char *);
 extern "C" int StatsUpload_UploadWithLastHash(const char *, u32, const char *, u32, int);
 extern "C" int StatsUpload_Upload(const char *, u32, const char *, u32, int);
 extern "C" void StatsUpload_Stop(int);
 extern "C" int PPW_LobbyUpdateMyProfile(const void *, u32, int);
-extern "C" void ov45_02234A88(int a0, int a1, int a2);
+extern "C" void PPWLobby_OnCheckProfile(int a0, int a1, int a2);
 #pragma force_active on
 
-extern "C" void ov45_02234A88(int a0, int a1, int a2) {
+extern "C" void PPWLobby_OnCheckProfile(int a0, int a1, int a2) {
     Info info;
     const char *name;
     const char *host;
@@ -2605,7 +2605,7 @@ extern "C" void ov45_02234A88(int a0, int a1, int a2) {
     }
     buf = 0;
     len = 0;
-    int r = ov45_02234A24(a0, a1, a2, &buf, &len);
+    int r = PPWLobby_ParseWebResponse(a0, a1, a2, &buf, &len);
     if (r == 0 && len != 0x94) {
         r = 2;
     }
@@ -2727,7 +2727,7 @@ struct Iter {
     }
 };
 struct Vec;
-extern "C" void ov45_022327B8(Vec *, Iter, Iter, TD);
+extern "C" void LobbyCharVector_AssignIterRange(Vec *, Iter, Iter, TD);
 extern "C" const char *LobbyByteVector_Data(const Vec *);
 
 struct Vec {
@@ -2745,7 +2745,7 @@ struct Vec {
     }
 
     void Assign(const Iter &first, const Iter &last, const TA &, const TB &) {
-        ov45_022327B8(this, first, last, TD());
+        LobbyCharVector_AssignIterRange(this, first, last, TD());
     }
 
     void Assign(const u8 *first, const u8 *last) {
@@ -2768,7 +2768,7 @@ struct Info2 {
     u32 extra;
 };
 struct Obj;
-extern "C" void ov45_022350FC(int, int, int);
+extern "C" void PPWLobby_OnGetVip(int, int, int);
 
 struct ObjVtbl {
     void (*f0)(Obj *);
@@ -2797,7 +2797,7 @@ struct Obj {
         , host(h)
         , x(x_)
         , data()
-        , cb(ov45_022350FC)
+        , cb(PPWLobby_OnGetVip)
         , x38(0)
         , x3c(1) {
         data.Assign(Iter((const u8 *)&info), Iter((const u8 *)&info + sizeof(Info2)));
@@ -2822,7 +2822,7 @@ struct Work {
 
 extern "C" Work *_022577C4;
 extern "C" Obj *ov45_022577D4;
-extern "C" int ov45_02234A24(int, int, int, void **, u32 *);
+extern "C" int PPWLobby_ParseWebResponse(int, int, int, void **, u32 *);
 extern "C" int PPW_LobbyUpdateMyProfile(const void *, u32, int);
 extern "C" void *LobbyMem_Alloc(u32);
 extern "C" void StatsUpload_Start(int, const char *);
@@ -2831,11 +2831,11 @@ extern "C" int StatsUpload_Upload(const char *, u32, const char *, u32, int);
 extern "C" void StatsUpload_Stop(int);
 extern "C" int PPWLobbySchedule_IsSizeValid(void *, void *, u32);
 extern "C" void PPWLobbySchedule_Load(void *, void *, u32);
-extern "C" void ov45_02234D68(int a0, int a1, int a2);
+extern "C" void PPWLobby_OnGetSchedule(int a0, int a1, int a2);
 #pragma force_active on
 #pragma opt_dead_assignments off
 
-extern "C" void ov45_02234D68(int a0, int a1, int a2) {
+extern "C" void PPWLobby_OnGetSchedule(int a0, int a1, int a2) {
     Info2 i2;
     Info info;
     const char *name;
@@ -2851,7 +2851,7 @@ extern "C" void ov45_02234D68(int a0, int a1, int a2) {
     }
     buf = 0;
     len = 0;
-    int r = ov45_02234A24(a0, a1, a2, &buf, &len);
+    int r = PPWLobby_ParseWebResponse(a0, a1, a2, &buf, &len);
     if (r == 0 && !PPWLobbySchedule_IsSizeValid(_022577C4->x144, buf, len)) {
         r = 2;
     }
@@ -2976,7 +2976,7 @@ struct Iter {
     }
 };
 struct Vec;
-extern "C" void ov45_022327B8(Vec *, Iter, Iter, TD);
+extern "C" void LobbyCharVector_AssignIterRange(Vec *, Iter, Iter, TD);
 extern "C" const char *LobbyByteVector_Data(const Vec *);
 
 struct Vec {
@@ -2994,7 +2994,7 @@ struct Vec {
     }
 
     void Assign(Iter first, Iter last, const TA &, const TB &) {
-        ov45_022327B8(this, first, last, TD());
+        LobbyCharVector_AssignIterRange(this, first, last, TD());
     }
 
     void Assign(const u8 *first, const u8 *last) {
@@ -3018,7 +3018,7 @@ struct ObjVtbl {
 };
 
 extern "C" const ObjVtbl ov45_02254FC0;
-extern "C" void ov45_022353F0(void);
+extern "C" void PPWLobby_OnGetQuestionnaire(void);
 
 struct Obj {
     const ObjVtbl *vtbl;
@@ -3040,7 +3040,7 @@ struct Obj {
         , host(h)
         , x(x_)
         , data()
-        , cb(ov45_022353F0)
+        , cb(PPWLobby_OnGetQuestionnaire)
         , x38(0)
         , x3c(1) {
         data.Assign(Iter((const u8 *)&info), Iter((const u8 *)&info + sizeof(Info)));
@@ -3065,18 +3065,18 @@ struct Work {
 
 extern "C" Work *_022577C4;
 extern "C" Obj *ov45_022577D4;
-extern "C" int ov45_02234A24(int, int, int, void **, u32 *);
+extern "C" int PPWLobby_ParseWebResponse(int, int, int, void **, u32 *);
 extern "C" void *LobbyMem_Alloc(u32);
 extern "C" void StatsUpload_Start(int, const char *);
 extern "C" int StatsUpload_UploadWithLastHash(const char *, u32, const char *, u32, int);
 extern "C" int StatsUpload_Upload(const char *, u32, const char *, u32, int);
 extern "C" void StatsUpload_Stop(int);
-extern "C" int ov45_0223AE84(void *, void *, u32);
-extern "C" void ov45_0223ACA4(void *, void *, u32);
-extern "C" void ov45_022350FC(int a0, int a1, int a2);
+extern "C" int PPWLobbySchedule_ValidateVipRecords(void *, void *, u32);
+extern "C" void PPWLobbySchedule_SetVipRecords(void *, void *, u32);
+extern "C" void PPWLobby_OnGetVip(int a0, int a1, int a2);
 #pragma force_active on
 
-extern "C" void ov45_022350FC(int a0, int a1, int a2) {
+extern "C" void PPWLobby_OnGetVip(int a0, int a1, int a2) {
     Info info;
     const char *name;
     const char *host;
@@ -3091,8 +3091,8 @@ extern "C" void ov45_022350FC(int a0, int a1, int a2) {
     }
     buf = 0;
     len = 0;
-    int r = ov45_02234A24(a0, a1, a2, &buf, &len);
-    if (!ov45_0223AE84(_022577C4->x144, buf, len)) {
+    int r = PPWLobby_ParseWebResponse(a0, a1, a2, &buf, &len);
+    if (!PPWLobbySchedule_ValidateVipRecords(_022577C4->x144, buf, len)) {
         r = 2;
     }
     if (r != 0) {
@@ -3101,7 +3101,7 @@ extern "C" void ov45_022350FC(int a0, int a1, int a2) {
         g->state = 10;
         return;
     }
-    ov45_0223ACA4(_022577C4->x144, buf, len);
+    PPWLobbySchedule_SetVipRecords(_022577C4->x144, buf, len);
     _022577C4->cb3c(r, buf, len >> 3);
     const u8 *f = (const u8 *)LobbyByteVector_Data(&_022577C4->field);
     info.x = _022577C4->x4c;
@@ -3179,11 +3179,11 @@ typedef struct {
 } Work;
 
 extern Work *_022577C4;
-extern int ov45_02234A24(void *, void *, void *, void **, u32 *);
-extern void ov45_0223AF04(void *, void *);
-void ov45_022353F0(void *, void *, void *);
+extern int PPWLobby_ParseWebResponse(void *, void *, void *, void **, u32 *);
+extern void PPWLobbySchedule_SetQuestionnaire(void *, void *);
+void PPWLobby_OnGetQuestionnaire(void *, void *, void *);
 
-void ov45_022353F0(void *a, void *b, void *c) {
+void PPWLobby_OnGetQuestionnaire(void *a, void *b, void *c) {
     void *data;
     u32 size;
     int result;
@@ -3193,7 +3193,7 @@ void ov45_022353F0(void *a, void *b, void *c) {
     }
     data = 0;
     size = 0;
-    result = ov45_02234A24(a, b, c, &data, &size);
+    result = PPWLobby_ParseWebResponse(a, b, c, &data, &size);
     if (size != 0x2d8) {
         result = 2;
     }
@@ -3205,7 +3205,7 @@ void ov45_022353F0(void *a, void *b, void *c) {
         }
         return;
     }
-    ov45_0223AF04(&_022577C4->value, data);
+    PPWLobbySchedule_SetQuestionnaire(&_022577C4->value, data);
     _022577C4->callback(result, data);
     _022577C4->value = 2;
 }
@@ -3225,13 +3225,13 @@ extern "C" {
 #define P(p, o) (*(void **)((u8 *)(p) + (o)))
 extern void *_022577C4;
 extern char *_02254D04[];
-extern void ov45_022320B4(Str *, void *), LobbyString_Reserve(Str *, u32);
-extern int LobbyString_Compare(Str *, Str *), LobbyChat_IsInChannel(const char *), ov45_0223E4A8(void *), PPWLobby_SetChannelData(u32, u32, const void *, const void *, u32);
+extern void PPWLobbyChannel_GetName(Str *, void *), LobbyString_Reserve(Str *, u32);
+extern int LobbyString_Compare(Str *, Str *), LobbyChat_IsInChannel(const char *), PPWLobbyPlayers_AllHaveProfiles(void *), PPWLobby_SetChannelData(u32, u32, const void *, const void *, u32);
 extern void *LobbyByteVector_Data(void *);
 extern u32 current_time(void);
 extern void LobbyString_Format(Str *, const char *, ...);
 extern void PPWLobby_SendMessage(u32, u32, u32, u32, u32, const void *, u32), LobbyChat_GetChannelModeAsync(const char *, void (*)(void), s32), LobbyChat_GetChannelKeysAsync(const char *, s32, const char *, void (*)(void), s32);
-extern void PPWLobby_OnGetChannelMode(void), PPWLobby_OnGetChannelTime(void), PPWLobby_OnGetLobbyData(void), ov45_0223AF04(void *, void *);
+extern void PPWLobby_OnGetChannelMode(void), PPWLobby_OnGetChannelTime(void), PPWLobby_OnGetLobbyData(void), PPWLobbySchedule_SetQuestionnaire(void *, void *);
 extern Str *LobbyString_ConcatCStr(Str *, Str *, char *);
 extern Str *LobbyString_Concat(Str *, Str *, Str *);
 extern char ov45_022550B8[];
@@ -3240,20 +3240,20 @@ extern char ov45_022550C4[];
 extern char ov45_022550D4[];
 extern char ov45_022550E4[];
 extern char ov45_022550F4[];
-void ov45_02233994(Str *out, u32 id, Str *s);
-void ov45_02233B74(Str *out);
+void PPWLobby_MakeChannelName(Str *out, u32 id, Str *s);
+void PPWLobby_GenerateChannelBaseName(Str *out);
 int LobbyString_Equals(Str *a, Str *b);
-int ov45_02234688(void);
-int ov45_02234764(void);
+int PPWLobby_IsMainChannelReady(void);
+int PPWLobby_TimerUploadUserProfile(void);
 int PPWLobby_TimerUploadSystemProfile(void);
 int PPWLobby_TimerSendRecruitInfo(void);
 int PPWLobby_TimerPollChannelMode(void);
 int PPWLobby_TimerRequestChannelTime(void);
 int PPWLobby_TimerRequestLobbyData(void);
-int ov45_022349CC(u32 type);
-int ov45_02234A24(int valid, u8 *data, u32 size, void **output, u32 *length);
-void ov45_022353F0(int valid, u8 *data, u32 size);
-void ov45_022354AC(int status);
+int PPWLobby_GetWebResultError(u32 type);
+int PPWLobby_ParseWebResponse(int valid, u8 *data, u32 size, void **output, u32 *length);
+void PPWLobby_OnGetQuestionnaire(int valid, u8 *data, u32 size);
+void PPWLobby_OnSubmitQuestionnaire(int status);
 
 #pragma warn_uninitializedvar off
 extern Str *LobbyString_ReplaceRange(Str *, u32, u32, const char *, const char *, u8);
@@ -3265,7 +3265,7 @@ static inline u32 short_length(Str *p) {
     return p->s.size;
 }
 
-void ov45_022354AC(int status) {
+void PPWLobby_OnSubmitQuestionnaire(int status) {
     if (!_022577C4 || I(_022577C4, 0) == 9) {
         return;
     }
@@ -3513,7 +3513,7 @@ extern "C" Lobby *_022577C4;
 extern "C" void LobbyChat_EnumUsersAsync(void *handle, void (*cb)(void), u32 code);
 extern "C" void PPWLobby_OnEnumUsers(void);
 extern "C" int PPWLobby_TimerUploadSystemProfile(void);
-extern "C" int ov45_02234764(void);
+extern "C" int PPWLobby_TimerUploadUserProfile(void);
 extern "C" int PPWLobby_TimerRequestChannelTime(void);
 extern "C" int PPWLobby_TimerPollChannelMode(void);
 extern "C" int PPWLobby_TimerRequestLobbyData(void);
@@ -3583,7 +3583,7 @@ extern "C" void PPWLobby_OnEnterMainChannel(int success, void *unused, void *han
         Lobby_ResetStamp();
         LobbyChat_EnumUsersAsync(handle, PPWLobby_OnEnumUsers, code);
         Lobby_AddTimer(1, 3, PPWLobby_TimerUploadSystemProfile);
-        Lobby_AddTimer(2, 4, ov45_02234764);
+        Lobby_AddTimer(2, 4, PPWLobby_TimerUploadUserProfile);
         Lobby_AddTimer(5, 4, PPWLobby_TimerRequestChannelTime);
         Lobby_AddTimer(4, 3, PPWLobby_TimerPollChannelMode);
         Lobby_AddTimer(6, 4, PPWLobby_TimerRequestLobbyData);
@@ -3696,11 +3696,11 @@ struct Work {
 extern "C" Work *_022577C4;
 extern "C" char ov45_02254D5C[], ov45_02254D1C[], ov45_02254D3C[];
 extern "C" void LobbyChat_SetChannelMode(int, const char *);
-extern "C" void ov45_02235A94(int, int, int, int);
+extern "C" void PPWLobby_OnEnterSubChannel(int, int, int, int);
 #pragma force_active on
 #pragma opt_common_subs off
 
-extern "C" void ov45_02235A94(int result, int unused, int arg, int kind) {
+extern "C" void PPWLobby_OnEnterSubChannel(int result, int unused, int arg, int kind) {
     if (kind == 5) {
         return;
     }
@@ -3853,7 +3853,7 @@ struct Work {
 };
 
 extern "C" Work *_022577C4;
-extern "C" void ov45_022320B4(Str *, Channel *);
+extern "C" void PPWLobbyChannel_GetName(Str *, Channel *);
 extern "C" int LobbyString_Equals(const Str *, const Str *);
 extern "C" Session *PPWLobbyPlayers_Find(void *, int);
 extern "C" void PPWLobbyPlayers_Remove(void *, int);
@@ -3863,7 +3863,7 @@ extern "C" void PPWLobbyPlayers_Add(void *, int);
 inline int Match(Channel *c, const Str &name) {
     Str t;
     int r;
-    ov45_022320B4(&t, c);
+    PPWLobbyChannel_GetName(&t, c);
     r = LobbyString_Equals(&t, &name);
     t.Destroy();
     return r;
@@ -4037,7 +4037,7 @@ struct Work {
 };
 
 extern "C" Work *_022577C4;
-extern "C" void ov45_022320B4(Str *, Channel *);
+extern "C" void PPWLobbyChannel_GetName(Str *, Channel *);
 extern "C" int LobbyString_Equals(const Str *, const Str *);
 extern "C" Session *PPWLobbyPlayers_Find(void *, int);
 extern "C" void PPWLobbyPlayers_Remove(void *, int);
@@ -4046,7 +4046,7 @@ extern "C" void PPWLobby_OnPlayerLeft(char *, int);
 inline int Match(Channel *c, const Str &name) {
     Str t;
     int r;
-    ov45_022320B4(&t, c);
+    PPWLobbyChannel_GetName(&t, c);
     r = LobbyString_Equals(&t, &name);
     t.Destroy();
     return r;
@@ -4181,18 +4181,18 @@ extern struct Vec *LobbyCharVector_Destroy(struct Vec *);
 extern struct Str *LobbyString_InitSubstring(struct Str *, struct Str *, u32, u32);
 extern void PPWLobby_OnMessage(int, int, int, int);
 extern void PPWLobby_HandleReceivedData(int, int, int, int, int, int, int);
-extern void ov45_0223DF4C(void *), ov45_02238508(void *), ov45_02238558(void *, void *);
-extern void ov45_022385A4(struct Vec *, u32, int), ov45_02238674(struct Vec *, u32, void *), ov45_022387E4(struct Vec *, u32, struct Alloc), ov45_02238820(struct Vec *, u32);
-extern void ov45_02237800(struct Vec *, u32, struct Alloc);
+extern void PPWLobbyPlayers_Clear(void *), ov45_02238508(void *), PPWLobbyPlayerSet_DestroyNodes(void *, void *);
+extern void LobbyStringVector_RecommendSize(struct Vec *, u32, int), LobbyStringVector_AppendCopiesSlow(struct Vec *, u32, void *), LobbyStringVector_EraseAtEnd(struct Vec *, u32, struct Alloc), LobbyCharVector_AppendZerosSlow(struct Vec *, u32);
+extern void LobbyCharVector_Allocate(struct Vec *, u32, struct Alloc);
 extern void LobbyTree_InsertRebalance(struct TreeNode *, void *), LobbyTimerMap_DestroyNodes(struct Tree *, struct TreeNode *);
 extern struct TreeNode *LobbyTree_EraseRebalance(struct TreeNode *, void *);
 extern void LobbyTimerMap_EraseKey(void *, int *), LobbyChat_SetChannelMode(int, char *);
 extern void PPWLobbyPlayers_Add(void *, int), LobbyChat_GetChannelKeysAsync(int, int, char *, void (*)(), int);
-extern void ov45_022320B4(struct Str *, void *);
+extern void PPWLobbyChannel_GetName(struct Str *, void *);
 extern struct Str *LobbyString_InitFromCStr(struct Str *, char *);
 extern int LobbyString_Equals(struct Str *, struct Str *);
 extern void LobbyString_Reserve(struct Str *, u32);
-extern u32 ov45_02237890(struct Vec *, u32);
+extern u32 LobbyCharVector_RecommendSize(struct Vec *, u32);
 extern struct Str *LobbyString_Replace(struct Str *, u32, u32, struct Str *);
 extern struct Str *LobbyString_ReplaceRange(struct Str *, u32, u32, char *, char *, struct Alloc);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
@@ -4203,29 +4203,29 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Str *LobbyString_Destroy(struct Str *a);
 struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
 struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 
-extern void ov45_02238508(void *), ov45_02238558(void *, void *);
+extern void ov45_02238508(void *), PPWLobbyPlayerSet_DestroyNodes(void *, void *);
 extern struct TreeNode *LobbyTimerMap_FindInsertPos(struct Tree *, u32 *, struct TreeNode **, u8 *, u8 *);
 extern struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *, struct TreeNode *, int, int, u32 *);
 extern void LobbyString_ReplaceSubstring(struct Str *, u32, u32, struct Str *, u32, u32);
@@ -4236,32 +4236,32 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_Destroy(struct Str *a);
 struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
 struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
-void *ov45_02236AE8(u32 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
 struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
@@ -4273,11 +4273,11 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236AE8(u32 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
@@ -4286,15 +4286,15 @@ void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
@@ -4307,7 +4307,7 @@ struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *a, struct TreeNode *paren
 extern int PPWLobby_DecodeMessageData(void *, struct Vec *);
 extern void *LobbyByteVector_Data(struct Vec *);
 extern int PPWLobbySchedule_Load(void *, void *, u32);
-extern void ov45_02238C1C(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
+extern void PPWLobbySchedule_CopyToVector(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
 extern char ov45_022550F4[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
@@ -4316,11 +4316,11 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236AE8(u32 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
@@ -4330,15 +4330,15 @@ void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
@@ -4387,8 +4387,8 @@ typedef struct {
 } Context;
 
 extern Context *_022577C4;
-extern void LobbyString_InitFromCStr(String *, void *), ov45_022320B4(String *, String *), LobbyString_Destroy(String *), LobbyCharVector_Destroy(String *), ov45_0223454C(Message *, int, int, void *, u32);
-extern int LobbyString_Equals(String *, String *), ov45_0223D27C(String *, Message *);
+extern void LobbyString_InitFromCStr(String *, void *), PPWLobbyChannel_GetName(String *, String *), LobbyString_Destroy(String *), LobbyCharVector_Destroy(String *), PPWLobby_HandleSystemMessage(Message *, int, int, void *, u32);
+extern int LobbyString_Equals(String *, String *), PPWLobby_ParseMessage(String *, Message *);
 extern u8 *PPWLobbyPlayers_Find(void *, int);
 extern void *LobbyByteVector_Data(String *);
 void PPWLobby_OnMessage(void *, int, void *);
@@ -4422,13 +4422,13 @@ void PPWLobby_OnMessage(void *key, int index, void *name) {
         LobbyString_InitFromCStr(&k, key);
         c = _022577C4;
         kp = &k;
-        ov45_022320B4(&a, &c->first);
+        PPWLobbyChannel_GetName(&a, &c->first);
         match = LobbyString_Equals(&a, kp);
         LobbyString_Destroy(&a);
         if (match) {
             language = c->first.a;
         } else {
-            ov45_022320B4(&b, &c->second);
+            PPWLobbyChannel_GetName(&b, &c->second);
             match = LobbyString_Equals(&b, kp);
             LobbyString_Destroy(&b);
             if (match) {
@@ -4453,7 +4453,7 @@ void PPWLobby_OnMessage(void *key, int index, void *name) {
         m.spare = 0;
         zeroString(&m.text);
         LobbyString_InitFromCStr(&tmp, name);
-        match = ov45_0223D27C(&tmp, &m) == 0 ? 1 : zero;
+        match = PPWLobby_ParseMessage(&tmp, &m) == 0 ? 1 : zero;
         LobbyString_Destroy(&tmp);
         if (match) {
             LobbyCharVector_Destroy(&m.text);
@@ -4484,7 +4484,7 @@ void PPWLobby_OnMessage(void *key, int index, void *name) {
         }
         case 0: {
             void *t = LobbyByteVector_Data(&m.text);
-            ov45_0223454C(&m, index, language, t, m.text.b);
+            PPWLobby_HandleSystemMessage(&m, index, language, t, m.text.b);
             break;
         }
         }
@@ -4554,18 +4554,18 @@ extern struct Vec *LobbyCharVector_Destroy(struct Vec *);
 extern struct Str *LobbyString_InitSubstring(struct Str *, struct Str *, u32, u32);
 extern void PPWLobby_OnMessage(int, int, int, int);
 extern void PPWLobby_HandleReceivedData(int, int, int, int, int, int, int);
-extern void ov45_0223DF4C(void *), ov45_02238508(void *), ov45_02238558(void *, void *);
-extern void ov45_022385A4(struct Vec *, u32, int), ov45_02238674(struct Vec *, u32, void *), ov45_022387E4(struct Vec *, u32, struct Alloc), ov45_02238820(struct Vec *, u32);
-extern void ov45_02237800(struct Vec *, u32, struct Alloc);
+extern void PPWLobbyPlayers_Clear(void *), ov45_02238508(void *), PPWLobbyPlayerSet_DestroyNodes(void *, void *);
+extern void LobbyStringVector_RecommendSize(struct Vec *, u32, int), LobbyStringVector_AppendCopiesSlow(struct Vec *, u32, void *), LobbyStringVector_EraseAtEnd(struct Vec *, u32, struct Alloc), LobbyCharVector_AppendZerosSlow(struct Vec *, u32);
+extern void LobbyCharVector_Allocate(struct Vec *, u32, struct Alloc);
 extern void LobbyTree_InsertRebalance(struct TreeNode *, void *), LobbyTimerMap_DestroyNodes(struct Tree *, struct TreeNode *);
 extern struct TreeNode *LobbyTree_EraseRebalance(struct TreeNode *, void *);
 extern void LobbyTimerMap_EraseKey(void *, int *), LobbyChat_SetChannelMode(int, char *);
 extern void PPWLobbyPlayers_Add(void *, int), LobbyChat_GetChannelKeysAsync(int, int, char *, void (*)(), int);
-extern void ov45_022320B4(struct Str *, void *);
+extern void PPWLobbyChannel_GetName(struct Str *, void *);
 extern struct Str *LobbyString_InitFromCStr(struct Str *, char *);
 extern int LobbyString_Equals(struct Str *, struct Str *);
 extern void LobbyString_Reserve(struct Str *, u32);
-extern u32 ov45_02237890(struct Vec *, u32);
+extern u32 LobbyCharVector_RecommendSize(struct Vec *, u32);
 extern struct Str *LobbyString_Replace(struct Str *, u32, u32, struct Str *);
 extern struct Str *LobbyString_ReplaceRange(struct Str *, u32, u32, char *, char *, struct Alloc);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
@@ -4576,29 +4576,29 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Str *LobbyString_Destroy(struct Str *a);
 struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
 struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 
-extern void ov45_02238508(void *), ov45_02238558(void *, void *);
+extern void ov45_02238508(void *), PPWLobbyPlayerSet_DestroyNodes(void *, void *);
 extern struct TreeNode *LobbyTimerMap_FindInsertPos(struct Tree *, u32 *, struct TreeNode **, u8 *, u8 *);
 extern struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *, struct TreeNode *, int, int, u32 *);
 extern void LobbyString_ReplaceSubstring(struct Str *, u32, u32, struct Str *, u32, u32);
@@ -4609,32 +4609,32 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_Destroy(struct Str *a);
 struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
 struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
-void *ov45_02236AE8(u32 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
 struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
@@ -4646,11 +4646,11 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236AE8(u32 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
@@ -4659,15 +4659,15 @@ void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
@@ -4680,7 +4680,7 @@ struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *a, struct TreeNode *paren
 extern int PPWLobby_DecodeMessageData(void *, struct Vec *);
 extern void *LobbyByteVector_Data(struct Vec *);
 extern int PPWLobbySchedule_Load(void *, void *, u32);
-extern void ov45_02238C1C(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
+extern void PPWLobbySchedule_CopyToVector(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
 extern char ov45_022550F4[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
@@ -4689,11 +4689,11 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236AE8(u32 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
@@ -4703,15 +4703,15 @@ void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
@@ -4767,7 +4767,7 @@ typedef struct {
 
 extern Work *_022577C4;
 extern char ov45_022550B8[];
-extern void LobbyString_InitFromCStr(String *, char *), LobbyString_Destroy(String *), ov45_02237664(Vec *), LobbyString_Assign(String *, String *), ov45_02233B74(String *);
+extern void LobbyString_InitFromCStr(String *, char *), LobbyString_Destroy(String *), LobbyStringVector_Destroy(Vec *), LobbyString_Assign(String *, String *), PPWLobby_GenerateChannelBaseName(String *);
 extern void LobbyString_Split(Vec *, String *, String *, int);
 void PPWLobby_OnEnumChannels(int, int, char **, int, int *);
 
@@ -4791,7 +4791,7 @@ void PPWLobby_OnEnumChannels(int valid, int count, char **names, int unused, int
         LobbyString_Destroy(&delimiter);
         LobbyString_Destroy(&item);
         if (parts.size < 2) {
-            ov45_02237664(&parts);
+            LobbyStringVector_Destroy(&parts);
             continue;
         }
         {
@@ -4803,10 +4803,10 @@ void PPWLobby_OnEnumChannels(int valid, int count, char **names, int unused, int
         LobbyString_Destroy(&text);
         _022577C4->failed = 0;
         _022577C4->state = 6;
-        ov45_02237664(&parts);
+        LobbyStringVector_Destroy(&parts);
         return;
     }
-    ov45_02233B74(&empty);
+    PPWLobby_GenerateChannelBaseName(&empty);
     LobbyString_Assign(&_022577C4->message, &empty);
     LobbyString_Destroy(&empty);
     _022577C4->failed = 1;
@@ -4864,7 +4864,7 @@ struct Str {
 
 class Alloc {};
 struct Vec;
-extern "C" void ov45_02237634(Vec *, const Str &, Alloc);
+extern "C" void LobbyStringVector_PushBackSlow(Vec *, const Str &, Alloc);
 
 struct Vec {
     Str *data;
@@ -4887,7 +4887,7 @@ struct Vec {
             new (data + count) Str(x);
             count++;
         } else {
-            ov45_02237634(this, x, Alloc());
+            LobbyStringVector_PushBackSlow(this, x, Alloc());
         }
     }
 };
@@ -4987,7 +4987,7 @@ struct Work {
 
 extern "C" Work *_022577C4;
 extern "C" char ov45_022550C4[], ov45_022550D4[];
-extern "C" Str ov45_022320B4(Entry *);
+extern "C" Str PPWLobbyChannel_GetName(Entry *);
 extern "C" int LobbyString_Equals(const Str &, const Str &);
 extern "C" void PPWLobbyPlayers_Add(void *, int);
 extern "C" void LobbyChat_GetChannelKeysAsync(char *, int, char *, void (*)(), int);
@@ -4998,7 +4998,7 @@ inline int Find(Work *w, const Str &name) {
     const Str &n = name;
     int eq;
     {
-        Str t = ov45_022320B4(&w->a);
+        Str t = PPWLobbyChannel_GetName(&w->a);
         eq = LobbyString_Equals(t, n);
         t.Destroy();
     }
@@ -5006,7 +5006,7 @@ inline int Find(Work *w, const Str &name) {
         return w->a.id;
     }
     {
-        Str t = ov45_022320B4(&w->b);
+        Str t = PPWLobbyChannel_GetName(&w->b);
         eq = LobbyString_Equals(t, n);
         t.Destroy();
     }
@@ -5114,18 +5114,18 @@ extern struct Vec *LobbyCharVector_Destroy(struct Vec *);
 extern struct Str *LobbyString_InitSubstring(struct Str *, struct Str *, u32, u32);
 extern void PPWLobby_OnMessage(int, int, int, int);
 extern void PPWLobby_HandleReceivedData(int, int, int, int, int, int, int);
-extern void ov45_0223DF4C(void *), ov45_02238508(void *), ov45_02238558(void *, void *);
-extern void ov45_022385A4(struct Vec *, u32, int), ov45_02238674(struct Vec *, u32, void *), ov45_022387E4(struct Vec *, u32, struct Alloc), ov45_02238820(struct Vec *, u32);
-extern void ov45_02237800(struct Vec *, u32, struct Alloc);
+extern void PPWLobbyPlayers_Clear(void *), ov45_02238508(void *), PPWLobbyPlayerSet_DestroyNodes(void *, void *);
+extern void LobbyStringVector_RecommendSize(struct Vec *, u32, int), LobbyStringVector_AppendCopiesSlow(struct Vec *, u32, void *), LobbyStringVector_EraseAtEnd(struct Vec *, u32, struct Alloc), LobbyCharVector_AppendZerosSlow(struct Vec *, u32);
+extern void LobbyCharVector_Allocate(struct Vec *, u32, struct Alloc);
 extern void LobbyTree_InsertRebalance(struct TreeNode *, void *), LobbyTimerMap_DestroyNodes(struct Tree *, struct TreeNode *);
 extern struct TreeNode *LobbyTree_EraseRebalance(struct TreeNode *, void *);
 extern void LobbyTimerMap_EraseKey(void *, int *), LobbyChat_SetChannelMode(int, char *);
 extern void PPWLobbyPlayers_Add(void *, int), LobbyChat_GetChannelKeysAsync(int, int, char *, void (*)(), int);
-extern void ov45_022320B4(struct Str *, void *);
+extern void PPWLobbyChannel_GetName(struct Str *, void *);
 extern struct Str *LobbyString_InitFromCStr(struct Str *, char *);
 extern int LobbyString_Equals(struct Str *, struct Str *);
 extern void LobbyString_Reserve(struct Str *, u32);
-extern u32 ov45_02237890(struct Vec *, u32);
+extern u32 LobbyCharVector_RecommendSize(struct Vec *, u32);
 extern struct Str *LobbyString_Replace(struct Str *, u32, u32, struct Str *);
 extern struct Str *LobbyString_ReplaceRange(struct Str *, u32, u32, char *, char *, struct Alloc);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
@@ -5136,29 +5136,29 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Str *LobbyString_Destroy(struct Str *a);
 struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
 struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 
-extern void ov45_02238508(void *), ov45_02238558(void *, void *);
+extern void ov45_02238508(void *), PPWLobbyPlayerSet_DestroyNodes(void *, void *);
 extern struct TreeNode *LobbyTimerMap_FindInsertPos(struct Tree *, u32 *, struct TreeNode **, u8 *, u8 *);
 extern struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *, struct TreeNode *, int, int, u32 *);
 extern void LobbyString_ReplaceSubstring(struct Str *, u32, u32, struct Str *, u32, u32);
@@ -5169,32 +5169,32 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_Destroy(struct Str *a);
 struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
 struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
-void *ov45_02236AE8(u32 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
 struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
@@ -5206,11 +5206,11 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236AE8(u32 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
@@ -5219,15 +5219,15 @@ void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
@@ -5240,7 +5240,7 @@ struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *a, struct TreeNode *paren
 extern int PPWLobby_DecodeMessageData(void *, struct Vec *);
 extern void *LobbyByteVector_Data(struct Vec *);
 extern int PPWLobbySchedule_Load(void *, void *, u32);
-extern void ov45_02238C1C(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
+extern void PPWLobbySchedule_CopyToVector(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
 extern char ov45_022550F4[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
@@ -5249,11 +5249,11 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236AE8(u32 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
@@ -5263,15 +5263,15 @@ void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
@@ -5422,7 +5422,7 @@ extern Work *_022577C4;
 extern u8 ov45_022550E4[], ov45_022550F4[];
 extern int PPWLobby_DecodeMessageData(void *, Blob *), PPWLobbySchedule_Load(u32 *, void *, u32);
 extern void *LobbyByteVector_Data(Blob *);
-extern void LobbyCharVector_Destroy(Blob *), PPWLobby_SetChannelData(int, int, void *, void *, int), LobbyTimerMap_EraseKey(int *, int *), ov45_02238C1C(Blob *, u32 *), DWC_GetDateTime(RTCDate *, RTCTime *);
+extern void LobbyCharVector_Destroy(Blob *), PPWLobby_SetChannelData(int, int, void *, void *, int), LobbyTimerMap_EraseKey(int *, int *), PPWLobbySchedule_CopyToVector(Blob *, u32 *), DWC_GetDateTime(RTCDate *, RTCTime *);
 
 static inline int appendBlob(Blob *blob) {
     Work *w = _022577C4;
@@ -5441,7 +5441,7 @@ void PPWLobby_OnGetLobbyData(int ok, int a, int b, int c, void *data) {
     blob.size = 0;
     blob.capacity = 0;
     if (!PPWLobby_DecodeMessageData(data, &blob) || blob.size == 0 || !appendBlob(&blob)) {
-        ov45_02238C1C(&copy, &_022577C4->stored);
+        PPWLobbySchedule_CopyToVector(&copy, &_022577C4->stored);
         PPWLobby_SetChannelData(-1, 0, ov45_022550F4, LobbyByteVector_Data(&copy), copy.size);
         LobbyCharVector_Destroy(&copy);
         LobbyCharVector_Destroy(&blob);
@@ -5515,18 +5515,18 @@ extern struct Vec *LobbyCharVector_Destroy(struct Vec *);
 extern struct Str *LobbyString_InitSubstring(struct Str *, struct Str *, u32, u32);
 extern void PPWLobby_OnMessage(int, int, int, int);
 extern void PPWLobby_HandleReceivedData(int, int, int, int, int, int, int);
-extern void ov45_0223DF4C(void *), ov45_02238508(void *), ov45_02238558(void *, void *);
-extern void ov45_022385A4(struct Vec *, u32, int), ov45_02238674(struct Vec *, u32, void *), ov45_022387E4(struct Vec *, u32, struct Alloc), ov45_02238820(struct Vec *, u32);
-extern void ov45_02237800(struct Vec *, u32, struct Alloc);
+extern void PPWLobbyPlayers_Clear(void *), ov45_02238508(void *), PPWLobbyPlayerSet_DestroyNodes(void *, void *);
+extern void LobbyStringVector_RecommendSize(struct Vec *, u32, int), LobbyStringVector_AppendCopiesSlow(struct Vec *, u32, void *), LobbyStringVector_EraseAtEnd(struct Vec *, u32, struct Alloc), LobbyCharVector_AppendZerosSlow(struct Vec *, u32);
+extern void LobbyCharVector_Allocate(struct Vec *, u32, struct Alloc);
 extern void LobbyTree_InsertRebalance(struct TreeNode *, void *), LobbyTimerMap_DestroyNodes(struct Tree *, struct TreeNode *);
 extern struct TreeNode *LobbyTree_EraseRebalance(struct TreeNode *, void *);
 extern void LobbyTimerMap_EraseKey(void *, int *), LobbyChat_SetChannelMode(int, char *);
 extern void PPWLobbyPlayers_Add(void *, int), LobbyChat_GetChannelKeysAsync(int, int, char *, void (*)(), int);
-extern void ov45_022320B4(struct Str *, void *);
+extern void PPWLobbyChannel_GetName(struct Str *, void *);
 extern struct Str *LobbyString_InitFromCStr(struct Str *, char *);
 extern int LobbyString_Equals(struct Str *, struct Str *);
 extern void LobbyString_Reserve(struct Str *, u32);
-extern u32 ov45_02237890(struct Vec *, u32);
+extern u32 LobbyCharVector_RecommendSize(struct Vec *, u32);
 extern struct Str *LobbyString_Replace(struct Str *, u32, u32, struct Str *);
 extern struct Str *LobbyString_ReplaceRange(struct Str *, u32, u32, char *, char *, struct Alloc);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
@@ -5537,29 +5537,29 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Str *LobbyString_Destroy(struct Str *a);
 struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
 struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 
-extern void ov45_02238508(void *), ov45_02238558(void *, void *);
+extern void ov45_02238508(void *), PPWLobbyPlayerSet_DestroyNodes(void *, void *);
 extern struct TreeNode *LobbyTimerMap_FindInsertPos(struct Tree *, u32 *, struct TreeNode **, u8 *, u8 *);
 extern struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *, struct TreeNode *, int, int, u32 *);
 extern void LobbyString_ReplaceSubstring(struct Str *, u32, u32, struct Str *, u32, u32);
@@ -5570,32 +5570,32 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_Destroy(struct Str *a);
 struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
 struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
-void *ov45_02236AE8(u32 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
 struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
@@ -5607,11 +5607,11 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236AE8(u32 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
@@ -5620,15 +5620,15 @@ void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
@@ -5641,7 +5641,7 @@ struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *a, struct TreeNode *paren
 extern int PPWLobby_DecodeMessageData(void *, struct Vec *);
 extern void *LobbyByteVector_Data(struct Vec *);
 extern int PPWLobbySchedule_Load(void *, void *, u32);
-extern void ov45_02238C1C(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
+extern void PPWLobbySchedule_CopyToVector(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
 extern char ov45_022550F4[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
@@ -5650,11 +5650,11 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236AE8(u32 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
@@ -5664,15 +5664,15 @@ void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
@@ -5687,25 +5687,25 @@ void PPWLobby_OnGetLobbyData(int ok, int unused1, int unused2, int unused3, void
 void PPWLobby_OnTopicChanged(void) {
 }
 
-void *ov45_02236A48(u8 *a) {
+void *PPWLobbyWebRequest_Destroy(u8 *a) {
     LobbyCharVector_Destroy((struct Vec *)(a + 40));
     LobbyString_Destroy((struct Str *)(a + 24));
     LobbyString_Destroy((struct Str *)(a + 12));
     return a;
 }
 
-void *ov45_02236A70(u8 *a) {
+void *PPWLobbyPlayers_Delete(u8 *a) {
     *(u8 **)a = ov45_02254FA0;
-    ov45_0223DF4C(a);
+    PPWLobbyPlayers_Clear(a);
     LobbyCharVector_Destroy((struct Vec *)(a + 40));
-    ov45_02236B88((struct Tree *)(a + 4));
+    PPWLobbyPlayerSet_Destroy((struct Tree *)(a + 4));
     if (a) {
         DWC_Free(0, a, 0);
     }
     return a;
 }
 
-void *ov45_02236AB8(u8 *a) {
+void *PPWLobbyPlayer_Delete(u8 *a) {
     LobbyCharVector_Destroy((struct Vec *)(a + 24));
     if (a) {
         DWC_Free(0, a, 0);
@@ -5733,9 +5733,9 @@ typedef struct Queue {
 } Queue;
 
 extern void DWC_Free(int, void *, int), ov45_02238508(void *);
-Queue *ov45_02236AE8(Queue *);
+Queue *LobbyEventDeque_Destroy(Queue *);
 
-Queue *ov45_02236AE8(Queue *p) {
+Queue *LobbyEventDeque_Destroy(Queue *p) {
     void **end, **cursor, **base, **limit;
     u32 capacity, start;
     u32 index = 0;
@@ -5826,18 +5826,18 @@ extern struct Vec *LobbyCharVector_Destroy(struct Vec *);
 extern struct Str *LobbyString_InitSubstring(struct Str *, struct Str *, u32, u32);
 extern void PPWLobby_OnMessage(int, int, int, int);
 extern void PPWLobby_HandleReceivedData(int, int, int, int, int, int, int);
-extern void ov45_0223DF4C(void *), ov45_02238508(void *), ov45_02238558(void *, void *);
-extern void ov45_022385A4(struct Vec *, u32, int), ov45_02238674(struct Vec *, u32, void *), ov45_022387E4(struct Vec *, u32, struct Alloc), ov45_02238820(struct Vec *, u32);
-extern void ov45_02237800(struct Vec *, u32, struct Alloc);
+extern void PPWLobbyPlayers_Clear(void *), ov45_02238508(void *), PPWLobbyPlayerSet_DestroyNodes(void *, void *);
+extern void LobbyStringVector_RecommendSize(struct Vec *, u32, int), LobbyStringVector_AppendCopiesSlow(struct Vec *, u32, void *), LobbyStringVector_EraseAtEnd(struct Vec *, u32, struct Alloc), LobbyCharVector_AppendZerosSlow(struct Vec *, u32);
+extern void LobbyCharVector_Allocate(struct Vec *, u32, struct Alloc);
 extern void LobbyTree_InsertRebalance(struct TreeNode *, void *), LobbyTimerMap_DestroyNodes(struct Tree *, struct TreeNode *);
 extern struct TreeNode *LobbyTree_EraseRebalance(struct TreeNode *, void *);
 extern void LobbyTimerMap_EraseKey(void *, int *), LobbyChat_SetChannelMode(int, char *);
 extern void PPWLobbyPlayers_Add(void *, int), LobbyChat_GetChannelKeysAsync(int, int, char *, void (*)(), int);
-extern void ov45_022320B4(struct Str *, void *);
+extern void PPWLobbyChannel_GetName(struct Str *, void *);
 extern struct Str *LobbyString_InitFromCStr(struct Str *, char *);
 extern int LobbyString_Equals(struct Str *, struct Str *);
 extern void LobbyString_Reserve(struct Str *, u32);
-extern u32 ov45_02237890(struct Vec *, u32);
+extern u32 LobbyCharVector_RecommendSize(struct Vec *, u32);
 extern struct Str *LobbyString_Replace(struct Str *, u32, u32, struct Str *);
 extern struct Str *LobbyString_ReplaceRange(struct Str *, u32, u32, char *, char *, struct Alloc);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
@@ -5848,29 +5848,29 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Str *LobbyString_Destroy(struct Str *a);
 struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
 struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 
-extern void ov45_02238508(void *), ov45_02238558(void *, void *);
+extern void ov45_02238508(void *), PPWLobbyPlayerSet_DestroyNodes(void *, void *);
 extern struct TreeNode *LobbyTimerMap_FindInsertPos(struct Tree *, u32 *, struct TreeNode **, u8 *, u8 *);
 extern struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *, struct TreeNode *, int, int, u32 *);
 extern void LobbyString_ReplaceSubstring(struct Str *, u32, u32, struct Str *, u32, u32);
@@ -5881,32 +5881,32 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_Destroy(struct Str *a);
 struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
 struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
-void *ov45_02236AE8(u32 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
 struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
@@ -5918,11 +5918,11 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236AE8(u32 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
@@ -5931,15 +5931,15 @@ void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
@@ -5952,7 +5952,7 @@ struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *a, struct TreeNode *paren
 extern int PPWLobby_DecodeMessageData(void *, struct Vec *);
 extern void *LobbyByteVector_Data(struct Vec *);
 extern int PPWLobbySchedule_Load(void *, void *, u32);
-extern void ov45_02238C1C(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
+extern void PPWLobbySchedule_CopyToVector(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
 extern char ov45_022550F4[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
@@ -5961,11 +5961,11 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236AE8(u32 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
@@ -5975,15 +5975,15 @@ void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
@@ -5995,9 +5995,9 @@ struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 void PPWLobby_OnEnumUsers(char *name, int id, int n, int *list);
 void PPWLobby_OnGetLobbyData(int ok, int unused1, int unused2, int unused3, void *value);
 
-void *ov45_02236B88(struct Tree *a) {
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a) {
     if (a->root) {
-        ov45_02238558(a, a->root);
+        PPWLobbyPlayerSet_DestroyNodes(a, a->root);
     }
     return a;
 }
@@ -6103,18 +6103,18 @@ extern struct Vec *LobbyCharVector_Destroy(struct Vec *);
 extern struct Str *LobbyString_InitSubstring(struct Str *, struct Str *, u32, u32);
 extern void PPWLobby_OnMessage(int, int, int, int);
 extern void PPWLobby_HandleReceivedData(int, int, int, int, int, int, int);
-extern void ov45_0223DF4C(void *), ov45_02238508(void *), ov45_02238558(void *, void *);
-extern void ov45_022385A4(struct Vec *, u32, int), ov45_02238674(struct Vec *, u32, void *), ov45_022387E4(struct Vec *, u32, struct Alloc), ov45_02238820(struct Vec *, u32);
-extern void ov45_02237800(struct Vec *, u32, struct Alloc);
+extern void PPWLobbyPlayers_Clear(void *), ov45_02238508(void *), PPWLobbyPlayerSet_DestroyNodes(void *, void *);
+extern void LobbyStringVector_RecommendSize(struct Vec *, u32, int), LobbyStringVector_AppendCopiesSlow(struct Vec *, u32, void *), LobbyStringVector_EraseAtEnd(struct Vec *, u32, struct Alloc), LobbyCharVector_AppendZerosSlow(struct Vec *, u32);
+extern void LobbyCharVector_Allocate(struct Vec *, u32, struct Alloc);
 extern void LobbyTree_InsertRebalance(struct TreeNode *, void *), LobbyTimerMap_DestroyNodes(struct Tree *, struct TreeNode *);
 extern struct TreeNode *LobbyTree_EraseRebalance(struct TreeNode *, void *);
 extern void LobbyTimerMap_EraseKey(void *, int *), LobbyChat_SetChannelMode(int, char *);
 extern void PPWLobbyPlayers_Add(void *, int), LobbyChat_GetChannelKeysAsync(int, int, char *, void (*)(), int);
-extern void ov45_022320B4(struct Str *, void *);
+extern void PPWLobbyChannel_GetName(struct Str *, void *);
 extern struct Str *LobbyString_InitFromCStr(struct Str *, char *);
 extern int LobbyString_Equals(struct Str *, struct Str *);
 extern void LobbyString_Reserve(struct Str *, u32);
-extern u32 ov45_02237890(struct Vec *, u32);
+extern u32 LobbyCharVector_RecommendSize(struct Vec *, u32);
 extern struct Str *LobbyString_Replace(struct Str *, u32, u32, struct Str *);
 extern struct Str *LobbyString_ReplaceRange(struct Str *, u32, u32, char *, char *, struct Alloc);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
@@ -6125,29 +6125,29 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Str *LobbyString_Destroy(struct Str *a);
 struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
 struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 
-extern void ov45_02238508(void *), ov45_02238558(void *, void *);
+extern void ov45_02238508(void *), PPWLobbyPlayerSet_DestroyNodes(void *, void *);
 extern struct TreeNode *LobbyTimerMap_FindInsertPos(struct Tree *, u32 *, struct TreeNode **, u8 *, u8 *);
 extern struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *, struct TreeNode *, int, int, u32 *);
 extern void LobbyString_ReplaceSubstring(struct Str *, u32, u32, struct Str *, u32, u32);
@@ -6158,32 +6158,32 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_Destroy(struct Str *a);
 struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
 struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
-void *ov45_02236AE8(u32 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
 struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
@@ -6195,11 +6195,11 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236AE8(u32 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
@@ -6208,15 +6208,15 @@ void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
@@ -6229,7 +6229,7 @@ struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *a, struct TreeNode *paren
 extern int PPWLobby_DecodeMessageData(void *, struct Vec *);
 extern void *LobbyByteVector_Data(struct Vec *);
 extern int PPWLobbySchedule_Load(void *, void *, u32);
-extern void ov45_02238C1C(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
+extern void PPWLobbySchedule_CopyToVector(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
 extern char ov45_022550F4[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
@@ -6238,11 +6238,11 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236AE8(u32 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
@@ -6252,15 +6252,15 @@ void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
@@ -6470,18 +6470,18 @@ extern struct Vec *LobbyCharVector_Destroy(struct Vec *);
 extern struct Str *LobbyString_InitSubstring(struct Str *, struct Str *, u32, u32);
 extern void PPWLobby_OnMessage(int, int, int, int);
 extern void PPWLobby_HandleReceivedData(int, int, int, int, int, int, int);
-extern void ov45_0223DF4C(void *), ov45_02238508(void *), ov45_02238558(void *, void *);
-extern void ov45_022385A4(struct Vec *, u32, int), ov45_02238674(struct Vec *, u32, void *), ov45_022387E4(struct Vec *, u32, struct Alloc), ov45_02238820(struct Vec *, u32);
-extern void ov45_02237800(struct Vec *, u32, struct Alloc);
+extern void PPWLobbyPlayers_Clear(void *), ov45_02238508(void *), PPWLobbyPlayerSet_DestroyNodes(void *, void *);
+extern void LobbyStringVector_RecommendSize(struct Vec *, u32, int), LobbyStringVector_AppendCopiesSlow(struct Vec *, u32, void *), LobbyStringVector_EraseAtEnd(struct Vec *, u32, struct Alloc), LobbyCharVector_AppendZerosSlow(struct Vec *, u32);
+extern void LobbyCharVector_Allocate(struct Vec *, u32, struct Alloc);
 extern void LobbyTree_InsertRebalance(struct TreeNode *, void *), LobbyTimerMap_DestroyNodes(struct Tree *, struct TreeNode *);
 extern struct TreeNode *LobbyTree_EraseRebalance(struct TreeNode *, void *);
 extern void LobbyTimerMap_EraseKey(void *, int *), LobbyChat_SetChannelMode(int, char *);
 extern void PPWLobbyPlayers_Add(void *, int), LobbyChat_GetChannelKeysAsync(int, int, char *, void (*)(), int);
-extern void ov45_022320B4(struct Str *, void *);
+extern void PPWLobbyChannel_GetName(struct Str *, void *);
 extern struct Str *LobbyString_InitFromCStr(struct Str *, char *);
 extern int LobbyString_Equals(struct Str *, struct Str *);
 extern void LobbyString_Reserve(struct Str *, u32);
-extern u32 ov45_02237890(struct Vec *, u32);
+extern u32 LobbyCharVector_RecommendSize(struct Vec *, u32);
 extern struct Str *LobbyString_Replace(struct Str *, u32, u32, struct Str *);
 extern struct Str *LobbyString_ReplaceRange(struct Str *, u32, u32, char *, char *, struct Alloc);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
@@ -6492,29 +6492,29 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Str *LobbyString_Destroy(struct Str *a);
 struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
 struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 
-extern void ov45_02238508(void *), ov45_02238558(void *, void *);
+extern void ov45_02238508(void *), PPWLobbyPlayerSet_DestroyNodes(void *, void *);
 extern struct TreeNode *LobbyTimerMap_FindInsertPos(struct Tree *, u32 *, struct TreeNode **, u8 *, u8 *);
 extern struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *, struct TreeNode *, int, int, u32 *);
 extern void LobbyString_ReplaceSubstring(struct Str *, u32, u32, struct Str *, u32, u32);
@@ -6525,32 +6525,32 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_Destroy(struct Str *a);
 struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
 struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
-void *ov45_02236AE8(u32 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
 struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
@@ -6562,11 +6562,11 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236AE8(u32 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
@@ -6575,15 +6575,15 @@ void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
@@ -6596,7 +6596,7 @@ struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *a, struct TreeNode *paren
 extern int PPWLobby_DecodeMessageData(void *, struct Vec *);
 extern void *LobbyByteVector_Data(struct Vec *);
 extern int PPWLobbySchedule_Load(void *, void *, u32);
-extern void ov45_02238C1C(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
+extern void PPWLobbySchedule_CopyToVector(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
 extern char ov45_022550F4[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
@@ -6605,11 +6605,11 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236AE8(u32 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
@@ -6619,15 +6619,15 @@ void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
@@ -7029,18 +7029,18 @@ extern struct Vec *LobbyCharVector_Destroy(struct Vec *);
 extern struct Str *LobbyString_InitSubstring(struct Str *, struct Str *, u32, u32);
 extern void PPWLobby_OnMessage(int, int, int, int);
 extern void PPWLobby_HandleReceivedData(int, int, int, int, int, int, int);
-extern void ov45_0223DF4C(void *), ov45_02238508(void *), ov45_02238558(void *, void *);
-extern void ov45_022385A4(struct Vec *, u32, int), ov45_02238674(struct Vec *, u32, void *), ov45_022387E4(struct Vec *, u32, struct Alloc), ov45_02238820(struct Vec *, u32);
-extern void ov45_02237800(struct Vec *, u32, struct Alloc);
+extern void PPWLobbyPlayers_Clear(void *), ov45_02238508(void *), PPWLobbyPlayerSet_DestroyNodes(void *, void *);
+extern void LobbyStringVector_RecommendSize(struct Vec *, u32, int), LobbyStringVector_AppendCopiesSlow(struct Vec *, u32, void *), LobbyStringVector_EraseAtEnd(struct Vec *, u32, struct Alloc), LobbyCharVector_AppendZerosSlow(struct Vec *, u32);
+extern void LobbyCharVector_Allocate(struct Vec *, u32, struct Alloc);
 extern void LobbyTree_InsertRebalance(struct TreeNode *, void *), LobbyTimerMap_DestroyNodes(struct Tree *, struct TreeNode *);
 extern struct TreeNode *LobbyTree_EraseRebalance(struct TreeNode *, void *);
 extern void LobbyTimerMap_EraseKey(void *, int *), LobbyChat_SetChannelMode(int, char *);
 extern void PPWLobbyPlayers_Add(void *, int), LobbyChat_GetChannelKeysAsync(int, int, char *, void (*)(), int);
-extern void ov45_022320B4(struct Str *, void *);
+extern void PPWLobbyChannel_GetName(struct Str *, void *);
 extern struct Str *LobbyString_InitFromCStr(struct Str *, char *);
 extern int LobbyString_Equals(struct Str *, struct Str *);
 extern void LobbyString_Reserve(struct Str *, u32);
-extern u32 ov45_02237890(struct Vec *, u32);
+extern u32 LobbyCharVector_RecommendSize(struct Vec *, u32);
 extern struct Str *LobbyString_Replace(struct Str *, u32, u32, struct Str *);
 extern struct Str *LobbyString_ReplaceRange(struct Str *, u32, u32, char *, char *, struct Alloc);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
@@ -7051,29 +7051,29 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Str *LobbyString_Destroy(struct Str *a);
 struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
 struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 
-extern void ov45_02238508(void *), ov45_02238558(void *, void *);
+extern void ov45_02238508(void *), PPWLobbyPlayerSet_DestroyNodes(void *, void *);
 extern struct TreeNode *LobbyTimerMap_FindInsertPos(struct Tree *, u32 *, struct TreeNode **, u8 *, u8 *);
 extern struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *, struct TreeNode *, int, int, u32 *);
 extern void LobbyString_ReplaceSubstring(struct Str *, u32, u32, struct Str *, u32, u32);
@@ -7084,32 +7084,32 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_Destroy(struct Str *a);
 struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
 struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
-void *ov45_02236AE8(u32 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
 struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
@@ -7121,11 +7121,11 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236AE8(u32 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
@@ -7134,15 +7134,15 @@ void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
@@ -7155,7 +7155,7 @@ struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *a, struct TreeNode *paren
 extern int PPWLobby_DecodeMessageData(void *, struct Vec *);
 extern void *LobbyByteVector_Data(struct Vec *);
 extern int PPWLobbySchedule_Load(void *, void *, u32);
-extern void ov45_02238C1C(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
+extern void PPWLobbySchedule_CopyToVector(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
 extern char ov45_022550F4[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
@@ -7164,11 +7164,11 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236AE8(u32 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
@@ -7178,15 +7178,15 @@ void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
@@ -7240,10 +7240,10 @@ void LobbyTree_RotateRight(struct TreeNode *a, void **root) {
     a->parent = (u32)b | (a->parent & 1);
 }
 
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused) {
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused) {
     struct Alloc alloc = { 0 };
-    ov45_022385A4(a, 1, 0);
-    ov45_02238674(a, 1, b);
+    LobbyStringVector_RecommendSize(a, 1, 0);
+    LobbyStringVector_AppendCopiesSlow(a, 1, b);
 }
 }
 }
@@ -7262,9 +7262,9 @@ typedef struct Tag {
     u8 value;
 } Tag;
 
-void ov45_022387E4(u32 *, u32, Tag, u32);
+void LobbyStringVector_EraseAtEnd(u32 *, u32, Tag, u32);
 void DWC_Free(u32, u32, u32);
-u32 *ov45_02237664(u32 *);
+u32 *LobbyStringVector_Destroy(u32 *);
 
 static inline Tag tag(void) {
     Tag t;
@@ -7272,11 +7272,11 @@ static inline Tag tag(void) {
     return t;
 }
 
-u32 *ov45_02237664(u32 *p) {
+u32 *LobbyStringVector_Destroy(u32 *p) {
     if (p[0]) {
         u32 current = p[1];
         Tag t = { 0 };
-        ov45_022387E4(p, current, t, 0);
+        LobbyStringVector_EraseAtEnd(p, current, t, 0);
         if (p[0]) {
             DWC_Free(0, p[0], 0);
         }
@@ -7346,18 +7346,18 @@ extern struct Vec *LobbyCharVector_Destroy(struct Vec *);
 extern struct Str *LobbyString_InitSubstring(struct Str *, struct Str *, u32, u32);
 extern void PPWLobby_OnMessage(int, int, int, int);
 extern void PPWLobby_HandleReceivedData(int, int, int, int, int, int, int);
-extern void ov45_0223DF4C(void *), ov45_02238508(void *), ov45_02238558(void *, void *);
-extern void ov45_022385A4(struct Vec *, u32, int), ov45_02238674(struct Vec *, u32, void *), ov45_022387E4(struct Vec *, u32, struct Alloc), ov45_02238820(struct Vec *, u32);
-extern void ov45_02237800(struct Vec *, u32, struct Alloc);
+extern void PPWLobbyPlayers_Clear(void *), ov45_02238508(void *), PPWLobbyPlayerSet_DestroyNodes(void *, void *);
+extern void LobbyStringVector_RecommendSize(struct Vec *, u32, int), LobbyStringVector_AppendCopiesSlow(struct Vec *, u32, void *), LobbyStringVector_EraseAtEnd(struct Vec *, u32, struct Alloc), LobbyCharVector_AppendZerosSlow(struct Vec *, u32);
+extern void LobbyCharVector_Allocate(struct Vec *, u32, struct Alloc);
 extern void LobbyTree_InsertRebalance(struct TreeNode *, void *), LobbyTimerMap_DestroyNodes(struct Tree *, struct TreeNode *);
 extern struct TreeNode *LobbyTree_EraseRebalance(struct TreeNode *, void *);
 extern void LobbyTimerMap_EraseKey(void *, int *), LobbyChat_SetChannelMode(int, char *);
 extern void PPWLobbyPlayers_Add(void *, int), LobbyChat_GetChannelKeysAsync(int, int, char *, void (*)(), int);
-extern void ov45_022320B4(struct Str *, void *);
+extern void PPWLobbyChannel_GetName(struct Str *, void *);
 extern struct Str *LobbyString_InitFromCStr(struct Str *, char *);
 extern int LobbyString_Equals(struct Str *, struct Str *);
 extern void LobbyString_Reserve(struct Str *, u32);
-extern u32 ov45_02237890(struct Vec *, u32);
+extern u32 LobbyCharVector_RecommendSize(struct Vec *, u32);
 extern struct Str *LobbyString_Replace(struct Str *, u32, u32, struct Str *);
 extern struct Str *LobbyString_ReplaceRange(struct Str *, u32, u32, char *, char *, struct Alloc);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
@@ -7368,29 +7368,29 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Str *LobbyString_Destroy(struct Str *a);
 struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
 struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 
-extern void ov45_02238508(void *), ov45_02238558(void *, void *);
+extern void ov45_02238508(void *), PPWLobbyPlayerSet_DestroyNodes(void *, void *);
 extern struct TreeNode *LobbyTimerMap_FindInsertPos(struct Tree *, u32 *, struct TreeNode **, u8 *, u8 *);
 extern struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *, struct TreeNode *, int, int, u32 *);
 extern void LobbyString_ReplaceSubstring(struct Str *, u32, u32, struct Str *, u32, u32);
@@ -7401,32 +7401,32 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_Destroy(struct Str *a);
 struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
 struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
-void *ov45_02236AE8(u32 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
 struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
@@ -7438,11 +7438,11 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236AE8(u32 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
@@ -7451,15 +7451,15 @@ void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
@@ -7472,7 +7472,7 @@ struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *a, struct TreeNode *paren
 extern int PPWLobby_DecodeMessageData(void *, struct Vec *);
 extern void *LobbyByteVector_Data(struct Vec *);
 extern int PPWLobbySchedule_Load(void *, void *, u32);
-extern void ov45_02238C1C(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
+extern void PPWLobbySchedule_CopyToVector(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
 extern char ov45_022550F4[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
@@ -7481,11 +7481,11 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236AE8(u32 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
@@ -7495,15 +7495,15 @@ void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
@@ -7515,7 +7515,7 @@ struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 void PPWLobby_OnEnumUsers(char *name, int id, int n, int *list);
 void PPWLobby_OnGetLobbyData(int ok, int unused1, int unused2, int unused3, void *value);
 
-struct Vec *ov45_022376BC(struct Vec *a) {
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a) {
     if (a->ptr) {
         u32 size = a->size;
         struct Alloc alloc = { 0 };
@@ -7527,7 +7527,7 @@ struct Vec *ov45_022376BC(struct Vec *a) {
     return a;
 }
 
-struct Vec *ov45_0223770C(struct Vec *a) {
+struct Vec *LobbyVipVector_Destroy(struct Vec *a) {
     if (a->ptr) {
         u32 size = a->size;
         struct Alloc alloc = { 0 };
@@ -7539,7 +7539,7 @@ struct Vec *ov45_0223770C(struct Vec *a) {
     return a;
 }
 
-struct Vec *ov45_0223775C(struct Vec *a) {
+struct Vec *LobbyEventVector_Destroy(struct Vec *a) {
     if (a->ptr) {
         u32 size = a->size;
         struct Alloc alloc = { 0 };
@@ -7571,7 +7571,7 @@ struct Vec {
     u32 size, cap;
 };
 
-extern "C" void ov45_02237800(Vec *, u32, Alloc);
+extern "C" void LobbyCharVector_Allocate(Vec *, u32, Alloc);
 extern "C" void LobbyCharVector_Grow(Vec *, u32);
 
 inline void FillN(char *p, u32 n, char c, TrueType) {
@@ -7580,7 +7580,7 @@ inline void FillN(char *p, u32 n, char c, TrueType) {
 
 extern "C" void LobbyCharVector_Grow(Vec *v, u32 n) {
     if (n) {
-        ov45_02237800(v, n, Alloc());
+        LobbyCharVector_Allocate(v, n, Alloc());
         FillN(v->ptr + v->size, n, char(), TrueType());
         v->size += n;
     }
@@ -7648,18 +7648,18 @@ extern struct Vec *LobbyCharVector_Destroy(struct Vec *);
 extern struct Str *LobbyString_InitSubstring(struct Str *, struct Str *, u32, u32);
 extern void PPWLobby_OnMessage(int, int, int, int);
 extern void PPWLobby_HandleReceivedData(int, int, int, int, int, int, int);
-extern void ov45_0223DF4C(void *), ov45_02238508(void *), ov45_02238558(void *, void *);
-extern void ov45_022385A4(struct Vec *, u32, int), ov45_02238674(struct Vec *, u32, void *), ov45_022387E4(struct Vec *, u32, struct Alloc), ov45_02238820(struct Vec *, u32);
-extern void ov45_02237800(struct Vec *, u32, struct Alloc);
+extern void PPWLobbyPlayers_Clear(void *), ov45_02238508(void *), PPWLobbyPlayerSet_DestroyNodes(void *, void *);
+extern void LobbyStringVector_RecommendSize(struct Vec *, u32, int), LobbyStringVector_AppendCopiesSlow(struct Vec *, u32, void *), LobbyStringVector_EraseAtEnd(struct Vec *, u32, struct Alloc), LobbyCharVector_AppendZerosSlow(struct Vec *, u32);
+extern void LobbyCharVector_Allocate(struct Vec *, u32, struct Alloc);
 extern void LobbyTree_InsertRebalance(struct TreeNode *, void *), LobbyTimerMap_DestroyNodes(struct Tree *, struct TreeNode *);
 extern struct TreeNode *LobbyTree_EraseRebalance(struct TreeNode *, void *);
 extern void LobbyTimerMap_EraseKey(void *, int *), LobbyChat_SetChannelMode(int, char *);
 extern void PPWLobbyPlayers_Add(void *, int), LobbyChat_GetChannelKeysAsync(int, int, char *, void (*)(), int);
-extern void ov45_022320B4(struct Str *, void *);
+extern void PPWLobbyChannel_GetName(struct Str *, void *);
 extern struct Str *LobbyString_InitFromCStr(struct Str *, char *);
 extern int LobbyString_Equals(struct Str *, struct Str *);
 extern void LobbyString_Reserve(struct Str *, u32);
-extern u32 ov45_02237890(struct Vec *, u32);
+extern u32 LobbyCharVector_RecommendSize(struct Vec *, u32);
 extern struct Str *LobbyString_Replace(struct Str *, u32, u32, struct Str *);
 extern struct Str *LobbyString_ReplaceRange(struct Str *, u32, u32, char *, char *, struct Alloc);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
@@ -7670,29 +7670,29 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Str *LobbyString_Destroy(struct Str *a);
 struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
 struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 
-extern void ov45_02238508(void *), ov45_02238558(void *, void *);
+extern void ov45_02238508(void *), PPWLobbyPlayerSet_DestroyNodes(void *, void *);
 extern struct TreeNode *LobbyTimerMap_FindInsertPos(struct Tree *, u32 *, struct TreeNode **, u8 *, u8 *);
 extern struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *, struct TreeNode *, int, int, u32 *);
 extern void LobbyString_ReplaceSubstring(struct Str *, u32, u32, struct Str *, u32, u32);
@@ -7703,32 +7703,32 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_Destroy(struct Str *a);
 struct Str *LobbyString_Assign(struct Str *a, struct Str *b);
 struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
-void *ov45_02236AE8(u32 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
 struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
@@ -7740,11 +7740,11 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236AE8(u32 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
@@ -7753,15 +7753,15 @@ void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
@@ -7774,7 +7774,7 @@ struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *a, struct TreeNode *paren
 extern int PPWLobby_DecodeMessageData(void *, struct Vec *);
 extern void *LobbyByteVector_Data(struct Vec *);
 extern int PPWLobbySchedule_Load(void *, void *, u32);
-extern void ov45_02238C1C(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
+extern void PPWLobbySchedule_CopyToVector(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
 extern char ov45_022550F4[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
@@ -7783,11 +7783,11 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(struct Str *a, struct Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236AE8(u32 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
@@ -7797,15 +7797,15 @@ void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(struct Vec *a, void *b, struct Alloc unused);
-struct Vec *ov45_02237664(struct Vec *a);
-struct Vec *ov45_022376BC(struct Vec *a);
-struct Vec *ov45_0223770C(struct Vec *a);
-struct Vec *ov45_0223775C(struct Vec *a);
+void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused);
+struct Vec *LobbyStringVector_Destroy(struct Vec *a);
+struct Vec *LobbyU32Vector_Destroy(struct Vec *a);
+struct Vec *LobbyVipVector_Destroy(struct Vec *a);
+struct Vec *LobbyEventVector_Destroy(struct Vec *a);
 void LobbyCharVector_Grow(struct Vec *a, u32 n);
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused);
-void ov45_02237820(struct Vec *a, u32 unused, u32 n);
-u32 ov45_02237890(struct Vec *a, u32 n);
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused);
+void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
+u32 LobbyCharVector_RecommendSize(struct Vec *a, u32 n);
 struct Vec *LobbyCharVector_Destroy(struct Vec *a);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
@@ -7817,7 +7817,7 @@ struct Str *LobbyString_Replace(struct Str *a, u32 b, u32 c, struct Str *d);
 void PPWLobby_OnEnumUsers(char *name, int id, int n, int *list);
 void PPWLobby_OnGetLobbyData(int ok, int unused1, int unused2, int unused3, void *value);
 
-void ov45_02237800(struct Vec *a, u32 b, struct Alloc unused) {
+void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused) {
     a->ptr = LobbyMem_Alloc(b);
     a->cap = b;
 }
@@ -7847,10 +7847,10 @@ typedef struct {
     u32 capacity;
 } Buffer;
 
-extern void DWC_Free(int, void *, int), ov45_02237800(Buffer *, u32, Allocator);
-void ov45_02237820(Buffer *, Allocator, u32);
+extern void DWC_Free(int, void *, int), LobbyCharVector_Allocate(Buffer *, u32, Allocator);
+void LobbyCharVector_Reallocate(Buffer *, Allocator, u32);
 
-void ov45_02237820(Buffer *b, Allocator incoming, u32 n) {
+void LobbyCharVector_Reallocate(Buffer *b, Allocator incoming, u32 n) {
     u32 size = b->size;
     Allocator old = { 0 };
     volatile Allocator copy;
@@ -7866,7 +7866,7 @@ void ov45_02237820(Buffer *b, Allocator incoming, u32 n) {
     }
     Allocator fresh = { 0 };
     copy.byte = 0;
-    ov45_02237800(b, n, fresh);
+    LobbyCharVector_Allocate(b, n, fresh);
 }
 }
 }
@@ -7915,18 +7915,18 @@ extern Vec *LobbyCharVector_Destroy(Vec *);
 extern Str *LobbyString_InitSubstring(Str *, Str *, u32, u32);
 extern void PPWLobby_OnMessage(int, int, int, int);
 extern void PPWLobby_HandleReceivedData(int, int, int, int, int, int, int);
-extern void ov45_0223DF4C(void *), ov45_02238508(void *), ov45_02238558(void *, void *);
-extern void ov45_022385A4(Vec *, u32, int), ov45_02238674(Vec *, u32, void *), ov45_022387E4(Vec *, u32, struct Alloc), ov45_02238820(Vec *, u32);
-extern void ov45_02237800(Vec *, u32, struct Alloc);
+extern void PPWLobbyPlayers_Clear(void *), ov45_02238508(void *), PPWLobbyPlayerSet_DestroyNodes(void *, void *);
+extern void LobbyStringVector_RecommendSize(Vec *, u32, int), LobbyStringVector_AppendCopiesSlow(Vec *, u32, void *), LobbyStringVector_EraseAtEnd(Vec *, u32, struct Alloc), LobbyCharVector_AppendZerosSlow(Vec *, u32);
+extern void LobbyCharVector_Allocate(Vec *, u32, struct Alloc);
 extern void LobbyTree_InsertRebalance(struct TreeNode *, void *), LobbyTimerMap_DestroyNodes(struct Tree *, struct TreeNode *);
 extern struct TreeNode *LobbyTree_EraseRebalance(struct TreeNode *, void *);
 extern void LobbyTimerMap_EraseKey(void *, int *), LobbyChat_SetChannelMode(int, char *);
 extern void PPWLobbyPlayers_Add(void *, int), LobbyChat_GetChannelKeysAsync(int, int, char *, void (*)(), int);
-extern void ov45_022320B4(Str *, void *);
+extern void PPWLobbyChannel_GetName(Str *, void *);
 extern Str *LobbyString_InitFromCStr(Str *, char *);
 extern int LobbyString_Equals(Str *, Str *);
 extern void LobbyString_Reserve(Str *, u32);
-extern u32 ov45_02237890(Vec *, u32);
+extern u32 LobbyCharVector_RecommendSize(Vec *, u32);
 extern Str *LobbyString_Replace(Str *, u32, u32, Str *);
 extern Str *LobbyString_ReplaceRange(Str *, u32, u32, char *, char *, struct Alloc);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
@@ -7937,29 +7937,29 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(Str *a, Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(Vec *a, void *b, struct Alloc unused);
-Vec *ov45_02237664(Vec *a);
-Vec *ov45_022376BC(Vec *a);
-Vec *ov45_0223770C(Vec *a);
-Vec *ov45_0223775C(Vec *a);
+void LobbyStringVector_PushBackSlow(Vec *a, void *b, struct Alloc unused);
+Vec *LobbyStringVector_Destroy(Vec *a);
+Vec *LobbyU32Vector_Destroy(Vec *a);
+Vec *LobbyVipVector_Destroy(Vec *a);
+Vec *LobbyEventVector_Destroy(Vec *a);
 Vec *LobbyCharVector_Destroy(Vec *a);
-void ov45_02237800(Vec *a, u32 b, struct Alloc unused);
-u32 ov45_02237890(Vec *a, u32 n);
+void LobbyCharVector_Allocate(Vec *a, u32 b, struct Alloc unused);
+u32 LobbyCharVector_RecommendSize(Vec *a, u32 n);
 Str *LobbyString_Destroy(Str *a);
 Str *LobbyString_Assign(Str *a, Str *b);
 Str *LobbyString_Replace(Str *a, u32 b, u32 c, Str *d);
 
-extern void ov45_02238508(void *), ov45_02238558(void *, void *);
+extern void ov45_02238508(void *), PPWLobbyPlayerSet_DestroyNodes(void *, void *);
 extern struct TreeNode *LobbyTimerMap_FindInsertPos(struct Tree *, u32 *, struct TreeNode **, u8 *, u8 *);
 extern struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *, struct TreeNode *, int, int, u32 *);
 extern void LobbyString_ReplaceSubstring(Str *, u32, u32, Str *, u32, u32);
@@ -7970,32 +7970,32 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(Str *a, Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Clear(struct Tree *a);
 void LobbyTimerMap_DestroyNodes(struct Tree *a, struct TreeNode *b);
 void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(Vec *a, void *b, struct Alloc unused);
-Vec *ov45_02237664(Vec *a);
-Vec *ov45_022376BC(Vec *a);
-Vec *ov45_0223770C(Vec *a);
-Vec *ov45_0223775C(Vec *a);
-void ov45_02237800(Vec *a, u32 b, struct Alloc unused);
-u32 ov45_02237890(Vec *a, u32 n);
+void LobbyStringVector_PushBackSlow(Vec *a, void *b, struct Alloc unused);
+Vec *LobbyStringVector_Destroy(Vec *a);
+Vec *LobbyU32Vector_Destroy(Vec *a);
+Vec *LobbyVipVector_Destroy(Vec *a);
+Vec *LobbyEventVector_Destroy(Vec *a);
+void LobbyCharVector_Allocate(Vec *a, u32 b, struct Alloc unused);
+u32 LobbyCharVector_RecommendSize(Vec *a, u32 n);
 Vec *LobbyCharVector_Destroy(Vec *a);
 Str *LobbyString_Destroy(Str *a);
 Str *LobbyString_Assign(Str *a, Str *b);
 Str *LobbyString_Replace(Str *a, u32 b, u32 c, Str *d);
-void *ov45_02236AE8(u32 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyCharVector_Grow(Vec *a, u32 n);
-void ov45_02237820(Vec *a, u32 unused, u32 n);
+void LobbyCharVector_Reallocate(Vec *a, u32 unused, u32 n);
 Str *LobbyString_InitCopy(Str *a, Str *b);
 Str *LobbyString_InitSubstring(Str *a, Str *b, u32 offset, u32 length);
 Str *LobbyString_InitFromCStr(Str *a, char *b);
@@ -8007,11 +8007,11 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(Str *a, Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236AE8(u32 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
@@ -8020,15 +8020,15 @@ void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(Vec *a, void *b, struct Alloc unused);
-Vec *ov45_02237664(Vec *a);
-Vec *ov45_022376BC(Vec *a);
-Vec *ov45_0223770C(Vec *a);
-Vec *ov45_0223775C(Vec *a);
+void LobbyStringVector_PushBackSlow(Vec *a, void *b, struct Alloc unused);
+Vec *LobbyStringVector_Destroy(Vec *a);
+Vec *LobbyU32Vector_Destroy(Vec *a);
+Vec *LobbyVipVector_Destroy(Vec *a);
+Vec *LobbyEventVector_Destroy(Vec *a);
 void LobbyCharVector_Grow(Vec *a, u32 n);
-void ov45_02237800(Vec *a, u32 b, struct Alloc unused);
-void ov45_02237820(Vec *a, u32 unused, u32 n);
-u32 ov45_02237890(Vec *a, u32 n);
+void LobbyCharVector_Allocate(Vec *a, u32 b, struct Alloc unused);
+void LobbyCharVector_Reallocate(Vec *a, u32 unused, u32 n);
+u32 LobbyCharVector_RecommendSize(Vec *a, u32 n);
 Vec *LobbyCharVector_Destroy(Vec *a);
 Str *LobbyString_InitCopy(Str *a, Str *b);
 Str *LobbyString_InitSubstring(Str *a, Str *b, u32 offset, u32 length);
@@ -8041,7 +8041,7 @@ struct TreeNode *LobbyTimerMap_InsertNode(struct Tree *a, struct TreeNode *paren
 extern int PPWLobby_DecodeMessageData(void *, Vec *);
 extern void *LobbyByteVector_Data(Vec *);
 extern int PPWLobbySchedule_Load(void *, void *, u32);
-extern void ov45_02238C1C(Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
+extern void PPWLobbySchedule_CopyToVector(Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
 extern char ov45_022550F4[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
@@ -8050,11 +8050,11 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f);
 void LobbyString_Substr(Str *a, Str *b, u32 c, u32 d);
 void PPWLobby_OnGetChannelMode(int a, int b, u32 *c);
 void PPWLobby_OnTopicChanged(void);
-void *ov45_02236A48(u8 *a);
-void *ov45_02236A70(u8 *a);
-void *ov45_02236AB8(u8 *a);
-void *ov45_02236AE8(u32 *a);
-void *ov45_02236B88(struct Tree *a);
+void *PPWLobbyWebRequest_Destroy(u8 *a);
+void *PPWLobbyPlayers_Delete(u8 *a);
+void *PPWLobbyPlayer_Delete(u8 *a);
+void *LobbyEventDeque_Destroy(u32 *a);
+void *PPWLobbyPlayerSet_Destroy(struct Tree *a);
 void LobbyTimerMap_Insert(u32 *result, struct Tree *a, u32 *value);
 void LobbyTimerMap_Erase(Iterator *result, struct Tree *a, Iterator node);
 void LobbyTimerMap_Clear(struct Tree *a);
@@ -8064,15 +8064,15 @@ void *LobbyTimerMap_Destroy(struct Tree *a);
 void ov45_02236E58(Iterator *p);
 void LobbyTree_RotateLeft(struct TreeNode *a, void **root);
 void LobbyTree_RotateRight(struct TreeNode *a, void **root);
-void ov45_02237634(Vec *a, void *b, struct Alloc unused);
-Vec *ov45_02237664(Vec *a);
-Vec *ov45_022376BC(Vec *a);
-Vec *ov45_0223770C(Vec *a);
-Vec *ov45_0223775C(Vec *a);
+void LobbyStringVector_PushBackSlow(Vec *a, void *b, struct Alloc unused);
+Vec *LobbyStringVector_Destroy(Vec *a);
+Vec *LobbyU32Vector_Destroy(Vec *a);
+Vec *LobbyVipVector_Destroy(Vec *a);
+Vec *LobbyEventVector_Destroy(Vec *a);
 void LobbyCharVector_Grow(Vec *a, u32 n);
-void ov45_02237800(Vec *a, u32 b, struct Alloc unused);
-void ov45_02237820(Vec *a, u32 unused, u32 n);
-u32 ov45_02237890(Vec *a, u32 n);
+void LobbyCharVector_Allocate(Vec *a, u32 b, struct Alloc unused);
+void LobbyCharVector_Reallocate(Vec *a, u32 unused, u32 n);
+u32 LobbyCharVector_RecommendSize(Vec *a, u32 n);
 Vec *LobbyCharVector_Destroy(Vec *a);
 Str *LobbyString_InitCopy(Str *a, Str *b);
 Str *LobbyString_InitSubstring(Str *a, Str *b, u32 offset, u32 length);
@@ -8084,7 +8084,7 @@ Str *LobbyString_Replace(Str *a, u32 b, u32 c, Str *d);
 void PPWLobby_OnEnumUsers(char *name, int id, int n, int *list);
 void PPWLobby_OnGetLobbyData(int ok, int unused1, int unused2, int unused3, void *value);
 
-u32 ov45_02237890(Vec *a, u32 n) {
+u32 LobbyCharVector_RecommendSize(Vec *a, u32 n) {
     u32 cap = a->cap;
     u32 growth;
     if (n > ~0u - cap) {
@@ -8111,7 +8111,7 @@ using std::memset;
 using namespace DwcFormatted216Native;
 #pragma force_active on
 
-extern "C" void ov45_0223795C(Vec *vector, u32 count, ResizeDispatch) {
+extern "C" void LobbyCharVector_AppendZeros(Vec *vector, u32 count, ResizeDispatch) {
     u32 capacity = vector->cap;
     if (count > capacity || vector->size > capacity - count) {
         u32 additional = vector->size + count - capacity;
@@ -8122,7 +8122,7 @@ extern "C" void ov45_0223795C(Vec *vector, u32 count, ResizeDispatch) {
         vector->size += count;
         return;
     }
-    ov45_02238820(vector, count);
+    LobbyCharVector_AppendZerosSlow(vector, count);
 }
 
 #pragma force_active off

@@ -44,7 +44,7 @@ typedef struct E {
     int key, val;
 } E;
 
-extern void ov45_02237800(Vec *, u32, Small);
+extern void LobbyCharVector_Allocate(Vec *, u32, Small);
 extern int LobbyString_CompareChars(const u8 *, u32, u32, const void *, u32);
 extern S *LobbyString_ReplaceRange(S *, u32, u32, char *, char *, Small);
 extern void *LobbyMem_Alloc(u32);
@@ -58,45 +58,45 @@ void LobbyString_Compare(S *p, S *q);
 void LobbyString_CompareCStr(S *p, char *q);
 void *LobbyTimerMap_FindInsertPos(Node *p, u32 *key, Node **out, u8 *less, u8 *empty);
 void LobbyString_AssignRange(S *p, char *a, char *b);
-void ov45_02238558(void *ctx, Node *p);
-void ov45_022387E4(Vec *p, u32 n, Small tag);
-void ov45_02238ACC(Vec *p, u32 n, Small tag);
-Vec *ov45_0223895C(Vec *p);
-Vec *ov45_022389B0(Vec *p);
-void ov45_022389CC(Vec *p, u32 n, Small tag);
-void ov45_02238A3C(Vec *p, u32 n, Small tag);
-u8 *ov45_02238B08(u8 *p);
-S *ov45_02238C08(Vec *p);
-void ov45_02238C1C(S *p, u8 *q);
+void PPWLobbyPlayerSet_DestroyNodes(void *ctx, Node *p);
+void LobbyStringVector_EraseAtEnd(Vec *p, u32 n, Small tag);
+void LobbyStringVectorBuffer_EraseAtEnd(Vec *p, u32 n, Small tag);
+Vec *LobbyStringVectorBuffer_Destroy(Vec *p);
+Vec *LobbyCharVectorBuffer_Destroy(Vec *p);
+void LobbyCharVectorBuffer_Allocate(Vec *p, u32 n, Small tag);
+void LobbyStringVectorBuffer_Allocate(Vec *p, u32 n, Small tag);
+u8 *PPWLobbySchedule_Init(u8 *p);
+S *LobbyEventVector_Data(Vec *p);
+void PPWLobbySchedule_CopyToVector(S *p, u8 *q);
 int PPWLobbySchedule_Copy(u8 *p, u8 *out, u32 *size);
-u32 ov45_022385A4(Vec *p, u32 n, ...);
+u32 LobbyStringVector_RecommendSize(Vec *p, u32 n, ...);
 void LobbySort_LowerBound(E **out, E *first, E *last, int *key, ...);
 void LobbySort_UpperBound(E **out, E *first, E *last, int *key, ...);
-void ov45_022383E0(Vec *p, char *first, char *last);
+void LobbyCharVector_InitRange(Vec *p, char *first, char *last);
 u8 *ov45_02238508(u8 *p);
-u8 *ov45_022389EC(u8 *p);
-Vec *ov45_02238A74(Vec *p);
+u8 *LobbyCharVectorBuffer_Deallocate(u8 *p);
+Vec *LobbyStringVectorBuffer_Deallocate(Vec *p);
 
 #pragma optimization_level 3
 
-Vec *ov45_0223895C(Vec *p) {
+Vec *LobbyStringVectorBuffer_Destroy(Vec *p) {
     S *first = p->data + p->extra, *end = first + p->len;
     while (end > first) {
         end--;
         LobbyString_Destroy(end);
     }
     p->len = 0;
-    ov45_02238A74(p);
+    LobbyStringVectorBuffer_Deallocate(p);
     return p;
 }
 
-Vec *ov45_022389B0(Vec *p) {
+Vec *LobbyCharVectorBuffer_Destroy(Vec *p) {
     p->len = 0;
-    ov45_022389EC((u8 *)p);
+    LobbyCharVectorBuffer_Deallocate((u8 *)p);
     return p;
 }
 
-void ov45_022389CC(Vec *p, u32 n, Small tag) {
+void LobbyCharVectorBuffer_Allocate(Vec *p, u32 n, Small tag) {
     p->data = LobbyMem_Alloc(n);
     p->cap = n;
 }

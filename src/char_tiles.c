@@ -156,7 +156,7 @@ static void CharTiles_CopyBlockFromRect(int srcWidth, int srcHeight, const TileR
 }
 
 static void CharTiles_LoadObjBlocksFromNarc(NarcId narcId, s32 fileId, enum HeapID heapID, int x, int y, int width, int height, void *dest) {
-    TileRect sp1C[6] = {
+    TileRect blocks[6] = {
         { 0, 0, 8, 8 },
         { 8, 0, 2, 4 },
         { 8, 4, 2, 4 },
@@ -165,12 +165,12 @@ static void CharTiles_LoadObjBlocksFromNarc(NarcId narcId, s32 fileId, enum Heap
         { 8, 8, 2, 2 },
     };
 
-    int sp18 = 0;
-    void *sp14 = CharTiles_AllocAndLoadRectFromNarc(narcId, fileId, heapID, x, y, width, height);
+    int dstOffset = 0;
+    void *rectBuf = CharTiles_AllocAndLoadRectFromNarc(narcId, fileId, heapID, x, y, width, height);
     for (int i = 0; i < 6; ++i) {
-        CharTiles_CopyBlockFromRect(width, height, &sp1C[i], &sp18, sp14, dest);
+        CharTiles_CopyBlockFromRect(width, height, &blocks[i], &dstOffset, rectBuf, dest);
     }
-    Heap_Free(sp14);
+    Heap_Free(rectBuf);
 }
 
 void CharTiles_LoadRectAsObjFromNarc(NarcId narcId, s32 fileId, enum HeapID heapID, TileRect *rect, void *dest) {
@@ -178,8 +178,8 @@ void CharTiles_LoadRectAsObjFromNarc(NarcId narcId, s32 fileId, enum HeapID heap
 }
 
 void CharTiles_LoadPicAsObjFromNarc(NarcId narcId, s32 fileId, enum HeapID heapID, void *dest) {
-    TileRect sp4 = { 0, 0, 10, 10 };
-    CharTiles_LoadRectAsObjFromNarc(narcId, fileId, heapID, &sp4, dest);
+    TileRect rect = { 0, 0, 10, 10 };
+    CharTiles_LoadRectAsObjFromNarc(narcId, fileId, heapID, &rect, dest);
 }
 
 void *CharTiles_AllocAndLoadPicAsObjFromNarc(NarcId narcId, s32 fileId, enum HeapID heapID) {
@@ -199,7 +199,7 @@ void *AllocAndLoadPltt16FromNarc(NarcId narcId, s32 fileId, enum HeapID heapID) 
 }
 
 void CharTiles_LoadMonObjBlocksFromNarc(NarcId narcId, s32 fileId, enum HeapID heapID, int x, int y, int width, int height, void *dest, u32 pid, BOOL isAnimated, int whichFacing, int species) {
-    TileRect sp2C[6] = {
+    TileRect blocks[6] = {
         { 0, 0, 8, 8 },
         { 8, 0, 2, 4 },
         { 8, 4, 2, 4 },
@@ -208,12 +208,12 @@ void CharTiles_LoadMonObjBlocksFromNarc(NarcId narcId, s32 fileId, enum HeapID h
         { 8, 8, 2, 2 },
     };
 
-    int sp28 = 0;
-    void *sp24 = CharTiles_AllocAndLoadMonRect(narcId, fileId, heapID, x, y, width, height, pid, isAnimated, whichFacing, species);
+    int dstOffset = 0;
+    void *rectBuf = CharTiles_AllocAndLoadMonRect(narcId, fileId, heapID, x, y, width, height, pid, isAnimated, whichFacing, species);
     for (int i = 0; i < 6; ++i) {
-        CharTiles_CopyBlockFromRect(width, height, &sp2C[i], &sp28, sp24, dest);
+        CharTiles_CopyBlockFromRect(width, height, &blocks[i], &dstOffset, rectBuf, dest);
     }
-    Heap_Free(sp24);
+    Heap_Free(rectBuf);
 }
 
 void CharTiles_LoadMonRectAsObjFromNarc(NarcId narcId, s32 fileId, enum HeapID heapID, TileRect *rect, void *dest, u32 personality, BOOL isAnimated, int whichFacing, int species) {
@@ -221,8 +221,8 @@ void CharTiles_LoadMonRectAsObjFromNarc(NarcId narcId, s32 fileId, enum HeapID h
 }
 
 void CharTiles_LoadMonPicAsObjFromNarc(NarcId narcId, s32 fileId, enum HeapID heapID, void *dest, u32 personality, BOOL isAnimated, int whichFacing, int species) {
-    TileRect sp14 = { 0, 0, 10, 10 };
-    CharTiles_LoadMonRectAsObjFromNarc(narcId, fileId, heapID, &sp14, dest, personality, isAnimated, whichFacing, species);
+    TileRect rect = { 0, 0, 10, 10 };
+    CharTiles_LoadMonRectAsObjFromNarc(narcId, fileId, heapID, &rect, dest, personality, isAnimated, whichFacing, species);
 }
 
 void *CharTiles_AllocAndLoadMonPicAsObjFromNarc(NarcId narcId, s32 fileId, enum HeapID heapID, u32 personality, BOOL isAnimated, int whichFacing, int species) {

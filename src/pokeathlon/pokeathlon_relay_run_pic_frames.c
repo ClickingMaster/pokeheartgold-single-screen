@@ -12,10 +12,10 @@ typedef struct PokeathlonRelayRunPicIds {
 } PokeathlonRelayRunPicIds;
 
 // The definition order fixes the .rodata layout: the HUD and the CPU read the ids through
-// ov96_0221C728 as one array.
+// gPokeathlonRelayRunPicIds as one array.
 static const PokeathlonRelayRunPicIds sPicResIds2 = { { 0x66, 0x67 } };
 static const PokeathlonRelayRunPicIds sPicKinds = { { 4, 5 } };
-const PokeathlonRelayRunPicIds ov96_0221C728 = { { 0x66, 0x67 } };
+const PokeathlonRelayRunPicIds gPokeathlonRelayRunPicIds = { { 0x66, 0x67 } };
 static const PokeathlonRelayRunPicIds sPicResIds3 = { { 0x66, 0x67 } };
 
 // Sprite pool helpers (pokeathlon_course_objects.c), declared with untyped entries and the argument
@@ -31,7 +31,7 @@ void PokeathlonRelayRunHud_CreatePicFrames(void *spritePool, PokeathlonRelayRunH
 
 // The two picture frames of the top screen and the tired mark shown on each.
 void PokeathlonRelayRunHud_CreatePicFrames(void *spritePool, PokeathlonRelayRunHud *hud) {
-    PokeathlonRelayRunPicIds resIds = ov96_0221C728;
+    PokeathlonRelayRunPicIds resIds = gPokeathlonRelayRunPicIds;
     PokeathlonRelayRunPicIds kinds = sPicKinds;
     VecFx32 position;
     int i;

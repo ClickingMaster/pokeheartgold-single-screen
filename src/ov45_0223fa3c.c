@@ -36,7 +36,7 @@ extern char ov45_02255304[];
 extern void LobbyChat_FormatNick(String *, void *);
 extern void LobbyString_Assign(String *, String *);
 extern void LobbyString_Destroy(String *);
-extern void ov45_0223FC5C(String *, Work *);
+extern void LobbyChatManager_GetNick(String *, Work *);
 extern void chatRetryWithNickA(void *, char *);
 extern void chatRegisterUniqueNickA(void *, int, char *, char *);
 void LobbyChat_OnNickError(void *, int);
@@ -51,21 +51,21 @@ void LobbyChat_OnNickError(void *out, int state) {
         LobbyChat_FormatNick(&a, ov45_022577DC->source);
         LobbyString_Assign(&ov45_022577DC->text, &a);
         LobbyString_Destroy(&a);
-        ov45_0223FC5C(&b, ov45_022577DC);
+        LobbyChatManager_GetNick(&b, ov45_022577DC);
         chatRetryWithNickA(out, getString(&b));
         LobbyString_Destroy(&b);
     } else if (state == 2) {
         LobbyChat_FormatNick(&c, ov45_022577DC->source);
         LobbyString_Assign(&ov45_022577DC->text, &c);
         LobbyString_Destroy(&c);
-        ov45_0223FC5C(&d, ov45_022577DC);
+        LobbyChatManager_GetNick(&d, ov45_022577DC);
         chatRetryWithNickA(out, getString(&d));
         LobbyString_Destroy(&d);
     } else if ((u32)(state - 3) <= 1) {
         LobbyChat_FormatNick(&e, ov45_022577DC->source);
         LobbyString_Assign(&ov45_022577DC->text, &e);
         LobbyString_Destroy(&e);
-        ov45_0223FC5C(&f, ov45_022577DC);
+        LobbyChatManager_GetNick(&f, ov45_022577DC);
         chatRegisterUniqueNickA(out, 2, getString(&f), ov45_02255304);
         LobbyString_Destroy(&f);
     } else if (state == 5) {
@@ -74,7 +74,7 @@ void LobbyChat_OnNickError(void *out, int state) {
         LobbyChat_FormatNick(&g, ov45_022577DC->source);
         LobbyString_Assign(&ov45_022577DC->text, &g);
         LobbyString_Destroy(&g);
-        ov45_0223FC5C(&h, ov45_022577DC);
+        LobbyChatManager_GetNick(&h, ov45_022577DC);
         chatRetryWithNickA(out, getString(&h));
         LobbyString_Destroy(&h);
     }

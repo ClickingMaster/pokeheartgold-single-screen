@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 5acfa7645 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · b847265ab · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -2830,9 +2830,9 @@ src/wifi_plaza_lobby.c</title></rect>
 <rect x="367.498" y="610.576" width="15.616" height="14.529" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / wifi_plaza_lobby_events.o
 1,418 bytes · C-only source
 src/wifi_plaza_lobby_events.c</title></rect>
-<rect x="383.114" y="595.945" width="14.574" height="15.283" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02253968.o
+<rect x="383.114" y="595.945" width="14.574" height="15.283" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / chat_socket_recv.o
 1,392 bytes · C-only source
-src/ov45_02253968.c</title></rect>
+src/chat_socket_recv.c</title></rect>
 <rect x="383.114" y="611.228" width="14.574" height="13.877" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_022412c4.o
 1,264 bytes · C-only source
 src/ov45_022412c4.c</title></rect>
@@ -2851,9 +2851,9 @@ src/ov45_02240b10.cpp</title></rect>
 <rect x="367.498" y="625.105" width="13.218" height="12.686" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / wifi_plaza_lobby_players.o
 1,048 bytes · C-only source
 src/wifi_plaza_lobby_players.c</title></rect>
-<rect x="380.716" y="625.105" width="12.966" height="12.686" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02242288.o
+<rect x="380.716" y="625.105" width="12.966" height="12.686" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / lobby_mem.o
 1,028 bytes · C-only source
-src/ov45_02242288.c</title></rect>
+src/lobby_mem.c</title></rect>
 <rect x="367.498" y="637.791" width="8.986" height="18.162" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_0223a0cc.o
 1,020 bytes · C++-only source
 src/ov45_0223a0cc.cpp</title></rect>
@@ -2881,12 +2881,12 @@ src/wifi_plaza.c</title></rect>
 <rect x="408.691" y="639.152" width="14.743" height="8.422" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_0223cab4.o
 776 bytes · C-only source
 src/ov45_0223cab4.c</title></rect>
-<rect x="408.691" y="647.574" width="14.743" height="8.379" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02231144.o
-772 bytes · C++-only source
-src/ov45_02231144.cpp</title></rect>
-<rect x="308.240" y="655.953" width="15.407" height="8.017" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_022441fc.o
+<rect x="408.691" y="647.574" width="14.743" height="8.379" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_022441fc.o
 772 bytes · C-only source
 src/ov45_022441fc.c</title></rect>
+<rect x="308.240" y="655.953" width="15.407" height="8.017" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ppw_lobby_initialize.o
+772 bytes · C++-only source
+src/ppw_lobby_initialize.cpp</title></rect>
 <rect x="308.240" y="663.970" width="15.407" height="7.914" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / wifi_plaza_word_set.o
 762 bytes · C-only source
 src/wifi_plaza_word_set.c</title></rect>
@@ -3016,15 +3016,15 @@ src/ov45_0223cf30.c</title></rect>
 <rect x="366.211" y="660.899" width="6.114" height="9.735" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_0223c8a0.o
 372 bytes · C-only source
 src/ov45_0223c8a0.c</title></rect>
-<rect x="372.326" y="660.899" width="6.049" height="9.735" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02238674.o
+<rect x="372.326" y="660.899" width="6.049" height="9.735" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / lobby_string_vector_append_copies_slow.o
 368 bytes · C++-only source
-src/ov45_02238674.cpp</title></rect>
+src/lobby_string_vector_append_copies_slow.cpp</title></rect>
 <rect x="378.375" y="655.953" width="7.934" height="7.421" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_0223d644.o
 368 bytes · C++-only source
 src/ov45_0223d644.cpp</title></rect>
-<rect x="378.375" y="663.374" width="7.934" height="7.260" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02232434.o
+<rect x="378.375" y="663.374" width="7.934" height="7.260" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ppw_lobby_get_channel_name.o
 360 bytes · C-only source
-src/ov45_02232434.c</title></rect>
+src/ppw_lobby_get_channel_name.c</title></rect>
 <rect x="386.309" y="655.953" width="7.760" height="7.340" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_0223f1c8.o
 356 bytes · C-only source
 src/ov45_0223f1c8.c</title></rect>
@@ -3034,9 +3034,9 @@ src/ov45_02241a20.cpp</title></rect>
 <rect x="366.211" y="670.634" width="7.125" height="7.995" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_0224335c.o
 356 bytes · C++-only source
 src/ov45_0224335c.cpp</title></rect>
-<rect x="373.336" y="670.634" width="6.965" height="7.995" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02239090.o
+<rect x="373.336" y="670.634" width="6.965" height="7.995" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / lobby_event_deque_copy.o
 348 bytes · C++-only source
-src/ov45_02239090.cpp</title></rect>
+src/lobby_event_deque_copy.cpp</title></rect>
 <rect x="366.211" y="678.629" width="7.045" height="7.904" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_0223b8e0.o
 348 bytes · C++-only source
 src/ov45_0223b8e0.cpp</title></rect>
@@ -3061,9 +3061,9 @@ src/ov45_02243cf8.cpp</title></rect>
 <rect x="400.845" y="655.953" width="6.613" height="7.839" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_0223db8c.o
 324 bytes · C++-only source
 src/ov45_0223db8c.cpp</title></rect>
-<rect x="394.069" y="663.792" width="6.737" height="7.505" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02238820.o
+<rect x="394.069" y="663.792" width="6.737" height="7.505" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / lobby_char_vector_append_zeros_slow.o
 316 bytes · C++-only source
-src/ov45_02238820.cpp</title></rect>
+src/lobby_char_vector_append_zeros_slow.cpp</title></rect>
 <rect x="400.806" y="663.792" width="6.652" height="7.505" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / lobby_chat_on_get_channel_mode.o
 312 bytes · C++-only source
 src/lobby_chat_on_get_channel_mode.cpp</title></rect>
@@ -3085,12 +3085,12 @@ src/ov45_022320b4.c</title></rect>
 <rect x="394.069" y="671.297" width="7.655" height="6.271" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_0223f5c8.o
 300 bytes · C-only source
 src/ov45_0223f5c8.c</title></rect>
-<rect x="401.724" y="671.297" width="7.553" height="6.271" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02243970.o
+<rect x="401.724" y="671.297" width="7.553" height="6.271" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / lobby_channel_map_insert_node.o
 296 bytes · C++-only source
-src/ov45_02243970.cpp</title></rect>
-<rect x="394.069" y="677.568" width="5.069" height="8.964" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02238558.o
+src/lobby_channel_map_insert_node.cpp</title></rect>
+<rect x="394.069" y="677.568" width="5.069" height="8.964" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ppw_lobby_player_set_destroy_nodes.o
 284 bytes · C-only source
-src/ov45_02238558.c</title></rect>
+src/ppw_lobby_player_set_destroy_nodes.c</title></rect>
 <rect x="399.138" y="677.568" width="5.069" height="8.964" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / wifi_plaza_sprite_culling.o
 284 bytes · C-only source
 src/wifi_plaza_sprite_culling.c</title></rect>
@@ -3157,12 +3157,12 @@ src/ov45_022321e0.c</title></rect>
 <rect x="375.593" y="701.478" width="4.597" height="6.822" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_0223b81c.o
 196 bytes · C-only source
 src/ov45_0223b81c.c</title></rect>
-<rect x="366.211" y="708.301" width="7.063" height="4.350" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_0223a9c0.o
+<rect x="366.211" y="708.301" width="7.063" height="4.350" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / lobby_user_map_make_entry.o
+192 bytes · C-only source
+src/lobby_user_map_make_entry.c</title></rect>
+<rect x="366.211" y="712.650" width="7.063" height="4.350" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_0223a9c0.o
 192 bytes · C++-only source
 src/ov45_0223a9c0.cpp</title></rect>
-<rect x="366.211" y="712.650" width="7.063" height="4.350" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02243780.o
-192 bytes · C-only source
-src/ov45_02243780.c</title></rect>
 <rect x="373.274" y="708.301" width="6.916" height="4.350" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_0223fd6c.o
 188 bytes · C-only source
 src/ov45_0223fd6c.c</title></rect>
@@ -3217,12 +3217,12 @@ src/ov45_02238b70.c</title></rect>
 <rect x="402.133" y="698.193" width="6.490" height="3.550" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_0223895c.o
 144 bytes · C-only source
 src/ov45_0223895c.c</title></rect>
-<rect x="408.623" y="686.532" width="6.135" height="3.652" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_0223b250.o
+<rect x="408.623" y="686.532" width="6.135" height="3.652" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / lobby_channel_map_find_insert_pos.o
+140 bytes · C-only source
+src/lobby_channel_map_find_insert_pos.c</title></rect>
+<rect x="408.623" y="690.184" width="6.135" height="3.652" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_0223b250.o
 140 bytes · C-only source
 src/ov45_0223b250.c</title></rect>
-<rect x="408.623" y="690.184" width="6.135" height="3.652" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02244170.o
-140 bytes · C-only source
-src/ov45_02244170.c</title></rect>
 <rect x="414.758" y="686.532" width="2.892" height="7.303" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_022310c0.o
 132 bytes · C-only source
 src/ov45_022310c0.c</title></rect>
@@ -3280,9 +3280,9 @@ src/ov45_02238c08.c</title></rect>
 <rect x="401.957" y="709.327" width="3.917" height="3.922" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_022322a4.o
 96 bytes · C-only source
 src/ov45_022322a4.c</title></rect>
-<rect x="405.873" y="709.327" width="3.590" height="3.922" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02232760.o
+<rect x="405.873" y="709.327" width="3.590" height="3.922" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / lobby_char_vector_assign_range.o
 88 bytes · C-only source
-src/ov45_02232760.c</title></rect>
+src/lobby_char_vector_assign_range.c</title></rect>
 <rect x="401.957" y="713.249" width="3.754" height="3.751" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02238a74.o
 88 bytes · C-only source
 src/ov45_02238a74.c</title></rect>
@@ -3316,9 +3316,9 @@ src/ov45_0223aedc.c</title></rect>
 <rect x="409.464" y="708.937" width="3.424" height="3.552" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_0223ec64.o
 76 bytes · C-only source
 src/ov45_0223ec64.c</title></rect>
-<rect x="412.888" y="708.937" width="3.244" height="3.552" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02231448.o
+<rect x="412.888" y="708.937" width="3.244" height="3.552" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ppw_lobby_player_destroy.o
 72 bytes · C-only source
-src/ov45_02231448.c</title></rect>
+src/ppw_lobby_player_destroy.c</title></rect>
 <rect x="409.464" y="712.488" width="2.270" height="4.512" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / lobby_chat_map_destroy.o
 64 bytes · C-only source
 src/lobby_chat_map_destroy.c</title></rect>
@@ -3334,12 +3334,12 @@ src/ov45_022387e4.c</title></rect>
 <rect x="418.739" y="708.937" width="2.434" height="3.681" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02238a3c.o
 56 bytes · C-only source
 src/ov45_02238a3c.c</title></rect>
-<rect x="421.173" y="708.937" width="2.260" height="3.681" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02242254.o
+<rect x="421.173" y="708.937" width="2.260" height="3.681" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / lobby_string_find_first_of.o
 52 bytes · C++-only source
-src/ov45_02242254.cpp</title></rect>
-<rect x="416.131" y="712.618" width="3.359" height="1.715" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02240850.o
+src/lobby_string_find_first_of.cpp</title></rect>
+<rect x="416.131" y="712.618" width="3.359" height="1.715" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / lobby_chat_timer_connect_timeout.o
 36 bytes · C-only source
-src/ov45_02240850.c</title></rect>
+src/lobby_chat_timer_connect_timeout.c</title></rect>
 <rect x="416.131" y="714.333" width="1.919" height="2.667" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / ov45_02240f6c.o
 32 bytes · C-only source
 src/ov45_02240f6c.c</title></rect>

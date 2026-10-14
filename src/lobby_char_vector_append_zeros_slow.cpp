@@ -50,19 +50,19 @@ struct Buf {
     void AllocA(u32 n);
 };
 
-extern "C" u32 ov45_02237890(Vec *, u32);
-extern "C" void ov45_022389CC(Buf *, u32, Tag);
-extern "C" void ov45_022389B0(Buf *);
+extern "C" u32 LobbyCharVector_RecommendSize(Vec *, u32);
+extern "C" void LobbyCharVectorBuffer_Allocate(Buf *, u32, Tag);
+extern "C" void LobbyCharVectorBuffer_Destroy(Buf *);
 
 inline void Buf::Allocate(u32 n, Tag t) {
-    ov45_022389CC(this, n, t);
+    LobbyCharVectorBuffer_Allocate(this, n, t);
 }
 
 inline void Buf::AllocA(u32 n) {
     Allocate(n, Tag());
 }
 
-extern "C" void ov45_02238820(Vec *, u32);
+extern "C" void LobbyCharVector_AppendZerosSlow(Vec *, u32);
 
 template <class T>
 inline void Swap(T &a, T &b) {
@@ -72,7 +72,7 @@ inline void Swap(T &a, T &b) {
 }
 
 inline u32 Recommend(Vec *v, u32 n, TrueType) {
-    return ov45_02237890(v, n);
+    return LobbyCharVector_RecommendSize(v, n);
 }
 
 inline void FillN(char *p, u32 n, char c) {
@@ -109,9 +109,9 @@ inline void Clear(Vec *v) {
     v->size = 0;
 }
 
-extern "C" void ov45_02238820(Vec *v, u32 n) {
+extern "C" void LobbyCharVector_AppendZerosSlow(Vec *v, u32 n) {
     Buf b(&v->cap);
-    u32 len = ov45_02237890(v, v->size + n - v->cap);
+    u32 len = LobbyCharVector_RecommendSize(v, v->size + n - v->cap);
     b.AllocA(len);
     b.start = v->size;
     FillN(b.ptr + b.start + b.size, n, 0);
@@ -121,5 +121,5 @@ extern "C" void ov45_02238820(Vec *v, u32 n) {
     Swap(v->cap, b.EndCap());
     Swap(v->ptr, b.ptr);
     Swap(v->size, b.size);
-    ov45_022389B0(&b);
+    LobbyCharVectorBuffer_Destroy(&b);
 }

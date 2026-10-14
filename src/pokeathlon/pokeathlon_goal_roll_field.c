@@ -39,7 +39,7 @@ extern const VecFx32 ov96_0221D4B4[4][2];
 extern const u8 ov96_0221D514[][30];
 extern const u8 ov96_0221D5AA[][30];
 extern const u8 ov96_0221D640[];
-extern const u8 ov96_0221DC80[];
+extern const u8 gPokeathlonGoalRollBounceOffsets[];
 
 extern const PokeathlonGoalRollWindowData ov96_0221D1F8;
 
@@ -1192,11 +1192,11 @@ s32 PokeathlonGoalRoll_DecodeBallY(s32 code) {
         code -= 0xC0;
         frame = code % 8;
         if (code < 8) {
-            result = ov96_0221DC80[frame] + 0x58;
+            result = gPokeathlonGoalRollBounceOffsets[frame] + 0x58;
         } else if (code < 0x10) {
-            result = ov96_0221DC80[frame] + 0x68;
+            result = gPokeathlonGoalRollBounceOffsets[frame] + 0x68;
         } else {
-            result = ov96_0221DC80[frame] + 0x78;
+            result = gPokeathlonGoalRollBounceOffsets[frame] + 0x78;
         }
         return result << 12;
     }

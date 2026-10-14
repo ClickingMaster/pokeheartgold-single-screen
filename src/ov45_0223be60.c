@@ -19,10 +19,10 @@ typedef struct {
 } Buffer;
 
 extern void DWC_Free(int, void *, int);
-extern void ov45_0223CE60(Buffer *, u32, Allocator);
-void ov45_0223BE60(Buffer *, Allocator, u32);
+extern void LobbyEventVector_Allocate(Buffer *, u32, Allocator);
+void LobbyEventVector_Reallocate(Buffer *, Allocator, u32);
 
-void ov45_0223BE60(Buffer *b, Allocator incoming, u32 n) {
+void LobbyEventVector_Reallocate(Buffer *b, Allocator incoming, u32 n) {
     u32 size = b->size;
     Allocator old = { 0 };
     volatile Allocator copy;
@@ -38,5 +38,5 @@ void ov45_0223BE60(Buffer *b, Allocator incoming, u32 n) {
     }
     Allocator fresh = { 0 };
     copy.byte = 0;
-    ov45_0223CE60(b, n, fresh);
+    LobbyEventVector_Allocate(b, n, fresh);
 }

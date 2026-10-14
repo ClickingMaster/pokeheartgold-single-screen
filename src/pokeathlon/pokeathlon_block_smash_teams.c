@@ -30,7 +30,7 @@ void PokeathlonCourseMonObject_SetAnim(void *monPic, int anim);
 void PokeathlonCourseObject_SetGroundPosition(void *monPic, int x, int y);
 void PokeathlonCourse_LoadMonPic(ManagedSprite *sprite, void *mon, int mainScreen, int palette, enum HeapID heapId);
 
-extern u32 ov96_0221E5A4;
+extern u32 gPokeathlonBlockSmashFramesSinceHit;
 extern const s32 ov96_0221CE08[3];
 extern const u16 ov96_0221CDE8[3];
 extern const s16 ov96_0221CDEE[3];
@@ -159,7 +159,7 @@ void PokeathlonBlockSmashMon_Update(PokeathlonBlockSmashMon *mon, BOOL stackDrop
         GF_ASSERT(FALSE);
         break;
     }
-    ov96_0221E5A4++;
+    gPokeathlonBlockSmashFramesSinceHit++;
     if (stackDropping == FALSE) {
         PokeathlonBlockSmashMon_UpdateGauge(mon);
     }
@@ -181,7 +181,7 @@ void PokeathlonBlockSmashMon_Update(PokeathlonBlockSmashMon *mon, BOOL stackDrop
 
 // After a hit: the stamina cost (an exhausted Pokemon stops), the gauge, the hit animation.
 void PokeathlonBlockSmashMon_OnHit(PokeathlonBlockSmashMon *mon, BOOL hitSpot, u8 broken) {
-    ov96_0221E5A4 = 0;
+    gPokeathlonBlockSmashFramesSinceHit = 0;
     GF_ASSERT(mon->mode != BLOCK_SMASH_MON_EXHAUSTED);
     if (mon->mode == BLOCK_SMASH_MON_HIT) {
         PokeathlonBlockSmashMember *member = &mon->members[mon->member];

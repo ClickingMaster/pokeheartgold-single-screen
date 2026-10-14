@@ -23,9 +23,9 @@ extern const char ov45_022553AC[];
 extern Node *LobbyMem_Alloc(u32);
 extern void LobbyTree_InsertRebalance(Node *, void *);
 extern void DWC_Free(int, void *, int);
-Node *ov45_02243E44(Tree *, Node *, int, int, const u32 *);
+Node *LobbyUserIdSet_InsertNode(Tree *, Node *, int, int, const u32 *);
 
-Node *ov45_02243E44(Tree *t, Node *parent, int left, int last, const u32 *value) {
+Node *LobbyUserIdSet_InsertNode(Tree *t, Node *parent, int left, int last, const u32 *value) {
     struct {
         volatile u8 byte;
         u8 pad[3];

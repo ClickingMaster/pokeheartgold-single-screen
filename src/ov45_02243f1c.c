@@ -30,23 +30,23 @@ extern char ov45_02255458[];
 extern char ov45_02255468[];
 extern char ov45_02255438[];
 extern int LobbyString_Compare(void *, void *);
-extern void ov45_02243780(void *p, int a, void *b);
-extern int ov45_02243794(void *p, void *key);
-extern int ov45_022437CC(void *p, void *key);
-extern int ov45_02243808(void *p, void *key);
+extern void LobbyUserMap_MakeEntry(void *p, int a, void *b);
+extern int LobbyChat_AreChannelUsersEnumerated(void *p, void *key);
+extern int LobbyChat_SetChannelUsersEnumerated(void *p, void *key);
+extern int LobbyChat_GetChannelUserLimit(void *p, void *key);
 extern void *LobbyUserIdSet_Destroy(void *p);
 extern void *LobbyUserMap_Destroy(void *p);
-extern void *ov45_02244150(void *p);
-extern void *ov45_02244170(void *p, void *key, void **prev, u8 *left, u8 *first);
-extern Node *ov45_022441FC(Tree *p, int *key, Node **prev, u8 *left, u8 *first);
-extern Node *ov45_02244268(Tree *p, int *key, Node **prev, u8 *left, u8 *first);
-extern void ov45_022442D4(void *p, void *node);
-extern void *ov45_02244330(void *p);
-extern void ov45_02244350(Tree *p, Tree *q);
-extern void ov45_022443DC(void *p, void *node);
-extern void ov45_02244428(void *p, void *node);
-extern void ov45_0224447C(void *p, void *node);
-extern void ov45_022444C8(void *p);
+extern void *LobbyRequestMap_Destroy(void *p);
+extern void *LobbyChannelMap_FindInsertPos(void *p, void *key, void **prev, u8 *left, u8 *first);
+extern Node *LobbyUserIdSet_FindInsertPos(Tree *p, int *key, Node **prev, u8 *left, u8 *first);
+extern Node *LobbyUserMap_FindInsertPos(Tree *p, int *key, Node **prev, u8 *left, u8 *first);
+extern void LobbyChannelMap_DestroyNodes(void *p, void *node);
+extern void *LobbyUserIdSet_Destroy2(void *p);
+extern void LobbyUserIdSet_Swap(Tree *p, Tree *q);
+extern void LobbyUserIdSet_DestroyNodes(void *p, void *node);
+extern void LobbyUserMap_DestroyNodes(void *p, void *node);
+extern void LobbyRequestMap_DestroyNodes(void *p, void *node);
+extern void ciCallbacksArrayElementFreeFn(void *p);
 extern int ciInitCallbacks(void *p);
 extern int ArrayLength(void *);
 extern void *ArrayNth(void *, int);
@@ -67,15 +67,15 @@ typedef struct {
     u8 ok;
 } InsertResult;
 
-extern Node *ov45_02243E44(Tree *, Node *, int, int, int *);
-extern Node *ov45_0224404C(Tree *, Node *, int, int, int *);
+extern Node *LobbyUserIdSet_InsertNode(Tree *, Node *, int, int, int *);
+extern Node *LobbyUserMap_InsertNode(Tree *, Node *, int, int, int *);
 extern u8 ov45_02255358[];
 extern void LobbyUserIdSet_Insert(InsertResult *, Tree *, int *);
 extern void LobbyUserMap_Insert(InsertResult *, Tree *, int *);
 
 void *LobbyUserIdSet_Destroy(void *p) {
     if (P(p, 4)) {
-        ov45_022443DC(p, P(p, 4));
+        LobbyUserIdSet_DestroyNodes(p, P(p, 4));
     }
     return p;
 }
@@ -84,9 +84,9 @@ void LobbyUserMap_Insert(InsertResult *out, Tree *p, int *key) {
     Node *prev;
     u8 left, first;
     Node *last;
-    last = ov45_02244268(p, key, &prev, &left, &first);
+    last = LobbyUserMap_FindInsertPos(p, key, &prev, &left, &first);
     if (!prev || prev->key < *key) {
-        out->node = ov45_0224404C(p, last, left, first, key);
+        out->node = LobbyUserMap_InsertNode(p, last, left, first, key);
         out->ok = ov45_02255358[0];
     } else {
         out->node = prev;

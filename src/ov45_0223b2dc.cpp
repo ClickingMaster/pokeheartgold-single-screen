@@ -26,7 +26,7 @@ struct CIt {
     inline CIt(const Ring *r, u32 i);
 };
 struct It;
-extern "C" void ov45_0223CD78(It *it, int n);
+extern "C" void LobbyEventDequeMapIterator_Advance(It *it, int n);
 
 struct It {
     P *cur, *first, *mid, *last;
@@ -53,13 +53,13 @@ struct It {
 };
 
 inline It &It::operator+=(int n) {
-    ov45_0223CD78(this, n);
+    LobbyEventDequeMapIterator_Advance(this, n);
     return *this;
 }
 
-extern "C" void ov45_0223BA3C(Ring *r, const P &v);
-extern "C" void ov45_0223B8E0(Ring *r, u32 n);
-extern "C" void ov45_0223CE90(Ring *r, CIt first, const CIt &last, Tag);
+extern "C" void LobbyEventDequeMap_PushBack(Ring *r, const P &v);
+extern "C" void LobbyEventDequeMap_Reserve(Ring *r, u32 n);
+extern "C" void LobbyEventDequeMap_InitCopy(Ring *r, CIt first, const CIt &last, Tag);
 extern "C" void ov45_02238508(Ring *r);
 
 struct Empty {};
@@ -84,9 +84,9 @@ struct WIt {
     }
 };
 
-extern "C" void ov45_0223BF9C(Ring *r, It pos, WIt first, WIt last, Tag);
+extern "C" void LobbyEventDequeMap_InsertRange(Ring *r, It pos, WIt first, WIt last, Tag);
 extern "C" void *LobbyMem_Alloc(u32 n);
-extern "C" void ov45_0223B8D0(char *msg);
+extern "C" void LobbyEventDeque_LengthError(char *msg);
 extern char ov45_022551AC[];
 extern u32 ov45_022577C8;
 extern u32 ov45_022551A8;
@@ -124,7 +124,7 @@ struct Ring : RingAlloc {
         Guard g2;
         Tag tg;
         CIt e = o.end();
-        ov45_0223CE90(this, o.begin(), e, tg);
+        LobbyEventDequeMap_InitCopy(this, o.begin(), e, tg);
     }
 
     ~Ring();
@@ -205,11 +205,11 @@ struct Ring : RingAlloc {
     }
 
     void ix2(const It &pos, const WIt &first, const WIt &last, Tag, Tag) {
-        ov45_0223BF9C(this, pos, first, last, Tag());
+        LobbyEventDequeMap_InsertRange(this, pos, first, last, Tag());
     }
 
     void push_back(const P &v) {
-        ov45_0223BA3C(this, v);
+        LobbyEventDequeMap_PushBack(this, v);
     }
 };
 
@@ -262,7 +262,7 @@ inline void CopyBlocks2(Ring *m, Ring *src) {
 }
 
 extern "C" void ov45_0223CA14(Deque *d);
-extern "C" void ov45_0223B2DC(Deque *d, u32 n);
+extern "C" void LobbyEventDeque_AddBackCapacity(Deque *d, u32 n);
 
 inline WIt::WIt(const SB &s)
     : it(0, 0, 0, 0) {
@@ -273,7 +273,7 @@ inline WIt::WIt(const SB &s)
     it.last = s.base + s.r->cap;
 }
 
-extern "C" void ov45_0223B2DC(Deque *d, u32 n) {
+extern "C" void LobbyEventDeque_AddBackCapacity(Deque *d, u32 n) {
     u32 nb = n / 0x80 + (n % 0x80 != 0);
     for (; nb != 0 && d->start >= 0x80; --nb) {
         P p = d->map.front();
@@ -286,7 +286,7 @@ extern "C" void ov45_0223B2DC(Deque *d, u32 n) {
         return;
     }
     if (nb * 0x80 > max_size() || (d->map.size == 0 ? 0 : (d->map.size - 1) * 0x80) > max_size() - nb * 0x80) {
-        ov45_0223B8D0(ov45_022551AC);
+        LobbyEventDeque_LengthError(ov45_022551AC);
     }
     if (nb + d->map.size <= d->map.capacity()) {
         for (; nb != 0; --nb) {
@@ -298,7 +298,7 @@ extern "C" void ov45_0223B2DC(Deque *d, u32 n) {
     }
     Deque tmp;
     Ring *m = &tmp.map;
-    ov45_0223B8E0(m, Max(d->map.capacity() * 2, nb + d->map.size + 1));
+    LobbyEventDequeMap_Reserve(m, Max(d->map.capacity() * 2, nb + d->map.size + 1));
     m->push_back(0);
     for (; nb != 0; --nb) {
         P p = (P)LobbyMem_Alloc(0x400);

@@ -28,9 +28,9 @@ struct Iter {
 };
 struct Vec;
 extern "C" Vec *LobbyCharVector_Destroy(Vec *v);
-extern "C" void ov45_022327B8(Vec *v, Iter first, Iter last, TD);
-extern "C" void ov45_022383E0(Vec *v, char *first, char *last, Alloc);
-extern "C" void ov45_02232760(Vec *v, char *first, char *last, Tag);
+extern "C" void LobbyCharVector_AssignIterRange(Vec *v, Iter first, Iter last, TD);
+extern "C" void LobbyCharVector_InitRange(Vec *v, char *first, char *last, Alloc);
+extern "C" void LobbyCharVector_AssignRange(Vec *v, char *first, char *last, Tag);
 extern "C" const char *LobbyByteVector_Data(const Vec *v);
 
 struct Vec {
@@ -42,7 +42,7 @@ struct Vec {
     }
 
     void Assign(Iter first, Iter last, const TA &, const TB &) {
-        ov45_022327B8(this, first, last, TD());
+        LobbyCharVector_AssignIterRange(this, first, last, TD());
     }
 
     void Destroy() {
@@ -117,7 +117,7 @@ struct Field {
         v.size = 0;
         v.cap = 0;
         Field *self = (Field *)(void *)this;
-        ov45_022383E0(&self->v, b, e, a);
+        LobbyCharVector_InitRange(&self->v, b, e, a);
         self->dirty = 1;
         return *self;
     }
@@ -155,7 +155,7 @@ extern "C" int PPW_LobbyUpdateMyProfile(const u8 *data, u32 len, int flag) {
     }
     if (!(w->field.v == nf.v)) {
         if (&w->field != &nf) {
-            ov45_02232760(&w->field.v, nf.v.begin(), nf.v.end(), Tag());
+            LobbyCharVector_AssignRange(&w->field.v, nf.v.begin(), nf.v.end(), Tag());
         }
         w->field.dirty = 1;
     }

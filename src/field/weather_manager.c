@@ -1354,57 +1354,57 @@ static void WeatherSpawnRamp_SetTarget(WeatherSpawnRamp *ramp, s16 targetCount, 
 }
 
 static s32 WeatherSpawnRamp_Update(WeatherSpawnRamp *ramp) {
-    s16 temp_r0;
-    s16 temp_r0_2;
-    s16 temp_r0_4;
-    s16 temp_r1;
-    s16 temp_r1_2;
-    s32 temp_r0_3;
-    s32 var_r2;
-    s32 var_r2_2;
-    s32 var_r4;
+    s16 intervalStep;
+    s16 interval;
+    s16 count;
+    s16 targetInterval;
+    s16 targetCount;
+    s32 countStep;
+    s32 intervalDecreasing;
+    s32 countDecreasing;
+    s32 doneFlags;
 
-    temp_r0 = ramp->intervalStep;
-    var_r4 = 0;
-    if (temp_r0 == 0) {
-        var_r4 |= 1;
+    intervalStep = ramp->intervalStep;
+    doneFlags = 0;
+    if (intervalStep == 0) {
+        doneFlags |= 1;
     } else {
-        if ((s32)temp_r0 <= 0) {
-            var_r2 = 1;
+        if ((s32)intervalStep <= 0) {
+            intervalDecreasing = 1;
         } else {
-            var_r2 = 0;
+            intervalDecreasing = 0;
         }
-        temp_r1 = ramp->targetInterval;
-        temp_r0_2 = ramp->interval;
-        if ((((s32)temp_r0_2 >= (s32)temp_r1) && (var_r2 == 0)) || (((s32)temp_r0_2 <= (s32)temp_r1) && (var_r2 == 1))) {
-            var_r4 |= 1;
-            ramp->interval = temp_r1;
+        targetInterval = ramp->targetInterval;
+        interval = ramp->interval;
+        if ((((s32)interval >= (s32)targetInterval) && (intervalDecreasing == 0)) || (((s32)interval <= (s32)targetInterval) && (intervalDecreasing == 1))) {
+            doneFlags |= 1;
+            ramp->interval = targetInterval;
         }
     }
-    temp_r0_3 = ramp->countStep;
-    if (temp_r0_3 == 0) {
-        var_r4 |= 2;
+    countStep = ramp->countStep;
+    if (countStep == 0) {
+        doneFlags |= 2;
     } else {
-        if (temp_r0_3 <= 0) {
-            var_r2_2 = 1;
+        if (countStep <= 0) {
+            countDecreasing = 1;
         } else {
-            var_r2_2 = 0;
+            countDecreasing = 0;
         }
-        temp_r1_2 = ramp->targetCount;
-        temp_r0_4 = ramp->count;
-        if ((((s32)temp_r0_4 >= (s32)temp_r1_2) && (var_r2_2 == 0)) || (((s32)temp_r0_4 <= (s32)temp_r1_2) && (var_r2_2 == 1))) {
-            var_r4 |= 2;
-            ramp->count = temp_r1_2;
+        targetCount = ramp->targetCount;
+        count = ramp->count;
+        if ((((s32)count >= (s32)targetCount) && (countDecreasing == 0)) || (((s32)count <= (s32)targetCount) && (countDecreasing == 1))) {
+            doneFlags |= 2;
+            ramp->count = targetCount;
         }
     }
     ramp->timer = (s16)(ramp->timer - 1);
     if ((s32)ramp->timer <= 0) {
         ramp->spawnFunc(ramp->work, ramp->count);
         ramp->timer = (s16)ramp->interval;
-        if (!(1 & var_r4)) {
+        if (!(1 & doneFlags)) {
             ramp->interval = (s16)(ramp->interval + ramp->intervalStep);
         }
-        if (!(2 & var_r4)) {
+        if (!(2 & doneFlags)) {
             ramp->countTimer = (s16)(ramp->countTimer + 1);
             if ((s32)ramp->countTimer >= (s32)ramp->countStepSpawns) {
                 ramp->countTimer = 0;
@@ -1412,7 +1412,7 @@ static s32 WeatherSpawnRamp_Update(WeatherSpawnRamp *ramp) {
             }
         }
     }
-    return var_r4;
+    return doneFlags;
 }
 
 static void WeatherFog_Start(WeatherFogChange *fogChange, WeatherFogTableFade *tableFade, FogData *fog, GXFogSlope fogSlope, s32 fogOffset, GXRgb rgb, s32 framesPerStep, s32 fogMode) {
@@ -1429,19 +1429,19 @@ static void WeatherFog_Start(WeatherFogChange *fogChange, WeatherFogTableFade *t
 }
 
 static BOOL WeatherFog_Update(WeatherFogChange *fogChange, WeatherFogTableFade *tableFade, s32 fogMode) {
-    s32 var_r4;
+    s32 done;
 
-    var_r4 = 1;
+    done = 1;
     if (fogMode != 0) {
         if (fogMode == 1) {
-            var_r4 = WeatherFogTableFade_Update(tableFade);
+            done = WeatherFogTableFade_Update(tableFade);
         } else if (fogMode == 2) {
             if (WeatherFogChange_Step(fogChange) == 0) {
-                var_r4 = 0;
+                done = 0;
             }
         }
     }
-    return var_r4;
+    return done;
 }
 
 static void Weather_SetFog(FogData *fog, GXFogSlope fogSlope, s32 fogOffset, GXRgb rgb) {
@@ -1493,13 +1493,13 @@ static void WeatherFogTableFade_Start(WeatherFogTableFade *tableFade, s32 frames
 }
 
 static s32 WeatherFogTableFade_Update(WeatherFogTableFade *tableFade) {
-    s32 temp_r4;
+    s32 done;
 
-    temp_r4 = WeatherFogTableFade_Step(tableFade);
+    done = WeatherFogTableFade_Step(tableFade);
     if (tableFade->frameTimer == 0) {
         Fog_SetTable(tableFade->fog, tableFade->table);
     }
-    return temp_r4;
+    return done;
 }
 
 static void WeatherFogTableFade_SetFull(WeatherFogTableFade *tableFade) {
@@ -1512,29 +1512,29 @@ static void WeatherFogTableFade_SetFull(WeatherFogTableFade *tableFade) {
 }
 
 static s32 WeatherFogTableFade_Step(WeatherFogTableFade *tableFade) {
-    s32 temp_r0;
-    s32 temp_r2;
-    s32 var_r4;
+    s32 stepsLeft;
+    s32 frameTimer;
+    s32 done;
 
-    var_r4 = 0;
+    done = 0;
     if (tableFade->direction == 0) {
-        var_r4 = 1;
+        done = 1;
     } else if ((s32)tableFade->stepsLeft <= 0) {
-        var_r4 = 1;
+        done = 1;
     } else {
-        temp_r2 = tableFade->frameTimer + 1;
-        tableFade->frameTimer = temp_r2;
-        if (temp_r2 >= (s32)tableFade->framesPerStep) {
+        frameTimer = tableFade->frameTimer + 1;
+        tableFade->frameTimer = frameTimer;
+        if (frameTimer >= (s32)tableFade->framesPerStep) {
             tableFade->frameTimer = 0;
             WeatherFogTableFade_BuildTable(tableFade);
-            temp_r0 = tableFade->stepsLeft - 1;
-            tableFade->stepsLeft = temp_r0;
-            if (temp_r0 <= 0) {
-                var_r4 = 1;
+            stepsLeft = tableFade->stepsLeft - 1;
+            tableFade->stepsLeft = stepsLeft;
+            if (stepsLeft <= 0) {
+                done = 1;
             }
         }
     }
-    return var_r4;
+    return done;
 }
 
 static void WeatherFogTableFade_BuildTable(WeatherFogTableFade *tableFade) {
@@ -1595,8 +1595,8 @@ static WeatherObject *WeatherSystem_GetFreeObject(WeatherWork *work) {
 
 static void WeatherTask_Sunny(SysTask *task, void *data) {
     WeatherWork *work = data;
-    u16 temp_r2 = work->state;
-    switch (temp_r2) {
+    u16 state = work->state;
+    switch (state) {
     case 0:
         work->state = 1;
         break;

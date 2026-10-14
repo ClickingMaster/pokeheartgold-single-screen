@@ -11,13 +11,13 @@ typedef struct {
 } Work;
 
 void DWC_Free(int, void *, u32);
-Work *ov45_0223ECB0(Work *);
+Work *LobbyU32VectorBuffer_Deallocate(Work *);
 
 static inline void init(u8 *p) {
     *p = 0;
 }
 
-Work *ov45_0223ECB0(Work *w) {
+Work *LobbyU32VectorBuffer_Deallocate(Work *w) {
     if (w->data) {
         u32 old = w->size;
 

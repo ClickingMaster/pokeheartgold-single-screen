@@ -19,7 +19,7 @@ typedef struct {
     u32 *current, *base, *split, *end;
 } Iter;
 
-void ov45_0223C8A0(Iter *, Iter *, Iter *, Iter *);
+void LobbyEventDequeMap_Copy(Iter *, Iter *, Iter *, Iter *);
 
 static inline void copyspan(u32 *first, u32 *last, u32 *dst) {
     u32 *a = first;
@@ -36,7 +36,7 @@ static inline void destroy(u8 *allocator, void *p) {
     (void)allocator;
 }
 
-void ov45_0223C8A0(Iter *out, Iter *first, Iter *last, Iter *dst) {
+void LobbyEventDequeMap_Copy(Iter *out, Iter *first, Iter *last, Iter *dst) {
     while (first->current != last->current) {
         int room = dst->end - dst->current;
         int n;

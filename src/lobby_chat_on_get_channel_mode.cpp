@@ -91,8 +91,8 @@ struct Manager {
 };
 
 extern "C" Manager *ov45_022577DC;
-extern "C" It ov45_0223FD8C(Map *map, Base *const &key);
-extern "C" void ov45_02242510(Map *map, u32 id);
+extern "C" It LobbyRequestMap_Find(Map *map, Base *const &key);
+extern "C" void LobbyRequestMap_DeleteKey(Map *map, u32 id);
 extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
 extern "C" Str *LobbyString_Destroy(Str *);
 extern "C" void LobbyChat_StripChannelPrefix(Str *dst, Manager *m, Str *src);
@@ -114,14 +114,14 @@ inline It FindIt(Manager *m, u32 id) {
     Base key;
     KeyInit(&key, id);
     Base *kp = &key;
-    return ov45_0223FD8C(&m->map, kp);
+    return LobbyRequestMap_Find(&m->map, kp);
 }
 
 inline Handler *Find(Manager *m, u32 id) {
     Base key;
     KeyInit(&key, id);
     Base *kp = &key;
-    return Lookup(m, ov45_0223FD8C(&m->map, kp));
+    return Lookup(m, LobbyRequestMap_Find(&m->map, kp));
 }
 
 #pragma push
@@ -148,7 +148,7 @@ extern "C" void LobbyChat_OnGetChannelMode(void *self, int result, const char *n
     cb(result == 1, str, x, h->getArg());
     LobbyString_Destroy(&t);
     LobbyString_Destroy(&s);
-    ov45_02242510(&ov45_022577DC->map, sid);
+    LobbyRequestMap_DeleteKey(&ov45_022577DC->map, sid);
 }
 
 #pragma pop

@@ -22,9 +22,9 @@ typedef struct {
 } Vector;
 
 void ov45_02236E58(Iterator *);
-void *ov45_0223EA34(Vector *, u32);
-void ov45_022421E4(Vector *, u32, void *);
-void ov45_022434C0(Vector *, Iter, Iter);
+void *LobbyU32Vector_RecommendSize(Vector *, u32);
+void LobbyU32Vector_Reallocate(Vector *, u32, void *);
+void LobbyU32Vector_AssignFromSet(Vector *, Iter, Iter);
 
 typedef struct {
     volatile u8 fillFlag, reserveFlag;
@@ -41,7 +41,7 @@ typedef struct {
 
 #pragma force_active on
 
-void ov45_022434C0(Vector *v, Iter first, Iter last) {
+void LobbyU32Vector_AssignFromSet(Vector *v, Iter first, Iter last) {
     Frame frame;
     Node *node;
     void *value;
@@ -57,8 +57,8 @@ void ov45_022434C0(Vector *v, Iter first, Iter last) {
     capacity = v->capacity;
     if (n > capacity) {
         frame.reserveFlag = 0;
-        void *p = ov45_0223EA34(v, n - capacity);
-        ov45_022421E4(v, n, p);
+        void *p = LobbyU32Vector_RecommendSize(v, n - capacity);
+        LobbyU32Vector_Reallocate(v, n, p);
     }
     out = v->data;
     frame.fill = first;

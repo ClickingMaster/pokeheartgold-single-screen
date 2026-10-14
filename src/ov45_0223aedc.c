@@ -34,34 +34,34 @@ void *_ZnamRKSt9nothrow_t(u32, void *);
 void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 void DWC_Free(int, void *, int);
 void *PPWLobby_GetWork(void);
-int ov45_0223DFC8(void *);
+int PPWLobbyPlayers_IsFull(void *);
 void DWC_GetDateTime(RTCDate *, RTCTime *);
-void ov45_0223B8D0(const char *);
-void ov45_0223BD0C(void);
+void LobbyEventDeque_LengthError(const char *);
+void LobbyEventDequeMap_LengthError(void);
 void LobbySort_GetTemporaryBuffer(void *, int);
 int PPWLobbySchedule_IsSizeValid(void *, void *, u32);
-int ov45_0223AE84(void *, void *, u32);
-int ov45_0223AEDC(void *, void *);
-int ov45_0223AF04(void *, void *);
-int ov45_0223B104(void *);
-int ov45_0223B1C8(void *);
-void ov45_0223B764(void *, u32);
-void ov45_0223B81C(void *, u32);
-u32 ov45_0223BBFC(void *, u32);
-u32 ov45_0223BD94(Vec *, u32);
-u32 ov45_0223BED0(Vec *, u32);
+int PPWLobbySchedule_ValidateVipRecords(void *, void *, u32);
+int PPWLobbySchedule_GetQuestionnaire(void *, void *);
+int PPWLobbySchedule_SetQuestionnaire(void *, void *);
+int PPWLobbySchedule_CanStart(void *);
+int PPWLobbySchedule_Start(void *);
+void LobbyEventDeque_EraseAtEnd(void *, u32);
+void LobbyEventDeque_EraseAtBegin(void *, u32);
+u32 LobbyEventDequeMap_RecommendSize(void *, u32);
+u32 LobbyVipVector_RecommendSize(Vec *, u32);
+u32 LobbyEventVector_RecommendSize(Vec *, u32);
 void LobbySort_InsertionSort(Iter, Iter);
-void ov45_0223AAE4(Vec *, Pair *, Pair *);
-void ov45_0223ACF0(Vec *, Pair *, Pair *);
-void ov45_0223BE60(Vec *, u32, u32);
-void ov45_0223BD24(Vec *, u32, u32);
-void ov45_0223CE30(Vec *, u32, Empty);
-void ov45_0223CE60(Vec *, u32, Empty);
-int ov45_0223ACA4(void *, void *, u32);
-void ov45_0223B250(void *, void *, u32);
-void ov45_0223CD78(void *, u32);
+void LobbyEventVector_AssignRange(Vec *, Pair *, Pair *);
+void LobbyVipVector_AssignRange(Vec *, Pair *, Pair *);
+void LobbyEventVector_Reallocate(Vec *, u32, u32);
+void LobbyVipVector_Reallocate(Vec *, u32, u32);
+void LobbyVipVector_Allocate(Vec *, u32, Empty);
+void LobbyEventVector_Allocate(Vec *, u32, Empty);
+int PPWLobbySchedule_SetVipRecords(void *, void *, u32);
+void LobbyEventDeque_IteratorAt(void *, void *, u32);
+void LobbyEventDequeMapIterator_Advance(void *, u32);
 
-int ov45_0223AEDC(void *p, void *out) {
+int PPWLobbySchedule_GetQuestionnaire(void *p, void *out) {
     if (!W(p, 0x334)) {
         return 0;
     }
@@ -69,7 +69,7 @@ int ov45_0223AEDC(void *p, void *out) {
     return 1;
 }
 
-int ov45_0223AF04(void *p, void *in) {
+int PPWLobbySchedule_SetQuestionnaire(void *p, void *in) {
     MI_CpuCopy8(in, (u8 *)p + 0x5c, 0x2d8);
     W(p, 0x334) = 1;
     return 1;

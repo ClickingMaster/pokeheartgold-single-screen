@@ -25,24 +25,24 @@ typedef struct {
     Six value;
 } Record;
 
-extern void *ov45_02237890(Vec *, u32);
-extern void ov45_02237820(Vec *, u32, void *);
+extern void *LobbyCharVector_RecommendSize(Vec *, u32);
+extern void LobbyCharVector_Reallocate(Vec *, u32, void *);
 
 typedef struct {
     u8 *p;
     u32 extra;
 } Iterator;
 
-void ov45_022327B8(Vec *, ...);
-void *ov45_0223259C(Vec *);
-void ov45_02232760(Vec *, u8 *, u8 *, int);
+void LobbyCharVector_AssignIterRange(Vec *, ...);
+void *LobbyU32Vector_Data2(Vec *);
+void LobbyCharVector_AssignRange(Vec *, u8 *, u8 *, int);
 void LobbyTimerMap_MakeEntry(Record *, u32, Six *);
 
-void ov45_02232760(Vec *v, u8 *first, u8 *last, int unused) {
+void LobbyCharVector_AssignRange(Vec *v, u8 *first, u8 *last, int unused) {
     u32 len = last - first;
     if (len > v->cap) {
         volatile u8 tag = 0;
-        ov45_02237820(v, len, ov45_02237890(v, len - v->cap));
+        LobbyCharVector_Reallocate(v, len, LobbyCharVector_RecommendSize(v, len - v->cap));
     }
     memmove(v->data, first, (u32)last - (u32)first);
     v->len = len;

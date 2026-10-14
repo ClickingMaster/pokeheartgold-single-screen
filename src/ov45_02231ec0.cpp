@@ -132,7 +132,7 @@ inline int ErrorMap::Map(int r) const {
 }
 
 extern "C" Work *_022577C4;
-extern "C" Str ov45_022320B4(Peer *);
+extern "C" Str PPWLobbyChannel_GetName(Peer *);
 extern "C" int LobbyChat_LeaveChannel(const char *);
 extern "C" int PPW_LobbyLeaveSubChannel(void);
 
@@ -176,7 +176,7 @@ extern "C" int PPW_LobbyLeaveSubChannel(void) {
         return 4;
     }
     {
-        Str t(ov45_022320B4(&w->peer));
+        Str t(PPWLobbyChannel_GetName(&w->peer));
         int parsed;
         int state;
         parsed = LobbyChat_LeaveChannel(t.text());

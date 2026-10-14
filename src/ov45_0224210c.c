@@ -29,9 +29,9 @@ extern const char ov45_0225533C[];
 extern void *LobbyMem_Alloc(u32);
 extern void LobbyTree_InsertRebalance(Node *, void *);
 extern void DWC_Free(int, void *, int);
-Node *ov45_0224210C(Container *, void *, int, int, const u32 *);
+Node *LobbyRequestMap_InsertNode(Container *, void *, int, int, const u32 *);
 
-Node *ov45_0224210C(Container *c, void *owner, int first, int last, const u32 *value) {
+Node *LobbyRequestMap_InsertNode(Container *c, void *owner, int first, int last, const u32 *value) {
     Node *node, *pending;
     u32 *dest;
     u32 *parent;

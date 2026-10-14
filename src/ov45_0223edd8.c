@@ -45,9 +45,9 @@ extern char ov45_022552C0[];
 extern char ov45_022552C8[];
 extern char ov45_022552D8[];
 extern void LobbyString_InitFromCStr(Text *, char *);
-extern int ov45_0223D644(Text *, Text *, int);
+extern int LobbyString_CompareNoCase(Text *, Text *, int);
 extern void LobbyString_Destroy(Text *);
-extern void ov45_02237664(Vector *);
+extern void LobbyStringVector_Destroy(Vector *);
 extern void LobbyChat_SplitString(Vector *, Text *, Text *, int);
 extern int LobbyChat_FindUserIdByNick(Work *, Text *);
 #pragma force_active off
@@ -64,7 +64,7 @@ static inline int Compare(register char *b, char *a, Text *ta, Text *tb, int n) 
     int result;
     LobbyString_InitFromCStr(ta, a);
     LobbyString_InitFromCStr(tb, b);
-    result = ov45_0223D644(ta, tb, n);
+    result = LobbyString_CompareNoCase(ta, tb, n);
     LobbyString_Destroy(tb);
     LobbyString_Destroy(ta);
     return result;
@@ -103,7 +103,7 @@ void LobbyChat_OnPrivateMessage(void *unused, char *name, char *data, int kind, 
         LobbyString_Destroy(&frame.f);
         LobbyString_Destroy(&frame.e);
         if (frame.vector.count == 0) {
-            ov45_02237664(&frame.vector);
+            LobbyStringVector_Destroy(&frame.vector);
             return;
         }
         {
@@ -111,12 +111,12 @@ void LobbyChat_OnPrivateMessage(void *unused, char *name, char *data, int kind, 
             id = atol(TextChars(last));
         }
         if (id == 0) {
-            ov45_02237664(&frame.vector);
+            LobbyStringVector_Destroy(&frame.vector);
             return;
         }
         frame.first = ov45_022577DC->callbacks;
         frame.first.second(id, arg);
-        ov45_02237664(&frame.vector);
+        LobbyStringVector_Destroy(&frame.vector);
         return;
     }
     if (kind != 3) {

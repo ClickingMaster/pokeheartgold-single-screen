@@ -57,7 +57,7 @@
 	.public ov96_0221D280
 	.public ov96_0221D474
 	.public ov96_0221B088
-	.public ov96_0221BFF4
+	.public gPokeathlonCirclePushNameplateCoords
 	.public ov96_0221C2A8
 	.public ov96_0221C55C
 	.public ov96_0221C589
@@ -163,11 +163,11 @@
 	.extern PokeathlonEvent_BlockSmashPoints
 	.extern PokeathlonEvent_DiscCatchPoints
 	.extern PokeathlonEvent_SnowThrowPoints
-	.extern ov96_0221DC80
-	.extern ov96_0221DC88
-	.extern ov96_0221DC90
-	.extern ov96_0221E5A0
-	.extern ov96_0221E5A4
+	.extern gPokeathlonGoalRollBounceOffsets
+	.extern gPokeathlonGoalRollStates
+	.extern gPokeathlonRingDropStates
+	.extern gPokeathlonLampJumpTrampolineRed
+	.extern gPokeathlonBlockSmashFramesSinceHit
 	.public ov96_0221D99C
 	.public gPokeathlonCourseEvent_Wait
 	.public ov96_0221AF64
@@ -187,7 +187,7 @@
 	.public ov96_0221C5D8
 	.public ov96_0221C5F0
 	.public ov96_0221CC60
-	.public ov96_0221CBCC
+	.public gPokeathlonPennantCaptureSpriteIds
 	.public ov96_0221C61C
 	.public ov96_0221C62C
 	.public ov96_0221C648
@@ -447,11 +447,11 @@
 	.public PokeathlonEvent_BlockSmashPoints
 	.public PokeathlonEvent_DiscCatchPoints
 	.public PokeathlonEvent_SnowThrowPoints
-	.extern ov96_0221DC80
-	.extern ov96_0221DC88
-	.extern ov96_0221DC90
-	.extern ov96_0221E5A0
-	.extern ov96_0221E5A4
+	.extern gPokeathlonGoalRollBounceOffsets
+	.extern gPokeathlonGoalRollStates
+	.extern gPokeathlonRingDropStates
+	.extern gPokeathlonLampJumpTrampolineRed
+	.extern gPokeathlonBlockSmashFramesSinceHit
 	.include "asm/macros.inc"
 	.include "overlay_96.inc"
 	.include "global.inc"

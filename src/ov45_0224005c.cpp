@@ -81,8 +81,8 @@ struct Manager {
 };
 
 extern "C" Manager *ov45_022577DC;
-extern "C" It ov45_0223FD8C(Map *map, Base *const &key);
-extern "C" void ov45_02242510(Map *map, u32 id);
+extern "C" It LobbyRequestMap_Find(Map *map, Base *const &key);
+extern "C" void LobbyRequestMap_DeleteKey(Map *map, u32 id);
 extern "C" int LobbyChat_FindUserIdByNick(Manager *m, String *s);
 extern "C" void LobbyChat_StripChannelPrefix(String *dst, Manager *m, String *s);
 
@@ -100,21 +100,21 @@ inline It FindIt(Manager *m, u32 id) {
     Base key;
     KeyInit(&key, id);
     Base *kp = &key;
-    return ov45_0223FD8C(&m->map, kp);
+    return LobbyRequestMap_Find(&m->map, kp);
 }
 
 inline Handler *Find(Manager *m, u32 id) {
     Base key;
     KeyInit(&key, id);
     Base *kp = &key;
-    return Lookup(m, ov45_0223FD8C(&m->map, kp));
+    return Lookup(m, LobbyRequestMap_Find(&m->map, kp));
 }
 
 struct Tag {};
 struct Vec;
-extern "C" void ov45_0223FFE8(Vec *v, u32 *first, u32 *last, Tag t);
-extern "C" void ov45_022376BC(Vec *v);
-extern "C" void *ov45_0223259C(Vec *v);
+extern "C" void LobbyU32Vector_AssignRange(Vec *v, u32 *first, u32 *last, Tag t);
+extern "C" void LobbyU32Vector_Destroy(Vec *v);
+extern "C" void *LobbyU32Vector_Data2(Vec *v);
 
 struct Vec {
     u32 *ptr;
@@ -129,13 +129,13 @@ struct Vec {
 
     Vec &operator=(const Vec &o) {
         if (this != &o) {
-            ov45_0223FFE8(this, o.ptr, o.ptr + o.size, Tag());
+            LobbyU32Vector_AssignRange(this, o.ptr, o.ptr + o.size, Tag());
         }
         return *this;
     }
 
     void destroy() {
-        ov45_022376BC(this);
+        LobbyU32Vector_Destroy(this);
     }
 
     u32 count() const {
@@ -143,8 +143,8 @@ struct Vec {
     }
 };
 
-extern "C" Vec ov45_02242EF4(Manager *map, int count, const char **names, const String &key);
-extern "C" void ov45_022437CC(Manager *m, String *s);
+extern "C" Vec LobbyChat_AddChannelUsers(Manager *map, int count, const char **names, const String &key);
+extern "C" void LobbyChat_SetChannelUsersEnumerated(Manager *m, String *s);
 extern "C" void LobbyChat_LeaveChannel(const char *s);
 
 inline Handler *Get(Manager *m, const It &it) {
@@ -177,14 +177,14 @@ extern "C" void LobbyChat_OnEnterChannelEnumUsers(void *self, int result, const 
     if (result == 1) {
         String s;
         LobbyString_InitFromCStr(&s, name);
-        Vec tmp = ov45_02242EF4(ov45_022577DC, count, names, s);
+        Vec tmp = LobbyChat_AddChannelUsers(ov45_022577DC, count, names, s);
         tmp.destroy();
         LobbyString_Destroy(&s);
     }
     {
         String u;
         LobbyString_InitFromCStr(&u, name);
-        ov45_022437CC(ov45_022577DC, &u);
+        LobbyChat_SetChannelUsersEnumerated(ov45_022577DC, &u);
         LobbyString_Destroy(&u);
     }
     int sid = id;
@@ -206,7 +206,7 @@ extern "C" void LobbyChat_OnEnterChannelEnumUsers(void *self, int result, const 
     cb(result == 1, 0, str, h->getArg());
     LobbyString_Destroy(&k);
     LobbyString_Destroy(&t);
-    ov45_02242510(&ov45_022577DC->map, sid);
+    LobbyRequestMap_DeleteKey(&ov45_022577DC->map, sid);
     if (result != 0) {
         return;
     }

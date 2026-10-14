@@ -23,9 +23,9 @@ struct Obj {
     Vec8 vec;
 };
 
-extern "C" int ov45_0223AE84(Obj *o, const void *data, u32 len);
+extern "C" int PPWLobbySchedule_ValidateVipRecords(Obj *o, const void *data, u32 len);
 
-extern "C" int ov45_0223AE84(Obj *o, const void *data, u32 len) {
+extern "C" int PPWLobbySchedule_ValidateVipRecords(Obj *o, const void *data, u32 len) {
     if (len % 8) {
         return 0;
     }

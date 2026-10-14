@@ -16,9 +16,9 @@ typedef struct {
 } Tree;
 
 extern int LobbyString_Compare(void *, void *);
-void *ov45_02244170(Tree *, void *, Node **, u8 *, u8 *);
+void *LobbyChannelMap_FindInsertPos(Tree *, void *, Node **, u8 *, u8 *);
 
-void *ov45_02244170(Tree *w, void *key, Node **found, u8 *left, u8 *empty) {
+void *LobbyChannelMap_FindInsertPos(Tree *w, void *key, Node **found, u8 *left, u8 *empty) {
     void *parent;
     Node *p;
     _Bool comparison;

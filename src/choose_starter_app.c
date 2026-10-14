@@ -423,9 +423,9 @@ BOOL ChooseStarter_Main(OverlayManager *ovy, int *state) {
         }
         work->modelAnimState = MODEL_ANM_STATE_BALL_ROCK;
         {
-            String *sp10 = NULL;
-            printMsgOnWinEx(work->winTop, work->heapID, FALSE, NARC_msg_msg_0190_bin, msg_0190_00004 + work->curSelection, MAKE_TEXT_COLOR(1, 2, 15), 0, &sp10);
-            String_Delete(sp10);
+            String *string = NULL;
+            printMsgOnWinEx(work->winTop, work->heapID, FALSE, NARC_msg_msg_0190_bin, msg_0190_00004 + work->curSelection, MAKE_TEXT_COLOR(1, 2, 15), 0, &string);
+            String_Delete(string);
         }
         PlayCry(sSpecies[work->curSelection], 0);
         if (work->state != SELECT_STATE_INSPECT) {
@@ -700,42 +700,42 @@ static void updateBaseAndBallsRotation(struct ChooseStarterAppWork *work) {
 static void initBgLayers(BgConfig *bgConfig, enum HeapID heapID) {
     G2_SetBG0Priority(2);
     {
-        const BgTemplate sp70 = {
+        const BgTemplate main1Template = {
             0, 0, 0x800, 0, GF_BG_SCR_SIZE_256x256, GF_BG_CLR_4BPP, 0, 1, 0, 0, 0, 0, 0
         };
-        InitBgFromTemplate(bgConfig, 1, &sp70, GF_BG_TYPE_TEXT);
+        InitBgFromTemplate(bgConfig, 1, &main1Template, GF_BG_TYPE_TEXT);
         BG_ClearCharDataRange(1, 0x20, 0, heapID);
         BgClearTilemapBufferAndCommit(bgConfig, 1);
     }
     {
-        const BgTemplate sp54 = {
+        const BgTemplate main2Template = {
             0, 0, 0x800, 0, GF_BG_SCR_SIZE_256x256, GF_BG_CLR_4BPP, 1, 3, 0, 1, 0, 0, 0
         };
-        InitBgFromTemplate(bgConfig, 2, &sp54, GF_BG_TYPE_TEXT);
+        InitBgFromTemplate(bgConfig, 2, &main2Template, GF_BG_TYPE_TEXT);
         BG_ClearCharDataRange(2, 0x20, 0, heapID);
         BgClearTilemapBufferAndCommit(bgConfig, 2);
     }
     {
-        const BgTemplate sp38 = {
+        const BgTemplate sub0Template = {
             0, 0, 0x800, 0, GF_BG_SCR_SIZE_256x256, GF_BG_CLR_4BPP, 2, 5, 0, 0, 0, 0, 0
         };
-        InitBgFromTemplate(bgConfig, 4, &sp38, GF_BG_TYPE_TEXT);
+        InitBgFromTemplate(bgConfig, 4, &sub0Template, GF_BG_TYPE_TEXT);
         BG_ClearCharDataRange(4, 0x20, 0, heapID);
         BgClearTilemapBufferAndCommit(bgConfig, 4);
     }
     {
-        const BgTemplate sp1C = {
+        const BgTemplate sub1Template = {
             0, 0, 0x800, 0, GF_BG_SCR_SIZE_256x256, GF_BG_CLR_4BPP, 0, 4, 0, 2, 0, 0, 0
         };
-        InitBgFromTemplate(bgConfig, 5, &sp1C, GF_BG_TYPE_TEXT);
+        InitBgFromTemplate(bgConfig, 5, &sub1Template, GF_BG_TYPE_TEXT);
         BG_ClearCharDataRange(5, 0x20, 0, heapID);
         BgClearTilemapBufferAndCommit(bgConfig, 5);
     }
     {
-        const BgTemplate sp00 = {
+        const BgTemplate sub2Template = {
             0, 0, 0x800, 0, GF_BG_SCR_SIZE_256x256, GF_BG_CLR_4BPP, 1, 3, 0, 1, 0, 0, 0
         };
-        InitBgFromTemplate(bgConfig, 6, &sp00, GF_BG_TYPE_TEXT);
+        InitBgFromTemplate(bgConfig, 6, &sub2Template, GF_BG_TYPE_TEXT);
         BG_ClearCharDataRange(6, 0x20, 0, heapID);
         BgClearTilemapBufferAndCommit(bgConfig, 6);
     }
@@ -998,11 +998,11 @@ static void reinitBallModelPosInDirection(struct ChooseStarterAppWork *work, int
     if (direction == 2) {
         work->curSelection = (work->curSelection + 1) % 3;
     } else if (direction == 1) {
-        s8 r0 = work->curSelection - 1;
-        if (r0 < 0) {
-            r0 = 2;
+        s8 selection = work->curSelection - 1;
+        if (selection < 0) {
+            selection = 2;
         }
-        work->curSelection = r0;
+        work->curSelection = selection;
     }
     initBallModelPositions(work);
 }

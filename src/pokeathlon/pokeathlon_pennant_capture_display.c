@@ -42,7 +42,7 @@ void PokeathlonPennantCaptureDisplay_CreatePicSprites(void *pool, PokeathlonPenn
 
 extern const u8 ov96_0221CBC4[];
 extern const u8 ov96_0221CBC8[];
-extern const PokeathlonPennantCaptureSpriteIds ov96_0221CBCC[];
+extern const PokeathlonPennantCaptureSpriteIds gPokeathlonPennantCaptureSpriteIds[];
 extern const VecFx32 ov96_0221CBF4;
 
 // Several loops below walk a display-typed cursor by one array element per step instead of indexing
@@ -121,8 +121,8 @@ void PokeathlonPennantCaptureDisplay_LoadSpriteResources(PokeathlonPennantCaptur
     int i;
 
 #pragma unused(display)
-    ids[0] = ov96_0221CBCC[1].ids[0];
-    ids[1] = ov96_0221CBCC[1].ids[1];
+    ids[0] = gPokeathlonPennantCaptureSpriteIds[1].ids[0];
+    ids[1] = gPokeathlonPennantCaptureSpriteIds[1].ids[1];
     for (i = 0; i < 2; i++) {
         PokeathlonCourseSpritePool_LoadChar(pool, 0x5D, 9, *id, 2);
         PokeathlonCourseSpritePool_LoadPltt(pool, 0x5D, 6, *id, 2, 1);

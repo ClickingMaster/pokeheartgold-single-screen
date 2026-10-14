@@ -11,9 +11,9 @@ typedef struct {
     int *current, *begin, *pivot, *end;
 } Iter;
 
-int ov45_0223CDBC(Iter *, Iter *);
+int LobbyEventDequeMapIterator_Distance(Iter *, Iter *);
 
-int ov45_0223CDBC(Iter *a, Iter *b) {
+int LobbyEventDequeMapIterator_Distance(Iter *a, Iter *b) {
     int *pivot;
     int *other;
     int *current;

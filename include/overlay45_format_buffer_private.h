@@ -25,13 +25,13 @@ Str *LobbyString_InitFromCStr(Str *,char *);
 Str *LobbyString_Destroy(Str *);
 Vec *LobbyCharVector_Destroy(Vec *);
 char *LobbyCharVector_Data(Vec *);
-u32 ov45_02237890(Vec *,u32);
-void ov45_02238820(Vec *,u32);
+u32 LobbyCharVector_RecommendSize(Vec *,u32);
+void LobbyCharVector_AppendZerosSlow(Vec *,u32);
 #ifdef __cplusplus
-void ov45_0223795C(Vec *,u32,DwcFormatted216Native::ResizeDispatch);
+void LobbyCharVector_AppendZeros(Vec *,u32,DwcFormatted216Native::ResizeDispatch);
 Str *LobbyString_ReplaceRange(Str *,u32,u32,char *,char *,DwcStringConcat200::RangeDispatch);
 void LobbyString_Reserve(Str *,u32);
 }
-inline u32 DwcFormatted216Native::Allocator::recommend(Vec *vector,u32 growth){return ov45_02237890(vector,growth);}
+inline u32 DwcFormatted216Native::Allocator::recommend(Vec *vector,u32 growth){return LobbyCharVector_RecommendSize(vector,growth);}
 #endif
 #endif

@@ -58,8 +58,8 @@ extern void LobbyString_Substr(void *a, void *b, u32 len, int d);
 extern void LobbyTimerMap_Clear(void *p);
 extern void LobbyTimerMap_Destroy(void *p);
 struct Tree;
-extern void ov45_022425A0(struct Tree *p);
-extern void ov45_02244150(void *p);
+extern void LobbyRequestMap_DeleteAll(struct Tree *p);
+extern void LobbyRequestMap_Destroy(void *p);
 extern void LobbyChannelMap_Destroy(void *p);
 extern void LobbyUserMap_Destroy(void *p);
 extern void LobbyString_Destroy(void *p);
@@ -99,9 +99,9 @@ typedef struct InsertResult {
 extern int LobbyString_Compare(Str *a, Str *b);
 extern void LobbyUserMap_Erase(Iter *out, Tree *t, Iter it);
 extern u8 ov45_02255228[];
-Node *ov45_0224210C(Tree *t, Node *parent, u8 a, u8 b, Obj **val);
+Node *LobbyRequestMap_InsertNode(Tree *t, Node *parent, u8 a, u8 b, Obj **val);
 Node *LobbyChannelMap_LowerBound(Tree *t, Str *key, Node *n, Node *res);
-Node *ov45_02242320(Tree *t, Obj **key, Node **pos, u8 *a, u8 *b);
+Node *LobbyRequestMap_FindInsertPos(Tree *t, Obj **key, Node **pos, u8 *a, u8 *b);
 void LobbyUserIdSet_Find(Iter *out, Tree *t, int *key);
 void LobbyUserMap_Find(Iter *out, Tree *t, int *key);
 void LobbyChannelMap_Find(Iter *out, Tree *t, Str *key);
@@ -168,7 +168,7 @@ typedef struct Empty2 {
 } Empty2;
 
 extern Node *LobbyTree_EraseRebalance(Node *n, void *root);
-extern void ov45_0223FD8C(Iter *out, Tree *t, void *key);
+extern void LobbyRequestMap_Find(Iter *out, Tree *t, void *key);
 extern void *ov45_02255238;
 extern u32 current_time(void);
 extern void LobbyString_FormatN(char *buf, u32 size, const char *fmt, ...);
@@ -176,15 +176,15 @@ extern char ov45_0225539C[];
 extern char ov45_022553A4[];
 extern void LobbyString_InitFromCStr(Str *s, const char *cstr);
 extern void LobbyChat_SplitString(Vec *out, Str *s, Str *sep, int n);
-extern void ov45_02237664(Vec *v);
+extern void LobbyStringVector_Destroy(Vec *v);
 extern long atol(const char *s);
-extern void ov45_02243BC0(TreeHdr *dst, TreeHdr *src);
+extern void LobbyUserIdSet_Assign(TreeHdr *dst, TreeHdr *src);
 extern void LobbyUserIdSet_Insert(InsertResult *out, Tree *t, int *key);
 extern void LobbyString_Assign(Str *dst, Str *src);
-extern Node *ov45_0224404C(Tree *t, Node *parent, u8 a, u8 b, IntStrPair *val);
+extern Node *LobbyUserMap_InsertNode(Tree *t, Node *parent, u8 a, u8 b, IntStrPair *val);
 extern BOOL LobbyUserIdSet_EraseKey(Tree *t, int *id);
 int LobbyChat_GetUserIdFromNick(Str *s);
-void ov45_0224261C(Iter *out, Tree *t, Iter pos);
+void LobbyRequestMap_Erase(Iter *out, Tree *t, Iter pos);
 
 typedef struct Tag {
     u8 x;
@@ -196,7 +196,7 @@ static inline IntStrPair *MapIndex(Tree *t, int *key, Tag a, Tag b) {
     return LobbyUserMap_GetOrInsert(t, key);
 }
 
-Node *ov45_02242E88(Tree *t, int *key, Node **pos, u8 *a, u8 *b);
+Node *LobbyUserMap_FindInsertPos2(Tree *t, int *key, Node **pos, u8 *a, u8 *b);
 BOOL LobbyChat_RemoveUserIfUnused(u8 *obj, int id);
 BOOL LobbyUserMap_EraseKey(Tree *t, int *key);
 
@@ -256,7 +256,7 @@ typedef struct CbObj {
 extern int ov45_022577E0;
 extern void chatDisconnect(void *p);
 extern void *LobbyMem_Alloc(u32 size);
-extern void ov45_0224206C(InsertResult *out, Tree *t, Obj **val);
+extern void LobbyRequestMap_Insert(InsertResult *out, Tree *t, Obj **val);
 
 static inline void CbObjBaseInit(CbObj *o, void *x8) {
     o->vt = (VTable *)&ov45_02255238;
@@ -310,7 +310,7 @@ extern void *ov45_022552B0;
 extern void *ov45_02255298;
 extern void *ov45_02255250;
 void *LobbyChatManager_Destroy(u8 *p);
-void ov45_022424DC(void);
+void LobbyMem_ReleaseReserve(void);
 
 #define CTX_CHECK(c)                      \
     if ((c) == NULL) {                    \
@@ -334,7 +334,7 @@ extern void chatSetChannelKeysA(void *h, const char *name, const char *who, int 
 
 extern void LobbyChannelMap_Insert(InsertResult *out, Tree *t, NamedEntry *e);
 extern void LobbyUserIdSet_Destroy(TreeHdr *t);
-void ov45_02242BE0(NamedEntry *dst, Str *name, Entry *src);
+void LobbyChannelMap_MakeEntry(NamedEntry *dst, Str *name, Entry *src);
 
 static inline void TreeHdrCopy(TreeHdr *d, TreeHdr *s) {
     Tag t;
@@ -342,7 +342,7 @@ static inline void TreeHdrCopy(TreeHdr *d, TreeHdr *s) {
     d->root = NULL;
     d->leftmost = (Node *)&d->root;
     t = (Tag) { 0 };
-    ov45_02243BC0(d, s);
+    LobbyUserIdSet_Assign(d, s);
 }
 
 static inline void TagTemp(void) {
@@ -368,9 +368,9 @@ static inline void NamedEntryCopy(NamedEntry *d, NamedEntry *s) {
     EntryCopy(&d->e, &s->e);
 }
 
-extern void ov45_0223EA04(Vec *v, u32 n, Tag t);
+extern void LobbyU32Vector_Allocate(Vec *v, u32 n, Tag t);
 
-extern void ov45_0223E910(Vec *v, u32 *val, Tag t);
+extern void LobbyU32Vector_PushBackSlow(Vec *v, u32 *val, Tag t);
 
 typedef struct Tree16 {
     int count;
@@ -460,9 +460,9 @@ extern struct {
     void *buf;
 } ov45_022577E8;
 
-void ov45_022423E0(void);
-void ov45_0224240C(void);
-int ov45_02242288(Str *s, const char *chars, u32 pos, u32 n);
+void LobbyMem_OnOutOfMemoryDisconnect(void);
+void LobbyMem_OnOutOfMemory(void);
+int LobbyString_FindFirstOfChars(Str *s, const char *chars, u32 pos, u32 n);
 Node *LobbyUserIdSet_LowerBound(Tree *t, int *key, Node *node, Node *res);
 
 Node *LobbyUserMap_LowerBound(Tree *t, int *key, Node *node, Node *res);
@@ -470,13 +470,13 @@ Node *LobbyUserMap_LowerBound(Tree *t, int *key, Node *node, Node *res);
 void *LobbyChat_GetChannelCallbacks(u8 *obj, Str *key);
 int LobbyChat_AddChannelUser(u8 *obj, Str *name, Str *key2);
 
-void ov45_02242BE0(NamedEntry *dst, Str *name, Entry *src) {
+void LobbyChannelMap_MakeEntry(NamedEntry *dst, Str *name, Entry *src) {
     LobbyString_InitCopy(&dst->name, name);
     dst->e.a = src->a;
     dst->e.t.count = 0;
     dst->e.t.root = NULL;
     dst->e.t.leftmost = (Node *)&dst->e.t.root;
-    ov45_02243BC0(&dst->e.t, &src->t);
+    LobbyUserIdSet_Assign(&dst->e.t, &src->t);
     dst->e.x10 = src->x10;
     dst->e.b = src->b;
 }
@@ -533,14 +533,14 @@ IntStrPair *LobbyUserMap_GetOrInsert(Tree *t, int *key) {
     Node *pos;
     u8 a;
     u8 b;
-    Node *parent = ov45_02242E88(t, key, &pos, &a, &b);
+    Node *parent = LobbyUserMap_FindInsertPos2(t, key, &pos, &a, &b);
     if (pos == NULL || pos->key.i < *key) {
         Str empty;
         IntStrPair pair;
         Node *n;
         StrInit(&empty);
         PairInit(&pair, key, &empty);
-        n = ov45_0224404C(t, parent, a, b, &pair);
+        n = LobbyUserMap_InsertNode(t, parent, a, b, &pair);
         LobbyString_Destroy(&pair.val);
         LobbyString_Destroy(&empty);
         return (IntStrPair *)&n->key;
@@ -548,7 +548,7 @@ IntStrPair *LobbyUserMap_GetOrInsert(Tree *t, int *key) {
     return (IntStrPair *)&pos->key;
 }
 
-Node *ov45_02242E88(Tree *t, int *key, Node **pos, u8 *a, u8 *b) {
+Node *LobbyUserMap_FindInsertPos2(Tree *t, int *key, Node **pos, u8 *a, u8 *b) {
     Node *parent;
     Node *n;
     *pos = NULL;

@@ -12,9 +12,9 @@ struct It {
     inline It(Ring *r, u32 i);
 };
 
-extern "C" void ov45_0223CB04(Ring *r, u32 n, Tag);
-extern "C" void ov45_0223CC78(Ring *r, const It &first, const It &last, Tag);
-extern "C" void ov45_0223CAB4(Ring *r);
+extern "C" void LobbyEventDequeMapBuffer_Allocate(Ring *r, u32 n, Tag);
+extern "C" void LobbyEventDequeMapBuffer_AppendRange(Ring *r, const It &first, const It &last, Tag);
+extern "C" void LobbyEventDequeMapBuffer_Destroy(Ring *r);
 
 inline void Swap(u32 &a, u32 &b) {
     u32 t = a;
@@ -76,15 +76,15 @@ struct Alloc {
     }
 };
 
-extern "C" void ov45_0223B8E0(Ring *r, u32 n);
+extern "C" void LobbyEventDequeMap_Reserve(Ring *r, u32 n);
 
-extern "C" void ov45_0223B8E0(Ring *r, u32 n) {
+extern "C" void LobbyEventDequeMap_Reserve(Ring *r, u32 n) {
     if (n <= r->capacity()) {
         return;
     }
     RingBuf tmp(&r->cap);
-    ov45_0223CB04(&tmp, n, Tag());
-    ov45_0223CC78(&tmp, r->begin(), r->end(), Tag());
+    LobbyEventDequeMapBuffer_Allocate(&tmp, n, Tag());
+    LobbyEventDequeMapBuffer_AppendRange(&tmp, r->begin(), r->end(), Tag());
     Alloc a = Alloc();
     a.destroy(r->ptr, r->size);
     r->size = 0;
@@ -93,5 +93,5 @@ extern "C" void ov45_0223B8E0(Ring *r, u32 n) {
     Swap(r->start, tmp.start);
     Swap(r->size, tmp.size);
     Swap(r->cap, c);
-    ov45_0223CAB4(&tmp);
+    LobbyEventDequeMapBuffer_Destroy(&tmp);
 }

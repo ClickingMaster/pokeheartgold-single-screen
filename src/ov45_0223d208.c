@@ -12,9 +12,9 @@ typedef struct {
     Elem *last;
 } It;
 
-int ov45_0223D208(It *x, It *y);
+int LobbyEventDequeMapIterator_Distance2(It *x, It *y);
 
-int ov45_0223D208(It *x, It *y) {
+int LobbyEventDequeMapIterator_Distance2(It *x, It *y) {
     int n;
     Elem *m = x->mid;
     n = x->cur - y->cur;

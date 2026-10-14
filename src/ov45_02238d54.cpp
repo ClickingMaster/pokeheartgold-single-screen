@@ -47,27 +47,27 @@ inline const T &Min(const T &a, const T &b) {
     return a < b ? a : b;
 }
 
-extern "C" DIter ov45_0223B250(Deque *, int);
-extern "C" DIter ov45_02239090(It, It, DIter);
-extern "C" void ov45_02238E60(Deque *, It *, const It &, Tag);
-extern "C" void ov45_0223B764(Deque *, u32, Tag);
-extern "C" void ov45_02238D54(Deque *, It, const It &, Tag);
+extern "C" DIter LobbyEventDeque_IteratorAt(Deque *, int);
+extern "C" DIter LobbyEventDeque_Copy(It, It, DIter);
+extern "C" void LobbyEventDeque_AppendRange(Deque *, It *, const It &, Tag);
+extern "C" void LobbyEventDeque_EraseAtEnd(Deque *, u32, Tag);
+extern "C" void LobbyEventDeque_Assign(Deque *, It, const It &, Tag);
 #pragma force_active on
 
-extern "C" void ov45_02238D54(Deque *d, It first, const It &last, Tag) {
+extern "C" void LobbyEventDeque_Assign(Deque *d, It first, const It &last, Tag) {
     u32 n = Distance(first, last);
     u32 m = Min(d->size, n);
     It mid = first;
     mid.p += m;
-    ov45_02239090(first, mid, ov45_0223B250(d, 0));
+    LobbyEventDeque_Copy(first, mid, LobbyEventDeque_IteratorAt(d, 0));
     n -= m;
     if (n != 0) {
         Tag t;
-        ov45_02238E60(d, &mid, last, t);
+        LobbyEventDeque_AppendRange(d, &mid, last, t);
     } else {
         u32 size = d->size;
         if (m < size) {
-            ov45_0223B764(d, size - m, Tag());
+            LobbyEventDeque_EraseAtEnd(d, size - m, Tag());
         }
     }
 }

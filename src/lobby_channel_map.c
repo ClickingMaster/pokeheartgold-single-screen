@@ -20,9 +20,9 @@ typedef struct {
 } Result;
 
 extern u8 ov45_02255358[];
-extern void *ov45_02244170(Tree *, void *, void **, u8 *, u8 *);
+extern void *LobbyChannelMap_FindInsertPos(Tree *, void *, void **, u8 *, u8 *);
 extern int LobbyString_Compare(void *, void *);
-void *ov45_02243970(Tree *, void *, u8, u8, void *);
+void *LobbyChannelMap_InsertNode(Tree *, void *, u8, u8, void *);
 extern void ov45_02236E58(Iterator *);
 extern void *LobbyTree_EraseRebalance(void *, void *);
 extern void LobbyUserIdSet_Destroy(void *);
@@ -69,15 +69,15 @@ extern int printf(const char *, ...);
 extern void abort(void);
 extern void *LobbyMem_Alloc(int);
 extern void LobbyString_InitCopy(Payload *, Payload *);
-extern void ov45_02243BC0(void *, void *);
+extern void LobbyUserIdSet_Assign(void *, void *);
 extern void LobbyTree_InsertRebalance(void *, void *);
 
 void LobbyChannelMap_Insert(Result *out, Tree *t, void *key) {
     u8 left, first;
     void *previous;
-    void *parent = ov45_02244170(t, key, &previous, &left, &first);
+    void *parent = LobbyChannelMap_FindInsertPos(t, key, &previous, &left, &first);
     if (previous == 0 || isLess((u8 *)previous + 12, key)) {
-        out->node = ov45_02243970(t, parent, left, first, key);
+        out->node = LobbyChannelMap_InsertNode(t, parent, left, first, key);
         out->flag = ov45_02255358[4];
     } else {
         out->node = previous;

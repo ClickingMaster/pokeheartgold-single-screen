@@ -84,11 +84,11 @@
 	.extern PokeathlonEvent_BlockSmashPoints
 	.extern PokeathlonEvent_DiscCatchPoints
 	.extern PokeathlonEvent_SnowThrowPoints
-	.extern ov96_0221DC80
-	.extern ov96_0221DC88
-	.extern ov96_0221DC90
-	.extern ov96_0221E5A0
-	.extern ov96_0221E5A4
+	.extern gPokeathlonGoalRollBounceOffsets
+	.extern gPokeathlonGoalRollStates
+	.extern gPokeathlonRingDropStates
+	.extern gPokeathlonLampJumpTrampolineRed
+	.extern gPokeathlonBlockSmashFramesSinceHit
 	.public _0221A7D8
 	.public subOverlayTemplate
 	.public ov96_0221A7F4

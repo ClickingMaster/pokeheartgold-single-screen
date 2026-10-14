@@ -315,7 +315,7 @@ typedef struct PokeathlonPennantCaptureCpu {
     u8 humanCount;                                    // 0x559
 } PokeathlonPennantCaptureCpu;                        // size: 0x55C
 
-// Resource ids of sprite sets (ov96_0221CBCC, defined with the override object between the display parts).
+// Resource ids of sprite sets (gPokeathlonPennantCaptureSpriteIds, defined with the override object between the display parts).
 typedef struct PokeathlonPennantCaptureSpriteIds {
     u32 ids[2];
 } PokeathlonPennantCaptureSpriteIds;

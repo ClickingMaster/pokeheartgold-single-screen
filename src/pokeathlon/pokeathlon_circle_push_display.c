@@ -30,7 +30,7 @@ SpriteResource **PokeathlonCourseSpritePool_GetResourceSlot(void *scene, int id,
 
 // The resource ids of the two picture sprites (102, 103) lie 0x20 bytes after the coordinates in
 // the read-only data of their defining file.
-extern PokeathlonCirclePushNameplateCoords ov96_0221BFF4;
+extern PokeathlonCirclePushNameplateCoords gPokeathlonCirclePushNameplateCoords;
 extern const WindowTemplate ov96_0221C028[5];
 extern const PokeathlonCirclePushPicKeys ov96_0221C01C;
 extern const VecFx32 ov96_0221C050[4];
@@ -41,8 +41,8 @@ extern const u32 ov96_0221DC04[3];
 
 void PokeathlonCirclePushDisplay_CreateSprites(void *scene, PokeathlonCirclePushDisplay *display) {
     VecFx32 pos = { 0, 0, 0 };
-    u8 x[4] = { ov96_0221BFF4.x[0], ov96_0221BFF4.x[1], ov96_0221BFF4.x[2], ov96_0221BFF4.x[3] };
-    u8 y[4] = { ov96_0221BFF4.y[0], ov96_0221BFF4.y[1], ov96_0221BFF4.y[2], ov96_0221BFF4.y[3] };
+    u8 x[4] = { gPokeathlonCirclePushNameplateCoords.x[0], gPokeathlonCirclePushNameplateCoords.x[1], gPokeathlonCirclePushNameplateCoords.x[2], gPokeathlonCirclePushNameplateCoords.x[3] };
+    u8 y[4] = { gPokeathlonCirclePushNameplateCoords.y[0], gPokeathlonCirclePushNameplateCoords.y[1], gPokeathlonCirclePushNameplateCoords.y[2], gPokeathlonCirclePushNameplateCoords.y[3] };
     u8 i;
     Sprite *sprite;
     Sprite *scoreboardSprite;
@@ -207,7 +207,7 @@ void PokeathlonCirclePushDisplay_ResetAnim(PokeathlonCirclePushDisplay *display)
 }
 
 void PokeathlonCirclePushDisplay_GetPicVramLocations(void *scene, PokeathlonCirclePushDisplay *display) {
-    u32 ids[2] = { ((const u32 *)&ov96_0221BFF4)[8], ((const u32 *)&ov96_0221BFF4)[9] };
+    u32 ids[2] = { ((const u32 *)&gPokeathlonCirclePushNameplateCoords)[8], ((const u32 *)&gPokeathlonCirclePushNameplateCoords)[9] };
     u8 i;
 
     for (i = 0; i < 2; i++) {

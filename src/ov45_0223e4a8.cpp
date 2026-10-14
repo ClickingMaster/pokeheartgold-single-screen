@@ -90,8 +90,8 @@ inline It FindIfNot(It first, It last, Pred pred) {
     return first;
 }
 
-extern "C" BOOL ov45_0223E4A8(Map *m);
+extern "C" BOOL PPWLobbyPlayers_AllHaveProfiles(Map *m);
 
-extern "C" BOOL ov45_0223E4A8(Map *m) {
+extern "C" BOOL PPWLobbyPlayers_AllHaveProfiles(Map *m) {
     return FindIfNot(m->begin(), m->end(), Pred(ov45_02255200.pmf)) == m->end();
 }

@@ -91,8 +91,8 @@ struct Manager {
 };
 
 extern "C" Manager *ov45_022577DC;
-extern "C" It ov45_0223FD8C(Map *map, Base *const &key);
-extern "C" void ov45_02242510(Map *map, u32 id);
+extern "C" It LobbyRequestMap_Find(Map *map, Base *const &key);
+extern "C" void LobbyRequestMap_DeleteKey(Map *map, u32 id);
 extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
 extern "C" Str *LobbyString_Destroy(Str *);
 extern "C" void LobbyChat_StripChannelPrefix(Str *dst, Manager *m, Str *src);
@@ -112,19 +112,19 @@ inline It FindIt(Manager *m, u32 id) {
     Base key;
     KeyInit(&key, id);
     Base *kp = &key;
-    return ov45_0223FD8C(&m->map, kp);
+    return LobbyRequestMap_Find(&m->map, kp);
 }
 
 inline Handler *Find(Manager *m, u32 id) {
     Base key;
     KeyInit(&key, id);
     Base *kp = &key;
-    return Lookup(m, ov45_0223FD8C(&m->map, kp));
+    return Lookup(m, LobbyRequestMap_Find(&m->map, kp));
 }
 
-extern "C" void ov45_0223FC5C(Str *dst, Manager *m);
+extern "C" void LobbyChatManager_GetNick(Str *dst, Manager *m);
 extern "C" void LobbyChat_AddChannelUser(Manager *m, Str *a, Str *b);
-extern "C" int ov45_02243808(Manager *m, Str *s);
+extern "C" int LobbyChat_GetChannelUserLimit(Manager *m, Str *s);
 extern "C" int chatGetChannelNumUsersA(void *net, const char *name);
 extern "C" void chatSetChannelLimitA(void *net, const char *name, int n);
 extern "C" void chatEnumUsersA(void *session, const char *name, void *cb, u32 id, u32 z);
@@ -141,7 +141,7 @@ extern "C" void LobbyChat_OnEnterChannel(void *session, int ok, int error, const
     if (ok == 1) {
         Str s;
         LobbyString_InitFromCStr(&s, name);
-        int found = ov45_02243808(ov45_022577DC, &s);
+        int found = LobbyChat_GetChannelUserLimit(ov45_022577DC, &s);
         LobbyString_Destroy(&s);
         if (found != 0) {
             int limit = chatGetChannelNumUsersA(ov45_022577DC->net, name);
@@ -158,7 +158,7 @@ extern "C" void LobbyChat_OnEnterChannel(void *session, int ok, int error, const
     }
     if (ok == 1) {
         Str a;
-        ov45_0223FC5C(&a, ov45_022577DC);
+        LobbyChatManager_GetNick(&a, ov45_022577DC);
         Str b;
         LobbyString_InitFromCStr(&b, name);
         LobbyChat_AddChannelUser(ov45_022577DC, &a, &b);
@@ -189,7 +189,7 @@ extern "C" void LobbyChat_OnEnterChannel(void *session, int ok, int error, const
     cb(0, error, str, h->getArg());
     LobbyString_Destroy(&t);
     LobbyString_Destroy(&s);
-    ov45_02242510(&ov45_022577DC->map, sid);
+    LobbyRequestMap_DeleteKey(&ov45_022577DC->map, sid);
 }
 
 #pragma pop

@@ -37,8 +37,8 @@ struct Str {
     }
 };
 struct Work;
-extern "C" Str ov45_02231EB0(Work *);
-extern "C" Str ov45_02233994(int, const Str &);
+extern "C" Str PPWLobby_GetChannelBaseName(Work *);
+extern "C" Str PPWLobby_MakeChannelName(int, const Str &);
 
 struct Result {
     int mode;
@@ -70,7 +70,7 @@ struct Table {
 };
 
 extern "C" Table ov45_02254D5C, ov45_02254D1C, ov45_02254D3C;
-extern "C" void PPWLobby_OnPlayerJoined(void), PPWLobby_OnPlayerLeft(void), PPWLobby_OnMessage(void), PPWLobby_OnChannelDataChanged(void), PPWLobby_OnTopicChanged(void), ov45_02235A94(void);
+extern "C" void PPWLobby_OnPlayerJoined(void), PPWLobby_OnPlayerLeft(void), PPWLobby_OnMessage(void), PPWLobby_OnChannelDataChanged(void), PPWLobby_OnTopicChanged(void), PPWLobby_OnEnterSubChannel(void);
 
 struct Callbacks {
     void (*f0)(void), (*f1)(void), (*f2)(void), (*f3)(void), (*f4)(void);
@@ -107,7 +107,7 @@ inline void SetResult(const Result &r) {
 }
 
 inline Str Build(int mode, const Str &t) {
-    Str n = ov45_02233994(mode, t);
+    Str n = PPWLobby_MakeChannelName(mode, t);
     t.Destroy();
     return n;
 }
@@ -136,7 +136,7 @@ extern "C" int PPW_LobbyJoinSubChannelAsync(int mode) {
     cb.f3 = PPWLobby_OnChannelDataChanged;
     cb.f4 = PPWLobby_OnTopicChanged;
     cb.mode = mode;
-    Str name = Build(mode, ov45_02231EB0(w));
+    Str name = Build(mode, PPWLobby_GetChannelBaseName(w));
     Table *t;
     switch (mode) {
     case 1:
@@ -153,7 +153,7 @@ extern "C" int PPW_LobbyJoinSubChannelAsync(int mode) {
         t = 0;
         break;
     }
-    int result = LobbyChat_EnterChannelAsync(name.c_str(), 0, t->ctx, &cb, ov45_02235A94, mode);
+    int result = LobbyChat_EnterChannelAsync(name.c_str(), 0, t->ctx, &cb, PPWLobby_OnEnterSubChannel, mode);
     {
         Work *g = _022577C4;
         int state = ErrorMap().Map(result);

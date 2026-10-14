@@ -594,14 +594,14 @@ static void FieldMap_Render3D(FieldSystem *fieldSystem) {
     MapPropManager_Draw(fieldSystem->mapPropManager, fieldSystem->areaDataManager);
 
     camAngle = Camera_GetAngle(fieldSystem->camera);
-    fx64 temp_ret = (fieldSystem->unk11C << FX32_SHIFT) * (fx64)(FX_CosIdx((u16)(-camAngle.x)));
-    fx64 temp_r2_2 = temp_ret + 0x800;
-    fx64 temp_r2_3 = temp_r2_2 >> FX32_SHIFT;
+    fx64 offsetProduct = (fieldSystem->unk11C << FX32_SHIFT) * (fx64)(FX_CosIdx((u16)(-camAngle.x)));
+    fx64 offsetRounded = offsetProduct + 0x800;
+    fx64 offset = offsetRounded >> FX32_SHIFT;
     MtxFx44 projMtx = NNS_G3dGlb.projMtx;
     MtxFx44 newProjMtx = projMtx;
-    fx64 temp_ret_2 = newProjMtx._22 * (fx64)((fx32)temp_r2_3);
-    fx64 temp_r3 = temp_ret_2 + 0x800;
-    newProjMtx._32 += temp_r3 >> FX32_SHIFT;
+    fx64 projOffsetProduct = newProjMtx._22 * (fx64)((fx32)offset);
+    fx64 projOffsetRounded = projOffsetProduct + 0x800;
+    newProjMtx._32 += projOffsetRounded >> FX32_SHIFT;
 
     // Resembles NNS_G3dGlbSetProjectionMtx(), except this has no NNS_G3D_NULL_ASSERT func,
     // So static below is either a diff func or that one is incorrect?

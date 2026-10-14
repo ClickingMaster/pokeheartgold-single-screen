@@ -188,27 +188,27 @@ extern "C" int StatsUpload_UploadWithLastHash(char *a, int b, void *c, u32 d, in
 extern "C" int StatsUpload_Upload(char *a, int b, void *c, u32 d, int e);
 extern "C" int LobbyChat_Process(void);
 extern "C" int PPW_LobbyShutdownAsync(void);
-extern "C" Vec *ov45_0223770C(Vec *);
-extern "C" void *ov45_02236AE8(void *);
-extern "C" Vec *ov45_0223775C(Vec *);
+extern "C" Vec *LobbyVipVector_Destroy(Vec *);
+extern "C" void *LobbyEventDeque_Destroy(void *);
+extern "C" Vec *LobbyEventVector_Destroy(Vec *);
 extern "C" void LobbyTimerMap_Clear(Tree *);
 extern "C" void *LobbyTimerMap_Destroy(Tree *);
-extern "C" void ov45_0223DF4C(void *);
+extern "C" void PPWLobbyPlayers_Clear(void *);
 extern "C" Vec *LobbyCharVector_Destroy(Vec *);
-extern "C" void *ov45_02236B88(Tree *);
+extern "C" void *PPWLobbyPlayerSet_Destroy(Tree *);
 extern "C" Str *LobbyString_Destroy(Str *);
 extern "C" int LobbyChat_GetLastError(void);
 extern "C" int DWC_GetDateTime(RTCDate *date, RTCTime *time);
 extern "C" void ov45_02236E58(Iterator *it);
 extern "C" void LobbyTimerMap_Erase(Iterator *result, Tree *t, Iterator node);
-extern "C" void ov45_0223E558(void *);
-extern "C" void ov45_0223AF28(void *);
+extern "C" void PPWLobbyPlayers_UpdateStates(void *);
+extern "C" void PPWLobbySchedule_Process(void *);
 extern "C" Str *LobbyString_InitFromCStr(Str *s, char *text);
-extern "C" void ov45_02233994(Str *out, u32 id, Str *s);
+extern "C" void PPWLobby_MakeChannelName(Str *out, u32 id, Str *s);
 extern "C" void PPWLobby_OnEnumChannels(void);
 extern "C" void LobbyChat_EnumChannelsAsync(char *s, void (*cb)(void), int x);
 extern "C" int PPWLobby_EnterMainChannel(void);
-extern "C" int ov45_02234688(void);
+extern "C" int PPWLobby_IsMainChannelReady(void);
 
 extern "C" int PPW_LobbyProcess(void);
 
@@ -310,15 +310,15 @@ static inline int Request_Update(void) {
 }
 
 static inline void Lobby_Destroy(Lobby *w) {
-    ov45_0223770C(&w->vec194);
-    ov45_02236AE8((u8 *)w + 0x17c);
-    ov45_0223775C(&w->vec170);
+    LobbyVipVector_Destroy(&w->vec194);
+    LobbyEventDeque_Destroy((u8 *)w + 0x17c);
+    LobbyEventVector_Destroy(&w->vec170);
     LobbyTimerMap_Clear(&w->timers);
     LobbyTimerMap_Destroy(&w->timers);
     w->sub.vt = ov45_02254FA0;
-    ov45_0223DF4C(&w->sub.vt);
+    PPWLobbyPlayers_Clear(&w->sub.vt);
     LobbyCharVector_Destroy(&w->sub.vec);
-    ov45_02236B88(&w->sub.tree);
+    PPWLobbyPlayerSet_Destroy(&w->sub.tree);
     LobbyString_Destroy(&w->sd4);
     LobbyString_Destroy(&w->sbc);
     LobbyString_Destroy(&w->s58);
@@ -382,8 +382,8 @@ static inline void Lobby_UpdateTimers(void) {
             ov45_02236E58(&it);
         }
     }
-    ov45_0223E558(&w->sub.vt);
-    ov45_0223AF28(&w->x144);
+    PPWLobbyPlayers_UpdateStates(&w->sub.vt);
+    PPWLobbySchedule_Process(&w->x144);
 }
 
 static inline int Lobby_IsReady(Lobby *w) {
@@ -397,7 +397,7 @@ static inline void Lobby_Login(void) {
     Str name;
     Str query;
     LobbyString_InitFromCStr(&name, ov45_022550B0);
-    ov45_02233994(&query, 0, &name);
+    PPWLobby_MakeChannelName(&query, 0, &name);
     LobbyChat_EnumChannelsAsync(Str_CStr(&query), PPWLobby_OnEnumChannels, 0);
     LobbyString_Destroy(&query);
     LobbyString_Destroy(&name);
@@ -472,7 +472,7 @@ static inline int Lobby_Process(void) {
         break;
     }
     case 7:
-        if (ov45_02234688()) {
+        if (PPWLobby_IsMainChannelReady()) {
             Sub *sub = &_022577C4->sub;
             sub->tracked.active = 0;
             Tracked t(sub->tracked.stamp.code, sub->tracked.stamp.pair, 1, 1);

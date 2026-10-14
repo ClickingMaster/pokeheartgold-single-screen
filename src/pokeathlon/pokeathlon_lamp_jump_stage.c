@@ -51,7 +51,7 @@ void PokeathlonCourseSpritePoolSprite_SetPosition(void *sprite, const VecFx32 *p
 SpriteList *PokeathlonCourseSpritePool_GetSpriteList(void *scene);
 void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *sprite, int priority);
 
-extern int ov96_0221E5A0;         // red of the next trampoline vertex
+extern int gPokeathlonLampJumpTrampolineRed;         // red of the next trampoline vertex
 extern const u8 ov96_0221C0B0[2]; // x of the timer digits
 extern const u8 ov96_0221C0B4[2]; // animation of the timer digits
 extern const VecFx32 ov96_0221C0C4;
@@ -98,7 +98,7 @@ void PokeathlonLampJump_DrawTrampoline(PokeathlonLampJump *lampJump) {
     NNS_G3dGlbFlushP();
     primitive = GX_BEGIN_QUAD_STRIP;
     NNS_G3dGeBufferOP_N(G3OP_BEGIN, &primitive, 1);
-    ov96_0221E5A0 = 0;
+    gPokeathlonLampJumpTrampolineRed = 0;
     sTrampolineGreen = 10;
     sTrampolineBlue = 20;
     PokeathlonLampJump_GeVtx16(0xE000, 0);
@@ -108,8 +108,8 @@ void PokeathlonLampJump_DrawTrampoline(PokeathlonLampJump *lampJump) {
 
         PokeathlonLampJump_GeVtx16((u16)(int)(x * 4096.0f) | ((u32)(u16)(s16)lampJump->trampoline.surface[i - 1] << 16), 0);
         PokeathlonLampJump_GeVtx16((u16)(int)(x * 4096.0f) | 0xE8000000, 0);
-        PokeathlonLampJump_GeColor((u16)(ov96_0221E5A0 | (sTrampolineGreen << 5) | (sTrampolineBlue << 10)));
-        ov96_0221E5A0 = (ov96_0221E5A0 + 1) % 31;
+        PokeathlonLampJump_GeColor((u16)(gPokeathlonLampJumpTrampolineRed | (sTrampolineGreen << 5) | (sTrampolineBlue << 10)));
+        gPokeathlonLampJumpTrampolineRed = (gPokeathlonLampJumpTrampolineRed + 1) % 31;
         sTrampolineGreen = (sTrampolineGreen + 1) % 31;
         sTrampolineBlue = (sTrampolineBlue + 1) % 31;
     }

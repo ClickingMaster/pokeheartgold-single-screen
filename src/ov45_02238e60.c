@@ -42,12 +42,12 @@ typedef struct {
     u32 x[5];
 } Position;
 
-void ov45_0223B2DC(Vector *, u32);
-Position ov45_0223B250(Vector *, u32);
-Position ov45_02238F18(Iter, Iter, Position *, u32 *, u32 *);
-void ov45_02238E60(Vector *, Iter *, Iter *, Tag);
+void LobbyEventDeque_AddBackCapacity(Vector *, u32);
+Position LobbyEventDeque_IteratorAt(Vector *, u32);
+Position LobbyEventDeque_UninitializedCopy(Iter, Iter, Position *, u32 *, u32 *);
+void LobbyEventDeque_AppendRange(Vector *, Iter *, Iter *, Tag);
 
-void ov45_02238E60(Vector *v, Iter *first, Iter *last, Tag tag) {
+void LobbyEventDeque_AppendRange(Vector *v, Iter *first, Iter *last, Tag tag) {
     Position result, pos;
     u32 count, available;
     if (Equal(first, last->p)) {
@@ -61,8 +61,8 @@ void ov45_02238E60(Vector *v, Iter *first, Iter *last, Tag tag) {
     }
     available -= v->start + v->size;
     if (count > available) {
-        ov45_0223B2DC(v, count - available);
+        LobbyEventDeque_AddBackCapacity(v, count - available);
     }
-    pos = ov45_0223B250(v, v->size);
-    result = ov45_02238F18(*first, *last, &pos, &v->field8, &v->size);
+    pos = LobbyEventDeque_IteratorAt(v, v->size);
+    result = LobbyEventDeque_UninitializedCopy(*first, *last, &pos, &v->field8, &v->size);
 }

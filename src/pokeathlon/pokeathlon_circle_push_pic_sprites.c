@@ -11,11 +11,11 @@ typedef struct PokeathlonCirclePushPicIds {
 } PokeathlonCirclePushPicIds;
 
 // The definition order fixes the .rodata layout: the display reads past the nameplate positions
-// (ov96_0221BFF4) into the ids that follow them.
+// (gPokeathlonCirclePushNameplateCoords) into the ids that follow them.
 static const PokeathlonCirclePushPicIds sPicKinds = { { 5, 6 } };
 static const PokeathlonCirclePushPicIds sPicResIds = { { 0x66, 0x67 } };
 static const PokeathlonCirclePushPicIds sPicResIds2 = { { 0x66, 0x67 } };
-const PokeathlonCirclePushNameplateCoords ov96_0221BFF4 = {
+const PokeathlonCirclePushNameplateCoords gPokeathlonCirclePushNameplateCoords = {
     { 0x88, 0x48, 0x68, 0x88 },
     { 0x20, 0x98, 0x98, 0x98 },
 };

@@ -46,10 +46,10 @@ struct It {
     }
 };
 
-extern "C" It &ov45_0223CD78(It *it, int n);
+extern "C" It &LobbyEventDequeMapIterator_Advance(It *it, int n);
 
 inline It &It::operator+=(int n) {
-    return ov45_0223CD78(this, n);
+    return LobbyEventDequeMapIterator_Advance(this, n);
 }
 
 struct Empty {};
@@ -75,10 +75,10 @@ inline WIt Advance(const WIt &w, int n) {
     return w + n;
 }
 
-extern "C" int ov45_0223CDBC(const WIt &a, const WIt &b);
+extern "C" int LobbyEventDequeMapIterator_Distance(const WIt &a, const WIt &b);
 
 inline int dist2(WIt first, WIt last) {
-    return ov45_0223CDBC(last, first);
+    return LobbyEventDequeMapIterator_Distance(last, first);
 }
 
 inline int distance(WIt first, WIt last) {
@@ -120,11 +120,11 @@ inline P *CopyRange(WIt first, WIt last, P *d) {
     return d;
 }
 
-extern "C" It ov45_0223C53C(WIt first, WIt last, It dest);
+extern "C" It LobbyEventDequeMap_CopyRange(WIt first, WIt last, It dest);
 
-extern "C" It ov45_0223C53C(WIt first, WIt last, It dest) {
+extern "C" It LobbyEventDequeMap_CopyRange(WIt first, WIt last, It dest) {
     if (first.it.cur != last.it.cur) {
-        int n = ov45_0223CDBC(last, first);
+        int n = LobbyEventDequeMapIterator_Distance(last, first);
         for (;;) {
             int room = dest.last - dest.cur;
             int chunk = Min(n, room);

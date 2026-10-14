@@ -49,8 +49,8 @@ struct Iter {
     }
 };
 struct CVec;
-extern "C" void ov45_022327B8(CVec *, Iter, Iter, TD);
-extern "C" void ov45_0223DA3C(CVec *, const char *, TQ);
+extern "C" void LobbyCharVector_AssignIterRange(CVec *, Iter, Iter, TD);
+extern "C" void LobbyCharVector_PushBackSlow(CVec *, const char *, TQ);
 
 struct CVec {
     char *ptr;
@@ -65,7 +65,7 @@ struct CVec {
     }
 
     void Assign(Iter first, Iter last, const TA &, const TB &) {
-        ov45_022327B8(this, first, last, TD());
+        LobbyCharVector_AssignIterRange(this, first, last, TD());
     }
 
     void PushBack(const char &c, const char *p) {
@@ -78,7 +78,7 @@ struct CVec {
             size = n;
             ptr[n - 1] = c;
         } else {
-            ov45_0223DA3C(this, p, TQ());
+            LobbyCharVector_PushBackSlow(this, p, TQ());
         }
     }
 };
@@ -101,16 +101,16 @@ struct Out {
 extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
 extern "C" void LobbyString_Destroy(Str *);
 extern "C" void LobbyString_Split(SVec *, const Str *, const Str *, int);
-extern "C" void ov45_02237664(SVec *);
-extern "C" int ov45_0223D644(Str *, Str *, int);
+extern "C" void LobbyStringVector_Destroy(SVec *);
+extern "C" int LobbyString_CompareNoCase(Str *, Str *, int);
 extern "C" int PPWLobby_DecodeMessageData(const char *, CVec *);
 extern "C" const char ov45_022551DC[], ov45_022551E0[], ov45_022551E4[], ov45_022551E8[], ov45_022551D9[];
 extern "C" char ov45_022551D8[];
-extern "C" int ov45_0223D27C(const Str *, Out *);
+extern "C" int PPWLobby_ParseMessage(const Str *, Out *);
 #pragma force_active on
 #pragma opt_common_subs off
 
-extern "C" int ov45_0223D27C(const Str *src, Out *out) {
+extern "C" int PPWLobby_ParseMessage(const Str *src, Out *out) {
     SVec parts;
     SVec fields;
     Str delim;
@@ -125,17 +125,17 @@ extern "C" int ov45_0223D27C(const Str *src, Out *out) {
     LobbyString_Split(&parts, src, &delim, 2);
     LobbyString_Destroy(&delim);
     if (parts.size != 2) {
-        ov45_02237664(&parts);
+        LobbyStringVector_Destroy(&parts);
         return 0;
     }
     {
         p = parts.ptr;
         if (p[0].size() > 40) {
-            ov45_02237664(&parts);
+            LobbyStringVector_Destroy(&parts);
             return 0;
         }
         if (p[1].size() > 400) {
-            ov45_02237664(&parts);
+            LobbyStringVector_Destroy(&parts);
             return 0;
         }
     }
@@ -143,8 +143,8 @@ extern "C" int ov45_0223D27C(const Str *src, Out *out) {
     LobbyString_Split(&fields, &parts.ptr[0], &delim2, 0);
     LobbyString_Destroy(&delim2);
     if (fields.size < 6) {
-        ov45_02237664(&fields);
-        ov45_02237664(&parts);
+        LobbyStringVector_Destroy(&fields);
+        LobbyStringVector_Destroy(&parts);
         return 0;
     }
     out->x0 = strtoul(fields.ptr[0].c_str(), &end, 16);
@@ -153,7 +153,7 @@ extern "C" int ov45_0223D27C(const Str *src, Out *out) {
         const char *k = ov45_022551E4;
         LobbyString_InitFromCStr(&a, fields.ptr[2].c_str());
         LobbyString_InitFromCStr(&b, k);
-        int r = ov45_0223D644(&a, &b, 1);
+        int r = LobbyString_CompareNoCase(&a, &b, 1);
         LobbyString_Destroy(&b);
         LobbyString_Destroy(&a);
         out->decode = r == 0;
@@ -162,7 +162,7 @@ extern "C" int ov45_0223D27C(const Str *src, Out *out) {
         const char *k = ov45_022551E8;
         LobbyString_InitFromCStr(&a2, fields.ptr[3].c_str());
         LobbyString_InitFromCStr(&b2, k);
-        int r = ov45_0223D644(&a2, &b2, 1);
+        int r = LobbyString_CompareNoCase(&a2, &b2, 1);
         LobbyString_Destroy(&b2);
         LobbyString_Destroy(&a2);
         if (r == 0) {
@@ -172,10 +172,10 @@ extern "C" int ov45_0223D27C(const Str *src, Out *out) {
         }
     }
     out->value = strtol(fields.ptr[4].c_str(), &end, 16);
-    ov45_02237664(&fields);
+    LobbyStringVector_Destroy(&fields);
     if (out->decode == 1) {
         if (!PPWLobby_DecodeMessageData(parts.ptr[1].c_str(), &out->payload)) {
-            ov45_02237664(&parts);
+            LobbyStringVector_Destroy(&parts);
             return 0;
         }
     } else {
@@ -183,6 +183,6 @@ extern "C" int ov45_0223D27C(const Str *src, Out *out) {
         out->payload.Assign(p[1].c_str(), p[1].c_str() + p[1].size());
         out->payload.PushBack(ov45_022551D8[1], ov45_022551D9);
     }
-    ov45_02237664(&parts);
+    LobbyStringVector_Destroy(&parts);
     return 1;
 }

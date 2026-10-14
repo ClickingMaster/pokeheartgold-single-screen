@@ -18,7 +18,7 @@ void PokeathlonCourseObject_GetCollisionCenter(void *object, fx32 x, fx32 y, fx3
 void **PokeathlonCourseSpritePool_GetResourceSlot(void *pool, u32 id, u32 kind);
 
 // Sprite resource ids of the touch screen (pairs: the two Pokemon pictures are entries 6 and 7).
-extern const u32 ov96_0221C728[];
+extern const u32 gPokeathlonRelayRunPicIds[];
 extern const WindowTemplate ov96_0221C760;
 extern const WindowTemplate ov96_0221C768;
 // Base score of each cell ahead of the runner: the farther, the better.
@@ -26,7 +26,7 @@ extern const s32 ov96_0221C770[RELAY_RUN_CPU_CELLS];
 
 // The touch screen: where the two picture slots are in VRAM.
 void PokeathlonRelayRunHud_GetPicVramOffsets(void *pool, PokeathlonRelayRunHud *hud) {
-    u32 ids[2] = { ov96_0221C728[6], ov96_0221C728[7] };
+    u32 ids[2] = { gPokeathlonRelayRunPicIds[6], gPokeathlonRelayRunPicIds[7] };
     u8 i;
 
     for (i = 0; i < 2; i++) {

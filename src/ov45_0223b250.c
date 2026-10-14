@@ -25,10 +25,10 @@ typedef struct {
     u32 tail;
 } Deque;
 
-void ov45_0223CD78(MapIt *it, u32 n);
-void ov45_0223B250(DequeIt *out, Deque *d, u32 idx);
+void LobbyEventDequeMapIterator_Advance(MapIt *it, u32 n);
+void LobbyEventDeque_IteratorAt(DequeIt *out, Deque *d, u32 idx);
 
-void ov45_0223B250(DequeIt *out, Deque *d, u32 idx) {
+void LobbyEventDeque_IteratorAt(DequeIt *out, Deque *d, u32 idx) {
     MapIt it;
     u8 *p;
     u8 **map;
@@ -40,7 +40,7 @@ void ov45_0223B250(DequeIt *out, Deque *d, u32 idx) {
     it.cur = cur;
     it.first = map;
     it.mid = cur;
-    ov45_0223CD78(&it, idx >> 7);
+    LobbyEventDequeMapIterator_Advance(&it, idx >> 7);
     {
         u8 **c = it.cur, **f = it.first, **m = it.mid, **l = it.last;
         p = (d->count == 0) ? NULL : *c;

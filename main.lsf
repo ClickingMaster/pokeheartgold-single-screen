@@ -1558,8 +1558,8 @@ Overlay OVY_45
     Object lib/NitroDWC/asm/dwc_lobby_data.o
     Object src/ov45_022310b0.o
     Object src/ov45_022310c0.o
-    Object src/ov45_02231144.o
-    Object src/ov45_02231448.o
+    Object src/ppw_lobby_initialize.o
+    Object src/ppw_lobby_player_destroy.o
     Object src/ppw_lobby_shutdown.o
     Object src/ppw_lobby_process.o
     Object src/ov45_02231c38.o
@@ -1571,10 +1571,10 @@ Overlay OVY_45
     Object src/ov45_022321e0.o
     Object src/ov45_022322a4.o
     Object src/ppw_lobby_get_channel_data.o
-    Object src/ov45_02232434.o
+    Object src/ppw_lobby_get_channel_name.o
     Object src/ov45_0223259c.o
     Object src/ov45_022325b0.o
-    Object src/ov45_02232760.o
+    Object src/lobby_char_vector_assign_range.o
     Object src/ov45_022327b8.o
     Object src/ov45_0223285c.o
     Object src/ov45_02232ae8.o
@@ -1587,10 +1587,10 @@ Overlay OVY_45
     Object src/lobby_timer_map_find_insert_pos.o
     Object src/ov45_022384bc.o
     Object src/ov45_02238508.o
-    Object src/ov45_02238558.o
-    Object src/ov45_02238674.o
+    Object src/ppw_lobby_player_set_destroy_nodes.o
+    Object src/lobby_string_vector_append_copies_slow.o
     Object src/ov45_022387e4.o
-    Object src/ov45_02238820.o
+    Object src/lobby_char_vector_append_zeros_slow.o
     Object src/ov45_0223895c.o
     Object src/ov45_022389ec.o
     Object src/ov45_02238a3c.o
@@ -1602,7 +1602,7 @@ Overlay OVY_45
     Object src/ov45_02238d54.o
     Object src/ov45_02238e60.o
     Object src/ov45_02238f18.o
-    Object src/ov45_02239090.o
+    Object src/lobby_event_deque_copy.o
     Object src/ov45_022391ec.o
     Object src/lobby_sort_stable_sort_adaptive.o
     Object src/lobby_sort_merge_adaptive.o
@@ -1681,7 +1681,7 @@ Overlay OVY_45
     Object src/lobby_chat_on_get_channel_keys.o
     Object src/lobby_chat_on_broadcast_key_changed.o
     Object src/lobby_chat_on_get_channel_mode.o
-    Object src/ov45_02240850.o
+    Object src/lobby_chat_timer_connect_timeout.o
     Object src/lobby_chat_process.o
     Object src/ov45_02240a58.o
     Object src/ov45_02240b10.o
@@ -1697,8 +1697,8 @@ Overlay OVY_45
     Object src/ov45_02241f80.o
     Object src/ov45_0224210c.o
     Object src/ov45_022421e4.o
-    Object src/ov45_02242254.o
-    Object src/ov45_02242288.o
+    Object src/lobby_string_find_first_of.o
+    Object src/lobby_mem.o
     Object src/ov45_0224268c.o
     Object src/lobby_chat_manager.o
     Object src/ov45_02242acc.o
@@ -1712,9 +1712,9 @@ Overlay OVY_45
     Object src/ov45_022435a8.o
     Object src/ov45_022435f8.o
     Object src/ov45_022436e0.o
-    Object src/ov45_02243780.o
+    Object src/lobby_user_map_make_entry.o
     Object src/lobby_channel_map.o
-    Object src/ov45_02243970.o
+    Object src/lobby_channel_map_insert_node.o
     Object src/ov45_02243a98.o
     Object src/ov45_02243b50.o
     Object src/ov45_02243bc0.o
@@ -1723,7 +1723,7 @@ Overlay OVY_45
     Object src/ov45_02243f1c.o
     Object src/ov45_02243fd4.o
     Object src/lobby_chat_map_destroy.o
-    Object src/ov45_02244170.o
+    Object src/lobby_channel_map_find_insert_pos.o
     Object src/ov45_022441fc.o
     Object src/chat_callbacks.o
     Object src/chat_channel.o
@@ -1733,7 +1733,7 @@ Overlay OVY_45
     Object src/chat_main.o
     Object src/ov45_02251a8c.o
     Object src/chat_socket.o
-    Object src/ov45_02253968.o
+    Object src/chat_socket_recv.o
     Object src/stats_upload.o
 }
 Overlay OVY_46

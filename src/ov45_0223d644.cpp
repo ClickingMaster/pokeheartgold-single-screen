@@ -69,9 +69,9 @@ inline It Transform(It first, It last, It out, int (*f)(int)) {
     return out;
 }
 
-extern "C" void ov45_0223D644(Str *a, Str *b, void *c);
+extern "C" void LobbyString_CompareNoCase(Str *a, Str *b, void *c);
 
-extern "C" void ov45_0223D644(Str *a, Str *b, void *c) {
+extern "C" void LobbyString_CompareNoCase(Str *a, Str *b, void *c) {
     Transform(a->begin(), a->end(), a->begin(), LobbyString_ToLowerChar);
     Transform(b->begin(), b->end(), b->begin(), LobbyString_ToLowerChar);
     LobbyString_CompareSubstring(a, 0, c, b);

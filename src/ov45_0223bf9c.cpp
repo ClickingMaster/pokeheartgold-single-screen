@@ -55,10 +55,10 @@ struct It {
     }
 };
 
-extern "C" It &ov45_0223CD78(It *it, int n);
+extern "C" It &LobbyEventDequeMapIterator_Advance(It *it, int n);
 
 inline It &It::operator+=(int n) {
-    return ov45_0223CD78(this, n);
+    return LobbyEventDequeMapIterator_Advance(this, n);
 }
 
 struct Empty {};
@@ -72,19 +72,19 @@ struct WIt {
     }
 };
 
-extern "C" int ov45_0223CDBC(const WIt &a, const WIt &b);
+extern "C" int LobbyEventDequeMapIterator_Distance(const WIt &a, const WIt &b);
 
 inline int dist2(WIt first, WIt last) {
-    return ov45_0223CDBC(last, first);
+    return LobbyEventDequeMapIterator_Distance(last, first);
 }
 
 inline int distance(WIt first, WIt last) {
     return dist2(first, last);
 }
 
-extern "C" It ov45_0223C8A0(It first, It last, It dest);
-extern "C" It ov45_0223C70C(It first, It last, It dest);
-extern "C" It ov45_0223C53C(WIt first, WIt last, It dest);
+extern "C" It LobbyEventDequeMap_Copy(It first, It last, It dest);
+extern "C" It LobbyEventDequeMap_CopyBackward(It first, It last, It dest);
+extern "C" It LobbyEventDequeMap_CopyRange(WIt first, WIt last, It dest);
 
 struct Alloc {
     void construct(P *p, P v) {
@@ -110,11 +110,11 @@ struct Tmp {
     u32 *owner;
 };
 
-extern "C" u32 ov45_0223BBFC(Ring *r, u32 n);
-extern "C" void ov45_0223CB04(Tmp *t, u32 n, Alloc);
-extern "C" void ov45_0223CC78(Tmp *t, const It &first, const It &last, Alloc);
-extern "C" void ov45_0223CB6C(Tmp *t, const It &first, const It &last, Alloc);
-extern "C" void ov45_0223CAB4(Tmp *t);
+extern "C" u32 LobbyEventDequeMap_RecommendSize(Ring *r, u32 n);
+extern "C" void LobbyEventDequeMapBuffer_Allocate(Tmp *t, u32 n, Alloc);
+extern "C" void LobbyEventDequeMapBuffer_AppendRange(Tmp *t, const It &first, const It &last, Alloc);
+extern "C" void LobbyEventDequeMapBuffer_PrependRange(Tmp *t, const It &first, const It &last, Alloc);
+extern "C" void LobbyEventDequeMapBuffer_Destroy(Tmp *t);
 
 struct Ring {
     P *ptr;
@@ -157,9 +157,9 @@ inline It Ring::end() {
     return It(ptr + endIndex(), *this);
 }
 
-extern "C" void ov45_0223BF9C(Ring *r, It pos, WIt first, WIt last, Tag);
+extern "C" void LobbyEventDequeMap_InsertRange(Ring *r, It pos, WIt first, WIt last, Tag);
 
-extern "C" void ov45_0223BF9C(Ring *r, It pos, WIt first, WIt last, Tag) {
+extern "C" void LobbyEventDequeMap_InsertRange(Ring *r, It pos, WIt first, WIt last, Tag) {
     u32 n = distance(first, last);
     if (n == 0) {
         return;
@@ -178,17 +178,17 @@ extern "C" void ov45_0223BF9C(Ring *r, It pos, WIt first, WIt last, Tag) {
             r->start = b.cur - r->ptr;
             r->size += n;
             if (k != 0) {
-                b = ov45_0223C8A0(old, old + k, b);
+                b = LobbyEventDequeMap_Copy(old, old + k, b);
             }
         } else {
             r->size += n;
             b = r->end();
             if (after != 0) {
-                b = ov45_0223C70C(b - (n + after), b - n, b);
+                b = LobbyEventDequeMap_CopyBackward(b - (n + after), b - n, b);
             }
             b += -n;
         }
-        ov45_0223C53C(first, last, b);
+        LobbyEventDequeMap_CopyRange(first, last, b);
         return;
     }
     Tmp t;
@@ -197,8 +197,8 @@ extern "C" void ov45_0223BF9C(Ring *r, It pos, WIt first, WIt last, Tag) {
     t.size = 0;
     t.cap = 0;
     t.owner = &r->cap;
-    u32 nc = ov45_0223BBFC(r, n);
-    ov45_0223CB04(&t, nc, Alloc(Alloc()));
+    u32 nc = LobbyEventDequeMap_RecommendSize(r, n);
+    LobbyEventDequeMapBuffer_Allocate(&t, nc, Alloc(Alloc()));
     t.start = k;
     P *p = t.ptr + k;
     if (n != 0) {
@@ -212,13 +212,13 @@ extern "C" void ov45_0223BF9C(Ring *r, It pos, WIt first, WIt last, Tag) {
             ++first.it;
         } while (n != 0);
     }
-    ov45_0223CC78(&t, pos, r->end(), Alloc());
-    ov45_0223CB6C(&t, r->begin(), pos, Alloc());
+    LobbyEventDequeMapBuffer_AppendRange(&t, pos, r->end(), Alloc());
+    LobbyEventDequeMapBuffer_PrependRange(&t, r->begin(), pos, Alloc());
     r->clear();
     swap(r->ptr, t.ptr);
     swap(r->start, t.start);
     swap(r->size, t.size);
     u32 &tc = t.cap;
     swap(r->cap, tc);
-    ov45_0223CAB4(&t);
+    LobbyEventDequeMapBuffer_Destroy(&t);
 }

@@ -11,7 +11,7 @@
 #include <string.h>
 
 // Web stats upload client of the OVY_45 network library (see dwc/stats_upload_internal.h). Its key setup and
-// random number generator are at the end of ov45_02253968.c.
+// random number generator are at the end of ciSocketParseNextLine.c.
 
 int snprintf(char *, u32, const char *, ...);
 int sprintf(char *, const char *, ...);

@@ -58,7 +58,7 @@ extern unsigned char __lower_mapC[];
 
 void DWC_Free(int, void *, int);
 void *LobbyMem_Alloc(u32);
-void ov45_0223BD0C(void);
+void LobbyEventDequeMap_LengthError(void);
 void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 Str *LobbyString_Replace(Str *, u32, u32, void *);
 void LobbyString_ReplaceCStr(Str *, u32, u32, const char *);
@@ -129,13 +129,13 @@ typedef struct CharSplitBuf {
     u32 start;
 } CharSplitBuf;
 
-void ov45_022389CC(CharSplitBuf *b, u32 cap, Tag unused);
-void ov45_022389B0(CharSplitBuf *b);
+void LobbyCharVectorBuffer_Allocate(CharSplitBuf *b, u32 cap, Tag unused);
+void LobbyCharVectorBuffer_Destroy(CharSplitBuf *b);
 
-u32 ov45_02237890(CharVec *, u32);
-void ov45_0223DB8C(CharVec *, u32, const char *);
-u32 ov45_0223EA34(Vec *, u32);
-void ov45_0223EB00(Vec *, u32, u32 *);
+u32 LobbyCharVector_RecommendSize(CharVec *, u32);
+void LobbyCharVector_AppendFillSlow(CharVec *, u32, const char *);
+u32 LobbyU32Vector_RecommendSize(Vec *, u32);
+void LobbyU32Vector_AppendFillSlow(Vec *, u32, u32 *);
 void ov45_02236E58(NodeIter *);
 Node *LobbyTree_EraseRebalance(Node *, void *);
 
@@ -150,8 +150,8 @@ typedef struct InsertResult {
 } InsertResult;
 
 extern u8 ov45_02255200[];
-Node *ov45_0223E940(List *l, Session **key, Node **parent, u8 *left, u8 *flag);
-Node *ov45_0223E758(List *l, Node *parent, u8 left, u8 flag, Session **key);
+Node *PPWLobbyPlayerSet_FindInsertPos(List *l, Session **key, Node **parent, u8 *left, u8 *flag);
+Node *PPWLobbyPlayerSet_InsertNode(List *l, Node *parent, u8 left, u8 flag, Session **key);
 
 typedef struct SessionMgr {
     u32 unk0;
@@ -159,7 +159,7 @@ typedef struct SessionMgr {
     Session self;
 } SessionMgr;
 
-void ov45_0223E6E8(NodeIter *out, List *l, NodeIter it);
+void PPWLobbyPlayerSet_Erase(NodeIter *out, List *l, NodeIter it);
 
 typedef struct FindState {
     int id;
@@ -167,20 +167,20 @@ typedef struct FindState {
     NodeIter it;
 } FindState;
 
-void ov45_0223E830(Vec *v, u32 n);
-void ov45_0223E910(Vec *v, u32 *x, Tag unused);
+void LobbyU32Vector_Reserve(Vec *v, u32 n);
+void LobbyU32Vector_PushBackSlow(Vec *v, u32 *x, Tag unused);
 
 static inline void VecReserve(Vec *v, u32 n) {
     if (n > v->cap) {
-        ov45_0223E830(v, n);
+        LobbyU32Vector_Reserve(v, n);
     }
 }
 
-void ov45_0223E024(Vec *out, SessionMgr *m);
-void ov45_022376BC(Vec *v);
+void PPWLobbyPlayers_GetEnteredIds(Vec *out, SessionMgr *m);
+void LobbyU32Vector_Destroy(Vec *v);
 
-void ov45_0223EA04(Vec *v, u32 n, Tag unused);
-Vec *ov45_0223E9B4(Vec *v);
+void LobbyU32Vector_Allocate(Vec *v, u32 n, Tag unused);
+Vec *LobbyU32Vector_Destroy2(Vec *v);
 
 static inline void SwapU32(u32 *a, u32 *b) {
     u32 t = *a;
@@ -239,7 +239,7 @@ void PPWLobbyPlayer_UpdateState(Session *s);
 
 extern VTable ov45_02254FB0;
 void DWC_GetDateTime(RTCDate *date, RTCTime *time);
-void ov45_0223E648(InsertResult *out, List *l, Session **key);
+void PPWLobbyPlayerSet_Insert(InsertResult *out, List *l, Session **key);
 
 typedef struct PtrDeque {
     u32 unk0;
@@ -266,9 +266,9 @@ void LobbyString_AssignCStr(Str *s, const char *arg);
 int DWC_Base64Encode(const void *src, u32 len, char *dst, u32 dstLen);
 void MI_CpuFill8(void *dst, u8 val, u32 size);
 
-void ov45_0223D15C(DequeBuf *d, u32 n, Tag unused);
-int ov45_0223D208(Iter *a, Iter *b);
-void ov45_0223CF30(DequeBuf *d, Iter *a, Iter *b, Tag unused);
+void LobbyEventDequeMap_Allocate(DequeBuf *d, u32 n, Tag unused);
+int LobbyEventDequeMapIterator_Distance2(Iter *a, Iter *b);
+void LobbyEventDequeMap_AppendRange(DequeBuf *d, Iter *a, Iter *b, Tag unused);
 
 static inline void TouchTag(void) {
     volatile Tag t = { 0 };
@@ -282,16 +282,16 @@ typedef struct SplitBuf {
     u32 start;
 } SplitBuf;
 
-void ov45_0223EC80(SplitBuf *b, u32 cap, Tag unused);
-void ov45_0223EC64(SplitBuf *b);
+void LobbyU32VectorBuffer_Allocate(SplitBuf *b, u32 cap, Tag unused);
+void LobbyU32VectorBuffer_Destroy(SplitBuf *b);
 
-Vec *ov45_0223CAB4(Vec *v);
-void ov45_0223CB04(DequeBuf *d, u32 n);
-void ov45_0223CB6C(DequeBuf *d, Iter *a, Iter *b);
-void ov45_0223CC78(DequeBuf *d, Iter *a, Iter *b);
-void ov45_0223CD78(Iter *it, int n);
+Vec *LobbyEventDequeMapBuffer_Destroy(Vec *v);
+void LobbyEventDequeMapBuffer_Allocate(DequeBuf *d, u32 n);
+void LobbyEventDequeMapBuffer_PrependRange(DequeBuf *d, Iter *a, Iter *b);
+void LobbyEventDequeMapBuffer_AppendRange(DequeBuf *d, Iter *a, Iter *b);
+void LobbyEventDequeMapIterator_Advance(Iter *it, int n);
 
-Vec *ov45_0223CAB4(Vec *v) {
+Vec *LobbyEventDequeMapBuffer_Destroy(Vec *v) {
     if (v->ptr != NULL) {
         u32 n = *(volatile u32 *)&v->cap;
         volatile Tag a = { 0 };
@@ -303,19 +303,19 @@ Vec *ov45_0223CAB4(Vec *v) {
     return v;
 }
 
-void ov45_0223CB04(DequeBuf *d, u32 n) {
+void LobbyEventDequeMapBuffer_Allocate(DequeBuf *d, u32 n) {
     if (!(ov45_022577CC & 1)) {
         ov45_022551A0 = 0x3FFFFFFE;
         ov45_022577CC |= 1;
     }
     if (n > ov45_022551A0) {
-        ov45_0223BD0C();
+        LobbyEventDequeMap_LengthError();
     }
     d->ptr = LobbyMem_Alloc((n + 1) * 4);
     d->cap = n + 1;
 }
 
-void ov45_0223CB6C(DequeBuf *d, Iter *a, Iter *b) {
+void LobbyEventDequeMapBuffer_PrependRange(DequeBuf *d, Iter *a, Iter *b) {
     u32 **dst = d->ptr + d->begin;
     if (a->cur <= b->cur) {
         int n = b->cur - a->cur;
@@ -338,7 +338,7 @@ void ov45_0223CB6C(DequeBuf *d, Iter *a, Iter *b) {
     }
 }
 
-void ov45_0223CC78(DequeBuf *d, Iter *a, Iter *b) {
+void LobbyEventDequeMapBuffer_AppendRange(DequeBuf *d, Iter *a, Iter *b) {
     u32 **dst = d->ptr + (d->begin + d->size) % d->cap;
     if (a->cur <= b->cur) {
         memmove(dst, a->cur, (b->cur - a->cur) * 4);
@@ -351,7 +351,7 @@ void ov45_0223CC78(DequeBuf *d, Iter *a, Iter *b) {
     }
 }
 
-void ov45_0223CD78(Iter *it, int n) {
+void LobbyEventDequeMapIterator_Advance(Iter *it, int n) {
     int size = it->last - it->first;
     n += it->cur - it->first;
     if (n < 0) {

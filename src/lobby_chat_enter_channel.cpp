@@ -72,7 +72,7 @@ struct InsertResult {
     }
 };
 
-extern "C" void ov45_0224206C(InsertResult *res, void *list, Handler **h);
+extern "C" void LobbyRequestMap_Insert(InsertResult *res, void *list, Handler **h);
 extern "C" Str LobbyChat_GetFullChannelName(Mgr *m, const Str &s);
 
 struct Arg3 {
@@ -164,7 +164,7 @@ extern "C" int LobbyChat_EnterChannelAsync(const char *name, u32 p1, u32 p2, Arg
     strlen(name);
     InsertResult res;
     Handler *h = NewHandler(a, b);
-    ov45_0224206C(&res, m->list, &h);
+    LobbyRequestMap_Insert(&res, m->list, &h);
     u32 id = GetId(h, IdTag(), IdTag());
     {
         Str s(name);

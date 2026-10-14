@@ -319,7 +319,7 @@ void ciFreeCallbackData(ChatCallback *callback) {
 }
 
 ChatResult ciInitCallbacks(ChatConnection *chat) {
-    chat->callbacks = ArrayNew(sizeof(ChatCallback), 0x80, ov45_022444C8);
+    chat->callbacks = ArrayNew(sizeof(ChatCallback), 0x80, ciCallbacksArrayElementFreeFn);
     return chat->callbacks == NULL ? CHAT_FAILURE : CHAT_SUCCESS;
 }
 

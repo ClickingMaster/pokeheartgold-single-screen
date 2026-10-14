@@ -29,10 +29,10 @@ union Str {
     }
 };
 
-extern "C" void ov45_02242288(Str *self, const char *data, int pos, u32 n);
-extern "C" void ov45_02242254(Str *self, const Str &str, int pos);
+extern "C" void LobbyString_FindFirstOfChars(Str *self, const char *data, int pos, u32 n);
+extern "C" void LobbyString_FindFirstOf(Str *self, const Str &str, int pos);
 
-extern "C" void ov45_02242254(Str *self, const Str &str, int pos) {
+extern "C" void LobbyString_FindFirstOf(Str *self, const Str &str, int pos) {
     const char *p;
     u32 n;
     if (!str.l.flag) {
@@ -42,5 +42,5 @@ extern "C" void ov45_02242254(Str *self, const Str &str, int pos) {
         p = str.l.data;
         n = str.l.size;
     }
-    ov45_02242288(self, p, pos, n);
+    LobbyString_FindFirstOfChars(self, p, pos, n);
 }

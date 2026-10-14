@@ -79,11 +79,11 @@ inline void Construct(u32 *p, const u32 &v) {
     new (p) u32(v);
 }
 
-extern "C" void ov45_02243CF8(Tree *t, Node *parent, Node *src, BOOL left);
+extern "C" void LobbyUserIdSet_CopyNodes(Tree *t, Node *parent, Node *src, BOOL left);
 #pragma opt_scalarize off
 #pragma opt_common_subs off
 
-extern "C" void ov45_02243CF8(Tree *t, Node *parent, Node *src, BOOL left) {
+extern "C" void LobbyUserIdSet_CopyNodes(Tree *t, Node *parent, Node *src, BOOL left) {
     Alloc a = Alloc();
     Node *p = a.allocate();
     Holder h(p, &t->alloc);
@@ -105,10 +105,10 @@ extern "C" void ov45_02243CF8(Tree *t, Node *parent, Node *src, BOOL left) {
     parent->set_color(src->color());
     ++t->size;
     if (src->right) {
-        ov45_02243CF8(t, parent, src, FALSE);
+        LobbyUserIdSet_CopyNodes(t, parent, src, FALSE);
     }
     if (src->left) {
-        ov45_02243CF8(t, parent, src, TRUE);
+        LobbyUserIdSet_CopyNodes(t, parent, src, TRUE);
     }
     Destroy(&h);
 }

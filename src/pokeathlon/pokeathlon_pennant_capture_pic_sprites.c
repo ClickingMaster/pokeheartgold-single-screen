@@ -6,10 +6,10 @@
 #include "sprite.h"
 
 // The definition order fixes the .rodata layout: the display parts and the CPU read the ids through
-// ov96_0221CBCC as an array.
+// gPokeathlonPennantCaptureSpriteIds as an array.
 static const PokeathlonPennantCaptureSpriteIds sPicKinds = { { 4, 5 } };
 static const PokeathlonPennantCaptureSpriteIds sPicResIds2 = { { 0x66, 0x67 } };
-const PokeathlonPennantCaptureSpriteIds ov96_0221CBCC = { { 0x66, 0x67 } };
+const PokeathlonPennantCaptureSpriteIds gPokeathlonPennantCaptureSpriteIds = { { 0x66, 0x67 } };
 static const PokeathlonPennantCaptureSpriteIds sPicResIds3 = { { 0x66, 0x67 } };
 
 // Sprite pool helpers (pokeathlon_course_objects.c), declared with untyped entries and the argument
@@ -23,7 +23,7 @@ void PokeathlonPennantCaptureDisplay_CreatePicSprites(void *pool, PokeathlonPenn
 
 // The two picture sprites of the top screen.
 void PokeathlonPennantCaptureDisplay_CreatePicSprites(void *pool, PokeathlonPennantCaptureDisplay *display) {
-    PokeathlonPennantCaptureSpriteIds resIds = ov96_0221CBCC;
+    PokeathlonPennantCaptureSpriteIds resIds = gPokeathlonPennantCaptureSpriteIds;
     PokeathlonPennantCaptureSpriteIds kinds = sPicKinds;
     VecFx32 position;
     void *sprite;

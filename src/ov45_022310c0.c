@@ -5,7 +5,7 @@
 #include <nitro/code32.h>
 extern int DWC_CheckUserData(void *);
 extern int DWC_CheckHasProfile(void *);
-extern int ov45_02231144(int, int, int, void *, int, int, int, int);
+extern int PPWLobby_Initialize(int, int, int, void *, int, int, int, int);
 int PPW_LobbyInitializeAsync(int a, int b, int c, void *d, u8 *user, int e, int f);
 #pragma force_active on
 #pragma opt_pointer_analysis off
@@ -15,5 +15,5 @@ int PPW_LobbyInitializeAsync(int a, int b, int c, void *d, u8 *user, int e, int 
     if (!DWC_CheckUserData(p) || !DWC_CheckHasProfile(p)) {
         return 3;
     }
-    return ov45_02231144(a, b, c, d, *(int *)(p + 28), e, f, 1);
+    return PPWLobby_Initialize(a, b, c, d, *(int *)(p + 28), e, f, 1);
 }

@@ -29,7 +29,7 @@ typedef struct Hooks {
 extern u8 *ov45_022577DC;
 void LobbyString_InitFromCStr(String *, const char *);
 void LobbyString_Destroy(String *);
-int ov45_02243808(void *, String *);
+int LobbyChat_GetChannelUserLimit(void *, String *);
 int chatGetChannelNumUsersA(int, const char *);
 char *LobbyChat_GetUserIdFromNick(String *);
 void LobbyChat_GetUserNick(String *, void *, char *);
@@ -37,7 +37,7 @@ int LobbyChat_RemoveChannelUser(void *, String *, String *);
 Hooks *LobbyChat_GetChannelCallbacks(void *, String *);
 void LobbyChat_StripChannelPrefix(String *, void *, String *);
 int LobbyChat_AddChannelUser(void *, String *, String *);
-int ov45_02243794(void *, String *);
+int LobbyChat_AreChannelUsersEnumerated(void *, String *);
 void LobbyChat_OnUserJoined(void *, const char *, const char *);
 
 static inline char *getStringData(String *s) {
@@ -55,7 +55,7 @@ void LobbyChat_OnUserJoined(void *unused, const char *key, const char *value) {
         return;
     }
     LobbyString_InitFromCStr(&a, key);
-    exists = ov45_02243808(ov45_022577DC, &a);
+    exists = LobbyChat_GetChannelUserLimit(ov45_022577DC, &a);
     LobbyString_Destroy(&a);
     if (exists && chatGetChannelNumUsersA(*(int *)ov45_022577DC, key) > exists) {
         return;
@@ -92,7 +92,7 @@ void LobbyChat_OnUserJoined(void *unused, const char *key, const char *value) {
         return;
     }
     LobbyString_InitFromCStr(&j, key);
-    exists = ov45_02243794(ov45_022577DC, &j);
+    exists = LobbyChat_AreChannelUsersEnumerated(ov45_022577DC, &j);
     LobbyString_Destroy(&j);
     if (exists) {
         LobbyString_InitFromCStr(&k, key);

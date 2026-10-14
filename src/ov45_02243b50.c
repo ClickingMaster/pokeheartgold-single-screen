@@ -28,7 +28,7 @@ typedef struct {
     Node *volatile cleanup;
 } Guard;
 
-void ov45_02243CF8(Tree *, Node *, Node **, int);
+void LobbyUserIdSet_CopyNodes(Tree *, Node *, Node **, int);
 void LobbyUserIdSet_Erase(Iterator *, Tree *, Iterator);
 
 void LobbyUserIdSet_Erase(Iterator *out, Tree *tree, Iterator node) {

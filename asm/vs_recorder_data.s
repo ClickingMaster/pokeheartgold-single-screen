@@ -3873,7 +3873,7 @@
 	.public ov40_02244D54
 	.public ov40_02244D70
 	.public ov40_02244D8C
-	.public ov40_02244DA8
+	.public gVsRecorderDecorSpriteXOffsets
 	.public ov40_02244DC0
 	.public ov40_02244DD8
 	.public ov40_02244DF0

@@ -87,7 +87,7 @@ struct InsertResult {
     }
 };
 
-extern "C" void ov45_0224206C(InsertResult *out, void *list, Handler **h);
+extern "C" void LobbyRequestMap_Insert(InsertResult *out, void *list, Handler **h);
 extern "C" Str LobbyChat_GetFullChannelName(Mgr *m, const Str &s);
 extern "C" void chatGetChannelKeysA(void *ctx, const char *name, const char *msg, int x, const char **desc, void (*cb)(), u32 id, u32 z);
 extern "C" void LobbyChat_OnGetChannelKeys();
@@ -164,7 +164,7 @@ extern "C" int LobbyChat_GetChannelKeysAsync(const char *name, int idx, const ch
     m = GetMgr();
     InsertResult res;
     Handler *h = NewHandler(a, b);
-    ov45_0224206C(&res, m->list, &h);
+    LobbyRequestMap_Insert(&res, m->list, &h);
     u32 id = GetId(h, IdTag(), IdTag());
     Str s(name);
     Str t = LobbyChat_GetFullChannelName(GetMgr(), s);

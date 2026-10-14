@@ -72,7 +72,7 @@ struct InsertResult {
     }
 };
 
-extern "C" void ov45_0224206C(InsertResult *out, void *list, Handler **h);
+extern "C" void LobbyRequestMap_Insert(InsertResult *out, void *list, Handler **h);
 extern "C" Str LobbyChat_GetFullChannelName(Mgr *m, const Str &s);
 extern "C" void chatEnumChannelsA(void *ctx, const char *name, void (*cb1)(), void (*cb2)(), u32 id, u32 z);
 extern "C" void LobbyChat_OnEnumChannelsEach();
@@ -131,7 +131,7 @@ extern "C" int LobbyChat_EnumChannelsAsync(const char *name, u32 a, u32 b) {
     }
     InsertResult res;
     Handler *h = NewHandler(a, b);
-    ov45_0224206C(&res, m->list, &h);
+    LobbyRequestMap_Insert(&res, m->list, &h);
     u32 id = GetId(h, IdTag(), IdTag());
     Str s(name);
     Str t = LobbyChat_GetFullChannelName(GetMgr(), s);

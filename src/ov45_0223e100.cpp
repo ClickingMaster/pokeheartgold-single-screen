@@ -36,9 +36,9 @@ struct Iter {
 };
 struct Vec;
 extern "C" Vec *LobbyCharVector_Destroy(Vec *);
-extern "C" void ov45_022327B8(Vec *, Iter, Iter, TC);
-extern "C" void ov45_022383E0(Vec *, char *, char *, Alloc);
-extern "C" void ov45_02232760(Vec *, char *, char *, Tag);
+extern "C" void LobbyCharVector_AssignIterRange(Vec *, Iter, Iter, TC);
+extern "C" void LobbyCharVector_InitRange(Vec *, char *, char *, Alloc);
+extern "C" void LobbyCharVector_AssignRange(Vec *, char *, char *, Tag);
 extern "C" const char *LobbyByteVector_Data(const Vec *);
 extern "C" char ov45_02254FB0[];
 
@@ -56,14 +56,14 @@ struct Vec {
     }
 
     void Assign(char *first, char *last, Alloc a) {
-        ov45_022383E0(this, first, last, a);
+        LobbyCharVector_InitRange(this, first, last, a);
     }
 
     Vec(char *first, char *last, Alloc a)
         : ptr(0)
         , size(0)
         , cap(0) {
-        ov45_022383E0(this, first, last, a);
+        LobbyCharVector_InitRange(this, first, last, a);
     }
 
     Vec(const u8 *first, const u8 *last)
@@ -74,7 +74,7 @@ struct Vec {
     }
 
     void Init(const u8 *first, const u8 *last, TA, TB) {
-        ov45_022327B8(this, Iter(first), Iter(last), TC());
+        LobbyCharVector_AssignIterRange(this, Iter(first), Iter(last), TC());
     }
 
     void Destroy() {
@@ -158,7 +158,7 @@ struct Field {
 
     Field &operator=(const Field &o) {
         if (this != &o) {
-            ov45_02232760(&v, o.v.begin(), o.v.end(), Tag());
+            LobbyCharVector_AssignRange(&v, o.v.begin(), o.v.end(), Tag());
         }
         return *this;
     }
@@ -303,10 +303,10 @@ struct Obj {
     Sub sub;
 };
 
-extern "C" void ov45_0223E100(Obj *obj, int id, const u8 *data, u32 len);
+extern "C" void PPWLobbyPlayers_SetSelf(Obj *obj, int id, const u8 *data, u32 len);
 #pragma optimization_level 2
 
-extern "C" void ov45_0223E100(Obj *obj, int id, const u8 *data, u32 len) {
+extern "C" void PPWLobbyPlayers_SetSelf(Obj *obj, int id, const u8 *data, u32 len) {
     Sub s(id);
     Sub *ps = &s;
     obj->sub = *ps;

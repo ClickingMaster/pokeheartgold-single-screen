@@ -54,9 +54,9 @@ struct Obj {
 };
 
 extern "C" int PPWLobbySchedule_IsSizeValid(Obj *, Src *);
-extern "C" void ov45_0223AAE4(Vec8 *, Elem *, Elem *, Tag);
+extern "C" void LobbyEventVector_AssignRange(Vec8 *, Elem *, Elem *, Tag);
 extern "C" void LobbySort_StableSort(It, It, Less);
-extern "C" void ov45_02238D54(Deque *, It, const It &, Tag);
+extern "C" void LobbyEventDeque_Assign(Deque *, It, const It &, Tag);
 extern "C" int PPWLobbySchedule_Load(Obj *, Src *);
 
 inline void Sort(It first, It last, Less c) {
@@ -65,7 +65,7 @@ inline void Sort(It first, It last, Less c) {
 
 inline void Assign(Deque *d, It first, It last) {
     Tag t;
-    ov45_02238D54(d, first, last, t);
+    LobbyEventDeque_Assign(d, first, last, t);
 }
 
 #pragma force_active on
@@ -82,7 +82,7 @@ extern "C" int PPWLobbySchedule_Load(Obj *o, Src *s) {
     o->w24 = s->w8;
     {
         u32 n = s->count;
-        ov45_0223AAE4(&o->vec, s->items, s->items + n, Tag());
+        LobbyEventVector_AssignRange(&o->vec, s->items, s->items + n, Tag());
     }
     Sort(o->vec.Begin(), o->vec.End(), c);
     Assign(&o->deq, o->vec.Begin(), o->vec.End());

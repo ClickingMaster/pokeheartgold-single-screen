@@ -88,10 +88,10 @@ inline Triple MakeAddr(Obj *o) {
     return t;
 }
 
-extern "C" void ov45_0223E558(Map *m);
+extern "C" void PPWLobbyPlayers_UpdateStates(Map *m);
 #pragma opt_propagation off
 
-extern "C" void ov45_0223E558(Map *m) {
+extern "C" void PPWLobbyPlayers_UpdateStates(Map *m) {
     Obj *o2;
     u32 zero;
     u32 x;

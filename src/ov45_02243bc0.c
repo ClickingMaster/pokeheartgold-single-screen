@@ -22,13 +22,13 @@ typedef struct {
 } Tree;
 
 extern Node *LobbyMem_Alloc(u32);
-extern void ov45_02243CF8(Tree *, Node *, Node *, int);
-extern void ov45_02244350(void *, Tree *);
-extern void ov45_02244330(Tree *);
+extern void LobbyUserIdSet_CopyNodes(Tree *, Node *, Node *, int);
+extern void LobbyUserIdSet_Swap(void *, Tree *);
+extern void LobbyUserIdSet_Destroy2(Tree *);
 extern void DWC_Free(int, void *, int);
-void ov45_02243BC0(u8 *, Work *);
+void LobbyUserIdSet_Assign(u8 *, Work *);
 
-void ov45_02243BC0(u8 *owner, Work *w) {
+void LobbyUserIdSet_Assign(u8 *owner, Work *w) {
     struct {
         u8 pad0;
         volatile u8 byte;
@@ -80,14 +80,14 @@ void ov45_02243BC0(u8 *owner, Work *w) {
         Node *root = w->root;
         f.cleanup = 0;
         if (root->right) {
-            ov45_02243CF8(&f.tree, n, root, 0);
+            LobbyUserIdSet_CopyNodes(&f.tree, n, root, 0);
         }
     }
     if (((Node *)w->root)->left) {
-        ov45_02243CF8(&f.tree, f.tree.root, w->root, 1);
+        LobbyUserIdSet_CopyNodes(&f.tree, f.tree.root, w->root, 1);
     }
-    ov45_02244350(owner, &f.tree);
-    ov45_02244330(&f.tree);
+    LobbyUserIdSet_Swap(owner, &f.tree);
+    LobbyUserIdSet_Destroy2(&f.tree);
     {
         Node *cleanup = f.cleanup;
         if (cleanup) {

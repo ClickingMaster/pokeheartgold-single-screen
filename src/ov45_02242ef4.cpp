@@ -56,8 +56,8 @@ struct Alloc {
     }
 };
 struct Vec;
-extern "C" void ov45_0223E830(Vec *v, u32 n);
-extern "C" void ov45_0223E910(Vec *v, const int *x, Tag t);
+extern "C" void LobbyU32Vector_Reserve(Vec *v, u32 n);
+extern "C" void LobbyU32Vector_PushBackSlow(Vec *v, const int *x, Tag t);
 
 struct Vec {
     int *ptr;
@@ -72,7 +72,7 @@ struct Vec {
 
     void reserve(u32 n) {
         if (n > cap) {
-            ov45_0223E830(this, n);
+            LobbyU32Vector_Reserve(this, n);
         }
     }
 
@@ -82,7 +82,7 @@ struct Vec {
             size++;
             a.construct(&ptr[size - 1], x);
         } else {
-            ov45_0223E910(this, &x, Tag());
+            LobbyU32Vector_PushBackSlow(this, &x, Tag());
         }
     }
 };
@@ -93,16 +93,16 @@ struct Map {
 };
 
 extern "C" int LobbyChat_GetUserIdFromNick(String *s);
-extern "C" void ov45_0223FC5C(String *out, Map *m);
+extern "C" void LobbyChatManager_GetNick(String *out, Map *m);
 extern "C" int LobbyChat_AddChannelUser(Map *m, const String &name, const String &key);
 
 static inline bool SameId(int id, String *s) {
     return id == LobbyChat_GetUserIdFromNick(s);
 }
 
-extern "C" Vec ov45_02242EF4(Map *map, int count, const char **names, const String &key);
+extern "C" Vec LobbyChat_AddChannelUsers(Map *map, int count, const char **names, const String &key);
 
-extern "C" Vec ov45_02242EF4(Map *map, int count, const char **names, const String &key) {
+extern "C" Vec LobbyChat_AddChannelUsers(Map *map, int count, const char **names, const String &key) {
     Vec out;
     int constructed;
     out.reserve(count);
@@ -117,7 +117,7 @@ extern "C" Vec ov45_02242EF4(Map *map, int count, const char **names, const Stri
             int id = LobbyChat_GetUserIdFromNick(&s);
             if (id == self) {
                 const char *n = names[i];
-                ov45_0223FC5C(&name, map);
+                LobbyChatManager_GetNick(&name, map);
                 constructed = 1;
                 if (name.ne(n)) {
                     skip = true;

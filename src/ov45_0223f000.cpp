@@ -14,7 +14,7 @@ extern "C" void LobbyString_InitCopy(String *dst, const String *src);
 extern "C" void LobbyString_Destroy(String *s);
 extern "C" void LobbyString_Assign(String *dst, const String *src);
 extern "C" String LobbyString_Substr(const String *s, u32 pos, u32 n);
-extern "C" int ov45_02242254(const String *s, const String &str, int pos);
+extern "C" int LobbyString_FindFirstOf(const String *s, const String &str, int pos);
 
 struct String {
     union {
@@ -58,11 +58,11 @@ struct String {
     }
 
     int find(const String &str, int pos) const {
-        return ov45_02242254(this, str, pos);
+        return LobbyString_FindFirstOf(this, str, pos);
     }
 };
 struct Vec;
-extern "C" void ov45_02237634(Vec *v, const String *x, Tag t);
+extern "C" void LobbyStringVector_PushBackSlow(Vec *v, const String *x, Tag t);
 
 struct Alloc {
     void construct(String *p, const String &x) {
@@ -91,7 +91,7 @@ struct Vec {
             a.construct(ptr + size, x);
             ++size;
         } else {
-            ov45_02237634(this, &x, Tag());
+            LobbyStringVector_PushBackSlow(this, &x, Tag());
         }
     }
 };

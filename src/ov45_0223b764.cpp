@@ -23,9 +23,9 @@ struct Deque {
     Map map;
 };
 
-extern "C" void ov45_0223B764(Deque *d, u32 n);
+extern "C" void LobbyEventDeque_EraseAtEnd(Deque *d, u32 n);
 
-extern "C" void ov45_0223B764(Deque *d, u32 n) {
+extern "C" void LobbyEventDeque_EraseAtEnd(Deque *d, u32 n) {
     if (n == 0) {
         return;
     }

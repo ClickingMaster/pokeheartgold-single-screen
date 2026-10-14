@@ -207,13 +207,13 @@ int BattleRegulation_ValidateParty(LinkBattleRuleset *ruleset, Party *party, Pok
     int i;
     u16 species[PARTY_SIZE];
     u16 levels[PARTY_SIZE];
-    u16 sp30[PARTY_SIZE];
+    u16 visited[PARTY_SIZE];
     int numLegalMons;
     int numBannedMons;
 
     partyCount = Party_GetCount(party);
     numLegalMons = partyCount;
-    MI_CpuClear8(sp30, sizeof(sp30));
+    MI_CpuClear8(visited, sizeof(visited));
     for (i = 0; i < partyCount; ++i) {
         mon = Party_GetMonByIndex(party, i);
         species[i] = GetMonData(mon, MON_DATA_SPECIES, NULL);
@@ -266,7 +266,7 @@ int BattleRegulation_ValidateParty(LinkBattleRuleset *ruleset, Party *party, Pok
     }
 
     for (i = 0; i < partyCount; ++i) {
-        if (BattleRegulation_CanPickMonsWithinLevelTotal(species, levels, sp30, rule, i, numLegalMons, partyCount)) {
+        if (BattleRegulation_CanPickMonsWithinLevelTotal(species, levels, visited, rule, i, numLegalMons, partyCount)) {
             return 0;
         }
     }

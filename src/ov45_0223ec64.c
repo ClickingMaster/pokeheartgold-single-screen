@@ -30,7 +30,7 @@ extern char ov45_022552FC[];
 void LobbyString_InitFromCStr(Str *, char *);
 void LobbyString_Destroy(Str *);
 void LobbyString_InitCopy(void *, void *);
-void ov45_022376BC(void *);
+void LobbyU32Vector_Destroy(void *);
 void LobbyTimerMap_EraseKey(void *, int *, int);
 void LobbyChatManager_Destroy(void *);
 void DWC_Free(int, void *, int);
@@ -43,13 +43,13 @@ void LobbyChat_GetFullChannelName(Str *, void *, Str *);
 int chatInChannelA(void *, char *);
 void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 void *LobbyMem_Alloc(unsigned);
-void *ov45_0223EA34(void *, unsigned, char *);
-void ov45_022421E4(void *, unsigned, void *);
+void *LobbyU32Vector_RecommendSize(void *, unsigned, char *);
+void LobbyU32Vector_Reallocate(void *, unsigned, void *);
 char *strncpy(char *, const char *, size_t);
 int LobbyChat_FindUserIdByNick(void *, Str *);
-void *ov45_0223EC64(void *p);
-void ov45_0223EC80(void *p, unsigned n);
-void *ov45_0223ECB0(void *p);
+void *LobbyU32VectorBuffer_Destroy(void *p);
+void LobbyU32VectorBuffer_Allocate(void *p, unsigned n);
+void *LobbyU32VectorBuffer_Deallocate(void *p);
 void LobbyChat_OnRaw(void);
 void LobbyChat_OnInvited(void);
 void LobbyChat_OnChannelModeChanged(void);
@@ -61,31 +61,31 @@ void LobbyChat_OnUserModeChanged(void *a, void *b, void *c, unsigned mode);
 void LobbyChat_OnTopicChanged(void *a, char *s, void *b);
 void LobbyChat_OnConnected(void *a, int n);
 void LobbyChat_OnFillInUser(void *a, void *b, char *out);
-void ov45_0223FA2C(void *out, void *p);
-void ov45_0223FC5C(void *out, void *p);
-void ov45_02240F6C(void *out, void *p);
-void ov45_02240F7C(void *out, void *p);
-int ov45_0223FD6C(void *p);
-void *ov45_0223FD74(void *p);
-void ov45_0223FD88(void);
-void *ov45_0223FDE8(void *c, void *key, void *node, void *best);
-void ov45_0223FD8C(void **out, void *tree, void *key);
+void LobbyChatManager_GetUser(void *out, void *p);
+void LobbyChatManager_GetNick(void *out, void *p);
+void LobbyChatManager_GetGameName(void *out, void *p);
+void LobbyChatManager_GetRealName(void *out, void *p);
+int LobbyRequest_GetParam(void *p);
+void *LobbyU32Vector_Data(void *p);
+void LobbyRequest_Destroy(void);
+void *LobbyRequestMap_LowerBound(void *c, void *key, void *node, void *best);
+void LobbyRequestMap_Find(void **out, void *tree, void *key);
 void LobbyChat_OnEnumChannelsEach(void *a, int n);
-void ov45_0223FFE8(void *p, u32 *first, u32 *last);
-int ov45_02240850(void);
+void LobbyU32Vector_AssignRange(void *p, u32 *first, u32 *last);
+int LobbyChat_TimerConnectTimeout(void);
 int LobbyChat_GetLastError(void);
 void *LobbyChat_ToErrorCode(void *p);
 int LobbyChat_IsInChannel(char *s);
 void LobbyChat_OnChannelMessage(void *a, char *s, char *name, void *arg, int mode);
 void LobbyChat_OnBroadcastKeyChanged(void *a, char *s, char *name, void *arg, void *extra);
 
-void *ov45_0223EC64(void *p) {
+void *LobbyU32VectorBuffer_Destroy(void *p) {
     W(p, 4) = 0;
-    ov45_0223ECB0(p);
+    LobbyU32VectorBuffer_Deallocate(p);
     return p;
 }
 
-void ov45_0223EC80(void *p, unsigned n) {
+void LobbyU32VectorBuffer_Allocate(void *p, unsigned n) {
     if (n > 0x3fffffff) {
         _ZNSt15__vector_commonILb1EE18throw_length_errorEv();
     }

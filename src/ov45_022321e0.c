@@ -21,7 +21,7 @@ typedef struct {
 } Work;
 
 extern Work *volatile _022577C4;
-extern void ov45_022320B4(String *, void *);
+extern void PPWLobbyChannel_GetName(String *, void *);
 extern void LobbyString_Destroy(String *);
 extern int LobbyChat_IsInChannel(char *);
 
@@ -51,7 +51,7 @@ int PPW_LobbyGetSubChannelState(void) {
             return 0;
         }
     }
-    ov45_022320B4(&text, &w->mode);
+    PPWLobbyChannel_GetName(&text, &w->mode);
     result = LobbyChat_IsInChannel(!text.flag ? &text.bytes[1] : *(char **)&text.raw[4]);
     LobbyString_Destroy(&text);
     if (result) {

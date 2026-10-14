@@ -12,7 +12,7 @@ typedef struct {
 
 extern u32 ov45_022577D0;
 extern u32 ov45_022551A4;
-extern void ov45_0223BD0C(void);
+extern void LobbyEventDequeMap_LengthError(void);
 
 static inline u32 Count(Queue *q) {
     return q->capacity == 0 ? 0 : q->capacity - 1;
@@ -30,7 +30,7 @@ static inline const u32 *Max(const u32 *a, const u32 *b) {
     return *a > *b ? a : b;
 }
 
-u32 ov45_0223BBFC(Queue *, u32, ...);
+u32 LobbyEventDequeMap_RecommendSize(Queue *, u32, ...);
 
 typedef struct {
     Queue q;
@@ -45,10 +45,10 @@ typedef struct {
     u8 byte;
 } Empty;
 
-extern void ov45_0223CB04(Temp *, u32, Empty);
-extern void ov45_0223CC78(Temp *, Iter *, Iter *, Empty);
-extern void ov45_0223CB6C(Temp *, Iter *, Iter *, Empty);
-extern void ov45_0223CAB4(Temp *);
+extern void LobbyEventDequeMapBuffer_Allocate(Temp *, u32, Empty);
+extern void LobbyEventDequeMapBuffer_AppendRange(Temp *, Iter *, Iter *, Empty);
+extern void LobbyEventDequeMapBuffer_PrependRange(Temp *, Iter *, Iter *, Empty);
+extern void LobbyEventDequeMapBuffer_Destroy(Temp *);
 
 static inline void Init(Temp *t, Queue *q) {
     t->q.data = 0;
@@ -104,15 +104,15 @@ static inline void Swap(Queue *a, Queue *b) {
     }
 }
 
-void ov45_0223B8E0(Queue *, u32);
-void ov45_0223BA3C(Queue *, u32 *);
+void LobbyEventDequeMap_Reserve(Queue *, u32);
+void LobbyEventDequeMap_PushBack(Queue *, u32 *);
 
-u32 ov45_0223BBFC(Queue *q, u32 extra, ...) {
+u32 LobbyEventDequeMap_RecommendSize(Queue *q, u32 extra, ...) {
     u32 size, limit, first, second;
     limit = Limit();
     size = Count(q);
     if (extra > limit - size) {
-        ov45_0223BD0C();
+        LobbyEventDequeMap_LengthError();
     }
     if (size < limit / 3) {
         first = (size + 1) * 3 / 5;

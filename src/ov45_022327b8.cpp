@@ -13,11 +13,11 @@ public:
     u32 recommend(Vec *vector, u32 growth);
 };
 
-extern "C" u32 ov45_02237890(Vec *, u32);
-extern "C" void ov45_02237820(Vec *, u32, u32);
+extern "C" u32 LobbyCharVector_RecommendSize(Vec *, u32);
+extern "C" void LobbyCharVector_Reallocate(Vec *, u32, u32);
 
 inline u32 Allocator::recommend(Vec *vector, u32 growth) {
-    return ov45_02237890(vector, growth);
+    return LobbyCharVector_RecommendSize(vector, growth);
 }
 
 struct Iter {
@@ -60,16 +60,16 @@ inline char Cast(const Iter &i) {
     return n(*i);
 }
 
-extern "C" void ov45_022327B8(Vec *v, Iter first, Iter last);
+extern "C" void LobbyCharVector_AssignIterRange(Vec *v, Iter first, Iter last);
 #pragma force_active on
 
-extern "C" void ov45_022327B8(Vec *v, Iter first, Iter last) {
+extern "C" void LobbyCharVector_AssignIterRange(Vec *v, Iter first, Iter last) {
     u32 n = last.p - first.p;
     u32 cap = v->cap;
     if (n > cap) {
         u32 growth = n - cap;
         Allocator a = Allocator();
-        ov45_02237820(v, n, a.recommend(v, growth));
+        LobbyCharVector_Reallocate(v, n, a.recommend(v, growth));
     }
     {
         Iter it = first;

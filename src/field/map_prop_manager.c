@@ -198,16 +198,16 @@ void MapPropManager_DrawWithOffset(const VecFx32 *position, AreaDataManager *are
         if (!GF3d_ModelBoxTest(mapProp->render->model, &translation, &rotation, &mapProp->scale)) {
             continue;
         }
-        BuildModelShapes *r4 = AreaDataManager_GetBuildModelShapes(areaDataManager);
+        BuildModelShapes *buildModelShapes = AreaDataManager_GetBuildModelShapes(areaDataManager);
         if (applyAttributes == TRUE) {
             ModelAttributes_ApplyToModel(modelAttributes, mapProp->render->model, 0xF33);
         }
-        u16 sp14;
-        BuildModelShapes_GetShapeCount(mapProp->buildModel, r4, &sp14);
-        if (sp14 == 0) {
+        u16 shapeCount;
+        BuildModelShapes_GetShapeCount(mapProp->buildModel, buildModelShapes, &shapeCount);
+        if (shapeCount == 0) {
             GF3dRender_DrawModel(&mapProp->render->renderObj, &translation, &rotation, &mapProp->scale);
         } else {
-            DrawModelShapewise(mapProp->render->model, &translation, &rotation, &mapProp->scale, r4, mapProp->buildModel);
+            DrawModelShapewise(mapProp->render->model, &translation, &rotation, &mapProp->scale, buildModelShapes, mapProp->buildModel);
         }
     }
 }
@@ -277,9 +277,9 @@ static void DrawModelShapewise(const NNSG3dResMdl *model, const VecFx32 *baseTra
     NNS_G3dGlbFlush();
 
     u16 num;
-    u16 sp0;
-    BuildModelShapes_GetShapeRange(buildModel, shapes, &num, &sp0);
-    u16(*shpDat)[2] = BuildModelShapes_GetShapes(sp0, shapes);
+    u16 start;
+    BuildModelShapes_GetShapeRange(buildModel, shapes, &num, &start);
+    u16(*shpDat)[2] = BuildModelShapes_GetShapes(start, shapes);
     u8 i;
     u8 matID = 0xFF;
     for (i = 0; i < num; ++i) {
@@ -328,16 +328,16 @@ void MapPropManager_Draw(MapPropManager *mapPropManager, AreaDataManager *areaDa
         if (!mapProp->active || mapProp->culled) {
             continue;
         }
-        BuildModelShapes *r6 = AreaDataManager_GetBuildModelShapes(areaDataManager);
-        u16 sp10;
-        BuildModelShapes_GetShapeCount(mapProp->buildModel, r6, &sp10);
+        BuildModelShapes *buildModelShapes = AreaDataManager_GetBuildModelShapes(areaDataManager);
+        u16 shapeCount;
+        BuildModelShapes_GetShapeCount(mapProp->buildModel, buildModelShapes, &shapeCount);
         if (mapProp->overrideRotation) {
             Math_CalcRotationMatrixXYZ(&baseRot, &mapProp->rotation);
         }
-        if (sp10 == 0) {
+        if (shapeCount == 0) {
             GF3dRender_DrawModel(&mapProp->render->renderObj, &mapProp->translation, &baseRot, &mapProp->scale);
         } else {
-            DrawModelShapewise(mapProp->render->model, &mapProp->translation, &baseRot, &mapProp->scale, r6, mapProp->buildModel);
+            DrawModelShapewise(mapProp->render->model, &mapProp->translation, &baseRot, &mapProp->scale, buildModelShapes, mapProp->buildModel);
         }
     }
 }

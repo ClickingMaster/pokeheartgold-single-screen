@@ -90,8 +90,8 @@ inline const T &Min(const T &a, const T &b) {
 
 struct FalseType {};
 
-extern "C" DIter ov45_02238F18(It, It, DIter, FalseType, u32 *);
-extern "C" DIter ov45_02239090(It, It, DIter);
+extern "C" DIter LobbyEventDeque_UninitializedCopy(It, It, DIter, FalseType, u32 *);
+extern "C" DIter LobbyEventDeque_Copy(It, It, DIter);
 
 inline Elem *UninitCopy(It first, It last, Elem *out, u32 *count) {
     for (; first != last; ++first.p, ++out) {
@@ -115,7 +115,7 @@ inline Elem *Copy(It first, It last, Elem *out) {
     return CopyRange(first, last, out);
 }
 
-extern "C" DIter ov45_02239090(It first, It last, DIter result) {
+extern "C" DIter LobbyEventDeque_Copy(It first, It last, DIter result) {
     if (first != last) {
         int n = last - first;
         for (;;) {

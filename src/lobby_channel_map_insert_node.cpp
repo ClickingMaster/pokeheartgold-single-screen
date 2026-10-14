@@ -24,7 +24,7 @@ struct String {
     }
 };
 struct Set;
-extern "C" void ov45_02243BC0(Set *dst, const Set *src);
+extern "C" void LobbyUserIdSet_Assign(Set *dst, const Set *src);
 
 struct Set {
     u32 size;
@@ -35,7 +35,7 @@ struct Set {
         : size(0)
         , root(0)
         , first(&root) {
-        ov45_02243BC0(this, &o);
+        LobbyUserIdSet_Assign(this, &o);
     }
 };
 
@@ -100,9 +100,9 @@ struct Holder {
     }
 };
 
-extern "C" Node *ov45_02243970(Tree *t, Node *parent, BOOL left, BOOL rightmost, const Value &v);
+extern "C" Node *LobbyChannelMap_InsertNode(Tree *t, Node *parent, BOOL left, BOOL rightmost, const Value &v);
 
-extern "C" Node *ov45_02243970(Tree *t, Node *parent, BOOL left, BOOL rightmost, const Value &v) {
+extern "C" Node *LobbyChannelMap_InsertNode(Tree *t, Node *parent, BOOL left, BOOL rightmost, const Value &v) {
     if (t->size == 0xFFFFFFFF) {
         printf(ov45_022553AC);
         abort();

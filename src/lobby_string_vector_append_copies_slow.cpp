@@ -73,10 +73,10 @@ struct Buf {
     void AllocC(u32 n, const Tag &t);
 };
 
-extern "C" u32 ov45_022385A4(Vec *, u32);
-extern "C" void ov45_02238A3C(Buf *, u32, Tag);
-extern "C" void ov45_0223895C(Buf *);
-extern "C" void ov45_02238674(Vec *, u32, const Str &);
+extern "C" u32 LobbyStringVector_RecommendSize(Vec *, u32);
+extern "C" void LobbyStringVectorBuffer_Allocate(Buf *, u32, Tag);
+extern "C" void LobbyStringVectorBuffer_Destroy(Buf *);
+extern "C" void LobbyStringVector_AppendCopiesSlow(Vec *, u32, const Str &);
 
 template <class T>
 inline void Swap(T &a, T &b) {
@@ -90,28 +90,28 @@ inline Buf *Self(FalseType, Buf &b) {
 }
 
 inline void Buf::Allocate(u32 n, Tag t) {
-    ov45_02238A3C(this, n, t);
+    LobbyStringVectorBuffer_Allocate(this, n, t);
 }
 
 inline void Buf::Allocate2(u32 n) {
-    ov45_02238A3C(this, n, get_tag());
+    LobbyStringVectorBuffer_Allocate(this, n, get_tag());
 }
 
 inline void Buf::Allocate3(u32 n) {
     Tag t = get_tag();
-    ov45_02238A3C(this, n, t);
+    LobbyStringVectorBuffer_Allocate(this, n, t);
 }
 
 inline void Buf::Allocate4(u32 n) {
     Tag t = get_tag();
     (void)t;
-    ov45_02238A3C(this, n, Tag());
+    LobbyStringVectorBuffer_Allocate(this, n, Tag());
 }
 
 inline void Buf::Allocate5(u32 n, Tag t) {
     Tag u = get_tag();
     (void)u;
-    ov45_02238A3C(this, n, t);
+    LobbyStringVectorBuffer_Allocate(this, n, t);
 }
 
 inline Tag MakeTag() {
@@ -165,9 +165,9 @@ inline void Release(Vec *) {
 
 #pragma force_active on
 
-extern "C" void ov45_02238674(Vec *v, u32 n, const Str &x) {
+extern "C" void LobbyStringVector_AppendCopiesSlow(Vec *v, u32 n, const Str &x) {
     Buf b(&v->cap);
-    u32 len = ov45_022385A4(v, v->size + n - v->cap);
+    u32 len = LobbyStringVector_RecommendSize(v, v->size + n - v->cap);
     b.AllocA(len);
     b.start = v->size;
     FillN(b, n, x);
@@ -176,5 +176,5 @@ extern "C" void ov45_02238674(Vec *v, u32 n, const Str &x) {
     Swap(v->cap, b.EndCap());
     Swap(v->ptr, b.ptr);
     Swap(v->size, b.size);
-    ov45_0223895C(&b);
+    LobbyStringVectorBuffer_Destroy(&b);
 }

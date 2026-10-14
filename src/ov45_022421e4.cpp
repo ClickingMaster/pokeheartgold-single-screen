@@ -12,7 +12,7 @@ struct Vec {
 struct Tag {};
 
 extern "C" void DWC_Free(int, void *, u32);
-extern "C" void ov45_0223EA04(Vec *v, u32 n, Tag t);
+extern "C" void LobbyU32Vector_Allocate(Vec *v, u32 n, Tag t);
 
 struct Alloc {
     void release(u32 *p) {
@@ -23,12 +23,12 @@ struct Alloc {
 };
 
 inline void Allocate(Vec *v, u32 n, Tag t) {
-    ov45_0223EA04(v, n, t);
+    LobbyU32Vector_Allocate(v, n, t);
 }
 
-extern "C" void ov45_022421E4(Vec *v, u32 size, u32 cap);
+extern "C" void LobbyU32Vector_Reallocate(Vec *v, u32 size, u32 cap);
 
-extern "C" void ov45_022421E4(Vec *v, u32 size, u32 cap) {
+extern "C" void LobbyU32Vector_Reallocate(Vec *v, u32 size, u32 cap) {
     u32 n = v->size;
     Alloc a = Alloc();
     v->size -= n;
@@ -37,5 +37,5 @@ extern "C" void ov45_022421E4(Vec *v, u32 size, u32 cap) {
         v->ptr = 0;
         v->cap = 0;
     }
-    ov45_0223EA04(v, cap, Tag(Tag()));
+    LobbyU32Vector_Allocate(v, cap, Tag(Tag()));
 }

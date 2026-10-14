@@ -65,11 +65,11 @@ struct Manager {
 };
 
 extern "C" Manager *ov45_022577DC;
-extern "C" void ov45_02242910(String *dst, Manager *mgr, u32 a, u32 b);
-extern "C" It ov45_0223FD8C(Map *map, Base *const &key);
-extern "C" const char *ov45_0223FD74(String *s);
-extern "C" void ov45_02242510(Map *map, u32 id);
-extern "C" void ov45_022376BC(String *s);
+extern "C" void LobbyChat_StripChannelPrefixes(String *dst, Manager *mgr, u32 a, u32 b);
+extern "C" It LobbyRequestMap_Find(Map *map, Base *const &key);
+extern "C" const char *LobbyU32Vector_Data(String *s);
+extern "C" void LobbyRequestMap_DeleteKey(Map *map, u32 id);
+extern "C" void LobbyU32Vector_Destroy(String *s);
 
 inline void KeyInit(Base *k, u32 id) {
     k->vtbl = &ov45_02255238;
@@ -81,7 +81,7 @@ inline It FindIt(Manager *m, u32 id) {
     Base key;
     KeyInit(&key, id);
     Base *kp = &key;
-    return ov45_0223FD8C(&m->map, kp);
+    return LobbyRequestMap_Find(&m->map, kp);
 }
 
 extern "C" void LobbyChat_OnEnumChannels(void *self, int result, u32 a, u32 d, u32 b, u32 c, u32 id);
@@ -93,7 +93,7 @@ extern "C" void LobbyChat_OnEnumChannels(void *self, int result, u32 a, u32 d, u
         return;
     }
     String str;
-    ov45_02242910(&str, ov45_022577DC, a, d);
+    LobbyChat_StripChannelPrefixes(&str, ov45_022577DC, a, d);
     int sid = id;
     Manager *m = ov45_022577DC;
     It it = FindIt(m, sid);
@@ -105,9 +105,9 @@ extern "C" void LobbyChat_OnEnumChannels(void *self, int result, u32 a, u32 d, u
         h = nd->value;
     }
     void (*cb)(BOOL, u32, const char *, u32, u32, u32) = h->callback;
-    cb(result == 1, a, ov45_0223FD74(&str), b, c, h->getArg());
-    ov45_02242510(&ov45_022577DC->map, sid);
-    ov45_022376BC(&str);
+    cb(result == 1, a, LobbyU32Vector_Data(&str), b, c, h->getArg());
+    LobbyRequestMap_DeleteKey(&ov45_022577DC->map, sid);
+    LobbyU32Vector_Destroy(&str);
 }
 
 #pragma pop

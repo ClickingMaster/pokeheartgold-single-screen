@@ -47,7 +47,7 @@ struct Tree {
     Node header;
 };
 
-extern "C" It ov45_0223E6E8(Tree *t, It pos);
+extern "C" It PPWLobbyPlayerSet_Erase(Tree *t, It pos);
 
 struct Map {
     u32 unk0;
@@ -62,13 +62,13 @@ struct Map {
     }
 
     void erase(It pos) {
-        ov45_0223E6E8(&tree, pos);
+        PPWLobbyPlayerSet_Erase(&tree, pos);
     }
 };
 
-extern "C" void ov45_0223DF4C(Map *m);
+extern "C" void PPWLobbyPlayers_Clear(Map *m);
 
-extern "C" void ov45_0223DF4C(Map *m) {
+extern "C" void PPWLobbyPlayers_Clear(Map *m) {
     for (It it = m->begin(); it != m->end();) {
         Value *v = it.n->value;
         if (v != 0) {

@@ -43,7 +43,7 @@ extern const char ov45_02257538[];
     }
 
 // Parses the first complete line of the input buffer into socket->message and removes it from the buffer.
-BOOL ov45_02253968(ChatSocket *socket) {
+BOOL ciSocketParseNextLine(ChatSocket *socket) {
     char *line = socket->input.data, *end, *last;
     char saved;
     int i;
@@ -111,7 +111,7 @@ ChatMessage *ciSocketRecv(ChatSocket *socket) {
     if (!socket->input.length) {
         return NULL;
     }
-    if (ov45_02253968(socket)) {
+    if (ciSocketParseNextLine(socket)) {
         return &socket->message;
     }
     return NULL;

@@ -46,7 +46,7 @@ extern const WindowTemplate ov96_0221C5C4; // the result window
 extern const VecFx32 ov96_0221C5CC;        // lap counter: the plate
 extern const VecFx32 ov96_0221C5D8;        // lap counter: the first digit
 extern const VecFx32 ov96_0221C5F0;        // lap counter: the second digit
-extern const u32 ov96_0221C728[];          // touch screen sprite resource ids
+extern const u32 gPokeathlonRelayRunPicIds[];          // touch screen sprite resource ids
 extern const u8 ov96_0221C718[6];          // x of the timer's sprites
 extern const u8 ov96_0221C720[6];          // their animations: digits and separators
 extern const VecFx32 ov96_0221C748;        // track map: offset of the start from its centre
@@ -250,8 +250,8 @@ void PokeathlonRelayRunHud_LoadSpriteGraphics(PokeathlonRelayRunHud *hud, void *
     u32 resIds[2];
     u32 *resId = resIds;
     int i;
-    resIds[0] = ov96_0221C728[4];
-    resIds[1] = ov96_0221C728[5];
+    resIds[0] = gPokeathlonRelayRunPicIds[4];
+    resIds[1] = gPokeathlonRelayRunPicIds[5];
     for (i = 0; i < 2; i++, resId++) {
         PokeathlonCourseSpritePool_LoadChar(spritePool, NARC_application_choose_starter_choose_starter_sub_res, 9, *resId, 2);
         PokeathlonCourseSpritePool_LoadPltt(spritePool, NARC_application_choose_starter_choose_starter_sub_res, 6, *resId, 2, 1);

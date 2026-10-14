@@ -20,17 +20,17 @@ extern "C" void DWC_Free(int, void *, int);
 extern "C" char ov45_02254FA0[], ov45_02254FB0[];
 extern "C" void PPWLobby_OnPlayerMessage();
 extern "C" void PPWLobby_OnExcessFlood();
-extern "C" void ov45_02238B08(void *);
-extern "C" void ov45_0223770C(void *);
-extern "C" void ov45_02236AE8(void *);
-extern "C" void ov45_0223775C(void *);
+extern "C" void PPWLobbySchedule_Init(void *);
+extern "C" void LobbyVipVector_Destroy(void *);
+extern "C" void LobbyEventDeque_Destroy(void *);
+extern "C" void LobbyEventVector_Destroy(void *);
 extern "C" void LobbyTimerMap_Clear(void *);
 extern "C" void LobbyTimerMap_Destroy(void *);
-extern "C" void ov45_0223DF4C(void *);
+extern "C" void PPWLobbyPlayers_Clear(void *);
 extern "C" void LobbyCharVector_Destroy(void *);
-extern "C" void ov45_02236B88(void *);
+extern "C" void PPWLobbyPlayerSet_Destroy(void *);
 extern "C" void LobbyString_Destroy(void *);
-extern "C" void ov45_0223E100(void *, u32, u32, u32);
+extern "C" void PPWLobbyPlayers_SetSelf(void *, u32, u32, u32);
 extern "C" void PPWLobby_StartCheckProfile(void);
 
 struct Callbacks {
@@ -141,9 +141,9 @@ struct Sessions {
 
     void Destroy() {
         vtbl = ov45_02254FA0;
-        ov45_0223DF4C(this);
+        PPWLobbyPlayers_Clear(this);
         LobbyCharVector_Destroy(&field);
-        ov45_02236B88(&list);
+        PPWLobbyPlayerSet_Destroy(&list);
     }
 };
 
@@ -195,13 +195,13 @@ struct Work {
         , w68(0)
         , w6c(0)
         , w70(0) {
-        ov45_02238B08(b144);
+        PPWLobbySchedule_Init(b144);
     }
 
     void Destroy() {
-        ov45_0223770C(b194);
-        ov45_02236AE8(b17c);
-        ov45_0223775C(b170);
+        LobbyVipVector_Destroy(b194);
+        LobbyEventDeque_Destroy(b17c);
+        LobbyEventVector_Destroy(b170);
         LobbyTimerMap_Clear(&tree);
         LobbyTimerMap_Destroy(&tree);
         sessions.Destroy();
@@ -244,9 +244,9 @@ inline int ErrorMap::Map(int r) const {
     return state;
 }
 
-extern "C" int ov45_02231144(u32 a0, u32 a1, u32 a2, const Config *cfg, u32 a4, u32 a5, u32 a6, u32 a7);
+extern "C" int PPWLobby_Initialize(u32 a0, u32 a1, u32 a2, const Config *cfg, u32 a4, u32 a5, u32 a6, u32 a7);
 
-extern "C" int ov45_02231144(u32 a0, u32 a1, u32 a2, const Config *cfg, u32 a4, u32 a5, u32 a6, u32 a7) {
+extern "C" int PPWLobby_Initialize(u32 a0, u32 a1, u32 a2, const Config *cfg, u32 a4, u32 a5, u32 a6, u32 a7) {
     if (_022577C4 != 0) {
         return 4;
     }
@@ -272,7 +272,7 @@ extern "C" int ov45_02231144(u32 a0, u32 a1, u32 a2, const Config *cfg, u32 a4, 
         }
         return result;
     }
-    ov45_0223E100(&_022577C4->sessions, a4, a5, a6);
+    PPWLobbyPlayers_SetSelf(&_022577C4->sessions, a4, a5, a6);
     PPWLobby_StartCheckProfile();
     _022577C4->state = 1;
     return 0;

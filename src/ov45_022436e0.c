@@ -28,7 +28,7 @@ extern void LobbyString_InitFromCStr(String *, const char *);
 extern char ov45_022553A8[];
 extern void LobbyString_InitCopy(String *, const void *);
 extern void LobbyUserMap_EraseKey(void *, int *);
-extern void ov45_02243780(Pair *, int, const String *);
+extern void LobbyUserMap_MakeEntry(Pair *, int, const String *);
 extern void LobbyUserMap_Insert(void *, void *, const Pair *);
 extern void LobbyString_Destroy(String *);
 int LobbyChat_FindUserIdByNick(Work *, const String *);
@@ -50,7 +50,7 @@ int LobbyChat_RenameUser(Work *w, const String *key, const String *value) {
     id = LobbyChat_FindUserIdByNick(w, key);
     LobbyUserMap_EraseKey(&w->tree, &id);
     LobbyString_InitCopy(&temp, value);
-    ov45_02243780(&pair, id, &temp);
+    LobbyUserMap_MakeEntry(&pair, id, &temp);
     {
         volatile u8 second;
 

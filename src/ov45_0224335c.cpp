@@ -28,8 +28,8 @@ struct Iter8 {
     }
 };
 struct Vec;
-extern "C" void ov45_022434C0(Vec *, Iter8, Iter8, TD);
-extern "C" Vec *ov45_022376BC(Vec *);
+extern "C" void LobbyU32Vector_AssignFromSet(Vec *, Iter8, Iter8, TD);
+extern "C" Vec *LobbyU32Vector_Destroy(Vec *);
 
 struct VIt {
     int *p;
@@ -79,11 +79,11 @@ struct Vec {
     }
 
     void Assign(Iter8 f, Iter8 l, const TA &, const TB &, const TD &td) {
-        ov45_022434C0(this, f, l, td);
+        LobbyU32Vector_AssignFromSet(this, f, l, td);
     }
 
     void Destroy() {
-        ov45_022376BC(this);
+        LobbyU32Vector_Destroy(this);
     }
 
     VIt begin() {

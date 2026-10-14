@@ -32,7 +32,7 @@ extern void *LobbyMem_Alloc(int);
 extern void LobbyString_InitCopy(void *, void *);
 extern void LobbyTree_InsertRebalance(Node *, void *);
 extern char ov45_022553AC[];
-Node *ov45_0224404C(List *, Node *, int, int, u32 *);
+Node *LobbyUserMap_InsertNode(List *, Node *, int, int, u32 *);
 
 void LobbyUserMap_Erase(Iterator *out, List *list, Iterator node) {
     Node *old = node.current;
@@ -48,7 +48,7 @@ void LobbyUserMap_Erase(Iterator *out, List *list, Iterator node) {
     list->count--;
 }
 
-Node *ov45_0224404C(List *list, Node *link, int before, int current, u32 *value) {
+Node *LobbyUserMap_InsertNode(List *list, Node *link, int before, int current, u32 *value) {
     struct {
         volatile u8 flag;
         Node *a, *b;

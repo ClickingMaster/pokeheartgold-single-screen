@@ -16,11 +16,11 @@ struct It {
     inline It(Ring *r, u32 i);
 };
 
-extern "C" void ov45_0223CB04(Ring *r, u32 n, Tag);
-extern "C" void ov45_0223CC78(Ring *r, const It &first, const It &last, Tag);
-extern "C" void ov45_0223CAB4(Ring *r);
-extern "C" void ov45_0223CB6C(Ring *r, const It &first, const It &last, Tag);
-extern "C" u32 ov45_0223BBFC(Ring *r, u32 n);
+extern "C" void LobbyEventDequeMapBuffer_Allocate(Ring *r, u32 n, Tag);
+extern "C" void LobbyEventDequeMapBuffer_AppendRange(Ring *r, const It &first, const It &last, Tag);
+extern "C" void LobbyEventDequeMapBuffer_Destroy(Ring *r);
+extern "C" void LobbyEventDequeMapBuffer_PrependRange(Ring *r, const It &first, const It &last, Tag);
+extern "C" u32 LobbyEventDequeMap_RecommendSize(Ring *r, u32 n);
 
 inline void Swap(u32 &a, u32 &b) {
     u32 t = a;
@@ -83,18 +83,18 @@ struct Alloc {
 };
 
 inline void Allocate(Ring *r, u32 n, Tag t) {
-    ov45_0223CB04(r, n, t);
+    LobbyEventDequeMapBuffer_Allocate(r, n, t);
 }
 
 struct A2 {
     void allocate(Ring *r, u32 n, Tag t) {
-        ov45_0223CB04(r, n, t);
+        LobbyEventDequeMapBuffer_Allocate(r, n, t);
     }
 };
 
-extern "C" void ov45_0223BA3C(Ring *r, const u32 &v);
+extern "C" void LobbyEventDequeMap_PushBack(Ring *r, const u32 &v);
 
-extern "C" void ov45_0223BA3C(Ring *r, const u32 &v) {
+extern "C" void LobbyEventDequeMap_PushBack(Ring *r, const u32 &v) {
     if (r->size + 1 < r->cap) {
         u32 *p = r->ptr + (r->start + r->size) % r->cap;
         new (p) u32(v);
@@ -102,12 +102,12 @@ extern "C" void ov45_0223BA3C(Ring *r, const u32 &v) {
         return;
     }
     RingBuf tmp(&r->cap);
-    u32 n = ov45_0223BBFC(r, 1);
+    u32 n = LobbyEventDequeMap_RecommendSize(r, 1);
     Allocate(&tmp, n, Tag(Tag()));
     tmp.start = r->size;
     new (tmp.ptr + tmp.start) u32(v);
     ++tmp.size;
-    ov45_0223CB6C(&tmp, r->begin(), r->end(), Tag());
+    LobbyEventDequeMapBuffer_PrependRange(&tmp, r->begin(), r->end(), Tag());
     Alloc a = Alloc();
     a.destroy(r->ptr, r->size);
     r->size = 0;
@@ -116,5 +116,5 @@ extern "C" void ov45_0223BA3C(Ring *r, const u32 &v) {
     Swap(r->start, tmp.start);
     Swap(r->size, tmp.size);
     Swap(r->cap, c);
-    ov45_0223CAB4(&tmp);
+    LobbyEventDequeMapBuffer_Destroy(&tmp);
 }

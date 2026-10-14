@@ -22,7 +22,7 @@ BOOL PokeathlonPennantCaptureCpu_IsNearCellTarget(PokeathlonPennantCaptureCpuCel
 BOOL PokeathlonPennantCaptureCpu_IsCellTargetOnField(PokeathlonPennantCaptureCpuCell *cell);
 
 extern const WindowTemplate ov96_0221CBEC;
-extern const PokeathlonPennantCaptureSpriteIds ov96_0221CBCC[];
+extern const PokeathlonPennantCaptureSpriteIds gPokeathlonPennantCaptureSpriteIds[];
 
 typedef struct PokeathlonPennantCaptureCpuPoint {
     int y;
@@ -38,7 +38,7 @@ typedef struct PokeathlonPennantCaptureCellNode {
 #pragma force_active on
 
 void PokeathlonPennantCaptureDisplay_GetPicVramOffsets(void *pool, PokeathlonPennantCaptureDisplay *display) {
-    PokeathlonPennantCaptureSpriteIds ids = ov96_0221CBCC[3];
+    PokeathlonPennantCaptureSpriteIds ids = gPokeathlonPennantCaptureSpriteIds[3];
     u8 i;
     for (i = 0; i < 2; i++) {
         int id = ((int *)&ids)[i];

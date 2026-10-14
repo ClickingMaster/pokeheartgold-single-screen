@@ -20,13 +20,13 @@ struct Obj {
     Vec8 vec;
 };
 
-extern "C" int ov45_0223AE84(Obj *o, const void *data, u32 len);
-extern "C" void ov45_0223ACF0(Vec8 *v, const Elem *first, const Elem *last, Tag);
-extern "C" int ov45_0223ACA4(Obj *o, const void *data, u32 len);
+extern "C" int PPWLobbySchedule_ValidateVipRecords(Obj *o, const void *data, u32 len);
+extern "C" void LobbyVipVector_AssignRange(Vec8 *v, const Elem *first, const Elem *last, Tag);
+extern "C" int PPWLobbySchedule_SetVipRecords(Obj *o, const void *data, u32 len);
 
-extern "C" int ov45_0223ACA4(Obj *o, const void *data, u32 len) {
-    ov45_0223AE84(o, data, len);
+extern "C" int PPWLobbySchedule_SetVipRecords(Obj *o, const void *data, u32 len) {
+    PPWLobbySchedule_ValidateVipRecords(o, data, len);
     const Elem *first = (const Elem *)data;
-    ov45_0223ACF0(&o->vec, first, first + len / sizeof(Elem), Tag());
+    LobbyVipVector_AssignRange(&o->vec, first, first + len / sizeof(Elem), Tag());
     return 1;
 }

@@ -52,7 +52,7 @@ struct Work {
 
 extern "C" Work *_022577C4;
 extern "C" char ov45_022550B4[];
-extern "C" Str ov45_02232434(u8 *, int);
+extern "C" Str PPWLobby_GetChannelName(u8 *, int);
 extern "C" int LobbyChat_GetChannelKeysAsync(const char *, int, int, void (*)(), int);
 extern "C" void PPWLobby_OnGetChannelKeys();
 extern "C" int PPW_LobbyGetChannelDataAsync(int, int, int, int);
@@ -94,7 +94,7 @@ extern "C" int PPW_LobbyGetChannelDataAsync(int id, int key, int mode, int arg) 
         return 4;
     }
     {
-        Str name = ov45_02232434(w->names, key);
+        Str name = PPWLobby_GetChannelName(w->names, key);
         if (name == ov45_022550B4) {
             name.Destroy();
             return 5;

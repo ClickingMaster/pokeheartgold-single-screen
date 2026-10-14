@@ -7,9 +7,9 @@
 #define W(p, o) (*(u32 *)((u8 *)(p) + (o)))
 #define H(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define B(p, o) (*(u8 *)((u8 *)(p) + (o)))
-void *ov45_02238C08(void *);
+void *LobbyEventVector_Data(void *);
 int PPWLobbySchedule_Copy(u8 *, u8 *, u32 *);
-void ov45_02238C1C(u32 *, u8 *);
+void PPWLobbySchedule_CopyToVector(u32 *, u8 *);
 extern void LobbyCharVector_Grow(void *, u32);
 extern void *LobbyByteVector_Data(void *);
 
@@ -27,7 +27,7 @@ int PPWLobbySchedule_Copy(u8 *s, u8 *out, u32 *len) {
     B(out, 13) = B(s, 0x29);
     H(out, 14) = W(s, 0x30);
     if (H(out, 14)) {
-        MI_CpuCopy8(ov45_02238C08(s + 0x2c), out + 16, W(s, 0x30) << 3);
+        MI_CpuCopy8(LobbyEventVector_Data(s + 0x2c), out + 16, W(s, 0x30) << 3);
     }
     return 1;
 }

@@ -9,9 +9,9 @@ typedef struct Tag {
     u8 value;
 } Tag;
 
-void ov45_02238ACC(u32 *, u32, Tag, u32);
+void LobbyStringVectorBuffer_EraseAtEnd(u32 *, u32, Tag, u32);
 void DWC_Free(u32, u32, u32);
-u32 *ov45_02238A74(u32 *);
+u32 *LobbyStringVectorBuffer_Deallocate(u32 *);
 
 static inline Tag tag(void) {
     Tag t;
@@ -19,11 +19,11 @@ static inline Tag tag(void) {
     return t;
 }
 
-u32 *ov45_02238A74(u32 *p) {
+u32 *LobbyStringVectorBuffer_Deallocate(u32 *p) {
     if (p[0]) {
         u32 current = p[1];
         Tag t = { 0 };
-        ov45_02238ACC(p, current, t, 0);
+        LobbyStringVectorBuffer_EraseAtEnd(p, current, t, 0);
         if (p[0]) {
             DWC_Free(0, p[0], 0);
         }

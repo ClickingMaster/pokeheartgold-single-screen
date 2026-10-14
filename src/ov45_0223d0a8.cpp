@@ -30,9 +30,9 @@ static inline u32 *Copy(u32 *d, u32 *s, u32 n) {
     return d + n;
 }
 
-extern "C" u32 *ov45_0223D0A8(RIt src, RIt end, u32 *dest);
+extern "C" u32 *LobbyEventDequeMap_CopyToArray(RIt src, RIt end, u32 *dest);
 
-extern "C" u32 *ov45_0223D0A8(RIt src, RIt end, u32 *dest) {
+extern "C" u32 *LobbyEventDequeMap_CopyToArray(RIt src, RIt end, u32 *dest) {
     int len;
     u32 n;
     u32 *p;
