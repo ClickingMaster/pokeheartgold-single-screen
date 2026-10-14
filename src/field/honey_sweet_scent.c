@@ -82,7 +82,7 @@ void HoneySweetScentFade_InitIn(Field3dObjectTask *task, FieldSystem *fieldSyste
     HoneySweetScentFade_Set(anim, 0, 10, 19);
     anim->done = 0;
     G2_SetBlendAlpha(GX_BLEND_PLANEMASK_BG2, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_BD, 0, 16);
-    SetBgPriority(2, 0);
+    SetBgPriority(GF_BG_LYR_MAIN_2, 0);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
     PlaySE(SEQ_SE_DP_FW230);
 }
@@ -152,9 +152,9 @@ void HoneySweetScent_LoadBg2Tint(BgConfig *bgConfig) {
     BG_LoadPlttData(2, &color, 2, 0xc2);
     buf = Heap_Alloc(HEAP_ID_FIELD1, 0x20);
     memset(buf, 0x11, 0x20);
-    BG_LoadCharTilesData(bgConfig, 2, buf, 0x20, 1);
+    BG_LoadCharTilesData(bgConfig, GF_BG_LYR_MAIN_2, buf, 0x20, 1);
     Heap_Free(buf);
-    BgFillTilemapBufferAndCommit(bgConfig, 2, 0x6001);
+    BgFillTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2, 0x6001);
 }
 
 void HoneySweetScentFade_Set(HoneySweetScentFade *anim, int start, int end, int frames) {
@@ -177,11 +177,11 @@ BOOL HoneySweetScentFade_Step(HoneySweetScentFade *anim) {
 }
 
 void HoneySweetScent_SetBg2MaskBlack(FieldSystem *fieldSystem) {
-    BG_SetMaskColor(2, 0);
+    BG_SetMaskColor(GF_BG_LYR_MAIN_2, 0);
 }
 
 void HoneySweetScent_SetBg2MaskWhite(FieldSystem *fieldSystem) {
-    BG_SetMaskColor(2, 0x7FFF);
+    BG_SetMaskColor(GF_BG_LYR_MAIN_2, 0x7FFF);
 }
 
 void HoneySweetScent_ShowWhiteBg2(FieldSystem *fieldSystem) {
@@ -190,7 +190,7 @@ void HoneySweetScent_ShowWhiteBg2(FieldSystem *fieldSystem) {
     reg_G2_BG2CNT = (reg_G2_BG2CNT & ~3) | 3;
     BG_LoadPlttData(2, &color, 2, 0xc4);
     BG_FillCharDataRange(fieldSystem->bgConfig, GF_BG_LYR_MAIN_2, 2, 1, 2);
-    BgFillTilemapBufferAndCommit(fieldSystem->bgConfig, 2, 0x6002);
+    BgFillTilemapBufferAndCommit(fieldSystem->bgConfig, GF_BG_LYR_MAIN_2, 0x6002);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
     HoneySweetScent_SetBg2MaskBlack(fieldSystem);
 }
@@ -201,7 +201,7 @@ void HoneySweetScent_ShowWhiteBg3(FieldSystem *fieldSystem) {
     reg_G2_BG3CNT = (reg_G2_BG3CNT & ~3) | 3;
     BG_LoadPlttData(3, &color, 2, 0xc4);
     BG_FillCharDataRange(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 2, 1, 2);
-    BgFillTilemapBufferAndCommit(fieldSystem->bgConfig, 3, 0x6002);
+    BgFillTilemapBufferAndCommit(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0x6002);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
     HoneySweetScent_SetBg2MaskBlack(fieldSystem);
 }
@@ -257,7 +257,7 @@ BOOL Task_HoneyOrSweetScent(TaskManager *taskManager) {
     case HONEY_SWEET_SCENT_STATE_FADE_IN:
         env->task = HoneySweetScent_StartFadeIn(fieldSystem);
         env->state = HONEY_SWEET_SCENT_STATE_WAIT_FADE_IN;
-        SetBgPriority(2, 0);
+        SetBgPriority(GF_BG_LYR_MAIN_2, 0);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
         break;
     case HONEY_SWEET_SCENT_STATE_WAIT_FADE_IN:
@@ -292,7 +292,7 @@ BOOL Task_HoneyOrSweetScent(TaskManager *taskManager) {
         if (HoneySweetScent_IsFadeDone(env->task) != 0) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
             reg_G2_BLDCNT = 0;
-            SetBgPriority(2, 3);
+            SetBgPriority(GF_BG_LYR_MAIN_2, 3);
             env->state = HONEY_SWEET_SCENT_STATE_NOTHING_HAPPENED;
         }
         break;
@@ -319,7 +319,7 @@ BOOL Task_HoneyOrSweetScent(TaskManager *taskManager) {
         if (env->useWhiteFlash != 0) {
             HoneySweetScent_ShowWhiteBg2(fieldSystem);
         }
-        BgFillTilemapBufferAndCommit(fieldSystem->bgConfig, 2, 0);
+        BgFillTilemapBufferAndCommit(fieldSystem->bgConfig, GF_BG_LYR_MAIN_2, 0);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
         return TRUE;
     default:

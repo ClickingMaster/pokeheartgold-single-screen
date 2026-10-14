@@ -861,7 +861,7 @@ void WildEffect_RunWave(SysTask *task, EncounterEffectTask *effect, BOOL white) 
         FreeBgTilemapBuffer(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3);
         InitBgFromTemplate(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, &gWildEffectWaveBgTemplate_Main3, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3);
-        SetBgPriority(2, 0);
+        SetBgPriority(GF_BG_LYR_MAIN_2, 0);
         SetBgPriority(8, 0);
         GfGfx_EngineASetPlanes(GX_PLANEMASK_BG0 | GX_PLANEMASK_BG2 | GX_PLANEMASK_OBJ);
         WildEffectBgLoader_Start(&work->bgLoader, effect);

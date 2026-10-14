@@ -235,26 +235,26 @@ void *FieldMoveCutIn_LoadMonPltt(PokepicTemplate *template, enum HeapID heapID) 
 }
 
 SpriteResource *FieldMoveCutIn_AddMonCharResource(FieldMoveCutIn *cutIn, NARC *narc) {
-    return AddCharResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CHAR], narc, 9, FALSE, 3, 1, HEAP_ID_FIELD1);
+    return AddCharResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CHAR], narc, 9, FALSE, 3, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_FIELD1);
 }
 
 void FieldMoveCutIn_TransferMonChar(FieldMoveCutIn *cutIn, void *data) {
     SpriteResource *res = SpriteResourceCollection_Find(cutIn->resMan[GF_GFX_RES_TYPE_CHAR], 3);
-    void *proxy = SpriteTransfer_GetCharProxy(res);
+    NNSG2dImageProxy *proxy = SpriteTransfer_GetCharProxy(res);
     u32 dst = NNS_G2dGetImageLocation(proxy, NNS_G2D_VRAM_TYPE_2DMAIN);
     DC_FlushRange(data, 0xc80);
     GX_LoadOBJ(data, dst, 0xc80);
 }
 
 SpriteResource *FieldMoveCutIn_AddMonPlttResource(FieldMoveCutIn *cutIn, NARC *narc) {
-    return AddPlttResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_PLTT], narc, 6, FALSE, 3, 1, 1, HEAP_ID_FIELD1);
+    return AddPlttResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_PLTT], narc, 6, FALSE, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 1, HEAP_ID_FIELD1);
 }
 
 void FieldMoveCutIn_TransferMonPltt(FieldMoveCutIn *cutIn, void *data) {
     SpriteResource *charRes = SpriteResourceCollection_Find(cutIn->resMan[GF_GFX_RES_TYPE_CHAR], 3);
-    void *charProxy = SpriteTransfer_GetCharProxy(charRes);
+    NNSG2dImageProxy *charProxy = SpriteTransfer_GetCharProxy(charRes);
     SpriteResource *plttRes = SpriteResourceCollection_Find(cutIn->resMan[GF_GFX_RES_TYPE_PLTT], 3);
-    void *plttProxy = SpriteTransfer_GetPaletteProxy(plttRes, charProxy);
+    NNSG2dImagePaletteProxy *plttProxy = SpriteTransfer_GetPaletteProxy(plttRes, charProxy);
     u32 dst = NNS_G2dGetImagePaletteLocation(plttProxy, NNS_G2D_VRAM_TYPE_2DMAIN);
     DC_FlushRange(data, 0x20);
     GX_LoadOBJPltt(data, dst, 0x20);
@@ -548,7 +548,7 @@ void FieldMoveCutIn_StartFlyerPickUp(FieldMoveCutIn *cutIn) {
     }
     trainerScale = sCutInFlyerTrainerScale;
     sprite = flyer->cutIn->trainerSprite;
-    Sprite_SetAffineOverwriteMode(sprite, 2);
+    Sprite_SetAffineOverwriteMode(sprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     Sprite_SetAffineMatrix(sprite, &matrix);
     Sprite_SetAffineScale(sprite, &trainerScale);
     Sprite_SetAffineZRotation(sprite, GF_DegreeToSinCosIdx(0));

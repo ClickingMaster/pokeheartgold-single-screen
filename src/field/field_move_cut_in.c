@@ -746,15 +746,15 @@ void FieldMoveCutIn_LoadSpriteResources(FieldMoveCutIn *cutIn, NARC *narc) {
     cutIn->resMan[GF_GFX_RES_TYPE_CELL] = Create2DGfxResObjMan(4, GF_GFX_RES_TYPE_CELL, HEAP_ID_FIELD1);
     cutIn->resMan[GF_GFX_RES_TYPE_ANIM] = Create2DGfxResObjMan(2, GF_GFX_RES_TYPE_ANIM, HEAP_ID_FIELD1);
 
-    cutIn->charResources[0] = AddCharResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CHAR], narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000014_NCGR, FALSE, 1, 1, HEAP_ID_FIELD1);
-    cutIn->charResources[1] = AddCharResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CHAR], narc, sCutInTrainerCharFiles[cutIn->trainerGraphics], FALSE, 2, 1, HEAP_ID_FIELD1);
+    cutIn->charResources[0] = AddCharResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CHAR], narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000014_NCGR, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_FIELD1);
+    cutIn->charResources[1] = AddCharResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CHAR], narc, sCutInTrainerCharFiles[cutIn->trainerGraphics], FALSE, 2, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_FIELD1);
     cutIn->charResources[2] = FieldMoveCutIn_AddMonCharResource(cutIn, narc);
 
     i = 0;
-    cutIn->plttResources[i] = AddPlttResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_PLTT], narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000006_NCLR, FALSE, 0, 1, 1, HEAP_ID_FIELD1);
+    cutIn->plttResources[i] = AddPlttResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_PLTT], narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000006_NCLR, FALSE, 0, NNS_G2D_VRAM_TYPE_2DMAIN, 1, HEAP_ID_FIELD1);
     i++;
     if (cutIn->trainerGraphics != 0) {
-        cutIn->plttResources[i] = AddPlttResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_PLTT], narc, sCutInTrainerPlttFiles[cutIn->trainerGraphics - 1], FALSE, 1, 1, 1, HEAP_ID_FIELD1);
+        cutIn->plttResources[i] = AddPlttResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_PLTT], narc, sCutInTrainerPlttFiles[cutIn->trainerGraphics - 1], FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 1, HEAP_ID_FIELD1);
         i++;
     }
     cutIn->plttResources[i] = FieldMoveCutIn_AddMonPlttResource(cutIn, narc);
@@ -857,7 +857,7 @@ Sprite *FieldMoveCutIn_CreateFlyerSprite(FieldMoveCutIn *cutIn, VecFx32 *pos, in
 
     affineScale = sCutInFlyerScale;
     sprite = FieldMoveCutIn_CreateSprite(cutIn, pos, 0, 0, 0, -1, 0, drawPriority);
-    Sprite_SetAffineOverwriteMode(sprite, 2);
+    Sprite_SetAffineOverwriteMode(sprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     Sprite_SetAffineMatrix(sprite, &affineMatrix);
     Sprite_SetAffineScale(sprite, &affineScale);
     Sprite_SetAffineZRotation(sprite, GF_DegreeToSinCosIdx(0));
@@ -870,7 +870,7 @@ void FieldMoveCutIn_LoadFlyResources(FieldMoveCutIn *cutIn) {
     int i;
     for (i = 0; i < 4; i++) {
         if (cutIn->charResources[i] == NULL) {
-            cutIn->charResources[i] = AddCharResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CHAR], narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000011_NCGR, FALSE, 0, 1, HEAP_ID_FIELD1);
+            cutIn->charResources[i] = AddCharResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CHAR], narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000011_NCGR, FALSE, 0, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_FIELD1);
             break;
         }
     }

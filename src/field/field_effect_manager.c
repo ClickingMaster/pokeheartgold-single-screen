@@ -2,6 +2,7 @@
 
 #include "field/field_effect_manager_internal.h"
 
+#include "field_system.h"
 #include "gf_3d_render.h"
 #include "map_object.h"
 
@@ -106,7 +107,7 @@ FieldSystem *FieldEffectManager_GetFieldSystem(FieldEffectManager *manager) {
 
 FieldEffectManager *FieldEffectManager_GetFromMapObject(LocalMapObject *mapObject) {
     // fieldSystem->fieldEffectManager (field_system.h declares the opaque FieldEffectManager)
-    return *(FieldEffectManager **)((u8 *)MapObject_GetFieldSystem(mapObject) + 0x44);
+    return MapObject_GetFieldSystem(mapObject)->fieldEffectManager;
 }
 
 enum HeapID FieldEffectManager_GetHeapID(FieldEffectManager *manager) {

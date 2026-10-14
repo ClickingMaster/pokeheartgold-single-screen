@@ -90,7 +90,7 @@ void GearPhoneRingManager_SetCallerParams(GearPhoneRingManager *gearPhone, u8 ca
 }
 
 u8 GearPhoneRingManager_GetCallerParams(GearPhoneRingManager *gearPhone, GearPhoneCallerParams *params) {
-    MI_CpuFill8(params, 0, 5);
+    MI_CpuFill8(params, 0, sizeof(GearPhoneCallerParams));
     if (gearPhone->callerId >= NUM_PHONE_CONTACTS) {
         GF_ASSERT(FALSE);
         params->unk_0 = 0xFF;

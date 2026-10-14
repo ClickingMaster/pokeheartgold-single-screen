@@ -149,7 +149,7 @@ void ScaleSprites_Init(ScaleSprites *scaleSprites, EncounterEffectSpriteManager 
         Sprite_SetDrawFlag(scaleSprites->sprites[i], FALSE);
         Sprite_SetAnimActiveFlag(scaleSprites->sprites[i], TRUE);
         if (i != SCALE_SPRITE_COUNT - 1) {
-            Sprite_SetAffineOverwriteMode(scaleSprites->sprites[i], 2);
+            Sprite_SetAffineOverwriteMode(scaleSprites->sprites[i], NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
             Sprite_SetAnimCtrlSeq(scaleSprites->sprites[i], 1);
             EncounterEffectInterp_InitFx(&scaleSprites->scale[i], FX32_CONST(2), FX32_CONST(1), 6);
         } else {

@@ -168,11 +168,11 @@ void PlayerBillboardMotion_FishingIdle(void *object, void *billboard, const s8 *
 void PlayerBillboardMotion_FishingCast(void *object, void *billboard, const s8 *work, int facing);
 void PlayerBillboardMotion_FishingBite(void *object, void *billboard, void *workRaw, int facing);
 void PlayerBillboardMotion_FishingReel(void *object, void *billboard, const s8 *work, int facing);
-void PlayerDraw_SetFishingOffset(void *object, void *billboard, u32 facing);
+void PlayerDraw_SetFishingOffset(LocalMapObject *object, void *billboard, u32 facing);
 void PlayerDraw_UpdateLadder(void *object);
 void PlayerBillboardMotion_Ladder0(void *object, void *billboard, const s8 *work, int facing);
 void PlayerBillboardMotion_Ladder1(void *object, void *billboard, const s8 *work, int facing);
-void PlayerDraw_SetLadderOffset(void *object, void *billboard, u32 facing);
+void PlayerDraw_SetLadderOffset(LocalMapObject *object, void *billboard, u32 facing);
 void PlayerDraw_UpdateSurfing(void *object);
 void PlayerDraw_UpdateUseHmOrSaving(void *object);
 void PlayerDraw_UpdateWatering(void *object);
@@ -180,12 +180,12 @@ void PlayerDraw_UpdatePoketch(void *object);
 void PlayerDraw_UpdateHeal(void *object);
 void PlayerDraw_UpdateApricornShake(void *object);
 void PlayerBillboardMotion_ApricornShake(void *object, void *billboard, const s8 *work, int facing);
-void PlayerDraw_SetApricornShakeOffset(void *object, void *billboard, int facing);
+void PlayerDraw_SetApricornShakeOffset(LocalMapObject *object, void *billboard, int facing);
 void BillboardObject_AlignSequenceFrame(void *billboard, int divisor);
 void BillboardObject_AlignSequenceFrameTo8(void *billboard);
 void BillboardObject_SetSequenceKeepAlignedFrame(void *billboard, u32 sequence, int divisor);
 void BillboardObject_SetSequenceKeepAlignedFrameTo8(void *billboard, u32 sequence);
-void MapObject_UpdateBillboardVisibility(void *object, void *billboard);
+void MapObject_UpdateBillboardVisibility(LocalMapObject *object, void *billboard);
 void MapObject_GetEffectModelOffset(u32 spriteId, VecFx32 *offset);
 void ModelObjectDraw_Init(void *object);
 void ModelObjectDraw_Update(void);
@@ -1088,7 +1088,7 @@ void PlayerBillboardMotion_FishingReel(void *object, void *billboard, const s8 *
 }
 
 #pragma force_active on
-void PlayerDraw_SetFishingOffset(void *object, void *billboard, u32 facing) {
+void PlayerDraw_SetFishingOffset(LocalMapObject *object, void *billboard, u32 facing) {
     VecFx32 offset = { 0, 0, 0 };
     int frame = BillboardObject_GetFrame(billboard) / FX32_ONE;
     switch (facing) {
@@ -1150,7 +1150,7 @@ void PlayerBillboardMotion_Ladder1(void *object, void *billboard, const s8 *work
 }
 
 #pragma force_active on
-void PlayerDraw_SetLadderOffset(void *object, void *billboard, u32 facing) {
+void PlayerDraw_SetLadderOffset(LocalMapObject *object, void *billboard, u32 facing) {
     VecFx32 offset = { 0, 0, 0 };
     int frame = BillboardObject_GetFrame(billboard) / FX32_ONE;
     switch (facing) {
@@ -1309,7 +1309,7 @@ void PlayerBillboardMotion_ApricornShake(void *object, void *billboard, const s8
     BillboardMotion_Loop(billboard, work, facing, 0, gPlayerApricornShakeSequences);
 }
 
-void PlayerDraw_SetApricornShakeOffset(void *object, void *billboard, int facing) {
+void PlayerDraw_SetApricornShakeOffset(LocalMapObject *object, void *billboard, int facing) {
 #pragma unused(billboard, facing)
     VecFx32 offset = { 0, 0, 0 };
     offset.z += FX32_CONST(0.5);
@@ -1343,7 +1343,7 @@ void BillboardObject_SetSequenceKeepAlignedFrameTo8(void *billboard, u32 sequenc
     BillboardObject_SetSequenceFrame(billboard, frame);
 }
 
-void MapObject_UpdateBillboardVisibility(void *object, void *billboard) {
+void MapObject_UpdateBillboardVisibility(LocalMapObject *object, void *billboard) {
     int visible = TRUE;
     if (MapObject_TestFlagsBits(object, MAPOBJECTFLAG_VISIBLE) == TRUE) {
         visible = FALSE;

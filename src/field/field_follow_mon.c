@@ -98,7 +98,7 @@ typedef struct HopTable {
 } HopTable;
 
 typedef struct SepiaBillboardTransfer {
-    void *file;
+    NNSG3dResFileHeader *file;
     void *texture;
     u16 palette[16];
 } SepiaBillboardTransfer;
@@ -669,7 +669,7 @@ BOOL Task_FollowMonRecall(TaskManager *taskMan) {
     case 2: {
         LocalMapObject *mapObject = FollowMon_GetMapObject(fieldSystem);
         int member = SpriteId_GetModelNo(MapObject_GetSpriteID(mapObject));
-        void *file = NARC_AllocAndReadWholeMember(MapObjectManager_GetMapModelNarc(fieldSystem->mapObjectManager), member, HEAP_ID_FIELD2);
+        NNSG3dResFileHeader *file = NARC_AllocAndReadWholeMember(MapObjectManager_GetMapModelNarc(fieldSystem->mapObjectManager), member, HEAP_ID_FIELD2);
         u8 *texture = (u8 *)NNS_G3dGetTex(file);
         MIi_CpuCopy16((u16 *)(texture + *(u32 *)(texture + 0x38)), env->palette, sizeof(env->palette));
         Heap_Free(file);
@@ -822,7 +822,7 @@ BOOL Task_FollowMonFlash(TaskManager *taskMan) {
     switch (*state) {
     case 0: {
         int member = SpriteId_GetModelNo(MapObject_GetSpriteID(FollowMon_GetMapObject(fieldSystem)));
-        void *file = NARC_AllocAndReadWholeMember(MapObjectManager_GetMapModelNarc(fieldSystem->mapObjectManager), member, HEAP_ID_FIELD2);
+        NNSG3dResFileHeader *file = NARC_AllocAndReadWholeMember(MapObjectManager_GetMapModelNarc(fieldSystem->mapObjectManager), member, HEAP_ID_FIELD2);
         u8 *texture = (u8 *)NNS_G3dGetTex(file);
         MIi_CpuCopy16((u16 *)(texture + *(u32 *)(texture + 0x38)), env->original, sizeof(env->original));
         Heap_Free(file);

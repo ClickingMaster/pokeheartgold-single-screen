@@ -614,7 +614,7 @@ static void WeatherSystem_Delete(WeatherSystem **pWeatherSystem) {
 
         reg_G2_BG0CNT = (reg_G2_BG0CNT & ~3) | 1;
 
-        GfGfx_EngineATogglePlanes(4, 0);
+        GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
 
         WeatherDraw_Delete(&(*pWeatherSystem)->weatherDraw);
 
@@ -692,7 +692,7 @@ static u16 WeatherSystem_GetState(WeatherSystem *weatherSystem, int weather) {
 }
 
 static void Weather_SetBlendAlpha(u32 ev1, u32 ev2) {
-    G2x_SetBlendAlpha_(0x04000050, 4, 0x21, ev1, ev2);
+    G2x_SetBlendAlpha_(0x04000050, GX_BLEND_PLANEMASK_BG2, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BD, ev1, ev2);
 }
 
 static void WeatherLerp_Init(WeatherLerp *lerp, s32 start, s32 end, s32 duration) {
@@ -851,7 +851,7 @@ static BOOL WeatherSystem_Start(WeatherSystem *weatherSystem, int weather, u32 s
     }
 
     if (entry->bgGfxId != 0xFFFF) {
-        GfGfx_EngineATogglePlanes(4, 0);
+        GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
         G2_SetBG2Priority(1);
         G2_SetBG0Priority(2);
     }
@@ -879,7 +879,7 @@ static void WeatherSystem_Unload(WeatherSystem *weatherSystem, u32 weather) {
     WeatherEntry *entry = &weatherSystem->entries[weather];
 
     if (entry->bgGfxId != 0xFFFF) {
-        GfGfx_EngineATogglePlanes(4, 0);
+        GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
 
         G2_SetBG2Priority(3);
         G2_SetBG0Priority(1);
@@ -933,7 +933,7 @@ static void WeatherSystem_Unload(WeatherSystem *weatherSystem, u32 weather) {
 
 static void WeatherEntry_EndTask(WeatherEntry *entry) {
     if (entry->bgGfxId != 0xFFFF) {
-        GfGfx_EngineATogglePlanes(4, 0);
+        GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
         G2_SetBG2Priority(3);
         G2_SetBG0Priority(1);
         G2_BlendNone();
@@ -1130,7 +1130,7 @@ static void WeatherSystem_LoadBgChars(WeatherSystem *weatherSystem, u16 bgGfxId)
     if (bgGfxId != 0xFFFF) {
         files.charFile = NARC_AllocAndReadWholeMember(weatherSystem->narc, weatherSystem->bgGfx[bgGfxId].charId, HEAP_ID_FIELD1);
         NNS_G2dGetUnpackedCharacterData(files.charFile, &files.charData);
-        BG_LoadCharTilesData(weatherSystem->fieldSystem->bgConfig, 2, files.charData->pRawData, files.charData->szByte, 0);
+        BG_LoadCharTilesData(weatherSystem->fieldSystem->bgConfig, GF_BG_LYR_MAIN_2, files.charData->pRawData, files.charData->szByte, 0);
         Heap_Free(files.charFile);
         files.charFile = NULL;
     }
@@ -1139,14 +1139,14 @@ static void WeatherSystem_LoadBgChars(WeatherSystem *weatherSystem, u16 bgGfxId)
 static void WeatherSystem_LoadBgScreen(WeatherSystem *weatherSystem, u16 bgGfxId) {
     WeatherBgGfxFiles files;
     if (bgGfxId != 0xFFFF) {
-        GfGfx_EngineATogglePlanes(4, 0);
+        GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
         files.screenFile = NARC_AllocAndReadWholeMember(weatherSystem->narc, weatherSystem->bgGfx[bgGfxId].screenId, HEAP_ID_FIELD1);
         GF_ASSERT(files.screenFile);
         NNS_G2dGetUnpackedScreenData(files.screenFile, &files.screenData);
-        BgCopyOrUncompressTilemapBufferRangeToVram(weatherSystem->fieldSystem->bgConfig, 2, files.screenData->rawData, files.screenData->szByte, 0);
-        BG_LoadScreenTilemapData(weatherSystem->fieldSystem->bgConfig, 2, files.screenData->rawData, files.screenData->szByte);
-        BgTilemapRectChangePalette(weatherSystem->fieldSystem->bgConfig, 2, 0, 0, 32, 32, 6);
-        BgCommitTilemapBufferToVram(weatherSystem->fieldSystem->bgConfig, 2);
+        BgCopyOrUncompressTilemapBufferRangeToVram(weatherSystem->fieldSystem->bgConfig, GF_BG_LYR_MAIN_2, files.screenData->rawData, files.screenData->szByte, 0);
+        BG_LoadScreenTilemapData(weatherSystem->fieldSystem->bgConfig, GF_BG_LYR_MAIN_2, files.screenData->rawData, files.screenData->szByte);
+        BgTilemapRectChangePalette(weatherSystem->fieldSystem->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 32, 32, 6);
+        BgCommitTilemapBufferToVram(weatherSystem->fieldSystem->bgConfig, GF_BG_LYR_MAIN_2);
         Heap_Free(files.screenFile);
         files.screenFile = NULL;
     }
@@ -2155,7 +2155,7 @@ static void WeatherTask_Mist(SysTask *task, void *data) {
         WeatherFog_Start(&taskData->fogChange, &taskData->fogTableFade, work->weatherSystem->fieldSystem->fog, GX_FOGSLOPE_0x0200, 0x7555, 0x7fff, 1, work->fogMode);
         WeatherLerp_Init(&taskData->blendLerp, 0, 9, 30);
         Weather_SetBlendAlpha(0, 16);
-        GfGfx_EngineATogglePlanes(4, 1);
+        GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
         work->state = 1;
         break;
     case 1:
@@ -2173,7 +2173,7 @@ static void WeatherTask_Mist(SysTask *task, void *data) {
             WeatherFogTableFade_SetFull(&taskData->fogTableFade);
         }
         Weather_SetBlendAlpha(9, 7);
-        GfGfx_EngineATogglePlanes(4, 1);
+        GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
         work->state = 3;
         break;
     case 3:

@@ -43,7 +43,7 @@ void EncounterEffect_KimonoGirl(SysTask *task, EncounterEffectTask *effect) {
         InitBgFromTemplate(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, (const BgTemplate *)gKimonoGirlEffectBg3Template, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3);
         EncounterEffect_LoadBgGraphicsMirrored(effect->narc, 168, 167, 166, 0, 0, effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1, GF_BG_LYR_MAIN_3);
-        SetBgPriority(2, 0);
+        SetBgPriority(GF_BG_LYR_MAIN_2, 0);
         SetBgPriority(8, 0);
         BG_SetMaskColor(GF_BG_LYR_MAIN_1, 0);
         BgSetPosTextAndCommit(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_X, 128);

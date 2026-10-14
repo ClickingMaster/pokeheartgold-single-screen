@@ -116,7 +116,7 @@ void EncounterEffect_TeamRocket(SysTask *task, EncounterEffectTask *effect) {
             EncounterEffect_SetVecFx32(&position, gEncounterTeamRocketSteps[work->next * 8], ov117_0225FB00[work->next * 8], 0);
             Sprite_SetMatrix(work->sprites[work->next], &position);
             EncounterEffect_SetVecFx32(&scale, FX32_CONST(2), FX32_CONST(2), 0);
-            Sprite_SetScaleAndAffineType(work->sprites[work->next], &scale, 2);
+            Sprite_SetScaleAndAffineType(work->sprites[work->next], &scale, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
             work->active[work->next] = TRUE;
             work->next++;
             if (work->next >= ROCKET_EFFECT_SPRITE_COUNT) {

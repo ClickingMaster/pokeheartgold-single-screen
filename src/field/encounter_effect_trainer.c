@@ -159,7 +159,7 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
         EncounterEffect_SetVecFx32(&scale, work->scale.value, work->scale.value, work->scale.value);
         for (i = 0; i < 2; i++) {
             Sprite_SetDrawFlag(work->sprites[i], TRUE);
-            Sprite_SetAffineOverwriteMode(work->sprites[i], 2);
+            Sprite_SetAffineOverwriteMode(work->sprites[i], NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
             Sprite_SetAffineScale(work->sprites[i], &scale);
         }
         EncounterEffectInterp_Init(&work->rotation, 0, 0xFFFF, 10);
@@ -249,7 +249,7 @@ void EncounterEffect_TrainerSpinApart(SysTask *task, EncounterEffectTask *effect
         for (i = 0; i < 2; i++) {
             work->sprites[i] = EncounterEffect_CreateSprite(&work->spriteManager, &work->spriteResources, FX32_CONST(128), 0, 0, 0);
             Sprite_SetDrawFlag(work->sprites[i], FALSE);
-            Sprite_SetAffineOverwriteMode(work->sprites[i], 2);
+            Sprite_SetAffineOverwriteMode(work->sprites[i], NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
         }
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         effect->state++;
@@ -367,10 +367,10 @@ void EncounterEffect_TrainerFadeSpin(SysTask *task, EncounterEffectTask *effect)
         break;
     case 3:
         EncounterEffectInterp_Init(&work->blend, 0, 16, 8);
-        G2x_SetBlendAlpha_((u32)&reg_G2_BLDCNT, 0, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3, work->blend.value, 16 - work->blend.value);
+        G2x_SetBlendAlpha_((u32)&reg_G2_BLDCNT, GX_BLEND_PLANEMASK_NONE, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3, work->blend.value, 16 - work->blend.value);
         for (i = 0; i < 2; i++) {
             Sprite_SetDrawFlag(work->sprites[i], TRUE);
-            Sprite_SetAffineOverwriteMode(work->sprites[i], 2);
+            Sprite_SetAffineOverwriteMode(work->sprites[i], NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
             Sprite_SetOamMode(work->sprites[i], GX_OAM_MODE_XLU);
         }
         EncounterEffectInterp_Init(&work->rotation, 0, 0xFFFF, 8);
@@ -467,7 +467,7 @@ void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect)
         for (i = 0; i < BALL_DROP_SPRITE_COUNT; i++) {
             work->sprites[i] = EncounterEffect_CreateSprite(&work->spriteManager, &work->spriteResources, 0, 0, 0, 0);
             Sprite_SetDrawFlag(work->sprites[i], FALSE);
-            Sprite_SetAffineOverwriteMode(work->sprites[i], 2);
+            Sprite_SetAffineOverwriteMode(work->sprites[i], NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
             work->trails[i] = RectTrail_New(HEAP_ID_FIELD1);
         }
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
@@ -620,7 +620,7 @@ void EncounterEffect_TrainerRisingBall(SysTask *task, EncounterEffectTask *effec
         EncounterEffectQuadInterp_Init(&work->scaleX, 410, FX32_CONST(2), 0, 12);
         EncounterEffectQuadInterp_Init(&work->scaleY, 410, FX32_CONST(2), 0, 12);
         EncounterEffect_SetVecFx32(&scale, work->scaleX.value, work->scaleY.value, 0);
-        Sprite_SetScaleAndAffineType(work->sprite, &scale, 2);
+        Sprite_SetScaleAndAffineType(work->sprite, &scale, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
         EncounterEffectInterp_Init(&work->rotation, 0, 0xFFFF, 12);
         effect->state++;
         break;
@@ -721,7 +721,7 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
             Sprite_SetMatrix(work->sprites[0], &position);
             Sprite_SetDrawFlag(work->sprites[0], TRUE);
             EncounterEffectInterp_Init(&work->rotation[0], 0, 0xFFFF, 5);
-            Sprite_SetAffineOverwriteMode(work->sprites[0], 2);
+            Sprite_SetAffineOverwriteMode(work->sprites[0], NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
             work->active[0] = TRUE;
             effect->state++;
             work->timer = 1;
@@ -734,7 +734,7 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
             Sprite_SetMatrix(work->sprites[1], &position);
             Sprite_SetDrawFlag(work->sprites[1], TRUE);
             EncounterEffectInterp_Init(&work->rotation[1], 0, -0xFFFF, 5);
-            Sprite_SetAffineOverwriteMode(work->sprites[1], 2);
+            Sprite_SetAffineOverwriteMode(work->sprites[1], NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
             work->active[1] = TRUE;
             effect->state++;
             work->timer = 3;
@@ -747,7 +747,7 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
             Sprite_SetMatrix(work->sprites[2], &position);
             Sprite_SetDrawFlag(work->sprites[2], TRUE);
             EncounterEffectInterp_Init(&work->rotation[2], 0, 0xFFFF, 5);
-            Sprite_SetAffineOverwriteMode(work->sprites[2], 2);
+            Sprite_SetAffineOverwriteMode(work->sprites[2], NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
             work->active[2] = TRUE;
             effect->state++;
         }

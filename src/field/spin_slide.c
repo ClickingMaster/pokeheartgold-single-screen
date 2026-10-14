@@ -2,6 +2,7 @@
 
 #include "global.h"
 
+#include "constants/movements.h"
 #include "constants/sndseq.h"
 
 #include "assert.h"
@@ -76,7 +77,7 @@ BOOL Task_SpinSlide(TaskManager *taskManager) {
         if (PlayerAvatar_IsReadyForMovement(task->avatar) == FALSE) {
             break;
         }
-        PlayerAvatar_SetMovement(task->avatar, GetMovementForDirection(task->direction, 12));
+        PlayerAvatar_SetMovement(task->avatar, GetMovementForDirection(task->direction, MOVEMENT_STEP_UP));
         PlayerAvatar_SetFacingDirection(task->avatar, task->direction);
         task->state++;
         task->countdown = 7;

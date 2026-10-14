@@ -54,7 +54,7 @@ Sprite *FlyLanding_CreateFlyerSprite(SpriteGfxManager *gfxManager) {
 
     affineScale = sFlyLandingFlyerScale;
     sprite = SpriteGfxManager_CreateSprite(gfxManager, &pos, 0, 0, 0, 2, 0, 0x84);
-    Sprite_SetAffineOverwriteMode(sprite, 2);
+    Sprite_SetAffineOverwriteMode(sprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     Sprite_SetAffineMatrix(sprite, &affineMatrix);
     Sprite_SetAffineScale(sprite, &affineScale);
     Sprite_SetAffineZRotation(sprite, GF_DegreeToSinCosIdx(0));
@@ -167,7 +167,7 @@ void FlyLandingEffect_Start(FieldEffect *effect) {
     }
     trainerScale = sFlyLandingTrainerScale;
     sprite = landing->args.trainerSprite;
-    Sprite_SetAffineOverwriteMode(sprite, 2);
+    Sprite_SetAffineOverwriteMode(sprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     Sprite_SetAffineMatrix(sprite, &matrix);
     Sprite_SetAffineScale(sprite, &trainerScale);
     Sprite_SetAffineZRotation(sprite, GF_DegreeToSinCosIdx(0));

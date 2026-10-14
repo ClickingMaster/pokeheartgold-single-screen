@@ -1,5 +1,6 @@
 #include "global.h"
 
+#include "constants/global_fieldmap.h"
 #include "constants/maps.h"
 #include "constants/player_avatar.h"
 #include "constants/pokemon.h"
@@ -664,7 +665,7 @@ BOOL Task_StopSurfing(TaskManager *taskManager) {
             if (FollowMon_IsActive(work->fieldSystem)) {
                 FollowMon_MoveToPlayer(work->fieldSystem, (u8)work->direction);
                 FollowMon_HideUntilStep(FollowMon_GetMapObject(work->fieldSystem), TRUE);
-                FollowMon_SetFacingDirection(work->fieldSystem, 1);
+                FollowMon_SetFacingDirection(work->fieldSystem, DIR_SOUTH);
                 MapObject_ChangeMovement(FollowMon_GetMapObject(work->fieldSystem), 0x30);
             }
             if (!CheckFlag99A(Save_VarsFlags_Get(work->fieldSystem->saveData))) {
@@ -745,14 +746,14 @@ void CallFieldTask_RockClimb(TaskManager *taskManager, int direction, int partyS
 
 BOOL MetatileBehavior_IsRockClimbInDirection(int facingTile, int facingDirection) {
     switch (facingDirection) {
-    case 0:
-    case 1:
+    case DIR_NORTH:
+    case DIR_SOUTH:
         if (MetatileBehavior_IsRockClimbNorthSouth((u8)facingTile) == TRUE) {
             return TRUE;
         }
         break;
-    case 2:
-    case 3:
+    case DIR_WEST:
+    case DIR_EAST:
         if (MetatileBehavior_IsRockClimbEastWest((u8)facingTile) == TRUE) {
             return TRUE;
         }
@@ -775,7 +776,7 @@ BOOL Task_RockClimb(TaskManager *taskManager) {
     if (result == 1) {
         FollowMon_MoveToPlayer(work->fieldSystem, (u8)work->direction);
         FollowMon_HideUntilStep(FollowMon_GetMapObject(work->fieldSystem), TRUE);
-        FollowMon_SetFacingDirection(work->fieldSystem, 1);
+        FollowMon_SetFacingDirection(work->fieldSystem, DIR_SOUTH);
         FieldMoveTask_FreeWork(work);
     }
     return result;
@@ -964,8 +965,8 @@ int WaterfallUp_Init(WaterfallWork *work, TaskManager *taskManager) {
     VecFx32 position;
     VecFx32 step;
     u8 kind;
-    int x = MapObject_GetXCoord(work->mapObject) + (GetDeltaXByFacingDirection(0) << 1);
-    int z = MapObject_GetZCoord(work->mapObject) + (GetDeltaYByFacingDirection(0) << 1);
+    int x = MapObject_GetXCoord(work->mapObject) + (GetDeltaXByFacingDirection(DIR_NORTH) << 1);
+    int z = MapObject_GetZCoord(work->mapObject) + (GetDeltaYByFacingDirection(DIR_NORTH) << 1);
     SetPositionToTileCenter(x, z, &work->targetPos);
     work->targetPos.y = Terrain_CalcHeightWithMode(work->fieldSystem, 1, work->targetPos.y, work->targetPos.x, work->targetPos.z, &kind);
     GF_ASSERT(kind != 0);
@@ -1049,8 +1050,8 @@ int WaterfallDown_WaitCutIn(WaterfallWork *work, TaskManager *taskManager) {
 int WaterfallDown_Init(WaterfallWork *work, TaskManager *taskManager) {
     VecFx32 position;
     VecFx32 step;
-    int x = MapObject_GetXCoord(work->mapObject) + (GetDeltaXByFacingDirection(1) << 1);
-    int z = MapObject_GetZCoord(work->mapObject) + (GetDeltaYByFacingDirection(1) << 1);
+    int x = MapObject_GetXCoord(work->mapObject) + (GetDeltaXByFacingDirection(DIR_SOUTH) << 1);
+    int z = MapObject_GetZCoord(work->mapObject) + (GetDeltaYByFacingDirection(DIR_SOUTH) << 1);
     SetPositionToTileCenter(x, z, &work->targetPos);
     FieldSystem_SnapToTerrainHeight(work->fieldSystem, &work->targetPos);
     work->progress = 0;
