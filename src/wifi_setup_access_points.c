@@ -270,7 +270,7 @@ void WifiSetupConnections_SetAutoDns(u8 v) {
 
 void WifiSetupConnections_SetSsid(const void *ssid) {
     MI_CpuCopy8(ssid, gWifiSetupConnections->edit.ssid, 0x20);
-    gWifiSetupConnections->edit.setupMethod = 0;
+    gWifiSetupConnections->edit.setupMethod = WIFI_SETUP_METHOD_MANUAL;
 }
 
 void WifiSetupConnections_SetWepKey(const char *key) {
@@ -443,7 +443,7 @@ void WifiSetupConnections_SetFromClientResult(WifiSetupClientResultData *src) {
     for (i = 0; i < 4; i++) {
         MI_CpuCopy8(src->wepKeys[i], w->wepKeys[i], len);
     }
-    w->setupMethod = 2;
+    w->setupMethod = WIFI_SETUP_METHOD_AUTO;
     MI_CpuFill8(w->mask, 0, 4);
     w->autoAddress = 1;
     w->autoDns = 1;
@@ -465,7 +465,7 @@ void WifiSetupConnections_SetFromInfo(u8 *src) {
     MI_CpuCopy8(src + 0x71, work->ssid, 0x20);
     work->keyType = 2;
     work->keyFormat = 0;
-    work->setupMethod = 1;
+    work->setupMethod = WIFI_SETUP_METHOD_COPIED;
     MI_CpuFill8(work->mask, 0, 4);
     work->autoAddress = 1;
     work->autoDns = 1;
@@ -479,7 +479,7 @@ WifiSetupConnections *WifiSetupConnections_Get(void) {
 void WifiSetupConnections_Erase(int idx) {
     WifiSetupConnectionPage *page = &gWifiSetupConnections->pages[idx];
     MI_CpuFill8(page, 0, 0xef);
-    page->setupMethod = 0xff;
+    page->setupMethod = WIFI_SETUP_METHOD_ERASED;
     WifiSetupConnections_WritePage(idx);
 }
 
@@ -489,7 +489,7 @@ void WifiSetupConnections_Reset(void) {
     int i;
     MIi_CpuClear16(0, (u16 *)gWifiSetupConnections, 0x400);
     for (i = 0; i < 3; i++) {
-        gWifiSetupConnections->pages[i].setupMethod = 0xff;
+        gWifiSetupConnections->pages[i].setupMethod = WIFI_SETUP_METHOD_ERASED;
     }
     DWCi_AUTH_GetNewWiFiInfo(info);
     conv = DWCi_BACKUPlConvWifiInfo(info);

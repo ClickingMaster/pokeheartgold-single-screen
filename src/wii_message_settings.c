@@ -700,8 +700,8 @@ BOOL WiiMessageSettingsScreen_Init(OverlayManager *man, int *state) {
     HBlankInterruptDisable();
     GfGfx_DisableEngineAPlanes();
     GfGfx_DisableEngineBPlanes();
-    GX_SetVisiblePlane(0);
-    GXS_SetVisiblePlane(0);
+    GX_SetVisiblePlane(GX_PLANEMASK_NONE);
+    GXS_SetVisiblePlane(GX_PLANEMASK_NONE);
     GX_SetVisibleWnd(GX_WNDMASK_NONE);
     GXS_SetVisibleWnd(GX_WNDMASK_NONE);
     G2_BlendNone();

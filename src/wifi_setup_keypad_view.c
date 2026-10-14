@@ -53,13 +53,13 @@ void WifiSetupKeypad_MoveCursor(int direction) {
     if (gWifiSetupKeypad->cursorKey == 13 && (direction == 1 || direction == 3)) {
         gWifiSetupKeypad->returnKey = old;
     } else if (gWifiSetupKeypad->cursorKey == -1) {
-        if (gWifiSetupKeypad->returnKey == 1 || gWifiSetupKeypad->returnKey == 10) {
+        if (gWifiSetupKeypad->returnKey == 1 || gWifiSetupKeypad->returnKey == WIFI_SETUP_KEYPAD_KEY_DELETE) {
             gWifiSetupKeypad->cursorKey = 10;
         } else {
             gWifiSetupKeypad->cursorKey = 11;
         }
     } else if (gWifiSetupKeypad->cursorKey == -2) {
-        if (gWifiSetupKeypad->returnKey == 1 || gWifiSetupKeypad->returnKey == 10) {
+        if (gWifiSetupKeypad->returnKey == 1 || gWifiSetupKeypad->returnKey == WIFI_SETUP_KEYPAD_KEY_DELETE) {
             gWifiSetupKeypad->cursorKey = 1;
         } else {
             gWifiSetupKeypad->cursorKey = 2;

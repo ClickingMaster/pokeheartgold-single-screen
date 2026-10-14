@@ -2718,7 +2718,7 @@ void WifiSetupDialog_Open(int message, int kind, u8 fade, int digitPos, int digi
     gWifiSetupDialog->kind = kind;
     gWifiSetupDialog->selected = -2;
     gWifiSetupDialog->fade = fade;
-    G2_SetBlendBrightness(0x1F, 0);
+    G2_SetBlendBrightness(GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ, 0);
     gWifiSetupDialog->frame = WifiSetupOamTemplate_AllocBlock(0, gWifiSetupDialogFrameTemplates[kind], 0);
     WifiSetupOamBlock_SetPosition(gWifiSetupDialog->frame, -1, 0x100, 0);
     WifiSetupOamBlock_SetPriority(gWifiSetupDialog->frame, -1, 0);
@@ -2731,12 +2731,12 @@ void WifiSetupDialog_Open(int message, int kind, u8 fade, int digitPos, int digi
     gWifiSetupDialog->textBlock = WifiSetupOamBlock_Alloc(0, numObjs, 0);
     WifiSetupText_DrawInRect(gWifiSetupDialog->canvas, 0, 0, gWifiSetupDialogTextSizes[kind].x, gWifiSetupDialogTextSizes[kind].y, 2, WifiSetup_GetTextFlags(), text);
     WifiSetupText_ShowObjCanvas(gWifiSetupDialog->canvas, 0x100, 0, gWifiSetupDialog->textBlock, 0);
-    WifiSetupDisplay_SetWindowPlanes(0, 0, 0x1F, 0);
-    WifiSetupDisplay_SetWindowPlanes(0, 1, 0x1F, tbl.planes[gWifiSetupDialog->kind]);
-    WifiSetupDisplay_SetWindowPlanes(0, 3, 0x1F, 1);
+    WifiSetupDisplay_SetWindowPlanes(0, 0, GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2 | GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ, 0);
+    WifiSetupDisplay_SetWindowPlanes(0, 1, GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2 | GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ, tbl.planes[gWifiSetupDialog->kind]);
+    WifiSetupDisplay_SetWindowPlanes(0, 3, GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2 | GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ, 1);
     WifiSetupDisplay_SetWindowRect(0, 1, &gWifiSetupDialogWindowRect);
     WifiSetupDialog_SetY(0xC0);
-    GX_SetVisibleWnd(3);
+    GX_SetVisibleWnd(GX_WNDMASK_W0 | GX_WNDMASK_W1);
     if (fade) {
         gWifiSetupDialog->task = WifiSetupTask_Create(1, WifiSetupDialog_FadeInTask, 0, 0x78);
     } else {
@@ -2918,7 +2918,7 @@ void WifiSetupDialog_FadeOutTask(void *task, void *arg) {
 
 void WifiSetupDialog_FreeTask(void *task, void *arg) {
     int i;
-    GX_SetVisibleWnd(0);
+    GX_SetVisibleWnd(GX_WNDMASK_NONE);
     WifiSetupOamBlock_Free(gWifiSetupDialog->frame);
     WifiSetupOamBlock_Free(gWifiSetupDialog->textBlock);
     for (i = 0; i < gWifiSetupDialogButtonCounts[gWifiSetupDialog->kind]; i++) {

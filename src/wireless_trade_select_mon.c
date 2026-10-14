@@ -405,8 +405,8 @@ BOOL WirelessTradeSelectMon_Init(OverlayManager *man, int *state) {
     HBlankInterruptDisable();
     GfGfx_DisableEngineAPlanes();
     GfGfx_DisableEngineBPlanes();
-    GX_SetVisiblePlane(0);
-    GXS_SetVisiblePlane(0);
+    GX_SetVisiblePlane(GX_PLANEMASK_NONE);
+    GXS_SetVisiblePlane(GX_PLANEMASK_NONE);
     Heap_Create(HEAP_ID_3, HEAP_ID_26, 0x70FA0);
     FontID_Alloc(4, HEAP_ID_26);
     narc = NARC_New(NARC_a_0_5_2, HEAP_ID_26);

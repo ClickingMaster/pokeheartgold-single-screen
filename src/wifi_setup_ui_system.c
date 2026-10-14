@@ -326,7 +326,7 @@ WifiSetupOamBlock *WifiSetupOamBlock_Alloc(int screen, int count, int fromFront)
     int irq;
 
     block = WifiSetupPool_Pop(gWifiSetupOamBlockManager[screen].pool);
-    irq = OS_DisableIrqMask(1);
+    irq = OS_DisableIrqMask(OS_IE_V_BLANK);
     if (fromFront) {
         cur = &gWifiSetupOamBlockManager[screen].first;
         while (cur != &gWifiSetupOamBlockManager[screen].last) {
@@ -535,7 +535,7 @@ void WifiSetupPool_Delete(WifiSetupPool *pool) {
 }
 
 void *WifiSetupPool_Push(WifiSetupPool *pool, void *item) {
-    int irq = OS_DisableIrqMask(1);
+    int irq = OS_DisableIrqMask(OS_IE_V_BLANK);
     int next = FX_ModS32(pool->tail + 1, pool->size);
     if (next == pool->head) {
         OS_Terminate();
@@ -547,7 +547,7 @@ void *WifiSetupPool_Push(WifiSetupPool *pool, void *item) {
 
 void *WifiSetupPool_Pop(WifiSetupPool *pool) {
     void *ret = NULL;
-    int irq = OS_DisableIrqMask(1);
+    int irq = OS_DisableIrqMask(OS_IE_V_BLANK);
     if (pool->head != pool->tail) {
         pool->tail = FX_ModS32(pool->tail + pool->size - 1, pool->size);
         ret = pool->items[pool->tail];
@@ -967,7 +967,7 @@ void WifiSetupHeap_Destroy(void) {
 void *WifiSetupHeap_Alloc(u32 size, int align) {
     void *mem;
     int irq;
-    irq = OS_DisableIrqMask(1);
+    irq = OS_DisableIrqMask(OS_IE_V_BLANK);
     mem = NNS_FndAllocFromExpHeapEx(gWifiSetupHeap, size, align);
     if (mem == NULL) {
         OS_Terminate();
@@ -984,7 +984,7 @@ void *WifiSetupHeap_AllocZeroed(u32 size, int align) {
 
 // ptr points to the pointer to free; it is set to NULL.
 void WifiSetupHeap_FreeAndClear(void *ptr) {
-    int irq = OS_DisableIrqMask(1);
+    int irq = OS_DisableIrqMask(OS_IE_V_BLANK);
     if (*(void **)ptr == NULL) {
         return;
     }
@@ -994,7 +994,7 @@ void WifiSetupHeap_FreeAndClear(void *ptr) {
 }
 
 void WifiSetupHeap_Free(void *mem) {
-    int irq = OS_DisableIrqMask(1);
+    int irq = OS_DisableIrqMask(OS_IE_V_BLANK);
     if (mem == NULL) {
         return;
     }
@@ -1255,10 +1255,10 @@ void WifiSetupInput_UpdateLcdPower(void) {
 void WifiSetup_InstallVBlankIntr(void) {
     gWifiSetupIrqSave.mask = reg_OS_IE;
     OS_SetIrqMask(0x40018);
-    OS_EnableIrqMask(1);
-    gWifiSetupIrqSave.vblankFunc = OS_GetIrqFunction(1);
-    OS_SetIrqFunction(1, WifiSetup_VBlankIntr);
-    OS_ResetRequestIrqMask(1);
+    OS_EnableIrqMask(OS_IE_V_BLANK);
+    gWifiSetupIrqSave.vblankFunc = OS_GetIrqFunction(OS_IE_V_BLANK);
+    OS_SetIrqFunction(OS_IE_V_BLANK, WifiSetup_VBlankIntr);
+    OS_ResetRequestIrqMask(OS_IE_V_BLANK);
     OS_EnableIrq();
     OS_EnableInterrupts();
 }
@@ -1266,7 +1266,7 @@ void WifiSetup_InstallVBlankIntr(void) {
 void WifiSetup_RestoreVBlankIntr(void) {
     OS_DisableIrq();
     OS_SetIrqMask(gWifiSetupIrqSave.mask);
-    OS_SetIrqFunction(1, gWifiSetupIrqSave.vblankFunc);
+    OS_SetIrqFunction(OS_IE_V_BLANK, gWifiSetupIrqSave.vblankFunc);
 }
 
 #pragma force_active off
@@ -1305,7 +1305,7 @@ void WifiSetupList_Delete(WifiSetupList *list) {
 
 void WifiSetupList_Remove(void *node) {
     WifiSetupListNode *n = node;
-    int irq = OS_DisableIrqMask(1);
+    int irq = OS_DisableIrqMask(OS_IE_V_BLANK);
     n->prev->next = n->next;
     n->next->prev = n->prev;
     n->next = NULL;
@@ -1316,7 +1316,7 @@ void WifiSetupList_Remove(void *node) {
 void WifiSetupList_InsertBefore(void *pos, void *node) {
     WifiSetupListNode *p = pos;
     WifiSetupListNode *n = node;
-    int irq = OS_DisableIrqMask(1);
+    int irq = OS_DisableIrqMask(OS_IE_V_BLANK);
     p->prev->next = n;
     n->prev = p->prev;
     n->next = p;
@@ -1395,7 +1395,7 @@ void *WifiSetupCharVram_Alloc(int screen, int size, int fromFront, u32 *outCharN
     block = WifiSetupPool_Pop(gWifiSetupCharVram[screen].pool);
     n = ((size + 3) & ~3) >> 2;
     block->size = n;
-    irq = OS_DisableIrqMask(1);
+    irq = OS_DisableIrqMask(OS_IE_V_BLANK);
     if (fromFront) {
         cur = &gWifiSetupCharVram[screen].first;
         while (cur != &gWifiSetupCharVram[screen].last) {
@@ -1589,7 +1589,7 @@ WifiSetupTask *WifiSetupTask_CreateEx(int queue, WifiSetupTaskFunc func, void *a
     task->arg = arg;
     task->priority = priority;
     task->ownsArg = ownsArg;
-    irq = OS_DisableIrqMask(1);
+    irq = OS_DisableIrqMask(OS_IE_V_BLANK);
     for (cur = (WifiSetupTask *)gWifiSetupTaskQueues[queue].head.node.next;; cur = (WifiSetupTask *)cur->node.next) {
         if (priority < cur->priority) {
             WifiSetupList_InsertBefore(cur, task);

@@ -101,7 +101,7 @@ void WifiSetupKeyboard_MoveCursor(int direction) {
             gWifiSetupKeyboard->returnKey = old;
         }
     } else if (gWifiSetupKeyboard->cursorKey == -1) {
-        if (gWifiSetupKeyboard->returnKey == 35 || gWifiSetupKeyboard->returnKey == 50) {
+        if (gWifiSetupKeyboard->returnKey == 35 || gWifiSetupKeyboard->returnKey == WIFI_SETUP_KEY_DELETE) {
             gWifiSetupKeyboard->cursorKey = 35;
         } else {
             gWifiSetupKeyboard->cursorKey = 34;
@@ -153,7 +153,7 @@ void WifiSetupKeyboard_MoveCursor(int direction) {
         case 11:
         case 34:
         case 35:
-        case 50:
+        case WIFI_SETUP_KEY_DELETE:
             gWifiSetupKeyboard->cursorKey = 46;
             break;
         default:
@@ -209,7 +209,7 @@ void WifiSetupKeyboard_MoveCursor(int direction) {
             gWifiSetupKeyboard->cursorKey = 11;
             break;
         case 35:
-        case 50:
+        case WIFI_SETUP_KEY_DELETE:
             gWifiSetupKeyboard->cursorKey = 50;
             break;
         default:

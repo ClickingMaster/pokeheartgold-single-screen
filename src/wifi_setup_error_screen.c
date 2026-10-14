@@ -153,8 +153,8 @@ void WifiSetupErrorScreen_DrawMessage(void) {
 }
 
 void WifiSetupErrorScreen_FadeIn(void) {
-    WifiSetupFade_Start(2, 0, 21, 8);
-    WifiSetupDisplay_ShowPlanes(0, 21);
+    WifiSetupFade_Start(2, 0, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_OBJ, 8);
+    WifiSetupDisplay_ShowPlanes(0, GX_PLANEMASK_BG0 | GX_PLANEMASK_BG2 | GX_PLANEMASK_OBJ);
     WifiSetupApp_SetStateFunc(WifiSetupErrorScreen_WaitFadeIn);
 }
 
@@ -212,8 +212,8 @@ void WifiSetupErrorScreen_CloseButtonBar(void) {
         return;
     }
     WifiSetupButtonBar_Close();
-    WifiSetupFade_Start(3, 1, 1, 8);
-    WifiSetupFade_Start(3, 0, 21, 8);
+    WifiSetupFade_Start(3, 1, GX_BLEND_PLANEMASK_BG0, 8);
+    WifiSetupFade_Start(3, 0, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_OBJ, 8);
     WifiSetupApp_SetStateFunc(WifiSetupErrorScreen_Exit);
 }
 
@@ -230,8 +230,8 @@ void WifiSetupErrorScreen_Exit(void) {
     }
     WifiSetupText_FreeBgCanvas(0);
     WifiSetupMessage_Hide();
-    WifiSetupDisplay_HidePlanes(1, 1);
-    WifiSetupDisplay_HidePlanes(0, 21);
+    WifiSetupDisplay_HidePlanes(1, GX_PLANEMASK_BG0);
+    WifiSetupDisplay_HidePlanes(0, GX_PLANEMASK_BG0 | GX_PLANEMASK_BG2 | GX_PLANEMASK_OBJ);
     WifiSetupApp_GetScreenArgs(0, &x);
     if (x) {
         WifiSetupApp_SetTransition(2, 1);
