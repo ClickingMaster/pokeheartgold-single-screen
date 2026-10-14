@@ -4,6 +4,7 @@
 #include "global.h"
 
 #include "pokeathlon/pokeathlon.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 
 #include "bg_window.h"
 #include "message_format.h"
@@ -77,10 +78,10 @@ typedef struct PokeathlonCirclePushDisplayAnim {
     NNSG2dScreenData *matchupBg2Screen;         // 0xA8
     NNSG2dScreenData *monPicScreen;             // 0xAC
     NNSG2dScreenData *digitsScreen;             // 0xB0: the digits 0-9 in two rows of five
-    void *unkB4;                                // 0xB4
-    void *roundSprite;                          // 0xB8
+    PokeathlonCourseSpritePoolSprite *unkB4;                                // 0xB4
+    PokeathlonCourseSpritePoolSprite *roundSprite;                          // 0xB8
     void *scoreboardSprites[2];                 // 0xBC
-    void *zoomSprite;                           // 0xC4
+    PokeathlonCourseSpritePoolSprite *zoomSprite;                           // 0xC4
     void *nameplateSprites[4];                  // 0xC8: per name window, in the team color
     void *playerEventSprites[4];                // 0xD8: per name window
     u8 score;                                   // 0xE8: points of the own team
@@ -101,12 +102,12 @@ struct PokeathlonCirclePushDisplay {
     u8 windowOfParticipant[4];            // 0x170
 }; // size: 0x174
 
-void PokeathlonCirclePushDisplay_CreateSprites(void *scene, PokeathlonCirclePushDisplay *display);
+void PokeathlonCirclePushDisplay_CreateSprites(PokeathlonCourseSpritePool *scene, PokeathlonCirclePushDisplay *display);
 void PokeathlonCirclePushDisplay_PrintPlayerNames(PokeathlonCirclePushDisplay *display);
 void PokeathlonCirclePushDisplay_SetRound(PokeathlonCirclePushDisplay *display, u32 round);
 void PokeathlonCirclePushDisplay_ShowPlayerEvent(PokeathlonCirclePushDisplay *display, u32 participant, u32 kind);
 void PokeathlonCirclePushDisplay_ResetAnim(PokeathlonCirclePushDisplay *display);
-void PokeathlonCirclePushDisplay_GetPicVramLocations(void *scene, PokeathlonCirclePushDisplay *display);
+void PokeathlonCirclePushDisplay_GetPicVramLocations(PokeathlonCourseSpritePool *scene, PokeathlonCirclePushDisplay *display);
 void PokeathlonCirclePushDisplay_LoadMonPics(PokeathlonCirclePushDisplay *display);
 void PokeathlonCirclePushDisplayAnim_LoadMonPic(PokeathlonCirclePushDisplayAnim *anim, u32 slot, u32 mon);
 void PokeathlonCirclePushDisplay_CreateWindows(PokeathlonCirclePushDisplay *display);
@@ -129,9 +130,9 @@ void PokeathlonCirclePushDisplay_UpdateMonPic(PokeathlonCirclePushDisplay *displ
 void PokeathlonCirclePushDisplay_UpdateMatchup(PokeathlonCirclePushDisplay *display);
 void PokeathlonCirclePushDisplay_UpdateZoom(PokeathlonCirclePushDisplay *display);
 void PokeathlonCirclePushDisplayAnim_SetupMatchup(PokeathlonCirclePushDisplayAnim *anim);
-void PokeathlonCirclePushDisplayAnim_MovePicAlongPath(u8 frame, const VecFx32 *path, void *picSprite);
+void PokeathlonCirclePushDisplayAnim_MovePicAlongPath(u8 frame, const VecFx32 *path, PokeathlonCourseSpritePoolSprite *picSprite);
 void PokeathlonCirclePushDisplayAnim_SetupMonPic(PokeathlonCirclePushDisplayAnim *anim, int mon);
-void PokeathlonCirclePushDisplayAnim_MovePicVertically(u8 frame, const PokeathlonCirclePushPicKeys *keys, void *picSprite);
+void PokeathlonCirclePushDisplayAnim_MovePicVertically(u8 frame, const PokeathlonCirclePushPicKeys *keys, PokeathlonCourseSpritePoolSprite *picSprite);
 void PokeathlonCirclePushDisplayAnim_PrintScore(PokeathlonCirclePushDisplayAnim *anim, BgConfig *bgConfig);
 void PokeathlonCirclePushDisplay_OffsetScreenTiles(int offset, NNSG2dScreenData *screen);
 

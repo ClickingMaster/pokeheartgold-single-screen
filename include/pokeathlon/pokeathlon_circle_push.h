@@ -6,6 +6,7 @@
 #include "pokeathlon/pokeathlon.h"
 #include "pokeathlon/pokeathlon_circle_push_display.h"
 #include "pokeathlon/pokeathlon_course_objects.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 
 #include "bg_window.h"
 #include "sys_task_api.h"
@@ -207,7 +208,7 @@ typedef struct PokeathlonCirclePush {
     u8 scoringIndex;                              // 0x74F
     u8 scoringMons[12];                           // 0x750
     u8 scoringPoints[12];                         // 0x75C
-    void *spriteResources;                        // 0x768
+    PokeathlonCourseSpriteResources *spriteResources;                        // 0x768
     void *objects;                                // 0x76C
     PokeathlonCirclePushAi *ai;                   // 0x770
     PokeathlonCirclePushDisplay *display;         // 0x774

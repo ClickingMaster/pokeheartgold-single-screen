@@ -55,7 +55,7 @@ int BattleHall_GetSpeciesRecordsType(int type);
 u32 FrontierStat_GetFriendIndex(u32 stat);
 void *FrontierTrainer_Load(BattleHallTrainerRecord *record, u32 trainerId, enum HeapID heapID, u32 narcId);
 void FrontierTrainer_GetClassSprite(u8 trainerClass);
-void Frontier_RecordLinkPlayerLocations(void *saveData);
+void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
 // Defined in battle_hall_setup.c with other types (returning u8 and int); declared as these callers use them.
 int BattleHall_GetLevelRank(BattleHallData *data);
 u8 BattleHall_GetPartySize(u8 type);

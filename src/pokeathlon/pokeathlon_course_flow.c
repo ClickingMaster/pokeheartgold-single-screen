@@ -5,6 +5,7 @@
 #include "msgdata/msg.naix"
 #include "pokeathlon/pokeathlon.h"
 #include "pokeathlon/pokeathlon_course_internal.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_save.h"
 
 #include "bg_window.h"
@@ -213,7 +214,7 @@ BOOL PokeathlonCourse_RunStartCountdown(PokeathlonCourseData *course) {
     case 1:
         if (PokeathlonCourse_IsStartAnimDone(course)) {
             layout->startState++;
-            Sound_SetPlayerPause(7, 0);
+            Sound_SetPlayerPause(PLAYER_BGM, 0);
         }
         break;
     case 2:
@@ -517,9 +518,9 @@ u32 PokeathlonCourse_State_SendParticipant(PokeathlonCourseData *course) {
 }
 
 u32 PokeathlonCourse_State_SendParticipants(PokeathlonCourseData *course) {
-    void *participants = PokeathlonCourse_GetParticipantData(course, 0);
+    PokeathlonParticipantData *participants = PokeathlonCourse_GetParticipantData(course, 0);
     int size = PokeathlonCourseCmd_AllParticipantsSize();
-    void *link = PokeathlonCourse_GetSystem(course);
+    PokeathlonCourseLink *link = PokeathlonCourse_GetSystem(course);
     if (PokeathlonCourseLink_SendLargeCommand(POKEATHLON_COURSE_CMD_ALL_PARTICIPANTS, participants, size, link)) {
         PokeathlonCourse_SetStateField07(course, 38);
     }
@@ -705,7 +706,7 @@ u32 PokeathlonCourse_State_WaitRoundStart(PokeathlonCourseData *course) {
             Sound_SetScene(0);
             Sound_SetSceneAndPlayBGM(24, SEQ_GS_PT_GAME, 0);
         }
-        Sound_SetPlayerPause(7, 1);
+        Sound_SetPlayerPause(PLAYER_BGM, 1);
         PokeathlonCourse_SetStateField07(course, 17);
         if (!GF_heap_c_dummy_return_true(HEAP_ID_POKEATHLON)) {
             GF_AssertFail();
@@ -1021,9 +1022,9 @@ u32 PokeathlonCourse_State_SendMonCounters(PokeathlonCourseData *course) {
 }
 
 u32 PokeathlonCourse_State_SendResults(PokeathlonCourseData *course) {
-    void *results = PokeathlonCourse_GetFieldData_AtIndex(course, 0);
+    PokeathlonFieldData *results = PokeathlonCourse_GetFieldData_AtIndex(course, 0);
     int size = PokeathlonCourseCmd_ResultsSize();
-    void *link = PokeathlonCourse_GetSystem(course);
+    PokeathlonCourseLink *link = PokeathlonCourse_GetSystem(course);
     if (PokeathlonCourseLink_SendLargeCommand(POKEATHLON_COURSE_CMD_RESULTS, results, size, link)) {
         PokeathlonCourse_SetStateField07(course, 38);
     }
@@ -2032,7 +2033,7 @@ BOOL PokeathlonCourseLink_GetNetId(void *ptr) {
     return 0;
 }
 
-PokeathlonCourseCmdQueue *PokeathlonCourseCmdQueue_New(const PokeathlonCourseCmd *cmds, int cmdCount, void *context, enum HeapID heapId) {
+PokeathlonCourseCmdQueue *PokeathlonCourseCmdQueue_New(const PokeathlonCourseCmd *cmds, int cmdCount, PokeathlonCourseData *context, enum HeapID heapId) {
     PokeathlonCourseCmdQueue *queue = Heap_Alloc(heapId, sizeof(PokeathlonCourseCmdQueue));
     memset(queue, 0, sizeof(PokeathlonCourseCmdQueue));
     queue->cmds = cmds;

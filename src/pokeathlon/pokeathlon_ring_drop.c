@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+#include "msgdata/msg/msg_0309.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_ring_drop_cpu.h"
 
 #include "assert.h"
@@ -19,18 +21,18 @@
 BOOL PokeathlonCourse_RunStartCountdown(PokeathlonCourseData *course);
 void PokeathlonCourse_SetHudPlanes(PokeathlonCourseData *course, u32 planes);
 BOOL PokeathlonCourse_RunFinish(PokeathlonCourseData *course);
-Sprite **PokeathlonCourse_CreateHudSprites(PokeathlonCourseData *course, int baseY, void *resources, SpriteList *spriteList);
+Sprite **PokeathlonCourse_CreateHudSprites(PokeathlonCourseData *course, int baseY, PokeathlonCourseSpriteResources *resources, SpriteList *spriteList);
 void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int event, int value);
 void PokeathlonCourse_SetRecordScore(PokeathlonCourseData *course, u32 value);
 void PokeathlonCourse_SetFinishCallback(PokeathlonCourseData *course, void (*callback)(PokeathlonCourseData *));
-void PokeathlonCourseScoreList_Rank(void *gfx, int mode);
-void PokeathlonCourseScoreList_Init(void *gfx);
-void PokeathlonCourseScoreList_AddPointsToTotals(void *gfx);
-void PokeathlonCourseScoreList_SaveEventPoints(void *gfx, int event);
-void PokeathlonCourse_AddScoreEntry(PokeathlonCourseData *course, void *gfx, int participant, u16 score, int idx, int digits, int msgno);
-BOOL PokeathlonCourseMonObjects_IsLoaded(void *monObjects);
+void PokeathlonCourseScoreList_Rank(PokeathlonCourseScoreList *gfx, int mode);
+void PokeathlonCourseScoreList_Init(PokeathlonCourseScoreList *gfx);
+void PokeathlonCourseScoreList_AddPointsToTotals(PokeathlonCourseScoreList *gfx);
+void PokeathlonCourseScoreList_SaveEventPoints(PokeathlonCourseScoreList *gfx, int event);
+void PokeathlonCourse_AddScoreEntry(PokeathlonCourseData *course, PokeathlonCourseScoreList *gfx, int participant, u16 score, int idx, int digits, int msgno);
+BOOL PokeathlonCourseMonObjects_IsLoaded(PokeathlonCourseMonObjects *monObjects);
 void PokeathlonCourseObject_CenterToGround(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
-void PokeathlonCourseObjects_PauseAnims(void *monObjects, int paused);
+void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseObjects *monObjects, int paused);
 void PokeathlonEvent_CalcPoints(void *gfx, int event);
 
 extern const GraphicsBanks gPokeathlonRingDropGraphicsBanks;
@@ -264,12 +266,12 @@ BOOL PokeathlonRingDrop_Draw(PokeathlonCourseData *course) {
 }
 
 BOOL PokeathlonRingDrop_ShowResults(PokeathlonCourseData *course) {
-    void *gfx = PokeathlonCourse_GetGraphicsSystem(course);
+    PokeathlonCourseScoreList *gfx = PokeathlonCourse_GetGraphicsSystem(course);
     int i;
 
     PokeathlonCourseScoreList_Init(gfx);
     for (i = 0; i < RING_DROP_PARTICIPANTS; i++) {
-        PokeathlonCourse_AddScoreEntry(course, gfx, i, PokeathlonCourse_GetField5F0_AtIndex(course, (u8)i), 0, 3, 298);
+        PokeathlonCourse_AddScoreEntry(course, gfx, i, PokeathlonCourse_GetField5F0_AtIndex(course, (u8)i), 0, 3, msg_0309_00298);
     }
     PokeathlonCourseScoreList_Rank(gfx, 1);
     PokeathlonEvent_CalcPoints(gfx, 7);

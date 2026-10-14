@@ -2,6 +2,7 @@
 
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0309.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_pennant_capture.h"
 
 #include "assert.h"
@@ -20,25 +21,25 @@
 #include "text.h"
 
 // Course sprite helpers (OVY_96, not yet tidied).
-Sprite *PokeathlonCourseSprites_CreateTimerDigit(void *resources, void *spriteList, int priority, enum HeapID heapId);
-void PokeathlonCourseSpritePool_LoadChar(void *pool, int narc, int file, int id, int vram);
-void PokeathlonCourseSpritePool_LoadPltt(void *pool, int narc, int file, int id, int vram, int count);
-void PokeathlonCourseSpritePool_LoadCell(void *pool, int narc, int file, int id);
-void PokeathlonCourseSpritePool_LoadAnim(void *pool, int narc, int file, int id);
-void *PokeathlonCourseSpritePool_CreateAndTake(void *pool, int priority, int whichScreen, int id, int anim);
-void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int shown, int show);
-void PokeathlonCourseSpritePoolSprite_SetAnim(void *sprite, int anim);
-void PokeathlonCourseSpritePoolSprite_SetPosition(void *sprite, VecFx32 *position);
-VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(void *sprite);
-Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(void *sprite);
-void *PokeathlonCourseSpritePool_GetSpriteList(void *pool);
-void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *sprite, int priority);
+Sprite *PokeathlonCourseSprites_CreateTimerDigit(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
+void PokeathlonCourseSpritePool_LoadChar(PokeathlonCourseSpritePool *pool, int narc, int file, int id, int vram);
+void PokeathlonCourseSpritePool_LoadPltt(PokeathlonCourseSpritePool *pool, int narc, int file, int id, int vram, int count);
+void PokeathlonCourseSpritePool_LoadCell(PokeathlonCourseSpritePool *pool, int narc, int file, int id);
+void PokeathlonCourseSpritePool_LoadAnim(PokeathlonCourseSpritePool *pool, int narc, int file, int id);
+PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_CreateAndTake(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, int id, int anim);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *sprite, int shown, int show);
+void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *sprite, int anim);
+void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *sprite, VecFx32 *position);
+VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(PokeathlonCourseSpritePoolSprite *sprite);
+Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(PokeathlonCourseSpritePoolSprite *sprite);
+SpriteList *PokeathlonCourseSpritePool_GetSpriteList(PokeathlonCourseSpritePool *pool);
+void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *sprite, int priority);
 // monsters.c / pokemon_icon_idx.c, declared here with the argument types the calls were built with
 void *CharTiles_AllocAndLoadMonPicAsObjFromNarc(u16 charNarc, u16 charFile, u32 heapId, u32 personality, int isAnimated, int whichFacing, u16 species);
 void *AllocAndLoadPltt16FromNarc(u16 plttNarc, u16 plttFile, u32 heapId);
 u32 GetMonIconPlttNaix(void);
 // in the object linked between the two parts of the top screen code (picture sprites)
-void PokeathlonPennantCaptureDisplay_CreatePicSprites(void *pool, PokeathlonPennantCaptureDisplay *display);
+void PokeathlonPennantCaptureDisplay_CreatePicSprites(PokeathlonCourseSpritePool *pool, PokeathlonPennantCaptureDisplay *display);
 
 extern const u8 sPennantCaptureTimerDigitX[];
 extern const u8 sPennantCaptureTimerDigitAnims[];
@@ -115,7 +116,7 @@ void PokeathlonPennantCaptureDisplay_LoadBgGfx(PokeathlonPennantCaptureDisplay *
     PokeathlonPennantCaptureDisplay_SetScore(display, 0);
 }
 
-void PokeathlonPennantCaptureDisplay_LoadSpriteResources(PokeathlonPennantCaptureDisplay *display, void *pool) {
+void PokeathlonPennantCaptureDisplay_LoadSpriteResources(PokeathlonPennantCaptureDisplay *display, PokeathlonCourseSpritePool *pool) {
     u32 ids[2];
     u32 *id = ids;
     int i;
@@ -136,7 +137,7 @@ void PokeathlonPennantCaptureDisplay_LoadSpriteResources(PokeathlonPennantCaptur
     PokeathlonCourseSpritePool_LoadAnim(pool, 0xE2, 11, 0x65);
 }
 
-void PokeathlonPennantCaptureDisplay_CreateSprites(PokeathlonPennantCaptureDisplay *display, void *pool, void *resources) {
+void PokeathlonPennantCaptureDisplay_CreateSprites(PokeathlonPennantCaptureDisplay *display, PokeathlonCourseSpritePool *pool, PokeathlonCourseSpriteResources *resources) {
     int participant;
     int i;
     PokeathlonPennantCaptureDisplay *row;

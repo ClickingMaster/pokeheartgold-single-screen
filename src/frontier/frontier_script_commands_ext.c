@@ -1,5 +1,6 @@
 #include "global.h"
 
+#include "constants/game_stats.h"
 #include "constants/sndseq.h"
 
 #include "battle/battle_setup.h"
@@ -10,6 +11,7 @@
 #include "frontier/frontier_system.h"
 #include "frontier/frontier_transition.h"
 #include "frontier/frontier_particles.h"
+#include "msgdata/msg.naix"
 
 #include "battle_record.h"
 #include "battle_recording.h"
@@ -654,7 +656,7 @@ BOOL FrtCmd_BufferSpeciesName(FrontierScriptContext *ctx) {
 }
 
 String *FrontierScript_ReadString(u32 msgId, enum HeapID heapId) {
-    MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 237, heapId);
+    MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0237_bin, heapId);
     String *string = NewString_ReadMsgData(msgData, msgId);
     DestroyMsgData(msgData);
     return string;
@@ -685,7 +687,7 @@ BOOL FrtCmd_GetBattlePoints(FrontierScriptContext *ctx) {
 BOOL FrtCmd_GiveBattlePoints(FrontierScriptContext *ctx) {
     FrontierLaunchArgs *args = Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
     u16 points = FrontierScript_ReadVar(ctx);
-    GameStats_Add(Save_GameStats_Get(args->saveData), 0x45, points);
+    GameStats_Add(Save_GameStats_Get(args->saveData), GAME_STAT_BATTLE_POINTS_RECEIVED, points);
     FrontierData_BattlePointAction(Save_FrontierData_Get(args->saveData), points, 5);
     return FALSE;
 }
@@ -693,7 +695,7 @@ BOOL FrtCmd_GiveBattlePoints(FrontierScriptContext *ctx) {
 BOOL FrtCmd_TakeBattlePoints(FrontierScriptContext *ctx) {
     FrontierLaunchArgs *args = Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
     u16 points = FrontierScript_ReadVar(ctx);
-    GameStats_Add(Save_GameStats_Get(args->saveData), 0x46, points);
+    GameStats_Add(Save_GameStats_Get(args->saveData), GAME_STAT_BATTLE_POINTS_SPENT, points);
     FrontierData_BattlePointAction(Save_FrontierData_Get(args->saveData), points, 6);
     return FALSE;
 }

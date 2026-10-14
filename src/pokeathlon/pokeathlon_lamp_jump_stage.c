@@ -6,6 +6,7 @@
 
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0309.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_results_announcement.h"
 
 #include "assert.h"
@@ -37,19 +38,19 @@ void NNS_G3dGlbFlushP(void);
 // Course helpers and the sprite scene (OVY_96, not yet tidied).
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int member);
 void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int counter, int value);
-void *PokeathlonCourse_CreateTimerDigitSpriteAlt(void *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
+Sprite *PokeathlonCourse_CreateTimerDigitSpriteAlt(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
 void PokeathlonCourseObject_GetCollisionCircle(void *sprite, int x, int y, fx32 *outX, fx32 *outY, int *outRadius);
 void PokeathlonCourseObject_GroundToCenter(void *sprite, int x, int y, int *outX, int *outY);
-void PokeathlonCourseSpritePool_LoadChar(void *scene, NarcId narcId, int fileId, int id, int vram);
-void PokeathlonCourseSpritePool_LoadPltt(void *scene, NarcId narcId, int fileId, int id, int vram, int count);
-void PokeathlonCourseSpritePool_LoadCell(void *scene, NarcId narcId, int fileId, int id);
-void PokeathlonCourseSpritePool_LoadAnim(void *scene, NarcId narcId, int fileId, int id);
-void *PokeathlonCourseSpritePool_CreateAndTake(void *scene, int priority, int whichScreen, int resId, int kind);
-void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int shown, int draw);
-void PokeathlonCourseSpritePoolSprite_SetAnim(void *sprite, int anim);
-void PokeathlonCourseSpritePoolSprite_SetPosition(void *sprite, const VecFx32 *pos);
-SpriteList *PokeathlonCourseSpritePool_GetSpriteList(void *scene);
-void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *sprite, int priority);
+void PokeathlonCourseSpritePool_LoadChar(PokeathlonCourseSpritePool *scene, NarcId narcId, int fileId, int id, int vram);
+void PokeathlonCourseSpritePool_LoadPltt(PokeathlonCourseSpritePool *scene, NarcId narcId, int fileId, int id, int vram, int count);
+void PokeathlonCourseSpritePool_LoadCell(PokeathlonCourseSpritePool *scene, NarcId narcId, int fileId, int id);
+void PokeathlonCourseSpritePool_LoadAnim(PokeathlonCourseSpritePool *scene, NarcId narcId, int fileId, int id);
+PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_CreateAndTake(PokeathlonCourseSpritePool *scene, int priority, int whichScreen, int resId, int kind);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *sprite, int shown, int draw);
+void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *sprite, int anim);
+void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *sprite, const VecFx32 *pos);
+SpriteList *PokeathlonCourseSpritePool_GetSpriteList(PokeathlonCourseSpritePool *scene);
+void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *sprite, int priority);
 
 extern int gPokeathlonLampJumpTrampolineRed;         // red of the next trampoline vertex
 extern const u8 sLampJumpTimerDigitX[2]; // x of the timer digits
@@ -543,7 +544,7 @@ void PokeathlonLampJump_SetDent(PokeathlonLampJump *lampJump, int mon, u8 column
     PokeathlonLampJump_CalcDent(column, lampJump->trampoline.dents[mon][column], lampJump->trampoline.dents[mon]);
 }
 
-void PokeathlonLampJump_LoadSpriteResources(void *scene) {
+void PokeathlonLampJump_LoadSpriteResources(PokeathlonCourseSpritePool *scene) {
     PokeathlonCourseSpritePool_LoadChar(scene, NARC_a_1_6_8, 3, 101, 3);
     PokeathlonCourseSpritePool_LoadPltt(scene, NARC_a_1_6_8, 0, 101, 3, 4);
     PokeathlonCourseSpritePool_LoadCell(scene, NARC_a_1_6_8, 2, 101);
@@ -552,7 +553,7 @@ void PokeathlonLampJump_LoadSpriteResources(void *scene) {
 
 #pragma force_active on
 
-void PokeathlonLampJump_CreateSprites(PokeathlonLampJump *lampJump, void *scene) {
+void PokeathlonLampJump_CreateSprites(PokeathlonLampJump *lampJump, PokeathlonCourseSpritePool *scene) {
     int i;
     int j;
     VecFx32 pos;
@@ -864,7 +865,7 @@ void PokeathlonLampJump_FreeLamps(PokeathlonLampJumpLamps *lamps) {
     Heap_Free(lamps);
 }
 
-void PokeathlonLampJump_CreateLampSprites(PokeathlonLampJumpLamps *lamps, void *scene, int priority) {
+void PokeathlonLampJump_CreateLampSprites(PokeathlonLampJumpLamps *lamps, PokeathlonCourseSpritePool *scene, int priority) {
     int i;
     PokeathlonLampJumpLamp *lamp = lamps->lamps;
     for (i = 0; i < 29; i++, lamp++) {

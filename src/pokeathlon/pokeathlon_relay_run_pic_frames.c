@@ -1,6 +1,7 @@
 #pragma force_active on
 #include "global.h"
 
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_relay_run.h"
 #include "pokeathlon/pokeathlon_relay_run_cpu.h"
 
@@ -20,22 +21,22 @@ static const PokeathlonRelayRunPicIds sPicResIds3 = { { 0x66, 0x67 } };
 
 // Sprite pool helpers (pokeathlon_course_objects.c), declared with untyped entries and the argument
 // types this caller passes.
-void PokeathlonCourseSpritePool_CreateSprite(void *pool, int priority, int whichScreen, u8 resId, u8 kind);
-void *PokeathlonCourseSpritePool_Take(void *pool, u8 resId, u8 kind);
-void *PokeathlonCourseSpritePoolSprite_GetSprite(void *entry);
-void PokeathlonCourseSpritePoolSprite_Show(void *entry, BOOL shown, BOOL draw);
-void PokeathlonCourseSpritePoolSprite_SetAnim(void *entry, int seq);
-void PokeathlonCourseSpritePoolSprite_SetPosition(void *entry, VecFx32 *position);
+void PokeathlonCourseSpritePool_CreateSprite(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, u8 resId, u8 kind);
+PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_Take(PokeathlonCourseSpritePool *pool, u8 resId, u8 kind);
+Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(PokeathlonCourseSpritePoolSprite *entry);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *entry, BOOL shown, BOOL draw);
+void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *entry, int seq);
+void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *entry, VecFx32 *position);
 
-void PokeathlonRelayRunHud_CreatePicFrames(void *spritePool, PokeathlonRelayRunHud *hud);
+void PokeathlonRelayRunHud_CreatePicFrames(PokeathlonCourseSpritePool *spritePool, PokeathlonRelayRunHud *hud);
 
 // The two picture frames of the top screen and the tired mark shown on each.
-void PokeathlonRelayRunHud_CreatePicFrames(void *spritePool, PokeathlonRelayRunHud *hud) {
+void PokeathlonRelayRunHud_CreatePicFrames(PokeathlonCourseSpritePool *spritePool, PokeathlonRelayRunHud *hud) {
     PokeathlonRelayRunPicIds resIds = gPokeathlonRelayRunPicIds;
     PokeathlonRelayRunPicIds kinds = sPicKinds;
     VecFx32 position;
     int i;
-    void *sprite;
+    Sprite *sprite;
 
     for (i = 0; i < 2; i++) {
         PokeathlonCourseSpritePool_CreateSprite(spritePool, 3, NNS_G2D_VRAM_TYPE_2DSUB, resIds.ids[i], kinds.ids[i]);

@@ -3,6 +3,7 @@
 
 #include "global.h"
 
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_relay_run.h"
 
 // The CPU of the Relay Run teams without a player. Every `interval` frames it looks at each CPU
@@ -64,7 +65,7 @@ typedef struct PokeathlonRelayRunCpu {
     u8 humanCount;                                                // 0x3E5
 } PokeathlonRelayRunCpu;                                          // size: 0x3E8
 
-void PokeathlonRelayRunHud_GetPicVramOffsets(void *pool, PokeathlonRelayRunHud *hud);
+void PokeathlonRelayRunHud_GetPicVramOffsets(PokeathlonCourseSpritePool *pool, PokeathlonRelayRunHud *hud);
 void PokeathlonRelayRunHud_InitWindows(PokeathlonRelayRunHud *hud);
 PokeathlonRelayRunCpu *PokeathlonRelayRunCpu_New(enum HeapID heapId, int cpuCount, int mode);
 void PokeathlonRelayRunCpu_SetTeam(PokeathlonRelayRunCpu *cpu, u8 index, PokeathlonRelayRunTeam *team);

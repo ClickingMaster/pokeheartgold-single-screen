@@ -1,6 +1,7 @@
 #include "global.h"
 
 #include "pokeathlon/pokeathlon_course_internal.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_ring_drop.h"
 
 #include "assert.h"
@@ -9,12 +10,12 @@
 #include "sprite_system.h"
 
 // Course mon objects (OVY_96; not declared by pokeathlon_course_internal.h).
-void PokeathlonCourseObject_SetCollision(void *object, s32 offsetY, s32 radius);
-void PokeathlonCourseObject_SetGroundPosition(void *object, s32 x, s32 y);
-void PokeathlonCourseObject_SetTouchRadius(void *object, int radius);
-void PokeathlonCourseObject_GroundToCenter(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
-void PokeathlonCourseObject_CenterToGround(void *object, int x, int y, int *outX, int *outY);
-void PokeathlonCourseObject_GetCollisionCircle(void *object, fx32 x, fx32 y, fx32 *outX, fx32 *outY, int *radius);
+void PokeathlonCourseObject_SetCollision(PokeathlonCourseObject *object, s32 offsetY, s32 radius);
+void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseObject *object, s32 x, s32 y);
+void PokeathlonCourseObject_SetTouchRadius(PokeathlonCourseObject *object, int radius);
+void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseObject *object, s32 x, s32 y, s32 *outX, s32 *outY);
+void PokeathlonCourseObject_CenterToGround(PokeathlonCourseObject *object, int x, int y, int *outX, int *outY);
+void PokeathlonCourseObject_GetCollisionCircle(PokeathlonCourseObject *object, fx32 x, fx32 y, fx32 *outX, fx32 *outY, int *radius);
 
 // The code calls these two with u8 arguments.
 #define PokeathlonRingDrop_GetMonObject(objects, index)    (((void *(*)(void *, u8))PokeathlonCourseMonObjects_Get)((objects), (index)))
@@ -134,7 +135,7 @@ void PokeathlonRingDrop_CreateMonObjects(PokeathlonRingDrop *ringDrop, Pokeathlo
         PokeathlonRingDrop *ringDrop;
     } saved;
 
-    void *spriteList;
+    SpriteList *spriteList;
 
     saved.ringDrop = ringDrop;
     spriteList = SpriteManager_GetSpriteList(saved.ringDrop->spriteManager);
@@ -540,8 +541,8 @@ void PokeathlonRingDrop_BuildFramePacket(u8 (*contacts)[RING_DROP_PARTICIPANTS],
 }
 
 // Centres the affine transforms of a mon object on its body (or on its feet).
-void PokeathlonRingDrop_SetMonAffineCenter(void *object, BOOL centered) {
-    void *gfx = PokeathlonCourseMonObject_GetGfx(object);
+void PokeathlonRingDrop_SetMonAffineCenter(PokeathlonCourseMonObject *object, BOOL centered) {
+    PokeathlonCourseMonGfx *gfx = PokeathlonCourseMonObject_GetGfx(object);
     int top = PokeathlonCourseMonGfx_GetTopRow(gfx);
     VecFx32 center = { 0 };
     int size = PokeathlonCourseMonGfx_GetInfo(gfx)->isLarge != 0 ? 0x40 : 0x20;

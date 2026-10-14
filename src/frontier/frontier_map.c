@@ -44,7 +44,7 @@ void Frontier_ResetMapSpriteState(void *frontier);
 u32 FrontierMap_GetParam(u32 mapId, u32 field);
 void FrontierMap_InitEffect(void *map, void *effect, u32 mapId);
 void FrontierMap_ExitEffect(void *map, void *effect, u32 mapId);
-int Frontier_GetPlayerSpriteId(void *profile);
+int Frontier_GetPlayerSpriteId(PlayerProfile *profile);
 u32 FrontierParticles_New(enum HeapID heapID);
 void FrontierParticles_Free(u32 resourceManager);
 void FrontierParticles_Update(void);

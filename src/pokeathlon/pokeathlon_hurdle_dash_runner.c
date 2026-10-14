@@ -1,6 +1,7 @@
 #pragma force_active on
 #include "global.h"
 
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_hurdle_dash.h"
 #include "pokeathlon/pokeathlon_hurdle_dash_race.h"
 
@@ -9,29 +10,29 @@
 
 // Course helpers (pokeathlon_course*.c), declared with untyped objects and the argument types this
 // caller passes (u8 member indices; a mon object where the object helpers expect a course object).
-void *PokeathlonCourseMonObjects_Get(void *objects, u8 index);
-void *PokeathlonCourseMonObject_GetGfx(void *object);
-PokeathlonHurdleDashMonView *PokeathlonCourseMonGfx_GetInfo(void *gfx);
+PokeathlonCourseMonObject *PokeathlonCourseMonObjects_Get(PokeathlonCourseMonObjects *objects, u8 index);
+PokeathlonCourseMonGfx *PokeathlonCourseMonObject_GetGfx(PokeathlonCourseMonObject *object);
+PokeathlonHurdleDashMonView *PokeathlonCourseMonGfx_GetInfo(PokeathlonCourseMonGfx *gfx);
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int mon);
 void *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, u8 mon);
 int PokeathlonCourse_GetCollisionSizeClass(void *performance);
-void PokeathlonCourseObject_SetCollision(void *object, u32 offsetY, u32 radius);
+void PokeathlonCourseObject_SetCollision(PokeathlonCourseObject *object, u32 offsetY, u32 radius);
 int PokeathlonCourse_GetTouchRadius(void);
-void PokeathlonCourseObject_SetTouchRadius(void *object, u32 radius);
-void PokeathlonCourseObject_SetGroundPosition(void *object, int x, int y);
-void PokeathlonCourseMonObject_SetAnimState(void *object, u32 animState);
-void PokeathlonCourseMonObject_SetDrawPriority(void *object, u32 drawPriority);
-void PokeathlonCourseMonObject_SetAffineOverwriteMode(void *object, int mode);
-void PokeathlonCourseMonObject_SetAffineMatrix(void *object, const VecFx32 *matrix);
-void *PokeathlonCourseSpritePool_Take(void *pool, u8 resId, u8 kind);
-Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(void *entry);
-void PokeathlonCourseSpritePoolSprite_Show(void *entry, BOOL shown, BOOL draw);
+void PokeathlonCourseObject_SetTouchRadius(PokeathlonCourseObject *object, u32 radius);
+void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseObject *object, int x, int y);
+void PokeathlonCourseMonObject_SetAnimState(PokeathlonCourseMonObject *object, u32 animState);
+void PokeathlonCourseMonObject_SetDrawPriority(PokeathlonCourseMonObject *object, u32 drawPriority);
+void PokeathlonCourseMonObject_SetAffineOverwriteMode(PokeathlonCourseMonObject *object, int mode);
+void PokeathlonCourseMonObject_SetAffineMatrix(PokeathlonCourseMonObject *object, const VecFx32 *matrix);
+PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_Take(PokeathlonCourseSpritePool *pool, u8 resId, u8 kind);
+Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(PokeathlonCourseSpritePoolSprite *entry);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *entry, BOOL shown, BOOL draw);
 
-void PokeathlonHurdleDashRunner_Init(PokeathlonCourseData *course, const PokeathlonHurdleDashTable *table, const PokeathlonHurdleDashParams *params, PokeathlonHurdleDashTrack *track, void *scene, void *monObjects, u8 lane, PokeathlonHurdleDashRunner *runner);
+void PokeathlonHurdleDashRunner_Init(PokeathlonCourseData *course, const PokeathlonHurdleDashTable *table, const PokeathlonHurdleDashParams *params, PokeathlonHurdleDashTrack *track, PokeathlonCourseSpritePool *scene, PokeathlonCourseMonObjects *monObjects, u8 lane, PokeathlonHurdleDashRunner *runner);
 
 // Sets up one of the player's Pokemon in its lane: its stats from the event tables, its object and the
 // jump marker, rank and boost sprites.
-void PokeathlonHurdleDashRunner_Init(PokeathlonCourseData *course, const PokeathlonHurdleDashTable *table, const PokeathlonHurdleDashParams *params, PokeathlonHurdleDashTrack *track, void *scene, void *monObjects, u8 lane, PokeathlonHurdleDashRunner *runner) {
+void PokeathlonHurdleDashRunner_Init(PokeathlonCourseData *course, const PokeathlonHurdleDashTable *table, const PokeathlonHurdleDashParams *params, PokeathlonHurdleDashTrack *track, PokeathlonCourseSpritePool *scene, PokeathlonCourseMonObjects *monObjects, u8 lane, PokeathlonHurdleDashRunner *runner) {
     VecFx32 scale;
     VecFx32 markerPosition;
     VecFx32 rankPosition;
@@ -39,7 +40,7 @@ void PokeathlonHurdleDashRunner_Init(PokeathlonCourseData *course, const Pokeath
     void *monObject;
     int x;
     int member;
-    void *gfx;
+    PokeathlonCourseMonGfx *gfx;
     PokeathlonHurdleDashMonView *info;
     u8 *stats;
     int performance;

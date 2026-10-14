@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include "msgdata/msg/msg_0309.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_ring_drop.h"
 
 #include "assert.h"
@@ -13,9 +15,9 @@
 #include "text.h"
 
 // Course helpers and mon objects (OVY_96).
-void PokeathlonCourseObject_GroundToCenter(void *object, int x, int y, int *outX, int *outY);
-void PokeathlonCourse_AddMonCounter(void *course, u8 participant, u8 member, int counter, int amount);
-u8 *PokeathlonCourse_GetMonStats(void *course, int participant, int member);
+void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseObject *object, int x, int y, int *outX, int *outY);
+void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int counter, int amount);
+u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int member);
 BOOL PlaySEOnPlayer(u16 seqNo, int player);
 
 extern const s16 gPokeathlonRingDropMonStartPositions[];
@@ -450,7 +452,7 @@ void PokeathlonRingDrop_PrintScore(PokeathlonCourseData *course, u32 score) {
     String *string;
     FillWindowPixelBuffer(&ringDrop->window, 0);
     BufferIntegerAsString(msgFormat, 0, score, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
-    string = ReadMsgData_ExpandPlaceholders(msgFormat, msgData, 0xA3, ringDrop->heapId);
+    string = ReadMsgData_ExpandPlaceholders(msgFormat, msgData, msg_0309_00163, ringDrop->heapId);
     AddTextPrinterParameterizedWithColor(&ringDrop->window, 4, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);
     String_Delete(string);
     CopyWindowToVram(&ringDrop->window);

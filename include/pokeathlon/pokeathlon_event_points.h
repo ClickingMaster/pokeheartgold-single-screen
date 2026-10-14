@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#include "pokeathlon/pokeathlon_course_types_def.h"
+
 // The course points of an event (pokeathlon_event_points.c, pokeathlon_event_rank_points.c).
 
 // The part of a course ranking entry (PokeathlonCourseScoreList_GetRanked) the points are made from.
@@ -30,6 +32,6 @@ u8 PokeathlonEvent_RingDropPoints(u32 score);
 u8 PokeathlonEvent_SnowThrowPoints(int score);
 
 // pokeathlon_event_rank_points.c
-void PokeathlonEvent_CalcRankPoints(void *list);
+void PokeathlonEvent_CalcRankPoints(PokeathlonCourseScoreList *list);
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_EVENT_POINTS_H

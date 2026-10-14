@@ -4,6 +4,7 @@
 #include "global.h"
 
 #include "pokeathlon/pokeathlon.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 
 #include "bg_window.h"
 #include "sprite.h"
@@ -25,9 +26,9 @@ typedef struct PokeathlonHurdleDashMon {
     s32 y;             // 0x14
     s32 groundY;       // 0x18
     s32 markerY;       // 0x1C
-    void *jumpMarker;  // 0x20: PokeathlonCourseSpritePoolSprite: shows whether a jump was timed
-    void *rankSprite;  // 0x24: PokeathlonCourseSpritePoolSprite
-    void *boostEffect; // 0x28: PokeathlonCourseSpritePoolSprite
+    PokeathlonCourseSpritePoolSprite *jumpMarker;  // 0x20: PokeathlonCourseSpritePoolSprite: shows whether a jump was timed
+    PokeathlonCourseSpritePoolSprite *rankSprite;  // 0x24: PokeathlonCourseSpritePoolSprite
+    PokeathlonCourseSpritePoolSprite *boostEffect; // 0x28: PokeathlonCourseSpritePoolSprite
     f32 topSpeed;      // 0x2C
     f32 acceleration;  // 0x30
     u8 jumpStat;       // 0x34: 0 hops instead of jumping
@@ -95,9 +96,9 @@ typedef struct PokeathlonHurdleDash {
     u32 frame;                                   // 0x230
     u32 endTimer;                                // 0x234
     PokeathlonHurdleDashCpuRunner cpuRunners[9]; // 0x238: 3 per participant without a player
-    void *spriteResources;                                // 0x3A0
+    PokeathlonCourseSpriteResources *spriteResources;                                // 0x3A0
     void *monSpriteManager;                      // 0x3A4
-    void *unk3A8;                                // 0x3A8
+    PokeathlonCourseSpritePoolSprite *unk3A8;                                // 0x3A8
     Sprite *sprites[6];                          // 0x3AC
     u16 rankTimer;                               // 0x3C4
     u8 ranksShown;                               // 0x3C6

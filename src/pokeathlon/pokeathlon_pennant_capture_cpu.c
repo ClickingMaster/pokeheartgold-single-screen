@@ -1,5 +1,6 @@
 #include "global.h"
 
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_pennant_capture.h"
 
 #include "assert.h"
@@ -13,10 +14,10 @@
 u32 LCRandom(void);
 
 // Course sprite and object helpers (OVY_96, not yet tidied).
-void PokeathlonCourseObject_GetCollisionCenter(void *object, int x, int y, int *outX, int *outY);
-void PokeathlonCourseObject_GroundToCenter(void *object, int x, int y, int *outX, int *outY);
-void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int shown, int show);
-void **PokeathlonCourseSpritePool_GetResourceSlot(void *pool, int id, int kind);
+void PokeathlonCourseObject_GetCollisionCenter(PokeathlonCourseObject *object, int x, int y, int *outX, int *outY);
+void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseObject *object, int x, int y, int *outX, int *outY);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *sprite, int shown, int show);
+void **PokeathlonCourseSpritePool_GetResourceSlot(PokeathlonCourseSpritePool *pool, int id, int kind);
 // the CPU's cell checks, next in link order (overlay96_course_scene_helpers.c)
 BOOL PokeathlonPennantCaptureCpu_IsNearCellTarget(PokeathlonPennantCaptureCpuCell *cell, s32 x, s32 y);
 BOOL PokeathlonPennantCaptureCpu_IsCellTargetOnField(PokeathlonPennantCaptureCpuCell *cell);
@@ -37,13 +38,13 @@ typedef struct PokeathlonPennantCaptureCellNode {
 
 #pragma force_active on
 
-void PokeathlonPennantCaptureDisplay_GetPicVramOffsets(void *pool, PokeathlonPennantCaptureDisplay *display) {
+void PokeathlonPennantCaptureDisplay_GetPicVramOffsets(PokeathlonCourseSpritePool *pool, PokeathlonPennantCaptureDisplay *display) {
     PokeathlonPennantCaptureSpriteIds ids = gPokeathlonPennantCaptureSpriteIds[3];
     u8 i;
     for (i = 0; i < 2; i++) {
         int id = ((int *)&ids)[i];
-        void *charResource = *PokeathlonCourseSpritePool_GetResourceSlot(pool, id, 0);
-        void *plttResource = *PokeathlonCourseSpritePool_GetResourceSlot(pool, id, 1);
+        SpriteResource *charResource = *PokeathlonCourseSpritePool_GetResourceSlot(pool, id, 0);
+        SpriteResource *plttResource = *PokeathlonCourseSpritePool_GetResourceSlot(pool, id, 1);
         NNSG2dImageProxy *image = SpriteTransfer_GetCharProxy(charResource);
         NNSG2dImagePaletteProxy *palette = SpriteTransfer_GetPaletteProxy(plttResource, image);
         display->picCharOffsets[i] = NNS_G2dGetImageLocation(image, NNS_G2D_VRAM_TYPE_2DSUB);

@@ -1,6 +1,7 @@
 #include "global.h"
 
 #include "pokeathlon/pokeathlon_course_internal.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_snow_throw.h"
 
 #include "assert.h"
@@ -21,20 +22,20 @@
 void MATH_QSort(void *base, u32 count, u32 width, int (*compare)(const void *, const void *), void *context);
 
 // Sprite pool helpers (pokeathlon_course_objects.c), declared with untyped entries as the course objects use them.
-void PokeathlonCourseSpritePool_LoadChar(void *pool, int narcId, int fileId, int resId, int vram);
-void PokeathlonCourseSpritePool_LoadPltt(void *pool, int narcId, int fileId, int resId, int vram, int count);
-void PokeathlonCourseSpritePool_LoadCell(void *pool, int narcId, int fileId, int resId);
-void PokeathlonCourseSpritePool_LoadAnim(void *pool, int narcId, int fileId, int resId);
-void PokeathlonCourseSpritePool_CreateSprite(void *pool, int priority, int whichScreen, int resId, int kind);
-void *PokeathlonCourseSpritePool_Take(void *pool, int resId, int kind);
-void **PokeathlonCourseSpritePool_GetResourceSlot(void *pool, u32 id, u32 kind);
-void PokeathlonCourseSpritePoolSprite_Show(void *entry, BOOL shown, BOOL draw);
-void PokeathlonCourseSpritePoolSprite_SetAnim(void *entry, int seq);
-void PokeathlonCourseSpritePoolSprite_TryChangeAnim(void *entry, int seq);
-void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *entry, int priority);
-void PokeathlonCourseSpritePoolSprite_SetPosition(void *entry, void *position);
-VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(void *entry);
-BOOL PokeathlonCourseSpritePoolSprite_IsAnimated(void *entry);
+void PokeathlonCourseSpritePool_LoadChar(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId, int vram);
+void PokeathlonCourseSpritePool_LoadPltt(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId, int vram, int count);
+void PokeathlonCourseSpritePool_LoadCell(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId);
+void PokeathlonCourseSpritePool_LoadAnim(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId);
+void PokeathlonCourseSpritePool_CreateSprite(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, int resId, int kind);
+PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_Take(PokeathlonCourseSpritePool *pool, int resId, int kind);
+void **PokeathlonCourseSpritePool_GetResourceSlot(PokeathlonCourseSpritePool *pool, u32 id, u32 kind);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *entry, BOOL shown, BOOL draw);
+void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *entry, int seq);
+void PokeathlonCourseSpritePoolSprite_TryChangeAnim(PokeathlonCourseSpritePoolSprite *entry, int seq);
+void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *entry, int priority);
+void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *entry, VecFx32 *position);
+VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(PokeathlonCourseSpritePoolSprite *entry);
+BOOL PokeathlonCourseSpritePoolSprite_IsAnimated(PokeathlonCourseSpritePoolSprite *entry);
 
 // Which of two Pokemon at the same depth is drawn in front, by view (own team) and Pokemon.
 extern const u8 sSnowThrowDrawOrder[][SNOW_THROW_MONS];
@@ -213,7 +214,7 @@ void PokeathlonSnowThrowDisplay_LoadBgGraphics(PokeathlonSnowThrowDisplay *displ
     ScheduleBgTilemapBufferTransfer(display->bgConfig, GF_BG_LYR_SUB_1);
 }
 
-void PokeathlonSnowThrowDisplay_LoadSpriteGraphics(PokeathlonSnowThrowDisplay *display, void *pool) {
+void PokeathlonSnowThrowDisplay_LoadSpriteGraphics(PokeathlonSnowThrowDisplay *display, PokeathlonCourseSpritePool *pool) {
 #pragma unused(display)
     PokeathlonCourseSpritePool_LoadChar(pool, NARC_a_2_1_7, 13, 101, 2);
     PokeathlonCourseSpritePool_LoadPltt(pool, NARC_a_2_1_7, 10, 101, 2, 4);
@@ -221,7 +222,7 @@ void PokeathlonSnowThrowDisplay_LoadSpriteGraphics(PokeathlonSnowThrowDisplay *d
     PokeathlonCourseSpritePool_LoadAnim(pool, NARC_a_2_1_7, 11, 101);
 }
 
-void PokeathlonSnowThrowDisplay_CreateSprites(PokeathlonSnowThrowDisplay *display, void *pool, PokeathlonCourseMonInfo *mons) {
+void PokeathlonSnowThrowDisplay_CreateSprites(PokeathlonSnowThrowDisplay *display, PokeathlonCourseSpritePool *pool, PokeathlonCourseMonInfo *mons) {
     int i;
 
     for (i = 0; i < SNOW_THROW_MEMBERS; i++) {
@@ -300,7 +301,7 @@ void PokeathlonSnowThrowDisplay_UpdateShake(PokeathlonSnowThrowDisplay *display)
 // The shadows under the own team's pictures.
 #pragma force_active on
 
-void PokeathlonSnowThrowDisplay_SetMonShadows(PokeathlonSnowThrowDisplay *display, void *pool, void *monResources) {
+void PokeathlonSnowThrowDisplay_SetMonShadows(PokeathlonSnowThrowDisplay *display, PokeathlonCourseSpritePool *pool, PokeathlonCourseSpriteResources *monResources) {
     PokeathlonCoursePoint positions[SNOW_THROW_MEMBERS];
     int i;
 
@@ -333,7 +334,7 @@ void PokeathlonSnowThrowDisplay_LoadMonPics(PokeathlonSnowThrowDisplay *display,
 // The own team's pictures (slid in from the left, 50 pixels apart) and the tired marks above them.
 #pragma force_active on
 
-void PokeathlonSnowThrowDisplay_CreatePicSprites(void *pool, PokeathlonSnowThrowDisplay *display, PokeathlonCourseMonInfo *mons) {
+void PokeathlonSnowThrowDisplay_CreatePicSprites(PokeathlonCourseSpritePool *pool, PokeathlonSnowThrowDisplay *display, PokeathlonCourseMonInfo *mons) {
     VecFx32 position;
     int i;
     volatile int x; // (kept in memory, as built)
@@ -390,9 +391,9 @@ void PokeathlonSnowThrowDisplay_TransferMonPics(PokeathlonSnowThrowDisplay *disp
 #pragma force_active reset
 
 // Each picture has its own 0xD00 bytes (after 0x300) of the resource's VRAM and its own palette (after the first).
-void PokeathlonSnowThrowDisplay_GetPicVramOffsets(void *pool, PokeathlonSnowThrowDisplay *display) {
-    void *charResource = *PokeathlonCourseSpritePool_GetResourceSlot(pool, 101, 0);
-    void *plttResource = *PokeathlonCourseSpritePool_GetResourceSlot(pool, 101, 1);
+void PokeathlonSnowThrowDisplay_GetPicVramOffsets(PokeathlonCourseSpritePool *pool, PokeathlonSnowThrowDisplay *display) {
+    SpriteResource *charResource = *PokeathlonCourseSpritePool_GetResourceSlot(pool, 101, 0);
+    SpriteResource *plttResource = *PokeathlonCourseSpritePool_GetResourceSlot(pool, 101, 1);
     NNSG2dImageProxy *image = SpriteTransfer_GetCharProxy(charResource);
     NNSG2dImagePaletteProxy *palette = SpriteTransfer_GetPaletteProxy(plttResource, image);
     u8 i;

@@ -6,6 +6,8 @@
 
 #include "constants/sndseq.h"
 
+#include "pokeathlon/pokeathlon_course_types_def.h"
+
 #include "assert.h"
 #include "filesystem.h"
 #include "heap.h"
@@ -19,15 +21,15 @@ u8 *PokeathlonCourse_ToBytes(void *block);
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, u32 participant, u32 member);
 void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, u8 participant, u8 member, void *out);
 void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int kind, int amount);
-u16 *PokeathlonCourseMonGfx_GetInfo(void *mon);
-void *PokeathlonCourseMonObjects_Get(void *monPics, int index);
-void *PokeathlonCourseMonObject_GetGfx(void *monPic);
-void PokeathlonCourseMonObject_SetDrawFlag(void *monPic, u8 visible);
-void PokeathlonCourseMonObject_SetShadowDrawFlag(void *monPic, int draw);
-void PokeathlonCourseMonObject_SetDrawPriority(void *monPic, int priority);
-void PokeathlonCourseMonObject_SetAnimState(void *monPic, int animState);
-void PokeathlonCourseMonObject_SetAnim(void *monPic, int anim);
-void PokeathlonCourseObject_SetGroundPosition(void *monPic, int x, int y);
+u16 *PokeathlonCourseMonGfx_GetInfo(PokeathlonCourseMonGfx *mon);
+PokeathlonCourseMonObject *PokeathlonCourseMonObjects_Get(PokeathlonCourseMonObjects *monPics, int index);
+PokeathlonCourseMonGfx *PokeathlonCourseMonObject_GetGfx(PokeathlonCourseMonObject *monPic);
+void PokeathlonCourseMonObject_SetDrawFlag(PokeathlonCourseMonObject *monPic, u8 visible);
+void PokeathlonCourseMonObject_SetShadowDrawFlag(PokeathlonCourseMonObject *monPic, int draw);
+void PokeathlonCourseMonObject_SetDrawPriority(PokeathlonCourseMonObject *monPic, int priority);
+void PokeathlonCourseMonObject_SetAnimState(PokeathlonCourseMonObject *monPic, int animState);
+void PokeathlonCourseMonObject_SetAnim(PokeathlonCourseMonObject *monPic, int anim);
+void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseObject *monPic, int x, int y);
 void PokeathlonCourse_LoadMonPic(ManagedSprite *sprite, void *mon, int mainScreen, int palette, enum HeapID heapId);
 
 extern u32 gPokeathlonBlockSmashFramesSinceHit;
@@ -272,7 +274,7 @@ u32 PokeathlonBlockSmashMon_CanHit(PokeathlonBlockSmashMon *mon) {
     return result;
 }
 
-PokeathlonBlockSmashRivals *PokeathlonBlockSmashRivals_New(enum HeapID heapId, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonCourseData *course, void *monPics) {
+PokeathlonBlockSmashRivals *PokeathlonBlockSmashRivals_New(enum HeapID heapId, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonCourseData *course, PokeathlonCourseMonObjects *monPics) {
     PokeathlonBlockSmashRatingTable table;
     u32 maxStamina[3];
     PokeathlonBlockSmashRivals *rivals;
@@ -545,7 +547,7 @@ void PokeathlonBlockSmashMon_UpdateTired(PokeathlonBlockSmashMon *mon) {
     }
 }
 
-void PokeathlonBlockSmashRival_Init(PokeathlonBlockSmashRival *row, SpriteSystem *spriteSystem, SpriteManager *spriteManager, void *monPics, u8 participant, PokeathlonCourseData *course, u32 *maxStamina) {
+void PokeathlonBlockSmashRival_Init(PokeathlonBlockSmashRival *row, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonCourseMonObjects *monPics, u8 participant, PokeathlonCourseData *course, u32 *maxStamina) {
     s32 i;
     s32 x;
     u32 who;
@@ -907,7 +909,7 @@ void PokeathlonBlockSmashMon_EndFullGauge(PokeathlonBlockSmashMon *mon) {
 }
 
 // Places the other teams' Pokemon pictures (three per row, the first one shown).
-void PokeathlonBlockSmashRivals_InitMonPics(void *monPics, u32 self) {
+void PokeathlonBlockSmashRivals_InitMonPics(PokeathlonCourseMonObjects *monPics, u32 self) {
     void *pic;
     u32 base;
     s32 i;

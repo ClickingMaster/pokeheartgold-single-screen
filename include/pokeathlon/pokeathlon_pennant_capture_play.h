@@ -3,6 +3,8 @@
 
 #include "pokeathlon/pokeathlon_pennant_capture.h"
 
+#include "pokeathlon/pokeathlon_course_types_def.h"
+
 // Pennant Capture (event 1): screen set-up, the event states and the host's frame step.
 
 // What every participant sends each frame.
@@ -17,8 +19,8 @@ typedef struct PokeathlonPennantCaptureInput {
 
 void PokeathlonPennantCapture_InitBgs(BgConfig *bgConfig);
 void PokeathlonPennantCapture_LoadBgGfx(PokeathlonPennantCapture *work);
-void PokeathlonPennantCapture_LoadSpriteResources(void *pool);
-void PokeathlonPennantCapture_CreateSprites(PokeathlonPennantCapture *work, void *pool);
+void PokeathlonPennantCapture_LoadSpriteResources(PokeathlonCourseSpritePool *pool);
+void PokeathlonPennantCapture_CreateSprites(PokeathlonPennantCapture *work, PokeathlonCourseSpritePool *pool);
 BOOL PokeathlonPennantCapture_State_Setup(PokeathlonCourseData *course, u8 *state);
 BOOL PokeathlonPennantCapture_State_Play(PokeathlonCourseData *course, u8 *state);
 BOOL PokeathlonPennantCapture_State_End(PokeathlonCourseData *course, u8 *state);

@@ -71,7 +71,7 @@ void ArcadeChallenge_SetSaved(void *record, int value);
 void ArcadeChallenge_SetField(void *record, int kind, u8 index, int unused, void *src);
 void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
 void BattleArcade_GetRoundTrainerIds(u32 type, u32 rank, u16 *trainerIds, u32 count);
-void FrontierTrainer_GenerateMons(u32 count, u16 trainerId, u16 partnerTrainerId, u16 *monIds, void *mons, u8 *ivs, u32 *otIds, u8 multiplayer);
+void FrontierTrainer_GenerateMons(u32 count, u16 trainerId, u16 partnerTrainerId, u16 *monIds, FrontierMon *mons, u8 *ivs, u32 *otIds, u8 multiplayer);
 int BattleArcade_GetMonLevel(ArcadeContext *ctx);
 void FrontierMon_ToPokemon(ArcadeFrontierMon *frontierMon, Pokemon *mon, int level);
 void BattleArcade_AddMonToParty(ArcadeContext *ctx, Party *party, Pokemon *mon);
@@ -133,7 +133,7 @@ static inline void BattleArcadeData_AddPartyMon(Party *party, u16 slot) {
     mon = Party_GetMonByIndex(party, gBattleArcadeData->partySlots[slot]);
     Party_AddMon(gBattleArcadeData->playerParty, mon);
     mon = Party_GetMonByIndex(gBattleArcadeData->playerParty, slot);
-    data.item = 0;
+    data.item = ITEM_NONE;
     SetMonData(mon, MON_DATA_HELD_ITEM, &data.item);
     if (GetMonData(mon, MON_DATA_LEVEL, NULL) > 50) {
         data.exp = GetMonExpBySpeciesAndLevel(GetMonData(mon, MON_DATA_SPECIES, NULL), 50);

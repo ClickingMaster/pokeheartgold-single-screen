@@ -1,6 +1,7 @@
 #pragma force_active on
 #include "global.h"
 
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_pennant_capture.h"
 
 #include "sprite.h"
@@ -14,19 +15,19 @@ static const PokeathlonPennantCaptureSpriteIds sPicResIds3 = { { 0x66, 0x67 } };
 
 // Sprite pool helpers (pokeathlon_course_objects.c), declared with untyped entries and the argument
 // types this caller passes.
-void PokeathlonCourseSpritePool_CreateSprite(void *pool, int priority, int whichScreen, u8 resId, u8 kind);
-void PokeathlonCourseSpritePoolSprite_Show(void *entry, BOOL shown, BOOL draw);
-void *PokeathlonCourseSpritePool_Take(void *pool, u8 resId, u8 kind);
-void *PokeathlonCourseSpritePoolSprite_GetSprite(void *entry);
+void PokeathlonCourseSpritePool_CreateSprite(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, u8 resId, u8 kind);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *entry, BOOL shown, BOOL draw);
+PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_Take(PokeathlonCourseSpritePool *pool, u8 resId, u8 kind);
+Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(PokeathlonCourseSpritePoolSprite *entry);
 
-void PokeathlonPennantCaptureDisplay_CreatePicSprites(void *pool, PokeathlonPennantCaptureDisplay *display);
+void PokeathlonPennantCaptureDisplay_CreatePicSprites(PokeathlonCourseSpritePool *pool, PokeathlonPennantCaptureDisplay *display);
 
 // The two picture sprites of the top screen.
-void PokeathlonPennantCaptureDisplay_CreatePicSprites(void *pool, PokeathlonPennantCaptureDisplay *display) {
+void PokeathlonPennantCaptureDisplay_CreatePicSprites(PokeathlonCourseSpritePool *pool, PokeathlonPennantCaptureDisplay *display) {
     PokeathlonPennantCaptureSpriteIds resIds = gPokeathlonPennantCaptureSpriteIds;
     PokeathlonPennantCaptureSpriteIds kinds = sPicKinds;
     VecFx32 position;
-    void *sprite;
+    Sprite *sprite;
     int i;
     for (i = 0; i < 2; i++) {
         PokeathlonCourseSpritePool_CreateSprite(pool, 3, NNS_G2D_VRAM_TYPE_2DSUB, resIds.ids[i], kinds.ids[i]);

@@ -4,6 +4,7 @@
 #include "global.h"
 
 #include "pokeathlon/pokeathlon.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 
 #include "bg_window.h"
 #include "font_sprite.h"
@@ -89,7 +90,7 @@ typedef struct PokeathlonResultsAnnouncementRanking {
 
 // One team on the scoreboard: name plate, three digits and the name.
 typedef struct PokeathlonResultsAnnouncementScoreboardTeam {
-    void *plate;                               // 0x00
+    PokeathlonCourseSpritePoolSprite *plate;                               // 0x00
     void *digits[3];                           // 0x04
     PokeathlonResultsAnnouncementText name;    // 0x10
     u32 points;                                // 0x20
@@ -99,7 +100,7 @@ typedef struct PokeathlonResultsAnnouncementScoreboardTeam {
 // The course points of the four teams (sub screen).
 typedef struct PokeathlonResultsAnnouncementScoreboard {
     enum HeapID heapId;                                   // 0x00
-    void *scene;                                          // 0x04
+    PokeathlonCourseSpritePool *scene;                                          // 0x04
     FontSystem *fontSystem;                               // 0x08
     PokeathlonResultsAnnouncementTextWindow window;       // 0x0C
     PokeathlonResultsAnnouncementScoreboardTeam teams[4]; // 0x24
@@ -109,11 +110,11 @@ typedef struct PokeathlonResultsAnnouncement {
     enum HeapID heapId;                                  // 0x00
     u32 unk04[2];                                        // 0x04
     BgConfig *bgConfig;                                  // 0x0C
-    void *scene;                                         // 0x10
+    PokeathlonCourseSpritePool *scene;                                         // 0x10
     PokeathlonResultsAnnouncementScoreboard *scoreboard; // 0x14
-    void *messageBox;                                    // 0x18: the announcer's text box
+    PokeathlonCourseMessageBox *messageBox;                                    // 0x18: the announcer's text box
     PokeathlonResultsAnnouncementRanking ranking;        // 0x1C
-    void *banner;                                         // 0x80
+    PokeathlonEventBanner *banner;                                         // 0x80
     Window window;                                       // 0x84: "Results Announcement"
     SpriteSystem *spriteSystem;                          // 0x94
     SpriteManager *spriteManager;                        // 0x98
@@ -207,7 +208,7 @@ void PokeathlonResultsAnnouncement_InitTextWindow(PokeathlonResultsAnnouncementP
 void PokeathlonResultsAnnouncement_InitTextWindows(PokeathlonResultsAnnouncementPlates *plates);
 void PokeathlonResultsAnnouncement_CreateText(PokeathlonResultsAnnouncementPlates *plates, PokeathlonResultsAnnouncementTextWindow *window, String *string, int x, int dx, int dy, Sprite *parent, PokeathlonResultsAnnouncementText *out);
 void PokeathlonResultsAnnouncement_DestroyText(PokeathlonResultsAnnouncementText *text);
-PokeathlonResultsAnnouncementScoreboard *PokeathlonResultsAnnouncement_NewScoreboard(enum HeapID heapId, BgConfig *bgConfig, void *scene);
+PokeathlonResultsAnnouncementScoreboard *PokeathlonResultsAnnouncement_NewScoreboard(enum HeapID heapId, BgConfig *bgConfig, PokeathlonCourseSpritePool *scene);
 void PokeathlonResultsAnnouncement_FreeScoreboard(PokeathlonResultsAnnouncementScoreboard *scoreboard);
 void PokeathlonResultsAnnouncement_LoadScoreboardResources(PokeathlonResultsAnnouncementScoreboard *scoreboard, s32 index);
 void PokeathlonResultsAnnouncement_InitScoreboard(PokeathlonResultsAnnouncementScoreboard *scoreboard, PokeathlonCourseData *course, int y);

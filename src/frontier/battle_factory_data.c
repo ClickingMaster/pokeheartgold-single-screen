@@ -2,6 +2,9 @@
 
 #include "global.h"
 
+#include "constants/items.h"
+#include "constants/species.h"
+
 #include "frontier/frontier_link_messages.h"
 
 #include "error_handling.h"
@@ -488,8 +491,8 @@ void BattleFactory_GenerateOpponentMons(BattleFactoryData *data) {
     u32 opponentCount;
 
     for (i = 0; i < 8; i++) {
-        species[i] = 0;
-        items[i] = 0;
+        species[i] = SPECIES_NONE;
+        items[i] = ITEM_NONE;
     }
     num = BattleFactory_GetOpponentMonCount(data->type, 1);
     playerCount = Party_GetCount(data->playerParty);

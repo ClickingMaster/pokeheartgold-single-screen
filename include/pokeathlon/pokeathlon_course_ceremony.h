@@ -5,6 +5,7 @@
 
 #include "pokeathlon/pokeathlon.h"
 #include "pokeathlon/pokeathlon_course_objects.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_course_ui.h"
 
 #include "bg_window.h"
@@ -150,8 +151,8 @@ typedef struct PokeathlonCourseCeremony {
     BgConfig *bgConfig;                     // 0x04
     SysTask *cryTask;                       // 0x08
     PokeathlonCourseMessageBox *messageBox; // 0x0C
-    void *spriteResources;                  // 0x10
-    void *objects;                          // 0x14: the 12 Pokemon
+    PokeathlonCourseSpriteResources *spriteResources;                  // 0x10
+    PokeathlonCourseMonObjects *objects;                          // 0x14: the 12 Pokemon
     SpriteSystem *spriteSystem;             // 0x18
     SpriteManager *spriteManager;           // 0x1C
 

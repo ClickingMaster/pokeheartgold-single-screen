@@ -4,6 +4,7 @@
 
 #include "msgdata/msg/msg_0309.h"
 #include "pokeathlon/pokeathlon_course_internal.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_event_points.h"
 #include "pokeathlon/pokeathlon_pennant_capture_play.h"
 
@@ -20,15 +21,15 @@
 #include "wireless_status_icon.h"
 
 // Sprite pool helpers (pokeathlon_course_objects.c), declared with untyped entries as the course objects use them.
-void PokeathlonCourseSpritePool_Draw(void *pool);
-void PokeathlonCourseSpritePool_Free(void *pool);
-void *PokeathlonCourseSpritePool_New(enum HeapID heapId, VecFx32 *template);
-void PokeathlonCourseSpritePool_SetSurfaceCoords(void *pool, fx32 mainX, fx32 mainY, fx32 subX, fx32 subY);
-void PokeathlonCourseSpritePool_SetResourceId(void *pool, int index, u32 id);
-void PokeathlonCourseSpritePool_TransferResources(void *pool);
+void PokeathlonCourseSpritePool_Draw(PokeathlonCourseSpritePool *pool);
+void PokeathlonCourseSpritePool_Free(PokeathlonCourseSpritePool *pool);
+PokeathlonCourseSpritePool *PokeathlonCourseSpritePool_New(enum HeapID heapId, VecFx32 *template);
+void PokeathlonCourseSpritePool_SetSurfaceCoords(PokeathlonCourseSpritePool *pool, fx32 mainX, fx32 mainY, fx32 subX, fx32 subY);
+void PokeathlonCourseSpritePool_SetResourceId(PokeathlonCourseSpritePool *pool, int index, u32 id);
+void PokeathlonCourseSpritePool_TransferResources(PokeathlonCourseSpritePool *pool);
 void PokeathlonCourseObject_SetCollision(void *object, s32 offsetY, s32 radius);
-void PokeathlonCourseObject_SetGroundPosition(void *object, s32 x, s32 y);
-void PokeathlonCourseObject_SetTouchRadius(void *object, s32 radius);
+void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseObject *object, s32 x, s32 y);
+void PokeathlonCourseObject_SetTouchRadius(PokeathlonCourseObject *object, s32 radius);
 void PokeathlonCourseObject_GroundToCenter(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
 
 extern const GraphicsBanks sPennantCaptureGraphicsBanks;
@@ -249,7 +250,7 @@ BOOL PokeathlonPennantCapture_Draw(PokeathlonCourseData *course) {
 
 // Results: the points each team scored.
 BOOL PokeathlonPennantCapture_ShowResults(PokeathlonCourseData *course) {
-    void *gfx = PokeathlonCourse_GetGraphicsSystem(course);
+    PokeathlonCourseScoreList *gfx = PokeathlonCourse_GetGraphicsSystem(course);
     int i;
     PokeathlonCourseScoreList_Init(gfx);
     for (i = 0; i < 4; i++) {

@@ -4,6 +4,7 @@
 #include "global.h"
 
 #include "pokeathlon/pokeathlon.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_lamp_jump.h"
 
 // Lamp Jump (event 5), the second part: the trampoline the Pokemon bounce on (drawn in 3D as a band of
@@ -14,9 +15,9 @@
 typedef struct PokeathlonLampJumpLamp {
     BOOL lit;             // 0x00
     VecFx32 pos;          // 0x04
-    void *sprite;         // 0x10
-    void *pointsSprite;   // 0x14: the points of the hit
-    void *hitSprite;      // 0x18
+    PokeathlonCourseSpritePoolSprite *sprite;         // 0x10
+    PokeathlonCourseSpritePoolSprite *pointsSprite;   // 0x14: the points of the hit
+    PokeathlonCourseSpritePoolSprite *hitSprite;      // 0x18
 } PokeathlonLampJumpLamp; // size: 0x1C
 
 typedef struct PokeathlonLampJumpLamps {
@@ -54,8 +55,8 @@ void PokeathlonLampJump_MoveSideways(PokeathlonLampJumpMon *mon, PokeathlonLampJ
 void PokeathlonLampJump_CalcDent(int column, int depth, s32 *dent);
 void PokeathlonLampJump_SetRestingHeights(PokeathlonLampJump *lampJump);
 void PokeathlonLampJump_SetDent(PokeathlonLampJump *lampJump, int mon, u8 column, fx32 depth);
-void PokeathlonLampJump_LoadSpriteResources(void *scene);
-void PokeathlonLampJump_CreateSprites(PokeathlonLampJump *lampJump, void *scene);
+void PokeathlonLampJump_LoadSpriteResources(PokeathlonCourseSpritePool *scene);
+void PokeathlonLampJump_CreateSprites(PokeathlonLampJump *lampJump, PokeathlonCourseSpritePool *scene);
 void PokeathlonLampJump_PlaceSprites(PokeathlonLampJump *lampJump, u8 self);
 void PokeathlonLampJump_UpdateScoreDisplay(PokeathlonLampJump *lampJump);
 void PokeathlonLampJump_PrintScore(PokeathlonLampJump *lampJump, int score);
@@ -68,7 +69,7 @@ void PokeathlonLampJump_SetMonParams(PokeathlonCourseData *course, PokeathlonLam
 BOOL PokeathlonLampJump_CollideMons(PokeathlonCourseData *course, PokeathlonLampJump *lampJump);
 PokeathlonLampJumpLamps *PokeathlonLampJump_NewLamps(enum HeapID heapId);
 void PokeathlonLampJump_FreeLamps(PokeathlonLampJumpLamps *lamps);
-void PokeathlonLampJump_CreateLampSprites(PokeathlonLampJumpLamps *lamps, void *scene, int priority);
+void PokeathlonLampJump_CreateLampSprites(PokeathlonLampJumpLamps *lamps, PokeathlonCourseSpritePool *scene, int priority);
 void PokeathlonLampJump_PlaceLamps(PokeathlonLampJumpLamps *lamps);
 void PokeathlonLampJump_UpdateLamps(PokeathlonLampJumpLamps *lamps);
 void PokeathlonLampJump_PutOutLamp(PokeathlonLampJumpLamps *lamps, u8 index);

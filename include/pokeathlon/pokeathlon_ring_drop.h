@@ -4,6 +4,7 @@
 #include "global.h"
 
 #include "pokeathlon/pokeathlon.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_goal_roll.h"
 
 #include "bg_window.h"
@@ -58,7 +59,7 @@ typedef struct PokeathlonRingDropMemberParams {
 
 // A team member's 3D object and stamina.
 typedef struct PokeathlonRingDropMember {
-    void *object;                                 // 0x00: the course mon object
+    PokeathlonCourseObject *object;                                 // 0x00: the course mon object
     const PokeathlonRingDropMemberParams *params; // 0x04
     fx32 stamina;                                 // 0x08
     u32 index : 4;                                // 0x0C: of the mon object (participant * 3 + member)
@@ -195,7 +196,7 @@ typedef struct PokeathlonRingDropFramePacket {
 
 // The sprites of a participant's Pokemon.
 typedef struct PokeathlonRingDropMonSprites {
-    void *monObject;                          // 0x00
+    PokeathlonCourseMonObject *monObject;                          // 0x00
     ManagedSprite *chargeSprite;              // 0x04
     ManagedSprite *markSprite;                // 0x08: above the Pokemon
     ManagedSprite *switchSprite;              // 0x0C: the ball going up and coming down
@@ -243,7 +244,7 @@ typedef struct PokeathlonRingDrop {
     SpriteManager *spriteManager;                                                             // 0x00C
     MessageFormat *msgFormat;                                                                 // 0x010
     MsgData *msgData;                                                                         // 0x014
-    void *resources;                                                                          // 0x018
+    PokeathlonCourseSpriteResources *resources;                                                                          // 0x018
     void *monObjects;                                                                         // 0x01C
     Window window;                                                                            // 0x020
     PokeathlonRingDropMemberParams memberParams[RING_DROP_PARTICIPANTS][RING_DROP_TEAM_SIZE]; // 0x030
@@ -299,14 +300,14 @@ ManagedSprite *PokeathlonRingDrop_NewSprite(SpriteSystem *spriteSystem, SpriteMa
 void PokeathlonRingDrop_InitBgs(PokeathlonRingDrop *ringDrop);
 void PokeathlonRingDrop_FreeBgs(PokeathlonRingDrop *ringDrop);
 void PokeathlonRingDrop_LoadBgGraphics(PokeathlonRingDrop *ringDrop);
-void PokeathlonRingDropDisplay_SwitchOut(PokeathlonRingDropMonSprites *mon, s16 *position, void *ui, u8 participant, PokeathlonRingDropInput *input, BOOL cpu, BOOL own);
+void PokeathlonRingDropDisplay_SwitchOut(PokeathlonRingDropMonSprites *mon, s16 *position, PokeathlonRingDropUi *ui, u8 participant, PokeathlonRingDropInput *input, BOOL cpu, BOOL own);
 void PokeathlonRingDropDisplay_SwitchIn(PokeathlonRingDropMonSprites *mon, s16 *position, void *ui, u8 participant, PokeathlonRingDropInput *input, BOOL report, BOOL own);
 void PokeathlonRingDropDisplay_EndSwitch(PokeathlonRingDropMonSprites *mon, const s16 *position, PokeathlonRingDropInput *input, BOOL report, BOOL own);
 void PokeathlonRingDropDisplay_UpdateSwitch(PokeathlonRingDropMonPacket *packet, PokeathlonRingDropMonSprites *mon, void *ui, PokeathlonCourseData *course, u8 participant);
 int PokeathlonRingDropDisplay_CompareDepth(const void *a, const void *b);
 int PokeathlonRingDropDisplay_CompareScores(const void *a, const void *b);
 void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay *display, PokeathlonRingDropFramePacket *framePacket, PokeathlonCourseData *course);
-void PokeathlonRingDropDisplay_Init(PokeathlonRingDropDisplay *display, SpriteSystem *spriteSystem, SpriteManager *spriteManager, void *ui, void *monObjects, enum HeapID heapId);
+void PokeathlonRingDropDisplay_Init(PokeathlonRingDropDisplay *display, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonRingDropUi *ui, void *monObjects, enum HeapID heapId);
 void PokeathlonRingDropDisplay_Update(PokeathlonRingDropDisplay *display, PokeathlonCourseData *course);
 void PokeathlonRingDropDisplay_Free(PokeathlonRingDropDisplay *display);
 void PokeathlonRingDropDisplay_StopAnimations(PokeathlonRingDropDisplay *display);
@@ -325,7 +326,7 @@ void PokeathlonRingDrop_UpdateCollisions(PokeathlonCourseData *course);
 void PokeathlonRingDrop_UpdateStamina(PokeathlonRingDropPlayer *players, PokeathlonCourseData *course);
 void PokeathlonRingDrop_UpdateMons(PokeathlonRingDropPlayer *players, PokeathlonCourseData *course);
 void PokeathlonRingDrop_BuildFramePacket(u8 (*contacts)[RING_DROP_PARTICIPANTS], PokeathlonCourseData *course);
-void PokeathlonRingDrop_SetMonAffineCenter(void *object, BOOL centered);
+void PokeathlonRingDrop_SetMonAffineCenter(PokeathlonCourseMonObject *object, BOOL centered);
 void PokeathlonRingDropMon_SetState(PokeathlonRingDropMon *mon, int state);
 BOOL PokeathlonRingDropMon_Collide(PokeathlonRingDropMon *a, PokeathlonRingDropMon *b);
 BOOL PokeathlonRingDropMon_CanSwitch(PokeathlonRingDropMon *mon);

@@ -5,6 +5,7 @@
 
 #include "pokeathlon/pokeathlon.h"
 #include "pokeathlon/pokeathlon_course_internal.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 
 #include "bg_window.h"
 #include "sprite.h"
@@ -38,9 +39,9 @@
 
 // The snowball of one Pokemon (0x48). Field positions are fx32 field units, x and z (y is 0).
 typedef struct PokeathlonSnowThrowBall {
-    void *sprite;       // 0x00: PokeathlonCourseSpritePoolSprite: the snowball in the air
-    void *shadowSprite; // 0x04
-    void *splashSprite; // 0x08
+    PokeathlonCourseSpritePoolSprite *sprite;       // 0x00: PokeathlonCourseSpritePoolSprite: the snowball in the air
+    PokeathlonCourseSpritePoolSprite *shadowSprite; // 0x04
+    PokeathlonCourseSpritePoolSprite *splashSprite; // 0x08
     int state;          // 0x0C: SNOW_THROW_BALL_*
     VecFx32 position;   // 0x10
     VecFx32 velocity;   // 0x1C
@@ -56,7 +57,7 @@ typedef struct PokeathlonSnowThrowBall {
 
 // One of the twelve Pokemon (0x20).
 typedef struct PokeathlonSnowThrowMon {
-    void *stunSprite; // 0x00: PokeathlonCourseSpritePoolSprite: shown over it while stunned
+    PokeathlonCourseSpritePoolSprite *stunSprite; // 0x00: PokeathlonCourseSpritePoolSprite: shown over it while stunned
     f32 throwWeight;  // 0x04: slows its throws down (tenths, by its Pokeathlon stats)
     f32 throwPower;   // 0x08: scales the energy its hits take
     f32 hitDamage;    // 0x0C: scales the energy hits take from it
@@ -167,8 +168,8 @@ typedef struct PokeathlonSnowThrow {
     Window scoreWindow;                                     // 0x004: the result
     Window nameWindows[SNOW_THROW_TEAMS - 1];               // 0x014: the other players' names
     enum HeapID heapId;                                     // 0x044
-    void *spritePool;                                       // 0x048: PokeathlonCourseSpritePool
-    void *frameSprite;                                      // 0x04C
+    PokeathlonCourseSpritePool *spritePool;                                       // 0x048: PokeathlonCourseSpritePool
+    PokeathlonCourseSpritePoolSprite *frameSprite;                                      // 0x04C
     Sprite *timerDigits[2];                                 // 0x050
     void *teamMarks[SNOW_THROW_TEAMS - 1];                  // 0x058: the colour of each other team
     void *hitMarks[SNOW_THROW_MEMBERS];                     // 0x064: where the own snowballs hit
@@ -181,7 +182,7 @@ typedef struct PokeathlonSnowThrow {
     u8 heldBall[SNOW_THROW_TEAMS];                          // 0x5CC: the snowball each participant is making / aiming
     u8 finished;                                            // 0x5D0
     u8 unk5D1[3];                                           // 0x5D1
-    void *monResources;                                     // 0x5D4: PokeathlonCourseSpriteResources
+    PokeathlonCourseSpriteResources *monResources;                                     // 0x5D4: PokeathlonCourseSpriteResources
     void *monObjectList;                                    // 0x5D8: PokeathlonCourseMonObjects
     PokeathlonSnowThrowCpu *cpu;                            // 0x5DC
     PokeathlonSnowThrowDisplay *display;                    // 0x5E0
@@ -202,8 +203,8 @@ BOOL PokeathlonSnowThrow_Exit(PokeathlonCourseData *course);
 void PokeathlonSnowThrow_SetGfxBanks(void);
 void PokeathlonSnowThrow_InitBgs(BgConfig *bgConfig);
 void PokeathlonSnowThrow_LoadBgGraphics(PokeathlonSnowThrow *work, u8 own);
-void PokeathlonSnowThrow_LoadSpriteGraphics(void *pool);
-void PokeathlonSnowThrow_CreateSprites(PokeathlonSnowThrow *work, void *pool, u8 own);
+void PokeathlonSnowThrow_LoadSpriteGraphics(PokeathlonCourseSpritePool *pool);
+void PokeathlonSnowThrow_CreateSprites(PokeathlonSnowThrow *work, PokeathlonCourseSpritePool *pool, u8 own);
 BOOL PokeathlonSnowThrow_Play(PokeathlonCourseData *course, u8 *state);
 BOOL PokeathlonSnowThrow_SaveScores(PokeathlonCourseData *course, u8 *state);
 void PokeathlonSnowThrow_UpdateHost(PokeathlonCourseData *course);
@@ -228,19 +229,19 @@ void PokeathlonSnowThrow_SortSprites(PokeathlonSnowThrow *work, u16 own);
 PokeathlonSnowThrowDisplay *PokeathlonSnowThrowDisplay_New(enum HeapID heapId, BgConfig *bgConfig, PokeathlonCourseData *course);
 void PokeathlonSnowThrowDisplay_Delete(PokeathlonSnowThrowDisplay *display);
 void PokeathlonSnowThrowDisplay_LoadBgGraphics(PokeathlonSnowThrowDisplay *display, u32 own);
-void PokeathlonSnowThrowDisplay_LoadSpriteGraphics(PokeathlonSnowThrowDisplay *display, void *pool);
-void PokeathlonSnowThrowDisplay_CreateSprites(PokeathlonSnowThrowDisplay *display, void *pool, PokeathlonCourseMonInfo *mons);
+void PokeathlonSnowThrowDisplay_LoadSpriteGraphics(PokeathlonSnowThrowDisplay *display, PokeathlonCourseSpritePool *pool);
+void PokeathlonSnowThrowDisplay_CreateSprites(PokeathlonSnowThrowDisplay *display, PokeathlonCourseSpritePool *pool, PokeathlonCourseMonInfo *mons);
 void PokeathlonSnowThrowDisplay_ShowTired(PokeathlonSnowThrowDisplay *display, u8 member, BOOL show);
 void PokeathlonSnowThrowDisplay_SetScore(PokeathlonSnowThrowDisplay *display, u16 score);
 void PokeathlonSnowThrowDisplay_SetPicAnim(PokeathlonSnowThrowDisplay *display, u8 member, int anim);
 BOOL PokeathlonSnowThrowDisplay_IsPicAnimated(PokeathlonSnowThrowDisplay *display, u8 member);
 void PokeathlonSnowThrowDisplay_Shake(PokeathlonSnowThrowDisplay *display);
 void PokeathlonSnowThrowDisplay_UpdateShake(PokeathlonSnowThrowDisplay *display);
-void PokeathlonSnowThrowDisplay_SetMonShadows(PokeathlonSnowThrowDisplay *display, void *pool, void *monResources);
+void PokeathlonSnowThrowDisplay_SetMonShadows(PokeathlonSnowThrowDisplay *display, PokeathlonCourseSpritePool *pool, PokeathlonCourseSpriteResources *monResources);
 void PokeathlonSnowThrowDisplay_LoadMonPics(PokeathlonSnowThrowDisplay *display, PokeathlonCourseMonInfo *mons);
-void PokeathlonSnowThrowDisplay_CreatePicSprites(void *pool, PokeathlonSnowThrowDisplay *display, PokeathlonCourseMonInfo *mons);
+void PokeathlonSnowThrowDisplay_CreatePicSprites(PokeathlonCourseSpritePool *pool, PokeathlonSnowThrowDisplay *display, PokeathlonCourseMonInfo *mons);
 void PokeathlonSnowThrowDisplay_TransferMonPics(PokeathlonSnowThrowDisplay *display);
-void PokeathlonSnowThrowDisplay_GetPicVramOffsets(void *pool, PokeathlonSnowThrowDisplay *display);
+void PokeathlonSnowThrowDisplay_GetPicVramOffsets(PokeathlonCourseSpritePool *pool, PokeathlonSnowThrowDisplay *display);
 void PokeathlonSnowThrowDisplay_InitWindow(PokeathlonSnowThrowDisplay *display);
 void PokeathlonSnowThrowDisplay_PrintName(PokeathlonSnowThrowDisplay *display);
 void PokeathlonSnowThrow_ScreenToField(int screenX, int screenY, float *fieldX, float *fieldZ);

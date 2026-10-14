@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+#include "msgdata/msg.naix"
+
 #include "bg_window.h"
 #include "brightness.h"
 #include "filesystem.h"
@@ -207,7 +209,7 @@ BOOL FrontierBrainIntro_Run(FrontierBrainIntro *intro, enum HeapID heapID, const
         slot = SpriteSystem_LoadPaletteBufferFromOpenNarc(intro->paletteData, PLTTBUF_MAIN_OBJ, intro->spriteSystem, intro->spriteManager, intro->narc, 16, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 2004);
         intro->paletteMask |= 1 << slot;
         intro->fontSystem = FontSystem_NewInit(4, HEAP_ID_101);
-        msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 729, heapID);
+        msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0729_bin, heapID);
         string = NewString_ReadMsgData(msgData, args->nameMsgId);
         FrontierBrainIntro_CreateText(intro, &sprites->name, string, 0, MAKE_TEXT_COLOR(1, 2, 0), 0, 2004, intro->x + 116, intro->y + 88, 0, NULL);
         TextOBJ_SetSpritesDrawFlag(sprites->name.textObj, FALSE);

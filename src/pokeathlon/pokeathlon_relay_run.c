@@ -6,6 +6,7 @@
 
 #include "msgdata/msg/msg_0309.h"
 #include "pokeathlon/pokeathlon_course_internal.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -32,30 +33,30 @@ typedef char PokeathlonRelayRunLayoutCheck[(offsetof(PokeathlonRelayRun, teams) 
 f32 _fflt(int value);
 
 // Sprite pool helpers (pokeathlon_course_objects.c), declared with untyped entries as the course objects use them.
-void PokeathlonCourseSpritePool_Draw(void *pool);
-void PokeathlonCourseSpritePool_Free(void *pool);
-void *PokeathlonCourseSpritePool_New(enum HeapID heapId, VecFx32 *template);
-void PokeathlonCourseSpritePool_SetSurfaceCoords(void *pool, fx32 mainX, fx32 mainY, fx32 subX, fx32 subY);
-void PokeathlonCourseSpritePool_SetResourceId(void *pool, int index, u32 id);
-void PokeathlonCourseSpritePool_TransferResources(void *pool);
-void PokeathlonCourseSpritePool_PauseAnims(void *pool, BOOL paused);
-void PokeathlonCourseSpritePool_LoadChar(void *pool, int narcId, int fileId, int resId, int vram);
-void PokeathlonCourseSpritePool_LoadPltt(void *pool, int narcId, int fileId, int resId, int vram, int count);
-void PokeathlonCourseSpritePool_LoadCell(void *pool, int narcId, int fileId, int resId);
-void PokeathlonCourseSpritePool_LoadAnim(void *pool, int narcId, int fileId, int resId);
-void PokeathlonCourseSpritePool_CreateSprite(void *pool, int priority, int whichScreen, int resId, int kind);
-void *PokeathlonCourseSpritePool_Take(void *pool, int resId, int kind);
-void PokeathlonCourseSpritePoolSprite_Show(void *entry, BOOL shown, BOOL draw);
-void PokeathlonCourseSpritePoolSprite_SetAnim(void *entry, int seq);
-void PokeathlonCourseSpritePoolSprite_TryChangeAnim(void *entry, int seq);
-void PokeathlonCourseSpritePoolSprite_SetPosition(void *entry, VecFx32 *position);
-void PokeathlonCourseObjects_PauseAnims(void *objects, BOOL paused);
+void PokeathlonCourseSpritePool_Draw(PokeathlonCourseSpritePool *pool);
+void PokeathlonCourseSpritePool_Free(PokeathlonCourseSpritePool *pool);
+PokeathlonCourseSpritePool *PokeathlonCourseSpritePool_New(enum HeapID heapId, VecFx32 *template);
+void PokeathlonCourseSpritePool_SetSurfaceCoords(PokeathlonCourseSpritePool *pool, fx32 mainX, fx32 mainY, fx32 subX, fx32 subY);
+void PokeathlonCourseSpritePool_SetResourceId(PokeathlonCourseSpritePool *pool, int index, u32 id);
+void PokeathlonCourseSpritePool_TransferResources(PokeathlonCourseSpritePool *pool);
+void PokeathlonCourseSpritePool_PauseAnims(PokeathlonCourseSpritePool *pool, BOOL paused);
+void PokeathlonCourseSpritePool_LoadChar(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId, int vram);
+void PokeathlonCourseSpritePool_LoadPltt(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId, int vram, int count);
+void PokeathlonCourseSpritePool_LoadCell(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId);
+void PokeathlonCourseSpritePool_LoadAnim(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId);
+void PokeathlonCourseSpritePool_CreateSprite(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, int resId, int kind);
+PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_Take(PokeathlonCourseSpritePool *pool, int resId, int kind);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *entry, BOOL shown, BOOL draw);
+void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *entry, int seq);
+void PokeathlonCourseSpritePoolSprite_TryChangeAnim(PokeathlonCourseSpritePoolSprite *entry, int seq);
+void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *entry, VecFx32 *position);
+void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseObjects *objects, BOOL paused);
 void PokeathlonCourseObject_SetCollision(void *object, s32 offsetY, s32 radius);
 void PokeathlonCourseObject_SetGroundPosition(void *object, s32 x, s32 y);
 void PokeathlonCourseObject_SetTouchRadius(void *object, s32 radius);
 void PokeathlonCourseObject_GroundToCenter(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
-BOOL PokeathlonCourseObject_IsInTouchRange(void *object, fx32 x, fx32 y, s32 targetX, s32 targetY);
-s32 PokeathlonCourseObject_GetCollisionRadius(void *object);
+BOOL PokeathlonCourseObject_IsInTouchRange(PokeathlonCourseObject *object, fx32 x, fx32 y, s32 targetX, s32 targetY);
+s32 PokeathlonCourseObject_GetCollisionRadius(PokeathlonCourseObject *object);
 
 // Course points of an event from its score list (course points code).
 void PokeathlonEvent_CalcPoints(void *scoreList, int event);
@@ -267,7 +268,7 @@ BOOL PokeathlonRelayRun_Draw(PokeathlonCourseData *course) {
 #pragma force_active on
 
 BOOL PokeathlonRelayRun_ShowResults(PokeathlonCourseData *course) {
-    void *gfx = PokeathlonCourse_GetGraphicsSystem(course);
+    PokeathlonCourseScoreList *gfx = PokeathlonCourse_GetGraphicsSystem(course);
     int i;
     PokeathlonCourseScoreList_Init(gfx);
     for (i = 0; i < RELAY_RUN_TEAMS; i++) {
@@ -363,7 +364,7 @@ void PokeathlonRelayRun_LoadBgGraphics(PokeathlonRelayRun *relayRun) {
     PokeathlonRelayRunHud_LoadBgGraphics(relayRun->hud);
 }
 
-void PokeathlonRelayRun_LoadSpriteGraphics(void *spritePool) {
+void PokeathlonRelayRun_LoadSpriteGraphics(PokeathlonCourseSpritePool *spritePool) {
     PokeathlonCourseSpritePool_LoadChar(spritePool, NARC_a_1_7_8, 17, 104, 1);
     PokeathlonCourseSpritePool_LoadPltt(spritePool, NARC_a_1_7_8, 14, 104, 1, 2);
     PokeathlonCourseSpritePool_LoadCell(spritePool, NARC_a_1_7_8, 16, 104);
@@ -372,7 +373,7 @@ void PokeathlonRelayRun_LoadSpriteGraphics(void *spritePool) {
 
 #pragma force_active on
 
-void PokeathlonRelayRun_CreateSprites(PokeathlonRelayRun *relayRun, void *spritePool) {
+void PokeathlonRelayRun_CreateSprites(PokeathlonRelayRun *relayRun, PokeathlonCourseSpritePool *spritePool) {
     int i;
     VecFx32 position;
     for (i = 0; i < RELAY_RUN_OBSTACLES; i++) {
@@ -859,7 +860,7 @@ BOOL PokeathlonRelayRun_IsTouchingRunner(PokeathlonRelayRun *relayRun, int teamI
     s32 centerX;
     s32 centerY;
     PokeathlonRelayRunTeam *team = &relayRun->teams[teamId];
-    void *object;
+    PokeathlonCourseObject *object;
     GF_ASSERT(team->current < RELAY_RUN_MEMBERS);
     object = team->monObjects[team->current];
     PokeathlonCourseObject_GroundToCenter(object, RELAY_RUN_RUNNER_X, team->position.y / FX32_ONE, &centerX, &centerY);

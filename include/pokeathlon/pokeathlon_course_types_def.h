@@ -1,0 +1,27 @@
+#ifndef POKEHEARTGOLD_POKEATHLON_POKEATHLON_COURSE_TYPES_DEF_H
+#define POKEHEARTGOLD_POKEATHLON_POKEATHLON_COURSE_TYPES_DEF_H
+
+// Structs shared by the Pokeathlon course and its events (defined in pokeathlon_course_objects.h,
+// pokeathlon_course_internal.h and pokeathlon_course_ui.h).
+typedef struct PokeathlonCourseObject PokeathlonCourseObject;
+typedef struct PokeathlonCourseObjectInfo PokeathlonCourseObjectInfo;
+typedef struct PokeathlonCourseObjects PokeathlonCourseObjects;
+typedef struct PokeathlonCourseSpritePoolTemplate PokeathlonCourseSpritePoolTemplate;
+typedef struct PokeathlonCourseSpritePoolSprite PokeathlonCourseSpritePoolSprite;
+typedef struct PokeathlonCourseSpritePool PokeathlonCourseSpritePool;
+typedef struct PokeathlonCourseMonInfo PokeathlonCourseMonInfo;
+typedef struct PokeathlonCourseScore PokeathlonCourseScore;
+typedef struct PokeathlonCourseScoreList PokeathlonCourseScoreList;
+typedef struct PokeathlonCourseMonGfx PokeathlonCourseMonGfx;
+typedef struct PokeathlonCourseMonGfxTemplate PokeathlonCourseMonGfxTemplate;
+typedef struct PokeathlonCourseSpriteResources PokeathlonCourseSpriteResources;
+typedef struct PokeathlonCourseMonObject PokeathlonCourseMonObject;
+typedef struct PokeathlonCourseMonObjects PokeathlonCourseMonObjects;
+typedef struct PokeathlonCourseLink PokeathlonCourseLink;
+typedef struct PokeathlonCoursePoint PokeathlonCoursePoint;
+typedef struct PokeathlonCoursePerformance PokeathlonCoursePerformance;
+typedef struct PokeathlonPerformanceSizeInfo PokeathlonPerformanceSizeInfo;
+typedef struct PokeathlonEventBanner PokeathlonEventBanner;
+typedef struct PokeathlonCourseMessageBox PokeathlonCourseMessageBox;
+
+#endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_COURSE_TYPES_DEF_H

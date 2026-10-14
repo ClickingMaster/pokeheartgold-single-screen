@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+#include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0309.h"
 #include "pokeathlon/pokeathlon_course_ceremony.h"
 
 #include "assert.h"
@@ -109,10 +111,10 @@ void PokeathlonEventBanner_LoadGraphics(PokeathlonEventBanner *banner) {
 
 void PokeathlonEventBanner_PrintTexts(PokeathlonEventBanner *banner) {
     u8 event = banner->event;
-    MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 309, banner->heapId);
+    MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0309_bin, banner->heapId);
     String *string = String_New(256, banner->heapId);
-    PokeathlonEventBanner_PrintText(&banner->nameWindow, msgData, string, event + 166, 4);
-    PokeathlonEventBanner_PrintText(&banner->placeWindow, msgData, string, event + 187, 0);
+    PokeathlonEventBanner_PrintText(&banner->nameWindow, msgData, string, event + msg_0309_00166, 4);
+    PokeathlonEventBanner_PrintText(&banner->placeWindow, msgData, string, event + msg_0309_00187, 0);
     String_Delete(string);
     DestroyMsgData(msgData);
 }
@@ -143,8 +145,8 @@ void PokeathlonCourseMessageBox_Init(PokeathlonCourseMessageBox *box, BgConfig *
     box->bgLayer = bgLayer;
     box->linkMode = linkMode;
     box->textSpeed = textSpeed;
-    box->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 309, box->heapId);
-    box->npcMsgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 311, box->heapId);
+    box->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0309_bin, box->heapId);
+    box->npcMsgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0311_bin, box->heapId);
     box->msgFormat = MessageFormat_New(box->heapId);
     ResetAllTextPrinters();
     PokeathlonCourseMessageBox_LoadFrame(box->bgConfig, (u8)box->bgLayer, box->heapId);

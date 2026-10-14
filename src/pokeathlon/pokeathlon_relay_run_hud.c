@@ -2,9 +2,12 @@
 
 #include "constants/sndseq.h"
 
+#include "application/choose_starter/choose_starter_sub_res.naix"
+#include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0309.h"
 #include "nnsys/g2d/load/g2d_NCG_load.h"
 #include "pokeathlon/pokeathlon_course_internal.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_relay_run.h"
 
 #include "assert.h"
@@ -25,20 +28,20 @@
 #include "char_tiles.h"
 
 // Sprite pool helpers (pokeathlon_course_objects.c), declared with untyped entries as the course objects use them.
-void PokeathlonCourseSpritePool_LoadChar(void *pool, int narcId, int fileId, int resId, int vram);
-void PokeathlonCourseSpritePool_LoadPltt(void *pool, int narcId, int fileId, int resId, int vram, int count);
-void PokeathlonCourseSpritePool_LoadCell(void *pool, int narcId, int fileId, int resId);
-void PokeathlonCourseSpritePool_LoadAnim(void *pool, int narcId, int fileId, int resId);
-void PokeathlonCourseSpritePool_CreateSprite(void *pool, int priority, int whichScreen, int resId, int kind);
-void *PokeathlonCourseSpritePool_Take(void *pool, int resId, int kind);
-void *PokeathlonCourseSpritePool_CreateAndTake(void *pool, int priority, int whichScreen, int resId, int kind);
+void PokeathlonCourseSpritePool_LoadChar(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId, int vram);
+void PokeathlonCourseSpritePool_LoadPltt(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId, int vram, int count);
+void PokeathlonCourseSpritePool_LoadCell(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId);
+void PokeathlonCourseSpritePool_LoadAnim(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId);
+void PokeathlonCourseSpritePool_CreateSprite(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, int resId, int kind);
+PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_Take(PokeathlonCourseSpritePool *pool, int resId, int kind);
+PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_CreateAndTake(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, int resId, int kind);
 SpriteList *PokeathlonCourseSpritePool_GetSpriteList(void *pool);
-void PokeathlonCourseSpritePoolSprite_Show(void *entry, BOOL shown, BOOL draw);
-void PokeathlonCourseSpritePoolSprite_SetAnim(void *entry, int seq);
-void PokeathlonCourseSpritePoolSprite_SetPosition(void *entry, VecFx32 *position);
-VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(void *entry);
-Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(void *entry);
-void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *entry, int priority);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *entry, BOOL shown, BOOL draw);
+void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *entry, int seq);
+void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *entry, VecFx32 *position);
+VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(PokeathlonCourseSpritePoolSprite *entry);
+Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(PokeathlonCourseSpritePoolSprite *entry);
+void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *entry, int priority);
 
 BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
 
@@ -117,7 +120,7 @@ void PokeathlonRelayRun_PrintResult(PokeathlonRelayRun *relayRun, int laps, int 
     if (tenths > 9) {
         GF_ASSERT(FALSE);
     }
-    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 309, relayRun->heapId);
+    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0309_bin, relayRun->heapId);
     msgFormat = MessageFormat_New(relayRun->heapId);
     BufferIntegerAsString(msgFormat, 0, laps, 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
     BufferIntegerAsString(msgFormat, 1, tenths, 1, PRINTING_MODE_LEADING_ZEROS, TRUE);
@@ -198,7 +201,7 @@ PokeathlonRelayRunHud *PokeathlonRelayRunHud_New(enum HeapID heapId, BgConfig *b
     hud->bgConfig = bgConfig;
     hud->course = course;
     PokeathlonRelayRunHud_InitWindows(hud);
-    hud->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 309, heapId);
+    hud->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0309_bin, heapId);
     hud->msgFormat = MessageFormat_New(heapId);
     for (i = 0; i < RELAY_RUN_MEMBERS; i++) {
         hud->names[i] = String_New(11, heapId);
@@ -246,17 +249,17 @@ void PokeathlonRelayRunHud_LoadBgGraphics(PokeathlonRelayRunHud *hud) {
     GfGfxLoader_GXLoadPal(NARC_a_1_7_8, 5, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0x40, hud->heapId);
 }
 
-void PokeathlonRelayRunHud_LoadSpriteGraphics(PokeathlonRelayRunHud *hud, void *spritePool) {
+void PokeathlonRelayRunHud_LoadSpriteGraphics(PokeathlonRelayRunHud *hud, PokeathlonCourseSpritePool *spritePool) {
     u32 resIds[2];
     u32 *resId = resIds;
     int i;
     resIds[0] = gPokeathlonRelayRunPicIds[4];
     resIds[1] = gPokeathlonRelayRunPicIds[5];
     for (i = 0; i < 2; i++, resId++) {
-        PokeathlonCourseSpritePool_LoadChar(spritePool, NARC_application_choose_starter_choose_starter_sub_res, 9, *resId, 2);
-        PokeathlonCourseSpritePool_LoadPltt(spritePool, NARC_application_choose_starter_choose_starter_sub_res, 6, *resId, 2, 1);
-        PokeathlonCourseSpritePool_LoadCell(spritePool, NARC_application_choose_starter_choose_starter_sub_res, 10, *resId);
-        PokeathlonCourseSpritePool_LoadAnim(spritePool, NARC_application_choose_starter_choose_starter_sub_res, 10, *resId);
+        PokeathlonCourseSpritePool_LoadChar(spritePool, NARC_application_choose_starter_choose_starter_sub_res, NARC_choose_starter_sub_res_choose_starter_sub_res_00000009_NCGR, *resId, 2);
+        PokeathlonCourseSpritePool_LoadPltt(spritePool, NARC_application_choose_starter_choose_starter_sub_res, NARC_choose_starter_sub_res_choose_starter_sub_res_00000006_NCLR, *resId, 2, 1);
+        PokeathlonCourseSpritePool_LoadCell(spritePool, NARC_application_choose_starter_choose_starter_sub_res, NARC_choose_starter_sub_res_choose_starter_sub_res_00000010_NCER, *resId);
+        PokeathlonCourseSpritePool_LoadAnim(spritePool, NARC_application_choose_starter_choose_starter_sub_res, NARC_choose_starter_sub_res_choose_starter_sub_res_00000010_NCER, *resId);
     }
     PokeathlonCourseSpritePool_LoadChar(spritePool, NARC_a_1_7_8, 13, 101, 2);
     PokeathlonCourseSpritePool_LoadPltt(spritePool, NARC_a_1_7_8, 10, 101, 2, 5);
@@ -268,9 +271,9 @@ void PokeathlonRelayRunHud_LoadSpriteGraphics(PokeathlonRelayRunHud *hud, void *
 // the timer's sprites.
 #pragma force_active on
 
-void PokeathlonRelayRunHud_CreateSprites(PokeathlonRelayRunHud *hud, void *spritePool, PokeathlonCourseSpriteResources *monResources) {
+void PokeathlonRelayRunHud_CreateSprites(PokeathlonRelayRunHud *hud, PokeathlonCourseSpritePool *spritePool, PokeathlonCourseSpriteResources *monResources) {
     int i, j;
-    void *plate;
+    PokeathlonCourseSpritePoolSprite *plate;
     VecFx32 timerPosition, platePosition;
     for (i = 0; i < RELAY_RUN_TEAMS; i++) {
         PokeathlonCourseSpritePool_CreateSprite(spritePool, 3, 2, 101, 2);

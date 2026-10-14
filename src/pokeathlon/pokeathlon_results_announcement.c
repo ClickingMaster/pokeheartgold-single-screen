@@ -5,6 +5,7 @@
 #include "constants/sndseq.h"
 
 #include "msgdata/msg/msg_0309.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -38,39 +39,39 @@ void TextOBJ_SetPalIndexRespectVramOffset(TextOBJ *textObj, int index);
 u16 PokeathlonResultsAnnouncement_GetPlateRank();
 
 // Course helpers, the announcer's text box and the scene (OVY_96, not yet tidied).
-PokeathlonResultsAnnouncementScore *PokeathlonCourseScoreList_GetRanked(void *scoreList, u8 rank);
-int PokeathlonCourseScoreList_GetCount(void *scoreList);
-int PokeathlonCourseScoreList_GetField04(void *scoreList);
-int PokeathlonCourseScoreList_GetEventPoints(void *scoreList, u32 event, int participant);
+PokeathlonResultsAnnouncementScore *PokeathlonCourseScoreList_GetRanked(PokeathlonCourseScoreList *scoreList, u8 rank);
+int PokeathlonCourseScoreList_GetCount(PokeathlonCourseScoreList *scoreList);
+int PokeathlonCourseScoreList_GetField04(PokeathlonCourseScoreList *scoreList);
+int PokeathlonCourseScoreList_GetEventPoints(PokeathlonCourseScoreList *scoreList, u32 event, int participant);
 u16 PokeathlonCourse_GetNpcTeamSpriteId(u8 team);
 void *PokeathlonCourseSpritePool_New(enum HeapID heapId, const void *config);
-void PokeathlonCourseSpritePool_Free(void *scene);
-void PokeathlonCourseSpritePool_SetResourceId(void *scene, int index, int id);
-void PokeathlonCourseSpritePool_LoadChar(void *scene, int narcId, int fileId, int id, int vram);
-void PokeathlonCourseSpritePool_LoadPltt(void *scene, int narcId, int fileId, int id, int vram, int count);
-void PokeathlonCourseSpritePool_LoadCell(void *scene, int narcId, int fileId, int id);
-void PokeathlonCourseSpritePool_LoadAnim(void *scene, int narcId, int fileId, int id);
-void PokeathlonCourseSpritePool_TransferResources(void *scene);
-Sprite *PokeathlonCourseSpritePool_CreateSprite(void *scene, int priority, int screen, u16 resId, u8 anim);
-void *PokeathlonCourseSpritePool_Take(void *scene, u8 resId, u8 anim);
-void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int shown, int draw);
-Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(void *sprite);
-void PokeathlonCourseSpritePool_Draw(void *scene);
-void PokeathlonCourseSpritePool_SetSurfaceCoords(void *scene, int mainX, int mainY, int subX, int subY);
-SpriteList *PokeathlonCourseSpritePool_GetSpriteList(void *scene);
-void *PokeathlonEventBanner_New(u32 event, enum HeapID heapId);
-void PokeathlonEventBanner_Free(void *banner);
-void PokeathlonEventBanner_AddWindows(void *banner, BgConfig *bgConfig);
-void PokeathlonEventBanner_LoadGraphics(void *banner);
-void PokeathlonEventBanner_PrintTexts(void *banner);
-void *PokeathlonCourseMessageBox_New(enum HeapID heapId);
-void PokeathlonCourseMessageBox_Init(void *messageBox, BgConfig *bgConfig, int bgLayer, int mode, SaveData *saveData);
-void PokeathlonCourseMessageBox_Free(void *messageBox);
-void PokeathlonCourseMessageBox_Update(void *messageBox);
-void PokeathlonCourseMessageBox_Print(void *messageBox, int msgId);
-void PokeathlonCourseMessageBox_Close(void *messageBox);
-void *PokeathlonCourseMessageBox_GetMsgFormat(void *messageBox);
-u32 PokeathlonCourseMessageBox_IsBusy(void *messageBox);
+void PokeathlonCourseSpritePool_Free(PokeathlonCourseSpritePool *scene);
+void PokeathlonCourseSpritePool_SetResourceId(PokeathlonCourseSpritePool *scene, int index, int id);
+void PokeathlonCourseSpritePool_LoadChar(PokeathlonCourseSpritePool *scene, int narcId, int fileId, int id, int vram);
+void PokeathlonCourseSpritePool_LoadPltt(PokeathlonCourseSpritePool *scene, int narcId, int fileId, int id, int vram, int count);
+void PokeathlonCourseSpritePool_LoadCell(PokeathlonCourseSpritePool *scene, int narcId, int fileId, int id);
+void PokeathlonCourseSpritePool_LoadAnim(PokeathlonCourseSpritePool *scene, int narcId, int fileId, int id);
+void PokeathlonCourseSpritePool_TransferResources(PokeathlonCourseSpritePool *scene);
+Sprite *PokeathlonCourseSpritePool_CreateSprite(PokeathlonCourseSpritePool *scene, int priority, int screen, u16 resId, u8 anim);
+PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_Take(PokeathlonCourseSpritePool *scene, u8 resId, u8 anim);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *sprite, int shown, int draw);
+Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(PokeathlonCourseSpritePoolSprite *sprite);
+void PokeathlonCourseSpritePool_Draw(PokeathlonCourseSpritePool *scene);
+void PokeathlonCourseSpritePool_SetSurfaceCoords(PokeathlonCourseSpritePool *scene, int mainX, int mainY, int subX, int subY);
+SpriteList *PokeathlonCourseSpritePool_GetSpriteList(PokeathlonCourseSpritePool *scene);
+PokeathlonEventBanner *PokeathlonEventBanner_New(u32 event, enum HeapID heapId);
+void PokeathlonEventBanner_Free(PokeathlonEventBanner *banner);
+void PokeathlonEventBanner_AddWindows(PokeathlonEventBanner *banner, BgConfig *bgConfig);
+void PokeathlonEventBanner_LoadGraphics(PokeathlonEventBanner *banner);
+void PokeathlonEventBanner_PrintTexts(PokeathlonEventBanner *banner);
+PokeathlonCourseMessageBox *PokeathlonCourseMessageBox_New(enum HeapID heapId);
+void PokeathlonCourseMessageBox_Init(PokeathlonCourseMessageBox *messageBox, BgConfig *bgConfig, int bgLayer, int mode, SaveData *saveData);
+void PokeathlonCourseMessageBox_Free(PokeathlonCourseMessageBox *messageBox);
+void PokeathlonCourseMessageBox_Update(PokeathlonCourseMessageBox *messageBox);
+void PokeathlonCourseMessageBox_Print(PokeathlonCourseMessageBox *messageBox, int msgId);
+void PokeathlonCourseMessageBox_Close(PokeathlonCourseMessageBox *messageBox);
+MessageFormat *PokeathlonCourseMessageBox_GetMsgFormat(PokeathlonCourseMessageBox *messageBox);
+u32 PokeathlonCourseMessageBox_IsBusy(PokeathlonCourseMessageBox *messageBox);
 void PokeathlonCourse_LoadTrainerPic(ManagedSprite *sprite, int fileId, int index, enum HeapID heapId);
 void PokeathlonCourse_LoadTrainerPicIntoSprite(Sprite *sprite, u32 fileId, int index, enum HeapID heapId);
 void PokeathlonCourse_LoadPlayerTrainerPic(Sprite *sprite, PokeathlonCourseData *course, u32 participant, int index);
@@ -94,7 +95,7 @@ BOOL PokeathlonResultsAnnouncement_Init(PokeathlonCourseData *course) {
     PokeathlonResultsAnnouncement *announcement = PokeathlonCourse_GetHeapAllocPtr4(course);
     PokeathlonResultsAnnouncementSceneConfig sceneConfig;
     PokeathlonResultsAnnouncementAffine affine;
-    void *scoreList;
+    PokeathlonCourseScoreList *scoreList;
     int value;
 
     switch (PokeathlonCourse_GetField1ED(course)) {
@@ -575,7 +576,7 @@ BOOL PokeathlonResultsAnnouncement_HasMorePlates(PokeathlonResultsAnnouncementRa
 
 // The plates are created from the last place up.
 PokeathlonResultsAnnouncementPlate *PokeathlonResultsAnnouncement_AddPlate(PokeathlonResultsAnnouncementRanking *ranking, PokeathlonCourseData *course, int x, int y) {
-    void *scoreList = PokeathlonCourse_GetGraphicsSystem(course);
+    PokeathlonCourseScoreList *scoreList = PokeathlonCourse_GetGraphicsSystem(course);
     int last = PokeathlonCourseScoreList_GetCount(scoreList) - 1;
     PokeathlonResultsAnnouncementScore *score = PokeathlonCourseScoreList_GetRanked(scoreList, last - ranking->next);
     ranking->next++;
@@ -1072,7 +1073,7 @@ void PokeathlonResultsAnnouncement_DestroyText(PokeathlonResultsAnnouncementText
     }
 }
 
-PokeathlonResultsAnnouncementScoreboard *PokeathlonResultsAnnouncement_NewScoreboard(enum HeapID heapId, BgConfig *bgConfig, void *scene) {
+PokeathlonResultsAnnouncementScoreboard *PokeathlonResultsAnnouncement_NewScoreboard(enum HeapID heapId, BgConfig *bgConfig, PokeathlonCourseSpritePool *scene) {
     PokeathlonResultsAnnouncementScoreboard *scoreboard = Heap_Alloc(heapId, sizeof(PokeathlonResultsAnnouncementScoreboard));
     PokeathlonResultsAnnouncementTextWindow *window;
     TextOBJLayout *layout;

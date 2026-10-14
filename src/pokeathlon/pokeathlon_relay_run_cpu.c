@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+#include "pokeathlon/pokeathlon_course_types_def.h"
+
 #include "assert.h"
 #include "bg_window.h"
 #include "font.h"
@@ -14,8 +16,8 @@ typedef char PokeathlonRelayRunCpuSizeCheck[(sizeof(PokeathlonRelayRunCpu) == 0x
 
 // Course sprite and object helpers (pokeathlon_course_objects.c), with untyped entries as the event uses them.
 void PokeathlonCourseObject_GroundToCenter(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
-void PokeathlonCourseObject_GetCollisionCenter(void *object, fx32 x, fx32 y, fx32 *outX, fx32 *outY);
-void **PokeathlonCourseSpritePool_GetResourceSlot(void *pool, u32 id, u32 kind);
+void PokeathlonCourseObject_GetCollisionCenter(PokeathlonCourseObject *object, fx32 x, fx32 y, fx32 *outX, fx32 *outY);
+void **PokeathlonCourseSpritePool_GetResourceSlot(PokeathlonCourseSpritePool *pool, u32 id, u32 kind);
 
 // Sprite resource ids of the touch screen (pairs: the two Pokemon pictures are entries 6 and 7).
 extern const u32 gPokeathlonRelayRunPicIds[];
@@ -25,13 +27,13 @@ extern const WindowTemplate sRelayRunLapsWindowTemplate;
 extern const s32 sRelayRunCpuCellScores[RELAY_RUN_CPU_CELLS];
 
 // The touch screen: where the two picture slots are in VRAM.
-void PokeathlonRelayRunHud_GetPicVramOffsets(void *pool, PokeathlonRelayRunHud *hud) {
+void PokeathlonRelayRunHud_GetPicVramOffsets(PokeathlonCourseSpritePool *pool, PokeathlonRelayRunHud *hud) {
     u32 ids[2] = { gPokeathlonRelayRunPicIds[6], gPokeathlonRelayRunPicIds[7] };
     u8 i;
 
     for (i = 0; i < 2; i++) {
-        void *charResource = *PokeathlonCourseSpritePool_GetResourceSlot(pool, ids[i], 0);
-        void *plttResource = *PokeathlonCourseSpritePool_GetResourceSlot(pool, ids[i], 1);
+        SpriteResource *charResource = *PokeathlonCourseSpritePool_GetResourceSlot(pool, ids[i], 0);
+        SpriteResource *plttResource = *PokeathlonCourseSpritePool_GetResourceSlot(pool, ids[i], 1);
         NNSG2dImageProxy *image = SpriteTransfer_GetCharProxy(charResource);
         NNSG2dImagePaletteProxy *palette = SpriteTransfer_GetPaletteProxy(plttResource, image);
 

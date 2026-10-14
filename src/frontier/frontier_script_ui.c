@@ -10,6 +10,7 @@
 #include "frontier/frontier_map.h"
 #include "frontier/frontier_script_context.h"
 #include "frontier/frontier_system.h"
+#include "msgdata/msg.naix"
 
 #include "bg_window.h"
 #include "filesystem.h"
@@ -138,7 +139,7 @@ void FrontierMenu_Init(FrontierSystem *system, FrontierMenu *menu, u8 x, u8 y, u
     int i;
 
     if (msgData == NULL) {
-        menu->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 191, system->heapId);
+        menu->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0191_bin, system->heapId);
         menu->ownsMsgData = TRUE;
     } else {
         menu->msgData = msgData;

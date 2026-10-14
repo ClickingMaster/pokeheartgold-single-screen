@@ -4,6 +4,7 @@
 #include "global.h"
 
 #include "pokeathlon/pokeathlon.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 
 #include "bg_window.h"
 #include "camera.h"
@@ -16,7 +17,7 @@
 // One of the player's three Pokemon.
 typedef struct PokeathlonLampJumpMon {
     void *sprite;       // 0x00
-    void *effectSprite; // 0x04
+    PokeathlonCourseSpritePoolSprite *effectSprite; // 0x04
     fx32 drawX;         // 0x08
     fx32 drawY;         // 0x0C
     u32 unk10;          // 0x10
@@ -60,7 +61,7 @@ typedef struct PokeathlonLampJump {
     enum HeapID heapId;            // 0x0054
     void *bg2ScreenFile;           // 0x0058
     NNSG2dScreenData *bg2Screen;   // 0x005C
-    void *scene;                   // 0x0060
+    PokeathlonCourseSpritePool *scene;                   // 0x0060
     void *unk64;                   // 0x0064
     void *playerSprites[4];        // 0x0068
     void *effectSprites[3];        // 0x0078
@@ -92,7 +93,7 @@ typedef struct PokeathlonLampJump {
     };
 
     PokeathlonLampJumpJump jumps[3]; // 0x0FAC
-    void *cellTransferState;         // 0x1000
+    NNSG2dCellTransferState *cellTransferState;         // 0x1000
 } PokeathlonLampJump;                // size: 0x1004
 
 // What PokeathlonCourse_GetMonInfo reports about one Pokemon of a team.

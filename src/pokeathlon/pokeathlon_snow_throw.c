@@ -6,6 +6,7 @@
 
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0309.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_event_points.h"
 
 #include "assert.h"
@@ -36,26 +37,26 @@ typedef char PokeathlonSnowThrowSizeCheck[(sizeof(PokeathlonSnowThrow) == 0x5F4 
 void MTX_MultVec43(const VecFx32 *vec, const MtxFx43 *mtx, VecFx32 *result);
 
 // Sprite pool helpers (pokeathlon_course_objects.c), declared with untyped entries as the course objects use them.
-void PokeathlonCourseSpritePool_Draw(void *pool);
-void PokeathlonCourseSpritePool_Free(void *pool);
-void *PokeathlonCourseSpritePool_New(enum HeapID heapId, VecFx32 *template);
-void PokeathlonCourseSpritePool_SetSurfaceCoords(void *pool, fx32 mainX, fx32 mainY, fx32 subX, fx32 subY);
-void PokeathlonCourseSpritePool_SetResourceId(void *pool, int index, u32 id);
-void PokeathlonCourseSpritePool_TransferResources(void *pool);
-void PokeathlonCourseSpritePool_PauseAnims(void *pool, BOOL paused);
-void PokeathlonCourseSpritePool_LoadChar(void *pool, int narcId, int fileId, int resId, int vram);
-void PokeathlonCourseSpritePool_LoadPltt(void *pool, int narcId, int fileId, int resId, int vram, int count);
-void PokeathlonCourseSpritePool_LoadCell(void *pool, int narcId, int fileId, int resId);
-void PokeathlonCourseSpritePool_LoadAnim(void *pool, int narcId, int fileId, int resId);
-void *PokeathlonCourseSpritePool_CreateAndTake(void *pool, int priority, int whichScreen, int resId, int kind);
-void PokeathlonCourseSpritePoolSprite_Show(void *entry, BOOL shown, BOOL draw);
-void PokeathlonCourseSpritePoolSprite_SetAnim(void *entry, int seq);
-void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *entry, int priority);
-void PokeathlonCourseSpritePoolSprite_SetPosition(void *entry, VecFx32 *position);
-VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(void *entry);
-void PokeathlonCourseSpritePoolSprite_SetScale(void *entry, VecFx32 *scale, int affineType);
-void PokeathlonCourseObjects_PauseAnims(void *objects, BOOL paused);
-void PokeathlonCourseObject_SetGroundPosition(void *object, s32 x, s32 y);
+void PokeathlonCourseSpritePool_Draw(PokeathlonCourseSpritePool *pool);
+void PokeathlonCourseSpritePool_Free(PokeathlonCourseSpritePool *pool);
+PokeathlonCourseSpritePool *PokeathlonCourseSpritePool_New(enum HeapID heapId, VecFx32 *template);
+void PokeathlonCourseSpritePool_SetSurfaceCoords(PokeathlonCourseSpritePool *pool, fx32 mainX, fx32 mainY, fx32 subX, fx32 subY);
+void PokeathlonCourseSpritePool_SetResourceId(PokeathlonCourseSpritePool *pool, int index, u32 id);
+void PokeathlonCourseSpritePool_TransferResources(PokeathlonCourseSpritePool *pool);
+void PokeathlonCourseSpritePool_PauseAnims(PokeathlonCourseSpritePool *pool, BOOL paused);
+void PokeathlonCourseSpritePool_LoadChar(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId, int vram);
+void PokeathlonCourseSpritePool_LoadPltt(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId, int vram, int count);
+void PokeathlonCourseSpritePool_LoadCell(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId);
+void PokeathlonCourseSpritePool_LoadAnim(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId);
+PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_CreateAndTake(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, int resId, int kind);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *entry, BOOL shown, BOOL draw);
+void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *entry, int seq);
+void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *entry, int priority);
+void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *entry, VecFx32 *position);
+VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(PokeathlonCourseSpritePoolSprite *entry);
+void PokeathlonCourseSpritePoolSprite_SetScale(PokeathlonCourseSpritePoolSprite *entry, VecFx32 *scale, int affineType);
+void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseObjects *objects, BOOL paused);
+void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseObject *object, s32 x, s32 y);
 
 extern const VecFx32 sSnowThrowSpritePoolTemplate; // sprite pool template
 
@@ -284,7 +285,7 @@ BOOL PokeathlonSnowThrow_Draw(PokeathlonCourseData *course) {
 
 // Results: the hits each team scored.
 BOOL PokeathlonSnowThrow_ShowResults(PokeathlonCourseData *course) {
-    void *gfx = PokeathlonCourse_GetGraphicsSystem(course);
+    PokeathlonCourseScoreList *gfx = PokeathlonCourse_GetGraphicsSystem(course);
     int i;
     PokeathlonCourseScoreList_Init(gfx);
     for (i = 0; i < SNOW_THROW_TEAMS; i++) {
@@ -387,7 +388,7 @@ void PokeathlonSnowThrow_LoadBgGraphics(PokeathlonSnowThrow *work, u8 own) {
     PokeathlonSnowThrowDisplay_LoadBgGraphics(work->display, own);
 }
 
-void PokeathlonSnowThrow_LoadSpriteGraphics(void *pool) {
+void PokeathlonSnowThrow_LoadSpriteGraphics(PokeathlonCourseSpritePool *pool) {
     PokeathlonCourseSpritePool_LoadChar(pool, NARC_a_2_1_7, 21, 106, 3);
     PokeathlonCourseSpritePool_LoadPltt(pool, NARC_a_2_1_7, 18, 106, 3, 2);
     PokeathlonCourseSpritePool_LoadCell(pool, NARC_a_2_1_7, 20, 106);
@@ -403,7 +404,7 @@ void PokeathlonSnowThrow_LoadSpriteGraphics(void *pool) {
 
 #pragma force_active on
 
-void PokeathlonSnowThrow_CreateSprites(PokeathlonSnowThrow *work, void *pool, u8 own) {
+void PokeathlonSnowThrow_CreateSprites(PokeathlonSnowThrow *work, PokeathlonCourseSpritePool *pool, u8 own) {
     int i;
     u8 anim;
     VecFx32 position;

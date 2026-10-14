@@ -4,6 +4,9 @@
 
 #include "constants/sndseq.h"
 
+#include "msgdata/msg/msg_0309.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
+
 #include "assert.h"
 #include "bg_window.h"
 #include "filesystem.h"
@@ -41,11 +44,11 @@ u8 *PokeathlonCourse_ToBytes(void *ptr);
 void PokeathlonCourseMonGfx_GetSprite(void *object);
 u8 PokeathlonCourseMonGfx_GetTopRow(u8 *image);
 void PokeathlonCourse_InitObjTransfer(ObjCharTransferTemplate *config, int plttCount, enum HeapID heapId, GXOBJVRamModeChar modeMain, GXOBJVRamModeChar modeSub);
-void PokeathlonCourseScoreList_Rank(void *gfx, int mode);
-void PokeathlonCourseScoreList_Init(void *gfx);
-void PokeathlonCourseScoreList_AddPointsToTotals(void *gfx);
-void PokeathlonCourseScoreList_SaveEventPoints(void *gfx, int event);
-void PokeathlonCourse_AddScoreEntry(PokeathlonCourseData *course, void *gfx, int participant, u16 score, int idx, int digits, int msgno);
+void PokeathlonCourseScoreList_Rank(PokeathlonCourseScoreList *gfx, int mode);
+void PokeathlonCourseScoreList_Init(PokeathlonCourseScoreList *gfx);
+void PokeathlonCourseScoreList_AddPointsToTotals(PokeathlonCourseScoreList *gfx);
+void PokeathlonCourseScoreList_SaveEventPoints(PokeathlonCourseScoreList *gfx, int event);
+void PokeathlonCourse_AddScoreEntry(PokeathlonCourseData *course, PokeathlonCourseScoreList *gfx, int participant, u16 score, int idx, int digits, int msgno);
 PokeathlonGoalRollResources *PokeathlonCourseSprites_CreateResources(int heapId, int flags, int charVram);
 void PokeathlonCourseSprites_FreeResources(PokeathlonGoalRollResources *resources);
 PokeathlonGoalRollMonObjects *PokeathlonCourseMonObjects_Create(enum HeapID heapId, int count, int baseDrawPriority, PokeathlonGoalRollResources *resources, SpriteList *spriteList);
@@ -466,14 +469,14 @@ BOOL PokeathlonGoalRoll_Draw(PokeathlonCourseData *course) {
 }
 
 BOOL PokeathlonGoalRoll_ShowResults(PokeathlonCourseData *course) {
-    void *gfx;
+    PokeathlonCourseScoreList *gfx;
     int i;
 
     PokeathlonCourse_GetHeapAllocPtr4(course);
     gfx = PokeathlonCourse_GetGraphicsSystem(course);
     PokeathlonCourseScoreList_Init(gfx);
     for (i = 0; i < 4; i++) {
-        PokeathlonCourse_AddScoreEntry(course, gfx, i, PokeathlonCourse_GetField5F0_AtIndex(course, (u8)i), 0, 3, 300);
+        PokeathlonCourse_AddScoreEntry(course, gfx, i, PokeathlonCourse_GetField5F0_AtIndex(course, (u8)i), 0, 3, msg_0309_00300);
     }
     PokeathlonCourseScoreList_Rank(gfx, 1);
     PokeathlonEvent_CalcPoints(gfx, 9);

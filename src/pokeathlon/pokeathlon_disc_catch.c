@@ -6,6 +6,7 @@
 
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0309.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -34,35 +35,35 @@ void PokeathlonCourse_InitMarkers(PokeathlonCourseData *course);
 void PokeathlonCourse_FreeMarkers(PokeathlonCourseData *course);
 void PokeathlonCourse_SetHudPlanes(PokeathlonCourseData *course, int planes);
 BOOL PokeathlonCourse_RunFinish(PokeathlonCourseData *course);
-void **PokeathlonCourse_CreateHudSprites(PokeathlonCourseData *course, int baseY, void *resources, void *spriteList);
+void **PokeathlonCourse_CreateHudSprites(PokeathlonCourseData *course, int baseY, PokeathlonCourseSpriteResources *resources, SpriteList *spriteList);
 void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int stat, int amount);
 void PokeathlonCourse_SetRecordScore(PokeathlonCourseData *course, u8 score);
-u8 *PokeathlonCourseMonGfx_GetInfo(void *mon);
-int PokeathlonCourseMonGfx_GetTopRow(void *mon);
-void PokeathlonCourseScoreList_Init(void *graphics);
-void PokeathlonCourse_AddScoreEntry(PokeathlonCourseData *course, void *graphics, u32 participant, u32 score, u8 idx, u8 digits, u32 msgno);
-void PokeathlonCourseScoreList_Rank(void *graphics, u32 mode);
-void PokeathlonCourseScoreList_AddPointsToTotals(void *graphics);
-void PokeathlonCourseScoreList_SaveEventPoints(void *graphics, u32 event);
-void *PokeathlonCourseSprites_CreateResources(enum HeapID heapId, int flags, int charVram);
-void PokeathlonCourseSprites_FreeResources(void *resources);
-void PokeathlonCourseMonObjects_Free(void *monPics);
-BOOL PokeathlonCourseMonObjects_IsLoaded(void *monPics);
-void *PokeathlonCourseMonObjects_Get(void *monPics, u8 index);
-void *PokeathlonCourseMonObject_GetGfx(void *monPic);
-void PokeathlonCourseMonObject_SetDrawFlag(void *monPic, u32 visible);
-void PokeathlonCourseMonObject_SetDrawPriority(void *monPic, u32 priority);
-void PokeathlonCourseMonObject_SetAffineOverwriteMode(void *monPic, int mode);
-void PokeathlonCourseMonObject_SetAffineMatrix(void *monPic, VecFx32 *center);
-void PokeathlonCourseMonObject_SetAnimState(void *monPic, u32 anim);
-void PokeathlonCourseObject_GetCollisionCircle(void *monPic, int x, int y, fx32 *outX, fx32 *outY, int *radius);
-void *PokeathlonCourseObject_GetCollisionRadius(void *monPic);
-void PokeathlonCourseObject_SetCenterPosition(void *monPic, s32 x, s32 y, u32 moveShadow);
-void PokeathlonCourseObject_CenterToGround(void *monPic, s32 x, s32 y, s32 *outX, s32 *outY);
-void PokeathlonCourseObject_GroundToCenter(void *monPic, s32 x, s32 y, s32 *outX, s32 *outY);
-BOOL PokeathlonCourseObject_IsInTouchRange(void *monPic, fx32 x, fx32 y, s32 targetX, s32 targetY);
-void PokeathlonCourseObject_SetScale(void *monPic, f32 scaleX, f32 scaleY);
-void PokeathlonCourseObjects_PauseAnims(void *monPics, int paused);
+u8 *PokeathlonCourseMonGfx_GetInfo(PokeathlonCourseMonGfx *mon);
+int PokeathlonCourseMonGfx_GetTopRow(PokeathlonCourseMonGfx *mon);
+void PokeathlonCourseScoreList_Init(PokeathlonCourseScoreList *graphics);
+void PokeathlonCourse_AddScoreEntry(PokeathlonCourseData *course, PokeathlonCourseScoreList *graphics, u32 participant, u32 score, u8 idx, u8 digits, u32 msgno);
+void PokeathlonCourseScoreList_Rank(PokeathlonCourseScoreList *graphics, u32 mode);
+void PokeathlonCourseScoreList_AddPointsToTotals(PokeathlonCourseScoreList *graphics);
+void PokeathlonCourseScoreList_SaveEventPoints(PokeathlonCourseScoreList *graphics, u32 event);
+PokeathlonCourseSpriteResources *PokeathlonCourseSprites_CreateResources(enum HeapID heapId, int flags, int charVram);
+void PokeathlonCourseSprites_FreeResources(PokeathlonCourseSpriteResources *resources);
+void PokeathlonCourseMonObjects_Free(PokeathlonCourseMonObjects *monPics);
+BOOL PokeathlonCourseMonObjects_IsLoaded(PokeathlonCourseMonObjects *monPics);
+PokeathlonCourseMonObject *PokeathlonCourseMonObjects_Get(PokeathlonCourseMonObjects *monPics, u8 index);
+PokeathlonCourseMonGfx *PokeathlonCourseMonObject_GetGfx(PokeathlonCourseMonObject *monPic);
+void PokeathlonCourseMonObject_SetDrawFlag(PokeathlonCourseMonObject *monPic, u32 visible);
+void PokeathlonCourseMonObject_SetDrawPriority(PokeathlonCourseMonObject *monPic, u32 priority);
+void PokeathlonCourseMonObject_SetAffineOverwriteMode(PokeathlonCourseMonObject *monPic, int mode);
+void PokeathlonCourseMonObject_SetAffineMatrix(PokeathlonCourseMonObject *monPic, VecFx32 *center);
+void PokeathlonCourseMonObject_SetAnimState(PokeathlonCourseMonObject *monPic, u32 anim);
+void PokeathlonCourseObject_GetCollisionCircle(PokeathlonCourseObject *monPic, int x, int y, fx32 *outX, fx32 *outY, int *radius);
+void *PokeathlonCourseObject_GetCollisionRadius(PokeathlonCourseObject *monPic);
+void PokeathlonCourseObject_SetCenterPosition(PokeathlonCourseObject *monPic, s32 x, s32 y, u32 moveShadow);
+void PokeathlonCourseObject_CenterToGround(PokeathlonCourseObject *monPic, s32 x, s32 y, s32 *outX, s32 *outY);
+void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseObject *monPic, s32 x, s32 y, s32 *outX, s32 *outY);
+BOOL PokeathlonCourseObject_IsInTouchRange(PokeathlonCourseObject *monPic, fx32 x, fx32 y, s32 targetX, s32 targetY);
+void PokeathlonCourseObject_SetScale(PokeathlonCourseObject *monPic, f32 scaleX, f32 scaleY);
+void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseObjects *monPics, int paused);
 void PokeathlonEvent_CalcPoints(void *graphics, u32 event);
 
 // The runtime's division, called directly once.
@@ -205,7 +206,7 @@ void PokeathlonDiscCatch_SquashTask(SysTask *task, void *data) {
     }
 }
 
-void PokeathlonDiscCatch_StartSquash(PokeathlonDiscCatchSquash *squash, void *monPic) {
+void PokeathlonDiscCatch_StartSquash(PokeathlonDiscCatchSquash *squash, PokeathlonCourseObject *monPic) {
     if (squash->task != NULL) {
         SysTask_Destroy(squash->task);
     }
@@ -218,8 +219,8 @@ void PokeathlonDiscCatch_StartSquash(PokeathlonDiscCatchSquash *squash, void *mo
 #pragma force_active on
 
 // Scales the Pokemon about its middle while it falls off the field, about its feet otherwise.
-void PokeathlonDiscCatch_SetMonScaleCenter(void *monPic, int falling) {
-    void *mon = PokeathlonCourseMonObject_GetGfx(monPic);
+void PokeathlonDiscCatch_SetMonScaleCenter(PokeathlonCourseMonObject *monPic, int falling) {
+    PokeathlonCourseMonGfx *mon = PokeathlonCourseMonObject_GetGfx(monPic);
     int height = PokeathlonCourseMonGfx_GetTopRow(mon);
     int size;
     VecFx32 center = { 0, 0, 0 };
@@ -921,11 +922,11 @@ u32 PokeathlonDiscCatch_Draw(PokeathlonCourseData *course) {
 
 // Event template entry 2.
 u32 PokeathlonDiscCatch_ShowResults(PokeathlonCourseData *course) {
-    void *graphics = PokeathlonCourse_GetGraphicsSystem(course);
+    PokeathlonCourseScoreList *graphics = PokeathlonCourse_GetGraphicsSystem(course);
     int i;
     PokeathlonCourseScoreList_Init(graphics);
     for (i = 0; i < DISC_CATCH_PARTICIPANTS; i++) {
-        PokeathlonCourse_AddScoreEntry(course, graphics, i, PokeathlonCourse_GetField5F0_AtIndex(course, (u8)i), 0, 3, 295);
+        PokeathlonCourse_AddScoreEntry(course, graphics, i, PokeathlonCourse_GetField5F0_AtIndex(course, (u8)i), 0, 3, msg_0309_00295);
     }
     PokeathlonCourseScoreList_Rank(graphics, 1);
     PokeathlonEvent_CalcPoints(graphics, 4);

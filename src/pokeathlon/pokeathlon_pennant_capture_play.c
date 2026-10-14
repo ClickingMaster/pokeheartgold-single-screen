@@ -2,6 +2,7 @@
 
 #include "global.h"
 
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_pennant_capture.h"
 
 #include "bg_window.h"
@@ -14,18 +15,18 @@
 #include "touchscreen.h"
 
 // Course helpers of other OVY_96 parts that have no module header yet.
-void *PokeathlonCourseSpritePool_CreateAndTake(void *pool, int priority, int whichScreen, int tag, int cell);
-void PokeathlonCourseSpritePoolSprite_SetAnim(void *sprite, int anim);
-void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *sprite, int priority);
-void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int shown, int draw);
-void PokeathlonCourseSpritePool_LoadChar(void *pool, int narc, int member, int tag, int vram);
-void PokeathlonCourseSpritePool_LoadPltt(void *pool, int narc, int member, int tag, int vram, int count);
-void PokeathlonCourseSpritePool_LoadCell(void *pool, int narc, int member, int tag);
-void PokeathlonCourseSpritePool_LoadAnim(void *pool, int narc, int member, int tag);
-void PokeathlonCourseObject_GroundToCenter(void *object, int x, int y, int *outX, int *outY);
-BOOL PokeathlonCourseObject_IsInTouchRange(void *object, fx32 x, fx32 y, int touchX, int touchY);
-void PokeathlonCourseObjects_PauseAnims(void *object, int paused);
-void PokeathlonCourseSpritePool_PauseAnims(void *object);
+PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_CreateAndTake(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, int tag, int cell);
+void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *sprite, int anim);
+void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *sprite, int priority);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *sprite, int shown, int draw);
+void PokeathlonCourseSpritePool_LoadChar(PokeathlonCourseSpritePool *pool, int narc, int member, int tag, int vram);
+void PokeathlonCourseSpritePool_LoadPltt(PokeathlonCourseSpritePool *pool, int narc, int member, int tag, int vram, int count);
+void PokeathlonCourseSpritePool_LoadCell(PokeathlonCourseSpritePool *pool, int narc, int member, int tag);
+void PokeathlonCourseSpritePool_LoadAnim(PokeathlonCourseSpritePool *pool, int narc, int member, int tag);
+void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseObject *object, int x, int y, int *outX, int *outY);
+BOOL PokeathlonCourseObject_IsInTouchRange(PokeathlonCourseObject *object, fx32 x, fx32 y, int touchX, int touchY);
+void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseObjects *object, int paused);
+void PokeathlonCourseSpritePool_PauseAnims(PokeathlonCourseSpritePool *object);
 u32 PokeathlonCourse_RunStartCountdown(PokeathlonCourseData *course);
 u32 PokeathlonCourse_RunFinish(PokeathlonCourseData *course);
 void PokeathlonCourse_UpdateTimeUpCountdown(PokeathlonCourseData *course, u16 timeLeft);
@@ -88,14 +89,14 @@ void PokeathlonPennantCapture_LoadBgGfx(PokeathlonPennantCapture *work) {
 
 #pragma force_active reset
 
-void PokeathlonPennantCapture_LoadSpriteResources(void *pool) {
+void PokeathlonPennantCapture_LoadSpriteResources(PokeathlonCourseSpritePool *pool) {
     PokeathlonCourseSpritePool_LoadChar(pool, 0xE2, 17, 0x68, 1);
     PokeathlonCourseSpritePool_LoadPltt(pool, 0xE2, 14, 0x68, 1, 2);
     PokeathlonCourseSpritePool_LoadCell(pool, 0xE2, 16, 0x68);
     PokeathlonCourseSpritePool_LoadAnim(pool, 0xE2, 15, 0x68);
 }
 
-void PokeathlonPennantCapture_CreateSprites(PokeathlonPennantCapture *work, void *pool) {
+void PokeathlonPennantCapture_CreateSprites(PokeathlonPennantCapture *work, PokeathlonCourseSpritePool *pool) {
     PokeathlonPennantCapture *cursor;
     int i;
     u8 j;
@@ -556,7 +557,7 @@ BOOL PokeathlonPennantCapture_IsTouchOnOwnMon(PokeathlonPennantCapture *work, in
     PokeathlonPennantCapturePlayer *player = &work->players[participant];
     int monX;
     int monY;
-    void *object;
+    PokeathlonCourseObject *object;
 
     if (player->member >= 3) {
         GF_AssertFail();

@@ -3,6 +3,8 @@
 
 #include "pokeathlon/pokeathlon_block_smash.h"
 
+#include "pokeathlon/pokeathlon_course_types_def.h"
+
 // Block Smash: the own team's Pokemon (the active one hits, the other two wait at the side), the
 // other teams' rows on the touch screen and the CPU participants.
 //
@@ -62,7 +64,7 @@ struct PokeathlonBlockSmashRivals {
     SpriteSystem *spriteSystem;        // 0x04
     SpriteManager *spriteManager;      // 0x08
     PokeathlonCourseData *course;      // 0x0C
-    void *monPics;                     // 0x10
+    PokeathlonCourseMonObjects *monPics;                     // 0x10
     PokeathlonBlockSmashRival rows[3]; // 0x14
 }; // size: 0xC8
 
@@ -116,7 +118,7 @@ u32 PokeathlonBlockSmashMon_IsTired(PokeathlonBlockSmashMon *mon);
 u16 PokeathlonBlockSmashMon_GetGauge(PokeathlonBlockSmashMon *mon);
 u8 PokeathlonBlockSmashMon_GetActiveMemberIndex(PokeathlonBlockSmashMon *mon);
 u32 PokeathlonBlockSmashMon_CanHit(PokeathlonBlockSmashMon *mon);
-PokeathlonBlockSmashRivals *PokeathlonBlockSmashRivals_New(enum HeapID heapId, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonCourseData *course, void *monPics);
+PokeathlonBlockSmashRivals *PokeathlonBlockSmashRivals_New(enum HeapID heapId, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonCourseData *course, PokeathlonCourseMonObjects *monPics);
 void PokeathlonBlockSmashRivals_Delete(PokeathlonBlockSmashRivals *rivals);
 void PokeathlonBlockSmashRivals_Update(PokeathlonBlockSmashRivals *rivals);
 void PokeathlonBlockSmashRivals_Pause(PokeathlonBlockSmashRivals *rivals);
@@ -125,7 +127,7 @@ void PokeathlonBlockSmashMon_UpdateHit(PokeathlonBlockSmashMon *mon);
 void PokeathlonBlockSmashMon_UpdateExhausted(PokeathlonBlockSmashMon *mon);
 void PokeathlonBlockSmashMon_UpdateSwitch(PokeathlonBlockSmashMon *mon);
 void PokeathlonBlockSmashMon_UpdateTired(PokeathlonBlockSmashMon *mon);
-void PokeathlonBlockSmashRival_Init(PokeathlonBlockSmashRival *row, SpriteSystem *spriteSystem, SpriteManager *spriteManager, void *monPics, u8 participant, PokeathlonCourseData *course, u32 *maxStamina);
+void PokeathlonBlockSmashRival_Init(PokeathlonBlockSmashRival *row, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonCourseMonObjects *monPics, u8 participant, PokeathlonCourseData *course, u32 *maxStamina);
 void PokeathlonBlockSmashRival_ShowStaminaMark(PokeathlonBlockSmashRival *row, int anim);
 void PokeathlonBlockSmashRival_UpdateStatus(PokeathlonBlockSmashRival *row, PokeathlonBlockSmashReport *report);
 void PokeathlonBlockSmashRival_UpdateScore(PokeathlonBlockSmashRival *row, PokeathlonBlockSmashReport *report);
@@ -140,7 +142,7 @@ void PokeathlonBlockSmashMon_AddGauge(PokeathlonBlockSmashMon *mon, BOOL hitSpot
 BOOL PokeathlonBlockSmash_SetTiredAnimSpeed(ManagedSprite *sprite, fx32 stamina, fx32 maxStamina);
 void PokeathlonBlockSmashMon_StartFullGauge(PokeathlonBlockSmashMon *mon);
 void PokeathlonBlockSmashMon_EndFullGauge(PokeathlonBlockSmashMon *mon);
-void PokeathlonBlockSmashRivals_InitMonPics(void *monPics, u32 self);
+void PokeathlonBlockSmashRivals_InitMonPics(PokeathlonCourseMonObjects *monPics, u32 self);
 void PokeathlonBlockSmash_ShowGaugeEffect(ManagedSprite *sprite, u16 gauge, BOOL playSE);
 void PokeathlonBlockSmashMon_SetWaitingPosition(PokeathlonBlockSmashMon *mon, int sprite, s16 x, s16 y);
 PokeathlonBlockSmashCpu *PokeathlonBlockSmashCpu_New(PokeathlonCourseData *course, enum HeapID heapId);

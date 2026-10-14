@@ -4,6 +4,7 @@
 #include "global.h"
 
 #include "pokeathlon/pokeathlon.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_hurdle_dash.h"
 
 #include "sprite.h"
@@ -16,8 +17,8 @@
 // A hurdle on a lane (0x10): a standing sprite and a knocked-over one.
 typedef struct PokeathlonHurdle {
     BOOL visible;         // 0x0
-    void *standingSprite; // 0x4: PokeathlonCourseSpritePoolSprite
-    void *knockedSprite;  // 0x8: PokeathlonCourseSpritePoolSprite
+    PokeathlonCourseSpritePoolSprite *standingSprite; // 0x4: PokeathlonCourseSpritePoolSprite
+    PokeathlonCourseSpritePoolSprite *knockedSprite;  // 0x8: PokeathlonCourseSpritePoolSprite
     BOOL standing;        // 0xC
 } PokeathlonHurdle;
 
@@ -39,7 +40,7 @@ typedef struct PokeathlonHurdleDashTrack {
 // The dust a running Pokemon kicks up: five sprites per lane.
 typedef struct PokeathlonHurdleDashDust {
     BOOL active;
-    void *sprite; // PokeathlonCourseSpritePoolSprite
+    PokeathlonCourseSpritePoolSprite *sprite; // PokeathlonCourseSpritePoolSprite
 } PokeathlonHurdleDashDust;
 
 typedef struct PokeathlonHurdleDashDustLane {
@@ -172,7 +173,7 @@ void PokeathlonHurdle_GetRect(PokeathlonHurdle *hurdle, PokeathlonHurdleDashRect
 PokeathlonHurdle *PokeathlonHurdleDashTrack_PlaceHurdle(PokeathlonHurdleDashTrack *track, int lane, int y);
 PokeathlonHurdleDashTrack *PokeathlonHurdleDashTrack_New(enum HeapID heapId);
 void PokeathlonHurdleDashTrack_Free(PokeathlonHurdleDashTrack *track);
-void PokeathlonHurdleDashTrack_CreateHurdleSprites(PokeathlonHurdleDashLane *lane, void *spritePool);
+void PokeathlonHurdleDashTrack_CreateHurdleSprites(PokeathlonHurdleDashLane *lane, PokeathlonCourseSpritePool *spritePool);
 PokeathlonHurdle *PokeathlonHurdleDashTrack_GetLaneHurdles(PokeathlonHurdleDashTrack *track, u32 lane);
 void *PokeathlonHurdleDashTrack_GetLayoutToSend(PokeathlonHurdleDashTrack *track);
 void *PokeathlonHurdleDashTrack_GetLayout(PokeathlonHurdleDashTrack *track);
@@ -193,7 +194,7 @@ void PokeathlonHurdleDashStandings_InitResourcesHeader(PokeathlonHurdleDashStand
 void PokeathlonHurdleDashStandings_CreateSprites(PokeathlonHurdleDashStandings *standings, PokeathlonHurdleDashStandingsMonId *mons);
 void PokeathlonHurdleDashStandings_InitSpriteTemplate(SpriteTemplate *template, PokeathlonHurdleDashStandings *standings, const SpriteResourcesHeader *header, NNS_G2D_VRAM_TYPE whichScreen);
 PokeathlonHurdleDashDustLane *PokeathlonHurdleDashDust_New(enum HeapID heapId);
-void PokeathlonHurdleDashDust_CreateSprites(PokeathlonHurdleDashDustLane *lanes, void *spritePool, u16 priority);
+void PokeathlonHurdleDashDust_CreateSprites(PokeathlonHurdleDashDustLane *lanes, PokeathlonCourseSpritePool *spritePool, u16 priority);
 void PokeathlonHurdleDashDust_Free(PokeathlonHurdleDashDustLane *lanes);
 void PokeathlonHurdleDashDust_Spawn(PokeathlonHurdleDashDustLane *lanes, u32 lane, const VecFx32 *position);
 void PokeathlonHurdleDashDust_Scroll(PokeathlonHurdleDashDustLane *lanes, u32 lane, u32 distance);

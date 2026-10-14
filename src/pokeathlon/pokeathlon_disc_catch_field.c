@@ -1,5 +1,6 @@
 #include "global.h"
 
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_disc_catch_play.h"
 
 #include "assert.h"
@@ -31,25 +32,25 @@ int PokeathlonCourse_GetCollisionSizeClass(void *performance);
 u32 PokeathlonCourse_GetTouchRadius(void);
 void PokeathlonCourse_StopMarkerAnims(PokeathlonCourseData *course);
 void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, int member, int counter, int amount);
-Sprite *PokeathlonCourse_AddMarker(PokeathlonCourseData *course, void *monPic, void *resources, SpriteList *spriteList, int priority);
-void PokeathlonCourse_CreateStartSprites(PokeathlonCourseData *course, int baseY, void *resources, SpriteList *spriteList, int whichScreen, int count, s16 (*positions)[2]);
+Sprite *PokeathlonCourse_AddMarker(PokeathlonCourseData *course, PokeathlonCourseMonObject *monPic, PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority);
+void PokeathlonCourse_CreateStartSprites(PokeathlonCourseData *course, int baseY, PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int whichScreen, int count, s16 (*positions)[2]);
 void PokeathlonCourse_UpdateTimeUpCountdown(PokeathlonCourseData *course, int timer);
-void *PokeathlonCourseMonObjects_Create(enum HeapID heapId, int count, int baseDrawPriority, void *resources, SpriteList *spriteList);
-void PokeathlonCourseObjects_ShiftLargeUp(void *monPics);
-void PokeathlonCourseMonObjects_Load(void *monPics, int count, PokeathlonDiscCatchMonInfo *infos, u32 *params, int priority, int baseIndex);
-void *PokeathlonCourseMonObjects_Get(void *monPics, u8 index);
-void *PokeathlonCourseMonObject_GetGfx(void *monPic);
-PokeathlonDiscCatchMonInfo *PokeathlonCourseMonGfx_GetInfo(void *gfx);
-void PokeathlonCourseMonObject_SetDrawFlag(void *monPic, int draw);
-void PokeathlonCourseMonObject_SetDrawPriority(void *monPic, int priority);
-void PokeathlonCourseMonObject_SetAnimState(void *monPic);
-void PokeathlonCourseObject_SetCollision(void *monPic, int offsetY, int radius);
-void PokeathlonCourseObject_SetScale(void *monPic, f32 scaleX, f32 scaleY);
-void PokeathlonCourseObject_SetGroundPosition(void *monPic, int x, int y);
-void PokeathlonCourseObject_SetTouchRadius(void *monPic, int radius);
-void PokeathlonCourseObject_GroundToCenter(void *monPic, int x, int y, int *outX, int *outY);
-void PokeathlonCourseObject_CenterToGround(void *monPic, int x, int y, int *outX, int *outY);
-int PokeathlonCourseObject_GetCollisionRadius(void *monPic);
+PokeathlonCourseMonObjects *PokeathlonCourseMonObjects_Create(enum HeapID heapId, int count, int baseDrawPriority, PokeathlonCourseSpriteResources *resources, SpriteList *spriteList);
+void PokeathlonCourseObjects_ShiftLargeUp(PokeathlonCourseObjects *monPics);
+void PokeathlonCourseMonObjects_Load(PokeathlonCourseMonObjects *monPics, int count, PokeathlonDiscCatchMonInfo *infos, u32 *params, int priority, int baseIndex);
+PokeathlonCourseMonObject *PokeathlonCourseMonObjects_Get(PokeathlonCourseMonObjects *monPics, u8 index);
+PokeathlonCourseMonGfx *PokeathlonCourseMonObject_GetGfx(PokeathlonCourseMonObject *monPic);
+PokeathlonDiscCatchMonInfo *PokeathlonCourseMonGfx_GetInfo(PokeathlonCourseMonGfx *gfx);
+void PokeathlonCourseMonObject_SetDrawFlag(PokeathlonCourseMonObject *monPic, int draw);
+void PokeathlonCourseMonObject_SetDrawPriority(PokeathlonCourseMonObject *monPic, int priority);
+void PokeathlonCourseMonObject_SetAnimState(PokeathlonCourseMonObject *monPic);
+void PokeathlonCourseObject_SetCollision(PokeathlonCourseObject *monPic, int offsetY, int radius);
+void PokeathlonCourseObject_SetScale(PokeathlonCourseObject *monPic, f32 scaleX, f32 scaleY);
+void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseObject *monPic, int x, int y);
+void PokeathlonCourseObject_SetTouchRadius(PokeathlonCourseObject *monPic, int radius);
+void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseObject *monPic, int x, int y, int *outX, int *outY);
+void PokeathlonCourseObject_CenterToGround(PokeathlonCourseObject *monPic, int x, int y, int *outX, int *outY);
+int PokeathlonCourseObject_GetCollisionRadius(PokeathlonCourseObject *monPic);
 
 extern const u32 gPokeathlonDiscCatchPhaseSeconds[4];
 extern const s16 gPokeathlonDiscCatchMonStartPositions[DISC_CATCH_PARTICIPANTS][DISC_CATCH_TEAM_SIZE][2];

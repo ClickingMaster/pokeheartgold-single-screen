@@ -240,7 +240,7 @@ extern const DpadMenuBox gBattleFactoryRentalGridBoxes[];
 // Frontier overlay (80) helpers
 int BattleFactory_GetPartySize(int frontierType);
 BOOL BattleFactory_IsMultiType(int frontierType);
-void Frontier_BufferPartnerName(void *msgFmt, u32 field);
+void Frontier_BufferPartnerName(MessageFormat *msgFmt, u32 field);
 
 // text.h (and render_text.h, which includes it) are not included: text.h declares fontId as u8
 // (FontID), but this module passes it unnarrowed

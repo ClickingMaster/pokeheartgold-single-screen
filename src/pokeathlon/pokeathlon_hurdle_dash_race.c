@@ -8,6 +8,7 @@
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0309.h"
 #include "pokeathlon/pokeathlon_course_internal.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -47,18 +48,18 @@ s32 _s32_div_f(s32 num, s32 den);
 
 // Course object and sprite pool helpers (pokeathlon_course_objects.c); declared here because SetScale is
 // called with the two float scales its header types as pointers.
-s32 PokeathlonCourseObject_GetCollisionRadius(void *object);
-s32 PokeathlonCourseObject_GetCollisionOffsetY(void *object);
-void PokeathlonCourseObject_SetScale(void *object, f32 x, f32 y);
-void *PokeathlonCourseSpritePool_Take(void *pool, int resId, int kind);
-void *PokeathlonCourseSpritePool_CreateAndTake(void *pool, int priority, int whichScreen, int resId, u8 kind);
-void PokeathlonCourseSpritePoolSprite_Show(void *entry, BOOL shown, BOOL draw);
-void PokeathlonCourseSpritePoolSprite_SetAnim(void *entry, int seq);
-BOOL PokeathlonCourseSpritePoolSprite_IsAnimated(void *entry);
-void PokeathlonCourseSpritePoolSprite_SetPosition(void *entry, const VecFx32 *position);
-VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(void *entry);
-Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(void *entry);
-void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *entry, int priority);
+s32 PokeathlonCourseObject_GetCollisionRadius(PokeathlonCourseObject *object);
+s32 PokeathlonCourseObject_GetCollisionOffsetY(PokeathlonCourseObject *object);
+void PokeathlonCourseObject_SetScale(PokeathlonCourseObject *object, f32 x, f32 y);
+PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_Take(PokeathlonCourseSpritePool *pool, int resId, int kind);
+PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_CreateAndTake(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, int resId, u8 kind);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *entry, BOOL shown, BOOL draw);
+void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *entry, int seq);
+BOOL PokeathlonCourseSpritePoolSprite_IsAnimated(PokeathlonCourseSpritePoolSprite *entry);
+void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *entry, const VecFx32 *position);
+VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(PokeathlonCourseSpritePoolSprite *entry);
+Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(PokeathlonCourseSpritePoolSprite *entry);
+void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *entry, int priority);
 
 extern const s8 sHurdleDashRisingJumpHeights[][9];                   // height of a rising jump per frame, by jump stat
 extern const s8 sHurdleDashFallingJumpHeights[][9];                   // height of a falling jump per frame, by jump stat
@@ -169,7 +170,7 @@ void PokeathlonHurdleDash_UpdateRunner(PokeathlonCourseData *course, PokeathlonH
             for (i = 0; i < 4; i++) {
                 hurdle = PokeathlonHurdleDashRunner_GetHurdle(runner, i);
                 if (PokeathlonHurdle_IsStanding(hurdle)) {
-                    void *monObject = runner->mon.monObject;
+                    PokeathlonCourseObject *monObject = runner->mon.monObject;
                     PokeathlonHurdle_GetRect(hurdle, &rect2);
                     if (PokeathlonHurdleDash_IsTouchingHurdle(runner->mon.groundY + 0x110 - PokeathlonCourseObject_GetCollisionOffsetY(monObject), (u8)PokeathlonCourseObject_GetCollisionRadius(monObject), &rect2)) {
                         PokeathlonHurdle_KnockDown(hurdle);
@@ -1353,15 +1354,15 @@ void PokeathlonHurdleDashTrack_Free(PokeathlonHurdleDashTrack *track) {
     Heap_Free(base);
 }
 
-void PokeathlonHurdleDashTrack_CreateHurdleSprites(PokeathlonHurdleDashLane *lane, void *spritePool) {
+void PokeathlonHurdleDashTrack_CreateHurdleSprites(PokeathlonHurdleDashLane *lane, PokeathlonCourseSpritePool *spritePool) {
     int i = 0;
     int j;
     do {
         j = 0;
         do {
             PokeathlonHurdle *hurdle = PokeathlonHurdleDash_GetHurdle(lane->hurdles, j);
-            void *standing = PokeathlonCourseSpritePool_Take(spritePool, 101, 2);
-            void *knocked = PokeathlonCourseSpritePool_Take(spritePool, 103, 6);
+            PokeathlonCourseSpritePoolSprite *standing = PokeathlonCourseSpritePool_Take(spritePool, 101, 2);
+            PokeathlonCourseSpritePoolSprite *knocked = PokeathlonCourseSpritePool_Take(spritePool, 103, 6);
             PokeathlonHurdle_SetSprites(hurdle, standing, knocked);
             j++;
         } while (j < 4);
@@ -1601,7 +1602,7 @@ PokeathlonHurdleDashDustLane *PokeathlonHurdleDashDust_New(enum HeapID heapId) {
 
 #pragma force_active on
 
-void PokeathlonHurdleDashDust_CreateSprites(PokeathlonHurdleDashDustLane *lanes, void *spritePool, u16 priority) {
+void PokeathlonHurdleDashDust_CreateSprites(PokeathlonHurdleDashDustLane *lanes, PokeathlonCourseSpritePool *spritePool, u16 priority) {
     u8 i;
     u8 j;
     for (i = 0; i < 3; i++) {

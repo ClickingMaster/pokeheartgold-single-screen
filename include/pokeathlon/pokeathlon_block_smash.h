@@ -4,6 +4,7 @@
 #include "global.h"
 
 #include "pokeathlon/pokeathlon.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 
 #include "bg_window.h"
 #include "filesystem.h"
@@ -105,7 +106,7 @@ typedef struct PokeathlonBlockSmash {
     SpriteSystem *spriteSystem;          // 0x008
     SpriteManager *spriteManager;        // 0x00C
     void *monPics;                       // 0x010: the other teams' Pokemon
-    void *iconResources;                 // 0x014
+    PokeathlonCourseSpriteResources *iconResources;                 // 0x014
     String *names[3];                    // 0x018: the own team's nicknames
     ManagedSprite *timerFrame;           // 0x024
     ManagedSprite *switchButton;         // 0x028

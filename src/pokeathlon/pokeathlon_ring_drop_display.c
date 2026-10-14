@@ -3,6 +3,7 @@
 #include "constants/sndseq.h"
 
 #include "msgdata/msg.naix"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_ring_drop.h"
 
 #include "assert.h"
@@ -24,7 +25,7 @@ typedef struct PokeathlonRingDropBgTemplates {
 // A Pokemon's screen y, to sort the Pokemon by depth.
 typedef struct PokeathlonRingDropDepth {
     u8 y;
-    void *monObject;
+    PokeathlonCourseMonObject *monObject;
 } PokeathlonRingDropDepth;
 
 extern const GraphicsModes gPokeathlonRingDropGraphicsModes;
@@ -46,21 +47,21 @@ void MATH_QSort(void *base, u32 count, u32 width, int (*compare)(const void *, c
 #define PokeathlonRingDrop_GetTeamMemberParams(course, participant, member)         (((PokeathlonRingDropMemberParams * (*)(PokeathlonCourseData *, u8, int)) PokeathlonRingDrop_GetMemberParams)((course), (participant), (member)))
 
 // Course helpers, mon objects and the computer participants (OVY_96).
-void *PokeathlonCourseSprites_CreateResources(int heapId, int flags, int charVram);
-void PokeathlonCourseSprites_FreeResources(void *resources);
+PokeathlonCourseSpriteResources *PokeathlonCourseSprites_CreateResources(int heapId, int flags, int charVram);
+void PokeathlonCourseSprites_FreeResources(PokeathlonCourseSpriteResources *resources);
 void PokeathlonCourse_UpdateTimeUpCountdown(PokeathlonCourseData *course, u32 timer);
-void *PokeathlonCourseMonGfx_GetInfo(void *mon);
-void PokeathlonCourseMonGfx_LoadPalette(void *info, enum HeapID heapId, u16 *palette);
-void *PokeathlonCourseMonObjects_Get(void *monObjects, u8 index);
-void *PokeathlonCourseMonObject_GetGfx(void *object);
-void PokeathlonCourseMonObject_SetDrawFlag(void *object, int draw);
-void PokeathlonCourseMonObject_SetDrawPriority(void *object, int priority);
-void PokeathlonCourseMonObject_SetAnimState(void *object, int anim);
-void PokeathlonCourseMonObject_SetAnim(void *object, int anim);
-void PokeathlonCourseMonObjects_SetPalette(void *monObjects, u8 index, int vram, u16 *palette);
-void PokeathlonCourseObject_SetCenterPosition(void *object, int x, int y, int moveShadow);
+PokeathlonCourseMonInfo *PokeathlonCourseMonGfx_GetInfo(PokeathlonCourseMonGfx *mon);
+void PokeathlonCourseMonGfx_LoadPalette(PokeathlonCourseMonInfo *info, enum HeapID heapId, u16 *palette);
+PokeathlonCourseMonObject *PokeathlonCourseMonObjects_Get(PokeathlonCourseMonObjects *monObjects, u8 index);
+PokeathlonCourseMonGfx *PokeathlonCourseMonObject_GetGfx(PokeathlonCourseMonObject *object);
+void PokeathlonCourseMonObject_SetDrawFlag(PokeathlonCourseMonObject *object, int draw);
+void PokeathlonCourseMonObject_SetDrawPriority(PokeathlonCourseMonObject *object, int priority);
+void PokeathlonCourseMonObject_SetAnimState(PokeathlonCourseMonObject *object, int anim);
+void PokeathlonCourseMonObject_SetAnim(PokeathlonCourseMonObject *object, int anim);
+void PokeathlonCourseMonObjects_SetPalette(PokeathlonCourseMonObjects *monObjects, u8 index, int vram, u16 *palette);
+void PokeathlonCourseObject_SetCenterPosition(PokeathlonCourseObject *object, int x, int y, int moveShadow);
 void PokeathlonCourseObject_CenterToGround(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
-void PokeathlonCourseObject_SetScale(void *object, f32 scaleX, f32 scaleY);
+void PokeathlonCourseObject_SetScale(PokeathlonCourseObject *object, f32 scaleX, f32 scaleY);
 
 #pragma force_active on
 
@@ -198,7 +199,7 @@ void PokeathlonRingDrop_LoadBgGraphics(PokeathlonRingDrop *ringDrop) {
 // Switch mode 1: the ball flies up off the Pokemon; then the next member is requested.
 #pragma force_active on
 
-void PokeathlonRingDropDisplay_SwitchOut(PokeathlonRingDropMonSprites *mon, s16 *position, void *ui, u8 participant, PokeathlonRingDropInput *input, BOOL cpu, BOOL own) {
+void PokeathlonRingDropDisplay_SwitchOut(PokeathlonRingDropMonSprites *mon, s16 *position, PokeathlonRingDropUi *ui, u8 participant, PokeathlonRingDropInput *input, BOOL cpu, BOOL own) {
     s16 x, y;
 
     switch (mon->switchStep) {
@@ -630,7 +631,7 @@ void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay *displ
         PokeathlonRingDropMonPacket *packet;
         PokeathlonRingDropDepth *depth;
         for (i = 0, index = 0, packet = framePacket->mons, depth = depths; i < RING_DROP_PARTICIPANTS; i++, packet++, index += RING_DROP_TEAM_SIZE, depth++) {
-            void *monObject = PokeathlonCourseMonObjects_Get(ringDrop->monObjects, (u8)(packet->member + index));
+            PokeathlonCourseMonObject *monObject = PokeathlonCourseMonObjects_Get(ringDrop->monObjects, (u8)(packet->member + index));
             int x = packet->x, y = packet->y;
             PokeathlonCourseObject_CenterToGround(monObject, x, y, &x, &y);
             depth->y = y;
@@ -648,7 +649,7 @@ void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay *displ
 // PokeathlonCourseMonObjects_Get as the first call in PokeathlonRingDropDisplay_Init was built: with an int index.
 typedef void *(*PokeathlonRingDropGetMonObjectFunc)(void *monObjects, int index);
 
-void PokeathlonRingDropDisplay_Init(PokeathlonRingDropDisplay *display, SpriteSystem *spriteSystem, SpriteManager *spriteManager, void *ui, void *monObjects, enum HeapID heapId) {
+void PokeathlonRingDropDisplay_Init(PokeathlonRingDropDisplay *display, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonRingDropUi *ui, void *monObjects, enum HeapID heapId) {
     volatile s32 control[3];
     s32 next;
     int member;

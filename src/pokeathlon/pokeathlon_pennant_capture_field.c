@@ -4,6 +4,7 @@
 
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0309.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_pennant_capture.h"
 
 #include "assert.h"
@@ -30,20 +31,20 @@ u8 *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participan
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, u8 member);
 void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int kind, int amount);
 void PokeathlonCourse_SetRecordScore(PokeathlonCourseData *course, int score);
-void PokeathlonCourseMonObject_SetDrawFlag(void *object, int visible);
-void PokeathlonCourseMonObject_SetDrawPriority(void *object, int priority);
-void PokeathlonCourseMonObject_SetAnimStateRaw(void *object, u8 size);
-void PokeathlonCourseMonObject_SetAnimState(void *object, u8 size);
-void PokeathlonCourseMonObject_SetAnim(void *object, int anim);
+void PokeathlonCourseMonObject_SetDrawFlag(PokeathlonCourseMonObject *object, int visible);
+void PokeathlonCourseMonObject_SetDrawPriority(PokeathlonCourseMonObject *object, int priority);
+void PokeathlonCourseMonObject_SetAnimStateRaw(PokeathlonCourseMonObject *object, u8 size);
+void PokeathlonCourseMonObject_SetAnimState(PokeathlonCourseMonObject *object, u8 size);
+void PokeathlonCourseMonObject_SetAnim(PokeathlonCourseMonObject *object, int anim);
 void PokeathlonCourseObject_GetCollisionCircle(void *object, int x, int y, int *outX, int *outY, int *outRadius);
-int PokeathlonCourseObject_GetCollisionRadius(void *object);
-void PokeathlonCourseObject_SetGroundPosition(void *object, int x, int y);
-void PokeathlonCourseObject_GroundToCenter(void *object, int x, int y, int *outX, int *outY);
-void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int shown, int show);
-void PokeathlonCourseSpritePoolSprite_SetAnim(void *sprite, int anim);
-void PokeathlonCourseSpritePoolSprite_SetPosition(void *sprite, VecFx32 *position);
-VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(void *sprite);
-void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *sprite, int priority);
+int PokeathlonCourseObject_GetCollisionRadius(PokeathlonCourseObject *object);
+void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseObject *object, int x, int y);
+void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseObject *object, int x, int y, int *outX, int *outY);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *sprite, int shown, int show);
+void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *sprite, int anim);
+void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *sprite, VecFx32 *position);
+VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(PokeathlonCourseSpritePoolSprite *sprite);
+void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *sprite, int priority);
 // in the top screen code
 void ov96_02208374(PokeathlonPennantCaptureDisplay *display, u16 score);
 BOOL ov96_02208448(PokeathlonPennantCaptureDisplay *display, int member);
@@ -279,7 +280,7 @@ void PokeathlonPennantCapture_ApplyFrame(PokeathlonCourseData *course, int viewe
     u32 baseY;
     PokeathlonPennantCapture *work;
     PokeathlonPennantCaptureFrame *frame;
-    void *object;
+    PokeathlonCourseMonObject *object;
     u8 size;
     u8 hidden;
     u8 active;
@@ -316,7 +317,7 @@ void PokeathlonPennantCapture_ApplyFrame(PokeathlonCourseData *course, int viewe
         PokeathlonPennantCapture_PlaySEIfOnScreen(x + 128 - baseX, y + 96 - baseY, SEQ_SE_GS_THLON06, 1);
     }
     if ((u8)(((u8)((frame->words[5] >> 19) & 0xF) >> self) & 1)) {
-        PlaySEOnPlayer(SEQ_SE_GS_HATAMOTENAI, 3);
+        PlaySEOnPlayer(SEQ_SE_GS_HATAMOTENAI, PLAYER_SE_1);
     }
     if ((u8)((frame->words[4] >> 18) & 1)) {
         x = frame->words[4] & 0x1FF;
@@ -410,10 +411,10 @@ void PokeathlonPennantCapture_ApplyFrame(PokeathlonCourseData *course, int viewe
                 player->flashTimer = 0;
                 remote = TRUE;
                 if (self == i) {
-                    if (GF_SndCountPlayingSeqOnPlayer(3) == 0) {
+                    if (GF_SndCountPlayingSeqOnPlayer(PLAYER_SE_1) == 0) {
                         PokeathlonPennantCapture_PlaySEIfOnScreen(position.x / FX32_ONE, position.y / FX32_ONE, SEQ_SE_GS_W146, 1);
                     }
-                } else if (GF_SndCountPlayingSeqOnPlayer(4) == 0) {
+                } else if (GF_SndCountPlayingSeqOnPlayer(PLAYER_SE_2) == 0) {
                     PokeathlonPennantCapture_PlaySEIfOnScreen(position.x / FX32_ONE, position.y / FX32_ONE, SEQ_SE_GS_W146, 0);
                 }
             } else {
@@ -940,8 +941,8 @@ static inline void PokeathlonPennantCapture_ZeroVec(VecFx32 *v) {
 #define CONTACT(player, i) (*((u8 *)((u32)(player) + (u32)(i)) + 0x94))
 
 int PokeathlonPennantCapture_CollidePlayers(PokeathlonCourseData *course, PokeathlonPennantCapturePlayer *players, VecFx32 *out) {
-    void *objectA;
-    void *objectB;
+    PokeathlonCourseObject *objectA;
+    PokeathlonCourseObject *objectB;
     int applied;
     int i, j;
     PokeathlonPennantCapturePlayer *a, *b;

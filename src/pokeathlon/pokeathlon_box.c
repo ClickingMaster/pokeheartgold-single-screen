@@ -1,6 +1,10 @@
 #include "pokeathlon/pokeathlon_box.h"
 
+#include "constants/species.h"
+
+#include "application/choose_starter/choose_starter_sub_res.naix"
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0278.h"
 
 #include "font.h"
 #include "gf_gfx_loader.h"
@@ -218,7 +222,7 @@ BOOL PokeathlonBox_GetBoxMon(PCStorage *storage, u32 boxno, u32 slotno, Pokeathl
         ptr->gender = GetBoxMonData(boxMon, MON_DATA_GENDER, NULL);
         return TRUE;
     }
-    ptr->species = 0;
+    ptr->species = SPECIES_NONE;
     ptr->personality = 0;
     ptr->isEgg = 0;
     ptr->form = 0;
@@ -242,7 +246,7 @@ BOOL PokeathlonBox_GetLightBoxMon(PCStorage *storage, u32 boxno, u32 slotno, Pok
         ptr->gender = 0;
         return TRUE;
     }
-    ptr->species = 0;
+    ptr->species = SPECIES_NONE;
     ptr->personality = 0;
     ptr->isEgg = 0;
     ptr->form = 0;
@@ -534,32 +538,32 @@ void PokeathlonBox_InitBgFromTemplates(BgConfig *bgConfig) {
 
 void PokeathlonBox_PrintStaticTexts(PokeathlonBox_Graphics *graphics) {
     BufferPokeathlonCourseName(graphics->msgFormat, 0, (u8)graphics->courseId);
-    String *str = ReadMsgData_ExpandPlaceholders(graphics->msgFormat, graphics->msgData, 0, graphics->heapID);
+    String *str = ReadMsgData_ExpandPlaceholders(graphics->msgFormat, graphics->msgData, msg_0278_00000, graphics->heapID);
     FillWindowPixelBuffer(&graphics->window1, 0);
     AddTextPrinterParameterizedWithColor(&graphics->window1, 0, str, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     CopyWindowToVram(&graphics->window1);
     String_Delete(str);
     FillWindowPixelBuffer(&graphics->window2, 0);
     if (graphics->isSupreme != 0) {
-        str = NewString_ReadMsgData(graphics->msgData, 1);
+        str = NewString_ReadMsgData(graphics->msgData, msg_0278_00001);
         AddTextPrinterParameterizedWithColor(&graphics->window2, 0, str, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
         String_Delete(str);
     }
     CopyWindowToVram(&graphics->window2);
     FillWindowPixelBuffer(&graphics->window5, 0);
-    str = NewString_ReadMsgData(graphics->msgData, 8);
+    str = NewString_ReadMsgData(graphics->msgData, msg_0278_00008);
     AddTextPrinterParameterizedWithColor(&graphics->window5, 0, str, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     String_Delete(str);
-    str = NewString_ReadMsgData(graphics->msgData, 4);
+    str = NewString_ReadMsgData(graphics->msgData, msg_0278_00004);
     AddTextPrinterParameterizedWithColor(&graphics->window5, 0, str, 0, 16, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     String_Delete(str);
-    str = NewString_ReadMsgData(graphics->msgData, 6);
+    str = NewString_ReadMsgData(graphics->msgData, msg_0278_00006);
     AddTextPrinterParameterizedWithColor(&graphics->window5, 0, str, 0, 32, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     String_Delete(str);
-    str = NewString_ReadMsgData(graphics->msgData, 5);
+    str = NewString_ReadMsgData(graphics->msgData, msg_0278_00005);
     AddTextPrinterParameterizedWithColor(&graphics->window5, 0, str, 0, 48, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     String_Delete(str);
-    str = NewString_ReadMsgData(graphics->msgData, 7);
+    str = NewString_ReadMsgData(graphics->msgData, msg_0278_00007);
     AddTextPrinterParameterizedWithColor(&graphics->window5, 0, str, 0, 64, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     String_Delete(str);
     CopyWindowToVram(&graphics->window5);
@@ -573,13 +577,13 @@ void PokeathlonBox_PrintMonTexts(PokeathlonBox_Graphics *graphics, PokeathlonBox
     AddTextPrinterParameterizedWithColor(&graphics->window3, 0, graphics->nickname, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     CopyWindowToVram(&graphics->window3);
     if (mon->gender == 0) {
-        str = NewString_ReadMsgData(graphics->msgData, 2);
+        str = NewString_ReadMsgData(graphics->msgData, msg_0278_00002);
         FillWindowPixelBuffer(&graphics->window4, 0);
         AddTextPrinterParameterizedWithColor(&graphics->window4, 0, str, 4, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(7, 8, 0), 0);
         CopyWindowToVram(&graphics->window4);
         String_Delete(str);
     } else if (mon->gender == 1) {
-        str = NewString_ReadMsgData(graphics->msgData, 3);
+        str = NewString_ReadMsgData(graphics->msgData, msg_0278_00003);
         FillWindowPixelBuffer(&graphics->window4, 0);
         AddTextPrinterParameterizedWithColor(&graphics->window4, 0, str, 4, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(3, 4, 0), 0);
         CopyWindowToVram(&graphics->window4);
@@ -591,7 +595,7 @@ void PokeathlonBox_PrintMonTexts(PokeathlonBox_Graphics *graphics, PokeathlonBox
     str = GetSpeciesName(mon->species, graphics->heapID);
     BufferString(graphics->msgFormat, 0, str, 2, 1, 2);
     String_Delete(str);
-    str = ReadMsgData_ExpandPlaceholders(graphics->msgFormat, graphics->msgData, 9, graphics->heapID);
+    str = ReadMsgData_ExpandPlaceholders(graphics->msgFormat, graphics->msgData, msg_0278_00009, graphics->heapID);
     FillWindowPixelBuffer(&graphics->window6, 0);
     AddTextPrinterParameterizedWithColor(&graphics->window6, 0, str, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), 0);
     CopyWindowToVram(&graphics->window6);
@@ -707,10 +711,10 @@ void PokeathlonBox_LoadSpriteResources(PokeathlonBox_SubGraphics *sub) {
     sub->resources[1].animResObj = AddCellOrAnimResObjFromNarc(sub->mgrs[3], NARC_a_1_6_2, 68, FALSE, 2, GF_GFX_RES_TYPE_ANIM, sub->heapID);
     SpriteTransfer_CreateCharTransferTask_AllocAtEnd(sub->resources[1].charResObj);
     SpriteTransfer_CreateExtPlttTransferTask(sub->resources[1].plttResObj);
-    sub->resources[2].charResObj = AddCharResObjFromNarc(sub->mgrs[0], NARC_application_choose_starter_choose_starter_sub_res, 9, FALSE, 3, NNS_G2D_VRAM_TYPE_2DSUB, sub->heapID);
-    sub->resources[2].plttResObj = AddPlttResObjFromNarc(sub->mgrs[1], NARC_application_choose_starter_choose_starter_sub_res, 6, FALSE, 3, NNS_G2D_VRAM_TYPE_2DSUB, 4, sub->heapID);
-    sub->resources[2].cellResObj = AddCellOrAnimResObjFromNarc(sub->mgrs[2], NARC_application_choose_starter_choose_starter_sub_res, 10, FALSE, 3, GF_GFX_RES_TYPE_CELL, sub->heapID);
-    sub->resources[2].animResObj = AddCellOrAnimResObjFromNarc(sub->mgrs[3], NARC_application_choose_starter_choose_starter_sub_res, 10, FALSE, 3, GF_GFX_RES_TYPE_ANIM, sub->heapID);
+    sub->resources[2].charResObj = AddCharResObjFromNarc(sub->mgrs[0], NARC_application_choose_starter_choose_starter_sub_res, NARC_choose_starter_sub_res_choose_starter_sub_res_00000009_NCGR, FALSE, 3, NNS_G2D_VRAM_TYPE_2DSUB, sub->heapID);
+    sub->resources[2].plttResObj = AddPlttResObjFromNarc(sub->mgrs[1], NARC_application_choose_starter_choose_starter_sub_res, NARC_choose_starter_sub_res_choose_starter_sub_res_00000006_NCLR, FALSE, 3, NNS_G2D_VRAM_TYPE_2DSUB, 4, sub->heapID);
+    sub->resources[2].cellResObj = AddCellOrAnimResObjFromNarc(sub->mgrs[2], NARC_application_choose_starter_choose_starter_sub_res, NARC_choose_starter_sub_res_choose_starter_sub_res_00000010_NCER, FALSE, 3, GF_GFX_RES_TYPE_CELL, sub->heapID);
+    sub->resources[2].animResObj = AddCellOrAnimResObjFromNarc(sub->mgrs[3], NARC_application_choose_starter_choose_starter_sub_res, NARC_choose_starter_sub_res_choose_starter_sub_res_00000010_NCER, FALSE, 3, GF_GFX_RES_TYPE_ANIM, sub->heapID);
     SpriteTransfer_CreateCharTransferTask_AllocAtEnd(sub->resources[2].charResObj);
     SpriteTransfer_CreateExtPlttTransferTask(sub->resources[2].plttResObj);
 }

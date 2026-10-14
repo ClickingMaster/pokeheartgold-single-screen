@@ -2,11 +2,15 @@
 
 #include "global.h"
 
+#include "constants/game_stats.h"
+#include "constants/items.h"
 #include "constants/pokemon.h"
 
 #include "frontier/frontier_map.h"
 #include "frontier/frontier_system.h"
 #include "frontier/frontier_trainers.h"
+#include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0031.h"
 
 #include "bg_window.h"
 #include "frontier_save_access.h"
@@ -39,7 +43,7 @@ void FrontierSave_AddStat(FrontierSave *frontierSave, int stat, int substat, u32
 void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
 u32 FrontierTrainer_GetClassSprite(u8 trainerClass);
 void *FrontierTrainer_Load(void *dst, u16 trainerId, u32 heapId, u32 size);
-void FrontierTrainer_GenerateMons(int a0, u16 trainerId, u16 partnerTrainerId, u16 *setIds, void *mons, u8 *ivs, void **personalities, u8 a7);
+void FrontierTrainer_GenerateMons(int a0, u16 trainerId, u16 partnerTrainerId, u16 *setIds, FrontierMon *mons, u8 *ivs, void **personalities, u8 a7);
 void FrontierMon_ToPokemon(void *frontierMon, void *mon, int level);
 void *CommPlayerInfo_GetProfile(int netId);
 u32 Comm_GetLocalNetId(void);
@@ -47,11 +51,11 @@ int BattleCastle_GetPartySize(u8 type, int a1);
 int BattleCastle_GetOpponentMonCount(int type, int a1);
 int BattleCastle_GetMonLevel(void *data);
 BOOL BattleCastle_IsMultiType(int type);
-void BattleCastle_ReviveParty(void *party);
+void BattleCastle_ReviveParty(Party *party);
 void BattleCastle_GetRoundTrainerIds(u32 type, u32 round, u16 *trainerIds, int count);
-void BattleCastle_AddMonToParty(void *data, void *party, void *mon);
-void BattleCastle_SetOpponentParty(void *data);
-u16 BattleCastle_GetRound(void *data);
+void BattleCastle_AddMonToParty(BattleCastleData *data, Party *party, Pokemon *mon);
+void BattleCastle_SetOpponentParty(BattleCastleData *data);
+u16 BattleCastle_GetRound(BattleCastleData *data);
 BOOL BattleCastleLink_SendRecord(BattleCastleData *data);
 BOOL BattleCastleLink_SendTrainerIds(BattleCastleData *data);
 BOOL BattleCastleLink_SendChoice(BattleCastleData *data);
@@ -165,7 +169,7 @@ BattleCastleData *BattleCastleData_Alloc(SaveData *saveData, BOOL resume, u8 typ
         mon = Party_GetMonByIndex(party, sBattleCastleData->partySlots[i]);
         Party_AddMon(sBattleCastleData->playerParty, mon);
         mon = Party_GetMonByIndex(sBattleCastleData->playerParty, i);
-        item = 0;
+        item = ITEM_NONE;
         SetMonData(mon, MON_DATA_HELD_ITEM, &item);
         if (GetMonData(mon, MON_DATA_LEVEL, NULL) > 50) {
             exp = GetMonExpBySpeciesAndLevel(GetMonData(mon, MON_DATA_SPECIES, NULL), 50);
@@ -593,7 +597,7 @@ void BattleCastle_AddPoints(SaveData *saveData, u32 type, s32 amount) {
             FrontierSave_AddStat(frontierSave, stat, substat, amount);
         }
     }
-    GameStats_Add(Save_GameStats_Get(saveData), 0x42, amount);
+    GameStats_Add(Save_GameStats_Get(saveData), GAME_STAT_UNK66, amount);
 }
 
 BOOL BattleCastleData_SendLinkMessage(BattleCastleData *data, u32 kind, u16 value) {
@@ -714,14 +718,14 @@ void BattleCastle_PrintPoints(FrontierSystem *system, BattleCastleData *data) {
 void BattleCastle_PrintPlayerPoints(FrontierSystem *system, Window *window, PlayerProfile *profile, u16 points) {
     String *tmp = String_New(20, system->heapId);
     String *buf = String_New(20, system->heapId);
-    MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 31, HEAP_ID_FIELD2);
+    MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0031_bin, HEAP_ID_FIELD2);
 
     BufferIntegerAsString(system->msgFormat, 0, points, 4, PRINTING_MODE_RIGHT_ALIGN, TRUE);
-    ReadMsgDataIntoString(msgData, 2, tmp);
+    ReadMsgDataIntoString(msgData, msg_0031_00002, tmp);
     StringExpandPlaceholders(system->msgFormat, buf, tmp);
     AddTextPrinterParameterized(window, 0, buf, 16, 16, TEXT_SPEED_NOTRANSFER, NULL);
     BufferPlayersName(system->msgFormat, 0, profile);
-    ReadMsgDataIntoString(msgData, 0, tmp);
+    ReadMsgDataIntoString(msgData, msg_0031_00000, tmp);
     StringExpandPlaceholders(system->msgFormat, buf, tmp);
     AddTextPrinterParameterized(window, 0, buf, 0, 0, TEXT_SPEED_INSTANT, NULL);
     String_Delete(tmp);

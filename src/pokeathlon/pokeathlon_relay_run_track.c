@@ -3,6 +3,7 @@
 #include "constants/sndseq.h"
 
 #include "pokeathlon/pokeathlon_course_internal.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_relay_run.h"
 
 #include "assert.h"
@@ -12,13 +13,13 @@
 #include "sprite.h"
 
 // Sprite pool helpers (pokeathlon_course_objects.c), declared with untyped entries as the course objects use them.
-void PokeathlonCourseSpritePoolSprite_Show(void *entry, BOOL shown, BOOL draw);
-void PokeathlonCourseSpritePoolSprite_SetAnim(void *entry, int seq);
-BOOL PokeathlonCourseSpritePoolSprite_TryChangeAnim(void *entry, int seq);
-void PokeathlonCourseSpritePoolSprite_SetPosition(void *entry, VecFx32 *position);
-VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(void *entry);
-void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *entry, int priority);
-void PokeathlonCourseObject_SetGroundPosition(void *object, s32 x, s32 y);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *entry, BOOL shown, BOOL draw);
+void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *entry, int seq);
+BOOL PokeathlonCourseSpritePoolSprite_TryChangeAnim(PokeathlonCourseSpritePoolSprite *entry, int seq);
+void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *entry, VecFx32 *position);
+VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(PokeathlonCourseSpritePoolSprite *entry);
+void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *entry, int priority);
+void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseObject *object, s32 x, s32 y);
 void PokeathlonCourseObject_GroundToCenter(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
 void PokeathlonCourseObject_GetCollisionCircle(void *object, fx32 x, fx32 y, fx32 *outX, fx32 *outY, s32 *radius);
 
@@ -41,7 +42,7 @@ void PokeathlonRelayRun_DrawTeams(PokeathlonCourseData *course, int own, Pokeath
     int screenX;
     PokeathlonRelayRun *relayRun;
     PokeathlonRelayRunPacket *packet;
-    void *monObject;
+    PokeathlonCourseMonObject *monObject;
     u8 swapping;
     u8 speedGrade;
     int condition;
@@ -79,7 +80,7 @@ void PokeathlonRelayRun_DrawTeams(PokeathlonCourseData *course, int own, Pokeath
             PokeathlonCourseSpritePoolSprite_SetAnim(relayRun->bumpMarks[relayRun->nextBumpMark], 9);
             relayRun->nextBumpMark = (relayRun->nextBumpMark + 1) % 4;
             if (bumpX >= 0 && bumpX < 256) {
-                PlaySEOnPlayer(SEQ_SE_GS_THLON06, 5);
+                PlaySEOnPlayer(SEQ_SE_GS_THLON06, PLAYER_SE_3);
             }
         }
     }
@@ -184,11 +185,11 @@ void PokeathlonRelayRun_DrawTeams(PokeathlonCourseData *course, int own, Pokeath
                 PokeathlonCourseMonObject_SetAnim(monObject, 21);
                 exhausted = TRUE;
                 if (isOwn) {
-                    if (!GF_SndCountPlayingSeqOnPlayer(3)) {
+                    if (!GF_SndCountPlayingSeqOnPlayer(PLAYER_SE_1)) {
                         PokeathlonRelayRun_PlaySEIfOnScreen(screenX, SEQ_SE_GS_W146, isOwn);
                     }
                 } else {
-                    if (!GF_SndCountPlayingSeqOnPlayer(4)) {
+                    if (!GF_SndCountPlayingSeqOnPlayer(PLAYER_SE_2)) {
                         PokeathlonRelayRun_PlaySEIfOnScreen(screenX, SEQ_SE_GS_W146, isOwn);
                     }
                 }
@@ -920,7 +921,7 @@ BOOL PokeathlonRelayRun_CollideRunners(PokeathlonCourseData *course, PokeathlonR
 
 // Places a mark (sprite) above a Pokemon standing at position, higher for bigger Pokemon (size class 1-3 in
 // its performance data).
-void PokeathlonRelayRun_PlaceAboveMon(PokeathlonCoursePerformance *performance, const VecFx32 *position, void *sprite) {
+void PokeathlonRelayRun_PlaceAboveMon(PokeathlonCoursePerformance *performance, const VecFx32 *position, PokeathlonCourseSpritePoolSprite *sprite) {
     VecFx32 above = *position;
     switch (performance->raw[8]) {
     case 1:

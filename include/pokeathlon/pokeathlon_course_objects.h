@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#include "pokeathlon/pokeathlon_course_types_def.h"
+
 #include "sprite.h"
 #include "sprite_resource_header.h"
 #include "sprite_resource.h"
@@ -13,7 +15,7 @@
 // A Pokemon on a course screen: its sprite plus a shadow and a player marker (0x44). Created
 // by the course sprite factory (PokeathlonCourseMonObjects_Load); this is the part of its layout the helpers
 // below use.
-typedef struct PokeathlonCourseObject {
+struct PokeathlonCourseObject {
     void *gfx;            // 0x00: the loaded Pokemon sprite (PokeathlonCourseMonGfx_GetSprite gives its Sprite)
     Sprite *shadowSprite; // 0x04
     Sprite *markerSprite; // 0x08
@@ -27,10 +29,10 @@ typedef struct PokeathlonCourseObject {
     s32 topRow;           // 0x28: first non-transparent pixel row of the frame
     s32 collisionOffsetY; // 0x2C: centre of the collision circle, rows above the frame bottom
     s32 collisionRadius;  // 0x30
-} PokeathlonCourseObject;
+};
 
 // What the course sprite factory needs to know about a Pokemon (0x10).
-typedef struct PokeathlonCourseObjectInfo {
+struct PokeathlonCourseObjectInfo {
     u16 species;     // 0x00
     u16 form;        // 0x02
     u16 isLarge;     // 0x04
@@ -38,7 +40,7 @@ typedef struct PokeathlonCourseObjectInfo {
     u8 gender;       // 0x07
     int participant; // 0x08
     u32 personality; // 0x0C
-} PokeathlonCourseObjectInfo;
+};
 
 // How the course sprite factory sets up the Pokemon objects.
 typedef struct PokeathlonCourseObjectsTemplate {
@@ -51,12 +53,12 @@ typedef struct PokeathlonCourseObjectsTemplate {
 } PokeathlonCourseObjectsTemplate;
 
 // The Pokemon objects of a course screen (only the field the helpers use).
-typedef struct PokeathlonCourseObjects {
+struct PokeathlonCourseObjects {
     enum HeapID heapId; // 0x00
     int count;          // 0x04
     u8 unk08[0xC];      // 0x08
     void *gfxManager;   // 0x14
-} PokeathlonCourseObjects;
+};
 
 // Course object code (OVY_96, not yet tidied).
 void *PokeathlonCourseMonGfx_GetSprite(void *gfx);
@@ -71,26 +73,26 @@ void PokeathlonCourseMonObject_SetPosition(PokeathlonCourseObject *object, int x
 // Sprite pool: resources loaded from NARCs into four resource managers, sprites created from
 // them up front and handed out by resource id and kind.
 
-typedef struct PokeathlonCourseSpritePoolTemplate {
+struct PokeathlonCourseSpritePoolTemplate {
     int capacity;      // 0x00: sprites
     int resourceCount; // 0x04: resource ids
     u8 resCounts[4];   // 0x08: char, palette, cell, animation
-} PokeathlonCourseSpritePoolTemplate;
+};
 
 typedef struct PokeathlonCourseSpritePoolResources {
     u32 id;                     // 0x00
     SpriteResource *objects[4]; // 0x04: char, palette, cell, animation
 } PokeathlonCourseSpritePoolResources;
 
-typedef struct PokeathlonCourseSpritePoolSprite {
+struct PokeathlonCourseSpritePoolSprite {
     u16 taken;      // 0x00
     u16 shown;      // 0x02
     Sprite *sprite; // 0x04
     u16 kind;       // 0x08
     u16 resId;      // 0x0A
-} PokeathlonCourseSpritePoolSprite;
+};
 
-typedef struct PokeathlonCourseSpritePool {
+struct PokeathlonCourseSpritePool {
     enum HeapID heapId;                             // 0x000
     int count;                                      // 0x004
     PokeathlonCourseSpritePoolTemplate template;    // 0x008
@@ -99,7 +101,7 @@ typedef struct PokeathlonCourseSpritePool {
     GF_2DGfxResMan *resMans[4];                     // 0x140
     PokeathlonCourseSpritePoolResources *resources; // 0x150
     PokeathlonCourseSpritePoolSprite *sprites;      // 0x154
-} PokeathlonCourseSpritePool;                       // size: 0x158
+};                       // size: 0x158
 
 void PokeathlonCourseObject_SetTouchRadius(PokeathlonCourseObject *object, s32 radius);
 void PokeathlonCourseObject_SetCollision(PokeathlonCourseObject *object, s32 offsetY, s32 radius);

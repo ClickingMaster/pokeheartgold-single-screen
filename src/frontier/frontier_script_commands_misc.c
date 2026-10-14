@@ -1,18 +1,20 @@
 #include "frontier_script_commands_misc_internal.h"
 
-BOOL FrtCmd_StopBGM(void *ctx) {
+#include "constants/game_stats.h"
+#include "constants/sndseq.h"
+
+BOOL FrtCmd_StopBGM(FrontierScriptContext *ctx) {
     FrontierScriptContext_ReadHalfWord(ctx);
     StopBGM(GF_GetCurrentPlayingBGM(), 0);
     return FALSE;
 }
 
-BOOL FrtCmd_TowerAction(void *ctx) {
-    u8 *script = ctx;
-    void *args = Frontier_GetLaunchArgs(**(void ***)script);
+BOOL FrtCmd_TowerAction(FrontierScriptContext *ctx) {
+    FrontierLaunchArgs *args = Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
     u16 command = FrontierScriptContext_ReadHalfWord(ctx);
     u32 value = FrontierScript_ReadVar(ctx);
     u16 *dst = FrontierScript_ReadVarPtr(ctx);
-    u8 *data = Frontier_GetData(**(void ***)script);
+    u8 *data = Frontier_GetData(ctx->frontierSystem->frontierWork);
 
     switch (command) {
     case 2:
@@ -20,7 +22,7 @@ BOOL FrtCmd_TowerAction(void *ctx) {
         break;
     case 0x2E:
         *dst = FrontierFieldSystem_AwardTowerBattlePoints(data);
-        GameStats_Add(Save_GameStats_Get(*(void **)((u8 *)args + 8)), 0x45, *dst);
+        GameStats_Add(Save_GameStats_Get(args->saveData), GAME_STAT_BATTLE_POINTS_RECEIVED, *dst);
         break;
     case 0x37:
         *dst = ov80_0223558C(data, (u8)value);
@@ -41,7 +43,7 @@ BOOL FrtCmd_TowerAction(void *ctx) {
         *dst = FrontierFieldSystem_GetBattleTowerMode(data);
         break;
     case 0x28:
-        BattleTower_GenerateOpponents(data, *(void **)((u8 *)args + 8));
+        BattleTower_GenerateOpponents(data, args->saveData);
         break;
     case 0x29:
         *dst = BattleTower_GetTrainerSprite(data, value);
@@ -50,10 +52,10 @@ BOOL FrtCmd_TowerAction(void *ctx) {
         BattleTower_SetPalmerDefeated(data, value);
         break;
     case 0x25:
-        FrontierFieldSystem_RecordSetLost(data, *(void **)((u8 *)args + 8));
+        FrontierFieldSystem_RecordSetLost(data, args->saveData);
         break;
     case 0x26:
-        FrontierFieldSystem_RecordSetWon(data, *(void **)((u8 *)args + 8));
+        FrontierFieldSystem_RecordSetWon(data, args->saveData);
         break;
     case 0x27:
         FrontierFieldSystem_SaveChallenge(data);
@@ -98,13 +100,12 @@ u32 ov80_0223558C(void *data, u32 mode) {
     return 0;
 }
 
-BOOL FrtCmd_TowerPrintTrainerMessage(void *ctx) {
-    u8 *script = ctx;
+BOOL FrtCmd_TowerPrintTrainerMessage(FrontierScriptContext *ctx) {
     u8 arg;
     u8 *data;
-    Frontier_GetLaunchArgs(**(void ***)ctx);
-    arg = *(*(u8 **)(script + 0x1C))++;
-    data = Frontier_GetData(**(void ***)ctx);
+    Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
+    arg = FrontierScriptContext_ReadByte(ctx);
+    data = Frontier_GetData(ctx->frontierSystem->frontierWork);
     if (data == NULL) {
         return FALSE;
     }
@@ -112,43 +113,41 @@ BOOL FrtCmd_TowerPrintTrainerMessage(void *ctx) {
     return TRUE;
 }
 
-BOOL FrtCmd_TowerFreeData(void *ctx) {
-    FrontierFieldSystem_Free(Frontier_GetData(**(void ***)ctx));
+BOOL FrtCmd_TowerFreeData(FrontierScriptContext *ctx) {
+    FrontierFieldSystem_Free(Frontier_GetData(ctx->frontierSystem->frontierWork));
     return FALSE;
 }
 
-BOOL FrtCmd_TowerStartBattle(void *ctx) {
-    u8 *script = ctx;
-    void *args = Frontier_GetLaunchArgs(**(void ***)ctx);
-    u8 *data = Frontier_GetData(**(void ***)ctx);
-    void *setup = BattleTower_NewBattleSetup(data, args);
+BOOL FrtCmd_TowerStartBattle(FrontierScriptContext *ctx) {
+    FrontierLaunchArgs *args = Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
+    u8 *data = Frontier_GetData(ctx->frontierSystem->frontierWork);
+    BattleSetup *setup = BattleTower_NewBattleSetup(data, args);
     *(void **)(data + 0x8D0) = setup;
-    Sound_SetSceneAndPlayBGM(5, 0x45D, 1);
-    Frontier_LaunchApplication(**(void ***)script, gOverlayTemplate_Battle, setup, 0, 0);
+    Sound_SetSceneAndPlayBGM(5, SEQ_GS_VS_TRAINER, 1);
+    Frontier_LaunchApplication(ctx->frontierSystem->frontierWork, &gOverlayTemplate_Battle, setup, 0, 0);
     return TRUE;
 }
 
-BOOL FrtCmd_TowerEndBattle(void *ctx) {
-    u8 *script = ctx;
-    u8 *data = Frontier_GetData(**(void ***)ctx);
+BOOL FrtCmd_TowerEndBattle(FrontierScriptContext *ctx) {
+    u8 *data = Frontier_GetData(ctx->frontierSystem->frontierWork);
     u16 *dst = FrontierScript_ReadVarPtr(ctx);
-    void *setup = *(void **)(data + 0x8D0);
-    *(u32 *)(data + 0x8CC) = IsBattleResultWin(*(u32 *)((u8 *)setup + 0x14));
+    BattleSetup *setup = *(void **)(data + 0x8D0);
+    *(u32 *)(data + 0x8CC) = IsBattleResultWin(setup->winFlag);
     *dst = *(u32 *)(data + 0x8CC);
     BattleSetup_Delete(setup);
     return FALSE;
 }
 
-BOOL FrtCmd_TowerSendLinkMessage(void *ctx) {
+BOOL FrtCmd_TowerSendLinkMessage(FrontierScriptContext *ctx) {
     u32 kind;
     u32 value;
     u8 *data;
     u16 *dst;
-    Frontier_GetLaunchArgs(**(void ***)ctx);
+    Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
     kind = FrontierScript_ReadVar(ctx);
     value = FrontierScript_ReadVar(ctx);
     dst = FrontierScript_ReadVarPtr(ctx);
-    data = Frontier_GetData(**(void ***)ctx);
+    data = Frontier_GetData(ctx->frontierSystem->frontierWork);
     if (kind == 2) {
         BattleTowerSetup_SetLinkFlag(data, value);
     } else {
@@ -163,22 +162,22 @@ BOOL FrtCmd_TowerSendLinkMessage(void *ctx) {
     return FALSE;
 }
 
-BOOL FrtCmd_TowerWaitLink(void *ctx) {
+BOOL FrtCmd_TowerWaitLink(FrontierScriptContext *ctx) {
     u16 first = FrontierScriptContext_ReadHalfWord(ctx);
     u16 second = FrontierScriptContext_ReadHalfWord(ctx);
-    *(u16 *)((u8 *)ctx + 0x78) = first;
-    *(u16 *)((u8 *)ctx + 0x7A) = second;
+    ctx->data[0] = first;
+    ctx->data[1] = second;
     FrontierScriptContext_Pause(ctx, FrontierScriptNative_WaitPartnerPacket);
     return TRUE;
 }
 
-BOOL FrontierScriptNative_WaitPartnerPacket(void *ctx) {
-    void *args = Frontier_GetLaunchArgs(**(void ***)ctx);
-    void *data = Frontier_GetData(**(void ***)ctx);
-    return FrontierScript_ReadPartnerPacket(ctx, data, *(void **)((u8 *)args + 8), *(u16 *)((u8 *)ctx + 0x78), *(u16 *)((u8 *)ctx + 0x7A)) == 1;
+BOOL FrontierScriptNative_WaitPartnerPacket(FrontierScriptContext *ctx) {
+    FrontierLaunchArgs *args = Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
+    void *data = Frontier_GetData(ctx->frontierSystem->frontierWork);
+    return FrontierScript_ReadPartnerPacket(ctx, data, args->saveData, ctx->data[0], ctx->data[1]) == 1;
 }
 
-BOOL FrontierScript_ReadPartnerPacket(void *ctx, void *data, void *fieldSystem, u32 mode, u16 value) {
+BOOL FrontierScript_ReadPartnerPacket(FrontierScriptContext *ctx, void *data, void *fieldSystem, u32 mode, u16 value) {
     void *remote = LinkSync_GetPacket(1 - Comm_GetLocalNetId());
     u16 *dst;
     if (remote == NULL) {

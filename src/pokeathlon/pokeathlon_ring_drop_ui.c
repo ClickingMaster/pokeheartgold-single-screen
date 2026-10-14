@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include "msgdata/msg/msg_0309.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_ring_drop.h"
 
 #include "assert.h"
@@ -31,7 +33,7 @@ struct PokeathlonRingDropUi {
     enum HeapID heapId;                                // 0x04
     SpriteSystem *spriteSystem;                        // 0x08
     SpriteManager *spriteManager;                      // 0x0C
-    void *resources;                                   // 0x10: the course sprite resources
+    PokeathlonCourseSpriteResources *resources;                                   // 0x10: the course sprite resources
     BgConfig *bgConfig;                                // 0x14
     MsgData *msgData;                                  // 0x18
     MessageFormat *msgFormat;                          // 0x1C
@@ -59,7 +61,7 @@ struct PokeathlonRingDropUi {
 void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, u32 participant, u32 member, void *info);
 void PokeathlonCourse_LoadMonIcon(void *sprite, void *info, u32 palette, u32 narc, u32 offset, u32 heapId);
 void PokeathlonCourse_LoadMonPic(void *sprite, void *info, u32 mainScreen, u32 palette, u32 heapId);
-Sprite *PokeathlonCourse_CreateTimerDigitSprite(void *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
+Sprite *PokeathlonCourse_CreateTimerDigitSprite(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
 
 // Sprite templates (resources 10001 and 10000) and the windows: name, next name, label.
 extern const ManagedSpriteTemplate gPokeathlonRingDropUiSpriteTemplate;
@@ -393,11 +395,11 @@ void PokeathlonRingDropUi_PrintNames(PokeathlonRingDropUi *ui) {
     FillWindowPixelBuffer(&ui->nameWindow, 0);
     name = PlayerProfile_GetPlayerName_NewString(PokeathlonCourse_GetPlayerProfileFromData(ui->course, ui->participant), ui->heapId);
     AddTextPrinterParameterizedWithColor(&ui->nameWindow, 0, name, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);
-    PokeathlonRingDropUi_PrintMessageAt(&ui->labelWindow, ui->msgFormat, ui->msgData, 304, ui->heapId, 2, 2);
+    PokeathlonRingDropUi_PrintMessageAt(&ui->labelWindow, ui->msgFormat, ui->msgData, msg_0309_00304, ui->heapId, 2, 2);
     String_Delete(name);
     CopyWindowToVram(&ui->nameWindow);
     BufferString(ui->msgFormat, 0, ui->memberNames[1], 2, 1, 2);
-    PokeathlonRingDropUi_PrintMessage(&ui->nextNameWindow, ui->msgFormat, ui->msgData, 154, ui->heapId);
+    PokeathlonRingDropUi_PrintMessage(&ui->nextNameWindow, ui->msgFormat, ui->msgData, msg_0309_00154, ui->heapId);
 }
 
 void PokeathlonRingDropUi_PrintMessage(Window *window, MessageFormat *msgFormat, MsgData *msgData, u32 msgId, enum HeapID heapId) {
@@ -522,7 +524,7 @@ void PokeathlonRingDropUi_PrintNextName(PokeathlonRingDropUi *ui, s32 member) {
     index = (member + 1) % RING_DROP_TEAM_SIZE;
     index = (u8)index;
     BufferString(ui->msgFormat, 0, ui->memberNames[index], 2, 1, 2);
-    PokeathlonRingDropUi_PrintMessage(&ui->nextNameWindow, ui->msgFormat, ui->msgData, 154, ui->heapId);
+    PokeathlonRingDropUi_PrintMessage(&ui->nextNameWindow, ui->msgFormat, ui->msgData, msg_0309_00154, ui->heapId);
 }
 
 void PokeathlonRingDropUi_SetPicPosition(PokeathlonRingDropUi *ui, s32 sprite, s32 x, s32 y) {

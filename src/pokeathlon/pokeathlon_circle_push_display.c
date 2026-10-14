@@ -5,6 +5,7 @@
 #include "constants/sndseq.h"
 
 #include "msgdata/msg/msg_0309.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -22,11 +23,11 @@
 
 // Sprite scene of the event and the course helpers (OVY_96, not yet tidied).
 void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, int participant, int member, PokeathlonCirclePushMonView *view);
-void PokeathlonCourseSpritePool_CreateSprite(void *scene, int priority, int whichScreen, int resId, int kind);
-void *PokeathlonCourseSpritePool_Take(void *scene, int resId, int kind);
-void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int shown, int draw);
-Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(void *sprite);
-SpriteResource **PokeathlonCourseSpritePool_GetResourceSlot(void *scene, int id, int type);
+void PokeathlonCourseSpritePool_CreateSprite(PokeathlonCourseSpritePool *scene, int priority, int whichScreen, int resId, int kind);
+PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_Take(PokeathlonCourseSpritePool *scene, int resId, int kind);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *sprite, int shown, int draw);
+Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(PokeathlonCourseSpritePoolSprite *sprite);
+SpriteResource **PokeathlonCourseSpritePool_GetResourceSlot(PokeathlonCourseSpritePool *scene, int id, int type);
 
 // The resource ids of the two picture sprites (102, 103) lie 0x20 bytes after the coordinates in
 // the read-only data of their defining file.
@@ -39,7 +40,7 @@ extern const u32 gPokeathlonCirclePushDisplayIdleAnims[3];
 
 #pragma force_active on
 
-void PokeathlonCirclePushDisplay_CreateSprites(void *scene, PokeathlonCirclePushDisplay *display) {
+void PokeathlonCirclePushDisplay_CreateSprites(PokeathlonCourseSpritePool *scene, PokeathlonCirclePushDisplay *display) {
     VecFx32 pos = { 0, 0, 0 };
     u8 x[4] = { gPokeathlonCirclePushNameplateCoords.x[0], gPokeathlonCirclePushNameplateCoords.x[1], gPokeathlonCirclePushNameplateCoords.x[2], gPokeathlonCirclePushNameplateCoords.x[3] };
     u8 y[4] = { gPokeathlonCirclePushNameplateCoords.y[0], gPokeathlonCirclePushNameplateCoords.y[1], gPokeathlonCirclePushNameplateCoords.y[2], gPokeathlonCirclePushNameplateCoords.y[3] };
@@ -206,7 +207,7 @@ void PokeathlonCirclePushDisplay_ResetAnim(PokeathlonCirclePushDisplay *display)
     PokeathlonCirclePushDisplayAnim_Stop(&display->anim);
 }
 
-void PokeathlonCirclePushDisplay_GetPicVramLocations(void *scene, PokeathlonCirclePushDisplay *display) {
+void PokeathlonCirclePushDisplay_GetPicVramLocations(PokeathlonCourseSpritePool *scene, PokeathlonCirclePushDisplay *display) {
     u32 ids[2] = { ((const u32 *)&gPokeathlonCirclePushNameplateCoords)[8], ((const u32 *)&gPokeathlonCirclePushNameplateCoords)[9] };
     u8 i;
 
@@ -597,7 +598,7 @@ void PokeathlonCirclePushDisplayAnim_SetupMatchup(PokeathlonCirclePushDisplayAni
 // Moves a picture along path[0] -> path[1] (frames 0-5), -> path[2] (5-45), -> path[3] (45-50).
 #pragma force_active on
 
-void PokeathlonCirclePushDisplayAnim_MovePicAlongPath(u8 frame, const VecFx32 *path, void *picSprite) {
+void PokeathlonCirclePushDisplayAnim_MovePicAlongPath(u8 frame, const VecFx32 *path, PokeathlonCourseSpritePoolSprite *picSprite) {
     fx32 startX;
     fx32 startY;
     fx32 x;
@@ -654,7 +655,7 @@ void PokeathlonCirclePushDisplayAnim_SetupMonPic(PokeathlonCirclePushDisplayAnim
 // Slides a picture in (frames 0-15), holds it (15-60) and slides it out (60-70).
 #pragma force_active on
 
-void PokeathlonCirclePushDisplayAnim_MovePicVertically(u8 frame, const PokeathlonCirclePushPicKeys *keys, void *picSprite) {
+void PokeathlonCirclePushDisplayAnim_MovePicVertically(u8 frame, const PokeathlonCirclePushPicKeys *keys, PokeathlonCourseSpritePoolSprite *picSprite) {
     s32 y;
     VecFx32 pos;
     Sprite *sprite;

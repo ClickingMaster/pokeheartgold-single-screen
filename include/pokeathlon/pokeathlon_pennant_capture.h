@@ -4,6 +4,7 @@
 #include "global.h"
 
 #include "pokeathlon/pokeathlon.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 
 #include "bg_window.h"
 #include "geometry_math.h"
@@ -33,9 +34,9 @@ typedef struct PokeathlonPennantCaptureMoveParams {
 typedef struct PokeathlonPennantCapturePlayer {
     void *monObjects[3];                              // 0x00: one course object per team member
     PokeathlonPennantCaptureMoveParams moveParams[3]; // 0x0C
-    void *carrySprite;                                // 0x48: shown above the Pokemon while active
+    PokeathlonCourseSpritePoolSprite *carrySprite;                                // 0x48: shown above the Pokemon while active
     void *pointSprites[2];                            // 0x4C: "+points" effects, used alternately
-    void *pennantSprite;                              // 0x54: pennant count change effect
+    PokeathlonCourseSpritePoolSprite *pennantSprite;                              // 0x54: pennant count change effect
     VecFx32 position;                                 // 0x58: field position (fx32)
     VecFx32 velocity;                                 // 0x64
     s16 drawOffsetY;                                  // 0x70
@@ -75,7 +76,7 @@ typedef struct PokeathlonPennantCapturePlayer {
 // An obstacle block (32 x 32 units).
 typedef struct PokeathlonPennantCaptureObstacle {
     void *object; // 0x00: NULL ends the list
-    void *sprite; // 0x04
+    PokeathlonCourseSpritePoolSprite *sprite; // 0x04
     u16 x;        // 0x08
     u16 y;        // 0x0A
 } PokeathlonPennantCaptureObstacle;
@@ -83,16 +84,16 @@ typedef struct PokeathlonPennantCaptureObstacle {
 // One of the ten two-sprite field objects; the CPU players head for them.
 typedef struct PokeathlonPennantCaptureFieldItem {
     void *object;       // 0x00: NULL ends the list
-    void *sprite;       // 0x04
-    void *shadowSprite; // 0x08
+    PokeathlonCourseSpritePoolSprite *sprite;       // 0x04
+    PokeathlonCourseSpritePoolSprite *shadowSprite; // 0x08
     u16 x;              // 0x0C
     u16 y;              // 0x0E
 } PokeathlonPennantCaptureFieldItem;
 
 typedef struct PokeathlonPennantCapturePennant {
     u32 active;       // 0x00
-    void *sprite;     // 0x04
-    void *poleSprite; // 0x08
+    PokeathlonCourseSpritePoolSprite *sprite;     // 0x04
+    PokeathlonCourseSpritePoolSprite *poleSprite; // 0x08
     u32 spot;         // 0x0C: index into PokeathlonPennantCapturePennants.spots
     u16 x;            // 0x10
     u16 y;            // 0x12
@@ -124,11 +125,11 @@ typedef struct PokeathlonPennantCapture {
     enum HeapID heapId;                                   // 0x014
     void *bgCharsFile;                                    // 0x018: the file bgChars points into
     NNSG2dCharacterData *bgChars;                         // 0x01C: the animated BG0 tiles (6 frames)
-    void *spritePool;                                     // 0x020
+    PokeathlonCourseSpritePool *spritePool;                                     // 0x020
     PokeathlonPennantCapturePlayer players[4];            // 0x024
     PokeathlonPennantCaptureTouch touches[4];             // 0x304: host: the participants' touch state
     BOOL dragging[4];                                     // 0x334: the touch started on the own Pokemon
-    void *monResources;                                   // 0x344: PokeathlonCourseSpriteResources
+    PokeathlonCourseSpriteResources *monResources;                                   // 0x344: PokeathlonCourseSpriteResources
     void *monObjects;                                     // 0x348: PokeathlonCourseMonObjects
     void *pickupEffects[4];                               // 0x34C: SEQ_SE_GS_THLON06, used in turn
     void *dropEffects[4];                                 // 0x35C: SEQ_SE_GS_SAA, used in turn
@@ -186,9 +187,9 @@ typedef struct PokeathlonPennantCaptureLinkData {
 
 // A participant's team member on the top screen.
 typedef struct PokeathlonPennantCaptureDisplayMon {
-    void *icon;      // 0x00
-    void *carryMark; // 0x04
-    void *frame;     // 0x08
+    PokeathlonCourseSpritePoolSprite *icon;      // 0x00
+    PokeathlonCourseSpritePoolSprite *carryMark; // 0x04
+    PokeathlonCourseSpritePoolSprite *frame;     // 0x08
     u8 active;       // 0x0C
     u8 unk0D[0xF];   // 0x0D
 } PokeathlonPennantCaptureDisplayMon;
@@ -231,7 +232,7 @@ typedef struct PokeathlonPennantCaptureDisplay {
     u32 picCharOffsets[2];                       // 0x120
     u32 picPlttOffsets[2];                       // 0x128
     void *picSprites[2];                         // 0x130
-    void *goalSprite;                            // 0x138
+    PokeathlonCourseSpritePoolSprite *goalSprite;                            // 0x138
     void *statusSprites[4][4];                   // 0x13C
     void *pointSprites[4][2];                    // 0x17C
     int picState;                                // 0x19C
@@ -371,8 +372,8 @@ void PokeathlonPennantCapture_UpdateOwnScore(PokeathlonCourseData *course);
 PokeathlonPennantCaptureDisplay *PokeathlonPennantCaptureDisplay_New(enum HeapID heapId, BgConfig *bgConfig, PokeathlonCourseData *course);
 void PokeathlonPennantCaptureDisplay_Delete(PokeathlonPennantCaptureDisplay *display);
 void PokeathlonPennantCaptureDisplay_LoadBgGfx(PokeathlonPennantCaptureDisplay *display);
-void PokeathlonPennantCaptureDisplay_LoadSpriteResources(PokeathlonPennantCaptureDisplay *display, void *pool);
-void PokeathlonPennantCaptureDisplay_CreateSprites(PokeathlonPennantCaptureDisplay *display, void *pool, void *resources);
+void PokeathlonPennantCaptureDisplay_LoadSpriteResources(PokeathlonPennantCaptureDisplay *display, PokeathlonCourseSpritePool *pool);
+void PokeathlonPennantCaptureDisplay_CreateSprites(PokeathlonPennantCaptureDisplay *display, PokeathlonCourseSpritePool *pool, PokeathlonCourseSpriteResources *resources);
 void PokeathlonPennantCaptureDisplay_LoadIcons(PokeathlonPennantCaptureDisplay *display, const PokeathlonPennantCaptureIconMon *mons);
 void PokeathlonPennantCaptureDisplay_LoadMonPics(PokeathlonPennantCaptureDisplay *display, const PokeathlonPennantCapturePicMon *mons);
 void PokeathlonPennantCaptureDisplay_LoadMonPicToVram(PokeathlonPennantCaptureDisplay *display, u32 slot, u32 member);
@@ -388,7 +389,7 @@ void PokeathlonPennantCaptureDisplay_ShowPoint(PokeathlonPennantCaptureDisplay *
 void PokeathlonPennantCaptureDisplay_PrintName(PokeathlonPennantCaptureDisplay *display, u32 member);
 
 // pokeathlon_pennant_capture_cpu.c
-void PokeathlonPennantCaptureDisplay_GetPicVramOffsets(void *pool, PokeathlonPennantCaptureDisplay *display);
+void PokeathlonPennantCaptureDisplay_GetPicVramOffsets(PokeathlonCourseSpritePool *pool, PokeathlonPennantCaptureDisplay *display);
 void PokeathlonPennantCaptureDisplay_InitWindow(PokeathlonPennantCaptureDisplay *display);
 void PokeathlonPennantCaptureDisplay_ShowStatus(void **sprites, int show);
 PokeathlonPennantCaptureCpu *PokeathlonPennantCaptureCpu_New(enum HeapID heapId, int cpuCount, int mode);

@@ -6,6 +6,7 @@
 
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0309.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_pennant_capture.h"
 
 #include "assert.h"
@@ -39,23 +40,23 @@ BOOL PokeathlonCourse_RunStartCountdown(PokeathlonCourseData *course);
 void PokeathlonCourse_UpdateTimeUpCountdown(PokeathlonCourseData *course, int timer);
 BOOL PokeathlonCourse_RunFinish(PokeathlonCourseData *course);
 void PokeathlonCourse_SetHudPlanes(PokeathlonCourseData *course, int planes);
-void **PokeathlonCourse_CreateHudSprites(PokeathlonCourseData *course, int baseY, void *resources, void *spriteList);
+void **PokeathlonCourse_CreateHudSprites(PokeathlonCourseData *course, int baseY, PokeathlonCourseSpriteResources *resources, SpriteList *spriteList);
 void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, int mon, int counter, int amount);
 void PokeathlonCourse_SetRecordScore(PokeathlonCourseData *course, u16 score);
-void PokeathlonCourseScoreList_Init(void *graphics);
-void PokeathlonCourse_AddScoreEntry(PokeathlonCourseData *course, void *graphics, int participant, int score, int idx, int digits, int msgno);
-void PokeathlonCourseScoreList_Rank(void *graphics, int mode);
-void PokeathlonCourseScoreList_AddPointsToTotals(void *graphics);
-void PokeathlonCourseScoreList_SaveEventPoints(void *graphics, int event);
-void *PokeathlonCourseSprites_CreateResources(enum HeapID heapId, int flags, int charVram);
-void PokeathlonCourseSprites_FreeResources(void *resources);
-void *PokeathlonCourse_CreateTimerDigitSprite(void *resources, void *spriteList, int priority, enum HeapID heapId);
-void *PokeathlonCourseSprites_CreateTimeUpCountdown(void *resources, void *spriteList, int priority, enum HeapID heapId);
-void *PokeathlonCourseMonObjects_Create(enum HeapID heapId, int count, int baseDrawPriority, void *resources, void *spriteList);
-void PokeathlonCourseMonObjects_Free(void *monPics);
+void PokeathlonCourseScoreList_Init(PokeathlonCourseScoreList *graphics);
+void PokeathlonCourse_AddScoreEntry(PokeathlonCourseData *course, PokeathlonCourseScoreList *graphics, int participant, int score, int idx, int digits, int msgno);
+void PokeathlonCourseScoreList_Rank(PokeathlonCourseScoreList *graphics, int mode);
+void PokeathlonCourseScoreList_AddPointsToTotals(PokeathlonCourseScoreList *graphics);
+void PokeathlonCourseScoreList_SaveEventPoints(PokeathlonCourseScoreList *graphics, int event);
+PokeathlonCourseSpriteResources *PokeathlonCourseSprites_CreateResources(enum HeapID heapId, int flags, int charVram);
+void PokeathlonCourseSprites_FreeResources(PokeathlonCourseSpriteResources *resources);
+Sprite *PokeathlonCourse_CreateTimerDigitSprite(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
+Sprite *PokeathlonCourseSprites_CreateTimeUpCountdown(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
+PokeathlonCourseMonObjects *PokeathlonCourseMonObjects_Create(enum HeapID heapId, int count, int baseDrawPriority, PokeathlonCourseSpriteResources *resources, SpriteList *spriteList);
+void PokeathlonCourseMonObjects_Free(PokeathlonCourseMonObjects *monPics);
 void PokeathlonCourseMonObjects_Load(void *monPics, int count, void *mons, void *params, int priority, int baseIndex);
-BOOL PokeathlonCourseMonObjects_IsLoaded(void *monPics);
-void PokeathlonCourseObjects_PauseAnims(void *monPics, int paused);
+BOOL PokeathlonCourseMonObjects_IsLoaded(PokeathlonCourseMonObjects *monPics);
+void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseObjects *monPics, int paused);
 void PokeathlonCourse_LoadMonIcon(ManagedSprite *sprite, void *mon, u16 plttId, NARC *narc, u32 offset, enum HeapID heapId);
 void PokeathlonEvent_CalcPoints(void *graphics, int event);
 
@@ -98,7 +99,7 @@ u32 PokeathlonBlockSmashMon_IsTired(PokeathlonBlockSmashMon *mon);
 u16 PokeathlonBlockSmashMon_GetGauge(PokeathlonBlockSmashMon *mon);
 u8 PokeathlonBlockSmashMon_GetActiveMemberIndex(PokeathlonBlockSmashMon *mon);
 u32 PokeathlonBlockSmashMon_CanHit(PokeathlonBlockSmashMon *mon);
-PokeathlonBlockSmashRivals *PokeathlonBlockSmashRivals_New(enum HeapID heapId, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonCourseData *course, void *monPics);
+PokeathlonBlockSmashRivals *PokeathlonBlockSmashRivals_New(enum HeapID heapId, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonCourseData *course, PokeathlonCourseMonObjects *monPics);
 void PokeathlonBlockSmashRivals_Delete(PokeathlonBlockSmashRivals *rivals);
 void PokeathlonBlockSmashRivals_Update(PokeathlonBlockSmashRivals *rivals);
 void PokeathlonBlockSmashRivals_Pause(PokeathlonBlockSmashRivals *rivals);
@@ -172,7 +173,7 @@ BOOL PokeathlonBlockSmash_Intro(PokeathlonCourseData *course, u8 *state) {
         PokeathlonBlockSmashBlocks_Update(work->blocks);
         if (PokeathlonBlockSmashBlocks_GetState(work->blocks) == 2) {
             PokeathlonBlockSmashBannerPosition position;
-            void *spriteList;
+            SpriteList *spriteList;
             position = gPokeathlonBlockSmashBannerPosition;
             spriteList = SpriteManager_GetSpriteList(work->spriteManager);
             PokeathlonCourse_CreateStartSprites(course, 0, work->iconResources, spriteList, 1, 1, &position);
@@ -448,12 +449,12 @@ BOOL PokeathlonBlockSmash_Draw(PokeathlonCourseData *course) {
 
 // Event template entry 2.
 BOOL PokeathlonBlockSmash_ShowResults(PokeathlonCourseData *course) {
-    void *graphics = PokeathlonCourse_GetGraphicsSystem(course);
+    PokeathlonCourseScoreList *graphics = PokeathlonCourse_GetGraphicsSystem(course);
     int i;
     PokeathlonCourseScoreList_Init(graphics);
     for (i = 0; i < 4; i++) {
         u16 value = PokeathlonCourse_GetField5F0_AtIndex(course, (u8)i);
-        PokeathlonCourse_AddScoreEntry(course, graphics, i, value, 0, 3, 294);
+        PokeathlonCourse_AddScoreEntry(course, graphics, i, value, 0, 3, msg_0309_00294);
     }
     PokeathlonCourseScoreList_Rank(graphics, 1);
     PokeathlonEvent_CalcPoints(graphics, 3);

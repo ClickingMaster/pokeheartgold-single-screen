@@ -5,6 +5,7 @@
 
 #include "pokeathlon/pokeathlon.h"
 #include "pokeathlon/pokeathlon_course_objects.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 
 #include "bg_window.h"
 #include "filesystem.h"
@@ -20,17 +21,17 @@
 
 // Banner of an event (NARC a/2/2/1 members by event, msg 309 names): picture on sub BG 3, name
 // and place windows.
-typedef struct PokeathlonEventBanner {
+struct PokeathlonEventBanner {
     enum HeapID heapId;  // 0x00
     BgConfig *bgConfig;  // 0x04
     u32 event;           // 0x08
     NARC *narc;          // 0x0C
     Window nameWindow;   // 0x10
     Window placeWindow;  // 0x20
-} PokeathlonEventBanner; // size: 0x30
+}; // size: 0x30
 
 // The message box of the commentator (msg 309, and msg 311 for the lines of the NPC teams).
-typedef struct PokeathlonCourseMessageBox {
+struct PokeathlonCourseMessageBox {
     BgConfig *bgConfig;       // 0x00
     MessageFormat *msgFormat; // 0x04
     MsgData *msgData;         // 0x08: msg 309
@@ -47,7 +48,7 @@ typedef struct PokeathlonCourseMessageBox {
     u32 unk34_27 : 1;
     u32 busy : 1;
     u32 unk34_29 : 3;
-} PokeathlonCourseMessageBox; // size: 0x38
+}; // size: 0x38
 
 // Defined in pokeathlon_event_intro.c.
 void PokeathlonCourse_LoadSpritePalette(ManagedSprite *sprite, NarcId narcId, int fileId, BOOL mainScreen, BOOL grayScale, enum HeapID heapId);

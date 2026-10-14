@@ -2,6 +2,7 @@
 #include "global.h"
 
 #include "pokeathlon/pokeathlon_circle_push_display.h"
+#include "pokeathlon/pokeathlon_course_types_def.h"
 
 #include "sprite.h"
 
@@ -23,15 +24,15 @@ static const PokeathlonCirclePushPicIds sPicResIds3 = { { 0x66, 0x67 } };
 
 // Sprite pool helpers (pokeathlon_course_objects.c), declared with untyped entries and the argument
 // types this caller passes.
-void PokeathlonCourseSpritePool_CreateSprite(void *pool, u8 priority, u8 whichScreen, u8 resId, u8 kind);
-void *PokeathlonCourseSpritePool_Take(void *pool, u8 resId, u8 kind);
-Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(void *entry);
-void PokeathlonCourseSpritePoolSprite_Show(void *entry, BOOL shown, BOOL draw);
+void PokeathlonCourseSpritePool_CreateSprite(PokeathlonCourseSpritePool *pool, u8 priority, u8 whichScreen, u8 resId, u8 kind);
+PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_Take(PokeathlonCourseSpritePool *pool, u8 resId, u8 kind);
+Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(PokeathlonCourseSpritePoolSprite *entry);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *entry, BOOL shown, BOOL draw);
 
-void PokeathlonCirclePushDisplay_CreatePicSprites(void *pool, PokeathlonCirclePushDisplay *display);
+void PokeathlonCirclePushDisplay_CreatePicSprites(PokeathlonCourseSpritePool *pool, PokeathlonCirclePushDisplay *display);
 
 // The two picture sprites of the top screen, at x 64 and 192.
-void PokeathlonCirclePushDisplay_CreatePicSprites(void *pool, PokeathlonCirclePushDisplay *display) {
+void PokeathlonCirclePushDisplay_CreatePicSprites(PokeathlonCourseSpritePool *pool, PokeathlonCirclePushDisplay *display) {
     PokeathlonCirclePushPicIds resIds = sPicResIds;
     PokeathlonCirclePushPicIds kinds = sPicKinds;
     int i;

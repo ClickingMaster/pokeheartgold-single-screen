@@ -1712,9 +1712,9 @@ void BattleCastlePartyApp_RedrawMonHp(BattleCastlePartyApp *app, Window *window,
 }
 
 void BattleCastlePartyApp_PrintChoosePrompt(BattleCastlePartyApp *app) {
-    app->printerId = BattleCastlePartyApp_PrintMessage(app, &app->windows[1], 6, 0, 5, 0xFF, 1, 2, 0, 0); // "EXIT"
+    app->printerId = BattleCastlePartyApp_PrintMessage(app, &app->windows[1], msg_0031_00006, 0, 5, 0xFF, 1, 2, 0, 0); // "EXIT"
     BattleCastle_DrawWindowFrame(&app->windows[7], Options_GetFrame(app->options));
-    app->printerId = BattleCastlePartyApp_PrintMessage(app, &app->windows[7], 5, 1, 1, 0xFF, 1, 2, 15, 1); // "Please choose your Pokémon."
+    app->printerId = BattleCastlePartyApp_PrintMessage(app, &app->windows[7], msg_0031_00005, 1, 1, 0xFF, 1, 2, 15, 1); // "Please choose your Pokémon."
 }
 
 void BattleCastlePartyApp_HideChoosePrompt(BattleCastlePartyApp *app) {
@@ -2560,7 +2560,7 @@ void BattleCastlePartyApp_GiveRentalItem(BattleCastlePartyApp *app, int slot, u1
     BattleCastleSprite_SetDrawFlag(app->heldItemIcons[BattleCastle_GetMonIndex(app->numMons, slot)], TRUE);
     BattleCastlePartyApp_BufferMonNickname(app, 0, Mon_GetBoxMon(mon));
     BufferItemName(app->msgFormat, 1, itemId);
-    app->printerId = BattleCastlePartyApp_ShowMessage(app, 59, 1); // "{mon} was given the {item} to hold."
+    app->printerId = BattleCastlePartyApp_ShowMessage(app, msg_0031_00059, 1); // "{mon} was given the {item} to hold."
     PlaySE(SEQ_SE_DP_UG_020);
 }
 
@@ -2593,7 +2593,7 @@ void BattleCastlePartyApp_PrintCastlePoints(BattleCastlePartyApp *app, Window *w
         points = BattleCastle_GetPointsStat(app->frontierType);
         points = FrontierSave_GetStat(app->frontierSave, points, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(app->frontierType)));
         BattleCastlePartyApp_BufferNumber(app, 0, points, 4, 0);
-        app->printerId = BattleCastlePartyApp_AddMessage(app, window, 2, x, y, 0xFF, 1, 2, 0, 0); // "{points} CP"
+        app->printerId = BattleCastlePartyApp_AddMessage(app, window, msg_0031_00002, x, y, 0xFF, 1, 2, 0, 0); // "{points} CP"
     } else {
         int rightPoints;
         int leftPoints;
@@ -2610,9 +2610,9 @@ void BattleCastlePartyApp_PrintCastlePoints(BattleCastlePartyApp *app, Window *w
             rightPoints = FrontierSave_GetStat(app->frontierSave, points, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(app->frontierType)));
         }
         BattleCastlePartyApp_BufferNumber(app, 0, leftPoints, 4, 0);
-        BattleCastlePartyApp_PrintExpandedMessage(app, window, app->msgData, 2, 112, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 1);
+        BattleCastlePartyApp_PrintExpandedMessage(app, window, app->msgData, msg_0031_00002, 112, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 1);
         BattleCastlePartyApp_BufferNumber(app, 0, rightPoints, 4, 0);
-        BattleCastlePartyApp_PrintExpandedMessage(app, window, app->msgData, 3, 240, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 1);
+        BattleCastlePartyApp_PrintExpandedMessage(app, window, app->msgData, msg_0031_00003, 240, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 1);
     }
     ScheduleWindowCopyToVram(window);
 }

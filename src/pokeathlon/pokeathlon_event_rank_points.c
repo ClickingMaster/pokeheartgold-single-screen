@@ -1,5 +1,6 @@
 #include "global.h"
 
+#include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_event_points.h"
 
 // Points by rank (100, 80, 70, 60); tied participants get the points of the lowest of their places. Every point
@@ -7,11 +8,11 @@
 extern const u8 gPokeathlonEventRankPoints[4];
 
 // PokeathlonCourseScoreList_GetRanked (pokeathlon_course_internal.h)
-PokeathlonEventPointsEntry *PokeathlonCourseScoreList_GetRanked(void *list, int index);
+PokeathlonEventPointsEntry *PokeathlonCourseScoreList_GetRanked(PokeathlonCourseScoreList *list, int index);
 
 #pragma force_active on
 
-void PokeathlonEvent_CalcRankPoints(void *list) {
+void PokeathlonEvent_CalcRankPoints(PokeathlonCourseScoreList *list) {
     u8 ranks[4];
     u8 ties[4];
     u8 table[4];
