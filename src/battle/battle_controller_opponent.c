@@ -13,6 +13,7 @@
 
 #include "battle/battle.h"
 #include "battle/battle_022378C0.h"
+#include "battle/battle_anim_ball.h"
 #include "battle/battle_pokepic_bob.h"
 #include "battle/battle_anim_internal.h"
 #include "battle/battle_controller.h"
@@ -69,41 +70,6 @@ typedef struct BattleItemInput {
 
 // Functions of other modules no header declares yet.
 void Sound_SetKeepPlayingCries(u8 value);
-
-// Overlay 7 (battle animations) functions no header declares yet.
-typedef struct BattlePokeballOpenArgs {
-    int battlerType;
-    int ball;
-    Pokemon *mon;
-} BattlePokeballOpenArgs;
-
-typedef struct BattleEmitterParams {
-    u32 index;
-    s32 unk_04;
-} BattleEmitterParams;
-
-void *BallSealEffect_New(enum HeapID heapID, BattlePokeballOpenArgs *args);
-void BallSealEffect_LoadResources(void *ballOpenEffect);
-int BallSealEffect_IsLoaded(void *ballOpenEffect);
-void BallSealEffect_Start(void *ballOpenEffect);
-BOOL BallSealEffect_IsActive(void *ballOpenEffect);
-void BallSealEffect_Free(void *ballOpenEffect);
-BOOL BallThrow_IsActive(BallThrow *ballData);
-BOOL BallThrow_HasOpened(BallThrow *ballData);
-void BallThrow_SetMode(BallThrow *ballData, u32 mode);
-void BallThrow_SetDrawFlag(BallThrow *ballData, int flag);
-void BallThrow_SetPosition(BallThrow *ballData, s16 x, s16 y);
-void BallThrow_SetAnimateSprite(BallThrow *ballData, u32 animate);
-void BallThrow_SetDrawPriority(BallThrow *ballData, u16 priority);
-void BallThrow_SetPriority(BallThrow *ballData, int priority);
-void BallThrow_SetDelay(BallThrow *ballData, s32 delay);
-void *BattleAnimEmitterManager_New(enum HeapID heapID, s32 a1);
-void *BattleAnimEmitterManager_AddEmitter(void *emitterManager, BattleEmitterParams *params);
-void BattleAnimEmitterManager_Free(void *emitterManager);
-void BattleAnimEmitterManager_StopAll(void *emitterManager);
-void BattleAnimEmitter_Start(void *emitter);
-u32 BattleAnimEmitter_IsActive(void *emitter);
-s16 BattleAnimUtil_GetBattlerTypeCoord(u32 battlerType, u32 index);
 
 extern const s16 gBattlerSlideInTargetX[][2];
 // Pokemon/trainer positions (x, y, z) by battler type: [0] on the field, [1] off screen where a slide-in starts.
@@ -534,9 +500,9 @@ void BattleBagMenu_Create(BattleBagMenuArgs *args);
 // Task data of the command workers.
 typedef struct OpponentEncounterAnimWork {
     BattleSystem *battleSystem;
-    void *emitterManager;
-    void *firstEmitter;
-    void *secondEmitter;
+    BattleAnimEmitterManager *emitterManager;
+    BattleAnimEmitter *firstEmitter;
+    BattleAnimEmitter *secondEmitter;
     u32 unk_10;
     u8 state;
     u8 timer;
@@ -572,7 +538,7 @@ typedef struct OpponentPokepicAnimParams {
 typedef struct OpponentPokemonSendOutWork {
     BattleSystem *battleSystem;
     OpponentData *opponentData;
-    void *ballOpenEffect;
+    BallSealEffect *ballOpenEffect;
     BallThrow *ballData;
     BattleAnimBattlerSprites *battlerSprites;
     PokepicTemplate pokepicTemplate;
@@ -3279,7 +3245,7 @@ void Task_GiratinaEncounter(SysTask *task, void *data) {
 void Task_PokemonSlideIn(SysTask *task, void *data) {
     OpponentPokemonSendOutWork *work = data;
     MoveAnimData animData;
-    BattlePokeballOpenArgs openArgs;
+    BallSealEffectTemplate openArgs;
     PokepicAnimScript scripts[10];
 
     switch (work->state) {
@@ -3520,7 +3486,7 @@ void Task_PokemonSendOut(SysTask *task, void *data) {
     MoveAnimData unsubstituteAnimData;
     BallThrowParams ballParams;
     PokepicAnimScript scripts[10];
-    BattlePokeballOpenArgs openArgs;
+    BallSealEffectTemplate openArgs;
     u8 state;
 
     animSystem = (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem);
@@ -6206,7 +6172,7 @@ void Task_PlayEncounterAnimation(SysTask *task, void *data) {
     PaletteData *palette;
     int terrain;
     u32 color;
-    BattleEmitterParams emitter;
+    BattleAnimEmitterTemplate emitter;
     u16 *dest;
     u16 i;
 
@@ -6220,11 +6186,11 @@ void Task_PlayEncounterAnimation(SysTask *task, void *data) {
     case 0:
         work->emitterManager = BattleAnimEmitterManager_New(HEAP_ID_BATTLE, 0);
         terrain = gBattleEncounterTerrains[terrain];
-        emitter.index = terrain;
-        emitter.unk_04 = 1;
+        emitter.resourceId = terrain;
+        emitter.perspective = 1;
         work->firstEmitter = BattleAnimEmitterManager_AddEmitter(work->emitterManager, &emitter);
-        emitter.index = terrain + 1;
-        emitter.unk_04 = 1;
+        emitter.resourceId = terrain + 1;
+        emitter.perspective = 1;
         work->secondEmitter = BattleAnimEmitterManager_AddEmitter(work->emitterManager, &emitter);
         BattleAnimEmitter_Start(work->firstEmitter);
         PlaySE(SEQ_SE_DP_PASA2);
