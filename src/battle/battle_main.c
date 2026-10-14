@@ -944,7 +944,7 @@ void Task_UpdateCriticalHpMusic(SysTask *task, void *data) {
     if (flag & 2) {
         if (flag & 1) {
             StopSE(SEQ_SE_DP_HINSI, 0);
-            BattleSystem_SetCriticalHpMusicFlag(battleSystem, 2);
+            BattleSystem_SetCriticalHpMusicFlag(battleSystem, CRITICAL_MUSIC_OFF);
         }
         return;
     }
@@ -1054,7 +1054,7 @@ void Battle_LinkInit(OverlayManager *man, BattleSetup *setup) {
     String_Delete(string);
     DestroyMsgData(msgData);
     Main_SetVBlankIntrCB(Battle_LinkVBlankCallback, work);
-    PaletteData_BeginPaletteFade(work->palette, 5, 0xFFFF, 0, 0x10, 0, 0);
+    PaletteData_BeginPaletteFade(work->palette, PLTTBUF_MAIN_BG_F | PLTTBUF_MAIN_OBJ_F, 0xFFFF, 0, 0x10, 0, 0);
     work->waitingIcon = WaitingIcon_New(work->window, 1);
     Battle_CreateWirelessStatusIcon();
 }
@@ -1261,7 +1261,7 @@ common:
             work->timer = 0;
             work->state++;
             if (work->state == 33) {
-                PaletteData_BeginPaletteFade(work->palette, 5, 0xFFFF, 0, 0, 0x10, 0);
+                PaletteData_BeginPaletteFade(work->palette, PLTTBUF_MAIN_BG_F | PLTTBUF_MAIN_OBJ_F, 0xFFFF, 0, 0, 0x10, 0);
             }
         } else {
             work->timer++;

@@ -529,7 +529,7 @@ int BattlePartyMenu_Setup(BattlePartyMenu *menu) {
     }
     BattlePartyMenu_SetPageCursor(menu, menu->page);
     BattlePartyMenu_DrawExpBar(menu, menu->page);
-    PaletteData_BeginPaletteFade(menu->paletteData, 10, 0xFFFF, -8, 16, 0, 0);
+    PaletteData_BeginPaletteFade(menu->paletteData, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -8, 16, 0, 0);
     return nextState;
 }
 
@@ -1077,7 +1077,7 @@ int BattlePartyMenu_AnimateRestoreAllPP(BattlePartyMenu *menu) {
 }
 
 int BattlePartyMenu_StartFadeOut(BattlePartyMenu *menu) {
-    PaletteData_BeginPaletteFade(menu->paletteData, 10, 0xFFFF, -8, 0, 16, 0);
+    PaletteData_BeginPaletteFade(menu->paletteData, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -8, 0, 16, 0);
     return 26;
 }
 

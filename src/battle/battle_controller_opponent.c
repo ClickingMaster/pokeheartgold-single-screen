@@ -27,6 +27,7 @@
 #include "msgdata/msg/msg_0197.h"
 
 #include "brightness.h"
+#include "camera.h"
 #include "filesystem.h"
 #include "heap.h"
 #include "move.h"
@@ -4903,8 +4904,8 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
     case 0:
         work->key = BattleInput_GetKeyPressed(BattleSystem_GetBattleInput(work->battleSystem));
         PaletteBlink_SetState(BattleSystem_GetMessageIcon(work->battleSystem), 1);
-        PaletteData_BeginPaletteFade(palette, 5, 0xC00, -8, 0, 7, 0);
-        PaletteData_BeginPaletteFade(palette, 10, 0xFFFF, -8, 0, 16, 0);
+        PaletteData_BeginPaletteFade(palette, PLTTBUF_MAIN_BG_F | PLTTBUF_MAIN_OBJ_F, 0xC00, -8, 0, 7, 0);
+        PaletteData_BeginPaletteFade(palette, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -8, 0, 16, 0);
         work->state++;
         break;
     case 1:
@@ -5001,8 +5002,8 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
     case 6:
         BattleSystem_RestoreInputAfterSubMenu(work->battleSystem);
         BattleInput_SetKeyPressed(BattleSystem_GetBattleInput(work->battleSystem), work->key);
-        PaletteData_BeginPaletteFade(palette, 5, 0xC00, -8, 7, 0, 0);
-        PaletteData_BeginPaletteFade(palette, 10, 0xFFFF, -8, 16, 0, 0);
+        PaletteData_BeginPaletteFade(palette, PLTTBUF_MAIN_BG_F | PLTTBUF_MAIN_OBJ_F, 0xC00, -8, 7, 0, 0);
+        PaletteData_BeginPaletteFade(palette, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -8, 16, 0, 0);
         work->state++;
         break;
     case 7:
@@ -5413,8 +5414,8 @@ void Task_PlayerShowMonList(SysTask *task, void *data) {
     }
         work->key = BattleInput_GetKeyPressed(BattleSystem_GetBattleInput(work->battleSystem));
         PaletteBlink_SetState(BattleSystem_GetMessageIcon(work->battleSystem), 1);
-        PaletteData_BeginPaletteFade(palette, 5, 0xC00, -8, 0, 7, 0);
-        PaletteData_BeginPaletteFade(palette, 10, 0xFFFF, -8, 0, 16, 0);
+        PaletteData_BeginPaletteFade(palette, PLTTBUF_MAIN_BG_F | PLTTBUF_MAIN_OBJ_F, 0xC00, -8, 0, 7, 0);
+        PaletteData_BeginPaletteFade(palette, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -8, 0, 16, 0);
         work->state++;
         break;
     case 1:
@@ -5517,8 +5518,8 @@ void Task_PlayerShowMonList(SysTask *task, void *data) {
         }
         BattleSystem_RestoreInputAfterSubMenu(work->battleSystem);
         BattleInput_SetKeyPressed(BattleSystem_GetBattleInput(work->battleSystem), work->partyMenu->key);
-        PaletteData_BeginPaletteFade(palette, 5, 0xC00, -8, 7, 0, 0);
-        PaletteData_BeginPaletteFade(palette, 10, 0xFFFF, -8, 16, 0, 0);
+        PaletteData_BeginPaletteFade(palette, PLTTBUF_MAIN_BG_F | PLTTBUF_MAIN_OBJ_F, 0xC00, -8, 7, 0, 0);
+        PaletteData_BeginPaletteFade(palette, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -8, 16, 0, 0);
         work->state++;
         break;
     case 3:
@@ -5788,7 +5789,7 @@ void Task_PlayMoveAnimation(SysTask *task, void *data) {
         work->state++;
         return;
     case 4:
-        BattleSystem_SetCriticalHpMusicFlag(work->battleSystem, 2);
+        BattleSystem_SetCriticalHpMusicFlag(work->battleSystem, CRITICAL_MUSIC_OFF);
         if (work->disableHpBar) {
             BattleSystem_SetHpBarDisabled(work->battleSystem);
         }
@@ -6019,7 +6020,7 @@ void Task_FadeOutBattle(SysTask *task, void *data) {
     switch (work->state) {
     case 0:
         PaletteBlink_SetState(BattleSystem_GetMessageIcon(work->battleSystem), 1);
-        PaletteData_BeginPaletteFade(palette, 0xF, 0xFFFF, 1, 0, 16, 0);
+        PaletteData_BeginPaletteFade(palette, PLTTBUF_MAIN_BG_F | PLTTBUF_SUB_BG_F | PLTTBUF_MAIN_OBJ_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, 1, 0, 16, 0);
         Pokepic_StartPaletteFadeAll(pokepicManager, 0, 16, 0, 0);
         GF_SndStartFadeOutBGM(0, 16);
         work->state++;
@@ -6187,18 +6188,18 @@ void Task_PlayEncounterAnimation(SysTask *task, void *data) {
         work->emitterManager = BattleAnimEmitterManager_New(HEAP_ID_BATTLE, 0);
         terrain = gBattleEncounterTerrains[terrain];
         emitter.resourceId = terrain;
-        emitter.perspective = 1;
+        emitter.perspective = CAMERA_PERSPECTIVE_TYPE_ORTHOGRAPHIC;
         work->firstEmitter = BattleAnimEmitterManager_AddEmitter(work->emitterManager, &emitter);
         emitter.resourceId = terrain + 1;
-        emitter.perspective = 1;
+        emitter.perspective = CAMERA_PERSPECTIVE_TYPE_ORTHOGRAPHIC;
         work->secondEmitter = BattleAnimEmitterManager_AddEmitter(work->emitterManager, &emitter);
         BattleAnimEmitter_Start(work->firstEmitter);
         PlaySE(SEQ_SE_DP_PASA2);
         work->state = 1;
     case 1:
         if (work->timer == 10) {
-            PaletteData_BeginPaletteFade(palette, 1, 0xF3FF, 0, 0, 16, (u16)color);
-            PaletteData_BeginPaletteFade(palette, 4, 0x3FFF, 0, 0, 16, (u16)color);
+            PaletteData_BeginPaletteFade(palette, PLTTBUF_MAIN_BG_F, 0xF3FF, 0, 0, 16, (u16)color);
+            PaletteData_BeginPaletteFade(palette, PLTTBUF_MAIN_OBJ_F, 0x3FFF, 0, 0, 16, (u16)color);
         }
         if (work->timer >= 10 && work->fadeStep < 16) {
             work->fadeStep++;
@@ -6221,12 +6222,12 @@ void Task_PlayEncounterAnimation(SysTask *task, void *data) {
         }
         if (work->timer == 28) {
             RESTORE_BG_PALETTES();
-            PaletteData_BeginPaletteFade(palette, 1, 0xF3FF, 0, 16, 0, (u16)color);
-            PaletteData_BeginPaletteFade(palette, 4, 0x3FFF, 0, 16, 0, (u16)color);
-            PaletteData_BeginPaletteFade(palette, 10, 0xFFFF, 0, 16, 0, (u16)color);
+            PaletteData_BeginPaletteFade(palette, PLTTBUF_MAIN_BG_F, 0xF3FF, 0, 16, 0, (u16)color);
+            PaletteData_BeginPaletteFade(palette, PLTTBUF_MAIN_OBJ_F, 0x3FFF, 0, 16, 0, (u16)color);
+            PaletteData_BeginPaletteFade(palette, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, 0, 16, 0, (u16)color);
         }
         if (work->timer >= 50) {
-            PaletteData_BeginPaletteFade(palette, 1, 0xC00, 0, 16, 0, 0);
+            PaletteData_BeginPaletteFade(palette, PLTTBUF_MAIN_BG_F, 0xC00, 0, 16, 0, 0);
             work->state++;
         }
         break;
@@ -6247,9 +6248,9 @@ void Task_PlayEncounterAnimation(SysTask *task, void *data) {
         work->state++;
     case 5:
         RESTORE_BG_PALETTES();
-        PaletteData_BeginPaletteFade(palette, 1, 0xFFFF, 0, 0, 0, 0x7FFF);
-        PaletteData_BeginPaletteFade(palette, 4, 0x3FFF, 0, 0, 0, 0xFFFF);
-        PaletteData_BeginPaletteFade(palette, 10, 0xFFFF, 0, 0, 0, 0x7FFF);
+        PaletteData_BeginPaletteFade(palette, PLTTBUF_MAIN_BG_F, 0xFFFF, 0, 0, 0, 0x7FFF);
+        PaletteData_BeginPaletteFade(palette, PLTTBUF_MAIN_OBJ_F, 0x3FFF, 0, 0, 0, 0xFFFF);
+        PaletteData_BeginPaletteFade(palette, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, 0, 0, 0, 0x7FFF);
         work->state = 3;
         break;
     }
@@ -6260,7 +6261,7 @@ void Task_SelectMoveToForget(SysTask *task, void *data) {
     PaletteData *palette = BattleSystem_GetPaletteData(work->battleSystem);
     switch (work->state) {
     case 0:
-        PaletteData_BeginPaletteFade(palette, 0xA, 0xFFFF, -8, 0, 16, 0);
+        PaletteData_BeginPaletteFade(palette, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -8, 0, 16, 0);
         work->state++;
         break;
     case 1:
@@ -6285,7 +6286,7 @@ void Task_SelectMoveToForget(SysTask *task, void *data) {
     case 2:
         if (work->partyMenu->done) {
             BattleSystem_RestoreInputAfterSubMenu(work->battleSystem);
-            PaletteData_BeginPaletteFade(palette, 0xA, 0xFFFF, -8, 16, 0, 0);
+            PaletteData_BeginPaletteFade(palette, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -8, 16, 0, 0);
             work->state++;
         }
         break;

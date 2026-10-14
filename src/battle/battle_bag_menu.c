@@ -310,7 +310,7 @@ int BattleBagMenu_Setup(BattleBagMenu *menu) {
     }
     BattleBagMenu_SetPageCursor(menu, menu->page);
     BattleBagMenu_UpdateTutorialFinger(menu, menu->page);
-    PaletteData_BeginPaletteFade(menu->paletteData, 10, 0xFFFF, -8, 16, 0, 0);
+    PaletteData_BeginPaletteFade(menu->paletteData, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -8, 16, 0, 0);
     if (menu->context->isTutorial == 1) {
         return 12;
     }
@@ -604,7 +604,7 @@ int BattleBagMenu_WaitButtonAnim(const BattleBagMenu *menu) {
 }
 
 int BattleBagMenu_StartFadeOut(BattleBagMenu *menu) {
-    PaletteData_BeginPaletteFade(menu->paletteData, 10, 0xFFFF, -8, 0, 16, 0);
+    PaletteData_BeginPaletteFade(menu->paletteData, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -8, 0, 16, 0);
     return 14;
 }
 
