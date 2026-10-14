@@ -175,7 +175,7 @@ BOOL WiFiPlazaGameEntry_Register(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork 
             break;
         }
         if (closeMenu == 1) {
-            WiFiPlazaRoom_CloseList(room, 0, 0);
+            WiFiPlazaRoom_CloseList(room, NULL, NULL);
             WiFiPlazaGameEntry_FreeMenu(entry, room);
         }
         break;
@@ -574,7 +574,7 @@ BOOL WiFiPlazaGameEntry_ReadSign(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork 
     u32 game;
     u32 msgId;
     WiFiPlazaGameStatus *newStatus;
-    void *objManager;
+    WiFiPlazaObjManager *objManager;
 
     switch (WiFiPlazaPlayerState_GetStep(state)) {
     case 0:

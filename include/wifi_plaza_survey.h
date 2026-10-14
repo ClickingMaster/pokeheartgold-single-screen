@@ -33,7 +33,7 @@ enum WiFiPlazaSurveyMode {
 // Arguments built by OVY_45.
 typedef struct WiFiPlazaSurveyArgs {
     SaveData *saveData;
-    void *lobby;
+    struct WiFiPlazaWork *lobby;
     int mode;
 } WiFiPlazaSurveyArgs;
 
@@ -62,7 +62,7 @@ typedef struct WiFiPlazaSurveyMessages {
     MessageFormat *format;
     String *expanded;
     String *raw;
-    void *lobby;
+    struct WiFiPlazaWork *lobby;
 } WiFiPlazaSurveyMessages; // size: 0x34
 
 typedef struct WiFiPlazaSurveyMessageBox {
@@ -118,19 +118,19 @@ typedef struct WiFiPlazaSurveyWork {
 } WiFiPlazaSurveyWork; // size: 0x28C
 
 // The OVY_45 lobby has no public header.
-extern BOOL WiFiPlazaWork_IsClosing(void *lobby);
-extern void WiFiPlazaWork_SetAppQuitForClosing(void *lobby);
-extern void WiFiPlazaWork_SetLowVolume(void *lobby, int value);
-extern int WiFiPlazaWork_GetOwnSlot(void *lobby);
-extern void *WiFiPlazaWork_GetPlayer(void *lobby, u32 index);
-extern void *WiFiPlazaWork_GetMyPlayer(void *lobby);
-extern void WiFiPlazaWork_SetSurveyAnswer(void *lobby, u32 surveyId, u32 answer);
-extern void WiFiPlazaPlayer_CopyToProfile(void *player, PlayerProfile *profile, enum HeapID heapID);
-extern void *WiFiPlazaPlayer_GetRawLanguage(void *player);
-extern void WiFiPlazaPlayer_GetSurvey(void *player, WiFiPlazaSurveyAnswerRecord *record);
-extern int WiFiPlazaWork_IsSpecialVisitor(void *lobby, int value);
-extern void WiFiPlazaWork_SetSurveyTally(void *lobby, const WiFiPlazaSurveyTally *tally);
-extern BOOL WiFiPlazaWork_GetSurveyTally(void *lobby, WiFiPlazaSurveyTally *tally);
+extern BOOL WiFiPlazaWork_IsClosing(struct WiFiPlazaWork *lobby);
+extern void WiFiPlazaWork_SetAppQuitForClosing(struct WiFiPlazaWork *lobby);
+extern void WiFiPlazaWork_SetLowVolume(struct WiFiPlazaWork *lobby, int value);
+extern int WiFiPlazaWork_GetOwnSlot(struct WiFiPlazaWork *lobby);
+extern struct WiFiPlazaPlayer *WiFiPlazaWork_GetPlayer(struct WiFiPlazaWork *lobby, u32 index);
+extern struct WiFiPlazaPlayer *WiFiPlazaWork_GetMyPlayer(struct WiFiPlazaWork *lobby);
+extern void WiFiPlazaWork_SetSurveyAnswer(struct WiFiPlazaWork *lobby, u32 surveyId, u32 answer);
+extern void WiFiPlazaPlayer_CopyToProfile(struct WiFiPlazaPlayer *player, PlayerProfile *profile, enum HeapID heapID);
+extern void *WiFiPlazaPlayer_GetRawLanguage(struct WiFiPlazaPlayer *player);
+extern void WiFiPlazaPlayer_GetSurvey(struct WiFiPlazaPlayer *player, WiFiPlazaSurveyAnswerRecord *record);
+extern int WiFiPlazaWork_IsSpecialVisitor(struct WiFiPlazaWork *lobby, int value);
+extern void WiFiPlazaWork_SetSurveyTally(struct WiFiPlazaWork *lobby, const WiFiPlazaSurveyTally *tally);
+extern BOOL WiFiPlazaWork_GetSurveyTally(struct WiFiPlazaWork *lobby, WiFiPlazaSurveyTally *tally);
 extern BOOL WiFiPlaza_HasConnectionFailed(void);
 extern void WiFiPlazaLobbyClient_SubmitSurveyAnswer(int answer);
 extern int WiFiPlazaLobbyClient_GetSurveySubmitState(void);
@@ -150,7 +150,7 @@ void WiFiPlazaSurvey_InitBgs(WiFiPlazaSurveyWork *work, Options *options, enum H
 void WiFiPlazaSurvey_FreeBgs(WiFiPlazaSurveyWork *work);
 void WiFiPlazaSurvey_InitSpriteSystem(WiFiPlazaSurveyWork *work, enum HeapID heapID);
 void WiFiPlazaSurvey_FreeSpriteSystem(WiFiPlazaSurveyWork *work);
-void WiFiPlazaSurvey_InitMessages(WiFiPlazaSurveyMessages *messages, void *lobby, enum HeapID heapID);
+void WiFiPlazaSurvey_InitMessages(WiFiPlazaSurveyMessages *messages, struct WiFiPlazaWork *lobby, enum HeapID heapID);
 void WiFiPlazaSurvey_FreeMessages(WiFiPlazaSurveyMessages *messages);
 String *WiFiPlazaSurvey_GetMessage(WiFiPlazaSurveyMessages *messages, int bank, int msgId);
 String *WiFiPlazaSurvey_GetQuestionTextFromMsg(WiFiPlazaSurveyMessages *messages, u32 questionNo);
@@ -193,6 +193,6 @@ String *WiFiPlazaSurvey_GetQuestionText(WiFiPlazaSurveyQuestion *question, WiFiP
 String *WiFiPlazaSurvey_GetAnswerText(WiFiPlazaSurveyQuestion *question, WiFiPlazaSurveyMessages *messages, int answer);
 void WiFiPlazaSurvey_LoadLastWeekTotals(WiFiPlazaSurveyTally *tally);
 u64 WiFiPlazaSurvey_GetBarLength(WiFiPlazaSurveyTally *tally, int answer, u32 maxLength);
-void WiFiPlazaSurvey_CountPlazaAnswers(WiFiPlazaSurveyTally *tally, void *lobby);
+void WiFiPlazaSurvey_CountPlazaAnswers(WiFiPlazaSurveyTally *tally, struct WiFiPlazaWork *lobby);
 
 #endif // POKEHEARTGOLD_WIFI_PLAZA_SURVEY_H

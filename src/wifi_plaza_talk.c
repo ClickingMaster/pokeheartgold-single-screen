@@ -30,9 +30,9 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
     int result;
     int direction;
     int partnerIndex;
-    void *partnerObj;
-    void *ownObj;
-    void *objManager;
+    WiFiPlazaObj *partnerObj;
+    WiFiPlazaObj *ownObj;
+    WiFiPlazaObjManager *objManager;
     WiFiPlazaPlayerStateManager *stateManager;
     int partnerStatus;
     u32 partnerAnswer;
@@ -217,7 +217,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
             break;
         }
         if (done == TRUE) {
-            WiFiPlazaRoom_CloseList(room, 0, 0);
+            WiFiPlazaRoom_CloseList(room, NULL, NULL);
             WiFiPlazaTalkMenu_Free(&talk->menu, room);
             WiFiPlazaTalk_StopMenuTimer(talk);
         }
@@ -272,7 +272,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
             break;
         }
         if (done == TRUE) {
-            WiFiPlazaRoom_CloseList(room, 0, 0);
+            WiFiPlazaRoom_CloseList(room, NULL, NULL);
             WiFiPlazaTalkMenu_Free(&talk->menu, room);
             WiFiPlazaTalk_StopMenuTimer(talk);
         }
@@ -333,7 +333,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
             WiFiPlazaTalk_UpdateMenuWait(talk, room);
             break;
         default:
-            WiFiPlazaRoom_CloseList(room, 0, 0);
+            WiFiPlazaRoom_CloseList(room, NULL, NULL);
             WiFiPlazaTalkMenu_Free(&talk->menu, room);
             talk->question = response;
             WiFiPlazaPlayerState_SetStep(state, 22);
@@ -360,7 +360,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
         case 1:
         case 2:
         case 3:
-            WiFiPlazaRoom_CloseList(room, 0, 0);
+            WiFiPlazaRoom_CloseList(room, NULL, NULL);
             WiFiPlazaTalkMenu_Free(&talk->menu, room);
             WiFiPlazaTalk_StopMenuTimer(talk);
             question = talk->question << 2;
@@ -445,7 +445,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
     case 32: { // "Sorry! Something's come up! I can't talk now!", shown for the time it takes to read
         u32 wait;
 
-        WiFiPlazaRoom_CloseList(room, 0, 0);
+        WiFiPlazaRoom_CloseList(room, NULL, NULL);
         WiFiPlazaTalkMenu_Free(&talk->menu, room);
         text = WiFiPlazaTalk_GetMsg(room, talk->partner, msg_0766_00045);
         WiFiPlazaRoom_PrintMessage(room, text);
@@ -492,7 +492,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
         WiFiPlazaRoom_CloseMessage(room);
         WiFiPlazaWork_SetActivity(lobby, 1);
         {
-            void *objManager2 = WiFiPlazaRoom_GetObjManager(room);
+            WiFiPlazaObjManager *objManager2 = WiFiPlazaRoom_GetObjManager(room);
             WiFiPlazaObj_SetHandler(objManager2, WiFiPlazaObj_GetOwnPlayer(objManager2), TRUE);
         }
         if (talk->partnerObj != NULL) {
@@ -792,7 +792,7 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
             break;
         }
         if (done) {
-            WiFiPlazaRoom_CloseList(room, 0, 0);
+            WiFiPlazaRoom_CloseList(room, NULL, NULL);
             WiFiPlazaTalkMenu_Free(&talk->menu, room);
             WiFiPlazaTalk_StopMenuTimer(talk);
             WiFiPlazaTalk_SetHistory(talk, partner);
@@ -823,7 +823,7 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
         u32 length;
         u32 duration;
 
-        WiFiPlazaRoom_CloseList(room, 0, 0);
+        WiFiPlazaRoom_CloseList(room, NULL, NULL);
         WiFiPlazaTalkMenu_Free(&talk->menu, room);
         string = WiFiPlazaTalk_GetMsg(room, talk->partner, msg_0766_00045);
         WiFiPlazaRoom_PrintMessage(room, string);
@@ -869,7 +869,7 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
         WiFiPlazaPlayerState_FreeWork(state);
         WiFiPlazaWork_SetActivity(lobby, 1);
         {
-            void *objManager = WiFiPlazaRoom_GetObjManager(room);
+            WiFiPlazaObjManager *objManager = WiFiPlazaRoom_GetObjManager(room);
             WiFiPlazaObj_SetHandler(objManager, WiFiPlazaObj_GetOwnPlayer(objManager), TRUE);
         }
         WiFiPlazaRoom_ShowOwnCard(room);
@@ -977,7 +977,7 @@ cancelTopics:
             break;
         }
         if (selected == TRUE) {
-            WiFiPlazaRoom_CloseList(room, 0, 0);
+            WiFiPlazaRoom_CloseList(room, NULL, NULL);
             WiFiPlazaTalkMenu_Free(&counter->menu, room);
         }
         break;
@@ -1019,7 +1019,7 @@ cancelGames:
             break;
         }
         if (selected == TRUE) {
-            WiFiPlazaRoom_CloseList(room, 0, 0);
+            WiFiPlazaRoom_CloseList(room, NULL, NULL);
             WiFiPlazaTalkMenu_Free(&counter->menu, room);
         }
         break;
@@ -1084,7 +1084,7 @@ cancelEvents:
             break;
         }
         if (selected == TRUE) {
-            WiFiPlazaRoom_CloseList(room, 0, 0);
+            WiFiPlazaRoom_CloseList(room, NULL, NULL);
             WiFiPlazaTalkMenu_Free(&counter->menu, room);
         }
         break;
@@ -1114,7 +1114,7 @@ cancelEvents:
         }
         break;
     case 24: {
-        void *objManager;
+        WiFiPlazaObjManager *objManager;
 
         WiFiPlazaPlayerState_FreeWork(state);
         WiFiPlazaRoom_CloseMessage(room);
@@ -1193,8 +1193,8 @@ BOOL WiFiPlazaTalk_Reception(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *roo
         }
         break;
     case 2: {
-        void *objManager;
-        void *ownObj;
+        WiFiPlazaObjManager *objManager;
+        WiFiPlazaObj *ownObj;
 
         WiFiPlazaRoom_CloseMessage(room);
         objManager = WiFiPlazaRoom_GetObjManager(room);

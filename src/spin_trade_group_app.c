@@ -447,8 +447,8 @@ void SpinTradeGroup_InitData(SpinTradeGroupApp *app, NARC *narc) {
     int i;
     for (i = 0; i < 5; i++) {
         app->names[i] = String_New(8, HEAP_ID_102);
-        app->members[i].profile = 0;
-        app->members[i].prevProfile = 0;
+        app->members[i].profile = NULL;
+        app->members[i].prevProfile = NULL;
         app->memberStates[i] = 0;
     }
     app->msgString = String_New(0xB4, HEAP_ID_102);
@@ -1172,7 +1172,7 @@ BOOL SpinTradeGroup_PrintMemberList(Window *window, u32 a1, u32 color, SpinTrade
     }
     FillWindowPixelBuffer(window, 0);
     for (i = 0; i < 5; i++) {
-        if (app->members[i].profile != 0) {
+        if (app->members[i].profile != NULL) {
             tid = PlayerProfile_GetTrainerID_VisibleHalf(app->members[i].profile);
             PlayerName_FlatToString(app->members[i].profile, app->names[i]);
             BufferIntegerAsString(app->msgFormat, 0, (s32)tid, 5, PRINTING_MODE_LEADING_ZEROS, TRUE);
@@ -1228,7 +1228,7 @@ BOOL SpinTradeGroup_UpdateMembers(SpinTradeGroupApp *app) {
         app->members[i].prevProfile = app->members[i].profile;
         app->members[i].profile = CommPlayerInfo_GetProfile(i);
         app->trainerIds[i].prev = app->trainerIds[i].cur;
-        if (app->members[i].profile != 0) {
+        if (app->members[i].profile != NULL) {
             app->trainerIds[i].cur.f.id = PlayerProfile_GetTrainerID(app->members[i].profile);
             app->trainerIds[i].cur.f.valid = 1;
         } else {
@@ -1239,7 +1239,7 @@ BOOL SpinTradeGroup_UpdateMembers(SpinTradeGroupApp *app) {
     for (i = 0; i < 5; i++) {
         if (app->members[i].prevProfile != app->members[i].profile) {
             changed = TRUE;
-            if (app->members[i].profile == 0) {
+            if (app->members[i].profile == NULL) {
                 app->memberStates[i] = 3;
             } else {
                 app->memberStates[i] = 1;
@@ -1295,7 +1295,7 @@ void SpinTradeGroup_UpdateAvatars(SpinTradeGroupApp *app) {
         case 1: {
             int gender;
             int avatar;
-            if (app->members[i].profile == 0) {
+            if (app->members[i].profile == NULL) {
                 GF_AssertFail();
             }
             gender = PlayerProfile_GetTrainerGender(app->members[i].profile);

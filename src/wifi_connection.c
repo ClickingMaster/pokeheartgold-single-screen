@@ -246,7 +246,7 @@ int WifiConnection_StartAnybodyMatchmaking(const char *name, int maxPlayers, int
     gWifiConnection->matchType = 0;
     DWC_SetUserSendCallback(WifiConnection_SendDoneCallback);
     DWC_SetUserRecvCallback(WifiConnection_ReceiveCallback);
-    DWC_SetConnectionClosedCallback(WifiConnection_ConnectionClosedCallback, 0);
+    DWC_SetConnectionClosedCallback(WifiConnection_ConnectionClosedCallback, NULL);
     DWC_SetUserRecvTimeoutCallback(WifiConnection_TimeoutCallback);
     gWifiConnection->sendBusy = 0;
     gWifiConnection->disconnectWhenAlone = 1;
@@ -1050,7 +1050,7 @@ int WifiConnection_StartMatchmaking(int friendIndex, int maxPlayers, BOOL altern
     gWifiConnection->state = WIFI_CONNECTION_STATE_MATCHING;
     DWC_SetUserSendCallback(WifiConnection_SendDoneCallback);
     DWC_SetUserRecvCallback(WifiConnection_ReceiveCallback);
-    DWC_SetConnectionClosedCallback(WifiConnection_ConnectionClosedCallback, 0);
+    DWC_SetConnectionClosedCallback(WifiConnection_ConnectionClosedCallback, NULL);
     DWC_SetUserRecvTimeoutCallback(WifiConnection_TimeoutCallback);
     gWifiConnection->sendBusy = 0;
     return 0;

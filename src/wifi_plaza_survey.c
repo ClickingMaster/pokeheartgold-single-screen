@@ -209,7 +209,7 @@ void WiFiPlazaSurvey_FreeSpriteSystem(WiFiPlazaSurveyWork *work) {
 
 #pragma force_active on
 
-void WiFiPlazaSurvey_InitMessages(WiFiPlazaSurveyMessages *messages, void *lobby, enum HeapID heapID) {
+void WiFiPlazaSurvey_InitMessages(WiFiPlazaSurveyMessages *messages, struct WiFiPlazaWork *lobby, enum HeapID heapID) {
     int i;
     messages->lobby = lobby;
     for (i = 0; i < WIFI_PLAZA_SURVEY_NUM_MSG_BANKS; i++) {
@@ -265,7 +265,7 @@ String *WiFiPlazaSurvey_GetAnswerTextFromMsg(WiFiPlazaSurveyMessages *messages, 
 
 void WiFiPlazaSurvey_BufferPlayerName(WiFiPlazaSurveyMessages *messages, int index, enum HeapID heapID) {
     PlayerProfile *profile = PlayerProfile_New(heapID);
-    void *player = WiFiPlazaWork_GetMyPlayer(messages->lobby);
+    struct WiFiPlazaPlayer *player = WiFiPlazaWork_GetMyPlayer(messages->lobby);
     WiFiPlazaPlayer_CopyToProfile(player, profile, heapID);
     BufferPlayersName(messages->format, index, profile);
     Heap_Free(profile);

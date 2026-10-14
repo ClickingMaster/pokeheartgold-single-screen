@@ -532,6 +532,6 @@ void WiFiPlazaPlayerObject_ApplyVisibility(WiFiPlazaPlayerObject *object) {
 }
 
 void WiFiPlazaPlayerObject_ApplyLightFlags(void *sprite, WiFiPlazaPlayerObject *object) {
-    void *model = BillboardObject_GetModelNoCast(sprite);
+    NNSG3dResMdl *model = BillboardObject_GetModelNoCast(sprite);
     NNS_G3dMdlSetMdlLightEnableFlagAll(model, object->lightFlags);
 }

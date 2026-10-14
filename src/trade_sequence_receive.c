@@ -255,7 +255,7 @@ BOOL TradeSequenceReceive_ShowMessages(TradeSequenceReceive *receive, u32 *state
             }
             ReadMsgDataIntoString(msgData, msgId, receive->msgTemplate);
             StringExpandPlaceholders(msgFormat, receive->msgString, receive->msgTemplate);
-            AddTextPrinterParameterized(&receive->window, 1, receive->msgString, 0, 0, TEXT_SPEED_NOTRANSFER, 0);
+            AddTextPrinterParameterized(&receive->window, 1, receive->msgString, 0, 0, TEXT_SPEED_NOTRANSFER, NULL);
             DrawFrame2AroundWindow(&receive->window, 109, 2);
             CopyWindowToVram(&receive->window);
             PlayFanfare(SEQ_ME_SHINKAOME);
@@ -271,7 +271,7 @@ BOOL TradeSequenceReceive_ShowMessages(TradeSequenceReceive *receive, u32 *state
             ReadMsgDataIntoString(msgData, msg_0179_00003, receive->msgTemplate);
             StringExpandPlaceholders(msgFormat, receive->msgString, receive->msgTemplate);
             FillWindowPixelBuffer(&receive->window, 15);
-            AddTextPrinterParameterized(&receive->window, 1, receive->msgString, 0, 0, TEXT_SPEED_NOTRANSFER, 0);
+            AddTextPrinterParameterized(&receive->window, 1, receive->msgString, 0, 0, TEXT_SPEED_NOTRANSFER, NULL);
             CopyWindowPixelsToVram_TextMode(&receive->window);
             receive->timer = 0;
             ++*state;

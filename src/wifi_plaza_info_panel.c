@@ -731,7 +731,7 @@ void WiFiPlazaPlayerCard_LoadMons(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphi
     int version = WiFiPlazaPlayer_GetLobbyId(myPlayer);
     const WiFiPlazaCardMonResources *res;
     const u16 *cell, *anim;
-    void *use;
+    NARC *use;
     int i;
     WiFiPlazaPlayerCard *cursor;
     SimpleSpriteTemplate template;

@@ -610,7 +610,7 @@ BOOL WiFiPlazaPlayerState_OwnArrival(WiFiPlazaPlayerState *state, WiFiPlazaRoomW
             break;
         }
         if (done == TRUE) {
-            WiFiPlazaRoom_CloseList(room, 0, 0);
+            WiFiPlazaRoom_CloseList(room, NULL, NULL);
             if (work->firstChoice != 0) {
                 WiFiPlazaRoom_PrintMessageInstant(room, WiFiPlazaRoom_GetMsgString(room, 1, msg_0777_00008));
                 WiFiPlazaRoom_OpenYesNoMenu(room);
@@ -660,7 +660,7 @@ BOOL WiFiPlazaPlayerState_OwnArrival(WiFiPlazaPlayerState *state, WiFiPlazaRoomW
             break;
         }
         if (done == TRUE) {
-            WiFiPlazaRoom_CloseList(room, 0, 0);
+            WiFiPlazaRoom_CloseList(room, NULL, NULL);
             if (work->secondChoice != 0) {
                 WiFiPlazaRoom_PrintMessageInstant(room, WiFiPlazaRoom_GetMsgString(room, 1, msg_0777_00008));
                 WiFiPlazaRoom_OpenYesNoMenu(room);
@@ -925,7 +925,7 @@ BOOL WiFiPlazaPlayerState_OwnWalk(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork
         int moveState;
         WiFiPlazaObj *ownPlayer;
         int tile;
-        void *models;
+        WiFiPlazaModels *models;
         WiFiPlazaMap *map;
         WiFiPlazaWork *lobby;
         WiFiPlazaPlayerStateManager *manager;
@@ -1725,7 +1725,7 @@ BOOL WiFiPlazaTalk_Greeter(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room,
 // The own player jumps onto a mover and rides it until the room closes
 BOOL WiFiPlazaPlayerState_OwnRideMover(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 index) {
     WiFiPlazaObjManager *objManager = WiFiPlazaRoom_GetObjManager(room);
-    void *models = WiFiPlazaRoom_GetModels(room);
+    WiFiPlazaModels *models = WiFiPlazaRoom_GetModels(room);
     WiFiPlazaCamera *camera = WiFiPlazaRoom_GetCamera(room);
     WiFiPlazaWork *lobby = WiFiPlazaRoom_GetLobby(room);
     WiFiPlazaPlayerRide *ride = WiFiPlazaPlayerState_GetWork(state);
@@ -2170,7 +2170,7 @@ BOOL WiFiPlazaPlayerState_OtherLeave(WiFiPlazaPlayerState *state, WiFiPlazaRoomW
 // Another player rides a mover
 BOOL WiFiPlazaPlayerState_OtherRideMover(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 index) {
     WiFiPlazaObjManager *objManager;
-    void *models;
+    WiFiPlazaModels *models;
     WiFiPlazaWork *lobby;
     VecFx32 vecD;
     VecFx32 vecC;

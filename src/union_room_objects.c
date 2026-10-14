@@ -1,3 +1,5 @@
+#include "constants/save_arrays.h"
+
 #include "union_room_objects.h"
 
 #include "global.h"
@@ -73,7 +75,7 @@ UnionRoomObjects *UnionRoomObjects_New(struct UnionRoom *unionRoom) {
     objects->enabled = 1;
     objects->task = SysTask_CreateOnMainQueue(UnionRoomObjects_Task, objects, 11);
     objects->fieldSystem = UnionRoom_GetFieldSystem(unionRoom);
-    objects->palPad = SaveArray_Get(objects->fieldSystem->saveData, 8);
+    objects->palPad = SaveArray_Get(objects->fieldSystem->saveData, SAVE_PALPAD);
     objects->avatar = objects->fieldSystem->playerAvatar;
     Heap_CreateAtEnd(HEAP_ID_FIELD2, HEAP_ID_87, 0x2710);
     objects->messages = UnionRoomMessages_New(0x57);

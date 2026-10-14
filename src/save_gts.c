@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include "constants/save_arrays.h"
+
 #include "save_gts.h"
 typedef struct GtsSave {
     u8 storedMon[0xEC]; // the deposited Pokemon (party format), kept until it is traded or taken back
@@ -21,7 +23,7 @@ u32 GtsSave_GetTradeDate(GtsSave *data);
 void GtsSave_SetTradeDate(GtsSave *data, u32 value);
 u16 GtsSave_GetStoredMonBox(GtsSave *data);
 int Save_Gts_Get(SaveData *save) {
-    return (int)SaveArray_Get(save, 22);
+    return (int)SaveArray_Get(save, SAVE_GTS);
 }
 u32 Save_Gts_sizeof(void) {
     return sizeof(GtsSave);

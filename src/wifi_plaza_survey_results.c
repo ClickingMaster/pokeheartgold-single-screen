@@ -514,11 +514,11 @@ u64 WiFiPlazaSurvey_GetBarLength(WiFiPlazaSurveyTally *tally, int answer, u32 ma
 }
 
 // Results from this Wi-Fi Plaza alone: the answers of the up to 20 players in the lobby.
-void WiFiPlazaSurvey_CountPlazaAnswers(WiFiPlazaSurveyTally *tally, void *lobby) {
+void WiFiPlazaSurvey_CountPlazaAnswers(WiFiPlazaSurveyTally *tally, struct WiFiPlazaWork *lobby) {
     int i;
     memset(tally, 0, sizeof(WiFiPlazaSurveyTally));
     for (i = 0; i < 20; i++) {
-        void *player = WiFiPlazaWork_GetPlayer(lobby, i);
+        struct WiFiPlazaPlayer *player = WiFiPlazaWork_GetPlayer(lobby, i);
         if (player != NULL) {
             void *value = WiFiPlazaPlayer_GetRawLanguage(player);
             WiFiPlazaSurveyAnswerRecord record;

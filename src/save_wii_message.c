@@ -75,7 +75,7 @@ u32 Save_WiiMessage_GetParam(SaveData *saveData, u32 param) {
 }
 
 static void WiiMessage_FillServerProfile(SaveData *saveData, WifiServerProfile *serverProfile) {
-    void *wifiHistory;
+    SaveWiFiHistory *wifiHistory;
     WiiMessageSave *ptr2;
     PlayerProfile *profile;
 

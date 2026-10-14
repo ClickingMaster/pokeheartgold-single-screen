@@ -43,7 +43,7 @@ void WiFiPlazaNews_SetOldestPlayer(WiFiPlazaNews *news, int slot) {
 void WiFiPlazaNews_AddChatEvent(WiFiPlazaNews *news, WiFiPlazaPairRequest *req) {
     WiFiPlazaNewsEvent *event = WiFiPlazaNewsEventList_GetFreeEvent(&news->events, 8);
     if (event != NULL) {
-        WiFiPlazaNewsEvent_Set(event, 0, 0, 0, req->profiles[0], req->profiles[1], 0, 0, req->slots[0], req->slots[1], 0, 0, 600, 8, 0);
+        WiFiPlazaNewsEvent_Set(event, 0, 0, 0, req->profiles[0], req->profiles[1], NULL, NULL, req->slots[0], req->slots[1], 0, 0, 600, 8, 0);
         WiFiPlazaNewsEventList_Insert(&news->events, event);
     }
 }
@@ -55,7 +55,7 @@ void WiFiPlazaNews_AddTapToyTradeEvent(WiFiPlazaNews *news, WiFiPlazaPairOptionR
     }
     event = WiFiPlazaNewsEventList_GetFreeEvent(&news->events, 7);
     if (event != NULL) {
-        WiFiPlazaNewsEvent_Set(event, req->option, 0, 0, req->profiles[0], req->profiles[1], 0, 0, req->slots[0], req->slots[1], 0, 0, 600, 7, 1);
+        WiFiPlazaNewsEvent_Set(event, req->option, 0, 0, req->profiles[0], req->profiles[1], NULL, NULL, req->slots[0], req->slots[1], 0, 0, 600, 7, 1);
         WiFiPlazaNewsEventList_Insert(&news->events, event);
     }
 }
@@ -89,7 +89,7 @@ void WiFiPlazaNews_AddFootprintStampEvent(WiFiPlazaNews *news, WiFiPlazaSingleRe
     }
     event = WiFiPlazaNewsEventList_GetFreeEvent(&news->events, (u16)(req->option + 5));
     if (event != NULL) {
-        WiFiPlazaNewsEvent_Set(event, req->option, req->count, 0, req->profile, 0, 0, 0, req->slot, 0, 0, 0, 900, req->option + 5, 3);
+        WiFiPlazaNewsEvent_Set(event, req->option, req->count, 0, req->profile, NULL, NULL, NULL, req->slot, 0, 0, 0, 900, req->option + 5, 3);
         WiFiPlazaNewsEventList_Insert(&news->events, event);
     }
 }
@@ -125,7 +125,7 @@ void WiFiPlazaNews_AddLobbyEventNotice(WiFiPlazaNews *news, WiFiPlazaLobbyNotice
     }
     event = WiFiPlazaNewsEventList_GetFreeEvent(&news->events, 14);
     if (event != NULL) {
-        WiFiPlazaNewsEvent_Set(event, *notice->time, notice->which, 0, 0, 0, 0, 0, 0, 0, 0, 0, 900, 14, 6);
+        WiFiPlazaNewsEvent_Set(event, *notice->time, notice->which, 0, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 900, 14, 6);
         WiFiPlazaNewsEventList_Insert(&news->events, event);
     }
 }
@@ -137,7 +137,7 @@ void WiFiPlazaNews_AddSpecialVisitorEvent(WiFiPlazaNews *news, int *slot, const 
     }
     event = WiFiPlazaNewsEventList_GetFreeEvent(&news->events, 1);
     if (event != NULL) {
-        WiFiPlazaNewsEvent_Set(event, *slot, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1800, 1, 7);
+        WiFiPlazaNewsEvent_Set(event, *slot, 0, 0, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 1800, 1, 7);
         WiFiPlazaNewsEventList_Insert(&news->events, event);
     }
 }

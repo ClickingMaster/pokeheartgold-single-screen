@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include "constants/save_arrays.h"
+
 #include "fashion_case.h"
 #include "heap.h"
 #include "pm_string.h"
@@ -631,5 +633,5 @@ void Save_FashionData_InsertEntries(u8 count, int skip, SaveFashionData *fashion
 }
 
 SaveFashionData *Save_FashionData_Get(SaveData *saveData) {
-    return SaveArray_Get(saveData, 0xC);
+    return SaveArray_Get(saveData, SAVE_DRESSUP_DATA);
 }

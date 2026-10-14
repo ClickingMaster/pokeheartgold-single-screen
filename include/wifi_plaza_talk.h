@@ -41,7 +41,7 @@ typedef struct WiFiPlazaTalk {
     u8 sameToy;               // 0x0C both players have the same Tap Toy
     u8 menuOpen;              // 0x0D
     u16 menuTimer;            // 0x0E frames the menu is open
-    void *partnerObj;         // 0x10 started by us: the partner's room object
+    WiFiPlazaObj *partnerObj;         // 0x10 started by us: the partner's room object
     WiFiPlazaTalkMenu menu;   // 0x14
     WiFiPlazaTalkReply reply; // 0x38
     u16 historyPending;       // 0x44 WiFiPlazaTalk_SetHistory
