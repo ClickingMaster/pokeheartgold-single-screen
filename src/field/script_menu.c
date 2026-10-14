@@ -609,25 +609,25 @@ int GetFloorNameMessage(u32 mapId, int floor, u8 *width_p) {
     return 0x11;
 }
 
-void ScriptMenu_ShowMultichoiceGrid(ScriptMenu *menu, u8 divisor) {
+void ScriptMenu_ShowMultichoiceGrid(ScriptMenu *menu, u8 numColumns) {
     u32 width;
-    int rows;
-    u8 columns;
+    int itemWidth;
+    u8 numRows;
 
     width = ScriptMenu_GetItemsWidth(menu);
     if ((width & 7) == 0) {
-        rows = width >> 3;
+        itemWidth = width >> 3;
     } else {
-        rows = (width >> 3) + 1;
+        itemWidth = (width >> 3) + 1;
     }
-    columns = menu->count / divisor;
-    if (menu->count % divisor) {
-        columns++;
+    numRows = menu->count / numColumns;
+    if (menu->count % numColumns) {
+        numRows++;
     }
-    AddWindowParameterized(menu->fieldSystem->bgConfig, &menu->window, GF_BG_LYR_MAIN_3, menu->x, menu->y, (u8)(rows * divisor), (u8)(columns * 2), 13, 0x3D);
+    AddWindowParameterized(menu->fieldSystem->bgConfig, &menu->window, GF_BG_LYR_MAIN_3, menu->x, menu->y, (u8)(itemWidth * numColumns), (u8)(numRows * 2), 13, 0x3D);
     LoadUserFrameGfx1(menu->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0x3D9, 11, 0, HEAP_ID_FIELD1);
     DrawFrameAndWindow1(&menu->window, TRUE, 0x3D9, 11);
-    ScriptMenu_SetupGridTemplate(menu, divisor, columns);
+    ScriptMenu_SetupGridTemplate(menu, numColumns, numRows);
     menu->menu2dPtr = Create2dMenu(&menu->menu2d, menu->initCursorPos, HEAP_ID_FIELD1);
     menu->task = SysTask_CreateOnMainQueue((SysTaskFunc)ScriptMenu_MultichoiceTask, menu, 0);
 }

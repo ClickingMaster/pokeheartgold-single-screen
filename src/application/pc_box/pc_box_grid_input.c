@@ -673,11 +673,11 @@ u32 PCBox_GetItemTrayHoldingInput(PCBoxWork *work) {
     return input;
 }
 
-void PCBox_StartCursorSlide(PCBoxView *view, u32 from, u32 to) {
+void PCBox_StartCursorSlide(PCBoxView *view, u32 newTarget, u32 prevTarget) {
     u8 pos[4];
     PCBoxCursorSlide *slide;
-    DpadMenuBox_GetPosition(GridInputHandler_GetDpadBox(view->gridInput, from), &pos[3], &pos[2]);
-    DpadMenuBox_GetPosition(GridInputHandler_GetDpadBox(view->gridInput, to), &pos[1], &pos[0]);
+    DpadMenuBox_GetPosition(GridInputHandler_GetDpadBox(view->gridInput, newTarget), &pos[3], &pos[2]);
+    DpadMenuBox_GetPosition(GridInputHandler_GetDpadBox(view->gridInput, prevTarget), &pos[1], &pos[0]);
     slide = Heap_Alloc(HEAP_ID_10, sizeof(PCBoxCursorSlide));
     slide->frames = 4;
     slide->x = pos[3];

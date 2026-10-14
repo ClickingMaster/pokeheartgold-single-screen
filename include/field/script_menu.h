@@ -35,7 +35,7 @@ void ScriptMenu_PrintCursorHelpMessage(ScriptMenu *menu);
 void PrintCurFloorInNewWindow(FieldSystem *fieldSystem, u8 x, u8 y, u16 *p_ret, MessageFormat *msgFmt, u16 floor);
 void ScriptMenu_PrintMessage(ScriptMenu *menu, u16 msgId, u8 x, u8 y);
 int GetFloorNameMessage(u32 mapId, int floor, u8 *width_p);
-void ScriptMenu_ShowMultichoiceGrid(ScriptMenu *menu, u8 divisor);
+void ScriptMenu_ShowMultichoiceGrid(ScriptMenu *menu, u8 numColumns);
 void ScriptMenu_SetupGridTemplate(ScriptMenu *menu, u8 wide, u8 high);
 Window *FieldSystem_ShowMoneyBox(FieldSystem *fieldSystem, u8 x, u8 y);
 void MoneyBoxSys_Delete(Window *moneybox);

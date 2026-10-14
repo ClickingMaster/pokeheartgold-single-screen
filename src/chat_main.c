@@ -11,7 +11,7 @@
 
 extern void __msl_assertion_failed(const char *, const char *, const char *, int);
 extern int sprintf(char *, const char *, ...);
-extern int sStr_X01_2; // 0, the number sent with the CRYPT command
+extern int gChatCryptVersion; // 0, the number sent with the CRYPT command
 extern const char sStr_ciThink[];
 extern const char sStr_ciSendNick[];
 extern const char sStr_ciSendUser[];
@@ -407,7 +407,7 @@ ChatConnection *chatConnectDoit(int loginType, const char *serverAddress, int se
     if (gameName && gameName[0] && gameKey && gameKey[0]) {
         strncpy(chat->gameKey, gameKey, 128);
         chat->gameKey[127] = 0;
-        ciSocketSendf(&chat->socket, sFmt_CRYPT_Des, sStr_X01_2, gameName);
+        ciSocketSendf(&chat->socket, sFmt_CRYPT_Des, gChatCryptVersion, gameName);
     } else if (chat->fillInUserCallback) {
         ciSocketSend(&chat->socket, sStr_USRIP_2);
     } else {

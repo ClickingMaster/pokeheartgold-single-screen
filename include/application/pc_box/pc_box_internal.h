@@ -941,7 +941,7 @@ void PCBox_WallpaperGridOnButton(PCBoxWork *work, u32 newTarget);
 void PCBox_WallpaperGridOnKeyMove(PCBoxWork *work, u32 newTarget, u32 prevTarget);
 void PCBox_WallpaperGridOnTouch(PCBoxWork *work, u32 newTarget);
 u32 PCBox_GetItemTrayHoldingInput(PCBoxWork *work);
-void PCBox_StartCursorSlide(PCBoxView *view, u32 from, u32 to);
+void PCBox_StartCursorSlide(PCBoxView *view, u32 newTarget, u32 prevTarget);
 u32 PCBox_IsSummaryShortcutPressed(PCBoxWork *work);
 
 #endif // POKEHEARTGOLD_APPLICATION_PC_BOX_PC_BOX_INTERNAL_H

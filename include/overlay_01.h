@@ -62,7 +62,7 @@ void ScriptMenu_CloseMultichoice(struct ScriptMenu *menu);
 void ScriptMenu_ShowListWithWidth(struct ScriptMenu *menu, u16 width);
 void ScriptMenu_ShowListAtPosition(struct ScriptMenu *menu, u16 *scroll_p, u16 *row_p);
 void ScriptMenu_ShowList(struct ScriptMenu *menu);
-void ScriptMenu_ShowMultichoiceGrid(struct ScriptMenu *menu, u8 divisor);
+void ScriptMenu_ShowMultichoiceGrid(struct ScriptMenu *menu, u8 numColumns);
 void ScriptMenu_SetAnchorRight(struct ScriptMenu *menu, int set);
 void ScriptMenu_SetAnchorBottom(struct ScriptMenu *menu, int set);
 void ScriptMenu_AddListItem(struct ScriptMenu *menu, int msgId, int helpMsgId, int value);
