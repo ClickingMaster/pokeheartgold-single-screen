@@ -16,29 +16,29 @@ typedef struct Id8 {
     u8 b[8];
 } Id8;
 
-// ov13_0224E270
+// gWifiSetupClientSettings
 typedef struct WifiSetupSettings {
     u8 unk_00[20];
     s8 unk_14;
     u8 unk_15[43];
 } WifiSetupSettings;
 
-// ov13_0224E184
+// gWifiSetupReply
 typedef struct WifiSetupReply {
     u32 words[149];
 } WifiSetupReply;
 
-// Both labels point into ov13_0224DF30 (ov13_0224DF10 + 0x20 is its unk_00, ov13_0224DF80 its
+// Both labels point into ov13_0224DF30 (gWifiSetupWcmSearchSsid + 0x20 is its unk_00, ov13_0224DF80 its
 // extendedRequest); the code addresses them through these labels.
-extern u8 ov13_0224DF10[];
+extern u8 gWifiSetupWcmSearchSsid[];
 extern int ov13_0224DF80[];
-extern u8 ov13_0224E3F0[16];   // key
-extern u8 ov13_0224EC64[2048]; // packet buffer
-extern u8 ov13_0224E464[2048]; // record buffer
+extern u8 gWifiSetupSessionKey[16];   // key
+extern u8 gWifiSetupPacketBuffer[2048]; // packet buffer
+extern u8 gWifiSetupRecordBuffer[2048]; // record buffer
 extern u8 ov13_0224E400[8];
 extern u8 ov13_0224E408[24];
-extern WifiSetupReply ov13_0224E184;
-extern WifiSetupSettings ov13_0224E270;
+extern WifiSetupReply gWifiSetupReply;
+extern WifiSetupSettings gWifiSetupClientSettings;
 
 int SOC_Socket(int domain, int type, int protocol);
 int SOC_Bind(int socket, void *addr);
@@ -125,36 +125,36 @@ int WifiSetup_RunSession(void) {
             ov13_0224DF30.step = 4;
             break;
         case 4:
-            if (WifiSetup_GetMilliseconds() >= ov13_02245A58.deadline) {
+            if (WifiSetup_GetMilliseconds() >= gWifiSetupConfig.deadline) {
                 SOC_Close(sock);
                 result = -3;
                 done = 1;
                 break;
             }
             recv.len = 8;
-            WifiSetup_BuildMacPair(ov13_0224E3F0, &recv);
-            if (SOC_RecvFrom(sock, ov13_0224EC64, 2048, 4, &recv) > 0 && WifiSetup_CheckVersionReply(ov13_0224EC64, ov13_0224DF80)) {
-                ov13_02245A58.deadline = WifiSetup_GetMilliseconds() + 30000;
+            WifiSetup_BuildMacPair(gWifiSetupSessionKey, &recv);
+            if (SOC_RecvFrom(sock, gWifiSetupPacketBuffer, 2048, 4, &recv) > 0 && WifiSetup_CheckVersionReply(gWifiSetupPacketBuffer, ov13_0224DF80)) {
+                gWifiSetupConfig.deadline = WifiSetup_GetMilliseconds() + 30000;
                 ov13_0224DF30.step = 5;
                 ov13_0224DF30.state = 4;
                 WifiSetup_ReportSimpleStartStatus();
             }
             break;
         case 5:
-            ov13_0224DF30.packetLength = WifiSetup_BuildVersionRequest(ov13_0224EC64);
-            WifiSetup_SendSetupPacket(sock, &recv, ov13_0224EC64, ov13_0224DF30.packetLength);
+            ov13_0224DF30.packetLength = WifiSetup_BuildVersionRequest(gWifiSetupPacketBuffer);
+            WifiSetup_SendSetupPacket(sock, &recv, gWifiSetupPacketBuffer, ov13_0224DF30.packetLength);
             last = WifiSetup_GetMilliseconds();
             ov13_0224DF30.step = 6;
             break;
         case 6:
-            if (WifiSetup_GetMilliseconds() >= ov13_02245A58.deadline) {
+            if (WifiSetup_GetMilliseconds() >= gWifiSetupConfig.deadline) {
                 SOC_Close(sock);
                 result = -4;
                 done = 1;
                 break;
             }
-            if (SOC_RecvFrom(sock, ov13_0224EC64, 2048, 4, &recv) > 0 && WifiSetup_ReadPacket(ov13_0224EC64, 3, ov13_0224E464, ov13_0224E3F0)) {
-                p = WifiSetup_FirstRecord(ov13_0224E464, &type, &size);
+            if (SOC_RecvFrom(sock, gWifiSetupPacketBuffer, 2048, 4, &recv) > 0 && WifiSetup_ReadPacket(gWifiSetupPacketBuffer, 3, gWifiSetupRecordBuffer, gWifiSetupSessionKey)) {
+                p = WifiSetup_FirstRecord(gWifiSetupRecordBuffer, &type, &size);
                 if (type == 257) {
                     timestamp = WifiSetup_GetMilliseconds();
                     *(Id8 *)ov13_0224E400 = *(Id8 *)p;
@@ -162,7 +162,7 @@ int WifiSetup_RunSession(void) {
                     retry = 0;
                     ov13_0224DF30.step = 7;
                     ov13_0224DF30.state = 5;
-                    ov13_02245A58.deadline = -1;
+                    gWifiSetupConfig.deadline = -1;
                     WifiSetup_ReportSimpleStartStatus();
                 }
                 p = NULL;
@@ -173,18 +173,18 @@ int WifiSetup_RunSession(void) {
             }
             break;
         case 7:
-            ov13_0224DF30.recordLength = WifiSetup_BuildSingleRecordList(ov13_0224E464, 258, ov13_0224E408, 8);
-            ov13_0224DF30.packetLength = WifiSetup_BuildPacket(ov13_0224EC64, 4, ov13_0224E464, ov13_0224DF30.recordLength, ov13_0224E3F0);
-            WifiSetup_SendSetupPacket(sock, &recv, ov13_0224EC64, ov13_0224DF30.packetLength);
+            ov13_0224DF30.recordLength = WifiSetup_BuildSingleRecordList(gWifiSetupRecordBuffer, 258, ov13_0224E408, 8);
+            ov13_0224DF30.packetLength = WifiSetup_BuildPacket(gWifiSetupPacketBuffer, 4, gWifiSetupRecordBuffer, ov13_0224DF30.recordLength, gWifiSetupSessionKey);
+            WifiSetup_SendSetupPacket(sock, &recv, gWifiSetupPacketBuffer, ov13_0224DF30.packetLength);
             last = WifiSetup_GetMilliseconds();
-            memset(&ov13_0224E184, 0, sizeof(ov13_0224E184));
+            memset(&gWifiSetupReply, 0, sizeof(gWifiSetupReply));
             ov13_0224DF30.step = 8;
             break;
         case 8:
-            if (SOC_RecvFrom(sock, ov13_0224EC64, 2048, 4, &recv) > 0) {
-                ov13_0224DF30.recordLength = WifiSetup_ReadPacket(ov13_0224EC64, 5, ov13_0224E464, ov13_0224E400);
-                if (ov13_0224DF30.recordLength && WifiSetup_ParseSettingsRecords(ov13_0224E464)) {
-                    if (ov13_0224E270.unk_14) {
+            if (SOC_RecvFrom(sock, gWifiSetupPacketBuffer, 2048, 4, &recv) > 0) {
+                ov13_0224DF30.recordLength = WifiSetup_ReadPacket(gWifiSetupPacketBuffer, 5, gWifiSetupRecordBuffer, ov13_0224E400);
+                if (ov13_0224DF30.recordLength && WifiSetup_ParseSettingsRecords(gWifiSetupRecordBuffer)) {
+                    if (gWifiSetupClientSettings.unk_14) {
                         ov13_0224DF30.unk_00 = 1;
                     } else {
                         ov13_0224DF30.unk_00 = 0;
@@ -206,15 +206,15 @@ int WifiSetup_RunSession(void) {
             }
             break;
         case 9:
-            ov13_0224DF30.recordLength = WifiSetup_BuildSingleRecordList(ov13_0224E464, 769, ov13_0224DF10 + 0x20, 1);
-            ov13_0224DF30.packetLength = WifiSetup_BuildPacket(ov13_0224EC64, 6, ov13_0224E464, ov13_0224DF30.recordLength, ov13_0224E400);
+            ov13_0224DF30.recordLength = WifiSetup_BuildSingleRecordList(gWifiSetupRecordBuffer, 769, gWifiSetupWcmSearchSsid + 0x20, 1);
+            ov13_0224DF30.packetLength = WifiSetup_BuildPacket(gWifiSetupPacketBuffer, 6, gWifiSetupRecordBuffer, ov13_0224DF30.recordLength, ov13_0224E400);
             if (WifiSetupLink_GetState() != 7) {
                 last = WifiSetup_GetMilliseconds() + 1000;
                 retry = 10;
                 ov13_0224DF30.step = 10;
                 break;
             }
-            WifiSetup_SendSetupPacket(sock, &recv, ov13_0224EC64, ov13_0224DF30.packetLength);
+            WifiSetup_SendSetupPacket(sock, &recv, gWifiSetupPacketBuffer, ov13_0224DF30.packetLength);
             last = WifiSetup_GetMilliseconds();
             ov13_0224DF30.step = 10;
             break;

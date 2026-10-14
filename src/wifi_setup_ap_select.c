@@ -4,7 +4,7 @@
 
 #include "wifi_setup_internal.h"
 
-extern char ov13_02245AC4[]; // SSID of the setup access point
+extern char sWifiSetupSetupApSsid[]; // SSID of the setup access point
 
 static inline int NameEqual(const char *name, const char *wanted) {
     return strlen(name) == strlen(wanted) && !memcmp(name, wanted, strlen(wanted));
@@ -20,7 +20,7 @@ static inline char *CopyName(char *name, const WifiSetupApEntry *entry) {
 
 // Compares two scan results. Picks the first access point of current that is also in previous
 // (same SSID and BSSID) but has just dropped privacy, or else the open setup access point
-// (ov13_02245AC4) when it is new in current. Returns 1 and its index in *selected if one was found.
+// (sWifiSetupSetupApSsid) when it is new in current. Returns 1 and its index in *selected if one was found.
 int WifiSetup_PickSetupAccessPoint(const WifiSetupApEntryList *current, const WifiSetupApEntryList *previous, u32 *selected) {
     int changed = 0;
     int result = 0;
@@ -72,13 +72,13 @@ int WifiSetup_PickSetupAccessPoint(const WifiSetupApEntryList *current, const Wi
         for (j = 0; j < previous->count; j++, right++) {
             memcpy(oldName, right->ssid, 32);
             oldName[right->ssidLength] = 0;
-            if (!memcmp(oldName, ov13_02245AC4, strlen(ov13_02245AC4)) && right->privacy == 0) {
+            if (!memcmp(oldName, sWifiSetupSetupApSsid, strlen(sWifiSetupSetupApSsid)) && right->privacy == 0) {
                 oldHas = 1;
                 break;
             }
         }
         for (i = 0; i < current->count; i++, left++) {
-            if (NameEqual(CopyName(oldName, left), ov13_02245AC4) && left->privacy == 0) {
+            if (NameEqual(CopyName(oldName, left), sWifiSetupSetupApSsid) && left->privacy == 0) {
                 newHas = 1;
                 break;
             }

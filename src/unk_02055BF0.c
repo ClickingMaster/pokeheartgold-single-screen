@@ -37,7 +37,7 @@ BOOL RoutineFieldFade(TaskManager *man);
 
 extern TaskFunc sMapEnterRoutines[9];
 extern TaskFunc sMapExitRoutines[9];
-extern FieldSystemFunc _020FC76C[9];
+extern FieldSystemFunc sMapEnterPlacementRoutines[9];
 
 void NewFieldFadeEnvironment(TaskManager *man, enum FadeMode fadeMode, enum FadeType typeTop, enum FadeType typeBottom, u16 colour, int duration, int framesPer, enum HeapID heapID) {
     FieldFadeEnvironment *sfenv = Heap_Alloc(heapID, sizeof(FieldFadeEnvironment));
@@ -184,9 +184,9 @@ BOOL Task_FieldTransition(TaskManager *man) {
         env->state++;
         break;
     case 6:
-        if (_020FC76C[env->transitionNo]) {
+        if (sMapEnterPlacementRoutines[env->transitionNo]) {
             Camera_SetHistoryEnabled(fieldSystem->camera, 0);
-            _020FC76C[env->transitionNo](fieldSystem);
+            sMapEnterPlacementRoutines[env->transitionNo](fieldSystem);
         }
         env->state++;
         break;

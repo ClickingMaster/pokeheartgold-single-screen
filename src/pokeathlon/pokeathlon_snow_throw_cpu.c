@@ -10,7 +10,7 @@
 void MTX_MultVec43(const VecFx32 *vec, const MtxFx43 *mtx, VecFx32 *result);
 
 // Where each Pokemon stands on the field (fx32 field units; the CPU's copy of the table).
-extern const VecFx32 ov96_0221CA30[SNOW_THROW_MONS];
+extern const VecFx32 sSnowThrowCpuMonPositions[SNOW_THROW_MONS];
 
 // Turns a direction by a random angle of at most `degrees` either way.
 void PokeathlonSnowThrow_AddAimSpread(int degrees, VecFx32 *direction) {
@@ -97,7 +97,7 @@ void PokeathlonSnowThrowCpu_Think(PokeathlonSnowThrowCpu *cpu, u8 team, u8 mon, 
         if (cpu->balls[mon]->state == SNOW_THROW_BALL_NONE) {
             cpu->balls[mon]->taps = 1;
             cpu->balls[mon]->state = SNOW_THROW_BALL_HELD;
-            cpu->balls[mon]->position = ov96_0221CA30[mon];
+            cpu->balls[mon]->position = sSnowThrowCpuMonPositions[mon];
             return;
         }
         GF_ASSERT(cpu->balls[mon]->state == SNOW_THROW_BALL_HELD);
@@ -129,8 +129,8 @@ void PokeathlonSnowThrowCpu_Think(PokeathlonSnowThrowCpu *cpu, u8 team, u8 mon, 
     pick = LCRandom() % count;
     {
         VecFx32 zero = { 0, 0, 0 };
-        home = &ov96_0221CA30[mon];
-        VEC_Subtract(&ov96_0221CA30[(u8)sorted[pick]->index], home, &direction);
+        home = &sSnowThrowCpuMonPositions[mon];
+        VEC_Subtract(&sSnowThrowCpuMonPositions[(u8)sorted[pick]->index], home, &direction);
         VEC_Normalize(&direction, &direction);
         PokeathlonSnowThrow_AddAimSpread(3, &direction);
         PokeathlonSnowThrow_AddAimSpread((u8)cpu->mons[mon]->aimSpread, &direction);

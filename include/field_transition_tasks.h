@@ -15,7 +15,7 @@ BOOL FieldTransition_EnterRising(TaskManager *man);
 BOOL FieldTransition_EnterWithDoorExit(TaskManager *man);
 BOOL FieldTransition_EnterSinking(TaskManager *man);
 
-// Player/camera placement before the enter routine (unk_02055BF0.c _020FC76C)
+// Player/camera placement before the enter routine (unk_02055BF0.c sMapEnterPlacementRoutines)
 void FieldTransition_PlaceInsideSideDoor(FieldSystem *fieldSystem);
 void FieldTransition_PlaceOffWarpStairs(FieldSystem *fieldSystem);
 void FieldTransition_PlaceBelowFloor(FieldSystem *fieldSystem);

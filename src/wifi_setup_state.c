@@ -2,7 +2,7 @@
 
 #include "wifi_setup.h"
 
-extern u8 ov13_0224DCF8[];
+extern u8 gWifiSetupPeerAddress[];
 extern u8 ov13_0224CFBC[];
 extern u8 ov13_0224CFB8[];
 
@@ -31,7 +31,7 @@ void WifiSetup_FreeWorkBuffers(void) {
 }
 
 void WifiSetup_InitState(WifiSetupRequest *request) {
-    WifiSetup_MemFill(ov13_0224DCF8, 0, 8);
+    WifiSetup_MemFill(gWifiSetupPeerAddress, 0, 8);
     gWifiSetupState.error = 1;
     WifiSetup_MemFill(ov13_0224CFBC, 0, 0x1C);
     gWifiSetupState.unk_24 = request->key;

@@ -21,4 +21,4 @@
 .public FieldTransition_PlaceAboveFloor
 .public sMapEnterRoutines
 .public sMapExitRoutines
-.public _020FC76C
+.public sMapEnterPlacementRoutines

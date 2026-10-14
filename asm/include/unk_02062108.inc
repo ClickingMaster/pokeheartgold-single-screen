@@ -166,7 +166,7 @@
 .public HiddenObjectMovement_GetCoverEffect
 .public HiddenObjectMovement_SetRevealed
 .public FieldEffect_Destroy
-.public _020FD198
+.public sMovementsByDirection
 .public gMovementCmdTable
 .public TrainerReveal_Spawn
 .public EmoteMark_IsDone

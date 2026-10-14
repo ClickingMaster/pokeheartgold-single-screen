@@ -37,8 +37,8 @@ VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(void *entry);
 BOOL PokeathlonCourseSpritePoolSprite_IsAnimated(void *entry);
 
 // Which of two Pokemon at the same depth is drawn in front, by view (own team) and Pokemon.
-extern const u8 ov96_0221C95C[][SNOW_THROW_MONS];
-extern const WindowTemplate ov96_0221CA28;
+extern const u8 sSnowThrowDrawOrder[][SNOW_THROW_MONS];
+extern const WindowTemplate sSnowThrowDisplayNameWindowTemplate;
 
 // A snowball as sorted for drawing (8).
 typedef struct PokeathlonSnowThrowDrawOrder {
@@ -144,9 +144,9 @@ int PokeathlonSnowThrow_CompareDrawOrder(const void *a, const void *b) {
         result = -1;
     } else if (orderA->y < orderB->y) {
         result = 1;
-    } else if (ov96_0221C95C[own][orderA->index] < ov96_0221C95C[own][orderB->index]) {
+    } else if (sSnowThrowDrawOrder[own][orderA->index] < sSnowThrowDrawOrder[own][orderB->index]) {
         result = -1;
-    } else if (ov96_0221C95C[own][orderA->index] > ov96_0221C95C[own][orderB->index]) {
+    } else if (sSnowThrowDrawOrder[own][orderA->index] > sSnowThrowDrawOrder[own][orderB->index]) {
         result = 1;
     } else {
         result = 0;
@@ -411,7 +411,7 @@ void PokeathlonSnowThrowDisplay_GetPicVramOffsets(void *pool, PokeathlonSnowThro
 }
 
 void PokeathlonSnowThrowDisplay_InitWindow(PokeathlonSnowThrowDisplay *display) {
-    AddWindow(display->bgConfig, &display->nameWindow, &ov96_0221CA28);
+    AddWindow(display->bgConfig, &display->nameWindow, &sSnowThrowDisplayNameWindowTemplate);
     BG_FillCharDataRange(display->bgConfig, GF_BG_LYR_SUB_0, 0, 1, 0);
     LoadFontPal0(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_15_OFFSET, display->heapId);
     FillWindowPixelBuffer(&display->nameWindow, 0);

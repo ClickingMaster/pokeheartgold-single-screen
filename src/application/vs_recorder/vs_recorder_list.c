@@ -22,8 +22,8 @@ typedef struct VsRecorderRankLimits {
 // GetSpeciesNameIntoArray called through an int prototype, as compiled (no u16 truncation of the species)
 #define GetSpeciesNameIntoArrayInt ((void (*)(int, enum HeapID, u16 *))GetSpeciesNameIntoArray)
 
-extern const VsRecorderRankLimits ov40_02244E10;
-extern const VsRecorderRankLimits ov40_02244E1C;
+extern const VsRecorderRankLimits sVsRecorderRankLimits;
+extern const VsRecorderRankLimits sVsRecorderRankLimitsRedraw;
 
 // "country / region" of the shown trainer in the list's second row
 void VsRecorder_PrintListLocation(VsRecorderListWindow *list, VsRecorderWork *work) {
@@ -205,7 +205,7 @@ void VsRecorder_InitRankingList(VsRecorderListWindow *list, VsRecorderWork *work
     AddWindowParameterized(work->bgConfig, win, (u8)config->bgId, (u8)config->x, (u8)config->y, (u8)config->width, (u8)config->height, 14, (u16)config->baseTile);
     FillWindowPixelBuffer(win, 0);
     fmt = VsRecorder_NewMessageFormat(HEAP_ID_109);
-    limits = ov40_02244E10;
+    limits = sVsRecorderRankLimits;
     previous = list->config->entries[0].time;
     groups[0] = 0;
     {
@@ -393,7 +393,7 @@ int VsRecorder_RedrawRankingList(VsRecorderListWindow *list, VsRecorderWork *wor
             end = list->count;
             start = list->count - list->rows;
         }
-        limits = ov40_02244E1C;
+        limits = sVsRecorderRankLimitsRedraw;
         previous = list->config->entries[0].time;
         groups[0] = 0;
         for (i = 1; i < limits.v[type]; i++) {

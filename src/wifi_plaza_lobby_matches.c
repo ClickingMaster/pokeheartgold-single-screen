@@ -66,15 +66,15 @@ WiFiPlazaLobbyMatch *WiFiPlazaLobbyMatches_Get(WiFiPlazaLobbyClient *client, int
 
 #pragma force_active on
 
-// Once per frame (WiFiPlazaLobbyClient_Update; works on _022577C0): the player count of the own session, the
+// Once per frame (WiFiPlazaLobbyClient_Update; works on gWiFiPlazaLobbyClient): the player count of the own session, the
 // countdowns.
 void WiFiPlazaLobbyMatches_Update(WiFiPlazaLobbyClient *client) {
     int i;
-    if (_022577C0->unk_69e == 1) {
+    if (gWiFiPlazaLobbyClient->unk_69e == 1) {
         u32 count = ov00_021E7144();
         WiFiPlazaLobbyMatch *match;
         GF_ASSERT(count <= 4);
-        match = &_022577C0->matches[_022577C0->currentMatch];
+        match = &gWiFiPlazaLobbyClient->matches[gWiFiPlazaLobbyClient->currentMatch];
         if (match->info.playerCount != count) {
             match->info.playerCount = count;
             PPW_LobbyUpdateRecruitInfo(match);
@@ -82,14 +82,14 @@ void WiFiPlazaLobbyMatches_Update(WiFiPlazaLobbyClient *client) {
     }
     for (i = 0; i < 3; i++) {
         // steps the client pointer by one match (0x4C bytes)
-        WiFiPlazaLobbyClient *p = (WiFiPlazaLobbyClient *)((u8 *)_022577C0 + i * 0x4C);
+        WiFiPlazaLobbyClient *p = (WiFiPlazaLobbyClient *)((u8 *)gWiFiPlazaLobbyClient + i * 0x4C);
         if (*(volatile u16 *)&p->matches[0].active == 1) {
             u32 frames;
             if (*(volatile u16 *)&p->matches[0].timer) {
                 (*(volatile u16 *)&p->matches[0].timer)--;
             }
-            frames = WiFiPlazaLobbyMatches_CalcTimer(_022577C0, i);
-            p = (WiFiPlazaLobbyClient *)((u8 *)_022577C0 + i * 0x4C);
+            frames = WiFiPlazaLobbyMatches_CalcTimer(gWiFiPlazaLobbyClient, i);
+            p = (WiFiPlazaLobbyClient *)((u8 *)gWiFiPlazaLobbyClient + i * 0x4C);
             if (frames < *(volatile u16 *)&p->matches[0].timer) {
                 *(volatile u16 *)&p->matches[0].timer = frames;
             }

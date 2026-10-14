@@ -14,18 +14,18 @@
 
 FS_EXTERN_OVERLAY(OVY_98);
 
-extern const SpriteResourceCountsListUnion ov99_021E9DEC;
-extern const WindowTemplate ov99_021E9ED0[15];
+extern const SpriteResourceCountsListUnion sPokeathlonTrophiesSpriteResourceCounts;
+extern const WindowTemplate sPokeathlonTrophiesWindowTemplates[15];
 extern const char sStr_SeqError_2[]; // "seq error!"
-extern const GraphicsModes ov99_021E9D9C;
-extern const PokeathlonTrophiesBgTemplates ov99_021E9E60;
-extern const u8 ov99_021E9D88[4];
-extern const ManagedSpriteTemplate ov99_021E9E2C;
-extern const int ov99_021E9D8C[];
-extern const int ov99_021E9DAC[];
-extern const int ov99_021E9DBC[];
-extern const int ov99_021E9DD4[];
-extern const int ov99_021E9E04[10];
+extern const GraphicsModes sPokeathlonTrophiesGraphicsModes;
+extern const PokeathlonTrophiesBgTemplates sPokeathlonTrophiesBgTemplates;
+extern const u8 sPokeathlonTrophiesBgLayers[4];
+extern const ManagedSpriteTemplate sPokeathlonTrophiesPlayerSpriteTemplate;
+extern const int sPokeathlonTrophiesMainRowResIds[];
+extern const int sPokeathlonTrophiesSubRowResIds[];
+extern const int sPokeathlonTrophiesMainNumberResIds[];
+extern const int sPokeathlonTrophiesSubNumberResIds[];
+extern const int sPokeathlonTrophiesFriendshipThresholds[10];
 
 BOOL PokeathlonTrophies_Init(OverlayManager *man, int *state) {
     PokeathlonTrophies *work;
@@ -43,8 +43,8 @@ BOOL PokeathlonTrophies_Init(OverlayManager *man, int *state) {
     PokeathlonUtil_ResetDisplay();
     PokeathlonTrophies_InitBgs(work);
     PokeathlonTrophies_LoadBgGraphics(work);
-    work->textContext = PokeathlonUtil_CreateTextContext(work->heapId, work->bgConfig, 15, ov99_021E9ED0, NARC_msg_msg_0314_bin);
-    counts = ov99_021E9DEC;
+    work->textContext = PokeathlonUtil_CreateTextContext(work->heapId, work->bgConfig, 15, sPokeathlonTrophiesWindowTemplates, NARC_msg_msg_0314_bin);
+    counts = sPokeathlonTrophiesSpriteResourceCounts;
     work->spriteContext = PokeathlonUtil_CreateSpriteContext(work->heapId, &counts, 67);
     PokeathlonTrophies_LoadSpriteResources(work);
     PokeathlonTrophies_DrawScreen(work);
@@ -119,13 +119,13 @@ void PokeathlonTrophies_InitBgs(PokeathlonTrophies *work) {
     int i;
 
     work->bgConfig = BgConfig_Alloc(work->heapId);
-    modes = ov99_021E9D9C;
+    modes = sPokeathlonTrophiesGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    templates = ov99_021E9E60;
+    templates = sPokeathlonTrophiesBgTemplates;
     for (i = 0; i < 4; i++) {
-        InitBgFromTemplate(work->bgConfig, ov99_021E9D88[i], &templates.templates[i], GF_BG_TYPE_TEXT);
-        BgClearTilemapBufferAndCommit(work->bgConfig, ov99_021E9D88[i]);
-        BG_ClearCharDataRange(ov99_021E9D88[i], 32, 0, work->heapId);
+        InitBgFromTemplate(work->bgConfig, sPokeathlonTrophiesBgLayers[i], &templates.templates[i], GF_BG_TYPE_TEXT);
+        BgClearTilemapBufferAndCommit(work->bgConfig, sPokeathlonTrophiesBgLayers[i]);
+        BG_ClearCharDataRange(sPokeathlonTrophiesBgLayers[i], 32, 0, work->heapId);
     }
     work->narc = NARC_New(NARC_a_1_7_7, work->heapId);
 }
@@ -146,7 +146,7 @@ void PokeathlonTrophies_FreeBgs(PokeathlonTrophies *work) {
 
     NARC_Delete(work->narc);
     for (i = 0; i < 4; i++) {
-        FreeBgTilemapBuffer(work->bgConfig, ov99_021E9D88[i]);
+        FreeBgTilemapBuffer(work->bgConfig, sPokeathlonTrophiesBgLayers[i]);
     }
     Heap_Free(work->bgConfig);
 }
@@ -174,7 +174,7 @@ void PokeathlonTrophies_LoadSpriteResources(PokeathlonTrophies *work) {
 }
 
 void PokeathlonTrophies_CreatePlayerSprite(PokeathlonTrophies *work) {
-    ManagedSprite *sprite = PokeathlonUtil_NewSprite(work->spriteContext, &ov99_021E9E2C);
+    ManagedSprite *sprite = PokeathlonUtil_NewSprite(work->spriteContext, &sPokeathlonTrophiesPlayerSpriteTemplate);
     work->sprites[0] = sprite;
     ManagedSprite_SetAnimateFlag(sprite, TRUE);
 }
@@ -187,7 +187,7 @@ void PokeathlonTrophies_CreateNumberSprites(PokeathlonTrophies *work, s32 value,
     for (i = 0; i < count; i++) {
         ManagedSprite *sprite;
         spriteTemplate.animation = PokeathlonUtil_GetDecimalDigit(value, (u8)(count - i));
-        MI_CpuCopy8(mainScreen ? ov99_021E9DBC : ov99_021E9DD4, spriteTemplate.resIdList, sizeof(spriteTemplate.resIdList));
+        MI_CpuCopy8(mainScreen ? sPokeathlonTrophiesMainNumberResIds : sPokeathlonTrophiesSubNumberResIds, spriteTemplate.resIdList, sizeof(spriteTemplate.resIdList));
         spriteTemplate.vram = mainScreen ? NNS_G2D_VRAM_TYPE_2DMAIN : NNS_G2D_VRAM_TYPE_2DSUB;
         spriteTemplate.x = x + i * spacing;
         spriteTemplate.y = y;
@@ -258,11 +258,11 @@ void PokeathlonTrophies_DrawScreen(PokeathlonTrophies *work) {
     }
     PokeathlonTrophies_CreateNumberSprites(work, trophyCount, 1, 2, 200, 112, 32, TRUE);
     PokeathlonTrophies_CreateNumberSprites(work, totalPoints, 3, 4, 80, 160, 32, FALSE);
-    PokeathlonUtil_CreateSpriteRow(work->spriteContext, work->sprites, ov99_021E9DAC, collectiveTrophies, 7, 16, 40, TRUE);
-    PokeathlonUtil_CreateSpriteRow(work->spriteContext, work->sprites, ov99_021E9DAC, trustTrophies, 17, 16, 72, TRUE);
-    PokeathlonUtil_CreateSpriteRow(work->spriteContext, work->sprites, ov99_021E9DAC, potentialTrophies, 27, 16, 104, TRUE);
-    PokeathlonUtil_CreateSpriteRow(work->spriteContext, work->sprites, ov99_021E9DAC, friendshipTrophies, 37, 16, 136, TRUE);
-    PokeathlonUtil_CreateSpriteRow(work->spriteContext, work->sprites, ov99_021E9D8C, friendshipTrophies, 57, 96, 120, FALSE);
+    PokeathlonUtil_CreateSpriteRow(work->spriteContext, work->sprites, sPokeathlonTrophiesSubRowResIds, collectiveTrophies, 7, 16, 40, TRUE);
+    PokeathlonUtil_CreateSpriteRow(work->spriteContext, work->sprites, sPokeathlonTrophiesSubRowResIds, trustTrophies, 17, 16, 72, TRUE);
+    PokeathlonUtil_CreateSpriteRow(work->spriteContext, work->sprites, sPokeathlonTrophiesSubRowResIds, potentialTrophies, 27, 16, 104, TRUE);
+    PokeathlonUtil_CreateSpriteRow(work->spriteContext, work->sprites, sPokeathlonTrophiesSubRowResIds, friendshipTrophies, 37, 16, 136, TRUE);
+    PokeathlonUtil_CreateSpriteRow(work->spriteContext, work->sprites, sPokeathlonTrophiesMainRowResIds, friendshipTrophies, 57, 96, 120, FALSE);
 }
 
 u16 PokeathlonTrophies_CalcEventRecordTotal(PokeathlonSave *pokeathlon) {
@@ -370,7 +370,7 @@ u16 PokeathlonTrophies_GetCourseScore(PokeathlonTrophiesSummary *summary, int co
 }
 
 u8 PokeathlonTrophies_CountFriendshipTrophies(int totalPoints) {
-    const int *thresholds = ov99_021E9E04;
+    const int *thresholds = sPokeathlonTrophiesFriendshipThresholds;
     u8 i = 0;
 
     do {

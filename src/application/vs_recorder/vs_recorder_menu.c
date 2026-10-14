@@ -49,8 +49,8 @@ typedef struct VsRecorderMenuMove {
     int arrived;
 } VsRecorderMenuMove;
 
-extern const TouchscreenHitbox ov40_02245100; // left edge: previous colour scheme
-extern const TouchscreenHitbox ov40_02245104; // right edge: next colour scheme
+extern const TouchscreenHitbox sVsRecorderPrevSchemeHitbox; // left edge: previous colour scheme
+extern const TouchscreenHitbox sVsRecorderNextSchemeHitbox; // right edge: next colour scheme
 
 BOOL VsRecorder_MenuMain(VsRecorderWork *work) {
     if (System_GetTouchNew() && work->menuNoticeShown == 0) {
@@ -74,10 +74,10 @@ BOOL VsRecorder_MenuMain(VsRecorderWork *work) {
 
 // 1: previous colour scheme, 2: next colour scheme, 0: none
 int VsRecorder_CheckSchemeArrowTouch(void) {
-    if (TouchscreenHitbox_TouchHeldIsIn(&ov40_02245100)) {
+    if (TouchscreenHitbox_TouchHeldIsIn(&sVsRecorderPrevSchemeHitbox)) {
         return 1;
     }
-    if (TouchscreenHitbox_TouchHeldIsIn(&ov40_02245104)) {
+    if (TouchscreenHitbox_TouchHeldIsIn(&sVsRecorderNextSchemeHitbox)) {
         return 2;
     }
     return 0;

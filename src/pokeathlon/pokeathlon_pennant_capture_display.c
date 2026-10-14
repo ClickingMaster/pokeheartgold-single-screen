@@ -40,8 +40,8 @@ u32 GetMonIconPlttNaix(void);
 // in the object linked between the two parts of the top screen code (picture sprites)
 void PokeathlonPennantCaptureDisplay_CreatePicSprites(void *pool, PokeathlonPennantCaptureDisplay *display);
 
-extern const u8 ov96_0221CBC4[];
-extern const u8 ov96_0221CBC8[];
+extern const u8 sPennantCaptureTimerDigitX[];
+extern const u8 sPennantCaptureTimerDigitAnims[];
 extern const PokeathlonPennantCaptureSpriteIds gPokeathlonPennantCaptureSpriteIds[];
 extern const VecFx32 gPokeathlonPennantCaptureInitialPosition;
 
@@ -181,11 +181,11 @@ void PokeathlonPennantCaptureDisplay_CreateSprites(PokeathlonPennantCaptureDispl
     for (i = 0; i < 2; i++) {
         display->timerDigits[i] = PokeathlonCourseSprites_CreateTimerDigit(resources, PokeathlonCourseSpritePool_GetSpriteList(pool), 3, display->heapId);
         Sprite_SetDrawFlag(display->timerDigits[i], TRUE);
-        digitPosition.x = ov96_0221CBC4[i] << FX32_SHIFT;
+        digitPosition.x = sPennantCaptureTimerDigitX[i] << FX32_SHIFT;
         digitPosition.y = 0x2C4000;
         digitPosition.z = 0;
         Sprite_SetMatrix(display->timerDigits[i], &digitPosition);
-        Sprite_SetAnimCtrlSeq(display->timerDigits[i], ov96_0221CBC8[i]);
+        Sprite_SetAnimCtrlSeq(display->timerDigits[i], sPennantCaptureTimerDigitAnims[i]);
     }
 }
 

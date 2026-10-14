@@ -39,15 +39,15 @@
 
 FS_EXTERN_OVERLAY(OVY_41);
 
-extern const TouchscreenHitbox ov40_022451C4;    // centre bottom button (exit)
-extern const TouchscreenHitbox ov40_022451C8;    // left bottom button (exit)
-extern const TouchscreenHitbox ov40_022451CC;    // right bottom button (send)
-extern const TouchscreenHitbox ov40_022451D0;    // top bar (photo / profile)
-extern const TouchscreenHitbox ov40_022451D4;    // previous photo
-extern const TouchscreenHitbox ov40_022451D8;    // next photo
-extern const VsRecorderListConfig ov40_022451F4; // species list
+extern const TouchscreenHitbox sVsRecorderDressUpCenterButtonHitbox;    // centre bottom button (exit)
+extern const TouchscreenHitbox sVsRecorderDressUpLeftButtonHitbox;    // left bottom button (exit)
+extern const TouchscreenHitbox sVsRecorderDressUpRightButtonHitbox;    // right bottom button (send)
+extern const TouchscreenHitbox sVsRecorderDressUpTopBarHitbox;    // top bar (photo / profile)
+extern const TouchscreenHitbox sVsRecorderDressUpPrevPhotoHitbox;    // previous photo
+extern const TouchscreenHitbox sVsRecorderDressUpNextPhotoHitbox;    // next photo
+extern const VsRecorderListConfig sVsRecorderDressUpSpeciesListConfig; // species list
 extern const TouchscreenHitbox sVsRecorderSpeciesGroupHitboxes[];  // species groups (9)
-extern const u16 ov40_02245CD4[];                // first species list index of each group
+extern const u16 sVsRecorderDressUpSpeciesGroupStarts[];                // first species list index of each group
 
 BOOL VsRecorder_FrontierExit(VsRecorderWork *work) {
     VsRecorderFrontierRecord *record = work->screenWork;
@@ -241,11 +241,11 @@ BOOL VsRecorder_DressUpSendShow(VsRecorderWork *work) {
 // send screen, substate 3: wait for EXIT or SEND
 BOOL VsRecorder_DressUpSendMain(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
-    if (TouchscreenHitbox_TouchNewIsIn(&ov40_022451C8)) {
+    if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderDressUpLeftButtonHitbox)) {
         VsRecorder_OnTouchConfirm(work);
         VsRecorder_SetSubState(work, 5);
     }
-    if (TouchscreenHitbox_TouchNewIsIn(&ov40_022451CC)) {
+    if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderDressUpRightButtonHitbox)) {
         VsRecorder_OnTouchConfirm(work);
         VsRecorder_SetSubState(work, 4);
     }
@@ -482,7 +482,7 @@ BOOL VsRecorder_DressUpViewSelectCategory(VsRecorderWork *work) {
         break;
     case 2:
         TouchHitboxController_IsTriggered(dressUp->hitboxes);
-        if (TouchscreenHitbox_TouchNewIsIn(&ov40_022451C4) || dressUp->categoryChosen == TRUE) {
+        if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderDressUpCenterButtonHitbox) || dressUp->categoryChosen == TRUE) {
             VsRecorder_OnTouchConfirm(work);
             work->step++;
         }
@@ -531,7 +531,7 @@ BOOL VsRecorder_DressUpViewSelectSpecies(VsRecorderWork *work) {
             VsRecorder_ShowTopMessage(work, 114);
             VsRecorder_SetVBlankPaused(work, TRUE);
             VsRecorder_CreateTouchScrollSprites(&work->touchScroll, work);
-            dressUp->listConfig = ov40_022451F4;
+            dressUp->listConfig = sVsRecorderDressUpSpeciesListConfig;
             dressUp->listConfig.entries = dressUp->entries;
             dressUp->listConfig.count = dressUp->speciesCount;
             VsRecorder_ClearListWindow(&work->listWindow);
@@ -553,7 +553,7 @@ BOOL VsRecorder_DressUpViewSelectSpecies(VsRecorderWork *work) {
             VsRecorder_OnTouchConfirm(work);
             work->step++;
         }
-        if (TouchscreenHitbox_TouchNewIsIn(&ov40_022451C4)) {
+        if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderDressUpCenterButtonHitbox)) {
             VsRecorder_OnTouchConfirm(work);
             work->step++;
         }
@@ -783,15 +783,15 @@ BOOL VsRecorder_DressUpViewShowPhoto(VsRecorderWork *work) {
 BOOL VsRecorder_DressUpViewMain(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
 
-    if (TouchscreenHitbox_TouchNewIsIn(&ov40_022451C4)) {
+    if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderDressUpCenterButtonHitbox)) {
         VsRecorder_OnTouchConfirm(work);
         VsRecorder_SetSubState(work, 9);
     }
-    if (TouchscreenHitbox_TouchNewIsIn(&ov40_022451D0)) {
+    if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderDressUpTopBarHitbox)) {
         VsRecorder_OnTouchConfirm(work);
         VsRecorder_SetSubState(work, 10);
     }
-    if (TouchscreenHitbox_TouchNewIsIn(&ov40_022451D4)) {
+    if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderDressUpPrevPhotoHitbox)) {
         if (dressUp->photoIndex != 0) {
             dressUp->photoIndex--;
         } else {
@@ -800,7 +800,7 @@ BOOL VsRecorder_DressUpViewMain(VsRecorderWork *work) {
         VsRecorder_OnTouchConfirm(work);
         VsRecorder_SetSubState(work, 11);
     }
-    if (TouchscreenHitbox_TouchNewIsIn(&ov40_022451D8)) {
+    if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderDressUpNextPhotoHitbox)) {
         dressUp->photoIndex++;
         dressUp->photoIndex %= dressUp->downloadCount;
         VsRecorder_OnTouchConfirm(work);
@@ -1216,8 +1216,8 @@ void VsRecorder_PrintPhotoCaption(VsRecorderWork *work, int index) {
 // TRUE if the player has seen a species of the group
 BOOL VsRecorder_DressUpCategoryHasSeen(VsRecorderWork *work, int category) {
     BOOL found = FALSE;
-    int end = ov40_02245CD4[category + 1];
-    int start = ov40_02245CD4[category];
+    int end = sVsRecorderDressUpSpeciesGroupStarts[category + 1];
+    int start = sVsRecorderDressUpSpeciesGroupStarts[category];
     int count, i;
     u16 *list = VsRecorder_LoadSpeciesList(HEAP_ID_109, found, &count);
     Pokedex *pokedex = Save_Pokedex_Get(work->saveData);
@@ -1239,10 +1239,10 @@ BOOL VsRecorder_DressUpCategoryHasSeen(VsRecorderWork *work, int category) {
 // the seen species of the group first, then the rest of the list; entries for the list window
 void VsRecorder_BuildDressUpSpeciesList(VsRecorderWork *work, int category) {
     VsRecorderDressUp *dressUp = work->screenWork;
-    int end = ov40_02245CD4[category + 1];
+    int end = sVsRecorderDressUpSpeciesGroupStarts[category + 1];
     u16 *tmp;
     Pokedex *pokedex;
-    int start = ov40_02245CD4[category];
+    int start = sVsRecorderDressUpSpeciesGroupStarts[category];
     int i;
 
     dressUp->speciesList = VsRecorder_LoadSpeciesList(HEAP_ID_109, 0, &dressUp->listSize);

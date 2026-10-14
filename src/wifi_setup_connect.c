@@ -25,8 +25,8 @@ typedef struct ConnectParam {
     u8 key[0x20];
 } ConnectParam;
 
-extern ConnectSetting ov13_0224DE80;
-extern ApInfo ov13_0224DDC0;
+extern ConnectSetting gWifiSetupConnectSetting;
+extern ApInfo gWifiSetupConnectApInfo;
 void MI_CpuFill8(void *dest, u8 value, u32 size);
 void MI_CpuCopy8(const void *src, void *dst, u32 size);
 void WCM_ClearApList(void);
@@ -56,18 +56,18 @@ int WifiSetup_ConnectAccessPoint(ConnectParam *param, void *out) {
         mode = 0xC0000;
     }
     mode |= 0x30000;
-    MI_CpuFill8(&ov13_0224DE80, 0, sizeof(ConnectSetting));
+    MI_CpuFill8(&gWifiSetupConnectSetting, 0, sizeof(ConnectSetting));
     if (param->keyLength == 5) {
-        ov13_0224DE80.keyType = 1;
+        gWifiSetupConnectSetting.keyType = 1;
     } else if (param->keyLength == 13) {
-        ov13_0224DE80.keyType = 2;
+        gWifiSetupConnectSetting.keyType = 2;
     } else if (param->keyLength == 16) {
-        ov13_0224DE80.keyType = 3;
+        gWifiSetupConnectSetting.keyType = 3;
     } else {
         return -1;
     }
-    ov13_0224DE80.keyIndex = connected;
-    MI_CpuCopy8(param->key, (u8 *)&ov13_0224DE80 + (connected * sizeof(ConnectKey) + 2), param->keyLength);
+    gWifiSetupConnectSetting.keyIndex = connected;
+    MI_CpuCopy8(param->key, (u8 *)&gWifiSetupConnectSetting + (connected * sizeof(ConnectKey) + 2), param->keyLength);
     WCM_ClearApList();
     if (WifiSetupWcm_StartSearch(0, (u32)param->unk04, param->unk00, 0x0030BFFE)) {
         retries = 0;
@@ -89,15 +89,15 @@ int WifiSetup_ConnectAccessPoint(ConnectParam *param, void *out) {
             case 5:
                 if (!connected) {
                     OS_CancelAlarm(&alarm);
-                    if (WifiSetupWcm_CopyApList(&ov13_0224DDC0, 1) != 1) {
+                    if (WifiSetupWcm_CopyApList(&gWifiSetupConnectApInfo, 1) != 1) {
                         running = FALSE;
                     } else {
-                        WifiSetup_CopyConnectSsid(param, &ov13_0224DDC0);
+                        WifiSetup_CopyConnectSsid(param, &gWifiSetupConnectApInfo);
                         i = 0;
                         n = APINFO2->count;
                         for (; i < n; i++) {
                         }
-                        if (!WifiSetupWcm_StartConnect(&ov13_0224DDC0, &ov13_0224DE80, mode)) {
+                        if (!WifiSetupWcm_StartConnect(&gWifiSetupConnectApInfo, &gWifiSetupConnectSetting, mode)) {
                             running = FALSE;
                         } else {
                             connected = 1;
@@ -106,8 +106,8 @@ int WifiSetup_ConnectAccessPoint(ConnectParam *param, void *out) {
                 }
                 break;
             case 10:
-                WifiSetup_CopyConnectSsid(param, &ov13_0224DDC0);
-                if (!WifiSetupWcm_StartConnect(&ov13_0224DDC0, &ov13_0224DE80, mode)) {
+                WifiSetup_CopyConnectSsid(param, &gWifiSetupConnectApInfo);
+                if (!WifiSetupWcm_StartConnect(&gWifiSetupConnectApInfo, &gWifiSetupConnectSetting, mode)) {
                     running = FALSE;
                 }
                 break;
@@ -117,7 +117,7 @@ int WifiSetup_ConnectAccessPoint(ConnectParam *param, void *out) {
                 break;
             case 13:
                 if (++retries < 3) {
-                    if (!WifiSetupWcm_StartConnect(&ov13_0224DDC0, &ov13_0224DE80, mode)) {
+                    if (!WifiSetupWcm_StartConnect(&gWifiSetupConnectApInfo, &gWifiSetupConnectSetting, mode)) {
                         running = FALSE;
                     }
                 } else {
@@ -137,7 +137,7 @@ int WifiSetup_ConnectAccessPoint(ConnectParam *param, void *out) {
         while (OS_ReceiveMessage(&gWifiSetupMessageQueue, &message, OS_MESSAGE_NOBLOCK) == TRUE) {
         }
     }
-    WifiSetup_StoreConnectResult(out, &ov13_0224DDC0, result == 0);
+    WifiSetup_StoreConnectResult(out, &gWifiSetupConnectApInfo, result == 0);
     return result;
 }
 #pragma optimization_level reset

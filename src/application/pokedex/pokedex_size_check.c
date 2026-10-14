@@ -20,7 +20,7 @@ typedef struct PokedexWeightRange {
     u16 max;
 } PokedexWeightRange;
 
-extern const ManagedSpriteTemplate ov18_021FA7B0[];
+extern const ManagedSpriteTemplate sPokedexSizeCheckSpriteTemplates[];
 extern PokedexWeightRange sWeightCheckDiffRanges[];
 extern BOOL (*const sWeightCheckAnimFuncs[])(PokedexWeightCheckAnim *anim);
 
@@ -31,7 +31,7 @@ void PokedexApp_SetupSizeCheckSprites(PokedexAppData *pokedexApp) {
 
     PokedexApp_LoadSizeCheckResources(pokedexApp);
     for (i = 1; i < 10; i++) {
-        pokedexApp->sprites[i] = PokedexApp_NewSprite(pokedexApp, &ov18_021FA7B0[i - 1]);
+        pokedexApp->sprites[i] = PokedexApp_NewSprite(pokedexApp, &sPokedexSizeCheckSpriteTemplates[i - 1]);
     }
     PokedexApp_SetSizeCheckMonIcons(pokedexApp);
     PokedexApp_DrawSizeCheckMonPic(pokedexApp);

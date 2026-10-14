@@ -118,19 +118,19 @@ int WifiSetup_StartSimpleStart(u32 priority, u32 count, void (*statusCallback)(s
     if (state >= 1 && state <= 5) {
         return -10;
     }
-    ov13_02245A58.count = count;
+    gWifiSetupConfig.count = count;
     WORK_STATE = 7;
     ov13_0224DF30.statusCallback = statusCallback;
     ov13_0224DF30.alloc = alloc;
     ov13_0224DF30.free = free;
-    ov13_02245A58.threadStackSize = stackSize;
+    gWifiSetupConfig.threadStackSize = stackSize;
     result = WifiSetupLink_Open(count);
     ov13_0224DF30.resultReady = 1;
     if (result < 0) {
         ov13_0224DF30.error = result;
         return result;
     }
-    ov13_0224DF30.threadStack = ov13_0224DF30.alloc(ov13_02245A58.threadStackSize);
+    ov13_0224DF30.threadStack = ov13_0224DF30.alloc(gWifiSetupConfig.threadStackSize);
     if (ov13_0224DF30.threadStack == NULL) {
         ov13_0224DF30.error = -1;
         return -1;
@@ -139,13 +139,13 @@ int WifiSetup_StartSimpleStart(u32 priority, u32 count, void (*statusCallback)(s
         ov13_0224DF30.error = -9;
         return -9;
     }
-    OS_CreateThread(&ov13_0224DFDC, WifiSetup_SimpleStartThread, NULL, (u8 *)ov13_0224DF30.threadStack + (ov13_02245A58.threadStackSize & ~7), ov13_02245A58.threadStackSize, priority);
+    OS_CreateThread(&gWifiSetupThread, WifiSetup_SimpleStartThread, NULL, (u8 *)ov13_0224DF30.threadStack + (gWifiSetupConfig.threadStackSize & ~7), gWifiSetupConfig.threadStackSize, priority);
     WORK_STATE = 1;
-    ov13_02245A58.deadline = WifiSetup_GetMilliseconds() + 60000;
+    gWifiSetupConfig.deadline = WifiSetup_GetMilliseconds() + 60000;
     ov13_0224DF30.stop = 0;
     memset(&ov13_0224E09C, 0, sizeof(ov13_0224E09C));
     WifiSetup_ReportSimpleStartStatus();
-    OS_WakeupThreadDirect(&ov13_0224DFDC);
+    OS_WakeupThreadDirect(&gWifiSetupThread);
     ov13_0224DF30.active = 1;
     return 1;
 }
@@ -163,9 +163,9 @@ int WifiSetup_StopSimpleStart(void) {
             OS_Sleep(100);
         }
         OS_Sleep(500);
-        while (!OS_IsThreadTerminated(&ov13_0224DFDC)) {
-            OS_WakeupThreadDirect(&ov13_0224DFDC);
-            OS_JoinThread(&ov13_0224DFDC);
+        while (!OS_IsThreadTerminated(&gWifiSetupThread)) {
+            OS_WakeupThreadDirect(&gWifiSetupThread);
+            OS_JoinThread(&gWifiSetupThread);
         }
         if (ov13_0224DF30.threadStack != NULL) {
             ov13_0224DF30.free(ov13_0224DF30.threadStack);
@@ -186,10 +186,10 @@ int WifiSetup_StopSimpleStart(void) {
 
 int WifiSetup_GetSimpleStartStatus(s32 *status) {
     status[0] = ov13_0224DF30.state;
-    if (ov13_02245A58.deadline == -1) {
+    if (gWifiSetupConfig.deadline == -1) {
         status[1] = -1;
     } else {
-        status[1] = ov13_02245A58.deadline - WifiSetup_GetMilliseconds();
+        status[1] = gWifiSetupConfig.deadline - WifiSetup_GetMilliseconds();
     }
     status[2] = ov13_0224DF30.error;
     return 1;

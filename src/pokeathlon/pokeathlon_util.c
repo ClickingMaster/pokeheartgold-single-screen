@@ -23,7 +23,7 @@ u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *stri
 
 u32 MATH_CountPopulation(u32 value);
 
-extern const u32 _0221F194[2];
+extern const u32 sPokeathlonUtilScreenVramTypes[2];
 extern const TileRect sPokeathlonMonPicRect;
 
 void *PokeathlonUtil_GetSpriteSystem(PokeathlonSpriteContext *ctx) {
@@ -46,8 +46,8 @@ PokeathlonSpriteContext *PokeathlonUtil_CreateSpriteContext(enum HeapID heapId, 
     ctx->spriteManager = SpriteManager_New(ctx->spriteSystem);
     ctx->narc = NARC_New(NARC_poketool_icongra_poke_icon, ctx->heapId);
     ctx->paletteOffset = -1;
-    oam = ov98_0221F1C0;
-    transfer = ov98_0221F1AC;
+    oam = sPokeathlonUtilOamManagerParam;
+    transfer = sPokeathlonUtilOamCharTransferParam;
     transfer.maxTasks = maxSprites;
     SpriteSystem_Init(ctx->spriteSystem, &oam, &transfer, 32);
     SpriteSystem_InitSprites(ctx->spriteSystem, ctx->spriteManager, maxSprites);
@@ -152,12 +152,12 @@ void PokeathlonUtil_LoadMonIconResources(PokeathlonSpriteContext *ctx, const int
     cellFileId = GetMonIconCell64KNaix();
     animFileId = GetMonIconAnim64KNaix();
     for (i = 0; i < count; i++) {
-        SpriteSystem_LoadCharResObj(spriteSystem, spriteManager, NARC_a_1_7_7, fileId, TRUE, _0221F194[screen], resIds[GF_GFX_RES_TYPE_CHAR] + i);
+        SpriteSystem_LoadCharResObj(spriteSystem, spriteManager, NARC_a_1_7_7, fileId, TRUE, sPokeathlonUtilScreenVramTypes[screen], resIds[GF_GFX_RES_TYPE_CHAR] + i);
     }
     SpriteSystem_LoadCellResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, cellFileId, FALSE, resIds[GF_GFX_RES_TYPE_CELL]);
     SpriteSystem_LoadAnimResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, animFileId, FALSE, resIds[GF_GFX_RES_TYPE_ANIM]);
     if (ctx->paletteOffset == -1) {
-        ctx->paletteOffset = SpriteSystem_LoadPlttResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), FALSE, 3, _0221F194[screen], resIds[GF_GFX_RES_TYPE_PLTT]);
+        ctx->paletteOffset = SpriteSystem_LoadPlttResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), FALSE, 3, sPokeathlonUtilScreenVramTypes[screen], resIds[GF_GFX_RES_TYPE_PLTT]);
     }
 }
 

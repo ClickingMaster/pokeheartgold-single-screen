@@ -147,7 +147,7 @@ BOOL WiFiPlaza_IsRegionValid(u32 country, u32 region) {
 }
 
 u8 WiFiPlaza_GetTypeByChoice(u32 index) {
-    return ov45_02254BB4[index];
+    return sWiFiPlazaTypeChoices[index];
 }
 
 // The error message class of a connection error (WifiConnection_ClassifyErrorCode, with the plaza's own errors 25 and

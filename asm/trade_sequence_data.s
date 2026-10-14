@@ -401,7 +401,7 @@
 	.public _02249B88
 	.public _02249B92
 	.public _02249BC6
-	.public _02249BE0
+	.public sWiiMessageSettingsHeap
 	.public _02249C04
 	.public _02249C4A
 	.public _02249C7A
@@ -630,7 +630,7 @@
 	.public _0224BA9C
 	.public _0224BAB8
 	.public sTradeSequenceBgZoomCenterY
-	.public _0224C020
+	.public sTradeSequenceBallSpirals
 	.public sTradeSequenceDeferredFreeCount
 	.public TradeSequence_BoxMonCantFlip
 	.public TradeSequence_DrawSpritesTask
@@ -1224,6 +1224,6 @@ sTradeSequenceReceiveGraphicsBanks: ; 0x0224BFDC
 
 	.data
 
-_0224C020:
+sTradeSequenceBallSpirals:
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00

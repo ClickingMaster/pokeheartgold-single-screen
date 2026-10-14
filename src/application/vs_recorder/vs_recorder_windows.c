@@ -38,9 +38,9 @@ typedef struct VsRecorderMailBuf {
     u32 v[2];
 } VsRecorderMailBuf;
 
-extern const VsRecorderWindowCoordsTable ov40_02244F40; // profile label windows
-extern const VsRecorderMsgIdTable ov40_02244F10;        // profile label messages
-extern const u32 ov40_02244FF0[][4];                    // trainer avatar files
+extern const VsRecorderWindowCoordsTable sVsRecorderProfileLabelWindows; // profile label windows
+extern const VsRecorderMsgIdTable sVsRecorderProfileLabelMsgIds;        // profile label messages
+extern const u32 sVsRecorderAvatarFileIds[][4];                    // trainer avatar files
 
 // touch screen notice (BG 6 window)
 void VsRecorder_ShowNotice(VsRecorderWork *work, int msgId) {
@@ -148,8 +148,8 @@ void VsRecorder_ShowMenuNotice(VsRecorderWork *work, int msgId) {
 }
 
 void VsRecorder_PrintProfile(VsRecorderProfile *profile, VsRecorderWork *work) {
-    VsRecorderWindowCoordsTable coords = ov40_02244F40;
-    VsRecorderMsgIdTable msgIds = ov40_02244F10;
+    VsRecorderWindowCoordsTable coords = sVsRecorderProfileLabelWindows;
+    VsRecorderMsgIdTable msgIds = sVsRecorderProfileLabelMsgIds;
     VsRecorderMailBuf mail;
     String *cityTemplate;
     String *countryTemplate;
@@ -379,7 +379,7 @@ u32 VsRecorder_GetAvatarFileId(int avatar, int kind) {
     if (kind >= 5) {
         return 0;
     }
-    return ov40_02244FF0[avatar][kind];
+    return sVsRecorderAvatarFileIds[avatar][kind];
 }
 
 // trainer sprite of the card (top screen): the player's own gender sprite unless a video is selected

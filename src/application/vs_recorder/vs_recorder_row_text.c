@@ -23,7 +23,7 @@ typedef struct VsRecorderS8x6 {
 
 #pragma force_active on
 
-extern const u8 ov40_02244DC0[2][5];
+extern const u8 sVsRecorderMenuRowDrawPriorities[2][5];
 
 // x offsets of the decor sprites (vs_recorder_ui.c)
 const VsRecorderS8x6 gVsRecorderDecorSpriteXOffsets = {
@@ -70,7 +70,7 @@ void VsRecorder_CreateMenuRowText(VsRecorderWork *work) {
             template.x = x + 36;
             template.y = y - 8;
             template.unk_20 = 3;
-            template.unk_24 = ov40_02244DC0[j][i] - 1;
+            template.unk_24 = sVsRecorderMenuRowDrawPriorities[j][i] - 1;
             template.vram = vrams.v[j];
             template.heapID = HEAP_ID_109;
             rows[j]->text = TextOBJ_Create(&template, rows[j]->textLayout);

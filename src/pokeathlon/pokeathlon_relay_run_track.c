@@ -28,8 +28,8 @@ fx32 FX_Sqrt(fx32 x);
 BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
 u32 GF_SndCountPlayingSeqOnPlayer(u32 playerNo);
 
-extern const PokeathlonRelayRunHitTable ov96_0221C5FC; // edges: RELAY_RUN_HIT_TOP, _RIGHT, _BOTTOM, _LEFT
-extern const PokeathlonRelayRunHitTable ov96_0221C60C; // corners: RELAY_RUN_HIT_TOP_LEFT ..
+extern const PokeathlonRelayRunHitTable sRelayRunEdgeHits; // edges: RELAY_RUN_HIT_TOP, _RIGHT, _BOTTOM, _LEFT
+extern const PokeathlonRelayRunHitTable sRelayRunCornerHits; // corners: RELAY_RUN_HIT_TOP_LEFT ..
 
 // Draws every team from the packet the host sent, scrolled so the player's own runner (team own) stands at
 // RELAY_RUN_RUNNER_X: positions, member swaps, dash lines, tired / exhausted marks and the bump mark.
@@ -566,7 +566,7 @@ int PokeathlonRelayRun_CollideWithObstacle(VecFx32 *start, VecFx32 *end, int rad
     b.x = end->x / FX32_ONE;
     b.y = end->y / FX32_ONE;
     for (i = 0; i < 4; i++) {
-        edgeHits = ov96_0221C5FC;
+        edgeHits = sRelayRunEdgeHits;
         if (Point2D_CalcSegmentIntersection(&shape->edges[i][0], &shape->edges[i][1], &a, &b, &hit)) {
             out->x = hit.x << FX32_SHIFT;
             out->y = hit.y << FX32_SHIFT;
@@ -607,7 +607,7 @@ int PokeathlonRelayRun_CollideWithObstacle(VecFx32 *start, VecFx32 *end, int rad
         }
     }
     for (i = 0; i < 4; i++) {
-        cornerHits = ov96_0221C60C;
+        cornerHits = sRelayRunCornerHits;
         corner.x = shape->corners[i].x << FX32_SHIFT;
         corner.y = shape->corners[i].y << FX32_SHIFT;
         corner.z = 0;

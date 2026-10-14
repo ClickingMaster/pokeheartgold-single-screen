@@ -10,7 +10,7 @@ void WiFiPlazaLobbyClient_OnMatchDisconnect(int result, void *arg) {
     if (client->unk_69e == 1) {
         WiFiPlazaLobbyClient_StopMatch();
     } else if (result == 0) {
-        _022577C0->unk_69f = 1;
+        gWiFiPlazaLobbyClient->unk_69f = 1;
     }
 }
 
@@ -109,8 +109,8 @@ WiFiPlazaPlayerObjects *WiFiPlazaPlayerObjects_New(u32 count, BOOL mode, enum He
     objects->lightFlags = NNS_G3dMdlGetMdlLightEnableFlag(NNS_G3dGetMdlByIdx(NNS_G3dGetMdlSet(file), 0), 0);
 
     for (i = 0; i < 2; i++) {
-        file = GfGfxLoader_LoadFromOpenNarc(modelNarc, ov45_02254C38[i], FALSE, loadHeapID, FALSE);
-        GF2dGfxRawResMan_AllocObj(objects->sequences, file, ov45_02254C38[i]);
+        file = GfGfxLoader_LoadFromOpenNarc(modelNarc, sWiFiPlazaSpriteSequenceFiles[i], FALSE, loadHeapID, FALSE);
+        GF2dGfxRawResMan_AllocObj(objects->sequences, file, sWiFiPlazaSpriteSequenceFiles[i]);
     }
 
     if (mode == FALSE) {
@@ -119,7 +119,7 @@ WiFiPlazaPlayerObjects *WiFiPlazaPlayerObjects_New(u32 count, BOOL mode, enum He
         skipped = 0;
     }
     {
-        const WiFiPlazaSpriteConfig *config = ov45_02254C48;
+        const WiFiPlazaSpriteConfig *config = sWiFiPlazaSpriteConfigs;
         int index = 0;
         do {
             if (skipped != index) {
@@ -201,7 +201,7 @@ WiFiPlazaPlayerObject *WiFiPlazaPlayerObjects_Add(WiFiPlazaPlayerObjects *object
     WiFiPlazaPlayerObject *object = WiFiPlazaPlayerObjects_GetFreeObject(objects);
     object->player = player;
     VecFx32 position = { 0, 0, 0 };
-    VecFx32 scale = ov45_02254C3C;
+    VecFx32 scale = sWiFiPlazaPlayerSpriteScale;
     config = WiFiPlaza_GetSpriteConfig(Field2DObject_GetParam(player, 7));
     modelFile = GF2dGfxRawResObj_GetData(GF2dGfxRawResMan_GetObjById(objects->models, 0x7F));
     texture = GF3dGfxRawResMan_GetObjById(objects->textures, config->fileId);
@@ -213,11 +213,11 @@ WiFiPlazaPlayerObject *WiFiPlazaPlayerObjects_Add(WiFiPlazaPlayerObjects *object
     }
     BillboardGfxSequence_Init(GF2dGfxRawResObj_GetData(GF2dGfxRawResMan_GetObjById(objects->sequences, texKey)), &sequence);
     if (config->ownTexture == 1) {
-        BillboardResource_Init(&resource, modelFile, tex, &ov45_02254C98, &sequence);
+        BillboardResource_Init(&resource, modelFile, tex, &sWiFiPlazaBillboardRanges, &sequence);
     } else {
         texKey = GF3dGfxRawResObj_GetTexKey(texture);
         tex4x4Key = GF3dGfxRawResObj_GetTex4x4Key(texture);
-        BillboardResource_InitWithKeys(&resource, modelFile, tex, &ov45_02254C98, &sequence, texKey, tex4x4Key, GF3dGfxRawResObj_GetPlttKey(texture));
+        BillboardResource_InitWithKeys(&resource, modelFile, tex, &sWiFiPlazaBillboardRanges, &sequence, texKey, tex4x4Key, GF3dGfxRawResObj_GetPlttKey(texture));
     }
     gridPos = Field2DObject_GetPos(player);
     WiFiPlazaMap_PosToVecFx32(&gridPos.unk0, &position.x);
@@ -302,8 +302,8 @@ u32 WiFiPlazaPlayerObject_IsVisible(WiFiPlazaPlayerObject *object) {
 const WiFiPlazaSpriteConfig *WiFiPlaza_GetSpriteConfig(int spriteId) {
     int i;
     for (i = 0; i < 20; i++) {
-        if (spriteId == ov45_02254C48[i].spriteId) {
-            return &ov45_02254C48[i];
+        if (spriteId == sWiFiPlazaSpriteConfigs[i].spriteId) {
+            return &sWiFiPlazaSpriteConfigs[i];
         }
     }
     GF_ASSERT(FALSE);
@@ -393,7 +393,7 @@ void WiFiPlazaPlayerObject_FollowPlayer(WiFiPlazaPlayerObject *object) {
             object->action = action;
         }
         {
-            void (*func)(WiFiPlazaPlayerObject *) = ov45_02254F28[action];
+            void (*func)(WiFiPlazaPlayerObject *) = sWiFiPlazaPlayerObjectActions[action];
             object->actionFrame = actionFrame;
             func(object);
         }
@@ -455,16 +455,16 @@ void WiFiPlazaPlayerObject_PlayWalkingSequence(WiFiPlazaPlayerObject *object) {
 
 void WiFiPlazaPlayerObject_UpdateEffect(WiFiPlazaPlayerObject *object) {
     if (object->mode == 0 && object->effectActive == 1) {
-        ov45_02254F1C[object->effect](object);
+        sWiFiPlazaPlayerObjectEffects[object->effect](object);
     }
 }
 
 #pragma force_active on
 
-// Effect 1 (ov45_02254F1C): turns around, one direction every 4 ticks.
+// Effect 1 (sWiFiPlazaPlayerObjectEffects): turns around, one direction every 4 ticks.
 void WiFiPlazaPlayerObject_EffectTurnAround(WiFiPlazaPlayerObject *object) {
     if (((int)object->timer) % 4 == 0) {
-        BillboardObject_SetSequence(object->sprite, WiFiPlaza_GetSpriteSequence(1, ov45_02254C34[(u32)object->timer >> 2]));
+        BillboardObject_SetSequence(object->sprite, WiFiPlaza_GetSpriteSequence(1, sWiFiPlazaTurnAroundDirections[(u32)object->timer >> 2]));
         BillboardObject_SetSequenceFrame(object->sprite, 0);
     }
     if (object->timer + object->step < 16) {

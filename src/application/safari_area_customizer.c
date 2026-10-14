@@ -124,7 +124,7 @@ typedef struct SafariAreaCustomizerResCounts {
     u8 counts[4];
 } SafariAreaCustomizerResCounts;
 
-// _021EA720 holds the per-row scroll directions of the slot swap; ov108_021EA724 (the label text colours)
+// _021EA720 holds the per-row scroll directions of the slot swap; sSafariAreaCustomizerLabelColors (the label text colours)
 // and the list menu template follow it without labels of their own.
 typedef struct SafariAreaCustomizerConsts {
     s8 swapDir[2][2];
@@ -133,23 +133,23 @@ typedef struct SafariAreaCustomizerConsts {
 } SafariAreaCustomizerConsts;
 
 extern const SafariAreaCustomizerConsts _021EA720;
-extern const u32 ov108_021EA724[2];
-extern const GraphicsModes ov108_021EA738;
-extern const u16 ov108_021EA748[];
+extern const u32 sSafariAreaCustomizerLabelColors[2];
+extern const GraphicsModes sSafariAreaCustomizerGraphicsModes;
+extern const u16 sSafariAreaCustomizerSlotMenuPositions[];
 extern const u16 ov108_021EA74A[];
-extern const TouchscreenHitbox ov108_021EA760[];
-extern const GraphicsBanks ov108_021EA780;
-extern const WindowTemplate ov108_021EA7A8[5];
-extern const TouchscreenHitbox ov108_021EA7D0[];
-extern const UnmanagedSpriteTemplate ov108_021EA7F8;
-extern const UnmanagedSpriteTemplate ov108_021EA820;
-extern const UnmanagedSpriteTemplate ov108_021EA848;
-extern const UnmanagedSpriteTemplate ov108_021EA870;
-extern const SafariAreaCustomizerBgTemplates ov108_021EA898;
-extern const SafariAreaCustomizerResCounts ov108_021EA978;
-extern const ResdatIdList ov108_021EA97C;
-extern const OamCharTransferParam ov108_021EA98C;
-extern const OamManagerParam ov108_021EA9A0;
+extern const TouchscreenHitbox sSafariAreaCustomizerSlotHitboxes[];
+extern const GraphicsBanks sSafariAreaCustomizerGraphicsBanks;
+extern const WindowTemplate sSafariAreaCustomizerWindowTemplates[5];
+extern const TouchscreenHitbox sSafariAreaCustomizerAreaHitboxes[];
+extern const UnmanagedSpriteTemplate sSafariAreaCustomizerSprite0Template;
+extern const UnmanagedSpriteTemplate sSafariAreaCustomizerSprite2Template;
+extern const UnmanagedSpriteTemplate sSafariAreaCustomizerSprite4Template;
+extern const UnmanagedSpriteTemplate sSafariAreaCustomizerSprite5Template;
+extern const SafariAreaCustomizerBgTemplates sSafariAreaCustomizerBgTemplates;
+extern const SafariAreaCustomizerResCounts sSafariAreaCustomizerResCounts;
+extern const ResdatIdList sSafariAreaCustomizerResdatIds;
+extern const OamCharTransferParam sSafariAreaCustomizerOamCharTransferParam;
+extern const OamManagerParam sSafariAreaCustomizerOamManagerParam;
 
 void SafariAreaCustomizer_InitFromArgs(SafariAreaCustomizer *s, SafariAreaCustomizerArgs *args);
 void SafariAreaCustomizer_SaveResults(SafariAreaCustomizer *s);
@@ -798,7 +798,7 @@ int SafariAreaCustomizer_HandleSlotButtons(SafariAreaCustomizer *s) {
 }
 
 int SafariAreaCustomizer_HandleSlotTouch(SafariAreaCustomizer *s) {
-    s32 hit = TouchscreenHitbox_FindRectAtTouchNew(ov108_021EA760);
+    s32 hit = TouchscreenHitbox_FindRectAtTouchNew(sSafariAreaCustomizerSlotHitboxes);
 
     if (hit == -1) {
         return 0;
@@ -912,7 +912,7 @@ int SafariAreaCustomizer_HandleAreaButtons(SafariAreaCustomizer *s) {
 }
 
 int SafariAreaCustomizer_HandleAreaTouch(SafariAreaCustomizer *s) {
-    s32 hit = TouchscreenHitbox_FindRectAtTouchNew(ov108_021EA7D0);
+    s32 hit = TouchscreenHitbox_FindRectAtTouchNew(sSafariAreaCustomizerAreaHitboxes);
 
     if (hit == -1) {
         return 0;
@@ -1023,7 +1023,7 @@ int SafariAreaCustomizer_HandleMoveButtons(SafariAreaCustomizer *s) {
 }
 
 int SafariAreaCustomizer_HandleMoveTouch(SafariAreaCustomizer *s) {
-    int hit = TouchscreenHitbox_FindRectAtTouchNew(ov108_021EA760);
+    int hit = TouchscreenHitbox_FindRectAtTouchNew(sSafariAreaCustomizerSlotHitboxes);
 
     if (hit == -1) {
         return 0;
@@ -1063,7 +1063,7 @@ void SafariAreaCustomizer_OpenSlotMenu(SafariAreaCustomizer *s) {
     header.bgConfig = s->bgConfig;
     header.numWindows = 3;
     y = ov108_021EA74A[s->selectedSlot * 2];
-    x = ov108_021EA748[s->selectedSlot * 2];
+    x = sSafariAreaCustomizerSlotMenuPositions[s->selectedSlot * 2];
     s->listMenu = TouchscreenListMenu_Create(s->listMenuSpawner, &header, s->touchMode, x, y, 0, 0);
     SafariAreaCustomizer_DrawSelectFrame(s, 1, s->selectedSlot, TRUE);
     SafariAreaCustomizer_DrawSelectFrame(s, 4, s->selectedSlot, TRUE);
@@ -1109,7 +1109,7 @@ void SafariAreaCustomizer_VBlankCB(void *cbArg) {
 }
 
 void SafariAreaCustomizer_SetGfxBanks(void) {
-    GraphicsBanks banks = ov108_021EA780;
+    GraphicsBanks banks = sSafariAreaCustomizerGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
@@ -1123,9 +1123,9 @@ void SafariAreaCustomizer_InitBgLayers(SafariAreaCustomizer *s) {
     SafariAreaCustomizer_SetGfxBanks();
     reg_GX_POWCNT &= ~REG_GX_POWCNT_DSEL_MASK;
     s->bgConfig = BgConfig_Alloc(s->heapId);
-    modes = ov108_021EA738;
+    modes = sSafariAreaCustomizerGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    templates = ov108_021EA898;
+    templates = sSafariAreaCustomizerBgTemplates;
     i = 0;
     count = 0;
     template = templates.templates;
@@ -1225,7 +1225,7 @@ void SafariAreaCustomizer_AddWindows(SafariAreaCustomizer *s) {
     int baseTile;
 
     for (i = 0; i <= 4; i++) {
-        AddWindow(s->bgConfig, &s->windows[i], &ov108_021EA7A8[i]);
+        AddWindow(s->bgConfig, &s->windows[i], &sSafariAreaCustomizerWindowTemplates[i]);
         FillWindowPixelBuffer(&s->windows[i], 0);
     }
     baseTile = 0x3A6;
@@ -1235,10 +1235,10 @@ void SafariAreaCustomizer_AddWindows(SafariAreaCustomizer *s) {
         height = (u8)(1 ^ (i / 4)) * 2 + 2;
         baseTile -= 22 * height;
         AddWindowParameterized(s->bgConfig, &s->windows[windowId], GF_BG_LYR_SUB_3, 1, y, 22, height, 5, baseTile);
-        FillWindowPixelBuffer(&s->windows[windowId], (ov108_021EA724[i % 2] & 0xFF));
+        FillWindowPixelBuffer(&s->windows[windowId], (sSafariAreaCustomizerLabelColors[i % 2] & 0xFF));
         baseTile -= 22 * height;
         AddWindowParameterized(s->bgConfig, &s->windows[windowId + 1], GF_BG_LYR_SUB_3, 26, y + (u8)(1 ^ (i / 4)), 5, 2, 5, baseTile);
-        FillWindowPixelBuffer(&s->windows[windowId + 1], (ov108_021EA724[i % 2] & 0xFF));
+        FillWindowPixelBuffer(&s->windows[windowId + 1], (sSafariAreaCustomizerLabelColors[i % 2] & 0xFF));
         baseTile -= 10;
     }
     InitWindow(&s->textObjWindow);
@@ -1301,12 +1301,12 @@ void SafariAreaCustomizer_CreateSprites(SafariAreaCustomizer *s) {
     for (i = 0; i < NUM_AREA_SLOTS; i++) {
         s->areaSprites[i + 6] = SafariAreaCustomizerSpriteRes_CreateAreaSprite(s->spriteRes, (i % 3) * 80 + 48, (i / 3) * 72 + 56, 3, 128, i + 6, i + 6 * s->page, NNS_G2D_VRAM_TYPE_2DMAIN);
     }
-    s->sprites[0] = SpriteSystem_CreateSpriteFromResourceHeader(s->spriteSystem, s->spriteManager, &ov108_021EA7F8);
-    s->sprites[1] = SpriteSystem_CreateSpriteFromResourceHeader(s->spriteSystem, s->spriteManager, &ov108_021EA7F8);
-    s->sprites[3] = SpriteSystem_CreateSpriteFromResourceHeader(s->spriteSystem, s->spriteManager, &ov108_021EA7F8);
-    s->sprites[2] = SpriteSystem_CreateSpriteFromResourceHeader(s->spriteSystem, s->spriteManager, &ov108_021EA820);
-    s->sprites[4] = SpriteSystem_CreateSpriteFromResourceHeader(s->spriteSystem, s->spriteManager, &ov108_021EA848);
-    s->sprites[5] = SpriteSystem_CreateSpriteFromResourceHeader(s->spriteSystem, s->spriteManager, &ov108_021EA870);
+    s->sprites[0] = SpriteSystem_CreateSpriteFromResourceHeader(s->spriteSystem, s->spriteManager, &sSafariAreaCustomizerSprite0Template);
+    s->sprites[1] = SpriteSystem_CreateSpriteFromResourceHeader(s->spriteSystem, s->spriteManager, &sSafariAreaCustomizerSprite0Template);
+    s->sprites[3] = SpriteSystem_CreateSpriteFromResourceHeader(s->spriteSystem, s->spriteManager, &sSafariAreaCustomizerSprite0Template);
+    s->sprites[2] = SpriteSystem_CreateSpriteFromResourceHeader(s->spriteSystem, s->spriteManager, &sSafariAreaCustomizerSprite2Template);
+    s->sprites[4] = SpriteSystem_CreateSpriteFromResourceHeader(s->spriteSystem, s->spriteManager, &sSafariAreaCustomizerSprite4Template);
+    s->sprites[5] = SpriteSystem_CreateSpriteFromResourceHeader(s->spriteSystem, s->spriteManager, &sSafariAreaCustomizerSprite5Template);
     thunk_Sprite_SetPriority(s->sprites[1], 3);
     thunk_Sprite_SetPriority(s->sprites[4], 3);
     thunk_Sprite_SetPriority(s->sprites[5], 3);
@@ -1578,7 +1578,7 @@ void SafariAreaCustomizer_PrintObjectTypeLabels(SafariAreaCustomizer *s) {
         for (i = 0; i < 5; i++) {
             Window *window = &s->windows[5 + i * 2];
             ReadMsgDataIntoString(s->msgData, i + 10, s->string);
-            AddTextPrinterParameterizedWithColor(window, 0, s->string, 0, 0, TEXT_SPEED_INSTANT, ov108_021EA724[i % 2], NULL);
+            AddTextPrinterParameterizedWithColor(window, 0, s->string, 0, 0, TEXT_SPEED_INSTANT, sSafariAreaCustomizerLabelColors[i % 2], NULL);
             CopyWindowToVram(window);
         }
     }
@@ -1596,7 +1596,7 @@ void SafariAreaCustomizer_PrintSlotInfo(SafariAreaCustomizer *s, u32 slot) {
     if (slot >= NUM_AREA_SLOTS) {
         if (s->objectsUnlocked) {
             for (i = 0; i < 5; i++) {
-                FillWindowPixelBuffer(&s->windows[i * 2 + 6], ov108_021EA724[i % 2]);
+                FillWindowPixelBuffer(&s->windows[i * 2 + 6], sSafariAreaCustomizerLabelColors[i % 2]);
                 ScheduleWindowCopyToVram(&s->windows[i * 2 + 6]);
             }
         }
@@ -1627,8 +1627,8 @@ void SafariAreaCustomizer_PrintSlotInfo(SafariAreaCustomizer *s, u32 slot) {
             Window *window = &s->windows[i * 2 + 6];
             BufferIntegerAsString(s->msgFormat, 0, counts[i], 2, PRINTING_MODE_RIGHT_ALIGN, TRUE);
             StringExpandPlaceholders(s->msgFormat, s->string, s->countTemplate);
-            FillWindowPixelBuffer(window, ov108_021EA724[i % 2]);
-            AddTextPrinterParameterizedWithColor(window, 0, s->string, 0, 0, TEXT_SPEED_NOTRANSFER, ov108_021EA724[i % 2], NULL);
+            FillWindowPixelBuffer(window, sSafariAreaCustomizerLabelColors[i % 2]);
+            AddTextPrinterParameterizedWithColor(window, 0, s->string, 0, 0, TEXT_SPEED_NOTRANSFER, sSafariAreaCustomizerLabelColors[i % 2], NULL);
             ScheduleWindowCopyToVram(window);
         }
     }
@@ -1786,7 +1786,7 @@ BOOL SafariAreaCustomizer_RunSwapAnim(SafariAreaCustomizer *s, int dir) {
 void SafariAreaCustomizer_InitSpriteSystem(SafariAreaCustomizer *s) {
     GF_CreateVramTransferManager(32, s->heapId);
     s->spriteSystem = SpriteSystem_Alloc(s->heapId);
-    SpriteSystem_Init(s->spriteSystem, &ov108_021EA9A0, &ov108_021EA98C, 4);
+    SpriteSystem_Init(s->spriteSystem, &sSafariAreaCustomizerOamManagerParam, &sSafariAreaCustomizerOamCharTransferParam, 4);
     thunk_ClearMainOAM(s->heapId);
     thunk_ClearSubOAM(s->heapId);
 }
@@ -1803,7 +1803,7 @@ void SafariAreaCustomizer_CreateSpriteManager(SafariAreaCustomizer *s) {
     if (s->spriteSystem != NULL) {
         s->spriteManager = SpriteManager_New(s->spriteSystem);
         SpriteSystem_InitSprites(s->spriteSystem, s->spriteManager, 140);
-        SpriteSystem_LoadResourceDataFromFileIdListEx(s->spriteSystem, s->spriteManager, &ov108_021EA97C, 2, 0);
+        SpriteSystem_LoadResourceDataFromFileIdListEx(s->spriteSystem, s->spriteManager, &sSafariAreaCustomizerResdatIds, 2, 0);
         SafariAreaCustomizerSpriteRes_SetSpriteList(s->spriteRes, SpriteManager_GetSpriteList(s->spriteManager));
     }
 }
@@ -1908,7 +1908,7 @@ void SafariAreaCustomizer_DeleteAreaSprite(ManagedSprite *sprite) {
 }
 
 void SafariAreaCustomizerSpriteRes_Init(SafariAreaCustomizerSpriteRes *res) {
-    SafariAreaCustomizerResCounts counts = ov108_021EA978;
+    SafariAreaCustomizerResCounts counts = sSafariAreaCustomizerResCounts;
     u32 i;
 
     res->spriteList = G2dRenderer_Init(res->maxSprites, &res->renderer, res->heapId);

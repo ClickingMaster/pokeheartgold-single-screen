@@ -52,17 +52,17 @@ SpriteList *PokeathlonCourseSpritePool_GetSpriteList(void *scene);
 void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *sprite, int priority);
 
 extern int gPokeathlonLampJumpTrampolineRed;         // red of the next trampoline vertex
-extern const u8 ov96_0221C0B0[2]; // x of the timer digits
-extern const u8 ov96_0221C0B4[2]; // animation of the timer digits
+extern const u8 sLampJumpTimerDigitX[2]; // x of the timer digits
+extern const u8 sLampJumpTimerDigitAnims[2]; // animation of the timer digits
 extern const VecFx32 ov96_0221C0C4;
-extern const VecFx32 ov96_0221C0D0;
-extern const VecFx32 ov96_0221C0DC;
-extern const VecFx32 ov96_0221C0E8;
-extern const VecFx32 ov96_0221C0F4;
-extern const u32 ov96_0221C110[]; // pitch of the lamp sound per points
-extern const WindowTemplate ov96_0221C1CC[5];
-extern const u16 ov96_0221C21C[29][2]; // lamp positions, in half pixels
-extern const WindowTemplate ov96_0221C2A0;
+extern const VecFx32 sLampJumpFirstOtherPlayerPos;
+extern const VecFx32 sLampJumpOwnPlayerPos;
+extern const VecFx32 sLampJumpTrampolineScale;
+extern const VecFx32 sLampJumpCameraOffset;
+extern const u32 sLampJumpLampSoundPitches[]; // pitch of the lamp sound per points
+extern const WindowTemplate sLampJumpWindowTemplates[5];
+extern const u16 sLampJumpLampPositions[29][2]; // lamp positions, in half pixels
+extern const WindowTemplate sResultsAnnouncementWindowTemplate;
 extern u8 gPokeathlonLampJumpSoundPlayers[]; // sound player of each Pokemon (not const: reloaded after every call)
 
 #pragma force_active on
@@ -84,7 +84,7 @@ static inline void PokeathlonLampJump_GeColor(u32 rgb) {
 
 // A quad strip from the trampoline's surface down to y -1.5, each column in the next color.
 void PokeathlonLampJump_DrawTrampoline(PokeathlonLampJump *lampJump) {
-    VecFx32 scale = ov96_0221C0E8;
+    VecFx32 scale = sLampJumpTrampolineScale;
     u32 polygonAttr;
     u32 color;
     u32 primitive;
@@ -132,7 +132,7 @@ void PokeathlonLampJump_Draw3D(PokeathlonLampJump *lampJump) {
 void PokeathlonLampJump_InitCamera(PokeathlonLampJump *lampJump) {
     VecFx32 up;
     CameraAngle angle;
-    VecFx32 offset = ov96_0221C0F4;
+    VecFx32 offset = sLampJumpCameraOffset;
 
     lampJump->cameraTarget.x = 0;
     lampJump->cameraTarget.y = 0;
@@ -307,7 +307,7 @@ void PokeathlonLampJump_UpdateJumps(PokeathlonCourseData *course, PokeathlonLamp
                     PokeathlonLampJump_ShowLampPoints(lampJump->lamps, lamp, points);
                     lampJump->hitLamp = TRUE;
                     PlaySEOnPlayer(SEQ_SE_GS_POINT1, *soundPlayer);
-                    GF_SndSetTrackPitchByPlayerNo(*soundPlayer, 0xFFFF, ov96_0221C110[points - 1]);
+                    GF_SndSetTrackPitchByPlayerNo(*soundPlayer, 0xFFFF, sLampJumpLampSoundPitches[points - 1]);
                     PokeathlonCourse_AddMonCounter(course, participant, (u8)i, 3, 1);
                 }
             }
@@ -582,11 +582,11 @@ void PokeathlonLampJump_CreateSprites(PokeathlonLampJump *lampJump, void *scene)
         SpriteList *spriteList = PokeathlonCourseSpritePool_GetSpriteList(scene);
         lampJump->timerDigits[j] = PokeathlonCourse_CreateTimerDigitSpriteAlt(lampJump->spriteResources, spriteList, 1, lampJump->heapId);
         Sprite_SetDrawFlag(lampJump->timerDigits[j], TRUE);
-        pos.x = ov96_0221C0B0[j] * FX32_ONE;
+        pos.x = sLampJumpTimerDigitX[j] * FX32_ONE;
         pos.y = FX32_CONST(8);
         pos.z = 0;
         Sprite_SetMatrix(lampJump->timerDigits[j], &pos);
-        Sprite_SetAnimCtrlSeq(lampJump->timerDigits[j], ov96_0221C0B4[j]);
+        Sprite_SetAnimCtrlSeq(lampJump->timerDigits[j], sLampJumpTimerDigitAnims[j]);
     }
 }
 
@@ -602,9 +602,9 @@ void PokeathlonLampJump_PlaceSprites(PokeathlonLampJump *lampJump, u8 self) {
     PokeathlonLampJump_PlaceLamps(lampJump->lamps);
     pos = ov96_0221C0C4;
     PokeathlonCourseSpritePoolSprite_SetPosition(lampJump->unk64, &pos);
-    ownPos = ov96_0221C0DC;
+    ownPos = sLampJumpOwnPlayerPos;
     PokeathlonCourseSpritePoolSprite_SetPosition(lampJump->playerSprites[self], &ownPos);
-    firstOtherPos = ov96_0221C0D0;
+    firstOtherPos = sLampJumpFirstOtherPlayerPos;
     n = 0;
     for (i = 0; i < 4; i++) {
         otherPos = firstOtherPos;
@@ -698,7 +698,7 @@ void PokeathlonLampJump_PrintPlayerNames(PokeathlonCourseData *course, Pokeathlo
 void PokeathlonLampJump_InitWindows(PokeathlonLampJump *lampJump) {
     u8 i;
     for (i = 0; i < 5; i++) {
-        AddWindow(lampJump->bgConfig, &lampJump->windows[i], &ov96_0221C1CC[i]);
+        AddWindow(lampJump->bgConfig, &lampJump->windows[i], &sLampJumpWindowTemplates[i]);
     }
     BG_FillCharDataRange(lampJump->bgConfig, GF_BG_LYR_SUB_2, 0, 1, 0);
     LoadFontPal0(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_15_OFFSET, lampJump->heapId);
@@ -882,7 +882,7 @@ void PokeathlonLampJump_CreateLampSprites(PokeathlonLampJumpLamps *lamps, void *
 void PokeathlonLampJump_PlaceLamps(PokeathlonLampJumpLamps *lamps) {
     int i;
     VecFx32 pos;
-    const u16 *xy = ov96_0221C21C[0];
+    const u16 *xy = sLampJumpLampPositions[0];
     PokeathlonLampJumpLamp *lamp = lamps->lamps;
     for (i = 0; i < 29; i++, xy += 2, lamp++) {
         pos.x = xy[0] << 15;
@@ -1065,7 +1065,7 @@ void PokeathlonResultsAnnouncement_InitWindow(Window *window, BgConfig *bgConfig
     if (bgConfig == NULL) {
         GF_AssertFail();
     }
-    AddWindow(bgConfig, window, &ov96_0221C2A0);
+    AddWindow(bgConfig, window, &sResultsAnnouncementWindowTemplate);
     BG_FillCharDataRange(bgConfig, GF_BG_LYR_MAIN_1, 0, 1, 0);
     LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_15_OFFSET, heapId);
     LoadFontPal0(GF_PAL_LOCATION_SUB_BGEXT, (enum GFPalSlotOffset)0x4000, heapId);

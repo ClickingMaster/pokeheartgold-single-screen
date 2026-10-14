@@ -52,16 +52,16 @@ void ov96_02208658(PokeathlonPennantCaptureDisplay *display, u8 participant, u16
 void ov96_02208840(PokeathlonPennantCaptureDisplay *display, int participant, u8 pennants);
 void ov96_02208864(PokeathlonPennantCaptureDisplay *display, int participant);
 
-extern const WindowTemplate ov96_0221CAC0;
-extern const VecFx32 ov96_0221CAC8;
+extern const WindowTemplate sPennantCaptureScoreWindowTemplate;
+extern const VecFx32 sPennantCaptureReferenceVector;
 
 // The sides of an obstacle a path enters through (edge and corner hit codes; 9-12 = from inside).
 typedef struct PokeathlonPennantCaptureHitCodes {
     int sides[4];
 } PokeathlonPennantCaptureHitCodes;
 
-extern const PokeathlonPennantCaptureHitCodes ov96_0221CB00; // edge hits
-extern const PokeathlonPennantCaptureHitCodes ov96_0221CAE0; // corner hits
+extern const PokeathlonPennantCaptureHitCodes sPennantCaptureEdgeHits; // edge hits
+extern const PokeathlonPennantCaptureHitCodes sPennantCaptureCornerHits; // corner hits
 
 typedef struct PokeathlonPennantCaptureCollisionFrame {
     int bY;
@@ -735,7 +735,7 @@ int PokeathlonPennantCapture_CollideWithObstacle(VecFx32 *from, VecFx32 *to, int
     stop.x = end->x / FX32_ONE;
     stop.y = end->y / FX32_ONE;
     for (i = 0; i < 4; ++i) {
-        PokeathlonPennantCaptureHitCodes codes = ov96_0221CB00;
+        PokeathlonPennantCaptureHitCodes codes = sPennantCaptureEdgeHits;
         if (Point2D_CalcSegmentIntersection(&bounds->edges[i][0], &bounds->edges[i][1], &start, &stop, &hit)) {
             result->x = hit.x << 12;
             result->y = hit.y << 12;
@@ -777,7 +777,7 @@ int PokeathlonPennantCapture_CollideWithObstacle(VecFx32 *from, VecFx32 *to, int
     }
     i = 0, corner = bounds->corners;
     while (i < 4) {
-        PokeathlonPennantCaptureHitCodes codes = ov96_0221CAE0;
+        PokeathlonPennantCaptureHitCodes codes = sPennantCaptureCornerHits;
         VecFx32 point;
         VecFx32 delta;
         point.x = corner->x << 12;
@@ -1056,7 +1056,7 @@ void PokeathlonPennantCapture_SetPlayerDrawPriority(PokeathlonPennantCapturePlay
 }
 
 void PokeathlonPennantCapture_InitScoreWindow(PokeathlonPennantCapture *work) {
-    AddWindow(work->bgConfig, &work->scoreWindow, &ov96_0221CAC0);
+    AddWindow(work->bgConfig, &work->scoreWindow, &sPennantCaptureScoreWindowTemplate);
     BG_FillCharDataRange(work->bgConfig, GF_BG_LYR_MAIN_3, 0, 1, 0);
     LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_15_OFFSET, work->heapId);
 }
@@ -1160,7 +1160,7 @@ BOOL PokeathlonPennantCapture_CirclesOverlap(const VecFx32 *a, const VecFx32 *b,
     return FALSE;
 }
 
-// 1 = up, 2 = right, 3 = down, 4 = left (from the angle to ov96_0221CAC8)
+// 1 = up, 2 = right, 3 = down, 4 = left (from the angle to sPennantCaptureReferenceVector)
 int PokeathlonPennantCapture_GetDirection(const VecFx32 *vector) {
     VecFx32 normalized;
     VecFx32 reference;
@@ -1170,7 +1170,7 @@ int PokeathlonPennantCapture_GetDirection(const VecFx32 *vector) {
 
     VEC_Normalize(vector, &normalized);
     if (VEC_Mag(&normalized) != 0) {
-        reference = ov96_0221CAC8;
+        reference = sPennantCaptureReferenceVector;
         rotated.x = normalized.y;
         rotated.z = normalized.x;
         rotated.y = 0;

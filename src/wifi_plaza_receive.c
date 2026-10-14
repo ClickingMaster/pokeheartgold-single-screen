@@ -87,9 +87,9 @@ void WiFiPlaza_OnTalkCancel(int id, u16 *data, u32 size, WiFiPlazaWork *work) {
 
 #pragma force_active on
 
-// A lobby message: handled by ov45_02254A60[type] (WiFiPlaza_HandleChatNews ...).
+// A lobby message: handled by sWiFiPlazaLobbyMessageHandlers[type] (WiFiPlaza_HandleChatNews ...).
 void WiFiPlaza_OnLobbyMessage(int id, WiFiPlazaLobbyMessage *msg, u32 size, WiFiPlazaWork *work) {
-    ov45_02254A60[msg->type](work, msg);
+    sWiFiPlazaLobbyMessageHandlers[msg->type](work, msg);
 }
 
 #pragma force_active reset

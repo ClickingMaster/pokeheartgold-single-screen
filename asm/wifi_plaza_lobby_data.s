@@ -83,9 +83,9 @@
 	.extern ov45_02230D5C
 	.public IncrementGameStat119
 	.public IncrementGameStat47
-	.public _02254A28
-	.public _02254E20
-	.public _022577C0
+	.public sWiFiPlazaTimerPhases
+	.public sWiFiPlazaAppFreeArgsFuncs
+	.public gWiFiPlazaLobbyClient
 	.public WiFiPlaza_Init
 	.public WiFiPlaza_Main
 	.public WiFiPlaza_Exit
@@ -560,43 +560,43 @@
 	.public WiFiPlaza_IsSpriteInView
 	.public WiFiPlaza_GetLocalTime
 	.public WiFiPlaza_GetLongitude
-	.public ov45_02254A3C
-	.public ov45_02254A60
-	.public ov45_02254A84
-	.public ov45_02254AC4
-	.public ov45_02254B04
-	.public ov45_02254B14
-	.public ov45_02254B24
-	.public ov45_02254B34
-	.public ov45_02254B44
-	.public ov45_02254B54
-	.public ov45_02254B64
-	.public ov45_02254B74
-	.public ov45_02254B84
-	.public ov45_02254B94
-	.public ov45_02254BA4
-	.public ov45_02254BB4
-	.public ov45_02254BC8
-	.public ov45_02254BCA
-	.public ov45_02254BD2
-	.public ov45_02254BDC
-	.public ov45_02254BE8
-	.public ov45_02254C0C
-	.public ov45_02254C30
-	.public ov45_02254C34
-	.public ov45_02254C38
-	.public ov45_02254C3C
-	.public ov45_02254C48
-	.public ov45_02254C98
-	.public ov45_02254E54
-	.public ov45_02254E88
-	.public ov45_02254EBC
-	.public ov45_02254EF0
+	.public sWiFiPlazaGroupStartTimes
+	.public sWiFiPlazaLobbyMessageHandlers
+	.public sWiFiPlazaAvatars
+	.public sWiFiPlazaLobbyCommands
+	.public sWiFiPlazaDisconnectOverlayTemplate
+	.public sWiFiPlazaFootprintStampBoard1OverlayTemplate
+	.public sWiFiPlazaFootprintStampBoard0OverlayTemplate
+	.public sWiFiPlazaWobbuffetPopOverlayTemplate
+	.public sWiFiPlazaSurveyOverlayTemplate
+	.public sWiFiPlazaSwalotPlopOverlayTemplate
+	.public sWiFiPlazaConnectOverlayTemplate
+	.public sWiFiPlazaNewsOverlayTemplate
+	.public sWiFiPlazaVisitorProfilesOverlayTemplate
+	.public sWiFiPlazaMainOverlayTemplate
+	.public sWiFiPlazaMimeJrTopOverlayTemplate
+	.public sWiFiPlazaTypeChoices
+	.public sWiFiPlazaNewsMinigameResultRanks
+	.public sWiFiPlazaNewsMinigameResultMsgs
+	.public sWiFiPlazaNewsMinigameResultMsgsOther
+	.public sWiFiPlazaNewsMinigameEntryRanks
+	.public sWiFiPlazaNewsEventSlotGetters
+	.public sWiFiPlazaNewsEventFormatters
+	.public sWiFiPlazaChannelCapacities
+	.public sWiFiPlazaTurnAroundDirections
+	.public sWiFiPlazaSpriteSequenceFiles
+	.public sWiFiPlazaPlayerSpriteScale
+	.public sWiFiPlazaSpriteConfigs
+	.public sWiFiPlazaBillboardRanges
+	.public sWiFiPlazaAppStartFuncs
+	.public sWiFiPlazaAppInitArgsFuncs
+	.public sWiFiPlazaAppEndFuncs
+	.public sWiFiPlazaLocationListKey
 	.public sStr_b_lby_wlddata
 	.public sStr_pokemonplatds
 	.public sStr_IIup73
-	.public ov45_02254F1C
-	.public ov45_02254F28
+	.public sWiFiPlazaPlayerObjectEffects
+	.public sWiFiPlazaPlayerObjectActions
 	.public WiFiPlazaWork_VBlankDummy
 	.public WiFiPlazaWork_HasError
 	.public WiFiPlazaWork_GetNews
@@ -673,16 +673,16 @@
 .text
 	.rodata
 
-_02254A28:
+sWiFiPlazaTimerPhases:
 	.byte 0x02, 0x00, 0x50, 0x00, 0x01, 0x00, 0x02, 0x00
 	.byte 0x03, 0x00, 0x8E, 0x00, 0x01, 0x00, 0x02, 0x00, 0x04, 0x00, 0x1E, 0x00
 
-ov45_02254A3C: ; 0x02254A3C
+sWiFiPlazaGroupStartTimes: ; 0x02254A3C
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x68, 0x01, 0x00, 0x00, 0xD0, 0x02, 0x00, 0x00, 0xB0, 0x04, 0x00, 0x00, 0x18, 0x06, 0x00, 0x00
 	.byte 0x80, 0x07, 0x00, 0x00, 0x60, 0x09, 0x00, 0x00, 0xC8, 0x0A, 0x00, 0x00, 0x30, 0x0C, 0x00, 0x00
 
-ov45_02254A60: ; 0x02254A60
+sWiFiPlazaLobbyMessageHandlers: ; 0x02254A60
 	.word WiFiPlaza_HandleChatNews
 	.word WiFiPlaza_HandleTapToyTradeNews
 	.word WiFiPlaza_HandleMinigameEntryNews
@@ -693,14 +693,14 @@ ov45_02254A60: ; 0x02254A60
 	.word WiFiPlaza_HandleUnusedNews
 	.word WiFiPlaza_HandleMinigameResultNews
 
-ov45_02254A84: ; 0x02254A84
+sWiFiPlazaAvatars: ; 0x02254A84
 	.byte 0x03, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x0B, 0x00, 0x00, 0x00
 	.byte 0x1F, 0x00, 0x00, 0x00, 0x32, 0x00, 0x00, 0x00, 0x33, 0x00, 0x00, 0x00, 0x3E, 0x00, 0x00, 0x00
 	.byte 0x46, 0x00, 0x00, 0x00, 0x06, 0x00, 0x01, 0x00, 0x07, 0x00, 0x01, 0x00, 0x0D, 0x00, 0x01, 0x00
 	.byte 0x0E, 0x00, 0x01, 0x00, 0x23, 0x00, 0x01, 0x00, 0x25, 0x00, 0x01, 0x00, 0x2A, 0x00, 0x01, 0x00
 	.byte 0x3F, 0x00, 0x01, 0x00
 
-ov45_02254AC4: ; 0x02254AC4
+sWiFiPlazaLobbyCommands: ; 0x02254AC4
 	.word WiFiPlaza_OnTalkRequest
 	.byte 0x04, 0x00, 0x00, 0x00
 	.word WiFiPlaza_OnTalkAnswer
@@ -718,91 +718,91 @@ ov45_02254AC4: ; 0x02254AC4
 	.word WiFiPlaza_RecvGroupAction
 	.byte 0x04, 0x00, 0x00, 0x00
 
-ov45_02254B04: ; 0x02254B04
+sWiFiPlazaDisconnectOverlayTemplate: ; 0x02254B04
 	.word WiFiPlazaConnect_DisconnectInit
 	.word WiFiPlazaConnect_DisconnectMain
 	.word WiFiPlazaConnect_DisconnectExit
 	.word FS_OVERLAY_ID(OVY_46)
 
-ov45_02254B14: ; 0x02254B14
+sWiFiPlazaFootprintStampBoard1OverlayTemplate: ; 0x02254B14
 	.word FootprintStamp_Init
 	.word FootprintStamp_Main
 	.word FootprintStamp_Exit
 	.word FS_OVERLAY_ID(OVY_89)
 
-ov45_02254B24: ; 0x02254B24
+sWiFiPlazaFootprintStampBoard0OverlayTemplate: ; 0x02254B24
 	.word FootprintStamp_Init
 	.word FootprintStamp_Main
 	.word FootprintStamp_Exit
 	.word FS_OVERLAY_ID(OVY_89)
 
-ov45_02254B34: ; 0x02254B34
+sWiFiPlazaWobbuffetPopOverlayTemplate: ; 0x02254B34
 	.word WobbuffetPopApp_Init
 	.word WobbuffetPopApp_Main
 	.word WobbuffetPopApp_Exit
 	.word FS_OVERLAY_ID(OVY_93)
 
-ov45_02254B44: ; 0x02254B44
+sWiFiPlazaSurveyOverlayTemplate: ; 0x02254B44
 	.word WiFiPlazaSurvey_Init
 	.word WiFiPlazaSurvey_Main
 	.word WiFiPlazaSurvey_Exit
 	.word FS_OVERLAY_ID(OVY_47)
 
-ov45_02254B54: ; 0x02254B54
+sWiFiPlazaSwalotPlopOverlayTemplate: ; 0x02254B54
 	.word SwalotPlop_Init
 	.word SwalotPlop_Main
 	.word SwalotPlop_Exit
 	.word FS_OVERLAY_ID(OVY_91)
 
-ov45_02254B64: ; 0x02254B64
+sWiFiPlazaConnectOverlayTemplate: ; 0x02254B64
 	.word WiFiPlazaConnect_Init
 	.word WiFiPlazaConnect_Main
 	.word WiFiPlazaConnect_Exit
 	.word FS_OVERLAY_ID(OVY_46)
 
-ov45_02254B74: ; 0x02254B74
+sWiFiPlazaNewsOverlayTemplate: ; 0x02254B74
 	.word PlazaNews_Init
 	.word PlazaNews_Main
 	.word PlazaNews_Exit
 	.word FS_OVERLAY_ID(OVY_88)
 
-ov45_02254B84: ; 0x02254B84
+sWiFiPlazaVisitorProfilesOverlayTemplate: ; 0x02254B84
 	.word VisitorProfiles_Init
 	.word VisitorProfiles_Main
 	.word VisitorProfiles_Exit
 	.word FS_OVERLAY_ID(OVY_48)
 
-ov45_02254B94: ; 0x02254B94
+sWiFiPlazaMainOverlayTemplate: ; 0x02254B94
 	.word WiFiPlazaRoom_Init
 	.word WiFiPlazaRoom_Main
 	.word WiFiPlazaRoom_Exit
 	.word FS_OVERLAY_ID(OVY_49)
 
-ov45_02254BA4: ; 0x02254BA4
+sWiFiPlazaMimeJrTopOverlayTemplate: ; 0x02254BA4
 	.word MimeJrTop_Init
 	.word MimeJrTop_Main
 	.word MimeJrTop_Exit
 	.word FS_OVERLAY_ID(OVY_92)
 
-ov45_02254BB4: ; 0x02254BB4
+sWiFiPlazaTypeChoices: ; 0x02254BB4
 	.byte 0x09, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x0A, 0x0B
 	.byte 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x00, 0x00
 
-ov45_02254BC8: ; 0x02254BC8
+sWiFiPlazaNewsMinigameResultRanks: ; 0x02254BC8
 	.byte 0x0B, 0x0A
 
-ov45_02254BCA: ; 0x02254BCA
+sWiFiPlazaNewsMinigameResultMsgs: ; 0x02254BCA
 	.byte 0x09, 0x00, 0x16, 0x00, 0x18, 0x00
 	.byte 0x19, 0x00
 
-ov45_02254BD2: ; 0x02254BD2
+sWiFiPlazaNewsMinigameResultMsgsOther: ; 0x02254BD2
 	.byte 0x1A, 0x00, 0x00, 0x00, 0x1B, 0x00, 0x1C, 0x00, 0x17, 0x00
 
-ov45_02254BDC: ; 0x02254BDC
+sWiFiPlazaNewsMinigameEntryRanks: ; 0x02254BDC
 	.byte 0x04, 0x00, 0x00, 0x00
 	.byte 0x03, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 
-ov45_02254BE8: ; 0x02254BE8
+sWiFiPlazaNewsEventSlotGetters: ; 0x02254BE8
 	.word WiFiPlazaNewsEvent_GetChatSlot
 	.word WiFiPlazaNewsEvent_GetTapToyTradeSlot
 	.word WiFiPlazaNewsEvent_GetMinigameEntrySlot
@@ -813,7 +813,7 @@ ov45_02254BE8: ; 0x02254BE8
 	.word WiFiPlazaNewsEvent_GetSpecialVisitorSlot
 	.word WiFiPlazaNewsEvent_GetMinigameResultSlot
 
-ov45_02254C0C: ; 0x02254C0C
+sWiFiPlazaNewsEventFormatters: ; 0x02254C0C
 	.word WiFiPlazaNewsEvent_FormatChat
 	.word WiFiPlazaNewsEvent_FormatTapToyTrade
 	.word WiFiPlazaNewsEvent_FormatMinigameEntry
@@ -824,20 +824,20 @@ ov45_02254C0C: ; 0x02254C0C
 	.word WiFiPlazaNewsEvent_FormatSpecialVisitor
 	.word WiFiPlazaNewsEvent_FormatMinigameResult
 
-ov45_02254C30: ; 0x02254C30
+sWiFiPlazaChannelCapacities: ; 0x02254C30
 	.byte 0x08, 0x08, 0x04, 0x04
 
-ov45_02254C34: ; 0x02254C34
+sWiFiPlazaTurnAroundDirections: ; 0x02254C34
 	.byte 0x01, 0x02, 0x00, 0x03
 
-ov45_02254C38: ; 0x02254C38
+sWiFiPlazaSpriteSequenceFiles: ; 0x02254C38
 	.byte 0x18, 0x01, 0x19, 0x01
 
-ov45_02254C3C: ; 0x02254C3C
+sWiFiPlazaPlayerSpriteScale: ; 0x02254C3C
 	.byte 0x00, 0x10, 0x00, 0x00
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00
 
-ov45_02254C48: ; 0x02254C48
+sWiFiPlazaSpriteConfigs: ; 0x02254C48
 	.byte 0x00, 0x00, 0x45, 0x80, 0x61, 0x00, 0x46, 0x80
 	.byte 0x03, 0x00, 0x02, 0x00, 0x05, 0x00, 0x04, 0x00, 0x0B, 0x00, 0x0A, 0x00, 0x1F, 0x00, 0x24, 0x00
 	.byte 0x32, 0x00, 0x2F, 0x00, 0x33, 0x00, 0x30, 0x00, 0x3E, 0x00, 0x1B, 0x00, 0x46, 0x00, 0x21, 0x00
@@ -845,7 +845,7 @@ ov45_02254C48: ; 0x02254C48
 	.byte 0x23, 0x00, 0x26, 0x00, 0x25, 0x00, 0x28, 0x00, 0x2A, 0x00, 0x2B, 0x00, 0x3F, 0x00, 0x1C, 0x00
 	.byte 0x1E, 0x01, 0x66, 0x00, 0x1D, 0x01, 0x65, 0x00
 
-ov45_02254C98: ; 0x02254C98
+sWiFiPlazaBillboardRanges: ; 0x02254C98
 	.byte 0x00, 0x00, 0x00, 0x00, 0x0F, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x1F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x20, 0x00, 0x00, 0x00, 0x2F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x30, 0x00, 0x00, 0x00
@@ -857,7 +857,7 @@ ov45_02254C98: ; 0x02254C98
 
 	.data
 
-_02254E20:
+sWiFiPlazaAppFreeArgsFuncs:
 	.word WiFiPlazaApps_FreeMainArgs
 	.word WiFiPlazaApps_FreeVisitorProfilesArgs
 	.word WiFiPlazaApps_FreePlazaNewsArgs
@@ -872,7 +872,7 @@ _02254E20:
 	.word WiFiPlazaApps_FreeSurveyArgs
 	.word WiFiPlazaApps_FreeSurveyArgs
 
-ov45_02254E54: ; 0x02254E54
+sWiFiPlazaAppStartFuncs: ; 0x02254E54
 	.word WiFiPlazaApps_StartMain
 	.word WiFiPlazaApps_StartVisitorProfiles
 	.word WiFiPlazaApps_StartPlazaNews
@@ -887,7 +887,7 @@ ov45_02254E54: ; 0x02254E54
 	.word WiFiPlazaApps_StartSurvey
 	.word WiFiPlazaApps_StartSurvey
 
-ov45_02254E88: ; 0x02254E88
+sWiFiPlazaAppInitArgsFuncs: ; 0x02254E88
 	.word WiFiPlazaApps_NewMainArgs
 	.word WiFiPlazaApps_NewVisitorProfilesArgs
 	.word WiFiPlazaApps_NewPlazaNewsArgs
@@ -902,7 +902,7 @@ ov45_02254E88: ; 0x02254E88
 	.word WiFiPlazaApps_NewSurveyAnswerArgs
 	.word WiFiPlazaApps_NewSurveyResultsArgs
 
-ov45_02254EBC: ; 0x02254EBC
+sWiFiPlazaAppEndFuncs: ; 0x02254EBC
 	.word WiFiPlazaApps_EndMain
 	.word WiFiPlazaApps_EndVisitorProfiles
 	.word WiFiPlazaApps_EndPlazaNews
@@ -917,7 +917,7 @@ ov45_02254EBC: ; 0x02254EBC
 	.word WiFiPlazaApps_EndSurvey
 	.word WiFiPlazaApps_EndSurvey
 
-ov45_02254EF0: ; 0x02254EF0
+sWiFiPlazaLocationListKey: ; 0x02254EF0
 	.word sStr_b_lby_wlddata
 
 	.balign 4, 0
@@ -933,12 +933,12 @@ sStr_IIup73: ; 0x02254F14
 	.asciz "IIup73"
 
 	.balign 4, 0
-ov45_02254F1C: ; 0x02254F1C
+sWiFiPlazaPlayerObjectEffects: ; 0x02254F1C
 	.word WiFiPlazaPlayerObject_EffectTurnAround
 	.word ov45_02230D20
 	.word ov45_02230D5C
 
-ov45_02254F28: ; 0x02254F28
+sWiFiPlazaPlayerObjectActions: ; 0x02254F28
 	.word WiFiPlazaPlayerObject_ShowStandingSprite
 	.word ov45_02230BFC
 	.word WiFiPlazaPlayerObject_PlayStandingSequence
@@ -954,5 +954,5 @@ ov45_02254F28: ; 0x02254F28
 
 	.bss
 
-_022577C0:
+gWiFiPlazaLobbyClient:
 	.space 0x4

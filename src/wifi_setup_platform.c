@@ -12,7 +12,7 @@ extern int SOC_Bind(int socket, void *address, int addressLength);
 extern int SOC_Close(int socket);
 extern int RTC_GetTime(void *time);
 extern u8 ov13_022459B4[];
-extern u8 ov13_022459BC[];
+extern u8 sWifiSetupSocConfig[];
 extern volatile u32 gSoclHostAddress;
 
 typedef struct ChannelMask {
@@ -21,7 +21,7 @@ typedef struct ChannelMask {
     u8 padding;
 } ChannelMask;
 
-extern ChannelMask ov13_02245A28[];
+extern ChannelMask sWifiSetupChannelMasks[];
 
 typedef struct ScanRecord {
     u8 unk_00[4];
@@ -74,7 +74,7 @@ int WifiSetup_StartupSocket(u32 address, u32 netmask, u32 gateway) {
     *(u32 *)(ov13_022459B4 + 0x18) = WifiSetup_HostToNet32(address);
     *(u32 *)(ov13_022459B4 + 0x1C) = WifiSetup_HostToNet32(netmask);
     *(u32 *)(ov13_022459B4 + 0x20) = WifiSetup_HostToNet32(gateway);
-    if (SOC_Startup(ov13_022459BC) < 0) {
+    if (SOC_Startup(sWifiSetupSocConfig) < 0) {
         return -1;
     }
     while (gSoclHostAddress == 0) {
@@ -225,7 +225,7 @@ void WifiSetup_ConvertBssDesc(const void *src, void *dst) {
     t->number = s->number;
     MIi_CpuCopy16(s->mac, t->mac, 6);
     count = 0;
-    p = ov13_02245A28;
+    p = sWifiSetupChannelMasks;
     i = count;
     for (; i < 12; i++, p++) {
         if (s->enabledChannels & p->mask) {

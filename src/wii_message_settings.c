@@ -286,7 +286,7 @@ BOOL GtsServer_IsRequestDone(void);
 int GtsServer_GetResult(void);
 void GtsServer_RequestSetProfile(WifiServerProfile *request, int *response);
 
-extern NNSFndHeapHandle _02249BE0;
+extern NNSFndHeapHandle sWiiMessageSettingsHeap;
 extern const WiiMessageSettingsAppEntry sWiiMessageSettingsApps[];
 extern const OverlayManagerTemplate gOverlayTemplate_CodeEntry;
 extern const WiiMessageSettingsWindowRect sWiiMessageSettingsRegisteredMenuWindow;
@@ -434,7 +434,7 @@ BOOL WiiMessageSettings_Main(OverlayManager *man, int *state) {
         break;
     case 1:
         if (CommWireless_IsStartedUp()) {
-            _02249BE0 = app->expHeap;
+            sWiiMessageSettingsHeap = app->expHeap;
             DWC_SetMemFunc(WiiMessageSettings_Alloc, WiiMessageSettings_Free);
             app->networkLoaded = TRUE;
             *state = 2;
@@ -526,7 +526,7 @@ u8 WiiMessageSettings_GetScreenStartState(WiiMessageSettings *app) {
 
 void *WiiMessageSettings_Alloc(int unused, u32 size, int alignment) {
     OSIntrMode intrMode = OS_DisableInterrupts();
-    void *ptr = NNS_FndAllocFromExpHeapEx(_02249BE0, size, alignment);
+    void *ptr = NNS_FndAllocFromExpHeapEx(sWiiMessageSettingsHeap, size, alignment);
     OS_RestoreInterrupts(intrMode);
     return ptr;
 }
@@ -534,7 +534,7 @@ void *WiiMessageSettings_Alloc(int unused, u32 size, int alignment) {
 void WiiMessageSettings_Free(int unused, void *ptr) {
     if (ptr) {
         OSIntrMode intrMode = OS_DisableInterrupts();
-        NNS_FndFreeToExpHeap(_02249BE0, ptr);
+        NNS_FndFreeToExpHeap(sWiiMessageSettingsHeap, ptr);
         OS_RestoreInterrupts(intrMode);
     }
 }

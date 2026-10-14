@@ -48,15 +48,15 @@ typedef struct VsRecorderIconLayout {
     VsRecorderIconPos pos[2][12];
 } VsRecorderIconLayout;
 
-extern const VsRecorderWindowRectSet ov40_02244EE8; // video info label windows
-extern const VsRecorderMsgIdSet ov40_02244E28;      // video info labels
-extern const VsRecorderIconLayout ov40_02244F90;    // party icon positions: [0] two trainers, [1] four
+extern const VsRecorderWindowRectSet sVsRecorderVideoInfoLabelWindows; // video info label windows
+extern const VsRecorderMsgIdSet sVsRecorderVideoInfoLabelMsgIds;      // video info labels
+extern const VsRecorderIconLayout sVsRecorderVideoPartyIconLayout;    // party icon positions: [0] two trainers, [1] four
 
 #pragma force_active on
 
 void VsRecorder_PrintVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work) {
-    VsRecorderWindowRectSet templates = ov40_02244EE8;
-    VsRecorderMsgIdSet msgIds = ov40_02244E28;
+    VsRecorderWindowRectSet templates = sVsRecorderVideoInfoLabelWindows;
+    VsRecorderMsgIdSet msgIds = sVsRecorderVideoInfoLabelMsgIds;
     String *unitStr;
     String *numberStr;
     u32 value;
@@ -223,7 +223,7 @@ int ov40_02230410(VsRecorderVideoInfo *info) {
 void VsRecorder_CreateVideoPartyIcons(VsRecorderVideoInfo *info, VsRecorderWork *work) {
     int mon;
     int count = 0;
-    VsRecorderIconLayout layout = ov40_02244F90;
+    VsRecorderIconLayout layout = sVsRecorderVideoPartyIconLayout;
     ManagedSpriteTemplate template;
     int species[12];
     int forms[12];

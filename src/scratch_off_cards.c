@@ -148,34 +148,34 @@ typedef struct ScratchOffCardsBounds {
 void *PaletteBlink_New(PaletteData *paletteData, u32 buffer, u32 palette, enum HeapID heapID);
 void PaletteBlink_Delete(void *task);
 
-extern const TouchscreenHitbox ov87_021E8184[2];
-extern const TouchscreenHitbox ov87_021E818C[2];
-extern const ScratchOffCardsSpritePos ov87_021E8194[3];
-extern const ScratchOffCardsPos ov87_021E81A0[4];
-extern const ScratchOffCardsPos ov87_021E81A2[]; // ov87_021E81A0[0].y
-extern const GraphicsModes ov87_021E81B0;
-extern const TouchscreenHitbox ov87_021E81C0[];
-extern const BgTemplate ov87_021E81D4;
-extern const BgTemplate ov87_021E81F0;
-extern const BgTemplate ov87_021E820C;
-extern const BgTemplate ov87_021E8228;
-extern const BgTemplate ov87_021E8244;
-extern const BgTemplate ov87_021E8260;
-extern const s8 ov87_021E827C[][8];
-extern const ScratchOffCardsBounds ov87_021E829C[9];
-extern const s16 ov87_021E82C0[];
-extern const s16 ov87_021E82C2[]; // ov87_021E82C0[1]
-extern const ScratchOffCardsPos ov87_021E82E4[9];
-extern const TouchscreenHitbox ov87_021E8308[10];
-extern const GraphicsBanks ov87_021E8330;
-extern const u16 ov87_021E8358[];
-extern const u8 ov87_021E8388[];
-extern const s8 ov87_021E838C[];
-extern const u8 ov87_021E8394[4];
-extern const ObjCharTransferTemplate ov87_021E8398;
-extern const VecFx32 ov87_021E83A8;
-extern const WindowTemplate ov87_021E842C[16];
-extern u8 ov87_021E84C0[8];
+extern const TouchscreenHitbox sScratchOffCardsLastCardButtonHitbox[2];
+extern const TouchscreenHitbox sScratchOffCardsNextCardButtonHitbox[2];
+extern const ScratchOffCardsSpritePos sScratchOffCardsResultSpritePositions[3];
+extern const ScratchOffCardsPos sScratchOffCardsCardChoicePositions[4];
+extern const ScratchOffCardsPos ov87_021E81A2[]; // sScratchOffCardsCardChoicePositions[0].y
+extern const GraphicsModes sScratchOffCardsGraphicsModes;
+extern const TouchscreenHitbox sScratchOffCardsCardChoiceHitboxes[];
+extern const BgTemplate sScratchOffCardsBgTemplate_Sub2;
+extern const BgTemplate sScratchOffCardsBgTemplate_Main1;
+extern const BgTemplate sScratchOffCardsBgTemplate_Main0;
+extern const BgTemplate sScratchOffCardsBgTemplate_Sub0;
+extern const BgTemplate sScratchOffCardsBgTemplate_Main2;
+extern const BgTemplate sScratchOffCardsBgTemplate_Sub3;
+extern const s8 sScratchOffCardsBounceX[][8];
+extern const ScratchOffCardsBounds sScratchOffCardsCellBounds[9];
+extern const s16 sScratchOffCardsCellOrigins[];
+extern const s16 ov87_021E82C2[]; // sScratchOffCardsCellOrigins[1]
+extern const ScratchOffCardsPos sScratchOffCardsCellPositions[9];
+extern const TouchscreenHitbox sScratchOffCardsCellHitboxes[10];
+extern const GraphicsBanks sScratchOffCardsGraphicsBanks;
+extern const u16 sScratchOffCardsPrizeItems[];
+extern const u8 sScratchOffCardsPrizeNameY[];
+extern const s8 sScratchOffCardsBounceY[];
+extern const u8 sScratchOffCardsSpriteResourceCounts[4];
+extern const ObjCharTransferTemplate sScratchOffCardsObjCharTransferTemplate;
+extern const VecFx32 sScratchOffCardsSpriteScale;
+extern const WindowTemplate sScratchOffCardsWindowTemplates[16];
+extern u8 sScratchOffCardsMatchPaletteFiles[8];
 
 int ScratchOffCards_FadeIn(ScratchOffCardsWork *work);
 int ScratchOffCards_SlideInCardChoices(ScratchOffCardsWork *work);
@@ -400,7 +400,7 @@ int ScratchOffCards_SlideInCardChoices(ScratchOffCardsWork *work) {
     case 0:
         work->slideX = -256;
         for (i = 0; i < 4; i++) {
-            ScratchOffCardsSprite_SetPosition(work->cardChoiceSprites[i], work->slideX + ov87_021E81A0[i].x, ov87_021E81A0[i].y);
+            ScratchOffCardsSprite_SetPosition(work->cardChoiceSprites[i], work->slideX + sScratchOffCardsCardChoicePositions[i].x, sScratchOffCardsCardChoicePositions[i].y);
             ScratchOffCardsSprite_SetDrawPriority(work->cardChoiceSprites[i], i + 20);
         }
         ScratchOffCards_DrawWindowFrame(&work->windows[15], Options_GetFrame(work->options));
@@ -412,7 +412,7 @@ int ScratchOffCards_SlideInCardChoices(ScratchOffCardsWork *work) {
         break;
     case 1:
         work->slideX += 32;
-        ScratchOffCardsSprite_SetPosition(work->cardChoiceSprites[work->bgScrollX], work->slideX + ov87_021E81A0[work->bgScrollX].x, ov87_021E81A2[work->bgScrollX].x);
+        ScratchOffCardsSprite_SetPosition(work->cardChoiceSprites[work->bgScrollX], work->slideX + sScratchOffCardsCardChoicePositions[work->bgScrollX].x, ov87_021E81A2[work->bgScrollX].x);
         if (work->slideX >= 0) {
             if (work->bgScrollX == 0) {
                 work->subState = 2;
@@ -447,7 +447,7 @@ int ScratchOffCards_SelectCard(ScratchOffCardsWork *work) {
         } else {
             work->delay--;
         }
-        hit = TouchscreenHitbox_FindRectAtTouchHeld(ov87_021E81C0);
+        hit = TouchscreenHitbox_FindRectAtTouchHeld(sScratchOffCardsCardChoiceHitboxes);
         if (hit != -1) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
             ScratchOffCardsSprite_SetVisible(work->unk_340, FALSE);
@@ -567,7 +567,7 @@ int ScratchOffCards_ShowCard(ScratchOffCardsWork *work) {
         }
         {
             int k = 0;
-            const s16 *pos = &ov87_021E82E4[0].x;
+            const s16 *pos = &sScratchOffCardsCellPositions[0].x;
             work->matchFrame = k;
             work->flags.hasPair = FALSE;
             work->revealed[0] = 177;
@@ -607,7 +607,7 @@ int ScratchOffCards_ShowCard(ScratchOffCardsWork *work) {
                 y += 42;
                 cursor = NEXT_SPRITE_SLOT(cursor);
             }
-            pos = &ov87_021E82E4[0].x;
+            pos = &sScratchOffCardsCellPositions[0].x;
             i = 0;
             cursor = work;
             for (; i < 9; i++) {
@@ -670,7 +670,7 @@ int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
         break;
     case 3:
         GF_TouchpadUpdate(&work->touch, 4, 2);
-        hit = TouchscreenHitbox_FindRectAtTouchHeld(ov87_021E8308);
+        hit = TouchscreenHitbox_FindRectAtTouchHeld(sScratchOffCardsCellHitboxes);
         if (hit != -1) {
             if (ScratchOffCards_CountTouchedCells(work) < 3) {
                 work->touchedCells[hit] = TRUE;
@@ -712,7 +712,7 @@ int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
             ScratchOffCards_AnimateMatch(work);
         }
         if (work->cardNo == 2) {
-            if (TouchscreenHitbox_FindRectAtTouchNew(ov87_021E8184) == -1) {
+            if (TouchscreenHitbox_FindRectAtTouchNew(sScratchOffCardsLastCardButtonHitbox) == -1) {
                 break;
             }
             ScratchOffCardsSprite_SetAnimActive(work->buttonSprite, TRUE);
@@ -723,7 +723,7 @@ int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
             ScratchOffCards_ShowYesNoPrompt(work);
             work->subState = 10;
         } else {
-            if (TouchscreenHitbox_FindRectAtTouchNew(ov87_021E818C) == -1) {
+            if (TouchscreenHitbox_FindRectAtTouchNew(sScratchOffCardsNextCardButtonHitbox) == -1) {
                 break;
             }
             ScratchOffCardsSprite_SetAnimActive(work->buttonSprite, TRUE);
@@ -858,7 +858,7 @@ int ScratchOffCards_SlideOutCard(ScratchOffCardsWork *work) {
                 ScratchOffCardsSprite_SetVisible(work->highlightSprites[i], FALSE);
             }
             for (i = 0; i < 9; i++) {
-                ScratchOffCardsSprite_SetPosition(work->cellSprites[i], work->slideX + ov87_021E82E4[i].x, ov87_021E82E4[i].y);
+                ScratchOffCardsSprite_SetPosition(work->cellSprites[i], work->slideX + sScratchOffCardsCellPositions[i].x, sScratchOffCardsCellPositions[i].y);
             }
         }
         work->slideX += 16;
@@ -896,7 +896,7 @@ int ScratchOffCards_FadeOut(ScratchOffCardsWork *work) {
 
 void ScratchOffCards_CreateHighlightSprites(ScratchOffCardsWork *work) {
     int i;
-    const ScratchOffCardsPos *pos = ov87_021E82E4;
+    const ScratchOffCardsPos *pos = sScratchOffCardsCellPositions;
     ScratchOffCardsSpriteGfx *gfx;
     i = 0;
     gfx = &work->spriteGfx;
@@ -910,7 +910,7 @@ void ScratchOffCards_CreateHighlightSprites(ScratchOffCardsWork *work) {
 
 void ScratchOffCards_CreateResultSprites(ScratchOffCardsWork *work) {
     int i;
-    const ScratchOffCardsSpritePos *pos = ov87_021E8194;
+    const ScratchOffCardsSpritePos *pos = sScratchOffCardsResultSpritePositions;
     ScratchOffCardsSpriteGfx *gfx;
     i = 0;
     gfx = &work->spriteGfx;
@@ -1033,13 +1033,13 @@ void ScratchOffCards_InitResources(ScratchOffCardsWork *work) {
         ScratchOffCardsSprite_SetVisible(work->cardIconSprites[i], FALSE);
     }
     for (i = 0; i < 9; i++) {
-        work->cellSprites[i] = ScratchOffCardsSprite_New(&work->spriteGfx, 1, 0, ov87_021E82E4[i].x, ov87_021E82E4[i].y, FALSE, 2, 10);
+        work->cellSprites[i] = ScratchOffCardsSprite_New(&work->spriteGfx, 1, 0, sScratchOffCardsCellPositions[i].x, sScratchOffCardsCellPositions[i].y, FALSE, 2, 10);
         ScratchOffCardsSprite_SetVisible(work->cellSprites[i], FALSE);
     }
     ScratchOffCards_CreateButtonSprites(work);
     for (i = 0; i < 4; i++) {
-        work->cardChoiceSprites[i] = ScratchOffCardsSprite_New(&work->spriteGfx, 2, i, ov87_021E81A0[i].x, ov87_021E81A0[i].y, FALSE, 1, 0);
-        ScratchOffCardsSprite_SetPosition(work->cardChoiceSprites[i], ov87_021E81A0[i].x - 256, ov87_021E81A0[i].y);
+        work->cardChoiceSprites[i] = ScratchOffCardsSprite_New(&work->spriteGfx, 2, i, sScratchOffCardsCardChoicePositions[i].x, sScratchOffCardsCardChoicePositions[i].y, FALSE, 1, 0);
+        ScratchOffCardsSprite_SetPosition(work->cardChoiceSprites[i], sScratchOffCardsCardChoicePositions[i].x - 256, sScratchOffCardsCardChoicePositions[i].y);
         ScratchOffCardsSprite_SetDrawPriority(work->cardChoiceSprites[i], i + 20);
     }
     work->winSprite = ScratchOffCardsSprite_New(&work->spriteGfx, 4, 0, 0x26, 0x38, FALSE, 0, 10);
@@ -1120,13 +1120,13 @@ void ScratchOffCards_VBlank(ScratchOffCardsWork *work) {
 }
 
 void ScratchOffCards_SetVramBanks(void) {
-    GraphicsBanks banks = ov87_021E8330;
+    GraphicsBanks banks = sScratchOffCardsGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
 #pragma force_active on
 void ScratchOffCards_InitBgs(BgConfig *bgConfig) {
-    GraphicsModes modes = ov87_021E81B0;
+    GraphicsModes modes = sScratchOffCardsGraphicsModes;
     BgTemplate sub0;
     BgTemplate sub3;
     BgTemplate sub2;
@@ -1134,23 +1134,23 @@ void ScratchOffCards_InitBgs(BgConfig *bgConfig) {
     BgTemplate main0;
     BgTemplate main2;
     SetBothScreensModesAndDisable(&modes);
-    sub0 = ov87_021E8228;
+    sub0 = sScratchOffCardsBgTemplate_Sub0;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &sub0, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 32, 0, HEAP_ID_122);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
-    sub3 = ov87_021E8260;
+    sub3 = sScratchOffCardsBgTemplate_Sub3;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_3, &sub3, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_3);
-    sub2 = ov87_021E81D4;
+    sub2 = sScratchOffCardsBgTemplate_Sub2;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &sub2, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_2);
-    main1 = ov87_021E81F0;
+    main1 = sScratchOffCardsBgTemplate_Main1;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &main1, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
-    main0 = ov87_021E820C;
+    main0 = sScratchOffCardsBgTemplate_Main0;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &main0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
-    main2 = ov87_021E8244;
+    main2 = sScratchOffCardsBgTemplate_Main2;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &main2, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_2, 32, 0, HEAP_ID_122);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
@@ -1279,7 +1279,7 @@ int ScratchOffCards_PrintCancelButton(ScratchOffCardsWork *work) {
 int ScratchOffCards_PrintPrizeName(ScratchOffCardsWork *work, int prizeNo) {
     int ret;
     BufferItemName(work->msgFormat, 0, work->prizes[prizeNo]);
-    ret = ScratchOffCards_PrintMessageCentered(work, &work->windows[prizeNo + 2], 1, 44, ov87_021E8388[prizeNo], TEXT_SPEED_INSTANT, 1, 2, 0, 0);
+    ret = ScratchOffCards_PrintMessageCentered(work, &work->windows[prizeNo + 2], 1, 44, sScratchOffCardsPrizeNameY[prizeNo], TEXT_SPEED_INSTANT, 1, 2, 0, 0);
     ScheduleWindowCopyToVram(&work->windows[prizeNo + 2]);
     return ret;
 }
@@ -1386,7 +1386,7 @@ void ScratchOffCards_ChoosePrizes(ScratchOffCardsWork *work, int unused) {
                     }
                 }
             } while (loop.j != loop.i);
-            work->prizes[loop.i] = ov87_021E8358[*loop.current];
+            work->prizes[loop.i] = sScratchOffCardsPrizeItems[*loop.current];
         }
     }
 }
@@ -1402,8 +1402,8 @@ int ScratchOffCards_BounceCardChoice(ScratchOffCardsWork *work, int cardNo) {
     }
     ScratchOffCardsSprite_GetPosition(work->cardChoiceSprites[cardNo], &x, &y);
     step = work->flags.bounceStep;
-    dy = ov87_021E838C[step];
-    newX = x + ov87_021E827C[cardNo][step];
+    dy = sScratchOffCardsBounceY[step];
+    newX = x + sScratchOffCardsBounceX[cardNo][step];
     newY = y + dy;
     work->flags.bounceStep = step + 1;
     ScratchOffCardsSprite_SetPosition(work->cardChoiceSprites[cardNo], newX, newY);
@@ -1450,7 +1450,7 @@ void ScratchOffCards_ScratchCell(ScratchOffCardsWork *work, int cellNo) {
     int i = 0;
     if (i < work->touch.count) {
         ScratchOffCardsWork *cursor = work; // advanced by one touch sample per iteration
-        const ScratchOffCardsBounds *bounds = &ov87_021E829C[cellNo];
+        const ScratchOffCardsBounds *bounds = &sScratchOffCardsCellBounds[cellNo];
         int left = bounds->left;
         do {
             int x = cursor->touch.samples[0].x;
@@ -1500,7 +1500,7 @@ int ScratchOffCards_CheckCellRevealed(ScratchOffCardsWork *work, u8 cellNo) {
     int left;
     int top;
     count = 0;
-    left = ov87_021E82C0[cellNo * 2];
+    left = sScratchOffCardsCellOrigins[cellNo * 2];
     top = ov87_021E82C2[cellNo * 2];
     for (y = top; y < top + 20; y++) {
         for (x = left; x < left + 25; x++) {
@@ -1536,7 +1536,7 @@ void ScratchOffCards_AnimateMatch(ScratchOffCardsWork *work) {
             for (i = 0; i < 2; i++) {
                 ScratchOffCardsSprite_SetPalette(work->highlightSprites[i], 3);
                 ScratchOffCardsSprite_SetVisible(work->highlightSprites[i], TRUE);
-                ScratchOffCardsSprite_SetPosition(work->highlightSprites[i], ov87_021E82E4[work->revealed[i]].x - 36, ov87_021E82E4[work->revealed[i]].y - 10);
+                ScratchOffCardsSprite_SetPosition(work->highlightSprites[i], sScratchOffCardsCellPositions[work->revealed[i]].x - 36, sScratchOffCardsCellPositions[work->revealed[i]].y - 10);
             }
         }
         ScratchOffCardsSpriteGfx_ReplaceMatchPalette(&work->spriteGfx, work->matchFrame);
@@ -1743,7 +1743,7 @@ void ScratchOffCardsSpriteGfx_Init(ScratchOffCardsSpriteGfx *gfx) {
     OamManager_Create(0, 0x80, 0, 0x20, 0, 0x80, 0, 0x20, HEAP_ID_122);
     gfx->spriteList = G2dRenderer_Init(0x28, &gfx->renderer, HEAP_ID_122);
     G2dRenderer_SetSubSurfaceCoords(&gfx->renderer, 0, 2 << 20);
-    counts = ov87_021E8394;
+    counts = sScratchOffCardsSpriteResourceCounts;
     for (i = 0; i < 4; i++) {
         gfx->resMan[i] = Create2DGfxResObjMan(*counts, (GfGfxResType)i, HEAP_ID_122);
         counts++;
@@ -1835,7 +1835,7 @@ void ScratchOffCardsSpriteGfx_Free(ScratchOffCardsSpriteGfx *gfx) {
 }
 
 void ScratchOffCardsSpriteGfx_InitTransfer(void) {
-    ObjCharTransferTemplate template = ov87_021E8398;
+    ObjCharTransferTemplate template = sScratchOffCardsObjCharTransferTemplate;
     ObjCharTransfer_InitEx(&template, GX_OBJVRAMMODE_CHAR_1D_128K, GX_OBJVRAMMODE_CHAR_1D_128K);
     ObjPlttTransfer_Init(14, HEAP_ID_122);
     ObjCharTransfer_ClearBuffers();
@@ -1849,7 +1849,7 @@ void ScratchOffCardsSpriteGfx_ReplaceMatchPalette(ScratchOffCardsSpriteGfx *gfx,
         GF_AssertFail();
     }
     resource = SpriteResourceCollection_Find(gfx->resMan[GF_GFX_RES_TYPE_PLTT], 3);
-    ReplacePlttResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], resource, NARC_a_2_0_5, ov87_021E84C0[frame], FALSE, HEAP_ID_122);
+    ReplacePlttResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], resource, NARC_a_2_0_5, sScratchOffCardsMatchPaletteFiles[frame], FALSE, HEAP_ID_122);
     SpriteTransfer_ReplacePlttData(resource);
 }
 #pragma force_active reset
@@ -1901,7 +1901,7 @@ void ScratchOffCardsSprite_SetAnim(ScratchOffCardsSprite *sprite, int seq) {
 }
 
 void ScratchOffCardsSprite_ResetScale(ScratchOffCardsSprite *sprite, int unused) {
-    Sprite_SetScaleAndAffineType(sprite->sprite, (VecFx32 *)&ov87_021E83A8, 1);
+    Sprite_SetScaleAndAffineType(sprite->sprite, (VecFx32 *)&sScratchOffCardsSpriteScale, 1);
 }
 
 void ScratchOffCardsSprite_SetScale(ScratchOffCardsSprite *sprite, VecFx32 *scale) {
@@ -1931,7 +1931,7 @@ int ScratchOffCardsSprite_IsAnimated(ScratchOffCardsSprite *sprite) {
 void ScratchOffCards_AddWindows(BgConfig *bgConfig, Window *windows) {
     u8 i = 0;
     do {
-        AddWindow(bgConfig, &windows[i], &ov87_021E842C[i]);
+        AddWindow(bgConfig, &windows[i], &sScratchOffCardsWindowTemplates[i]);
         FillWindowPixelBuffer(&windows[i], 0);
         i++;
     } while (i < 16);

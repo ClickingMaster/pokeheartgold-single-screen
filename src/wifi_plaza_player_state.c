@@ -109,15 +109,15 @@ extern const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateTalkAnswer;
 extern const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateOtherWait;
 extern const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStatePlayInstrument;
 extern const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateGameEntryRegister;
-extern const u32 ov49_02269B90[];
-extern const u32 ov49_02269BA0[];
-extern const u32 ov49_02269BB0[];
-extern const u32 ov49_02269BC0[];
-extern const u32 ov49_02269BD0[];
+extern const u32 sWiFiPlazaActivity2Tags[];
+extern const u32 sWiFiPlazaActivity4Tags[];
+extern const u32 sWiFiPlazaActivity7Tags[];
+extern const u32 sWiFiPlazaActivity3Tags[];
+extern const u32 sWiFiPlazaActivity8Tags[];
 extern const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateOwnEntries[4];
 extern const ListMenuTemplate sWiFiPlazaArrivalMenuTemplate;
-extern const u32 ov49_02269C20[];
-extern const u32 ov49_02269C40[];
+extern const u32 sWiFiPlazaActivity5Tags[];
+extern const u32 sWiFiPlazaActivity6Tags[];
 extern const WiFiPlazaTileAction sWiFiPlazaWalkUpTileActions[];
 extern const WiFiPlazaTileAction sWiFiPlazaCheckTileActions[];
 extern const WiFiPlazaTileAction sWiFiPlazaStandTileActions[];
@@ -2379,41 +2379,41 @@ BOOL WiFiPlazaPlayerState_PlaceOtherForActivity(WiFiPlazaPlacement *placement, W
 
     switch (kind) {
     case 2:
-        if (!WiFiPlazaPlayerState_FindFreeTaggedCell(map, objManager, ov49_02269B90, 4, cell)) {
+        if (!WiFiPlazaPlayerState_FindFreeTaggedCell(map, objManager, sWiFiPlazaActivity2Tags, 4, cell)) {
             return besideOwnPlayer;
         }
         goto found;
     case 3:
-        if (!WiFiPlazaPlayerState_FindFreeTaggedCell(map, objManager, ov49_02269BC0, 4, cell)) {
+        if (!WiFiPlazaPlayerState_FindFreeTaggedCell(map, objManager, sWiFiPlazaActivity3Tags, 4, cell)) {
             return besideOwnPlayer;
         }
         goto found;
     case 4:
-        if (!WiFiPlazaPlayerState_FindFreeTaggedCell(map, objManager, ov49_02269BA0, 4, cell)) {
+        if (!WiFiPlazaPlayerState_FindFreeTaggedCell(map, objManager, sWiFiPlazaActivity4Tags, 4, cell)) {
             return besideOwnPlayer;
         }
         goto found;
     case 5:
         direction = 0;
-        if (!WiFiPlazaPlayerState_FindFreeTaggedCell(map, objManager, ov49_02269C20, 8, cell)) {
+        if (!WiFiPlazaPlayerState_FindFreeTaggedCell(map, objManager, sWiFiPlazaActivity5Tags, 8, cell)) {
             return besideOwnPlayer;
         }
         goto found;
     case 6:
         direction = 0;
-        if (!WiFiPlazaPlayerState_FindFreeTaggedCell(map, objManager, ov49_02269C40, 8, cell)) {
+        if (!WiFiPlazaPlayerState_FindFreeTaggedCell(map, objManager, sWiFiPlazaActivity6Tags, 8, cell)) {
             return besideOwnPlayer;
         }
         goto found;
     case 7:
         direction = 3;
-        if (!WiFiPlazaPlayerState_FindFreeTaggedCell(map, objManager, ov49_02269BB0, 4, cell)) {
+        if (!WiFiPlazaPlayerState_FindFreeTaggedCell(map, objManager, sWiFiPlazaActivity7Tags, 4, cell)) {
             return besideOwnPlayer;
         }
         goto found;
     case 8:
         direction = 0;
-        if (!WiFiPlazaPlayerState_FindFreeTaggedCell(map, objManager, ov49_02269BD0, 4, cell)) {
+        if (!WiFiPlazaPlayerState_FindFreeTaggedCell(map, objManager, sWiFiPlazaActivity8Tags, 4, cell)) {
             return besideOwnPlayer;
         }
         goto found;

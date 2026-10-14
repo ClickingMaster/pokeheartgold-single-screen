@@ -2,7 +2,7 @@
 #include "sound_system.h"
 
 extern int _021D05E8[4];
-extern const u8 _020F5710[8][4];
+extern const u8 sSoundFootstepVariations[8][4];
 extern const u16 gGBSoundsSeqPairs[136][2];
 BOOL NNS_SndPlayerReadVariable(NNSSndHandle *handle, u32 variable, s16 *value);
 void NNS_SndPlayerSetTrackAllocatableChannel(NNSSndHandle *handle, u32 tracks, u32 channels);
@@ -32,8 +32,8 @@ BOOL GF_SndReadSeqVariable(u16 seqNo, u32 variable, s16 *value) {
 }
 void Sound_ApplyFootstepVariation(u16 seqNo) {
     u8 *state = GF_SdatGetAttrPtr(55);
-    GF_SetVolumeBySeqNo(seqNo, _020F5710[state[0]][1]);
-    GF_SndHandleSetTrackPitch(4, 65535, _020F5710[state[0]][0]);
+    GF_SetVolumeBySeqNo(seqNo, sSoundFootstepVariations[state[0]][1]);
+    GF_SndHandleSetTrackPitch(4, 65535, sSoundFootstepVariations[state[0]][0]);
     if (state[1] >= 8) {
         state[1] = 0;
     }

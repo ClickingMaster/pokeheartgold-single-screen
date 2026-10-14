@@ -77,16 +77,16 @@ void PokeathlonCourse_LoadPlayerTrainerPic(Sprite *sprite, PokeathlonCourseData 
 int PokeathlonCourse_GetTrainerPicFileId(int kind);
 int PokeathlonCourse_GetNpcTrainerPicFileId(int trainerClass);
 
-extern const OamCharTransferParam ov96_0221C2C4;
-extern const SpriteResourceCountsListUnion ov96_0221C2D8;
-extern const OamManagerParam ov96_0221C2F0;
-extern const PokeathlonResultsAnnouncementSceneConfig ov96_0221C2A8;
-extern const GraphicsModes ov96_0221C2B4;
-extern const PokeathlonResultsAnnouncementBgTemplates ov96_0221C338;
-extern const u8 ov96_0221C290[6]; // BG layers
-extern const u8 ov96_0221C298[6]; // BG types
-extern const GraphicsBanks ov96_0221C310;
-extern const VecFx32 ov96_0221C3E0;
+extern const OamCharTransferParam sResultsAnnouncementOamCharTransferParam;
+extern const SpriteResourceCountsListUnion sResultsAnnouncementSpriteResourceCounts;
+extern const OamManagerParam sResultsAnnouncementOamManagerParam;
+extern const PokeathlonResultsAnnouncementSceneConfig sResultsAnnouncementSceneConfig;
+extern const GraphicsModes sResultsAnnouncementGraphicsModes;
+extern const PokeathlonResultsAnnouncementBgTemplates sResultsAnnouncementBgTemplates;
+extern const u8 sResultsAnnouncementBgLayers[6]; // BG layers
+extern const u8 sResultsAnnouncementBgTypes[6]; // BG types
+extern const GraphicsBanks sResultsAnnouncementGraphicsBanks;
+extern const VecFx32 sResultsAnnouncementPlatePos;
 
 #pragma force_active on
 
@@ -121,7 +121,7 @@ BOOL PokeathlonResultsAnnouncement_Init(PokeathlonCourseData *course) {
         PokeathlonCourse_IncrementField1ED(course);
         break;
     case 1:
-        sceneConfig = ov96_0221C2A8;
+        sceneConfig = sResultsAnnouncementSceneConfig;
         announcement->scene = PokeathlonCourseSpritePool_New(announcement->heapId, &sceneConfig);
         PokeathlonCourseSpritePool_SetSurfaceCoords(announcement->scene, 0, 0, 0, FX32_CONST(300));
         scoreList = PokeathlonCourse_GetGraphicsSystem(course);
@@ -217,7 +217,7 @@ BOOL PokeathlonResultsAnnouncement_Exit(PokeathlonCourseData *course) {
     RemoveWindow(&announcement->window);
     PokeathlonCourseMessageBox_Free(announcement->messageBox);
     for (i = 0; i < 6; i++) {
-        FreeBgTilemapBuffer(announcement->bgConfig, ov96_0221C290[i]);
+        FreeBgTilemapBuffer(announcement->bgConfig, sResultsAnnouncementBgLayers[i]);
     }
     PokeathlonResultsAnnouncement_FreeScoreboard(announcement->scoreboard);
     PokeathlonResultsAnnouncement_FreePlates(announcement->ranking.plates);
@@ -233,14 +233,14 @@ BOOL PokeathlonResultsAnnouncement_Exit(PokeathlonCourseData *course) {
 }
 
 void PokeathlonResultsAnnouncement_SetGfxBanks(void) {
-    GraphicsBanks banks = ov96_0221C310;
+    GraphicsBanks banks = sResultsAnnouncementGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
 #pragma force_active on
 
 void PokeathlonResultsAnnouncement_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {
-    GraphicsModes modes = ov96_0221C2B4;
+    GraphicsModes modes = sResultsAnnouncementGraphicsModes;
     PokeathlonResultsAnnouncementBgTemplates templates;
     volatile int i;
     const u8 *type;
@@ -249,9 +249,9 @@ void PokeathlonResultsAnnouncement_InitBgs(BgConfig *bgConfig, enum HeapID heapI
     int next;
 
     SetBothScreensModesAndDisable(&modes);
-    templates = ov96_0221C338;
-    type = ov96_0221C298;
-    layer = ov96_0221C290;
+    templates = sResultsAnnouncementBgTemplates;
+    type = sResultsAnnouncementBgTypes;
+    layer = sResultsAnnouncementBgLayers;
     i = 0;
     template = templates.templates;
     do {
@@ -621,9 +621,9 @@ u32 PokeathlonResultsAnnouncement_GetCommentMessage(PokeathlonCourseData *course
 }
 
 void PokeathlonResultsAnnouncement_InitSprites(PokeathlonResultsAnnouncement *announcement) {
-    SpriteResourceCountsListUnion counts = ov96_0221C2D8;
-    OamManagerParam oamManagerParam = ov96_0221C2F0;
-    OamCharTransferParam oamTransferParam = ov96_0221C2C4;
+    SpriteResourceCountsListUnion counts = sResultsAnnouncementSpriteResourceCounts;
+    OamManagerParam oamManagerParam = sResultsAnnouncementOamManagerParam;
+    OamCharTransferParam oamTransferParam = sResultsAnnouncementOamCharTransferParam;
     oamTransferParam.maxTasks = 26;
     announcement->spriteSystem = SpriteSystem_Alloc(announcement->heapId);
     announcement->spriteManager = SpriteManager_New(announcement->spriteSystem);
@@ -987,7 +987,7 @@ void PokeathlonResultsAnnouncement_SetPlateVisible(BOOL firstPlace, BOOL draw, P
 #pragma force_active on
 
 void PokeathlonResultsAnnouncement_SetPlateSpritePositions(int x, int y, PokeathlonResultsAnnouncementPlate *plate) {
-    VecFx32 pos = ov96_0221C3E0;
+    VecFx32 pos = sResultsAnnouncementPlatePos;
     pos.y += y << FX32_SHIFT;
     pos.x = (x + 128) << FX32_SHIFT;
     Sprite_SetMatrix(plate->sprites[0], &pos);

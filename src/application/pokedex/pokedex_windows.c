@@ -24,7 +24,7 @@ extern const WindowTemplate sListWindowTemplates[];
 extern const WindowTemplate sSearchWindowTemplates[];
 extern const WindowTemplate sAreaWindowTemplates[];
 extern const WindowTemplate sSizeCheckWindowTemplates[];
-extern const WindowTemplate ov18_021F9DB0[];
+extern const WindowTemplate sPokedexEntryMenuWindowTemplates[];
 extern const WindowTemplate sFormsWindowTemplates[];
 extern const u8 sSearchTypeMsgIds[];
 
@@ -1167,7 +1167,7 @@ void PokedexApp_SetupEntryMenuWindows(PokedexAppData *pokedexApp) {
     u32 i;
     u8 *window;
 
-    PokedexApp_AddWindows(pokedexApp, ov18_021F9DB0, 2);
+    PokedexApp_AddWindows(pokedexApp, sPokedexEntryMenuWindowTemplates, 2);
     i = 0;
     window = (u8 *)pokedexApp;
     window += offsetof(PokedexAppData, windows);

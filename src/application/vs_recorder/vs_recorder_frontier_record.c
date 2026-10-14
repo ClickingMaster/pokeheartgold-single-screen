@@ -27,11 +27,11 @@ typedef struct VsRecorderIntSet5 {
     int values[5];
 } VsRecorderIntSet5;
 
-extern const VsRecorderIntSet5 ov40_02245174; // print palette slots
-extern const VsRecorderIntSet5 ov40_02245188; // facility icon char files (NARC_a_1_7_9)
-extern const VsRecorderIntSet5 ov40_0224519C; // facility icon palette files (NARC_a_1_7_9)
-extern const VsRecorderIntSet5 ov40_022451B0; // print animation per facility
-extern const s16 _02245CC0[];                 // print positions (x, y) after the spin
+extern const VsRecorderIntSet5 sVsRecorderFrontierPrintPaletteSlots; // print palette slots
+extern const VsRecorderIntSet5 sVsRecorderFrontierIconCharFiles; // facility icon char files (NARC_a_1_7_9)
+extern const VsRecorderIntSet5 sVsRecorderFrontierIconPaletteFiles; // facility icon palette files (NARC_a_1_7_9)
+extern const VsRecorderIntSet5 sVsRecorderFrontierPrintAnims; // print animation per facility
+extern const s16 sVsRecorderFrontierPrintPositions[];                 // print positions (x, y) after the spin
 
 void VsRecorder_FreeExitButton(VsRecorderWork *work) {
     VsRecorderSavedVideo *savedVideo = work->screenWork;
@@ -110,8 +110,8 @@ void VsRecorder_LoadFrontierGfx(VsRecorderWork *work) {
     SpriteSystem_LoadAnimResObjFromOpenNarc(spriteSystem, spriteManager, narc, 39, FALSE, 28282);
 
     // facility icons: Battle Castle (3) from the app's NARC, the others from NARC_a_1_7_9
-    palFileIds = ov40_0224519C;
-    charFileIds = ov40_02245188;
+    palFileIds = sVsRecorderFrontierIconPaletteFiles;
+    charFileIds = sVsRecorderFrontierIconCharFiles;
     for (i = 0; i < 5; i++) {
         if (i == 3) {
             SpriteSystem_LoadPaletteBufferFromOpenNarc(plttData, PLTTBUF_MAIN_OBJ, spriteSystem, spriteManager, narc, 92, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 18181 + i);
@@ -175,7 +175,7 @@ void VsRecorder_GrayFrontierPrints(VsRecorderWork *work) {
     progress[4] = Save_VarsFlags_GetBattleHallPrintProgress(varsFlags);
     for (i = 0; i < 5; i++) {
         if (progress[i] != 0) {
-            slots = ov40_02245174;
+            slots = sVsRecorderFrontierPrintPaletteSlots;
             if (progress[i] == 2 || progress[i] == 3) {
                 VsRecorder_GrayscalePalette(PaletteData_GetFadedBuf(work->plttData, PLTTBUF_MAIN_OBJ), (u16)((slots.values[i] + 4) * 16), 16);
             }
@@ -260,7 +260,7 @@ void VsRecorder_CreateFrontierSprites(VsRecorderWork *work) {
             ManagedSprite_SetDrawFlag(record->facilityIcons[i], FALSE);
             ManagedSprite_SetDrawFlag(record->playerIcons[i], FALSE);
         } else {
-            printAnims = ov40_022451B0;
+            printAnims = sVsRecorderFrontierPrintAnims;
             ManagedSprite_SetAnim(record->prints[i], printAnims.values[i]);
             ManagedSprite_SetPaletteOverride(record->prints[i], printAnims.values[i] + 4);
         }
@@ -432,7 +432,7 @@ BOOL VsRecorder_SpinOutFrontierSprites(VsRecorderWork *work) {
 }
 
 void VsRecorder_PlaceFrontierSprites(VsRecorderWork *work) {
-    const s16 *pos = _02245CC0;
+    const s16 *pos = sVsRecorderFrontierPrintPositions;
     VsRecorderFrontierRecord *record = work->screenWork;
     s16 x;
     s16 y;

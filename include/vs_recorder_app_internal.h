@@ -39,10 +39,10 @@ typedef struct FrontierBrainClasses {
 extern const OverlayManagerTemplate gOverlayTemplate_Battle;
 extern const OverlayManagerTemplate gOverlayTemplate_VsRecorderMenu;
 extern const OverlayManagerTemplate gOverlayTemplate_VsRecorderMenuFromTerminal;
-extern const VsRecorderMenuEntry _02102DC0[];
-extern const VsRecorderMenuEntry _0210357C[];
+extern const VsRecorderMenuEntry sVsRecorderMode3MenuNoFrontier[];
+extern const VsRecorderMenuEntry sVsRecorderMode0MenuNoFrontier[];
 
-// The root menus (the child fields of the 7 root entries, 0x24 bytes apart in the screen data): _021037B8 is
+// The root menus (the child fields of the 7 root entries, 0x24 bytes apart in the screen data): sVsRecorderRootMenus is
 // the first child field, 0x64 bytes into _02103754
 typedef struct VsRecorderRootMenu {
     const VsRecorderMenuEntry *menu;
@@ -50,7 +50,7 @@ typedef struct VsRecorderRootMenu {
 } VsRecorderRootMenu;
 
 extern const u8 _02103754[];
-extern const VsRecorderRootMenu _021037B8[];
+extern const VsRecorderRootMenu sVsRecorderRootMenus[];
 
 void BattleRecord_RestoreSetup(BattleSetup *setup, SaveData *saveData);
 void *BattleRecord_Get(void);

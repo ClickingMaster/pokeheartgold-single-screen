@@ -74,7 +74,7 @@ void WiFiPlazaNews_AddMinigameEntryEvent(WiFiPlazaNews *news, WiFiPlazaGroupFlag
     } else if (req->count < 1 || req->count > 4) {
         return;
     }
-    rank = ov45_02254BDC[type];
+    rank = sWiFiPlazaNewsMinigameEntryRanks[type];
     event = WiFiPlazaNewsEventList_GetFreeEvent(&news->events, (u16)rank);
     if (event != NULL) {
         WiFiPlazaNewsEvent_Set(event, type, req->count, req->flag, req->profiles[0], req->profiles[1], req->profiles[2], req->profiles[3], req->slots[0], req->slots[1], req->slots[2], req->slots[3], 900, rank, 2);
@@ -150,7 +150,7 @@ void WiFiPlazaNews_AddMinigameResultEvent(WiFiPlazaNews *news, WiFiPlazaGroupOpt
         return;
     }
     type = req->option;
-    rank = ov45_02254BC8[type];
+    rank = sWiFiPlazaNewsMinigameResultRanks[type];
     event = WiFiPlazaNewsEventList_GetFreeEvent(&news->events, rank);
     if (event != NULL) {
         WiFiPlazaNewsEvent_Set(event, type, req->count, 0, req->profiles[0], req->profiles[1], req->profiles[2], req->profiles[3], req->slots[0], req->slots[1], req->slots[2], req->slots[3], 450, rank, 8);
@@ -203,7 +203,7 @@ u8 WiFiPlazaNews_GetEventType(WiFiPlazaNews *news) {
     return news->events.head.next->type;
 }
 
-// Formats the current event with ov45_02254C0C[type].
+// Formats the current event with sWiFiPlazaNewsEventFormatters[type].
 BOOL WiFiPlazaNews_FormatEvent(WiFiPlazaNews *news, const u8 *flags, int unused, String *out, enum HeapID heapID) {
     MessageFormat *format;
     MsgData *msgData;
@@ -218,7 +218,7 @@ BOOL WiFiPlazaNews_FormatEvent(WiFiPlazaNews *news, const u8 *flags, int unused,
     format = MessageFormat_New(heapID);
     type = event->type;
     if ((u32)type < 9) {
-        result = ov45_02254C0C[type](event, flags, format, msgData, out, heapID);
+        result = sWiFiPlazaNewsEventFormatters[type](event, flags, format, msgData, out, heapID);
     } else {
         result = FALSE;
     }
@@ -227,7 +227,7 @@ BOOL WiFiPlazaNews_FormatEvent(WiFiPlazaNews *news, const u8 *flags, int unused,
     return result;
 }
 
-// The lobby slot of the index-th name of the current event (20: none), by ov45_02254BE8[type].
+// The lobby slot of the index-th name of the current event (20: none), by sWiFiPlazaNewsEventSlotGetters[type].
 int WiFiPlazaNews_GetEventSlot(WiFiPlazaNews *news, int unused, int index) {
     WiFiPlazaNewsEvent *event;
     int type;
@@ -237,7 +237,7 @@ int WiFiPlazaNews_GetEventSlot(WiFiPlazaNews *news, int unused, int index) {
     event = news->events.head.next;
     type = event->type;
     if ((u32)type < 9) {
-        return ov45_02254BE8[type](event, index);
+        return sWiFiPlazaNewsEventSlotGetters[type](event, index);
     }
     GF_AssertFail();
     return 20;

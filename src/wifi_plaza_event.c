@@ -21,19 +21,19 @@ extern const u16 sWiFiPlazaLight1Colors[];
 extern const u16 sWiFiPlazaLightColorSets[][5];
 extern void (*const sWiFiPlazaEventEffectPhaseUpdates[])(WiFiPlazaEventEffect *effect, int arg);
 extern void (*const sWiFiPlazaEventEffectPhaseStarts[])(WiFiPlazaEventEffect *effect, u32 arg);
-extern const u8 ov49_0226A8B4[];
-extern const u32 ov49_0226A894[][2];
-extern const u8 ov49_0226A83C[];
+extern const u8 sWiFiPlazaEventPhase3PropIds[];
+extern const u32 sWiFiPlazaEventPhase3PropGroups[][2];
+extern const u8 sWiFiPlazaEventPhase4Steps[];
 extern const u8 ov49_0226A83D[];
-extern const u32 ov49_0226A864[];
+extern const u32 sWiFiPlazaEventPhase5Thresholds[];
 extern const u32 ov49_0226A868[];
-extern const u8 ov49_0226A81C[];
-extern const u8 ov49_0226A820[];
-extern const u8 ov49_0226A824[];
-extern const u8 ov49_0226A828[];
-extern const u8 ov49_0226A82C[];
-extern const u8 ov49_0226A830[];
-extern const u8 ov49_0226A834[];
+extern const u8 sWiFiPlazaEventModelIds3[];
+extern const u8 sWiFiPlazaEventModelIds4[];
+extern const u8 sWiFiPlazaEventModelIds2[];
+extern const u8 sWiFiPlazaEventModelIds5[];
+extern const u8 sWiFiPlazaEventModelIds1[];
+extern const u8 sWiFiPlazaEventModelIds6[];
+extern const u8 sWiFiPlazaEventModelIds0[];
 extern const u8 sWiFiPlazaMoverMarkerTags[];
 extern const u16 sWiFiPlazaMoverSounds[][6];
 extern BOOL (*const sWiFiPlazaEventWobbleSteps[])(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index);
@@ -387,16 +387,16 @@ void WiFiPlazaEventEffect_UpdatePhase3(WiFiPlazaEventEffect *effect, u32 tick) {
         const u8 *id;
         int result;
 
-        id = ov49_0226A8B4;
+        id = sWiFiPlazaEventPhase3PropIds;
         i = 0;
         do {
             int show;
             int active = 0;
 
-            if ((i & 3) == ov49_0226A894[effect->step][0]) {
+            if ((i & 3) == sWiFiPlazaEventPhase3PropGroups[effect->step][0]) {
                 show = 1;
                 active = 1;
-            } else if ((i & 3) == ov49_0226A894[effect->step][1]) {
+            } else if ((i & 3) == sWiFiPlazaEventPhase3PropGroups[effect->step][1]) {
                 show = 0;
                 active = 1;
             }
@@ -427,7 +427,7 @@ void WiFiPlazaEventEffect_UpdatePhase4(WiFiPlazaEventEffect *effect, u32 tick) {
     if (tick % 6 != 0) {
         return;
     }
-    kind = ov49_0226A83C[effect->step * 2];
+    kind = sWiFiPlazaEventPhase4Steps[effect->step * 2];
     WiFiPlazaEvent_GetModelList(ov49_0226A83D[effect->step * 2], &list);
     for (i = 0; i < list.count; i++) {
         if (WiFiPlazaModels_ShowEffectProp(effect->models, list.ids[i], 0, 0x1000) != 1) {
@@ -446,7 +446,7 @@ void WiFiPlazaEventEffect_UpdatePhase4(WiFiPlazaEventEffect *effect, u32 tick) {
 void WiFiPlazaEventEffect_UpdatePhase5(WiFiPlazaEventEffect *effect, u32 value) {
     u32 step = effect->step;
 
-    if (step < 3 && ov49_0226A864[step * 2] < value) {
+    if (step < 3 && sWiFiPlazaEventPhase5Thresholds[step * 2] < value) {
         WiFiPlazaModels_TriggerStageShows(effect->models, ov49_0226A868[step * 2]);
         WiFiPlazaModels_TriggerStageBursts(effect->models, ov49_0226A868[effect->step * 2]);
         PlaySE(0x5B4);
@@ -494,31 +494,31 @@ void WiFiPlazaEvent_GetModelList(u32 kind, WiFiPlazaEventModelList *list) {
     switch (kind) {
     case 0:
         list->count = 6;
-        list->ids = ov49_0226A834;
+        list->ids = sWiFiPlazaEventModelIds0;
         break;
     case 1:
         list->count = 2;
-        list->ids = ov49_0226A82C;
+        list->ids = sWiFiPlazaEventModelIds1;
         break;
     case 2:
         list->count = 2;
-        list->ids = ov49_0226A824;
+        list->ids = sWiFiPlazaEventModelIds2;
         break;
     case 3:
         list->count = 1;
-        list->ids = ov49_0226A81C;
+        list->ids = sWiFiPlazaEventModelIds3;
         break;
     case 4:
         list->count = 1;
-        list->ids = ov49_0226A820;
+        list->ids = sWiFiPlazaEventModelIds4;
         break;
     case 5:
         list->count = 2;
-        list->ids = ov49_0226A828;
+        list->ids = sWiFiPlazaEventModelIds5;
         break;
     case 6:
         list->count = 3;
-        list->ids = ov49_0226A830;
+        list->ids = sWiFiPlazaEventModelIds6;
         break;
     default:
         GF_AssertFail();

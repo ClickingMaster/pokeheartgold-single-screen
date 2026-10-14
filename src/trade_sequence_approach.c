@@ -79,7 +79,7 @@ extern const GraphicsModes sTradeSequenceApproachGraphicsModes;
 extern const GXRgb sTradeSequenceApproachEdgeColors[8];
 extern const BgTemplate sTradeSequenceApproachBgTemplate;
 extern const GraphicsBanks sTradeSequenceApproachGraphicsBanks;
-extern u32 _0224C020[]; // 1 in the data: the ball spirals (when 0 it would only follow the center)
+extern u32 sTradeSequenceBallSpirals[]; // 1 in the data: the ball spirals (when 0 it would only follow the center)
 
 // No header declares it.
 void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapID);
@@ -374,7 +374,7 @@ void TradeSequenceApproach_SetFlightTargets(TradeSequenceApproachFlight *flight,
 void TradeSequenceApproach_UpdateFlight(TradeSequenceApproachFlight *flight) {
     s32 angle;
 
-    if (_0224C020[0] != 0) {
+    if (sTradeSequenceBallSpirals[0] != 0) {
         fx32 radius;
         s64 product;
 

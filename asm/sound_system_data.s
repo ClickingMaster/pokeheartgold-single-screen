@@ -5,8 +5,8 @@
 
 	.rodata
 
-	.public _020F5710
-_020F5710:
+	.public sSoundFootstepVariations
+sSoundFootstepVariations:
 	.byte 0x00, 0x2A, 0x00, 0x00
 	.byte 0x40, 0x6B, 0x00, 0x00
 	.byte 0x20, 0x2F, 0x00, 0x00
@@ -164,8 +164,8 @@ _021D05E8:
 gSoundMicAutoParam:
 	.space 0x28
 
-	.public _021D0620
-_021D0620:
+	.public sSoundChatotBuffer
+sSoundChatotBuffer:
 	.space 0x7D0
 
 	.text

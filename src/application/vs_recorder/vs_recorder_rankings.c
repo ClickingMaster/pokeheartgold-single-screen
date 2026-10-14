@@ -43,14 +43,14 @@ typedef struct VsRecorderRankingTeamCounts {
 // launcher (vs_recorder_app_2.c): flypoint flag 27 is set
 BOOL VsRecorderApp_HasVisitedBattleFrontier(VsRecorderWork *work);
 
-extern const VsRecorderRankingTeamCounts ov40_022453A0;    // teams per kind: 16 trainer types, 12 months, 20 species
-extern const TouchscreenHitbox ov40_022453AC[];            // SWITCH RANKINGS, SWITCH TEAMS, exit
-extern const VsRecorderRankingsWindowRect ov40_022453B8[]; // VsRecorderRankings.buttonLabels
-extern const VsRecorderRankingsWindowRect ov40_022453D8[]; // VsRecorderRankings.windows, this week
-extern const VsRecorderRankingsWindowRect ov40_022453F8[]; // VsRecorderRankings.windows, last week
-extern const VsRecorderListConfig ov40_02245418;           // this week's ranking list
-extern const VsRecorderListConfig ov40_02245444;           // last week's results list
-extern u32 ov40_02245CE8[];                                // game stat of each record (0xFFFF: none)
+extern const VsRecorderRankingTeamCounts sVsRecorderRankingTeamCounts;    // teams per kind: 16 trainer types, 12 months, 20 species
+extern const TouchscreenHitbox sVsRecorderRankingsHitboxes[];            // SWITCH RANKINGS, SWITCH TEAMS, exit
+extern const VsRecorderRankingsWindowRect sVsRecorderRankingsButtonLabelWindows[]; // VsRecorderRankings.buttonLabels
+extern const VsRecorderRankingsWindowRect sVsRecorderRankingsThisWeekWindows[]; // VsRecorderRankings.windows, this week
+extern const VsRecorderRankingsWindowRect sVsRecorderRankingsLastWeekWindows[]; // VsRecorderRankings.windows, last week
+extern const VsRecorderListConfig sVsRecorderRankingsThisWeekListConfig;           // this week's ranking list
+extern const VsRecorderListConfig sVsRecorderRankingsLastWeekListConfig;           // last week's results list
+extern u32 sVsRecorderRankedRecordGameStats[];                                // game stat of each record (0xFFFF: none)
 
 // ranking list entry kinds (VsRecorderListEntry.msgId)
 #define RANKING_ENTRY_TRAINER_TYPE       10000
@@ -88,10 +88,10 @@ void VsRecorder_InitRankingsList(VsRecorderWork *work) {
     VsRecorderRankings *rankings = work->screenWork;
 
     if (rankings->lastWeek == FALSE) {
-        rankings->listConfig = ov40_02245418;
+        rankings->listConfig = sVsRecorderRankingsThisWeekListConfig;
         rankings->valueTemplate = NULL;
     } else {
-        rankings->listConfig = ov40_02245444;
+        rankings->listConfig = sVsRecorderRankingsLastWeekListConfig;
         rankings->valueTemplate = NewString_ReadMsgData(work->recordMsgData, rankings->results[rankings->ranking].recordId + 94);
     }
     rankings->listConfig.count = rankings->teamCount;
@@ -173,7 +173,7 @@ void VsRecorder_FillRankingEntries(VsRecorderWork *work) {
 // SWITCH RANKINGS / SWITCH TEAMS
 void VsRecorder_CreateRankingsButtonLabels(VsRecorderWork *work) {
     Window *window;
-    const VsRecorderRankingsWindowRect *rect = ov40_022453B8;
+    const VsRecorderRankingsWindowRect *rect = sVsRecorderRankingsButtonLabelWindows;
     int baseTile = 1;
     int i;
 
@@ -204,8 +204,8 @@ void VsRecorder_RemoveRankingsButtonLabels(VsRecorderWork *work) {
 
 void VsRecorder_CreateRankingsWindows(VsRecorderWork *work) {
     Window *window;
-    const VsRecorderRankingsWindowRect *rect = ov40_022453D8;
-    const VsRecorderRankingsWindowRect *lastWeekRect = ov40_022453F8;
+    const VsRecorderRankingsWindowRect *rect = sVsRecorderRankingsThisWeekWindows;
+    const VsRecorderRankingsWindowRect *lastWeekRect = sVsRecorderRankingsLastWeekWindows;
     int baseTile = 1;
     VsRecorderRankings *rankings = work->screenWork;
     int i;
@@ -248,10 +248,10 @@ u32 VsRecorder_GetRankedRecordValue(VsRecorderWork *work, int record) {
         record = 0;
         GF_AssertFail();
     }
-    if (ov40_02245CE8[record] == 0xFFFF) {
+    if (sVsRecorderRankedRecordGameStats[record] == 0xFFFF) {
         GF_AssertFail();
     }
-    return GameStats_GetCapped(Save_GameStats_Get(work->saveData), ov40_02245CE8[record]);
+    return GameStats_GetCapped(Save_GameStats_Get(work->saveData), sVsRecorderRankedRecordGameStats[record]);
 }
 
 // the ranking's record (or LAST WEEK'S RESULTS!), the team kind and the player's own team
@@ -378,7 +378,7 @@ void VsRecorder_FreeRankingsButtons(VsRecorderWork *work) {
 }
 
 void VsRecorder_UpdateRankingTeamCount(VsRecorderRankings *rankings) {
-    VsRecorderRankingTeamCounts teamCounts = ov40_022453A0;
+    VsRecorderRankingTeamCounts teamCounts = sVsRecorderRankingTeamCounts;
     rankings->teamCount = teamCounts.counts[rankings->team];
 }
 
@@ -427,7 +427,7 @@ BOOL VsRecorder_RankingsInit(VsRecorderWork *work) {
     BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_2);
     BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_3);
     VsRecorder_InitBgBlend(&rankings->eva, &rankings->evb, 0);
-    rankings->hitboxController = TouchHitboxController_Create(ov40_022453AC, 3, VsRecorder_OnRankingsTouch, work, HEAP_ID_109);
+    rankings->hitboxController = TouchHitboxController_Create(sVsRecorderRankingsHitboxes, 3, VsRecorder_OnRankingsTouch, work, HEAP_ID_109);
     VsRecorder_SetSubState(work, 1);
     return FALSE;
 }

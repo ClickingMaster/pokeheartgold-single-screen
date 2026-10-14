@@ -150,15 +150,15 @@ const VsRecorderMenuEntry *VsRecorderApp_GetRootMenu(int mode) {
         GF_ASSERT(mode < 7);
         return *(const VsRecorderMenuEntry **)(_02103754 + 0x64);
     }
-    return _021037B8[mode].menu;
+    return sVsRecorderRootMenus[mode].menu;
 }
 
 const VsRecorderMenuEntry *VsRecorderApp_GetStartMenu(VsRecorderWork *recorder, int mode) {
     if (mode == 0 && VsRecorderApp_HasVisitedBattleFrontier(recorder) == 0) {
-        return _0210357C;
+        return sVsRecorderMode0MenuNoFrontier;
     }
     if (mode == 3 && VsRecorderApp_HasVisitedBattleFrontier(recorder) == 0) {
-        return _02102DC0;
+        return sVsRecorderMode3MenuNoFrontier;
     }
     return VsRecorderApp_GetRootMenu(mode);
 }

@@ -23,9 +23,9 @@
 // VS Recorder saved video screen (VS_RECORDER_SCREEN_SAVED_VIDEO): the battle video in the chosen save slot with its
 // owner's profile, play (after saving the game if needed) and exit. Also the menu's next-colour-scheme substate.
 
-extern const TouchscreenHitbox ov40_0224512C;    // YES
-extern const TouchscreenHitbox ov40_02245130;    // NO
-extern const TouchscreenHitbox ov40_02245134[3]; // profile, play, exit
+extern const TouchscreenHitbox sVsRecorderSaveYesHitbox;    // YES
+extern const TouchscreenHitbox sVsRecorderSaveNoHitbox;    // NO
+extern const TouchscreenHitbox sVsRecorderSavedVideoHitboxes[3]; // profile, play, exit
 
 // right colour scheme arrow (VS_RECORDER_SCREEN_MENU substate 8): like VsRecorder_MenuPrevScheme the other way round
 BOOL VsRecorder_MenuNextScheme(VsRecorderWork *work) {
@@ -160,7 +160,7 @@ BOOL VsRecorder_SavedVideoShow(VsRecorderWork *work) {
         break;
     case 1:
         VsRecorder_SetSavedVideoSlot(work);
-        savedVideo->hitboxes = TouchHitboxController_Create(ov40_02245134, 3, VsRecorder_OnSavedVideoTouch, work, HEAP_ID_109);
+        savedVideo->hitboxes = TouchHitboxController_Create(sVsRecorderSavedVideoHitboxes, 3, VsRecorder_OnSavedVideoTouch, work, HEAP_ID_109);
         work->step++;
         break;
     case 2:
@@ -331,7 +331,7 @@ BOOL VsRecorder_SavedVideoSavePrompt(VsRecorderWork *work) {
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)savedVideo->fade, (u16)work->blendColor);
         break;
     case 4:
-        if (TouchscreenHitbox_TouchNewIsIn(&ov40_0224512C) != FALSE) {
+        if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderSaveYesHitbox) != FALSE) {
             savedVideo->exitMode = 1;
             VsRecorder_OnTouchConfirm(work);
             if (Save_NumModifiedPCBoxesIsMany(work->saveData)) {
@@ -340,7 +340,7 @@ BOOL VsRecorder_SavedVideoSavePrompt(VsRecorderWork *work) {
                 VsRecorder_SetMessageText(work, 0x12B);
             }
             work->step++;
-        } else if (TouchscreenHitbox_TouchNewIsIn(&ov40_02245130) != FALSE) {
+        } else if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderSaveNoHitbox) != FALSE) {
             savedVideo->exitMode = 2;
             VsRecorder_OnTouchConfirm(work);
             work->step = 6;
@@ -518,7 +518,7 @@ BOOL VsRecorder_SavedVideoResume(VsRecorderWork *work) {
         break;
     case 1:
         VsRecorder_SetSavedVideoSlot(work);
-        savedVideo->hitboxes = TouchHitboxController_Create(ov40_02245134, 3, VsRecorder_OnSavedVideoTouch, work, HEAP_ID_109);
+        savedVideo->hitboxes = TouchHitboxController_Create(sVsRecorderSavedVideoHitboxes, 3, VsRecorder_OnSavedVideoTouch, work, HEAP_ID_109);
         work->step++;
         break;
     case 2:

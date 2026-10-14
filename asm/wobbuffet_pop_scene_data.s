@@ -54,7 +54,7 @@
 	.public sWobbuffetPopSubObjColorIndices
 	.public sWobbuffetPopSubObjPaletteBases
 	.public sWobbuffetPopBonusTargetStateFuncs
-	.public ov93_02262CA4
+	.public sWobbuffetPopPuffBonusFactors
 	.public sWobbuffetPopSeatPositions
 	.public sWobbuffetPopSeatPositionsY
 	.public sWobbuffetPopRingSpeedSteps
@@ -164,7 +164,7 @@ sWobbuffetPopBonusTargetStateFuncs: ; 0x02262C94
 	.word WobbuffetPopBonusTarget_Walk
 	.word WobbuffetPopBonusTarget_Hit
 
-ov93_02262CA4: ; 0x02262CA4
+sWobbuffetPopPuffBonusFactors: ; 0x02262CA4
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00
 	.byte 0x00, 0x20, 0x00, 0x00
 

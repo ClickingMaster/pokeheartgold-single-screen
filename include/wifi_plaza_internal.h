@@ -79,7 +79,7 @@ typedef struct WiFiPlazaPlayerList {
     s32 *ids;
 } WiFiPlazaPlayerList;
 
-// Entry of the avatar table ov45_02254A84.
+// Entry of the avatar table sWiFiPlazaAvatars.
 typedef struct WiFiPlazaAvatarEntry {
     u16 avatar;
     u16 unk_02;
@@ -149,7 +149,7 @@ typedef struct WiFiPlazaTimer {
     s64 start; // WiFiPlazaLobbyClient_GetTime
     s32 elapsed;
     s32 duration;
-    u32 phase;        // _02254A28[].phase, then 5 at the end
+    u32 phase;        // sWiFiPlazaTimerPhases[].phase, then 5 at the end
     u32 counter;      // updates in the current phase
     void *playerInfo; // WiFiPlazaPlayerInfo_New (WiFiPlazaWork_NewPlayerInfo / WiFiPlazaWork_FreePlayerInfo)
 } WiFiPlazaTimer;
@@ -305,7 +305,7 @@ typedef struct WiFiPlazaNewsSlots {
     u16 lastSlot; // WiFiPlazaNewsSlots_SetLastJoined
 } WiFiPlazaNewsSlots;
 
-// An event (topic) of the plaza news: type 0-8 (message ov45_02254C0C[type]), up to four player names and slots.
+// An event (topic) of the plaza news: type 0-8 (message sWiFiPlazaNewsEventFormatters[type]), up to four player names and slots.
 typedef struct WiFiPlazaNewsEvent {
     u8 type;
     u32 a;
@@ -501,7 +501,7 @@ typedef struct WiFiPlazaPlayerObject {
     u8 culled : 2;       // WiFiPlazaPlayerObject_UpdateCulling
     u8 visible : 2;      // WiFiPlazaPlayerObject_SetVisible
     u8 effectActive : 1; // WiFiPlazaPlayerObject_StartEffect
-    u8 effect : 7;       // index into ov45_02254F1C
+    u8 effect : 7;       // index into sWiFiPlazaPlayerObjectEffects
     u8 timer;
     u8 step;
     Field2DObject *player; // NULL = free slot
@@ -522,8 +522,8 @@ typedef struct WiFiPlazaObjectModel {
 // The player objects (WiFiPlazaPlayerObjects_New).
 typedef struct WiFiPlazaPlayerObjects {
     GF_2DGfxRawResMan *models;    // the billboard model
-    GF_2DGfxRawResMan *sequences; // 2 sprite sequences (ov45_02254C38)
-    GF_3DGfxRawResMan *textures;  // 20 sprites (ov45_02254C48)
+    GF_2DGfxRawResMan *sequences; // 2 sprite sequences (sWiFiPlazaSpriteSequenceFiles)
+    GF_3DGfxRawResMan *textures;  // 20 sprites (sWiFiPlazaSpriteConfigs)
     void *billboards;
     WiFiPlazaPlayerObject *objects;
     u32 count;
@@ -567,7 +567,7 @@ typedef struct WiFiPlazaBillboardCreateParams {
     VecFx32 scale;
 } WiFiPlazaBillboardCreateParams;
 
-// The lobby client (_022577C0, wifi_plaza_lobby_client.c).
+// The lobby client (gWiFiPlazaLobbyClient, wifi_plaza_lobby_client.c).
 typedef struct WiFiPlazaLobbyClient {
     SaveData *save;
     FriendRoster *friendRoster;
@@ -956,7 +956,7 @@ u16 WiFiPlazaNewsEvent_GetLobbyEventNoticeSlot(WiFiPlazaNewsEvent *event, u32 in
 u16 WiFiPlazaNewsEvent_GetSpecialVisitorSlot(WiFiPlazaNewsEvent *event, u32 index);
 
 // wifi_plaza_lobby_client.c
-extern WiFiPlazaLobbyClient *_022577C0;
+extern WiFiPlazaLobbyClient *gWiFiPlazaLobbyClient;
 u16 WiFiPlazaNewsEvent_GetMinigameResultSlot(WiFiPlazaNewsEvent *event, u32 index);
 BOOL WiFiPlaza_IsMinigamePlayerCountValid(u32 activity, u32 count);
 void WiFiPlazaLobbyClient_Init(enum HeapID heapID, SaveData *save, u32 count, WiFiPlazaCallbacks *callbacks, void *callbackArg);
@@ -1142,19 +1142,19 @@ WiFiPlazaTime WiFiPlaza_GetLocalTime(int country, u16 region, u32 time, enum Hea
 void WiFiPlaza_GetLongitude(NARC *narc, enum HeapID heapID, int country, u16 region, s32 *longitude);
 
 // data (asm)
-extern const WiFiPlazaTimerPhase _02254A28[5];
-extern const u8 ov45_02254BB4[];
-extern const u8 ov45_02254BC8[];  // news event rank per type of WiFiPlazaNews_AddMinigameResultEvent
-extern const u16 ov45_02254BCA[]; // message per player count (WiFiPlazaNewsEvent_FormatMinigameResult)
-extern const u16 ov45_02254BD2[];
-extern const u32 ov45_02254BDC[]; // news event rank per type of WiFiPlazaNews_AddMinigameEntryEvent
+extern const WiFiPlazaTimerPhase sWiFiPlazaTimerPhases[5];
+extern const u8 sWiFiPlazaTypeChoices[];
+extern const u8 sWiFiPlazaNewsMinigameResultRanks[];  // news event rank per type of WiFiPlazaNews_AddMinigameResultEvent
+extern const u16 sWiFiPlazaNewsMinigameResultMsgs[]; // message per player count (WiFiPlazaNewsEvent_FormatMinigameResult)
+extern const u16 sWiFiPlazaNewsMinigameResultMsgsOther[];
+extern const u32 sWiFiPlazaNewsMinigameEntryRanks[]; // news event rank per type of WiFiPlazaNews_AddMinigameEntryEvent
 // slot getter / message of a news event per type
-extern u16 (*const ov45_02254BE8[9])(WiFiPlazaNewsEvent *event, u32 index);
-extern BOOL (*const ov45_02254C0C[9])(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out, enum HeapID heapID);
+extern u16 (*const sWiFiPlazaNewsEventSlotGetters[9])(WiFiPlazaNewsEvent *event, u32 index);
+extern BOOL (*const sWiFiPlazaNewsEventFormatters[9])(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out, enum HeapID heapID);
 // start time of each group
-extern const s32 ov45_02254A3C[9];
+extern const s32 sWiFiPlazaGroupStartTimes[9];
 // handlers per lobby message type
-extern void (*const ov45_02254A60[9])(WiFiPlazaWork *work, WiFiPlazaLobbyMessage *msg);
+extern void (*const sWiFiPlazaLobbyMessageHandlers[9])(WiFiPlazaWork *work, WiFiPlazaLobbyMessage *msg);
 
 // defined in the other overlay 45 files
 // lobby library
@@ -1178,22 +1178,22 @@ int PPW_LobbySubmitQuestionnaire(int index);
 void PPW_LobbyGetLastError(void);
 void PPW_LobbyToErrorCode(void);
 void ov45_02233220(void);
-extern const u8 ov45_02254C30[4]; // room per channel
-extern const char *ov45_02254EF0; // lobby data key of the location list
+extern const u8 sWiFiPlazaChannelCapacities[4]; // room per channel
+extern const char *sWiFiPlazaLocationListKey; // lobby data key of the location list
 extern const u8 sStr_pokemonplatds[];
 extern const u8 sStr_IIup73[];
 void PPW_LobbyGetTimeInfo(void *a0);
 
-extern const WiFiPlazaAvatarEntry ov45_02254A84[16];
-extern u8 ov45_02254AC4[];
+extern const WiFiPlazaAvatarEntry sWiFiPlazaAvatars[16];
+extern u8 sWiFiPlazaLobbyCommands[];
 
-extern const u8 ov45_02254C34[4];   // sprite directions of effect WiFiPlazaPlayerObject_EffectTurnAround
-extern const u16 ov45_02254C38[2];  // sprite sequence files
-extern const VecFx32 ov45_02254C3C; // sprite scale
-extern WiFiPlazaSpriteConfig ov45_02254C48[20];
-extern const u8 ov45_02254C98[];
-extern void (*ov45_02254F1C[3])(WiFiPlazaPlayerObject *object);      // effects
-extern void (*const ov45_02254F28[])(WiFiPlazaPlayerObject *object); // per player action
+extern const u8 sWiFiPlazaTurnAroundDirections[4];   // sprite directions of effect WiFiPlazaPlayerObject_EffectTurnAround
+extern const u16 sWiFiPlazaSpriteSequenceFiles[2];  // sprite sequence files
+extern const VecFx32 sWiFiPlazaPlayerSpriteScale; // sprite scale
+extern WiFiPlazaSpriteConfig sWiFiPlazaSpriteConfigs[20];
+extern const u8 sWiFiPlazaBillboardRanges[];
+extern void (*sWiFiPlazaPlayerObjectEffects[3])(WiFiPlazaPlayerObject *object);      // effects
+extern void (*const sWiFiPlazaPlayerObjectActions[])(WiFiPlazaPlayerObject *object); // per player action
 
 // defined in other overlays / the ARM9 static part
 void WiFiPlazaMap_PosToVecFx32(const s16 *gridPos, s32 *position);

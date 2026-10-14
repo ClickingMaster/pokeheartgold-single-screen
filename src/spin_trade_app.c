@@ -398,7 +398,7 @@ typedef struct SpinTradeBonusAreas {
     const SpinTradeAngleRange *ranges;
 } SpinTradeBonusAreas;
 
-extern const s32 ov85_021EA4F0[];
+extern const s32 gSpinTradeBonusRanges2P[];
 extern const WindowTemplate gSpinTradeMsgWindowTemplate;
 extern int (*const gSpinTradeEggDropStateFuncs[])(SpinTradeEggDropTask *task);
 extern const SpinTradeCountdownSounds gSpinTradeCountdownSounds;
@@ -417,7 +417,7 @@ extern const BgTemplate gSpinTradeSubBg2Template;
 extern const BgTemplate gSpinTradeSubBg3Template;
 extern const OamManagerParam gSpinTradeOamManagerParam;
 extern const GraphicsBanks gSpinTradeGraphicsBanks;
-extern u32 ov85_021EA728[][2];
+extern u32 gSpinTradeBonusBerryRanges[][2];
 extern u32 ov85_021EA72C[][2];
 extern const SpinTradeBonusAreas gSpinTradeBonusAreas[];
 extern const u16 gSpinTradeSlotAngles[][5];
@@ -1295,11 +1295,11 @@ BOOL SpinTrade_State_GiveBonusBerry(SpinTradeApp *app) {
         return FALSE;
     }
     playerCount = app->playerCount;
-    item = ov85_021EA728[playerCount][0];
+    item = gSpinTradeBonusBerryRanges[playerCount][0];
     high = ov85_021EA72C[playerCount][0];
     item += LCRandom() % (high - item + 1);
-    if (item < ov85_021EA728[playerCount][0]) {
-        item = ov85_021EA728[playerCount][0];
+    if (item < gSpinTradeBonusBerryRanges[playerCount][0]) {
+        item = gSpinTradeBonusBerryRanges[playerCount][0];
     } else if (item > high) {
         item = high;
     }
@@ -2890,8 +2890,8 @@ void SpinTrade_StartSubBgFade(SpinTradeApp *app, int fadeOut) {
     s32 startLevels[2];
     SpinTradeFadeTask *fade;
 
-    startLevels[0] = ov85_021EA4F0[7];
-    startLevels[1] = ov85_021EA4F0[8];
+    startLevels[0] = gSpinTradeBonusRanges2P[7];
+    startLevels[1] = gSpinTradeBonusRanges2P[8];
     fade = Heap_AllocAtEnd(HEAP_ID_102, sizeof(SpinTradeFadeTask));
     fade->app = app;
     fade->fadeOut = fadeOut;

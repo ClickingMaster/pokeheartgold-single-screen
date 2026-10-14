@@ -19,7 +19,7 @@ typedef struct WaveArcInfo {
 // asm/sound_system_data.s
 extern int _021D05E8[4];
 extern MICAutoParam gSoundMicAutoParam;
-extern s8 _021D0620[2000];
+extern s8 sSoundChatotBuffer[2000];
 
 // sound_gb.c, sound_playback.c, communication
 u16 GBSounds_GetDSSeqNoByGBSeqNo(u16 seqNo);
@@ -991,7 +991,7 @@ void Sound_SetMasterVolume(int volume) {
 }
 
 s8 *Sound_GetChatotBuffer(void) {
-    return _021D0620;
+    return sSoundChatotBuffer;
 }
 
 void Sound_SetReloadFieldSeqFlag(u16 state) {

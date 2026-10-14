@@ -178,7 +178,7 @@ void WiFiPlazaTimer_Start(WiFiPlazaTimer *timer) {
     WiFiPlazaLobbyClient_GetTime(&timer->start);
 }
 
-// Runs the timer (30 per second of WiFiPlazaLobbyClient_GetTime time) and steps its phase through _02254A28; phase 5 for 120
+// Runs the timer (30 per second of WiFiPlazaLobbyClient_GetTime time) and steps its phase through sWiFiPlazaTimerPhases; phase 5 for 120
 // updates at the end.
 void WiFiPlazaTimer_Update(WiFiPlazaTimer *timer) {
     s64 now;
@@ -197,10 +197,10 @@ void WiFiPlazaTimer_Update(WiFiPlazaTimer *timer) {
             value = (timer->elapsed << 8) / timer->duration;
             accum = 0;
             for (i = 0; i < 5; i++) {
-                accum += _02254A28[i].length;
+                accum += sWiFiPlazaTimerPhases[i].length;
                 if ((u32)accum >= value) {
-                    if (timer->phase != _02254A28[i].phase) {
-                        timer->phase = _02254A28[i].phase;
+                    if (timer->phase != sWiFiPlazaTimerPhases[i].phase) {
+                        timer->phase = sWiFiPlazaTimerPhases[i].phase;
                         timer->counter = 0;
                     }
                     break;

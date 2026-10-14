@@ -44,30 +44,30 @@ void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapID);
 void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapID);
 void VsRecorderApp_CountMenuChoices(VsRecorderWork *work);
 
-extern const GraphicsModes _02244C44;
-extern const OamCharTransferParam ov40_02244C54;
-extern const SpriteResourceCountsListUnion ov40_02244C68;
-extern const OamManagerParam ov40_02244C80;
-extern const GraphicsBanks ov40_02244CA0;
-extern const BgTemplate ov40_02244CC8;
-extern const BgTemplate ov40_02244CE4;
-extern const BgTemplate ov40_02244D00;
-extern const BgTemplate ov40_02244D1C;
-extern const BgTemplate ov40_02244D38;
-extern const BgTemplate ov40_02244D54;
-extern const BgTemplate ov40_02244D70;
-extern const BgTemplate ov40_02244D8C;
+extern const GraphicsModes sVsRecorderGraphicsModes;
+extern const OamCharTransferParam sVsRecorderOamCharTransferParam;
+extern const SpriteResourceCountsListUnion sVsRecorderSpriteResourceCounts;
+extern const OamManagerParam sVsRecorderOamManagerParam;
+extern const GraphicsBanks sVsRecorderGraphicsBanks;
+extern const BgTemplate sVsRecorderBgTemplate_Main0;
+extern const BgTemplate sVsRecorderBgTemplate_Main1;
+extern const BgTemplate sVsRecorderBgTemplate_Main2;
+extern const BgTemplate sVsRecorderBgTemplate_Main3;
+extern const BgTemplate sVsRecorderBgTemplate_Sub0;
+extern const BgTemplate sVsRecorderBgTemplate_Sub1;
+extern const BgTemplate sVsRecorderBgTemplate_Sub2;
+extern const BgTemplate sVsRecorderBgTemplate_Sub3;
 
 // per-screen step tables, indexed by VsRecorderWork.subState
-extern VsRecorderScreenFunc ov40_022450F0[];
-extern VsRecorderScreenFunc ov40_02245108[];
-extern VsRecorderScreenFunc ov40_02245140[];
-extern VsRecorderScreenFunc ov40_02245168[];
-extern VsRecorderScreenFunc ov40_02245220[];
-extern VsRecorderScreenFunc ov40_02245238[];
-extern VsRecorderScreenFunc ov40_0224533C[];
-extern VsRecorderScreenFunc ov40_02245368[];
-extern VsRecorderScreenFunc ov40_02245470[];
+extern VsRecorderScreenFunc sVsRecorderTitleSubStates[];
+extern VsRecorderScreenFunc sVsRecorderMenuSubStates[];
+extern VsRecorderScreenFunc sVsRecorderSavedVideoSubStates[];
+extern VsRecorderScreenFunc sVsRecorderFrontierSubStates[];
+extern VsRecorderScreenFunc sVsRecorderDressUpSendSubStates[];
+extern VsRecorderScreenFunc sVsRecorderDressUpViewSubStates[];
+extern VsRecorderScreenFunc sVsRecorderBoxDataSendSubStates[];
+extern VsRecorderScreenFunc sVsRecorderBoxDataViewSubStates[];
+extern VsRecorderScreenFunc sVsRecorderRankingsSubStates[];
 extern VsRecorderScreenFunc sVsRecorderVideoListSubStates[];
 extern VsRecorderScreenFunc sVsRecorderVideoSearchSubStates[];
 extern VsRecorderScreenFunc sVsRecorderNumberSearchSubStates[];
@@ -214,26 +214,26 @@ void VsRecorder_InitBgLayers(BgConfig *bgConfig) {
     GraphicsModes modes;
     GraphicsBanks banks;
     GfGfx_DisableEngineAPlanes();
-    modes = _02244C44;
+    modes = sVsRecorderGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    banks = ov40_02244CA0;
+    banks = sVsRecorderGraphicsBanks;
     GfGfx_SetBanks(&banks);
     MIi_CpuClear32(0, (void *)HW_BG_VRAM, 0x80000);
     MIi_CpuClear32(0, (void *)HW_DB_BG_VRAM, 0x20000);
     MIi_CpuClear32(0, (void *)HW_OBJ_VRAM, 0x40000);
     MIi_CpuClear32(0, (void *)HW_DB_OBJ_VRAM, 0x20000);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &ov40_02244CC8, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &ov40_02244CE4, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &ov40_02244D00, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &ov40_02244D1C, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &sVsRecorderBgTemplate_Main0, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &sVsRecorderBgTemplate_Main1, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &sVsRecorderBgTemplate_Main2, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &sVsRecorderBgTemplate_Main3, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &ov40_02244D38, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &ov40_02244D54, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &ov40_02244D70, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_3, &ov40_02244D8C, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &sVsRecorderBgTemplate_Sub0, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &sVsRecorderBgTemplate_Sub1, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &sVsRecorderBgTemplate_Sub2, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_3, &sVsRecorderBgTemplate_Sub3, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_2);
@@ -261,7 +261,7 @@ void VsRecorder_SetScreensFlipped(int flipped) {
 }
 
 void VsRecorder_ResetBg2(VsRecorderWork *work) {
-    InitBgFromTemplate(work->bgConfig, GF_BG_LYR_MAIN_2, &ov40_02244D00, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(work->bgConfig, GF_BG_LYR_MAIN_2, &sVsRecorderBgTemplate_Main2, GF_BG_TYPE_TEXT);
 }
 
 void VsRecorder_InitSpriteSystem(VsRecorderWork *work) {
@@ -269,10 +269,10 @@ void VsRecorder_InitSpriteSystem(VsRecorderWork *work) {
     OamCharTransferParam oamCharTransferParam;
     SpriteResourceCountsListUnion counts;
     work->spriteSystem = SpriteSystem_Alloc(HEAP_ID_109);
-    oamManagerParam = ov40_02244C80;
-    oamCharTransferParam = ov40_02244C54;
+    oamManagerParam = sVsRecorderOamManagerParam;
+    oamCharTransferParam = sVsRecorderOamCharTransferParam;
     SpriteSystem_Init(work->spriteSystem, &oamManagerParam, &oamCharTransferParam, 0x20);
-    counts = ov40_02244C68;
+    counts = sVsRecorderSpriteResourceCounts;
     work->spriteManager = SpriteManager_New(work->spriteSystem);
     if (!SpriteSystem_InitSprites(work->spriteSystem, work->spriteManager, 0xC0)) {
         GF_AssertFail();
@@ -297,7 +297,7 @@ BOOL VsRecorder_Main(VsRecorderWork *work, int *screen) {
     BOOL done;
     switch (*screen) {
     case VS_RECORDER_SCREEN_TITLE:
-        done = ov40_022450F0[work->subState](work);
+        done = sVsRecorderTitleSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_MENU, done, screen);
         if (done == FALSE) {
             break;
@@ -309,36 +309,36 @@ BOOL VsRecorder_Main(VsRecorderWork *work, int *screen) {
         }
         break;
     case VS_RECORDER_SCREEN_MENU:
-        done = ov40_02245108[work->subState](work);
+        done = sVsRecorderMenuSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_SAVED_VIDEO:
-        done = ov40_02245140[work->subState](work);
+        done = sVsRecorderSavedVideoSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_FRONTIER:
-        done = ov40_02245168[work->subState](work);
+        done = sVsRecorderFrontierSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_DRESS_UP_SEND:
-        done = ov40_02245220[work->subState](work);
+        done = sVsRecorderDressUpSendSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_DRESS_UP_VIEW:
-        done = ov40_02245238[work->subState](work);
+        done = sVsRecorderDressUpViewSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_BOX_DATA_SEND:
-        done = ov40_0224533C[work->subState](work);
+        done = sVsRecorderBoxDataSendSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_BOX_DATA_VIEW:
-        done = ov40_02245368[work->subState](work);
+        done = sVsRecorderBoxDataViewSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_RANKINGS:
     case VS_RECORDER_SCREEN_RANKINGS_LAST:
-        done = ov40_02245470[work->subState](work);
+        done = sVsRecorderRankingsSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_COLOSSEUM_TOP:

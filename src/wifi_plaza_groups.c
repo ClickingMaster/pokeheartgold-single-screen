@@ -2,13 +2,13 @@
 
 #include "wifi_plaza_internal.h"
 
-// Advances the plaza time; group i starts counting (state 1) once the time reaches ov45_02254A3C[i] and ends (state 2)
+// Advances the plaza time; group i starts counting (state 1) once the time reaches sWiFiPlazaGroupStartTimes[i] and ends (state 2)
 // after 1200 more updates.
 void WiFiPlazaGroups_Update(WiFiPlazaGroups *groups) {
     int i;
     if (groups->active != 0) {
         for (i = 0; i < 9; i++) {
-            if (groups->time == ov45_02254A3C[i]) {
+            if (groups->time == sWiFiPlazaGroupStartTimes[i]) {
                 groups->states[i] = 1;
             }
             if (groups->states[i] == 1) {

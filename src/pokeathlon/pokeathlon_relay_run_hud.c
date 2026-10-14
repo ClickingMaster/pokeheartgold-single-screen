@@ -42,21 +42,21 @@ void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *entry, int priority)
 
 BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
 
-extern const WindowTemplate ov96_0221C5C4; // the result window
-extern const VecFx32 ov96_0221C5CC;        // lap counter: the plate
-extern const VecFx32 ov96_0221C5D8;        // lap counter: the first digit
-extern const VecFx32 ov96_0221C5F0;        // lap counter: the second digit
+extern const WindowTemplate sRelayRunResultWindowTemplate; // the result window
+extern const VecFx32 sRelayRunLapCounterPlatePos;        // lap counter: the plate
+extern const VecFx32 sRelayRunLapCounterFirstDigitPos;        // lap counter: the first digit
+extern const VecFx32 sRelayRunLapCounterSecondDigitPos;        // lap counter: the second digit
 extern const u32 gPokeathlonRelayRunPicIds[];          // touch screen sprite resource ids
-extern const u8 ov96_0221C718[6];          // x of the timer's sprites
-extern const u8 ov96_0221C720[6];          // their animations: digits and separators
-extern const VecFx32 ov96_0221C748;        // track map: offset of the start from its centre
-extern const VecFx32 ov96_0221C754;        // track map: centre
+extern const u8 sRelayRunTimerSpriteX[6];          // x of the timer's sprites
+extern const u8 sRelayRunTimerSpriteAnims[6];          // their animations: digits and separators
+extern const VecFx32 sRelayRunMapStartOffset;        // track map: offset of the start from its centre
+extern const VecFx32 sRelayRunMapCenter;        // track map: centre
 
 // Shows the lap count for a second (60 frames) each time it goes up.
 #pragma force_active on
 
 void PokeathlonRelayRun_UpdateLapCounter(PokeathlonRelayRunLapCounter *counter, u8 laps) {
-    VecFx32 platePosition = ov96_0221C5CC, firstPosition = ov96_0221C5D8, secondPosition = ov96_0221C5F0;
+    VecFx32 platePosition = sRelayRunLapCounterPlatePos, firstPosition = sRelayRunLapCounterFirstDigitPos, secondPosition = sRelayRunLapCounterSecondDigitPos;
     int changed;
     if (counter->laps < laps) {
         counter->laps = laps;
@@ -101,7 +101,7 @@ void PokeathlonRelayRun_UpdateLapCounter(PokeathlonRelayRunLapCounter *counter, 
 #pragma force_active reset
 
 void PokeathlonRelayRun_AddResultWindow(PokeathlonRelayRun *relayRun) {
-    AddWindow(relayRun->bgConfig, &relayRun->window, &ov96_0221C5C4);
+    AddWindow(relayRun->bgConfig, &relayRun->window, &sRelayRunResultWindowTemplate);
     BG_FillCharDataRange(relayRun->bgConfig, GF_BG_LYR_MAIN_3, 0, 1, 0);
     LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_15_OFFSET, relayRun->heapId);
 }
@@ -301,11 +301,11 @@ void PokeathlonRelayRunHud_CreateSprites(PokeathlonRelayRunHud *hud, void *sprit
     for (j = 0; j < 6; j++) {
         hud->timerSprites[j] = PokeathlonCourseSprites_CreateTimerDigit(monResources, PokeathlonCourseSpritePool_GetSpriteList(spritePool), 3, hud->heapId);
         Sprite_SetDrawFlag(hud->timerSprites[j], TRUE);
-        timerPosition.x = ov96_0221C718[j] << FX32_SHIFT;
+        timerPosition.x = sRelayRunTimerSpriteX[j] << FX32_SHIFT;
         timerPosition.y = FX32_CONST(568);
         timerPosition.z = 0;
         Sprite_SetMatrix(hud->timerSprites[j], &timerPosition);
-        Sprite_SetAnimCtrlSeq(hud->timerSprites[j], ov96_0221C720[j]);
+        Sprite_SetAnimCtrlSeq(hud->timerSprites[j], sRelayRunTimerSpriteAnims[j]);
     }
 }
 
@@ -394,8 +394,8 @@ void PokeathlonRelayRunHud_SetMapPosition(PokeathlonRelayRunHud *hud, u8 teamId,
     int lapX = x % RELAY_RUN_TRACK_LENGTH;
     u16 angle = lapX * 65536 / RELAY_RUN_TRACK_LENGTH;
     angle = 65536 - angle;
-    offset = ov96_0221C748;
-    centre = ov96_0221C754;
+    offset = sRelayRunMapStartOffset;
+    centre = sRelayRunMapCenter;
     MTX_RotZ33_(&rotation, FX_SinCosTable_[(angle >> 4) * 2], FX_SinCosTable_[(angle >> 4) * 2 + 1]);
     MTX_MultVec33(&offset, &rotation, &offset);
     VEC_Add(&centre, &offset, &position);

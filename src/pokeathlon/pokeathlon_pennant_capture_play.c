@@ -33,12 +33,12 @@ void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant
 void PokeathlonCourse_SetFinishCallback(PokeathlonCourseData *course, void (*callback)(PokeathlonCourseData *course));
 
 // Screen templates (asm data).
-extern const GraphicsModes ov96_0221CAF0;
-extern const BgTemplate ov96_0221CB10;
-extern const BgTemplate ov96_0221CB2C;
-extern const BgTemplate ov96_0221CB48;
-extern const BgTemplate ov96_0221CB64;
-extern const BgTemplate ov96_0221CB80;
+extern const GraphicsModes sPennantCaptureGraphicsModes;
+extern const BgTemplate sPennantCaptureBgTemplate_Sub0;
+extern const BgTemplate sPennantCaptureBgTemplate_Sub1;
+extern const BgTemplate sPennantCaptureBgTemplate_Sub2;
+extern const BgTemplate sPennantCaptureBgTemplate_Main0;
+extern const BgTemplate sPennantCaptureBgTemplate_Main3;
 
 // One link entry: [0] own input, [1] own frame (host), [2-5] the participants' inputs, [6] the host's frame.
 typedef struct PokeathlonPennantCaptureLinkEntry {
@@ -55,23 +55,23 @@ typedef struct PokeathlonPennantCaptureLayout {
 #pragma force_active on
 
 void PokeathlonPennantCapture_InitBgs(BgConfig *bgConfig) {
-    GraphicsModes modes = ov96_0221CAF0;
+    GraphicsModes modes = sPennantCaptureGraphicsModes;
     BgTemplate bg0, bg3, bg4, bg5, bg6;
 
     SetBothScreensModesAndDisable(&modes);
-    bg0 = ov96_0221CB64;
+    bg0 = sPennantCaptureBgTemplate_Main0;
     InitBgFromTemplate(bgConfig, 0, &bg0, 0);
     BgClearTilemapBufferAndCommit(bgConfig, 0);
-    bg3 = ov96_0221CB80;
+    bg3 = sPennantCaptureBgTemplate_Main3;
     InitBgFromTemplate(bgConfig, 3, &bg3, 0);
     BgClearTilemapBufferAndCommit(bgConfig, 3);
-    bg4 = ov96_0221CB10;
+    bg4 = sPennantCaptureBgTemplate_Sub0;
     InitBgFromTemplate(bgConfig, 4, &bg4, 0);
     BgClearTilemapBufferAndCommit(bgConfig, 4);
-    bg5 = ov96_0221CB2C;
+    bg5 = sPennantCaptureBgTemplate_Sub1;
     InitBgFromTemplate(bgConfig, 5, &bg5, 0);
     BgClearTilemapBufferAndCommit(bgConfig, 5);
-    bg6 = ov96_0221CB48;
+    bg6 = sPennantCaptureBgTemplate_Sub2;
     InitBgFromTemplate(bgConfig, 6, &bg6, 0);
     BgClearTilemapBufferAndCommit(bgConfig, 6);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);

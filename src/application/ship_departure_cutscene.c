@@ -48,19 +48,19 @@ typedef struct ShipCutsceneFiles {
     u16 anims[SHIP_CUTSCENE_NUM_ANIMS];
 } ShipCutsceneFiles;
 
-extern const u16 ov105_021E5DCC[2][SHIP_CUTSCENE_NUM_SCENES][2];
-extern const VecFx32 ov105_021E5DD4;
-extern const GXRgb ov105_021E5DE0[8];
-extern const VecFx32 ov105_021E5DF0[2][SHIP_CUTSCENE_NUM_SCENES];
-extern const MtxFx33 ov105_021E5E08;
-extern const CameraParam ov105_021E5E2C[2][SHIP_CUTSCENE_NUM_SCENES];
-extern const GraphicsBanks ov105_021E5E54;
-extern const u32 _021E5DC4[SHIP_CUTSCENE_NUM_SCENES];
-extern const u32 ov105_021E5DC8[SHIP_CUTSCENE_NUM_SCENES];
-extern ShipCutsceneFiles _021E5E80;
-extern ShipCutsceneFiles ov105_021E5E8C;
-extern ShipCutsceneFiles ov105_021E5E98;
-extern ShipCutsceneFiles ov105_021E5EA4;
+extern const u16 sShipDepartureCutsceneClipPlanes[2][SHIP_CUTSCENE_NUM_SCENES][2];
+extern const VecFx32 sShipDepartureCutsceneModelScale;
+extern const GXRgb sShipDepartureCutsceneEdgeColors[8];
+extern const VecFx32 sShipDepartureCutsceneCameraOffsets[2][SHIP_CUTSCENE_NUM_SCENES];
+extern const MtxFx33 sShipDepartureCutsceneModelRotation;
+extern const CameraParam sShipDepartureCutsceneCameraParams[2][SHIP_CUTSCENE_NUM_SCENES];
+extern const GraphicsBanks sShipDepartureCutsceneGraphicsBanks;
+extern const u32 sShipDepartureCutscenePort1SceneSE[SHIP_CUTSCENE_NUM_SCENES];
+extern const u32 sShipDepartureCutscenePort0SceneSE[SHIP_CUTSCENE_NUM_SCENES];
+extern ShipCutsceneFiles sShipDepartureCutscenePort0NightFiles;
+extern ShipCutsceneFiles sShipDepartureCutscenePort0DayFiles;
+extern ShipCutsceneFiles sShipDepartureCutscenePort1NightFiles;
+extern ShipCutsceneFiles sShipDepartureCutscenePort1DayFiles;
 
 void ShipDepartureCutscene_InitGraphics(void);
 void ShipDepartureCutscene_InitCamera(ShipDepartureCutscene *cutscene);
@@ -140,8 +140,8 @@ BOOL ShipDepartureCutscene_Main(OverlayManager *man, int *state) {
             anmObj->frame = frame;
         }
     }
-    rotation = ov105_021E5E08;
-    scale = ov105_021E5DD4;
+    rotation = sShipDepartureCutsceneModelRotation;
+    scale = sShipDepartureCutsceneModelScale;
     {
         VecFx32 translation = { 0, 0, 0 };
         Thunk_G3X_Reset();
@@ -181,7 +181,7 @@ void ShipDepartureCutscene_InitGraphics(void) {
     ShipDepartureCutscene_SetBanks();
     GF3dRender_InitSimpleManager(HEAP_ID_151);
     G3X_EdgeMarking(TRUE);
-    G3X_SetEdgeColorTable(ov105_021E5DE0);
+    G3X_SetEdgeColorTable(sShipDepartureCutsceneEdgeColors);
     GfGfx_SwapDisplay();
 }
 
@@ -193,14 +193,14 @@ void ShipDepartureCutscene_InitCamera(ShipDepartureCutscene *cutscene) {
     cutscene->target = target;
     scene = cutscene->scene;
     port = cutscene->port;
-    Camera_Init_FromTargetDistanceAndAngle(&cutscene->target, ov105_021E5E2C[port][scene].distance, &ov105_021E5E2C[port][scene].angle, ov105_021E5E2C[port][scene].perspective, ov105_021E5E2C[port][scene].perspectiveType, TRUE, cutscene->camera);
-    Camera_OffsetLookAtPosAndTarget(&ov105_021E5DF0[cutscene->port][scene], cutscene->camera);
-    Camera_SetPerspectiveClippingPlane(ov105_021E5DCC[cutscene->port][scene][0] * FX32_ONE, ov105_021E5DCC[cutscene->port][scene][1] * FX32_ONE, cutscene->camera);
+    Camera_Init_FromTargetDistanceAndAngle(&cutscene->target, sShipDepartureCutsceneCameraParams[port][scene].distance, &sShipDepartureCutsceneCameraParams[port][scene].angle, sShipDepartureCutsceneCameraParams[port][scene].perspective, sShipDepartureCutsceneCameraParams[port][scene].perspectiveType, TRUE, cutscene->camera);
+    Camera_OffsetLookAtPosAndTarget(&sShipDepartureCutsceneCameraOffsets[cutscene->port][scene], cutscene->camera);
+    Camera_SetPerspectiveClippingPlane(sShipDepartureCutsceneClipPlanes[cutscene->port][scene][0] * FX32_ONE, sShipDepartureCutsceneClipPlanes[cutscene->port][scene][1] * FX32_ONE, cutscene->camera);
     Camera_SetStaticPtr(cutscene->camera);
 }
 
 void ShipDepartureCutscene_SetBanks(void) {
-    GraphicsBanks banks = ov105_021E5E54;
+    GraphicsBanks banks = sShipDepartureCutsceneGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
@@ -216,18 +216,18 @@ void ShipDepartureCutscene_LoadModel(ShipDepartureCutscene *cutscene) {
     HeapExp_FndInitAllocator(&cutscene->allocator, HEAP_ID_151, 4);
     if (cutscene->port == 0) {
         if (cutscene->isNight == FALSE) {
-            files = &ov105_021E5E8C;
+            files = &sShipDepartureCutscenePort0DayFiles;
         } else {
-            files = &_021E5E80;
+            files = &sShipDepartureCutscenePort0NightFiles;
         }
-        cutscene->sceneSE = ov105_021E5DC8;
+        cutscene->sceneSE = sShipDepartureCutscenePort0SceneSE;
     } else {
         if (cutscene->isNight == FALSE) {
-            files = &ov105_021E5EA4;
+            files = &sShipDepartureCutscenePort1DayFiles;
         } else {
-            files = &ov105_021E5E98;
+            files = &sShipDepartureCutscenePort1NightFiles;
         }
-        cutscene->sceneSE = _021E5DC4;
+        cutscene->sceneSE = sShipDepartureCutscenePort1SceneSE;
     }
     model = &cutscene->models[0];
     model->fileHeader = NARC_AllocAndReadWholeMember(narc, files->model, HEAP_ID_151);

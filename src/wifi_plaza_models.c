@@ -40,7 +40,7 @@ void NNS_G3dReleaseMdlSet(NNSG3dResMdlSet *mdlSet);
 
 // rodata of this overlay (asm/wifi_plaza_map_rodata.s)
 extern const s32 sWiFiPlazaPropTagShiftX[2];
-extern const WiFiPlazaModelsOffset ov49_02269A7C[]; // x / z cell offsets in front of a mover,
+extern const WiFiPlazaModelsOffset sWiFiPlazaMoverFrontOffsets[]; // x / z cell offsets in front of a mover,
 extern const WiFiPlazaModelsOffset ov49_02269A7E[]; // the z column labelled separately
 extern const WiFiPlazaMoverSpawn sWiFiPlazaMoverSpawns[9];
 extern const WiFiPlazaModelsSpawn sWiFiPlazaPropSpawns[35];
@@ -1140,7 +1140,7 @@ void WiFiPlazaModels_GetMoverFrontPos(WiFiPlazaModels *models, int index, int si
         GF_AssertFail();
     }
     WiFiPlazaMover_GetPosition(models->movers[index], position);
-    position->x += ov49_02269A7C[side].value << FX32_SHIFT;
+    position->x += sWiFiPlazaMoverFrontOffsets[side].value << FX32_SHIFT;
     position->z += ov49_02269A7E[side].value << FX32_SHIFT;
     position->y = 40 * FX32_ONE;
 }

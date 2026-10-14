@@ -14,23 +14,23 @@
 
 FS_EXTERN_OVERLAY(OVY_98);
 
-extern const SpriteResourceCountsListUnion ov99_021E95A4;
-extern const u8 ov99_021E9600[][4];
-extern const u8 _021E954C[8];
-extern const GraphicsModes ov99_021E9564;
-extern const PokeathlonCourseRecordBgTemplates ov99_021E9760;
-extern const s32 ov99_021E95D8[][2];
+extern const SpriteResourceCountsListUnion sPokeathlonCourseRecordSpriteResourceCounts;
+extern const u8 sPokeathlonCourseRecordCourseEvents[][4];
+extern const u8 sPokeathlonCourseRecordBgLayers[8];
+extern const GraphicsModes sPokeathlonCourseRecordGraphicsModes;
+extern const PokeathlonCourseRecordBgTemplates sPokeathlonCourseRecordBgTemplates;
+extern const s32 sPokeathlonCourseRecordScreenFiles[][2];
 extern const s32 ov99_021E95DC[][2];
-extern const PokeathlonCourseRecordSpritePos ov99_021E9690[6];
-extern const u32 ov99_021E958C[];
-extern const int ov99_021E9554[];
-extern const int ov99_021E9650[3][4];
-extern const ManagedSpriteTemplate ov99_021E9840[26];
-extern const u32 ov99_021E9628[];
-extern const TouchscreenHitbox ov99_021E95BC[];
-extern const s16 ov99_021E9574[];
+extern const PokeathlonCourseRecordSpritePos sPokeathlonCourseRecordScrollSpritePositions[6];
+extern const u32 sPokeathlonCourseRecordScoreWindows[];
+extern const int sPokeathlonCourseRecordMonIconResIds[];
+extern const int sPokeathlonCourseRecordMonPicResIds[3][4];
+extern const ManagedSpriteTemplate sPokeathlonCourseRecordSpriteTemplates[26];
+extern const u32 sPokeathlonCourseRecordDigitAnims[];
+extern const TouchscreenHitbox sPokeathlonCourseRecordHitboxes[];
+extern const s16 sPokeathlonCourseRecordCursorPositions[];
 extern const s16 ov99_021E9576[];
-extern const WindowTemplate ov99_021E96D8[17];
+extern const WindowTemplate sPokeathlonCourseRecordWindowTemplates[17];
 extern const char sStr_SeqError[]; // "seq error!"
 
 // The first 0xDC bytes of PokeathlonSave hold the five course records.
@@ -57,8 +57,8 @@ BOOL PokeathlonCourseRecord_Init(OverlayManager *man, int *state) {
     PokeathlonUtil_ResetDisplay();
     PokeathlonCourseRecord_InitBgs(work);
     PokeathlonCourseRecord_LoadBgGraphics(work);
-    work->textContext = PokeathlonUtil_CreateTextContext(work->heapId, work->bgConfig, 17, ov99_021E96D8, NARC_msg_msg_0314_bin);
-    counts = ov99_021E95A4;
+    work->textContext = PokeathlonUtil_CreateTextContext(work->heapId, work->bgConfig, 17, sPokeathlonCourseRecordWindowTemplates, NARC_msg_msg_0314_bin);
+    counts = sPokeathlonCourseRecordSpriteResourceCounts;
     work->spriteContext = PokeathlonUtil_CreateSpriteContext(work->heapId, &counts, 26);
     PokeathlonCourseRecord_LoadSpriteResources(work);
     PokeathlonCourseRecord_CreateSprites(work);
@@ -183,7 +183,7 @@ int PokeathlonCourseRecord_GetEventId(PokeathlonCourseRecordArgs *args, s32 cour
     GF_ASSERT(args != NULL);
     GF_ASSERT(course < 10);
     GF_ASSERT(event < 4);
-    events = ov99_021E9600[course];
+    events = sPokeathlonCourseRecordCourseEvents[course];
     return events[event];
 }
 
@@ -202,13 +202,13 @@ void PokeathlonCourseRecord_InitBgs(PokeathlonCourseRecord *work) {
     int i;
 
     work->bgConfig = BgConfig_Alloc(work->heapId);
-    modes = ov99_021E9564;
+    modes = sPokeathlonCourseRecordGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    templates = ov99_021E9760;
+    templates = sPokeathlonCourseRecordBgTemplates;
     for (i = 0; i < 8; i++) {
-        InitBgFromTemplate(work->bgConfig, _021E954C[i], &templates.templates[i], GF_BG_TYPE_TEXT);
-        BgClearTilemapBufferAndCommit(work->bgConfig, _021E954C[i]);
-        BG_ClearCharDataRange(_021E954C[i], 32, 0, work->heapId);
+        InitBgFromTemplate(work->bgConfig, sPokeathlonCourseRecordBgLayers[i], &templates.templates[i], GF_BG_TYPE_TEXT);
+        BgClearTilemapBufferAndCommit(work->bgConfig, sPokeathlonCourseRecordBgLayers[i]);
+        BG_ClearCharDataRange(sPokeathlonCourseRecordBgLayers[i], 32, 0, work->heapId);
     }
     G2_SetBlendAlpha(GX_BLEND_PLANEMASK_BG3, GX_BLEND_PLANEMASK_BG2, 15, 0);
     G2S_SetBlendAlpha(GX_BLEND_PLANEMASK_BG3, GX_BLEND_PLANEMASK_BG1, 15, 0);
@@ -222,7 +222,7 @@ void PokeathlonCourseRecord_FreeBgs(PokeathlonCourseRecord *work) {
 
     NARC_Delete(work->narc);
     for (i = 0; i < 8; i++) {
-        FreeBgTilemapBuffer(work->bgConfig, _021E954C[i]);
+        FreeBgTilemapBuffer(work->bgConfig, sPokeathlonCourseRecordBgLayers[i]);
     }
     Heap_Free(work->bgConfig);
 }
@@ -257,14 +257,14 @@ void PokeathlonCourseRecord_StartPageScroll(PokeathlonCourseRecord *work, int co
     }
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
-    GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, ov99_021E95D8[course][0], work->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, TRUE, work->heapId);
+    GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, sPokeathlonCourseRecordScreenFiles[course][0], work->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, TRUE, work->heapId);
     GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, ov99_021E95DC[course][0], work->bgConfig, GF_BG_LYR_SUB_1, 0, 0, TRUE, work->heapId);
     BgSetPosTextAndCommit(work->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_SET_X, offset);
     BgSetPosTextAndCommit(work->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_X, offset);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
     for (i = 0; i < 6; i++) {
-        ManagedSprite_OffsetPositionXY(work->sprites[ov99_021E9690[i].sprite], -offset, 0);
+        ManagedSprite_OffsetPositionXY(work->sprites[sPokeathlonCourseRecordScrollSpritePositions[i].sprite], -offset, 0);
     }
 }
 
@@ -286,7 +286,7 @@ void PokeathlonCourseRecord_UpdatePageScroll(PokeathlonCourseRecord *work) {
     ScheduleSetBgPosText(work->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_SET_X, x);
     ScheduleSetBgPosText(work->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_X, x);
     for (i = 0; i < 6; i++) {
-        const PokeathlonCourseRecordSpritePos *pos = &ov99_021E9690[i];
+        const PokeathlonCourseRecordSpritePos *pos = &sPokeathlonCourseRecordScrollSpritePositions[i];
         ManagedSprite_SetPositionXY(work->sprites[pos->sprite], pos->x - x, pos->y);
     }
     if (x == 0) {
@@ -319,7 +319,7 @@ void PokeathlonCourseRecord_PrintPage(PokeathlonCourseRecord *work, u32 course) 
 void PokeathlonCourseRecord_PrintEventScores(PokeathlonCourseRecord *work, int course) {
     MessageFormat *msgFormat = PokeathlonUtil_GetMessageFormat(work->textContext);
     int i;
-    const u32 *windows = ov99_021E958C;
+    const u32 *windows = sPokeathlonCourseRecordScoreWindows;
 
     for (i = 0; i < 3; i++, windows += 2) {
         BufferPokeathlonEventName(msgFormat, 1, (u8)PokeathlonCourseRecord_GetEventId(work->args, course, (u8)i));
@@ -420,7 +420,7 @@ void PokeathlonCourseRecord_LoadSpriteResources(PokeathlonCourseRecord *work) {
     SpriteSystem_LoadAnimResObjFromOpenNarc(spriteSystem, spriteManager, work->narc, 11, TRUE, 3);
 
     PokeathlonCourseRecord_LoadMonPicResources(work);
-    PokeathlonUtil_LoadMonIconResources(work->spriteContext, ov99_021E9554, 3, 0, TRUE);
+    PokeathlonUtil_LoadMonIconResources(work->spriteContext, sPokeathlonCourseRecordMonIconResIds, 3, 0, TRUE);
 }
 
 void PokeathlonCourseRecord_LoadMonPicResources(PokeathlonCourseRecord *work) {
@@ -429,7 +429,7 @@ void PokeathlonCourseRecord_LoadMonPicResources(PokeathlonCourseRecord *work) {
     SpriteManager *spriteManager = PokeathlonUtil_GetSpriteManager(work->spriteContext);
 
     for (i = 0; i < 3; i++) {
-        PokeathlonUtil_LoadMonPicSpriteResources(spriteSystem, spriteManager, ov99_021E9650[i], NNS_G2D_VRAM_TYPE_2DMAIN);
+        PokeathlonUtil_LoadMonPicSpriteResources(spriteSystem, spriteManager, sPokeathlonCourseRecordMonPicResIds[i], NNS_G2D_VRAM_TYPE_2DMAIN);
     }
 }
 
@@ -438,7 +438,7 @@ void PokeathlonCourseRecord_LoadMonPicResources(PokeathlonCourseRecord *work) {
 void PokeathlonCourseRecord_CreateSprites(PokeathlonCourseRecord *work) {
     int i;
     s32 course;
-    const ManagedSpriteTemplate *spriteTemplate = ov99_021E9840;
+    const ManagedSpriteTemplate *spriteTemplate = sPokeathlonCourseRecordSpriteTemplates;
 
     for (i = 0; i < 26; i++) {
         work->sprites[i] = PokeathlonUtil_NewSprite(work->spriteContext, spriteTemplate);
@@ -493,7 +493,7 @@ void PokeathlonCourseRecord_UpdatePageSprites(PokeathlonCourseRecord *work, int 
         if (PokeathlonCourseRecord_HasRecord(work->args, course) == TRUE) {
             u16 digit = PokeathlonUtil_GetDecimalDigit(totalScore, (u8)(i + 1));
             ManagedSprite_SetAnim(work->sprites[20 + i], digit);
-            ManagedSprite_SetAnim(work->sprites[14 + i], ov99_021E9628[digit]);
+            ManagedSprite_SetAnim(work->sprites[14 + i], sPokeathlonCourseRecordDigitAnims[digit]);
             ManagedSprite_SetDrawFlag(work->sprites[14 + i], TRUE);
             ManagedSprite_SetDrawFlag(work->sprites[20 + i], TRUE);
         } else {
@@ -527,7 +527,7 @@ BOOL PokeathlonCourseRecord_HandleInput(PokeathlonCourseRecord *work) {
         return TRUE;
     }
     if (gSystem.touchNew) {
-        int hit = TouchscreenHitbox_FindHitboxAtTouchNew(ov99_021E95BC);
+        int hit = TouchscreenHitbox_FindHitboxAtTouchNew(sPokeathlonCourseRecordHitboxes);
         if (hit != -1) {
             if (hit == 5) {
                 exit = TRUE;
@@ -563,7 +563,7 @@ BOOL PokeathlonCourseRecord_HandleInput(PokeathlonCourseRecord *work) {
     selection->cursor = cursor;
     work->selection.page = selection->cursor;
     if (oldCursor != selection->cursor) {
-        ManagedSprite_SetPositionXY(work->sprites[0], ov99_021E9574[selection->cursor * 2], ov99_021E9576[selection->cursor * 2]);
+        ManagedSprite_SetPositionXY(work->sprites[0], sPokeathlonCourseRecordCursorPositions[selection->cursor * 2], ov99_021E9576[selection->cursor * 2]);
         if (selection->cursor == 5) {
             ManagedSprite_SetAnim(work->sprites[0], 12);
         } else {

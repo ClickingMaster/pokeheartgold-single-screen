@@ -16,8 +16,8 @@
 // VS Recorder helpers: list scroll arrows, the touch scroll bar, game stats, battle record import, the screen flip and
 // V-blank tasks, the server video list, saved videos and Pokemon icons.
 
-extern const TouchscreenHitbox ov40_02244E08[];
-extern const TouchscreenHitbox ov40_02244E0C[];
+extern const TouchscreenHitbox sVsRecorderTouchScrollLeftHitbox[];
+extern const TouchscreenHitbox sVsRecorderTouchScrollRightHitbox[];
 
 void WirelessStatusIcon_Refresh(void);
 
@@ -232,7 +232,7 @@ void VsRecorder_UpdateTouchScroll(VsRecorderTouchScroll *scroll) {
         scroll->direction = 0;
         return;
     }
-    if (TouchscreenHitbox_TouchHeldIsIn(ov40_02244E08) || TouchscreenHitbox_TouchHeldIsIn(ov40_02244E0C)) {
+    if (TouchscreenHitbox_TouchHeldIsIn(sVsRecorderTouchScrollLeftHitbox) || TouchscreenHitbox_TouchHeldIsIn(sVsRecorderTouchScrollRightHitbox)) {
         hit = 1;
     }
     if (hit) {

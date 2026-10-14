@@ -30,28 +30,28 @@ typedef struct PokewalkerSpotPixel {
 
 extern const u16 sPokewalkerPictureFiles[][2]; // Pokewalker picture file per species: {male, female}
 extern const u8 sWindowBankScreens[];          // window bank -> 0 main screen, 1 sub screen
-extern const u8 ov112_021FEC88[];              // palettes of the first 17 sprites
-extern const OamCharTransferParam ov112_021FEC98;
-extern const SpriteResourceCountsListUnion ov112_021FECAC;
-extern const OamManagerParam ov112_021FECC4;
+extern const u8 sPokewalkerAppSpritePalettes[];              // palettes of the first 17 sprites
+extern const OamCharTransferParam sPokewalkerAppOamCharTransferParam;
+extern const SpriteResourceCountsListUnion sPokewalkerAppSpriteResourceCounts;
+extern const OamManagerParam sPokewalkerAppOamManagerParam;
 // Cursor positions {x, y, anim, palette}; each column has its own label.
-extern const u8 ov112_021FECE4[];
-extern const u8 ov112_021FECE5[];
-extern const u8 ov112_021FECE6[];
-extern const u8 ov112_021FECE7[];
-extern const ManagedSpriteTemplate ov112_021FED1C[];
-extern const ManagedSpriteTemplate ov112_021FF028;
-extern const ManagedSpriteTemplate ov112_021FF05C;
+extern const u8 sPokewalkerAppCursorX[];
+extern const u8 sPokewalkerAppCursorY[];
+extern const u8 sPokewalkerAppCursorAnims[];
+extern const u8 sPokewalkerAppCursorPalettes[];
+extern const ManagedSpriteTemplate sPokewalkerAppSpriteTemplates[];
+extern const ManagedSpriteTemplate sPokewalkerAppMainSpriteTemplate;
+extern const ManagedSpriteTemplate sPokewalkerAppSubSpriteTemplate;
 extern const PokewalkerSpotPixel *sSpindaSpotPixels[];
 extern const TouchscreenHitbox *sTouchButtons[];
-extern const WindowTemplate *ov112_021FF5D0[];
-extern const WindowTemplate *ov112_021FF5D8[];
-extern const WindowTemplate *ov112_021FF5F0[];
-extern const WindowTemplate *ov112_021FF608[];
-extern const WindowTemplate *ov112_021FF624[];
-extern const WindowTemplate *ov112_021FF640[];
-extern const WindowTemplate *ov112_021FF660[];
-extern const WindowTemplate *ov112_021FF684[];
+extern const WindowTemplate *sWindowBank2Templates[];
+extern const WindowTemplate *sWindowBank1Templates[];
+extern const WindowTemplate *sWindowBank7Templates[];
+extern const WindowTemplate *sWindowBank0Templates[];
+extern const WindowTemplate *sWindowBank5Templates[];
+extern const WindowTemplate *sWindowBank3Templates[];
+extern const WindowTemplate *sWindowBank4Templates[];
+extern const WindowTemplate *sWindowBank6Templates[];
 
 u32 PokewalkerApp_GetBoxMonIconFile(BoxPokemon *boxMon) {
     return Boxmon_GetIconNaix(boxMon) - 7;
@@ -323,29 +323,29 @@ void PokewalkerApp_AddWindowBank(PokewalkerApp *app, int bank) {
     GF_ASSERT(bank < 8);
     switch (bank) {
     case 0:
-        ADD_WINDOWS(app->subWindows, ov112_021FF608, 7, subWindowBank);
+        ADD_WINDOWS(app->subWindows, sWindowBank0Templates, 7, subWindowBank);
         break;
     case 1:
-        ADD_WINDOWS(app->windows, ov112_021FF5D8, 6, windowBank);
+        ADD_WINDOWS(app->windows, sWindowBank1Templates, 6, windowBank);
         break;
     case 2:
-        ADD_WINDOWS(app->subWindows, ov112_021FF5D0, 2, subWindowBank);
+        ADD_WINDOWS(app->subWindows, sWindowBank2Templates, 2, subWindowBank);
         break;
     case 3:
-        ADD_WINDOWS(app->windows, ov112_021FF640, 8, windowBank);
+        ADD_WINDOWS(app->windows, sWindowBank3Templates, 8, windowBank);
         break;
     case 4:
-        ADD_WINDOWS(app->windows, ov112_021FF660, 9, windowBank);
+        ADD_WINDOWS(app->windows, sWindowBank4Templates, 9, windowBank);
         break;
     case 5:
-        ADD_WINDOWS(app->windows, ov112_021FF624, 7, windowBank);
+        ADD_WINDOWS(app->windows, sWindowBank5Templates, 7, windowBank);
         break;
     case 6:
-        ADD_WINDOWS(app->windows, ov112_021FF684, 16, windowBank);
+        ADD_WINDOWS(app->windows, sWindowBank6Templates, 16, windowBank);
         break;
     case 7:
         // main screen windows, but recorded as the sub screen bank
-        ADD_WINDOWS(app->windows, ov112_021FF5F0, 6, subWindowBank);
+        ADD_WINDOWS(app->windows, sWindowBank7Templates, 6, subWindowBank);
         break;
     }
     app->windowCounts[sWindowBankScreens[bank]] = i;
@@ -515,14 +515,14 @@ void PokewalkerApp_FreeSprites(PokewalkerApp *app) {
 }
 
 void PokewalkerApp_InitSpriteSystem(PokewalkerApp *app) {
-    SpriteResourceCountsListUnion counts = ov112_021FECAC;
+    SpriteResourceCountsListUnion counts = sPokewalkerAppSpriteResourceCounts;
     OamManagerParam oam;
     OamCharTransferParam transfer;
 
     app->spriteSystem = SpriteSystem_Alloc(HEAP_ID_154);
     app->spriteManager = SpriteManager_New(app->spriteSystem);
-    oam = ov112_021FECC4;
-    transfer = ov112_021FEC98;
+    oam = sPokewalkerAppOamManagerParam;
+    transfer = sPokewalkerAppOamCharTransferParam;
     SpriteSystem_Init(app->spriteSystem, &oam, &transfer, 0x20);
     SpriteSystem_InitSprites(app->spriteSystem, app->spriteManager, NELEMS(app->sprites));
     SpriteSystem_InitManagerWithCapacities(app->spriteSystem, app->spriteManager, &counts);
@@ -546,8 +546,8 @@ void PokewalkerApp_LoadSpriteResources(PokewalkerApp *app) {
 // 117-216 particles on the sub screen.
 void PokewalkerApp_CreateSprites(PokewalkerApp *app) {
     u32 i = 0;
-    const ManagedSpriteTemplate *template = ov112_021FED1C;
-    const u8 *palette = ov112_021FEC88;
+    const ManagedSpriteTemplate *template = sPokewalkerAppSpriteTemplates;
+    const u8 *palette = sPokewalkerAppSpritePalettes;
     PokewalkerApp *slot = app; // advanced by one sprite pointer per sprite: slot->sprites[0] is sprite i
 
     for (; i < 17;) {
@@ -561,13 +561,13 @@ void PokewalkerApp_CreateSprites(PokewalkerApp *app) {
     }
     ManagedSprite_SetPriority(app->sprites[1], 2);
     for (; i < 117; i++) {
-        app->sprites[i] = SpriteSystem_NewSprite(app->spriteSystem, app->spriteManager, &ov112_021FF028);
+        app->sprites[i] = SpriteSystem_NewSprite(app->spriteSystem, app->spriteManager, &sPokewalkerAppMainSpriteTemplate);
         ManagedSprite_SetPaletteOverride(app->sprites[i], 0);
         ManagedSprite_SetDrawFlag(app->sprites[i], FALSE);
         ManagedSprite_SetPriority(app->sprites[i], 2);
     }
     for (; i < NELEMS(app->sprites); i++) {
-        app->sprites[i] = SpriteSystem_NewSpriteWithYOffset(app->spriteSystem, app->spriteManager, &ov112_021FF05C, FX32_CONST(256));
+        app->sprites[i] = SpriteSystem_NewSpriteWithYOffset(app->spriteSystem, app->spriteManager, &sPokewalkerAppSubSpriteTemplate, FX32_CONST(256));
         ManagedSprite_SetPaletteOverride(app->sprites[i], 0);
         ManagedSprite_SetDrawFlag(app->sprites[i], FALSE);
         ManagedSprite_SetPriority(app->sprites[i], 2);
@@ -588,9 +588,9 @@ void PokewalkerApp_ResetCursor(PokewalkerApp *app) {
 void PokewalkerApp_SetCursorPosition(PokewalkerApp *app, int position) {
     int i = position * 4;
     ManagedSprite *cursor = app->sprites[0];
-    ManagedSprite_SetPositionXYWithSubscreenOffset(cursor, ov112_021FECE4[i], ov112_021FECE5[i], FX32_CONST(256));
-    ManagedSprite_SetAnim(app->sprites[0], ov112_021FECE6[i]);
-    ManagedSprite_SetPaletteOverride(app->sprites[0], ov112_021FECE7[i]);
+    ManagedSprite_SetPositionXYWithSubscreenOffset(cursor, sPokewalkerAppCursorX[i], sPokewalkerAppCursorY[i], FX32_CONST(256));
+    ManagedSprite_SetAnim(app->sprites[0], sPokewalkerAppCursorAnims[i]);
+    ManagedSprite_SetPaletteOverride(app->sprites[0], sPokewalkerAppCursorPalettes[i]);
     ManagedSprite_SetDrawFlag(app->sprites[0], TRUE);
 }
 

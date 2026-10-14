@@ -6,7 +6,7 @@
 
 .public sMapEnterRoutines
 .public sMapExitRoutines
-.public _020FC76C;
+.public sMapEnterPlacementRoutines;
 
 .public FieldTransition_EnterWithDirectionalFade
 .public FieldTransition_EnterWithFade
@@ -42,7 +42,7 @@ sMapExitRoutines:
 	.word FieldTransition_ExitWithFade
 	.word FieldTransition_ExitRising
 	.word FieldTransition_ExitSinking
-_020FC76C:
+sMapEnterPlacementRoutines:
 	.word 0
 	.word 0
 	.word FieldTransition_PlaceInsideSideDoor

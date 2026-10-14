@@ -29,26 +29,26 @@
 	.extern gPokeathlonCirclePushZones_Layout14
 	.public gPokeathlonRingDropFallSpeeds
 	.public gPokeathlonRingDropJumpHeights
-	.public ov96_0221C0B0
-	.public ov96_0221C0B4
+	.public sLampJumpTimerDigitX
+	.public sLampJumpTimerDigitAnims
 	.public gPokeathlonRingDropSwitchSpots
 	.public ov96_0221D70A
 	.public ov96_0221D70C
 	.public gPokeathlonCourseMonPicRect
-	.public ov96_0221C0F4
+	.public sLampJumpCameraOffset
 	.public gPokeathlonGoalRollPaletteData
-	.public ov96_0221C748
-	.public ov96_0221C754
-	.public ov96_0221CAF0
-	.public ov96_0221CB10
-	.public ov96_0221CB2C
-	.public ov96_0221CB48
-	.public ov96_0221CB64
-	.public ov96_0221CB80
-	.public ov96_0221C290
-	.public ov96_0221C298
-	.public ov96_0221C2B4
-	.public ov96_0221C338
+	.public sRelayRunMapStartOffset
+	.public sRelayRunMapCenter
+	.public sPennantCaptureGraphicsModes
+	.public sPennantCaptureBgTemplate_Sub0
+	.public sPennantCaptureBgTemplate_Sub1
+	.public sPennantCaptureBgTemplate_Sub2
+	.public sPennantCaptureBgTemplate_Main0
+	.public sPennantCaptureBgTemplate_Main3
+	.public sResultsAnnouncementBgLayers
+	.public sResultsAnnouncementBgTypes
+	.public sResultsAnnouncementGraphicsModes
+	.public sResultsAnnouncementBgTemplates
 	.public gPokeathlonGoalRollBallSpeedsA
 	.public gPokeathlonGoalRollBallSpeedsB
 	.public gPokeathlonGoalRollKickSpeeds
@@ -58,11 +58,11 @@
 	.public gPokeathlonGoalRollGoalLines
 	.public gPokeathlonCourseCeremonyCheerPitches
 	.public gPokeathlonCirclePushNameplateCoords
-	.public ov96_0221C2A8
-	.public ov96_0221C55C
-	.public ov96_0221C589
-	.public ov96_0221C718
-	.public ov96_0221C720
+	.public sResultsAnnouncementSceneConfig
+	.public sHurdleDashRisingJumpHeights
+	.public sHurdleDashFallingJumpHeights
+	.public sRelayRunTimerSpriteX
+	.public sRelayRunTimerSpriteAnims
 	.public gPokeathlonLampJumpSoundPlayers
 	.public gPokeathlonHurdleDashLanePans
 	.public gPokeathlonHurdleDashLaneSoundPlayers
@@ -71,7 +71,7 @@
 	.public gPokeathlonEventIntroSpritePositions
 	.public gPokeathlonEventIntroOamManagerParam
 	.public gPokeathlonEventIntroMascotAnims
-	.public ov96_0221C5B8
+	.public sHurdleDashNewHurdlePos
 	.public gPokeathlonBlockSmashSpotHitboxCounts
 	.public gPokeathlonRingDropDirectionReference
 	.public gPokeathlonRingDropGraphicsModes
@@ -182,28 +182,28 @@
 	.public gPokeathlonDiscCatchSpriteResourceCounts
 	.public gPokeathlonDiscCatchOamManagerParam
 	.public gPokeathlonCourseEvents
-	.public ov96_0221C3E0
-	.public ov96_0221C5CC
-	.public ov96_0221C5D8
-	.public ov96_0221C5F0
+	.public sResultsAnnouncementPlatePos
+	.public sRelayRunLapCounterPlatePos
+	.public sRelayRunLapCounterFirstDigitPos
+	.public sRelayRunLapCounterSecondDigitPos
 	.public gPokeathlonBlockSmashWindowTemplates
 	.public gPokeathlonPennantCaptureSpriteIds
-	.public ov96_0221C61C
-	.public ov96_0221C62C
-	.public ov96_0221C648
-	.public ov96_0221C664
-	.public ov96_0221C680
-	.public ov96_0221C69C
-	.public ov96_0221C6B8
-	.public ov96_0221C6D4
-	.public ov96_0221C7DC
-	.public ov96_0221C804
-	.public ov96_0221C820
-	.public ov96_0221C83C
-	.public ov96_0221C858
-	.public ov96_0221C874
-	.public ov96_0221C890
-	.public ov96_0221C8AC
+	.public sRelayRunGraphicsModes
+	.public sRelayRunBgTemplate_Sub2
+	.public sRelayRunBgTemplate_Main0
+	.public sRelayRunBgTemplate_Main1
+	.public sRelayRunBgTemplate_Main2
+	.public sRelayRunBgTemplate_Main3
+	.public sRelayRunBgTemplate_Sub0
+	.public sRelayRunBgTemplate_Sub1
+	.public sSnowThrowGraphicsModes
+	.public sSnowThrowBgTemplate_Sub1
+	.public sSnowThrowBgTemplate_Sub2
+	.public sSnowThrowBgTemplate_Main0
+	.public sSnowThrowBgTemplate_Main1
+	.public sSnowThrowBgTemplate_Sub3
+	.public sSnowThrowBgTemplate_Main3
+	.public sSnowThrowBgTemplate_Sub0
 	.public gPokeathlonRingDropOamCharTransferParam
 	.public gPokeathlonRingDropSpriteResourceCounts
 	.public gPokeathlonRingDropOamManagerParam

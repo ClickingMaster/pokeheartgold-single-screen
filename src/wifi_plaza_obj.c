@@ -21,10 +21,10 @@ typedef struct WiFiPlazaObjSpawn {
 } WiFiPlazaObjSpawn;
 
 // rodata of this overlay (asm/wifi_plaza_map_rodata.s)
-extern const u8 ov49_02269654[4];
-extern const u8 ov49_02269658[];
-extern const u8 ov49_0226965C[];
-extern const u32 ov49_02269660[];
+extern const u8 sWiFiPlazaObjNeighborDirections[4];
+extern const u8 sWiFiPlazaObjWanderTimers[];
+extern const u8 sWiFiPlazaObjWanderDirections[];
+extern const u32 sWiFiPlazaObjLightSets[];
 extern const WiFiPlazaObjSpawn sWiFiPlazaObjMapSpawns[];
 extern const WiFiPlazaObjFunc sWiFiPlazaObjExitHandlers[];
 extern const WiFiPlazaObjFunc sWiFiPlazaObjHandlers[10];
@@ -101,11 +101,11 @@ u32 ov49_02258BE0(WiFiPlazaObjManager *manager) {
 }
 
 void WiFiPlazaObj_SetLightSet(WiFiPlazaObjManager *manager, int set) {
-    WiFiPlazaObj_InitLight(&manager->light, manager->avatars, ov49_02269660[set]);
+    WiFiPlazaObj_InitLight(&manager->light, manager->avatars, sWiFiPlazaObjLightSets[set]);
 }
 
 void WiFiPlazaObj_FadeToLightSet(WiFiPlazaObjManager *manager, int set) {
-    WiFiPlazaObj_StartLightFade(&manager->light, ov49_02269660[set]);
+    WiFiPlazaObj_StartLightFade(&manager->light, sWiFiPlazaObjLightSets[set]);
 }
 
 void WiFiPlazaObj_PushCommand(WiFiPlazaObjManager *manager, Field2DCommand *command) {
@@ -347,7 +347,7 @@ BOOL WiFiPlazaObj_FindFreeNeighbor(WiFiPlazaObjManager *manager, WiFiPlazaObj *o
     int i;
 
     for (i = 0; i < 4; i++) {
-        Field2DPoint next = Field2D_StepInDirection(current, ov49_02269654[i]);
+        Field2DPoint next = Field2D_StepInDirection(current, sWiFiPlazaObjNeighborDirections[i]);
         int y = next.unk2 / 16;
         int x = next.unk0 / 16;
 
@@ -355,7 +355,7 @@ BOOL WiFiPlazaObj_FindFreeNeighbor(WiFiPlazaObjManager *manager, WiFiPlazaObj *o
             int attr = WiFiPlazaMap_GetTileAttr(manager->map, x, y);
 
             if ((attr == 0 || attr == 0x2A) && Field2DObjectManager_FindObjectAt(manager->gridObjs, next) == NULL) {
-                *direction = ov49_02269654[i];
+                *direction = sWiFiPlazaObjNeighborDirections[i];
                 *position = next;
                 return TRUE;
             }
@@ -602,7 +602,7 @@ void WiFiPlazaObj_HandlerWander(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager)
 
     switch (obj->step) {
     case 0:
-        obj->work.wander.timer = WiFiPlazaObj_RandomPick(ov49_02269658, 4);
+        obj->work.wander.timer = WiFiPlazaObj_RandomPick(sWiFiPlazaObjWanderTimers, 4);
         obj->step++;
         break;
     case 1:
@@ -614,7 +614,7 @@ void WiFiPlazaObj_HandlerWander(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager)
     case 2:
         id = Field2DObject_GetParam(obj->gridObj, 4);
         facing = Field2DObject_GetParam(obj->gridObj, 6);
-        obj->work.wander.direction = WiFiPlazaObj_RandomPick(ov49_0226965C, 4);
+        obj->work.wander.direction = WiFiPlazaObj_RandomPick(sWiFiPlazaObjWanderDirections, 4);
         if (WiFiPlazaObj_IsTagInDirection(manager, obj, obj->work.wander.direction, id + 4) == TRUE) {
             if (facing == obj->work.wander.direction) {
                 WiFiPlazaObj_QueueCommand(manager, obj, 2, obj->work.wander.direction);

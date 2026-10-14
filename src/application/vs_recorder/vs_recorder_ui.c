@@ -38,9 +38,9 @@ BOOL FashionEntry_IsSaved(SaveFashionDataSub *entry);
 void TextOBJ_SetParentSprite(TextOBJ *textOBJ, const Sprite *sprite);
 
 extern const u8 gVsRecorderDecorSpriteXOffsets[];
-extern const u8 ov40_02244DC0[];
-extern const VsRecorderAngles ov40_02244DD8;
-extern const VsRecorderF32x6 ov40_02244DF0;
+extern const u8 sVsRecorderMenuRowDrawPriorities[];
+extern const VsRecorderAngles sVsRecorderDecorAngles;
+extern const VsRecorderF32x6 sVsRecorderDecorScales;
 
 void VsRecorder_SetScreenIfDone(VsRecorderWork *work, int nextScreen, BOOL done, int *screen) {
     if (done) {
@@ -446,7 +446,7 @@ void VsRecorder_CreateDecorSprites(VsRecorderWork *work) {
     template.resIdList[4] = -1;
     template.resIdList[5] = -1;
     ys = *(const VsRecorderS16x6 *)(gVsRecorderDecorSpriteXOffsets + 0x22);
-    scales = ov40_02244DF0;
+    scales = sVsRecorderDecorScales;
     xs = *(const VsRecorderS8x6 *)gVsRecorderDecorSpriteXOffsets;
     for (i = 0; i < 6; i++) {
         for (j = 0; j < 2; j++) {
@@ -660,7 +660,7 @@ void VsRecorder_CreateMenuRowSprites(VsRecorderWork *work) {
         template.resIdList[1] = 10000;
         template.resIdList[2] = 10002;
         template.resIdList[3] = 10002;
-        template.drawPriority = ov40_02244DC0[i + 5];
+        template.drawPriority = sVsRecorderMenuRowDrawPriorities[i + 5];
         rows[i].sprite = SpriteSystem_NewSprite(spriteSystem, spriteManager, &template);
         ManagedSprite_TickFrame(rows[i].sprite);
         ManagedSprite_SetDrawFlag(rows[i].sprite, TRUE);
@@ -670,7 +670,7 @@ void VsRecorder_CreateMenuRowSprites(VsRecorderWork *work) {
         template.resIdList[1] = 9999;
         template.resIdList[2] = 10001;
         template.resIdList[3] = 10001;
-        template.drawPriority = ov40_02244DC0[i];
+        template.drawPriority = sVsRecorderMenuRowDrawPriorities[i];
         rows[i + 5].sprite = SpriteSystem_NewSprite(spriteSystem, spriteManager, &template);
         ManagedSprite_TickFrame(rows[i + 5].sprite);
         VsRecorder_SetSpritePos(rows[i + 5].sprite, template.x, template.y);
@@ -817,7 +817,7 @@ void VsRecorder_DecorTask(SysTask *task, void *data) {
         }
         break;
     case 2:
-        f.angles = ov40_02244DD8;
+        f.angles = sVsRecorderDecorAngles;
         ManagedSprite_GetPositionXY(decor->sprites[0], &f.p.x, &f.p.y1);
         ManagedSprite_GetPositionXY(decor->sprites[1], &f.p.x, &f.p.y2);
         if (decor->counter == 0) {

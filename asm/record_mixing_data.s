@@ -1,6 +1,6 @@
 	.public sRecordMixingButtonX
 	.public sRecordMixingStateFuncs
-	.public _021EA940
+	.public sNintendoWfcUnusedGlobal
 	.public sRecordMixingAvatarVramOffsets
 	.public sRecordMixingFlashDurations
 	.public sRecordMixingFlashPalettes
@@ -13,12 +13,12 @@
 	.public sRecordMixingBgTemplate_Sub0
 	.public sRecordMixingBgTemplate_Sub1
 	.public sRecordMixingGraphicsBanks
-	.public ov73_021EA610
-	.public ov73_021EA618
-	.public ov73_021EA624
-	.public ov73_021EA630
-	.public ov73_021EA640
-	.public ov73_021EA650
+	.public sRecordMixingAllowedEntryKinds5
+	.public sRecordMixingAllowedEntryKinds2
+	.public sRecordMixingAllowedEntryKinds3
+	.public sRecordMixingAllowedEntryKinds0
+	.public sRecordMixingAllowedEntryKinds4
+	.public sRecordMixingAllowedEntryKinds1
 	.public sRecordMixingAllowedEntryKinds
 	.public sNintendoWfcUnusedArrowPositions
 	.public sNintendoWfcUnusedGraphicsModes
@@ -201,31 +201,31 @@ sRecordMixingGraphicsBanks: ; 0x021EA5E8
 	.byte 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov73_021EA610:
+sRecordMixingAllowedEntryKinds5:
 	.byte 0x01, 0x03, 0x04, 0x06, 0x08, 0x09, 0xFF, 0x00
 
-ov73_021EA618:
+sRecordMixingAllowedEntryKinds2:
 	.byte 0x01, 0x03, 0x04, 0x05, 0x08, 0x09, 0x0A, 0x0B, 0xFF, 0x00, 0x00, 0x00
 
-ov73_021EA624:
+sRecordMixingAllowedEntryKinds3:
 	.byte 0x02, 0x04, 0x06, 0x07, 0x09, 0x0A, 0x0B, 0x0D, 0xFF, 0x00, 0x00, 0x00
 
-ov73_021EA630:
+sRecordMixingAllowedEntryKinds0:
 	.byte 0x02, 0x04, 0x06, 0x07, 0x09, 0x0A, 0x0B, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0xFF, 0x00
 
-ov73_021EA640:
+sRecordMixingAllowedEntryKinds4:
 	.byte 0x01, 0x02, 0x03, 0x04, 0x06, 0x0A, 0x0D, 0x0F, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0xFF
 
-ov73_021EA650:
+sRecordMixingAllowedEntryKinds1:
 	.byte 0x01, 0x02, 0x03, 0x04, 0x06, 0x07, 0x08, 0x0A, 0x0D, 0x0F, 0x10, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x19, 0x1A, 0xFF
 
 sRecordMixingAllowedEntryKinds: ; 0x021EA664
-	.word ov73_021EA630
-	.word ov73_021EA650
-	.word ov73_021EA618
-	.word ov73_021EA624
-	.word ov73_021EA640
-	.word ov73_021EA610
+	.word sRecordMixingAllowedEntryKinds0
+	.word sRecordMixingAllowedEntryKinds1
+	.word sRecordMixingAllowedEntryKinds2
+	.word sRecordMixingAllowedEntryKinds3
+	.word sRecordMixingAllowedEntryKinds4
+	.word sRecordMixingAllowedEntryKinds5
 	.byte 0x00, 0x17, 0x0D, 0x07
 	.byte 0x04, 0x0D, 0x00, 0x00
 
@@ -381,5 +381,5 @@ sNintendoWfcUnusedStates: ; 0x021EA848
 
 	.bss
 
-_021EA940:
+sNintendoWfcUnusedGlobal:
 	.space 0x8

@@ -35,20 +35,20 @@ BOOL WiFiPlazaLobbyClient_AddOwnLocation(WiFiPlazaLobbyClient *client) {
     client->locations[i].country = country;
     client->locations[i].region = region;
     client->locations[i].active = 1;
-    return WiFiPlazaLobbyClient_CheckResult(PPW_LobbySetChannelData(-1, 0, ov45_02254EF0, client->locations, sizeof(client->locations)));
+    return WiFiPlazaLobbyClient_CheckResult(PPW_LobbySetChannelData(-1, 0, sWiFiPlazaLocationListKey, client->locations, sizeof(client->locations)));
 }
 
 #pragma force_active reset
 
 void WiFiPlazaLobbyClient_AllocPlayerData(WiFiPlazaLobbyClient *client, u32 size, enum HeapID heapID) {
     u32 bytes = size * 20;
-    _022577C0->playerData = Heap_Alloc(heapID, bytes);
-    memset(_022577C0->playerData, 0, bytes);
-    _022577C0->playerDataSize = size;
+    gWiFiPlazaLobbyClient->playerData = Heap_Alloc(heapID, bytes);
+    memset(gWiFiPlazaLobbyClient->playerData, 0, bytes);
+    gWiFiPlazaLobbyClient->playerDataSize = size;
 }
 
 void WiFiPlazaLobbyClient_FreePlayerData(WiFiPlazaLobbyClient *client) {
-    Heap_Free(_022577C0->playerData);
+    Heap_Free(gWiFiPlazaLobbyClient->playerData);
 }
 
 void WiFiPlazaLobbyClient_SetPlayerData(WiFiPlazaLobbyClient *client, int id, const void *data) {

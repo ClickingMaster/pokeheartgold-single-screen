@@ -10,26 +10,26 @@
 // app): make its arguments, free them, start its overlay, and pick the next app when the overlay has finished.
 //   0 the plaza itself (OVY_49)   1 visitor profiles (OVY_48)   2 plaza news (OVY_88)   3, 4 footprint stamp (OVY_89)
 //   5 connect (OVY_46)   6, 7, 8 the games (OVY_91, OVY_92, OVY_93, with OVY_90)   9, 10 disconnect (OVY_46)
-//   11, 12 the app of ov45_02254B44
+//   11, 12 the app of sWiFiPlazaSurveyOverlayTemplate
 
 FS_EXTERN_OVERLAY(OVY_90);
 
-extern const OverlayManagerTemplate ov45_02254B04; // disconnect (OVY_46)
-extern const OverlayManagerTemplate ov45_02254B14; // footprint stamp (OVY_89)
-extern const OverlayManagerTemplate ov45_02254B24; // footprint stamp (OVY_89)
-extern const OverlayManagerTemplate ov45_02254B34; // OVY_93
-extern const OverlayManagerTemplate ov45_02254B44;
-extern const OverlayManagerTemplate ov45_02254B54; // OVY_91
-extern const OverlayManagerTemplate ov45_02254B64; // connect (OVY_46)
-extern const OverlayManagerTemplate ov45_02254B74; // plaza news (OVY_88)
-extern const OverlayManagerTemplate ov45_02254B84; // visitor profiles (OVY_48)
-extern const OverlayManagerTemplate ov45_02254B94; // the plaza (OVY_49)
-extern const OverlayManagerTemplate ov45_02254BA4; // OVY_92
+extern const OverlayManagerTemplate sWiFiPlazaDisconnectOverlayTemplate; // disconnect (OVY_46)
+extern const OverlayManagerTemplate sWiFiPlazaFootprintStampBoard1OverlayTemplate; // footprint stamp (OVY_89)
+extern const OverlayManagerTemplate sWiFiPlazaFootprintStampBoard0OverlayTemplate; // footprint stamp (OVY_89)
+extern const OverlayManagerTemplate sWiFiPlazaWobbuffetPopOverlayTemplate; // OVY_93
+extern const OverlayManagerTemplate sWiFiPlazaSurveyOverlayTemplate;
+extern const OverlayManagerTemplate sWiFiPlazaSwalotPlopOverlayTemplate; // OVY_91
+extern const OverlayManagerTemplate sWiFiPlazaConnectOverlayTemplate; // connect (OVY_46)
+extern const OverlayManagerTemplate sWiFiPlazaNewsOverlayTemplate; // plaza news (OVY_88)
+extern const OverlayManagerTemplate sWiFiPlazaVisitorProfilesOverlayTemplate; // visitor profiles (OVY_48)
+extern const OverlayManagerTemplate sWiFiPlazaMainOverlayTemplate; // the plaza (OVY_49)
+extern const OverlayManagerTemplate sWiFiPlazaMimeJrTopOverlayTemplate; // OVY_92
 
-extern void (*const ov45_02254E88[13])(WiFiPlazaApps *apps, void **args, enum HeapID heapID);
-extern void (*const _02254E20[13])(void **args);
-extern void (*const ov45_02254E54[13])(WiFiPlazaApps *apps, void **args);
-extern BOOL (*const ov45_02254EBC[13])(WiFiPlazaApps *apps, void **args);
+extern void (*const sWiFiPlazaAppInitArgsFuncs[13])(WiFiPlazaApps *apps, void **args, enum HeapID heapID);
+extern void (*const sWiFiPlazaAppFreeArgsFuncs[13])(void **args);
+extern void (*const sWiFiPlazaAppStartFuncs[13])(WiFiPlazaApps *apps, void **args);
+extern BOOL (*const sWiFiPlazaAppEndFuncs[13])(WiFiPlazaApps *apps, void **args);
 
 // Arguments of app 0, the plaza.
 typedef struct WiFiPlazaMainArgs {
@@ -144,7 +144,7 @@ BOOL WiFiPlazaApps_EndSurvey(WiFiPlazaApps *apps);
 int WiFiPlaza_AvatarToIndex(u16 avatar) {
     int i;
     for (i = 0; i < 16; i++) {
-        if (avatar == ov45_02254A84[i].avatar) {
+        if (avatar == sWiFiPlazaAvatars[i].avatar) {
             return i;
         }
     }
@@ -153,7 +153,7 @@ int WiFiPlaza_AvatarToIndex(u16 avatar) {
 
 u16 WiFiPlaza_IndexToAvatar(u32 index) {
     if (index < 16) {
-        return ov45_02254A84[index].avatar;
+        return sWiFiPlazaAvatars[index].avatar;
     }
     return 0xffff;
 }
@@ -210,21 +210,21 @@ void WiFiPlazaApps_InitArgs(WiFiPlazaApps *apps, u32 app, enum HeapID heapID) {
     if (app >= 13) {
         GF_AssertFail();
     }
-    ov45_02254E88[app](apps, &apps->args[app], heapID);
+    sWiFiPlazaAppInitArgsFuncs[app](apps, &apps->args[app], heapID);
 }
 
 void WiFiPlazaApps_FreeArgs(WiFiPlazaApps *apps, u32 app) {
     if (app >= 13) {
         GF_AssertFail();
     }
-    _02254E20[app](&apps->args[app]);
+    sWiFiPlazaAppFreeArgsFuncs[app](&apps->args[app]);
 }
 
 void WiFiPlazaApps_Start(WiFiPlazaApps *apps, u32 app) {
     if (app >= 13) {
         GF_AssertFail();
     }
-    ov45_02254E54[app](apps, &apps->args[app]);
+    sWiFiPlazaAppStartFuncs[app](apps, &apps->args[app]);
     apps->current = app;
 }
 
@@ -232,7 +232,7 @@ BOOL WiFiPlazaApps_End(WiFiPlazaApps *apps, u32 app) {
     if (app >= 13) {
         GF_AssertFail();
     }
-    return ov45_02254EBC[app](apps, &apps->args[app]);
+    return sWiFiPlazaAppEndFuncs[app](apps, &apps->args[app]);
 }
 
 void WiFiPlazaGameArgs_NewProfiles(WiFiPlazaGameArgs *args, enum HeapID heapID) {
@@ -290,7 +290,7 @@ void WiFiPlazaApps_StartMain(WiFiPlazaApps *apps, void **args) {
     WiFiPlazaMainArgs *main = *args;
     main->unk_04 = ov45_0222AD2C(apps->work);
     main->unk_08 = ov45_0222AD3C(apps->work);
-    WiFiPlazaApps_StartOverlay(apps, args, &ov45_02254B94);
+    WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaMainOverlayTemplate);
 }
 
 // The plaza tells which app comes next.
@@ -360,7 +360,7 @@ void WiFiPlazaApps_StartVisitorProfiles(WiFiPlazaApps *apps, void **args) {
     WiFiPlazaVisitorArgs *visitor = *args;
     visitor->players = WiFiPlazaWork_GetPlaces(apps->work);
     visitor->time = *WiFiPlazaWork_GetCurrentTimePtr(apps->work);
-    WiFiPlazaApps_StartOverlay(apps, args, &ov45_02254B84);
+    WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaVisitorProfilesOverlayTemplate);
 }
 
 BOOL WiFiPlazaApps_EndVisitorProfiles(WiFiPlazaApps *apps) {
@@ -399,7 +399,7 @@ void WiFiPlazaApps_FreePlazaNewsArgs(void **args) {
 }
 
 void WiFiPlazaApps_StartPlazaNews(WiFiPlazaApps *apps, void **args) {
-    WiFiPlazaApps_StartOverlay(apps, args, &ov45_02254B74);
+    WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaNewsOverlayTemplate);
 }
 
 BOOL WiFiPlazaApps_EndPlazaNews(WiFiPlazaApps *apps) {
@@ -435,7 +435,7 @@ void WiFiPlazaApps_FreeConnectArgs(void **args) {
 }
 
 void WiFiPlazaApps_StartConnect(WiFiPlazaApps *apps, void **args) {
-    WiFiPlazaApps_StartOverlay(apps, args, &ov45_02254B64);
+    WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaConnectOverlayTemplate);
 }
 
 // TRUE (the plaza ends) unless the connection was made.
@@ -467,7 +467,7 @@ void WiFiPlazaApps_FreeSwalotPlopArgs(void **args) {
 void WiFiPlazaApps_StartSwalotPlop(WiFiPlazaApps *apps, void **args) {
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_90), OVY_LOAD_ASYNC);
     WiFiPlazaGameArgs_Setup(*args, apps->work, (enum HeapID)apps->heapID);
-    WiFiPlazaApps_StartOverlay(apps, args, &ov45_02254B54);
+    WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaSwalotPlopOverlayTemplate);
 }
 
 BOOL WiFiPlazaApps_EndSwalotPlop(WiFiPlazaApps *apps, void **args) {
@@ -499,7 +499,7 @@ void WiFiPlazaApps_FreeMimeJrTopArgs(void **args) {
 void WiFiPlazaApps_StartMimeJrTop(WiFiPlazaApps *apps, void **args) {
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_90), OVY_LOAD_ASYNC);
     WiFiPlazaGameArgs_Setup(*args, apps->work, (enum HeapID)apps->heapID);
-    WiFiPlazaApps_StartOverlay(apps, args, &ov45_02254BA4);
+    WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaMimeJrTopOverlayTemplate);
 }
 
 BOOL WiFiPlazaApps_EndMimeJrTop(WiFiPlazaApps *apps, void **args) {
@@ -531,7 +531,7 @@ void WiFiPlazaApps_FreeWobbuffetPopArgs(void **args) {
 void WiFiPlazaApps_StartWobbuffetPop(WiFiPlazaApps *apps, void **args) {
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_90), OVY_LOAD_ASYNC);
     WiFiPlazaGameArgs_Setup(*args, apps->work, (enum HeapID)apps->heapID);
-    WiFiPlazaApps_StartOverlay(apps, args, &ov45_02254B34);
+    WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaWobbuffetPopOverlayTemplate);
 }
 
 BOOL WiFiPlazaApps_EndWobbuffetPop(WiFiPlazaApps *apps, void **args) {
@@ -574,12 +574,12 @@ BOOL WiFiPlazaApps_EndFootprintStamp(WiFiPlazaApps *apps) {
 
 void WiFiPlazaApps_StartFootprintStampBoard0(WiFiPlazaApps *apps, void **args) {
     ((WiFiPlazaFootprintArgs *)*args)->mode = 0;
-    WiFiPlazaApps_StartOverlay(apps, args, &ov45_02254B24);
+    WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaFootprintStampBoard0OverlayTemplate);
 }
 
 void WiFiPlazaApps_StartFootprintStampBoard1(WiFiPlazaApps *apps, void **args) {
     ((WiFiPlazaFootprintArgs *)*args)->mode = 1;
-    WiFiPlazaApps_StartOverlay(apps, args, &ov45_02254B14);
+    WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaFootprintStampBoard1OverlayTemplate);
 }
 
 // Apps 9 and 10, disconnect.
@@ -617,7 +617,7 @@ void WiFiPlazaApps_StartClosedDisconnect(WiFiPlazaApps *apps, void **args) {
 
 void WiFiPlazaApps_StartDisconnectOverlay(WiFiPlazaApps *apps, void **args, u32 mode) {
     ((WiFiPlazaDisconnectArgs *)*args)->mode = mode;
-    WiFiPlazaApps_StartOverlay(apps, args, &ov45_02254B04);
+    WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaDisconnectOverlayTemplate);
 }
 
 BOOL WiFiPlazaApps_EndDisconnect(void) {
@@ -672,7 +672,7 @@ void WiFiPlazaApps_FreeSurveyArgs(void **args) {
 }
 
 void WiFiPlazaApps_StartSurvey(WiFiPlazaApps *apps, void **args) {
-    WiFiPlazaApps_StartOverlay(apps, args, &ov45_02254B44);
+    WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaSurveyOverlayTemplate);
 }
 
 BOOL WiFiPlazaApps_EndSurvey(WiFiPlazaApps *apps) {

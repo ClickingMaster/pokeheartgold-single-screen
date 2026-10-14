@@ -20,7 +20,7 @@
 // VS Recorder box data view (VS_RECORDER_SCREEN_BOX_DATA_VIEW), after the category is chosen: receive the latest boxes
 // of the category, the box list (box name and sender), the sender's profile, the chosen box, and the way back to the menu.
 
-extern const VsRecorderListConfig ov40_02245310; // box list
+extern const VsRecorderListConfig sVsRecorderBoxListConfig; // box list
 
 // view screen, substate 4: receive the boxes of the chosen category
 BOOL VsRecorder_BoxDataViewDownload(VsRecorderWork *work) {
@@ -142,7 +142,7 @@ BOOL VsRecorder_BoxDataViewDownload(VsRecorderWork *work) {
             VsRecorder_CreateBoxListTitle(work);
             VsRecorder_CreateBoxListItems(work);
             VsRecorder_SetVBlankPaused(work, TRUE);
-            boxData->listConfig = ov40_02245310;
+            boxData->listConfig = sVsRecorderBoxListConfig;
             boxData->listConfig.count = boxData->downloadCount;
             VsRecorder_CreateTouchScrollSpritesWithAnim(&work->touchScroll, work, 2);
             VsRecorder_ClearListWindow(&work->listWindow);

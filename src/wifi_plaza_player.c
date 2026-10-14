@@ -263,7 +263,7 @@ int WiFiPlazaPlayer_GetAvatarIndex(WiFiPlazaPlayer *player) {
     u16 v = WiFiPlazaPlayer_GetAvatar(player);
     int i;
     for (i = 0; i < 16; i++) {
-        if (v == ov45_02254A84[i].avatar) {
+        if (v == sWiFiPlazaAvatars[i].avatar) {
             return i;
         }
     }
@@ -281,8 +281,8 @@ u32 WiFiPlazaPlayer_GetGender(WiFiPlazaPlayer *player) {
     if (player->gender >= 2) {
         if (WiFiPlaza_IndexToAvatar(player->avatarIndex) != 0xFFFF) {
             for (i = 0; i < 16; i++) {
-                if (ov45_02254A84[i].avatar == player->avatarIndex) {
-                    result = ov45_02254A84[i].avatar;
+                if (sWiFiPlazaAvatars[i].avatar == player->avatarIndex) {
+                    result = sWiFiPlazaAvatars[i].avatar;
                 }
             }
         } else {

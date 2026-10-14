@@ -25,25 +25,25 @@ extern const OamManagerParam sPokedexOamManagerParam;
 extern const OamCharTransferParam sPokedexOamCharTransferParam;
 extern const SpriteResourceCountsListUnion sSpriteResourceCapacities;
 extern const ManagedSpriteTemplate sMonIconSpriteTemplate;
-extern const ManagedSpriteTemplate ov18_021FABC0; // Pokemon picture, first of the pair
-extern const ManagedSpriteTemplate ov18_021FABF4; // Pokemon picture, second of the pair
-extern const TileRect ov18_021FA328;
+extern const ManagedSpriteTemplate sPokedexMonPicSpriteTemplate0; // Pokemon picture, first of the pair
+extern const ManagedSpriteTemplate sPokedexMonPicSpriteTemplate1; // Pokemon picture, second of the pair
+extern const TileRect sPokedexMonPicSpriteRect;
 extern const ManagedSpriteTemplate sFootprintSpriteTemplate;
 extern const ManagedSpriteTemplate sTypeIconSpriteTemplate;
 extern const ManagedSpriteTemplate sLanguageIconSpriteTemplate;
-extern const ManagedSpriteTemplate ov18_021FAB24;
-extern const ManagedSpriteTemplate ov18_021FA984[]; // the list screen's 8 main-screen sprites
-extern const ManagedSpriteTemplate ov18_021FAB58;
-extern const ManagedSpriteTemplate ov18_021FAB8C;
+extern const ManagedSpriteTemplate sPokedexLanguageIconSpriteTemplate;
+extern const ManagedSpriteTemplate sPokedexListSpriteTemplates[]; // the list screen's 8 main-screen sprites
+extern const ManagedSpriteTemplate sPokedexListSprite9Template;
+extern const ManagedSpriteTemplate sPokedexListSprite10Template;
 extern const u16 sListScrollbarSizeThresholds[];
-extern const u8 ov18_021FA310[];                    // scrollbar length per size animation
-extern const ManagedSpriteTemplate ov18_021FB004[]; // search menu sprites 0-25
-extern const ManagedSpriteTemplate ov18_021FA520;
-extern const ManagedSpriteTemplate ov18_021FB54C;
-extern const ManagedSpriteTemplate ov18_021FB580;
-extern const ManagedSpriteTemplate ov18_021FA4EC; // body type icons
-extern const ManagedSpriteTemplate ov18_021FA554;
-extern const ManagedSpriteTemplate ov18_021FA610[]; // area screen sprites 1-8
+extern const u8 sPokedexScrollbarLengths[];                    // scrollbar length per size animation
+extern const ManagedSpriteTemplate sPokedexSearchSpriteTemplates[]; // search menu sprites 0-25
+extern const ManagedSpriteTemplate sPokedexSearchSprite43Template;
+extern const ManagedSpriteTemplate sPokedexSearchSprite26Template;
+extern const ManagedSpriteTemplate sPokedexSearchSprite27Template;
+extern const ManagedSpriteTemplate sPokedexBodyTypeIconSpriteTemplate; // body type icons
+extern const ManagedSpriteTemplate sPokedexEntryTabCursorSpriteTemplate;
+extern const ManagedSpriteTemplate sPokedexAreaSpriteTemplates[]; // area screen sprites 1-8
 
 // Sprite slots: pokedexApp->sprites[120]. Character / palette / cell / animation resource ids start at 0xC550.
 // The list screen lays its icon grid out as two sets of 30 sprites (iconPage selects the one shown).
@@ -421,8 +421,8 @@ void PokedexApp_UnloadFormsSpriteResources(PokedexAppData *pokedexApp) {
 
 // The Pokemon picture is a pair of sprites (index, index + 1); PokedexApp_SwapMonPic alternates between them.
 void PokedexApp_CreateMonPicSprites(PokedexAppData *pokedexApp, int index) {
-    pokedexApp->sprites[index] = SpriteSystem_NewSpriteWithYOffset(pokedexApp->spriteSystem, pokedexApp->spriteManager, &ov18_021FABC0, FX32_CONST(512));
-    (pokedexApp->sprites + 1)[index] = SpriteSystem_NewSpriteWithYOffset(pokedexApp->spriteSystem, pokedexApp->spriteManager, &ov18_021FABF4, FX32_CONST(512));
+    pokedexApp->sprites[index] = SpriteSystem_NewSpriteWithYOffset(pokedexApp->spriteSystem, pokedexApp->spriteManager, &sPokedexMonPicSpriteTemplate0, FX32_CONST(512));
+    (pokedexApp->sprites + 1)[index] = SpriteSystem_NewSpriteWithYOffset(pokedexApp->spriteSystem, pokedexApp->spriteManager, &sPokedexMonPicSpriteTemplate1, FX32_CONST(512));
 }
 
 #pragma force_active on
@@ -431,7 +431,7 @@ void PokedexApp_CreateMonPicSprites(PokedexAppData *pokedexApp, int index) {
 // only, anything else fills the palette with black.
 void PokedexApp_LoadMonPicToSprite(PokedexAppData *pokedexApp, int species, u8 form, u8 gender, u8 facing, int sprite, int mode) {
     PokepicTemplate pokepic;
-    TileRect rect = ov18_021FA328;
+    TileRect rect = sPokedexMonPicSpriteRect;
     void *buffer = Heap_AllocAtEnd(HEAP_ID_POKEDEX_APP, 3200);
     u32 personality, location, palette;
     ManagedSprite **sprites;
@@ -694,7 +694,7 @@ void PokedexApp_CreateLanguageIconSprites(PokedexAppData *pokedexApp) {
         ManagedSprite_SetPaletteOverride(pokedexApp->sprites[i], SpriteManager_FindPlttResourceOffset(pokedexApp->spriteManager, 0xC55A, NNS_G2D_VRAM_TYPE_2DSUB));
         x += 24;
     }
-    PokedexApp_CreateSpriteInSlot(pokedexApp, 8, &ov18_021FAB24);
+    PokedexApp_CreateSpriteInSlot(pokedexApp, 8, &sPokedexLanguageIconSpriteTemplate);
 }
 
 #pragma force_active reset
@@ -826,7 +826,7 @@ void PokedexApp_LoadListSpriteResources(PokedexAppData *pokedexApp) {
 }
 
 void PokedexApp_CreateListSprites(PokedexAppData *pokedexApp) {
-    const ManagedSpriteTemplate *template = ov18_021FA984;
+    const ManagedSpriteTemplate *template = sPokedexListSpriteTemplates;
     u32 i;
 
     for (i = 0; i <= 7; i++) {
@@ -835,8 +835,8 @@ void PokedexApp_CreateListSprites(PokedexAppData *pokedexApp) {
     }
     ManagedSprite_SetDrawFlag(pokedexApp->sprites[6], FALSE);
     ManagedSprite_SetDrawFlag(pokedexApp->sprites[7], FALSE);
-    pokedexApp->sprites[9] = SpriteSystem_NewSpriteWithYOffset(pokedexApp->spriteSystem, pokedexApp->spriteManager, &ov18_021FAB58, FX32_CONST(512));
-    pokedexApp->sprites[10] = SpriteSystem_NewSpriteWithYOffset(pokedexApp->spriteSystem, pokedexApp->spriteManager, &ov18_021FAB8C, FX32_CONST(512));
+    pokedexApp->sprites[9] = SpriteSystem_NewSpriteWithYOffset(pokedexApp->spriteSystem, pokedexApp->spriteManager, &sPokedexListSprite9Template, FX32_CONST(512));
+    pokedexApp->sprites[10] = SpriteSystem_NewSpriteWithYOffset(pokedexApp->spriteSystem, pokedexApp->spriteManager, &sPokedexListSprite10Template, FX32_CONST(512));
 }
 
 void PokedexApp_SetSpritePairVisibleIfInternationalView(PokedexAppData *pokedexApp, int index, int visible) {
@@ -953,7 +953,7 @@ int PokedexApp_GetListScrollbarSizeAnim(PokedexAppData *pokedexApp, int mode) {
 }
 
 u32 PokedexApp_GetListScrollbarLength(PokedexAppData *pokedexApp, int sprite) {
-    return (ov18_021FA310 + 1)[ManagedSprite_GetActiveAnim(pokedexApp->sprites[sprite])];
+    return (sPokedexScrollbarLengths + 1)[ManagedSprite_GetActiveAnim(pokedexApp->sprites[sprite])];
 }
 
 int PokedexApp_GetListScrollbarMinY(PokedexAppData *pokedexApp, int sprite) {
@@ -1139,8 +1139,8 @@ void PokedexApp_CreateSearchEntrySprites(PokedexAppData *pokedexApp) {
     PokedexApp_LoadTypeIconResources(pokedexApp);
     PokedexApp_LoadSubObjResources(pokedexApp);
     PokedexApp_LoadLanguageIconResourcesSub(pokedexApp);
-    pokedexApp->sprites[44] = SpriteSystem_NewSpriteWithYOffset(pokedexApp->spriteSystem, pokedexApp->spriteManager, &ov18_021FAB58, FX32_CONST(512));
-    pokedexApp->sprites[45] = SpriteSystem_NewSpriteWithYOffset(pokedexApp->spriteSystem, pokedexApp->spriteManager, &ov18_021FAB8C, FX32_CONST(512));
+    pokedexApp->sprites[44] = SpriteSystem_NewSpriteWithYOffset(pokedexApp->spriteSystem, pokedexApp->spriteManager, &sPokedexListSprite9Template, FX32_CONST(512));
+    pokedexApp->sprites[45] = SpriteSystem_NewSpriteWithYOffset(pokedexApp->spriteSystem, pokedexApp->spriteManager, &sPokedexListSprite10Template, FX32_CONST(512));
     PokedexApp_CreateMonPicSprites(pokedexApp, 46);
     PokedexApp_CreateFootprintSprite(pokedexApp, 48);
     PokedexApp_CreateTypeIconSprites(pokedexApp, 49);
@@ -1176,15 +1176,15 @@ void PokedexApp_CreateSearchSprites(PokedexAppData *pokedexApp) {
     ManagedSpriteTemplate template;
 
     for (i = 0; i <= 25; i++) {
-        pokedexApp->sprites[i] = SpriteSystem_NewSprite(pokedexApp->spriteSystem, pokedexApp->spriteManager, &ov18_021FB004[i]);
+        pokedexApp->sprites[i] = SpriteSystem_NewSprite(pokedexApp->spriteSystem, pokedexApp->spriteManager, &sPokedexSearchSpriteTemplates[i]);
         PokedexApp_SetSpriteVisible(pokedexApp, i, FALSE);
     }
-    pokedexApp->sprites[43] = SpriteSystem_NewSpriteWithYOffset(pokedexApp->spriteSystem, pokedexApp->spriteManager, &ov18_021FA520, FX32_CONST(512));
+    pokedexApp->sprites[43] = SpriteSystem_NewSpriteWithYOffset(pokedexApp->spriteSystem, pokedexApp->spriteManager, &sPokedexSearchSprite43Template, FX32_CONST(512));
     PokedexApp_SetSpriteVisible(pokedexApp, 43, FALSE);
-    pokedexApp->sprites[26] = SpriteSystem_NewSpriteWithYOffset(pokedexApp->spriteSystem, pokedexApp->spriteManager, &ov18_021FB54C, FX32_CONST(512));
-    pokedexApp->sprites[27] = SpriteSystem_NewSpriteWithYOffset(pokedexApp->spriteSystem, pokedexApp->spriteManager, &ov18_021FB580, FX32_CONST(512));
+    pokedexApp->sprites[26] = SpriteSystem_NewSpriteWithYOffset(pokedexApp->spriteSystem, pokedexApp->spriteManager, &sPokedexSearchSprite26Template, FX32_CONST(512));
+    pokedexApp->sprites[27] = SpriteSystem_NewSpriteWithYOffset(pokedexApp->spriteSystem, pokedexApp->spriteManager, &sPokedexSearchSprite27Template, FX32_CONST(512));
     PokedexApp_SetSpriteVisible(pokedexApp, 27, FALSE);
-    template = ov18_021FA4EC;
+    template = sPokedexBodyTypeIconSpriteTemplate;
     for (i = 28; i <= 42; i++) {
         if (i == 28) {
             template.x = 224;
@@ -1589,7 +1589,7 @@ void PokedexApp_GetSeenFormAndGender(PokedexAppData *pokedexApp, u32 index, u8 *
 
 void PokedexApp_CreateEntryTabCursor(PokedexAppData *pokedexApp) {
     PokedexApp_LoadMainObjResources(pokedexApp);
-    pokedexApp->sprites[0] = SpriteSystem_NewSprite(pokedexApp->spriteSystem, pokedexApp->spriteManager, &ov18_021FA554);
+    pokedexApp->sprites[0] = SpriteSystem_NewSprite(pokedexApp->spriteSystem, pokedexApp->spriteManager, &sPokedexEntryTabCursorSpriteTemplate);
     ManagedSprite_SetPaletteOverride(pokedexApp->sprites[0], 4);
     PokedexApp_SetSpriteVisible(pokedexApp, 0, FALSE);
 }
@@ -1605,7 +1605,7 @@ void PokedexApp_MoveEntryTabCursor(PokedexAppData *pokedexApp, int index) {
     PokedexApp_SetSpritePos(pokedexApp, 0, index * 64 + 32, 176, FALSE);
 }
 
-// Area screen: 1-8 from ov18_021FA610, the icon of the shown form in 1, then the player marker, the area list's
+// Area screen: 1-8 from sPokedexAreaSpriteTemplates, the icon of the shown form in 1, then the player marker, the area list's
 // scrollbar and the map markers.
 void PokedexApp_SetupAreaSprites(PokedexAppData *pokedexApp) {
     u8 form, gender;
@@ -1613,7 +1613,7 @@ void PokedexApp_SetupAreaSprites(PokedexAppData *pokedexApp) {
 
     PokedexApp_LoadAreaSpriteResources(pokedexApp);
     for (i = 1; i <= 8; i++) {
-        pokedexApp->sprites[i] = PokedexApp_NewSprite(pokedexApp, &ov18_021FA610[i - 1]);
+        pokedexApp->sprites[i] = PokedexApp_NewSprite(pokedexApp, &sPokedexAreaSpriteTemplates[i - 1]);
     }
     PokedexApp_SetPlayerMarkerAnim(pokedexApp, 1);
     PokedexApp_GetSeenFormAndGender(pokedexApp, 0, &form, &gender);

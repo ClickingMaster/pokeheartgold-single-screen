@@ -19,10 +19,10 @@ void **PokeathlonCourseSpritePool_GetResourceSlot(void *pool, u32 id, u32 kind);
 
 // Sprite resource ids of the touch screen (pairs: the two Pokemon pictures are entries 6 and 7).
 extern const u32 gPokeathlonRelayRunPicIds[];
-extern const WindowTemplate ov96_0221C760;
-extern const WindowTemplate ov96_0221C768;
+extern const WindowTemplate sRelayRunNameWindowTemplate;
+extern const WindowTemplate sRelayRunLapsWindowTemplate;
 // Base score of each cell ahead of the runner: the farther, the better.
-extern const s32 ov96_0221C770[RELAY_RUN_CPU_CELLS];
+extern const s32 sRelayRunCpuCellScores[RELAY_RUN_CPU_CELLS];
 
 // The touch screen: where the two picture slots are in VRAM.
 void PokeathlonRelayRunHud_GetPicVramOffsets(void *pool, PokeathlonRelayRunHud *hud) {
@@ -41,8 +41,8 @@ void PokeathlonRelayRunHud_GetPicVramOffsets(void *pool, PokeathlonRelayRunHud *
 }
 
 void PokeathlonRelayRunHud_InitWindows(PokeathlonRelayRunHud *hud) {
-    AddWindow(hud->bgConfig, &hud->nameWindow, &ov96_0221C760);
-    AddWindow(hud->bgConfig, &hud->lapsWindow, &ov96_0221C768);
+    AddWindow(hud->bgConfig, &hud->nameWindow, &sRelayRunNameWindowTemplate);
+    AddWindow(hud->bgConfig, &hud->lapsWindow, &sRelayRunLapsWindowTemplate);
     BG_FillCharDataRange(hud->bgConfig, GF_BG_LYR_SUB_0, 0, 1, 0);
     LoadFontPal0(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_15_OFFSET, hud->heapId);
 }
@@ -193,7 +193,7 @@ void PokeathlonRelayRunCpu_Think(PokeathlonCourseData *course, PokeathlonRelayRu
         cpu->cells[i].targetY = cellY + 32 + LCRandom() % RELAY_RUN_CPU_CELL_SIZE;
     }
     for (i = 0; i < RELAY_RUN_CPU_CELLS; i++) {
-        cpu->cells[i].score = ov96_0221C770[i];
+        cpu->cells[i].score = sRelayRunCpuCellScores[i];
     }
     for (lane = 0, laneScore = laneScores, firstCell = 0, laneTop = 32; lane < 4; lane++, laneScore++, firstCell += 4, laneTop += RELAY_RUN_CPU_CELL_SIZE) {
         // other runners: in the own lane ahead -4, in another lane ahead -2, the cell they are in -3;

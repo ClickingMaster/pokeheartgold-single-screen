@@ -76,8 +76,8 @@ typedef struct PokewalkerIrTransfer {
 } PokewalkerIrTransfer;
 
 extern u8 _021FF500[];
-extern PokewalkerIrLink _021FF9E0;
-extern PokewalkerIrPacket ov112_021FFA18;
+extern PokewalkerIrLink gPokewalkerIrLink;
+extern PokewalkerIrPacket gPokewalkerIrPacket;
 extern u8 ov112_021FFA20[];
 extern PokewalkerIrWork ov112_021FFAA4;
 extern OSMessage ov112_021FFAC0[];
@@ -87,6 +87,6 @@ extern OSMutex ov112_021FFB08;
 extern OSMessageQueue ov112_021FFB20;
 extern PokewalkerIrTransfer ov112_021FFB24;
 extern u8 ov112_021FFB64[];
-extern OSThread ov112_021FFBD8;
+extern OSThread sPokewalkerIrThread;
 
 #endif // POKEHEARTGOLD_APPLICATION_POKEWALKER_POKEWALKER_IR_INTERNAL_H

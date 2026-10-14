@@ -10,7 +10,7 @@ typedef struct MatchParams {
     u32 timeout;
 } MatchParams;
 
-extern const MatchParams _0221602C;
+extern const MatchParams sWifiConnectionAnybodyMatchParams;
 extern char gWifiGameName[];
 extern char gWifiSecretKey[];
 extern char gWifiLobbyKeyName[];
@@ -230,7 +230,7 @@ int WifiConnection_StartAnybodyMatchmaking(const char *name, int maxPlayers, int
         return 0;
     }
     WifiConnection_FreeRecvBuffers();
-    params = _0221602C;
+    params = sWifiConnectionAnybodyMatchParams;
     params.timeout = 1000 * timeoutSeconds;
     GF_ASSERT(DWC_SetMatchingOption(0, &params, 8) == 0);
     GF_ASSERT(DWC_AddMatchKeyString(0, gWifiLobbyKeyName, name) != 0);

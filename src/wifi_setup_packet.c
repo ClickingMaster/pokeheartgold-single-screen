@@ -32,15 +32,15 @@ typedef struct WifiSetupSettings64 {
     u64 words[8];
 } WifiSetupSettings64;
 
-extern char ov13_0224E440[]; // SSID of the chosen access point
-extern u8 ov13_0224E3E0[6];  // BSSID of the chosen access point
-extern u8 ov13_0224E3D8[6];  // own MAC address
-extern u8 ov13_0224E464[];
+extern char gWifiSetupApSsid[]; // SSID of the chosen access point
+extern u8 gWifiSetupApBssid[6];  // BSSID of the chosen access point
+extern u8 gWifiSetupOwnMacAddress[6];  // own MAC address
+extern u8 gWifiSetupRecordBuffer[];
 extern u8 sStr_WARP[4];
-extern WifiSetupVersion ov13_02242680;
+extern WifiSetupVersion sWifiSetupClientVersion;
 extern u32 ov13_0224E284[8];
 extern u32 ov13_0224E2B0[];
-extern u8 ov13_0224E184[];
+extern u8 gWifiSetupReply[];
 extern u8 ov13_0224E2E8[][40];
 extern u32 ov13_0224E380[18];
 extern u8 ov13_0224E0B0[];
@@ -103,7 +103,7 @@ int WifiSetup_FindSetupAccessPoint(void) {
         goto done;
     }
     for (attempt = 0; attempt < 30 && !ov13_0224DF30.stop; attempt++) {
-        if (WifiSetup_GetMilliseconds() >= ov13_02245A58.deadline) {
+        if (WifiSetup_GetMilliseconds() >= gWifiSetupConfig.deadline) {
             break;
         }
         if (!WifiSetupLink_StartSearch(0, 0, 0, 0x30BFFE)) {
@@ -116,7 +116,7 @@ int WifiSetup_FindSetupAccessPoint(void) {
         result = 0;
         do {
             OS_Sleep(10);
-            if (WifiSetup_GetMilliseconds() >= ov13_02245A58.deadline || ov13_0224DF30.stop) {
+            if (WifiSetup_GetMilliseconds() >= gWifiSetupConfig.deadline || ov13_0224DF30.stop) {
                 break;
             }
             while ((event = WifiSetupLink_PopEvent()) != 0) {
@@ -177,16 +177,16 @@ int WifiSetup_FindSetupAccessPoint(void) {
         if (ov13_0224DF30.state != 1 && WifiSetup_PickSetupAccessPoint(out, previous, &selected)) {
             WifiSetupApEntry *entry = &out->entries[selected];
             ov13_0224DF30.selection = selected;
-            strcpy(ov13_0224E440, entry->ssid);
-            memcpy(ov13_0224E3E0, entry->bssid, 6);
-            WifiSetup_FormatMacAddress(text, (const s8 *)ov13_0224E3E0);
+            strcpy(gWifiSetupApSsid, entry->ssid);
+            memcpy(gWifiSetupApBssid, entry->bssid, 6);
+            WifiSetup_FormatMacAddress(text, (const s8 *)gWifiSetupApBssid);
             break;
         }
         memcpy(previous, out, size);
         ov13_0224DF30.state = 2;
         WifiSetup_ReportSimpleStartStatus();
     }
-    if (attempt >= 30 || WifiSetup_GetMilliseconds() > ov13_02245A58.deadline) {
+    if (attempt >= 30 || WifiSetup_GetMilliseconds() > gWifiSetupConfig.deadline) {
         result = -3;
     } else if (ov13_0224DF30.stop) {
         result = -8;
@@ -418,17 +418,17 @@ void WifiSetup_BuildVersionRequest(void *dst) {
     WifiSetupVersionRecord record;
     u8 *ptr;
     record.value = 256;
-    record.version = ov13_02242680;
-    ptr = WifiSetup_AppendRecord(ov13_02245A58.packetBuffer, 1, &record, 2);
+    record.version = sWifiSetupClientVersion;
+    ptr = WifiSetup_AppendRecord(gWifiSetupConfig.packetBuffer, 1, &record, 2);
     ptr = WifiSetup_AppendRecord(ptr, 2, &record, 2);
     if (ov13_0224DF30.extendedRequest) {
         ptr = WifiSetup_AppendRecord(ptr, 5, &record, 2);
     }
     ptr = WifiSetup_AppendRecord(ptr, 3, &record.version, 7);
     if (ov13_0224DF30.extendedRequest) {
-        ptr = WifiSetup_AppendRecord(ptr, 4, ov13_0224E3D8, 6);
+        ptr = WifiSetup_AppendRecord(ptr, 4, gWifiSetupOwnMacAddress, 6);
     }
-    WifiSetup_BuildPacket(dst, 2, ov13_0224E464, ptr - ov13_02245A58.packetBuffer + 8, NULL);
+    WifiSetup_BuildPacket(dst, 2, gWifiSetupRecordBuffer, ptr - gWifiSetupConfig.packetBuffer + 8, NULL);
 }
 
 #pragma force_active reset
@@ -449,10 +449,10 @@ BOOL WifiSetup_BuildMacPair(WifiSetupMacPair *pair) {
     u8 *src;
 
     memcpy(pair->prefix, sStr_WARP, 4);
-    memcpy(other, ov13_0224E3E0, 6);
+    memcpy(other, gWifiSetupApBssid, 6);
     other[0] &= 0xFD;
     WifiSetup_GetOwnMacAddress(own);
-    memcpy(ov13_0224E3D8, own, 6);
+    memcpy(gWifiSetupOwnMacAddress, own, 6);
     if (memcmp(other, own, 6) <= 0) {
         memcpy(pair->first, own, 6);
         src = other;
@@ -461,7 +461,7 @@ BOOL WifiSetup_BuildMacPair(WifiSetupMacPair *pair) {
         src = own;
     }
     memcpy(pair->second, src, 6);
-    if (ov13_02245A58.debug) {
+    if (gWifiSetupConfig.debug) {
         WifiSetup_FormatMacAddress(text1, (const s8 *)own);
         WifiSetup_FormatMacAddress(text2, (const s8 *)other);
     }
@@ -490,7 +490,7 @@ int WifiSetup_ParseSettingsRecords(const u8 *data) {
             break;
         case 0x203: {
             int i = 0;
-            u8 *p = ov13_0224E184;
+            u8 *p = gWifiSetupReply;
             u16 v = Swap16(*(u16 *)value);
             do {
                 *(u32 *)(p + 0x15c) = v;
@@ -500,7 +500,7 @@ int WifiSetup_ParseSettingsRecords(const u8 *data) {
             break;
         }
         case 0x204: {
-            u8 *p = ov13_0224E184;
+            u8 *p = gWifiSetupReply;
             int i = 0;
             u16 v = Swap16(*(u16 *)value);
             do {

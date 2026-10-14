@@ -99,15 +99,15 @@ void *PokeathlonLampJump_NewCpuPlayers(u32 heapId, int count, u32 mode, u32 data
 void PokeathlonLampJump_FreeCpuPlayers(void *cpu);
 void PokeathlonLampJump_UpdateCpuPlayers(PokeathlonCourseData *course, void *cpu);
 
-extern const PokeathlonLampJumpSceneConfig ov96_0221C0B8;
-extern const GraphicsModes ov96_0221C100;
-extern const BgTemplate ov96_0221C124;
-extern const BgTemplate ov96_0221C140;
-extern const BgTemplate ov96_0221C15C;
-extern const BgTemplate ov96_0221C178;
-extern const BgTemplate ov96_0221C194;
-extern const BgTemplate ov96_0221C1B0;
-extern const GraphicsBanks ov96_0221C1F4;
+extern const PokeathlonLampJumpSceneConfig sLampJumpSceneConfig;
+extern const GraphicsModes sLampJumpGraphicsModes;
+extern const BgTemplate sLampJumpBgTemplate_Main2;
+extern const BgTemplate sLampJumpBgTemplate_Main1;
+extern const BgTemplate sLampJumpBgTemplate_Main3;
+extern const BgTemplate sLampJumpBgTemplate_Sub0;
+extern const BgTemplate sLampJumpBgTemplate_Sub1;
+extern const BgTemplate sLampJumpBgTemplate_Sub2;
+extern const GraphicsBanks sLampJumpGraphicsBanks;
 extern const u8 gPokeathlonLampJumpSoundPlayers[]; // sound player of each Pokemon
 
 #pragma force_active on
@@ -165,7 +165,7 @@ BOOL PokeathlonLampJump_Init(PokeathlonCourseData *course) {
         PokeathlonCourse_IncrementField1ED(course);
         break;
     case 2:
-        sceneConfig = ov96_0221C0B8;
+        sceneConfig = sLampJumpSceneConfig;
         lampJump->scene = PokeathlonCourseSpritePool_New(lampJump->heapId, &sceneConfig);
         PokeathlonCourseSpritePool_SetSurfaceCoords(lampJump->scene, 0, FX32_CONST(192), 0, 0);
         lampJump->monSpriteManager = PokeathlonCourseMonObjects_Create(lampJump->heapId, (void *)3, (void *)10, NULL, PokeathlonCourseSpritePool_GetSpriteList(lampJump->scene));
@@ -337,7 +337,7 @@ BOOL PokeathlonLampJump_Exit(PokeathlonCourseData *course) {
 #pragma force_active reset
 
 void PokeathlonLampJump_SetGfxBanks(void) {
-    GraphicsBanks banks = ov96_0221C1F4;
+    GraphicsBanks banks = sLampJumpGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
@@ -442,24 +442,24 @@ void PokeathlonLampJump_InitBgs(BgConfig *bgConfig) {
     BgTemplate sub1;
     BgTemplate sub2;
 
-    modes = ov96_0221C100;
+    modes = sLampJumpGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    main2 = ov96_0221C124;
+    main2 = sLampJumpBgTemplate_Main2;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &main2, 0);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
-    main1 = ov96_0221C140;
+    main1 = sLampJumpBgTemplate_Main1;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &main1, 0);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
-    main3 = ov96_0221C15C;
+    main3 = sLampJumpBgTemplate_Main3;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &main3, 0);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
-    sub0 = ov96_0221C178;
+    sub0 = sLampJumpBgTemplate_Sub0;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &sub0, 0);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
-    sub1 = ov96_0221C194;
+    sub1 = sLampJumpBgTemplate_Sub1;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &sub1, 0);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
-    sub2 = ov96_0221C1B0;
+    sub2 = sLampJumpBgTemplate_Sub2;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &sub2, 0);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_2);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);

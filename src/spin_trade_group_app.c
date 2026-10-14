@@ -155,19 +155,19 @@ typedef struct SpinTradeGroupApp {
     SpinTradeGroupTrainerIds trainerIds[5]; // 0x4A60
 } SpinTradeGroupApp;                        // size 0x4AB0
 
-extern const WindowTemplate ov85_021EA8D8;
-extern const u16 ov85_021EA8E0[];
-extern const u8 ov85_021EA8EA[];
+extern const WindowTemplate gSpinTradeGroupYesNoWindowTemplate;
+extern const u16 gSpinTradeGroupAvatarCharOffsets[];
+extern const u8 gSpinTradeGroupBlinkFrames[];
 extern const u8 ov85_021EA8EB[];
-extern const GraphicsModes ov85_021EA8F4;
-extern const ObjCharTransferTemplate ov85_021EA904;
-extern const SpinTradeGroupPos ov85_021EA914[];
-extern const BgTemplate ov85_021EA92C;
-extern const BgTemplate ov85_021EA948;
-extern const BgTemplate ov85_021EA964;
-extern const BgTemplate ov85_021EA980;
-extern const BgTemplate ov85_021EA99C;
-extern const GraphicsBanks ov85_021EA9B8;
+extern const GraphicsModes gSpinTradeGroupGraphicsModes;
+extern const ObjCharTransferTemplate gSpinTradeGroupObjCharTransferTemplate;
+extern const SpinTradeGroupPos gSpinTradeGroupAvatarPositions[];
+extern const BgTemplate gSpinTradeGroupBgTemplate_Sub2;
+extern const BgTemplate gSpinTradeGroupBgTemplate_Main0;
+extern const BgTemplate gSpinTradeGroupBgTemplate_Main1;
+extern const BgTemplate gSpinTradeGroupBgTemplate_Sub0;
+extern const BgTemplate gSpinTradeGroupBgTemplate_Sub1;
+extern const GraphicsBanks gSpinTradeGroupGraphicsBanks;
 extern int (*const gSpinTradeGroupStateFuncs[])(SpinTradeGroupApp *app, int state);
 
 // Not declared by the owners' headers
@@ -391,7 +391,7 @@ void SpinTradeGroup_VBlankTask(SysTask *task, void *data) {
     SpinTradeGroupApp *app = data;
     SpinTradeGroupBlink *blink = &app->blink;
     if (app->blink.active != 0) {
-        if (blink->timer > ov85_021EA8EA[blink->frame * 2]) {
+        if (blink->timer > gSpinTradeGroupBlinkFrames[blink->frame * 2]) {
             blink->timer = 0;
             blink->frame++;
             if (ov85_021EA8EB[blink->frame * 2] == 0xFF) {
@@ -415,28 +415,28 @@ void SpinTradeGroup_VBlankCallback(void *data) {
 }
 
 void SpinTradeGroup_SetGraphicsBanks(void) {
-    GraphicsBanks banks = ov85_021EA9B8;
+    GraphicsBanks banks = gSpinTradeGroupGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
 #pragma force_active on
 void SpinTradeGroup_InitBgLayers(BgConfig *bgConfig) {
-    GraphicsModes modes = ov85_021EA8F4;
+    GraphicsModes modes = gSpinTradeGroupGraphicsModes;
     BgTemplate subBg0, subBg1, subBg2, mainBg0, mainBg1;
 
     SetBothScreensModesAndDisable(&modes);
-    subBg0 = ov85_021EA980;
+    subBg0 = gSpinTradeGroupBgTemplate_Sub0;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &subBg0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
-    subBg1 = ov85_021EA99C;
+    subBg1 = gSpinTradeGroupBgTemplate_Sub1;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &subBg1, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
-    subBg2 = ov85_021EA92C;
+    subBg2 = gSpinTradeGroupBgTemplate_Sub2;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &subBg2, GF_BG_TYPE_TEXT);
-    mainBg0 = ov85_021EA948;
+    mainBg0 = gSpinTradeGroupBgTemplate_Main0;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &mainBg0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
-    mainBg1 = ov85_021EA964;
+    mainBg1 = gSpinTradeGroupBgTemplate_Main1;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &mainBg1, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_0, 32, 0, HEAP_ID_102);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 32, 0, HEAP_ID_102);
@@ -505,7 +505,7 @@ void SpinTradeGroup_LoadBgGraphics(SpinTradeGroupApp *app, NARC *narc) {
 #pragma force_active reset
 
 void SpinTradeGroup_InitObjTransfer(void) {
-    ObjCharTransferTemplate tmpl = ov85_021EA904;
+    ObjCharTransferTemplate tmpl = gSpinTradeGroupObjCharTransferTemplate;
     ObjCharTransfer_Init(&tmpl);
     ObjPlttTransfer_Init(0x14, HEAP_ID_102);
     ObjCharTransfer_ClearBuffers();
@@ -549,8 +549,8 @@ void SpinTradeGroup_CreateAvatarSprites(SpinTradeGroupApp *app) {
     tmpl.whichScreen = (NNS_G2D_VRAM_TYPE)1;
     tmpl.heapID = HEAP_ID_102;
     for (i = 0; i < 5; i++) {
-        tmpl.position.x = ov85_021EA914[i + 1].x << 12;
-        tmpl.position.y = ov85_021EA914[i + 1].y << 12;
+        tmpl.position.x = gSpinTradeGroupAvatarPositions[i + 1].x << 12;
+        tmpl.position.y = gSpinTradeGroupAvatarPositions[i + 1].y << 12;
         app->avatars[i] = Sprite_CreateAffine(&tmpl);
         Sprite_SetAnimActiveFlag(app->avatars[i], 1);
         Sprite_SetAnimCtrlSeq(app->avatars[i], (i - 1) * 2 + 0x1B);
@@ -691,7 +691,7 @@ int SpinTradeGroup_State_ResetLeaderMenuState(SpinTradeGroupApp *app, int state)
 }
 
 int SpinTradeGroup_State_ShowCancelYesNo(SpinTradeGroupApp *app, int state) {
-    app->yesNoMenu = Std_CreateYesNoMenu(app->bgConfig, &ov85_021EA8D8, 0x1F, 0xB, HEAP_ID_102);
+    app->yesNoMenu = Std_CreateYesNoMenu(app->bgConfig, &gSpinTradeGroupYesNoWindowTemplate, 0x1F, 0xB, HEAP_ID_102);
     app->subState = 5;
     SpinTradeGroup_UpdateDummy(app);
     return state;
@@ -785,7 +785,7 @@ int SpinTradeGroup_State_AbortLeave(SpinTradeGroupApp *app, int state) {
 }
 
 int SpinTradeGroup_State_ShowConfirmYesNo(SpinTradeGroupApp *app, int state) {
-    app->yesNoMenu = Std_CreateYesNoMenu(app->bgConfig, &ov85_021EA8D8, 0x1F, 0xB, HEAP_ID_102);
+    app->yesNoMenu = Std_CreateYesNoMenu(app->bgConfig, &gSpinTradeGroupYesNoWindowTemplate, 0x1F, 0xB, HEAP_ID_102);
     app->subState = 0x17;
     SpinTradeGroup_UpdateDummy(app);
     return state;
@@ -896,7 +896,7 @@ int SpinTradeGroup_State_FadeOutCanceled(SpinTradeGroupApp *app, int state) {
 }
 
 int SpinTradeGroup_State_ShowDisbandYesNo(SpinTradeGroupApp *app, int state) {
-    app->yesNoMenu = Std_CreateYesNoMenu(app->bgConfig, &ov85_021EA8D8, 0x1F, 0xB, HEAP_ID_102);
+    app->yesNoMenu = Std_CreateYesNoMenu(app->bgConfig, &gSpinTradeGroupYesNoWindowTemplate, 0x1F, 0xB, HEAP_ID_102);
     app->subState = 0xC;
     SpinTradeGroup_UpdateDummy(app);
     return state;
@@ -1338,7 +1338,7 @@ void SpinTradeGroup_LoadAvatarGraphics(SpinTradeGroupApp *app, NARC *narc) {
 void SpinTradeGroup_LoadAvatar(NNSG2dCharacterData **chars, NNSG2dPaletteData **pltts, int slot, int avatar, int gender) {
     int idx = SpriteToUnionRoomAvatarIdx(gender, avatar);
     void *pltt = pltts[1]->pRawData;
-    GX_LoadOBJ((u8 *)chars[1]->pRawData + idx * 0x600, ov85_021EA8E0[slot], 0x600);
+    GX_LoadOBJ((u8 *)chars[1]->pRawData + idx * 0x600, gSpinTradeGroupAvatarCharOffsets[slot], 0x600);
     GX_LoadOBJPltt((u8 *)pltt + idx * 0x20, (slot + 7) * 0x20, 0x20);
 }
 

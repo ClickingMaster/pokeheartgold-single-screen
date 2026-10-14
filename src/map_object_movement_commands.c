@@ -91,7 +91,7 @@ void TrainerReveal_Spawn(LocalMapObject *object);
 
 extern const MovementScriptStateFunc sMovementScriptMachineStateFuncs[];
 extern const u32 _020FDA28[4];
-extern const u32 *const _020FD198[];
+extern const u32 *const sMovementsByDirection[];
 extern const MovementCommandFunc *const gMovementCmdTable[];
 extern const fx32 *gJumpHeightTables[];
 extern const u32 gVariableSpeedWalk_Cmd082[];
@@ -266,7 +266,7 @@ u32 GetMovementForDirection(s32 direction, u32 movement) {
     if (direction >= 4) {
         GF_AssertFail();
     }
-    table = _020FD198;
+    table = sMovementsByDirection;
     entry = *table;
     if (entry != NULL) {
         do {
@@ -289,7 +289,7 @@ u32 GetMovementForDirection(s32 direction, u32 movement) {
 
 s32 GetMovementDirection(u32 movement) {
     s32 i;
-    const u32 *const *table = _020FD198;
+    const u32 *const *table = sMovementsByDirection;
     const u32 *entry = *table;
 
     if (entry != NULL) {

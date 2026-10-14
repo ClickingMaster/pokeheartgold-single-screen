@@ -59,7 +59,7 @@
 	.public sWiiNumberDigitChars
 	.public gApplication_TitleScreen
 	.public sWiiMessageSettingsRegisterChoicePositions
-	.public _02249BE0
+	.public sWiiMessageSettingsHeap
 	.public WiiMessageSettings_Init
 	.public WiiMessageSettings_Main
 	.public WiiMessageSettings_Exit
@@ -313,5 +313,5 @@ sWiiMessageSettingsScreenStates: ; 0x02249B30
 
 	.bss
 
-_02249BE0:
+sWiiMessageSettingsHeap:
 	.space 0x20

@@ -31,8 +31,8 @@ void PokeathlonCourseObject_SetGroundPosition(void *object, s32 x, s32 y);
 void PokeathlonCourseObject_SetTouchRadius(void *object, s32 radius);
 void PokeathlonCourseObject_GroundToCenter(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
 
-extern const GraphicsBanks ov96_0221CB9C;
-extern const VecFx32 ov96_0221CAD4; // sprite pool template
+extern const GraphicsBanks sPennantCaptureGraphicsBanks;
+extern const VecFx32 sPennantCaptureSpritePoolTemplate; // sprite pool template
 
 // Collision circle of a Pokemon by size (NARC a/1/7/0 member 14).
 typedef struct PokeathlonPennantCaptureCollision {
@@ -128,7 +128,7 @@ BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
         break;
     }
     case 2:
-        poolTemplate = ov96_0221CAD4;
+        poolTemplate = sPennantCaptureSpritePoolTemplate;
         work->spritePool = PokeathlonCourseSpritePool_New(work->heapId, &poolTemplate);
         PokeathlonCourseSpritePool_SetSurfaceCoords(work->spritePool, 0, 0, 0, FX32_CONST(700));
         work->monObjects = PokeathlonCourseMonObjects_Create(work->heapId, 12, 2, work->monResources, PokeathlonCourseSpritePool_GetSpriteList(work->spritePool));
@@ -294,6 +294,6 @@ BOOL PokeathlonPennantCapture_Exit(PokeathlonCourseData *course) {
 }
 
 void PokeathlonPennantCapture_SetGfxBanks(void) {
-    GraphicsBanks banks = ov96_0221CB9C;
+    GraphicsBanks banks = sPennantCaptureGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }

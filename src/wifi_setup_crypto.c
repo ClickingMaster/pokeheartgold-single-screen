@@ -6,30 +6,30 @@ typedef struct WifiSetupBlock8 {
     u8 bytes[8];
 } WifiSetupBlock8;
 
-extern const u32 ov13_02242688[];
-extern const u32 ov13_022426B0[];
-extern const u32 ov13_02242AB0[];
-extern const u32 ov13_02242EB0[];
-extern const u32 ov13_022432B0[];
-extern const u32 ov13_022436B0[];
-extern const u32 ov13_02243AB0[];
-extern const u32 ov13_02243EB0[];
-extern const u32 ov13_022442B0[];
-extern const u32 ov13_022446B0[];
-extern const u32 ov13_02244AB0[];
+extern const u32 sWifiSetupAesRcon[];
+extern const u32 sWifiSetupAesTd2[];
+extern const u32 sWifiSetupAesTd3[];
+extern const u32 sWifiSetupAesTd4[];
+extern const u32 sWifiSetupAesTe0[];
+extern const u32 sWifiSetupAesTe1[];
+extern const u32 sWifiSetupAesTe2[];
+extern const u32 sWifiSetupAesTe3[];
+extern const u32 sWifiSetupAesTe4[];
+extern const u32 sWifiSetupAesTd0[];
+extern const u32 sWifiSetupAesTd1[];
 
 // AES tables
-#define rcon ov13_02242688
-#define Td2  ov13_022426B0
-#define Td3  ov13_02242AB0
-#define Td4  ov13_02242EB0
-#define Te0  ov13_022432B0
-#define Te1  ov13_022436B0
-#define Te3  ov13_02243EB0
-#define Te2  ov13_02243AB0
-#define Te4  ov13_022442B0
-#define Td0  ov13_022446B0
-#define Td1  ov13_02244AB0
+#define rcon sWifiSetupAesRcon
+#define Td2  sWifiSetupAesTd2
+#define Td3  sWifiSetupAesTd3
+#define Td4  sWifiSetupAesTd4
+#define Te0  sWifiSetupAesTe0
+#define Te1  sWifiSetupAesTe1
+#define Te3  sWifiSetupAesTe3
+#define Te2  sWifiSetupAesTe2
+#define Te4  sWifiSetupAesTe4
+#define Td0  sWifiSetupAesTd0
+#define Td1  sWifiSetupAesTd1
 
 #define GETU32(pt) (((u32)(pt)[0] << 24) ^ ((u32)(pt)[1] << 16) ^ ((u32)(pt)[2] << 8) ^ ((u32)(pt)[3]))
 #define PUTU32(ct, st)              \
@@ -51,7 +51,7 @@ void WifiSetup_SimpleStartThread(void *arg) {
     } else {
         ov13_0224DF30.state = 7;
     }
-    ov13_02245A58.deadline = -1;
+    gWifiSetupConfig.deadline = -1;
     WifiSetup_ReportSimpleStartStatus();
 }
 
@@ -538,7 +538,7 @@ void WifiSetup_Md5Final(u8 *out, WifiSetupMd5Context *ctx) {
     WifiSetup_EncodeLittleEndian(bits, &ctx->bitsLo, 8);
     idx = (ctx->bitsLo >> 3) & 0x3f;
     pad = idx < 56 ? 56 - idx : 120 - idx;
-    WifiSetup_Md5Update(ctx, ov13_02245AD8, pad);
+    WifiSetup_Md5Update(ctx, sWifiSetupMd5Padding, pad);
     WifiSetup_Md5Update(ctx, bits, 8);
     WifiSetup_EncodeLittleEndian(out, ctx->state, 16);
     WifiSetup_FillBytes(ctx, 0, 0x58);

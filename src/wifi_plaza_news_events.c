@@ -7,8 +7,8 @@
 #include "wifi_plaza_internal.h"
 
 // The event list of the plaza news: 8 events in a list ordered by rank (head = WiFiPlazaNewsEventList.head); a new
-// event takes a free one or replaces one of at least its rank. Each event type has a message (ov45_02254C0C) and a
-// lobby slot getter (ov45_02254BE8).
+// event takes a free one or replaces one of at least its rank. Each event type has a message (sWiFiPlazaNewsEventFormatters) and a
+// lobby slot getter (sWiFiPlazaNewsEventSlotGetters).
 
 BOOL WiFiPlazaNewsSlots_IsLastJoined(WiFiPlazaNewsSlots *slots, u32 slot) {
     if (slot >= 20) {
@@ -288,9 +288,9 @@ BOOL WiFiPlazaNewsEvent_FormatMinigameResult(WiFiPlazaNewsEvent *event, const u8
         BufferString(format, i + 1, event->names[i], 0, 1, gGameLanguage);
     }
     if (event->a <= 1) {
-        string = NewString_ReadMsgData(msgData, ov45_02254BCA[event->b]);
+        string = NewString_ReadMsgData(msgData, sWiFiPlazaNewsMinigameResultMsgs[event->b]);
     } else {
-        string = NewString_ReadMsgData(msgData, ov45_02254BD2[event->b]);
+        string = NewString_ReadMsgData(msgData, sWiFiPlazaNewsMinigameResultMsgsOther[event->b]);
     }
     StringExpandPlaceholders(format, out, string);
     String_Delete(string);

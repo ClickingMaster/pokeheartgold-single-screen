@@ -5,14 +5,14 @@
 
 // Second copy of the WCM wrapper (see wifi_setup_wcm.h), on the worker's state ov13_0224DF30, plus
 // the worker's link steps: open (start WCM), connect to the chosen access point and start the
-// socket library, disconnect, close. WCM events are queued (ov13_0224DFB4) and polled by the worker.
+// socket library, disconnect, close. WCM events are queued (gWifiSetupLinkEventQueue) and polled by the worker.
 
-extern void (*ov13_0224DFB0)(u32 event, int arg);
-extern u32 ov13_0224DFB4[4];
-extern OSMutex ov13_0224DFC4;
-extern u8 ov13_0224E3E8[6];
-extern u8 ov13_0224E420[32];
-extern u8 ov13_02245A6C[]; // socket library configuration
+extern void (*gWifiSetupLinkEventCallback)(u32 event, int arg);
+extern u32 gWifiSetupLinkEventQueue[4];
+extern OSMutex gWifiSetupLinkMutex;
+extern u8 gWifiSetupLinkSearchBssid[6];
+extern u8 gWifiSetupLinkSearchSsid[32];
+extern u8 sWifiSetupLinkSocConfig[]; // socket library configuration
 extern u8 WCM_Bssid_Any[];     // BSSID ff:ff:ff:ff:ff:ff (any)
 extern u8 WCM_Essid_Any[];     // SSID of 0xFF bytes (any)
 
@@ -30,28 +30,28 @@ void WifiSetupLink_HandleEvent(WifiSetupWcmEvent *event) {
         if (event->result == 0) {
             if (ov13_0224DF30.wcmState == 4) {
                 ov13_0224DF30.wcmState = 3;
-                if (ov13_0224DFB0) {
-                    ov13_0224DFB0(6, 0);
+                if (gWifiSetupLinkEventCallback) {
+                    gWifiSetupLinkEventCallback(6, 0);
                 }
             } else if (ov13_0224DF30.wcmState == 6) {
                 if (WCM_SearchAsync(ov13_0224DF30.searchBssid, ov13_0224DF30.searchSsid, ov13_0224DF30.searchOption) != 3) {
                     ov13_0224DF30.wcmState = 3;
-                    if (ov13_0224DFB0) {
-                        ov13_0224DFB0(2, 0);
+                    if (gWifiSetupLinkEventCallback) {
+                        gWifiSetupLinkEventCallback(2, 0);
                     }
                 }
             } else if (ov13_0224DF30.wcmState == 8) {
                 if (WCM_ConnectAsync(ov13_0224DF30.connectAp, ov13_0224DF30.connectKey, ov13_0224DF30.connectOption) != 3) {
                     ov13_0224DF30.wcmState = 3;
-                    if (ov13_0224DFB0) {
-                        ov13_0224DFB0(2, 0);
+                    if (gWifiSetupLinkEventCallback) {
+                        gWifiSetupLinkEventCallback(2, 0);
                     }
                 }
             }
         } else {
             ov13_0224DF30.wcmState = 1;
-            if (ov13_0224DFB0) {
-                ov13_0224DFB0(2, 0);
+            if (gWifiSetupLinkEventCallback) {
+                gWifiSetupLinkEventCallback(2, 0);
             }
         }
         break;
@@ -59,14 +59,14 @@ void WifiSetupLink_HandleEvent(WifiSetupWcmEvent *event) {
         if (event->result == 0) {
             if (ov13_0224DF30.wcmState == 6) {
                 ov13_0224DF30.wcmState = 5;
-                if (ov13_0224DFB0) {
-                    ov13_0224DFB0(8, 0);
+                if (gWifiSetupLinkEventCallback) {
+                    gWifiSetupLinkEventCallback(8, 0);
                 }
             }
         } else {
             ov13_0224DF30.wcmState = 3;
-            if (ov13_0224DFB0) {
-                ov13_0224DFB0(9, 0);
+            if (gWifiSetupLinkEventCallback) {
+                gWifiSetupLinkEventCallback(9, 0);
             }
         }
         break;
@@ -74,14 +74,14 @@ void WifiSetupLink_HandleEvent(WifiSetupWcmEvent *event) {
         if (event->result == 0) {
             if (ov13_0224DF30.wcmState == 8) {
                 ov13_0224DF30.wcmState = 7;
-                if (ov13_0224DFB0) {
-                    ov13_0224DFB0(12, 0);
+                if (gWifiSetupLinkEventCallback) {
+                    gWifiSetupLinkEventCallback(12, 0);
                 }
             }
         } else {
             ov13_0224DF30.wcmState = 3;
-            if (ov13_0224DFB0) {
-                ov13_0224DFB0(13, 0);
+            if (gWifiSetupLinkEventCallback) {
+                gWifiSetupLinkEventCallback(13, 0);
             }
         }
         break;
@@ -89,35 +89,35 @@ void WifiSetupLink_HandleEvent(WifiSetupWcmEvent *event) {
         if (event->result == 0) {
             if (ov13_0224DF30.wcmState == 4) {
                 ov13_0224DF30.wcmState = 3;
-                if (ov13_0224DFB0) {
-                    ov13_0224DFB0(10, 0);
+                if (gWifiSetupLinkEventCallback) {
+                    gWifiSetupLinkEventCallback(10, 0);
                 }
             } else if (ov13_0224DF30.wcmState == 6) {
                 if (WCM_SearchAsync(ov13_0224DF30.searchBssid, ov13_0224DF30.searchSsid, ov13_0224DF30.searchOption) != 3) {
                     ov13_0224DF30.wcmState = 3;
-                    if (ov13_0224DFB0) {
-                        ov13_0224DFB0(2, 0);
+                    if (gWifiSetupLinkEventCallback) {
+                        gWifiSetupLinkEventCallback(2, 0);
                     }
                 }
             } else if (ov13_0224DF30.wcmState == 2) {
                 if (WCM_CleanupAsync() != 3) {
                     ov13_0224DF30.wcmState = 3;
-                    if (ov13_0224DFB0) {
-                        ov13_0224DFB0(2, 0);
+                    if (gWifiSetupLinkEventCallback) {
+                        gWifiSetupLinkEventCallback(2, 0);
                     }
                 }
             } else if (ov13_0224DF30.wcmState == 8) {
                 if (WCM_ConnectAsync(ov13_0224DF30.connectAp, ov13_0224DF30.connectKey, ov13_0224DF30.connectOption) != 3) {
                     ov13_0224DF30.wcmState = 3;
-                    if (ov13_0224DFB0) {
-                        ov13_0224DFB0(2, 0);
+                    if (gWifiSetupLinkEventCallback) {
+                        gWifiSetupLinkEventCallback(2, 0);
                     }
                 }
             }
         } else {
             ov13_0224DF30.wcmState = 3;
-            if (ov13_0224DFB0) {
-                ov13_0224DFB0(11, 0);
+            if (gWifiSetupLinkEventCallback) {
+                gWifiSetupLinkEventCallback(11, 0);
             }
         }
         break;
@@ -125,28 +125,28 @@ void WifiSetupLink_HandleEvent(WifiSetupWcmEvent *event) {
         if (event->result == 0) {
             if (ov13_0224DF30.wcmState == 4) {
                 ov13_0224DF30.wcmState = 3;
-                if (ov13_0224DFB0) {
-                    ov13_0224DFB0(14, 0);
+                if (gWifiSetupLinkEventCallback) {
+                    gWifiSetupLinkEventCallback(14, 0);
                 }
             } else if (ov13_0224DF30.wcmState == 6) {
                 if (WCM_SearchAsync(ov13_0224DF30.searchBssid, ov13_0224DF30.searchSsid, ov13_0224DF30.searchOption) != 3) {
                     ov13_0224DF30.wcmState = 3;
-                    if (ov13_0224DFB0) {
-                        ov13_0224DFB0(2, 0);
+                    if (gWifiSetupLinkEventCallback) {
+                        gWifiSetupLinkEventCallback(2, 0);
                     }
                 }
             } else if (ov13_0224DF30.wcmState == 2) {
                 if (WCM_CleanupAsync() != 3) {
                     ov13_0224DF30.wcmState = 3;
-                    if (ov13_0224DFB0) {
-                        ov13_0224DFB0(2, 0);
+                    if (gWifiSetupLinkEventCallback) {
+                        gWifiSetupLinkEventCallback(2, 0);
                     }
                 }
             } else if (ov13_0224DF30.wcmState == 8) {
                 if (WCM_ConnectAsync(ov13_0224DF30.connectAp, ov13_0224DF30.connectKey, ov13_0224DF30.connectOption) != 3) {
                     ov13_0224DF30.wcmState = 3;
-                    if (ov13_0224DFB0) {
-                        ov13_0224DFB0(2, 0);
+                    if (gWifiSetupLinkEventCallback) {
+                        gWifiSetupLinkEventCallback(2, 0);
                     }
                 }
             } else if (ov13_0224DF30.wcmState == 7) {
@@ -154,8 +154,8 @@ void WifiSetupLink_HandleEvent(WifiSetupWcmEvent *event) {
             }
         } else {
             ov13_0224DF30.wcmState = 3;
-            if (ov13_0224DFB0) {
-                ov13_0224DFB0(15, 0);
+            if (gWifiSetupLinkEventCallback) {
+                gWifiSetupLinkEventCallback(15, 0);
             }
         }
         break;
@@ -164,38 +164,38 @@ void WifiSetupLink_HandleEvent(WifiSetupWcmEvent *event) {
             if (ov13_0224DF30.wcmState == 2) {
                 WCM_Finish();
                 ov13_0224DF30.wcmState = 0;
-                if (ov13_0224DFB0) {
-                    ov13_0224DFB0(20, 0);
+                if (gWifiSetupLinkEventCallback) {
+                    gWifiSetupLinkEventCallback(20, 0);
                 }
             }
         } else {
             ov13_0224DF30.wcmState = 3;
-            if (ov13_0224DFB0) {
-                ov13_0224DFB0(2, 0);
+            if (gWifiSetupLinkEventCallback) {
+                gWifiSetupLinkEventCallback(2, 0);
             }
         }
         break;
     case 7:
         if (ov13_0224DF30.wcmState == 5) {
-            if (ov13_0224DFB0) {
-                ov13_0224DFB0(5, 0);
+            if (gWifiSetupLinkEventCallback) {
+                gWifiSetupLinkEventCallback(5, 0);
             }
         }
         break;
     case 8:
-        if (ov13_0224DFB0) {
-            ov13_0224DFB0(4, 0);
+        if (gWifiSetupLinkEventCallback) {
+            gWifiSetupLinkEventCallback(4, 0);
         }
         break;
     case 9:
         ov13_0224DF30.wcmState = 0;
-        if (ov13_0224DFB0) {
-            ov13_0224DFB0(3, 0);
+        if (gWifiSetupLinkEventCallback) {
+            gWifiSetupLinkEventCallback(3, 0);
         }
         break;
     default:
-        if (ov13_0224DFB0) {
-            ov13_0224DFB0(1, 0);
+        if (gWifiSetupLinkEventCallback) {
+            gWifiSetupLinkEventCallback(1, 0);
         }
         break;
     }
@@ -261,29 +261,29 @@ int WifiSetupLink_StartSearch(const u8 *bssid, const u8 *ssid, int len, int opti
     int i;
     irq = OS_DisableInterrupts();
     ov13_0224DF30.searchOption = option;
-    ov13_0224DF30.searchBssid = ov13_0224E3E8;
+    ov13_0224DF30.searchBssid = gWifiSetupLinkSearchBssid;
     if (bssid != NULL) {
         for (i = 0; i < 6; i++) {
-            ov13_0224E3E8[i] = *bssid++;
+            gWifiSetupLinkSearchBssid[i] = *bssid++;
         }
     } else {
-        MI_CpuFill8(ov13_0224E3E8, 0xFF, 6);
+        MI_CpuFill8(gWifiSetupLinkSearchBssid, 0xFF, 6);
         ov13_0224DF30.searchBssid = WCM_Bssid_Any;
     }
-    ov13_0224DF30.searchSsid = ov13_0224E420;
+    ov13_0224DF30.searchSsid = gWifiSetupLinkSearchSsid;
     if (ssid != NULL && len > 0 && len < 32) {
         for (i = 0; i < len; i++) {
-            ov13_0224E420[i] = *ssid++;
+            gWifiSetupLinkSearchSsid[i] = *ssid++;
         }
         for (; i < 32; i++) {
-            ov13_0224E420[i] = 0;
+            gWifiSetupLinkSearchSsid[i] = 0;
         }
     } else {
-        MI_CpuFill8(ov13_0224E420, 0xFF, 32);
+        MI_CpuFill8(gWifiSetupLinkSearchSsid, 0xFF, 32);
         ov13_0224DF30.searchSsid = WCM_Essid_Any;
     }
     if (ov13_0224DF30.wcmState == 3) {
-        if (WCM_SearchAsync(ov13_0224E3E8, ov13_0224DF30.searchSsid, ov13_0224DF30.searchOption) == 3) {
+        if (WCM_SearchAsync(gWifiSetupLinkSearchBssid, ov13_0224DF30.searchSsid, ov13_0224DF30.searchOption) == 3) {
             ov13_0224DF30.wcmState = 6;
             OS_RestoreInterrupts(irq);
             return 1;
@@ -371,7 +371,7 @@ int WifiSetupLink_Init(void (*eventCallback)(u32 event, int arg), u8 *buffer, in
     ov13_0224DF30.wcmConfig->bufferSize = (buffer + size) - (u8 *)ov13_0224DF30.wcmConfig->buffer;
     ov13_0224DF30.wcmConfig->unk_0C = 0;
     ov13_0224DF30.wcmConfig->unk_00 = 3;
-    ov13_0224DFB0 = eventCallback;
+    gWifiSetupLinkEventCallback = eventCallback;
     if (ov13_0224DF30.wcmState == 0) {
         if (WCM_Init(ov13_0224DF30.wcmWork, 8960) != 0) {
             OS_RestoreInterrupts(irq);
@@ -401,9 +401,9 @@ int WifiSetupLink_GetState(void) {
 void *WifiSetupLink_Alloc(int unused, int size) {
     void *result;
     if (size > 0) {
-        OS_LockMutex(&ov13_0224DFC4);
+        OS_LockMutex(&gWifiSetupLinkMutex);
         result = ov13_0224DF30.alloc(size);
-        OS_UnlockMutex(&ov13_0224DFC4);
+        OS_UnlockMutex(&gWifiSetupLinkMutex);
         return result;
     }
     return NULL;
@@ -411,9 +411,9 @@ void *WifiSetupLink_Alloc(int unused, int size) {
 
 void WifiSetupLink_Free(int unused, void *ptr, int size) {
     if (ptr != NULL && size > 0) {
-        OS_LockMutex(&ov13_0224DFC4);
+        OS_LockMutex(&gWifiSetupLinkMutex);
         ov13_0224DF30.free(ptr);
-        OS_UnlockMutex(&ov13_0224DFC4);
+        OS_UnlockMutex(&gWifiSetupLinkMutex);
     }
 }
 
@@ -423,7 +423,7 @@ void WifiSetupLink_ClearEvents(void) {
     ov13_0224DF30.eventWrite = 0;
     ov13_0224DF30.eventRead = 0;
     for (i = 0; i < 4; i++) {
-        ov13_0224DFB4[i] = 0;
+        gWifiSetupLinkEventQueue[i] = 0;
     }
     OS_RestoreInterrupts(irq);
 }
@@ -436,7 +436,7 @@ u32 WifiSetupLink_PopEvent(void) {
     if (ov13_0224DF30.eventWrite == read) {
         result = 0;
     } else {
-        result = ov13_0224DFB4[read];
+        result = gWifiSetupLinkEventQueue[read];
         ov13_0224DF30.eventRead = read + 1;
         if (ov13_0224DF30.eventRead >= 4) {
             ov13_0224DF30.eventRead = 0;
@@ -452,7 +452,7 @@ void WifiSetupLink_PushEvent(u32 event, int unused) {
     int read = ov13_0224DF30.eventRead;
     int next = write + 1;
     if (next != read && write != read + 3) {
-        ov13_0224DFB4[write] = event;
+        gWifiSetupLinkEventQueue[write] = event;
         ov13_0224DF30.eventWrite = next;
         if (next >= 4) {
             ov13_0224DF30.eventWrite = 0;
@@ -583,7 +583,7 @@ int WifiSetupLink_ConnectSelectedAp(void) {
     OS_CreateAlarm(&alarm);
     OS_SetAlarm(&alarm, 0x3FEC42, (OSAlarmHandler)WifiSetupLink_PostEvent, (void *)18);
     do {
-        if (WifiSetup_GetMilliseconds() >= ov13_02245A58.deadline) {
+        if (WifiSetup_GetMilliseconds() >= gWifiSetupConfig.deadline) {
             result = -3;
             break;
         }
@@ -623,7 +623,7 @@ int WifiSetupLink_ConnectSelectedAp(void) {
     while (WifiSetupLink_PopEvent()) {}
     if (result > 0) {
         ov13_0224DF30.connected = 1;
-        if (SOC_Startup(ov13_02245A6C) < 0) {
+        if (SOC_Startup(sWifiSetupLinkSocConfig) < 0) {
             result = -2;
         } else {
             ov13_0224DF30.socketStarted = 1;

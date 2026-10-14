@@ -14,612 +14,612 @@
 
 	.rodata
 
-_020FCBD8:
+sWalkOnSpotFastMovements:
 	.word 0x00000024
 	.word 0x00000025
 	.word 0x00000026
 	.word 0x00000027
 
-_020FCBE8:
+sJumpNearFastMovements:
 	.word 0x00000034
 	.word 0x00000035
 	.word 0x00000036
 	.word 0x00000037
 
-_020FCBF8:
+sJumpFartherMovements:
 	.word 0x0000005E
 	.word 0x0000005F
 	.word 0x0000005E
 	.word 0x0000005F
 
-_020FCC08:
+sWalkOnSpotFasterMovements:
 	.word 0x00000028
 	.word 0x00000029
 	.word 0x0000002A
 	.word 0x0000002B
 
-_020FCC18:
+sJumpNearSlowMovements:
 	.word 0x0000005C
 	.word 0x0000005D
 	.word 0x0000005C
 	.word 0x0000005D
 
-_020FCC28:
+sWalkOnSpotNormalMovements:
 	.word 0x00000020
 	.word 0x00000021
 	.word 0x00000022
 	.word 0x00000023
 
-_020FCC38:
+sWalkSlightlyFastMovements:
 	.word 0x0000004C
 	.word 0x0000004D
 	.word 0x0000004E
 	.word 0x0000004F
 
-_020FCC48:
+sWalkFastestMovements:
 	.word 0x00000054
 	.word 0x00000055
 	.word 0x00000056
 	.word 0x00000057
 
-_020FCC58:
+sJumpOnSpotFastMovements:
 	.word 0x00000030
 	.word 0x00000031
 	.word 0x00000032
 	.word 0x00000033
 
-_020FCC68:
+sRunMovements:
 	.word 0x00000058
 	.word 0x00000059
 	.word 0x0000005A
 	.word 0x0000005B
 
-_020FCC78:
+sWalkOnSpotSlowMovements:
 	.word 0x0000001C
 	.word 0x0000001D
 	.word 0x0000001E
 	.word 0x0000001F
 
-_020FCC88:
+sJumpFarMovements:
 	.word 0x00000038
 	.word 0x00000039
 	.word 0x0000003A
 	.word 0x0000003B
 
-_020FCC98:
+sWalkOnSpotSlowerMovements:
 	.word 0x00000018
 	.word 0x00000019
 	.word 0x0000001A
 	.word 0x0000001B
 
-_020FCCA8:
+sWalkFastMovements:
 	.word 0x00000010
 	.word 0x00000011
 	.word 0x00000012
 	.word 0x00000013
 
-_020FCCB8:
+sWalkFasterMovements:
 	.word 0x00000014
 	.word 0x00000015
 	.word 0x00000016
 	.word 0x00000017
 
-_020FCCC8:
+sWalkEverSoSlightlyFastMovements:
 	.word 0x00000060
 	.word 0x00000061
 	.word 0x00000062
 	.word 0x00000063
 
-_020FCCD8:
+sWalkSlightlyFasterMovements:
 	.word 0x00000050
 	.word 0x00000051
 	.word 0x00000052
 	.word 0x00000053
 
-_020FCCE8:
+sWalkNormalMovements:
 	.word 0x0000000C
 	.word 0x0000000D
 	.word 0x0000000E
 	.word 0x0000000F
 
-_020FCCF8:
+sFaceMovements:
 	.word 0x00000000
 	.word 0x00000001
 	.word 0x00000002
 	.word 0x00000003
 
-_020FCD08:
+sWalkSlowerMovements:
 	.word 0x00000004
 	.word 0x00000005
 	.word 0x00000006
 	.word 0x00000007
 
-_020FCD18:
+sWalkSlowMovements:
 	.word 0x00000008
 	.word 0x00000009
 	.word 0x0000000A
 	.word 0x0000000B
 
-_020FCD28:
+sJumpOnSpotSlowMovements:
 	.word 0x0000002C
 	.word 0x0000002D
 	.word 0x0000002E
 	.word 0x0000002F
 
-_020FCD38:
+sHiddenObjectCover1MovementCallbacks:
 	.word 0x00000034
 	.word HiddenObjectMovement_InitCover1
 	.word HiddenObjectMovement_Update
 	.word HiddenObjectMovement_Delete
 	.word HiddenObjectMovement_Resume
 
-_020FCD4C:
+sPathTable15MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable15
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCD60:
+sHiddenObjectCover3MovementCallbacks:
 	.word 0x00000036
 	.word HiddenObjectMovement_InitCover3
 	.word HiddenObjectMovement_Update
 	.word HiddenObjectMovement_Delete
 	.word HiddenObjectMovement_Resume
 
-_020FCD74:
+sFollowPlayer55MovementCallbacks:
 	.word 0x00000003
 	.word FollowPlayerMovement_Init
 	.word FollowPlayerMovement_Update
 	.word FollowPlayerMovement_Delete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCD88:
+sPathTable14MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable14
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCD9C:
+sHiddenObjectCover2MovementCallbacks:
 	.word 0x00000035
 	.word HiddenObjectMovement_InitCover2
 	.word HiddenObjectMovement_Update
 	.word HiddenObjectMovement_Delete
 	.word HiddenObjectMovement_Resume
 
-_020FCDB0:
+sSpinClockwiseMovementCallbacks:
 	.word 0x00000003
 	.word SpinMovement_InitClockwise
 	.word SpinMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCDC4:
+sHiddenObjectCover0MovementCallbacks:
 	.word 0x00000033
 	.word HiddenObjectMovement_InitCover0
 	.word HiddenObjectMovement_Update
 	.word HiddenObjectMovement_Delete
 	.word HiddenObjectMovement_Resume
 
-_020FCDD8:
+sPathTable19MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable19
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCDEC:
+sFollowPlayer56MovementCallbacks:
 	.word 0x00000003
 	.word FollowPlayerMovement_Init
 	.word FollowPlayerMovement_UpdateMirror
 	.word FollowPlayerMovement_Delete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCE00:
+sPathTable20MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable20
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCE14:
+sPathTable21MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable21
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCE28:
+sPathTable22MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable22
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCE3C:
+sPathTable23MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable23
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCE50:
+sPathTable25MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable25
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCE64:
+sPathTable26MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable26
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCE78:
+sPathTable27MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable27
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCE8C:
+sPathTable28MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable28
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCEA0:
+sPathTable29MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable29
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCEB4:
+sPathTable30MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable30
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCEC8:
+sNoMovementCallbacks:
 	.word 0
 	.word MapObjectMovement_NoOpInit
 	.word MapObjectMovement_NoOpUpdate
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCEDC:
+sPlayerMovementCallbacks:
 	.word 0x00000001
 	.word MapObjectMovement_NoOpInit
 	.word MapObjectMovement_NoOpUpdate
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCEF0:
+sPathTable31MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable31
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCF04:
+sPathTable24MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable24
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCF18:
+sPathTable32MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable32
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCF2C:
+sRandomWalkLeftRightMovementCallbacks:
 	.word 0x00000003
 	.word RandomWalkMovement_InitLeftRight
 	.word RandomWalkMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCF40:
+sPathTable33MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable33
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCF54:
+sPathTable34MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable34
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCF68:
+sRandomLookDownLeftMovementCallbacks:
 	.word 0x00000003
 	.word RandomLookMovement_InitDownLeft
 	.word RandomLookMovement_Update
 	.word RandomLookMovement_Delete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCF7C:
+sPathTable18MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable18
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCF90:
+sPathTable17MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable17
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCFA4:
+sPathTable16MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable16
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCFB8:
+sRandomLookDownRightMovementCallbacks:
 	.word 0x00000003
 	.word RandomLookMovement_InitDownRight
 	.word RandomLookMovement_Update
 	.word RandomLookMovement_Delete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCFCC:
+sPathTable35MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable35
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCFE0:
+sBackAndForthMovementCallbacks:
 	.word 0x00000003
 	.word BackAndForthMovement_Init
 	.word BackAndForthMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FCFF4:
+sAlternatingSpinMovementCallbacks:
 	.word 0x00000003
 	.word AlternatingSpinMovement_Init
 	.word AlternatingSpinMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FD008:
+sPathTable36MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable36
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FD01C:
+sSpinCounterclockwiseMovementCallbacks:
 	.word 0x00000003
 	.word SpinMovement_InitCounterclockwise
 	.word SpinMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FD030:
+sFaceDirectionRightMovementCallbacks:
 	.word 0x00000003
 	.word FaceDirectionMovement_InitRight
 	.word FaceDirectionMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FD044:
+sFaceDirectionLeftMovementCallbacks:
 	.word 0x00000003
 	.word FaceDirectionMovement_InitLeft
 	.word FaceDirectionMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FD058:
+sRandomLookDownLeftRightMovementCallbacks:
 	.word 0x00000003
 	.word RandomLookMovement_InitDownLeftRight
 	.word RandomLookMovement_Update
 	.word RandomLookMovement_Delete
 	.word MapObjectMovement_NoOpRestore
 
-_020FD06C:
+sPathTable37MovementCallbacks:
 	.word 0x00000003
 	.word PathMovement_InitTable37
 	.word PathMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FD080:
+sRandomLookUpDownMovementCallbacks:
 	.word 0x00000003
 	.word RandomLookMovement_InitUpDown
 	.word RandomLookMovement_Update
 	.word RandomLookMovement_Delete
 	.word MapObjectMovement_NoOpRestore
 
-_020FD094:
+sRandomLookLeftRightMovementCallbacks:
 	.word 0x00000003
 	.word RandomLookMovement_InitLeftRight
 	.word RandomLookMovement_Update
 	.word RandomLookMovement_Delete
 	.word MapObjectMovement_NoOpRestore
 
-_020FD0A8:
+sFollowPlayer48MovementCallbacks:
 	.word 0x00000003
 	.word FollowPlayerMovement_Init
 	.word FollowPlayerMovement_UpdateFollowMon
 	.word FollowPlayerMovement_Delete
 	.word MapObjectMovement_NoOpRestore
 
-_020FD0BC:
+sRandomLookUpLeftRightMovementCallbacks:
 	.word 0x00000003
 	.word RandomLookMovement_InitUpLeftRight
 	.word RandomLookMovement_Update
 	.word RandomLookMovement_Delete
 	.word MapObjectMovement_NoOpRestore
 
-_020FD0D0:
+sRandomLookUpDownRightMovementCallbacks:
 	.word 0x00000003
 	.word RandomLookMovement_InitUpDownRight
 	.word RandomLookMovement_Update
 	.word RandomLookMovement_Delete
 	.word MapObjectMovement_NoOpRestore
 
-_020FD0E4:
+sRandomLookUpDownLeftMovementCallbacks:
 	.word 0x00000003
 	.word RandomLookMovement_InitUpDownLeft
 	.word RandomLookMovement_Update
 	.word RandomLookMovement_Delete
 	.word MapObjectMovement_NoOpRestore
 
-_020FD0F8:
+sFaceDirectionUpMovementCallbacks:
 	.word 0x00000003
 	.word FaceDirectionMovement_InitUp
 	.word FaceDirectionMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FD10C:
+sFaceDirectionDownMovementCallbacks:
 	.word 0x00000003
 	.word FaceDirectionMovement_InitDown
 	.word FaceDirectionMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FD120:
+sRandomLookUpRightMovementCallbacks:
 	.word 0x00000003
 	.word RandomLookMovement_InitUpRight
 	.word RandomLookMovement_Update
 	.word RandomLookMovement_Delete
 	.word MapObjectMovement_NoOpRestore
 
-_020FD134:
+sRandomLookUpLeftMovementCallbacks:
 	.word 0x00000003
 	.word RandomLookMovement_InitUpLeft
 	.word RandomLookMovement_Update
 	.word RandomLookMovement_Delete
 	.word MapObjectMovement_NoOpRestore
 
-_020FD148:
+sFollowPartnerMovementCallbacks:
 	.word 0x00000003
 	.word FollowPartnerMovement_Init
 	.word FollowPartnerMovement_Update
 	.word FollowPartnerMovement_Delete
 	.word FollowPartnerMovement_Resume
 
-_020FD15C:
+sRandomWalkUpDownMovementCallbacks:
 	.word 0x00000003
 	.word RandomWalkMovement_InitUpDown
 	.word RandomWalkMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FD170:
+sRandomWalkAnyDirectionMovementCallbacks:
 	.word 0x00000003
 	.word RandomWalkMovement_InitAnyDirection
 	.word RandomWalkMovement_Update
 	.word MapObjectMovement_NoOpDelete
 	.word MapObjectMovement_NoOpRestore
 
-_020FD184:
+sRandomLookAnyDirectionMovementCallbacks:
 	.word 0x00000002
 	.word RandomLookMovement_InitAnyDirection
 	.word RandomLookMovement_Update
 	.word RandomLookMovement_Delete
 	.word MapObjectMovement_NoOpRestore
-_020FD198:
-	.word _020FCCF8
-	.word _020FCD08
-	.word _020FCD18
-	.word _020FCCE8
-	.word _020FCCA8
-	.word _020FCCB8
-	.word _020FCC98
-	.word _020FCC78
-	.word _020FCC28
-	.word _020FCBD8
-	.word _020FCC08
-	.word _020FCD28
-	.word _020FCC58
-	.word _020FCBE8
-	.word _020FCC88
-	.word _020FCC38
-	.word _020FCCD8
-	.word _020FCC48
-	.word _020FCC68
-	.word _020FCC18
-	.word _020FCBF8
-	.word _020FCCC8
+sMovementsByDirection:
+	.word sFaceMovements
+	.word sWalkSlowerMovements
+	.word sWalkSlowMovements
+	.word sWalkNormalMovements
+	.word sWalkFastMovements
+	.word sWalkFasterMovements
+	.word sWalkOnSpotSlowerMovements
+	.word sWalkOnSpotSlowMovements
+	.word sWalkOnSpotNormalMovements
+	.word sWalkOnSpotFastMovements
+	.word sWalkOnSpotFasterMovements
+	.word sJumpOnSpotSlowMovements
+	.word sJumpOnSpotFastMovements
+	.word sJumpNearFastMovements
+	.word sJumpFarMovements
+	.word sWalkSlightlyFastMovements
+	.word sWalkSlightlyFasterMovements
+	.word sWalkFastestMovements
+	.word sRunMovements
+	.word sJumpNearSlowMovements
+	.word sJumpFartherMovements
+	.word sWalkEverSoSlightlyFastMovements
 	.word 0
 	.public gMapObjectMovementCallbacks
 gMapObjectMovementCallbacks:
-	.word _020FCEC8
-	.word _020FCEDC
-	.word _020FD184
-	.word _020FD170
-	.word _020FD15C
-	.word _020FCF2C
-	.word _020FD134
-	.word _020FD120
-	.word _020FCF68
-	.word _020FCFB8
-	.word _020FD0E4
-	.word _020FD0D0
-	.word _020FD0BC
-	.word _020FD058
-	.word _020FD0F8
-	.word _020FD10C
-	.word _020FD044
-	.word _020FD030
-	.word _020FD01C
-	.word _020FCDB0
-	.word _020FCFE0
-	.word _020FCD88
-	.word _020FCD4C
-	.word _020FCFA4
-	.word _020FCF90
-	.word _020FCF7C
-	.word _020FCDD8
-	.word _020FCE00
-	.word _020FCE14
-	.word _020FCE28
-	.word _020FCE3C
-	.word _020FCF04
-	.word _020FCE50
-	.word _020FCE64
-	.word _020FCE78
-	.word _020FCE8C
-	.word _020FCEA0
-	.word _020FCEB4
-	.word _020FCEF0
-	.word _020FCF18
-	.word _020FCF40
-	.word _020FCF54
-	.word _020FCFCC
-	.word _020FD008
-	.word _020FD06C
-	.word _020FD080
-	.word _020FD094
+	.word sNoMovementCallbacks
+	.word sPlayerMovementCallbacks
+	.word sRandomLookAnyDirectionMovementCallbacks
+	.word sRandomWalkAnyDirectionMovementCallbacks
+	.word sRandomWalkUpDownMovementCallbacks
+	.word sRandomWalkLeftRightMovementCallbacks
+	.word sRandomLookUpLeftMovementCallbacks
+	.word sRandomLookUpRightMovementCallbacks
+	.word sRandomLookDownLeftMovementCallbacks
+	.word sRandomLookDownRightMovementCallbacks
+	.word sRandomLookUpDownLeftMovementCallbacks
+	.word sRandomLookUpDownRightMovementCallbacks
+	.word sRandomLookUpLeftRightMovementCallbacks
+	.word sRandomLookDownLeftRightMovementCallbacks
+	.word sFaceDirectionUpMovementCallbacks
+	.word sFaceDirectionDownMovementCallbacks
+	.word sFaceDirectionLeftMovementCallbacks
+	.word sFaceDirectionRightMovementCallbacks
+	.word sSpinCounterclockwiseMovementCallbacks
+	.word sSpinClockwiseMovementCallbacks
+	.word sBackAndForthMovementCallbacks
+	.word sPathTable14MovementCallbacks
+	.word sPathTable15MovementCallbacks
+	.word sPathTable16MovementCallbacks
+	.word sPathTable17MovementCallbacks
+	.word sPathTable18MovementCallbacks
+	.word sPathTable19MovementCallbacks
+	.word sPathTable20MovementCallbacks
+	.word sPathTable21MovementCallbacks
+	.word sPathTable22MovementCallbacks
+	.word sPathTable23MovementCallbacks
+	.word sPathTable24MovementCallbacks
+	.word sPathTable25MovementCallbacks
+	.word sPathTable26MovementCallbacks
+	.word sPathTable27MovementCallbacks
+	.word sPathTable28MovementCallbacks
+	.word sPathTable29MovementCallbacks
+	.word sPathTable30MovementCallbacks
+	.word sPathTable31MovementCallbacks
+	.word sPathTable32MovementCallbacks
+	.word sPathTable33MovementCallbacks
+	.word sPathTable34MovementCallbacks
+	.word sPathTable35MovementCallbacks
+	.word sPathTable36MovementCallbacks
+	.word sPathTable37MovementCallbacks
+	.word sRandomLookUpDownMovementCallbacks
+	.word sRandomLookLeftRightMovementCallbacks
 	.word 0
-	.word _020FD0A8
-	.word _020FCFF4
-	.word _020FD148
-	.word _020FCDC4
-	.word _020FCD38
-	.word _020FCD9C
-	.word _020FCD60
-	.word _020FCD74
-	.word _020FCDEC
+	.word sFollowPlayer48MovementCallbacks
+	.word sAlternatingSpinMovementCallbacks
+	.word sFollowPartnerMovementCallbacks
+	.word sHiddenObjectCover0MovementCallbacks
+	.word sHiddenObjectCover1MovementCallbacks
+	.word sHiddenObjectCover2MovementCallbacks
+	.word sHiddenObjectCover3MovementCallbacks
+	.word sFollowPlayer55MovementCallbacks
+	.word sFollowPlayer56MovementCallbacks
 gMovementCmdTable:
 	.word gMovementCmdSteps_000
 	.word gMovementCmdSteps_001

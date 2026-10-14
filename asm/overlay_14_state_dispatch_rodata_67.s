@@ -544,7 +544,7 @@
 	.public _021EA91C
 	.public _021EA920
 	.public _021EA924
-	.public _021EA940
+	.public sNintendoWfcUnusedGlobal
 	.public _021EA94E
 	.public _021EA970
 	.public _021EA98A

@@ -28,7 +28,7 @@ extern const u16 sWobbuffetPopBonusTargetAnims[];
 extern const u16 sWobbuffetPopSubObjColorIndices[];
 extern const u16 sWobbuffetPopSubObjPaletteBases[];
 extern u32 (*const sWobbuffetPopBonusTargetStateFuncs[])(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target);
-extern const s32 ov93_02262CA4[];
+extern const s32 sWobbuffetPopPuffBonusFactors[];
 extern const s16 sWobbuffetPopSeatPositions[][2];
 extern const s16 sWobbuffetPopSeatPositionsY[][2];
 extern const u8 sWobbuffetPopRingSpeedSteps[];
@@ -389,7 +389,7 @@ BOOL WobbuffetPopPuff_Move(WobbuffetPop *game, WobbuffetPopPuff *puff) {
             ManagedSprite_SetAffineScale(puff->sprite, scale, scale);
         }
     } else if (remaining > -14) {
-        value = (-remaining * ov93_02262CA4[puff->bonus]) / 14;
+        value = (-remaining * sWobbuffetPopPuffBonusFactors[puff->bonus]) / 14;
         if (value < (1 << 10)) {
             value = 1 << 10;
         }

@@ -24,12 +24,12 @@ typedef struct VsRecorderSchemeTable {
 } VsRecorderSchemeTable;
 
 // per colour scheme (VsRecorderWork.colorScheme)
-extern const u32 ov40_02244E40[7];
-extern const u32 ov40_02244E5C[7]; // blend colour
-extern const u32 ov40_02244E78[7]; // BG palette file
-extern const u32 ov40_02244E94[7];
-extern const u32 ov40_02244EB0[7]; // BG frame palette file
-extern const u32 ov40_02244ECC[7]; // OBJ palette file
+extern const u32 sVsRecorderSchemeFileIds1[7];
+extern const u32 sVsRecorderSchemeBlendColors[7]; // blend colour
+extern const u32 sVsRecorderSchemeBgPaletteFiles[7]; // BG palette file
+extern const u32 sVsRecorderSchemeMenuBlendColors[7];
+extern const u32 sVsRecorderSchemeBgFramePaletteFiles[7]; // BG frame palette file
+extern const u32 sVsRecorderSchemeObjPaletteFiles[7]; // OBJ palette file
 
 void OrbitCursor_ReloadPalette(void *banner, int colorScheme);
 
@@ -365,12 +365,12 @@ MessageFormat *VsRecorder_NewMessageFormat(enum HeapID heapID) {
 }
 
 u32 VsRecorder_GetBlendColor(VsRecorderWork *work) {
-    VsRecorderSchemeTable table = *(const VsRecorderSchemeTable *)ov40_02244E5C;
+    VsRecorderSchemeTable table = *(const VsRecorderSchemeTable *)sVsRecorderSchemeBlendColors;
     return table.values[work->colorScheme];
 }
 
 u32 VsRecorder_GetMenuBlendColor(VsRecorderWork *work) {
-    VsRecorderSchemeTable table = *(const VsRecorderSchemeTable *)ov40_02244E94;
+    VsRecorderSchemeTable table = *(const VsRecorderSchemeTable *)sVsRecorderSchemeMenuBlendColors;
     if (work->mode != 0) {
         return 0x7E05;
     }
@@ -379,10 +379,10 @@ u32 VsRecorder_GetMenuBlendColor(VsRecorderWork *work) {
 
 // NARC_a_1_9_1 palette file of the colour scheme: 0 BG frame, 1 ?, 2 OBJ, 3 BG
 u32 VsRecorder_GetSchemeFileId(VsRecorderWork *work, u32 kind) {
-    VsRecorderSchemeTable bgFrame = *(const VsRecorderSchemeTable *)ov40_02244EB0;
-    VsRecorderSchemeTable b = *(const VsRecorderSchemeTable *)ov40_02244E40;
-    VsRecorderSchemeTable obj = *(const VsRecorderSchemeTable *)ov40_02244ECC;
-    VsRecorderSchemeTable bg = *(const VsRecorderSchemeTable *)ov40_02244E78;
+    VsRecorderSchemeTable bgFrame = *(const VsRecorderSchemeTable *)sVsRecorderSchemeBgFramePaletteFiles;
+    VsRecorderSchemeTable b = *(const VsRecorderSchemeTable *)sVsRecorderSchemeFileIds1;
+    VsRecorderSchemeTable obj = *(const VsRecorderSchemeTable *)sVsRecorderSchemeObjPaletteFiles;
+    VsRecorderSchemeTable bg = *(const VsRecorderSchemeTable *)sVsRecorderSchemeBgPaletteFiles;
     u32 index = work->colorScheme;
 
     switch (kind) {

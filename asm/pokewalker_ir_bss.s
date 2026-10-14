@@ -3,16 +3,16 @@
 	.include "overlay_112.inc"
 	.include "global.inc"
 
-	.public _021FF9E0
-	.public ov112_021FFA18
+	.public gPokewalkerIrLink
+	.public gPokewalkerIrPacket
 	.public ov112_021FFA20
 
 	.bss
 
-_021FF9E0:
+gPokewalkerIrLink:
 	.space 0x38
 
-ov112_021FFA18: ; 0x021FFA18
+gPokewalkerIrPacket: ; 0x021FFA18
 	.space 0x8
 
 ov112_021FFA20: ; 0x021FFA20

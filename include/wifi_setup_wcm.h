@@ -4,7 +4,7 @@
 #include "global.h"
 
 // Wireless connection manager (WCM_*) wrapper of the access-point setup client. The client carries
-// two copies of it: src/wifi_setup_wcm.c (first module, state ov13_0224DEE0) and
+// two copies of it: src/wifi_setup_wcm.c (first module, state gWifiSetupWcm) and
 // src/wifi_setup_link.c (second module, state inside WifiSetupWork).
 //
 // Wrapper states: 0 none, 1 initialised, 2 cleaning up, 3 idle, 4 starting up / stopping,
@@ -24,8 +24,8 @@ typedef struct WifiSetupWcmConfig {
     u32 unk_0C;     // 0x0C, always 0
 } WifiSetupWcmConfig;
 
-// ov13_0224DEE0 (0x28 bytes); followed by its search filter buffers ov13_0224DF08 (BSSID) and
-// ov13_0224DF10 (SSID)
+// gWifiSetupWcm (0x28 bytes); followed by its search filter buffers gWifiSetupWcmSearchBssid (BSSID) and
+// gWifiSetupWcmSearchSsid (SSID)
 typedef struct WifiSetupWcm {
     void *wcmWork;                        // 0x00, WCM_Init work area
     int searchOption;                     // 0x04

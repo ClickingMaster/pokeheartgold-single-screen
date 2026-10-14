@@ -5,8 +5,8 @@
 #include "pokemon_icon_idx.h"
 #include "sprite_system.h"
 
-extern const u16 ov18_021FA35A[];
-extern u8 ov18_021FA3B0[]; // width and height of each area marker shape (not const: const lets loads move out of loops)
+extern const u16 sPokedexAreaScrollbarSizeSteps[];
+extern u8 sPokedexAreaMarkerSizes[]; // width and height of each area marker shape (not const: const lets loads move out of loops)
 extern const ManagedSpriteTemplate sAreaMarkerSpriteTemplate;
 
 #pragma force_active on
@@ -49,7 +49,7 @@ void PokedexApp_UpdateTimeOfDayCursor(PokedexAppData *pokedexApp) {
 }
 
 void PokedexApp_SetupAreaListScrollbar(PokedexAppData *pokedexApp) {
-    PokedexApp_SetScrollbarSizeAnim(pokedexApp, 5, (s8)pokedexApp->areaList.areas.nMaps, ov18_021FA35A, 9);
+    PokedexApp_SetScrollbarSizeAnim(pokedexApp, 5, (s8)pokedexApp->areaList.areas.nMaps, sPokedexAreaScrollbarSizeSteps, 9);
     PokedexApp_SyncAreaScrollbar(pokedexApp);
     PokedexApp_UpdateScrollArrows(pokedexApp, pokedexApp->areaListPos, (s8)pokedexApp->areaList.areas.nMaps, 6);
 }
@@ -224,7 +224,7 @@ void PokedexApp_UpdateAreaMarkers(PokedexAppData *pokedexApp) {
             PokedexApp_SetSpriteAnim(pokedexApp, i + 8, local.marker.shape);
             PokedexApp_SetSpriteVisible(pokedexApp, i + 8, TRUE);
             {
-                u8 *size = ov18_021FA3B0 + local.marker.shape * 2;
+                u8 *size = sPokedexAreaMarkerSizes + local.marker.shape * 2;
                 int halfWidth = size[0] / 2;
                 if (local.playerX >= local.marker.x - halfWidth && local.playerX < local.marker.x + halfWidth) {
                     int halfHeight = size[1] / 2;
@@ -249,9 +249,9 @@ void PokedexApp_UpdateAreaMarkers(PokedexAppData *pokedexApp) {
             PokedexApp_SetSpriteAnim(pokedexApp, 9, local.marker.shape);
             PokedexApp_SetSpriteVisible(pokedexApp, 9, TRUE);
             {
-                int halfWidth = ov18_021FA3B0[local.marker.shape * 2] / 2;
+                int halfWidth = sPokedexAreaMarkerSizes[local.marker.shape * 2] / 2;
                 if (local.playerX >= local.marker.x - halfWidth && local.playerX < local.marker.x + halfWidth) {
-                    int halfHeight = (ov18_021FA3B0 + 1)[local.marker.shape * 2] / 2;
+                    int halfHeight = (sPokedexAreaMarkerSizes + 1)[local.marker.shape * 2] / 2;
                     if (local.playerY >= local.marker.y - halfHeight && local.playerY < local.marker.y + halfHeight) {
                         hit = TRUE;
                     }
@@ -264,9 +264,9 @@ void PokedexApp_UpdateAreaMarkers(PokedexAppData *pokedexApp) {
             PokedexApp_SetSpriteAnim(pokedexApp, 9, local.marker.shape);
             PokedexApp_SetSpriteVisible(pokedexApp, 9, TRUE);
             {
-                int halfWidth = ov18_021FA3B0[local.marker.shape * 2] / 2;
+                int halfWidth = sPokedexAreaMarkerSizes[local.marker.shape * 2] / 2;
                 if (local.playerX >= local.marker.x - halfWidth && local.playerX < local.marker.x + halfWidth) {
-                    int halfHeight = (ov18_021FA3B0 + 1)[local.marker.shape * 2] / 2;
+                    int halfHeight = (sPokedexAreaMarkerSizes + 1)[local.marker.shape * 2] / 2;
                     if (local.playerY >= local.marker.y - halfHeight && local.playerY < local.marker.y + halfHeight) {
                         hit = TRUE;
                     }
@@ -416,8 +416,8 @@ BOOL ov18_021F4974(PokedexAppData *pokedexApp, u32 start, s32 x, s32 y) {
         do {
             if (ManagedSprite_GetDrawFlag(((PokedexAppData *)walker)->sprites[0]) != FALSE) {
                 PokedexApp_GetSpritePos(pokedexApp, i, &pos[1], &pos[0], 2);
-                if (x >= pos[1] - (s32)((u32)ov18_021FA3B0[0] >> 1) && x < pos[1] + (s32)((u32)ov18_021FA3B0[0] >> 1)
-                    && y >= pos[0] - (s32)((u32)ov18_021FA3B0[1] >> 1) && y < pos[0] + (s32)((u32)ov18_021FA3B0[1] >> 1)) {
+                if (x >= pos[1] - (s32)((u32)sPokedexAreaMarkerSizes[0] >> 1) && x < pos[1] + (s32)((u32)sPokedexAreaMarkerSizes[0] >> 1)
+                    && y >= pos[0] - (s32)((u32)sPokedexAreaMarkerSizes[1] >> 1) && y < pos[0] + (s32)((u32)sPokedexAreaMarkerSizes[1] >> 1)) {
                     return TRUE;
                 }
             }

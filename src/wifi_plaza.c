@@ -108,7 +108,7 @@ WiFiPlazaWork *WiFiPlazaWork_New(SaveData *save, enum HeapID heapID) {
     WiFiPlazaProfile_InitFromSave(&work->profile, work->save, heapID);
     WiFiPlazaTalkSession_Init(&work->talk);
     WiFiPlaza_ClearTapToyPlayedFlags(work->unk_1e8);
-    WiFiPlazaLobbyClient_SetLobbyCommands(ov45_02254AC4, 8, work);
+    WiFiPlazaLobbyClient_SetLobbyCommands(sWiFiPlazaLobbyCommands, 8, work);
     WiFiPlazaEventSchedule_Init(&work->eventSchedule);
     WiFiPlazaGroups_Init(&work->groups);
     WiFiPlazaGroupWeights_Init(&work->groupWeights);

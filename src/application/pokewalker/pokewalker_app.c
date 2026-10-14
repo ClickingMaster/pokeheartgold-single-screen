@@ -27,17 +27,17 @@ typedef struct PokewalkerAppModeEntry {
     PokewalkerAppModeFunc other[2];
 } PokewalkerAppModeEntry;
 
-extern const PokewalkerAppModeEntry ov112_021FF54C[]; // enter
-extern const PokewalkerAppModeEntry ov112_021FF550[]; // update
-extern const PokewalkerAppModeEntry ov112_021FF554[]; // exit
-extern const GraphicsModes ov112_021F3684;
-extern const GraphicsBanks ov112_021F36DC;
-extern const BgTemplate ov112_021F3704;
-extern const BgTemplate ov112_021F3720;
-extern const BgTemplate ov112_021F373C;
-extern const BgTemplate ov112_021F3758;
-extern const BgTemplate ov112_021F3774;
-extern const BgTemplate ov112_021F3790;
+extern const PokewalkerAppModeEntry sPokewalkerAppModeEnter[]; // enter
+extern const PokewalkerAppModeEntry sPokewalkerAppModeUpdate[]; // update
+extern const PokewalkerAppModeEntry sPokewalkerAppModeExit[]; // exit
+extern const GraphicsModes sPokewalkerAppGraphicsModes;
+extern const GraphicsBanks sPokewalkerAppGraphicsBanks;
+extern const BgTemplate sPokewalkerAppBgTemplate_Main1;
+extern const BgTemplate sPokewalkerAppBgTemplate_Main2;
+extern const BgTemplate sPokewalkerAppBgTemplate_Main3;
+extern const BgTemplate sPokewalkerAppBgTemplate_Sub0;
+extern const BgTemplate sPokewalkerAppBgTemplate_Sub1;
+extern const BgTemplate sPokewalkerAppBgTemplate_Sub2;
 BOOL PokewalkerApp_Init(OverlayManager *manager, int *state) {
     PokewalkerApp *app;
     Main_SetVBlankIntrCB(NULL, NULL);
@@ -105,14 +105,14 @@ BOOL PokewalkerApp_Main(OverlayManager *manager, int *state) {
         }
         break;
     case 1:
-        *state = ov112_021FF54C[app->mode].func(app);
+        *state = sPokewalkerAppModeEnter[app->mode].func(app);
         break;
     case 2:
-        *state = ov112_021FF550[app->mode].func(app);
+        *state = sPokewalkerAppModeUpdate[app->mode].func(app);
         BgSetPosTextAndCommit(app->bgConfig, 5, BG_POS_OP_SET_X, app->subBgScrollX);
         break;
     case 3:
-        *state = ov112_021FF554[app->mode].func(app);
+        *state = sPokewalkerAppModeExit[app->mode].func(app);
         if (app->nextMode == 11) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_WHITE, 6, 1, HEAP_ID_154);
             *state = 4;
@@ -174,22 +174,22 @@ void PokewalkerApp_VBlankCB(void *arg) {
 #pragma force_active reset
 
 void PokewalkerApp_SetGxBanks(void) {
-    GraphicsBanks banks = ov112_021F36DC;
+    GraphicsBanks banks = sPokewalkerAppGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
 void PokewalkerApp_InitBgs(BgConfig *bgConfig) {
-    GraphicsModes modes = ov112_021F3684;
+    GraphicsModes modes = sPokewalkerAppGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    InitBgFromTemplate(bgConfig, 1, &ov112_021F3704, 0);
-    InitBgFromTemplate(bgConfig, 2, &ov112_021F3720, 0);
-    InitBgFromTemplate(bgConfig, 3, &ov112_021F373C, 0);
+    InitBgFromTemplate(bgConfig, 1, &sPokewalkerAppBgTemplate_Main1, 0);
+    InitBgFromTemplate(bgConfig, 2, &sPokewalkerAppBgTemplate_Main2, 0);
+    InitBgFromTemplate(bgConfig, 3, &sPokewalkerAppBgTemplate_Main3, 0);
     BgClearTilemapBufferAndCommit(bgConfig, 1);
     BgClearTilemapBufferAndCommit(bgConfig, 2);
     BgClearTilemapBufferAndCommit(bgConfig, 3);
-    InitBgFromTemplate(bgConfig, 4, &ov112_021F3758, 0);
-    InitBgFromTemplate(bgConfig, 5, &ov112_021F3774, 0);
-    InitBgFromTemplate(bgConfig, 6, &ov112_021F3790, 0);
+    InitBgFromTemplate(bgConfig, 4, &sPokewalkerAppBgTemplate_Sub0, 0);
+    InitBgFromTemplate(bgConfig, 5, &sPokewalkerAppBgTemplate_Sub1, 0);
+    InitBgFromTemplate(bgConfig, 6, &sPokewalkerAppBgTemplate_Sub2, 0);
     BgClearTilemapBufferAndCommit(bgConfig, 4);
     BgClearTilemapBufferAndCommit(bgConfig, 5);
     BgClearTilemapBufferAndCommit(bgConfig, 6);

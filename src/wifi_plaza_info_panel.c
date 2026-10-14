@@ -23,20 +23,20 @@
 int TypeIcon_GetPlttFile(void);
 
 // rodata of this overlay (asm/wifi_plaza_map_rodata.s)
-extern const u8 ov49_022696EC[];
-extern const s8 ov49_022696F0[];
+extern const u8 sWiFiPlazaPanelButtonScreenBases[];
+extern const s8 sWiFiPlazaPanelButtonScrollY[];
 extern const TouchscreenHitbox sWiFiPlazaPanelButtonHitbox[];
-extern u16 ov49_022696F8[];
-extern const u16 ov49_022696FC[];
-extern const u16 ov49_02269704[];
+extern u16 sWiFiPlazaCardTypeIconTileBases[];
+extern const u16 sWiFiPlazaCardMonAnimFiles[];
+extern const u16 sWiFiPlazaCardMonCellFiles[];
 extern const WindowTemplate sWiFiPlazaPanelButtonWindowTemplate;
-extern u8 ov49_02269764[];
-extern const WiFiPlazaCardMonResources ov49_02269774[];
-extern const u8 ov49_0226978C[][0x10];
+extern u8 sWiFiPlazaCardPlayerMonInfo[];
+extern const WiFiPlazaCardMonResources sWiFiPlazaCardMonResources[];
+extern const u8 sWiFiPlazaCardTypeIconTiles[][0x10];
 extern const WindowTemplate sWiFiPlazaCardWindowTemplates[];
 extern const WiFiPlazaCardAvatar sWiFiPlazaCardAvatars[];
 extern const VecFx32 sWiFiPlazaCardMonPositions[];
-extern u8 ov49_022699AC[];
+extern u8 sWiFiPlazaCardSpeciesMonInfo[];
 
 void WiFiPlazaInfoPanel_Init(WiFiPlazaInfoPanel *panel, u16 *startParams, WiFiPlazaRoomGraphics *graphics, PlayerProfile *profile, enum HeapID heapID) {
     u32 gender = PlayerProfile_GetTrainerGender(profile);
@@ -499,8 +499,8 @@ void WiFiPlazaPlayerCard_Show(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWindow *sig
 
 void WiFiPlazaPlayerCard_LoadTypeIcons(WiFiPlazaInfoPanel *unused0, WiFiPlazaPlayerCard *unused1, WiFiPlazaRoomGraphics *graphics, enum HeapID heapID, struct WiFiPlazaPlayer *player) {
     s32 i = 0;
-    u16 *tileBase = ov49_022696F8;
-    const u8(*tiles)[0x10] = ov49_0226978C;
+    u16 *tileBase = sWiFiPlazaCardTypeIconTileBases;
+    const u8(*tiles)[0x10] = sWiFiPlazaCardTypeIconTiles;
     u32 y = 2;
 
     for (; i < 2; i++) {
@@ -736,11 +736,11 @@ void WiFiPlazaPlayerCard_LoadMons(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphi
     SpriteResourcesHeader header;
 
     gender = WiFiPlazaPlayer_GetGender(myPlayer);
-    res = ov49_02269774;
+    res = sWiFiPlazaCardMonResources;
     i = 0;
-    cell = ov49_02269704;
+    cell = sWiFiPlazaCardMonCellFiles;
     cursor = card;
-    anim = ov49_022696FC;
+    anim = sWiFiPlazaCardMonAnimFiles;
     for (; i < 4; i++) {
         if (i == 2) {
             if (gender == 1) {
@@ -833,9 +833,9 @@ void WiFiPlazaPlayerCard_FreeMons(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphi
 
 const WiFiPlazaCardMonInfo *WiFiPlazaPlayerCard_GetMonInfo(int species, int form, int version, int gender) {
     if (form == version) {
-        return (const WiFiPlazaCardMonInfo *)(ov49_02269764 + gender * 8);
+        return (const WiFiPlazaCardMonInfo *)(sWiFiPlazaCardPlayerMonInfo + gender * 8);
     }
-    return (const WiFiPlazaCardMonInfo *)(ov49_022699AC + species * 8);
+    return (const WiFiPlazaCardMonInfo *)(sWiFiPlazaCardSpeciesMonInfo + species * 8);
 }
 
 void WiFiPlazaPanelButton_Init(WiFiPlazaPanelButton *button, WiFiPlazaRoomGraphics *graphics, NARC *narc, enum HeapID heapID) {
@@ -937,9 +937,9 @@ void WiFiPlazaPanelButton_Draw(WiFiPlazaPanelButton *button, WiFiPlazaRoomGraphi
     CopyToBgTilemapRect(graphics->bgConfig, GF_BG_LYR_SUB_1, 0, 3, 32, 21, button->screens[index]->rawData, 0, 3, 32, 32);
     ScheduleBgTilemapBufferTransfer(graphics->bgConfig, GF_BG_LYR_SUB_1);
     if (button->instrumentMode == TRUE) {
-        WiFiPlazaInfoPanel_LoadScreen(graphics, narc, ov49_022696EC[index] + button->graphic * 2 + 96, GF_BG_LYR_SUB_2, 320, heapID);
+        WiFiPlazaInfoPanel_LoadScreen(graphics, narc, sWiFiPlazaPanelButtonScreenBases[index] + button->graphic * 2 + 96, GF_BG_LYR_SUB_2, 320, heapID);
     }
-    ScheduleSetBgPosText(graphics->bgConfig, GF_BG_LYR_SUB_2, BG_POS_OP_SET_Y, ov49_022696F0[index]);
+    ScheduleSetBgPosText(graphics->bgConfig, GF_BG_LYR_SUB_2, BG_POS_OP_SET_Y, sWiFiPlazaPanelButtonScrollY[index]);
 }
 
 #pragma force_active reset

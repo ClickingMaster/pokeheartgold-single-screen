@@ -545,7 +545,7 @@
 	.public _021E7ADC
 	.public _021E7AEC
 	.public _021E7AF0
-	.public _0221602C
+	.public sWifiConnectionAnybodyMatchParams
 	.public gWifiMatchFilterFormat
 	.public gWifiGameName
 	.public gWifiSecretKey
@@ -682,7 +682,7 @@
 .text
 	.rodata
 
-_0221602C:
+sWifiConnectionAnybodyMatchParams:
 	.byte 0x01, 0x02, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 	.balign 4, 0

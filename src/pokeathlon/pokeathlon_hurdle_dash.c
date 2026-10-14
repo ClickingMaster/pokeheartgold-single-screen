@@ -86,20 +86,20 @@ void PokeathlonHurdleDashDust_CreateSprites(void *lanes, void *scene, int priori
 void PokeathlonHurdleDashDust_Free(void *lanes);
 void PokeathlonEvent_CalcPoints(void *gfx, int event);
 
-extern const PokeathlonHurdleDashSceneConfig ov96_0221C404;
-extern const PokeathlonHurdleDashNumberX ov96_0221C410;
-extern const u8 ov96_0221C3F4[8];
-extern const u8 ov96_0221C3EC[8];
-extern const GraphicsModes ov96_0221C434;
-extern const BgTemplate ov96_0221C454;
-extern const BgTemplate ov96_0221C470;
-extern const BgTemplate ov96_0221C48C;
-extern const BgTemplate ov96_0221C4A8;
-extern const BgTemplate ov96_0221C4C4;
-extern const BgTemplate ov96_0221C4E0;
-extern const BgTemplate ov96_0221C4FC;
-extern const BgTemplate ov96_0221C518;
-extern const GraphicsBanks ov96_0221C534;
+extern const PokeathlonHurdleDashSceneConfig sHurdleDashSceneConfig;
+extern const PokeathlonHurdleDashNumberX sHurdleDashNumberX;
+extern const u8 sHurdleDashTimerDigitX[8];
+extern const u8 sHurdleDashTimerDigitAnims[8];
+extern const GraphicsModes sHurdleDashGraphicsModes;
+extern const BgTemplate sHurdleDashBgTemplate_Sub0;
+extern const BgTemplate sHurdleDashBgTemplate_Sub1;
+extern const BgTemplate sHurdleDashBgTemplate_Main0;
+extern const BgTemplate sHurdleDashBgTemplate_Main1;
+extern const BgTemplate sHurdleDashBgTemplate_Main2;
+extern const BgTemplate sHurdleDashBgTemplate_Main3;
+extern const BgTemplate sHurdleDashBgTemplate_Sub3;
+extern const BgTemplate sHurdleDashBgTemplate_Sub2;
+extern const GraphicsBanks sHurdleDashGraphicsBanks;
 
 BOOL PokeathlonHurdleDash_Start(PokeathlonCourseData *course) {
     PokeathlonCourse_SetStateField07(course, 1);
@@ -274,7 +274,7 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
         break;
     }
     case 1:
-        sceneConfig = ov96_0221C404;
+        sceneConfig = sHurdleDashSceneConfig;
         hurdleDash->scene = PokeathlonCourseSpritePool_New(hurdleDash->heapId, &sceneConfig);
         PokeathlonCourseSpritePool_SetSurfaceCoords(hurdleDash->scene, 0, FX32_CONST(272), 0, 0);
         PokeathlonCourseSpritePool_SetResourceId(hurdleDash->scene, 0, 101);
@@ -333,11 +333,11 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
         for (i = 0; i < 6; i++) {
             hurdleDash->sprites[i] = PokeathlonCourse_CreateTimerDigitSprite(hurdleDash->spriteResources, PokeathlonCourseSpritePool_GetSpriteList(hurdleDash->scene), 0, hurdleDash->heapId);
             Sprite_SetDrawFlag(hurdleDash->sprites[i], TRUE);
-            spritePos.x = ov96_0221C3F4[i] << FX32_SHIFT;
+            spritePos.x = sHurdleDashTimerDigitX[i] << FX32_SHIFT;
             spritePos.y = FX32_CONST(456);
             spritePos.z = 0;
             Sprite_SetMatrix(hurdleDash->sprites[i], &spritePos);
-            Sprite_SetAnimCtrlSeq(hurdleDash->sprites[i], ov96_0221C3EC[i]);
+            Sprite_SetAnimCtrlSeq(hurdleDash->sprites[i], sHurdleDashTimerDigitAnims[i]);
         }
         PokeathlonHurdleDashDust_CreateSprites(hurdleDash->dust, hurdleDash->scene, 1);
         hurdleDash->standings = PokeathlonHurdleDashStandings_New(hurdleDash->heapId);
@@ -407,7 +407,7 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
         u8 *dataCopy;
         PokeathlonHurdleDashTrack_CreateHurdleSprites(hurdleDash->track, hurdleDash->scene);
         Sprite_SetDrawPriority(*PokeathlonCourse_CreateHudSpritesInPool(course, 272, hurdleDash->spriteResources, hurdleDash->scene), 1);
-        numberX = ov96_0221C410;
+        numberX = sHurdleDashNumberX;
         ReadWholeNarcMemberByIdPair(&params, NARC_a_1_7_0, 10);
         ReadWholeNarcMemberByIdPair(&table, NARC_a_1_7_0, 0);
         {
@@ -517,50 +517,50 @@ BOOL PokeathlonHurdleDash_Exit(PokeathlonCourseData *course) {
 }
 
 void PokeathlonHurdleDash_SetGfxBanks(void) {
-    GraphicsBanks banks = ov96_0221C534;
+    GraphicsBanks banks = sHurdleDashGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
 void PokeathlonHurdleDash_InitBgs(BgConfig *bgConfig) {
-    GraphicsModes modes = ov96_0221C434;
+    GraphicsModes modes = sHurdleDashGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     {
-        BgTemplate bg = ov96_0221C48C;
+        BgTemplate bg = sHurdleDashBgTemplate_Main0;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &bg, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
     }
     {
-        BgTemplate bg = ov96_0221C4A8;
+        BgTemplate bg = sHurdleDashBgTemplate_Main1;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &bg, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
     }
     {
-        BgTemplate bg = ov96_0221C4C4;
+        BgTemplate bg = sHurdleDashBgTemplate_Main2;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &bg, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
     }
     {
-        BgTemplate bg = ov96_0221C4E0;
+        BgTemplate bg = sHurdleDashBgTemplate_Main3;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &bg, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
     }
     {
-        BgTemplate bg = ov96_0221C454;
+        BgTemplate bg = sHurdleDashBgTemplate_Sub0;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &bg, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
     }
     {
-        BgTemplate bg = ov96_0221C470;
+        BgTemplate bg = sHurdleDashBgTemplate_Sub1;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &bg, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
     }
     {
-        BgTemplate bg = ov96_0221C518;
+        BgTemplate bg = sHurdleDashBgTemplate_Sub2;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &bg, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_2);
     }
     {
-        BgTemplate bg = ov96_0221C4FC;
+        BgTemplate bg = sHurdleDashBgTemplate_Sub3;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_3, &bg, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_3);
     }

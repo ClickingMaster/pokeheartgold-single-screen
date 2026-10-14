@@ -36,7 +36,7 @@ typedef struct WifiSetupApEntryList {
     WifiSetupApEntry entries[];
 } WifiSetupApEntryList;
 
-// ov13_0224DF30 (0x80 bytes, up to ov13_0224DFB0)
+// ov13_0224DF30 (0x80 bytes, up to gWifiSetupLinkEventCallback)
 typedef struct WifiSetupWork {
     u8 unk_00;                           // 0x00, sent as record 0x301
     u8 unk_01[3];                        // 0x01
@@ -65,7 +65,7 @@ typedef struct WifiSetupWork {
     WifiSetupApInfo *apList;             // 0x5C, room for apListCount entries
     int searchOption;                    // 0x60
     s32 active;                          // 0x64
-    int eventWrite;                      // 0x68, ov13_0224DFB4 queue
+    int eventWrite;                      // 0x68, gWifiSetupLinkEventQueue queue
     int eventRead;                       // 0x6C
     int apListCount;                     // 0x70
     s32 resultReady;                     // 0x74
@@ -73,7 +73,7 @@ typedef struct WifiSetupWork {
     void (*statusCallback)(s32 *status); // 0x7C, receives {state, ms left, error}
 } WifiSetupWork;
 
-// ov13_02245A58
+// gWifiSetupConfig
 typedef struct WifiSetupConfig {
     u8 *packetBuffer;    // 0x00
     BOOL debug;          // 0x04
@@ -90,8 +90,8 @@ typedef struct WifiSetupMd5Context {
 } WifiSetupMd5Context;
 
 extern WifiSetupWork ov13_0224DF30;
-extern WifiSetupConfig ov13_02245A58;
-extern OSThread ov13_0224DFDC;
+extern WifiSetupConfig gWifiSetupConfig;
+extern OSThread gWifiSetupThread;
 
 // result block handed to the caller (WifiSetup_GetSimpleStartResult)
 typedef struct WifiSetupResult {
@@ -100,7 +100,7 @@ typedef struct WifiSetupResult {
 
 extern WifiSetupResult ov13_0224E09C;
 
-extern const u8 ov13_02245AD8[]; // MD5 padding
+extern const u8 sWifiSetupMd5Padding[]; // MD5 padding
 
 // wifi_setup_link.c
 void WifiSetupLink_HandleEvent(WifiSetupWcmEvent *event);

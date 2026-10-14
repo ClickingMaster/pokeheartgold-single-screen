@@ -60,16 +60,16 @@ s32 PokeathlonCourseObject_GetCollisionRadius(void *object);
 // Course points of an event from its score list (course points code).
 void PokeathlonEvent_CalcPoints(void *scoreList, int event);
 
-extern const GraphicsBanks ov96_0221C6F0;
-extern const GraphicsModes ov96_0221C61C;
-extern const BgTemplate ov96_0221C62C;
-extern const BgTemplate ov96_0221C648;
-extern const BgTemplate ov96_0221C664;
-extern const BgTemplate ov96_0221C680;
-extern const BgTemplate ov96_0221C69C;
-extern const BgTemplate ov96_0221C6B8;
-extern const BgTemplate ov96_0221C6D4;
-extern const VecFx32 ov96_0221C5E4; // sprite pool template
+extern const GraphicsBanks sRelayRunGraphicsBanks;
+extern const GraphicsModes sRelayRunGraphicsModes;
+extern const BgTemplate sRelayRunBgTemplate_Sub2;
+extern const BgTemplate sRelayRunBgTemplate_Main0;
+extern const BgTemplate sRelayRunBgTemplate_Main1;
+extern const BgTemplate sRelayRunBgTemplate_Main2;
+extern const BgTemplate sRelayRunBgTemplate_Main3;
+extern const BgTemplate sRelayRunBgTemplate_Sub0;
+extern const BgTemplate sRelayRunBgTemplate_Sub1;
+extern const VecFx32 sRelayRunSpritePoolTemplate; // sprite pool template
 
 #pragma push
 #pragma opt_common_subs off
@@ -119,7 +119,7 @@ BOOL PokeathlonRelayRun_Init(PokeathlonCourseData *course) {
         break;
     }
     case 2: {
-        VecFx32 template = ov96_0221C5E4;
+        VecFx32 template = sRelayRunSpritePoolTemplate;
         relayRun->spritePool = PokeathlonCourseSpritePool_New(relayRun->heapId, &template);
         PokeathlonCourseSpritePool_SetSurfaceCoords(relayRun->spritePool, 0, 0, 0, FX32_CONST(512));
         relayRun->monObjects = PokeathlonCourseMonObjects_Create(relayRun->heapId, 12, 4, relayRun->monResources, PokeathlonCourseSpritePool_GetSpriteList(relayRun->spritePool));
@@ -317,7 +317,7 @@ BOOL PokeathlonRelayRun_Exit(PokeathlonCourseData *course) {
 }
 
 void PokeathlonRelayRun_SetGfxBanks(void) {
-    GraphicsBanks banks = ov96_0221C6F0;
+    GraphicsBanks banks = sRelayRunGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
@@ -326,27 +326,27 @@ void PokeathlonRelayRun_SetGfxBanks(void) {
 void PokeathlonRelayRun_InitBgs(BgConfig *bgConfig) {
     GraphicsModes modes;
     BgTemplate main0, main1, main2, main3, sub0, sub1, sub2;
-    modes = ov96_0221C61C;
+    modes = sRelayRunGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    main0 = ov96_0221C648;
+    main0 = sRelayRunBgTemplate_Main0;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &main0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
-    main1 = ov96_0221C664;
+    main1 = sRelayRunBgTemplate_Main1;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &main1, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
-    main2 = ov96_0221C680;
+    main2 = sRelayRunBgTemplate_Main2;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &main2, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
-    main3 = ov96_0221C69C;
+    main3 = sRelayRunBgTemplate_Main3;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &main3, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
-    sub0 = ov96_0221C6B8;
+    sub0 = sRelayRunBgTemplate_Sub0;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &sub0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
-    sub1 = ov96_0221C6D4;
+    sub1 = sRelayRunBgTemplate_Sub1;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &sub1, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
-    sub2 = ov96_0221C62C;
+    sub2 = sRelayRunBgTemplate_Sub2;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &sub2, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_2);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);

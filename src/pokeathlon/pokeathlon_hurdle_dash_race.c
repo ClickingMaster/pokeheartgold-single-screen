@@ -60,15 +60,15 @@ VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(void *entry);
 Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(void *entry);
 void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *entry, int priority);
 
-extern const s8 ov96_0221C55C[][9];                   // height of a rising jump per frame, by jump stat
-extern const s8 ov96_0221C589[][9];                   // height of a falling jump per frame, by jump stat
+extern const s8 sHurdleDashRisingJumpHeights[][9];                   // height of a rising jump per frame, by jump stat
+extern const s8 sHurdleDashFallingJumpHeights[][9];                   // height of a falling jump per frame, by jump stat
 extern u8 gPokeathlonHurdleDashLaneSoundPlayers[];                            // sound player of each lane
 extern const s8 gPokeathlonHurdleDashLanePans[];                      // pan of each lane
-extern const PokeathlonHurdleDashLaneX ov96_0221C41C; // x of each lane (touch)
-extern const PokeathlonHurdleDashLaneX ov96_0221C428; // x of each lane (dust)
-extern const WindowTemplate ov96_0221C3FC;            // the time window
-extern const f32 ov96_0221C444[];                     // speed above the top speed by boost level
-extern const VecFx32 ov96_0221C5B8;                   // position of a new hurdle
+extern const PokeathlonHurdleDashLaneX sHurdleDashTouchLaneX; // x of each lane (touch)
+extern const PokeathlonHurdleDashLaneX sHurdleDashDustLaneX; // x of each lane (dust)
+extern const WindowTemplate sHurdleDashTimeWindowTemplate;            // the time window
+extern const f32 sHurdleDashBoostSpeeds[];                     // speed above the top speed by boost level
+extern const VecFx32 sHurdleDashNewHurdlePos;                   // position of a new hurdle
 
 void *PokeathlonHurdleDashRunner_GetHurdle(PokeathlonHurdleDashRunner *runner, int index) {
     return PokeathlonHurdleDash_GetHurdle(runner->hurdles, index);
@@ -275,7 +275,7 @@ void PokeathlonHurdleDashMon_Update(int lane, PokeathlonHurdleDashMon *mon, f32 
         mon->timer++;
         switch (mon->phase) {
         case 1: {
-            int height = ov96_0221C55C[mon->jumpStat][mon->timer - 1];
+            int height = sHurdleDashRisingJumpHeights[mon->jumpStat][mon->timer - 1];
             int y = mon->y - height;
             if (mon->jumpStat == 0) {
                 PokeathlonHurdleDashMon_ScaleForHop(mon, FALSE);
@@ -305,7 +305,7 @@ void PokeathlonHurdleDashMon_Update(int lane, PokeathlonHurdleDashMon *mon, f32 
             }
             break;
         case 3: {
-            int height = ov96_0221C589[mon->jumpStat][mon->timer - 1];
+            int height = sHurdleDashFallingJumpHeights[mon->jumpStat][mon->timer - 1];
             int y = mon->y - height;
             if (mon->jumpStat == 0) {
                 PokeathlonHurdleDashMon_ScaleForHop(mon, TRUE);
@@ -926,7 +926,7 @@ void PokeathlonHurdleDash_RevealHurdles(PokeathlonHurdleDash *hurdleDash, int di
 
 // Kicks up dust behind a running Pokemon, more often the faster it is boosted.
 void PokeathlonHurdleDashRunner_UpdateDust(PokeathlonHurdleDash *hurdleDash, PokeathlonHurdleDashRunner *runner) {
-    PokeathlonHurdleDashLaneX laneX = ov96_0221C428;
+    PokeathlonHurdleDashLaneX laneX = sHurdleDashDustLaneX;
     s32 interval;
     if (runner->mon.state != 1 && runner->finished == FALSE) {
         if (runner->mon.state == 2) {
@@ -967,7 +967,7 @@ void PokeathlonHurdleDashRunner_UpdateDust(PokeathlonHurdleDash *hurdleDash, Pok
 
 // The lane touched at x, y; 3 for none.
 u8 PokeathlonHurdleDash_GetTouchedLane(PokeathlonHurdleDash *hurdleDash, s32 x, s32 y) {
-    PokeathlonHurdleDashLaneX laneX = ov96_0221C41C;
+    PokeathlonHurdleDashLaneX laneX = sHurdleDashTouchLaneX;
     u8 i;
     for (i = 0; i < 3; i++) {
         s32 left = laneX.x[i] - 24;
@@ -979,7 +979,7 @@ u8 PokeathlonHurdleDash_GetTouchedLane(PokeathlonHurdleDash *hurdleDash, s32 x, 
 }
 
 void PokeathlonHurdleDash_InitTimeWindow(PokeathlonHurdleDash *hurdleDash) {
-    AddWindow(hurdleDash->bgConfig, &hurdleDash->window, &ov96_0221C3FC);
+    AddWindow(hurdleDash->bgConfig, &hurdleDash->window, &sHurdleDashTimeWindowTemplate);
     BG_FillCharDataRange(hurdleDash->bgConfig, GF_BG_LYR_MAIN_3, 0, 1, 0);
     LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_15_OFFSET, hurdleDash->heapId);
     FillWindowPixelBuffer(&hurdleDash->window, 0);
@@ -1076,7 +1076,7 @@ void PokeathlonHurdleDash_UpdateCpuRunner(PokeathlonCourseData *course, Pokeathl
             if (random < runner->boostChance) {
                 if (runner->boostLevel < 4) {
                     runner->boostLevel++;
-                    runner->speed = runner->topSpeed + ov96_0221C444[runner->boostLevel - 1];
+                    runner->speed = runner->topSpeed + sHurdleDashBoostSpeeds[runner->boostLevel - 1];
                 }
                 PokeathlonCourse_AddMonCounter(course, participant, member, 6, 1);
                 PokeathlonCourse_AddMonCounter(course, participant, member, 2, 1);
@@ -1179,7 +1179,7 @@ void PokeathlonHurdleDashRunner_Boost(PokeathlonCourseData *course, PokeathlonHu
             SetPlayerPan(gPokeathlonHurdleDashLaneSoundPlayers[runner->lane], gPokeathlonHurdleDashLanePans[runner->lane]);
         }
         if (runner->speed < 10.0) {
-            runner->speed = runner->mon.topSpeed + ov96_0221C444[runner->boostLevel - 1];
+            runner->speed = runner->mon.topSpeed + sHurdleDashBoostSpeeds[runner->boostLevel - 1];
         } else {
             GF_AssertFail();
         }
@@ -1303,7 +1303,7 @@ PokeathlonHurdle *PokeathlonHurdleDashTrack_PlaceHurdle(PokeathlonHurdleDashTrac
         return NULL;
     }
     track->lanes[lane].next = (track->lanes[lane].next + 1) % 4;
-    position = ov96_0221C5B8;
+    position = sHurdleDashNewHurdlePos;
     position.y += y << FX32_SHIFT;
     switch (lane) {
     case 0:

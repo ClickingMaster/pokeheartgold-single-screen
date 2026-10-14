@@ -184,7 +184,7 @@ void BattleRoomDownload_SetLeaders(BattleRoomDownload *data, void *records, u32 
 // WifiConnection_ClassifyErrorCode.
 int RecordMixing_State_AbortLeave(int errorCode, int errorType);
 
-extern NintendoWfcUnusedGlobal _021EA940;
+extern NintendoWfcUnusedGlobal sNintendoWfcUnusedGlobal;
 extern const u16 sNintendoWfcUnusedArrowPositions[2][2];
 extern const GraphicsModes sNintendoWfcUnusedGraphicsModes;
 extern const ObjCharTransferTemplate sNintendoWfcUnusedObjCharTransferTemplate;
@@ -314,7 +314,7 @@ BOOL NintendoWfcUnused_Init(OverlayManager *man, int *state) {
         wfc = OverlayManager_CreateAndGetData(man, sizeof(NintendoWfcUnused), HEAP_ID_150);
         memset(wfc, 0, sizeof(NintendoWfcUnused));
         wfc->bgConfig = BgConfig_Alloc(HEAP_ID_150);
-        _021EA940.wfc = wfc;
+        sNintendoWfcUnusedGlobal.wfc = wfc;
         modes = sNintendoWfcUnusedGraphicsModes;
         SetBothScreensModesAndDisable(&modes);
         wfc->msgFormat = MessageFormat_New_Custom(11, 32, HEAP_ID_150);
@@ -354,7 +354,7 @@ BOOL NintendoWfcUnused_Main(OverlayManager *man, int *state) {
     switch (*state) {
     case 0:
         if (CommWireless_IsStartedUp()) {
-            _021EA940.heap = wfc->expHeap;
+            sNintendoWfcUnusedGlobal.heap = wfc->expHeap;
             DWC_SetMemFunc(NintendoWfcUnused_Alloc, NintendoWfcUnused_Free);
             *state = 1;
         }
@@ -527,7 +527,7 @@ void NintendoWfcUnused_SetState(NintendoWfcUnused *wfc, int state, int nextState
 
 void *NintendoWfcUnused_Alloc(void *unused, u32 size, int alignment) {
     OSIntrMode enabled = OS_DisableInterrupts();
-    void *result = NNS_FndAllocFromExpHeapEx(_021EA940.heap, size, alignment);
+    void *result = NNS_FndAllocFromExpHeapEx(sNintendoWfcUnusedGlobal.heap, size, alignment);
     OS_RestoreInterrupts(enabled);
     return result;
 }
@@ -535,7 +535,7 @@ void *NintendoWfcUnused_Alloc(void *unused, u32 size, int alignment) {
 void NintendoWfcUnused_Free(void *unused, void *ptr) {
     if (ptr) {
         OSIntrMode enabled = OS_DisableInterrupts();
-        NNS_FndFreeToExpHeap(_021EA940.heap, ptr);
+        NNS_FndFreeToExpHeap(sNintendoWfcUnusedGlobal.heap, ptr);
         OS_RestoreInterrupts(enabled);
     }
 }
