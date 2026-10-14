@@ -14,40 +14,40 @@
 
 extern void __msl_assertion_failed(const char *, const char *, const char *, int);
 extern char *strchr(const char *, int);
-extern const char ov45_022569C0[];
-extern const char ov45_02256B94[];
-extern const char ov45_02256BA0[];
-extern const char ov45_02256E04[];
-extern const char ov45_02257174[];
-extern const char ov45_02257194[];
-extern const char ov45_022571E4[];
-extern const char ov45_022571F8[];
-extern const char ov45_02257248[];
-extern const char ov45_02257258[];
-extern const char ov45_02257268[];
-extern const char ov45_0225727C[];
-extern const char ov45_02257290[];
-extern const char ov45_022572B4[];
-extern const char ov45_022572CC[];
-extern const char ov45_022572F0[];
-extern const char ov45_022572FC[];
-extern const char ov45_0225730C[];
-extern const char ov45_02257324[];
+extern const char sStr_ciNickError[];
+extern const char sStr_ChatMainC[];
+extern const char sStr_ChatNeNULL_4[];
+extern const char sStr_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuv_3[];
+extern const char sStr_ciBufferInit[];
+extern const char sStr_ciSocketInit[];
+extern const char sStr_ciBufferPreAppend[];
+extern const char sStr_ciBufferClipFront[];
+extern const char sStr_BufferNeNULL_2[];
+extern const char sStr_ChatSocketC[];
+extern const char sStr_BufferNeNULL_3[];
+extern const char sStr_BufferSizeGe0[];
+extern const char sStr_BufferSizeBUFFER_INC_Eq0[];
+extern const char sStr_BufferLengthGe0[];
+extern const char sStr_BufferLengthLeBufferSize[];
+extern const char sStr_LenGe0_2[];
+extern const char sStr_LenLeSHRT_MAX[];
+extern const char sStr_LenLeBufferLength[];
+extern const char sStr_SockNeNULL[];
 
 // Assertion of the socket module with the message, the name of the checking function and the line.
 #define ASSERT(cond, message, func, line)                           \
     if (!(cond)) {                                                  \
-        __msl_assertion_failed(message, ov45_02257258, func, line); \
+        __msl_assertion_failed(message, sStr_ChatSocketC, func, line); \
     }
 // A valid buffer: size a multiple of 0x2000, 0 <= length <= size.
 #define ASSERT_BUFFER(buffer, func, line)                            \
-    ASSERT(buffer, ov45_02257268, func, line);                       \
-    ASSERT((buffer)->size >= 0, ov45_0225727C, func, line);          \
-    ASSERT((buffer)->size % 0x2000 == 0, ov45_02257290, func, line); \
-    ASSERT((buffer)->length >= 0, ov45_022572B4, func, line);        \
-    ASSERT((buffer)->length <= (buffer)->size, ov45_022572CC, func, line);
+    ASSERT(buffer, sStr_BufferNeNULL_3, func, line);                       \
+    ASSERT((buffer)->size >= 0, sStr_BufferSizeGe0, func, line);          \
+    ASSERT((buffer)->size % 0x2000 == 0, sStr_BufferSizeBUFFER_INC_Eq0, func, line); \
+    ASSERT((buffer)->length >= 0, sStr_BufferLengthGe0, func, line);        \
+    ASSERT((buffer)->length <= (buffer)->size, sStr_BufferLengthLeBufferSize, func, line);
 
-// Checks a nick: 0 = valid, 6 = too long, 2 = empty, bad first character or a character outside ov45_02256E04.
+// Checks a nick: 0 = valid, 6 = too long, 2 = empty, bad first character or a character outside sStr_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuv_3.
 int ciNickIsValid(const char *nick) {
     if (strlen(nick) >= 21) {
         return 6;
@@ -59,7 +59,7 @@ int ciNickIsValid(const char *nick) {
         return 2;
     }
     while (*nick) {
-        if (!strchr(ov45_02256E04, *nick++)) {
+        if (!strchr(sStr_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuv_3, *nick++)) {
             return 2;
         }
     }
@@ -69,7 +69,7 @@ int ciNickIsValid(const char *nick) {
 // The nick was refused: queue the nick error callback, or end the connect attempt without one.
 void ciNickError(ChatConnection *chat, int type, const char *nick, int unk_0C, int unk_10) {
     if (!chat) {
-        __msl_assertion_failed(ov45_02256BA0, ov45_02256B94, ov45_022569C0, 3017);
+        __msl_assertion_failed(sStr_ChatNeNULL_4, sStr_ChatMainC, sStr_ciNickError, 3017);
     }
     if (chat->nickErrorCallback) {
         ChatNickErrorArgs args = { 0 };
@@ -88,7 +88,7 @@ void ciNickError(ChatConnection *chat, int type, const char *nick, int unk_0C, i
 
 // Allocates an empty buffer of 0x2000 bytes.
 BOOL ciBufferInit(ChatBuffer *buffer) {
-    ASSERT(buffer, ov45_02257248, ov45_02257174, 95);
+    ASSERT(buffer, sStr_BufferNeNULL_2, sStr_ciBufferInit, 95);
     buffer->length = 0;
     buffer->size = 0x2000;
     buffer->data = DWCi_GsMalloc(0x2001);
@@ -107,9 +107,9 @@ void ciBufferFree(ChatBuffer *buffer) {
 BOOL ciBufferPreAppend(ChatBuffer *buffer, int length) {
     int size;
     char *data;
-    ASSERT_BUFFER(buffer, ov45_022571E4, 120);
-    ASSERT(length >= 0, ov45_022572F0, ov45_022571E4, 121);
-    ASSERT(length <= 0x7FFF, ov45_022572FC, ov45_022571E4, 122);
+    ASSERT_BUFFER(buffer, sStr_ciBufferPreAppend, 120);
+    ASSERT(length >= 0, sStr_LenGe0_2, sStr_ciBufferPreAppend, 121);
+    ASSERT(length <= 0x7FFF, sStr_LenLeSHRT_MAX, sStr_ciBufferPreAppend, 122);
     if (buffer->length + length <= buffer->size) {
         return TRUE;
     }
@@ -126,9 +126,9 @@ BOOL ciBufferPreAppend(ChatBuffer *buffer, int length) {
 
 // Removes the first length bytes.
 void ciBufferClipFront(ChatBuffer *buffer, int length) {
-    ASSERT_BUFFER(buffer, ov45_022571F8, 151);
-    ASSERT(length >= 0, ov45_022572F0, ov45_022571F8, 152);
-    ASSERT(length <= buffer->length, ov45_0225730C, ov45_022571F8, 153);
+    ASSERT_BUFFER(buffer, sStr_ciBufferClipFront, 151);
+    ASSERT(length >= 0, sStr_LenGe0_2, sStr_ciBufferClipFront, 152);
+    ASSERT(length <= buffer->length, sStr_LenLeBufferLength, sStr_ciBufferClipFront, 153);
     buffer->length -= length;
     memmove(buffer->data, buffer->data + length, buffer->length);
     buffer->data[buffer->length] = 0;
@@ -136,7 +136,7 @@ void ciBufferClipFront(ChatBuffer *buffer, int length) {
 
 // Clears the socket and allocates its two buffers (name is not used).
 BOOL ciSocketInit(ChatSocket *socket, const char *name) {
-    ASSERT(socket, ov45_02257324, ov45_02257194, 177);
+    ASSERT(socket, sStr_SockNeNULL, sStr_ciSocketInit, 177);
     memset(socket, 0, sizeof(ChatSocket));
     socket->handle = -1;
     if (!ciBufferInit(&socket->input)) {

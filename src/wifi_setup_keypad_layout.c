@@ -44,21 +44,21 @@ void WifiSetupKeypad_SetRowY(int row, int y) {
     int start = row * 3;
     key = start;
     for (i = 0; i < digitKeys.counts[row]; i++) {
-        int x = ov13_0224527A[key].x;
+        int x = gWifiSetupKeypadDigitKeyPositions[key].x;
         gWifiSetupKeypad->keys[key]->attr01 &= 0xC1FFFCFF;
         gWifiSetupKeypad->keys[key]->attr01 = OamPos(gWifiSetupKeypad->keys[key]->attr01, x, y);
         key++;
     }
     if (row < 4) {
-        WifiSetupText_ShowObjCanvas(gWifiSetupKeypad->rows[row], ov13_0224527A[start].x, y, gWifiSetupKeypad->rowBlocks[row], 2);
+        WifiSetupText_ShowObjCanvas(gWifiSetupKeypad->rows[row], gWifiSetupKeypadDigitKeyPositions[start].x, y, gWifiSetupKeypad->rowBlocks[row], 2);
     }
     for (i = 0; i < extraKeys.counts[row]; i++) {
-        int x = ov13_02245250[i].x;
+        int x = gWifiSetupKeypadExtraKeyPositions[i].x;
         gWifiSetupKeypad->extraKeys[i]->attr01 &= 0xC1FFFCFF;
         gWifiSetupKeypad->extraKeys[i]->attr01 = OamPos(gWifiSetupKeypad->extraKeys[i]->attr01, x, y);
     }
     for (i = 0; i < buttons.counts[row]; i++) {
         WifiSetupOamBlock_SetAffineMode(gWifiSetupKeypad->buttons[i], -1, 0, 0);
-        WifiSetupOamBlock_SetPosition(gWifiSetupKeypad->buttons[i], -1, ov13_02245258[i].x, y);
+        WifiSetupOamBlock_SetPosition(gWifiSetupKeypad->buttons[i], -1, gWifiSetupKeypadButtonPositions[i].x, y);
     }
 }

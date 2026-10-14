@@ -37,7 +37,7 @@ typedef struct WifiSetupSignalIcon {
 
 extern WifiSetupBusyIcon *gWifiSetupBusyIcon;
 extern WifiSetupSignalIcon *gWifiSetupSignalIcon;
-extern const u8 ov13_02244EB0[];
+extern const u8 gWifiSetupBusyIconPalettes[];
 
 void WifiSetupBusyIcon_Create(u8 style);
 void WifiSetupBusyIcon_Destroy(void);

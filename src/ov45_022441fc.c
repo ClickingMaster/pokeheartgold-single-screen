@@ -26,9 +26,9 @@ extern void LobbyString_Destroy(void *);
 extern void LobbyChannelMap_Find(void **, void *, void *);
 extern void __msl_assertion_failed(char *, char *, char *, int);
 extern void *ArrayNew(int, int, void (*)(void *));
-extern char ov45_02255458[];
-extern char ov45_02255468[];
-extern char ov45_02255438[];
+extern char sStr_DataNeNULL[];
+extern char sStr_ChatCallbacksC[];
+extern char sStr_ciCallbacksArrayElementFreeFn[];
 extern int LobbyString_Compare(void *, void *);
 extern void LobbyUserMap_MakeEntry(void *p, int a, void *b);
 extern int LobbyChat_AreChannelUsersEnumerated(void *p, void *key);
@@ -52,13 +52,13 @@ extern int ArrayLength(void *);
 extern void *ArrayNth(void *, int);
 extern void ArrayFree(void *);
 extern void ciFreeCallbackData(void *);
-extern char ov45_022554F0[];
-extern char ov45_0225540C[];
-extern char ov45_02255478[];
-extern char ov45_02255488[];
-extern char ov45_022554A4[];
-extern char ov45_022554BC[];
-extern char ov45_022554DC[];
+extern char sStr_ChatNeNULL[];
+extern char sStr_ciCleanupCallbacks[];
+extern char sStr_DataTypeGe0[];
+extern char sStr_DataTypeLtCALLBACK_NUM[];
+extern char sStr_DataCallbackNeNULL[];
+extern char sStr_DataCallbackParamsNeNULL[];
+extern char sStr_DataID_Ge0[];
 extern void *LobbyChannelMap_Destroy(void *p);
 extern void ciCleanupCallbacks(void *p);
 
@@ -204,7 +204,7 @@ void LobbyRequestMap_DestroyNodes(void *p, void *node) {
 
 void ciCallbacksArrayElementFreeFn(void *p) {
     if (!p) {
-        __msl_assertion_failed(ov45_02255458, ov45_02255468, ov45_02255438, 164);
+        __msl_assertion_failed(sStr_DataNeNULL, sStr_ChatCallbacksC, sStr_ciCallbacksArrayElementFreeFn, 164);
     }
     DWCi_GsFree(P(p, 20));
 }

@@ -162,7 +162,7 @@ void WiFiPlazaLobbyClient_InitializeEx(int value, int mode) {
     callbacks[15] = (void (*)(void))WiFiPlazaLobbyClient_OnSurveySubmitted;
     callbacks[16] = (void (*)(void))ov45_02230130;
     userData = FriendRoster_GetUserData(_022577C0->friendRoster);
-    _022577C0->initResult = PPW_LobbyInitializeAsync(ov45_02254F04, ov45_02254F14, mode, callbacks, userData, value, _022577C0->playerDataSize);
+    _022577C0->initResult = PPW_LobbyInitializeAsync(sStr_pokemonplatds, sStr_IIup73, mode, callbacks, userData, value, _022577C0->playerDataSize);
     WiFiPlazaLobbyClient_CheckResult(_022577C0->initResult);
 }
 

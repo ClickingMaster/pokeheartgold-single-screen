@@ -115,8 +115,8 @@ struct Work {
     Container entries;
 };
 
-extern "C" Work *_022577C4;
-extern "C" char ov45_02254F88[];
+extern "C" Work *gPPWLobbyWork;
+extern "C" char sFmt_M_IntUnderscoreUint[];
 extern "C" void PPWLobby_TimerSendRecruitInfo();
 extern "C" u32 current_time(void);
 extern "C" Str LobbyString_FormatN(int, const char *, ...);
@@ -144,14 +144,14 @@ inline Result Insert2(Container *c, const Entry &e) {
 #pragma opt_common_subs off
 
 extern "C" int PPW_LobbyStartRecruit(User *u) {
-    Work *w = _022577C4;
+    Work *w = gPPWLobbyWork;
     if (w == 0) {
         return 4;
     }
     if (w != 0 && w->state == 10) {
         return 7;
     }
-    if (w != 0 && _022577C4->state != 8) {
+    if (w != 0 && gPPWLobbyWork->state != 8) {
         return 4;
     }
     Str value;
@@ -160,11 +160,11 @@ extern "C" int PPW_LobbyStartRecruit(User *u) {
         p[i] = 0;
     }
     int ok = 0;
-    Work *g = _022577C4;
+    Work *g = gPPWLobbyWork;
     if (g->busy == 0) {
         g->busy = 1;
         g->user = *u;
-        Str tmp = LobbyString_FormatN(20, ov45_02254F88, g->code, current_time() % 1000);
+        Str tmp = LobbyString_FormatN(20, sFmt_M_IntUnderscoreUint, g->code, current_time() % 1000);
         value = tmp;
         LobbyString_Destroy(&tmp);
         strncpy(g->user.name, value.CStr(), 19);
@@ -175,7 +175,7 @@ extern "C" int PPW_LobbyStartRecruit(User *u) {
         return 4;
     }
     strncpy(u->name, value.CStr(), 19);
-    Work *h = _022577C4;
+    Work *h = gPPWLobbyWork;
     Date date;
     Time time;
     DWC_GetDateTime(&date, &time);

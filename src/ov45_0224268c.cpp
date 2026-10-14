@@ -78,8 +78,8 @@ struct Obj {
 };
 
 extern "C" NameTable ov45_02254DC4;
-extern "C" char ov45_02254DBC[];
-extern "C" char ov45_02255398[];
+extern "C" char sStr_GSP[];
+extern "C" char sStr_Bang_2[];
 extern "C" Obj *LobbyChatManager_Init(Obj *obj, const String &a1, const String &a2, int idx, u32 v8, const String &aC, const String &a18, const String &a24, const Triple *t);
 #pragma opt_propagation off
 
@@ -116,13 +116,13 @@ extern "C" Obj *LobbyChatManager_Init(Obj *obj, const String &a1, const String &
     obj->unkA0 = 0;
     obj->unkA8 = &obj->unkA0;
     NameTable names = ov45_02254DC4;
-    String s48(ov45_02254DBC);
-    String s3C = LobbyString_ConcatCStr(s48, ov45_02255398);
+    String s48(sStr_GSP);
+    String s3C = LobbyString_ConcatCStr(s48, sStr_Bang_2);
     String s30 = LobbyString_Concat(s3C, obj->str30);
-    String s24 = LobbyString_ConcatCStr(s30, ov45_02255398);
+    String s24 = LobbyString_ConcatCStr(s30, sStr_Bang_2);
     String s18(names.names[idx]);
     String sC = LobbyString_Concat(s24, s18);
-    String r = LobbyString_ConcatCStr(sC, ov45_02255398);
+    String r = LobbyString_ConcatCStr(sC, sStr_Bang_2);
     const String *pr = &r;
     LobbyString_Assign(&obj->str48, pr);
     r.destroy();

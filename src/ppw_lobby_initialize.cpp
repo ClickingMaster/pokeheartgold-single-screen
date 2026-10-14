@@ -17,7 +17,7 @@ extern "C" void DWC_GetDateTime(Date *, Time *);
 extern "C" s64 RTC_ConvertDateTimeToSecond(const Date *, const Time *);
 extern "C" void *LobbyMem_Alloc(u32);
 extern "C" void DWC_Free(int, void *, int);
-extern "C" char ov45_02254FA0[], ov45_02254FB0[];
+extern "C" char gPPWLobbyPlayersVtable[], gPPWLobbyPlayerVtable[];
 extern "C" void PPWLobby_OnPlayerMessage();
 extern "C" void PPWLobby_OnExcessFlood();
 extern "C" void PPWLobbySchedule_Init(void *);
@@ -132,15 +132,15 @@ struct Sessions {
     int last;
 
     Sessions()
-        : vtbl(ov45_02254FA0)
-        , alloc(ov45_02254FB0)
+        : vtbl(gPPWLobbyPlayersVtable)
+        , alloc(gPPWLobbyPlayerVtable)
         , valid(1)
         , dirty(1)
         , last(-1) {
     }
 
     void Destroy() {
-        vtbl = ov45_02254FA0;
+        vtbl = gPPWLobbyPlayersVtable;
         PPWLobbyPlayers_Clear(this);
         LobbyCharVector_Destroy(&field);
         PPWLobbyPlayerSet_Destroy(&list);
@@ -211,7 +211,7 @@ struct Work {
     }
 };
 
-extern "C" Work *_022577C4;
+extern "C" Work *gPPWLobbyWork;
 
 inline void Free(void *p) {
     if (p) {
@@ -247,17 +247,17 @@ inline int ErrorMap::Map(int r) const {
 extern "C" int PPWLobby_Initialize(u32 a0, u32 a1, u32 a2, const Config *cfg, u32 a4, u32 a5, u32 a6, u32 a7);
 
 extern "C" int PPWLobby_Initialize(u32 a0, u32 a1, u32 a2, const Config *cfg, u32 a4, u32 a5, u32 a6, u32 a7) {
-    if (_022577C4 != 0) {
+    if (gPPWLobbyWork != 0) {
         return 4;
     }
     Callbacks cbs(PPWLobby_OnPlayerMessage, PPWLobby_OnExcessFlood, 5);
-    _022577C4 = new (LobbyMem_Alloc(sizeof(Work))) Work(a2, *cfg, a4, a7);
-    if (_022577C4 == 0) {
+    gPPWLobbyWork = new (LobbyMem_Alloc(sizeof(Work))) Work(a2, *cfg, a4, a7);
+    if (gPPWLobbyWork == 0) {
         return 1;
     }
     int result = LobbyChat_Initialize(a0, a1, a2, &cbs, a4);
     {
-        Work *g = _022577C4;
+        Work *g = gPPWLobbyWork;
         int state = ErrorMap().Map(result);
         if (state != 0) {
             g->sub = state;
@@ -265,15 +265,15 @@ extern "C" int PPWLobby_Initialize(u32 a0, u32 a1, u32 a2, const Config *cfg, u3
         }
     }
     if (result != 0) {
-        Work *w = _022577C4;
+        Work *w = gPPWLobbyWork;
         if (w != 0) {
             Delete(w);
-            _022577C4 = 0;
+            gPPWLobbyWork = 0;
         }
         return result;
     }
-    PPWLobbyPlayers_SetSelf(&_022577C4->sessions, a4, a5, a6);
+    PPWLobbyPlayers_SetSelf(&gPPWLobbyWork->sessions, a4, a5, a6);
     PPWLobby_StartCheckProfile();
-    _022577C4->state = 1;
+    gPPWLobbyWork->state = 1;
     return 0;
 }

@@ -12,7 +12,7 @@ extern "C" void DWC_Free(int, void *, u32);
 extern "C" void *LobbyMem_Alloc(u32 size);
 extern "C" int printf(const char *, ...);
 extern "C" void abort(void);
-extern "C" char ov45_022553AC[];
+extern "C" char sStr_TreeInsertLengthError_4[];
 struct String;
 extern "C" String *LobbyString_InitCopy(String *dst, const String *src);
 
@@ -104,7 +104,7 @@ extern "C" Node *LobbyChannelMap_InsertNode(Tree *t, Node *parent, BOOL left, BO
 
 extern "C" Node *LobbyChannelMap_InsertNode(Tree *t, Node *parent, BOOL left, BOOL rightmost, const Value &v) {
     if (t->size == 0xFFFFFFFF) {
-        printf(ov45_022553AC);
+        printf(sStr_TreeInsertLengthError_4);
         abort();
     }
     Holder h((Alloc *)&t->root);

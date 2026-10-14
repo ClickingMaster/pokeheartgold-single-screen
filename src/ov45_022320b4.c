@@ -52,8 +52,8 @@ typedef struct Record {
 
 extern int DWC_CheckUserData(void *);
 extern int DWC_CheckHasProfile(void *);
-extern u8 *volatile _022577C4;
-extern u8 ov45_02254FA0[];
+extern u8 *volatile gPPWLobbyWork;
+extern u8 gPPWLobbyPlayersVtable[];
 extern void *LobbyString_InitCopy(void *, void *);
 extern void *LobbyCharVector_Data(Vec *);
 extern Node *LobbyTimerMap_LowerBound(u8 *, u32 *, Node *, Node *);
@@ -109,7 +109,7 @@ void *PPWLobbyChannel_GetName(u8 *p, u8 *q) {
 }
 
 int PPW_LobbyGetTimeInfo(u64 *out) {
-    u8 *root = _022577C4;
+    u8 *root = gPPWLobbyWork;
     if (!root) {
         return 4;
     }
@@ -119,7 +119,7 @@ int PPW_LobbyGetTimeInfo(u64 *out) {
         }
     }
     if (root) {
-        if (W(_022577C4, 0) != 8) {
+        if (W(gPPWLobbyWork, 0) != 8) {
             return 4;
         }
     }
@@ -137,7 +137,7 @@ int PPW_LobbyGetTimeInfo(u64 *out) {
 }
 
 int PPW_LobbyGetSchedule(void *p, u32 *size) {
-    u8 *root = _022577C4;
+    u8 *root = gPPWLobbyWork;
     if (!root) {
         return 4;
     }
@@ -147,7 +147,7 @@ int PPW_LobbyGetSchedule(void *p, u32 *size) {
         }
     }
     if (root) {
-        if (W(_022577C4, 0) != 8) {
+        if (W(gPPWLobbyWork, 0) != 8) {
             return 4;
         }
     }

@@ -75,14 +75,14 @@ struct Mgr {
     Tree tree;
 };
 
-extern "C" Mgr *ov45_022577DC;
+extern "C" Mgr *gLobbyChatManager;
 
 static inline bool IsFatal() {
-    return ov45_022577DC != NULL && ov45_022577DC->state == 5;
+    return gLobbyChatManager != NULL && gLobbyChatManager->state == 5;
 }
 
 static inline int GetState() {
-    return ov45_022577DC->state;
+    return gLobbyChatManager->state;
 }
 
 static inline bool Tick(Node *n, const s64 &now) {
@@ -139,7 +139,7 @@ extern "C" int LobbyChat_Process(void);
 #pragma opt_common_subs off
 
 extern "C" int LobbyChat_Process(void) {
-    Mgr *g = ov45_022577DC;
+    Mgr *g = gLobbyChatManager;
     if (g == NULL) {
         return 0;
     }
@@ -150,7 +150,7 @@ extern "C" int LobbyChat_Process(void) {
     if (p != NULL) {
         chatThink(p);
     }
-    Mgr *w = ov45_022577DC;
+    Mgr *w = gLobbyChatManager;
     RTCTime time;
     RTCDate date;
     s64 now;
@@ -169,14 +169,14 @@ extern "C" int LobbyChat_Process(void) {
             ov45_02236E58(&it);
         }
     }
-    Mgr *g2 = ov45_022577DC;
+    Mgr *g2 = gLobbyChatManager;
     if (g2 != NULL && g2->state == 5) {
         return 5;
     }
-    Mgr *m2 = ov45_022577DC;
+    Mgr *m2 = gLobbyChatManager;
     if (g2->unk54 >= 3) {
         g2->unk54 = 0;
-        SetError(ov45_022577DC, 3);
+        SetError(gLobbyChatManager, 3);
         return GetState();
     }
     UpdateState(m2);

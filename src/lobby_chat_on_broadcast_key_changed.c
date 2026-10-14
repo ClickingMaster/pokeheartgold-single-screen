@@ -21,12 +21,12 @@ typedef union {
     } s;
 } Str;
 
-extern void *ov45_022577DC;
-extern char ov45_022552DC[];
-extern char ov45_022552E4[];
-extern char ov45_022552EC[];
-extern char ov45_022552F0[];
-extern char ov45_022552FC[];
+extern void *gLobbyChatManager;
+extern char sStr_normal[];
+extern char sStr_voice[];
+extern char sStr_ops[];
+extern char sStr_VoiceOps[];
+extern char sStr_invalid[];
 void LobbyString_InitFromCStr(Str *, char *);
 void LobbyString_Destroy(Str *);
 void LobbyString_InitCopy(void *, void *);
@@ -83,21 +83,21 @@ void LobbyChat_OnBroadcastKeyChanged(void *a, char *s, char *name, void *arg, vo
     Str x, y, z, t;
     int id;
     void *p;
-    if (ov45_022577DC && W(ov45_022577DC, 4) == 5) {
+    if (gLobbyChatManager && W(gLobbyChatManager, 4) == 5) {
         return;
     }
     if (!name) {
         id = -1;
     } else {
         LobbyString_InitFromCStr(&x, name);
-        id = LobbyChat_FindUserIdByNick(ov45_022577DC, &x);
+        id = LobbyChat_FindUserIdByNick(gLobbyChatManager, &x);
         LobbyString_Destroy(&x);
     }
     LobbyString_InitFromCStr(&y, s);
-    p = LobbyChat_GetChannelCallbacks(ov45_022577DC, &y);
+    p = LobbyChat_GetChannelCallbacks(gLobbyChatManager, &y);
     LobbyString_Destroy(&y);
     LobbyString_InitFromCStr(&z, s);
-    LobbyChat_StripChannelPrefix(&t, ov45_022577DC, &z);
+    LobbyChat_StripChannelPrefix(&t, gLobbyChatManager, &z);
     ((void (*)(char *, int, void *, void *, void *))P(p, 12))(!t.b.flag ? t.s.inlinebuf : t.b.data, id, arg, extra, P(p, 20));
     LobbyString_Destroy(&t);
     LobbyString_Destroy(&z);

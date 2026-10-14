@@ -12,9 +12,9 @@
 
 // Vertical scroll bar and the access-point scan work allocation (see include/wifi_setup_scroll_bar.h).
 
-extern u8 ov13_02245790[]; // thumb template per kind
-extern u8 ov13_02245794[]; // thumb length per kind
-extern WifiSetupRect ov13_02245958;
+extern u8 gWifiSetupScrollBarThumbTemplates[]; // thumb template per kind
+extern u8 gWifiSetupScrollBarThumbLengths[]; // thumb length per kind
+extern WifiSetupRect gWifiSetupInputPanelRect;
 extern s32 FX_DivS32(s32, s32);
 typedef struct WifiSetupApScan WifiSetupApScan; // wifi_setup_access_points.c
 extern WifiSetupApScan *gWifiSetupApScan;
@@ -113,7 +113,7 @@ void WifiSetupScrollBar_Drag(void) {
     int v;
     int max;
 
-    if (WifiSetupInput_IsTouchHeld(&ov13_02245958)) {
+    if (WifiSetupInput_IsTouchHeld(&gWifiSetupInputPanelRect)) {
         WifiSetupInput_GetTouchPos(&p);
         s = gWifiSetupScrollBar;
         if (p.x >= s->pos.x - 0x1e) {
@@ -121,7 +121,7 @@ void WifiSetupScrollBar_Drag(void) {
             if (v < 0) {
                 v = 0;
             } else {
-                max = s->length - ov13_02245794[s->kind];
+                max = s->length - gWifiSetupScrollBarThumbLengths[s->kind];
                 if (v >= max) {
                     v = max;
                 }
@@ -175,7 +175,7 @@ void WifiSetupScrollBar_JumpToTouch(void) {
 
     WifiSetupInput_GetTouchPos(&p);
     s = gWifiSetupScrollBar;
-    w = ov13_02245794[s->kind];
+    w = gWifiSetupScrollBarThumbLengths[s->kind];
     v = p.y - s->pos.y - (w >> 1);
     if (v < 0) {
         v = 0;
@@ -229,7 +229,7 @@ void WifiSetupScrollBar_GetPartRect(int part, WifiSetupRect *r) {
     switch (part) {
     case 1:
         r->top = gWifiSetupScrollBar->pos.y + gWifiSetupScrollBar->value;
-        r->bottom = r->top + ov13_02245794[gWifiSetupScrollBar->kind];
+        r->bottom = r->top + gWifiSetupScrollBarThumbLengths[gWifiSetupScrollBar->kind];
         break;
     case 2:
         r->top = gWifiSetupScrollBar->pos.y - 13;

@@ -31,7 +31,7 @@ extern const TouchscreenHitbox ov99_021E95BC[];
 extern const s16 ov99_021E9574[];
 extern const s16 ov99_021E9576[];
 extern const WindowTemplate ov99_021E96D8[17];
-extern const char _021EA5C0[]; // "seq error!"
+extern const char sStr_SeqError[]; // "seq error!"
 
 // The first 0xDC bytes of PokeathlonSave hold the five course records.
 static inline PokeathlonCourseRecordEntry *PokeathlonCourseRecord_GetRecords(PokeathlonCourseRecordArgs *args) {
@@ -125,7 +125,7 @@ BOOL PokeathlonCourseRecord_Main(OverlayManager *man, int *state) {
         PokeathlonUtil_DisableDisplay();
         return TRUE;
     default:
-        GF_ASSERT(!_021EA5C0);
+        GF_ASSERT(!sStr_SeqError);
         break;
     }
     PokeathlonUtil_DrawSprites(work->spriteContext);

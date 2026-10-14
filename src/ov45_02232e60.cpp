@@ -26,16 +26,16 @@ inline void *operator new(std::size_t, void *p) {
     return p;
 }
 
-extern "C" char ov45_02255048[], ov45_02255024[], ov45_02255070[], ov45_02254FE4[], ov45_02254FC8[], ov45_02255004[];
+extern "C" char sStr_WebEncLobbySubmitQuestionnaireAsp[], sStr_WebEncLobbyGetQuestionnaireAsp[], sStr_uLMOGEiiJogofchScpXb000244fd00006015100000005b44[], sStr_WebEncLobbyGetScheduleAsp[], sStr_WebEncLobbyGetVIP_Asp[], sStr_WebEncLobbyCheckProfileAsp[];
 #pragma explicit_zero_data on
 extern "C" u8 ov45_02254F5A = 1;
-extern "C" const char *ov45_02254F68 = ov45_02254FE4;
-extern "C" const char *ov45_02254F6C = ov45_02254FC8;
-extern "C" const char *ov45_02254F60 = ov45_02255024;
-extern "C" const char *ov45_02254F5C = ov45_02255048;
+extern "C" const char *ov45_02254F68 = sStr_WebEncLobbyGetScheduleAsp;
+extern "C" const char *ov45_02254F6C = sStr_WebEncLobbyGetVIP_Asp;
+extern "C" const char *ov45_02254F60 = sStr_WebEncLobbyGetQuestionnaireAsp;
+extern "C" const char *ov45_02254F5C = sStr_WebEncLobbySubmitQuestionnaireAsp;
 extern "C" signed char ov45_02254F5B = 0;
-extern "C" const char *ov45_02254F70 = ov45_02255004;
-extern "C" const char *ov45_02254F64 = ov45_02255070;
+extern "C" const char *ov45_02254F70 = sStr_WebEncLobbyCheckProfileAsp;
+extern "C" const char *ov45_02254F64 = sStr_uLMOGEiiJogofchScpXb000244fd00006015100000005b44;
 extern "C" signed char ov45_02254F59 = 0;
 extern "C" u8 _02254F58 = 0;
 #pragma explicit_zero_data reset
@@ -146,7 +146,7 @@ struct OpVtbl {
     void (*del)(Op *);
 };
 
-extern "C" const OpVtbl ov45_02254FC0;
+extern "C" const OpVtbl gPPWLobbyWebRequestVtable;
 extern "C" void PPWLobby_OnSubmitQuestionnaire(void);
 
 struct Op {
@@ -162,7 +162,7 @@ struct Op {
     int x3c;
 
     Op(int f, const char *n, const char *h, int i, const u8 *first, const u8 *last)
-        : vtbl(&ov45_02254FC0)
+        : vtbl(&gPPWLobbyWebRequestVtable)
         , kind(3)
         , flag(f)
         , a(n)
@@ -209,8 +209,8 @@ struct Work {
     u8 x144[4];
 };
 
-extern "C" Work *_022577C4;
-extern "C" Op *ov45_022577D4;
+extern "C" Work *gPPWLobbyWork;
+extern "C" Op *gPPWLobbyCurrentRequest;
 
 inline const Data *GetData(Work *w) {
     return (const Data *)LobbyByteVector_Data(&w->v110);
@@ -225,7 +225,7 @@ extern "C" int PPW_LobbySubmitQuestionnaire(int mode) {
     Op *o;
     int x;
     ReqMethod flag;
-    Work *w = _022577C4;
+    Work *w = gPPWLobbyWork;
     if (w == 0) {
         return 4;
     }
@@ -236,15 +236,15 @@ extern "C" int PPW_LobbySubmitQuestionnaire(int mode) {
         return 3;
     }
     Out out;
-    if (!PPWLobbySchedule_GetQuestionnaire(w->x144, &out) || _022577C4->x6c != 0) {
+    if (!PPWLobbySchedule_GetQuestionnaire(w->x144, &out) || gPPWLobbyWork->x6c != 0) {
         return 4;
     }
-    const Data *d = GetData(_022577C4);
+    const Data *d = GetData(gPPWLobbyWork);
     Packet p = { 0 };
     {
         Info info;
-        const Data *d2 = GetData(_022577C4);
-        info.id = _022577C4->x4c;
+        const Data *d2 = GetData(gPPWLobbyWork);
+        info.id = gPPWLobbyWork->x4c;
         info.one = 1;
         info.a = d2->x42;
         info.b = d2->x39;
@@ -258,14 +258,14 @@ extern "C" int PPW_LobbySubmitQuestionnaire(int mode) {
     p.d38 = d->x38;
     p.d3c = d->x3c;
     p.d3e = d->x3e;
-    x = _022577C4->x4c;
+    x = gPPWLobbyWork->x4c;
     host = ov45_02254F5C;
     name = ov45_02254F64;
-    flag = _022577C4->x50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
-    if (ov45_022577D4 == 0) {
+    flag = gPPWLobbyWork->x50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
+    if (gPPWLobbyCurrentRequest == 0) {
         o = (Op *)LobbyMem_Alloc(sizeof(Op));
         PNEW(o, flag, name, host, x, (const u8 *)&p, (const u8 *)&p + sizeof(p));
-        ov45_022577D4 = o;
+        gPPWLobbyCurrentRequest = o;
         StatsUpload_Start(o->flag, o->a.CStr());
         int ret;
         if (o->x3c) {
@@ -283,16 +283,16 @@ extern "C" int PPW_LobbySubmitQuestionnaire(int mode) {
             ok = 0;
         }
         if (!ok) {
-            if (ov45_022577D4 != 0) {
-                Op *q = ov45_022577D4;
+            if (gPPWLobbyCurrentRequest != 0) {
+                Op *q = gPPWLobbyCurrentRequest;
                 if (q != 0) {
                     q->vtbl->del(q);
                 }
-                ov45_022577D4 = 0;
+                gPPWLobbyCurrentRequest = 0;
             }
         }
     }
-    _022577C4->x6c = 1;
+    gPPWLobbyWork->x6c = 1;
     return 0;
 }
 
@@ -355,8 +355,8 @@ typedef struct Record {
 
 extern int DWC_CheckUserData(void *);
 extern int DWC_CheckHasProfile(void *);
-extern u8 *volatile _022577C4;
-extern u8 ov45_02254FA0[];
+extern u8 *volatile gPPWLobbyWork;
+extern u8 gPPWLobbyPlayersVtable[];
 extern void *LobbyString_InitCopy(void *, void *);
 extern void *LobbyCharVector_Data(Vec *);
 extern Node *LobbyTimerMap_LowerBound(u8 *, u32 *, Node *, Node *);
@@ -408,7 +408,7 @@ void PPWLobby_GetChannelName(S *p, u8 *q, int x);
 int PPW_LobbyUpdateRecruitInfo(u8 *p);
 
 int PPW_LobbyGetLastError(void) {
-    u8 *p = _022577C4;
+    u8 *p = gPPWLobbyWork;
     if (p) {
         return W(p, 4);
     }
@@ -502,8 +502,8 @@ struct Work {
     u8 names[4];
 };
 
-extern "C" Work *_022577C4;
-extern "C" char ov45_022550B4[];
+extern "C" Work *gPPWLobbyWork;
+extern "C" char sStr_Empty_15[];
 extern "C" Str PPWLobby_GetChannelName(u8 *, int);
 extern "C" int PPWLobby_EncodeMessage(int, int, int, int, int, Str *);
 extern "C" int LobbyChat_SendUserMessage(int, const char *);
@@ -529,7 +529,7 @@ inline int ErrorMap::Map(int r) const {
 }
 
 inline void SetError(int r) {
-    Work *g = _022577C4;
+    Work *g = gPPWLobbyWork;
     int state = ErrorMap().Map(r);
     if (state != 0) {
         g->sub = state;
@@ -555,8 +555,8 @@ extern "C" int PPWLobby_SendMessage(int id, int key, int a, int b, int c, int d,
         value.Destroy();
         return result;
     }
-    Str name = PPWLobby_GetChannelName(_022577C4->names, key);
-    if (name == ov45_022550B4) {
+    Str name = PPWLobby_GetChannelName(gPPWLobbyWork->names, key);
+    if (name == sStr_Empty_15) {
         name.Destroy();
         value.Destroy();
         return 5;
@@ -597,8 +597,8 @@ typedef struct {
     u8 names[1];
 } Global;
 
-extern Global *_022577C4;
-extern char ov45_022550B4[];
+extern Global *gPPWLobbyWork;
+extern char sStr_Empty_15[];
 extern int PPWLobby_EncodeMessage(void *, void *, void *, void *, void *, String *), LobbyChat_SendUserMessage(int, char *), LobbyChat_SendChannelMessage(char *, char *), LobbyString_CompareCStr(String *, char *), LobbyChat_SetChannelKey(char *, int, int, void *);
 extern void LobbyString_Destroy(String *), PPWLobby_GetChannelName(String *, void *, int), LobbyCharVector_Grow(String *, u32), LobbyCharVector_Destroy(String *);
 extern void *LobbyCharVector_Data(String *);
@@ -620,12 +620,12 @@ static inline char *Text(String *s) {
 }
 
 static inline int Empty(String *s) {
-    return LobbyString_CompareCStr(s, ov45_022550B4) == 0;
+    return LobbyString_CompareCStr(s, sStr_Empty_15) == 0;
 }
 
 static inline void Status(int result) {
     volatile u8 z = 0;
-    Global *g = _022577C4;
+    Global *g = gPPWLobbyWork;
     int e = 0;
     (void)&z;
     switch (result) {
@@ -649,7 +649,7 @@ int PPWLobby_SetChannelData(int id, int key, int mode, void *data, u32 length) {
     String name, encoded;
     int result;
     char *text;
-    PPWLobby_GetChannelName(&name, _022577C4->names, key);
+    PPWLobby_GetChannelName(&name, gPPWLobbyWork->names, key);
     if (Empty(&name)) {
         LobbyString_Destroy(&name);
         return 5;
@@ -805,7 +805,7 @@ struct ObjVtbl {
     void (*del)(Obj *);
 };
 
-extern "C" const ObjVtbl ov45_02254FC0;
+extern "C" const ObjVtbl gPPWLobbyWebRequestVtable;
 extern "C" void PPWLobby_OnCheckProfile(int, int, int);
 
 struct Obj {
@@ -821,7 +821,7 @@ struct Obj {
     int x3c;
 
     Obj(int f, const char *n, const char *h, u32 x_, const Info &info)
-        : vtbl(&ov45_02254FC0)
+        : vtbl(&gPPWLobbyWebRequestVtable)
         , kind(3)
         , flag(f)
         , name(n)
@@ -843,8 +843,8 @@ struct Work {
     u8 field[4];
 };
 
-extern "C" Work *_022577C4;
-extern "C" Obj *ov45_022577D4;
+extern "C" Work *gPPWLobbyWork;
+extern "C" Obj *gPPWLobbyCurrentRequest;
 extern "C" void *LobbyMem_Alloc(u32);
 extern "C" void StatsUpload_Start(int, const char *);
 extern "C" int StatsUpload_UploadWithLastHash(const char *, u32, const char *, u32, int);
@@ -855,29 +855,29 @@ extern "C" void PPWLobby_StartCheckProfile(void);
 
 extern "C" void PPWLobby_StartCheckProfile(void) {
     Info info;
-    const Config *c = (const Config *)LobbyByteVector_Data(_022577C4->field);
-    const u8 *f = (const u8 *)LobbyByteVector_Data(_022577C4->field);
+    const Config *c = (const Config *)LobbyByteVector_Data(gPPWLobbyWork->field);
+    const u8 *f = (const u8 *)LobbyByteVector_Data(gPPWLobbyWork->field);
     const char *name;
     const char *host;
     Obj *o;
     u32 x;
     ReqMethod flag;
-    info.x = _022577C4->x4c;
+    info.x = gPPWLobbyWork->x4c;
     info.one = 1;
     info.a = f[0x42];
     info.b = f[0x39];
     OS_GetMacAddress(info.mac);
     info.cfg = *c;
-    x = _022577C4->x4c;
+    x = gPPWLobbyWork->x4c;
     host = ov45_02254F70;
     name = ov45_02254F64;
-    flag = _022577C4->x50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
-    if (ov45_022577D4 != 0) {
+    flag = gPPWLobbyWork->x50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
+    if (gPPWLobbyCurrentRequest != 0) {
         return;
     }
     o = (Obj *)LobbyMem_Alloc(sizeof(Obj));
     new (o) Obj(flag, name, host, x, info);
-    ov45_022577D4 = o;
+    gPPWLobbyCurrentRequest = o;
     StatsUpload_Start(o->flag, o->name.CStr());
     int ret;
     if (o->x3c) {
@@ -897,12 +897,12 @@ extern "C" void PPWLobby_StartCheckProfile(void) {
     if (ok) {
         return;
     }
-    if (ov45_022577D4 != 0) {
-        Obj *p = ov45_022577D4;
+    if (gPPWLobbyCurrentRequest != 0) {
+        Obj *p = gPPWLobbyCurrentRequest;
         if (p != 0) {
             p->vtbl->del(p);
         }
-        ov45_022577D4 = 0;
+        gPPWLobbyCurrentRequest = 0;
     }
 }
 
@@ -919,8 +919,8 @@ extern "C" {
 #pragma force_active on
 #define I(p, o) (*(s32 *)((u8 *)(p) + (o)))
 #define P(p, o) (*(void **)((u8 *)(p) + (o)))
-extern void *_022577C4;
-extern char *_02254D04[];
+extern void *gPPWLobbyWork;
+extern char *gPPWLobbyChannelNamePrefixes[];
 extern void PPWLobbyChannel_GetName(Str *, void *), LobbyString_Reserve(Str *, u32);
 extern int LobbyString_Compare(Str *, Str *), LobbyChat_IsInChannel(const char *), PPWLobbyPlayers_AllHaveProfiles(void *), PPWLobby_SetChannelData(u32, u32, const void *, const void *, u32);
 extern void *LobbyByteVector_Data(void *);
@@ -930,12 +930,12 @@ extern void PPWLobby_SendMessage(u32, u32, u32, u32, u32, const void *, u32), Lo
 extern void PPWLobby_OnGetChannelMode(void), PPWLobby_OnGetChannelTime(void), PPWLobby_OnGetLobbyData(void), PPWLobbySchedule_SetQuestionnaire(void *, void *);
 extern Str *LobbyString_ConcatCStr(Str *, Str *, char *);
 extern Str *LobbyString_Concat(Str *, Str *, Str *);
-extern char ov45_022550B8[];
-extern char ov45_022550BC[];
-extern char ov45_022550C4[];
-extern char ov45_022550D4[];
-extern char ov45_022550E4[];
-extern char ov45_022550F4[];
+extern char sStr_Bang[];
+extern char sFmt_C_IntUnderscoreUint[];
+extern char sStr_b_lib_u_user[];
+extern char sStr_b_lib_u_system[];
+extern char sStr_b_lib_c_time[];
+extern char sStr_b_lib_c_lobby[];
 void PPWLobby_MakeChannelName(Str *out, u32 id, Str *s);
 void PPWLobby_GenerateChannelBaseName(Str *out);
 int LobbyString_Equals(Str *a, Str *b);
@@ -963,8 +963,8 @@ static inline u32 short_length(Str *p) {
 
 void PPWLobby_MakeChannelName(Str *out, u32 id, Str *s) {
     Str b, a;
-    LobbyString_InitFromCStr(&b, _02254D04[id]);
-    LobbyString_ConcatCStr(&a, &b, ov45_022550B8);
+    LobbyString_InitFromCStr(&b, gPPWLobbyChannelNamePrefixes[id]);
+    LobbyString_ConcatCStr(&a, &b, sStr_Bang);
     LobbyString_Concat(out, &a, s);
     LobbyString_Destroy(&a);
     LobbyString_Destroy(&b);
@@ -1110,8 +1110,8 @@ extern "C" {
 #pragma force_active on
 #define I(p, o) (*(s32 *)((u8 *)(p) + (o)))
 #define P(p, o) (*(void **)((u8 *)(p) + (o)))
-extern void *_022577C4;
-extern char *_02254D04[];
+extern void *gPPWLobbyWork;
+extern char *gPPWLobbyChannelNamePrefixes[];
 extern void PPWLobbyChannel_GetName(Str *, void *), LobbyString_Reserve(Str *, u32);
 extern int LobbyString_Compare(Str *, Str *), LobbyChat_IsInChannel(const char *), PPWLobbyPlayers_AllHaveProfiles(void *), PPWLobby_SetChannelData(u32, u32, const void *, const void *, u32);
 extern void *LobbyByteVector_Data(void *);
@@ -1121,12 +1121,12 @@ extern void PPWLobby_SendMessage(u32, u32, u32, u32, u32, const void *, u32), Lo
 extern void PPWLobby_OnGetChannelMode(void), PPWLobby_OnGetChannelTime(void), PPWLobby_OnGetLobbyData(void), PPWLobbySchedule_SetQuestionnaire(void *, void *);
 extern Str *LobbyString_ConcatCStr(Str *, Str *, char *);
 extern Str *LobbyString_Concat(Str *, Str *, Str *);
-extern char ov45_022550B8[];
-extern char ov45_022550BC[];
-extern char ov45_022550C4[];
-extern char ov45_022550D4[];
-extern char ov45_022550E4[];
-extern char ov45_022550F4[];
+extern char sStr_Bang[];
+extern char sFmt_C_IntUnderscoreUint[];
+extern char sStr_b_lib_u_user[];
+extern char sStr_b_lib_u_system[];
+extern char sStr_b_lib_c_time[];
+extern char sStr_b_lib_c_lobby[];
 void PPWLobby_MakeChannelName(Str *out, u32 id, Str *s);
 void PPWLobby_GenerateChannelBaseName(Str *out);
 int LobbyString_Equals(Str *a, Str *b);
@@ -1153,9 +1153,9 @@ static inline u32 short_length(Str *p) {
 }
 
 void PPWLobby_GenerateChannelBaseName(Str *out) {
-    u32 id = I(_022577C4, 0x4c);
+    u32 id = I(gPPWLobbyWork, 0x4c);
     u32 tick = current_time();
-    LobbyString_Format(out, ov45_022550BC, id, tick % 1000);
+    LobbyString_Format(out, sFmt_C_IntUnderscoreUint, id, tick % 1000);
 }
 }
 }
@@ -1320,7 +1320,7 @@ struct Callbacks {
     }
 };
 
-extern "C" Work *_022577C4;
+extern "C" Work *gPPWLobbyWork;
 extern "C" void PPWLobby_OnPlayerJoined(), PPWLobby_OnPlayerLeft(), PPWLobby_OnMessage(), PPWLobby_OnChannelDataChanged(), PPWLobby_OnTopicChanged(), PPWLobby_OnEnterMainChannel();
 extern "C" Str PPWLobby_GetChannelBaseName(Work *, int);
 extern "C" Str PPWLobby_MakeChannelName(int, const Str &);
@@ -1347,7 +1347,7 @@ inline int ErrorMap::Map(int r) const {
 
 inline void SetSelf(const Str &n) {
     Info i(n);
-    Work *w = _022577C4;
+    Work *w = gPPWLobbyWork;
     w->self.id = i.id;
     w->self.name = i.name;
     w->self.x = i.x;
@@ -1391,7 +1391,7 @@ inline void SetSelfK(const Str &n) {
     LobbyString_InitCopy(&i.name(), &n);
     p->x = 0;
     p->y = 0;
-    w = (Work2 *)_022577C4;
+    w = (Work2 *)gPPWLobbyWork;
     w->self.id = i.id;
     w->self.name() = i.name();
     w->self.x = i.x;
@@ -1404,10 +1404,10 @@ inline void SetSelfK(const Str &n) {
 
 extern "C" int PPWLobby_EnterMainChannel(void) {
     Callbacks cb(PPWLobby_OnPlayerJoined, PPWLobby_OnPlayerLeft, PPWLobby_OnMessage, PPWLobby_OnChannelDataChanged, PPWLobby_OnTopicChanged);
-    Str name = Build(PPWLobby_GetChannelBaseName(_022577C4, 0));
+    Str name = Build(PPWLobby_GetChannelBaseName(gPPWLobbyWork, 0));
     int result = LobbyChat_EnterChannelAsync(name.CStr(), 0, 0x14, &cb, PPWLobby_OnEnterMainChannel, 0);
     {
-        Work *w = _022577C4;
+        Work *w = gPPWLobbyWork;
         int state = ErrorMap().Map(result);
         if (state != 0) {
             w->sub = state;
@@ -1495,7 +1495,7 @@ struct Work {
     u8 sessions[4];
 };
 
-extern "C" Work *_022577C4;
+extern "C" Work *gPPWLobbyWork;
 extern "C" Str PPWLobbyChannel_GetName(Entry *);
 extern "C" int LobbyString_Equals(const Str &, const Str &);
 extern "C" int PPWLobby_DecodeMessageData(const char *, Vec *);
@@ -1538,7 +1538,7 @@ extern "C" void PPWLobby_HandleReceivedData(int a, int b, char *channel, int id,
     Vec data;
     {
         Str name(channel);
-        kind = Find(_022577C4, name);
+        kind = Find(gPPWLobbyWork, name);
         name.Destroy();
     }
     if (kind == 5) {
@@ -1559,12 +1559,12 @@ extern "C" void PPWLobby_HandleReceivedData(int a, int b, char *channel, int id,
         return;
     }
     if (id != -1) {
-        if (!IsActive(PPWLobbyPlayers_Find(_022577C4->sessions, id))) {
+        if (!IsActive(PPWLobbyPlayers_Find(gPPWLobbyWork->sessions, id))) {
             data.Destroy();
             return;
         }
     }
-    Work *w = _022577C4;
+    Work *w = gPPWLobbyWork;
     w->handler(a, b, kind, id, arg, LobbyByteVector_Data(&data), data.size, extra);
     data.Destroy();
 }
@@ -1862,8 +1862,8 @@ struct Work {
     }
 };
 
-extern "C" Work *_022577C4;
-extern "C" const char ov45_022550C4[], ov45_022550D4[], ov45_022550E4[], ov45_022550F4[];
+extern "C" Work *gPPWLobbyWork;
+extern "C" const char sStr_b_lib_u_user[], sStr_b_lib_u_system[], sStr_b_lib_c_time[], sStr_b_lib_c_lobby[];
 extern "C" Rec *PPWLobbyPlayers_Find(void *, int);
 extern "C" int PPWLobbySchedule_Load(int *, const u8 *, u32);
 extern "C" int PPWLobby_HandleLibraryData(int, int, int, int, const char *, const u8 *, u32);
@@ -1891,7 +1891,7 @@ inline void Rec::SetQuad(const u8 *d) {
 }
 
 static inline void OnPairFn(const u8 *d) {
-    _022577C4->SetPair(Val(d));
+    gPPWLobbyWork->SetPair(Val(d));
 }
 
 #pragma force_active on
@@ -1900,29 +1900,29 @@ extern "C" int PPWLobby_HandleLibraryData(int a0, int a1, int sel, int id, const
     if (sel) {
         return 0;
     }
-    if (strcmp(cmd, ov45_022550C4) == 0) {
-        if (id == _022577C4->id) {
+    if (strcmp(cmd, sStr_b_lib_u_user) == 0) {
+        if (id == gPPWLobbyWork->id) {
             return 1;
         }
-        Rec *r = PPWLobbyPlayers_Find(_022577C4->table, id);
+        Rec *r = PPWLobbyPlayers_Find(gPPWLobbyWork->table, id);
         if (!r) {
             return 1;
         }
         TU al;
         r->SetVec(data, len, al);
         if (r->valid) {
-            _022577C4->onData(id, data, len);
+            gPPWLobbyWork->onData(id, data, len);
         }
         return 1;
     }
-    if (strcmp(cmd, ov45_022550D4) == 0) {
-        if (id == _022577C4->id) {
+    if (strcmp(cmd, sStr_b_lib_u_system) == 0) {
+        if (id == gPPWLobbyWork->id) {
             return 1;
         }
         if (len != 16) {
             return 1;
         }
-        Rec *r = PPWLobbyPlayers_Find(_022577C4->table, id);
+        Rec *r = PPWLobbyPlayers_Find(gPPWLobbyWork->table, id);
         if (!r) {
             return 1;
         }
@@ -1930,22 +1930,22 @@ extern "C" int PPWLobby_HandleLibraryData(int a0, int a1, int sel, int id, const
         if (r->valid && r->q.changed) {
             r->q.changed = 0;
             Triple t = r->GetTriple();
-            _022577C4->onQuad(id, &t);
+            gPPWLobbyWork->onQuad(id, &t);
         }
         return 1;
     }
-    if (strcmp(cmd, ov45_022550E4) == 0) {
+    if (strcmp(cmd, sStr_b_lib_c_time) == 0) {
         if (len != 8) {
             return 1;
         }
         OnPairFn(data);
         return 1;
     }
-    if (strcmp(cmd, ov45_022550F4) == 0) {
-        if (!PPWLobbySchedule_Load(&_022577C4->status, data, len)) {
+    if (strcmp(cmd, sStr_b_lib_c_lobby) == 0) {
+        if (!PPWLobbySchedule_Load(&gPPWLobbyWork->status, data, len)) {
             return 1;
         }
-        _022577C4->status = 4;
+        gPPWLobbyWork->status = 4;
         return 1;
     }
     return 0;
@@ -1974,7 +1974,7 @@ typedef struct {
     int valid;
 } Record;
 
-extern u8 *_022577C4;
+extern u8 *gPPWLobbyWork;
 Record *PPWLobbyPlayers_Find(void *, int);
 void PPWLobbySchedule_Start(void *);
 
@@ -1992,10 +1992,10 @@ int PPWLobby_HandleSystemMessage(Obj *obj, int id, int flag, void *payload, int 
     }
     switch (obj->selector) {
     case 1:
-        if (id == *(int *)(_022577C4 + 0x4c)) {
+        if (id == *(int *)(gPPWLobbyWork + 0x4c)) {
             break;
         }
-        r = PPWLobbyPlayers_Find(_022577C4 + 0xe8, id);
+        r = PPWLobbyPlayers_Find(gPPWLobbyWork + 0xe8, id);
         valid = RecordValid(r);
         switch (valid) {
         case 0:
@@ -2004,14 +2004,14 @@ int PPWLobby_HandleSystemMessage(Obj *obj, int id, int flag, void *payload, int 
             break;
         }
         if (obj->mode == 1 && message == 0x44) {
-            (*(void (**)(int, void *))(_022577C4 + 0x28))(id, payload);
+            (*(void (**)(int, void *))(gPPWLobbyWork + 0x28))(id, payload);
         }
         break;
     case 2:
-        if (id == *(int *)(_022577C4 + 0x4c)) {
+        if (id == *(int *)(gPPWLobbyWork + 0x4c)) {
             break;
         }
-        r = PPWLobbyPlayers_Find(_022577C4 + 0xe8, id);
+        r = PPWLobbyPlayers_Find(gPPWLobbyWork + 0xe8, id);
         valid = RecordValid(r);
         switch (valid) {
         case 0:
@@ -2020,12 +2020,12 @@ int PPWLobby_HandleSystemMessage(Obj *obj, int id, int flag, void *payload, int 
             break;
         }
         if (obj->mode == 1 && message == 0x44) {
-            (*(void (**)(int, void *))(_022577C4 + 0x2c))(id, payload);
+            (*(void (**)(int, void *))(gPPWLobbyWork + 0x2c))(id, payload);
         }
         break;
     case 0:
         if (obj->mode == 1 && message == 4) {
-            PPWLobbySchedule_Start(_022577C4 + 0x144);
+            PPWLobbySchedule_Start(gPPWLobbyWork + 0x144);
         }
         break;
     }
@@ -2068,7 +2068,7 @@ typedef struct {
     u32 active;
 } W30615Context;
 
-extern W30615Context *_022577C4;
+extern W30615Context *gPPWLobbyWork;
 extern void PPWLobbyChannel_GetName(W30615String *, void *), LobbyString_Destroy(W30615String *);
 extern int LobbyChat_IsInChannel(char *), PPWLobbyPlayers_AllHaveProfiles(void *);
 int PPWLobby_IsMainChannelReady(void);
@@ -2089,13 +2089,13 @@ int PPWLobby_IsMainChannelReady(void) {
     W30615String local;
     int empty;
     W30615Context *c;
-    PPWLobbyChannel_GetName(&local, &_022577C4->name);
+    PPWLobbyChannel_GetName(&local, &gPPWLobbyWork->name);
     empty = LobbyChat_IsInChannel(!local.heap.large ? local.small.data : local.heap.ptr) == 0;
     LobbyString_Destroy(&local);
     if (empty) {
         return 0;
     }
-    c = _022577C4;
+    c = gPPWLobbyWork;
     if (c->a == 0) {
         return 0;
     }
@@ -2147,8 +2147,8 @@ typedef union Str {
     u8 bytes[12];
 } Str;
 
-extern u8 *_022577C4;
-extern char ov45_022550C4[];
+extern u8 *gPPWLobbyWork;
+extern char sStr_b_lib_u_user[];
 extern int LobbyString_Compare(Str *, Str *);
 extern void *LobbyByteVector_Data(void *);
 extern void PPWLobby_SetChannelData(u32, u32, char *, void *, u32);
@@ -2169,9 +2169,9 @@ static inline int flush(u8 *c) {
         return 1;
     }
     W(c, 0x11c) = 0;
-    peer = (u8 *)W(_022577C4, 0x4c);
+    peer = (u8 *)W(gPPWLobbyWork, 0x4c);
     buf = LobbyByteVector_Data(c + 0x110);
-    PPWLobby_SetChannelData((u32)peer, 0, ov45_022550C4, buf, W(c, 0x114));
+    PPWLobby_SetChannelData((u32)peer, 0, sStr_b_lib_u_user, buf, W(c, 0x114));
     return 1;
 }
 
@@ -2186,7 +2186,7 @@ static inline BOOL ready(int n) {
 }
 
 int PPWLobby_TimerUploadUserProfile(void) {
-    return flush(_022577C4);
+    return flush(gPPWLobbyWork);
 }
 }
 }
@@ -2203,8 +2203,8 @@ extern "C" {
 #pragma force_active on
 #define I(p, o) (*(s32 *)((u8 *)(p) + (o)))
 #define P(p, o) (*(void **)((u8 *)(p) + (o)))
-extern void *_022577C4;
-extern char *_02254D04[];
+extern void *gPPWLobbyWork;
+extern char *gPPWLobbyChannelNamePrefixes[];
 extern void PPWLobbyChannel_GetName(Str *, void *), LobbyString_Reserve(Str *, u32);
 extern int LobbyString_Compare(Str *, Str *), LobbyChat_IsInChannel(const char *), PPWLobbyPlayers_AllHaveProfiles(void *), PPWLobby_SetChannelData(u32, u32, const void *, const void *, u32);
 extern void *LobbyByteVector_Data(void *);
@@ -2214,12 +2214,12 @@ extern void PPWLobby_SendMessage(u32, u32, u32, u32, u32, const void *, u32), Lo
 extern void PPWLobby_OnGetChannelMode(void), PPWLobby_OnGetChannelTime(void), PPWLobby_OnGetLobbyData(void), PPWLobbySchedule_SetQuestionnaire(void *, void *);
 extern Str *LobbyString_ConcatCStr(Str *, Str *, char *);
 extern Str *LobbyString_Concat(Str *, Str *, Str *);
-extern char ov45_022550B8[];
-extern char ov45_022550BC[];
-extern char ov45_022550C4[];
-extern char ov45_022550D4[];
-extern char ov45_022550E4[];
-extern char ov45_022550F4[];
+extern char sStr_Bang[];
+extern char sFmt_C_IntUnderscoreUint[];
+extern char sStr_b_lib_u_user[];
+extern char sStr_b_lib_u_system[];
+extern char sStr_b_lib_c_time[];
+extern char sStr_b_lib_c_lobby[];
 void PPWLobby_MakeChannelName(Str *out, u32 id, Str *s);
 void PPWLobby_GenerateChannelBaseName(Str *out);
 int LobbyString_Equals(Str *a, Str *b);
@@ -2246,17 +2246,17 @@ static inline u32 short_length(Str *p) {
 }
 
 int PPWLobby_TimerUploadSystemProfile(void) {
-    void *p = _022577C4;
+    void *p = gPPWLobbyWork;
     if (!I(p, 0x10c)) {
         return 1;
     }
     I(p, 0x10c) = 0;
-    PPWLobby_SetChannelData(I(_022577C4, 0x4c), 0, ov45_022550D4, (u8 *)p + 0xfc, 16);
+    PPWLobby_SetChannelData(I(gPPWLobbyWork, 0x4c), 0, sStr_b_lib_u_system, (u8 *)p + 0xfc, 16);
     return 1;
 }
 
 int PPWLobby_TimerSendRecruitInfo(void) {
-    void *p = _022577C4;
+    void *p = gPPWLobbyWork;
     if (!I(p, 0x68)) {
         return 0;
     }
@@ -2266,7 +2266,7 @@ int PPWLobby_TimerSendRecruitInfo(void) {
 
 int PPWLobby_TimerPollChannelMode(void) {
     Str s;
-    PPWLobbyChannel_GetName(&s, (u8 *)_022577C4 + 0xb8);
+    PPWLobbyChannel_GetName(&s, (u8 *)gPPWLobbyWork + 0xb8);
     LobbyChat_GetChannelModeAsync(!s.l.flag ? s.s.data : s.l.data, PPWLobby_OnGetChannelMode, 0);
     LobbyString_Destroy(&s);
     return 1;
@@ -2274,11 +2274,11 @@ int PPWLobby_TimerPollChannelMode(void) {
 
 int PPWLobby_TimerRequestChannelTime(void) {
     Str s;
-    if (I(_022577C4, 328) != 0) {
+    if (I(gPPWLobbyWork, 328) != 0) {
         return 0;
     }
-    PPWLobbyChannel_GetName(&s, (u8 *)_022577C4 + 0xb8);
-    LobbyChat_GetChannelKeysAsync(!s.l.flag ? s.s.data : s.l.data, -1, ov45_022550E4, PPWLobby_OnGetChannelTime, 0);
+    PPWLobbyChannel_GetName(&s, (u8 *)gPPWLobbyWork + 0xb8);
+    LobbyChat_GetChannelKeysAsync(!s.l.flag ? s.s.data : s.l.data, -1, sStr_b_lib_c_time, PPWLobby_OnGetChannelTime, 0);
     LobbyString_Destroy(&s);
     return 1;
 }
@@ -2295,8 +2295,8 @@ int PPWLobby_TimerRequestChannelTime(void) {
 namespace F19 {
 extern "C" {
 #pragma force_active on
-extern u8 *_022577C4;
-extern u8 ov45_022550F4[];
+extern u8 *gPPWLobbyWork;
+extern u8 sStr_b_lib_c_lobby[];
 extern void PPWLobby_OnGetLobbyData(void), PPWLobbyChannel_GetName(void *, void *), LobbyString_Destroy(void *), LobbyChat_GetChannelKeysAsync(void *, int, void *, void (*)(void), int);
 
 typedef union {
@@ -2321,14 +2321,14 @@ int PPWLobby_TimerRequestLobbyData(void);
 
 int PPWLobby_TimerRequestLobbyData(void) {
     String s;
-    switch (limit(*(int *)(_022577C4 + 0x144))) {
+    switch (limit(*(int *)(gPPWLobbyWork + 0x144))) {
     case 0:
         break;
     default:
         return 0;
     }
-    PPWLobbyChannel_GetName(&s, _022577C4 + 0xb8);
-    LobbyChat_GetChannelKeysAsync(s.longform.flag == 0 ? s.shortform.data : s.longform.pointer, -1, ov45_022550F4, PPWLobby_OnGetLobbyData, 0);
+    PPWLobbyChannel_GetName(&s, gPPWLobbyWork + 0xb8);
+    LobbyChat_GetChannelKeysAsync(s.longform.flag == 0 ? s.shortform.data : s.longform.pointer, -1, sStr_b_lib_c_lobby, PPWLobby_OnGetLobbyData, 0);
     LobbyString_Destroy(&s);
     return 1;
 }
@@ -2346,8 +2346,8 @@ extern "C" {
 #pragma force_active on
 #define I(p, o) (*(s32 *)((u8 *)(p) + (o)))
 #define P(p, o) (*(void **)((u8 *)(p) + (o)))
-extern void *_022577C4;
-extern char *_02254D04[];
+extern void *gPPWLobbyWork;
+extern char *gPPWLobbyChannelNamePrefixes[];
 extern void PPWLobbyChannel_GetName(Str *, void *), LobbyString_Reserve(Str *, u32);
 extern int LobbyString_Compare(Str *, Str *), LobbyChat_IsInChannel(const char *), PPWLobbyPlayers_AllHaveProfiles(void *), PPWLobby_SetChannelData(u32, u32, const void *, const void *, u32);
 extern void *LobbyByteVector_Data(void *);
@@ -2357,12 +2357,12 @@ extern void PPWLobby_SendMessage(u32, u32, u32, u32, u32, const void *, u32), Lo
 extern void PPWLobby_OnGetChannelMode(void), PPWLobby_OnGetChannelTime(void), PPWLobby_OnGetLobbyData(void), PPWLobbySchedule_SetQuestionnaire(void *, void *);
 extern Str *LobbyString_ConcatCStr(Str *, Str *, char *);
 extern Str *LobbyString_Concat(Str *, Str *, Str *);
-extern char ov45_022550B8[];
-extern char ov45_022550BC[];
-extern char ov45_022550C4[];
-extern char ov45_022550D4[];
-extern char ov45_022550E4[];
-extern char ov45_022550F4[];
+extern char sStr_Bang[];
+extern char sFmt_C_IntUnderscoreUint[];
+extern char sStr_b_lib_u_user[];
+extern char sStr_b_lib_u_system[];
+extern char sStr_b_lib_c_time[];
+extern char sStr_b_lib_c_lobby[];
 void PPWLobby_MakeChannelName(Str *out, u32 id, Str *s);
 void PPWLobby_GenerateChannelBaseName(Str *out);
 int LobbyString_Equals(Str *a, Str *b);
@@ -2532,7 +2532,7 @@ struct ObjVtbl {
     void (*del)(Obj *);
 };
 
-extern "C" const ObjVtbl ov45_02254FC0;
+extern "C" const ObjVtbl gPPWLobbyWebRequestVtable;
 extern "C" void PPWLobby_OnGetSchedule(void);
 
 struct Obj {
@@ -2548,7 +2548,7 @@ struct Obj {
     int x3c;
 
     Obj(int f, const char *n, const char *h, u32 x_, const Info &info)
-        : vtbl(&ov45_02254FC0)
+        : vtbl(&gPPWLobbyWebRequestVtable)
         , kind(3)
         , flag(f)
         , name(n)
@@ -2578,8 +2578,8 @@ struct Work {
     u8 x144[4];
 };
 
-extern "C" Work *_022577C4;
-extern "C" Obj *ov45_022577D4;
+extern "C" Work *gPPWLobbyWork;
+extern "C" Obj *gPPWLobbyCurrentRequest;
 extern "C" int PPWLobby_ParseWebResponse(int, int, int, void **, u32 *);
 extern "C" void *LobbyMem_Alloc(u32);
 extern "C" void StatsUpload_Start(int, const char *);
@@ -2599,7 +2599,7 @@ extern "C" void PPWLobby_OnCheckProfile(int a0, int a1, int a2) {
     ReqMethod flag;
     void *buf;
     u32 len;
-    Work *w = _022577C4;
+    Work *w = gPPWLobbyWork;
     if (w == 0 || w->state == 9) {
         return;
     }
@@ -2612,29 +2612,29 @@ extern "C" void PPWLobby_OnCheckProfile(int a0, int a1, int a2) {
     if (r == 0) {
         PPW_LobbyUpdateMyProfile(buf, len, 0);
     }
-    _022577C4->cb(r, buf, len);
+    gPPWLobbyWork->cb(r, buf, len);
     if (r != 0) {
-        Work *g = _022577C4;
+        Work *g = gPPWLobbyWork;
         g->sub = 6;
         g->state = 10;
         return;
     }
-    const u8 *f = (const u8 *)LobbyByteVector_Data(&_022577C4->field);
-    info.x = _022577C4->x4c;
+    const u8 *f = (const u8 *)LobbyByteVector_Data(&gPPWLobbyWork->field);
+    info.x = gPPWLobbyWork->x4c;
     info.one = 1;
     info.a = f[0x42];
     info.b = f[0x39];
     OS_GetMacAddress(info.mac);
-    x = _022577C4->x4c;
+    x = gPPWLobbyWork->x4c;
     host = ov45_02254F68;
     name = ov45_02254F64;
-    flag = _022577C4->x50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
-    if (ov45_022577D4 != 0) {
+    flag = gPPWLobbyWork->x50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
+    if (gPPWLobbyCurrentRequest != 0) {
         return;
     }
     o = (Obj *)LobbyMem_Alloc(sizeof(Obj));
     new (o) Obj(flag, name, host, x, info);
-    ov45_022577D4 = o;
+    gPPWLobbyCurrentRequest = o;
     StatsUpload_Start(o->flag, o->name.CStr());
     int ret;
     if (o->x3c) {
@@ -2654,12 +2654,12 @@ extern "C" void PPWLobby_OnCheckProfile(int a0, int a1, int a2) {
     if (ok) {
         return;
     }
-    if (ov45_022577D4 != 0) {
-        Obj *p = ov45_022577D4;
+    if (gPPWLobbyCurrentRequest != 0) {
+        Obj *p = gPPWLobbyCurrentRequest;
         if (p != 0) {
             p->vtbl->del(p);
         }
-        ov45_022577D4 = 0;
+        gPPWLobbyCurrentRequest = 0;
     }
 }
 
@@ -2775,7 +2775,7 @@ struct ObjVtbl {
     void (*del)(Obj *);
 };
 
-extern "C" const ObjVtbl ov45_02254FC0;
+extern "C" const ObjVtbl gPPWLobbyWebRequestVtable;
 
 struct Obj {
     const ObjVtbl *vtbl;
@@ -2790,7 +2790,7 @@ struct Obj {
     int x3c;
 
     Obj(int f, const char *n, const char *h, u32 x_, const Info2 &info)
-        : vtbl(&ov45_02254FC0)
+        : vtbl(&gPPWLobbyWebRequestVtable)
         , kind(3)
         , flag(f)
         , name(n)
@@ -2820,8 +2820,8 @@ struct Work {
     u8 x144[4];
 };
 
-extern "C" Work *_022577C4;
-extern "C" Obj *ov45_022577D4;
+extern "C" Work *gPPWLobbyWork;
+extern "C" Obj *gPPWLobbyCurrentRequest;
 extern "C" int PPWLobby_ParseWebResponse(int, int, int, void **, u32 *);
 extern "C" int PPW_LobbyUpdateMyProfile(const void *, u32, int);
 extern "C" void *LobbyMem_Alloc(u32);
@@ -2845,47 +2845,47 @@ extern "C" void PPWLobby_OnGetSchedule(int a0, int a1, int a2) {
     ReqMethod flag;
     void *buf;
     u32 len;
-    Work *w = _022577C4;
+    Work *w = gPPWLobbyWork;
     if (w == 0 || w->state == 9) {
         return;
     }
     buf = 0;
     len = 0;
     int r = PPWLobby_ParseWebResponse(a0, a1, a2, &buf, &len);
-    if (r == 0 && !PPWLobbySchedule_IsSizeValid(_022577C4->x144, buf, len)) {
+    if (r == 0 && !PPWLobbySchedule_IsSizeValid(gPPWLobbyWork->x144, buf, len)) {
         r = 2;
     }
-    int ok2 = _022577C4->cb38(r, buf);
+    int ok2 = gPPWLobbyWork->cb38(r, buf);
     if (r != 0) {
-        Work *g = _022577C4;
+        Work *g = gPPWLobbyWork;
         g->sub = 4;
         g->state = 10;
         return;
     }
     if (ok2) {
-        PPWLobbySchedule_Load(_022577C4->x144, buf, len);
+        PPWLobbySchedule_Load(gPPWLobbyWork->x144, buf, len);
     }
-    const u8 *p = (const u8 *)LobbyByteVector_Data(&_022577C4->field);
+    const u8 *p = (const u8 *)LobbyByteVector_Data(&gPPWLobbyWork->field);
     int ret = 0;
     std::memset(&i2, 0, sizeof(i2));
-    const u8 *f = (const u8 *)LobbyByteVector_Data(&_022577C4->field);
-    info.x = _022577C4->x4c;
+    const u8 *f = (const u8 *)LobbyByteVector_Data(&gPPWLobbyWork->field);
+    info.x = gPPWLobbyWork->x4c;
     info.one = 1;
     info.a = f[0x42];
     info.b = f[0x39];
     OS_GetMacAddress(info.mac);
     i2.info = info;
     i2.extra = *(const u32 *)(p + 4);
-    x = _022577C4->x4c;
+    x = gPPWLobbyWork->x4c;
     host = ov45_02254F6C;
     name = ov45_02254F64;
-    flag = _022577C4->x50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
-    if (ov45_022577D4 != 0) {
+    flag = gPPWLobbyWork->x50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
+    if (gPPWLobbyCurrentRequest != 0) {
         return;
     }
     o = (Obj *)LobbyMem_Alloc(sizeof(Obj));
     new (o) Obj(flag, name, host, x, i2);
-    ov45_022577D4 = o;
+    gPPWLobbyCurrentRequest = o;
     StatsUpload_Start(o->flag, o->name.CStr());
     if (o->x3c) {
         u32 n = o->data.size;
@@ -2904,12 +2904,12 @@ extern "C" void PPWLobby_OnGetSchedule(int a0, int a1, int a2) {
     if (ok) {
         return;
     }
-    if (ov45_022577D4 != 0) {
-        Obj *q = ov45_022577D4;
+    if (gPPWLobbyCurrentRequest != 0) {
+        Obj *q = gPPWLobbyCurrentRequest;
         if (q != 0) {
             q->vtbl->del(q);
         }
-        ov45_022577D4 = 0;
+        gPPWLobbyCurrentRequest = 0;
     }
 }
 
@@ -3017,7 +3017,7 @@ struct ObjVtbl {
     void (*del)(Obj *);
 };
 
-extern "C" const ObjVtbl ov45_02254FC0;
+extern "C" const ObjVtbl gPPWLobbyWebRequestVtable;
 extern "C" void PPWLobby_OnGetQuestionnaire(void);
 
 struct Obj {
@@ -3033,7 +3033,7 @@ struct Obj {
     int x3c;
 
     Obj(int f, const char *n, const char *h, u32 x_, const Info &info)
-        : vtbl(&ov45_02254FC0)
+        : vtbl(&gPPWLobbyWebRequestVtable)
         , kind(3)
         , flag(f)
         , name(n)
@@ -3063,8 +3063,8 @@ struct Work {
     u8 x144[4];
 };
 
-extern "C" Work *_022577C4;
-extern "C" Obj *ov45_022577D4;
+extern "C" Work *gPPWLobbyWork;
+extern "C" Obj *gPPWLobbyCurrentRequest;
 extern "C" int PPWLobby_ParseWebResponse(int, int, int, void **, u32 *);
 extern "C" void *LobbyMem_Alloc(u32);
 extern "C" void StatsUpload_Start(int, const char *);
@@ -3085,40 +3085,40 @@ extern "C" void PPWLobby_OnGetVip(int a0, int a1, int a2) {
     ReqMethod flag;
     void *buf;
     u32 len;
-    Work *w = _022577C4;
+    Work *w = gPPWLobbyWork;
     if (w == 0 || w->state == 9) {
         return;
     }
     buf = 0;
     len = 0;
     int r = PPWLobby_ParseWebResponse(a0, a1, a2, &buf, &len);
-    if (!PPWLobbySchedule_ValidateVipRecords(_022577C4->x144, buf, len)) {
+    if (!PPWLobbySchedule_ValidateVipRecords(gPPWLobbyWork->x144, buf, len)) {
         r = 2;
     }
     if (r != 0) {
-        Work *g = _022577C4;
+        Work *g = gPPWLobbyWork;
         g->sub = 5;
         g->state = 10;
         return;
     }
-    PPWLobbySchedule_SetVipRecords(_022577C4->x144, buf, len);
-    _022577C4->cb3c(r, buf, len >> 3);
-    const u8 *f = (const u8 *)LobbyByteVector_Data(&_022577C4->field);
-    info.x = _022577C4->x4c;
+    PPWLobbySchedule_SetVipRecords(gPPWLobbyWork->x144, buf, len);
+    gPPWLobbyWork->cb3c(r, buf, len >> 3);
+    const u8 *f = (const u8 *)LobbyByteVector_Data(&gPPWLobbyWork->field);
+    info.x = gPPWLobbyWork->x4c;
     info.one = 1;
     info.a = f[0x42];
     info.b = f[0x39];
     OS_GetMacAddress(info.mac);
-    x = _022577C4->x4c;
+    x = gPPWLobbyWork->x4c;
     host = ov45_02254F60;
     name = ov45_02254F64;
-    flag = _022577C4->x50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
-    if (ov45_022577D4 != 0) {
+    flag = gPPWLobbyWork->x50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
+    if (gPPWLobbyCurrentRequest != 0) {
         return;
     }
     o = (Obj *)LobbyMem_Alloc(sizeof(Obj));
     new (o) Obj(flag, name, host, x, info);
-    ov45_022577D4 = o;
+    gPPWLobbyCurrentRequest = o;
     StatsUpload_Start(o->flag, o->name.CStr());
     int ret;
     if (o->x3c) {
@@ -3138,12 +3138,12 @@ extern "C" void PPWLobby_OnGetVip(int a0, int a1, int a2) {
     if (ok) {
         return;
     }
-    if (ov45_022577D4 != 0) {
-        Obj *p = ov45_022577D4;
+    if (gPPWLobbyCurrentRequest != 0) {
+        Obj *p = gPPWLobbyCurrentRequest;
         if (p != 0) {
             p->vtbl->del(p);
         }
-        ov45_022577D4 = 0;
+        gPPWLobbyCurrentRequest = 0;
     }
 }
 
@@ -3178,7 +3178,7 @@ typedef struct {
     int value;
 } Work;
 
-extern Work *_022577C4;
+extern Work *gPPWLobbyWork;
 extern int PPWLobby_ParseWebResponse(void *, void *, void *, void **, u32 *);
 extern void PPWLobbySchedule_SetQuestionnaire(void *, void *);
 void PPWLobby_OnGetQuestionnaire(void *, void *, void *);
@@ -3187,7 +3187,7 @@ void PPWLobby_OnGetQuestionnaire(void *a, void *b, void *c) {
     void *data;
     u32 size;
     int result;
-    Work *w = _022577C4;
+    Work *w = gPPWLobbyWork;
     if (!w || w->state == 9) {
         return;
     }
@@ -3199,15 +3199,15 @@ void PPWLobby_OnGetQuestionnaire(void *a, void *b, void *c) {
     }
     if (result) {
         {
-            Work *target = _022577C4;
+            Work *target = gPPWLobbyWork;
             target->error = 7;
             target->state = 10;
         }
         return;
     }
-    PPWLobbySchedule_SetQuestionnaire(&_022577C4->value, data);
-    _022577C4->callback(result, data);
-    _022577C4->value = 2;
+    PPWLobbySchedule_SetQuestionnaire(&gPPWLobbyWork->value, data);
+    gPPWLobbyWork->callback(result, data);
+    gPPWLobbyWork->value = 2;
 }
 }
 }
@@ -3223,8 +3223,8 @@ extern "C" {
 #pragma force_active on
 #define I(p, o) (*(s32 *)((u8 *)(p) + (o)))
 #define P(p, o) (*(void **)((u8 *)(p) + (o)))
-extern void *_022577C4;
-extern char *_02254D04[];
+extern void *gPPWLobbyWork;
+extern char *gPPWLobbyChannelNamePrefixes[];
 extern void PPWLobbyChannel_GetName(Str *, void *), LobbyString_Reserve(Str *, u32);
 extern int LobbyString_Compare(Str *, Str *), LobbyChat_IsInChannel(const char *), PPWLobbyPlayers_AllHaveProfiles(void *), PPWLobby_SetChannelData(u32, u32, const void *, const void *, u32);
 extern void *LobbyByteVector_Data(void *);
@@ -3234,12 +3234,12 @@ extern void PPWLobby_SendMessage(u32, u32, u32, u32, u32, const void *, u32), Lo
 extern void PPWLobby_OnGetChannelMode(void), PPWLobby_OnGetChannelTime(void), PPWLobby_OnGetLobbyData(void), PPWLobbySchedule_SetQuestionnaire(void *, void *);
 extern Str *LobbyString_ConcatCStr(Str *, Str *, char *);
 extern Str *LobbyString_Concat(Str *, Str *, Str *);
-extern char ov45_022550B8[];
-extern char ov45_022550BC[];
-extern char ov45_022550C4[];
-extern char ov45_022550D4[];
-extern char ov45_022550E4[];
-extern char ov45_022550F4[];
+extern char sStr_Bang[];
+extern char sFmt_C_IntUnderscoreUint[];
+extern char sStr_b_lib_u_user[];
+extern char sStr_b_lib_u_system[];
+extern char sStr_b_lib_c_time[];
+extern char sStr_b_lib_c_lobby[];
 void PPWLobby_MakeChannelName(Str *out, u32 id, Str *s);
 void PPWLobby_GenerateChannelBaseName(Str *out);
 int LobbyString_Equals(Str *a, Str *b);
@@ -3266,11 +3266,11 @@ static inline u32 short_length(Str *p) {
 }
 
 void PPWLobby_OnSubmitQuestionnaire(int status) {
-    if (!_022577C4 || I(_022577C4, 0) == 9) {
+    if (!gPPWLobbyWork || I(gPPWLobbyWork, 0) == 9) {
         return;
     }
-    I(_022577C4, 0x6c) = 0;
-    ((void (*)(s32))P(_022577C4, 0x44))(status ? 0 : 2);
+    I(gPPWLobbyWork, 0x6c) = 0;
+    ((void (*)(s32))P(gPPWLobbyWork, 0x44))(status ? 0 : 2);
 }
 }
 }
@@ -3509,7 +3509,7 @@ typedef struct Lobby {
     Map timers;
 } Lobby;
 
-extern "C" Lobby *_022577C4;
+extern "C" Lobby *gPPWLobbyWork;
 extern "C" void LobbyChat_EnumUsersAsync(void *handle, void (*cb)(void), u32 code);
 extern "C" void PPWLobby_OnEnumUsers(void);
 extern "C" int PPWLobby_TimerUploadSystemProfile(void);
@@ -3521,22 +3521,22 @@ extern "C" int PPWLobby_TimerRequestLobbyData(void);
 extern "C" void PPWLobby_OnEnterMainChannel(int success, void *unused, void *handle, u32 code);
 
 static inline void Lobby_ResetStamp(void) {
-    _022577C4->retry = 0;
+    gPPWLobbyWork->retry = 0;
     Tracked t(5, 1);
-    Sub *sub = &_022577C4->sub;
+    Sub *sub = &gPPWLobbyWork->sub;
     sub->tracked.Set(t);
     sub->SetFlag(1);
 }
 
 static inline void Lobby_AddTimer(int kind, u32 delay, int (*cb)(void)) {
-    Map *m = &_022577C4->timers;
+    Map *m = &gPPWLobbyWork->timers;
     Task task(GetNow(), delay, cb);
     KV<int, Task> d = LobbyTimerMap_MakeEntry(kind, task);
     m->insert(d);
 }
 
 static inline Arguments Lobby_GetArgs(void) {
-    const Stamp &s = _022577C4->sub.tracked.stamp;
+    const Stamp &s = gPPWLobbyWork->sub.tracked.stamp;
     Arguments a;
     a.code = s.code;
     a.time = s.pair.v;
@@ -3544,8 +3544,8 @@ static inline Arguments Lobby_GetArgs(void) {
 }
 
 static inline void Lobby_Notify(Arguments *args) {
-    Callbacks *cbs = &_022577C4->cbs;
-    Sub *sub = &_022577C4->sub;
+    Callbacks *cbs = &gPPWLobbyWork->cbs;
+    Sub *sub = &gPPWLobbyWork->sub;
     u32 key = sub->key;
     cbs->notify(key, args, LobbyByteVector_Data(&sub->vec), sub->vec.size);
 }
@@ -3559,7 +3559,7 @@ static inline int Lobby_Retry(Lobby *w) {
 }
 
 static inline void Lobby_SetError(int code) {
-    Lobby *w = _022577C4;
+    Lobby *w = gPPWLobbyWork;
     if (code != 0) {
         w->err = code;
         w->state = 10;
@@ -3567,9 +3567,9 @@ static inline void Lobby_SetError(int code) {
 }
 
 static inline void Lobby_OnFail(void) {
-    _022577C4->peer.Reset();
-    if (Lobby_Retry(_022577C4)) {
-        _022577C4->state = 4;
+    gPPWLobbyWork->peer.Reset();
+    if (Lobby_Retry(gPPWLobbyWork)) {
+        gPPWLobbyWork->state = 4;
     } else {
         Lobby_SetError(3);
     }
@@ -3693,7 +3693,7 @@ struct Work {
     int dirty;
 };
 
-extern "C" Work *_022577C4;
+extern "C" Work *gPPWLobbyWork;
 extern "C" char ov45_02254D5C[], ov45_02254D1C[], ov45_02254D3C[];
 extern "C" void LobbyChat_SetChannelMode(int, const char *);
 extern "C" void PPWLobby_OnEnterSubChannel(int, int, int, int);
@@ -3722,13 +3722,13 @@ extern "C" void PPWLobby_OnEnterSubChannel(int result, int unused, int arg, int 
             break;
         }
         if (name == 0) {
-            Work *w = _022577C4;
+            Work *w = gPPWLobbyWork;
             w->sub = 1;
             w->state = 10;
         }
         LobbyChat_SetChannelMode(arg, name);
         {
-            Work *w = _022577C4;
+            Work *w = gPPWLobbyWork;
             w->entry.valid = 0;
             Info info;
             info = w->entry.info;
@@ -3741,9 +3741,9 @@ extern "C" void PPWLobby_OnEnterSubChannel(int result, int unused, int arg, int 
             w->dirty = 1;
         }
     } else {
-        _022577C4->peer.Reset();
+        gPPWLobbyWork->peer.Reset();
     }
-    _022577C4->callback(result, kind);
+    gPPWLobbyWork->callback(result, kind);
 }
 
 #pragma opt_common_subs reset
@@ -3852,7 +3852,7 @@ struct Work {
     u8 sessions[4];
 };
 
-extern "C" Work *_022577C4;
+extern "C" Work *gPPWLobbyWork;
 extern "C" void PPWLobbyChannel_GetName(Str *, Channel *);
 extern "C" int LobbyString_Equals(const Str *, const Str *);
 extern "C" Session *PPWLobbyPlayers_Find(void *, int);
@@ -3908,25 +3908,25 @@ extern "C" void PPWLobby_OnPlayerJoined(char *channel, int id) {
     {
         Str name;
         LobbyString_InitFromCStr(&name, channel);
-        kind = Find(_022577C4, name);
+        kind = Find(gPPWLobbyWork, name);
         name.Destroy();
     }
     if (kind == 5) {
         return;
     }
     if (kind == 0) {
-        PPWLobbyPlayers_Add(_022577C4->sessions, id);
+        PPWLobbyPlayers_Add(gPPWLobbyWork->sessions, id);
         return;
     }
-    Session *s = PPWLobbyPlayers_Find(_022577C4->sessions, id);
+    Session *s = PPWLobbyPlayers_Find(gPPWLobbyWork->sessions, id);
     if (s == 0) {
-        PPWLobbyPlayers_Add(_022577C4->sessions, id);
-        s = PPWLobbyPlayers_Find(_022577C4->sessions, id);
+        PPWLobbyPlayers_Add(gPPWLobbyWork->sessions, id);
+        s = PPWLobbyPlayers_Find(gPPWLobbyWork->sessions, id);
     }
     Refresh2(s, info, arg, kind);
     MakeSum(s, arg);
     if (s->active) {
-        _022577C4->update(id, arg);
+        gPPWLobbyWork->update(id, arg);
     }
 }
 
@@ -4036,7 +4036,7 @@ struct Work {
     u8 sessions[4];
 };
 
-extern "C" Work *_022577C4;
+extern "C" Work *gPPWLobbyWork;
 extern "C" void PPWLobbyChannel_GetName(Str *, Channel *);
 extern "C" int LobbyString_Equals(const Str *, const Str *);
 extern "C" Session *PPWLobbyPlayers_Find(void *, int);
@@ -4091,29 +4091,29 @@ extern "C" void PPWLobby_OnPlayerLeft(char *channel, int id) {
     {
         Str name;
         LobbyString_InitFromCStr(&name, channel);
-        kind = Find(_022577C4, name);
+        kind = Find(gPPWLobbyWork, name);
         name.Destroy();
     }
     if (kind == 5) {
         return;
     }
     if (kind == 0) {
-        Session *s = PPWLobbyPlayers_Find(_022577C4->sessions, id);
+        Session *s = PPWLobbyPlayers_Find(gPPWLobbyWork->sessions, id);
         if (s == 0 || s->active == 0) {
             return;
         }
-        _022577C4->left(id);
-        PPWLobbyPlayers_Remove(_022577C4->sessions, id);
+        gPPWLobbyWork->left(id);
+        PPWLobbyPlayers_Remove(gPPWLobbyWork->sessions, id);
         return;
     }
-    Session *s = PPWLobbyPlayers_Find(_022577C4->sessions, id);
+    Session *s = PPWLobbyPlayers_Find(gPPWLobbyWork->sessions, id);
     if (s == 0) {
         return;
     }
     Refresh2(s, info, arg);
     MakeSum(s, arg);
     if (s->active) {
-        _022577C4->update(id, arg);
+        gPPWLobbyWork->update(id, arg);
     }
 }
 
@@ -4172,8 +4172,8 @@ struct Alloc {
     u8 tag;
 };
 
-extern u32 *_022577C4;
-extern u8 ov45_02254FA0[], ov45_022550C4[], ov45_022550D4[], ov45_02254D7C[];
+extern u32 *gPPWLobbyWork;
+extern u8 gPPWLobbyPlayersVtable[], sStr_b_lib_u_user[], sStr_b_lib_u_system[], ov45_02254D7C[];
 extern void DWC_Free(int, void *, int);
 extern void *LobbyMem_Alloc(u32);
 extern struct Str *LobbyString_Destroy(struct Str *);
@@ -4265,7 +4265,7 @@ void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
 struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
-extern char ov45_02255120[], ov45_02255104[];
+extern char sStr_BasicStringReserveLengthError[], sStr_TreeInsertLengthError[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
 void PPWLobby_OnChannelDataChanged(int a, int b, int c, int d);
@@ -4308,7 +4308,7 @@ extern int PPWLobby_DecodeMessageData(void *, struct Vec *);
 extern void *LobbyByteVector_Data(struct Vec *);
 extern int PPWLobbySchedule_Load(void *, void *, u32);
 extern void PPWLobbySchedule_CopyToVector(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
-extern char ov45_022550F4[];
+extern char sStr_b_lib_c_lobby[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
 void PPWLobby_OnChannelDataChanged(int a, int b, int c, int d);
@@ -4386,7 +4386,7 @@ typedef struct {
     u8 map[4];
 } Context;
 
-extern Context *_022577C4;
+extern Context *gPPWLobbyWork;
 extern void LobbyString_InitFromCStr(String *, void *), PPWLobbyChannel_GetName(String *, String *), LobbyString_Destroy(String *), LobbyCharVector_Destroy(String *), PPWLobby_HandleSystemMessage(Message *, int, int, void *, u32);
 extern int LobbyString_Equals(String *, String *), PPWLobby_ParseMessage(String *, Message *);
 extern u8 *PPWLobbyPlayers_Find(void *, int);
@@ -4420,7 +4420,7 @@ void PPWLobby_OnMessage(void *key, int index, void *name) {
         String *kp;
         int match;
         LobbyString_InitFromCStr(&k, key);
-        c = _022577C4;
+        c = gPPWLobbyWork;
         kp = &k;
         PPWLobbyChannel_GetName(&a, &c->first);
         match = LobbyString_Equals(&a, kp);
@@ -4461,20 +4461,20 @@ void PPWLobby_OnMessage(void *key, int index, void *name) {
         }
         switch (m.kind) {
         case 1: {
-            u8 *p = PPWLobbyPlayers_Find(_022577C4->map, index);
+            u8 *p = PPWLobbyPlayers_Find(gPPWLobbyWork->map, index);
             if (!validEntry(p)) {
                 LobbyCharVector_Destroy(&m.text);
                 return;
             }
             switch (m.type) {
             case 1: {
-                Context *c = _022577C4;
+                Context *c = gPPWLobbyWork;
                 void *t = LobbyByteVector_Data(&m.text);
                 c->cb1(index, language, m.arg, t, m.text.b);
                 break;
             }
             case 0: {
-                Context *c = _022577C4;
+                Context *c = gPPWLobbyWork;
                 void *t = LobbyByteVector_Data(&m.text);
                 c->cb0(index, language, m.arg, t);
                 break;
@@ -4545,8 +4545,8 @@ struct Alloc {
     u8 tag;
 };
 
-extern u32 *_022577C4;
-extern u8 ov45_02254FA0[], ov45_022550C4[], ov45_022550D4[], ov45_02254D7C[];
+extern u32 *gPPWLobbyWork;
+extern u8 gPPWLobbyPlayersVtable[], sStr_b_lib_u_user[], sStr_b_lib_u_system[], ov45_02254D7C[];
 extern void DWC_Free(int, void *, int);
 extern void *LobbyMem_Alloc(u32);
 extern struct Str *LobbyString_Destroy(struct Str *);
@@ -4638,7 +4638,7 @@ void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
 struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
-extern char ov45_02255120[], ov45_02255104[];
+extern char sStr_BasicStringReserveLengthError[], sStr_TreeInsertLengthError[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
 void PPWLobby_OnChannelDataChanged(int a, int b, int c, int d);
@@ -4681,7 +4681,7 @@ extern int PPWLobby_DecodeMessageData(void *, struct Vec *);
 extern void *LobbyByteVector_Data(struct Vec *);
 extern int PPWLobbySchedule_Load(void *, void *, u32);
 extern void PPWLobbySchedule_CopyToVector(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
-extern char ov45_022550F4[];
+extern char sStr_b_lib_c_lobby[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
 void PPWLobby_OnChannelDataChanged(int a, int b, int c, int d);
@@ -4724,7 +4724,7 @@ void PPWLobby_OnEnumUsers(char *name, int id, int n, int *list);
 void PPWLobby_OnGetLobbyData(int ok, int unused1, int unused2, int unused3, void *value);
 
 void PPWLobby_OnExcessFlood(int a) {
-    ((void (*)(int))_022577C4[18])(a);
+    ((void (*)(int))gPPWLobbyWork[18])(a);
 }
 
 void PPWLobby_OnChannelDataChanged(int a, int b, int c, int d) {
@@ -4765,8 +4765,8 @@ typedef struct {
     int failed;
 } Work;
 
-extern Work *_022577C4;
-extern char ov45_022550B8[];
+extern Work *gPPWLobbyWork;
+extern char sStr_Bang[];
 extern void LobbyString_InitFromCStr(String *, char *), LobbyString_Destroy(String *), LobbyStringVector_Destroy(Vec *), LobbyString_Assign(String *, String *), PPWLobby_GenerateChannelBaseName(String *);
 extern void LobbyString_Split(Vec *, String *, String *, int);
 void PPWLobby_OnEnumChannels(int, int, char **, int, int *);
@@ -4786,7 +4786,7 @@ void PPWLobby_OnEnumChannels(int valid, int count, char **names, int unused, int
             continue;
         }
         LobbyString_InitFromCStr(&item, names[i]);
-        LobbyString_InitFromCStr(&delimiter, ov45_022550B8);
+        LobbyString_InitFromCStr(&delimiter, sStr_Bang);
         LobbyString_Split(&parts, &item, &delimiter, 0);
         LobbyString_Destroy(&delimiter);
         LobbyString_Destroy(&item);
@@ -4799,18 +4799,18 @@ void PPWLobby_OnEnumChannels(int valid, int count, char **names, int unused, int
             char *p = s->allocated == 0 ? (char *)s + 1 : (char *)s->data;
             LobbyString_InitFromCStr(&text, p);
         }
-        LobbyString_Assign(&_022577C4->message, &text);
+        LobbyString_Assign(&gPPWLobbyWork->message, &text);
         LobbyString_Destroy(&text);
-        _022577C4->failed = 0;
-        _022577C4->state = 6;
+        gPPWLobbyWork->failed = 0;
+        gPPWLobbyWork->state = 6;
         LobbyStringVector_Destroy(&parts);
         return;
     }
     PPWLobby_GenerateChannelBaseName(&empty);
-    LobbyString_Assign(&_022577C4->message, &empty);
+    LobbyString_Assign(&gPPWLobbyWork->message, &empty);
     LobbyString_Destroy(&empty);
-    _022577C4->failed = 1;
-    _022577C4->state = 6;
+    gPPWLobbyWork->failed = 1;
+    gPPWLobbyWork->state = 6;
 }
 }
 }
@@ -4985,8 +4985,8 @@ struct Work {
     u8 sessions[4];
 };
 
-extern "C" Work *_022577C4;
-extern "C" char ov45_022550C4[], ov45_022550D4[];
+extern "C" Work *gPPWLobbyWork;
+extern "C" char sStr_b_lib_u_user[], sStr_b_lib_u_system[];
 extern "C" Str PPWLobbyChannel_GetName(Entry *);
 extern "C" int LobbyString_Equals(const Str &, const Str &);
 extern "C" void PPWLobbyPlayers_Add(void *, int);
@@ -5017,7 +5017,7 @@ inline int Find(Work *w, const Str &name) {
 }
 
 inline bool IsSelf(int id) {
-    return id == _022577C4->self;
+    return id == gPPWLobbyWork->self;
 }
 
 #pragma force_active on
@@ -5030,7 +5030,7 @@ extern "C" void PPWLobby_OnEnumUsers(int a, char *channel, int count, int *ids) 
     }
     {
         Str name(channel);
-        Work *w = _022577C4;
+        Work *w = gPPWLobbyWork;
         result = Find(w, name);
         name.Destroy();
     }
@@ -5042,12 +5042,12 @@ extern "C" void PPWLobby_OnEnumUsers(int a, char *channel, int count, int *ids) 
     }
     for (i = 0; i < count; i++) {
         if (!IsSelf(ids[i])) {
-            PPWLobbyPlayers_Add(_022577C4->sessions, ids[i]);
-            LobbyChat_GetChannelKeysAsync(channel, ids[i], ov45_022550C4, PPWLobby_OnGetChannelKeys, 0);
-            LobbyChat_GetChannelKeysAsync(channel, ids[i], ov45_022550D4, PPWLobby_OnGetChannelKeys, 0);
+            PPWLobbyPlayers_Add(gPPWLobbyWork->sessions, ids[i]);
+            LobbyChat_GetChannelKeysAsync(channel, ids[i], sStr_b_lib_u_user, PPWLobby_OnGetChannelKeys, 0);
+            LobbyChat_GetChannelKeysAsync(channel, ids[i], sStr_b_lib_u_system, PPWLobby_OnGetChannelKeys, 0);
         }
     }
-    _022577C4->flag = 1;
+    gPPWLobbyWork->flag = 1;
 }
 
 #pragma opt_common_subs reset
@@ -5105,8 +5105,8 @@ struct Alloc {
     u8 tag;
 };
 
-extern u32 *_022577C4;
-extern u8 ov45_02254FA0[], ov45_022550C4[], ov45_022550D4[], ov45_02254D7C[];
+extern u32 *gPPWLobbyWork;
+extern u8 gPPWLobbyPlayersVtable[], sStr_b_lib_u_user[], sStr_b_lib_u_system[], ov45_02254D7C[];
 extern void DWC_Free(int, void *, int);
 extern void *LobbyMem_Alloc(u32);
 extern struct Str *LobbyString_Destroy(struct Str *);
@@ -5198,7 +5198,7 @@ void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
 struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
-extern char ov45_02255120[], ov45_02255104[];
+extern char sStr_BasicStringReserveLengthError[], sStr_TreeInsertLengthError[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
 void PPWLobby_OnChannelDataChanged(int a, int b, int c, int d);
@@ -5241,7 +5241,7 @@ extern int PPWLobby_DecodeMessageData(void *, struct Vec *);
 extern void *LobbyByteVector_Data(struct Vec *);
 extern int PPWLobbySchedule_Load(void *, void *, u32);
 extern void PPWLobbySchedule_CopyToVector(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
-extern char ov45_022550F4[];
+extern char sStr_b_lib_c_lobby[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
 void PPWLobby_OnChannelDataChanged(int a, int b, int c, int d);
@@ -5289,9 +5289,9 @@ void PPWLobby_OnGetChannelMode(int a, int b, u32 *c) {
         return;
     }
     if (c[7] == 20) {
-        _022577C4[51] = 1;
+        gPPWLobbyWork[51] = 1;
         v = 4;
-        LobbyTimerMap_EraseKey((u8 *)_022577C4 + 308, &v);
+        LobbyTimerMap_EraseKey((u8 *)gPPWLobbyWork + 308, &v);
         return;
     }
     LobbyChat_SetChannelMode(b, (char *)ov45_02254D7C);
@@ -5352,8 +5352,8 @@ struct Work {
     }
 };
 
-extern "C" Work *_022577C4;
-extern "C" char ov45_022550E4[];
+extern "C" Work *gPPWLobbyWork;
+extern "C" char sStr_b_lib_c_time[];
 extern "C" int PPWLobby_DecodeMessageData(const char *, Vec *);
 extern "C" void DWC_GetDateTime(Date *, Time *);
 extern "C" s64 RTC_ConvertDateTimeToSecond(const Date *, const Time *);
@@ -5369,23 +5369,23 @@ extern "C" void PPWLobby_OnGetChannelTime(int result, int unused1, int unused2, 
     }
     Vec data;
     if (PPWLobby_DecodeMessageData(value, &data) == 0 || data.size != 8) {
-        Work *w = _022577C4;
+        Work *w = gPPWLobbyWork;
         DateTime now;
         DWC_GetDateTime(&now.date, &now.time);
         w->stamp.v = RTC_ConvertDateTimeToSecond(&now.date, &now.time);
         Stamp s;
         s = w->stamp;
-        PPWLobby_SetChannelData(-1, 0, ov45_022550E4, &s, 8);
+        PPWLobby_SetChannelData(-1, 0, sStr_b_lib_c_time, &s, 8);
         data.Destroy();
         return;
     }
     {
         Stamp s = *(Stamp *)LobbyByteVector_Data(&data);
-        Work *w = _022577C4;
+        Work *w = gPPWLobbyWork;
         w->valid = 1;
         w->stamp = s;
         int state = 5;
-        LobbyTimerMap_EraseKey(_022577C4->list, &state);
+        LobbyTimerMap_EraseKey(gPPWLobbyWork->list, &state);
     }
     data.Destroy();
 }
@@ -5418,14 +5418,14 @@ typedef struct {
     Pair time;
 } Work;
 
-extern Work *_022577C4;
-extern u8 ov45_022550E4[], ov45_022550F4[];
+extern Work *gPPWLobbyWork;
+extern u8 sStr_b_lib_c_time[], sStr_b_lib_c_lobby[];
 extern int PPWLobby_DecodeMessageData(void *, Blob *), PPWLobbySchedule_Load(u32 *, void *, u32);
 extern void *LobbyByteVector_Data(Blob *);
 extern void LobbyCharVector_Destroy(Blob *), PPWLobby_SetChannelData(int, int, void *, void *, int), LobbyTimerMap_EraseKey(int *, int *), PPWLobbySchedule_CopyToVector(Blob *, u32 *), DWC_GetDateTime(RTCDate *, RTCTime *);
 
 static inline int appendBlob(Blob *blob) {
-    Work *w = _022577C4;
+    Work *w = gPPWLobbyWork;
     return PPWLobbySchedule_Load(&w->stored, LobbyByteVector_Data(blob), blob->size);
 }
 
@@ -5441,15 +5441,15 @@ void PPWLobby_OnGetLobbyData(int ok, int a, int b, int c, void *data) {
     blob.size = 0;
     blob.capacity = 0;
     if (!PPWLobby_DecodeMessageData(data, &blob) || blob.size == 0 || !appendBlob(&blob)) {
-        PPWLobbySchedule_CopyToVector(&copy, &_022577C4->stored);
-        PPWLobby_SetChannelData(-1, 0, ov45_022550F4, LobbyByteVector_Data(&copy), copy.size);
+        PPWLobbySchedule_CopyToVector(&copy, &gPPWLobbyWork->stored);
+        PPWLobby_SetChannelData(-1, 0, sStr_b_lib_c_lobby, LobbyByteVector_Data(&copy), copy.size);
         LobbyCharVector_Destroy(&copy);
         LobbyCharVector_Destroy(&blob);
         return;
     }
-    _022577C4->stored = 4;
+    gPPWLobbyWork->stored = 4;
     state = 6;
-    LobbyTimerMap_EraseKey(&_022577C4->state, &state);
+    LobbyTimerMap_EraseKey(&gPPWLobbyWork->state, &state);
     LobbyCharVector_Destroy(&blob);
 }
 }
@@ -5506,8 +5506,8 @@ struct Alloc {
     u8 tag;
 };
 
-extern u32 *_022577C4;
-extern u8 ov45_02254FA0[], ov45_022550C4[], ov45_022550D4[], ov45_02254D7C[];
+extern u32 *gPPWLobbyWork;
+extern u8 gPPWLobbyPlayersVtable[], sStr_b_lib_u_user[], sStr_b_lib_u_system[], ov45_02254D7C[];
 extern void DWC_Free(int, void *, int);
 extern void *LobbyMem_Alloc(u32);
 extern struct Str *LobbyString_Destroy(struct Str *);
@@ -5599,7 +5599,7 @@ void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
 struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
-extern char ov45_02255120[], ov45_02255104[];
+extern char sStr_BasicStringReserveLengthError[], sStr_TreeInsertLengthError[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
 void PPWLobby_OnChannelDataChanged(int a, int b, int c, int d);
@@ -5642,7 +5642,7 @@ extern int PPWLobby_DecodeMessageData(void *, struct Vec *);
 extern void *LobbyByteVector_Data(struct Vec *);
 extern int PPWLobbySchedule_Load(void *, void *, u32);
 extern void PPWLobbySchedule_CopyToVector(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
-extern char ov45_022550F4[];
+extern char sStr_b_lib_c_lobby[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
 void PPWLobby_OnChannelDataChanged(int a, int b, int c, int d);
@@ -5695,7 +5695,7 @@ void *PPWLobbyWebRequest_Destroy(u8 *a) {
 }
 
 void *PPWLobbyPlayers_Delete(u8 *a) {
-    *(u8 **)a = ov45_02254FA0;
+    *(u8 **)a = gPPWLobbyPlayersVtable;
     PPWLobbyPlayers_Clear(a);
     LobbyCharVector_Destroy((struct Vec *)(a + 40));
     PPWLobbyPlayerSet_Destroy((struct Tree *)(a + 4));
@@ -5817,8 +5817,8 @@ struct Alloc {
     u8 tag;
 };
 
-extern u32 *_022577C4;
-extern u8 ov45_02254FA0[], ov45_022550C4[], ov45_022550D4[], ov45_02254D7C[];
+extern u32 *gPPWLobbyWork;
+extern u8 gPPWLobbyPlayersVtable[], sStr_b_lib_u_user[], sStr_b_lib_u_system[], ov45_02254D7C[];
 extern void DWC_Free(int, void *, int);
 extern void *LobbyMem_Alloc(u32);
 extern struct Str *LobbyString_Destroy(struct Str *);
@@ -5910,7 +5910,7 @@ void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
 struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
-extern char ov45_02255120[], ov45_02255104[];
+extern char sStr_BasicStringReserveLengthError[], sStr_TreeInsertLengthError[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
 void PPWLobby_OnChannelDataChanged(int a, int b, int c, int d);
@@ -5953,7 +5953,7 @@ extern int PPWLobby_DecodeMessageData(void *, struct Vec *);
 extern void *LobbyByteVector_Data(struct Vec *);
 extern int PPWLobbySchedule_Load(void *, void *, u32);
 extern void PPWLobbySchedule_CopyToVector(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
-extern char ov45_022550F4[];
+extern char sStr_b_lib_c_lobby[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
 void PPWLobby_OnChannelDataChanged(int a, int b, int c, int d);
@@ -6094,8 +6094,8 @@ struct Alloc {
     u8 tag;
 };
 
-extern u32 *_022577C4;
-extern u8 ov45_02254FA0[], ov45_022550C4[], ov45_022550D4[], ov45_02254D7C[];
+extern u32 *gPPWLobbyWork;
+extern u8 gPPWLobbyPlayersVtable[], sStr_b_lib_u_user[], sStr_b_lib_u_system[], ov45_02254D7C[];
 extern void DWC_Free(int, void *, int);
 extern void *LobbyMem_Alloc(u32);
 extern struct Str *LobbyString_Destroy(struct Str *);
@@ -6187,7 +6187,7 @@ void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
 struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
-extern char ov45_02255120[], ov45_02255104[];
+extern char sStr_BasicStringReserveLengthError[], sStr_TreeInsertLengthError[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
 void PPWLobby_OnChannelDataChanged(int a, int b, int c, int d);
@@ -6230,7 +6230,7 @@ extern int PPWLobby_DecodeMessageData(void *, struct Vec *);
 extern void *LobbyByteVector_Data(struct Vec *);
 extern int PPWLobbySchedule_Load(void *, void *, u32);
 extern void PPWLobbySchedule_CopyToVector(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
-extern char ov45_022550F4[];
+extern char sStr_b_lib_c_lobby[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
 void PPWLobby_OnChannelDataChanged(int a, int b, int c, int d);
@@ -6305,7 +6305,7 @@ void LobbyTimerMap_Clear(struct Tree *a) {
 namespace F45 {
 extern "C" int printf(const char *, ...);
 extern "C" void abort(void);
-extern "C" char ov45_02255104[];
+extern "C" char sStr_TreeInsertLengthError[];
 extern "C" void *LobbyMem_Alloc(u32);
 extern "C" void DWC_Free(int, void *, int);
 
@@ -6384,7 +6384,7 @@ extern "C" Node *LobbyTimerMap_InsertNode(Tree *, Node *, int, int, Value *);
 
 extern "C" Node *LobbyTimerMap_InsertNode(Tree *t, Node *parent, int left, int leftmost, Value *v) {
     if (t->count == (u32)-1) {
-        printf(ov45_02255104);
+        printf(sStr_TreeInsertLengthError);
         abort();
     }
     Node *n = Allocate(Alloc());
@@ -6461,8 +6461,8 @@ struct Alloc {
     u8 tag;
 };
 
-extern u32 *_022577C4;
-extern u8 ov45_02254FA0[], ov45_022550C4[], ov45_022550D4[], ov45_02254D7C[];
+extern u32 *gPPWLobbyWork;
+extern u8 gPPWLobbyPlayersVtable[], sStr_b_lib_u_user[], sStr_b_lib_u_system[], ov45_02254D7C[];
 extern void DWC_Free(int, void *, int);
 extern void *LobbyMem_Alloc(u32);
 extern struct Str *LobbyString_Destroy(struct Str *);
@@ -6554,7 +6554,7 @@ void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
 struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
-extern char ov45_02255120[], ov45_02255104[];
+extern char sStr_BasicStringReserveLengthError[], sStr_TreeInsertLengthError[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
 void PPWLobby_OnChannelDataChanged(int a, int b, int c, int d);
@@ -6597,7 +6597,7 @@ extern int PPWLobby_DecodeMessageData(void *, struct Vec *);
 extern void *LobbyByteVector_Data(struct Vec *);
 extern int PPWLobbySchedule_Load(void *, void *, u32);
 extern void PPWLobbySchedule_CopyToVector(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
-extern char ov45_022550F4[];
+extern char sStr_b_lib_c_lobby[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
 void PPWLobby_OnChannelDataChanged(int a, int b, int c, int d);
@@ -7020,8 +7020,8 @@ struct Alloc {
     u8 tag;
 };
 
-extern u32 *_022577C4;
-extern u8 ov45_02254FA0[], ov45_022550C4[], ov45_022550D4[], ov45_02254D7C[];
+extern u32 *gPPWLobbyWork;
+extern u8 gPPWLobbyPlayersVtable[], sStr_b_lib_u_user[], sStr_b_lib_u_system[], ov45_02254D7C[];
 extern void DWC_Free(int, void *, int);
 extern void *LobbyMem_Alloc(u32);
 extern struct Str *LobbyString_Destroy(struct Str *);
@@ -7113,7 +7113,7 @@ void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
 struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
-extern char ov45_02255120[], ov45_02255104[];
+extern char sStr_BasicStringReserveLengthError[], sStr_TreeInsertLengthError[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
 void PPWLobby_OnChannelDataChanged(int a, int b, int c, int d);
@@ -7156,7 +7156,7 @@ extern int PPWLobby_DecodeMessageData(void *, struct Vec *);
 extern void *LobbyByteVector_Data(struct Vec *);
 extern int PPWLobbySchedule_Load(void *, void *, u32);
 extern void PPWLobbySchedule_CopyToVector(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
-extern char ov45_022550F4[];
+extern char sStr_b_lib_c_lobby[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
 void PPWLobby_OnChannelDataChanged(int a, int b, int c, int d);
@@ -7337,8 +7337,8 @@ struct Alloc {
     u8 tag;
 };
 
-extern u32 *_022577C4;
-extern u8 ov45_02254FA0[], ov45_022550C4[], ov45_022550D4[], ov45_02254D7C[];
+extern u32 *gPPWLobbyWork;
+extern u8 gPPWLobbyPlayersVtable[], sStr_b_lib_u_user[], sStr_b_lib_u_system[], ov45_02254D7C[];
 extern void DWC_Free(int, void *, int);
 extern void *LobbyMem_Alloc(u32);
 extern struct Str *LobbyString_Destroy(struct Str *);
@@ -7430,7 +7430,7 @@ void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
 struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
-extern char ov45_02255120[], ov45_02255104[];
+extern char sStr_BasicStringReserveLengthError[], sStr_TreeInsertLengthError[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
 void PPWLobby_OnChannelDataChanged(int a, int b, int c, int d);
@@ -7473,7 +7473,7 @@ extern int PPWLobby_DecodeMessageData(void *, struct Vec *);
 extern void *LobbyByteVector_Data(struct Vec *);
 extern int PPWLobbySchedule_Load(void *, void *, u32);
 extern void PPWLobbySchedule_CopyToVector(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
-extern char ov45_022550F4[];
+extern char sStr_b_lib_c_lobby[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
 void PPWLobby_OnChannelDataChanged(int a, int b, int c, int d);
@@ -7639,8 +7639,8 @@ struct Alloc {
     u8 tag;
 };
 
-extern u32 *_022577C4;
-extern u8 ov45_02254FA0[], ov45_022550C4[], ov45_022550D4[], ov45_02254D7C[];
+extern u32 *gPPWLobbyWork;
+extern u8 gPPWLobbyPlayersVtable[], sStr_b_lib_u_user[], sStr_b_lib_u_system[], ov45_02254D7C[];
 extern void DWC_Free(int, void *, int);
 extern void *LobbyMem_Alloc(u32);
 extern struct Str *LobbyString_Destroy(struct Str *);
@@ -7732,7 +7732,7 @@ void LobbyCharVector_Reallocate(struct Vec *a, u32 unused, u32 n);
 struct Str *LobbyString_InitCopy(struct Str *a, struct Str *b);
 struct Str *LobbyString_InitSubstring(struct Str *a, struct Str *b, u32 offset, u32 length);
 struct Str *LobbyString_InitFromCStr(struct Str *a, char *b);
-extern char ov45_02255120[], ov45_02255104[];
+extern char sStr_BasicStringReserveLengthError[], sStr_TreeInsertLengthError[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
 void PPWLobby_OnChannelDataChanged(int a, int b, int c, int d);
@@ -7775,7 +7775,7 @@ extern int PPWLobby_DecodeMessageData(void *, struct Vec *);
 extern void *LobbyByteVector_Data(struct Vec *);
 extern int PPWLobbySchedule_Load(void *, void *, u32);
 extern void PPWLobbySchedule_CopyToVector(struct Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
-extern char ov45_022550F4[];
+extern char sStr_b_lib_c_lobby[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
 void PPWLobby_OnChannelDataChanged(int a, int b, int c, int d);
@@ -7906,8 +7906,8 @@ struct Alloc {
     u8 tag;
 };
 
-extern u32 *_022577C4;
-extern u8 ov45_02254FA0[], ov45_022550C4[], ov45_022550D4[], ov45_02254D7C[];
+extern u32 *gPPWLobbyWork;
+extern u8 gPPWLobbyPlayersVtable[], sStr_b_lib_u_user[], sStr_b_lib_u_system[], ov45_02254D7C[];
 extern void DWC_Free(int, void *, int);
 extern void *LobbyMem_Alloc(u32);
 extern Str *LobbyString_Destroy(Str *);
@@ -7999,7 +7999,7 @@ void LobbyCharVector_Reallocate(Vec *a, u32 unused, u32 n);
 Str *LobbyString_InitCopy(Str *a, Str *b);
 Str *LobbyString_InitSubstring(Str *a, Str *b, u32 offset, u32 length);
 Str *LobbyString_InitFromCStr(Str *a, char *b);
-extern char ov45_02255120[], ov45_02255104[];
+extern char sStr_BasicStringReserveLengthError[], sStr_TreeInsertLengthError[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
 void PPWLobby_OnChannelDataChanged(int a, int b, int c, int d);
@@ -8042,7 +8042,7 @@ extern int PPWLobby_DecodeMessageData(void *, Vec *);
 extern void *LobbyByteVector_Data(Vec *);
 extern int PPWLobbySchedule_Load(void *, void *, u32);
 extern void PPWLobbySchedule_CopyToVector(Vec *, void *), PPWLobby_SetChannelData(int, int, char *, void *, u32);
-extern char ov45_022550F4[];
+extern char sStr_b_lib_c_lobby[];
 void PPWLobby_OnPlayerMessage(int a, int b, int c);
 void PPWLobby_OnExcessFlood(int a);
 void PPWLobby_OnChannelDataChanged(int a, int b, int c, int d);
@@ -8274,7 +8274,7 @@ extern "C" {
 #define SH(p, o) (*(s16 *)((u8 *)(p) + (o)))
 #define U(p, o)  (*(u32 *)((u8 *)(p) + (o)))
 #define P(p, o)  (*(void **)((u8 *)(p) + (o)))
-extern char ov45_02255120[];
+extern char sStr_BasicStringReserveLengthError[];
 int printf(const char *, ...);
 void abort(void);
 void *LobbyMem_Alloc(u32);
@@ -8308,7 +8308,7 @@ void LobbyString_Reserve(Text *w, u32 size) {
     u8 *dst, *old;
     int wasHeap, makeHeap;
     if (size > 0x7ffffffe) {
-        printf(ov45_02255120);
+        printf(sStr_BasicStringReserveLengthError);
         abort();
     }
     wasHeap = w->header.h.heap != 0;
@@ -8470,7 +8470,7 @@ namespace F64 {
 #pragma force_active on
 extern "C" int printf(const char *, ...);
 extern "C" void abort(void);
-extern "C" char ov45_02255144[];
+extern "C" char sStr_BasicStringOutOfRange[];
 
 class RangeDispatch {};
 
@@ -8512,7 +8512,7 @@ extern "C" String *LobbyString_ReplaceSubstring(String *self, u32 pos, u32 n1, S
         size = str->raw.s.size;
     }
     if (pos2 > size) {
-        printf(ov45_02255144);
+        printf(sStr_BasicStringOutOfRange);
         abort();
     }
     data += pos2;
@@ -8671,7 +8671,7 @@ extern "C" {
 extern int printf(const char *, ...);
 extern void abort(void);
 #pragma force_active on
-extern const char ov45_02255160[];
+extern const char sStr_StringComparePosGtLen[];
 int LobbyString_CompareChars(const u8 *, u32, u32, const void *, u32);
 
 static inline const u32 *Min(const u32 *a, const u32 *b) {
@@ -8690,7 +8690,7 @@ int LobbyString_CompareChars(const u8 *s, u32 pos, u32 length, const void *other
         size = ((const struct {u8 flag:1;u8 size:7; } *)s)->size;
     }
     if (pos > size) {
-        printf(ov45_02255160);
+        printf(sStr_StringComparePosGtLen);
         abort();
     }
     remaining = size - pos;
@@ -8720,7 +8720,7 @@ extern "C" int printf(const char *, ...);
 extern "C" void abort(void);
 extern "C" void *LobbyMem_Alloc(u32);
 extern "C" void DWC_Free(int, void *, int);
-extern "C" const char ov45_02255144[], ov45_0225517C[];
+extern "C" const char sStr_BasicStringOutOfRange[], sStr_BasicStringLengthError[];
 
 class Tag {};
 struct Str;
@@ -8786,7 +8786,7 @@ extern "C" Str *LobbyString_ReplaceRange(Str *s, u32 pos, u32 n1, const char *fi
         data = s->raw.l.data;
     }
     if (pos > size) {
-        printf(ov45_02255144);
+        printf(sStr_BasicStringOutOfRange);
         abort();
     }
     u32 rem = size - pos;
@@ -8794,7 +8794,7 @@ extern "C" Str *LobbyString_ReplaceRange(Str *s, u32 pos, u32 n1, const char *fi
     u32 n2 = last - first;
     u32 len;
     if (n2 > 0x7ffffffe || (len = size - n) > 0x7ffffffe - n2) {
-        printf(ov45_0225517C);
+        printf(sStr_BasicStringLengthError);
         abort();
     }
     u32 newSize = n2 + len;

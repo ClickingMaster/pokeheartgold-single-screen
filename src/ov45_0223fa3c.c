@@ -31,8 +31,8 @@ static inline char *getString(String *s) {
     return p;
 }
 
-extern Work *volatile ov45_022577DC;
-extern char ov45_02255304[];
+extern Work *volatile gLobbyChatManager;
+extern char sStr_Empty_17[];
 extern void LobbyChat_FormatNick(String *, void *);
 extern void LobbyString_Assign(String *, String *);
 extern void LobbyString_Destroy(String *);
@@ -43,38 +43,38 @@ void LobbyChat_OnNickError(void *, int);
 
 void LobbyChat_OnNickError(void *out, int state) {
     String a, b, c, d, e, f, g, h;
-    Work *w = ov45_022577DC;
+    Work *w = gLobbyChatManager;
     if (w && w->state == 5) {
         return;
     }
     if (state == 1) {
-        LobbyChat_FormatNick(&a, ov45_022577DC->source);
-        LobbyString_Assign(&ov45_022577DC->text, &a);
+        LobbyChat_FormatNick(&a, gLobbyChatManager->source);
+        LobbyString_Assign(&gLobbyChatManager->text, &a);
         LobbyString_Destroy(&a);
-        LobbyChatManager_GetNick(&b, ov45_022577DC);
+        LobbyChatManager_GetNick(&b, gLobbyChatManager);
         chatRetryWithNickA(out, getString(&b));
         LobbyString_Destroy(&b);
     } else if (state == 2) {
-        LobbyChat_FormatNick(&c, ov45_022577DC->source);
-        LobbyString_Assign(&ov45_022577DC->text, &c);
+        LobbyChat_FormatNick(&c, gLobbyChatManager->source);
+        LobbyString_Assign(&gLobbyChatManager->text, &c);
         LobbyString_Destroy(&c);
-        LobbyChatManager_GetNick(&d, ov45_022577DC);
+        LobbyChatManager_GetNick(&d, gLobbyChatManager);
         chatRetryWithNickA(out, getString(&d));
         LobbyString_Destroy(&d);
     } else if ((u32)(state - 3) <= 1) {
-        LobbyChat_FormatNick(&e, ov45_022577DC->source);
-        LobbyString_Assign(&ov45_022577DC->text, &e);
+        LobbyChat_FormatNick(&e, gLobbyChatManager->source);
+        LobbyString_Assign(&gLobbyChatManager->text, &e);
         LobbyString_Destroy(&e);
-        LobbyChatManager_GetNick(&f, ov45_022577DC);
-        chatRegisterUniqueNickA(out, 2, getString(&f), ov45_02255304);
+        LobbyChatManager_GetNick(&f, gLobbyChatManager);
+        chatRegisterUniqueNickA(out, 2, getString(&f), sStr_Empty_17);
         LobbyString_Destroy(&f);
     } else if (state == 5) {
         return;
     } else if (state == 6) {
-        LobbyChat_FormatNick(&g, ov45_022577DC->source);
-        LobbyString_Assign(&ov45_022577DC->text, &g);
+        LobbyChat_FormatNick(&g, gLobbyChatManager->source);
+        LobbyString_Assign(&gLobbyChatManager->text, &g);
         LobbyString_Destroy(&g);
-        LobbyChatManager_GetNick(&h, ov45_022577DC);
+        LobbyChatManager_GetNick(&h, gLobbyChatManager);
         chatRetryWithNickA(out, getString(&h));
         LobbyString_Destroy(&h);
     }

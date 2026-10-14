@@ -64,8 +64,8 @@ struct Handler {
     u32 a;
 };
 
-extern "C" HandlerVtbl ov45_02255238, ov45_02255268;
-extern "C" const u32 ov45_022577E0;
+extern "C" HandlerVtbl gLobbyRequestVtable, gLobbyGetChannelKeysRequestVtable;
+extern "C" const u32 gLobbyChatNextRequestId;
 
 struct Mgr {
     void *unk0;
@@ -74,7 +74,7 @@ struct Mgr {
     u8 list[1];
 };
 
-extern "C" Mgr *ov45_022577DC;
+extern "C" Mgr *gLobbyChatManager;
 extern "C" void *LobbyMem_Alloc(u32);
 
 struct Tag {};
@@ -92,15 +92,15 @@ extern "C" Str LobbyChat_GetFullChannelName(Mgr *m, const Str &s);
 extern "C" void chatGetChannelKeysA(void *ctx, const char *name, const char *msg, int x, const char **desc, void (*cb)(), u32 id, u32 z);
 extern "C" void LobbyChat_OnGetChannelKeys();
 extern "C" unsigned long strlen(const char *);
-extern "C" const char ov45_02255304[];
+extern "C" const char sStr_Empty_17[];
 extern "C" Str LobbyChat_GetUserNick(Mgr *m, int idx);
 
 inline Mgr *GetMgr() {
-    return ov45_022577DC;
+    return gLobbyChatManager;
 }
 
 inline void BaseInit(Handler *h, u32 b) {
-    h->vtbl = &ov45_02255238;
+    h->vtbl = &gLobbyRequestVtable;
     h->id = 0;
     h->b = b;
 }
@@ -109,8 +109,8 @@ inline void BaseInit(Handler *h, u32 b) {
 // stores through `this` are known not to alias it (native schedules the load
 // above the base-part stores).
 inline u32 NextHandlerId() {
-    u32 n = ov45_022577E0;
-    *(u32 *)&ov45_022577E0 = n + 1;
+    u32 n = gLobbyChatNextRequestId;
+    *(u32 *)&gLobbyChatNextRequestId = n + 1;
     return n;
 }
 
@@ -119,7 +119,7 @@ inline Handler *NewHandler(u32 a, u32 b) {
     if (p) {
         BaseInit(p, b);
         p->id = NextHandlerId();
-        p->vtbl = &ov45_02255268;
+        p->vtbl = &gLobbyGetChannelKeysRequestVtable;
         p->a = a;
     }
     return p;
@@ -136,7 +136,7 @@ inline u32 GetId(Handler *h, IdTag, IdTag) {
 #pragma opt_common_subs off
 
 extern "C" int LobbyChat_GetChannelKeysAsync(const char *name, int idx, const char *desc, u32 a, u32 b) {
-    Mgr *m = ov45_022577DC;
+    Mgr *m = gLobbyChatManager;
     if (m == NULL) {
         return 4;
     }
@@ -149,14 +149,14 @@ extern "C" int LobbyChat_GetChannelKeysAsync(const char *name, int idx, const ch
     if (strlen(desc) + 1 > 20) {
         return 3;
     }
-    Str msg(ov45_02255304);
+    Str msg(sStr_Empty_17);
     if (idx == -1) {
-        msg.assign(ov45_02255304);
+        msg.assign(sStr_Empty_17);
     } else {
         Str tmp = LobbyChat_GetUserNick(GetMgr(), idx);
         msg.assign(tmp);
         tmp.destroy();
-        if (msg.equals(ov45_02255304)) {
+        if (msg.equals(sStr_Empty_17)) {
             msg.destroy();
             return 3;
         }

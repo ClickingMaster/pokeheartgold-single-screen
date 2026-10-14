@@ -49,8 +49,8 @@ struct Handler {
     u32 a;
 };
 
-extern "C" HandlerVtbl ov45_02255238, ov45_02255250;
-extern "C" const u32 ov45_022577E0;
+extern "C" HandlerVtbl gLobbyRequestVtable, gLobbyGetChannelModeRequestVtable;
+extern "C" const u32 gLobbyChatNextRequestId;
 
 struct Mgr {
     void *unk0;
@@ -59,7 +59,7 @@ struct Mgr {
     u8 list[1];
 };
 
-extern "C" Mgr *ov45_022577DC;
+extern "C" Mgr *gLobbyChatManager;
 extern "C" void *LobbyMem_Alloc(u32);
 
 struct Tag {};
@@ -78,11 +78,11 @@ extern "C" void chatGetChannelModeA(void *ctx, const char *name, void (*cb)(), u
 extern "C" void LobbyChat_OnGetChannelMode();
 
 inline Mgr *GetMgr() {
-    return ov45_022577DC;
+    return gLobbyChatManager;
 }
 
 inline void BaseInit(Handler *h, u32 b) {
-    h->vtbl = &ov45_02255238;
+    h->vtbl = &gLobbyRequestVtable;
     h->id = 0;
     h->b = b;
 }
@@ -91,8 +91,8 @@ inline void BaseInit(Handler *h, u32 b) {
 // stores through `this` are known not to alias it (native schedules the load
 // above the base-part stores).
 inline u32 NextHandlerId() {
-    u32 n = ov45_022577E0;
-    *(u32 *)&ov45_022577E0 = n + 1;
+    u32 n = gLobbyChatNextRequestId;
+    *(u32 *)&gLobbyChatNextRequestId = n + 1;
     return n;
 }
 
@@ -101,7 +101,7 @@ inline Handler *NewHandler(u32 a, u32 b) {
     if (p) {
         BaseInit(p, b);
         p->id = NextHandlerId();
-        p->vtbl = &ov45_02255250;
+        p->vtbl = &gLobbyGetChannelModeRequestVtable;
         p->a = a;
     }
     return p;
@@ -118,7 +118,7 @@ inline u32 GetId(Handler *h, IdTag, IdTag) {
 #pragma opt_common_subs off
 
 extern "C" int LobbyChat_GetChannelModeAsync(const char *name, u32 a, u32 b) {
-    Mgr *m = ov45_022577DC;
+    Mgr *m = gLobbyChatManager;
     if (m == NULL) {
         return 4;
     }

@@ -21,12 +21,12 @@ typedef union {
     } s;
 } Str;
 
-extern void *ov45_022577DC;
-extern char ov45_022552DC[];
-extern char ov45_022552E4[];
-extern char ov45_022552EC[];
-extern char ov45_022552F0[];
-extern char ov45_022552FC[];
+extern void *gLobbyChatManager;
+extern char sStr_normal[];
+extern char sStr_voice[];
+extern char sStr_ops[];
+extern char sStr_VoiceOps[];
+extern char sStr_invalid[];
 void LobbyString_InitFromCStr(Str *, char *);
 void LobbyString_Destroy(Str *);
 void LobbyString_InitCopy(void *, void *);

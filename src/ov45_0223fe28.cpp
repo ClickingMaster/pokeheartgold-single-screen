@@ -50,7 +50,7 @@ struct Handler {
     void (*callback)(BOOL ok, const char *str, u32 n, void *data, u32 extra);
 };
 
-extern "C" HandlerVtbl ov45_02255238;
+extern "C" HandlerVtbl gLobbyRequestVtable;
 
 struct Node {
     Node *l, *r, *p;
@@ -80,14 +80,14 @@ struct Manager {
     Map map;
 };
 
-extern "C" Manager *ov45_022577DC;
+extern "C" Manager *gLobbyChatManager;
 extern "C" It LobbyRequestMap_Find(Map *map, Base *const &key);
 extern "C" void LobbyRequestMap_DeleteKey(Map *map, u32 id);
 extern "C" int LobbyChat_FindUserIdByNick(Manager *m, String *s);
 extern "C" void LobbyChat_StripChannelPrefix(String *dst, Manager *m, String *s);
 
 inline void KeyInit(Base *k, u32 id) {
-    k->vtbl = &ov45_02255238;
+    k->vtbl = &gLobbyRequestVtable;
     k->id = id;
     k->unk8 = 0;
 }
@@ -149,20 +149,20 @@ extern "C" void LobbyChat_OnEnumUsers(void *self, int result, const char *name, 
 #pragma opt_propagation off
 
 extern "C" void LobbyChat_OnEnumUsers(void *self, int result, const char *name, int count, const char **names, u32 unused, u32 id) {
-    if (ov45_022577DC != NULL && ov45_022577DC->state == 5) {
+    if (gLobbyChatManager != NULL && gLobbyChatManager->state == 5) {
         return;
     }
     Vec ids;
     if (count != 0) {
         String s;
         LobbyString_InitFromCStr(&s, name);
-        Vec tmp = LobbyChat_AddChannelUsers(ov45_022577DC, count, names, s);
+        Vec tmp = LobbyChat_AddChannelUsers(gLobbyChatManager, count, names, s);
         ids = tmp;
         tmp.destroy();
         LobbyString_Destroy(&s);
     }
     int sid = id;
-    Manager *m = ov45_022577DC;
+    Manager *m = gLobbyChatManager;
     It it = FindIt(m, sid);
     Handler *h;
     if (it.n == &m->map.header) {
@@ -174,14 +174,14 @@ extern "C" void LobbyChat_OnEnumUsers(void *self, int result, const char *name, 
     String t;
     String k;
     LobbyString_InitFromCStr(&t, name);
-    LobbyChat_StripChannelPrefix(&k, ov45_022577DC, &t);
+    LobbyChat_StripChannelPrefix(&k, gLobbyChatManager, &t);
     u32 n = ids.count();
     const char *str = k.c_str();
     void (*cb)(BOOL, const char *, u32, void *, u32) = h->callback;
     cb(result == 1, str, n, LobbyU32Vector_Data2(&ids), h->getArg());
     LobbyString_Destroy(&k);
     LobbyString_Destroy(&t);
-    LobbyRequestMap_DeleteKey(&ov45_022577DC->map, sid);
+    LobbyRequestMap_DeleteKey(&gLobbyChatManager->map, sid);
     ids.destroy();
 }
 

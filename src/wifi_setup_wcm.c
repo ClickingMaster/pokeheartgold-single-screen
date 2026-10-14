@@ -7,8 +7,8 @@
 extern WifiSetupWcm ov13_0224DEE0;
 extern u8 ov13_0224DF08[6];
 extern u8 ov13_0224DF10[32];
-extern u8 _02108FC0[]; // BSSID ff:ff:ff:ff:ff:ff (any)
-extern u8 _02108FC8[]; // SSID of 0xFF bytes (any)
+extern u8 WCM_Bssid_Any[]; // BSSID ff:ff:ff:ff:ff:ff (any)
+extern u8 WCM_Essid_Any[]; // SSID of 0xFF bytes (any)
 
 void WifiSetup_Sleep(s32 ticks);
 s32 WifiSetup_NotifyStatus(s32 arg);
@@ -272,7 +272,7 @@ int WifiSetupWcm_StartSearch(const u8 *bssid, const u8 *ssid, int len, int optio
         ov13_0224DEE0.searchBssid = ov13_0224DF08;
     } else {
         MI_CpuFill8(ov13_0224DF08, 0xFF, 6);
-        ov13_0224DEE0.searchBssid = _02108FC0;
+        ov13_0224DEE0.searchBssid = WCM_Bssid_Any;
     }
     if (ssid != NULL && len > 0 && len <= 32) {
         for (i = 0; i < len; i++) {
@@ -284,7 +284,7 @@ int WifiSetupWcm_StartSearch(const u8 *bssid, const u8 *ssid, int len, int optio
         ov13_0224DEE0.searchSsid = ov13_0224DF10;
     } else {
         MI_CpuFill8(ov13_0224DF10, 0xFF, 32);
-        ov13_0224DEE0.searchSsid = _02108FC8;
+        ov13_0224DEE0.searchSsid = WCM_Essid_Any;
     }
     if (ov13_0224DEE0.state == 3) {
         if (WCM_SearchAsync(ov13_0224DEE0.searchBssid, ov13_0224DEE0.searchSsid, ov13_0224DEE0.searchOption) == 3) {

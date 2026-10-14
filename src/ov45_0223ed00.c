@@ -21,12 +21,12 @@ typedef union {
     } s;
 } Str;
 
-extern void *ov45_022577DC;
-extern char ov45_022552DC[];
-extern char ov45_022552E4[];
-extern char ov45_022552EC[];
-extern char ov45_022552F0[];
-extern char ov45_022552FC[];
+extern void *gLobbyChatManager;
+extern char sStr_normal[];
+extern char sStr_voice[];
+extern char sStr_ops[];
+extern char sStr_VoiceOps[];
+extern char sStr_invalid[];
 void LobbyString_InitFromCStr(Str *, char *);
 void LobbyString_Destroy(Str *);
 void LobbyString_InitCopy(void *, void *);
@@ -80,7 +80,7 @@ void LobbyChat_OnChannelMessage(void *a, char *s, char *name, void *arg, int mod
 void LobbyChat_OnBroadcastKeyChanged(void *a, char *s, char *name, void *arg, void *extra);
 
 void LobbyChat_OnRaw(void) {
-    if (ov45_022577DC && W(ov45_022577DC, 4) == 5) {
+    if (gLobbyChatManager && W(gLobbyChatManager, 4) == 5) {
         return;
     }
 }
@@ -88,12 +88,12 @@ void LobbyChat_OnRaw(void) {
 void LobbyChat_OnDisconnected(void) {
     int zero;
     void *p;
-    if (ov45_022577DC && W(ov45_022577DC, 4) == 5) {
+    if (gLobbyChatManager && W(gLobbyChatManager, 4) == 5) {
         return;
     }
     zero = 0;
-    LobbyTimerMap_EraseKey((u8 *)ov45_022577DC + 0x9c, &zero, 0);
-    p = ov45_022577DC;
+    LobbyTimerMap_EraseKey((u8 *)gLobbyChatManager + 0x9c, &zero, 0);
+    p = gLobbyChatManager;
     if (W(p, 4) == 4) {
         if (!p) {
             return;
@@ -104,10 +104,10 @@ void LobbyChat_OnDisconnected(void) {
                 DWC_Free(0, p, 0);
             }
         }
-        ov45_022577DC = 0;
+        gLobbyChatManager = 0;
         return;
     }
     W(p, 0x58) = 3;
     W(p, 4) = 5;
-    W(ov45_022577DC, 0x60) = 1;
+    W(gLobbyChatManager, 0x60) = 1;
 }

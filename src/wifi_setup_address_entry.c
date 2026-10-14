@@ -35,13 +35,13 @@ extern void *gWifiSetupTextEntry[];
 // Screen layout (defined in src/wifi_setup_address_entry_init.c): starts
 // with the field limit; the u16 at index 7 and 8 are the position of the digits.
 extern const WifiSetupFieldLimit ov13_02245480;
-extern WifiSetupAddressFuncs ov13_022454AC;
-extern const u8 ov13_022454C0[]; // x of every digit
-extern u8 ov13_022463E4[];
-extern u8 ov13_022463F8[];
-extern u8 ov13_02246410[];
-extern u8 ov13_02246428[];
-extern char ov13_02246440[];
+extern WifiSetupAddressFuncs gWifiSetupAddressEntryFuncs;
+extern const u8 gWifiSetupAddressEntryDigitX[]; // x of every digit
+extern u8 gWifiSetupAddressEntryYbObjKbNclPath[];
+extern u8 gWifiSetupAddressEntryJbBgStep3NcgPath[];
+extern u8 gWifiSetupAddressEntryYbBgStep3NclPath[];
+extern u8 gWifiSetupAddressEntryXb4EditAddrNscPath[];
+extern char gWifiSetupAddressEntryYbObjMainNclPath[];
 
 extern void WifiSetup_ParseAddress(const char *text, u8 *address);
 extern int DWC_BACKUPlCheckAddress(void *address);
@@ -53,10 +53,10 @@ extern void WifiSetupSettings_Init(void);
 extern long atol(const char *);
 
 void WifiSetupAddressEntry_LoadGraphics(void) {
-    WifiSetup_LoadGraphics(ov13_022463E4, GX_LoadOBJPltt);
-    WifiSetup_LoadGraphics(ov13_022463F8, GX_LoadBG2Char);
-    WifiSetup_LoadGraphics(ov13_02246410, GX_LoadBGPltt);
-    WifiSetup_LoadGraphics(ov13_02246428, GX_LoadBG2Scr);
+    WifiSetup_LoadGraphics(gWifiSetupAddressEntryYbObjKbNclPath, GX_LoadOBJPltt);
+    WifiSetup_LoadGraphics(gWifiSetupAddressEntryJbBgStep3NcgPath, GX_LoadBG2Char);
+    WifiSetup_LoadGraphics(gWifiSetupAddressEntryYbBgStep3NclPath, GX_LoadBGPltt);
+    WifiSetup_LoadGraphics(gWifiSetupAddressEntryXb4EditAddrNscPath, GX_LoadBG2Scr);
     *(vu16 *)0x04001008 = (*(vu16 *)0x04001008 & ~3) | 3;
     *(vu16 *)0x0400100a = (*(vu16 *)0x0400100a & ~3) | 3;
     *(vu16 *)0x04000008 = (*(vu16 *)0x04000008 & ~3) | 2;
@@ -251,7 +251,7 @@ void WifiSetupAddressEntry_Exit(void) {
     WifiSetupMessage_Hide();
     WifiSetupOam_Release(gWifiSetupAddressEntry->cursor);
     WifiSetupText_FreeBgCanvas(0);
-    WifiSetup_LoadGraphics(ov13_02246440, GX_LoadOBJPltt);
+    WifiSetup_LoadGraphics(gWifiSetupAddressEntryYbObjMainNclPath, GX_LoadOBJPltt);
     WifiSetupDisplay_HidePlanes(1, 1);
     WifiSetupDisplay_HidePlanes(0, 21);
     WifiSetupApp_GetScreenArgs(&kind, 0);
@@ -280,7 +280,7 @@ void WifiSetupAddressEntry_DrawDigits(void) {
     WifiSetupText_Clear(entry->canvas, 0);
     text[1] = 0;
     for (i = 0; i < 12; i++) {
-        u16 x = ov13_022454C0[i];
+        u16 x = gWifiSetupAddressEntryDigitX[i];
         text[0] = gWifiSetupAddressEntry->digits[i];
         rect[0] = x;
         DrawDigit(gWifiSetupAddressEntry->canvas, x, rect, text);
@@ -297,7 +297,7 @@ void WifiSetupAddressEntry_UpdateCursor(void) {
     if (field > 3) {
         field = 3;
     }
-    SetOamPos(&gWifiSetupAddressEntry->cursor->attr01, ov13_022454C0[field * 3 + 2], 0x28);
+    SetOamPos(&gWifiSetupAddressEntry->cursor->attr01, gWifiSetupAddressEntryDigitX[field * 3 + 2], 0x28);
 }
 
 void WifiSetupAddressEntry_WaitConfirm(void) {
@@ -319,7 +319,7 @@ void WifiSetupAddressEntry_WaitConfirm(void) {
 void WifiSetupAddressEntry_FinishConfirm(void) {
     WifiSetupAddressFunc store[5];
     int kind;
-    *(WifiSetupAddressFuncs *)store = ov13_022454AC;
+    *(WifiSetupAddressFuncs *)store = gWifiSetupAddressEntryFuncs;
     if (WifiSetupDialog_IsOpen()) {
         return;
     }

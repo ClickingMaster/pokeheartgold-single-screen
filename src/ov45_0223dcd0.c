@@ -139,7 +139,7 @@ void LobbyU32Vector_AppendFillSlow(Vec *, u32, u32 *);
 void ov45_02236E58(NodeIter *);
 Node *LobbyTree_EraseRebalance(Node *, void *);
 
-extern char ov45_0225520C[];
+extern char sStr_TreeInsertLengthError_2[];
 void printf(const char *, ...);
 void abort(void);
 void LobbyTree_InsertRebalance(Node *, void *);
@@ -237,7 +237,7 @@ Callbacks *PPWLobby_GetWork(void);
 const char *LobbyByteVector_Data(void *);
 void PPWLobbyPlayer_UpdateState(Session *s);
 
-extern VTable ov45_02254FB0;
+extern VTable gPPWLobbyPlayerVtable;
 void DWC_GetDateTime(RTCDate *date, RTCTime *time);
 void PPWLobbyPlayerSet_Insert(InsertResult *out, List *l, Session **key);
 
@@ -249,15 +249,15 @@ typedef struct PtrDeque {
 
 void ov45_02238508(DequeBuf *);
 
-extern char ov45_022551DC[];
-extern char ov45_022551E0[];
-extern char ov45_022551E4[];
-extern char ov45_022551E8[];
-extern char ov45_022551EC[];
-extern char ov45_022551F0[];
-extern char ov45_022551F4[];
-extern char ov45_022551F8[];
-extern char ov45_022551FC[];
+extern char sStr_SpaceSpace[];
+extern char sStr_Space_2[];
+extern char sStr_B[];
+extern char sStr_S[];
+extern char sStr_Empty_16[];
+extern char sFmt_Hex_3[];
+extern char sStr_A[];
+extern char sStr__[];
+extern char sFmt_Str_3[];
 void LobbyString_FormatN(Str *out, u32 width, const char *fmt, ...);
 void LobbyString_Destroy(Str *s);
 void LobbyString_Append(Str *s, void *arg);
@@ -321,7 +321,7 @@ BOOL PPWLobbyPlayers_Add(SessionMgr *m, int id) {
     volatile Tag t0;
     Session *n = LobbyMem_Alloc(sizeof(Session));
     if (n != NULL) {
-        n->vt = &ov45_02254FB0;
+        n->vt = &gPPWLobbyPlayerVtable;
         n->unk4 = 5;
         n->time = 0;
         n->unk10 = 0;

@@ -36,7 +36,7 @@ extern char ov13_0224E440[]; // SSID of the chosen access point
 extern u8 ov13_0224E3E0[6];  // BSSID of the chosen access point
 extern u8 ov13_0224E3D8[6];  // own MAC address
 extern u8 ov13_0224E464[];
-extern u8 ov13_02245B18[4];
+extern u8 sStr_WARP[4];
 extern WifiSetupVersion ov13_02242680;
 extern u32 ov13_0224E284[8];
 extern u32 ov13_0224E2B0[];
@@ -448,7 +448,7 @@ BOOL WifiSetup_BuildMacPair(WifiSetupMacPair *pair) {
     char text2[32];
     u8 *src;
 
-    memcpy(pair->prefix, ov13_02245B18, 4);
+    memcpy(pair->prefix, sStr_WARP, 4);
     memcpy(other, ov13_0224E3E0, 6);
     other[0] &= 0xFD;
     WifiSetup_GetOwnMacAddress(own);

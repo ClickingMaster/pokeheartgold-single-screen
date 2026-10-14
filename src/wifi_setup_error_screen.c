@@ -13,11 +13,11 @@
 // (0x02232770-0x02232E04): shows gWifiSetupErrorCode with the message for its range and waits for
 // the button.
 
-extern const u8 ov13_022454CC[];  // font per language
-extern const u16 ov13_022454DC[]; // x, y of the code per language
-extern const u16 ov13_022454DE[];
-extern char ov13_02246458[];
-extern const u16 ov13_0224646C[]; // error code format
+extern const u8 gWifiSetupErrorScreenFonts[];  // font per language
+extern const u16 gWifiSetupErrorCodeX[]; // x, y of the code per language
+extern const u16 gWifiSetupErrorCodeY[];
+extern char gWifiSetupErrorScreenJb4ErrorNscPath[];
+extern const u16 gWifiSetupErrorCodeFormat[]; // error code format
 
 extern int WifiSetupDialog_GetSelected(void);
 extern void WifiSetupDialog_Close(void);
@@ -51,7 +51,7 @@ void WifiSetupErrorScreen_Init(void) {
 }
 
 void WifiSetupErrorScreen_LoadGraphics(void) {
-    WifiSetup_LoadGraphics(ov13_02246458, GX_LoadBG2Scr);
+    WifiSetup_LoadGraphics(gWifiSetupErrorScreenJb4ErrorNscPath, GX_LoadBG2Scr);
     reg_G2S_DB_BG0CNT = (reg_G2S_DB_BG0CNT & ~3) | 3;
     reg_G2S_DB_BG1CNT = (reg_G2S_DB_BG1CNT & ~3) | 3;
     reg_G2_BG0CNT = (reg_G2_BG0CNT & ~3) | 3;
@@ -138,13 +138,13 @@ void WifiSetupErrorScreen_DrawMessage(void) {
     } else {
         code = 0;
     }
-    canvas = WifiSetupText_InitBgCanvas(0, ov13_022454CC[WifiSetupApp_GetLanguage()]);
+    canvas = WifiSetupText_InitBgCanvas(0, gWifiSetupErrorScreenFonts[WifiSetupApp_GetLanguage()]);
     msg = WifiSetupText_GetString(gWifiSetupTextBank, code);
-    swprintf(text, 8, ov13_0224646C, -gWifiSetupErrorCode);
+    swprintf(text, 8, gWifiSetupErrorCodeFormat, -gWifiSetupErrorCode);
     {
-        int y = ov13_022454DE[WifiSetupApp_GetLanguage() * 2];
+        int y = gWifiSetupErrorCodeY[WifiSetupApp_GetLanguage() * 2];
         {
-            int x = ov13_022454DC[WifiSetupApp_GetLanguage() * 2];
+            int x = gWifiSetupErrorCodeX[WifiSetupApp_GetLanguage() * 2];
             WifiSetupText_DrawMonospace(canvas, x, y, 2, 10, text, 0);
         }
     }

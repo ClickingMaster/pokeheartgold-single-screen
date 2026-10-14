@@ -19,7 +19,7 @@ FS_EXTERN_OVERLAY(OVY_98);
 #define EVENT_RECORD_SPRITE(work, index) (((PokeathlonEventRecord *)((u8 *)(work) + (index) * sizeof(ManagedSprite *)))->sprites[0])
 
 extern const WindowTemplate ov99_021EA45C[19];
-extern const char _021EA5E4[]; // "seq error!"
+extern const char sStr_SeqError_4[]; // "seq error!"
 extern const GraphicsModes ov99_021EA374;
 extern const PokeathlonEventRecordBgTemplates ov99_021EA4F4;
 extern const u8 ov99_021EA59C[6];
@@ -116,7 +116,7 @@ BOOL PokeathlonEventRecord_Main(OverlayManager *man, int *state) {
     case 4:
         return TRUE;
     default:
-        GF_ASSERT(!_021EA5E4);
+        GF_ASSERT(!sStr_SeqError_4);
         break;
     }
     PokeathlonUtil_DrawSprites(work->spriteContext);

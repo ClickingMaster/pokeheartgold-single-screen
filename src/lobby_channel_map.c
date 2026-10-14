@@ -64,7 +64,7 @@ static inline void initializeGuard(volatile Guard *g, Node *n, void *anchor) {
     g->current = n;
 }
 
-extern const char ov45_022553AC[];
+extern const char sStr_TreeInsertLengthError_4[];
 extern int printf(const char *, ...);
 extern void abort(void);
 extern void *LobbyMem_Alloc(int);

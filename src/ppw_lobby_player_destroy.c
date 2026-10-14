@@ -52,8 +52,8 @@ typedef struct Record {
 
 extern int DWC_CheckUserData(void *);
 extern int DWC_CheckHasProfile(void *);
-extern u8 *volatile _022577C4;
-extern u8 ov45_02254FA0[];
+extern u8 *volatile gPPWLobbyWork;
+extern u8 gPPWLobbyPlayersVtable[];
 extern void *LobbyString_InitCopy(void *, void *);
 extern void *LobbyCharVector_Data(Vec *);
 extern Node *LobbyTimerMap_LowerBound(u8 *, u32 *, Node *, Node *);
@@ -110,7 +110,7 @@ u8 *PPWLobbyPlayer_Destroy(u8 *p) {
 }
 
 u8 *PPWLobbyPlayers_Destroy(u8 *p) {
-    P(p, 0) = ov45_02254FA0;
+    P(p, 0) = gPPWLobbyPlayersVtable;
     PPWLobbyPlayers_Clear(p);
     LobbyCharVector_Destroy(p + 40);
     PPWLobbyPlayerSet_Destroy(p + 4);

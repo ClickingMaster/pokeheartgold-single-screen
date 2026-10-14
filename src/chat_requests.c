@@ -14,44 +14,44 @@
 
 extern void __msl_assertion_failed(const char *, const char *, const char *, int);
 extern long atol(const char *);
-extern const char ov45_02255E60[];
-extern const char ov45_02255E6C[];
-extern const char ov45_02255E78[];
-extern const char ov45_02255EB4[];
-extern const char ov45_02255EC4[];
-extern const char ov45_02255F74[];
-extern const char ov45_02255F84[];
-extern const char ov45_02255F94[];
-extern const char ov45_02255FC4[];
-extern const char ov45_02255FD4[];
-extern const char ov45_02256010[];
-extern const char ov45_0225609C[];
-extern const char ov45_022560B0[];
-extern const char ov45_02256128[];
-extern const char ov45_022565C0[];
-extern const char ov45_022565D0[];
-extern const char ov45_022565E0[];
-extern const char ov45_022565F0[];
-extern const char ov45_022565F8[];
-extern const char ov45_02256630[];
-extern const char ov45_02256638[];
-extern const char ov45_02256644[];
-extern const char ov45_02256654[];
-extern const char ov45_0225665C[];
-extern const char ov45_02256690[];
-extern const char ov45_02256694[];
-extern const char ov45_022566A0[];
-extern const char ov45_022566A8[];
-extern const char ov45_022566BC[];
-extern const char ov45_022566DC[];
-extern const char ov45_022566E0[];
+extern const char sStr_ciGetNextID[];
+extern const char sStr_ciAddFilter[];
+extern const char sStr_ciParseMode[];
+extern const char sStr_ciFindFilter[];
+extern const char sStr_ciFilterThink[];
+extern const char sStr_ciRemoveFilter[];
+extern const char sStr_ciFinishFilter[];
+extern const char sStr_ciAddJOINFilter[];
+extern const char sStr_ciDestroyFilter[];
+extern const char sStr_ciCleanupFilters[];
+extern const char sStr_ciFilterTimedout[];
+extern const char sStr_ciFindGetKeyFilter[];
+extern const char sStr_ciCheckFiltersForID[];
+extern const char sStr_ciApplyChangesToMode[];
+extern const char sStr_ChatNeNULL_3[];
+extern const char sStr_ChatHandlersC[];
+extern const char sStr_NumMatchesGt0[];
+extern const char sStr_matches[];
+extern const char sStr_MatchesI_TypeGe0_AndMatchesI_TypeLtNUM_TYPES[];
+extern const char sStr_channel[];
+extern const char sStr_Channel0[];
+extern const char sStr_FilterNeNULL[];
+extern const char sStr_filter[];
+extern const char sStr_FilterTypeGe0_AndFilterTypeLtNUM_TYPES[];
+extern const char sStr_0_10[];
+extern const char sStr_TimedOut[];
+extern const char sStr_ID_Gt0[];
+extern const char sStr_PasswordNeNULL[];
+extern const char sStr_StrlenPasswordLtMAX_PASSWORD[];
+extern const char sStr_B_UnderscoreStar[];
+extern const char sStr_ModeNeNULL[];
 
 #define ASSERT(cond, message, func, line)                           \
     if (!(cond)) {                                                  \
-        __msl_assertion_failed(message, ov45_022565D0, func, line); \
+        __msl_assertion_failed(message, sStr_ChatHandlersC, func, line); \
     }
-#define ASSERT_CHAT(chat, func, line)          ASSERT(chat, ov45_022565C0, func, line)
-#define ASSERT_EXPR(cond, message, func, line) ((cond) ? (void)0 : __msl_assertion_failed(message, ov45_022565D0, func, line))
+#define ASSERT_CHAT(chat, func, line)          ASSERT(chat, sStr_ChatNeNULL_3, func, line)
+#define ASSERT_EXPR(cond, message, func, line) ((cond) ? (void)0 : __msl_assertion_failed(message, sStr_ChatHandlersC, func, line))
 
 #define REQUEST_TIMEOUT 60000 // ms
 
@@ -61,13 +61,13 @@ ChatRequest *ciFindFilter(ChatConnection *chat, int count, const ChatRequestKey 
     const char *name;
     const char *name2;
     ChatRequest *request;
-    ASSERT_EXPR(chat != NULL, ov45_022565C0, ov45_02255EB4, 0x15B);
-    ASSERT_EXPR(count > 0, ov45_022565E0, ov45_02255EB4, 0x15D);
-    ASSERT_EXPR(keys != NULL, ov45_022565F0, ov45_02255EB4, 0x15E);
+    ASSERT_EXPR(chat != NULL, sStr_ChatNeNULL_3, sStr_ciFindFilter, 0x15B);
+    ASSERT_EXPR(count > 0, sStr_NumMatchesGt0, sStr_ciFindFilter, 0x15D);
+    ASSERT_EXPR(keys != NULL, sStr_matches, sStr_ciFindFilter, 0x15E);
     for (request = chat->requests; request != NULL; request = request->next) {
         for (i = 0; i < count; i++) {
             const ChatRequestKey *key = &keys[i];
-            ASSERT_EXPR(key->type >= 0 && key->type < CHAT_REQUEST_TYPE_COUNT, ov45_022565F8, ov45_02255EB4, 0x164);
+            ASSERT_EXPR(key->type >= 0 && key->type < CHAT_REQUEST_TYPE_COUNT, sStr_MatchesI_TypeGe0_AndMatchesI_TypeLtNUM_TYPES, sStr_ciFindFilter, 0x164);
             if (request->type != key->type) {
                 continue;
             }
@@ -89,9 +89,9 @@ ChatRequest *ciFindFilter(ChatConnection *chat, int count, const ChatRequestKey 
 // Finds the channel keys request (type 12) of the channel.
 ChatRequest *ciFindGetKeyFilter(ChatConnection *chat, const char *channel) {
     ChatRequest *request;
-    ASSERT_CHAT(chat, ov45_0225609C, 0x17F);
-    ASSERT(channel, ov45_02256630, ov45_0225609C, 0x181);
-    ASSERT(*channel, ov45_02256638, ov45_0225609C, 0x182);
+    ASSERT_CHAT(chat, sStr_ciFindGetKeyFilter, 0x17F);
+    ASSERT(channel, sStr_channel, sStr_ciFindGetKeyFilter, 0x181);
+    ASSERT(*channel, sStr_Channel0, sStr_ciFindGetKeyFilter, 0x182);
     request = chat->requests;
     while (request) {
         if (request->type == 12 && strnicmp(((ChatKeysData *)request->data)->arg.channel, channel) == 0) {
@@ -103,7 +103,7 @@ ChatRequest *ciFindGetKeyFilter(ChatConnection *chat, const char *channel) {
 }
 
 void ciDestroyFilter(ChatRequest *request) {
-    ASSERT(request, ov45_02256644, ov45_02255FC4, 403);
+    ASSERT(request, sStr_FilterNeNULL, sStr_ciDestroyFilter, 403);
     DWCi_GsFree(request->data);
     DWCi_GsFree(request->name);
     DWCi_GsFree(request->name2);
@@ -113,8 +113,8 @@ void ciDestroyFilter(ChatRequest *request) {
 // Unlinks and frees the request.
 void ciRemoveFilter(ChatConnection *chat, ChatRequest *target) {
     ChatRequest *previous = NULL, *head, *request;
-    ASSERT_CHAT(chat, ov45_02255F74, 0x19F);
-    ASSERT(target, ov45_02256644, ov45_02255F74, 0x1A1);
+    ASSERT_CHAT(chat, sStr_ciRemoveFilter, 0x19F);
+    ASSERT(target, sStr_FilterNeNULL, sStr_ciRemoveFilter, 0x1A1);
     head = chat->requests;
     request = head;
     while (request) {
@@ -141,12 +141,12 @@ void ciRemoveFilter(ChatConnection *chat, ChatRequest *target) {
 void ciFinishFilter(ChatConnection *chat, ChatRequest *request, u32 *results) {
     int i, valid;
     ChatRequestData *data;
-    ASSERT(request, ov45_02256654, ov45_02255F84, 0x1C1);
+    ASSERT(request, sStr_filter, sStr_ciFinishFilter, 0x1C1);
     valid = 0;
     if (request->type >= 0 && request->type < CHAT_REQUEST_TYPE_COUNT) {
         valid = 1;
     }
-    ASSERT(valid, ov45_0225665C, ov45_02255F84, 0x1C2);
+    ASSERT(valid, sStr_FilterTypeGe0_AndFilterTypeLtNUM_TYPES, sStr_ciFinishFilter, 0x1C2);
     if (request->type == 0) {
         data = request->data;
         if (request->callback2) {
@@ -263,7 +263,7 @@ void ciFinishFilter(ChatConnection *chat, ChatRequest *request, u32 *results) {
             ciAddCallback_(chat, 31, request->callback, results, request->param, request->id, NULL, 8);
         }
     } else {
-        __msl_assertion_failed(ov45_02256690, ov45_022565D0, ov45_02255F84, 0x25C);
+        __msl_assertion_failed(sStr_0_10, sStr_ChatHandlersC, sStr_ciFinishFilter, 0x25C);
     }
     ciRemoveFilter(chat, request);
 }
@@ -271,12 +271,12 @@ void ciFinishFilter(ChatConnection *chat, ChatRequest *request, u32 *results) {
 // Ends the request without an answer: completes it with failed (zeroed) results.
 void ciFilterTimedout(ChatConnection *chat, ChatRequest *request) {
     BOOL valid;
-    ASSERT(request, ov45_02256654, ov45_02256010, 0x268);
+    ASSERT(request, sStr_filter, sStr_ciFilterTimedout, 0x268);
     valid = FALSE;
     if (request->type >= 0 && request->type < CHAT_REQUEST_TYPE_COUNT) {
         valid = TRUE;
     }
-    ASSERT(valid, ov45_0225665C, ov45_02256010, 0x269);
+    ASSERT(valid, sStr_FilterTypeGe0_AndFilterTypeLtNUM_TYPES, sStr_ciFilterTimedout, 0x269);
     if (request->type == 0) {
         u32 results[5];
         results[0] = 0;
@@ -420,18 +420,18 @@ void ciFilterTimedout(ChatConnection *chat, ChatRequest *request) {
     if (request->type == 16) {
         u32 results[2];
         results[0] = 0;
-        results[1] = (u32)ov45_02256694;
+        results[1] = (u32)sStr_TimedOut;
         ciFinishFilter(chat, request, results);
         return;
     }
-    __msl_assertion_failed(ov45_02256690, ov45_022565D0, ov45_02256010, 0x311);
+    __msl_assertion_failed(sStr_0_10, sStr_ChatHandlersC, sStr_ciFilterTimedout, 0x311);
 }
 
 // Ends every request whose timeout has passed.
 void ciFilterThink(ChatConnection *chat) {
     ChatRequest *request, *next;
     u32 now;
-    ASSERT_CHAT(chat, ov45_02255EC4, 794);
+    ASSERT_CHAT(chat, sStr_ciFilterThink, 794);
     now = current_time();
     for (request = chat->requests; request; request = next) {
         next = request->next;
@@ -443,7 +443,7 @@ void ciFilterThink(ChatConnection *chat) {
 
 // Returns a new request id (1 .. 0x7FFFFFFF, wrapping).
 int ciGetNextID(ChatConnection *chat) {
-    ASSERT_CHAT(chat, ov45_02255E60, 813);
+    ASSERT_CHAT(chat, sStr_ciGetNextID, 813);
     u32 id = chat->nextRequestId;
     u32 next;
     if (id == 0x7FFFFFFF) {
@@ -458,8 +458,8 @@ int ciGetNextID(ChatConnection *chat) {
 // Returns whether the request with this id is still waiting.
 BOOL ciCheckFiltersForID(ChatConnection *chat, int id) {
     ChatRequest *request;
-    ASSERT_CHAT(chat, ov45_022560B0, 832);
-    ASSERT(id > 0, ov45_022566A0, ov45_022560B0, 834);
+    ASSERT_CHAT(chat, sStr_ciCheckFiltersForID, 832);
+    ASSERT(id > 0, sStr_ID_Gt0, sStr_ciCheckFiltersForID, 834);
     for (request = chat->requests; request; request = request->next) {
         if (request->id == id) {
             return TRUE;
@@ -470,7 +470,7 @@ BOOL ciCheckFiltersForID(ChatConnection *chat, int id) {
 
 // Ends all requests.
 void ciCleanupFilters(ChatConnection *chat) {
-    ASSERT_CHAT(chat, ov45_02255FD4, 851);
+    ASSERT_CHAT(chat, sStr_ciCleanupFilters, 851);
     while (chat->requests) {
         ciFilterTimedout(chat, chat->requests);
     }
@@ -479,7 +479,7 @@ void ciCleanupFilters(ChatConnection *chat) {
 // Appends a request (names are copied) and returns its id, 0 when out of memory.
 int ciAddFilter(ChatConnection *chat, int type, const char *name, const char *name2, void *callback, void *callback2, void *param, void *data) {
     ChatRequest *request;
-    ASSERT_CHAT(chat, ov45_02255E6C, 860);
+    ASSERT_CHAT(chat, sStr_ciAddFilter, 860);
     request = DWCi_GsMalloc(sizeof(ChatRequest));
     if (!request) {
         return 0;
@@ -515,8 +515,8 @@ int ciAddLISTFilter(ChatConnection *chat, void *callbackEach, void *callbackAll,
 int ciAddJOINFilter(ChatConnection *chat, const char *channel, void *callback, void *param, const ChatChannelCallbacks *callbacks, const char *password) {
     ChatEnterData *data;
     int id;
-    ASSERT(password, ov45_022566A8, ov45_02255F94, 913);
-    ASSERT(strlen(password) < 32, ov45_022566BC, ov45_02255F94, 914);
+    ASSERT(password, sStr_PasswordNeNULL, sStr_ciAddJOINFilter, 913);
+    ASSERT(strlen(password) < 32, sStr_StrlenPasswordLtMAX_PASSWORD, sStr_ciAddJOINFilter, 914);
     data = DWCi_GsMalloc(sizeof(ChatEnterData));
     if (!data) {
         return 0;
@@ -568,7 +568,7 @@ int ciAddGETCKEYFilter(ChatConnection *chat, const char *cookie, int count, cons
     j = i;
     for (; i < count; i++) {
         const char *key = keys[i];
-        if (strcmp(key, ov45_022566DC) != 0) {
+        if (strcmp(key, sStr_B_UnderscoreStar) != 0) {
             data->keys[j] = goastrdup(key);
             if (!data->keys[j]) {
                 for (j--; j >= 0; j--) {
@@ -620,7 +620,7 @@ int ciAddGETCHANKEYFilter(ChatConnection *chat, const char *cookie, int count, c
         }
         for (i = 0, j = 0; i < count; i++) {
             key = keys[i];
-            if (strcmp(key, ov45_022566DC) == 0) {
+            if (strcmp(key, sStr_B_UnderscoreStar) == 0) {
                 continue;
             }
             data->keys[j] = goastrdup(key);
@@ -652,7 +652,7 @@ ChatModeChange *ciParseMode(const char *modes, const char **args, int argCount) 
     int count;
     count = 0;
     hasArg = FALSE;
-    ASSERT(modes != NULL, ov45_022566E0, ov45_02255E78, 0x494);
+    ASSERT(modes != NULL, sStr_ModeNeNULL, sStr_ciParseMode, 0x494);
     if (*modes == '+') {
         set = TRUE;
     } else if (*modes == '-') {
@@ -811,7 +811,7 @@ void ciApplyChangesToMode(ChatChannelMode *mode, ChatModeChange *changes) {
             mode->opsObeyChannelLimit = changes->set;
             break;
         default:
-            __msl_assertion_failed(ov45_02256690, ov45_022565D0, ov45_02256128, 0x56C);
+            __msl_assertion_failed(sStr_0_10, sStr_ChatHandlersC, sStr_ciApplyChangesToMode, 0x56C);
             break;
         }
         changes++;

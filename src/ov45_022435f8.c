@@ -25,7 +25,7 @@ extern int LobbyChat_GetUserIdFromNick(const String *);
 extern void LobbyUserMap_Find(void **, void *, const void *);
 extern int LobbyString_Equals(const void *, const void *);
 extern void LobbyString_InitFromCStr(String *, const char *);
-extern char ov45_022553A8[];
+extern char sStr_Empty_18[];
 extern void LobbyString_InitCopy(String *, const void *);
 extern void LobbyUserMap_EraseKey(void *, int *);
 extern void LobbyUserMap_MakeEntry(Pair *, int, const String *);
@@ -56,7 +56,7 @@ void LobbyChat_GetUserNick(String *out, Work *w, int id, ...) {
     void *node;
     LobbyUserMap_Find(&node, &w->tree, &id);
     if (node == w->sentinel) {
-        LobbyString_InitFromCStr(out, ov45_022553A8);
+        LobbyString_InitFromCStr(out, sStr_Empty_18);
     } else {
         LobbyString_InitCopy(out, (u8 *)node + 0x10);
     }

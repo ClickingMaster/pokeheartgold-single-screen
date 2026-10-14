@@ -177,7 +177,7 @@ extern const SpriteResourceCountsListUnion sBattleAnimBattlerSpriteCapacities;
 extern const u32 sBattleAnimBattlerSpritePriorities[6];
 extern void (*const sBattleAnimEmitterCallbackTable[])(SPLEmitter *);
 // assert messages; GF_ASSERT(message == NULL) is an assert that always fails
-extern const char _02237840[];
+extern const char sStr_HaikeiSubSystemLaunchLimit[];
 extern const char ov07_02237870[];
 extern const char ov07_0223789C[];
 
@@ -1682,7 +1682,7 @@ void BattleAnimSystem_RegisterBgEffect(BattleAnimBgEffect **effects, void *effec
             return;
         }
     }
-    GF_ASSERT(_02237840 == NULL);
+    GF_ASSERT(sStr_HaikeiSubSystemLaunchLimit == NULL);
 }
 
 void *BattleAnimSystem_FindBgEffect(BattleAnimBgEffect **effects, int kind) {

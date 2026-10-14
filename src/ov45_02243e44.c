@@ -19,7 +19,7 @@ typedef struct {
     void *last;
 } Tree;
 
-extern const char ov45_022553AC[];
+extern const char sStr_TreeInsertLengthError_4[];
 extern Node *LobbyMem_Alloc(u32);
 extern void LobbyTree_InsertRebalance(Node *, void *);
 extern void DWC_Free(int, void *, int);
@@ -37,7 +37,7 @@ Node *LobbyUserIdSet_InsertNode(Tree *t, Node *parent, int left, int last, const
     Node *n;
     u32 address;
     if (t->count == -1) {
-        printf(ov45_022553AC);
+        printf(sStr_TreeInsertLengthError_4);
         abort();
     }
     f.byte = 0;

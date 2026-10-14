@@ -50,7 +50,7 @@ struct Handler {
     void (*callback)(BOOL ok, u32 zero, const char *str, u32 extra);
 };
 
-extern "C" HandlerVtbl ov45_02255238;
+extern "C" HandlerVtbl gLobbyRequestVtable;
 
 struct Node {
     Node *l, *r, *p;
@@ -80,14 +80,14 @@ struct Manager {
     Map map;
 };
 
-extern "C" Manager *ov45_022577DC;
+extern "C" Manager *gLobbyChatManager;
 extern "C" It LobbyRequestMap_Find(Map *map, Base *const &key);
 extern "C" void LobbyRequestMap_DeleteKey(Map *map, u32 id);
 extern "C" int LobbyChat_FindUserIdByNick(Manager *m, String *s);
 extern "C" void LobbyChat_StripChannelPrefix(String *dst, Manager *m, String *s);
 
 inline void KeyInit(Base *k, u32 id) {
-    k->vtbl = &ov45_02255238;
+    k->vtbl = &gLobbyRequestVtable;
     k->id = id;
     k->unk8 = 0;
 }
@@ -171,24 +171,24 @@ extern "C" void LobbyChat_OnEnterChannelEnumUsers(void *self, int result, const 
 #pragma opt_propagation off
 
 extern "C" void LobbyChat_OnEnterChannelEnumUsers(void *self, int result, const char *name, int count, const char **names, u32 unused, u32 id) {
-    if (ov45_022577DC != NULL && ov45_022577DC->state == 5) {
+    if (gLobbyChatManager != NULL && gLobbyChatManager->state == 5) {
         return;
     }
     if (result == 1) {
         String s;
         LobbyString_InitFromCStr(&s, name);
-        Vec tmp = LobbyChat_AddChannelUsers(ov45_022577DC, count, names, s);
+        Vec tmp = LobbyChat_AddChannelUsers(gLobbyChatManager, count, names, s);
         tmp.destroy();
         LobbyString_Destroy(&s);
     }
     {
         String u;
         LobbyString_InitFromCStr(&u, name);
-        LobbyChat_SetChannelUsersEnumerated(ov45_022577DC, &u);
+        LobbyChat_SetChannelUsersEnumerated(gLobbyChatManager, &u);
         LobbyString_Destroy(&u);
     }
     int sid = id;
-    Manager *m = ov45_022577DC;
+    Manager *m = gLobbyChatManager;
     It it = FindIt(m, sid);
     Handler *h;
     if (it.n == &m->map.header) {
@@ -200,20 +200,20 @@ extern "C" void LobbyChat_OnEnterChannelEnumUsers(void *self, int result, const 
     String t;
     LobbyString_InitFromCStr(&t, name);
     String k;
-    LobbyChat_StripChannelPrefix(&k, ov45_022577DC, &t);
+    LobbyChat_StripChannelPrefix(&k, gLobbyChatManager, &t);
     void (*cb)(BOOL, u32, const char *, u32) = h->callback;
     const char *str = k.c_str();
     cb(result == 1, 0, str, h->getArg());
     LobbyString_Destroy(&k);
     LobbyString_Destroy(&t);
-    LobbyRequestMap_DeleteKey(&ov45_022577DC->map, sid);
+    LobbyRequestMap_DeleteKey(&gLobbyChatManager->map, sid);
     if (result != 0) {
         return;
     }
     String a;
     LobbyString_InitFromCStr(&a, name);
     String b;
-    LobbyChat_StripChannelPrefix(&b, ov45_022577DC, &a);
+    LobbyChat_StripChannelPrefix(&b, gLobbyChatManager, &a);
     LobbyChat_LeaveChannel(b.c_str());
     LobbyString_Destroy(&b);
     LobbyString_Destroy(&a);

@@ -16,7 +16,7 @@ FS_EXTERN_OVERLAY(OVY_98);
 
 extern const SpriteResourceCountsListUnion ov99_021E9DEC;
 extern const WindowTemplate ov99_021E9ED0[15];
-extern const char _021EA5CC[]; // "seq error!"
+extern const char sStr_SeqError_2[]; // "seq error!"
 extern const GraphicsModes ov99_021E9D9C;
 extern const PokeathlonTrophiesBgTemplates ov99_021E9E60;
 extern const u8 ov99_021E9D88[4];
@@ -96,7 +96,7 @@ BOOL PokeathlonTrophies_Main(OverlayManager *man, int *state) {
     case 4:
         return TRUE;
     default:
-        GF_ASSERT(!_021EA5CC);
+        GF_ASSERT(!sStr_SeqError_2);
         break;
     }
     PokeathlonUtil_DrawSprites(work->spriteContext);

@@ -60,12 +60,12 @@ void WifiSetupKeyboard_InputTask(void) {
 void WifiSetupKeyboard_HandleTouchPress(void) {
     WifiSetupRect rect;
     int i;
-    if (!WifiSetupInput_IsTouchPressed(&ov13_02245958)) {
+    if (!WifiSetupInput_IsTouchPressed(&gWifiSetupInputPanelRect)) {
         return;
     }
     gWifiSetupKeyboard->pressedKey = -1;
     for (i = 0; i < WIFI_SETUP_KEYBOARD_NUM_CHAR_KEYS; i++) {
-        WifiSetup_RectFromPosSize(ov13_02244FA4 + i, &ov13_02244F68, &rect);
+        WifiSetup_RectFromPosSize(gWifiSetupKeyboardKeyPositions + i, &ov13_02244F68, &rect);
         if (WifiSetupInput_IsTouchPressed(&rect)) {
             if (!gWifiSetupKeyboard->canType) {
                 WifiSetupSound_Play(9);
@@ -77,13 +77,13 @@ void WifiSetupKeyboard_HandleTouchPress(void) {
         }
     }
     for (i = 0; i < WIFI_SETUP_KEYBOARD_NUM_EXTRA_KEYS; i++) {
-        WifiSetup_RectFromPosSize(ov13_02244F84 + i, ov13_02244F94 + i, &rect);
+        WifiSetup_RectFromPosSize(gWifiSetupKeyboardExtraKeyPositions + i, gWifiSetupKeyboardExtraKeySizes + i, &rect);
         if (WifiSetupInput_IsTouchPressed(&rect)) {
             if ((i == 3 && !gWifiSetupKeyboard->canDelete) || (i == 2 && !gWifiSetupKeyboard->canType)) {
                 WifiSetupSound_Play(9);
                 return;
             }
-            WifiSetupSound_Play(ov13_02245D80[i]);
+            WifiSetupSound_Play(gWifiSetupKeyboardExtraKeySounds[i]);
             gWifiSetupKeyboard->pressedKey = i + WIFI_SETUP_KEYBOARD_NUM_CHAR_KEYS;
             return;
         }
@@ -91,7 +91,7 @@ void WifiSetupKeyboard_HandleTouchPress(void) {
     {
         const WifiSetupPoint *size, *pos;
         int j;
-        pos = ov13_02244F7C;
+        pos = gWifiSetupKeyboardButtonPositions;
         size = &ov13_02244F64;
         for (j = 0; j < WIFI_SETUP_KEYBOARD_NUM_BUTTONS; j++, pos++) {
             WifiSetup_RectFromPosSize(pos, size, &rect);
@@ -109,16 +109,16 @@ void WifiSetupKeyboard_HandleTouchRelease(void) {
     int i;
     const WifiSetupPoint *pos, *size;
     gWifiSetupKeyboard->input = 0;
-    if (!WifiSetupInput_IsTouchReleased(&ov13_02245958)) {
+    if (!WifiSetupInput_IsTouchReleased(&gWifiSetupInputPanelRect)) {
         return;
     }
-    for (i = 0, pos = ov13_02244FA4; i < WIFI_SETUP_KEYBOARD_NUM_CHAR_KEYS; i++, pos++) {
+    for (i = 0, pos = gWifiSetupKeyboardKeyPositions; i < WIFI_SETUP_KEYBOARD_NUM_CHAR_KEYS; i++, pos++) {
         WifiSetup_RectFromPosSize(pos, &ov13_02244F68, &rect);
         if (WifiSetupInput_IsTouchReleased(&rect)) {
             if (gWifiSetupKeyboard->pressedKey != i) {
                 return;
             }
-            gWifiSetupKeyboard->input = ov13_02245D68[gWifiSetupKeyboard->page][i];
+            gWifiSetupKeyboard->input = gWifiSetupKeyboardPageKeyCodes[gWifiSetupKeyboard->page][i];
             if (gWifiSetupKeyboard->page == 1) {
                 WifiSetupKeyboard_SetPage(0);
             }
@@ -133,7 +133,7 @@ void WifiSetupKeyboard_HandleTouchRelease(void) {
             if (gWifiSetupKeyboard->pressedKey != i + WIFI_SETUP_KEYBOARD_NUM_CHAR_KEYS) {
                 return;
             }
-            gWifiSetupKeyboard->input = ov13_02245208[i];
+            gWifiSetupKeyboard->input = gWifiSetupKeyboardExtraKeyCodes[i];
             if (gWifiSetupKeyboard->page == 1) {
                 WifiSetupKeyboard_SetPage(0);
             }
@@ -142,19 +142,19 @@ void WifiSetupKeyboard_HandleTouchRelease(void) {
             return;
         }
     }
-    for (i = 0, pos = ov13_02244F7C; i < WIFI_SETUP_KEYBOARD_NUM_BUTTONS; i++, pos++) {
+    for (i = 0, pos = gWifiSetupKeyboardButtonPositions; i < WIFI_SETUP_KEYBOARD_NUM_BUTTONS; i++, pos++) {
         WifiSetup_RectFromPosSize(pos, &ov13_02244F64, &rect);
         if (WifiSetupInput_IsTouchReleased(&rect)) {
             if (gWifiSetupKeyboard->pressedKey != i + WIFI_SETUP_KEY_BUTTON_0) {
                 return;
             }
-            gWifiSetupKeyboard->input = ov13_02244F58[i];
+            gWifiSetupKeyboard->input = gWifiSetupKeyboardButtonCodes[i];
             gWifiSetupKeyboard->cursorKey = i + WIFI_SETUP_KEY_BUTTON_0;
             WifiSetupKeyboard_UpdateCursor();
             return;
         }
     }
-    WifiSetup_RectFromPosSize(ov13_02244F84, ov13_02244F94, &rect);
+    WifiSetup_RectFromPosSize(gWifiSetupKeyboardExtraKeyPositions, gWifiSetupKeyboardExtraKeySizes, &rect);
     if (WifiSetupInput_IsTouchReleased(&rect)) {
         if (gWifiSetupKeyboard->pressedKey != WIFI_SETUP_KEY_ALT_PAGE) {
             return;
@@ -191,10 +191,10 @@ void WifiSetupKeyboard_HandleTouchHold(void) {
     WifiSetupRect rect;
     int i;
     const WifiSetupPoint *pos, *size;
-    if (!WifiSetupInput_IsTouchHeld(&ov13_02245958)) {
+    if (!WifiSetupInput_IsTouchHeld(&gWifiSetupInputPanelRect)) {
         goto none;
     }
-    pos = ov13_02244FA4;
+    pos = gWifiSetupKeyboardKeyPositions;
     for (i = 0; i < WIFI_SETUP_KEYBOARD_NUM_CHAR_KEYS; i++, pos++) {
         WifiSetup_RectFromPosSize(pos, &ov13_02244F68, &rect);
         if (WifiSetupInput_IsTouchHeld(&rect)) {
@@ -231,7 +231,7 @@ void WifiSetupKeyboard_HandleTouchHold(void) {
             return;
         }
     }
-    pos = ov13_02244F7C;
+    pos = gWifiSetupKeyboardButtonPositions;
     for (i = 0; i < WIFI_SETUP_KEYBOARD_NUM_BUTTONS; i++, pos++) {
         WifiSetup_RectFromPosSize(pos, &ov13_02244F64, &rect);
         if (WifiSetupInput_IsTouchHeld(&rect)) {
@@ -279,7 +279,7 @@ void WifiSetupKeyboard_HandleButtons(void) {
                 WifiSetupSound_Play(9);
                 return;
             }
-            gWifiSetupKeyboard->input = ov13_02245D68[gWifiSetupKeyboard->page][key];
+            gWifiSetupKeyboard->input = gWifiSetupKeyboardPageKeyCodes[gWifiSetupKeyboard->page][key];
             if (gWifiSetupKeyboard->page == 1) {
                 WifiSetupKeyboard_SetPage(0);
             }
@@ -311,10 +311,10 @@ void WifiSetupKeyboard_HandleButtons(void) {
             if (gWifiSetupKeyboard->page == 1) {
                 WifiSetupKeyboard_SetPage(0);
             }
-            gWifiSetupKeyboard->input = ov13_02245208[key - WIFI_SETUP_KEYBOARD_NUM_CHAR_KEYS];
+            gWifiSetupKeyboard->input = gWifiSetupKeyboardExtraKeyCodes[key - WIFI_SETUP_KEYBOARD_NUM_CHAR_KEYS];
             return;
         }
-        gWifiSetupKeyboard->input = ov13_02244F58[key - WIFI_SETUP_KEY_BUTTON_0];
+        gWifiSetupKeyboard->input = gWifiSetupKeyboardButtonCodes[key - WIFI_SETUP_KEY_BUTTON_0];
     }
     if (WifiSetupInput_IsKeyRepeated(PAD_BUTTON_B)) {
         if (!gWifiSetupKeyboard->canDelete) {

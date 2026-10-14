@@ -62,7 +62,7 @@ struct Work {
     int a, b;
 };
 
-extern "C" Work *_022577C4;
+extern "C" Work *gPPWLobbyWork;
 
 struct Table {
     u8 pad[0x1c];
@@ -98,7 +98,7 @@ inline int ErrorMap::Map(int r) const {
 }
 
 inline void SetResult(const Result &r) {
-    Work *g = _022577C4;
+    Work *g = gPPWLobbyWork;
     g->mode = r.mode;
     LobbyString_Assign(&g->text, &r.text);
     g->a = r.a;
@@ -116,14 +116,14 @@ extern "C" int PPW_LobbyJoinSubChannelAsync(int mode);
 #pragma opt_common_subs off
 
 extern "C" int PPW_LobbyJoinSubChannelAsync(int mode) {
-    Work *w = _022577C4;
+    Work *w = gPPWLobbyWork;
     if (w == 0) {
         return 4;
     }
     if (w != 0 && w->state == 10) {
         return 7;
     }
-    if (w != 0 && _022577C4->state != 8) {
+    if (w != 0 && gPPWLobbyWork->state != 8) {
         return 4;
     }
     if (w != 0 && (w->mode != 5 ? 1 : 0) != 0) {
@@ -155,7 +155,7 @@ extern "C" int PPW_LobbyJoinSubChannelAsync(int mode) {
     }
     int result = LobbyChat_EnterChannelAsync(name.c_str(), 0, t->ctx, &cb, PPWLobby_OnEnterSubChannel, mode);
     {
-        Work *g = _022577C4;
+        Work *g = gPPWLobbyWork;
         int state = ErrorMap().Map(result);
         if (state != 0) {
             g->error = state;

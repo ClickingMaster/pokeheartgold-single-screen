@@ -3,7 +3,7 @@
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-extern u8 *_022577C4;
+extern u8 *gPPWLobbyWork;
 extern void LobbyTimerMap_Clear(void *);
 extern int LobbyChat_Shutdown(void);
 int PPW_LobbyShutdownAsync(void);
@@ -12,16 +12,16 @@ int PPW_LobbyShutdownAsync(void) {
     int result, error;
     volatile u8 unused;
     u8 *p;
-    if (!_022577C4) {
+    if (!gPPWLobbyWork) {
         return 0;
     }
-    if (*(int *)_022577C4 == 9) {
+    if (*(int *)gPPWLobbyWork == 9) {
         return 0;
     }
-    LobbyTimerMap_Clear(_022577C4 + 0x134);
-    *(int *)_022577C4 = 9;
+    LobbyTimerMap_Clear(gPPWLobbyWork + 0x134);
+    *(int *)gPPWLobbyWork = 9;
     result = LobbyChat_Shutdown();
-    p = _022577C4;
+    p = gPPWLobbyWork;
     unused = 0;
     if (result != 1) {
         if (result == 2) {

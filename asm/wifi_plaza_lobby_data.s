@@ -592,9 +592,9 @@
 	.public ov45_02254E88
 	.public ov45_02254EBC
 	.public ov45_02254EF0
-	.public ov45_02254EF4
-	.public ov45_02254F04
-	.public ov45_02254F14
+	.public sStr_b_lby_wlddata
+	.public sStr_pokemonplatds
+	.public sStr_IIup73
 	.public ov45_02254F1C
 	.public ov45_02254F28
 	.public WiFiPlazaWork_VBlankDummy
@@ -918,18 +918,18 @@ ov45_02254EBC: ; 0x02254EBC
 	.word WiFiPlazaApps_EndSurvey
 
 ov45_02254EF0: ; 0x02254EF0
-	.word ov45_02254EF4
+	.word sStr_b_lby_wlddata
 
 	.balign 4, 0
-ov45_02254EF4:
+sStr_b_lby_wlddata:
 	.asciz "b_lby_wlddata"
 
 	.balign 4, 0
-ov45_02254F04: ; 0x02254F04
+sStr_pokemonplatds: ; 0x02254F04
 	.asciz "pokemonplatds"
 
 	.balign 4, 0
-ov45_02254F14: ; 0x02254F14
+sStr_IIup73: ; 0x02254F14
 	.asciz "IIup73"
 
 	.balign 4, 0

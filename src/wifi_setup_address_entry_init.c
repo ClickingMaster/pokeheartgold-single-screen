@@ -34,7 +34,7 @@ typedef struct WifiSetupAddressLayout {
     u8 unk_0D[11];
 } WifiSetupAddressLayout;
 
-extern const u8 ov13_022463E0[]; // stored address of an unset entry
+extern const u8 gWifiSetupAddressEntryUnsetAddress[]; // stored address of an unset entry
 extern const WifiSetupAddressLayout ov13_02245480;
 extern const WifiSetupAddressLoadFuncs ov13_02245498;
 
@@ -49,7 +49,7 @@ void WifiSetupAddressEntry_Init(void) {
     WifiSetupApp_GetScreenArgs(&kind, 0);
     funcs.funcs[kind]((char *)gWifiSetupAddressEntry->digits);
     work = gWifiSetupAddressEntry;
-    if (memcmp(work->digits, ov13_022463E0, 3) != 0) {
+    if (memcmp(work->digits, gWifiSetupAddressEntryUnsetAddress, 3) != 0) {
         work->field = 3;
     } else {
         MI_CpuFill8(work->digits, 0, 12);

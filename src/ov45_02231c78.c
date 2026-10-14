@@ -30,7 +30,7 @@ typedef struct {
     int a, b;
 } Work;
 
-extern Work *volatile _022577C4;
+extern Work *volatile gPPWLobbyWork;
 
 static inline int badMode(Work *w) {
     if (w) {

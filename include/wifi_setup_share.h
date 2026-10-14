@@ -10,7 +10,7 @@
 // Local wireless session of the access-point setup (ARM code in overlay 13, src/wifi_setup_share.c):
 //  - WifiSetupWh_*: a small handler around the WM parent functions (initialise, parent parameters,
 //    WEP key, start parent, MP, key sharing / data sharing, channel measurement, end, reset). Its log
-//    strings call it "DWCi_MOV_WH"; the state names are in the table ov13_02247120.
+//    strings call it "DWCi_MOV_WH"; the state names are in the table gWifiSetupWhStateNames.
 //  - WifiSetupShare_*: the session that runs on it: DS Download Play of a program to one child
 //    (WifiSetupMbParent_*), then data sharing with that child, sending the connection settings
 //    (WifiSetupConnections_Get) in 64-byte blocks.

@@ -468,22 +468,22 @@
 	.public ov74_0223CC5C
 	.public ov74_0223CC5E
 	.public sGiftCartridgeGameCodes
-	.public ov74_0223CEF0
-	.public ov74_0223CF04
-	.public ov74_0223CF18
-	.public ov74_0223CF2C
-	.public ov74_0223CF40
-	.public ov74_0223CF58
-	.public ov74_0223CF70
-	.public ov74_0223CF8C
-	.public ov74_0223CFA8
-	.public ov74_0223CFC4
+	.public sStr_mywh_SYSSTATE_IDLE
+	.public sStr_mywh_SYSSTATE_BUSY
+	.public sStr_mywh_SYSSTATE_STOP
+	.public sStr_mywh_SYSSTATE_ERROR
+	.public sStr_mywh_SYSSTATE_SCANNING
+	.public sStr_mywh_SYSSTATE_CONNECTED
+	.public sStr_mywh_SYSSTATE_KEYSHARING
+	.public sStr_mywh_SYSSTATE_DATASHARING
+	.public sStr_mywh_SYSSTATE_CONNECT_FAIL
+	.public sStr_mywh_SYSSTATE_MEASURECHANNEL
 	.public sMysteryGiftBeaconStateNames
-	.public ov74_0223D00C
-	.public ov74_0223D014
-	.public ov74_0223D018
-	.public ov74_0223D038
-	.public ov74_0223D040
+	.public sFmt_StrSpaceDashGtSpace
+	.public sFmt_StrLf
+	.public sFmt_NotMyParentGgid
+	.public sStr_IPGE
+	.public sStr_K5WfPEw9T3cvqzHa
 	.public ov74_0223D054
 	.public gConnectToRanger_PlayerName
 	.public gConnectToRanger_TrainerId
@@ -1266,66 +1266,66 @@ sGiftCartridgeGameCodes: ; 0x0223CE9C
 	.ascii "EV5B"
 	.ascii "EW5B"
 	.ascii "\x00\x00\x00\x00"
-ov74_0223CEF0:
+sStr_mywh_SYSSTATE_IDLE:
 	.asciz "mywh_SYSSTATE_IDLE"
 	.balign 4, 0
-ov74_0223CF04:
+sStr_mywh_SYSSTATE_BUSY:
 	.asciz "mywh_SYSSTATE_BUSY"
 	.balign 4, 0
-ov74_0223CF18:
+sStr_mywh_SYSSTATE_STOP:
 	.asciz "mywh_SYSSTATE_STOP"
 	.balign 4, 0
-ov74_0223CF2C:
+sStr_mywh_SYSSTATE_ERROR:
 	.asciz "mywh_SYSSTATE_ERROR"
 	.balign 4, 0
-ov74_0223CF40:
+sStr_mywh_SYSSTATE_SCANNING:
 	.asciz "mywh_SYSSTATE_SCANNING"
 	.balign 4, 0
-ov74_0223CF58:
+sStr_mywh_SYSSTATE_CONNECTED:
 	.asciz "mywh_SYSSTATE_CONNECTED"
 	.balign 4, 0
-ov74_0223CF70:
+sStr_mywh_SYSSTATE_KEYSHARING:
 	.asciz "mywh_SYSSTATE_KEYSHARING"
 	.balign 4, 0
-ov74_0223CF8C:
+sStr_mywh_SYSSTATE_DATASHARING:
 	.asciz "mywh_SYSSTATE_DATASHARING"
 	.balign 4, 0
-ov74_0223CFA8:
+sStr_mywh_SYSSTATE_CONNECT_FAIL:
 	.asciz "mywh_SYSSTATE_CONNECT_FAIL"
 	.balign 4, 0
-ov74_0223CFC4:
+sStr_mywh_SYSSTATE_MEASURECHANNEL:
 	.asciz "mywh_SYSSTATE_MEASURECHANNEL"
 	.balign 4, 0
 
 sMysteryGiftBeaconStateNames: ; 0x0223CFE4
-	.word ov74_0223CF18
-	.word ov74_0223CEF0
-	.word ov74_0223CF40
-	.word ov74_0223CF04
-	.word ov74_0223CF58
-	.word ov74_0223CF8C
-	.word ov74_0223CF70
-	.word ov74_0223CFC4
-	.word ov74_0223CFA8
-	.word ov74_0223CF2C
+	.word sStr_mywh_SYSSTATE_STOP
+	.word sStr_mywh_SYSSTATE_IDLE
+	.word sStr_mywh_SYSSTATE_SCANNING
+	.word sStr_mywh_SYSSTATE_BUSY
+	.word sStr_mywh_SYSSTATE_CONNECTED
+	.word sStr_mywh_SYSSTATE_DATASHARING
+	.word sStr_mywh_SYSSTATE_KEYSHARING
+	.word sStr_mywh_SYSSTATE_MEASURECHANNEL
+	.word sStr_mywh_SYSSTATE_CONNECT_FAIL
+	.word sStr_mywh_SYSSTATE_ERROR
 
-ov74_0223D00C: ; 0x0223D00C
+sFmt_StrSpaceDashGtSpace: ; 0x0223D00C
 	.asciz "%s -> "
 	.balign 4, 0
 
-ov74_0223D014: ; 0x0223D014
+sFmt_StrLf: ; 0x0223D014
 	.asciz "%s\n"
 	.balign 4, 0
 
-ov74_0223D018: ; 0x0223D018
+sFmt_NotMyParentGgid: ; 0x0223D018
 	.asciz "not my parent ggid (%d != %d)\n"
 	.balign 4, 0
 
-ov74_0223D038: ; 0x0223D038
+sStr_IPGE: ; 0x0223D038
 	.asciz "IPGE"
 	.balign 4, 0
 
-ov74_0223D040: ; 0x0223D040
+sStr_K5WfPEw9T3cvqzHa: ; 0x0223D040
 	.asciz "K5WfPEw9T3cvqzHa"
 	.balign 4, 0
 

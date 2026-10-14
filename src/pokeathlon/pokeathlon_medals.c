@@ -37,7 +37,7 @@ extern const PokeathlonMedalsBgTemplates ov99_021EA0BC;
 extern const ManagedSpriteTemplate ov99_021EA180[4];
 extern const DpadMenuBox ov99_021EA250[];
 extern const u8 ov99_021EA348[7];
-extern const char _021EA5D8[]; // "seq error!"
+extern const char sStr_SeqError_3[]; // "seq error!"
 
 BOOL PokeathlonMedals_GetSpeciesOrderFileIndex(void) {
     return TRUE;
@@ -416,7 +416,7 @@ BOOL PokeathlonMedals_Main(OverlayManager *man, int *state) {
     case 4:
         return TRUE;
     default:
-        GF_ASSERT(!_021EA5D8);
+        GF_ASSERT(!sStr_SeqError_3);
         break;
     }
     PokeathlonUtil_DrawSprites(work->spriteContext);

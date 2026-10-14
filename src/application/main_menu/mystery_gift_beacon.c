@@ -95,21 +95,21 @@ u32 _u32_div_f(u32 dividend, u32 divisor);
 
 extern MysteryGiftBeacon sMysteryGiftBeacon;
 extern const char *sMysteryGiftBeaconStateNames[];
-extern const char ov74_0223D00C[];
-extern const char ov74_0223D014[];
-extern const char ov74_0223D018[];
+extern const char sFmt_StrSpaceDashGtSpace[];
+extern const char sFmt_StrLf[];
+extern const char sFmt_NotMyParentGgid[];
 
 void MysteryGiftBeacon_SetState(int state) {
     void (*print)(const char *format, ...) = sMysteryGiftBeacon.print;
     if (print != NULL) {
         int index = sMysteryGiftBeacon.work->state;
-        print(ov74_0223D00C, sMysteryGiftBeaconStateNames[index]); // "%s -> "
+        print(sFmt_StrSpaceDashGtSpace, sMysteryGiftBeaconStateNames[index]); // "%s -> "
     }
     sMysteryGiftBeacon.work->state = state;
     print = sMysteryGiftBeacon.print;
     if (print != NULL) {
         int index = sMysteryGiftBeacon.work->state;
-        print(ov74_0223D014, sMysteryGiftBeaconStateNames[index]); // "%s\n"
+        print(sFmt_StrLf, sMysteryGiftBeaconStateNames[index]); // "%s\n"
     }
 }
 
@@ -225,7 +225,7 @@ void MysteryGiftBeacon_ScanCallback(void *arg) {
         DC_InvalidateRange(sMysteryGiftBeacon.work->scanBuffer, sizeof(sMysteryGiftBeacon.work->scanBuffer));
         if (result->gameInfoLength < 8 || result->ggid != MYSTERY_GIFT_BEACON_GGID) {
             if (sMysteryGiftBeacon.print != NULL) {
-                sMysteryGiftBeacon.print(ov74_0223D018, result->ggid, MYSTERY_GIFT_BEACON_GGID); // "not my parent ggid (%d != %d)\n"
+                sMysteryGiftBeacon.print(sFmt_NotMyParentGgid, result->ggid, MYSTERY_GIFT_BEACON_GGID); // "not my parent ggid (%d != %d)\n"
             }
             break;
         }

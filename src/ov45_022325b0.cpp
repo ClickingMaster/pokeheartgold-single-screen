@@ -132,18 +132,18 @@ struct Work {
     int changed;
 };
 
-extern "C" Work *_022577C4;
+extern "C" Work *gPPWLobbyWork;
 extern "C" int PPW_LobbyUpdateMyProfile(const u8 *data, u32 len, int flag);
 
 extern "C" int PPW_LobbyUpdateMyProfile(const u8 *data, u32 len, int flag) {
-    Work *w = _022577C4;
+    Work *w = gPPWLobbyWork;
     if (w == 0) {
         return 4;
     }
     if (w != 0 && w->state == 10) {
         return 7;
     }
-    if (w != 0 && (*(Work *volatile *)&_022577C4)->state != 8) {
+    if (w != 0 && (*(Work *volatile *)&gPPWLobbyWork)->state != 8) {
         return 4;
     }
     Field f;

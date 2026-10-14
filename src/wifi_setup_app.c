@@ -47,7 +47,7 @@ void WifiSetupApp_StartAossClient(void) {
     MIi_CpuClear16(0, (u16 *)&key, sizeof(key));
     key.tag = 'P';
     key.length = 12;
-    MI_CpuCopy8(ov13_02245320, key.data, 12);
+    MI_CpuCopy8(gWifiSetupAossClientName, key.data, 12);
     gWifiSetupClient.request->requestMask = 3;
     // copy the key to request->unk_002.. two halfwords at a time
     base = (u16 *)gWifiSetupClient.request;
@@ -364,7 +364,7 @@ void WifiSetupTransfer_Start(WifiSetupSessionCallback callback) {
     gWifiSetupSession->callback = callback;
     gWifiSetupSession->missedEvent = 0;
     gWifiSetupSession->cancelled = 0;
-    params = ov13_02245F8C;
+    params = gWifiSetupTransferSessionParams;
     params.title = WifiSetupText_GetString(gWifiSetupTextBank, 0);
     params.description = WifiSetupText_GetString(gWifiSetupTextBank, 1);
     params.languageCode = WifiSetupApp_GetLanguageCode();

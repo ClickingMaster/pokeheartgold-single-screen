@@ -14,25 +14,25 @@
 // random number generator of the stats upload client (stats_upload.c), which share this object.
 
 extern void __msl_assertion_failed(const char *, const char *, const char *, int);
-extern const char ov45_02257164[];
-extern const char ov45_02257258[];
-extern const char ov45_02257334[];
-extern const char ov45_02257344[];
-extern const char ov45_022573C4[];
-extern const char ov45_022573E4[];
-extern const char ov45_02257408[];
-extern const char ov45_02257438[];
-extern const char ov45_0225745C[];
-extern const char ov45_0225749C[];
-extern const char ov45_022574BC[];
-extern const char ov45_022574E0[];
-extern const char ov45_02257514[];
-extern const char ov45_02257538[];
+extern const char sStr_ciSocketRecv[];
+extern const char sStr_ChatSocketC[];
+extern const char sStr_SockNeNULL_2[];
+extern const char sStr_SockConnectStateEqCiNotConnectedOrSock[];
+extern const char sStr_SockInputQueueNeNULL[];
+extern const char sStr_SockInputQueueSizeGe0[];
+extern const char sStr_SockInputQueueSizeBUFFER_INC_Eq0[];
+extern const char sStr_SockInputQueueLengthGe0[];
+extern const char sStr_SockInputQueueLengthLeSockInputQueueSize[];
+extern const char sStr_SockOutputQueueNeNULL[];
+extern const char sStr_SockOutputQueueSizeGe0[];
+extern const char sStr_SockOutputQueueSizeBUFFER_INC_Eq0[];
+extern const char sStr_SockOutputQueueLengthGe0[];
+extern const char sStr_SockOutputQueueLengthLeSockOutputQueueSize[];
 
 // Assertion of the socket module with the message, the name of the checking function and the line.
 #define ASSERT(cond, message, func, line)                           \
     if (!(cond)) {                                                  \
-        __msl_assertion_failed(message, ov45_02257258, func, line); \
+        __msl_assertion_failed(message, sStr_ChatSocketC, func, line); \
     }
 
 // Frees a part of the message and clears it.
@@ -96,18 +96,18 @@ fail:
 
 // Returns the next line received from the server, or NULL.
 ChatMessage *ciSocketRecv(ChatSocket *socket) {
-    ASSERT(socket, ov45_02257334, ov45_02257164, 1001);
-    ASSERT(socket->state <= 2, ov45_02257344, ov45_02257164, 1001);
-    ASSERT(&socket->input, ov45_022573C4, ov45_02257164, 1001);
-    ASSERT(socket->input.size >= 0, ov45_022573E4, ov45_02257164, 1001);
-    ASSERT(socket->input.size % 0x2000 == 0, ov45_02257408, ov45_02257164, 1001);
-    ASSERT(socket->input.length >= 0, ov45_02257438, ov45_02257164, 1001);
-    ASSERT(socket->input.length <= socket->input.size, ov45_0225745C, ov45_02257164, 1001);
-    ASSERT(&socket->output, ov45_0225749C, ov45_02257164, 1001);
-    ASSERT(socket->output.size >= 0, ov45_022574BC, ov45_02257164, 1001);
-    ASSERT(socket->output.size % 0x2000 == 0, ov45_022574E0, ov45_02257164, 1001);
-    ASSERT(socket->output.length >= 0, ov45_02257514, ov45_02257164, 1001);
-    ASSERT(socket->output.length <= socket->output.size, ov45_02257538, ov45_02257164, 1001);
+    ASSERT(socket, sStr_SockNeNULL_2, sStr_ciSocketRecv, 1001);
+    ASSERT(socket->state <= 2, sStr_SockConnectStateEqCiNotConnectedOrSock, sStr_ciSocketRecv, 1001);
+    ASSERT(&socket->input, sStr_SockInputQueueNeNULL, sStr_ciSocketRecv, 1001);
+    ASSERT(socket->input.size >= 0, sStr_SockInputQueueSizeGe0, sStr_ciSocketRecv, 1001);
+    ASSERT(socket->input.size % 0x2000 == 0, sStr_SockInputQueueSizeBUFFER_INC_Eq0, sStr_ciSocketRecv, 1001);
+    ASSERT(socket->input.length >= 0, sStr_SockInputQueueLengthGe0, sStr_ciSocketRecv, 1001);
+    ASSERT(socket->input.length <= socket->input.size, sStr_SockInputQueueLengthLeSockInputQueueSize, sStr_ciSocketRecv, 1001);
+    ASSERT(&socket->output, sStr_SockOutputQueueNeNULL, sStr_ciSocketRecv, 1001);
+    ASSERT(socket->output.size >= 0, sStr_SockOutputQueueSizeGe0, sStr_ciSocketRecv, 1001);
+    ASSERT(socket->output.size % 0x2000 == 0, sStr_SockOutputQueueSizeBUFFER_INC_Eq0, sStr_ciSocketRecv, 1001);
+    ASSERT(socket->output.length >= 0, sStr_SockOutputQueueLengthGe0, sStr_ciSocketRecv, 1001);
+    ASSERT(socket->output.length <= socket->output.size, sStr_SockOutputQueueLengthLeSockOutputQueueSize, sStr_ciSocketRecv, 1001);
     if (!socket->input.length) {
         return NULL;
     }
@@ -123,13 +123,13 @@ u32 StatsUpload_GetBase64Length(u32 length) {
 }
 
 void StatsUpload_SeedRandom(u32 seed) {
-    ov45_022587F8 = seed | (seed << 16);
+    gStatsUploadRandomState = seed | (seed << 16);
 }
 
 // Next byte of the random number generator.
 int StatsUpload_RandomByte(void) {
-    ov45_022587F8 = (gStatsUpload.multiplier * ov45_022587F8 + gStatsUpload.increment) % gStatsUpload.modulus;
-    return ((int)ov45_022587F8 >> 16) & 0xFF;
+    gStatsUploadRandomState = (gStatsUpload.multiplier * gStatsUploadRandomState + gStatsUpload.increment) % gStatsUpload.modulus;
+    return ((int)gStatsUploadRandomState >> 16) & 0xFF;
 }
 
 // Sets the game name (< 32 characters), the 20 character secret key and the random number generator constants

@@ -21,12 +21,12 @@ typedef union {
     } s;
 } Str;
 
-extern void *ov45_022577DC;
-extern char ov45_022552DC[];
-extern char ov45_022552E4[];
-extern char ov45_022552EC[];
-extern char ov45_022552F0[];
-extern char ov45_022552FC[];
+extern void *gLobbyChatManager;
+extern char sStr_normal[];
+extern char sStr_voice[];
+extern char sStr_ops[];
+extern char sStr_VoiceOps[];
+extern char sStr_invalid[];
 void LobbyString_InitFromCStr(Str *, char *);
 void LobbyString_Destroy(Str *);
 void LobbyString_InitCopy(void *, void *);
@@ -81,12 +81,12 @@ void LobbyChat_OnBroadcastKeyChanged(void *a, char *s, char *name, void *arg, vo
 
 void LobbyChat_OnUserChangedNick(void *a, void *b, char *c, char *d) {
     Str x, y;
-    if (ov45_022577DC && W(ov45_022577DC, 4) == 5) {
+    if (gLobbyChatManager && W(gLobbyChatManager, 4) == 5) {
         return;
     }
     LobbyString_InitFromCStr(&x, c);
     LobbyString_InitFromCStr(&y, d);
-    LobbyChat_RenameUser(ov45_022577DC, &x, &y);
+    LobbyChat_RenameUser(gLobbyChatManager, &x, &y);
     LobbyString_Destroy(&y);
     LobbyString_Destroy(&x);
 }

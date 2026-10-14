@@ -40,10 +40,10 @@ typedef struct {
     Callbacks callbacks;
 } Work;
 
-extern Work *ov45_022577DC;
-extern char ov45_022552C0[];
-extern char ov45_022552C8[];
-extern char ov45_022552D8[];
+extern Work *gLobbyChatManager;
+extern char sStr_SERVER[];
+extern char sStr_ExcessFlood[];
+extern char sStr_SpaceColon[];
 extern void LobbyString_InitFromCStr(Text *, char *);
 extern int LobbyString_CompareNoCase(Text *, Text *, int);
 extern void LobbyString_Destroy(Text *);
@@ -86,19 +86,19 @@ void LobbyChat_OnPrivateMessage(void *unused, char *name, char *data, int kind, 
 
     char *firstKey, *secondKey;
     int firstResult, secondResult, id;
-    if (ov45_022577DC && ov45_022577DC->state == 5) {
+    if (gLobbyChatManager && gLobbyChatManager->state == 5) {
         return;
     }
-    firstKey = ov45_022552C0;
+    firstKey = sStr_SERVER;
     firstResult = Compare(firstKey, name, &frame.a, &frame.b, 6);
     if (firstResult == 0) {
-        secondKey = ov45_022552C8;
+        secondKey = sStr_ExcessFlood;
         secondResult = Compare(secondKey, data, &frame.c, &frame.d, 12);
         if (secondResult != 0) {
             return;
         }
         LobbyString_InitFromCStr(&frame.e, data);
-        LobbyString_InitFromCStr(&frame.f, ov45_022552D8);
+        LobbyString_InitFromCStr(&frame.f, sStr_SpaceColon);
         LobbyChat_SplitString(&frame.vector, &frame.e, &frame.f, 0);
         LobbyString_Destroy(&frame.f);
         LobbyString_Destroy(&frame.e);
@@ -114,7 +114,7 @@ void LobbyChat_OnPrivateMessage(void *unused, char *name, char *data, int kind, 
             LobbyStringVector_Destroy(&frame.vector);
             return;
         }
-        frame.first = ov45_022577DC->callbacks;
+        frame.first = gLobbyChatManager->callbacks;
         frame.first.second(id, arg);
         LobbyStringVector_Destroy(&frame.vector);
         return;
@@ -123,11 +123,11 @@ void LobbyChat_OnPrivateMessage(void *unused, char *name, char *data, int kind, 
         return;
     }
     LobbyString_InitFromCStr(&frame.g, name);
-    id = LobbyChat_FindUserIdByNick(ov45_022577DC, &frame.g);
+    id = LobbyChat_FindUserIdByNick(gLobbyChatManager, &frame.g);
     LobbyString_Destroy(&frame.g);
     if (id == -1) {
         return;
     }
-    frame.second = ov45_022577DC->callbacks;
+    frame.second = gLobbyChatManager->callbacks;
     frame.second.first(id, data, arg);
 }

@@ -31,7 +31,7 @@ struct HandlerVtbl {
     u32 (*getArg)(Handler *h);
 };
 
-extern "C" HandlerVtbl ov45_02255238;
+extern "C" HandlerVtbl gLobbyRequestVtable;
 
 struct Base {
     HandlerVtbl *vtbl;
@@ -42,7 +42,7 @@ struct Base {
     }
 
     Base(u32 i)
-        : vtbl(&ov45_02255238)
+        : vtbl(&gLobbyRequestVtable)
         , id(i)
         , unk8(0) {
     }
@@ -90,7 +90,7 @@ struct Manager {
     Map map;
 };
 
-extern "C" Manager *ov45_022577DC;
+extern "C" Manager *gLobbyChatManager;
 extern "C" It LobbyRequestMap_Find(Map *map, Base *const &key);
 extern "C" void LobbyRequestMap_DeleteKey(Map *map, u32 id);
 extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
@@ -99,7 +99,7 @@ extern "C" void LobbyChat_StripChannelPrefix(Str *dst, Manager *m, Str *src);
 extern "C" void LobbyChat_OnChannelModeChanged(void *self, const char *name, u32 x, u32 id);
 
 inline void KeyInit(Base *k, u32 id) {
-    k->vtbl = &ov45_02255238;
+    k->vtbl = &gLobbyRequestVtable;
     k->id = id;
     k->unk8 = 0;
 }
@@ -128,7 +128,7 @@ inline Handler *Find(Manager *m, u32 id) {
 #pragma opt_propagation off
 
 extern "C" void LobbyChat_OnGetChannelMode(void *self, int result, const char *name, u32 x, u32 id) {
-    if (ov45_022577DC != NULL && ov45_022577DC->state == 5) {
+    if (gLobbyChatManager != NULL && gLobbyChatManager->state == 5) {
         return;
     }
     if (result == 0) {
@@ -136,19 +136,19 @@ extern "C" void LobbyChat_OnGetChannelMode(void *self, int result, const char *n
     }
     LobbyChat_OnChannelModeChanged(self, name, x, id);
     int sid = id;
-    Manager *m = ov45_022577DC;
+    Manager *m = gLobbyChatManager;
     It it = FindIt(m, sid);
     Handler *h = it.n == &m->map.header ? 0 : it.n->value;
     Str s;
     LobbyString_InitFromCStr(&s, name);
     Str t;
-    LobbyChat_StripChannelPrefix(&t, ov45_022577DC, &s);
+    LobbyChat_StripChannelPrefix(&t, gLobbyChatManager, &s);
     const char *str = t.c_str();
     void (*cb)(BOOL, const char *, u32, u32) = h->callback;
     cb(result == 1, str, x, h->getArg());
     LobbyString_Destroy(&t);
     LobbyString_Destroy(&s);
-    LobbyRequestMap_DeleteKey(&ov45_022577DC->map, sid);
+    LobbyRequestMap_DeleteKey(&gLobbyChatManager->map, sid);
 }
 
 #pragma pop

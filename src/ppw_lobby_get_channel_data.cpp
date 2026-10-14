@@ -50,15 +50,15 @@ struct Work {
     u8 names[4];
 };
 
-extern "C" Work *_022577C4;
-extern "C" char ov45_022550B4[];
+extern "C" Work *gPPWLobbyWork;
+extern "C" char sStr_Empty_15[];
 extern "C" Str PPWLobby_GetChannelName(u8 *, int);
 extern "C" int LobbyChat_GetChannelKeysAsync(const char *, int, int, void (*)(), int);
 extern "C" void PPWLobby_OnGetChannelKeys();
 extern "C" int PPW_LobbyGetChannelDataAsync(int, int, int, int);
 
 inline bool IsState(int s) {
-    return _022577C4->state == s;
+    return gPPWLobbyWork->state == s;
 }
 
 class ErrorMap {
@@ -83,25 +83,25 @@ inline int ErrorMap::Map(int r) const {
 #pragma opt_common_subs off
 
 extern "C" int PPW_LobbyGetChannelDataAsync(int id, int key, int mode, int arg) {
-    Work *w = _022577C4;
+    Work *w = gPPWLobbyWork;
     if (w == 0) {
         return 4;
     }
     if (w != 0 && w->state == 10) {
         return 7;
     }
-    if (w != 0 && _022577C4->state != 8) {
+    if (w != 0 && gPPWLobbyWork->state != 8) {
         return 4;
     }
     {
         Str name = PPWLobby_GetChannelName(w->names, key);
-        if (name == ov45_022550B4) {
+        if (name == sStr_Empty_15) {
             name.Destroy();
             return 5;
         }
         int result = LobbyChat_GetChannelKeysAsync(name.CStr(), id, mode, PPWLobby_OnGetChannelKeys, arg);
         {
-            Work *g = _022577C4;
+            Work *g = gPPWLobbyWork;
             int state = ErrorMap().Map(result);
             if (state != 0) {
                 g->sub = state;

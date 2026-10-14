@@ -28,7 +28,7 @@ struct Callback {
     u8 pad[12];
     void *arg;
 };
-extern struct State *ov45_022577DC;
+extern struct State *gLobbyChatManager;
 extern void LobbyString_InitFromCStr(struct String *, char *);
 extern void LobbyString_Destroy(struct String *);
 extern void LobbyChat_StripChannelPrefix(struct String *, struct State *, struct String *);
@@ -48,26 +48,26 @@ void LobbyChat_OnUserParted(int unused, char *name, char *value) {
     struct String a, b, c, d, e, f;
     int id;
     struct Callback *cb;
-    if (ov45_022577DC && ov45_022577DC->state == 5) {
+    if (gLobbyChatManager && gLobbyChatManager->state == 5) {
         return;
     }
     LobbyString_InitFromCStr(&a, value);
-    id = LobbyChat_FindUserIdByNick(ov45_022577DC, &a);
+    id = LobbyChat_FindUserIdByNick(gLobbyChatManager, &a);
     LobbyString_Destroy(&a);
     if (id == -1) {
         return;
     }
     LobbyString_InitFromCStr(&b, name);
-    cb = LobbyChat_GetChannelCallbacks(ov45_022577DC, &b);
+    cb = LobbyChat_GetChannelCallbacks(gLobbyChatManager, &b);
     LobbyString_Destroy(&b);
     LobbyString_InitFromCStr(&c, name);
-    LobbyChat_StripChannelPrefix(&d, ov45_022577DC, &c);
+    LobbyChat_StripChannelPrefix(&d, gLobbyChatManager, &c);
     cb->second(getText(&d), id, cb->arg);
     LobbyString_Destroy(&d);
     LobbyString_Destroy(&c);
     LobbyString_InitFromCStr(&e, value);
     LobbyString_InitFromCStr(&f, name);
-    LobbyChat_RemoveChannelUser(ov45_022577DC, &e, &f);
+    LobbyChat_RemoveChannelUser(gLobbyChatManager, &e, &f);
     LobbyString_Destroy(&f);
     LobbyString_Destroy(&e);
 }

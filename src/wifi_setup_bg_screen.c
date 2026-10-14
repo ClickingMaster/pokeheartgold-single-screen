@@ -11,9 +11,9 @@
 
 // BG 2 screen copy and palette uploads, scroll bar creation (see include/wifi_setup_scroll_bar.h).
 
-extern u8 ov13_02245790[]; // thumb template per kind
-extern u8 ov13_02245794[]; // thumb length per kind
-extern WifiSetupRect ov13_02245958;
+extern u8 gWifiSetupScrollBarThumbTemplates[]; // thumb template per kind
+extern u8 gWifiSetupScrollBarThumbLengths[]; // thumb length per kind
+extern WifiSetupRect gWifiSetupInputPanelRect;
 extern s32 FX_DivS32(s32, s32);
 typedef struct WifiSetupApScan WifiSetupApScan; // wifi_setup_access_points.c
 extern WifiSetupApScan *gWifiSetupApScan;
@@ -81,7 +81,7 @@ void WifiSetupScrollBar_Create(int kind, int length, int x, int y, int value) {
     gWifiSetupScrollBar->value = value;
     // called without the u16 conversions of the prototype
     ((void (*)(int, int, WifiSetupPoint *))WifiSetup_SetPoint)(x, y, &gWifiSetupScrollBar->pos);
-    gWifiSetupScrollBar->thumb = WifiSetupOamTemplate_AllocBlock(0, ov13_02245790[kind], 1);
+    gWifiSetupScrollBar->thumb = WifiSetupOamTemplate_AllocBlock(0, gWifiSetupScrollBarThumbTemplates[kind], 1);
     WifiSetupOamBlock_SetPosition(gWifiSetupScrollBar->thumb, -1, x, y + value);
     WifiSetupOamBlock_SetPriority(gWifiSetupScrollBar->thumb, -1, 1);
     gWifiSetupScrollBar->task = WifiSetupTask_Create(0, WifiSetupScrollBar_Task, NULL, 0x80);

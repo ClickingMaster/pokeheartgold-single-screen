@@ -170,11 +170,11 @@ typedef struct Lobby {
     }
 } Lobby;
 
-extern "C" Request *ov45_022577D4;
+extern "C" Request *gPPWLobbyCurrentRequest;
 extern "C" Deletable *ov45_022577D8;
-extern "C" Lobby *_022577C4;
-extern "C" u8 ov45_02254FA0[];
-extern "C" char ov45_022550B0[];
+extern "C" Lobby *gPPWLobbyWork;
+extern "C" u8 gPPWLobbyPlayersVtable[];
+extern "C" char sStr_Star[];
 
 extern "C" int StatsUpload_Process(void);
 extern "C" void *StatsUpload_GetResponseBody(u32 *len);
@@ -221,8 +221,8 @@ static inline void Request_Finish(Request *r, int ok, void *buf, u32 len) {
     Request *tmp;
     StatsUpload_Stop();
     tmp = (Request *)ov45_022577D8;
-    ov45_022577D8 = (Deletable *)ov45_022577D4;
-    ov45_022577D4 = tmp;
+    ov45_022577D8 = (Deletable *)gPPWLobbyCurrentRequest;
+    gPPWLobbyCurrentRequest = tmp;
     r->fn(ok, buf, len, arg);
 }
 
@@ -232,8 +232,8 @@ static inline void Request_Succeed(Request *r, void *buf, const u32 &size) {
     Request *tmp;
     StatsUpload_Stop();
     tmp = (Request *)ov45_022577D8;
-    ov45_022577D8 = (Deletable *)ov45_022577D4;
-    ov45_022577D4 = tmp;
+    ov45_022577D8 = (Deletable *)gPPWLobbyCurrentRequest;
+    gPPWLobbyCurrentRequest = tmp;
     r->fn(1, buf, len, arg);
 }
 
@@ -298,7 +298,7 @@ static inline void Deletable_Delete(Deletable *d) {
 }
 
 static inline int Request_Update(void) {
-    Request *r = ov45_022577D4;
+    Request *r = gPPWLobbyCurrentRequest;
     if (r == NULL) {
         return 0;
     }
@@ -315,7 +315,7 @@ static inline void Lobby_Destroy(Lobby *w) {
     LobbyEventVector_Destroy(&w->vec170);
     LobbyTimerMap_Clear(&w->timers);
     LobbyTimerMap_Destroy(&w->timers);
-    w->sub.vt = ov45_02254FA0;
+    w->sub.vt = gPPWLobbyPlayersVtable;
     PPWLobbyPlayers_Clear(&w->sub.vt);
     LobbyCharVector_Destroy(&w->sub.vec);
     PPWLobbyPlayerSet_Destroy(&w->sub.tree);
@@ -334,7 +334,7 @@ static inline void Lobby_Delete(Lobby *w) {
 }
 
 static inline void Lobby_SetError(int code) {
-    Lobby *w = _022577C4;
+    Lobby *w = gPPWLobbyWork;
     if (code != 0) {
         w->err = code;
         w->state = 10;
@@ -342,7 +342,7 @@ static inline void Lobby_SetError(int code) {
 }
 
 static inline bool Lobby_IsError(void) {
-    return _022577C4 != NULL && _022577C4->GetState() == 10;
+    return gPPWLobbyWork != NULL && gPPWLobbyWork->GetState() == 10;
 }
 
 static inline int Timer_Update(Timer *t, s64 now) {
@@ -362,7 +362,7 @@ static inline Iterator Iterator_Make(void *p) {
 }
 
 static inline void Lobby_UpdateTimers(void) {
-    Lobby *w = _022577C4;
+    Lobby *w = gPPWLobbyWork;
     RTCTime time;
     RTCDate date;
     s64 now;
@@ -396,7 +396,7 @@ static inline int Lobby_IsReady(Lobby *w) {
 static inline void Lobby_Login(void) {
     Str name;
     Str query;
-    LobbyString_InitFromCStr(&name, ov45_022550B0);
+    LobbyString_InitFromCStr(&name, sStr_Star);
     PPWLobby_MakeChannelName(&query, 0, &name);
     LobbyChat_EnumChannelsAsync(Str_CStr(&query), PPWLobby_OnEnumChannels, 0);
     LobbyString_Destroy(&query);
@@ -404,7 +404,7 @@ static inline void Lobby_Login(void) {
 }
 
 static inline void Lobby_Fail(int r) {
-    Lobby *w = _022577C4;
+    Lobby *w = gPPWLobbyWork;
     int code;
     switch (r) {
     case 1:
@@ -427,14 +427,14 @@ static inline int Lobby_Process(void) {
     switch (LobbyChat_Process()) {
     case 0:
         PPW_LobbyShutdownAsync();
-        if (_022577C4 != NULL) {
-            Lobby_Delete(_022577C4);
-            _022577C4 = NULL;
+        if (gPPWLobbyWork != NULL) {
+            Lobby_Delete(gPPWLobbyWork);
+            gPPWLobbyWork = NULL;
         }
         return 9;
     case 3:
-        if (_022577C4->state == 1) {
-            _022577C4->state = 2;
+        if (gPPWLobbyWork->state == 1) {
+            gPPWLobbyWork->state = 2;
         }
         break;
     case 5:
@@ -446,20 +446,20 @@ static inline int Lobby_Process(void) {
         break;
     }
     Lobby_UpdateTimers();
-    switch (_022577C4->state) {
+    switch (gPPWLobbyWork->state) {
     case 0:
         return 9;
     case 2:
-        _022577C4->state = 3;
+        gPPWLobbyWork->state = 3;
         break;
     case 3:
-        if (Lobby_IsReady(_022577C4)) {
-            _022577C4->state = 4;
+        if (Lobby_IsReady(gPPWLobbyWork)) {
+            gPPWLobbyWork->state = 4;
         }
         break;
     case 4: {
         Lobby_Login();
-        _022577C4->state = 5;
+        gPPWLobbyWork->state = 5;
         break;
     }
     case 6: {
@@ -467,19 +467,19 @@ static inline int Lobby_Process(void) {
         if (r != 0) {
             Lobby_Fail(r);
         } else {
-            _022577C4->state = 7;
+            gPPWLobbyWork->state = 7;
         }
         break;
     }
     case 7:
         if (PPWLobby_IsMainChannelReady()) {
-            Sub *sub = &_022577C4->sub;
+            Sub *sub = &gPPWLobbyWork->sub;
             sub->tracked.active = 0;
             Tracked t(sub->tracked.stamp.code, sub->tracked.stamp.pair, 1, 1);
             sub->tracked.Set(t);
             sub->flag = 1;
-            _022577C4->state = 8;
-            _022577C4->cb(1, 0);
+            gPPWLobbyWork->state = 8;
+            gPPWLobbyWork->cb(1, 0);
         }
         break;
     case 1:
@@ -489,16 +489,16 @@ static inline int Lobby_Process(void) {
     case 10:
         break;
     }
-    return _022577C4->state;
+    return gPPWLobbyWork->state;
 }
 
 int PPW_LobbyProcess(void) {
     int polled = Request_Update();
     if (polled) {
-        if (_022577C4 == NULL) {
+        if (gPPWLobbyWork == NULL) {
             return 9;
         }
-    } else if (_022577C4 == NULL) {
+    } else if (gPPWLobbyWork == NULL) {
         return 0;
     }
     if (Lobby_IsError()) {

@@ -52,23 +52,23 @@ extern WifiSetupKeypad *gWifiSetupKeypad;
 extern const WifiSetupPoint ov13_02245228;     // digit key size
 extern const WifiSetupPoint ov13_02245230;     // extra key size
 extern const WifiSetupPoint ov13_02245234;     // button size
-extern const WifiSetupPoint ov13_0224527A[10]; // digit key positions
-extern const WifiSetupPoint ov13_02245250[2];  // extra key positions
-extern const WifiSetupPoint ov13_02245258[2];  // button positions
-extern WifiSetupRect ov13_02245958;            // whole keypad (shared with the keyboard)
-extern const u16 ov13_02245260[12];            // key labels, three per row
-extern const u8 ov13_02245214[2];              // OAM templates of the extra keys
-extern const u8 ov13_02245218[2];              // OAM templates of the buttons
-extern const u16 ov13_022452A2[];              // cursor x of each key (stride 2)
-extern const u16 ov13_022452A4[];              // cursor y of each key (stride 2)
-extern const s8 ov13_022452DA[][4];            // cursor moves: next key for left, up, right, down
+extern const WifiSetupPoint gWifiSetupKeypadDigitKeyPositions[10]; // digit key positions
+extern const WifiSetupPoint gWifiSetupKeypadExtraKeyPositions[2];  // extra key positions
+extern const WifiSetupPoint gWifiSetupKeypadButtonPositions[2];  // button positions
+extern WifiSetupRect gWifiSetupInputPanelRect;            // whole keypad (shared with the keyboard)
+extern const u16 gWifiSetupKeypadKeyLabels[12];            // key labels, three per row
+extern const u8 gWifiSetupKeypadExtraKeyTemplates[2];              // OAM templates of the extra keys
+extern const u8 gWifiSetupKeypadButtonTemplates[2];              // OAM templates of the buttons
+extern const u16 gWifiSetupKeypadCursorX[];              // cursor x of each key (stride 2)
+extern const u16 gWifiSetupKeypadCursorY[];              // cursor y of each key (stride 2)
+extern const s8 gWifiSetupKeypadCursorMoves[][4];            // cursor moves: next key for left, up, right, down
 
 // input codes
-extern const u8 ov13_02245314[10]; // digit keys
-extern const u8 ov13_02245224[2];  // extra keys
-extern const u8 ov13_02245220[2];  // buttons
-extern const u8 ov13_0224521C[4];  // key palette: normal, highlighted
-extern const u8 ov13_02245210[4];  // button palette: normal, highlighted
+extern const u8 gWifiSetupKeypadDigitKeys[10]; // digit keys
+extern const u8 gWifiSetupKeypadExtraKeyCodes[2];  // extra keys
+extern const u8 gWifiSetupKeypadButtonCodes[2];  // buttons
+extern const u8 gWifiSetupKeypadKeyPalettes[4];  // key palette: normal, highlighted
+extern const u8 gWifiSetupKeypadButtonPalettes[4];  // button palette: normal, highlighted
 
 void WifiSetupKeypad_Create(void);
 void WifiSetupKeypad_Close(void);

@@ -17,8 +17,8 @@ typedef struct {
     Entry entries[64];
 } List;
 
-extern char ov13_02245A14[];
-extern char ov13_02245A20[];
+extern char sStr_ESSID_AOSS[];
+extern char sStr_MELCO[];
 #define U8_AT(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 #define U16_AT(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define U32_AT(p, o) (*(u32 *)((u8 *)(p) + (o)))
@@ -123,7 +123,7 @@ int WifiSetup_FindAossAccessPoint(List *list) {
     }
     for (i = 0; i < count; i++) {
         if (list->entries[i].flags & 1) {
-            if (list->entries[i].length == WifiSetup_StrLen(ov13_02245A14) && WifiSetup_MemCompare(list->entries[i].data, (const u8 *)ov13_02245A14, WifiSetup_StrLen(ov13_02245A14)) == 0) {
+            if (list->entries[i].length == WifiSetup_StrLen(sStr_ESSID_AOSS) && WifiSetup_MemCompare(list->entries[i].data, (const u8 *)sStr_ESSID_AOSS, WifiSetup_StrLen(sStr_ESSID_AOSS)) == 0) {
                 matches++;
             }
         }
@@ -141,14 +141,14 @@ int WifiSetup_FindAossAccessPoint(List *list) {
 
 int WifiSetup_InitAossConnectInfo(void *out) {
     u8 *p = out;
-    *(u32 *)p = WifiSetup_StrLen(ov13_02245A14);
-    WifiSetup_MemCopy(p + 4, ov13_02245A14, *(u32 *)p);
+    *(u32 *)p = WifiSetup_StrLen(sStr_ESSID_AOSS);
+    WifiSetup_MemCopy(p + 4, sStr_ESSID_AOSS, *(u32 *)p);
     *(u32 *)(p + 0x24) = 1;
-    *(u32 *)(p + 0x28) = WifiSetup_StrLen(ov13_02245A20);
+    *(u32 *)(p + 0x28) = WifiSetup_StrLen(sStr_MELCO);
     if (*(u32 *)(p + 0x28) > 13) {
         return -1;
     }
-    WifiSetup_MemCopy(p + 0x2C, ov13_02245A20, *(u32 *)(p + 0x28));
+    WifiSetup_MemCopy(p + 0x2C, sStr_MELCO, *(u32 *)(p + 0x28));
     return 0;
 }
 
@@ -350,7 +350,7 @@ int WifiSetup_DecryptPacket(Packet *p) {
     u16 *body = &p->length;
     int result;
     WifiSetup_MemCopy(address, p->address, 8);
-    result = WifiSetup_Scramble(address, 8, ov13_02245A20, WifiSetup_StrLen(ov13_02245A20));
+    result = WifiSetup_Scramble(address, 8, sStr_MELCO, WifiSetup_StrLen(sStr_MELCO));
     if (result == -1) {
         WifiSetup_SetError(2);
         return -100;
@@ -412,7 +412,7 @@ int WifiSetup_CheckPeer(int value, const void *data) {
 
 int WifiSetup_CheckReplySequence(const u8 *a, u8 *b) {
     int result = 0;
-    WifiSetup_Scramble(b, 8, ov13_02245A20, WifiSetup_StrLen(ov13_02245A20));
+    WifiSetup_Scramble(b, 8, sStr_MELCO, WifiSetup_StrLen(sStr_MELCO));
     if (WifiSetup_MemCompare(a, b, 6) != 0) {
         result = -1;
     } else {
@@ -756,7 +756,7 @@ int WifiSetup_SendJoinRequest(void *unused, const u8 *src, void *arg) {
     header.length += 4;
     WifiSetup_WriteBody(0, encoded, payload, &header.length, (u16 *)&header.flag, &header);
     header.flag |= 0x10;
-    if (WifiSetup_Scramble(data, 8, ov13_02245A20, 6) != 0) {
+    if (WifiSetup_Scramble(data, 8, sStr_MELCO, 6) != 0) {
         WifiSetup_SetError(2);
         if (payload != NULL) {
             WifiSetup_Free(payload);
@@ -801,7 +801,7 @@ int WifiSetup_SendSettingsRequest(void *unused, const u8 *src, void *arg) {
     header.length = 8;
     WifiSetup_WriteBody(gWifiSetupState.unk_00, work + 0x18, packet, &header.length, (u16 *)&header.flag, &header);
     WifiSetup_MemCopy(data, src + 8, 8);
-    size = WifiSetup_Scramble(data, 8, ov13_02245A20, 6);
+    size = WifiSetup_Scramble(data, 8, sStr_MELCO, 6);
     if (size != 0) {
         WifiSetup_SetError(2);
         return -1;
@@ -819,8 +819,8 @@ int WifiSetup_SendDoneRequest(void *unused, const u8 *src, void *arg) {
 
     WifiSetup_MemFill(work, 0, 0x5DC);
     WifiSetup_MemCopy(data, src + 0x10, 8);
-    size = WifiSetup_StrLen(ov13_02245A20);
-    WifiSetup_Scramble(data, 8, ov13_02245A20, size);
+    size = WifiSetup_StrLen(sStr_MELCO);
+    WifiSetup_Scramble(data, 8, sStr_MELCO, size);
     WifiSetup_WritePacketHeader(work, 3 << 12, 0, 0, 0, 0x11, data);
     WifiSetup_SendPacket(work, (void *)0x18, 0, arg);
     return 0;

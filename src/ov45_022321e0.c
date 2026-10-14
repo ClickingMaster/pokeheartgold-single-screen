@@ -20,7 +20,7 @@ typedef struct {
     int mode;
 } Work;
 
-extern Work *volatile _022577C4;
+extern Work *volatile gPPWLobbyWork;
 extern void PPWLobbyChannel_GetName(String *, void *);
 extern void LobbyString_Destroy(String *);
 extern int LobbyChat_IsInChannel(char *);
@@ -34,7 +34,7 @@ int PPW_LobbyGetSubChannelState(void);
 
 int PPW_LobbyGetSubChannelState(void) {
     String text;
-    Work *w = _022577C4;
+    Work *w = gPPWLobbyWork;
     int result;
     if (!w) {
         return 3;
@@ -42,7 +42,7 @@ int PPW_LobbyGetSubChannelState(void) {
     if (w && w->state == 10) {
         return 3;
     }
-    if (w && _022577C4->state != 8) {
+    if (w && gPPWLobbyWork->state != 8) {
         return 3;
     }
     {

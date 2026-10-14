@@ -1180,8 +1180,8 @@ void PPW_LobbyToErrorCode(void);
 void ov45_02233220(void);
 extern const u8 ov45_02254C30[4]; // room per channel
 extern const char *ov45_02254EF0; // lobby data key of the location list
-extern const u8 ov45_02254F04[];
-extern const u8 ov45_02254F14[];
+extern const u8 sStr_pokemonplatds[];
+extern const u8 sStr_IIup73[];
 void PPW_LobbyGetTimeInfo(void *a0);
 
 extern const WiFiPlazaAvatarEntry ov45_02254A84[16];

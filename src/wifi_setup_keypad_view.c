@@ -25,13 +25,13 @@ void WifiSetupKeypad_SetKeyHighlight(int key, int highlighted) {
     }
     if (key < WIFI_SETUP_KEYPAD_NUM_DIGIT_KEYS) {
         WifiSetupKeypad *keypad = gWifiSetupKeypad;
-        SetKeyPalette(keypad->keys[key], ov13_0224521C[highlighted]);
+        SetKeyPalette(keypad->keys[key], gWifiSetupKeypadKeyPalettes[highlighted]);
     } else if (key - WIFI_SETUP_KEYPAD_KEY_DELETE < WIFI_SETUP_KEYPAD_NUM_EXTRA_KEYS) {
         WifiSetupKeypad *keypad = gWifiSetupKeypad;
-        SetKeyPalette(keypad->extraKeys[key - WIFI_SETUP_KEYPAD_KEY_DELETE], ov13_0224521C[highlighted]);
+        SetKeyPalette(keypad->extraKeys[key - WIFI_SETUP_KEYPAD_KEY_DELETE], gWifiSetupKeypadKeyPalettes[highlighted]);
     } else {
         WifiSetupKeypad *keypad = gWifiSetupKeypad;
-        WifiSetupOamBlock_SetModeAndPalette(keypad->buttons[key - WIFI_SETUP_KEYPAD_KEY_BUTTON_0], -1, 0, ov13_02245210[highlighted]);
+        WifiSetupOamBlock_SetModeAndPalette(keypad->buttons[key - WIFI_SETUP_KEYPAD_KEY_BUTTON_0], -1, 0, gWifiSetupKeypadButtonPalettes[highlighted]);
     }
 }
 
@@ -41,7 +41,7 @@ void WifiSetupKeypad_UpdateCursor(void) {
     GXOamAttr *oam = WifiSetupOamBlock_GetOam(gWifiSetupKeypad->cursor, 0);
     WifiSetupOamTemplate_Copy(0, templ, oam);
     WifiSetupOamBlock_SetPriority(gWifiSetupKeypad->cursor, -1, 2);
-    WifiSetupOamBlock_SetPosition(gWifiSetupKeypad->cursor, -1, ov13_022452A2[gWifiSetupKeypad->cursorKey * 2], ov13_022452A4[gWifiSetupKeypad->cursorKey * 2]);
+    WifiSetupOamBlock_SetPosition(gWifiSetupKeypad->cursor, -1, gWifiSetupKeypadCursorX[gWifiSetupKeypad->cursorKey * 2], gWifiSetupKeypadCursorY[gWifiSetupKeypad->cursorKey * 2]);
 }
 
 // direction: 0 left, 1 up, 2 right, 3 down. Negative entries of the move table pick the target
@@ -49,7 +49,7 @@ void WifiSetupKeypad_UpdateCursor(void) {
 // column.
 void WifiSetupKeypad_MoveCursor(int direction) {
     s8 old = gWifiSetupKeypad->cursorKey;
-    gWifiSetupKeypad->cursorKey = ov13_022452DA[old][direction];
+    gWifiSetupKeypad->cursorKey = gWifiSetupKeypadCursorMoves[old][direction];
     if (gWifiSetupKeypad->cursorKey == 13 && (direction == 1 || direction == 3)) {
         gWifiSetupKeypad->returnKey = old;
     } else if (gWifiSetupKeypad->cursorKey == -1) {

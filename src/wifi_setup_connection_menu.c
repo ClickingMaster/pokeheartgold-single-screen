@@ -41,36 +41,36 @@ typedef struct WifiSetupConnectionTestParams {
     u8 unk_0B;
 } WifiSetupConnectionTestParams;
 
-extern u8 ov13_02245600[];                    // slot icon template per setup method (3 = empty)
-extern WifiSetupPaletteRows ov13_02245604[2]; // palette row per slot, icon palette per setup method
-extern WifiSetupPoint ov13_02245622[];        // slot icons 0-2, erase buttons 3-5
-extern WifiSetupRect ov13_0224563A[];         // touch rects of the 7 selections
-extern WifiSetupRect ov13_02245672[];         // cursor rects of the 7 selections
-extern s8 ov13_022456AC[];                    // digit position of the erase dialog per language
-extern WifiSetupPaletteRows ov13_022456B4;    // palette row per setup method
-extern WifiSetupPath22 ov13_022456B8;
-extern s8 ov13_022456CE[][4][4];         // next method per method and direction, -1 none, -2 last
-extern WifiSetupRect ov13_022456EE[][4]; // touch rects of the methods
-extern WifiSetupRect ov13_0224572E[][4]; // cursor rects of the methods
-extern s8 ov13_02245770[];               // digit position of the method menu message per language
-extern WifiSetupConnectionTestParams ov13_02245778;
-extern WifiSetupTestPromptMessages ov13_02245784;
-extern char ov13_02246664[];
-extern char ov13_0224667C[];
-extern char ov13_02246694[];
-extern char ov13_022466AC[];
-extern char ov13_022466C0[];
-extern char ov13_022466D8[];
-extern char ov13_022466F0[];
-extern char ov13_02246704[];
-extern char ov13_02246718[];
-extern char ov13_0224672C[];
-extern char ov13_02246740[];
-extern char ov13_02246758[];
-extern char ov13_02246770[];
-extern char ov13_02246784[];
-extern char ov13_0224679C[];
-extern char ov13_022467B4[];
+extern u8 gWifiSetupConnectionListSlotIconTemplates[];                    // slot icon template per setup method (3 = empty)
+extern WifiSetupPaletteRows gWifiSetupConnectionListPaletteRows[2]; // palette row per slot, icon palette per setup method
+extern WifiSetupPoint gWifiSetupConnectionListIconPositions[];        // slot icons 0-2, erase buttons 3-5
+extern WifiSetupRect gWifiSetupConnectionListTouchRects[];         // touch rects of the 7 selections
+extern WifiSetupRect gWifiSetupConnectionListCursorRects[];         // cursor rects of the 7 selections
+extern s8 gWifiSetupConnectionListEraseDigitPositions[];                    // digit position of the erase dialog per language
+extern WifiSetupPaletteRows gWifiSetupMethodMenuPaletteRows;    // palette row per setup method
+extern WifiSetupPath22 gWifiSetupMethodMenuYbBgStep21NclPath;
+extern s8 gWifiSetupMethodMenuCursorMoves[][4][4];         // next method per method and direction, -1 none, -2 last
+extern WifiSetupRect gWifiSetupMethodMenuTouchRects[][4]; // touch rects of the methods
+extern WifiSetupRect gWifiSetupMethodMenuCursorRects[][4]; // cursor rects of the methods
+extern s8 gWifiSetupMethodMenuDigitPositions[];               // digit position of the method menu message per language
+extern WifiSetupConnectionTestParams gWifiSetupConnectionTestParams;
+extern WifiSetupTestPromptMessages gWifiSetupTestPromptMessages;
+extern char gWifiSetupConnectionListYbObjMainNclPath[];
+extern char gWifiSetupMethodMenuJbBgStep2NcgPath[];
+extern char gWifiSetupMethodMenuYbBgStep2NclPath[];
+extern char gWifiSetupMethodMenuJb3WayNscPath[];
+extern char gWifiSetupConnectionTestJbBgStep3NcgPath[];
+extern char gWifiSetupConnectionTestYbBgStep3NclPath[];
+extern char gWifiSetupConnectionTestXb4MultiNscPath[];
+extern char gWifiSetupConnectionOkXb4MultiNscPath[];
+extern char gWifiSetupTestPromptXb4NoneNscPath[];
+extern char gWifiSetupUsbConnectorDoneXb4MultiNscPath[];
+extern char gWifiSetupUsbConnectorIntroJbBgStep2NcgPath[];
+extern char gWifiSetupUsbConnectorIntroYbBgStep2NclPath[];
+extern char gWifiSetupUsbConnectorIntroXb3MultiNscPath[];
+extern char gWifiSetupUsbConnectorJbBgStep3NcgPath[];
+extern char gWifiSetupUsbConnectorYbBgStep3NclPath[];
+extern char gWifiSetupUsbConnectorJb4UsbNscPath[];
 
 extern BOOL DWC_AC_Create(WifiSetupConnectionTestParams *params);
 extern int DWC_AC_Process(void);
@@ -90,11 +90,11 @@ void WifiSetupConnectionList_CreateIcons(void) {
         } else {
             gWifiSetupConnectionList.work->eraseButtons[i] = WifiSetupOamTemplate_AllocBlock(0, 0x11, 1);
             j = i + 3;
-            WifiSetupOamBlock_SetPosition(gWifiSetupConnectionList.work->eraseButtons[i], -1, ov13_02245622[j].x, ov13_02245622[j].y);
+            WifiSetupOamBlock_SetPosition(gWifiSetupConnectionList.work->eraseButtons[i], -1, gWifiSetupConnectionListIconPositions[j].x, gWifiSetupConnectionListIconPositions[j].y);
             WifiSetupOamBlock_SetPriority(gWifiSetupConnectionList.work->eraseButtons[i], -1, 3);
         }
-        gWifiSetupConnectionList.work->slotIcons[i] = WifiSetupOamTemplate_AllocBlock(0, ov13_02245600[k], 1);
-        WifiSetupOamBlock_SetPosition(gWifiSetupConnectionList.work->slotIcons[i], -1, ov13_02245622[i].x, ov13_02245622[i].y);
+        gWifiSetupConnectionList.work->slotIcons[i] = WifiSetupOamTemplate_AllocBlock(0, gWifiSetupConnectionListSlotIconTemplates[k], 1);
+        WifiSetupOamBlock_SetPosition(gWifiSetupConnectionList.work->slotIcons[i], -1, gWifiSetupConnectionListIconPositions[i].x, gWifiSetupConnectionListIconPositions[i].y);
         WifiSetupOamBlock_SetPriority(gWifiSetupConnectionList.work->slotIcons[i], -1, 3);
     }
 }
@@ -138,7 +138,7 @@ void WifiSetupConnectionList_Main(void) {
 void WifiSetupConnectionList_HandleInput(void) {
     u32 i;
     for (i = 0; i < 7; i++) {
-        if (WifiSetupInput_IsTouchPressed(&ov13_0224563A[i])) {
+        if (WifiSetupInput_IsTouchPressed(&gWifiSetupConnectionListTouchRects[i])) {
             WifiSetupButtonBar_SelectIfNone(1);
             gWifiSetupConnectionList.selected = i;
             WifiSetupConnectionList_ShowCursor();
@@ -201,7 +201,7 @@ void WifiSetupConnectionList_CheckButtons(void) {
                 return;
             }
             WifiSetupSound_Play(6);
-            k = ov13_022456AC[WifiSetupApp_GetLanguage()];
+            k = gWifiSetupConnectionListEraseDigitPositions[WifiSetupApp_GetLanguage()];
             WifiSetupDialog_Open(0x46, 0, 1, k, idx + 1);
             WifiSetupConnectionList_PressEraseButton();
             WifiSetupButtonBar_Lock();
@@ -270,7 +270,7 @@ void WifiSetupConnectionList_End(void) {
     WifiSetupCursor_Hide();
     WifiSetupMessage_Hide();
     WifiSetupFile_Free(gWifiSetupConnectionList.work->graphics);
-    WifiSetup_LoadGraphics(ov13_02246664, GX_LoadOBJPltt);
+    WifiSetup_LoadGraphics(gWifiSetupConnectionListYbObjMainNclPath, GX_LoadOBJPltt);
     WifiSetupDisplay_HidePlanes(1, 1);
     WifiSetupDisplay_HidePlanes(0, 0x14);
     if (gWifiSetupConnectionList.work->exit == WIFI_SETUP_CONNECTION_LIST_BACK) {
@@ -302,9 +302,9 @@ void WifiSetupConnectionList_End(void) {
 void WifiSetupConnectionList_ShowCursor(void) {
     u8 sel = gWifiSetupConnectionList.selected;
     if (sel < 4) {
-        WifiSetupCursor_ShowCorners(ov13_02245672[sel].left, ov13_02245672[sel].right, ov13_02245672[sel].top, ov13_02245672[sel].bottom);
+        WifiSetupCursor_ShowCorners(gWifiSetupConnectionListCursorRects[sel].left, gWifiSetupConnectionListCursorRects[sel].right, gWifiSetupConnectionListCursorRects[sel].top, gWifiSetupConnectionListCursorRects[sel].bottom);
     } else {
-        WifiSetupCursor_ShowPair(0, ov13_02245672[sel].left, ov13_02245672[sel].right, ov13_02245672[sel].top);
+        WifiSetupCursor_ShowPair(0, gWifiSetupConnectionListCursorRects[sel].left, gWifiSetupConnectionListCursorRects[sel].right, gWifiSetupConnectionListCursorRects[sel].top);
     }
 }
 
@@ -406,7 +406,7 @@ void WifiSetupConnectionList_MoveCursor(int dir) {
 void WifiSetupConnectionList_PressEraseButton(void) {
     int idx = gWifiSetupConnectionList.selected - WIFI_SETUP_CONNECTION_LIST_FIRST_ERASE;
     WifiSetupOamTemplate_Copy(0, 0x32, WifiSetupOamBlock_GetOam(gWifiSetupConnectionList.work->eraseButtons[idx], 0));
-    WifiSetupOamBlock_SetPosition(gWifiSetupConnectionList.work->eraseButtons[idx], -1, ov13_02245622[idx + 3].x, ov13_02245622[idx + 3].y);
+    WifiSetupOamBlock_SetPosition(gWifiSetupConnectionList.work->eraseButtons[idx], -1, gWifiSetupConnectionListIconPositions[idx + 3].x, gWifiSetupConnectionListIconPositions[idx + 3].y);
     WifiSetupOamBlock_SetPriority(gWifiSetupConnectionList.work->eraseButtons[idx], -1, 3);
 }
 
@@ -417,7 +417,7 @@ void WifiSetupConnectionList_WaitEraseDialog(void) {
         WifiSetupSound_Play(0xE);
         WifiSetupConnections_Erase(idx);
         WifiSetupOamTemplate_Copy(0, 0x56, WifiSetupOamBlock_GetOam(gWifiSetupConnectionList.work->slotIcons[idx], 0));
-        WifiSetupOamBlock_SetPosition(gWifiSetupConnectionList.work->slotIcons[idx], -1, ov13_02245622[idx].x, ov13_02245622[idx].y);
+        WifiSetupOamBlock_SetPosition(gWifiSetupConnectionList.work->slotIcons[idx], -1, gWifiSetupConnectionListIconPositions[idx].x, gWifiSetupConnectionListIconPositions[idx].y);
         WifiSetupOamBlock_SetPriority(gWifiSetupConnectionList.work->slotIcons[idx], -1, 3);
         WifiSetupOamBlock_Free(gWifiSetupConnectionList.work->eraseButtons[idx]);
         gWifiSetupConnectionList.work->eraseButtons[idx] = NULL;
@@ -425,7 +425,7 @@ void WifiSetupConnectionList_WaitEraseDialog(void) {
     case 0:
         WifiSetupSound_Play(7);
         WifiSetupOamTemplate_Copy(0, 0x11, WifiSetupOamBlock_GetOam(gWifiSetupConnectionList.work->eraseButtons[idx], 0));
-        WifiSetupOamBlock_SetPosition(gWifiSetupConnectionList.work->eraseButtons[idx], -1, ov13_02245622[idx + 3].x, ov13_02245622[idx + 3].y);
+        WifiSetupOamBlock_SetPosition(gWifiSetupConnectionList.work->eraseButtons[idx], -1, gWifiSetupConnectionListIconPositions[idx + 3].x, gWifiSetupConnectionListIconPositions[idx + 3].y);
         WifiSetupOamBlock_SetPriority(gWifiSetupConnectionList.work->eraseButtons[idx], -1, 3);
         break;
     default:
@@ -444,8 +444,8 @@ void WifiSetupConnectionList_WaitEraseDialogClosed(void) {
 }
 
 void WifiSetupConnectionList_HighlightSelection(void) {
-    WifiSetupPaletteRows rows = ov13_02245604[0];
-    WifiSetupPaletteRows palettes = ov13_02245604[1];
+    WifiSetupPaletteRows rows = gWifiSetupConnectionListPaletteRows[0];
+    WifiSetupPaletteRows palettes = gWifiSetupConnectionListPaletteRows[1];
     int k;
     if (gWifiSetupConnectionList.selected > 3) {
         return;
@@ -479,17 +479,17 @@ void WifiSetupMethodMenu_Init(void) {
     WifiSetupMethodMenu_LoadGraphics();
     WifiSetupBackground_LoadSlotHeader();
     k = WifiSetupApp_GetLanguage();
-    WifiSetupMessage_Show(0x32, ov13_02245770[k], connection->index + 1);
+    WifiSetupMessage_Show(0x32, gWifiSetupMethodMenuDigitPositions[k], connection->index + 1);
     WifiSetupBanner_Show(1);
-    WifiSetupCursor_ShowCorners(ov13_0224572E[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].left, ov13_0224572E[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].right, ov13_0224572E[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].top, ov13_0224572E[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].bottom);
+    WifiSetupCursor_ShowCorners(gWifiSetupMethodMenuCursorRects[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].left, gWifiSetupMethodMenuCursorRects[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].right, gWifiSetupMethodMenuCursorRects[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].top, gWifiSetupMethodMenuCursorRects[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].bottom);
     WifiSetupApp_SetStateFunc(WifiSetupMethodMenu_FadeIn);
 }
 
 void WifiSetupMethodMenu_LoadGraphics(void) {
-    WifiSetupPath22 path = ov13_022456B8;
-    WifiSetup_LoadGraphics(ov13_0224667C, GX_LoadBG2Char);
-    WifiSetup_LoadGraphics(ov13_02246694, GX_LoadBGPltt);
-    WifiSetup_LoadGraphics(ov13_022466AC, GX_LoadBG2Scr);
+    WifiSetupPath22 path = gWifiSetupMethodMenuYbBgStep21NclPath;
+    WifiSetup_LoadGraphics(gWifiSetupMethodMenuJbBgStep2NcgPath, GX_LoadBG2Char);
+    WifiSetup_LoadGraphics(gWifiSetupMethodMenuYbBgStep2NclPath, GX_LoadBGPltt);
+    WifiSetup_LoadGraphics(gWifiSetupMethodMenuJb3WayNscPath, GX_LoadBG2Scr);
     gWifiSetupMethodMenu.graphics = WifiSetupFile_Load(WifiSetup_LocalizePath(path.text), NULL, 4);
     G2S_SetBG0Priority(3);
     G2S_SetBG1Priority(3);
@@ -533,10 +533,10 @@ void WifiSetupMethodMenu_Main(void) {
 void WifiSetupMethodMenu_HandleInput(void) {
     u32 i;
     for (i = 0; i < 4; i++) {
-        if (WifiSetupInput_IsTouchPressed(&ov13_022456EE[WifiSetupApp_HasOption(1)][i])) {
+        if (WifiSetupInput_IsTouchPressed(&gWifiSetupMethodMenuTouchRects[WifiSetupApp_HasOption(1)][i])) {
             WifiSetupButtonBar_SelectIfNone(1);
             gWifiSetupMethodMenu.selected = i;
-            WifiSetupCursor_ShowCorners(ov13_0224572E[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].left, ov13_0224572E[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].right, ov13_0224572E[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].top, ov13_0224572E[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].bottom);
+            WifiSetupCursor_ShowCorners(gWifiSetupMethodMenuCursorRects[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].left, gWifiSetupMethodMenuCursorRects[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].right, gWifiSetupMethodMenuCursorRects[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].top, gWifiSetupMethodMenuCursorRects[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].bottom);
             return;
         }
     }
@@ -646,7 +646,7 @@ void WifiSetupMethodMenu_End(void) {
 
 void WifiSetupMethodMenu_MoveCursor(int dir) {
     s8 cur = gWifiSetupMethodMenu.selected;
-    s8 next = ov13_022456CE[WifiSetupApp_HasOption(1)][cur][dir];
+    s8 next = gWifiSetupMethodMenuCursorMoves[WifiSetupApp_HasOption(1)][cur][dir];
     if (next == -1) {
         return;
     }
@@ -659,11 +659,11 @@ void WifiSetupMethodMenu_MoveCursor(int dir) {
         gWifiSetupMethodMenu.selected = next;
     }
     WifiSetupSound_Play(8);
-    WifiSetupCursor_ShowCorners(ov13_0224572E[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].left, ov13_0224572E[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].right, ov13_0224572E[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].top, ov13_0224572E[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].bottom);
+    WifiSetupCursor_ShowCorners(gWifiSetupMethodMenuCursorRects[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].left, gWifiSetupMethodMenuCursorRects[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].right, gWifiSetupMethodMenuCursorRects[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].top, gWifiSetupMethodMenuCursorRects[WifiSetupApp_HasOption(1)][gWifiSetupMethodMenu.selected].bottom);
 }
 
 void WifiSetupMethodMenu_HighlightSelection(void) {
-    WifiSetupPaletteRows rows = ov13_022456B4;
+    WifiSetupPaletteRows rows = gWifiSetupMethodMenuPaletteRows;
     WifiSetupPalette_LoadRow(gWifiSetupMethodMenu.graphics, rows.rows[gWifiSetupMethodMenu.selected], rows.rows[gWifiSetupMethodMenu.selected]);
 }
 
@@ -688,9 +688,9 @@ void WifiSetupConnectionTest_Init(void) {
 }
 
 void WifiSetupConnectionTest_LoadGraphics(void) {
-    WifiSetup_LoadGraphics(ov13_022466C0, GX_LoadBG2Char);
-    WifiSetup_LoadGraphics(ov13_022466D8, GX_LoadBGPltt);
-    WifiSetup_LoadGraphics(ov13_022466F0, GX_LoadBG2Scr);
+    WifiSetup_LoadGraphics(gWifiSetupConnectionTestJbBgStep3NcgPath, GX_LoadBG2Char);
+    WifiSetup_LoadGraphics(gWifiSetupConnectionTestYbBgStep3NclPath, GX_LoadBGPltt);
+    WifiSetup_LoadGraphics(gWifiSetupConnectionTestXb4MultiNscPath, GX_LoadBG2Scr);
     G2S_SetBG0Priority(3);
     G2S_SetBG1Priority(3);
     G2_SetBG0Priority(3);
@@ -702,7 +702,7 @@ void WifiSetupConnectionTest_Start(void) {
     int mode;
     WifiSetupConnectionTestParams param;
     WifiSetupConnection *connection = WifiSetupConnections_GetEdit();
-    MIi_CpuCopy32((const void *)&ov13_02245778, (void *)&param, sizeof(param));
+    MIi_CpuCopy32((const void *)&gWifiSetupConnectionTestParams, (void *)&param, sizeof(param));
     WifiSetupApp_GetScreenArgs(0, &mode);
     if (mode == 2) {
         param.slot = 4;
@@ -820,7 +820,7 @@ void WifiSetupConnectionOk_Init(void) {
 }
 
 void WifiSetupConnectionOk_LoadGraphics(void) {
-    WifiSetup_LoadGraphics(ov13_02246704, GX_LoadBG2Scr);
+    WifiSetup_LoadGraphics(gWifiSetupConnectionOkXb4MultiNscPath, GX_LoadBG2Scr);
     G2S_SetBG0Priority(3);
     G2S_SetBG1Priority(3);
     G2_SetBG1Priority(3);
@@ -919,7 +919,7 @@ void WifiSetupTestPrompt_Init(void) {
 }
 
 void WifiSetupTestPrompt_LoadGraphics(void) {
-    WifiSetup_LoadGraphics(ov13_02246718, GX_LoadBG2Scr);
+    WifiSetup_LoadGraphics(gWifiSetupTestPromptXb4NoneNscPath, GX_LoadBG2Scr);
     G2S_SetBG0Priority(3);
     G2S_SetBG1Priority(3);
     G2_SetBG1Priority(3);
@@ -935,7 +935,7 @@ void WifiSetupTestPrompt_FadeIn(void) {
 }
 
 void WifiSetupTestPrompt_WaitFadeIn(void) {
-    WifiSetupTestPromptMessages prompts = ov13_02245784;
+    WifiSetupTestPromptMessages prompts = gWifiSetupTestPromptMessages;
     int mode;
     if (WifiSetupFade_IsActive(1)) {
         return;
@@ -993,7 +993,7 @@ void WifiSetupUsbConnectorDone_Init(void) {
 }
 
 void WifiSetupUsbConnectorDone_LoadGraphics(void) {
-    WifiSetup_LoadGraphics(ov13_0224672C, GX_LoadBG2Scr);
+    WifiSetup_LoadGraphics(gWifiSetupUsbConnectorDoneXb4MultiNscPath, GX_LoadBG2Scr);
     G2S_SetBG0Priority(3);
     G2S_SetBG1Priority(3);
     G2_SetBG0Priority(3);
@@ -1062,9 +1062,9 @@ void WifiSetupUsbConnectorIntro_Init(void) {
 }
 
 void WifiSetupUsbConnectorIntro_LoadGraphics(void) {
-    WifiSetup_LoadGraphics(ov13_02246740, GX_LoadBG2Char);
-    WifiSetup_LoadGraphics(ov13_02246758, GX_LoadBGPltt);
-    WifiSetup_LoadGraphics(ov13_02246770, GX_LoadBG2Scr);
+    WifiSetup_LoadGraphics(gWifiSetupUsbConnectorIntroJbBgStep2NcgPath, GX_LoadBG2Char);
+    WifiSetup_LoadGraphics(gWifiSetupUsbConnectorIntroYbBgStep2NclPath, GX_LoadBGPltt);
+    WifiSetup_LoadGraphics(gWifiSetupUsbConnectorIntroXb3MultiNscPath, GX_LoadBG2Scr);
     G2S_SetBG0Priority(3);
     G2S_SetBG1Priority(3);
     G2_SetBG0Priority(3);
@@ -1197,9 +1197,9 @@ void WifiSetupUsbConnector_Init(void) {
 }
 
 void WifiSetupUsbConnector_LoadGraphics(void) {
-    WifiSetup_LoadGraphics(ov13_02246784, GX_LoadBG2Char);
-    WifiSetup_LoadGraphics(ov13_0224679C, GX_LoadBGPltt);
-    WifiSetup_LoadGraphics(ov13_022467B4, GX_LoadBG2Scr);
+    WifiSetup_LoadGraphics(gWifiSetupUsbConnectorJbBgStep3NcgPath, GX_LoadBG2Char);
+    WifiSetup_LoadGraphics(gWifiSetupUsbConnectorYbBgStep3NclPath, GX_LoadBGPltt);
+    WifiSetup_LoadGraphics(gWifiSetupUsbConnectorJb4UsbNscPath, GX_LoadBG2Scr);
     G2S_SetBG0Priority(3);
     G2S_SetBG1Priority(3);
     G2_SetBG0Priority(3);

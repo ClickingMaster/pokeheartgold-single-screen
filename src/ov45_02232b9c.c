@@ -28,7 +28,7 @@ typedef struct {
     u8 r[0x134 - 0xb8];
 } Work;
 
-extern Work *volatile _022577C4;
+extern Work *volatile gPPWLobbyWork;
 
 static inline int release(Work *w) {
     if (w->active) {
@@ -54,7 +54,7 @@ char *LobbyCharVector_Data(Vec *p) {
 }
 
 int PPW_LobbyUpdateRecruitInfo(Packet *p) {
-    Work *w = _022577C4;
+    Work *w = gPPWLobbyWork;
     int result;
     if (!w) {
         return 4;
@@ -62,10 +62,10 @@ int PPW_LobbyUpdateRecruitInfo(Packet *p) {
     if (w && w->state == 10) {
         return 7;
     }
-    if (w && _022577C4->state != 8) {
+    if (w && gPPWLobbyWork->state != 8) {
         return 4;
     }
-    w = _022577C4;
+    w = gPPWLobbyWork;
     if (!w->active) {
         result = 0;
     } else {
@@ -85,7 +85,7 @@ int PPW_LobbyUpdateRecruitInfo(Packet *p) {
 
 int PPW_LobbyStopRecruit(void) {
     int value;
-    Work *w = _022577C4;
+    Work *w = gPPWLobbyWork;
     int result;
     if (!w) {
         return 4;
@@ -93,18 +93,18 @@ int PPW_LobbyStopRecruit(void) {
     if (w && w->state == 10) {
         return 7;
     }
-    if (w && _022577C4->state != 8) {
+    if (w && gPPWLobbyWork->state != 8) {
         return 4;
     }
-    w = _022577C4;
+    w = gPPWLobbyWork;
     result = release(w);
     if (!result) {
         return 4;
     }
-    w = _022577C4;
+    w = gPPWLobbyWork;
     PPWLobby_SendMessage(*(int *)((u8 *)w + 0x4c), 0, 1, 0, 2, &w->packet, 0x44);
     value = 3;
-    LobbyTimerMap_EraseKey((u8 *)_022577C4 + 0x134, &value);
+    LobbyTimerMap_EraseKey((u8 *)gPPWLobbyWork + 0x134, &value);
     return 0;
 }
 

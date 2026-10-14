@@ -13,10 +13,10 @@
 	.public PokeathlonMedals_Init
 	.public PokeathlonMedals_Main
 	.public _021E954C
-	.public _021EA5C0
-	.public _021EA5CC
-	.public _021EA5D8
-	.public _021EA5E4
+	.public sStr_SeqError
+	.public sStr_SeqError_2
+	.public sStr_SeqError_3
+	.public sStr_SeqError_4
 	.public PokeathlonCourseRecord_GetTotalScore
 	.public PokeathlonCourseRecord_HasRecord
 	.public PokeathlonCourseRecord_GetScore
@@ -633,17 +633,17 @@ ov99_021EA59C: ; 0x021EA59C
 	.data
 
 	.balign 4, 0
-_021EA5C0:
+sStr_SeqError:
 	.asciz "seq error!"
 
 	.balign 4, 0
-_021EA5CC:
+sStr_SeqError_2:
 	.asciz "seq error!"
 
 	.balign 4, 0
-_021EA5D8:
+sStr_SeqError_3:
 	.asciz "seq error!"
 
 	.balign 4, 0
-_021EA5E4:
+sStr_SeqError_4:
 	.asciz "seq error!"

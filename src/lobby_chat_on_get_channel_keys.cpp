@@ -50,7 +50,7 @@ struct Handler {
     void (*callback)(BOOL ok, const char *str, int x, u32 a, u32 b, u32 extra);
 };
 
-extern "C" HandlerVtbl ov45_02255238;
+extern "C" HandlerVtbl gLobbyRequestVtable;
 
 struct Node {
     Node *l, *r, *p;
@@ -80,14 +80,14 @@ struct Manager {
     Map map;
 };
 
-extern "C" Manager *ov45_022577DC;
+extern "C" Manager *gLobbyChatManager;
 extern "C" It LobbyRequestMap_Find(Map *map, Base *const &key);
 extern "C" void LobbyRequestMap_DeleteKey(Map *map, u32 id);
 extern "C" int LobbyChat_FindUserIdByNick(Manager *m, String *s);
 extern "C" void LobbyChat_StripChannelPrefix(String *dst, Manager *m, String *s);
 
 inline void KeyInit(Base *k, u32 id) {
-    k->vtbl = &ov45_02255238;
+    k->vtbl = &gLobbyRequestVtable;
     k->id = id;
     k->unk8 = 0;
 }
@@ -115,7 +115,7 @@ extern "C" void LobbyChat_OnGetChannelKeys(void *self, int result, const char *n
 #pragma opt_propagation off
 
 extern "C" void LobbyChat_OnGetChannelKeys(void *self, int result, const char *name, const char *other, int n, u32 *pa, u32 *pb, u32 id) {
-    if (ov45_022577DC != NULL && ov45_022577DC->state == 5) {
+    if (gLobbyChatManager != NULL && gLobbyChatManager->state == 5) {
         return;
     }
     if (name == NULL) {
@@ -127,13 +127,13 @@ extern "C" void LobbyChat_OnGetChannelKeys(void *self, int result, const char *n
     } else {
         String s;
         LobbyString_InitFromCStr(&s, other);
-        x = LobbyChat_FindUserIdByNick(ov45_022577DC, &s);
+        x = LobbyChat_FindUserIdByNick(gLobbyChatManager, &s);
         LobbyString_Destroy(&s);
     }
     int sid = id;
     u32 a, b;
     Handler *h;
-    Manager *m = ov45_022577DC;
+    Manager *m = gLobbyChatManager;
     It it = FindIt(m, sid);
     if (it.n == &m->map.header) {
         h = 0;
@@ -150,13 +150,13 @@ extern "C" void LobbyChat_OnGetChannelKeys(void *self, int result, const char *n
     String t;
     LobbyString_InitFromCStr(&t, name);
     String k;
-    LobbyChat_StripChannelPrefix(&k, ov45_022577DC, &t);
+    LobbyChat_StripChannelPrefix(&k, gLobbyChatManager, &t);
     const char *str = k.c_str();
     void (*cb)(BOOL, const char *, int, u32, u32, u32) = h->callback;
     cb(result == 1, str, x, a, b, h->getArg());
     LobbyString_Destroy(&k);
     LobbyString_Destroy(&t);
-    LobbyRequestMap_DeleteKey(&ov45_022577DC->map, sid);
+    LobbyRequestMap_DeleteKey(&gLobbyChatManager->map, sid);
 }
 
 #pragma pop

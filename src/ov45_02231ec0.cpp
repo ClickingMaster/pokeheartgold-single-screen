@@ -131,13 +131,13 @@ inline int ErrorMap::Map(int r) const {
     return state;
 }
 
-extern "C" Work *_022577C4;
+extern "C" Work *gPPWLobbyWork;
 extern "C" Str PPWLobbyChannel_GetName(Peer *);
 extern "C" int LobbyChat_LeaveChannel(const char *);
 extern "C" int PPW_LobbyLeaveSubChannel(void);
 
 inline Work *GetWork() {
-    return _022577C4;
+    return gPPWLobbyWork;
 }
 
 inline bool IsError(Work *w) {

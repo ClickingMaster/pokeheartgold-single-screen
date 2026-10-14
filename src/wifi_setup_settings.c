@@ -39,22 +39,22 @@ typedef struct WifiSetupGraphicsPath23 {
     char text[23];
 } WifiSetupGraphicsPath23;
 
-extern const WifiSetupGraphicsPath21 ov13_02245548;
-extern const WifiSetupGraphicsPath22 ov13_0224555D;
-extern const WifiSetupGraphicsPath23 ov13_02245573;
-extern u8 ov13_02245526[][3]; // OAM template per button type and option
-extern u16 ov13_02245536[];   // top screen tile offset per first visible item
-extern WifiSetupRect ov13_0224558A[];
-extern s8 ov13_022455D4[];
-extern u8 ov13_022455DC[]; // item per row touched
-extern u8 ov13_022455F4[];
-extern WifiSetupRect ov13_02245958;
-extern u8 ov13_02246474[];
-extern u8 ov13_02246488[];
-extern u8 ov13_022464A0[];
-extern u8 ov13_022464B8[];
-extern u8 ov13_022464CC[];
-extern u16 ov13_022464E4[]; // address format
+extern const WifiSetupGraphicsPath21 gWifiSetupSettingsYbBgStep2NclPath;
+extern const WifiSetupGraphicsPath22 gWifiSetupSettingsYbBgStep21NclPath;
+extern const WifiSetupGraphicsPath23 gWifiSetupSettingsJb3ListBackNscPath;
+extern u8 gWifiSetupSettingsButtonTemplates[][3]; // OAM template per button type and option
+extern u16 gWifiSetupSettingsRowTileOffsets[];   // top screen tile offset per first visible item
+extern WifiSetupRect gWifiSetupSettingsTouchRects[];
+extern s8 gWifiSetupSettingsDigitPositions[];
+extern u8 gWifiSetupSettingsRowItems[]; // item per row touched
+extern u8 gWifiSetupSettingsItemRows[];
+extern WifiSetupRect gWifiSetupInputPanelRect;
+extern u8 gWifiSetupSettingsYbObjKbNclPath[];
+extern u8 gWifiSetupSettingsJbBgStep2NcgPath[];
+extern u8 gWifiSetupSettingsJbBgStep21NcgPath[];
+extern u8 gWifiSetupSettingsJb3ListNscPath[];
+extern u8 gWifiSetupSettingsYbObjMainNclPath[];
+extern u16 gWifiSetupSettingsAddressFormat[]; // address format
 extern u32 ov13_0224F554[]; // &gWifiSetupSettings.work
 
 // src/wifi_setup_ui_parts.c; WifiSetupMessage_Hide is called with an argument
@@ -114,7 +114,7 @@ void WifiSetupSettings_Init(void) {
     WifiSetupSettings_ResetPosition();
     WifiSetupSettings_LoadGraphics();
     if (!gWifiSetupSettings.fromMenu) {
-        WifiSetupMessage_Show(48, ov13_022455D4[WifiSetupApp_GetLanguage()], record[0xF4] + 1);
+        WifiSetupMessage_Show(48, gWifiSetupSettingsDigitPositions[WifiSetupApp_GetLanguage()], record[0xF4] + 1);
     } else {
         WifiSetupMessage_Show(69, -1, 0);
     }
@@ -149,15 +149,15 @@ void WifiSetupSettings_LoadGraphics(void) {
     WifiSetupGraphicsPath23 scrName;
     WifiSetupGraphicsPath21 plttName;
     WifiSetupGraphicsPath22 charName;
-    scrName = ov13_02245573;
-    plttName = ov13_02245548;
-    charName = ov13_0224555D;
+    scrName = gWifiSetupSettingsJb3ListBackNscPath;
+    plttName = gWifiSetupSettingsYbBgStep2NclPath;
+    charName = gWifiSetupSettingsYbBgStep21NclPath;
     REG16(0x0400000C) = (REG16(0x0400000C) & 0x43) | 0xe18;
-    WifiSetup_LoadGraphics(ov13_02246474, GX_LoadOBJPltt);
-    WifiSetup_LoadGraphics(ov13_02246488, GX_LoadBG3Char);
-    WifiSetup_LoadGraphics(ov13_022464A0, GX_LoadBG2Char);
+    WifiSetup_LoadGraphics(gWifiSetupSettingsYbObjKbNclPath, GX_LoadOBJPltt);
+    WifiSetup_LoadGraphics(gWifiSetupSettingsJbBgStep2NcgPath, GX_LoadBG3Char);
+    WifiSetup_LoadGraphics(gWifiSetupSettingsJbBgStep21NcgPath, GX_LoadBG2Char);
     WifiSetup_LoadGraphics(&plttName, GX_LoadBGPltt);
-    WifiSetup_LoadGraphics(ov13_022464B8, GX_LoadBG3Scr);
+    WifiSetup_LoadGraphics(gWifiSetupSettingsJb3ListNscPath, GX_LoadBG3Scr);
     {
         void *path;
         void *data;
@@ -352,7 +352,7 @@ void WifiSetupSettings_SelectItem(int item) {
         WifiSetupSound_Play(7);
     } else {
         WifiSetupSound_Play(6);
-        WifiSetupSettings_SetButtonOam(0, 1, WifiSetupSettings_GetItemRow(ov13_022455F4[item]));
+        WifiSetupSettings_SetButtonOam(0, 1, WifiSetupSettings_GetItemRow(gWifiSetupSettingsItemRows[item]));
         WifiSetupSettings_UpdateObjects();
     }
     WifiSetupScrollBar_Disable();
@@ -503,7 +503,7 @@ void WifiSetupSettings_Exit(void) {
     for (i = 0; i < 2; i++) {
         WifiSetupFile_Free((&gWifiSetupSettings.work->paletteData)[i]);
     }
-    WifiSetup_LoadGraphics(ov13_022464CC, GX_LoadOBJPltt);
+    WifiSetup_LoadGraphics(gWifiSetupSettingsYbObjMainNclPath, GX_LoadOBJPltt);
     WifiSetupDisplay_HidePlanes(1, 1);
     WifiSetupDisplay_HidePlanes(0, 29);
     *(vu32 *)0x04000010 = 0;
@@ -575,7 +575,7 @@ void WifiSetupSettings_DrawRows(void) {
     for (; row < 5; row++, item++) {
         WifiSetupSettings_DrawValue(item, (void *)row);
     }
-    WifiSetupBgScreen_CopyRect(gWifiSetupSettings.work->screenData + ov13_02245536[first], 0, 30, 19);
+    WifiSetupBgScreen_CopyRect(gWifiSetupSettings.work->screenData + gWifiSetupSettingsRowTileOffsets[first], 0, 30, 19);
     for (item = 0; item < 5; item++, first++) {
         WifiSetupSettings_DrawButtons(first, (void *)item);
     }
@@ -777,8 +777,8 @@ void WifiSetupSettings_SetButtonOam(unsigned type, int option, int row) {
             oam = &gWifiSetupSettings.work->dnsSwitch;
         }
     }
-    if (ov13_02245526[type][option]) {
-        WifiSetupOamTemplate_Copy(0, ov13_02245526[type][option], *oam);
+    if (gWifiSetupSettingsButtonTemplates[type][option]) {
+        WifiSetupOamTemplate_Copy(0, gWifiSetupSettingsButtonTemplates[type][option], *oam);
         {
             u32 value = *(volatile u16 *)&x[type];
             GXOamAttr *obj = *(GXOamAttr *volatile *)oam;
@@ -828,7 +828,7 @@ void WifiSetupSettings_DrawText(u8 *text, int row) {
 
 void WifiSetupSettings_DrawAddress(u8 *address, int row) {
     u16 buf[16];
-    swprintf(buf, 16, ov13_022464E4, address[0], address[1], address[2], address[3]);
+    swprintf(buf, 16, gWifiSetupSettingsAddressFormat, address[0], address[1], address[2], address[3]);
     WifiSetupText_DrawMonospace(gWifiSetupSettings.work->canvas, 95, row * WIFI_SETUP_SETTINGS_ROW_HEIGHT + 8, 2, 7, buf, 1);
 }
 
@@ -890,7 +890,7 @@ static const WifiSetupRect sSwitchOnBox = { 0xC0, 0x34, 0x2C, 0x18 };
 int WifiSetupSettings_GetTouchedItem(void) {
     WifiSetupRect r;
     int item, i;
-    if (!WifiSetupInput_IsTouchPressed(&ov13_02245958)) {
+    if (!WifiSetupInput_IsTouchPressed(&gWifiSetupInputPanelRect)) {
         return WIFI_SETUP_SETTINGS_ITEM_NONE;
     }
     item = FX_DivS32(gWifiSetupSettings.scroll, WIFI_SETUP_SETTINGS_ROW_HEIGHT);
@@ -898,7 +898,7 @@ int WifiSetupSettings_GetTouchedItem(void) {
     for (i = 0; i < 4; i++) {
         if (item != 2 && item != 6) {
             if (WifiSetupInput_IsTouchPressedInBox(&r)) {
-                return ov13_022455DC[item];
+                return gWifiSetupSettingsRowItems[item];
             }
         }
         r.top += WIFI_SETUP_SETTINGS_ROW_HEIGHT;
@@ -939,7 +939,7 @@ int WifiSetupSettings_GetTouchedItem(void) {
         item++;
     }
     for (i = 0; i < 3; i++) {
-        if (WifiSetupInput_IsTouchPressed(&ov13_0224558A[i])) {
+        if (WifiSetupInput_IsTouchPressed(&gWifiSetupSettingsTouchRects[i])) {
             return i + 11;
         }
     }

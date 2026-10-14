@@ -84,8 +84,8 @@ extern WifiSetupApp gWifiSetupApp;
 extern WifiSetupTextBanks *gWifiSetupTextBanks;
 extern WifiSetupSession *gWifiSetupSession;
 extern WifiSetupTextBank *gWifiSetupTextBank;
-extern const u8 ov13_02245320[12];
-extern const WifiSetupSessionParams ov13_02245F8C;
+extern const u8 gWifiSetupAossClientName[12];
+extern const WifiSetupSessionParams gWifiSetupTransferSessionParams;
 
 int WifiSetupApp_Run(void *heap, s32 language, s32 flags);
 void WifiSetupApp_StartAossClient(void);

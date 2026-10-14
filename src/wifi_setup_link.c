@@ -13,8 +13,8 @@ extern OSMutex ov13_0224DFC4;
 extern u8 ov13_0224E3E8[6];
 extern u8 ov13_0224E420[32];
 extern u8 ov13_02245A6C[]; // socket library configuration
-extern u8 _02108FC0[];     // BSSID ff:ff:ff:ff:ff:ff (any)
-extern u8 _02108FC8[];     // SSID of 0xFF bytes (any)
+extern u8 WCM_Bssid_Any[];     // BSSID ff:ff:ff:ff:ff:ff (any)
+extern u8 WCM_Essid_Any[];     // SSID of 0xFF bytes (any)
 
 int SOC_Startup(void *config);
 void SOC_Cleanup(void);
@@ -268,7 +268,7 @@ int WifiSetupLink_StartSearch(const u8 *bssid, const u8 *ssid, int len, int opti
         }
     } else {
         MI_CpuFill8(ov13_0224E3E8, 0xFF, 6);
-        ov13_0224DF30.searchBssid = _02108FC0;
+        ov13_0224DF30.searchBssid = WCM_Bssid_Any;
     }
     ov13_0224DF30.searchSsid = ov13_0224E420;
     if (ssid != NULL && len > 0 && len < 32) {
@@ -280,7 +280,7 @@ int WifiSetupLink_StartSearch(const u8 *bssid, const u8 *ssid, int len, int opti
         }
     } else {
         MI_CpuFill8(ov13_0224E420, 0xFF, 32);
-        ov13_0224DF30.searchSsid = _02108FC8;
+        ov13_0224DF30.searchSsid = WCM_Essid_Any;
     }
     if (ov13_0224DF30.wcmState == 3) {
         if (WCM_SearchAsync(ov13_0224E3E8, ov13_0224DF30.searchSsid, ov13_0224DF30.searchOption) == 3) {

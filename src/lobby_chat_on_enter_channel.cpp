@@ -31,7 +31,7 @@ struct HandlerVtbl {
     u32 (*getArg)(Handler *h);
 };
 
-extern "C" HandlerVtbl ov45_02255238;
+extern "C" HandlerVtbl gLobbyRequestVtable;
 
 struct Base {
     HandlerVtbl *vtbl;
@@ -42,7 +42,7 @@ struct Base {
     }
 
     Base(u32 i)
-        : vtbl(&ov45_02255238)
+        : vtbl(&gLobbyRequestVtable)
         , id(i)
         , unk8(0) {
     }
@@ -90,7 +90,7 @@ struct Manager {
     Map map;
 };
 
-extern "C" Manager *ov45_022577DC;
+extern "C" Manager *gLobbyChatManager;
 extern "C" It LobbyRequestMap_Find(Map *map, Base *const &key);
 extern "C" void LobbyRequestMap_DeleteKey(Map *map, u32 id);
 extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
@@ -99,7 +99,7 @@ extern "C" void LobbyChat_StripChannelPrefix(Str *dst, Manager *m, Str *src);
 extern "C" void LobbyChat_OnChannelModeChanged(void *self, const char *name, u32 x, u32 id);
 
 inline void KeyInit(Base *k, u32 id) {
-    k->vtbl = &ov45_02255238;
+    k->vtbl = &gLobbyRequestVtable;
     k->id = id;
     k->unk8 = 0;
 }
@@ -135,16 +135,16 @@ extern "C" void LobbyChat_OnEnterChannel(void *session, int ok, int error, const
 #pragma opt_propagation off
 
 extern "C" void LobbyChat_OnEnterChannel(void *session, int ok, int error, const char *name, u32 id) {
-    if (ov45_022577DC != NULL && ov45_022577DC->state == 5) {
+    if (gLobbyChatManager != NULL && gLobbyChatManager->state == 5) {
         return;
     }
     if (ok == 1) {
         Str s;
         LobbyString_InitFromCStr(&s, name);
-        int found = LobbyChat_GetChannelUserLimit(ov45_022577DC, &s);
+        int found = LobbyChat_GetChannelUserLimit(gLobbyChatManager, &s);
         LobbyString_Destroy(&s);
         if (found != 0) {
-            int limit = chatGetChannelNumUsersA(ov45_022577DC->net, name);
+            int limit = chatGetChannelNumUsersA(gLobbyChatManager->net, name);
             if (found == -1) {
                 ok = 0;
                 error = 7;
@@ -152,16 +152,16 @@ extern "C" void LobbyChat_OnEnterChannel(void *session, int ok, int error, const
                 ok = 0;
                 error = 2;
             } else {
-                chatSetChannelLimitA(ov45_022577DC->net, name, found);
+                chatSetChannelLimitA(gLobbyChatManager->net, name, found);
             }
         }
     }
     if (ok == 1) {
         Str a;
-        LobbyChatManager_GetNick(&a, ov45_022577DC);
+        LobbyChatManager_GetNick(&a, gLobbyChatManager);
         Str b;
         LobbyString_InitFromCStr(&b, name);
-        LobbyChat_AddChannelUser(ov45_022577DC, &a, &b);
+        LobbyChat_AddChannelUser(gLobbyChatManager, &a, &b);
         LobbyString_Destroy(&b);
         LobbyString_Destroy(&a);
         chatEnumUsersA(session, name, (void *)LobbyChat_OnEnterChannelEnumUsers, id, 0);
@@ -171,25 +171,25 @@ extern "C" void LobbyChat_OnEnterChannel(void *session, int ok, int error, const
         Str s;
         LobbyString_InitFromCStr(&s, name);
         Str t;
-        LobbyChat_StripChannelPrefix(&t, ov45_022577DC, &s);
+        LobbyChat_StripChannelPrefix(&t, gLobbyChatManager, &s);
         LobbyChat_LeaveChannel(t.c_str());
         LobbyString_Destroy(&t);
         LobbyString_Destroy(&s);
     }
     int sid = id;
-    Manager *m = ov45_022577DC;
+    Manager *m = gLobbyChatManager;
     It it = FindIt(m, sid);
     Handler *h = it.n == &m->map.header ? 0 : it.n->value;
     Str s;
     LobbyString_InitFromCStr(&s, name);
     Str t;
-    LobbyChat_StripChannelPrefix(&t, ov45_022577DC, &s);
+    LobbyChat_StripChannelPrefix(&t, gLobbyChatManager, &s);
     const char *str = t.c_str();
     void (*cb)(BOOL, int, const char *, u32) = h->callback;
     cb(0, error, str, h->getArg());
     LobbyString_Destroy(&t);
     LobbyString_Destroy(&s);
-    LobbyRequestMap_DeleteKey(&ov45_022577DC->map, sid);
+    LobbyRequestMap_DeleteKey(&gLobbyChatManager->map, sid);
 }
 
 #pragma pop

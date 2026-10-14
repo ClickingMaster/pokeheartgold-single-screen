@@ -13,40 +13,40 @@
 extern void __msl_assertion_failed(const char *, const char *, const char *, int);
 extern ChatHostEntry *SOC_GetHostByName(const char *name);
 extern int vsprintf(char *, const char *, va_list);
-extern const char ov45_02257148[];
-extern const char ov45_02257154[];
-extern const char ov45_02257184[];
-extern const char ov45_022571A4[];
-extern const char ov45_022571B4[];
-extern const char ov45_022571C4[];
-extern const char ov45_022571D4[];
-extern const char ov45_0225720C[];
-extern const char ov45_02257220[];
-extern const char ov45_02257234[];
-extern const char ov45_02257248[];
-extern const char ov45_02257258[];
-extern const char ov45_02257334[];
-extern const char ov45_02257344[];
-extern const char ov45_022573C4[];
-extern const char ov45_022573E4[];
-extern const char ov45_02257408[];
-extern const char ov45_02257438[];
-extern const char ov45_0225745C[];
-extern const char ov45_0225749C[];
-extern const char ov45_022574BC[];
-extern const char ov45_022574E0[];
-extern const char ov45_02257514[];
-extern const char ov45_02257538[];
-extern const char ov45_02257578[];
-extern const char ov45_02257590[];
-extern const char ov45_0225759C[];
-extern const char ov45_022575B0[];
-extern const char ov45_022575D8[];
-extern const char ov45_022575FC[];
-extern const char ov45_02257600[];
-extern const char ov45_02257610[];
-extern const char ov45_02257620[];
-extern const char ov45_02257624[];
+extern const char sStr_ciParseUser[];
+extern const char sStr_ciSocketSend[];
+extern const char sStr_ciParseParam[];
+extern const char sStr_ciSocketSendf[];
+extern const char sStr_ciSocketThink[];
+extern const char sStr_ciParseMessage[];
+extern const char sStr_ciSocketConnect[];
+extern const char sStr_ciSocketThinkSend[];
+extern const char sStr_ciSocketThinkRecv[];
+extern const char sStr_ciSocketDisconnect[];
+extern const char sStr_BufferNeNULL_2[];
+extern const char sStr_ChatSocketC[];
+extern const char sStr_SockNeNULL_2[];
+extern const char sStr_SockConnectStateEqCiNotConnectedOrSock[];
+extern const char sStr_SockInputQueueNeNULL[];
+extern const char sStr_SockInputQueueSizeGe0[];
+extern const char sStr_SockInputQueueSizeBUFFER_INC_Eq0[];
+extern const char sStr_SockInputQueueLengthGe0[];
+extern const char sStr_SockInputQueueLengthLeSockInputQueueSize[];
+extern const char sStr_SockOutputQueueNeNULL[];
+extern const char sStr_SockOutputQueueSizeGe0[];
+extern const char sStr_SockOutputQueueSizeBUFFER_INC_Eq0[];
+extern const char sStr_SockOutputQueueLengthGe0[];
+extern const char sStr_SockOutputQueueLengthLeSockOutputQueueSize[];
+extern const char sStr_ServerAddressNeNULL_2[];
+extern const char sStr_PortGe0[];
+extern const char sStr_PortLeUSHRT_MAX[];
+extern const char sStr_SockConnectStateEqCiNotConnected[];
+extern const char sStr_SockConnectStateEqCiConnected[];
+extern const char sStr_0_12[];
+extern const char sStr_PTextNeNULL[];
+extern const char sStr_MessageNeNULL_3[];
+extern const char sStr_SpaceColon_2[];
+extern const char sStr_Space_4[];
 
 // Line buffer of ciSocketSendf (4096 bytes).
 extern char ciSendfBuffer[];
@@ -54,22 +54,22 @@ extern char ciSendfBuffer[];
 // Assertion with the message, the name of the checking function and the line.
 #define ASSERT(cond, message, func, line)                           \
     if (!(cond)) {                                                  \
-        __msl_assertion_failed(message, ov45_02257258, func, line); \
+        __msl_assertion_failed(message, sStr_ChatSocketC, func, line); \
     }
 // A valid socket: state 0 .. 2 and both buffers consistent.
 #define ASSERT_SOCKET(sock, func, line)                                            \
-    ASSERT(sock, ov45_02257334, func, line);                                       \
-    ASSERT((sock)->state <= 2, ov45_02257344, func, line);                         \
-    ASSERT(&(sock)->input, ov45_022573C4, func, line);                             \
-    ASSERT((sock)->input.size >= 0, ov45_022573E4, func, line);                    \
-    ASSERT((sock)->input.size % 0x2000 == 0, ov45_02257408, func, line);           \
-    ASSERT((sock)->input.length >= 0, ov45_02257438, func, line);                  \
-    ASSERT((sock)->input.length <= (sock)->input.size, ov45_0225745C, func, line); \
-    ASSERT(&(sock)->output, ov45_0225749C, func, line);                            \
-    ASSERT((sock)->output.size >= 0, ov45_022574BC, func, line);                   \
-    ASSERT((sock)->output.size % 0x2000 == 0, ov45_022574E0, func, line);          \
-    ASSERT((sock)->output.length >= 0, ov45_02257514, func, line);                 \
-    ASSERT((sock)->output.length <= (sock)->output.size, ov45_02257538, func, line);
+    ASSERT(sock, sStr_SockNeNULL_2, func, line);                                       \
+    ASSERT((sock)->state <= 2, sStr_SockConnectStateEqCiNotConnectedOrSock, func, line);                         \
+    ASSERT(&(sock)->input, sStr_SockInputQueueNeNULL, func, line);                             \
+    ASSERT((sock)->input.size >= 0, sStr_SockInputQueueSizeGe0, func, line);                    \
+    ASSERT((sock)->input.size % 0x2000 == 0, sStr_SockInputQueueSizeBUFFER_INC_Eq0, func, line);           \
+    ASSERT((sock)->input.length >= 0, sStr_SockInputQueueLengthGe0, func, line);                  \
+    ASSERT((sock)->input.length <= (sock)->input.size, sStr_SockInputQueueLengthLeSockInputQueueSize, func, line); \
+    ASSERT(&(sock)->output, sStr_SockOutputQueueNeNULL, func, line);                            \
+    ASSERT((sock)->output.size >= 0, sStr_SockOutputQueueSizeGe0, func, line);                   \
+    ASSERT((sock)->output.size % 0x2000 == 0, sStr_SockOutputQueueSizeBUFFER_INC_Eq0, func, line);          \
+    ASSERT((sock)->output.length >= 0, sStr_SockOutputQueueLengthGe0, func, line);                 \
+    ASSERT((sock)->output.length <= (sock)->output.size, sStr_SockOutputQueueLengthLeSockOutputQueueSize, func, line);
 
 // Frees a part of the message and clears it.
 #define FREE_PART(part)      \
@@ -82,11 +82,11 @@ extern char ciSendfBuffer[];
 BOOL ciSocketConnect(ChatSocket *socket, const char *address, int port) {
     u32 ip;
     ChatSocketAddress addr;
-    ASSERT_SOCKET(socket, ov45_022571D4, 216);
-    ASSERT(address, ov45_02257578, ov45_022571D4, 217);
-    ASSERT(port >= 0, ov45_02257590, ov45_022571D4, 218);
-    ASSERT(port <= 65535, ov45_0225759C, ov45_022571D4, 219);
-    ASSERT(socket->state == 0, ov45_022575B0, ov45_022571D4, 220);
+    ASSERT_SOCKET(socket, sStr_ciSocketConnect, 216);
+    ASSERT(address, sStr_ServerAddressNeNULL_2, sStr_ciSocketConnect, 217);
+    ASSERT(port >= 0, sStr_PortGe0, sStr_ciSocketConnect, 218);
+    ASSERT(port <= 65535, sStr_PortLeUSHRT_MAX, sStr_ciSocketConnect, 219);
+    ASSERT(socket->state == 0, sStr_SockConnectStateEqCiNotConnected, sStr_ciSocketConnect, 220);
     strncpy(socket->host, address, 255);
     socket->host[254] = 0;
     ip = gsSocketInetAddr(address);
@@ -116,7 +116,7 @@ BOOL ciSocketConnect(ChatSocket *socket, const char *address, int port) {
 // Closes the socket and frees its buffers and the last message.
 void ciSocketDisconnect(ChatSocket *socket) {
     int i;
-    ASSERT_SOCKET(socket, ov45_02257234, 283);
+    ASSERT_SOCKET(socket, sStr_ciSocketDisconnect, 283);
     if (socket->handle != -1) {
         gsSocketShutdown(socket->handle, 2);
         gsSocketClose(socket->handle);
@@ -155,8 +155,8 @@ void ciSocketSelect(int handle, BOOL *readable, BOOL *writable, BOOL *except) {
 
 // Sends as much of the output buffer as the socket takes (1024 bytes at a time).
 void ciSocketThinkSend(ChatSocket *socket) {
-    ASSERT_SOCKET(socket, ov45_0225720C, 340);
-    ASSERT(socket->state == 1, ov45_022575D8, ov45_0225720C, 341);
+    ASSERT_SOCKET(socket, sStr_ciSocketThinkSend, 340);
+    ASSERT(socket->state == 1, sStr_SockConnectStateEqCiConnected, sStr_ciSocketThinkSend, 341);
     while (socket->output.length > 0) {
         BOOL writable;
         int sent;
@@ -178,8 +178,8 @@ void ciSocketThinkRecv(ChatSocket *socket) {
     BOOL readable;
     int received, length;
     u8 *data;
-    ASSERT_SOCKET(socket, ov45_02257220, 378);
-    ASSERT(socket->state == 1, ov45_022575D8, ov45_02257220, 379);
+    ASSERT_SOCKET(socket, sStr_ciSocketThinkRecv, 378);
+    ASSERT(socket->state == 1, sStr_SockConnectStateEqCiConnected, sStr_ciSocketThinkRecv, 379);
     for (;;) {
         ciSocketSelect(socket->handle, &readable, NULL, NULL);
         if (!readable) {
@@ -205,8 +205,8 @@ void ciSocketThinkRecv(ChatSocket *socket) {
 
 // Sends and receives.
 void ciSocketThink(ChatSocket *socket) {
-    ASSERT_SOCKET(socket, ov45_022571B4, 446);
-    ASSERT(socket->state == 1, ov45_022575D8, ov45_022571B4, 447);
+    ASSERT_SOCKET(socket, sStr_ciSocketThink, 446);
+    ASSERT(socket->state == 1, sStr_SockConnectStateEqCiConnected, sStr_ciSocketThink, 447);
     if (socket->state == 2) {
         return;
     }
@@ -219,9 +219,9 @@ BOOL ciSocketSend(ChatSocket *socket, const char *line) {
     int length;
     u8 *data;
     int start;
-    ASSERT_SOCKET(socket, ov45_02257154, 472);
-    ASSERT(socket->state == 1, ov45_022575D8, ov45_02257154, 473);
-    ASSERT(line, ov45_02257248, ov45_02257154, 474);
+    ASSERT_SOCKET(socket, sStr_ciSocketSend, 472);
+    ASSERT(socket->state == 1, sStr_SockConnectStateEqCiConnected, sStr_ciSocketSend, 473);
+    ASSERT(line, sStr_BufferNeNULL_2, sStr_ciSocketSend, 474);
     if (socket->state == 2) {
         return TRUE;
     }
@@ -251,8 +251,8 @@ BOOL ciSocketSend(ChatSocket *socket, const char *line) {
 BOOL ciSocketSendf(ChatSocket *socket, const char *format, ...) {
     va_list args;
     int length;
-    ASSERT_SOCKET(socket, ov45_022571A4, 531);
-    ASSERT(socket->state == 1, ov45_022575D8, ov45_022571A4, 532);
+    ASSERT_SOCKET(socket, sStr_ciSocketSendf, 531);
+    ASSERT(socket->state == 1, sStr_SockConnectStateEqCiConnected, sStr_ciSocketSendf, 532);
     if (socket->state == 2) {
         return TRUE;
     }
@@ -271,7 +271,7 @@ BOOL ciParseUser(char *prefix, ChatMessage *message) {
     char *user = NULL, *host = NULL, *p;
     int nickLength = 0, userLength = 0, hostLength = 0;
     if (!prefix || !*(volatile char *)prefix) {
-        __msl_assertion_failed(ov45_022575FC, ov45_02257258, ov45_02257148, 562);
+        __msl_assertion_failed(sStr_0_12, sStr_ChatSocketC, sStr_ciParseUser, 562);
         return FALSE;
     }
     p = prefix;
@@ -350,8 +350,8 @@ BOOL ciParseParam(const char *params, ChatMessage *message) {
     char *trailing;
     char *word;
     char *copy;
-    ASSERT(params, ov45_02257600, ov45_02257184, 673);
-    ASSERT(message, ov45_02257610, ov45_02257184, 674);
+    ASSERT(params, sStr_PTextNeNULL, sStr_ciParseParam, 673);
+    ASSERT(message, sStr_MessageNeNULL_3, sStr_ciParseParam, 674);
     copy = DWCi_GsMalloc(strlen(params) + 1);
     if (!copy) {
         return FALSE;
@@ -361,20 +361,20 @@ BOOL ciParseParam(const char *params, ChatMessage *message) {
         copy[0] = 0;
         trailing = copy + 1;
     } else {
-        trailing = strstr(copy, ov45_02257620);
+        trailing = strstr(copy, sStr_SpaceColon_2);
         if (trailing) {
             *trailing = 0;
             trailing += 2;
         }
     }
-    word = strtok(copy, ov45_02257624);
+    word = strtok(copy, sStr_Space_4);
     if (word) {
         do {
             if (!ciAddParam(word, message)) {
                 DWCi_GsFree(copy);
                 return FALSE;
             }
-            word = strtok(NULL, ov45_02257624);
+            word = strtok(NULL, sStr_Space_4);
         } while (word);
     }
     if (trailing && !ciAddParam(trailing, message)) {
@@ -390,7 +390,7 @@ BOOL ciParseMessage(ChatSocket *socket, char *line) {
     int prefixLength = 0, commandLength = 0, middleLength = 0, trailingLength = 0, length;
     char *start;
     if (!line || !*line) {
-        __msl_assertion_failed(ov45_022575FC, ov45_02257258, ov45_022571C4, 740);
+        __msl_assertion_failed(sStr_0_12, sStr_ChatSocketC, sStr_ciParseMessage, 740);
         return FALSE;
     }
     length = strlen(line);

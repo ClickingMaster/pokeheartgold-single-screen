@@ -87,7 +87,7 @@ struct WIt {
 extern "C" void LobbyEventDequeMap_InsertRange(Ring *r, It pos, WIt first, WIt last, Tag);
 extern "C" void *LobbyMem_Alloc(u32 n);
 extern "C" void LobbyEventDeque_LengthError(char *msg);
-extern char ov45_022551AC[];
+extern char sStr_DequeLengthError[];
 extern u32 ov45_022577C8;
 extern u32 ov45_022551A8;
 
@@ -286,7 +286,7 @@ extern "C" void LobbyEventDeque_AddBackCapacity(Deque *d, u32 n) {
         return;
     }
     if (nb * 0x80 > max_size() || (d->map.size == 0 ? 0 : (d->map.size - 1) * 0x80) > max_size() - nb * 0x80) {
-        LobbyEventDeque_LengthError(ov45_022551AC);
+        LobbyEventDeque_LengthError(sStr_DequeLengthError);
     }
     if (nb + d->map.size <= d->map.capacity()) {
         for (; nb != 0; --nb) {

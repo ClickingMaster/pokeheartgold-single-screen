@@ -26,7 +26,7 @@ typedef struct Hooks {
     void *arg;
 } Hooks;
 
-extern u8 *ov45_022577DC;
+extern u8 *gLobbyChatManager;
 void LobbyString_InitFromCStr(String *, const char *);
 void LobbyString_Destroy(String *);
 int LobbyChat_GetChannelUserLimit(void *, String *);
@@ -51,27 +51,27 @@ void LobbyChat_OnUserJoined(void *unused, const char *key, const char *value) {
     String result, a, b, c, d, e, f, g, h, i, j, k, l, m;
     int exists, index;
     Hooks *hooks;
-    if (ov45_022577DC && *(int *)(ov45_022577DC + 4) == 5) {
+    if (gLobbyChatManager && *(int *)(gLobbyChatManager + 4) == 5) {
         return;
     }
     LobbyString_InitFromCStr(&a, key);
-    exists = LobbyChat_GetChannelUserLimit(ov45_022577DC, &a);
+    exists = LobbyChat_GetChannelUserLimit(gLobbyChatManager, &a);
     LobbyString_Destroy(&a);
-    if (exists && chatGetChannelNumUsersA(*(int *)ov45_022577DC, key) > exists) {
+    if (exists && chatGetChannelNumUsersA(*(int *)gLobbyChatManager, key) > exists) {
         return;
     }
     LobbyString_InitFromCStr(&b, value);
-    LobbyChat_GetUserNick(&result, ov45_022577DC, LobbyChat_GetUserIdFromNick(&b));
+    LobbyChat_GetUserNick(&result, gLobbyChatManager, LobbyChat_GetUserIdFromNick(&b));
     LobbyString_Destroy(&b);
     LobbyString_InitFromCStr(&c, key);
-    exists = LobbyChat_RemoveChannelUser(ov45_022577DC, &result, &c);
+    exists = LobbyChat_RemoveChannelUser(gLobbyChatManager, &result, &c);
     LobbyString_Destroy(&c);
     if (exists) {
         LobbyString_InitFromCStr(&d, key);
-        hooks = LobbyChat_GetChannelCallbacks(ov45_022577DC, &d);
+        hooks = LobbyChat_GetChannelCallbacks(gLobbyChatManager, &d);
         LobbyString_Destroy(&d);
         LobbyString_InitFromCStr(&e, key);
-        LobbyChat_StripChannelPrefix(&f, ov45_022577DC, &e);
+        LobbyChat_StripChannelPrefix(&f, gLobbyChatManager, &e);
         LobbyString_InitFromCStr(&g, value);
         {
             String *second = &g;
@@ -84,7 +84,7 @@ void LobbyChat_OnUserJoined(void *unused, const char *key, const char *value) {
     }
     LobbyString_InitFromCStr(&h, value);
     LobbyString_InitFromCStr(&i, key);
-    index = LobbyChat_AddChannelUser(ov45_022577DC, &h, &i);
+    index = LobbyChat_AddChannelUser(gLobbyChatManager, &h, &i);
     LobbyString_Destroy(&i);
     LobbyString_Destroy(&h);
     if (index == -1) {
@@ -92,14 +92,14 @@ void LobbyChat_OnUserJoined(void *unused, const char *key, const char *value) {
         return;
     }
     LobbyString_InitFromCStr(&j, key);
-    exists = LobbyChat_AreChannelUsersEnumerated(ov45_022577DC, &j);
+    exists = LobbyChat_AreChannelUsersEnumerated(gLobbyChatManager, &j);
     LobbyString_Destroy(&j);
     if (exists) {
         LobbyString_InitFromCStr(&k, key);
-        hooks = LobbyChat_GetChannelCallbacks(ov45_022577DC, &k);
+        hooks = LobbyChat_GetChannelCallbacks(gLobbyChatManager, &k);
         LobbyString_Destroy(&k);
         LobbyString_InitFromCStr(&l, key);
-        LobbyChat_StripChannelPrefix(&m, ov45_022577DC, &l);
+        LobbyChat_StripChannelPrefix(&m, gLobbyChatManager, &l);
         hooks->first(getStringData(&m), index, hooks->arg);
         LobbyString_Destroy(&m);
         LobbyString_Destroy(&l);

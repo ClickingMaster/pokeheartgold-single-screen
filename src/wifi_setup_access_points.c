@@ -81,12 +81,12 @@ typedef struct WifiSetupConnectionBody {
 } WifiSetupConnectionBody;
 
 extern WifiSetupApScan *gWifiSetupApScan;
-extern u8 ov13_02245798[]; // vendor element prefix that marks WPA
-extern u8 ov13_0224579C[]; // empty BSSID
-extern WifiSetupScanParam ov13_022457A4;
-extern u8 ov13_022457E8[]; // address 0.0.0.0
-extern u8 ov13_022467C8[]; // address format
-extern u8 ov13_022467D8[]; // sound archive path
+extern u8 gWifiSetupWpaVendorPrefix[]; // vendor element prefix that marks WPA
+extern u8 gWifiSetupApScanEmptyBssid[]; // empty BSSID
+extern WifiSetupScanParam gWifiSetupApScanParam;
+extern u8 gWifiSetupZeroAddress[]; // address 0.0.0.0
+extern u8 gWifiSetupConnectionsAddressFormat[]; // address format
+extern u8 gWifiSetupSoundArchivePath[]; // sound archive path
 
 extern int WM_Initialize(void *, void *, u16);
 extern int WM_ReadStatus(void *);
@@ -127,7 +127,7 @@ int WifiSetupApScan_Start(void) {
         WM_ReadStatus(&gWifiSetupApScan->status);
         w = gWifiSetupApScan;
     } while (w->status.state != 2);
-    w->param = ov13_022457A4;
+    w->param = gWifiSetupApScanParam;
     w->param.words[0] = (u32)w->scanBuf;
     *(u16 *)&gWifiSetupApScan->param.words[2] = WM_GetDispersionScanPeriod();
     return WifiSetupApScan_Continue() ? 1 : 0;
@@ -160,7 +160,7 @@ int WifiSetupApScan_GetEntries(WifiSetupScanEntry **out) {
     int i;
     *out = e = gWifiSetupApScan->entries;
     for (i = 0; i < 20; i++) {
-        if (memcmp(e[i].bssid, ov13_0224579C, 6) != 0) {
+        if (memcmp(e[i].bssid, gWifiSetupApScanEmptyBssid, 6) != 0) {
             count++;
         }
     }
@@ -212,7 +212,7 @@ void WifiSetupApScan_StoreResults(WifiSetupScanCallback *cb) {
         }
         if (j == 20) {
             for (j = 0; j < 20; j++) {
-                if (memcmp(entries[j].bssid, ov13_0224579C, 6) == 0) {
+                if (memcmp(entries[j].bssid, gWifiSetupApScanEmptyBssid, 6) == 0) {
                     break;
                 }
             }
@@ -236,7 +236,7 @@ void WifiSetupApScan_StoreResults(WifiSetupScanCallback *cb) {
                 break;
             }
             if (elems.element[k].id == 0xdd && elems.element[k].length >= 4) {
-                if (memcmp(elems.element[k].body, ov13_02245798, 4) == 0) {
+                if (memcmp(elems.element[k].body, gWifiSetupWpaVendorPrefix, 4) == 0) {
                     entries[j].security = 2;
                     break;
                 }
@@ -342,30 +342,30 @@ void WifiSetupConnections_GetSsid(void *dst) {
 
 void WifiSetupConnections_FormatIpAddress(char *buf) {
     WifiSetupConnections *d = gWifiSetupConnections;
-    OS_SPrintf(buf, (char *)ov13_022467C8, d->edit.ip[0], d->edit.ip[1], d->edit.ip[2], d->edit.ip[3]);
+    OS_SPrintf(buf, (char *)gWifiSetupConnectionsAddressFormat, d->edit.ip[0], d->edit.ip[1], d->edit.ip[2], d->edit.ip[3]);
 }
 
 void WifiSetupConnections_FormatSubnetMask(char *buf) {
     WifiSetupConnections *d = gWifiSetupConnections;
-    OS_SPrintf(buf, (char *)ov13_022467C8, d->edit.mask[0], d->edit.mask[1], d->edit.mask[2], d->edit.mask[3]);
+    OS_SPrintf(buf, (char *)gWifiSetupConnectionsAddressFormat, d->edit.mask[0], d->edit.mask[1], d->edit.mask[2], d->edit.mask[3]);
 }
 
 void WifiSetupConnections_FormatGateway(char *buf) {
     WifiSetupConnections *d = gWifiSetupConnections;
     u8 *a = d->edit.gateway;
-    OS_SPrintf(buf, (char *)ov13_022467C8, a[0], a[1], a[2], a[3]);
+    OS_SPrintf(buf, (char *)gWifiSetupConnectionsAddressFormat, a[0], a[1], a[2], a[3]);
 }
 
 void WifiSetupConnections_FormatPrimaryDns(char *buf) {
     WifiSetupConnections *d = gWifiSetupConnections;
     u8 *a = d->edit.dns1;
-    OS_SPrintf(buf, (char *)ov13_022467C8, a[0], a[1], a[2], a[3]);
+    OS_SPrintf(buf, (char *)gWifiSetupConnectionsAddressFormat, a[0], a[1], a[2], a[3]);
 }
 
 void WifiSetupConnections_FormatSecondaryDns(char *buf) {
     WifiSetupConnections *d = gWifiSetupConnections;
     u8 *a = d->edit.dns2;
-    OS_SPrintf(buf, (char *)ov13_022467C8, a[0], a[1], a[2], a[3]);
+    OS_SPrintf(buf, (char *)gWifiSetupConnectionsAddressFormat, a[0], a[1], a[2], a[3]);
 }
 
 u8 WifiSetupConnections_GetSetupMethod(int idx) {
@@ -377,12 +377,12 @@ void WifiSetupConnections_Edit(int idx) {
     WifiSetupConnectionPage *page = &d->pages[idx];
     *(WifiSetupConnectionBody *)&d->edit = *(WifiSetupConnectionBody *)page;
     d->edit.index = idx;
-    if (memcmp(page->ip, ov13_022457E8, 4) != 0) {
+    if (memcmp(page->ip, gWifiSetupZeroAddress, 4) != 0) {
         gWifiSetupConnections->edit.autoAddress = 0;
     } else {
         gWifiSetupConnections->edit.autoAddress = 1;
     }
-    if (memcmp(page->dns1, ov13_022457E8, 4) != 0 || memcmp(page->dns2, ov13_022457E8, 4) != 0) {
+    if (memcmp(page->dns1, gWifiSetupZeroAddress, 4) != 0 || memcmp(page->dns2, gWifiSetupZeroAddress, 4) != 0) {
         gWifiSetupConnections->edit.autoDns = 0;
     } else {
         gWifiSetupConnections->edit.autoDns = 1;
@@ -566,7 +566,7 @@ int WifiSetup_HexDigitValue(u8 c) {
 void WifiSetupSound_Init(void) {
     u32 size;
     gWifiSetupSound = WifiSetupHeap_AllocZeroed(0xa0, 4);
-    gWifiSetupSound->data = WifiSetupFile_Load(ov13_022467D8, &size, 0x20);
+    gWifiSetupSound->data = WifiSetupFile_Load(gWifiSetupSoundArchivePath, &size, 0x20);
     NNS_SndInit();
     NNS_SndArcInitOnMemory(gWifiSetupSound, gWifiSetupSound->data);
     NNS_SndArcPlayerSetup(0);

@@ -27,7 +27,7 @@ void WifiSetupKeyboard_SetPage(int page) {
     u32 key;
     gWifiSetupKeyboard->page = page;
     for (i = 0, key = 0; i < 4; i++, key += 12) {
-        WifiSetupKeyboard_SetRowY(page, i, ov13_02244FA4[key].y);
+        WifiSetupKeyboard_SetRowY(page, i, gWifiSetupKeyboardKeyPositions[key].y);
     }
     if (page == 2) {
         altPage = TRUE;
@@ -46,13 +46,13 @@ void WifiSetupKeyboard_SetKeyHighlight(int key, int highlighted) {
     }
     if (key < WIFI_SETUP_KEYBOARD_NUM_CHAR_KEYS) {
         WifiSetupKeyboard *keyboard = gWifiSetupKeyboard;
-        SetKeyPalette(keyboard->keys[key], ov13_02244F4C[highlighted]);
+        SetKeyPalette(keyboard->keys[key], gWifiSetupKeyboardKeyPalettes[highlighted]);
     } else if (key - WIFI_SETUP_KEYBOARD_NUM_CHAR_KEYS < WIFI_SETUP_KEYBOARD_NUM_EXTRA_KEYS) {
         WifiSetupKeyboard *keyboard = gWifiSetupKeyboard;
-        SetKeyPalette(keyboard->extraKeys[key - WIFI_SETUP_KEYBOARD_NUM_CHAR_KEYS], ov13_02244F4C[highlighted]);
+        SetKeyPalette(keyboard->extraKeys[key - WIFI_SETUP_KEYBOARD_NUM_CHAR_KEYS], gWifiSetupKeyboardKeyPalettes[highlighted]);
     } else {
         WifiSetupKeyboard *keyboard = gWifiSetupKeyboard;
-        WifiSetupOamBlock_SetModeAndPalette(keyboard->buttons[key - WIFI_SETUP_KEY_BUTTON_0], -1, 0, ov13_02244F50[highlighted]);
+        WifiSetupOamBlock_SetModeAndPalette(keyboard->buttons[key - WIFI_SETUP_KEY_BUTTON_0], -1, 0, gWifiSetupKeyboardButtonPalettes[highlighted]);
     }
 }
 
@@ -84,14 +84,14 @@ void WifiSetupKeyboard_UpdateCursor(void) {
     oam = WifiSetupOamBlock_GetOam(gWifiSetupKeyboard->cursor, 0);
     WifiSetupOamTemplate_Copy(0, templ, oam);
     WifiSetupOamBlock_SetPriority(gWifiSetupKeyboard->cursor, -1, 2);
-    WifiSetupOamBlock_SetPosition(gWifiSetupKeyboard->cursor, -1, ov13_02245060[gWifiSetupKeyboard->cursorKey * 2], ov13_02245062[gWifiSetupKeyboard->cursorKey * 2]);
+    WifiSetupOamBlock_SetPosition(gWifiSetupKeyboard->cursor, -1, gWifiSetupKeyboardCursorX[gWifiSetupKeyboard->cursorKey * 2], gWifiSetupKeyboardCursorY[gWifiSetupKeyboard->cursorKey * 2]);
 }
 
 // direction: 0 left, 1 up, 2 right, 3 down. Negative entries of the move table pick the target
 // from the key the cursor came from, so that moving through a wide key returns to the same column.
 void WifiSetupKeyboard_MoveCursor(int direction) {
     int old = gWifiSetupKeyboard->cursorKey;
-    gWifiSetupKeyboard->cursorKey = ov13_02245134[old][direction];
+    gWifiSetupKeyboard->cursorKey = gWifiSetupKeyboardCursorMoves[old][direction];
     if (gWifiSetupKeyboard->cursorKey == 46 && direction == 3) {
         gWifiSetupKeyboard->returnKey = old;
     } else if (gWifiSetupKeyboard->cursorKey == 51 && (direction == 1 || direction == 3)) {

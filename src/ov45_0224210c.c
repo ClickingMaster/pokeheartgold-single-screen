@@ -25,7 +25,7 @@ typedef struct {
 
 extern int printf(const char *, ...);
 extern void abort(void);
-extern const char ov45_0225533C[];
+extern const char sStr_TreeInsertLengthError_3[];
 extern void *LobbyMem_Alloc(u32);
 extern void LobbyTree_InsertRebalance(Node *, void *);
 extern void DWC_Free(int, void *, int);
@@ -37,7 +37,7 @@ Node *LobbyRequestMap_InsertNode(Container *c, void *owner, int first, int last,
     u32 *parent;
     volatile Guard guard;
     if (c->count == -1) {
-        printf(ov45_0225533C);
+        printf(sStr_TreeInsertLengthError_3);
         abort();
     }
     guard.active = 0;

@@ -13,7 +13,7 @@ extern int SOC_Close(int socket);
 extern int RTC_GetTime(void *time);
 extern u8 ov13_022459B4[];
 extern u8 ov13_022459BC[];
-extern volatile u32 _021D4670;
+extern volatile u32 gSoclHostAddress;
 
 typedef struct ChannelMask {
     u16 mask;
@@ -77,7 +77,7 @@ int WifiSetup_StartupSocket(u32 address, u32 netmask, u32 gateway) {
     if (SOC_Startup(ov13_022459BC) < 0) {
         return -1;
     }
-    while (_021D4670 == 0) {
+    while (gSoclHostAddress == 0) {
         OS_Sleep(100);
     }
     return 0;

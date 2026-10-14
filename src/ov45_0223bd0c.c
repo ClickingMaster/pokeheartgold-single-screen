@@ -29,7 +29,7 @@ extern u32 ov45_02255198[];
 extern u32 ov45_022577D0;
 extern u32 ov45_022551A4;
 extern char _ZSt7nothrow[];
-extern char ov45_022551C4[];
+extern char sStr_CdequeLengthError[];
 void *_ZnamRKSt9nothrow_t(u32, void *);
 void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 void DWC_Free(int, void *, int);
@@ -62,6 +62,6 @@ void LobbyEventDeque_IteratorAt(void *, void *, u32);
 void LobbyEventDequeMapIterator_Advance(void *, u32);
 
 void LobbyEventDequeMap_LengthError(void) {
-    printf(ov45_022551C4);
+    printf(sStr_CdequeLengthError);
     abort();
 }

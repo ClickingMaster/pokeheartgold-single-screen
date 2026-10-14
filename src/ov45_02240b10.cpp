@@ -114,10 +114,10 @@ struct Callbacks {
     void *data;
 };
 
-extern Root *ov45_022577DC;
+extern Root *gLobbyChatManager;
 extern "C" const u8 _version_NINTENDO_DWC_LOBBY[];
 extern "C" void OSi_ReferSymbol(const void *);
-extern "C" const char ov45_02255308[], ov45_02255310[], ov45_02255318[], ov45_0225531C[];
+extern "C" const char sStr_DWCUser[], sStr_DWCName[], sStr_Dot[], sStr_PeerchatGsNintendowifiNet[];
 extern "C" void *LobbyMem_Alloc(u32);
 extern "C" Root *LobbyChatManager_Init(Root *, String *, String *, int, void *, String *, String *, String *, void *);
 extern "C" int LobbyMem_InstallOutOfMemoryHandler(void);
@@ -154,12 +154,12 @@ extern "C" int LobbyChat_Initialize(const char *a, const char *b, int n, u8 *con
     Root *root;
     int error;
     OSi_ReferSymbol(_version_NINTENDO_DWC_LOBBY);
-    if (ov45_022577DC) {
+    if (gLobbyChatManager) {
         return 4;
     }
     LobbyChat_FormatNick(&outer1, user);
-    LobbyString_InitFromCStr(&outer2, ov45_02255308);
-    LobbyString_InitFromCStr(&outer3, ov45_02255310);
+    LobbyString_InitFromCStr(&outer2, sStr_DWCUser);
+    LobbyString_InitFromCStr(&outer3, sStr_DWCName);
     {
         int firstReady = 0, secondReady = firstReady;
         Root *created = (Root *)LobbyMem_Alloc(0xac);
@@ -170,7 +170,7 @@ extern "C" int LobbyChat_Initialize(const char *a, const char *b, int n, u8 *con
             secondReady = firstReady;
             created = LobbyChatManager_Init(created, &name1, &name2, n, user, &outer1, &outer2, &outer3, config);
         }
-        ov45_022577DC = created;
+        gLobbyChatManager = created;
         if (secondReady) {
             name1.destroy();
         }
@@ -178,7 +178,7 @@ extern "C" int LobbyChat_Initialize(const char *a, const char *b, int n, u8 *con
             name2.destroy();
         }
     }
-    if (!ov45_022577DC) {
+    if (!gLobbyChatManager) {
         outer3.destroy();
         outer2.destroy();
         outer1.destroy();
@@ -195,13 +195,13 @@ extern "C" int LobbyChat_Initialize(const char *a, const char *b, int n, u8 *con
         callbacks.f[2] = LobbyChat_OnPrivateMessage;
         callbacks.f[3] = LobbyChat_OnInvited;
         callbacks.data = *(void **)(config + 8);
-        LobbyChatManager_GetGameName(&s7, ov45_022577DC);
-        LobbyString_ConcatCStr(&s6, &s7, ov45_02255318);
-        LobbyString_ConcatCStr(&s5, &s6, ov45_0225531C);
-        LobbyChatManager_GetNick(&s4, ov45_022577DC);
-        LobbyChatManager_GetRealName(&s3, ov45_022577DC);
-        LobbyChatManager_GetGameName(&s2, ov45_022577DC);
-        LobbyChatManager_GetGameKey(&s1, ov45_022577DC);
+        LobbyChatManager_GetGameName(&s7, gLobbyChatManager);
+        LobbyString_ConcatCStr(&s6, &s7, sStr_Dot);
+        LobbyString_ConcatCStr(&s5, &s6, sStr_PeerchatGsNintendowifiNet);
+        LobbyChatManager_GetNick(&s4, gLobbyChatManager);
+        LobbyChatManager_GetRealName(&s3, gLobbyChatManager);
+        LobbyChatManager_GetGameName(&s2, gLobbyChatManager);
+        LobbyChatManager_GetGameKey(&s1, gLobbyChatManager);
         u32 connection = chatConnectSpecialA(s5.c_str(), 0x1a0b, s4.c_str(), s3.c_str(), s2.c_str(), s1.c_str(), &callbacks, LobbyChat_OnNickError, LobbyChat_OnFillInUser, LobbyChat_OnConnected, *(void **)(config + 8), 0);
         s1.destroy();
         s2.destroy();
@@ -214,13 +214,13 @@ extern "C" int LobbyChat_Initialize(const char *a, const char *b, int n, u8 *con
             error = 2;
             goto failure;
         }
-        ov45_022577DC->connection = connection;
-        if (ov45_022577DC->state != 5) {
-            ov45_022577DC->state = 1;
+        gLobbyChatManager->connection = connection;
+        if (gLobbyChatManager->state != 5) {
+            gLobbyChatManager->state = 1;
         }
     }
     {
-        root = ov45_022577DC;
+        root = gLobbyChatManager;
         DWC_GetDateTime(&date, &time);
         root->queue.insert(LobbyTimerMap_MakeEntry(0, Task(RTC_ConvertDateTimeToSecond(&date, &time), root, LobbyChat_TimerConnectTimeout)));
     }
@@ -230,10 +230,10 @@ extern "C" int LobbyChat_Initialize(const char *a, const char *b, int n, u8 *con
     return 0;
 failure:
     LobbyMem_ReleaseReserve();
-    root = ov45_022577DC;
+    root = gLobbyChatManager;
     if (root) {
         DeleteRoot(root);
-        ov45_022577DC = 0;
+        gLobbyChatManager = 0;
     }
     outer3.destroy();
     outer2.destroy();

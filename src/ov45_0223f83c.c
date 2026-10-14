@@ -21,12 +21,12 @@ typedef union {
     } s;
 } Str;
 
-extern void *ov45_022577DC;
-extern char ov45_022552DC[];
-extern char ov45_022552E4[];
-extern char ov45_022552EC[];
-extern char ov45_022552F0[];
-extern char ov45_022552FC[];
+extern void *gLobbyChatManager;
+extern char sStr_normal[];
+extern char sStr_voice[];
+extern char sStr_ops[];
+extern char sStr_VoiceOps[];
+extern char sStr_invalid[];
 void LobbyString_InitFromCStr(Str *, char *);
 void LobbyString_Destroy(Str *);
 void LobbyString_InitCopy(void *, void *);
@@ -82,27 +82,27 @@ void LobbyChat_OnBroadcastKeyChanged(void *a, char *s, char *name, void *arg, vo
 void LobbyChat_OnTopicChanged(void *a, char *s, void *b) {
     Str x, y, z;
     void *p;
-    if (ov45_022577DC && W(ov45_022577DC, 4) == 5) {
+    if (gLobbyChatManager && W(gLobbyChatManager, 4) == 5) {
         return;
     }
     LobbyString_InitFromCStr(&x, s);
-    p = LobbyChat_GetChannelCallbacks(ov45_022577DC, &x);
+    p = LobbyChat_GetChannelCallbacks(gLobbyChatManager, &x);
     LobbyString_Destroy(&x);
     LobbyString_InitFromCStr(&y, s);
-    LobbyChat_StripChannelPrefix(&z, ov45_022577DC, &y);
+    LobbyChat_StripChannelPrefix(&z, gLobbyChatManager, &y);
     ((void (*)(char *, void *, void *))P(p, 16))(!z.b.flag ? z.s.inlinebuf : z.b.data, b, P(p, 20));
     LobbyString_Destroy(&z);
     LobbyString_Destroy(&y);
 }
 
 void LobbyChat_OnChannelModeChanged(void) {
-    if (ov45_022577DC && W(ov45_022577DC, 4) == 5) {
+    if (gLobbyChatManager && W(gLobbyChatManager, 4) == 5) {
         return;
     }
 }
 
 void LobbyChat_OnUserListUpdated(void) {
-    if (ov45_022577DC && W(ov45_022577DC, 4) == 5) {
+    if (gLobbyChatManager && W(gLobbyChatManager, 4) == 5) {
         return;
     }
 }
@@ -110,29 +110,29 @@ void LobbyChat_OnUserListUpdated(void) {
 void LobbyChat_OnConnected(void *a, int n) {
     int zero;
     void *p;
-    if (ov45_022577DC && W(ov45_022577DC, 4) == 5) {
+    if (gLobbyChatManager && W(gLobbyChatManager, 4) == 5) {
         return;
     }
     zero = 0;
-    LobbyTimerMap_EraseKey((u8 *)ov45_022577DC + 0x9c, &zero, 0);
+    LobbyTimerMap_EraseKey((u8 *)gLobbyChatManager + 0x9c, &zero, 0);
     if (!n) {
-        p = ov45_022577DC;
+        p = gLobbyChatManager;
         W(p, 0x58) = 3;
         W(p, 4) = 5;
-        W(ov45_022577DC, 0x60) = 1;
+        W(gLobbyChatManager, 0x60) = 1;
         return;
     }
-    if (W(ov45_022577DC, 4) != 5) {
-        W(ov45_022577DC, 4) = 2;
+    if (W(gLobbyChatManager, 4) != 5) {
+        W(gLobbyChatManager, 4) = 2;
     }
 }
 
 void LobbyChat_OnFillInUser(void *a, void *b, char *out) {
     Str t;
-    if (ov45_022577DC && W(ov45_022577DC, 4) == 5) {
+    if (gLobbyChatManager && W(gLobbyChatManager, 4) == 5) {
         return;
     }
-    LobbyChatManager_GetUser(&t, ov45_022577DC);
+    LobbyChatManager_GetUser(&t, gLobbyChatManager);
     strncpy(out, !t.b.flag ? t.s.inlinebuf : t.b.data, 127);
     LobbyString_Destroy(&t);
 }

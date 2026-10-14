@@ -17,26 +17,26 @@
 
 #define WH_LOG_LEVEL 0x8000000
 
-extern char *ov13_02247120[]; // state names, see WIFI_SETUP_WH_STATE_*
-extern char ov13_02247200[];  // "%s -> "
-extern char ov13_02247208[];  // "%s\n"
-extern char ov13_0224720C[];  // "StartParent - new child (aid %x) connected\n"
-extern char ov13_02247238[];  // "StartParent - child (aid %x) disconnected\n"
-extern char ov13_02247264[];  // "unknown indicate, state = %d\n"
-extern char ov13_02247284[];  // "DWCi_MOV_WH_StateInStartParentKeyShare failed\n"
-extern char ov13_022472B4[];  // "DWCi_MOV_WH_StateInEndParent failed\n"
-extern char ov13_022472DC[];  // "recv buffer size = %d\n"
-extern char ov13_022472F4[];  // "send buffer size = %d\n"
-extern char ov13_0224730C[];  // "channel %d bratio = %x\n"
-extern char ov13_02247324[];  // "decided channel = %d\n"
-extern char ov13_0224733C[];  // "unknown connect mode %d\n"
-extern char ov13_02247358[];  // "DWCi_MOV_WH_StepDataSharing - Warning No Child\n"
-extern char ov13_02247388[];  // "DWCi_MOV_WH_StepDataSharing - Warning No DataSet\n"
-extern char ov13_022473BC[];  // "already DWCi_MOV_WH_SYSSTATE_IDLE\n"
-extern char ov13_022473E0[];  // "DWCi_MOV_WH_Finalize, state = %d\n"
-extern char ov13_02247404[];  // "rom:/dwc/utility.bin"
-extern char ov13_0224741C[];  // "%s:/"
-extern char ov13_0224593C[];  // archive name
+extern char *gWifiSetupWhStateNames[]; // state names, see WIFI_SETUP_WH_STATE_*
+extern char gWifiSetupWhFmt_StateFrom[];  // "%s -> "
+extern char gWifiSetupWhFmt_StateTo[];  // "%s\n"
+extern char gWifiSetupWhStr_ChildConnected[];  // "StartParent - new child (aid %x) connected\n"
+extern char gWifiSetupWhStr_ChildDisconnected[];  // "StartParent - child (aid %x) disconnected\n"
+extern char gWifiSetupWhStr_UnknownIndicate[];  // "unknown indicate, state = %d\n"
+extern char gWifiSetupWhStr_StartParentKeyShareFailed[];  // "DWCi_MOV_WH_StateInStartParentKeyShare failed\n"
+extern char gWifiSetupWhStr_EndParentFailed[];  // "DWCi_MOV_WH_StateInEndParent failed\n"
+extern char gWifiSetupWhStr_RecvBufferSize[];  // "recv buffer size = %d\n"
+extern char gWifiSetupWhStr_SendBufferSize[];  // "send buffer size = %d\n"
+extern char gWifiSetupWhStr_ChannelBratio[];  // "channel %d bratio = %x\n"
+extern char gWifiSetupWhStr_DecidedChannel[];  // "decided channel = %d\n"
+extern char gWifiSetupWhStr_UnknownConnectMode[];  // "unknown connect mode %d\n"
+extern char gWifiSetupWhStr_StepNoChild[];  // "DWCi_MOV_WH_StepDataSharing - Warning No Child\n"
+extern char gWifiSetupWhStr_StepNoDataSet[];  // "DWCi_MOV_WH_StepDataSharing - Warning No DataSet\n"
+extern char gWifiSetupWhStr_AlreadyIdle[];  // "already DWCi_MOV_WH_SYSSTATE_IDLE\n"
+extern char gWifiSetupWhStr_Finalize[];  // "DWCi_MOV_WH_Finalize, state = %d\n"
+extern char gWifiSetupArchivePath[];  // "rom:/dwc/utility.bin"
+extern char gWifiSetupArchivePrefixFormat[];  // "%s:/"
+extern char gWifiSetupArchiveName[];  // archive name
 
 extern WifiSetupArchiveState *gWifiSetupArchive;
 
@@ -128,11 +128,11 @@ void WifiSetupWh_Init(u8 *work) {
 
 void WifiSetupWh_SetState(u32 state) {
     if (gWifiSetupWh.log) {
-        gWifiSetupWh.log(WH_LOG_LEVEL, ov13_02247200, ov13_02247120[gWifiSetupWh.work->state]);
+        gWifiSetupWh.log(WH_LOG_LEVEL, gWifiSetupWhFmt_StateFrom, gWifiSetupWhStateNames[gWifiSetupWh.work->state]);
     }
     gWifiSetupWh.work->state = state;
     if (gWifiSetupWh.log) {
-        gWifiSetupWh.log(WH_LOG_LEVEL, ov13_02247208, ov13_02247120[gWifiSetupWh.work->state]);
+        gWifiSetupWh.log(WH_LOG_LEVEL, gWifiSetupWhFmt_StateTo, gWifiSetupWhStateNames[gWifiSetupWh.work->state]);
     }
 }
 
@@ -235,7 +235,7 @@ void WifiSetupWh_StartParentCallback(WifiSetupWhParentArg *arg) {
     switch (frame.arg->state) {
     case 7: // child connected
         if (gWifiSetupWh.log) {
-            gWifiSetupWh.log(WH_LOG_LEVEL, ov13_0224720C, frame.aid);
+            gWifiSetupWh.log(WH_LOG_LEVEL, gWifiSetupWhStr_ChildConnected, frame.aid);
         }
         if (gWifiSetupWh.work->judgeChild && gWifiSetupWh.work->judgeChild(frame.arg) == 0) {
             int result = WM_Disconnect(NULL, frame.arg->aid);
@@ -250,7 +250,7 @@ void WifiSetupWh_StartParentCallback(WifiSetupWhParentArg *arg) {
         return;
     case 9: // child disconnected
         if (gWifiSetupWh.log) {
-            gWifiSetupWh.log(WH_LOG_LEVEL, ov13_02247238, frame.aid);
+            gWifiSetupWh.log(WH_LOG_LEVEL, gWifiSetupWhStr_ChildDisconnected, frame.aid);
         }
         gWifiSetupWh.work->connectedMask &= ~frame.mask;
         return;
@@ -263,7 +263,7 @@ void WifiSetupWh_StartParentCallback(WifiSetupWhParentArg *arg) {
         return;
     default:
         if (gWifiSetupWh.log) {
-            gWifiSetupWh.log(WH_LOG_LEVEL, ov13_02247264, frame.arg->state);
+            gWifiSetupWh.log(WH_LOG_LEVEL, gWifiSetupWhStr_UnknownIndicate, frame.arg->state);
         }
         return;
     }
@@ -299,7 +299,7 @@ void WifiSetupWh_StartMpCallback(WifiSetupWhMpArg *arg) {
                     return;
                 }
                 if (gWifiSetupWh.log) {
-                    gWifiSetupWh.log(WH_LOG_LEVEL, ov13_02247284);
+                    gWifiSetupWh.log(WH_LOG_LEVEL, gWifiSetupWhStr_StartParentKeyShareFailed);
                 }
                 WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_ERROR);
                 return;
@@ -324,7 +324,7 @@ void WifiSetupWh_StartMpCallback(WifiSetupWhMpArg *arg) {
     case 13:
     default:
         if (gWifiSetupWh.log) {
-            gWifiSetupWh.log(WH_LOG_LEVEL, ov13_02247264, state);
+            gWifiSetupWh.log(WH_LOG_LEVEL, gWifiSetupWhStr_UnknownIndicate, state);
         }
         break;
     }
@@ -372,7 +372,7 @@ void WifiSetupWh_EndMpCallback(WifiSetupWhCallbackArg *arg) {
         return;
     }
     if (gWifiSetupWh.log) {
-        gWifiSetupWh.log(WH_LOG_LEVEL, ov13_022472B4);
+        gWifiSetupWh.log(WH_LOG_LEVEL, gWifiSetupWhStr_EndParentFailed);
     }
     WifiSetupWh_TryReset();
 }
@@ -547,7 +547,7 @@ void WifiSetupWh_MeasureChannelCallback(WifiSetupWhMeasureArg *arg) {
         return;
     }
     if (gWifiSetupWh.log) {
-        gWifiSetupWh.log(WH_LOG_LEVEL, ov13_0224730C, arg->channel, arg->busyRatio);
+        gWifiSetupWh.log(WH_LOG_LEVEL, gWifiSetupWhStr_ChannelBratio, arg->channel, arg->busyRatio);
     }
     busyRatio = arg->busyRatio;
     channel = arg->channel;
@@ -579,7 +579,7 @@ u16 WifiSetupWh_DecideChannel(void) {
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_IDLE);
     gWifiSetupWh.work->channel = WifiSetupWh_PickChannel(gWifiSetupWh.work->quietChannels);
     if (gWifiSetupWh.log) {
-        gWifiSetupWh.log(WH_LOG_LEVEL, ov13_02247324, gWifiSetupWh.work->channel);
+        gWifiSetupWh.log(WH_LOG_LEVEL, gWifiSetupWhStr_DecidedChannel, gWifiSetupWh.work->channel);
     }
     return gWifiSetupWh.work->channel;
 }
@@ -675,10 +675,10 @@ int WifiSetupWh_StartConnection(u32 mode, u16 tgid, u16 channel) {
     gWifiSetupWh.work->recvBufferSize = 0x180;
     gWifiSetupWh.work->sendBufferSize = 0xE0;
     if (gWifiSetupWh.log) {
-        gWifiSetupWh.log(WH_LOG_LEVEL, ov13_022472DC, gWifiSetupWh.work->recvBufferSize);
+        gWifiSetupWh.log(WH_LOG_LEVEL, gWifiSetupWhStr_RecvBufferSize, gWifiSetupWh.work->recvBufferSize);
     }
     if (gWifiSetupWh.log) {
-        gWifiSetupWh.log(WH_LOG_LEVEL, ov13_022472F4, gWifiSetupWh.work->sendBufferSize);
+        gWifiSetupWh.log(WH_LOG_LEVEL, gWifiSetupWhStr_SendBufferSize, gWifiSetupWh.work->sendBufferSize);
     }
     gWifiSetupWh.work->connectMode = mode;
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_BUSY);
@@ -696,7 +696,7 @@ int WifiSetupWh_StartConnection(u32 mode, u16 tgid, u16 channel) {
         return WifiSetupWh_SetParentParameter();
     }
     if (gWifiSetupWh.log) {
-        gWifiSetupWh.log(WH_LOG_LEVEL, ov13_0224733C, mode);
+        gWifiSetupWh.log(WH_LOG_LEVEL, gWifiSetupWhStr_UnknownConnectMode, mode);
     }
     return 0;
 }
@@ -715,13 +715,13 @@ int WifiSetupWh_StepDataSharing(void *data) {
     int result = WM_StepDataSharing(gWifiSetupWh.work->dataSharingInfo, data, gWifiSetupWh.work->dataSet);
     if (result == 7) {
         if (gWifiSetupWh.log) {
-            gWifiSetupWh.log(WH_LOG_LEVEL, ov13_02247358);
+            gWifiSetupWh.log(WH_LOG_LEVEL, gWifiSetupWhStr_StepNoChild);
         }
         return 0;
     }
     if (result == 5) {
         if (gWifiSetupWh.log) {
-            gWifiSetupWh.log(WH_LOG_LEVEL, ov13_02247388);
+            gWifiSetupWh.log(WH_LOG_LEVEL, gWifiSetupWhStr_StepNoDataSet);
         }
         WifiSetupWh_SetError(result);
         return 0;
@@ -743,12 +743,12 @@ void WifiSetupWh_TryReset(void) {
 void WifiSetupWh_Finalize(void) {
     if (gWifiSetupWh.work->state == WIFI_SETUP_WH_STATE_IDLE) {
         if (gWifiSetupWh.log != NULL) {
-            gWifiSetupWh.log(WH_LOG_LEVEL, ov13_022473BC);
+            gWifiSetupWh.log(WH_LOG_LEVEL, gWifiSetupWhStr_AlreadyIdle);
         }
         return;
     }
     if (gWifiSetupWh.log != NULL) {
-        gWifiSetupWh.log(WH_LOG_LEVEL, ov13_022473E0, gWifiSetupWh.work->state);
+        gWifiSetupWh.log(WH_LOG_LEVEL, gWifiSetupWhStr_Finalize, gWifiSetupWh.work->state);
     }
     if (!(gWifiSetupWh.work->state == WIFI_SETUP_WH_STATE_KEYSHARING || gWifiSetupWh.work->state == WIFI_SETUP_WH_STATE_DATASHARING || gWifiSetupWh.work->state == WIFI_SETUP_WH_STATE_CONNECTED)) {
         WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_BUSY);
@@ -1297,7 +1297,7 @@ void WifiSetupArchive_Load(void) {
     u32 fnt[2], fat[2], base, size;
     gWifiSetupArchive = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupArchiveState), 4);
     FS_InitFile(&file);
-    if (!FS_OpenFile(&file, ov13_02247404)) {
+    if (!FS_OpenFile(&file, gWifiSetupArchivePath)) {
         OS_Terminate();
     }
     gWifiSetupArchive->lockId = OS_GetLockID();
@@ -1306,7 +1306,7 @@ void WifiSetupArchive_Load(void) {
     FS_ReadFile(&file, fat, 8);
     FS_CloseFile(&file);
     FS_InitArchive(&gWifiSetupArchive->arc);
-    if (!FS_RegisterArchiveName(&gWifiSetupArchive->arc, ov13_0224593C, 3)) {
+    if (!FS_RegisterArchiveName(&gWifiSetupArchive->arc, gWifiSetupArchiveName, 3)) {
         OS_Terminate();
     }
     FS_SetArchiveProc(&gWifiSetupArchive->arc, WifiSetupArchive_Proc, 0x602);
@@ -1317,6 +1317,6 @@ void WifiSetupArchive_Load(void) {
     gWifiSetupArchive->tables = WifiSetupHeap_AllocZeroed(size, 4);
     FS_LoadArchiveTables(&gWifiSetupArchive->arc, gWifiSetupArchive->tables, size);
     gWifiSetupArchive->filePool = WifiSetupPool_NewWithItems(32, gWifiSetupArchive->poolItems, 4);
-    OS_SPrintf(path, ov13_0224741C, ov13_0224593C);
+    OS_SPrintf(path, gWifiSetupArchivePrefixFormat, gWifiSetupArchiveName);
     FS_ChangeDir(path);
 }

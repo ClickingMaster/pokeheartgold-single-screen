@@ -44,29 +44,29 @@ typedef struct WifiSetupKeyboard {
 extern WifiSetupKeyboard *gWifiSetupKeyboard;
 
 // layout (positions and sizes in pixels on the touch screen)
-extern const WifiSetupPoint ov13_02244FA4[47]; // character key positions
+extern const WifiSetupPoint gWifiSetupKeyboardKeyPositions[47]; // character key positions
 extern const WifiSetupPoint ov13_02244F60;
 extern const WifiSetupPoint ov13_02244F64;    // button size
 extern const WifiSetupPoint ov13_02244F68;    // character key size
-extern const WifiSetupPoint ov13_02244F7C[2]; // button positions
-extern const WifiSetupPoint ov13_02244F84[];  // extra key positions
-extern const WifiSetupPoint ov13_02244F88[];  // = &ov13_02244F84[1]
-extern const WifiSetupPoint ov13_02244F8C[];  // = &ov13_02244F84[2]
-extern const WifiSetupPoint ov13_02244F94[];  // extra key sizes
-extern const WifiSetupPoint ov13_02244F98[];  // = &ov13_02244F94[1]
-extern const WifiSetupPoint ov13_02244F9C[];  // = &ov13_02244F94[2]
-extern WifiSetupRect ov13_02245958;           // whole keyboard
-extern u16 ov13_02245060[];                   // cursor x of each key (stride 2)
-extern u16 ov13_02245062[];                   // cursor y of each key (stride 2)
-extern const s8 ov13_02245134[][4];           // cursor moves: next key for left, up, right, down
+extern const WifiSetupPoint gWifiSetupKeyboardButtonPositions[2]; // button positions
+extern const WifiSetupPoint gWifiSetupKeyboardExtraKeyPositions[];  // extra key positions
+extern const WifiSetupPoint ov13_02244F88[];  // = &gWifiSetupKeyboardExtraKeyPositions[1]
+extern const WifiSetupPoint ov13_02244F8C[];  // = &gWifiSetupKeyboardExtraKeyPositions[2]
+extern const WifiSetupPoint gWifiSetupKeyboardExtraKeySizes[];  // extra key sizes
+extern const WifiSetupPoint ov13_02244F98[];  // = &gWifiSetupKeyboardExtraKeySizes[1]
+extern const WifiSetupPoint ov13_02244F9C[];  // = &gWifiSetupKeyboardExtraKeySizes[2]
+extern WifiSetupRect gWifiSetupInputPanelRect;           // whole keyboard
+extern u16 gWifiSetupKeyboardCursorX[];                   // cursor x of each key (stride 2)
+extern u16 gWifiSetupKeyboardCursorY[];                   // cursor y of each key (stride 2)
+extern const s8 gWifiSetupKeyboardCursorMoves[][4];           // cursor moves: next key for left, up, right, down
 
 // input codes
-extern u8 *ov13_02245D68[3];      // character key codes of each page
-extern u8 ov13_02245208[];        // extra key codes
-extern u8 ov13_02244F58[];        // button codes
-extern int ov13_02245D80[];       // sound of each extra key
-extern const u8 ov13_02244F4C[4]; // key palette: normal, highlighted
-extern const u8 ov13_02244F50[4]; // button palette: normal, highlighted
+extern u8 *gWifiSetupKeyboardPageKeyCodes[3];      // character key codes of each page
+extern u8 gWifiSetupKeyboardExtraKeyCodes[];        // extra key codes
+extern u8 gWifiSetupKeyboardButtonCodes[];        // button codes
+extern int gWifiSetupKeyboardExtraKeySounds[];       // sound of each extra key
+extern const u8 gWifiSetupKeyboardKeyPalettes[4]; // key palette: normal, highlighted
+extern const u8 gWifiSetupKeyboardButtonPalettes[4]; // button palette: normal, highlighted
 
 void WifiSetupKeyboard_Create(void);
 void WifiSetupKeyboard_Close(void);

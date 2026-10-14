@@ -15,7 +15,7 @@
 	.public ov13_022459B4
 	.public gWifiSetupRuntime
 	.public gWifiSetupFreeHook
-	.public ov13_02245A20
+	.public sStr_MELCO
 	.public ov13_0224DCF8
 	.public ov13_0224DF30
 	.public ov13_0224DFB0
@@ -197,15 +197,15 @@
 	.global _022459B0
 	.global ov13_022459B4
 	.global ov13_022459BC
-	.global ov13_02245A14
-	.global ov13_02245A20
+	.global sStr_ESSID_AOSS
+	.global sStr_MELCO
 	.global ov13_02245A28
 	.global ov13_02245A58
 	.global ov13_02245A6C
 	.global ov13_02245AC4
-	.global ov13_02245ACC
+	.global sStr_NINTENDO_DS_2
 	.global ov13_02245AD8
-	.global ov13_02245B18
+	.global sStr_WARP
 	.global gWifiSetupState
 	.global ov13_0224CF9C
 	.global ov13_0224CFB8
@@ -949,11 +949,11 @@ ov13_022459BC: ; 0x022459BC
 	.byte 0x00, 0x00, 0x00, 0x00
 
 	.balign 4, 0
-ov13_02245A14: ; 0x02245A14
+sStr_ESSID_AOSS: ; 0x02245A14
 	.asciz "ESSID-AOSS"
 
 	.balign 4, 0
-ov13_02245A20: ; 0x02245A20
+sStr_MELCO: ; 0x02245A20
 	.asciz "MELCO"
 
 	.balign 4, 0
@@ -977,7 +977,7 @@ ov13_02245A6C: ; 0x02245A6C
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
-	.word ov13_02245ACC
+	.word sStr_NINTENDO_DS_2
 	.byte 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
@@ -985,7 +985,7 @@ ov13_02245AC4: ; 0x02245AC4
 	.byte 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x00, 0x00
 
 	.balign 4, 0
-ov13_02245ACC:
+sStr_NINTENDO_DS_2:
 	.asciz "NINTENDO-DS"
 
 	.balign 4, 0
@@ -997,7 +997,7 @@ ov13_02245AD8: ; 0x02245AD8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
 	.balign 4, 0
-ov13_02245B18: ; 0x02245B18
+sStr_WARP: ; 0x02245B18
 	.asciz "WARP"
 	.balign 4, 0
 

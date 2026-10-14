@@ -21,12 +21,12 @@ typedef union {
     } s;
 } Str;
 
-extern void *ov45_022577DC;
-extern char ov45_022552DC[];
-extern char ov45_022552E4[];
-extern char ov45_022552EC[];
-extern char ov45_022552F0[];
-extern char ov45_022552FC[];
+extern void *gLobbyChatManager;
+extern char sStr_normal[];
+extern char sStr_voice[];
+extern char sStr_ops[];
+extern char sStr_VoiceOps[];
+extern char sStr_invalid[];
 void LobbyString_InitFromCStr(Str *, char *);
 void LobbyString_Destroy(Str *);
 void LobbyString_InitCopy(void *, void *);
@@ -80,7 +80,7 @@ void LobbyChat_OnChannelMessage(void *a, char *s, char *name, void *arg, int mod
 void LobbyChat_OnBroadcastKeyChanged(void *a, char *s, char *name, void *arg, void *extra);
 
 int LobbyChat_GetLastError(void) {
-    return ov45_022577DC ? W(ov45_022577DC, 0x58) : 0;
+    return gLobbyChatManager ? W(gLobbyChatManager, 0x58) : 0;
 }
 
 void *LobbyChat_ToErrorCode(void *p) {
@@ -90,12 +90,12 @@ void *LobbyChat_ToErrorCode(void *p) {
 int LobbyChat_IsInChannel(char *s) {
     Str x, y;
     int r;
-    if (!ov45_022577DC) {
+    if (!gLobbyChatManager) {
         return 0;
     }
     LobbyString_InitFromCStr(&x, s);
-    LobbyChat_GetFullChannelName(&y, ov45_022577DC, &x);
-    r = chatInChannelA(P(ov45_022577DC, 0), !y.b.flag ? y.s.inlinebuf : y.b.data) == 1;
+    LobbyChat_GetFullChannelName(&y, gLobbyChatManager, &x);
+    r = chatInChannelA(P(gLobbyChatManager, 0), !y.b.flag ? y.s.inlinebuf : y.b.data) == 1;
     LobbyString_Destroy(&y);
     LobbyString_Destroy(&x);
     return r;

@@ -52,8 +52,8 @@ typedef struct Record {
 
 extern int DWC_CheckUserData(void *);
 extern int DWC_CheckHasProfile(void *);
-extern u8 *volatile _022577C4;
-extern u8 ov45_02254FA0[];
+extern u8 *volatile gPPWLobbyWork;
+extern u8 gPPWLobbyPlayersVtable[];
 extern void *LobbyString_InitCopy(void *, void *);
 extern void *LobbyCharVector_Data(Vec *);
 extern Node *LobbyTimerMap_LowerBound(u8 *, u32 *, Node *, Node *);
@@ -105,7 +105,7 @@ void PPWLobby_GetChannelName(S *p, u8 *q, int x);
 int PPW_LobbyUpdateRecruitInfo(u8 *p);
 
 int PPW_LobbySetChannelData(void *a, void *b, void *c, void *d, void *e) {
-    u8 *root = _022577C4;
+    u8 *root = gPPWLobbyWork;
     if (!root) {
         return 4;
     }
@@ -115,7 +115,7 @@ int PPW_LobbySetChannelData(void *a, void *b, void *c, void *d, void *e) {
         }
     }
     if (root) {
-        if (W(_022577C4, 0) != 8) {
+        if (W(gPPWLobbyWork, 0) != 8) {
             return 4;
         }
     }

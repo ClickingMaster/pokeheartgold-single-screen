@@ -140,7 +140,7 @@ void LobbyU32Vector_AppendFillSlow(Vec *, u32, u32 *);
 void ov45_02236E58(NodeIter *);
 Node *LobbyTree_EraseRebalance(Node *, void *);
 
-extern char ov45_0225520C[];
+extern char sStr_TreeInsertLengthError_2[];
 void printf(const char *, ...);
 void abort(void);
 void LobbyTree_InsertRebalance(Node *, void *);
@@ -238,7 +238,7 @@ Callbacks *PPWLobby_GetWork(void);
 const char *LobbyByteVector_Data(void *);
 void PPWLobbyPlayer_UpdateState(Session *s);
 
-extern VTable ov45_02254FB0;
+extern VTable gPPWLobbyPlayerVtable;
 void DWC_GetDateTime(RTCDate *date, RTCTime *time);
 void PPWLobbyPlayerSet_Insert(InsertResult *out, List *l, Session **key);
 
@@ -250,15 +250,15 @@ typedef struct PtrDeque {
 
 void ov45_02238508(DequeBuf *);
 
-extern char ov45_022551DC[];
-extern char ov45_022551E0[];
-extern char ov45_022551E4[];
-extern char ov45_022551E8[];
-extern char ov45_022551EC[];
-extern char ov45_022551F0[];
-extern char ov45_022551F4[];
-extern char ov45_022551F8[];
-extern char ov45_022551FC[];
+extern char sStr_SpaceSpace[];
+extern char sStr_Space_2[];
+extern char sStr_B[];
+extern char sStr_S[];
+extern char sStr_Empty_16[];
+extern char sFmt_Hex_3[];
+extern char sStr_A[];
+extern char sStr__[];
+extern char sFmt_Str_3[];
 void LobbyString_FormatN(Str *out, u32 width, const char *fmt, ...);
 void LobbyString_Destroy(Str *s);
 void LobbyString_Append(Str *s, void *arg);
@@ -310,46 +310,46 @@ BOOL PPWLobby_EncodeMessage(int type, int mode, u32 value, const void *data, u32
     if (type == 1 && len > 300) {
         return FALSE;
     }
-    LobbyString_AssignCStr(out, ov45_022551EC);
-    LobbyString_FormatN(&s0, 3, ov45_022551F0, 0);
+    LobbyString_AssignCStr(out, sStr_Empty_16);
+    LobbyString_FormatN(&s0, 3, sFmt_Hex_3, 0);
     LobbyString_Append(out, &s0);
     LobbyString_Destroy(&s0);
-    LobbyString_AppendCStr(out, ov45_022551E0);
-    LobbyString_FormatN(&s1, 2, ov45_022551F0, 6);
+    LobbyString_AppendCStr(out, sStr_Space_2);
+    LobbyString_FormatN(&s1, 2, sFmt_Hex_3, 6);
     LobbyString_Append(out, &s1);
     LobbyString_Destroy(&s1);
-    LobbyString_AppendCStr(out, ov45_022551E0);
+    LobbyString_AppendCStr(out, sStr_Space_2);
     switch (type) {
     case 0:
-        LobbyString_AppendCStr(out, ov45_022551E8);
+        LobbyString_AppendCStr(out, sStr_S);
         break;
     case 1:
-        LobbyString_AppendCStr(out, ov45_022551E4);
+        LobbyString_AppendCStr(out, sStr_B);
         break;
     default:
         return FALSE;
     }
-    LobbyString_AppendCStr(out, ov45_022551E0);
+    LobbyString_AppendCStr(out, sStr_Space_2);
     switch (mode) {
     case 1:
-        LobbyString_AppendCStr(out, ov45_022551F4);
+        LobbyString_AppendCStr(out, sStr_A);
         break;
     case 0:
-        LobbyString_AppendCStr(out, ov45_022551E8);
+        LobbyString_AppendCStr(out, sStr_S);
         break;
     default:
         return FALSE;
     }
-    LobbyString_AppendCStr(out, ov45_022551E0);
-    LobbyString_FormatN(&s2, 8, ov45_022551F0, value);
+    LobbyString_AppendCStr(out, sStr_Space_2);
+    LobbyString_FormatN(&s2, 8, sFmt_Hex_3, value);
     LobbyString_Append(out, &s2);
     LobbyString_Destroy(&s2);
-    LobbyString_AppendCStr(out, ov45_022551E0);
-    LobbyString_AppendCStr(out, ov45_022551F8);
-    LobbyString_AppendCStr(out, ov45_022551DC);
+    LobbyString_AppendCStr(out, sStr_Space_2);
+    LobbyString_AppendCStr(out, sStr__);
+    LobbyString_AppendCStr(out, sStr_SpaceSpace);
     switch (type) {
     case 0:
-        LobbyString_FormatN(&s3, len, ov45_022551FC, data);
+        LobbyString_FormatN(&s3, len, sFmt_Str_3, data);
         LobbyString_Append(out, &s3);
         LobbyString_Destroy(&s3);
         break;

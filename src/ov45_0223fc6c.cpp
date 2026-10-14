@@ -14,7 +14,7 @@ struct HandlerVtbl {
     u32 (*getArg)(Handler *h);
 };
 
-extern "C" HandlerVtbl ov45_02255238;
+extern "C" HandlerVtbl gLobbyRequestVtable;
 
 struct Base {
     HandlerVtbl *vtbl;
@@ -64,7 +64,7 @@ struct Manager {
     Map map;
 };
 
-extern "C" Manager *ov45_022577DC;
+extern "C" Manager *gLobbyChatManager;
 extern "C" void LobbyChat_StripChannelPrefixes(String *dst, Manager *mgr, u32 a, u32 b);
 extern "C" It LobbyRequestMap_Find(Map *map, Base *const &key);
 extern "C" const char *LobbyU32Vector_Data(String *s);
@@ -72,7 +72,7 @@ extern "C" void LobbyRequestMap_DeleteKey(Map *map, u32 id);
 extern "C" void LobbyU32Vector_Destroy(String *s);
 
 inline void KeyInit(Base *k, u32 id) {
-    k->vtbl = &ov45_02255238;
+    k->vtbl = &gLobbyRequestVtable;
     k->id = id;
     k->unk8 = 0;
 }
@@ -89,13 +89,13 @@ extern "C" void LobbyChat_OnEnumChannels(void *self, int result, u32 a, u32 d, u
 #pragma opt_propagation off
 
 extern "C" void LobbyChat_OnEnumChannels(void *self, int result, u32 a, u32 d, u32 b, u32 c, u32 id) {
-    if (ov45_022577DC != NULL && ov45_022577DC->state == 5) {
+    if (gLobbyChatManager != NULL && gLobbyChatManager->state == 5) {
         return;
     }
     String str;
-    LobbyChat_StripChannelPrefixes(&str, ov45_022577DC, a, d);
+    LobbyChat_StripChannelPrefixes(&str, gLobbyChatManager, a, d);
     int sid = id;
-    Manager *m = ov45_022577DC;
+    Manager *m = gLobbyChatManager;
     It it = FindIt(m, sid);
     Handler *h;
     if (it.n == &m->map.header) {
@@ -106,7 +106,7 @@ extern "C" void LobbyChat_OnEnumChannels(void *self, int result, u32 a, u32 d, u
     }
     void (*cb)(BOOL, u32, const char *, u32, u32, u32) = h->callback;
     cb(result == 1, a, LobbyU32Vector_Data(&str), b, c, h->getArg());
-    LobbyRequestMap_DeleteKey(&ov45_022577DC->map, sid);
+    LobbyRequestMap_DeleteKey(&gLobbyChatManager->map, sid);
     LobbyU32Vector_Destroy(&str);
 }
 

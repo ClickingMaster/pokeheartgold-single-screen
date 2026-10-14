@@ -31,7 +31,7 @@ void LobbyUserMap_Erase(Iterator *, List *, Iterator);
 extern void *LobbyMem_Alloc(int);
 extern void LobbyString_InitCopy(void *, void *);
 extern void LobbyTree_InsertRebalance(Node *, void *);
-extern char ov45_022553AC[];
+extern char sStr_TreeInsertLengthError_4[];
 Node *LobbyUserMap_InsertNode(List *, Node *, int, int, u32 *);
 
 void LobbyUserMap_Erase(Iterator *out, List *list, Iterator node) {
@@ -65,7 +65,7 @@ Node *LobbyUserMap_InsertNode(List *list, Node *link, int before, int current, u
 
     u32 *lp;
     if (list->count == -1) {
-        printf(ov45_022553AC);
+        printf(sStr_TreeInsertLengthError_4);
         abort();
     }
     guard.flag = 0;

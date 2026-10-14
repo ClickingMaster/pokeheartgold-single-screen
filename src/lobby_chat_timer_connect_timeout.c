@@ -21,12 +21,12 @@ typedef union {
     } s;
 } Str;
 
-extern void *ov45_022577DC;
-extern char ov45_022552DC[];
-extern char ov45_022552E4[];
-extern char ov45_022552EC[];
-extern char ov45_022552F0[];
-extern char ov45_022552FC[];
+extern void *gLobbyChatManager;
+extern char sStr_normal[];
+extern char sStr_voice[];
+extern char sStr_ops[];
+extern char sStr_VoiceOps[];
+extern char sStr_invalid[];
 void LobbyString_InitFromCStr(Str *, char *);
 void LobbyString_Destroy(Str *);
 void LobbyString_InitCopy(void *, void *);
@@ -80,7 +80,7 @@ void LobbyChat_OnChannelMessage(void *a, char *s, char *name, void *arg, int mod
 void LobbyChat_OnBroadcastKeyChanged(void *a, char *s, char *name, void *arg, void *extra);
 
 int LobbyChat_TimerConnectTimeout(void) {
-    void *p = ov45_022577DC;
+    void *p = gLobbyChatManager;
     W(p, 0x58) = 3;
     W(p, 4) = 5;
     return 0;

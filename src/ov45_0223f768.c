@@ -9,12 +9,12 @@ typedef struct {
     u32 state;
 } Ov45State;
 
-extern Ov45State *ov45_022577DC;
-extern char ov45_022552DC[];
-extern char ov45_022552E4[];
-extern char ov45_022552EC[];
-extern char ov45_022552F0[];
-extern char ov45_022552FC[];
+extern Ov45State *gLobbyChatManager;
+extern char sStr_normal[];
+extern char sStr_voice[];
+extern char sStr_ops[];
+extern char sStr_VoiceOps[];
+extern char sStr_invalid[];
 
 typedef struct {
     u32 w[3];
@@ -28,7 +28,7 @@ void LobbyChat_OnUserModeChanged(int a, int b, int c, int mode) {
     String str;
     u32 *w;
     u32 i;
-    if (ov45_022577DC != NULL && ov45_022577DC->state == 5) {
+    if (gLobbyChatManager != NULL && gLobbyChatManager->state == 5) {
         return;
     }
     i = 0;
@@ -38,19 +38,19 @@ void LobbyChat_OnUserModeChanged(int a, int b, int c, int mode) {
     }
     switch (mode) {
     case 0:
-        LobbyString_AssignCStr(&str, ov45_022552DC);
+        LobbyString_AssignCStr(&str, sStr_normal);
         break;
     case 1:
-        LobbyString_AssignCStr(&str, ov45_022552E4);
+        LobbyString_AssignCStr(&str, sStr_voice);
         break;
     case 2:
-        LobbyString_AssignCStr(&str, ov45_022552EC);
+        LobbyString_AssignCStr(&str, sStr_ops);
         break;
     case 3:
-        LobbyString_AssignCStr(&str, ov45_022552F0);
+        LobbyString_AssignCStr(&str, sStr_VoiceOps);
         break;
     default:
-        LobbyString_AssignCStr(&str, ov45_022552FC);
+        LobbyString_AssignCStr(&str, sStr_invalid);
         break;
     }
     LobbyString_Destroy(&str);

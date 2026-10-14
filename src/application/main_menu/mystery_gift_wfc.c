@@ -80,8 +80,8 @@ void WirelessStatusIcon_Destroy(void);
 void CommWireless_Terminate(void);
 
 extern MysteryGiftWfcStatus sMysteryGiftWfcStatus;
-extern const char ov74_0223D038[];
-extern const char ov74_0223D040[];
+extern const char sStr_IPGE[];
+extern const char sStr_K5WfPEw9T3cvqzHa[];
 extern const char ov74_0223D054[];
 extern u8 sMysteryGiftWfcFileList[];
 
@@ -256,7 +256,7 @@ int MysteryGiftWfc_Run(OverlayManager *manager, int *state) {
         break;
     }
     case WFC_STATE_INIT_DOWNLOAD:
-        if (!DWC_NdInitAsync(MysteryGiftWfc_OnRequestDone, ov74_0223D038, ov74_0223D040)) { // "IPGE", the secret key
+        if (!DWC_NdInitAsync(MysteryGiftWfc_OnRequestDone, sStr_IPGE, sStr_K5WfPEw9T3cvqzHa)) { // "IPGE", the secret key
             *state = MysteryGiftWfc_HandleError(data);
         } else {
             MysteryGiftWfc_WaitForRequest(data, state, WFC_STATE_SET_ATTRIBUTES);

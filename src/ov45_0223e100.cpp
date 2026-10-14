@@ -40,7 +40,7 @@ extern "C" void LobbyCharVector_AssignIterRange(Vec *, Iter, Iter, TC);
 extern "C" void LobbyCharVector_InitRange(Vec *, char *, char *, Alloc);
 extern "C" void LobbyCharVector_AssignRange(Vec *, char *, char *, Tag);
 extern "C" const char *LobbyByteVector_Data(const Vec *);
-extern "C" char ov45_02254FB0[];
+extern "C" char gPPWLobbyPlayerVtable[];
 
 struct Vec {
     char *ptr;
@@ -252,7 +252,7 @@ struct Sub {
     int a28, id, a30, a34, a38;
 
     Sub(int i)
-        : vtbl(ov45_02254FB0) {
+        : vtbl(gPPWLobbyPlayerVtable) {
         Entry *const pe = &entry;
         Sub *const t = this;
         pe->Init(5);

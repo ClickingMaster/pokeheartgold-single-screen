@@ -27,19 +27,19 @@ typedef struct SecretKey {
     u8 bytes[20];
 } SecretKey;
 
-extern const HexDigits ov45_02254DF4; // "0123456789abcdef"
-extern const char ov45_02254E05[17];  // "0123456789abcdef"
-extern const char ov45_022576CC[];    // "&hash="
-extern const char ov45_022576D4[];    // "error:"
+extern const HexDigits sStr_0123456789abcdef; // "0123456789abcdef"
+extern const char sStr_0123456789abcdef_2[17];  // "0123456789abcdef"
+extern const char sStr_Hash[];    // "&hash="
+extern const char sStr_Error[];    // "error:"
 extern char gStatsUploadServerRelease[];          // server addresses
 extern char gStatsUploadServerDev1[];
 extern char gStatsUploadServerDev2[];
-extern const char ov45_02257750[]; // "&data="
-extern const char ov45_02257758[]; // "%d"
-extern const char ov45_0225775C[]; // "?pid="
-extern const char ov45_02257764[]; // "%s%s%s?pid=%d&hash=%s&data="
-extern const char ov45_02257780[]; // 40 '0' characters, the hash placeholder
-extern const char ov45_022577AC[]; // ""
+extern const char sStr_Data[]; // "&data="
+extern const char sFmt_Int_7[]; // "%d"
+extern const char sStr_Pid[]; // "?pid="
+extern const char sFmt_PidHashData[]; // "%s%s%s?pid=%d&hash=%s&data="
+extern const char sStr_0000000000000000000000000000000000000000[]; // 40 '0' characters, the hash placeholder
+extern const char gStatsUploadEmptyString[]; // ""
 
 // Checks the 40 hex digit SHA-1 at the end of the response: it is computed over the base64 encoding of the rest,
 // between two copies of the secret key. On success the rest becomes the body.
@@ -50,7 +50,7 @@ BOOL StatsUpload_CheckResponseHash(const char *response, int length) {
     u32 bodyLength;
     u8 *buf;
     int i;
-    hex = ov45_02254DF4;
+    hex = sStr_0123456789abcdef;
     if (length <= 40) {
         return FALSE;
     }
@@ -104,7 +104,7 @@ void StatsUpload_OnRequestCompleted(char *response, int length, int error) {
                 char hex[17];
                 u8 *digest = (u8 *)gStatsUpload.hash + 20;
                 int i, j;
-                memcpy(hex, ov45_02254E05, 17);
+                memcpy(hex, sStr_0123456789abcdef_2, 17);
                 memcpy(&block.key, gStatsUploadSecretKey, 20);
                 memcpy(block.challenge, response, 32);
                 MATH_CalcSHA1(digest, &block, 52);
@@ -112,7 +112,7 @@ void StatsUpload_OnRequestCompleted(char *response, int length, int error) {
                     gStatsUpload.hash[j] = hex[digest[i] >> 4];
                     gStatsUpload.hash[j + 1] = hex[digest[i] & 15];
                 }
-                *(gStatsUpload.hash - strlen(ov45_022576CC)) = '&';
+                *(gStatsUpload.hash - strlen(sStr_Hash)) = '&';
                 strncpy(gStatsUploadLastHash, gStatsUpload.hash, 41);
                 gStatsUpload.state = STATS_UPLOAD_SEND;
             } else {
@@ -121,7 +121,7 @@ void StatsUpload_OnRequestCompleted(char *response, int length, int error) {
             DWCi_GsFree(response);
             break;
         case STATS_UPLOAD_WAIT_RESPONSE:
-            if (strncmp(response, ov45_022576D4, strlen(ov45_022576D4)) == 0) {
+            if (strncmp(response, sStr_Error, strlen(sStr_Error)) == 0) {
                 DWCi_GsFree(response);
                 StatsUpload_SetFailed();
                 return;
@@ -326,10 +326,10 @@ int StatsUpload_PrepareUpload(char *name, int pid, const void *data, int size, S
         gStatsUpload.url = NULL;
     }
     dataLength = StatsUpload_GetBase64Length(size + 12);
-    dataTagLength = strlen(ov45_02257750);
-    hashTagLength = strlen(ov45_022576CC);
-    pidLength = snprintf(pidText, 16, ov45_02257758, pid);
-    pidTagLength = strlen(ov45_0225775C);
+    dataTagLength = strlen(sStr_Data);
+    hashTagLength = strlen(sStr_Hash);
+    pidLength = snprintf(pidText, 16, sFmt_Int_7, pid);
+    pidTagLength = strlen(sStr_Pid);
     nameLength = strlen(name);
     serverLength = strlen(gStatsUploadServer);
     gameNameLength = strlen(gStatsUploadGameName);
@@ -337,12 +337,12 @@ int StatsUpload_PrepareUpload(char *name, int pid, const void *data, int size, S
     if (!gStatsUpload.url) {
         return 2;
     }
-    sprintf(gStatsUpload.url, ov45_02257764, gStatsUploadServer, gStatsUploadGameName, name, pid, ov45_02257780, ov45_022577AC);
+    sprintf(gStatsUpload.url, sFmt_PidHashData, gStatsUploadServer, gStatsUploadGameName, name, pid, sStr_0000000000000000000000000000000000000000, gStatsUploadEmptyString);
     {
         char *url = gStatsUpload.url;
         gStatsUpload.data = url + strlen(url);
     }
-    gStatsUpload.hash = gStatsUpload.data - strlen(ov45_02257750) - 40;
+    gStatsUpload.hash = gStatsUpload.data - strlen(sStr_Data) - 40;
     header.pid = pid;
     header.size = size;
     if (StatsUpload_EncodeData(gStatsUpload.data, (const u8 *)&header, 8, data, size) == 2) {
@@ -354,7 +354,7 @@ int StatsUpload_PrepareUpload(char *name, int pid, const void *data, int size, S
         memcpy(gStatsUpload.hash, gStatsUploadLastHash, 40);
         gStatsUpload.state = STATS_UPLOAD_SEND;
     } else {
-        *(gStatsUpload.hash - strlen(ov45_022576CC)) = 0;
+        *(gStatsUpload.hash - strlen(sStr_Hash)) = 0;
         gStatsUpload.state = STATS_UPLOAD_GET_CHALLENGE;
     }
     gStatsUpload.callback = callback;
