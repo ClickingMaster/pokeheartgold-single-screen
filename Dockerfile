@@ -1,5 +1,5 @@
 FROM --platform=linux/amd64 ubuntu:22.04
-LABEL com.docker.image.name=ghcr.io/pret/pokeheartgold
+LABEL com.docker.image.name=ghcr.io/ctrl-cheeb-del/pokeheartgold
 
 RUN apt-get -y update \
  && apt-get -y install \

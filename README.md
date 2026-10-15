@@ -2,8 +2,7 @@
 
 **Not affiliated with pret.**
 
-pret doesn't accept AI-generated code, so don't send anything from here upstream.
-Please don't bother them about this fork; keep everything here.
+This is a fork of pret's pokeheartgold repo, and the original tooling is all theirs. pret doesn't accept AI-generated code and doesn't want to be associated with this, so don't send anything from here upstream or bother them about it; keep everything here.
 
 Fully decompiled: everything's C/C++ and both ROMs build byte-for-byte. Built with LLM agents.
 

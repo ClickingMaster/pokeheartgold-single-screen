@@ -14,9 +14,8 @@ With Homebrew and (on Apple Silicon) Rosetta 2 installed:
 ./scripts/build.sh GAME_VERSION=SOULSILVER progress
 ```
 
-The setup helper installs native dependencies through Homebrew, obtains the
-compiler and SDK tools from the same assets used by upstream CI, and verifies
-download SHA256 hashes. It installs Wine 11.16 inside `.local-tools/`; its Wine
+The setup helper installs native dependencies through Homebrew, uses locally supplied compiler and SDK archives and verifies
+their SHA256 hashes. It installs Wine 11.16 inside `.local-tools/`; its Wine
 prefix also stays in this ignored directory. It does not modify system Wine
 settings. Downloaded tools, compiler licenses, ROMs, and build intermediates
 are ignored by Git.
@@ -32,7 +31,7 @@ Using a terminal or git client, clone this repository to your local device. All 
 
 ### 1. Install MWCC compiler
 
-The build system requires the use of the Metrowerks C Compiler versions 2.0/sp2p2 to compile matching files. We cannot distribute the correct compiler here so join the PRET discord and download the pinned mwccarm.zip zip in #pokediamond and extract it to tools/. At the end of this operation, you should have i.e. the file `tools/mwccarm/2.0/sp2p2/mwccarm.exe`. Run each of the executables so they ask for a license.dat and provide the one in the rar (it may also ask for it when compiling). This only needs to be done once.
+The build system requires the use of the Metrowerks C Compiler versions 2.0/sp2p2 to compile matching files. Supply your own legally obtained mwccarm.zip and extract it to tools/. At the end of this operation, you should have i.e. the file `tools/mwccarm/2.0/sp2p2/mwccarm.exe`. Run each of the executables so they ask for a license.dat and provide the one in the rar (it may also ask for it when compiling). This only needs to be done once.
 
 In the future, a GCC option will be available so MWCC is not required to build, however it is required for a matching ROM.
 
@@ -40,7 +39,7 @@ In the future, a GCC option will be available so MWCC is not required to build, 
 
 ### 2. Install Nitro SDK
 
-As with the compiler, the Nitro SDK is proprietary and cannot be distributed here. Download the "NitroSDK-4_2-071210-jp.7z" file pinned in the PRET discord. Extract and copy the folder `tools/bin` from the Nitro SDK into the folder `tools` in your pokeheartgold clone. At the end of this operation, you should have i.e. the file `tools/bin/makelcf.exe` inside your pokeheartgold clone. Finally, copy include/nitro/specfiles/ARM7-TS.lcf.template into the subdirectory `sub`, and include/nitro/specfiles/ARM9-TS.lcf.template and include/nitro/specfiles/mwldarm.response.template into the project root.
+As with the compiler, the Nitro SDK is proprietary and cannot be distributed here. Supply your own legally obtained compatible Nitro SDK archive. Extract and copy the folder `tools/bin` from the Nitro SDK into the folder `tools` in your pokeheartgold clone. At the end of this operation, you should have i.e. the file `tools/bin/makelcf.exe` inside your pokeheartgold clone. Finally, copy include/nitro/specfiles/ARM7-TS.lcf.template into the subdirectory `sub`, and include/nitro/specfiles/ARM9-TS.lcf.template and include/nitro/specfiles/mwldarm.response.template into the project root.
 
 ### 3. Dependencies
 
@@ -166,17 +165,16 @@ $ ./contrib/docker/build_docker.sh soulsilver # build pokesoulsilver
 
 Note: Docker may not run at a full performance if its underlying Linux kernel is being virtualized (mainly Windows and macOS hosts).
 
-#### After updating from upstream
+#### After updating this repository
 
-This repository is still in a volatile state, and several files may be moved around or renamed. If you pull from upstream and experience errors rebuilding, try the following troubleshooting steps, **one line at a time** until you get the non_npc_msg `build/heartgold.us/pokeheartgold.us.nds: OK`:
+This repository is still in a volatile state, and several files may be moved around or renamed. If you update this repository and experience errors rebuilding, try the following troubleshooting steps, **one line at a time** until you get the non_npc_msg `build/heartgold.us/pokeheartgold.us.nds: OK`:
 
 ```shell
 make tidy && make compare
 make clean && make compare
-git clean -fdx && make compare
 ```
 
-If, after the third step, you're still getting errors, please ask for help in the Discord.
+If errors persist, report them in this repository.
 
 ## Progress reports
 

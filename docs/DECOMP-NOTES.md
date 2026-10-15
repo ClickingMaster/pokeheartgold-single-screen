@@ -1,27 +1,5 @@
 # Decompilation work log
 
-## Earlier local research located
-
-The following work was found on this machine during the first decompilation
-session. It remains in its original locations; private saves, ROMs, and
-research datasets have not been copied into this repository.
-
-| Location | What was found |
-| --- | --- |
-| `~/pokemon-research-private/` | Research notes, save decoders, source-derived models, and ARM/Thumb experiments using Unicorn. |
-| `~/pokemon-research-private/NATIVE-RESEARCH.md` | Headbutt, roamer, and battle-AI investigations, with references to native execution harnesses. |
-| `~/pokemon-research-private/headbutt_reference_test.c` | A standalone source-derived Headbutt classifier for research, rather than a replacement object integrated into a matching build. |
-| `~/pokemon-research-private/mood_ref/pret/` | A clean full checkout at upstream `0985e8718`. |
-| `~/pokemon-research-private/reference/pokeheartgold/` | Selected reference files; the C, header, and assembly files with counterparts in this checkout matched byte-for-byte. |
-| `~/Documents/projects/pokeheartgold/` | A clean main checkout at upstream `0985e8718`; this fork task runs in its separate worktree. |
-
-Spotlight and the usual project/worktree directories were also checked for
-other HeartGold copies. No uncommitted matching-decomp changes were found in
-the full checkouts inspected. The research is useful evidence for future
-work, but its reported behavioral tests have not been rerun in this session.
-Some studied routines, including the Headbutt classifier, are already C in
-upstream and should not be counted as new decompilation progress.
-
 ## First batch: sound state
 
 `src/sound_state.c` replaces the contiguous assembly functions from
@@ -1033,7 +1011,7 @@ remained disabled.
 
 Reimplemented 203 NitroSDK functions in C across the FX matrix/vector,
 GX/G2/G3, VRAM, background, display-list loading, and MI DMA modules. The
-starting point was manually decompiled public source from `pret/pokediamond`,
+starting point was manually decompiled public source from the public Diamond disassembly,
 adapted and independently compiled against HeartGold's MWCC 2.0/sp2p3 objects.
 Only functions that matched the repository objects were integrated; eleven
 inline-assembly functions were excluded and remain in residual assembly.
@@ -1089,7 +1067,7 @@ only; GitHub CI remained disabled.
 
 Integrated 410 byte-matched functions from parallel clean-room reconstruction
 and the independently verified public NitroSDK work. The SDK sources were
-adapted from the public `pret/pokediamond` repository and rebuilt with this
+adapted from the public the public Diamond disassembly repository and rebuilt with this
 repository's exact compiler versions and flags. No leaked Nintendo, Game
 Freak, SDK, or compiler source was used. Every accepted function was checked
 against frozen retail-derived objects before integration.

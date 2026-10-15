@@ -14,6 +14,7 @@ fi
 HOMEBREW_NO_AUTO_UPDATE=1 brew install coreutils make gnu-sed arm-none-eabi-binutils pugixml libpng pkgconf sevenzip
 python3 - <<'PY'
 import hashlib
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -24,7 +25,10 @@ import zipfile
 root = Path.cwd()
 local = root / '.local-tools'
 local.mkdir(exist_ok=True)
-assets = 'https://raw.githubusercontent.com/pret/pokeheartgold/workflows/assets/'
+assets = os.environ.get('POKEHEARTGOLD_TOOLCHAIN_DIR', '')
+if not assets:
+    raise SystemExit('Set POKEHEARTGOLD_TOOLCHAIN_DIR to a directory containing your compiler and SDK archives.')
+assets = Path(assets).resolve().as_uri() + '/'
 
 def download(url, path, expected):
     print(f'Downloading {path.name}', flush=True)
