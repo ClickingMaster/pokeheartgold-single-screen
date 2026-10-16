@@ -166,18 +166,18 @@ inline Handler *Get3(Node *n, Node *end) {
     return n == end ? 0 : n->value;
 }
 
-extern "C" void LobbyChat_OnEnterChannelEnumUsers(void *self, int result, const char *name, int count, const char **names, u32 unused, u32 id);
+extern "C" void LobbyChat_OnEnterChannelEnumUsers(void *chat, int result, const char *name, int count, const char **nicks, u32 modes, u32 id);
 #pragma push
 #pragma opt_propagation off
 
-extern "C" void LobbyChat_OnEnterChannelEnumUsers(void *self, int result, const char *name, int count, const char **names, u32 unused, u32 id) {
+extern "C" void LobbyChat_OnEnterChannelEnumUsers(void *chat, int result, const char *name, int count, const char **nicks, u32 modes, u32 id) {
     if (gLobbyChatManager != NULL && gLobbyChatManager->state == 5) {
         return;
     }
     if (result == 1) {
         String s;
         LobbyString_InitFromCStr(&s, name);
-        Vec tmp = LobbyChat_AddChannelUsers(gLobbyChatManager, count, names, s);
+        Vec tmp = LobbyChat_AddChannelUsers(gLobbyChatManager, count, nicks, s);
         tmp.destroy();
         LobbyString_Destroy(&s);
     }

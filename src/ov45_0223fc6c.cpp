@@ -84,16 +84,16 @@ inline It FindIt(Manager *m, u32 id) {
     return LobbyRequestMap_Find(&m->map, kp);
 }
 
-extern "C" void LobbyChat_OnEnumChannels(void *self, int result, u32 a, u32 d, u32 b, u32 c, u32 id);
+extern "C" void LobbyChat_OnEnumChannels(void *chat, int result, u32 count, u32 channels, u32 topics, u32 userCounts, u32 id);
 #pragma push
 #pragma opt_propagation off
 
-extern "C" void LobbyChat_OnEnumChannels(void *self, int result, u32 a, u32 d, u32 b, u32 c, u32 id) {
+extern "C" void LobbyChat_OnEnumChannels(void *chat, int result, u32 count, u32 channels, u32 topics, u32 userCounts, u32 id) {
     if (gLobbyChatManager != NULL && gLobbyChatManager->state == 5) {
         return;
     }
     String str;
-    LobbyChat_StripChannelPrefixes(&str, gLobbyChatManager, a, d);
+    LobbyChat_StripChannelPrefixes(&str, gLobbyChatManager, count, channels);
     int sid = id;
     Manager *m = gLobbyChatManager;
     It it = FindIt(m, sid);
@@ -105,7 +105,7 @@ extern "C" void LobbyChat_OnEnumChannels(void *self, int result, u32 a, u32 d, u
         h = nd->value;
     }
     void (*cb)(BOOL, u32, const char *, u32, u32, u32) = h->callback;
-    cb(result == 1, a, LobbyU32Vector_Data(&str), b, c, h->getArg());
+    cb(result == 1, count, LobbyU32Vector_Data(&str), topics, userCounts, h->getArg());
     LobbyRequestMap_DeleteKey(&gLobbyChatManager->map, sid);
     LobbyU32Vector_Destroy(&str);
 }

@@ -125,46 +125,46 @@ inline Handler *Find(Manager *m, u32 id) {
 extern "C" void LobbyChatManager_GetNick(Str *dst, Manager *m);
 extern "C" void LobbyChat_AddChannelUser(Manager *m, Str *a, Str *b);
 extern "C" int LobbyChat_GetChannelUserLimit(Manager *m, Str *s);
-extern "C" int chatGetChannelNumUsersA(void *net, const char *name);
-extern "C" void chatSetChannelLimitA(void *net, const char *name, int n);
-extern "C" void chatEnumUsersA(void *session, const char *name, void *cb, u32 id, u32 z);
+extern "C" int chatGetChannelNumUsersA(void *chat, const char *channel);
+extern "C" void chatSetChannelLimitA(void *chat, const char *channel, int limit);
+extern "C" void chatEnumUsersA(void *chat, const char *channel, void *callback, u32 param, u32 blocking);
 extern "C" void LobbyChat_LeaveChannel(const char *s);
 extern "C" void LobbyChat_OnEnterChannelEnumUsers(void *self, int result, const char *name, int count, const char **names, u32 unused, u32 id);
-extern "C" void LobbyChat_OnEnterChannel(void *session, int ok, int error, const char *name, u32 id);
+extern "C" void LobbyChat_OnEnterChannel(void *chat, int ok, int error, const char *name, u32 id);
 #pragma push
 #pragma opt_propagation off
 
-extern "C" void LobbyChat_OnEnterChannel(void *session, int ok, int error, const char *name, u32 id) {
+extern "C" void LobbyChat_OnEnterChannel(void *chat, int ok, int error, const char *name, u32 id) {
     if (gLobbyChatManager != NULL && gLobbyChatManager->state == 5) {
         return;
     }
     if (ok == 1) {
         Str s;
         LobbyString_InitFromCStr(&s, name);
-        int found = LobbyChat_GetChannelUserLimit(gLobbyChatManager, &s);
+        int userLimit = LobbyChat_GetChannelUserLimit(gLobbyChatManager, &s);
         LobbyString_Destroy(&s);
-        if (found != 0) {
-            int limit = chatGetChannelNumUsersA(gLobbyChatManager->net, name);
-            if (found == -1) {
+        if (userLimit != 0) {
+            int numUsers = chatGetChannelNumUsersA(gLobbyChatManager->net, name);
+            if (userLimit == -1) {
                 ok = 0;
                 error = 7;
-            } else if (limit > found || limit == -1) {
+            } else if (numUsers > userLimit || numUsers == -1) {
                 ok = 0;
                 error = 2;
             } else {
-                chatSetChannelLimitA(gLobbyChatManager->net, name, found);
+                chatSetChannelLimitA(gLobbyChatManager->net, name, userLimit);
             }
         }
     }
     if (ok == 1) {
-        Str a;
-        LobbyChatManager_GetNick(&a, gLobbyChatManager);
-        Str b;
-        LobbyString_InitFromCStr(&b, name);
-        LobbyChat_AddChannelUser(gLobbyChatManager, &a, &b);
-        LobbyString_Destroy(&b);
-        LobbyString_Destroy(&a);
-        chatEnumUsersA(session, name, (void *)LobbyChat_OnEnterChannelEnumUsers, id, 0);
+        Str nick;
+        LobbyChatManager_GetNick(&nick, gLobbyChatManager);
+        Str channelName;
+        LobbyString_InitFromCStr(&channelName, name);
+        LobbyChat_AddChannelUser(gLobbyChatManager, &nick, &channelName);
+        LobbyString_Destroy(&channelName);
+        LobbyString_Destroy(&nick);
+        chatEnumUsersA(chat, name, (void *)LobbyChat_OnEnterChannelEnumUsers, id, 0);
         return;
     }
     {

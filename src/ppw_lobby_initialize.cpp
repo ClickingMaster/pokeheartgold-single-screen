@@ -184,12 +184,12 @@ struct Work {
     u8 b17c[0x194 - 0x17c];
     u8 b194[0x47c - 0x194];
 
-    Work(u32 a2, const Config &c, u32 a4, u32 a7)
+    Work(u32 prefix, const Config &c, u32 userId, u32 a7)
         : state(0)
         , sub(0)
         , cfg(c)
-        , arg4(a4)
-        , arg2(a2)
+        , arg4(userId)
+        , arg2(prefix)
         , arg7(a7)
         , w64(0)
         , w68(0)
@@ -244,18 +244,18 @@ inline int ErrorMap::Map(int r) const {
     return state;
 }
 
-extern "C" int PPWLobby_Initialize(u32 a0, u32 a1, u32 a2, const Config *cfg, u32 a4, u32 a5, u32 a6, u32 a7);
+extern "C" int PPWLobby_Initialize(u32 gameName, u32 secretKey, u32 prefix, const Config *cfg, u32 userId, u32 playerData, u32 playerDataSize, u32 a7);
 
-extern "C" int PPWLobby_Initialize(u32 a0, u32 a1, u32 a2, const Config *cfg, u32 a4, u32 a5, u32 a6, u32 a7) {
+extern "C" int PPWLobby_Initialize(u32 gameName, u32 secretKey, u32 prefix, const Config *cfg, u32 userId, u32 playerData, u32 playerDataSize, u32 a7) {
     if (gPPWLobbyWork != 0) {
         return 4;
     }
     Callbacks cbs(PPWLobby_OnPlayerMessage, PPWLobby_OnExcessFlood, 5);
-    gPPWLobbyWork = new (LobbyMem_Alloc(sizeof(Work))) Work(a2, *cfg, a4, a7);
+    gPPWLobbyWork = new (LobbyMem_Alloc(sizeof(Work))) Work(prefix, *cfg, userId, a7);
     if (gPPWLobbyWork == 0) {
         return 1;
     }
-    int result = LobbyChat_Initialize(a0, a1, a2, &cbs, a4);
+    int result = LobbyChat_Initialize(gameName, secretKey, prefix, &cbs, userId);
     {
         Work *g = gPPWLobbyWork;
         int state = ErrorMap().Map(result);
@@ -272,7 +272,7 @@ extern "C" int PPWLobby_Initialize(u32 a0, u32 a1, u32 a2, const Config *cfg, u3
         }
         return result;
     }
-    PPWLobbyPlayers_SetSelf(&gPPWLobbyWork->sessions, a4, a5, a6);
+    PPWLobbyPlayers_SetSelf(&gPPWLobbyWork->sessions, userId, playerData, playerDataSize);
     PPWLobby_StartCheckProfile();
     gPPWLobbyWork->state = 1;
     return 0;

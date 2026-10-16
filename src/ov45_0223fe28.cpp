@@ -144,11 +144,11 @@ struct Vec {
 };
 
 extern "C" Vec LobbyChat_AddChannelUsers(Manager *map, int count, const char **names, const String &key);
-extern "C" void LobbyChat_OnEnumUsers(void *self, int result, const char *name, int count, const char **names, u32 unused, u32 id);
+extern "C" void LobbyChat_OnEnumUsers(void *chat, int result, const char *name, int count, const char **nicks, u32 modes, u32 id);
 #pragma push
 #pragma opt_propagation off
 
-extern "C" void LobbyChat_OnEnumUsers(void *self, int result, const char *name, int count, const char **names, u32 unused, u32 id) {
+extern "C" void LobbyChat_OnEnumUsers(void *chat, int result, const char *name, int count, const char **nicks, u32 modes, u32 id) {
     if (gLobbyChatManager != NULL && gLobbyChatManager->state == 5) {
         return;
     }
@@ -156,7 +156,7 @@ extern "C" void LobbyChat_OnEnumUsers(void *self, int result, const char *name, 
     if (count != 0) {
         String s;
         LobbyString_InitFromCStr(&s, name);
-        Vec tmp = LobbyChat_AddChannelUsers(gLobbyChatManager, count, names, s);
+        Vec tmp = LobbyChat_AddChannelUsers(gLobbyChatManager, count, nicks, s);
         ids = tmp;
         tmp.destroy();
         LobbyString_Destroy(&s);

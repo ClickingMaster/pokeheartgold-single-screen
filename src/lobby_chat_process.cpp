@@ -14,7 +14,7 @@ struct RTCTime {
 
 extern "C" s64 RTC_ConvertDateTimeToSecond(const RTCDate *date, const RTCTime *time);
 extern "C" void DWC_GetDateTime(RTCDate *date, RTCTime *time);
-extern "C" void chatThink(void *p);
+extern "C" void chatThink(void *chat);
 
 struct Node {
     Node *a, *b, *c;

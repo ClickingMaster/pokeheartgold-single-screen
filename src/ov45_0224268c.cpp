@@ -80,18 +80,18 @@ struct Obj {
 extern "C" NameTable ov45_02254DC4;
 extern "C" char sStr_GSP[];
 extern "C" char sStr_Bang_2[];
-extern "C" Obj *LobbyChatManager_Init(Obj *obj, const String &a1, const String &a2, int idx, u32 v8, const String &aC, const String &a18, const String &a24, const Triple *t);
+extern "C" Obj *LobbyChatManager_Init(Obj *obj, const String &gameName, const String &gameKey, int prefix, u32 userId, const String &nick, const String &userName, const String &realName, const Triple *config);
 #pragma opt_propagation off
 
-extern "C" Obj *LobbyChatManager_Init(Obj *obj, const String &a1, const String &a2, int idx, u32 v8, const String &aC, const String &a18, const String &a24, const Triple *t) {
+extern "C" Obj *LobbyChatManager_Init(Obj *obj, const String &gameName, const String &gameKey, int prefix, u32 userId, const String &nick, const String &userName, const String &realName, const Triple *config) {
     obj->connection = 0;
     obj->state = 0;
-    obj->userData = v8;
-    LobbyString_InitCopy(&obj->strC, &aC);
-    LobbyString_InitCopy(&obj->str18, &a18);
-    LobbyString_InitCopy(&obj->str24, &a24);
-    LobbyString_InitCopy(&obj->str30, &a1);
-    LobbyString_InitCopy(&obj->str3C, &a2);
+    obj->userData = userId;
+    LobbyString_InitCopy(&obj->strC, &nick);
+    LobbyString_InitCopy(&obj->str18, &userName);
+    LobbyString_InitCopy(&obj->str24, &realName);
+    LobbyString_InitCopy(&obj->str30, &gameName);
+    LobbyString_InitCopy(&obj->str3C, &gameKey);
     u32 *w = obj->str48.w;
     u32 i = 0;
     do {
@@ -102,7 +102,7 @@ extern "C" Obj *LobbyChatManager_Init(Obj *obj, const String &a1, const String &
     obj->lastError = 0;
     obj->connectedFrames = 0;
     obj->disconnected = 0;
-    obj->config = *t;
+    obj->config = *config;
     obj->unk70 = 0;
     obj->unk74 = 0;
     obj->unk7C = &obj->unk74;
@@ -115,23 +115,23 @@ extern "C" Obj *LobbyChatManager_Init(Obj *obj, const String &a1, const String &
     obj->unk9C = 0;
     obj->unkA0 = 0;
     obj->unkA8 = &obj->unkA0;
-    NameTable names = ov45_02254DC4;
-    String s48(sStr_GSP);
-    String s3C = LobbyString_ConcatCStr(s48, sStr_Bang_2);
-    String s30 = LobbyString_Concat(s3C, obj->str30);
-    String s24 = LobbyString_ConcatCStr(s30, sStr_Bang_2);
-    String s18(names.names[idx]);
-    String sC = LobbyString_Concat(s24, s18);
-    String r = LobbyString_ConcatCStr(sC, sStr_Bang_2);
-    const String *pr = &r;
+    NameTable prefixNames = ov45_02254DC4;
+    String gsp(sStr_GSP);
+    String gspSep = LobbyString_ConcatCStr(gsp, sStr_Bang_2);
+    String withGame = LobbyString_Concat(gspSep, obj->str30);
+    String withGameSep = LobbyString_ConcatCStr(withGame, sStr_Bang_2);
+    String prefixName(prefixNames.names[prefix]);
+    String withPrefix = LobbyString_Concat(withGameSep, prefixName);
+    String channelPrefix = LobbyString_ConcatCStr(withPrefix, sStr_Bang_2);
+    const String *pr = &channelPrefix;
     LobbyString_Assign(&obj->str48, pr);
-    r.destroy();
-    sC.destroy();
-    s18.destroy();
-    s24.destroy();
-    s30.destroy();
-    s3C.destroy();
-    s48.destroy();
+    channelPrefix.destroy();
+    withPrefix.destroy();
+    prefixName.destroy();
+    withGameSep.destroy();
+    withGame.destroy();
+    gspSep.destroy();
+    gsp.destroy();
     return obj;
 }
 

@@ -45,7 +45,7 @@ inline void String::destroy() {
 }
 
 extern "C" void LobbyString_InitFromCStr(String *s, const char *p);
-extern "C" void LobbyChat_FormatNick(String *s, void *user);
+extern "C" void LobbyChat_FormatNick(String *s, void *userId);
 extern "C" void LobbyString_ConcatCStr(String *out, const String *a, const char *b);
 struct Root;
 extern "C" void LobbyChatManager_GetGameName(String *, Root *);
@@ -141,14 +141,14 @@ inline void DeleteRoot(Root *r) {
 }
 
 extern "C" void MI_CpuFill8(void *, u8, u32);
-extern "C" int LobbyChat_Initialize(const char *a, const char *b, int n, u8 *config, void *user);
+extern "C" int LobbyChat_Initialize(const char *gameName, const char *gameKey, int prefix, u8 *config, void *userId);
 #pragma force_active on
 
-extern "C" int LobbyChat_Initialize(const char *a, const char *b, int n, u8 *config, void *user) {
-    String outer1, outer2, outer3;
+extern "C" int LobbyChat_Initialize(const char *gameName, const char *gameKey, int prefix, u8 *config, void *userId) {
+    String nick, userName, realName;
     Callbacks callbacks;
-    String name2, name1;
-    String s7, s6, s5, s4, s3, s2, s1;
+    String gameKeyStr, gameNameStr;
+    String hostGameName, hostPrefix, host, nickArg, realNameArg, gameNameArg, gameKeyArg;
     RTCDate date;
     RTCTime time;
     Root *root;
@@ -157,31 +157,31 @@ extern "C" int LobbyChat_Initialize(const char *a, const char *b, int n, u8 *con
     if (gLobbyChatManager) {
         return 4;
     }
-    LobbyChat_FormatNick(&outer1, user);
-    LobbyString_InitFromCStr(&outer2, sStr_DWCUser);
-    LobbyString_InitFromCStr(&outer3, sStr_DWCName);
+    LobbyChat_FormatNick(&nick, userId);
+    LobbyString_InitFromCStr(&userName, sStr_DWCUser);
+    LobbyString_InitFromCStr(&realName, sStr_DWCName);
     {
         int firstReady = 0, secondReady = firstReady;
         Root *created = (Root *)LobbyMem_Alloc(0xac);
         if (created) {
-            LobbyString_InitFromCStr(&name2, b);
+            LobbyString_InitFromCStr(&gameKeyStr, gameKey);
             firstReady = 1;
-            LobbyString_InitFromCStr(&name1, a);
+            LobbyString_InitFromCStr(&gameNameStr, gameName);
             secondReady = firstReady;
-            created = LobbyChatManager_Init(created, &name1, &name2, n, user, &outer1, &outer2, &outer3, config);
+            created = LobbyChatManager_Init(created, &gameNameStr, &gameKeyStr, prefix, userId, &nick, &userName, &realName, config);
         }
         gLobbyChatManager = created;
         if (secondReady) {
-            name1.destroy();
+            gameNameStr.destroy();
         }
         if (firstReady) {
-            name2.destroy();
+            gameKeyStr.destroy();
         }
     }
     if (!gLobbyChatManager) {
-        outer3.destroy();
-        outer2.destroy();
-        outer1.destroy();
+        realName.destroy();
+        userName.destroy();
+        nick.destroy();
         return 1;
     }
     if (!LobbyMem_InstallOutOfMemoryHandler()) {
@@ -195,21 +195,21 @@ extern "C" int LobbyChat_Initialize(const char *a, const char *b, int n, u8 *con
         callbacks.f[2] = LobbyChat_OnPrivateMessage;
         callbacks.f[3] = LobbyChat_OnInvited;
         callbacks.data = *(void **)(config + 8);
-        LobbyChatManager_GetGameName(&s7, gLobbyChatManager);
-        LobbyString_ConcatCStr(&s6, &s7, sStr_Dot);
-        LobbyString_ConcatCStr(&s5, &s6, sStr_PeerchatGsNintendowifiNet);
-        LobbyChatManager_GetNick(&s4, gLobbyChatManager);
-        LobbyChatManager_GetRealName(&s3, gLobbyChatManager);
-        LobbyChatManager_GetGameName(&s2, gLobbyChatManager);
-        LobbyChatManager_GetGameKey(&s1, gLobbyChatManager);
-        u32 connection = chatConnectSpecialA(s5.c_str(), 0x1a0b, s4.c_str(), s3.c_str(), s2.c_str(), s1.c_str(), &callbacks, LobbyChat_OnNickError, LobbyChat_OnFillInUser, LobbyChat_OnConnected, *(void **)(config + 8), 0);
-        s1.destroy();
-        s2.destroy();
-        s3.destroy();
-        s4.destroy();
-        s5.destroy();
-        s6.destroy();
-        s7.destroy();
+        LobbyChatManager_GetGameName(&hostGameName, gLobbyChatManager);
+        LobbyString_ConcatCStr(&hostPrefix, &hostGameName, sStr_Dot);
+        LobbyString_ConcatCStr(&host, &hostPrefix, sStr_PeerchatGsNintendowifiNet);
+        LobbyChatManager_GetNick(&nickArg, gLobbyChatManager);
+        LobbyChatManager_GetRealName(&realNameArg, gLobbyChatManager);
+        LobbyChatManager_GetGameName(&gameNameArg, gLobbyChatManager);
+        LobbyChatManager_GetGameKey(&gameKeyArg, gLobbyChatManager);
+        u32 connection = chatConnectSpecialA(host.c_str(), 0x1a0b, nickArg.c_str(), realNameArg.c_str(), gameNameArg.c_str(), gameKeyArg.c_str(), &callbacks, LobbyChat_OnNickError, LobbyChat_OnFillInUser, LobbyChat_OnConnected, *(void **)(config + 8), 0);
+        gameKeyArg.destroy();
+        gameNameArg.destroy();
+        realNameArg.destroy();
+        nickArg.destroy();
+        host.destroy();
+        hostPrefix.destroy();
+        hostGameName.destroy();
         if (!connection) {
             error = 2;
             goto failure;
@@ -224,9 +224,9 @@ extern "C" int LobbyChat_Initialize(const char *a, const char *b, int n, u8 *con
         DWC_GetDateTime(&date, &time);
         root->queue.insert(LobbyTimerMap_MakeEntry(0, Task(RTC_ConvertDateTimeToSecond(&date, &time), root, LobbyChat_TimerConnectTimeout)));
     }
-    outer3.destroy();
-    outer2.destroy();
-    outer1.destroy();
+    realName.destroy();
+    userName.destroy();
+    nick.destroy();
     return 0;
 failure:
     LobbyMem_ReleaseReserve();
@@ -235,8 +235,8 @@ failure:
         DeleteRoot(root);
         gLobbyChatManager = 0;
     }
-    outer3.destroy();
-    outer2.destroy();
-    outer1.destroy();
+    realName.destroy();
+    userName.destroy();
+    nick.destroy();
     return error;
 }

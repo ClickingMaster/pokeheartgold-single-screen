@@ -80,7 +80,7 @@ struct Arg3 {
     u32 unk14;
 };
 
-extern "C" void LobbyChat_AddChannel(Mgr *m, const Str &s, Arg3 *c, u32 d);
+extern "C" void LobbyChat_AddChannel(Mgr *m, const Str &s, Arg3 *callbacks, u32 limit);
 
 struct Callbacks {
     void (*f0)();
@@ -97,7 +97,7 @@ struct Callbacks {
     u32 f2C;
 };
 
-extern "C" void chatEnterChannelA(void *ctx, const char *name, u32 b, Callbacks *cb, void (*cb2)(), u32 id, u32 z);
+extern "C" void chatEnterChannelA(void *chat, const char *channel, u32 password, Callbacks *callbacks, void (*callback)(), u32 param, u32 blocking);
 extern "C" void LobbyChat_OnChannelMessage();
 extern "C" void LobbyChat_OnKicked();
 extern "C" void LobbyChat_OnUserJoined();
@@ -114,28 +114,26 @@ inline Mgr *GetMgr() {
     return gLobbyChatManager;
 }
 
-inline void BaseInit(Handler *h, u32 b) {
+inline void BaseInit(Handler *h, u32 param) {
     h->vtbl = &gLobbyRequestVtable;
     h->id = 0;
-    h->b = b;
+    h->b = param;
 }
 
-// The id counter is only ever read/written here; it is declared const so that
-// stores through `this` are known not to alias it (native schedules the load
-// above the base-part stores).
+// The id counter is only changed here; it is declared const so that stores through the new handler cannot alias it.
 inline u32 NextHandlerId() {
     u32 n = gLobbyChatNextRequestId;
     *(u32 *)&gLobbyChatNextRequestId = n + 1;
     return n;
 }
 
-inline Handler *NewHandler(u32 a, u32 b) {
+inline Handler *NewHandler(u32 callback, u32 param) {
     Handler *p = (Handler *)LobbyMem_Alloc(sizeof(Handler));
     if (p) {
-        BaseInit(p, b);
+        BaseInit(p, param);
         p->id = NextHandlerId();
         p->vtbl = &gLobbyEnterChannelRequestVtable;
-        p->a = a;
+        p->a = callback;
     }
     return p;
 }
@@ -146,10 +144,10 @@ inline u32 GetId(Handler *h, IdTag, IdTag) {
     return h->vtbl->getId(h);
 }
 
-extern "C" int LobbyChat_EnterChannelAsync(const char *name, u32 p1, u32 p2, Arg3 *p3, u32 a, u32 b);
+extern "C" int LobbyChat_EnterChannelAsync(const char *name, u32 password, u32 limit, Arg3 *channelCallbacks, u32 callback, u32 param);
 #pragma opt_common_subs off
 
-extern "C" int LobbyChat_EnterChannelAsync(const char *name, u32 p1, u32 p2, Arg3 *p3, u32 a, u32 b) {
+extern "C" int LobbyChat_EnterChannelAsync(const char *name, u32 password, u32 limit, Arg3 *channelCallbacks, u32 callback, u32 param) {
     Callbacks cb;
     Mgr *m = gLobbyChatManager;
     if (m == NULL) {
@@ -163,14 +161,14 @@ extern "C" int LobbyChat_EnterChannelAsync(const char *name, u32 p1, u32 p2, Arg
     }
     strlen(name);
     InsertResult res;
-    Handler *h = NewHandler(a, b);
+    Handler *h = NewHandler(callback, param);
     LobbyRequestMap_Insert(&res, m->list, &h);
     u32 id = GetId(h, IdTag(), IdTag());
     {
         Str s(name);
         Str t = LobbyChat_GetFullChannelName(GetMgr(), s);
         Str u(t.c_str());
-        LobbyChat_AddChannel(GetMgr(), u, p3, p2);
+        LobbyChat_AddChannel(GetMgr(), u, channelCallbacks, limit);
         u.destroy();
         t.destroy();
         s.destroy();
@@ -186,10 +184,10 @@ extern "C" int LobbyChat_EnterChannelAsync(const char *name, u32 p1, u32 p2, Arg
     cb.f1C = LobbyChat_OnUserModeChanged;
     cb.f10 = LobbyChat_OnUserChangedNick;
     cb.f28 = LobbyChat_OnBroadcastKeyChanged;
-    cb.f2C = p3->unk14;
+    cb.f2C = channelCallbacks->unk14;
     Str s2(name);
     Str t2 = LobbyChat_GetFullChannelName(GetMgr(), s2);
-    chatEnterChannelA(GetMgr()->connection, t2.c_str(), p1, &cb, LobbyChat_OnEnterChannel, id, 0);
+    chatEnterChannelA(GetMgr()->connection, t2.c_str(), password, &cb, LobbyChat_OnEnterChannel, id, 0);
     t2.destroy();
     s2.destroy();
     return 0;

@@ -108,7 +108,7 @@ inline Handler *Lookup(Manager *m, const It &it) {
     return it.n == m->map.end().n ? 0 : it.n->value;
 }
 
-extern "C" void LobbyChat_OnGetChannelMode(void *self, int result, const char *name, u32 x, u32 id);
+extern "C" void LobbyChat_OnGetChannelMode(void *chat, int result, const char *name, u32 mode, u32 id);
 
 inline It FindIt(Manager *m, u32 id) {
     Base key;
@@ -127,14 +127,14 @@ inline Handler *Find(Manager *m, u32 id) {
 #pragma push
 #pragma opt_propagation off
 
-extern "C" void LobbyChat_OnGetChannelMode(void *self, int result, const char *name, u32 x, u32 id) {
+extern "C" void LobbyChat_OnGetChannelMode(void *chat, int result, const char *name, u32 mode, u32 id) {
     if (gLobbyChatManager != NULL && gLobbyChatManager->state == 5) {
         return;
     }
     if (result == 0) {
         return;
     }
-    LobbyChat_OnChannelModeChanged(self, name, x, id);
+    LobbyChat_OnChannelModeChanged(chat, name, mode, id);
     int sid = id;
     Manager *m = gLobbyChatManager;
     It it = FindIt(m, sid);
@@ -145,7 +145,7 @@ extern "C" void LobbyChat_OnGetChannelMode(void *self, int result, const char *n
     LobbyChat_StripChannelPrefix(&t, gLobbyChatManager, &s);
     const char *str = t.c_str();
     void (*cb)(BOOL, const char *, u32, u32) = h->callback;
-    cb(result == 1, str, x, h->getArg());
+    cb(result == 1, str, mode, h->getArg());
     LobbyString_Destroy(&t);
     LobbyString_Destroy(&s);
     LobbyRequestMap_DeleteKey(&gLobbyChatManager->map, sid);

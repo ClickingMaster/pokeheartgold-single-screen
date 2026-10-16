@@ -110,28 +110,28 @@ inline It FindIt(Manager *m, u32 id) {
     return LobbyRequestMap_Find(&m->map, kp);
 }
 
-extern "C" void LobbyChat_OnGetChannelKeys(void *self, int result, const char *name, const char *other, int n, u32 *pa, u32 *pb, u32 id);
+extern "C" void LobbyChat_OnGetChannelKeys(void *chat, int result, const char *name, const char *user, int count, u32 *keys, u32 *values, u32 id);
 #pragma push
 #pragma opt_propagation off
 
-extern "C" void LobbyChat_OnGetChannelKeys(void *self, int result, const char *name, const char *other, int n, u32 *pa, u32 *pb, u32 id) {
+extern "C" void LobbyChat_OnGetChannelKeys(void *chat, int result, const char *name, const char *user, int count, u32 *keys, u32 *values, u32 id) {
     if (gLobbyChatManager != NULL && gLobbyChatManager->state == 5) {
         return;
     }
     if (name == NULL) {
         return;
     }
-    int x;
-    if (other == NULL) {
-        x = -1;
+    int userId;
+    if (user == NULL) {
+        userId = -1;
     } else {
         String s;
-        LobbyString_InitFromCStr(&s, other);
-        x = LobbyChat_FindUserIdByNick(gLobbyChatManager, &s);
+        LobbyString_InitFromCStr(&s, user);
+        userId = LobbyChat_FindUserIdByNick(gLobbyChatManager, &s);
         LobbyString_Destroy(&s);
     }
     int sid = id;
-    u32 a, b;
+    u32 key, value;
     Handler *h;
     Manager *m = gLobbyChatManager;
     It it = FindIt(m, sid);
@@ -141,11 +141,11 @@ extern "C" void LobbyChat_OnGetChannelKeys(void *self, int result, const char *n
         Node *nd = it.n;
         h = nd->value;
     }
-    a = 0;
-    b = a;
-    if (result == 1 && n > 0) {
-        a = *pa;
-        b = *pb;
+    key = 0;
+    value = key;
+    if (result == 1 && count > 0) {
+        key = *keys;
+        value = *values;
     }
     String t;
     LobbyString_InitFromCStr(&t, name);
@@ -153,7 +153,7 @@ extern "C" void LobbyChat_OnGetChannelKeys(void *self, int result, const char *n
     LobbyChat_StripChannelPrefix(&k, gLobbyChatManager, &t);
     const char *str = k.c_str();
     void (*cb)(BOOL, const char *, int, u32, u32, u32) = h->callback;
-    cb(result == 1, str, x, a, b, h->getArg());
+    cb(result == 1, str, userId, key, value, h->getArg());
     LobbyString_Destroy(&k);
     LobbyString_Destroy(&t);
     LobbyRequestMap_DeleteKey(&gLobbyChatManager->map, sid);

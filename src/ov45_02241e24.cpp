@@ -74,40 +74,38 @@ struct InsertResult {
 
 extern "C" void LobbyRequestMap_Insert(InsertResult *out, void *list, Handler **h);
 extern "C" Str LobbyChat_GetFullChannelName(Mgr *m, const Str &s);
-extern "C" void chatGetChannelModeA(void *ctx, const char *name, void (*cb)(), u32 id, u32 z);
+extern "C" void chatGetChannelModeA(void *chat, const char *channel, void (*callback)(), u32 param, u32 blocking);
 extern "C" void LobbyChat_OnGetChannelMode();
 
 inline Mgr *GetMgr() {
     return gLobbyChatManager;
 }
 
-inline void BaseInit(Handler *h, u32 b) {
+inline void BaseInit(Handler *h, u32 param) {
     h->vtbl = &gLobbyRequestVtable;
     h->id = 0;
-    h->b = b;
+    h->b = param;
 }
 
-// The id counter is only ever read/written here; it is declared const so that
-// stores through `this` are known not to alias it (native schedules the load
-// above the base-part stores).
+// The id counter is only changed here; it is declared const so that stores through the new handler cannot alias it.
 inline u32 NextHandlerId() {
     u32 n = gLobbyChatNextRequestId;
     *(u32 *)&gLobbyChatNextRequestId = n + 1;
     return n;
 }
 
-inline Handler *NewHandler(u32 a, u32 b) {
+inline Handler *NewHandler(u32 callback, u32 param) {
     Handler *p = (Handler *)LobbyMem_Alloc(sizeof(Handler));
     if (p) {
-        BaseInit(p, b);
+        BaseInit(p, param);
         p->id = NextHandlerId();
         p->vtbl = &gLobbyGetChannelModeRequestVtable;
-        p->a = a;
+        p->a = callback;
     }
     return p;
 }
 
-extern "C" int LobbyChat_GetChannelModeAsync(const char *name, u32 a, u32 b);
+extern "C" int LobbyChat_GetChannelModeAsync(const char *name, u32 callback, u32 param);
 
 struct IdTag {};
 
@@ -117,7 +115,7 @@ inline u32 GetId(Handler *h, IdTag, IdTag) {
 
 #pragma opt_common_subs off
 
-extern "C" int LobbyChat_GetChannelModeAsync(const char *name, u32 a, u32 b) {
+extern "C" int LobbyChat_GetChannelModeAsync(const char *name, u32 callback, u32 param) {
     Mgr *m = gLobbyChatManager;
     if (m == NULL) {
         return 4;
@@ -130,7 +128,7 @@ extern "C" int LobbyChat_GetChannelModeAsync(const char *name, u32 a, u32 b) {
     }
     InsertResult res;
     Handler *h;
-    h = NewHandler(a, b);
+    h = NewHandler(callback, param);
     LobbyRequestMap_Insert(&res, m->list, &h);
     u32 id = GetId(h, IdTag(), IdTag());
     Str s(name);

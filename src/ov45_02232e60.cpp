@@ -1,6 +1,6 @@
-// Overlay 45 (DWC lobby) code from PPW_LobbySubmitQuestionnaire to ov45_022383DF.
-// One translation unit: its functions address the pooled .data block at _02254F58 (4 one-byte objects
-// and 6 string pointers, MWCC pool order = heapsort by size) through one shared pool literal.
+// PPW lobby core: sending and receiving lobby messages, main and sub channel handling, player tracking and the
+// questionnaire, schedule, VIP and profile web requests. Kept as one translation unit because its functions share
+// one block of file-scope data.
 #include <nitro/types.h>
 
 // The code below is compiled as ARM (32-bit) code.
@@ -2647,7 +2647,6 @@ extern "C" void PPWLobby_OnCheckProfile(int a0, int a1, int a2) {
 #pragma push
 
 namespace F22 {
-// @var
 extern "C" void OS_GetMacAddress(u8 *);
 struct Str;
 extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
@@ -4985,9 +4984,9 @@ inline bool IsSelf(int id) {
 #pragma force_active on
 #pragma opt_common_subs off
 
-extern "C" void PPWLobby_OnEnumUsers(int a, char *channel, int count, int *ids) {
+extern "C" void PPWLobby_OnEnumUsers(int success, char *channel, int count, int *ids) {
     int result, i;
-    if (a == 0) {
+    if (success == 0) {
         return;
     }
     {
