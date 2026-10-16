@@ -197,6 +197,25 @@ BOOL ScaleSprites_Update(ScaleSprites *scaleSprites) {
 }
 #pragma force_active reset
 
+enum GymLeaderIntroState {
+    GYM_LEADER_INTRO_STATE_INIT,
+    GYM_LEADER_INTRO_STATE_START_FLASH,
+    GYM_LEADER_INTRO_STATE_WAIT_FLASH,
+    GYM_LEADER_INTRO_STATE_START_WIPE,
+    GYM_LEADER_INTRO_STATE_WAIT_WIPE,
+    GYM_LEADER_INTRO_STATE_SCALE_SPRITES,
+    GYM_LEADER_INTRO_STATE_START_SLIDE_IN,
+    GYM_LEADER_INTRO_STATE_SLIDE_IN,
+    GYM_LEADER_INTRO_STATE_START_BRIGHTEN,
+    GYM_LEADER_INTRO_STATE_BRIGHTEN,
+    GYM_LEADER_INTRO_STATE_START_RESTORE_BRIGHTNESS,
+    GYM_LEADER_INTRO_STATE_RESTORE_BRIGHTNESS,
+    GYM_LEADER_INTRO_STATE_HOLD,
+    GYM_LEADER_INTRO_STATE_START_FADE,
+    GYM_LEADER_INTRO_STATE_WAIT_FADE,
+    GYM_LEADER_INTRO_STATE_END,
+};
+
 String *LeadersEffect_GetTrainerNameString(u32 trainerId, enum HeapID heapID) {
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0189_bin, heapID);
     MessageFormat *msgFormat = MessageFormat_New(heapID);
@@ -236,7 +255,7 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
     VecFx32 position;
 
     switch (state) {
-    case 0:
+    case GYM_LEADER_INTRO_STATE_INIT:
         effect->work = Heap_Alloc(heapID, sizeof(GymLeaderIntroWork));
         memset(effect->work, 0, sizeof(GymLeaderIntroWork));
         work = effect->work;
@@ -261,16 +280,16 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
         work->band = ZigzagWipe_New();
         effect->state++;
         break;
-    case 1:
+    case GYM_LEADER_INTRO_STATE_START_FLASH:
         EncounterEffect_StartFlash(1, 16, 16, &effect->fadeDone, 1);
         effect->state++;
         break;
-    case 2:
+    case GYM_LEADER_INTRO_STATE_WAIT_FLASH:
         if (effect->fadeDone) {
             effect->state = state + 1;
         }
         break;
-    case 3:
+    case GYM_LEADER_INTRO_STATE_START_WIPE:
         EncounterEffect_LoadBgGraphics(effect->narc, params->bgMembers[2], params->bgMembers[1], params->bgMembers[0], 0, 1, effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3);
         work->scrolling = TRUE;
         ZigzagWipe_Start(effect, work->band, 6, 8, 16, 31, 23);
@@ -281,14 +300,14 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
         effect->state++;
         break;
-    case 4:
+    case GYM_LEADER_INTRO_STATE_WAIT_WIPE:
         if (EncounterEffect_IsWipeDone(effect)) {
             effect->state++;
             ZigzagWipe_Free(work->band);
             work->timer = 10;
         }
         break;
-    case 5:
+    case GYM_LEADER_INTRO_STATE_SCALE_SPRITES:
         if (--work->timer < 0) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
             if (ScaleSprites_Update(&work->scaleSprites) == TRUE) {
@@ -296,7 +315,7 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
             }
         }
         break;
-    case 6:
+    case GYM_LEADER_INTRO_STATE_START_SLIDE_IN:
         EncounterEffectQuadInterp_Init(&work->slide, FX32_CONST(272), params->endX, -FX32_CONST(64), 4);
         Sprite_SetDrawFlag(work->leaderSprite, TRUE);
         Sprite_SetPriority(work->leaderSprite, 1);
@@ -304,7 +323,7 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
         Sprite_SetMatrix(work->leaderSprite, &position);
         effect->state++;
         break;
-    case 7:
+    case GYM_LEADER_INTRO_STATE_SLIDE_IN:
         done = EncounterEffectQuadInterp_Update(&work->slide);
         EncounterEffect_SetVecFx32(&position, work->slide.value, FX32_CONST(66), 0);
         Sprite_SetMatrix(work->leaderSprite, &position);
@@ -312,12 +331,12 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
             effect->state++;
         }
         break;
-    case 8:
+    case GYM_LEADER_INTRO_STATE_START_BRIGHTEN:
         EncounterEffectInterp_Init(&work->brightness, 0, 16, 3);
         work->timer = 10;
         effect->state++;
         break;
-    case 9:
+    case GYM_LEADER_INTRO_STATE_BRIGHTEN:
         if (--work->timer < 0) {
             done = EncounterEffectInterp_Update(&work->brightness);
             EncounterEffect_ApplyMainBrightness(&work->brightness);
@@ -330,11 +349,11 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
             }
         }
         break;
-    case 10:
+    case GYM_LEADER_INTRO_STATE_START_RESTORE_BRIGHTNESS:
         EncounterEffectInterp_Init(&work->brightness, 16, 0, 3);
         effect->state++;
         break;
-    case 11:
+    case GYM_LEADER_INTRO_STATE_RESTORE_BRIGHTNESS:
         done = EncounterEffectInterp_Update(&work->brightness);
         EncounterEffect_ApplyMainBrightness(&work->brightness);
         if (done == TRUE) {
@@ -342,21 +361,21 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
             work->timer = 26;
         }
         break;
-    case 12:
+    case GYM_LEADER_INTRO_STATE_HOLD:
         if (--work->timer < 0) {
             effect->state++;
         }
         break;
-    case 13:
+    case GYM_LEADER_INTRO_STATE_START_FADE:
         BeginNormalPaletteFade(3, 0, 0, RGB_WHITE, 15, 1, HEAP_ID_FIELD1);
         effect->state++;
         break;
-    case 14:
+    case GYM_LEADER_INTRO_STATE_WAIT_FADE:
         if (IsPaletteFadeFinished()) {
             effect->state++;
         }
         break;
-    case 15:
+    case GYM_LEADER_INTRO_STATE_END:
         SetMasterBrightnessByColor(1, RGB_WHITE);
         if (effect->done) {
             *effect->done = TRUE;
@@ -376,7 +395,7 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
         ScheduleSetBgPosText(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_X, work->scroll);
         work->scroll = (work->scroll + 30) % 512;
     }
-    if (effect->state != 15) {
+    if (effect->state != GYM_LEADER_INTRO_STATE_END) {
         SpriteList_RenderAndAnimateSprites(work->spriteManager.spriteList);
     }
     return FALSE;
@@ -489,6 +508,24 @@ u32 LeadersEffect_GetPlayerGender(FieldSystem *fieldSystem) {
     return PlayerProfile_GetTrainerGender(Save_PlayerData_GetProfile(fieldSystem->saveData));
 }
 
+enum EliteFourIntroState {
+    ELITE_FOUR_INTRO_STATE_LOAD_RESOURCES,
+    ELITE_FOUR_INTRO_STATE_CREATE_SPRITES,
+    ELITE_FOUR_INTRO_STATE_START_FLASH,
+    ELITE_FOUR_INTRO_STATE_WAIT_FLASH,
+    ELITE_FOUR_INTRO_STATE_LOAD_PARTICLES,
+    ELITE_FOUR_INTRO_STATE_START_SLIDE_IN,
+    ELITE_FOUR_INTRO_STATE_SLIDE_IN,
+    ELITE_FOUR_INTRO_STATE_WAIT_EFFECTS,
+    ELITE_FOUR_INTRO_STATE_BRIGHTEN,
+    ELITE_FOUR_INTRO_STATE_START_RESTORE_BRIGHTNESS,
+    ELITE_FOUR_INTRO_STATE_RESTORE_BRIGHTNESS,
+    ELITE_FOUR_INTRO_STATE_WAIT_SHAKE,
+    ELITE_FOUR_INTRO_STATE_SHAKE,
+    ELITE_FOUR_INTRO_STATE_SLIDE_OUT,
+    ELITE_FOUR_INTRO_STATE_END,
+};
+
 static inline void EliteFourIntro_CreateSprites(EncounterEffectSpriteManager *spriteManager, EncounterEffectSpriteResources resources[4], Sprite *sprites[4]) {
     EncounterEffectSpriteResources *cursor = resources;
     int i;
@@ -525,7 +562,7 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
     String *string;
 
     switch (effect->state) {
-    case 0:
+    case ELITE_FOUR_INTRO_STATE_LOAD_RESOURCES:
         effect->work = Heap_Alloc(heapID, sizeof(EliteFourIntroWork));
         memset(effect->work, 0, sizeof(EliteFourIntroWork));
         work = effect->work;
@@ -544,7 +581,7 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
         EncounterEffect_LoadSpriteResources(effect->narc, &work->spriteManager, &work->resources[3], 59, 1, 60, 61, 62, 600003);
         effect->state++;
         break;
-    case 1:
+    case ELITE_FOUR_INTRO_STATE_CREATE_SPRITES:
         EncounterEffect_SetVecFx32(&initial, FX32_CONST(2), FX32_CONST(2), 0);
         EliteFourIntro_CreateSprites(&work->spriteManager, work->resources, work->sprites);
         LeadersEffect_LoadBlendedSpritePalette(work->sprites[0], heapID, work->playerMember, 14, RGB_BLACK);
@@ -554,12 +591,12 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
         EncounterEffect_StartParticleMode(effect->fieldSystem);
         effect->state++;
         break;
-    case 2:
+    case ELITE_FOUR_INTRO_STATE_START_FLASH:
         EncounterEffect_StartFlash(1, 16, 16, &effect->fadeDone, 1);
         effect->timer = 0;
         effect->state++;
         break;
-    case 3:
+    case ELITE_FOUR_INTRO_STATE_WAIT_FLASH:
         if (++effect->timer == 8) {
             EncounterEffect_RequestParticleSetup();
         }
@@ -567,14 +604,14 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
             effect->state++;
         }
         break;
-    case 4:
+    case ELITE_FOUR_INTRO_STATE_LOAD_PARTICLES:
         if (EncounterEffect_IsParticleSetupDone() == TRUE) {
             EncounterEffect_LoadParticles(effect->narc, 151);
             G2x_SetBlendAlpha_((u32)&reg_G2_BLDCNT, GX_BLEND_PLANEMASK_BG0, GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ, 0, 8);
             effect->state++;
         }
         break;
-    case 5:
+    case ELITE_FOUR_INTRO_STATE_START_SLIDE_IN:
         EncounterEffectQuadInterp_Init(&work->x, -FX32_CONST(128), FX32_CONST(56), FX32_CONST(80), 6);
         EncounterEffect_SetVecFx32(&pos, work->x.value, FX32_CONST(92), 0);
         Sprite_SetMatrix(work->sprites[0], &pos);
@@ -601,7 +638,7 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
         effect->fadeDone = 3; // reused as a frame counter from here on
         effect->state++;
         break;
-    case 6:
+    case ELITE_FOUR_INTRO_STATE_SLIDE_IN:
         if (effect->fadeDone > 0) {
             if (--effect->fadeDone == 0) {
                 EncounterEffect_CreateEmitters(3);
@@ -629,7 +666,7 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
             effect->state++;
         }
         break;
-    case 7:
+    case ELITE_FOUR_INTRO_STATE_WAIT_EFFECTS:
         ready = ScaleSprites_Update(&work->scaleSprites);
         done = EncounterEffect_AreParticlesDone();
         if (ready && done) {
@@ -638,7 +675,7 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
             effect->state++;
         }
         break;
-    case 8:
+    case ELITE_FOUR_INTRO_STATE_BRIGHTEN:
         ready = EncounterEffectInterp_Update(&work->fade);
         EncounterEffect_ApplyMainBrightness(&work->fade);
         if (ready == TRUE) {
@@ -652,13 +689,13 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
             effect->state++;
         }
         break;
-    case 9:
+    case ELITE_FOUR_INTRO_STATE_START_RESTORE_BRIGHTNESS:
         EncounterEffectInterp_Init(&work->fade, 16, 0, 6);
         EncounterEffect_CreateEmitters(4);
         SetBgPriority(GF_BG_LYR_MAIN_0, 1);
         effect->state++;
         break;
-    case 10:
+    case ELITE_FOUR_INTRO_STATE_RESTORE_BRIGHTNESS:
         ready = EncounterEffectInterp_Update(&work->fade);
         EncounterEffect_ApplyMainBrightness(&work->fade);
         if (ready == TRUE) {
@@ -666,7 +703,7 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
             effect->fadeDone = 8;
         }
         break;
-    case 11:
+    case ELITE_FOUR_INTRO_STATE_WAIT_SHAKE:
         if (effect->fadeDone > 0) {
             effect->fadeDone--;
         } else {
@@ -676,7 +713,7 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
             effect->state++;
         }
         break;
-    case 12:
+    case ELITE_FOUR_INTRO_STATE_SHAKE:
         effect->fadeDone++;
         ready = EncounterEffectQuadInterp_Update(&work->x);
         EncounterEffectQuadInterp_Update(&work->y);
@@ -712,7 +749,7 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
             BeginNormalPaletteFade(3, 0, 0, RGB_WHITE, 8, 1, HEAP_ID_FIELD1);
         }
         break;
-    case 13:
+    case ELITE_FOUR_INTRO_STATE_SLIDE_OUT:
         EncounterEffectQuadInterp_Update(&work->x);
         EncounterEffectQuadInterp_Update(&work->y);
         EncounterEffect_SetVecFx32(&pos, work->playerPos.x - work->x.value, work->playerPos.y - work->y.value, 0);
@@ -729,7 +766,7 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
             effect->state++;
         }
         break;
-    case 14:
+    case ELITE_FOUR_INTRO_STATE_END:
         SetMasterBrightnessByColor(1, RGB_WHITE);
         if (effect->done) {
             *effect->done = TRUE;
@@ -748,9 +785,9 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
         reg_G2_BLDCNT = 0;
         return TRUE;
     }
-    if (effect->state != 14) {
+    if (effect->state != ELITE_FOUR_INTRO_STATE_END) {
         SpriteList_RenderAndAnimateSprites(work->spriteManager.spriteList);
-        if ((int)effect->state > 4) {
+        if ((int)effect->state > ELITE_FOUR_INTRO_STATE_LOAD_PARTICLES) {
             Thunk_G3X_Reset();
             EncounterEffect_UpdateParticles();
             EncounterEffect_DrawParticles();

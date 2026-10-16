@@ -124,6 +124,57 @@ enum PlazaGameContinueState {
     PLAZA_GAME_CONTINUE_FINISH,
 };
 
+enum PlazaGameRankingState {
+    PLAZA_GAME_RANKING_FADE_IN,
+    PLAZA_GAME_RANKING_WAIT_FADE_IN,
+    PLAZA_GAME_RANKING_PRINT_TITLE,
+    PLAZA_GAME_RANKING_WAIT_TITLE,
+    PLAZA_GAME_RANKING_HIDE_TITLE,
+    PLAZA_GAME_RANKING_NEXT_RANK,
+    PLAZA_GAME_RANKING_SHOW_RANK,
+    PLAZA_GAME_RANKING_WAIT_PLAYERS,
+    PLAZA_GAME_RANKING_START_FLASH,
+    PLAZA_GAME_RANKING_WAIT_FLASH,
+    PLAZA_GAME_RANKING_PRINT_RESULT,
+    PLAZA_GAME_RANKING_WAIT_RESULT,
+    PLAZA_GAME_RANKING_PRINT_TAP_TOY,
+    PLAZA_GAME_RANKING_WAIT_TAP_TOY,
+    PLAZA_GAME_RANKING_HIDE_MESSAGE,
+    PLAZA_GAME_RANKING_START_SYNC,
+    PLAZA_GAME_RANKING_WAIT_SYNC,
+    PLAZA_GAME_RANKING_FADE_OUT,
+    PLAZA_GAME_RANKING_WAIT_FADE_OUT,
+    PLAZA_GAME_RANKING_RECORD_FRIEND_PLAYS,
+    PLAZA_GAME_RANKING_RUN_CONTINUE,
+    PLAZA_GAME_RANKING_FINISH,
+    PLAZA_GAME_RANKING_WAIT_NO_WINNER,
+    PLAZA_GAME_RANKING_SHOW_ALL_LAST,
+};
+
+enum PlazaGameTeamState {
+    PLAZA_GAME_TEAM_FADE_IN,
+    PLAZA_GAME_TEAM_WAIT_FADE_IN,
+    PLAZA_GAME_TEAM_PRINT_TITLE,
+    PLAZA_GAME_TEAM_WAIT_TITLE,
+    PLAZA_GAME_TEAM_HIDE_TITLE,
+    PLAZA_GAME_TEAM_SHOW_PLAYERS,
+    PLAZA_GAME_TEAM_WAIT_PLAYERS,
+    PLAZA_GAME_TEAM_RUN_BALLOONS,
+    PLAZA_GAME_TEAM_PRINT_TOTAL,
+    PLAZA_GAME_TEAM_WAIT_TOTAL,
+    PLAZA_GAME_TEAM_PRINT_TAP_TOY,
+    PLAZA_GAME_TEAM_WAIT_TAP_TOY,
+    PLAZA_GAME_TEAM_HOLD,
+    PLAZA_GAME_TEAM_HOLD_POWERED_UP,
+    PLAZA_GAME_TEAM_START_SYNC,
+    PLAZA_GAME_TEAM_WAIT_SYNC,
+    PLAZA_GAME_TEAM_FADE_OUT,
+    PLAZA_GAME_TEAM_WAIT_FADE_OUT,
+    PLAZA_GAME_TEAM_RECORD_FRIEND_PLAYS,
+    PLAZA_GAME_TEAM_RUN_CONTINUE,
+    PLAZA_GAME_TEAM_FINISH,
+};
+
 void PlazaGameRoster_Init(PlazaGameRoster *roster, u32 fromLobby, SaveData *saveData, u8 unkA, PlazaGameArgs *args) {
     int netId;
     int localNetId;
@@ -1517,7 +1568,7 @@ void PlazaGameResults_RankingTask(SysTask *task, void *data) {
     PlazaGameResults *results = data;
 
     switch (results->state) {
-    case 0: {
+    case PLAZA_GAME_RANKING_FADE_IN: {
         int i;
         int threshold;
         results->prevTapToy = results->roster.args->tapToy;
@@ -1540,22 +1591,22 @@ void PlazaGameResults_RankingTask(SysTask *task, void *data) {
         results->state++;
         break;
     }
-    case 1:
+    case PLAZA_GAME_RANKING_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
             results->state++;
         }
         break;
-    case 2:
+    case PLAZA_GAME_RANKING_PRINT_TITLE:
         PlazaGameMessageBox_Show(&results->messageBox, &results->text, msg_0236_00001, 0);
         results->state++;
         break;
-    case 3:
+    case PLAZA_GAME_RANKING_WAIT_TITLE:
         if (PlazaGameMessageBox_IsPrinterFinished(&results->messageBox, 0)) {
             results->timer = 64;
             results->state++;
         }
         break;
-    case 4: {
+    case PLAZA_GAME_RANKING_HIDE_TITLE: {
         int i;
         u32 threshold;
         BOOL noWinner;
@@ -1577,14 +1628,14 @@ void PlazaGameResults_RankingTask(SysTask *task, void *data) {
         }
         if (noWinner == TRUE) {
             results->delay = 16;
-            results->state = 22;
+            results->state = PLAZA_GAME_RANKING_WAIT_NO_WINNER;
         } else {
             results->state++;
             results->rankStep = 4;
         }
         break;
     }
-    case 5: {
+    case PLAZA_GAME_RANKING_NEXT_RANK: {
         int i;
         BOOL found = FALSE;
         do {
@@ -1612,7 +1663,7 @@ void PlazaGameResults_RankingTask(SysTask *task, void *data) {
         results->state++;
         break;
     }
-    case 6: {
+    case PLAZA_GAME_RANKING_SHOW_RANK: {
         int i;
         BOOL show;
         results->delay--;
@@ -1630,33 +1681,33 @@ void PlazaGameResults_RankingTask(SysTask *task, void *data) {
                 }
             }
             if (results->rankStep > 1) {
-                results->state = 5;
+                results->state = PLAZA_GAME_RANKING_NEXT_RANK;
             } else {
                 results->state++;
             }
         }
         break;
     }
-    case 7:
+    case PLAZA_GAME_RANKING_WAIT_PLAYERS:
         if (PlazaGameResults_UpdatePlayers(results)) {
             results->state++;
         }
         break;
-    case 8:
+    case PLAZA_GAME_RANKING_START_FLASH:
         results->state++;
         PlazaGameResults_StartFlash(results);
         results->timer = 30;
         break;
-    case 9:
+    case PLAZA_GAME_RANKING_WAIT_FLASH:
         if (results->timer != 0) {
             results->timer--;
         }
         if (results->timer == 0) {
-            results->state = 10;
+            results->state = PLAZA_GAME_RANKING_PRINT_RESULT;
             results->timer = 0;
         }
         break;
-    case 10: {
+    case PLAZA_GAME_RANKING_PRINT_RESULT: {
         int i;
         int msgNo;
         i = results->roster.localIndex;
@@ -1670,18 +1721,18 @@ void PlazaGameResults_RankingTask(SysTask *task, void *data) {
         results->state++;
         break;
     }
-    case 11:
+    case PLAZA_GAME_RANKING_WAIT_RESULT:
         if (PlazaGameMessageBox_IsPrinterFinished(&results->messageBox, 0) && PlazaGameResults_IsFanfareDone(results) == TRUE) {
             if (results->roster.launchedFromField == 1) {
                 results->timer = 102;
-                results->state = 14;
+                results->state = PLAZA_GAME_RANKING_HIDE_MESSAGE;
             } else {
                 results->timer = 102;
                 results->state++;
             }
         }
         break;
-    case 12: {
+    case PLAZA_GAME_RANKING_PRINT_TAP_TOY: {
         int i;
         int msgNo;
         if (results->timer != 0) {
@@ -1701,16 +1752,16 @@ void PlazaGameResults_RankingTask(SysTask *task, void *data) {
         i = results->roster.localIndex;
         PlazaGameText_BufferPlayerName(&results->text, results->info.profiles[i]);
         PlazaGameMessageBox_Show(&results->messageBox, &results->text, msgNo, 0);
-        results->state = 13;
+        results->state = PLAZA_GAME_RANKING_WAIT_TAP_TOY;
         break;
     }
-    case 13:
+    case PLAZA_GAME_RANKING_WAIT_TAP_TOY:
         if (PlazaGameMessageBox_IsPrinterFinished(&results->messageBox, 0)) {
             results->timer = 102;
             results->state++;
         }
         break;
-    case 14:
+    case PLAZA_GAME_RANKING_HIDE_MESSAGE:
         if (results->timer == 0) {
             break;
         }
@@ -1722,7 +1773,7 @@ void PlazaGameResults_RankingTask(SysTask *task, void *data) {
         results->timer = 30;
         results->state++;
         break;
-    case 15:
+    case PLAZA_GAME_RANKING_START_SYNC:
         if (results->timer != 0) {
             results->timer--;
             break;
@@ -1733,51 +1784,51 @@ void PlazaGameResults_RankingTask(SysTask *task, void *data) {
         }
         results->state++;
         break;
-    case 16:
+    case PLAZA_GAME_RANKING_WAIT_SYNC:
         if (LinkSync_IsSynced(0x82)) {
             if (results->roster.launchedFromField != 0) {
-                results->state = 19;
+                results->state = PLAZA_GAME_RANKING_RECORD_FRIEND_PLAYS;
             } else {
                 results->state++;
             }
         }
         break;
-    case 17:
+    case PLAZA_GAME_RANKING_FADE_OUT:
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, (enum HeapID)results->heapId);
         results->state++;
         break;
-    case 18:
+    case PLAZA_GAME_RANKING_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished()) {
-            results->state = 21;
+            results->state = PLAZA_GAME_RANKING_FINISH;
         }
         break;
-    case 19:
+    case PLAZA_GAME_RANKING_RECORD_FRIEND_PLAYS:
         PlazaGameResults_RecordFriendPlays(results);
         results->state++;
         break;
-    case 20:
+    case PLAZA_GAME_RANKING_RUN_CONTINUE:
         if (PlazaGameContinue_Run(&results->continuePrompt, &results->messageBox, &results->text, results->game, (enum HeapID)results->heapId)) {
             results->continueResult = PlazaGameContinue_GetResult(&results->continuePrompt);
             results->state++;
         }
         break;
-    case 21:
+    case PLAZA_GAME_RANKING_FINISH:
         PlazaGameLineScroll_Free(&results->lineScroll);
         results->done = TRUE;
         break;
-    case 22:
+    case PLAZA_GAME_RANKING_WAIT_NO_WINNER:
         results->delay--;
         if (results->delay == 0) {
             results->state++;
         }
         break;
-    case 23: {
+    case PLAZA_GAME_RANKING_SHOW_ALL_LAST: {
         int i;
         for (i = 0; i < results->roster.count; i++) {
             results->data.ranks[i] = results->roster.count - 1;
             PlazaGameResults_ShowPlayer(results, i, results->data.ranks[i]);
         }
-        results->state = 7;
+        results->state = PLAZA_GAME_RANKING_WAIT_PLAYERS;
         break;
     }
     default:
@@ -1793,7 +1844,7 @@ void PlazaGameResults_TeamTask(SysTask *task, void *data) {
     PlazaGameResults *results = data;
     int i;
     switch (results->state) {
-    case 0:
+    case PLAZA_GAME_TEAM_FADE_IN:
         if (results->roster.launchedFromField == 1) {
             results->tapToyPoweredUp = FALSE;
         } else {
@@ -1810,23 +1861,23 @@ void PlazaGameResults_TeamTask(SysTask *task, void *data) {
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, 0xFFFF, 6, 1, (enum HeapID)results->heapId);
         results->state++;
         break;
-    case 1:
+    case PLAZA_GAME_TEAM_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
             results->state++;
             results->rankStep = 4;
         }
         break;
-    case 2:
+    case PLAZA_GAME_TEAM_PRINT_TITLE:
         PlazaGameMessageBox_Show(&results->messageBox, &results->text, msg_0236_00001, 0);
         results->state++;
         break;
-    case 3:
+    case PLAZA_GAME_TEAM_WAIT_TITLE:
         if (PlazaGameMessageBox_IsPrinterFinished(&results->messageBox, 0)) {
             results->timer = 102;
             results->state++;
         }
         break;
-    case 4:
+    case PLAZA_GAME_TEAM_HIDE_TITLE:
         if (results->timer != 0) {
             results->timer--;
             if (results->timer == 0) {
@@ -1835,7 +1886,7 @@ void PlazaGameResults_TeamTask(SysTask *task, void *data) {
             }
         }
         break;
-    case 5:
+    case PLAZA_GAME_TEAM_SHOW_PLAYERS:
         PlazaGameLineScroll_Init(&results->lineScroll, &results->bg, (enum HeapID)results->heapId);
         for (i = 0; i < results->roster.count; i++) {
             PlazaGamePlayer_Init(&results->players[i], results->roster.count, results->game, results->screen, &results->bg, i, results->roster.localIndex, &results->sprites, results->gfxRes, (enum HeapID)results->heapId);
@@ -1848,7 +1899,7 @@ void PlazaGameResults_TeamTask(SysTask *task, void *data) {
         results->state++;
         results->timer = 16;
         break;
-    case 6:
+    case PLAZA_GAME_TEAM_WAIT_PLAYERS:
         if (PlazaGameResults_UpdatePlayers(results) == TRUE) {
             results->timer--;
             if (results->timer == 0) {
@@ -1857,7 +1908,7 @@ void PlazaGameResults_TeamTask(SysTask *task, void *data) {
             }
         }
         break;
-    case 7:
+    case PLAZA_GAME_TEAM_RUN_BALLOONS:
         if (PlazaGameBalloons_Update(&results->balloons, &results->bg) == TRUE) {
             if (results->tapToyPoweredUp == TRUE) {
                 PlazaGameResults_PlayFanfare(results);
@@ -1865,19 +1916,19 @@ void PlazaGameResults_TeamTask(SysTask *task, void *data) {
             results->state++;
         }
         break;
-    case 8:
+    case PLAZA_GAME_TEAM_PRINT_TOTAL:
         PlazaGameText_BufferTwoDigitNumber(&results->text, results->data.total);
         PlazaGameMessageBox_Show(&results->messageBox, &results->text, msg_0236_00007, 0);
         results->timer = 102;
         results->state++;
         break;
-    case 9:
+    case PLAZA_GAME_TEAM_WAIT_TOTAL:
         if (PlazaGameMessageBox_IsPrinterFinished(&results->messageBox, 0) == TRUE) {
             if (results->timer == 0) {
                 if (PlazaGameResults_IsFanfareDone(results) == TRUE) {
                     if (results->roster.launchedFromField == 1) {
                         results->timer = 102;
-                        results->state = 12;
+                        results->state = PLAZA_GAME_TEAM_HOLD;
                     } else {
                         results->state++;
                     }
@@ -1887,72 +1938,72 @@ void PlazaGameResults_TeamTask(SysTask *task, void *data) {
             }
         }
         break;
-    case 10:
+    case PLAZA_GAME_TEAM_PRINT_TAP_TOY:
         PlazaGameMessageBox_Show(&results->messageBox, &results->text, results->tapToyPoweredUp ? msg_0236_00008 : msg_0236_00009, 0);
         results->state++;
         break;
-    case 11:
+    case PLAZA_GAME_TEAM_WAIT_TAP_TOY:
         if (PlazaGameMessageBox_IsPrinterFinished(&results->messageBox, 0)) {
             results->timer = 102;
             if (results->tapToyPoweredUp) {
-                results->state = 13;
+                results->state = PLAZA_GAME_TEAM_HOLD_POWERED_UP;
             } else {
                 results->state++;
             }
         }
         break;
-    case 12:
+    case PLAZA_GAME_TEAM_HOLD:
         if (results->timer != 0) {
             results->timer--;
             if (results->timer == 0) {
-                results->state = 14;
+                results->state = PLAZA_GAME_TEAM_START_SYNC;
             }
         }
         break;
-    case 13:
+    case PLAZA_GAME_TEAM_HOLD_POWERED_UP:
         if (results->timer != 0) {
             results->timer--;
         }
         if (results->timer == 0) {
-            results->state = 14;
+            results->state = PLAZA_GAME_TEAM_START_SYNC;
         }
         break;
-    case 14:
+    case PLAZA_GAME_TEAM_START_SYNC:
         if (results->roster.voiceChat) {
             WifiConnection_StopVoiceChat();
         }
         LinkSync_StartSync(0x82);
         results->state++;
         break;
-    case 15:
+    case PLAZA_GAME_TEAM_WAIT_SYNC:
         if (LinkSync_IsSynced(0x82)) {
             if (results->roster.launchedFromField) {
-                results->state = 18;
+                results->state = PLAZA_GAME_TEAM_RECORD_FRIEND_PLAYS;
             } else {
                 results->state++;
             }
         }
         break;
-    case 16:
+    case PLAZA_GAME_TEAM_FADE_OUT:
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, (enum HeapID)results->heapId);
         results->state++;
         break;
-    case 17:
+    case PLAZA_GAME_TEAM_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished()) {
-            results->state = 20;
+            results->state = PLAZA_GAME_TEAM_FINISH;
         }
         break;
-    case 18:
+    case PLAZA_GAME_TEAM_RECORD_FRIEND_PLAYS:
         PlazaGameResults_RecordFriendPlays(results);
         results->state++;
         break;
-    case 19:
+    case PLAZA_GAME_TEAM_RUN_CONTINUE:
         if (PlazaGameContinue_Run(&results->continuePrompt, &results->messageBox, &results->text, results->game, (enum HeapID)results->heapId)) {
             results->continueResult = PlazaGameContinue_GetResult(&results->continuePrompt);
             results->state++;
         }
         break;
-    case 20:
+    case PLAZA_GAME_TEAM_FINISH:
         PlazaGameLineScroll_Free(&results->lineScroll);
         results->done = TRUE;
         break;

@@ -397,6 +397,40 @@ s32 WirelessTradeSelectMon_HandleYesNoPrompt(BgConfig *bgConfig, void *unused, u
 ListMenu *WirelessTradeSelectMon_CreateRosterListMenu(ListMenuItem *items, u32 count, Window *window, BgConfig *bgConfig);
 void WirelessTradeSelectMon_RosterListCursorCB(ListMenu *list, s32 index, u8 onInit);
 
+enum WirelessTradeSelectState {
+    WIRELESS_TRADE_SELECT_STATE_EXCHANGE_DATA,
+    WIRELESS_TRADE_SELECT_STATE_SELECT,
+    WIRELESS_TRADE_SELECT_STATE_EXIT,
+    WIRELESS_TRADE_SELECT_STATE_START_SUMMARY,
+    WIRELESS_TRADE_SELECT_STATE_OPEN_SUMMARY,
+    WIRELESS_TRADE_SELECT_STATE_RUN_SUMMARY,
+    WIRELESS_TRADE_SELECT_STATE_START_FADE_IN,
+    WIRELESS_TRADE_SELECT_STATE_WAIT_FADE_IN,
+};
+
+enum WirelessTradeSelectExchangeState {
+    WIRELESS_TRADE_EXCHANGE_START_SYNC,
+    WIRELESS_TRADE_EXCHANGE_WAIT_SYNC,
+    WIRELESS_TRADE_EXCHANGE_WAIT_START_DELAY,
+    WIRELESS_TRADE_EXCHANGE_COUNT_START_DELAY,
+    WIRELESS_TRADE_EXCHANGE_INIT_SAVE,
+    WIRELESS_TRADE_EXCHANGE_SAVE,
+    WIRELESS_TRADE_EXCHANGE_START_SEND_SYNC,
+    WIRELESS_TRADE_EXCHANGE_WAIT_SEND_SYNC,
+    WIRELESS_TRADE_EXCHANGE_SEND_PARTY,
+    WIRELESS_TRADE_EXCHANGE_WAIT_PARTY,
+    WIRELESS_TRADE_EXCHANGE_PRINT_NICKNAMES,
+    WIRELESS_TRADE_EXCHANGE_GET_MON_INFO,
+    WIRELESS_TRADE_EXCHANGE_SEND_PALPAD,
+    WIRELESS_TRADE_EXCHANGE_WAIT_PALPAD,
+    WIRELESS_TRADE_EXCHANGE_SEND_CHATOT,
+    WIRELESS_TRADE_EXCHANGE_WAIT_CHATOT,
+    WIRELESS_TRADE_EXCHANGE_SHOW_MAIN_SCREEN,
+    WIRELESS_TRADE_EXCHANGE_WAIT_MAIN_SCREEN,
+    WIRELESS_TRADE_EXCHANGE_SHOW_SUB_SCREEN,
+    WIRELESS_TRADE_EXCHANGE_WAIT_SUB_SCREEN,
+};
+
 BOOL WirelessTradeSelectMon_Init(OverlayManager *man, int *state) {
     NARC *narc;
     WirelessTradeSelectMon *work;
@@ -524,31 +558,31 @@ BOOL WirelessTradeSelectMon_Main(OverlayManager *man, int *state) {
         break;
     case 1:
         switch (work->state) {
-        case 0:
+        case WIRELESS_TRADE_SELECT_STATE_EXCHANGE_DATA:
             work->state = WirelessTradeSelectMon_ExchangeData(work);
             break;
-        case 1:
+        case WIRELESS_TRADE_SELECT_STATE_SELECT:
             work->state = WirelessTradeSelectMon_RunSelect(work);
             break;
-        case 2:
+        case WIRELESS_TRADE_SELECT_STATE_EXIT:
             BeginNormalPaletteFade(0, 0, 0, RGB_BLACK, 8, 1, HEAP_ID_26);
             *state = 2;
             break;
-        case 3:
+        case WIRELESS_TRADE_SELECT_STATE_START_SUMMARY:
             BeginNormalPaletteFade(0, 0, 0, RGB_BLACK, 8, 1, HEAP_ID_26);
-            work->state = 4;
+            work->state = WIRELESS_TRADE_SELECT_STATE_OPEN_SUMMARY;
             break;
-        case 4:
+        case WIRELESS_TRADE_SELECT_STATE_OPEN_SUMMARY:
             if (IsPaletteFadeFinished()) {
                 WirelessTradeSelectMon_FreeIconCharData(work);
                 WirelessTradeSelectMon_FreeSprites(work);
                 WirelessTradeSelectMon_FreeBgs(work->bgConfig);
                 work->summaryActive = TRUE;
-                work->state = 5;
+                work->state = WIRELESS_TRADE_SELECT_STATE_RUN_SUMMARY;
                 WirelessTradeSelectMon_OpenSummary(work, work->cursor / 6);
             }
             break;
-        case 5:
+        case WIRELESS_TRADE_SELECT_STATE_RUN_SUMMARY:
             if (OverlayManager_Run(work->summaryApp)) {
                 OverlayManager_Delete(work->summaryApp);
                 WirelessTradeSelectMon_ReloadScreen(work);
@@ -557,16 +591,16 @@ BOOL WirelessTradeSelectMon_Main(OverlayManager *man, int *state) {
                 WirelessTradeSelectMon_ShowSelectedMon(work);
                 WirelessTradeSelectMon_SetCursorSprite(work->cursor, work->cursorSprites[0], 0);
                 WirelessStatusIcon_Create();
-                work->state = 6;
+                work->state = WIRELESS_TRADE_SELECT_STATE_START_FADE_IN;
             }
             break;
-        case 6:
+        case WIRELESS_TRADE_SELECT_STATE_START_FADE_IN:
             BeginNormalPaletteFade(0, 1, 1, RGB_BLACK, 8, 1, HEAP_ID_26);
-            work->state = 7;
+            work->state = WIRELESS_TRADE_SELECT_STATE_WAIT_FADE_IN;
             break;
-        case 7:
+        case WIRELESS_TRADE_SELECT_STATE_WAIT_FADE_IN:
             if (IsPaletteFadeFinished()) {
-                work->state = 1;
+                work->state = WIRELESS_TRADE_SELECT_STATE_SELECT;
             }
             break;
         }
@@ -643,7 +677,7 @@ BOOL WirelessTradeSelectMon_ExchangeData(WirelessTradeSelectMon *work) {
 
     WirelessTradeSelectMon_UpdateTimeout(work);
     switch (work->exchangeState) {
-    case 0:
+    case WIRELESS_TRADE_EXCHANGE_START_SYNC:
         LinkSync_StartSync(0x50);
         Sys_SetSoftResetDisableFlag(2);
         WirelessTradeSelectMon_ShowWaitingIcon(work);
@@ -659,12 +693,12 @@ BOOL WirelessTradeSelectMon_ExchangeData(WirelessTradeSelectMon *work) {
         }
         work->exchangeState++;
         break;
-    case 1:
+    case WIRELESS_TRADE_EXCHANGE_WAIT_SYNC:
         if (LinkSync_IsSynced(0x50)) {
             if (work->args->tradeCount == 0) {
-                work->exchangeState = 6;
+                work->exchangeState = WIRELESS_TRADE_EXCHANGE_START_SEND_SYNC;
             } else {
-                work->exchangeState = 2;
+                work->exchangeState = WIRELESS_TRADE_EXCHANGE_WAIT_START_DELAY;
             }
             if (Comm_GetLocalNetId() == 0) {
                 // The parent picks a random delay before the data exchange.
@@ -675,37 +709,37 @@ BOOL WirelessTradeSelectMon_ExchangeData(WirelessTradeSelectMon *work) {
             WirelessTradeSelectMon_StartTimeout(work);
         }
         break;
-    case 2:
+    case WIRELESS_TRADE_EXCHANGE_WAIT_START_DELAY:
         if (work->startDelay != 0) {
             work->exchangeState++;
         }
         break;
-    case 3:
+    case WIRELESS_TRADE_EXCHANGE_COUNT_START_DELAY:
         work->startDelay--;
         if (work->startDelay == 0) {
-            work->exchangeState = 4;
+            work->exchangeState = WIRELESS_TRADE_EXCHANGE_INIT_SAVE;
         }
         break;
-    case 4:
+    case WIRELESS_TRADE_EXCHANGE_INIT_SAVE:
         Comm_InitSyncedSave(&work->saveState);
         work->exchangeState++;
         break;
-    case 5:
+    case WIRELESS_TRADE_EXCHANGE_SAVE:
         if (Comm_SyncedSave(work->saveData, 2, &work->saveState)) {
             work->exchangeState++;
         }
         break;
-    case 6:
+    case WIRELESS_TRADE_EXCHANGE_START_SEND_SYNC:
         Comm_SetWifiContinuousSend(1);
         LinkSync_StartSync(0x51);
         work->exchangeState++;
         break;
-    case 7:
+    case WIRELESS_TRADE_EXCHANGE_WAIT_SEND_SYNC:
         if (LinkSync_IsSynced(0x51)) {
             work->exchangeState++;
         }
         break;
-    case 8:
+    case WIRELESS_TRADE_EXCHANGE_SEND_PARTY:
         work->sentChunks = 0;
         work->commState = 0;
         work->receivedChunks = 0;
@@ -715,16 +749,16 @@ BOOL WirelessTradeSelectMon_ExchangeData(WirelessTradeSelectMon *work) {
         }
         work->exchangeState++;
         break;
-    case 9:
+    case WIRELESS_TRADE_EXCHANGE_WAIT_PARTY:
         if (work->commState != 0) {
-            work->exchangeState = 10;
+            work->exchangeState = WIRELESS_TRADE_EXCHANGE_PRINT_NICKNAMES;
         }
         break;
-    case 10:
+    case WIRELESS_TRADE_EXCHANGE_PRINT_NICKNAMES:
         work->exchangeState++;
         WirelessTradeSelectMon_PrintPartyNicknames(work);
         break;
-    case 11: {
+    case WIRELESS_TRADE_EXCHANGE_GET_MON_INFO: {
         int j;
         u16 species;
         u8 *shifted;
@@ -757,20 +791,20 @@ BOOL WirelessTradeSelectMon_ExchangeData(WirelessTradeSelectMon *work) {
         work->mons[WIRELESS_TRADE_SLOT_CANCEL].species = 1;
         work->exchangeState++;
         break;
-    case 12:
+    case WIRELESS_TRADE_EXCHANGE_SEND_PALPAD:
         WirelessTradeSelectMon_SendPalPad(CommPlayerInfo_GetProfile(Comm_GetLocalNetId()), work->palPad, &work->palPadPacket);
         work->exchangeState++;
         break;
-    case 13:
+    case WIRELESS_TRADE_EXCHANGE_WAIT_PALPAD:
         if (work->commState == 3) {
             work->exchangeState++;
         }
         break;
-    case 14:
+    case WIRELESS_TRADE_EXCHANGE_SEND_CHATOT:
         WirelessTradeSelectMon_SendChatot(Save_Chatot_Get(work->saveData));
         work->exchangeState++;
         break;
-    case 15:
+    case WIRELESS_TRADE_EXCHANGE_WAIT_CHATOT:
         if (work->commState == 4) {
             work->exchangeState++;
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
@@ -782,7 +816,7 @@ BOOL WirelessTradeSelectMon_ExchangeData(WirelessTradeSelectMon *work) {
             }
         }
         break;
-    case 16:
+    case WIRELESS_TRADE_EXCHANGE_SHOW_MAIN_SCREEN:
         StartBrightnessTransition(8, 0, -16, (GXBlendPlaneMask)0x1E, 1);
         ToggleBgLayer(GF_BG_LYR_MAIN_1, GF_PLANE_TOGGLE_ON);
         ToggleBgLayer(GF_BG_LYR_MAIN_2, GF_PLANE_TOGGLE_ON);
@@ -790,14 +824,14 @@ BOOL WirelessTradeSelectMon_ExchangeData(WirelessTradeSelectMon *work) {
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         work->exchangeState++;
         break;
-    case 17:
+    case WIRELESS_TRADE_EXCHANGE_WAIT_MAIN_SCREEN:
         if (IsBrightnessTransitionActive(1)) {
             work->pendingMonPic = WirelessTradeSelectMon_LoadMonPic(0, Party_GetMonByIndex(work->party, 0), work->monPics[0], &work->monPicTemplates[0]);
             WirelessTradeSelectMon_ShowMonDetails(work->windows, 0, work->party, 0, work);
             work->exchangeState++;
         }
         break;
-    case 18:
+    case WIRELESS_TRADE_EXCHANGE_SHOW_SUB_SCREEN:
         StartBrightnessTransition(8, 0, -16, (GXBlendPlaneMask)0x17, 2);
         ToggleBgLayer(GF_BG_LYR_SUB_0, GF_PLANE_TOGGLE_ON);
         ToggleBgLayer(GF_BG_LYR_SUB_1, GF_PLANE_TOGGLE_ON);
@@ -806,7 +840,7 @@ BOOL WirelessTradeSelectMon_ExchangeData(WirelessTradeSelectMon *work) {
         work->exchangeState++;
         WirelessTradeSelectMon_HideWaitingIcon(work);
         break;
-    case 19:
+    case WIRELESS_TRADE_EXCHANGE_WAIT_SUB_SCREEN:
         if (IsBrightnessTransitionActive(2)) {
             ClearFrameAndWindow2(&work->windows[23], TRUE);
             FillBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, 32, 24, 0);
@@ -900,9 +934,9 @@ int WirelessTradeSelectMon_RunSelect(WirelessTradeSelectMon *work) {
     case 1:
         break;
     case 2:
-        return 2;
+        return WIRELESS_TRADE_SELECT_STATE_EXIT;
     case 3:
-        return 3;
+        return WIRELESS_TRADE_SELECT_STATE_START_SUMMARY;
     default:
         break;
     }
@@ -913,7 +947,7 @@ int WirelessTradeSelectMon_RunSelect(WirelessTradeSelectMon *work) {
     WirelessTradeSelectMon_MoveCursor(&work->partnerDpadDir, &work->partnerCursor, work->cursorSprites[1], work->mons, 1);
     WirelessTradeSelectMon_UpdateCursorBlink(&work->cursorBlinkAngle);
     WirelessTradeSelectMon_SendCommandIfChanged(work, WIRELESS_TRADE_CMD_CURSOR, work->cursor);
-    return 1;
+    return WIRELESS_TRADE_SELECT_STATE_SELECT;
 }
 
 void WirelessTradeSelectMon_FreeSprites(WirelessTradeSelectMon *work) {
@@ -1077,8 +1111,8 @@ void WirelessTradeSelectMon_InitWork(WirelessTradeSelectMon *work, OverlayManage
     work->cursor = 0;
     work->partnerCursor = 6;
     work->selectResult = 0;
-    work->state = 0;
-    work->exchangeState = 0;
+    work->state = WIRELESS_TRADE_SELECT_STATE_EXCHANGE_DATA;
+    work->exchangeState = WIRELESS_TRADE_EXCHANGE_START_SYNC;
     work->callback = WirelessTradeSelectMon_SelectMon;
     work->answers[0] = 0;
     work->answers[1] = 0;

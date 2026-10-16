@@ -75,6 +75,56 @@ enum BallCapsuleEditorMode {
     BALL_CAPSULE_EDITOR_MODE_NONE,
 };
 
+// editor->state, one set of values per mode
+enum BallCapsuleSelectState {
+    BALL_CAPSULE_SELECT_SETUP,
+    BALL_CAPSULE_SELECT_FADE_IN,
+    BALL_CAPSULE_SELECT_WAIT_FADE_IN,
+    BALL_CAPSULE_SELECT_INPUT,
+    BALL_CAPSULE_SELECT_MENU,
+    BALL_CAPSULE_SELECT_FADE_OUT,
+    BALL_CAPSULE_SELECT_WAIT_FADE_OUT,
+};
+
+enum BallCapsuleEditState {
+    BALL_CAPSULE_EDIT_ENTER,
+    BALL_CAPSULE_EDIT_INPUT = 4,
+    BALL_CAPSULE_EDIT_PREVIEW,
+    BALL_CAPSULE_EDIT_SAVE,
+    BALL_CAPSULE_EDIT_CONFIRM_QUIT,
+    BALL_CAPSULE_EDIT_LEAVE = 11,
+};
+
+enum BallCapsuleRemoveState {
+    BALL_CAPSULE_REMOVE_START,
+    BALL_CAPSULE_REMOVE_WAIT_INPUT,
+    BALL_CAPSULE_REMOVE_FINISH,
+};
+
+enum BallCapsuleSwitchState {
+    BALL_CAPSULE_SWITCH_START,
+    BALL_CAPSULE_SWITCH_INPUT,
+    BALL_CAPSULE_SWITCH_WAIT_INPUT,
+    BALL_CAPSULE_SWITCH_FINISH,
+};
+
+// Which actions the capsule menu offers (BallCapsuleEditor_GetMenuKind)
+enum BallCapsuleMenuKind {
+    BALL_CAPSULE_MENU_EMPTY,
+    BALL_CAPSULE_MENU_SEALED,
+    BALL_CAPSULE_MENU_SEALED_ON_MON,
+    BALL_CAPSULE_MENU_EMPTY_ON_MON,
+};
+
+// sBallCapsuleEditorMenuItems
+enum BallCapsuleMenuItem {
+    BALL_CAPSULE_MENU_ITEM_EDIT,
+    BALL_CAPSULE_MENU_ITEM_QUIT,
+    BALL_CAPSULE_MENU_ITEM_SET,
+    BALL_CAPSULE_MENU_ITEM_REMOVE,
+    BALL_CAPSULE_MENU_ITEM_SWITCH,
+};
+
 typedef struct BallCapsuleEditorCapsule {
     u32 partySlot;    // 0x0, party slot of the Pokémon the capsule is on, or BALL_CAPSULE_EDITOR_NO_MON
     CAPSULE *capsule; // 0x4
@@ -1247,32 +1297,32 @@ static inline int BallCapsuleEditor_GetMenuItems(int items[4], int kind) {
     int size;
 
     switch (kind) {
-    case 0:
-        items[0] = 0;
-        items[1] = 4;
+    case BALL_CAPSULE_MENU_EMPTY:
+        items[0] = BALL_CAPSULE_MENU_ITEM_EDIT;
+        items[1] = BALL_CAPSULE_MENU_ITEM_SWITCH;
         size = 6;
-        items[2] = 1;
+        items[2] = BALL_CAPSULE_MENU_ITEM_QUIT;
         break;
-    case 1:
-        items[0] = 2;
-        items[1] = 0;
-        items[2] = 4;
+    case BALL_CAPSULE_MENU_SEALED:
+        items[0] = BALL_CAPSULE_MENU_ITEM_SET;
+        items[1] = BALL_CAPSULE_MENU_ITEM_EDIT;
+        items[2] = BALL_CAPSULE_MENU_ITEM_SWITCH;
         size = 8;
-        items[3] = 1;
+        items[3] = BALL_CAPSULE_MENU_ITEM_QUIT;
         break;
-    case 2:
-        items[0] = 3;
-        items[1] = 0;
-        items[2] = 4;
+    case BALL_CAPSULE_MENU_SEALED_ON_MON:
+        items[0] = BALL_CAPSULE_MENU_ITEM_REMOVE;
+        items[1] = BALL_CAPSULE_MENU_ITEM_EDIT;
+        items[2] = BALL_CAPSULE_MENU_ITEM_SWITCH;
         size = 8;
-        items[3] = 1;
+        items[3] = BALL_CAPSULE_MENU_ITEM_QUIT;
         break;
-    case 3:
-        items[0] = 2;
-        items[1] = 0;
-        items[2] = 4;
+    case BALL_CAPSULE_MENU_EMPTY_ON_MON:
+        items[0] = BALL_CAPSULE_MENU_ITEM_SET;
+        items[1] = BALL_CAPSULE_MENU_ITEM_EDIT;
+        items[2] = BALL_CAPSULE_MENU_ITEM_SWITCH;
         size = 8;
-        items[3] = 1;
+        items[3] = BALL_CAPSULE_MENU_ITEM_QUIT;
         break;
     default:
         break;
@@ -1959,15 +2009,15 @@ int BallCapsuleEditor_GetMenuKind(BallCapsuleEditor *editor, int capsule) {
     u32 hasSeals = editor->capsuleIcons[capsule].hasSeals;
 
     if (partySlot == BALL_CAPSULE_EDITOR_NO_MON && hasSeals == FALSE) {
-        return 0;
+        return BALL_CAPSULE_MENU_EMPTY;
     }
     if (partySlot == BALL_CAPSULE_EDITOR_NO_MON && hasSeals == TRUE) {
-        return 1;
+        return BALL_CAPSULE_MENU_SEALED;
     }
     if (partySlot != BALL_CAPSULE_EDITOR_NO_MON && hasSeals == TRUE) {
-        return 2;
+        return BALL_CAPSULE_MENU_SEALED_ON_MON;
     }
-    return 3;
+    return BALL_CAPSULE_MENU_EMPTY_ON_MON;
 }
 
 BOOL BallCapsuleEditor_RunMode(BallCapsuleEditor *editor) {
@@ -1981,7 +2031,7 @@ BOOL BallCapsuleEditor_ModeSelect(BallCapsuleEditor *editor) {
     int input;
 
     switch (editor->state) {
-    case 0:
+    case BALL_CAPSULE_SELECT_SETUP:
         narc = NARC_New(NARC_a_0_8_7, HEAP_ID_52);
         BallCapsuleEditor_LoadMonIconResources(editor);
         BallCapsuleEditor_CreateMonIcons(editor);
@@ -2016,26 +2066,26 @@ BOOL BallCapsuleEditor_ModeSelect(BallCapsuleEditor *editor) {
         NARC_Delete(narc);
         editor->state++;
         break;
-    case 1:
+    case BALL_CAPSULE_SELECT_FADE_IN:
         BallCapsuleEditor_FadeIn();
         editor->state++;
         break;
-    case 2:
+    case BALL_CAPSULE_SELECT_WAIT_FADE_IN:
         if (IsPaletteFadeFinished() != TRUE) {
             break;
         }
         editor->state++;
         // fallthrough
-    case 3:
+    case BALL_CAPSULE_SELECT_INPUT:
         editor->state = BallCapsuleEditor_HandleSelectInput(editor);
         break;
-    case 4:
+    case BALL_CAPSULE_SELECT_MENU:
         input = TouchscreenListMenu_HandleInput(editor->menu);
         switch (input) {
         case LIST_CANCEL:
             BallCapsuleEditor_MenuQuit(editor);
             BallCapsuleEditor_PrintMessage(&editor->display.windows[3], 3, msg_0011_00007, FALSE);
-            editor->state = 3;
+            editor->state = BALL_CAPSULE_SELECT_INPUT;
             break;
         case LIST_NOTHING_CHOSEN:
             break;
@@ -2045,17 +2095,17 @@ BOOL BallCapsuleEditor_ModeSelect(BallCapsuleEditor *editor) {
                     BallCapsuleEditor_MenuQuit(editor);
                 } else {
                     BallCapsuleEditor_PrintMessage(&editor->display.windows[3], 3, msg_0011_00007, FALSE);
-                    editor->state = 3;
+                    editor->state = BALL_CAPSULE_SELECT_INPUT;
                 }
             }
             break;
         }
         break;
-    case 5:
+    case BALL_CAPSULE_SELECT_FADE_OUT:
         BallCapsuleEditor_FadeOut();
         editor->state++;
         break;
-    case 6:
+    case BALL_CAPSULE_SELECT_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished() == TRUE) {
             BallCapsuleEditor_RemoveMessageWindows(editor);
             BallCapsuleEditor_DeleteCapsuleIcons(editor);
@@ -2083,16 +2133,16 @@ BOOL BallCapsuleEditor_ModeEdit(BallCapsuleEditor *editor) {
     BOOL onCapsule;
 
     switch (editor->state) {
-    case 0:
+    case BALL_CAPSULE_EDIT_ENTER:
         editor->state = BallCapsuleEditor_EnterEdit(editor);
         break;
-    case 4:
+    case BALL_CAPSULE_EDIT_INPUT:
         editor->state = BallCapsuleEditor_HandleEditKeys(editor);
         break;
-    case 5:
+    case BALL_CAPSULE_EDIT_PREVIEW:
         editor->state = BallCapsuleEditor_PreviewCapsule(editor);
         break;
-    case 6:
+    case BALL_CAPSULE_EDIT_SAVE:
         BallCapsuleEditor_PrintMessage(&editor->display.windows[0], 0, msg_0011_00012, FALSE);
         editor->timer = 20;
         if (BallCapsuleEditor_IsCapsuleChanged(editor) == TRUE) {
@@ -2108,24 +2158,24 @@ BOOL BallCapsuleEditor_ModeEdit(BallCapsuleEditor *editor) {
             mon = args->mons[partySlot];
             SetMonData(mon, MON_DATA_BALL_CAPSULE, SealCase_GetCapsuleI(args->sealCase, i));
         }
-        editor->state = 11;
+        editor->state = BALL_CAPSULE_EDIT_LEAVE;
         break;
-    case 7:
+    case BALL_CAPSULE_EDIT_CONFIRM_QUIT:
         editor->state = BallCapsuleEditor_ConfirmQuitEdit(editor);
         break;
-    case 11:
+    case BALL_CAPSULE_EDIT_LEAVE:
         if (BallCapsuleEditor_LeaveEdit(editor)) {
             return TRUE;
         }
         break;
     }
-    if (editor->state == 4 || editor->state == 0) {
+    if (editor->state == BALL_CAPSULE_EDIT_INPUT || editor->state == BALL_CAPSULE_EDIT_ENTER) {
         i = editor->display.heldSeal;
         if (i == BALL_CAPSULE_EDITOR_NONE) {
             TouchHitboxController_IsTriggered(editor->display.hitboxController);
         } else {
             touched = System_GetTouchHeldCoords(&x, &y);
-            if (editor->state != 4) {
+            if (editor->state != BALL_CAPSULE_EDIT_INPUT) {
                 touched = FALSE;
             }
             if (touched) {
@@ -2156,18 +2206,18 @@ BOOL BallCapsuleEditor_ModeEdit(BallCapsuleEditor *editor) {
 
 BOOL BallCapsuleEditor_ModeRemove(BallCapsuleEditor *editor) {
     switch (editor->state) {
-    case 0:
+    case BALL_CAPSULE_REMOVE_START:
         BallCapsuleEditor_ClearCapsuleMon(editor, editor->cursorCapsule[0]);
         BallCapsuleEditor_PrintMessage(&editor->display.windows[0], 0, msg_0011_00009, TRUE);
         editor->state++;
         break;
-    case 1:
+    case BALL_CAPSULE_REMOVE_WAIT_INPUT:
         BallCapsuleEditor_UpdateMenuInputState(editor);
         if ((gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B | PAD_BUTTON_X | PAD_BUTTON_Y | PAD_PLUS_KEY_MASK)) || System_GetTouchNew()) {
             editor->state++;
         }
         break;
-    case 2:
+    case BALL_CAPSULE_REMOVE_FINISH:
         BallCapsuleEditor_SetMode(editor, BALL_CAPSULE_EDITOR_MODE_SELECT, 0xFF, 0);
         EraseFrameAndWindow1(&editor->display.windows[0], TRUE);
         ClearWindowTilemapAndScheduleTransfer(&editor->display.windows[0]);
@@ -2184,7 +2234,7 @@ BOOL BallCapsuleEditor_ModeRemove(BallCapsuleEditor *editor) {
 
 BOOL BallCapsuleEditor_ModeSwitch(BallCapsuleEditor *editor) {
     switch (editor->state) {
-    case 0:
+    case BALL_CAPSULE_SWITCH_START:
         ManagedSprite_SetDrawPriority(editor->cursors[0], 25);
         ManagedSprite_SetDrawPriority(editor->cursors[1], 20);
         ManagedSprite_SetAnim(editor->cursors[0], 1);
@@ -2192,16 +2242,16 @@ BOOL BallCapsuleEditor_ModeSwitch(BallCapsuleEditor *editor) {
         ManagedSprite_SetDrawFlag(editor->cursors[1], TRUE);
         editor->state++;
         // fallthrough
-    case 1:
+    case BALL_CAPSULE_SWITCH_INPUT:
         editor->state = BallCapsuleEditor_HandleSwitchInput(editor);
         break;
-    case 2:
+    case BALL_CAPSULE_SWITCH_WAIT_INPUT:
         BallCapsuleEditor_UpdateMenuInputState(editor);
         if ((gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B | PAD_BUTTON_X | PAD_BUTTON_Y | PAD_PLUS_KEY_MASK)) || System_GetTouchNew()) {
-            editor->state = 3;
+            editor->state = BALL_CAPSULE_SWITCH_FINISH;
         }
         break;
-    case 3:
+    case BALL_CAPSULE_SWITCH_FINISH:
         ManagedSprite_SetDrawPriority(editor->cursors[0], 20);
         ManagedSprite_SetDrawPriority(editor->cursors[1], 25);
         BallCapsuleEditor_SetMode(editor, BALL_CAPSULE_EDITOR_MODE_SELECT, 0xFF, 0);
@@ -2263,9 +2313,9 @@ int BallCapsuleEditor_EnterEdit(BallCapsuleEditor *editor) {
         }
         BallCapsuleEditor_SetInputEnabled(editor, TRUE);
         editor->subState = 0;
-        return 4;
+        return BALL_CAPSULE_EDIT_INPUT;
     }
-    return 0;
+    return BALL_CAPSULE_EDIT_ENTER;
 }
 
 #pragma force_active on
@@ -2328,7 +2378,7 @@ int BallCapsuleEditor_ConfirmQuitEdit(BallCapsuleEditor *editor) {
     switch (editor->subState) {
     case 0:
         if (!BallCapsuleEditor_IsCapsuleChanged(editor)) {
-            return 11;
+            return BALL_CAPSULE_EDIT_LEAVE;
         }
         PaletteData_BeginPaletteFade(editor->display.paletteData, 2, 0x80B, 0, 0, 10, RGB_BLACK);
         PaletteData_BeginPaletteFade(editor->display.paletteData, 8, 0xFFFF, 0, 0, 10, RGB_BLACK);
@@ -2395,22 +2445,22 @@ int BallCapsuleEditor_ConfirmQuitEdit(BallCapsuleEditor *editor) {
             BallCapsuleEditor_RemoveAllSeals(editor);
             BallCapsuleEditor_LoadSeals(editor);
             BallCapsuleEditor_SetSealsDrawFlag(editor, TRUE);
-            result = 6;
+            result = BALL_CAPSULE_EDIT_SAVE;
             editor->timer = 20;
             break;
         case YESNORESPONSE_NO:
-            result = 4;
+            result = BALL_CAPSULE_EDIT_INPUT;
             break;
         default:
 other:
-            result = 7;
+            result = BALL_CAPSULE_EDIT_CONFIRM_QUIT;
             break;
         }
         BallCapsuleEditor_SetInputEnabled(editor, TRUE);
         editor->subState = 0;
         return result;
     }
-    return 7;
+    return BALL_CAPSULE_EDIT_CONFIRM_QUIT;
 }
 
 // "Confirming...": the party Pokémon (or the first non-Egg) comes out of its ball with the capsule's seals.
@@ -2528,13 +2578,13 @@ int BallCapsuleEditor_PreviewCapsule(BallCapsuleEditor *editor) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
             BallCapsuleEditor_SetInputEnabled(editor, TRUE);
             editor->subState = 0;
-            editor->state = 4;
+            editor->state = BALL_CAPSULE_EDIT_INPUT;
             BallCapsuleEditor_PrintMessage(&editor->display.windows[0], 0, 0xFFFF, FALSE);
-            return 4;
+            return BALL_CAPSULE_EDIT_INPUT;
         }
         break;
     }
-    return 5;
+    return BALL_CAPSULE_EDIT_PREVIEW;
 }
 
 #pragma force_active on
@@ -2577,8 +2627,8 @@ void BallCapsuleEditor_HitboxCallback(u32 index, u32 event, void *arg) {
         break;
     case BALL_CAPSULE_EDITOR_HITBOX_PREVIEW:
         if (event == 0) {
-            if (editor->state != 5) {
-                editor->state = 5;
+            if (editor->state != BALL_CAPSULE_EDIT_PREVIEW) {
+                editor->state = BALL_CAPSULE_EDIT_PREVIEW;
                 PlaySE(SEQ_SE_DP_DECIDE);
             }
             BallCapsuleEditor_StartButtonPress(editor->caseSprites[BALL_CAPSULE_EDITOR_HITBOX_PREVIEW], NULL);
@@ -2587,8 +2637,8 @@ void BallCapsuleEditor_HitboxCallback(u32 index, u32 event, void *arg) {
         break;
     case BALL_CAPSULE_EDITOR_HITBOX_OK:
         if (event == 0) {
-            if (editor->state != 6) {
-                editor->state = 6;
+            if (editor->state != BALL_CAPSULE_EDIT_SAVE) {
+                editor->state = BALL_CAPSULE_EDIT_SAVE;
                 BallCapsuleEditor_SetInputEnabled(editor, FALSE);
                 PlaySE(SEQ_SE_DP_PIRORIRO);
             }
@@ -2598,8 +2648,8 @@ void BallCapsuleEditor_HitboxCallback(u32 index, u32 event, void *arg) {
         break;
     case BALL_CAPSULE_EDITOR_HITBOX_CANCEL:
         if (event == 0) {
-            if (editor->state != 7) {
-                editor->state = 7;
+            if (editor->state != BALL_CAPSULE_EDIT_CONFIRM_QUIT) {
+                editor->state = BALL_CAPSULE_EDIT_CONFIRM_QUIT;
                 BallCapsuleEditor_SetInputEnabled(editor, FALSE);
                 PlaySE(SEQ_SE_DP_DECIDE);
             }
@@ -2692,12 +2742,12 @@ int BallCapsuleEditor_HandleSelection(BallCapsuleEditor *editor, int selection) 
     case BALL_CAPSULE_EDITOR_SELECT_BACK:
         PlaySE(SEQ_SE_DP_DECIDE);
         BallCapsuleEditor_SetArgsSetCapsuleOnMon(editor->args, FALSE);
-        return 5;
+        return BALL_CAPSULE_SELECT_FADE_OUT;
     case BALL_CAPSULE_EDITOR_SELECT_CONFIRM:
         BallCapsuleEditor_PrintMessage(&editor->display.windows[3], 3, msg_0011_00008, FALSE);
         BallCapsuleEditor_CreateMenu(editor->display.bgConfig, &editor->display.windows[1], 1, editor, editor->cursorCapsule[0]);
         PlaySE(SEQ_SE_DP_SELECT);
-        return 4;
+        return BALL_CAPSULE_SELECT_MENU;
     default:
         break;
     }
@@ -2716,9 +2766,9 @@ int BallCapsuleEditor_HandleSelection(BallCapsuleEditor *editor, int selection) 
         BallCapsuleEditor_PrintMessage(&editor->display.windows[3], 3, msg_0011_00008, FALSE);
         BallCapsuleEditor_CreateMenu(editor->display.bgConfig, &editor->display.windows[1], 1, editor, editor->cursorCapsule[0]);
         PlaySE(SEQ_SE_DP_SELECT);
-        return 4;
+        return BALL_CAPSULE_SELECT_MENU;
     }
-    return 3;
+    return BALL_CAPSULE_SELECT_INPUT;
 }
 
 #pragma force_active on
@@ -2733,12 +2783,12 @@ int BallCapsuleEditor_HandleSelectKeys(BallCapsuleEditor *editor) {
         return BallCapsuleEditor_HandleSelection(editor, BALL_CAPSULE_EDITOR_SELECT_CONFIRM);
     }
     if (!(gSystem.newAndRepeatedKeys & PAD_PLUS_KEY_MASK)) {
-        return 3;
+        return BALL_CAPSULE_SELECT_INPUT;
     }
     selection = editor->cursorCapsule[0];
     switch (BallCapsuleEditor_MoveCapsuleCursor(&selection)) {
     case FALSE:
-        return 3;
+        return BALL_CAPSULE_SELECT_INPUT;
     default:
         return BallCapsuleEditor_HandleSelection(editor, (u8)selection);
     }
@@ -2750,7 +2800,7 @@ int BallCapsuleEditor_HandleSelectTouch(BallCapsuleEditor *editor) {
     int selection = BallCapsuleEditor_GetTouchedCapsule(editor);
 
     if (selection < 0) {
-        return 3;
+        return BALL_CAPSULE_SELECT_INPUT;
     }
     return BallCapsuleEditor_HandleSelection(editor, (u8)selection);
 }
@@ -2777,13 +2827,13 @@ int BallCapsuleEditor_FinishSwitch(BallCapsuleEditor *editor, BOOL confirm) {
         BallCapsuleEditor_UpdateCursors(editor, 1, 1);
         BallCapsuleEditor_PrintMessage(&editor->display.windows[0], 0, msg_0011_00011, TRUE);
         PlaySE(SEQ_SE_DP_SELECT);
-        return 2;
+        return BALL_CAPSULE_SWITCH_WAIT_INPUT;
     }
     ManagedSprite_SetDrawFlag(editor->cursors[1], FALSE);
     ManagedSprite_SetAnim(editor->cursors[0], 0);
     BallCapsuleEditor_UpdateCursors(editor, 0, 0);
     PlaySE(SEQ_SE_DP_DECIDE);
-    return 3;
+    return BALL_CAPSULE_SWITCH_FINISH;
 }
 
 #pragma force_active reset
@@ -2804,7 +2854,7 @@ int BallCapsuleEditor_HandleSwitchSelection(BallCapsuleEditor *editor, int selec
     } else {
         return BallCapsuleEditor_FinishSwitch(editor, TRUE);
     }
-    return 1;
+    return BALL_CAPSULE_SWITCH_INPUT;
 }
 
 #pragma force_active on
@@ -2819,11 +2869,11 @@ int BallCapsuleEditor_HandleSwitchKeys(BallCapsuleEditor *editor) {
         return BallCapsuleEditor_HandleSwitchSelection(editor, BALL_CAPSULE_EDITOR_SELECT_CONFIRM);
     }
     if (!(gSystem.newAndRepeatedKeys & PAD_PLUS_KEY_MASK)) {
-        return 1;
+        return BALL_CAPSULE_SWITCH_INPUT;
     }
     selection = editor->cursorCapsule[1];
     if (BallCapsuleEditor_MoveCapsuleCursor(&selection) == FALSE) {
-        return 1;
+        return BALL_CAPSULE_SWITCH_INPUT;
     }
     return BallCapsuleEditor_HandleSwitchSelection(editor, (u8)selection);
 }
@@ -2834,7 +2884,7 @@ int BallCapsuleEditor_HandleSwitchTouch(BallCapsuleEditor *editor) {
     int selection = BallCapsuleEditor_GetTouchedCapsule(editor);
 
     if (selection < 0) {
-        return 1;
+        return BALL_CAPSULE_SWITCH_INPUT;
     }
     return BallCapsuleEditor_HandleSwitchSelection(editor, (u8)selection);
 }
@@ -2942,37 +2992,37 @@ int BallCapsuleEditor_HandleEditKeys(BallCapsuleEditor *editor) {
     if (keys & PAD_BUTTON_A) {
         if (editor->display.heldSeal != BALL_CAPSULE_EDITOR_NONE) {
             PlaySE(SEQ_SE_DP_CUSTOM06);
-            return 4;
+            return BALL_CAPSULE_EDIT_INPUT;
         }
         BallCapsuleEditor_SetInputEnabled(editor, FALSE);
         PlaySE(SEQ_SE_DP_PIRORIRO);
         BallCapsuleEditor_StartButtonPress(editor->caseSprites[BALL_CAPSULE_EDITOR_HITBOX_OK], editor->buttonLabels[0]);
-        return 6;
+        return BALL_CAPSULE_EDIT_SAVE;
     }
     if (keys & PAD_BUTTON_B) {
         if (editor->display.heldSeal != BALL_CAPSULE_EDITOR_NONE) {
             PlaySE(SEQ_SE_DP_CUSTOM06);
-            return 4;
+            return BALL_CAPSULE_EDIT_INPUT;
         }
         BallCapsuleEditor_SetInputEnabled(editor, FALSE);
         PlaySE(SEQ_SE_DP_DECIDE);
         BallCapsuleEditor_StartButtonPress(editor->caseSprites[BALL_CAPSULE_EDITOR_HITBOX_CANCEL], editor->buttonLabels[1]);
-        return 7;
+        return BALL_CAPSULE_EDIT_CONFIRM_QUIT;
     }
     if (keys & (PAD_BUTTON_X | PAD_BUTTON_Y)) {
         if (editor->display.heldSeal != BALL_CAPSULE_EDITOR_NONE) {
             PlaySE(SEQ_SE_DP_CUSTOM06);
-            return 4;
+            return BALL_CAPSULE_EDIT_INPUT;
         }
         PlaySE(SEQ_SE_DP_DECIDE);
         BallCapsuleEditor_StartButtonPress(editor->caseSprites[BALL_CAPSULE_EDITOR_HITBOX_PREVIEW], NULL);
-        return 5;
+        return BALL_CAPSULE_EDIT_PREVIEW;
     }
-    return 4;
+    return BALL_CAPSULE_EDIT_INPUT;
 }
 
 BOOL BallCapsuleEditor_MenuEdit(BallCapsuleEditor *editor) {
-    BallCapsuleEditor_SetMode(editor, BALL_CAPSULE_EDITOR_MODE_EDIT, 0, 3);
+    BallCapsuleEditor_SetMode(editor, BALL_CAPSULE_EDITOR_MODE_EDIT, BALL_CAPSULE_EDIT_ENTER, BALL_CAPSULE_SELECT_INPUT);
     return FALSE;
 }
 
@@ -2989,19 +3039,19 @@ BOOL BallCapsuleEditor_MenuSet(BallCapsuleEditor *editor) {
     BallCapsuleEditor_SaveCapsule(editor);
     BallCapsuleEditor_RefreshCapsuleIcons(editor);
     BallCapsuleEditor_SetArgsSetCapsuleOnMon(editor->args, TRUE);
-    editor->state = 5;
+    editor->state = BALL_CAPSULE_SELECT_FADE_OUT;
     return FALSE;
 }
 
 #pragma force_active reset
 
 BOOL BallCapsuleEditor_MenuRemove(BallCapsuleEditor *editor) {
-    BallCapsuleEditor_SetMode(editor, BALL_CAPSULE_EDITOR_MODE_REMOVE, 0, 3);
+    BallCapsuleEditor_SetMode(editor, BALL_CAPSULE_EDITOR_MODE_REMOVE, BALL_CAPSULE_REMOVE_START, BALL_CAPSULE_SELECT_INPUT);
     return FALSE;
 }
 
 BOOL BallCapsuleEditor_MenuSwitch(BallCapsuleEditor *editor) {
-    BallCapsuleEditor_SetMode(editor, BALL_CAPSULE_EDITOR_MODE_SWITCH, 0, 3);
+    BallCapsuleEditor_SetMode(editor, BALL_CAPSULE_EDITOR_MODE_SWITCH, BALL_CAPSULE_SWITCH_START, BALL_CAPSULE_SELECT_INPUT);
     return FALSE;
 }
 

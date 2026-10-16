@@ -74,6 +74,81 @@ typedef struct MysteryGiftMenuTables {
     MysteryGiftMenuItem mainMenuItems[2];       // 0x70
 } MysteryGiftMenuTables;
 
+enum MysteryGiftState {
+    MYSTERY_GIFT_STATE_INIT,
+    MYSTERY_GIFT_STATE_SETUP_SCREEN,
+    MYSTERY_GIFT_STATE_WAIT_FADE,
+    MYSTERY_GIFT_STATE_MAIN_MENU,
+    MYSTERY_GIFT_STATE_RECEIVE_MENU,
+    MYSTERY_GIFT_STATE_CONFIRM_CONNECT,
+    MYSTERY_GIFT_STATE_SEARCH_FRIEND = 7,
+    MYSTERY_GIFT_STATE_ACCEPT_FRIEND_GIFT,
+    MYSTERY_GIFT_STATE_WAIT_FRIEND_LINK,
+    MYSTERY_GIFT_STATE_WAIT_FRIEND_GIFT,
+    MYSTERY_GIFT_STATE_SAVE_FRIEND_GIFT,
+    MYSTERY_GIFT_STATE_WAIT_FRIEND_SAVE,
+    MYSTERY_GIFT_STATE_WAIT_SAVE_SYNC,
+    MYSTERY_GIFT_STATE_FRIEND_DISCONNECTED,
+    MYSTERY_GIFT_STATE_FINISH_FRIEND_GIFT,
+    MYSTERY_GIFT_STATE_PRINT_TURNED_DOWN,
+    MYSTERY_GIFT_STATE_PRINT_NO_GIFT,
+    MYSTERY_GIFT_STATE_WAIT_RETURN_TO_MENU,
+    MYSTERY_GIFT_STATE_CHECK_GIFT,
+    MYSTERY_GIFT_STATE_ACCEPT_GIFT,
+    MYSTERY_GIFT_STATE_START_RECEIVE,
+    MYSTERY_GIFT_STATE_SHOW_GIFT,
+    MYSTERY_GIFT_STATE_WAIT_BEFORE_SAVE,
+    MYSTERY_GIFT_STATE_WAIT_SAVE,
+    MYSTERY_GIFT_STATE_WAIT_RECEIVED,
+    MYSTERY_GIFT_STATE_WFC_DOWNLOAD = 27,
+    MYSTERY_GIFT_STATE_ACCEPT_BEACON_GIFT = 31,
+    MYSTERY_GIFT_STATE_BEACON_SEARCH,
+    MYSTERY_GIFT_STATE_SAVE_BEACON_GIFT,
+    MYSTERY_GIFT_STATE_WAIT_BEACON_SAVE,
+    MYSTERY_GIFT_STATE_WAIT_GIFT_ANIM,
+    MYSTERY_GIFT_STATE_STOP_BEACON_SEARCH,
+    MYSTERY_GIFT_STATE_CANNOT_RECEIVE = 49,
+    MYSTERY_GIFT_STATE_PRINT_MESSAGE,
+    MYSTERY_GIFT_STATE_WAIT_RETURN_TO_MAIN_MENU,
+    MYSTERY_GIFT_STATE_ASK_SHARED_GIFT,
+    MYSTERY_GIFT_STATE_EXIT_TO_TITLE,
+    MYSTERY_GIFT_STATE_EXIT_TO_ALBUM,
+    MYSTERY_GIFT_STATE_EXIT_TO_LOCK_CAPSULE_CARD,
+    MYSTERY_GIFT_STATE_WAIT_FINISH,
+    MYSTERY_GIFT_STATE_SHOW_WONDER_CARD,
+    MYSTERY_GIFT_STATE_RESET,
+};
+
+// The beacon watch and the wireless search continue the numbering of the app states.
+enum MysteryGiftBeaconWatchState {
+    MYSTERY_GIFT_BEACON_WATCH_START = 28,
+    MYSTERY_GIFT_BEACON_WATCH_OFF,
+    MYSTERY_GIFT_BEACON_WATCH_ACTIVE,
+};
+
+enum MysteryGiftLinkStatus {
+    MYSTERY_GIFT_LINK_START_UP = 37,
+    MYSTERY_GIFT_LINK_WAIT_START_UP,
+    MYSTERY_GIFT_LINK_STARTED,
+    MYSTERY_GIFT_LINK_SEARCHING,
+    MYSTERY_GIFT_LINK_FOUND,
+    MYSTERY_GIFT_LINK_COMPLETE,
+    MYSTERY_GIFT_LINK_STOPPING,
+    MYSTERY_GIFT_LINK_DECRYPT,
+    MYSTERY_GIFT_LINK_RECEIVED,
+    MYSTERY_GIFT_LINK_BAD_GIFT,
+    MYSTERY_GIFT_LINK_STOPPED,
+    MYSTERY_GIFT_LINK_ERROR,
+};
+
+enum MysteryGiftReceiveMode {
+    MYSTERY_GIFT_RECEIVE_NONE,
+    MYSTERY_GIFT_RECEIVE_FRIEND,
+    MYSTERY_GIFT_RECEIVE_CARTRIDGE,
+    MYSTERY_GIFT_RECEIVE_WIRELESS,
+    MYSTERY_GIFT_RECEIVE_WFC,
+};
+
 // Link state shared with the overlay's link helpers.
 typedef struct MysteryGiftLinkState {
     OverlayManager *manager;          // 0x00, the Mystery Gift app (MysteryGiftApp_GetOverlayManager)
@@ -249,19 +324,19 @@ void MysteryGiftApp_ClearWindowIfInUse(Window *window, BOOL dontCopyToVram) {
 int MysteryGiftApp_StartSearch(OverlayManager *manager) {
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
 
-    if (data->receiveMode != 2) {
+    if (data->receiveMode != MYSTERY_GIFT_RECEIVE_CARTRIDGE) {
         MysteryGiftApp_PrintMessage(manager, &data->messageWindow, msg_0247_00003);
     }
     MysteryGiftApp_EraseWindowIfInUse(&data->windows[2], FALSE);
-    if (data->receiveMode != 2) {
+    if (data->receiveMode != MYSTERY_GIFT_RECEIVE_CARTRIDGE) {
         MysteryGiftComm_StartChild(data, 15);
         data->timeout = 7200;
         WirelessStatusIcon_Create();
         MysteryGiftApp_SetWaitingIconVisible(data, TRUE);
-        return 7;
+        return MYSTERY_GIFT_STATE_SEARCH_FRIEND;
     }
-    data->giftCheckSource = 19;
-    return 19;
+    data->giftCheckSource = MYSTERY_GIFT_STATE_CHECK_GIFT;
+    return MYSTERY_GIFT_STATE_CHECK_GIFT;
 }
 
 int MysteryGiftApp_AcceptGift(OverlayManager *manager) {
@@ -269,28 +344,28 @@ int MysteryGiftApp_AcceptGift(OverlayManager *manager) {
     int state = data->giftCheckResult;
 
     if (state == 1) {
-        return 49;
+        return MYSTERY_GIFT_STATE_CANNOT_RECEIVE;
     }
     if ((u32)(state - 2) <= 2) {
-        return 49;
+        return MYSTERY_GIFT_STATE_CANNOT_RECEIVE;
     }
     if (state == 5) {
-        return 49;
+        return MYSTERY_GIFT_STATE_CANNOT_RECEIVE;
     }
-    if (data->receiveMode == 1) {
+    if (data->receiveMode == MYSTERY_GIFT_RECEIVE_FRIEND) {
         MysteryGiftComm_ConnectToChannel(data->channel);
     }
     MysteryGiftApp_PrintMessage(manager, &data->messageWindow, msg_0247_00006);
     MysteryGiftApp_EraseWindowIfInUse(&data->windows[2], FALSE);
-    if (data->receiveMode == 1) {
+    if (data->receiveMode == MYSTERY_GIFT_RECEIVE_FRIEND) {
         MysteryGiftApp_SetSpriteAnim(data, 0);
         MysteryGiftApp_SetWaitingIconVisible(data, TRUE);
     }
-    if (data->receiveMode == 1) {
+    if (data->receiveMode == MYSTERY_GIFT_RECEIVE_FRIEND) {
         LinkSync_StartSync(171);
-        return 9;
+        return MYSTERY_GIFT_STATE_WAIT_FRIEND_LINK;
     }
-    return 21;
+    return MYSTERY_GIFT_STATE_START_RECEIVE;
 }
 
 #pragma force_active on
@@ -301,11 +376,11 @@ WonderCard *MysteryGiftApp_GetReceivedCard(OverlayManager *manager) {
     WonderCardInfo *header = &data->receivedHeader;
 
     switch (data->receiveMode) {
-    case 1:
+    case MYSTERY_GIFT_RECEIVE_FRIEND:
         memcpy(card, MysteryGiftComm_GetRecvBuffer(0, NULL, 0), sizeof(WonderCard));
         MainMenuUtil_DecryptWonderCard(&data->receivedHeader, &data->receivedCard, HEAP_ID_84);
         break;
-    case 3: {
+    case MYSTERY_GIFT_RECEIVE_WIRELESS: {
         u8 *src = data->recvBuffer;
         memcpy(card, src + sizeof(WonderCardInfo), sizeof(WonderCard));
         memcpy(header, src, sizeof(WonderCardInfo));
@@ -413,7 +488,7 @@ int MysteryGiftApp_DeclineSearch(OverlayManager *manager) {
 
     MysteryGiftApp_EraseWindowIfInUse(&data->windows[2], FALSE);
     MysteryGiftApp_EraseWindowIfInUse(&data->titleWindow, FALSE);
-    if (data->receiveMode == 1) {
+    if (data->receiveMode == MYSTERY_GIFT_RECEIVE_FRIEND) {
         MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
     }
     WirelessStatusIcon_Destroy();
@@ -426,7 +501,7 @@ int MysteryGiftApp_SelectGetFromFriend(OverlayManager *manager) {
     Window *window;
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
 
-    data->receiveMode = MainMenuUtil_GetCartridgeGiftSize() ? 2 : 1;
+    data->receiveMode = MainMenuUtil_GetCartridgeGiftSize() ? MYSTERY_GIFT_RECEIVE_CARTRIDGE : MYSTERY_GIFT_RECEIVE_FRIEND;
     MysteryGiftApp_EraseWindowIfInUse(&data->windows[1], FALSE);
     window = &data->windows[2];
     if (window->bgConfig == NULL) {
@@ -434,13 +509,13 @@ int MysteryGiftApp_SelectGetFromFriend(OverlayManager *manager) {
     }
     DrawFrameAndWindow1(window, TRUE, 31, 3);
     MysteryGiftApp_CreateListMenu(manager, sMysteryGiftFromFriendMenuItems, 2, window, msg_0247_00002);
-    return 5;
+    return MYSTERY_GIFT_STATE_CONFIRM_CONNECT;
 }
 
 int MysteryGiftApp_SelectGetViaWfc(OverlayManager *manager) {
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
 
-    data->receiveMode = 4;
+    data->receiveMode = MYSTERY_GIFT_RECEIVE_WFC;
     MysteryGiftApp_EraseWindowIfInUse(&data->windows[1], FALSE);
     Window *window = &data->windows[2];
     if (window->bgConfig == NULL) {
@@ -448,13 +523,13 @@ int MysteryGiftApp_SelectGetViaWfc(OverlayManager *manager) {
     }
     DrawFrameAndWindow1(window, TRUE, 31, 3);
     MysteryGiftApp_CreateListMenu(manager, sMysteryGiftMenuTables.wfcPromptItems, 2, window, msg_0247_00080);
-    return 5;
+    return MYSTERY_GIFT_STATE_CONFIRM_CONNECT;
 }
 
 int MysteryGiftApp_SelectGetViaWireless(OverlayManager *manager) {
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
 
-    data->receiveMode = 3;
+    data->receiveMode = MYSTERY_GIFT_RECEIVE_WIRELESS;
     MysteryGiftApp_EraseWindowIfInUse(&data->windows[1], FALSE);
     Window *window = &data->windows[2];
     if (window->bgConfig == NULL) {
@@ -462,7 +537,7 @@ int MysteryGiftApp_SelectGetViaWireless(OverlayManager *manager) {
     }
     DrawFrameAndWindow1(window, TRUE, 31, 3);
     MysteryGiftApp_CreateListMenu(manager, sMysteryGiftWirelessMenuItems, 2, window, msg_0247_00079);
-    return 5;
+    return MYSTERY_GIFT_STATE_CONFIRM_CONNECT;
 }
 
 void MysteryGiftApp_AskReceiveGift(OverlayManager *manager) {
@@ -484,7 +559,7 @@ int MysteryGiftApp_DeclineAcceptGift(OverlayManager *manager) {
     MysteryGiftApp_EraseWindowIfInUse(&data->windows[2], FALSE);
     MysteryGiftApp_EraseWindowIfInUse(&data->titleWindow, FALSE);
     WirelessStatusIcon_Destroy();
-    if (data->receiveMode == 1) {
+    if (data->receiveMode == MYSTERY_GIFT_RECEIVE_FRIEND) {
         MysteryGiftComm_Free();
     }
     return MysteryGiftApp_SelectReceiveGift(manager);
@@ -498,8 +573,8 @@ int MysteryGiftApp_ConfirmWirelessSearch(OverlayManager *manager) {
     MysteryGiftApp_PrintMessage(manager, &data->messageWindow, msg_0247_00003);
     MysteryGiftApp_EraseWindowIfInUse(&data->windows[2], FALSE);
     MysteryGiftApp_SetWaitingIconVisible(data, TRUE);
-    sMysteryGiftLinkState.state = 37;
-    return 32;
+    sMysteryGiftLinkState.state = MYSTERY_GIFT_LINK_START_UP;
+    return MYSTERY_GIFT_STATE_BEACON_SEARCH;
 }
 
 #pragma force_active reset
@@ -508,26 +583,26 @@ int MysteryGiftApp_ConfirmReceiveGift(OverlayManager *manager) {
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
 
     if ((u32)(data->giftCheckResult - 2) <= 2) {
-        return 49;
+        return MYSTERY_GIFT_STATE_CANNOT_RECEIVE;
     }
     MysteryGiftApp_EraseWindowIfInUse(&data->windows[2], FALSE);
     MysteryGiftApp_PrintMessage(manager, &data->messageWindow, msg_0247_00007);
-    return 33;
+    return MYSTERY_GIFT_STATE_SAVE_BEACON_GIFT;
 }
 
 #pragma force_active on
 
 int MysteryGiftApp_DeclineReceiveGift(OverlayManager *manager) {
     switch (sMysteryGiftLinkState.state) {
-    case 40:
-    case 41:
-    case 48:
+    case MYSTERY_GIFT_LINK_SEARCHING:
+    case MYSTERY_GIFT_LINK_FOUND:
+    case MYSTERY_GIFT_LINK_ERROR:
         if (MysteryGiftBeacon_Stop()) {
-            sMysteryGiftLinkState.state = 43;
+            sMysteryGiftLinkState.state = MYSTERY_GIFT_LINK_STOPPING;
         }
         break;
     }
-    return 36;
+    return MYSTERY_GIFT_STATE_STOP_BEACON_SEARCH;
 }
 
 #pragma force_active reset
@@ -541,7 +616,7 @@ int MysteryGiftApp_ConfirmWfcSearch(OverlayManager *manager) {
     MysteryGiftApp_SetWaitingIconVisible(data, TRUE);
     data->wfcState = 0x1000;
     data->wfcCallback = NULL;
-    return 27;
+    return MYSTERY_GIFT_STATE_WFC_DOWNLOAD;
 }
 
 int MysteryGiftApp_CancelReceiveMenu(OverlayManager *manager) {
@@ -549,7 +624,7 @@ int MysteryGiftApp_CancelReceiveMenu(OverlayManager *manager) {
 
     MysteryGiftApp_EraseWindowIfInUse(&data->windows[1], FALSE);
     MysteryGiftApp_ShowMainMenu(manager, 196, msg_0247_00000);
-    return 3;
+    return MYSTERY_GIFT_STATE_MAIN_MENU;
 }
 
 #pragma force_active on
@@ -559,7 +634,7 @@ int MysteryGiftApp_SelectReceiveGift(OverlayManager *manager) {
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
 
     Save_MysteryGift_Get(data->saveData);
-    if (data->beaconWatchState == 30) {
+    if (data->beaconWatchState == MYSTERY_GIFT_BEACON_WATCH_ACTIVE) {
         data->beaconWatchTimer = 1;
         MysteryGiftApp_UpdateBeaconWatch(data);
     }
@@ -570,7 +645,7 @@ int MysteryGiftApp_SelectReceiveGift(OverlayManager *manager) {
     }
     DrawFrameAndWindow1(window, TRUE, 31, 3);
     MysteryGiftApp_CreateListMenu(manager, sMysteryGiftReceiveMenuItems, 4, window, msg_0247_00001);
-    return 4;
+    return MYSTERY_GIFT_STATE_RECEIVE_MENU;
 }
 
 #pragma force_active reset
@@ -578,33 +653,33 @@ int MysteryGiftApp_SelectReceiveGift(OverlayManager *manager) {
 int MysteryGiftApp_SelectCheckCard(OverlayManager *manager) {
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
 
-    if (data->beaconWatchState == 30) {
+    if (data->beaconWatchState == MYSTERY_GIFT_BEACON_WATCH_ACTIVE) {
         data->beaconWatchTimer = 1;
         MysteryGiftApp_UpdateBeaconWatch(data);
     }
-    MainMenuUtil_StartFade(0, 54, data->mainState, 2);
+    MainMenuUtil_StartFade(0, MYSTERY_GIFT_STATE_EXIT_TO_ALBUM, data->mainState, MYSTERY_GIFT_STATE_WAIT_FADE);
     return -1;
 }
 
 int MysteryGiftApp_SelectViewLockCapsuleCard(OverlayManager *manager) {
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
 
-    if (data->beaconWatchState == 30) {
+    if (data->beaconWatchState == MYSTERY_GIFT_BEACON_WATCH_ACTIVE) {
         data->beaconWatchTimer = 1;
         MysteryGiftApp_UpdateBeaconWatch(data);
     }
-    MainMenuUtil_StartFade(0, 55, data->mainState, 2);
+    MainMenuUtil_StartFade(0, MYSTERY_GIFT_STATE_EXIT_TO_LOCK_CAPSULE_CARD, data->mainState, MYSTERY_GIFT_STATE_WAIT_FADE);
     return -1;
 }
 
 int MysteryGiftApp_SelectExit(OverlayManager *manager) {
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
 
-    if (data->beaconWatchState == 30) {
+    if (data->beaconWatchState == MYSTERY_GIFT_BEACON_WATCH_ACTIVE) {
         data->beaconWatchTimer = 1;
     }
     MainMenuUtil_SetFadeWhite(1);
-    MainMenuUtil_StartFade(0, 53, data->mainState, 2);
+    MainMenuUtil_StartFade(0, MYSTERY_GIFT_STATE_EXIT_TO_TITLE, data->mainState, MYSTERY_GIFT_STATE_WAIT_FADE);
     return -1;
 }
 
@@ -790,15 +865,15 @@ void MysteryGiftApp_RunWfcDownload(OverlayManager *manager, int *state) {
     case 1:
         memcpy(&data->receivedHeader, data->wfcRecvBuffer, sizeof(WonderCardInfo) + sizeof(WonderCard));
         MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
-        data->giftCheckSource = 27;
-        *state = 19;
+        data->giftCheckSource = MYSTERY_GIFT_STATE_WFC_DOWNLOAD;
+        *state = MYSTERY_GIFT_STATE_CHECK_GIFT;
         data->resultDelay = 0;
         break;
     case 2:
     case 3:
         MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
         data->resultDelay = 0;
-        *state = 17;
+        *state = MYSTERY_GIFT_STATE_PRINT_NO_GIFT;
         break;
     case 4:
         ClearWindowTilemapAndCopyToVram(&data->wfcErrorWindow);
@@ -807,7 +882,7 @@ void MysteryGiftApp_RunWfcDownload(OverlayManager *manager, int *state) {
         PlaySE(SEQ_SE_DP_SELECT);
         MysteryGiftApp_ShowMainMenu(manager, 196, msg_0247_00000);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
-        *state = 3;
+        *state = MYSTERY_GIFT_STATE_MAIN_MENU;
         break;
     }
 }
@@ -848,9 +923,9 @@ int MysteryGiftApp_ShowCannotReceiveMessage(OverlayManager *manager) {
     } else if (result == 1) {
         msgId = msg_0247_00028;
     } else if (result == 5) {
-        return MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00009, 52);
+        return MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00009, MYSTERY_GIFT_STATE_ASK_SHARED_GIFT);
     }
-    return MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msgId, 51);
+    return MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msgId, MYSTERY_GIFT_STATE_WAIT_RETURN_TO_MAIN_MENU);
 }
 
 int MysteryGiftApp_PrintMessageAndWait(OverlayManager *manager, Window *window, int msgId, int nextState) {
@@ -871,19 +946,19 @@ int MysteryGiftApp_PrintMessageAndWait(OverlayManager *manager, Window *window, 
         data->textSpeed = 0;
         return data->stateAfterMessage;
     }
-    return 50;
+    return MYSTERY_GIFT_STATE_PRINT_MESSAGE;
 }
 
 void MysteryGiftApp_StopReceiving(MysteryGiftAppData *data) {
     switch (data->receiveMode) {
-    case 1:
+    case MYSTERY_GIFT_RECEIVE_FRIEND:
         MysteryGiftComm_Free();
         WirelessStatusIcon_Destroy();
         break;
-    case 0:
-    case 2:
-    case 3:
-    case 4:
+    case MYSTERY_GIFT_RECEIVE_NONE:
+    case MYSTERY_GIFT_RECEIVE_CARTRIDGE:
+    case MYSTERY_GIFT_RECEIVE_WIRELESS:
+    case MYSTERY_GIFT_RECEIVE_WFC:
         break;
     }
 }
@@ -906,11 +981,11 @@ BOOL MysteryGiftApp_Init(OverlayManager *manager, int *state) {
     Sound_SetSceneAndPlayBGM(10, SEQ_GS_WIFI_PRESENT, 1);
     MainMenuUtil_SetCryptoHeap(HEAP_ID_84);
     if (MainMenuUtil_GetCartridgeGiftSize()) {
-        data->receiveMode = 2;
+        data->receiveMode = MYSTERY_GIFT_RECEIVE_CARTRIDGE;
         Sys_SetAgbCartridgeVersion(gGameVersion);
         MainMenuUtil_EnableCartridgePullOutCheck(TRUE);
     }
-    data->beaconWatchState = 29;
+    data->beaconWatchState = MYSTERY_GIFT_BEACON_WATCH_OFF;
     args = OverlayManager_GetArgs(manager);
     data->saveData = args->saveData;
     data->options = Save_PlayerData_GetOptionsAddr(data->saveData);
@@ -1735,44 +1810,44 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
     int result;
 
     CTRDG_IsExisting();
-    if (data->beaconWatchState != 29) {
+    if (data->beaconWatchState != MYSTERY_GIFT_BEACON_WATCH_OFF) {
         MysteryGiftApp_UpdateBeaconWatch(data);
     }
     switch (*state) {
-    case 0:
+    case MYSTERY_GIFT_STATE_INIT:
         MainMenuUtil_InitWork(HEAP_ID_84);
         data->mainState = state;
-        *state = 1;
+        *state = MYSTERY_GIFT_STATE_SETUP_SCREEN;
         break;
-    case 1:
+    case MYSTERY_GIFT_STATE_SETUP_SCREEN:
         MysteryGiftApp_SetupScreen(manager, data);
         MysteryGiftApp_InitSprites(data);
-        MainMenuUtil_StartFade(1, 3, state, 2);
+        MainMenuUtil_StartFade(1, MYSTERY_GIFT_STATE_MAIN_MENU, state, MYSTERY_GIFT_STATE_WAIT_FADE);
         break;
-    case 2:
+    case MYSTERY_GIFT_STATE_WAIT_FADE:
         MainMenuUtil_WaitFade(state);
         break;
-    case 3:
+    case MYSTERY_GIFT_STATE_MAIN_MENU:
         MysteryGiftApp_HandleListMenuInput(manager, state, MysteryGiftApp_SelectExit);
         break;
-    case 4:
+    case MYSTERY_GIFT_STATE_RECEIVE_MENU:
         MysteryGiftApp_HandleListMenuInput(manager, state, MysteryGiftApp_CancelReceiveMenu);
         break;
-    case 5:
+    case MYSTERY_GIFT_STATE_CONFIRM_CONNECT:
         MysteryGiftApp_HandleListMenuInput(manager, state, MysteryGiftApp_DeclineSearch);
         break;
-    case 27:
+    case MYSTERY_GIFT_STATE_WFC_DOWNLOAD:
         MysteryGiftApp_RunWfcDownload(manager, state);
         break;
-    case 32:
+    case MYSTERY_GIFT_STATE_BEACON_SEARCH:
         MysteryGiftApp_UpdateWirelessSearch(data);
-        if (sMysteryGiftLinkState.state == 45) {
+        if (sMysteryGiftLinkState.state == MYSTERY_GIFT_LINK_RECEIVED) {
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
             MysteryGiftApp_GetReceivedCard(manager);
             data->giftCheckResult = MysteryGift_CheckCanReceive(data->saveData, &data->receivedHeader);
             if (data->giftCheckResult == 1) {
                 MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
-                *state = 49;
+                *state = MYSTERY_GIFT_STATE_CANNOT_RECEIVE;
             } else {
                 if (!WindowIsInUse(&data->titleWindow)) {
                     AddWindowParameterized(data->bgConfig, &data->titleWindow, GF_BG_LYR_MAIN_0, 3, 2, 26, 4, 0, 452);
@@ -1780,19 +1855,19 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
                 MysteryGiftApp_PrintGiftTitle(manager, &data->titleWindow, MysteryGiftBeacon_GetTitle());
                 MysteryGiftApp_PrintMessage(manager, &data->messageWindow, msg_0247_00004);
                 MysteryGiftApp_AskReceiveGift(manager);
-                *state = 31;
+                *state = MYSTERY_GIFT_STATE_ACCEPT_BEACON_GIFT;
             }
         }
-        if ((u32)(sMysteryGiftLinkState.state - 46) <= 1) {
+        if ((u32)(sMysteryGiftLinkState.state - MYSTERY_GIFT_LINK_BAD_GIFT) <= 1) {
             MysteryGiftApp_StopWirelessLink();
-            *state = 17;
+            *state = MYSTERY_GIFT_STATE_PRINT_NO_GIFT;
         }
         break;
-    case 31:
+    case MYSTERY_GIFT_STATE_ACCEPT_BEACON_GIFT:
         MysteryGiftApp_HandleListMenuInput(manager, state, MysteryGiftApp_DeclineReceiveGift);
         MysteryGiftApp_UpdateWirelessSearch(data);
         break;
-    case 33:
+    case MYSTERY_GIFT_STATE_SAVE_BEACON_GIFT:
         card = MysteryGiftApp_GetReceivedCard(manager);
         MysteryGiftApp_SetWaitingIconVisible(data, TRUE);
         MysteryGiftApp_SetSpriteAnim(data, 1);
@@ -1812,15 +1887,15 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
             MainMenuUtil_ShowCardSubScreen(data->bgConfig, card);
             MysteryGiftApp_SaveReceivedGift(manager);
         }
-        *state = 34;
+        *state = MYSTERY_GIFT_STATE_WAIT_BEACON_SAVE;
         break;
-    case 35:
+    case MYSTERY_GIFT_STATE_WAIT_GIFT_ANIM:
         if (!data->animStatus) {
-            *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00008, 56);
+            *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00008, MYSTERY_GIFT_STATE_WAIT_FINISH);
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
         }
         break;
-    case 34:
+    case MYSTERY_GIFT_STATE_WAIT_BEACON_SAVE:
         result = MainMenuUtil_GetSaveState();
         if (result == 4) {
             MainMenuUtil_ResumeSave();
@@ -1838,25 +1913,25 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
             } else {
                 PlaySE(SEQ_SE_DP_UG_020);
             }
-            *state = 35;
+            *state = MYSTERY_GIFT_STATE_WAIT_GIFT_ANIM;
         } else if (result == 3) {
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
             MysteryGiftApp_SetSpriteAnim(data, -1);
             data->receivedHeader.unk8E_2 = 0;
-            *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00027, 56);
+            *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00027, MYSTERY_GIFT_STATE_WAIT_FINISH);
         }
         break;
-    case 36:
+    case MYSTERY_GIFT_STATE_STOP_BEACON_SEARCH:
         MysteryGiftApp_UpdateWirelessSearch(data);
         result = sMysteryGiftLinkState.state;
-        if ((u32)(result - 45) <= 2) {
-            if (result == 47) {
+        if ((u32)(result - MYSTERY_GIFT_LINK_RECEIVED) <= 2) {
+            if (result == MYSTERY_GIFT_LINK_STOPPED) {
                 MysteryGiftApp_StopWirelessLink();
             }
             *state = MysteryGiftApp_DeclineAcceptGift(manager);
         }
         break;
-    case 7:
+    case MYSTERY_GIFT_STATE_SEARCH_FRIEND:
         data->channel = MysteryGiftComm_GetFirstParentInfo(data);
         if (data->channel != -1) {
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
@@ -1867,19 +1942,19 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
             MysteryGiftApp_PrintGiftTitle(manager, &data->titleWindow, data->receivedHeader.name);
             MysteryGiftApp_PrintMessage(manager, &data->messageWindow, msg_0247_00004);
             MysteryGiftApp_ShowReceivePrompt(manager, 0);
-            *state = 8;
+            *state = MYSTERY_GIFT_STATE_ACCEPT_FRIEND_GIFT;
         }
         if ((gSystem.newKeys & PAD_BUTTON_B) || --data->timeout == 0) {
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
             MysteryGiftComm_Free();
             WirelessStatusIcon_Destroy();
-            *state = 17;
+            *state = MYSTERY_GIFT_STATE_PRINT_NO_GIFT;
         }
         break;
-    case 8:
+    case MYSTERY_GIFT_STATE_ACCEPT_FRIEND_GIFT:
         MysteryGiftApp_HandleListMenuInput(manager, state, MysteryGiftApp_DeclineAcceptGift);
         break;
-    case 9:
+    case MYSTERY_GIFT_STATE_WAIT_FRIEND_LINK:
         result = Comm_GetLocalNetId();
         if (result && Comm_IsNetIdConnected((u16)result)) {
             if (LinkSync_IsSynced(171) == TRUE) {
@@ -1889,14 +1964,14 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
                 MysteryGiftApp_SetSpriteAnim(data, 1);
                 MysteryGiftApp_SetWaitingIconVisible(data, TRUE);
                 data->timeout = 600;
-                *state = 10;
+                *state = MYSTERY_GIFT_STATE_WAIT_FRIEND_GIFT;
             }
         } else if (result && !Comm_IsNetIdConnected((u16)result)) {
             MysteryGiftComm_Free();
             WirelessStatusIcon_Destroy();
             MysteryGiftApp_SetSpriteAnim(data, -1);
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
-            *state = 16;
+            *state = MYSTERY_GIFT_STATE_PRINT_TURNED_DOWN;
             break;
         }
         if ((gSystem.newKeys & PAD_BUTTON_B) || --data->timeout == 0) {
@@ -1904,29 +1979,29 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
             WirelessStatusIcon_Destroy();
             MysteryGiftApp_SetSpriteAnim(data, -1);
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
-            *state = 17;
+            *state = MYSTERY_GIFT_STATE_PRINT_NO_GIFT;
         }
         break;
-    case 10:
+    case MYSTERY_GIFT_STATE_WAIT_FRIEND_GIFT:
         if (MysteryGiftComm_IsReceived()) {
-            *state = 11;
+            *state = MYSTERY_GIFT_STATE_SAVE_FRIEND_GIFT;
         }
         result = Comm_GetLocalNetId();
         if ((gSystem.newKeys & PAD_BUTTON_B) || --data->timeout == 0 || (result && !Comm_IsNetIdConnected((u16)result))) {
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
             MysteryGiftComm_Free();
             WirelessStatusIcon_Destroy();
-            *state = 17;
+            *state = MYSTERY_GIFT_STATE_PRINT_NO_GIFT;
         }
         break;
-    case 11:
+    case MYSTERY_GIFT_STATE_SAVE_FRIEND_GIFT:
         card = MysteryGiftApp_GetReceivedCard(manager);
         MainMenuUtil_ShowCardSubScreen(data->bgConfig, card);
         CommState_SetErrorWatch(0, 0);
         MysteryGiftApp_SaveReceivedGift(manager);
-        *state = 12;
+        *state = MYSTERY_GIFT_STATE_WAIT_FRIEND_SAVE;
         break;
-    case 12:
+    case MYSTERY_GIFT_STATE_WAIT_FRIEND_SAVE:
         result = Comm_GetLocalNetId();
         if (result && !Comm_IsNetIdConnected((u16)result)) {
             MysteryGiftComm_Free();
@@ -1935,52 +2010,52 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
             WirelessStatusIcon_Destroy();
             MysteryGiftApp_SetSpriteAnim(data, -1);
-            *state = 14;
+            *state = MYSTERY_GIFT_STATE_FRIEND_DISCONNECTED;
         } else if (MainMenuUtil_GetSaveState() == 4) {
             LinkSync_StartSync(147);
-            *state = 13;
+            *state = MYSTERY_GIFT_STATE_WAIT_SAVE_SYNC;
             data->timer = 120;
         } else if (MainMenuUtil_GetSaveState() == 3) {
             MainMenuUtil_CancelSave();
             data->receivedHeader.unk8E_2 = 0;
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
-            *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00027, 56);
+            *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00027, MYSTERY_GIFT_STATE_WAIT_FINISH);
         }
         break;
-    case 13:
+    case MYSTERY_GIFT_STATE_WAIT_SAVE_SYNC:
         if (LinkSync_IsSynced(147) == TRUE) {
             MainMenuUtil_ResumeSave();
             data->timer = 10;
-            *state = 15;
+            *state = MYSTERY_GIFT_STATE_FINISH_FRIEND_GIFT;
         } else if (--data->timer == 0) {
             MainMenuUtil_CancelSave();
             data->receivedHeader.unk8E_2 = 0;
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
-            *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00027, 56);
+            *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00027, MYSTERY_GIFT_STATE_WAIT_FINISH);
         }
         break;
-    case 14:
+    case MYSTERY_GIFT_STATE_FRIEND_DISCONNECTED:
         MysteryGiftApp_EraseWindowIfInUse(&data->titleWindow, FALSE);
         data->receivedHeader.unk8E_2 = 0;
-        *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00029, 56);
+        *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00029, MYSTERY_GIFT_STATE_WAIT_FINISH);
         break;
-    case 15:
+    case MYSTERY_GIFT_STATE_FINISH_FRIEND_GIFT:
         if (--data->timer == 0) {
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
             MysteryGiftComm_Free();
             WirelessStatusIcon_Destroy();
             PlaySE(SEQ_SE_DP_UG_020);
             MysteryGiftApp_SetSpriteAnim(data, -1);
-            *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00008, 56);
+            *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00008, MYSTERY_GIFT_STATE_WAIT_FINISH);
         }
         break;
-    case 16:
+    case MYSTERY_GIFT_STATE_PRINT_TURNED_DOWN:
         PlaySE(SEQ_SE_DP_SELECT);
         MysteryGiftApp_PrintMessage(manager, &data->messageWindow, msg_0247_00025);
         MysteryGiftApp_EraseWindowIfInUse(&data->titleWindow, FALSE);
-        *state = 18;
+        *state = MYSTERY_GIFT_STATE_WAIT_RETURN_TO_MENU;
         break;
-    case 17:
+    case MYSTERY_GIFT_STATE_PRINT_NO_GIFT:
         if (data->resultDelay) {
             data->resultDelay--;
         } else {
@@ -1988,27 +2063,27 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
             PlaySE(SEQ_SE_DP_SELECT);
             MysteryGiftApp_PrintMessage(manager, &data->messageWindow, msg_0247_00024);
             MysteryGiftApp_EraseWindowIfInUse(&data->titleWindow, FALSE);
-            *state = 18;
+            *state = MYSTERY_GIFT_STATE_WAIT_RETURN_TO_MENU;
         }
         break;
-    case 18:
+    case MYSTERY_GIFT_STATE_WAIT_RETURN_TO_MENU:
         if (gSystem.newKeys) {
             PlaySE(SEQ_SE_DP_SELECT);
             MysteryGiftApp_ShowMainMenu(manager, 196, msg_0247_00000);
-            *state = 3;
+            *state = MYSTERY_GIFT_STATE_MAIN_MENU;
         }
         break;
-    case 19:
+    case MYSTERY_GIFT_STATE_CHECK_GIFT:
         if (data->resultDelay) {
             data->resultDelay--;
         } else {
-            if (data->giftCheckSource != 27) {
+            if (data->giftCheckSource != MYSTERY_GIFT_STATE_WFC_DOWNLOAD) {
                 MainMenuUtil_ReadCartridgeGift(&data->receivedHeader, sizeof(WonderCardInfo) + sizeof(WonderCard));
             }
             data->giftCheckResult = MysteryGift_CheckCanReceive(data->saveData, &data->receivedHeader);
             if (data->giftCheckResult == 1) {
                 MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
-                *state = 49;
+                *state = MYSTERY_GIFT_STATE_CANNOT_RECEIVE;
             } else {
                 if (!WindowIsInUse(&data->titleWindow)) {
                     AddWindowParameterized(data->bgConfig, &data->titleWindow, GF_BG_LYR_MAIN_0, 3, 2, 26, 4, 0, 452);
@@ -2016,32 +2091,32 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
                 MysteryGiftApp_PrintGiftTitle(manager, &data->titleWindow, data->receivedHeader.name);
                 MysteryGiftApp_PrintMessage(manager, &data->messageWindow, msg_0247_00004);
                 MysteryGiftApp_ShowReceivePrompt(manager, 0);
-                *state = 20;
+                *state = MYSTERY_GIFT_STATE_ACCEPT_GIFT;
             }
         }
         break;
-    case 20:
+    case MYSTERY_GIFT_STATE_ACCEPT_GIFT:
         MysteryGiftApp_HandleListMenuInput(manager, state, MysteryGiftApp_DeclineAcceptGift);
         break;
-    case 21:
-        *state = 22;
+    case MYSTERY_GIFT_STATE_START_RECEIVE:
+        *state = MYSTERY_GIFT_STATE_SHOW_GIFT;
         break;
-    case 22:
+    case MYSTERY_GIFT_STATE_SHOW_GIFT:
         card = MysteryGiftApp_GetReceivedCard(manager);
         MainMenuUtil_ShowCardSubScreen(data->bgConfig, card);
         MysteryGiftApp_PrintMessage(manager, &data->messageWindow, msg_0247_00007);
         MysteryGiftApp_SetSpriteAnim(data, 1);
         MysteryGiftApp_SetWaitingIconVisible(data, TRUE);
         data->timer = 60;
-        *state = 23;
+        *state = MYSTERY_GIFT_STATE_WAIT_BEFORE_SAVE;
         break;
-    case 23:
+    case MYSTERY_GIFT_STATE_WAIT_BEFORE_SAVE:
         if (--data->timer == 0) {
             MysteryGiftApp_SaveReceivedGift(manager);
-            *state = 24;
+            *state = MYSTERY_GIFT_STATE_WAIT_SAVE;
         }
         break;
-    case 24:
+    case MYSTERY_GIFT_STATE_WAIT_SAVE:
         if (MainMenuUtil_GetSaveState() == 4) {
             MainMenuUtil_ResumeSave();
         }
@@ -2050,64 +2125,64 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
             MysteryGiftApp_SetSpriteAnim(data, -1);
             PlaySE(SEQ_SE_DP_UG_020);
-            *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00008, 25);
+            *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00008, MYSTERY_GIFT_STATE_WAIT_RECEIVED);
         } else if (MainMenuUtil_GetSaveState() == 3) {
             MysteryGiftApp_SetSpriteAnim(data, -1);
             data->receivedHeader.unk8E_2 = 0;
-            *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00027, 56);
+            *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00027, MYSTERY_GIFT_STATE_WAIT_FINISH);
         }
         break;
-    case 25:
+    case MYSTERY_GIFT_STATE_WAIT_RECEIVED:
         if (--data->timer == 0) {
             data->timer = 0x10000;
-            *state = 56;
+            *state = MYSTERY_GIFT_STATE_WAIT_FINISH;
         }
         break;
-    case 49:
+    case MYSTERY_GIFT_STATE_CANNOT_RECEIVE:
         if (data->giftCheckResult != 5) {
             MysteryGiftApp_StopReceiving(data);
         }
         *state = MysteryGiftApp_ShowCannotReceiveMessage(manager);
         MysteryGiftApp_EraseWindowIfInUse(&data->windows[2], FALSE);
         break;
-    case 50:
+    case MYSTERY_GIFT_STATE_PRINT_MESSAGE:
         *state = MysteryGiftApp_PrintMessageAndWait(manager, NULL, msg_0247_00000, *state);
         break;
-    case 51:
+    case MYSTERY_GIFT_STATE_WAIT_RETURN_TO_MAIN_MENU:
         if (gSystem.newKeys) {
             MysteryGiftApp_EraseWindowIfInUse(&data->titleWindow, FALSE);
             *state = MysteryGiftApp_CancelReceiveMenu(manager);
         }
         break;
-    case 52:
+    case MYSTERY_GIFT_STATE_ASK_SHARED_GIFT:
         MysteryGiftApp_ShowReceivePrompt(manager, 1);
-        *state = 8;
+        *state = MYSTERY_GIFT_STATE_ACCEPT_FRIEND_GIFT;
         data->giftCheckResult = 0;
         break;
-    case 53:
+    case MYSTERY_GIFT_STATE_EXIT_TO_TITLE:
         MysteryGiftApp_FreeGraphics(manager);
         data->exitTarget = 0;
         return TRUE;
-    case 54:
+    case MYSTERY_GIFT_STATE_EXIT_TO_ALBUM:
         MysteryGiftApp_FreeGraphics(manager);
         data->exitTarget = 1;
         return TRUE;
-    case 55:
+    case MYSTERY_GIFT_STATE_EXIT_TO_LOCK_CAPSULE_CARD:
         MysteryGiftApp_FreeGraphics(manager);
         data->exitTarget = 2;
         return TRUE;
-    case 56:
+    case MYSTERY_GIFT_STATE_WAIT_FINISH:
         if (gSystem.newKeys) {
             PlaySE(SEQ_SE_DP_SELECT);
             if (data->receivedHeader.unk8E_2 == 1) {
-                MainMenuUtil_StartFade(0, 57, data->mainState, 2);
+                MainMenuUtil_StartFade(0, MYSTERY_GIFT_STATE_SHOW_WONDER_CARD, data->mainState, MYSTERY_GIFT_STATE_WAIT_FADE);
             } else {
                 MainMenuUtil_SetFadeWhite(1);
-                MainMenuUtil_StartFade(0, 58, data->mainState, 2);
+                MainMenuUtil_StartFade(0, MYSTERY_GIFT_STATE_RESET, data->mainState, MYSTERY_GIFT_STATE_WAIT_FADE);
             }
         }
         break;
-    case 57:
+    case MYSTERY_GIFT_STATE_SHOW_WONDER_CARD:
         MysteryGiftApp_LoadSubScreenBg(data->bgConfig);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
@@ -2116,10 +2191,10 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         } else {
             WonderCardAlbum_DrawCardOnBg(data->bgConfig, &data->receivedCard, HEAP_ID_84);
         }
-        MainMenuUtil_StartFade(1, 56, data->mainState, 2);
+        MainMenuUtil_StartFade(1, MYSTERY_GIFT_STATE_WAIT_FINISH, data->mainState, MYSTERY_GIFT_STATE_WAIT_FADE);
         data->receivedHeader.unk8E_2 = 0;
         break;
-    case 58:
+    case MYSTERY_GIFT_STATE_RESET:
         OS_ResetSystem(0);
         break;
     default:
@@ -2158,7 +2233,7 @@ BOOL MysteryGiftApp_Exit(OverlayManager *manager, int *state) {
     Heap_Destroy(HEAP_ID_89);
     OverlayManager_FreeData(manager);
     Heap_Destroy(HEAP_ID_84);
-    if (data->receiveMode == 2) {
+    if (data->receiveMode == MYSTERY_GIFT_RECEIVE_CARTRIDGE) {
         Sys_SetAgbCartridgeVersion(0);
     }
     MainMenuUtil_EnableCartridgePullOutCheck(FALSE);
@@ -2167,21 +2242,21 @@ BOOL MysteryGiftApp_Exit(OverlayManager *manager, int *state) {
 
 void MysteryGiftApp_UpdateBeaconWatch(MysteryGiftAppData *data) {
     switch (data->beaconWatchState) {
-    case 28:
+    case MYSTERY_GIFT_BEACON_WATCH_START:
         CommState_StartBeaconWatch(data->saveData);
         data->beaconWatchTimer = 120;
-        data->beaconWatchState = 30;
+        data->beaconWatchState = MYSTERY_GIFT_BEACON_WATCH_ACTIVE;
         break;
-    case 29:
+    case MYSTERY_GIFT_BEACON_WATCH_OFF:
         break;
-    case 30:
+    case MYSTERY_GIFT_BEACON_WATCH_ACTIVE:
         if (CommState_GetSeenGames() & 1) {
             data->giftBeaconSeen = 1;
         }
         data->beaconWatchTimer--;
         if (data->beaconWatchTimer == 0) {
             CommState_StopBeaconWatch();
-            data->beaconWatchState = 29;
+            data->beaconWatchState = MYSTERY_GIFT_BEACON_WATCH_OFF;
         }
         break;
     }
@@ -2189,24 +2264,24 @@ void MysteryGiftApp_UpdateBeaconWatch(MysteryGiftAppData *data) {
 
 void MysteryGiftApp_BeaconCallback(int choice) {
     switch (choice) {
-    case 0:
-        sMysteryGiftLinkState.state = 40;
+    case MYSTERY_GIFT_BEACON_EVENT_SEARCHING:
+        sMysteryGiftLinkState.state = MYSTERY_GIFT_LINK_SEARCHING;
         break;
-    case 1:
-        sMysteryGiftLinkState.state = 41;
+    case MYSTERY_GIFT_BEACON_EVENT_FOUND:
+        sMysteryGiftLinkState.state = MYSTERY_GIFT_LINK_FOUND;
         break;
-    case 2:
-        sMysteryGiftLinkState.state = 42;
+    case MYSTERY_GIFT_BEACON_EVENT_COMPLETE:
+        sMysteryGiftLinkState.state = MYSTERY_GIFT_LINK_COMPLETE;
         break;
-    case 3:
-        if (sMysteryGiftLinkState.state == 42) {
-            sMysteryGiftLinkState.state = 44;
+    case MYSTERY_GIFT_BEACON_EVENT_STOPPED:
+        if (sMysteryGiftLinkState.state == MYSTERY_GIFT_LINK_COMPLETE) {
+            sMysteryGiftLinkState.state = MYSTERY_GIFT_LINK_DECRYPT;
         } else {
-            sMysteryGiftLinkState.state = 47;
+            sMysteryGiftLinkState.state = MYSTERY_GIFT_LINK_STOPPED;
         }
         break;
-    case 4:
-        sMysteryGiftLinkState.state = 48;
+    case MYSTERY_GIFT_BEACON_EVENT_ERROR:
+        sMysteryGiftLinkState.state = MYSTERY_GIFT_LINK_ERROR;
         break;
     }
 }
@@ -2225,24 +2300,24 @@ void MysteryGiftApp_StopWirelessLink(void) {
 void MysteryGiftApp_UpdateWirelessSearch(MysteryGiftAppData *data) {
     u32 state;
 
-    if (sMysteryGiftLinkState.state == 44) {
+    if (sMysteryGiftLinkState.state == MYSTERY_GIFT_LINK_DECRYPT) {
         MysteryGiftApp_StopWirelessLink();
         if (MysteryGiftBeacon_DecryptGift()) {
-            sMysteryGiftLinkState.state = 45;
+            sMysteryGiftLinkState.state = MYSTERY_GIFT_LINK_RECEIVED;
         } else {
-            sMysteryGiftLinkState.state = 46;
+            sMysteryGiftLinkState.state = MYSTERY_GIFT_LINK_BAD_GIFT;
         }
     }
     state = sMysteryGiftLinkState.state;
-    if (state == 37 || state == 38 || state == 39 || state == 40 || state == 41 || state == 43) {
+    if (state == MYSTERY_GIFT_LINK_START_UP || state == MYSTERY_GIFT_LINK_WAIT_START_UP || state == MYSTERY_GIFT_LINK_STARTED || state == MYSTERY_GIFT_LINK_SEARCHING || state == MYSTERY_GIFT_LINK_FOUND || state == MYSTERY_GIFT_LINK_STOPPING) {
         WirelessStatusIcon_SetLevel(3 - WM_GetLinkLevel());
     }
     switch (sMysteryGiftLinkState.state) {
-    case 37:
+    case MYSTERY_GIFT_LINK_START_UP:
         CommWireless_StartUp();
-        sMysteryGiftLinkState.state = 38;
+        sMysteryGiftLinkState.state = MYSTERY_GIFT_LINK_WAIT_START_UP;
         break;
-    case 38:
+    case MYSTERY_GIFT_LINK_WAIT_START_UP:
         if (CommWireless_IsStartedUp() == TRUE) {
             void *linkWork;
 
@@ -2250,40 +2325,40 @@ void MysteryGiftApp_UpdateWirelessSearch(MysteryGiftAppData *data) {
             linkWork = Heap_Alloc(HEAP_ID_84, MysteryGiftBeacon_GetWorkSize());
             sMysteryGiftLinkState.linkWork = linkWork;
             MysteryGiftBeacon_Init(data->recvBuffer, MysteryGiftApp_BeaconCallback, linkWork);
-            sMysteryGiftLinkState.state = 39;
+            sMysteryGiftLinkState.state = MYSTERY_GIFT_LINK_STARTED;
             WirelessStatusIcon_Create();
         }
         break;
-    case 41:
+    case MYSTERY_GIFT_LINK_FOUND:
         sMysteryGiftLinkState.count++;
         break;
-    case 47:
+    case MYSTERY_GIFT_LINK_STOPPED:
         return;
-    case 39:
-    case 40:
-    case 42:
-    case 43:
-    case 44:
-    case 45:
-    case 46:
-    case 48:
+    case MYSTERY_GIFT_LINK_STARTED:
+    case MYSTERY_GIFT_LINK_SEARCHING:
+    case MYSTERY_GIFT_LINK_COMPLETE:
+    case MYSTERY_GIFT_LINK_STOPPING:
+    case MYSTERY_GIFT_LINK_DECRYPT:
+    case MYSTERY_GIFT_LINK_RECEIVED:
+    case MYSTERY_GIFT_LINK_BAD_GIFT:
+    case MYSTERY_GIFT_LINK_ERROR:
         break;
     }
     if (gSystem.newKeys & PAD_BUTTON_B) {
         switch (sMysteryGiftLinkState.state) {
-        case 40:
-        case 41:
-        case 48:
+        case MYSTERY_GIFT_LINK_SEARCHING:
+        case MYSTERY_GIFT_LINK_FOUND:
+        case MYSTERY_GIFT_LINK_ERROR:
             if (MysteryGiftBeacon_Stop()) {
-                sMysteryGiftLinkState.state = 43;
+                sMysteryGiftLinkState.state = MYSTERY_GIFT_LINK_STOPPING;
             }
             break;
-        case 42:
-        case 43:
-        case 44:
-        case 45:
-        case 46:
-        case 47:
+        case MYSTERY_GIFT_LINK_COMPLETE:
+        case MYSTERY_GIFT_LINK_STOPPING:
+        case MYSTERY_GIFT_LINK_DECRYPT:
+        case MYSTERY_GIFT_LINK_RECEIVED:
+        case MYSTERY_GIFT_LINK_BAD_GIFT:
+        case MYSTERY_GIFT_LINK_STOPPED:
             break;
         }
     }

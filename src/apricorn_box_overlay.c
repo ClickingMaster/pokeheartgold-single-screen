@@ -26,6 +26,17 @@ int ApricornBox_State_OpenAprijuiceScreen(ApricornBoxApp *app);
 int ApricornBox_State_RunAprijuiceScreen(ApricornBoxApp *app);
 void ApricornBox_ResetDisplay(void);
 
+enum ApricornBoxState {
+    APRICORN_BOX_STATE_START,
+    APRICORN_BOX_STATE_OPEN_BOX_SCREEN,
+    APRICORN_BOX_STATE_RUN_BOX_SCREEN,
+    APRICORN_BOX_STATE_OPEN_PARTY_MENU,
+    APRICORN_BOX_STATE_RUN_PARTY_MENU,
+    APRICORN_BOX_STATE_OPEN_APRIJUICE_SCREEN,
+    APRICORN_BOX_STATE_RUN_APRIJUICE_SCREEN,
+    APRICORN_BOX_STATE_EXIT,
+};
+
 static const OverlayManagerTemplate sApricornBoxScreenTemplate = {
     ApricornBoxScreen_Init,
     ApricornBoxScreen_Main,
@@ -66,32 +77,32 @@ BOOL ApricornBox_Main(OverlayManager *man, int *state) {
     ApricornBoxApp *app = OverlayManager_GetData(man);
 
     switch (*state) {
-    case 0:
+    case APRICORN_BOX_STATE_START:
         if (app->args->mode == 3) {
-            *state = 3;
+            *state = APRICORN_BOX_STATE_OPEN_PARTY_MENU;
         } else {
-            *state = 1;
+            *state = APRICORN_BOX_STATE_OPEN_BOX_SCREEN;
         }
         break;
-    case 1:
+    case APRICORN_BOX_STATE_OPEN_BOX_SCREEN:
         *state = ApricornBox_State_OpenBoxScreen(app);
         break;
-    case 2:
+    case APRICORN_BOX_STATE_RUN_BOX_SCREEN:
         *state = ApricornBox_State_RunBoxScreen(app);
         break;
-    case 3:
+    case APRICORN_BOX_STATE_OPEN_PARTY_MENU:
         *state = ApricornBox_State_OpenPartyMenu(app);
         break;
-    case 4:
+    case APRICORN_BOX_STATE_RUN_PARTY_MENU:
         *state = ApricornBox_State_RunPartyMenu(app);
         break;
-    case 5:
+    case APRICORN_BOX_STATE_OPEN_APRIJUICE_SCREEN:
         *state = ApricornBox_State_OpenAprijuiceScreen(app);
         break;
-    case 6:
+    case APRICORN_BOX_STATE_RUN_APRIJUICE_SCREEN:
         *state = ApricornBox_State_RunAprijuiceScreen(app);
         break;
-    case 7:
+    case APRICORN_BOX_STATE_EXIT:
         return TRUE;
     }
     return FALSE;
@@ -192,18 +203,18 @@ void ApricornBox_Cleanup(ApricornBoxApp *app) {
 
 int ApricornBox_State_OpenBoxScreen(ApricornBoxApp *app) {
     app->child = OverlayManager_New(&sApricornBoxScreenTemplate, app, app->heapId);
-    return 2;
+    return APRICORN_BOX_STATE_RUN_BOX_SCREEN;
 }
 
 int ApricornBox_State_RunBoxScreen(ApricornBoxApp *app) {
     if (!ApricornBox_RunChildApp(&app->child)) {
-        return 2;
+        return APRICORN_BOX_STATE_RUN_BOX_SCREEN;
     }
     if (app->mode == 3) {
         app->partySlot = 0;
-        return 3;
+        return APRICORN_BOX_STATE_OPEN_PARTY_MENU;
     }
-    return 7;
+    return APRICORN_BOX_STATE_EXIT;
 }
 
 int ApricornBox_State_OpenPartyMenu(ApricornBoxApp *app) {
@@ -221,14 +232,14 @@ int ApricornBox_State_OpenPartyMenu(ApricornBoxApp *app) {
     args->partySlot = app->partySlot;
     app->child = OverlayManager_New(&gOverlayTemplate_PartyMenu, args, app->heapId);
     app->partyMenuArgs = args;
-    return 4;
+    return APRICORN_BOX_STATE_RUN_PARTY_MENU;
 }
 
 int ApricornBox_State_RunPartyMenu(ApricornBoxApp *app) {
     u8 slot;
 
     if (!ApricornBox_RunChildApp(&app->child)) {
-        return 4;
+        return APRICORN_BOX_STATE_RUN_PARTY_MENU;
     }
     slot = app->partyMenuArgs->partySlot;
     app->partySlot = slot;
@@ -236,29 +247,29 @@ int ApricornBox_State_RunPartyMenu(ApricornBoxApp *app) {
     app->partyMenuArgs = NULL;
     if (slot == 7) {
         if (app->args->mode == 3) {
-            return 7;
+            return APRICORN_BOX_STATE_EXIT;
         }
-        return 1;
+        return APRICORN_BOX_STATE_OPEN_BOX_SCREEN;
     }
-    return 5;
+    return APRICORN_BOX_STATE_OPEN_APRIJUICE_SCREEN;
 }
 
 int ApricornBox_State_OpenAprijuiceScreen(ApricornBoxApp *app) {
     app->child = OverlayManager_New(&sAprijuiceScreenTemplate, app, app->heapId);
-    return 6;
+    return APRICORN_BOX_STATE_RUN_APRIJUICE_SCREEN;
 }
 
 int ApricornBox_State_RunAprijuiceScreen(ApricornBoxApp *app) {
     if (!ApricornBox_RunChildApp(&app->child)) {
-        return 6;
+        return APRICORN_BOX_STATE_RUN_APRIJUICE_SCREEN;
     }
     if (app->mode == 3) {
-        return 3;
+        return APRICORN_BOX_STATE_OPEN_PARTY_MENU;
     }
     if (app->args->mode == 3) {
-        return 7;
+        return APRICORN_BOX_STATE_EXIT;
     }
-    return 1;
+    return APRICORN_BOX_STATE_OPEN_BOX_SCREEN;
 }
 
 void ApricornBox_ResetDisplay(void) {

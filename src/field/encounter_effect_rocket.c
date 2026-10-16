@@ -232,6 +232,22 @@ void EncounterEffect_RocketBoss(SysTask *task, EncounterEffectTask *effect) {
     RocketEffect_RunExecutiveIntro(task, effect, &gEncounterRocketBossIntroParams);
 }
 
+enum RocketExecutiveState {
+    ROCKET_EXECUTIVE_STATE_INIT,
+    ROCKET_EXECUTIVE_STATE_START_SCROLL,
+    ROCKET_EXECUTIVE_STATE_SCROLL,
+    ROCKET_EXECUTIVE_STATE_START_OPEN_WINDOW,
+    ROCKET_EXECUTIVE_STATE_OPEN_WINDOW,
+    ROCKET_EXECUTIVE_STATE_WAIT_OPEN,
+    ROCKET_EXECUTIVE_STATE_START_SLIDE_IN,
+    ROCKET_EXECUTIVE_STATE_SLIDE_IN,
+    ROCKET_EXECUTIVE_STATE_WAIT_BRIGHTNESS,
+    ROCKET_EXECUTIVE_STATE_WAIT_SLIDE_OUT,
+    ROCKET_EXECUTIVE_STATE_SLIDE_OUT,
+    ROCKET_EXECUTIVE_STATE_WAIT_FADE,
+    ROCKET_EXECUTIVE_STATE_END,
+};
+
 // The trainer's picture slides in behind a window that opens from the middle of the screen,
 // with the trainer's name in a text window.
 // force_active only sets a section flag; it is kept so the objects stay identical to the matched ones
@@ -242,7 +258,7 @@ void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, 
     RocketExecutiveEffectWork *work = effect->work;
 
     switch (effect->state) {
-    case 0: {
+    case ROCKET_EXECUTIVE_STATE_INIT: {
         String *string;
 
         effect->work = Heap_Alloc(heapID, sizeof(RocketExecutiveEffectWork));
@@ -284,24 +300,24 @@ void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, 
         effect->state++;
         break;
     }
-    case 1:
+    case ROCKET_EXECUTIVE_STATE_START_SCROLL:
         ToggleBgLayer(GF_BG_LYR_MAIN_1, GF_PLANE_TOGGLE_ON);
         work->timer = 12;
         effect->state++;
         // fallthrough
-    case 2:
+    case ROCKET_EXECUTIVE_STATE_SCROLL:
         BgSetPosTextAndCommit(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_ADD_X, 24);
         if (--work->timer <= 0) {
             effect->state++;
         }
         break;
-    case 3:
+    case ROCKET_EXECUTIVE_STATE_START_OPEN_WINDOW:
         reg_GX_DISPCNT = (reg_GX_DISPCNT & 0xFFFF1FFF) | REG_GX_DISPCNT_W0_MASK;
         ToggleBgLayer(GF_BG_LYR_MAIN_3, GF_PLANE_TOGGLE_ON);
         EncounterEffectQuadInterp_Init(&work->slide, 0, FX32_CONST(96), FX32_CONST(4), 4);
         effect->state++;
         // fallthrough
-    case 4:
+    case ROCKET_EXECUTIVE_STATE_OPEN_WINDOW:
         BgSetPosTextAndCommit(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_ADD_X, 24);
         if (!EncounterEffectQuadInterp_Update(&work->slide)) {
             int height = work->slide.value >> FX32_SHIFT;
@@ -315,12 +331,12 @@ void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, 
             effect->state++;
         }
         break;
-    case 5:
+    case ROCKET_EXECUTIVE_STATE_WAIT_OPEN:
         if (--work->timer <= 0) {
             effect->state++;
         }
         break;
-    case 6:
+    case ROCKET_EXECUTIVE_STATE_START_SLIDE_IN:
         RocketEffect_LoadBgScreen(effect, GF_BG_LYR_MAIN_1, 221);
         SetBgPriority(GF_BG_LYR_MAIN_1, 1);
         SetBgPriority(GF_BG_LYR_MAIN_3, 2);
@@ -329,7 +345,7 @@ void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, 
         work->timer = 0;
         effect->state++;
         // fallthrough
-    case 7: {
+    case ROCKET_EXECUTIVE_STATE_SLIDE_IN: {
         int blendDone = FALSE;
 
         if (work->timer <= 16) {
@@ -357,13 +373,13 @@ void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, 
         Sprite_SetMatrix(work->sprite, &work->position);
         break;
     }
-    case 8:
+    case ROCKET_EXECUTIVE_STATE_WAIT_BRIGHTNESS:
         if (IsBrightnessTransitionActive(1)) {
             work->timer = 16;
             effect->state++;
         }
         break;
-    case 9:
+    case ROCKET_EXECUTIVE_STATE_WAIT_SLIDE_OUT:
         if (--work->timer <= 0) {
             EncounterEffectQuadInterp_Init(&work->slide, work->position.x, FX32_CONST(-96), FX32_CONST(2), 8);
             work->timer = 8;
@@ -371,7 +387,7 @@ void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, 
             effect->state++;
         }
         break;
-    case 10:
+    case ROCKET_EXECUTIVE_STATE_SLIDE_OUT:
         work->position.x = work->slide.value;
         {
             int x = -((work->position.x >> FX32_SHIFT) + 8);
@@ -390,12 +406,12 @@ void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, 
             effect->state++;
         }
         break;
-    case 11:
+    case ROCKET_EXECUTIVE_STATE_WAIT_FADE:
         if (IsPaletteFadeFinished()) {
             effect->state++;
         }
         break;
-    case 12:
+    case ROCKET_EXECUTIVE_STATE_END:
         if (effect->done) {
             *effect->done = TRUE;
         }
@@ -415,7 +431,7 @@ void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, 
     if (work->waveActive == TRUE) {
         EncounterEffectHBlankWave_AlternateDirection(&work->wave, 2);
     }
-    if (effect->state != 12) {
+    if (effect->state != ROCKET_EXECUTIVE_STATE_END) {
         SpriteList_RenderAndAnimateSprites(work->spriteManager.spriteList);
     }
 }
