@@ -278,7 +278,7 @@ BOOL PokeathlonRelayRun_ShowResults(PokeathlonCourseData *course) {
     int i;
     PokeathlonCourseScoreList_Init(gfx);
     for (i = 0; i < RELAY_RUN_TEAMS; i++) {
-        // read through an int-returning type: the original truncates the result again
+        // read through an int-returning type and truncated again
         int distance = (u16)((int (*)(PokeathlonCourseData *, int))PokeathlonCourse_GetField5F0_AtIndex)(course, (u8)i);
         PokeathlonCourse_AddScoreEntry2(course, gfx, i, distance, (u32)distance >> 10, (distance % RELAY_RUN_TRACK_LENGTH) * 10 / RELAY_RUN_TRACK_LENGTH, 0, 1, 2, 1, msg_0309_00297);
     }
@@ -519,7 +519,7 @@ BOOL PokeathlonRelayRun_SaveScores(PokeathlonCourseData *course, u8 *state) {
 }
 
 // teamCursor and dragCursor are relayRun moved on by i teams / i flags, so that ->teams[0] / ->dragging[0] is
-// team i's (the loop below walks them that way, as the original does).
+// team i's (the loop below walks them that way).
 static inline void PokeathlonRelayRun_ClearDrag(PokeathlonRelayRun *teamCursor, PokeathlonRelayRun *dragCursor) {
     dragCursor->dragging[0] = FALSE;
     teamCursor->teams[0].heldFrames = 0;
@@ -780,7 +780,7 @@ BOOL PokeathlonRelayRun_Update(PokeathlonCourseData *course) {
             PokeathlonCourse_SetFinishCallback(course, PokeathlonRelayRun_SaveResult);
             if (!PokeathlonCourse_GetNetId(course)) {
                 for (i = 0; i < RELAY_RUN_TEAMS; i++) {
-                    // team i through relayRun moved by i teams (shifted->teams[0]), the way the original addresses it
+                    // team i through relayRun moved by i teams (shifted->teams[0])
                     PokeathlonRelayRun *shifted = (PokeathlonRelayRun *)((u8 *)relayRun + i * sizeof(PokeathlonRelayRunTeam));
                     for (j = 0; j < RELAY_RUN_MEMBERS; j++) {
                         s32 distance = shifted->teams[0].distance[j] / RELAY_RUN_TRACK_LENGTH;

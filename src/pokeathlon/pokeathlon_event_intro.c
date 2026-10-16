@@ -575,7 +575,7 @@ void PokeathlonEventIntro_ResetMascot(PokeathlonEventIntro *intro) {
 }
 
 // Places the templates (in .data) at the positions of layout 0 and creates the sprites. The
-// template is written through one pointer and read through another, as the original did.
+// template is written through one pointer and read through another.
 #pragma force_active on
 
 void PokeathlonEventIntro_CreateSprites(PokeathlonEventIntro *intro) {

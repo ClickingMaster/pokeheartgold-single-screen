@@ -606,7 +606,7 @@ void BattleRoomResults_LoadLeaders(BattleRoomResults *results) {
     struct {
         int index;
         BattleRoomLeaderRecord *records;
-    } query; // kept in one struct: matches the original stack layout
+    } query;
 
     BattleRoomLeader *leader;
     BattleRoomLeaderRecord *record;

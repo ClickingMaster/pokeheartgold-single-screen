@@ -219,7 +219,7 @@ BOOL TradeSequenceReceive_ShowMon(TradeSequenceReceive *receive, u32 *state) {
                 u16 species = TradeSequence_GetReceivedSpecies(receive->ts);
                 int form = TradeSequence_GetReceivedForm(receive->ts);
                 PlayCryDelayed(species, cryDelay[0], (u8)form);
-                ((void (*)(Pokepic *, int))Pokepic_StartAnim)(receive->pokepic, 1); // the original call passes a 2nd argument
+                ((void (*)(Pokepic *, int))Pokepic_StartAnim)(receive->pokepic, 1); // called with an extra argument
             }
             receive->timer = 0;
             (*state)++;

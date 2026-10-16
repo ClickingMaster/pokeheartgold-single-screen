@@ -268,7 +268,7 @@ void PCBox_PrintAligned(Window *window, String *str, s32 x, s32 y, u32 font, u32
     } else if (align == 3) {
         x -= FontID_String_GetWidthMultiline(font, str, 0) / 2;
     }
-    // FONT goes on as a full register (the call does not narrow it to a FontID)
+    // the font is not narrowed to a FontID
     ((u8(*)(Window *, u32, String *, u32, u32, u32, u32, PrinterCallback_t))AddTextPrinterParameterizedWithColor)(window, font, str, x, y, TEXT_SPEED_NOTRANSFER, color, NULL);
 }
 

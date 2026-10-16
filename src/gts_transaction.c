@@ -98,7 +98,7 @@ extern const BgTemplate sGtsTransactionSubBg1Template;
 u16 GtsSave_HasStoredMon(void *gtsSave);
 void GtsSave_SetHasStoredMon(void *gtsSave, u16 value);
 void GtsSave_GetStoredMon(void *gtsSave, void *dest);
-void GtsSave_SetStoredMon(void *gtsSave, void *src);
+void GtsSave_SetStoredMon(void *gtsSave, void *src, int box);
 void GtsSave_SetDepositDate(void *gtsSave, u32 value);
 void GtsSave_SetTradeDate(void *gtsSave, u32 value);
 u16 GtsSave_GetStoredMonBox(void *gtsSave);
@@ -1036,13 +1036,13 @@ void GtsTransaction_StoreSelectedMon(GtsApp *app, BOOL setDeposited) {
     if (app->selectedBox != GTS_BOX_PARTY) {
         mon = AllocMonZeroed(HEAP_ID_61);
         CopyBoxPokemonToPokemon(PCStorage_GetMonByIndexPair(app->args->pcStorage, app->selectedBox, app->selectedSlot), mon);
-        ((void (*)(void *, void *, int))GtsSave_SetStoredMon)((void *)app->args->gtsSave, mon, app->selectedBox); // passes the box too
+        GtsSave_SetStoredMon((void *)app->args->gtsSave, mon, app->selectedBox);
         PCStorage_DeleteBoxMonByIndexPair(app->args->pcStorage, app->selectedBox, app->selectedSlot);
         Heap_Free(mon);
     } else {
         mon = Party_GetMonByIndex(app->args->party, app->selectedSlot);
         Pokemon_RemoveCapsule(mon);
-        ((void (*)(void *, void *, int))GtsSave_SetStoredMon)((void *)app->args->gtsSave, mon, app->selectedBox); // passes the box too
+        GtsSave_SetStoredMon((void *)app->args->gtsSave, mon, app->selectedBox);
         Party_RemoveMon(app->args->party, app->selectedSlot);
         if (!Party_HasMon(app->args->party, SPECIES_CHATOT)) {
             Chatot_Invalidate(Save_Chatot_Get(app->args->saveData));

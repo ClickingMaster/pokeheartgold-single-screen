@@ -505,7 +505,7 @@ BOOL VsRecorder_DressUpViewSelectCategory(VsRecorderWork *work) {
         }
         break;
     case 3:
-        ((void (*)(void))VsRecorder_RemoveDressUpCategoryWindows)();
+        VsRecorder_RemoveDressUpCategoryWindows(work);
         TouchHitboxController_Destroy(dressUp->hitboxes);
         VsRecorder_HideTopMessage(work);
         work->step++;

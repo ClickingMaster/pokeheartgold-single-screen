@@ -2038,7 +2038,7 @@ BOOL WiFiPlazaPlayerState_OtherWaitForPlayer(WiFiPlazaPlayerState *state, WiFiPl
             WiFiPlazaPlayerState_SetStep(state, 1);
             break;
         }
-        if (WiFiPlazaPlayer_HasTapToy() == TRUE) {
+        if (WiFiPlazaPlayer_HasTapToy(player) == TRUE) {
             WiFiPlazaObj *newObj = WiFiPlazaObj_CreatePlayer(objManager, index, WiFiPlazaPlayer_GetAvatar(player));
             if (newObj) {
                 WiFiPlazaObj_SetVisible(newObj, 0);

@@ -200,7 +200,7 @@ void MainMenuUtil_StartSave(SaveData *saveData) {
 #pragma force_active on
 
 int MainMenuUtil_RunSave(void) {
-    // the work through the preceding label (second literal-pool entry of the same address, matching)
+    // the work through the preceding label (second literal-pool entry of the same address)
     MainMenuUtilWork *work = (MainMenuUtilWork *)(&sMainMenuUtilCryptoHeapId + 1);
     int result;
 

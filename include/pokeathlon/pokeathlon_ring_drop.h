@@ -377,7 +377,7 @@ u16 PokeathlonRingDropUi_GetScore(PokeathlonRingDropUi *ui);
 BOOL PokeathlonRingDropUi_RunSwitch(PokeathlonRingDropUi *ui, u8 participant, u8 member);
 BOOL PokeathlonRingDropUi_WaitSwitch(PokeathlonRingDropUi *ui, u8 participant, u8 member);
 void PokeathlonRingDropUi_SetSwitching(PokeathlonRingDropUi *ui, u8 participant, u32 member, BOOL switching);
-ManagedSprite *PokeathlonRingDropUi_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u16 animation, u16 priority);
+ManagedSprite *PokeathlonRingDropUi_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u16 animation, u16 priority);
 void PokeathlonRingDropUi_AddWindows(PokeathlonRingDropUi *ui);
 void PokeathlonRingDropUi_DrawScore(PokeathlonRingDropUi *ui, s32 score);
 void PokeathlonRingDropUi_PrintNames(PokeathlonRingDropUi *ui);
@@ -385,7 +385,7 @@ void PokeathlonRingDropUi_PrintMessage(Window *window, MessageFormat *msgFormat,
 void PokeathlonRingDropUi_PrintMessageAt(Window *window, MessageFormat *msgFormat, MsgData *msgData, u32 msgId, enum HeapID heapId, s16 x, s16 y);
 void PokeathlonRingDropUi_CreateSprites(PokeathlonRingDropUi *ui);
 void PokeathlonRingDropUi_LoadMonPic(PokeathlonCourseData *course, enum HeapID heapId, ManagedSprite *sprite, u32 participant, u8 member);
-void PokeathlonRingDropUi_LoadMonIcon(PokeathlonRingDropUi *ui, s32 participant, u32 member);
+void PokeathlonRingDropUi_LoadMonIcon(PokeathlonRingDropUi *ui, u8 participant, u32 member);
 void *PokeathlonRingDropUi_NewTimerSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u16 animation, u16 priority);
 void PokeathlonRingDropUi_CreateTimerSprites(PokeathlonRingDropUi *ui);
 void PokeathlonRingDropUi_PrintNextName(PokeathlonRingDropUi *ui, s32 member);

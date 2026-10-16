@@ -7,13 +7,13 @@
 #include "player_data.h"
 #include "save_link_ruleset.h"
 
-// Wireless link layer of the communication code (ARM9 static 0x02034B0C-0x02035900), above the local wireless
+// Wireless link layer of the communication code, above the local wireless
 // manager (wireless_manager.c): wireless start-up (WVR), the beacon this game sends as a parent (trainer, link
 // kind, member count, profile, ruleset), the list of parents found while scanning (kept 300 frames after their
 // last beacon), connecting to one of them, the parent's start sequence (measure channels, pick one, start) and
 // the shutdown sequences.
 
-// The game info sent in the beacons (0x5C bytes; at offset 0x50 of a scanned parent's description).
+// The game info sent in the beacons, also read from a scanned parent's description.
 typedef struct CommBeacon {
     u32 trainerId;
     u8 kind;        // 0x04: link kind (CommState_GetLinkMode)

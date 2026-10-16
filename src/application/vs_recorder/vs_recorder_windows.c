@@ -348,7 +348,7 @@ void VsRecorder_CreateProfileMonIcon(VsRecorderProfile *profile, VsRecorderWork 
         template.bgPriority = 0;
         template.vramTransfer = 0;
         profile->monIcon = SpriteSystem_NewSprite(work->spriteSystem, work->spriteManager, &template);
-        // called through an int prototype, as compiled (no u8 truncation of the offset)
+        // the offset is passed without u8 truncation
         ((void (*)(ManagedSprite *, int))ManagedSprite_SetPaletteOverrideOffset)(profile->monIcon, slot + GetMonIconPaletteEx(species, form, isEgg));
         ManagedSprite_SetAnim(profile->monIcon, 1);
     }

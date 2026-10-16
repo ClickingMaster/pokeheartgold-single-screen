@@ -626,8 +626,7 @@ int WifiSetupWh_Start(void) {
     gWifiSetupWh.work->parentParam.userData = NULL;
     gWifiSetupWh.work->parentParam.userDataLength = 0;
     gWifiSetupWh.work->judgeChild = NULL;
-    // called with an argument of 0
-    return ((int (*)(int))WifiSetupWh_InitializeWm)(0) == 0 ? 0 : 1;
+    return WifiSetupWh_InitializeWm() == 0 ? 0 : 1;
 }
 
 #pragma pop
@@ -817,11 +816,8 @@ void WifiSetupShare_Init(WifiSetupShare *share, const WifiSetupSessionParams *pa
     gWifiSetupShare->params.languageCode = 2;
     OS_GetTick();
     DWCi_BACKUPlRead(gWifiSetupShare->backup);
-    {
-        u64 tick = OS_GetTick();
-        // called with the tick in the argument registers
-        gWifiSetupShare->data = (u8 *)((WifiSetupConnections * (*)(u32, u32)) WifiSetupConnections_Get)((u32)tick, (u32)(tick >> 32));
-    }
+    OS_GetTick();
+    gWifiSetupShare->data = (u8 *)WifiSetupConnections_Get();
 }
 
 int WifiSetupShare_Cancel(void) {

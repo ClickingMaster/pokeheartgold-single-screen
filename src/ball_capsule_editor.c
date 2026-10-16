@@ -1064,7 +1064,7 @@ void BallCapsuleEditor_SetButtonLabelsDrawFlag(BallCapsuleEditor *editor, BOOL d
 
 void BallCapsuleEditor_CreateButtonLabel(BallCapsuleEditor *editor, int index, int x, int y, int palette) {
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0011_bin, HEAP_ID_52);
-    String *volatile string = NewString_ReadMsgData(msgData, index + msg_0011_00005); // (volatile: matches the original stack use)
+    String *volatile string = NewString_ReadMsgData(msgData, index + msg_0011_00005);
     TextOBJTemplate template;
     Window window;
     int chars;
@@ -1462,7 +1462,7 @@ void BallCapsuleEditor_CreateArrows(BallCapsuleEditor *editor) {
     struct {
         BallCapsuleEditorArrows arrows;
         ManagedSpriteTemplate template;
-    } data; // (one struct: matches the original stack layout)
+    } data;
 
     int i;
 
@@ -2451,7 +2451,7 @@ int BallCapsuleEditor_PreviewCapsule(BallCapsuleEditor *editor) {
         }
         break;
     case 2: {
-        volatile u32 *clear = (u32 *)&effectParams; // (volatile stores: matches the original)
+        volatile u32 *clear = (u32 *)&effectParams;
         clear[0] = 0;
         clear[1] = 0;
         clear[2] = 0;
@@ -2701,7 +2701,7 @@ int BallCapsuleEditor_HandleSelection(BallCapsuleEditor *editor, int selection) 
     default:
         break;
     }
-    ((void (*)(void))BallCapsuleEditor_SortSeals)(); // called without an argument
+    BallCapsuleEditor_SortSeals(editor);
     BallCapsuleEditor_SaveCapsule(editor);
     BallCapsuleEditor_RefreshCapsuleIcons(editor);
     editor->cursorCapsule[0] = selection;

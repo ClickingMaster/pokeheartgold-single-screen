@@ -659,7 +659,7 @@ BOOL FootprintStamp_UpdateFall(FootprintStampBoard *board, FootprintStampObj *st
         if (x < -0x50000 || x > 0x50000 || y > 0x30000 || y < -0x30000) {
             return TRUE;
         }
-        // the angle is re-read from memory each time, as in the original (volatile)
+        // the angle is re-read from memory each time (volatile)
         angle = *(volatile fx32 *)&fall->angle + 0x8000;
         *(volatile fx32 *)&fall->angle = angle;
         if (angle >= (360 << FX32_SHIFT)) {
@@ -1445,8 +1445,7 @@ BOOL FootprintStamp_IsFromOtherPlayer(u32 playerId, const FootprintStampLinkFilt
     if (filter->active == FALSE) {
         return FALSE;
     }
-    // called with a second argument the function does not take
-    index = ((int (*)(u32, BOOL))WiFiPlazaLobbyClient_IdToChannelSlot)(playerId, filter->active);
+    index = WiFiPlazaLobbyClient_IdToChannelSlot(playerId);
     if (index != -1) {
         return TRUE;
     }
@@ -1454,8 +1453,7 @@ BOOL FootprintStamp_IsFromOtherPlayer(u32 playerId, const FootprintStampLinkFilt
 }
 
 BOOL FootprintStamp_SendStamp(FootprintStampMon *mon) {
-    // called with an argument the function does not take
-    if (((BOOL(*)(FootprintStampMon *))WiFiPlaza_HasConnectionFailed)(mon) == TRUE) {
+    if (WiFiPlaza_HasConnectionFailed() == TRUE) {
         return FALSE;
     }
     WiFiPlazaLobbyClient_SendToChannel(2, mon, sizeof(FootprintStampMon));

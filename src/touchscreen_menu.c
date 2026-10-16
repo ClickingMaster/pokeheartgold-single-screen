@@ -946,7 +946,7 @@ void TouchscreenMenu_CreateSprites(TouchscreenMenuData *data) {
     }
     {
         // Sprites 9-14 share the button resources. The loop steps a TouchscreenMenuData pointer by one
-        // sprite slot (and passes the rounding constant in a variable), which codegen needs.
+        // sprite slot and passes the rounding constant in a variable.
         TouchscreenMenuData *slot;
         int j;
         float half;

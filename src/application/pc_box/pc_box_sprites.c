@@ -24,7 +24,7 @@
 #include "type_icon_resources.h"
 #include "char_tiles.h"
 
-// Some calls pass full-width values to u16 / s16 parameters, as the original code did: those go through a cast of
+// Some calls pass full-width values to u16 / s16 parameters: those go through a cast of
 // the function.
 //
 // Sprites of the view (PCBoxView.sprites): 0-1 box arrows, 2-3 mon pics (two buffers), 4-8 tray / wallpaper menu

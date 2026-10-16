@@ -269,7 +269,7 @@ BOOL TradeSequenceSend_ShowMessages(TradeSequenceSend *send, u32 *state) {
             StringExpandPlaceholders(msgFormat, send->msgString, send->msgTemplate);
             if (GetBoxMonData(TradeSequence_GetSentBoxMon(send->ts), MON_DATA_IS_EGG, NULL) == FALSE) {
                 u8 cryDelay;
-                ((void (*)(Pokepic *, int))Pokepic_StartAnim)(send->pokepic, 1); // the original call passes a 2nd argument
+                ((void (*)(Pokepic *, int))Pokepic_StartAnim)(send->pokepic, 1); // called with an extra argument
                 NARC_ReadPokepicCryDelay(send->pokeAnimNarc, &cryDelay, TradeSequence_GetSentSpecies(send->ts), 1);
                 u16 species = TradeSequence_GetSentSpecies(send->ts);
                 PlayCryDelayed(species, cryDelay, (u8)TradeSequence_GetSentForm(send->ts));

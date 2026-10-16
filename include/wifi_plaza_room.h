@@ -441,7 +441,7 @@ struct WiFiPlazaPlayer *WiFiPlazaWork_GetPlayer(WiFiPlazaWork *work, u32 index);
 struct WiFiPlazaPlayer *WiFiPlazaWork_GetMyPlayer(WiFiPlazaWork *work);
 void WiFiPlazaPlayer_CopyToProfile(struct WiFiPlazaPlayer *player, PlayerProfile *profile, enum HeapID heapID);
 u8 WiFiPlazaPlayer_GetTapToy(struct WiFiPlazaPlayer *player);
-BOOL WiFiPlazaPlayer_HasTapToy(void); // the player-state caller passes the player through r0; see WiFiPlazaRoom_Init
+BOOL WiFiPlazaPlayer_HasTapToy(WiFiPlazaPlayer *player);
 u32 WiFiPlazaWork_HasError(WiFiPlazaWork *work);
 BOOL WiFiPlazaWork_IsClosed(WiFiPlazaWork *work);
 void WiFiPlazaWork_SendTapToyPlayed(void *unused, u32 value);

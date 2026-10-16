@@ -903,8 +903,7 @@ BOOL NintendoWfc_Init(OverlayManager *man, int *state) {
         reg_GX_DISPCNT &= ~REG_GX_DISPCNT_DISPLAY_MASK;
         reg_GXS_DB_DISPCNT &= ~REG_GX_DISPCNT_DISPLAY_MASK;
         Heap_Create(HEAP_ID_3, HEAP_ID_67, 0x50000);
-        // the definition returns BOOL; unk_020915B0.h declares it void, which changes the scheduling here
-        ((BOOL(*)(void))LoadDwcOverlay)();
+        LoadDwcOverlay();
         LoadOVY38();
         Comm_InitDwc(HEAP_ID_67);
         wfc = OverlayManager_CreateAndGetData(man, sizeof(NintendoWfcConnect), HEAP_ID_67);
@@ -1003,7 +1002,7 @@ BOOL NintendoWfc_Exit(OverlayManager *man, int *state) {
 }
 
 void NintendoWfc_VBlankCB(void *arg) {
-    volatile u32 *irqCheck = (volatile u32 *)0x027E0000; // the OS IRQ check flag lives at +0x3FF8
+    volatile u32 *irqCheck = (volatile u32 *)0x027E0000; // for the OS IRQ check flag
     NintendoWfcConnect *wfc = arg;
     GF_RunVramTransferTasks();
     DoScheduledBgGpuUpdates(wfc->bgConfig);
@@ -1903,7 +1902,7 @@ int NintendoWfc_HandleChallengeRoomInput(NintendoWfcConnect *wfc) {
         if (value > 0) {
             DWC_GetDateTime(date, time);
             wfc->room = value;
-            // BattleRoomDownload_IsRoomMarked takes u32 group/entry; the original call truncated them to u8
+            // BattleRoomDownload_IsRoomMarked takes u32 group/entry; they are passed as u8 values
             if (BattleRoomDownload_IsRoomMarked((BattleRoomDownload *)wfc->args->battleRoomDownload, (u8)wfc->rank, (u8)wfc->room, date)) {
                 wfc->state = NINTENDO_WFC_STATE_PRINT_ROOM_UNAVAILABLE;
             } else {
@@ -1950,7 +1949,7 @@ int NintendoWfc_WaitTrainersDownload(NintendoWfcConnect *wfc) {
         case 0: {
             u32 time[3];
             u32 date[4];
-            // BattleRoomDownload_SetTrainers/BattleRoomDownload_MarkRoom take u32; the original calls truncated rank and room to u8
+            // BattleRoomDownload_SetTrainers/BattleRoomDownload_MarkRoom take u32; rank and room are passed as u8 values
             BattleRoomDownload_SetTrainers((BattleRoomDownload *)wfc->args->battleRoomDownload, wfc->downloadBuffer, (u8)wfc->ownRank, (u8)wfc->room);
             NintendoWfc_SetState(wfc, NINTENDO_WFC_STATE_START_SAVE, NINTENDO_WFC_STATE_PRINT_TRAINERS_RECEIVED);
             DWC_GetDateTime(date, time);
@@ -2179,10 +2178,10 @@ int NintendoWfc_RequestLeadersDownload(NintendoWfcConnect *wfc) {
 int NintendoWfc_WaitLeadersDownload(NintendoWfcConnect *wfc) {
     if (NintendoWfcHttp_IsDone()) {
         int result = NintendoWfcHttp_GetResult();
-        *(volatile int *)&wfc->timeoutCounter = 0; // the original accessed this counter as volatile here
+        *(volatile int *)&wfc->timeoutCounter = 0;
         switch (result) {
         case 0:
-            // BattleRoomDownload_SetLeaders takes u32; the original call truncated rank and room to u8
+            // BattleRoomDownload_SetLeaders takes u32; rank and room are passed as u8 values
             BattleRoomDownload_SetLeaders((BattleRoomDownload *)wfc->args->battleRoomDownload, wfc->downloadBuffer + 0x63C, (u8)wfc->rank, (u8)wfc->room);
             NintendoWfc_SetState(wfc, NINTENDO_WFC_STATE_START_SAVE, NINTENDO_WFC_STATE_PRINT_LEADERS_RECEIVED);
             break;
@@ -2404,7 +2403,6 @@ int NintendoWfc_Disconnect(NintendoWfcConnect *wfc) {
         }
         break;
     default:
-        // the original accessed this timer as volatile here
         (*(volatile s16 *)&wfc->subTimer)++;
         if (*(volatile s16 *)&wfc->subTimer > 30) {
             NintendoWfc_SetNextMode(wfc, 0, 0);

@@ -1431,7 +1431,7 @@ void VsRecorder_ShowVideoListMessage(VsRecorderWork *work, int msgId, int unused
     VsRecorderVideoListScreen *listWork = work->screenWork;
     String *str;
 
-    ((void (*)(VsRecorderWork *, GFBgLayer))VsRecorder_LoadMessageBg)(work, GF_BG_LYR_MAIN_2); // the third argument is left unset
+    VsRecorder_LoadMessageBg(work, GF_BG_LYR_MAIN_2, unused);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
     InitWindow(window);
     AddWindowParameterized(work->bgConfig, window, GF_BG_LYR_MAIN_2, 1, 19, 30, 4, 14, 0x12C);

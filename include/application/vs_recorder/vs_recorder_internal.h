@@ -670,7 +670,7 @@ void VsRecorder_DeleteSprite(void *unused0, void *unused1, ManagedSprite *sprite
 
 // vs_recorder_screen.c
 void VsRecorder_PrintVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work);
-void VsRecorder_RemoveVideoInfoWindows(VsRecorderVideoInfo *info);
+void VsRecorder_RemoveVideoInfoWindows(VsRecorderVideoInfo *info, VsRecorderWork *work);
 BOOL VsRecorder_HeaderUsesThreeMonLayout(void *header);
 BOOL VsRecorderVideoInfo_UsesThreeMonLayout(VsRecorderVideoInfo *info);
 int VsRecorderVideoInfo_GetScreenId(VsRecorderVideoInfo *info);

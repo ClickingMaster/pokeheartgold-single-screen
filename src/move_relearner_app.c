@@ -778,7 +778,7 @@ u32 MoveRelearner_CountEligibleMoves(MoveRelearner *relearner) {
 void MoveRelearner_CopyButtonTiles(MoveRelearner *relearner, u32 x, u32 y, u32 width, u8 height, u8 srcX, u8 srcY) {
     NNSG2dScreenData *screenData = relearner->screenData;
 
-    // The coordinates are passed without truncation to u8: the original callee prototype took them as u32.
+    // The coordinates are passed without truncation to u8.
     ((void (*)(BgConfig *, u8, u32, u32, u32, u32, const void *, u32, u32, u32, u32))CopyToBgTilemapRect)(relearner->bgConfig, GF_BG_LYR_SUB_3, x, y, width, height, screenData->rawData, srcX, srcY, (u8)(screenData->screenWidth / 8), (u8)(screenData->screenHeight / 8));
     ScheduleBgTilemapBufferTransfer(relearner->bgConfig, GF_BG_LYR_SUB_3);
 }
@@ -789,17 +789,17 @@ void MoveRelearner_PrintListRow(MoveRelearner *relearner, int scrollOffset, int 
     int index = scrollOffset + row;
     int y = row * 32;
 
-    // The printer calls use the original prototype with int coordinates: then y + 16 is computed twice, as in the original.
     if (index >= relearner->numMoves) {
         MoveRelearner_CopyButtonTiles(relearner, 0, (u8)(row * 4 + 4), 16, 4, 0, 4);
         return;
     }
-    ((u8(*)(Window *, u32, String *, int, int, u32, u32, PrinterCallback_t))AddTextPrinterParameterizedWithColor)(&relearner->windows[10], 0, relearner->moveList[index].text, 0, y, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);
-    ((u8(*)(Window *, u32, String *, int, int, u32, u32, PrinterCallback_t))AddTextPrinterParameterizedWithColor)(&relearner->windows[10], 0, relearner->ppLabel, 16, y + 16, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
+    AddTextPrinterParameterizedWithColor(&relearner->windows[10], 0, relearner->moveList[index].text, 0, y, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);
+    AddTextPrinterParameterizedWithColor(&relearner->windows[10], 0, relearner->ppLabel, 16, y + 16, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     int maxPP = GetMoveMaxPP((u16)relearner->moveList[index].value, 0);
     BufferIntegerAsString(relearner->msgFormat, 0, maxPP, 2, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     BufferIntegerAsString(relearner->msgFormat, 1, maxPP, 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
     StringExpandPlaceholders(relearner->msgFormat, relearner->string, relearner->ppFormat);
+    // int coordinates: y + 16 is computed again for this call
     ((u8(*)(Window *, u32, String *, int, int, u32, u32, PrinterCallback_t))AddTextPrinterParameterizedWithColor)(&relearner->windows[10], 0, relearner->string, 45, y + 16, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
 }
 
@@ -855,7 +855,7 @@ void MoveRelearner_PrintMoveInfo(MoveRelearner *relearner, s32 move) {
     ManagedSprite_SetDrawFlag(relearner->sprites[3], FALSE);
 
     if (move != -2) {
-        // move is passed without truncation to u16: the original callee prototype took it as u32
+        // move is passed without truncation to u16
         value = ((u32(*)(u32, MoveAttr))GetMoveAttr)(move, MOVEATTR_POWER);
         if (value <= 1) {
             ReadMsgDataIntoString(relearner->msgData, msg_0747_00033, relearner->string); // "---"
@@ -1146,7 +1146,7 @@ void MoveRelearner_SetTypeIcon(MoveRelearner *relearner, u16 move, u16 index) {
 void MoveRelearner_UpdateListTypeIcons(MoveRelearner *relearner) {
     u32 i = 0;
     s32 y = 40;
-    u8 *shifted = (u8 *)relearner; // advanced by one sprite per row (the original strength reduction)
+    u8 *shifted = (u8 *)relearner; // advanced by one sprite per row
 
     for (; i < MOVE_RELEARNER_VISIBLE_ROWS;) {
         ManagedSprite_SetPositionXY(((MoveRelearner *)shifted)->sprites[4], 22, y);
@@ -1163,7 +1163,7 @@ void MoveRelearner_UpdateListTypeIcons(MoveRelearner *relearner) {
 }
 
 void MoveRelearner_SetCategoryIcon(MoveRelearner *relearner, int move) {
-    int category = ((u32(*)(u32, MoveAttr))GetMoveAttr)(move, MOVEATTR_CLASS); // no truncation of move to u16, as in the original
+    int category = ((u32(*)(u32, MoveAttr))GetMoveAttr)(move, MOVEATTR_CLASS); // move is not truncated to u16
     NarcId narc = MoveCategoryIcon_GetNarc(category);
     int file = MoveCategoryIcon_GetCharFile(category);
 

@@ -836,8 +836,7 @@ void EasyChatAppView_Cmd_MoveMenuCursor(SysTask *task, EasyChatViewCommand *comm
 
     if (cursor == 0) {
         view->onMenu = FALSE;
-        // called without its second argument
-        ((void (*)(EasyChatMenuView *))EasyChatMenuView_SetCursorVisible)(view->menuView);
+        EasyChatMenuView_SetCursorVisible(view->menuView, FALSE);
         EasyChatSentenceView_SetCursorVisible(view->sentence, 1);
         EasyChatSentenceView_MoveCursorToSlot(view->sentence, EasyChatApp_GetWordSlot(view->app));
     } else {

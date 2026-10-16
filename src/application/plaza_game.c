@@ -506,7 +506,7 @@ Sprite *PlazaGameGfx_CreateSprite(PlazaGameGfxRes *gfxRes, SpriteList *spriteLis
 
 #pragma force_active on
 
-// The volatile copies of id and heapId keep them on the stack as in the original.
+// The volatile copies of id and heapId keep them on the stack.
 void PlazaGameGfx_LoadInto(PlazaGameGfx *gfx, PlazaGameGfxRes *gfxRes, NARC *narc, int plttFile, int plttCount, int charFile, int cellFile, int animFile, volatile int id, volatile enum HeapID heapId) {
     enum HeapID heap;
     int resId;
@@ -579,7 +579,7 @@ void PlazaGameSprites_Init(PlazaGameSprites *sprites, int count, int charCount, 
     ObjCharTransferTemplate template;
     enum HeapID heap;
     NNS_G2dInitOamManagerModule();
-    // Read through a volatile pointer: the original reloads heapId from the stack here.
+    // Read through a volatile pointer: heapId is reloaded from the stack here.
     heap = *(volatile enum HeapID *)&heapId;
     OamManager_Create(0, 126, 0, 31, 0, 126, 0, 31, heap);
     template = sPlazaGameObjCharTransfer;
@@ -1019,7 +1019,7 @@ BOOL PlazaGameEntry_UpdatePlayers(PlazaGameEntry *entry) {
     allDone = TRUE;
     i = 0;
     if (i < entry->roster.count) {
-        // The sprite check walks its own pointer over the rows, as the original does.
+        // The sprite check walks its own pointer over the rows.
         PlazaGamePlayer *player = entry->players;
         u8 *row = (u8 *)entry;
         PlazaGamePlayer *scrollPlayer = player;
@@ -1328,7 +1328,7 @@ int PlazaGamePlayerInfo_HasDifferentCountries(const PlazaGameRoster *roster, con
     int result;
     result = 0;
     i = 0;
-    // The count is reloaded every iteration, as the original does.
+    // The count is reloaded every iteration.
     for (; i < *(const volatile u8 *)&roster->count - 1; i++) {
         int next = countries[i + 1];
         int current = countries[i];
@@ -2130,7 +2130,7 @@ void PlazaGameContinue_Free(PlazaGameContinue *prompt) {
 
 #pragma force_active on
 
-// The volatile heapId keeps it on the stack as in the original.
+// The volatile heapId keeps it on the stack.
 BOOL PlazaGameContinue_Run(PlazaGameContinue *prompt, PlazaGameMessageBox *messageBox, PlazaGameText *text, int game, volatile enum HeapID heapId) {
     switch (prompt->state) {
     case PLAZA_GAME_CONTINUE_FADE: {
@@ -2280,7 +2280,7 @@ void PlazaGameBalloons_Init(PlazaGameBalloons *balloons, PlazaGameBg *bg, PlazaG
         col = 0;
         spriteY = y;
         for (; col < 5; col++, x += 24) {
-            // Addressed as the struct shifted by whole sprite slots, as the original does.
+            // Addressed as the struct shifted by whole sprite slots.
             PlazaGameBalloons *slot = (PlazaGameBalloons *)((u8 *)balloons + 4 * (col + base));
             slot->sprites[0] = PlazaGameGfx_CreateSprite(balloons->gfxRes, sprites->spriteList, (s16)x, spriteY, 0, heapId);
             Sprite_SetDrawFlag(slot->sprites[0], FALSE);
@@ -2384,7 +2384,7 @@ BOOL PlazaGameResults_UpdatePlayers(PlazaGameResults *results) {
     i = 0;
     if (i < *(volatile u8 *)&results->roster.count) {
         player = results->players;
-        // The sprite check walks its own pointer over the rows, as the original does.
+        // The sprite check walks its own pointer over the rows.
         row = (u8 *)results;
         scrollPlayer = player;
         do {

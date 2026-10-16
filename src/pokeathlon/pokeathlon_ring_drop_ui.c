@@ -338,7 +338,7 @@ void PokeathlonRingDropUi_SetSwitching(PokeathlonRingDropUi *ui, u8 participant,
 
 #pragma force_active on
 
-ManagedSprite *PokeathlonRingDropUi_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u16 animation, u16 priority) {
+ManagedSprite *PokeathlonRingDropUi_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u16 animation, u16 priority) {
     ManagedSpriteTemplate template = gPokeathlonRingDropUiSpriteTemplate;
     ManagedSprite *sprite;
     GF_ASSERT(spriteSystem);
@@ -415,9 +415,6 @@ void PokeathlonRingDropUi_PrintMessageAt(Window *window, MessageFormat *msgForma
     CopyWindowToVram(window);
 }
 
-// The code calls these with s16 coordinates and a u8 participant.
-#define PokeathlonRingDropUi_NewSpriteS16(spriteSystem, spriteManager, x, y, animation, priority) (((ManagedSprite * (*)(SpriteSystem *, SpriteManager *, s16, s16, u16, u16)) PokeathlonRingDropUi_NewSprite)((spriteSystem), (spriteManager), (x), (y), (animation), (priority)))
-#define PokeathlonRingDropUi_LoadMonIconU8(ui, participant, member)                               (((void (*)(PokeathlonRingDropUi *, u8, u32))PokeathlonRingDropUi_LoadMonIcon)((ui), (participant), (member)))
 
 #pragma force_active on
 
@@ -426,15 +423,15 @@ void PokeathlonRingDropUi_CreateSprites(PokeathlonRingDropUi *ui) {
     int i;
     s16 x;
 
-    ui->sprites[RING_DROP_UI_SPRITE_PLATE] = PokeathlonRingDropUi_NewSpriteS16(ui->spriteSystem, ui->spriteManager, 134, 160, ui->participant + 12, 6);
+    ui->sprites[RING_DROP_UI_SPRITE_PLATE] = PokeathlonRingDropUi_NewSprite(ui->spriteSystem, ui->spriteManager, 134, 160, ui->participant + 12, 6);
     ManagedSprite_SetPaletteOverride(ui->sprites[RING_DROP_UI_SPRITE_PLATE], 1);
     for (i = 0; i < RING_DROP_PARTICIPANTS; i++) {
         x = i * 32 + 120;
-        ui->sprites[RING_DROP_UI_SPRITE_ICONS + i] = PokeathlonRingDropUi_NewSpriteS16(ui->spriteSystem, ui->spriteManager, x, 36, i + 1, 5);
-        PokeathlonRingDropUi_LoadMonIconU8(ui, i, 0);
-        ui->sprites[RING_DROP_UI_SPRITE_SWITCHING + i] = PokeathlonRingDropUi_NewSpriteS16(ui->spriteSystem, ui->spriteManager, x, 36, 10, 4);
+        ui->sprites[RING_DROP_UI_SPRITE_ICONS + i] = PokeathlonRingDropUi_NewSprite(ui->spriteSystem, ui->spriteManager, x, 36, i + 1, 5);
+        PokeathlonRingDropUi_LoadMonIcon(ui, i, 0);
+        ui->sprites[RING_DROP_UI_SPRITE_SWITCHING + i] = PokeathlonRingDropUi_NewSprite(ui->spriteSystem, ui->spriteManager, x, 36, 10, 4);
         ManagedSprite_SetDrawFlag(ui->sprites[RING_DROP_UI_SPRITE_SWITCHING + i], FALSE);
-        ui->sprites[RING_DROP_UI_SPRITE_RANKS + i] = PokeathlonRingDropUi_NewSpriteS16(ui->spriteSystem, ui->spriteManager, i * 32 + 120, 24, 6, 0);
+        ui->sprites[RING_DROP_UI_SPRITE_RANKS + i] = PokeathlonRingDropUi_NewSprite(ui->spriteSystem, ui->spriteManager, i * 32 + 120, 24, 6, 0);
         ManagedSprite_SetDrawFlag(ui->sprites[RING_DROP_UI_SPRITE_RANKS + i], FALSE);
     }
     for (i = 0; i < 2; i++) {
@@ -452,7 +449,7 @@ void PokeathlonRingDropUi_CreateSprites(PokeathlonRingDropUi *ui) {
     }
     for (i = 0; i < 2; i++) {
         PokeathlonRingDropUi_LoadMonPic(ui->course, ui->heapId, ui->sprites[RING_DROP_UI_SPRITE_PICS + i], ui->participant, 2 - i);
-        ui->sprites[RING_DROP_UI_SPRITE_PIC_MARKS + i] = PokeathlonRingDropUi_NewSpriteS16(ui->spriteSystem, ui->spriteManager, 40, i * 88 + 24, 5, 1);
+        ui->sprites[RING_DROP_UI_SPRITE_PIC_MARKS + i] = PokeathlonRingDropUi_NewSprite(ui->spriteSystem, ui->spriteManager, 40, i * 88 + 24, 5, 1);
         ManagedSprite_SetDrawFlag(ui->sprites[RING_DROP_UI_SPRITE_PIC_MARKS + i], FALSE);
     }
     PokeathlonRingDropUi_CreateTimerSprites(ui);
@@ -466,7 +463,7 @@ void PokeathlonRingDropUi_LoadMonPic(PokeathlonCourseData *course, enum HeapID h
     PokeathlonCourse_LoadMonPic(sprite, info, 0, 0, heapId);
 }
 
-void PokeathlonRingDropUi_LoadMonIcon(PokeathlonRingDropUi *ui, s32 participant, u32 member) {
+void PokeathlonRingDropUi_LoadMonIcon(PokeathlonRingDropUi *ui, u8 participant, u32 member) {
     u32 info[4];
     ManagedSprite *sprite = RING_DROP_UI_SPRITE(ui, participant + RING_DROP_UI_SPRITE_ICONS);
     PokeathlonCourse_GetMonInfo(ui->course, participant, member, info);

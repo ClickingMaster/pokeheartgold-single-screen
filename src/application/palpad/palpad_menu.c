@@ -73,7 +73,6 @@ int PalPadMenu_Main(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx, enum
         shared->subState = PALPAD_MENU_STATE_INPUT;
         break;
     case PALPAD_MENU_STATE_INPUT:
-        // the result goes through the stack variable `valid` in the original
         valid = PalPadMenu_HandleInput(&menu->selection, &shared->inputState, gfx);
         if (valid) {
             menu->timer = 2;
@@ -307,7 +306,7 @@ void PalPadMenu_HighlightSelection(u32 *selection, PalPadGfx *gfx) {
 
     while (i < 4) {
         int palette = (*selection == i) ? 9 : 2;
-        // called through an int-typed pointer in the original: the palette is not truncated to u8
+        // the palette is not truncated to u8
         ((void (*)(BgConfig *, int, int, int, int, int, int))BgTilemapRectChangePalette)(gfx->bgConfig, GF_BG_LYR_MAIN_2, 2, (u8)y, 28, 4, palette);
         i++;
         y += 5;

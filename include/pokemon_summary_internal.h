@@ -291,7 +291,7 @@ void PokemonSummary_UpdateShinyLeafSprites(PokemonSummary *summary);
 void PokemonSummary_SetMonTypeSprites(PokemonSummary *summary);
 void PokemonSummary_SetTypeSprite(PokemonSummary *summary, u8 sprite, u8 resId, u8 type);
 void PokemonSummary_FindMoveTypeSprite(PokemonSummary *summary, u8 *slot, s16 *x, s16 *y);
-void PokemonSummary_SwapMoveTypeSprites(PokemonSummary *summary, u8 slotA, u8 slotB, int unused);
+void PokemonSummary_SwapMoveTypeSprites(PokemonSummary *summary, u8 slotA, u8 slotB);
 void PokemonSummary_SetMoveCategorySprite(PokemonSummary *summary, u16 move);
 void PokemonSummary_UpdateMoveCursorSprite(PokemonSummary *summary);
 void PokemonSummary_ShowSwapCursorSprite(PokemonSummary *summary);

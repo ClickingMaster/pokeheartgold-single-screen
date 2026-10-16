@@ -81,7 +81,7 @@ SaveRankingsEntry *RecordMixing_Rankings_Load(SaveData *saveData, enum HeapID he
 
 void RecordMixing_Rankings_Merge(RecordMixingMergeArgs *args) {
     Save_Rankings_Get(args->saveData);
-    // the local id is passed without truncation to u8 (the original prototype took a wider type)
+    // the local id is passed without truncation to u8
     ((void (*)(SaveData *, int, u8, SaveRankingsEntry **, enum HeapID))Save_UpdateRankingsFromMixing)(args->saveData, args->localId, (u8)args->numPlayers, (SaveRankingsEntry **)args->records, args->heapID);
 }
 

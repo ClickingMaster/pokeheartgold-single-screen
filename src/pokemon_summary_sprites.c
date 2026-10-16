@@ -19,7 +19,7 @@
 #include "pokemon_summary.h"
 #include "vram_transfer_manager.h"
 
-// Pokemon summary screen sprites (ARM9 static 0x0208B1AC-0x0208C3E4): the sprite system of the screen and the
+// Pokemon summary screen sprites: the sprite system of the screen and the
 // sprites of each page (type, move and status icons, the shown Pokemon's and the party's icons, markings,
 // sheen sparkles, condition, ribbon, Pokeathlon star and shiny leaf sprites).
 // Tables: asm/pokemon_summary_sprites_data.s. The force_active regions keep those functions in the link as before.
@@ -379,10 +379,9 @@ void PokemonSummary_FindMoveTypeSprite(PokemonSummary *summary, u8 *slot, s16 *x
     }
 }
 
-void PokemonSummary_SwapMoveTypeSprites(PokemonSummary *summary, u8 slotA, u8 slotB, int unused) {
+void PokemonSummary_SwapMoveTypeSprites(PokemonSummary *summary, u8 slotA, u8 slotB) {
     s16 posA[2];
     s16 posB[2];
-    (void)unused;
     PokemonSummary_FindMoveTypeSprite(summary, &slotA, &posA[1], &posA[0]);
     PokemonSummary_FindMoveTypeSprite(summary, &slotB, &posB[1], &posB[0]);
     Sprite_SetPositionXY(summary->sprites[slotA + 13], posB[1], posB[0]);

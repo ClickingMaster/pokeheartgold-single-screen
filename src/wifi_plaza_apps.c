@@ -502,7 +502,7 @@ void WiFiPlazaApps_NewMimeJrTopArgs(WiFiPlazaApps *apps, void **out, enum HeapID
     memset(*out, 0, sizeof(WiFiPlazaGameArgs));
     p = *out;
     ((WiFiPlazaGameArgs *)p)->mimeJrTopVoiceChat = 0;
-    *(u32 *)&((WiFiPlazaGameArgs *)p)->voiceChat = 1; // this game reads a word at 0x38
+    *(u32 *)&((WiFiPlazaGameArgs *)p)->voiceChat = 1; // this game reads voiceChat as a whole word
     ((WiFiPlazaGameArgs *)p)->save = apps->save;
     WiFiPlazaGameArgs_NewProfiles((WiFiPlazaGameArgs *)p, heapID);
 }

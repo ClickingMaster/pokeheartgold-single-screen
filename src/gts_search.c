@@ -560,7 +560,7 @@ int GtsSearch_WaitSearch(GtsApp *app) {
         case 6:
         case 7:
             app->searchResultCount = result;
-            ((void (*)(u16))StopSE)(SEQ_SE_DP_Z_SEARCH); // called without its second argument
+            StopSE(SEQ_SE_DP_Z_SEARCH, 0);
             Gts_ShowResultAvatars(app, result, 1);
             if (result == 0) {
                 GtsSearch_DrawResultsButton(app->bgConfig, &app->infoWindows[8], app->gtsMsgData, FALSE);

@@ -37,7 +37,7 @@ WifiClubStatusData *CommState_GetWifiClubData(void);
 void CommState_SendWifiDisconnect(void);
 BOOL CommState_IsWifiJoiningLobby(void);
 void CommState_EndWifiSession(void);
-void Comm_RegisterLinkedFriends(SaveData *saveData, void *results, enum HeapID heapID);
+s32 Comm_RegisterLinkedFriends(SaveData *saveData, void *results, enum HeapID heapID);
 void CommState_SetSingleBattleWifiLinkMode(void);
 BOOL CommState_IsWifiInLobby(void);
 WifiClubStatusData *CommState_StartWifiClub(SaveData *saveData, u32 dataSize);

@@ -986,8 +986,7 @@ int BagApp_State_HandleInput(BagApp *app) {
         BagApp_PrintCursorDescription(app);
     }
     pressed[0] = FALSE;
-    // called without the hitbox table index (r1 is whatever the previous call left; the main table, 0, in practice)
-    result = ((int (*)(BagApp *))BagApp_GetTouchedButton)(app);
+    result = BagApp_GetTouchedButton(app, 0);
     if (result != -1) {
         if (BagApp_ShouldMoveCursorToButton(app, result)) {
             if ((u32)result < 8) {
@@ -2347,8 +2346,7 @@ int BagApp_State_HoldItemSelectInput(BagApp *app) {
         BagApp_PrintCursorDescription(app);
     }
     itemChosen = FALSE;
-    // called without the hitbox table index, see BagApp_State_HandleInput
-    result = ((int (*)(BagApp *))BagApp_GetTouchedButton)(app);
+    result = BagApp_GetTouchedButton(app, 0);
     if (result != -1) {
         if (BagApp_ShouldMoveCursorToButton(app, result)) {
             if ((u32)result < 8) {
@@ -2505,8 +2503,7 @@ int BagApp_State_SellSelectInput(BagApp *app) {
         BagApp_PrintCursorDescription(app);
     }
     itemChosen = FALSE;
-    // called without the hitbox table index, see BagApp_State_HandleInput
-    result = ((int (*)(BagApp *))BagApp_GetTouchedButton)(app);
+    result = BagApp_GetTouchedButton(app, 0);
     if (result != -1) {
         if (BagApp_ShouldMoveCursorToButton(app, result)) {
             if ((u32)result < 8) {

@@ -88,7 +88,7 @@ BOOL WiFiPlazaRoom_Init(OverlayManager *manager, int *state) {
     WiFiPlazaYesNoMenu_Init(&room->yesNoMenu, &room->msg, HEAP_ID_119);
     WiFiPlazaInfoPanel_Init(&room->infoPanel, room->startParams, &room->graphics, room->profile, HEAP_ID_119);
     args = (WiFiPlazaRoomArgs *)WiFiPlazaWork_GetMyPlayer(room->lobby);
-    if (((BOOL(*)(struct WiFiPlazaPlayer *))WiFiPlazaPlayer_HasTapToy)((struct WiFiPlazaPlayer *)args) == TRUE) {
+    if (WiFiPlazaPlayer_HasTapToy((WiFiPlazaPlayer *)args) == TRUE) {
         WiFiPlazaInfoPanel_ShowOwnCard(&room->infoPanel, &room->graphics, &room->msg, HEAP_ID_119, (struct WiFiPlazaPlayer *)args);
     }
     room->playerStates = WiFiPlazaPlayerState_CreateManager(room, HEAP_ID_119);
@@ -648,7 +648,7 @@ void WiFiPlazaRoom_FreeGraphics(WiFiPlazaRoomGraphics *graphics) {
     }
     Heap_Free(graphics->bgConfig);
     DestroyCellTransferStateManager(graphics->cellTransfer);
-    // cellTransfer = NULL, then resManagers[0-3] (the offset is kept in a register)
+    // cellTransfer = NULL, then resManagers[0-3]
     offset = offsetof(WiFiPlazaRoomGraphics, cellTransfer);
     j = 0;
     *(void **)((u8 *)graphics + offset) = NULL;

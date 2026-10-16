@@ -13,7 +13,7 @@
 #include <nitro/code32.h>
 
 // Local wireless: sound player controls, title banner, dialog window, Wi-Fi USB connector scan and
-// DS Download Play parent (0x0223ABB4-0x0223D4C8).
+// DS Download Play parent.
 
 typedef struct WifiSetupDialogPlanes {
     u8 planes[6];

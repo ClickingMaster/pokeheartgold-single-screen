@@ -20,7 +20,7 @@
 #include "ui_util.h"
 #include "pokemon_summary.h"
 
-// Pokemon summary screen (ARM9 static 0x02089E80-0x0208B1AC): touch input on the pages, the page backgrounds and
+// Pokemon summary screen: touch input on the pages, the page backgrounds and
 // HP/EXP bars, switching to another Pokemon, the move info and ribbon list slide-ins, the ribbon cursor, the touch
 // hitboxes and the touched-button flashes. Tables: asm/pokemon_summary_data.s. The force_active regions keep those
 // functions in the link as before.

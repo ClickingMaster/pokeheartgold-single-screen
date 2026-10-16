@@ -122,7 +122,7 @@ void VsRecorder_SkipToOccupiedSlot(VsRecorderBoxData *boxData);
 
 // from the cursor on, then from the first slot: put the cursor on the next slot with a Pokemon
 void VsRecorder_SkipToOccupiedSlot(VsRecorderBoxData *boxData) {
-    // the slots are walked through a view of the work shifted by one u16 per slot (codegen)
+    // the slots are walked through a view of the work shifted by one u16 per slot
     int i;
     VsRecorderBoxData *slot;
     int start = boxData->cursor;

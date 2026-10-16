@@ -15,7 +15,7 @@
 FS_EXTERN_OVERLAY(OVY_98);
 
 // work->sprites[index], addressed as (work + index) first: with plain array indexing the compiler
-// folds the index differently than the original code.
+// folds the index differently.
 #define EVENT_RECORD_SPRITE(work, index) (((PokeathlonEventRecord *)((u8 *)(work) + (index) * sizeof(ManagedSprite *)))->sprites[0])
 
 extern const WindowTemplate sPokeathlonEventRecordWindowTemplates[19];

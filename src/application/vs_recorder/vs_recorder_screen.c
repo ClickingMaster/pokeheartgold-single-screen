@@ -183,7 +183,7 @@ void VsRecorder_PrintVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work) 
 
 #pragma force_active reset
 
-void VsRecorder_RemoveVideoInfoWindows(VsRecorderVideoInfo *info) {
+void VsRecorder_RemoveVideoInfoWindows(VsRecorderVideoInfo *info, VsRecorderWork *work) {
     int i;
     Window *window = (Window *)info;
     i = 0;
@@ -197,8 +197,7 @@ void VsRecorder_RemoveVideoInfoWindows(VsRecorderVideoInfo *info) {
 }
 
 BOOL VsRecorder_HeaderUsesThreeMonLayout(void *header) {
-    // called without a prototype in the original (int result)
-    switch (((int (*)(void *, int, int))BattleRecordHeader_GetField)(header, 3, 0)) {
+    switch ((int)BattleRecordHeader_GetField(header, 3, 0)) {
     case 0xE:
     case 0x11:
     case 0x14:
@@ -330,8 +329,7 @@ void VsRecorder_FreeVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work) {
         i++;
         icon = (VsRecorderVideoInfo *)((u8 *)icon + sizeof(ManagedSprite *));
     } while (i < 12);
-    // the original call passes the work as a second argument
-    ((void (*)(VsRecorderVideoInfo *, VsRecorderWork *))VsRecorder_RemoveVideoInfoWindows)(info, work);
+    VsRecorder_RemoveVideoInfoWindows(info, work);
 }
 
 #pragma force_active reset

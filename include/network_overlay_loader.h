@@ -2,6 +2,6 @@
 #define POKEHEARTGOLD_NETWORK_OVERLAY_LOADER_H
 
 void UnloadDwcOverlay(void);
-void LoadDwcOverlay(void);
+BOOL LoadDwcOverlay(void);
 
 #endif // POKEHEARTGOLD_NETWORK_OVERLAY_LOADER_H

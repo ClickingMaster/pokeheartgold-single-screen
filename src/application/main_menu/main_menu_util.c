@@ -43,7 +43,7 @@ void CRYPTO_SetAllocator(void *(*alloc)(u32), void (*free)(void *));
 BOOL CRYPTO_VerifySignature(const void *data, u32 size, const void *signature, const void *publicKey);
 
 // Declared here rather than through text.h / font.h / pokemon.h / item.h: the font id is passed as an int, and the
-// gift graphics use the pieces' own signatures of the Pokemon and item helpers (matching).
+// gift graphics use the pieces' own signatures of the Pokemon and item helpers.
 int AddTextPrinterParameterizedWithColor(Window *window, int fontId, String *string, int x, int y, int textSpeed, u32 color, void *callback);
 int FontID_String_GetWidth(int fontId, String *string, int letterSpacing);
 u8 GetFontAttribute(u8 fontId, int attr);
@@ -101,7 +101,7 @@ int MainMenuUtil_CheckGiftCartridgeSignature(void) {
     u32 code = (u8)(gameCode >> 24) | ((gameCode << 24) | (((gameCode >> 8) << 24) >> 8) | (((gameCode >> 16) << 24) >> 16));
     u32 i = 0;
     if (i < sGiftCartridgeGameCodes[0]) {
-        // sGiftCartridgeGameCodes, reached through the end of the preceding table (second literal-pool entry, matching)
+        // sGiftCartridgeGameCodes, reached through the end of the preceding table (second literal-pool entry)
         u32 *codes = (u32 *)(sAgbSpeciesMapNationalDex + 0x11F);
         do {
             if (code == *codes) {
@@ -420,7 +420,7 @@ void MainMenuUtil_LoadSpriteResources(NarcId narcId, u32 charFileId, u32 plttFil
         work->sprites.spriteRes[screen].animRes = AddCellOrAnimResObjFromNarc(work->sprites.resMan[GF_GFX_RES_TYPE_ANIM], narcId, animFileId, compressed, screen, GF_GFX_RES_TYPE_ANIM, work->heapId);
     }
     {
-        // spriteRes[screen] through a work pointer shifted by the screen's offset, computed once (matching)
+        // spriteRes[screen] through a work pointer shifted by the screen's offset, computed once
         int offset = screen * sizeof(MainMenuUtilSpriteRes);
         SpriteTransfer_CreateCharTransferTask(((MainMenuUtilWork *)((u8 *)work + offset))->sprites.spriteRes[0].charRes);
         SpriteTransfer_CreatePlttTransferTask(((MainMenuUtilWork *)((u8 *)work + offset))->sprites.spriteRes[0].plttRes);
@@ -556,7 +556,7 @@ void MainMenuUtil_VBlankCB(void) {
         DoScheduledBgGpuUpdates(work->bgConfig);
     }
     {
-        // OS_SetIrqCheckFlag(OS_IE_V_BLANK), with the address of the check flag spelled out (matching)
+        // OS_SetIrqCheckFlag(OS_IE_V_BLANK), with the address of the check flag spelled out
         volatile u32 *dtcm = (volatile u32 *)0x027E0000;
         dtcm[0x3FF8 / 4] |= OS_IE_V_BLANK;
     }
@@ -568,7 +568,7 @@ int MainMenuUtil_GetGiftPalette(int giftType) {
     int i;
     u8 *entry;
     i = 0;
-    // u8 compared with -1: the 0xFF terminator never matches, the search ends at the gift type (matching)
+    // u8 compared with -1: the 0xFF terminator never matches, the search ends at the gift type
     if (palettes.data[0] != -1) {
         entry = palettes.data;
         do {

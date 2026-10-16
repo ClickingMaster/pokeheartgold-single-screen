@@ -227,7 +227,7 @@ void PokedexApp_CreateMonIconSprites(PokedexAppData *pokedexApp, int first) {
     ManagedSpriteTemplate template;
     ManagedSpriteTemplate base;
     u32 i;
-    u8 *slot; // walks the sprite slots as a byte offset into pokedexApp (as compiled)
+    u8 *slot; // walks the sprite slots as a byte offset into pokedexApp
 
     i = 0;
     slot = (u8 *)pokedexApp + first * sizeof(ManagedSprite *);
@@ -280,7 +280,7 @@ void PokedexApp_SetMonIconSub(PokedexAppData *pokedexApp, u32 species, u32 form,
 // Shows list entry entry's icon in sprite slot sprite (translucent while only seen).
 void PokedexApp_SetListIcon(PokedexAppData *pokedexApp, int entry, int sprite) {
     ManagedSprite **sprites = pokedexApp->sprites;
-    PokedexListEntry *volatile entries; // volatile: kept on the stack (as compiled)
+    PokedexListEntry *volatile entries; // volatile: kept on the stack
     u32 form, species, offset;
 
     ManagedSprite_SetDrawFlag(sprites[sprite], FALSE);

@@ -414,7 +414,7 @@ BOOL VsRecorder_SavedVideoSave(VsRecorderWork *work) {
         work->step++;
         break;
     default:
-        ((void (*)(void))VsRecorder_HideTopMessage)(); // called without the work
+        VsRecorder_HideTopMessage(work);
         VsRecorder_CreateExitButton(work);
         VsRecorder_SetSubState(work, SAVED_VIDEO_RESUME);
         break;
@@ -499,7 +499,7 @@ BOOL VsRecorder_SavedVideoExit(VsRecorderWork *work) {
         work->step++;
         break;
     default:
-        if (((u32(*)(void))VsRecorder_IsFlipScreensDone)()) { // called without the work
+        if (VsRecorder_IsFlipScreensDone(work)) {
             if (VsRecorder_StepFade(&savedVideo->fade, 0)) {
                 VsRecorder_ClearPaletteBlend(work);
                 VsRecorder_ResetFade(&savedVideo->fade);

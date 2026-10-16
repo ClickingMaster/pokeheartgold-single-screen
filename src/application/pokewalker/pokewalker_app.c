@@ -158,7 +158,7 @@ void PokewalkerApp_GetSaveData(PokewalkerApp *app) {
     app->pokedex = Save_Pokedex_Get(app->saveData);
 }
 
-// OS_SetIrqCheckFlag(OS_IE_V_BLANK) with the DTCM base passed in (HW_INTR_CHECK_BUF = DTCM + 0x3FF8).
+// OS_SetIrqCheckFlag(OS_IE_V_BLANK), with the DTCM base passed in.
 static inline void SetIrqCheckFlag(u32 *dtcm) {
     dtcm[0xFFE] |= OS_IE_V_BLANK;
 }

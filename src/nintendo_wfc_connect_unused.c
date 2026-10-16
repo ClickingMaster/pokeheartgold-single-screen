@@ -479,7 +479,7 @@ BOOL NintendoWfcUnused_Exit(OverlayManager *man, int *state) {
 }
 
 void NintendoWfcUnused_VBlankCB(void *arg) {
-    volatile u32 *irqCheck = (volatile u32 *)0x027E0000; // the OS IRQ check flag lives at +0x3FF8
+    volatile u32 *irqCheck = (volatile u32 *)0x027E0000; // for the OS IRQ check flag
     NintendoWfcUnused *wfc = arg;
 
     GF_RunVramTransferTasks();
@@ -1053,7 +1053,7 @@ int NintendoWfcUnused_RequestInfo(NintendoWfcUnused *wfc) {
 int NintendoWfcUnused_WaitInfo(NintendoWfcUnused *wfc) {
     if (NintendoWfcHttp_IsDone()) {
         int result = NintendoWfcHttp_GetResult();
-        *(volatile int *)&wfc->timeoutCounter = 0; // the original accessed this counter as volatile here
+        *(volatile int *)&wfc->timeoutCounter = 0;
         switch (result) {
         case 0:
             NintendoWfcUnused_HideWaitingIcon(wfc);
@@ -1214,7 +1214,7 @@ int NintendoWfcUnused_RequestRoomCount(NintendoWfcUnused *wfc) {
 int NintendoWfcUnused_WaitRoomCount(NintendoWfcUnused *wfc) {
     if (NintendoWfcHttp_IsDone()) {
         int result = NintendoWfcHttp_GetResult();
-        *(volatile int *)&wfc->timeoutCounter = 0; // the original accessed this counter as volatile here
+        *(volatile int *)&wfc->timeoutCounter = 0;
         switch (result) {
         case -1:
             wfc->httpResult = result;
@@ -1298,7 +1298,7 @@ int NintendoWfcUnused_HandleChallengeRoomInput(NintendoWfcUnused *wfc) {
         PlaySE(SEQ_SE_DP_SELECT);
     } else if (gSystem.newKeys & PAD_BUTTON_A) {
         DWC_GetDateTime(date, time);
-        // BattleRoomDownload_IsRoomMarked takes u32 group/entry; the original call truncated them to u8
+        // BattleRoomDownload_IsRoomMarked takes u32 group/entry; they are passed as u8 values
         if (BattleRoomDownload_IsRoomMarked((BattleRoomDownload *)wfc->args->battleRoomDownload, (u8)wfc->rank, (u8)wfc->room, date)) {
             wfc->state = NINTENDO_WFC_UNUSED_STATE_PRINT_ROOM_UNAVAILABLE;
         } else {
@@ -1349,7 +1349,7 @@ int NintendoWfcUnused_WaitTrainersDownload(NintendoWfcUnused *wfc) {
         wfc->timeoutCounter = 0;
         switch (result) {
         case 0:
-            // BattleRoomDownload_SetTrainers / BattleRoomDownload_MarkRoom take u32; the original calls truncated rank and room to u8
+            // BattleRoomDownload_SetTrainers / BattleRoomDownload_MarkRoom take u32; rank and room are passed as u8 values
             BattleRoomDownload_SetTrainers((BattleRoomDownload *)wfc->args->battleRoomDownload, wfc->downloadBuffer, (u8)wfc->ownRank, (u8)wfc->room);
             NintendoWfcUnused_SetState(wfc, NINTENDO_WFC_UNUSED_STATE_START_SAVE, NINTENDO_WFC_UNUSED_STATE_PRINT_TRAINERS_RECEIVED);
             DWC_GetDateTime(date, time);
@@ -1430,7 +1430,7 @@ int NintendoWfcUnused_RequestUpload(NintendoWfcUnused *wfc) {
 int NintendoWfcUnused_WaitUpload(NintendoWfcUnused *wfc) {
     if (NintendoWfcHttp_IsDone()) {
         int result = NintendoWfcHttp_GetResult();
-        *(volatile int *)&wfc->timeoutCounter = 0; // the original accessed this counter as volatile here
+        *(volatile int *)&wfc->timeoutCounter = 0;
         switch (result) {
         case 0:
             FrontierData_FlagAction(wfc->args->frontierData, 5, 2);
@@ -1509,7 +1509,7 @@ int NintendoWfcUnused_StartLeadersRankInput(NintendoWfcUnused *wfc) {
 // Chooses the rank (1-10) with UP/DOWN; A: continue, B: back.
 int NintendoWfcUnused_HandleLeadersRankInput(NintendoWfcUnused *wfc) {
     if (gSystem.newAndRepeatedKeys & PAD_KEY_UP) {
-        (*(volatile u32 *)&wfc->rank)++; // the original accessed the rank as volatile here
+        (*(volatile u32 *)&wfc->rank)++;
         if (*(volatile int *)&wfc->rank > 10) {
             *(volatile u32 *)&wfc->rank = 1;
         }
@@ -1557,7 +1557,7 @@ int NintendoWfcUnused_StartLeadersRoomInput(NintendoWfcUnused *wfc) {
 // Chooses the room (1-roomCount) with UP/DOWN; A: continue, B: back.
 int NintendoWfcUnused_HandleLeadersRoomInput(NintendoWfcUnused *wfc) {
     if (gSystem.newAndRepeatedKeys & PAD_KEY_UP) {
-        (*(volatile u32 *)&wfc->room)++; // the original accessed the room as volatile here
+        (*(volatile u32 *)&wfc->room)++;
         if (*(volatile int *)&wfc->room == wfc->roomCount + 1) {
             *(volatile u32 *)&wfc->room = 1;
         }
@@ -1609,7 +1609,7 @@ int NintendoWfcUnused_WaitLeadersDownload(NintendoWfcUnused *wfc) {
         wfc->timeoutCounter = 0;
         switch (result) {
         case 0:
-            // BattleRoomDownload_SetLeaders takes u32; the original call truncated rank and room to u8
+            // BattleRoomDownload_SetLeaders takes u32; rank and room are passed as u8 values
             BattleRoomDownload_SetLeaders((BattleRoomDownload *)wfc->args->battleRoomDownload, wfc->downloadBuffer + 0x63C, (u8)wfc->rank, (u8)wfc->room);
             NintendoWfcUnused_SetState(wfc, NINTENDO_WFC_UNUSED_STATE_START_SAVE, NINTENDO_WFC_UNUSED_STATE_PRINT_LEADERS_RECEIVED);
             break;

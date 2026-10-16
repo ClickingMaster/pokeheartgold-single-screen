@@ -16,7 +16,7 @@ void Save_Gts_Init(GtsSave *data);
 u16 GtsSave_HasStoredMon(GtsSave *data);
 void GtsSave_SetHasStoredMon(GtsSave *data, u16 value);
 void GtsSave_GetStoredMon(GtsSave *data, void *out);
-void GtsSave_SetStoredMon(GtsSave *data, void *src);
+void GtsSave_SetStoredMon(GtsSave *data, void *src, int box);
 u32 GtsSave_GetDepositDate(GtsSave *data);
 void GtsSave_SetDepositDate(GtsSave *data, u32 value);
 u32 GtsSave_GetTradeDate(GtsSave *data);
@@ -40,7 +40,7 @@ void GtsSave_SetHasStoredMon(GtsSave *data, u16 value) {
 void GtsSave_GetStoredMon(GtsSave *data, void *out) {
     MI_CpuCopyFast(data->storedMon, out, 0xEC);
 }
-void GtsSave_SetStoredMon(GtsSave *data, void *src) {
+void GtsSave_SetStoredMon(GtsSave *data, void *src, int box) {
     MI_CpuCopyFast(src, data->storedMon, 0xEC);
 }
 u32 GtsSave_GetDepositDate(GtsSave *data) {

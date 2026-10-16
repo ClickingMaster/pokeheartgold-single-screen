@@ -1900,7 +1900,7 @@ void BattleCastleOpponentApp_PrepareLinkRanks(BattleCastleOpponentApp *app, int 
     gender = PlayerProfile_GetTrainerGender(profile);
     i = 0;
     app->linkSendBuf[1] = gender;
-    // linkSendBuf[2 + i], addressed from a cursor that steps through the app (keeps the original codegen)
+    // linkSendBuf[2 + i], addressed from a cursor that steps through the app
     dest = (u8 *)app + 2 * sizeof(u16);
     do {
         *(u16 *)(dest + offsetof(BattleCastleOpponentApp, linkSendBuf)) = BattleCastle_GetRank(app->saveData, app->frontierType, i);
@@ -2099,7 +2099,7 @@ void BattleCastleOpponentApp_PrintTrainerNames(BattleCastleOpponentApp *app, Win
     if (!BattleCastle_IsMultiType(app->frontierType)) {
         BattleCastleOpponentApp_PrintPlayerName(app, window, (u16)(x1 + 4), (u16)(y1 + 1), 0);
     } else if (!Comm_GetLocalNetId()) {
-        int y = y1; // widened copy of y1 keeps the original register allocation
+        int y = y1;
         y = (u16)(y + 1);
         BattleCastleOpponentApp_PrintPlayerName(app, window, x1, y, 0);
         BattleCastleOpponentApp_PrintPartnerName(app, window, x2, (u16)(y2 + 1), 0);

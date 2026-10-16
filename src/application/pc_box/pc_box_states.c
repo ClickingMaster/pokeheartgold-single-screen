@@ -1715,7 +1715,7 @@ u32 PCBox_State_ApplyWallpaper(PCBoxWork *work) {
     if (wallpaper < 16) {
         PCStorage_SetBoxWallpaper(work->storage, work->activeBox, wallpaper);
     } else {
-        // the bonus wallpaper id goes on as a full register
+        // the bonus wallpaper id is passed untruncated
         ((void (*)(PCStorage *, u32, u32))PCStorage_SetBoxWallpaper)(work->storage, work->activeBox, wallpaper + 16);
     }
     PCBox_UpdateCurrentWallpaperMarker(work);

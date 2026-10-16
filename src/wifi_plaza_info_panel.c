@@ -51,8 +51,7 @@ void WiFiPlazaInfoPanel_Init(WiFiPlazaInfoPanel *panel, u16 *startParams, WiFiPl
     panel->page = 0;
     if (startParams[3] == 0) {
         panel->state = 0;
-        // called without the mask colour argument
-        ((void (*)(u8))BG_SetMaskColor)(GF_BG_LYR_SUB_0);
+        BG_SetMaskColor(GF_BG_LYR_SUB_0, 0);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
@@ -89,7 +88,7 @@ void WiFiPlazaInfoPanel_Update(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomWork *roo
 
     graphics = &room->graphics;
     lobby = room->lobby;
-    offset = offsetof(WiFiPlazaRoomWork, msg); // + 0x3C: signWindow
+    offset = offsetof(WiFiPlazaRoomWork, msg);
     switch (panel->state) {
     case 0:
         if (panel->started == TRUE) {
@@ -507,7 +506,7 @@ void WiFiPlazaPlayerCard_LoadTypeIcons(WiFiPlazaInfoPanel *unused0, WiFiPlazaPla
 
     for (; i < 2; i++) {
         if ((u16)WiFiPlazaPlayer_GetFavoriteType(player, i) != 0) {
-            u16 type = ((u32(*)(void))WiFiPlaza_GetTypeByChoice)(); // called without its argument: the type is still in r0
+            u16 type = ((u32(*)(void))WiFiPlaza_GetTypeByChoice)(); // called without its argument; it receives the type read above
             NarcId narcId = TypeIcon_GetNarc();
             u32 member = TypeIcon_GetCharFile(type);
             void *buf = GfGfxLoader_LoadFromNarc(narcId, member, TRUE, heapID, TRUE);

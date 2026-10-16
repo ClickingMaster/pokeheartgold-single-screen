@@ -28,15 +28,12 @@
 #include "ui_util.h"
 #include "pokemon_summary.h"
 
-// Pokemon summary screen (ARM9 static 0x02088D48-0x02089E80): the move, ribbon and condition input states, the
+// Pokemon summary screen: the move, ribbon and condition input states, the
 // button flash, reading the shown Pokemon into PokemonSummary.mon, and switching pages. The force_active region keeps
 // that function in the link as before.
 
 // pokemon_summary_scene.c, declared with the type its call site was matched against.
 void PokemonSummary_InitConditionChart(PokemonSummary *summary);
-
-// Called without its unused last argument.
-#define PokemonSummary_SwapMoveTypeSprites3(summary, slotA, slotB) ((void (*)(PokemonSummary *, u8, u8))PokemonSummary_SwapMoveTypeSprites)(summary, slotA, slotB)
 
 // State 5: pick a move to move (A) or leave the move list (B).
 int PokemonSummary_HandleMoveSelectInput(PokemonSummary *summary) {
@@ -119,7 +116,7 @@ int PokemonSummary_HandleMoveSwapInput(PokemonSummary *summary) {
         if (summary->moveSlot != summary->swapMoveSlot) {
             PlaySE(SEQ_SE_DP_DECIDE);
             PokemonSummary_SwapMoves(summary);
-            PokemonSummary_SwapMoveTypeSprites3(summary, summary->moveSlot, summary->swapMoveSlot);
+            PokemonSummary_SwapMoveTypeSprites(summary, summary->moveSlot, summary->swapMoveSlot);
             PokemonSummary_PrintSwappedMoves(summary);
             PokemonSummary_ShowSelectedMoveInfo(summary);
         } else {
@@ -147,7 +144,7 @@ int PokemonSummary_HandleMoveSwapInput(PokemonSummary *summary) {
             summary->moveSlot = index;
             PlaySE(SEQ_SE_DP_DECIDE);
             PokemonSummary_SwapMoves(summary);
-            PokemonSummary_SwapMoveTypeSprites3(summary, summary->moveSlot, summary->swapMoveSlot);
+            PokemonSummary_SwapMoveTypeSprites(summary, summary->moveSlot, summary->swapMoveSlot);
             PokemonSummary_PrintSwappedMoves(summary);
             PokemonSummary_ShowSelectedMoveInfo(summary);
         } else {

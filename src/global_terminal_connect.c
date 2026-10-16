@@ -397,7 +397,7 @@ void GlobalTerminalConnect_LoadGraphics(GlobalTerminalConnectWork *work) {
     outer = 0;
     {
         // 3 x 7 palettes: base palette n blended towards base palette n+1 in steps of 3/16 (color 0 unchanged);
-        // the source and target colors are addressed relative to the work as in the original
+        // the source and target colors are addressed relative to the work
         int blend;
         int last;
         u8 *dest = (u8 *)work + 0x130;

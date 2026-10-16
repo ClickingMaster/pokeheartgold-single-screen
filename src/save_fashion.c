@@ -457,7 +457,7 @@ void FashionEntry_PlaceItem(SaveFashionDataSub *entry_, FashionSource *source, i
         GF_AssertFail();
     }
     y = (s16)coords.yCopy;
-    // y < 256, read back from its stack slot (needed to match)
+    // y < 256, read back from its stack slot
     if (((volatile int *)&coords)[-1] >= 256) {
         GF_AssertFail();
     }

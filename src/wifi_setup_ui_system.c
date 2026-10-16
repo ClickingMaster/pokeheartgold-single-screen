@@ -124,7 +124,7 @@ typedef struct WifiSetupIrqSave {
 } WifiSetupIrqSave;
 
 // The address of a global of this module, formed from the module's first .bss label so that it gets
-// its own literal-pool slot, as in the original code.
+// its own literal-pool slot.
 #define MODULE_BSS_ADDR(addr) ((void *)(gWifiSetupShare + ((addr) - 0x0224F5C8)))
 
 static inline int GX_GetVisiblePlane13(void) {
@@ -1277,7 +1277,7 @@ static inline volatile u32 *WifiSetup_GetIrqCheckBase(void) {
 
 #pragma force_active on
 
-// Runs the vblank task queue and sets the vblank bit of the interrupt check flags (DTCM + 0x3FF8).
+// Runs the vblank task queue and sets the vblank bit of the interrupt check flags.
 void WifiSetup_VBlankIntr(void) {
     WifiSetupTask_RunQueue(1);
     {

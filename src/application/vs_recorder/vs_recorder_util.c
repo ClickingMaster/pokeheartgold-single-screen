@@ -85,7 +85,7 @@ void VsRecorder_CreateListArrows(VsRecorderListWindow *list, VsRecorderWork *wor
 #pragma force_active reset
 
 void VsRecorder_SetListArrowsY(VsRecorderListWindow *list, int upY, int downY) {
-    // called through an int prototype, as compiled (no s16 truncation)
+    // the positions are passed without s16 truncation
     ((void (*)(ManagedSprite *, int, int))ManagedSprite_SetPositionXY)(list->arrows[0], 0x80, upY);
     ((void (*)(ManagedSprite *, int, int))ManagedSprite_SetPositionXY)(list->arrows[1], 0x80, downY);
 }

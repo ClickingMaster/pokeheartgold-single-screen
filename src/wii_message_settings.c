@@ -739,7 +739,6 @@ BOOL WiiMessageSettingsScreen_Init(OverlayManager *man, int *state) {
         }
         break;
     case WMS_STATE_CONFIRM_REGISTRATION_CODE: {
-        // the original reset the timer through a pointer
         int *timeoutTimer = &screen->timeoutTimer;
         *timeoutTimer = 0;
         WirelessStatusIcon_Create();
@@ -1237,7 +1236,7 @@ void WiiMessageSettingsScreen_PrintRegisterChoice(WiiMessageSettingsScreen *scre
     string = NewString_ReadMsgData(screen->msgData, msg_0188_00043);
     AddTextPrinterParameterized(&screen->choiceWindow, 0, string, sWiiMessageSettingsRegisterChoicePositions[1].x + 12, sWiiMessageSettingsRegisterChoicePositions[1].y, TEXT_SPEED_NOTRANSFER, NULL);
     String_Delete(string);
-    // the original call passed x/y without truncating them to the header's u8
+    // x and y are passed without truncation to the header's u8
     ((void (*)(struct ListMenuCursor *, Window *, u32, u32))ListMenuUpdateCursorObj)(screen->cursor, &screen->choiceWindow, sWiiMessageSettingsRegisterChoicePositions[screen->registerChoice].x, sWiiMessageSettingsRegisterChoicePositions[screen->registerChoice].y);
     CopyWindowToVram(&screen->choiceWindow);
 }
@@ -1611,7 +1610,6 @@ BOOL WiiMessageSettingsScreen_StartConnect(WiiMessageSettingsScreen *screen) {
 }
 
 BOOL WiiMessageSettingsScreen_WaitConnect(WiiMessageSettingsScreen *screen) {
-    // the original kept these locals in one stack frame struct
     struct {
         int error;
         u32 errorType;
