@@ -4,6 +4,8 @@
 
 #include "application/main_menu/mystery_gift_app.h"
 
+#include "comm_wireless.h"
+#include "communication_command.h"
 #include "communication_player_state.h"
 #include "heap.h"
 #include "link_synchronization.h"
@@ -11,8 +13,6 @@
 #include "overlay_manager.h"
 #include "player_data.h"
 #include "sys_task_api.h"
-#include "communication_command.h"
-#include "comm_wireless.h"
 
 // DS-wireless link used by Mystery Gift to receive a Wonder Card from a distribution system. The link
 // is driven by a small state callback run from a task every frame.

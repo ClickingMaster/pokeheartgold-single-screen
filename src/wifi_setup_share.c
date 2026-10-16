@@ -20,26 +20,26 @@
 
 #define WH_LOG_LEVEL 0x8000000
 
-extern char *gWifiSetupWhStateNames[]; // state names, see WIFI_SETUP_WH_STATE_*
-extern char gWifiSetupWhFmt_StateFrom[];  // "%s -> "
-extern char gWifiSetupWhFmt_StateTo[];  // "%s\n"
-extern char gWifiSetupWhStr_ChildConnected[];  // "StartParent - new child (aid %x) connected\n"
-extern char gWifiSetupWhStr_ChildDisconnected[];  // "StartParent - child (aid %x) disconnected\n"
-extern char gWifiSetupWhStr_UnknownIndicate[];  // "unknown indicate, state = %d\n"
-extern char gWifiSetupWhStr_StartParentKeyShareFailed[];  // "DWCi_MOV_WH_StateInStartParentKeyShare failed\n"
-extern char gWifiSetupWhStr_EndParentFailed[];  // "DWCi_MOV_WH_StateInEndParent failed\n"
-extern char gWifiSetupWhStr_RecvBufferSize[];  // "recv buffer size = %d\n"
-extern char gWifiSetupWhStr_SendBufferSize[];  // "send buffer size = %d\n"
-extern char gWifiSetupWhStr_ChannelBratio[];  // "channel %d bratio = %x\n"
-extern char gWifiSetupWhStr_DecidedChannel[];  // "decided channel = %d\n"
-extern char gWifiSetupWhStr_UnknownConnectMode[];  // "unknown connect mode %d\n"
-extern char gWifiSetupWhStr_StepNoChild[];  // "DWCi_MOV_WH_StepDataSharing - Warning No Child\n"
-extern char gWifiSetupWhStr_StepNoDataSet[];  // "DWCi_MOV_WH_StepDataSharing - Warning No DataSet\n"
-extern char gWifiSetupWhStr_AlreadyIdle[];  // "already DWCi_MOV_WH_SYSSTATE_IDLE\n"
-extern char gWifiSetupWhStr_Finalize[];  // "DWCi_MOV_WH_Finalize, state = %d\n"
-extern char gWifiSetupArchivePath[];  // "rom:/dwc/utility.bin"
-extern char gWifiSetupArchivePrefixFormat[];  // "%s:/"
-extern char gWifiSetupArchiveName[];  // archive name
+extern char *gWifiSetupWhStateNames[];                   // state names, see WIFI_SETUP_WH_STATE_*
+extern char gWifiSetupWhFmt_StateFrom[];                 // "%s -> "
+extern char gWifiSetupWhFmt_StateTo[];                   // "%s\n"
+extern char gWifiSetupWhStr_ChildConnected[];            // "StartParent - new child (aid %x) connected\n"
+extern char gWifiSetupWhStr_ChildDisconnected[];         // "StartParent - child (aid %x) disconnected\n"
+extern char gWifiSetupWhStr_UnknownIndicate[];           // "unknown indicate, state = %d\n"
+extern char gWifiSetupWhStr_StartParentKeyShareFailed[]; // "DWCi_MOV_WH_StateInStartParentKeyShare failed\n"
+extern char gWifiSetupWhStr_EndParentFailed[];           // "DWCi_MOV_WH_StateInEndParent failed\n"
+extern char gWifiSetupWhStr_RecvBufferSize[];            // "recv buffer size = %d\n"
+extern char gWifiSetupWhStr_SendBufferSize[];            // "send buffer size = %d\n"
+extern char gWifiSetupWhStr_ChannelBratio[];             // "channel %d bratio = %x\n"
+extern char gWifiSetupWhStr_DecidedChannel[];            // "decided channel = %d\n"
+extern char gWifiSetupWhStr_UnknownConnectMode[];        // "unknown connect mode %d\n"
+extern char gWifiSetupWhStr_StepNoChild[];               // "DWCi_MOV_WH_StepDataSharing - Warning No Child\n"
+extern char gWifiSetupWhStr_StepNoDataSet[];             // "DWCi_MOV_WH_StepDataSharing - Warning No DataSet\n"
+extern char gWifiSetupWhStr_AlreadyIdle[];               // "already DWCi_MOV_WH_SYSSTATE_IDLE\n"
+extern char gWifiSetupWhStr_Finalize[];                  // "DWCi_MOV_WH_Finalize, state = %d\n"
+extern char gWifiSetupArchivePath[];                     // "rom:/dwc/utility.bin"
+extern char gWifiSetupArchivePrefixFormat[];             // "%s:/"
+extern char gWifiSetupArchiveName[];                     // archive name
 
 extern WifiSetupArchiveState *gWifiSetupArchive;
 

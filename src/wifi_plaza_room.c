@@ -1,11 +1,11 @@
-#include "msgdata/msg/msg_0777.h"
-#include "msgdata/msg/msg_0800.h"
-
 #include "wifi_plaza_room.h"
 
 #include <string.h>
 
 #include "global.h"
+
+#include "msgdata/msg/msg_0777.h"
+#include "msgdata/msg/msg_0800.h"
 
 #include "comm_state.h"
 #include "font.h"
@@ -19,12 +19,12 @@
 #include "overlay_manager.h"
 #include "palette.h"
 #include "render_text.h"
+#include "screen_fade_legacy.h"
 #include "sound_playback.h"
 #include "sprite_transfer.h"
+#include "swap_3d_buffers.h"
 #include "system.h"
 #include "text.h"
-#include "screen_fade_legacy.h"
-#include "swap_3d_buffers.h"
 #include "wifi_plaza_event.h"
 #include "wireless_status_icon.h"
 

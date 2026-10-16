@@ -28,10 +28,10 @@ typedef struct WifiSetupMbParentData {
 extern void *ov13_0224F5B0[]; // same address as gWifiSetupBanner.banner, then gWifiSetupUsbScan, gWifiSetupDialog
 
 extern const u8 gWifiSetupBannerLetterTemplates[][WIFI_SETUP_BANNER_NUM_LETTERS]; // banner letter templates per kind
-extern const u8 gWifiSetupBannerLetterPalettes[][WIFI_SETUP_BANNER_NUM_LETTERS]; // banner letter palettes per kind
+extern const u8 gWifiSetupBannerLetterPalettes[][WIFI_SETUP_BANNER_NUM_LETTERS];  // banner letter palettes per kind
 extern WifiSetupPoint gWifiSetupBannerLetterPositions[WIFI_SETUP_BANNER_NUM_LETTERS];
 extern u8 gWifiSetupUsbScanEmptyBssid[6]; // empty BSSID
-extern u8 gWifiSetupUsbApSsid[];  // "NWCUSBAP"
+extern u8 gWifiSetupUsbApSsid[];          // "NWCUSBAP"
 extern WifiSetupUsbScanParam gWifiSetupUsbScanParam;
 extern u8 gWifiSetupDialogWindowPlanes[];
 extern WifiSetupRect gWifiSetupDialogWindowRect;

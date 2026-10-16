@@ -1,13 +1,13 @@
-#include "msgdata/msg/msg_0776.h"
-#include "msgdata/msg/msg_0777.h"
-#include "msgdata/msg/msg_0800.h"
-
 #include "wifi_plaza_player_state.h"
 
 #include <nitro/fx/fx_trig.h>
 #include <string.h>
 
 #include "global.h"
+
+#include "msgdata/msg/msg_0776.h"
+#include "msgdata/msg/msg_0777.h"
+#include "msgdata/msg/msg_0800.h"
 
 #include "assert.h"
 #include "heap.h"

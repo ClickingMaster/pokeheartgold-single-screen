@@ -17,15 +17,15 @@
 #include "pokemon.h"
 #include "pokepic.h"
 #include "render_window.h"
+#include "screen_fade_legacy.h"
 #include "sound_playback.h"
 #include "sprite.h"
+#include "swap_3d_buffers.h"
 #include "sys_task.h"
 #include "sys_task_api.h"
 #include "text.h"
 #include "trade_sequence_internal.h"
 #include "trade_sequence_models.h"
-#include "screen_fade_legacy.h"
-#include "swap_3d_buffers.h"
 #include "wireless_status_icon.h"
 
 // Scene 0 of the trade animation: the sent Pokemon's picture and the "will be sent to" / "Bye-bye" messages, then

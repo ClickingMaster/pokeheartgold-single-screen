@@ -33,7 +33,7 @@ struct PokeathlonRingDropUi {
     enum HeapID heapId;                                // 0x04
     SpriteSystem *spriteSystem;                        // 0x08
     SpriteManager *spriteManager;                      // 0x0C
-    PokeathlonCourseSpriteResources *resources;                                   // 0x10: the course sprite resources
+    PokeathlonCourseSpriteResources *resources;        // 0x10: the course sprite resources
     BgConfig *bgConfig;                                // 0x14
     MsgData *msgData;                                  // 0x18
     MessageFormat *msgFormat;                          // 0x1C
@@ -414,7 +414,6 @@ void PokeathlonRingDropUi_PrintMessageAt(Window *window, MessageFormat *msgForma
     String_Delete(string);
     CopyWindowToVram(window);
 }
-
 
 #pragma force_active on
 

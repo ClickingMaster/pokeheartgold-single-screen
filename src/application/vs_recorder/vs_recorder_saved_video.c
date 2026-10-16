@@ -24,8 +24,8 @@
 // VS Recorder saved video screen (VS_RECORDER_SCREEN_SAVED_VIDEO): the battle video in the chosen save slot with its
 // owner's profile, play (after saving the game if needed) and exit. Also the menu's next-colour-scheme substate.
 
-extern const TouchscreenHitbox sVsRecorderSaveYesHitbox;    // YES
-extern const TouchscreenHitbox sVsRecorderSaveNoHitbox;    // NO
+extern const TouchscreenHitbox sVsRecorderSaveYesHitbox;         // YES
+extern const TouchscreenHitbox sVsRecorderSaveNoHitbox;          // NO
 extern const TouchscreenHitbox sVsRecorderSavedVideoHitboxes[3]; // profile, play, exit
 
 // substates of the saved video screen (sVsRecorderSavedVideoSubStates)

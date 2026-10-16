@@ -553,7 +553,7 @@ void PokewalkerIr_RequestChunk(void) {
         break;                                                                                                        \
     case 1:                                                                                                           \
         ov112_021FFB24.step = 178;                                                                                    \
-        PokewalkerIr_BeginTransfer((void *)((void *)((s32)ov112_021FFAA4.blocks + 580)), (u32)((void *)0xBA44), 764); \
+        PokewalkerIr_BeginTransfer((void *)((s32)ov112_021FFAA4.blocks + 580), (u32)((void *)0xBA44), 764); \
         break;                                                                                                        \
     case 2:                                                                                                           \
         ov112_021FFB24.step = 180;                                                                                    \
@@ -561,7 +561,7 @@ void PokewalkerIr_RequestChunk(void) {
         break;                                                                                                        \
     case 3:                                                                                                           \
         ov112_021FFB24.step = 182;                                                                                    \
-        PokewalkerIr_BeginTransfer((void *)(ov112_021FFAA4.unk_0C), (u32)((void *)0xBF00), 3260);                     \
+        PokewalkerIr_BeginTransfer(ov112_021FFAA4.unk_0C, (u32)((void *)0xBF00), 3260);                     \
         break;                                                                                                        \
     }
 
@@ -622,7 +622,7 @@ void PokewalkerIr_OnReceiveComplete(void) {
     switch (ov112_021FFB24.step) {
     case 70:
         ov112_021FFB24.step = 72;
-        PokewalkerIr_BeginTransfer((void *)((void *)0xCE80), (u32)(ov112_021FFAA4.status), 3404);
+        PokewalkerIr_BeginTransfer((void *)0xCE80, (u32)(ov112_021FFAA4.status), 3404);
         PokewalkerIr_RequestChunk();
         return;
     case 72:
@@ -650,17 +650,17 @@ void PokewalkerIr_OnReceiveComplete(void) {
         case 188:
         case 190:
             ov112_021FFB24.step = 74;
-            PokewalkerIr_BeginTransfer((void *)((void *)0xB800), (u32)(ov112_021FFAA4.blocks), 4);
+            PokewalkerIr_BeginTransfer((void *)0xB800, (u32)(ov112_021FFAA4.blocks), 4);
             PokewalkerIr_RequestChunk();
             return;
         case 96:
             ov112_021FFB24.step = 76;
-            PokewalkerIr_BeginTransfer((void *)((void *)0xDE24), (u32)(ov112_021FFAA4.records + 548), 5480);
+            PokewalkerIr_BeginTransfer((void *)0xDE24, (u32)(ov112_021FFAA4.records + 548), 5480);
             PokewalkerIr_RequestChunk();
             return;
         default:
             ov112_021FFB24.step = 74;
-            PokewalkerIr_BeginTransfer((void *)((void *)0xB800), (u32)(ov112_021FFAA4.blocks), 1736);
+            PokewalkerIr_BeginTransfer((void *)0xB800, (u32)(ov112_021FFAA4.blocks), 1736);
             PokewalkerIr_RequestChunk();
             return;
         }
@@ -671,7 +671,7 @@ void PokewalkerIr_OnReceiveComplete(void) {
             return;
         case 64:
             ov112_021FFB24.step = 76;
-            PokewalkerIr_BeginTransfer((void *)((void *)0xDE24), (u32)(ov112_021FFAA4.records + 548), 5480);
+            PokewalkerIr_BeginTransfer((void *)0xDE24, (u32)(ov112_021FFAA4.records + 548), 5480);
             PokewalkerIr_RequestChunk();
             return;
         case 176:
@@ -689,7 +689,7 @@ void PokewalkerIr_OnReceiveComplete(void) {
                 return;
             }
             ov112_021FFB24.step = 178;
-            PokewalkerIr_BeginTransfer((void *)((void *)((s32)ov112_021FFAA4.blocks + 580)), (u32)((void *)0xBA44), 764);
+            PokewalkerIr_BeginTransfer((void *)((s32)ov112_021FFAA4.blocks + 580), (u32)((void *)0xBA44), 764);
             PokewalkerIr_SendChunk();
             return;
         case 180:
@@ -707,7 +707,7 @@ void PokewalkerIr_OnReceiveComplete(void) {
                 return;
             }
             ov112_021FFB24.step = 182;
-            PokewalkerIr_BeginTransfer((void *)(ov112_021FFAA4.unk_0C), (u32)((void *)0xBF00), 3260);
+            PokewalkerIr_BeginTransfer(ov112_021FFAA4.unk_0C, (u32)((void *)0xBF00), 3260);
             PokewalkerIr_SendChunk();
             return;
         case 184:
@@ -757,7 +757,7 @@ void PokewalkerIr_OnConnect(int result) {
         break;
     case 0xFE:
         PokewalkerIr_StoreClock();
-        PokewalkerIr_Send((void *)ov112_021FFAA4.unk_28, 8, ov112_021FFB24.command, 1);
+        PokewalkerIr_Send(ov112_021FFAA4.unk_28, 8, ov112_021FFB24.command, 1);
         break;
     case 0xE2:
         data[0] = 0x80;

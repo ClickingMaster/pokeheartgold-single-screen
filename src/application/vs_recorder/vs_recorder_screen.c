@@ -51,8 +51,8 @@ typedef struct VsRecorderIconLayout {
 } VsRecorderIconLayout;
 
 extern const VsRecorderWindowRectSet sVsRecorderVideoInfoLabelWindows; // video info label windows
-extern const VsRecorderMsgIdSet sVsRecorderVideoInfoLabelMsgIds;      // video info labels
-extern const VsRecorderIconLayout sVsRecorderVideoPartyIconLayout;    // party icon positions: [0] two trainers, [1] four
+extern const VsRecorderMsgIdSet sVsRecorderVideoInfoLabelMsgIds;       // video info labels
+extern const VsRecorderIconLayout sVsRecorderVideoPartyIconLayout;     // party icon positions: [0] two trainers, [1] four
 
 #pragma force_active on
 

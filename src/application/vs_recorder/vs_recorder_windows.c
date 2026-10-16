@@ -40,8 +40,8 @@ typedef struct VsRecorderMailBuf {
 } VsRecorderMailBuf;
 
 extern const VsRecorderWindowCoordsTable sVsRecorderProfileLabelWindows; // profile label windows
-extern const VsRecorderMsgIdTable sVsRecorderProfileLabelMsgIds;        // profile label messages
-extern const u32 sVsRecorderAvatarFileIds[][4];                    // trainer avatar files
+extern const VsRecorderMsgIdTable sVsRecorderProfileLabelMsgIds;         // profile label messages
+extern const u32 sVsRecorderAvatarFileIds[][4];                          // trainer avatar files
 
 // touch screen notice (BG 6 window)
 void VsRecorder_ShowNotice(VsRecorderWork *work, int msgId) {

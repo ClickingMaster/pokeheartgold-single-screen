@@ -3,21 +3,30 @@
 #include "constants/moves.h"
 #include "constants/sndseq.h"
 
-#include "frontier/battle_castle.h"
 #include "frontier/battle_arcade_data.h"
+#include "frontier/battle_castle.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0033.h"
 
+#include "battle_frontier_communication.h"
 #include "bg_window.h"
+#include "char_tiles.h"
+#include "communication_core.h"
+#include "communication_player_state.h"
 #include "font.h"
+#include "frontier_save_access.h"
+#include "frontier_stat_ids_legacy.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
 #include "item.h"
+#include "link_synchronization.h"
 #include "message_format.h"
 #include "message_printer.h"
+#include "message_printer_number.h"
 #include "move.h"
 #include "msgdata.h"
+#include "oam_manager.h"
 #include "obj_char_transfer.h"
 #include "obj_pltt_transfer.h"
 #include "options.h"
@@ -34,23 +43,14 @@
 #include "render_window.h"
 #include "save.h"
 #include "save_frontier.h"
+#include "screen_fade_legacy.h"
 #include "sound_playback.h"
 #include "sprite.h"
 #include "sprite_transfer.h"
 #include "string_util.h"
 #include "system.h"
-#include "oam_manager.h"
-#include "message_printer_number.h"
-#include "screen_fade_legacy.h"
-#include "char_tiles.h"
-#include "frontier_save_access.h"
-#include "communication_player_state.h"
-#include "communication_core.h"
-#include "link_synchronization.h"
-#include "wireless_status_icon.h"
-#include "frontier_stat_ids_legacy.h"
-#include "battle_frontier_communication.h"
 #include "vram_transfer_manager.h"
+#include "wireless_status_icon.h"
 
 FS_EXTERN_OVERLAY(OVY_80);
 
@@ -213,7 +213,7 @@ typedef struct BattleCastleOpponentApp {
     u8 linkLevelChange;                          // 0x012 (level change of the pending link action)
     u8 action;                                   // 0x013 (CASTLE_OPP_ACTION_*)
     u8 numMons;                                  // 0x014 (3, or 4 for the link challenge)
-    u8 numOwnSlots;                                  // 0x015 (4; grid positions from here on are the EXIT button / partner's slots)
+    u8 numOwnSlots;                              // 0x015 (4; grid positions from here on are the EXIT button / partner's slots)
     u8 timer;                                    // 0x016
     u8 linkRecvCount;                            // 0x017 (incremented by the link receive callbacks)
     u8 unk_018[8];                               // 0x018
@@ -230,8 +230,8 @@ typedef struct BattleCastleOpponentApp {
     MessagePrinter *msgPrinter;                  // 0x2B4
     Options *options;                            // 0x2B8
     SaveData *saveData;                          // 0x2BC
-    void *castleChallenge;                               // 0x2C0 (Save_Frontier_GetCastleChallenge)
-    u32 castleFlags;                                 // 0x2C4 (Save_Frontier_GetCastleFlags)
+    void *castleChallenge;                       // 0x2C0 (Save_Frontier_GetCastleChallenge)
+    u32 castleFlags;                             // 0x2C4 (Save_Frontier_GetCastleFlags)
     BattleCastleSpriteGfx spriteGfx;             // 0x2C8
     BattleCastleSprite *monIcons[4];             // 0x4E4
     BattleCastleSprite *hiddenMonIcons[4];       // 0x4F4 (shown until the mon is checked)
@@ -283,7 +283,7 @@ typedef struct BattleCastleOpponentAppArgs {
 
 // Tables still defined in the overlay's data asm
 extern const u8 gBattleCastlePartyAppButtonRects[][4]; // party app button rects (x, y, width, height in tiles)
-extern const u8 gBattleCastleOpponentAppListMenuY[];    // list menu y, by number of entries
+extern const u8 gBattleCastleOpponentAppListMenuY[];   // list menu y, by number of entries
 extern const TouchscreenListMenuTemplate gBattleCastleOpponentAppListMenuTemplate;
 extern const u16 gBattleCastleOpponentAppStatsHelpMessages[2]; // SUMMARY menu help messages, by "moves can be bought" (0) or not (1)
 extern const u16 gBattleCastleOpponentAppMovesHelpMessages[2];
@@ -304,21 +304,21 @@ extern const TileRect gBattleCastleMonPicRect;
 extern const struct {
     const WindowTemplate *templates;
     u32 count;
-} gBattleCastleWindowSets[2];                             // window sets
-extern const TouchscreenHitbox gBattleCastleItemGridArrowHitboxes[]; // rental item grid page arrows
-extern const GridCallbacks gBattleCastlePartyAppPartyGridCallbacks;       // party app party grid
-extern const GridCallbacks gBattleCastleOpponentAppPartyGridCallbacks;       // opponent app party grid
-extern const GridCallbacks gBattleCastleItemGridCallbacks;       // rental item grid
-extern const TouchscreenHitbox gBattleCastlePartyGrid3Hitboxes[]; // party grid, 3 mons
-extern const int gBattleCastlePartyGridSlots[];               // party grid position -> slot
-extern const TouchscreenHitbox gBattleCastlePartyGrid4Hitboxes[]; // party grid, 4 mons
-extern const u32 gBattleCastleItemGridCursorAnims[];               // rental item grid cursor animations
-extern const int gBattleCastleItemGridButtons[];               // rental item grid position -> button
+} gBattleCastleWindowSets[2];                                          // window sets
+extern const TouchscreenHitbox gBattleCastleItemGridArrowHitboxes[];   // rental item grid page arrows
+extern const GridCallbacks gBattleCastlePartyAppPartyGridCallbacks;    // party app party grid
+extern const GridCallbacks gBattleCastleOpponentAppPartyGridCallbacks; // opponent app party grid
+extern const GridCallbacks gBattleCastleItemGridCallbacks;             // rental item grid
+extern const TouchscreenHitbox gBattleCastlePartyGrid3Hitboxes[];      // party grid, 3 mons
+extern const int gBattleCastlePartyGridSlots[];                        // party grid position -> slot
+extern const TouchscreenHitbox gBattleCastlePartyGrid4Hitboxes[];      // party grid, 4 mons
+extern const u32 gBattleCastleItemGridCursorAnims[];                   // rental item grid cursor animations
+extern const int gBattleCastleItemGridButtons[];                       // rental item grid position -> button
 extern const DpadMenuBox gBattleCastlePartyGrid3Boxes[];
 extern const TouchscreenHitbox gBattleCastleItemGridHitboxes[];
 extern const DpadMenuBox gBattleCastlePartyGrid4Boxes[];
 extern const DpadMenuBox gBattleCastleItemGridBoxes[]; // rental item grid
-extern const u8 gBattleCastleItemGridBoxTops[];          // = &gBattleCastleItemGridBoxes[0].top, referenced by its own label
+extern const u8 gBattleCastleItemGridBoxTops[];        // = &gBattleCastleItemGridBoxes[0].top, referenced by its own label
 
 // Frontier overlay (80) helpers
 void Frontier_SetSpriteAnim(Sprite *sprite, int value);

@@ -803,14 +803,14 @@ void PCBox_AttachWindowToPanel(BgCellManager *mgr, int id, Window *window) {
 }
 
 void PCBox_AttachPanelWindows(PCBoxView *view) {
-    PCBox_AttachWindowToPanel(view->panels, 3, (Window *)(&view->windows[29]));
-    PCBox_AttachWindowToPanel(view->panels, 4, (Window *)(&view->windows[30]));
-    PCBox_AttachWindowToPanel(view->panels, 5, (Window *)(&view->windows[31]));
-    PCBox_AttachWindowToPanel(view->panels, 6, (Window *)(&view->windows[32]));
-    PCBox_AttachWindowToPanel(view->panels, 7, (Window *)(&view->windows[33]));
-    PCBox_SetPanelWindowFrame(view->panels, 0xc, (Window *)(&view->windows[41]));
-    PCBox_AttachWindowToPanel(view->panels, 0xe, (Window *)(&view->windows[42]));
-    PCBox_AttachWindowToPanel(view->panels, 0xf, (Window *)(&view->windows[43]));
+    PCBox_AttachWindowToPanel(view->panels, 3, &view->windows[29]);
+    PCBox_AttachWindowToPanel(view->panels, 4, &view->windows[30]);
+    PCBox_AttachWindowToPanel(view->panels, 5, &view->windows[31]);
+    PCBox_AttachWindowToPanel(view->panels, 6, &view->windows[32]);
+    PCBox_AttachWindowToPanel(view->panels, 7, &view->windows[33]);
+    PCBox_SetPanelWindowFrame(view->panels, 0xc, &view->windows[41]);
+    PCBox_AttachWindowToPanel(view->panels, 0xe, &view->windows[42]);
+    PCBox_AttachWindowToPanel(view->panels, 0xf, &view->windows[43]);
 }
 
 void PCBox_AttachPartyButtonWindow(PCBoxView *view) {

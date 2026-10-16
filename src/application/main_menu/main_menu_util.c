@@ -23,10 +23,10 @@
 #include "render_window.h"
 #include "screen_fade.h"
 #include "sprite.h"
+#include "sprite_resource.h"
+#include "sprite_resource_header.h"
 #include "sprite_transfer.h"
 #include "system.h"
-#include "sprite_resource_header.h"
-#include "sprite_resource.h"
 #include "vram_transfer_manager.h"
 
 // GBA cartridge access (NitroSDK CTRDG) and the crypto library

@@ -5,12 +5,12 @@
 #include "assert.h"
 #include "fashion_case.h"
 #include "friend_group.h"
+#include "frontier_wifi_upload_record.h"
 #include "heap.h"
 #include "save.h"
 #include "save_arrays.h"
-#include "save_rankings.h"
 #include "save_block_23.h"
-#include "frontier_wifi_upload_record.h"
+#include "save_rankings.h"
 
 // record_mixing_records.c
 u32 RecordMixing_GetGroupRecordSize(SAV_FRIEND_GRP *friendGroup);

@@ -12,13 +12,13 @@
 #include "party.h"
 #include "player_data.h"
 #include "pokemon.h"
+#include "pokemon_summary.h"
 #include "pokemon_summary_internal.h"
 #include "sound_playback.h"
 #include "sprite.h"
 #include "sprite_system.h"
 #include "touchscreen.h"
 #include "ui_util.h"
-#include "pokemon_summary.h"
 
 // Pokemon summary screen: touch input on the pages, the page backgrounds and
 // HP/EXP bars, switching to another Pokemon, the move info and ribbon list slide-ins, the ribbon cursor, the touch

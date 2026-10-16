@@ -674,7 +674,7 @@ u32 PCBox_State_MarkingMenuInput(PCBoxWork *work) {
         PCBox_ToggleMarking(work, 5);
         break;
     case 6: {
-        u8 value = *(u32 *)(&work->view->markings);
+        u8 value = work->view->markings;
         PCBox_SetSlotMonData(work, *(&work->selectedSlot), MON_DATA_MARKINGS, &value);
         PCBox_DrawMarkings(work, value);
         PlaySE(SEQ_SE_DP_DECIDE);
@@ -916,7 +916,7 @@ int PCBox_State_MoveModePartyInput(PCBoxWork *work) {
     }
     {
         u32 input = PCBox_GetMoveModePartyMenuInput(work);
-        switch ((u32)input) {
+        switch (input) {
         case 6:
             PlaySE(SEQ_SE_DP_DECIDE);
             work->moveWithButtons = 0;

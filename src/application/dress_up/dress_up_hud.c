@@ -15,11 +15,11 @@
 #include "render_window.h"
 #include "sound_playback.h"
 #include "sprite.h"
+#include "sprite_resource.h"
+#include "sprite_resource_header.h"
 #include "sprite_transfer.h"
 #include "sys_task_api.h"
 #include "text.h"
-#include "sprite_resource_header.h"
-#include "sprite_resource.h"
 
 // Editor sub screen (message box, accessory count meter, an unused countdown with its pulse tween), message and
 // sprite resource helpers shared by the buttons, and the backdrop animation of the finished design.

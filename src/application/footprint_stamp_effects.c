@@ -43,9 +43,9 @@ extern const fx32 sFootprintStampSizeBoundsLeft[];
 extern const fx32 sFootprintStampSizeBoundsRight[];
 extern const fx32 sFootprintStampSizeBoundsBottom[];
 extern const fx32 sFootprintStampSizeBoundsTop[];
-extern const s16 sFootprintStampCameraChainLengths[];    // chain length that moves the camera, by player count
-extern const u8 sFootprintStampNatureEffects[];     // enum FootprintStampEffect by nature
-extern const u16 sFootprintStampInkColors[][2]; // ink colors by OT id % 9, two columns
+extern const s16 sFootprintStampCameraChainLengths[]; // chain length that moves the camera, by player count
+extern const u8 sFootprintStampNatureEffects[];       // enum FootprintStampEffect by nature
+extern const u16 sFootprintStampInkColors[][2];       // ink colors by OT id % 9, two columns
 extern const TouchscreenHitbox sFootprintStampPartyHitboxes[];
 extern const u8 sFootprintStampSpeciesFootprints[]; // per species: 4 bytes, [0] footprint type, [1] footprint size
 extern const u8 sFootprintStampSpeciesFootprintSizes[];

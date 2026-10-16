@@ -9,11 +9,11 @@
 #include "heap.h"
 #include "obj_char_transfer.h"
 #include "pokemon.h"
+#include "screen_fade_legacy.h"
 #include "sprite_transfer.h"
 #include "sys_task_api.h"
 #include "text.h"
 #include "type_icon_resources.h"
-#include "screen_fade_legacy.h"
 #include "wifi_plaza_event.h"
 #include "wifi_plaza_room.h"
 

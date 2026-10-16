@@ -9,6 +9,7 @@
 #include "application/pc_box/pc_box_internal.h"
 
 #include "bg_cell_manager.h"
+#include "char_tiles.h"
 #include "filesystem.h"
 #include "font_sprite.h"
 #include "gf_gfx_loader.h"
@@ -22,7 +23,6 @@
 #include "sprite.h"
 #include "sprite_system.h"
 #include "type_icon_resources.h"
-#include "char_tiles.h"
 
 // Some calls pass full-width values to u16 / s16 parameters: those go through a cast of
 // the function.

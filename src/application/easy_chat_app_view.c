@@ -15,12 +15,12 @@
 #include "obj_char_transfer.h"
 #include "palette.h"
 #include "pm_string.h"
+#include "screen_fade_legacy.h"
 #include "sprite.h"
+#include "sprite_resource_header.h"
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
-#include "sprite_resource_header.h"
-#include "screen_fade_legacy.h"
 #include "wireless_status_icon.h"
 
 typedef struct EasyChatSentenceView EasyChatSentenceView;
@@ -30,9 +30,9 @@ typedef struct EasyChatWordListView EasyChatWordListView;
 typedef struct EasyChatPageButtonsView EasyChatPageButtonsView;
 
 typedef struct EasyChatButtonText {
-    TextOBJ *textObj;             // 0x00
+    TextOBJ *textObj;                  // 0x00
     ObjCharSpaceReservation charAlloc; // 0x04
-} EasyChatButtonText;             // size: 0x10
+} EasyChatButtonText;                  // size: 0x10
 
 struct EasyChatAppView {
     SysTask *mainTask;                         // 0x000
@@ -67,7 +67,7 @@ typedef struct EasyChatViewCommand {
     EasyChatApp *app;      // 0x04
     ECMenu *menu;          // 0x08
     u32 command;           // 0x0C
-    u32 slot;     // 0x10
+    u32 slot;              // 0x10
     u32 state;             // 0x14
 } EasyChatViewCommand;     // size: 0x18
 
@@ -444,7 +444,7 @@ void EasyChatAppView_LoadSpriteGraphics(EasyChatViewCommand *command, NARC *narc
         NNS_G2dInitImagePaletteProxy(&view->paletteProxies[i]);
         NNS_G2dInitImageProxy(&view->imageProxies[i]);
         GfGfxLoader_LoadImageMappingFromOpenNarc(narc, 9, TRUE, GF_BG_LYR_MAIN_0, 0, (NNS_G2D_VRAM_TYPE)(u32)(i + 1), 0, HEAP_ID_35, &view->imageProxies[i]);
-        GfGfxLoader_PartiallyLoadPaletteFromOpenNarc(narc, 10, (NNS_G2D_VRAM_TYPE)(int)(i + 1), 0, HEAP_ID_35, &view->paletteProxies[i]);
+        GfGfxLoader_PartiallyLoadPaletteFromOpenNarc(narc, 10, (NNS_G2D_VRAM_TYPE)(i + 1), 0, HEAP_ID_35, &view->paletteProxies[i]);
         view->cellFiles[i] = GfGfxLoader_GetCellBankFromOpenNarc(narc, 7, TRUE, &view->cellBanks[i], HEAP_ID_35);
         view->animFiles[i] = GfGfxLoader_GetAnimBankFromOpenNarc(narc, 8, TRUE, &view->animBanks[i], HEAP_ID_35);
     }

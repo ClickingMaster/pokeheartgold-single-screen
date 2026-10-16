@@ -11,12 +11,12 @@
 #include "party.h"
 #include "pokemon.h"
 #include "pokemon_icon_idx.h"
+#include "pokemon_summary.h"
 #include "pokemon_summary_internal.h"
 #include "ribbon.h"
 #include "sprite.h"
 #include "sprite_system.h"
 #include "type_icon_resources.h"
-#include "pokemon_summary.h"
 #include "vram_transfer_manager.h"
 
 // Pokemon summary screen sprites: the sprite system of the screen and the

@@ -10,8 +10,11 @@
 #include "msgdata/msg/msg_0800.h"
 
 #include "bg_window.h"
+#include "comm_state.h"
+#include "comm_wireless.h"
 #include "filesystem.h"
 #include "font.h"
+#include "friend_roster.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
@@ -21,8 +24,9 @@
 #include "main.h"
 #include "message_format.h"
 #include "msgdata.h"
+#include "network_overlay_loader.h"
+#include "oam_manager.h"
 #include "options.h"
-#include "wifi_club_app.h"
 #include "overlay_manager.h"
 #include "palette.h"
 #include "player_data.h"
@@ -33,6 +37,7 @@
 #include "sav_system_info.h"
 #include "save.h"
 #include "save_vars_flags.h"
+#include "save_wii_message.h"
 #include "screen_fade.h"
 #include "sound_playback.h"
 #include "sound_system.h"
@@ -42,16 +47,11 @@
 #include "system.h"
 #include "text.h"
 #include "title_screen.h"
-#include "oam_manager.h"
 #include "touchpad.h"
-#include "friend_roster.h"
-#include "save_wii_message.h"
-#include "comm_wireless.h"
-#include "comm_state.h"
-#include "wireless_status_icon.h"
-#include "network_overlay_loader.h"
 #include "vram_transfer_manager.h"
+#include "wifi_club_app.h"
 #include "wii_number.h"
+#include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
 FS_EXTERN_OVERLAY(OVY_70);
@@ -138,7 +138,7 @@ typedef struct WiiMessageSettings {
     u32 unk_8C;                 // 0x08C, set together with nextApp, never read
     u32 unk_90;                 // 0x090
     void *childArgs;            // 0x094
-    WifiServerProfile request;        // 0x098
+    WifiServerProfile request;  // 0x098
     int responseStatus;         // 0x0FC, written by GtsServer_RequestSetProfile
     int responseResult;         // 0x100
     u32 password;               // 0x104

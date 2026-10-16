@@ -12,13 +12,18 @@
 #include "nnsys/fnd/expheap.h"
 
 #include "bg_window.h"
+#include "comm_state.h"
+#include "comm_wireless.h"
 #include "filesystem.h"
 #include "font.h"
+#include "frontier_data_access.h"
+#include "frontier_wifi_upload_record.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
 #include "message_format.h"
 #include "msgdata.h"
+#include "network_overlay_loader.h"
 #include "oam_manager.h"
 #include "obj_char_transfer.h"
 #include "obj_pltt_transfer.h"
@@ -27,25 +32,20 @@
 #include "pm_string.h"
 #include "render_text.h"
 #include "render_window.h"
+#include "save_wii_message.h"
 #include "screen_fade.h"
 #include "sound_playback.h"
 #include "sound_system.h"
 #include "sprite.h"
+#include "sprite_resource.h"
+#include "sprite_resource_header.h"
 #include "sprite_transfer.h"
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "sprite_resource_header.h"
-#include "sprite_resource.h"
-#include "frontier_data_access.h"
-#include "save_wii_message.h"
-#include "comm_wireless.h"
-#include "comm_state.h"
-#include "wireless_status_icon.h"
-#include "frontier_wifi_upload_record.h"
-#include "network_overlay_loader.h"
 #include "vram_transfer_manager.h"
+#include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
 enum NintendoWfcMainState {
@@ -214,13 +214,13 @@ typedef struct NintendoWfcConnect {
     int nextState;                              // 0x0020
     void *heapMem;                              // 0x0024
     NNSFndHeapHandle expHeap;                   // 0x0028
-    u8 connection[0x64];                          // 0x002C, passed to DWC_InitInetEx
+    u8 connection[0x64];                        // 0x002C, passed to DWC_InitInetEx
     u32 ownRank;                                // 0x0090
     u32 rank;                                   // 0x0094
     int roomCount;                              // 0x0098
     u32 room;                                   // 0x009C
     u8 downloadBuffer[0xA38];                   // 0x00A0
-    FrontierWifiUploadRecord uploadRecord;            // 0x0AD8
+    FrontierWifiUploadRecord uploadRecord;      // 0x0AD8
     u8 filler_0BBC[0x14];                       // 0x0BBC
     MessageFormat *msgFormat;                   // 0x0BD0
     MsgData *msgDataTower;                      // 0x0BD4, Wi-Fi Battle Tower (bank 774)
@@ -251,7 +251,7 @@ typedef struct NintendoWfcConnect {
     int dwcErrorType;                           // 0x0F58
     int httpResult;                             // 0x0F5C
     int messageTimer;                           // 0x0F60
-    WifiServerProfile profile;                        // 0x0F64
+    WifiServerProfile profile;                  // 0x0F64
     u32 profileResponse[2];                     // 0x0FC8
     s16 subState;                               // 0x0FD0
     s16 subTimer;                               // 0x0FD2

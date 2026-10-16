@@ -8,6 +8,7 @@
 #include "msgdata/msg/msg_0775.h"
 
 #include "bg_window.h"
+#include "comm_state.h"
 #include "communication_error.h"
 #include "font.h"
 #include "game_stats.h"
@@ -33,7 +34,6 @@
 #include "screen_fade.h"
 #include "sys_vars.h"
 #include "text.h"
-#include "comm_state.h"
 #include "wireless_status_icon.h"
 
 // Talking to the GTS server (screen 7), entered with nextScreenArg: 7 deposit the selected Pokemon (post.asp,

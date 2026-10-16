@@ -7,20 +7,20 @@
 #include "application/pokedex/pokedex_text_util.h"
 #include "graphic/zukan_gra.naix"
 
+#include "char_tiles.h"
 #include "filesystem.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
 #include "palette.h"
 #include "pokedex.h"
+#include "pokedex_language.h"
+#include "pokedex_language_order.h"
 #include "pokemon.h"
 #include "pokemon_icon_idx.h"
 #include "sprite.h"
-#include "sprite_system.h"
 #include "sprite_resource_header.h"
-#include "char_tiles.h"
-#include "pokedex_language.h"
-#include "pokedex_language_order.h"
+#include "sprite_system.h"
 
 extern const OamManagerParam sPokedexOamManagerParam;
 extern const OamCharTransferParam sPokedexOamCharTransferParam;
@@ -37,7 +37,7 @@ extern const ManagedSpriteTemplate sPokedexListSpriteTemplates[]; // the list sc
 extern const ManagedSpriteTemplate sPokedexListSprite9Template;
 extern const ManagedSpriteTemplate sPokedexListSprite10Template;
 extern const u16 sListScrollbarSizeThresholds[];
-extern const u8 sPokedexScrollbarLengths[];                    // scrollbar length per size animation
+extern const u8 sPokedexScrollbarLengths[];                         // scrollbar length per size animation
 extern const ManagedSpriteTemplate sPokedexSearchSpriteTemplates[]; // search menu sprites 0-25
 extern const ManagedSpriteTemplate sPokedexSearchSprite43Template;
 extern const ManagedSpriteTemplate sPokedexSearchSprite26Template;

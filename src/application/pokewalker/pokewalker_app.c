@@ -29,9 +29,9 @@ typedef struct PokewalkerAppModeEntry {
     PokewalkerAppModeFunc other[2];
 } PokewalkerAppModeEntry;
 
-extern const PokewalkerAppModeEntry sPokewalkerAppModeEnter[]; // enter
+extern const PokewalkerAppModeEntry sPokewalkerAppModeEnter[];  // enter
 extern const PokewalkerAppModeEntry sPokewalkerAppModeUpdate[]; // update
-extern const PokewalkerAppModeEntry sPokewalkerAppModeExit[]; // exit
+extern const PokewalkerAppModeEntry sPokewalkerAppModeExit[];   // exit
 extern const GraphicsModes sPokewalkerAppGraphicsModes;
 extern const GraphicsBanks sPokewalkerAppGraphicsBanks;
 extern const BgTemplate sPokewalkerAppBgTemplate_Main1;

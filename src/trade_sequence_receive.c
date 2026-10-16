@@ -17,16 +17,16 @@
 #include "pokemon.h"
 #include "pokepic.h"
 #include "render_window.h"
+#include "screen_fade_legacy.h"
 #include "sound_playback.h"
 #include "sprite.h"
+#include "swap_3d_buffers.h"
 #include "sys_task.h"
 #include "sys_task_api.h"
 #include "text.h"
 #include "trade_sequence_internal.h"
 #include "trade_sequence_models.h"
 #include "trade_sequence_receive_internal.h"
-#include "screen_fade_legacy.h"
-#include "swap_3d_buffers.h"
 
 // Scene 6 of the trade animation (trades and receiving): the ball lands with a flash and the received Pokemon
 // appears with its cry, then "<Pokemon> sent over <Pokemon>." / "Take good care of <Pokemon>!" (trade) or "<Pokemon>

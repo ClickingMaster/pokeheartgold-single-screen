@@ -827,7 +827,7 @@ int WifiSetup_BuildJoinPayload(u8 *dst) {
     u8 *second;
     u32 value;
 
-    dst[0] = (s8)ov13_0224CFB8[0x1D];
+    dst[0] = ov13_0224CFB8[0x1D];
     dst[1] = 1;
     sourceLen = (s16)gWifiSetupState.keyLength;
     WifiSetup_MemCopy(dst + 6, gWifiSetupState.key, sourceLen);
@@ -844,7 +844,7 @@ int WifiSetup_BuildJoinPayload(u8 *dst) {
     WifiSetup_MemCopy(second + 6, &value, 4);
     *(u16 *)(second + 2) = WifiSetup_HostToNet16(4);
     total += 10;
-    return (s16)total;
+    return total;
 }
 
 void WifiSetup_WriteBody(int mode, u8 *dst, const void *src, s16 *length, u16 *flag, const void *extra) {
@@ -880,7 +880,7 @@ void WifiSetup_SendPacket(void *buffer, void *size, int index, void *socket) {
     *(u16 *)(packet + 2) = WifiSetup_HostToNet16(0x5790);
     value = WifiSetup_HostToNet32(gWifiSetupState.address);
     *(int *)(packet + 4) = value;
-    if (index == 0xFF || (s8)ov13_0224CFB8[0x1C] == 0) {
+    if (index == 0xFF || ov13_0224CFB8[0x1C] == 0) {
         *(int *)(packet + 4) = -1;
     }
     WifiSetup_SendTo((int)socket, buffer, (int)size, 0, packet, sizeof(packet));

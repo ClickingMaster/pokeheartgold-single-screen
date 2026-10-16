@@ -9,13 +9,20 @@
 #include "msgdata/msg/msg_0236.h"
 
 #include "assert.h"
+#include "comm_state.h"
+#include "communication_command.h"
+#include "communication_core.h"
+#include "communication_player_state.h"
 #include "filesystem.h"
 #include "font.h"
+#include "friend_roster.h"
 #include "game_stats.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
+#include "link_synchronization.h"
 #include "math_util.h"
+#include "oam_manager.h"
 #include "obj_char_transfer.h"
 #include "obj_pltt_transfer.h"
 #include "options.h"
@@ -27,15 +34,8 @@
 #include "sprite_transfer.h"
 #include "system.h"
 #include "text.h"
-#include "oam_manager.h"
-#include "friend_roster.h"
-#include "communication_command.h"
-#include "communication_player_state.h"
-#include "communication_core.h"
-#include "link_synchronization.h"
-#include "comm_state.h"
-#include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
+#include "wireless_status_icon.h"
 
 // These are declared only in other modules' private headers.
 struct DoubleBuffer *DoubleBuffer_New(enum HeapID heapId, void *first, void *second);
@@ -2238,7 +2238,7 @@ void PlazaGameContinue_ReceiveVote(PlazaGameContinue *prompt, int netId, int yes
         prompt->votes |= bit;
     }
     votes = 0;
-    for (i = votes; (int)i < 4; i++) {
+    for (i = votes; i < 4; i++) {
         if (prompt->votes & (1 << i)) {
             votes++;
         }

@@ -10,6 +10,7 @@
 #include "msgdata/msg/msg_0196.h"
 
 #include "bg_window.h"
+#include "field_interaction.h"
 #include "field_system.h"
 #include "filesystem.h"
 #include "font.h"
@@ -25,6 +26,8 @@
 #include "script_manager.h"
 #include "sound_playback.h"
 #include "sprite.h"
+#include "sprite_resource.h"
+#include "sprite_resource_header.h"
 #include "sprite_transfer.h"
 #include "sys_task.h"
 #include "systask_environment.h"
@@ -32,9 +35,6 @@
 #include "task.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "sprite_resource_header.h"
-#include "sprite_resource.h"
-#include "field_interaction.h"
 
 // Field bottom-screen app 4: the Dowsing Machine (field_use_item.c Task_ActivateDowsingMchnUI).
 // While the stylus is held in the search circle, four indicators turn toward the nearest hidden

@@ -7,8 +7,10 @@
 
 #include "assert.h"
 #include "bg_window.h"
+#include "comm_state.h"
 #include "filesystem.h"
 #include "font.h"
+#include "friend_roster.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "global_terminal_net.h"
@@ -32,10 +34,8 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "friend_roster.h"
-#include "comm_state.h"
-#include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
+#include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
 // Global Terminal: connects to (and disconnects from) Nintendo Wi-Fi Connection around the VS Recorder
@@ -60,10 +60,10 @@ enum GlobalTerminalConnectState {
 // view of GlobalTerminalApp (include/overlay_app_manager_internal.h defines a file-scope static, so it is not included)
 typedef struct GlobalTerminalConnectArgs {
     GlobalTerminalLaunchArgs *launchArgs; // 0x00
-    BOOL disconnect;                // 0x04, second run after the VS Recorder: only disconnect
-    u8 unk_08[0x14 - 0x08];         // 0x08
-    u8 wifiConnection[0x7C - 0x14]; // 0x14
-    BOOL isConnected;               // 0x7C
+    BOOL disconnect;                      // 0x04, second run after the VS Recorder: only disconnect
+    u8 unk_08[0x14 - 0x08];               // 0x08
+    u8 wifiConnection[0x7C - 0x14];       // 0x14
+    BOOL isConnected;                     // 0x7C
 } GlobalTerminalConnectArgs;
 
 typedef struct GlobalTerminalConnectBgTemplates {

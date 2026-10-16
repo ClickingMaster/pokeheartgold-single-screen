@@ -15,9 +15,15 @@
 #include "bag.h"
 #include "bg_window.h"
 #include "brightness.h"
+#include "char_tiles.h"
+#include "comm_state.h"
+#include "communication_core.h"
+#include "communication_player_state.h"
 #include "field_bgm.h"
 #include "filesystem.h"
 #include "font.h"
+#include "friend_roster.h"
+#include "frontier_save_access.h"
 #include "game_stats.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
@@ -25,11 +31,13 @@
 #include "heap.h"
 #include "item.h"
 #include "launch_application_internal.h"
+#include "link_synchronization.h"
 #include "list_menu.h"
 #include "list_menu_items.h"
 #include "math_util.h"
 #include "message_format.h"
 #include "msgdata.h"
+#include "oam_manager.h"
 #include "obj_char_transfer.h"
 #include "obj_pltt_transfer.h"
 #include "options.h"
@@ -38,15 +46,19 @@
 #include "pm_string.h"
 #include "pokemon.h"
 #include "pokemon_icon_idx.h"
+#include "pokemon_summary.h"
 #include "render_window.h"
 #include "sav_chatot.h"
 #include "save_palpad.h"
 #include "save_special_ribbons.h"
 #include "save_vars_flags.h"
+#include "screen_fade_legacy.h"
 #include "sound_chatot.h"
 #include "sound_playback.h"
 #include "sound_system.h"
 #include "sprite.h"
+#include "sprite_resource.h"
+#include "sprite_resource_header.h"
 #include "sprite_transfer.h"
 #include "string_util.h"
 #include "sys_vars.h"
@@ -55,21 +67,9 @@
 #include "touchscreen.h"
 #include "touchscreen_list_menu.h"
 #include "trainer_memo.h"
-#include "sprite_resource_header.h"
-#include "sprite_resource.h"
-#include "oam_manager.h"
-#include "screen_fade_legacy.h"
-#include "char_tiles.h"
-#include "friend_roster.h"
-#include "frontier_save_access.h"
-#include "communication_player_state.h"
-#include "communication_core.h"
-#include "link_synchronization.h"
-#include "comm_state.h"
-#include "wireless_status_icon.h"
-#include "pokemon_summary.h"
 #include "update_dex_received.h"
 #include "vram_transfer_manager.h"
+#include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
 #define WIRELESS_TRADE_NUM_SLOTS   12 // 6 own party slots, then the partner's 6
@@ -211,9 +211,9 @@ struct WirelessTradeSelectMon {
     ListMenuItem *rosterItems;                                   // 0x3688
     ListMenu *rosterMenu;                                        // 0x368C
     Window rosterWindow;                                         // 0x3690
-    FriendRoster *roster;                                  // 0x36A0
+    FriendRoster *roster;                                        // 0x36A0
     u32 tradesDone;                                              // 0x36A4
-    s32 saveState;                                                // 0x36A8
+    s32 saveState;                                               // 0x36A8
     int lastSentValue;                                           // 0x36AC
     int lastSentCommand;                                         // 0x36B0
     WaitingIcon *waitingIcon;                                    // 0x36B4

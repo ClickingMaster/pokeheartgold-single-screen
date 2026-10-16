@@ -12,6 +12,7 @@
 
 #include "bg_window.h"
 #include "font.h"
+#include "font_sprite.h"
 #include "game_stats.h"
 #include "gf_3d_vramman.h"
 #include "gf_gfx_loader.h"
@@ -22,25 +23,24 @@
 #include "obj_char_transfer.h"
 #include "overlay_07.h"
 #include "palette.h"
+#include "particle_system.h"
 #include "pm_string.h"
 #include "poke_overlay.h"
 #include "pokemon_icon_idx.h"
 #include "pokepic.h"
 #include "render_window.h"
 #include "screen_fade.h"
+#include "seal_data.h"
 #include "sound_playback.h"
 #include "sprite_system.h"
+#include "swap_3d_buffers.h"
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
 #include "touch_hitbox_controller.h"
+#include "touchpad.h"
 #include "touchscreen.h"
 #include "touchscreen_list_menu.h"
-#include "font_sprite.h"
-#include "particle_system.h"
-#include "touchpad.h"
-#include "swap_3d_buffers.h"
-#include "seal_data.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 
@@ -126,11 +126,11 @@ typedef struct BallCapsuleEditor {
     BallCapsuleEditorDisplay display;                        // 0x0D4
     TouchscreenListMenu *menu;                               // 0x24C
     void *pokepicEffect;                                     // 0x250, BallSealEffect_New
-    BallThrow *ballData;                                   // 0x254
+    BallThrow *ballData;                                     // 0x254
     GF3DVramMan *vramMan;                                    // 0x258
-    FontSystem *fontSystem;                          // 0x25C
+    FontSystem *fontSystem;                                  // 0x25C
     TextOBJ *buttonLabels[2];                                // 0x260, OK / CANCEL
-    ObjCharSpaceReservation buttonLabelChars[2];                  // 0x268
+    ObjCharSpaceReservation buttonLabelChars[2];             // 0x268
     u32 unk_280;                                             // 0x280
     void *pokepicAnim;                                       // 0x284, PokepicAnimManager_New
     BOOL sortSeals;                                          // 0x288

@@ -32,7 +32,7 @@ typedef struct WifiSetupReply {
 // extendedRequest); the code addresses them through these labels.
 extern u8 gWifiSetupWcmSearchSsid[];
 extern int gWifiSetupExtendedRequest[];
-extern u8 gWifiSetupSessionKey[16];   // key
+extern u8 gWifiSetupSessionKey[16];     // key
 extern u8 gWifiSetupPacketBuffer[2048]; // packet buffer
 extern u8 gWifiSetupRecordBuffer[2048]; // record buffer
 extern u8 gWifiSetupSettingsKey[8];

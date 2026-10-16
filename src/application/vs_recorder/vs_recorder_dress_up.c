@@ -27,11 +27,11 @@
 #include "render_text.h"
 #include "sound_playback.h"
 #include "sprite_system.h"
+#include "swap_3d_buffers.h"
 #include "system.h"
 #include "text.h"
 #include "touch_hitbox_controller.h"
 #include "touchscreen.h"
-#include "swap_3d_buffers.h"
 #include "vram_transfer_manager.h"
 
 // VS Recorder dress-up photo screens: send the player's own photo (VS_RECORDER_SCREEN_DRESS_UP_SEND) and view photos
@@ -40,15 +40,15 @@
 
 FS_EXTERN_OVERLAY(OVY_41);
 
-extern const TouchscreenHitbox sVsRecorderDressUpCenterButtonHitbox;    // centre bottom button (exit)
-extern const TouchscreenHitbox sVsRecorderDressUpLeftButtonHitbox;    // left bottom button (exit)
+extern const TouchscreenHitbox sVsRecorderDressUpCenterButtonHitbox;   // centre bottom button (exit)
+extern const TouchscreenHitbox sVsRecorderDressUpLeftButtonHitbox;     // left bottom button (exit)
 extern const TouchscreenHitbox sVsRecorderDressUpRightButtonHitbox;    // right bottom button (send)
-extern const TouchscreenHitbox sVsRecorderDressUpTopBarHitbox;    // top bar (photo / profile)
-extern const TouchscreenHitbox sVsRecorderDressUpPrevPhotoHitbox;    // previous photo
-extern const TouchscreenHitbox sVsRecorderDressUpNextPhotoHitbox;    // next photo
+extern const TouchscreenHitbox sVsRecorderDressUpTopBarHitbox;         // top bar (photo / profile)
+extern const TouchscreenHitbox sVsRecorderDressUpPrevPhotoHitbox;      // previous photo
+extern const TouchscreenHitbox sVsRecorderDressUpNextPhotoHitbox;      // next photo
 extern const VsRecorderListConfig sVsRecorderDressUpSpeciesListConfig; // species list
-extern const TouchscreenHitbox sVsRecorderSpeciesGroupHitboxes[];  // species groups (9)
-extern const u16 sVsRecorderDressUpSpeciesGroupStarts[];                // first species list index of each group
+extern const TouchscreenHitbox sVsRecorderSpeciesGroupHitboxes[];      // species groups (9)
+extern const u16 sVsRecorderDressUpSpeciesGroupStarts[];               // first species list index of each group
 
 // substates of sending a Dress-Up photo (sVsRecorderDressUpSendSubStates)
 #define DRESS_UP_SEND_MAIN   3

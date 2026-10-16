@@ -22,11 +22,11 @@
 #include "pokepic.h"
 #include "sound_playback.h"
 #include "sprite.h"
+#include "sprite_resource_header.h"
 #include "sprite_system.h"
 #include "sys_task.h"
 #include "sys_task_api.h"
 #include "system.h"
-#include "sprite_resource_header.h"
 #include "vram_transfer_manager.h"
 
 // SE pan sweep / repeat / delay task (sBattleAnimSoundFuncs[kind])

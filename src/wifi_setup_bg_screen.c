@@ -11,7 +11,7 @@
 
 // BG 2 screen copy and palette uploads, scroll bar creation (see include/wifi_setup_scroll_bar.h).
 
-extern u8 gWifiSetupScrollBarThumbTemplates[]; // thumb template per kind
+extern u8 gWifiSetupScrollBarThumbTemplates[];  // thumb template per kind
 typedef struct WifiSetupApScan WifiSetupApScan; // wifi_setup_access_points.c
 
 void WifiSetupPalette_LoadRowTask(void *task, void *arg);

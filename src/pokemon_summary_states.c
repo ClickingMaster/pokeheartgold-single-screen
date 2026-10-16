@@ -16,6 +16,7 @@
 #include "msgdata.h"
 #include "options.h"
 #include "pokemon.h"
+#include "pokemon_summary.h"
 #include "pokemon_summary_internal.h"
 #include "render_window.h"
 #include "ribbon.h"
@@ -26,7 +27,6 @@
 #include "sprite_system.h"
 #include "system.h"
 #include "ui_util.h"
-#include "pokemon_summary.h"
 
 // Pokemon summary screen: the move, ribbon and condition input states, the
 // button flash, reading the shown Pokemon into PokemonSummary.mon, and switching pages. The force_active region keeps

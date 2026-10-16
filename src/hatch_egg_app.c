@@ -10,6 +10,7 @@
 
 #include "bg_window.h"
 #include "camera.h"
+#include "field_environment_sound.h"
 #include "filesystem.h"
 #include "font.h"
 #include "gf_3d_vramman.h"
@@ -22,6 +23,7 @@
 #include "obj_pltt_transfer.h"
 #include "options.h"
 #include "palette.h"
+#include "particle_system.h"
 #include "pm_string.h"
 #include "pokemon.h"
 #include "pokepic.h"
@@ -29,17 +31,15 @@
 #include "render_text.h"
 #include "render_window.h"
 #include "screen_fade.h"
-#include "sound_system.h"
 #include "sound_chatot.h"
+#include "sound_playback.h"
+#include "sound_system.h"
 #include "sprite.h"
 #include "sprite_system.h"
+#include "swap_3d_buffers.h"
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "sound_playback.h"
-#include "particle_system.h"
-#include "swap_3d_buffers.h"
-#include "field_environment_sound.h"
 #include "vram_transfer_manager.h"
 
 enum HatchEggSceneType {
@@ -115,7 +115,7 @@ typedef struct HatchEggApp {
     u8 filler_48[8];                // 0x48
     SpriteManager *spriteManager;   // 0x50
     SpriteSystem *spriteSystem;     // 0x54
-    PokepicAnimManager *picManager;         // 0x58
+    PokepicAnimManager *picManager; // 0x58
     u32 sceneType;                  // 0x5C: index into gHatchEggSceneFuncs
     u32 state;                      // 0x60
     s32 timer;                      // 0x64

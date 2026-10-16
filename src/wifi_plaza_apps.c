@@ -14,17 +14,17 @@
 
 FS_EXTERN_OVERLAY(OVY_90);
 
-extern const OverlayManagerTemplate sWiFiPlazaDisconnectOverlayTemplate; // disconnect (OVY_46)
+extern const OverlayManagerTemplate sWiFiPlazaDisconnectOverlayTemplate;           // disconnect (OVY_46)
 extern const OverlayManagerTemplate sWiFiPlazaFootprintStampBoard1OverlayTemplate; // footprint stamp (OVY_89)
 extern const OverlayManagerTemplate sWiFiPlazaFootprintStampBoard0OverlayTemplate; // footprint stamp (OVY_89)
-extern const OverlayManagerTemplate sWiFiPlazaWobbuffetPopOverlayTemplate; // OVY_93
+extern const OverlayManagerTemplate sWiFiPlazaWobbuffetPopOverlayTemplate;         // OVY_93
 extern const OverlayManagerTemplate sWiFiPlazaSurveyOverlayTemplate;
-extern const OverlayManagerTemplate sWiFiPlazaSwalotPlopOverlayTemplate; // OVY_91
-extern const OverlayManagerTemplate sWiFiPlazaConnectOverlayTemplate; // connect (OVY_46)
-extern const OverlayManagerTemplate sWiFiPlazaNewsOverlayTemplate; // plaza news (OVY_88)
+extern const OverlayManagerTemplate sWiFiPlazaSwalotPlopOverlayTemplate;      // OVY_91
+extern const OverlayManagerTemplate sWiFiPlazaConnectOverlayTemplate;         // connect (OVY_46)
+extern const OverlayManagerTemplate sWiFiPlazaNewsOverlayTemplate;            // plaza news (OVY_88)
 extern const OverlayManagerTemplate sWiFiPlazaVisitorProfilesOverlayTemplate; // visitor profiles (OVY_48)
-extern const OverlayManagerTemplate sWiFiPlazaMainOverlayTemplate; // the plaza (OVY_49)
-extern const OverlayManagerTemplate sWiFiPlazaMimeJrTopOverlayTemplate; // OVY_92
+extern const OverlayManagerTemplate sWiFiPlazaMainOverlayTemplate;            // the plaza (OVY_49)
+extern const OverlayManagerTemplate sWiFiPlazaMimeJrTopOverlayTemplate;       // OVY_92
 
 extern void (*const sWiFiPlazaAppInitArgsFuncs[13])(WiFiPlazaApps *apps, void **args, enum HeapID heapID);
 extern void (*const sWiFiPlazaAppFreeArgsFuncs[13])(void **args);
