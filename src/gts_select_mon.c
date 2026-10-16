@@ -922,7 +922,7 @@ int GtsSelectMon_HandleTradeMenu(GtsApp *app) {
 int GtsSelectMon_FadeOut(GtsApp *app) {
     if (app->nextScreen == 0 || app->nextScreen == 8 || app->nextScreen == 3) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_61);
-        app->unk_11FC = 1;
+        app->fadedBothScreens = 1;
     } else {
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_61);
     }
@@ -983,7 +983,7 @@ BOOL GtsSelectMon_StartTrade(GtsApp *app) {
     }
     app->selectedMon = Gts_GetBoxMon(app->args->party, app->args->pcStorage, app->selectedBox, app->selectedSlot);
     app->state = GTS_SELECT_MON_STATE_FADE_OUT;
-    app->unk_11FC = 1;
+    app->fadedBothScreens = 1;
     Gts_SetNextScreen(app, 7, 9);
     GtsSelectMon_InitTradeRecord(&app->record, app);
     app->searchResultCount = 0;

@@ -248,7 +248,7 @@ void GtsSummary_CreateStrings(GtsApp *app) {
     app->msgBuffer = String_New(180, HEAP_ID_61);
     app->titleString = NewString_ReadMsgData(app->gtsMsgData, msg_0775_00039); // GLOBAL TRADE SYSTEM
     for (i = 0; i < 10; i++) {
-        app->unk_0BC4[i] = String_New(20, HEAP_ID_61);
+        app->infoStrings[i] = String_New(20, HEAP_ID_61);
     }
 }
 
@@ -258,7 +258,7 @@ void GtsSummary_DeleteStrings(GtsApp *app) {
     int i;
 
     for (i = 0; i < 10; i++) {
-        String_Delete(app->unk_0BC4[i]);
+        String_Delete(app->infoStrings[i]);
     }
     String_Delete(app->msgBuffer);
     String_Delete(app->titleString);
@@ -301,7 +301,7 @@ int GtsSummary_HandleTakeBackPrompt(GtsApp *app) {
     if (response == YESNORESPONSE_YES) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
         app->state = GTS_SUMMARY_STATE_FADE_OUT;
-        app->unk_11FC = 1;
+        app->fadedBothScreens = 1;
         Gts_SetNextScreen(app, 7, 8);
         GtsSummary_DrawWanted(app);
     } else if (response == YESNORESPONSE_NO) {

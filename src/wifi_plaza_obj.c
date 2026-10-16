@@ -42,7 +42,7 @@ WiFiPlazaObjManager *WiFiPlazaObj_CreateManager(u32 count, u32 mode, WiFiPlazaMa
     manager->objs = Heap_Alloc(heapID, bytes);
     memset(manager->objs, 0, bytes);
     manager->map = map;
-    manager->unk_0E = mode;
+    manager->mode = mode;
     WiFiPlazaObj_SpawnMapObjects(manager);
     return manager;
 }
@@ -131,7 +131,7 @@ WiFiPlazaObj *WiFiPlazaObj_CreateOwnPlayerAt(WiFiPlazaObjManager *manager, int i
     template.unk4 = id;
     template.unk6 = 0;
     template.unk8 = 0;
-    if (manager->unk_0E == 0) {
+    if (manager->mode == 0) {
         template.unkA = 0;
     } else {
         template.unkA = 0x61;

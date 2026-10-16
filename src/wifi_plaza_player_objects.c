@@ -7,10 +7,10 @@
 
 void WiFiPlazaLobbyClient_OnMatchDisconnect(int result, void *arg) {
     WiFiPlazaLobbyClient *client = arg;
-    if (client->unk_69e == 1) {
+    if (client->isMatchHost == 1) {
         WiFiPlazaLobbyClient_StopMatch();
     } else if (result == 0) {
-        gWiFiPlazaLobbyClient->unk_69f = 1;
+        gWiFiPlazaLobbyClient->matchCancelled = 1;
     }
 }
 

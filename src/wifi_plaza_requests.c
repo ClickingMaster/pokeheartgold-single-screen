@@ -148,7 +148,7 @@ void WiFiPlaza_HandleTapToyTradeNews(WiFiPlazaWork *work, WiFiPlazaLobbyMessage 
     req.profiles[1] = work->profiles[1];
     req.slots[0] = WiFiPlazaLobbyClient_IdToSlot(msg->ids[0]);
     req.slots[1] = WiFiPlazaLobbyClient_IdToSlot(msg->ids[1]);
-    req.option = msg->unk_12;
+    req.option = msg->tapToy;
     WiFiPlazaNews_AddTapToyTradeEvent(work->news, &req);
 }
 

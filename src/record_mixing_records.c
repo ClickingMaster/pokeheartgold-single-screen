@@ -105,7 +105,7 @@ void RecordMixing_FillBlock23Entries(SaveData *saveData, RecordMixingEntry *out,
         CopyU16StringArrayN(out->name, PlayerProfile_GetNamePtr(profile), 8);
         out->data = *in;
         out->data.unk_01 = 0;
-        out->data.unk_00 = 0;
+        out->data.kind = 0;
     }
 }
 
@@ -175,14 +175,14 @@ void *RecordMixing_Block23List1_Load2(SaveData *saveData, enum HeapID heapID, u3
 
 int RecordMixing_InsertBlock23Entry(RecordMixingEntry *entries, int count, RecordMixingEntry *entry, int idx) {
     int i;
-    if (entry->data.unk_00 == 0) {
+    if (entry->data.kind == 0) {
         return 0;
     }
-    if (!RecordMixing_IsAllowedEntryKind(idx, entry->data.unk_00)) {
+    if (!RecordMixing_IsAllowedEntryKind(idx, entry->data.kind)) {
         return -1;
     }
     for (i = 0; i < count; i++) {
-        if (entries[i].data.unk_00 == 0) {
+        if (entries[i].data.kind == 0) {
             entries[i] = *entry;
             return 1;
         }

@@ -6,7 +6,7 @@
 
 // Records of the save block 23 lists as they are mixed: the sender's trainer data + one list entry.
 typedef struct RecordMixingEntryData {
-    u8 unk_00;
+    u8 kind;
     u8 unk_01;
     u8 unk_02[2];
     u32 unk_04[11];

@@ -2824,13 +2824,13 @@ s32 WifiClub_OpenSeekSubmenu(WifiClubApp *app, s32 menuChoice) {
     s32 listLen;
     switch (menuChoice) {
     case 0:
-        app->unk37C = 1;
+        app->submenuKind = 1;
         listMenuItems = WifiClubSingleBattleItems;
         listLen = NELEMS(WifiClubSingleBattleItems);
         listMenuTemplate = sBattleSubmenuTemplate;
         break;
     case 1:
-        app->unk37C = 0;
+        app->submenuKind = 0;
         listMenuItems = WifiClubDoubleBattleItems;
         listLen = NELEMS(WifiClubDoubleBattleItems);
         listMenuTemplate = sBattleSubmenuTemplate;
@@ -2839,7 +2839,7 @@ s32 WifiClub_OpenSeekSubmenu(WifiClubApp *app, s32 menuChoice) {
         listMenuItems = WifiClubPlazaGameItems;
         listLen = NELEMS(WifiClubPlazaGameItems);
         listMenuTemplate = sPlazaGameSubmenuTemplate;
-        app->unk37C = 2;
+        app->submenuKind = 2;
         break;
     }
     app->menuItems = ListMenuItems_New(listLen, HEAP_ID_53);
@@ -2862,7 +2862,7 @@ s32 WifiClub_OpenSeekSubmenu(WifiClubApp *app, s32 menuChoice) {
     DrawFrameAndWindow1(&app->menuWindow, TRUE, 473, 11);
     listMenuTemplate.items = app->menuItems;
     listMenuTemplate.window = &app->menuWindow;
-    app->listMenu = ListMenuInit(&listMenuTemplate, 0, (&app->unk376)[app->unk37C], HEAP_ID_53);
+    app->listMenu = ListMenuInit(&listMenuTemplate, 0, (&app->submenuCursors)[app->submenuKind], HEAP_ID_53);
     ScheduleWindowCopyToVram(&app->menuWindow);
     return 1;
 }
@@ -2872,7 +2872,7 @@ s32 WifiClub_State_SeekSubmenu(WifiClubApp *app, s32 mainState) {
     if (CommState_HasWifiFailed() != 0) {
         EraseFrameAndWindow1(&app->menuWindow, FALSE);
         RemoveWindow(&app->menuWindow);
-        DestroyListMenu(app->listMenu, NULL, &app->unk376 + app->unk37C);
+        DestroyListMenu(app->listMenu, NULL, &app->submenuCursors + app->submenuKind);
         ListMenuItems_Delete(app->menuItems);
         WifiClub_CloseMessage(app);
         WifiClub_HandleWifiError(app);
@@ -2882,7 +2882,7 @@ s32 WifiClub_State_SeekSubmenu(WifiClubApp *app, s32 mainState) {
         app->state = 19;
         EraseFrameAndWindow1(&app->menuWindow, FALSE);
         RemoveWindow(&app->menuWindow);
-        DestroyListMenu(app->listMenu, NULL, &app->unk376 + app->unk37C);
+        DestroyListMenu(app->listMenu, NULL, &app->submenuCursors + app->submenuKind);
         ListMenuItems_Delete(app->menuItems);
         WifiClub_CloseMessage(app);
         return mainState;
@@ -2921,7 +2921,7 @@ s32 WifiClub_State_SeekSubmenu(WifiClubApp *app, s32 mainState) {
     }
     EraseFrameAndWindow1(&app->menuWindow, FALSE);
     RemoveWindow(&app->menuWindow);
-    DestroyListMenu(app->listMenu, NULL, &app->unk376 + app->unk37C);
+    DestroyListMenu(app->listMenu, NULL, &app->submenuCursors + app->submenuKind);
     ListMenuItems_Delete(app->menuItems);
     return mainState;
 }

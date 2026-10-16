@@ -203,7 +203,7 @@ struct GtsApp {
     u8 filler_0008[0xC];                     // 0x0008
     int screen;                              // 0x0014, index into sGtsScreens
     int nextScreen;                          // 0x0018
-    int unk_001C;                            // 0x001C
+    int statusCheckCaller;                   // 0x001C
     int prevScreen;                          // 0x0020
     int nextScreenArg;                       // 0x0024
     int afterSaveMsgId;                      // 0x0028, printed once the save of screen 7 is written
@@ -255,7 +255,7 @@ struct GtsApp {
     String *cancelText;                      // 0x0BB8
     String *msgBuffer;                       // 0x0BBC
     String *titleString;                     // 0x0BC0
-    String *unk_0BC4[10];                    // 0x0BC4
+    String *infoStrings[10];                 // 0x0BC4
     String *errorBuffer;                     // 0x0BEC, the Wi-Fi error message of screen 0
     int textPrinterId;                       // 0x0BF0
     SpriteList *spriteList;                  // 0x0BF4
@@ -310,7 +310,7 @@ struct GtsApp {
     GtsMonSummary *boxSummaries;             // 0x11F4, of the shown box's Pokemon
     u16 boxMonCount;                         // 0x11F8, Pokemon and Eggs in the PC, counted one box per frame
     u16 countingBox;                         // 0x11FA, 1-based box being counted, 0 when done
-    int unk_11FC;                            // 0x11FC
+    int fadedBothScreens;                    // 0x11FC
     GtsMonIcon *monIcons;                    // 0x1200, of the shown box, freed by the VBlank task
     GtsVBlankFunc vblankTask;                // 0x1204, run once
     GtsVBlankFunc vblankFunc;                // 0x1208, run every frame

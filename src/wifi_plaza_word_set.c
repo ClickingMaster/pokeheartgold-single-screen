@@ -4,12 +4,12 @@
 #include "math_util.h"
 #include "wifi_plaza_internal.h"
 
-// Receive callbacks (see wifi_plaza_receive.c): the sender id marks its lobby slot in WiFiPlazaWork.unk_1e8 or joins a
+// Receive callbacks (see wifi_plaza_receive.c): the sender id marks its lobby slot in WiFiPlazaWork.tapToyPlayed or joins a
 // group of WiFiPlazaWork.groups.
 void WiFiPlaza_RecvTapToyPlayed(int id, void *data, u32 size, WiFiPlazaWork *work) {
     int slot = WiFiPlazaLobbyClient_IdToSlot(id);
     if (slot != -1) {
-        work->unk_1e8[slot] = 1;
+        work->tapToyPlayed[slot] = 1;
     }
 }
 

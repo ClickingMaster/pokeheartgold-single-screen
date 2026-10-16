@@ -114,7 +114,7 @@ int GtsMainMenu_Init(GtsApp *app, int state) {
         app->mainMenuShown = TRUE;
         Gts_StartPlayerEnterAnim(app, PlayerProfile_GetTrainerGender(app->args->profile));
     } else {
-        if (app->unk_11FC == 1 && GXS_GetMasterBrightness() != 0) {
+        if (app->fadedBothScreens == 1 && GXS_GetMasterBrightness() != 0) {
             Gts_ResetAvatarPositions(app);
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_61);
         } else {
@@ -122,7 +122,7 @@ int GtsMainMenu_Init(GtsApp *app, int state) {
         }
         app->state = GTS_MAIN_MENU_STATE_SHOW_PROMPT;
     }
-    app->unk_11FC = 0;
+    app->fadedBothScreens = 0;
     return 2;
 }
 
@@ -309,7 +309,7 @@ int GtsMainMenu_WaitEnterAnim(GtsApp *app) {
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
         Gts_SetNextScreen(app, 7, 11);
-        app->unk_001C = 1;
+        app->statusCheckCaller = 1;
         app->state = GTS_MAIN_MENU_STATE_FADE_OUT;
     }
     return 3;
@@ -367,7 +367,7 @@ void GtsMainMenu_SelectButton(GtsApp *app, int button) {
             PlaySE(SEQ_SE_DP_SELECT);
         } else if (app->timer == 0) {
             Gts_SetNextScreen(app, 7, 11);
-            app->unk_001C = 2;
+            app->statusCheckCaller = 2;
             app->state = GTS_MAIN_MENU_STATE_FADE_OUT;
             app->timer = 30 * 60;
             PlaySE(SEQ_SE_DP_SELECT);

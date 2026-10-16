@@ -192,10 +192,10 @@ int WiFiPlazaLobbyClient_GetState(void) {
     if (client->channel != 4 && client->channelState == 4) {
         return 4;
     }
-    if (client->unk_133) {
+    if (client->ownRecordError) {
         return 4;
     }
-    if (client->unk_132) {
+    if (client->requestError) {
         return 4;
     }
     return client->state;
@@ -293,7 +293,7 @@ BOOL WiFiPlazaLobbyClient_JoinChannel(int channel) {
     result = WiFiPlazaLobbyClient_CheckResult(PPW_LobbyJoinSubChannelAsync(WiFiPlazaLobbyClient_ChannelToLib(channel)));
     if (result == TRUE) {
         gWiFiPlazaLobbyClient->channel = channel;
-        gWiFiPlazaLobbyClient->unk_12f = 0;
+        gWiFiPlazaLobbyClient->joinChannelResult = 0;
     }
     return result;
 }
@@ -302,7 +302,7 @@ BOOL WiFiPlazaLobbyClient_JoinChannel(int channel) {
 
 u8 WiFiPlazaLobbyClient_GetJoinChannelResult(void) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
-    return gWiFiPlazaLobbyClient->unk_12f;
+    return gWiFiPlazaLobbyClient->joinChannelResult;
 }
 
 #pragma force_active on
@@ -413,7 +413,7 @@ int WiFiPlazaLobbyClient_StartAddOwnLocation(void) {
     {
         int result = WiFiPlazaLobbyClient_AddOwnLocation(gWiFiPlazaLobbyClient);
         if (result) {
-            gWiFiPlazaLobbyClient->unk_130 = 1;
+            gWiFiPlazaLobbyClient->addingLocation = 1;
         }
         return result;
     }
@@ -422,7 +422,7 @@ int WiFiPlazaLobbyClient_StartAddOwnLocation(void) {
 #pragma force_active reset
 
 BOOL WiFiPlazaLobbyClient_IsOwnLocationAdded(void) {
-    return gWiFiPlazaLobbyClient->unk_130 == 0;
+    return gWiFiPlazaLobbyClient->addingLocation == 0;
 }
 
 u32 WiFiPlazaLobbyClient_GetLocationCountry(u8 slot) {
@@ -542,8 +542,8 @@ BOOL WiFiPlazaLobbyClient_HostMatch(int index, int maxPlayers) {
     gWiFiPlazaLobbyClient->matches[index].hostId = PPW_LobbyGetMyUserId();
     gWiFiPlazaLobbyClient->matches[index].timer = 1800;
     gWiFiPlazaLobbyClient->currentMatch = index;
-    gWiFiPlazaLobbyClient->unk_69e = 1;
-    gWiFiPlazaLobbyClient->unk_69f = 0;
+    gWiFiPlazaLobbyClient->isMatchHost = 1;
+    gWiFiPlazaLobbyClient->matchCancelled = 0;
     WifiConnection_StartAnybodyMatchmaking(gWiFiPlazaLobbyClient->matches[index].info.name, maxPlayers, 1, gWiFiPlazaLobbyClient->matches[index].timer / 30);
     WifiConnection_SetClientCallback(WiFiPlazaLobbyClient_OnMatchClientDummy, gWiFiPlazaLobbyClient);
     WifiConnection_SetDisconnectCallback(WiFiPlazaLobbyClient_OnMatchDisconnect, gWiFiPlazaLobbyClient);
@@ -557,12 +557,12 @@ void WiFiPlazaLobbyClient_StopMatch(void) {
     WiFiPlazaLobbyClient *client;
     int ownId;
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
-    if (gWiFiPlazaLobbyClient->currentMatch != 3 && gWiFiPlazaLobbyClient->unk_69e) {
+    if (gWiFiPlazaLobbyClient->currentMatch != 3 && gWiFiPlazaLobbyClient->isMatchHost) {
         GF_ASSERT(WiFiPlazaLobbyClient_CheckResult(PPW_LobbyStopRecruit()));
         client = gWiFiPlazaLobbyClient;
         ownId = PPW_LobbyGetMyUserId();
         GF_ASSERT(WiFiPlazaLobbyMatches_Remove(client, client->currentMatch, ownId));
-        gWiFiPlazaLobbyClient->unk_69e = 0;
+        gWiFiPlazaLobbyClient->isMatchHost = 0;
     }
 }
 
@@ -570,7 +570,7 @@ void WiFiPlazaLobbyClient_StopMatch(void) {
 
 void WiFiPlazaLobbyClient_CloseMatch(void) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
-    if (gWiFiPlazaLobbyClient->unk_69e) {
+    if (gWiFiPlazaLobbyClient->isMatchHost) {
         gWiFiPlazaLobbyClient->matches[gWiFiPlazaLobbyClient->currentMatch].info.state = 1;
         GF_ASSERT(WiFiPlazaLobbyClient_CheckResult(PPW_LobbyUpdateRecruitInfo(&gWiFiPlazaLobbyClient->matches[gWiFiPlazaLobbyClient->currentMatch])));
     }
@@ -590,7 +590,7 @@ BOOL WiFiPlazaLobbyClient_IsCurrentMatchClosed(void) {
 
 u8 WiFiPlazaLobbyClient_WasMatchCancelled(void) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
-    return gWiFiPlazaLobbyClient->unk_69f;
+    return gWiFiPlazaLobbyClient->matchCancelled;
 }
 
 BOOL WiFiPlazaLobbyClient_IsMatchActive(int index) {
@@ -677,7 +677,7 @@ int WiFiPlazaLobbyClient_GetMatchHostId(void) {
 
 u8 WiFiPlazaLobbyClient_IsMatchHost(void) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
-    return gWiFiPlazaLobbyClient->unk_69e;
+    return gWiFiPlazaLobbyClient->isMatchHost;
 }
 
 int WiFiPlazaLobbyClient_IsSpecialVisitor(int id) {
@@ -693,14 +693,14 @@ int WiFiPlazaLobbyClient_GetSpecialVisitorCode(int id) {
 void WiFiPlazaLobbyClient_SubmitSurveyAnswer(int index) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
     GF_ASSERT(index < 3);
-    GF_ASSERT(gWiFiPlazaLobbyClient->unk_980 != 1);
+    GF_ASSERT(gWiFiPlazaLobbyClient->surveySubmitState != 1);
     GF_ASSERT(WiFiPlazaLobbyClient_CheckResult(PPW_LobbySubmitQuestionnaire(index)) == TRUE);
-    gWiFiPlazaLobbyClient->unk_980 = 1;
+    gWiFiPlazaLobbyClient->surveySubmitState = 1;
 }
 
 u32 WiFiPlazaLobbyClient_GetSurveySubmitState(void) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
-    return gWiFiPlazaLobbyClient->unk_980;
+    return gWiFiPlazaLobbyClient->surveySubmitState;
 }
 
 u32 WiFiPlazaLobbyClient_GetSurveyValue(int field) {
@@ -708,25 +708,25 @@ u32 WiFiPlazaLobbyClient_GetSurveyValue(int field) {
     GF_ASSERT(field < 11);
     switch (field) {
     case 0:
-        return gWiFiPlazaLobbyClient->surveyData.unk_04[0].unk_04;
+        return gWiFiPlazaLobbyClient->surveyData.surveys[0].surveyId;
     case 1:
-        return gWiFiPlazaLobbyClient->surveyData.unk_04[0].unk_08;
+        return gWiFiPlazaLobbyClient->surveyData.surveys[0].questionNo;
     case 2:
-        return gWiFiPlazaLobbyClient->surveyData.unk_04[1].unk_00;
+        return gWiFiPlazaLobbyClient->surveyData.surveys[1].unk_00;
     case 3:
-        return gWiFiPlazaLobbyClient->surveyData.unk_04[0].unk_08 >= 1000;
+        return gWiFiPlazaLobbyClient->surveyData.surveys[0].questionNo >= 1000;
     case 4:
-        return gWiFiPlazaLobbyClient->surveyData.unk_04[1].unk_04;
+        return gWiFiPlazaLobbyClient->surveyData.surveys[1].surveyId;
     case 5:
-        return gWiFiPlazaLobbyClient->surveyData.unk_04[1].unk_08;
+        return gWiFiPlazaLobbyClient->surveyData.surveys[1].questionNo;
     case 6:
-        return gWiFiPlazaLobbyClient->surveyData.unk_2c4;
+        return gWiFiPlazaLobbyClient->surveyData.lastWeekIsSpecial;
     case 7:
-        return gWiFiPlazaLobbyClient->surveyData.unk_04[1].unk_08 >= 1000;
+        return gWiFiPlazaLobbyClient->surveyData.surveys[1].questionNo >= 1000;
     case 8:
     case 9:
     case 10:
-        return gWiFiPlazaLobbyClient->surveyData.unk_2d4[field - 8];
+        return gWiFiPlazaLobbyClient->surveyData.lastWeekTotals[field - 8];
     default:
         GF_AssertFail();
         return 0;
@@ -738,17 +738,17 @@ void *WiFiPlazaLobbyClient_GetSurveyText(int field) {
     GF_ASSERT(field < 8);
     switch (field) {
     case 0:
-        return gWiFiPlazaLobbyClient->surveyData.unk_04[0].unk_0c;
+        return gWiFiPlazaLobbyClient->surveyData.surveys[0].questionText;
     case 1:
     case 2:
     case 3:
-        return gWiFiPlazaLobbyClient->surveyData.unk_04[0].unk_e8[field - 1];
+        return gWiFiPlazaLobbyClient->surveyData.surveys[0].answerTexts[field - 1];
     case 4:
-        return gWiFiPlazaLobbyClient->surveyData.unk_04[1].unk_0c;
+        return gWiFiPlazaLobbyClient->surveyData.surveys[1].questionText;
     case 5:
     case 6:
     case 7:
-        return gWiFiPlazaLobbyClient->surveyData.unk_04[1].unk_e8[field - 5];
+        return gWiFiPlazaLobbyClient->surveyData.surveys[1].answerTexts[field - 5];
     default:
         GF_AssertFail();
         return NULL;
@@ -766,9 +766,9 @@ u8 WiFiPlazaLobbyClient_GetSurveyFlag(int which, int index) {
         return 0;
     }
     if (which == 0) {
-        return gWiFiPlazaLobbyClient->surveyData.unk_04[0].unk_154[index];
+        return gWiFiPlazaLobbyClient->surveyData.surveys[0].languageFlags[index];
     }
-    return gWiFiPlazaLobbyClient->surveyData.unk_04[1].unk_154[index];
+    return gWiFiPlazaLobbyClient->surveyData.surveys[1].languageFlags[index];
 }
 
 // Ends the matchmaking session.
@@ -777,8 +777,8 @@ void WiFiPlazaLobbyClient_EndMatch(void) {
     WifiConnection_SetClientCallback(NULL, NULL);
     WifiConnection_SetDisconnectCallback(NULL, NULL);
     gWiFiPlazaLobbyClient->currentMatch = 3;
-    gWiFiPlazaLobbyClient->unk_69e = 0;
-    gWiFiPlazaLobbyClient->unk_69f = 0;
+    gWiFiPlazaLobbyClient->isMatchHost = 0;
+    gWiFiPlazaLobbyClient->matchCancelled = 0;
 }
 
 // TRUE when a lobby library call succeeded (result 0).
@@ -810,8 +810,8 @@ BOOL WiFiPlazaLobbyClient_CheckResult(int result) {
 }
 
 void WiFiPlazaLobbyClient_ClearErrors(void) {
-    gWiFiPlazaLobbyClient->unk_133 = 0;
-    gWiFiPlazaLobbyClient->unk_132 = 0;
+    gWiFiPlazaLobbyClient->ownRecordError = 0;
+    gWiFiPlazaLobbyClient->requestError = 0;
 }
 
 // Channel <-> lobby library channel (4 = none).

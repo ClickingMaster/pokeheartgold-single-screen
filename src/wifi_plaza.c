@@ -107,7 +107,7 @@ WiFiPlazaWork *WiFiPlazaWork_New(SaveData *save, enum HeapID heapID) {
     }
     WiFiPlazaProfile_InitFromSave(&work->profile, work->save, heapID);
     WiFiPlazaTalkSession_Init(&work->talk);
-    WiFiPlaza_ClearTapToyPlayedFlags(work->unk_1e8);
+    WiFiPlaza_ClearTapToyPlayedFlags(work->tapToyPlayed);
     WiFiPlazaLobbyClient_SetLobbyCommands(sWiFiPlazaLobbyCommands, 8, work);
     WiFiPlazaEventSchedule_Init(&work->eventSchedule);
     WiFiPlazaGroups_Init(&work->groups);
@@ -150,7 +150,7 @@ void WiFiPlazaWork_Update(WiFiPlazaWork *work) {
     WiFiPlaza_SecondsToTime(&work->currentTime, &time);
     WiFiPlazaWork_CheckClosingTime(work);
     WiFiPlazaTalkSession_UpdateTimeout(&work->talk);
-    WiFiPlaza_ClearTapToyPlayedFlags(work->unk_1e8);
+    WiFiPlaza_ClearTapToyPlayedFlags(work->tapToyPlayed);
     WiFiPlaza_ClearEventFlags(work->changeFlags);
     WiFiPlazaEventSchedule_Update(&work->eventSchedule, work->changeFlags, &work->groups, &work->timer);
     WiFiPlazaSessionState_UpdateCooldown(&work->sessionState);

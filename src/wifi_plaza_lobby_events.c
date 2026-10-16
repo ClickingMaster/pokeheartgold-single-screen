@@ -31,19 +31,19 @@ void WiFiPlazaLobbyClient_OnEnterChannel(int result, u32 libChannel) {
     WiFiPlazaLobbyClient *client;
 
     if (libChannel == 0) {
-        gWiFiPlazaLobbyClient->unk_5b4 = sizeof(gWiFiPlazaLobbyClient->schedule);
-        GF_ASSERT(WiFiPlazaLobbyClient_CheckResult(PPW_LobbyGetSchedule(&gWiFiPlazaLobbyClient->schedule, &gWiFiPlazaLobbyClient->unk_5b4)));
+        gWiFiPlazaLobbyClient->scheduleSize = sizeof(gWiFiPlazaLobbyClient->schedule);
+        GF_ASSERT(WiFiPlazaLobbyClient_CheckResult(PPW_LobbyGetSchedule(&gWiFiPlazaLobbyClient->schedule, &gWiFiPlazaLobbyClient->scheduleSize)));
         PPW_LobbyGetChannelDataAsync(-1, 0, sWiFiPlazaLocationListKey, 0);
         return;
     }
     client = gWiFiPlazaLobbyClient;
     if (client->channel == WiFiPlazaLobbyClient_ChannelFromLib(libChannel)) {
         if (result == 1) {
-            client->unk_12f = 1;
+            client->joinChannelResult = 1;
             WiFiPlazaLobbyClient_RebuildChannelList(gWiFiPlazaLobbyClient, gWiFiPlazaLobbyClient->channel);
             WiFiPlazaLobbyClient_AddToIdList(gWiFiPlazaLobbyClient, PPW_LobbyGetMyUserId(), 1);
         } else {
-            client->unk_12f = 2;
+            client->joinChannelResult = 2;
         }
     } else {
         GF_AssertFail();
@@ -133,8 +133,8 @@ void WiFiPlazaLobbyClient_OnMessage(int id, u32 libChannel, u32 type, const void
 void WiFiPlazaLobbyClient_OnLocationsChanged(int a0, int a1, int a2, int a3, const char *key, const void *data) {
     if (strcmp(key, sWiFiPlazaLocationListKey) == 0) {
         memcpy(gWiFiPlazaLobbyClient->locations, data, sizeof(gWiFiPlazaLobbyClient->locations));
-        if (gWiFiPlazaLobbyClient->unk_130) {
-            gWiFiPlazaLobbyClient->unk_130 = 0;
+        if (gWiFiPlazaLobbyClient->addingLocation) {
+            gWiFiPlazaLobbyClient->addingLocation = 0;
         }
     }
 }
@@ -182,13 +182,13 @@ void WiFiPlazaLobbyClient_OnMatchInfo(int id, WiFiPlazaLobbyMatchInfo *info) {
     int slot = WiFiPlazaLobbyClient_FindInIdList(gWiFiPlazaLobbyClient, id, 0);
     if (slot != -1) {
         if (IsSameId(WiFiPlazaLobbyClient_GetOwnId(), id)) {
-        } else if (gWiFiPlazaLobbyClient->unk_69e && gWiFiPlazaLobbyClient->currentMatch == info->index) {
+        } else if (gWiFiPlazaLobbyClient->isMatchHost && gWiFiPlazaLobbyClient->currentMatch == info->index) {
             WiFiPlazaLobbyMatchInfo_GetStartTime(&gWiFiPlazaLobbyClient->matches[gWiFiPlazaLobbyClient->currentMatch].info, &current);
             WiFiPlazaLobbyMatchInfo_GetStartTime(info, &received);
             if (current < received) {
                 return;
             }
-            gWiFiPlazaLobbyClient->unk_69f = 1;
+            gWiFiPlazaLobbyClient->matchCancelled = 1;
             WiFiPlazaLobbyClient_StopMatch();
         }
         WiFiPlazaLobbyMatches_Set(gWiFiPlazaLobbyClient, info->index, id, info);
@@ -204,7 +204,7 @@ void WiFiPlazaLobbyClient_OnMatchClosed(int id, const WiFiPlazaLobbyMatchInfo *i
     }
     result = WiFiPlazaLobbyMatches_Remove(gWiFiPlazaLobbyClient, info->index, id);
     if (gWiFiPlazaLobbyClient->currentMatch == info->index && result == 1) {
-        gWiFiPlazaLobbyClient->unk_69f = 1;
+        gWiFiPlazaLobbyClient->matchCancelled = 1;
     }
 }
 
@@ -214,7 +214,7 @@ void WiFiPlazaLobbyClient_OnLobbyEvent(u32 event) {
 
 void WiFiPlazaLobbyClient_OnOwnRecord(int result, const WiFiPlazaPlayer *data, u32 size) {
     if (result != 0) {
-        gWiFiPlazaLobbyClient->unk_133 = 1;
+        gWiFiPlazaLobbyClient->ownRecordError = 1;
     } else {
         gWiFiPlazaLobbyClient->callbacks.onOwnRecord(data, size, gWiFiPlazaLobbyClient->callbackArg);
     }
@@ -224,7 +224,7 @@ BOOL WiFiPlazaLobbyClient_OnEvent12Result(int result) {
     if (result == 0) {
         return TRUE;
     }
-    gWiFiPlazaLobbyClient->unk_132 = 1;
+    gWiFiPlazaLobbyClient->requestError = 1;
     return FALSE;
 }
 
@@ -234,23 +234,23 @@ void WiFiPlazaLobbyClient_OnSpecialVisitorsReceived(int result, const void *data
     if (result == 0) {
         WiFiPlazaLobbyIdValueList_Set(&gWiFiPlazaLobbyClient->surveyData, data, size);
     } else {
-        gWiFiPlazaLobbyClient->unk_132 = 1;
+        gWiFiPlazaLobbyClient->requestError = 1;
     }
 }
 
 void WiFiPlazaLobbyClient_OnSurveyReceived(int result, const void *data) {
     if (result == 0) {
-        WiFiPlazaLobbyClient_CopySurveyData(&gWiFiPlazaLobbyClient->surveyData.unk_04[0].unk_04, data);
+        WiFiPlazaLobbyClient_CopySurveyData(&gWiFiPlazaLobbyClient->surveyData.surveys[0].surveyId, data);
     } else {
-        gWiFiPlazaLobbyClient->unk_132 = 1;
+        gWiFiPlazaLobbyClient->requestError = 1;
     }
 }
 
 #pragma force_active reset
 
 void WiFiPlazaLobbyClient_OnSurveySubmitted(void) {
-    GF_ASSERT(gWiFiPlazaLobbyClient->unk_980 == 1);
-    gWiFiPlazaLobbyClient->unk_980 = 2;
+    GF_ASSERT(gWiFiPlazaLobbyClient->surveySubmitState == 1);
+    gWiFiPlazaLobbyClient->surveySubmitState = 2;
 }
 
 void WiFiPlazaLobbyClient_SetFlag131(void) {

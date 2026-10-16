@@ -54,29 +54,29 @@ typedef struct GlobalTerminalNetLogin {
     u32 dwcProfileId;     // 0x00
     u8 gameVersion;       // 0x04
     u8 unk_05;            // 0x05, always 2
-    u8 unk_06[0x132];     // 0x06
+    u8 token[0x132];      // 0x06
 } GlobalTerminalNetLogin; // size 0x138
 
 // dress-up photo as sent to the server (SaveFashionDataSub without its unsent parts)
 typedef struct GlobalTerminalNetDressUpForm {
-    u32 unk_00;                 // 0x00
-    u32 unk_04;                 // 0x04
-    u32 unk_08;                 // 0x08
-    u16 unk_0C;                 // 0x0C
-    u16 unk_0E[8];              // 0x0E
-    s8 unk_1E;                  // 0x1E
-    u8 unk_1F;                  // 0x1F
-    u8 unk_20;                  // 0x20
-    u8 unk_21;                  // 0x21
+    u32 magic;                  // 0x00
+    u32 personality;            // 0x04
+    u32 otId;                   // 0x08
+    u16 species;                // 0x0C
+    u16 secondText[8];          // 0x0E
+    s8 z;                       // 0x1E
+    u8 x;                       // 0x1F
+    u8 y;                       // 0x20
+    u8 form;                    // 0x21
     u8 unk_22[2];               // 0x22
-    u32 unk_24;                 // 0x24
-    u16 unk_28;                 // 0x28
-    u16 unk_2A;                 // 0x2A
-    u16 unk_2C;                 // 0x2C
-    u16 unk_2E;                 // 0x2E
-    u8 unk_30[40];              // 0x30
-    u8 unk_58;                  // 0x58
-    u8 unk_59;                  // 0x59
+    u32 itemMask;               // 0x24
+    u16 mailMsgBank;            // 0x28
+    u16 mailMsgNo;              // 0x2A
+    u16 mailField0;             // 0x2C
+    u16 mailField1;             // 0x2E
+    u8 items[40];               // 0x30
+    u8 backdrop;                // 0x58
+    u8 language;                // 0x59
     u16 unk_5A;                 // 0x5A
     u16 crc;                    // 0x5C
     u16 unk_5E;                 // 0x5E
@@ -84,25 +84,25 @@ typedef struct GlobalTerminalNetDressUpForm {
 
 // view of SaveFashionDataSub (include/fashion_case.h only declares fillers there)
 typedef struct GlobalTerminalNetDressUpRecord {
-    u32 unk_00;             // 0x00
-    u32 unk_04;             // 0x04
-    u32 unk_08;             // 0x08
-    u16 unk_0C;             // 0x0C
-    u8 unk_0E[0x24 - 0x0E]; // 0x0E, 11 u16
-    u16 unk_24[8];          // 0x24
-    s8 unk_34;              // 0x34
-    u8 unk_35;              // 0x35
-    u8 unk_36;              // 0x36
-    u8 unk_37;              // 0x37
-    u8 unk_38[4];           // 0x38
-    u32 unk_3C;             // 0x3C
-    u16 unk_40;             // 0x40
-    u16 unk_42;             // 0x42
-    u16 unk_44;             // 0x44
-    u16 unk_46;             // 0x46
-    u8 unk_48[40];          // 0x48
-    u8 unk_70;              // 0x70
-    u8 unk_71;              // 0x71
+    u32 magic;                // 0x00
+    u32 personality;          // 0x04
+    u32 otId;                 // 0x08
+    u16 species;              // 0x0C
+    u8 nickname[0x24 - 0x0E]; // 0x0E, 11 u16
+    u16 secondText[8];        // 0x24
+    s8 z;                     // 0x34
+    u8 x;                     // 0x35
+    u8 y;                     // 0x36
+    u8 form;                  // 0x37
+    u8 unk_38[4];             // 0x38
+    u32 itemMask;             // 0x3C
+    u16 mailMsgBank;          // 0x40
+    u16 mailMsgNo;            // 0x42
+    u16 mailField0;           // 0x44
+    u16 mailField1;           // 0x46
+    u8 items[40];             // 0x48
+    u8 backdrop;              // 0x70
+    u8 language;              // 0x71
 } GlobalTerminalNetDressUpRecord;
 
 // box as sent to the server
@@ -114,7 +114,7 @@ typedef struct GlobalTerminalNetBoxForm {
     u32 eggFlags;              // 0x154, bit per slot (mon data 174 == 494)
     u8 forms[30];              // 0x158, mon data 112
     u8 wallpaper;              // 0x176
-    u8 unk_177;                // 0x177
+    u8 category;               // 0x177
     u8 unk_178[0x198 - 0x178]; // 0x178
     u16 crc;                   // 0x198
     u8 unk_19A[2];             // 0x19A

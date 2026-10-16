@@ -76,7 +76,7 @@ void WiFiPlazaWork_SetActivity(WiFiPlazaWork *work, int value) {
         work->hasError = 1;
         return;
     }
-    if (work->profile.player.unk_43 == value) {
+    if (work->profile.player.activity == value) {
         return;
     }
     if (value != 9 && WiFiPlazaWork_IsTalking(work) == 1) {
@@ -86,7 +86,7 @@ void WiFiPlazaWork_SetActivity(WiFiPlazaWork *work, int value) {
         }
         WiFiPlazaTalkSession_Abort(&work->talk);
     }
-    switch (work->profile.player.unk_43) {
+    switch (work->profile.player.activity) {
     case 2:
         WiFiPlazaHistory_Add(&work->history, 0x10, -1);
         break;
@@ -109,7 +109,7 @@ void WiFiPlazaWork_SetActivity(WiFiPlazaWork *work, int value) {
         WiFiPlazaHistory_Add(&work->history, 0x16, -1);
         break;
     }
-    work->profile.player.unk_43 = value;
+    work->profile.player.activity = value;
     WiFiPlazaProfile_UpdateChecksum(&work->profile, work->save);
     WiFiPlazaWork_SendOwnRecord(work);
 }
@@ -130,7 +130,7 @@ void WiFiPlazaWork_SetTapToy(WiFiPlazaWork *work, u32 value) {
         work->hasError = 1;
         return;
     }
-    work->profile.player.unk_41 = value;
+    work->profile.player.tapToy = value;
     WiFiPlazaProfile_UpdateChecksum(&work->profile, work->save);
     WiFiPlazaWork_SendOwnRecord(work);
 }
@@ -148,11 +148,11 @@ void WiFiPlazaWork_SetFavoriteTypes(WiFiPlazaWork *work, int a, int b) {
     }
     if (a < 18 && b < 18) {
         if (a == 0) {
-            work->profile.player.unk_88[0] = b;
-            work->profile.player.unk_88[1] = 0;
+            work->profile.player.favoriteTypes[0] = b;
+            work->profile.player.favoriteTypes[1] = 0;
         } else {
-            work->profile.player.unk_88[0] = a;
-            work->profile.player.unk_88[1] = b;
+            work->profile.player.favoriteTypes[0] = a;
+            work->profile.player.favoriteTypes[1] = b;
         }
         WiFiPlazaProfile_UpdateChecksum(&work->profile, work->save);
         WiFiPlazaWork_SendOwnRecord(work);
@@ -211,7 +211,7 @@ void WiFiPlazaPlayer_CopyToProfile(WiFiPlazaPlayer *player, PlayerProfile *profi
 }
 
 int WiFiPlazaPlayer_GetActivity(WiFiPlazaPlayer *player) {
-    u8 v = player->unk_43;
+    u8 v = player->activity;
     return v < 14 ? v : 14;
 }
 
@@ -357,7 +357,7 @@ u8 WiFiPlazaPlayer_GetRegion(WiFiPlazaPlayer *player) {
 #pragma force_active reset
 
 u8 WiFiPlazaPlayer_GetTapToy(WiFiPlazaPlayer *player) {
-    u8 v = player->unk_41;
+    u8 v = player->tapToy;
     if (v == 0xFF) {
         return 0;
     }
@@ -368,7 +368,7 @@ u8 WiFiPlazaPlayer_GetTapToy(WiFiPlazaPlayer *player) {
 }
 
 BOOL WiFiPlazaPlayer_HasTapToy(WiFiPlazaPlayer *player) {
-    return player->unk_41 == 0xFF ? FALSE : TRUE;
+    return player->tapToy == 0xFF ? FALSE : TRUE;
 }
 
 #pragma force_active on
@@ -378,7 +378,7 @@ u16 WiFiPlazaPlayer_GetFavoriteType(WiFiPlazaPlayer *player, u32 index) {
     if (index >= 2) {
         GF_AssertFail();
     }
-    value = player->unk_88[index];
+    value = player->favoriteTypes[index];
     if (value >= 18) {
         value = 0;
     }

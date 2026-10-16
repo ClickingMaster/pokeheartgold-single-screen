@@ -184,14 +184,14 @@ void GlobalTerminalNet_PackBoxData(SaveData *saveData, PCStorage *storage, int b
         form->forms[i] = PCStorage_GetMonDataByIndexPair(storage, box, i, 112, NULL);
     }
     form->wallpaper = PCStorage_GetBoxWallpaper(storage, box);
-    form->unk_177 = 0;
+    form->category = 0;
     form->crc = SaveArray_CalcCRC16(saveData, form, 408);
 }
 
 #pragma force_active reset
 
 void GlobalTerminalNet_SealBoxData(SaveData *saveData, GlobalTerminalNetBoxForm *form, int value) {
-    form->unk_177 = value;
+    form->category = value;
     form->crc = SaveArray_CalcCRC16(saveData, form, 0x198);
 }
 

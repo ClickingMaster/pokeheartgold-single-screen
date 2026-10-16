@@ -906,77 +906,77 @@ void GlobalTerminalNet_DressUpToUploadForm(const GlobalTerminalNetDressUpRecord 
     int i;
 
     MI_CpuFill8(dst, 0, sizeof(GlobalTerminalNetDressUpForm));
-    dst->unk_00 = src->unk_00;
-    dst->unk_04 = src->unk_04;
-    dst->unk_08 = src->unk_08;
-    dst->unk_0C = src->unk_0C;
+    dst->magic = src->magic;
+    dst->personality = src->personality;
+    dst->otId = src->otId;
+    dst->species = src->species;
     for (i = 0; i < 8; i++) {
-        dst->unk_0E[i] = src->unk_24[i];
+        dst->secondText[i] = src->secondText[i];
     }
-    dst->unk_1E = src->unk_34;
-    dst->unk_1F = src->unk_35;
-    dst->unk_20 = src->unk_36;
-    dst->unk_21 = src->unk_37;
-    dst->unk_24 = src->unk_3C;
-    dst->unk_28 = src->unk_40;
-    dst->unk_2A = src->unk_42;
-    dst->unk_2C = src->unk_44;
-    dst->unk_2E = src->unk_46;
+    dst->z = src->z;
+    dst->x = src->x;
+    dst->y = src->y;
+    dst->form = src->form;
+    dst->itemMask = src->itemMask;
+    dst->mailMsgBank = src->mailMsgBank;
+    dst->mailMsgNo = src->mailMsgNo;
+    dst->mailField0 = src->mailField0;
+    dst->mailField1 = src->mailField1;
     {
         // 10 groups of 4 bytes, the destination stepped as a whole struct pointer
-        const u8 *s = src->unk_48;
+        const u8 *s = src->items;
         GlobalTerminalNetDressUpForm *d = dst;
         for (i = 0; i < 10; i++) {
-            d->unk_30[0] = s[0];
-            d->unk_30[1] = s[1];
-            d->unk_30[2] = s[2];
-            d->unk_30[3] = s[3];
+            d->items[0] = s[0];
+            d->items[1] = s[1];
+            d->items[2] = s[2];
+            d->items[3] = s[3];
             s += 4;
             d = (GlobalTerminalNetDressUpForm *)((u8 *)d + 4);
         }
     }
-    dst->unk_58 = src->unk_70;
-    dst->unk_59 = src->unk_71;
+    dst->backdrop = src->backdrop;
+    dst->language = src->language;
 }
 
 void GlobalTerminalNet_UploadFormToDressUp(const GlobalTerminalNetDressUpForm *src, GlobalTerminalNetDressUpRecord *dst) {
     int i;
 
     MI_CpuFill8(dst, 0, FashionEntry_sizeof());
-    dst->unk_00 = src->unk_00;
-    dst->unk_04 = src->unk_04;
-    dst->unk_08 = src->unk_08;
-    dst->unk_0C = src->unk_0C;
+    dst->magic = src->magic;
+    dst->personality = src->personality;
+    dst->otId = src->otId;
+    dst->species = src->species;
     for (i = 0; i < 8; i++) {
-        dst->unk_24[i] = src->unk_0E[i];
+        dst->secondText[i] = src->secondText[i];
     }
-    dst->unk_34 = src->unk_1E;
-    dst->unk_35 = src->unk_1F;
-    dst->unk_36 = src->unk_20;
-    dst->unk_37 = src->unk_21;
-    dst->unk_3C = src->unk_24;
-    dst->unk_40 = src->unk_28;
-    dst->unk_42 = src->unk_2A;
-    dst->unk_44 = src->unk_2C;
-    dst->unk_46 = src->unk_2E;
+    dst->z = src->z;
+    dst->x = src->x;
+    dst->y = src->y;
+    dst->form = src->form;
+    dst->itemMask = src->itemMask;
+    dst->mailMsgBank = src->mailMsgBank;
+    dst->mailMsgNo = src->mailMsgNo;
+    dst->mailField0 = src->mailField0;
+    dst->mailField1 = src->mailField1;
     {
-        const u8 *s = src->unk_30;
+        const u8 *s = src->items;
         GlobalTerminalNetDressUpRecord *d = dst;
         for (i = 0; i < 10; i++) {
-            d->unk_48[0] = s[0];
-            d->unk_48[1] = s[1];
-            d->unk_48[2] = s[2];
-            d->unk_48[3] = s[3];
+            d->items[0] = s[0];
+            d->items[1] = s[1];
+            d->items[2] = s[2];
+            d->items[3] = s[3];
             s += 4;
             d = (GlobalTerminalNetDressUpRecord *)((u8 *)d + 4);
         }
     }
-    dst->unk_70 = src->unk_58;
-    dst->unk_71 = src->unk_59;
+    dst->backdrop = src->backdrop;
+    dst->language = src->language;
     {
         GlobalTerminalNetDressUpRecord *p = dst;
         for (i = 0; i < 11; i++) {
-            *(u16 *)&p->unk_0E[0] = 0xFFFF;
+            *(u16 *)&p->nickname[0] = 0xFFFF;
             p = (GlobalTerminalNetDressUpRecord *)((u8 *)p + 2);
         }
     }

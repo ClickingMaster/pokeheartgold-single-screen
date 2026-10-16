@@ -2439,7 +2439,7 @@ void PlazaGameResults_ReportWinners(PlazaGameResults *results) {
         }
     }
     if (count != 0) {
-        WiFiPlaza_SendMinigameResultNews(results->roster.args->unk30, results->game, count, ids[0], ids[1], ids[2], ids[3]);
+        WiFiPlaza_SendMinigameResultNews(results->roster.args->plazaWork, results->game, count, ids[0], ids[1], ids[2], ids[3]);
     }
 }
 
@@ -2448,7 +2448,7 @@ void PlazaGameResults_ReportWinners(PlazaGameResults *results) {
 void PlazaGameResults_ReportTeamWin(PlazaGameResults *results) {
     if (results->roster.count != 0 && results->data.total >= 10) {
         PlazaGameArgs *args = results->roster.args;
-        WiFiPlaza_SendMinigameResultNews(args->unk30, results->game, results->roster.count, args->slots[0], args->slots[1], args->slots[2], args->slots[3]);
+        WiFiPlaza_SendMinigameResultNews(args->plazaWork, results->game, results->roster.count, args->slots[0], args->slots[1], args->slots[2], args->slots[3]);
     }
 }
 

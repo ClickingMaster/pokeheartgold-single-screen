@@ -73,7 +73,7 @@ struct WiFiPlazaObjManager {
     void *avatars;                     // 0x04 OVY_45 avatar manager
     WiFiPlazaObj *objs;                // 0x08
     u16 count;                         // 0x0C
-    u16 unk_0E;                        // 0x0E nonzero: own player avatar 0x61
+    u16 mode;                          // 0x0E nonzero: own player avatar 0x61
     Field2DCommandQueue *commands; // 0x10 queued move commands
     WiFiPlazaMap *map;                 // 0x14
     WiFiPlazaObjLight light;           // 0x18

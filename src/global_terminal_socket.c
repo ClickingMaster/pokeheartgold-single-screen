@@ -743,7 +743,7 @@ int GlobalTerminalSocket_FetchToken(void) {
     for (;;) {
         int status = DWC_SVLProcess();
         if (status == 3) {
-            GlobalTerminalSocketToken *token = (GlobalTerminalSocketToken *)sGlobalTerminalSocket.login.unk_06;
+            GlobalTerminalSocketToken *token = (GlobalTerminalSocketToken *)sGlobalTerminalSocket.login.token;
             *token = request.token;
             sGlobalTerminalSocket.hasToken = TRUE;
             return 1;

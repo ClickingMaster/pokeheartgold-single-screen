@@ -388,7 +388,7 @@ void MimeJrTop_InitGame(MimeJrTopApp *app) {
     }
     app->sign = PlazaGameSign_New(SpriteManager_GetSpriteList(app->resources.spriteManager), HEAP_ID_113);
     PaletteData_LoadPaletteSlotFromHardware(app->resources.palette, PLTTBUF_MAIN_OBJ, 0, 0x200);
-    if (app->args->unk3C) {
+    if (app->args->mimeJrTopVoiceChat) {
         WifiConnection_StartVoiceChat(HEAP_ID_113);
     }
 }
@@ -426,7 +426,7 @@ BOOL MimeJrTop_Init(OverlayManager *man, int *state) {
 
     args = app->args;
     // The launch arguments are read as words here.
-    ((MimeJrTopRosterInitFunc)PlazaGameRoster_Init)(&app->roster, *(u32 *)&args->unk38, args->saveData, args->unk3C, args);
+    ((MimeJrTopRosterInitFunc)PlazaGameRoster_Init)(&app->roster, *(u32 *)&args->voiceChat, args->saveData, args->mimeJrTopVoiceChat, args);
     return TRUE;
 }
 
@@ -682,7 +682,7 @@ BOOL MimeJrTop_Main(OverlayManager *man, int *state) {
                 app->keepPlaying = TRUE;
                 MimeJrTop_ResetRound(app);
                 MimeJrTop_SetStateIf(app, done, 0, state);
-                if (app->args->unk3C) {
+                if (app->args->mimeJrTopVoiceChat) {
                     WifiConnection_StopVoiceChat();
                 }
             } else {
@@ -691,7 +691,7 @@ BOOL MimeJrTop_Main(OverlayManager *man, int *state) {
             break;
         case 19:
             LinkSync_StartSync(0x1B);
-            if (app->args->unk3C) {
+            if (app->args->mimeJrTopVoiceChat) {
                 WifiConnection_StopVoiceChat();
             }
             MimeJrTop_SetStateIf(app, TRUE, 20, state);

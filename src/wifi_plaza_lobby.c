@@ -58,7 +58,7 @@ void WiFiPlaza_SendTapToyTradeNews(void *unused, u32 slot0, u32 slot1, u8 value)
     msg.ids[0] = WiFiPlazaLobbyClient_SlotToId(slot1);
     msg.ids[1] = WiFiPlazaLobbyClient_SlotToId(slot0);
     msg.count = 2;
-    msg.unk_12 = value;
+    msg.tapToy = value;
     WiFiPlazaLobbyClient_SendToLobby(4, &msg, sizeof(msg));
 }
 
@@ -149,7 +149,7 @@ u8 WiFiPlazaWork_HasPlayedTapToy(WiFiPlazaWork *work, u32 index) {
     if (index >= 20) {
         GF_AssertFail();
     }
-    return work->unk_1e8[index];
+    return work->tapToyPlayed[index];
 }
 
 void WiFiPlazaWork_SendTapToyPlayed(void *unused, u32 value) {

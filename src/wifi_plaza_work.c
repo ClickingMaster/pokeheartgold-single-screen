@@ -154,11 +154,11 @@ int WiFiPlazaWork_IsGameEntryCoolingDown(WiFiPlazaWork *work) {
 }
 
 void *WiFiPlazaWork_GetField508_04(WiFiPlazaWork *work) {
-    return work->ownProfileData.unk_04;
+    return work->ownProfileData.gameConnectionLost;
 }
 
 void WiFiPlazaWork_SetField508_04(WiFiPlazaWork *work, void *value) {
-    work->ownProfileData.unk_04 = value;
+    work->ownProfileData.gameConnectionLost = value;
 }
 
 void WiFiPlazaWork_ClearGameMembers(WiFiPlazaWork *work) {
@@ -191,5 +191,5 @@ int WiFiPlazaWork_DidAppQuitForClosing(WiFiPlazaWork *work) {
 }
 
 void WiFiPlazaWork_SetMinigameActiveFlag(WiFiPlazaWork *work, u8 value) {
-    work->eventSchedule.unk_0c = value;
+    work->eventSchedule.minigameActive = value;
 }

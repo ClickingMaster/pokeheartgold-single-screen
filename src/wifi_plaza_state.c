@@ -443,8 +443,8 @@ void WiFiPlazaProfile_InitFromSave(WiFiPlazaProfile *profile, SaveData *save, en
     profile->player.region = WiFiHistory_GetPlayerRegion(history);
     profile->player.hasNationalDex = Pokedex_GetNatDexFlag(pokedex);
     profile->player.gameCleared = PlayerProfile_GetGameClearFlag(playerProfile);
-    profile->player.unk_41 = 0xff;
-    profile->player.unk_43 = 0;
+    profile->player.tapToy = 0xff;
+    profile->player.activity = 0;
     profile->player.version = GAME_VERSION;
     profile->player.unk_44 = rtc->seconds_since_nitro_epoch;
     for (i = 0; i < 12; i++) {
@@ -452,7 +452,7 @@ void WiFiPlazaProfile_InitFromSave(WiFiPlazaProfile *profile, SaveData *save, en
         profile->player.slotData[i] = (void *)-1;
     }
     for (j = 0; j < 2; j++) {
-        profile->player.unk_88[j] = 0;
+        profile->player.favoriteTypes[j] = 0;
     }
     profile->player.survey.surveyId = -1;
     profile->player.survey.answer = 3;
@@ -543,7 +543,7 @@ void WiFiPlazaEventSchedule_Update(WiFiPlazaEventSchedule *state, u32 *flags, Wi
         state->paradeDelay--;
     } else if (state->paradeDelay == 0) {
         WiFiPlazaGroups_Start(groups);
-        if (state->unk_0c == 0) {
+        if (state->minigameActive == 0) {
             PlayBGM(SEQ_GS_WIFIPARADE);
         }
         state->flag4 = 1;

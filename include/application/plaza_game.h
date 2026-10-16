@@ -26,12 +26,12 @@ typedef struct PlazaGameArgs {
     u8 unk0C[0x10];             // 0x0C
     BOOL connectionLost;        // 0x1C
     PlayerProfile *profiles[4]; // 0x20
-    void *unk30;                // 0x30
+    void *plazaWork;            // 0x30
     SaveData *saveData;         // 0x34
-    u8 unk38;                   // 0x38
+    u8 voiceChat;               // 0x38
     u8 fromLobby;               // 0x39
     u8 unk3A[2];                // 0x3A
-    u32 unk3C;                  // 0x3C
+    u32 mimeJrTopVoiceChat;     // 0x3C
 } PlazaGameArgs;
 
 typedef struct PlazaGameRoster {

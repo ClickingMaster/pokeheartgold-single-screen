@@ -501,7 +501,7 @@ int GtsWanted_HandleConfirmPrompt(GtsApp *app) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
         Gts_SetNextScreen(app, 7, 7);
         app->state = GTS_WANTED_STATE_FADE_OUT;
-        app->unk_11FC = 1;
+        app->fadedBothScreens = 1;
         GtsWanted_InitDepositRecord(&app->record, app);
     } else if (response == YESNORESPONSE_NO) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
@@ -514,7 +514,7 @@ int GtsWanted_HandleConfirmPrompt(GtsApp *app) {
 int GtsWanted_FadeOut(GtsApp *app) {
     if (app->nextScreen == 0) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_61);
-        app->unk_11FC = 1;
+        app->fadedBothScreens = 1;
     } else {
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_61);
     }

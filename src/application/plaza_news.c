@@ -615,7 +615,7 @@ void PlazaNewsPeople_DrawGrid(PlazaNewsTileset *tileset, PlazaNewsGraphics *grap
         volatile int usePalette3;
         volatile int altRow;
         volatile int row;
-        volatile int unk_10;
+        volatile int isLastJoined;
         int rowU8;
     } f;
     int col;
@@ -634,9 +634,9 @@ void PlazaNewsPeople_DrawGrid(PlazaNewsTileset *tileset, PlazaNewsGraphics *grap
                 f.altRow = WiFiPlazaNews_GetSlotGender(newsData, col + base);
                 f.usePalette3 = WiFiPlazaNews_IsOwnSlot(newsData, col + base);
                 f.altPage = WiFiPlazaNews_IsOldestSlot(newsData, col + base);
-                f.unk_10 = WiFiPlazaNews_IsLastJoinedSlot(newsData, col + base);
+                f.isLastJoined = WiFiPlazaNews_IsLastJoinedSlot(newsData, col + base);
                 highlight = WiFiPlazaWork_IsSpecialVisitor(lobby, col + base);
-                if (mode == 2 && f.unk_10 == 1) {
+                if (mode == 2 && f.isLastJoined == 1) {
                     tile = 0;
                 } else {
                     tile = mode;

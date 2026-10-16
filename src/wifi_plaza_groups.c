@@ -27,7 +27,7 @@ void WiFiPlazaGroups_Update(WiFiPlazaGroups *groups) {
 
 #pragma force_active on
 
-// Puts id into the first free place of a group that has not ended and whose unk_bc count allows value; returns the
+// Puts id into the first free place of a group that has not ended and whose markerCounts count allows value; returns the
 // place (group * 3 + seat) or -1.
 int WiFiPlazaGroups_Join(WiFiPlazaGroups *groups, u32 id, u32 value) {
     int seat;
@@ -92,7 +92,7 @@ int WiFiPlazaGroups_GetCounter(WiFiPlazaGroups *groups, u32 group) {
 void WiFiPlazaGroups_RequestAction(WiFiPlazaGroups *groups, u32 id) {
     u32 place = WiFiPlazaGroups_FindPlace(groups, id);
     if (place != (u32)-1) {
-        groups->unk_128[place / 3][place % 3] = 1;
+        groups->actionRequests[place / 3][place % 3] = 1;
     }
 }
 
@@ -107,7 +107,7 @@ int WiFiPlazaGroups_GetActionRequest(WiFiPlazaGroups *groups, u32 place) {
     }
     group = place / 3;
     seat = place % 3;
-    slot = &groups->unk_128[group][seat];
+    slot = &groups->actionRequests[group][seat];
     return *slot;
 }
 
@@ -120,7 +120,7 @@ void WiFiPlazaGroups_ClearActionRequest(WiFiPlazaGroups *groups, u32 place) {
     }
     group = place / 3;
     seat = place % 3;
-    slot = &groups->unk_128[group][seat];
+    slot = &groups->actionRequests[group][seat];
     *slot = 0;
 }
 
@@ -153,7 +153,7 @@ void WiFiPlazaGroups_SetMarkerPassed(WiFiPlazaGroups *groups, u32 place, u32 val
     }
     group = place / 3;
     seat = place % 3;
-    slot = &groups->unk_bc[group][seat];
+    slot = &groups->markerCounts[group][seat];
     *slot = value + 1;
 }
 
@@ -166,7 +166,7 @@ BOOL WiFiPlazaGroups_HasPassedMarker(WiFiPlazaGroups *groups, u32 place, u32 val
     }
     group = place / 3;
     seat = place % 3;
-    slot = &groups->unk_bc[group][seat];
+    slot = &groups->markerCounts[group][seat];
     if (*slot <= value) {
         return FALSE;
     }
@@ -182,6 +182,6 @@ u32 WiFiPlazaGroups_GetMarkerCount(WiFiPlazaGroups *groups, u32 place) {
     }
     group = place / 3;
     seat = place % 3;
-    slot = &groups->unk_bc[group][seat];
+    slot = &groups->markerCounts[group][seat];
     return *slot;
 }

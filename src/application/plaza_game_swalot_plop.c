@@ -103,7 +103,7 @@ BOOL SwalotPlop_Init(OverlayManager *man, int *state) {
     Heap_Create(HEAP_ID_3, HEAP_ID_106, 3 << 17);
     app = OverlayManager_CreateAndGetData(man, sizeof(SwalotPlopApp), HEAP_ID_106);
     memset(app, 0, sizeof(SwalotPlopApp));
-    PlazaGameRoster_Init(&app->roster, args->fromLobby, args->saveData, args->unk38, args);
+    PlazaGameRoster_Init(&app->roster, args->fromLobby, args->saveData, args->voiceChat, args);
     SwalotPlop_LoadSharedData(app, HEAP_ID_106);
     return TRUE;
 }
@@ -188,7 +188,7 @@ BOOL SwalotPlop_Main(OverlayManager *man, int *state) {
         }
         app->game = SwalotPlopGame_New(HEAP_ID_106, 0x4B0, app->playerCount, app->localIndex, &app->shared);
         WirelessStatusIcon_Create();
-        if (args->unk38 != 0) {
+        if (args->voiceChat != 0) {
             WifiConnection_StartVoiceChat(HEAP_ID_106);
         }
         switch (app->selection) {
@@ -305,7 +305,7 @@ BOOL SwalotPlop_Main(OverlayManager *man, int *state) {
         if (LinkSync_IsSynced(3) == FALSE) {
             return FALSE;
         }
-        if (args->unk38 != 0) {
+        if (args->voiceChat != 0) {
             WifiConnection_StopVoiceChat();
         }
         if (app->netId == 0) {
@@ -504,7 +504,7 @@ void SwalotPlop_Abort(SwalotPlopApp *app, PlazaGameArgs *args) {
         SwalotPlopGame_Free(app->game);
         GF_DestroyVramTransferManager();
     }
-    if (args->unk38 != 0) {
+    if (args->voiceChat != 0) {
         WifiConnection_StopVoiceChat();
     }
     if (app->results != NULL) {

@@ -70,7 +70,7 @@ WiFiPlazaLobbyMatch *WiFiPlazaLobbyMatches_Get(WiFiPlazaLobbyClient *client, int
 // countdowns.
 void WiFiPlazaLobbyMatches_Update(WiFiPlazaLobbyClient *client) {
     int i;
-    if (gWiFiPlazaLobbyClient->unk_69e == 1) {
+    if (gWiFiPlazaLobbyClient->isMatchHost == 1) {
         u32 count = WifiConnection_GetNumConnectionHost();
         WiFiPlazaLobbyMatch *match;
         GF_ASSERT(count <= 4);

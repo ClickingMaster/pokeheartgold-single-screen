@@ -80,17 +80,17 @@ typedef struct WiFiPlazaDisconnectArgs {
 
 // Arguments of the games (apps 6 to 8).
 typedef struct WiFiPlazaGameArgs {
-    u32 unk_00;               // WiFiPlazaPlayer_GetTapToy of the own player
+    u32 tapToy;               // WiFiPlazaPlayer_GetTapToy of the own player
     u8 slots[4];              // WiFiPlazaWork_GetGameMembers
     u8 specialVisitors[0x14]; // WiFiPlazaWork_GetSpecialVisitors
-    void *unk_1c;
+    void *connectionLost;
     PlayerProfile *profiles[4];
     WiFiPlazaWork *work;
     SaveData *save;
-    u8 unk_38;
-    u8 unk_39;
+    u8 voiceChat;
+    u8 fromLobby;
     u8 unk_3a[2];
-    u32 unk_3c;
+    u32 mimeJrTopVoiceChat;
 } WiFiPlazaGameArgs;
 
 // The entries of the app tables (and their helpers).
@@ -253,11 +253,11 @@ void WiFiPlazaGameArgs_FreeProfiles(WiFiPlazaGameArgs *args) {
 
 void WiFiPlazaGameArgs_Setup(WiFiPlazaGameArgs *args, WiFiPlazaWork *work, enum HeapID heapID) {
     int i;
-    args->unk_00 = WiFiPlazaPlayer_GetTapToy(WiFiPlazaWork_GetMyPlayer(work));
+    args->tapToy = WiFiPlazaPlayer_GetTapToy(WiFiPlazaWork_GetMyPlayer(work));
     WiFiPlazaWork_GetSpecialVisitors(work, args->specialVisitors);
     WiFiPlazaWork_GetGameMembers(work, args->slots);
     args->work = work;
-    args->unk_1c = NULL;
+    args->connectionLost = NULL;
     for (i = 0; i < 4; i++) {
         WiFiPlazaPlayer *player = WiFiPlazaWork_GetPlayer(work, args->slots[i]);
         if (player) {
@@ -450,11 +450,11 @@ BOOL WiFiPlazaApps_EndConnect(WiFiPlazaApps *apps, void **args) {
 // Apps 6, 7, 8, the games.
 void WiFiPlazaApps_NewSwalotPlopArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID) {
     u8 *p;
-    *out = Heap_Alloc(heapID, sizeof(WiFiPlazaGameArgs) - 4); // without unk_3c
+    *out = Heap_Alloc(heapID, sizeof(WiFiPlazaGameArgs) - 4); // without mimeJrTopVoiceChat
     memset(*out, 0, sizeof(WiFiPlazaGameArgs) - 4);
     p = *out;
-    ((WiFiPlazaGameArgs *)p)->unk_38 = 0;
-    ((WiFiPlazaGameArgs *)p)->unk_39 = 1;
+    ((WiFiPlazaGameArgs *)p)->voiceChat = 0;
+    ((WiFiPlazaGameArgs *)p)->fromLobby = 1;
     ((WiFiPlazaGameArgs *)p)->save = apps->save;
     WiFiPlazaGameArgs_NewProfiles((WiFiPlazaGameArgs *)p, heapID);
 }
@@ -474,8 +474,8 @@ BOOL WiFiPlazaApps_EndSwalotPlop(WiFiPlazaApps *apps, void **args) {
     WiFiPlazaGameArgs *game;
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_90));
     game = *args;
-    WiFiPlazaWork_SetField508_04(apps->work, game->unk_1c);
-    WiFiPlazaWork_SetTapToy(apps->work, game->unk_00);
+    WiFiPlazaWork_SetField508_04(apps->work, game->connectionLost);
+    WiFiPlazaWork_SetTapToy(apps->work, game->tapToy);
     WiFiPlazaApps_Start(apps, 0);
     return FALSE;
 }
@@ -485,8 +485,8 @@ void WiFiPlazaApps_NewMimeJrTopArgs(WiFiPlazaApps *apps, void **out, enum HeapID
     *out = Heap_Alloc(heapID, sizeof(WiFiPlazaGameArgs));
     memset(*out, 0, sizeof(WiFiPlazaGameArgs));
     p = *out;
-    ((WiFiPlazaGameArgs *)p)->unk_3c = 0;
-    *(u32 *)&((WiFiPlazaGameArgs *)p)->unk_38 = 1; // this game reads a word at 0x38
+    ((WiFiPlazaGameArgs *)p)->mimeJrTopVoiceChat = 0;
+    *(u32 *)&((WiFiPlazaGameArgs *)p)->voiceChat = 1; // this game reads a word at 0x38
     ((WiFiPlazaGameArgs *)p)->save = apps->save;
     WiFiPlazaGameArgs_NewProfiles((WiFiPlazaGameArgs *)p, heapID);
 }
@@ -506,19 +506,19 @@ BOOL WiFiPlazaApps_EndMimeJrTop(WiFiPlazaApps *apps, void **args) {
     WiFiPlazaGameArgs *game;
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_90));
     game = *args;
-    WiFiPlazaWork_SetField508_04(apps->work, game->unk_1c);
-    WiFiPlazaWork_SetTapToy(apps->work, game->unk_00);
+    WiFiPlazaWork_SetField508_04(apps->work, game->connectionLost);
+    WiFiPlazaWork_SetTapToy(apps->work, game->tapToy);
     WiFiPlazaApps_Start(apps, 0);
     return FALSE;
 }
 
 void WiFiPlazaApps_NewWobbuffetPopArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID) {
     u8 *p;
-    *out = Heap_Alloc(heapID, sizeof(WiFiPlazaGameArgs) - 4); // without unk_3c
+    *out = Heap_Alloc(heapID, sizeof(WiFiPlazaGameArgs) - 4); // without mimeJrTopVoiceChat
     memset(*out, 0, sizeof(WiFiPlazaGameArgs) - 4);
     p = *out;
-    ((WiFiPlazaGameArgs *)p)->unk_38 = 0;
-    ((WiFiPlazaGameArgs *)p)->unk_39 = 1;
+    ((WiFiPlazaGameArgs *)p)->voiceChat = 0;
+    ((WiFiPlazaGameArgs *)p)->fromLobby = 1;
     ((WiFiPlazaGameArgs *)p)->save = apps->save;
     WiFiPlazaGameArgs_NewProfiles((WiFiPlazaGameArgs *)p, heapID);
 }
@@ -538,8 +538,8 @@ BOOL WiFiPlazaApps_EndWobbuffetPop(WiFiPlazaApps *apps, void **args) {
     WiFiPlazaGameArgs *game;
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_90));
     game = *args;
-    WiFiPlazaWork_SetField508_04(apps->work, game->unk_1c);
-    WiFiPlazaWork_SetTapToy(apps->work, game->unk_00);
+    WiFiPlazaWork_SetField508_04(apps->work, game->connectionLost);
+    WiFiPlazaWork_SetTapToy(apps->work, game->tapToy);
     WiFiPlazaApps_Start(apps, 0);
     return FALSE;
 }

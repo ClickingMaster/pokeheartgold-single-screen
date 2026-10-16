@@ -289,7 +289,7 @@ int GtsTransaction_Start(GtsApp *app) {
     case 10:
         Gts_PrintMessage(app, app->gtsMsgData, msg_0775_00024, 1, 0xF0F);
         Gts_SetState(app, GTS_TRANSACTION_STATE_WAIT_TEXT, GTS_TRANSACTION_STATE_RECEIVE_TRADED_MON);
-        app->unk_11FC = 1;
+        app->fadedBothScreens = 1;
         break;
     case 11:
         Gts_PrintMessage(app, app->gtsMsgData, msg_0775_00024, TEXT_SPEED_INSTANT, 0xF0F);
@@ -631,7 +631,7 @@ int GtsTransaction_WaitResult(GtsApp *app) {
                 break;
             case 0:
                 app->state = GTS_TRANSACTION_STATE_RECEIVE_TRADED_MON;
-                app->unk_11FC = 1;
+                app->fadedBothScreens = 1;
                 break;
             }
             break;
@@ -749,9 +749,9 @@ int GtsTransaction_WaitStatusGet(GtsApp *app) {
     return 3;
 }
 
-// Back to the screen that asked for the status check: the main menu (unk_001C 1) or the summary (2).
+// Back to the screen that asked for the status check: the main menu (statusCheckCaller 1) or the summary (2).
 void GtsTransaction_ReturnToCaller(GtsApp *app) {
-    switch (app->unk_001C) {
+    switch (app->statusCheckCaller) {
     case 1:
         Gts_SetNextScreen(app, 1, 0);
         app->state = GTS_TRANSACTION_STATE_FADE_OUT;
@@ -1013,7 +1013,7 @@ int GtsTransaction_SaveWithMessage(GtsApp *app) {
 int GtsTransaction_FadeOut(GtsApp *app) {
     Gts_DeleteWaitingIcon(app);
     WirelessStatusIcon_Destroy();
-    if (app->unk_11FC == 1) {
+    if (app->fadedBothScreens == 1) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_61);
     } else {
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_61);

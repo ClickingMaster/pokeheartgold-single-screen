@@ -55,13 +55,13 @@ typedef struct WiFiPlazaPlayer {
     u8 region;
     u8 hasNationalDex;
     u8 gameCleared;
-    u8 unk_41; // < 27
+    u8 tapToy; // < 27
     u8 version;
-    u8 unk_43;    // < 15
+    u8 activity;  // < 15
     s64 unk_44;   // SysInfo_RTC.seconds_since_nitro_epoch
     u8 slots[12]; // < 24: used
     void *slotData[12];
-    u16 unk_88[2]; // < 18
+    u16 favoriteTypes[2]; // < 18
     WiFiPlazaPlayerSurvey survey;
 } WiFiPlazaPlayer;
 
@@ -107,7 +107,7 @@ typedef struct WiFiPlazaLobbyMessage {
     u32 ids[4]; // WiFiPlazaLobbyClient_SlotToId of lobby slots
     u8 count;   // of ids
     u8 type;
-    u8 unk_12;
+    u8 tapToy;
     u8 unk_13_0 : 7;
     u8 unk_13_7 : 1;
 } WiFiPlazaLobbyMessage;
@@ -127,7 +127,7 @@ typedef struct WiFiPlazaEventSchedule {
     s16 lightingDelay;
     s16 fireworksDelay;
     s16 paradeDelay;
-    u8 unk_0c;
+    u8 minigameActive;
     u8 lowVolume;
     u8 bgmFadedOut;
     u8 low : 4;
@@ -182,7 +182,7 @@ typedef struct WiFiPlazaTallyCache {
 // Part of WiFiPlazaWork at 0x508 (WiFiPlaza_NewPlayerProfile / WiFiPlaza_FreePlayerProfile set it up and free it).
 typedef struct WiFiPlazaOwnProfileData {
     PlayerProfile *profile; // the own profile as the lobby sees it (WiFiPlazaProfile_CopyToPlayerProfile)
-    void *unk_04;
+    void *gameConnectionLost;
     WiFiPlazaTallyCache tally; // WiFiPlazaWork_SetSurveyTally / WiFiPlazaWork_GetSurveyTally
     BOOL hasTally;
 } WiFiPlazaOwnProfileData;
@@ -195,8 +195,8 @@ typedef struct WiFiPlazaGroups {
     s32 counters[9];
     u32 states[9];
     u32 ids[9][3]; // -1 = free (WiFiPlazaGroups_Init)
-    u32 unk_bc[9][3];
-    u32 unk_128[9][3];
+    u32 markerCounts[9][3];
+    u32 actionRequests[9][3];
 } WiFiPlazaGroups;
 
 // A time of day (WiFiPlaza_SecondsToTime / WiFiPlazaTime_Add / WiFiPlazaTime_Subtract).
@@ -344,7 +344,7 @@ typedef struct WiFiPlazaWork {
     u32 changeFlags[4]; // per lobby slot: entered, left, events, updated (WiFiPlazaWork_TakePlayerEntered / A25C / A288 / A2A0)
     WiFiPlazaProfile profile;
     WiFiPlazaTalkSession talk;
-    u8 unk_1e8[0x14];
+    u8 tapToyPlayed[0x14];
     WiFiPlazaEventSchedule eventSchedule;
     WiFiPlazaGroups groups;
     WiFiPlazaSessionState sessionState;
@@ -480,19 +480,19 @@ typedef struct WiFiPlazaLobbySchedule {
 // WiFiPlazaLobbyClient_GetSurveyValue / WiFiPlazaLobbyClient_GetSurveyText / WiFiPlazaLobbyClient_GetSurveyFlag read the two halves.
 typedef struct WiFiPlazaLobbySurvey {
     u32 unk_00;
-    u32 unk_04;
-    s32 unk_08;
-    u8 unk_0c[0xDC];
-    u8 unk_e8[3][0x24];
-    u8 unk_154[12];
+    u32 surveyId;
+    s32 questionNo;
+    u8 questionText[0xDC];
+    u8 answerTexts[3][0x24];
+    u8 languageFlags[12];
 } WiFiPlazaLobbySurvey;
 
 typedef struct WiFiPlazaLobbySurveyData {
     u32 unk_00;
-    WiFiPlazaLobbySurvey unk_04[2];
-    u32 unk_2c4;
+    WiFiPlazaLobbySurvey surveys[2];
+    u32 lastWeekIsSpecial;
     u32 unk_2c8[3];
-    u32 unk_2d4[3];
+    u32 lastWeekTotals[3];
 } WiFiPlazaLobbySurveyData;
 
 // A player on the plaza map (overlay 49): a billboard sprite of the field character models with a model under it.
@@ -581,23 +581,23 @@ typedef struct WiFiPlazaLobbyClient {
     u8 state;        // 0 = none, 1 = connecting, 2 = in the lobby, 3, 4 = error (WiFiPlazaLobbyClient_Update)
     u8 channel;      // 4 = none (WiFiPlazaLobbyClient_JoinChannel)
     u8 channelState; // 4 = error
-    u8 unk_12f;
-    u8 unk_130;
+    u8 joinChannelResult;
+    u8 addingLocation;
     u8 unk_131;
-    u8 unk_132; // error
-    u8 unk_133; // error
+    u8 requestError;   // error
+    u8 ownRecordError; // error
     WiFiPlazaLobbyLocation locations[20];
     WiFiPlazaLobbyCommandTable commandTables[2]; // lobby, channel
     s64 time;                                    // lobby time, refreshed every frame
     u8 unk_1a4[0x10];
     WiFiPlazaLobbySchedule schedule; // received with PPW_LobbyGetSchedule (WiFiPlazaLobbyClient_OnEnterChannel)
-    u32 unk_5b4;                        // its size
+    u32 scheduleSize;                   // its size
     WiFiPlazaLobbyMatch matches[3];
     u16 currentMatch; // 3 = none
-    u8 unk_69e;
-    u8 unk_69f;
+    u8 isMatchHost;
+    u8 matchCancelled;
     WiFiPlazaLobbySurveyData surveyData;
-    u32 unk_980;
+    u32 surveySubmitState;
     int initResult; // PPW_LobbyInitializeAsync
 } WiFiPlazaLobbyClient;
 

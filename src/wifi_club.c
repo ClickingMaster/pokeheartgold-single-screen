@@ -322,7 +322,7 @@ u32 WifiClub_FinishGameEntry(WifiClubTask *task) {
 PlazaGameArgs *WifiClub_LaunchSwalotPlop(FieldSystem *fieldSystem, enum HeapID heapID, u32 selection) {
     PlazaGameArgs *args = Heap_Alloc(heapID, 0x3C);
     memset(args, 0, 0x3C);
-    args->unk38 = selection;
+    args->voiceChat = selection;
     args->fromLobby = FALSE;
     args->saveData = fieldSystem->saveData;
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_90), OVY_LOAD_ASYNC);
@@ -338,8 +338,8 @@ void WifiClub_FinishSwalotPlop(PlazaGameArgs *args) {
 PlazaGameArgs *WifiClub_LaunchMimeJrTop(FieldSystem *fieldSystem, enum HeapID heapID, u32 selection) {
     PlazaGameArgs *args = Heap_Alloc(heapID, sizeof(PlazaGameArgs));
     memset(args, 0, sizeof(PlazaGameArgs));
-    args->unk3C = selection;
-    *(u32 *)&args->unk38 = 0; // read as one word: launched from the lobby
+    args->mimeJrTopVoiceChat = selection;
+    *(u32 *)&args->voiceChat = 0; // read as one word: launched from the lobby
     args->saveData = fieldSystem->saveData;
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_90), OVY_LOAD_ASYNC);
     FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_MimeJrTop, args);
@@ -354,7 +354,7 @@ void WifiClub_FinishMimeJrTop(PlazaGameArgs *args) {
 PlazaGameArgs *WifiClub_LaunchWobbuffetPop(FieldSystem *fieldSystem, enum HeapID heapID, u32 selection) {
     PlazaGameArgs *args = Heap_Alloc(heapID, 0x3C);
     MI_CpuFill8(args, 0, 0x3C);
-    args->unk38 = selection;
+    args->voiceChat = selection;
     args->fromLobby = FALSE;
     args->saveData = fieldSystem->saveData;
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_90), OVY_LOAD_ASYNC);

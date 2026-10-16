@@ -188,7 +188,7 @@ BOOL WobbuffetPopApp_Main(OverlayManager *man, int *state) {
         }
         break;
     case 4:
-        if (args->unk38) {
+        if (args->voiceChat) {
             WifiConnection_StopVoiceChat();
         }
         app->screenId = 2;
@@ -250,8 +250,8 @@ void WobbuffetPopApp_InitRoster(WobbuffetPopApp *app, PlazaGameArgs *args) {
         }
     }
     app->playerCount = count;
-    app->voiceChat = args->unk38;
-    PlazaGameRoster_Init(&app->roster, args->fromLobby, args->saveData, args->unk38, args);
+    app->voiceChat = args->voiceChat;
+    PlazaGameRoster_Init(&app->roster, args->fromLobby, args->saveData, args->voiceChat, args);
 }
 
 BOOL WobbuffetPopApp_CheckConnectionLost(WobbuffetPopApp *app) {

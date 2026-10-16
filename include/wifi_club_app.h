@@ -209,9 +209,9 @@ struct WifiClubApp {
     u8 unk36C[4];
     s32 contactFriend;
     u16 seekMenuCursor;
-    u16 unk376;
+    u16 submenuCursors;
     u8 unk378[4];
-    u16 unk37C;
+    u16 submenuKind;
     u16 partnerStatus;
     u16 partnerVoiceChat;
     u16 partnerId;

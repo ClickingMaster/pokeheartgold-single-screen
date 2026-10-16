@@ -449,7 +449,7 @@ int GtsConnection_HandleDisconnectMenu(GtsApp *app) {
             goto done;
         }
         Gts_SetNextScreen(app, 7, 11);
-        app->unk_001C = 1;
+        app->statusCheckCaller = 1;
         app->state = GTS_CONNECTION_STATE_FADE_OUT;
         goto done;
     }
@@ -773,7 +773,7 @@ int GtsConnection_FadeOut(GtsApp *app) {
     Gts_DeleteWaitingIcon(app);
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_61);
     app->state = GTS_CONNECTION_STATE_ASK_CONNECT;
-    app->unk_11FC = 1;
+    app->fadedBothScreens = 1;
     return 4;
 }
 

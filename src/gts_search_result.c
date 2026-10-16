@@ -267,15 +267,15 @@ void GtsSearchResult_CreateStrings(GtsApp *app) {
     if (result->city) {
         BufferCityName(app->msgFormat, 9, result->country, result->city);
     }
-    app->unk_0BC4[0] = ReadMsgData_ExpandPlaceholders(app->msgFormat, app->gtsMsgData, msg_0775_00082, HEAP_ID_61);
-    app->unk_0BC4[1] = ReadMsgData_ExpandPlaceholders(app->msgFormat, app->gtsMsgData, msg_0775_00083, HEAP_ID_61);
+    app->infoStrings[0] = ReadMsgData_ExpandPlaceholders(app->msgFormat, app->gtsMsgData, msg_0775_00082, HEAP_ID_61);
+    app->infoStrings[1] = ReadMsgData_ExpandPlaceholders(app->msgFormat, app->gtsMsgData, msg_0775_00083, HEAP_ID_61);
 }
 
 #pragma force_active reset
 
 void GtsSearchResult_DeleteStrings(GtsApp *app) {
-    String_Delete(app->unk_0BC4[0]);
-    String_Delete(app->unk_0BC4[1]);
+    String_Delete(app->infoStrings[0]);
+    String_Delete(app->infoStrings[1]);
     String_Delete(app->msgBuffer);
 }
 
@@ -388,7 +388,7 @@ int GtsSearchResult_HandleTradePrompt(GtsApp *app) {
 
 void GtsSearchResult_DrawDetails(GtsApp *app) {
     GfGfxLoader_LoadScrnData(NARC_a_1_0_0, 36, app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0x600, TRUE, HEAP_ID_61);
-    GtsSearchResult_DrawLocation(&app->infoWindows[10], app->unk_0BC4[0], app->unk_0BC4[1]);
+    GtsSearchResult_DrawLocation(&app->infoWindows[10], app->infoStrings[0], app->infoStrings[1]);
     GtsSearchResult_DrawWanted(&app->infoWindows[15], app->gtsMsgData, app->speciesNames, &app->searchResults[app->selectedResult].wanted);
 }
 

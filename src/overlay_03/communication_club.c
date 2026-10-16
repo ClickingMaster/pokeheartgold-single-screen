@@ -41,7 +41,7 @@ struct CommClubManager {
     u16 connectionIndex;
     u8 connectedCount;
     u8 commType;
-    u8 unk92;
+    u8 course;
     u8 unk93;
     u8 printerID;
     u8 contactNetId;
@@ -358,9 +358,9 @@ static void CommClub_ShowParentList(CommClubManager *commClubManager) {
     };
 
     if (sCommClubManager->commType == COMM_TYPE_8) {
-        CommClub_PrintMessage(sCommClubManager->unk92 + 122, FALSE);
+        CommClub_PrintMessage(sCommClubManager->course + 122, FALSE);
     } else if (sCommClubManager->commType == COMM_TYPE_POKEATHLON) {
-        CommClub_PrintMessage(sCommClubManager->unk92 + CommunicationClub_Text_ChooseLeader_JumpCourse, FALSE);
+        CommClub_PrintMessage(sCommClubManager->course + CommunicationClub_Text_ChooseLeader_JumpCourse, FALSE);
     } else {
         CommClub_PrintMessage(sChooseText[sCommClubManager->commType], FALSE);
     }
@@ -686,15 +686,15 @@ static void CommClub_PrintAwaitingContact() {
 
     if (sCommClubManager->commType == COMM_TYPE_8) {
         if (CommPlayerInfo_CountAccepted() > 1) {
-            CommClub_PrintMessage(sCommClubManager->unk92 + 127, FALSE);
+            CommClub_PrintMessage(sCommClubManager->course + 127, FALSE);
         } else {
-            CommClub_PrintMessage(sCommClubManager->unk92 + 117, FALSE);
+            CommClub_PrintMessage(sCommClubManager->course + 117, FALSE);
         }
     } else if (sCommClubManager->commType == COMM_TYPE_POKEATHLON) {
         if (CommPlayerInfo_CountAccepted() > 1) {
-            CommClub_PrintMessage(sCommClubManager->unk92 + 154, FALSE);
+            CommClub_PrintMessage(sCommClubManager->course + 154, FALSE);
         } else {
-            CommClub_PrintMessage(sCommClubManager->unk92 + 142, FALSE);
+            CommClub_PrintMessage(sCommClubManager->course + 142, FALSE);
         }
     } else {
         CommClub_PrintMessage(sAwaitingContactText[sCommClubManager->commType], FALSE);
@@ -1176,7 +1176,7 @@ static void CommClub_GroupCancelled(void *task, CommClubManager *commClubManager
 
     CommClub_CloseMenus(task, commClubManager);
     if (sCommClubManager->commType == COMM_TYPE_8) {
-        CommClub_PrintMessage(sCommClubManager->unk92 + 137, FALSE);
+        CommClub_PrintMessage(sCommClubManager->course + 137, FALSE);
     } else {
         CommClub_PrintMessage(sGroupCancelledText[commClubManager->commType], FALSE);
     }
@@ -1421,9 +1421,9 @@ static void CommClub_WaitGroupSyncAfterReply(void *task, CommClubManager *commCl
                 CommunicationClub_Text_GroupWaiting_Pokeathlon // Pokéathlon! Waiting for the rest of the group.
             };
             if (sCommClubManager->commType == COMM_TYPE_8) {
-                CommClub_PrintMessage(sCommClubManager->unk92 + 132, FALSE);
+                CommClub_PrintMessage(sCommClubManager->course + 132, FALSE);
             } else if (sCommClubManager->commType == COMM_TYPE_POKEATHLON) {
-                CommClub_PrintMessage(sCommClubManager->unk92 + 160, FALSE);
+                CommClub_PrintMessage(sCommClubManager->course + 160, FALSE);
             } else {
                 CommClub_PrintMessage(sGroupWaitingText[commClubManager->commType], FALSE);
             }
@@ -1494,7 +1494,7 @@ static int CommClub_GetMaxPlayers() {
 }
 
 static int CommClub_GetBeaconId() {
-    return sCommClubManager->unk92 + (sCommClubManager->unk93 * 16);
+    return sCommClubManager->course + (sCommClubManager->unk93 * 16);
 }
 
 void CommClub_StartJoin(FieldSystem *fieldSystem, u32 commType, u16 arg2, u16 arg3) {
@@ -1503,7 +1503,7 @@ void CommClub_StartJoin(FieldSystem *fieldSystem, u32 commType, u16 arg2, u16 ar
     if (commType == COMM_TYPE_MIX_BATTLE || commType == COMM_TYPE_MULTI_BATTLE_1) {
         fieldSystem->linkBattleRuleset = NULL;
     }
-    sCommClubManager->unk92 = arg2;
+    sCommClubManager->course = arg2;
     sCommClubManager->unk93 = arg3;
     CommClub_StartChild(sCommClubManager);
 }
@@ -1526,7 +1526,7 @@ void CommClub_StartHost(FieldSystem *fieldSystem, u32 commType, u16 arg2, u16 ar
     if (commType == COMM_TYPE_MIX_BATTLE || commType == COMM_TYPE_MULTI_BATTLE_1) {
         fieldSystem->linkBattleRuleset = NULL;
     }
-    sCommClubManager->unk92 = arg2;
+    sCommClubManager->course = arg2;
     sCommClubManager->unk93 = arg3;
     CommClub_StartParent(sCommClubManager);
 }
