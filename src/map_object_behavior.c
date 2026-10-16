@@ -82,6 +82,20 @@ int TypeBehavior_NoOpUpdate(LocalMapObject *object) {
     return 0;
 }
 
+enum TrainerCheckState {
+    TRAINER_CHECK_STATE_WAIT_OFF_TILE,
+    TRAINER_CHECK_STATE_WAIT_ON_TILE,
+    TRAINER_CHECK_STATE_WAIT_MOVEMENT,
+    TRAINER_CHECK_STATE_READY,
+};
+
+enum TrainerTurnState {
+    TRAINER_TURN_STATE_INIT,
+    TRAINER_TURN_STATE_TURN,
+    TRAINER_TURN_STATE_WAIT_TURN,
+    TRAINER_TURN_STATE_PAUSE,
+};
+
 void TypeBehavior_LookSidewaysInit(LocalMapObject *object) {
     TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_InitBehaviorData(object, 9);
     state->limit = MapObject_GetParam(object, 1);
@@ -90,29 +104,29 @@ void TypeBehavior_LookSidewaysInit(LocalMapObject *object) {
 BOOL TypeBehavior_LookSidewaysCheck(LocalMapObject *object) {
     TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_GetBehaviorData(object);
     switch (state->state) {
-    case 0:
+    case TRAINER_CHECK_STATE_WAIT_OFF_TILE:
         if (MapObject_IsOffPreviousTile(object) == TRUE) {
             state->state++;
         }
         break;
-    case 1:
+    case TRAINER_CHECK_STATE_WAIT_ON_TILE:
         if (MapObject_IsOnPreviousTile(object) == 0) {
             break;
         }
         state->count++;
         if (state->count < state->limit) {
-            state->state = 0;
+            state->state = TRAINER_CHECK_STATE_WAIT_OFF_TILE;
             break;
         }
         state->state++;
-    case 2:
+    case TRAINER_CHECK_STATE_WAIT_MOVEMENT:
         if (MapObject_CheckSingleMovement(object) == TRUE) {
             break;
         }
         state->state++;
         state->count = 0;
-        state->turnState = 0;
-    case 3:
+        state->turnState = TRAINER_TURN_STATE_INIT;
+    case TRAINER_CHECK_STATE_READY:
         return TRUE;
     }
     return FALSE;
@@ -121,24 +135,24 @@ BOOL TypeBehavior_LookSidewaysCheck(LocalMapObject *object) {
 BOOL TypeBehavior_LookSidewaysUpdate(LocalMapObject *object) {
     TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_GetBehaviorData(object);
     switch (state->turnState) {
-    case 0: {
+    case TRAINER_TURN_STATE_INIT: {
         FourValues dirTable = gLookSidewaysAxisByFacing;
         int dir = MapObject_GetFacingDirection(object);
         state->direction = dir;
         state->sequence = dirTable.values[dir];
         state->turnState++;
     }
-    case 1: {
+    case TRAINER_TURN_STATE_TURN: {
         TwoByTwoValues moveTable = gLookSidewaysDirections;
         MapObject_ForceSetHeldMovement(object, GetMovementForDirection(moveTable.values[state->sequence][state->index], MOVEMENT_FACE_UP));
         state->turnState++;
     }
-    case 2:
+    case TRAINER_TURN_STATE_WAIT_TURN:
         if (MapObject_RunForcedMovement(object) == 0) {
             return TRUE;
         }
         state->turnState++;
-    case 3:
+    case TRAINER_TURN_STATE_PAUSE:
         state->timer++;
         if (state->timer < 8) {
             return TRUE;
@@ -147,13 +161,13 @@ BOOL TypeBehavior_LookSidewaysUpdate(LocalMapObject *object) {
         state->turns++;
         if (state->turns < 4) {
             state->index = (state->index + 1) & 1;
-            state->turnState = 1;
+            state->turnState = TRAINER_TURN_STATE_TURN;
             return TRUE;
         }
         MapObject_SetFacingDirection(object, state->direction);
         state->turnState++;
         state->turns = 0;
-        state->state = 0;
+        state->state = TRAINER_CHECK_STATE_WAIT_OFF_TILE;
     }
     return FALSE;
 }
@@ -167,29 +181,29 @@ void TypeBehavior_SpinInit(LocalMapObject *object) {
 BOOL TypeBehavior_SpinCheck(LocalMapObject *object) {
     TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_GetBehaviorData(object);
     switch (state->state) {
-    case 0:
+    case TRAINER_CHECK_STATE_WAIT_OFF_TILE:
         if (MapObject_IsOffPreviousTile(object) == TRUE) {
             state->state++;
         }
         break;
-    case 1:
+    case TRAINER_CHECK_STATE_WAIT_ON_TILE:
         if (MapObject_IsOnPreviousTile(object) == 0) {
             break;
         }
         state->count++;
         if (state->count < state->limit) {
-            state->state = 0;
+            state->state = TRAINER_CHECK_STATE_WAIT_OFF_TILE;
             break;
         }
         state->state++;
-    case 2:
+    case TRAINER_CHECK_STATE_WAIT_MOVEMENT:
         if (MapObject_CheckSingleMovement(object) == TRUE) {
             break;
         }
         state->state++;
         state->count = 0;
-        state->turnState = 0;
-    case 3:
+        state->turnState = TRAINER_TURN_STATE_INIT;
+    case TRAINER_CHECK_STATE_READY:
         return TRUE;
     }
     return FALSE;
@@ -201,7 +215,7 @@ BOOL TypeBehavior_SpinUpdate(LocalMapObject *object) {
     int i;
     int dir;
     switch (state->turnState) {
-    case 0:
+    case TRAINER_TURN_STATE_INIT:
         dir = MapObject_GetFacingDirection(object);
         i = 0;
         goto search_check;
@@ -219,15 +233,15 @@ search_check:
         state->direction = dir;
         state->index = (i + 1) % 4;
         state->turnState++;
-    case 1:
+    case TRAINER_TURN_STATE_TURN:
         MapObject_ForceSetHeldMovement(object, GetMovementForDirection(spinOrders.values[state->sequence][state->index], MOVEMENT_FACE_UP));
         state->turnState++;
-    case 2:
+    case TRAINER_TURN_STATE_WAIT_TURN:
         if (MapObject_RunForcedMovement(object) == 0) {
             return TRUE;
         }
         state->turnState++;
-    case 3:
+    case TRAINER_TURN_STATE_PAUSE:
         state->timer++;
         if (state->timer < 8) {
             return TRUE;
@@ -236,13 +250,13 @@ search_check:
         state->turns++;
         if (state->turns < 4) {
             state->index = (state->index + 1) % 4;
-            state->turnState = 1;
+            state->turnState = TRAINER_TURN_STATE_TURN;
             return TRUE;
         }
         MapObject_SetFacingDirection(object, state->direction);
         state->turnState++;
         state->turns = 0;
-        state->state = 0;
+        state->state = TRAINER_CHECK_STATE_WAIT_OFF_TILE;
     }
     return FALSE;
 }

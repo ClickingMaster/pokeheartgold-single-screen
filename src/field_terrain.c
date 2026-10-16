@@ -57,8 +57,8 @@ BOOL FieldSystem_FindMapProp(FieldSystem *fieldSystem, int buildModel, MapProp *
 BOOL FieldSystem_FindMapPropOfModels(FieldSystem *fieldSystem, int *models, u32 count, MapProp **outProp, int *outModel);
 int *FieldSystem_CollectMapPropModelsInRect(FieldSystem *fieldSystem, u32 heapId, int capacity, fx32 *rect, u32 fill);
 void Terrain_GetChunkOrigin(int idx, int width, VecFx32 *pos);
-BOOL MapModelNo_IsInTableD0ToD3(u16 a0);
-BOOL MapModelNo_HasNoAreaMapAnimation(u16 a0);
+BOOL MapModelNo_IsInTableD0ToD3(u16 modelNo);
+BOOL MapModelNo_HasNoAreaMapAnimation(u16 modelNo);
 
 int Terrain_AbsDiff(int lhs, int rhs) {
     if (lhs >= rhs) {
@@ -509,11 +509,11 @@ void Terrain_GetChunkOrigin(int idx, int width, VecFx32 *pos) {
     pos->z = pos->z + ((u16)(idx / width) << 21);
 }
 
-BOOL MapModelNo_IsInTableD0ToD3(u16 a0) {
+BOOL MapModelNo_IsInTableD0ToD3(u16 modelNo) {
     int i;
     const u16 *p = _020FC60C;
     for (i = 0; i < 4; i++) {
-        if (a0 == *p) {
+        if (modelNo == *p) {
             return TRUE;
         }
         p++;
@@ -521,15 +521,15 @@ BOOL MapModelNo_IsInTableD0ToD3(u16 a0) {
     return FALSE;
 }
 
-BOOL MapModelNo_HasNoAreaMapAnimation(u16 a0) {
+BOOL MapModelNo_HasNoAreaMapAnimation(u16 modelNo) {
     int i;
     const u16 *p;
-    if (!MapModelNo_IsInTableD0ToD3(a0)) {
+    if (!MapModelNo_IsInTableD0ToD3(modelNo)) {
         return FALSE;
     }
     p = _020FC5FC;
     for (i = 0; i < 3; i++) {
-        if (a0 == *p) {
+        if (modelNo == *p) {
             return TRUE;
         }
         p++;

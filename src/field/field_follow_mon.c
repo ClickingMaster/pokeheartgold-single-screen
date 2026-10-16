@@ -1,6 +1,7 @@
 #include "global.h"
 
 #include "constants/global_fieldmap.h"
+#include "constants/movements.h"
 #include "constants/scrcmd.h"
 #include "constants/sprites.h"
 
@@ -483,6 +484,31 @@ void FollowMon_SetHeight(FieldSystem *fieldSystem, fx32 y) {
 }
 
 // Lets the following Pokemon finish its current movement (pausing it again if it was paused).
+enum WaitFollowMonMovementState {
+    WAIT_MOVEMENT_STATE_START,
+    WAIT_MOVEMENT_STATE_WAIT_AND_PAUSE,
+    WAIT_MOVEMENT_STATE_WAIT,
+};
+
+enum FollowMonHopState {
+    HOP_STATE_START,
+    HOP_STATE_WAIT_STOP,
+    HOP_STATE_MOVE_ASIDE,
+    HOP_STATE_FACE_UP,
+    HOP_STATE_JUMP,
+    HOP_STATE_SPAWN_BALL,
+    HOP_STATE_WAIT_BALL,
+    HOP_STATE_END,
+};
+
+enum FollowMonRecallState {
+    RECALL_STATE_START,
+    RECALL_STATE_WAIT_STOP,
+    RECALL_STATE_SPAWN_BALL,
+    RECALL_STATE_WAIT_BALL,
+    RECALL_STATE_END,
+};
+
 BOOL Task_WaitFollowMonMovement(TaskManager *taskMan) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskMan);
     u32 *state = TaskManager_GetStatePtr(taskMan);
@@ -492,21 +518,21 @@ BOOL Task_WaitFollowMonMovement(TaskManager *taskMan) {
     }
     mapObject = fieldSystem->followMon.mapObject;
     switch (*state) {
-    case 0:
+    case WAIT_MOVEMENT_STATE_START:
         if (MapObject_CheckMovementPaused(mapObject)) {
             MapObject_UnpauseMovement(mapObject);
-            *state = 1;
+            *state = WAIT_MOVEMENT_STATE_WAIT_AND_PAUSE;
         } else {
-            *state = 2;
+            *state = WAIT_MOVEMENT_STATE_WAIT;
         }
         break;
-    case 1:
+    case WAIT_MOVEMENT_STATE_WAIT_AND_PAUSE:
         if (MapObject_IsMovementPaused(mapObject) && MapObject_AreBitsSetForMovementScriptInit(mapObject)) {
             MapObject_PauseMovement(mapObject);
             return TRUE;
         }
         break;
-    case 2:
+    case WAIT_MOVEMENT_STATE_WAIT:
         if (MapObject_IsMovementPaused(mapObject) && MapObject_AreBitsSetForMovementScriptInit(mapObject)) {
             return TRUE;
         }
@@ -517,7 +543,7 @@ BOOL Task_WaitFollowMonMovement(TaskManager *taskMan) {
 
 void FollowMon_StartHopIntoBall(FieldSystem *fieldSystem) {
     FollowMonHopIntoBall *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(FollowMonHopIntoBall));
-    env->state = 0;
+    env->state = HOP_STATE_START;
     env->step = 0;
     env->timer = 0;
     env->movement = 0;
@@ -534,7 +560,7 @@ BOOL Task_FollowMonHopIntoBall(TaskManager *taskMan) {
     VecFx32 position, scale;
     int delta;
     switch (env->state) {
-    case 0:
+    case HOP_STATE_START:
         if (!FollowMon_IsActive(fieldSystem)) {
             Heap_Free(env);
             return TRUE;
@@ -545,12 +571,12 @@ BOOL Task_FollowMonHopIntoBall(TaskManager *taskMan) {
         }
         MapObject_UnpauseMovement(FollowMon_GetMapObject(fieldSystem));
         env->state++;
-    case 1:
+    case HOP_STATE_WAIT_STOP:
         if (MapObject_IsMovementPaused(FollowMon_GetMapObject(fieldSystem))) {
             env->state = FollowMonHopIntoBall_GetSide(fieldSystem, env);
         }
         break;
-    case 2: {
+    case HOP_STATE_MOVE_ASIDE: {
         movements = sFollowMonHopIntoBallTable.movements;
         mapObject = FollowMon_GetMapObject(fieldSystem);
         if (!MapObject_IsMovementPaused(mapObject)) {
@@ -562,15 +588,15 @@ BOOL Task_FollowMonHopIntoBall(TaskManager *taskMan) {
         }
         break;
     }
-    case 3:
+    case HOP_STATE_FACE_UP:
         mapObject = FollowMon_GetMapObject(fieldSystem);
         if (!MapObject_IsMovementPaused(mapObject)) {
             break;
         }
-        MapObject_SetHeldMovement(mapObject, 0);
+        MapObject_SetHeldMovement(mapObject, MOVEMENT_FACE_UP);
         env->state++;
         break;
-    case 4: {
+    case HOP_STATE_JUMP: {
         zOffsets = gFollowMonHopIntoBallZOffsets;
         yOffsets = sFollowMonHopIntoBallTable.yOffsets;
         mapObject = FollowMon_GetMapObject(fieldSystem);
@@ -589,11 +615,11 @@ BOOL Task_FollowMonHopIntoBall(TaskManager *taskMan) {
         }
         break;
     }
-    case 5:
+    case HOP_STATE_SPAWN_BALL:
         FollowMonBall_Spawn(FollowMon_GetMapObject(fieldSystem), 3);
         env->state++;
         break;
-    case 6: {
+    case HOP_STATE_WAIT_BALL: {
         env->timer++;
         if (env->timer < 20) {
             break;
@@ -605,7 +631,7 @@ BOOL Task_FollowMonHopIntoBall(TaskManager *taskMan) {
         env->state++;
         break;
     }
-    case 7:
+    case HOP_STATE_END:
         Heap_Free(env);
         return TRUE;
     }
@@ -613,7 +639,7 @@ BOOL Task_FollowMonHopIntoBall(TaskManager *taskMan) {
 }
 #pragma force_active reset
 
-// Which side of the player the following Pokemon is on: below it (state 2), or left/right of it (state 3).
+// Which side of the player the following Pokemon is on: below it (it moves aside first), or left/right of it.
 u32 FollowMonHopIntoBall_GetSide(FieldSystem *fieldSystem, FollowMonHopIntoBall *env) {
     int playerX = MapObject_GetXCoord(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar));
     int playerZ = MapObject_GetZCoord(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar));
@@ -621,18 +647,18 @@ u32 FollowMonHopIntoBall_GetSide(FieldSystem *fieldSystem, FollowMonHopIntoBall 
     int z = MapObject_GetZCoord(FollowMon_GetMapObject(fieldSystem));
     if (x == playerX && z == playerZ + 1) {
         env->toLeft = TRUE;
-        return 2;
+        return HOP_STATE_MOVE_ASIDE;
     }
     if (x == playerX + 1 && z == playerZ) {
         env->toLeft = FALSE;
-        return 3;
+        return HOP_STATE_FACE_UP;
     }
     if (x + 1 == playerX && z == playerZ) {
         env->toLeft = TRUE;
-        return 3;
+        return HOP_STATE_FACE_UP;
     }
     GF_ASSERT(FALSE);
-    return 2;
+    return HOP_STATE_MOVE_ASIDE;
 }
 
 // Puts the following Pokemon into its Poke Ball (it turns white and shrinks); FALSE if there is nothing to do.
@@ -658,15 +684,15 @@ BOOL Task_FollowMonRecall(TaskManager *taskMan) {
     FollowMonRecall *env = TaskManager_GetEnvironment(taskMan);
     u32 *state = TaskManager_GetStatePtr(taskMan);
     switch (*state) {
-    case 0:
+    case RECALL_STATE_START:
         MapObject_UnpauseMovement(FollowMon_GetMapObject(fieldSystem));
         (*state)++;
-    case 1:
+    case RECALL_STATE_WAIT_STOP:
         if (MapObject_IsMovementPaused(FollowMon_GetMapObject(fieldSystem))) {
             (*state)++;
         }
         break;
-    case 2: {
+    case RECALL_STATE_SPAWN_BALL: {
         LocalMapObject *mapObject = FollowMon_GetMapObject(fieldSystem);
         int member = SpriteId_GetModelNo(MapObject_GetSpriteID(mapObject));
         NNSG3dResFileHeader *file = NARC_AllocAndReadWholeMember(MapObjectManager_GetMapModelNarc(fieldSystem->mapObjectManager), member, HEAP_ID_FIELD2);
@@ -677,7 +703,7 @@ BOOL Task_FollowMonRecall(TaskManager *taskMan) {
         (*state)++;
         break;
     }
-    case 3:
+    case RECALL_STATE_WAIT_BALL:
         env->timer++;
         if (env->timer >= 20) {
             VecFx32 scale;
@@ -695,7 +721,7 @@ BOOL Task_FollowMonRecall(TaskManager *taskMan) {
             (*state)++;
         }
         break;
-    case 4:
+    case RECALL_STATE_END:
         Heap_Free(env);
         return TRUE;
     }

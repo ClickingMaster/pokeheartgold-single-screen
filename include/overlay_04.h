@@ -24,7 +24,7 @@ void GymmickInit_Fuchsia(FieldSystem *fieldSystem);
 void GymmickInit_Viridian(FieldSystem *fieldSystem);
 void GymmickInit_Sinjoh(FieldSystem *fieldSystem);
 void EcruteakGymmick_BindCandleToTrainerObject(FieldSystem *fieldSystem);
-void EcruteakGymmick_UnbindCandleFromTrainerObject(FieldSystem *fieldSystem);
+void EcruteakGymmick_UnbindCandle(FieldSystem *fieldSystem);
 void EcruteakGymmick_ExtinguishCandle(FieldSystem *fieldSystem, ScriptEnvField field);
 BOOL CianwoodGymmick_ActivateWinch(FieldSystem *fieldSystem);
 void VermilionGymmick_GateAction(FieldSystem *fieldSystem, u8 lockno, u8 relock);

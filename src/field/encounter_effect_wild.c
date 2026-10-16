@@ -155,15 +155,41 @@ void WildEffect_RunWave(SysTask *task, EncounterEffectTask *effect, BOOL white);
 void SetBothScreensBrightnessByColor(u16 color);
 
 extern const u32 gRedEffectSpriteResources[];
-extern const u32 ov120_022601F8[];
-extern const u32 ov120_022601FC[];
-extern const u32 ov120_02260200[];
+extern const u32 gRedEffectAnimMembers[];
+extern const u32 gRedEffectCellMembers[];
+extern const u32 gRedEffectPlttMembers[];
 extern const BgTemplate gWildEffectWaveBgTemplate_Main1;
 extern const BgTemplate gWildEffectWaveBgTemplate_Main3;
 extern const u8 gWildEffectCellGridDiagonalsB[];
 extern const u8 gWildEffectCellGridRows[];
 extern const u8 gWildEffectCellGridDiagonalsA[];
 extern const u8 gWildEffectCellGridRowsReverse[];
+
+enum WildEffectState {
+    WILD_EFFECT_STATE_INIT,
+    WILD_EFFECT_STATE_START_FLASH,
+    WILD_EFFECT_STATE_WAIT_FLASH,
+    WILD_EFFECT_STATE_START,
+    WILD_EFFECT_STATE_RUN,
+    WILD_EFFECT_STATE_END,
+};
+
+enum RedEffectStepState {
+    RED_STEP_STATE_START,
+    RED_STEP_STATE_WAIT,
+    RED_STEP_STATE_FINISH,
+};
+
+enum WaveEffectState {
+    WAVE_EFFECT_STATE_LOAD_BG,
+    WAVE_EFFECT_STATE_START_FLASH,
+    WAVE_EFFECT_STATE_WAIT_FLASH,
+    WAVE_EFFECT_STATE_START_WAVE,
+    WAVE_EFFECT_STATE_WAIT_BG1_DELAY,
+    WAVE_EFFECT_STATE_START_BG1_SCROLL,
+    WAVE_EFFECT_STATE_WAIT_BG1_SCROLL,
+    WAVE_EFFECT_STATE_END,
+};
 
 WildEffectCell *WildEffectCell_New(enum HeapID heapID) {
     WildEffectCell *cell = Heap_Alloc(heapID, sizeof(WildEffectCell));
@@ -463,7 +489,7 @@ void EncounterEffect_PkmnTrainerRed(SysTask *task, EncounterEffectTask *effect) 
     RedEffectWork *work = effect->work;
 
     switch (effect->state) {
-    case 0: {
+    case WILD_EFFECT_STATE_INIT: {
         u16 black;
 
         effect->work = Heap_Alloc(HEAP_ID_FIELD1, sizeof(RedEffectWork));
@@ -482,28 +508,28 @@ void EncounterEffect_PkmnTrainerRed(SysTask *task, EncounterEffectTask *effect) 
         WildEffectStep_Init(&work->steps[0], (WildEffectStepFunc)RedEffect_FillScreen);
         WildEffectStep_Init(&work->steps[1], (WildEffectStepFunc)RedEffect_FirstFlash);
         WildEffectStep_Init(&work->steps[2], (WildEffectStepFunc)RedEffect_SecondFlash);
-        effect->state = 1;
+        effect->state = WILD_EFFECT_STATE_START_FLASH;
         break;
     }
-    case 1:
+    case WILD_EFFECT_STATE_START_FLASH:
         EncounterEffect_StartFlash(1, -16, -16, &effect->fadeDone, 2);
-        effect->state = 2;
+        effect->state = WILD_EFFECT_STATE_WAIT_FLASH;
         break;
-    case 2:
+    case WILD_EFFECT_STATE_WAIT_FLASH:
         if (effect->fadeDone) {
-            effect->state = 3;
+            effect->state = WILD_EFFECT_STATE_START;
         }
         break;
-    case 3:
+    case WILD_EFFECT_STATE_START:
         work->step = 0;
-        effect->state = 4;
+        effect->state = WILD_EFFECT_STATE_RUN;
         break;
-    case 4:
+    case WILD_EFFECT_STATE_RUN:
         if (WildEffectStep_Run(&work->steps[work->step], work)) {
-            effect->state = 5;
+            effect->state = WILD_EFFECT_STATE_END;
         }
         break;
-    case 5:
+    case WILD_EFFECT_STATE_END:
         SetBothScreensBrightnessByColor(0);
         if (effect->done) {
             *effect->done = TRUE;
@@ -517,7 +543,7 @@ void EncounterEffect_PkmnTrainerRed(SysTask *task, EncounterEffectTask *effect) 
         EncounterEffect_Finish(effect, task);
         return;
     }
-    if (effect->state != 5) {
+    if (effect->state != WILD_EFFECT_STATE_END) {
         SpriteList_RenderAndAnimateSprites(work->spriteManager.spriteList);
     }
 }
@@ -527,21 +553,21 @@ BOOL RedEffect_FillScreen(RedEffectWork *work, u32 *state) {
     BOOL done;
 
     switch (*state) {
-    case 0:
+    case RED_STEP_STATE_START:
         work->fill = WildEffectRandomFill_New(HEAP_ID_FIELD1);
         WildEffectRandomFill_Start(work->fill, 0, work->window, 15);
-        *state = 1;
+        *state = RED_STEP_STATE_WAIT;
         break;
-    case 1:
+    case RED_STEP_STATE_WAIT:
         done = WildEffectRandomFill_Update(work->fill);
         ScheduleWindowCopyToVram(work->window);
         if (done) {
-            *state = 2;
+            *state = RED_STEP_STATE_FINISH;
         }
         break;
-    case 2:
+    case RED_STEP_STATE_FINISH:
         WildEffectRandomFill_Free(work->fill);
-        *state = 0;
+        *state = RED_STEP_STATE_START;
         return TRUE;
     default:
         GF_ASSERT(FALSE);
@@ -551,19 +577,19 @@ BOOL RedEffect_FillScreen(RedEffectWork *work, u32 *state) {
 
 BOOL RedEffect_FirstFlash(RedEffectWork *work, u32 *state) {
     switch (*state) {
-    case 0:
+    case RED_STEP_STATE_START:
         HBlankSystem_Stop(work->hBlankSystem);
         BeginNormalPaletteFade(3, 42, 42, RGB_BLACK, 28, 1, HEAP_ID_FIELD1);
-        *state = 1;
+        *state = RED_STEP_STATE_WAIT;
         break;
-    case 1:
+    case RED_STEP_STATE_WAIT:
         if (IsPaletteFadeFinished()) {
-            *state = 2;
+            *state = RED_STEP_STATE_FINISH;
         }
         break;
-    case 2:
+    case RED_STEP_STATE_FINISH:
         HBlankSystem_Start(work->hBlankSystem);
-        *state = 0;
+        *state = RED_STEP_STATE_START;
         return TRUE;
     default:
         GF_ASSERT(FALSE);
@@ -573,19 +599,19 @@ BOOL RedEffect_FirstFlash(RedEffectWork *work, u32 *state) {
 
 BOOL RedEffect_SecondFlash(RedEffectWork *work, u32 *state) {
     switch (*state) {
-    case 0:
+    case RED_STEP_STATE_START:
         HBlankSystem_Stop(work->hBlankSystem);
         BeginNormalPaletteFade(3, 24, 24, RGB_BLACK, 28, 1, HEAP_ID_FIELD1);
-        *state = 1;
+        *state = RED_STEP_STATE_WAIT;
         break;
-    case 1:
+    case RED_STEP_STATE_WAIT:
         if (IsPaletteFadeFinished()) {
-            *state = 2;
+            *state = RED_STEP_STATE_FINISH;
         }
         break;
-    case 2:
+    case RED_STEP_STATE_FINISH:
         HBlankSystem_Start(work->hBlankSystem);
-        *state = 0;
+        *state = RED_STEP_STATE_START;
         return TRUE;
     default:
         GF_ASSERT(FALSE);
@@ -595,7 +621,7 @@ BOOL RedEffect_SecondFlash(RedEffectWork *work, u32 *state) {
 
 void RedEffect_CreateSprite(NARC *narc, Sprite **sprite, EncounterEffectSpriteManager *spriteManager, EncounterEffectSpriteResources *spriteResources, int variant) {
     GF_ASSERT(variant != 2);
-    EncounterEffect_LoadSpriteResources(narc, spriteManager, spriteResources, ov120_02260200[variant * 4], 1, gRedEffectSpriteResources[variant * 4], ov120_022601FC[variant * 4], ov120_022601F8[variant * 4], 600000);
+    EncounterEffect_LoadSpriteResources(narc, spriteManager, spriteResources, gRedEffectPlttMembers[variant * 4], 1, gRedEffectSpriteResources[variant * 4], gRedEffectCellMembers[variant * 4], gRedEffectAnimMembers[variant * 4], 600000);
     *sprite = EncounterEffect_CreateSprite(spriteManager, spriteResources, FX32_CONST(128), FX32_CONST(96), 0, 0);
     Sprite_SetDrawFlag(*sprite, TRUE);
     Sprite_SetDrawPriority(*sprite, 16);
@@ -618,7 +644,7 @@ void WildEffect_RunCellGridRows(SysTask *task, EncounterEffectTask *effect, BOOL
     int brightness;
 
     switch (effect->state) {
-    case 0: {
+    case WILD_EFFECT_STATE_INIT: {
         u8 *bytes = Heap_Alloc(HEAP_ID_FIELD1, sizeof(CellGridEffectWork));
         effect->work = bytes;
         bytes[0] = 0;
@@ -637,31 +663,31 @@ void WildEffect_RunCellGridRows(SysTask *task, EncounterEffectTask *effect, BOOL
         FillWindowPixelBuffer(work->window, 0);
         ScheduleWindowCopyToVram(work->window);
         work->grid = WildEffectCellGrid_New(HEAP_ID_FIELD1);
-        effect->state = 1;
+        effect->state = WILD_EFFECT_STATE_START_FLASH;
         break;
     }
-    case 1:
+    case WILD_EFFECT_STATE_START_FLASH:
         brightness = white ? 16 : -16;
         EncounterEffect_StartFlash(1, brightness, brightness, &effect->fadeDone, 2);
-        effect->state = 2;
+        effect->state = WILD_EFFECT_STATE_WAIT_FLASH;
         break;
-    case 2:
+    case WILD_EFFECT_STATE_WAIT_FLASH:
         if (effect->fadeDone) {
-            effect->state = 3;
+            effect->state = WILD_EFFECT_STATE_START;
         }
         break;
-    case 3:
+    case WILD_EFFECT_STATE_START:
         WildEffectCellGrid_Start(work->grid, 0, 4, work->window, 15, white);
-        effect->state = 4;
+        effect->state = WILD_EFFECT_STATE_RUN;
         break;
-    case 4:
+    case WILD_EFFECT_STATE_RUN:
         done = WildEffectCellGrid_UpdateRows(work->grid);
         ScheduleWindowCopyToVram(work->window);
         if (done) {
-            effect->state = 5;
+            effect->state = WILD_EFFECT_STATE_END;
         }
         break;
-    case 5:
+    case WILD_EFFECT_STATE_END:
         SetBothScreensBrightnessByColor(0);
         if (effect->done) {
             *effect->done = TRUE;
@@ -692,7 +718,7 @@ void WildEffect_RunCellGridDiagonals(SysTask *task, EncounterEffectTask *effect,
     int brightness;
 
     switch (effect->state) {
-    case 0: {
+    case WILD_EFFECT_STATE_INIT: {
         u8 *bytes = Heap_Alloc(HEAP_ID_FIELD1, sizeof(CellGridEffectWork));
         effect->work = bytes;
         bytes[0] = 0;
@@ -711,31 +737,31 @@ void WildEffect_RunCellGridDiagonals(SysTask *task, EncounterEffectTask *effect,
         FillWindowPixelBuffer(work->window, 0);
         ScheduleWindowCopyToVram(work->window);
         work->grid = WildEffectCellGrid_New(HEAP_ID_FIELD1);
-        effect->state = 1;
+        effect->state = WILD_EFFECT_STATE_START_FLASH;
         break;
     }
-    case 1:
+    case WILD_EFFECT_STATE_START_FLASH:
         brightness = white ? 16 : -16;
         EncounterEffect_StartFlash(1, brightness, brightness, &effect->fadeDone, 2);
-        effect->state = 2;
+        effect->state = WILD_EFFECT_STATE_WAIT_FLASH;
         break;
-    case 2:
+    case WILD_EFFECT_STATE_WAIT_FLASH:
         if (effect->fadeDone) {
-            effect->state = 3;
+            effect->state = WILD_EFFECT_STATE_START;
         }
         break;
-    case 3:
+    case WILD_EFFECT_STATE_START:
         WildEffectCellGrid_Start(work->grid, 0, 4, work->window, 15, white);
-        effect->state = 4;
+        effect->state = WILD_EFFECT_STATE_RUN;
         break;
-    case 4:
+    case WILD_EFFECT_STATE_RUN:
         done = WildEffectCellGrid_UpdateDiagonals(work->grid);
         ScheduleWindowCopyToVram(work->window);
         if (done) {
-            effect->state = 5;
+            effect->state = WILD_EFFECT_STATE_END;
         }
         break;
-    case 5:
+    case WILD_EFFECT_STATE_END:
         SetBothScreensBrightnessByColor(0);
         if (effect->done) {
             *effect->done = TRUE;
@@ -848,7 +874,7 @@ void WildEffect_RunWave(SysTask *task, EncounterEffectTask *effect, BOOL white) 
     WaveEffectWork *work = effect->work;
 
     switch (effect->state) {
-    case 0:
+    case WAVE_EFFECT_STATE_LOAD_BG:
         effect->work = Heap_Alloc(HEAP_ID_FIELD1, sizeof(WaveEffectWork));
         memset(effect->work, 0, sizeof(WaveEffectWork));
         work = effect->work;
@@ -865,9 +891,9 @@ void WildEffect_RunWave(SysTask *task, EncounterEffectTask *effect, BOOL white) 
         SetBgPriority(8, 0);
         GfGfx_EngineASetPlanes(GX_PLANEMASK_BG0 | GX_PLANEMASK_BG2 | GX_PLANEMASK_OBJ);
         WildEffectBgLoader_Start(&work->bgLoader, effect);
-        effect->state = 1;
+        effect->state = WAVE_EFFECT_STATE_START_FLASH;
         break;
-    case 1:
+    case WAVE_EFFECT_STATE_START_FLASH:
         if (!WildEffectBgLoader_IsDone(&work->bgLoader)) {
             break;
         }
@@ -889,37 +915,37 @@ void WildEffect_RunWave(SysTask *task, EncounterEffectTask *effect, BOOL white) 
             }
             EncounterEffect_StartFlash(1, brightness, brightness, &effect->fadeDone, 2);
         }
-        effect->state = 2;
+        effect->state = WAVE_EFFECT_STATE_WAIT_FLASH;
         break;
-    case 2:
+    case WAVE_EFFECT_STATE_WAIT_FLASH:
         if (effect->fadeDone) {
             EncounterEffectHBlankWave_Init(&work->wave, 4);
-            effect->state = 3;
+            effect->state = WAVE_EFFECT_STATE_START_WAVE;
         }
         break;
-    case 3:
+    case WAVE_EFFECT_STATE_START_WAVE:
         work->timer = 10;
         EncounterEffectHBlankWave_Start(&work->wave, 0, 191, 3410, 0x3000, 400, (void *)&reg_G2_BG0HOFS, 0, 4);
         work->bg3Scrolling = TRUE;
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
-        effect->state = 4;
+        effect->state = WAVE_EFFECT_STATE_WAIT_BG1_DELAY;
         // fallthrough
-    case 4:
+    case WAVE_EFFECT_STATE_WAIT_BG1_DELAY:
         if (work->timer-- == 0) {
-            effect->state = 5;
+            effect->state = WAVE_EFFECT_STATE_START_BG1_SCROLL;
         }
         break;
-    case 5:
+    case WAVE_EFFECT_STATE_START_BG1_SCROLL:
         work->bg1Scrolling = TRUE;
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
-        effect->state = 6;
+        effect->state = WAVE_EFFECT_STATE_WAIT_BG1_SCROLL;
         break;
-    case 6:
+    case WAVE_EFFECT_STATE_WAIT_BG1_SCROLL:
         if (work->bg1Done) {
-            effect->state = 7;
+            effect->state = WAVE_EFFECT_STATE_END;
         }
         break;
-    case 7:
+    case WAVE_EFFECT_STATE_END:
         SetBothScreensBrightnessByColor(0);
         if (effect->done) {
             *effect->done = TRUE;

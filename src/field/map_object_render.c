@@ -200,7 +200,7 @@ MapObjectBillboardResource *MapObjectRender_GetBillboardResourceSlot(MapObjectRe
 BOOL MapObjectRender_GetBillboardResource(MapObjectManager *manager, u32 spriteId, MapObjectBillboardResource *dest);
 void MapObjectRender_ReleaseBillboardResource(MapObjectRender *render, u32 spriteId);
 void MapObjectRender_ReleaseAllBillboardResources(MapObjectRender *render);
-BOOL MapObjectManager_IsSpriteUsedByOtherActiveObject(MapObjectManager *manager, LocalMapObject *self, u32 spriteId);
+BOOL MapObjectManager_IsSpriteUsedByOther(MapObjectManager *manager, LocalMapObject *self, u32 spriteId);
 void MapObjectRender_CreateResourceBanks(MapObjectRender *render, u32 modelCount, u32 residentModelCount, u32 sequenceCount, u32 residentSequenceCount, u32 textureCount, u32 residentTextureCount);
 void MapObjectRender_DestroyResourceBanks(MapObjectRender *render);
 void *BillboardModelEntries_Find(int id, int terminator, const BillboardModelEntry *entries);
@@ -369,7 +369,7 @@ void MapObject_FreeBillboard(LocalMapObject *object, void **billboard, u32 sprit
     BillboardObject_Delete(*billboard);
     *billboard = NULL;
     manager = MapObject_GetManager(object);
-    if (!MapObjectManager_IsSpriteUsedByOtherActiveObject(manager, object, spriteId)) {
+    if (!MapObjectManager_IsSpriteUsedByOther(manager, object, spriteId)) {
         MapObjectRender_ReleaseBillboardResource(MapObject_GetRender(object), spriteId);
     }
 }
@@ -388,7 +388,7 @@ void MapObject_CancelAndFreeBillboard(LocalMapObject *object, void **billboard, 
         BillboardObject_Delete(*billboard);
         *billboard = NULL;
     }
-    if (spriteId != 0xFFFF && !MapObjectManager_IsSpriteUsedByOtherActiveObject(MapObject_GetManager(object), object, spriteId)) {
+    if (spriteId != 0xFFFF && !MapObjectManager_IsSpriteUsedByOther(MapObject_GetManager(object), object, spriteId)) {
         MapObjectRender_ReleaseBillboardResource(MapObject_GetRender(object), spriteId);
     }
 }
@@ -524,7 +524,7 @@ void MapObjectRender_ReleaseAllBillboardResources(MapObjectRender *render) {
 }
 
 // TRUE if another active map object uses the sprite
-BOOL MapObjectManager_IsSpriteUsedByOtherActiveObject(MapObjectManager *manager, LocalMapObject *self, u32 spriteId) {
+BOOL MapObjectManager_IsSpriteUsedByOther(MapObjectManager *manager, LocalMapObject *self, u32 spriteId) {
     LocalMapObject *cur;
     u32 count = MapObjectManager_GetObjectCount(manager);
 

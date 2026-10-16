@@ -60,18 +60,29 @@ void EncounterEffectHBlankWave_AlternateDirection(EncounterEffectHBlankWave *wav
 // One entry per grunt sprite, 8 words apart: start/end/velocity of x, start/end/velocity of y,
 // delay before the sprite appears, rotation
 extern const s32 gEncounterTeamRocketSteps[];
-extern const s32 ov117_0225FAF8[];
-extern const s32 ov117_0225FAFC[];
-extern const s32 ov117_0225FB00[];
-extern const s32 ov117_0225FB04[];
-extern const s32 ov117_0225FB08[];
-extern const s32 ov117_0225FB0C[];
-extern const s32 ov117_0225FB10[];
+extern const s32 gEncounterTeamRocketStepEndX[];
+extern const s32 gEncounterTeamRocketStepVelocityX[];
+extern const s32 gEncounterTeamRocketStepStartY[];
+extern const s32 gEncounterTeamRocketStepEndY[];
+extern const s32 gEncounterTeamRocketStepVelocityY[];
+extern const s32 gEncounterTeamRocketStepDelay[];
+extern const s32 gEncounterTeamRocketStepRotation[];
 extern const RocketExecutiveIntroParams gEncounterExecutivePetrelIntroParams;
 extern const RocketExecutiveIntroParams gEncounterExecutiveProtonIntroParams;
 extern const RocketExecutiveIntroParams gEncounterExecutiveArcherIntroParams;
 extern const RocketExecutiveIntroParams gEncounterExecutiveArianaIntroParams;
 extern const RocketExecutiveIntroParams gEncounterRocketBossIntroParams;
+
+enum TeamRocketState {
+    TEAM_ROCKET_STATE_INIT,
+    TEAM_ROCKET_STATE_START_FLASH,
+    TEAM_ROCKET_STATE_WAIT_FLASH,
+    TEAM_ROCKET_STATE_LAUNCH_SPRITES,
+    TEAM_ROCKET_STATE_WAIT_SPRITES,
+    TEAM_ROCKET_STATE_START_FADE,
+    TEAM_ROCKET_STATE_WAIT_FADE,
+    TEAM_ROCKET_STATE_END,
+};
 
 // Six "R" sprites fly in one after another, then the screen fades to black.
 void EncounterEffect_TeamRocket(SysTask *task, EncounterEffectTask *effect) {
@@ -82,7 +93,7 @@ void EncounterEffect_TeamRocket(SysTask *task, EncounterEffectTask *effect) {
     TeamRocketEffectWork *work = effect->work;
 
     switch (effect->state) {
-    case 0:
+    case TEAM_ROCKET_STATE_INIT:
         effect->work = Heap_Alloc(HEAP_ID_FIELD1, sizeof(TeamRocketEffectWork));
         memset(effect->work, 0, sizeof(TeamRocketEffectWork));
         work = effect->work;
@@ -95,25 +106,25 @@ void EncounterEffect_TeamRocket(SysTask *task, EncounterEffectTask *effect) {
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         effect->state++;
         break;
-    case 1:
+    case TEAM_ROCKET_STATE_START_FLASH:
         EncounterEffect_StartFlash(1, -16, -16, &effect->fadeDone, 2);
         effect->state++;
         break;
-    case 2:
+    case TEAM_ROCKET_STATE_WAIT_FLASH:
         if (effect->fadeDone) {
             effect->state++;
             work->next = 0;
-            work->timer = ov117_0225FB0C[work->next * 8];
+            work->timer = gEncounterTeamRocketStepDelay[work->next * 8];
         }
         break;
-    case 3:
+    case TEAM_ROCKET_STATE_LAUNCH_SPRITES:
         if (--work->timer < 0) {
-            EncounterEffectQuadInterp_Init(&work->x[work->next], gEncounterTeamRocketSteps[work->next * 8], ov117_0225FAF8[work->next * 8], ov117_0225FAFC[work->next * 8], 8);
-            EncounterEffectQuadInterp_Init(&work->y[work->next], ov117_0225FB00[work->next * 8], ov117_0225FB04[work->next * 8], ov117_0225FB08[work->next * 8], 8);
+            EncounterEffectQuadInterp_Init(&work->x[work->next], gEncounterTeamRocketSteps[work->next * 8], gEncounterTeamRocketStepEndX[work->next * 8], gEncounterTeamRocketStepVelocityX[work->next * 8], 8);
+            EncounterEffectQuadInterp_Init(&work->y[work->next], gEncounterTeamRocketStepStartY[work->next * 8], gEncounterTeamRocketStepEndY[work->next * 8], gEncounterTeamRocketStepVelocityY[work->next * 8], 8);
             EncounterEffectQuadInterp_Init(&work->scale[work->next], FX32_CONST(2), 41, -0x666, 8);
-            EncounterEffectInterp_Init(&work->rotation[work->next], 0, ov117_0225FB10[work->next * 8], 8);
+            EncounterEffectInterp_Init(&work->rotation[work->next], 0, gEncounterTeamRocketStepRotation[work->next * 8], 8);
             Sprite_SetDrawFlag(work->sprites[work->next], TRUE);
-            EncounterEffect_SetVecFx32(&position, gEncounterTeamRocketSteps[work->next * 8], ov117_0225FB00[work->next * 8], 0);
+            EncounterEffect_SetVecFx32(&position, gEncounterTeamRocketSteps[work->next * 8], gEncounterTeamRocketStepStartY[work->next * 8], 0);
             Sprite_SetMatrix(work->sprites[work->next], &position);
             EncounterEffect_SetVecFx32(&scale, FX32_CONST(2), FX32_CONST(2), 0);
             Sprite_SetScaleAndAffineType(work->sprites[work->next], &scale, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
@@ -122,26 +133,26 @@ void EncounterEffect_TeamRocket(SysTask *task, EncounterEffectTask *effect) {
             if (work->next >= ROCKET_EFFECT_SPRITE_COUNT) {
                 effect->state++;
             } else {
-                work->timer = ov117_0225FB0C[work->next * 8];
+                work->timer = gEncounterTeamRocketStepDelay[work->next * 8];
             }
         }
         break;
-    case 4:
+    case TEAM_ROCKET_STATE_WAIT_SPRITES:
         if (work->active[ROCKET_EFFECT_SPRITE_COUNT - 1] == FALSE) {
             effect->state++;
         }
         break;
-    case 5:
+    case TEAM_ROCKET_STATE_START_FADE:
         HBlankSystem_Stop(effect->fieldSystem->mapSystems->hBlankSystem);
         BeginNormalPaletteFade(3, 34, 0, RGB_BLACK, 12, 1, HEAP_ID_FIELD1);
         effect->state++;
         break;
-    case 6:
+    case TEAM_ROCKET_STATE_WAIT_FADE:
         if (IsPaletteFadeFinished()) {
             effect->state++;
         }
         break;
-    case 7:
+    case TEAM_ROCKET_STATE_END:
         SetMasterBrightnessByColor(1, RGB_BLACK);
         HBlankSystem_Start(effect->fieldSystem->mapSystems->hBlankSystem);
         if (effect->done != NULL) {
@@ -172,7 +183,7 @@ void EncounterEffect_TeamRocket(SysTask *task, EncounterEffectTask *effect) {
             Sprite_SetAffineZRotation(work->sprites[i], (u16)work->rotation[i].value);
         }
     }
-    if (effect->state != 7) {
+    if (effect->state != TEAM_ROCKET_STATE_END) {
         SpriteList_RenderAndAnimateSprites(work->spriteManager.spriteList);
     }
 }

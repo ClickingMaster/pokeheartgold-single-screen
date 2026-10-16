@@ -521,7 +521,7 @@
 	.public _021EA6AA
 	.public _021EA6C8
 	.public _021EA71A
-	.public _021EA720
+	.public sSafariAreaCustomizerConsts
 	.public _021EA724
 	.public _021EA73A
 	.public _021EA766

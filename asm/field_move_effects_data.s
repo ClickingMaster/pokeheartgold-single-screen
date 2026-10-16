@@ -1274,7 +1274,7 @@
 	.public FieldMoveCutIn_StepStartFly
 	.public FieldMoveCutIn_StepWaitTakeOff
 	.public FieldMoveCutIn_StepWaitBeforeFlyAway
-	.public FieldMoveCutIn_StepWaitBeforeFlyAwayWithObject
+	.public FieldMoveCutIn_StepWaitBeforePickUp
 	.public FieldMoveCutIn_StepWaitFlyAway
 	.public FieldMoveCutIn_StepCloseFlyWindow
 	.public FieldMoveCutIn_StepWaitFlyEnd
@@ -1926,7 +1926,7 @@ sFieldMoveCutInFlyWithObjectSteps: ; 0x022534F0
 	.word FieldMoveCutIn_StepWaitModelEffect
 	.word FieldMoveCutIn_StepLoadFlyGraphics
 	.word FieldMoveCutIn_StepWaitFlyGraphics
-	.word FieldMoveCutIn_StepWaitBeforeFlyAwayWithObject
+	.word FieldMoveCutIn_StepWaitBeforePickUp
 	.word FieldMoveCutIn_StepWaitFlyAway
 	.word FieldMoveCutIn_StepWaitFlyEnd
 	.word FieldMoveCutIn_StepWaitPaletteFade

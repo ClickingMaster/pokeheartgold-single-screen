@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+#include "constants/global_fieldmap.h"
+
 #include "field_system.h"
 #include "map_events_internal.h"
 #include "map_object.h"
@@ -16,7 +18,7 @@ BOOL BottomScreen_None_IsDone(void);
 u32 _GetCoordsOfFacingTile(FieldSystem *fieldSystem, int *x, int *z);
 u8 PlayerAvatar_IsAtSameHeightAs(PlayerAvatar *avatar, LocalMapObject *object);
 u8 BgEventIsUncollectedHiddenItem(FieldSystem *fieldSystem, BgEvent *bgEvent);
-BOOL BgEventDirectionIsCompatibleWithPlayerFacing(FieldSystem *fieldSystem, BgEvent *bgEvent);
+BOOL BgEvent_MatchesPlayerFacing(FieldSystem *fieldSystem, BgEvent *bgEvent);
 
 void BottomScreen_None_Init(void) {
 }
@@ -104,7 +106,7 @@ u16 GetInteractedBackgroundEventScript(FieldSystem *fieldSystem, BgEvent *bgEven
                     if (BgEventIsUncollectedHiddenItem(fieldSystem, &bgEvents[i]) == TRUE) {
                         return bgEvents[i].scriptId;
                     }
-                } else if (BgEventDirectionIsCompatibleWithPlayerFacing(fieldSystem, &bgEvents[i]) == TRUE) {
+                } else if (BgEvent_MatchesPlayerFacing(fieldSystem, &bgEvents[i]) == TRUE) {
                     return bgEvents[i].scriptId;
                 }
             }
@@ -125,27 +127,27 @@ u8 BgEventIsUncollectedHiddenItem(FieldSystem *fieldSystem, BgEvent *bgEvent) {
     return TRUE;
 }
 
-BOOL BgEventDirectionIsCompatibleWithPlayerFacing(FieldSystem *fieldSystem, BgEvent *bgEvent) {
+BOOL BgEvent_MatchesPlayerFacing(FieldSystem *fieldSystem, BgEvent *bgEvent) {
     if (bgEvent->dir == 4) {
         return TRUE;
     }
     switch (PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar)) {
-    case 0:
+    case DIR_NORTH:
         if (bgEvent->dir == 0 || bgEvent->dir == 6) {
             return TRUE;
         }
         break;
-    case 1:
+    case DIR_SOUTH:
         if (bgEvent->dir == 3 || bgEvent->dir == 6) {
             return TRUE;
         }
         break;
-    case 2:
+    case DIR_WEST:
         if (bgEvent->dir == 2 || bgEvent->dir == 5) {
             return TRUE;
         }
         break;
-    case 3:
+    case DIR_EAST:
         if (bgEvent->dir == 1 || bgEvent->dir == 5) {
             return TRUE;
         }
@@ -159,7 +161,7 @@ u32 GetFacingSignScript(FieldSystem *fieldSystem, BgEvent *bgEvents, int numEven
     int x;
     int z;
     int i;
-    if (PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar) != 0) {
+    if (PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar) != DIR_NORTH) {
         return 0xFFFF;
     }
     _GetCoordsOfFacingTile(fieldSystem, &x, &z);

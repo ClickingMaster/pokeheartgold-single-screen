@@ -117,6 +117,17 @@ BOOL BlockWipe_Update(void *circleWipe);
 void EncounterEffectHBlankWave_AlternateDirection(EncounterEffectHBlankWave *wave, int unused);
 void SetBothScreensBrightnessByColor(u16 color);
 
+enum SpinZoomState {
+    SPIN_ZOOM_STATE_INIT,
+    SPIN_ZOOM_STATE_START_FLASH,
+    SPIN_ZOOM_STATE_WAIT_FLASH,
+    SPIN_ZOOM_STATE_START_SPIN,
+    SPIN_ZOOM_STATE_SPIN,
+    SPIN_ZOOM_STATE_START_WIPE,
+    SPIN_ZOOM_STATE_WIPE,
+    SPIN_ZOOM_STATE_END,
+};
+
 void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect) {
     SpinZoomEffectWork *work = effect->work;
     VecFx32 scale;
@@ -129,7 +140,7 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
     int i;
 
     switch (effect->state) {
-    case 0:
+    case SPIN_ZOOM_STATE_INIT:
         effect->work = Heap_Alloc(HEAP_ID_FIELD1, sizeof(SpinZoomEffectWork));
         memset(effect->work, 0, sizeof(SpinZoomEffectWork));
         work = effect->work;
@@ -145,16 +156,16 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         effect->state++;
         break;
-    case 1:
+    case SPIN_ZOOM_STATE_START_FLASH:
         EncounterEffect_StartFlash(1, -16, -16, &effect->fadeDone, 2);
         effect->state++;
         break;
-    case 2:
+    case SPIN_ZOOM_STATE_WAIT_FLASH:
         if (effect->fadeDone) {
             effect->state++;
         }
         break;
-    case 3:
+    case SPIN_ZOOM_STATE_START_SPIN:
         EncounterEffectQuadInterp_Init(&work->scale, 41, FX32_ONE, 2, 10);
         EncounterEffect_SetVecFx32(&scale, work->scale.value, work->scale.value, work->scale.value);
         for (i = 0; i < 2; i++) {
@@ -165,7 +176,7 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
         EncounterEffectInterp_Init(&work->rotation, 0, 0xFFFF, 10);
         effect->state++;
         break;
-    case 4:
+    case SPIN_ZOOM_STATE_SPIN:
         done = EncounterEffectQuadInterp_Update(&work->scale);
         EncounterEffect_SetVecFx32(&scale, work->scale.value, work->scale.value, work->scale.value);
         EncounterEffectInterp_Update(&work->rotation);
@@ -178,7 +189,7 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
             effect->state++;
         }
         break;
-    case 5:
+    case SPIN_ZOOM_STATE_START_WIPE:
         StripeWipe_Start(effect, work->flash, 96, 6, 0, FX32_CONST(255), FX32_CONST(10));
         Sprite_SetAnimCtrlSeq(work->sprites[0], 1);
         Sprite_SetAnimCtrlSeq(work->sprites[1], 2);
@@ -189,7 +200,7 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
         Sprite_SetAffineZRotation(work->sprites[1], 0);
         effect->state++;
         break;
-    case 6:
+    case SPIN_ZOOM_STATE_WIPE:
         EncounterEffectQuadInterp_Update(&work->movement);
         EncounterEffect_SetVecFx32(&leftPos, FX32_CONST(128) - work->movement.value, FX32_CONST(96), 0);
         left = leftPos;
@@ -203,7 +214,7 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
             effect->state++;
         }
         break;
-    case 7:
+    case SPIN_ZOOM_STATE_END:
         SetBothScreensBrightnessByColor(RGB_BLACK);
         if (effect->done != NULL) {
             *effect->done = TRUE;
@@ -217,7 +228,7 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
         EncounterEffect_Finish(effect, task);
         break;
     }
-    if (effect->state != 7) {
+    if (effect->state != SPIN_ZOOM_STATE_END) {
         SpriteList_RenderAndAnimateSprites(work->spriteManager.spriteList);
     }
 }
@@ -323,6 +334,17 @@ void EncounterEffect_TrainerSpinApart(SysTask *task, EncounterEffectTask *effect
     }
 }
 
+enum FadeSpinState {
+    FADE_SPIN_STATE_INIT,
+    FADE_SPIN_STATE_START_FLASH,
+    FADE_SPIN_STATE_WAIT_FLASH,
+    FADE_SPIN_STATE_START_SPIN,
+    FADE_SPIN_STATE_SPIN,
+    FADE_SPIN_STATE_START_ZOOM,
+    FADE_SPIN_STATE_ZOOM,
+    FADE_SPIN_STATE_END,
+};
+
 void EncounterEffect_TrainerFadeSpin(SysTask *task, EncounterEffectTask *effect) {
     FadeSpinEffectWork *work = effect->work;
     VecFx32 scale5;
@@ -334,7 +356,7 @@ void EncounterEffect_TrainerFadeSpin(SysTask *task, EncounterEffectTask *effect)
     int i;
 
     switch (effect->state) {
-    case 0:
+    case FADE_SPIN_STATE_INIT:
         effect->work = Heap_Alloc(HEAP_ID_FIELD1, sizeof(FadeSpinEffectWork));
         memset(effect->work, 0, sizeof(FadeSpinEffectWork));
         work = effect->work;
@@ -351,11 +373,11 @@ void EncounterEffect_TrainerFadeSpin(SysTask *task, EncounterEffectTask *effect)
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         effect->state++;
         break;
-    case 1:
+    case FADE_SPIN_STATE_START_FLASH:
         EncounterEffect_StartFlash(1, -16, -16, &effect->fadeDone, 2);
         effect->state++;
         break;
-    case 2:
+    case FADE_SPIN_STATE_WAIT_FLASH:
         work->timer--;
         if (work->timer == 0) {
             EncounterEffectHBlankWave_Start(&work->wave, 0, 191, 682, FX32_CONST(12), 800, (void *)&reg_G2_BG0HOFS, 0, HEAP_ID_FIELD1);
@@ -365,7 +387,7 @@ void EncounterEffect_TrainerFadeSpin(SysTask *task, EncounterEffectTask *effect)
             effect->state++;
         }
         break;
-    case 3:
+    case FADE_SPIN_STATE_START_SPIN:
         EncounterEffectInterp_Init(&work->blend, 0, 16, 8);
         G2x_SetBlendAlpha_((u32)&reg_G2_BLDCNT, GX_BLEND_PLANEMASK_NONE, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3, work->blend.value, 16 - work->blend.value);
         for (i = 0; i < 2; i++) {
@@ -376,7 +398,7 @@ void EncounterEffect_TrainerFadeSpin(SysTask *task, EncounterEffectTask *effect)
         EncounterEffectInterp_Init(&work->rotation, 0, 0xFFFF, 8);
         effect->state++;
         break;
-    case 4:
+    case FADE_SPIN_STATE_SPIN:
         done = EncounterEffectInterp_Update(&work->blend);
         reg_G2_BLDALPHA = (u16)(work->blend.value | ((16 - work->blend.value) << 8));
         angle = (u16)work->rotation.value;
@@ -396,7 +418,7 @@ void EncounterEffect_TrainerFadeSpin(SysTask *task, EncounterEffectTask *effect)
         }
         effect->state++;
         break;
-    case 5:
+    case FADE_SPIN_STATE_START_ZOOM:
         EncounterEffectQuadInterp_Init(&work->scale, FX32_ONE, 41, 410, 8);
         EncounterEffect_SetVecFx32(&scalePos5, work->scale.value, work->scale.value, work->scale.value);
         scale5 = scalePos5;
@@ -410,7 +432,7 @@ void EncounterEffect_TrainerFadeSpin(SysTask *task, EncounterEffectTask *effect)
         BeginNormalPaletteFade(3, 24, 0, RGB_BLACK, 8, 1, HEAP_ID_FIELD1);
         effect->state++;
         break;
-    case 6:
+    case FADE_SPIN_STATE_ZOOM:
         done = EncounterEffectQuadInterp_Update(&work->scale);
         EncounterEffect_SetVecFx32(&scalePos6, work->scale.value, work->scale.value, work->scale.value);
         scale6 = scalePos6;
@@ -423,7 +445,7 @@ void EncounterEffect_TrainerFadeSpin(SysTask *task, EncounterEffectTask *effect)
             effect->state++;
         }
         break;
-    case 7:
+    case FADE_SPIN_STATE_END:
         SetMasterBrightnessByColor(1, RGB_BLACK);
         if (effect->done != NULL) {
             *effect->done = TRUE;
@@ -441,10 +463,21 @@ void EncounterEffect_TrainerFadeSpin(SysTask *task, EncounterEffectTask *effect)
     if (work->waveActive == TRUE) {
         EncounterEffectHBlankWave_AlternateDirection(&work->wave, 2);
     }
-    if (effect->state != 7) {
+    if (effect->state != FADE_SPIN_STATE_END) {
         SpriteList_RenderAndAnimateSprites(work->spriteManager.spriteList);
     }
 }
+
+enum BallDropState {
+    BALL_DROP_STATE_INIT,
+    BALL_DROP_STATE_START_FLASH,
+    BALL_DROP_STATE_WAIT_FLASH,
+    BALL_DROP_STATE_START_TRAIL_1,
+    BALL_DROP_STATE_START_TRAIL_2,
+    BALL_DROP_STATE_START_TRAIL_3,
+    BALL_DROP_STATE_WAIT_TRAILS,
+    BALL_DROP_STATE_END,
+};
 
 void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect) {
     BallDropEffectWork *work = effect->work;
@@ -455,7 +488,7 @@ void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect)
     int i;
 
     switch (effect->state) {
-    case 0:
+    case BALL_DROP_STATE_INIT:
         effect->work = Heap_Alloc(HEAP_ID_FIELD1, sizeof(BallDropEffectWork));
         memset(effect->work, 0, sizeof(BallDropEffectWork));
         work = effect->work;
@@ -479,11 +512,11 @@ void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect)
         ScheduleWindowCopyToVram(work->window);
         effect->state++;
         break;
-    case 1:
+    case BALL_DROP_STATE_START_FLASH:
         EncounterEffect_StartFlash(1, 16, -16, &effect->fadeDone, 2);
         effect->state++;
         break;
-    case 2:
+    case BALL_DROP_STATE_WAIT_FLASH:
         if (--work->timer == 0) {
             EncounterEffectHBlankWave_Start(&work->wave, 0, 191, 682, FX32_CONST(12), 800, (void *)&reg_G2_BG0HOFS, 0, HEAP_ID_FIELD1);
             work->waveActive = TRUE;
@@ -493,7 +526,7 @@ void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect)
             effect->state++;
         }
         break;
-    case 3:
+    case BALL_DROP_STATE_START_TRAIL_1:
         if (--work->timer < 0) {
             distance = Camera_GetDistance(work->camera);
             EncounterEffectQuadInterp_Init(&work->cameraDistance, distance, distance - (125 << 14), -FX32_CONST(10), 16);
@@ -508,7 +541,7 @@ void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect)
             work->timer = 4;
         }
         break;
-    case 4:
+    case BALL_DROP_STATE_START_TRAIL_2:
         if (--work->timer < 0) {
             EncounterEffectInterp_Init(&work->y[1], 231, -32, 6);
             EncounterEffectInterp_Init(&work->rotation[1], 0, -0xFFFF, 6);
@@ -521,7 +554,7 @@ void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect)
             work->timer = 2;
         }
         break;
-    case 5:
+    case BALL_DROP_STATE_START_TRAIL_3:
         if (--work->timer < 0) {
             EncounterEffectInterp_Init(&work->y[2], 231, -32, 6);
             EncounterEffectInterp_Init(&work->rotation[2], 0, 0xFFFF, 6);
@@ -533,14 +566,14 @@ void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect)
             effect->state++;
         }
         break;
-    case 6:
+    case BALL_DROP_STATE_WAIT_TRAILS:
         EncounterEffectQuadInterp_Update(&work->cameraDistance);
         Camera_SetDistance(work->cameraDistance.value, work->camera);
         if (work->active[0] == FALSE && work->active[1] == FALSE && work->active[2] == FALSE) {
             effect->state++;
         }
         break;
-    case 7:
+    case BALL_DROP_STATE_END:
         SetBothScreensBrightnessByColor(RGB_BLACK);
         if (effect->done != NULL) {
             *effect->done = TRUE;
@@ -578,10 +611,21 @@ void EncounterEffect_TrainerBallDrop(SysTask *task, EncounterEffectTask *effect)
         }
     }
     ScheduleWindowCopyToVram(work->window);
-    if (effect->state != 7) {
+    if (effect->state != BALL_DROP_STATE_END) {
         SpriteList_RenderAndAnimateSprites(work->spriteManager.spriteList);
     }
 }
+
+enum RisingBallState {
+    RISING_BALL_STATE_INIT,
+    RISING_BALL_STATE_START_FLASH,
+    RISING_BALL_STATE_WAIT_FLASH,
+    RISING_BALL_STATE_START_RISE,
+    RISING_BALL_STATE_RISE,
+    RISING_BALL_STATE_START_ZOOM,
+    RISING_BALL_STATE_WAIT_FADE,
+    RISING_BALL_STATE_END,
+};
 
 void EncounterEffect_TrainerRisingBall(SysTask *task, EncounterEffectTask *effect) {
     VecFx32 scale;
@@ -593,7 +637,7 @@ void EncounterEffect_TrainerRisingBall(SysTask *task, EncounterEffectTask *effec
     RisingBallEffectWork *work = effect->work;
 
     switch (effect->state) {
-    case 0:
+    case RISING_BALL_STATE_INIT:
         effect->work = Heap_Alloc(HEAP_ID_FIELD1, sizeof(RisingBallEffectWork));
         memset(effect->work, 0, sizeof(RisingBallEffectWork));
         work = effect->work;
@@ -605,16 +649,16 @@ void EncounterEffect_TrainerRisingBall(SysTask *task, EncounterEffectTask *effec
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         effect->state++;
         break;
-    case 1:
+    case RISING_BALL_STATE_START_FLASH:
         EncounterEffect_StartFlash(1, -16, -16, &effect->fadeDone, 2);
         effect->state++;
         break;
-    case 2:
+    case RISING_BALL_STATE_WAIT_FLASH:
         if (effect->fadeDone) {
             effect->state++;
         }
         break;
-    case 3:
+    case RISING_BALL_STATE_START_RISE:
         EncounterEffectQuadInterp_Init(&work->y, 0, FX32_CONST(256), FX32_CONST(2), 12);
         Sprite_SetDrawFlag(work->sprite, TRUE);
         EncounterEffectQuadInterp_Init(&work->scaleX, 410, FX32_CONST(2), 0, 12);
@@ -624,7 +668,7 @@ void EncounterEffect_TrainerRisingBall(SysTask *task, EncounterEffectTask *effec
         EncounterEffectInterp_Init(&work->rotation, 0, 0xFFFF, 12);
         effect->state++;
         break;
-    case 4:
+    case RISING_BALL_STATE_RISE:
         done = EncounterEffectQuadInterp_Update(&work->y);
         x = 2 << 18;
         EncounterEffect_SetVecFx32(&position, x, work->y.value - (x >> 2), 0);
@@ -641,21 +685,21 @@ void EncounterEffect_TrainerRisingBall(SysTask *task, EncounterEffectTask *effec
             effect->state++;
         }
         break;
-    case 5:
+    case RISING_BALL_STATE_START_ZOOM:
         HBlankSystem_Stop(effect->fieldSystem->mapSystems->hBlankSystem);
         distance = Camera_GetDistance(work->camera);
         EncounterEffectQuadInterp_Init(&work->cameraDistance, distance, distance - (250 << 14), FX32_CONST(10), 8);
         BeginNormalPaletteFade(3, 18, 0, RGB_BLACK, 8, 1, HEAP_ID_FIELD1);
         effect->state++;
         break;
-    case 6:
+    case RISING_BALL_STATE_WAIT_FADE:
         EncounterEffectQuadInterp_Update(&work->cameraDistance);
         Camera_SetDistance(work->cameraDistance.value, work->camera);
         if (IsPaletteFadeFinished()) {
             effect->state++;
         }
         break;
-    case 7:
+    case RISING_BALL_STATE_END:
         SetMasterBrightnessByColor(1, RGB_BLACK);
         HBlankSystem_Start(effect->fieldSystem->mapSystems->hBlankSystem);
         if (effect->done != NULL) {
@@ -668,10 +712,23 @@ void EncounterEffect_TrainerRisingBall(SysTask *task, EncounterEffectTask *effec
         break;
     }
 
-    if (effect->state != 7) {
+    if (effect->state != RISING_BALL_STATE_END) {
         SpriteList_RenderAndAnimateSprites(work->spriteManager.spriteList);
     }
 }
+
+enum BallFallState {
+    BALL_FALL_STATE_INIT,
+    BALL_FALL_STATE_START_FLASH,
+    BALL_FALL_STATE_WAIT_FLASH,
+    BALL_FALL_STATE_DROP_BALL_1,
+    BALL_FALL_STATE_DROP_BALL_2,
+    BALL_FALL_STATE_DROP_BALL_3,
+    BALL_FALL_STATE_WAIT_BALLS,
+    BALL_FALL_STATE_START_WIPE,
+    BALL_FALL_STATE_WIPE,
+    BALL_FALL_STATE_END,
+};
 
 void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect) {
     BallFallEffectWork *work = effect->work;
@@ -683,7 +740,7 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
     int i;
 
     switch (effect->state) {
-    case 0:
+    case BALL_FALL_STATE_INIT:
         effect->work = Heap_Alloc(HEAP_ID_FIELD1, sizeof(BallFallEffectWork));
         memset(effect->work, 0, sizeof(BallFallEffectWork));
         work = effect->work;
@@ -704,17 +761,17 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
         work->circleWipe = BlockWipe_New(HEAP_ID_FIELD1);
         effect->state++;
         break;
-    case 1:
+    case BALL_FALL_STATE_START_FLASH:
         EncounterEffect_StartFlash(1, 16, -16, &effect->fadeDone, 2);
         effect->state++;
         break;
-    case 2:
+    case BALL_FALL_STATE_WAIT_FLASH:
         if (effect->fadeDone) {
             effect->state++;
             work->timer = 0;
         }
         break;
-    case 3:
+    case BALL_FALL_STATE_DROP_BALL_1:
         if (--work->timer <= 0) {
             EncounterEffectInterp_Init(&work->y[0], -32, 224, 5);
             EncounterEffect_SetVecFx32(&position, FX32_CONST(128), -FX32_CONST(32), 0);
@@ -727,7 +784,7 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
             work->timer = 1;
         }
         break;
-    case 4:
+    case BALL_FALL_STATE_DROP_BALL_2:
         if (--work->timer <= 0) {
             EncounterEffectInterp_Init(&work->y[1], -32, 224, 5);
             EncounterEffect_SetVecFx32(&position, FX32_CONST(208), -FX32_CONST(32), 0);
@@ -740,7 +797,7 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
             work->timer = 3;
         }
         break;
-    case 5:
+    case BALL_FALL_STATE_DROP_BALL_3:
         if (--work->timer <= 0) {
             EncounterEffectInterp_Init(&work->y[2], -32, 224, 5);
             EncounterEffect_SetVecFx32(&position, FX32_CONST(48), -FX32_CONST(32), 0);
@@ -752,7 +809,7 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
             effect->state++;
         }
         break;
-    case 6:
+    case BALL_FALL_STATE_WAIT_BALLS:
         if (work->active[0] == FALSE && work->active[1] == FALSE && work->active[2] == FALSE) {
             for (i = 0; i < BALL_DROP_SPRITE_COUNT; i++) {
                 Sprite_SetDrawFlag(work->sprites[i], FALSE);
@@ -760,13 +817,13 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
             effect->state++;
         }
         break;
-    case 7:
+    case BALL_FALL_STATE_START_WIPE:
         BlockWipe_Start(work->circleWipe, 1, 1, work->window, 15);
         distance = Camera_GetDistance(work->camera);
         EncounterEffectQuadInterp_Init(&work->cameraDistance, distance, distance - (125 << 15), FX32_CONST(10), 64);
         effect->state++;
         break;
-    case 8:
+    case BALL_FALL_STATE_WIPE:
         done = BlockWipe_Update(work->circleWipe);
         ScheduleWindowCopyToVram(work->window);
         EncounterEffectQuadInterp_Update(&work->cameraDistance);
@@ -775,7 +832,7 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
             effect->state++;
         }
         break;
-    case 9:
+    case BALL_FALL_STATE_END:
         SetBothScreensBrightnessByColor(RGB_BLACK);
         if (effect->done != NULL) {
             *effect->done = TRUE;
@@ -808,7 +865,7 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
             Sprite_SetAffineZRotation(work->sprites[i], (u16)work->rotation[i].value);
         }
     }
-    if (effect->state != 9) {
+    if (effect->state != BALL_FALL_STATE_END) {
         SpriteList_RenderAndAnimateSprites(work->spriteManager.spriteList);
     }
 }

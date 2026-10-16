@@ -66,7 +66,7 @@ BOOL FieldMoveCutIn_StepWaitFlyGraphics(FieldMoveCutIn *cutIn);
 BOOL FieldMoveCutIn_StepStartFly(FieldMoveCutIn *cutIn);
 BOOL FieldMoveCutIn_StepWaitTakeOff(FieldMoveCutIn *cutIn);
 BOOL FieldMoveCutIn_StepWaitBeforeFlyAway(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepWaitBeforeFlyAwayWithObject(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepWaitBeforePickUp(FieldMoveCutIn *cutIn);
 BOOL FieldMoveCutIn_StepWaitFlyAway(FieldMoveCutIn *cutIn);
 BOOL FieldMoveCutIn_StepCloseFlyWindow(FieldMoveCutIn *cutIn);
 BOOL FieldMoveCutIn_StepWaitFlyEnd(FieldMoveCutIn *cutIn);
@@ -494,7 +494,7 @@ BOOL FieldMoveCutIn_StepWaitBeforeFlyAway(FieldMoveCutIn *cutIn) {
     return TRUE;
 }
 
-BOOL FieldMoveCutIn_StepWaitBeforeFlyAwayWithObject(FieldMoveCutIn *cutIn) {
+BOOL FieldMoveCutIn_StepWaitBeforePickUp(FieldMoveCutIn *cutIn) {
     cutIn->timer++;
     if (cutIn->timer >= 20) {
         cutIn->timer = 0;

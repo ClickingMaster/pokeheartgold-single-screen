@@ -247,7 +247,7 @@ void EmoteBubbleEffect_Update(FieldEffect *effect, EmoteBubbleEffect *work) {
     VecFx32 position;
     VecFx32 facing;
     VecFx32 drawOffset;
-    VecFx32 v0;
+    VecFx32 tileOffset;
 
     LocalMapObject *mapObject = work->args.mapObject;
     if (!MapObject_CheckIDAndMap(mapObject, work->objectId, work->mapId)) {
@@ -256,10 +256,10 @@ void EmoteBubbleEffect_Update(FieldEffect *effect, EmoteBubbleEffect *work) {
     MapObject_CopyPositionVector(mapObject, &position);
     MapObject_CopyFacingVector(mapObject, &facing);
     MapObject_CopyDrawOffset(mapObject, &drawOffset);
-    MapObject_CopyTileDrawOffset(mapObject, &v0);
-    result.x = v0.x + (drawOffset.x + (position.x + facing.x));
-    result.y = v0.y + (position.y + drawOffset.y);
-    result.z = v0.z + (drawOffset.z + (position.z + facing.z));
+    MapObject_CopyTileDrawOffset(mapObject, &tileOffset);
+    result.x = tileOffset.x + (drawOffset.x + (position.x + facing.x));
+    result.y = tileOffset.y + (position.y + drawOffset.y);
+    result.z = tileOffset.z + (drawOffset.z + (position.z + facing.z));
     result.y += 0x20000;
     result.z += FX32_ONE;
     switch (work->state) {

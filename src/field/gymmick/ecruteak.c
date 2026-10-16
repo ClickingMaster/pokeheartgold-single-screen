@@ -75,7 +75,7 @@ void EcruteakGymmick_BindCandleToTrainerObject(FieldSystem *fieldSystem) {
     localData->sysTask = SysTask_CreateOnMainQueue(SysTask_MoveCandleToFollowMapObject, fieldSystem, 0);
 }
 
-void EcruteakGymmick_UnbindCandleFromTrainerObject(FieldSystem *fieldSystem) {
+void EcruteakGymmick_UnbindCandle(FieldSystem *fieldSystem) {
     EcruteakGymmickLocalData *localData = fieldSystem->mapSystems->localData;
     SysTask_Destroy(localData->sysTask);
 }

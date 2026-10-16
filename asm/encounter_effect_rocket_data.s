@@ -38,13 +38,13 @@
 	.public gEncounterExecutiveArianaIntroParams
 	.public gEncounterRocketBossIntroParams
 	.public gEncounterTeamRocketSteps
-	.public ov117_0225FAF8
-	.public ov117_0225FAFC
-	.public ov117_0225FB00
-	.public ov117_0225FB04
-	.public ov117_0225FB08
-	.public ov117_0225FB0C
-	.public ov117_0225FB10
+	.public gEncounterTeamRocketStepEndX
+	.public gEncounterTeamRocketStepVelocityX
+	.public gEncounterTeamRocketStepStartY
+	.public gEncounterTeamRocketStepEndY
+	.public gEncounterTeamRocketStepVelocityY
+	.public gEncounterTeamRocketStepDelay
+	.public gEncounterTeamRocketStepRotation
 	.public gEncounterExecutivePetrelIntroParams
 	.public EncounterEffect_TeamRocket
 	.public RocketEffect_LoadBgScreen
@@ -82,25 +82,25 @@ gEncounterRocketBossIntroParams: ; 0x0225FAEC
 gEncounterTeamRocketSteps: ; 0x0225FAF4
 	.byte 0x00, 0x40, 0x10, 0x00
 
-ov117_0225FAF8: ; 0x0225FAF8
+gEncounterTeamRocketStepEndX: ; 0x0225FAF8
 	.byte 0x00, 0x00, 0x08, 0x00
 
-ov117_0225FAFC: ; 0x0225FAFC
+gEncounterTeamRocketStepVelocityX: ; 0x0225FAFC
 	.byte 0x00, 0x20, 0xFE, 0xFF
 
-ov117_0225FB00: ; 0x0225FB00
+gEncounterTeamRocketStepStartY: ; 0x0225FB00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov117_0225FB04: ; 0x0225FB04
+gEncounterTeamRocketStepEndY: ; 0x0225FB04
 	.byte 0x00, 0x40, 0x06, 0x00
 
-ov117_0225FB08: ; 0x0225FB08
+gEncounterTeamRocketStepVelocityY: ; 0x0225FB08
 	.byte 0x00, 0x40, 0x01, 0x00
 
-ov117_0225FB0C: ; 0x0225FB0C
+gEncounterTeamRocketStepDelay: ; 0x0225FB0C
 	.byte 0x04, 0x00, 0x00, 0x00
 
-ov117_0225FB10: ; 0x0225FB10
+gEncounterTeamRocketStepRotation: ; 0x0225FB10
 	.byte 0xFE, 0xFF, 0x01, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x08, 0x00, 0x00, 0xE0, 0x01, 0x00
 	.byte 0x00, 0x00, 0x0A, 0x00, 0x00, 0x40, 0x06, 0x00, 0x00, 0xC0, 0xFE, 0xFF, 0x03, 0x00, 0x00, 0x00
 	.byte 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0xE0, 0x01, 0x00

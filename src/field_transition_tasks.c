@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+#include "constants/global_fieldmap.h"
+
 #include "field/fieldmap.h"
 
 #include "camera.h"
@@ -176,7 +178,7 @@ BOOL FieldTransition_EnterRising(TaskManager *taskMan) {
     case 4:
         if (MapObject_AreBitsSetForMovementScriptInit(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar)) && IsPaletteFadeFinished()) {
             if (FollowMon_IsActive(fieldSystem)) {
-                FollowMon_MoveToPlayer(fieldSystem, 0);
+                FollowMon_MoveToPlayer(fieldSystem, DIR_NORTH);
                 MapObject_ChangeMovement(FollowMon_GetMapObject(fieldSystem), 0x30);
                 FollowMon_HideUntilStep(FollowMon_GetMapObject(fieldSystem), TRUE);
             }
@@ -231,7 +233,7 @@ BOOL FieldTransition_EnterSinking(TaskManager *taskMan) {
     case 4:
         if (MapObject_AreBitsSetForMovementScriptInit(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar)) && IsPaletteFadeFinished()) {
             if (FollowMon_IsActive(fieldSystem)) {
-                FollowMon_MoveToPlayer(fieldSystem, 1);
+                FollowMon_MoveToPlayer(fieldSystem, DIR_SOUTH);
                 MapObject_ChangeMovement(FollowMon_GetMapObject(fieldSystem), 0x30);
                 FollowMon_HideUntilStep(FollowMon_GetMapObject(fieldSystem), TRUE);
             }

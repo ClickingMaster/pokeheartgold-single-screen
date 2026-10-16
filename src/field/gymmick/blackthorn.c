@@ -93,8 +93,8 @@ static void BlackthornGymmick_ApplyZTranslation(const int dz, const u8 width, Bl
 static void BlackthornPlatform_ApplyRotation(const u8 rot, const u16 x, const u16 z, BlackthornGymmickPlatformData *platform);
 static BlackthornPlatformButtonAction BlackthornGymmick_GetButtonAction(const BlackthornGymmickLocalData *localData, const u16 x, const u16 z, u8 *out);
 static BOOL BlackthornGymmick_TryStartBlackthornAction(const BlackthornGymmickLocalData *localData, const u16 x, const u16 z);
-static void BlackthornGymmick_GetCurrentLeadingWallCoordinates(const BlackthornGymmickPlatformData *platform, BlackthornGymMovePlatformTaskData *taskData);
-static void BlackthornGymmick_GetNextLeadingWallCoordinates(const int dim, BlackthornGymMovePlatformTaskData *taskData);
+static void BlackthornGymmick_GetLeadingWall(const BlackthornGymmickPlatformData *platform, BlackthornGymMovePlatformTaskData *taskData);
+static void BlackthornGymmick_MoveLeadingWall(const int dim, BlackthornGymMovePlatformTaskData *taskData);
 static int BlackthornGymmick_GetMoveDirection(u8 rotation, u8 direction);
 static void BlackthornGymmick_DirectionToVec(int directionId, VecFx32 *directionVec);
 static u8 BlackthornGymmick_CheckWallCollision(FieldSystem *fieldSystem, const u8 dim, const BlackthornGymXZPoint *const points);
@@ -485,7 +485,7 @@ static BOOL BlackthornGymmick_TryStartBlackthornAction(const BlackthornGymmickLo
     return ret;
 }
 
-static void BlackthornGymmick_GetCurrentLeadingWallCoordinates(const BlackthornGymmickPlatformData *platform, BlackthornGymMovePlatformTaskData *taskData) {
+static void BlackthornGymmick_GetLeadingWall(const BlackthornGymmickPlatformData *platform, BlackthornGymMovePlatformTaskData *taskData) {
     int i;
 
     switch (taskData->action) {
@@ -502,7 +502,7 @@ static void BlackthornGymmick_GetCurrentLeadingWallCoordinates(const BlackthornG
     }
 }
 
-static void BlackthornGymmick_GetNextLeadingWallCoordinates(const int dim, BlackthornGymMovePlatformTaskData *taskData) {
+static void BlackthornGymmick_MoveLeadingWall(const int dim, BlackthornGymMovePlatformTaskData *taskData) {
     switch (taskData->moveDirection) {
     case 0:
         BlackthornGymmick_ApplyXTranslation(1, dim, taskData->leadingWall);
@@ -593,7 +593,7 @@ static BOOL Task_BlackthornGymmick_MovePlatform(TaskManager *taskman) {
 
     switch (taskData->state) {
     case STATE_MOVE_INIT:
-        BlackthornGymmick_GetCurrentLeadingWallCoordinates(&localData->platforms[taskData->platformIdx], taskData);
+        BlackthornGymmick_GetLeadingWall(&localData->platforms[taskData->platformIdx], taskData);
         SysTask_CreateOnMainQueue(SysTask_BlackthornGymmick_MovePlatform, taskData, 0);
         taskData->state = STATE_MOVE_CHECK;
         break;
@@ -760,7 +760,7 @@ static void SysTask_BlackthornGymmick_MovePlatform(SysTask *task, void *data) {
         ++taskData->moveStepTimer;
         if (taskData->moveStepTimer >= 2) {
             taskData->moveStepTimer = 0;
-            BlackthornGymmick_GetNextLeadingWallCoordinates(localData->platforms[taskData->platformIdx].height, taskData);
+            BlackthornGymmick_MoveLeadingWall(localData->platforms[taskData->platformIdx].height, taskData);
             ++taskData->moveStepCount;
             if (taskData->moveStepCount >= taskData->moveDistance) {
                 VecFx32 playerFinalPos;

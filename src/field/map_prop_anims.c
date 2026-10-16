@@ -66,6 +66,15 @@ static inline NNSG3dResMdl *MapPropModelFile_GetModel(NNSG3dResFileHeader **mode
     return NNS_G3dGetMdlByIdx(NNS_G3dGetMdlSet(*modelFile), 0);
 }
 
+enum HealAnimState {
+    HEAL_ANIM_STATE_LOAD,
+    HEAL_ANIM_STATE_PLACE_BALL,
+    HEAL_ANIM_STATE_WAIT_BALL,
+    HEAL_ANIM_STATE_PLAY,
+    HEAL_ANIM_STATE_WAIT,
+    HEAL_ANIM_STATE_END,
+};
+
 #pragma force_active on
 BOOL PokecenterAnimRun(TaskManager *taskManager);
 
@@ -82,7 +91,7 @@ BOOL PokecenterAnimRun(TaskManager *taskManager) {
     u8 i;
 
     switch (anim->state) {
-    case 0:
+    case HEAL_ANIM_STATE_LOAD:
         ballModelFile = AreaDataManager_GetMapPropModel(MAP_PROP_HEALING_POKE_BALL, fieldSystem->areaDataManager);
         machineModelFile = AreaDataManager_GetMapPropModel(MAP_PROP_HEALING_MACHINE, fieldSystem->areaDataManager);
         ballModel = MapPropModelFile_GetModel(ballModelFile);
@@ -95,7 +104,7 @@ BOOL PokecenterAnimRun(TaskManager *taskManager) {
         MapPropOneShotAnimationManager_LoadPropAnimations(fieldSystem->mapPropAnimationManager, fieldSystem->mapPropOneShotAnimationManager, HEALING_ANIM_TAG_MACHINE, MAP_PROP_HEALING_MACHINE, renderObj, machineModel, AreaDataManager_GetMapPropTexture(fieldSystem->areaDataManager), 1, 1, FALSE);
         anim->state++;
         break;
-    case 1: {
+    case HEAL_ANIM_STATE_PLACE_BALL: {
         VecFx32 rotation = { 0 };
         pos.x = anim->machinePos.x + sHealingMachineBallOffsets[anim->ballIndex].x;
         pos.y = anim->machinePos.y + sHealingMachineBallOffsetsY[anim->ballIndex].x;
@@ -105,27 +114,27 @@ BOOL PokecenterAnimRun(TaskManager *taskManager) {
         anim->state++;
         break;
     }
-    case 2:
+    case HEAL_ANIM_STATE_WAIT_BALL:
         if (anim->timer < HEALING_BALL_DELAY) {
             anim->timer++;
         } else {
             anim->timer = 0;
             anim->ballIndex++;
             if (anim->ballIndex < anim->ballCount) {
-                anim->state = 1;
+                anim->state = HEAL_ANIM_STATE_PLACE_BALL;
             } else {
                 MapPropOneShotAnimationManager_SetAnimationRenderObj(fieldSystem->mapPropOneShotAnimationManager, HEALING_ANIM_TAG_BALLS, 0, MapProp_GetRenderSurface(MapPropManager_GetMapPropByIndex_Checked_RequireActive(fieldSystem->mapPropManager, anim->ballProps[0])));
                 anim->state++;
             }
         }
         break;
-    case 3:
+    case HEAL_ANIM_STATE_PLAY:
         MapPropOneShotAnimationManager_PlayAnimation(fieldSystem->mapPropOneShotAnimationManager, HEALING_ANIM_TAG_BALLS, 0);
         MapPropOneShotAnimationManager_PlayAnimation(fieldSystem->mapPropOneShotAnimationManager, HEALING_ANIM_TAG_MACHINE, 0);
         PlayFanfare(SEQ_ME_ASA);
         anim->state++;
         break;
-    case 4:
+    case HEAL_ANIM_STATE_WAIT:
         if (MapPropOneShotAnimationManager_IsAnimationLoopFinished(fieldSystem->mapPropOneShotAnimationManager, HEALING_ANIM_TAG_BALLS)
             && MapPropOneShotAnimationManager_IsAnimationLoopFinished(fieldSystem->mapPropOneShotAnimationManager, HEALING_ANIM_TAG_MACHINE)
             && !IsFanfarePlaying()) {
@@ -137,13 +146,21 @@ BOOL PokecenterAnimRun(TaskManager *taskManager) {
             anim->state++;
         }
         break;
-    case 5:
+    case HEAL_ANIM_STATE_END:
         Heap_Free(anim);
         return TRUE;
     }
     return FALSE;
 }
 #pragma force_active reset
+
+enum ElevatorAnimState {
+    ELEVATOR_ANIM_STATE_LOAD,
+    ELEVATOR_ANIM_STATE_PLAY,
+    ELEVATOR_ANIM_STATE_WAIT,
+    ELEVATOR_ANIM_STATE_WAIT_CHIME,
+    ELEVATOR_ANIM_STATE_END,
+};
 
 BOOL ElevatorAnimRun(TaskManager *taskManager);
 
@@ -152,7 +169,7 @@ void ElevatorAnimCreate(FieldSystem *fieldSystem, u8 direction, u8 length) {
         ElevatorAnim *anim = Heap_AllocAtEnd(HEAP_ID_FIELD1, sizeof(ElevatorAnim));
         anim->length = length;
         anim->direction = direction;
-        anim->state = 0;
+        anim->state = ELEVATOR_ANIM_STATE_LOAD;
         TaskManager_Call(fieldSystem->taskman, ElevatorAnimRun, anim);
     } else {
         GF_AssertFail();
@@ -164,7 +181,7 @@ BOOL ElevatorAnimRun(TaskManager *taskManager) {
     ElevatorAnim *anim = TaskManager_GetEnvironment(taskManager);
 
     switch (anim->state) {
-    case 0: {
+    case ELEVATOR_ANIM_STATE_LOAD: {
         MapProp *elevator;
         NNSG3dResMdl *model = MapPropModel_Get(fieldSystem->areaDataManager, MAP_PROP_ELEVATOR);
         NNSG3dRenderObj *renderObj;
@@ -178,13 +195,13 @@ BOOL ElevatorAnimRun(TaskManager *taskManager) {
         anim->state++;
         break;
     }
-    case 1:
+    case ELEVATOR_ANIM_STATE_PLAY:
         GF_ASSERT(anim->direction == 0 || anim->direction == 1);
         MapPropOneShotAnimationManager_PlayAnimation(fieldSystem->mapPropOneShotAnimationManager, ELEVATOR_ANIM_TAG, anim->direction);
         PlaySE(SEQ_SE_DP_ELEBETA2);
         anim->state++;
         break;
-    case 2:
+    case ELEVATOR_ANIM_STATE_WAIT:
         if (MapPropOneShotAnimationManager_IsAnimationLoopFinished(fieldSystem->mapPropOneShotAnimationManager, ELEVATOR_ANIM_TAG)) {
             StopSE(SEQ_SE_DP_ELEBETA2, 0);
             PlaySE(SEQ_SE_DP_PINPON);
@@ -192,12 +209,12 @@ BOOL ElevatorAnimRun(TaskManager *taskManager) {
             anim->state++;
         }
         break;
-    case 3:
+    case ELEVATOR_ANIM_STATE_WAIT_CHIME:
         if (!IsSEPlaying(SEQ_SE_DP_PINPON)) {
             anim->state++;
         }
         break;
-    case 4:
+    case ELEVATOR_ANIM_STATE_END:
         Heap_Free(anim);
         return TRUE;
     }

@@ -102,6 +102,22 @@ static void WeatherTask_DelayedRainSE(SysTask *task, void *data);
 static void Weather_PlayLoopSE(WeatherWork *work, u32 sndSeq);
 static void Weather_StopLoopSE(WeatherWork *work);
 
+enum WeatherEntryState {
+    WEATHER_ENTRY_STATE_NONE,
+    WEATHER_ENTRY_STATE_LOADING,
+    WEATHER_ENTRY_STATE_LOADED,
+    WEATHER_ENTRY_STATE_RUNNING,
+};
+
+enum WeatherState {
+    WEATHER_STATE_FADE_IN_INIT,
+    WEATHER_STATE_FADE_IN,
+    WEATHER_STATE_START_FULL,
+    WEATHER_STATE_RUNNING,
+    WEATHER_STATE_FADE_OUT,
+    WEATHER_STATE_END,
+};
+
 struct WeatherWork {
     WeatherSystem *weatherSystem;
     WeatherEntry *entry;
@@ -190,9 +206,9 @@ void WeatherManager_SetWeather(WeatherManager *weatherManager, int weather) {
     GF_ASSERT(weather < WEATHER_MAX);
 
     if (weatherManager->weather != weather) {
-        GF_ASSERT(WeatherSystem_Process(weatherManager->weatherSystem, 8, weatherManager->weather));
-        GF_ASSERT(WeatherSystem_Process(weatherManager->weatherSystem, 0, weather));
-        GF_ASSERT(WeatherSystem_Process(weatherManager->weatherSystem, 3, weather));
+        GF_ASSERT(WeatherSystem_Process(weatherManager->weatherSystem, WEATHER_SYS_PROC_UNLOAD, weatherManager->weather));
+        GF_ASSERT(WeatherSystem_Process(weatherManager->weatherSystem, WEATHER_SYS_PROC_INIT, weather));
+        GF_ASSERT(WeatherSystem_Process(weatherManager->weatherSystem, WEATHER_SYS_PROC_START_FULL, weather));
         weatherManager->weather = weather;
     }
 }
@@ -231,37 +247,37 @@ static void WeatherTask_ChangeWeather(SysTask *task, void *data) {
     WeatherManager *weatherManager = data;
     switch (weatherManager->state) {
     case 0:
-        GF_ASSERT(WeatherSystem_Process(weatherManager->weatherSystem, 5, weatherManager->weather));
+        GF_ASSERT(WeatherSystem_Process(weatherManager->weatherSystem, WEATHER_SYS_PROC_REQUEST_STOP, weatherManager->weather));
         weatherManager->state++;
         break;
     case 1:
-        if (WeatherSystem_GetState(weatherManager->weatherSystem, weatherManager->weather) != 3) {
-            GF_ASSERT(WeatherSystem_Process(weatherManager->weatherSystem, 8, weatherManager->weather));
+        if (WeatherSystem_GetState(weatherManager->weatherSystem, weatherManager->weather) != WEATHER_ENTRY_STATE_RUNNING) {
+            GF_ASSERT(WeatherSystem_Process(weatherManager->weatherSystem, WEATHER_SYS_PROC_UNLOAD, weatherManager->weather));
             weatherManager->state++;
         }
         break;
     case 2:
-        GF_ASSERT(WeatherSystem_Process(weatherManager->weatherSystem, 1, weatherManager->nextWeather));
+        GF_ASSERT(WeatherSystem_Process(weatherManager->weatherSystem, WEATHER_SYS_PROC_LOAD_ASYNC, weatherManager->nextWeather));
         weatherManager->state++;
         break;
     case 3:
-        if (WeatherSystem_GetState(weatherManager->weatherSystem, weatherManager->nextWeather) != 1) {
+        if (WeatherSystem_GetState(weatherManager->weatherSystem, weatherManager->nextWeather) != WEATHER_ENTRY_STATE_LOADING) {
             weatherManager->state++;
         }
         break;
     case 4:
-        GF_ASSERT(WeatherSystem_Process(weatherManager->weatherSystem, 2, weatherManager->nextWeather));
+        GF_ASSERT(WeatherSystem_Process(weatherManager->weatherSystem, WEATHER_SYS_PROC_START, weatherManager->nextWeather));
         weatherManager->state++;
         weatherManager->weather = weatherManager->nextWeather;
-        weatherManager->nextWeather = 0;
+        weatherManager->nextWeather = WEATHER_SUNNY;
         break;
     case 5:
         weatherManager->state = 6;
         weatherManager->task = NULL;
         SysTask_Destroy(task);
-        if (weatherManager->queuedWeather != 14) {
+        if (weatherManager->queuedWeather != WEATHER_MAX) {
             WeatherManager_ChangeWeather(weatherManager, weatherManager->queuedWeather);
-            weatherManager->queuedWeather = 14;
+            weatherManager->queuedWeather = WEATHER_MAX;
         }
         break;
     }
@@ -271,34 +287,34 @@ static void WeatherTask_ChangeWeatherOverlapped(SysTask *task, void *data) {
     WeatherManager *weatherManager = data;
     switch (weatherManager->state) {
     case 0:
-        GF_ASSERT(WeatherSystem_Process(weatherManager->weatherSystem, 1, weatherManager->nextWeather));
+        GF_ASSERT(WeatherSystem_Process(weatherManager->weatherSystem, WEATHER_SYS_PROC_LOAD_ASYNC, weatherManager->nextWeather));
         weatherManager->state++;
         break;
     case 1:
-        if (WeatherSystem_GetState(weatherManager->weatherSystem, weatherManager->nextWeather) != 1) {
+        if (WeatherSystem_GetState(weatherManager->weatherSystem, weatherManager->nextWeather) != WEATHER_ENTRY_STATE_LOADING) {
             weatherManager->state++;
         }
         break;
     case 2:
-        GF_ASSERT(WeatherSystem_Process(weatherManager->weatherSystem, 7, weatherManager->weather));
-        GF_ASSERT(WeatherSystem_Process(weatherManager->weatherSystem, 4, weatherManager->nextWeather));
+        GF_ASSERT(WeatherSystem_Process(weatherManager->weatherSystem, WEATHER_SYS_PROC_REQUEST_STOP_NO_FOG, weatherManager->weather));
+        GF_ASSERT(WeatherSystem_Process(weatherManager->weatherSystem, WEATHER_SYS_PROC_START_OVERLAPPED, weatherManager->nextWeather));
         weatherManager->state++;
         break;
     case 3:
-        if (WeatherSystem_GetState(weatherManager->weatherSystem, weatherManager->weather) != 3) {
-            GF_ASSERT(WeatherSystem_Process(weatherManager->weatherSystem, 8, weatherManager->weather));
+        if (WeatherSystem_GetState(weatherManager->weatherSystem, weatherManager->weather) != WEATHER_ENTRY_STATE_RUNNING) {
+            GF_ASSERT(WeatherSystem_Process(weatherManager->weatherSystem, WEATHER_SYS_PROC_UNLOAD, weatherManager->weather));
             weatherManager->state++;
         }
         break;
     case 4:
         weatherManager->weather = weatherManager->nextWeather;
-        weatherManager->nextWeather = 0;
+        weatherManager->nextWeather = WEATHER_SUNNY;
         weatherManager->state = 6;
         weatherManager->task = NULL;
         SysTask_Destroy(task);
-        if (weatherManager->queuedWeather != 14) {
+        if (weatherManager->queuedWeather != WEATHER_MAX) {
             WeatherManager_ChangeWeather(weatherManager, weatherManager->queuedWeather);
-            weatherManager->queuedWeather = 14;
+            weatherManager->queuedWeather = WEATHER_MAX;
         }
         break;
     }
@@ -628,7 +644,7 @@ static void WeatherSystem_Delete(WeatherSystem **pWeatherSystem) {
 static BOOL WeatherSystem_Process(WeatherSystem *weatherSystem, int state, int weather) {
     BOOL ret = TRUE;
 
-    if (weather > 14) {
+    if (weather > WEATHER_MAX) {
         return FALSE;
     }
 
@@ -636,41 +652,41 @@ static BOOL WeatherSystem_Process(WeatherSystem *weatherSystem, int state, int w
     case WEATHER_SYS_PROC_INIT:
         ret = WeatherSystem_Init(weatherSystem, weather);
         break;
-    case 1:
+    case WEATHER_SYS_PROC_LOAD_ASYNC:
         ret = WeatherSystem_LoadAsync(weatherSystem, weather);
         break;
-    case 2:
-        ret = WeatherSystem_Start(weatherSystem, weather, 0, 1);
+    case WEATHER_SYS_PROC_START:
+        ret = WeatherSystem_Start(weatherSystem, weather, WEATHER_STATE_FADE_IN_INIT, 1);
         break;
-    case 3:
-        ret = WeatherSystem_Start(weatherSystem, weather, 2, 1);
+    case WEATHER_SYS_PROC_START_FULL:
+        ret = WeatherSystem_Start(weatherSystem, weather, WEATHER_STATE_START_FULL, 1);
         break;
-    case 4:
+    case WEATHER_SYS_PROC_START_OVERLAPPED:
         if (Fog_IsEnabled(weatherSystem->fieldSystem->fog) == TRUE) {
-            ret = WeatherSystem_Start(weatherSystem, weather, 0, 2);
+            ret = WeatherSystem_Start(weatherSystem, weather, WEATHER_STATE_FADE_IN_INIT, 2);
         } else {
-            ret = WeatherSystem_Start(weatherSystem, weather, 0, 1);
+            ret = WeatherSystem_Start(weatherSystem, weather, WEATHER_STATE_FADE_IN_INIT, 1);
         }
         break;
-    case 5:
+    case WEATHER_SYS_PROC_REQUEST_STOP:
         WeatherSystem_RequestStop(weatherSystem, weather, 1);
         break;
-    case 6:
+    case WEATHER_SYS_PROC_STOP_NOW:
         WeatherSystem_StopNow(weatherSystem, weather);
         break;
-    case 7:
+    case WEATHER_SYS_PROC_REQUEST_STOP_NO_FOG:
         WeatherSystem_RequestStop(weatherSystem, weather, 0);
         break;
-    case 8:
+    case WEATHER_SYS_PROC_UNLOAD:
         WeatherSystem_Unload(weatherSystem, weather);
         break;
-    case 9:
+    case WEATHER_SYS_PROC_RESUME_SE:
         WeatherEntry *playEntry = &weatherSystem->entries[weather];
         if (playEntry->work && playEntry->work->loopSEPlaying == TRUE) {
             PlaySE(playEntry->work->sndSeq);
         }
         break;
-    case 10:
+    case WEATHER_SYS_PROC_STOP_SE:
         WeatherEntry *stopEntry = &weatherSystem->entries[weather];
         if (stopEntry->work && stopEntry->work->loopSEPlaying == TRUE) {
             StopSE(stopEntry->work->sndSeq, 0);
@@ -684,7 +700,7 @@ static BOOL WeatherSystem_Process(WeatherSystem *weatherSystem, int state, int w
 }
 
 static u16 WeatherSystem_GetState(WeatherSystem *weatherSystem, int weather) {
-    if (weather >= 14) {
+    if (weather >= WEATHER_MAX) {
         return 0;
     }
     WeatherEntry *entry = &weatherSystem->entries[weather];
@@ -789,7 +805,7 @@ static BOOL WeatherSystem_Init(WeatherSystem *weatherSystem, int weather) {
         }
 
         WeatherSystem_LoadBgGfx(weatherSystem, entry->bgGfxId);
-        entry->state = 2;
+        entry->state = WEATHER_ENTRY_STATE_LOADED;
     }
 
     return TRUE;
@@ -806,7 +822,7 @@ static BOOL WeatherSystem_LoadAsync(WeatherSystem *weatherSystem, int weather) {
     }
 
     entry->task = SysTask_CreateOnMainQueue(WeatherTask_LoadAsync, entry, 1);
-    entry->state = 1;
+    entry->state = WEATHER_ENTRY_STATE_LOADING;
     entry->loadStep = 0;
 
     return TRUE;
@@ -823,7 +839,7 @@ static BOOL WeatherSystem_Start(WeatherSystem *weatherSystem, int weather, u32 s
         return FALSE;
     }
 
-    if (entry->state != 2) {
+    if (entry->state != WEATHER_ENTRY_STATE_LOADED) {
         return FALSE;
     }
 
@@ -833,7 +849,7 @@ static BOOL WeatherSystem_Start(WeatherSystem *weatherSystem, int weather, u32 s
         return FALSE;
     }
 
-    entry->state = 3;
+    entry->state = WEATHER_ENTRY_STATE_RUNNING;
     entry->work->state = state;
     entry->work->stopRequest = 0;
     entry->work->linkedListDummy.next = &entry->work->linkedListDummy;
@@ -861,7 +877,7 @@ static BOOL WeatherSystem_Start(WeatherSystem *weatherSystem, int weather, u32 s
 
 static void WeatherSystem_RequestStop(WeatherSystem *weatherSystem, int weather, u16 fogMode) {
     WeatherEntry *entry = &weatherSystem->entries[weather];
-    if (entry->state == 3) {
+    if (entry->state == WEATHER_ENTRY_STATE_RUNNING) {
         entry->work->stopRequest = 5;
         entry->work->fogMode = fogMode;
     }
@@ -869,8 +885,8 @@ static void WeatherSystem_RequestStop(WeatherSystem *weatherSystem, int weather,
 
 static void WeatherSystem_StopNow(WeatherSystem *weatherSystem, int weather) {
     WeatherEntry *entry = &weatherSystem->entries[weather];
-    if (WeatherSystem_GetState(weatherSystem, weather) == 3) {
-        entry->work->state = 5;
+    if (WeatherSystem_GetState(weatherSystem, weather) == WEATHER_ENTRY_STATE_RUNNING) {
+        entry->work->state = WEATHER_STATE_END;
         entry->taskFunc(NULL, entry->work);
     }
 }
@@ -912,11 +928,11 @@ static void WeatherSystem_Unload(WeatherSystem *weatherSystem, u32 weather) {
             entry->work->taskData = NULL;
         }
 
-        if (entry->state == 1) {
+        if (entry->state == WEATHER_ENTRY_STATE_LOADING) {
             if (entry->task) {
                 SysTask_Destroy(entry->task);
             }
-        } else if (entry->state == 3) {
+        } else if (entry->state == WEATHER_ENTRY_STATE_RUNNING) {
             SysTask_Destroy(entry->work->weatherTask);
         }
 
@@ -946,9 +962,9 @@ static void WeatherEntry_EndTask(WeatherEntry *entry) {
             Weather_StopLoopSE(entry->work);
         }
 
-        if (entry->state == 3) {
+        if (entry->state == WEATHER_ENTRY_STATE_RUNNING) {
             SysTask_Destroy(entry->work->weatherTask);
-            entry->state = 2;
+            entry->state = WEATHER_ENTRY_STATE_LOADED;
         }
     }
 }
@@ -1012,7 +1028,7 @@ static void WeatherTask_LoadAsync(SysTask *task, void *data) {
         if (entry->spriteResId != 0xFFFF) {
             WeatherWork_CreateSprites(entry->work);
         }
-        entry->state = 2;
+        entry->state = WEATHER_ENTRY_STATE_LOADED;
         entry->loadStep = 0;
         entry->task = 0;
         SysTask_Destroy(task);
@@ -1031,7 +1047,7 @@ static BOOL WeatherSystem_AllocWork(WeatherSystem *weatherSystem, WeatherEntry *
     memset(entry->work, 0, sizeof(WeatherWork));
 
     entry->work->weatherSystem = weatherSystem;
-    entry->work->state = 0;
+    entry->work->state = WEATHER_STATE_FADE_IN_INIT;
     entry->work->stopRequest = 0;
     entry->work->linkedListDummy.next = &entry->work->linkedListDummy;
     entry->work->linkedListDummy.prev = &entry->work->linkedListDummy;
@@ -1597,24 +1613,24 @@ static void WeatherTask_Sunny(SysTask *task, void *data) {
     WeatherWork *work = data;
     u16 state = work->state;
     switch (state) {
-    case 0:
-        work->state = 1;
+    case WEATHER_STATE_FADE_IN_INIT:
+        work->state = WEATHER_STATE_FADE_IN;
         break;
-    case 1:
-        work->state = 3;
+    case WEATHER_STATE_FADE_IN:
+        work->state = WEATHER_STATE_RUNNING;
         break;
-    case 2:
-        work->state = 3;
+    case WEATHER_STATE_START_FULL:
+        work->state = WEATHER_STATE_RUNNING;
         break;
-    case 3:
+    case WEATHER_STATE_RUNNING:
         if (work->stopRequest == 5) {
-            work->state = 4;
+            work->state = WEATHER_STATE_FADE_OUT;
         }
         break;
-    case 4:
-        work->state = 5;
+    case WEATHER_STATE_FADE_OUT:
+        work->state = WEATHER_STATE_END;
         break;
-    case 5:
+    case WEATHER_STATE_END:
         WeatherEntry_EndTask(work->entry);
         break;
     }
@@ -1626,27 +1642,27 @@ static void WeatherTask_Rain(SysTask *task, void *data) {
     WeatherParticleTaskData *taskData = work->taskData;
 
     switch (work->state) {
-    case 0:
+    case WEATHER_STATE_FADE_IN_INIT:
         WeatherSpawnRamp_Init(&taskData->spawnRamp, work, 1, 8, 20, 1, -1, 1, 2, Rain_AddDrops);
         WeatherFog_Start(&taskData->fogChange, &taskData->fogTableFade, work->weatherSystem->fieldSystem->fog, GX_FOGSLOPE_0x1000, 0x726F, 0x6b5a, 1, work->fogMode);
 
         taskData->data[0] = 0;
         work->seDelayTask = SysTask_CreateOnMainQueue(WeatherTask_DelayedRainSE, work, 100);
         work->seDelay = 30;
-        work->state = 1;
+        work->state = WEATHER_STATE_FADE_IN;
         break;
-    case 1:
+    case WEATHER_STATE_FADE_IN:
         int rampDone = WeatherSpawnRamp_Update(&taskData->spawnRamp);
         if (taskData->data[0] > 0) {
             taskData->data[0]--;
         } else {
             int fogDone = WeatherFog_Update(&taskData->fogChange, &taskData->fogTableFade, work->fogMode);
             if (fogDone == 1 && rampDone == 3) {
-                work->state = 3;
+                work->state = WEATHER_STATE_RUNNING;
             }
         }
         break;
-    case 2:
+    case WEATHER_STATE_START_FULL:
         WeatherSpawnRamp_Init(&taskData->spawnRamp, work, 20, 1, 20, 1, -1, 1, 2, Rain_AddDrops);
 
         if (work->fogMode) {
@@ -1659,9 +1675,9 @@ static void WeatherTask_Rain(SysTask *task, void *data) {
 
         work->seDelayTask = SysTask_CreateOnMainQueue(WeatherTask_DelayedRainSE, work, 100);
         work->seDelay = 30;
-        work->state = 3;
+        work->state = WEATHER_STATE_RUNNING;
         break;
-    case 3:
+    case WEATHER_STATE_RUNNING:
         if (taskData->spawnRamp.timer-- <= 0) {
             Rain_AddDrops(work, taskData->spawnRamp.count);
             taskData->spawnRamp.timer = taskData->spawnRamp.interval;
@@ -1674,11 +1690,11 @@ static void WeatherTask_Rain(SysTask *task, void *data) {
                 WeatherFogTableFade_Start(&taskData->fogTableFade, 1, 0);
             }
             taskData->data[0] = 0;
-            work->state = 4;
+            work->state = WEATHER_STATE_FADE_OUT;
             Weather_StopLoopSE(work);
         }
         break;
-    case 4:
+    case WEATHER_STATE_FADE_OUT:
         int ret = WeatherSpawnRamp_Update(&taskData->spawnRamp);
         if (taskData->data[0] > 0) {
             taskData->data[0]--;
@@ -1692,12 +1708,12 @@ static void WeatherTask_Rain(SysTask *task, void *data) {
 
             if (fogFadeDone == 1 && ret == 3) {
                 if (work->linkedListDummy.next == &work->linkedListDummy) {
-                    work->state = 5;
+                    work->state = WEATHER_STATE_END;
                 }
             }
         }
         break;
-    case 5:
+    case WEATHER_STATE_END:
         if (work->fogMode) {
             Fog_Set(taskData->fogTableFade.fog, 1, FALSE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x8000, 0);
         }
@@ -1705,7 +1721,7 @@ static void WeatherTask_Rain(SysTask *task, void *data) {
         break;
     }
 
-    if (work->state != 5 && work->state != 0) {
+    if (work->state != WEATHER_STATE_END && work->state != WEATHER_STATE_FADE_IN_INIT) {
         WeatherObject_ForEach(&work->linkedListDummy, Rain_UpdateDrop);
         WeatherWork_ScrollObjectsInt(work, NULL, NULL);
         WeatherWork_Nop(work);
@@ -1789,27 +1805,27 @@ static void WeatherTask_Snow(SysTask *task, void *data) {
     WeatherParticleTaskData *taskData = work->taskData;
 
     switch (work->state) {
-    case 0:
+    case WEATHER_STATE_FADE_IN_INIT:
         WeatherSpawnRamp_Init(&taskData->spawnRamp, work, 1, 30, 6, 3, -5, 2, 1, Snow_AddFlakes);
 
         WeatherFog_Start(&taskData->fogChange, &taskData->fogTableFade, work->weatherSystem->fieldSystem->fog, GX_FOGSLOPE_0x1000, 0x726F, GX_RGB(24, 24, 24), 2, work->fogMode);
 
         taskData->data[0] = 8;
         taskData->data[1] = 0;
-        work->state = 1;
+        work->state = WEATHER_STATE_FADE_IN;
         break;
-    case 1:
+    case WEATHER_STATE_FADE_IN:
         int rampDone = WeatherSpawnRamp_Update(&taskData->spawnRamp);
         if (taskData->data[0] > 0) {
             taskData->data[0]--;
         } else {
             int fogDone = WeatherFog_Update(&taskData->fogChange, &taskData->fogTableFade, work->fogMode);
             if (fogDone == 1 && rampDone == 3) {
-                work->state = 3;
+                work->state = WEATHER_STATE_RUNNING;
             }
         }
         break;
-    case 2:
+    case WEATHER_STATE_START_FULL:
         WeatherSpawnRamp_Init(&taskData->spawnRamp, work, 6, 3, 6, 3, -5, 2, 1, Snow_AddFlakes);
 
         if (work->fogMode) {
@@ -1822,9 +1838,9 @@ static void WeatherTask_Snow(SysTask *task, void *data) {
 
         Weather_SpawnAndPreAdvance(work, Snow_AddFlakes, 20, 2, 3, Snow_UpdateFlake);
 
-        work->state = 3;
+        work->state = WEATHER_STATE_RUNNING;
         break;
-    case 3:
+    case WEATHER_STATE_RUNNING:
         if (taskData->spawnRamp.timer-- <= 0) {
             Snow_AddFlakes(work, taskData->spawnRamp.count);
             taskData->spawnRamp.timer = taskData->spawnRamp.interval;
@@ -1837,10 +1853,10 @@ static void WeatherTask_Snow(SysTask *task, void *data) {
                 WeatherFogTableFade_Start(&taskData->fogTableFade, 1, 0);
             }
             taskData->data[0] = 0;
-            work->state = 4;
+            work->state = WEATHER_STATE_FADE_OUT;
         }
         break;
-    case 4:
+    case WEATHER_STATE_FADE_OUT:
         int ret = WeatherSpawnRamp_Update(&taskData->spawnRamp);
         if (taskData->data[0] > 0) {
             taskData->data[0]--;
@@ -1854,12 +1870,12 @@ static void WeatherTask_Snow(SysTask *task, void *data) {
 
             if (fogFadeDone == 1 && ret == 3) {
                 if (work->linkedListDummy.next == &work->linkedListDummy) {
-                    work->state = 5;
+                    work->state = WEATHER_STATE_END;
                 }
             }
         }
         break;
-    case 5:
+    case WEATHER_STATE_END:
         if (work->fogMode) {
             Fog_Set(taskData->fogTableFade.fog, 1, FALSE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x8000, 0);
         }
@@ -1867,7 +1883,7 @@ static void WeatherTask_Snow(SysTask *task, void *data) {
         break;
     }
 
-    if (work->state != 5 && work->state != 0) {
+    if (work->state != WEATHER_STATE_END && work->state != WEATHER_STATE_FADE_IN_INIT) {
         WeatherObject_ForEach(&work->linkedListDummy, Snow_UpdateFlake);
         WeatherWork_ScrollObjectsInt(work, NULL, NULL);
         WeatherWork_Nop(work);
@@ -1956,26 +1972,26 @@ static void WeatherTask_DiamondDust(SysTask *task, void *data) {
     WeatherParticleTaskData *taskData = work->taskData;
 
     switch (work->state) {
-    case 0:
+    case WEATHER_STATE_FADE_IN_INIT:
         WeatherSpawnRamp_Init(&taskData->spawnRamp, work, 2, 16, 20, 2, -2, 4, 2, DiamondDust_AddSparkles);
 
         WeatherFog_Start(&taskData->fogChange, &taskData->fogTableFade, work->weatherSystem->fieldSystem->fog, GX_FOGSLOPE_0x1000, 0x716F, GX_RGB(26, 26, 26), 1, work->fogMode);
 
         taskData->data[0] = 0;
-        work->state = 1;
+        work->state = WEATHER_STATE_FADE_IN;
         break;
-    case 1:
+    case WEATHER_STATE_FADE_IN:
         int rampDone = WeatherSpawnRamp_Update(&taskData->spawnRamp);
         if (taskData->data[0] > 0) {
             taskData->data[0]--;
         } else {
             int fogDone = WeatherFog_Update(&taskData->fogChange, &taskData->fogTableFade, work->fogMode);
             if (fogDone == 1 && rampDone == 3) {
-                work->state = 3;
+                work->state = WEATHER_STATE_RUNNING;
             }
         }
         break;
-    case 2:
+    case WEATHER_STATE_START_FULL:
         WeatherSpawnRamp_Init(&taskData->spawnRamp, work, 20, 2, 20, 2, -2, 4, 2, DiamondDust_AddSparkles);
 
         if (work->fogMode) {
@@ -1986,9 +2002,9 @@ static void WeatherTask_DiamondDust(SysTask *task, void *data) {
 
         Weather_SpawnAndPreAdvance(work, DiamondDust_AddSparkles, 20, 10, 1, DiamondDust_UpdateSparkle);
 
-        work->state = 3;
+        work->state = WEATHER_STATE_RUNNING;
         break;
-    case 3:
+    case WEATHER_STATE_RUNNING:
         if (taskData->spawnRamp.timer-- <= 0) {
             DiamondDust_AddSparkles(work, taskData->spawnRamp.count);
             taskData->spawnRamp.timer = taskData->spawnRamp.interval;
@@ -2001,10 +2017,10 @@ static void WeatherTask_DiamondDust(SysTask *task, void *data) {
                 WeatherFogTableFade_Start(&taskData->fogTableFade, 1, 0);
             }
             taskData->data[0] = 20;
-            work->state = 4;
+            work->state = WEATHER_STATE_FADE_OUT;
         }
         break;
-    case 4:
+    case WEATHER_STATE_FADE_OUT:
         int ret = WeatherSpawnRamp_Update(&taskData->spawnRamp);
         if (taskData->data[0] > 0) {
             taskData->data[0]--;
@@ -2013,12 +2029,12 @@ static void WeatherTask_DiamondDust(SysTask *task, void *data) {
 
             if (fogFadeDone == 1 && ret == 3) {
                 if (work->linkedListDummy.next == &work->linkedListDummy) {
-                    work->state = 5;
+                    work->state = WEATHER_STATE_END;
                 }
             }
         }
         break;
-    case 5:
+    case WEATHER_STATE_END:
         if (work->fogMode) {
             Fog_Set(taskData->fogTableFade.fog, 1, FALSE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x8000, 0);
         }
@@ -2026,7 +2042,7 @@ static void WeatherTask_DiamondDust(SysTask *task, void *data) {
         break;
     }
 
-    if (work->state != 5 && work->state != 0) {
+    if (work->state != WEATHER_STATE_END && work->state != WEATHER_STATE_FADE_IN_INIT) {
         WeatherObject_ForEach(&work->linkedListDummy, DiamondDust_UpdateSparkle);
         WeatherWork_ScrollObjectsInt(work, NULL, NULL);
         WeatherWork_Nop(work);
@@ -2099,33 +2115,33 @@ static void DiamondDust_UpdateSparkle(WeatherObject *object) {
 
 static void WeatherTask_RunFogOnly(WeatherWork *work, WeatherFogTaskData *taskData, GXFogSlope fogSlope, s32 fogOffset, GXRgb rgb, s32 framesPerStep, s32 stopFramesPerStep) {
     switch (work->state) {
-    case 0:
+    case WEATHER_STATE_FADE_IN_INIT:
         WeatherFog_Start(&taskData->fogChange, &taskData->fogTableFade, work->weatherSystem->fieldSystem->fog, fogSlope, fogOffset, rgb, framesPerStep, work->fogMode);
-        work->state = 1;
+        work->state = WEATHER_STATE_FADE_IN;
         break;
-    case 1:
+    case WEATHER_STATE_FADE_IN:
         int fogDone = WeatherFog_Update(&taskData->fogChange, &taskData->fogTableFade, work->fogMode);
         if (fogDone == 1) {
-            work->state = 3;
+            work->state = WEATHER_STATE_RUNNING;
         }
         break;
-    case 2:
+    case WEATHER_STATE_START_FULL:
         if (work->fogMode != 0) {
             taskData->fogTableFade.fog = work->weatherSystem->fieldSystem->fog;
             Weather_SetFog(taskData->fogTableFade.fog, fogSlope, fogOffset, rgb);
             WeatherFogTableFade_SetFull(&taskData->fogTableFade);
         }
-        work->state = 3;
+        work->state = WEATHER_STATE_RUNNING;
         break;
-    case 3:
+    case WEATHER_STATE_RUNNING:
         if (work->stopRequest == 5) {
             if (work->fogMode != 0) {
                 WeatherFogTableFade_Start(&taskData->fogTableFade, stopFramesPerStep, 0);
             }
-            work->state = 4;
+            work->state = WEATHER_STATE_FADE_OUT;
         }
         break;
-    case 4:
+    case WEATHER_STATE_FADE_OUT:
         int ret;
         if (work->fogMode != 0) {
             ret = WeatherFogTableFade_Update(&taskData->fogTableFade);
@@ -2134,10 +2150,10 @@ static void WeatherTask_RunFogOnly(WeatherWork *work, WeatherFogTaskData *taskDa
         }
 
         if (ret == 1) {
-            work->state = 5;
+            work->state = WEATHER_STATE_END;
         }
         break;
-    case 5:
+    case WEATHER_STATE_END:
         if (work->fogMode != 0) {
             Fog_Set(taskData->fogTableFade.fog, 1, FALSE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x8000, 0);
         }
@@ -2151,22 +2167,22 @@ static void WeatherTask_Mist(SysTask *task, void *data) {
     WeatherMistTaskData *taskData = work->taskData;
 
     switch (work->state) {
-    case 0:
+    case WEATHER_STATE_FADE_IN_INIT:
         WeatherFog_Start(&taskData->fogChange, &taskData->fogTableFade, work->weatherSystem->fieldSystem->fog, GX_FOGSLOPE_0x0200, 0x7555, 0x7fff, 1, work->fogMode);
         WeatherLerp_Init(&taskData->blendLerp, 0, 9, 30);
         Weather_SetBlendAlpha(0, 16);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
-        work->state = 1;
+        work->state = WEATHER_STATE_FADE_IN;
         break;
-    case 1:
+    case WEATHER_STATE_FADE_IN:
         int fogDone = WeatherFogTableFade_Update(&taskData->fogTableFade);
         int blendDone = WeatherLerp_Step(&taskData->blendLerp);
         Weather_SetBlendAlpha(taskData->blendLerp.value, 16 - taskData->blendLerp.value);
         if (fogDone == 1 && blendDone == 1) {
-            work->state = 3;
+            work->state = WEATHER_STATE_RUNNING;
         }
         break;
-    case 2:
+    case WEATHER_STATE_START_FULL:
         if (work->fogMode != 0) {
             taskData->fogTableFade.fog = work->weatherSystem->fieldSystem->fog;
             Weather_SetFog(taskData->fogTableFade.fog, GX_FOGSLOPE_0x0200, 0x7555, 0x7fff);
@@ -2174,18 +2190,18 @@ static void WeatherTask_Mist(SysTask *task, void *data) {
         }
         Weather_SetBlendAlpha(9, 7);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
-        work->state = 3;
+        work->state = WEATHER_STATE_RUNNING;
         break;
-    case 3:
+    case WEATHER_STATE_RUNNING:
         if (work->stopRequest == 5) {
             if (work->fogMode != 0) {
                 WeatherFogTableFade_Start(&taskData->fogTableFade, 1, 0);
             }
             WeatherLerp_Init(&taskData->blendLerp, 9, 0, 30);
-            work->state = 4;
+            work->state = WEATHER_STATE_FADE_OUT;
         }
         break;
-    case 4:
+    case WEATHER_STATE_FADE_OUT:
         int fogOutDone;
         if (work->fogMode != 0) {
             fogOutDone = WeatherFogTableFade_Update(&taskData->fogTableFade);
@@ -2196,10 +2212,10 @@ static void WeatherTask_Mist(SysTask *task, void *data) {
         int blendOutDone = WeatherLerp_Step(&taskData->blendLerp);
         Weather_SetBlendAlpha(taskData->blendLerp.value, 16 - taskData->blendLerp.value);
         if (fogOutDone == 1 && blendOutDone == 1) {
-            work->state = 5;
+            work->state = WEATHER_STATE_END;
         }
         break;
-    case 5:
+    case WEATHER_STATE_END:
         if (work->fogMode != 0) {
             Fog_Set(taskData->fogTableFade.fog, 1, FALSE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x8000, 0);
         }
@@ -2215,7 +2231,7 @@ static void WeatherTask_Flash(SysTask *task, void *data) {
     WeatherFlashTaskData *taskData = work->taskData;
 
     switch (work->state) {
-    case 0:
+    case WEATHER_STATE_FADE_IN_INIT:
         taskData->darkness = FlashDarkness_Show(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar));
         Fog_Set(fieldSystem->fog, -1, TRUE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x0020, 0);
         Fog_SetColor(fieldSystem->fog, -1, 0, 0);
@@ -2227,12 +2243,12 @@ static void WeatherTask_Flash(SysTask *task, void *data) {
             Fog_SetTable(fieldSystem->fog, fogTable);
         }
         taskData->scaleFrame = 0;
-        work->state = 1;
+        work->state = WEATHER_STATE_FADE_IN;
         break;
-    case 1:
-        work->state = 3;
+    case WEATHER_STATE_FADE_IN:
+        work->state = WEATHER_STATE_RUNNING;
         break;
-    case 2:
+    case WEATHER_STATE_START_FULL:
         taskData->darkness = FlashDarkness_Show(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar));
         Fog_Set(fieldSystem->fog, -1, TRUE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x0020, 0);
         Fog_SetColor(fieldSystem->fog, -1, 0, 0);
@@ -2244,15 +2260,15 @@ static void WeatherTask_Flash(SysTask *task, void *data) {
             Fog_SetTable(fieldSystem->fog, fogTable);
         }
         taskData->scaleFrame = 0;
-        work->state = 3;
+        work->state = WEATHER_STATE_RUNNING;
         break;
-    case 3:
+    case WEATHER_STATE_RUNNING:
         if (work->stopRequest == 5) {
             taskData->endStep = 0;
-            work->state = 4;
+            work->state = WEATHER_STATE_FADE_OUT;
         }
         break;
-    case 4:
+    case WEATHER_STATE_FADE_OUT:
         switch (taskData->endStep) {
         case 0:
             BeginNormalPaletteFade(3, 0, 0, 0x7FFF, 6, 1, HEAP_ID_FIELD1);
@@ -2274,12 +2290,12 @@ static void WeatherTask_Flash(SysTask *task, void *data) {
             float scale = 1.0 + (taskData->scaleFrame * 3.0) / 24.0;
             FlashDarkness_SetScale(taskData->darkness, scale);
             if (scale >= 4.0) {
-                work->state = 5;
+                work->state = WEATHER_STATE_END;
             }
             break;
         }
         break;
-    case 5:
+    case WEATHER_STATE_END:
         WeatherEntry_EndTask(work->entry);
         break;
     }
@@ -2292,7 +2308,7 @@ static void WeatherTask_Flash2(SysTask *task, void *data) {
     WeatherFlashTaskData *taskData = work->taskData;
 
     switch (work->state) {
-    case 0:
+    case WEATHER_STATE_FADE_IN_INIT:
         taskData->darkness = FlashDarkness_Show(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar));
         Fog_Set(fieldSystem->fog, -1, TRUE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x0020, 0);
         Fog_SetColor(fieldSystem->fog, -1, 0, 0);
@@ -2304,12 +2320,12 @@ static void WeatherTask_Flash2(SysTask *task, void *data) {
             Fog_SetTable(fieldSystem->fog, fogTable);
         }
         FlashDarkness_SetScale(taskData->darkness, 4);
-        work->state = 1;
+        work->state = WEATHER_STATE_FADE_IN;
         break;
-    case 1:
-        work->state = 3;
+    case WEATHER_STATE_FADE_IN:
+        work->state = WEATHER_STATE_RUNNING;
         break;
-    case 2:
+    case WEATHER_STATE_START_FULL:
         taskData->darkness = FlashDarkness_Show(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar));
         Fog_Set(fieldSystem->fog, -1, TRUE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x0020, 0);
         Fog_SetColor(fieldSystem->fog, -1, 0, 0);
@@ -2321,17 +2337,17 @@ static void WeatherTask_Flash2(SysTask *task, void *data) {
             Fog_SetTable(fieldSystem->fog, fogTable);
         }
         FlashDarkness_SetScale(taskData->darkness, 4);
-        work->state = 3;
+        work->state = WEATHER_STATE_RUNNING;
         break;
-    case 3:
+    case WEATHER_STATE_RUNNING:
         if (work->stopRequest == 5) {
-            work->state = 4;
+            work->state = WEATHER_STATE_FADE_OUT;
         }
         break;
-    case 4:
-        work->state = 5;
+    case WEATHER_STATE_FADE_OUT:
+        work->state = WEATHER_STATE_END;
         break;
-    case 5:
+    case WEATHER_STATE_END:
         WeatherEntry_EndTask(work->entry);
         break;
     }

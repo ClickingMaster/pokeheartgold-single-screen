@@ -17,7 +17,7 @@
 	.public MapObjectRender_GetBillboardResource
 	.public MapObjectRender_ReleaseBillboardResource
 	.public MapObjectRender_ReleaseAllBillboardResources
-	.public MapObjectManager_IsSpriteUsedByOtherActiveObject
+	.public MapObjectManager_IsSpriteUsedByOther
 	.public MapObjectRender_CreateResourceBanks
 	.public MapObjectRender_LoadIntoBank
 	.public MapObjectRender_LoadSpriteTexture

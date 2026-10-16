@@ -1,4 +1,4 @@
-	.public _021EA720
+	.public sSafariAreaCustomizerConsts
 	.public SafariAreaCustomizer_Setup
 	.public SafariAreaCustomizer_Teardown
 	.public SafariAreaCustomizer_HandleSlotMenu
@@ -47,7 +47,7 @@
 	.public sSafariAreaCustomizerLabelColors
 	.public sSafariAreaCustomizerGraphicsModes
 	.public sSafariAreaCustomizerSlotMenuPositions
-	.public ov108_021EA74A
+	.public sSafariAreaCustomizerSlotMenuPositionsY
 	.public sSafariAreaCustomizerSlotHitboxes
 	.public sSafariAreaCustomizerGraphicsBanks
 	.public sSafariAreaCustomizerWindowTemplates
@@ -111,7 +111,7 @@
 .text
 	.rodata
 
-_021EA720:
+sSafariAreaCustomizerConsts:
 	.byte 0xFF, 0x01, 0x01, 0xFF
 
 sSafariAreaCustomizerLabelColors: ; 0x021EA724
@@ -125,7 +125,7 @@ sSafariAreaCustomizerGraphicsModes: ; 0x021EA738
 sSafariAreaCustomizerSlotMenuPositions: ; 0x021EA748
 	.byte 0x0C, 0x00
 
-ov108_021EA74A: ; 0x021EA74A
+sSafariAreaCustomizerSlotMenuPositionsY: ; 0x021EA74A
 	.byte 0x02, 0x00, 0x15, 0x00, 0x02, 0x00
 	.byte 0x0A, 0x00, 0x02, 0x00, 0x0C, 0x00, 0x09, 0x00, 0x15, 0x00, 0x09, 0x00, 0x0A, 0x00, 0x09, 0x00
 

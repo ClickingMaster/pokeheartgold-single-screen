@@ -22,7 +22,7 @@ typedef struct SinjohGymmickLocalData {
 static void SinjohGymmick_Load3dGraphics(SinjohGymmickLocalData *localData);
 static void SinjohGymmick_Unload3dGraphics(SinjohGymmickLocalData *localData);
 static void SysTask_SinjohGymmick(SysTask *sysTask, void *taskData);
-static BOOL SinjohGymmick_AdvanceAnimAndSetAnimIdIfCurrentAnimFinished(SinjohGymmickModelState *modelState, const u8 numAnims, const u8 animId);
+static BOOL SinjohGymmick_AdvanceAnims(SinjohGymmickModelState *modelState, const u8 numAnims, const u8 animId);
 static void SinjohGymmick_SetAnimsFrames(Field3DModelAnimation *anims, const u8 num, const fx32 frame);
 static BOOL Task_SinjohGymmick_WaitAnimFinished(TaskManager *taskman);
 
@@ -155,7 +155,7 @@ static void SysTask_SinjohGymmick(SysTask *sysTask, void *taskData) {
         GF_ASSERT(FALSE);
     }
     for (i = 0; i < 3; ++i) {
-        isFinished = SinjohGymmick_AdvanceAnimAndSetAnimIdIfCurrentAnimFinished(&localData->modelStates[i], 2, choiceFlag[i]); // bug: only the result of the last call matters
+        isFinished = SinjohGymmick_AdvanceAnims(&localData->modelStates[i], 2, choiceFlag[i]); // bug: only the result of the last call matters
     }
     for (i = 0; i < 3; ++i) {
         Field3dObject_Draw(&localData->modelStates[i].object);
@@ -176,7 +176,7 @@ static void SysTask_SinjohGymmick(SysTask *sysTask, void *taskData) {
     GF_ASSERT(currentFrames[2] == currentFrames[0]);
 }
 
-static BOOL SinjohGymmick_AdvanceAnimAndSetAnimIdIfCurrentAnimFinished(SinjohGymmickModelState *modelState, const u8 numAnims, const u8 animId) {
+static BOOL SinjohGymmick_AdvanceAnims(SinjohGymmickModelState *modelState, const u8 numAnims, const u8 animId) {
     u8 i;
     fx32 currentFrame;
     fx32 endFrame;

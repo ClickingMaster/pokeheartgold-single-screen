@@ -159,10 +159,10 @@ static const BottomScreenAppTemplate sBottomScreenApps[] = {
     [BOTTOM_SCREEN_APP_UNION_CHAT_LOG] = { UnionChatLogApp_Init, UnionChatLogApp_Exit, UnionChatLogApp_IsExitDone, FS_OVERLAY_ID(OVY_34) },
 };
 
-void FieldSystem_SendBottomScreenEvent(FieldSystem *fieldSystem, int a1, int a2) {
+void FieldSystem_SendBottomScreenEvent(FieldSystem *fieldSystem, int event, int a2) {
     void *state = (void *)fieldSystem->mapSystems->unk14;
     if (state != NULL) {
-        FieldHookUnused_OnEvent(state, a1, a2);
+        FieldHookUnused_OnEvent(state, event, a2);
     }
 }
 

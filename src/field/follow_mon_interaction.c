@@ -8,6 +8,7 @@
 #include "constants/sprites.h"
 #include "constants/weather.h"
 
+#include "field/bottom_screen_app.h"
 #include "field/field_effect_helpers.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0040.h"
@@ -88,6 +89,38 @@ enum FollowMonInteractionResult {
     FOLLOW_MON_INTERACTION_QUESTION,
     FOLLOW_MON_INTERACTION_GIVE_ACCESSORY,
     FOLLOW_MON_INTERACTION_GIVE_SHINY_LEAF,
+};
+
+enum FollowMonInteractionState {
+    INTERACTION_STATE_START_MOVEMENT,
+    INTERACTION_STATE_SHOW_EMOTE,
+    INTERACTION_STATE_PRINT_MESSAGE,
+    INTERACTION_STATE_START_WAIT,
+    INTERACTION_STATE_NEXT_STEP,
+    INTERACTION_STATE_RUN_MOVEMENT,
+    INTERACTION_STATE_WAIT_MESSAGE,
+    INTERACTION_STATE_WAIT,
+    INTERACTION_STATE_OPEN_CHOICE = 10,
+    INTERACTION_STATE_WAIT_CHOICE_APP,
+    INTERACTION_STATE_WAIT_ANSWER,
+    INTERACTION_STATE_CLOSE_CHOICE,
+};
+
+enum FollowMonInteractionMoveState {
+    INTERACTION_MOVE_STATE_LOAD,
+    INTERACTION_MOVE_STATE_INIT,
+    INTERACTION_MOVE_STATE_NEXT_STEP,
+    INTERACTION_MOVE_STATE_STEP,
+    INTERACTION_MOVE_STATE_FINISH,
+};
+
+enum FollowMonTaskState {
+    FOLLOW_MON_TASK_STATE_LOAD_SCRIPT,
+    FOLLOW_MON_TASK_STATE_RUN,
+    FOLLOW_MON_TASK_STATE_QUESTION,
+    FOLLOW_MON_TASK_STATE_GIVE_ACCESSORY,
+    FOLLOW_MON_TASK_STATE_GIVE_SHINY_LEAF,
+    FOLLOW_MON_TASK_STATE_WAIT_GIFT_MESSAGE,
 };
 
 typedef struct ShinyLeafMonDataIds {
@@ -688,8 +721,8 @@ void FollowMonInteraction_LoadScript(FollowMonInteraction *interaction, int scri
     int i;
 
     ReadWholeNarcMemberByIdPair(interaction->steps, NARC_a_2_2_1, script - 1);
-    interaction->movementState = 0;
-    interaction->state = 0;
+    interaction->movementState = INTERACTION_MOVE_STATE_LOAD;
+    interaction->state = INTERACTION_STATE_START_MOVEMENT;
     interaction->movementIndex = 0;
     interaction->stepIndex = 0;
     interaction->movementFrame = 0;
@@ -726,7 +759,7 @@ static inline void FollowMonInteraction_CloseMessage(FieldSystem *fieldSystem, F
     RemoveWindow(&interaction->window);
     String_Delete(interaction->string);
     fieldSystem->textbox_open = FALSE;
-    interaction->state = 3;
+    interaction->state = INTERACTION_STATE_START_WAIT;
 }
 
 #pragma force_active on
@@ -745,40 +778,40 @@ int FollowMonInteraction_Run(FieldSystem *fieldSystem, FollowMonInteraction *int
         return FollowMonInteraction_Finish(fieldSystem, interaction);
     }
     switch (interaction->state) {
-    case 0:
+    case INTERACTION_STATE_START_MOVEMENT:
         if (FollowMonInteraction_StepHasMovement(interaction, step)) {
             MapObject_UnpauseMovement(fieldSystem->followMon.mapObject);
-            interaction->movementState = 0;
-            interaction->state = 5;
+            interaction->movementState = INTERACTION_MOVE_STATE_LOAD;
+            interaction->state = INTERACTION_STATE_RUN_MOVEMENT;
             break;
         }
-    case 1:
+    case INTERACTION_STATE_SHOW_EMOTE:
         if (FollowMonInteraction_TryShowEmote(fieldSystem, interaction, step)) {
             MapObject_UnpauseMovement(fieldSystem->followMon.mapObject);
-            interaction->state = 2;
+            interaction->state = INTERACTION_STATE_PRINT_MESSAGE;
             break;
         }
-    case 2:
+    case INTERACTION_STATE_PRINT_MESSAGE:
         if (FollowMon_TryPrintInteractionMessage(fieldSystem, interaction, step)) {
             MapObject_PauseMovement(fieldSystem->followMon.mapObject);
-            interaction->state = 6;
+            interaction->state = INTERACTION_STATE_WAIT_MESSAGE;
             break;
         }
-    case 3:
+    case INTERACTION_STATE_START_WAIT:
         if (FollowMonInteraction_StepHasWait(interaction, step)) {
-            interaction->state = 7;
+            interaction->state = INTERACTION_STATE_WAIT;
             break;
         }
-    case 4:
+    case INTERACTION_STATE_NEXT_STEP:
         interaction->stepIndex = (u8)(interaction->stepIndex + 1);
-        interaction->state = 0;
+        interaction->state = INTERACTION_STATE_START_MOVEMENT;
         break;
-    case 5:
+    case INTERACTION_STATE_RUN_MOVEMENT:
         if (FollowMonInteraction_RunMovement(fieldSystem, interaction, movement)) {
-            interaction->state = 1;
+            interaction->state = INTERACTION_STATE_SHOW_EMOTE;
         }
         break;
-    case 6:
+    case INTERACTION_STATE_WAIT_MESSAGE:
         if (DialogBox_IsPrintFinished((u8)interaction->printerId) == TRUE) {
             if (interaction->stepCount > interaction->stepIndex + 1) {
                 if (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) {
@@ -786,17 +819,17 @@ int FollowMonInteraction_Run(FieldSystem *fieldSystem, FollowMonInteraction *int
                 }
             } else {
                 if (interaction->askQuestion) {
-                    interaction->state = 3;
+                    interaction->state = INTERACTION_STATE_START_WAIT;
                 } else if (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) {
                     FollowMonInteraction_CloseMessage(fieldSystem, interaction);
                 }
             }
         }
         break;
-    case 7:
+    case INTERACTION_STATE_WAIT:
         if (interaction->waitFrames >= step->wait) {
             interaction->stepIndex = (u8)(interaction->stepIndex + 1);
-            interaction->state = 0;
+            interaction->state = INTERACTION_STATE_START_MOVEMENT;
         } else {
             interaction->waitFrames++;
         }
@@ -1018,28 +1051,28 @@ BOOL FollowMonInteraction_RunMovement(FieldSystem *fieldSystem, FollowMonInterac
         return TRUE;
     }
     switch (interaction->movementState) {
-    case 0:
+    case INTERACTION_MOVE_STATE_LOAD:
         ReadWholeNarcMemberByIdPair(interaction->movements, NARC_a_2_2_2, movement - 1);
-    case 1:
+    case INTERACTION_MOVE_STATE_INIT:
         MapObject_CopyPositionVector(fieldSystem->followMon.mapObject, &interaction->savedPosition);
         interaction->savedFacing = MapObject_GetFacingDirection(fieldSystem->followMon.mapObject);
         FollowMonBillboard_SetHeight(fieldSystem->followMon.mapObject, 0);
         FollowMonBillboard_SetShadowAnchored(fieldSystem->followMon.mapObject, TRUE);
-        interaction->movementState = 2;
+        interaction->movementState = INTERACTION_MOVE_STATE_NEXT_STEP;
         interaction->movementIndex = 0;
         break;
-    case 2:
+    case INTERACTION_MOVE_STATE_NEXT_STEP:
         if (!FollowMonMovement_HasNextStep(interaction)) {
-            interaction->movementState = 4;
+            interaction->movementState = INTERACTION_MOVE_STATE_FINISH;
             break;
         }
-        interaction->movementState = 3;
-    case 3:
+        interaction->movementState = INTERACTION_MOVE_STATE_STEP;
+    case INTERACTION_MOVE_STATE_STEP:
         if (FollowMonMovement_Step(interaction, fieldSystem->followMon.mapObject)) {
-            interaction->movementState = 2;
+            interaction->movementState = INTERACTION_MOVE_STATE_NEXT_STEP;
         }
         break;
-    case 4:
+    case INTERACTION_MOVE_STATE_FINISH:
         direction = MapObject_GetFacingDirection(fieldSystem->followMon.mapObject);
         FollowMonBillboard_SetHeight(fieldSystem->followMon.mapObject, 0);
         FollowMonBillboard_SetShadowAnchored(fieldSystem->followMon.mapObject, FALSE);
@@ -1065,54 +1098,54 @@ BOOL Task_FollowMonInteract(TaskManager *taskManager) {
     u32 *state = TaskManager_GetStatePtr(taskManager);
 
     switch (*state) {
-    case 0:
+    case FOLLOW_MON_TASK_STATE_LOAD_SCRIPT:
         FollowMonInteraction_LoadScript(fieldSystem->followMonInteraction, FollowMon_SelectInteraction(fieldSystem));
         (*state)++;
         break;
-    case 1: {
+    case FOLLOW_MON_TASK_STATE_RUN: {
         int result = FollowMonInteraction_Run(fieldSystem, fieldSystem->followMonInteraction);
         if (result == FOLLOW_MON_INTERACTION_DONE) {
             MapObject_PauseMovement(fieldSystem->followMon.mapObject);
             return TRUE;
         }
         if (result == FOLLOW_MON_INTERACTION_QUESTION) {
-            fieldSystem->followMonInteraction->state = 10;
-            *state = 2;
+            fieldSystem->followMonInteraction->state = INTERACTION_STATE_OPEN_CHOICE;
+            *state = FOLLOW_MON_TASK_STATE_QUESTION;
         } else if (result == FOLLOW_MON_INTERACTION_GIVE_ACCESSORY) {
-            *state = 3;
+            *state = FOLLOW_MON_TASK_STATE_GIVE_ACCESSORY;
         } else if (result == FOLLOW_MON_INTERACTION_GIVE_SHINY_LEAF) {
-            *state = 4;
+            *state = FOLLOW_MON_TASK_STATE_GIVE_SHINY_LEAF;
         }
         break;
     }
-    case 2:
+    case FOLLOW_MON_TASK_STATE_QUESTION:
         switch (fieldSystem->followMonInteraction->state) {
-        case 10:
-            FieldSystem_SwitchBottomScreenApp(fieldSystem, 3, 0);
-            fieldSystem->followMonInteraction->state = 11;
+        case INTERACTION_STATE_OPEN_CHOICE:
+            FieldSystem_SwitchBottomScreenApp(fieldSystem, BOTTOM_SCREEN_APP_CHOICE_MENU, 0);
+            fieldSystem->followMonInteraction->state = INTERACTION_STATE_WAIT_CHOICE_APP;
             break;
-        case 11: {
+        case INTERACTION_STATE_WAIT_CHOICE_APP: {
             int a = FieldSystem_GetBottomScreenAppId(fieldSystem);
             int b = FieldSystem_GetBottomScreenAppState(fieldSystem);
-            if (a == 3 && b == 1) {
+            if (a == BOTTOM_SCREEN_APP_CHOICE_MENU && b == BOTTOM_SCREEN_APP_STATE_RUNNING) {
                 FieldSystem_SetTouchscreenChoiceMenuState(fieldSystem, 3, 3, &fieldSystem->followMonInteraction->answer);
-                fieldSystem->followMonInteraction->state = 12;
+                fieldSystem->followMonInteraction->state = INTERACTION_STATE_WAIT_ANSWER;
             }
             break;
         }
-        case 12: {
+        case INTERACTION_STATE_WAIT_ANSWER: {
             int a = FieldSystem_GetBottomScreenAppId(fieldSystem);
             int b = FieldSystem_GetTouchscreenChoiceMenuState(fieldSystem);
-            if (a == 3 && b == 6) {
-                FieldSystem_SwitchBottomScreenApp(fieldSystem, 0, 0);
-                fieldSystem->followMonInteraction->state = 13;
+            if (a == BOTTOM_SCREEN_APP_CHOICE_MENU && b == 6) {
+                FieldSystem_SwitchBottomScreenApp(fieldSystem, BOTTOM_SCREEN_APP_TOUCHSCREEN_MENU, 0);
+                fieldSystem->followMonInteraction->state = INTERACTION_STATE_CLOSE_CHOICE;
             }
             break;
         }
-        case 13: {
+        case INTERACTION_STATE_CLOSE_CHOICE: {
             int a = FieldSystem_GetBottomScreenAppId(fieldSystem);
             int b = FieldSystem_GetBottomScreenAppState(fieldSystem);
-            if (a == 0 && b == 1) {
+            if (a == BOTTOM_SCREEN_APP_TOUCHSCREEN_MENU && b == BOTTOM_SCREEN_APP_STATE_RUNNING) {
                 switch (fieldSystem->followMonInteraction->answer) {
                 case 0:
                     FieldSystem_CloseFollowMonMessage(fieldSystem);
@@ -1121,7 +1154,7 @@ BOOL Task_FollowMonInteract(TaskManager *taskManager) {
                         return TRUE;
                     }
                     FollowMonInteraction_LoadScript(fieldSystem->followMonInteraction, fieldSystem->followMonInteraction->yesScript);
-                    *state = 1;
+                    *state = FOLLOW_MON_TASK_STATE_RUN;
                     break;
                 case 1:
                     FieldSystem_CloseFollowMonMessage(fieldSystem);
@@ -1130,7 +1163,7 @@ BOOL Task_FollowMonInteract(TaskManager *taskManager) {
                         return TRUE;
                     }
                     FollowMonInteraction_LoadScript(fieldSystem->followMonInteraction, fieldSystem->followMonInteraction->noScript);
-                    *state = 1;
+                    *state = FOLLOW_MON_TASK_STATE_RUN;
                     break;
                 }
             }
@@ -1138,7 +1171,7 @@ BOOL Task_FollowMonInteract(TaskManager *taskManager) {
         }
         }
         break;
-    case 3: {
+    case FOLLOW_MON_TASK_STATE_GIVE_ACCESSORY: {
         FashionCase *fashionCase = Save_FashionData_GetFashionCase(Save_FashionData_Get(fieldSystem->saveData));
         int accessory = fieldSystem->followMonInteraction->accessory - 1;
         if (accessory < 0 || accessory >= 100) {
@@ -1151,10 +1184,10 @@ BOOL Task_FollowMonInteract(TaskManager *taskManager) {
         } else {
             FollowMonInteraction_PrintGiftMessage(fieldSystem, fieldSystem->followMonInteraction, 2);
         }
-        *state = 5;
+        *state = FOLLOW_MON_TASK_STATE_WAIT_GIFT_MESSAGE;
         break;
     }
-    case 4: {
+    case FOLLOW_MON_TASK_STATE_GIVE_SHINY_LEAF: {
         int attr;
         Pokemon *mon;
         switch (fieldSystem->followMonInteraction->shinyLeaf) {
@@ -1188,10 +1221,10 @@ BOOL Task_FollowMonInteract(TaskManager *taskManager) {
         } else {
             FollowMonInteraction_PrintGiftMessage(fieldSystem, fieldSystem->followMonInteraction, 0);
         }
-        *state = 5;
+        *state = FOLLOW_MON_TASK_STATE_WAIT_GIFT_MESSAGE;
         break;
     }
-    case 5:
+    case FOLLOW_MON_TASK_STATE_WAIT_GIFT_MESSAGE:
         if (DialogBox_IsPrintFinished((u8)fieldSystem->followMonInteraction->printerId) == TRUE && !IsFanfarePlaying() && (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B))) {
             FieldSystem_CloseFollowMonMessage(fieldSystem);
             MapObject_PauseMovement(fieldSystem->followMon.mapObject);

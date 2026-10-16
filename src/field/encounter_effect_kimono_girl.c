@@ -24,12 +24,24 @@ const u8 gKimonoGirlEffectBg3Template[sizeof(BgTemplate)] __attribute__((aligned
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0x10, 0, 0, 0, 0, 0, 0, 3, 0, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0
 };
 
+enum KimonoGirlState {
+    KIMONO_GIRL_STATE_INIT,
+    KIMONO_GIRL_STATE_START_FLASH,
+    KIMONO_GIRL_STATE_WAIT_FLASH,
+    KIMONO_GIRL_STATE_START_SCROLL_IN,
+    KIMONO_GIRL_STATE_SCROLL_IN,
+    KIMONO_GIRL_STATE_HOLD,
+    KIMONO_GIRL_STATE_START_SCROLL_OUT,
+    KIMONO_GIRL_STATE_SCROLL_OUT,
+    KIMONO_GIRL_STATE_END,
+};
+
 // Two halves of a picture slide in from both sides, hold, then slide out again.
 void EncounterEffect_KimonoGirl(SysTask *task, EncounterEffectTask *effect) {
     KimonoGirlEffectWork *work = effect->work;
 
     switch (effect->state) {
-    case 0:
+    case KIMONO_GIRL_STATE_INIT:
         effect->work = Heap_Alloc(HEAP_ID_FIELD1, sizeof(KimonoGirlEffectWork));
         memset(effect->work, 0, sizeof(KimonoGirlEffectWork));
         work = effect->work;
@@ -49,30 +61,30 @@ void EncounterEffect_KimonoGirl(SysTask *task, EncounterEffectTask *effect) {
         BgSetPosTextAndCommit(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_X, 128);
         BgSetPosTextAndCommit(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_X, 256);
         GfGfx_EngineASetPlanes(GX_PLANEMASK_BG0 | GX_PLANEMASK_BG2 | GX_PLANEMASK_OBJ);
-        effect->state = 1;
+        effect->state = KIMONO_GIRL_STATE_START_FLASH;
         break;
-    case 1:
+    case KIMONO_GIRL_STATE_START_FLASH:
         EncounterEffect_StartFlash(1, -16, -16, &effect->fadeDone, 2);
-        effect->state = 2;
+        effect->state = KIMONO_GIRL_STATE_WAIT_FLASH;
         break;
-    case 2:
+    case KIMONO_GIRL_STATE_WAIT_FLASH:
         if (effect->fadeDone) {
-            effect->state = 3;
+            effect->state = KIMONO_GIRL_STATE_START_SCROLL_IN;
         }
         break;
-    case 3:
+    case KIMONO_GIRL_STATE_START_SCROLL_IN:
         EncounterEffectQuadInterp_Init(&work->scroll, FX32_CONST(128), 0, FX32_CONST(5), 18);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
         work->scrolling = TRUE;
-        effect->state = 4;
+        effect->state = KIMONO_GIRL_STATE_SCROLL_IN;
         break;
-    case 4:
+    case KIMONO_GIRL_STATE_SCROLL_IN:
         if (EncounterEffectQuadInterp_Update(&work->scroll)) {
-            effect->state = 5;
+            effect->state = KIMONO_GIRL_STATE_HOLD;
         }
         break;
-    case 5:
+    case KIMONO_GIRL_STATE_HOLD:
         BgSetPosTextAndCommit(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_X, 0);
         BgSetPosTextAndCommit(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_X, 384);
         work->scrolling = FALSE;
@@ -80,20 +92,20 @@ void EncounterEffect_KimonoGirl(SysTask *task, EncounterEffectTask *effect) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
             work->scrolling = TRUE;
             work->holdFrames = 0;
-            effect->state = 6;
+            effect->state = KIMONO_GIRL_STATE_START_SCROLL_OUT;
         }
         break;
-    case 6:
+    case KIMONO_GIRL_STATE_START_SCROLL_OUT:
         EncounterEffectQuadInterp_Init(&work->scroll, 0, FX32_CONST(128), FX32_CONST(5), 18);
         work->scrolling = TRUE;
-        effect->state = 7;
+        effect->state = KIMONO_GIRL_STATE_SCROLL_OUT;
         break;
-    case 7:
+    case KIMONO_GIRL_STATE_SCROLL_OUT:
         if (EncounterEffectQuadInterp_Update(&work->scroll)) {
-            effect->state = 8;
+            effect->state = KIMONO_GIRL_STATE_END;
         }
         break;
-    case 8:
+    case KIMONO_GIRL_STATE_END:
         work->scrolling = FALSE;
         SetBothScreensBrightnessByColor();
         if (effect->done) {

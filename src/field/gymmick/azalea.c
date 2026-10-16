@@ -51,7 +51,7 @@ typedef struct AzaleaGymmickLocalData {
 
 static BOOL Task_SpinarakRide(TaskManager *taskman);
 static VecFx32 AzaleaGymmick_GetVectorBetweenRouteNodes(const AzaleaGymmickSpinarakRouteNode *prev, const AzaleaGymmickSpinarakRouteNode *next);
-static void AzaleaGymmick_GetSignsOfVectorXZComponents(const VecFx32 *deltaVec, BOOL *xzSigns);
+static void AzaleaGymmick_GetVectorSignsXZ(const VecFx32 *deltaVec, BOOL *xzSigns);
 static int AzaleaGymmick_GetMovementDoneParams(BOOL sign, fx32 cur, fx32 delta, u16 nodeComponent);
 static void SysTask_DoSpinarakRide(SysTask *sysTask, void *taskData);
 static BOOL Task_WaitSwitchFlipSFX(TaskManager *taskman);
@@ -408,7 +408,7 @@ static VecFx32 AzaleaGymmick_GetVectorBetweenRouteNodes(const AzaleaGymmickSpina
     return ret;
 }
 
-static void AzaleaGymmick_GetSignsOfVectorXZComponents(const VecFx32 *deltaVec, BOOL *xzSigns) {
+static void AzaleaGymmick_GetVectorSignsXZ(const VecFx32 *deltaVec, BOOL *xzSigns) {
     if (deltaVec->x >= 0) {
         xzSigns[0] = TRUE;
     } else {
@@ -521,7 +521,7 @@ static void SysTask_DoSpinarakRide(SysTask *sysTask, void *taskData) {
                 localData->node = &sSpinarakRoutes_Froms[spinarakPair][switchState].route[localData->curNodeIndex + 1];
             }
             localData->moveVector = AzaleaGymmick_GetVectorBetweenRouteNodes(prevNode, localData->node);
-            AzaleaGymmick_GetSignsOfVectorXZComponents(&localData->moveVector, localData->moveVectorComponentSigns);
+            AzaleaGymmick_GetVectorSignsXZ(&localData->moveVector, localData->moveVectorComponentSigns);
             VEC_Normalize(&localData->moveVector, &localData->moveVector);
 
             VecFx32 xOne = { FX32_ONE, 0, 0 };
