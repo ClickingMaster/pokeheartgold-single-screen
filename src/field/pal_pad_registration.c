@@ -2,13 +2,13 @@
 
 #include "global.h"
 
+#include "field/bottom_screen_app.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0779.h"
 
 #include "bag.h"
 #include "communication_player_state.h"
 #include "dialog_box.h"
-#include "field/bottom_screen_app.h"
 #include "friend_roster.h"
 #include "frontier_save_access.h"
 #include "gf_gfx_planes.h"
@@ -19,7 +19,6 @@
 #include "task.h"
 #include "text.h"
 
-// declared by no header, or with other types than this file was built with
 void *FriendRoster_GetDwcFriendData(FriendRoster *roster, int slot);
 BOOL FriendRoster_IsFriendValid(FriendRoster *roster, int slot);
 void FriendRoster_RemoveFriend(FriendRoster *roster, int slot);
@@ -47,25 +46,25 @@ enum PalPadRegistrationState {
 
 #define FRIEND_ROSTER_SIZE 32
 
-BOOL PalPadRegistration_Start(PalPadRegistration *registration);
-BOOL PalPadRegistration_NextPartner(PalPadRegistration *registration);
-BOOL PalPadRegistration_WaitAskRegister(PalPadRegistration *registration);
-BOOL PalPadRegistration_AnswerRegister(PalPadRegistration *registration);
-BOOL PalPadRegistration_WaitAskDelete(PalPadRegistration *registration);
-BOOL PalPadRegistration_AnswerDelete(PalPadRegistration *registration);
-BOOL PalPadRegistration_WaitAskGiveUp(PalPadRegistration *registration);
-BOOL PalPadRegistration_AnswerGiveUp(PalPadRegistration *registration);
-BOOL PalPadRegistration_RunFriendRosterApp(PalPadRegistration *registration);
-BOOL PalPadRegistration_HandleFriendRosterChoice(PalPadRegistration *registration);
-BOOL PalPadRegistration_WaitConfirmDelete(PalPadRegistration *registration);
-BOOL PalPadRegistration_AnswerConfirmDelete(PalPadRegistration *registration);
-BOOL Task_PalPadRegistration(TaskManager *taskman);
-void PalPadRegistration_PrintMessage(PalPadRegistration *registration, u32 msgId);
-void PalPadRegistration_Init(PalPadRegistration *registration);
-void PalPadRegistration_Free(PalPadRegistration *registration);
+static BOOL PalPadRegistration_Start(PalPadRegistration *registration);
+static BOOL PalPadRegistration_NextPartner(PalPadRegistration *registration);
+static BOOL PalPadRegistration_WaitAskRegister(PalPadRegistration *registration);
+static BOOL PalPadRegistration_AnswerRegister(PalPadRegistration *registration);
+static BOOL PalPadRegistration_WaitAskDelete(PalPadRegistration *registration);
+static BOOL PalPadRegistration_AnswerDelete(PalPadRegistration *registration);
+static BOOL PalPadRegistration_WaitAskGiveUp(PalPadRegistration *registration);
+static BOOL PalPadRegistration_AnswerGiveUp(PalPadRegistration *registration);
+static BOOL PalPadRegistration_RunFriendRosterApp(PalPadRegistration *registration);
+static BOOL PalPadRegistration_HandleFriendRosterChoice(PalPadRegistration *registration);
+static BOOL PalPadRegistration_WaitConfirmDelete(PalPadRegistration *registration);
+static BOOL PalPadRegistration_AnswerConfirmDelete(PalPadRegistration *registration);
+static BOOL Task_PalPadRegistration(TaskManager *taskman);
+static void PalPadRegistration_PrintMessage(PalPadRegistration *registration, u32 msgId);
+static void PalPadRegistration_Init(PalPadRegistration *registration);
+static void PalPadRegistration_Free(PalPadRegistration *registration);
 void FieldSystem_StartPalPadRegistration(FieldSystem *fieldSystem);
 
-BOOL PalPadRegistration_Start(PalPadRegistration *registration) {
+static BOOL PalPadRegistration_Start(PalPadRegistration *registration) {
     FriendRoster_GetDwcFriendData(Save_FriendRoster_Get(registration->saveData), 0);
     if (!Comm_RegisterLinkedFriends(registration->saveData, registration->requests, HEAP_ID_FIELD1)) {
         return TRUE;
@@ -78,7 +77,7 @@ BOOL PalPadRegistration_Start(PalPadRegistration *registration) {
 }
 
 // Asks about the next partner who requested registration; registers directly when the player has no Pal Pad.
-BOOL PalPadRegistration_NextPartner(PalPadRegistration *registration) {
+static BOOL PalPadRegistration_NextPartner(PalPadRegistration *registration) {
     FriendRoster *roster;
     int i;
 
@@ -114,7 +113,7 @@ BOOL PalPadRegistration_NextPartner(PalPadRegistration *registration) {
     return FALSE;
 }
 
-BOOL PalPadRegistration_WaitAskRegister(PalPadRegistration *registration) {
+static BOOL PalPadRegistration_WaitAskRegister(PalPadRegistration *registration) {
     if (!TextPrinterCheckActive((u8)registration->printerId)) {
         registration->yesNoState = 0;
         registration->state = PAL_PAD_REGISTRATION_STATE_ANSWER_REGISTER;
@@ -122,7 +121,7 @@ BOOL PalPadRegistration_WaitAskRegister(PalPadRegistration *registration) {
     return FALSE;
 }
 
-BOOL PalPadRegistration_AnswerRegister(PalPadRegistration *registration) {
+static BOOL PalPadRegistration_AnswerRegister(PalPadRegistration *registration) {
     int i;
     FriendRoster *roster;
 
@@ -147,7 +146,7 @@ BOOL PalPadRegistration_AnswerRegister(PalPadRegistration *registration) {
     return FALSE;
 }
 
-BOOL PalPadRegistration_WaitAskDelete(PalPadRegistration *registration) {
+static BOOL PalPadRegistration_WaitAskDelete(PalPadRegistration *registration) {
     if (!TextPrinterCheckActive((u8)registration->printerId)) {
         registration->yesNoState = 0;
         registration->state = PAL_PAD_REGISTRATION_STATE_ANSWER_DELETE;
@@ -155,7 +154,7 @@ BOOL PalPadRegistration_WaitAskDelete(PalPadRegistration *registration) {
     return FALSE;
 }
 
-BOOL PalPadRegistration_AnswerDelete(PalPadRegistration *registration) {
+static BOOL PalPadRegistration_AnswerDelete(PalPadRegistration *registration) {
     if (!PalPadRegistration_RunTouchYesNo(registration)) {
         if (registration->yesNoAnswer == 0) {
             registration->rosterAppState = 0;
@@ -169,7 +168,7 @@ BOOL PalPadRegistration_AnswerDelete(PalPadRegistration *registration) {
     return FALSE;
 }
 
-BOOL PalPadRegistration_WaitAskGiveUp(PalPadRegistration *registration) {
+static BOOL PalPadRegistration_WaitAskGiveUp(PalPadRegistration *registration) {
     if (!TextPrinterCheckActive((u8)registration->printerId)) {
         registration->yesNoState = 0;
         registration->state = PAL_PAD_REGISTRATION_STATE_ANSWER_GIVE_UP;
@@ -177,7 +176,7 @@ BOOL PalPadRegistration_WaitAskGiveUp(PalPadRegistration *registration) {
     return FALSE;
 }
 
-BOOL PalPadRegistration_AnswerGiveUp(PalPadRegistration *registration) {
+static BOOL PalPadRegistration_AnswerGiveUp(PalPadRegistration *registration) {
     if (!PalPadRegistration_RunTouchYesNo(registration)) {
         if (registration->yesNoAnswer == 0) {
             registration->state = PAL_PAD_REGISTRATION_STATE_END;
@@ -189,7 +188,7 @@ BOOL PalPadRegistration_AnswerGiveUp(PalPadRegistration *registration) {
     return FALSE;
 }
 
-BOOL PalPadRegistration_RunFriendRosterApp(PalPadRegistration *registration) {
+static BOOL PalPadRegistration_RunFriendRosterApp(PalPadRegistration *registration) {
     switch (registration->rosterAppState) {
     case 0:
         FieldSystem_SwitchBottomScreenApp(registration->fieldSystem, BOTTOM_SCREEN_APP_FRIEND_ROSTER, &registration->rosterChoice);
@@ -205,7 +204,7 @@ BOOL PalPadRegistration_RunFriendRosterApp(PalPadRegistration *registration) {
     return FALSE;
 }
 
-BOOL PalPadRegistration_HandleFriendRosterChoice(PalPadRegistration *registration) {
+static BOOL PalPadRegistration_HandleFriendRosterChoice(PalPadRegistration *registration) {
     FriendRoster *roster;
     PlayerProfile *profile;
 
@@ -231,7 +230,7 @@ BOOL PalPadRegistration_HandleFriendRosterChoice(PalPadRegistration *registratio
     return FALSE;
 }
 
-BOOL PalPadRegistration_WaitConfirmDelete(PalPadRegistration *registration) {
+static BOOL PalPadRegistration_WaitConfirmDelete(PalPadRegistration *registration) {
     if (!TextPrinterCheckActive((u8)registration->printerId)) {
         registration->yesNoState = 0;
         registration->state = PAL_PAD_REGISTRATION_STATE_ANSWER_CONFIRM_DELETE;
@@ -239,7 +238,7 @@ BOOL PalPadRegistration_WaitConfirmDelete(PalPadRegistration *registration) {
     return FALSE;
 }
 
-BOOL PalPadRegistration_AnswerConfirmDelete(PalPadRegistration *registration) {
+static BOOL PalPadRegistration_AnswerConfirmDelete(PalPadRegistration *registration) {
     FriendRoster *roster = Save_FriendRoster_Get(registration->saveData);
 
     if (!PalPadRegistration_RunTouchYesNo(registration)) {
@@ -257,7 +256,7 @@ BOOL PalPadRegistration_AnswerConfirmDelete(PalPadRegistration *registration) {
     return FALSE;
 }
 
-BOOL Task_PalPadRegistration(TaskManager *taskman) {
+static BOOL Task_PalPadRegistration(TaskManager *taskman) {
     PalPadRegistration *registration = TaskManager_GetEnvironment(taskman);
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskman);
 
@@ -312,7 +311,7 @@ BOOL Task_PalPadRegistration(TaskManager *taskman) {
     return FALSE;
 }
 
-void PalPadRegistration_PrintMessage(PalPadRegistration *registration, u32 msgId) {
+static void PalPadRegistration_PrintMessage(PalPadRegistration *registration, u32 msgId) {
     if (WindowIsInUse(&registration->window)) {
         RemoveWindow(&registration->window);
     }
@@ -323,7 +322,7 @@ void PalPadRegistration_PrintMessage(PalPadRegistration *registration, u32 msgId
     registration->printerId = DialogBox_PrintMessage(&registration->window, registration->message, Save_PlayerData_GetOptionsAddr(registration->fieldSystem->saveData), TRUE);
 }
 
-void PalPadRegistration_Init(PalPadRegistration *registration) {
+static void PalPadRegistration_Init(PalPadRegistration *registration) {
     MI_CpuFill8(registration, 0, sizeof(PalPadRegistration));
     registration->msgFormat = MessageFormat_New(HEAP_ID_FIELD1);
     registration->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0779_bin, HEAP_ID_FIELD1);
@@ -331,7 +330,7 @@ void PalPadRegistration_Init(PalPadRegistration *registration) {
     registration->rawMessage = String_New(110, HEAP_ID_FIELD1);
 }
 
-void PalPadRegistration_Free(PalPadRegistration *registration) {
+static void PalPadRegistration_Free(PalPadRegistration *registration) {
     DestroyMsgData(registration->msgData);
     MessageFormat_Delete(registration->msgFormat);
     String_Delete(registration->message);

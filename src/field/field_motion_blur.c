@@ -7,7 +7,6 @@
 #include "sys_task_api.h"
 #include "systask_environment.h"
 
-// declared only by the NitroSDK internal headers, which clash with lib/include
 u32 GX_GetBankForLCDC(void);
 
 static inline void FieldCapture_SetCaptureRegister(GXCaptureSize size, GXCaptureMode mode, GXCaptureSrcA srcA, GXCaptureSrcB srcB, GXCaptureDest dest, int eva, int evb) {

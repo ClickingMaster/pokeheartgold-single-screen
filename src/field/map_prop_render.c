@@ -460,7 +460,7 @@ void TimeOfDayPropAnimManager_AddProp(TimeOfDayPropAnimManager *manager, NNSG3dR
         if (count > 4) {
             set->numAnims = 4;
         }
-        for (u8 i = 0;  i < set->numAnims; i++) {
+        for (u8 i = 0; i < set->numAnims; i++) {
             set->animations[i] = animation[i];
         }
         set->renderObj = renderObj;

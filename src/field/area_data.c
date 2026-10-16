@@ -7,8 +7,8 @@
 #include "global.h"
 
 #include "field/build_model_shapes.h"
-#include "field/map_prop_animation.h"
 #include "field/field_3d_model.h"
+#include "field/map_prop_animation.h"
 #include "field/map_prop_render.h"
 
 #include "assert.h"
@@ -33,14 +33,14 @@ typedef struct AreaDataHeader {
 // Scratch state between AreaDataManager_Alloc and AreaDataManager_Load.
 typedef struct AreaDataLoadContext {
     u32 areaDataBank;
-    u32 unk4;
+    u32 unk_04;
     NARC *mapPropModelNarc;
     u16 mapPropCount;
-    u16 unkE;
+    u16 unk_0E;
 } AreaDataLoadContext;
 
 struct AreaDataManager {
-    u32 unk0;
+    u32 unk_00;
     NNSG3dResFileHeader *mapPropModels[AREA_DATA_MAX_MAP_PROPS]; // 0x004
     void *mapTexFile;                                            // 0x89C
     void *mapPropTexFile;                                        // 0x8A0
@@ -54,14 +54,13 @@ struct AreaDataManager {
 };
 
 typedef struct FieldAnmRes {
-    u32 unk0;
+    u32 unk_00;
     u16 numFrames;
-    u16 unk6;
+    u16 unk_06;
 } FieldAnmRes;
 
 int sprintf(char *buf, const char *fmt, ...);
 
-// Not in the public headers yet: other sources still declare these with other parameter types.
 NNSG3dResFileHeader **AreaDataManager_GetMapPropModel(u32 mapPropId, AreaDataManager *areaDataManager);
 BOOL AreaDataManager_IsLit(AreaDataManager *areaDataManager);
 void Field3dObject_SetXRotation(Field3dObject *object, u16 angle, int axis);
@@ -80,7 +79,7 @@ AreaDataManager *AreaDataManager_Alloc(u8 areaDataBank) {
     AreaDataManager *areaDataManager = Heap_Alloc(HEAP_ID_FIELD1, sizeof(AreaDataManager));
     areaDataManager->loadCtx = Heap_AllocAtEnd(HEAP_ID_FIELD1, sizeof(AreaDataLoadContext));
     areaDataManager->loadCtx->areaDataBank = areaDataBank;
-    areaDataManager->loadCtx->unk4 = 0;
+    areaDataManager->loadCtx->unk_04 = 0;
     ReadWholeNarcMemberByIdPair(&areaDataManager->header, NARC_a_0_4_2, areaDataBank);
     if (areaDataManager->header.buildModelKind != 0) {
         areaDataManager->mapPropAnimListNarc = NARC_New(NARC_a_1_0_7, HEAP_ID_FIELD1);
@@ -165,7 +164,6 @@ u32 AreaDataManager_GetAreaLightArchiveID(AreaDataManager *areaDataManager) {
     return 0;
 }
 
-// force_active only sets a section flag; it is kept so the objects stay identical to the matched ones
 #pragma force_active on
 void AreaDataManager_Load(AreaDataManager *areaDataManager, Field3dRenderObjManager *renderObjManager, MapPropAnimationManager *mapPropAnimationManager, AreaMapAnimation *unkCC, TimeOfDayPropAnimManager *unk104) {
     MapPropAnimListFile animListFile;

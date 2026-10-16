@@ -101,7 +101,6 @@ void FieldCamera_InitShift(FieldSystem *fieldSystem, u32 presetNo) {
     }
 }
 
-// force_active only sets a section flag; it is kept so the objects stay identical to the matched ones
 #pragma force_active on
 void FieldCameraShift_Start(FieldCameraShift *shift, u8 mode) {
     int presetIdx;

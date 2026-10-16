@@ -14,6 +14,7 @@
 #include "camera.h"
 #include "camera_translation.h"
 #include "field_metatile_query_internal.h"
+#include "field_transition_effects.h"
 #include "follow_mon.h"
 #include "heap.h"
 #include "map_header.h"
@@ -23,7 +24,6 @@
 #include "player_avatar.h"
 #include "screen_fade.h"
 #include "sound_playback.h"
-#include "field_transition_effects.h"
 
 // Door prop slot used by the one-shot animation manager for front doors and for side doors.
 #define DOOR_ANIM_TAG      1
@@ -75,22 +75,22 @@ typedef struct DoorTransitionWork {
     u8 cameraStep;                           // 0x0D
     u16 cameraAngle;                         // 0x0E
     BOOL adjustCamera;                       // 0x10
-    u32 unk14;                               // 0x14
+    u32 unk_14;                               // 0x14
     GFCameraTranslationWrapper *translation; // 0x18
     u16 translationDone;                     // 0x1C
     u16 cameraPathIndex;                     // 0x1E
-} DoorTransitionWork; // size: 0x20
+} DoorTransitionWork;                        // size: 0x20
 
 typedef struct DoorTransitionTaskWork {
-    u8 state;         // 0x00
-    u8 cameraStep;    // 0x01
-    u16 cameraAngle;  // 0x02
-    BOOL adjustCamera; // 0x04
+    u8 state;             // 0x00
+    u8 cameraStep;        // 0x01
+    u16 cameraAngle;      // 0x02
+    BOOL adjustCamera;    // 0x04
 } DoorTransitionTaskWork; // size: 0x08
 
 // Same layout as MapPropAnimListFile; a nonzero door type marks a prop as a door and selects its sound effects.
 typedef struct DoorAnimListEntry {
-    u32 unk00;
+    u32 unk_00;
     u8 doorType; // 0x04
     u8 filler05[0x13];
 } DoorAnimListEntry;
@@ -616,7 +616,6 @@ BOOL Task_WaitDoorAnimation(TaskManager *taskman) {
     return FALSE;
 }
 
-// force_active only sets a section flag; it is kept so the objects stay identical to the matched ones
 #pragma force_active on
 // Loads the animations of the door prop in front of (x, z) into the one-shot animation slot tag.
 void DoorAnimation_Load(FieldSystem *fieldSystem, int x, int z, u8 tag) {

@@ -31,7 +31,7 @@ struct AreaLightManager {
     AreaLightEntry *entries;          // 0x04
     u32 activeIndex;                  // 0x08
     ModelAttributes *modelAttributes; // 0x0C
-    u32 applyChanges;                        // 0x10
+    u32 applyChanges;                 // 0x10
 };
 
 extern const char *const gAreaLightFilePaths[AREA_LIGHT_FILE_COUNT];
@@ -134,7 +134,6 @@ void AreaLight_ClearMaterialModifyFlags(NNSG3dResMdl *model) {
     NNSi_G3dModifyMatFlag(model, FALSE, NNS_G3D_MATFLAG_EMISSION);
 }
 
-// force_active only sets a section flag; it is kept so the objects stay identical to the matched ones
 #pragma force_active on
 // Each entry is 10 lines: "endTime,...", 4 light lines, 4 material color lines and one more; the file ends with "EOF".
 int AreaLight_LoadEntries(const char *path, AreaLightEntry **entriesOut) {

@@ -2,6 +2,7 @@
 
 #include "constants/maps.h"
 
+#include "field/bottom_screen_app.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0423.h"
 
@@ -16,7 +17,6 @@
 #include "message_format.h"
 #include "msgdata.h"
 #include "overlay_01.h"
-#include "field/bottom_screen_app.h"
 #include "player_avatar.h"
 #include "player_data.h"
 #include "pm_string.h"
@@ -59,7 +59,6 @@ struct SaveStatsRow {
     u32 color; // index into sTextColors
 };
 
-// in asm/save_stats_printer_data.s (overlapping tables)
 extern const u32 sTextColors[2];
 extern const u32 sMsgIdsMain[4];
 extern const u32 sMsgIdsSub[5];

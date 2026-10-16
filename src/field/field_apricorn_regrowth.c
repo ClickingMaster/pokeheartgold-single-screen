@@ -29,11 +29,11 @@ typedef struct ApricornRegrowth {
 typedef struct ApricornRegrowthEffectArgs {
     FieldEffectManager *manager;
     ApricornRegrowth *regrowth;
-    u32 unk08;
+    u32 unk_08;
 } ApricornRegrowthEffectArgs;
 
 typedef struct ApricornRegrowthEffect {
-    u8 unk00[4];
+    u8 unk_00[4];
     int playCount;
     BOOL sequenceDone;
     ApricornRegrowthEffectArgs args;
@@ -46,21 +46,19 @@ typedef struct ApricornRegrowthSpeeds {
 
 ApricornRegrowth *ApricornRegrowth_New(FieldEffectManager *manager);
 void ApricornRegrowth_Free(ApricornRegrowth *regrowth);
-void ApricornRegrowth_Retain(ApricornRegrowth *regrowth);
-void ApricornRegrowth_Release(ApricornRegrowth *regrowth);
-void ApricornRegrowth_LoadGfx(ApricornRegrowth *regrowth);
-void ApricornRegrowth_FreeGfx(ApricornRegrowth *regrowth);
-void ApricornRegrowth_LoadGfxIfUnused(ApricornRegrowth *regrowth);
-void ApricornRegrowth_FreeGfxIfUnused(ApricornRegrowth *regrowth);
+static void ApricornRegrowth_Retain(ApricornRegrowth *regrowth);
+static void ApricornRegrowth_Release(ApricornRegrowth *regrowth);
+static void ApricornRegrowth_LoadGfx(ApricornRegrowth *regrowth);
+static void ApricornRegrowth_FreeGfx(ApricornRegrowth *regrowth);
+static void ApricornRegrowth_LoadGfxIfUnused(ApricornRegrowth *regrowth);
+static void ApricornRegrowth_FreeGfxIfUnused(ApricornRegrowth *regrowth);
 void ApricornRegrowth_Spawn(LocalMapObject *mapObject);
 BOOL ApricornRegrowthEffect_Init(FieldEffect *effect, ApricornRegrowthEffect *work);
 void ApricornRegrowthEffect_Destroy(FieldEffect *effect, ApricornRegrowthEffect *work);
 void ApricornRegrowthEffect_Update(FieldEffect *effect, ApricornRegrowthEffect *work);
 void ApricornRegrowthEffect_Draw(FieldEffect *effect, ApricornRegrowthEffect *work);
 
-// The effect template and the record parameters ({ 0, 9, 1, 0, 0, 2 }) stay in asm, linked around this file
-// (asm/field_apricorn_regrowth_data.s before it, asm/field_apricorn_regrowth_gfx_data.s after it): MWCC would not keep the update
-// function's speed table between them.
+// The record parameters are { 0, 9, 1, 0, 0, 2 }.
 extern const FieldEffectBasicTemplate sApricornRegrowthTemplate;
 extern const u32 sApricornRegrowthRecordParams[6];
 
@@ -75,18 +73,18 @@ void ApricornRegrowth_Free(ApricornRegrowth *regrowth) {
     FieldEffectManager_HeapFree(regrowth);
 }
 
-void ApricornRegrowth_Retain(ApricornRegrowth *regrowth) {
+static void ApricornRegrowth_Retain(ApricornRegrowth *regrowth) {
     regrowth->refCount++;
 }
 
-void ApricornRegrowth_Release(ApricornRegrowth *regrowth) {
+static void ApricornRegrowth_Release(ApricornRegrowth *regrowth) {
     regrowth->refCount--;
     if (regrowth->refCount < 0) {
         GF_AssertFail();
     }
 }
 
-void ApricornRegrowth_LoadGfx(ApricornRegrowth *regrowth) {
+static void ApricornRegrowth_LoadGfx(ApricornRegrowth *regrowth) {
     if (regrowth->gfxLoaded == FALSE) {
         regrowth->gfxLoaded = TRUE;
         FieldEffectManager_LoadBillboardResource(regrowth->manager, APRICORN_REGROWTH_RESOURCE, 0x80);
@@ -96,7 +94,7 @@ void ApricornRegrowth_LoadGfx(ApricornRegrowth *regrowth) {
     }
 }
 
-void ApricornRegrowth_FreeGfx(ApricornRegrowth *regrowth) {
+static void ApricornRegrowth_FreeGfx(ApricornRegrowth *regrowth) {
     if (regrowth->gfxLoaded == TRUE) {
         regrowth->gfxLoaded = FALSE;
         FieldEffectManager_FreeBillboardResource(regrowth->manager, APRICORN_REGROWTH_RESOURCE);
@@ -106,13 +104,13 @@ void ApricornRegrowth_FreeGfx(ApricornRegrowth *regrowth) {
     }
 }
 
-void ApricornRegrowth_LoadGfxIfUnused(ApricornRegrowth *regrowth) {
+static void ApricornRegrowth_LoadGfxIfUnused(ApricornRegrowth *regrowth) {
     if (regrowth->refCount == 0) {
         ApricornRegrowth_LoadGfx(regrowth);
     }
 }
 
-void ApricornRegrowth_FreeGfxIfUnused(ApricornRegrowth *regrowth) {
+static void ApricornRegrowth_FreeGfxIfUnused(ApricornRegrowth *regrowth) {
     if (regrowth->refCount == 0) {
         ApricornRegrowth_FreeGfx(regrowth);
     }

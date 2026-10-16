@@ -1,8 +1,8 @@
-#include "field/model_attributes.h"
+#include <nnsys/g3d_util_internal.h>
 
 #include "global.h"
 
-#include <nnsys/g3d_util_internal.h>
+#include "field/model_attributes.h"
 
 #include "heap.h"
 

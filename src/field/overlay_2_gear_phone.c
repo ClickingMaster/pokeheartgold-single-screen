@@ -4,6 +4,7 @@
 
 #include "overlay_2/overlay_02_gear_phone.h"
 
+#include "gear_phone_ring_manager.h"
 #include "map_header.h"
 #include "math_util.h"
 #include "msgdata.h"
@@ -15,14 +16,13 @@
 #include "sound_radio.h"
 #include "sys_flags.h"
 #include "sys_vars.h"
-#include "gear_phone_ring_manager.h"
 
 typedef struct PhoneCallTrigger {
     u8 callerId;
-    u8 unk1;
+    u8 unk_01;
     u16 callScriptID;
     u8 forcePickUp;
-    u8 unk5;
+    u8 unk_05;
 } PhoneCallTrigger;
 
 static const PhoneCallTrigger sPhoneCallTriggers[] = {
@@ -51,10 +51,10 @@ static const PhoneCallTrigger sPhoneCallTriggers[] = {
     { PHONE_CONTACT_MOTHER,    0, PHONE_SCRIPT_027,  FALSE, 0 }
 };
 
-u32 GearPhoneRingManager_TryRandomCall(GearPhoneRingManager *gearPhone, PhoneBook *phoneBook, u32 mapId);
-u32 GearPhoneRingManager_TryCallTrigger(GearPhoneRingManager *gearPhone, PhoneBook *phoneBook, u32 mapId);
+static u32 GearPhoneRingManager_TryRandomCall(GearPhoneRingManager *gearPhone, PhoneBook *phoneBook, u32 mapId);
+static u32 GearPhoneRingManager_TryCallTrigger(GearPhoneRingManager *gearPhone, PhoneBook *phoneBook, u32 mapId);
 static u8 GearPhoneRingManager_PickCallTrigger(GearPhoneRingManager *gearPhone, PhoneBook *phoneBook, u32 mapId);
-void GearPhoneRingManager_SetRinging(GearPhoneRingManager *gearPhone, BOOL ringing);
+static void GearPhoneRingManager_SetRinging(GearPhoneRingManager *gearPhone, BOOL ringing);
 
 #pragma force_active on
 
@@ -116,10 +116,10 @@ BOOL GearPhoneRingManager_TryStartCall(GearPhoneRingManager *gearPhone) {
     }
 
     PhoneBook *phoneBook = AllocAndReadPhoneBook(HEAP_ID_FIELD1);
-    u32 var = GearPhoneRingManager_TryCallTrigger(gearPhone, phoneBook, position->mapId);
-    if (var) {
+    u32 result = GearPhoneRingManager_TryCallTrigger(gearPhone, phoneBook, position->mapId);
+    if (result) {
         FreePhoneBook(phoneBook);
-        if (var == 2) {
+        if (result == 2) {
             gearPhone->sys->suppressBottomScreenDim = TRUE;
             StartMapSceneScript(gearPhone->sys, 0x7FF, 0);
             return TRUE;
@@ -135,10 +135,10 @@ BOOL GearPhoneRingManager_TryStartCall(GearPhoneRingManager *gearPhone) {
         return FALSE;
     }
 
-    var = GearPhoneRingManager_TryRandomCall(gearPhone, phoneBook, position->mapId);
+    result = GearPhoneRingManager_TryRandomCall(gearPhone, phoneBook, position->mapId);
     FreePhoneBook(phoneBook);
 
-    if (var == 0) {
+    if (result == 0) {
         gearPhone->elapsedMinutes = 0;
     }
     return FALSE;
@@ -146,7 +146,7 @@ BOOL GearPhoneRingManager_TryStartCall(GearPhoneRingManager *gearPhone) {
 
 #pragma force_active reset
 
-u32 GearPhoneRingManager_TryRandomCall(GearPhoneRingManager *gearPhone, PhoneBook *phoneBook, u32 mapId) {
+static u32 GearPhoneRingManager_TryRandomCall(GearPhoneRingManager *gearPhone, PhoneBook *phoneBook, u32 mapId) {
     u8 numContacts;
     u8 numCallers;
     int timeOfDay;
@@ -230,7 +230,7 @@ u32 GearPhoneRingManager_TryRandomCall(GearPhoneRingManager *gearPhone, PhoneBoo
 
 #pragma force_active on
 
-u32 GearPhoneRingManager_TryCallTrigger(GearPhoneRingManager *gearPhone, PhoneBook *phoneBook, u32 mapId) {
+static u32 GearPhoneRingManager_TryCallTrigger(GearPhoneRingManager *gearPhone, PhoneBook *phoneBook, u32 mapId) {
     u8 callTriggerID = GearPhoneRingManager_PickCallTrigger(gearPhone, phoneBook, mapId);
     if (callTriggerID == 0xFF) {
         return FALSE;
@@ -241,12 +241,11 @@ u32 GearPhoneRingManager_TryCallTrigger(GearPhoneRingManager *gearPhone, PhoneBo
     return sPhoneCallTriggers[callTriggerID].forcePickUp + 1;
 }
 
-// FIXME: This is a fakematch from decomp.me, it doesn't match locally without the label https://decomp.me/scratch/YdDak
 static u8 GearPhoneRingManager_PickCallTrigger(GearPhoneRingManager *gearPhone, PhoneBook *phoneBook, u32 mapId) {
-    u8 *ptr = Heap_AllocAtEnd(HEAP_ID_FIELD1, NUM_CALL_TRIGGERS);
-    MI_CpuFill8(ptr, 0, NUM_CALL_TRIGGERS);
+    u8 *triggers = Heap_AllocAtEnd(HEAP_ID_FIELD1, NUM_CALL_TRIGGERS);
+    MI_CpuFill8(triggers, 0, NUM_CALL_TRIGGERS);
 
-    int cnt = 0;
+    int count = 0;
     for (int i = 0; i < NUM_CALL_TRIGGERS; i++) {
         if (PhoneCallPersistentState_CheckCallTriggerFlag(gearPhone->savingsData, i) == FALSE) {
             continue;
@@ -254,7 +253,6 @@ static u8 GearPhoneRingManager_PickCallTrigger(GearPhoneRingManager *gearPhone, 
         PhoneBookEntry *entry = &phoneBook->entries[sPhoneCallTriggers[i].callerId];
         if (entry->id == PHONE_CONTACT_DAY_C_MAN) {
             if (SavePokegear_IsNumberRegistered(gearPhone->pokegearData, PHONE_CONTACT_DAY_C_MAN) != 0xFF) {
-                // had to do this to match
                 goto LABEL;
             } else {
                 continue;
@@ -263,20 +261,20 @@ static u8 GearPhoneRingManager_PickCallTrigger(GearPhoneRingManager *gearPhone, 
             continue;
         }
 LABEL:
-        ptr[cnt++] = i;
+        triggers[count++] = i;
     }
 
-    if (cnt == 0) {
-        Heap_Free(ptr);
+    if (count == 0) {
+        Heap_Free(triggers);
         return 0xFF;
     }
 
-    u8 ret = ptr[LCRandom() % cnt];
-    Heap_Free(ptr);
+    u8 ret = triggers[LCRandom() % count];
+    Heap_Free(triggers);
     return ret;
 }
 
-void GearPhoneRingManager_SetRinging(GearPhoneRingManager *gearPhone, BOOL ringing) {
+static void GearPhoneRingManager_SetRinging(GearPhoneRingManager *gearPhone, BOOL ringing) {
     GearPhone_ToggleRinging(gearPhone, ringing);
 }
 

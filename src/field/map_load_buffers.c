@@ -1,8 +1,8 @@
+#include "field/map_load_buffers.h"
+
 #include "global.h"
 
 #include "constants/heap.h"
-
-#include "field/map_load_buffers.h"
 
 #include "heap.h"
 

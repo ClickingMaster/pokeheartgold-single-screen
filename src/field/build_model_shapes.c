@@ -1,6 +1,6 @@
-#include "global.h"
-
 #include "field/build_model_shapes.h"
+
+#include "global.h"
 
 #include "filesystem.h"
 #include "heap.h"

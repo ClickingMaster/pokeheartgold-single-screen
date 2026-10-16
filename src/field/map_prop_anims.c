@@ -7,11 +7,11 @@
 #include "field/map_prop_animation.h"
 
 #include "field_system.h"
+#include "field_terrain.h"
 #include "heap.h"
 #include "overlay_02.h"
 #include "sound_playback.h"
 #include "task.h"
-#include "field_terrain.h"
 
 // Animations of map props started by script commands: the Pokemon Center healing machine (one Poke Ball prop per
 // Pokemon, then the machine's and the balls' animations and the healing fanfare), the elevator, and the one-shot
@@ -44,18 +44,17 @@ typedef struct ElevatorAnim {
     u8 unused;
 } ElevatorAnim;
 
-// Poke Ball positions on the healing machine, relative to it (x, y and z of one VecFx32 per ball; asm data)
+// Poke Ball positions on the healing machine, relative to it (x, y and z of one VecFx32 per ball)
 extern const VecFx32 sHealingMachineBallOffsets[];
 extern const VecFx32 sHealingMachineBallOffsetsY[];
 extern const VecFx32 sHealingMachineBallOffsetsZ[];
-// area_data.c; not declared in field/area_data.h while overlay 2's private headers declare it with other types
 NNSG3dResFileHeader **AreaDataManager_GetMapPropModel(u32 mapPropId, AreaDataManager *areaDataManager);
 
 typedef struct MapPropModelPair {
     int models[2];
 } MapPropModelPair;
 
-// the two prop models whose animations PCProp_LoadAnimations loads (asm data)
+// the two prop models whose animations PCProp_LoadAnimations loads
 extern const MapPropModelPair sPCPropModels;
 
 static inline NNSG3dResMdl *MapPropModel_Get(AreaDataManager *areaDataManager, int mapPropId) {
