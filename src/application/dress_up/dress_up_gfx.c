@@ -77,8 +77,6 @@ BOOL DressUpGfx_IsTouchHeldOnSlot(DressUpSlot *slot) {
     return TouchscreenHitbox_TouchHeldIsIn(&hitbox);
 }
 
-#pragma force_active on
-
 // TRUE if the touch is held on an opaque pixel of the slot (within 4 pixels of the touch point)
 BOOL DressUpGfx_HitTestSlotPixels(DressUpSlot *slot, int *x, int *y, NNSG2dCharacterData *hitMap) {
     int slotX, slotY;
@@ -102,8 +100,6 @@ BOOL DressUpGfx_HitTestSlotPixels(DressUpSlot *slot, int *x, int *y, NNSG2dChara
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 void DressUpGfx_SetSlotPos(DressUpSlot *slot, s16 x, s16 y) {
     GraphicsObject_SetPosition(slot->object, x, y);
@@ -193,8 +189,6 @@ GraphicsObject *DressUpGfx_CreateSlotGraphicsObject(const DressUpSlotTemplate *t
     return GraphicsManager_AddObject(&objectTemplate);
 }
 
-#pragma force_active on
-
 void DressUpGfx_GetSlotHitbox(DressUpSlot *slot, TouchscreenHitbox *hitbox) {
     // the volatile locals keep the halfword stack round trips
     volatile DressUpSignedPoint pos, dim;
@@ -218,8 +212,6 @@ void DressUpGfx_GetSlotHitbox(DressUpSlot *slot, TouchscreenHitbox *hitbox) {
         hitbox->rect.right = x + dim.x;
     }
 }
-
-#pragma force_active reset
 
 void DressUpGfx_InitDisplay(void) {
     DressUpGfx_SetVramBanks();
@@ -288,8 +280,6 @@ void DressUpGfx_FreeAllTexAndPltt(DressUpGfx *gfx) {
     GraphicsManager_FreePalettes(gfx->graphicsManager);
 }
 
-#pragma force_active on
-
 Sprite *DressUpGfx_CreateSprite(DressUpGfx *gfx, int id, int x, int y, u32 priority, NNS_G2D_VRAM_TYPE whichScreen) {
     SpriteResourcesHeader header;
     SimpleSpriteTemplate template;
@@ -304,8 +294,6 @@ Sprite *DressUpGfx_CreateSprite(DressUpGfx *gfx, int id, int x, int y, u32 prior
     template.heapID = HEAP_ID_14;
     return Sprite_Create(&template);
 }
-
-#pragma force_active reset
 
 void DressUpGfx_LoadCharRes(DressUpGfx *gfx, NARC *narc, int fileId, BOOL compressed, int vram, int id) {
     SpriteResource *resource = AddCharResObjFromOpenNarc(gfx->charResMan, narc, fileId, compressed, id, vram, HEAP_ID_14);
@@ -361,8 +349,6 @@ NNSG2dCharacterData *DressUpGfx_StoreUnpackedChar(DressUpGfx *gfx, void *data, i
     return gfx->hitMaps[index];
 }
 
-#pragma force_active on
-
 void DressUp_DisableDragWindow(void) {
     reg_GX_DISPCNT &= ~0xE000; // windows 0, 1 and OBJ window off
     reg_G2_BG0CNT = (reg_G2_BG0CNT & ~3) | 1;
@@ -379,8 +365,6 @@ void DressUp_EnableDragWindow(void) {
     reg_G2_BG0CNT = reg_G2_BG0CNT & ~3;
     reg_G2_BG1CNT = (reg_G2_BG1CNT & ~3) | 1;
 }
-
-#pragma force_active reset
 
 void DressUp_VBlank(DressUpGfx *gfx) {
     DoScheduledBgGpuUpdates(gfx->bgConfig);
@@ -564,8 +548,6 @@ void DressUpGfx_DrawGraphicsManager(DressUpGfx *gfx) {
     GraphicsManager_DrawObjects(gfx->graphicsManager);
 }
 
-#pragma force_active on
-
 void DressUpGfx_AddImages(DressUpGfx *gfx, GraphicsImageTemplate *templates, int count) {
     int i = 0;
     u8 *cursor;
@@ -609,8 +591,6 @@ void DressUpGfx_AddPalettes(DressUpGfx *gfx, GraphicsPaletteTemplate *templates,
         } while (i < count);
     }
 }
-
-#pragma force_active reset
 
 void DressUpGfx_InitBgs(DressUpGfx *gfx) {
     {
@@ -705,8 +685,6 @@ void DressUpGfx_RenderSprites(DressUpGfx *gfx) {
     SpriteList_RenderAndAnimateSprites(gfx->spriteList);
 }
 
-#pragma force_active on
-
 // NARC_a_0_2_6 members 1..100 -> hit maps 0..99 and image templates, member 0 = the shared accessory palette
 void DressUp_LoadAccessoryChars(DressUpGfx *gfx, DressUpGfxResources *resources) {
     int i;
@@ -749,8 +727,6 @@ void DressUp_LoadBackdropCharsAndPalettes(DressUpGfx *gfx, DressUpGfxResources *
         fileId += 4;
     }
 }
-
-#pragma force_active reset
 
 void DressUpGfx_LoadMonPicAttrs(DressUpGfx *gfx, enum HeapID heapID) {
     gfx->monPicAttrs = GfGfxLoader_LoadFromOpenNarc(gfx->narc, 0xEB, FALSE, heapID, FALSE);

@@ -235,8 +235,6 @@ void PCBox_FreePaletteData(PCBoxWork *work) {
     PaletteData_Free(work->view->paletteData);
 }
 
-#pragma force_active on
-
 void PCBox_SetBlendEnabled(int enabled) {
     if (enabled == 1) {
         G2x_SetBlendAlpha_(0x04000050, 0, 42, 6, 10);
@@ -244,8 +242,6 @@ void PCBox_SetBlendEnabled(int enabled) {
         *(volatile u16 *)0x04000050 = 0;
     }
 }
-
-#pragma force_active reset
 
 void PCBox_CreateYesNoPrompt(PCBoxWork *work) {
     work->view->yesNoPrompt = YesNoPrompt_Create(HEAP_ID_10);

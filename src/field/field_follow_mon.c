@@ -366,7 +366,6 @@ void FollowMon_SetNoBallEffect(FieldSystem *fieldSystem) {
     FollowPlayerMovement_DisableBallEffect(FollowMon_GetMapObject(fieldSystem));
 }
 
-#pragma force_active on
 void FollowMon_SetAltSequenceFrameFlags(MapObjectManager *manager) {
     BillboardSequenceData *sequence = ResourceBank_Get(((MapObjectRenderData *)MapObjectManager_GetRender(manager))->sequenceBank, BILLBOARD_SEQUENCE_FOLLOW_MON_ALT);
     int count = sequence->count, i;
@@ -376,7 +375,6 @@ void FollowMon_SetAltSequenceFrameFlags(MapObjectManager *manager) {
         flags[i] = 1;
     }
 }
-#pragma force_active reset
 
 void FollowMonBillboard_SetResource(BOOL alternate, LocalMapObject *object, void *billboard) {
     u8 record[0x28];
@@ -401,7 +399,6 @@ void FollowMonBillboard_InitSequence(BOOL alternate, LocalMapObject *object, voi
     BillboardGfxSequence_Init(sequence, (u8 *)record + 0xC);
 }
 
-#pragma force_active on
 // Reloads the billboard's palette from the object's model file in sepia and re-uploads its texture.
 void MapObject_SetBillboardSepia(void *unused, LocalMapObject *object, void *billboard) {
     SepiaBillboardTransfer *transfer = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(SepiaBillboardTransfer));
@@ -422,7 +419,6 @@ void MapObject_SetBillboardSepia(void *unused, LocalMapObject *object, void *bil
     GF_CreateNewVramTransferTask(NNS_GFD_DST_3D_TEX_VRAM, (u16)BillboardObject_GetTexKey(billboard) * 8, transfer->texture, ((texKey & 0x7FFF0000) >> 16) * 16);
     SysTask_CreateOnVWaitQueue(SepiaBillboardTransfer_FreeWhenDone, transfer, 0);
 }
-#pragma force_active reset
 
 // Frees the sepia transfer once the VRAM transfers are done.
 void SepiaBillboardTransfer_FreeWhenDone(SysTask *task, void *data) {
@@ -550,7 +546,6 @@ void FollowMon_StartHopIntoBall(FieldSystem *fieldSystem) {
     TaskManager_Call(fieldSystem->taskman, Task_FollowMonHopIntoBall, env);
 }
 
-#pragma force_active on
 BOOL Task_FollowMonHopIntoBall(TaskManager *taskMan) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskMan);
     FollowMonHopIntoBall *env = TaskManager_GetEnvironment(taskMan);
@@ -637,7 +632,6 @@ BOOL Task_FollowMonHopIntoBall(TaskManager *taskMan) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 // Which side of the player the following Pokemon is on: below it (it moves aside first), or left/right of it.
 u32 FollowMonHopIntoBall_GetSide(FieldSystem *fieldSystem, FollowMonHopIntoBall *env) {
@@ -678,7 +672,6 @@ BOOL FollowMon_StartRecall(FieldSystem *fieldSystem) {
     return TRUE;
 }
 
-#pragma force_active on
 BOOL Task_FollowMonRecall(TaskManager *taskMan) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskMan);
     FollowMonRecall *env = TaskManager_GetEnvironment(taskMan);
@@ -727,7 +720,6 @@ BOOL Task_FollowMonRecall(TaskManager *taskMan) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 void FollowMon_StartHideForFieldMove(TaskManager *taskMan) {
     int *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(int));
@@ -735,7 +727,6 @@ void FollowMon_StartHideForFieldMove(TaskManager *taskMan) {
     TaskManager_Call(taskMan, Task_FollowMonHideForFieldMove, env);
 }
 
-#pragma force_active on
 BOOL Task_FollowMonHideForFieldMove(TaskManager *taskMan) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskMan);
     int *timer = TaskManager_GetEnvironment(taskMan);
@@ -783,7 +774,6 @@ BOOL Task_FollowMonHideForFieldMove(TaskManager *taskMan) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 // Starts object walking one tile towards target.
 void MapObject_StepTowards(LocalMapObject *target, LocalMapObject *object) {
@@ -840,7 +830,6 @@ BOOL FollowMon_StartFlash(FieldSystem *fieldSystem, u8 step, u8 period) {
     return TRUE;
 }
 
-#pragma force_active on
 BOOL Task_FollowMonFlash(TaskManager *taskMan) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskMan);
     FollowMonFlash *env = TaskManager_GetEnvironment(taskMan);
@@ -922,7 +911,6 @@ BOOL FollowMon_IsNextToPlayer(FieldSystem *fieldSystem) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 u8 FieldSystem_GetLeadMonIndex(FieldSystem *fieldSystem) {
     return GetIdxOfFirstAliveMonInParty_CrashIfNone(SaveArray_Party_Get(fieldSystem->saveData));

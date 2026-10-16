@@ -478,8 +478,6 @@ void FootprintStamp_LoadPartySpriteGfx(FootprintStamp *work, NARC *narc) {
     work->cursorPlttSlot = SpriteSystem_LoadPaletteBuffer(work->plttData, PLTTBUF_MAIN_OBJ, work->spriteSystem, work->spriteManager, NARC_a_2_0_8, 26, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 10003);
 }
 
-#pragma force_active on
-
 void FootprintStamp_CreatePartySprites(FootprintStamp *work) {
     ManagedSpriteTemplate template;
     int i;
@@ -514,8 +512,6 @@ void FootprintStamp_CreatePartySprites(FootprintStamp *work) {
     TextOBJ_SetSpritesDrawFlag(work->exitText.textObj, TRUE);
     String_Delete(string);
 }
-
-#pragma force_active reset
 
 void FootprintStamp_FreePartySprites(FootprintStamp *work) {
     {

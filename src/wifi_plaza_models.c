@@ -391,8 +391,6 @@ BOOL WiFiPlazaModelSet_IsPropAnimActive(WiFiPlazaModelSet *set, WiFiPlazaProp *p
     return FALSE;
 }
 
-#pragma force_active on
-
 void WiFiPlazaModelSet_SetPropAnimFrame(WiFiPlazaModelSet *set, WiFiPlazaProp *prop, int slot, fx32 frame) {
     if (slot >= WIFI_PLAZA_PROP_ANIM_COUNT) {
         GF_AssertFail();
@@ -408,8 +406,6 @@ void WiFiPlazaModelSet_SetPropAnimFrame(WiFiPlazaModelSet *set, WiFiPlazaProp *p
         ModelAnimation_SetFrame(&prop->anims[slot], prop->animFrames[slot]);
     }
 }
-
-#pragma force_active reset
 
 BOOL WiFiPlazaProp_IsAnimActive(WiFiPlazaProp *prop, s32 slot) {
     if (slot >= WIFI_PLAZA_PROP_ANIM_COUNT) {
@@ -471,8 +467,6 @@ void WiFiPlazaModels_FreeLayout(WiFiPlazaModelsLayout *layout) {
     Heap_Free(layout);
 }
 
-#pragma force_active on
-
 void WiFiPlazaModels_LoadModel(ModelResource *model, NARC *narc, int fileId, enum HeapID heapID) {
     WiFiPlazaMap_LoadModelFile(&model->file, narc, fileId, heapID);
     model->set = NNS_G3dGetMdlSet(model->file);
@@ -480,8 +474,6 @@ void WiFiPlazaModels_LoadModel(ModelResource *model, NARC *narc, int fileId, enu
     model->texture = NNS_G3dGetTex(model->file);
     GF3dRender_BindModelSet(model->file, model->texture);
 }
-
-#pragma force_active reset
 
 void WiFiPlazaModels_FreeModel(ModelResource *model) {
     ModelResource_Free(model);
@@ -646,8 +638,6 @@ WiFiPlazaMover *WiFiPlazaModelSet_AllocMover(WiFiPlazaModelSet *set) {
     return NULL;
 }
 
-#pragma force_active on
-
 void WiFiPlazaModelSet_LoadMovers(WiFiPlazaMoverResources *res, NARC *narc, NNSFndAllocator *allocator, WiFiPlazaModelsLayout *layout, enum HeapID heapID) {
     int i;
     int j;
@@ -678,8 +668,6 @@ void WiFiPlazaModelSet_LoadMovers(WiFiPlazaMoverResources *res, NARC *narc, NNSF
         }
     }
 }
-
-#pragma force_active reset
 
 void WiFiPlazaModelSet_FreeMovers(WiFiPlazaMoverResources *res, NNSFndAllocator *allocator) {
     int i;
@@ -769,8 +757,6 @@ void WiFiPlazaModelSet_UpdateMover(WiFiPlazaMover *mover, WiFiPlazaMoverResource
     }
 }
 
-#pragma force_active on
-
 void WiFiPlazaModelSet_DrawMover(WiFiPlazaMover *mover, WiFiPlazaMoverResources *res) {
     int i;
     if (mover->active && WiFiPlazaMap_IsModelInstanceInView(&res->models[mover->model], &mover->instance)) {
@@ -800,8 +786,6 @@ void WiFiPlazaModelSet_DrawMover(WiFiPlazaMover *mover, WiFiPlazaMoverResources 
     }
 }
 
-#pragma force_active reset
-
 WiFiPlazaProp *WiFiPlazaModelSet_AllocProp(WiFiPlazaModelSet *set) {
     int i;
     for (i = 0; i < set->propCount; i++) {
@@ -812,8 +796,6 @@ WiFiPlazaProp *WiFiPlazaModelSet_AllocProp(WiFiPlazaModelSet *set) {
     GF_AssertFail();
     return NULL;
 }
-
-#pragma force_active on
 
 void WiFiPlazaModelSet_LoadProps(WiFiPlazaPropResources *res, NARC *narc, NNSFndAllocator *allocator, WiFiPlazaModelsLayout *layout, volatile enum HeapID heapID) {
     struct {
@@ -856,8 +838,6 @@ void WiFiPlazaModelSet_LoadProps(WiFiPlazaPropResources *res, NARC *narc, NNSFnd
     }
 }
 
-#pragma force_active reset
-
 void WiFiPlazaModelSet_FreeProps(WiFiPlazaPropResources *res, NNSFndAllocator *allocator) {
     int i;
     int j;
@@ -888,8 +868,6 @@ void WiFiPlazaModelSet_DrawProp(WiFiPlazaPropResources *res, WiFiPlazaProp *prop
         }
     }
 }
-
-#pragma force_active on
 
 void WiFiPlazaModelSet_UpdateProp(WiFiPlazaModelSet *set, WiFiPlazaProp *prop) {
     int i = 0;
@@ -958,8 +936,6 @@ void WiFiPlazaModelSet_UpdateProp(WiFiPlazaModelSet *set, WiFiPlazaProp *prop) {
     }
 }
 
-#pragma force_active reset
-
 static inline void WiFiPlazaModels_CreateMovers(WiFiPlazaModels *models, VecFx32 *position) {
     int i;
 
@@ -971,8 +947,6 @@ static inline void WiFiPlazaModels_CreateMovers(WiFiPlazaModels *models, VecFx32
         WiFiPlazaMover_SetVisible(models->movers[i], FALSE);
     }
 }
-
-#pragma force_active on
 
 // Places a prop on every map cell carrying one of the spawn tags.
 WiFiPlazaModels *WiFiPlazaModels_Create(int group, int variant, WiFiPlazaMap *map, enum HeapID heapID, enum HeapID dataHeapID) {
@@ -1083,8 +1057,6 @@ WiFiPlazaModels *WiFiPlazaModels_Create(int group, int variant, WiFiPlazaMap *ma
     models->moverCount = 9;
     return models;
 }
-
-#pragma force_active reset
 
 void WiFiPlazaModels_Delete(WiFiPlazaModels *models) {
     int i;
@@ -1343,8 +1315,6 @@ void WiFiPlazaModels_TriggerStageShows(WiFiPlazaModels *models, fx32 animSpeed) 
 // Rounds the digit frame `n` to fx32 the way the original float conversion did.
 #define WIFI_PLAZA_SIGN_FRAME(n) ((s32)(((n) << 2) ? (float)((n) << 14) + 0.5f : (float)((n) << 14) - 0.5f))
 
-#pragma force_active on
-
 // Sign of matchmaking session `match`: shows its player count (frames 4 + count while it recruits),
 // blinking every 14 frames while the session runs.
 void WiFiPlazaModels_UpdateMatchSign(WiFiPlazaModels *models, int match, u32 playerCount, BOOL exists, BOOL recruiting, BOOL stop) {
@@ -1374,8 +1344,6 @@ void WiFiPlazaModels_UpdateMatchSign(WiFiPlazaModels *models, int match, u32 pla
         WiFiPlazaModelSet_SetPropAnimFrame(models->set, sign, 0, 0);
     }
 }
-
-#pragma force_active reset
 
 BOOL WiFiPlazaProp_IsAt(WiFiPlazaProp *prop, u8 x, u8 y) {
     s16 cellY = (s16)(y * 16);
@@ -1506,8 +1474,6 @@ void WiFiPlazaPropShow_StartFade(WiFiPlazaPropShow *show) {
     show->fadeTimer = 0;
 }
 
-#pragma force_active on
-
 // 10 frames: the animations speed up to twice their speed, alpha falls to 0 and the scale grows by 0.18.
 BOOL WiFiPlazaPropShow_UpdateFade(WiFiPlazaPropShow *show) {
     fx32 value;
@@ -1525,8 +1491,6 @@ BOOL WiFiPlazaPropShow_UpdateFade(WiFiPlazaPropShow *show) {
     }
     return TRUE;
 }
-
-#pragma force_active reset
 
 void WiFiPlazaPropShow_Trigger(WiFiPlazaPropShow *show, fx32 animSpeed) {
     u32 state = show->state;

@@ -120,7 +120,6 @@ void GtsServer_RequestPost(const void *record) {
     }
 }
 
-#pragma force_active on
 // The copy goes through two pointers (opt_propagation off keeps them).
 #pragma opt_propagation off
 
@@ -139,7 +138,6 @@ void GtsServer_RequestPostFinish(void) {
 }
 
 #pragma opt_propagation reset
-#pragma force_active reset
 
 void GtsServer_RequestGet(void *response) {
     ov70_02246900.response = response;
@@ -201,8 +199,6 @@ void GtsServer_RequestSearch(const void *criteria, int count, void *response) {
     }
 }
 
-#pragma force_active on
-
 void GtsServer_RequestSearchEx(const void *criteria, void *response) {
     u32 i;
     const u8 *src;
@@ -226,8 +222,6 @@ void GtsServer_RequestSearchEx(const void *criteria, void *response) {
     GameStats_Shutdown();
 }
 
-#pragma force_active reset
-
 void GtsServer_RequestExchange(void *arg, const void *record, void *response) {
     ov70_02246900.response = response;
     GameStats_Start();
@@ -242,7 +236,6 @@ void GtsServer_RequestExchange(void *arg, const void *record, void *response) {
     }
 }
 
-#pragma force_active on
 // The copy goes through two pointers (opt_propagation off keeps them).
 #pragma opt_propagation off
 
@@ -261,7 +254,6 @@ void GtsServer_RequestExchangeFinish(void) {
 }
 
 #pragma opt_propagation reset
-#pragma force_active reset
 
 void GtsServer_RequestInfo(void) {
     GameStats_Start();
@@ -410,8 +402,6 @@ BOOL Gts_Init(OverlayManager *man, int *state) {
     return FALSE;
 }
 
-#pragma force_active on
-
 BOOL Gts_Main(OverlayManager *man, int *state) {
     GtsApp *app = OverlayManager_GetData(man);
 
@@ -464,8 +454,6 @@ BOOL Gts_Main(OverlayManager *man, int *state) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 BOOL Gts_Exit(OverlayManager *man, int *state) {
     GtsApp *app = OverlayManager_GetData(man);
 
@@ -493,8 +481,6 @@ BOOL Gts_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-#pragma force_active on
-
 void Gts_VBlankCB(void *arg) {
     GtsApp *app = arg;
     // OS_SetIrqCheckFlag(OS_IE_V_BLANK), with the DTCM base as a constant
@@ -512,8 +498,6 @@ void Gts_VBlankCB(void *arg) {
     OamManager_ApplyAndResetBuffers();
     dtcm[0x3FF8 / 4] |= OS_IE_V_BLANK;
 }
-
-#pragma force_active reset
 
 void Gts_SetGfxBanks(void) {
     GraphicsBanks graphicsBanks = sGtsGraphicsBanks;
@@ -711,8 +695,6 @@ void Gts_SetState(GtsApp *app, int state, int nextState) {
     app->nextState = nextState;
 }
 
-#pragma force_active on
-
 void Gts_SetSpritePositionRounded(Sprite *sprite, int x, int y) {
     VecFx32 vec;
     float f;
@@ -748,8 +730,6 @@ void Gts_Free(void *unused, void *ptr) {
     }
 }
 
-#pragma force_active reset
-
 int Gts_GetWifiIconLevel(void) {
     return 3 - DWC_GetLinkLevel();
 }
@@ -767,8 +747,6 @@ void Gts_SwitchScreen(GtsApp *app) {
 int Gts_GetTextFrameDelay(GtsApp *app) {
     return Options_GetTextFrameDelay(app->args->options);
 }
-
-#pragma force_active on
 
 void Gts_InitGraphics(GtsApp *app) {
     Gts_SetGfxBanks();
@@ -795,8 +773,6 @@ void Gts_FreeGraphics(GtsApp *app) {
     ObjCharTransfer_Destroy();
     ObjPlttTransfer_Destroy();
 }
-
-#pragma force_active reset
 
 void Gts_DecrementTimer(GtsApp *app) {
     if (app->timer != 0) {

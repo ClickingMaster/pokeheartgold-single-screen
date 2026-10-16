@@ -457,7 +457,6 @@ void PlazaNewsClock_Init(PlazaNewsClock *clock, PlazaNewsGraphics *graphics, Pla
 void PlazaNewsClock_Free(PlazaNewsClock *clock) {
 }
 
-#pragma force_active on
 BOOL PlazaNewsClock_UpdateTime(PlazaNewsClock *clock, void *newsData, const PlazaNewsTime *endTime) {
     PlazaNewsTime now;
     PlazaNewsTime remaining;
@@ -480,7 +479,6 @@ BOOL PlazaNewsClock_UpdateTime(PlazaNewsClock *clock, void *newsData, const Plaz
     }
     return changed;
 }
-#pragma force_active reset
 
 void PlazaNewsClock_Draw(PlazaNewsClock *clock, PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics) {
     if (clock->isWaiting == TRUE) {
@@ -497,7 +495,6 @@ void PlazaNewsClock_DrawWaiting(PlazaNewsClock *clock, PlazaNewsTileset *tileset
     }
 }
 
-#pragma force_active on
 void PlazaNewsClock_DrawGauge(PlazaNewsClock *clock, PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics) {
     int i;
     int cell = (clock->time.hms.minute * 60 + clock->time.hms.second + clock->time.hms.hour * 3600) / clock->secondsPerCell;
@@ -550,13 +547,10 @@ void PlazaNewsClock_DrawGauge(PlazaNewsClock *clock, PlazaNewsTileset *tileset, 
         }
     }
 }
-#pragma force_active reset
 
-#pragma force_active on
 void PlazaNewsPeople_Init(PlazaNewsPeople *people, PlazaNewsGraphics *graphics, PlazaNewsTileset *tileset, void *newsData, void *lobby, enum HeapID heapID) {
     PlazaNewsPeople_DrawGrid(tileset, graphics, newsData, lobby, 0);
 }
-#pragma force_active reset
 
 void PlazaNewsPeople_Free(PlazaNewsPeople *people) {
 }
@@ -608,7 +602,6 @@ void PlazaNewsPeople_Draw(PlazaNewsPeople *people, PlazaNewsTileset *tileset, Pl
     }
 }
 
-#pragma force_active on
 void PlazaNewsPeople_DrawGrid(PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics, void *newsData, void *lobby, int mode) {
     struct {
         volatile int altPage;
@@ -650,7 +643,6 @@ void PlazaNewsPeople_DrawGrid(PlazaNewsTileset *tileset, PlazaNewsGraphics *grap
         f.row = nextRow;
     } while (nextRow < 4);
 }
-#pragma force_active reset
 
 void PlazaNewsPeople_BlinkMode2(PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics, void *newsData, void *lobby, u32 frame) {
     int mode;
@@ -667,7 +659,6 @@ void PlazaNewsPeople_BlinkMode2(PlazaNewsTileset *tileset, PlazaNewsGraphics *gr
 }
 
 #pragma opt_propagation off
-#pragma force_active on
 void PlazaNewsPeople_BlinkMode1(PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics, void *newsData, void *lobby, u32 frame) {
     if (!(frame & 7)) {
         u32 blink = frame >> 3;
@@ -678,7 +669,6 @@ void PlazaNewsPeople_BlinkMode1(PlazaNewsTileset *tileset, PlazaNewsGraphics *gr
         PlazaNewsPeople_DrawGrid(tileset, graphics, newsData, lobby, mode);
     }
 }
-#pragma force_active reset
 #pragma opt_propagation reset
 
 void PlazaNewsHeadlines_GetNameColors(u8 *colors, void *newsData, void *item, void *lobby) {
@@ -695,7 +685,6 @@ void PlazaNewsHeadlines_GetNameColors(u8 *colors, void *newsData, void *item, vo
     }
 }
 
-#pragma force_active on
 void PlazaNewsHeadlines_LoadNameColors(const u8 *colors, NNSG2dPaletteData *palette, int paletteNum) {
     int i = 0;
     int base = paletteNum * 32;
@@ -708,9 +697,7 @@ void PlazaNewsHeadlines_LoadNameColors(const u8 *colors, NNSG2dPaletteData *pale
         }
     }
 }
-#pragma force_active reset
 
-#pragma force_active on
 void PlazaNewsHeadlines_Init(PlazaNewsHeadlines *headlines, PlazaNewsGraphics *graphics, enum HeapID heapID) {
     int i = 0;
     PlazaNewsTicker *ticker = headlines->tickers;
@@ -734,7 +721,6 @@ void PlazaNewsHeadlines_Init(PlazaNewsHeadlines *headlines, PlazaNewsGraphics *g
     BG_LoadPlttData(0, (u8 *)headlines->palette->pRawData + 238, 4, 282);
     BG_LoadPlttData(0, (u8 *)headlines->palette->pRawData + 238, 4, 314);
 }
-#pragma force_active reset
 
 void PlazaNewsHeadlines_Free(PlazaNewsHeadlines *headlines) {
     int i;
@@ -754,7 +740,6 @@ void PlazaNewsHeadlines_Free(PlazaNewsHeadlines *headlines) {
     }
 }
 
-#pragma force_active on
 BOOL PlazaNewsHeadlines_Update(PlazaNewsHeadlines *headlines, void *newsData, void *lobby, enum HeapID heapID) {
     u32 info[5];
     u32 nameColors;
@@ -794,7 +779,6 @@ BOOL PlazaNewsHeadlines_Update(PlazaNewsHeadlines *headlines, void *newsData, vo
     }
     return FALSE;
 }
-#pragma force_active reset
 
 void PlazaNewsHeadlines_Draw(PlazaNewsHeadlines *headlines) {
     int i;
@@ -830,7 +814,6 @@ void PlazaNewsTicker_Free(PlazaNewsTicker *ticker) {
     RemoveWindow(&ticker->bitmap);
 }
 
-#pragma force_active on
 void PlazaNewsTicker_SetText(PlazaNewsTicker *ticker, String *text, u32 duration, u8 *nameColors, NNSG2dPaletteData *palette) {
     String_Copy(ticker->text, text);
     ticker->active = TRUE;
@@ -847,7 +830,6 @@ void PlazaNewsTicker_SetText(PlazaNewsTicker *ticker, String *text, u32 duration
     ticker->nameColors[3] = nameColors[3];
     PlazaNewsHeadlines_LoadNameColors(ticker->nameColors, palette, ticker->paletteNum);
 }
-#pragma force_active reset
 
 void PlazaNewsTicker_Stop(PlazaNewsTicker *ticker) {
     ticker->active = FALSE;
@@ -863,7 +845,6 @@ BOOL PlazaNewsTicker_Advance(PlazaNewsTicker *ticker) {
     return finished;
 }
 
-#pragma force_active on
 void PlazaNewsTicker_Draw(PlazaNewsTicker *ticker, Window *window) {
     volatile int width = ticker->width;
     int scroll = *(volatile u16 *)&ticker->position * width / ticker->duration;
@@ -884,7 +865,6 @@ void PlazaNewsTicker_Draw(PlazaNewsTicker *ticker, Window *window) {
     BlitBitmapRect(window, ticker->bitmap.pixelBuffer, (u16)srcX, 0, 1440, 16, (u16)x, 0, (u16)scroll, 16, 15);
     ScheduleWindowCopyToVram(window);
 }
-#pragma force_active reset
 
 void PlazaNewsTitles_Init(PlazaNewsTitles *titles, PlazaNewsGraphics *graphics, enum HeapID heapID) {
     int messageNo;
@@ -1007,7 +987,6 @@ void PlazaNewsFlash_Start(PlazaNewsFlash *flash) {
     flash->timer = 0;
 }
 
-#pragma force_active on
 void PlazaNewsFlash_Update(PlazaNewsFlash *flash) {
     if (flash->timer > 28) {
         flash->active = FALSE;
@@ -1032,4 +1011,3 @@ void PlazaNewsFlash_Update(PlazaNewsFlash *flash) {
         flash->timer++;
     }
 }
-#pragma force_active reset

@@ -26,8 +26,6 @@ extern int RTC_GetDate(RTCDate *date);
 #define SWAP16(v) (((u32)(u8)((v) >> 8)) | (((v) << 8) & 0xFF00))
 #define SWAP32(v) (((u32)(u8)((v) >> 24)) | (((v) >> 8) & 0xFF00) | (((v) << 8) & 0xFF0000) | (((v) << 24) & 0xFF000000))
 
-#pragma force_active on
-
 u16 PokewalkerIr_Checksum(u8 *bytes, u32 len) {
     u32 sum = 2, index;
     for (index = 0; index < len; index++) {
@@ -47,8 +45,6 @@ void PokewalkerIr_MarkDisconnected(void) {
     gPokewalkerIrLink.closing = 1;
     gPokewalkerIrLink.numDisconnects++;
 }
-
-#pragma force_active reset
 
 void PokewalkerIr_ResetLink(void) {
     gPokewalkerIrLink.unk_00 = 0;
@@ -80,7 +76,6 @@ u32 PokewalkerIr_IsConnected(void) {
     return gPokewalkerIrLink.active;
 }
 
-#pragma force_active on
 #pragma optimization_level 2
 
 void PokewalkerIr_SendPacket(const u8 *src, int len, u8 command, u8 arg, u32 sessionId) {
@@ -124,8 +119,6 @@ void PokewalkerIr_CloseLink(int result) {
     PokewalkerIr_ResetLink();
 }
 
-#pragma force_active reset
-
 void PokewalkerIr_Disconnect(void) {
     PokewalkerIr_CloseLink(0);
 }
@@ -139,7 +132,6 @@ void PokewalkerIr_Send(void *data, int len, u8 command, u8 arg) {
 void PokewalkerIr_PollDummy(void) {
 }
 
-#pragma force_active on
 #pragma optimization_level 1
 
 BOOL PokewalkerIr_ShouldDropShortPacket(u32 size) {
@@ -166,7 +158,6 @@ BOOL PokewalkerIr_ShouldDropShortPacket(u32 size) {
 }
 
 #pragma optimization_level reset
-#pragma force_active reset
 
 BOOL PokewalkerIr_CheckTimeout(void) {
     u64 elapsed;
@@ -182,7 +173,6 @@ BOOL PokewalkerIr_CheckTimeout(void) {
     return TRUE;
 }
 
-#pragma force_active on
 #pragma opt_rotateloops off
 
 BOOL PokewalkerIr_VerifyPacket(u32 size) {
@@ -323,7 +313,6 @@ int PokewalkerIr_Poll(void) {
 }
 
 #pragma opt_common_subs reset
-#pragma force_active reset
 
 void PokewalkerIr_SetConnectCallback(void *callback) {
     gPokewalkerIrLink.onConnect = callback;
@@ -348,8 +337,6 @@ void PokewalkerIr_SetCompressBuffer(void *buffer) {
     ov112_021FFAA4.compressBuffer = buffer;
     ov112_021FFAA4.compressedSizes = (u8 *)buffer + 0xCD80;
 }
-
-#pragma force_active on
 
 // Compresses size bytes in blocks of 128; sizes[i] receives the compressed size of block i (128 = stored).
 void PokewalkerIr_CompressBlocks(u8 *src, u8 *dst, u16 size, u8 *sizes) {
@@ -377,15 +364,11 @@ void PokewalkerIr_CompressBlocks(u8 *src, u8 *dst, u16 size, u8 *sizes) {
     }
 }
 
-#pragma force_active reset
-
 void PokewalkerIr_SetError(int error) {
     if (ov112_021FFAA4.error == 0) {
         ov112_021FFAA4.error = error;
     }
 }
-
-#pragma force_active on
 
 void PokewalkerIr_StoreClock(void) {
     PokewalkerIrIdentity *identity = ov112_021FFAA4.identity;
@@ -414,8 +397,6 @@ void PokewalkerIr_StoreCurrentTime(void) {
         }
     }
 }
-
-#pragma force_active reset
 
 void PokewalkerIr_SetIdentities(PokewalkerIrIdentity *identity, PokewalkerIrIdentity *peerIdentity) {
     ov112_021FFAA4.identity = identity;
@@ -915,8 +896,6 @@ void PokewalkerIr_ValidatePeer(void) {
     }
 }
 
-#pragma force_active on
-
 void PokewalkerIr_OnReceive(void *data, u32 size, int command) {
     switch (command) {
     case 34: {
@@ -1104,8 +1083,6 @@ void PokewalkerIr_OnReceive(void *data, u32 size, int command) {
         break;
     }
 }
-
-#pragma force_active reset
 
 void PokewalkerIr_ThreadMain(void *arg) {
     for (;;) {

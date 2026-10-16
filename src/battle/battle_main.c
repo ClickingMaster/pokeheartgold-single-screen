@@ -116,8 +116,6 @@ extern void Comm_SetWifiContinuousSendAndMuteVoice(int mode);
 extern void CommState_FrameDummy(int a0, BgConfig *bgConfig);
 extern void WirelessStatusIcon_SetLevel(int linkLevel);
 
-#pragma force_active on
-
 void Battle_BattleInit(OverlayManager *manager) {
     BattleSystem *battleSystem = OverlayManager_GetData(manager);
     BattleSetup *setup = OverlayManager_GetArgs(manager);
@@ -216,8 +214,6 @@ void Battle_BattleInit(OverlayManager *manager) {
     }
 }
 
-#pragma force_active reset
-
 BOOL Battle_BattleMain(OverlayManager *man) {
     BattleSystem *battleSystem = OverlayManager_GetData(man);
     int i;
@@ -252,8 +248,6 @@ BOOL Battle_BattleMain(OverlayManager *man) {
 
     return battleSystem->battleFinished;
 }
-
-#pragma force_active on
 
 void Battle_BattleExit(OverlayManager *man) {
     BattleSystem *battleSystem = OverlayManager_GetData(man);
@@ -360,8 +354,6 @@ void Battle_BattleExit(OverlayManager *man) {
         UnloadOverlayByID(FS_OVERLAY_ID(OVY_18));
     }
 }
-
-#pragma force_active reset
 
 void Battle_InitBackgrounds(BattleSystem *battleSystem, BgConfig *bgConfig) {
     BattleBgTemplateSet templates;
@@ -821,8 +813,6 @@ GF3DVramMan *Battle_Create3DVramMan(void) {
     return GF_3DVramMan_Create(HEAP_ID_BATTLE, 0, 2, 0, 2, Battle_Setup3D);
 }
 
-#pragma force_active on
-
 void Battle_Setup3D(void) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
     G2_SetBG0Priority(1);
@@ -835,8 +825,6 @@ void Battle_Setup3D(void) {
     G3X_SetClearColor(GX_RGB(0, 0, 0), 0, 0x7FFF, 63, FALSE);
     G3_ViewPort(0, 0, 255, 191);
 }
-
-#pragma force_active reset
 
 void Battle_Delete3DVramMan(GF3DVramMan *vramMan) {
     GF_3DVramMan_Delete(vramMan);
@@ -859,8 +847,6 @@ void Battle_ReserveTexAndPlttVram(void) {
 static inline void SetIrqCheckFlag(u8 *dtcm, u32 mask) {
     *(volatile u32 *)(dtcm + 0x3FF8) |= mask;
 }
-
-#pragma force_active on
 
 void Battle_VBlankCallback(void *data) {
     BattleSystem *battleSystem = data;
@@ -899,8 +885,6 @@ void Battle_LinkVBlankCallback(void *data) {
     SetIrqCheckFlag((u8 *)0x027E0000, OS_IE_VBLANK);
 }
 
-#pragma force_active reset
-
 void Task_DrawBattleGraphics(SysTask *task, void *data) {
     BattleSystem *battleSystem = data;
 
@@ -915,8 +899,6 @@ void Task_DrawBattleGraphics(SysTask *task, void *data) {
         RequestSwap3DBuffers(GX_SORTMODE_MANUAL, GX_BUFFERMODE_Z);
     }
 }
-
-#pragma force_active on
 
 void Task_UpdateCriticalHpMusic(SysTask *task, void *data) {
     BattleSystem *battleSystem = data;
@@ -965,8 +947,6 @@ void Task_UpdateCriticalHpMusic(SysTask *task, void *data) {
         }
     }
 }
-
-#pragma force_active reset
 
 void VBlankTask_ScrollBattleBackground(SysTask *task, void *data) {
     BattleSystem *battleSystem = data;
@@ -1322,8 +1302,6 @@ void Battle_LinkExit(OverlayManager *man) {
     Heap_Free(work);
 }
 
-#pragma force_active on
-
 BOOL Battle_PartyPreviewInit(OverlayManager *man) {
     BattleSystem *battleSystem = OverlayManager_CreateAndGetData(man, sizeof(BattleSystem), HEAP_ID_BATTLE);
     BattleSetup *setup = OverlayManager_GetArgs(man);
@@ -1370,8 +1348,6 @@ BOOL Battle_PartyPreviewInit(OverlayManager *man) {
     return TRUE;
 }
 
-#pragma force_active reset
-
 BOOL Battle_PartyPreviewMain(OverlayManager *man) {
     BattleSystem *battleSystem = OverlayManager_GetData(man);
     int i;
@@ -1387,8 +1363,6 @@ BOOL Battle_PartyPreviewMain(OverlayManager *man) {
     }
     return FALSE;
 }
-
-#pragma force_active on
 
 BOOL Battle_VsScreenInit(OverlayManager *man) {
     BattleSystem *battleSystem = OverlayManager_GetData(man);
@@ -1431,8 +1405,6 @@ BOOL Battle_VsScreenInit(OverlayManager *man) {
     return TRUE;
 }
 
-#pragma force_active reset
-
 BOOL Battle_VsScreenMain(OverlayManager *man) {
     BattleSystem *battleSystem = OverlayManager_GetData(man);
     int i;
@@ -1448,8 +1420,6 @@ BOOL Battle_VsScreenMain(OverlayManager *man) {
     }
     return FALSE;
 }
-
-#pragma force_active on
 
 BOOL Battle_EndInit(OverlayManager *man) {
     BattleSetup *setup = OverlayManager_GetArgs(man);
@@ -1533,8 +1503,6 @@ BOOL Battle_EndInit(OverlayManager *man) {
     return TRUE;
 }
 
-#pragma force_active reset
-
 BOOL Battle_EndMain(OverlayManager *man) {
     BattleSetup *setup = OverlayManager_GetArgs(man);
     LinkBattleScreenArgs *args = (LinkBattleScreenArgs *)setup->evolutionTaskData;
@@ -1569,8 +1537,6 @@ static inline void SwapInts(int *a, int *b) {
     *a = *b;
     *b = tmp;
 }
-
-#pragma force_active on
 
 void BattleSystem_ChooseLinkServer(BattleSystem *battleSystem, BattleSetup *setup) {
     int ids[4];
@@ -1624,8 +1590,6 @@ void BattleSystem_ChooseLinkServer(BattleSystem *battleSystem, BattleSetup *setu
         }
     }
 }
-
-#pragma force_active reset
 
 void Battle_CreateWirelessStatusIcon(void) {
     WirelessStatusIcon_Create();

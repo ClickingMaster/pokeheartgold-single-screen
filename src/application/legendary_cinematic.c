@@ -309,7 +309,6 @@ void LegendaryCinematic_SetEdgeMarking(const GXRgb *colorTable) {
     }
 }
 
-#pragma force_active on
 void LegendaryCinematic_LoadModels(LegendaryCinematic *cinematic, NarcId narcId, const LegendaryCinematicModelSpec *specs, u32 count) {
     NNSG3dResTex *tex;
     u16 i;
@@ -346,7 +345,6 @@ void LegendaryCinematic_LoadModels(LegendaryCinematic *cinematic, NarcId narcId,
     }
     cinematic->numModels = count;
 }
-#pragma force_active reset
 
 void LegendaryCinematic_FreeModels(LegendaryCinematic *cinematic) {
     u16 i;
@@ -731,7 +729,6 @@ void ArceusCinematic_SetBanks(void) {
     GfGfx_SetBanks(&gArceusCinematicGraphicsBanks);
 }
 
-#pragma force_active on
 void ArceusCinematic_InitBgs(ArceusCinematic *arceus) {
     GraphicsModes modes;
     BgTemplate bg0;
@@ -756,7 +753,6 @@ void ArceusCinematic_InitBgs(ArceusCinematic *arceus) {
     BG_SetMaskColor(GF_BG_LYR_MAIN_0, 0);
     BG_SetMaskColor(GF_BG_LYR_SUB_0, 0);
 }
-#pragma force_active reset
 
 void ArceusCinematic_FreeBgs(ArceusCinematic *arceus) {
     FreeBgTilemapBuffer(arceus->bgConfig, GF_BG_LYR_MAIN_2);
@@ -765,7 +761,6 @@ void ArceusCinematic_FreeBgs(ArceusCinematic *arceus) {
     Heap_Free(arceus->bgConfig);
 }
 
-#pragma force_active on
 void ArceusCinematic_InitSprites(LegendaryCinematic *cinematic) {
     ArceusCinematic *arceus = cinematic->arceus;
     OamManagerParam oamManagerParam;
@@ -797,7 +792,6 @@ void ArceusCinematic_DeleteSprite(ArceusCinematic *arceus, int index) {
         arceus->sprites[index] = NULL;
     }
 }
-#pragma force_active reset
 
 void ArceusCinematic_FreeSprites(ArceusCinematic *arceus) {
     ArceusCinematic_DeleteSprite(arceus, 0);

@@ -160,8 +160,6 @@ void GlobalTerminalNet_UnpackDressUpPhoto(const GlobalTerminalNetDressUpForm *fo
     GlobalTerminalNet_UploadFormToDressUp(form, record);
 }
 
-#pragma force_active on
-
 void GlobalTerminalNet_PackBoxData(SaveData *saveData, PCStorage *storage, int box, GlobalTerminalNetBoxForm *form, enum HeapID heapID) {
     String *name;
     int i;
@@ -188,8 +186,6 @@ void GlobalTerminalNet_PackBoxData(SaveData *saveData, PCStorage *storage, int b
     form->crc = SaveArray_CalcCRC16(saveData, form, 408);
 }
 
-#pragma force_active reset
-
 void GlobalTerminalNet_SealBoxData(SaveData *saveData, GlobalTerminalNetBoxForm *form, int value) {
     form->category = value;
     form->crc = SaveArray_CalcCRC16(saveData, form, 0x198);
@@ -203,8 +199,6 @@ void GlobalTerminalNet_SetRequestHeader(SaveData *saveData, const void *src, voi
 void GlobalTerminalNet_CopyRequestHeader(const void *src, void *dst) {
     MI_CpuCopy8(src, dst, 0x80);
 }
-
-#pragma force_active on
 
 void GlobalTerminalNet_SetRankingsHeader(SaveData *saveData, const GlobalTerminalNetRankingsSource *src, GlobalTerminalNetRankingsHeader *dst) {
     MI_CpuFill8(dst, 0, sizeof(GlobalTerminalNetRankingsHeader));
@@ -252,8 +246,6 @@ void GlobalTerminalNet_Free(GlobalTerminalNet *net) {
     Heap_Free(net->osHeapMemory);
 }
 
-#pragma force_active reset
-
 BOOL GlobalTerminalNet_SeqStopClient(GlobalTerminalNet *net) {
     GlobalTerminalServer_Stop();
     net->isRunning = 0;
@@ -283,8 +275,6 @@ BOOL GlobalTerminalNet_SeqWaitButton(GlobalTerminalNet *net) {
     return FALSE;
 }
 
-#pragma force_active on
-
 BOOL GlobalTerminalNet_RequestDressUpUpload(GlobalTerminalNet *net, const void *header, const GlobalTerminalNetDressUpRecord *record) {
     if (GlobalTerminalNet_IsIdle(net) == FALSE) {
         return FALSE;
@@ -296,8 +286,6 @@ BOOL GlobalTerminalNet_RequestDressUpUpload(GlobalTerminalNet *net, const void *
     return TRUE;
 }
 
-#pragma force_active reset
-
 BOOL GlobalTerminalNet_RequestDressUpDownload(GlobalTerminalNet *net, u16 arg) {
     if (!GlobalTerminalNet_IsIdle(net)) {
         return FALSE;
@@ -306,8 +294,6 @@ BOOL GlobalTerminalNet_RequestDressUpDownload(GlobalTerminalNet *net, u16 arg) {
     net->pendingCommand = GTS_REQUEST_DRESS_UP_DOWNLOAD;
     return TRUE;
 }
-
-#pragma force_active on
 
 BOOL GlobalTerminalNet_RequestBoxUpload(GlobalTerminalNet *net, int value, const void *header, PCStorage *storage, int box) {
     if (GlobalTerminalNet_IsIdle(net) == FALSE) {
@@ -322,8 +308,6 @@ BOOL GlobalTerminalNet_RequestBoxUpload(GlobalTerminalNet *net, int value, const
     net->pendingCommand = GTS_REQUEST_BOX_UPLOAD;
     return TRUE;
 }
-
-#pragma force_active reset
 
 BOOL GlobalTerminalNet_RequestBoxDownload(GlobalTerminalNet *net, u8 arg) {
     if (!GlobalTerminalNet_IsIdle(net)) {
@@ -618,16 +602,12 @@ BOOL GlobalTerminalNet_CompleteVideoUploadFailed(GlobalTerminalNet *net, GlobalT
     return TRUE;
 }
 
-#pragma force_active on
-
 // stores the server's number for the uploaded video in the recording and saves it; done when the save finished
 BOOL GlobalTerminalNet_SaveUploadedVideoNumber(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc) {
     GlobalTerminalNetVideoNumberResponse *response = GlobalTerminalServer_GetResponse(net);
     int result = VsRecorder_SaveRecordNumber(net->saveData, response->numberLow, response->numberHigh, (u8 *)responseFunc + 4, (u8 *)responseFunc + 6);
     return (u32)(result - 2) <= 1;
 }
-
-#pragma force_active reset
 
 BOOL GlobalTerminalNet_CompleteDressUpUploadFailed(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc) {
     return TRUE;
@@ -640,8 +620,6 @@ BOOL GlobalTerminalNet_CompleteBoxUploadFailed(GlobalTerminalNet *net, GlobalTer
 BOOL GlobalTerminalNet_CompleteError(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc) {
     return TRUE;
 }
-
-#pragma force_active on
 
 BOOL GlobalTerminalNet_HandleResponse(GlobalTerminalNet *net) {
     BOOL result = TRUE;
@@ -716,8 +694,6 @@ BOOL GlobalTerminalNet_HandleResponse(GlobalTerminalNet *net) {
     return result;
 }
 
-#pragma force_active reset
-
 u32 GlobalTerminalNet_GetError(GlobalTerminalNet *net, GlobalTerminalNetError **error) {
     *error = &net->error;
     return net->error.isError;
@@ -726,8 +702,6 @@ u32 GlobalTerminalNet_GetError(GlobalTerminalNet *net, GlobalTerminalNetError **
 void GlobalTerminalNet_PrintMessage(GlobalTerminalNet *net, String *message) {
     net->messageFunc(net->messageArg, message);
 }
-
-#pragma force_active on
 
 void GlobalTerminalNet_ShowErrorMessage(GlobalTerminalNet *net, int msgId, int errorNumber) {
     String *string;
@@ -741,8 +715,6 @@ void GlobalTerminalNet_ShowErrorMessage(GlobalTerminalNet *net, int msgId, int e
     String_Delete(string);
     GlobalTerminalNet_PrintMessage(net, net->string);
 }
-
-#pragma force_active reset
 
 BOOL GlobalTerminalNet_IsIdle(GlobalTerminalNet *net) {
     if (GlobalTerminalNet_GetSequence(net) == 0 && net->pendingCommand == GTS_REQUEST_NONE && net->activeCommand == GTS_REQUEST_NONE) {
@@ -803,8 +775,6 @@ BOOL GlobalTerminalNet_CheckDressUpDownloadResult(GlobalTerminalNet *net, Global
     return ret;
 }
 
-#pragma force_active on
-
 int GlobalTerminalNet_GetDressUpList(GlobalTerminalNet *net, void **out, int max) {
     GlobalTerminalNetDressUpList *list = &((GlobalTerminalNetDressUpListResponse *)GlobalTerminalServer_GetResponse(net))->list;
     int count = list->count;
@@ -828,8 +798,6 @@ int GlobalTerminalNet_GetDressUpList(GlobalTerminalNet *net, void **out, int max
     }
     return count;
 }
-
-#pragma force_active reset
 
 BOOL GlobalTerminalNet_CheckBoxUploadResult(GlobalTerminalNet *net, GlobalTerminalNetResponse *response) {
     BOOL ret = FALSE;
@@ -862,8 +830,6 @@ BOOL GlobalTerminalNet_CheckBoxDownloadResult(GlobalTerminalNet *net, GlobalTerm
     return ret;
 }
 
-#pragma force_active on
-
 int GlobalTerminalNet_GetBoxList(GlobalTerminalNet *net, void **out, int max) {
     int count;
     int *base = &((GlobalTerminalNetBoxListResponse *)GlobalTerminalServer_GetResponse(net))->count;
@@ -894,8 +860,6 @@ int GlobalTerminalNet_GetBoxList(GlobalTerminalNet *net, void **out, int max) {
     }
     return count;
 }
-
-#pragma force_active reset
 
 BOOL GlobalTerminalNet_Check22000Result(GlobalTerminalNet *net, GlobalTerminalNetResponse *response) {
     BOOL ret = FALSE;
@@ -955,14 +919,10 @@ BOOL GlobalTerminalNet_CheckVideoUploadResult(GlobalTerminalNet *net, GlobalTerm
     return ret;
 }
 
-#pragma force_active on
-
 u64 GlobalTerminalNet_GetUploadedVideoNumber(GlobalTerminalNet *net) {
     GlobalTerminalNetVideoNumberResponse *response = GlobalTerminalServer_GetResponse(net);
     return *(u64 *)&response->numberLow;
 }
-
-#pragma force_active reset
 
 BOOL GlobalTerminalNet_CheckVideoSearchResult(GlobalTerminalNet *net, GlobalTerminalNetResponse *response) {
     BOOL ret = FALSE;
@@ -977,8 +937,6 @@ BOOL GlobalTerminalNet_CheckVideoSearchResult(GlobalTerminalNet *net, GlobalTerm
     }
     return ret;
 }
-
-#pragma force_active on
 
 int GlobalTerminalNet_GetVideoList(GlobalTerminalNet *net, GlobalTerminalNetVideoHeader **out, int max) {
     GlobalTerminalNetVideoList *list = &((GlobalTerminalNetVideoListResponse *)GlobalTerminalServer_GetResponse(net))->list;
@@ -1005,8 +963,6 @@ int GlobalTerminalNet_GetVideoList(GlobalTerminalNet *net, GlobalTerminalNetVide
     return count;
 }
 
-#pragma force_active reset
-
 BOOL GlobalTerminalNet_CheckVideoDownloadResult(GlobalTerminalNet *net, GlobalTerminalNetResponse *response) {
     BOOL ret = FALSE;
     switch (response->result) {
@@ -1021,8 +977,6 @@ BOOL GlobalTerminalNet_CheckVideoDownloadResult(GlobalTerminalNet *net, GlobalTe
     return ret;
 }
 
-#pragma force_active on
-
 u32 GlobalTerminalNet_GetDownloadedVideo(GlobalTerminalNet *net, u8 **out) {
     GlobalTerminalNetVideoResponse *response = GlobalTerminalServer_GetResponse(net);
     GlobalTerminalNetVideoView *view = (GlobalTerminalNetVideoView *)((u8 *)response + 4);
@@ -1034,8 +988,6 @@ u32 GlobalTerminalNet_GetDownloadedVideo(GlobalTerminalNet *net, u8 **out) {
     }
     return response->number; // low word only
 }
-
-#pragma force_active reset
 
 BOOL GlobalTerminalNet_Check23003Result(GlobalTerminalNet *net, GlobalTerminalNetResponse *response) {
     BOOL ret = FALSE;

@@ -548,8 +548,6 @@ void GlobalTerminalConnect_HideWaitingIcon(GlobalTerminalConnectWork *work) {
     }
 }
 
-#pragma force_active on
-
 YesNoPrompt *GlobalTerminalConnect_CreateYesNoPrompt(BgConfig *bgConfig, int tileStart) {
     YesNoPromptTemplate template;
     YesNoPrompt *prompt = YesNoPrompt_Create(HEAP_ID_124);
@@ -580,8 +578,6 @@ void GlobalTerminalConnect_PrintMessage(GlobalTerminalConnectWork *work, MsgData
         work->printerId = 0xFF;
     }
 }
-
-#pragma force_active reset
 
 void GlobalTerminalConnect_SetStateAndNext(GlobalTerminalConnectWork *work, u32 state, u32 nextState) {
     work->state = state;

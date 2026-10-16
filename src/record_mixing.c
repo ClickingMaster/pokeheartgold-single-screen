@@ -349,8 +349,6 @@ BOOL RecordMixing_Init(OverlayManager *man, int *state) {
     return FALSE;
 }
 
-#pragma force_active on
-
 BOOL RecordMixing_Main(OverlayManager *man, int *state) {
     RecordMixingApp *app = OverlayManager_GetData(man);
 
@@ -395,8 +393,6 @@ BOOL RecordMixing_Main(OverlayManager *man, int *state) {
     SpriteList_RenderAndAnimateSprites(app->spriteList);
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL RecordMixing_Exit(OverlayManager *man, int *state) {
     RecordMixingApp *app = OverlayManager_GetData(man);
@@ -539,8 +535,6 @@ void RecordMixing_FreeBgs(BgConfig *bgConfig) {
     Heap_Free(bgConfig);
 }
 
-#pragma force_active on
-
 void RecordMixing_LoadBgGraphics(RecordMixingApp *app, NARC *narc) {
     BgConfig *bgConfig = app->bgConfig;
 
@@ -558,8 +552,6 @@ void RecordMixing_LoadBgGraphics(RecordMixingApp *app, NARC *narc) {
     LoadUserFrameGfx2(bgConfig, GF_BG_LYR_MAIN_0, 1, 11, Options_GetFrame(app->args->options), HEAP_ID_50);
     LoadUserFrameGfx1(bgConfig, GF_BG_LYR_MAIN_0, 31, 10, 0, HEAP_ID_50);
 }
-
-#pragma force_active reset
 
 void RecordMixing_FreeButtonScreen(RecordMixingApp *app) {
     Heap_Free(app->buttonScreenRaw);
@@ -598,8 +590,6 @@ void RecordMixing_InitSpriteGraphics(RecordMixingApp *app, NARC *narc) {
     SpriteTransfer_CreateExtPlttTransferTask(app->plttRes);
 }
 
-#pragma force_active on
-
 void RecordMixing_CreateSprites(RecordMixingApp *app) {
     SpriteTemplate template;
     int i;
@@ -637,8 +627,6 @@ void RecordMixing_CreateSprites(RecordMixingApp *app) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
-
-#pragma force_active reset
 
 void RecordMixing_AddWindows(RecordMixingApp *app, OverlayManager *unused) {
     AddWindowParameterized(app->bgConfig, &app->messageWindow, GF_BG_LYR_MAIN_0, 2, 1, 27, 4, 12, 0x5B);
@@ -716,9 +704,6 @@ BOOL RecordMixing_UpdateMenuInputState(RecordMixingApp *app) {
     return FALSE;
 }
 
-#pragma opt_common_subs off
-#pragma force_active on
-
 void RecordMixing_HandleInput(RecordMixingApp *app) {
     u8 button = 0;
 
@@ -786,9 +771,6 @@ void RecordMixing_HandleInput(RecordMixingApp *app) {
         ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_1);
     }
 }
-
-#pragma force_active reset
-#pragma opt_common_subs reset
 
 void RecordMixing_UpdateDummy(RecordMixingApp *app) {
 }
@@ -1321,8 +1303,6 @@ void RecordMixing_SetButtonState(RecordMixingApp *app, int button, int buttonSta
     CopyToBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, sRecordMixingButtonX[button], 20, 8, 4, screen->rawData, 0, buttonState * 4, screen->screenWidth / 8, screen->screenHeight / 8);
 }
 
-#pragma force_active on
-
 void RecordMixing_PrintButtons(RecordMixingApp *app) {
     String *string;
     int x;
@@ -1344,10 +1324,6 @@ void RecordMixing_PrintButtons(RecordMixingApp *app) {
     ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_0);
 }
 
-#pragma force_active reset
-
-#pragma force_active on
-
 void RecordMixing_PulsePalette(u16 *angle) {
     u16 color;
 
@@ -1360,8 +1336,6 @@ void RecordMixing_PulsePalette(u16 *angle) {
     GX_LoadOBJPltt(&color, 42, 2);
 }
 
-#pragma force_active reset
-
 int RecordMixing_CountProfiles(void) {
     int i, n = 0;
     for (i = 0; i < RECORD_MIXING_MAX_MEMBERS; i++) {
@@ -1371,8 +1345,6 @@ int RecordMixing_CountProfiles(void) {
     }
     return n;
 }
-
-#pragma force_active on
 
 BOOL RecordMixing_PrintMemberList(Window *window, int unused, u32 color, RecordMixingApp *app) {
     int i;
@@ -1415,8 +1387,6 @@ BOOL RecordMixing_PrintMemberList(Window *window, int unused, u32 color, RecordM
     return TRUE;
 }
 
-#pragma force_active reset
-
 void RecordMixing_HandleGroupMenuDummy(RecordMixingApp *app) {
 }
 
@@ -1435,7 +1405,6 @@ int RecordMixing_GetMemberCount(RecordMixingApp *app) {
 }
 
 // memberStates: 0 none, 1 joined, 2 shown, 3 left
-#pragma force_active on
 
 BOOL RecordMixing_UpdateMembers(RecordMixingApp *app) {
     int i;
@@ -1473,10 +1442,6 @@ BOOL RecordMixing_UpdateMembers(RecordMixingApp *app) {
     return changed;
 }
 
-#pragma force_active reset
-
-#pragma force_active on
-
 void RecordMixing_PrintMessage(RecordMixingApp *app, int msgId, BOOL immediate) {
     String *string = String_New(180, HEAP_ID_50);
     ReadMsgDataIntoString(app->msgData, msgId, string);
@@ -1493,8 +1458,6 @@ void RecordMixing_PrintMessage(RecordMixingApp *app, int msgId, BOOL immediate) 
     }
 }
 
-#pragma force_active reset
-
 BOOL RecordMixing_IsPrinterDone(u32 printerId) {
     if (printerId == 0xFF) {
         return TRUE;
@@ -1508,8 +1471,6 @@ BOOL RecordMixing_IsPrinterDone(u32 printerId) {
 void RecordMixing_ClearMessageWindow(RecordMixingApp *app) {
     ClearFrameAndWindow2(&app->messageWindow, FALSE);
 }
-
-#pragma force_active on
 
 void RecordMixing_UpdateMemberSprites(RecordMixingApp *app) {
     int i;
@@ -1551,8 +1512,6 @@ void RecordMixing_UpdateMemberSprites(RecordMixingApp *app) {
         PlaySE(SEQ_SE_DP_TELE2);
     }
 }
-
-#pragma force_active reset
 
 void RecordMixing_LoadAvatarGraphics(RecordMixingApp *app, NARC *narc) {
     app->avatarPlttRaw[0] = GfGfxLoader_GetPlttData(NARC_a_1_0_0, 9, &app->avatarPltt[0], HEAP_ID_50);
@@ -1601,8 +1560,6 @@ void RecordMixing_UpdateMaxEntries(RecordMixingApp *app, int index) {
     }
 }
 
-#pragma force_active on
-
 int RecordMixing_LeaderUpdateMembers(RecordMixingApp *app, int index) {
     u8 flag[1];
     int n = RecordMixing_CountMembers();
@@ -1650,5 +1607,3 @@ int RecordMixing_LeaderUpdateMembers(RecordMixingApp *app, int index) {
     app->lastMemberCount = RecordMixing_CountMembers();
     return 1;
 }
-
-#pragma force_active reset

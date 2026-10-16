@@ -670,7 +670,6 @@ void BattleCastleOpponentApp_DrawScreen(BattleCastleOpponentApp *app) {
     GfGfx_BothDispOn();
 }
 
-#pragma force_active on
 BOOL BattleCastleOpponentApp_HandleMenu(BattleCastleOpponentApp *app) {
     u32 input;
     u32 points;
@@ -1056,7 +1055,6 @@ BOOL BattleCastleOpponentApp_HandleMenu(BattleCastleOpponentApp *app) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 enum {
     CASTLE_OPP_LINK_ACTION_SEND,
@@ -1183,7 +1181,6 @@ BOOL BattleCastleOpponentApp_FadeOut(BattleCastleOpponentApp *app) {
     return FALSE;
 }
 
-#pragma force_active on
 void BattleCastleOpponentApp_FreeResources(BattleCastleOpponentApp *app) {
     int numMons;
     int i;
@@ -1226,7 +1223,6 @@ void BattleCastleOpponentApp_FreeResources(BattleCastleOpponentApp *app) {
     BattleCastleOpponentApp_FreeBgLayers(app->bgConfig);
     NARC_Delete(app->narc);
 }
-#pragma force_active reset
 
 void BattleCastleOpponentApp_DisableDisplay(void) {
     Main_SetVBlankIntrCB(NULL, NULL);
@@ -1237,7 +1233,6 @@ void BattleCastleOpponentApp_DisableDisplay(void) {
     GXS_SetVisiblePlane(0);
 }
 
-#pragma force_active on
 void BattleCastleOpponentApp_InitGraphics(BattleCastleOpponentApp *app) {
     // kept in one struct: these locals live on the stack in this order
     struct {
@@ -1342,7 +1337,6 @@ void BattleCastleOpponentApp_InitGraphics(BattleCastleOpponentApp *app) {
     G2_SetBlendAlpha(GX_BLEND_PLANEMASK_NONE, GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3, 6, 10);
     Main_SetVBlankIntrCB(BattleCastleOpponentApp_VBlankCallback, app);
 }
-#pragma force_active reset
 
 void BattleCastleOpponentApp_InitBgGraphics(BattleCastleOpponentApp *app) {
     GX_SetDispSelect(GX_DISP_SELECT_SUB_MAIN);
@@ -1376,7 +1370,6 @@ void BattleCastleOpponentApp_FreeBgLayers(BgConfig *bgConfig) {
     reg_GX_POWCNT |= REG_GX_POWCNT_DSEL_MASK; // GX_SetDispSelect(GX_DISP_SELECT_MAIN_SUB)
 }
 
-#pragma force_active on
 void BattleCastleOpponentApp_VBlankCallback(void *arg) {
     // OS_SetIrqCheckFlag(OS_IE_V_BLANK) with the DTCM address written out
     vu32 *dtcm = (vu32 *)0x027E0000;
@@ -1390,14 +1383,12 @@ void BattleCastleOpponentApp_VBlankCallback(void *arg) {
     OamManager_ApplyAndResetBuffers();
     dtcm[0x3FF8 / 4] |= OS_IE_V_BLANK;
 }
-#pragma force_active reset
 
 void BattleCastleOpponentApp_SetGraphicsBanks(void) {
     GraphicsBanks banks = gBattleCastleOpponentAppGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
-#pragma force_active on
 void BattleCastleOpponentApp_InitBgLayers(BgConfig *bgConfig) {
     GraphicsModes modes;
     BgTemplate main1;
@@ -1435,7 +1426,6 @@ void BattleCastleOpponentApp_InitBgLayers(BgConfig *bgConfig) {
     G2_SetBG0Priority(0);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
 }
-#pragma force_active reset
 
 void BattleCastleOpponentApp_LoadPartyBg(BattleCastleOpponentApp *app, GFBgLayer bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(app->narc, 0x30, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_107);
@@ -1475,7 +1465,6 @@ void BattleCastleOpponentApp_LoadSubScreenBg(BattleCastleOpponentApp *app, GFBgL
     GfGfxLoader_GXLoadPalFromOpenNarc(app->narc, 0xBE, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0, HEAP_ID_107);
 }
 
-#pragma force_active on
 u8 BattleCastleOpponentApp_PrintMessage(BattleCastleOpponentApp *app, Window *window, int msgNo, int x, int y, int speed, u8 fg, u8 shadow, u8 bg, u8 fontId) {
     u8 printerId;
 
@@ -1496,7 +1485,6 @@ u8 BattleCastleOpponentApp_AddMessage(BattleCastleOpponentApp *app, Window *wind
     ScheduleWindowCopyToVram(window);
     return printerId;
 }
-#pragma force_active reset
 
 int BattleCastleOpponentApp_ShowMessage(BattleCastleOpponentApp *app, int msgNo, u8 fontId) {
     int printerId = BattleCastleOpponentApp_PrintMessage(app, &app->windows[CASTLE_OPP_WIN_MESSAGE], msgNo, 1, 1, TEXT_SPEED_NOTRANSFER, 1, 2, 15, fontId);
@@ -1505,7 +1493,6 @@ int BattleCastleOpponentApp_ShowMessage(BattleCastleOpponentApp *app, int msgNo,
     return printerId;
 }
 
-#pragma force_active on
 void BattleCastleOpponentApp_PrintPartyHp(BattleCastleOpponentApp *app, Window *window) {
     int x;
     int i;
@@ -1558,7 +1545,6 @@ void BattleCastleOpponentApp_PrintPartyLevels(BattleCastleOpponentApp *app, Wind
     }
     ScheduleWindowCopyToVram(window);
 }
-#pragma force_active reset
 
 void BattleCastleOpponentApp_ShowYesNoPrompt(BattleCastleOpponentApp *app) {
     BattleCastlePrompt_Show(&app->yesNoPrompt, app->bgConfig);
@@ -1991,7 +1977,6 @@ void BattleCastleOpponentApp_SetStatsBought(BattleCastleOpponentApp *app, int sl
     app->statsBought[index] = TRUE;
 }
 
-#pragma force_active on
 void BattleCastleOpponentApp_BuyStats(BattleCastleOpponentApp *app, int slot) {
     BattleCastle_DrawWindowFrame(&app->windows[CASTLE_OPP_WIN_MESSAGE], Options_GetFrame(app->options));
     BattleCastleOpponentApp_BufferSpeciesName(app, 0, Mon_GetBoxMon(Party_GetMonByIndex(app->party, BattleCastle_GetMonIndex(app->numMons, slot))));
@@ -2004,14 +1989,12 @@ void BattleCastleOpponentApp_BuyStats(BattleCastleOpponentApp *app, int slot) {
     }
     PlaySE(SEQ_SE_DP_UG_020);
 }
-#pragma force_active reset
 
 void BattleCastleOpponentApp_SetMovesBought(BattleCastleOpponentApp *app, int slot) {
     int index = BattleCastle_GetMonIndex(app->numMons, slot);
     app->movesBought[index] = TRUE;
 }
 
-#pragma force_active on
 void BattleCastleOpponentApp_BuyMoves(BattleCastleOpponentApp *app, int slot) {
     BattleCastle_DrawWindowFrame(&app->windows[CASTLE_OPP_WIN_MESSAGE], Options_GetFrame(app->options));
     BattleCastleOpponentApp_BufferSpeciesName(app, 0, Mon_GetBoxMon(Party_GetMonByIndex(app->party, BattleCastle_GetMonIndex(app->numMons, slot))));
@@ -2032,13 +2015,11 @@ void BattleCastleOpponentApp_CloseMenus(BattleCastleOpponentApp *app) {
     }
     BattleCastlePrompt_Hide(&app->yesNoPrompt);
 }
-#pragma force_active reset
 
 void BattleCastleOpponentApp_OpenMessageBox(BattleCastleOpponentApp *app) {
     BattleCastle_DrawWindowFrame(&app->windows[CASTLE_OPP_WIN_MESSAGE], Options_GetFrame(app->options));
 }
 
-#pragma force_active on
 void BattleCastleOpponentApp_PrintCastlePoints(BattleCastleOpponentApp *app, Window *window) {
     u16 x1;
     u16 y1;
@@ -2077,7 +2058,6 @@ void BattleCastleOpponentApp_PrintCastlePoints(BattleCastleOpponentApp *app, Win
     }
     ScheduleWindowCopyToVram(window);
 }
-#pragma force_active reset
 
 void BattleCastleOpponentApp_ConfirmLevelChange(BattleCastleOpponentApp *app, u8 levelChange) {
     int cost = BattleCastleOpponentApp_GetLevelChangeCost(levelChange);
@@ -2088,7 +2068,6 @@ void BattleCastleOpponentApp_ConfirmLevelChange(BattleCastleOpponentApp *app, u8
     app->levelChange = levelChange;
 }
 
-#pragma force_active on
 void BattleCastleOpponentApp_PrintTrainerNames(BattleCastleOpponentApp *app, Window *window) {
     u16 x1;
     u16 y1;
@@ -2169,7 +2148,6 @@ void BattleCastleOpponentApp_ApplyAction(BattleCastleOpponentApp *app, u8 slot, 
         break;
     }
 }
-#pragma force_active reset
 
 void BattleCastleOpponentApp_CheckMon(BattleCastleOpponentApp *app, u32 slot) {
     int index;
@@ -2205,7 +2183,6 @@ void BattleCastleOpponentApp_CheckMonAndRedrawHp(BattleCastleOpponentApp *app, i
     BattleCastleOpponentApp_PrintPartyHp(app, &app->windows[CASTLE_OPP_WIN_HP]);
 }
 
-#pragma force_active on
 // LEVEL +5 / -5 toggles: a second purchase of the same change resets the mon to level 50
 void BattleCastleOpponentApp_ChangeLevel(BattleCastleOpponentApp *app, int slot, int levelChange) {
     Pokemon *mon;
@@ -2246,7 +2223,6 @@ void BattleCastleOpponentApp_ChangeLevel(BattleCastleOpponentApp *app, int slot,
         BattleCastleOpponentApp_PrintMonSummary(app, 0);
     }
 }
-#pragma force_active reset
 
 void BattleCastleOpponentApp_HideSummaryBg(BattleCastleOpponentApp *app) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
@@ -2300,7 +2276,6 @@ int BattleCastleOpponentApp_TryBuy(BattleCastleOpponentApp *app, int cost, int f
     return TRUE;
 }
 
-#pragma force_active on
 // RANK UP (info rank): the player or the partner pays CASTLE_CP_RANK_UP
 void BattleCastleOpponentApp_RankUp(BattleCastleOpponentApp *app, u8 slot, int action) {
     u8 kind;
@@ -2363,7 +2338,6 @@ void BattleCastleOpponentApp_RankUp(BattleCastleOpponentApp *app, u8 slot, int a
     BattleCastle_DrawWindowFrame(&app->windows[CASTLE_OPP_WIN_MESSAGE], Options_GetFrame(app->options));
     app->printerId = BattleCastleOpponentApp_ShowMessage(app, gBattleCastleOpponentAppRankUpMessages[kind][slot], 1);
 }
-#pragma force_active reset
 
 void BattleCastleOpponentApp_ShowBoughtMarks(BattleCastleOpponentApp *app) {
     int i;
@@ -2610,7 +2584,6 @@ void BattleCastleOpponentApp_ShowMonSummary(BattleCastleOpponentApp *app, int co
     BattleCastleOpponentApp_LoadMonPic(app);
 }
 
-#pragma force_active on
 void BattleCastleOpponentApp_ShowSummaryPanel(BattleCastleOpponentApp *app, int show) {
     u32 i;
 
@@ -2637,7 +2610,6 @@ void BattleCastleOpponentApp_LoadMonPic(BattleCastleOpponentApp *app) {
         BattleCastleSprite_LoadMonPic(app->monPic, app->summary.boxMon, app->summary.species, app->summary.personality);
     }
 }
-#pragma force_active reset
 
 void BattleCastleOpponentApp_SetCursorPos(BattleCastleOpponentApp *app, u32 cursorPos, u32 prevCursorPos) {
     app->cursorPos = cursorPos;
@@ -2793,7 +2765,6 @@ void BattleCastleOpponentApp_PrintSummaryMenuHelp(BattleCastleOpponentApp *app) 
 // Helpers shared by both Battle Castle apps
 // ---------------------------------------------------------------------------
 
-#pragma force_active on
 // Sprite renderer and resources: the castle sprites (id 0), the type icons (id 2, NARC a/0/0/8),
 // the party list item marks (id 1), the selected item icon (id 3), the six item icons (ids 4-9)
 // and the four party mon icons (ids 10-13)
@@ -2860,7 +2831,6 @@ void BattleCastle_InitSpriteGfx(BattleCastleSpriteGfx *gfx, Party *party, u8 isL
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
-#pragma force_active reset
 
 Sprite *BattleCastle_CreateSprite(BattleCastleSpriteGfx *gfx, int charId, int plttId, int cellId, int animSeq, int drawPriority, int priority, u8 screen) {
     SpriteResourcesHeader header;
@@ -2958,7 +2928,6 @@ void BattleCastle_LoadMonPicGfx(BattleCastleSpriteGfx *gfx) {
     NARC_Delete(narc);
 }
 
-#pragma force_active on
 BattleCastleSprite *BattleCastleSprite_New(BattleCastleSpriteGfx *gfx, int charId, int plttId, int cellId, int animSeq, s16 x, s16 y, int priority, int unused) {
     BattleCastleSprite *sprite = Heap_Alloc(HEAP_ID_107, sizeof(BattleCastleSprite));
     VecFx32 pos;
@@ -2986,7 +2955,6 @@ BattleCastleSprite *BattleCastleSprite_NewSubScreen(BattleCastleSpriteGfx *gfx, 
     Sprite_SetMatrix(sprite->sprite, &pos);
     return sprite;
 }
-#pragma force_active reset
 
 int BattleCastleSprite_Delete(BattleCastleSprite *sprite) {
     if (sprite == NULL) {
@@ -3104,14 +3072,12 @@ u32 BattleCastle_GetSideSlot(u32 numOwnSlots, u32 slot) {
     return slot;
 }
 
-#pragma force_active on
 u8 BattleCastle_GetRank(SaveData *saveData, u8 frontierType, u8 kind) {
     FrontierSave *frontierSave = Save_Frontier_GetStatic(saveData);
     int stat = BattleCastle_GetRankStat(frontierType, kind);
 
     return FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetRankStat(frontierType, kind)));
 }
-#pragma force_active reset
 
 void BattleCastle_PlaySEOnInput(int input, u16 seqNo) {
     if (input != LIST_NOTHING_CHOSEN) {
@@ -3128,7 +3094,6 @@ void BattleCastle_ClearBgToggleRequests(u32 *requests) {
     *requests = 0;
 }
 
-#pragma force_active on
 // Request a BG layer toggle (value = GF_PLANE_TOGGLE_*), applied in VBlank by BattleCastle_ApplyBgToggleRequests
 void BattleCastle_RequestBgToggle(int layer, int value, u32 *requests) {
     int shift;
@@ -3154,7 +3119,6 @@ void BattleCastle_ApplyBgToggleRequests(u32 *requests) {
     }
     BattleCastle_ClearBgToggleRequests(requests);
 }
-#pragma force_active reset
 
 void BattleCastlePrompt_Init(BattleCastlePrompt *prompt) {
     prompt->prompt = YesNoPrompt_Create(HEAP_ID_107);
@@ -3165,7 +3129,6 @@ void BattleCastlePrompt_Free(BattleCastlePrompt *prompt) {
     YesNoPrompt_Destroy(prompt->prompt);
 }
 
-#pragma force_active on
 void BattleCastlePrompt_Show(BattleCastlePrompt *prompt, BgConfig *bgConfig) {
     u16 tileStart;
     u16 tileCount;
@@ -3185,7 +3148,6 @@ void BattleCastlePrompt_Show(BattleCastlePrompt *prompt, BgConfig *bgConfig) {
     YesNoPrompt_InitFromTemplate(prompt->prompt, &template);
     prompt->active = TRUE;
 }
-#pragma force_active reset
 
 void BattleCastlePrompt_Hide(BattleCastlePrompt *prompt) {
     if (prompt->active != FALSE) {
@@ -3195,7 +3157,6 @@ void BattleCastlePrompt_Hide(BattleCastlePrompt *prompt) {
     }
 }
 
-#pragma force_active on
 // Window set 0 (party app, 70 windows) or 1 (opponent app, 35 windows)
 void BattleCastle_AddWindows(BgConfig *bgConfig, Window *windows, u32 set) {
     const WindowTemplate *templates = gBattleCastleWindowSets[set].templates;
@@ -3224,7 +3185,6 @@ void BattleCastle_DrawWindowFrame(Window *window, int frame) {
     DrawFrameAndWindow2(window, TRUE, 0x3D9, 10);
     ScheduleWindowCopyToVram(window);
 }
-#pragma force_active reset
 
 // VRAM tiles of the list menus and Yes/No prompts
 void BattleCastle_GetMenuTiles(u16 *tileStart, u16 *tileCount) {
@@ -3232,7 +3192,6 @@ void BattleCastle_GetMenuTiles(u16 *tileStart, u16 *tileCount) {
     *tileStart = 0x2E9;
 }
 
-#pragma force_active on
 void BattleCastle_PrintString(Window *window, String *string, int x, int y, int fontId, int color, int alignment) {
     if (alignment == CASTLE_ALIGN_RIGHT) {
         x -= FontID_String_GetWidth(fontId, string, 0);
@@ -3241,7 +3200,6 @@ void BattleCastle_PrintString(Window *window, String *string, int x, int y, int 
     }
     AddTextPrinterParameterizedWithColor(window, fontId, string, x, y, TEXT_SPEED_NOTRANSFER, color, NULL);
 }
-#pragma force_active reset
 
 void BattleCastle_PrintMsg(Window *window, MsgData *msgData, s32 msgNo, int x, int y, int fontId, int color, int alignment) {
     String *string = NewString_ReadMsgData(msgData, msgNo);

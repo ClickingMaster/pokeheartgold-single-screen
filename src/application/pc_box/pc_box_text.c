@@ -399,7 +399,6 @@ void PCBox_ClearMonInfoWindows(PCBoxView *view) {
     ClearWindowTilemapAndScheduleTransfer(&view->windows[8]);
 }
 
-#pragma force_active on
 #pragma opt_common_subs off
 
 // Draws the four moves of the mon into the move windows of the back buffer (9-12 or 13-16) and returns the
@@ -448,10 +447,6 @@ int PCBox_DrawMoveWindows(PCBoxWork *work, PCBoxMonInfo *monInfo) {
 
 #pragma opt_common_subs reset
 
-#pragma force_active reset
-
-#pragma force_active on
-
 // Prints the name and description of the held item into the back buffer windows (20-21 or 22-23).
 u32 PCBox_PrintItemNameAndDesc(PCBoxWork *work, u16 itemId) {
     u32 windowId;
@@ -477,8 +472,6 @@ u32 PCBox_PrintItemNameAndDesc(PCBoxWork *work, u16 itemId) {
     }
     return windowId;
 }
-
-#pragma force_active reset
 
 void PCBox_PrintModeTitle(PCBoxWork *work) {
     MsgData *msg;
@@ -563,8 +556,6 @@ void PCBox_DrawWallpaperName(PCBoxWork *work) {
     RemoveWindow(&window);
 }
 
-#pragma force_active on
-
 void PCBox_DrawButtonWindow(PCBoxWork *work, u32 win, u32 msgId, u32 style) {
     Window *w = &work->view->windows[win];
     void *buf;
@@ -637,13 +628,9 @@ void PCBox_PrintWindowMessage(PCBoxWork *work, u32 win, u32 msgId, u32 style, u8
     CopyWindowPixelsToVram_TextMode(w);
 }
 
-#pragma force_active reset
-
 void PCBox_DrawPartyButton(PCBoxWork *work, u32 style) {
     PCBox_DrawButtonWindow(work, 0x18, msg_0024_00060, style);
 }
-
-#pragma force_active on
 
 void PCBox_DrawTabWindow(PCBoxWork *work, u32 win, u32 msgId) {
     Window *w = &work->view->windows[win];
@@ -673,8 +660,6 @@ void PCBox_DrawTabWindow(PCBoxWork *work, u32 win, u32 msgId) {
     String_Delete(str);
     CopyWindowPixelsToVram_TextMode(w);
 }
-
-#pragma force_active reset
 
 void PCBox_DrawTrayTab(PCBoxWork *work, u32 unused) {
     if (work->args->mode == PC_BOX_MODE_MOVE_ITEMS) {
@@ -755,8 +740,6 @@ void PCBox_DrawDepositTitle(PCBoxWork *work) {
     PCBox_PrintWindowMessage(work, 0x29, msg_0024_00079, 0, 3);
 }
 
-#pragma force_active on
-
 void PCBox_SetPanelWindowFrame(BgCellManager *mgr, int id, Window *win) {
     u16 size[2];
     u16 *map;
@@ -789,8 +772,6 @@ void PCBox_SetPanelWindowFrame(BgCellManager *mgr, int id, Window *win) {
         }
     }
 }
-
-#pragma force_active reset
 
 void PCBox_AttachWindowToPanel(BgCellManager *mgr, int id, Window *window) {
     u32 width;
@@ -855,20 +836,14 @@ void PCBox_PrintPartyPanelExitLabel(PCBoxView *view) {
     PCBox_PrintCenteredLabel(view, 0x24, msg_0024_00075, 0);
 }
 
-#pragma force_active on
-
 void PCBox_AttachMarkingMenuWindows(PCBoxView *view) {
     BgCellManager_PutWindowTiles(view->panels, 2, &view->windows[34]);
     BgCellManager_PutWindowTiles(view->panels, 2, &view->windows[35]);
 }
 
-#pragma force_active reset
-
 void PCBox_AttachPartyPanelLabelWindow(PCBoxView *view) {
     BgCellManager_PutWindowTiles(view->panels, 1, &view->windows[36]);
 }
-
-#pragma force_active on
 
 void PCBox_DrawSummaryButton(PCBoxWork *work, u32 unused) {
     PCBoxView *view = work->view;
@@ -910,13 +885,9 @@ void PCBox_DrawSummaryButton(PCBoxWork *work, u32 unused) {
     CopyWindowPixelsToVram_TextMode(&view->windows[43]);
 }
 
-#pragma force_active reset
-
 MsgData *PCBox_LoadBoxMessages(void) {
     return NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0025_bin, HEAP_ID_10);
 }
-
-#pragma force_active on
 
 void PCBox_DrawMessageFrame(Window *window) {
     FillWindowPixelBuffer(window, 15);
@@ -927,8 +898,6 @@ void PCBox_CloseMessageWindow(PCBoxView *view, int windowId) {
     ClearFrameAndWindow2(&view->windows[windowId], TRUE);
     ScheduleBgTilemapBufferTransfer(view->bgConfig, GetWindowBgId(&view->windows[windowId]));
 }
-
-#pragma force_active reset
 
 void PCBox_ClearWindowFrameNoTransfer(PCBoxView *view, u32 idx) {
     ClearFrameAndWindow2(&view->windows[idx], TRUE);
@@ -994,8 +963,6 @@ void PCBox_PrintTouchTheMark(PCBoxWork *work, int x) {
     PCBox_PrintMessage(work, msg_0025_00035, x);
 }
 
-#pragma force_active on
-
 void PCBox_PrintReleaseMessage(PCBoxWork *work, int mode, int windowId) {
     int msgNo;
 
@@ -1029,8 +996,6 @@ void PCBox_PrintReleaseMessage(PCBoxWork *work, int mode, int windowId) {
     }
     PCBox_PrintMessage(work, msgNo, windowId);
 }
-
-#pragma force_active reset
 
 void PCBox_PrintMenuPrompt(PCBoxWork *work, u32 which, u32 v) {
     switch (which) {
@@ -1174,8 +1139,6 @@ s32 PCBox_FindTouchedTrayPartySlot(void) {
     return TouchscreenHitbox_FindRectAtTouchNew(sPCBoxTrayPartyHitboxes);
 }
 
-#pragma force_active on
-
 void PCBox_CreateModeGridInput(PCBoxWork *work) {
     int layout;
 
@@ -1203,8 +1166,6 @@ void PCBox_CreateGridInput(PCBoxWork *work, int layout, int initialPos) {
     work->view->gridInput = GridInputHandler_Create(sPCBoxGridLayouts[layout].hitboxes, sPCBoxGridLayouts[layout].dpadBoxes, sPCBoxGridLayouts[layout].callbacks, work, TRUE, initialPos, HEAP_ID_10);
     PCBox_PlaceCursorOnGridInput(work, initialPos);
 }
-
-#pragma force_active reset
 
 void PCBox_FreeGridInput(PCBoxWork *work) {
     GridInputHandler *gridInput = work->view->gridInput;

@@ -454,7 +454,6 @@ void SpinTradeGroup_SetGraphicsBanks(void) {
     GfGfx_SetBanks(&banks);
 }
 
-#pragma force_active on
 void SpinTradeGroup_InitBgLayers(BgConfig *bgConfig) {
     GraphicsModes modes = gSpinTradeGroupGraphicsModes;
     BgTemplate subBg0, subBg1, subBg2, mainBg0, mainBg1;
@@ -476,7 +475,6 @@ void SpinTradeGroup_InitBgLayers(BgConfig *bgConfig) {
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_0, 32, 0, HEAP_ID_102);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 32, 0, HEAP_ID_102);
 }
-#pragma force_active reset
 
 void SpinTradeGroup_InitData(SpinTradeGroupApp *app, NARC *narc) {
     int i;
@@ -522,7 +520,6 @@ void SpinTradeGroup_FreeBgLayers(BgConfig *bgConfig) {
     Heap_Free(bgConfig);
 }
 
-#pragma force_active on
 void SpinTradeGroup_LoadBgGraphics(SpinTradeGroupApp *app, NARC *narc) {
     BgConfig *bgConfig = app->bgConfig;
 
@@ -537,7 +534,6 @@ void SpinTradeGroup_LoadBgGraphics(SpinTradeGroupApp *app, NARC *narc) {
     LoadUserFrameGfx2(bgConfig, GF_BG_LYR_MAIN_0, 1, 10, Options_GetFrame(app->args->input.options), HEAP_ID_102);
     LoadUserFrameGfx1(bgConfig, GF_BG_LYR_MAIN_0, 31, 11, 0, HEAP_ID_102);
 }
-#pragma force_active reset
 
 void SpinTradeGroup_InitObjTransfer(void) {
     ObjCharTransferTemplate tmpl = gSpinTradeGroupObjCharTransferTemplate;

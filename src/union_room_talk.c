@@ -181,8 +181,6 @@ int UnionRoom_GetGroupOfMemberSlot(int slot) {
     return -1;
 }
 
-#pragma force_active on
-
 int UnionRoom_GetPlayerActivityMsg(struct UnionRoom *unionRoom, int slot) {
     int index, gender;
     UnionRoomPeerInfo *info;
@@ -233,8 +231,6 @@ int UnionRoom_GetPlayerActivityMsg(struct UnionRoom *unionRoom, int slot) {
     }
     return 40;
 }
-
-#pragma force_active off
 
 int UnionRoom_GetPartnerHometownMsg(MessageFormat *msgFmt) {
     u8 myCountry = CommPlayerInfo_GetCountry(Comm_GetLocalNetId());

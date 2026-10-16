@@ -152,8 +152,6 @@ void TrainerCardMain_SetButtonSpriteAnim(TrainerCardMainSprites *sprites, int bu
 void TrainerCardMain_InitObjTransfer(void);
 void TrainerCardMain_InitUnk33A0Pairs(u8 *pairs);
 
-#pragma force_active on
-
 int TrainerCardMainApp_Init(OverlayManager *manager, int *state) {
     TrainerCardMain *cardMain;
     Options *options;
@@ -245,8 +243,6 @@ int TrainerCardMainApp_Init(OverlayManager *manager, int *state) {
     }
     return TRUE;
 }
-
-#pragma force_active reset
 
 int TrainerCardMainApp_Main(OverlayManager *manager, int *state) {
     TrainerCardMain *cardMain = OverlayManager_GetData(manager);
@@ -376,8 +372,6 @@ void TrainerCardMain_SetGfxBanks(void) {
     GfGfx_SetBanks(&banks);
 }
 
-#pragma force_active on
-
 void TrainerCardMain_LoadCardColorPalette(u32 stars, BOOL pokedexObtained, u8 version) {
     u32 fileId;
     NNSG2dPaletteData *plttData;
@@ -432,8 +426,6 @@ void TrainerCardMain_LoadCardColorPalette(u32 stars, BOOL pokedexObtained, u8 ve
     Heap_Free(file);
 }
 
-#pragma force_active reset
-
 void TrainerCardMain_LoadCasePalette(int palette) {
     NNSG2dPaletteData *plttData;
     void *file = GfGfxLoader_GetPlttData(NARC_a_0_4_9, 0x3c, &plttData, HEAP_ID_25);
@@ -472,8 +464,6 @@ void TrainerCardMain_InitBgLayers(BgConfig *bgConfig) {
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &bg3, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
 }
-
-#pragma force_active on
 
 void TrainerCardMain_LoadBgGraphics(TrainerCardMain *cardMain) {
     NNSG2dPaletteData *plttData;
@@ -528,8 +518,6 @@ void TrainerCardMain_LoadBgGraphics(TrainerCardMain *cardMain) {
     BgCommitTilemapBufferToVram(cardMain->bgConfig, GF_BG_LYR_MAIN_2);
     TrainerCardMain_UnpackSignature(cardMain->card->signature, cardMain->signaturePixels);
 }
-
-#pragma force_active reset
 
 void TrainerCardMain_FreeBgLayers(BgConfig *bgConfig) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_ALL, FALSE);
@@ -751,8 +739,6 @@ int TrainerCardMain_HandleTouch(TrainerCardMain *cardMain, int *touched) {
     return 0;
 }
 
-#pragma force_active on
-
 int TrainerCardMain_HandleInput(TrainerCardMain *cardMain) {
     int touched = 0;
     cardMain->unk_3108 = -1;
@@ -770,8 +756,6 @@ int TrainerCardMain_HandleInput(TrainerCardMain *cardMain) {
     }
 }
 
-#pragma force_active reset
-
 void TrainerCardMain_VBlankCB(TrainerCardMain *cardMain) {
     int pos = -cardMain->scrollOffset;
     BgSetPosTextAndCommit(cardMain->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_X, pos);
@@ -786,8 +770,6 @@ void TrainerCardMain_VBlankCB(TrainerCardMain *cardMain) {
     OamManager_ApplyAndResetBuffers();
     *(vu32 *)((u8 *)OS_IRQTable + 0x3ff8) |= OS_IE_VBLANK; // OS_SetIrqCheckFlag, addressed from OS_IRQTable
 }
-
-#pragma force_active on
 
 void TrainerCardMain_ResetBgAffine(void) {
     MtxFx22 matrix;
@@ -812,13 +794,9 @@ void TrainerCardMain_DrawFrontPicture(TrainerCardMain *cardMain) {
     BgCommitTilemapBufferToVram(cardMain->bgConfig, GF_BG_LYR_SUB_3);
 }
 
-#pragma force_active reset
-
 void TrainerCardMain_ClearBackSideRect(TrainerCardMain *cardMain) {
     FillBgTilemapRect(cardMain->bgConfig, GF_BG_LYR_SUB_3, 0, 0x14, 6, 6, 9, TILEMAP_FILL_KEEP_PAL);
 }
-
-#pragma force_active on
 
 void TrainerCardMain_UnpackSignature(u8 *signature, u8 *pixels) {
     int count = 0x3000;
@@ -852,8 +830,6 @@ void TrainerCardMain_DrawSignature(BgConfig *bgConfig, int bgId, u8 *pixels) {
     } while (y < 8);
     ScheduleBgTilemapBufferTransfer(bgConfig, (u8)bgId);
 }
-
-#pragma force_active reset
 
 void TrainerCardMain_UpdatePlayTime(TrainerCardMain *cardMain, int update) {
     if (update != 0) {
@@ -903,8 +879,6 @@ void TrainerCardMain_DestroyWindows(TrainerCardMain *cardMain) {
         RemoveWindow(&cardMain->windows[i]);
     }
 }
-
-#pragma force_active on
 
 void TrainerCardMain_PrintFront(TrainerCardMain *cardMain, Window *windows, TrainerCardMainCard *card) {
     MsgData *msgData = cardMain->msgData;
@@ -963,8 +937,6 @@ void TrainerCardMain_PrintFront(TrainerCardMain *cardMain, Window *windows, Trai
     String_Delete(template);
     MessageFormat_Delete(format);
 }
-
-#pragma force_active reset
 
 void TrainerCardMain_CopySideWindowsToVram(TrainerCardMain *cardMain, Window *windows) {
     int i;
@@ -1054,8 +1026,6 @@ void TrainerCardMain_PrintStringRightAligned(Window *window, int right, int gap,
     AddTextPrinterParameterizedWithColor(window, 0, string, right - (width + gap), y, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
 }
 
-#pragma force_active on
-
 void TrainerCardMain_PrintLivePlayTime(Window *windows, TrainerCardMainCard *card, String *unused) {
     int x;
     MessageFormat *format;
@@ -1081,8 +1051,6 @@ void TrainerCardMain_PrintLivePlayTime(Window *windows, TrainerCardMainCard *car
     String_Delete(template);
     MessageFormat_Delete(format);
 }
-
-#pragma force_active reset
 
 void TrainerCardMain_DrawPlayTimeColon(Window *window, BOOL show, String *string) {
     if (show != FALSE) {
@@ -1179,8 +1147,6 @@ void TrainerCardMain_SetButtonWindowsHidden(TrainerCardMain *cardMain, int hide)
     }
 }
 
-#pragma force_active on
-
 void TrainerCardMain_InitSprites(TrainerCardMainSprites *sprites) {
     TrainerCardBadgePalettes paletteFiles;
     TrainerCardObjVramTypes vramTypes;
@@ -1229,8 +1195,6 @@ void TrainerCardMain_InitSprites(TrainerCardMainSprites *sprites) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-#pragma force_active reset
-
 void TrainerCardMain_CreateBadgeSprites(TrainerCardMainSprites *sprites, const u8 *badgeFlags, int showKantoBadges) {
     SpriteResourcesHeader header;
     SpriteTemplate template;
@@ -1271,8 +1235,6 @@ void TrainerCardMain_CreateBadgeSprites(TrainerCardMainSprites *sprites, const u
     }
 }
 
-#pragma force_active on
-
 void TrainerCardMain_CreateButtonSprites(TrainerCardMainSprites *sprites) {
     SpriteResourcesHeader header;
     SpriteTemplate template;
@@ -1301,8 +1263,6 @@ void TrainerCardMain_CreateButtonSprites(TrainerCardMainSprites *sprites) {
         Sprite_SetDrawFlag(sprites->buttonSprites[i], FALSE);
     }
 }
-
-#pragma force_active reset
 
 void TrainerCardMain_FreeSprites(TrainerCardMainSprites *sprites) {
     u8 i;

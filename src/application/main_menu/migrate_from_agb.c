@@ -243,8 +243,6 @@ BOOL MigrateFromAgb_PrintResultMsg(MigrateFromAgbApp *app, int index);
 BOOL MigrateFromAgb_PrintResultMsgWithYesNo(MigrateFromAgbApp *app, int index);
 BOOL MigrateFromAgb_PrintPendingMsg(MigrateFromAgbApp *app, int textSpeed);
 
-#pragma force_active on
-
 // Species the DP games can't take (none, the unused GBA indexes, out of range)
 BOOL MigrateFromAgb_IsSpeciesUnavailable(int species) {
     if (species <= 0) {
@@ -372,8 +370,6 @@ int MigrateFromAgb_RunTransfer(MigrateFromAgbApp *app) {
     return TRANSFER_IN_PROGRESS;
 }
 
-#pragma force_active reset
-
 void MigrateFromAgb_SaveMigrationRecord(MigrateFromAgbApp *app) {
     MigratedPokemon *migrated = Save_MigratedPokemon_Get(app->saveData);
     u32 trainerId = PmAgbCartridge_GetTrainerId();
@@ -382,8 +378,6 @@ void MigrateFromAgb_SaveMigrationRecord(MigrateFromAgbApp *app) {
     SaveGameNormal(app->saveData);
     Sys_ClearSoftResetDisableFlag(4);
 }
-
-#pragma force_active on
 
 void MigrateFromAgb_MovePicksToPalPark(MigrateFromAgbApp *app) {
     Pokemon mon;
@@ -404,8 +398,6 @@ void MigrateFromAgb_MovePicksToPalPark(MigrateFromAgbApp *app) {
     }
 }
 
-#pragma force_active reset
-
 int MigrateFromAgb_GetTextX(MigrateFromAgbText *text, String *string, int flags) {
     if (flags & 1) {
         int width = FontID_String_GetWidth(1, string, 0);
@@ -413,8 +405,6 @@ int MigrateFromAgb_GetTextX(MigrateFromAgbText *text, String *string, int flags)
     }
     return text->printX;
 }
-
-#pragma force_active on
 
 // flags: 1 center, 2 keep the window contents, 4 don't copy to VRAM, 8 draw the frame (16: the message box frame)
 void MigrateFromAgb_PrintText(MigrateFromAgbApp *app, MigrateFromAgbText *text, int flags) {
@@ -469,8 +459,6 @@ void MigrateFromAgb_PrintText(MigrateFromAgbApp *app, MigrateFromAgbText *text, 
         }
     }
 }
-
-#pragma force_active reset
 
 void MigrateFromAgb_InitObjTransfer(void) {
     ObjCharTransferTemplate template = sMigrateFromAgbObjCharTransferTemplate;
@@ -559,8 +547,6 @@ BOOL MigrateFromAgb_ReadCharData(int fileId, NNSG2dCharacterData **charData, voi
     return NNS_G2dGetUnpackedBGCharacterData(file, charData);
 }
 
-#pragma force_active on
-
 // Unown letter from the personality, Deoxys form from the game
 int MigrateFromAgb_GetMonForm(int species, u32 personality, int agbVersion) {
     u8 form = 0;
@@ -602,10 +588,6 @@ void MigrateFromAgb_LoadMonIcon(int species, int isEgg, u32 personality, int agb
     Heap_Free(file);
 }
 
-#pragma force_active reset
-
-#pragma force_active on
-
 // Loads a box slot's icon into sMigrateFromAgbIcons[index] for the VBlank upload (MigrateFromAgb_UploadBoxIcons)
 void MigrateFromAgb_PrepareBoxIcon(int species, int isEgg, int form, int index, Sprite *sprite, void *file, NARC *narc) {
     MigrateFromAgbIcon *icon = sMigrateFromAgbIcons + index;
@@ -626,8 +608,6 @@ void MigrateFromAgb_PrepareBoxIcon(int species, int isEgg, int form, int index, 
     }
 }
 
-#pragma force_active reset
-
 void MigrateFromAgb_UploadBoxIcons(void) {
     int i;
     MigrateFromAgbIcon *icon = sMigrateFromAgbIcons;
@@ -639,8 +619,6 @@ void MigrateFromAgb_UploadBoxIcons(void) {
         }
     }
 }
-
-#pragma force_active on
 
 // Shows the current box
 void MigrateFromAgb_ShowBox(MigrateFromAgbApp *app) {
@@ -751,9 +729,6 @@ end:;
 }
 
 #pragma pop
-#pragma force_active reset
-
-#pragma force_active on
 
 Sprite *MigrateFromAgb_CreateSprite(MigrateFromAgbApp *app, int x, int y, int anim, BOOL draw) {
     SpriteTemplate template;
@@ -788,8 +763,6 @@ void MigrateFromAgb_CreateButtons(MigrateFromAgbApp *app) {
     }
     app->pickCount = 0;
 }
-
-#pragma force_active reset
 
 // Pokemon that can't be migrated: eggs, Pokemon knowing an HM (sMigrateFromAgbHMMoves), holding a GBA-only item
 // (sMigrateFromAgbBlockedItems), species the DP games lack
@@ -837,8 +810,6 @@ BOOL MigrateFromAgb_IsBoxMonSpeciesUnavailable(MigrateFromAgbApp *app, int slot)
     int box = app->box;
     return MigrateFromAgb_IsSpeciesUnavailable(AGB_GetBoxMonData(&storage->boxes[box][slot], AGB_MON_DATA_SPECIES, NULL));
 }
-
-#pragma force_active on
 
 // Picks or unpicks a box slot: 0 nothing (6 picked), 1 picked, 2 unpicked, 3 empty, 4 egg, 5 forbidden move,
 // 6 forbidden item, 7 not a DP species
@@ -895,8 +866,6 @@ int MigrateFromAgb_TogglePick(MigrateFromAgbApp *app, int slot) {
     return PICK_RESULT_NONE;
 }
 
-#pragma force_active reset
-
 // Shows the picks of the current box
 void MigrateFromAgb_ShowBoxPicks(MigrateFromAgbApp *app) {
     int i;
@@ -909,8 +878,6 @@ void MigrateFromAgb_ShowBoxPicks(MigrateFromAgbApp *app) {
         }
     }
 }
-
-#pragma force_active on
 
 void MigrateFromAgb_PrintBoxName(MigrateFromAgbApp *app, int box) {
     MigrateFromAgbText text = { 0 };
@@ -1035,8 +1002,6 @@ void MigrateFromAgb_PrintMonInfo(MigrateFromAgbApp *app, AgbBoxMon *mon) {
     PlayCry((u16)species, 0);
 }
 
-#pragma force_active reset
-
 void MigrateFromAgb_StartFadeBlack(MigrateFromAgbApp *app, enum FadeType fadeType, int nextState, int *state) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, fadeType, fadeType, RGB_BLACK, 6, 1, HEAP_ID_76);
     if (state != NULL) {
@@ -1052,8 +1017,6 @@ void MigrateFromAgb_StartFadeWhite(MigrateFromAgbApp *app, enum FadeType fadeTyp
     }
     app->nextState = nextState;
 }
-
-#pragma force_active on
 
 void MigrateFromAgb_InitBgs(BgConfig *bgConfig) {
     GraphicsModes modes = gMigrateFromAgbGraphicsModes;
@@ -1151,8 +1114,6 @@ void MigrateFromAgb_ShowConfirmScreen(MigrateFromAgbApp *app) {
     MigrateFromAgb_PrintText(app, &app->msgBox, 24);
 }
 
-#pragma force_active reset
-
 void MigrateFromAgb_RemoveWindow(Window *window) {
     if (window->bgConfig != NULL) {
         ClearFrameAndWindow2(window, FALSE);
@@ -1181,8 +1142,6 @@ void MigrateFromAgb_CloseConfirmScreen(MigrateFromAgbApp *app) {
     }
     app->pickCount = 0;
 }
-
-#pragma force_active on
 
 void MigrateFromAgb_FreeGraphics(MigrateFromAgbApp *app) {
     int i;
@@ -1232,8 +1191,6 @@ void MigrateFromAgb_FreeGraphics(MigrateFromAgbApp *app) {
     FreeBgTilemapBuffer(app->bgConfig, GF_BG_LYR_MAIN_3);
 }
 
-#pragma force_active reset
-
 void MigrateFromAgb_ShowYesNo(MigrateFromAgbApp *app) {
     YesNoPromptTemplate template;
     template.bgConfig = app->bgConfig;
@@ -1246,8 +1203,6 @@ void MigrateFromAgb_ShowYesNo(MigrateFromAgbApp *app) {
     template.initialCursorPos = 1;
     YesNoPrompt_InitFromTemplate(app->yesNoPrompt, &template);
 }
-
-#pragma force_active on
 
 // "Migrate from <player>'s game?" (message per GBA game)
 void MigrateFromAgb_PrintIntro(MigrateFromAgbApp *app) {
@@ -1283,8 +1238,6 @@ void MigrateFromAgb_VBlankCB(MigrateFromAgbApp *app) {
         dtcm[0x3FF8 / 4] |= OS_IE_V_BLANK;
     }
 }
-
-#pragma force_active reset
 
 // The checks before the boxes are shown: 0 OK, 5 fewer than six Pokemon, 6 the Pal Park is not empty
 int MigrateFromAgb_CheckCanMigrate(MigrateFromAgbApp *app) {

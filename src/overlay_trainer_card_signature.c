@@ -240,8 +240,6 @@ void TrainerCardSignature_SetGfxBanks(void) {
     GfGfx_SetBanks(&banks);
 }
 
-#pragma force_active on
-
 void TrainerCardSignature_InitBgLayers(BgConfig *bgConfig) {
     GraphicsModes modes;
     BgTemplate bg0;
@@ -291,8 +289,6 @@ void TrainerCardSignature_InitStrings(TrainerCardSignature *signature) {
     MIi_CpuClearFast(0, (u32 *)&signature->prevMoveX, 5);
 }
 
-#pragma force_active reset
-
 void TrainerCardSignature_FreeStrings(TrainerCardSignature *signature) {
     int i;
 
@@ -315,8 +311,6 @@ void TrainerCardSignature_FreeBgLayers(BgConfig *bgConfig) {
     Heap_Free(bgConfig);
 }
 
-#pragma force_active on
-
 void TrainerCardSignature_LoadBgGraphics(TrainerCardSignature *signature, NARC *narc) {
     BgConfig *bgConfig = signature->bgConfig;
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 0, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 96, HEAP_ID_39);
@@ -332,8 +326,6 @@ void TrainerCardSignature_LoadBgGraphics(TrainerCardSignature *signature, NARC *
     LoadUserFrameGfx1(bgConfig, GF_BG_LYR_MAIN_0, 31, 11, 0, HEAP_ID_39);
 }
 
-#pragma force_active reset
-
 void TrainerCardSignature_InitObjTransfer(void) {
     ObjCharTransferTemplate template = sTrainerCardSignatureObjCharTransferTemplate;
     ObjCharTransfer_Init(&template);
@@ -341,8 +333,6 @@ void TrainerCardSignature_InitObjTransfer(void) {
     ObjCharTransfer_ClearBuffers();
     ObjPlttTransfer_Reset();
 }
-
-#pragma force_active on
 
 void TrainerCardSignature_InitSpriteResources(TrainerCardSignature *signature, NARC *narc) {
     int i;
@@ -369,8 +359,6 @@ void TrainerCardSignature_InitSpriteResources(TrainerCardSignature *signature, N
     SpriteTransfer_CreateExtPlttTransferTask(signature->resourceObjects[0][1]);
     SpriteTransfer_CreateExtPlttTransferTask(signature->resourceObjects[1][1]);
 }
-
-#pragma force_active reset
 
 void TrainerCardSignature_CreateDoneButtonSprite(TrainerCardSignature *signature) {
     SpriteTemplate template;
@@ -469,8 +457,6 @@ void TrainerCardSignature_RemoveWindows(TrainerCardSignature *signature) {
 void TrainerCardSignature_UpdateCanvasDummy(void) {
 }
 
-#pragma force_active on
-
 void TrainerCardSignature_HandleTouch(TrainerCardSignature *signature) {
     TouchOutput touches;
     int i;
@@ -501,8 +487,6 @@ void TrainerCardSignature_HandleTouch(TrainerCardSignature *signature) {
         signature->newStroke.style = signature->penStyle;
     }
 }
-
-#pragma force_active reset
 
 void TrainerCardSignature_SetDoneButtonSpriteSeq(Sprite **sprite, int pressed) {
     const volatile u16 *anims = sTrainerCardSignatureDoneButtonPos;
@@ -794,8 +778,6 @@ void TrainerCardSignature_PrintPenNamesDummy(Window *windows, int unused1, u32 u
 #pragma unused(windows, unused1, unused2, unused3)
 }
 
-#pragma force_active on
-
 void TrainerCardSignature_TakeNewStroke(TrainerCardSignature *signature) {
     signature->strokes[0] = signature->newStroke;
 }
@@ -810,14 +792,11 @@ void TrainerCardSignature_PrintMessage(TrainerCardSignature *signature, int msgI
     signature->textPrinterId = AddTextPrinterParameterized(&signature->messageWindow, 1, signature->messageString, 0, 0, Options_GetTextFrameDelay(signature->options), NULL);
 }
 
-#pragma force_active reset
-
 BOOL TrainerCardSignature_IsPrinterDone(u32 textPrinterId) {
     return TextPrinterCheckActive((u8)textPrinterId) ? FALSE : TRUE;
 }
 
 // Packs the 4bpp canvas (colour 1 = ink) into the save's 1bpp signature.
-#pragma force_active on
 
 void TrainerCardSignature_PackCanvas(u8 *signature, const u8 *pixels) {
     int n = 0;
@@ -881,8 +860,6 @@ void TrainerCardSignature_UpdatePenSound(TrainerCardSignature *signature) {
     signature->lastTouchX = gSystem.touchX;
     signature->lastTouchY = gSystem.touchY;
 }
-
-#pragma force_active reset
 
 // moves: previous x/y direction, current x/y direction. Plays the pen sound when the pen starts
 // moving or changes direction.

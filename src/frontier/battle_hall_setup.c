@@ -148,7 +148,6 @@ void BattleHall_PickTrainerIds(int type, int count, int round, u32 rank, u8 batt
     } while (picked < count);
 }
 
-#pragma force_active on
 // Picks count sets of the cell's type (or the Hall Matron's sets) that are not the player's species and not used by
 // the earlier battles of the round.
 void BattleHall_PickSetIds(u16 count, u16 cellType, int rank, u8 battleNo, u16 playerSpecies, u16 *setIds, int matron) {
@@ -302,7 +301,6 @@ BattleSetup *BattleHall_NewBattleSetup(BattleHallData *data, FrontierLaunchArgs 
     }
     return setup;
 }
-#pragma force_active reset
 
 // Moves the personality on until the opponent Pokemon is not shiny (the callers loop while it returns TRUE).
 u8 BattleHall_RerollPersonality(BattleHallData *data, u32 index) {

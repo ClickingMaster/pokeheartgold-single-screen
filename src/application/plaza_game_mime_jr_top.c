@@ -265,7 +265,6 @@ void MimeJrTop_RegisterCommands(MimeJrTopApp *app) {
     Comm_RegisterCommandTable(table, count, app);
 }
 
-#pragma force_active on
 // Builds the game screen once the entry screen is done. Compiled without propagation and
 // strength reduction (the audience loop keeps its separate counters).
 #pragma opt_propagation off
@@ -395,7 +394,6 @@ void MimeJrTop_InitGame(MimeJrTopApp *app) {
 
 #pragma opt_propagation reset
 #pragma opt_strength_reduction reset
-#pragma force_active reset
 
 BOOL MimeJrTop_Init(OverlayManager *man, int *state) {
     MimeJrTopApp *app;
@@ -429,8 +427,6 @@ BOOL MimeJrTop_Init(OverlayManager *man, int *state) {
     ((MimeJrTopRosterInitFunc)PlazaGameRoster_Init)(&app->roster, *(u32 *)&args->voiceChat, args->saveData, args->mimeJrTopVoiceChat, args);
     return TRUE;
 }
-
-#pragma force_active on
 
 // The demo shown before the start: a hand rubbing the screen at (x, y); (0, 0) lets go.
 void MimeJrTopGame_RubDemo(MimeJrTopGame *game, int x, int y) {
@@ -471,8 +467,6 @@ void MimeJrTopGame_RubDemo(MimeJrTopGame *game, int x, int y) {
     game->lastTouchX = x;
     game->lastTouchY = y;
 }
-
-#pragma force_active reset
 
 BOOL MimeJrTopGame_RunDemo(MimeJrTopGame *game) {
     MimeJrTopDemoPath path = sMimeJrTopDemoPath;
@@ -860,8 +854,6 @@ void MimeJrTop_FreeGraphics(MimeJrTopApp *app) {
     reg_G3X_DISP3DCNT &= 0xCFF7;
 }
 
-#pragma force_active on
-
 void MimeJrTop_InitBgs(BgConfig *bgConfig) {
     MimeJrTopBgTemplates mainTemplates;
     MimeJrTopBgTemplates subTemplates;
@@ -939,8 +931,6 @@ void MimeJrTop_InitSprites(MimeJrTopApp *app) {
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(app->resources.spriteSystem), 0, 256 << 12);
 }
 
-#pragma force_active reset
-
 BOOL MimeJrTop_StartFade(int type) {
     BeginNormalPaletteFade(0, type, type, RGB_BLACK, 6, 1, HEAP_ID_113);
     return TRUE;
@@ -977,8 +967,6 @@ void MimeJrTop_SetFinishReceived(MimeJrTopApp *app) {
     app->finishReceived = TRUE;
 }
 
-#pragma force_active on
-
 // 0: connected, 1: showing the lost connection, 2: done (leave the overlay).
 int MimeJrTop_HandleConnectionLost(MimeJrTopApp *app) {
     if (PlazaGameRoster_CheckConnectionLost(&app->roster) == TRUE) {
@@ -1012,8 +1000,6 @@ int MimeJrTop_HandleConnectionLost(MimeJrTopApp *app) {
     return 0;
 }
 
-#pragma force_active reset
-
 void MimeJrTopModel_Draw(MimeJrTopModel *model, MtxFx43 *rotation, VecFx32 *position) {
     if (model->instance.visible != FALSE) {
         NNS_G3dGlbFlushP();
@@ -1027,8 +1013,6 @@ void MimeJrTopModel_Draw(MimeJrTopModel *model, MtxFx43 *rotation, VecFx32 *posi
 void MimeJrTopModel_Load(MimeJrTopModel *model, NARC *narc, int fileId) {
     ModelResource_LoadFromNarc(&model->resource, narc, fileId, HEAP_ID_113);
 }
-
-#pragma force_active on
 
 void MimeJrTopModel_Init(MimeJrTopModel *model, int large) {
     ModelInstance_Init(&model->instance, &model->resource);
@@ -1048,14 +1032,10 @@ void MimeJrTopModel_Init(MimeJrTopModel *model, int large) {
     model->loaded = TRUE;
 }
 
-#pragma force_active reset
-
 void MimeJrTopModel_Free(MimeJrTopModel *model) {
     model->loaded = FALSE;
     ModelResource_Free(&model->resource);
 }
-
-#pragma force_active on
 
 // Draws the 3D scene (audience, Mime Jr. in its current pose, the top, the stage and the tier
 // models) and the sprites.
@@ -1154,8 +1134,6 @@ void MimeJrTopGame_SetMimeJrAnimation(MimeJrTopGame *game, int animation) {
     }
 }
 
-#pragma force_active reset
-
 void MimeJrTop_InitCamera(MimeJrTopApp *app) {
     VecFx32 target = { 0, 0, 0 };
     VecFx32 pos = sMimeJrTopCameraPosition;
@@ -1181,8 +1159,6 @@ void MimeJrTop_InitSpriteTemplate(ManagedSpriteTemplate *template, s16 x, s16 y,
     template->resIdList[GF_GFX_RES_TYPE_MCEL] = -1;
     template->resIdList[GF_GFX_RES_TYPE_MANM] = -1;
 }
-
-#pragma force_active on
 
 void MimeJrTopGame_CreateStars(MimeJrTopGame *game) {
     ManagedSpriteTemplate template;
@@ -1225,8 +1201,6 @@ void MimeJrTopGame_CreatePopups(MimeJrTopGame *game) {
         ManagedSprite_SetPaletteOverrideOffset(game->popups[0], 1);
     }
 }
-
-#pragma force_active reset
 
 void MimeJrTopGame_FreePopups(MimeJrTopGame *game) {
     int i;
@@ -1337,8 +1311,6 @@ void MimeJrTopGame_HideInstructions(MimeJrTopGame *game) {
     }
 }
 
-#pragma force_active on
-
 // The four player colours of the 3D scene (palette per player count and player index).
 void MimeJrTop_LoadPlayerPalettes(MimeJrTopApp *app, int index) {
     PaletteData *palette = app->resources.palette;
@@ -1349,14 +1321,10 @@ void MimeJrTop_LoadPlayerPalettes(MimeJrTopApp *app, int index) {
     }
 }
 
-#pragma force_active reset
-
 int MimeJrTop_GetCenteredX(Window *window, String *string) {
     int width = FontID_String_GetWidth(0, string, 0);
     return (GetWindowWidth(window) * 8 - width) / 2;
 }
-
-#pragma force_active on
 
 // The names of the other players next to their tops.
 void MimeJrTopGame_ShowRivalNames(MimeJrTopApp *app, MimeJrTopGame *game) {
@@ -1409,8 +1377,6 @@ void MimeJrTopGame_ShowRivalNames(MimeJrTopApp *app, MimeJrTopGame *game) {
     }
 }
 
-#pragma force_active reset
-
 void MimeJrTopGame_HideRivalNames(MimeJrTopGame *game) {
     int i;
     Window *window;
@@ -1460,8 +1426,6 @@ void MimeJrTop_LoadSpriteResources(MimeJrTopApp *app) {
 
 #undef LOAD_SPRITE_RESOURCES
 
-#pragma force_active on
-
 // The other players' tops on the sub screen: face, body and tier badge per player.
 void MimeJrTopGame_CreateRivalSprites(MimeJrTopApp *app, MimeJrTopGame *game) {
     ManagedSpriteTemplate template;
@@ -1495,8 +1459,6 @@ void MimeJrTopGame_CreateRivalSprites(MimeJrTopApp *app, MimeJrTopGame *game) {
     }
 }
 
-#pragma force_active reset
-
 ManagedSprite *MimeJrTopGame_NewSpark(MimeJrTopGame *game, u16 x, u16 y) {
     ManagedSpriteTemplate template;
     ManagedSprite *sprite;
@@ -1511,8 +1473,6 @@ ManagedSprite *MimeJrTopGame_NewSpark(MimeJrTopGame *game, u16 x, u16 y) {
     ManagedSprite_TickTwoFrames(sprite);
     return sprite;
 }
-
-#pragma force_active on
 
 void MimeJrTopGame_CreateDancerSprites(MimeJrTopGame *game) {
     ManagedSpriteTemplate template;
@@ -1541,8 +1501,6 @@ void MimeJrTopGame_CreateDancerSprites(MimeJrTopGame *game) {
     }
 }
 
-#pragma force_active reset
-
 void MimeJrTopGame_FreeDancerSprites(MimeJrTopGame *game) {
     int i;
     for (i = 0; i < 2; i++, game = (MimeJrTopGame *)((u8 *)game + 4)) {
@@ -1550,8 +1508,6 @@ void MimeJrTopGame_FreeDancerSprites(MimeJrTopGame *game) {
         Sprite_DeleteAndFreeResources(game->backDancers[0]);
     }
 }
-
-#pragma force_active on
 
 void MimeJrTopGame_CreateDemoHand(MimeJrTopGame *game) {
     ManagedSpriteTemplate template;
@@ -1567,13 +1523,9 @@ void MimeJrTopGame_CreateDemoHand(MimeJrTopGame *game) {
     ManagedSprite_SetPaletteOverrideOffset(game->demoHand, 7);
 }
 
-#pragma force_active reset
-
 void MimeJrTopGame_FreeDemoHand(MimeJrTopGame *game) {
     Sprite_DeleteAndFreeResources(game->demoHand);
 }
-
-#pragma force_active on
 
 void MimeJrTop_LoadBgGraphics(MimeJrTopApp *app) {
     NARC *narc;
@@ -1600,10 +1552,6 @@ void MimeJrTop_LoadBgGraphics(MimeJrTopApp *app) {
     LoadUserFrameGfx1(bgConfig, GF_BG_LYR_SUB_3, 180, 13, 0, HEAP_ID_113);
 }
 
-#pragma force_active reset
-
-#pragma force_active on
-
 MimeJrTopClock *MimeJrTopClock_New(u32 playerCount, MimeJrTopResources *resources) {
     MimeJrTopClock *clock = Heap_Alloc(HEAP_ID_113, sizeof(MimeJrTopClock));
     memset(clock, 0, sizeof(MimeJrTopClock));
@@ -1612,8 +1560,6 @@ MimeJrTopClock *MimeJrTopClock_New(u32 playerCount, MimeJrTopResources *resource
     clock->resources = resources;
     return clock;
 }
-
-#pragma force_active reset
 
 void MimeJrTopClock_Free(MimeJrTopClock *clock) {
     Heap_Free(clock);
@@ -1627,8 +1573,6 @@ BOOL MimeJrTopClock_Tick(MimeJrTopClock *clock) {
     }
     return FALSE;
 }
-
-#pragma force_active on
 
 MimeJrTopGame *MimeJrTopGame_New(u32 playerCount, u32 localIndex, MimeJrTopResources *resources) {
     MimeJrTopGame *game = Heap_Alloc(HEAP_ID_113, sizeof(MimeJrTopGame));
@@ -1687,8 +1631,6 @@ void MimeJrTopGame_ResetBalance(MimeJrTopGame *game) {
     MimeJrTopModel_Turn(&game->stage, 0, 0, -5, -5, 0.8f, FALSE);
 }
 
-#pragma force_active reset
-
 void MimeJrTopGame_Free(MimeJrTopGame *game) {
     Heap_Free(game);
 }
@@ -1711,8 +1653,6 @@ void MimeJrTopGame_UpdateMimeJrAnimation(MimeJrTopGame *game) {
         MimeJrTopGame_SetMimeJrAnimation(game, 0);
     }
 }
-
-#pragma force_active on
 
 SysTask *MimeJrTopGame_StartRivalFall(MimeJrTopGame *game, int player) {
     MimeJrTopRivalFallTask *task = Heap_Alloc(HEAP_ID_113, sizeof(MimeJrTopRivalFallTask));
@@ -1740,8 +1680,6 @@ void MimeJrTopGame_StartRivalTier(MimeJrTopGame *game, int player) {
     task->resources = game->resources;
     SysTask_CreateOnMainQueue(MimeJrTopRivalTier_Task, task, 4096);
 }
-
-#pragma force_active reset
 
 void MimeJrTopGame_StartTierModels(MimeJrTopGame *game, int player) {
     MimeJrTopTierModelsTask *task = &game->playerTasks[player].local;
@@ -1775,8 +1713,6 @@ void MimeJrTopGame_StartFall(MimeJrTopGame *game) {
     ModelAnimation_SetFrame(&game->mimeJr[2].animations[0], 0);
     SysTask_CreateOnMainQueue((SysTaskFunc)MimeJrTopFall_Task, task, 1 << 12);
 }
-
-#pragma force_active on
 
 // Mime Jr. falls off the side the top leans to (pose 1), lies there (pose 2), then climbs back.
 void MimeJrTopFall_Task(SysTask *sysTask, MimeJrTopFallTask *task) {
@@ -1892,8 +1828,6 @@ void MimeJrTopFall_Task(SysTask *sysTask, MimeJrTopFallTask *task) {
         break;
     }
 }
-
-#pragma force_active reset
 
 // Another player's top drops down and comes back.
 void MimeJrTopRivalFall_Task(SysTask *sysTask, void *data) {
@@ -2037,8 +1971,6 @@ void MimeJrTopRivalTier_Task(SysTask *sysTask, void *data) {
     ModelAnimation_Free(&b->animations[0], &task->resources->allocator); \
     ModelAnimation_Free(&b->animations[1], &task->resources->allocator)
 
-#pragma force_active on
-
 // Loads the two models of the current tier (one step per frame) and swaps them in.
 void MimeJrTopTierModels_Task(SysTask *sysTask, MimeJrTopTierModelsTask *task) {
     MimeJrTopModel *a = task->modelA, *b = task->modelB;
@@ -2126,8 +2058,6 @@ void MimeJrTopTierModels_Task(SysTask *sysTask, MimeJrTopTierModelsTask *task) {
     }
 }
 
-#pragma force_active reset
-
 #undef FREE_TIER_MODELS
 
 void MimeJrTopGame_AddTierScore(MimeJrTopGame *game) {
@@ -2188,8 +2118,6 @@ BOOL MimeJrTop_GetTier(MimeJrTopGame *game, int spinFrames, u32 *tier) {
     }
     return FALSE;
 }
-
-#pragma force_active on
 
 // Follows the other players' states (sent with command 24).
 void MimeJrTopGame_UpdateRivals(MimeJrTopGame *game) {
@@ -2287,8 +2215,6 @@ void MimeJrTopGame_UpdateLocalPlayer(MimeJrTopGame *game) {
     }
 }
 
-#pragma force_active reset
-
 void MimeJrTopGame_Update(MimeJrTopGame *game) {
     if (game->frame < 0x4B0) {
         MimeJrTopGame_UpdateLocalPlayer(game);
@@ -2304,8 +2230,6 @@ void MimeJrTopGame_Update(MimeJrTopGame *game) {
         game->levelTimer++;
     }
 }
-
-#pragma force_active on
 
 // Rubbing the touch screen turns the top (and Mime Jr. with it), which tilts the balance.
 void MimeJrTopGame_HandleTouch(MimeJrTopGame *game) {
@@ -2372,8 +2296,6 @@ void MimeJrTopGame_HandleTouch(MimeJrTopGame *game) {
     game->lastTouchY = y;
 }
 
-#pragma force_active reset
-
 void MimeJrTopGame_ResetMotion(MimeJrTopGame *game) {
     game->wobbleTime = 0;
     game->wobbleTick = 0;
@@ -2393,8 +2315,6 @@ void MimeJrTopGame_UpdateLevel(MimeJrTopGame *game) {
         game->dance.enabled = TRUE;
     }
 }
-
-#pragma force_active on
 
 // Random kicks that tip the top over; harder the higher the tier.
 void MimeJrTopGame_UpdateWobble(MimeJrTopGame *game) {
@@ -2546,8 +2466,6 @@ void MimeJrTopGame_UpdateWobble(MimeJrTopGame *game) {
     game->wobbling = TRUE;
 }
 
-#pragma force_active reset
-
 // Turns the model by the drag from (targetX, targetY) to (x, y); with saveVelocity the drag also
 // keeps turning it for 8 more frames (MimeJrTopModel_ContinueSpin).
 BOOL MimeJrTopModel_Turn(MimeJrTopModel *model, s32 x, s32 y, s32 targetX, s32 targetY, f32 scale, BOOL saveVelocity) {
@@ -2651,8 +2569,6 @@ int MimeJrTop_GetPlayerIndex(MimeJrTopApp *app, u32 netId) {
     return 0xFF;
 }
 
-#pragma force_active on
-
 void MimeJrTopTween_InitAccel(MimeJrTopTween *tween, fx32 start, fx32 end, fx32 velocity, int frames) {
     fx32 accel = FX_Div((fx32)(((s64)(end - start - (fx32)(((s64)velocity * (frames << 12) + 2048) >> 12)) * 8192 + 2048) >> 12), (frames * frames) << 12);
     tween->value = start;
@@ -2678,8 +2594,6 @@ BOOL MimeJrTopTween_UpdateAccel(MimeJrTopTween *tween) {
     tween->frame = b;
     return TRUE;
 }
-
-#pragma force_active reset
 
 void MimeJrTopTween_Init(MimeJrTopTween *tween, fx32 start, fx32 end, int frames) {
     tween->value = start;
@@ -3317,8 +3231,6 @@ void MimeJrTopStage_Task(SysTask *sysTask, void *data) {
     stage->previousPhase = *stage->phase;
 }
 
-#pragma force_active on
-
 void MimeJrTopGame_StartStage(MimeJrTopGame *game) {
     int i, j;
 
@@ -3372,8 +3284,6 @@ void MimeJrTopGame_StartStage(MimeJrTopGame *game) {
     }
     game->stageEffects.task = SysTask_CreateOnMainQueue(MimeJrTopStage_Task, &game->stageEffects, 4096);
 }
-
-#pragma force_active reset
 
 // The sub screen BG layers slide apart for the dance.
 void MimeJrTopDance_SlideIn(MimeJrTopDance *dance) {
@@ -3482,8 +3392,6 @@ int MimeJrTop_GetDanceStepFrames(int speed) {
     }
 }
 
-#pragma force_active on
-
 // Starts the routine of the current level whenever the previous one has run out.
 void MimeJrTopDance_Task(SysTask *sysTask, void *data) {
     MimeJrTopDance *dance = data;
@@ -3516,8 +3424,6 @@ void MimeJrTopDance_Task(SysTask *sysTask, void *data) {
         dance->timer--;
     }
 }
-
-#pragma force_active reset
 
 void MimeJrTopGame_StartDance(MimeJrTopGame *game) {
     int i;
@@ -4217,16 +4123,12 @@ void MimeJrTop_QuatCopy(MimeJrTopQuat *dst, const MimeJrTopQuat *src) {
     *dst = *src;
 }
 
-#pragma force_active on
-
 void MimeJrTop_QuatMul(f32 *dst, const f32 *a, const f32 *b) {
     dst[0] = a[0] * b[0] - a[1] * b[1] - a[2] * b[2] - a[3] * b[3];
     dst[1] = a[2] * b[3] + (a[0] * b[1] + a[1] * b[0]) - a[3] * b[2];
     dst[2] = a[3] * b[1] + (a[2] * b[0] + (a[0] * b[2] - a[1] * b[3]));
     dst[3] = a[3] * b[0] + (a[0] * b[3] + a[1] * b[2] - a[2] * b[1]);
 }
-
-#pragma force_active reset
 
 // As written: w * w + 2x + 2y + 2z.
 f32 MimeJrTop_QuatLengthSq(const MimeJrTopQuat *quat) {
@@ -4238,8 +4140,6 @@ f32 MimeJrTop_QuatLengthSq(const MimeJrTopQuat *quat) {
     return a + c;
 }
 
-#pragma force_active on
-
 f32 MimeJrTop_QuatLength(const MimeJrTopQuat *quat) {
     f32 value;
     if (MimeJrTop_QuatLengthSq(quat) > 0.0f) {
@@ -4249,8 +4149,6 @@ f32 MimeJrTop_QuatLength(const MimeJrTopQuat *quat) {
     }
     return (f32)FX_Sqrt((int)value) / 4096.0f;
 }
-
-#pragma force_active reset
 
 void MimeJrTop_QuatDivide(f32 *dst, const f32 *src, f32 divisor) {
     dst[0] = src[0] / divisor;

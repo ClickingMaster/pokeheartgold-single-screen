@@ -73,7 +73,6 @@ typedef struct WiFiPlazaInstrumentToken {
     u32 index;
 } WiFiPlazaInstrumentToken;
 
-#pragma force_active on
 #pragma opt_propagation off
 
 void WiFiPlazaInfoPanel_Update(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomWork *room, BOOL paused, enum HeapID heapID) {
@@ -238,7 +237,6 @@ void WiFiPlazaInfoPanel_Update(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomWork *roo
 }
 
 #pragma opt_propagation reset
-#pragma force_active reset
 
 u8 WiFiPlazaInfoPanel_GetState(WiFiPlazaInfoPanel *panel) {
     return panel->state;
@@ -250,8 +248,6 @@ void WiFiPlazaInfoPanel_RequestPlayerCard(WiFiPlazaInfoPanel *panel, u32 playerI
     panel->requestArg = showMessage;
 }
 
-#pragma force_active on
-
 void WiFiPlazaInfoPanel_SetCardIcon(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics, u32 icon, enum HeapID heapID) {
     GF_ASSERT(icon < 27);
     GF_ASSERT(panel->page == 2);
@@ -259,8 +255,6 @@ void WiFiPlazaInfoPanel_SetCardIcon(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGrap
         WiFiPlazaPlayerCard_ChangeIcon(&panel->card, graphics, panel->narc, heapID, icon);
     }
 }
-
-#pragma force_active reset
 
 void WiFiPlazaInfoPanel_RequestOwnCard(WiFiPlazaInfoPanel *panel) {
     if (panel->page != 1) {
@@ -300,8 +294,6 @@ BOOL WiFiPlazaInfoPanel_HasRequest(WiFiPlazaInfoPanel *panel) {
     return panel->request != 0;
 }
 
-#pragma force_active on
-
 void WiFiPlazaInfoPanel_ShowPlayerCard(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWindow *signWindow, WiFiPlazaRoomGraphics *graphics, WiFiPlazaRoomMsg *msg, BOOL isOwn, enum HeapID heapID, struct WiFiPlazaPlayer *player, struct WiFiPlazaPlayer *myPlayer, int special, BOOL hasMessage, u16 *message, BOOL showIcon) {
     if (panel->page == 2) {
         WiFiPlazaInfoPanel_HidePlayerCard(panel, signWindow, graphics);
@@ -309,8 +301,6 @@ void WiFiPlazaInfoPanel_ShowPlayerCard(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWi
     WiFiPlazaPlayerCard_Show(panel, signWindow, &panel->card, graphics, msg, isOwn, panel->narc, heapID, player, myPlayer, special, hasMessage, message, showIcon);
     panel->page = 2;
 }
-
-#pragma force_active reset
 
 void WiFiPlazaInfoPanel_HidePlayerCard(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWindow *signWindow, WiFiPlazaRoomGraphics *graphics) {
     WiFiPlazaPlayerCard_Clear(&panel->card, signWindow, graphics);
@@ -421,8 +411,6 @@ void WiFiPlazaPlayerCard_Free(WiFiPlazaPlayerCard *card, WiFiPlazaMsgWindow *sig
 void WiFiPlazaPlayerCard_Update(WiFiPlazaPlayerCard *card, WiFiPlazaMsgWindow *signWindow) {
 }
 
-#pragma force_active on
-
 void WiFiPlazaPlayerCard_Show(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWindow *signWindow, WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics, WiFiPlazaRoomMsg *msg, BOOL isOwn, NARC *narc, enum HeapID heapID, struct WiFiPlazaPlayer *player, struct WiFiPlazaPlayer *myPlayer, int special, BOOL hasMessage, u16 *message, BOOL showIcon) {
     int color, avatar;
     PlayerProfile *profile;
@@ -495,8 +483,6 @@ void WiFiPlazaPlayerCard_Show(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWindow *sig
     WiFiPlazaPlayerCard_LoadTypeIcons(panel, card, graphics, heapID, player);
     Heap_Free(profile);
 }
-
-#pragma force_active reset
 
 void WiFiPlazaPlayerCard_LoadTypeIcons(WiFiPlazaInfoPanel *unused0, WiFiPlazaPlayerCard *unused1, WiFiPlazaRoomGraphics *graphics, enum HeapID heapID, struct WiFiPlazaPlayer *player) {
     s32 i = 0;
@@ -580,8 +566,6 @@ void WiFiPlazaPlayerCard_LoadIcon(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphi
     Sprite_SetDrawFlag(card->iconSprite, draw);
 }
 
-#pragma force_active on
-
 void WiFiPlazaPlayerCard_FreeIcon(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics) {
     int i;
 
@@ -593,8 +577,6 @@ void WiFiPlazaPlayerCard_FreeIcon(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphi
         DestroySingle2DGfxResObj(graphics->resManagers[i], card->iconResources[i]);
     }
 }
-
-#pragma force_active reset
 
 void WiFiPlazaPlayerCard_LoadAvatar(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics, NARC *narc, enum HeapID heapID, u32 avatar) {
     TrainerPicFileIds files;
@@ -634,8 +616,6 @@ void WiFiPlazaPlayerCard_LoadAvatar(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGrap
     card->avatarSprite = Sprite_Create(&template);
 }
 
-#pragma force_active on
-
 void WiFiPlazaPlayerCard_FreeAvatar(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics) {
     int i;
 
@@ -649,10 +629,7 @@ void WiFiPlazaPlayerCard_FreeAvatar(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGrap
     }
 }
 
-#pragma force_active reset
-
 // Tints the avatar palette: grey level of each colour, mapped to a blue-green shade.
-#pragma force_active on
 #pragma opt_propagation off
 
 void WiFiPlazaInfoPanel_TintPalette(NNSG2dPaletteData *pltt) {
@@ -674,7 +651,6 @@ void WiFiPlazaInfoPanel_TintPalette(NNSG2dPaletteData *pltt) {
 }
 
 #pragma opt_propagation reset
-#pragma force_active reset
 
 void WiFiPlazaPlayerCard_ClearWindows(WiFiPlazaPlayerCard *card) {
     int i;
@@ -721,7 +697,6 @@ void WiFiPlazaPlayerCard_BufferMessage(WiFiPlazaPlayerCard *card, WiFiPlazaRoomM
 }
 
 // The player's Pokemon (12 slots, species 24 = empty) with shared palettes / cells / animations per kind.
-#pragma force_active on
 
 void WiFiPlazaPlayerCard_LoadMons(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics, NARC *panelNarc, enum HeapID heapID, struct WiFiPlazaPlayer *player, struct WiFiPlazaPlayer *myPlayer) {
     NARC *narc = NARC_New(NARC_a_2_1_3, heapID);
@@ -803,8 +778,6 @@ next:
     }
     NARC_Delete(narc);
 }
-
-#pragma force_active reset
 
 void WiFiPlazaPlayerCard_FreeMons(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics) {
     int i = 0;
@@ -932,7 +905,6 @@ void WiFiPlazaPanelButton_Clear(WiFiPlazaPanelButton *unused, WiFiPlazaRoomGraph
 }
 
 // index 0: up, 1: pressed, 2: playing
-#pragma force_active on
 
 void WiFiPlazaPanelButton_Draw(WiFiPlazaPanelButton *button, WiFiPlazaRoomGraphics *graphics, int index, NARC *narc, enum HeapID heapID) {
     CopyToBgTilemapRect(graphics->bgConfig, GF_BG_LYR_SUB_1, 0, 3, 32, 21, button->screens[index]->rawData, 0, 3, 32, 32);
@@ -942,8 +914,6 @@ void WiFiPlazaPanelButton_Draw(WiFiPlazaPanelButton *button, WiFiPlazaRoomGraphi
     }
     ScheduleSetBgPosText(graphics->bgConfig, GF_BG_LYR_SUB_2, BG_POS_OP_SET_Y, sWiFiPlazaPanelButtonScrollY[index]);
 }
-
-#pragma force_active reset
 
 void WiFiPlazaPanelButton_OnTouch(u32 index, u32 event, void *arg) {
     WiFiPlazaPanelButton *button = arg;

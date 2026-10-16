@@ -1075,7 +1075,6 @@ PokewalkerBoxDisplay *PokewalkerBoxDisplay_New(enum HeapID heapId) {
     return display;
 }
 
-#pragma force_active on
 void PokewalkerBoxDisplay_Init(PokewalkerBoxDisplay *display, BgConfig *bgConfig) {
     display->bgConfig = bgConfig;
     PokewalkerBoxDisplay_LoadBgGraphics(bgConfig, display->heapId);
@@ -1093,7 +1092,6 @@ void PokewalkerBoxDisplay_Init(PokewalkerBoxDisplay *display, BgConfig *bgConfig
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
 }
-#pragma force_active reset
 
 void PokewalkerBoxDisplay_ShowMon(PokewalkerBoxDisplay *display, PokewalkerSelectMonInfo *info) {
     if (info->state == 2) {
@@ -1260,7 +1258,6 @@ void PokewalkerBoxDisplay_HideSprites(PokewalkerBoxDisplay *display) {
     Sprite_SetDrawFlag(sprites->monSprite, FALSE);
 }
 
-#pragma force_active on
 void PokewalkerBoxDisplay_InitSprites(PokewalkerBoxDisplaySprites *sprites) {
     int i;
 
@@ -1283,7 +1280,6 @@ void PokewalkerBoxDisplay_InitSprites(PokewalkerBoxDisplaySprites *sprites) {
     SpriteTransfer_CreateCharTransferTask_AllocAtEnd(sprites->resObjs[1][GF_GFX_RES_TYPE_CHAR]);
     SpriteTransfer_CreateExtPlttTransferTask(sprites->resObjs[1][GF_GFX_RES_TYPE_PLTT]);
 }
-#pragma force_active reset
 
 void PokewalkerBoxDisplay_CreateSprites(PokewalkerBoxDisplaySprites *sprites) {
     u8 i;
@@ -1295,7 +1291,6 @@ void PokewalkerBoxDisplay_CreateSprites(PokewalkerBoxDisplaySprites *sprites) {
     PokewalkerBoxDisplay_GetMonPictureLocation(sprites);
 }
 
-#pragma force_active on
 Sprite *PokewalkerBoxDisplay_CreateSprite(PokewalkerBoxDisplaySprites *sprites, int resId, int drawPriority, int priority, int x, int y, int anim, BOOL visible) {
     SpriteTemplate template;
     SpriteResourcesHeader header;
@@ -1313,7 +1308,6 @@ Sprite *PokewalkerBoxDisplay_CreateSprite(PokewalkerBoxDisplaySprites *sprites, 
     Sprite_SetDrawFlag(sprite, visible);
     return sprite;
 }
-#pragma force_active reset
 
 void PokewalkerApp_InitSpriteTemplate(SpriteTemplate *template, SpriteList *spriteList, const SpriteResourcesHeader *header, NNS_G2D_VRAM_TYPE whichScreen, enum HeapID heapId) {
     template->spriteList = spriteList;

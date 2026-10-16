@@ -139,7 +139,6 @@ void *FrontierTrainer_Load(FrontierTrainerRecord *record, int trainerId, enum He
     return trainer;
 }
 
-#pragma force_active on
 u32 FrontierMon_Generate(FrontierMon *mon, u32 setId, u32 otId, u32 pid, u8 iv, u8 itemIndex, BOOL useItemTable, enum HeapID heapID, NarcId narcId) {
     FrontierMonSet set;
     int friendship;
@@ -271,7 +270,6 @@ void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level) {
     SetMonData(mon, MON_DATA_LANGUAGE, &frontierMon->language);
     CalcMonLevelAndStats(mon);
 }
-#pragma force_active reset
 
 u16 FrontierTrainer_GetClassSprite(u16 value) {
     u32 i = 0;
@@ -379,7 +377,6 @@ void FrontierTrainer_SetBattleTrainer(BattleSetup *battleSetup, FrontierTrainerR
     *(u16 *)(setup + offset + 0x5A) = source->messages[7];
 }
 
-#pragma force_active on
 u32 FrontierMon_GenerateWithRandomOtId(FrontierMon *mon, u16 setId, int itemIndex, u8 iv, int pid, enum HeapID heapID, NarcId narcId) {
     u32 otId = LCRandom();
     otId |= (u32)LCRandom() << 16;
@@ -417,7 +414,6 @@ void FrontierMon_GenerateList(FrontierMon *mons, u16 *setIds, u8 *ivs, u32 *pids
         } while (i < count);
     }
 }
-#pragma force_active reset
 
 int FrontierTrainer_GetMonIv(u32 trainerIndex) {
     if (trainerIndex < 100) {
@@ -444,7 +440,6 @@ int FrontierTrainer_GetMonIv(u32 trainerIndex) {
     return 31;
 }
 
-#pragma force_active on
 // Picks count different sets (no repeated species or item) for a trainer, avoiding the excluded species and items
 // for the first 50 tries. Returns TRUE if the exclusion had to be dropped.
 // heapID is unused.
@@ -518,7 +513,6 @@ void FrontierTrainer_GenerateMons(u8 count, int trainerIndex, int partnerIndex, 
     Heap_Free(trainer);
     FrontierMon_GenerateList(mons, setIds, ivs, NULL, otIds, count, HEAP_ID_FIELD2, NARC_a_2_0_3);
 }
-#pragma force_active reset
 
 void Frontier_BufferPartnerName(MessageFormat *msgFmt, int field) {
     int netId = Comm_GetLocalNetId() ^ 1;

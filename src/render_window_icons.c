@@ -86,8 +86,6 @@ void LoadMapSignpostFrameAndGraphic(BgConfig *bgConfig, u8 bgId, u16 baseTile, u
     }
 }
 
-#pragma force_active on
-
 void LoadMapSignpostGraphic(BgConfig *bgConfig, u32 bgId, u16 baseTile, BOOL type, u16 map, u32 heapId) {
     if (type == 0) {
         map += 33;
@@ -118,8 +116,6 @@ void DrawSignpostFrameTilemap(BgConfig *bgConfig, u8 bgId, u8 x, u8 y, u8 width,
     FillBgTilemapRect(bgConfig, bgId, baseTile + 16, x + width + 1, y + height, 1, 1, paletteNum);
     FillBgTilemapRect(bgConfig, bgId, baseTile + 17, x + width + 2, y + height, 1, 1, paletteNum);
 }
-
-#pragma force_active off
 
 // The 6x4 tile signpost graphic left of the window.
 void DrawSignpostGraphicTilemap(Window *window, u16 baseTile, u8 paletteNum) {
@@ -158,8 +154,6 @@ void DrawFrameAndWindow3(Window *window, BOOL dontCopyToVram, u16 baseTile, u8 p
     }
     TextPrinter_SetDownArrowBaseTile(baseTile);
 }
-
-#pragma force_active on
 
 WaitingIcon *WaitingIcon_New(Window *window, int baseTile) {
     int heapId = BgConfig_GetHeapId(window->bgConfig);
@@ -221,8 +215,6 @@ void WaitingIcon_Draw(WaitingIcon *icon, int mode) {
         BgCommitTilemapBufferToVram(icon->window->bgConfig, bgId);
     }
 }
-
-#pragma force_active off
 
 void WaitingIcon_Task(SysTask *task, WaitingIcon *icon) {
     if (icon->state != 0) {

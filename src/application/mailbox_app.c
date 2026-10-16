@@ -339,7 +339,6 @@ BOOL MailboxApp_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-#pragma force_active on
 void MailboxApp_VBlankCB(void *cbArg) {
     MailboxApp *app = cbArg;
     vu32 *dtcm = (vu32 *)0x027E0000;
@@ -348,7 +347,6 @@ void MailboxApp_VBlankCB(void *cbArg) {
     SpriteSystem_TransferOam();
     dtcm[0x3FF8 / sizeof(u32)] |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
 }
-#pragma force_active reset
 
 void MailboxApp_SetGfxBanks(void) {
     GfGfx_SetBanks(&gMailboxAppGraphicsBanks);
@@ -561,7 +559,6 @@ void MailboxApp_FreeMail(MailboxApp *app) {
     }
 }
 
-#pragma force_active on
 void MailboxApp_DrawPage(MailboxApp *app) {
     u32 first = (u16)(app->page * MAILBOX_MAIL_PER_PAGE);
     u16 cell = 0;
@@ -581,7 +578,6 @@ void MailboxApp_DrawPage(MailboxApp *app) {
         cell++;
     }
 }
-#pragma force_active reset
 
 void MailboxApp_DrawSelectedNameplate(MailboxApp *app) {
     MailboxApp_DrawNameplate(app, MAILBOX_CELL_SELECTED, 20, app->selectedMail);
@@ -1469,7 +1465,6 @@ static inline u32 MailboxAppData_GetMessageWindowOffset(void) {
     return offsetof(MailboxAppData, windows[MAILBOX_WIN_MESSAGE]);
 }
 
-#pragma force_active on
 void MailboxApp_PrintMessageBox(MailboxApp *app) {
     // Matching quirk: the window, the string and the printer id are addressed relative to the message
     // window's offset, which must not be folded into the member offsets at compile time.
@@ -1479,7 +1474,6 @@ void MailboxApp_PrintMessageBox(MailboxApp *app) {
     FillWindowPixelBuffer((Window *)((u32)data + offset), 15);
     *(u8 *)((u32)app->data + offset + (offsetof(MailboxAppData, printerId) - offsetof(MailboxAppData, windows[MAILBOX_WIN_MESSAGE]))) = AddTextPrinterParameterizedWithColor((Window *)((u32)data + offset), 1, *(String **)((u32)app->data + offset + (offsetof(MailboxAppData, string) - offsetof(MailboxAppData, windows[MAILBOX_WIN_MESSAGE]))), 0, 0, Options_GetTextFrameDelay(app->options), 0x1020F, NULL);
 }
-#pragma force_active reset
 
 void MailboxApp_PrintMailPrompt(MailboxApp *app) {
     String *template;

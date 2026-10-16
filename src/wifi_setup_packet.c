@@ -70,7 +70,6 @@ int WifiSetup_ParseSettingsRecords(const u8 *data);
 int WifiSetup_HexToBytes(u8 *dst, const char *src, int length);
 int WifiSetup_StoreSimpleStartResult(void);
 
-#pragma force_active on
 #pragma optimization_level 3
 
 // Scans up to 30 times for the access point until WifiSetup_PickSetupAccessPoint picks one.
@@ -204,7 +203,6 @@ done:
 }
 
 #pragma optimization_level reset
-#pragma force_active reset
 
 int WifiSetup_SendDatagram(int socket, const void *address, const void *unused, const void *data, int length) {
     int result = SOC_SendTo(socket, data, length, 0, address);
@@ -267,8 +265,6 @@ u8 *WifiSetup_FirstRecord(u8 *data, u32 *type, u32 *length) {
     return WifiSetup_NextRecord(&cursor, cursor + Swap16(*(u16 *)data), type, length);
 }
 
-#pragma force_active on
-
 // Builds a packet from a record list, AES-key-wrapped when `key` is given; returns its size.
 u32 WifiSetup_BuildPacket(u8 *dest, u32 type, u8 *data, u32 length, const void *key) {
     u8 *end = dest;
@@ -326,7 +322,6 @@ u8 *WifiSetup_AppendRecord(u8 *out, int tag, const void *source, int size) {
 }
 
 #pragma pop
-#pragma force_active reset
 
 // A record list holding one record; the list header stores its length.
 u8 *WifiSetup_BuildSingleRecordList(u8 *dst, u16 type, const void *src, u32 length) {
@@ -340,8 +335,6 @@ u8 *WifiSetup_BuildSingleRecordList(u8 *dst, u16 type, const void *src, u32 leng
     *(u16 *)dst = (u16)size;
     return (u8 *)result;
 }
-
-#pragma force_active on
 
 // Reply of type 1: records 1 and 2 must be 1; record 5 >= 1 asks for the extended request.
 int WifiSetup_CheckVersionReply(void *data, int *extended) {
@@ -390,8 +383,6 @@ int WifiSetup_CheckVersionReply(void *data, int *extended) {
     return 1;
 }
 
-#pragma force_active reset
-
 // Copies the payload of a packet of `expectedType`, AES-key-unwrapped when `key` is given.
 int WifiSetup_ReadPacket(u8 *data, u32 expectedType, void *dst, int key) {
     u32 type, length;
@@ -411,8 +402,6 @@ int WifiSetup_ReadPacket(u8 *data, u32 expectedType, void *dst, int key) {
     return length;
 }
 
-#pragma force_active on
-
 // First request (type 2): version records, plus own MAC address in the extended form.
 void WifiSetup_BuildVersionRequest(void *dst) {
     WifiSetupVersionRecord record;
@@ -431,14 +420,10 @@ void WifiSetup_BuildVersionRequest(void *dst) {
     WifiSetup_BuildPacket(dst, 2, gWifiSetupRecordBuffer, ptr - gWifiSetupConfig.packetBuffer + 8, NULL);
 }
 
-#pragma force_active reset
-
 BOOL WifiSetup_GetOwnMacAddress(u8 *mac) {
     OS_GetMacAddress(mac);
     return TRUE;
 }
-
-#pragma force_active on
 
 // Orders the access point's and our MAC address (the smaller one first).
 BOOL WifiSetup_BuildMacPair(WifiSetupMacPair *pair) {
@@ -539,8 +524,6 @@ int WifiSetup_ParseSettingsRecords(const u8 *data) {
     }
     return result;
 }
-
-#pragma force_active reset
 
 int WifiSetup_HexToBytes(u8 *dst, const char *src, int length) {
     int len = length;

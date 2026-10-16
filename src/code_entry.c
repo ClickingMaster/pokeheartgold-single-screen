@@ -401,8 +401,6 @@ void CodeEntry_SelectGroup(CodeEntryApp *app, int group) {
     }
 }
 
-#pragma force_active on
-
 void CodeEntry_InitLayout(CodeEntryApp *app) {
     int i, group, j, end;
     u16 start;
@@ -446,8 +444,6 @@ void CodeEntry_InitLayout(CodeEntryApp *app) {
         app->firstEditable += app->args.groupLengths[i];
     }
 }
-
-#pragma force_active off
 
 void CodeEntry_SetState(CodeEntryApp *app, int state) {
     app->state = state;
@@ -597,8 +593,6 @@ BOOL CodeEntry_RunState(CodeEntryApp *app) {
     SpriteSystem_DrawSprites(app->spriteManager);
     return result;
 }
-
-#pragma force_active on
 
 void CodeEntry_HandleKeys(CodeEntryApp *app) {
     CodeEntryKeyGrid grid = sCodeEntryKeyGrid;
@@ -751,8 +745,6 @@ void CodeEntry_HandleKeys(CodeEntryApp *app) {
         }
     }
 }
-
-#pragma force_active off
 
 // OK: empty digits become 0, all digits are appended to args.text.
 void CodeEntry_Confirm(CodeEntryApp *app) {
@@ -950,8 +942,6 @@ void CodeEntry_ClearPendingAction(CodeEntryApp *app) {
     app->pendingToLast = FALSE;
 }
 
-#pragma force_active on
-
 int CodeEntry_GetGroupFirstDigit(CodeEntryApp *app, int group) {
     int i = 0, count = app->digitCount;
     for (; i < count; i++) {
@@ -976,8 +966,6 @@ int CodeEntry_GetGroupLastDigit(CodeEntryApp *app, int group) {
     return count - 1;
 }
 
-#pragma force_active off
-
 void CodeEntry_InitSpriteSystem(CodeEntryApp *app) {
     OamManagerParam oamManagerParam;
     OamCharTransferParam oamCharTransferParam;
@@ -997,8 +985,6 @@ void CodeEntry_InitSpriteSystem(CodeEntryApp *app) {
         }
     }
 }
-
-#pragma force_active on
 
 void CodeEntry_LoadGraphics(CodeEntryApp *app) {
     NARC *narc;
@@ -1036,8 +1022,6 @@ void CodeEntry_LoadGraphics(CodeEntryApp *app) {
     PaletteData_LoadNarc(paletteData, NARC_graphic_font, 8, HEAP_ID_108, PLTTBUF_SUB_BG, 0x20, 0xC0);
 }
 
-#pragma force_active off
-
 void CodeEntry_FreeGraphics(CodeEntryApp *app) {
     int i;
 
@@ -1056,8 +1040,6 @@ void CodeEntry_FreeGraphics(CodeEntryApp *app) {
     CodeEntry_FreeButtonLabels(app);
     RemoveWindow(&app->promptWindow);
 }
-
-#pragma force_active on
 
 void CodeEntry_CreateDigitSprites(CodeEntryApp *app) {
     int placed = 0;
@@ -1124,8 +1106,6 @@ void CodeEntry_CreateDigitSprites(CodeEntryApp *app) {
         } while (i < app->digitCount + app->separatorCount);
     }
 }
-
-#pragma force_active off
 
 void CodeEntry_CreateCursorSprites(CodeEntryApp *app) {
     ManagedSpriteTemplate template;
@@ -1234,8 +1214,6 @@ void CodeEntry_MoveDigitCursor(CodeEntryApp *app, int digit) {
     }
 }
 
-#pragma force_active on
-
 void CodeEntry_MoveKeyCursor(CodeEntryApp *app, int key) {
     ManagedSprite_SetPositionXY(app->cursors[1].sprite, (app->hitboxes[key + 16].rect.left + app->hitboxes[key + 16].rect.right) / 2, (app->hitboxes[key + 16].rect.top + app->hitboxes[key + 16].rect.bottom) / 2);
 }
@@ -1243,8 +1221,6 @@ void CodeEntry_MoveKeyCursor(CodeEntryApp *app, int key) {
 void CodeEntry_MoveCursorToKey(CodeEntryApp *app, int key, int cursor) {
     ManagedSprite_SetPositionXY(app->cursors[cursor].sprite, (app->hitboxes[key + 16].rect.left + app->hitboxes[key + 16].rect.right) / 2, (app->hitboxes[key + 16].rect.top + app->hitboxes[key + 16].rect.bottom) / 2);
 }
-
-#pragma force_active off
 
 void CodeEntry_UpdateCursors(CodeEntryApp *app) {
     int i;
@@ -1343,8 +1319,6 @@ void CodeEntry_MarkSelectedDigits(CodeEntryApp *app) {
     }
 }
 
-#pragma force_active on
-
 // Places the digits and separators: the selected group is spread out (32 px per digit), the others are packed
 // (8 px). With animate, sets the sprites moving there over 2 frames instead.
 void CodeEntry_LayoutDigits(CodeEntryApp *app, int animate) {
@@ -1399,8 +1373,6 @@ void CodeEntry_LayoutDigits(CodeEntryApp *app, int animate) {
     }
 }
 
-#pragma force_active off
-
 void CodeEntry_UpdateDigitHitboxes(CodeEntryApp *app) {
     int i = 0;
     if (app->digitCount > 0) {
@@ -1451,8 +1423,6 @@ void CodeEntry_CreateButtonLabels(CodeEntryApp *app) {
     CodeEntry_CreateButtonLabel(app, 1, 0xAC, 0xA5, 0);
 }
 
-#pragma force_active on
-
 void CodeEntry_CreateButtonLabel(CodeEntryApp *app, int button, int x, int y, int palette) {
     TextOBJTemplate template;
     Window window;
@@ -1488,8 +1458,6 @@ void CodeEntry_CreateButtonLabel(CodeEntryApp *app, int button, int x, int y, in
     DestroyMsgData(msgData);
     RemoveWindow(&window);
 }
-
-#pragma force_active off
 
 void CodeEntry_CreatePromptWindow(BgConfig *bgConfig, Window *window, int bgId, int x, int y, int width, int height, int baseTile, int msgNo) {
     InitWindow(window);

@@ -46,8 +46,6 @@ extern const VecFx32 gPokeathlonGoalRollLabelPosition;
 typedef void (*PokeathlonGoalRollChangePaletteFunc)(BgConfig *bgConfig, int bgId, int x, int y, int width, int height, int palette);
 #define ChangePlatePalette ((PokeathlonGoalRollChangePaletteFunc)BgTilemapRectChangePalette)
 
-#pragma force_active on
-
 void PokeathlonGoalRoll_StartPlateFlash(PokeathlonGoalRoll *goalRoll, int participant, int gained, int bigBall) {
     goalRoll->plates[participant].state = PLATE_STATE_START_FLASH;
     goalRoll->plates[participant].gained = gained;
@@ -114,8 +112,6 @@ void PokeathlonGoalRoll_PlateTask(SysTask *task, PokeathlonGoalRollPlate *plate)
     }
 }
 
-#pragma force_active reset
-
 // The y code of a ball in `goal` last touched by `team` (see PokeathlonGoalRoll_EncodeBallY).
 u32 PokeathlonGoalRoll_GetGoalCode(u32 goal, u8 team) {
     u32 code;
@@ -143,13 +139,9 @@ u32 PokeathlonGoalRoll_GetGoalCode(u32 goal, u8 team) {
     return (u8)(code + team);
 }
 
-#pragma force_active on
-
 u32 PokeathlonGoalRoll_GetBallQuadrant(PokeathlonGoalRollBall *ball) {
     return PokeathlonGoalRoll_GetQuadrant(ball->position.x / 4096, ball->position.y / 4096);
 }
-
-#pragma force_active reset
 
 // 0 top left, 1 top right, 2 bottom left, 3 bottom right
 u32 PokeathlonGoalRoll_GetQuadrant(s32 x, s32 y) {
@@ -164,8 +156,6 @@ u32 PokeathlonGoalRoll_GetQuadrant(s32 x, s32 y) {
     }
     return 3;
 }
-
-#pragma force_active on
 
 // Until the last 300 frames, the names of the participants with the highest score are highlighted.
 void PokeathlonGoalRoll_UpdateLeaders(PokeathlonGoalRoll *goalRoll) {
@@ -190,8 +180,6 @@ void PokeathlonGoalRoll_UpdateLeaders(PokeathlonGoalRoll *goalRoll) {
     }
 }
 
-#pragma force_active reset
-
 void PokeathlonGoalRoll_RefreshPlates(PokeathlonGoalRoll *goalRoll) {
     u8 i = 0;
     do {
@@ -206,8 +194,6 @@ typedef struct PokeathlonGoalRollDrawOrder {
     u8 *y;
     PokeathlonGoalRollMon *mon;
 } PokeathlonGoalRollDrawOrder;
-
-#pragma force_active on
 
 // Draws the own team's Pokemon lower on the screen in front.
 void PokeathlonGoalRoll_SortOwnTeamOrder(PokeathlonGoalRollMon *team, u8 *monY) {
@@ -246,8 +232,6 @@ void PokeathlonGoalRoll_SortOwnTeamOrder(PokeathlonGoalRollMon *team, u8 *monY) 
     }
 }
 
-#pragma force_active reset
-
 typedef struct PokeathlonGoalRollMonY {
     u16 index;
     u16 y;
@@ -270,8 +254,6 @@ int PokeathlonGoalRoll_CompareMonY(const void *a, const void *b) {
     }
     return 0;
 }
-
-#pragma force_active on
 
 // Draws the other participants' Pokemon lower on the screen in front.
 void PokeathlonGoalRoll_SortOtherMonsOrder(PokeathlonGoalRoll *goalRoll, PokeathlonGoalRollFramePacket *frame, u8 own) {
@@ -297,8 +279,6 @@ void PokeathlonGoalRoll_SortOtherMonsOrder(PokeathlonGoalRoll *goalRoll, Pokeath
     }
 }
 
-#pragma force_active reset
-
 // Course callback at the end of the match: the own team's total.
 void PokeathlonGoalRoll_OnTimeUp(PokeathlonCourseData *course) {
     void *area = PokeathlonCourse_GetDataCopyArea(course);
@@ -308,8 +288,6 @@ void PokeathlonGoalRoll_OnTimeUp(PokeathlonCourseData *course) {
     PokeathlonCourse_SetRecordScore(course, score);
     PokeathlonGoalRoll_PrintTotalPoints(goalRoll, score);
 }
-
-#pragma force_active on
 
 PokeathlonGoalRollDisplay *PokeathlonGoalRollDisplay_New(enum HeapID heapId, BgConfig *bgConfig, PokeathlonCourseData *course) {
     PokeathlonGoalRollDisplay *display = Heap_Alloc(heapId, sizeof(PokeathlonGoalRollDisplay));
@@ -322,8 +300,6 @@ PokeathlonGoalRollDisplay *PokeathlonGoalRollDisplay_New(enum HeapID heapId, BgC
     display->msgFormat = MessageFormat_New(heapId);
     return display;
 }
-
-#pragma force_active reset
 
 void PokeathlonGoalRollDisplay_Free(PokeathlonGoalRollDisplay *display) {
     Heap_Free(display->digitScreenData);

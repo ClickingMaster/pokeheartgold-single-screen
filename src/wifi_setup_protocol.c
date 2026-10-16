@@ -101,8 +101,6 @@ int WifiSetup_CheckPrintable(const u8 *data, int length) {
     return 0;
 }
 
-#pragma force_active on
-
 int WifiSetup_FindAossAccessPoint(List *list) {
     int result = 0;
     int matches = 0;
@@ -130,8 +128,6 @@ int WifiSetup_FindAossAccessPoint(List *list) {
     }
     return result;
 }
-
-#pragma force_active reset
 
 int WifiSetup_InitAossConnectInfo(void *out) {
     u8 *p = out;
@@ -337,8 +333,6 @@ int WifiSetup_HandleDoneReply(int state, void *packet, int *counter, void *conte
     return -1;
 }
 
-#pragma force_active on
-
 int WifiSetup_DecryptPacket(Packet *p) {
     u8 address[8];
     u16 *body = &p->length;
@@ -379,8 +373,6 @@ int WifiSetup_DecryptPacket(Packet *p) {
     }
     return result;
 }
-
-#pragma force_active reset
 
 int WifiSetup_CheckPeer(int value, const void *data) {
     int i;
@@ -615,8 +607,6 @@ int WifiSetup_ParseType70Record(const u8 *a, void *dst) {
     return 0;
 }
 
-#pragma force_active on
-
 int WifiSetup_ParseSecurityRecords(int id, u8 *p, int remaining, u8 *out, u8 *other) {
     int flags = 0;
     if (remaining <= 0) {
@@ -682,8 +672,6 @@ int WifiSetup_ParseSecurityRecords(int id, u8 *p, int remaining, u8 *out, u8 *ot
     gWifiSetupState.receivedMask |= flags;
     return 0;
 }
-
-#pragma force_active reset
 
 int WifiSetup_IsEncryptionRequested(int value) {
     int result = 0;
@@ -1034,8 +1022,6 @@ s32 WifiSetup_Scramble(void *dst, s32 size, const s8 *key, s32 keySize) {
     return 0;
 }
 
-#pragma force_active on
-
 void WifiSetup_ScrambleMakeKey(int start, s8 *out, int length, const s8 *key, int keylen) {
     int half = length / 2, pos = start % keylen, i;
     for (i = 0; i < half; i++) {
@@ -1054,8 +1040,6 @@ void WifiSetup_ScrambleXorHalf(s8 *in, u8 *out, int length) {
         out[i + half] ^= in[i];
     }
 }
-
-#pragma force_active reset
 
 void WifiSetup_ScrambleSwapHalves(u8 *dst, s32 size, u8 *tmp) {
     s32 half = (s32)(size + ((u32)size >> 31)) >> 1;

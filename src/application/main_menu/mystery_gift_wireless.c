@@ -66,8 +66,6 @@ void MysteryGiftComm_SetState(MysteryGiftCommStateFunc func, u16 arg) {
     sMysteryGiftCommWork->stateArg = arg;
 }
 
-#pragma force_active on
-
 void MysteryGiftComm_ParentWaitStartup(void) {
     int i;
     if (Comm_IsNetIdConnected(Comm_GetLocalNetId())) {
@@ -87,8 +85,6 @@ void MysteryGiftComm_ParentCollectProfiles(void) {
         }
     }
 }
-
-#pragma force_active reset
 
 void MysteryGiftComm_ChildWaitStartup(void) {
     if (CommWireless_IsStartedUp()) {
@@ -140,8 +136,6 @@ int MysteryGiftWireless_SendCard(void *data, void *size) {
     return Comm_SendParentCommandNoCopy(0x16, data, size);
 }
 
-#pragma force_active on
-
 void MysteryGiftComm_StartChild(void *owner, int linkMode) {
     if (!Comm_IsActive()) {
         void **args = OverlayManager_GetArgs(MysteryGiftApp_GetOverlayManager());
@@ -150,8 +144,6 @@ void MysteryGiftComm_StartChild(void *owner, int linkMode) {
         MysteryGiftComm_SetState(MysteryGiftComm_ChildWaitStartup, 0);
     }
 }
-
-#pragma force_active reset
 
 void MysteryGiftComm_ConnectToChannel(int channel) {
     sMysteryGiftCommWork->channel = channel;

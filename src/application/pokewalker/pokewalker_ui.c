@@ -161,7 +161,6 @@ void PokewalkerApp_ShowSaveEraseStepsMenu(PokewalkerApp *app, int selection) {
 }
 
 // Returns 0 (first choice), 1 (second choice) or 2 (still choosing).
-#pragma force_active on
 int PokewalkerApp_HandleTwoChoiceMenu(PokewalkerApp *app) {
     if (app->menuState == 0) {
         switch ((u32)PokewalkerApp_GetTouchedButton(0)) {
@@ -217,7 +216,6 @@ int PokewalkerApp_HandleTwoChoiceMenu(PokewalkerApp *app) {
     }
     return 2;
 }
-#pragma force_active reset
 
 int PokewalkerApp_GetTouchedButton(int index) {
     GF_ASSERT(index < 6);
@@ -243,7 +241,6 @@ u8 PokewalkerApp_GetPixel2bpp(const u8 *picture, int x, int y) {
     return (((picture[offset + 1] >> bit) & 1) << 1) | ((picture[offset] >> bit) & 1);
 }
 
-#pragma force_active on
 void PokewalkerApp_SetPixel2bpp(u8 *picture, int x, int y, int color) {
     int row = y / 8;
     int bit = y % 8;
@@ -286,7 +283,6 @@ void PokewalkerApp_DrawSpindaSpots(u8 *picture, const u8 *mask, u32 personality,
         personality >>= 8;
     }
 }
-#pragma force_active reset
 
 // Draws Spinda's spots on both frames of its Pokewalker picture.
 void PokewalkerApp_DrawSpindaSpotsOnPicture(void *picture, const void *mask, u32 personality) {
@@ -317,7 +313,6 @@ void PokewalkerApp_DrawSpindaSpotsOnPicture(void *picture, const void *mask, u32
     } while (0)
 
 // Adds the windows of a bank (0, 2: sub screen; others: main screen).
-#pragma force_active on
 void PokewalkerApp_AddWindowBank(PokewalkerApp *app, int bank) {
     u32 i;
     GF_ASSERT(bank < 8);
@@ -350,7 +345,6 @@ void PokewalkerApp_AddWindowBank(PokewalkerApp *app, int bank) {
     }
     app->windowCounts[sWindowBankScreens[bank]] = i;
 }
-#pragma force_active reset
 
 #undef ADD_WINDOWS
 
@@ -462,7 +456,6 @@ void PokewalkerApp_PrintSubMessage(PokewalkerApp *app, int window, int msgId, u3
 }
 
 // Prints a message in a framed window at the player's text speed; returns the text printer id.
-#pragma force_active on
 u8 PokewalkerApp_StartMessageBox(PokewalkerApp *app, int window, int msgId) {
     String *string = NewString_ReadMsgData(app->msgData, msgId);
     Window *windows = app->windows;
@@ -484,7 +477,6 @@ void PokewalkerApp_ShowMessageBox(PokewalkerApp *app, int window, int msgId) {
     AddTextPrinterParameterized(&windows[window], 1, app->string, 0, 0, TEXT_SPEED_INSTANT, NULL);
     String_Delete(string);
 }
-#pragma force_active reset
 
 void PokewalkerApp_CreateWaitingIcon(PokewalkerApp *app) {
     app->waitingIcon = WaitingIcon_New(&app->windows[2], 0x3E2);
@@ -604,7 +596,6 @@ void PokewalkerApp_PressCursor(PokewalkerApp *app) {
     ManagedSprite_SetAnim(app->sprites[0], anim + 3);
 }
 
-#pragma force_active on
 void PokewalkerApp_ShowConnectionSprites(PokewalkerApp *app, int anim) {
     ManagedSprite_SetAnim(app->sprites[1], 0);
     ManagedSprite_SetDrawFlag(app->sprites[1], TRUE);
@@ -631,7 +622,6 @@ void PokewalkerApp_UpdateConnectionAnim(PokewalkerApp *app) {
         }
     }
 }
-#pragma force_active reset
 
 void PokewalkerApp_HideConnectionSprites(PokewalkerApp *app) {
     ManagedSprite_SetDrawFlag(app->sprites[1], FALSE);
@@ -801,7 +791,6 @@ void PokewalkerApp_SetMotionSpritePos(PokewalkerApp *app, int x, int y) {
     }
 }
 
-#pragma force_active on
 void PokewalkerApp_InitMotion(PokewalkerApp *app, PokewalkerAppMotion *motion, int kind) {
     if (kind == 0) {
         motion->x = 128;
@@ -823,7 +812,6 @@ void PokewalkerApp_InitMotion(PokewalkerApp *app, PokewalkerAppMotion *motion, i
     motion->unk_0A = 0;
     PokewalkerApp_ShowMotionSprites(app, motion);
 }
-#pragma force_active reset
 
 // Moves the object up (delta < 0) or down; returns TRUE once it has stopped and been hidden.
 BOOL PokewalkerApp_UpdateMotion(PokewalkerApp *app, PokewalkerAppMotion *motion) {

@@ -678,9 +678,6 @@ void MailView_FreeBgs(MailView *mailView) {
     Heap_Free(mailView->bgConfig);
 }
 
-#pragma force_active on
-#pragma opt_dead_assignments off
-
 void MailView_LoadBgGraphics(void *data) {
     MailView *mailView = data;
     NARC *narc;
@@ -750,9 +747,6 @@ void MailView_LoadBgGraphics(void *data) {
         mailView->onSwitchToTouch = MailView_OnSwitchToTouch;
     }
 }
-
-#pragma opt_dead_assignments reset
-#pragma force_active reset
 
 void MailView_FreeBgGraphics(MailView *mailView) {
     Heap_Free(mailView->buttonScreenFile);

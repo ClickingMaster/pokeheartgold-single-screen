@@ -294,8 +294,6 @@ void WiFiPlazaInstrument_FreeTextures(WiFiPlazaInstrumentManager *manager) {
     }
 }
 
-#pragma force_active on
-
 void WiFiPlazaInstrument_LoadAnimations(WiFiPlazaInstrumentManager *manager, NARC *narc, enum HeapID heapID) {
     int i, j;
     const WiFiPlazaInstrumentModelDesc *desc = sWiFiPlazaInstrumentModelDescs;
@@ -314,8 +312,6 @@ void WiFiPlazaInstrument_LoadAnimations(WiFiPlazaInstrumentManager *manager, NAR
         desc++;
     }
 }
-
-#pragma force_active reset
 
 void WiFiPlazaInstrument_FreeAnimations(WiFiPlazaInstrumentManager *manager) {
     int i;
@@ -391,8 +387,6 @@ void WiFiPlazaInstrument_SetModel(WiFiPlazaInstrumentManager *manager, WiFiPlaza
     ModelInstance_Init(&effect->models[index], &manager->models[desc->model]);
 }
 
-#pragma force_active on
-
 // Binds the slot's texture and animations to the shared model, draws it and unbinds them again.
 void WiFiPlazaInstrument_DrawModel(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, u32 index) {
     ModelResource *model;
@@ -428,8 +422,6 @@ void WiFiPlazaInstrument_DrawModel(WiFiPlazaInstrumentManager *manager, WiFiPlaz
     }
 }
 
-#pragma force_active reset
-
 void WiFiPlazaInstrument_LoopAnim(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, u32 index, u32 anim) {
     WiFiPlazaInstrument_LoopAnimBy(manager, effect, index, anim, FX32_CONST(2));
 }
@@ -450,8 +442,6 @@ void WiFiPlazaInstrument_LoopAnimBy(WiFiPlazaInstrumentManager *manager, WiFiPla
     }
 }
 
-#pragma force_active on
-
 // Returns TRUE (and holds the last frame) once the animation reached its end.
 BOOL WiFiPlazaInstrument_PlayAnimBy(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, int index, int anim, int step) {
     fx32 frameCount = ModelAnimation_GetFrameCount(&manager->anims[effect->descs[index]->anims[anim]]);
@@ -464,8 +454,6 @@ BOOL WiFiPlazaInstrument_PlayAnimBy(WiFiPlazaInstrumentManager *manager, WiFiPla
     effect->animFrames[index][anim] = frameCount - FX32_CONST(0.5);
     return TRUE;
 }
-
-#pragma force_active reset
 
 void WiFiPlazaInstrument_SetAnimFrame(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, u32 index, u32 anim, fx32 frame) {
     const WiFiPlazaInstrumentModelDesc *desc = effect->descs[index];
@@ -1053,8 +1041,6 @@ BOOL WiFiPlazaInstrument_DrawEffectModels(WiFiPlazaInstrumentManager *manager, W
     return TRUE;
 }
 
-#pragma force_active on
-
 // The player's object rises with up to 3 models (types 24-26); on map attribute 42 it only lifts slightly.
 void WiFiPlazaInstrument_InitBalloon(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, int count) {
     u32 packed;
@@ -1100,8 +1086,6 @@ void WiFiPlazaInstrument_InitBalloon(WiFiPlazaInstrumentManager *manager, WiFiPl
         WiFiPlazaInstrument_StartBalloonLift(manager, effect);
     }
 }
-
-#pragma force_active reset
 
 void WiFiPlazaInstrument_StartBalloonRise(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     VecFx32 pos;
@@ -1214,8 +1198,6 @@ void WiFiPlazaInstrument_StartBalloonDown(WiFiPlazaInstrumentManager *manager, W
     WiFiPlazaInstrument_StartBalloonDrop(manager, effect);
 }
 
-#pragma force_active on
-
 // Starts the way down: the object drops back, the models fly off (up and to the sides).
 void WiFiPlazaInstrument_StartBalloonFall(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     VecFx32 pos;
@@ -1252,8 +1234,6 @@ void WiFiPlazaInstrument_StartBalloonFall(WiFiPlazaInstrumentManager *manager, W
     effect->work.hop.tick = 0;
 }
 
-#pragma force_active reset
-
 void WiFiPlazaInstrument_StartBalloonDrop(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     VecFx32 pos;
 
@@ -1269,8 +1249,6 @@ BOOL WiFiPlazaInstrument_UpdateBalloonDown(WiFiPlazaInstrumentManager *manager, 
     }
     return WiFiPlazaInstrument_UpdateBalloonDrop(manager, effect);
 }
-
-#pragma force_active on
 
 // The way down off map attribute 42: wait, flash the object, drop it and let it bounce once while the models fly off.
 BOOL WiFiPlazaInstrument_UpdateBalloonFall(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
@@ -1366,8 +1344,6 @@ BOOL WiFiPlazaInstrument_UpdateBalloonFall(WiFiPlazaInstrumentManager *manager, 
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL WiFiPlazaInstrument_UpdateBalloonDrop(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     VecFx32 pos;
@@ -1559,8 +1535,6 @@ void WiFiPlazaInstrument_InitSparkle(WiFiPlazaInstrumentManager *manager, WiFiPl
     effect->work.shower.shown = 0;
 }
 
-#pragma force_active on
-
 BOOL WiFiPlazaInstrument_UpdateSparkleModel(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, int index) {
     VecFx32 pos;
     BOOL done;
@@ -1577,8 +1551,6 @@ BOOL WiFiPlazaInstrument_UpdateSparkleModel(WiFiPlazaInstrumentManager *manager,
     return done;
 }
 
-#pragma force_active reset
-
 void WiFiPlazaInstrument_InitRipple(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, u32 count) {
     u32 i;
 
@@ -1593,8 +1565,6 @@ void WiFiPlazaInstrument_InitRipple(WiFiPlazaInstrumentManager *manager, WiFiPla
     }
     effect->work.rise.count = count;
 }
-
-#pragma force_active on
 
 // Plays sequence `kind`: 12 steps over 48 frames, each showing one model at a fixed animation frame.
 BOOL WiFiPlazaInstrument_UpdateSignalSequence(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, int kind) {
@@ -1625,8 +1595,6 @@ BOOL WiFiPlazaInstrument_UpdateSignalSequence(WiFiPlazaInstrumentManager *manage
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 void WiFiPlazaInstrument_InitWhirl(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, u32 count) {
     u32 i;
@@ -1686,8 +1654,6 @@ void WiFiPlazaInstrument_UpdateCymbalFlash(WiFiPlazaInstrumentManager *manager, 
     }
 }
 
-#pragma force_active on
-
 void WiFiPlazaInstrument_InitBursts(WiFiPlazaInstrumentBurstWork *work, const WiFiPlazaInstrumentBurstEvent *events, u16 eventCount, u16 duration, u32 kind, WiFiPlazaInstrumentEffect *effect) {
     int i;
 
@@ -1734,8 +1700,6 @@ int WiFiPlazaInstrument_UpdateBursts(WiFiPlazaInstrumentBurstWork *work, u32 fra
     }
     return result;
 }
-
-#pragma force_active reset
 
 void WiFiPlazaInstrumentBurst_Init(WiFiPlazaInstrumentBurst *burst, ModelInstance *model0, ModelInstance *model1, ModelInstance *model2, ModelInstance *model3, WiFiPlazaObj *obj, u32 kind) {
     GF_ASSERT(kind < 3);
@@ -1898,8 +1862,6 @@ void WiFiPlazaInstrumentBurst_StartDrum(WiFiPlazaInstrumentBurst *burst, WiFiPla
     WiFiPlazaInstrumentBurst_UpdateDrum(burst);
 }
 
-#pragma force_active on
-
 BOOL WiFiPlazaInstrumentBurst_UpdateDrum(WiFiPlazaInstrumentBurst *burst) {
     int i;
     WiFiPlazaInstrumentWave *wave;
@@ -1931,8 +1893,6 @@ BOOL WiFiPlazaInstrumentBurst_UpdateDrum(WiFiPlazaInstrumentBurst *burst) {
     return burst->frame >= 22;
 }
 
-#pragma force_active reset
-
 void WiFiPlazaInstrumentBurst_StartCymbal(WiFiPlazaInstrumentBurst *burst, WiFiPlazaObj *obj) {
     VecFx32 pos;
     int i;
@@ -1947,7 +1907,6 @@ void WiFiPlazaInstrumentBurst_StartCymbal(WiFiPlazaInstrumentBurst *burst, WiFiP
 }
 
 #pragma force_active on
-#pragma opt_propagation off
 
 // Three hops: each time the tweens end, the next one starts from where the model landed.
 BOOL WiFiPlazaInstrumentBurst_UpdateCymbal(WiFiPlazaInstrumentBurst *burst) {
@@ -1992,7 +1951,6 @@ BOOL WiFiPlazaInstrumentBurst_UpdateCymbal(WiFiPlazaInstrumentBurst *burst) {
     return FALSE;
 }
 
-#pragma opt_propagation reset
 #pragma force_active reset
 
 void WiFiPlazaInstrumentBurst_StartHop(WiFiPlazaInstrumentBurst *burst, u32 index, VecFx32 *origin, fx32 dx01, fx32 dy01, fx32 dx23, fx32 dy23, s32 duration) {

@@ -65,7 +65,6 @@ void FootprintStamp_FreePlayerSprites(FootprintStamp *work) {
 }
 
 // Shows the party in the bar at the bottom: the footprint of each Pokemon in its ink color, empty slots hidden.
-#pragma force_active on
 
 void FootprintStamp_ShowParty(FootprintStamp *work) {
     int i;
@@ -103,8 +102,6 @@ void FootprintStamp_ShowParty(FootprintStamp *work) {
     FootprintStamp_HighlightPartySlot(work, 0);
     ScheduleBgTilemapBufferTransfer(work->bgConfig, GF_BG_LYR_MAIN_2);
 }
-
-#pragma force_active reset
 
 // Copies the footprint of a Pokemon (or the generic one) into the 2x2-tile character of a sprite.
 BOOL FootprintStamp_LoadFootprintIcon(int species, int form, ManagedSprite *sprite, NARC *narc, NARC *footprintNarc, int screen, void *unk19E0) {
@@ -164,8 +161,6 @@ void FootprintStamp_FreeCamera(FootprintStamp *work) {
     Camera_Delete(work->camera);
 }
 
-#pragma force_active on
-
 void FootprintStamp_LoadBoardModel(FootprintStamp *work, NARC *narc) {
     int fileId = work->args->boardType == 0 ? 28 : 27;
 
@@ -176,13 +171,9 @@ void FootprintStamp_LoadBoardModel(FootprintStamp *work, NARC *narc) {
     ModelInstance_SetVisible(&work->boardInstance, TRUE);
 }
 
-#pragma force_active reset
-
 void FootprintStamp_FreeBoardModel(FootprintStamp *work) {
     ModelResource_Free(&work->boardModel);
 }
-
-#pragma force_active on
 
 void FootprintStamp_Draw3D(FootprintStamp *work) {
     VecFx32 scale, trans;
@@ -214,12 +205,9 @@ void FootprintStamp_Draw3D(FootprintStamp *work) {
     NNS_G3dGeBufferOP_N(G3OP_MTX_POP, &op, 1);
 }
 
-#pragma force_active reset
-
 #pragma opt_common_subs off
 #pragma opt_strength_reduction off
 #pragma opt_rotateloops off
-#pragma force_active on
 
 void FootprintStamp_CreateWindows(FootprintStamp *work) {
     Window *windows;
@@ -237,7 +225,6 @@ void FootprintStamp_CreateWindows(FootprintStamp *work) {
     }
 }
 
-#pragma force_active reset
 #pragma opt_common_subs reset
 #pragma opt_strength_reduction reset
 #pragma opt_rotateloops reset
@@ -346,7 +333,6 @@ BOOL FootprintStamp_PlaceStamp(FootprintStamp *work, FootprintStampMon *mon, u32
 #pragma opt_propagation off
 // Syncs the player list with the lobby: prints joined players' names, clears the rows of players who left.
 // Returns 1 if someone joined, 2 if someone left, else 0.
-#pragma force_active on
 
 int FootprintStamp_UpdatePlayers(FootprintStamp *work) {
     int joined;
@@ -410,7 +396,6 @@ int FootprintStamp_UpdatePlayers(FootprintStamp *work) {
     return 0;
 }
 
-#pragma force_active reset
 #pragma opt_common_subs reset
 #pragma opt_strength_reduction reset
 #pragma opt_rotateloops reset
@@ -424,8 +409,6 @@ void FootprintStamp_ShowPlayerName(FootprintStamp *work, u32 playerId) {
 void FootprintStamp_ClearPlayerName(FootprintStamp *work, u32 index) {
     FootprintStamp_ClearPlayerNameWindow(work->playerNameWindows, index);
 }
-
-#pragma force_active on
 
 void FootprintStamp_StartSelectEffect(FootprintStamp *work, int slot) {
     ManagedSpriteTemplate template = sFootprintStampSelectEffectTemplate;
@@ -445,8 +428,6 @@ void FootprintStamp_StartSelectEffect(FootprintStamp *work, int slot) {
     FootprintStamp_HighlightPartySlot(work, slot);
     PlaySE(SEQ_SE_DP_BUTTON3);
 }
-
-#pragma force_active reset
 
 void FootprintStamp_HighlightPartySlot(FootprintStamp *work, int slot) {
     u16 *unfaded = PaletteData_GetUnfadedBuf(work->plttData, PLTTBUF_MAIN_OBJ);
@@ -473,8 +454,6 @@ void FootprintStamp_UpdateSelectEffects(FootprintStamp *work) {
         }
     }
 }
-
-#pragma force_active on
 
 void FootprintStamp_CreateTextSprite(FootprintStamp *work, FootprintStampTextSprite *text, String *string, int font, int color, int priority, int plttResId, int x, int y, BOOL centered) {
     TextOBJTemplate template;
@@ -519,8 +498,6 @@ void FootprintStamp_CreateTextSprite(FootprintStamp *work, FootprintStampTextSpr
     text->width = width;
 }
 
-#pragma force_active reset
-
 void FootprintStamp_FreeTextSprite(FootprintStampTextSprite *text) {
     FontOAM_Delete(text->textObj);
     ObjCharTransfer_FreeCharSpace(&text->charTransfer);
@@ -542,7 +519,6 @@ static inline int FootprintStamp_InkGaugeY(int y) {
 }
 
 // Refills the ink and moves the ink level shown above the party slots towards it.
-#pragma force_active on
 
 void FootprintStamp_UpdateInkGauge(FootprintStamp *work) {
     int i, x;
@@ -572,8 +548,6 @@ void FootprintStamp_UpdateInkGauge(FootprintStamp *work) {
         slot = (FootprintStamp *)((u8 *)slot + 4);
     } while (i < FOOTPRINT_STAMP_PARTY_SLOTS);
 }
-
-#pragma force_active reset
 
 BOOL FootprintStamp_UseInk(FootprintStamp *work, fx32 amount) {
     fx32 diff;
@@ -627,8 +601,6 @@ BOOL FootprintStampBoard_AddStamp(FootprintStamp *work, FootprintStampBoard *boa
     return FALSE;
 }
 
-#pragma force_active on
-
 void FootprintStampBoard_Update(FootprintStampBoard *board, Camera *camera, int phase, u32 inkColumn) {
     int i;
 
@@ -653,8 +625,6 @@ void FootprintStampBoard_Update(FootprintStampBoard *board, Camera *camera, int 
     }
 }
 
-#pragma force_active reset
-
 void FootprintStampBoard_Draw(FootprintStampBoard *board) {
     int i;
 
@@ -673,7 +643,6 @@ void FootprintStampBoard_Draw(FootprintStampBoard *board) {
 
 // Idle stamps touched by a stamp playing an effect take over that effect and join its chain; once a chain
 // is long enough, the other stamps are removed and the chain's camera move starts.
-#pragma force_active on
 
 void FootprintStampBoard_ResolveChains(FootprintStampBoard *board) {
     int i;
@@ -720,8 +689,6 @@ void FootprintStampBoard_ResolveChains(FootprintStampBoard *board) {
     }
 }
 
-#pragma force_active reset
-
 // Uploads the textures of new or redrawn stamps, and the flash brightness.
 void FootprintStampBoard_VBlank(FootprintStampBoard *board, int phase) {
     int i;
@@ -740,8 +707,6 @@ void FootprintStampBoard_VBlank(FootprintStampBoard *board, int phase) {
         board->brightnessChanged = FALSE;
     }
 }
-
-#pragma force_active on
 
 FootprintStampObj *FootprintStampBoard_CreateStamp(FootprintStamp *work, FootprintStampBoard *board, const FootprintStampMon *mon, NARC *narc, NARC *footprintNarc, void *unk19E0) {
     FootprintStampObj *stamp = Heap_Alloc(HEAP_ID_125, sizeof(FootprintStampObj));
@@ -764,10 +729,6 @@ FootprintStampObj *FootprintStampBoard_CreateStamp(FootprintStamp *work, Footpri
     ModelInstance_SetVisible(&stamp->instance, FALSE);
     return stamp;
 }
-
-#pragma force_active reset
-
-#pragma force_active on
 
 BOOL FootprintStamp_LoadStampModel(FootprintStampBoard *board, FootprintStampModel *model, NARC *narc, NARC *footprintNarc, FootprintStampMon *mon, void *unk19E0) {
     model->file = GfGfxLoader_LoadFromOpenNarc(narc, 29, FALSE, HEAP_ID_125, FALSE);
@@ -797,8 +758,6 @@ BOOL FootprintStamp_LoadStampModel(FootprintStampBoard *board, FootprintStampMod
     }
     return TRUE;
 }
-
-#pragma force_active reset
 
 BOOL FootprintStampBoard_QueueTexture(FootprintStampBoard *board, NNSG3dResTex *texture) {
     int i;

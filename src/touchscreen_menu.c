@@ -391,8 +391,6 @@ void TouchscreenMenu_RequestRegisteredItemAnim(SysTask *task, int item) {
     data->registeredItemAnim = item;
 }
 
-#pragma force_active on
-
 void TouchscreenMenu_Task(SysTask *task, void *taskData) {
     TouchscreenMenuData *data = taskData;
     BOOL busy = TouchscreenMenu_IsFieldBusy(data->fieldSystem);
@@ -442,8 +440,6 @@ void TouchscreenMenu_Task(SysTask *task, void *taskData) {
     TouchscreenMenu_UpdatePhoneRing(&data->phoneRing);
     SpriteList_RenderAndAnimateSprites(data->spriteList);
 }
-
-#pragma force_active reset
 
 void TouchscreenMenu_SetRunningShoesSprites(TouchscreenMenuData *data, int on) {
     Sprite_SetAnimCtrlSeq(data->sprites[TOUCHSCREEN_MENU_SPRITE_SHOES_LABEL], 11 - on * 4);
@@ -546,8 +542,6 @@ void TouchscreenMenu_UpdateActionLabel(TouchscreenMenuData *data) {
     }
 }
 
-#pragma force_active on
-
 void TouchscreenMenu_SetButtonsActive(TouchscreenMenuData *data, BOOL active) {
     if (active) {
         data->buttonsActive = TRUE;
@@ -593,8 +587,6 @@ BOOL TouchscreenMenu_SyncStartMenuState(TouchscreenMenuData *data) {
     return TRUE;
 }
 
-#pragma force_active reset
-
 void TouchscreenMenu_RefreshLabelAndNewIcons(TouchscreenMenuData *data) {
     if (FieldSystem_IsFieldMapRunning(data->fieldSystem) == TRUE) {
         TouchscreenMenu_UpdateActionLabel(data);
@@ -609,8 +601,6 @@ void TouchscreenMenu_HighlightSelectionAndDisable(TouchscreenMenuData *data) {
     TouchscreenMenu_HighlightIcon(data, data->selection);
     TouchscreenMenu_SetButtonsActive(data, FALSE);
 }
-
-#pragma force_active on
 
 void TouchscreenMenu_UpdateForStartMenu(TouchscreenMenuData *data) {
     switch (data->fieldSystem->startMenuState) {
@@ -633,8 +623,6 @@ void TouchscreenMenu_UpdateForStartMenu(TouchscreenMenuData *data) {
         break;
     }
 }
-
-#pragma force_active reset
 
 void TouchscreenMenu_RestoreAfterStartMenu(TouchscreenMenuData *data) {
     TouchscreenMenu_PrintActionLabel(data, TouchscreenMenu_GetActionType(data));
@@ -911,8 +899,6 @@ static inline s32 TouchscreenMenu_PosToFx32Half(u16 x, float half) {
     return (s32)f;
 }
 
-#pragma force_active on
-
 void TouchscreenMenu_CreateSprites(TouchscreenMenuData *data) {
     SpriteTemplate template;
     SpriteResourcesHeader *header;
@@ -998,8 +984,6 @@ void TouchscreenMenu_CreateSprites(TouchscreenMenuData *data) {
     TouchscreenMenu_ShowIcons(data);
 }
 
-#pragma force_active reset
-
 int TouchscreenMenu_FindNeighborIcon(int selection, int dir, const TouchscreenMenuIcon *icons) {
     int i;
     int ret = -1;
@@ -1034,8 +1018,6 @@ void TouchscreenMenu_HighlightIcon(TouchscreenMenuData *data, int selection) {
     }
 }
 
-#pragma force_active on
-
 void TouchscreenMenu_HandleDpadInput(TouchscreenMenuData *data) {
     int dir = -1;
     int selection = data->selection;
@@ -1064,8 +1046,6 @@ void TouchscreenMenu_HandleDpadInput(TouchscreenMenuData *data) {
         data->fieldSystem->startMenuCursorPos = TouchscreenMenu_GetMenuIndex(data, data->selection);
     }
 }
-
-#pragma force_active reset
 
 void TouchscreenMenu_SetIconsTranslucent(Sprite **sprites, int selection) {
     int i;
@@ -1205,8 +1185,6 @@ void TouchscreenMenu_PrintFramedText(Window *window, String *string, int colorIn
     AddTextPrinterParameterizedWithColor(window, 0, string, 3, 0, TEXT_SPEED_INSTANT, color, NULL);
 }
 
-#pragma force_active on
-
 void TouchscreenMenu_LoadStrings(TouchscreenMenuData *data, u32 unused) {
     int i;
     int j;
@@ -1225,8 +1203,6 @@ void TouchscreenMenu_LoadStrings(TouchscreenMenuData *data, u32 unused) {
     data->unk_4C8 = ReadMsgData_ExpandPlaceholders(data->msgFormat, data->msgData, msg_0196_00013, HEAP_ID_8);
 }
 
-#pragma force_active reset
-
 void TouchscreenMenu_FreeStrings(TouchscreenMenuData *data) {
     int i;
 
@@ -1241,8 +1217,6 @@ void TouchscreenMenu_FreeStrings(TouchscreenMenuData *data) {
         }
     }
 }
-
-#pragma force_active on
 
 void TouchscreenMenu_CopyIconLabelsToVram(TouchscreenMenuData *data) {
     BOOL draw[8];
@@ -1264,8 +1238,6 @@ void TouchscreenMenu_CopyIconLabelsToVram(TouchscreenMenuData *data) {
     }
 }
 
-#pragma force_active reset
-
 void TouchscreenMenu_PrintIconLabels(TouchscreenMenuData *data) {
     int i = 0;
     Window *window = data->iconWindows;
@@ -1283,8 +1255,6 @@ void TouchscreenMenu_PrintIconLabels(TouchscreenMenuData *data) {
 u32 TouchscreenMenu_IsTextboxOpen(FieldSystem *fieldSystem) {
     return fieldSystem->textbox_open;
 }
-
-#pragma force_active on
 
 int TouchscreenMenu_GetLayout(FieldSystem *fieldSystem) {
     SaveVarsFlags *varsFlags = Save_VarsFlags_Get(fieldSystem->saveData);
@@ -1309,8 +1279,6 @@ int TouchscreenMenu_GetLayout(FieldSystem *fieldSystem) {
     return TOUCHSCREEN_MENU_LAYOUT_NORMAL;
 }
 
-#pragma force_active reset
-
 BOOL TouchscreenMenu_LayoutHasRegisteredItems(TouchscreenMenuData *data) {
     u32 layout = data->layout;
     if (layout - TOUCHSCREEN_MENU_LAYOUT_BUG_CONTEST > TOUCHSCREEN_MENU_LAYOUT_BATTLE_TOWER_PARTNER_ROOM - TOUCHSCREEN_MENU_LAYOUT_BUG_CONTEST) {
@@ -1329,8 +1297,6 @@ void TouchscreenMenu_InitPhoneRing(TouchscreenMenuPhoneRing *phoneRing, Touchscr
     phoneRing->bgConfig = data->bgConfig;
     phoneRing->shown = FALSE;
 }
-
-#pragma force_active on
 
 void TouchscreenMenu_UpdatePhoneRing(TouchscreenMenuPhoneRing *phoneRing) {
     BOOL ringing = GearPhoneRingManager_IsRinging(phoneRing->phoneRingManager);
@@ -1358,8 +1324,6 @@ void TouchscreenMenu_UpdatePhoneRing(TouchscreenMenuPhoneRing *phoneRing) {
     }
 }
 
-#pragma force_active reset
-
 void TouchscreenMenu_HidePhoneCaller(TouchscreenMenuPhoneRing *phoneRing) {
     if (phoneRing->shown != FALSE) {
         TouchscreenMenu_DrawWindowFrame(&phoneRing->callerWindow, 2);
@@ -1367,8 +1331,6 @@ void TouchscreenMenu_HidePhoneCaller(TouchscreenMenuPhoneRing *phoneRing) {
         RemoveWindow(&phoneRing->callerWindow);
     }
 }
-
-#pragma force_active on
 
 // Prints a message into a temporary window on BG sub 1; textX == -1 centres it.
 void TouchscreenMenu_PrintMessageAt(TouchscreenMenuData *data, u32 msgId, u8 x, u8 y, u8 width, u8 height, u32 baseTile, s16 textX, s16 textY) {
@@ -1387,8 +1349,6 @@ void TouchscreenMenu_PrintMessageAt(TouchscreenMenuData *data, u32 msgId, u8 x, 
     CopyWindowToVram(&window);
     RemoveWindow(&window);
 }
-
-#pragma force_active reset
 
 void TouchscreenMenu_PrintItemCount(TouchscreenMenuData *data, u8 x, u8 y, u16 count) {
     BufferIntegerAsString(data->msgFormat, 0, count, 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
@@ -1415,8 +1375,6 @@ void TouchscreenMenu_PrintParkBalls(TouchscreenMenuData *data) {
     TouchscreenMenu_PrintItemCount(data, 14, 14, FieldSystem_GetParkBallCount(data->fieldSystem));
 }
 
-#pragma force_active on
-
 void TouchscreenMenu_PrintBugContestInfo(TouchscreenMenuData *data) {
     BugContest *contest = FieldSystem_BugContest_Get(data->fieldSystem);
     if (contest == NULL) {
@@ -1430,8 +1388,6 @@ void TouchscreenMenu_PrintBugContestInfo(TouchscreenMenuData *data) {
     data->iconShown[TOUCHSCREEN_MENU_SPRITE_BUG_CONTEST_MON] = FALSE;
     data->icons[TOUCHSCREEN_MENU_SPRITE_BUG_CONTEST_MON].shown = FALSE;
 }
-
-#pragma force_active reset
 
 void TouchscreenMenu_PrintBallInfo(TouchscreenMenuData *data) {
     u32 layout = data->layout;
@@ -1448,8 +1404,6 @@ void TouchscreenMenu_PrintBallInfo(TouchscreenMenuData *data) {
     }
 }
 
-#pragma force_active on
-
 void TouchscreenMenu_InitIconFlags(TouchscreenMenuData *data) {
     int i;
     for (i = 0; i < TOUCHSCREEN_MENU_NUM_ICONS; i++) {
@@ -1464,8 +1418,6 @@ void TouchscreenMenu_InitIconFlags(TouchscreenMenuData *data) {
         data->icons[i].shown = data->iconShown[i];
     }
 }
-
-#pragma force_active reset
 
 // Slots 7/8 (registered items) pass through; icon slots map to their index among the shown icons.
 int TouchscreenMenu_GetMenuIndex(TouchscreenMenuData *data, int slot) {
@@ -1485,8 +1437,6 @@ int TouchscreenMenu_GetMenuIndex(TouchscreenMenuData *data, int slot) {
     }
     return menuIndex;
 }
-
-#pragma force_active on
 
 int TouchscreenMenu_GetSlotFromMenuIndex(TouchscreenMenuData *data, int menuIndex) {
     int i;
@@ -1525,8 +1475,6 @@ void TouchscreenMenu_ValidateSelection(TouchscreenMenuData *data) {
         }
     }
 }
-
-#pragma force_active reset
 
 void *TouchscreenMenu_OnFlashcartDetected(void) {
     return Heap_AllocAtEnd(HEAP_ID_3, 1000);

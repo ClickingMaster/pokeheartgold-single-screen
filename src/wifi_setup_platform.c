@@ -119,8 +119,6 @@ int WifiSetup_RecvFrom(int socket, void *buffer, int size, int flags, u8 *addres
     return SOC_RecvFrom(socket, buffer, size, flags, address);
 }
 
-#pragma force_active on
-
 int WifiSetup_Poll(void *unused, WifiSetupPollTime *fd, int unused2, int unused3, WifiSetupPollTime *timeout) {
     WifiSetupPollTime copy = *fd;
     u64 ticks = 0;
@@ -128,8 +126,6 @@ int WifiSetup_Poll(void *unused, WifiSetupPollTime *fd, int unused2, int unused3
     ticks += (u64)((s64)timeout->microseconds * 0x1FF6210) >> 6;
     return SOC_Poll(&copy, 1, ticks);
 }
-
-#pragma force_active reset
 
 int WifiSetup_SendTo(int socket, const void *buffer, int size, int flags, u8 *address, u32 addressLength) {
     *address = addressLength;
@@ -152,8 +148,6 @@ int WifiSetup_Close(int socket) {
     return SOC_Close(socket);
 }
 
-#pragma force_active on
-
 u32 WifiSetup_HostToNet32(u32 x) {
     return (u8)(x >> 24) | ((x >> 8) & 0xFF00) | ((x << 8) & 0xFF0000) | ((x << 24) & 0xFF000000);
 }
@@ -169,8 +163,6 @@ u32 WifiSetup_NetToHost32(u32 x) {
 u16 WifiSetup_NetToHost16(int x) {
     return (u8)(x >> 8) | ((x << 8) & 0xFF00);
 }
-
-#pragma force_active reset
 
 s32 WifiSetup_StrLen(const char *str) {
     s32 len = 0;
@@ -212,8 +204,6 @@ void WifiSetup_AddToPollSet(u32 socket, void *set) {
     *(u16 *)(p + 4) = 1;
 }
 
-#pragma force_active on
-
 void WifiSetup_ConvertBssDesc(const void *src, void *dst) {
     const ScanRecord *s = src;
     AccessPointInfo *t = dst;
@@ -247,8 +237,6 @@ void WifiSetup_ConvertBssDesc(const void *src, void *dst) {
         t->mode = 0;
     }
 }
-
-#pragma force_active reset
 
 void WifiSetup_CopyConnectSsid(const void *src, void *dst) {
     u8 *p = dst;

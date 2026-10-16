@@ -292,8 +292,6 @@ int ApricornJuice_GetFlavorTotal(ApricornJuice *data) {
     return (u8)total;
 }
 
-#pragma force_active on
-
 void ApricornJuice_RankFlavors(void *input_, void *out_) {
     const u8 *input = input_;
     ApricornJuiceResult *out = out_;
@@ -393,8 +391,6 @@ void ApricornJuice_RankFlavors(void *input_, void *out_) {
     }
     out->count = count;
 }
-
-#pragma force_active off
 
 int ApricornJuice_GetTopMixIndex(void *data) {
     struct {
@@ -597,8 +593,6 @@ void ApricornBox_AddJuiceMildness(SaveApricornBox *box, u8 amount) {
     }
 }
 
-#pragma force_active on
-
 void ApricornBox_MixQueuedApricorns(SaveApricornBox *box) {
     ApricornMixState *s = (ApricornMixState *)box;
     s8 values[5], order[5];
@@ -680,8 +674,6 @@ void ApricornBox_MixQueuedApricorns(SaveApricornBox *box) {
     s->state = 3;
     s->actions = 0;
 }
-
-#pragma force_active off
 
 void ApricornJuice_GetFlavors(ApricornJuice *data, u8 *out) {
     int i;

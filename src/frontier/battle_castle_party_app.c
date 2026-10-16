@@ -518,7 +518,6 @@ enum {
     CASTLE_PARTY_FADE_IN_WAIT_FADE,
 };
 
-#pragma force_active on
 BOOL BattleCastlePartyApp_FadeIn(BattleCastlePartyApp *app) {
     switch (app->subState) {
     case CASTLE_PARTY_FADE_IN_START_SYNC:
@@ -569,7 +568,6 @@ BOOL BattleCastlePartyApp_FadeIn(BattleCastlePartyApp *app) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 void BattleCastlePartyApp_DrawScreen(BattleCastlePartyApp *app) {
     Window *window = &app->windows[0];
@@ -583,7 +581,6 @@ void BattleCastlePartyApp_DrawScreen(BattleCastlePartyApp *app) {
     GfGfx_BothDispOn();
 }
 
-#pragma force_active on
 BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
     u32 input;
     u32 rank;
@@ -1123,7 +1120,6 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 enum {
     CASTLE_PARTY_LINK_ACTION_SEND,
@@ -1243,7 +1239,6 @@ BOOL BattleCastlePartyApp_FadeOut(BattleCastlePartyApp *app) {
     return FALSE;
 }
 
-#pragma force_active on
 void BattleCastlePartyApp_FreeResources(BattleCastlePartyApp *app) {
     int numMons;
     int i;
@@ -1288,7 +1283,6 @@ void BattleCastlePartyApp_FreeResources(BattleCastlePartyApp *app) {
     BattleCastlePartyApp_FreeBgLayers(app->bgConfig);
     NARC_Delete(app->narc);
 }
-#pragma force_active reset
 
 void BattleCastlePartyApp_DisableDisplay(void) {
     Main_SetVBlankIntrCB(NULL, NULL);
@@ -1653,7 +1647,6 @@ void BattleCastlePartyApp_PrintPartyHp(BattleCastlePartyApp *app, Window *window
     ScheduleWindowCopyToVram(window);
 }
 
-#pragma force_active on
 // mode 0: in the party panel column of the slot; otherwise at the start of a single-mon window
 void BattleCastlePartyApp_PrintMonHp(BattleCastlePartyApp *app, Window *window, int slot, int mode) {
     u16 maxHpX;
@@ -1685,7 +1678,6 @@ void BattleCastlePartyApp_PrintMonHp(BattleCastlePartyApp *app, Window *window, 
     MessagePrinter_PrintGlyph(app->msgPrinter, 0, window, slashX, y); // "/"
     PrintUIntOnWindow(app->msgPrinter, GetMonData(mon, MON_DATA_MAX_HP, NULL), 3, PRINTING_MODE_LEFT_ALIGN, window, maxHpX, y);
 }
-#pragma force_active reset
 
 void BattleCastlePartyApp_PrintPartyLevels(BattleCastlePartyApp *app, Window *window) {
     int numMons = BattleCastle_GetPartySize(app->frontierType, 1);
@@ -1697,7 +1689,6 @@ void BattleCastlePartyApp_PrintPartyLevels(BattleCastlePartyApp *app, Window *wi
     ScheduleWindowCopyToVram(window);
 }
 
-#pragma force_active on
 // mode 0: in the party panel column of the slot; otherwise at the start of a single-mon window
 void BattleCastlePartyApp_PrintMonLevelAndGender(BattleCastlePartyApp *app, Window *window, u32 slot, u8 mode) {
     unsigned int levelBaseX;
@@ -1726,7 +1717,6 @@ void BattleCastlePartyApp_PrintMonLevelAndGender(BattleCastlePartyApp *app, Wind
     MessagePrinter_PrintGlyphAndUInt(app->msgPrinter, 1, GetMonData(mon, MON_DATA_LEVEL, NULL), 3, PRINTING_MODE_LEFT_ALIGN, window, levelX, y); // "Lv. {n}"
     BattleCastlePartyApp_PrintGenderSymbol(app, window, genderX, y, 0, GetMonData(mon, MON_DATA_GENDER, NULL));
 }
-#pragma force_active reset
 
 // Redraws the current HP of the mon in the party panel column of the slot
 void BattleCastlePartyApp_RedrawMonHp(BattleCastlePartyApp *app, Window *window, int slot, int hp) {
@@ -1748,7 +1738,6 @@ void BattleCastlePartyApp_HideChoosePrompt(BattleCastlePartyApp *app) {
     BattleCastlePartyApp_CloseWindow(&app->windows[7]);
 }
 
-#pragma force_active on
 // HEAL / RENTAL / CANCEL
 void BattleCastlePartyApp_OpenMainMenu(BattleCastlePartyApp *app) {
     BattleCastle_DrawWindowFrame(&app->windows[6], Options_GetFrame(app->options));
@@ -1756,14 +1745,12 @@ void BattleCastlePartyApp_OpenMainMenu(BattleCastlePartyApp *app) {
     BattleCastlePartyApp_CreateMainMenuList(app);
     BattleCastlePartyApp_PrintMainMenuHelp(app);
 }
-#pragma force_active reset
 
 void BattleCastlePartyApp_CloseMainMenu(BattleCastlePartyApp *app) {
     BattleCastlePartyApp_CloseWindow(&app->windows[6]);
     BattleCastlePartyApp_DestroyListMenu(app);
 }
 
-#pragma force_active on
 // RESTORE HP / RESTORE PP / RESTORE ALL / RANK UP / CANCEL
 void BattleCastlePartyApp_OpenHealMenu(BattleCastlePartyApp *app) {
     BattleCastle_DrawWindowFrame(&app->windows[6], Options_GetFrame(app->options));
@@ -1771,20 +1758,17 @@ void BattleCastlePartyApp_OpenHealMenu(BattleCastlePartyApp *app) {
     BattleCastlePartyApp_CreateHealMenuList(app);
     BattleCastlePartyApp_PrintHealMenuHelp(app);
 }
-#pragma force_active reset
 
 void BattleCastlePartyApp_CloseHealMenu(BattleCastlePartyApp *app) {
     BattleCastlePartyApp_DestroyListMenu(app);
 }
 
-#pragma force_active on
 void BattleCastlePartyApp_OpenRentalMenu(BattleCastlePartyApp *app) {
     BattleCastle_DrawWindowFrame(&app->windows[6], Options_GetFrame(app->options));
     app->listCursorPos = CASTLE_PARTY_LIST_POS_NONE;
     BattleCastlePartyApp_CreateRentalMenuList(app);
     BattleCastlePartyApp_PrintRentalMenuHelp(app);
 }
-#pragma force_active reset
 
 void BattleCastlePartyApp_CloseRentalMenu(BattleCastlePartyApp *app) {
     BattleCastlePartyApp_DestroyListMenu(app);
@@ -1805,7 +1789,6 @@ void BattleCastlePartyApp_OpenItemGrid(BattleCastlePartyApp *app, int mode) {
     BattleCastlePartyApp_SetupItemGrid(app, mode);
 }
 
-#pragma force_active on
 void BattleCastlePartyApp_CloseItemGrid(BattleCastlePartyApp *app) {
     if (app->flags.bits.itemMenuOpen == TRUE) {
         u32 i;
@@ -1836,7 +1819,6 @@ void BattleCastlePartyApp_CloseItemGrid(BattleCastlePartyApp *app) {
         app->flags.bits.itemMenuOpen = FALSE;
     }
 }
-#pragma force_active reset
 
 void BattleCastlePartyApp_ShowYesNoPrompt(BattleCastlePartyApp *app) {
     BattleCastlePrompt_Show(&app->yesNoPrompt, app->bgConfig);
@@ -1894,7 +1876,6 @@ void BattleCastlePartyApp_PrintItemNames(BattleCastlePartyApp *app) {
     }
 }
 
-#pragma force_active on
 // Icons of the items on the current page
 void BattleCastlePartyApp_DrawItemIcons(BattleCastlePartyApp *app) {
     // The list entry offset and the icon slot (iconSlot->itemIcons[0] == app->itemIcons[i])
@@ -1925,7 +1906,6 @@ void BattleCastlePartyApp_DrawItemIcons(BattleCastlePartyApp *app) {
         }
     }
 }
-#pragma force_active reset
 
 // "{page}/{numPages}"
 void BattleCastlePartyApp_PrintItemPageNumber(BattleCastlePartyApp *app) {
@@ -1966,7 +1946,6 @@ void BattleCastlePartyApp_PrintItemDescription(BattleCastlePartyApp *app, u32 it
     ScheduleWindowCopyToVram(&app->windows[CASTLE_PARTY_WIN_ITEM_DESC]);
 }
 
-#pragma force_active on
 // Nickname, gender, level, HP and held item of the mon the item is for
 void BattleCastlePartyApp_PrintSelectedMonInfo(BattleCastlePartyApp *app) {
     u32 i;
@@ -1997,9 +1976,7 @@ void BattleCastlePartyApp_PrintSelectedMonInfo(BattleCastlePartyApp *app) {
         ScheduleWindowCopyToVram(&app->windows[i]);
     }
 }
-#pragma force_active reset
 
-#pragma force_active on
 // Builds the rental list for the player's rental rank and draws the item grid
 void BattleCastlePartyApp_SetupItemGrid(BattleCastlePartyApp *app, int mode) {
     MsgData *itemNames = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0222_bin, HEAP_ID_107);
@@ -2030,7 +2007,6 @@ void BattleCastlePartyApp_SetupItemGrid(BattleCastlePartyApp *app, int mode) {
     BattleCastlePartyApp_PrintSelectedMonInfo(app);
     BattleCastleSprite_SetPositionSubScreen(app->monPic, 48, 72);
 }
-#pragma force_active reset
 
 void BattleCastlePartyApp_BufferNumber(BattleCastlePartyApp *app, int field, int value, int digits, int mode) {
     BufferIntegerAsString(app->msgFormat, field, value, digits, (PrintingMode)mode, TRUE);
@@ -2374,7 +2350,6 @@ void BattleCastlePartyApp_CloseAll(BattleCastlePartyApp *app) {
     BattleCastleSprite_SetDrawFlag(app->menuOpenSprite, FALSE);
 }
 
-#pragma force_active on
 // TRUE if any move has less than its max PP
 int BattleCastlePartyApp_IsAnyPpUsed(Pokemon *mon) {
     int used = FALSE;
@@ -2398,7 +2373,6 @@ int BattleCastlePartyApp_IsAnyPpUsed(Pokemon *mon) {
     }
     return used;
 }
-#pragma force_active reset
 
 void BattleCastlePartyApp_CloseWindow(Window *window) {
     ClearFrameAndWindow2(window, TRUE);
@@ -2524,7 +2498,6 @@ void BattleCastlePartyApp_UseItemOnMon(Pokemon *mon, u16 itemId) {
     UseItemOnPokemon(mon, itemId, 0, 0, HEAP_ID_107);
 }
 
-#pragma force_active on
 void BattleCastlePartyApp_PrintTrainerNames(BattleCastlePartyApp *app, Window *window) {
     u16 x1;
     u16 y1;
@@ -2547,7 +2520,6 @@ void BattleCastlePartyApp_PrintTrainerNames(BattleCastlePartyApp *app, Window *w
     }
     ScheduleWindowCopyToVram(window);
 }
-#pragma force_active reset
 
 void BattleCastlePartyApp_HealMon(BattleCastlePartyApp *app, int slot, int action) {
     Pokemon *mon;
@@ -2765,7 +2737,6 @@ void BattleCastlePartyApp_UpdateMonIcons(BattleCastlePartyApp *app) {
     }
 }
 
-#pragma force_active on
 // Raises the heal (action 4) or rental rank of whoever owns the mon in slot and pays for it
 void BattleCastlePartyApp_RankUp(BattleCastlePartyApp *app, u8 slot, u16 action) {
     u8 kind;
@@ -2832,7 +2803,6 @@ void BattleCastlePartyApp_RankUp(BattleCastlePartyApp *app, u8 slot, u16 action)
     BattleCastle_DrawWindowFrame(&app->windows[CASTLE_PARTY_WIN_MESSAGE], Options_GetFrame(app->options));
     app->printerId = BattleCastlePartyApp_ShowMessage(app, gBattleCastlePartyAppRankUpMessages[kind][rank], 1);
 }
-#pragma force_active reset
 
 void BattleCastlePartyApp_PrintExpandedMessage(BattleCastlePartyApp *app, Window *window, MsgData *msgData, int msgNo, int x, int y, int fontId, int color, int alignment) {
     String *string = NewString_ReadMsgData(msgData, msgNo);
@@ -2842,7 +2812,6 @@ void BattleCastlePartyApp_PrintExpandedMessage(BattleCastlePartyApp *app, Window
     String_Delete(string);
 }
 
-#pragma force_active on
 void BattleCastlePartyApp_LoadMonSummary(BattleCastlePartyApp *app) {
     Pokemon *mon = Party_GetMonByIndex(app->party, BattleCastle_GetMonIndex(app->numMons, app->cursorPos));
     BOOL lock = AcquireMonLock(mon);
@@ -2880,7 +2849,6 @@ void BattleCastlePartyApp_LoadMonSummary(BattleCastlePartyApp *app) {
     }
     ReleaseMonLock(mon, lock);
 }
-#pragma force_active reset
 
 void BattleCastlePartyApp_PrintSummaryLabels(BattleCastlePartyApp *app) {
     FillWindowPixelBuffer(&app->windows[CASTLE_PARTY_WIN_LEVEL_LABEL], 0);
@@ -2915,8 +2883,6 @@ void BattleCastlePartyApp_PrintSummaryLabels(BattleCastlePartyApp *app) {
     CopyWindowPixelsToVram_TextMode(&app->windows[CASTLE_PARTY_WIN_SPEED_LABEL]);
 }
 
-#pragma force_active on
-#pragma opt_strength_reduction off
 // Prints the values of the summary panel (scheduleCopy == TRUE: schedule the copy, else copy now)
 void BattleCastlePartyApp_PrintMonSummary(BattleCastlePartyApp *app, int scheduleCopy) {
     u32 i;
@@ -3040,8 +3006,6 @@ void BattleCastlePartyApp_PrintMonSummary(BattleCastlePartyApp *app, int schedul
         CopyWindowPixelsToVram_TextMode(&app->windows[CASTLE_PARTY_WIN_MOVE_PP + 3]);
     }
 }
-#pragma opt_strength_reduction reset
-#pragma force_active reset
 
 void BattleCastlePartyApp_RefreshMonSummary(BattleCastlePartyApp *app, int scheduleCopy) {
     BattleCastlePartyApp_LoadMonSummary(app);
@@ -3144,12 +3108,10 @@ void BattleCastlePartyApp_SetCursorPos(BattleCastlePartyApp *app, u32 cursorPos,
     BattleCastlePartyApp_MoveCursor(app);
 }
 
-#pragma force_active on
 void BattleCastlePartyApp_SetItemCursor(BattleCastlePartyApp *app, int x, int y, int seq) {
     BattleCastleSprite_SetPosition(app->itemCursor, x, y);
     BattleCastleSprite_SetAnim(app->itemCursor, seq);
 }
-#pragma force_active reset
 
 void BattleCastlePartyApp_ShowItemDescription(BattleCastlePartyApp *app, int button) {
     BattleCastlePartyApp_PrintItemDescription(app, (u16)button);

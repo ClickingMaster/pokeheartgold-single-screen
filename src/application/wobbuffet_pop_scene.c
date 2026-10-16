@@ -117,7 +117,6 @@ void WobbuffetPop_HandleFinishEvent(WobbuffetPop *game, WobbuffetPopEvent *event
 void WobbuffetPop_HandleSyncEvent(WobbuffetPop *game, WobbuffetPopEvent *event);
 void WobbuffetPop_HandleDemoEvent(WobbuffetPop *game, WobbuffetPopEvent *event);
 
-#pragma force_active on
 void WobbuffetPopInflation_Start(BgConfig *bgConfig, int playerCount, int size, WobbuffetPopInflation *inflation) {
     NARC *narc = NARC_New(NARC_a_1_9_9, HEAP_ID_117);
 
@@ -132,7 +131,6 @@ void WobbuffetPopInflation_Start(BgConfig *bgConfig, int playerCount, int size, 
     WobbuffetPopInflation_UpdateBg(bgConfig, inflation, playerCount);
     PlaySE(SEQ_SE_DP_BOX02);
 }
-#pragma force_active off
 
 void WobbuffetPopInflation_Stop(BgConfig *bgConfig, WobbuffetPopInflation *inflation) {
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_3);
@@ -140,7 +138,6 @@ void WobbuffetPopInflation_Stop(BgConfig *bgConfig, WobbuffetPopInflation *infla
     inflation->hideBg = TRUE;
 }
 
-#pragma force_active on
 void WobbuffetPopInflation_UpdateBg(BgConfig *bgConfig, WobbuffetPopInflation *inflation, int playerCount) {
     int x;
     int y;
@@ -194,7 +191,6 @@ void WobbuffetPopInflation_CalcScale(int playerCount, int size, int air, int *sc
         *scaleX += (int)(((s64)(q - 3328) * 4506 + 2048) >> 12);
     }
 }
-#pragma force_active off
 
 int WobbuffetPop_GetBalloonSize(int n) {
     if (n >= 10) {
@@ -452,7 +448,6 @@ void WobbuffetPop_FreePuffs(WobbuffetPop *game) {
     }
 }
 
-#pragma force_active on
 #pragma optimization_level 2
 #pragma opt_common_subs off
 void WobbuffetPopConfetti_Create(WobbuffetPop *game, WobbuffetPopConfetti *confetti, WobbuffetPopInflation *inflation) {
@@ -535,7 +530,6 @@ void WobbuffetPopConfetti_Create(WobbuffetPop *game, WobbuffetPopConfetti *confe
 }
 #pragma opt_common_subs reset
 #pragma optimization_level reset
-#pragma force_active off
 
 void WobbuffetPop_FreeConfetti(WobbuffetPop *game) {
     s32 i;
@@ -596,7 +590,6 @@ void WobbuffetPop_FreeConfetti(WobbuffetPop *game) {
         }                                                                                                                                                                                \
     } while (0)
 
-#pragma force_active on
 BOOL WobbuffetPop_UpdateConfetti(WobbuffetPop *game) {
     WobbuffetPopConfetti *confetti = &game->confetti;
     int count = 0;
@@ -629,7 +622,6 @@ BOOL WobbuffetPop_UpdateConfetti(WobbuffetPop *game) {
     }
     return TRUE;
 }
-#pragma force_active off
 
 BOOL WobbuffetPop_PopBalloon(WobbuffetPop *game) {
     WobbuffetPopConfetti *confetti = &game->confetti;
@@ -818,7 +810,6 @@ static inline int WobbuffetPop_GetSubObjPaletteIndex(WobbuffetPop *game, int i, 
     return offset * 16 + sWobbuffetPopSubObjPaletteIndices[count][seat];
 }
 
-#pragma force_active on
 void WobbuffetPop_SetPlayerSubBgColors(WobbuffetPop *game) {
     u16 colors[4][3];
     int i;
@@ -897,7 +888,6 @@ void WobbuffetPop_SetPlayerSubObjColors(WobbuffetPop *game) {
         faded[index] = colors[player];
     }
 }
-#pragma force_active off
 
 void WobbuffetPop_InitPump(WobbuffetPop *game, u32 balloonIndex, u32 amount, WobbuffetPopPump *pump) {
     MI_CpuFill8(pump, 0, sizeof(WobbuffetPopPump));
@@ -928,7 +918,6 @@ WobbuffetPopPump *WobbuffetPop_DequeuePump(WobbuffetPop *game) {
     return &game->pumpQueue[n % 8];
 }
 
-#pragma force_active on
 BOOL WobbuffetPop_SetPumpBonus(WobbuffetPop *game, int bonus) {
     WobbuffetPopPump *pump = NULL;
     int start;
@@ -1006,7 +995,6 @@ void WobbuffetPop_CreateSeatSprites(WobbuffetPop *game, ManagedSprite **sprites)
         break;
     }
 }
-#pragma force_active off
 
 void WobbuffetPop_FreeSeatSprites(WobbuffetPop *game, ManagedSprite **sprites) {
     s32 i;
@@ -1017,7 +1005,6 @@ void WobbuffetPop_FreeSeatSprites(WobbuffetPop *game, ManagedSprite **sprites) {
     }
 }
 
-#pragma force_active on
 void WobbuffetPopBonusRing_CreateSprites(WobbuffetPop *game, WobbuffetPopBonusRing *ring) {
     ManagedSpriteTemplate template = sWobbuffetPopBonusSpriteTemplate;
     int i;
@@ -1050,7 +1037,6 @@ void WobbuffetPopBonusRing_CreateSprites(WobbuffetPop *game, WobbuffetPopBonusRi
     ManagedSprite_SetDrawFlag(ring->targets[0].sprite, TRUE);
     ManagedSprite_SetDrawFlag(ring->targets[0].shadow, TRUE);
 }
-#pragma force_active off
 
 void WobbuffetPopBonusRing_FreeSprites(WobbuffetPop *game, WobbuffetPopBonusRing *ring) {
     s32 i;
@@ -1065,7 +1051,6 @@ void WobbuffetPopBonusRing_FreeSprites(WobbuffetPop *game, WobbuffetPopBonusRing
     }
 }
 
-#pragma force_active on
 #pragma opt_strength_reduction off
 void WobbuffetPopBonusRing_Init(WobbuffetPop *game, WobbuffetPopBonusRing *ring) {
     ring->angleStep = 0x1e000 / sWobbuffetPopRingSpeedSteps[ring->speed * 4];
@@ -1139,7 +1124,6 @@ void WobbuffetPopBonusRing_Update(WobbuffetPop *game, WobbuffetPopBonusRing *rin
         WobbuffetPopDust_Update(game, &ring->targets[i], &ring->targets[i].dust);
     }
 }
-#pragma force_active off
 
 u8 WobbuffetPop_FindBonusTargetAtFront(WobbuffetPop *game, WobbuffetPopBonusTarget **outTarget) {
     s32 i;
@@ -1405,7 +1389,6 @@ void WobbuffetPop_FreeBonusPopupSprites(WobbuffetPop *game, WobbuffetPopBonusPop
     }
 }
 
-#pragma force_active on
 void WobbuffetPop_ShowBonusPopup(WobbuffetPop *game, WobbuffetPopBonusPopup *popups, int bonus, int netId, int delay) {
     int bonusCopy = bonus;
     WobbuffetPopBonusPopup *popup = NULL;
@@ -1443,7 +1426,6 @@ void WobbuffetPop_ShowBonusPopup(WobbuffetPop *game, WobbuffetPopBonusPopup *pop
     popup->state = 0;
     popup->active = TRUE;
 }
-#pragma force_active off
 
 void WobbuffetPop_UpdateBonusPopups(WobbuffetPop *game, WobbuffetPopBonusPopup *popups) {
     s32 i;
@@ -1514,7 +1496,6 @@ BOOL WobbuffetPopBonusPopup_Update(WobbuffetPopBonusPopup *popups, WobbuffetPopB
     return TRUE;
 }
 
-#pragma force_active on
 void WobbuffetPop_NewTextObj(BgConfig *bgConfig, SpriteManager *spriteManager, FontSystem *fontSystem, WobbuffetPopTextObj *textObj, String *string, int fontId, u32 color, int setPalOffset, int plttResId, int x, int y, int centered, int unk_20, int vram, int height) {
     TextOBJTemplate template;
     Window window;
@@ -1555,7 +1536,6 @@ void WobbuffetPop_NewTextObj(BgConfig *bgConfig, SpriteManager *spriteManager, F
     textObj->charAlloc = charAlloc;
     textObj->width = width;
 }
-#pragma force_active off
 
 void WobbuffetPopTextObj_Free(WobbuffetPopTextObj *textObj) {
     FontOAM_Delete(textObj->textObj);
@@ -1651,7 +1631,6 @@ BOOL WobbuffetPopScoreDisplay_IsSettled(WobbuffetPopScoreDisplay *display) {
     return TRUE;
 }
 
-#pragma force_active on
 #pragma opt_strength_reduction off
 BOOL WobbuffetPopScoreDisplay_RollDigits(WobbuffetPopScoreDisplay *display) {
     int digit = 5;
@@ -1695,7 +1674,6 @@ BOOL WobbuffetPopScoreDisplay_RollDigits(WobbuffetPopScoreDisplay *display) {
     return FALSE;
 }
 #pragma opt_strength_reduction reset
-#pragma force_active off
 
 ManagedSprite *WobbuffetPop_CreateScoreFrameSprite(WobbuffetPop *game) {
     ManagedSprite *sprite = SpriteSystem_NewSprite(game->spriteSystem, game->spriteManager, &sWobbuffetPopScoreFrameSpriteTemplate);
@@ -1704,7 +1682,6 @@ ManagedSprite *WobbuffetPop_CreateScoreFrameSprite(WobbuffetPop *game) {
     return sprite;
 }
 
-#pragma force_active on
 void WobbuffetPop_CreateScoreLabels(WobbuffetPop *game) {
     int i;
     u32 score = game->score;
@@ -1735,7 +1712,6 @@ void WobbuffetPop_CreateScoreLabels(WobbuffetPop *game) {
         label = (WobbuffetPopTextObj *)((u8 *)label - sizeof(WobbuffetPopTextObj));
     }
 }
-#pragma force_active off
 
 void WobbuffetPop_FreeScoreLabels(WobbuffetPop *game) {
     s32 i;
@@ -1767,7 +1743,6 @@ void WobbuffetPop_DeleteDemoStylusSprite(WobbuffetPop *game, ManagedSprite *spri
     Sprite_DeleteAndFreeResources(sprite);
 }
 
-#pragma force_active on
 BOOL WobbuffetPop_RunDemo(WobbuffetPop *game, WobbuffetPopDemo *demo) {
     switch (demo->state) {
     case 0:
@@ -1815,7 +1790,6 @@ BOOL WobbuffetPop_RunDemo(WobbuffetPop *game, WobbuffetPopDemo *demo) {
     }
     return FALSE;
 }
-#pragma force_active off
 
 void WobbuffetPopDust_Create(WobbuffetPop *game, WobbuffetPopDust *dust) {
     s32 i;
@@ -1842,7 +1816,6 @@ void WobbuffetPopDust_Free(WobbuffetPop *game, WobbuffetPopDust *dust) {
     }
 }
 
-#pragma force_active on
 void WobbuffetPopDust_Start(WobbuffetPop *game, WobbuffetPopBonusTarget *target, WobbuffetPopDust *dust) {
     s16 xy[2];
     int i;
@@ -1884,7 +1857,6 @@ void WobbuffetPopDust_Update(WobbuffetPop *game, WobbuffetPopBonusTarget *target
         break;
     }
 }
-#pragma force_active off
 
 // The player list and results screens, run by WobbuffetPopApp before and after the game.
 typedef struct WobbuffetPopPlazaScreen {
