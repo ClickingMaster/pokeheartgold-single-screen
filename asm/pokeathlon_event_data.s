@@ -32,8 +32,8 @@
 	.public sLampJumpTimerDigitX
 	.public sLampJumpTimerDigitAnims
 	.public gPokeathlonRingDropSwitchSpots
-	.public ov96_0221D70A
-	.public ov96_0221D70C
+	.public gPokeathlonRingDropSwitchSpotsY
+	.public gPokeathlonRingDropSwitchSpotsRadius
 	.public gPokeathlonCourseMonPicRect
 	.public sLampJumpCameraOffset
 	.public gPokeathlonGoalRollPaletteData
@@ -76,7 +76,7 @@
 	.public gPokeathlonRingDropDirectionReference
 	.public gPokeathlonRingDropGraphicsModes
 	.public gPokeathlonRingDropMonStartPositions
-	.public ov96_0221D6E6
+	.public gPokeathlonRingDropMonStartPositionsY
 	.public gPokeathlonRingDropBgLayers
 	.public gPokeathlonRingDropBgTemplates
 	.public gPokeathlonEventIntroSpriteTemplates
@@ -177,7 +177,7 @@
 	.public gPokeathlonCourseCeremonyBgTemplate1
 	.public gPokeathlonCourseWaitSteps
 	.public gPokeathlonBlockSmashSpotPositions
-	.public ov96_0221CDCA
+	.public gPokeathlonBlockSmashSpotPositionsY
 	.public gPokeathlonDiscCatchOamCharTransferParam
 	.public gPokeathlonDiscCatchSpriteResourceCounts
 	.public gPokeathlonDiscCatchOamManagerParam
@@ -365,15 +365,15 @@
 	.public PokeathlonLampJump_GetLampPos
 	.public PokeathlonLampJump_IsLampLit
 	.public PokeathlonLampJump_FreeCpuPlayers
-	.public PokeathlonResultsAnnouncement_CreatePlates
-	.public PokeathlonResultsAnnouncement_Wait
-	.public PokeathlonResultsAnnouncement_ClearSlide
-	.public PokeathlonResultsAnnouncement_RemoveSlide
-	.public PokeathlonResultsAnnouncement_GetLeavingSlide
-	.public PokeathlonResultsAnnouncement_DrawPlates
-	.public PokeathlonResultsAnnouncement_GetPlatePos
-	.public PokeathlonResultsAnnouncement_SetPlatePos
-	.public PokeathlonResultsAnnouncement_GetPlateRank
+	.public PokeathlonResults_CreatePlates
+	.public PokeathlonResults_Wait
+	.public PokeathlonResults_ClearSlide
+	.public PokeathlonResults_RemoveSlide
+	.public PokeathlonResults_GetLeavingSlide
+	.public PokeathlonResults_DrawPlates
+	.public PokeathlonResults_GetPlatePos
+	.public PokeathlonResults_SetPlatePos
+	.public PokeathlonResults_GetPlateRank
 	.public PokeathlonHurdleDash_Start
 	.public PokeathlonHurdleDashRunner_GetHurdle
 	.public PokeathlonHurdleDash_FreeHurdles
@@ -536,7 +536,7 @@ gPokeathlonBlockSmashSpotHitboxes_Kind0:
 gPokeathlonBlockSmashSpotPositions: ; 0x0221CDC8
 	.byte 0xF4, 0xFF
 
-ov96_0221CDCA: ; 0x0221CDCA
+gPokeathlonBlockSmashSpotPositionsY: ; 0x0221CDCA
 	.byte 0xF4, 0xFF, 0x02, 0x00, 0xF3, 0xFF
 	.byte 0xF0, 0xFF, 0xFC, 0xFF, 0xFE, 0xFF, 0xFC, 0xFF
 
@@ -640,7 +640,7 @@ gPokeathlonDiscCatchGraphicsBanks: ; 0x0221CF94
 gPokeathlonDiscCatchMonStartPositions: ; 0x0221CFBC
 	.byte 0x28, 0x00
 
-ov96_0221CFBE: ; 0x0221CFBE
+gPokeathlonDiscCatchMonStartPositionsY: ; 0x0221CFBE
 	.byte 0x28, 0x00
 	.byte 0x28, 0x00, 0x58, 0x00, 0x28, 0x00, 0x98, 0x00, 0x60, 0x00, 0x28, 0x00, 0x60, 0x00, 0x58, 0x00
 	.byte 0x60, 0x00, 0x98, 0x00, 0xA0, 0x00, 0x28, 0x00, 0xA0, 0x00, 0x58, 0x00, 0xA0, 0x00, 0x98, 0x00
@@ -697,7 +697,7 @@ gPokeathlonDiscCatchScoreboardSpriteTemplate: ; 0x0221D17C
 gPokeathlonDiscCatchCpuHomeRowStarts: ; 0x0221D1B0
 	.byte 0x03
 
-ov96_0221D1B1: ; 0x0221D1B1
+gPokeathlonDiscCatchCpuHomeRowCounts: ; 0x0221D1B1
 	.byte 0x05, 0x07, 0x06, 0x0F, 0x06, 0x00, 0x00
 
 gPokeathlonDiscCatchCpuJumpChances: ; 0x0221D1B8
@@ -821,7 +821,7 @@ gPokeathlonGoalRollMonStartPositions: ; 0x0221D408
 gPokeathlonGoalRollBallSpawnPoints: ; 0x0221D438
 	.byte 0x50, 0x00
 
-ov96_0221D43A: ; 0x0221D43A
+gPokeathlonGoalRollBallSpawnPointsY: ; 0x0221D43A
 	.byte 0x58, 0x00, 0x68, 0x00, 0x58, 0x00
 	.byte 0x80, 0x00, 0x58, 0x00, 0x98, 0x00, 0x58, 0x00, 0xB0, 0x00, 0x58, 0x00, 0x50, 0x00, 0x68, 0x00
 	.byte 0x68, 0x00, 0x68, 0x00, 0x80, 0x00, 0x68, 0x00, 0x98, 0x00, 0x68, 0x00, 0xB0, 0x00, 0x68, 0x00
@@ -893,13 +893,13 @@ gPokeathlonGoalRollLabelPosition: ; 0x0221D66C
 gPokeathlonGoalRollCpuGuardPoints: ; 0x0221D678
 	.byte 0xD0, 0x00
 
-ov96_0221D67A: ; 0x0221D67A
+gPokeathlonGoalRollCpuGuardPointsY: ; 0x0221D67A
 	.byte 0x40, 0x00
 
-ov96_0221D67C: ; 0x0221D67C
+gPokeathlonGoalRollCpuGuardPoints1: ; 0x0221D67C
 	.byte 0xB8, 0x00, 0x30, 0x00
 
-ov96_0221D680: ; 0x0221D680
+gPokeathlonGoalRollCpuGuardPoints2: ; 0x0221D680
 	.byte 0xE0, 0x00, 0x58, 0x00, 0x30, 0x00, 0x90, 0x00, 0x48, 0x00, 0xA0, 0x00, 0x20, 0x00, 0x78, 0x00
 	.byte 0xD0, 0x00, 0x90, 0x00, 0xB8, 0x00, 0xA0, 0x00, 0xE0, 0x00, 0x78, 0x00
 
@@ -926,7 +926,7 @@ gPokeathlonRingDropRingEdge: ; 0x0221D6D4
 gPokeathlonRingDropMonStartPositions: ; 0x0221D6E4
 	.byte 0x48, 0x00
 
-ov96_0221D6E6: ; 0x0221D6E6
+gPokeathlonRingDropMonStartPositionsY: ; 0x0221D6E6
 	.byte 0x60, 0x00, 0xB8, 0x00, 0x60, 0x00, 0x40, 0x00, 0x88, 0x00
 	.byte 0xC0, 0x00, 0x88, 0x00
 
@@ -937,10 +937,10 @@ gPokeathlonRingDropOamCharTransferParam: ; 0x0221D6F4
 gPokeathlonRingDropSwitchSpots: ; 0x0221D708
 	.byte 0x30, 0x00
 
-ov96_0221D70A: ; 0x0221D70A
+gPokeathlonRingDropSwitchSpotsY: ; 0x0221D70A
 	.byte 0x30, 0x00
 
-ov96_0221D70C: ; 0x0221D70C
+gPokeathlonRingDropSwitchSpotsRadius: ; 0x0221D70C
 	.byte 0x40, 0x00, 0xD0, 0x00
 	.byte 0x30, 0x00, 0x40, 0x00, 0x20, 0x00, 0x90, 0x00, 0x40, 0x00, 0xE0, 0x00, 0x90, 0x00, 0x40, 0x00
 
@@ -1019,7 +1019,7 @@ gPokeathlonRingDropCpuDashChances: ; 0x0221D97C
 gPokeathlonRingDropCpuSwitchSpots: ; 0x0221D98C
 	.byte 0x30, 0x00
 
-ov96_0221D98E: ; 0x0221D98E
+gPokeathlonRingDropCpuSwitchSpotsY: ; 0x0221D98E
 	.byte 0x40, 0x00
 	.byte 0xD0, 0x00, 0x40, 0x00, 0x20, 0x00, 0xA0, 0x00, 0xE0, 0x00, 0xA0, 0x00
 
@@ -1060,7 +1060,7 @@ gPokeathlonLampJumpStates:
 	.word PokeathlonLampJump_CalcScores
 
 gPokeathlonResultsAnnouncementSteps: ; 0x0221DC24
-	.word PokeathlonResultsAnnouncement_Run
+	.word PokeathlonResults_Run
 
 gPokeathlonHurdleDashLanePans: ; 0x0221DC28
 	.byte 0x94, 0x00, 0x6B, 0x00

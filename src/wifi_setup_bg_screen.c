@@ -17,14 +17,6 @@ typedef struct WifiSetupApScan WifiSetupApScan; // wifi_setup_access_points.c
 void WifiSetupPalette_LoadRowTask(void *task, void *arg);
 void WifiSetupPalette_LoadTask(void *task, void *arg);
 void WifiSetupScrollBar_Task(void *task, void *arg);
-void WifiSetupScrollBar_Drag(void);
-void WifiSetupScrollBar_PlayDragSound(int value);
-void WifiSetupScrollBar_PressArrow(int state);
-void WifiSetupScrollBar_JumpToTouch(void);
-int WifiSetupScrollBar_GetTouchedPart(void);
-int WifiSetupScrollBar_GetHeldArrow(int part);
-void WifiSetupScrollBar_GetPartRect(int part, WifiSetupRect *rect);
-void WifiSetupScrollBar_SetThumbPos(int value);
 
 void WifiSetupBgScreen_MarkDirty(void) {
     gWifiSetupBgScreen.screen->dirty = 1;

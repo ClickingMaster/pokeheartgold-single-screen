@@ -7,6 +7,13 @@
 #include "launch_application.h"
 #include "task.h"
 
+enum {
+    COURSE_TASK_STATE_LAUNCH_APP,
+    COURSE_TASK_STATE_WAIT_APP,
+    COURSE_TASK_STATE_WAIT_FIELD,
+    COURSE_TASK_STATE_FINISH,
+};
+
 typedef struct PokeathlonCourseTaskArgs {
     SaveData *saveData; // 0x00
     u32 mode;           // 0x04
@@ -32,16 +39,16 @@ typedef struct PokeathlonCourseTaskEnv {
 
 static BOOL Task_PokeathlonCourse(TaskManager *taskman);
 
-void CallTask_PokeathlonCourse(FieldSystem *fieldSystem, u8 mode, u8 a2, u8 a3, u16 *a4, u16 *a5, u16 *a6, u16 *a7) {
+void CallTask_PokeathlonCourse(FieldSystem *fieldSystem, u8 mode, u8 isSupreme, u8 course, u16 *shouldFreeHeapOut, u16 *totalPointsOut, u16 *pointsOut, u16 *rankOut) {
     PokeathlonCourseTaskEnv *work = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(PokeathlonCourseTaskEnv));
-    work->state = 0;
+    work->state = COURSE_TASK_STATE_LAUNCH_APP;
     work->mode = mode;
-    work->isSupreme = a2;
-    work->course = a3;
-    work->shouldFreeHeapOut = a4;
-    work->totalPointsOut = a5;
-    work->pointsOut = a6;
-    work->rankOut = a7;
+    work->isSupreme = isSupreme;
+    work->course = course;
+    work->shouldFreeHeapOut = shouldFreeHeapOut;
+    work->totalPointsOut = totalPointsOut;
+    work->pointsOut = pointsOut;
+    work->rankOut = rankOut;
     TaskManager_Call(fieldSystem->taskman, Task_PokeathlonCourse, work);
 }
 
@@ -49,7 +56,7 @@ static BOOL Task_PokeathlonCourse(TaskManager *taskman) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskman);
     PokeathlonCourseTaskEnv *work = TaskManager_GetEnvironment(taskman);
     switch (work->state) {
-    case 0:
+    case COURSE_TASK_STATE_LAUNCH_APP:
         work->args = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(PokeathlonCourseTaskArgs));
         work->args->mode = (work->mode != 0);
         work->args->saveData = FieldSystem_GetSaveData(fieldSystem);
@@ -57,22 +64,22 @@ static BOOL Task_PokeathlonCourse(TaskManager *taskman) {
         work->args->isSupreme = work->isSupreme;
         PokeathlonCourse_LaunchApp(fieldSystem, (PokeathlonCourseArgs *)work->args);
         FieldSystem_ResumeProcesses();
-        work->state = 1;
+        work->state = COURSE_TASK_STATE_WAIT_APP;
         break;
-    case 1:
+    case COURSE_TASK_STATE_WAIT_APP:
         if (FieldSystem_ApplicationIsRunning(fieldSystem)) {
             break;
         }
-        work->state = 2;
+        work->state = COURSE_TASK_STATE_WAIT_FIELD;
         FieldSystem_LoadFieldOverlay(fieldSystem);
         break;
-    case 2:
+    case COURSE_TASK_STATE_WAIT_FIELD:
         if (!FieldSystem_IsOverworldRestored(fieldSystem)) {
             break;
         }
-        work->state = 3;
+        work->state = COURSE_TASK_STATE_FINISH;
         break;
-    case 3:
+    case COURSE_TASK_STATE_FINISH:
         *work->shouldFreeHeapOut = work->args->shouldFreeHeap;
         *work->totalPointsOut = work->args->totalPoints;
         *work->pointsOut = work->args->points;

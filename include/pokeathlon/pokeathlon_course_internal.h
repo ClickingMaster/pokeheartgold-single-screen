@@ -185,6 +185,51 @@ struct PokeathlonCourseMonObjects {
 };
 
 // ---------------------------------------------------------------------------------------------------------
+// Course states, in the order of sPokeathlonStateInfoFuncTable (PokeathlonCourse_SetStateField07)
+
+enum PokeathlonCourseStateId {
+    POKEATHLON_COURSE_STATE_SEND_EVENTS,
+    POKEATHLON_COURSE_STATE_RUN_EVENT_OVERLAY,
+    POKEATHLON_COURSE_STATE_RUN_WAIT,
+    POKEATHLON_COURSE_STATE_SEND_PARTICIPANT,
+    POKEATHLON_COURSE_STATE_SEND_PARTICIPANTS,
+    POKEATHLON_COURSE_STATE_SEND_PROFILES,
+    POKEATHLON_COURSE_STATE_SEND_RECORD,
+    POKEATHLON_COURSE_STATE_START_OPENING,
+    POKEATHLON_COURSE_STATE_WAIT_OPENING_START,
+    POKEATHLON_COURSE_STATE_RUN_OPENING,
+    POKEATHLON_COURSE_STATE_END_OPENING,
+    POKEATHLON_COURSE_STATE_START_EVENT_INTRO,
+    POKEATHLON_COURSE_STATE_WAIT_EVENT_INTRO_START,
+    POKEATHLON_COURSE_STATE_RUN_EVENT_INTRO,
+    POKEATHLON_COURSE_STATE_END_EVENT_INTRO,
+    POKEATHLON_COURSE_STATE_START_ROUND,
+    POKEATHLON_COURSE_STATE_WAIT_ROUND_START,
+    POKEATHLON_COURSE_STATE_SEND_EVENT_DATA,
+    POKEATHLON_COURSE_STATE_RUN_EVENT,
+    POKEATHLON_COURSE_STATE_RESET_DATA_COPY_AREA,
+    POKEATHLON_COURSE_STATE_SEND_EVENT_RESULT,
+    POKEATHLON_COURSE_STATE_SEND_EVENT_RESULTS,
+    POKEATHLON_COURSE_STATE_END_ROUND,
+    POKEATHLON_COURSE_STATE_EXIT_EVENT,
+    POKEATHLON_COURSE_STATE_NEXT_ROUND,
+    POKEATHLON_COURSE_STATE_START_RESULTS,
+    POKEATHLON_COURSE_STATE_WAIT_RESULTS_START,
+    POKEATHLON_COURSE_STATE_RUN_RESULTS,
+    POKEATHLON_COURSE_STATE_END_RESULTS,
+    POKEATHLON_COURSE_STATE_SEND_MON_COUNTERS,
+    POKEATHLON_COURSE_STATE_SEND_RESULTS,
+    POKEATHLON_COURSE_STATE_START_CLOSING,
+    POKEATHLON_COURSE_STATE_WAIT_CLOSING_START,
+    POKEATHLON_COURSE_STATE_RUN_CLOSING,
+    POKEATHLON_COURSE_STATE_CREATE_JUICE_RECORDS,
+    POKEATHLON_COURSE_STATE_SEND_JUICE_RECORD,
+    POKEATHLON_COURSE_STATE_STORE_JUICE_RECORDS,
+    POKEATHLON_COURSE_STATE_EXIT,
+    POKEATHLON_COURSE_STATE_WAIT_FOR_COMMAND,
+};
+
+// ---------------------------------------------------------------------------------------------------------
 // Link commands (0x16..0x21). In a single-player course the commands go through a local queue that runs them
 // in the next VBlank task, so the course code is the same for both.
 
@@ -538,10 +583,10 @@ u32 PokeathlonCourse_State_SendEventResults(PokeathlonCourseData *course);
 u32 PokeathlonCourse_State_EndRound(PokeathlonCourseData *course);
 u32 PokeathlonCourse_State_ExitEvent(PokeathlonCourseData *course);
 u32 PokeathlonCourse_State_NextRound(PokeathlonCourseData *course);
-u32 PokeathlonCourse_State_StartResultsAnnouncement(PokeathlonCourseData *course);
-u32 PokeathlonCourse_State_WaitResultsAnnouncementStart(PokeathlonCourseData *course);
-u32 PokeathlonCourse_State_RunResultsAnnouncement(PokeathlonCourseData *course);
-u32 PokeathlonCourse_State_EndResultsAnnouncement(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_StartResults(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_WaitResultsStart(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_RunResults(PokeathlonCourseData *course);
+u32 PokeathlonCourse_State_EndResults(PokeathlonCourseData *course);
 u32 PokeathlonCourse_State_StartClosing(PokeathlonCourseData *course);
 u32 PokeathlonCourse_State_WaitClosingStart(PokeathlonCourseData *course);
 u32 PokeathlonCourse_State_RunClosing(PokeathlonCourseData *course);

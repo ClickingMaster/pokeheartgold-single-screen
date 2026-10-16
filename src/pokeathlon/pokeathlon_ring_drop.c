@@ -17,6 +17,12 @@
 #include "touchscreen.h"
 #include "wireless_status_icon.h"
 
+enum {
+    RING_DROP_STATE_FADE_IN,
+    RING_DROP_STATE_PLAY,
+    RING_DROP_STATE_FINISH,
+};
+
 // Course helpers, mon objects and the computer participants (OVY_96).
 BOOL PokeathlonCourse_RunStartCountdown(PokeathlonCourseData *course);
 void PokeathlonCourse_SetHudPlanes(PokeathlonCourseData *course, u32 planes);
@@ -134,7 +140,7 @@ BOOL PokeathlonRingDrop_State_FadeIn(PokeathlonCourseData *course, u8 *state) {
         break;
     case 2:
         if (PokeathlonCourse_RunStartCountdown(course)) {
-            PokeathlonCourse_SetStateField07(course, 1);
+            PokeathlonCourse_SetStateField07(course, RING_DROP_STATE_PLAY);
         }
         break;
     default:
@@ -158,7 +164,7 @@ BOOL PokeathlonRingDrop_State_Play(PokeathlonCourseData *course, u8 *state) {
         PokeathlonRingDrop_Update(course);
         if (PokeathlonCourse_RunFinish(course) && PokeathlonScreenShake_IsDone(&ringDrop->shake)) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, ringDrop->heapId);
-            PokeathlonCourse_SetStateField07(course, 2);
+            PokeathlonCourse_SetStateField07(course, RING_DROP_STATE_FINISH);
         }
         break;
     default:
@@ -453,14 +459,14 @@ void PokeathlonRingDrop_Update(PokeathlonCourseData *course) {
             }
             PokeathlonRingDropMon_UpdateStatus(mon, touch, PokeathlonRingDrop_IsOnSwitchButton(player->touchX, player->touchY));
             if (mon->flags.bits.switching) {
-                if (mon->flags.bits.switchState == 1 && input->switchState == 1) {
+                if (mon->flags.bits.switchState == RING_DROP_SWITCH_OUT && input->switchState == RING_DROP_SWITCH_OUT) {
                     PokeathlonRingDropMon_NextMember(mon);
                     PokeathlonRingDropMon_ResetToStart(mon);
-                    mon->flags.bits.switchState = 2;
-                } else if (mon->flags.bits.switchState == 2 && input->switchState == 2) {
+                    mon->flags.bits.switchState = RING_DROP_SWITCH_IN;
+                } else if (mon->flags.bits.switchState == RING_DROP_SWITCH_IN && input->switchState == RING_DROP_SWITCH_IN) {
                     mon->flags.bits.switching = FALSE;
-                    mon->flags.bits.switchState = 0;
-                    PokeathlonRingDropMon_SetState(mon, 4);
+                    mon->flags.bits.switchState = RING_DROP_SWITCH_NONE;
+                    PokeathlonRingDropMon_SetState(mon, RING_DROP_MON_RETURN);
                 }
             }
         }

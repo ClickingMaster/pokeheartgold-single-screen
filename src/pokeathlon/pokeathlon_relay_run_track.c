@@ -140,29 +140,29 @@ void PokeathlonRelayRun_DrawTeams(PokeathlonCourseData *course, int own, Pokeath
             running = FALSE;
             exhausted = FALSE;
             switch (speedGrade) {
-            case 2:
+            case RELAY_RUN_SPEED_FAST:
                 if (speedGrade != team->lastSpeedGrade) {
                     PokeathlonCourseSpritePoolSprite_Show(team->speedSprite, TRUE, TRUE);
                     PokeathlonCourseSpritePoolSprite_SetAnim(team->speedSprite, 4);
                 }
                 PokeathlonCourseMonObject_SetAnim(monObject, 8);
                 running = TRUE;
-                if (team->speedSoundGrade <= 1 && team->speedSoundPlayed == FALSE) {
+                if (team->speedSoundGrade <= RELAY_RUN_SPEED_SLOW && team->speedSoundPlayed == FALSE) {
                     PokeathlonRelayRun_PlaySEIfOnScreen(screenX, SEQ_SE_GS_FW015_2, isOwn);
-                    team->speedSoundGrade = 2;
+                    team->speedSoundGrade = RELAY_RUN_SPEED_FAST;
                     team->speedSoundPlayed = TRUE;
                 }
                 break;
-            case 3:
+            case RELAY_RUN_SPEED_TOP:
                 if (speedGrade != team->lastSpeedGrade) {
                     PokeathlonCourseSpritePoolSprite_Show(team->speedSprite, TRUE, TRUE);
                     PokeathlonCourseSpritePoolSprite_SetAnim(team->speedSprite, 5);
                 }
                 PokeathlonCourseMonObject_SetAnim(monObject, 8);
                 running = TRUE;
-                if (team->speedSoundGrade <= 1 && team->speedSoundPlayed == FALSE) {
+                if (team->speedSoundGrade <= RELAY_RUN_SPEED_SLOW && team->speedSoundPlayed == FALSE) {
                     PokeathlonRelayRun_PlaySEIfOnScreen(screenX, SEQ_SE_GS_FW015_2, isOwn);
-                    team->speedSoundGrade = 3;
+                    team->speedSoundGrade = RELAY_RUN_SPEED_TOP;
                     team->speedSoundPlayed = TRUE;
                 }
                 break;
@@ -285,12 +285,12 @@ void PokeathlonRelayRunTeam_AnimateLeave(PokeathlonRelayRunHud *hud, PokeathlonR
     case 2:
         if (isOwn != FALSE) {
             if (PokeathlonRelayRunHud_RotateMonPics(hud, member)) {
-                touch->displayPhase = 1;
+                touch->displayPhase = RELAY_RUN_SWAP_LEAVE;
                 team->swapStep++;
             }
         } else if (isHostForCpu != FALSE) {
             if (PokeathlonRelayRunHud_RotateCpuMonPics(hud, teamId)) {
-                touch->displayPhase = 1;
+                touch->displayPhase = RELAY_RUN_SWAP_LEAVE;
                 team->swapStep++;
             }
         } else {
@@ -333,7 +333,7 @@ void PokeathlonRelayRunTeam_AnimateArrive(PokeathlonRelayRunTeam *team, VecFx32 
     }
     case 2:
         if (reportPhase != FALSE) {
-            touch->displayPhase = 2;
+            touch->displayPhase = RELAY_RUN_SWAP_ARRIVE;
         }
         PokeathlonCourseSpritePoolSprite_SetPosition(team->swapSprite, position);
         PokeathlonCourseSpritePoolSprite_SetPosition(team->shadowSprite, position);
@@ -355,7 +355,7 @@ void PokeathlonRelayRunTeam_EndSwap(PokeathlonRelayRunTeam *team, u8 unused, u8 
     PokeathlonCourseSpritePoolSprite_SetAnim(team->shadowSprite, 8);
     PokeathlonCourseSpritePoolSprite_Show(team->swapSprite, TRUE, FALSE);
     if (reportPhase) {
-        touch->displayPhase = 0;
+        touch->displayPhase = RELAY_RUN_SWAP_DONE;
     }
     position = *PokeathlonCourseSpritePoolSprite_GetPosition(team->shadowSprite);
     PokeathlonRelayRun_PlaySEIfOnScreen(position.x / FX32_ONE, SEQ_SE_GS_BOWA2, isOwn);
@@ -381,14 +381,14 @@ void PokeathlonRelayRunTeam_DrawSwap(PokeathlonRelayRunHud *hud, PokeathlonRelay
     position.y = y << FX32_SHIFT;
     position.z = 0;
     switch (team->shownSwapPhase) {
-    case 1:
+    case RELAY_RUN_SWAP_LEAVE:
         PokeathlonRelayRunTeam_AnimateLeave(hud, team, &position, teamId, member, touch, isHost && isCpu, isOwn);
         break;
-    case 2:
+    case RELAY_RUN_SWAP_ARRIVE:
         reportPhase = isHost && isCpu;
         PokeathlonRelayRunTeam_AnimateArrive(team, &position, teamId, member, touch, reportPhase | isOwn, isOwn);
         break;
-    case 0:
+    case RELAY_RUN_SWAP_DONE:
         if (changed) {
             PokeathlonRelayRunTeam_EndSwap(team, teamId, member, touch, (isHost && isCpu) | isOwn, isOwn);
         }

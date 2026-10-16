@@ -86,13 +86,13 @@ void PokeathlonHurdleDash_UpdateRunner(PokeathlonCourseData *course, PokeathlonH
     PokeathlonHurdleDashRect rect;
     PokeathlonHurdleDashRect rect2;
 
-    if (runner->finished != TRUE && runner->mon.state != 2 && runner->boostLevel == 0 && runner->speed < runner->mon.topSpeed) {
+    if (runner->finished != TRUE && runner->mon.state != HURDLE_DASH_MON_TRIPPED && runner->boostLevel == 0 && runner->speed < runner->mon.topSpeed) {
         runner->speed = runner->speed + runner->mon.acceleration;
         if (runner->speed > runner->mon.topSpeed) {
             runner->speed = runner->mon.topSpeed;
         }
     }
-    if (touch != NULL && runner->mon.state == 0) {
+    if (touch != NULL && runner->mon.state == HURDLE_DASH_MON_RUNNING) {
         PokeathlonHurdleDashMon_StartJump(course, touch->unk4, runner->lane, &runner->mon);
         timed = FALSE;
         if (runner->mon.jumpStat != 0) {
@@ -115,7 +115,7 @@ void PokeathlonHurdleDash_UpdateRunner(PokeathlonCourseData *course, PokeathlonH
         } else {
             Sprite_SetAnimCtrlSeq(marker, 1);
         }
-    } else if (touch != NULL && runner->mon.state == 1 && runner->mon.phase == 3 && runner->mon.jumpStat != 0) {
+    } else if (touch != NULL && runner->mon.state == HURDLE_DASH_MON_JUMPING && runner->mon.phase == HURDLE_DASH_JUMP_FALL && runner->mon.jumpStat != 0) {
         runner->mon.jumpQueued = 1;
         runner->mon.queuedJumps = runner->mon.queuedJumps + 1;
     }
@@ -139,13 +139,13 @@ void PokeathlonHurdleDash_UpdateRunner(PokeathlonCourseData *course, PokeathlonH
     PokeathlonHurdleDashDust_Scroll(hurdleDash->dust, runner->lane, distance);
     PokeathlonHurdleDashMon_Update(runner->lane, &runner->mon, &runner->speed);
     if (runner->finished == TRUE) {
-        if (runner->mon.state == 0) {
-            runner->mon.state = 3;
-        } else if (runner->mon.state == 3 || runner->mon.state == 1) {
+        if (runner->mon.state == HURDLE_DASH_MON_RUNNING) {
+            runner->mon.state = HURDLE_DASH_MON_CENTERING;
+        } else if (runner->mon.state == HURDLE_DASH_MON_CENTERING || runner->mon.state == HURDLE_DASH_MON_JUMPING) {
             s32 groundY = runner->mon.groundY;
             if (runner->distance >= 0x1080) {
                 if (groundY == 120) {
-                    runner->mon.state = 4;
+                    runner->mon.state = HURDLE_DASH_MON_STOPPED;
                     runner->speed = 0.0f;
                     runner->speedFraction = 0.0f;
                 }
@@ -160,7 +160,7 @@ void PokeathlonHurdleDash_UpdateRunner(PokeathlonCourseData *course, PokeathlonH
         return;
     } else {
         checkHurdles = TRUE;
-        if (runner->mon.state == 1) {
+        if (runner->mon.state == HURDLE_DASH_MON_JUMPING) {
             checkHurdles = FALSE;
         }
         if (runner->mon.jumpQueued == 1 && runner->mon.queuedJumps == 1) {
@@ -179,15 +179,15 @@ void PokeathlonHurdleDash_UpdateRunner(PokeathlonCourseData *course, PokeathlonH
                         if (runner->mon.jumpQueued == 1 && runner->mon.queuedJumps == 1) {
                             PokeathlonCourse_AddMonCounter(course, (u8)PokeathlonCourse_GetNetId(course), runner->lane, 2, 1);
                             runner->mon.timer = 3;
-                            runner->mon.phase = 1;
+                            runner->mon.phase = HURDLE_DASH_JUMP_RISE;
                             PokeathlonHurdleDashRunner_Boost(course, runner);
                         } else {
                             runner->speed = 0.5f;
                             runner->boostLevel = 0;
-                            runner->mon.state = 2;
+                            runner->mon.state = HURDLE_DASH_MON_TRIPPED;
                             runner->mon.spinTimer = 0;
                             runner->mon.direction = 1;
-                            runner->mon.phase = 4;
+                            runner->mon.phase = HURDLE_DASH_JUMP_TRIPPED;
                             Sprite_SetAnimCtrlSeq(PokeathlonCourseSpritePoolSprite_GetSprite(runner->mon.boostEffect), 0);
                             PokeathlonCourse_AddMonCounter(course, (u8)PokeathlonCourse_GetNetId(course), runner->lane, 1, 1);
                         }
@@ -252,7 +252,7 @@ BOOL PokeathlonHurdleDash_UpdateRunners(PokeathlonCourseData *course, Pokeathlon
 }
 
 void PokeathlonHurdleDashMon_StartJump(PokeathlonCourseData *course, u32 unused, u32 lane, PokeathlonHurdleDashMon *mon) {
-    if (mon->state == 0) {
+    if (mon->state == HURDLE_DASH_MON_RUNNING) {
         if (mon->jumpStat != 0) {
             PlaySEOnPlayer(SEQ_SE_DP_DANSA, gPokeathlonHurdleDashLaneSoundPlayers[lane]);
             PokeathlonCourse_AddMonCounter(course, (u8)PokeathlonCourse_GetNetId(course), lane, 2, 1);
@@ -260,9 +260,9 @@ void PokeathlonHurdleDashMon_StartJump(PokeathlonCourseData *course, u32 unused,
             PlaySEOnPlayer(SEQ_SE_GS_MOGURU, gPokeathlonHurdleDashLaneSoundPlayers[lane]);
         }
         SetPlayerPan(gPokeathlonHurdleDashLaneSoundPlayers[lane], gPokeathlonHurdleDashLanePans[lane]);
-        mon->state = 1;
+        mon->state = HURDLE_DASH_MON_JUMPING;
         mon->timer = 0;
-        mon->phase = 1;
+        mon->phase = HURDLE_DASH_JUMP_RISE;
         PokeathlonCourseMonObject_GetSpritePosition(mon->monObject, &mon->x, &mon->y);
     }
 }
@@ -272,10 +272,10 @@ void PokeathlonHurdleDashMon_StartJump(PokeathlonCourseData *course, u32 unused,
 
 void PokeathlonHurdleDashMon_Update(int lane, PokeathlonHurdleDashMon *mon, f32 *speed) {
     switch (mon->state) {
-    case 1:
+    case HURDLE_DASH_MON_JUMPING:
         mon->timer++;
         switch (mon->phase) {
-        case 1: {
+        case HURDLE_DASH_JUMP_RISE: {
             int height = sHurdleDashRisingJumpHeights[mon->jumpStat][mon->timer - 1];
             int y = mon->y - height;
             if (mon->jumpStat == 0) {
@@ -286,7 +286,7 @@ void PokeathlonHurdleDashMon_Update(int lane, PokeathlonHurdleDashMon *mon, f32 
                 PokeathlonCourseMonObject_SetPosition(mon->monObject, mon->x, y, FALSE);
             }
             if (mon->timer >= mon->riseFrames) {
-                mon->phase = 2;
+                mon->phase = HURDLE_DASH_JUMP_HANG;
                 mon->timer = 0;
                 if (mon->jumpStat == 0) {
                     PokeathlonCourseMonObject_SetMonDrawFlag(mon->monObject, FALSE);
@@ -294,9 +294,9 @@ void PokeathlonHurdleDashMon_Update(int lane, PokeathlonHurdleDashMon *mon, f32 
             }
             break;
         }
-        case 2:
+        case HURDLE_DASH_JUMP_HANG:
             if (mon->timer >= mon->hangFrames) {
-                mon->phase = 3;
+                mon->phase = HURDLE_DASH_JUMP_FALL;
                 mon->timer = 0;
                 if (mon->jumpStat == 0) {
                     PokeathlonCourseMonObject_SetMonDrawFlag(mon->monObject, TRUE);
@@ -305,7 +305,7 @@ void PokeathlonHurdleDashMon_Update(int lane, PokeathlonHurdleDashMon *mon, f32 
                 }
             }
             break;
-        case 3: {
+        case HURDLE_DASH_JUMP_FALL: {
             int height = sHurdleDashFallingJumpHeights[mon->jumpStat][mon->timer - 1];
             int y = mon->y - height;
             if (mon->jumpStat == 0) {
@@ -316,8 +316,8 @@ void PokeathlonHurdleDashMon_Update(int lane, PokeathlonHurdleDashMon *mon, f32 
                 PokeathlonCourseMonObject_SetPosition(mon->monObject, mon->x, y, FALSE);
             }
             if (mon->timer >= mon->riseFrames) {
-                mon->state = 0;
-                mon->phase = 0;
+                mon->state = HURDLE_DASH_MON_RUNNING;
+                mon->phase = HURDLE_DASH_JUMP_NONE;
                 mon->timer = 0;
                 PokeathlonCourseMonObject_SetPosition(mon->monObject, mon->x, mon->y, FALSE);
                 if (mon->jumpStat != 0) {
@@ -337,7 +337,7 @@ void PokeathlonHurdleDashMon_Update(int lane, PokeathlonHurdleDashMon *mon, f32 
             break;
         }
         break;
-    case 2:
+    case HURDLE_DASH_MON_TRIPPED:
         mon->timer++;
         if (mon->spinTimer == 0) {
             switch (mon->direction) {
@@ -361,12 +361,12 @@ void PokeathlonHurdleDashMon_Update(int lane, PokeathlonHurdleDashMon *mon, f32 
         mon->spinTimer = (mon->spinTimer + 1) % 4;
         if (mon->timer > 30) {
             mon->timer = 0;
-            mon->state = 0;
-            mon->phase = 0;
+            mon->state = HURDLE_DASH_MON_RUNNING;
+            mon->phase = HURDLE_DASH_JUMP_NONE;
             PokeathlonCourseMonObject_SetAnimState(mon->monObject, 1);
         }
         break;
-    case 3: {
+    case HURDLE_DASH_MON_CENTERING: {
         BOOL moved = FALSE;
         int delta;
         if (mon->groundY < 120) {
@@ -389,7 +389,7 @@ void PokeathlonHurdleDashMon_Update(int lane, PokeathlonHurdleDashMon *mon, f32 
         }
         break;
     }
-    case 0:
+    case HURDLE_DASH_MON_RUNNING:
         mon->jumpQueued = 0;
         mon->queuedJumps = 0;
         break;
@@ -872,7 +872,7 @@ BOOL PokeathlonHurdleDash_HaveAllStopped(PokeathlonHurdleDash *hurdleDash) {
     s32 i;
     BOOL stopped = FALSE;
     for (i = 0; i < 3; i++) {
-        if (hurdleDash->runners[i].mon.state != 4) {
+        if (hurdleDash->runners[i].mon.state != HURDLE_DASH_MON_STOPPED) {
             break;
         }
     }
@@ -929,8 +929,8 @@ void PokeathlonHurdleDash_RevealHurdles(PokeathlonHurdleDash *hurdleDash, int di
 void PokeathlonHurdleDashRunner_UpdateDust(PokeathlonHurdleDash *hurdleDash, PokeathlonHurdleDashRunner *runner) {
     PokeathlonHurdleDashLaneX laneX = sHurdleDashDustLaneX;
     s32 interval;
-    if (runner->mon.state != 1 && runner->finished == FALSE) {
-        if (runner->mon.state == 2) {
+    if (runner->mon.state != HURDLE_DASH_MON_JUMPING && runner->finished == FALSE) {
+        if (runner->mon.state == HURDLE_DASH_MON_TRIPPED) {
             interval = 24;
         } else {
             switch (runner->boostLevel) {
@@ -1057,7 +1057,7 @@ void PokeathlonHurdleDash_UpdateCpuRunner(PokeathlonCourseData *course, Pokeathl
     int hurdle;
     int pixels;
     f32 distance;
-    if (runner->finished != TRUE && runner->state != 2 && runner->boostLevel == 0) {
+    if (runner->finished != TRUE && runner->state != HURDLE_DASH_MON_TRIPPED && runner->boostLevel == 0) {
         if (runner->speed < runner->topSpeed) {
             runner->speed += runner->acceleration;
             if (runner->speed > runner->topSpeed) {
@@ -1065,10 +1065,10 @@ void PokeathlonHurdleDash_UpdateCpuRunner(PokeathlonCourseData *course, Pokeathl
             }
         }
     }
-    if (runner->state == 2) {
+    if (runner->state == HURDLE_DASH_MON_TRIPPED) {
         runner->stunTimer--;
         if (runner->stunTimer == 0) {
-            runner->state = 0;
+            runner->state = HURDLE_DASH_MON_RUNNING;
         }
     } else {
         hurdle = PokeathlonHurdleDashTrack_GetHurdleAt(hurdleDash->track, member, runner->distance);
@@ -1082,7 +1082,7 @@ void PokeathlonHurdleDash_UpdateCpuRunner(PokeathlonCourseData *course, Pokeathl
                 PokeathlonCourse_AddMonCounter(course, participant, member, 6, 1);
                 PokeathlonCourse_AddMonCounter(course, participant, member, 2, 1);
             } else if (random < runner->clearChance) {
-                runner->state = 2;
+                runner->state = HURDLE_DASH_MON_TRIPPED;
                 runner->stunTimer = 30;
                 runner->boostLevel = 0;
                 runner->speed = 0.5f;

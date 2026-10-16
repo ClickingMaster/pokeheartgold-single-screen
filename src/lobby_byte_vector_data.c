@@ -49,8 +49,6 @@ static inline void initResult(Result *r, int mode, String *s) {
     r->b = 0;
 }
 
-int PPW_LobbyJoinSubChannelAsync(int);
-
 int LobbyByteVector_Data(int *p) {
     if (p[1] == 0) {
         return 0;

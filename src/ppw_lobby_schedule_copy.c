@@ -9,7 +9,6 @@
 #define B(p, o) (*(u8 *)((u8 *)(p) + (o)))
 void *LobbyEventVector_Data(void *);
 int PPWLobbySchedule_Copy(u8 *, u8 *, u32 *);
-void PPWLobbySchedule_CopyToVector(u32 *, u8 *);
 
 int PPWLobbySchedule_Copy(u8 *s, u8 *out, u32 *len) {
     u32 needed = ((W(s, 0x30) - 1) << 3) + 0x18;

@@ -36,8 +36,8 @@ typedef struct PokeathlonRingDropSwitchSpot {
     s16 radius;
 } PokeathlonRingDropSwitchSpot;
 
-// gPokeathlonRingDropSwitchSpots[participant] (the code reads y and radius through the labels ov96_0221D70A and ov96_0221D70C).
-extern const PokeathlonRingDropSwitchSpot gPokeathlonRingDropSwitchSpots[], ov96_0221D70A[], ov96_0221D70C[];
+// gPokeathlonRingDropSwitchSpots[participant] (the code reads y and radius through the labels gPokeathlonRingDropSwitchSpotsY and gPokeathlonRingDropSwitchSpotsRadius).
+extern const PokeathlonRingDropSwitchSpot gPokeathlonRingDropSwitchSpots[], gPokeathlonRingDropSwitchSpotsY[], gPokeathlonRingDropSwitchSpotsRadius[];
 // The direction 4 (PokeathlonRingDrop_GetDirection measures the angle from it).
 extern VecFx32 gPokeathlonRingDropDirectionReference;
 // The ring's edge: two lines (x, y pairs) the Pokemon must stay right of between y 64 and 160.
@@ -602,8 +602,8 @@ BOOL PokeathlonRingDropMon_CanSwitch(PokeathlonRingDropMon *mon) {
         VecFx32 spot = { 0, 0, 0 };
         u8 participant = mon->flags.bits.participant;
         spot.x = gPokeathlonRingDropSwitchSpots[participant].x * FX32_ONE;
-        spot.y = ov96_0221D70A[participant].x * FX32_ONE;
-        return PokeathlonRingDrop_IsWithinDistance(&mon->position, &spot, ov96_0221D70C[participant].x * FX32_ONE);
+        spot.y = gPokeathlonRingDropSwitchSpotsY[participant].x * FX32_ONE;
+        return PokeathlonRingDrop_IsWithinDistance(&mon->position, &spot, gPokeathlonRingDropSwitchSpotsRadius[participant].x * FX32_ONE);
     }
     return FALSE;
 }

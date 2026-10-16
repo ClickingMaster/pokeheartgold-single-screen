@@ -114,7 +114,7 @@ void PokeathlonCourseObject_GetCollisionCenter(PokeathlonCourseObject *object, f
 void PokeathlonCourseObject_CenterToGround(PokeathlonCourseObject *object, int x, int y, int *outX, int *outY);
 void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseObject *object, s32 x, s32 y, s32 *outX, s32 *outY);
 BOOL PokeathlonCourseObject_IsInTouchRange(PokeathlonCourseObject *object, fx32 x, fx32 y, s32 targetX, s32 targetY);
-void PokeathlonCourseObject_SetScale(PokeathlonCourseObject *object, void *scale, void *a2);
+void PokeathlonCourseObject_SetScale(PokeathlonCourseObject *object, void *scale, void *scaleY);
 BOOL PokeathlonCourseObject_IsDrawn(PokeathlonCourseObject *object);
 void PokeathlonCourseObjects_ShiftLargeUp(PokeathlonCourseObjects *objects);
 void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseObjects *objects, BOOL paused);

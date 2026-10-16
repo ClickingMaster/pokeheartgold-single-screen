@@ -25,6 +25,14 @@
 #include "touchscreen.h"
 #include "wireless_status_icon.h"
 
+enum {
+    EVENT_INTRO_STEP_APPEAR,
+    EVENT_INTRO_STEP_DETAILS,
+    EVENT_INTRO_STEP_RULES,
+    EVENT_INTRO_STEP_CONTROLS,
+    EVENT_INTRO_STEP_FADE_OUT,
+};
+
 FS_EXTERN_OVERLAY(OVY_98);
 
 // Not declared by a header yet.
@@ -40,7 +48,7 @@ extern const struct {
 extern const struct {
     int fileId;
     int unused;
-} ov96_0221B1D8[];
+} gPokeathlonNpcTrainerPicFileIds[];
 
 extern const GraphicsBanks gPokeathlonCourseWaitGraphicsBanks;
 extern const GraphicsModes gPokeathlonCourseWaitGraphicsModes;
@@ -100,7 +108,7 @@ int PokeathlonCourse_GetNpcTrainerPicFileId(int trainerClass) {
             return 0;
         }
         if (trainerClass == gPokeathlonNpcTrainerClasses[i].trainerClass) {
-            return ov96_0221B1D8[i].fileId;
+            return gPokeathlonNpcTrainerPicFileIds[i].fileId;
         }
     }
     GF_AssertFail();
@@ -780,14 +788,14 @@ BOOL PokeathlonEventIntro_Appear(PokeathlonCourseData *course, u8 *state) {
                 intro->timer = 0;
                 (*step)++;
             } else {
-                PokeathlonCourse_SetStateField07(data, 1);
+                PokeathlonCourse_SetStateField07(data, EVENT_INTRO_STEP_DETAILS);
             }
         }
         break;
     case 5:
         intro->timer++;
         if (intro->timer >= 180) {
-            PokeathlonCourse_SetStateField07(data, 4);
+            PokeathlonCourse_SetStateField07(data, EVENT_INTRO_STEP_FADE_OUT);
         }
         break;
     default:
@@ -811,7 +819,7 @@ BOOL PokeathlonEventIntro_DetailsPage(PokeathlonCourseData *course, u8 *state) {
                     PokeathlonEventIntro_FadeToPage(course, EVENT_INTRO_PAGE_RULES);
                     break;
                 case 1:
-                    PokeathlonCourse_SetStateField07(course, 4);
+                    PokeathlonCourse_SetStateField07(course, EVENT_INTRO_STEP_FADE_OUT);
                     break;
                 default:
                     GF_AssertFail();

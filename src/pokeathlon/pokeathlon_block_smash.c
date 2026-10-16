@@ -30,6 +30,22 @@
 #include "sprite_resource_header.h"
 #include "wireless_status_icon.h"
 
+enum {
+    BLOCK_SMASH_STATE_INTRO,
+    BLOCK_SMASH_STATE_PLAY,
+    BLOCK_SMASH_STATE_FINISH,
+};
+
+enum {
+    BLOCKS_STATE_DROPPING = 1,
+    BLOCKS_STATE_READY,
+};
+
+enum {
+    BLOCK_STATE_FALLING = 1,
+    BLOCK_STATE_LANDED,
+};
+
 // Course helpers (OVY_96, not yet tidied).
 u8 *PokeathlonCourse_ToBytes(void *block);
 void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, int participant, int member, void *out);
@@ -113,7 +129,7 @@ ManagedSprite *PokeathlonBlockSmash_NewSubSprite(SpriteSystem *spriteSystem, Spr
 extern const TouchscreenHitbox *gPokeathlonBlockSmashSpotHitboxes[3];
 extern const u8 gPokeathlonBlockSmashSpotHitboxCounts[3];
 extern const s16 gPokeathlonBlockSmashSpotPositions[4][2]; // x, y of the four weak spot positions
-extern const s16 ov96_0221CDCA[];     // their y (the second half of each gPokeathlonBlockSmashSpotPositions entry)
+extern const s16 gPokeathlonBlockSmashSpotPositionsY[];     // their y (the second half of each gPokeathlonBlockSmashSpotPositions entry)
 extern const s16 gPokeathlonBlockSmashBlockTouchOffsets[4][2];
 
 // The sprites of a participant's row on the top screen
@@ -171,7 +187,7 @@ BOOL PokeathlonBlockSmash_Intro(PokeathlonCourseData *course, u8 *state) {
     switch (*state) {
     case 0:
         PokeathlonBlockSmashBlocks_Update(work->blocks);
-        if (PokeathlonBlockSmashBlocks_GetState(work->blocks) == 2) {
+        if (PokeathlonBlockSmashBlocks_GetState(work->blocks) == BLOCKS_STATE_READY) {
             PokeathlonBlockSmashBannerPosition position;
             SpriteList *spriteList;
             position = gPokeathlonBlockSmashBannerPosition;
@@ -183,7 +199,7 @@ BOOL PokeathlonBlockSmash_Intro(PokeathlonCourseData *course, u8 *state) {
     case 1:
         if (PokeathlonCourse_RunStartCountdown(course)) {
             PokeathlonCourseObjects_PauseAnims(work->monPics, 0);
-            PokeathlonCourse_SetStateField07(course, 1);
+            PokeathlonCourse_SetStateField07(course, BLOCK_SMASH_STATE_PLAY);
         }
         break;
     default:
@@ -219,14 +235,14 @@ BOOL PokeathlonBlockSmash_UpdateGame(PokeathlonCourseData *course) {
     PokeathlonBlockSmash_UpdateTimer(work);
     PokeathlonBlockSmashBlocks_Update(work->blocks);
     state = PokeathlonBlockSmashBlocks_GetState(work->blocks);
-    PokeathlonBlockSmashMon_Update(work->mon, state == 1);
+    PokeathlonBlockSmashMon_Update(work->mon, state == BLOCKS_STATE_DROPPING);
     if (PokeathlonCourse_GetNetId(course) == 0) {
         PokeathlonBlockSmashCpu_Update(work->cpu);
     }
     PokeathlonBlockSmashRivals_Update(work->rivals);
     touched = PokeathlonBlockSmashBlocks_IsTopBlockTouched(work->blocks);
     PokeathlonBlockSmash_HandleSwipe(work, touched);
-    if (PokeathlonBlockSmashMon_CanHit(work->mon) && state == 2 && touched) {
+    if (PokeathlonBlockSmashMon_CanHit(work->mon) && state == BLOCKS_STATE_READY && touched) {
         member = PokeathlonBlockSmashMon_GetActiveMember(work->mon);
         strongHit = PokeathlonBlockSmashMon_IsGaugeFull(work->mon);
         hitSpot = PokeathlonBlockSmashBlocks_IsSpotTouched(work->blocks, ((PokeathlonBlockSmashMember *)member)->kind);
@@ -270,7 +286,7 @@ BOOL PokeathlonBlockSmash_Play(PokeathlonCourseData *course, u8 *state) {
     case 1:
         if (PokeathlonCourse_RunFinish(course) && work->shakeTask == NULL) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, work->heapId);
-            PokeathlonCourse_SetStateField07(course, 2);
+            PokeathlonCourse_SetStateField07(course, BLOCK_SMASH_STATE_FINISH);
         }
         break;
     }
@@ -1022,7 +1038,7 @@ PokeathlonBlockSmashBlocks *PokeathlonBlockSmashBlocks_New(enum HeapID heapId, S
     s32 i;
     blocks = Heap_Alloc(heapId, sizeof(PokeathlonBlockSmashBlocks));
     MI_CpuFill8(blocks, 0, sizeof(PokeathlonBlockSmashBlocks));
-    blocks->state = 1;
+    blocks->state = BLOCKS_STATE_DROPPING;
     blocks->count = 0;
     blocks->spriteSystem = spriteSystem;
     blocks->spriteManager = spriteManager;
@@ -1054,10 +1070,10 @@ void PokeathlonBlockSmashBlocks_Delete(PokeathlonBlockSmashBlocks *blocks) {
 void PokeathlonBlockSmashBlocks_Update(PokeathlonBlockSmashBlocks *blocks) {
     GF_ASSERT(blocks != NULL);
     switch (blocks->state) {
-    case 1:
+    case BLOCKS_STATE_DROPPING:
         PokeathlonBlockSmashBlocks_UpdateDrop(blocks);
         break;
-    case 2:
+    case BLOCKS_STATE_READY:
         PokeathlonBlockSmashBlocks_CheckEmpty(blocks);
         break;
     default:
@@ -1110,7 +1126,7 @@ BOOL PokeathlonBlockSmashBlocks_IsTopBlockTouched(PokeathlonBlockSmashBlocks *bl
     fx32 rightEdgeY;
     float converted;
     GF_ASSERT(blocks != NULL);
-    if (blocks->state == 1) {
+    if (blocks->state == BLOCKS_STATE_DROPPING) {
         return FALSE;
     }
     GF_ASSERT(blocks->count != 0);
@@ -1255,13 +1271,13 @@ void PokeathlonBlockSmashBlocks_UpdateDrop(PokeathlonBlockSmashBlocks *blocks) {
     u32 timer;
     if (blocks->count >= 10) {
         for (i = 0; i < 10; i++) {
-            if (PokeathlonBlockSmashBlock_GetState(blocks->blocks[i]) == 1) {
+            if (PokeathlonBlockSmashBlock_GetState(blocks->blocks[i]) == BLOCK_STATE_FALLING) {
                 break;
             }
         }
         if (i == 10) {
             PlaySE(SEQ_SE_GS_KI_GASYAN);
-            blocks->state = 2;
+            blocks->state = BLOCKS_STATE_READY;
         }
     } else {
         timer = blocks->dropTimer;
@@ -1283,7 +1299,7 @@ void PokeathlonBlockSmashBlocks_UpdateDrop(PokeathlonBlockSmashBlocks *blocks) {
 // A cleared stack is rebuilt.
 void PokeathlonBlockSmashBlocks_CheckEmpty(PokeathlonBlockSmashBlocks *blocks) {
     if (blocks->count == 0) {
-        blocks->state = 1;
+        blocks->state = BLOCKS_STATE_DROPPING;
     }
 }
 
@@ -1310,7 +1326,7 @@ void PokeathlonBlockSmashBlock_Drop(PokeathlonBlockSmashBlock *block) {
     GF_ASSERT(block != NULL);
     block->health = 100;
     block->fallSpeed = 0;
-    block->state = 1;
+    block->state = BLOCK_STATE_FALLING;
     block->active = TRUE;
     ManagedSprite_SetAnim(block->sprite, 1);
     ManagedSprite_SetPositionXY(block->sprite, 120, 0);
@@ -1335,7 +1351,7 @@ void PokeathlonBlockSmashBlock_Delete(PokeathlonBlockSmashBlock *block) {
 
 // Falls with increasing speed until it lands on the block below (4 pixels per block).
 void PokeathlonBlockSmashBlock_Update(PokeathlonBlockSmashBlock *block) {
-    if (block->state == 1) {
+    if (block->state == BLOCK_STATE_FALLING) {
         u32 bottom = 168 - block->index * 4;
         s16 x, y;
         block->fallSpeed += 20;
@@ -1347,7 +1363,7 @@ void PokeathlonBlockSmashBlock_Update(PokeathlonBlockSmashBlock *block) {
             y = bottom;
             ManagedSprite_SetPositionXY(block->sprite, x, y);
             PokeathlonBlockSmashBlock_UpdateSpot(block);
-            block->state = 2;
+            block->state = BLOCK_STATE_LANDED;
         }
     }
 }
@@ -1362,7 +1378,7 @@ void PokeathlonBlockSmashBlock_MoveSpot(PokeathlonBlockSmashBlock *block) {
     }
     block->spotSlot = slot;
     block->spotX = gPokeathlonBlockSmashSpotPositions[block->spotSlot][0] + (MTRandom() & 15);
-    block->spotY = ov96_0221CDCA[block->spotSlot * 2] + MTRandom() % 12;
+    block->spotY = gPokeathlonBlockSmashSpotPositionsY[block->spotSlot * 2] + MTRandom() % 12;
 }
 
 #pragma force_active reset

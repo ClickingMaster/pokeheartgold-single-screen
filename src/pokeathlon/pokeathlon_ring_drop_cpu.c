@@ -60,14 +60,14 @@ extern const u8 gPokeathlonRingDropCpuDashChances[];
 // Chance of a jump by the number of close opponents (1..3).
 extern const u8 gPokeathlonRingDropCpuCloseChances[];
 
-// The switch spots (x, y) by participant (y read through the label ov96_0221D98E).
+// The switch spots (x, y) by participant (y read through the label gPokeathlonRingDropCpuSwitchSpotsY).
 typedef struct PokeathlonRingDropCpuSpot {
     s16 x;
     s16 y;
 } PokeathlonRingDropCpuSpot;
 
 extern const PokeathlonRingDropCpuSpot gPokeathlonRingDropCpuSwitchSpots[];
-extern const s16 ov96_0221D98E[];
+extern const s16 gPokeathlonRingDropCpuSwitchSpotsY[];
 
 #pragma force_active on
 
@@ -268,7 +268,7 @@ void PokeathlonRingDropCpu_GoSwitch(PokeathlonRingDropCpuPlayer *player) {
     VecFx32 spotPosition = { 0, 0, 0 };
     PokeathlonRingDrop_GetMonScreenPosition(player->course, player->participant, &position);
     spotPosition.x = gPokeathlonRingDropCpuSwitchSpots[player->participant].x << FX32_SHIFT;
-    spotPosition.y = ov96_0221D98E[player->participant * 2] << FX32_SHIFT;
+    spotPosition.y = gPokeathlonRingDropCpuSwitchSpotsY[player->participant * 2] << FX32_SHIFT;
     PokeathlonRingDrop_SetMonDestination(player->course, player->participant, (const s16 *)spot);
     if (PokeathlonRingDrop_IsNear(&position, &spotPosition, FX32_CONST(64))) {
         PokeathlonRingDrop_StartMonSwitch(player->course, player->participant);

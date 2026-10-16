@@ -6,8 +6,13 @@
 #include "heap.h"
 #include "math_util.h"
 
+enum {
+    CPU_MON_STATE_IDLE,
+    CPU_MON_STATE_CHASE,
+};
+
 extern const u8 gPokeathlonDiscCatchCpuHomeRowStarts[];                                                  // per member: first home row (tiles) of its band ...
-extern const u8 ov96_0221D1B1[];                                                  // ... and the band's rows
+extern const u8 gPokeathlonDiscCatchCpuHomeRowCounts[];                                                  // ... and the band's rows
 extern const int gPokeathlonDiscCatchCpuJumpChances[DISC_CATCH_TEAM_SIZE];                             // per member: chance (%) to jump at a disc in reach
 extern const s16 gPokeathlonDiscCatchCpuHomePositions[DISC_CATCH_PARTICIPANTS][DISC_CATCH_TEAM_SIZE][2]; // home x
 
@@ -94,12 +99,12 @@ void PokeathlonDiscCatchCpuTeam_Update(PokeathlonDiscCatchCpuMon *mons, u16 aver
 // A new home spot: a random row of the member's band and the team's column, give or take two tiles.
 void PokeathlonDiscCatchCpuMon_PickHome(PokeathlonDiscCatchCpuMon *mon) {
     int band = mon->member * 2;
-    mon->targetY = gPokeathlonDiscCatchCpuHomeRowStarts[band] + MTRandom() % ov96_0221D1B1[band];
+    mon->targetY = gPokeathlonDiscCatchCpuHomeRowStarts[band] + MTRandom() % gPokeathlonDiscCatchCpuHomeRowCounts[band];
     mon->targetY = mon->targetY * 8;
     mon->homeX = gPokeathlonDiscCatchCpuHomePositions[mon->participant][mon->member][0];
     mon->homeX = mon->homeX + (MTRandom() % 5 - 2) * 8;
     mon->chasing = FALSE;
-    mon->state = 0;
+    mon->state = CPU_MON_STATE_IDLE;
 }
 
 void PokeathlonDiscCatchCpuMon_Init(PokeathlonDiscCatchCpuMon *mon, PokeathlonCourseData *course, u8 index) {
@@ -121,7 +126,7 @@ void PokeathlonDiscCatchCpuMon_Think(PokeathlonDiscCatchCpuMon *mon) {
     int i;
     PokeathlonDiscCatch_CountTeamsAhead(mon->course, (u8)mon->participant);
     switch (mon->state) {
-    case 0:
+    case CPU_MON_STATE_IDLE:
         GF_ASSERT(mon->chasing == FALSE);
         mon->targetX = mon->homeX;
         for (i = 0; i < DISC_CATCH_DISCS; i++) {
@@ -129,12 +134,12 @@ void PokeathlonDiscCatchCpuMon_Think(PokeathlonDiscCatchCpuMon *mon) {
                 if (PokeathlonDiscCatchCpuMon_IsNearDisc(mon, i, 56)) {
                     mon->disc = i;
                     mon->chasing = TRUE;
-                    mon->state = 1;
+                    mon->state = CPU_MON_STATE_CHASE;
                 }
             }
         }
         break;
-    case 1:
+    case CPU_MON_STATE_CHASE:
         GF_ASSERT(mon->chasing == TRUE);
         if (mon->chasing) {
             disc = PokeathlonDiscCatch_GetDisc(work, (u8)mon->disc);
@@ -142,7 +147,7 @@ void PokeathlonDiscCatchCpuMon_Think(PokeathlonDiscCatchCpuMon *mon) {
                 mon->targetX = PokeathlonDiscCatch_GetDiscX((s16)(mon->targetY + 288), disc->path);
             } else {
                 mon->chasing = FALSE;
-                mon->state = 0;
+                mon->state = CPU_MON_STATE_IDLE;
             }
         }
         break;

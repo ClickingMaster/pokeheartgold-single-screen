@@ -31,6 +31,11 @@
 #include "touchscreen.h"
 #include "wireless_status_icon.h"
 
+enum {
+    SNOW_THROW_STATE_PLAY,
+    SNOW_THROW_STATE_SAVE_SCORES,
+};
+
 typedef char PokeathlonSnowThrowSizeCheck[(sizeof(PokeathlonSnowThrow) == 0x5F4 && sizeof(PokeathlonSnowThrowBall) == 0x48 && sizeof(PokeathlonSnowThrowMon) == 0x20 && sizeof(PokeathlonSnowThrowPacket) == 0x28 && sizeof(PokeathlonSnowThrowLink) == 0x118 && offsetof(PokeathlonSnowThrow, balls) == 0xB8 && offsetof(PokeathlonSnowThrow, mons) == 0x418 && offsetof(PokeathlonSnowThrow, cpu) == 0x5DC && offsetof(PokeathlonSnowThrow, timer) == 0x5E8) ? 1 : -1];
 
 // fx_mtx43.c (not declared in the fx headers here)
@@ -493,7 +498,7 @@ BOOL PokeathlonSnowThrow_Play(PokeathlonCourseData *course, u8 *state) {
         PokeathlonSnowThrow_UpdateHost(course);
         if (PokeathlonCourse_RunFinish(course)) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, work->heapId);
-            PokeathlonCourse_SetStateField07(course, 1);
+            PokeathlonCourse_SetStateField07(course, SNOW_THROW_STATE_SAVE_SCORES);
         }
         break;
     }

@@ -26,6 +26,11 @@
 #include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
 
+enum {
+    LAMP_JUMP_STATE_PLAY,
+    LAMP_JUMP_STATE_CALC_SCORES,
+};
+
 // sound_playback.c (no header declares them)
 BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
 u32 GF_SndCountPlayingSeqOnPlayer(u32 playerNo);
@@ -379,7 +384,7 @@ BOOL PokeathlonLampJump_Play(PokeathlonCourseData *course, u8 *state) {
     case 5:
         if (PokeathlonCourse_RunFinish(course)) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, 0, 6, 1, lampJump->heapId);
-            PokeathlonCourse_SetStateField07(course, 1);
+            PokeathlonCourse_SetStateField07(course, LAMP_JUMP_STATE_CALC_SCORES);
         }
         break;
     }

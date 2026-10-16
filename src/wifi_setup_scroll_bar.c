@@ -18,8 +18,6 @@ extern s32 FX_DivS32(s32, s32);
 typedef struct WifiSetupApScan WifiSetupApScan; // wifi_setup_access_points.c
 extern WifiSetupApScan *gWifiSetupApScan;
 
-void WifiSetupPalette_LoadRowTask(void *task, void *arg);
-void WifiSetupPalette_LoadTask(void *task, void *arg);
 void WifiSetupScrollBar_Task(void *task, void *arg);
 void WifiSetupScrollBar_Drag(void);
 void WifiSetupScrollBar_PlayDragSound(int value);

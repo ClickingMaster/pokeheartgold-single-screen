@@ -36,6 +36,11 @@
 #define RING_DROP_MON_JUMP_FALL  11 // presses down on whatever it lands on
 #define RING_DROP_MON_LANDING    12
 
+// The switch to the next team member (PokeathlonRingDropMonFlags.switchState).
+#define RING_DROP_SWITCH_NONE 0
+#define RING_DROP_SWITCH_OUT  1 // the ball flies up off the Pokemon
+#define RING_DROP_SWITCH_IN   2 // the ball comes down with the next member
+
 // What a push does to the Pokemon pushed (PokeathlonRingDropMon_GetPushReaction).
 #define RING_DROP_REACTION_NONE    0
 #define RING_DROP_REACTION_STAND   1

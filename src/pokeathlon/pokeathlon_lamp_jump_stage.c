@@ -1062,7 +1062,7 @@ void PokeathlonLampJump_UpdateCpuPlayer(PokeathlonCourseData *course, Pokeathlon
 }
 
 // Results Announcement (pokeathlon_results_announcement.c): its title window.
-void PokeathlonResultsAnnouncement_InitWindow(Window *window, BgConfig *bgConfig, enum HeapID heapId) {
+void PokeathlonResults_InitWindow(Window *window, BgConfig *bgConfig, enum HeapID heapId) {
     if (bgConfig == NULL) {
         GF_AssertFail();
     }
@@ -1073,7 +1073,7 @@ void PokeathlonResultsAnnouncement_InitWindow(Window *window, BgConfig *bgConfig
 }
 
 // "Results Announcement"
-void PokeathlonResultsAnnouncement_PrintTitle(Window *window, enum HeapID heapId) {
+void PokeathlonResults_PrintTitle(Window *window, enum HeapID heapId) {
     MsgData *msgData;
     MessageFormat *messageFormat;
     String *string;

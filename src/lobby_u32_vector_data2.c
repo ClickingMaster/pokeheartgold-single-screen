@@ -30,10 +30,7 @@ typedef struct {
     u32 extra;
 } Iterator;
 
-void LobbyCharVector_AssignIterRange(Vec *, ...);
 void *LobbyU32Vector_Data2(Vec *);
-void LobbyCharVector_AssignRange(Vec *, u8 *, u8 *, int);
-void LobbyTimerMap_MakeEntry(Record *, u32, Six *);
 
 void *LobbyU32Vector_Data2(Vec *v) {
     return v->len == 0 ? NULL : v->data;

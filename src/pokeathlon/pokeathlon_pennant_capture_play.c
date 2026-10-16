@@ -14,6 +14,12 @@
 #include "system.h"
 #include "touchscreen.h"
 
+enum {
+    PENNANT_CAPTURE_STATE_SETUP,
+    PENNANT_CAPTURE_STATE_PLAY,
+    PENNANT_CAPTURE_STATE_END,
+};
+
 // Course helpers of other OVY_96 parts that have no module header yet.
 PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_CreateAndTake(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, int tag, int cell);
 void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *sprite, int anim);
@@ -222,7 +228,7 @@ BOOL PokeathlonPennantCapture_State_Setup(PokeathlonCourseData *course, u8 *stat
         break;
     case 2:
         if (IsPaletteFadeFinished()) {
-            PokeathlonCourse_SetStateField07(course, 1);
+            PokeathlonCourse_SetStateField07(course, PENNANT_CAPTURE_STATE_PLAY);
         }
         break;
     }
@@ -253,7 +259,7 @@ BOOL PokeathlonPennantCapture_State_Play(PokeathlonCourseData *course, u8 *state
         PokeathlonPennantCapture_HostStep(course);
         if (PokeathlonCourse_RunFinish(course)) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, work->heapId);
-            PokeathlonCourse_SetStateField07(course, 2);
+            PokeathlonCourse_SetStateField07(course, PENNANT_CAPTURE_STATE_END);
         }
         break;
     }

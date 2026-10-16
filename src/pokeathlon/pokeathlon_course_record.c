@@ -20,7 +20,7 @@ extern const u8 sPokeathlonCourseRecordBgLayers[8];
 extern const GraphicsModes sPokeathlonCourseRecordGraphicsModes;
 extern const PokeathlonCourseRecordBgTemplates sPokeathlonCourseRecordBgTemplates;
 extern const s32 sPokeathlonCourseRecordScreenFiles[][2];
-extern const s32 ov99_021E95DC[][2];
+extern const s32 sPokeathlonCourseRecordSubScreenFiles[][2];
 extern const PokeathlonCourseRecordSpritePos sPokeathlonCourseRecordScrollSpritePositions[6];
 extern const u32 sPokeathlonCourseRecordScoreWindows[];
 extern const int sPokeathlonCourseRecordMonIconResIds[];
@@ -29,7 +29,7 @@ extern const ManagedSpriteTemplate sPokeathlonCourseRecordSpriteTemplates[26];
 extern const u32 sPokeathlonCourseRecordDigitAnims[];
 extern const TouchscreenHitbox sPokeathlonCourseRecordHitboxes[];
 extern const s16 sPokeathlonCourseRecordCursorPositions[];
-extern const s16 ov99_021E9576[];
+extern const s16 sPokeathlonCourseRecordCursorPositionsY[];
 extern const WindowTemplate sPokeathlonCourseRecordWindowTemplates[17];
 extern const char sStr_SeqError[]; // "seq error!"
 
@@ -258,7 +258,7 @@ void PokeathlonCourseRecord_StartPageScroll(PokeathlonCourseRecord *work, int co
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
     GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, sPokeathlonCourseRecordScreenFiles[course][0], work->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, TRUE, work->heapId);
-    GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, ov99_021E95DC[course][0], work->bgConfig, GF_BG_LYR_SUB_1, 0, 0, TRUE, work->heapId);
+    GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, sPokeathlonCourseRecordSubScreenFiles[course][0], work->bgConfig, GF_BG_LYR_SUB_1, 0, 0, TRUE, work->heapId);
     BgSetPosTextAndCommit(work->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_SET_X, offset);
     BgSetPosTextAndCommit(work->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_X, offset);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
@@ -563,7 +563,7 @@ BOOL PokeathlonCourseRecord_HandleInput(PokeathlonCourseRecord *work) {
     selection->cursor = cursor;
     work->selection.page = selection->cursor;
     if (oldCursor != selection->cursor) {
-        ManagedSprite_SetPositionXY(work->sprites[0], sPokeathlonCourseRecordCursorPositions[selection->cursor * 2], ov99_021E9576[selection->cursor * 2]);
+        ManagedSprite_SetPositionXY(work->sprites[0], sPokeathlonCourseRecordCursorPositions[selection->cursor * 2], sPokeathlonCourseRecordCursorPositionsY[selection->cursor * 2]);
         if (selection->cursor == 5) {
             ManagedSprite_SetAnim(work->sprites[0], 12);
         } else {

@@ -33,10 +33,7 @@ typedef struct {
     u32 extra;
 } Iterator;
 
-void LobbyCharVector_AssignIterRange(Vec *, ...);
-void *LobbyU32Vector_Data2(Vec *);
 void LobbyCharVector_AssignRange(Vec *, u8 *, u8 *, int);
-void LobbyTimerMap_MakeEntry(Record *, u32, Six *);
 
 void LobbyCharVector_AssignRange(Vec *v, u8 *first, u8 *last, int unused) {
     u32 len = last - first;

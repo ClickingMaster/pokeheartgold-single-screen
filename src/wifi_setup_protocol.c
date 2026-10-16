@@ -51,7 +51,6 @@ typedef struct {
 extern s8 ov13_0224CFB8[];
 extern u8 gWifiSetupCipherSeed[];
 extern u8 gWifiSetupCipherKey[];
-u32 _u32_div_f(u32, u32);
 
 int WifiSetup_CheckPrintable(const u8 *data, int length);
 int WifiSetup_FindAossAccessPoint(List *list);

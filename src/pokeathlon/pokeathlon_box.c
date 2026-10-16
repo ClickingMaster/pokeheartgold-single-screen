@@ -23,6 +23,15 @@
 #include "char_tiles.h"
 #include "wireless_status_icon.h"
 
+enum {
+    BOX_STATE_START,
+    BOX_STATE_FADE_IN,
+    BOX_STATE_WAIT_FADE_IN,
+    BOX_STATE_SELECT,
+    BOX_STATE_FADE_OUT,
+    BOX_STATE_WAIT_FADE_OUT,
+};
+
 // functions in asm:
 int BoxMonSelector_Run(int);
 void BoxMonSelector_RenderSprites(u32);
@@ -62,38 +71,38 @@ BOOL PokeathlonBox_Main(OverlayManager *manager) {
     PokeathlonBox *data = OverlayManager_GetData(manager);
 
     switch (data->state) {
-    case 0:
-        data->state = 1;
+    case BOX_STATE_START:
+        data->state = BOX_STATE_FADE_IN;
         break;
 
-    case 1:
+    case BOX_STATE_FADE_IN:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, 0, 6, 1, HEAP_ID_POKEATHLON);
-        data->state = 2;
+        data->state = BOX_STATE_WAIT_FADE_IN;
         break;
 
-    case 2:
+    case BOX_STATE_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
-            data->state = 3;
+            data->state = BOX_STATE_SELECT;
         }
         break;
 
-    case 3:
+    case BOX_STATE_SELECT:
         int res = BoxMonSelector_Run(data->monSelector);
         if (res == 2) {
             data->cancelled = FALSE;
-            data->state = 4;
+            data->state = BOX_STATE_FADE_OUT;
         } else if (res == 3) {
             data->cancelled = TRUE;
-            data->state = 4;
+            data->state = BOX_STATE_FADE_OUT;
         }
         break;
 
-    case 4:
+    case BOX_STATE_FADE_OUT:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, 0, 6, 1, HEAP_ID_POKEATHLON);
-        data->state = 5;
+        data->state = BOX_STATE_WAIT_FADE_OUT;
         break;
 
-    case 5:
+    case BOX_STATE_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished()) {
             PokeathlonBoxArgs *args = OverlayManager_GetArgs(manager);
             PokeathlonBox_CopySelectedMons(data, args);
@@ -172,7 +181,7 @@ BOOL PokeathlonBox_Setup(OverlayManager *manager) {
     WirelessStatusIcon_CreateOnScreenIfConnected(2);
     PokeathlonBox_SetupGraphics(data->graphics, data->bgConfig, data->courseId, courseArgs->isSupreme);
     Main_SetVBlankIntrCB(&PokeathlonBox_VBlankCallback, data);
-    data->state = 0;
+    data->state = BOX_STATE_START;
 
     ResetAllTextPrinters();
     LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_15_OFFSET, HEAP_ID_POKEATHLON);

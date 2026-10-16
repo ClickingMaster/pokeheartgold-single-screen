@@ -81,7 +81,7 @@ PokeathlonLampJumpCpuPlayers *PokeathlonLampJump_NewCpuPlayers(enum HeapID heapI
 void PokeathlonLampJump_FreeCpuPlayers(PokeathlonLampJumpCpuPlayers *cpu);
 int PokeathlonLampJump_UpdateCpuPlayers(PokeathlonCourseData *course, PokeathlonLampJumpCpuPlayers *cpu);
 void PokeathlonLampJump_UpdateCpuPlayer(PokeathlonCourseData *course, PokeathlonLampJumpCpuPlayers *cpu, u8 participant);
-void PokeathlonResultsAnnouncement_InitWindow(Window *window, BgConfig *bgConfig, enum HeapID heapId);
-void PokeathlonResultsAnnouncement_PrintTitle(Window *window, enum HeapID heapId);
+void PokeathlonResults_InitWindow(Window *window, BgConfig *bgConfig, enum HeapID heapId);
+void PokeathlonResults_PrintTitle(Window *window, enum HeapID heapId);
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_LAMP_JUMP_STAGE_H

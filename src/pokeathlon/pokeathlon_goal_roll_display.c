@@ -13,6 +13,12 @@
 #include "player_data.h"
 #include "text.h"
 
+enum {
+    PLATE_STATE_IDLE,
+    PLATE_STATE_START_FLASH,
+    PLATE_STATE_FLASH,
+};
+
 // NitroSDK MATH_QSort (no header declares it)
 void MATH_QSort(void *base, u32 count, u32 width, int (*compare)(const void *, const void *), void *context);
 
@@ -43,7 +49,7 @@ typedef void (*PokeathlonGoalRollChangePaletteFunc)(BgConfig *bgConfig, int bgId
 #pragma force_active on
 
 void PokeathlonGoalRoll_StartPlateFlash(PokeathlonGoalRoll *goalRoll, int participant, int gained, int bigBall) {
-    goalRoll->plates[participant].state = 1;
+    goalRoll->plates[participant].state = PLATE_STATE_START_FLASH;
     goalRoll->plates[participant].gained = gained;
     goalRoll->plates[participant].bigBall = bigBall;
 }
@@ -51,9 +57,9 @@ void PokeathlonGoalRoll_StartPlateFlash(PokeathlonGoalRoll *goalRoll, int partic
 // Shows "+1", "+2" or "-1" on a participant's plate and flashes it for 30 frames.
 void PokeathlonGoalRoll_PlateTask(SysTask *task, PokeathlonGoalRollPlate *plate) {
     switch (plate->state) {
-    case 0:
+    case PLATE_STATE_IDLE:
         break;
-    case 1:
+    case PLATE_STATE_START_FLASH:
         if (plate->gained) {
             if (plate->bigBall) {
                 PokeathlonGoalRoll_PrintPlate(plate->owner, plate->id, 1);
@@ -66,16 +72,16 @@ void PokeathlonGoalRoll_PlateTask(SysTask *task, PokeathlonGoalRollPlate *plate)
         plate->timer = 0;
         plate->toggle = 0;
         plate->delay = 0;
-        plate->state = 2;
+        plate->state = PLATE_STATE_FLASH;
         break;
-    case 2:
+    case PLATE_STATE_FLASH:
         plate->timer++;
         if (plate->timer > 30) {
             ChangePlatePalette(plate->owner->bgConfig, GF_BG_LYR_MAIN_1, (plate->id & 31) * 8, 0, 8, 2, 1);
             ScheduleBgTilemapBufferTransfer(plate->owner->bgConfig, GF_BG_LYR_MAIN_1);
             PokeathlonGoalRoll_PrintPlate(plate->owner, plate->id, 0);
             plate->unk03 = -1;
-            plate->state = 0;
+            plate->state = PLATE_STATE_IDLE;
             break;
         }
         if (plate->delay == 0) {
@@ -189,7 +195,7 @@ void PokeathlonGoalRoll_UpdateLeaders(PokeathlonGoalRoll *goalRoll) {
 void PokeathlonGoalRoll_RefreshPlates(PokeathlonGoalRoll *goalRoll) {
     u8 i = 0;
     do {
-        if (goalRoll->plates[i].state == 0) {
+        if (goalRoll->plates[i].state == PLATE_STATE_IDLE) {
             PokeathlonGoalRoll_PrintPlate(goalRoll, i, 0);
         }
         i++;

@@ -18,6 +18,12 @@
 #include "system.h"
 #include "wireless_status_icon.h"
 
+enum {
+    HURDLE_DASH_STATE_START,
+    HURDLE_DASH_STATE_PLAY,
+    HURDLE_DASH_STATE_CALC_SCORES,
+};
+
 // Course helpers, sprite scene and the rest of the event (OVY_96, not yet tidied).
 void *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, int member);
 int PokeathlonCourse_GetSpriteSizeType(void *mon);
@@ -105,7 +111,7 @@ extern const BgTemplate sHurdleDashBgTemplate_Sub2;
 extern const GraphicsBanks sHurdleDashGraphicsBanks;
 
 BOOL PokeathlonHurdleDash_Start(PokeathlonCourseData *course) {
-    PokeathlonCourse_SetStateField07(course, 1);
+    PokeathlonCourse_SetStateField07(course, HURDLE_DASH_STATE_PLAY);
     return FALSE;
 }
 
@@ -162,7 +168,7 @@ BOOL PokeathlonHurdleDash_Play(PokeathlonCourseData *course, u8 *state) {
     case 4:
         if (++hurdleDash->endTimer > 90) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, 0, 6, 1, hurdleDash->heapId);
-            PokeathlonCourse_SetStateField07(course, 2);
+            PokeathlonCourse_SetStateField07(course, HURDLE_DASH_STATE_CALC_SCORES);
         }
         break;
     }

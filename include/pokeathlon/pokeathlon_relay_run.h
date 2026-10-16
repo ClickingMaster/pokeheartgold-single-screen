@@ -35,6 +35,17 @@
 #define RELAY_RUN_TIRED     1 // energy at RELAY_RUN_TIRED_ENERGY or below
 #define RELAY_RUN_EXHAUSTED 2 // out of energy: can't be flicked until it recovers
 
+// PokeathlonRelayRunTeam.speedGrade
+#define RELAY_RUN_SPEED_STANDING 0
+#define RELAY_RUN_SPEED_SLOW     1
+#define RELAY_RUN_SPEED_FAST     2
+#define RELAY_RUN_SPEED_TOP      3 // at its speed limit
+
+// The swap to the next team member (PokeathlonRelayRunTeam.swapPhase, PokeathlonRelayRunTouch.displayPhase)
+#define RELAY_RUN_SWAP_DONE   0
+#define RELAY_RUN_SWAP_LEAVE  1
+#define RELAY_RUN_SWAP_ARRIVE 2
+
 // PokeathlonRelayRunObstacle.kind (0: none)
 #define RELAY_RUN_OBSTACLE_BIG_WALL   1 // 48x48
 #define RELAY_RUN_OBSTACLE_WALL       2 // 32x32

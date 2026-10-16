@@ -19,6 +19,12 @@
 // result every frame; every player draws from that packet. The top screen is
 // PokeathlonCirclePushDisplay.
 
+enum PokeathlonCirclePushMonState {
+    CIRCLE_PUSH_MON_OUT,
+    CIRCLE_PUSH_MON_IN_RING,
+    CIRCLE_PUSH_MON_AT_START,
+};
+
 // One of the twelve Pokemon (0x90).
 typedef struct PokeathlonCirclePushMon {
     PokeathlonCourseObject *object;                 // 0x00

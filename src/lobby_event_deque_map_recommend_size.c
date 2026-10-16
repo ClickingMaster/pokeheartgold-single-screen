@@ -99,9 +99,6 @@ static inline void Swap(Queue *a, Queue *b) {
     }
 }
 
-void LobbyEventDequeMap_Reserve(Queue *, u32);
-void LobbyEventDequeMap_PushBack(Queue *, u32 *);
-
 u32 LobbyEventDequeMap_RecommendSize(Queue *q, u32 extra, ...) {
     u32 size, limit, first, second;
     limit = Limit();

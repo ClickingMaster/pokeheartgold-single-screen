@@ -28,6 +28,12 @@
 #include "sprite_resource_header.h"
 #include "wireless_status_icon.h"
 
+enum {
+    DISC_CATCH_STATE_INTRO,
+    DISC_CATCH_STATE_PLAY,
+    DISC_CATCH_STATE_FINISH,
+};
+
 // Course helpers (OVY_96, not yet tidied).
 BOOL PokeathlonCourse_RunStartCountdown(PokeathlonCourseData *course);
 void PokeathlonCourse_UpdateTimeUpCountdown(PokeathlonCourseData *course, int timer);
@@ -104,7 +110,7 @@ extern const OamCharTransferParam gPokeathlonDiscCatchOamCharTransferParam;
 extern const u32 gPokeathlonDiscCatchBgLayers[7];
 extern const GraphicsBanks gPokeathlonDiscCatchGraphicsBanks;
 extern const s16 gPokeathlonDiscCatchMonStartPositions[DISC_CATCH_PARTICIPANTS][DISC_CATCH_TEAM_SIZE][2]; // where the Pokemon start
-extern const s16 ov96_0221CFBE[][3][2];                                           // their y (the second half of each entry)
+extern const s16 gPokeathlonDiscCatchMonStartPositionsY[][3][2];                                           // their y (the second half of each entry)
 extern const ManagedSpriteTemplate gPokeathlonDiscCatchDiscTopSpriteTemplate;
 extern const ManagedSpriteTemplate gPokeathlonDiscCatchDiscTouchSpriteTemplate;
 extern const ManagedSpriteTemplate gPokeathlonDiscCatchEffectSpriteTemplate;
@@ -398,7 +404,7 @@ void PokeathlonDiscCatchMon_Respawn(PokeathlonDiscCatchMon *mon) {
     index = mon->index;
     member = index % 3;
     participant = index / 3;
-    PokeathlonCourseObject_GroundToCenter(mon->monPic, gPokeathlonDiscCatchMonStartPositions[participant][member][0], ov96_0221CFBE[participant][member][0], &x, &y);
+    PokeathlonCourseObject_GroundToCenter(mon->monPic, gPokeathlonDiscCatchMonStartPositions[participant][member][0], gPokeathlonDiscCatchMonStartPositionsY[participant][member][0], &x, &y);
     mon->position.x = x << FX32_SHIFT;
     mon->position.y = y << FX32_SHIFT;
     mon->target.x = x << FX32_SHIFT;
@@ -772,7 +778,7 @@ u32 PokeathlonDiscCatch_Intro(PokeathlonCourseData *course, u8 *state) {
         break;
     case 2:
         if (PokeathlonCourse_RunStartCountdown(course)) {
-            PokeathlonCourse_SetStateField07(course, 1);
+            PokeathlonCourse_SetStateField07(course, DISC_CATCH_STATE_PLAY);
         }
         break;
     default:
@@ -810,7 +816,7 @@ u32 PokeathlonDiscCatch_Play(PokeathlonCourseData *course, u8 *state) {
         if (PokeathlonCourse_RunFinish(course)) {
             if (PokeathlonDiscCatchShake_IsDone(&work->shake)) {
                 BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, work->heapId);
-                PokeathlonCourse_SetStateField07(course, 2);
+                PokeathlonCourse_SetStateField07(course, DISC_CATCH_STATE_FINISH);
             }
         }
         break;

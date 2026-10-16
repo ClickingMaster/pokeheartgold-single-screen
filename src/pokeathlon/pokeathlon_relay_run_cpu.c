@@ -282,7 +282,7 @@ void PokeathlonRelayRunCpu_Think(PokeathlonCourseData *course, PokeathlonRelayRu
             return;
         }
         self->team->swapping = TRUE;
-        self->team->swapPhase = 1;
+        self->team->swapPhase = RELAY_RUN_SWAP_LEAVE;
         PokeathlonCourse_AddMonCounter(course, self->team->owner, self->team->current, 7, 1);
     }
 }

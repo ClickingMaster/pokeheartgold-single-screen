@@ -13,6 +13,22 @@
 // result is the sum of its Pokemon's times. Event template gPokeathlonHurdleDashEvent = {Init, Draw, ShowResults, Exit},
 // states gPokeathlonHurdleDashStates = {Start, Play, CalcScores}. The race: pokeathlon_hurdle_dash_race.c.
 
+enum PokeathlonHurdleDashMonState {
+    HURDLE_DASH_MON_RUNNING,
+    HURDLE_DASH_MON_JUMPING,
+    HURDLE_DASH_MON_TRIPPED,
+    HURDLE_DASH_MON_CENTERING,
+    HURDLE_DASH_MON_STOPPED,
+};
+
+enum PokeathlonHurdleDashJumpPhase {
+    HURDLE_DASH_JUMP_NONE,
+    HURDLE_DASH_JUMP_RISE,
+    HURDLE_DASH_JUMP_HANG,
+    HURDLE_DASH_JUMP_FALL,
+    HURDLE_DASH_JUMP_TRIPPED,
+};
+
 // A Pokemon on its lane (0x40, at 0x24 of its runner).
 typedef struct PokeathlonHurdleDashMon {
     void *monObject;   // 0x00: PokeathlonCourseMonObject

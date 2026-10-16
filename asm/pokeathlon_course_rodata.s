@@ -132,7 +132,7 @@
 	.public gPokeathlonCourseMonPicRect
 	.public gPokeathlonCourseTrainerPicFileIds
 	.public gPokeathlonNpcTrainerClasses
-	.public ov96_0221B1D8
+	.public gPokeathlonNpcTrainerPicFileIds
 	.public gPokeathlonCourseWaitGraphicsModes
 	.public gPokeathlonCourseWaitBgTemplate
 	.public gPokeathlonCourseWaitGraphicsBanks
@@ -241,10 +241,10 @@ gPokeathlonSnowThrowEvent:
 	.word 0
 
 gPokeathlonCourseEvent_ResultsAnnouncement: ; 0x0221A86C
-	.word PokeathlonResultsAnnouncement_Init
-	.word PokeathlonResultsAnnouncement_Draw
+	.word PokeathlonResults_Init
+	.word PokeathlonResults_Draw
 	.word 0
-	.word PokeathlonResultsAnnouncement_Exit
+	.word PokeathlonResults_Exit
 	.word 0
 
 gPokeathlonRingDropEvent:
@@ -346,10 +346,10 @@ sPokeathlonStateInfoFuncTable: ; 0x0221A984
 	.word PokeathlonCourse_State_EndRound
 	.word PokeathlonCourse_State_ExitEvent
 	.word PokeathlonCourse_State_NextRound
-	.word PokeathlonCourse_State_StartResultsAnnouncement
-	.word PokeathlonCourse_State_WaitResultsAnnouncementStart
-	.word PokeathlonCourse_State_RunResultsAnnouncement
-	.word PokeathlonCourse_State_EndResultsAnnouncement
+	.word PokeathlonCourse_State_StartResults
+	.word PokeathlonCourse_State_WaitResultsStart
+	.word PokeathlonCourse_State_RunResults
+	.word PokeathlonCourse_State_EndResults
 	.word PokeathlonCourse_State_SendMonCounters
 	.word PokeathlonCourse_State_SendResults
 	.word PokeathlonCourse_State_StartClosing
@@ -572,7 +572,7 @@ gPokeathlonCourseTrainerPicFileIds: ; 0x0221B1BC
 gPokeathlonNpcTrainerClasses: ; 0x0221B1D4
 	.byte 0x01, 0x00, 0x00, 0x00
 
-ov96_0221B1D8: ; 0x0221B1D8
+gPokeathlonNpcTrainerPicFileIds: ; 0x0221B1D8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00
 	.byte 0x03, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00

@@ -27,7 +27,6 @@ extern void LobbyUserMap_MakeEntry(Pair *, int, const String *);
 extern void LobbyUserMap_Insert(void *, void *, const Pair *);
 extern void LobbyString_Destroy(String *);
 int LobbyChat_FindUserIdByNick(Work *, const String *);
-void LobbyChat_GetUserNick(String *, Work *, int, ...);
 int LobbyChat_RenameUser(Work *, const String *, const String *);
 
 int LobbyChat_RenameUser(Work *w, const String *key, const String *value) {

@@ -88,12 +88,7 @@ typedef struct InsertResult {
 } InsertResult;
 
 extern int LobbyString_Compare(Str *a, Str *b);
-Node *LobbyRequestMap_InsertNode(Tree *t, Node *parent, u8 a, u8 b, Obj **val);
-Node *LobbyChannelMap_LowerBound(Tree *t, Str *key, Node *n, Node *res);
-Node *LobbyRequestMap_FindInsertPos(Tree *t, Obj **key, Node **pos, u8 *a, u8 *b);
 void LobbyUserIdSet_Find(Iter *out, Tree *t, int *key);
-void LobbyUserMap_Find(Iter *out, Tree *t, int *key);
-void LobbyChannelMap_Find(Iter *out, Tree *t, Str *key);
 
 static inline BOOL StrLess(Str *a, Str *b) {
     return LobbyString_Compare(a, b) < 0;
@@ -159,8 +154,6 @@ typedef struct Empty2 {
 extern void *gLobbyRequestVtable;
 extern void LobbyString_InitFromCStr(Str *s, const char *cstr);
 extern void LobbyUserIdSet_Assign(TreeHdr *dst, TreeHdr *src);
-int LobbyChat_GetUserIdFromNick(Str *s);
-void LobbyRequestMap_Erase(Iter *out, Tree *t, Iter pos);
 
 typedef struct Tag {
     u8 x;
@@ -171,10 +164,6 @@ IntStrPair *LobbyUserMap_GetOrInsert(Tree *t, int *key);
 static inline IntStrPair *MapIndex(Tree *t, int *key, Tag a, Tag b) {
     return LobbyUserMap_GetOrInsert(t, key);
 }
-
-Node *LobbyUserMap_FindInsertPos2(Tree *t, int *key, Node **pos, u8 *a, u8 *b);
-BOOL LobbyChat_RemoveUserIfUnused(u8 *obj, int id);
-BOOL LobbyUserMap_EraseKey(Tree *t, int *key);
 
 int LobbyChat_GetFullChannelName(void *a, void *b0, void *c);
 
@@ -266,8 +255,6 @@ static inline CbObj *CbObjCreate(void *vt, int xc, void *x8) {
 }
 
 extern int LobbyString_CompareCStr(Str *a, const char *b);
-void *LobbyChatManager_Destroy(u8 *p);
-void LobbyMem_ReleaseReserve(void);
 
 #define CTX_CHECK(c)                      \
     if ((c) == NULL) {                    \
@@ -285,8 +272,6 @@ static inline void OpDelete(void *p) {
         DWC_Free(0, p, 0);
     }
 }
-
-void LobbyChannelMap_MakeEntry(NamedEntry *dst, Str *name, Entry *src);
 
 static inline void TreeHdrCopy(TreeHdr *d, TreeHdr *s) {
     Tag t;
@@ -395,13 +380,6 @@ extern struct {
     u8 *obj;
     void *buf;
 } ov45_022577E8;
-
-void LobbyMem_OnOutOfMemoryDisconnect(void);
-void LobbyMem_OnOutOfMemory(void);
-int LobbyString_FindFirstOfChars(Str *s, const char *chars, u32 pos, u32 n);
-Node *LobbyUserIdSet_LowerBound(Tree *t, int *key, Node *node, Node *res);
-
-Node *LobbyUserMap_LowerBound(Tree *t, int *key, Node *node, Node *res);
 
 int LobbyChat_SetChannelMode(const char *name, int arg);
 

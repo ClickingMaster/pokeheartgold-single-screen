@@ -16,9 +16,9 @@ void PokeathlonCourseSpritePoolSprite_Show(PokeathlonGoalRollSprite *sprite, BOO
 
 // Per goal (indexed by participant - 1 or by 3 - quadrant): three guard points (x, y) in front of it.
 extern const u16 gPokeathlonGoalRollCpuGuardPoints[][3][2];
-extern const u16 ov96_0221D67A[][3][2];
-extern const u16 ov96_0221D67C[][3][2];
-extern const u16 ov96_0221D680[][3][2];
+extern const u16 gPokeathlonGoalRollCpuGuardPointsY[][3][2];
+extern const u16 gPokeathlonGoalRollCpuGuardPoints1[][3][2];
+extern const u16 gPokeathlonGoalRollCpuGuardPoints2[][3][2];
 
 // The timer on the top screen: seconds left; "Second Wind!" from the last 900 frames on.
 void PokeathlonGoalRollDisplay_UpdateTimer(PokeathlonGoalRollDisplay *display, s32 timer) {
@@ -276,7 +276,7 @@ int PokeathlonGoalRollCpu_ApplyChaserDecision(PokeathlonGoalRollMon *mon, const 
         if (quadrant != 4) {
             u8 goal = 3 - quadrant;
             mon->target.x = gPokeathlonGoalRollCpuGuardPoints[goal][0][0] << 12;
-            mon->target.y = ov96_0221D67A[goal][0][0] << 12;
+            mon->target.y = gPokeathlonGoalRollCpuGuardPointsY[goal][0][0] << 12;
         } else {
             GF_AssertFail();
         }
@@ -370,11 +370,11 @@ int PokeathlonGoalRollCpu_ApplyGuardDecision(PokeathlonGoalRollMon *mon, Pokeath
             point[0] = points[0][0];
             point[1] = points[0][1];
         } else if ((s32)LCRandom() % 2 == 0) {
-            const u16 *other = ov96_0221D67C[participant - 1][0];
+            const u16 *other = gPokeathlonGoalRollCpuGuardPoints1[participant - 1][0];
             point[0] = other[0];
             point[1] = other[1];
         } else {
-            const u16 *other = ov96_0221D680[participant - 1][0];
+            const u16 *other = gPokeathlonGoalRollCpuGuardPoints2[participant - 1][0];
             point[0] = other[0];
             point[1] = other[1];
         }

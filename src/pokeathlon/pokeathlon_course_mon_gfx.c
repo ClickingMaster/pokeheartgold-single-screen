@@ -13,6 +13,11 @@
 #include "sys_task_api.h"
 #include "char_tiles.h"
 
+enum {
+    MON_GFX_LOAD_GRAPHICS,
+    MON_GFX_LOAD_CREATE_SPRITES,
+};
+
 void PokeathlonCourseMonGfx_InitManager(PokeathlonCourseMonGfxManager *manager, u32 count, SpriteList *spriteList) {
     int i;
     if (count > 16) {
@@ -59,7 +64,7 @@ void PokeathlonCourseMonGfx_StartLoad(PokeathlonCourseMonGfxManager *manager, s3
     load->count = count;
     load->manager = manager;
     load->template = *template;
-    load->state = 0;
+    load->state = MON_GFX_LOAD_GRAPHICS;
     load->baseIndex = baseIndex;
     load->current = 0;
     manager->loaded = FALSE;
@@ -295,7 +300,7 @@ BOOL PokeathlonCourseMonGfx_LoadStep(PokeathlonCourseMonGfxLoad *load) {
     u8 index;
     PokeathlonCourseMonGfx *mon;
     switch (load->state) {
-    case 0:
+    case MON_GFX_LOAD_GRAPHICS:
         index = (u8)(load->baseIndex + load->current);
         PokeathlonCourseMonGfx_Load(load->manager, &load->manager->mons[index], (PokeathlonCourseMonInfo *)((u32)load->infos + (u32)index * sizeof(PokeathlonCourseMonInfo)), load->template.vram, index, load->template.vramTransfer);
         load->manager->mons[index].info = load->infos[index];
@@ -312,10 +317,10 @@ BOOL PokeathlonCourseMonGfx_LoadStep(PokeathlonCourseMonGfxLoad *load) {
         load->current++;
         if (load->current >= load->count) {
             load->current = 0;
-            load->state = 1;
+            load->state = MON_GFX_LOAD_CREATE_SPRITES;
         }
         break;
-    case 1:
+    case MON_GFX_LOAD_CREATE_SPRITES:
         index = (u8)(load->baseIndex + load->current);
         PokeathlonCourseMonGfx_CreateSprite(load->manager, load->template.priority, load->template.vramTransfer, load->template.whichScreen, index, index);
         load->current++;

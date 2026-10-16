@@ -47,10 +47,10 @@
 	.public PokeathlonCourse_State_EndRound
 	.public PokeathlonCourse_State_ExitEvent
 	.public PokeathlonCourse_State_NextRound
-	.public PokeathlonCourse_State_StartResultsAnnouncement
-	.public PokeathlonCourse_State_WaitResultsAnnouncementStart
-	.public PokeathlonCourse_State_RunResultsAnnouncement
-	.public PokeathlonCourse_State_EndResultsAnnouncement
+	.public PokeathlonCourse_State_StartResults
+	.public PokeathlonCourse_State_WaitResultsStart
+	.public PokeathlonCourse_State_RunResults
+	.public PokeathlonCourse_State_EndResults
 	.public PokeathlonCourse_State_StartClosing
 	.public PokeathlonCourse_State_WaitClosingStart
 	.public PokeathlonCourse_State_RunClosing
@@ -600,70 +600,70 @@
 	.public PokeathlonLampJump_FreeCpuPlayers
 	.public PokeathlonLampJump_UpdateCpuPlayers
 	.public PokeathlonLampJump_UpdateCpuPlayer
-	.public PokeathlonResultsAnnouncement_InitWindow
-	.public PokeathlonResultsAnnouncement_PrintTitle
-	.public PokeathlonResultsAnnouncement_Init
-	.public PokeathlonResultsAnnouncement_Draw
-	.public PokeathlonResultsAnnouncement_Exit
-	.public PokeathlonResultsAnnouncement_SetGfxBanks
-	.public PokeathlonResultsAnnouncement_InitBgs
-	.public PokeathlonResultsAnnouncement_LoadBgGfx
-	.public PokeathlonResultsAnnouncement_AllPlayersFinished
-	.public PokeathlonResultsAnnouncement_Run
-	.public PokeathlonResultsAnnouncement_CreatePlates
-	.public PokeathlonResultsAnnouncement_StartRanking
-	.public PokeathlonResultsAnnouncement_MoveSlide
-	.public PokeathlonResultsAnnouncement_MoveSlides
-	.public PokeathlonResultsAnnouncement_IsSlideDone
-	.public PokeathlonResultsAnnouncement_Wait
-	.public PokeathlonResultsAnnouncement_UpdateRanking
-	.public PokeathlonResultsAnnouncement_QueueSlide
-	.public PokeathlonResultsAnnouncement_SetIncomingSlide
-	.public PokeathlonResultsAnnouncement_ClearSlide
-	.public PokeathlonResultsAnnouncement_HasMorePlates
-	.public PokeathlonResultsAnnouncement_AddPlate
-	.public PokeathlonResultsAnnouncement_RemoveSlide
-	.public PokeathlonResultsAnnouncement_GetLeavingSlide
-	.public PokeathlonResultsAnnouncement_GetIntroMessage
-	.public PokeathlonResultsAnnouncement_GetCommentMessage
-	.public PokeathlonResultsAnnouncement_InitSprites
-	.public PokeathlonResultsAnnouncement_FreeSprites
-	.public PokeathlonResultsAnnouncement_LoadSpriteResources
-	.public PokeathlonResultsAnnouncement_CreateSprite
-	.public PokeathlonResultsAnnouncement_WaitForPlayers
-	.public PokeathlonResultsAnnouncement_NewPlates
-	.public PokeathlonResultsAnnouncement_FreePlates
-	.public PokeathlonResultsAnnouncement_DrawPlates
-	.public PokeathlonResultsAnnouncement_InitPlates
-	.public PokeathlonResultsAnnouncement_ShowPlate
-	.public PokeathlonResultsAnnouncement_HidePlate
-	.public PokeathlonResultsAnnouncement_GetPlatePos
-	.public PokeathlonResultsAnnouncement_SetPlatePos
-	.public PokeathlonResultsAnnouncement_MovePlate
-	.public PokeathlonResultsAnnouncement_GetPlateRank
-	.public PokeathlonResultsAnnouncement_LoadPlateResources
-	.public PokeathlonResultsAnnouncement_InitPlateResourcesHeader
-	.public PokeathlonResultsAnnouncement_InitPlateSpriteTemplate
-	.public PokeathlonResultsAnnouncement_CreatePlateSprite
-	.public PokeathlonResultsAnnouncement_CreatePlateSprites
-	.public PokeathlonResultsAnnouncement_PrintPlateName
-	.public PokeathlonResultsAnnouncement_PrintPlateText
-	.public PokeathlonResultsAnnouncement_RefreshPlate
-	.public PokeathlonResultsAnnouncement_SetPlateVisible
-	.public PokeathlonResultsAnnouncement_SetPlateSpritePositions
-	.public PokeathlonResultsAnnouncement_MovePlateSprites
-	.public PokeathlonResultsAnnouncement_InitTextWindow
-	.public PokeathlonResultsAnnouncement_InitTextWindows
-	.public PokeathlonResultsAnnouncement_CreateText
-	.public PokeathlonResultsAnnouncement_DestroyText
-	.public PokeathlonResultsAnnouncement_NewScoreboard
-	.public PokeathlonResultsAnnouncement_FreeScoreboard
-	.public PokeathlonResultsAnnouncement_LoadScoreboardResources
-	.public PokeathlonResultsAnnouncement_InitScoreboard
-	.public PokeathlonResultsAnnouncement_SetScore
-	.public PokeathlonResultsAnnouncement_CreateScoreboardText
-	.public PokeathlonResultsAnnouncement_DestroyScoreboardText
-	.public PokeathlonResultsAnnouncement_SetScoreDigits
+	.public PokeathlonResults_InitWindow
+	.public PokeathlonResults_PrintTitle
+	.public PokeathlonResults_Init
+	.public PokeathlonResults_Draw
+	.public PokeathlonResults_Exit
+	.public PokeathlonResults_SetGfxBanks
+	.public PokeathlonResults_InitBgs
+	.public PokeathlonResults_LoadBgGfx
+	.public PokeathlonResults_AllPlayersFinished
+	.public PokeathlonResults_Run
+	.public PokeathlonResults_CreatePlates
+	.public PokeathlonResults_StartRanking
+	.public PokeathlonResults_MoveSlide
+	.public PokeathlonResults_MoveSlides
+	.public PokeathlonResults_IsSlideDone
+	.public PokeathlonResults_Wait
+	.public PokeathlonResults_UpdateRanking
+	.public PokeathlonResults_QueueSlide
+	.public PokeathlonResults_SetIncomingSlide
+	.public PokeathlonResults_ClearSlide
+	.public PokeathlonResults_HasMorePlates
+	.public PokeathlonResults_AddPlate
+	.public PokeathlonResults_RemoveSlide
+	.public PokeathlonResults_GetLeavingSlide
+	.public PokeathlonResults_GetIntroMessage
+	.public PokeathlonResults_GetCommentMessage
+	.public PokeathlonResults_InitSprites
+	.public PokeathlonResults_FreeSprites
+	.public PokeathlonResults_LoadSpriteResources
+	.public PokeathlonResults_CreateSprite
+	.public PokeathlonResults_WaitForPlayers
+	.public PokeathlonResults_NewPlates
+	.public PokeathlonResults_FreePlates
+	.public PokeathlonResults_DrawPlates
+	.public PokeathlonResults_InitPlates
+	.public PokeathlonResults_ShowPlate
+	.public PokeathlonResults_HidePlate
+	.public PokeathlonResults_GetPlatePos
+	.public PokeathlonResults_SetPlatePos
+	.public PokeathlonResults_MovePlate
+	.public PokeathlonResults_GetPlateRank
+	.public PokeathlonResults_LoadPlateResources
+	.public PokeathlonResults_InitPlateResourcesHeader
+	.public PokeathlonResults_InitPlateSpriteTemplate
+	.public PokeathlonResults_CreatePlateSprite
+	.public PokeathlonResults_CreatePlateSprites
+	.public PokeathlonResults_PrintPlateName
+	.public PokeathlonResults_PrintPlateText
+	.public PokeathlonResults_RefreshPlate
+	.public PokeathlonResults_SetPlateVisible
+	.public PokeathlonResults_SetPlateSpritePositions
+	.public PokeathlonResults_MovePlateSprites
+	.public PokeathlonResults_InitTextWindow
+	.public PokeathlonResults_InitTextWindows
+	.public PokeathlonResults_CreateText
+	.public PokeathlonResults_DestroyText
+	.public PokeathlonResults_NewScoreboard
+	.public PokeathlonResults_FreeScoreboard
+	.public PokeathlonResults_LoadScoreboardResources
+	.public PokeathlonResults_InitScoreboard
+	.public PokeathlonResults_SetScore
+	.public PokeathlonResults_CreateScoreboardText
+	.public PokeathlonResults_DestroyScoreboardText
+	.public PokeathlonResults_SetScoreDigits
 	.public PokeathlonHurdleDash_Start
 	.public PokeathlonHurdleDash_Play
 	.public PokeathlonHurdleDash_CalcScores
@@ -1476,7 +1476,7 @@
 	.public gPokeathlonCourseMonPicRect
 	.public gPokeathlonCourseTrainerPicFileIds
 	.public gPokeathlonNpcTrainerClasses
-	.public ov96_0221B1D8
+	.public gPokeathlonNpcTrainerPicFileIds
 	.public gPokeathlonCourseWaitGraphicsModes
 	.public gPokeathlonCourseWaitBgTemplate
 	.public gPokeathlonCourseWaitGraphicsBanks
@@ -1665,7 +1665,7 @@
 	.public gPokeathlonBlockSmashSpotHitboxes_Kind1
 	.public gPokeathlonBlockSmashSpotHitboxes_Kind0
 	.public gPokeathlonBlockSmashSpotPositions
-	.public ov96_0221CDCA
+	.public gPokeathlonBlockSmashSpotPositionsY
 	.public gPokeathlonBlockSmashBlockTouchOffsets
 	.public gPokeathlonBlockSmashCpuSwitchGaugeThresholds
 	.public gPokeathlonBlockSmashCpuSwitchGaugeChances
@@ -1690,7 +1690,7 @@
 	.public gPokeathlonDiscCatchOamManagerParam
 	.public gPokeathlonDiscCatchGraphicsBanks
 	.public gPokeathlonDiscCatchMonStartPositions
-	.public ov96_0221CFBE
+	.public gPokeathlonDiscCatchMonStartPositionsY
 	.public gPokeathlonDiscCatchDiscTopSpriteTemplate
 	.public gPokeathlonDiscCatchDiscTouchSpriteTemplate
 	.public gPokeathlonDiscCatchEffectSpriteTemplate
@@ -1699,7 +1699,7 @@
 	.public gPokeathlonDiscCatchScoreboardWindowTemplates
 	.public gPokeathlonDiscCatchScoreboardSpriteTemplate
 	.public gPokeathlonDiscCatchCpuHomeRowStarts
-	.public ov96_0221D1B1
+	.public gPokeathlonDiscCatchCpuHomeRowCounts
 	.public gPokeathlonDiscCatchCpuJumpChances
 	.public gPokeathlonDiscCatchCpuHomePositions
 	.public gPokeathlonGoalRollPaletteData
@@ -1729,7 +1729,7 @@
 	.public gPokeathlonGoalRollGoalPositions
 	.public gPokeathlonGoalRollMonStartPositions
 	.public gPokeathlonGoalRollBallSpawnPoints
-	.public ov96_0221D43A
+	.public gPokeathlonGoalRollBallSpawnPointsY
 	.public gPokeathlonGoalRollGoalLines
 	.public gPokeathlonGoalRollGoalPosts
 	.public gPokeathlonGoalRollBallSpeedsA
@@ -1742,20 +1742,20 @@
 	.public gPokeathlonGoalRollNumberPosition
 	.public gPokeathlonGoalRollLabelPosition
 	.public gPokeathlonGoalRollCpuGuardPoints
-	.public ov96_0221D67A
-	.public ov96_0221D67C
-	.public ov96_0221D680
+	.public gPokeathlonGoalRollCpuGuardPointsY
+	.public gPokeathlonGoalRollCpuGuardPoints1
+	.public gPokeathlonGoalRollCpuGuardPoints2
 	.public gPokeathlonRingDropFallSpeeds
 	.public gPokeathlonRingDropScoreWindowTemplate
 	.public gPokeathlonRingDropDirectionReference
 	.public gPokeathlonRingDropGraphicsModes
 	.public gPokeathlonRingDropRingEdge
 	.public gPokeathlonRingDropMonStartPositions
-	.public ov96_0221D6E6
+	.public gPokeathlonRingDropMonStartPositionsY
 	.public gPokeathlonRingDropOamCharTransferParam
 	.public gPokeathlonRingDropSwitchSpots
-	.public ov96_0221D70A
-	.public ov96_0221D70C
+	.public gPokeathlonRingDropSwitchSpotsY
+	.public gPokeathlonRingDropSwitchSpotsRadius
 	.public gPokeathlonRingDropSpriteResourceCounts
 	.public gPokeathlonRingDropBgLayers
 	.public gPokeathlonRingDropOamManagerParam
@@ -1769,7 +1769,7 @@
 	.public gPokeathlonRingDropCpuCloseChances
 	.public gPokeathlonRingDropCpuDashChances
 	.public gPokeathlonRingDropCpuSwitchSpots
-	.public ov96_0221D98E
+	.public gPokeathlonRingDropCpuSwitchSpotsY
 	.public gPokeathlonEventRankPoints
 	.public gPokeathlonEventPointsCalcFuncs
 	.public gPokeathlonEventScorePointsFuncs

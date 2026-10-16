@@ -33,7 +33,7 @@ extern const VecFx32 gPokeathlonGoalRollNormalTopRight;
 extern const VecFx32 gPokeathlonGoalRollFrameRight;
 extern const WindowTemplate gPokeathlonGoalRollNameWindowTemplates[];
 extern const s16 gPokeathlonGoalRollBallSpawnPoints[];
-extern const s16 ov96_0221D43A[];
+extern const s16 gPokeathlonGoalRollBallSpawnPointsY[];
 extern const Point2D gPokeathlonGoalRollGoalLines[4][2]; // the goal line of each corner
 extern const VecFx32 gPokeathlonGoalRollGoalPosts[4][2];
 extern const u8 gPokeathlonGoalRollBallSpeedsA[][30];
@@ -1145,7 +1145,7 @@ void PokeathlonGoalRoll_PickBallSpawn(PokeathlonGoalRoll *goalRoll, PokeathlonGo
     {
         u8 selected = candidates[(u8)(LCRandom() % count)];
         ball->position.x = gPokeathlonGoalRollBallSpawnPoints[selected * 2] << 12;
-        ball->position.y = ov96_0221D43A[selected * 2] << 12;
+        ball->position.y = gPokeathlonGoalRollBallSpawnPointsY[selected * 2] << 12;
         ball->spawnPoint = selected;
     }
 }

@@ -26,6 +26,12 @@
 #include "touchscreen.h"
 #include "wireless_status_icon.h"
 
+enum {
+    RELAY_RUN_STATE_START,
+    RELAY_RUN_STATE_PLAY,
+    RELAY_RUN_STATE_SAVE_SCORES,
+};
+
 typedef char PokeathlonRelayRunSizeCheck[(sizeof(PokeathlonRelayRun) == 0x648 && sizeof(PokeathlonRelayRunTeam) == 0xD4 && sizeof(PokeathlonRelayRunMember) == 0x1C && sizeof(PokeathlonRelayRunPacket) == 0x28 && sizeof(PokeathlonRelayRunTouch) == 0x24 && sizeof(PokeathlonRelayRunLink) == 0x118) ? 1 : -1];
 typedef char PokeathlonRelayRunLayoutCheck[(offsetof(PokeathlonRelayRun, teams) == 0x30 && offsetof(PokeathlonRelayRun, finished) == 0x3C0 && offsetof(PokeathlonRelayRun, cpu) == 0x3DC && offsetof(PokeathlonRelayRun, obstacles) == 0x4D4 && offsetof(PokeathlonRelayRun, timer) == 0x640 && offsetof(PokeathlonRelayRunTeam, position) == 0x7C && offsetof(PokeathlonRelayRunTeam, laps) == 0x9C && offsetof(PokeathlonRelayRunTeam, owner) == 0xD0) ? 1 : -1];
 
@@ -456,7 +462,7 @@ BOOL PokeathlonRelayRun_Start(PokeathlonCourseData *course, u8 *state) {
         break;
     case 2:
         if (IsPaletteFadeFinished()) {
-            PokeathlonCourse_SetStateField07(course, 1);
+            PokeathlonCourse_SetStateField07(course, RELAY_RUN_STATE_PLAY);
         }
         break;
     }
@@ -484,7 +490,7 @@ BOOL PokeathlonRelayRun_Play(PokeathlonCourseData *course, u8 *state) {
         PokeathlonRelayRun_UpdateHost(course);
         if (PokeathlonCourse_RunFinish(course)) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, relayRun->heapId);
-            PokeathlonCourse_SetStateField07(course, 2);
+            PokeathlonCourse_SetStateField07(course, RELAY_RUN_STATE_SAVE_SCORES);
         }
         break;
     }
@@ -588,11 +594,11 @@ void PokeathlonRelayRun_UpdateHost(PokeathlonCourseData *course) {
         }
         PokeathlonRelayRun_UpdateSwapSign(relayRun, (u8)i, PokeathlonRelayRun_IsTouchingSwapButton(relayRun, touch->x, touch->y));
         if (teamCursor->teams[0].swapping) {
-            if (teamCursor->teams[0].swapPhase == 1 && touch->displayPhase == 1) {
+            if (teamCursor->teams[0].swapPhase == RELAY_RUN_SWAP_LEAVE && touch->displayPhase == RELAY_RUN_SWAP_LEAVE) {
                 teamCursor->teams[0].current = (teamCursor->teams[0].current + 1) % RELAY_RUN_MEMBERS;
-                teamCursor->teams[0].swapPhase = 2;
-            } else if (teamCursor->teams[0].swapPhase == 2 && touch->displayPhase == 2) {
-                teamCursor->teams[0].swapPhase = 0;
+                teamCursor->teams[0].swapPhase = RELAY_RUN_SWAP_ARRIVE;
+            } else if (teamCursor->teams[0].swapPhase == RELAY_RUN_SWAP_ARRIVE && touch->displayPhase == RELAY_RUN_SWAP_ARRIVE) {
+                teamCursor->teams[0].swapPhase = RELAY_RUN_SWAP_DONE;
                 teamCursor->teams[0].swapping = FALSE;
                 teamCursor->teams[0].tired = FALSE;
             }
@@ -611,7 +617,7 @@ void PokeathlonRelayRun_UpdateHost(PokeathlonCourseData *course) {
         if (pressCursor->presses[0].pressed) {
             if (PokeathlonRelayRun_IsTouchingSwapButton(relayRun, touch->x, touch->y)) {
                 teamCursor->teams[0].swapping = TRUE;
-                teamCursor->teams[0].swapPhase = 1;
+                teamCursor->teams[0].swapPhase = RELAY_RUN_SWAP_LEAVE;
                 PokeathlonCourse_AddMonCounter(course, teamCursor->teams[0].owner, teamCursor->teams[0].current, 7, 1);
             } else if (PokeathlonRelayRun_IsTouchingRunner(relayRun, (u8)i, touch->x, touch->y)) {
                 dragCursor->dragging[0] = TRUE;
@@ -658,7 +664,7 @@ void PokeathlonRelayRun_UpdateHost(PokeathlonCourseData *course) {
             if (work.flick.x < 0) {
                 if (work.flick.x < FX32_CONST(-16)) {
                     teamCursor->teams[0].swapping = TRUE;
-                    teamCursor->teams[0].swapPhase = 1;
+                    teamCursor->teams[0].swapPhase = RELAY_RUN_SWAP_LEAVE;
                     PokeathlonCourse_AddMonCounter(course, teamCursor->teams[0].owner, teamCursor->teams[0].current, 7, 1);
                 }
                 work.flick.x = 0;
@@ -1045,13 +1051,13 @@ void PokeathlonRelayRun_MoveTeams(PokeathlonCourseData *course) {
         speed = VEC_Mag(&team->velocity);
         speedLimit = team->members[team->current].speedLimit;
         if (speed >= (speedLimit - 1) << FX32_SHIFT) {
-            team->speedGrade = 3;
+            team->speedGrade = RELAY_RUN_SPEED_TOP;
         } else if (speed >= (speedLimit - 3) << FX32_SHIFT) {
-            team->speedGrade = 2;
+            team->speedGrade = RELAY_RUN_SPEED_FAST;
         } else if (speed == 0) {
-            team->speedGrade = 0;
+            team->speedGrade = RELAY_RUN_SPEED_STANDING;
         } else {
-            team->speedGrade = 1;
+            team->speedGrade = RELAY_RUN_SPEED_SLOW;
         }
         if (team->swapping) {
             continue;
@@ -1061,12 +1067,12 @@ void PokeathlonRelayRun_MoveTeams(PokeathlonCourseData *course) {
             if (j == team->current) {
                 if (team->members[j].condition != RELAY_RUN_EXHAUSTED) {
                     switch (team->speedGrade) {
-                    case 0:
+                    case RELAY_RUN_SPEED_STANDING:
                         energy += 0.5;
                         break;
-                    case 1:
-                    case 2:
-                    case 3:
+                    case RELAY_RUN_SPEED_SLOW:
+                    case RELAY_RUN_SPEED_FAST:
+                    case RELAY_RUN_SPEED_TOP:
                         energy = energy - 0.5;
                         break;
                     }

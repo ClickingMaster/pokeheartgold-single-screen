@@ -267,7 +267,7 @@ void PokeathlonCourseCmd_RecvEvents(int netId, int size, void *data, void *conte
     PokeathlonCourseData *course = context;
     PokeathlonCourse_SetEvents(course, data);
     PokeathlonCourse_SetStateTransitionType(course, 1);
-    PokeathlonCourse_SetStateField07(course, 1);
+    PokeathlonCourse_SetStateField07(course, POKEATHLON_COURSE_STATE_RUN_EVENT_OVERLAY);
 }
 
 #pragma force_active on
@@ -285,7 +285,7 @@ void PokeathlonCourseCmd_RecvParticipant(int netId, int size, void *data, void *
                 PokeathlonCourse_SetupNpcParticipants(context, (u8)missing);
             }
             PokeathlonCourse_ResetField1EF(context);
-            PokeathlonCourse_SetStateField07(context, 4);
+            PokeathlonCourse_SetStateField07(context, POKEATHLON_COURSE_STATE_SEND_PARTICIPANTS);
         }
     }
 }
@@ -297,7 +297,7 @@ void PokeathlonCourseCmd_RecvAllParticipants(int netId, int size, void *data, vo
     memcpy(PokeathlonCourse_GetParticipantData(course, netId), data, size);
     PokeathlonCourse_LoadPerformanceData(course);
     PokeathlonCourse_SetStateTransitionType(course, 3);
-    PokeathlonCourse_SetStateField07(course, 5);
+    PokeathlonCourse_SetStateField07(course, POKEATHLON_COURSE_STATE_SEND_PROFILES);
 }
 
 void PokeathlonCourseCmd_RecvProfiles(int netId, int size, void *data, void *context) {
@@ -306,7 +306,7 @@ void PokeathlonCourseCmd_RecvProfiles(int netId, int size, void *data, void *con
         memcpy(PokeathlonCourse_GetPlayerProfileFromData(course, 0), data, size);
     }
     PokeathlonCourse_SetStateTransitionType(course, 4);
-    PokeathlonCourse_SetStateField07(course, 6);
+    PokeathlonCourse_SetStateField07(course, POKEATHLON_COURSE_STATE_SEND_RECORD);
 }
 
 void PokeathlonCourseCmd_RecvRecord(int netId, int size, void *data, void *context) {
@@ -315,7 +315,7 @@ void PokeathlonCourseCmd_RecvRecord(int netId, int size, void *data, void *conte
     if (PokeathlonCourse_GetParticipantCount(course) == PokeathlonCourse_GetField1EF(course)) {
         PokeathlonCourse_ResetField1EF(course);
         PokeathlonCourse_SetStateTransitionType(course, 5);
-        PokeathlonCourse_SetStateField07(course, 7);
+        PokeathlonCourse_SetStateField07(course, POKEATHLON_COURSE_STATE_START_OPENING);
     }
 }
 
@@ -332,7 +332,7 @@ void PokeathlonCourseCmd_RecvPacket(int netId, int size, void *data, void *conte
 void PokeathlonCourseCmd_RecvEventData(int netId, int size, void *data, void *context) {
     PokeathlonCourseData *course = context;
     PokeathlonCourse_SetStateTransitionType(course, 10);
-    PokeathlonCourse_SetStateField07(course, 18);
+    PokeathlonCourse_SetStateField07(course, POKEATHLON_COURSE_STATE_RUN_EVENT);
 }
 
 void PokeathlonCourseCmd_RecvEventResult(int netId, int size, void *data, void *context) {
@@ -344,7 +344,7 @@ void PokeathlonCourseCmd_RecvEventResult(int netId, int size, void *data, void *
         PokeathlonCourse_IncrementField1EF(course);
         if (PokeathlonCourse_GetParticipantCount(course) == PokeathlonCourse_GetField1EF(course)) {
             PokeathlonCourse_ResetField1EF(course);
-            PokeathlonCourse_SetStateField07(course, 21);
+            PokeathlonCourse_SetStateField07(course, POKEATHLON_COURSE_STATE_SEND_EVENT_RESULTS);
         }
     }
 }
@@ -352,7 +352,7 @@ void PokeathlonCourseCmd_RecvEventResult(int netId, int size, void *data, void *
 void PokeathlonCourseCmd_RecvEventResults(int netId, int size, void *data, void *context) {
     PokeathlonCourseData *course = context;
     memcpy(PokeathlonCourse_GetDataCopyArea(course) + 6 * sizeof(PokeathlonCoursePacket), data, size);
-    PokeathlonCourse_SetStateField07(course, 22);
+    PokeathlonCourse_SetStateField07(course, POKEATHLON_COURSE_STATE_END_ROUND);
 }
 
 // Host: adds a player's per-mon event counters to its counters in the course results.
@@ -377,7 +377,7 @@ void PokeathlonCourseCmd_RecvMonCounters(int netId, int size, void *data, void *
         PokeathlonCourse_IncrementField1EF(course);
         if (PokeathlonCourse_GetParticipantCount(course) == PokeathlonCourse_GetField1EF(course)) {
             PokeathlonCourse_ResetField1EF(course);
-            PokeathlonCourse_SetStateField07(course, 30);
+            PokeathlonCourse_SetStateField07(course, POKEATHLON_COURSE_STATE_SEND_RESULTS);
         }
     }
 }
@@ -387,7 +387,7 @@ void PokeathlonCourseCmd_RecvResults(int netId, int size, void *data, void *cont
     PokeathlonCourse_GetDataCopyArea(course);
     PokeathlonCourse_GetNetId(course);
     PokeathlonCourse_SetStateTransitionType(course, 13);
-    PokeathlonCourse_SetStateField07(course, 31);
+    PokeathlonCourse_SetStateField07(course, POKEATHLON_COURSE_STATE_START_CLOSING);
 }
 
 void PokeathlonCourseCmd_RecvJuiceRecord(int netId, int size, void *data, void *context) {
@@ -397,7 +397,7 @@ void PokeathlonCourseCmd_RecvJuiceRecord(int netId, int size, void *data, void *
     if (PokeathlonCourse_GetParticipantCount(course) == PokeathlonCourse_GetField1EF(course)) {
         PokeathlonCourse_ResetField1EF(course);
         PokeathlonCourse_SetStateTransitionType(course, 15);
-        PokeathlonCourse_SetStateField07(course, 36);
+        PokeathlonCourse_SetStateField07(course, POKEATHLON_COURSE_STATE_STORE_JUICE_RECORDS);
     }
 }
 

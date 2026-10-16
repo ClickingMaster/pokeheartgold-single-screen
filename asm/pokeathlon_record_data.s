@@ -125,12 +125,12 @@
 	.public sPokeathlonCourseRecordMonIconResIds
 	.public sPokeathlonCourseRecordGraphicsModes
 	.public sPokeathlonCourseRecordCursorPositions
-	.public ov99_021E9576
+	.public sPokeathlonCourseRecordCursorPositionsY
 	.public sPokeathlonCourseRecordScoreWindows
 	.public sPokeathlonCourseRecordSpriteResourceCounts
 	.public sPokeathlonCourseRecordHitboxes
 	.public sPokeathlonCourseRecordScreenFiles
-	.public ov99_021E95DC
+	.public sPokeathlonCourseRecordSubScreenFiles
 	.public sPokeathlonCourseRecordCourseEvents
 	.public sPokeathlonCourseRecordDigitAnims
 	.public sPokeathlonCourseRecordMonPicResIds
@@ -231,7 +231,7 @@ sPokeathlonCourseRecordGraphicsModes: ; 0x021E9564
 sPokeathlonCourseRecordCursorPositions: ; 0x021E9574
 	.byte 0xD0, 0x00
 
-ov99_021E9576: ; 0x021E9576
+sPokeathlonCourseRecordCursorPositionsY: ; 0x021E9576
 	.byte 0x10, 0x00, 0xF0, 0x00, 0x30, 0x00, 0xD0, 0x00, 0x50, 0x00
 	.byte 0xF0, 0x00, 0x70, 0x00, 0xD0, 0x00, 0x90, 0x00, 0xE0, 0x00, 0xB0, 0x00
 
@@ -252,7 +252,7 @@ sPokeathlonCourseRecordHitboxes: ; 0x021E95BC
 sPokeathlonCourseRecordScreenFiles: ; 0x021E95D8
 	.byte 0x3F, 0x00, 0x00, 0x00
 
-ov99_021E95DC: ; 0x021E95DC
+sPokeathlonCourseRecordSubScreenFiles: ; 0x021E95DC
 	.byte 0x45, 0x00, 0x00, 0x00
 	.byte 0x40, 0x00, 0x00, 0x00, 0x46, 0x00, 0x00, 0x00, 0x41, 0x00, 0x00, 0x00, 0x47, 0x00, 0x00, 0x00
 	.byte 0x42, 0x00, 0x00, 0x00, 0x48, 0x00, 0x00, 0x00, 0x43, 0x00, 0x00, 0x00, 0x49, 0x00, 0x00, 0x00

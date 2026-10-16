@@ -48,28 +48,8 @@ typedef struct E {
 
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 #include "overlay45_string_search.h"
-void LobbyString_Compare(S *p, S *q);
-void LobbyString_CompareCStr(S *p, char *q);
-void *LobbyTimerMap_FindInsertPos(Node *p, u32 *key, Node **out, u8 *less, u8 *empty);
-void LobbyString_AssignRange(S *p, char *a, char *b);
 void PPWLobbyPlayerSet_DestroyNodes(void *ctx, Node *p);
-void LobbyStringVector_EraseAtEnd(Vec *p, u32 n, Small tag);
-void LobbyStringVectorBuffer_EraseAtEnd(Vec *p, u32 n, Small tag);
-Vec *LobbyStringVectorBuffer_Destroy(Vec *p);
-Vec *LobbyCharVectorBuffer_Destroy(Vec *p);
-void LobbyCharVectorBuffer_Allocate(Vec *p, u32 n, Small tag);
-void LobbyStringVectorBuffer_Allocate(Vec *p, u32 n, Small tag);
-u8 *PPWLobbySchedule_Init(u8 *p);
-S *LobbyEventVector_Data(Vec *p);
-void PPWLobbySchedule_CopyToVector(S *p, u8 *q);
-int PPWLobbySchedule_Copy(u8 *p, u8 *out, u32 *size);
 u32 LobbyStringVector_RecommendSize(Vec *p, u32 n, ...);
-void LobbySort_LowerBound(E **out, E *first, E *last, int *key, ...);
-void LobbySort_UpperBound(E **out, E *first, E *last, int *key, ...);
-void LobbyCharVector_InitRange(Vec *p, char *first, char *last);
-u8 *ov45_02238508(u8 *p);
-u8 *LobbyCharVectorBuffer_Deallocate(u8 *p);
-Vec *LobbyStringVectorBuffer_Deallocate(Vec *p);
 
 #pragma optimization_level 3
 

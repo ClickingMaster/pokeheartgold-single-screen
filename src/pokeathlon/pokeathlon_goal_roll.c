@@ -23,6 +23,11 @@
 #include "touchscreen.h"
 #include "wireless_status_icon.h"
 
+enum {
+    GOAL_ROLL_STATE_PLAY,
+    GOAL_ROLL_STATE_FINISH,
+};
+
 // Course helpers, sprite scene and object helpers (OVY_96, not yet tidied).
 void *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, int member);
 int PokeathlonCourse_GetTouchRadius(void);
@@ -557,7 +562,7 @@ BOOL PokeathlonGoalRoll_State_Play(PokeathlonCourseData *course, u8 *state) {
         PokeathlonGoalRoll_ApplyFrameScore(course);
         if (PokeathlonCourse_RunFinish(course)) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, goalRoll->heapId);
-            PokeathlonCourse_SetStateField07(course, 1);
+            PokeathlonCourse_SetStateField07(course, GOAL_ROLL_STATE_FINISH);
         }
         break;
     }
