@@ -15,8 +15,6 @@
 
 extern u8 gWifiSetupScrollBarThumbLengths[]; // thumb length per kind
 extern s32 FX_DivS32(s32, s32);
-typedef struct WifiSetupApScan WifiSetupApScan; // wifi_setup_access_points.c
-extern WifiSetupApScan *gWifiSetupApScan;
 
 void WifiSetupScrollBar_Task(void *task, void *arg);
 void WifiSetupScrollBar_Drag(void);
@@ -253,5 +251,5 @@ void WifiSetupApScan_AllocWork(void) {
     if (gWifiSetupApScan != NULL) {
         return;
     }
-    gWifiSetupApScan = WifiSetupHeap_AllocZeroed(0x1E60, 0x20) /* sizeof(WifiSetupApScan) */;
+    gWifiSetupApScan = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupApScan), 0x20);
 }

@@ -1,6 +1,8 @@
 #ifndef POKEHEARTGOLD_WIFI_SETUP_SHARE_H
 #define POKEHEARTGOLD_WIFI_SETUP_SHARE_H
 
+#include <nitro/wm/wm_internal.h>
+
 #include "global.h"
 
 #include "wifi_setup_app.h"
@@ -92,60 +94,10 @@
 
 typedef void (*WifiSetupWhLogFunc)(int level, char *format, ...);
 
-// Head of the argument of every WM callback.
-typedef struct WifiSetupWhCallbackArg {
-    u16 apiId;
-    u16 result; // 0 success
-} WifiSetupWhCallbackArg;
-
-typedef struct WifiSetupWhMpArg {
-    u16 apiId;
-    u16 result;
-    u16 state;
-} WifiSetupWhMpArg;
-
-typedef struct WifiSetupWhParentArg {
-    u16 apiId;
-    u16 result;
-    u8 unk_04[4];
-    u16 state;
-    u8 macAddr[6]; // 0x0A
-    u16 aid;       // 0x10
-} WifiSetupWhParentArg;
-
-typedef struct WifiSetupWhMeasureArg {
-    u16 apiId;
-    u16 result;
-    u8 unk_04[4];
-    u16 channel;   // 0x08
-    u16 busyRatio; // 0x0A
-} WifiSetupWhMeasureArg;
-
-typedef void (*WifiSetupWhCallback)(void *arg);
-typedef BOOL (*WifiSetupWhJudgeFunc)(WifiSetupWhParentArg *arg);
-
-// Parent parameters handed to WM_SetParentParameter.
-typedef struct WifiSetupWhParentParam {
-    void *userData;     // 0x00
-    u16 userDataLength; // 0x04
-    u16 padding;
-    u32 ggid;           // 0x08
-    u16 tgid;           // 0x0C
-    u16 entry;          // 0x0E, accept new children
-    u16 maxEntries;     // 0x10
-    u16 multiBoot;      // 0x12
-    u16 keySharing;     // 0x14
-    u16 continuousSend; // 0x16
-    u16 beaconPeriod;   // 0x18
-    u16 reserved[12];   // 0x1A
-    u16 channel;        // 0x32
-    u16 parentMaxSize;  // 0x34
-    u16 childMaxSize;   // 0x36
-    u16 reserved2[4];   // 0x38
-} WifiSetupWhParentParam;
+typedef BOOL (*WifiSetupWhJudgeFunc)(WMStartParentCallback *arg);
 
 typedef struct WifiSetupWhWork {
-    WifiSetupWhParentParam parentParam;                      // 0x0000
+    WmParentParam parentParam;                               // 0x0000
     u32 state;                                               // 0x0040, WIFI_SETUP_WH_STATE_*
     u32 connectMode;                                         // 0x0044, WIFI_SETUP_WH_MODE_*
     u32 unk_48;                                              // 0x0048
@@ -169,9 +121,9 @@ typedef struct WifiSetupWhWork {
     u32 unk_13B0;                                            // 0x13B0
     u8 unk_13B4[0xC];                                        // 0x13B4
     u8 wepKey[0x20];                                         // 0x13C0
-    u8 dataSharingInfo[0x820];                               // 0x13E0
-    u8 dataSet[0x200];                                       // 0x1C00
-    u8 keySharing[4];                                        // 0x1E00, size unknown
+    WMDataSharingInfo dataSharingInfo;                       // 0x13E0
+    WMDataSet dataSet;                                       // 0x1C00
+    WMKeySetBuf keySharing;                                  // 0x1E00
 } WifiSetupWhWork;
 
 typedef struct WifiSetupWh {
@@ -234,40 +186,40 @@ void WifiSetupWh_Init(u8 *work);
 void WifiSetupWh_SetState(u32 state);
 void WifiSetupWh_SetError(u32 code);
 int WifiSetupWh_SetParentParameter(void);
-void WifiSetupWh_SetParentParameterCallback(WifiSetupWhCallbackArg *arg);
+void WifiSetupWh_SetParentParameterCallback(void *arg);
 int WifiSetupWh_SetWepKey(void);
-void WifiSetupWh_SetWepKeyCallback(WifiSetupWhCallbackArg *arg);
+void WifiSetupWh_SetWepKeyCallback(void *arg);
 int WifiSetupWh_StartParent(void);
-void WifiSetupWh_StartParentCallback(WifiSetupWhParentArg *arg);
+void WifiSetupWh_StartParentCallback(void *arg);
 int WifiSetupWh_StartMp(void);
-void WifiSetupWh_StartMpCallback(WifiSetupWhMpArg *arg);
+void WifiSetupWh_StartMpCallback(void *arg);
 int WifiSetupWh_StartKeySharing(void);
 int WifiSetupWh_EndKeySharing(void);
 int WifiSetupWh_EndMp(void);
-void WifiSetupWh_EndMpCallback(WifiSetupWhCallbackArg *arg);
+void WifiSetupWh_EndMpCallback(void *arg);
 int WifiSetupWh_EndParent(void);
-void WifiSetupWh_EndParentCallback(WifiSetupWhCallbackArg *arg);
+void WifiSetupWh_EndParentCallback(void *arg);
 int WifiSetupWh_StopKeySharing(void);
 int WifiSetupWh_EndMpForDisconnect(void);
-void WifiSetupWh_EndMpForDisconnectCallback(WifiSetupWhCallbackArg *arg);
+void WifiSetupWh_EndMpForDisconnectCallback(void *arg);
 int WifiSetupWh_Disconnect(void);
-void WifiSetupWh_DisconnectCallback(WifiSetupWhCallbackArg *arg);
+void WifiSetupWh_DisconnectCallback(void *arg);
 int WifiSetupWh_Reset(void);
-void WifiSetupWh_ResetCallback(WifiSetupWhCallbackArg *arg);
-void WifiSetupWh_EndCallback(WifiSetupWhCallbackArg *arg);
+void WifiSetupWh_ResetCallback(void *arg);
+void WifiSetupWh_EndCallback(void *arg);
 void WifiSetupWh_SetGgid(u32 ggid);
 u16 WifiSetupWh_GetConnectedMask(void);
 u32 WifiSetupWh_GetState(void);
 int WifiSetupWh_StartMeasureChannel(void);
 u16 WifiSetupWh_MeasureNextChannel(u16 channel);
-void WifiSetupWh_MeasureChannelCallback(WifiSetupWhMeasureArg *arg);
-int WifiSetupWh_MeasureChannel(WifiSetupWhCallback callback, u16 channel);
+void WifiSetupWh_MeasureChannelCallback(void *arg);
+int WifiSetupWh_MeasureChannel(WmCallback callback, u16 channel);
 u16 WifiSetupWh_DecideChannel(void);
 s16 WifiSetupWh_PickChannel(u16 mask);
 int WifiSetupWh_Start(void);
-void WifiSetupWh_IndicationCallback(WifiSetupWhCallbackArg *arg);
+void WifiSetupWh_IndicationCallback(void *arg);
 int WifiSetupWh_InitializeWm(void);
-void WifiSetupWh_InitializeCallback(WifiSetupWhCallbackArg *arg);
+void WifiSetupWh_InitializeCallback(void *arg);
 int WifiSetupWh_StartConnection(u32 mode, u16 tgid, u16 channel);
 void WifiSetupWh_SetJudgeCallback(WifiSetupWhJudgeFunc judge);
 void *WifiSetupWh_GetSharedData(u16 aid);
@@ -291,7 +243,7 @@ void WifiSetupShare_StartSharing(void);
 void WifiSetupShare_UpdateSharing(void);
 void WifiSetupShare_SetDone(void);
 int WifiSetupShare_EndWireless(void);
-BOOL WifiSetupShare_JudgeChild(WifiSetupWhParentArg *arg);
+BOOL WifiSetupShare_JudgeChild(WMStartParentCallback *arg);
 void WifiSetupShare_ClearPackets(void);
 void WifiSetupShare_SendPacket(u16 kind, u16 index, void *data);
 void WifiSetupShare_UpdateChild(void);

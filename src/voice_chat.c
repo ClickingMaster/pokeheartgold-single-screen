@@ -3,36 +3,16 @@
 #include "global.h"
 
 #include "dwc/dwc_main_internal.h"
+#include "vct/vct_audio_internal.h"
+#include "vct/vct_ssp_internal.h"
 
 #include "comm_state.h"
 #include "heap.h"
 #include "wifi_connection.h"
 
-extern void NNS_SndStrmInit(void *stream);
-extern void NNS_SndStrmAllocChannel(void *stream, int count, void *channels);
-extern void NNS_SndStrmSetVolume(void *stream, int volume);
-extern void NNS_SndStrmSetup(void *stream, int format, void *buffer, u32 size, int rate, int channels, void (*callback)(void), void *arg);
-extern void NNS_SndStrmStart(void *stream);
-extern void NNS_SndStrmStop(void *stream);
-extern void NNS_SndStrmFreeChannel(void *stream);
 extern void MIC_StartAutoSamplingAsync(MICAutoParam *param, void (*callback)(MICResult, void *), void *arg);
 extern u8 *MIC_GetLastSamplingAddress(void);
 extern void MIC_StopAutoSampling(void);
-extern void VCT_EnableVAD(int enable);
-extern void VCT_EnableEchoCancel(int enable);
-extern void VCT_SendAudio(void *data, u32 size);
-extern void VCT_ReceiveAudio(void *data, u32 size, int unused);
-extern Session *VCT_CreateSession(u32 aid);
-extern int VCT_Request(Session *session, int request);
-extern int VCT_Response(Session *session, int response);
-extern int VCT_StartStreaming(Session *session);
-extern void VCT_StopStreaming(Session *session);
-extern void VCT_DeleteSession(Session *session);
-extern void VCT_Main(void);
-extern int VCT_HandleData(u8 aid, void *data, void *size, void *work);
-extern void VCT_SetCodec(int codec);
-extern void VCT_Cleanup(void);
-extern void VCT_GetVADInfo(void *info);
 extern int Comm_IsWifiPeerLinkMode(void);
 
 #pragma force_active on
@@ -55,7 +35,7 @@ void VoiceChat_InitAudio(void) {
     gVoiceChat.work->unk_1AAC = 0;
     VCT_EnableVAD(1);
     NNS_SndInit();
-    NNS_SndStrmInit(gVoiceChat.work->stream);
+    NNS_SndStrmInit(&gVoiceChat.work->stream);
     MIi_CpuClearFast(0, (u32 *)gVoiceChat.work->silenceBuffer, 0x880);
     gVoiceChat.frameBudget = 0;
     VCT_EnableEchoCancel(1);
@@ -68,11 +48,12 @@ void VoiceChat_MicCallback(MICResult result, void *arg) {
 
 #pragma force_active on
 
-void VoiceChat_StreamCallback(int enabled, u32 count, void **buffers, u32 size, int unused, u8 *address) {
+void VoiceChat_StreamCallback(BOOL isAlarm, int numChannels, void **buffers, u32 size, int format, void *arg) {
+    u8 *address = arg; // the stream argument is the work, which starts with the mic buffer
     u32 i;
 
-    if (!enabled) {
-        for (i = 0; i < count; i++) {
+    if (!isAlarm) {
+        for (i = 0; i < numChannels; i++) {
             MI_CpuFill8(buffers[i], 0, size);
         }
         return;
@@ -91,7 +72,7 @@ void VoiceChat_StreamCallback(int enabled, u32 count, void **buffers, u32 size, 
     if (!gVoiceChat.work->muted) {
         VCT_SendAudio(address, size);
     }
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < numChannels; i++) {
         VCT_ReceiveAudio(buffers[i], size, 0);
     }
     gVoiceChat.work->samplingState = 2;
@@ -260,7 +241,7 @@ void VoiceChat_Update(void) {
 
 #pragma force_active reset
 
-BOOL VoiceChat_ReceiveData(u32 aid, void *data, void *size) {
+BOOL VoiceChat_ReceiveData(u32 aid, void *data, u32 size) {
     if (gVoiceChat.work == NULL) {
         return FALSE;
     }
@@ -301,9 +282,9 @@ void VoiceChat_Init(int heapId, int codec, int count) {
     gVoiceChat.work->micParam.full_callback = NULL;
     gVoiceChat.work->micParam.full_arg = NULL;
     gVoiceChat.work->restartSampling = 1;
-    NNS_SndStrmAllocChannel(gVoiceChat.work->stream, 1, channels);
-    NNS_SndStrmSetVolume(gVoiceChat.work->stream, 0);
-    NNS_SndStrmSetup(gVoiceChat.work->stream, 1, gVoiceChat.work->streamBuffer, 0x880, 65, 2, (void (*)(void))VoiceChat_StreamCallback, gVoiceChat.work);
+    NNS_SndStrmAllocChannel(&gVoiceChat.work->stream, 1, channels);
+    NNS_SndStrmSetVolume(&gVoiceChat.work->stream, 0);
+    NNS_SndStrmSetup(&gVoiceChat.work->stream, 1, gVoiceChat.work->streamBuffer, 0x880, 65, 2, VoiceChat_StreamCallback, gVoiceChat.work);
     gVoiceChat.work->callState = VOICE_CHAT_CALL_IDLE;
     gVoiceChat.work->session = NULL;
     CommState_GetLinkMode();
@@ -337,7 +318,7 @@ void VoiceChat_Init(int heapId, int codec, int count) {
 #pragma force_active reset
 
 void VoiceChat_StartStream(void) {
-    NNS_SndStrmStart(gVoiceChat.work->stream);
+    NNS_SndStrmStart(&gVoiceChat.work->stream);
 }
 
 // The only caller passes the voice chat active flag (kept: removing the argument changes its code).
@@ -372,8 +353,8 @@ void VoiceChat_Shutdown(void) {
     if (gVoiceChat.work) {
         callback = gVoiceChat.work->endCallback;
         MIC_StopAutoSampling();
-        NNS_SndStrmStop(gVoiceChat.work->stream);
-        NNS_SndStrmFreeChannel(gVoiceChat.work->stream);
+        NNS_SndStrmStop(&gVoiceChat.work->stream);
+        NNS_SndStrmFreeChannel(&gVoiceChat.work->stream);
         VCT_Cleanup();
         Heap_FreeExplicit((enum HeapID)gVoiceChat.work->heapId, gVoiceChat.work->vctBufferRaw);
         Heap_FreeExplicit((enum HeapID)gVoiceChat.work->heapId, gVoiceChat.work->rawAlloc);

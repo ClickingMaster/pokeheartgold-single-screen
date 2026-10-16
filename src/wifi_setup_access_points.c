@@ -3,13 +3,14 @@
 
 #include "global.h"
 
+#include "dwc/dwc_bm_internal.h"
+#include "nnsys/snd_arc_internal.h"
+
 #include "wifi_setup_local_wireless.h"
 #include "wifi_setup_ui.h"
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-
-#include "WM.h"
 
 // Access-point data (0x02239B68-0x0223ABB4): the scan for access points over WM, the saved
 // connection settings (read with DWCi_BACKUPlRead, one page copied to an edit copy and written back
@@ -18,99 +19,20 @@
 
 typedef void (*WifiSetupTaskFunc2)(void *, void *);
 
-typedef struct WifiSetupScanParam {
-    u32 words[17];
-} WifiSetupScanParam;
-
-typedef struct WifiSetupWmStatus {
-    u16 state;
-} WifiSetupWmStatus;
-
-// WM work of the scan, followed by the scan state.
-typedef struct WifiSetupApScan {
-    u8 wmWork[0xF00];
-    u8 scanBuf[0x400];
-    WifiSetupScanEntry entries[WIFI_SETUP_NUM_SCAN_ENTRIES];
-    WifiSetupScanParam param;
-    WifiSetupWmStatus status;
-    u8 unk_168E[0x1E5C - 0x168E];
-    u8 ending;
-} WifiSetupApScan;
-
-typedef struct WifiSetupWmCallback {
-    u16 apiid;
-    u16 errcode;
-    u16 wlCmdID;
-    u16 wlResult;
-    u16 state;
-} WifiSetupWmCallback;
-
-typedef struct WifiSetupBssDesc {
-    u16 length;
-    u16 rssi;
-    u8 bssid[6];
-    u16 ssidLength;
-    u8 ssid[0x20];
-    u16 capaInfo;
-    u8 unk2E[0x3C - 0x2E];
-    u16 gameInfoLength;
-} WifiSetupBssDesc;
-
-typedef struct WifiSetupScanCallback {
-    u16 apiid;
-    u16 errcode;
-    u16 wlCmdID;
-    u16 wlResult;
-    u16 state;
-    u8 unkA[4];
-    u16 bssDescCount;
-    WifiSetupBssDesc *bssDesc[16];
-    u16 linkLevel[16];
-} WifiSetupScanCallback;
-
-typedef struct WifiSetupOtherElement {
-    u8 id;
-    u8 length;
-    u8 pad[2];
-    u8 *body;
-} WifiSetupOtherElement;
-
-typedef struct WifiSetupOtherElements {
-    u8 count;
-    u8 pad[3];
-    WifiSetupOtherElement element[16];
-} WifiSetupOtherElements;
-
 typedef struct WifiSetupConnectionBody {
     u8 bytes[0xF0];
 } WifiSetupConnectionBody;
 
-extern WifiSetupApScan *gWifiSetupApScan;
 extern u8 gWifiSetupWpaVendorPrefix[]; // vendor element prefix that marks WPA
 extern u8 gWifiSetupApScanEmptyBssid[]; // empty BSSID
-extern WifiSetupScanParam gWifiSetupApScanParam;
+extern WmScanExParam gWifiSetupApScanParam;
 extern u8 gWifiSetupZeroAddress[]; // address 0.0.0.0
 extern u8 gWifiSetupConnectionsAddressFormat[]; // address format
 extern u8 gWifiSetupSoundArchivePath[]; // sound archive path
 
-extern int WM_Initialize(void *, void *, u16);
-extern int WM_ReadStatus(void *);
-extern u16 WM_GetDispersionScanPeriod(void);
-extern int WM_StartScanEx(void *, void *);
-extern int WM_Reset(void *);
-extern int WM_End(void *);
-extern void WM_GetOtherElements(WifiSetupOtherElements *, WifiSetupBssDesc *);
-extern void DWCi_BACKUPlRead(WifiSetupConnections *);
-extern void DWCi_BACKUPlConvMaskAddr(int, u8 *);
-extern int DWCi_BACKUPlConvMaskCidr(u8 *);
-extern void DWCi_AUTH_GetNewWiFiInfo(void *);
-extern void *DWCi_BACKUPlConvWifiInfo(void *);
-extern void DWCi_BACKUPlWritePage(WifiSetupConnections *, int *, void *);
-extern u16 MATH_CalcCRC16(const MATHCRC16Table *, const void *, u32);
 extern long atol(const char *);
-extern void NNS_SndArcInitOnMemory(void *, void *);
 
-void WifiSetupApScan_StoreResults(WifiSetupScanCallback *cb);
+void WifiSetupApScan_StoreResults(WMStartScanExCallback *cb);
 
 int WifiSetupApScan_Start(void) {
     WifiSetupApScan *w;
@@ -123,8 +45,8 @@ int WifiSetupApScan_Start(void) {
         w = gWifiSetupApScan;
     } while (w->status.state != 2);
     w->param = gWifiSetupApScanParam;
-    w->param.words[0] = (u32)w->scanBuf;
-    *(u16 *)&gWifiSetupApScan->param.words[2] = WM_GetDispersionScanPeriod();
+    w->param.buffer = w->scanBuf;
+    gWifiSetupApScan->param.dwell = WM_GetDispersionScanPeriod();
     return WifiSetupApScan_Continue() ? 1 : 0;
 }
 
@@ -163,7 +85,7 @@ int WifiSetupApScan_GetEntries(WifiSetupScanEntry **out) {
 }
 
 void WifiSetupApScan_Callback(void *arg) {
-    WifiSetupWmCallback *cb = arg;
+    WMStartScanExCallback *cb = arg;
     if (cb->errcode != WM_ERRCODE_SUCCESS) {
         return;
     }
@@ -172,7 +94,7 @@ void WifiSetupApScan_Callback(void *arg) {
     }
     switch (cb->state) {
     case 5:
-        WifiSetupApScan_StoreResults(arg);
+        WifiSetupApScan_StoreResults(cb);
         WifiSetupApScan_Continue();
         break;
     case 4:
@@ -184,10 +106,10 @@ void WifiSetupApScan_Callback(void *arg) {
     }
 }
 
-void WifiSetupApScan_StoreResults(WifiSetupScanCallback *cb) {
-    WifiSetupOtherElements elems;
+void WifiSetupApScan_StoreResults(WMStartScanExCallback *cb) {
+    WMOtherElementResults elems;
     WifiSetupScanEntry *entries;
-    WifiSetupBssDesc *desc;
+    WMBssDesc *desc;
     int i;
     int j;
     int k;
@@ -223,7 +145,7 @@ void WifiSetupApScan_StoreResults(WifiSetupScanCallback *cb) {
             continue;
         }
         entries[j].security = 1;
-        WM_GetOtherElements(&elems, desc);
+        elems = WM_GetOtherElements(desc);
         n = elems.count;
         for (k = 0; k < n; k++) {
             if (elems.element[k].id == 0x30) {
@@ -479,15 +401,15 @@ void WifiSetupConnections_Erase(int idx) {
 }
 
 void WifiSetupConnections_Reset(void) {
-    u8 info[0x14];
-    void *conv;
+    DwcWiFiInfo info;
+    u8 *conv;
     int i;
     MIi_CpuClear16(0, (u16 *)gWifiSetupConnections, 0x400);
     for (i = 0; i < 3; i++) {
         gWifiSetupConnections->pages[i].setupMethod = WIFI_SETUP_METHOD_ERASED;
     }
-    DWCi_AUTH_GetNewWiFiInfo(info);
-    conv = DWCi_BACKUPlConvWifiInfo(info);
+    DWCi_AUTH_GetNewWiFiInfo(&info);
+    conv = DWCi_BACKUPlConvWifiInfo(&info);
     for (i = 0; i < 2; i++) {
         MI_CpuCopy8(conv, gWifiSetupConnections->pages[i].tail.page.info, 0xe);
     }
@@ -497,7 +419,7 @@ void WifiSetupConnections_Reset(void) {
 }
 
 void WifiSetupConnections_WritePage(int index) {
-    int changed[4];
+    BOOL changed[4];
     void *temp;
     int status = gWifiSetupConnections->pages[index].setupMethod;
     int active = 0, i, offset;
@@ -563,9 +485,9 @@ void WifiSetupSound_Init(void) {
     gWifiSetupSound = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupSound), 4);
     gWifiSetupSound->data = WifiSetupFile_Load(gWifiSetupSoundArchivePath, &size, 0x20);
     NNS_SndInit();
-    NNS_SndArcInitOnMemory(gWifiSetupSound, gWifiSetupSound->data);
+    NNS_SndArcInitOnMemory(&gWifiSetupSound->arc, gWifiSetupSound->data);
     NNS_SndArcPlayerSetup(0);
-    NNS_SndHandleInit((NNSSndHandle *)gWifiSetupSound->handle);
+    NNS_SndHandleInit(&gWifiSetupSound->handle);
     gWifiSetupSound->task = WifiSetupTask_Create(0, WifiSetupSound_UpdateTask, NULL, 0xc8);
 }
 

@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#include "nitrowifi/socl_internal.h"
+
 // Access-point setup client (OVY_13 Thumb library): scans for the access point, exchanges
 // UDP packets with it on the local network and reads the connection settings it hands out.
 
@@ -86,12 +88,12 @@ int WifiSetup_CleanupSocket(void);
 int WifiSetup_MemCompare(const u8 *a, const u8 *b, int n);
 void WifiSetup_MemCopy(void *dst, const void *src, u32 size);
 void WifiSetup_MemFill(void *dst, int value, u32 size);
-int WifiSetup_RecvFrom(int socket, void *buffer, int size, int flags, u8 *address, u32 *addressLength);
-int WifiSetup_Poll(void *unused, WifiSetupPollTime *fd, int unused2, int unused3, WifiSetupPollTime *timeout);
-int WifiSetup_SendTo(int socket, const void *buffer, int size, int flags, u8 *address, u32 addressLength);
-void WifiSetup_SetSockOpt(void);
+int WifiSetup_RecvFrom(int socket, void *buffer, int size, int flags, SocAddress *address, int *addressLength);
+int WifiSetup_Poll(int count, SocPollFd *readSet, void *writeSet, void *exceptSet, WifiSetupPollTime *timeout);
+int WifiSetup_SendTo(int socket, const void *buffer, int size, int flags, SocAddress *address, int addressLength);
+int WifiSetup_SetSockOpt(int socket, int level, int name, const void *value, int length);
 int WifiSetup_Socket(int domain, int type, int protocol);
-int WifiSetup_Bind(int socket, u8 *address, int addressLength);
+int WifiSetup_Bind(int socket, SocAddress *address, int addressLength);
 int WifiSetup_Close(int socket);
 u32 WifiSetup_HostToNet32(u32 x);
 u16 WifiSetup_HostToNet16(int x);
@@ -99,8 +101,8 @@ u32 WifiSetup_NetToHost32(u32 x);
 u16 WifiSetup_NetToHost16(int x);
 s32 WifiSetup_StrLen(const char *str);
 u16 WifiSetup_Random(void);
-void WifiSetup_ClearPollSet(void *set);
-void WifiSetup_AddToPollSet(u32 socket, void *set);
+void WifiSetup_ClearPollSet(SocPollFd *set);
+void WifiSetup_AddToPollSet(int socket, SocPollFd *set);
 void WifiSetup_ConvertBssDesc(const void *src, void *dst);
 void WifiSetup_CopyConnectSsid(const void *src, void *dst);
 void WifiSetup_StoreConnectResult(void *dst, const void *src, u32 value);

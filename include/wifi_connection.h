@@ -23,71 +23,9 @@
 #define WIFI_CONNECTION_STATE_DISCONNECTED      17
 #define WIFI_CONNECTION_STATE_TIMED_OUT         18
 
-typedef struct WifiFriendData {
-    u32 data[3];
-} WifiFriendData;
-
 typedef void (*WifiReceiveCallback)(u32 aid, void *data, u16 size);
 
-// 0x1108 bytes, 32-byte aligned inside a Heap_Alloc'd block (rawAlloc).
-typedef struct WifiConnection {
-    u8 sendBuffer[0x100];                    // 0x0000, 4-byte header + payload
-    WifiFriendData *friendList;              // 0x0100, 32 entries
-    u8 loginControl[0xF10 - 0x104];          // 0x0104, library login control block
-    void *userData;                          // 0x0F10
-    u8 libConfig[0x64];                      // 0x0F14
-    void *saveData;                          // 0x0F78
-    void *rawAlloc;                          // 0x0F7C
-    void *recvBuffers[4];                    // 0x0F80
-    void *heapMemory;                        // 0x0F90
-    NNSFndHeapHandle heap;                   // 0x0F94
-    void *extraHeapMemory;                   // 0x0F98
-    NNSFndHeapHandle extraHeap;              // 0x0F9C
-    u32 extraHeapFreeSize;                   // 0x0FA0
-    WifiReceiveCallback recvLocalCallback;   // 0x0FA4
-    WifiReceiveCallback recvCallback;        // 0x0FA8
-    void (*disconnectCallback)(int, void *); // 0x0FAC
-    void *disconnectCallbackArg;             // 0x0FB0
-    void (*clientCallback)(int, void *);     // 0x0FB4
-    void *clientCallbackArg;                 // 0x0FB8
-    BOOL (*connectFilterCallback)(int);      // 0x0FBC
-    void (*errorCallback)(int);              // 0x0FC0
-    char matchFilter[0x80];                  // 0x0FC4
-    u8 friendStatus[32];                     // 0x1044
-    u8 *friendStatusData;                    // 0x1064
-    int friendStatusStride;                  // 0x1068
-    int friendStatusIndex;                   // 0x106C
-    int state;                               // 0x1070
-    int matchType;                           // 0x1074
-    int sendBusy;                            // 0x1078
-    int maxPlayers;                          // 0x107C
-    int conferenceAidMask;                   // 0x1080
-    int heapId;                              // 0x1084
-    int heapId2;                             // 0x1088
-    u32 heapSize;                            // 0x108C
-    int voiceChatActive;                     // 0x1090
-    int targetFriendIndex;                   // 0x1094
-    int newClientIndex;                      // 0x1098
-    int voiceChatEnabled;                    // 0x109C
-    int matchInProgress;                     // 0x10A0
-    int voiceChatMode;                       // 0x10A4
-    int recvTimeoutArmed;                    // 0x10A8
-    int keepAliveTimers[8];                  // 0x10AC
-    int retryCount;                          // 0x10CC
-    int peerVoiceFlag;                       // 0x10D0
-    u16 ownVoiceFlag;                        // 0x10D4
-    u16 voiceUnmuted;                        // 0x10D6
-    int matchedAidBitmap;                    // 0x10D8
-    u8 sendSequence;                         // 0x10DC
-    u8 recvSequence;                         // 0x10DD
-    u8 forceError;                           // 0x10DE
-    u8 unk_10DF;                             // 0x10DF
-    u8 stopMatchingState;                    // 0x10E0
-    u8 recvBufferFromGameHeap[4];            // 0x10E1
-    u8 disconnectWhenAlone;                  // 0x10E5
-    u8 friendDataChanged;                    // 0x10E6
-    u8 filler_10E7[0x1108 - 0x10E7];         // 0x10E7
-} WifiConnection;
+typedef struct WifiConnection WifiConnection;
 
 extern WifiConnection *gWifiConnection;
 
@@ -104,21 +42,21 @@ int WifiConnection_Update(int success);
 int WifiConnection_SendToHost(void *data, int size);
 int WifiConnection_SendFromHost(void *data, int size);
 int WifiConnection_SendToAll(void *data, int size);
-void WifiConnection_LoginCallback(int result, int unused, int arg);
+void WifiConnection_LoginCallback(int result, int unused, void *param);
 void WifiConnection_TimeoutCallback(void);
-void WifiConnection_UpdateServersCallback(u32 result);
+void WifiConnection_UpdateServersCallback(int result, int unused, void *param);
 void WifiConnection_FriendStatusCallback(void);
 void WifiConnection_DeleteFriendCallback(int index, int srcIndex);
 void WifiConnection_BuddyFriendCallback(void);
 void WifiConnection_ResetKeepAliveTimers(void);
 void WifiConnection_SetRecvTimeouts(void);
 void WifiConnection_OnConnected(int aid);
-void WifiConnection_AnybodyMatchedCallback(int result, int cancelled);
+void WifiConnection_AnybodyMatchedCallback(int result, int cancelled, void *param);
 BOOL WifiConnection_EvalPlayerCallback(void);
 void WifiConnection_SendDoneCallback(u32 result, s32 aid);
 void WifiConnection_ReadPeerVoiceFlag(u32 header);
 void WifiConnection_ReceiveCallback(u16 aid, const u8 *data, int size);
-void WifiConnection_ConnectionClosedCallback(int result, int unused1, int unused2, int arg);
+void WifiConnection_ConnectionClosedCallback(int result, BOOL isLocal, BOOL isServer, u32 aid, int index, void *param);
 void *WifiConnection_Alloc(int unused, u32 size, int alignment);
 void WifiConnection_Free(int unused, void *ptr, u32 size);
 int WifiConnection_CheckError(void);
@@ -140,8 +78,8 @@ void WifiConnection_SetOwnStatusData(void *data, int size);
 u8 WifiConnection_GetFriendStatus(int index);
 int WifiConnection_StartMatchmaking(int friendIndex, int maxPlayers, BOOL alternate);
 int WifiConnection_GetTargetFriendIndex(void);
-void WifiConnection_GameServerMatchedCallback(int result, int cancelled, int cancelledByMe, int unused, int aid);
-void WifiConnection_ConnectedToServerCallback(u32 result, u32 cancelled, u32 a2, u32 a3, u32 aid);
+void WifiConnection_GameServerMatchedCallback(int result, BOOL cancelled, BOOL self, BOOL isServer, int aid, void *param);
+void WifiConnection_ConnectedToServerCallback(int result, BOOL cancelled, BOOL self, BOOL isServer, int aid, void *param);
 void WifiConnection_NewClientCallback(int index);
 void WifiConnection_CreateTokenAndScanFriends(void);
 BOOL WifiConnection_GetVoiceActivity(void);
@@ -149,7 +87,7 @@ int WifiConnection_IsVoiceChatEnabled(void);
 int WifiConnection_GetNewClientIndex(void);
 void WifiConnection_SetVoiceChatEnabled(int value);
 void WifiConnection_SetVoiceUnmuted(u16 value);
-void WifiConnection_StopServerMatchingCallback(void);
+void WifiConnection_StopServerMatchingCallback(void *param);
 BOOL WifiConnection_StopServerMatching(void);
 void WifiConnection_ResetStopServerMatching(void);
 void WifiConnection_GetNumConnectionHost(void);

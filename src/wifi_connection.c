@@ -2,6 +2,9 @@
 
 #include "global.h"
 
+#include "dwc/dwc_account_internal.h"
+#include "dwc/dwc_main_internal.h"
+#include "dwc/net_common_internal.h"
 #include "nnsys/fnd_internal.h"
 
 #include "comm_state.h"
@@ -11,12 +14,67 @@
 #include "heap.h"
 #include "voice_chat.h"
 
-typedef struct MatchParams {
-    u32 a;
-    u32 timeout;
-} MatchParams;
+// 0x1108 bytes, 32-byte aligned inside a Heap_Alloc'd block (rawAlloc).
+struct WifiConnection {
+    u8 sendBuffer[0x100];                    // 0x0000, 4-byte header + payload
+    DwcAccData *friendList;                  // 0x0100, 32 entries
+    DwcControl loginControl;                 // 0x0104
+    DwcUserData *userData;                   // 0x0F10
+    NetConnection libConfig;                 // 0x0F14
+    void *saveData;                          // 0x0F78
+    void *rawAlloc;                          // 0x0F7C
+    void *recvBuffers[4];                    // 0x0F80
+    void *heapMemory;                        // 0x0F90
+    NNSFndHeapHandle heap;                   // 0x0F94
+    void *extraHeapMemory;                   // 0x0F98
+    NNSFndHeapHandle extraHeap;              // 0x0F9C
+    u32 extraHeapFreeSize;                   // 0x0FA0
+    WifiReceiveCallback recvLocalCallback;   // 0x0FA4
+    WifiReceiveCallback recvCallback;        // 0x0FA8
+    void (*disconnectCallback)(int, void *); // 0x0FAC
+    void *disconnectCallbackArg;             // 0x0FB0
+    void (*clientCallback)(int, void *);     // 0x0FB4
+    void *clientCallbackArg;                 // 0x0FB8
+    BOOL (*connectFilterCallback)(int);      // 0x0FBC
+    void (*errorCallback)(int);              // 0x0FC0
+    char matchFilter[0x80];                  // 0x0FC4
+    u8 friendStatus[32];                     // 0x1044
+    u8 *friendStatusData;                    // 0x1064
+    int friendStatusStride;                  // 0x1068
+    int friendStatusIndex;                   // 0x106C
+    int state;                               // 0x1070
+    int matchType;                           // 0x1074
+    int sendBusy;                            // 0x1078
+    int maxPlayers;                          // 0x107C
+    int conferenceAidMask;                   // 0x1080
+    int heapId;                              // 0x1084
+    int heapId2;                             // 0x1088
+    u32 heapSize;                            // 0x108C
+    int voiceChatActive;                     // 0x1090
+    int targetFriendIndex;                   // 0x1094
+    int newClientIndex;                      // 0x1098
+    int voiceChatEnabled;                    // 0x109C
+    int matchInProgress;                     // 0x10A0
+    int voiceChatMode;                       // 0x10A4
+    int recvTimeoutArmed;                    // 0x10A8
+    int keepAliveTimers[8];                  // 0x10AC
+    int retryCount;                          // 0x10CC
+    int peerVoiceFlag;                       // 0x10D0
+    u16 ownVoiceFlag;                        // 0x10D4
+    u16 voiceUnmuted;                        // 0x10D6
+    int matchedAidBitmap;                    // 0x10D8
+    u8 sendSequence;                         // 0x10DC
+    u8 recvSequence;                         // 0x10DD
+    u8 forceError;                           // 0x10DE
+    u8 unk_10DF;                             // 0x10DF
+    u8 stopMatchingState;                    // 0x10E0
+    u8 recvBufferFromGameHeap[4];            // 0x10E1
+    u8 disconnectWhenAlone;                  // 0x10E5
+    u8 friendDataChanged;                    // 0x10E6
+    u8 filler_10E7[0x1108 - 0x10E7];         // 0x10E7
+};
 
-extern const MatchParams sWifiConnectionAnybodyMatchParams;
+extern const DwcMatchOptMinComplete sWifiConnectionAnybodyMatchParams;
 extern char gWifiGameName[];
 extern char gWifiSecretKey[];
 extern char gWifiLobbyKeyName[];
@@ -30,46 +88,7 @@ extern void FrontierSave_ClearRow(void *, int, int);
 extern int Comm_IsWifiPeerLinkMode(void);
 extern int Comm_IsLinkMode19To23Or34(void);
 extern void CommState_SetWifiError(int, u32, int);
-extern int DWC_CheckHasProfile(void *);
-extern int DWC_CheckValidConsole(void *);
-extern int DWC_CheckDirtyFlag(void *);
-extern void DWC_ClearDirtyFlag(void *);
-extern void DWC_CreateExchangeToken(void *, void *);
-extern int DWC_GetFriendDataType(void *);
-extern int DWC_IsBuddyFriendData(void *);
 
-extern int DWC_GetLastErrorEx(int *, u32 *);
-extern void DWC_ClearError(void);
-extern void DWC_SetMemFunc(void *(*alloc)(int, u32, int), void (*free)(int, void *, u32));
-extern void DWC_InitInetEx(void *, int, int, int);
-extern void DWC_SetAuthServer(int);
-extern void DWC_ConnectInetAsync(void);
-extern int DWC_CheckInet(void);
-extern void DWC_ProcessInet(void);
-extern int DWC_GetInetStatus(void);
-extern void DWC_CleanupInet(void);
-extern void DWC_InitFriendsMatch(void *, void *, int, char *, char *, int, int, void *, int);
-extern void DWC_ShutdownFriendsMatch(void);
-extern void DWC_ProcessFriendsMatch(void);
-extern void DWC_LoginAsync(u16 *, int, void (*)(int, int, int), void *);
-extern int DWC_UpdateServersAsync(int, void (*)(u32), void *, void (*)(void), int, void (*)(int, int), int);
-extern void DWC_ConnectToAnybodyAsync(u8, void *, void (*)(int, int), int, BOOL (*)(void), int);
-extern int DWC_SetupGameServer(u8, void (*)(int, int, int, int, int), void *, void (*)(int), void *);
-extern int DWC_ConnectToGameServerAsync(int, void (*)(u32, u32, u32, u32, u32), void *, void (*)(int), void *);
-extern void DWC_SetConnectionClosedCallback(void (*)(int, int, int, int), void *);
-extern void DWC_CloseAllConnectionsHard(void);
-extern void DWC_CloseConnectionHardBitmap(u32 *);
-extern int DWC_GetNumConnectionHost(void);
-extern int DWC_GetMyAID(void);
-extern u32 DWC_GetAIDBitmap(void);
-extern int DWC_IsValidAID(u8);
-extern void DWC_SetOwnStatusData(void);
-extern int DWC_GetFriendStatusData(void *, void *, int *);
-extern void DWC_SetBuddyFriendCallback(void (*)(void), int);
-extern void DWC_CancelMatching(void);
-extern void DWC_StopSCMatchingAsync(void (*)(void), int);
-extern int DWC_AddMatchKeyString(int, const char *, const char *);
-extern int DWC_SetMatchingOption(int, const void *, u32);
 extern int DWC_IsSendableReliable(u8);
 extern u32 DWC_SendReliableBitmap(u32, void *, u32);
 extern void DWC_SetRecvBuffer(u8, void *, int);
@@ -162,7 +181,7 @@ int WifiConnection_UpdateLogin(void) {
     switch ((u32)gWifiConnection->state) {
     case WIFI_CONNECTION_STATE_INIT:
         DWC_SetMemFunc(WifiConnection_Alloc, WifiConnection_Free);
-        DWC_InitInetEx(gWifiConnection->libConfig, 2, 1, 20);
+        DWC_InitInetEx(&gWifiConnection->libConfig, 2, 1, 20);
         DWC_SetAuthServer(2);
         DWC_ConnectInetAsync();
         gWifiConnection->state = WIFI_CONNECTION_STATE_WAIT_LINK;
@@ -183,7 +202,7 @@ int WifiConnection_UpdateLogin(void) {
         if (err) {
             return err;
         }
-        DWC_InitFriendsMatch(gWifiConnection->loginControl, gWifiConnection->userData, 0x29E7, gWifiGameName, gWifiSecretKey, 0, 0, gWifiConnection->friendList, 32);
+        DWC_InitFriendsMatch(&gWifiConnection->loginControl, gWifiConnection->userData, 0x29E7, gWifiGameName, gWifiSecretKey, 0, 0, gWifiConnection->friendList, 32);
         OS_GetOwnerInfo(&owner);
         DWC_LoginAsync(owner.nickName, 0, WifiConnection_LoginCallback, NULL);
         gWifiConnection->state = WIFI_CONNECTION_STATE_LOGGING_IN;
@@ -221,7 +240,7 @@ void WifiConnection_SetClientCallback(void (*callback)(int, void *), void *arg) 
 #pragma force_active on
 
 int WifiConnection_StartAnybodyMatchmaking(const char *name, int maxPlayers, int filterLocal, int timeoutSeconds) {
-    MatchParams params;
+    DwcMatchOptMinComplete params;
 
     GF_ASSERT(gWifiConnection);
     if (gWifiConnection->state != WIFI_CONNECTION_STATE_LOGGED_IN) {
@@ -230,7 +249,7 @@ int WifiConnection_StartAnybodyMatchmaking(const char *name, int maxPlayers, int
     WifiConnection_FreeRecvBuffers();
     params = sWifiConnectionAnybodyMatchParams;
     params.timeout = 1000 * timeoutSeconds;
-    GF_ASSERT(DWC_SetMatchingOption(0, &params, 8) == 0);
+    GF_ASSERT(DWC_SetMatchingOption(0, &params, sizeof(params)) == 0);
     GF_ASSERT(DWC_AddMatchKeyString(0, gWifiLobbyKeyName, name) != 0);
     MI_CpuFill8(gWifiConnection->matchFilter, 0, 128);
     sprintf(gWifiConnection->matchFilter, gWifiMatchFilterFormat, gWifiLobbyKeyName, name);
@@ -392,13 +411,13 @@ int WifiConnection_SendToAll(void *data, int size) {
     return 1;
 }
 
-void WifiConnection_LoginCallback(int result, int unused, int arg) {
+void WifiConnection_LoginCallback(int result, int unused, void *param) {
     if (DWC_CheckDirtyFlag(gWifiConnection->userData)) {
         DWC_ClearDirtyFlag(gWifiConnection->userData);
         gWifiConnection->friendDataChanged = 1;
     }
     if (result == 0) {
-        if (DWC_UpdateServersAsync(0, WifiConnection_UpdateServersCallback, gWifiConnection->userData, WifiConnection_FriendStatusCallback, arg, WifiConnection_DeleteFriendCallback, arg) == 0) {
+        if (DWC_UpdateServersAsync(0, WifiConnection_UpdateServersCallback, gWifiConnection->userData, WifiConnection_FriendStatusCallback, param, WifiConnection_DeleteFriendCallback, param) == 0) {
             CommState_SetError(1);
             return;
         }
@@ -416,7 +435,7 @@ void WifiConnection_TimeoutCallback(void) {
     }
 }
 
-void WifiConnection_UpdateServersCallback(u32 result) {
+void WifiConnection_UpdateServersCallback(int result, int unused, void *param) {
     if (result == 0) {
         gWifiConnection->state = WIFI_CONNECTION_STATE_LOGGED_IN;
     } else {
@@ -478,7 +497,7 @@ void WifiConnection_OnConnected(int aid) {
     WifiConnection_SetRecvTimeouts();
 }
 
-void WifiConnection_AnybodyMatchedCallback(int result, int cancelled) {
+void WifiConnection_AnybodyMatchedCallback(int result, int cancelled, void *param) {
     WifiConnection *connection;
     if (result == 0) {
         if (cancelled == 0) {
@@ -530,7 +549,7 @@ void WifiConnection_ReceiveCallback(u16 aid, const u8 *data, int size) {
         WifiConnection_ReadPeerVoiceFlag(header);
         gWifiConnection->recvSequence = data[2];
     } else {
-        if (VoiceChat_ReceiveData(aid, (void *)data, (void *)size) == 0) {
+        if (VoiceChat_ReceiveData(aid, (void *)data, size) == 0) {
             WifiConnection_ReadPeerVoiceFlag(header);
         }
         return;
@@ -554,7 +573,7 @@ void WifiConnection_ReceiveCallback(u16 aid, const u8 *data, int size) {
 
 #pragma force_active reset
 
-void WifiConnection_ConnectionClosedCallback(int result, int unused1, int unused2, int arg) {
+void WifiConnection_ConnectionClosedCallback(int result, BOOL isLocal, BOOL isServer, u32 aid, int index, void *param) {
     gWifiConnection->sendBusy = 0;
     gWifiConnection->retryCount = 0;
     gWifiConnection->matchInProgress = 0;
@@ -567,7 +586,7 @@ void WifiConnection_ConnectionClosedCallback(int result, int unused1, int unused
         }
     }
     if (gWifiConnection->disconnectCallback != NULL) {
-        gWifiConnection->disconnectCallback(arg, gWifiConnection->disconnectCallbackArg);
+        gWifiConnection->disconnectCallback(aid, gWifiConnection->disconnectCallbackArg);
     }
 }
 
@@ -999,7 +1018,7 @@ void WifiConnection_UpdateFriendStatus(void) {
 #pragma force_active reset
 
 void WifiConnection_SetOwnStatusData(void *data, int size) {
-    DWC_SetOwnStatusData();
+    DWC_SetOwnStatusData(data, size);
 }
 
 u8 WifiConnection_GetFriendStatus(int index) {
@@ -1065,7 +1084,7 @@ int WifiConnection_GetTargetFriendIndex(void) {
 
 #pragma force_active on
 
-void WifiConnection_GameServerMatchedCallback(int result, int cancelled, int cancelledByMe, int unused, int aid) {
+void WifiConnection_GameServerMatchedCallback(int result, BOOL cancelled, BOOL self, BOOL isServer, int aid, void *param) {
     int reject = 0;
     gWifiConnection->matchInProgress = 0;
     if (result == 0) {
@@ -1097,7 +1116,7 @@ void WifiConnection_GameServerMatchedCallback(int result, int cancelled, int can
                 return;
             }
             WifiConnection_OnConnected(aid);
-        } else if (cancelledByMe == 0) {
+        } else if (self == 0) {
             gWifiConnection->newClientIndex = -1;
         }
     }
@@ -1105,7 +1124,7 @@ void WifiConnection_GameServerMatchedCallback(int result, int cancelled, int can
 
 #pragma force_active reset
 
-void WifiConnection_ConnectedToServerCallback(u32 result, u32 cancelled, u32 a2, u32 a3, u32 aid) {
+void WifiConnection_ConnectedToServerCallback(int result, BOOL cancelled, BOOL self, BOOL isServer, int aid, void *param) {
     gWifiConnection->matchInProgress = 0;
     if (result == 0 && cancelled == 0) {
         WifiConnection_OnConnected(aid);
@@ -1126,19 +1145,19 @@ void WifiConnection_NewClientCallback(int index) {
 #pragma force_active reset
 
 void WifiConnection_CreateTokenAndScanFriends(void) {
-    u8 profileToken[12];
-    u8 newToken[12];
+    DwcAccData profileToken;
+    DwcAccData newToken;
     int i;
     int offset;
 
     if (!DWC_CheckHasProfile(gWifiConnection->userData)) {
-        DWC_CreateExchangeToken(gWifiConnection->userData, profileToken);
+        DWC_CreateExchangeToken(gWifiConnection->userData, &profileToken);
     } else {
-        DWC_CreateExchangeToken(gWifiConnection->userData, newToken);
+        DWC_CreateExchangeToken(gWifiConnection->userData, &newToken);
     }
     for (i = 0, offset = 0; i < 32; i++, offset += 12) {
-        DWC_GetFriendDataType((u8 *)gWifiConnection->friendList + offset);
-        DWC_IsBuddyFriendData((u8 *)gWifiConnection->friendList + offset);
+        DWC_GetFriendDataType(&gWifiConnection->friendList[i]);
+        DWC_IsBuddyFriendData(&gWifiConnection->friendList[i]);
     }
 }
 
@@ -1168,7 +1187,7 @@ void WifiConnection_SetVoiceUnmuted(u16 value) {
     gWifiConnection->voiceUnmuted = value;
 }
 
-void WifiConnection_StopServerMatchingCallback(void) {
+void WifiConnection_StopServerMatchingCallback(void *param) {
     gWifiConnection->stopMatchingState = 2;
 }
 

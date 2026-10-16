@@ -1,6 +1,8 @@
 #ifndef POKEHEARTGOLD_WIFI_SETUP_LOCAL_WIRELESS_H
 #define POKEHEARTGOLD_WIFI_SETUP_LOCAL_WIRELESS_H
 
+#include <nitro/wm/wm_internal.h>
+
 #include "global.h"
 
 #include "wifi_setup_ui.h"
@@ -9,6 +11,9 @@
 // controls, the title banner (five OAM letters sliding in over a BG screen), the dialog window
 // with up to two buttons, the scan for a Wi-Fi USB connector (access points whose SSID starts
 // with "NWCUSBAP") and the DS Download Play parent.
+//
+// A connector's SSID holds the tag "NWCUSBAP" (8 bytes), a flag byte at 9 (bit 0: in setup mode) and, in the scan
+// parameters, the owner's nickname from 12 on.
 
 #define WIFI_SETUP_BANNER_NUM_LETTERS   5
 #define WIFI_SETUP_USB_SCAN_NUM_ENTRIES 16
@@ -31,33 +36,14 @@ typedef struct WifiSetupUsbScanEntry {
     u8 flag; // bit 0 of the byte after the SSID tag
 } WifiSetupUsbScanEntry;
 
-// Parameters of the scan (copied from a template); the SSID carries the tag, a flag byte and the
-// owner's nickname.
-typedef struct WifiSetupUsbScanParam {
-    void *buf;
-    u8 unk_04[4];
-    u16 period;
-    u8 unk_0A[10];
-    u8 ssidTag[8]; // 0x14
-    u8 unk_1C;
-    u8 ssidFlag; // 0x1D
-    u8 unk_1E[2];
-    u8 nickname[0x24]; // 0x20
-} WifiSetupUsbScanParam;
-
-typedef struct WifiSetupUsbScanStatus {
-    u16 state;
-    u8 unk_002[0x7CE];
-} WifiSetupUsbScanStatus;
-
 // Scan work (0x1BA0 bytes, 32-byte aligned; the WM work buffer comes first).
 typedef struct WifiSetupUsbScan {
     u8 wmBuf[0xF00];
     u8 scanBuf[0x400];                                              // 0xF00
     WifiSetupUsbScanEntry entries[WIFI_SETUP_USB_SCAN_NUM_ENTRIES]; // 0x1300
     void (*callback)(int result);                                   // 0x1370
-    WifiSetupUsbScanParam param;                                    // 0x1374
-    WifiSetupUsbScanStatus status;                                  // 0x13B8
+    WmScanExParam param;                                            // 0x1374
+    WmStatus status;                                                // 0x13B8
     OSTick startTick;                                               // 0x1B88
     void *task;                                                     // 0x1B90
     vu8 endState;                                                   // 0x1B94, 1 ending, 2 ended
@@ -65,26 +51,6 @@ typedef struct WifiSetupUsbScan {
     u8 rescanning;                                                  // 0x1B96, set once the first scan period is over
     u8 unk_1B97[9];
 } WifiSetupUsbScan;
-
-// Access point as reported by a scan callback.
-typedef struct WifiSetupUsbScanBss {
-    u8 unk_00[4];
-    u8 bssid[6];
-    u8 ssidLength[2];
-    u8 ssidTag[8]; // 0x0C
-    u8 unk_14;
-    u8 ssidFlag; // 0x15
-} WifiSetupUsbScanBss;
-
-typedef struct WifiSetupUsbScanCallbackArg {
-    u16 apiid;
-    u16 errcode;
-    u8 unk_04[4];
-    u16 state;
-    u8 unk_0A[4];
-    u16 count;
-    WifiSetupUsbScanBss *bss[1];
-} WifiSetupUsbScanCallbackArg;
 
 // Dialog window (0x20 bytes): a frame, a text line and up to two buttons sliding up from the
 // bottom of the screen.

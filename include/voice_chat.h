@@ -3,6 +3,7 @@
 
 #include "global.h"
 
+#include "nnsys/snd_internal.h"
 #include "vct/vct_session.h"
 
 #define VOICE_CHAT_MODE_PHONE      1
@@ -27,7 +28,7 @@ typedef struct VoiceChatWork {
     u32 callState;             // 0x19EC
     BOOL muted;                // 0x19F0
     u32 heapId;                // 0x19F4
-    u8 stream[0x5C];           // 0x19F8, NNS sound stream
+    SndStrm stream;            // 0x19F8
     Session *session;          // 0x1A54
     u8 samplingState;          // 0x1A58
     u8 restartSampling;        // 0x1A59
@@ -53,14 +54,14 @@ extern VoiceChatWork *gVoiceChatWork; // same storage as gVoiceChat.work
 
 void VoiceChat_InitAudio(void);
 void VoiceChat_MicCallback(MICResult result, void *arg);
-void VoiceChat_StreamCallback(int enabled, u32 count, void **buffers, u32 size, int unused, u8 *address);
+void VoiceChat_StreamCallback(BOOL isAlarm, int numChannels, void **buffers, u32 size, int format, void *arg);
 BOOL VoiceChat_RequestSession(u32 aid);
 BOOL VoiceChat_AcceptSession(int unused);
 void VoiceChat_ConferenceEventCallback(u32 unusedId, u32 event, Session *session, void *unusedContext);
 void VoiceChat_PhoneEventCallback(u32 unusedId, u32 event, Session *session, void *unusedContext);
 void VoiceChat_EndSession(Session *session);
 void VoiceChat_Update(void);
-BOOL VoiceChat_ReceiveData(u32 aid, void *data, void *size);
+BOOL VoiceChat_ReceiveData(u32 aid, void *data, u32 size);
 void VoiceChat_AllocAligned(void **allocation, void **aligned, u32 size, u32 heapId);
 void VoiceChat_Init(int heapId, int codec, int count);
 void VoiceChat_StartStream(void);

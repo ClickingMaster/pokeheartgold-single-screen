@@ -3,18 +3,9 @@
 #include "wifi_setup.h"
 #include "wifi_setup_wcm.h"
 
-extern int SOC_Startup(void *config);
-extern int SOC_Cleanup(void);
-extern int SOC_RecvFrom(int socket, void *buffer, int size, int flags, u8 *address);
-extern int SOC_SendTo(int socket, const void *buffer, int size, int flags, u8 *address);
-extern int SOC_Poll(WifiSetupPollTime *fds, int count, s64 timeout);
-extern int SOC_Socket(int domain, int type, int protocol);
-extern int SOC_Bind(int socket, void *address, int addressLength);
-extern int SOC_Close(int socket);
 extern int RTC_GetTime(void *time);
 extern u8 gWifiSetupSocket[];
-extern u8 sWifiSetupSocConfig[];
-extern volatile u32 gSoclHostAddress;
+extern SocConfig sWifiSetupSocConfig;
 
 typedef struct RateMask {
     u16 mask;
@@ -75,7 +66,7 @@ int WifiSetup_StartupSocket(u32 address, u32 netmask, u32 gateway) {
     *(u32 *)(gWifiSetupSocket + 0x18) = WifiSetup_HostToNet32(address);
     *(u32 *)(gWifiSetupSocket + 0x1C) = WifiSetup_HostToNet32(netmask);
     *(u32 *)(gWifiSetupSocket + 0x20) = WifiSetup_HostToNet32(gateway);
-    if (SOC_Startup(sWifiSetupSocConfig) < 0) {
+    if (SOC_Startup(&sWifiSetupSocConfig) < 0) {
         return -1;
     }
     while (gSoclHostAddress == 0) {
@@ -114,33 +105,35 @@ void WifiSetup_MemFill(void *dst, int value, u32 size) {
     MI_CpuFill8(dst, value, size);
 }
 
-int WifiSetup_RecvFrom(int socket, void *buffer, int size, int flags, u8 *address, u32 *addressLength) {
-    *address = *addressLength;
+int WifiSetup_RecvFrom(int socket, void *buffer, int size, int flags, SocAddress *address, int *addressLength) {
+    address->length = *addressLength;
     return SOC_RecvFrom(socket, buffer, size, flags, address);
 }
 
-int WifiSetup_Poll(void *unused, WifiSetupPollTime *fd, int unused2, int unused3, WifiSetupPollTime *timeout) {
-    WifiSetupPollTime copy = *fd;
+int WifiSetup_Poll(int count, SocPollFd *readSet, void *writeSet, void *exceptSet, WifiSetupPollTime *timeout) {
+    SocPollFd copy = *readSet;
     u64 ticks = 0;
     ticks += (u64)((s64)timeout->seconds * 0x1FF6210) >> 6;
     ticks += (u64)((s64)timeout->microseconds * 0x1FF6210) >> 6;
     return SOC_Poll(&copy, 1, ticks);
 }
 
-int WifiSetup_SendTo(int socket, const void *buffer, int size, int flags, u8 *address, u32 addressLength) {
-    *address = addressLength;
+int WifiSetup_SendTo(int socket, const void *buffer, int size, int flags, SocAddress *address, int addressLength) {
+    address->length = addressLength;
     return SOC_SendTo(socket, buffer, size, flags, address);
 }
 
-void WifiSetup_SetSockOpt(void) {
+// Socket options are not supported; the socket number comes back as a success result.
+int WifiSetup_SetSockOpt(int socket, int level, int name, const void *value, int length) {
+    return socket;
 }
 
 int WifiSetup_Socket(int domain, int type, int protocol) {
     return SOC_Socket(domain, type, protocol);
 }
 
-int WifiSetup_Bind(int socket, u8 *address, int addressLength) {
-    *address = addressLength;
+int WifiSetup_Bind(int socket, SocAddress *address, int addressLength) {
+    address->length = addressLength;
     return SOC_Bind(socket, address, addressLength);
 }
 
@@ -191,17 +184,15 @@ u16 WifiSetup_Random(void) {
     return (u16)(((gWifiSetupState.randomState >> 16) * 0x7FFF) >> 16);
 }
 
-void WifiSetup_ClearPollSet(void *set) {
-    u8 *p = set;
-    *(u32 *)(p + 0) = 0;
-    *(u16 *)(p + 4) = 0;
-    *(u16 *)(p + 6) = 0;
+void WifiSetup_ClearPollSet(SocPollFd *set) {
+    set->fd = 0;
+    set->events = 0;
+    set->revents = 0;
 }
 
-void WifiSetup_AddToPollSet(u32 socket, void *set) {
-    u8 *p = set;
-    *(u32 *)(p + 0) = socket;
-    *(u16 *)(p + 4) = 1;
+void WifiSetup_AddToPollSet(int socket, SocPollFd *set) {
+    set->fd = socket;
+    set->events = 1;
 }
 
 void WifiSetup_ConvertBssDesc(const void *src, void *dst) {

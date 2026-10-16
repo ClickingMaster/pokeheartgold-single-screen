@@ -10,7 +10,6 @@ extern u8 gWifiSetupWcmSearchSsid[32];
 extern u8 WCM_Bssid_Any[]; // BSSID ff:ff:ff:ff:ff:ff (any)
 extern u8 WCM_Essid_Any[]; // SSID of 0xFF bytes (any)
 
-void WifiSetup_Sleep(s32 ticks);
 s32 WifiSetup_NotifyStatus(s32 arg);
 void WifiSetupWcm_HandleEvent(WifiSetupWcmEvent *event);
 int WifiSetupWcm_ReturnToIdle(void);

@@ -3,7 +3,8 @@
 
 #include "global.h"
 
-#include "WM.h"
+#include "nnsys/snd_arc_strm_internal.h"
+
 #include "wifi_setup_access_points.h"
 #include "wifi_setup_app.h"
 #include "wifi_setup_ui.h"
@@ -32,7 +33,7 @@ extern const u8 gWifiSetupBannerLetterPalettes[][WIFI_SETUP_BANNER_NUM_LETTERS];
 extern WifiSetupPoint gWifiSetupBannerLetterPositions[WIFI_SETUP_BANNER_NUM_LETTERS];
 extern u8 gWifiSetupUsbScanEmptyBssid[6]; // empty BSSID
 extern u8 gWifiSetupUsbApSsid[];          // "NWCUSBAP"
-extern WifiSetupUsbScanParam gWifiSetupUsbScanParam;
+extern WmScanExParam gWifiSetupUsbScanParam;
 extern u8 gWifiSetupDialogWindowPlanes[];
 extern WifiSetupRect gWifiSetupDialogWindowRect;
 extern u8 gWifiSetupDialogButtonPositions[][2];
@@ -48,12 +49,6 @@ extern u8 gWifiSetupDialogFrameTemplates[];
 extern u8 gWifiSetupDialogButtonCounts[];
 extern char *gWifiSetupBannerScreenPaths[];
 
-int WM_Initialize(void *buf, void *callback, u16 dmaNo);
-int WM_ReadStatus(void *status);
-u16 WM_GetDispersionScanPeriod(void);
-int WM_StartScanEx(void *callback, void *param);
-int WM_Reset(void *callback);
-int WM_End(void *callback);
 int MB_Init(void *work, void *user, u32 ggid, u32 tgid, u32 dmaNo);
 void MB_SetParentCommParam(u16 sendSize, u16 maxChildren);
 void MB_CommSetParentStateCallback(void *callback);
@@ -66,10 +61,6 @@ void MB_DisconnectChild(u16 aid);
 BOOL MB_CommIsBootable(u16 aid);
 void *MB_CommGetChildUser(u16 aid);
 void MB_End(void);
-extern void NNS_SndArcPlayerStartSeqArc(void *, int, int);
-extern void NNS_SndPlayerSetVolume(void *, int);
-extern void NNS_SndPlayerSetTrackPitch(void *, u32, int);
-extern void NNS_SndPlayerStopSeq(void *, int);
 
 int WifiSetupMbParent_GetChildState(void);
 void WifiSetupWh_Init(u8 *work);
@@ -87,9 +78,9 @@ void WifiSetupBanner_SlideOutTask1(void *task, void *arg);
 void WifiSetupBanner_SlideOffTask(void *task, void *arg);
 void WifiSetupBanner_LoadScreenTask(void *task, void *arg);
 BOOL WifiSetupUsbScan_StartScan(void);
-void WifiSetupUsbScan_WmCallback(WifiSetupUsbScanCallbackArg *arg);
-void WifiSetupUsbScan_StoreResults(WifiSetupUsbScanCallbackArg *arg);
-void WifiSetupUsbScan_CheckResults(WifiSetupUsbScanCallbackArg *arg);
+void WifiSetupUsbScan_WmCallback(void *arg);
+void WifiSetupUsbScan_StoreResults(WMStartScanExCallback *arg);
+void WifiSetupUsbScan_CheckResults(WMStartScanExCallback *arg);
 void WifiSetupUsbScan_TimeoutTask(void *task, void *arg);
 void WifiSetupDialog_FadeInTask(void *task, void *arg);
 void WifiSetupDialog_SlideInTask(void *task, void *arg);
@@ -2223,19 +2214,19 @@ WifiSetupMbParentData gWifiSetupMbParentData = {
 };
 
 void WifiSetupSound_Play(int seq) {
-    NNS_SndArcPlayerStartSeqArc(gWifiSetupSound->handle, 0, seq);
+    NNS_SndArcPlayerStartSeqArc(&gWifiSetupSound->handle, 0, seq);
 }
 
 void WifiSetupSound_SetVolume(int volume) {
-    NNS_SndPlayerSetVolume(gWifiSetupSound->handle, volume);
+    NNS_SndPlayerSetVolume(&gWifiSetupSound->handle, volume);
 }
 
 void WifiSetupSound_SetTrackPitch(int mask, int pitch) {
-    NNS_SndPlayerSetTrackPitch(gWifiSetupSound->handle, mask, pitch);
+    NNS_SndPlayerSetTrackPitch(&gWifiSetupSound->handle, mask, pitch);
 }
 
 void WifiSetupSound_Stop(void) {
-    NNS_SndPlayerStopSeq(gWifiSetupSound->handle, 0);
+    NNS_SndPlayerStopSeq(&gWifiSetupSound->handle, 0);
 }
 
 void WifiSetupSound_UpdateTask(void *task, void *arg) {
@@ -2515,12 +2506,12 @@ BOOL WifiSetupUsbScan_Start(void (*cb)(int)) {
             WM_ReadStatus(&gWifiSetupUsbScan->status);
         } while (gWifiSetupUsbScan->status.state != 2);
         gWifiSetupUsbScan->param = gWifiSetupUsbScanParam;
-        gWifiSetupUsbScan->param.buf = gWifiSetupUsbScan->scanBuf;
-        gWifiSetupUsbScan->param.period = WM_GetDispersionScanPeriod();
+        gWifiSetupUsbScan->param.buffer = gWifiSetupUsbScan->scanBuf;
+        gWifiSetupUsbScan->param.dwell = WM_GetDispersionScanPeriod();
         OS_GetOwnerInfo(&info);
-        MI_CpuCopy8(gWifiSetupUsbApSsid, gWifiSetupUsbScan->param.ssidTag, 8);
-        gWifiSetupUsbScan->param.ssidFlag = 1;
-        MI_CpuCopy8(info.nickName, gWifiSetupUsbScan->param.nickname, info.nickNameLength * 2);
+        MI_CpuCopy8(gWifiSetupUsbApSsid, gWifiSetupUsbScan->param.ssid, 8);
+        gWifiSetupUsbScan->param.ssid[9] = 1;
+        MI_CpuCopy8(info.nickName, &gWifiSetupUsbScan->param.ssid[12], info.nickNameLength * 2);
         if (WifiSetupUsbScan_StartScan()) {
             gWifiSetupUsbScan->task = WifiSetupTask_Create(0, WifiSetupUsbScan_TimeoutTask, 0, 0x78);
             return TRUE;
@@ -2561,25 +2552,26 @@ void WifiSetupUsbScan_SetCallback(void (*cb)(int)) {
     gWifiSetupUsbScan->callback = cb;
 }
 
-void WifiSetupUsbScan_WmCallback(WifiSetupUsbScanCallbackArg *arg) {
-    if (arg->errcode != WM_ERRCODE_SUCCESS) {
+void WifiSetupUsbScan_WmCallback(void *arg) {
+    WMStartScanExCallback *cb = arg;
+    if (cb->errcode != WM_ERRCODE_SUCCESS) {
         return;
     }
     if (gWifiSetupUsbScan->endState != 0) {
-        if (arg->apiid == 2) {
+        if (cb->apiid == 2) {
             gWifiSetupUsbScan->endState = 2;
         }
         return;
     }
-    if (arg->apiid != 0x26) {
+    if (cb->apiid != 0x26) {
         return;
     }
-    switch (arg->state) {
+    switch (cb->state) {
     case 5:
         if (gWifiSetupUsbScan->rescanning) {
-            WifiSetupUsbScan_CheckResults(arg);
+            WifiSetupUsbScan_CheckResults(cb);
         } else {
-            WifiSetupUsbScan_StoreResults(arg);
+            WifiSetupUsbScan_StoreResults(cb);
         }
         WifiSetupUsbScan_StartScan();
         break;
@@ -2592,15 +2584,15 @@ void WifiSetupUsbScan_WmCallback(WifiSetupUsbScanCallbackArg *arg) {
     }
 }
 
-void WifiSetupUsbScan_StoreResults(WifiSetupUsbScanCallbackArg *arg) {
-    WifiSetupUsbScanBss *bss;
+void WifiSetupUsbScan_StoreResults(WMStartScanExCallback *arg) {
+    WMBssDesc *bss;
     int i;
     int j;
     WifiSetupUsbScan *w;
-    for (i = 0; i < arg->count; i++) {
-        bss = arg->bss[i];
+    for (i = 0; i < arg->bssDescCount; i++) {
+        bss = arg->bssDesc[i];
         DC_InvalidateRange(bss, 0xC0);
-        if (memcmp(bss->ssidTag, gWifiSetupUsbApSsid, 8) != 0) {
+        if (memcmp(bss->ssid, gWifiSetupUsbApSsid, 8) != 0) {
             continue;
         }
         w = gWifiSetupUsbScan;
@@ -2609,7 +2601,7 @@ void WifiSetupUsbScan_StoreResults(WifiSetupUsbScanCallbackArg *arg) {
                 if (w->entries[j].flag != 0) {
                     goto next;
                 }
-                if (!(bss->ssidFlag & 1)) {
+                if (!(bss->ssid[9] & 1)) {
                     goto next;
                 }
                 if (w->callback != NULL) {
@@ -2621,7 +2613,7 @@ void WifiSetupUsbScan_StoreResults(WifiSetupUsbScanCallbackArg *arg) {
         for (j = 0; j < 16; j++) {
             if (memcmp(w->entries[j].bssid, gWifiSetupUsbScanEmptyBssid, 6) == 0) {
                 MI_CpuCopy8(bss->bssid, w->entries[j].bssid, 6);
-                gWifiSetupUsbScan->entries[j].flag = (bss->ssidFlag & 1) ? 1 : 0;
+                gWifiSetupUsbScan->entries[j].flag = (bss->ssid[9] & 1) ? 1 : 0;
                 break;
             }
         }
@@ -2629,8 +2621,8 @@ next:;
     }
 }
 
-void WifiSetupUsbScan_CheckResults(WifiSetupUsbScanCallbackArg *arg) {
-    u8 *data;
+void WifiSetupUsbScan_CheckResults(WMStartScanExCallback *arg) {
+    WMBssDesc *bss;
     int i, j;
     WifiSetupUsbScanEntry *entry;
     WifiSetupUsbScan *scan;
@@ -2642,17 +2634,17 @@ void WifiSetupUsbScan_CheckResults(WifiSetupUsbScanCallbackArg *arg) {
         return;
     }
     DC_InvalidateRange(gWifiSetupUsbScan->scanBuf, 0x400);
-    count = arg->count;
+    count = arg->bssDescCount;
     i = 0;
     if (count <= 0) {
         return;
     }
     scan = gWifiSetupUsbScan;
     do {
-        data = (u8 *)arg->bss[i];
-        if (memcmp(data + 12, gWifiSetupUsbApSsid, 8) == 0 && (data[21] & 1)) {
+        bss = arg->bssDesc[i];
+        if (memcmp(bss->ssid, gWifiSetupUsbApSsid, 8) == 0 && (bss->ssid[9] & 1)) {
             for (j = 0, entry = scan->entries; j < WIFI_SETUP_USB_SCAN_NUM_ENTRIES; j++, entry++) {
-                if (memcmp(data + 4, entry->bssid, 6) == 0) {
+                if (memcmp(bss->bssid, entry->bssid, 6) == 0) {
                     if (scan->entries[j].flag) {
                         break;
                     }

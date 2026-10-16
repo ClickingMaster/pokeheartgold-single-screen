@@ -1,6 +1,8 @@
 #ifndef POKEHEARTGOLD_WIFI_SETUP_ACCESS_POINTS_H
 #define POKEHEARTGOLD_WIFI_SETUP_ACCESS_POINTS_H
 
+#include <nitro/wm/wm_internal.h>
+
 #include "global.h"
 
 #include "wifi_setup_connection.h"
@@ -21,6 +23,16 @@ typedef struct WifiSetupScanEntry {
     u8 pad29;
 } WifiSetupScanEntry;
 
+// WM work of the scan, followed by the scan state.
+typedef struct WifiSetupApScan {
+    u8 wmWork[0xF00];
+    u8 scanBuf[0x400];
+    WifiSetupScanEntry entries[WIFI_SETUP_NUM_SCAN_ENTRIES];
+    WmScanExParam param;
+    WmStatus status;
+    u8 ending;
+} WifiSetupApScan;
+
 typedef struct WifiSetupConnections {
     WifiSetupConnectionPage pages[WIFI_SETUP_NUM_CONNECTIONS];
     WifiSetupConnection edit; // 0x400
@@ -36,12 +48,13 @@ typedef struct WifiSetupClientResultData {
 } WifiSetupClientResultData;
 
 typedef struct WifiSetupSound {
-    u8 arc[0x94];
-    u8 handle[4]; // 0x94, NNSSndHandle
-    void *data;   // 0x98, sound archive file
-    void *task;   // 0x9C
+    NNSSndArc arc;
+    NNSSndHandle handle;
+    void *data; // sound archive file
+    void *task;
 } WifiSetupSound;
 
+extern WifiSetupApScan *gWifiSetupApScan;
 extern WifiSetupConnections *gWifiSetupConnections;
 extern WifiSetupSound *gWifiSetupSound;
 

@@ -860,18 +860,18 @@ void WifiSetup_WritePacketHeader(u8 *dst, int type, int length, int flags, s8 va
 }
 
 void WifiSetup_SendPacket(void *buffer, void *size, int index, void *socket) {
-    u8 packet[8];
+    SocAddress address;
     int value;
 
-    WifiSetup_MemFill(packet, 0, sizeof(packet));
-    packet[1] = 2;
-    *(u16 *)(packet + 2) = WifiSetup_HostToNet16(0x5790);
+    WifiSetup_MemFill(&address, 0, sizeof(address));
+    address.family = 2;
+    address.port = WifiSetup_HostToNet16(0x5790);
     value = WifiSetup_HostToNet32(gWifiSetupState.address);
-    *(int *)(packet + 4) = value;
+    address.ip = value;
     if (index == 0xFF || ov13_0224CFB8[0x1C] == 0) {
-        *(int *)(packet + 4) = -1;
+        address.ip = -1;
     }
-    WifiSetup_SendTo((int)socket, buffer, (int)size, 0, packet, sizeof(packet));
+    WifiSetup_SendTo((int)socket, buffer, (int)size, 0, &address, sizeof(address));
 }
 
 int WifiSetup_Encrypt(void *src, void *dst, int size, u8 *checksum, void *seedDst, const void *seedSrc, int seedSize) {

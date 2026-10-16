@@ -62,6 +62,8 @@ typedef struct WifiSetupWcm {
     void *connectKey;                     // 0x24, key description (0x50 bytes)
 } WifiSetupWcm;
 
+void WifiSetup_Sleep(s32 ticks);
+
 int WCM_Init(void *work, u32 size);
 int WCM_StartupAsync(WifiSetupWcmConfig *config, void (*callback)(WifiSetupWcmEvent *event));
 int WCM_CleanupAsync(void);
