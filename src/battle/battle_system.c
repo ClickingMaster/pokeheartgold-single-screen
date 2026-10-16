@@ -968,11 +968,11 @@ void BattleSystem_AddSpeciesCaughtScore(BattleSystem *battleSystem) {
 }
 
 void BattleSystem_SetField2440(BattleSystem *battleSystem, int a1) {
-    battleSystem->unk2440 = a1;
+    battleSystem->mainMenuReady = a1;
 }
 
 void BattleSystem_SetSwitchingOrCanPickCommandMask(BattleSystem *battleSystem, u8 a1) {
-    battleSystem->unk2442 = a1;
+    battleSystem->switchingOrCanPickCommandMask = a1;
 }
 
 void *BattleSystem_GetWaitingIcon(BattleSystem *battleSystem) {

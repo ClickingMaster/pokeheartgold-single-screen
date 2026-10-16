@@ -319,7 +319,7 @@ void Battle_BattleExit(OverlayManager *man) {
     setup->battleTotals.totalTimesFainted += BattleContext_Get(battleSystem, battleSystem->ctx, 6, 0) + BattleContext_Get(battleSystem, battleSystem->ctx, 6, 2);
     setup->battleTotals.totalDamage += BattleContext_Get(battleSystem, battleSystem->ctx, 7, 0) + BattleContext_Get(battleSystem, battleSystem->ctx, 7, 2);
     setup->totalTurns = BattleContext_Get(battleSystem, battleSystem->ctx, 3, 0);
-    setup->unk1C4 = battleSystem->isRecordingPaused;
+    setup->isRecordingPaused = battleSystem->isRecordingPaused;
     for (i = 0; i < 4; i++) {
         Heap_Free(battleSystem->monPicData[i].charBuffer);
     }

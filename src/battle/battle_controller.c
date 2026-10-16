@@ -158,14 +158,14 @@ typedef struct BattleControllerTargetGauge {
 
 typedef struct BattleControllerPacketSelectTarget {
     u8 command;
-    u8 unk_01;
+    u8 isLastSelection;
     u16 moveRange;
     BattleControllerTargetGauge gauges[BATTLER_MAX];
 } BattleControllerPacketSelectTarget;
 
 typedef struct BattleControllerPacketSelectItem {
     u8 command;
-    u8 unk_01;
+    u8 twoTargets;
     u8 targetSemiInvulnerable;
     u8 targetSubstitute;
     u8 selectedMonIndex[BATTLER_MAX];
@@ -937,9 +937,9 @@ void BattleController_EmitSelectTarget(BattleSystem *battleSystem, BattleContext
     packet.command = 16;
     packet.moveRange = moveRange;
     if (!(battleType & BATTLE_TYPE_DOUBLES) || (battleType & BATTLE_TYPE_MULTI) || ((battleType & BATTLE_TYPE_DOUBLES) && battlerId >= BATTLER_PLAYER2)) {
-        packet.unk_01 = 1;
+        packet.isLastSelection = 1;
     } else {
-        packet.unk_01 = 0;
+        packet.isLastSelection = 0;
     }
     for (i = 0; i < BATTLER_MAX; i++) {
         if (ctx->battleMons[i].hp) {
@@ -972,7 +972,7 @@ void BattleController_ReplyTargetSelection(BattleSystem *battleSystem, int battl
 }
 
 static inline void SelectItemPacket_SetTargetFlags(BattleControllerPacketSelectItem *packet, const BattleMon *mon) {
-    packet->unk_01 = 0;
+    packet->twoTargets = 0;
     if (mon->moveEffectFlags & MOVE_EFFECT_FLAG_SEMI_INVULNERABLE) {
         packet->targetSemiInvulnerable = TRUE;
         packet->targetSubstitute = FALSE;
@@ -1003,7 +1003,7 @@ void BattleController_EmitSelectItem(BattleSystem *battleSystem, BattleContext *
     }
     if (BattleSystem_GetBattleType(battleSystem) == (BATTLE_TYPE_DOUBLES | BATTLE_TYPE_MULTI | BATTLE_TYPE_AI)) {
         if (!(MaskOfFlagNo(BATTLER_ENEMY) & ctx->switchInFlag) && !(MaskOfFlagNo(BATTLER_ENEMY2) & ctx->switchInFlag)) {
-            packet.unk_01 = 1;
+            packet.twoTargets = 1;
             packet.targetSemiInvulnerable = FALSE;
             packet.targetSubstitute = FALSE;
         } else if (!(MaskOfFlagNo(BATTLER_ENEMY) & ctx->switchInFlag)) {
@@ -1014,7 +1014,7 @@ void BattleController_EmitSelectItem(BattleSystem *battleSystem, BattleContext *
     } else if (BattleSystem_GetBattleType(battleSystem) == BATTLE_TYPE_NONE) {
         SelectItemPacket_SetTargetFlags(&packet, &ctx->battleMons[BATTLER_ENEMY]);
     } else {
-        packet.unk_01 = 0;
+        packet.twoTargets = 0;
         packet.targetSemiInvulnerable = FALSE;
         packet.targetSubstitute = FALSE;
     }
@@ -1082,7 +1082,7 @@ void BattleController_EmitPrintAttackMessage(BattleSystem *battleSystem, BattleC
 #pragma force_active reset
 
 void BattleController_EmitPrintMessage(BattleSystem *battleSystem, BattleContext *ctx, BattleMessage *msg) {
-    msg->unk0 = 21;
+    msg->command = 21;
     BattleController_EmitPacket(battleSystem, 1, ctx->battlerIdAttacker, msg, sizeof(BattleMessage));
 }
 

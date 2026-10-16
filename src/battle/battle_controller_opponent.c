@@ -216,14 +216,14 @@ typedef struct BattleControllerPacketSelectMove {
 
 typedef struct BattleControllerPacketSelectTarget {
     u8 command;
-    u8 unk_01;
+    u8 isLastSelection;
     u16 moveRange;
     TargetPokemon targetMons[BATTLER_MAX];
 } BattleControllerPacketSelectTarget;
 
 typedef struct BattleControllerPacketSelectItem {
     u8 command;
-    u8 unk_01;
+    u8 twoTargets;
     u8 targetSemiInvulnerable;
     u8 targetSubstitute;
     u8 selectedMonIndex[BATTLER_MAX];
@@ -481,14 +481,14 @@ typedef struct BattleBagMenuArgs {
     Bag *bag;
     enum HeapID heapID;
     u32 battlerId;
-    u32 unk_14;
+    u32 isTutorial;
     u32 embargoFlag;
     u16 item;
     u8 pocket;
-    u8 unk_1F;
+    u8 lastUsedPocket;
     u8 unk_20;
     u8 unk_21;
-    u8 unk_22;
+    u8 twoTargets;
     u8 targetSemiInvulnerable;
     u8 targetSubstitute;
     u8 key;
@@ -692,7 +692,7 @@ typedef struct OpponentSelectTargetWork {
     u8 state;
     TargetPokemon targetMons[BATTLER_MAX];
     u16 moveRange;
-    u8 unk_32;
+    u8 isLastSelection;
 } OpponentSelectTargetWork;
 
 typedef struct OpponentSelectItemPartyMenu {
@@ -714,7 +714,7 @@ typedef struct OpponentSelectItemWork {
     u8 key;
     u8 printerId;
     u16 nextState;
-    u8 unk_14;
+    u8 twoTargets;
     u8 targetSemiInvulnerable;
     u8 targetSubstitute;
     u8 timer;
@@ -2401,7 +2401,7 @@ SysTask *OpponentData_SelectCommand(BattleSystem *battleSystem, OpponentData *op
             work->movePP[k] = packet->movePP[k];
         }
     }
-    return SysTask_CreateOnMainQueue((SysTaskFunc)opponentData->unk0[0], work, 0);
+    return SysTask_CreateOnMainQueue((SysTaskFunc)opponentData->inputTasks[0], work, 0);
 }
 
 #pragma force_active reset
@@ -2430,7 +2430,7 @@ void OpponentData_SelectMove(BattleSystem *battleSystem, OpponentData *opponentD
         }
     }
     work->unusableMovesMask = packet->unusableMovesMask;
-    SysTask_CreateOnMainQueue((SysTaskFunc)opponentData->unk0[1], work, 0);
+    SysTask_CreateOnMainQueue((SysTaskFunc)opponentData->inputTasks[1], work, 0);
 }
 
 #pragma force_active on
@@ -2449,7 +2449,7 @@ void OpponentData_SelectTarget(BattleSystem *battleSystem, OpponentData *opponen
     work->battlerType = opponentData->battlerType;
     work->moveRange = packet->moveRange;
     work->hpBar = &opponentData->hpBar;
-    work->unk_32 = packet->unk_01;
+    work->isLastSelection = packet->isLastSelection;
     BattleSystem_GetBattlerTypes(battleSystem, battlerTypes);
     maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
     BattleSystem_GetBattleType(battleSystem);
@@ -2467,7 +2467,7 @@ void OpponentData_SelectTarget(BattleSystem *battleSystem, OpponentData *opponen
             dst = (OpponentSelectTargetWork *)((u8 *)dst + sizeof(TargetPokemon));
         } while (i < maxBattlers);
     }
-    SysTask_CreateOnMainQueue((SysTaskFunc)opponentData->unk0[2], work, 0);
+    SysTask_CreateOnMainQueue((SysTaskFunc)opponentData->inputTasks[2], work, 0);
 }
 
 SysTask *OpponentData_SelectItem(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectItem *packet) {
@@ -2483,7 +2483,7 @@ SysTask *OpponentData_SelectItem(BattleSystem *battleSystem, OpponentData *oppon
     work->command = packet->command;
     work->battlerId = opponentData->battlerId;
     work->battlerType = opponentData->battlerType;
-    work->unk_14 = packet->unk_01;
+    work->twoTargets = packet->twoTargets;
     work->targetSemiInvulnerable = packet->targetSemiInvulnerable;
     work->targetSubstitute = packet->targetSubstitute;
     for (i = 0; i < BATTLER_MAX; i++) {
@@ -2493,7 +2493,7 @@ SysTask *OpponentData_SelectItem(BattleSystem *battleSystem, OpponentData *oppon
         }
         work->embargoFlag[i] = packet->embargoFlag[i];
     }
-    return SysTask_CreateOnMainQueue((SysTaskFunc)opponentData->unk0[3], work, 0);
+    return SysTask_CreateOnMainQueue((SysTaskFunc)opponentData->inputTasks[3], work, 0);
 }
 
 void OpponentData_ShowMonList(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketShowMonList *packet) {
@@ -2516,7 +2516,7 @@ void OpponentData_ShowMonList(BattleSystem *battleSystem, OpponentData *opponent
             work->partyOrder[i][j] = packet->partyOrder[i][j];
         }
     }
-    SysTask_CreateOnMainQueue((SysTaskFunc)opponentData->unk0[4], work, 0);
+    SysTask_CreateOnMainQueue((SysTaskFunc)opponentData->inputTasks[4], work, 0);
 }
 
 #pragma force_active reset
@@ -2532,7 +2532,7 @@ void OpponentData_DrawYesNoBox(BattleSystem *battleSystem, OpponentData *opponen
     work->mode = packet->mode;
     work->value = packet->value;
     work->param = packet->param;
-    SysTask_CreateOnMainQueue((SysTaskFunc)opponentData->unk0[5], work, 0);
+    SysTask_CreateOnMainQueue((SysTaskFunc)opponentData->inputTasks[5], work, 0);
 }
 
 #pragma force_active on
@@ -2581,10 +2581,10 @@ void OpponentData_PlayMoveAnimation(BattleSystem *battleSystem, OpponentData *op
     work->animData = *animData;
     work->pokepic = opponentData->pokepic;
     if (animData->isEffectAnim == 1 && animData->effectAnimId == 25) {
-        opponentData->unk1A0 = 1;
+        opponentData->substituteShown = 1;
     }
     if (animData->isEffectAnim == 1 && animData->effectAnimId == 26) {
-        opponentData->unk1A0 = 0;
+        opponentData->substituteShown = 0;
     }
     MoveAnim_GetDisplayFlags(&work->disableHpBar, &work->updateG3, animData->isEffectAnim, animData->effectAnimId, animData->move);
     SysTask_CreateOnMainQueue(Task_PlayMoveAnimation, work, 0);
@@ -3614,7 +3614,7 @@ void Task_PokemonSendOut(SysTask *task, void *data) {
         BattleAnimUtil_LoadSubstituteIntoPic(&params, HEAP_ID_BATTLE);
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &unsubstituteAnimData, 1, 16, work->battlerId, work->battlerId, MOVE_NONE);
         OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, animSystem, &unsubstituteAnimData);
-        work->opponentData->unk1A0 = 1;
+        work->opponentData->substituteShown = 1;
         work->state++;
         break;
     default:
@@ -3696,7 +3696,7 @@ void Task_FollowMonSendOut(SysTask *task, void *data) {
         BattleAnimUtil_LoadSubstituteIntoPic(&params, HEAP_ID_BATTLE);
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &unsubstituteAnimData, 1, 16, work->battlerId, work->battlerId, MOVE_NONE);
         OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, animSystem, &unsubstituteAnimData);
-        work->opponentData->unk1A0 = 1;
+        work->opponentData->substituteShown = 1;
         work->state++;
         break;
     default:
@@ -3735,7 +3735,7 @@ void Task_RecallPokemon(SysTask *task, void *data) {
         BattleAnimUtil_RestorePic(&params, HEAP_ID_BATTLE);
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &unsubstituteAnimData, 1, 16, work->battlerId, work->battlerId, MOVE_NONE);
         OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, animSystem, &unsubstituteAnimData);
-        work->opponentData->unk1A0 = 0;
+        work->opponentData->substituteShown = 0;
         work->state++;
         break;
     case 1:
@@ -3838,7 +3838,7 @@ void Task_RecallFollowMon(SysTask *task, void *data) {
         BattleAnimUtil_RestorePic(&params, HEAP_ID_BATTLE);
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &unsubstituteAnimData, 1, 16, work->battlerId, work->battlerId, MOVE_NONE);
         OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, animSystem, &unsubstituteAnimData);
-        work->opponentData->unk1A0 = 0;
+        work->opponentData->substituteShown = 0;
         work->state++;
         break;
     case 1:
@@ -4412,7 +4412,7 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
             action.maxHp = work->maxHp;
             action.monIconStatus = work->ballStatusBattler;
             action.cancelRunDisplay = BattleSystem_GetCancelRunDisplay(work->battleSystem, work->battlerId, work->switchingOrCanPickCommandMask);
-            if (opponent->unk197 != 0) {
+            if (opponent->mainMenuShown != 0) {
                 BattleInput_SetMenuOpenDummy(battleInput, 1);
                 if (BattleSystem_GetBattleSpecial(work->battleSystem) & BATTLE_SPECIAL_FIRST_RIVAL) {
                     BattleInput_ChangeMenu(narc0, narc1, battleInput, 6, 0, (int *)&action);
@@ -4442,7 +4442,7 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
                 } else {
                     BattleInput_ChangeMenu(narc0, narc1, battleInput, 2, 0, (int *)&action);
                 }
-                opponent->unk197 = 1;
+                opponent->mainMenuShown = 1;
             }
             BattleInput_SetPartyExpPercents(battleInput, work->expPercents);
             BattleInput_UpdateBallGaugeAnimation(battleInput, work->ballStatus[0], work->ballStatus[1]);
@@ -4793,7 +4793,7 @@ void Task_PlayerSelectTarget(SysTask *task, void *data) {
             BattleHpBar_StopActiveEffect(work->hpBar);
             OpponentData_StopPokepicBobTask(opponent);
             BattleHpBar_MenuCloseDummy(hpBar);
-            if (work->unk_32 == 1) {
+            if (work->isLastSelection == 1) {
                 BattleInput_SetMenuOpenDummy(battleInput, 0);
             }
         }
@@ -4920,7 +4920,7 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
             work->bagMenu->bag = BattleSystem_GetBag(work->battleSystem);
             work->bagMenu->battlerId = work->battlerId;
             work->bagMenu->key = work->key;
-            work->bagMenu->unk_22 = work->unk_14;
+            work->bagMenu->twoTargets = work->twoTargets;
             work->bagMenu->targetSemiInvulnerable = work->targetSemiInvulnerable;
             work->bagMenu->targetSubstitute = work->targetSubstitute;
             work->bagMenu->embargoFlag = work->embargoFlag[work->battlerId];
@@ -5785,7 +5785,7 @@ void Task_PlayMoveAnimation(SysTask *task, void *data) {
         battlerId = work->battlerId;
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &unsubstituteAnimData, 1, 16, battlerId, battlerId, MOVE_NONE);
         OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, work->animSystem, &unsubstituteAnimData);
-        work->opponentData->unk1A0 = 0;
+        work->opponentData->substituteShown = 0;
         work->state++;
         return;
     case 4:
@@ -5822,7 +5822,7 @@ void Task_PlayMoveAnimation(SysTask *task, void *data) {
         battlerId = work->battlerId;
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &restoreAnimData, 1, 16, battlerId, battlerId, MOVE_NONE);
         OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, work->animSystem, &restoreAnimData);
-        work->opponentData->unk1A0 = 1;
+        work->opponentData->substituteShown = 1;
         work->state++;
         return;
     case 10:
@@ -5885,16 +5885,16 @@ void Task_ExpBarUpdate(SysTask *task, void *data) {
     BattleHpBar *hpBar = data;
     switch (hpBar->script) {
     case 0:
-        hpBar->unk4E = 0;
+        hpBar->expSoundTimer = 0;
         PlaySE(SEQ_SE_DP_EXP);
         BattleHpBar_InitExpChange(hpBar, hpBar->gainedExp);
         hpBar->script++;
     case 1:
-        if (hpBar->unk4E < 8) {
-            hpBar->unk4E++;
+        if (hpBar->expSoundTimer < 8) {
+            hpBar->expSoundTimer++;
         }
         if (BattleHpBar_UpdateExpChange(hpBar) == -1) {
-            if (hpBar->unk4E >= 8) {
+            if (hpBar->expSoundTimer >= 8) {
                 StopSE(SEQ_SE_DP_EXP, 0);
                 hpBar->script = 100;
             } else {
@@ -5903,8 +5903,8 @@ void Task_ExpBarUpdate(SysTask *task, void *data) {
         }
         break;
     case 2:
-        hpBar->unk4E++;
-        if (hpBar->unk4E >= 8) {
+        hpBar->expSoundTimer++;
+        if (hpBar->expSoundTimer >= 8) {
             StopSE(SEQ_SE_DP_EXP, 0);
             hpBar->script = 100;
         }
@@ -5942,7 +5942,7 @@ void Task_PlayFaintAnimation(SysTask *task, void *data) {
         BattleAnimUtil_RestorePic(&params, HEAP_ID_BATTLE);
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &unsubstituteAnimData, 1, 16, work->battlerId, work->battlerId, MOVE_NONE);
         OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, animSystem, &unsubstituteAnimData);
-        work->opponentData->unk1A0 = 0;
+        work->opponentData->substituteShown = 0;
         work->state++;
         break;
     case 1:
@@ -6063,7 +6063,7 @@ void Task_ToggleVanish(SysTask *task, void *data) {
         }
         break;
     case 1:
-        if (work->isSubstitute && work->opponentData->unk1A0 == 0) {
+        if (work->isSubstitute && work->opponentData->substituteShown == 0) {
             BattleController_InitMoveAnimData(work->battleSystem, NULL, &substituteAnimData, 1, 15, work->battlerId, work->battlerId, MOVE_NONE);
             OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, animSystem, &substituteAnimData);
             work->state++;
@@ -6076,7 +6076,7 @@ void Task_ToggleVanish(SysTask *task, void *data) {
         BattleAnimUtil_LoadSubstituteIntoPic(&params, HEAP_ID_BATTLE);
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &restoreAnimData, 1, 16, work->battlerId, work->battlerId, MOVE_NONE);
         OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, animSystem, &restoreAnimData);
-        work->opponentData->unk1A0 = 1;
+        work->opponentData->substituteShown = 1;
         work->state++;
         break;
     case 2:
@@ -6506,12 +6506,12 @@ void Task_OpponentScreenFade(SysTask *task, void *data) {
 #pragma force_active on
 // Selects the input tasks run for commands 14-19 (select command, move, target, item, party, yes/no) and the input mode.
 #define SET_INPUT_TASKS(opponentData, selectCommand, selectMove, selectTarget, selectItem, showMonList, drawYesNoBox) \
-    (opponentData)->unk0[0] = (u32)(selectCommand);                                                                   \
-    (opponentData)->unk0[1] = (u32)(selectMove);                                                                      \
-    (opponentData)->unk0[2] = (u32)(selectTarget);                                                                    \
-    (opponentData)->unk0[3] = (u32)(selectItem);                                                                      \
-    (opponentData)->unk0[4] = (u32)(showMonList);                                                                     \
-    (opponentData)->unk0[5] = (u32)(drawYesNoBox)
+    (opponentData)->inputTasks[0] = (u32)(selectCommand);                                                                   \
+    (opponentData)->inputTasks[1] = (u32)(selectMove);                                                                      \
+    (opponentData)->inputTasks[2] = (u32)(selectTarget);                                                                    \
+    (opponentData)->inputTasks[3] = (u32)(selectItem);                                                                      \
+    (opponentData)->inputTasks[4] = (u32)(showMonList);                                                                     \
+    (opponentData)->inputTasks[5] = (u32)(drawYesNoBox)
 #define SET_AI_INPUT_TASKS(opponentData)       SET_INPUT_TASKS(opponentData, Task_AISelectCommand, Task_AISelectMove, Task_AISelectTarget, Task_AISelectItem, Task_AIShowMonList, Task_AIDrawYesNoBox)
 #define SET_RECORDED_INPUT_TASKS(opponentData) SET_INPUT_TASKS(opponentData, Task_RecordedSelectCommand, Task_RecordedSelectMove, Task_RecordedSelectTarget, Task_RecordedSelectItem, Task_RecordedShowMonList, Task_RecordedDrawYesNoBox)
 #define SET_PLAYER_INPUT_TASKS(opponentData)   SET_INPUT_TASKS(opponentData, Task_PlayerSelectCommand, Task_PlayerSelectMove, Task_PlayerSelectTarget, Task_PlayerSelectItem, Task_PlayerShowMonList, Task_PlayerDrawYesNoBox)
@@ -6643,11 +6643,11 @@ BattleHpBar *OpponentData_GetHpBar(OpponentData *opponentData) {
 }
 
 BattleCursorPosition *OpponentData_GetCursorPosition(OpponentData *opponentData) {
-    return (BattleCursorPosition *)&opponentData->unk80;
+    return (BattleCursorPosition *)&opponentData->cursorPosition;
 }
 
 void OpponentData_ResetCursorPosition(OpponentData *opponentData) {
-    MI_CpuFill8(&opponentData->unk80, 0, 8);
+    MI_CpuFill8(&opponentData->cursorPosition, 0, 8);
 }
 
 void OpponentData_SetSpriteDrawFlag(OpponentData *opponentData, s32 drawFlag) {

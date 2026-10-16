@@ -2414,7 +2414,7 @@ static void ApplyEffectivenessFlags(int effectiveness, u32 *moveStatusFlag) {
 }
 
 BOOL BattleContext_HasMoveFailed(BattleContext *ctx, int battlerId) {
-    if (ctx->moveFail[battlerId].paralysis || ctx->moveFail[battlerId].noEffect || ctx->moveFail[battlerId].imprison || ctx->moveFail[battlerId].infatuation || ctx->moveFail[battlerId].disabled || ctx->moveFail[battlerId].unk0_5 || ctx->moveFail[battlerId].flinch || ctx->moveFail[battlerId].gravity || ctx->moveFail[battlerId].confusion) {
+    if (ctx->moveFail[battlerId].paralysis || ctx->moveFail[battlerId].noEffect || ctx->moveFail[battlerId].imprison || ctx->moveFail[battlerId].infatuation || ctx->moveFail[battlerId].disabled || ctx->moveFail[battlerId].taunt || ctx->moveFail[battlerId].flinch || ctx->moveFail[battlerId].gravity || ctx->moveFail[battlerId].confusion) {
         return TRUE;
     }
     return FALSE;
@@ -2451,8 +2451,8 @@ int CreateNicknameTag(BattleContext *ctx, int battlerId) {
 u16 GetBattlerSelectedMove(BattleContext *ctx, int battlerId) {
     u16 moveNo = 0;
 
-    if (ctx->playerActions[battlerId].inputSelection == BATTLE_INPUT_FIGHT && ctx->playerActions[battlerId].unk8) {
-        moveNo = ctx->battleMons[battlerId].moves[ctx->playerActions[battlerId].unk8 - 1];
+    if (ctx->playerActions[battlerId].inputSelection == BATTLE_INPUT_FIGHT && ctx->playerActions[battlerId].commandParam) {
+        moveNo = ctx->battleMons[battlerId].moves[ctx->playerActions[battlerId].commandParam - 1];
     }
 
     return moveNo;
@@ -6245,7 +6245,7 @@ int BattleContext_Get(BattleSystem *battleSystem, BattleContext *ctx, int var, i
     case 11:
         return ctx->trainerAIData.selectedTarget[battlerId];
     case BATTLE_SUBSCRIPT_UPDATE_STAT_STAGE:
-        return ctx->playerActions[battlerId].unk8;
+        return ctx->playerActions[battlerId].commandParam;
     case 13:
         return (int)ctx->command;
     case 14:

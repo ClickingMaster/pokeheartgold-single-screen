@@ -136,9 +136,9 @@ typedef struct BattleInputFeedback {
             int ret;
         } monSelect;
         struct {
-            s16 *unk4;
-            TouchscreenHitbox *unk8;
-        } unkBugContest;
+            s16 *screenOffsets;
+            TouchscreenHitbox *touchscreenHitbox;
+        } fightButton;
         s16 unk4[2];
     };
 } BattleInputFeedback;

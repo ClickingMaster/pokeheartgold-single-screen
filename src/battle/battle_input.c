@@ -3343,7 +3343,7 @@ static void Task_FightMenuButtonFeedback(SysTask *task, void *data) {
         battleInput->feedback.delay++;
 
         if (battleInput->feedback.delay > 0) {
-            BattleInput_CopyButtonTilemap(battleInput, battleInput->feedback.unkBugContest.unk4, battleInput->feedback.unkBugContest.unk8, battleInput->feedback.button.bufferIndex, 0);
+            BattleInput_CopyButtonTilemap(battleInput, battleInput->feedback.fightButton.screenOffsets, battleInput->feedback.fightButton.touchscreenHitbox, battleInput->feedback.button.bufferIndex, 0);
             BattleInput_FinishFeedback(battleInput, 1, 1);
             BattleInput_DestroyFeedbackTask(battleInput);
             return;

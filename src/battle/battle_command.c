@@ -4290,7 +4290,7 @@ BOOL BtlCmd_IfTurnFlag(BattleSystem *battleSystem, BattleContext *ctx) {
         }
         break;
     case 1:
-        if (ctx->turnData[battlerId].unk0_1 == val) {
+        if (ctx->turnData[battlerId].ppDecrementFlag == val) {
             ret = TRUE;
         }
         break;
@@ -4342,7 +4342,7 @@ BOOL BtlCmd_SetTurnFlag(BattleSystem *battleSystem, BattleContext *ctx) {
         ctx->turnData[battlerId].struggleFlag = val;
         break;
     case 1:
-        ctx->turnData[battlerId].unk0_1 = val;
+        ctx->turnData[battlerId].ppDecrementFlag = val;
         break;
     case 2:
         ctx->turnData[battlerId].protectFlag = val;

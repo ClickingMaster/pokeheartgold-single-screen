@@ -284,7 +284,7 @@ static void BattleControllerPlayer_SelectionScreenInput(BattleSystem *battleSyst
                 ctx->playerActions[battlerId].command = CONTROLLER_COMMAND_40;
                 break;
             } else if (Battler_CanSelectAction(ctx, battlerId) == 0) {
-                ctx->turnData[battlerId].unk0_1 = 1;
+                ctx->turnData[battlerId].ppDecrementFlag = 1;
                 ctx->selectionState[battlerId] = SSI_STATE_13;
                 ctx->playerActions[battlerId].command = CONTROLLER_COMMAND_FIGHT_INPUT;
                 break;
@@ -386,7 +386,7 @@ static void BattleControllerPlayer_SelectionScreenInput(BattleSystem *battleSyst
                         } else if (ctx->battleMons[battlerId].moveEffectData.encoredMove) {
                             ctx->movePos[battlerId] = ctx->battleMons[battlerId].moveEffectData.encoredMoveIndex;
                             ctx->moveNoSelected[battlerId] = ctx->battleMons[battlerId].moveEffectData.encoredMove;
-                            ctx->playerActions[battlerId].unk8 = 0;
+                            ctx->playerActions[battlerId].commandParam = 0;
 
                             if (BattleSystem_GetBattleSpecial(battleSystem) & BATTLE_SPECIAL_RECORDING) {
                                 ctx->selectionState[battlerId] = SSI_STATE_13;
@@ -461,7 +461,7 @@ static void BattleControllerPlayer_SelectionScreenInput(BattleSystem *battleSyst
                         ctx->selectionNextState[battlerId] = SSI_STATE_3;
                     }
                 } else {
-                    ctx->playerActions[battlerId].unk8 = ctx->battleBuffer[battlerId][0];
+                    ctx->playerActions[battlerId].commandParam = ctx->battleBuffer[battlerId][0];
                     ctx->movePos[battlerId] = ctx->battleBuffer[battlerId][0] - 1;
                     ctx->moveNoSelected[battlerId] = ctx->battleMons[battlerId].moves[ctx->movePos[battlerId]];
                     ctx->selectionState[battlerId] = SSI_STATE_5;
@@ -500,7 +500,7 @@ static void BattleControllerPlayer_SelectionScreenInput(BattleSystem *battleSyst
                 u32 *unkPtr;
 
                 unkPtr = (u32 *)&ctx->battleBuffer[battlerId][0];
-                ctx->playerActions[battlerId].unk8 = unkPtr[0];
+                ctx->playerActions[battlerId].commandParam = unkPtr[0];
                 ctx->selectionState[battlerId] = SSI_STATE_13;
             }
             break;
@@ -516,7 +516,7 @@ static void BattleControllerPlayer_SelectionScreenInput(BattleSystem *battleSyst
                 partnerId = BattleSystem_GetBattlerIdPartner(battleSystem, battlerId);
 
                 if (ctx->playerActions[partnerId].command == CONTROLLER_COMMAND_POKEMON_INPUT) {
-                    v9 = ctx->playerActions[partnerId].unk8;
+                    v9 = ctx->playerActions[partnerId].commandParam;
                 }
             }
 
@@ -528,7 +528,7 @@ static void BattleControllerPlayer_SelectionScreenInput(BattleSystem *battleSyst
             if (BattleBuffer_GetNext(ctx, battlerId) == 0xff) {
                 ctx->selectionState[battlerId] = SSI_STATE_SELECT_COMMAND_INIT;
             } else if (BattleBuffer_GetNext(ctx, battlerId)) {
-                ctx->playerActions[battlerId].unk8 = ctx->battleBuffer[battlerId][0] - 1;
+                ctx->playerActions[battlerId].commandParam = ctx->battleBuffer[battlerId][0] - 1;
                 ctx->switchMonIndex[battlerId] = ctx->battleBuffer[battlerId][0] - 1;
                 ctx->selectionState[battlerId] = SSI_STATE_13;
             }
@@ -1712,7 +1712,7 @@ static void BattleControllerPlayer_ItemInput(BattleSystem *battleSystem, BattleC
     int script;
     ctx->battlerIdAttacker = ctx->executionOrder[ctx->executionIndex];
     ctx->battlerIdTarget = Battler_GetRandomOpposingBattlerId(battleSystem, ctx, ctx->battlerIdAttacker);
-    item = (BattleItem *)&ctx->playerActions[ctx->battlerIdAttacker].unk8;
+    item = (BattleItem *)&ctx->playerActions[ctx->battlerIdAttacker].commandParam;
 
     if (BattleSystem_GetFieldSide(battleSystem, ctx->battlerIdAttacker)) {
         switch (ctx->trainerAIData.useItem[ctx->battlerIdAttacker >> 1]) {
@@ -2042,8 +2042,8 @@ BOOL BattleControllerPlayer_DeductPP(BattleSystem *battleSystem, BattleContext *
 
     index = BattleMon_GetMoveIndex(&ctx->battleMons[ctx->battlerIdAttacker], ctx->moveNoTemp);
 
-    if (!ctx->turnData[ctx->battlerIdAttacker].unk0_1 && !ctx->turnData[ctx->battlerIdAttacker].struggleFlag) {
-        ctx->turnData[ctx->battlerIdAttacker].unk0_1 = 1;
+    if (!ctx->turnData[ctx->battlerIdAttacker].ppDecrementFlag && !ctx->turnData[ctx->battlerIdAttacker].struggleFlag) {
+        ctx->turnData[ctx->battlerIdAttacker].ppDecrementFlag = 1;
         if (ctx->battleMons[ctx->battlerIdAttacker].movePPCur[index] && index < 4) {
             if (ctx->battleMons[ctx->battlerIdAttacker].movePPCur[index] > decreasePP) {
                 ctx->battleMons[ctx->battlerIdAttacker].movePPCur[index] -= decreasePP;
@@ -2211,7 +2211,7 @@ static BOOL BattleControllerPlayer_CheckAttackerStatus(BattleSystem *battleSyste
             break;
         case 7:
             if (ctx->battleMons[ctx->battlerIdAttacker].moveEffectData.tauntTurns && ctx->trainerAIData.moveData[ctx->moveNoCur].power == 0) {
-                ctx->moveFail[ctx->battlerIdAttacker].unk0_5 = TRUE;
+                ctx->moveFail[ctx->battlerIdAttacker].taunt = TRUE;
                 ReadBattleScriptFromNarc(ctx, NARC_a_0_0_1, BATTLE_SUBSCRIPT_MOVE_FAIL_TAUNTED);
                 ctx->command = CONTROLLER_COMMAND_RUN_SCRIPT;
                 ctx->commandNext = CONTROLLER_COMMAND_39;
@@ -3975,7 +3975,7 @@ static void BattleControllerPlayer_RecordInputs(BattleSystem *battleSystem, Batt
             switch (ctx->playerActions[battler].command) {
             case CONTROLLER_COMMAND_FIGHT_INPUT:
                 if (ctx->recordInputFlags[battler] & (1 << 1)) {
-                    data = ctx->playerActions[battler].unk8;
+                    data = ctx->playerActions[battler].commandParam;
                     BattleSystem_RecordInput(battleSystem, battler, data);
                 }
 
@@ -3985,13 +3985,13 @@ static void BattleControllerPlayer_RecordInputs(BattleSystem *battleSystem, Batt
                 }
                 break;
             case CONTROLLER_COMMAND_ITEM_INPUT:
-                data = ctx->playerActions[battler].unk8 & 0xFF;
+                data = ctx->playerActions[battler].commandParam & 0xFF;
                 BattleSystem_RecordInput(battleSystem, battler, data);
-                data = (ctx->playerActions[battler].unk8 & 0xFF00) >> 16;
+                data = (ctx->playerActions[battler].commandParam & 0xFF00) >> 16;
                 BattleSystem_RecordInput(battleSystem, battler, data);
                 break;
             case CONTROLLER_COMMAND_POKEMON_INPUT:
-                data = ctx->playerActions[battler].unk8 + 1;
+                data = ctx->playerActions[battler].commandParam + 1;
                 BattleSystem_RecordInput(battleSystem, battler, data);
                 break;
             case CONTROLLER_COMMAND_RUN_INPUT:

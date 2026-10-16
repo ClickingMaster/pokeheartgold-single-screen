@@ -71,7 +71,7 @@ typedef struct LinkBattleScreenMonInfo {
     u16 heldItem;          // 0x0A
     u8 level;              // 0x0C
     u8 gender;             // 0x0D
-    u8 unk_0E;             // 0x0E, 0 when MON_DATA_NO_PRINT_GENDER is 1
+    u8 hideGender;         // 0x0E, 0 when MON_DATA_NO_PRINT_GENDER is 1
     u8 isEgg;              // 0x0F
     u8 ballCapsule;        // 0x10, MON_DATA_BALL_CAPSULE_ID
     u8 form;               // 0x11
@@ -134,7 +134,7 @@ struct LinkBattleScreen {
     WaitingIcon *waitingIcon;                                       // 0xBC4
     BOOL canSaveVideo;                                              // 0xBC8
     int savedVideoCheck;                                            // 0xBCC
-    u32 unk_BD0;                                                    // 0xBD0, set when a linked player's version is 0
+    u32 hasVersionZeroPlayer;                                       // 0xBD0, set when a linked player's version is 0
 }; // size: 0xBD4
 
 // The 7 words a sprite of this screen is made from (see LinkBattleScreen_CreateSprite).
@@ -495,11 +495,11 @@ int LinkBattleScreen_InitResultScreen(LinkBattleScreen *screen) {
         LinkBattleScreen_SetBg1AlphaBlend();
         BattleRecord_IsSlotValid(screen->args->setup->saveData, screen->args->heapId, &value, 0);
         screen->savedVideoCheck = value;
-        screen->unk_BD0 = 0;
+        screen->hasVersionZeroPlayer = 0;
         for (i = 0; i < 8; i++) {
             PlayerProfile *profile = CommPlayerInfo_GetProfile(i);
             if (profile != NULL && PlayerProfile_GetVersion(profile) == 0) {
-                screen->unk_BD0 = 1;
+                screen->hasVersionZeroPlayer = 1;
                 break;
             }
         }
@@ -778,7 +778,7 @@ int LinkBattleScreen_SaveBattleVideo(LinkBattleScreen *screen) {
         screen->delayFrames = 1;
         return 1;
     }
-    if (screen->unk_BD0 == 0 && screen->yesNoMenu != NULL) {
+    if (screen->hasVersionZeroPlayer == 0 && screen->yesNoMenu != NULL) {
         return 0;
     }
     if (screen->videoPromptState == 5) {
@@ -1553,9 +1553,9 @@ void LinkBattleScreen_ReadPartyMonInfo(LinkBattleScreen *screen, Party *party, i
                 details->monInfo[0].ballCapsule = GetMonData(mon, MON_DATA_BALL_CAPSULE_ID, NULL);
                 details->monInfo[0].form = GetMonData(mon, MON_DATA_FORM, NULL);
                 if (GetMonData(mon, MON_DATA_NO_PRINT_GENDER, NULL) == TRUE) {
-                    record->monInfo[0].unk_0E = 0;
+                    record->monInfo[0].hideGender = 0;
                 } else {
-                    record->monInfo[0].unk_0E = 1;
+                    record->monInfo[0].hideGender = 1;
                 }
                 details->monInfo[0].gender = GetMonGender(mon);
                 details->monInfo[0].statusIcon = (u8)Pokemon_GetStatusIconId(mon);
@@ -1742,7 +1742,7 @@ void LinkBattleScreen_PrintMonName(LinkBattleScreen *screen, MsgData *msgData, M
     StringExpandPlaceholders(msgFormat, string, template);
     String_Delete(template);
     AddTextPrinterParameterizedWithColor(window, 0, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);
-    if (screen->monInfo[index].unk_0E == 0) {
+    if (screen->monInfo[index].hideGender == 0) {
         if (screen->monInfo[index].gender == MON_MALE) {
             ReadMsgDataIntoString(msgData, msg_0300_00027, string);
             AddTextPrinterParameterizedWithColor(window, 0, string, 64, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(3, 4, 0), NULL);

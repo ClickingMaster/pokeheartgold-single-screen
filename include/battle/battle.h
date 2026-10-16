@@ -29,7 +29,7 @@
 #include "font_sprite.h"
 
 typedef struct BattleMessage {
-    u8 unk0;
+    u8 command;
     u8 tag;
     u16 id;
     int param[6];
@@ -75,7 +75,7 @@ typedef struct SideConditionData {
 
 typedef struct TurnData {
     u32 struggleFlag : 1;
-    u32 unk0_1 : 1;
+    u32 ppDecrementFlag : 1;
     u32 protectFlag : 1;
     u32 helpingHandFlag : 1;
     u32 magicCoatFlag : 1;
@@ -150,7 +150,7 @@ typedef struct MoveFailFlags {
     u32 imprison : 1;
     u32 infatuation : 1;
     u32 disabled : 1;
-    u32 unk0_5 : 1;
+    u32 taunt : 1;
     u32 flinch : 1;
     u32 confusion : 1;
     u32 gravity : 1;
@@ -272,7 +272,7 @@ typedef struct PokemonStats {
 typedef struct PlayerActions {
     ControllerCommand command;
     u32 battlerIdTarget;
-    u32 unk8;
+    u32 commandParam;
     u32 inputSelection;
 } PlayerActions;
 
@@ -465,7 +465,7 @@ typedef struct BattleHpBar {
     u8 caught;
     u8 command;
     u8 delay;
-    u8 unk4E;
+    u8 expSoundTimer;
     u8 slideOut : 1;
     u8 slideDone : 1;
     u8 unk_4F_2 : 1;
@@ -477,23 +477,23 @@ typedef struct BattleHpBar {
 typedef struct BallThrow BallThrow;
 
 typedef struct OpponentData {
-    u32 unk0[6];
+    u32 inputTasks[6];
     ManagedSprite *managedSprite;
     u32 *unk1C;
     Pokepic *pokepic;
     u32 *unk24;
     BattleHpBar hpBar;
-    void *unk80;
+    void *cursorPosition;
     u8 unk84[0x4];
     BallThrow *ballData;
     u8 unk8C[0x108];
     u8 battlerId;
     u8 battlerType;
     u8 inputMode;
-    u8 unk197;
+    u8 mainMenuShown;
     SysTask *pokepicBobTask;
     u16 pokepicBobAngle;
-    int unk1A0;
+    int substituteShown;
     u32 *pokepicAnimNarc;
     u8 commandReceived;
     u8 unk1A9[3];
@@ -612,8 +612,8 @@ struct BattleSystem {
     u32 lcrngSeedBackup;
     int bgScrollY;
     int caughtBattlerId;
-    int unk2440;
-    u8 unk2442;
+    int mainMenuReady;
+    u8 switchingOrCanPickCommandMask;
     u8 trainerAIOverlayLoaded;
     u16 networkId;
     u32 rand;
@@ -720,9 +720,9 @@ struct BallThrow { // TODO: Give a better name.
     int opened;
     SpriteManager *spriteManager;
     ManagedSprite *managedSprite;
-    u8 unk34[0x5C];
+    u8 throwMotions[0x5C];
     BallThrowParams params;
-    u8 unkB8[0xC];
+    u8 throwCoords[0xC];
     int modeFrames;
     int arcHeight;
     SysTask *task;

@@ -70,7 +70,7 @@ struct BattleSetup {                     // declared in trainer_data.h
     void *keyPressedSave;
     u8 chatotVoiceParam[BATTLER_MAX];
     SaveData *saveData; // 1c0
-    int unk1C4;
+    int isRecordingPaused;
     Pokemon *bugContestMon; // 1c8
     u8 followMonSlot[BATTLER_MAX];
     BOOL isFishing;

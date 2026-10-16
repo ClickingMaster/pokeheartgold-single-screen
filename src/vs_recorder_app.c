@@ -187,7 +187,7 @@ BOOL VsRecorderApp_RunPlayback(VsRecorderApp *work, enum HeapID heapId) {
         break;
     default:
         if (OverlayManager_Run(work->manager)) {
-            work->recorder->battleResult = work->setup->unk1C4;
+            work->recorder->battleResult = work->setup->isRecordingPaused;
             if (work->recorder->mode != 0 && work->recorder->battleResult == 0) {
                 *(u8 *)work->recorder->videoFlagPtr = 1;
             }

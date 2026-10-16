@@ -47,14 +47,14 @@ fx32 FX_Sqrt(fx32 x); // not declared by the lib/include fx headers
 //                    (sBallThrowModeFuncs), resTagOffset resource tag offset, bgPriority sprite BG priority,
 //                    keepSubSurface keep the renderer's sub surface
 // Members its declaration still keeps as byte arrays:
-#define BALL_ROTATION(data)     ((s32 *)&(data)->unk34[0x34 - 0x34])  // 0x34, value motion of the rotation
-#define BALL_ARC_MOTION(data)   ((void *)&(data)->unk34[0x48 - 0x34]) // 0x48, linear part of the throw arc
-#define BALL_ARC_MOTION2(data)  ((void *)&(data)->unk34[0x6C - 0x34]) // 0x6C, height part of the throw arc
-#define BALL_X(data)            (*(s16 *)&(data)->unkB8[0xB8 - 0xB8]) // sprite position at the mode start
-#define BALL_Y(data)            (*(s16 *)&(data)->unkB8[0xBA - 0xB8])
-#define BALL_TARGET_X(data)     (*(s16 *)&(data)->unkB8[0xBC - 0xB8]) // end of the throw arc
-#define BALL_TARGET_Y(data)     (*(s16 *)&(data)->unkB8[0xBE - 0xB8])
-#define BALL_ARC_DURATION(data) (*(int *)&(data)->unkB8[0xC0 - 0xB8])
+#define BALL_ROTATION(data)     ((s32 *)&(data)->throwMotions[0x34 - 0x34])  // 0x34, value motion of the rotation
+#define BALL_ARC_MOTION(data)   ((void *)&(data)->throwMotions[0x48 - 0x34]) // 0x48, linear part of the throw arc
+#define BALL_ARC_MOTION2(data)  ((void *)&(data)->throwMotions[0x6C - 0x34]) // 0x6C, height part of the throw arc
+#define BALL_X(data)            (*(s16 *)&(data)->throwCoords[0xB8 - 0xB8]) // sprite position at the mode start
+#define BALL_Y(data)            (*(s16 *)&(data)->throwCoords[0xBA - 0xB8])
+#define BALL_TARGET_X(data)     (*(s16 *)&(data)->throwCoords[0xBC - 0xB8]) // end of the throw arc
+#define BALL_TARGET_Y(data)     (*(s16 *)&(data)->throwCoords[0xBE - 0xB8])
+#define BALL_ARC_DURATION(data) (*(int *)&(data)->throwCoords[0xC0 - 0xB8])
 
 typedef BOOL (*BallThrowFunc)(BallThrow *data);
 
