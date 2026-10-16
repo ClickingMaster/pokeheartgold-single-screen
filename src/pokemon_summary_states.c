@@ -50,41 +50,41 @@ int PokemonSummary_HandleMoveSelectInput(PokemonSummary *summary) {
             PlaySE(SEQ_SE_DP_SELECT);
             PokemonSummary_ShowSelectedMoveInfo(summary);
         }
-        return 5;
+        return POKEMON_SUMMARY_STATE_MOVE_SELECT_INPUT;
     }
     if (keys & PAD_KEY_DOWN) {
         if (PokemonSummary_MoveMoveCursor(summary, 1) == TRUE) {
             PlaySE(SEQ_SE_DP_SELECT);
             PokemonSummary_ShowSelectedMoveInfo(summary);
         }
-        return 5;
+        return POKEMON_SUMMARY_STATE_MOVE_SELECT_INPUT;
     }
     if ((keys & PAD_BUTTON_A) && summary->args->mode != 1) {
         PlaySE(SEQ_SE_DP_DECIDE);
-        return PokemonSummary_FlashSwapButton(summary, 7);
+        return PokemonSummary_FlashSwapButton(summary, POKEMON_SUMMARY_STATE_START_MOVE_SWAP);
     }
     if (keys & PAD_BUTTON_B) {
         PlaySE(SEQ_SE_GS_GEARCANCEL);
         PokemonSummary_DrawSwitchButton(summary, 0);
-        return PokemonSummary_FlashCancelButton(summary, 4);
+        return PokemonSummary_FlashCancelButton(summary, POKEMON_SUMMARY_STATE_SLIDE_OUT_MOVE_INFO);
     }
     index = PokemonSummary_GetMoveSelectTouch(summary);
     if (index == 4) {
         if (summary->args->mode != 1) {
             PlaySE(SEQ_SE_DP_DECIDE);
-            return PokemonSummary_FlashSwapButton(summary, 7);
+            return PokemonSummary_FlashSwapButton(summary, POKEMON_SUMMARY_STATE_START_MOVE_SWAP);
         }
     } else if (index == 5) {
         PlaySE(SEQ_SE_GS_GEARCANCEL);
         PokemonSummary_DrawSwitchButton(summary, 0);
-        return PokemonSummary_FlashCancelButton(summary, 4);
+        return PokemonSummary_FlashCancelButton(summary, POKEMON_SUMMARY_STATE_SLIDE_OUT_MOVE_INFO);
     } else if (index != -1 && summary->mon.moves[index] != MOVE_NONE) {
         summary->moveSlot = index;
         PlaySE(SEQ_SE_DP_SELECT);
         PokemonSummary_ShowSelectedMoveInfo(summary);
-        return 5;
+        return POKEMON_SUMMARY_STATE_MOVE_SELECT_INPUT;
     }
-    return 5;
+    return POKEMON_SUMMARY_STATE_MOVE_SELECT_INPUT;
 }
 
 // State 7: show the swap cursor on the picked move.
@@ -92,7 +92,7 @@ int PokemonSummary_StartMoveSwap(PokemonSummary *summary) {
     PokemonSummary_DrawSwitchButton(summary, 0);
     PokemonSummary_ShowSwapCursorSprite(summary);
     summary->swapMoveSlot = summary->moveSlot;
-    return 6;
+    return POKEMON_SUMMARY_STATE_MOVE_SWAP_INPUT;
 }
 
 // State 6: pick the move to swap with.
@@ -104,14 +104,14 @@ int PokemonSummary_HandleMoveSwapInput(PokemonSummary *summary) {
             PlaySE(SEQ_SE_DP_SELECT);
             PokemonSummary_ShowSelectedMoveInfo(summary);
         }
-        return 6;
+        return POKEMON_SUMMARY_STATE_MOVE_SWAP_INPUT;
     }
     if (gSystem.newKeys & PAD_KEY_DOWN) {
         if (PokemonSummary_MoveMoveCursor(summary, 1) == TRUE) {
             PlaySE(SEQ_SE_DP_SELECT);
             PokemonSummary_ShowSelectedMoveInfo(summary);
         }
-        return 6;
+        return POKEMON_SUMMARY_STATE_MOVE_SWAP_INPUT;
     }
     if (gSystem.newKeys & PAD_BUTTON_A) {
         PokemonSummary_DrawSwitchButton(summary, 1);
@@ -125,20 +125,20 @@ int PokemonSummary_HandleMoveSwapInput(PokemonSummary *summary) {
         } else {
             PlaySE(SEQ_SE_DP_SELECT);
         }
-        return 5;
+        return POKEMON_SUMMARY_STATE_MOVE_SELECT_INPUT;
     }
     if (gSystem.newKeys & PAD_BUTTON_B) {
         PlaySE(SEQ_SE_GS_GEARCANCEL);
         PokemonSummary_DrawSwitchButton(summary, 1);
         Sprite_SetDrawFlag(summary->sprites[10], FALSE);
-        return PokemonSummary_FlashCancelButton(summary, 5);
+        return PokemonSummary_FlashCancelButton(summary, POKEMON_SUMMARY_STATE_MOVE_SELECT_INPUT);
     }
     index = PokemonSummary_GetMoveSwapTouch(summary);
     if (index == 4) {
         PlaySE(SEQ_SE_GS_GEARCANCEL);
         PokemonSummary_DrawSwitchButton(summary, 1);
         Sprite_SetDrawFlag(summary->sprites[10], FALSE);
-        return PokemonSummary_FlashCancelButton(summary, 5);
+        return PokemonSummary_FlashCancelButton(summary, POKEMON_SUMMARY_STATE_MOVE_SELECT_INPUT);
     }
     if (index != -1 && summary->mon.moves[index] != MOVE_NONE) {
         PokemonSummary_DrawSwitchButton(summary, 1);
@@ -153,9 +153,9 @@ int PokemonSummary_HandleMoveSwapInput(PokemonSummary *summary) {
         } else {
             PlaySE(SEQ_SE_DP_SELECT);
         }
-        return 5;
+        return POKEMON_SUMMARY_STATE_MOVE_SELECT_INPUT;
     }
-    return 6;
+    return POKEMON_SUMMARY_STATE_MOVE_SWAP_INPUT;
 }
 
 // State 8 (learning a move): pick the move to forget; slot 4 is the move to learn.
@@ -170,14 +170,14 @@ int PokemonSummary_HandleForgetMoveInput(PokemonSummary *summary) {
             PlaySE(SEQ_SE_DP_SELECT);
             PokemonSummary_ShowSelectedMoveInfo(summary);
         }
-        return 8;
+        return POKEMON_SUMMARY_STATE_FORGET_MOVE_INPUT;
     }
     if (keys & PAD_KEY_DOWN) {
         if (PokemonSummary_MoveMoveCursor(summary, 1) == TRUE) {
             PlaySE(SEQ_SE_DP_SELECT);
             PokemonSummary_ShowSelectedMoveInfo(summary);
         }
-        return 8;
+        return POKEMON_SUMMARY_STATE_FORGET_MOVE_INPUT;
     }
     if (keys & PAD_BUTTON_A) {
         PlaySE(SEQ_SE_DP_DECIDE);
@@ -185,12 +185,12 @@ int PokemonSummary_HandleForgetMoveInput(PokemonSummary *summary) {
         if (index == 4) {
             summary->args->selectedMoveSlot = 4;
             summary->args->exitedWithB = 0;
-            return 21;
+            return POKEMON_SUMMARY_STATE_START_FADE_OUT;
         }
         if (MoveIsHM(summary->mon.moves[index]) == TRUE && summary->args->moveToLearn != MOVE_NONE) {
             thunk_Sprite_SetDrawFlag(summary->sprites[18], FALSE);
             PokemonSummary_PrintCantForgetHMMessage(summary);
-            return 8;
+            return POKEMON_SUMMARY_STATE_FORGET_MOVE_INPUT;
         }
         return PokemonSummary_ShowForgetConfirm(summary);
     }
@@ -198,7 +198,7 @@ int PokemonSummary_HandleForgetMoveInput(PokemonSummary *summary) {
         PlaySE(SEQ_SE_GS_GEARCANCEL);
         summary->args->selectedMoveSlot = 4;
         summary->args->exitedWithB = 1;
-        return PokemonSummary_FlashCancelButton(summary, 21);
+        return PokemonSummary_FlashCancelButton(summary, POKEMON_SUMMARY_STATE_START_FADE_OUT);
     }
 
     index = PokemonSummary_GetForgetMoveTouch(summary);
@@ -217,7 +217,7 @@ int PokemonSummary_HandleForgetMoveInput(PokemonSummary *summary) {
         summary->moveSlot = 5;
         summary->args->selectedMoveSlot = 4;
         summary->args->exitedWithB = 0;
-        return PokemonSummary_FlashCancelButton(summary, 21);
+        return PokemonSummary_FlashCancelButton(summary, POKEMON_SUMMARY_STATE_START_FADE_OUT);
     default:
         if (MoveIsHM(summary->mon.moves[index]) == TRUE && summary->args->moveToLearn != MOVE_NONE) {
             PlaySE(SEQ_SE_DP_DECIDE);
@@ -225,7 +225,7 @@ int PokemonSummary_HandleForgetMoveInput(PokemonSummary *summary) {
             thunk_Sprite_SetDrawFlag(summary->sprites[18], FALSE);
             PokemonSummary_UpdateMoveCursorSprite(summary);
             PokemonSummary_PrintCantForgetHMMessage(summary);
-            return 8;
+            return POKEMON_SUMMARY_STATE_FORGET_MOVE_INPUT;
         }
         if (summary->mon.moves[index] != MOVE_NONE) {
             PlaySE(SEQ_SE_DP_DECIDE);
@@ -235,7 +235,7 @@ int PokemonSummary_HandleForgetMoveInput(PokemonSummary *summary) {
         }
         break;
     }
-    return 8;
+    return POKEMON_SUMMARY_STATE_FORGET_MOVE_INPUT;
 }
 
 // State 9: confirm forgetting the picked move.
@@ -251,14 +251,14 @@ int PokemonSummary_HandleForgetMoveConfirmInput(PokemonSummary *arg) {
         PlaySE(SEQ_SE_DP_DECIDE);
         summary->args->selectedMoveSlot = summary->moveSlot;
         summary->args->exitedWithB = 0;
-        return PokemonSummary_FlashConfirmButton(summary, 21);
+        return PokemonSummary_FlashConfirmButton(summary, POKEMON_SUMMARY_STATE_START_FADE_OUT);
     }
     if (keys & PAD_BUTTON_B) {
         PlaySE(SEQ_SE_GS_GEARCANCEL);
         Sprite_SetAnimCtrlSeq(summary->sprites[9], 0);
         Sprite_SetDrawFlag(summary->sprites[10], FALSE);
         PokemonSummary_DrawForgetConfirm(summary, 0);
-        return PokemonSummary_FlashCancelButton(summary, 8);
+        return PokemonSummary_FlashCancelButton(summary, POKEMON_SUMMARY_STATE_FORGET_MOVE_INPUT);
     }
     input = PokemonSummary_GetForgetConfirmTouch(summary);
     if (input != -1) {
@@ -267,34 +267,34 @@ int PokemonSummary_HandleForgetMoveConfirmInput(PokemonSummary *arg) {
             PlaySE(SEQ_SE_DP_DECIDE);
             summary->args->selectedMoveSlot = summary->moveSlot;
             summary->args->exitedWithB = 0;
-            return PokemonSummary_FlashConfirmButton(summary, 21);
+            return PokemonSummary_FlashConfirmButton(summary, POKEMON_SUMMARY_STATE_START_FADE_OUT);
         case 1:
             PlaySE(SEQ_SE_GS_GEARCANCEL);
             Sprite_SetAnimCtrlSeq(summary->sprites[9], 0);
             Sprite_SetDrawFlag(summary->sprites[10], FALSE);
             PokemonSummary_DrawForgetConfirm(summary, 0);
-            return PokemonSummary_FlashCancelButton(summary, 8);
+            return PokemonSummary_FlashCancelButton(summary, POKEMON_SUMMARY_STATE_FORGET_MOVE_INPUT);
         default:
             break;
         }
     }
-    return 9;
+    return POKEMON_SUMMARY_STATE_FORGET_MOVE_CONFIRM_INPUT;
 }
 
 // State 10: open the ribbon list.
 int PokemonSummary_OpenRibbonList(PokemonSummary *summary) {
     if (PokemonSummary_SlideInRibbonList(summary) == 1) {
-        return 12;
+        return POKEMON_SUMMARY_STATE_RIBBON_INPUT;
     }
-    return 10;
+    return POKEMON_SUMMARY_STATE_OPEN_RIBBON_LIST;
 }
 
 // State 11: close the ribbon list.
 int PokemonSummary_CloseRibbonList(PokemonSummary *summary) {
     if (PokemonSummary_SlideOutRibbonList(summary) == 1) {
-        return 2;
+        return POKEMON_SUMMARY_STATE_INPUT;
     }
-    return 11;
+    return POKEMON_SUMMARY_STATE_CLOSE_RIBBON_LIST;
 }
 
 #pragma force_active on
@@ -305,23 +305,23 @@ int PokemonSummary_HandleRibbonInput(PokemonSummary *summary) {
 
     if (gSystem.newAndRepeatedKeys & PAD_KEY_LEFT) {
         PokemonSummary_MoveRibbonCursor(summary, -1);
-        return 12;
+        return POKEMON_SUMMARY_STATE_RIBBON_INPUT;
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_RIGHT) {
         PokemonSummary_MoveRibbonCursor(summary, 1);
-        return 12;
+        return POKEMON_SUMMARY_STATE_RIBBON_INPUT;
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_UP) {
         PokemonSummary_MoveRibbonCursor(summary, -3);
-        return 12;
+        return POKEMON_SUMMARY_STATE_RIBBON_INPUT;
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_DOWN) {
         PokemonSummary_MoveRibbonCursor(summary, 3);
-        return 12;
+        return POKEMON_SUMMARY_STATE_RIBBON_INPUT;
     }
     if (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) {
         PlaySE(SEQ_SE_GS_GEARCANCEL);
-        return PokemonSummary_FlashRibbonCancelButton(summary, 11);
+        return PokemonSummary_FlashRibbonCancelButton(summary, POKEMON_SUMMARY_STATE_CLOSE_RIBBON_LIST);
     }
     selection = PokemonSummary_GetRibbonTouch(summary);
     switch (selection) {
@@ -331,28 +331,28 @@ int PokemonSummary_HandleRibbonInput(PokemonSummary *summary) {
         if (Sprite_GetDrawFlag(summary->sprites[64]) == TRUE) {
             PlaySE(SEQ_SE_DP_SELECT);
             Sprite_SetAnimCtrlSeq(summary->sprites[64], 2);
-            return 13;
+            return POKEMON_SUMMARY_STATE_RIBBON_PAGE_UP;
         }
         break;
     case 10:
         if (Sprite_GetDrawFlag(summary->sprites[65]) == TRUE) {
             PlaySE(SEQ_SE_DP_SELECT);
             Sprite_SetAnimCtrlSeq(summary->sprites[65], 3);
-            return 14;
+            return POKEMON_SUMMARY_STATE_RIBBON_PAGE_DOWN;
         }
         break;
     case 11:
         PlaySE(SEQ_SE_GS_GEARCANCEL);
-        return PokemonSummary_FlashRibbonCancelButton(summary, 11);
+        return PokemonSummary_FlashRibbonCancelButton(summary, POKEMON_SUMMARY_STATE_CLOSE_RIBBON_LIST);
     default:
         if (summary->ribbonCursor != selection) {
             summary->ribbonCursor = selection;
             PlaySE(SEQ_SE_DP_SELECT);
             PokemonSummary_MoveRibbonCursor(summary, 0);
         }
-        return 12;
+        return POKEMON_SUMMARY_STATE_RIBBON_INPUT;
     }
-    return 12;
+    return POKEMON_SUMMARY_STATE_RIBBON_INPUT;
 }
 
 #pragma force_active off
@@ -361,18 +361,18 @@ int PokemonSummary_HandleRibbonInput(PokemonSummary *summary) {
 int PokemonSummary_WaitRibbonPageUp(PokemonSummary *summary) {
     if (Sprite_IsAnimated(summary->sprites[64]) == FALSE) {
         PokemonSummary_MoveRibbonCursor(summary, -9);
-        return 12;
+        return POKEMON_SUMMARY_STATE_RIBBON_INPUT;
     }
-    return 13;
+    return POKEMON_SUMMARY_STATE_RIBBON_PAGE_UP;
 }
 
 // State 14: the same for the down arrow.
 int PokemonSummary_WaitRibbonPageDown(PokemonSummary *summary) {
     if (Sprite_IsAnimated(summary->sprites[65]) == FALSE) {
         PokemonSummary_MoveRibbonCursor(summary, 9);
-        return 12;
+        return POKEMON_SUMMARY_STATE_RIBBON_INPUT;
     }
-    return 14;
+    return POKEMON_SUMMARY_STATE_RIBBON_PAGE_DOWN;
 }
 
 // State 16: on A or B, read the condition again; unk7BE gets one bit per stat (cool..tough) that changed.
@@ -424,14 +424,14 @@ int PokemonSummary_UpdateCondition(PokemonSummary *summary) {
     LoadUserFrameGfx2(summary->bgConfig, GF_BG_LYR_MAIN_1, 0x3E2, 13, Options_GetFrame(summary->args->options), HEAP_ID_19);
     if (summary->unk7BE == 0) {
         PokemonSummary_PrintConditionChangeMessage(summary, 0xFE);
-        return 18;
+        return POKEMON_SUMMARY_STATE_WAIT_CONDITION_EXIT;
     }
     PokemonSummary_InitConditionChart(summary);
     PokemonSummary_InitSheenSparkles(summary);
     PokemonSummary_ShowConditionChangeSprites(summary);
-    return 17;
+    return POKEMON_SUMMARY_STATE_SHOW_CONDITION_CHANGES;
 no_input:
-    return 16;
+    return POKEMON_SUMMARY_STATE_UPDATE_CONDITION;
 }
 
 // State 17: on A or B, show the next changed condition stat.
@@ -445,28 +445,28 @@ int PokemonSummary_ShowConditionChanges(PokemonSummary *summary) {
                 PokemonSummary_PrintConditionChangeMessage(summary, i);
                 summary->unk7BE ^= mask;
                 if (summary->unk7BE == 0) {
-                    return 18;
+                    return POKEMON_SUMMARY_STATE_WAIT_CONDITION_EXIT;
                 }
                 break;
             }
             i = (u8)(i + 1);
         } while (i < 5);
     }
-    return 17;
+    return POKEMON_SUMMARY_STATE_SHOW_CONDITION_CHANGES;
 }
 
 // State 18: leave on A or B.
 int PokemonSummary_WaitConditionExit(PokemonSummary *summary) {
     if (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) {
-        return 21;
+        return POKEMON_SUMMARY_STATE_START_FADE_OUT;
     }
-    return 18;
+    return POKEMON_SUMMARY_STATE_WAIT_CONDITION_EXIT;
 }
 
 // State 21.
 int PokemonSummary_StartFadeOut(PokemonSummary *summary) {
     BeginAppScreenFade(1, HEAP_ID_19);
-    return 22;
+    return POKEMON_SUMMARY_STATE_WAIT_FADE_OUT;
 }
 
 // State 22.
@@ -499,7 +499,7 @@ int PokemonSummary_FlashButton(PokemonSummary *summary) {
         }
         break;
     }
-    return 15;
+    return POKEMON_SUMMARY_STATE_FLASH_BUTTON;
 }
 
 // State 20: one of the previous/next Pokemon buttons was touched.
@@ -510,7 +510,7 @@ int PokemonSummary_ChangeMonByButton(PokemonSummary *summary) {
         PokemonSummary_ChangeMon(summary, 1);
     }
     PokemonSummary_DrawMonButtons(summary);
-    return 19;
+    return POKEMON_SUMMARY_STATE_SHOW_POKEPIC;
 }
 
 void PokemonSummary_ReadShownMon(PokemonSummary *summary) {

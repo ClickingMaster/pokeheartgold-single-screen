@@ -75,7 +75,7 @@
 	.extern NintendoWfcYesNo_UnusedState2
 	.extern NintendoWfcYesNo_WaitClose
 	.public gNintendoWfcYesNoCursorPositions
-	.public ov72_0223B4C2
+	.public gNintendoWfcYesNoCursorPositionsY
 	.public NintendoWfc_Exit
 	.public NintendoWfc_Init
 	.public NintendoWfc_Main
@@ -189,10 +189,10 @@
 	.public sNintendoWfcObjCharTransferTemplate
 	.public sNintendoWfcGraphicsModes
 	.public gNintendoWfcDigitSpritePositions
-	.public ov72_0223B366
+	.public gNintendoWfcDigitSpritePositionsY
 	.public sNintendoWfcGraphicsBanks
 	.public gNintendoWfcPadCursorPositions
-	.public ov72_0223B3A6
+	.public gNintendoWfcPadCursorPositionsY
 	.public sNintendoWfcBgTemplate_Sub1
 	.public sNintendoWfcBgTemplate_Sub2
 	.public sNintendoWfcBgTemplate_Main1
@@ -204,10 +204,10 @@
 	.public ov72_0223B46A
 	.public gNintendoWfcNumberInputWindowX
 	.public gNintendoWfcPadKeyFlashes
-	.public ov72_0223B479
+	.public gNintendoWfcPadKeyFlashesY
 	.public gNintendoWfcPadNeighbors
 	.public gNintendoWfcYesNoCursorPositions
-	.public ov72_0223B4C2
+	.public gNintendoWfcYesNoCursorPositionsY
 	.public gNintendoWfcYesNoHitboxes
 	.public sNintendoWfcDownloadUrl
 	.public sNintendoWfcUploadUrl
@@ -221,12 +221,12 @@
 	.public gNintendoWfcPadHitboxes_Max100
 	.public gNintendoWfcPadHitboxes
 	.public sNintendoWfcYesNoStates
-	.public ov72_0223B82C
+	.public sNintendoWfcHttpFriendKey
 	.public gNintendoWfcHttpRequestBuffer
 	.public ov72_0223B900
-	.public ov72_0223B91B
+	.public gNintendoWfcHttpUploadFriendKey
 	.public gNintendoWfcHttpResponse
-	.public ov72_0223B923
+	.public gNintendoWfcHttpShortResponse
 	.public sNintendoWfcGlobal
 	.public NintendoWfcHttp_Init
 	.public NintendoWfcHttp_GetResult
@@ -301,7 +301,7 @@ sNintendoWfcGraphicsModes: ; 0x0223B354
 gNintendoWfcDigitSpritePositions: ; 0x0223B364
 	.byte 0x60, 0x00
 
-ov72_0223B366: ; 0x0223B366
+gNintendoWfcDigitSpritePositionsY: ; 0x0223B366
 	.byte 0x1D, 0x00, 0x80, 0x00, 0x1D, 0x00, 0xA0, 0x00, 0x1D, 0x00
 	.byte 0x50, 0x00, 0x1D, 0x00, 0x70, 0x00, 0x1D, 0x00, 0x90, 0x00, 0x1D, 0x00
 
@@ -314,7 +314,7 @@ sNintendoWfcGraphicsBanks: ; 0x0223B37C
 gNintendoWfcPadCursorPositions: ; 0x0223B3A4
 	.byte 0x20, 0x00
 
-ov72_0223B3A6: ; 0x0223B3A6
+gNintendoWfcPadCursorPositionsY: ; 0x0223B3A6
 	.byte 0x51, 0x00, 0x50, 0x00, 0x51, 0x00, 0x80, 0x00, 0x51, 0x00
 	.byte 0xAE, 0x00, 0x51, 0x00, 0xE0, 0x00, 0x51, 0x00, 0x20, 0x00, 0x80, 0x00, 0x50, 0x00, 0x80, 0x00
 	.byte 0x80, 0x00, 0x80, 0x00, 0xAE, 0x00, 0x80, 0x00, 0xE0, 0x00, 0x80, 0x00, 0x28, 0x00, 0xB0, 0x00
@@ -362,7 +362,7 @@ gNintendoWfcNumberInputWindowX: ; 0x0223B46C
 gNintendoWfcPadKeyFlashes: ; 0x0223B478
 	.byte 0x01
 
-ov72_0223B479: ; 0x0223B479
+gNintendoWfcPadKeyFlashesY: ; 0x0223B479
 	.byte 0x07, 0x07, 0x07, 0x0D, 0x07, 0x13, 0x07
 	.byte 0x19, 0x07, 0x01, 0x0D, 0x07, 0x0D, 0x0D, 0x0D, 0x13, 0x0D, 0x19, 0x0D
 
@@ -375,7 +375,7 @@ gNintendoWfcPadNeighbors: ; 0x0223B48C
 gNintendoWfcYesNoCursorPositions: ; 0x0223B4C0
 	.byte 0x80, 0x00
 
-ov72_0223B4C2: ; 0x0223B4C2
+gNintendoWfcYesNoCursorPositionsY: ; 0x0223B4C2
 	.byte 0x48, 0x00, 0x80, 0x00, 0x78, 0x00
 
 gNintendoWfcYesNoHitboxes: ; 0x0223B4C8
@@ -508,7 +508,7 @@ sNintendoWfcYesNoStates: ; 0x0223B7FC
 sNintendoWfcHttp:
 	.space 0xC
 
-ov72_0223B82C: ; 0x0223B82C
+sNintendoWfcHttpFriendKey: ; 0x0223B82C
 	.space 0x8
 
 gNintendoWfcHttpRequestBuffer: ; 0x0223B834
@@ -517,13 +517,13 @@ gNintendoWfcHttpRequestBuffer: ; 0x0223B834
 ov72_0223B900: ; 0x0223B900
 	.space 0x1B
 
-ov72_0223B91B: ; 0x0223B91B
+gNintendoWfcHttpUploadFriendKey: ; 0x0223B91B
 	.space 0x5
 
 gNintendoWfcHttpResponse: ; 0x0223B920
 	.space 0x3
 
-ov72_0223B923: ; 0x0223B923
+gNintendoWfcHttpShortResponse: ; 0x0223B923
 	.space 0x9
 
 sNintendoWfcGlobal: ; 0x0223B92C

@@ -8,16 +8,25 @@
 #include "sound_playback.h"
 #include "field_time_events.h"
 
-void CallTask_ShipVoyage(FieldSystem *fieldSystem, u8 param1, u8 param2, u32 mapId, u32 x, u32 y) {
+enum ShipVoyageState {
+    SHIP_VOYAGE_FADE_OUT,
+    SHIP_VOYAGE_LEAVE_OVERWORLD,
+    SHIP_VOYAGE_DEPARTURE_CUTSCENE,
+    SHIP_VOYAGE_CHANGE_MAP,
+    SHIP_VOYAGE_RETURN_TO_OVERWORLD,
+    SHIP_VOYAGE_FREE,
+};
+
+void CallTask_ShipVoyage(FieldSystem *fieldSystem, u8 param1, u8 direction, u32 mapId, u32 x, u32 y) {
     AreaLightTaskEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(AreaLightTaskEnv));
 
     env->param1 = param1;
-    env->param2 = param2;
+    env->param2 = direction;
     env->mapId = mapId;
     env->x = x;
     env->y = y;
     LoadAreaOrDungeonLightTxt(0, &env->light);
-    env->state = 0;
+    env->state = SHIP_VOYAGE_FADE_OUT;
     TaskManager_Call(fieldSystem->taskman, Task_ShipVoyage, env);
 }
 
@@ -71,33 +80,33 @@ BOOL Task_ShipVoyage(TaskManager *taskManager) {
     AreaLightTaskEnv *env = TaskManager_GetEnvironment(taskManager);
 
     switch (env->state) {
-    case 0:
+    case SHIP_VOYAGE_FADE_OUT:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, 0, 6, 1, HEAP_ID_FIELD2);
         GF_SndStartFadeOutBGM(0, 6);
-        env->state = 1;
+        env->state = SHIP_VOYAGE_LEAVE_OVERWORLD;
         break;
-    case 1:
+    case SHIP_VOYAGE_LEAVE_OVERWORLD:
         if (!IsPaletteFadeFinished() || GF_SndGetFadeTimer() != 0) {
             return FALSE;
         }
         StopBGM(GF_GetCurrentPlayingBGM(), 0);
         CallTask_LeaveOverworld(taskManager);
-        env->state = 2;
+        env->state = SHIP_VOYAGE_DEPARTURE_CUTSCENE;
         break;
-    case 2:
+    case SHIP_VOYAGE_DEPARTURE_CUTSCENE:
         CallTask_ShipDepartureCutscene(fieldSystem, env->param1, &env->light);
-        env->state = 3;
+        env->state = SHIP_VOYAGE_CHANGE_MAP;
         break;
-    case 3:
+    case SHIP_VOYAGE_CHANGE_MAP:
         CallTask_ChangeMapToCoords(taskManager, env->mapId, -1, env->x, env->y, env->param2);
-        env->state = 4;
+        env->state = SHIP_VOYAGE_RETURN_TO_OVERWORLD;
         break;
-    case 4:
+    case SHIP_VOYAGE_RETURN_TO_OVERWORLD:
         FieldBGM_PlayForMapHeader(fieldSystem, env->mapId, FALSE);
         CallTask_RestoreOverworldAndFadeIn(taskManager);
-        env->state = 5;
+        env->state = SHIP_VOYAGE_FREE;
         break;
-    case 5:
+    case SHIP_VOYAGE_FREE:
         Heap_Free(env);
         return TRUE;
     }

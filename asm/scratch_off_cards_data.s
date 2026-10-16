@@ -5,7 +5,7 @@
 	.public sScratchOffCardsNextCardButtonHitbox
 	.public sScratchOffCardsResultSpritePositions
 	.public sScratchOffCardsCardChoicePositions
-	.public ov87_021E81A2
+	.public sScratchOffCardsCardChoicePositionsY
 	.public sScratchOffCardsGraphicsModes
 	.public sScratchOffCardsCardChoiceHitboxes
 	.public sScratchOffCardsBgTemplate_Sub2
@@ -17,7 +17,7 @@
 	.public sScratchOffCardsBounceX
 	.public sScratchOffCardsCellBounds
 	.public sScratchOffCardsCellOrigins
-	.public ov87_021E82C2
+	.public sScratchOffCardsCellOriginsY
 	.public sScratchOffCardsCellPositions
 	.public sScratchOffCardsCellHitboxes
 	.public sScratchOffCardsGraphicsBanks
@@ -51,7 +51,7 @@ sScratchOffCardsResultSpritePositions: ; 0x021E8194
 sScratchOffCardsCardChoicePositions: ; 0x021E81A0
 	.byte 0x00, 0x00
 
-ov87_021E81A2: ; 0x021E81A2
+sScratchOffCardsCardChoicePositionsY: ; 0x021E81A2
 	.byte 0x24, 0x00, 0x38, 0x00, 0x24, 0x00, 0x70, 0x00, 0x24, 0x00, 0xA8, 0x00, 0x24, 0x00
 
 sScratchOffCardsGraphicsModes: ; 0x021E81B0
@@ -100,7 +100,7 @@ sScratchOffCardsCellBounds: ; 0x021E829C
 sScratchOffCardsCellOrigins: ; 0x021E82C0
 	.byte 0x2A, 0x00
 
-ov87_021E82C2: ; 0x021E82C2
+sScratchOffCardsCellOriginsY: ; 0x021E82C2
 	.byte 0x1B, 0x00, 0x75, 0x00, 0x1B, 0x00, 0xBD, 0x00, 0x1B, 0x00, 0x2A, 0x00, 0x4A, 0x00
 	.byte 0x75, 0x00, 0x4A, 0x00, 0xBD, 0x00, 0x4A, 0x00, 0x2A, 0x00, 0x78, 0x00, 0x75, 0x00, 0x78, 0x00
 	.byte 0xBD, 0x00, 0x78, 0x00

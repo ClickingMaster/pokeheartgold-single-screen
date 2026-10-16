@@ -166,7 +166,7 @@ extern const TouchscreenHitbox sScratchOffCardsLastCardButtonHitbox[2];
 extern const TouchscreenHitbox sScratchOffCardsNextCardButtonHitbox[2];
 extern const ScratchOffCardsSpritePos sScratchOffCardsResultSpritePositions[3];
 extern const ScratchOffCardsPos sScratchOffCardsCardChoicePositions[4];
-extern const ScratchOffCardsPos ov87_021E81A2[]; // sScratchOffCardsCardChoicePositions[0].y
+extern const ScratchOffCardsPos sScratchOffCardsCardChoicePositionsY[]; // sScratchOffCardsCardChoicePositions[0].y
 extern const GraphicsModes sScratchOffCardsGraphicsModes;
 extern const TouchscreenHitbox sScratchOffCardsCardChoiceHitboxes[];
 extern const BgTemplate sScratchOffCardsBgTemplate_Sub2;
@@ -178,7 +178,7 @@ extern const BgTemplate sScratchOffCardsBgTemplate_Sub3;
 extern const s8 sScratchOffCardsBounceX[][8];
 extern const ScratchOffCardsBounds sScratchOffCardsCellBounds[9];
 extern const s16 sScratchOffCardsCellOrigins[];
-extern const s16 ov87_021E82C2[]; // sScratchOffCardsCellOrigins[1]
+extern const s16 sScratchOffCardsCellOriginsY[]; // sScratchOffCardsCellOrigins[1]
 extern const ScratchOffCardsPos sScratchOffCardsCellPositions[9];
 extern const TouchscreenHitbox sScratchOffCardsCellHitboxes[10];
 extern const GraphicsBanks sScratchOffCardsGraphicsBanks;
@@ -426,7 +426,7 @@ int ScratchOffCards_SlideInCardChoices(ScratchOffCardsWork *work) {
         break;
     case 1:
         work->slideX += 32;
-        ScratchOffCardsSprite_SetPosition(work->cardChoiceSprites[work->bgScrollX], work->slideX + sScratchOffCardsCardChoicePositions[work->bgScrollX].x, ov87_021E81A2[work->bgScrollX].x);
+        ScratchOffCardsSprite_SetPosition(work->cardChoiceSprites[work->bgScrollX], work->slideX + sScratchOffCardsCardChoicePositions[work->bgScrollX].x, sScratchOffCardsCardChoicePositionsY[work->bgScrollX].x);
         if (work->slideX >= 0) {
             if (work->bgScrollX == 0) {
                 work->subState = 2;
@@ -1515,7 +1515,7 @@ int ScratchOffCards_CheckCellRevealed(ScratchOffCardsWork *work, u8 cellNo) {
     int top;
     count = 0;
     left = sScratchOffCardsCellOrigins[cellNo * 2];
-    top = ov87_021E82C2[cellNo * 2];
+    top = sScratchOffCardsCellOriginsY[cellNo * 2];
     for (y = top; y < top + 20; y++) {
         for (x = left; x < left + 25; x++) {
             if (work->scratchMask[0][y * 240 + x] == 1) {

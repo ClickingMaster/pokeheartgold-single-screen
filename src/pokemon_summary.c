@@ -121,78 +121,78 @@ BOOL PokemonSummary_Main(OverlayManager *manager, int *state) {
     PokemonSummary *summary = OverlayManager_GetData(manager);
 
     switch (*state) {
-    case 0:
+    case POKEMON_SUMMARY_STATE_START_FADE_IN:
         BeginAppScreenFade(0, HEAP_ID_19);
         Pokepic_SetAttr(summary->pokepic, POKEPIC_VANISHED, 0);
-        *state = 1;
+        *state = POKEMON_SUMMARY_STATE_WAIT_FADE_IN;
         break;
-    case 1:
+    case POKEMON_SUMMARY_STATE_WAIT_FADE_IN:
         *state = PokemonSummary_WaitFadeIn(summary);
         break;
-    case 2:
+    case POKEMON_SUMMARY_STATE_INPUT:
         *state = PokemonSummary_HandleInput(summary);
         break;
-    case 3:
+    case POKEMON_SUMMARY_STATE_SLIDE_IN_MOVE_INFO:
         *state = PokemonSummary_WaitSlideInMoveInfo(summary);
         break;
-    case 4:
+    case POKEMON_SUMMARY_STATE_SLIDE_OUT_MOVE_INFO:
         *state = PokemonSummary_WaitSlideOutMoveInfo(summary);
         break;
-    case 5:
+    case POKEMON_SUMMARY_STATE_MOVE_SELECT_INPUT:
         *state = PokemonSummary_HandleMoveSelectInput(summary);
         break;
-    case 7:
+    case POKEMON_SUMMARY_STATE_START_MOVE_SWAP:
         *state = PokemonSummary_StartMoveSwap(summary);
         break;
-    case 6:
+    case POKEMON_SUMMARY_STATE_MOVE_SWAP_INPUT:
         *state = PokemonSummary_HandleMoveSwapInput(summary);
         break;
-    case 8:
+    case POKEMON_SUMMARY_STATE_FORGET_MOVE_INPUT:
         *state = PokemonSummary_HandleForgetMoveInput(summary);
         break;
-    case 9:
+    case POKEMON_SUMMARY_STATE_FORGET_MOVE_CONFIRM_INPUT:
         *state = PokemonSummary_HandleForgetMoveConfirmInput(summary);
         break;
-    case 10:
+    case POKEMON_SUMMARY_STATE_OPEN_RIBBON_LIST:
         *state = PokemonSummary_OpenRibbonList(summary);
         break;
-    case 11:
+    case POKEMON_SUMMARY_STATE_CLOSE_RIBBON_LIST:
         *state = PokemonSummary_CloseRibbonList(summary);
         break;
-    case 12:
+    case POKEMON_SUMMARY_STATE_RIBBON_INPUT:
         *state = PokemonSummary_HandleRibbonInput(summary);
         break;
-    case 13:
+    case POKEMON_SUMMARY_STATE_RIBBON_PAGE_UP:
         *state = PokemonSummary_WaitRibbonPageUp(summary);
         break;
-    case 14:
+    case POKEMON_SUMMARY_STATE_RIBBON_PAGE_DOWN:
         *state = PokemonSummary_WaitRibbonPageDown(summary);
         break;
-    case 15:
+    case POKEMON_SUMMARY_STATE_FLASH_BUTTON:
         *state = PokemonSummary_FlashButton(summary);
         break;
-    case 16:
+    case POKEMON_SUMMARY_STATE_UPDATE_CONDITION:
         *state = PokemonSummary_UpdateCondition(summary);
         break;
-    case 17:
+    case POKEMON_SUMMARY_STATE_SHOW_CONDITION_CHANGES:
         *state = PokemonSummary_ShowConditionChanges(summary);
         break;
-    case 18:
+    case POKEMON_SUMMARY_STATE_WAIT_CONDITION_EXIT:
         *state = PokemonSummary_WaitConditionExit(summary);
         break;
-    case 21:
+    case POKEMON_SUMMARY_STATE_START_FADE_OUT:
         *state = PokemonSummary_StartFadeOut(summary);
         break;
-    case 22:
+    case POKEMON_SUMMARY_STATE_WAIT_FADE_OUT:
         if (PokemonSummary_WaitFadeOut(summary) == 1) {
             return TRUE;
         }
         break;
-    case 19:
+    case POKEMON_SUMMARY_STATE_SHOW_POKEPIC:
         Pokepic_SetAttr(summary->pokepic, POKEPIC_VANISHED, 0);
-        *state = 2;
+        *state = POKEMON_SUMMARY_STATE_INPUT;
         break;
-    case 20:
+    case POKEMON_SUMMARY_STATE_CHANGE_MON_BY_BUTTON:
         *state = PokemonSummary_ChangeMonByButton(summary);
         break;
     }
@@ -363,14 +363,14 @@ int PokemonSummary_WaitFadeIn(PokemonSummary *summary) {
         PokemonSummary_PlayCry(summary);
         mode = summary->args->mode;
         if (mode == 2) {
-            return 8;
+            return POKEMON_SUMMARY_STATE_FORGET_MOVE_INPUT;
         }
         if (mode == 4) {
-            return 16;
+            return POKEMON_SUMMARY_STATE_UPDATE_CONDITION;
         }
-        return 2;
+        return POKEMON_SUMMARY_STATE_INPUT;
     }
-    return 1;
+    return POKEMON_SUMMARY_STATE_WAIT_FADE_IN;
 }
 
 // State 2: the page input.
@@ -379,41 +379,41 @@ int PokemonSummary_HandleInput(PokemonSummary *summary) {
 
     if (summary->exitRequested == 1) {
         summary->args->exitedWithB = 1;
-        return 21;
+        return POKEMON_SUMMARY_STATE_START_FADE_OUT;
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_LEFT) {
         PokemonSummary_ScrollPage(summary, -1);
-        return 2;
+        return POKEMON_SUMMARY_STATE_INPUT;
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_RIGHT) {
         PokemonSummary_ScrollPage(summary, 1);
-        return 2;
+        return POKEMON_SUMMARY_STATE_INPUT;
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_UP) {
         PokemonSummary_ChangeMon(summary, -1);
-        return 19;
+        return POKEMON_SUMMARY_STATE_SHOW_POKEPIC;
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_DOWN) {
         PokemonSummary_ChangeMon(summary, 1);
-        return 19;
+        return POKEMON_SUMMARY_STATE_SHOW_POKEPIC;
     }
     if (gSystem.newKeys & PAD_BUTTON_B) {
         PlaySE(SEQ_SE_GS_GEARCANCEL);
         summary->args->exitedWithB = 1;
         PokemonSummary_SetMenuInputState(summary, 0);
-        return PokemonSummary_FlashCancelButton(summary, 21);
+        return PokemonSummary_FlashCancelButton(summary, POKEMON_SUMMARY_STATE_START_FADE_OUT);
     }
     if (gSystem.newKeys & PAD_BUTTON_A) {
         switch (summary->page) {
         case 1:
             PlaySE(SEQ_SE_DP_SYU01);
             summary->moveSlot = 0;
-            return 3;
+            return POKEMON_SUMMARY_STATE_SLIDE_IN_MOVE_INFO;
         case 2:
             if (summary->ribbonCount != 0) {
                 PlaySE(SEQ_SE_DP_DECIDE);
                 summary->ribbonCursor = 0;
-                return 10;
+                return POKEMON_SUMMARY_STATE_OPEN_RIBBON_LIST;
             }
             break;
         }
@@ -423,7 +423,7 @@ int PokemonSummary_HandleInput(PokemonSummary *summary) {
         if (selection != -1 && summary->mon.moves[selection] != MOVE_NONE) {
             PlaySE(SEQ_SE_DP_SYU01);
             summary->moveSlot = selection;
-            return 3;
+            return POKEMON_SUMMARY_STATE_SLIDE_IN_MOVE_INFO;
         }
     }
     if (summary->page == 2) {
@@ -431,7 +431,7 @@ int PokemonSummary_HandleInput(PokemonSummary *summary) {
         if (selection != -1 && selection < 9 && selection < summary->ribbonCount) {
             PlaySE(SEQ_SE_DP_DECIDE);
             summary->ribbonCursor = selection;
-            return 10;
+            return POKEMON_SUMMARY_STATE_OPEN_RIBBON_LIST;
         }
     }
     if (summary->args->monDataType == 2) {
@@ -439,16 +439,16 @@ int PokemonSummary_HandleInput(PokemonSummary *summary) {
         if (selection == 0) {
             if (PokemonSummary_FindNextMon(summary, -1) != -1) {
                 PlaySE(SEQ_SE_DP_DECIDE);
-                return PokemonSummary_FlashMonButton(summary, 0, 20);
+                return PokemonSummary_FlashMonButton(summary, 0, POKEMON_SUMMARY_STATE_CHANGE_MON_BY_BUTTON);
             }
-            return 2;
+            return POKEMON_SUMMARY_STATE_INPUT;
         }
         if (selection == 1) {
             if (PokemonSummary_FindNextMon(summary, 1) != -1) {
                 PlaySE(SEQ_SE_DP_DECIDE);
-                return PokemonSummary_FlashMonButton(summary, 1, 20);
+                return PokemonSummary_FlashMonButton(summary, 1, POKEMON_SUMMARY_STATE_CHANGE_MON_BY_BUTTON);
             }
-            return 2;
+            return POKEMON_SUMMARY_STATE_INPUT;
         }
     }
     return PokemonSummary_HandleTouchInput(summary);
@@ -457,14 +457,14 @@ int PokemonSummary_HandleInput(PokemonSummary *summary) {
 int PokemonSummary_WaitSlideInMoveInfo(PokemonSummary *summary) {
     if (PokemonSummary_SlideInMoveInfo(summary) == TRUE) {
         PokemonSummary_DrawSwitchButton(summary, 1);
-        return 5;
+        return POKEMON_SUMMARY_STATE_MOVE_SELECT_INPUT;
     }
-    return 3;
+    return POKEMON_SUMMARY_STATE_SLIDE_IN_MOVE_INFO;
 }
 
 int PokemonSummary_WaitSlideOutMoveInfo(PokemonSummary *summary) {
     if (PokemonSummary_SlideOutMoveInfo(summary) == TRUE) {
-        return 2;
+        return POKEMON_SUMMARY_STATE_INPUT;
     }
-    return 4;
+    return POKEMON_SUMMARY_STATE_SLIDE_OUT_MOVE_INFO;
 }

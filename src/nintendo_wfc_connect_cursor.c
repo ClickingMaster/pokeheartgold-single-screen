@@ -16,14 +16,14 @@ typedef struct NintendoWfcYesNoCursor {
 
 // cursor x/y per choice (pairs of u16)
 extern const u16 gNintendoWfcYesNoCursorPositions[];
-extern const u16 ov72_0223B4C2[];
+extern const u16 gNintendoWfcYesNoCursorPositionsY[];
 
 void NintendoWfcYesNo_MoveCursor(NintendoWfcYesNoCursor *menu, int choice);
 
 void NintendoWfcYesNo_MoveCursor(NintendoWfcYesNoCursor *menu, int choice) {
     VecFx32 pos;
     pos.x = gNintendoWfcYesNoCursorPositions[choice * 2] << FX32_SHIFT;
-    pos.y = (menu->cursorOffsetY + ov72_0223B4C2[choice * 2]) << FX32_SHIFT;
+    pos.y = (menu->cursorOffsetY + gNintendoWfcYesNoCursorPositionsY[choice * 2]) << FX32_SHIFT;
     pos.z = 0;
     Sprite_SetMatrix(menu->cursorSprite, &pos);
 }

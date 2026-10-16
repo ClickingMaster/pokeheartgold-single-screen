@@ -49,7 +49,7 @@ int PokemonSummary_HandleTouchInput(PokemonSummary *arg) {
     PokemonSummary *summary = arg;
     u8 button = PokemonSummary_CheckTouchedButton(summary);
     if (button == 0xFF) {
-        return 2;
+        return POKEMON_SUMMARY_STATE_INPUT;
     }
     switch (button) {
     case 0:
@@ -66,7 +66,7 @@ int PokemonSummary_HandleTouchInput(PokemonSummary *arg) {
     case 3:
         PokemonSummary_SetMenuInputState(summary, 1);
         PlaySE(SEQ_SE_GS_GEARCANCEL);
-        return PokemonSummary_FlashCancelButton(summary, 21);
+        return PokemonSummary_FlashCancelButton(summary, POKEMON_SUMMARY_STATE_START_FADE_OUT);
     case 4:
     case 5:
     case 6:
@@ -76,11 +76,11 @@ int PokemonSummary_HandleTouchInput(PokemonSummary *arg) {
         int slot = button - 4;
         if (summary->args->partySlot != slot && PokemonSummary_CanShowMonAt(summary, slot)) {
             PokemonSummary_ShowMon(summary, (u8)slot);
-            return 19;
+            return POKEMON_SUMMARY_STATE_SHOW_POKEPIC;
         }
     } break;
     }
-    return 2;
+    return POKEMON_SUMMARY_STATE_INPUT;
 }
 
 void PokemonSummary_LoadBgScreen(PokemonSummary *summary, BgConfig *bgConfig, int member, int bgId) {
@@ -838,7 +838,7 @@ int PokemonSummary_ShowForgetConfirm(PokemonSummary *summary) {
     Sprite_SetDrawFlag(summary->sprites[10], TRUE);
     PokemonSummary_ResetSwapCursorSprite(summary);
     PokemonSummary_DrawForgetConfirm(summary, 1);
-    return 9;
+    return POKEMON_SUMMARY_STATE_FORGET_MOVE_CONFIRM_INPUT;
 }
 
 void PokemonSummary_DrawForgetConfirm(PokemonSummary *summary, int show) {
@@ -889,7 +889,7 @@ int PokemonSummary_StartButtonFlash(PokemonSummary *summary, u8 bgId, u8 x, u8 y
     summary->flashBgId = bgId;
     summary->flashTimer = 0;
     summary->flashNextState = nextState;
-    return 15;
+    return POKEMON_SUMMARY_STATE_FLASH_BUTTON;
 }
 
 #pragma force_active off

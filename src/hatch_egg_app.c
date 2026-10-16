@@ -42,6 +42,30 @@
 #include "field_environment_sound.h"
 #include "vram_transfer_manager.h"
 
+enum HatchEggSceneType {
+    HATCH_EGG_SCENE_TYPE_EGG,
+    HATCH_EGG_SCENE_TYPE_MANAPHY,
+};
+
+enum HatchEggSceneState {
+    HATCH_EGG_SCENE_SETUP,
+    HATCH_EGG_SCENE_FADE_IN,
+    HATCH_EGG_SCENE_WAIT_FADE_IN,
+    HATCH_EGG_SCENE_WAIT_BEFORE_SHAKE,
+    HATCH_EGG_SCENE_SHAKE_ONCE,
+    HATCH_EGG_SCENE_SHAKE_TWICE,
+    HATCH_EGG_SCENE_SHAKE_CRACK,
+    HATCH_EGG_SCENE_HATCH,
+    HATCH_EGG_SCENE_WAIT_CRY,
+    HATCH_EGG_SCENE_WAIT_FANFARE,
+    HATCH_EGG_SCENE_PRINT_NICKNAME_PROMPT,
+    HATCH_EGG_SCENE_SHOW_YES_NO,
+    HATCH_EGG_SCENE_HANDLE_YES_NO,
+    HATCH_EGG_SCENE_FADE_OUT = 15,
+    HATCH_EGG_SCENE_WAIT_FADE_OUT,
+    HATCH_EGG_SCENE_FREE,
+};
+
 // Layout of HatchEggTaskData (hatch_egg_task.c), which the task passes as the overlay's args.
 typedef struct HatchEggAppArgs {
     u32 taskState;
@@ -604,7 +628,7 @@ BOOL HatchEggApp_RunScene(HatchEggApp *app) {
 BOOL HatchEggApp_RunEggScene(HatchEggApp *app) {
     BOOL ret = TRUE;
     switch (app->state) {
-    case 0: {
+    case HATCH_EGG_SCENE_SETUP: {
         HatchEggParticlesParam param;
         HatchEggApp_LoadBackground(app->bgConfig, app->paletteData);
         HatchEggApp_LoadWindowGfx(app->bgConfig, app->paletteData, app->frame);
@@ -620,37 +644,37 @@ BOOL HatchEggApp_RunEggScene(HatchEggApp *app) {
         app->state++;
         break;
     }
-    case 1:
+    case HATCH_EGG_SCENE_FADE_IN:
         HatchEggApp_FadeIn();
         app->state++;
-    case 2:
+    case HATCH_EGG_SCENE_WAIT_FADE_IN:
         if (IsPaletteFadeFinished() == TRUE) {
             Sound_Stop();
             Sound_SetSceneAndPlayBGM(13, SEQ_GS_SHINKA, 1);
             app->state++;
         }
         break;
-    case 3:
+    case HATCH_EGG_SCENE_WAIT_BEFORE_SHAKE:
         if (HatchEggApp_WaitBeforeShake(app) == FALSE) {
             app->state++;
         }
         break;
-    case 4:
+    case HATCH_EGG_SCENE_SHAKE_ONCE:
         if (HatchEggApp_ShakeEggOnce(app) == FALSE) {
             app->state++;
         }
         break;
-    case 5:
+    case HATCH_EGG_SCENE_SHAKE_TWICE:
         if (HatchEggApp_ShakeEggTwice(app) == FALSE) {
             app->state++;
         }
         break;
-    case 6:
+    case HATCH_EGG_SCENE_SHAKE_CRACK:
         if (HatchEggApp_ShakeEggCrack(app) == FALSE) {
             app->state++;
         }
         break;
-    case 7:
+    case HATCH_EGG_SCENE_HATCH:
         if (HatchEggApp_HatchEgg(app) == FALSE) {
             HatchEggApp_StartPokepicAnim(app);
             PlayCry(GetMonData(app->args->hatch.mon, MON_DATA_SPECIES, NULL), GetMonData(app->args->hatch.mon, MON_DATA_FORM, NULL));
@@ -658,24 +682,24 @@ BOOL HatchEggApp_RunEggScene(HatchEggApp *app) {
             app->state++;
         }
         break;
-    case 8:
+    case HATCH_EGG_SCENE_WAIT_CRY:
         if (IsCryFinished()) {
             break;
         }
         PlayFanfare(SEQ_ME_SHINKAOME);
         app->state++;
-    case 9:
+    case HATCH_EGG_SCENE_WAIT_FANFARE:
         if (IsFanfarePlaying()) {
             break;
         }
         app->state++;
-    case 10:
+    case HATCH_EGG_SCENE_PRINT_NICKNAME_PROMPT:
         if (TextPrinterCheckActive(app->printerId)) {
             break;
         }
         app->printerId = HatchEggApp_PrintMessage(&app->window, msg_0187_00001, app->args->hatch.mon, app->textSpeed);
         app->state++;
-    case 11:
+    case HATCH_EGG_SCENE_SHOW_YES_NO:
         if (TextPrinterCheckActive(app->printerId)) {
             break;
         }
@@ -688,7 +712,7 @@ BOOL HatchEggApp_RunEggScene(HatchEggApp *app) {
         HatchEggYesNoMenu_Show(app->yesNoMenu, 2, 3);
         app->state++;
         break;
-    case 12:
+    case HATCH_EGG_SCENE_HANDLE_YES_NO:
         switch (HatchEggYesNoMenu_Run(app->yesNoMenu)) {
         case 1:
             app->args->wantToNameNewMon = TRUE;
@@ -706,15 +730,15 @@ BOOL HatchEggApp_RunEggScene(HatchEggApp *app) {
     case 14:
         app->state++;
         break;
-    case 15:
+    case HATCH_EGG_SCENE_FADE_OUT:
         HatchEggApp_FadeOut();
         app->state++;
-    case 16:
+    case HATCH_EGG_SCENE_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished() == TRUE) {
             app->state++;
         }
         break;
-    case 17:
+    case HATCH_EGG_SCENE_FREE:
     default:
         HatchEggApp_DeletePokepic(app);
         HatchEggApp_DeleteSprites(app);
@@ -731,7 +755,7 @@ BOOL HatchEggApp_RunEggScene(HatchEggApp *app) {
 BOOL HatchEggApp_RunManaphyEggScene(HatchEggApp *app) {
     BOOL ret = TRUE;
     switch (app->state) {
-    case 0: {
+    case HATCH_EGG_SCENE_SETUP: {
         HatchEggParticlesParam param;
         HatchEggApp_LoadBackground(app->bgConfig, app->paletteData);
         HatchEggApp_LoadWindowGfx(app->bgConfig, app->paletteData, app->frame);
@@ -748,10 +772,10 @@ BOOL HatchEggApp_RunManaphyEggScene(HatchEggApp *app) {
         app->state++;
         break;
     }
-    case 1:
+    case HATCH_EGG_SCENE_FADE_IN:
         HatchEggApp_FadeIn();
         app->state++;
-    case 2:
+    case HATCH_EGG_SCENE_WAIT_FADE_IN:
         if (IsPaletteFadeFinished() == TRUE) {
             Sound_SetSceneAndPlayBGM(13, SEQ_GS_SHINKA, 1);
             app->state++;
@@ -762,33 +786,33 @@ BOOL HatchEggApp_RunManaphyEggScene(HatchEggApp *app) {
             HatchEggApp_StartPokepicAnim(app);
             PlayCry(GetMonData(app->args->hatch.mon, MON_DATA_SPECIES, NULL), GetMonData(app->args->hatch.mon, MON_DATA_FORM, NULL));
             app->printerId = HatchEggApp_PrintMessage(&app->window, msg_0187_00000, app->args->hatch.mon, app->textSpeed);
-            app->state = 8;
+            app->state = HATCH_EGG_SCENE_WAIT_CRY;
         }
         break;
-    case 4:
-    case 5:
-    case 6:
-    case 7:
+    case HATCH_EGG_SCENE_SHAKE_ONCE:
+    case HATCH_EGG_SCENE_SHAKE_TWICE:
+    case HATCH_EGG_SCENE_SHAKE_CRACK:
+    case HATCH_EGG_SCENE_HATCH:
         GF_AssertFail();
         break;
-    case 8:
+    case HATCH_EGG_SCENE_WAIT_CRY:
         if (IsCryFinished()) {
             break;
         }
         PlayFanfare(SEQ_ME_SHINKAOME);
         app->state++;
-    case 9:
+    case HATCH_EGG_SCENE_WAIT_FANFARE:
         if (IsFanfarePlaying()) {
             break;
         }
         app->state++;
-    case 10:
+    case HATCH_EGG_SCENE_PRINT_NICKNAME_PROMPT:
         if (TextPrinterCheckActive(app->printerId)) {
             break;
         }
         app->printerId = HatchEggApp_PrintMessage(&app->window, msg_0187_00001, app->args->hatch.mon, app->textSpeed);
         app->state++;
-    case 11:
+    case HATCH_EGG_SCENE_SHOW_YES_NO:
         if (TextPrinterCheckActive(app->printerId)) {
             break;
         }
@@ -801,7 +825,7 @@ BOOL HatchEggApp_RunManaphyEggScene(HatchEggApp *app) {
         HatchEggYesNoMenu_Show(app->yesNoMenu, 2, 3);
         app->state++;
         break;
-    case 12:
+    case HATCH_EGG_SCENE_HANDLE_YES_NO:
         switch (HatchEggYesNoMenu_Run(app->yesNoMenu)) {
         case 1:
             app->args->wantToNameNewMon = TRUE;
@@ -819,15 +843,15 @@ BOOL HatchEggApp_RunManaphyEggScene(HatchEggApp *app) {
     case 14:
         app->state++;
         break;
-    case 15:
+    case HATCH_EGG_SCENE_FADE_OUT:
         HatchEggApp_FadeOut();
         app->state++;
-    case 16:
+    case HATCH_EGG_SCENE_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished() == TRUE) {
             app->state++;
         }
         break;
-    case 17:
+    case HATCH_EGG_SCENE_FREE:
     default:
         HatchEggApp_DeletePokepic(app);
         HatchEggApp_DeleteSprites(app);
@@ -1173,9 +1197,9 @@ BOOL HatchEggApp_Main(OverlayManager *man, int *state) {
         species = GetMonData(app->args->hatch.mon, MON_DATA_SPECIES, NULL);
         NARC_ReadPokepicCryDelay(app->narc, app->animParams, (u16)species, 1);
         if (species == SPECIES_MANAPHY) {
-            app->sceneType = 1;
+            app->sceneType = HATCH_EGG_SCENE_TYPE_MANAPHY;
         } else {
-            app->sceneType = 0;
+            app->sceneType = HATCH_EGG_SCENE_TYPE_EGG;
         }
         break;
     }

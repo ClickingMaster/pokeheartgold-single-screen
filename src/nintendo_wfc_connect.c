@@ -267,6 +267,17 @@ typedef struct NintendoWfcConnect {
     NintendoWfcYesNoMenu yesNoMenu;             // 0x136C
 } NintendoWfcConnect;                           // size: 0x13A4
 
+enum NintendoWfcHttpState {
+    NINTENDO_WFC_HTTP_NONE,
+    NINTENDO_WFC_HTTP_IDLE,
+    NINTENDO_WFC_HTTP_ROOM_COUNT,
+    NINTENDO_WFC_HTTP_DOWNLOAD = 4,
+    NINTENDO_WFC_HTTP_UPLOAD = 6,
+    NINTENDO_WFC_HTTP_INFO = 8,
+    NINTENDO_WFC_HTTP_SET_PROFILE = 10,
+    NINTENDO_WFC_HTTP_DONE = 12,
+};
+
 // The HTTP request state of the Wi-Fi Battle Tower (gamestats) requests.
 typedef struct NintendoWfcHttp {
     volatile s32 state; // 0x00, 1: idle, 2/4/6/8/10: request running, 12: done
@@ -279,7 +290,7 @@ typedef struct NintendoWfcHttp {
 
 typedef struct NintendoWfcHttpResponse {
     u8 unk_0[3];
-    volatile u8 status; // 0x3, first byte of the response buffer ov72_0223B923
+    volatile u8 status; // 0x3, first byte of the response buffer gNintendoWfcHttpShortResponse
     u32 unk_4;
     u8 *buffer; // 0x8
 } NintendoWfcHttpResponse;
@@ -343,12 +354,12 @@ void BattleRoomDownload_GetTrainersRoom(BattleRoomDownload *data, u8 *out);
 void BattleRoomDownload_SetLeaders(BattleRoomDownload *data, void *records, u32 a, u32 b);
 
 extern NintendoWfcHttp sNintendoWfcHttp;
-extern u8 ov72_0223B82C[];
+extern u8 sNintendoWfcHttpFriendKey[];
 extern u8 gNintendoWfcHttpRequestBuffer[];
 extern u8 ov72_0223B900[];
-extern u8 ov72_0223B91B[];
+extern u8 gNintendoWfcHttpUploadFriendKey[];
 extern NintendoWfcHttpResponse gNintendoWfcHttpResponse;
-extern u8 ov72_0223B923[];
+extern u8 gNintendoWfcHttpShortResponse[];
 extern NintendoWfcGlobal sNintendoWfcGlobal;
 extern const char sNintendoWfcRoomNumUrl[];
 extern const char sNintendoWfcDownloadUrl[];
@@ -371,16 +382,16 @@ extern const BgTemplate sNintendoWfcBgTemplate_Main0;
 extern const BgTemplate sNintendoWfcBgTemplate_Sub0;
 extern const u16 gNintendoWfcButtonSpritePositions[][2];
 extern const u16 gNintendoWfcDigitSpritePositions[][3][2];
-extern const u16 ov72_0223B366[][3][2];
+extern const u16 gNintendoWfcDigitSpritePositionsY[][3][2];
 extern const u16 gNintendoWfcPadCursorPositions[][2];
-extern const u16 ov72_0223B3A6[][2];
+extern const u16 gNintendoWfcPadCursorPositionsY[][2];
 extern const u8 ov72_0223B464[];
 extern const u8 ov72_0223B466[];
 extern const u8 ov72_0223B468[];
 extern const u8 ov72_0223B46A[];
 extern const int gNintendoWfcNumberInputWindowX[];
 extern const u8 gNintendoWfcPadKeyFlashes[];
-extern const u8 ov72_0223B479[];
+extern const u8 gNintendoWfcPadKeyFlashesY[];
 extern const u8 gNintendoWfcPadNeighbors[][4];
 extern const TouchscreenHitbox gNintendoWfcYesNoHitboxes[];
 extern const TouchscreenHitbox gNintendoWfcPadHitboxes_Max100[];
@@ -542,7 +553,7 @@ int NintendoWfcYesNo_UnusedState2(void);
 BOOL NintendoWfcYesNo_WaitClose(NintendoWfcYesNoMenu *menu);
 
 void NintendoWfcHttp_Init(u32 profileId, u64 friendKey) {
-    sNintendoWfcHttp.state = 1;
+    sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_IDLE;
     sNintendoWfcHttp.result = 0;
     sNintendoWfcHttp.profileId = profileId;
     sNintendoWfcHttp.friendKey = friendKey;
@@ -552,19 +563,19 @@ void NintendoWfcHttp_Init(u32 profileId, u64 friendKey) {
 
 void NintendoWfcHttp_Update(void) {
     switch (sNintendoWfcHttp.state) {
-    case 0:
-    case 1:
-    case 12:
+    case NINTENDO_WFC_HTTP_NONE:
+    case NINTENDO_WFC_HTTP_IDLE:
+    case NINTENDO_WFC_HTTP_DONE:
         break;
-    case 2:
+    case NINTENDO_WFC_HTTP_ROOM_COUNT:
         switch (GameStats_Update()) {
         case 1:
-            sNintendoWfcHttp.state = 12;
+            sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
             sNintendoWfcHttp.result = NintendoWfcHttp_ConvertError(GameStats_GetError());
             GameStats_Shutdown();
             break;
         case 7:
-            sNintendoWfcHttp.state = 12;
+            sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
             if (GameStats_GetResponseLength() > 0) {
                 sNintendoWfcHttp.result = gNintendoWfcHttpResponse.status;
             } else {
@@ -574,15 +585,15 @@ void NintendoWfcHttp_Update(void) {
             break;
         }
         break;
-    case 4:
+    case NINTENDO_WFC_HTTP_DOWNLOAD:
         switch (GameStats_Update()) {
         case 1:
-            sNintendoWfcHttp.state = 12;
+            sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
             sNintendoWfcHttp.result = NintendoWfcHttp_ConvertError(GameStats_GetError());
             GameStats_Shutdown();
             break;
         case 7:
-            sNintendoWfcHttp.state = 12;
+            sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
             if (GameStats_GetResponseLength() == 2616) {
                 sNintendoWfcHttp.result = 0;
             } else {
@@ -602,15 +613,15 @@ void NintendoWfcHttp_Update(void) {
             break;
         }
         break;
-    case 6:
+    case NINTENDO_WFC_HTTP_UPLOAD:
         switch (GameStats_Update()) {
         case 1:
-            sNintendoWfcHttp.state = 12;
+            sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
             sNintendoWfcHttp.result = NintendoWfcHttp_ConvertError(GameStats_GetError());
             GameStats_Shutdown();
             break;
         case 7:
-            sNintendoWfcHttp.state = 12;
+            sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
             switch (gNintendoWfcHttpResponse.status) {
             case 1:
                 sNintendoWfcHttp.result = 0;
@@ -632,15 +643,15 @@ void NintendoWfcHttp_Update(void) {
             break;
         }
         break;
-    case 8:
+    case NINTENDO_WFC_HTTP_INFO:
         switch (GameStats_Update()) {
         case 1:
-            sNintendoWfcHttp.state = 12;
+            sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
             sNintendoWfcHttp.result = NintendoWfcHttp_ConvertError(GameStats_GetError());
             GameStats_Shutdown();
             break;
         case 7:
-            sNintendoWfcHttp.state = 12;
+            sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
             switch (gNintendoWfcHttpResponse.status) {
             case 1:
                 sNintendoWfcHttp.result = 0;
@@ -662,15 +673,15 @@ void NintendoWfcHttp_Update(void) {
             break;
         }
         break;
-    case 10:
+    case NINTENDO_WFC_HTTP_SET_PROFILE:
         switch (GameStats_Update()) {
         case 1:
-            sNintendoWfcHttp.state = 12;
+            sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
             sNintendoWfcHttp.result = NintendoWfcHttp_ConvertError(GameStats_GetError());
             GameStats_Shutdown();
             break;
         case 7:
-            sNintendoWfcHttp.state = 12;
+            sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
             if (GameStats_GetResponseLength() == 8) {
                 sNintendoWfcHttp.result = 0;
             } else {
@@ -701,7 +712,7 @@ void NintendoWfcHttp_Update(void) {
     case 7:
     case 9:
     case 11:
-        sNintendoWfcHttp.state = 12;
+        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
         sNintendoWfcHttp.result = -4;
         GameStats_Shutdown();
         break;
@@ -712,10 +723,10 @@ void NintendoWfcHttp_Update(void) {
 
 BOOL NintendoWfcHttp_IsDone(void) {
     switch (sNintendoWfcHttp.state) {
-    case 1:
+    case NINTENDO_WFC_HTTP_IDLE:
         return TRUE;
-    case 12:
-        sNintendoWfcHttp.state = 1;
+    case NINTENDO_WFC_HTTP_DONE:
+        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_IDLE;
         return TRUE;
     default:
         return FALSE;
@@ -729,10 +740,10 @@ s32 NintendoWfcHttp_GetResult(void) {
 void NintendoWfcHttp_RequestRoomCount(int rank) {
     GameStats_Start();
     sNintendoWfcHttp.rank = rank - 1;
-    if (NintendoWfcHttp_StartRequest(sNintendoWfcRoomNumUrl, gNintendoWfcHttpRequestBuffer, 1, ov72_0223B923, 2)) {
-        sNintendoWfcHttp.state = 2;
+    if (NintendoWfcHttp_StartRequest(sNintendoWfcRoomNumUrl, gNintendoWfcHttpRequestBuffer, 1, gNintendoWfcHttpShortResponse, 2)) {
+        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_ROOM_COUNT;
     } else {
-        sNintendoWfcHttp.state = 12;
+        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
         sNintendoWfcHttp.result = -5;
         GameStats_Shutdown();
     }
@@ -744,9 +755,9 @@ void NintendoWfcHttp_RequestDownload(int rank, int room, void *buffer) {
     sNintendoWfcHttp.rank = rank - 1;
     sNintendoWfcHttp.room = room - 1;
     if (NintendoWfcHttp_StartRequest(sNintendoWfcDownloadUrl, gNintendoWfcHttpRequestBuffer, 2, buffer, 0xA38)) {
-        sNintendoWfcHttp.state = 4;
+        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DOWNLOAD;
     } else {
-        sNintendoWfcHttp.state = 12;
+        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
         sNintendoWfcHttp.result = -5;
         GameStats_Shutdown();
     }
@@ -764,16 +775,16 @@ void NintendoWfcHttp_RequestUpload(int rank, int room, int winCount, FrontierWif
     ov72_0223B900[0x18] = rank - 1;
     ov72_0223B900[0x19] = room - 1;
     ov72_0223B900[0x1A] = winCount;
-    dst = ov72_0223B91B;
-    src = ov72_0223B82C;
+    dst = gNintendoWfcHttpUploadFriendKey;
+    src = sNintendoWfcHttpFriendKey;
     n = 8;
     do {
         *dst++ = *src++;
     } while (--n);
-    if (NintendoWfcHttp_StartRequest(sNintendoWfcUploadUrl, gNintendoWfcHttpRequestBuffer, 239, ov72_0223B923, 2)) {
-        sNintendoWfcHttp.state = 6;
+    if (NintendoWfcHttp_StartRequest(sNintendoWfcUploadUrl, gNintendoWfcHttpRequestBuffer, 239, gNintendoWfcHttpShortResponse, 2)) {
+        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_UPLOAD;
     } else {
-        sNintendoWfcHttp.state = 12;
+        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
         sNintendoWfcHttp.result = -5;
         GameStats_Shutdown();
     }
@@ -783,10 +794,10 @@ void NintendoWfcHttp_RequestUpload(int rank, int room, int winCount, FrontierWif
 
 void NintendoWfcHttp_RequestInfo(void) {
     GameStats_Start();
-    if (NintendoWfcHttp_StartRequest(sNintendoWfcInfoUrl, gNintendoWfcHttpRequestBuffer, 0, ov72_0223B923, 2)) {
-        sNintendoWfcHttp.state = 8;
+    if (NintendoWfcHttp_StartRequest(sNintendoWfcInfoUrl, gNintendoWfcHttpRequestBuffer, 0, gNintendoWfcHttpShortResponse, 2)) {
+        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_INFO;
     } else {
-        sNintendoWfcHttp.state = 12;
+        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
         sNintendoWfcHttp.result = -5;
         GameStats_Shutdown();
     }
@@ -798,9 +809,9 @@ void NintendoWfcHttp_RequestSetProfile(WifiServerProfile *profile, u32 *response
     gNintendoWfcHttpResponse.buffer = (u8 *)response;
     GameStats_Start();
     if (NintendoWfcHttp_StartRequest(sNintendoWfcSetProfileUrl, gNintendoWfcHttpRequestBuffer, sizeof(WifiServerProfile), gNintendoWfcHttpResponse.buffer, 8)) {
-        sNintendoWfcHttp.state = 10;
+        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_SET_PROFILE;
     } else {
-        sNintendoWfcHttp.state = 12;
+        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
         sNintendoWfcHttp.result = -5;
         GameStats_Shutdown();
     }
@@ -1158,7 +1169,7 @@ void NintendoWfc_SetSpritePosition(Sprite *sprite, int x, int y) {
 }
 
 void NintendoWfc_MovePadCursor(Sprite *sprite, int key) {
-    NintendoWfc_SetSpritePosition(sprite, gNintendoWfcPadCursorPositions[key][0], ov72_0223B3A6[key][0] + 256);
+    NintendoWfc_SetSpritePosition(sprite, gNintendoWfcPadCursorPositions[key][0], gNintendoWfcPadCursorPositionsY[key][0] + 256);
     if (key < 10) {
         Sprite_SetAnimCtrlSeq(sprite, 1);
     } else {
@@ -1171,7 +1182,7 @@ void NintendoWfc_MoveDigitCursor(Sprite *sprite, int index, int twoDigits) {
 }
 
 void NintendoWfc_SetDigitSpritePosition(Sprite *sprite, int index, int twoDigits) {
-    NintendoWfc_SetSpritePosition(sprite, gNintendoWfcDigitSpritePositions[twoDigits][index][0], ov72_0223B366[twoDigits][index][0] + 256);
+    NintendoWfc_SetSpritePosition(sprite, gNintendoWfcDigitSpritePositions[twoDigits][index][0], gNintendoWfcDigitSpritePositionsY[twoDigits][index][0] + 256);
 }
 
 void *NintendoWfc_Alloc(void *unused, u32 size, int alignment) {
@@ -2739,7 +2750,7 @@ void NintendoWfc_PressPadKey(NintendoWfcConnect *wfc, int key) {
             wfc->numberInput.cursor = NintendoWfc_GetCursorAfterDigit(&wfc->numberInput);
             NintendoWfc_MovePadCursor(wfc->sprites[NINTENDO_WFC_SPRITE_PAD_CURSOR], wfc->numberInput.cursor);
             PlaySE(SEQ_SE_DP_SELECT);
-            NintendoWfc_StartButtonFlash(wfc, gNintendoWfcPadKeyFlashes[(key - 3) * 2], ov72_0223B479[(key - 3) * 2], NINTENDO_WFC_NUMBER_INPUT_MAIN);
+            NintendoWfc_StartButtonFlash(wfc, gNintendoWfcPadKeyFlashes[(key - 3) * 2], gNintendoWfcPadKeyFlashesY[(key - 3) * 2], NINTENDO_WFC_NUMBER_INPUT_MAIN);
         } else {
             PlaySE(SEQ_SE_DP_CUSTOM06);
         }

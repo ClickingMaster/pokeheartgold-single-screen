@@ -40,6 +40,15 @@
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 
+enum TrainerCardMainState {
+    TRAINER_CARD_MAIN_WAIT_FADE_IN,
+    TRAINER_CARD_MAIN_INPUT,
+    TRAINER_CARD_MAIN_WAIT_FADE_OUT,
+    TRAINER_CARD_MAIN_FLIP,
+    TRAINER_CARD_MAIN_SIGN_PROMPT,
+    TRAINER_CARD_MAIN_EXIT_TO_SIGN,
+};
+
 typedef struct TrainerCardPaletteTable {
     u32 members[6];
 } TrainerCardPaletteTable;
@@ -243,53 +252,53 @@ int TrainerCardMainApp_Main(OverlayManager *manager, int *state) {
     TrainerCardMain *cardMain = OverlayManager_GetData(manager);
 
     switch (*state) {
-    case 0:
+    case TRAINER_CARD_MAIN_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
-            *state = 1;
+            *state = TRAINER_CARD_MAIN_INPUT;
         }
         break;
-    case 1: {
+    case TRAINER_CARD_MAIN_INPUT: {
         int input = TrainerCardMain_HandleInput(cardMain);
         if (input == 3) {
             cardMain->subState = 0;
-            *state = 3;
+            *state = TRAINER_CARD_MAIN_FLIP;
         } else if (input == 4) {
             TrainerCardMain_SetButtonSpriteAnim(&cardMain->sprites, 1, 3, 1);
             cardMain->subState = 0;
-            *state = 4;
+            *state = TRAINER_CARD_MAIN_SIGN_PROMPT;
         } else if (input == 5) {
             TrainerCardMain_SetButtonSpriteAnim(&cardMain->sprites, 0, 1, 1);
             BeginNormalPaletteFade(FADE_MAIN_THEN_SUB, FADE_TYPE_UPWARD_OUT, FADE_TYPE_UPWARD_OUT, RGB_BLACK, 6, 1, HEAP_ID_25);
-            *state = 2;
+            *state = TRAINER_CARD_MAIN_WAIT_FADE_OUT;
         }
         TrainerCardMain_UpdatePlayTime(cardMain, cardMain->card->liveIgt);
         break;
     }
-    case 2:
+    case TRAINER_CARD_MAIN_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished()) {
             return TRUE;
         }
         break;
-    case 3:
+    case TRAINER_CARD_MAIN_FLIP:
         if (TrainerCardMain_RunFlip(cardMain)) {
-            *state = 1;
+            *state = TRAINER_CARD_MAIN_INPUT;
         }
         break;
-    case 4: {
+    case TRAINER_CARD_MAIN_SIGN_PROMPT: {
         switch (TrainerCardMain_RunSignPrompt(cardMain)) {
         case 1:
-            *state = 1;
+            *state = TRAINER_CARD_MAIN_INPUT;
             break;
         case 2:
-            *state = 5;
+            *state = TRAINER_CARD_MAIN_EXIT_TO_SIGN;
             break;
         }
         break;
     }
-    case 5:
+    case TRAINER_CARD_MAIN_EXIT_TO_SIGN:
         BeginNormalPaletteFade(FADE_MAIN_THEN_SUB, FADE_TYPE_UPWARD_OUT, FADE_TYPE_UPWARD_OUT, RGB_BLACK, 6, 1, HEAP_ID_25);
         cardMain->args->settings.showBack = 1;
-        *state = 2;
+        *state = TRAINER_CARD_MAIN_WAIT_FADE_OUT;
         break;
     }
     cardMain->scrollOffset++;

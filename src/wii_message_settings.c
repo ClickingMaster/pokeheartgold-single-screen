@@ -85,14 +85,14 @@ enum WiiMessageSettingsScreenState {
     WMS_STATE_START_WII_NUMBER_ENTRY,
     WMS_STATE_CHECK_WII_NUMBER_ENTRY,
     WMS_STATE_CONFIRM_CONNECT,
-    WMS_STATE_8,
+    WMS_STATE_HANDLE_CONNECT_YES_NO,
     WMS_STATE_PRINT_DISCONNECTING,
     WMS_STATE_DISCONNECT,
     WMS_STATE_PRINT_DISCONNECTED,
     WMS_STATE_START_CONNECT,
     WMS_STATE_WAIT_CONNECT,
-    WMS_STATE_14,
-    WMS_STATE_15,
+    WMS_STATE_START_AUTH,
+    WMS_STATE_WAIT_AUTH,
     WMS_STATE_START_SERVER_SESSION,
     WMS_STATE_SEND_REGISTRATION_REQUEST,
     WMS_STATE_WAIT_REGISTRATION_RESPONSE,
@@ -1653,7 +1653,7 @@ BOOL WiiMessageSettingsScreen_WaitConnect(WiiMessageSettingsScreen *screen) {
             break;
         case 4:
             DWC_GetApInfo(locals.info);
-            screen->state = WMS_STATE_14;
+            screen->state = WMS_STATE_START_AUTH;
             break;
         }
     }
@@ -1664,7 +1664,7 @@ BOOL WiiMessageSettingsScreen_WaitConnect(WiiMessageSettingsScreen *screen) {
 
 BOOL WiiMessageSettingsScreen_StartAuth(WiiMessageSettingsScreen *screen) {
     DWC_NASLoginAsync();
-    screen->state = WMS_STATE_15;
+    screen->state = WMS_STATE_WAIT_AUTH;
     return FALSE;
 }
 
