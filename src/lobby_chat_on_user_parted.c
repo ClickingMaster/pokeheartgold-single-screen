@@ -4,50 +4,12 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-struct String {
-    union {
-        struct {
-            u32 flag : 1;
-            u32 spare : 31;
-        } bits;
-
-        char bytes[4];
-    } head;
-
-    u32 cap;
-    char *text;
-};
-
-struct State {
-    int a, state;
-};
-
-struct Callback {
-    void (*first)(char *, int, void *);
-    void (*second)(char *, int, void *);
-    u8 pad[12];
-    void *arg;
-};
-extern struct State *gLobbyChatManager;
-extern void LobbyString_InitFromCStr(struct String *, char *);
-extern void LobbyString_Destroy(struct String *);
-extern void LobbyChat_StripChannelPrefix(struct String *, struct State *, struct String *);
-extern int LobbyChat_FindUserIdByNick(struct State *, struct String *);
-extern int LobbyChat_RemoveChannelUser(struct State *, struct String *, struct String *);
-extern struct Callback *LobbyChat_GetChannelCallbacks(struct State *, struct String *);
-void LobbyChat_OnUserParted(int, char *, char *);
-
-static inline char *getText(struct String *s) {
-    if (s->head.bits.flag == 0) {
-        return s->head.bytes + 1;
-    }
-    return s->text;
-}
+#include "lobby_chat_internal.h"
 
 void LobbyChat_OnUserParted(int unused, char *name, char *value) {
-    struct String a, b, c, d, e, f;
+    Str a, b, c, d, e, f;
     int id;
-    struct Callback *cb;
+    LobbyChannelCallbacks *callbacks;
     if (gLobbyChatManager && gLobbyChatManager->state == 5) {
         return;
     }
@@ -58,11 +20,11 @@ void LobbyChat_OnUserParted(int unused, char *name, char *value) {
         return;
     }
     LobbyString_InitFromCStr(&b, name);
-    cb = LobbyChat_GetChannelCallbacks(gLobbyChatManager, &b);
+    callbacks = LobbyChat_GetChannelCallbacks(gLobbyChatManager, &b);
     LobbyString_Destroy(&b);
     LobbyString_InitFromCStr(&c, name);
     LobbyChat_StripChannelPrefix(&d, gLobbyChatManager, &c);
-    cb->second(getText(&d), id, cb->arg);
+    callbacks->onUserParted(StrData(&d), id, callbacks->param);
     LobbyString_Destroy(&d);
     LobbyString_Destroy(&c);
     LobbyString_InitFromCStr(&e, value);

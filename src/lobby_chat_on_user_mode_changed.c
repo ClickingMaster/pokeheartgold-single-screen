@@ -4,35 +4,17 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-typedef struct {
-    u32 unk0;
-    u32 state;
-} Ov45State;
-
-extern Ov45State *gLobbyChatManager;
-extern char sStr_normal[];
-extern char sStr_voice[];
-extern char sStr_ops[];
-extern char sStr_VoiceOps[];
-extern char sStr_invalid[];
-
-typedef struct {
-    u32 w[3];
-} String;
-
-void LobbyString_AssignCStr(String *str, const char *s);
-void LobbyString_Destroy(String *str);
-void LobbyChat_OnUserModeChanged(int a, int b, int c, int mode);
+#include "lobby_chat_internal.h"
 
 void LobbyChat_OnUserModeChanged(int a, int b, int c, int mode) {
-    String str;
+    Str str;
     u32 *w;
     u32 i;
     if (gLobbyChatManager != NULL && gLobbyChatManager->state == 5) {
         return;
     }
     i = 0;
-    w = str.w;
+    w = (u32 *)&str;
     for (; i < 3; i++) {
         w[i] = 0;
     }
