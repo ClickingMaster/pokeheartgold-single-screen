@@ -448,7 +448,7 @@ u32 PokeathlonCourse_State_RunEventOverlay(PokeathlonCourseData *course) {
         OverlayManager_Delete(manager);
         args = layout->args;
         if (args->mode == 0) {
-            if (layout->unk1FC != 0) {
+            if (layout->boxCancelled != 0) {
                 args->shouldFreeHeap = TRUE;
                 PokeathlonCourse_SetStateField07(course, 37);
             } else {
@@ -781,10 +781,10 @@ u32 PokeathlonCourse_State_ResetDataCopyArea(PokeathlonCourseData *course) {
 u32 PokeathlonCourse_State_SendEventResult(PokeathlonCourseData *course) {
     PokeathlonCourseLayout *layout = (PokeathlonCourseLayout *)course;
     BOOL done;
-    if (layout->event->unk10 != 0) {
+    if (layout->event->sendsOwnResult != 0) {
         PokeathlonCoursePoint *point = (PokeathlonCoursePoint *)PokeathlonCourse_ToBytes(&layout->packets[0]);
         int netId = PokeathlonCourse_GetNetId(course);
-        point->x = layout->eventResults[netId].unk0;
+        point->x = layout->eventResults[netId].score;
         point->y = layout->eventResults[netId].unk2;
         done = PokeathlonCourse_TrySendCommand(POKEATHLON_COURSE_CMD_EVENT_RESULT, &layout->packets[0], PokeathlonCourseCmd_PacketSize(), (int)layout->link);
         if (done && !PokeathlonCourse_GetNetId(course)) {
@@ -1002,7 +1002,7 @@ u32 PokeathlonCourse_State_CreateJuiceRecords(PokeathlonCourseData *course) {
     size = ApricornJuiceRecord_sizeof() * 4;
     layout->heapAllocPtr3 = Heap_AllocAtEnd(layout->heapId, size);
     memset(layout->heapAllocPtr3, 0, size);
-    layout->heapAllocPtr2 = ApricornRecord_New(apricornBox, profile, record->unk70, layout->heapId);
+    layout->heapAllocPtr2 = ApricornRecord_New(apricornBox, profile, record->fanCount, layout->heapId);
     if (layout->args->mode == 1) {
         PokeathlonCourse_SetStateTransitionType(course, 14);
         PokeathlonCourse_SetStateField07(course, 35);
@@ -1693,7 +1693,7 @@ void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u32 participan
         if (mon >= 3) {
             GF_AssertFail();
         }
-        if (layout->event->unk10 == 0) {
+        if (layout->event->sendsOwnResult == 0) {
             if (PokeathlonCourse_GetNetId(course) != 0) {
                 GF_AssertFail();
             }

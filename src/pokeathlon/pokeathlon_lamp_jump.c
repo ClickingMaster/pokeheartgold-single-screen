@@ -183,11 +183,11 @@ BOOL PokeathlonLampJump_Init(PokeathlonCourseData *course) {
             PokeathlonCourse_GetMonInfo(course, participant, i, &views[i]);
             info.sizeTypes[i] = PokeathlonCourse_GetSpriteSizeType(PokeathlonCourse_GetPerformance(course, participant, i));
         }
-        info.unk00[0] = 0;
-        info.unk00[1] = 1;
-        info.unk00[2] = 1;
-        info.unk00[3] = 3;
-        info.unk00[4] = 3;
+        info.settings[0] = 0;
+        info.settings[1] = 1;
+        info.settings[2] = 1;
+        info.settings[3] = 3;
+        info.settings[4] = 3;
         PokeathlonCourseMonObjects_Load(lampJump->monSpriteManager, 3, views, &info, 0, 0);
         PokeathlonCourse_IncrementField1ED(course);
         break;
@@ -256,7 +256,7 @@ BOOL PokeathlonLampJump_Init(PokeathlonCourseData *course) {
             jumpX = jumpIndex * 64 + 64;
             lampJump->monColumns[jumpIndex] = jumpX / 2;
             lampJump->jumps[jumpIndex].unk04 = 4096.0 * ((f32)jumpX / 64.0 - 2.0);
-            lampJump->mons[jumpIndex].unk28 = TRUE;
+            lampJump->mons[jumpIndex].bounceReady = TRUE;
         }
         WirelessStatusIcon_CreateOnScreenIfConnected(1);
         PokeathlonCourse_IncrementField1ED(course);

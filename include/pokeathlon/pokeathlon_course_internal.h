@@ -161,12 +161,12 @@ struct PokeathlonCourseMonObject {
     s32 shadowOffsetY;           // 0x10
     s32 halfWidth;               // 0x14
     s32 halfHeight;              // 0x18
-    u8 unk1C[4];                 // 0x1C
+    u8 touchRadius[4];           // 0x1C
     s32 x;                       // 0x20: centre
     s32 y;                       // 0x24
     s32 topRow;                   // 0x28
-    s32 unk2C;                   // 0x2C
-    u32 unk30;                   // 0x30
+    s32 collisionOffsetY;        // 0x2C
+    u32 collisionRadius;         // 0x30
     u32 animState;               // 0x34
     u32 anim;                    // 0x38
     s32 drawPriorityStep;        // 0x3C
@@ -280,7 +280,7 @@ typedef struct PokeathlonCourseArgsLayout {
 
 // A player's result of the event that is running (exchanged with link commands 0x1D / 0x1E).
 typedef struct PokeathlonCourseEventResult {
-    u16 unk0;
+    u16 score;
     u16 unk2;
 } PokeathlonCourseEventResult;
 
@@ -299,7 +299,7 @@ typedef struct PokeathlonCourseEvent {
     void (*draw)(PokeathlonCourseData *course, u32 param);
     void (*onResults)(PokeathlonCourseData *course, u32 param);
     void (*exit)(PokeathlonCourseData *course, u32 param);
-    BOOL unk10;
+    BOOL sendsOwnResult;
 } PokeathlonCourseEvent;
 
 typedef BOOL (*PokeathlonCourseStepFunc)(PokeathlonCourseData *course, u8 *state);
@@ -338,9 +338,9 @@ typedef struct PokeathlonCourseLayout {
     u32 round;                                    // 0x1F0
     u32 eventDrawEnabled;                                // 0x1F4
     PokeathlonCourseArgsLayout *args;             // 0x1F8
-    u32 unk1FC;                                   // 0x1FC
+    u32 boxCancelled;                             // 0x1FC
     PokeathlonCourseParticipant localParticipant; // 0x200
-    u32 field_27C;                                // 0x27C
+    u32 boxCourseId;                              // 0x27C
     OverlayManager *subOverlay;                   // 0x280
     enum HeapID heapId;                           // 0x284
     PokeathlonCourseLink *link;                   // 0x288

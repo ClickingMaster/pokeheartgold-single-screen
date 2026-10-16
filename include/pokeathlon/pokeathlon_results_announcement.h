@@ -135,9 +135,9 @@ typedef struct PokeathlonResultsAnnouncementScore {
 } PokeathlonResultsAnnouncementScore;
 
 typedef struct PokeathlonResultsAnnouncementSceneConfig {
-    u32 unk00;
-    u32 unk04;
-    u32 unk08;
+    u32 capacity;
+    u32 resourceCount;
+    u32 resCounts;
 } PokeathlonResultsAnnouncementSceneConfig;
 
 typedef struct PokeathlonResultsAnnouncementBgTemplates {

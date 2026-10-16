@@ -306,11 +306,11 @@ BOOL PokeathlonBlockSmash_Finish(PokeathlonCourseData *course) {
 }
 
 typedef struct PokeathlonBlockSmashMonPicParams {
-    u32 unk0;
-    u32 unk4;
-    u32 unk8;
-    u32 unkC;
-    u32 unk10;
+    u32 loadAtOnce;
+    u32 priority;
+    u32 vramTransfer;
+    u32 vram;
+    u32 whichScreen;
     u32 ids[9];
     u32 unk38[3];
 } PokeathlonBlockSmashMonPicParams;
@@ -377,9 +377,9 @@ BOOL PokeathlonBlockSmash_Init(PokeathlonCourseData *course) {
                 }
             }
         }
-        params.unk4 = 1;
-        params.unkC = 1;
-        params.unk10 = 1;
+        params.priority = 1;
+        params.vram = 1;
+        params.whichScreen = 1;
         PokeathlonCourseMonObjects_Load(work->monPics, 9, mons, &params, 0, 0);
         PokeathlonCourse_IncrementField1ED(course);
         break;

@@ -20,7 +20,7 @@
 typedef struct PokeathlonCirclePushMonView {
     u16 species;     // 0x00
     u16 form;        // 0x02
-    u16 unk04;       // 0x04
+    u16 isLarge;     // 0x04
     u8 shiny;        // 0x06
     u8 gender;       // 0x07
     u32 participant; // 0x08

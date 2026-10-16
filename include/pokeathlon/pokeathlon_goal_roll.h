@@ -59,7 +59,7 @@ typedef struct PokeathlonGoalRollMonObject {
     void *object;              // 0x00
     void *sprite1;             // 0x04
     void *sprite2;             // 0x08
-    u8 unk0C[4];               // 0x0C
+    u8 markerOffsetY[4];       // 0x0C
     s32 offsetY;               // 0x10
     s32 offsetX;               // 0x14
     s32 halfHeight;            // 0x18
@@ -76,13 +76,13 @@ typedef struct PokeathlonGoalRollMonObject {
 } PokeathlonGoalRollMonObject; // size: 0x44
 
 typedef struct PokeathlonGoalRollMonObjects {
-    u32 unk00;                                           // 0x00
-    int unk04;                                           // 0x04
-    int unk08;                                           // 0x08
-    u32 unk0C;                                           // 0x0C
-    void *unk10;                                         // 0x10
-    void *unk14;                                         // 0x14
-    void *unk18;                                         // 0x18
+    u32 heapId;                                          // 0x00
+    int count;                                           // 0x04
+    int baseDrawPriority;                                // 0x08
+    u32 loaded;                                          // 0x0C
+    void *spriteList;                                    // 0x10
+    void *gfxManager;                                    // 0x14
+    void *resources;                                     // 0x18
     PokeathlonGoalRollMonObject entries[GOAL_ROLL_MONS]; // 0x1C
 } PokeathlonGoalRollMonObjects;
 
@@ -136,7 +136,7 @@ typedef struct PokeathlonGoalRollMon {
     u8 power;                                  // 0x71: lost when hit by a kicked ball, recovers over time
     u8 kickPower;                              // 0x72
     u8 kickRow;                                // 0x73: row of the ball speed tables
-    u8 unk74;                                  // 0x74
+    u8 powerLevel;                             // 0x74
     u8 kickLevel;                              // 0x75: how long a kicked ball keeps going (gPokeathlonGoalRollKickSpeeds)
     u8 unk76[2];                               // 0x76
     int mode;                                  // 0x78

@@ -455,10 +455,10 @@ void WifiSetupConnections_SetFromClientResult(WifiSetupClientResultData *src) {
 void WifiSetupConnections_SetFromInfo(u8 *src) {
     WifiSetupConnection *work = &gWifiSetupConnections->edit;
     MI_CpuFill8(work, 0, 0xef);
-    MI_CpuCopy8(src, &work->unk_D1[0], 5);
-    MI_CpuCopy8(src + 6, &work->unk_D1[5], 5);
-    MI_CpuCopy8(src + 0xc, &work->unk_D1[10], 5);
-    MI_CpuCopy8(src + 0x12, &work->unk_D1[15], 5);
+    MI_CpuCopy8(src, &work->wep40Keys[0], 5);
+    MI_CpuCopy8(src + 6, &work->wep40Keys[5], 5);
+    MI_CpuCopy8(src + 0xc, &work->wep40Keys[10], 5);
+    MI_CpuCopy8(src + 0x12, &work->wep40Keys[15], 5);
     MI_CpuCopy8(src + 0x18, work->unk_60, 0x20);
     MI_CpuCopy8(src + 0x39, work->wepKeys[0], 0xd);
     MI_CpuCopy8(src + 0x47, work->wepKeys[1], 0xd);

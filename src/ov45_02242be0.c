@@ -238,10 +238,10 @@ static inline void FindIfP(Iter *first, Node *last, Pred p) {
 }
 
 typedef struct Ctx {
-    void *unk0;
+    void *connection;
     int state;
     u8 unk8[0x58];
-    int unk60;
+    int disconnected;
     u8 unk64[0x2c];
     u8 map[0xc];
 } Ctx;
@@ -388,9 +388,9 @@ typedef struct NameTable {
 } NameTable;
 
 typedef struct CtxFull {
-    int unk0;
-    int unk4;
-    int unk8;
+    int connection;
+    int state;
+    int userData;
     Str sC;
     Str s18;
     Str s24;
@@ -398,9 +398,9 @@ typedef struct CtxFull {
     Str s3C;
     Str s48;
     int unk54;
-    int unk58;
-    int unk5C;
-    int unk60;
+    int lastError;
+    int connectedFrames;
+    int disconnected;
     Blob12 b64;
     Tree16 t70;
     Tree16 t80;

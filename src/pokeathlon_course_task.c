@@ -10,24 +10,24 @@
 typedef struct PokeathlonCourseTaskArgs {
     SaveData *saveData; // 0x00
     u32 mode;           // 0x04
-    u16 unk08;          // 0x08
-    u16 unk0A;          // 0x0A
-    u8 unk0C;           // 0x0C
-    u8 unk0D;           // 0x0D
-    u8 unk0E;           // 0x0E
-    u8 unk0F;           // 0x0F
+    u16 points;         // 0x08
+    u16 totalPoints;    // 0x0A
+    u8 course;          // 0x0C
+    u8 rank;            // 0x0D
+    u8 shouldFreeHeap;  // 0x0E
+    u8 isSupreme;       // 0x0F
 } PokeathlonCourseTaskArgs;
 
 typedef struct PokeathlonCourseTaskEnv {
     u32 state;
     PokeathlonCourseTaskArgs *args;
     u32 mode;
-    u16 unk0C;
-    u16 unk0E;
-    u16 *unk10;
-    u16 *unk14;
-    u16 *unk18;
-    u16 *unk1C;
+    u16 course;
+    u16 isSupreme;
+    u16 *shouldFreeHeapOut;
+    u16 *totalPointsOut;
+    u16 *pointsOut;
+    u16 *rankOut;
 } PokeathlonCourseTaskEnv;
 
 static BOOL Task_PokeathlonCourse(TaskManager *taskman);
@@ -36,12 +36,12 @@ void CallTask_PokeathlonCourse(FieldSystem *fieldSystem, u8 mode, u8 a2, u8 a3, 
     PokeathlonCourseTaskEnv *work = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(PokeathlonCourseTaskEnv));
     work->state = 0;
     work->mode = mode;
-    work->unk0E = a2;
-    work->unk0C = a3;
-    work->unk10 = a4;
-    work->unk14 = a5;
-    work->unk18 = a6;
-    work->unk1C = a7;
+    work->isSupreme = a2;
+    work->course = a3;
+    work->shouldFreeHeapOut = a4;
+    work->totalPointsOut = a5;
+    work->pointsOut = a6;
+    work->rankOut = a7;
     TaskManager_Call(fieldSystem->taskman, Task_PokeathlonCourse, work);
 }
 
@@ -53,8 +53,8 @@ static BOOL Task_PokeathlonCourse(TaskManager *taskman) {
         work->args = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(PokeathlonCourseTaskArgs));
         work->args->mode = (work->mode != 0);
         work->args->saveData = FieldSystem_GetSaveData(fieldSystem);
-        work->args->unk0C = work->unk0C;
-        work->args->unk0F = work->unk0E;
+        work->args->course = work->course;
+        work->args->isSupreme = work->isSupreme;
         PokeathlonCourse_LaunchApp(fieldSystem, (PokeathlonCourseArgs *)work->args);
         FieldSystem_ResumeProcesses();
         work->state = 1;
@@ -73,10 +73,10 @@ static BOOL Task_PokeathlonCourse(TaskManager *taskman) {
         work->state = 3;
         break;
     case 3:
-        *work->unk10 = work->args->unk0E;
-        *work->unk14 = work->args->unk0A;
-        *work->unk18 = work->args->unk08;
-        *work->unk1C = work->args->unk0D;
+        *work->shouldFreeHeapOut = work->args->shouldFreeHeap;
+        *work->totalPointsOut = work->args->totalPoints;
+        *work->pointsOut = work->args->points;
+        *work->rankOut = work->args->rank;
         Heap_Free(work->args);
         Heap_Free(work);
         return TRUE;

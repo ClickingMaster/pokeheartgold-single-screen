@@ -26,8 +26,8 @@ typedef struct PokeathlonStateInfo {
 
 // Participant data structure (0x7C = 124 bytes each)
 typedef struct PokeathlonParticipantData {
-    u8 field_00[0x04];
-    u8 field_04;
+    u8 npcTeam[0x04];
+    u8 mons;
     u8 field_05[0x77];
 } PokeathlonParticipantData;
 
@@ -92,7 +92,7 @@ struct PokeathlonCourseData {
     u8 filler_1FC[0x74];                       // 0x1FC
     void *field_270;                           // 0x270
     u8 filler_274[0x8];                        // 0x274
-    u32 field_27C;                             // 0x27C
+    u32 boxCourseId;                           // 0x27C
     OverlayManager *subOverlay;                // 0x280
     enum HeapID heapId;                        // 0x284
     void *system;                              // 0x288

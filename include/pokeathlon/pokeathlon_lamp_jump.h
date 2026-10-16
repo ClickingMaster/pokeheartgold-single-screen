@@ -29,7 +29,7 @@ typedef struct PokeathlonLampJumpMon {
     u16 combo;          // 0x24: lamps hit in this jump, up to 5
     u8 stunned;           // 0x26: cannot be touched while set
     u8 stunTimer;       // 0x27
-    u8 unk28;           // 0x28
+    u8 bounceReady;     // 0x28
     u8 colliding[3];    // 0x29: touching each of the other Pokemon
     s32 bounce;         // 0x2C: scales the bounce off the trampoline, in twelfths
     s32 stunFrames;     // 0x30: after a collision
@@ -102,9 +102,9 @@ typedef struct PokeathlonLampJumpMonView {
 } PokeathlonLampJumpMonView;
 
 typedef struct PokeathlonLampJumpSceneConfig {
-    int unk00;
-    int unk04;
-    int unk08;
+    int capacity;
+    int resourceCount;
+    int resCounts;
 } PokeathlonLampJumpSceneConfig;
 
 typedef struct PokeathlonLampJumpSpriteConfig {
@@ -115,7 +115,7 @@ typedef struct PokeathlonLampJumpSpriteConfig {
 } PokeathlonLampJumpSpriteConfig;
 
 typedef struct PokeathlonLampJumpMonSpriteInfo {
-    int unk00[5];
+    int settings[5];
     int sizeTypes[3]; // per Pokemon: PokeathlonCourse_GetSpriteSizeType of the Pokemon
     int unk20[9];
 } PokeathlonLampJumpMonSpriteInfo;

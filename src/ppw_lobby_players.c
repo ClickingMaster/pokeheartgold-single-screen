@@ -84,18 +84,18 @@ static inline const char *StrData(Str *s) {
 
 typedef struct Session {
     VTable *vt;
-    u32 unk4;
+    u32 channel;
     s64 time;
     u32 unk10;
-    u32 unk14;
-    u32 unk18;
-    u32 unk1C;
-    u32 unk20;
-    u32 unk24;
+    u32 systemProfileChanged;
+    u32 userProfileData;
+    u32 userProfileSize;
+    u32 userProfileCapacity;
+    u32 userProfileChanged;
     int state;
     int id;
-    u32 unk30;
-    u32 unk34;
+    u32 systemProfileReceived;
+    u32 userProfileReceived;
     u32 entered;
 } Session;
 
@@ -292,7 +292,7 @@ Session *PPWLobbyPlayers_Find(SessionMgr *m, int id);
 void PPWLobbyPlayer_UpdateState(Session *s) {
     switch (s->state) {
     case 0:
-        s->state = (s->unk30 != 0 && s->unk34 != 0) ? 1 : 0;
+        s->state = (s->systemProfileReceived != 0 && s->userProfileReceived != 0) ? 1 : 0;
         if (s->state == 0) {
             return;
         }
@@ -322,20 +322,20 @@ BOOL PPWLobbyPlayers_Add(SessionMgr *m, int id) {
     Session *n = LobbyMem_Alloc(sizeof(Session));
     if (n != NULL) {
         n->vt = &gPPWLobbyPlayerVtable;
-        n->unk4 = 5;
+        n->channel = 5;
         n->time = 0;
         n->unk10 = 0;
         DWC_GetDateTime(&date, &time);
         n->time = RTC_ConvertDateTimeToSecond(&date, &time);
-        n->unk14 = 1;
-        n->unk18 = 0;
-        n->unk1C = 0;
-        n->unk20 = 0;
-        n->unk24 = 1;
+        n->systemProfileChanged = 1;
+        n->userProfileData = 0;
+        n->userProfileSize = 0;
+        n->userProfileCapacity = 0;
+        n->userProfileChanged = 1;
         n->state = 0;
         n->id = id;
-        n->unk30 = 0;
-        n->unk34 = 0;
+        n->systemProfileReceived = 0;
+        n->userProfileReceived = 0;
         n->entered = 0;
     }
     s = n;

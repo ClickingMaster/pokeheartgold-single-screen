@@ -781,7 +781,7 @@ void PokeathlonGoalRoll_InitMonStats(PokeathlonCourseData *course, PokeathlonGoa
     mon->kickPower = params->kickPower[levels[0]];
     mon->kickRow = levels[4];
     mon->kickLevel = levels[0];
-    mon->unk74 = levels[3];
+    mon->powerLevel = levels[3];
 }
 
 void PokeathlonGoalRoll_InitWindows(PokeathlonGoalRoll *goalRoll) {

@@ -115,16 +115,16 @@ extern const PokeathlonGoalRollPaletteData gPokeathlonGoalRollPaletteData;
 // A Pokemon as PokeathlonCourse_GetMonInfo describes it to the 3D object list.
 typedef struct PokeathlonGoalRollMonView {
     u16 species;
-    u16 unk02;
-    u16 unk04;
+    u16 form;
+    u16 isLarge;
     u8 kind;
-    u8 unk07;
+    u8 gender;
     u32 participant;
-    u32 unk0C;
+    u32 personality;
 } PokeathlonGoalRollMonView;
 
 typedef struct PokeathlonGoalRollMonObjectsInfo {
-    u32 unk00[5];
+    u32 settings[5];
     int sizes[GOAL_ROLL_MONS];
 } PokeathlonGoalRollMonObjectsInfo;
 
@@ -349,11 +349,11 @@ BOOL PokeathlonGoalRoll_Init(PokeathlonCourseData *course) {
             PokeathlonCourse_GetMonInfo(course, participantIndex, col, &work.views[i]);
             info->sizes[i] = PokeathlonCourse_GetSpriteSizeType(PokeathlonCourse_GetPerformance(course, participantIndex, col));
         }
-        work.objectsInfo.unk00[0] = 0;
-        work.objectsInfo.unk00[1] = 1;
-        work.objectsInfo.unk00[2] = 0;
-        work.objectsInfo.unk00[3] = 1;
-        work.objectsInfo.unk00[4] = 1;
+        work.objectsInfo.settings[0] = 0;
+        work.objectsInfo.settings[1] = 1;
+        work.objectsInfo.settings[2] = 0;
+        work.objectsInfo.settings[3] = 1;
+        work.objectsInfo.settings[4] = 1;
         PokeathlonCourseMonObjects_Load(goalRoll->monObjects, 12, work.views, &work.objectsInfo, 0, 0);
         PokeathlonCourse_IncrementField1ED(course);
         break;

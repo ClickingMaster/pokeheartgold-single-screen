@@ -264,7 +264,7 @@ void PokeathlonBox_GetBoxName(String *dest, PCStorage *storage, u32 boxno) {
 void PokeathlonBox_CopySelectedMons(PokeathlonBox *data, PokeathlonBoxArgs *args) {
     PokeathlonBox_BoxMon boxMon;
 
-    args->selectedMons[0].unk0 = data->cancelled;
+    args->selectedMons[0].cancelled = data->cancelled;
     if (data->cancelled == 0) {
         for (int i = 0; i < 3; i++) {
             if (data->selectedMons[i].boxno == NUM_BOXES) {
@@ -351,7 +351,7 @@ void PokeathlonBox_ShowMonInfo(int boxno, u8 slot, PokeathlonBox *data) {
 
     medalShifts = gPokeathlonBoxMedalShifts;
     if (boxno != -1 && slot != -1) {
-        monInfo.unk9 = 2;
+        monInfo.displayMode = 2;
         if (boxno == NUM_BOXES) {
             Party *party = SaveArray_Party_Get(data->saveData);
             Pokemon *partyMon = Party_GetMonByIndex(party, slot);
@@ -400,7 +400,7 @@ void PokeathlonBox_ShowMonInfo(int boxno, u8 slot, PokeathlonBox *data) {
         return;
     }
 
-    monInfo.unk9 = 0;
+    monInfo.displayMode = 0;
     PokeathlonBox_DrawMonInfo(data->graphics, &monInfo);
 }
 
@@ -442,7 +442,7 @@ void PokeathlonBox_SetupGraphics(PokeathlonBox_Graphics *graphics, BgConfig *bgC
 }
 
 void PokeathlonBox_DrawMonInfo(PokeathlonBox_Graphics *graphics, PokeathlonBox_MonInfo *mon) {
-    if (mon->unk9 == 2) {
+    if (mon->displayMode == 2) {
         PokeathlonBox_ShowMonSprites(graphics, mon);
         PokeathlonBox_PrintMonTexts(graphics, mon);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);

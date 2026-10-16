@@ -772,7 +772,7 @@ BOOL ScrCmd_GetPokeathlonStat(ScriptContext *ctx) {
         *unkPtrA = ClampToU16Max(unkPtrB->courseFirstPlaces);
         break;
     case 1:
-        *unkPtrA = ClampToU16Max(unkPtrB->unk70);
+        *unkPtrA = ClampToU16Max(unkPtrB->fanCount);
         break;
     case 2:
         *unkPtrA = ClampToU16Max(unkPtrB->coursesJoined);
@@ -810,18 +810,18 @@ BOOL ScrCmd_AdjustPokeathlonStat11(ScriptContext *ctx) {
     PokeathlonStatistics *unkPtr = PokeathlonSave_GetStatistics2(Save_Pokeathlon_Get(ctx->fieldSystem->saveData));
 
     if (unkA == 0) {
-        val = unkPtr->unk70 + unkB;
+        val = unkPtr->fanCount + unkB;
         if ((u32)val > 0xFFFF) {
-            unkPtr->unk70 = 0xFFFF;
+            unkPtr->fanCount = 0xFFFF;
         } else {
-            unkPtr->unk70 = val;
+            unkPtr->fanCount = val;
         }
     } else {
-        val = unkPtr->unk70 - unkB;
+        val = unkPtr->fanCount - unkB;
         if (val < 0) {
-            unkPtr->unk70 = 0;
+            unkPtr->fanCount = 0;
         } else {
-            unkPtr->unk70 = val;
+            unkPtr->fanCount = val;
         }
     }
 

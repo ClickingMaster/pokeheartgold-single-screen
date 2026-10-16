@@ -70,7 +70,7 @@ typedef struct WifiSetupUsbScan {
 typedef struct WifiSetupUsbScanBss {
     u8 unk_00[4];
     u8 bssid[6];
-    u8 unk_0A[2];
+    u8 ssidLength[2];
     u8 ssidTag[8]; // 0x0C
     u8 unk_14;
     u8 ssidFlag; // 0x15

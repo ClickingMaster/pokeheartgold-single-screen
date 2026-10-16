@@ -22,7 +22,7 @@ typedef struct WifiSetupConnectionPage {
     u8 dns1[4];          // 0xC8
     u8 dns2[4];          // 0xCC
     u8 cidr;             // 0xD0, subnet mask as a prefix length
-    u8 unk_D1[0x15];
+    u8 wep40Keys[0x15];
     u8 keyType : 2;   // 0xE6, 0 none, 1 WEP 40, 2 WEP 104, 3 WEP 128
     u8 keyFormat : 6; // 0 hex digits, 1 text
     u8 setupMethod;   // 0xE7, WIFI_SETUP_METHOD_*
@@ -64,7 +64,7 @@ typedef struct WifiSetupConnection {
     };
 
     u8 cidr; // 0xD0
-    u8 unk_D1[0x15];
+    u8 wep40Keys[0x15];
     u8 keyType : 2; // 0xE6
     u8 keyFormat : 6;
     u8 setupMethod; // 0xE7

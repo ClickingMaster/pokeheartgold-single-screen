@@ -307,7 +307,7 @@ PokeathlonParticipantData *PokeathlonCourse_GetParticipantData(PokeathlonCourseD
 }
 
 u8 *PokeathlonCourse_GetParticipantMons(PokeathlonCourseData *data, int index) {
-    return &data->participants[index].field_04;
+    return &data->participants[index].mons;
 }
 
 SaveData *PokeathlonCourse_GetSaveData(PokeathlonCourseData *data) {
@@ -366,7 +366,7 @@ void PokeathlonCourse_SetEvents(PokeathlonCourseData *data, u8 *param) {
     }
 
     data->courseId = PokeathlonCourse_FindCourseId(data);
-    data->field_27C = data->courseId;
+    data->boxCourseId = data->courseId;
 }
 
 u32 PokeathlonCourse_GetField3D8_ForCurrentParticipant(PokeathlonCourseData *data) {

@@ -84,19 +84,19 @@ static inline const char *StrData(Str *s) {
 
 typedef struct Session {
     VTable *vt;
-    u32 unk4;
+    u32 channel;
     s64 time;
     u32 unk10;
-    u32 unk14;
-    u32 unk18;
-    u32 unk1C;
-    u32 unk20;
-    u32 unk24;
+    u32 systemProfileChanged;
+    u32 userProfileData;
+    u32 userProfileSize;
+    u32 userProfileCapacity;
+    u32 userProfileChanged;
     int state;
     int id;
-    u32 unk30;
-    u32 unk34;
-    u32 unk38;
+    u32 systemProfileReceived;
+    u32 userProfileReceived;
+    u32 entered;
 } Session;
 
 typedef struct Node {

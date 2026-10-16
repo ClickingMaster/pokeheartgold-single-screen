@@ -23,17 +23,17 @@ typedef struct PokeathlonStatistics {
     u32 linkCourseLastPlaces;
     u32 eventFirstPlaces[10];
     u32 eventLastPlaces;
-    u32 unk70;
+    u32 fanCount;
 } PokeathlonStatistics; // size: 0x74
 
 typedef struct Pokeathlon_CourseEntry {
     u16 score;
-    u8 unk_2[6];
+    u8 mons[6];
 } Pokeathlon_CourseEntry; // size: 0x8
 
 typedef struct Pokeathlon_RecordsSolo {
     Pokeathlon_CourseEntry entries[5];
-    u8 unk_28[0x4];
+    u8 timesPlayed[0x4];
 } Pokeathlon_RecordsSolo; // size: 0x2C
 
 typedef struct Pokeathlon_RecordsLink {

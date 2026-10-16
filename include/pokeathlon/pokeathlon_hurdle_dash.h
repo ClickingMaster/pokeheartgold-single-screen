@@ -124,9 +124,9 @@ typedef struct PokeathlonHurdleDashTeamMon {
 } PokeathlonHurdleDashTeamMon;
 
 typedef struct PokeathlonHurdleDashSceneConfig {
-    s32 unk00;
-    s32 unk04;
-    u8 unk08[4];
+    s32 capacity;
+    s32 resourceCount;
+    u8 resCounts[4];
 } PokeathlonHurdleDashSceneConfig;
 
 // NARC a/1/7/0 member 10.

@@ -2014,7 +2014,7 @@ void PokeathlonCourseCeremony_GetIntroStats(PokeathlonStatistics *dest, const Po
         dest->eventFirstPlaces[i] = src->eventFirstPlaces[i];
     }
     dest->eventLastPlaces = src->monSelfImpedes;
-    dest->unk70 = src->unk70;
+    dest->fanCount = src->fanCount;
 }
 
 // Weighs the statistics (value / gPokeathlonCourseCeremonyIntroStatWeights[i], plus 0..2 at random).
@@ -2075,7 +2075,7 @@ void PokeathlonCourseCeremony_ChooseOwnIntro(PokeathlonCourseCeremonyIntro *intr
     statistic = PokeathlonCourseCeremony_PickIntroStat(weights, &level);
     intro->msgId = level + PokeathlonCourseCeremony_GetIntroMsgBase(statistic);
     intro->value = ((u32 *)&stats)[statistic];
-    intro->cheer = PokeathlonCourseCeremony_GetCheerLevel(records->unk70);
+    intro->cheer = PokeathlonCourseCeremony_GetCheerLevel(records->fanCount);
 }
 
 void PokeathlonCourseCeremony_ChooseLinkIntro(PokeathlonCourseCeremonyIntro *intro, PokeathlonCourseData *course, int team) {
@@ -2091,7 +2091,7 @@ void PokeathlonCourseCeremony_ChooseLinkIntro(PokeathlonCourseCeremonyIntro *int
     statistic = PokeathlonCourseCeremony_PickIntroStat(weights, &level);
     intro->msgId = level + PokeathlonCourseCeremony_GetIntroMsgBase(statistic);
     intro->value = ((u32 *)&stats)[statistic];
-    intro->cheer = PokeathlonCourseCeremony_GetCheerLevel(records->unk70);
+    intro->cheer = PokeathlonCourseCeremony_GetCheerLevel(records->fanCount);
 }
 
 typedef struct NpcIntroLocals {

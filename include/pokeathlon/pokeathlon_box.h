@@ -30,7 +30,7 @@ typedef struct PokeathlonBox_MonStats {
 } PokeathlonBox_MonStats;
 
 typedef struct PokeathlonBoxArgs_SelectedMon {
-    u32 unk0;                     // 0x00
+    u32 cancelled;                // 0x00
     u32 unk4;                     // 0x04
     u16 species;                  // 0x08
     u16 form;                     // 0x0A
@@ -79,7 +79,7 @@ typedef struct PokeathlonBox_MonInfo {
     u8 isShiny;       // 0x06
     u8 form;          // 0x07
     u8 gender;        // 0x08
-    u8 unk9;          // 0x09
+    u8 displayMode;   // 0x09
     u16 nickname[11]; // 0x0A
     u8 medals[5];
     u8 unk25;

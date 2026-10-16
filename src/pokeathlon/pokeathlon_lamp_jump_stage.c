@@ -369,7 +369,7 @@ void PokeathlonLampJump_UpdateJump(PokeathlonCourseData *course, PokeathlonLampJ
             jump->launchVelocity = 0;
             jump->jumping = FALSE;
             jump->velocity = 0;
-            lampJump->mons[mon].unk28 = TRUE;
+            lampJump->mons[mon].bounceReady = TRUE;
             PokeathlonLampJump_SetDent(lampJump, mon, column, 0);
             return;
         }
@@ -417,7 +417,7 @@ void PokeathlonLampJump_UpdateJump(PokeathlonCourseData *course, PokeathlonLampJ
         if (jump->height >= heights[column]) {
             // back at the surface: bounce off
             PokeathlonLampJump_SetDent(lampJump, mon, column, 0);
-            if (lampJump->mons[mon].unk28) {
+            if (lampJump->mons[mon].bounceReady) {
                 jump->velocity = lampJump->mons[mon].bounce * jump->velocity / 12;
             }
             if (jump->velocity > 2200) {
@@ -425,7 +425,7 @@ void PokeathlonLampJump_UpdateJump(PokeathlonCourseData *course, PokeathlonLampJ
             }
             jump->velocity = jump->velocity * 9 / 10;
             if (jump->velocity == 0) {
-                if (lampJump->mons[mon].unk28) {
+                if (lampJump->mons[mon].bounceReady) {
                     PlaySEOnPlayer(SEQ_SE_DP_BOX03, gPokeathlonLampJumpSoundPlayers[3]);
                 }
                 jump->airborne = FALSE;
@@ -434,7 +434,7 @@ void PokeathlonLampJump_UpdateJump(PokeathlonCourseData *course, PokeathlonLampJ
                 jump->jumping = FALSE;
                 PokeathlonLampJump_SetDent(lampJump, mon, column, 0);
             } else if (jump->velocity > 0) {
-                if ((double)jump->velocity <= 1408.0 && !lampJump->mons[mon].unk28) {
+                if ((double)jump->velocity <= 1408.0 && !lampJump->mons[mon].bounceReady) {
                     jump->airborne = FALSE;
                     jump->height = heights[column];
                     jump->launchVelocity = 0;
@@ -444,7 +444,7 @@ void PokeathlonLampJump_UpdateJump(PokeathlonCourseData *course, PokeathlonLampJ
                 } else {
                     jump->airborne = TRUE;
                     jump->launchVelocity = jump->velocity;
-                    lampJump->mons[mon].unk28 = FALSE;
+                    lampJump->mons[mon].bounceReady = FALSE;
                     PlaySEOnPlayer(SEQ_SE_DP_DANSA5, gPokeathlonLampJumpSoundPlayers[3]);
                     PokeathlonCourse_AddMonCounter(course, participant, mon, 2, 1);
                 }
@@ -480,7 +480,7 @@ void PokeathlonLampJump_UpdateJump(PokeathlonCourseData *course, PokeathlonLampJ
         PokeathlonLampJump_SetDent(lampJump, mon, column, jump->height);
     }
     if (!jump->jumping) {
-        lampJump->mons[mon].unk28 = TRUE;
+        lampJump->mons[mon].bounceReady = TRUE;
     }
 }
 

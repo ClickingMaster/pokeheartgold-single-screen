@@ -79,7 +79,7 @@ typedef BOOL (*WifiSetupWhJudgeFunc)(WifiSetupWhParentArg *arg);
 typedef struct WifiSetupWhParentParam {
     void *userData;     // 0x00
     u16 userDataLength; // 0x04
-    u16 unk_06;
+    u16 padding;
     u32 ggid;           // 0x08
     u16 tgid;           // 0x0C
     u16 entry;          // 0x0E, accept new children
@@ -88,11 +88,11 @@ typedef struct WifiSetupWhParentParam {
     u16 keySharing;     // 0x14
     u16 continuousSend; // 0x16
     u16 beaconPeriod;   // 0x18
-    u16 unk_1A[12];     // 0x1A
+    u16 reserved[12];   // 0x1A
     u16 channel;        // 0x32
     u16 parentMaxSize;  // 0x34
     u16 childMaxSize;   // 0x36
-    u16 unk_38[4];      // 0x38
+    u16 reserved2[4];   // 0x38
 } WifiSetupWhParentParam;
 
 typedef struct WifiSetupWhWork {
