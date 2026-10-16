@@ -2,6 +2,7 @@
 #include "global.h"
 
 #include "wifi_setup_app.h"
+#include "wifi_setup_connection_screens.h"
 #include "wifi_setup_local_wireless.h"
 #include "wifi_setup_scroll_bar.h"
 #include "wifi_setup_ui.h"
@@ -17,13 +18,6 @@
 // gWifiSetupUsbConnectorExit
 #define USB_CONNECTOR_RUNNING 0
 #define USB_CONNECTOR_BACK    1
-
-extern u8 gWifiSetupUsbConnectorExit;
-
-extern BOOL WifiSetupUsbConnector_IsLidClosed(void);
-extern void WifiSetupConnectionList_Init(void);
-extern void WifiSetupUsbConnectorIntro_Init(void);
-extern void WifiSetupUsbConnectorDone_Init(void);
 
 void WifiSetupUsbConnector_Start(void);
 void WifiSetupUsbConnector_WaitFadeIn(void);

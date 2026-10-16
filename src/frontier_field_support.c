@@ -3,6 +3,7 @@
 #include "constants/maps.h"
 
 #include "bag.h"
+#include "comm_state.h"
 #include "field_system.h"
 #include "friend_group.h"
 #include "friend_group_access.h"
@@ -65,10 +66,8 @@ typedef struct FieldSystemFrontierFsysView {
 
 extern const u8 gFrontierSummaryPages[];
 
-extern FrontierData *Save_FrontierData_Get(SaveData *saveData);
 extern void FrontierData_SetTowerSeed(FrontierData *frontierData, u32 value);
 extern u32 FrontierData_GetTowerSeed(FrontierData *frontierData);
-extern BOOL Comm_HasWifiProfile(SaveData *saveData);
 
 u32 FrontierPartySelect_LaunchPartyMenu(FrontierPartySelectEnv *env, FieldSystem *fieldSystem, enum HeapID heapId);
 u32 FrontierPartySelect_WaitPartyMenu(FrontierPartySelectEnv *env, FieldSystem *fieldSystem);

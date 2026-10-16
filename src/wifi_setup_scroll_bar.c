@@ -4,6 +4,7 @@
 #include "global.h"
 
 #include "wifi_setup_access_points.h"
+#include "wifi_setup_keypad.h"
 #include "wifi_setup_local_wireless.h"
 #include "wifi_setup_ui.h"
 
@@ -14,7 +15,6 @@
 
 extern u8 gWifiSetupScrollBarThumbTemplates[]; // thumb template per kind
 extern u8 gWifiSetupScrollBarThumbLengths[]; // thumb length per kind
-extern WifiSetupRect gWifiSetupInputPanelRect;
 extern s32 FX_DivS32(s32, s32);
 typedef struct WifiSetupApScan WifiSetupApScan; // wifi_setup_access_points.c
 extern WifiSetupApScan *gWifiSetupApScan;

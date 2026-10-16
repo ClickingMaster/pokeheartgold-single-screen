@@ -3,6 +3,9 @@
 
 #include "wifi_setup_address_entry.h"
 #include "wifi_setup_app.h"
+#include "wifi_setup_connection_screens.h"
+#include "wifi_setup_local_wireless.h"
+#include "wifi_setup_settings.h"
 #include "wifi_setup_ui.h"
 #include "wifi_setup_ui_parts.h"
 
@@ -19,12 +22,6 @@ extern const u16 gWifiSetupErrorCodeY[];
 extern char gWifiSetupErrorScreenJb4ErrorNscPath[];
 extern const u16 gWifiSetupErrorCodeFormat[]; // error code format
 
-extern int WifiSetupDialog_GetSelected(void);
-extern void WifiSetupDialog_Close(void);
-extern int WifiSetupDialog_IsOpen(void);
-extern void WifiSetupSettings_Init(void);
-extern void WifiSetupConnectionList_Init(void);
-extern void WifiSetupSettings_SetFromMenu(int);
 extern int swprintf(u16 *, int, const u16 *, ...);
 
 void WifiSetupAddressEntry_WaitInvalidMessage(void) {

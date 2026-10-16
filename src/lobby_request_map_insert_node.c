@@ -1,6 +1,8 @@
 #pragma force_active on
 #include "global.h"
 
+#include "dwc/net_common_internal.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #pragma force_active on
@@ -28,7 +30,6 @@ extern void abort(void);
 extern const char sStr_TreeInsertLengthError_3[];
 extern void *LobbyMem_Alloc(u32);
 extern void LobbyTree_InsertRebalance(Node *, void *);
-extern void DWC_Free(int, void *, int);
 Node *LobbyRequestMap_InsertNode(Container *, void *, int, int, const u32 *);
 
 Node *LobbyRequestMap_InsertNode(Container *c, void *owner, int first, int last, const u32 *value) {

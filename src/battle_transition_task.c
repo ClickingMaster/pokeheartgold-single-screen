@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+#include "field/encounter_effect.h"
+
 #include "heap.h"
 #include "sound_system.h"
 #include "task.h"
@@ -14,10 +16,6 @@ typedef struct BattleTransitionTaskEnv {
     int effect;
     u32 bgm;
 } BattleTransitionTaskEnv;
-
-extern void EncounterEffect_LoadOverlay(int effect);
-extern void EncounterEffect_UnloadOverlay(int effect);
-extern void EncounterEffect_Start(int effect, FieldSystem *fieldSystem, int *done);
 
 static BOOL Task_BattleTransition(TaskManager *taskMan);
 void CallTask_BattleTransition(TaskManager *taskMan, int effect, int bgm);

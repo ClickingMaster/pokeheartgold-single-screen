@@ -1,6 +1,8 @@
 #pragma force_active on
 #include "global.h"
 
+#include "dwc/net_common_internal.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #include <stdarg.h>
@@ -58,7 +60,6 @@ extern void *LobbyString_InitCopy(void *, void *);
 extern void *LobbyCharVector_Data(Vec *);
 extern Node *LobbyTimerMap_LowerBound(u8 *, u32 *, Node *, Node *);
 extern void LobbyTimerMap_Find(Node **, u8 *, u32 *);
-extern int DWC_Free();
 extern int DWC_GetDateTime();
 extern int PPWLobby_Initialize();
 extern int PPWLobby_SendMessage();

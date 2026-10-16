@@ -1,5 +1,8 @@
 #pragma force_active on
 #include "global.h"
+
+#include "dwc/net_common_internal.h"
+
 extern int printf(const char *, ...);
 extern void abort(void);
 
@@ -23,9 +26,7 @@ struct Node {
     u8 str[12];
 };
 
-extern void ov45_02236E58(Iterator *);
 extern void LobbyString_Destroy(void *);
-extern void DWC_Free(int, void *, int);
 extern Node *LobbyTree_EraseRebalance(Node *, void *);
 void LobbyUserMap_Erase(Iterator *, List *, Iterator);
 extern void *LobbyMem_Alloc(int);

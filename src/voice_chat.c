@@ -2,10 +2,12 @@
 
 #include "global.h"
 
+#include "dwc/dwc_main_internal.h"
+
+#include "comm_state.h"
 #include "heap.h"
 #include "wifi_connection.h"
 
-extern void NNS_SndInit(void);
 extern void NNS_SndStrmInit(void *stream);
 extern void NNS_SndStrmAllocChannel(void *stream, int count, void *channels);
 extern void NNS_SndStrmSetVolume(void *stream, int volume);
@@ -31,9 +33,7 @@ extern int VCT_HandleData(u8 aid, void *data, void *size, void *work);
 extern void VCT_SetCodec(int codec);
 extern void VCT_Cleanup(void);
 extern void VCT_GetVADInfo(void *info);
-extern void CommState_GetLinkMode(void);
 extern int Comm_IsWifiPeerLinkMode(void);
-extern int DWC_GetMyAID(void);
 
 #pragma force_active on
 

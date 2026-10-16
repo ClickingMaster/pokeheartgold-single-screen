@@ -2,6 +2,8 @@
 #pragma force_active on
 #include "global.h"
 
+#include "dwc/net_common_internal.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #define U32(p, o) (*(u32 *)((u8 *)(p) + (o)))
@@ -18,7 +20,6 @@ typedef struct {
     u32 capacity;
 } Buffer;
 
-extern void DWC_Free(int, void *, int);
 extern void LobbyEventVector_Allocate(Buffer *, u32, Allocator);
 void LobbyEventVector_Reallocate(Buffer *, Allocator, u32);
 

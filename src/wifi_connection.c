@@ -2,6 +2,11 @@
 
 #include "global.h"
 
+#include "nnsys/fnd_internal.h"
+
+#include "communication_core_internal.h"
+#include "friend_roster.h"
+#include "frontier_save_access.h"
 #include "heap.h"
 #include "voice_chat.h"
 
@@ -18,15 +23,11 @@ extern char gWifiMatchFilterFormat[];
 
 extern int sprintf(char *dest, const char *format, ...);
 
-extern void *FriendRoster_GetUserData(void *);
 extern void *FriendRoster_GetDwcFriendData(void *, int);
 extern void FriendRoster_MergeFriend(void *, int, int);
-extern void *Save_FriendRoster_Get(void *);
 extern void FrontierSave_ClearRow(void *, int, int);
-extern void *Save_Frontier_GetStatic(void *);
 extern int Comm_IsWifiPeerLinkMode(void);
 extern int Comm_IsLinkMode19To23Or34(void);
-extern int Comm_CountConnected(void);
 extern void CommState_SetWifiError(int, u32, int);
 extern int CommState_GetLinkMode(void);
 extern void CommState_SetError(int);
@@ -37,8 +38,6 @@ extern void DWC_ClearDirtyFlag(void *);
 extern void DWC_CreateExchangeToken(void *, void *);
 extern int DWC_GetFriendDataType(void *);
 extern int DWC_IsBuddyFriendData(void *);
-extern u16 NNS_FndSetGroupIDForExpHeap(NNSFndHeapHandle heap, u16 groupID);
-extern int NNS_FndGetGroupIDForMBlockExpHeap(void *);
 
 extern int DWC_GetLastErrorEx(int *, u32 *);
 extern void DWC_ClearError(void);

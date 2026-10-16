@@ -66,12 +66,10 @@ void MB_DisconnectChild(u16 aid);
 BOOL MB_CommIsBootable(u16 aid);
 void *MB_CommGetChildUser(u16 aid);
 void MB_End(void);
-extern int memcmp(const void *, const void *, u32);
 extern void NNS_SndArcPlayerStartSeqArc(void *, int, int);
 extern void NNS_SndPlayerSetVolume(void *, int);
 extern void NNS_SndPlayerSetTrackPitch(void *, u32, int);
 extern void NNS_SndPlayerStopSeq(void *, int);
-extern void NNS_SndMain(void);
 
 int WifiSetupMbParent_GetChildState(void);
 void WifiSetupWh_Init(u8 *work);

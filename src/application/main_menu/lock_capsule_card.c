@@ -12,6 +12,7 @@
 #include "msgdata/msg/msg_0247.h"
 
 #include "bg_window.h"
+#include "comm_state.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
@@ -86,8 +87,6 @@ extern u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, Strin
 
 // Other modules (not in a header yet).
 extern void RTC_ConvertDayToDate(RTCDate *date, s32 day);
-extern BOOL CommState_Exists(void);
-extern void OS_ResetSystem(u32 parameter);
 
 extern const OverlayManagerTemplate gApp_MainMenu_SelectOption_MysteryGift;
 extern const MysteryGiftMenuItem sLockCapsuleCardMenuItems[2];

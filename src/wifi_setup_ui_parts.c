@@ -5,6 +5,8 @@
 #include "global.h"
 
 #include "wifi_setup_access_points.h"
+#include "wifi_setup_app.h"
+#include "wifi_setup_local_wireless.h"
 #include "wifi_setup_ui.h"
 
 // The code below is compiled as ARM (32-bit) code.
@@ -24,7 +26,6 @@ extern u8 gWifiSetupMessageShown;
 extern char gWifiSetupLocalizedPath[];
 extern WifiSetupOamBlock **gWifiSetupCursorBlocks;
 extern void *gWifiSetupBackgroundScreen;
-extern void *gWifiSetupTextBank;
 extern u16 gWifiSetupButtonBarButtonSize[];
 extern u16 gWifiSetupButtonBarButtonX[];
 extern u16 gWifiSetupButtonBarButtonY[];
@@ -47,13 +48,6 @@ extern u16 *gWifiSetupKeyboardPageLabels[];
 extern s32 FX_DivS32(s32, s32);
 extern int WM_GetAllowedChannel(void);
 extern int WM_GetLinkLevel(void);
-extern int WifiSetupApp_GetLanguage(void);
-extern int WifiSetupApp_GetKind(void);
-extern void WifiSetupApp_GetTransition(int *, int *);
-extern void *WifiSetupText_GetString(void *, int);
-extern void *WifiSetupText_GetStringWithDigit(void *, int, int, int);
-extern void WifiSetupBanner_Open(int);
-extern void WifiSetupBanner_SetKind(int);
 
 void WifiSetupBusyIcon_Task(void *task) {
     GXOamAttr *oam;

@@ -1,5 +1,7 @@
 #include "application/main_menu/mystery_gift_app.h"
 
+#include <nitro/wm/wm_internal.h>
+
 #include "global.h"
 
 #include "constants/gx.h"
@@ -83,7 +85,6 @@ typedef struct MysteryGiftLinkState {
 
 // Other modules (not in a header yet).
 extern BOOL CTRDG_IsExisting();
-extern int WM_GetLinkLevel(void);
 extern fx32 FX_Sqrt(fx32 value);
 extern void CommWireless_Terminate(void);
 extern void WirelessStatusIcon_SetLevel(int level);

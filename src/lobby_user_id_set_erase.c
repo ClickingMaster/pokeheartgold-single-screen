@@ -1,6 +1,8 @@
 #pragma force_active on
 #include "global.h"
 
+#include "dwc/net_common_internal.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
@@ -17,9 +19,7 @@ typedef struct {
     void *root, *last;
 } Tree;
 
-extern void ov45_02236E58(Iterator *);
 extern Node *LobbyTree_EraseRebalance(Node *, void *);
-extern void DWC_Free(int, void *, int);
 extern Node *LobbyMem_Alloc(u32);
 
 typedef struct {

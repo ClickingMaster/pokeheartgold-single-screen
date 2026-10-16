@@ -1,6 +1,8 @@
 #pragma force_active on
 #include "global.h"
 
+#include "dwc/dwc_bm_internal.h"
+
 #include "wifi_setup_access_points.h"
 #include "wifi_setup_app.h"
 #include "wifi_setup_connection_screens.h"
@@ -55,8 +57,6 @@ extern char gWifiSetupConnectionListJbBgStep1NclPath[];
 extern char gWifiSetupConnectionListJb2ApNscPath[];
 
 extern s32 FX_DivS32(s32 n, s32 d);
-extern BOOL DWC_BACKUPlCheckAddress(const u8 *address);
-extern BOOL DWC_BACKUPlCheckIp(const u8 *ip, const u8 *mask);
 
 int WifiSetupSettings_GetItemRow(int item) {
     int d = FX_DivS32(gWifiSetupSettings.scroll, WIFI_SETUP_SETTINGS_ROW_HEIGHT);

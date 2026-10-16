@@ -1,11 +1,16 @@
 #include "global.h"
 
+#include "dwc/dwc_main_internal.h"
+
+#include "comm_wireless.h"
 #include "communication_core_internal.h"
 #include "error_handling.h"
 #include "gf_rtc.h"
 #include "heap.h"
 #include "system.h"
 #include "link_synchronization.h"
+#include "wifi_connection.h"
+#include "wireless_manager.h"
 
 // Called with the argument types their call sites were matched against.
 extern void *SysTask_CreateOnVBlankQueue(void *func, void *data, int priority);
@@ -16,7 +21,6 @@ extern void CommState_SetErrorWatch(int, int);
 extern void CommState_CheckLinkError(int);
 extern void LinkSync_Update(void);
 extern void CommState_Main(void);
-extern u16 Wireless_GetConnectedBitmap(void);
 extern int Wireless_GetState(void);
 extern BOOL Wireless_SendData(void *data, u16 size, int, void (*callback)(void *));
 extern int Wireless_GetAid(void);
@@ -50,19 +54,10 @@ extern int CommWireless_StartScan(int, int);
 extern int CommWireless_RequestStopAndFree(void);
 extern int CommWireless_ConnectToParent(int);
 extern BOOL CommWireless_Main(int);
-extern int CommWireless_Exists(void);
 extern int CommWireless_GetConnectedChildren(void);
 extern int CommWireless_IsLinkLost(void);
 extern int CommWireless_IsShutdownRequested(void);
 extern void CommWireless_RequestShutdown(void);
-extern BOOL WifiConnection_SendToHost(void *frame, int size);
-extern BOOL WifiConnection_SendFromHost(void *frame, int size);
-extern BOOL WifiConnection_SendToAll(void *frame, int size);
-extern int WifiConnection_GetAid(void);
-extern void WifiConnection_Shutdown(void);
-extern int WifiConnection_IsVoiceChatEnabled(void);
-extern void WifiConnection_SetVoiceUnmuted(int);
-extern u32 DWC_GetAIDBitmap(void);
 
 // The bytes around the key state in the work area (Comm_ScrambleDirectionKeys).
 typedef struct CommKeyWork {

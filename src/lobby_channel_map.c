@@ -1,6 +1,8 @@
 #pragma force_active on
 #include "global.h"
 
+#include "dwc/net_common_internal.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
@@ -23,11 +25,9 @@ extern u8 ov45_02255358[];
 extern void *LobbyChannelMap_FindInsertPos(Tree *, void *, void **, u8 *, u8 *);
 extern int LobbyString_Compare(void *, void *);
 void *LobbyChannelMap_InsertNode(Tree *, void *, u8, u8, void *);
-extern void ov45_02236E58(Iterator *);
 extern void *LobbyTree_EraseRebalance(void *, void *);
 extern void LobbyUserIdSet_Destroy(void *);
 extern void LobbyString_Destroy(void *);
-extern void DWC_Free(int, void *, int);
 
 static inline int isLess(void *a, void *b) {
     return LobbyString_Compare(a, b) < 0;

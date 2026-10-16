@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+#include "nnsys/gfd_internal.h"
+
 #include "camera.h"
 #include "filesystem.h"
 #include "heap.h"
@@ -64,14 +66,6 @@ extern void spl_calc_magnet(const void *, SPLParticle *, VecFx32 *, SPLEmitter *
 extern void spl_calc_spin(const void *, SPLParticle *, VecFx32 *, SPLEmitter *);
 extern void spl_calc_scfield(const void *, SPLParticle *, VecFx32 *, SPLEmitter *);
 extern void spl_calc_convergence(const void *, SPLParticle *, VecFx32 *, SPLEmitter *);
-
-extern void NNS_GfdGetFrmTexVramState(void *);
-extern void NNS_GfdSetFrmTexVramState(void *);
-extern int NNS_GfdFreeLnkTexVram(u32);
-extern void NNS_GfdGetFrmPlttVramState(void *);
-extern void NNS_GfdSetFrmPlttVramState(void *);
-extern int NNS_GfdFreeLnkPlttVram(u32);
-extern void NNS_G3dGlbFlushP(void);
 
 void *ParticleSystem_AllocSlot0(u32 size);
 void *ParticleSystem_AllocSlot1(u32 size);

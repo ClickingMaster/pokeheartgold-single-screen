@@ -1,6 +1,8 @@
 #pragma force_active on
 #include "global.h"
 
+#include "dwc/net_common_internal.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #include <stdarg.h>
@@ -50,7 +52,6 @@ extern S *LobbyString_ReplaceRange(S *, u32, u32, char *, char *, Small);
 extern void *LobbyMem_Alloc(u32);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 extern u8 *LobbyByteVector_Data(S *);
-extern int DWC_Free();
 extern int LobbyCharVector_Grow();
 extern int LobbyString_Destroy();
 #include "overlay45_string_search.h"

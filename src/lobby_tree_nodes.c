@@ -1,6 +1,10 @@
 #pragma force_active on
 #include "global.h"
 
+#include "dwc/net_common_internal.h"
+
+#include "overlay45_format_buffer_private.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #pragma force_active on
@@ -19,10 +23,7 @@ typedef struct {
     void *root, *last;
 } Tree;
 
-extern void DWC_Free(int, void *, int);
-extern void DWCi_GsFree(void *);
 extern void LobbyString_InitCopy(void *, void *);
-extern void LobbyString_Destroy(void *);
 extern void LobbyChannelMap_Find(void **, void *, void *);
 extern void __msl_assertion_failed(char *, char *, char *, int);
 extern void *ArrayNew(int, int, void (*)(void *));

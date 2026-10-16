@@ -4,8 +4,12 @@
 #include "global.h"
 
 #include "wifi_setup_app.h"
+#include "wifi_setup_connection_screens.h"
 #include "wifi_setup_internal.h"
 #include "wifi_setup_keyboard.h"
+#include "wifi_setup_local_wireless.h"
+#include "wifi_setup_scroll_bar.h"
+#include "wifi_setup_settings.h"
 #include "wifi_setup_ui.h"
 #include "wifi_setup_ui_parts.h"
 
@@ -164,20 +168,7 @@ extern u16 gWifiSetupSystemInfoMacFormat[];
 extern u16 gWifiSetupSystemInfoIdFormat[];
 extern u16 gWifiSetupSystemInfoNoIdText[];
 
-extern void WifiSetupConnectionList_Init(void);
-extern void WifiSetupMethodMenu_Init(void);
-extern void WifiSetupTestPrompt_Init(void);
 extern void WifiSetupBgScreen_Create(void *a);
-extern void WifiSetupBgScreen_Destroy(void);
-extern void WifiSetupBgScreen_MarkDirty(void);
-extern void WifiSetupPalette_LoadRow(void *a, int b, int c);
-extern void WifiSetupScrollBar_Create(int a, int b, int c, int d, int e);
-extern void WifiSetupScrollBar_Destroy(void);
-extern int WifiSetupScrollBar_GetValue(void);
-extern int WifiSetupScrollBar_GetEvent(void);
-extern void WifiSetupScrollBar_SetValue(int);
-extern void WifiSetupScrollBar_Enable(void);
-extern void WifiSetupScrollBar_Disable(void);
 extern void WifiSetupApScan_FreeWork(void);
 extern u8 WifiSetupApScan_GetEntries(void *p);
 extern void WifiSetupConnections_Load(void);
@@ -188,19 +179,9 @@ extern void WifiSetupConnections_GetSsid(void *);
 extern void WifiSetupConnections_Edit(int);
 extern void WifiSetupConnections_SetFromClientResult(WifiSetupClientResult *a);
 extern void WifiSetupConnections_Reset(void);
-extern void WifiSetupSound_Stop(void);
-extern void WifiSetupBanner_LoadScreen(int a);
-extern void WifiSetupDialog_Open(int a, int b, int c, int d, int e);
-extern void WifiSetupDialog_Close(void);
-extern int WifiSetupDialog_GetSelected(void);
-extern int WifiSetupDialog_IsOpen(void);
-extern void WifiSetupApScanScreen_Init(void);
-extern void WifiSetupSettings_Init(void);
 extern void WifiSetupText_FreeCanvas(void *);
 extern void DWCi_BM_GetWiFiInfo(WifiSetupWiFiInfo *info);
-extern void OS_Terminate(void);
 extern s32 FX_DivS32(s32 a, s32 b);
-extern s32 FX_ModS32(s32 a, s32 b);
 extern int swprintf(u16 *buf, u32 n, const u16 *fmt, ...);
 
 #define REG16(a)    (*(vu16 *)(a))

@@ -3,8 +3,13 @@
 
 #include "global.h"
 
+#include "dwc/dwc_bm_internal.h"
+
+#include "wifi_setup_access_points.h"
 #include "wifi_setup_app.h"
 #include "wifi_setup_keypad.h"
+#include "wifi_setup_local_wireless.h"
+#include "wifi_setup_settings.h"
 #include "wifi_setup_ui.h"
 #include "wifi_setup_ui_parts.h"
 
@@ -43,13 +48,6 @@ extern u8 gWifiSetupAddressEntryYbBgStep3NclPath[];
 extern u8 gWifiSetupAddressEntryXb4EditAddrNscPath[];
 extern char gWifiSetupAddressEntryYbObjMainNclPath[];
 
-extern void WifiSetup_ParseAddress(const char *text, u8 *address);
-extern int DWC_BACKUPlCheckAddress(void *address);
-extern void WifiSetupDialog_Open(int, int, int, int, int);
-extern int WifiSetupDialog_GetSelected(void);
-extern void WifiSetupDialog_Close(void);
-extern int WifiSetupDialog_IsOpen(void);
-extern void WifiSetupSettings_Init(void);
 extern long atol(const char *);
 
 void WifiSetupAddressEntry_LoadGraphics(void) {

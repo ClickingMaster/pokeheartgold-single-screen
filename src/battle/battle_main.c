@@ -1,5 +1,7 @@
 #include "battle/battle_main.h"
 
+#include <nitro/wm/wm_internal.h>
+
 #include "global.h"
 
 #include "constants/battle.h"
@@ -15,12 +17,14 @@
 #include "battle/battle_system.h"
 #include "battle/battle_util.h"
 #include "battle/battle_recording_stop.h"
+#include "dwc/net_common_internal.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0197.h"
 
 #include "bag.h"
 #include "bag_cursor.h"
 #include "battle_link_comm.h"
+#include "comm_wireless.h"
 #include "filesystem_files_def.h"
 #include "font.h"
 #include "game_stats.h"
@@ -33,6 +37,7 @@
 #include "msgdata.h"
 #include "overlay_06.h"
 #include "palette.h"
+#include "particle_system_internal.h"
 #include "party.h"
 #include "player_data.h"
 #include "poke_overlay.h"
@@ -121,13 +126,9 @@ extern u32 *BattleAnimSystem_New(enum HeapID heapId);
 extern void BattleAnimSystem_Delete(u32 *animSystem);
 extern void LinkBattleScreen_Start(BattleLinkScreenArgs *args);
 extern void BattleRecord_StoreSetup(BattleSetup *setup);
-extern void ParticleSystem_FreeAll(void);
 extern void Comm_SetWifiContinuousSendAndMuteVoice(int mode);
 extern void CommState_FrameDummy(int a0, BgConfig *bgConfig);
 extern void WirelessStatusIcon_SetLevel(int linkLevel);
-extern int DWC_GetLinkLevel(void);
-extern BOOL CommWireless_Exists(void);
-extern int WM_GetLinkLevel(void);
 
 #pragma force_active on
 

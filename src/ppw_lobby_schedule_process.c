@@ -2,6 +2,8 @@
 #pragma force_active on
 #include "global.h"
 
+#include "dwc/net_common_internal.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
@@ -35,7 +37,6 @@ typedef struct {
 
 extern void PPWLobbySchedule_Start(W *);
 extern void LobbyEventDeque_EraseAtBegin(u32 *, int, Byte);
-extern void DWC_GetDateTime(RTCDate *, RTCTime *);
 
 typedef union {
     struct {

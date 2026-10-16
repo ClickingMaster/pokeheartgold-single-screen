@@ -9,8 +9,6 @@
 // StepPosition reads position->y and returns 1 through the field overlay's id (1): kept, it is how the code matches.
 FS_EXTERN_OVERLAY(field);
 
-extern void GF_AssertFail(void);
-
 void GridPanel2_Move(GridCursor *cursor, GridPosition *position, const u8 *dimensions, s8 dx, s8 dy) {
     GridMove move;
 

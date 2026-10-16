@@ -1,6 +1,8 @@
 #pragma force_active on
 #include "global.h"
 
+#include "dwc/net_common_internal.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #pragma force_active on
@@ -25,7 +27,6 @@ extern Node *LobbyMem_Alloc(u32);
 extern void LobbyUserIdSet_CopyNodes(Tree *, Node *, Node *, int);
 extern void LobbyUserIdSet_Swap(void *, Tree *);
 extern void LobbyUserIdSet_Destroy2(Tree *);
-extern void DWC_Free(int, void *, int);
 void LobbyUserIdSet_Assign(u8 *, Work *);
 
 void LobbyUserIdSet_Assign(u8 *owner, Work *w) {

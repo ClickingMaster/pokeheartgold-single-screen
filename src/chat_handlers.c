@@ -15,7 +15,6 @@
 
 extern void __msl_assertion_failed(const char *, const char *, const char *, int);
 extern char *strchr(const char *, int);
-extern char *strtok(char *, const char *);
 extern long atol(const char *);
 extern const char sStr_ciParseValue[];
 extern const char sStr_ciUTMHandler[];

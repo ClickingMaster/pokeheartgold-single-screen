@@ -11,10 +11,6 @@
 FS_EXTERN_OVERLAY(OVY_15);
 FS_EXTERN_OVERLAY(OVY_17);
 
-extern BOOL BerryPotsApp_Initialize(OverlayManager *, int *);
-extern BOOL BerryPotsApp_Run(OverlayManager *, int *);
-extern BOOL BerryPotsApp_Exit(OverlayManager *, int *);
-
 static const u8 sBerryPotsBerryPockets[] = {
     POCKET_BERRIES, 0xFF
 };

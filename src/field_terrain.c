@@ -2,6 +2,7 @@
 
 #include "global.h"
 
+#include "field/bdhc.h"
 #include "field/map_load_manager.h"
 #include "field/map_prop.h"
 
@@ -35,7 +36,6 @@ int FieldSystem_GetHeightStep(FieldSystem *fieldSystem, VecFx32 *playerPos, int 
 extern int TileIndex_GetQuadrant(int idx, int stride);
 extern int MapLoadManager_GetMapSlotOfMatrixIndex(int chunkIdx, int a1, MapLoadManager *mapLoadManager);
 extern void *MapLoadManager_GetBdhc(MapLoadManager *mapLoadManager, u8 idx);
-extern int Bdhc_GetHeight(int a0, int a1, fx32 x, fx32 z, void *a4, fx32 *outY);
 int Terrain_CalcHeight(FieldSystem *fieldSystem, int objectHeightMode, int objectHeight, fx32 x, fx32 z, u8 *outKind);
 int Terrain_GetHeight_Bdhc(FieldSystem *fieldSystem, int objectHeight, fx32 x, fx32 z, u8 *outKind);
 int Terrain_CalcHeightWithMode(FieldSystem *fieldSystem, int objectHeightMode, int objectHeight, fx32 x, fx32 z, u8 *outKind);

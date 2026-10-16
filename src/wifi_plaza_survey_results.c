@@ -8,6 +8,7 @@
 #include "font.h"
 #include "gf_gfx_loader.h"
 #include "heap.h"
+#include "save_plaza_survey.h"
 #include "screen_fade.h"
 #include "sound_playback.h"
 #include "sprite_transfer.h"
@@ -17,11 +18,6 @@
 
 #define WIFI_PLAZA_SURVEY_BAR_LENGTH 80 // pixels
 #define WIFI_PLAZA_SURVEY_BAR_FRAMES 20
-
-// save_block_32.c has no public header: the player's last Plaza Survey answer.
-extern void *Save_PlazaSurvey_Get(SaveData *saveData);
-extern u32 PlazaSurvey_GetSurveyId(void *data);
-extern u32 PlazaSurvey_GetAnswer(void *data);
 
 extern const WindowTemplate sWiFiPlazaSurveyYesNoTemplate;
 extern const VecFx32 sWiFiPlazaSurveyCursorPositions[WIFI_PLAZA_SURVEY_NUM_ANSWERS];

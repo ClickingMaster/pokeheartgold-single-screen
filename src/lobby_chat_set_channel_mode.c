@@ -1,6 +1,8 @@
 #pragma force_active on
 #include "global.h"
 
+#include "dwc/net_common_internal.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
@@ -52,7 +54,6 @@ static inline const char *StrData(Str *s) {
 }
 
 extern void LobbyString_InitCopy(void *dst, void *src);
-extern void DWC_Free(int a, void *p, int b);
 extern void *DWC_Alloc(int a, u32 size);
 extern void LobbyString_Substr(void *a, void *b, u32 len, int d);
 extern void LobbyTimerMap_Clear(void *p);
@@ -88,8 +89,6 @@ typedef struct Tree {
 
 #include "../lib/NitroDWC/src/tree-iterator4.h"
 typedef Iterator Iter;
-
-extern void ov45_02236E58(Iter *it);
 
 typedef struct InsertResult {
     Node *node;

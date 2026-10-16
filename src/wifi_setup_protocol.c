@@ -41,9 +41,6 @@ typedef struct Packet {
 } Packet;
 
 extern u8 gWifiSetupPeerAddress[];
-extern void WifiSetup_Free(void *);
-extern int WifiSetup_GetError(void);
-extern void *WifiSetup_Alloc(int);
 extern u8 sWifiSetupSecurityRecordTypes[];
 
 typedef struct {

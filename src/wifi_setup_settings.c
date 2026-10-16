@@ -5,10 +5,14 @@
 
 #include "global.h"
 
+#include "dwc/dwc_bm_internal.h"
+
 #include "wifi_setup_app.h"
 #include "wifi_setup_connection.h"
 #include "wifi_setup_keyboard.h"
+#include "wifi_setup_local_wireless.h"
 #include "wifi_setup_screens.h"
+#include "wifi_setup_scroll_bar.h"
 #include "wifi_setup_ui.h"
 
 // The code below is compiled as ARM (32-bit) code.
@@ -38,7 +42,6 @@ extern WifiSetupRect gWifiSetupSettingsTouchRects[];
 extern s8 gWifiSetupSettingsDigitPositions[];
 extern u8 gWifiSetupSettingsRowItems[]; // item per row touched
 extern u8 gWifiSetupSettingsItemRows[];
-extern WifiSetupRect gWifiSetupInputPanelRect;
 extern u8 gWifiSetupSettingsYbObjKbNclPath[];
 extern u8 gWifiSetupSettingsJbBgStep2NcgPath[];
 extern u8 gWifiSetupSettingsJbBgStep21NcgPath[];
@@ -58,22 +61,11 @@ extern void WifiSetupCursor_Hide(void);
 
 extern WifiSetupConnection *WifiSetupConnections_GetEdit(void);
 extern void WifiSetupBgScreen_Create(void *);
-extern void WifiSetupBgScreen_MarkDirty(void);
-extern void WifiSetupBgScreen_CopyRect(void *, int, int, int);
-extern void WifiSetupScrollBar_Create(int, int, int, int, int);
-extern void WifiSetupBgScreen_Destroy(void);
-extern void WifiSetupScrollBar_Destroy(void);
-extern int WifiSetupScrollBar_GetValue(void);
-extern int WifiSetupScrollBar_GetEvent(void);
-extern int WifiSetupScrollBar_Disable();
 extern int WifiSetupConnections_SetAutoAddress();
 extern int WifiSetupConnections_SetAutoDns();
 extern void WifiSetupConnections_Edit(int);
-extern int WifiSetupDialog_Open();
-extern int DWCi_BACKUPlConvMaskCidr(void *);
 extern int swprintf(u16 *, u32, const u16 *, ...);
 extern s32 FX_DivS32(s32, s32);
-extern s32 FX_ModS32(s32, s32);
 
 extern int WifiSetupSettings_GetItemRow();
 extern int WifiSetupSettings_GetRowItem();

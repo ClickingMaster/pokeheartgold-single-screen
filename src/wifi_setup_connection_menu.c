@@ -1,6 +1,8 @@
 #pragma force_active on
 #include "global.h"
 
+#include "dwc/dwc_bm_internal.h"
+
 #include "wifi_setup_access_points.h"
 #include "wifi_setup_address_entry.h"
 #include "wifi_setup_app.h"
@@ -77,7 +79,6 @@ extern int DWC_AC_Process(void);
 extern int DWC_AC_GetStatus(void);
 extern BOOL DWC_AC_Destroy(void);
 extern void DWCi_AC_SetUserProfile(int slot, WifiSetupConnection *connection);
-extern u8 *DWCi_BACKUPlGetWifi(void);
 
 void WifiSetupConnectionList_CreateIcons(void) {
     int k;

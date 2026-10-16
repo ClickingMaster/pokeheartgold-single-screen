@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#include "wifi_setup_ui.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
@@ -97,8 +99,6 @@ extern int WM_StartScanEx(void *, void *);
 extern int WM_Reset(void *);
 extern int WM_End(void *);
 extern void WM_GetOtherElements(WifiSetupOtherElements *, WifiSetupBssDesc *);
-extern int memcmp(const void *, const void *, u32);
-extern void DC_InvalidateRange(void *, u32);
 extern void DWCi_BACKUPlRead(WifiSetupConnections *);
 extern void DWCi_BACKUPlConvMaskAddr(int, u8 *);
 extern int DWCi_BACKUPlConvMaskCidr(u8 *);
@@ -109,12 +109,6 @@ extern u16 MATH_CalcCRC16(const MATHCRC16Table *, const void *, u32);
 extern long atol(const char *);
 extern void NNS_SndArcInitOnMemory(void *, void *);
 
-extern void *WifiSetupHeap_AllocZeroed(u32, u32);
-extern void WifiSetupHeap_FreeAndClear(void *);
-extern void *WifiSetupFile_Load(void *, u32 *, int);
-extern int WifiSetup_StrNLen(const char *, int);
-extern void *WifiSetupTask_Create(int, WifiSetupTaskFunc2, void *, int);
-extern void WifiSetupTask_DestroyLater(int, void *);
 extern void WifiSetupSound_UpdateTask(void *, void *);
 
 void WifiSetupApScan_StoreResults(WifiSetupScanCallback *cb);

@@ -3,6 +3,11 @@
 
 #include "global.h"
 
+#include "dwc/dwc_bm_internal.h"
+
+#include "wifi_setup_access_points.h"
+#include "wifi_setup_screens.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
@@ -18,11 +23,6 @@ typedef struct WifiSetupRequestKey {
     u8 data[256];
 } WifiSetupRequestKey;
 
-extern void WifiSetupConnections_SetFromInfo(u8 *result);
-extern void WifiSetupSound_Init(void);
-extern void WifiSetupSound_Free(void);
-extern void WifiSetupScreens_Init(void);
-extern void WifiSetupArchive_Load(void);
 extern void WifiSetupShare_Init(WifiSetupSession *session, WifiSetupSessionParams *params);
 extern int WifiSetupShare_Start(void);
 extern int WifiSetupShare_Cancel(void);
@@ -30,7 +30,6 @@ extern void WifiSetupShare_StartDownload(void);
 extern void WifiSetupShare_Update(void *task);
 extern void WifiSetupShare_GetState(u8 *event, u8 *ok);
 extern u16 *WifiSetupShare_GetChildUser(void);
-extern void DWC_BM_Init(void *work);
 extern void GXx_SetMasterBrightness_(vu16 *reg, int brightness);
 
 // Starts the setup client: requests settings 0 and 1 with the setup key, one connection attempt and

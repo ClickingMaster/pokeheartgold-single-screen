@@ -1,9 +1,9 @@
 #pragma force_active on
 #include "global.h"
 
-#include "voice_chat.h"
+#include "vct/vct_ssp_internal.h"
 
-extern int VCT_AddConferenceClient(u8 aid);
+#include "voice_chat.h"
 
 int VoiceChat_AddConferenceClients(u32 aidMask, int skipAid) {
     int i;

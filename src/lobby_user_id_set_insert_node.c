@@ -1,6 +1,8 @@
 #pragma force_active on
 #include "global.h"
 
+#include "dwc/net_common_internal.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 extern int printf(const char *, ...);
@@ -22,7 +24,6 @@ typedef struct {
 extern const char sStr_TreeInsertLengthError_4[];
 extern Node *LobbyMem_Alloc(u32);
 extern void LobbyTree_InsertRebalance(Node *, void *);
-extern void DWC_Free(int, void *, int);
 Node *LobbyUserIdSet_InsertNode(Tree *, Node *, int, int, const u32 *);
 
 Node *LobbyUserIdSet_InsertNode(Tree *t, Node *parent, int left, int last, const u32 *value) {

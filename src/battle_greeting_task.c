@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+#include "field/fieldmap.h"
+
 #include "field_system.h"
 #include "heap.h"
 #include "launch_application.h"
@@ -11,9 +13,6 @@
 #include "save_misc_data.h"
 #include "screen_fade.h"
 #include "task.h"
-
-extern void MessageFormat_Delete(MessageFormat *messageFormat);
-extern void FieldMap_FadeScreen(int type);
 
 typedef struct BattleGreetingTask {
     FieldSystem *fieldSystem;

@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#include "dwc/dwc_bm_internal.h"
+
 #include "WM.h"
 #include "wifi_setup_access_points.h"
 #include "wifi_setup_app.h"
@@ -63,7 +65,6 @@ extern u16 WM_GetNextTgid(void);
 extern u16 WM_GetDispersionBeaconPeriod(void);
 extern void *MB_CommGetChildUser(u16 aid);
 extern void MB_End(void);
-extern void DWCi_BACKUPlRead(void *buf);
 extern FSResult WifiSetupArchive_Proc(FSFile *file, FSCommandType command);
 extern FSResult WifiSetupArchive_Read(FSArchive *arc, void *dst, u32 pos, u32 size);
 extern FSResult WifiSetupArchive_Write(FSArchive *arc, const void *src, u32 pos, u32 size);
