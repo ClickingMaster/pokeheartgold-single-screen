@@ -3,7 +3,6 @@
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-#pragma force_active on
 #define W(p, o) (*(u32 *)((u8 *)(p) + (o)))
 #define H(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define B(p, o) (*(u8 *)((u8 *)(p) + (o)))

@@ -1,5 +1,4 @@
 #pragma force_active on
-#pragma force_active on
 #include "global.h"
 
 #include "dwc/net_common_internal.h"

@@ -203,8 +203,8 @@ void WiFiPlazaWork_SetGroupMarkerPassed(WiFiPlazaWork *work, int place, int valu
     WiFiPlazaGroups_SetMarkerPassed(&work->groups, place, value);
 }
 
-void WiFiPlazaWork_GetGroupMarkerCount(WiFiPlazaWork *work, int place) {
-    WiFiPlazaGroups_GetMarkerCount(&work->groups, place);
+int WiFiPlazaWork_GetGroupMarkerCount(WiFiPlazaWork *work, int place) {
+    return WiFiPlazaGroups_GetMarkerCount(&work->groups, place);
 }
 
 void WiFiPlazaWork_SendJoinGroup(void) {

@@ -329,9 +329,15 @@ BOOL FrontierRecordsApp_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
+enum {
+    RECORDS_FADE_IN_PRINT,
+    RECORDS_FADE_IN_START,
+    RECORDS_FADE_IN_WAIT,
+};
+
 BOOL FrontierRecordsApp_FadeIn(FrontierRecordsApp *app) {
     switch (app->state) {
-    case 0:
+    case RECORDS_FADE_IN_PRINT:
         if (FrontierRecordsApp_IsHall(app) == TRUE) {
             FrontierRecordsApp_InitHallPicker(app);
         } else {
@@ -339,11 +345,11 @@ BOOL FrontierRecordsApp_FadeIn(FrontierRecordsApp *app) {
         }
         app->state++;
         break;
-    case 1:
+    case RECORDS_FADE_IN_START:
         BeginNormalPaletteFade(0, 1, 1, RGB_BLACK, 6, 3, HEAP_ID_121);
         app->state++;
         break;
-    case 2:
+    case RECORDS_FADE_IN_WAIT:
         if (IsPaletteFadeFinished() == TRUE) {
             return TRUE;
         }
@@ -409,13 +415,18 @@ BOOL FrontierRecordsApp_Run(FrontierRecordsApp *app) {
     return FALSE;
 }
 
+enum {
+    RECORDS_FADE_OUT_START,
+    RECORDS_FADE_OUT_WAIT,
+};
+
 BOOL FrontierRecordsApp_FadeOut(FrontierRecordsApp *app) {
     switch (app->state) {
-    case 0:
+    case RECORDS_FADE_OUT_START:
         BeginNormalPaletteFade(0, 0, 0, RGB_BLACK, 6, 1, HEAP_ID_121);
         app->state++;
         break;
-    case 1:
+    case RECORDS_FADE_OUT_WAIT:
         if (IsPaletteFadeFinished() == TRUE) {
             return TRUE;
         }
@@ -656,6 +667,8 @@ void FrontierRecordsApp_PrintFactoryOpenLevelRecords(FrontierRecordsApp *app) {
     ScheduleWindowCopyToVram(&app->windows[6]);
 }
 
+#define FACTORY_FLAGS_HAS_STREAK 10
+
 // Returns CURRENT if the streak is still running, PREV otherwise
 u32 FrontierRecordsApp_GetFactoryStreakLabel(FrontierRecordsApp *app, u32 level) {
     u32 stat;
@@ -672,7 +685,7 @@ u32 FrontierRecordsApp_GetFactoryStreakLabel(FrontierRecordsApp *app, u32 level)
         result = FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(stat));
     } else {
         int factory = Save_Frontier_GetFactoryFlags(app->saveData);
-        result = FactoryFlags_GetField(factory, 10, (u8)(mode + level * 4), 0);
+        result = FactoryFlags_GetField(factory, FACTORY_FLAGS_HAS_STREAK, (u8)(mode + level * 4), 0);
     }
     return (u8)result == 1 ? msg_0019_00030 : msg_0019_00029;
 }
@@ -774,6 +787,8 @@ void FrontierRecordsApp_PrintCastleRecords(FrontierRecordsApp *app) {
     ScheduleWindowCopyToVram(&app->windows[3]);
 }
 
+#define CASTLE_FLAGS_HAS_STREAK 9
+
 u32 FrontierRecordsApp_GetCastleStreakLabel(FrontierRecordsApp *app) {
     u32 result;
     u8 mode = app->mode;
@@ -782,7 +797,7 @@ u32 FrontierRecordsApp_GetCastleStreakLabel(FrontierRecordsApp *app) {
         FrontierSave *frontierSave = Save_Frontier_GetStatic(app->saveData);
         result = FrontierSave_GetStat(frontierSave, 0x6C, FrontierStat_GetFriendIndex(0x6C));
     } else {
-        result = CastleFlags_GetField(Save_Frontier_GetCastleFlags(app->saveData), 9, mode, 0, 0);
+        result = CastleFlags_GetField(Save_Frontier_GetCastleFlags(app->saveData), CASTLE_FLAGS_HAS_STREAK, mode, 0, 0);
     }
     return (u8)result == 1 ? msg_0019_00030 : msg_0019_00029;
 }
@@ -813,6 +828,8 @@ void FrontierRecordsApp_PrintArcadeRecords(FrontierRecordsApp *app) {
     ScheduleWindowCopyToVram(&app->windows[2]);
 }
 
+#define ARCADE_FLAGS_HAS_STREAK 8
+
 u32 FrontierRecordsApp_GetArcadeStreakLabel(FrontierRecordsApp *app) {
     u32 result;
     u8 mode = app->mode;
@@ -821,7 +838,7 @@ u32 FrontierRecordsApp_GetArcadeStreakLabel(FrontierRecordsApp *app) {
         FrontierSave *frontierSave = Save_Frontier_GetStatic(app->saveData);
         result = FrontierSave_GetStat(frontierSave, 0x6E, FrontierStat_GetFriendIndex(0x6E));
     } else {
-        result = ArcadeFlags_GetField(Save_Frontier_GetArcadeFlags(app->saveData), 8, mode, 0, 0);
+        result = ArcadeFlags_GetField(Save_Frontier_GetArcadeFlags(app->saveData), ARCADE_FLAGS_HAS_STREAK, mode, 0, 0);
     }
     return (u8)result == 1 ? msg_0019_00030 : msg_0019_00029;
 }
@@ -983,11 +1000,17 @@ void FrontierRecordsApp_SetSpritePosition(FrontierRecordsApp *app, int index, s1
     ManagedSprite_SetPositionXY(app->sprites[index], x, y);
 }
 
+enum {
+    BUTTON_FLASH_ON,
+    BUTTON_FLASH_OFF,
+    BUTTON_FLASH_WAIT,
+};
+
 #pragma force_active on
 // Returns 0 once the flash has finished
 int FrontierRecordsApp_RunButtonFlash(FrontierRecordsApp *app) {
     switch (app->flash.state) {
-    case 0:
+    case BUTTON_FLASH_ON:
         if (!app->flash.isBg) {
             ManagedSprite_SetPaletteOverride(app->sprites[app->flash.index], app->flash.paletteOn);
         } else {
@@ -996,7 +1019,7 @@ int FrontierRecordsApp_RunButtonFlash(FrontierRecordsApp *app) {
         }
         app->flash.state++;
         break;
-    case 1:
+    case BUTTON_FLASH_OFF:
         app->flash.timer++;
         if (app->flash.timer != 4) {
             break;
@@ -1010,7 +1033,7 @@ int FrontierRecordsApp_RunButtonFlash(FrontierRecordsApp *app) {
         app->flash.timer = 0;
         app->flash.state++;
         break;
-    case 2:
+    case BUTTON_FLASH_WAIT:
         app->flash.timer++;
         if (app->flash.timer == 2) {
             return 0;
@@ -1025,7 +1048,7 @@ void FrontierRecordsApp_StartReturnButtonFlash(FrontierRecordsApp *app) {
     app->flash.index = 0;
     app->flash.paletteOn = 1;
     app->flash.paletteOff = 0;
-    app->flash.state = 0;
+    app->flash.state = BUTTON_FLASH_ON;
     app->flash.timer = 0;
 }
 #pragma force_active reset
@@ -1238,7 +1261,7 @@ void FrontierRecordsApp_StartLetterFlash(FrontierRecordsApp *app, int letter) {
     app->flash.y = ((position / 7) * 32 + 40) / 8 + 32;
     app->flash.width = 2;
     app->flash.height = 2;
-    app->flash.state = 0;
+    app->flash.state = BUTTON_FLASH_ON;
     app->flash.timer = 0;
 }
 #pragma pop
@@ -1337,7 +1360,7 @@ void FrontierRecordsApp_StartSpeciesFlash(FrontierRecordsApp *app, int slot) {
     app->flash.y = (position / 2) * 4 + 37;
     app->flash.width = 9;
     app->flash.height = 2;
-    app->flash.state = 0;
+    app->flash.state = BUTTON_FLASH_ON;
     app->flash.timer = 0;
 }
 
@@ -1350,7 +1373,7 @@ void FrontierRecordsApp_StartArrowFlash(FrontierRecordsApp *app, u8 x, u8 y) {
     app->flash.y = y;
     app->flash.width = 4;
     app->flash.height = 4;
-    app->flash.state = 0;
+    app->flash.state = BUTTON_FLASH_ON;
     app->flash.timer = 0;
 }
 

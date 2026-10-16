@@ -718,7 +718,7 @@ void WiFiPlazaWork_GetGroupActionRequest(WiFiPlazaWork *work, int place);
 void WiFiPlazaWork_ClearGroupActionRequest(WiFiPlazaWork *work, int place);
 void WiFiPlaza_SplitGroupPlace(u32 value, u32 *quotient, u32 *remainder);
 void WiFiPlazaWork_SetGroupMarkerPassed(WiFiPlazaWork *work, int place, int value);
-void WiFiPlazaWork_GetGroupMarkerCount(WiFiPlazaWork *work, int place);
+int WiFiPlazaWork_GetGroupMarkerCount(WiFiPlazaWork *work, int place);
 void WiFiPlazaWork_SendJoinGroup(void);
 void WiFiPlazaWork_SendGroupAction(void);
 void WiFiPlazaWork_ResetTalk(WiFiPlazaWork *work);

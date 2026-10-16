@@ -7,7 +7,6 @@
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-#pragma force_active on
 
 // Requests sent to the chat server whose answers are still awaited: the ChatConnection.requests list, the results
 // they collect, completion (queues the user callback) and cancellation, and the channel mode strings.

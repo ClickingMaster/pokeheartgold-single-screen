@@ -17,38 +17,48 @@ int Frontier_Init(void *manager) {
     return 1;
 }
 
+enum {
+    FRONTIER_MAIN_INIT,
+    FRONTIER_MAIN_RUN,
+    FRONTIER_MAIN_EXIT,
+    FRONTIER_MAIN_START_CHILD_APP,
+    FRONTIER_MAIN_RUN_CHILD_APP,
+    FRONTIER_MAIN_FREE_MAP,
+    FRONTIER_MAIN_REBUILD_MAP,
+};
+
 int Frontier_Main(void *manager, int *state) {
     FrontierWork *work = OverlayManager_GetData(manager);
     switch (*state) {
-    case 0:
-        *state = 1;
+    case FRONTIER_MAIN_INIT:
+        *state = FRONTIER_MAIN_RUN;
         break;
-    case 1:
+    case FRONTIER_MAIN_RUN:
         if (work->exitRequested == 1) {
-            *state = 2;
+            *state = FRONTIER_MAIN_EXIT;
             break;
         }
         if (work->mapActive == 0) {
             break;
         }
         if (work->rebuildPending == 1) {
-            *state = 5;
+            *state = FRONTIER_MAIN_FREE_MAP;
             break;
         }
         FrontierSystem_Main(work->system);
         if (work->childManager != 0) {
-            *state = 3;
+            *state = FRONTIER_MAIN_START_CHILD_APP;
         }
         break;
-    case 2:
+    case FRONTIER_MAIN_EXIT:
         return 1;
-    case 3:
+    case FRONTIER_MAIN_START_CHILD_APP:
         FrontierMap_SaveObjects(work->map);
         Frontier_FreeMap(work);
         Frontier_UnloadOverlays();
-        *state = 4;
+        *state = FRONTIER_MAIN_RUN_CHILD_APP;
         break;
-    case 4:
+    case FRONTIER_MAIN_RUN_CHILD_APP:
         if (OverlayManager_Run(work->childManager) == 1) {
             OverlayManager_Delete(work->childManager);
             Frontier_LoadOverlays();
@@ -63,15 +73,15 @@ int Frontier_Main(void *manager, int *state) {
             work->childArgs = 0;
             Frontier_CreateMap(work);
             FrontierMap_RestoreObjects(work->map);
-            *state = 1;
+            *state = FRONTIER_MAIN_RUN;
         }
         break;
-    case 5:
+    case FRONTIER_MAIN_FREE_MAP:
         Frontier_FreeMap(work);
         Frontier_ResetMapObjects(work);
-        *state = 6;
+        *state = FRONTIER_MAIN_REBUILD_MAP;
         break;
-    case 6:
+    case FRONTIER_MAIN_REBUILD_MAP:
         Frontier_CreateMap(work);
         if (work->taskId == 0xffff) {
             FrontierSystem_ChangeMsgBank(work->system, ((FrontierLaunchArgsInternal *)work->launchArgs)->mode, 11);
@@ -83,7 +93,7 @@ int Frontier_Main(void *manager, int *state) {
             FrontierSystem_RestoreVars(work->system, saved);
         }
         work->rebuildPending = 0;
-        *state = 1;
+        *state = FRONTIER_MAIN_RUN;
         break;
     }
     return 0;

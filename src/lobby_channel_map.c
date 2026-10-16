@@ -7,7 +7,6 @@
 #include <nitro/code32.h>
 
 #include "../lib/NitroDWC/src/tree-iterator4.h"
-#pragma force_active on
 
 typedef struct {
     u32 count;

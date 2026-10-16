@@ -189,6 +189,28 @@ void FrontierBrainIntro_MainTask(SysTask *task, void *data) {
     }
 }
 
+enum {
+    BRAIN_INTRO_LOAD,
+    BRAIN_INTRO_FLASH_OUT,
+    BRAIN_INTRO_WAIT_FLASH_OUT,
+    BRAIN_INTRO_FLASH_IN,
+    BRAIN_INTRO_WAIT_FLASH_IN,
+    BRAIN_INTRO_OPEN_WINDOW,
+    BRAIN_INTRO_WAIT_WINDOW,
+    BRAIN_INTRO_BURST,
+    BRAIN_INTRO_EMPTY_STEP,
+    BRAIN_INTRO_SLIDE_IN,
+    BRAIN_INTRO_START_DELAY,
+    BRAIN_INTRO_DELAY_FLASH_OUT,
+    BRAIN_INTRO_SHOW_NAME,
+    BRAIN_INTRO_FLASH_IN_NAME,
+    BRAIN_INTRO_WAIT_FLASH_IN_NAME,
+    BRAIN_INTRO_HOLD,
+    BRAIN_INTRO_FADE_OUT,
+    BRAIN_INTRO_WAIT_FADE_OUT,
+    BRAIN_INTRO_FINISH,
+};
+
 #pragma force_active on
 BOOL FrontierBrainIntro_Run(FrontierBrainIntro *intro, enum HeapID heapID, const FrontierBrainIntroArgs *args) {
     FrontierBrainIntroSprites *sprites = intro->sprites;
@@ -201,7 +223,7 @@ BOOL FrontierBrainIntro_Run(FrontierBrainIntro *intro, enum HeapID heapID, const
     int slot;
 
     switch (intro->state) {
-    case 0:
+    case BRAIN_INTRO_LOAD:
         intro->sprites = Heap_Alloc(heapID, sizeof(FrontierBrainIntroSprites));
         memset(intro->sprites, 0, sizeof(FrontierBrainIntroSprites));
         sprites = intro->sprites;
@@ -247,58 +269,58 @@ BOOL FrontierBrainIntro_Run(FrontierBrainIntro *intro, enum HeapID heapID, const
         FrontierBrainIntro_CreateBurst(intro, &sprites->burst, x + FX32_CONST(72), y + FX32_CONST(82), heapID);
         intro->state++;
         break;
-    case 1:
+    case BRAIN_INTRO_FLASH_OUT:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_WHITE, 3, 1, heapID);
         intro->state++;
         break;
-    case 2:
+    case BRAIN_INTRO_WAIT_FLASH_OUT:
         if (IsPaletteFadeFinished()) {
             intro->state++;
         }
         break;
-    case 3:
+    case BRAIN_INTRO_FLASH_IN:
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_WHITE, 3, 1, heapID);
         intro->state++;
         break;
-    case 4:
+    case BRAIN_INTRO_WAIT_FLASH_IN:
         if (IsPaletteFadeFinished()) {
             intro->state++;
         }
         break;
-    case 5:
+    case BRAIN_INTRO_OPEN_WINDOW:
         FrontierBrainIntro_StartWindowAnim(intro, FALSE);
         intro->state++;
         break;
-    case 6:
+    case BRAIN_INTRO_WAIT_WINDOW:
         if (intro->windowAnim.finished == TRUE) {
             intro->state++;
             sprites->timer = 10;
         }
         break;
-    case 7:
+    case BRAIN_INTRO_BURST:
         if (--sprites->timer < 0 && FrontierBrainIntro_UpdateBurst(&sprites->burst) == TRUE) {
             intro->state++;
         }
         break;
-    case 8:
+    case BRAIN_INTRO_EMPTY_STEP:
         intro->state++;
         break;
-    case 9:
+    case BRAIN_INTRO_SLIDE_IN:
         if (FrontierBrainIntro_SlideInBrain(intro, sprites, &intro->slide) == TRUE) {
             intro->state++;
         }
         break;
-    case 10:
+    case BRAIN_INTRO_START_DELAY:
         sprites->timer = 10;
         intro->state++;
         break;
-    case 11:
+    case BRAIN_INTRO_DELAY_FLASH_OUT:
         if (--sprites->timer < 0) {
             BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_WHITE, 3, 1, heapID);
             intro->state++;
         }
         break;
-    case 12:
+    case BRAIN_INTRO_SHOW_NAME:
         if (IsPaletteFadeFinished()) {
             PaletteData_BlendPalettes(intro->paletteData, PLTTBUF_MAIN_OBJ, (u16)(0x3FFF ^ intro->paletteMask), 14, RGB_BLACK);
             PaletteData_BlendPalette(intro->paletteData, PLTTBUF_MAIN_OBJ, (u16)(intro->brainPaletteSlot << 4), 16, 0, RGB_BLACK);
@@ -307,31 +329,31 @@ BOOL FrontierBrainIntro_Run(FrontierBrainIntro *intro, enum HeapID heapID, const
             intro->state++;
         }
         break;
-    case 13:
+    case BRAIN_INTRO_FLASH_IN_NAME:
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_WHITE, 3, 1, heapID);
         intro->state++;
         break;
-    case 14:
+    case BRAIN_INTRO_WAIT_FLASH_IN_NAME:
         if (IsPaletteFadeFinished()) {
             sprites->timer = 26;
             intro->state++;
         }
         break;
-    case 15:
+    case BRAIN_INTRO_HOLD:
         if (--sprites->timer < 0) {
             intro->state++;
         }
         break;
-    case 16:
+    case BRAIN_INTRO_FADE_OUT:
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_WHITE, 15, 1, HEAP_ID_101);
         intro->state++;
         break;
-    case 17:
+    case BRAIN_INTRO_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished()) {
             intro->state++;
         }
         break;
-    case 18:
+    case BRAIN_INTRO_FINISH:
         SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_WHITE);
         if (intro->done) {
             *intro->done = 1;
@@ -610,15 +632,20 @@ void FrontierBrainIntro_CloseWindowTask(SysTask *task, void *data) {
     }
 }
 
+enum {
+    BRAIN_SLIDE_START,
+    BRAIN_SLIDE_MOVE,
+};
+
 BOOL FrontierBrainIntro_SlideInBrain(FrontierBrainIntro *intro, FrontierBrainIntroSprites *sprites, FrontierBrainIntroSlide *slide) {
     switch (slide->state) {
-    case 0:
+    case BRAIN_SLIDE_START:
         ManagedSprite_SetPositionXYWithSubscreenOffset(sprites->brainSprite, (s16)(intro->x + 256), (s16)(intro->y + 80), FX32_CONST(512));
         ManagedSprite_SetDrawFlag(sprites->brainSprite, TRUE);
         slide->x = 0x10000;
         slide->state++;
         break;
-    case 1:
+    case BRAIN_SLIDE_MOVE:
         slide->x -= 0xF00;
         if (slide->x <= 0xD000) {
             slide->x = 0xD000;

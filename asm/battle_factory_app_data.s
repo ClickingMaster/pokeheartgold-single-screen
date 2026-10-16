@@ -770,14 +770,14 @@
 	.public BattleFactoryApp_CreateSwapInGrid
 	.public BattleFactory_SetSwapInGridMenu
 	.public gBattleFactoryBallPositions_Multi2
-	.public ov81_0224345E
+	.public gBattleFactoryBallY_Multi2
 	.public gBattleFactoryBallPositions_Single
-	.public ov81_02243466
+	.public gBattleFactoryBallY_Single
 	.public gBattleFactoryBallPositions_Multi
-	.public ov81_02243472
+	.public gBattleFactoryBallY_Multi
 	.public gBattleFactoryAppGraphicsModes
 	.public gBattleFactoryBallPositions_Rental
-	.public ov81_02243492
+	.public gBattleFactoryBallY_Rental
 	.public gBattleFactoryAppBgTemplate_Main1
 	.public gBattleFactoryAppBgTemplate_Main2
 	.public gBattleFactoryAppBgTemplate_Sub1
@@ -1062,20 +1062,20 @@ gBattleFactoryAppSummaryPages:
 gBattleFactoryBallPositions_Multi2: ; 0x0224345C
 	.byte 0x60, 0x00
 
-ov81_0224345E: ; 0x0224345E
+gBattleFactoryBallY_Multi2: ; 0x0224345E
 	.byte 0x40, 0x00
 	.byte 0x98, 0x00, 0x40, 0x00
 
 gBattleFactoryBallPositions_Single: ; 0x02243464
 	.byte 0x40, 0x00
 
-ov81_02243466: ; 0x02243466
+gBattleFactoryBallY_Single: ; 0x02243466
 	.byte 0x40, 0x00, 0x78, 0x00, 0x40, 0x00, 0xB0, 0x00, 0x40, 0x00
 
 gBattleFactoryBallPositions_Multi: ; 0x02243470
 	.byte 0x28, 0x00
 
-ov81_02243472: ; 0x02243472
+gBattleFactoryBallY_Multi: ; 0x02243472
 	.byte 0x40, 0x00, 0x60, 0x00, 0x40, 0x00, 0x98, 0x00, 0x40, 0x00, 0xD0, 0x00, 0x40, 0x00
 
 gBattleFactoryAppGraphicsModes: ; 0x02243480
@@ -1084,7 +1084,7 @@ gBattleFactoryAppGraphicsModes: ; 0x02243480
 gBattleFactoryBallPositions_Rental: ; 0x02243490
 	.byte 0x18, 0x00
 
-ov81_02243492: ; 0x02243492
+gBattleFactoryBallY_Rental: ; 0x02243492
 	.byte 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x68, 0x00, 0x40, 0x00, 0x90, 0x00, 0x40, 0x00
 	.byte 0xB8, 0x00, 0x40, 0x00, 0xE0, 0x00, 0x40, 0x00
 

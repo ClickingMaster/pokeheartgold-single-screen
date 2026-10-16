@@ -133,8 +133,8 @@
 .public gBattleArcadePlayerMonIconPositions
 .public gBattleArcadeOpponentMonIconPositions
 .public gBattleArcadeEventBgFiles
-.public ov80_0223BF5C
-.public ov80_0223BF5E
+.public gBattleArcadeEventBgScreenFiles
+.public gBattleArcadeEventBgPaletteFiles
 .public gBattleArcadeRoundValues_Single
 .public gBattleArcadeRoundValues_Multi
 .public gBattleArcadeEventItemLists
@@ -154,7 +154,7 @@
 .public gBattleArcadeItems_Rank3
 .public gBattleArcadeBerries_Rank3
 .public gBattleArcadeEventBgFiles
-.public ov80_0223BF5C
-.public ov80_0223BF5E
+.public gBattleArcadeEventBgScreenFiles
+.public gBattleArcadeEventBgPaletteFiles
 .public gBattleArcadeRoundValues_Single
 .public gBattleArcadeRoundValues_Multi

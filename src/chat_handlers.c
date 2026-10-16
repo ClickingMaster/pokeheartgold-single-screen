@@ -7,7 +7,6 @@
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-#pragma force_active on
 
 // Handlers of the lines received from the chat server (the command table): messages, the user and channel
 // commands, errors and invitations, the channel user list, topic and WHO replies, and nick errors. The server

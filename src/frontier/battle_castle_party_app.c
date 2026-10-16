@@ -239,7 +239,7 @@ extern const u16 gBattleCastlePartyAppHealCosts[];     // CP cost of RESTORE HP 
 extern const u16 gBattleCastlePartyAppMainMenuHelpMessages[];     // main menu help messages, by cursor position
 extern const u16 gBattleCastlePartyAppItemCounts[];     // number of rentable items, by rental rank - 1
 extern const u16 gBattleCastlePartyAppRankUpCosts[2][3]; // CP cost of the next rank, by rank kind (CASTLE_RANK_*) and rank
-extern const u16 ov83_02247D4E[];     // = gBattleCastlePartyAppRankUpCosts[CASTLE_RANK_RENTAL] (referenced by its own label)
+extern const u16 gBattleCastlePartyAppRentalRankUpCosts[];     // = gBattleCastlePartyAppRankUpCosts[CASTLE_RANK_RENTAL] (referenced by its own label)
 extern const u16 gBattleCastlePartyAppRankUpMessages[2][3]; // "gained the ability to..." messages, by rank kind and rank
 extern const BattleCastleMenuItem gBattleCastlePartyAppMainMenuItems[];
 extern const BattleCastleMenuOption gBattleCastlePartyAppRentalMenuOptions[]; // BERRIES / ITEMS / RANK UP / CANCEL
@@ -510,17 +510,25 @@ BOOL BattleCastlePartyApp_Exit(OverlayManager *manager) {
     return TRUE;
 }
 
+enum {
+    CASTLE_PARTY_FADE_IN_START_SYNC,
+    CASTLE_PARTY_FADE_IN_WAIT_SYNC,
+    CASTLE_PARTY_FADE_IN_SEND_START,
+    CASTLE_PARTY_FADE_IN_WAIT_PARTNER,
+    CASTLE_PARTY_FADE_IN_WAIT_FADE,
+};
+
 #pragma force_active on
 BOOL BattleCastlePartyApp_FadeIn(BattleCastlePartyApp *app) {
     switch (app->subState) {
-    case 0:
+    case CASTLE_PARTY_FADE_IN_START_SYNC:
         if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
             LinkSync_ClearPackets();
             LinkSync_StartSync(CASTLE_PARTY_SYNC_START);
         }
         app->subState++;
         break;
-    case 1:
+    case CASTLE_PARTY_FADE_IN_WAIT_SYNC:
         if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
             if (LinkSync_IsSynced(CASTLE_PARTY_SYNC_START) == TRUE) {
                 LinkSync_ClearPackets();
@@ -530,7 +538,7 @@ BOOL BattleCastlePartyApp_FadeIn(BattleCastlePartyApp *app) {
             app->subState++;
         }
         break;
-    case 2:
+    case CASTLE_PARTY_FADE_IN_SEND_START:
         if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
             if (BattleCastlePartyApp_SendLinkCommand(app, CASTLE_LINK_CMD_START, 0) == TRUE) {
                 app->subState++;
@@ -541,7 +549,7 @@ BOOL BattleCastlePartyApp_FadeIn(BattleCastlePartyApp *app) {
             app->subState++;
         }
         break;
-    case 3:
+    case CASTLE_PARTY_FADE_IN_WAIT_PARTNER:
         if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
             if (app->linkRecvCount >= 2) {
                 app->linkRecvCount = 0;
@@ -553,7 +561,7 @@ BOOL BattleCastlePartyApp_FadeIn(BattleCastlePartyApp *app) {
             app->subState++;
         }
         break;
-    case 4:
+    case CASTLE_PARTY_FADE_IN_WAIT_FADE:
         if (IsPaletteFadeFinished() == TRUE) {
             return TRUE;
         }
@@ -845,7 +853,7 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
             }
             app->action = input;
             BattleCastlePartyApp_CloseRentalMenu(app);
-            BattleCastlePartyApp_BufferNumber(app, 0, ov83_02247D4E[rank], 4, 0);
+            BattleCastlePartyApp_BufferNumber(app, 0, gBattleCastlePartyAppRentalRankUpCosts[rank], 4, 0);
             app->printerId = BattleCastlePartyApp_ShowMessage(app, msg_0031_00038, 1);
             BattleCastlePartyApp_ShowYesNoPrompt(app);
             app->subState = CASTLE_PARTY_STATE_CONFIRM_RENT_RANK_UP;
@@ -989,7 +997,7 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
             cpStat = BattleCastle_GetPointsStat(app->frontierType);
             points = FrontierSave_GetStat(app->frontierSave, cpStat, FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(app->frontierType)));
             rank = BattleCastle_GetRank(app->saveData, app->frontierType, CASTLE_RANK_RENTAL);
-            if (points < ov83_02247D4E[rank]) {
+            if (points < gBattleCastlePartyAppRentalRankUpCosts[rank]) {
                 BattleCastle_DrawWindowFrame(&app->windows[CASTLE_PARTY_WIN_MESSAGE], Options_GetFrame(app->options));
                 app->printerId = BattleCastlePartyApp_ShowMessage(app, msg_0031_00041, 1);
                 app->subState = CASTLE_PARTY_STATE_RENTAL_MENU_MESSAGE;
@@ -1117,9 +1125,17 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
 }
 #pragma force_active reset
 
+enum {
+    CASTLE_PARTY_LINK_ACTION_SEND,
+    CASTLE_PARTY_LINK_ACTION_APPLY,
+    CASTLE_PARTY_LINK_ACTION_PLAY_EFFECT,
+    CASTLE_PARTY_LINK_ACTION_DELAY,
+    CASTLE_PARTY_LINK_ACTION_WAIT_SYNC,
+};
+
 BOOL BattleCastlePartyApp_LinkAction(BattleCastlePartyApp *app) {
     switch (app->subState) {
-    case 0:
+    case CASTLE_PARTY_LINK_ACTION_SEND:
         app->flags.bits.linkResume = 0;
         BattleCastle_RequestBgToggle(GF_BG_LYR_MAIN_2, 0, &app->bgToggleRequests);
         if (BattleCastlePartyApp_SendLinkCommand(app, CASTLE_LINK_CMD_ACTION, app->cursorPos) == TRUE) {
@@ -1127,7 +1143,7 @@ BOOL BattleCastlePartyApp_LinkAction(BattleCastlePartyApp *app) {
             app->subState++;
         }
         break;
-    case 1:
+    case CASTLE_PARTY_LINK_ACTION_APPLY:
         if (app->linkSlot != 0xFF) {
             u8 action;
 
@@ -1141,13 +1157,13 @@ BOOL BattleCastlePartyApp_LinkAction(BattleCastlePartyApp *app) {
             app->subState++;
         }
         break;
-    case 2:
+    case CASTLE_PARTY_LINK_ACTION_PLAY_EFFECT:
         if (BattleCastlePartyApp_PlayActionEffect(app, BattleCastle_GetSideSlot(app->numOwnSlots, app->linkSlot), app->action) == TRUE) {
             app->timer = 30;
             app->subState++;
         }
         break;
-    case 3:
+    case CASTLE_PARTY_LINK_ACTION_DELAY:
         app->timer--;
         if (app->timer == 0) {
             LinkSync_ClearPackets();
@@ -1155,7 +1171,7 @@ BOOL BattleCastlePartyApp_LinkAction(BattleCastlePartyApp *app) {
             app->subState++;
         }
         break;
-    case 4:
+    case CASTLE_PARTY_LINK_ACTION_WAIT_SYNC:
         if (LinkSync_IsSynced(CASTLE_PARTY_SYNC_ACTION) == TRUE) {
             LinkSync_ClearPackets();
             LinkSync_Init(HEAP_ID_107);
@@ -1172,15 +1188,21 @@ BOOL BattleCastlePartyApp_LinkAction(BattleCastlePartyApp *app) {
     return FALSE;
 }
 
+enum {
+    CASTLE_PARTY_LINK_EXIT_SEND,
+    CASTLE_PARTY_LINK_EXIT_DELAY,
+    CASTLE_PARTY_LINK_EXIT_WAIT_SYNC,
+};
+
 BOOL BattleCastlePartyApp_LinkExit(BattleCastlePartyApp *app) {
     switch (app->subState) {
-    case 0:
+    case CASTLE_PARTY_LINK_EXIT_SEND:
         if (BattleCastlePartyApp_SendLinkCommand(app, CASTLE_LINK_CMD_EXIT, 0) == TRUE) {
             app->timer = 30;
             app->subState++;
         }
         break;
-    case 1:
+    case CASTLE_PARTY_LINK_EXIT_DELAY:
         if (app->timer != 0) {
             app->timer--;
         }
@@ -1190,7 +1212,7 @@ BOOL BattleCastlePartyApp_LinkExit(BattleCastlePartyApp *app) {
             app->subState++;
         }
         break;
-    case 2:
+    case CASTLE_PARTY_LINK_EXIT_WAIT_SYNC:
         if (LinkSync_IsSynced(CASTLE_PARTY_SYNC_EXIT) == TRUE) {
             LinkSync_ClearPackets();
             BattleCastlePartyApp_CloseWindow(&app->windows[CASTLE_PARTY_WIN_MESSAGE]);
@@ -1201,13 +1223,18 @@ BOOL BattleCastlePartyApp_LinkExit(BattleCastlePartyApp *app) {
     return FALSE;
 }
 
+enum {
+    CASTLE_PARTY_FADE_OUT_START,
+    CASTLE_PARTY_FADE_OUT_WAIT,
+};
+
 BOOL BattleCastlePartyApp_FadeOut(BattleCastlePartyApp *app) {
     switch (app->subState) {
-    case 0:
+    case CASTLE_PARTY_FADE_OUT_START:
         BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, HEAP_ID_107);
         app->subState++;
         break;
-    case 1:
+    case CASTLE_PARTY_FADE_OUT_WAIT:
         if (IsPaletteFadeFinished() == TRUE) {
             return TRUE;
         }

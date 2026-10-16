@@ -38,9 +38,9 @@ typedef struct BattleCastleTrainerRange {
 } BattleCastleTrainerRange;
 
 extern const u16 gBattleCastleRoundTrainerRanges[];
-extern const u16 ov80_0223D4D6[];
-extern const u16 ov80_0223D4D8[];
-extern const u16 ov80_0223D4DA[];
+extern const u16 gBattleCastleRoundTrainerMaxes[];
+extern const u16 gBattleCastleRoundLastBattleMins[];
+extern const u16 gBattleCastleRoundLastBattleMaxes[];
 
 void *FrontierTrainer_Load(BattleCastleTrainerRecord *record, int trainerId, enum HeapID heapID, int narcId);
 void FrontierTrainer_SetBattleTrainer(BattleSetup *setup, BattleCastleTrainerRecord *record, int count, int battler, enum HeapID heapID);
@@ -68,11 +68,11 @@ int BattleCastle_GetRandomTrainerId(int type, u32 round, int battleNo) {
         round = 7;
     }
     if (battleNo == 6 || battleNo == 13) {
-        min = ov80_0223D4D8[round * 4];
-        span = ov80_0223D4DA[round * 4] - min;
+        min = gBattleCastleRoundLastBattleMins[round * 4];
+        span = gBattleCastleRoundLastBattleMaxes[round * 4] - min;
     } else {
         min = gBattleCastleRoundTrainerRanges[round * 4];
-        span = ov80_0223D4D6[round * 4] - min;
+        span = gBattleCastleRoundTrainerMaxes[round * 4] - min;
     }
     return min + LCRandom() % span;
 }

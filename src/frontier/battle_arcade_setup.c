@@ -31,9 +31,9 @@ typedef struct BattleArcadeTrainerRecord {
 } BattleArcadeTrainerRecord;
 
 extern const u16 gBattleArcadeRoundTrainerRanges[];
-extern const u16 ov80_0223D516[];
-extern const u16 ov80_0223D518[];
-extern const u16 ov80_0223D51A[];
+extern const u16 gBattleArcadeRoundTrainerMaxes[];
+extern const u16 gBattleArcadeRoundLastBattleMins[];
+extern const u16 gBattleArcadeRoundLastBattleMaxes[];
 
 void *FrontierTrainer_Load(BattleArcadeTrainerRecord *record, u16 trainerId, enum HeapID heapID, int narcId);
 void FrontierTrainer_SetBattleTrainer(BattleSetup *setup, BattleArcadeTrainerRecord *record, int count, int battler, enum HeapID heapID);
@@ -59,11 +59,11 @@ u32 BattleArcade_GetRandomTrainerId(u32 type, u32 round, u32 battleNo) {
         round = 7;
     }
     if (battleNo == 6 || battleNo == 13) {
-        min = ov80_0223D518[round * 4];
-        span = ov80_0223D51A[round * 4] - min;
+        min = gBattleArcadeRoundLastBattleMins[round * 4];
+        span = gBattleArcadeRoundLastBattleMaxes[round * 4] - min;
     } else {
         min = gBattleArcadeRoundTrainerRanges[round * 4];
-        span = ov80_0223D516[round * 4] - min;
+        span = gBattleArcadeRoundTrainerMaxes[round * 4] - min;
     }
     return min + LCRandom() % span;
 }

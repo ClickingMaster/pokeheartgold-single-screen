@@ -142,17 +142,53 @@ BOOL FrtCmd_FactorySetOpponentParty(FrontierScriptContext *ctx) {
     return FALSE;
 }
 
+enum {
+    FACTORY_ACTION_SET_LEVEL_MODE = 1,
+    FACTORY_ACTION_SET_TYPE,
+    FACTORY_ACTION_GET_SELECTION,
+    FACTORY_ACTION_GET_WIN_STREAK,
+    FACTORY_ACTION_INC_WIN_STREAK,
+    FACTORY_ACTION_RESET_SYSTEM = 7,
+    FACTORY_ACTION_GET_SAVED = 9,
+    FACTORY_ACTION_SAVE,
+    FACTORY_ACTION_NEXT_BATTLE = 14,
+    FACTORY_ACTION_GET_OPPONENT_SPECIES,
+    FACTORY_ACTION_GET_OPPONENT_MOVE,
+    FACTORY_ACTION_GET_OPPONENT_TYPE,
+    FACTORY_ACTION_GET_OPPONENT_MAIN_TYPE,
+    FACTORY_ACTION_GET_ROUND,
+    FACTORY_ACTION_GET_TRAINER_SPRITE,
+    FACTORY_ACTION_COMPLETE_ROUND = 22,
+    FACTORY_ACTION_GET_BATTLE_NO,
+    FACTORY_ACTION_GET_PARTNER_VALUE_A,
+    FACTORY_ACTION_GET_PARTNER_VALUE_B = 26,
+    FACTORY_ACTION_REGISTER_LINK_COMMANDS,
+    FACTORY_ACTION_IS_MULTI,
+    FACTORY_ACTION_GET_TYPE,
+    FACTORY_ACTION_SET_BG_PALETTE,
+    FACTORY_ACTION_START_BG_SCROLL,
+    FACTORY_ACTION_STOP_BG_SCROLL,
+    FACTORY_ACTION_LOAD_TRAINERS,
+    FACTORY_ACTION_BUFFER_PARTY_NAMES,
+    FACTORY_ACTION_GET_WON_BATTLE_POINTS,
+    FACTORY_ACTION_INC_TRADE_COUNT,
+    FACTORY_ACTION_GET_BRAIN_BATTLE,
+    FACTORY_ACTION_ADD_PARTNER_MONS,
+    FACTORY_ACTION_GENERATE_OPPONENTS,
+    FACTORY_ACTION_SET_PARTY_TO_RENTALS,
+};
+
 BOOL FrtCmd_FactoryAction(FrontierScriptContext *ctx) {
     u8 action;
     u8 arg;
     BattleFactoryData *data;
     FrontierMap *map;
-    int arg2;
+    int moveIndex;
     u16 *var;
 
     action = FrontierScriptContext_ReadByte(ctx);
     arg = FrontierScriptContext_ReadByte(ctx);
-    arg2 = FrontierScriptContext_ReadByte(ctx);
+    moveIndex = FrontierScriptContext_ReadByte(ctx);
     var = FrontierScript_ReadVarPtr(ctx);
     data = Frontier_GetData(ctx->frontierSystem->frontierWork);
     map = FrontierSystem_GetFrontierMap(ctx->frontierSystem);
@@ -161,44 +197,44 @@ BOOL FrtCmd_FactoryAction(FrontierScriptContext *ctx) {
     case 0:
         data->unk_007 = arg;
         break;
-    case 1:
+    case FACTORY_ACTION_SET_LEVEL_MODE:
         data->levelMode = arg;
         break;
-    case 2:
+    case FACTORY_ACTION_SET_TYPE:
         data->type = arg;
         break;
-    case 3:
+    case FACTORY_ACTION_GET_SELECTION:
         *var = data->selection[arg];
         break;
-    case 4:
+    case FACTORY_ACTION_GET_WIN_STREAK:
         *var = data->winStreak;
         break;
-    case 5: {
+    case FACTORY_ACTION_INC_WIN_STREAK: {
         u16 winStreak = data->winStreak;
         if (winStreak < 9999) {
             data->winStreak = winStreak + 1;
         }
         break;
     }
-    case 7:
+    case FACTORY_ACTION_RESET_SYSTEM:
         OS_ResetSystem(0);
         break;
-    case 9:
+    case FACTORY_ACTION_GET_SAVED:
         *var = FactoryChallenge_GetSaved(data->challenge);
         break;
-    case 10:
+    case FACTORY_ACTION_SAVE:
         BattleFactoryData_SaveRecord(data, 2);
         break;
-    case 14:
+    case FACTORY_ACTION_NEXT_BATTLE:
         *var = BattleFactory_IncBattleNo(data);
         break;
-    case 15:
+    case FACTORY_ACTION_GET_OPPONENT_SPECIES:
         *var = data->opponentMons[arg].species;
         break;
-    case 16:
-        *var = data->opponentMons[arg].moves[arg2];
+    case FACTORY_ACTION_GET_OPPONENT_MOVE:
+        *var = data->opponentMons[arg].moves[moveIndex];
         break;
-    case 17: {
+    case FACTORY_ACTION_GET_OPPONENT_TYPE: {
         Pokemon *mon = AllocMonZeroed(HEAP_ID_FIELD2);
         FrontierMon_ToPokemon(&data->opponentMons[arg], mon, BattleFactory_GetMonLevel(data));
         *var = GetMonData(mon, MON_DATA_TYPE_1, NULL);
@@ -206,7 +242,7 @@ BOOL FrtCmd_FactoryAction(FrontierScriptContext *ctx) {
         break;
     }
     // the type most of the opponent's Pokemon have, 0xFF when no type is shared
-    case 18: {
+    case FACTORY_ACTION_GET_OPPONENT_MAIN_TYPE: {
         int count;
         int i;
         int types[18];
@@ -254,54 +290,54 @@ BOOL FrtCmd_FactoryAction(FrontierScriptContext *ctx) {
         }
         break;
     }
-    case 19:
+    case FACTORY_ACTION_GET_ROUND:
         *var = BattleFactory_GetRound(data);
         break;
-    case 20:
+    case FACTORY_ACTION_GET_TRAINER_SPRITE:
         *var = BattleFactory_GetTrainerSprite(data, arg);
         break;
     case 21:
         BattleFactoryData_SaveRecordMode1(data);
         break;
-    case 22:
+    case FACTORY_ACTION_COMPLETE_ROUND:
         BattleFactory_CompleteRound(data);
         break;
-    case 23:
+    case FACTORY_ACTION_GET_BATTLE_NO:
         *var = BattleFactory_GetBattleNo(data);
         break;
-    case 24:
+    case FACTORY_ACTION_GET_PARTNER_VALUE_A:
         *var = data->partnerValueA;
         break;
-    case 26:
+    case FACTORY_ACTION_GET_PARTNER_VALUE_B:
         *var = data->partnerValueB;
         break;
-    case 27:
+    case FACTORY_ACTION_REGISTER_LINK_COMMANDS:
         FrontierLink_RegisterCommands(data);
         break;
-    case 28:
+    case FACTORY_ACTION_IS_MULTI:
         *var = BattleFactory_IsMultiType(data->type);
         break;
-    case 29:
+    case FACTORY_ACTION_GET_TYPE:
         *var = data->type;
         break;
-    case 30:
+    case FACTORY_ACTION_SET_BG_PALETTE:
         BgTilemapRectChangePalette(map->bgConfig, 3, 3, 10, 26, 11, arg);
         ScheduleBgTilemapBufferTransfer(map->bgConfig, 3);
         break;
-    case 31:
+    case FACTORY_ACTION_START_BG_SCROLL:
         data->scrollTask = SysTask_CreateOnMainQueue(BattleFactory_BgScrollTask, FrontierSystem_GetFrontierMap(ctx->frontierSystem), 5);
         break;
-    case 32:
+    case FACTORY_ACTION_STOP_BG_SCROLL:
         if (data->scrollTask != NULL) {
             SysTask_Destroy(data->scrollTask);
             data->scrollTask = NULL;
         }
         break;
-    case 33:
+    case FACTORY_ACTION_LOAD_TRAINERS:
         FrontierTrainer_LoadRecord(&data->trainers[0], data->trainerIds[data->battleNo], HEAP_ID_FIELD2, NARC_a_2_0_2);
         FrontierTrainer_LoadRecord(&data->trainers[1], data->trainerIds[data->battleNo + 7], HEAP_ID_FIELD2, NARC_a_2_0_2);
         break;
-    case 34: {
+    case FACTORY_ACTION_BUFFER_PARTY_NAMES: {
         int count = BattleFactory_GetPartySize(data->type);
         int i;
         for (i = 0; i < count; i++) {
@@ -309,14 +345,14 @@ BOOL FrtCmd_FactoryAction(FrontierScriptContext *ctx) {
         }
         break;
     }
-    case 35:
+    case FACTORY_ACTION_GET_WON_BATTLE_POINTS:
         *var = BattleFactory_GetWonBattlePoints(data);
         break;
-    case 36:
+    case FACTORY_ACTION_INC_TRADE_COUNT:
         BattleFactory_IncTradeCount(data);
         break;
     // 1 before the Factory Head's first battle (21st), 2 before the second (49th)
-    case 37:
+    case FACTORY_ACTION_GET_BRAIN_BATTLE:
         *var = 0;
         if (data->type == 0) {
             int battle = data->winStreak + 1;
@@ -327,13 +363,13 @@ BOOL FrtCmd_FactoryAction(FrontierScriptContext *ctx) {
             }
         }
         break;
-    case 38:
+    case FACTORY_ACTION_ADD_PARTNER_MONS:
         BattleFactory_AddPartnerMonsToParty(data);
         break;
-    case 39:
+    case FACTORY_ACTION_GENERATE_OPPONENTS:
         FrontierMon_GenerateList(data->opponentMons, data->opponentSetIds, data->opponentIVs, data->opponentPersonalities, NULL, 4, HEAP_ID_FIELD2, NARC_a_2_0_3);
         break;
-    case 40:
+    case FACTORY_ACTION_SET_PARTY_TO_RENTALS:
         BattleFactory_SetPartyToRentals(data);
         break;
     case 41:

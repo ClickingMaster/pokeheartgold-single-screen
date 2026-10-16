@@ -50,7 +50,7 @@ extern const u8 gFrontierMovementWaitFrames[];
 extern const ManagedSpriteTemplate gFrontierMapItemIconTemplate;
 extern const ManagedSpriteTemplate gFrontierMapMonIconTemplate;
 extern const u16 gFrontierMovementSteps[];
-extern const u16 ov80_0223DC22[];
+extern const u16 gFrontierMovementDirections[];
 
 #pragma force_active on
 void FrontierSystem_PrintMessage(FrontierSystem *system, MsgData *msgData, u16 msgId, u16 canABSpeedUp, const FrontierMessageParams *params) {
@@ -556,6 +556,12 @@ void FrontierListMenu_Cancel(FrontierMenu *menu) {
     }
 }
 
+enum {
+    MOVEMENT_TASK_CHECK_END,
+    MOVEMENT_TASK_RUN,
+    MOVEMENT_TASK_FINISH,
+};
+
 // Runs a movement script on a map object: (opcode, count) pairs ending with 0xFD13; opcodes 0x20-0x26 wait,
 // 0x27/0x28 turn the object's sprite flag on/off, the others are steps (Field2DMoveQueue_Push) repeated count times.
 void FrontierScript_MovementTask(SysTask *task, FrontierMovementTask *data) {
@@ -564,12 +570,12 @@ void FrontierScript_MovementTask(SysTask *task, FrontierMovementTask *data) {
     u16 count = data->script[1];
 
     switch (data->state) {
-    case 0:
+    case MOVEMENT_TASK_CHECK_END:
         if (opcode == 0xFD13) {
-            data->state = 2;
+            data->state = MOVEMENT_TASK_FINISH;
             return;
         }
-    case 1:
+    case MOVEMENT_TASK_RUN:
         if (Field2DObject_GetParam(data->object->object, 5) != 0) {
             return;
         }
@@ -604,9 +610,9 @@ void FrontierScript_MovementTask(SysTask *task, FrontierMovementTask *data) {
             data->repeat = 0;
             data->script += 2;
         }
-        data->state = 0;
+        data->state = MOVEMENT_TASK_CHECK_END;
         return;
-    case 2:
+    case MOVEMENT_TASK_FINISH:
         if (Field2DObject_GetParam(data->object->object, 5) == 0) {
             (*data->runningCount)--;
             data->object->movementTask = NULL;
@@ -620,7 +626,7 @@ void FrontierScript_MovementTask(SysTask *task, FrontierMovementTask *data) {
 // The object position comes from overlay 42 as a packed word; the halfwords go through a volatile copy.
 void FrontierScript_GetMovementStep(FrontierMovementStep *step, Field2DObject *object, u16 id, s32 opcode) {
     step->id = id;
-    step->direction = ov80_0223DC22[opcode * 2];
+    step->direction = gFrontierMovementDirections[opcode * 2];
     step->sequence = gFrontierMovementSteps[opcode * 2];
     if (step->sequence == 2 || step->sequence == 3 || step->sequence == 6) {
         volatile u16 position[2];

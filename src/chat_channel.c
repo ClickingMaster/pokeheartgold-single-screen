@@ -5,7 +5,6 @@
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-#pragma force_active on
 
 extern void __msl_assertion_failed(const char *, const char *, const char *, int);
 extern const char sStr_ciInChannel[];

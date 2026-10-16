@@ -17,6 +17,7 @@
 #include "battle/battle_system.h"
 #include "battle/battle_util.h"
 #include "battle/battle_recording_stop.h"
+#include "battle/link_battle_screen.h"
 #include "dwc/net_common_internal.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0197.h"
@@ -88,23 +89,9 @@ typedef struct BattleLinkStageWork {
     WaitingIcon *waitingIcon; // 0x1024
 } BattleLinkStageWork;
 
-// Arguments of the overlay 5 link battle screen (0x30 bytes).
-typedef struct BattleLinkScreenArgs {
-    BattleSetup *setup; // 0x00
-    Party *parties[4];  // 0x04
-    String *names[4];   // 0x14
-    enum HeapID heapId; // 0x24
-    u8 mode;            // 0x28
-    u8 multiOrSide;     // 0x29
-    u8 outcome;         // 0x2A
-    u8 done;            // 0x2B
-    u8 linkBattleMode;          // 0x2C
-    u8 unk_2D[3];       // 0x2D
-} BattleLinkScreenArgs;
-
 // BattleSystem.unk1C4 holds the overlay 5 link battle screen arguments while that screen runs. A macro, not an
 // inline function: the field is reloaded at each use, after the calls in the same expression.
-#define LINK_SCREEN_ARGS(battleSystem) ((BattleLinkScreenArgs *)(battleSystem)->linkScreenArgs)
+#define LINK_SCREEN_ARGS(battleSystem) ((LinkBattleScreenArgs *)(battleSystem)->linkScreenArgs)
 
 extern const OamManagerParam sBattleOamManagerParam;
 extern const OamCharTransferParam sBattleOamCharTransferParam;
@@ -123,7 +110,6 @@ extern const u8 sDoublesBattlerTypes[4];
 
 extern u32 *BattleAnimSystem_New(enum HeapID heapId);
 extern void BattleAnimSystem_Delete(u32 *animSystem);
-extern void LinkBattleScreen_Start(BattleLinkScreenArgs *args);
 extern void BattleRecord_StoreSetup(BattleSetup *setup);
 extern void Comm_SetWifiContinuousSendAndMuteVoice(int mode);
 extern void CommState_FrameDummy(int a0, BgConfig *bgConfig);
@@ -1315,8 +1301,8 @@ BOOL Battle_PartyPreviewInit(OverlayManager *man) {
     if (!(battleSystem->battleType & BATTLE_TYPE_MULTI)) {
         return FALSE;
     }
-    battleSystem->linkScreenArgs = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattleLinkScreenArgs));
-    MIi_CpuClearFast(0, battleSystem->linkScreenArgs, sizeof(BattleLinkScreenArgs));
+    battleSystem->linkScreenArgs = Heap_Alloc(HEAP_ID_BATTLE, sizeof(LinkBattleScreenArgs));
+    MIi_CpuClearFast(0, battleSystem->linkScreenArgs, sizeof(LinkBattleScreenArgs));
     netId = Comm_GetLocalNetId();
     switch (Comm_GetBattleSlot(netId)) {
     case 0:
@@ -1378,8 +1364,8 @@ BOOL Battle_VsScreenInit(OverlayManager *man) {
         return FALSE;
     }
     netId = Comm_GetLocalNetId();
-    battleSystem->linkScreenArgs = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattleLinkScreenArgs));
-    MI_CpuClearFast(battleSystem->linkScreenArgs, sizeof(BattleLinkScreenArgs));
+    battleSystem->linkScreenArgs = Heap_Alloc(HEAP_ID_BATTLE, sizeof(LinkBattleScreenArgs));
+    MI_CpuClearFast(battleSystem->linkScreenArgs, sizeof(LinkBattleScreenArgs));
     if (battleSystem->battleType & BATTLE_TYPE_MULTI) {
         BattleSystem *cursor;
         for (i = 0, cursor = battleSystem; i < 4; cursor = (BattleSystem *)((u8 *)cursor + 4), i++) {
@@ -1434,16 +1420,16 @@ BOOL Battle_EndInit(OverlayManager *man) {
     int offset;
     int other;
     int slot;
-    BattleLinkScreenArgs *args;
+    LinkBattleScreenArgs *args;
 
     if (!(setup->battleType & BATTLE_TYPE_LINK) || (setup->battleSpecial & BATTLE_SPECIAL_RECORDING) || (setup->battleType & BATTLE_TYPE_FRONTIER)) {
         return FALSE;
     }
     netId = (u8)Comm_GetLocalNetId();
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_5), OVY_LOAD_ASYNC);
-    args = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattleLinkScreenArgs));
+    args = Heap_Alloc(HEAP_ID_BATTLE, sizeof(LinkBattleScreenArgs));
     setup->evolutionTaskData = (EvolutionTaskData *)args;
-    MIi_CpuClearFast(0, (u32 *)args, sizeof(BattleLinkScreenArgs));
+    MIi_CpuClearFast(0, (u32 *)args, sizeof(LinkBattleScreenArgs));
     args->setup = setup;
     switch (setup->winFlag) {
     case 1:
@@ -1513,7 +1499,7 @@ BOOL Battle_EndInit(OverlayManager *man) {
 
 BOOL Battle_EndMain(OverlayManager *man) {
     BattleSetup *setup = OverlayManager_GetArgs(man);
-    BattleLinkScreenArgs *args = (BattleLinkScreenArgs *)setup->evolutionTaskData;
+    LinkBattleScreenArgs *args = (LinkBattleScreenArgs *)setup->evolutionTaskData;
     int i;
 
     if (args->done) {

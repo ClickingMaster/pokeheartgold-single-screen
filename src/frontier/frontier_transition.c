@@ -102,10 +102,19 @@ void FrontierTransition_StartFlash(u32 screen, s32 brightness, s32 otherBrightne
     flash->count = count;
 }
 
+enum {
+    FLASH_INIT_OTHER_SCREEN,
+    FLASH_START_IN,
+    FLASH_WAIT_IN,
+    FLASH_START_OUT,
+    FLASH_WAIT_OUT,
+    FLASH_FINISH,
+};
+
 void FrontierTransition_FlashTask(SysTask *task, void *data) {
     FrontierTransitionFlash *flash = data;
     switch (flash->state) {
-    case 0:
+    case FLASH_INIT_OTHER_SCREEN:
         if (flash->screen == 1) {
             FrontierTransitionFade_Init(&flash->otherFade, 0, flash->otherBrightness, 2, 8);
         } else if (flash->screen == 2) {
@@ -113,31 +122,31 @@ void FrontierTransition_FlashTask(SysTask *task, void *data) {
         }
         flash->state++;
         break;
-    case 1:
+    case FLASH_START_IN:
         FrontierTransitionFade_Init(&flash->fade, 0, flash->brightness, flash->screen, 3);
         flash->state++;
         break;
-    case 2:
+    case FLASH_WAIT_IN:
         if (FrontierTransitionFade_Step(&flash->fade)) {
             flash->state++;
         }
         break;
-    case 3:
+    case FLASH_START_OUT:
         FrontierTransitionFade_Init(&flash->fade, flash->brightness, 0, flash->screen, 3);
         flash->state++;
         break;
-    case 4:
+    case FLASH_WAIT_OUT:
         if (FrontierTransitionFade_Step(&flash->fade)) {
             flash->iteration++;
             if (flash->iteration == flash->count) {
-                flash->state = 5;
+                flash->state = FLASH_FINISH;
             } else {
-                flash->state = 1;
+                flash->state = FLASH_START_IN;
             }
         }
         break;
-    case 5:
-        flash->state = 0;
+    case FLASH_FINISH:
+        flash->state = FLASH_INIT_OTHER_SCREEN;
         flash->iteration = 0;
         if (flash->done != NULL) {
             *flash->done = TRUE;

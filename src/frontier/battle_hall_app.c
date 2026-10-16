@@ -354,16 +354,23 @@ BOOL BattleHallApp_Exit(OverlayManager *man) {
     return TRUE;
 }
 
+enum {
+    HALL_FADE_IN_START_SYNC,
+    HALL_FADE_IN_WAIT_SYNC,
+    HALL_FADE_IN_DRAW,
+    HALL_FADE_IN_WAIT_FADE,
+};
+
 BOOL BattleHallApp_FadeIn(BattleHallApp *app) {
     switch (app->subState) {
-    case 0:
+    case HALL_FADE_IN_START_SYNC:
         if (app->linkReady == 0 && BattleHall_IsMultiType(app->mode) == TRUE) {
             LinkSync_ClearPackets();
             LinkSync_StartSync(0x70);
         }
         app->subState++;
         break;
-    case 1:
+    case HALL_FADE_IN_WAIT_SYNC:
         if (app->linkReady == 0 && BattleHall_IsMultiType(app->mode) == TRUE) {
             if (LinkSync_IsSynced(0x70) == TRUE) {
                 LinkSync_ClearPackets();
@@ -374,13 +381,13 @@ BOOL BattleHallApp_FadeIn(BattleHallApp *app) {
             app->subState++;
         }
         break;
-    case 2:
+    case HALL_FADE_IN_DRAW:
         BattleHallApp_PrintTypeGrid(app);
         BattleHallApp_PrintTitle(app);
         BeginNormalPaletteFade(0, 1, 1, RGB_BLACK, 6, 3, HEAP_ID_105);
         app->subState++;
         break;
-    case 3:
+    case HALL_FADE_IN_WAIT_FADE:
         if (IsPaletteFadeFinished() == TRUE) {
             return TRUE;
         }
@@ -437,14 +444,25 @@ BOOL BattleHallApp_RunSummary(BattleHallApp *app) {
     return FALSE;
 }
 
+enum {
+    HALL_SELECT_INIT,
+    HALL_SELECT_INPUT,
+    HALL_SELECT_DIM,
+    HALL_SELECT_HANDLE_YES_NO,
+    HALL_SELECT_UNDIM,
+    HALL_SELECT_MATRON_MESSAGE,
+    HALL_SELECT_WAIT_MATRON_MESSAGE,
+    HALL_SELECT_OPEN_SUMMARY,
+};
+
 #pragma force_active on
 BOOL BattleHallApp_SelectType(BattleHallApp *app) {
     switch (app->subState) {
-    case 0:
+    case HALL_SELECT_INIT:
         app->openSummary = 0;
-        app->subState = 1;
+        app->subState = HALL_SELECT_INPUT;
         break;
-    case 1:
+    case HALL_SELECT_INPUT:
         BattleHallApp_HandleDpad(app, gSystem.newKeys);
         if (!BattleHallApp_HandleConfirm(app) && !BattleHallApp_HandleTouch(app)) {
             break;
@@ -454,7 +472,7 @@ BOOL BattleHallApp_SelectType(BattleHallApp *app) {
             PlaySE(SEQ_SE_DP_DECIDE);
             BeginNormalPaletteFade(0, 0, 0, RGB_BLACK, 6, 1, HEAP_ID_105);
             app->summaryPending = 1;
-            app->subState = 7;
+            app->subState = HALL_SELECT_OPEN_SUMMARY;
             break;
         }
         if (BattleHallApp_IsMatronMode(app) == 1) {
@@ -478,15 +496,15 @@ BOOL BattleHallApp_SelectType(BattleHallApp *app) {
             ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_3);
         }
         app->brightness = 0;
-        app->subState = 2;
+        app->subState = HALL_SELECT_DIM;
         break;
-    case 2:
+    case HALL_SELECT_DIM:
         app->brightness++;
         BattleHallApp_SetBrightness(-app->brightness);
         if (app->brightness == 8) {
             if (!BattleHall_IsMultiType(app->mode)) {
                 BattleHallApp_ShowConfirmPrompt(app);
-                app->subState = 3;
+                app->subState = HALL_SELECT_HANDLE_YES_NO;
             } else {
                 BattleHallApp_DrawMessageFrame(&app->windows[0], Options_GetFrame(app->options));
                 app->printerId = BattleHallApp_ShowMessage(app, msg_0441_00000, 1);
@@ -496,7 +514,7 @@ BOOL BattleHallApp_SelectType(BattleHallApp *app) {
             }
         }
         break;
-    case 3:
+    case HALL_SELECT_HANDLE_YES_NO:
         switch (BattleHallApp_HandleYesNo(app->yesNoPrompt)) {
         case YESNORESPONSE_WAIT:
             break;
@@ -504,7 +522,7 @@ BOOL BattleHallApp_SelectType(BattleHallApp *app) {
             BattleHallApp_ResetYesNo(app);
             if (BattleHallApp_IsMatronBattle(app) == 1 && BattleHallApp_IsMatronMode(app) == 0) {
                 app->savedCursor = app->cursor;
-                app->subState = 5;
+                app->subState = HALL_SELECT_MATRON_MESSAGE;
                 break;
             }
             StopSE(SEQ_SE_DP_SELECT, 0);
@@ -515,32 +533,32 @@ BOOL BattleHallApp_SelectType(BattleHallApp *app) {
             return TRUE;
         case YESNORESPONSE_NO:
             BattleHallApp_ResetYesNo(app);
-            app->subState = 4;
+            app->subState = HALL_SELECT_UNDIM;
             break;
         }
         break;
-    case 4:
+    case HALL_SELECT_UNDIM:
         app->brightness--;
         BattleHallApp_SetBrightness(-app->brightness);
         if (app->brightness <= 0) {
             BattleHallApp_CancelConfirm(app);
             if (app->matronMode == 1) {
-                app->subState = 0;
+                app->subState = HALL_SELECT_INIT;
             } else if (app->matronMode == 0) {
-                app->subState = 1;
+                app->subState = HALL_SELECT_INPUT;
             } else {
                 GF_AssertFail();
             }
         }
         break;
-    case 5:
+    case HALL_SELECT_MATRON_MESSAGE:
         // The Hall Matron interrupts the selection
         BattleHallApp_DrawMessageFrame(&app->windows[0], Options_GetFrame(app->options));
         app->printerId = BattleHallApp_PrintMessage(app, &app->windows[0], msg_0441_00032, 1, 1, Options_GetTextFrameDelay(Save_PlayerData_GetOptionsAddr(app->saveData)), 1, 2, 15, 1);
         CopyWindowToVram(&app->windows[0]);
-        app->subState = 6;
+        app->subState = HALL_SELECT_WAIT_MATRON_MESSAGE;
         break;
-    case 6:
+    case HALL_SELECT_WAIT_MATRON_MESSAGE:
         if (!TextPrinterCheckActive(app->printerId)) {
             int x, y;
             app->matronMode = 1;
@@ -552,10 +570,10 @@ BOOL BattleHallApp_SelectType(BattleHallApp *app) {
             x = BattleHallApp_GetCursorX(app);
             y = BattleHallApp_GetCursorY(app);
             BattleHallSprite_SetPosition(app->cursorSprite, x, y);
-            app->subState = 4;
+            app->subState = HALL_SELECT_UNDIM;
         }
         break;
-    case 7:
+    case HALL_SELECT_OPEN_SUMMARY:
         if (IsPaletteFadeFinished() == TRUE) {
             BattleHallApp_CreateSummaryArgs(app);
             BattleHallApp_FreeGraphics(app);
@@ -569,17 +587,36 @@ BOOL BattleHallApp_SelectType(BattleHallApp *app) {
 }
 #pragma force_active reset
 
+enum {
+    HALL_LINK_CMD_PING = 4,
+    HALL_LINK_CMD_CHOICE,
+    HALL_LINK_CMD_ANSWER,
+};
+
+enum {
+    HALL_LINK_DECIDE_SEND_CHOICE,
+    HALL_LINK_DECIDE_WAIT_PARTNER,
+    HALL_LINK_DECIDE_CONFIRM,
+    HALL_LINK_DECIDE_SHOW_PARTNER_CHOICE,
+    HALL_LINK_DECIDE_WAIT_PARTNER_ANSWER,
+    HALL_LINK_DECIDE_HANDLE_YES_NO,
+    HALL_LINK_DECIDE_SEND_ACCEPT,
+    HALL_LINK_DECIDE_SEND_DECLINE,
+    HALL_LINK_DECIDE_START_SYNC,
+    HALL_LINK_DECIDE_WAIT_SYNC,
+};
+
 BOOL BattleHallApp_LinkDecide(BattleHallApp *app) {
     switch (app->subState) {
-    case 0:
-        if (BattleHallApp_SendLinkCommand(app, 5, BattleHallApp_GetRecordIndex(app->linkCursor)) == TRUE) {
+    case HALL_LINK_DECIDE_SEND_CHOICE:
+        if (BattleHallApp_SendLinkCommand(app, HALL_LINK_CMD_CHOICE, BattleHallApp_GetRecordIndex(app->linkCursor)) == TRUE) {
             app->timer = 0;
             app->linkCursor = 0;
             app->linkDecided = 0;
-            app->subState = 1;
+            app->subState = HALL_LINK_DECIDE_WAIT_PARTNER;
         }
         break;
-    case 1:
+    case HALL_LINK_DECIDE_WAIT_PARTNER:
         if (app->timer != 0) {
             app->timer--;
         } else if (app->recvCount >= 2) {
@@ -587,20 +624,20 @@ BOOL BattleHallApp_LinkDecide(BattleHallApp *app) {
             // The parent's choice wins unless the child chose first
             if (app->linkChoice < 20) {
                 if (Comm_GetLocalNetId() == 0) {
-                    app->subState = 2;
+                    app->subState = HALL_LINK_DECIDE_CONFIRM;
                 } else {
-                    app->subState = 3;
+                    app->subState = HALL_LINK_DECIDE_SHOW_PARTNER_CHOICE;
                 }
             } else {
                 if (Comm_GetLocalNetId() == 0) {
-                    app->subState = 3;
+                    app->subState = HALL_LINK_DECIDE_SHOW_PARTNER_CHOICE;
                 } else {
-                    app->subState = 2;
+                    app->subState = HALL_LINK_DECIDE_CONFIRM;
                 }
             }
         }
         break;
-    case 3:
+    case HALL_LINK_DECIDE_SHOW_PARTNER_CHOICE:
         BattleHallApp_SetBrightness(0);
         app->brightness = 0;
         BattleHallSprite_SetVisible(app->monIcon, FALSE);
@@ -610,9 +647,9 @@ BOOL BattleHallApp_LinkDecide(BattleHallApp *app) {
         app->timer = 10;
         BattleHallApp_SetCellPalette(app->bgConfig, app->partnerCursor, 2);
         ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_3);
-        app->subState = 4;
+        app->subState = HALL_LINK_DECIDE_WAIT_PARTNER_ANSWER;
         break;
-    case 4:
+    case HALL_LINK_DECIDE_WAIT_PARTNER_ANSWER:
         if (app->partnerAnswer != 0) {
             if (app->partnerAnswer == 1) {
                 app->cursor = app->partnerCursor;
@@ -628,13 +665,13 @@ BOOL BattleHallApp_LinkDecide(BattleHallApp *app) {
             return TRUE;
         }
         break;
-    case 2:
+    case HALL_LINK_DECIDE_CONFIRM:
         BattleHallApp_SetCellPalette(app->bgConfig, app->cursor, 1);
         ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_3);
         BattleHallApp_ShowConfirmPrompt(app);
-        app->subState = 5;
+        app->subState = HALL_LINK_DECIDE_HANDLE_YES_NO;
         break;
-    case 5:
+    case HALL_LINK_DECIDE_HANDLE_YES_NO:
         switch (BattleHallApp_HandleYesNo(app->yesNoPrompt)) {
         case YESNORESPONSE_WAIT:
             break;
@@ -642,24 +679,24 @@ BOOL BattleHallApp_LinkDecide(BattleHallApp *app) {
             StopSE(SEQ_SE_DP_SELECT, 0);
             PlaySE(SEQ_SE_DP_UG_020);
             BattleHallApp_ResetYesNo(app);
-            app->subState = 6;
+            app->subState = HALL_LINK_DECIDE_SEND_ACCEPT;
             break;
         case YESNORESPONSE_NO:
             BattleHallApp_ResetYesNo(app);
-            app->subState = 7;
+            app->subState = HALL_LINK_DECIDE_SEND_DECLINE;
             break;
         }
         break;
-    case 6:
-        if (BattleHallApp_SendLinkCommand(app, 6, 1) == TRUE) {
+    case HALL_LINK_DECIDE_SEND_ACCEPT:
+        if (BattleHallApp_SendLinkCommand(app, HALL_LINK_CMD_ANSWER, 1) == TRUE) {
             return TRUE;
         }
         break;
-    case 7:
+    case HALL_LINK_DECIDE_SEND_DECLINE:
         if (app->brightness > 0) {
             app->brightness--;
             BattleHallApp_SetBrightness(-app->brightness);
-        } else if (BattleHallApp_SendLinkCommand(app, 6, 2) == TRUE) {
+        } else if (BattleHallApp_SendLinkCommand(app, HALL_LINK_CMD_ANSWER, 2) == TRUE) {
             BattleHallApp_CancelConfirm(app);
             app->partnerCursor = NO_LINK_CHOICE;
             app->linkChoice = NO_LINK_CHOICE;
@@ -667,12 +704,12 @@ BOOL BattleHallApp_LinkDecide(BattleHallApp *app) {
             return TRUE;
         }
         break;
-    case 8:
+    case HALL_LINK_DECIDE_START_SYNC:
         LinkSync_ClearPackets();
         LinkSync_StartSync(0x68);
-        app->subState = 9;
+        app->subState = HALL_LINK_DECIDE_WAIT_SYNC;
         break;
-    case 9:
+    case HALL_LINK_DECIDE_WAIT_SYNC:
         if (LinkSync_IsSynced(0x68) == TRUE) {
             LinkSync_ClearPackets();
             LinkSync_Init(HEAP_ID_105);
@@ -684,14 +721,19 @@ BOOL BattleHallApp_LinkDecide(BattleHallApp *app) {
     return FALSE;
 }
 
+enum {
+    HALL_LINK_SYNC_START,
+    HALL_LINK_SYNC_WAIT,
+};
+
 BOOL BattleHallApp_LinkSync(BattleHallApp *app) {
     switch (app->subState) {
-    case 0:
+    case HALL_LINK_SYNC_START:
         LinkSync_ClearPackets();
         LinkSync_StartSync(0x68);
         app->subState++;
         break;
-    case 1:
+    case HALL_LINK_SYNC_WAIT:
         if (LinkSync_IsSynced(0x68) == 1) {
             LinkSync_ClearPackets();
             return TRUE;
@@ -701,13 +743,19 @@ BOOL BattleHallApp_LinkSync(BattleHallApp *app) {
     return FALSE;
 }
 
+enum {
+    HALL_FADE_OUT_DELAY,
+    HALL_FADE_OUT_START,
+    HALL_FADE_OUT_WAIT,
+};
+
 BOOL BattleHallApp_FadeOut(BattleHallApp *app) {
     switch (app->subState) {
-    case 0:
+    case HALL_FADE_OUT_DELAY:
         app->timer = 10;
         app->subState++;
         break;
-    case 1:
+    case HALL_FADE_OUT_START:
         app->timer--;
         if (app->timer == 0) {
             BattleHallApp_ClearMessage(app);
@@ -715,7 +763,7 @@ BOOL BattleHallApp_FadeOut(BattleHallApp *app) {
             app->subState++;
         }
         break;
-    case 2:
+    case HALL_FADE_OUT_WAIT:
         if (IsPaletteFadeFinished() == TRUE) {
             return TRUE;
         }
@@ -724,15 +772,20 @@ BOOL BattleHallApp_FadeOut(BattleHallApp *app) {
     return FALSE;
 }
 
+enum {
+    HALL_CLOSE_PROMPT_CLOSE,
+    HALL_CLOSE_PROMPT_DONE,
+};
+
 BOOL BattleHallApp_ClosePrompt(BattleHallApp *app) {
     switch (app->subState) {
-    case 0:
+    case HALL_CLOSE_PROMPT_CLOSE:
         BattleHallApp_ResetYesNo(app);
         BattleHallSprite_SetVisible(app->monIcon, TRUE);
         ClearFrameAndWindow2(&app->windows[0], FALSE);
         app->subState++;
         break;
-    case 1:
+    case HALL_CLOSE_PROMPT_DONE:
         return TRUE;
     }
     return FALSE;
@@ -1315,15 +1368,15 @@ BOOL BattleHallApp_SendLinkCommand(BattleHallApp *app, u16 command, u16 arg) {
         return FALSE;
     }
     switch (command) {
-    case 4:
+    case HALL_LINK_CMD_PING:
         id = 0x27;
         BattleHallApp_PrepareLinkPing(app, command);
         break;
-    case 5:
+    case HALL_LINK_CMD_CHOICE:
         id = 0x28;
         BattleHallApp_PrepareLinkChoice(app, command, arg);
         break;
-    case 6:
+    case HALL_LINK_CMD_ANSWER:
         id = 0x29;
         BattleHallApp_PrepareLinkAnswer(app, command, arg);
         break;

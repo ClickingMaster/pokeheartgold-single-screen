@@ -132,6 +132,36 @@ void BattleHall_OnAppExit(void *args) {
     Heap_Free(appArgs);
 }
 
+enum {
+    HALL_ACTION_SET_TYPE = 2,
+    HALL_ACTION_GET_CURSOR,
+    HALL_ACTION_GET_WIN_STREAK,
+    HALL_ACTION_INC_WIN_STREAK,
+    HALL_ACTION_RESET_SYSTEM = 7,
+    HALL_ACTION_GET_SAVED = 9,
+    HALL_ACTION_SAVE,
+    HALL_ACTION_NEXT_BATTLE = 14,
+    HALL_ACTION_GET_SPECIES,
+    HALL_ACTION_GET_TYPE = 17,
+    HALL_ACTION_GET_ROUND = 19,
+    HALL_ACTION_GET_TRAINER_SPRITE,
+    HALL_ACTION_CLEAR_RANKS,
+    HALL_ACTION_END_ROUND,
+    HALL_ACTION_GET_BATTLE_NO,
+    HALL_ACTION_GET_PARTNER_VALUE,
+    HALL_ACTION_RESTORE_HELD_ITEMS = 27,
+    HALL_ACTION_RAISE_TYPE_RANK,
+    HALL_ACTION_REGISTER_LINK_COMMANDS,
+    HALL_ACTION_IS_MULTI,
+    HALL_ACTION_TOGGLE_BG2,
+    HALL_ACTION_LOAD_TRAINERS,
+    HALL_ACTION_GET_TYPE_RANK,
+    HALL_ACTION_GET_WON_BATTLE_POINTS,
+    HALL_ACTION_RESET_MAXED_RANKS,
+    HALL_ACTION_UPDATE_LEVEL_SQRT,
+    HALL_ACTION_GET_MATRON_BATTLE,
+};
+
 BOOL FrtCmd_HallAction(FrontierScriptContext *ctx) {
     u8 action;
     u8 arg;
@@ -147,55 +177,55 @@ BOOL FrtCmd_HallAction(FrontierScriptContext *ctx) {
     data = Frontier_GetData(ctx->frontierSystem->frontierWork);
 
     switch (action) {
-    case 2:
+    case HALL_ACTION_SET_TYPE:
         data->type = arg;
         break;
-    case 3:
+    case HALL_ACTION_GET_CURSOR:
         *result = data->cursor;
         break;
-    case 4:
+    case HALL_ACTION_GET_WIN_STREAK:
         *result = data->winStreak;
         break;
-    case 5:
+    case HALL_ACTION_INC_WIN_STREAK:
         if (data->winStreak < 9999) {
             data->winStreak++;
         }
         break;
-    case 7:
+    case HALL_ACTION_RESET_SYSTEM:
         OS_ResetSystem(0);
         break;
-    case 9:
+    case HALL_ACTION_GET_SAVED:
         *result = HallChallenge_GetSaved(data->challenge);
         break;
-    case 10:
+    case HALL_ACTION_SAVE:
         BattleHallData_Save(data, 2);
         break;
-    case 14:
+    case HALL_ACTION_NEXT_BATTLE:
         *result = BattleHallData_NextBattle(data);
         break;
-    case 19:
+    case HALL_ACTION_GET_ROUND:
         if (data->type == 2) {
             *result = 10;
         } else {
             *result = data->round;
         }
         break;
-    case 20:
+    case HALL_ACTION_GET_TRAINER_SPRITE:
         *result = BattleHallData_GetTrainerSprite(data, arg);
         break;
-    case 21:
+    case HALL_ACTION_CLEAR_RANKS:
         BattleHallData_ClearRanks(data);
         break;
-    case 22:
+    case HALL_ACTION_END_ROUND:
         BattleHallData_EndRound(data);
         break;
-    case 23:
+    case HALL_ACTION_GET_BATTLE_NO:
         *result = BattleHallData_GetBattleNo(data);
         break;
-    case 24:
+    case HALL_ACTION_GET_PARTNER_VALUE:
         *result = data->partnerValue;
         break;
-    case 27: {
+    case HALL_ACTION_RESTORE_HELD_ITEMS: {
         // gives the held items back
         Party *party = SaveArray_Party_Get(launchArgs->saveData);
         int count = BattleHall_GetPartySize(data->type);
@@ -211,52 +241,52 @@ BOOL FrtCmd_HallAction(FrontierScriptContext *ctx) {
         }
         break;
     }
-    case 28: {
+    case HALL_ACTION_RAISE_TYPE_RANK: {
         u32 rank = HallTypeRanks_Get(data->cell, data->typeRanks[data->type]);
         if (rank < 10) {
             HallTypeRanks_Set(data->cell, data->typeRanks[data->type], (u8)(rank + 1));
         }
         break;
     }
-    case 29:
+    case HALL_ACTION_REGISTER_LINK_COMMANDS:
         FrontierLink_RegisterCommands();
         break;
-    case 30:
+    case HALL_ACTION_IS_MULTI:
         *result = BattleHall_IsMultiType(data->type);
         break;
-    case 17:
+    case HALL_ACTION_GET_TYPE:
         *result = data->type;
         break;
-    case 31:
+    case HALL_ACTION_TOGGLE_BG2:
         if (arg == 0) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
         } else {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
         }
         break;
-    case 32:
+    case HALL_ACTION_LOAD_TRAINERS:
         FrontierTrainer_LoadRecord(&data->trainers[0], data->trainerIds[data->battleNo * 2], HEAP_ID_FIELD2, 204);
         FrontierTrainer_LoadRecord(&data->trainers[1], data->trainerIds[data->battleNo * 2 + 1], HEAP_ID_FIELD2, 204);
         break;
-    case 33:
+    case HALL_ACTION_GET_TYPE_RANK:
         *result = HallTypeRanks_Get(data->cell, data->typeRanks[data->type]);
         break;
-    case 34:
+    case HALL_ACTION_GET_WON_BATTLE_POINTS:
         *result = BattleHallData_GetWonBattlePoints(data);
         break;
-    case 15: {
+    case HALL_ACTION_GET_SPECIES: {
         Party *party = SaveArray_Party_Get(launchArgs->saveData);
         Pokemon *mon = Party_GetMonByIndex(party, data->partySlots[0]);
         *result = GetMonData(mon, MON_DATA_SPECIES, NULL);
         break;
     }
-    case 35:
+    case HALL_ACTION_RESET_MAXED_RANKS:
         BattleHallData_ResetMaxedRanks(data);
         break;
-    case 36:
+    case HALL_ACTION_UPDATE_LEVEL_SQRT:
         BattleHallData_UpdateLevelSqrt(data);
         break;
-    case 37:
+    case HALL_ACTION_GET_MATRON_BATTLE:
         // the Hall Matron battles of the single battle streak
         *result = 0;
         if (data->type == 0) {

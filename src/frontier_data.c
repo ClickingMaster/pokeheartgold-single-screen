@@ -222,17 +222,27 @@ void BattleTowerChallenge_SetSaved(u32 challenge, u32 value) {
     ((BattleTowerChallenge *)challenge)->saved = (u8)value;
 }
 
+enum {
+    FRONTIER_DATA_GET,
+    FRONTIER_DATA_SET,
+    FRONTIER_DATA_RESET,
+    FRONTIER_DATA_INC,
+    FRONTIER_DATA_DEC,
+    FRONTIER_DATA_ADD,
+    FRONTIER_DATA_SUB,
+};
+
 // action: 0 get, 1 set, 5 add, 6 subtract; capped at 9999. Returns the new amount.
 u32 FrontierData_BattlePointAction(FrontierData *data, u32 param, u32 action) {
     switch (action) {
-    case 1:
+    case FRONTIER_DATA_SET:
         if (param > 9999) {
             data->battlePoints = 9999;
         } else {
             data->battlePoints = param;
         }
         break;
-    case 5: {
+    case FRONTIER_DATA_ADD: {
         int points = data->battlePoints + param;
         if (points > 9999) {
             data->battlePoints = 9999;
@@ -241,17 +251,17 @@ u32 FrontierData_BattlePointAction(FrontierData *data, u32 param, u32 action) {
         }
         break;
     }
-    case 6:
+    case FRONTIER_DATA_SUB:
         if (data->battlePoints < param) {
             data->battlePoints = 0;
         } else {
             data->battlePoints -= param;
         }
         break;
-    case 0:
-    case 2:
-    case 3:
-    case 4:
+    case FRONTIER_DATA_GET:
+    case FRONTIER_DATA_RESET:
+    case FRONTIER_DATA_INC:
+    case FRONTIER_DATA_DEC:
         break;
     }
     return data->battlePoints;
@@ -260,11 +270,11 @@ u32 FrontierData_BattlePointAction(FrontierData *data, u32 param, u32 action) {
 // action: 2 reset, 3 count (starts at 1 when the streak flag is not set); returns the count.
 u32 FrontierData_WifiStreakAction(FrontierData *data, u32 action) {
     switch (action) {
-    case 2:
+    case FRONTIER_DATA_RESET:
         data->wifiStreak = 0;
         data->state.flags &= ~16;
         break;
-    case 3:
+    case FRONTIER_DATA_INC:
         if (data->state.bits.wifiStreakActive) {
             data->wifiStreak++;
         } else {
@@ -279,15 +289,15 @@ u32 FrontierData_WifiStreakAction(FrontierData *data, u32 action) {
 // action: 0 get, 2 reset to 1, 3 up (max 10), 4 down (min 1). Returns the rank.
 u32 FrontierData_WifiRankAction(FrontierData *data, u32 action) {
     switch (action) {
-    case 2:
+    case FRONTIER_DATA_RESET:
         data->wifiRank = 1;
         break;
-    case 3:
+    case FRONTIER_DATA_INC:
         if (data->wifiRank < 10) {
             data->wifiRank++;
         }
         break;
-    case 4:
+    case FRONTIER_DATA_DEC:
         if (data->wifiRank > 1) {
             data->wifiRank--;
         }
@@ -352,10 +362,10 @@ u32 FrontierData_TowerRoundAction(void *ptr, u32 towerMode, u32 action) {
         towerMode = 5;
     }
     switch (action) {
-    case 2:
+    case FRONTIER_DATA_RESET:
         data->towerRounds[towerMode] = 0;
         break;
-    case 3:
+    case FRONTIER_DATA_INC:
         if (data->towerRounds[towerMode] < 65534) {
             data->towerRounds[towerMode]++;
         }
@@ -388,14 +398,14 @@ u32 FrontierData_FlagAction(FrontierData *data, u16 flag, u32 action) {
     }
     switch (action) {
     // Preserve the original mask calculation before reading the flags.
-    case 2:
+    case FRONTIER_DATA_RESET:
         mask ^= 0xFFFF;
         data->state.flags = mask & *(volatile u16 *)&data->state.flags;
         break;
-    case 1:
+    case FRONTIER_DATA_SET:
         data->state.flags |= mask;
         break;
-    case 0:
+    case FRONTIER_DATA_GET:
         return (data->state.flags >> flag) & 1;
     }
     return 0;

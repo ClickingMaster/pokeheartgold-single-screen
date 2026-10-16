@@ -1,6 +1,8 @@
 #pragma force_active on
 #include "global.h"
-#pragma force_active on
+
+#include "wifi_plaza_internal.h"
+#include "wifi_plaza_models.h"
 
 // Marker progress of the nine movers of the room event (WiFiPlazaEventMovers in include/wifi_plaza_event.h,
 // which this file does not include: the layout below keeps the original's accesses).
@@ -14,14 +16,6 @@ typedef struct WiFiPlazaMoverMarkerWork {
         s16 x, z;
     } markers[3]; // 0xAA cell positions (pixels) of the three marker map tags
 } WiFiPlazaMoverMarkerWork;
-
-typedef struct WiFiPlazaMoverMarkerPos {
-    int x, y, z;
-} WiFiPlazaMoverMarkerPos;
-
-extern int WiFiPlazaWork_GetGroupMarkerCount(struct WiFiPlazaWork *lobby, int slot);
-extern void WiFiPlazaModels_GetMoverFrontPos(struct WiFiPlazaModels *models, int index, int side, WiFiPlazaMoverMarkerPos *position);
-extern void WiFiPlazaWork_SetGroupMarkerPassed(struct WiFiPlazaWork *lobby, int slot, int marker);
 
 void WiFiPlazaEvent_UpdateMoverMarkers(void *parent, int index);
 
@@ -39,7 +33,7 @@ void WiFiPlazaEvent_UpdateMoverMarkers(void *parent, int index) {
     int i = 0, j;
     int twice = (s32)((u32)index * 2);
     input.base = (s32)((u32)input.index + (u32)twice);
-    WiFiPlazaMoverMarkerPos v;
+    VecFx32 v;
     for (i = 0; i < 3; i++) {
         j = WiFiPlazaWork_GetGroupMarkerCount(w->lobby, (s32)((u32)i + (u32)input.base));
         WiFiPlazaModels_GetMoverFrontPos(w->models, input.index, i, &v);

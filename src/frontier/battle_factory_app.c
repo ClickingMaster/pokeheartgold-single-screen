@@ -204,14 +204,14 @@ typedef struct BattleFactoryApp {
 
 extern const u8 gBattleFactoryAppSummaryPages[];
 extern const u16 gBattleFactoryBallPositions_Multi2[];
-extern const u16 ov81_0224345E[];
+extern const u16 gBattleFactoryBallY_Multi2[];
 extern const u16 gBattleFactoryBallPositions_Single[];
-extern const u16 ov81_02243466[];
+extern const u16 gBattleFactoryBallY_Single[];
 extern const u16 gBattleFactoryBallPositions_Multi[];
-extern const u16 ov81_02243472[];
+extern const u16 gBattleFactoryBallY_Multi[];
 extern const GraphicsModes gBattleFactoryAppGraphicsModes;
 extern const u16 gBattleFactoryBallPositions_Rental[];
-extern const u16 ov81_02243492[];
+extern const u16 gBattleFactoryBallY_Rental[];
 extern const BgTemplate gBattleFactoryAppBgTemplate_Main1;
 extern const BgTemplate gBattleFactoryAppBgTemplate_Main2;
 extern const BgTemplate gBattleFactoryAppBgTemplate_Sub1;
@@ -695,20 +695,30 @@ BOOL BattleFactoryApp_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
+enum {
+    FACTORY_SLIDE_IN_START_SYNC,
+    FACTORY_SLIDE_IN_WAIT_SYNC,
+    FACTORY_SLIDE_IN_FADE_IN,
+    FACTORY_SLIDE_IN_WAIT_FADE,
+    FACTORY_SLIDE_IN_SCROLL_BALLS,
+    FACTORY_SLIDE_IN_WAIT_CENTER_ANIM,
+    FACTORY_SLIDE_IN_SHOW_POKEPICS,
+};
+
 #pragma force_active on
 BOOL BattleFactoryApp_SlideIn(BattleFactoryApp *app) {
     int i;
     u32 j;
 
     switch (app->subState) {
-    case 0:
+    case FACTORY_SLIDE_IN_START_SYNC:
         if (BattleFactory_IsMultiType(app->frontierType) == TRUE) {
             LinkSync_ClearPackets();
             LinkSync_StartSync(237);
         }
         app->subState++;
         break;
-    case 1:
+    case FACTORY_SLIDE_IN_WAIT_SYNC:
         if (BattleFactory_IsMultiType(app->frontierType) == TRUE) {
             if (LinkSync_IsSynced(237) == TRUE) {
                 LinkSync_ClearPackets();
@@ -718,7 +728,7 @@ BOOL BattleFactoryApp_SlideIn(BattleFactoryApp *app) {
             app->subState++;
         }
         break;
-    case 2:
+    case FACTORY_SLIDE_IN_FADE_IN:
         for (i = 0; i < app->numBalls; i++) {
             BattleFactoryBall_GetPosition(app->balls[i]);
             BattleFactoryBall_MoveOffscreen(app->balls[i]);
@@ -728,7 +738,7 @@ BOOL BattleFactoryApp_SlideIn(BattleFactoryApp *app) {
         BeginNormalPaletteFade(0, 1, 1, 0, 6, 3, HEAP_ID_100);
         app->subState++;
         break;
-    case 3:
+    case FACTORY_SLIDE_IN_WAIT_FADE:
         if (!IsPaletteFadeFinished()) {
             break;
         }
@@ -736,7 +746,7 @@ BOOL BattleFactoryApp_SlideIn(BattleFactoryApp *app) {
         app->timer = 0;
         app->subState++;
         break;
-    case 4:
+    case FACTORY_SLIDE_IN_SCROLL_BALLS:
         if (BattleFactoryApp_ScrollBallsIn(app) != TRUE) {
             break;
         }
@@ -750,14 +760,14 @@ BOOL BattleFactoryApp_SlideIn(BattleFactoryApp *app) {
         app->timer = 0;
         app->subState++;
         break;
-    case 5:
+    case FACTORY_SLIDE_IN_WAIT_CENTER_ANIM:
         if (BattleFactorySprite_IsAnimated(app->centerSprite) == TRUE) {
             break;
         }
         app->timer = 0;
         app->subState++;
         break;
-    case 6:
+    case FACTORY_SLIDE_IN_SHOW_POKEPICS:
         if (app->timer == 0) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
             if (BattleFactoryApp_IsScreen(app, FACTORY_SCREEN_RENTAL) == TRUE) {
@@ -783,9 +793,14 @@ BOOL BattleFactoryApp_SlideIn(BattleFactoryApp *app) {
 }
 #pragma force_active reset
 
+enum {
+    FACTORY_SHOW_SCREEN_SETUP,
+    FACTORY_SHOW_SCREEN_WAIT_FADE,
+};
+
 BOOL BattleFactoryApp_ShowScreen(BattleFactoryApp *app) {
     switch (app->subState) {
-    case 0:
+    case FACTORY_SHOW_SCREEN_SETUP:
         if (BattleFactoryApp_IsScreen(app, FACTORY_SCREEN_RENTAL) == TRUE) {
             BattleFactoryApp_SetupRentalScreen(app);
         } else {
@@ -801,7 +816,7 @@ BOOL BattleFactoryApp_ShowScreen(BattleFactoryApp *app) {
         app->shown = TRUE;
         app->subState++;
         break;
-    case 1:
+    case FACTORY_SHOW_SCREEN_WAIT_FADE:
         if (IsPaletteFadeFinished() == TRUE) {
             return TRUE;
         }
@@ -991,16 +1006,28 @@ BOOL BattleFactoryApp_WaitSummary(BattleFactoryApp *app) {
     return FALSE;
 }
 
+enum {
+    FACTORY_RENTALS_INIT,
+    FACTORY_RENTALS_INPUT,
+    FACTORY_RENTALS_BUTTON_FLASH,
+    FACTORY_RENTALS_OPEN_SUMMARY,
+    FACTORY_RENTALS_WAIT_SUMMARY_CLOSED,
+    FACTORY_RENTALS_WAIT_FADE,
+    FACTORY_RENTALS_FADE_TO_SUMMARY,
+    FACTORY_RENTALS_TOGGLE_RENTAL,
+    FACTORY_RENTALS_CLOSE_MENU,
+};
+
 #pragma force_active on
 BOOL BattleFactoryApp_SelectRentals(BattleFactoryApp *app) {
     u32 input;
 
     switch (app->subState) {
-    case 0:
-        app->subState = 1;
+    case FACTORY_RENTALS_INIT:
+        app->subState = FACTORY_RENTALS_INPUT;
         app->summaryOpen = FALSE;
         break;
-    case 1:
+    case FACTORY_RENTALS_INPUT:
         input = GridInputHandler_HandleInput_NoHold(app->grid);
         switch (input) {
         case 0:
@@ -1018,18 +1045,18 @@ BOOL BattleFactoryApp_SelectRentals(BattleFactoryApp *app) {
             break;
         case 6:
             PlaySE(SEQ_SE_DP_SELECT);
-            BattleFactoryApp_FlashWideButton(app, 2, 12, 6);
-            app->subState = 2;
+            BattleFactoryApp_FlashWideButton(app, 2, 12, FACTORY_RENTALS_FADE_TO_SUMMARY);
+            app->subState = FACTORY_RENTALS_BUTTON_FLASH;
             break;
         case 7:
             PlaySE(SEQ_SE_DP_SELECT);
-            BattleFactoryApp_FlashWideButton(app, 18, 12, 7);
-            app->subState = 2;
+            BattleFactoryApp_FlashWideButton(app, 18, 12, FACTORY_RENTALS_TOGGLE_RENTAL);
+            app->subState = FACTORY_RENTALS_BUTTON_FLASH;
             break;
         case 8:
             PlaySE(SEQ_SE_DP_SELECT);
-            BattleFactoryApp_FlashWideButton(app, 10, 15, 8);
-            app->subState = 2;
+            BattleFactoryApp_FlashWideButton(app, 10, 15, FACTORY_RENTALS_CLOSE_MENU);
+            app->subState = FACTORY_RENTALS_BUTTON_FLASH;
             break;
         case GRID_MENU_CURSOR_MOVE:
             PlaySE(SEQ_SE_DP_SELECT);
@@ -1054,10 +1081,10 @@ BOOL BattleFactoryApp_SelectRentals(BattleFactoryApp *app) {
             break;
         }
         break;
-    case 2:
+    case FACTORY_RENTALS_BUTTON_FLASH:
         BattleFactoryApp_UpdateButtonFlash(app);
         break;
-    case 3:
+    case FACTORY_RENTALS_OPEN_SUMMARY:
         if (IsPaletteFadeFinished() == TRUE) {
             if (PaletteData_GetSelectedBuffersBitmask(app->paletteData) != 0) {
                 PaletteData_ScheduleFadeTaskEndIfNoSelectedBuffers(app->paletteData);
@@ -1071,22 +1098,22 @@ BOOL BattleFactoryApp_SelectRentals(BattleFactoryApp *app) {
             }
         }
         break;
-    case 4:
+    case FACTORY_RENTALS_WAIT_SUMMARY_CLOSED:
         if (app->summaryApp == NULL) {
             return TRUE;
         }
         break;
-    case 5:
+    case FACTORY_RENTALS_WAIT_FADE:
         if (IsPaletteFadeFinished() == TRUE) {
-            app->subState = 1;
+            app->subState = FACTORY_RENTALS_INPUT;
         }
         break;
-    case 6:
+    case FACTORY_RENTALS_FADE_TO_SUMMARY:
         BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, HEAP_ID_100);
         app->summaryFading = TRUE;
-        app->subState = 3;
+        app->subState = FACTORY_RENTALS_OPEN_SUMMARY;
         break;
-    case 7:
+    case FACTORY_RENTALS_TOGGLE_RENTAL:
         BattleFactoryApp_CloseRentalMenu(app);
         if (BattleFactoryBall_IsSelected(app->balls[app->cursorPos]) == 0) {
             BattleFactoryApp_AddRental(app);
@@ -1097,7 +1124,7 @@ BOOL BattleFactoryApp_SelectRentals(BattleFactoryApp *app) {
             BattleFactoryApp_SendLinkCommand(app, FACTORY_LINK_RENTALS, 0);
         }
         return TRUE;
-    case 8:
+    case FACTORY_RENTALS_CLOSE_MENU:
         BattleFactoryApp_CloseRentalMenu(app);
         return TRUE;
     }
@@ -1165,29 +1192,40 @@ void BattleFactoryApp_RemoveRental(BattleFactoryApp *app) {
     BattleFactoryApp_PrintRentalNames(app, app->cursorPos, 6);
 }
 
+enum {
+    FACTORY_CONFIRM_HIDE_CURSORS,
+    FACTORY_CONFIRM_DELAY_1,
+    FACTORY_CONFIRM_DELAY_2,
+    FACTORY_CONFIRM_DELAY_3,
+    FACTORY_CONFIRM_SHOW_PROMPT,
+    FACTORY_CONFIRM_HANDLE_INPUT,
+    FACTORY_CONFIRM_LINK_SEND,
+    FACTORY_CONFIRM_WAIT_SYNC,
+};
+
 #pragma force_active on
 BOOL BattleFactoryApp_ConfirmRentals(BattleFactoryApp *app) {
     int result = BattleFactory_GetPartySize(app->frontierType);
 
     switch (app->subState) {
-    case 0:
+    case FACTORY_CONFIRM_HIDE_CURSORS:
         BattleFactorySprite_SetVisible(app->cursor, FALSE);
         BattleFactorySprite_SetVisible(app->picCursor, FALSE);
         app->timer = 0;
         app->subState++;
         break;
-    case 1:
+    case FACTORY_CONFIRM_DELAY_1:
         app->timer = 0;
         app->subState++;
         break;
-    case 2:
+    case FACTORY_CONFIRM_DELAY_2:
         app->subState++;
         break;
-    case 3:
+    case FACTORY_CONFIRM_DELAY_3:
         app->timer = 0;
         app->subState++;
         break;
-    case 4:
+    case FACTORY_CONFIRM_SHOW_PROMPT:
         BattleFactoryApp_BufferNumber(app, 0, result);
         app->printerId = BattleFactoryApp_ShowMessage(app, msg_0194_00001);
         BattleFactoryApp_InitYesNo(app->yesNoPrompt, app->bgConfig);
@@ -1195,7 +1233,7 @@ BOOL BattleFactoryApp_ConfirmRentals(BattleFactoryApp *app) {
         app->timer = 0;
         app->subState++;
         break;
-    case 5:
+    case FACTORY_CONFIRM_HANDLE_INPUT:
         result = YesNoPrompt_HandleInput(app->yesNoPrompt);
         switch (result) {
         case YESNORESPONSE_YES:
@@ -1216,7 +1254,7 @@ BOOL BattleFactoryApp_ConfirmRentals(BattleFactoryApp *app) {
             return TRUE;
         }
         break;
-    case 6:
+    case FACTORY_CONFIRM_LINK_SEND:
         if (BattleFactory_IsMultiType(app->frontierType) == FALSE) {
             return TRUE;
         }
@@ -1227,7 +1265,7 @@ BOOL BattleFactoryApp_ConfirmRentals(BattleFactoryApp *app) {
             app->subState++;
         }
         break;
-    case 7:
+    case FACTORY_CONFIRM_WAIT_SYNC:
         if (LinkSync_IsSynced(164) == TRUE) {
             LinkSync_ClearPackets();
             return TRUE;
@@ -1254,17 +1292,30 @@ void BattleFactoryApp_DeselectCursorRental(BattleFactoryApp *app) {
     BattleFactoryApp_UpdateOrderSprites(app);
 }
 
+enum {
+    FACTORY_SWAP_OUT_INIT,
+    FACTORY_SWAP_OUT_INPUT,
+    FACTORY_SWAP_OUT_BUTTON_FLASH,
+    FACTORY_SWAP_OUT_OPEN_SUMMARY,
+    FACTORY_SWAP_OUT_WAIT_SUMMARY_CLOSED,
+    FACTORY_SWAP_OUT_WAIT_FADE,
+    FACTORY_SWAP_OUT_CANCEL,
+    FACTORY_SWAP_OUT_FADE_TO_SUMMARY,
+    FACTORY_SWAP_OUT_PICK,
+    FACTORY_SWAP_OUT_CLOSE_MENU,
+};
+
 #pragma force_active on
 BOOL BattleFactoryApp_SelectSwapOut(BattleFactoryApp *app) {
     u32 input;
 
     switch (app->subState) {
-    case 0:
+    case FACTORY_SWAP_OUT_INIT:
         BattleFactoryApp_SetCancelRequested(app, FALSE);
-        app->subState = 1;
+        app->subState = FACTORY_SWAP_OUT_INPUT;
         app->summaryOpen = FALSE;
         break;
-    case 1:
+    case FACTORY_SWAP_OUT_INPUT:
         input = GridInputHandler_HandleInput_NoHold(app->grid);
         switch (input) {
         case 0:
@@ -1280,18 +1331,18 @@ BOOL BattleFactoryApp_SelectSwapOut(BattleFactoryApp *app) {
             break;
         case 4:
             PlaySE(SEQ_SE_DP_SELECT);
-            BattleFactoryApp_FlashWideButton(app, 2, 12, 7);
-            app->subState = 2;
+            BattleFactoryApp_FlashWideButton(app, 2, 12, FACTORY_SWAP_OUT_FADE_TO_SUMMARY);
+            app->subState = FACTORY_SWAP_OUT_BUTTON_FLASH;
             break;
         case 5:
             PlaySE(SEQ_SE_DP_SELECT);
-            BattleFactoryApp_FlashWideButton(app, 18, 12, 8);
-            app->subState = 2;
+            BattleFactoryApp_FlashWideButton(app, 18, 12, FACTORY_SWAP_OUT_PICK);
+            app->subState = FACTORY_SWAP_OUT_BUTTON_FLASH;
             break;
         case 6:
             PlaySE(SEQ_SE_DP_SELECT);
-            BattleFactoryApp_FlashWideButton(app, 10, 15, 9);
-            app->subState = 2;
+            BattleFactoryApp_FlashWideButton(app, 10, 15, FACTORY_SWAP_OUT_CLOSE_MENU);
+            app->subState = FACTORY_SWAP_OUT_BUTTON_FLASH;
             break;
         case 3:
             PlaySE(SEQ_SE_DP_SELECT);
@@ -1300,8 +1351,8 @@ BOOL BattleFactoryApp_SelectSwapOut(BattleFactoryApp *app) {
             ClearWindowTilemapAndScheduleTransfer(&app->windows[8]);
             BgCellManager_EraseCell(app->bgCellManager, 0);
             BattleFactoryApp_UpdateSwapOutPicCursor(app);
-            BattleFactoryApp_FlashNarrowButton(app, 23, 15, 6);
-            app->subState = 2;
+            BattleFactoryApp_FlashNarrowButton(app, 23, 15, FACTORY_SWAP_OUT_CANCEL);
+            app->subState = FACTORY_SWAP_OUT_BUTTON_FLASH;
             break;
         case GRID_MENU_CURSOR_MOVE:
             PlaySE(SEQ_SE_DP_SELECT);
@@ -1335,10 +1386,10 @@ BOOL BattleFactoryApp_SelectSwapOut(BattleFactoryApp *app) {
             break;
         }
         break;
-    case 2:
+    case FACTORY_SWAP_OUT_BUTTON_FLASH:
         BattleFactoryApp_UpdateButtonFlash(app);
         break;
-    case 3:
+    case FACTORY_SWAP_OUT_OPEN_SUMMARY:
         if (IsPaletteFadeFinished() == TRUE) {
             if (PaletteData_GetSelectedBuffersBitmask(app->paletteData) != 0) {
                 PaletteData_ScheduleFadeTaskEndIfNoSelectedBuffers(app->paletteData);
@@ -1352,34 +1403,34 @@ BOOL BattleFactoryApp_SelectSwapOut(BattleFactoryApp *app) {
             }
         }
         break;
-    case 4:
+    case FACTORY_SWAP_OUT_WAIT_SUMMARY_CLOSED:
         if (app->summaryApp == NULL) {
             return TRUE;
         }
         break;
-    case 5:
+    case FACTORY_SWAP_OUT_WAIT_FADE:
         if (IsPaletteFadeFinished() == TRUE) {
-            app->subState = 1;
+            app->subState = FACTORY_SWAP_OUT_INPUT;
         }
         break;
-    case 6:
+    case FACTORY_SWAP_OUT_CANCEL:
         BattleFactoryApp_ClearSwapOutMenu(app);
         BattleFactoryApp_SetCancelRequested(app, TRUE);
         return TRUE;
-    case 7:
+    case FACTORY_SWAP_OUT_FADE_TO_SUMMARY:
         BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, HEAP_ID_100);
         app->summaryFading = TRUE;
-        app->subState = 3;
+        app->subState = FACTORY_SWAP_OUT_OPEN_SUMMARY;
         break;
-    case 8:
+    case FACTORY_SWAP_OUT_PICK:
         BattleFactoryApp_PickSwapOut(app);
         BattleFactoryApp_CloseSwapOutMenu(app);
         BattleFactoryApp_ClearSwapOutMenu(app);
         return TRUE;
-    case 9:
+    case FACTORY_SWAP_OUT_CLOSE_MENU:
         BattleFactoryApp_CloseSwapOutMenu(app);
         BattleFactorySprite_SetPalette(app->cursor, 0);
-        app->subState = 1;
+        app->subState = FACTORY_SWAP_OUT_INPUT;
         break;
     }
     return FALSE;
@@ -1392,16 +1443,22 @@ void BattleFactoryApp_PickSwapOut(BattleFactoryApp *app) {
     app->swapOutPicked = TRUE;
 }
 
+enum {
+    FACTORY_CANCEL_SWAP_SHOW_PROMPT,
+    FACTORY_CANCEL_SWAP_HANDLE_INPUT,
+    FACTORY_CANCEL_SWAP_DONE,
+};
+
 #pragma force_active on
 BOOL BattleFactoryApp_ConfirmCancelSwap(BattleFactoryApp *app) {
     switch (app->subState) {
-    case 0:
+    case FACTORY_CANCEL_SWAP_SHOW_PROMPT:
         app->printerId = BattleFactoryApp_ShowMessage(app, msg_0194_00010);
         BattleFactoryApp_InitYesNo(app->yesNoPrompt, app->bgConfig);
         BattleFactoryApp_SetBallsTranslucent(app, TRUE);
         app->subState++;
         break;
-    case 1:
+    case FACTORY_CANCEL_SWAP_HANDLE_INPUT:
         switch (YesNoPrompt_HandleInput(app->yesNoPrompt)) {
         case YESNORESPONSE_YES:
             YesNoPrompt_Reset(app->yesNoPrompt);
@@ -1420,7 +1477,7 @@ BOOL BattleFactoryApp_ConfirmCancelSwap(BattleFactoryApp *app) {
             break;
         }
         break;
-    case 2:
+    case FACTORY_CANCEL_SWAP_DONE:
         return TRUE;
     }
     return FALSE;
@@ -1433,17 +1490,29 @@ void BattleFactoryApp_ResumeSwapOut(BattleFactoryApp *app) {
     app->printerId = BattleFactoryApp_ShowMessage(app, msg_0194_00009);
 }
 
+enum {
+    FACTORY_SWAP_IN_INIT,
+    FACTORY_SWAP_IN_INPUT,
+    FACTORY_SWAP_IN_HANDLE_YES_NO,
+    FACTORY_SWAP_IN_DONE,
+    FACTORY_SWAP_IN_BUTTON_FLASH,
+    FACTORY_SWAP_IN_BACK,
+    FACTORY_SWAP_IN_CANCEL,
+    FACTORY_SWAP_IN_SHOW_PROMPT,
+    FACTORY_SWAP_IN_CLOSE_MENU,
+};
+
 #pragma force_active on
 BOOL BattleFactoryApp_SelectSwapIn(BattleFactoryApp *app) {
     u32 input;
 
     switch (app->subState) {
-    case 0:
+    case FACTORY_SWAP_IN_INIT:
         BattleFactoryApp_DrawMessageFrame(&app->windows[7], Options_GetFrame(app->options));
         app->printerId = BattleFactoryApp_ShowMessage(app, msg_0194_00013);
-        app->subState = 1;
+        app->subState = FACTORY_SWAP_IN_INPUT;
         break;
-    case 1:
+    case FACTORY_SWAP_IN_INPUT:
         input = GridInputHandler_HandleInput_NoHold(app->grid);
         switch (input) {
         case 0:
@@ -1467,8 +1536,8 @@ BOOL BattleFactoryApp_SelectSwapIn(BattleFactoryApp *app) {
             ClearWindowTilemapAndScheduleTransfer(&app->windows[8]);
             ClearWindowTilemapAndScheduleTransfer(&app->windows[app->picked[0] + 2]);
             BgCellManager_EraseCell(app->bgCellManager, 0);
-            BattleFactoryApp_FlashNarrowButton(app, 2, 15, 5);
-            app->subState = 4;
+            BattleFactoryApp_FlashNarrowButton(app, 2, 15, FACTORY_SWAP_IN_BACK);
+            app->subState = FACTORY_SWAP_IN_BUTTON_FLASH;
             break;
         case 5:
             PlaySE(SEQ_SE_DP_SELECT);
@@ -1478,18 +1547,18 @@ BOOL BattleFactoryApp_SelectSwapIn(BattleFactoryApp *app) {
             ClearWindowTilemapAndScheduleTransfer(&app->windows[8]);
             ClearWindowTilemapAndScheduleTransfer(&app->windows[app->picked[0] + 2]);
             BgCellManager_EraseCell(app->bgCellManager, 0);
-            BattleFactoryApp_FlashNarrowButton(app, 23, 15, 6);
-            app->subState = 4;
+            BattleFactoryApp_FlashNarrowButton(app, 23, 15, FACTORY_SWAP_IN_CANCEL);
+            app->subState = FACTORY_SWAP_IN_BUTTON_FLASH;
             break;
         case 6:
             PlaySE(SEQ_SE_DP_SELECT);
-            BattleFactoryApp_FlashWideButton(app, 2, 15, 7);
-            app->subState = 4;
+            BattleFactoryApp_FlashWideButton(app, 2, 15, FACTORY_SWAP_IN_SHOW_PROMPT);
+            app->subState = FACTORY_SWAP_IN_BUTTON_FLASH;
             break;
         case 7:
             PlaySE(SEQ_SE_DP_SELECT);
-            BattleFactoryApp_FlashWideButton(app, 18, 15, 8);
-            app->subState = 4;
+            BattleFactoryApp_FlashWideButton(app, 18, 15, FACTORY_SWAP_IN_CLOSE_MENU);
+            app->subState = FACTORY_SWAP_IN_BUTTON_FLASH;
             break;
         case GRID_MENU_CURSOR_MOVE:
             PlaySE(SEQ_SE_DP_SELECT);
@@ -1531,7 +1600,7 @@ BOOL BattleFactoryApp_SelectSwapIn(BattleFactoryApp *app) {
             break;
         }
         break;
-    case 2:
+    case FACTORY_SWAP_IN_HANDLE_YES_NO:
         switch (YesNoPrompt_HandleInput(app->yesNoPrompt)) {
         case YESNORESPONSE_YES:
             YesNoPrompt_Reset(app->yesNoPrompt);
@@ -1548,35 +1617,35 @@ BOOL BattleFactoryApp_SelectSwapIn(BattleFactoryApp *app) {
             BattleFactoryApp_ShowSwapInPrompt(app);
             BattleFactoryApp_RedrawSwapInButtons(app);
             BattleFactorySprite_SetPalette(app->cursor, 0);
-            app->subState = 1;
+            app->subState = FACTORY_SWAP_IN_INPUT;
             break;
         }
         break;
-    case 3:
+    case FACTORY_SWAP_IN_DONE:
         return TRUE;
-    case 4:
+    case FACTORY_SWAP_IN_BUTTON_FLASH:
         BattleFactoryApp_UpdateButtonFlash(app);
         break;
-    case 5:
+    case FACTORY_SWAP_IN_BACK:
         BattleFactoryApp_ClearSwapInMenu(app);
         BattleFactoryApp_UnpickSwapOut(app);
         return TRUE;
-    case 6:
+    case FACTORY_SWAP_IN_CANCEL:
         BattleFactoryApp_ClearSwapInMenu(app);
         BattleFactoryApp_SetCancelRequested(app, TRUE);
         return TRUE;
-    case 7:
+    case FACTORY_SWAP_IN_SHOW_PROMPT:
         BattleFactoryApp_CloseSwapInMenu(app);
         BattleFactoryApp_ClearSwapInMenu(app);
         BattleFactoryApp_InitYesNo(app->yesNoPrompt, app->bgConfig);
         BattleFactoryApp_SetBallsTranslucent(app, TRUE);
         app->printerId = BattleFactoryApp_ShowMessage(app, msg_0194_00014);
-        app->subState = 2;
+        app->subState = FACTORY_SWAP_IN_HANDLE_YES_NO;
         break;
-    case 8:
+    case FACTORY_SWAP_IN_CLOSE_MENU:
         BattleFactoryApp_CloseSwapInMenu(app);
         BattleFactorySprite_SetPalette(app->cursor, 0);
-        app->subState = 1;
+        app->subState = FACTORY_SWAP_IN_INPUT;
         break;
     }
     return FALSE;
@@ -1603,16 +1672,22 @@ void BattleFactoryApp_ShowSwapInPrompt(BattleFactoryApp *app) {
     app->printerId = BattleFactoryApp_ShowMessage(app, msg_0194_00013);
 }
 
+enum {
+    FACTORY_CANCEL_SWAP_IN_SHOW_PROMPT,
+    FACTORY_CANCEL_SWAP_IN_HANDLE_INPUT,
+    FACTORY_CANCEL_SWAP_IN_DONE,
+};
+
 #pragma force_active on
 BOOL BattleFactoryApp_ConfirmCancelSwapIn(BattleFactoryApp *app) {
     switch (app->subState) {
-    case 0:
+    case FACTORY_CANCEL_SWAP_IN_SHOW_PROMPT:
         app->printerId = BattleFactoryApp_ShowMessage(app, msg_0194_00010);
         BattleFactoryApp_InitYesNo(app->yesNoPrompt, app->bgConfig);
         BattleFactoryApp_SetBallsTranslucent(app, TRUE);
         app->subState++;
         break;
-    case 1:
+    case FACTORY_CANCEL_SWAP_IN_HANDLE_INPUT:
         switch (YesNoPrompt_HandleInput(app->yesNoPrompt)) {
         case YESNORESPONSE_YES:
             YesNoPrompt_Reset(app->yesNoPrompt);
@@ -1632,7 +1707,7 @@ BOOL BattleFactoryApp_ConfirmCancelSwapIn(BattleFactoryApp *app) {
             break;
         }
         break;
-    case 2:
+    case FACTORY_CANCEL_SWAP_IN_DONE:
         return TRUE;
     }
     return FALSE;
@@ -1644,13 +1719,23 @@ void BattleFactoryApp_ResumeSwapIn(BattleFactoryApp *app) {
     BattleFactoryApp_SetCancelRequested(app, TRUE);
 }
 
+enum {
+    FACTORY_SWITCH_PAGE_CLEAR_SCREEN,
+    FACTORY_SWITCH_PAGE_DELETE_SPRITES,
+    FACTORY_SWITCH_PAGE_LOAD_BG,
+    FACTORY_SWITCH_PAGE_SCROLL_BALLS_OUT,
+    FACTORY_SWITCH_PAGE_SCROLL_BALLS_IN,
+    FACTORY_SWITCH_PAGE_WAIT_CENTER_ANIM,
+    FACTORY_SWITCH_PAGE_SHOW_POKEPICS,
+};
+
 BOOL BattleFactoryApp_SwitchPage(BattleFactoryApp *app) {
     int count;
     int i;
 
     BattleFactory_GetPartySize(app->frontierType);
     switch (app->subState) {
-    case 0:
+    case FACTORY_SWITCH_PAGE_CLEAR_SCREEN:
         app->switchingPage = TRUE;
         ClearWindowTilemapAndCopyToVram(&app->windows[1]);
         ClearWindowTilemapAndCopyToVram(&app->windows[5]);
@@ -1670,7 +1755,7 @@ BOOL BattleFactoryApp_SwitchPage(BattleFactoryApp *app) {
         app->timer = 0;
         app->subState++;
         break;
-    case 1:
+    case FACTORY_SWITCH_PAGE_DELETE_SPRITES:
         app->timer++;
         if (app->timer < 2) {
             break;
@@ -1689,7 +1774,7 @@ BOOL BattleFactoryApp_SwitchPage(BattleFactoryApp *app) {
         app->timer = 0;
         app->subState++;
         break;
-    case 2:
+    case FACTORY_SWITCH_PAGE_LOAD_BG:
         Pokepic_ResumePaletteFade(app->pokepics[0]);
         if (BattleFactorySprite_IsAnimated(app->centerSprite) == TRUE) {
             break;
@@ -1702,7 +1787,7 @@ BOOL BattleFactoryApp_SwitchPage(BattleFactoryApp *app) {
         app->timer = 0;
         app->subState++;
         break;
-    case 3:
+    case FACTORY_SWITCH_PAGE_SCROLL_BALLS_OUT:
         if (BattleFactoryApp_ScrollBallsOut(app) != TRUE) {
             break;
         }
@@ -1728,7 +1813,7 @@ BOOL BattleFactoryApp_SwitchPage(BattleFactoryApp *app) {
         app->timer = 0;
         app->subState++;
         break;
-    case 4:
+    case FACTORY_SWITCH_PAGE_SCROLL_BALLS_IN:
         if (BattleFactoryApp_ScrollBallsIn(app) != TRUE) {
             break;
         }
@@ -1743,14 +1828,14 @@ BOOL BattleFactoryApp_SwitchPage(BattleFactoryApp *app) {
         app->timer = 0;
         app->subState++;
         break;
-    case 5:
+    case FACTORY_SWITCH_PAGE_WAIT_CENTER_ANIM:
         if (BattleFactorySprite_IsAnimated(app->centerSprite) == TRUE) {
             break;
         }
         app->timer = 0;
         app->subState++;
         break;
-    case 6:
+    case FACTORY_SWITCH_PAGE_SHOW_POKEPICS:
         if (app->timer == 0) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
             if (app->swapOutPicked == FALSE) {
@@ -1785,14 +1870,19 @@ BOOL BattleFactoryApp_SwitchPage(BattleFactoryApp *app) {
     return FALSE;
 }
 
+enum {
+    FACTORY_SEND_SWAP_START,
+    FACTORY_SEND_SWAP_WAIT_PARTNER,
+};
+
 BOOL BattleFactoryApp_LinkSendSwap(BattleFactoryApp *app) {
     switch (app->subState) {
-    case 0:
+    case FACTORY_SEND_SWAP_START:
         if (BattleFactoryApp_SendLinkCommand(app, FACTORY_LINK_SWAP, app->swapAccepted) == TRUE) {
             app->subState++;
         }
         break;
-    case 1:
+    case FACTORY_SEND_SWAP_WAIT_PARTNER:
         if (app->recvCount >= 2) {
             app->recvCount = 0;
             return TRUE;
@@ -1802,15 +1892,20 @@ BOOL BattleFactoryApp_LinkSendSwap(BattleFactoryApp *app) {
     return FALSE;
 }
 
+enum {
+    FACTORY_SYNC_START,
+    FACTORY_SYNC_WAIT,
+};
+
 BOOL BattleFactoryApp_LinkSync(BattleFactoryApp *app) {
     switch (app->subState) {
-    case 0:
+    case FACTORY_SYNC_START:
         app->printerId = BattleFactoryApp_ShowMessage(app, msg_0194_00015);
         LinkSync_ClearPackets();
         LinkSync_StartSync(165);
         app->subState++;
         break;
-    case 1:
+    case FACTORY_SYNC_WAIT:
         if (LinkSync_IsSynced(165) == TRUE) {
             LinkSync_ClearPackets();
             return TRUE;
@@ -1820,13 +1915,18 @@ BOOL BattleFactoryApp_LinkSync(BattleFactoryApp *app) {
     return FALSE;
 }
 
+enum {
+    FACTORY_FADE_OUT_START,
+    FACTORY_FADE_OUT_WAIT,
+};
+
 BOOL BattleFactoryApp_FadeOut(BattleFactoryApp *app) {
     switch (app->subState) {
-    case 0:
+    case FACTORY_FADE_OUT_START:
         BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, HEAP_ID_100);
         app->subState++;
         break;
-    case 1:
+    case FACTORY_FADE_OUT_WAIT:
         if (IsPaletteFadeFinished() == TRUE) {
             return TRUE;
         }
@@ -1835,9 +1935,14 @@ BOOL BattleFactoryApp_FadeOut(BattleFactoryApp *app) {
     return FALSE;
 }
 
+enum {
+    FACTORY_TRADE_RESULT_PRINT,
+    FACTORY_TRADE_RESULT_WAIT_PRINT,
+};
+
 BOOL BattleFactoryApp_ShowLinkTradeResult(BattleFactoryApp *app) {
     switch (app->subState) {
-    case 0:
+    case FACTORY_TRADE_RESULT_PRINT:
         if (app->unk_378[1] != NULL) {
             Delete2dMenu(app->unk_17C, NULL);
             BattleFactoryApp_CloseWindow(app->unk_174);
@@ -1853,7 +1958,7 @@ BOOL BattleFactoryApp_ShowLinkTradeResult(BattleFactoryApp *app) {
         app->timer = 80;
         app->subState++;
         break;
-    case 1:
+    case FACTORY_TRADE_RESULT_WAIT_PRINT:
         if (TextPrinterCheckActive(app->printerId) == 0) {
             app->timer = 0;
             return TRUE;
@@ -2512,16 +2617,16 @@ BattleFactoryBall *BattleFactoryApp_CreateBall(BattleFactoryApp *app, int index)
 
     if (BattleFactoryApp_IsScreen(app, FACTORY_SCREEN_RENTAL) == TRUE) {
         x = gBattleFactoryBallPositions_Rental[index * 2];
-        y = ov81_02243492[index * 2];
+        y = gBattleFactoryBallY_Rental[index * 2];
     } else if (BattleFactory_IsMultiType(app->frontierType) == FALSE) {
         x = gBattleFactoryBallPositions_Single[index * 2];
-        y = ov81_02243466[index * 2];
+        y = gBattleFactoryBallY_Single[index * 2];
     } else if (app->numBalls == 2) {
         x = gBattleFactoryBallPositions_Multi2[index * 2];
-        y = ov81_0224345E[index * 2];
+        y = gBattleFactoryBallY_Multi2[index * 2];
     } else {
         x = gBattleFactoryBallPositions_Multi[index * 2];
-        y = ov81_02243472[index * 2];
+        y = gBattleFactoryBallY_Multi[index * 2];
     }
     return BattleFactoryBall_Create(&app->spriteGfx, x, y, HEAP_ID_100);
 }

@@ -35,20 +35,20 @@ u32 BattleCastle_GetPointsStat(u32 type);
 u32 BattleCastle_GetSpentPointsStat(u32 type);
 u32 BattleCastle_GetBestStreakPointsStat(u32 type);
 u32 FrontierStat_GetFriendIndex(u32 stat);
-u32 CastleChallenge_GetField(void *challenge, u32 field, u8 index, u32 a3, u32 a4);
-void CastleChallenge_SetField(void *challenge, int field, u8 index, int a3, void *value);
+u32 CastleChallenge_GetField(void *challenge, u32 field, u8 index, u32 column, u32 unused);
+void CastleChallenge_SetField(void *challenge, int field, u8 index, int column, void *value);
 void CastleChallenge_SetSaved(void *challenge, int saved);
 void CastleChallenge_Clear(void *challenge);
 void FrontierSave_AddStat(FrontierSave *frontierSave, int stat, int substat, u32 amount);
 void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
 u32 FrontierTrainer_GetClassSprite(u8 trainerClass);
 void *FrontierTrainer_Load(void *dst, u16 trainerId, u32 heapId, u32 size);
-void FrontierTrainer_GenerateMons(int a0, u16 trainerId, u16 partnerTrainerId, u16 *setIds, FrontierMon *mons, u8 *ivs, void **personalities, u8 a7);
+void FrontierTrainer_GenerateMons(int count, u16 trainerId, u16 partnerTrainerId, u16 *setIds, FrontierMon *mons, u8 *ivs, void **personalities, u8 hasPartner);
 void FrontierMon_ToPokemon(void *frontierMon, void *mon, int level);
 void *CommPlayerInfo_GetProfile(int netId);
 u32 Comm_GetLocalNetId(void);
-int BattleCastle_GetPartySize(u8 type, int a1);
-int BattleCastle_GetOpponentMonCount(int type, int a1);
+int BattleCastle_GetPartySize(u8 type, int both);
+int BattleCastle_GetOpponentMonCount(int type, int both);
 int BattleCastle_GetMonLevel(void *data);
 BOOL BattleCastle_IsMultiType(int type);
 void BattleCastle_ReviveParty(Party *party);
@@ -73,6 +73,18 @@ void BattleCastleData_RestoreParty(BattleCastleData *data);
 u16 BattleCastleAppArgs_GetSelection(BattleCastleAppArgs *args, u32 index);
 void BattleCastle_DrawPointsWindowFrame(BgConfig *bgConfig, Window *window);
 void BattleCastle_PrintPlayerPoints(FrontierSystem *system, Window *window, PlayerProfile *profile, u16 points);
+
+#define CASTLE_CHALLENGE_TYPE        0
+#define CASTLE_CHALLENGE_BATTLE_NO   1
+#define CASTLE_CHALLENGE_HP          2
+#define CASTLE_CHALLENGE_PP          3
+#define CASTLE_CHALLENGE_STATUS      4
+#define CASTLE_CHALLENGE_HELD_ITEM   5
+#define CASTLE_CHALLENGE_TRAINER_IDS 6
+#define CASTLE_CHALLENGE_PARTY_SLOTS 7
+#define CASTLE_CHALLENGE_SET_IDS     8
+
+#define CASTLE_FLAGS_HAS_STREAK 9
 
 #pragma force_active on
 BattleCastleData *BattleCastleData_Alloc(SaveData *saveData, BOOL resume, u8 type, int slot0, u16 slot1, u16 slot2, u16 *resultVar) {
@@ -108,7 +120,7 @@ BattleCastleData *BattleCastleData_Alloc(SaveData *saveData, BOOL resume, u8 typ
         if (sBattleCastleData->type == 3) {
             hasStreak = Save_VarsFlags_GetVar4052(Save_VarsFlags_Get(sBattleCastleData->saveData));
         } else {
-            hasStreak = CastleFlags_GetField(castleFlags, 9, sBattleCastleData->type, 0, 0);
+            hasStreak = CastleFlags_GetField(castleFlags, CASTLE_FLAGS_HAS_STREAK, sBattleCastleData->type, 0, 0);
         }
         if (hasStreak == 1) {
             frontierSave = Save_Frontier_GetStatic(sBattleCastleData->saveData);
@@ -146,14 +158,14 @@ BattleCastleData *BattleCastleData_Alloc(SaveData *saveData, BOOL resume, u8 typ
         u32 zero = 0;
         data = sBattleCastleData;
         data->type = CastleChallenge_GetField(challenge, zero, zero, zero, zero);
-        data->battleNo = CastleChallenge_GetField(challenge, 1, zero, zero, zero);
+        data->battleNo = CastleChallenge_GetField(challenge, CASTLE_CHALLENGE_BATTLE_NO, zero, zero, zero);
         saved = sBattleCastleData;
         frontierSave = Save_Frontier_GetStatic(saved->saveData);
         stat = BattleCastle_GetWinStreakStat(sBattleCastleData->type);
         saved->winStreak = FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetWinStreakStat(data->type)));
         saved->round = saved->winStreak / 7;
         for (i = 0; i < 3; i++) {
-            u8 slot = CastleChallenge_GetField(challenge, 7, (u8)i, zero, zero);
+            u8 slot = CastleChallenge_GetField(challenge, CASTLE_CHALLENGE_PARTY_SLOTS, (u8)i, zero, zero);
             sBattleCastleData->partySlots[i] = slot;
         }
     }
@@ -239,13 +251,13 @@ void BattleCastleData_RestoreChallenge(BattleCastleData *data) {
     BattleCastleData_RestoreParty(data);
     dst = (u8 *)data;
     for (i = 0; i < 14; i++, dst += 2) {
-        ((BattleCastleData *)dst)->trainerIds[0] = CastleChallenge_GetField(data->challenge, 6, (u8)i, 0, 0);
+        ((BattleCastleData *)dst)->trainerIds[0] = CastleChallenge_GetField(data->challenge, CASTLE_CHALLENGE_TRAINER_IDS, (u8)i, 0, 0);
     }
     j = 0;
     u16 *setId = opponents.setIds;
     dst = (u8 *)data;
     for (; j < 4; j++, setId++, dst += 2) {
-        *setId = CastleChallenge_GetField(data->challenge, 8, (u8)j, 0, 0);
+        *setId = CastleChallenge_GetField(data->challenge, CASTLE_CHALLENGE_SET_IDS, (u8)j, 0, 0);
         ((BattleCastleData *)dst)->opponentSetIds[0] = *setId;
     }
     FrontierMon_GenerateList(opponents.mons, opponents.setIds, opponents.ivs, NULL, opponents.personalities, 4, HEAP_ID_FIELD2, 205);
@@ -268,19 +280,19 @@ void BattleCastleData_RestoreParty(BattleCastleData *data) {
     u32 wordValue;
     for (i = 0; i < count; i++) {
         Pokemon *mon = Party_GetMonByIndex(data->playerParty, i);
-        halfValue = CastleChallenge_GetField(data->challenge, 2, (u8)i, 0, 0);
+        halfValue = CastleChallenge_GetField(data->challenge, CASTLE_CHALLENGE_HP, (u8)i, 0, 0);
         SetMonData(mon, MON_DATA_HP, &halfValue);
-        byteValue = CastleChallenge_GetField(data->challenge, 3, (u8)i, 0, 0);
+        byteValue = CastleChallenge_GetField(data->challenge, CASTLE_CHALLENGE_PP, (u8)i, 0, 0);
         SetMonData(mon, MON_DATA_MOVE1_PP, &byteValue);
-        byteValue = CastleChallenge_GetField(data->challenge, 3, (u8)i, 1, 0);
+        byteValue = CastleChallenge_GetField(data->challenge, CASTLE_CHALLENGE_PP, (u8)i, 1, 0);
         SetMonData(mon, MON_DATA_MOVE2_PP, &byteValue);
-        byteValue = CastleChallenge_GetField(data->challenge, 3, (u8)i, 2, 0);
+        byteValue = CastleChallenge_GetField(data->challenge, CASTLE_CHALLENGE_PP, (u8)i, 2, 0);
         SetMonData(mon, MON_DATA_MOVE3_PP, &byteValue);
-        byteValue = CastleChallenge_GetField(data->challenge, 3, (u8)i, 3, 0);
+        byteValue = CastleChallenge_GetField(data->challenge, CASTLE_CHALLENGE_PP, (u8)i, 3, 0);
         SetMonData(mon, MON_DATA_MOVE4_PP, &byteValue);
-        wordValue = CastleChallenge_GetField(data->challenge, 4, (u8)i, 0, 0);
+        wordValue = CastleChallenge_GetField(data->challenge, CASTLE_CHALLENGE_STATUS, (u8)i, 0, 0);
         SetMonData(mon, MON_DATA_STATUS, &wordValue);
-        halfValue = CastleChallenge_GetField(data->challenge, 5, (u8)i, 0, 0);
+        halfValue = CastleChallenge_GetField(data->challenge, CASTLE_CHALLENGE_HELD_ITEM, (u8)i, 0, 0);
         SetMonData(mon, MON_DATA_HELD_ITEM, &halfValue);
     }
 }
@@ -340,10 +352,10 @@ void BattleCastleData_Save(BattleCastleData *data, int mode) {
     u32 oldBest, points, stat;
     BattleCastle_GetOpponentMonCount(data->type, 1);
     value.byte = data->type;
-    CastleChallenge_SetField(data->challenge, 0, 0, 0, &value.byte);
+    CastleChallenge_SetField(data->challenge, CASTLE_CHALLENGE_TYPE, 0, 0, &value.byte);
     CastleChallenge_SetSaved(data->challenge, 1);
     value.byte = data->battleNo;
-    CastleChallenge_SetField(data->challenge, 1, 0, 0, &value.byte);
+    CastleChallenge_SetField(data->challenge, CASTLE_CHALLENGE_BATTLE_NO, 0, 0, &value.byte);
     stat = BattleCastle_GetWinStreakStat(data->type);
     FrontierSave_SetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetWinStreakStat(data->type)), data->winStreak);
     if (mode != 2) {
@@ -363,42 +375,42 @@ void BattleCastleData_Save(BattleCastleData *data, int mode) {
             FrontierSave_SetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetBestStreakPointsStat(data->type)), (u16)points);
         }
         value.byte = data->hasStreak;
-        CastleFlags_SetField(castleFlags, 9, data->type, 0, &value.byte);
+        CastleFlags_SetField(castleFlags, CASTLE_FLAGS_HAS_STREAK, data->type, 0, &value.byte);
         if (data->type == 3) {
             FrontierSave_SetStat(frontierSave, 108, FrontierStat_GetFriendIndex(108), data->hasStreak);
         }
     }
     for (i = 0; i < 14; i++) {
         value.half = data->trainerIds[i];
-        CastleChallenge_SetField(data->challenge, 6, (u8)i, 0, &value.half);
+        CastleChallenge_SetField(data->challenge, CASTLE_CHALLENGE_TRAINER_IDS, (u8)i, 0, &value.half);
     }
     for (i = 0; i < 3; i++) {
         value.byte = data->partySlots[i];
-        CastleChallenge_SetField(data->challenge, 7, (u8)i, 0, &value.byte);
+        CastleChallenge_SetField(data->challenge, CASTLE_CHALLENGE_PARTY_SLOTS, (u8)i, 0, &value.byte);
     }
     count = Party_GetCount(data->playerParty);
     for (i = 0; i < count; i++) {
         Pokemon *mon = Party_GetMonByIndex(data->playerParty, i);
         value.half = GetMonData(mon, MON_DATA_HP, NULL);
-        CastleChallenge_SetField(data->challenge, 2, (u8)i, 0, &value.half);
+        CastleChallenge_SetField(data->challenge, CASTLE_CHALLENGE_HP, (u8)i, 0, &value.half);
         value.byte = GetMonData(mon, MON_DATA_MOVE1_PP, NULL);
-        CastleChallenge_SetField(data->challenge, 3, (u8)i, 0, &value.byte);
+        CastleChallenge_SetField(data->challenge, CASTLE_CHALLENGE_PP, (u8)i, 0, &value.byte);
         value.byte = GetMonData(mon, MON_DATA_MOVE2_PP, NULL);
-        CastleChallenge_SetField(data->challenge, 3, (u8)i, 1, &value.byte);
+        CastleChallenge_SetField(data->challenge, CASTLE_CHALLENGE_PP, (u8)i, 1, &value.byte);
         value.byte = GetMonData(mon, MON_DATA_MOVE3_PP, NULL);
-        CastleChallenge_SetField(data->challenge, 3, (u8)i, 2, &value.byte);
+        CastleChallenge_SetField(data->challenge, CASTLE_CHALLENGE_PP, (u8)i, 2, &value.byte);
         value.byte = GetMonData(mon, MON_DATA_MOVE4_PP, NULL);
-        CastleChallenge_SetField(data->challenge, 3, (u8)i, 3, &value.byte);
+        CastleChallenge_SetField(data->challenge, CASTLE_CHALLENGE_PP, (u8)i, 3, &value.byte);
         value.word = GetMonData(mon, MON_DATA_STATUS, NULL);
-        CastleChallenge_SetField(data->challenge, 4, (u8)i, 0, &value.word);
+        CastleChallenge_SetField(data->challenge, CASTLE_CHALLENGE_STATUS, (u8)i, 0, &value.word);
         value.half = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
-        CastleChallenge_SetField(data->challenge, 5, (u8)i, 0, &value.half);
+        CastleChallenge_SetField(data->challenge, CASTLE_CHALLENGE_HELD_ITEM, (u8)i, 0, &value.half);
     }
     count = Party_GetCount(data->opponentParty);
     for (i = 0; i < count; i++) {
         Party_GetMonByIndex(data->opponentParty, i);
         value.half = data->opponentSetIds[i];
-        CastleChallenge_SetField(data->challenge, 8, (u8)i, 0, &value.half);
+        CastleChallenge_SetField(data->challenge, CASTLE_CHALLENGE_SET_IDS, (u8)i, 0, &value.half);
     }
 }
 #pragma force_active reset

@@ -318,7 +318,7 @@ extern const DpadMenuBox gBattleCastlePartyGrid3Boxes[];
 extern const TouchscreenHitbox gBattleCastleItemGridHitboxes[];
 extern const DpadMenuBox gBattleCastlePartyGrid4Boxes[];
 extern const DpadMenuBox gBattleCastleItemGridBoxes[]; // rental item grid
-extern const u8 ov83_02248611[];          // = &gBattleCastleItemGridBoxes[0].top, referenced by its own label
+extern const u8 gBattleCastleItemGridBoxTops[];          // = &gBattleCastleItemGridBoxes[0].top, referenced by its own label
 
 // Frontier overlay (80) helpers
 void Frontier_SetSpriteAnim(Sprite *sprite, int value);
@@ -598,16 +598,24 @@ BOOL BattleCastleOpponentApp_Exit(OverlayManager *manager) {
     return TRUE;
 }
 
+enum {
+    CASTLE_OPP_FADE_IN_START_SYNC,
+    CASTLE_OPP_FADE_IN_WAIT_SYNC,
+    CASTLE_OPP_FADE_IN_SEND_START,
+    CASTLE_OPP_FADE_IN_WAIT_PARTNER,
+    CASTLE_OPP_FADE_IN_WAIT_FADE,
+};
+
 BOOL BattleCastleOpponentApp_FadeIn(BattleCastleOpponentApp *app) {
     switch (app->subState) {
-    case 0:
+    case CASTLE_OPP_FADE_IN_START_SYNC:
         if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
             LinkSync_ClearPackets();
             LinkSync_StartSync(CASTLE_OPP_SYNC_START);
         }
         app->subState++;
         break;
-    case 1:
+    case CASTLE_OPP_FADE_IN_WAIT_SYNC:
         if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
             if (LinkSync_IsSynced(CASTLE_OPP_SYNC_START) == TRUE) {
                 LinkSync_ClearPackets();
@@ -617,7 +625,7 @@ BOOL BattleCastleOpponentApp_FadeIn(BattleCastleOpponentApp *app) {
             app->subState++;
         }
         break;
-    case 2:
+    case CASTLE_OPP_FADE_IN_SEND_START:
         if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
             if (BattleCastleOpponentApp_SendLinkCommand(app, CASTLE_OPP_LINK_CMD_START, 0) == TRUE) {
                 app->subState++;
@@ -628,7 +636,7 @@ BOOL BattleCastleOpponentApp_FadeIn(BattleCastleOpponentApp *app) {
             app->subState++;
         }
         break;
-    case 3:
+    case CASTLE_OPP_FADE_IN_WAIT_PARTNER:
         if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
             if (app->linkRecvCount < 2) {
                 break;
@@ -641,7 +649,7 @@ BOOL BattleCastleOpponentApp_FadeIn(BattleCastleOpponentApp *app) {
             app->subState++;
         }
         break;
-    case 4:
+    case CASTLE_OPP_FADE_IN_WAIT_FADE:
         if (IsPaletteFadeFinished() == TRUE) {
             return TRUE;
         }
@@ -1050,16 +1058,25 @@ BOOL BattleCastleOpponentApp_HandleMenu(BattleCastleOpponentApp *app) {
 }
 #pragma force_active reset
 
+enum {
+    CASTLE_OPP_LINK_ACTION_SEND,
+    CASTLE_OPP_LINK_ACTION_APPLY,
+    CASTLE_OPP_LINK_ACTION_PLAY_EFFECT,
+    CASTLE_OPP_LINK_ACTION_DELAY,
+    CASTLE_OPP_LINK_ACTION_WAIT_SYNC,
+    CASTLE_OPP_LINK_ACTION_FINISH,
+};
+
 BOOL BattleCastleOpponentApp_LinkAction(BattleCastleOpponentApp *app) {
     switch (app->subState) {
-    case 0:
+    case CASTLE_OPP_LINK_ACTION_SEND:
         app->flags.bits.linkResume = CASTLE_OPP_RESUME_SELECT_MON;
         if (BattleCastleOpponentApp_SendLinkCommand(app, CASTLE_OPP_LINK_CMD_ACTION, app->cursorPos) == TRUE) {
             app->linkActionPending = FALSE;
             app->subState++;
         }
         break;
-    case 1:
+    case CASTLE_OPP_LINK_ACTION_APPLY:
         if (app->linkSlot != 0xFF) {
             u8 action;
             u8 slot;
@@ -1075,7 +1092,7 @@ BOOL BattleCastleOpponentApp_LinkAction(BattleCastleOpponentApp *app) {
             app->subState++;
         }
         break;
-    case 2: {
+    case CASTLE_OPP_LINK_ACTION_PLAY_EFFECT: {
         int slot = BattleCastle_GetSideSlot(app->numOwnSlots, app->linkSlot);
         if (BattleCastleOpponentApp_PlayActionEffect(app, slot, app->action) == TRUE) {
             app->timer = 30;
@@ -1083,7 +1100,7 @@ BOOL BattleCastleOpponentApp_LinkAction(BattleCastleOpponentApp *app) {
         }
         break;
     }
-    case 3:
+    case CASTLE_OPP_LINK_ACTION_DELAY:
         app->timer--;
         if (app->timer == 0) {
             LinkSync_ClearPackets();
@@ -1091,12 +1108,12 @@ BOOL BattleCastleOpponentApp_LinkAction(BattleCastleOpponentApp *app) {
             app->subState++;
         }
         break;
-    case 4:
+    case CASTLE_OPP_LINK_ACTION_WAIT_SYNC:
         if (LinkSync_IsSynced(CASTLE_OPP_SYNC_ACTION) == TRUE) {
             app->subState++;
         }
         break;
-    case 5: {
+    case CASTLE_OPP_LINK_ACTION_FINISH: {
         int slot = BattleCastle_GetSideSlot(app->numOwnSlots, app->linkSlot);
         if (BattleCastleOpponentApp_FinishLinkAction(app, slot, app->action) == TRUE) {
             LinkSync_ClearPackets();
@@ -1111,15 +1128,21 @@ BOOL BattleCastleOpponentApp_LinkAction(BattleCastleOpponentApp *app) {
     return FALSE;
 }
 
+enum {
+    CASTLE_OPP_LINK_EXIT_SEND,
+    CASTLE_OPP_LINK_EXIT_DELAY,
+    CASTLE_OPP_LINK_EXIT_WAIT_SYNC,
+};
+
 BOOL BattleCastleOpponentApp_LinkExit(BattleCastleOpponentApp *app) {
     switch (app->subState) {
-    case 0:
+    case CASTLE_OPP_LINK_EXIT_SEND:
         if (BattleCastleOpponentApp_SendLinkCommand(app, CASTLE_OPP_LINK_CMD_EXIT, 0) == TRUE) {
             app->timer = 30;
             app->subState++;
         }
         break;
-    case 1:
+    case CASTLE_OPP_LINK_EXIT_DELAY:
         if (app->timer != 0) {
             app->timer--;
         }
@@ -1129,7 +1152,7 @@ BOOL BattleCastleOpponentApp_LinkExit(BattleCastleOpponentApp *app) {
             app->subState++;
         }
         break;
-    case 2:
+    case CASTLE_OPP_LINK_EXIT_WAIT_SYNC:
         if (LinkSync_IsSynced(CASTLE_OPP_SYNC_EXIT) == TRUE) {
             LinkSync_ClearPackets();
             BattleCastleOpponentApp_CloseWindow(&app->windows[CASTLE_OPP_WIN_MESSAGE]);
@@ -1140,13 +1163,18 @@ BOOL BattleCastleOpponentApp_LinkExit(BattleCastleOpponentApp *app) {
     return FALSE;
 }
 
+enum {
+    CASTLE_OPP_FADE_OUT_START,
+    CASTLE_OPP_FADE_OUT_WAIT,
+};
+
 BOOL BattleCastleOpponentApp_FadeOut(BattleCastleOpponentApp *app) {
     switch (app->subState) {
-    case 0:
+    case CASTLE_OPP_FADE_OUT_START:
         BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, HEAP_ID_107);
         app->subState++;
         break;
-    case 1:
+    case CASTLE_OPP_FADE_OUT_WAIT:
         if (IsPaletteFadeFinished() == TRUE) {
             return TRUE;
         }
@@ -3325,12 +3353,12 @@ int BattleCastle_HandleItemGridInput(GridInputHandler *grid) {
 }
 
 void BattleCastlePartyApp_OnItemGridKeyMove(BattleCastlePartyApp *app, int newTarget) {
-    BattleCastlePartyApp_SetItemCursor(app, gBattleCastleItemGridBoxes[newTarget].left, ov83_02248611[newTarget * sizeof(DpadMenuBox)], gBattleCastleItemGridCursorAnims[newTarget]);
+    BattleCastlePartyApp_SetItemCursor(app, gBattleCastleItemGridBoxes[newTarget].left, gBattleCastleItemGridBoxTops[newTarget * sizeof(DpadMenuBox)], gBattleCastleItemGridCursorAnims[newTarget]);
     BattleCastlePartyApp_ShowItemDescription(app, newTarget);
 }
 
 void BattleCastlePartyApp_OnItemGridTouch(BattleCastlePartyApp *app, int newTarget) {
-    BattleCastlePartyApp_SetItemCursor(app, gBattleCastleItemGridBoxes[newTarget].left, ov83_02248611[newTarget * sizeof(DpadMenuBox)], gBattleCastleItemGridCursorAnims[newTarget]);
+    BattleCastlePartyApp_SetItemCursor(app, gBattleCastleItemGridBoxes[newTarget].left, gBattleCastleItemGridBoxTops[newTarget * sizeof(DpadMenuBox)], gBattleCastleItemGridCursorAnims[newTarget]);
     BattleCastlePartyApp_ShowItemDescription(app, newTarget);
 }
 

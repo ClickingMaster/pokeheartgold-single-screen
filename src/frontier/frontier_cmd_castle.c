@@ -173,54 +173,92 @@ BOOL FrtCmd_CastleGenerateOpponents(FrontierScriptContext *ctx) {
     return FALSE;
 }
 
+enum {
+    CASTLE_ACTION_SET_TYPE = 2,
+    CASTLE_ACTION_GET_SELECTION,
+    CASTLE_ACTION_GET_WIN_STREAK,
+    CASTLE_ACTION_INC_WIN_STREAK,
+    CASTLE_ACTION_RESET_SYSTEM = 7,
+    CASTLE_ACTION_GET_SAVED = 9,
+    CASTLE_ACTION_SAVE,
+    CASTLE_ACTION_NEXT_BATTLE = 14,
+    CASTLE_ACTION_GET_OPPONENT_SPECIES,
+    CASTLE_ACTION_GET_OPPONENT_MOVE,
+    CASTLE_ACTION_GET_TYPE,
+    CASTLE_ACTION_RESTORE_HELD_ITEMS,
+    CASTLE_ACTION_GET_ROUND,
+    CASTLE_ACTION_GET_TRAINER_SPRITE,
+    CASTLE_ACTION_RESET_RANKS,
+    CASTLE_ACTION_END_ROUND,
+    CASTLE_ACTION_GET_BATTLE_NO,
+    CASTLE_ACTION_GET_PARTNER_VALUE_A,
+    CASTLE_ACTION_GET_MON_FAINTED,
+    CASTLE_ACTION_GET_PARTNER_VALUE_B,
+    CASTLE_ACTION_AWARD_POINTS,
+    CASTLE_ACTION_RECORD_LINK_PARTY_PP,
+    CASTLE_ACTION_REGISTER_LINK_COMMANDS,
+    CASTLE_ACTION_GET_DECIDED_CHOICE,
+    CASTLE_ACTION_CLEAR_CHOICES,
+    CASTLE_ACTION_SET_CHOICE,
+    CASTLE_ACTION_SPEND_CHOICE_POINTS,
+    CASTLE_ACTION_IS_PARTNER_CHOICE,
+    CASTLE_ACTION_IS_MULTI,
+    CASTLE_ACTION_DRAW_ROUND_TILES,
+    CASTLE_ACTION_LOAD_TRAINERS,
+    CASTLE_ACTION_GET_ROUND_TABLE_VALUE,
+    CASTLE_ACTION_GET_BRAIN_BATTLE = 40,
+    CASTLE_ACTION_GENERATE_OPPONENTS,
+    CASTLE_ACTION_SET_OPPONENT_PARTY,
+};
+
 #pragma force_active on
 BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx) {
     FrontierLaunchArgs *launchArgs;
     int arg;
     u32 action = FrontierScriptContext_ReadByte(ctx);
     arg = FrontierScriptContext_ReadByte(ctx);
-    int arg2 = FrontierScriptContext_ReadByte(ctx);
+    int moveIndex = FrontierScriptContext_ReadByte(ctx);
     u16 *result = FrontierScript_ReadVarPtr(ctx);
     BattleCastleData *data = Frontier_GetData(ctx->frontierSystem->frontierWork);
     launchArgs = Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
     u8 byteValue;
     u32 stat;
     switch (action) {
-    case 2:
+    case CASTLE_ACTION_SET_TYPE:
         data->type = arg;
         break;
-    case 3:
+    case CASTLE_ACTION_GET_SELECTION:
         *result = data->selections[arg];
         break;
-    case 4:
+    case CASTLE_ACTION_GET_WIN_STREAK:
         *result = data->winStreak;
         break;
-    case 5:
+    case CASTLE_ACTION_INC_WIN_STREAK:
         if (data->winStreak < 9999) {
             data->winStreak++;
         }
         break;
-    case 7:
+    case CASTLE_ACTION_RESET_SYSTEM:
         OS_ResetSystem(0);
         break;
-    case 9:
+    case CASTLE_ACTION_GET_SAVED:
         *result = CastleChallenge_GetSaved(data->challenge);
         break;
-    case 10:
+    case CASTLE_ACTION_SAVE:
         BattleCastleData_Save(data, 2);
         break;
-    case 14:
+    case CASTLE_ACTION_NEXT_BATTLE:
         *result = BattleCastleData_NextBattle(data);
         break;
-    case 15:
+    case CASTLE_ACTION_GET_OPPONENT_SPECIES:
         *result = data->opponentMons[arg].species;
         break;
-    case 16: {
+    case CASTLE_ACTION_GET_OPPONENT_MOVE: {
         FrontierMon *opponentMon = &data->opponentMons[arg];
-        *result = opponentMon->moves[arg2];
+        *result = opponentMon->moves[moveIndex];
         break;
     }
-    case 18: {
+    case CASTLE_ACTION_RESTORE_HELD_ITEMS: {
         Party *party = SaveArray_Party_Get(launchArgs->saveData);
         int i;
         u16 *heldItem = data->heldItems;
@@ -229,53 +267,53 @@ BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx) {
         }
         break;
     }
-    case 19:
+    case CASTLE_ACTION_GET_ROUND:
         *result = BattleCastle_GetRound(data);
         break;
-    case 20:
+    case CASTLE_ACTION_GET_TRAINER_SPRITE:
         *result = BattleCastleData_GetTrainerSprite(data, arg);
         break;
-    case 21:
+    case CASTLE_ACTION_RESET_RANKS:
         BattleCastleData_ResetRanks(data);
         break;
-    case 22:
+    case CASTLE_ACTION_END_ROUND:
         BattleCastleData_EndRound(data);
         break;
-    case 23:
+    case CASTLE_ACTION_GET_BATTLE_NO:
         *result = BattleCastleData_GetBattleNo(data);
         break;
-    case 24:
+    case CASTLE_ACTION_GET_PARTNER_VALUE_A:
         *result = data->partnerValueA;
         break;
-    case 26:
+    case CASTLE_ACTION_GET_PARTNER_VALUE_B:
         *result = data->partnerValueB;
         break;
-    case 27:
+    case CASTLE_ACTION_AWARD_POINTS:
         *result = BattleCastleData_CalcPointsEarned(data);
         BattleCastle_AddPoints(data->saveData, data->type, *result);
         break;
-    case 28:
+    case CASTLE_ACTION_RECORD_LINK_PARTY_PP:
         BattleCastleData_RecordLinkPartyPP(data);
         break;
-    case 29:
+    case CASTLE_ACTION_REGISTER_LINK_COMMANDS:
         FrontierLink_RegisterCommands(data);
         break;
-    case 30:
+    case CASTLE_ACTION_GET_DECIDED_CHOICE:
         if (data->decidedChoice >= 6) {
             *result = data->decidedChoice - 6;
         } else {
             *result = data->decidedChoice;
         }
         break;
-    case 31:
+    case CASTLE_ACTION_CLEAR_CHOICES:
         data->decidedChoice = 0;
         data->partnerChoice = 0;
         data->choice = 0;
         break;
-    case 32:
+    case CASTLE_ACTION_SET_CHOICE:
         data->choice = arg;
         break;
-    case 33: {
+    case CASTLE_ACTION_SPEND_CHOICE_POINTS: {
         int spend = 0;
         if (data->decidedChoice >= 6) {
             if (Comm_GetLocalNetId() != 0) {
@@ -291,7 +329,7 @@ BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx) {
         }
         break;
     }
-    case 34:
+    case CASTLE_ACTION_IS_PARTNER_CHOICE:
         *result = 0;
         if (BattleCastle_IsMultiType(data->type) == TRUE) {
             if (data->decidedChoice >= 6) {
@@ -303,23 +341,23 @@ BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx) {
             }
         }
         break;
-    case 35:
+    case CASTLE_ACTION_IS_MULTI:
         *result = BattleCastle_IsMultiType(data->type);
         break;
-    case 17:
+    case CASTLE_ACTION_GET_TYPE:
         *result = data->type;
         break;
-    case 25:
+    case CASTLE_ACTION_GET_MON_FAINTED:
         *result = data->monFainted;
         break;
-    case 36:
+    case CASTLE_ACTION_DRAW_ROUND_TILES:
         BattleCastle_DrawRoundTiles(FrontierSystem_GetFrontierMap(ctx->frontierSystem)->bgConfig, data, 3);
         break;
-    case 37:
+    case CASTLE_ACTION_LOAD_TRAINERS:
         FrontierTrainer_LoadRecord(&data->trainers[0], data->trainerIds[data->battleNo], HEAP_ID_FIELD2, 204);
         FrontierTrainer_LoadRecord(&data->trainers[1], data->trainerIds[data->battleNo + 7], HEAP_ID_FIELD2, 204);
         break;
-    case 38:
+    case CASTLE_ACTION_GET_ROUND_TABLE_VALUE:
         *result = BattleCastleData_GetRoundTableValue(data);
         break;
     case 39:
@@ -327,7 +365,7 @@ BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx) {
         byteValue = 1;
         CastleFlags_SetField(Save_Frontier_GetCastleFlags(launchArgs->saveData), 10, 0, 0, &byteValue);
         break;
-    case 40:
+    case CASTLE_ACTION_GET_BRAIN_BATTLE:
         *result = 0;
         if (data->type == 0) {
             u32 wins = data->winStreak + 1;
@@ -338,10 +376,10 @@ BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx) {
             }
         }
         break;
-    case 41:
+    case CASTLE_ACTION_GENERATE_OPPONENTS:
         FrontierMon_GenerateList(data->opponentMons, data->opponentSetIds, data->opponentIVs, data->opponentPersonalities, NULL, 4, HEAP_ID_FIELD2, 205);
         break;
-    case 42:
+    case CASTLE_ACTION_SET_OPPONENT_PARTY:
         BattleCastle_SetOpponentParty(data);
         break;
     case 43:

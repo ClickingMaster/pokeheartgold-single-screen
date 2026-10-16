@@ -7,7 +7,6 @@
 #include <nitro/code32.h>
 extern int printf(const char *, ...);
 extern void abort(void);
-#pragma force_active on
 
 typedef struct Node {
     void *left, *right;

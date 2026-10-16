@@ -5,7 +5,6 @@
 #include <nitro/code32.h>
 
 #include "overlay45_format_buffer_private.h"
-#pragma force_active on
 
 typedef struct {
     u32 words[4];

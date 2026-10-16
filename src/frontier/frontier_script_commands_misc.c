@@ -9,6 +9,21 @@ BOOL FrtCmd_StopBGM(FrontierScriptContext *ctx) {
     return FALSE;
 }
 
+enum {
+    TOWER_ACTION_RESET_SYSTEM = 2,
+    TOWER_ACTION_GET_BATTLE_NUMBER = 0x21,
+    TOWER_ACTION_INC_BATTLE_NUMBER,
+    TOWER_ACTION_HAS_WON_SET,
+    TOWER_ACTION_RECORD_SET_LOST = 0x25,
+    TOWER_ACTION_RECORD_SET_WON,
+    TOWER_ACTION_SAVE_CHALLENGE,
+    TOWER_ACTION_GENERATE_OPPONENTS,
+    TOWER_ACTION_GET_TRAINER_SPRITE,
+    TOWER_ACTION_GET_MODE = 0x2B,
+    TOWER_ACTION_SET_PALMER_DEFEATED,
+    TOWER_ACTION_AWARD_BATTLE_POINTS = 0x2E,
+};
+
 BOOL FrtCmd_TowerAction(FrontierScriptContext *ctx) {
     FrontierLaunchArgs *args = Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
     u16 command = FrontierScriptContext_ReadHalfWord(ctx);
@@ -17,47 +32,47 @@ BOOL FrtCmd_TowerAction(FrontierScriptContext *ctx) {
     u8 *data = Frontier_GetData(ctx->frontierSystem->frontierWork);
 
     switch (command) {
-    case 2:
+    case TOWER_ACTION_RESET_SYSTEM:
         ResetSystem();
         break;
-    case 0x2E:
+    case TOWER_ACTION_AWARD_BATTLE_POINTS:
         *dst = FrontierFieldSystem_AwardTowerBattlePoints(data);
         GameStats_Add(Save_GameStats_Get(args->saveData), GAME_STAT_BATTLE_POINTS_RECEIVED, *dst);
         break;
     case 0x37:
         *dst = ov80_0223558C(data, (u8)value);
         break;
-    case 0x21:
+    case TOWER_ACTION_GET_BATTLE_NUMBER:
         *dst = FrontierFieldSystem_GetFrontierBattleNumber(data);
         break;
-    case 0x22:
+    case TOWER_ACTION_INC_BATTLE_NUMBER:
         *dst = BattleTower_IncBattleNumber(data);
         break;
-    case 0x23:
+    case TOWER_ACTION_HAS_WON_SET:
         *dst = FrontierFieldSystem_HasWonSet(data);
         break;
     case 0x24:
         *dst = Overlay80Counter_GetSumCapped(data);
         break;
-    case 0x2B:
+    case TOWER_ACTION_GET_MODE:
         *dst = FrontierFieldSystem_GetBattleTowerMode(data);
         break;
-    case 0x28:
+    case TOWER_ACTION_GENERATE_OPPONENTS:
         BattleTower_GenerateOpponents(data, args->saveData);
         break;
-    case 0x29:
+    case TOWER_ACTION_GET_TRAINER_SPRITE:
         *dst = BattleTower_GetTrainerSprite(data, value);
         break;
-    case 0x2C:
+    case TOWER_ACTION_SET_PALMER_DEFEATED:
         BattleTower_SetPalmerDefeated(data, value);
         break;
-    case 0x25:
+    case TOWER_ACTION_RECORD_SET_LOST:
         FrontierFieldSystem_RecordSetLost(data, args->saveData);
         break;
-    case 0x26:
+    case TOWER_ACTION_RECORD_SET_WON:
         FrontierFieldSystem_RecordSetWon(data, args->saveData);
         break;
-    case 0x27:
+    case TOWER_ACTION_SAVE_CHALLENGE:
         FrontierFieldSystem_SaveChallenge(data);
         break;
     case 0x3A:

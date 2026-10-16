@@ -795,13 +795,18 @@ BOOL FrtCmd_GetSaveVar(FrontierScriptContext *ctx) {
     return FALSE;
 }
 
+enum {
+    TRANSITION_FLASH_START,
+    TRANSITION_FLASH_WAIT,
+};
+
 BOOL FrontierTransition_Flash(FrontierTransitionWork *work) {
     switch (work->state) {
-    case 0:
+    case TRANSITION_FLASH_START:
         FrontierTransition_StartFlash(1, 16, -16, &work->flashDone, 2);
         work->state++;
         break;
-    case 1:
+    case TRANSITION_FLASH_WAIT:
         if (work->flashDone != 0) {
             ResetVisibleHardwareWindows(PM_LCD_TOP);
             ResetVisibleHardwareWindows(PM_LCD_BOTTOM);
@@ -818,14 +823,21 @@ BOOL FrontierTransition_Flash(FrontierTransitionWork *work) {
     return TRUE;
 }
 
+enum {
+    TRANSITION_WIPE_START_FLASH,
+    TRANSITION_WIPE_CREATE,
+    TRANSITION_WIPE_START,
+    TRANSITION_WIPE_UPDATE,
+};
+
 BOOL FrontierTransition_FlashWipeHorizontal(FrontierTransitionWork *work) {
     BOOL done;
     switch (work->state) {
-    case 0:
+    case TRANSITION_WIPE_START_FLASH:
         FrontierTransition_StartFlash(1, 16, -16, &work->flashDone, 2);
         work->state++;
         break;
-    case 1:
+    case TRANSITION_WIPE_CREATE:
         if (work->flashDone == 0) {
             break;
         }
@@ -836,11 +848,11 @@ BOOL FrontierTransition_FlashWipeHorizontal(FrontierTransitionWork *work) {
         ScheduleWindowCopyToVram(work->window);
         work->wipe = FrontierWipe_New(HEAP_ID_FIELD2);
         work->state++;
-    case 2:
+    case TRANSITION_WIPE_START:
         FrontierWipe_Start(work->wipe, 1, 1, work->window, 15);
         work->state++;
         break;
-    case 3:
+    case TRANSITION_WIPE_UPDATE:
         done = FrontierWipe_UpdateHorizontal(work->wipe);
         ScheduleWindowCopyToVram(work->window);
         if (done != FALSE) {
@@ -867,11 +879,11 @@ BOOL FrontierTransition_FlashWipeHorizontal(FrontierTransitionWork *work) {
 BOOL FrontierTransition_FlashWipeVertical(FrontierTransitionWork *work) {
     BOOL done;
     switch (work->state) {
-    case 0:
+    case TRANSITION_WIPE_START_FLASH:
         FrontierTransition_StartFlash(1, 16, -16, &work->flashDone, 2);
         work->state++;
         break;
-    case 1:
+    case TRANSITION_WIPE_CREATE:
         if (work->flashDone == 0) {
             break;
         }
@@ -882,11 +894,11 @@ BOOL FrontierTransition_FlashWipeVertical(FrontierTransitionWork *work) {
         ScheduleWindowCopyToVram(work->window);
         work->wipe = FrontierWipe_New(HEAP_ID_FIELD2);
         work->state++;
-    case 2:
+    case TRANSITION_WIPE_START:
         FrontierWipe_Start(work->wipe, 1, 1, work->window, 15);
         work->state++;
         break;
-    case 3:
+    case TRANSITION_WIPE_UPDATE:
         done = FrontierWipe_UpdateVertical(work->wipe);
         ScheduleWindowCopyToVram(work->window);
         if (done != FALSE) {
@@ -1037,13 +1049,19 @@ void FrontierTransition_RowScrollTask(SysTask *task, FrontierTransitionWork *wor
 }
 #pragma force_active reset
 
+enum {
+    TRANSITION_ROW_SCROLL_START_FLASH,
+    TRANSITION_ROW_SCROLL_START,
+    TRANSITION_ROW_SCROLL_WAIT,
+};
+
 BOOL FrontierTransition_RowScroll1(FrontierTransitionWork *work) {
     switch (work->state) {
-    case 0:
+    case TRANSITION_ROW_SCROLL_START_FLASH:
         FrontierTransition_StartFlash(1, 16, -16, &work->flashDone, 2);
         work->state++;
         break;
-    case 1:
+    case TRANSITION_ROW_SCROLL_START:
         if (work->flashDone != 0) {
             FrontierScanlineRegs initial;
             int i;
@@ -1075,7 +1093,7 @@ BOOL FrontierTransition_RowScroll1(FrontierTransitionWork *work) {
             work->state++;
         }
         break;
-    case 2:
+    case TRANSITION_ROW_SCROLL_WAIT:
         if (IsBrightnessTransitionActive(1)) {
             work->finished = TRUE;
             ToggleBgLayer(GF_BG_LYR_MAIN_3, GF_PLANE_TOGGLE_OFF);
@@ -1092,11 +1110,11 @@ BOOL FrontierTransition_RowScroll1(FrontierTransitionWork *work) {
 
 BOOL FrontierTransition_RowScroll2(FrontierTransitionWork *work) {
     switch (work->state) {
-    case 0:
+    case TRANSITION_ROW_SCROLL_START_FLASH:
         FrontierTransition_StartFlash(1, 16, -16, &work->flashDone, 2);
         work->state++;
         break;
-    case 1:
+    case TRANSITION_ROW_SCROLL_START:
         if (work->flashDone != 0) {
             FrontierScanlineRegs initial;
             int i;
@@ -1137,7 +1155,7 @@ BOOL FrontierTransition_RowScroll2(FrontierTransitionWork *work) {
             work->state++;
         }
         break;
-    case 2:
+    case TRANSITION_ROW_SCROLL_WAIT:
         if (IsBrightnessTransitionActive(1)) {
             work->finished = TRUE;
             ToggleBgLayer(GF_BG_LYR_MAIN_3, GF_PLANE_TOGGLE_OFF);
@@ -1152,13 +1170,18 @@ BOOL FrontierTransition_RowScroll2(FrontierTransitionWork *work) {
     return TRUE;
 }
 
+enum {
+    TRANSITION_WAVE_INIT,
+    TRANSITION_WAVE_START,
+};
+
 BOOL FrontierTransition_Wave(FrontierTransitionWork *work) {
     switch (work->state) {
-    case 0:
+    case TRANSITION_WAVE_INIT:
         FrontierScanline_Init(&work->scanline, HEAP_ID_101);
         work->state++;
         break;
-    case 1:
+    case TRANSITION_WAVE_START:
         FrontierScanline_StartWave(&work->scanline, 0, 191, 0x2AA, 0x12000, 400, (void *)REG_BG3HOFS_ADDR, 0, 4);
         work->state++;
         break;

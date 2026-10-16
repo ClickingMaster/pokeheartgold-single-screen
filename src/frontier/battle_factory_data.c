@@ -60,6 +60,8 @@ u16 BattleFactory_GetRound(BattleFactoryData *data);
 
 #pragma force_active on
 
+#define FACTORY_FLAGS_HAS_STREAK 10
+
 BattleFactoryData *BattleFactoryData_Alloc(SaveData *saveData, int resume, u8 type, u8 levelMode) {
     BattleFactoryData *data;
     void *challenge;
@@ -93,7 +95,7 @@ BattleFactoryData *BattleFactoryData_Alloc(SaveData *saveData, int resume, u8 ty
         if (gBattleFactoryData->type == 3) {
             hasStreak = Save_VarsFlags_GetVar4052(Save_VarsFlags_Get(gBattleFactoryData->saveData));
         } else {
-            hasStreak = FactoryFlags_GetField(flags, 10, (u8)(gBattleFactoryData->levelMode * 4 + gBattleFactoryData->type), 0);
+            hasStreak = FactoryFlags_GetField(flags, FACTORY_FLAGS_HAS_STREAK, (u8)(gBattleFactoryData->levelMode * 4 + gBattleFactoryData->type), 0);
         }
         if (hasStreak == 1) {
             first = gBattleFactoryData;
@@ -374,7 +376,7 @@ void BattleFactoryData_SaveRecord(BattleFactoryData *data, int mode) {
             FrontierSave_SetStat(frontier, BattleFactory_GetBestTradeCountStat(data->levelMode, data->type), FrontierStat_GetFriendIndex(BattleFactory_GetBestTradeCountStat(data->levelMode, data->type)), data->tradeCount);
         }
         value.byte = data->hasStreak;
-        FactoryFlags_SetField(flags, 10, (u8)(data->type + data->levelMode * 4), &value.byte);
+        FactoryFlags_SetField(flags, FACTORY_FLAGS_HAS_STREAK, (u8)(data->type + data->levelMode * 4), &value.byte);
         if (data->type == 3) {
             int stat;
             if (data->levelMode == 0) {

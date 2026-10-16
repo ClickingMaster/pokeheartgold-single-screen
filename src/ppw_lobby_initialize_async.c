@@ -7,7 +7,6 @@ extern int DWC_CheckUserData(void *);
 extern int DWC_CheckHasProfile(void *);
 extern int PPWLobby_Initialize(int, int, int, void *, int, int, int, int);
 int PPW_LobbyInitializeAsync(int a, int b, int c, void *d, u8 *user, int e, int f);
-#pragma force_active on
 #pragma opt_pointer_analysis off
 
 int PPW_LobbyInitializeAsync(int a, int b, int c, void *d, u8 *user, int e, int f) {
