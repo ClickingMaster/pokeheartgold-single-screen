@@ -55,7 +55,7 @@ void PokeathlonDiscCatchCpu_Delete(PokeathlonDiscCatchCpu *cpu) {
 #pragma force_active on
 
 void PokeathlonDiscCatchCpu_Update(PokeathlonDiscCatchCpu *cpu) {
-    PokeathlonDiscCatch *work = PokeathlonCourse_GetHeapAllocPtr4(cpu->course);
+    PokeathlonDiscCatch *work = PokeathlonCourse_GetWork(cpu->course);
     int total = 0;
     u32 i = 0;
     for (; (s32)i < DISC_CATCH_PARTICIPANTS; i++) {
@@ -121,7 +121,7 @@ void PokeathlonDiscCatchCpuMon_Init(PokeathlonDiscCatchCpuMon *mon, PokeathlonCo
 // Every 20 frames: an idle Pokemon goes home or after a disc coming down near it; a chasing one
 // follows its disc along the home row until the disc is gone.
 void PokeathlonDiscCatchCpuMon_Think(PokeathlonDiscCatchCpuMon *mon) {
-    PokeathlonDiscCatch *work = PokeathlonCourse_GetHeapAllocPtr4(mon->course);
+    PokeathlonDiscCatch *work = PokeathlonCourse_GetWork(mon->course);
     PokeathlonDiscCatchDisc *disc;
     int i;
     PokeathlonDiscCatch_CountTeamsAhead(mon->course, (u8)mon->participant);
@@ -163,7 +163,7 @@ void PokeathlonDiscCatchCpuMon_Think(PokeathlonDiscCatchCpuMon *mon) {
 void PokeathlonDiscCatchCpuMon_Update(PokeathlonDiscCatchCpuMon *mon, u16 average, u16 score) {
     s16 position[2];
     void *radius;
-    PokeathlonDiscCatch *work = PokeathlonCourse_GetHeapAllocPtr4(mon->course);
+    PokeathlonDiscCatch *work = PokeathlonCourse_GetWork(mon->course);
     int roll;
     int chance;
     if (PokeathlonDiscCatch_IsMonInPlay(work, (u8)mon->participant, (u8)mon->member) == FALSE) {
@@ -200,7 +200,7 @@ void PokeathlonDiscCatchCpuMon_Update(PokeathlonDiscCatchCpuMon *mon, u16 averag
 BOOL PokeathlonDiscCatchCpuMon_IsNearDisc(PokeathlonDiscCatchCpuMon *mon, int index, int reach) {
     s16 position[2];
     void *radius;
-    PokeathlonDiscCatch *work = PokeathlonCourse_GetHeapAllocPtr4(mon->course);
+    PokeathlonDiscCatch *work = PokeathlonCourse_GetWork(mon->course);
     PokeathlonDiscCatchDisc *disc = PokeathlonDiscCatch_GetDisc(work, (u8)index);
     if (disc->progress < 288) {
         return FALSE;

@@ -110,7 +110,7 @@ void PokeathlonGoalRoll_MoveMons(PokeathlonCourseData *course) {
     fx32 limit;
     u16 angle;
 
-    goalRoll = PokeathlonCourse_GetHeapAllocPtr4(course);
+    goalRoll = PokeathlonCourse_GetWork(course);
     VecFx32 zero = { 0, 0, 0 };
     VecFx32 delta;
     VecFx32 direction;
@@ -233,7 +233,7 @@ void PokeathlonGoalRoll_CollideBalls(PokeathlonCourseData *course) {
     int i;
     fx32 dot;
 
-    goalRoll = PokeathlonCourse_GetHeapAllocPtr4(course);
+    goalRoll = PokeathlonCourse_GetWork(course);
     for (k = 0, ball = goalRoll->balls; k < 2; k++, ball++) {
         if (ball->kind == GOAL_ROLL_BALL_NONE || (ball->state != GOAL_ROLL_BALL_ROLLING && ball->state != GOAL_ROLL_BALL_KICKED)) {
             continue;
@@ -338,7 +338,7 @@ void PokeathlonGoalRoll_CollideBalls(PokeathlonCourseData *course) {
 }
 
 void PokeathlonGoalRoll_MoveBalls(PokeathlonCourseData *course) {
-    PokeathlonGoalRoll *goalRoll = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonGoalRoll *goalRoll = PokeathlonCourse_GetWork(course);
     VecFx32 previous, zero, out;
     int i;
 
@@ -572,7 +572,7 @@ void PokeathlonGoalRoll_BounceBallOff(PokeathlonGoalRollBall *ball, const Pokeat
 void PokeathlonGoalRoll_CheckGoals(PokeathlonCourseData *course) {
     PokeathlonGoalRollMon(*teams)[GOAL_ROLL_TEAM_SIZE];
     int k;
-    PokeathlonGoalRoll *goalRoll = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonGoalRoll *goalRoll = PokeathlonCourse_GetWork(course);
     k = 0;
     PokeathlonGoalRollBall *ball = goalRoll->balls;
     teams = goalRoll->mons;
@@ -636,7 +636,7 @@ void PokeathlonGoalRoll_CheckGoals(PokeathlonCourseData *course) {
 
 // Pokemon low on power walk slowly.
 void PokeathlonGoalRoll_UpdateTiredMons(PokeathlonCourseData *course) {
-    PokeathlonGoalRoll *goalRoll = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonGoalRoll *goalRoll = PokeathlonCourse_GetWork(course);
     u8 i;
     int tired = GOAL_ROLL_MODE_TIRED;
 
@@ -1276,7 +1276,7 @@ void PokeathlonGoalRoll_PrintPlate(PokeathlonGoalRoll *goalRoll, u8 participant,
 
 void PokeathlonGoalRoll_LoadStrings(PokeathlonCourseData *course) {
     u8 i;
-    PokeathlonGoalRoll *goalRoll = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonGoalRoll *goalRoll = PokeathlonCourse_GetWork(course);
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0309_bin, goalRoll->heapId);
     MessageFormat *msgFormat = MessageFormat_New(goalRoll->heapId);
     goalRoll->plateStrings[0] = NewString_ReadMsgData(msgData, msg_0309_00307);
@@ -1294,7 +1294,7 @@ void PokeathlonGoalRoll_LoadStrings(PokeathlonCourseData *course) {
 
 void PokeathlonGoalRoll_FreeStrings(PokeathlonCourseData *course) {
     u8 i;
-    PokeathlonGoalRoll *goalRoll = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonGoalRoll *goalRoll = PokeathlonCourse_GetWork(course);
     String_Delete(goalRoll->plateStrings[0]);
     String_Delete(goalRoll->plateStrings[1]);
     String_Delete(goalRoll->plateStrings[2]);

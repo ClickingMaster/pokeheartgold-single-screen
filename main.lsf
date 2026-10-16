@@ -278,10 +278,7 @@ Static main
     Object src/map_object_behavior.o
     Object src/gymmick_collision.o
     Object src/field_use_item.o
-    Object src/map_object_follow_player.o
-    Object src/map_object_follow_partner.o
-    Object src/map_object_hidden.o
-    Object src/map_object_follow_effects.o
+    Object src/map_object_follow.o
     Object src/sys_flags.o
     Object src/sys_vars.o
     Object asm/frontier_field_support_data.o
@@ -1437,7 +1434,6 @@ Overlay OVY_38
 {
     After OVY_0
     Object src/game_stats_request.o
-    Object src/game_stats_request_state.o
     Object asm/overlay_38_thumb_data.o
     Object lib/NitroDWC/asm/http_data.o
     Object lib/NitroDWC/src/http_connection.o

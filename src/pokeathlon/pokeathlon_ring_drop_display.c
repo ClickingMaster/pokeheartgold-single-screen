@@ -396,7 +396,7 @@ void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay *displ
     u8 objectIndex;
     f32 scaleY;
 
-    ringDrop = PokeathlonCourse_GetHeapAllocPtr4(course);
+    ringDrop = PokeathlonCourse_GetWork(course);
     if (framePacket->marks.bits.bumped && !display->bumped) {
         PlaySE(SEQ_SE_GS_IDOUHIT);
     }
@@ -703,7 +703,7 @@ void PokeathlonRingDropDisplay_Update(PokeathlonRingDropDisplay *display, Pokeat
     int i;
 
     packet = (PokeathlonRingDropFramePacket *)(void *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + RING_DROP_DATA_FRAME_IN);
-    ringDrop = PokeathlonCourse_GetHeapAllocPtr4(course);
+    ringDrop = PokeathlonCourse_GetWork(course);
     PokeathlonRingDropDisplay_ApplyFramePacket(display, packet, course);
     PokeathlonCourse_UpdateTimeUpCountdown(course, packet->timer);
     if (packet->timer == 450) {

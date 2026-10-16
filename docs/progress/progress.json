@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "ef4dc114b92e46abd08b7ff85bccaac473029ebf",
+  "commit": "fc875fc338c4caf271d23042bdf95ee98b82757e",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "2bcda83cb0d978d12f077944b92d14061e001195d474dd0c3aa5f2a602099a38",
+    "ARM9": "9e6ca75654c9d975187ff45afdf6600e8de68d909a6599a35d154f86a4c35378",
     "ARM7": "985179e08068b2c1549d530df2e13c352f6e3ddc4d1f434e15b082467f2c6245"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -1957,17 +1957,9 @@
       "cpu": "ARM9",
       "module": "OVY_38",
       "object": "game_stats_request.o",
-      "bytes": 1350,
+      "bytes": 1578,
       "status": "c",
       "source": "src/game_stats_request.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_38",
-      "object": "game_stats_request_state.o",
-      "bytes": 228,
-      "status": "c",
-      "source": "src/game_stats_request_state.c"
     },
     {
       "cpu": "ARM9",
@@ -9689,34 +9681,10 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "map_object_follow_effects.o",
-      "bytes": 342,
+      "object": "map_object_follow.o",
+      "bytes": 3230,
       "status": "c",
-      "source": "src/map_object_follow_effects.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "map_object_follow_partner.o",
-      "bytes": 700,
-      "status": "c",
-      "source": "src/map_object_follow_partner.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "map_object_follow_player.o",
-      "bytes": 1806,
-      "status": "c",
-      "source": "src/map_object_follow_player.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "map_object_hidden.o",
-      "bytes": 382,
-      "status": "c",
-      "source": "src/map_object_hidden.c"
+      "source": "src/map_object_follow.c"
     },
     {
       "cpu": "ARM9",

@@ -62,7 +62,7 @@ void PokeathlonRelayRun_DrawTeams(PokeathlonCourseData *course, int own, Pokeath
     s32 flags;
 
     packet = (PokeathlonRelayRunPacket *)PokeathlonCourse_ToBytes(&link->packet);
-    relayRun = PokeathlonCourse_GetHeapAllocPtr4(course);
+    relayRun = PokeathlonCourse_GetWork(course);
     x = packet->x[own];
     {
         VecFx32 position = { 0, 0, 0 };

@@ -83,8 +83,8 @@ extern const VecFx32 sRelayRunSpritePoolTemplate; // sprite pool template
 #pragma force_active on
 
 BOOL PokeathlonRelayRun_Init(PokeathlonCourseData *course) {
-    PokeathlonRelayRun *relayRun = PokeathlonCourse_GetHeapAllocPtr4(course);
-    switch (PokeathlonCourse_GetField1ED(course)) {
+    PokeathlonRelayRun *relayRun = PokeathlonCourse_GetWork(course);
+    switch (PokeathlonCourse_GetEventInitState(course)) {
     case 0: {
         Heap_Create(HEAP_ID_POKEATHLON, HEAP_ID_144, 0x68000);
         Main_SetVBlankIntrCB(NULL, NULL);
@@ -94,10 +94,10 @@ BOOL PokeathlonRelayRun_Init(PokeathlonCourseData *course) {
         reg_GX_DISPCNT &= ~REG_GX_DISPCNT_DISPLAY_MASK;
         reg_GXS_DB_DISPCNT &= ~REG_GXS_DB_DISPCNT_DISPLAY_MASK;
         PokeathlonRelayRun_SetGfxBanks();
-        PokeathlonRelayRun *data = PokeathlonCourse_AllocPtr4FromHeap(course, sizeof(PokeathlonRelayRun));
+        PokeathlonRelayRun *data = PokeathlonCourse_AllocWork(course, sizeof(PokeathlonRelayRun));
         MI_CpuFill8(data, 0, sizeof(PokeathlonRelayRun));
         data->bgConfig = BgConfig_Alloc(HEAP_ID_144);
-        PokeathlonCourse_SetField3A4(course, (u32)data->layoutToSend, (u32)data->layout, sizeof(data->layout));
+        PokeathlonCourse_SetEventDataTransfer(course, (u32)data->layoutToSend, (u32)data->layout, sizeof(data->layout));
         PokeathlonCourse_SetHudPlanes(course, 8);
         ObjCharTransferTemplate charTransfer;
         charTransfer.maxTasks = 151;
@@ -113,7 +113,7 @@ BOOL PokeathlonRelayRun_Init(PokeathlonCourseData *course) {
         PokeathlonRelayRun_AddResultWindow(data);
         gSystem.screensFlipped = TRUE;
         GfGfx_SwapDisplay();
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
     case 1: {
@@ -122,7 +122,7 @@ BOOL PokeathlonRelayRun_Init(PokeathlonCourseData *course) {
         int mode = PokeathlonCourse_GetMode(course);
         relayRun->cpu = PokeathlonRelayRunCpu_New(relayRun->heapId, RELAY_RUN_TEAMS - count, mode);
         relayRun->monResources = PokeathlonCourseSprites_CreateResources(relayRun->heapId, 0x2BF, 1);
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
     case 2: {
@@ -140,7 +140,7 @@ BOOL PokeathlonRelayRun_Init(PokeathlonCourseData *course) {
         Sprite_SetDrawPriority(*PokeathlonCourse_CreateHudSpritesInPool(course, 0, relayRun->monResources, relayRun->spritePool), 1);
         PokeathlonRelayRun_CreateSprites(relayRun, relayRun->spritePool);
         PokeathlonRelayRunHud_CreateSprites(relayRun->hud, relayRun->spritePool, relayRun->monResources);
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
     case 3: {
@@ -169,7 +169,7 @@ BOOL PokeathlonRelayRun_Init(PokeathlonCourseData *course) {
         template.whichScreen = NNS_G2D_VRAM_TYPE_2DMAIN;
         PokeathlonCourseMonObjects_Load(relayRun->monObjects, 12, infos, &template, 0, 0);
         PokeathlonRelayRunHud_SetDrawPriorities(relayRun->hud, PokeathlonCourse_GetNetId(course));
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
     case 4: {
@@ -186,7 +186,7 @@ BOOL PokeathlonRelayRun_Init(PokeathlonCourseData *course) {
         }
         own = PokeathlonCourse_GetNetId(course);
         PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)relayRun->bgConfig); // takes the BgConfig
-        PokeathlonCourse_SetField1F4(course, 1);
+        PokeathlonCourse_SetEventDrawEnabled(course, 1);
         ReadWholeNarcMemberByIdPair(collisions, NARC_a_1_7_0, 12);
         for (i = 0; i < 12; i++) {
             PokeathlonCourseMonObject *object = PokeathlonCourseMonObjects_Get(relayRun->monObjects, (u8)i);
@@ -242,7 +242,7 @@ BOOL PokeathlonRelayRun_Init(PokeathlonCourseData *course) {
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         WirelessStatusIcon_CreateOnScreenIfConnected(1);
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
     case 5:
@@ -252,7 +252,7 @@ BOOL PokeathlonRelayRun_Init(PokeathlonCourseData *course) {
             ReadWholeNarcMemberByIdPair(layout, NARC_a_2_2_7, index);
             PokeathlonRelayRunCpu_SetObstacles(relayRun->cpu, layout);
         }
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     case 6:
         GF_ASSERT(GF_heap_c_dummy_return_true(HEAP_ID_POKEATHLON));
@@ -265,7 +265,7 @@ BOOL PokeathlonRelayRun_Init(PokeathlonCourseData *course) {
 #pragma pop
 
 BOOL PokeathlonRelayRun_Draw(PokeathlonCourseData *course) {
-    PokeathlonRelayRun *relayRun = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonRelayRun *relayRun = PokeathlonCourse_GetWork(course);
     PokeathlonCourseSpritePool_Draw(relayRun->spritePool);
     return TRUE;
 }
@@ -279,7 +279,7 @@ BOOL PokeathlonRelayRun_ShowResults(PokeathlonCourseData *course) {
     PokeathlonCourseScoreList_Init(gfx);
     for (i = 0; i < RELAY_RUN_TEAMS; i++) {
         // read through an int-returning type and truncated again
-        int distance = (u16)((int (*)(PokeathlonCourseData *, int))PokeathlonCourse_GetField5F0_AtIndex)(course, (u8)i);
+        int distance = (u16)((int (*)(PokeathlonCourseData *, int))PokeathlonCourse_GetReceivedScore)(course, (u8)i);
         PokeathlonCourse_AddScoreEntry2(course, gfx, i, distance, (u32)distance >> 10, (distance % RELAY_RUN_TRACK_LENGTH) * 10 / RELAY_RUN_TRACK_LENGTH, 0, 1, 2, 1, msg_0309_00297);
     }
     PokeathlonCourseScoreList_Rank(gfx, 1);
@@ -292,9 +292,9 @@ BOOL PokeathlonRelayRun_ShowResults(PokeathlonCourseData *course) {
 #pragma force_active reset
 
 BOOL PokeathlonRelayRun_Exit(PokeathlonCourseData *course) {
-    PokeathlonRelayRun *relayRun = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonRelayRun *relayRun = PokeathlonCourse_GetWork(course);
     WirelessStatusIcon_Destroy();
-    PokeathlonCourse_ResetField3A4(course);
+    PokeathlonCourse_ClearEventDataTransfer(course);
     FreeBgTilemapBuffer(relayRun->bgConfig, GF_BG_LYR_MAIN_0);
     FreeBgTilemapBuffer(relayRun->bgConfig, GF_BG_LYR_MAIN_1);
     FreeBgTilemapBuffer(relayRun->bgConfig, GF_BG_LYR_MAIN_2);
@@ -315,7 +315,7 @@ BOOL PokeathlonRelayRun_Exit(PokeathlonCourseData *course) {
     FontID_Release(4);
     Main_SetVBlankIntrCB(NULL, NULL);
     Main_SetHBlankIntrCB(NULL, NULL);
-    PokeathlonCourse_FreePtr4HeapAlloc(course);
+    PokeathlonCourse_FreeWork(course);
     gSystem.screensFlipped = FALSE;
     GfGfx_SwapDisplay();
     reg_G2_BLDCNT = 0;
@@ -430,7 +430,7 @@ void PokeathlonRelayRun_CreateSprites(PokeathlonRelayRun *relayRun, PokeathlonCo
 
 BOOL PokeathlonRelayRun_Start(PokeathlonCourseData *course, u8 *state) {
     int i;
-    PokeathlonRelayRun *relayRun = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonRelayRun *relayRun = PokeathlonCourse_GetWork(course);
     VecFx32 position;
     switch (*state) {
     case 0:
@@ -462,7 +462,7 @@ BOOL PokeathlonRelayRun_Start(PokeathlonCourseData *course, u8 *state) {
         break;
     case 2:
         if (IsPaletteFadeFinished()) {
-            PokeathlonCourse_SetStateField07(course, RELAY_RUN_STATE_PLAY);
+            PokeathlonCourse_SetNextState(course, RELAY_RUN_STATE_PLAY);
         }
         break;
     }
@@ -473,7 +473,7 @@ BOOL PokeathlonRelayRun_Start(PokeathlonCourseData *course, u8 *state) {
 
 // State 1: countdown, the race, then the finish.
 BOOL PokeathlonRelayRun_Play(PokeathlonCourseData *course, u8 *state) {
-    PokeathlonRelayRun *relayRun = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonRelayRun *relayRun = PokeathlonCourse_GetWork(course);
     switch (*state) {
     case 0:
         if (PokeathlonCourse_RunStartCountdown(course)) {
@@ -490,7 +490,7 @@ BOOL PokeathlonRelayRun_Play(PokeathlonCourseData *course, u8 *state) {
         PokeathlonRelayRun_UpdateHost(course);
         if (PokeathlonCourse_RunFinish(course)) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, relayRun->heapId);
-            PokeathlonCourse_SetStateField07(course, RELAY_RUN_STATE_SAVE_SCORES);
+            PokeathlonCourse_SetNextState(course, RELAY_RUN_STATE_SAVE_SCORES);
         }
         break;
     }
@@ -501,7 +501,7 @@ BOOL PokeathlonRelayRun_Play(PokeathlonCourseData *course, u8 *state) {
 BOOL PokeathlonRelayRun_SaveScores(PokeathlonCourseData *course, u8 *state) {
     int i;
     PokeathlonCourseData *savedCourse = course;
-    PokeathlonRelayRunTeam *team = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonRelayRunTeam *team = PokeathlonCourse_GetWork(course);
 
     if (*state == 0) {
         if (IsPaletteFadeFinished()) {
@@ -513,7 +513,7 @@ BOOL PokeathlonRelayRun_SaveScores(PokeathlonCourseData *course, u8 *state) {
         return TRUE;
     }
     for (i = 0, team = (PokeathlonRelayRunTeam *)((u8 *)team + offsetof(PokeathlonRelayRun, teams)); i < RELAY_RUN_TEAMS; i++, team++) {
-        PokeathlonCourse_SetField5E0_AtIndex(savedCourse, (u8)i, (u16)(team->position.x / FX32_ONE + (team->laps << 10)));
+        PokeathlonCourse_SetEventScore(savedCourse, (u8)i, (u16)(team->position.x / FX32_ONE + (team->laps << 10)));
     }
     return TRUE;
 }
@@ -552,7 +552,7 @@ void PokeathlonRelayRun_UpdateHost(PokeathlonCourseData *course) {
     } work;
 
     link = PokeathlonCourse_GetDataCopyArea(course);
-    relayRun = PokeathlonCourse_GetHeapAllocPtr4(course);
+    relayRun = PokeathlonCourse_GetWork(course);
     if (PokeathlonCourse_GetNetId(course)) {
         return;
     }
@@ -764,7 +764,7 @@ BOOL PokeathlonRelayRun_Update(PokeathlonCourseData *course) {
     u8 j;
     u8 i;
 
-    relayRun = PokeathlonCourse_GetHeapAllocPtr4(course);
+    relayRun = PokeathlonCourse_GetWork(course);
     packet = (PokeathlonRelayRunPacket *)PokeathlonCourse_GetDataCopyArea(course);
     touch = (PokeathlonRelayRunTouch *)PokeathlonCourse_ToBytes(packet);
     touch->held = FALSE;
@@ -808,7 +808,7 @@ BOOL PokeathlonRelayRun_Update(PokeathlonCourseData *course) {
 #pragma force_active on
 
 void PokeathlonRelayRun_DrawPacket(PokeathlonCourseData *course) {
-    PokeathlonRelayRun *relayRun = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonRelayRun *relayRun = PokeathlonCourse_GetWork(course);
     u8 *link = PokeathlonCourse_GetDataCopyArea(course);
     PokeathlonRelayRunPacket *packet = (PokeathlonRelayRunPacket *)PokeathlonCourse_ToBytes(link + offsetof(PokeathlonRelayRunLink, packet));
     u8 own = PokeathlonCourse_GetNetId(course);
@@ -906,7 +906,7 @@ void PokeathlonRelayRun_MoveTeams(PokeathlonCourseData *course) {
     f32 coefficient;
     f32 energy;
     u8 speedLimit;
-    relayRun = PokeathlonCourse_GetHeapAllocPtr4(course);
+    relayRun = PokeathlonCourse_GetWork(course);
     relayRun->bumped = FALSE;
     for (i = 0; i < RELAY_RUN_TEAMS; i++) {
         skip[i] = FALSE;

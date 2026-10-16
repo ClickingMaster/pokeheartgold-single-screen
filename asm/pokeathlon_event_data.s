@@ -81,22 +81,22 @@
 	.public gPokeathlonRingDropBgTemplates
 	.public gPokeathlonEventIntroSpriteTemplates
 	.public gPokeathlonBlockSmashSpotHitboxes
-	.extern PokeathlonCourse_AllocPtr4FromHeap
-	.extern PokeathlonCourse_FreePtr4HeapAlloc
-	.extern PokeathlonCourse_GetCurrentParticipantIndex
+	.extern PokeathlonCourse_AllocWork
+	.extern PokeathlonCourse_FreeWork
+	.extern PokeathlonCourse_GetRound
 	.extern PokeathlonCourse_GetDataCopyArea
-	.extern PokeathlonCourse_GetField1ED
-	.extern PokeathlonCourse_GetField1EF
-	.extern PokeathlonCourse_GetField3A4
-	.extern PokeathlonCourse_GetField3D8_AtIndex
-	.extern PokeathlonCourse_GetField3D8_ForCurrentParticipant
-	.extern PokeathlonCourse_GetField5F0_AtIndex
-	.extern PokeathlonCourse_GetField974_AtIndex
-	.extern PokeathlonCourse_GetFieldBA4
+	.extern PokeathlonCourse_GetEventInitState
+	.extern PokeathlonCourse_GetReceivedCount
+	.extern PokeathlonCourse_GetEventRecvBuffer
+	.extern PokeathlonCourse_GetRoundEvent
+	.extern PokeathlonCourse_GetCurrentEvent
+	.extern PokeathlonCourse_GetReceivedScore
+	.extern PokeathlonCourse_GetRecord
+	.extern PokeathlonCourse_GetMonCounters
 	.extern PokeathlonCourse_GetFieldData
 	.extern PokeathlonCourse_GetFieldData_AtIndex
 	.extern PokeathlonCourse_GetGraphicsSystem
-	.extern PokeathlonCourse_GetHeapAllocPtr4
+	.extern PokeathlonCourse_GetWork
 	.extern PokeathlonCourse_GetHeapID
 	.extern PokeathlonCourse_GetMode
 	.extern PokeathlonCourse_GetParticipantCount
@@ -107,20 +107,20 @@
 	.extern PokeathlonCourse_GetSaveData
 	.extern PokeathlonCourse_GetSystem
 	.extern PokeathlonCourse_GetEventResultSize
-	.extern PokeathlonCourse_IncrementField1ED
-	.extern PokeathlonCourse_IncrementField1EF
+	.extern PokeathlonCourse_AdvanceEventInitState
+	.extern PokeathlonCourse_IncrementReceivedCount
 	.extern PokeathlonCourse_InitPlayerProfiles
 	.extern PokeathlonCourse_InitStateInfo
 	.extern PokeathlonCourse_ResetDataCopyArea
-	.extern PokeathlonCourse_ResetField1EF
-	.extern PokeathlonCourse_ResetField3A4
+	.extern PokeathlonCourse_ResetReceivedCount
+	.extern PokeathlonCourse_ClearEventDataTransfer
 	.extern PokeathlonCourse_RunSubStateLoop
-	.extern PokeathlonCourse_SetField1ED
-	.extern PokeathlonCourse_SetField1F4
-	.extern PokeathlonCourse_SetField3A4
-	.extern PokeathlonCourse_SetField5E0_AtIndex
-	.extern PokeathlonCourse_SetStateField07
-	.extern PokeathlonCourse_SetStateField07_IfDifferent
+	.extern PokeathlonCourse_SetEventInitState
+	.extern PokeathlonCourse_SetEventDrawEnabled
+	.extern PokeathlonCourse_SetEventDataTransfer
+	.extern PokeathlonCourse_SetEventScore
+	.extern PokeathlonCourse_SetNextState
+	.extern PokeathlonCourse_SetNextStateIfNot
 	.extern PokeathlonCourse_SetStateTransitionType
 	.extern PokeathlonCourse_SetVBlankIntrCB
 	.extern PokeathlonCourse_SetEvents
@@ -224,38 +224,38 @@
 	.extern PokeathlonCourse_GetSaveData
 	.extern PokeathlonCourse_GetFieldData
 	.extern PokeathlonCourse_GetFieldData_AtIndex
-	.extern PokeathlonCourse_GetFieldBA4
-	.extern PokeathlonCourse_AllocPtr4FromHeap
-	.extern PokeathlonCourse_FreePtr4HeapAlloc
-	.extern PokeathlonCourse_GetHeapAllocPtr4
+	.extern PokeathlonCourse_GetMonCounters
+	.extern PokeathlonCourse_AllocWork
+	.extern PokeathlonCourse_FreeWork
+	.extern PokeathlonCourse_GetWork
 	.extern PokeathlonCourse_GetHeapID
-	.extern PokeathlonCourse_GetField1ED
-	.extern PokeathlonCourse_SetField1ED
-	.extern PokeathlonCourse_IncrementField1ED
-	.extern PokeathlonCourse_SetField1F4
+	.extern PokeathlonCourse_GetEventInitState
+	.extern PokeathlonCourse_SetEventInitState
+	.extern PokeathlonCourse_AdvanceEventInitState
+	.extern PokeathlonCourse_SetEventDrawEnabled
 	.extern PokeathlonCourse_SetEvents
-	.extern PokeathlonCourse_GetField3D8_ForCurrentParticipant
-	.extern PokeathlonCourse_GetField3D8_AtIndex
+	.extern PokeathlonCourse_GetCurrentEvent
+	.extern PokeathlonCourse_GetRoundEvent
 	.extern PokeathlonCourse_FindCourseId
-	.extern PokeathlonCourse_GetCurrentParticipantIndex
+	.extern PokeathlonCourse_GetRound
 	.extern PokeathlonCourse_GetMode
-	.extern PokeathlonCourse_GetField1EF
-	.extern PokeathlonCourse_IncrementField1EF
-	.extern PokeathlonCourse_ResetField1EF
+	.extern PokeathlonCourse_GetReceivedCount
+	.extern PokeathlonCourse_IncrementReceivedCount
+	.extern PokeathlonCourse_ResetReceivedCount
 	.extern PokeathlonCourse_GetSystem
 	.extern PokeathlonCourse_GetNetId
 	.extern PokeathlonCourse_GetPlayerProfileFromData
-	.extern PokeathlonCourse_GetField974_AtIndex
+	.extern PokeathlonCourse_GetRecord
 	.extern PokeathlonCourse_GetDataCopyArea
 	.extern PokeathlonCourse_ResetDataCopyArea
-	.extern PokeathlonCourse_SetField3A4
-	.extern PokeathlonCourse_ResetField3A4
-	.extern PokeathlonCourse_GetField3A4
+	.extern PokeathlonCourse_SetEventDataTransfer
+	.extern PokeathlonCourse_ClearEventDataTransfer
+	.extern PokeathlonCourse_GetEventRecvBuffer
 	.extern PokeathlonCourse_GetEventResultSize
-	.extern PokeathlonCourse_SetField5E0_AtIndex
-	.extern PokeathlonCourse_GetField5F0_AtIndex
-	.extern PokeathlonCourse_SetStateField07
-	.extern PokeathlonCourse_SetStateField07_IfDifferent
+	.extern PokeathlonCourse_SetEventScore
+	.extern PokeathlonCourse_GetReceivedScore
+	.extern PokeathlonCourse_SetNextState
+	.extern PokeathlonCourse_SetNextStateIfNot
 	.extern PokeathlonCourse_SetStateTransitionType
 	.extern PokeathlonCourse_SetVBlankIntrCB
 	.extern PokeathlonCourse_GetGraphicsSystem

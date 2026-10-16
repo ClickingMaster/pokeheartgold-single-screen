@@ -16,13 +16,13 @@ extern u8 gWifiSetupSocket[];
 extern u8 sWifiSetupSocConfig[];
 extern volatile u32 gSoclHostAddress;
 
-typedef struct ChannelMask {
+typedef struct RateMask {
     u16 mask;
-    u8 id;
+    u8 rate;
     u8 padding;
-} ChannelMask;
+} RateMask;
 
-extern ChannelMask sWifiSetupChannelMasks[];
+extern RateMask sWifiSetupRateMasks[];
 
 typedef struct ScanRecord {
     u8 unk_00[4];
@@ -30,22 +30,22 @@ typedef struct ScanRecord {
     u16 ssidLength;
     u16 ssid[16];
     u16 flags;
-    u16 presentChannels;
-    u16 enabledChannels;
+    u16 basicRates;
+    u16 supportedRates;
     u16 beaconPeriod;
     u16 dtimPeriod;
-    u16 number;
+    u16 channel;
 } ScanRecord;
 
 typedef struct AccessPointInfo {
     u32 ssidLength;
     u16 ssid[16];
-    u32 number;
+    u32 channel;
     u8 unk_28[8];
     u16 mac[3];
     u8 unk_36[2];
-    int channelCount;
-    u8 channels[16];
+    int rateCount;
+    u8 rates[16];
     int beaconPeriod;
     int mode;
 } AccessPointInfo;
@@ -209,25 +209,25 @@ void WifiSetup_ConvertBssDesc(const void *src, void *dst) {
     AccessPointInfo *t = dst;
     int i;
     int count;
-    ChannelMask *p;
+    RateMask *p;
 
     t->ssidLength = s->ssidLength;
     MIi_CpuCopy16(s->ssid, t->ssid, 32);
-    t->number = s->number;
+    t->channel = s->channel;
     MIi_CpuCopy16(s->mac, t->mac, 6);
     count = 0;
-    p = sWifiSetupChannelMasks;
+    p = sWifiSetupRateMasks;
     i = count;
     for (; i < 12; i++, p++) {
-        if (s->enabledChannels & p->mask) {
-            t->channels[count] = p->id;
-            if (s->presentChannels & p->mask) {
-                t->channels[count] |= 128;
+        if (s->supportedRates & p->mask) {
+            t->rates[count] = p->rate;
+            if (s->basicRates & p->mask) {
+                t->rates[count] |= 128;
             }
             count++;
         }
     }
-    t->channelCount = count;
+    t->rateCount = count;
     t->beaconPeriod = s->beaconPeriod;
     if ((s->flags & 3) == 1) {
         t->mode = 1;

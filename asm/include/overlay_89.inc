@@ -231,7 +231,7 @@
 .public gSystem
 .public NNS_G3dGlb
 .public WiFiPlazaWork_GetSaveData
-.public WiFiPlazaWork_GetScheduleValue4
+.public WiFiPlazaWork_IsArceusFootprintShown
 .public WiFiPlazaWork_IsClosing
 .public WiFiPlazaWork_SetAppQuitForClosing
 .public WiFiPlazaWork_SetLowVolume

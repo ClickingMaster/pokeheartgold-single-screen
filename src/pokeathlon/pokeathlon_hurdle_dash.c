@@ -111,12 +111,12 @@ extern const BgTemplate sHurdleDashBgTemplate_Sub2;
 extern const GraphicsBanks sHurdleDashGraphicsBanks;
 
 BOOL PokeathlonHurdleDash_Start(PokeathlonCourseData *course) {
-    PokeathlonCourse_SetStateField07(course, HURDLE_DASH_STATE_PLAY);
+    PokeathlonCourse_SetNextState(course, HURDLE_DASH_STATE_PLAY);
     return FALSE;
 }
 
 BOOL PokeathlonHurdleDash_Play(PokeathlonCourseData *course, u8 *state) {
-    PokeathlonHurdleDash *hurdleDash = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonHurdleDash *hurdleDash = PokeathlonCourse_GetWork(course);
     switch (*state) {
     case 0:
         if (PokeathlonCourse_RunStartCountdown(course)) {
@@ -168,7 +168,7 @@ BOOL PokeathlonHurdleDash_Play(PokeathlonCourseData *course, u8 *state) {
     case 4:
         if (++hurdleDash->endTimer > 90) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, 0, 6, 1, hurdleDash->heapId);
-            PokeathlonCourse_SetStateField07(course, HURDLE_DASH_STATE_CALC_SCORES);
+            PokeathlonCourse_SetNextState(course, HURDLE_DASH_STATE_CALC_SCORES);
         }
         break;
     }
@@ -177,7 +177,7 @@ BOOL PokeathlonHurdleDash_Play(PokeathlonCourseData *course, u8 *state) {
 }
 
 BOOL PokeathlonHurdleDash_CalcScores(PokeathlonCourseData *course, u8 *state) {
-    PokeathlonHurdleDash *hurdleDash = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonHurdleDash *hurdleDash = PokeathlonCourse_GetWork(course);
     float frames;
     int participant;
     int member;
@@ -198,7 +198,7 @@ BOOL PokeathlonHurdleDash_CalcScores(PokeathlonCourseData *course, u8 *state) {
     for (i = 0; i < 3; i++) {
         total += hurdleDash->runners[i].time;
     }
-    PokeathlonCourse_SetField5E0_AtIndex(course, (u8)self, (u16)PokeathlonHurdleDash_RoundTime(total));
+    PokeathlonCourse_SetEventScore(course, (u8)self, (u16)PokeathlonHurdleDash_RoundTime(total));
     if (self == 0) {
         // the host simulates the races of the participants without a player
         count = PokeathlonCourse_GetParticipantCount(course);
@@ -222,7 +222,7 @@ BOOL PokeathlonHurdleDash_CalcScores(PokeathlonCourseData *course, u8 *state) {
                 }
                 sum += hurdleDash->cpuRunners[index].time;
             }
-            PokeathlonCourse_SetField5E0_AtIndex(course, (u8)participant, (u16)PokeathlonHurdleDash_RoundTime(sum));
+            PokeathlonCourse_SetEventScore(course, (u8)participant, (u16)PokeathlonHurdleDash_RoundTime(sum));
         }
     }
     return TRUE;
@@ -242,9 +242,9 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
     PokeathlonHurdleDashNumberX numberX;
     u16 numberPos[3][2];
     PokeathlonHurdleDashParams params;
-    PokeathlonHurdleDash *hurdleDash = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonHurdleDash *hurdleDash = PokeathlonCourse_GetWork(course);
     int i, j;
-    switch (PokeathlonCourse_GetField1ED(course)) {
+    switch (PokeathlonCourse_GetEventInitState(course)) {
     case 0: {
         void *a, *b;
         int c;
@@ -256,7 +256,7 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
         GX_SetVisiblePlane(GX_PLANEMASK_NONE);
         GXS_SetVisiblePlane(GX_PLANEMASK_NONE);
         PokeathlonHurdleDash_SetGfxBanks();
-        hurdleDash = PokeathlonCourse_AllocPtr4FromHeap(course, sizeof(PokeathlonHurdleDash));
+        hurdleDash = PokeathlonCourse_AllocWork(course, sizeof(PokeathlonHurdleDash));
         MI_CpuFill8(hurdleDash, 0, sizeof(PokeathlonHurdleDash));
         hurdleDash->bgConfig = BgConfig_Alloc(HEAP_ID_138);
         hurdleDash->track = PokeathlonHurdleDashTrack_New(hurdleDash->heapId);
@@ -264,7 +264,7 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
         a = PokeathlonHurdleDashTrack_GetLayoutToSend(hurdleDash->track);
         b = PokeathlonHurdleDashTrack_GetLayout(hurdleDash->track);
         c = PokeathlonHurdleDashTrack_GetLayoutSize(hurdleDash->track);
-        PokeathlonCourse_SetField3A4(course, (u32)a, (u32)b, (u32)c);
+        PokeathlonCourse_SetEventDataTransfer(course, (u32)a, (u32)b, (u32)c);
         PokeathlonCourse_SetHudPlanes(course, 8);
         charTransfer.maxTasks = 107;
         charTransfer.sizeMain = 0x40000;
@@ -279,7 +279,7 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
         PokeathlonHurdleDash_InitTimeWindow(hurdleDash);
         gSystem.screensFlipped = TRUE;
         GfGfx_SwapDisplay();
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
     case 1:
@@ -319,7 +319,7 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
         PokeathlonCourseSpritePool_TransferResources(hurdleDash->scene);
         hurdleDash->spriteResources = PokeathlonCourseSprites_CreateResources((int)hurdleDash->heapId, 743, 1);
         hurdleDash->monSpriteManager = PokeathlonCourseMonObjects_Create(hurdleDash->heapId, 3, 4, hurdleDash->spriteResources, PokeathlonCourseSpritePool_GetSpriteList(hurdleDash->scene));
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     case 2:
         for (i = 0; i < 12; i++) {
@@ -376,13 +376,13 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
         spriteInfo[3] = 1;
         spriteInfo[4] = 1;
         PokeathlonCourseMonObjects_Load(hurdleDash->monSpriteManager, 3, views, spriteInfo, 0, 0);
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     case 3:
         if (PokeathlonCourseMonObjects_IsLoaded(hurdleDash->monSpriteManager)) {
             PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)hurdleDash->bgConfig); // takes the BgConfig
             PokeathlonHurdleDash_LoadBgTiles(hurdleDash->bgConfig, hurdleDash->heapId);
-            PokeathlonCourse_IncrementField1ED(course);
+            PokeathlonCourse_AdvanceEventInitState(course);
         }
         break;
     case 4:
@@ -395,22 +395,22 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
             reg_G2S_DB_BG1OFS = 0x300000;
             reg_G2S_DB_BG2OFS = 0x300000;
         }
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     case 5:
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
-        PokeathlonCourse_SetField1F4(course, 1);
+        PokeathlonCourse_SetEventDrawEnabled(course, 1);
         for (i = 0; i < 3; i++) {
             PokeathlonCourseMonObject_SetDrawFlag(PokeathlonCourseMonObjects_Get(hurdleDash->monSpriteManager, (u8)i), 1);
         }
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     case 6:
         if (PokeathlonCourse_GetNetId(course) == 0) {
             PokeathlonHurdleDashTrack_LoadRandomLayout(hurdleDash->track);
         }
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     case 7: {
         u8 *dataCopy;
@@ -448,7 +448,7 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
         }
         WirelessStatusIcon_CreateOnScreenIfConnected(1);
         BeginNormalPaletteFade(FADE_SUB_THEN_MAIN, FADE_TYPE_DOWNWARD_IN, FADE_TYPE_DOWNWARD_IN, 0, 6, 1, hurdleDash->heapId);
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
     case 8:
@@ -463,7 +463,7 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
 #pragma force_active reset
 
 BOOL PokeathlonHurdleDash_Draw(PokeathlonCourseData *course) {
-    PokeathlonHurdleDash *hurdleDash = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonHurdleDash *hurdleDash = PokeathlonCourse_GetWork(course);
     PokeathlonHurdleDashStandings_Draw(hurdleDash->standings);
     PokeathlonCourseSpritePool_Draw(hurdleDash->scene);
     return TRUE;
@@ -477,11 +477,11 @@ BOOL PokeathlonHurdleDash_ShowResults(PokeathlonCourseData *course) {
     int frames;
     int seconds;
 
-    hurdleDash = PokeathlonCourse_GetHeapAllocPtr4(course);
+    hurdleDash = PokeathlonCourse_GetWork(course);
     gfx = PokeathlonCourse_GetGraphicsSystem(course);
     PokeathlonCourseScoreList_Init(gfx);
     for (i = 0; i < 4; i++) {
-        frames = PokeathlonCourse_GetField5F0_AtIndex(course, (u8)i);
+        frames = PokeathlonCourse_GetReceivedScore(course, (u8)i);
         seconds = frames / 30;
         PokeathlonCourse_AddScoreEntry2(course, gfx, i, (u16)frames, seconds, (frames % 30) * 10 / 30, 0, 1, 3, 1, msg_0309_00291);
     }
@@ -493,12 +493,12 @@ BOOL PokeathlonHurdleDash_ShowResults(PokeathlonCourseData *course) {
 }
 
 BOOL PokeathlonHurdleDash_Exit(PokeathlonCourseData *course) {
-    PokeathlonHurdleDash *hurdleDash = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonHurdleDash *hurdleDash = PokeathlonCourse_GetWork(course);
 
     WirelessStatusIcon_Destroy();
     PokeathlonCourseLink_SetCheckSize(PokeathlonCourse_GetSystem(course), 0);
     PokeathlonHurdleDashStandings_Free(hurdleDash->standings);
-    PokeathlonCourse_ResetField3A4(course);
+    PokeathlonCourse_ClearEventDataTransfer(course);
     PokeathlonHurdleDashDust_Free(hurdleDash->dust);
     PokeathlonHurdleDashTrack_Free(hurdleDash->track);
     FreeBgTilemapBuffer(hurdleDash->bgConfig, GF_BG_LYR_MAIN_0);
@@ -518,7 +518,7 @@ BOOL PokeathlonHurdleDash_Exit(PokeathlonCourseData *course) {
     FontID_Release(4);
     Main_SetVBlankIntrCB(NULL, NULL);
     Main_SetHBlankIntrCB(NULL, NULL);
-    PokeathlonCourse_FreePtr4HeapAlloc(course);
+    PokeathlonCourse_FreeWork(course);
     gSystem.screensFlipped = FALSE;
     GfGfx_SwapDisplay();
     Heap_Destroy(HEAP_ID_138);

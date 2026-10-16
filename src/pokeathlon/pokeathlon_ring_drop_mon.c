@@ -411,7 +411,7 @@ PokeathlonRingDropMemberParams *PokeathlonRingDrop_GetMemberParams(PokeathlonCou
     u8 *params;
     u32 p = participant;
     u32 m = member;
-    params = PokeathlonCourse_GetHeapAllocPtr4(course);
+    params = PokeathlonCourse_GetWork(course);
     if (params == NULL) {
         GF_AssertFail();
     }
@@ -446,7 +446,7 @@ void PokeathlonRingDrop_AddScoreWindow(PokeathlonRingDrop *ringDrop) {
 }
 
 void PokeathlonRingDrop_PrintScore(PokeathlonCourseData *course, u32 score) {
-    PokeathlonRingDrop *ringDrop = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonRingDrop *ringDrop = PokeathlonCourse_GetWork(course);
     MessageFormat *msgFormat = ringDrop->msgFormat;
     MsgData *msgData = ringDrop->msgData;
     String *string;

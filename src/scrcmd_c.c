@@ -1715,9 +1715,9 @@ BOOL ScrCmd_GetMoveSelection(ScriptContext *ctx) {
     MoveSelectionResult **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA); // presumably move selection data?
     GF_ASSERT(*p_work != NULL);
     if (mode == 1) {
-        *p_ret = RunningAppData_GetUnk16(*p_work);
+        *p_ret = MoveSelectionResult_GetMoveSlot(*p_work);
     } else {
-        *p_ret = RunningAppData_GetUnk14(*p_work);
+        *p_ret = MoveSelectionResult_GetPartySlot(*p_work);
     }
     Heap_Free(*p_work);
     *p_work = NULL;

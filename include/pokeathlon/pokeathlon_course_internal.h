@@ -185,7 +185,7 @@ struct PokeathlonCourseMonObjects {
 };
 
 // ---------------------------------------------------------------------------------------------------------
-// Course states, in the order of sPokeathlonStateInfoFuncTable (PokeathlonCourse_SetStateField07)
+// Course states, in the order of sPokeathlonStateInfoFuncTable (PokeathlonCourse_SetNextState)
 
 enum PokeathlonCourseStateId {
     POKEATHLON_COURSE_STATE_SEND_EVENTS,
@@ -374,7 +374,7 @@ typedef struct PokeathlonCourseLayout {
     u8 field_15C;                                 // 0x15C
     u8 filler_15D[0x83];                          // 0x15D
     const PokeathlonCourseEvent *event;           // 0x1E0
-    void *heapAllocPtr4;                          // 0x1E4
+    void *work;                                   // 0x1E4
     u8 eventIds[4];                               // 0x1E8: event of each round, as sent to the other players
     u8 unk1EC;                                    // 0x1EC
     u8 eventInitState;                                 // 0x1ED
@@ -424,8 +424,8 @@ typedef struct PokeathlonCourseLayout {
     u16 recordScore;                              // 0xD2A: the event result compared with the saved record
     u32 counterEnabled;                           // 0xD2C
     PokeathlonCourseMarkers markers;              // 0xD30
-    void *heapAllocPtr2;                          // 0xD64
-    void *heapAllocPtr3;                          // 0xD68
+    void *juiceRecord;                            // 0xD64
+    void *playerJuiceRecords;                     // 0xD68
     PokeathlonCourseFinishFunc finishCallback;    // 0xD6C
 } PokeathlonCourseLayout;
 

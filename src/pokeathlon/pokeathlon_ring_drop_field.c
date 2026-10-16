@@ -312,7 +312,7 @@ void PokeathlonRingDrop_UpdateCollisions(PokeathlonCourseData *course) {
     u8(*contacts)[RING_DROP_PARTICIPANTS];
     int j;
 
-    ringDrop = PokeathlonCourse_GetHeapAllocPtr4(course);
+    ringDrop = PokeathlonCourse_GetWork(course);
     contacts = ringDrop->contacts;
     for (i = 0; i < RING_DROP_PARTICIPANTS; i++) {
         PokeathlonRingDropMon *a = &ringDrop->players[i].mon;
@@ -660,7 +660,7 @@ BOOL PokeathlonRingDropMon_CanCollide(PokeathlonRingDropMon *mon) {
 #pragma force_active reset
 
 void PokeathlonRingDrop_ClearContacts(PokeathlonCourseData *course, s32 participant) {
-    u8 *contact = ((PokeathlonRingDrop *)PokeathlonCourse_GetHeapAllocPtr4(course))->contacts[participant];
+    u8 *contact = ((PokeathlonRingDrop *)PokeathlonCourse_GetWork(course))->contacts[participant];
     s32 i = 0;
     do {
         i++;

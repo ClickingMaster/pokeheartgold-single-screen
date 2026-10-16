@@ -267,7 +267,7 @@ void PokeathlonCourseCmd_RecvEvents(int netId, int size, void *data, void *conte
     PokeathlonCourseData *course = context;
     PokeathlonCourse_SetEvents(course, data);
     PokeathlonCourse_SetStateTransitionType(course, 1);
-    PokeathlonCourse_SetStateField07(course, POKEATHLON_COURSE_STATE_RUN_EVENT_OVERLAY);
+    PokeathlonCourse_SetNextState(course, POKEATHLON_COURSE_STATE_RUN_EVENT_OVERLAY);
 }
 
 #pragma force_active on
@@ -277,15 +277,15 @@ void PokeathlonCourseCmd_RecvParticipant(int netId, int size, void *data, void *
     int count;
     if (PokeathlonCourse_GetNetId(context) == 0) {
         memcpy(PokeathlonCourse_GetParticipantData(context, netId), data, size);
-        PokeathlonCourse_IncrementField1EF(context);
+        PokeathlonCourse_IncrementReceivedCount(context);
         count = PokeathlonCourse_GetParticipantCount(context);
-        if (count == PokeathlonCourse_GetField1EF(context)) {
-            if ((u32)PokeathlonCourse_GetField1EF(context) < 4) {
-                u32 missing = 4 - PokeathlonCourse_GetField1EF(context);
+        if (count == PokeathlonCourse_GetReceivedCount(context)) {
+            if ((u32)PokeathlonCourse_GetReceivedCount(context) < 4) {
+                u32 missing = 4 - PokeathlonCourse_GetReceivedCount(context);
                 PokeathlonCourse_SetupNpcParticipants(context, (u8)missing);
             }
-            PokeathlonCourse_ResetField1EF(context);
-            PokeathlonCourse_SetStateField07(context, POKEATHLON_COURSE_STATE_SEND_PARTICIPANTS);
+            PokeathlonCourse_ResetReceivedCount(context);
+            PokeathlonCourse_SetNextState(context, POKEATHLON_COURSE_STATE_SEND_PARTICIPANTS);
         }
     }
 }
@@ -297,7 +297,7 @@ void PokeathlonCourseCmd_RecvAllParticipants(int netId, int size, void *data, vo
     memcpy(PokeathlonCourse_GetParticipantData(course, netId), data, size);
     PokeathlonCourse_LoadPerformanceData(course);
     PokeathlonCourse_SetStateTransitionType(course, 3);
-    PokeathlonCourse_SetStateField07(course, POKEATHLON_COURSE_STATE_SEND_PROFILES);
+    PokeathlonCourse_SetNextState(course, POKEATHLON_COURSE_STATE_SEND_PROFILES);
 }
 
 void PokeathlonCourseCmd_RecvProfiles(int netId, int size, void *data, void *context) {
@@ -306,16 +306,16 @@ void PokeathlonCourseCmd_RecvProfiles(int netId, int size, void *data, void *con
         memcpy(PokeathlonCourse_GetPlayerProfileFromData(course, 0), data, size);
     }
     PokeathlonCourse_SetStateTransitionType(course, 4);
-    PokeathlonCourse_SetStateField07(course, POKEATHLON_COURSE_STATE_SEND_RECORD);
+    PokeathlonCourse_SetNextState(course, POKEATHLON_COURSE_STATE_SEND_RECORD);
 }
 
 void PokeathlonCourseCmd_RecvRecord(int netId, int size, void *data, void *context) {
     PokeathlonCourseData *course = context;
-    PokeathlonCourse_IncrementField1EF(course);
-    if (PokeathlonCourse_GetParticipantCount(course) == PokeathlonCourse_GetField1EF(course)) {
-        PokeathlonCourse_ResetField1EF(course);
+    PokeathlonCourse_IncrementReceivedCount(course);
+    if (PokeathlonCourse_GetParticipantCount(course) == PokeathlonCourse_GetReceivedCount(course)) {
+        PokeathlonCourse_ResetReceivedCount(course);
         PokeathlonCourse_SetStateTransitionType(course, 5);
-        PokeathlonCourse_SetStateField07(course, POKEATHLON_COURSE_STATE_START_OPENING);
+        PokeathlonCourse_SetNextState(course, POKEATHLON_COURSE_STATE_START_OPENING);
     }
 }
 
@@ -332,7 +332,7 @@ void PokeathlonCourseCmd_RecvPacket(int netId, int size, void *data, void *conte
 void PokeathlonCourseCmd_RecvEventData(int netId, int size, void *data, void *context) {
     PokeathlonCourseData *course = context;
     PokeathlonCourse_SetStateTransitionType(course, 10);
-    PokeathlonCourse_SetStateField07(course, POKEATHLON_COURSE_STATE_RUN_EVENT);
+    PokeathlonCourse_SetNextState(course, POKEATHLON_COURSE_STATE_RUN_EVENT);
 }
 
 void PokeathlonCourseCmd_RecvEventResult(int netId, int size, void *data, void *context) {
@@ -341,10 +341,10 @@ void PokeathlonCourseCmd_RecvEventResult(int netId, int size, void *data, void *
     if (!PokeathlonCourse_GetNetId(course)) {
         u32 resultSize = PokeathlonCourse_GetEventResultSize(course);
         memcpy(PokeathlonCourse_ToBytes(dataCopy + sizeof(PokeathlonCoursePacket)) + netId * resultSize, data, resultSize);
-        PokeathlonCourse_IncrementField1EF(course);
-        if (PokeathlonCourse_GetParticipantCount(course) == PokeathlonCourse_GetField1EF(course)) {
-            PokeathlonCourse_ResetField1EF(course);
-            PokeathlonCourse_SetStateField07(course, POKEATHLON_COURSE_STATE_SEND_EVENT_RESULTS);
+        PokeathlonCourse_IncrementReceivedCount(course);
+        if (PokeathlonCourse_GetParticipantCount(course) == PokeathlonCourse_GetReceivedCount(course)) {
+            PokeathlonCourse_ResetReceivedCount(course);
+            PokeathlonCourse_SetNextState(course, POKEATHLON_COURSE_STATE_SEND_EVENT_RESULTS);
         }
     }
 }
@@ -352,7 +352,7 @@ void PokeathlonCourseCmd_RecvEventResult(int netId, int size, void *data, void *
 void PokeathlonCourseCmd_RecvEventResults(int netId, int size, void *data, void *context) {
     PokeathlonCourseData *course = context;
     memcpy(PokeathlonCourse_GetDataCopyArea(course) + 6 * sizeof(PokeathlonCoursePacket), data, size);
-    PokeathlonCourse_SetStateField07(course, POKEATHLON_COURSE_STATE_END_ROUND);
+    PokeathlonCourse_SetNextState(course, POKEATHLON_COURSE_STATE_END_ROUND);
 }
 
 // Host: adds a player's per-mon event counters to its counters in the course results.
@@ -374,10 +374,10 @@ void PokeathlonCourseCmd_RecvMonCounters(int netId, int size, void *data, void *
             dst[i * 8 + 6] += src[i * 8 + 6];
             dst[i * 8 + 7] += src[i * 8 + 7];
         }
-        PokeathlonCourse_IncrementField1EF(course);
-        if (PokeathlonCourse_GetParticipantCount(course) == PokeathlonCourse_GetField1EF(course)) {
-            PokeathlonCourse_ResetField1EF(course);
-            PokeathlonCourse_SetStateField07(course, POKEATHLON_COURSE_STATE_SEND_RESULTS);
+        PokeathlonCourse_IncrementReceivedCount(course);
+        if (PokeathlonCourse_GetParticipantCount(course) == PokeathlonCourse_GetReceivedCount(course)) {
+            PokeathlonCourse_ResetReceivedCount(course);
+            PokeathlonCourse_SetNextState(course, POKEATHLON_COURSE_STATE_SEND_RESULTS);
         }
     }
 }
@@ -387,17 +387,17 @@ void PokeathlonCourseCmd_RecvResults(int netId, int size, void *data, void *cont
     PokeathlonCourse_GetDataCopyArea(course);
     PokeathlonCourse_GetNetId(course);
     PokeathlonCourse_SetStateTransitionType(course, 13);
-    PokeathlonCourse_SetStateField07(course, POKEATHLON_COURSE_STATE_START_CLOSING);
+    PokeathlonCourse_SetNextState(course, POKEATHLON_COURSE_STATE_START_CLOSING);
 }
 
 void PokeathlonCourseCmd_RecvJuiceRecord(int netId, int size, void *data, void *context) {
     PokeathlonCourseData *course = context;
     PokeathlonCourse_GetDataCopyArea(course);
-    PokeathlonCourse_IncrementField1EF(course);
-    if (PokeathlonCourse_GetParticipantCount(course) == PokeathlonCourse_GetField1EF(course)) {
-        PokeathlonCourse_ResetField1EF(course);
+    PokeathlonCourse_IncrementReceivedCount(course);
+    if (PokeathlonCourse_GetParticipantCount(course) == PokeathlonCourse_GetReceivedCount(course)) {
+        PokeathlonCourse_ResetReceivedCount(course);
         PokeathlonCourse_SetStateTransitionType(course, 15);
-        PokeathlonCourse_SetStateField07(course, POKEATHLON_COURSE_STATE_STORE_JUICE_RECORDS);
+        PokeathlonCourse_SetNextState(course, POKEATHLON_COURSE_STATE_STORE_JUICE_RECORDS);
     }
 }
 
@@ -439,11 +439,11 @@ u32 PokeathlonCourseCmd_JuiceRecordSize(void) {
 }
 
 void *PokeathlonCourseCmd_GetEventDataBuffer(int netId, void *context) {
-    return (void *)PokeathlonCourse_GetField3A4(context);
+    return (void *)PokeathlonCourse_GetEventRecvBuffer(context);
 }
 
 void *PokeathlonCourseCmd_GetRecordBuffer(int netId, void *context) {
-    return PokeathlonCourse_GetField974_AtIndex(context, netId);
+    return PokeathlonCourse_GetRecord(context, netId);
 }
 
 void *PokeathlonCourseCmd_GetResultsBuffer(int netId, void *context) {
@@ -451,7 +451,7 @@ void *PokeathlonCourseCmd_GetResultsBuffer(int netId, void *context) {
 }
 
 void *PokeathlonCourseCmd_GetMonCountersBuffer(int netId, void *context, int size) {
-    return (u8 *)PokeathlonCourse_GetFieldBA4(context) + netId * size;
+    return (u8 *)PokeathlonCourse_GetMonCounters(context) + netId * size;
 }
 
 void *PokeathlonCourseCmd_GetJuiceRecordBuffer(int netId, void *context) {

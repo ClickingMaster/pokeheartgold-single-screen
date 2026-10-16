@@ -59,7 +59,7 @@ extern const WindowTemplate gPokeathlonDiscCatchScoreWindowTemplate;
 // Each frame (every participant): sends the own touch and shows the host's frame packet; returns TRUE
 // once the host reports the end.
 BOOL PokeathlonDiscCatch_UpdateFrame(PokeathlonCourseData *course) {
-    PokeathlonDiscCatch *work = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonDiscCatch *work = PokeathlonCourse_GetWork(course);
     u8 *area = PokeathlonCourse_GetDataCopyArea(course);
     PokeathlonDiscCatchFrame *received = (PokeathlonDiscCatchFrame *)PokeathlonCourse_ToBytes(area + 0xF0);
     PokeathlonDiscCatchFrame *own = (PokeathlonDiscCatchFrame *)PokeathlonCourse_ToBytes(area);
@@ -123,7 +123,7 @@ void PokeathlonDiscCatch_InitStats(PokeathlonCourseData *course) {
 }
 
 PokeathlonDiscCatchStats *PokeathlonDiscCatch_GetStats(PokeathlonCourseData *course, u32 participant, u32 member) {
-    PokeathlonDiscCatch *work = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonDiscCatch *work = PokeathlonCourse_GetWork(course);
     PokeathlonDiscCatchStats *stats;
     GF_ASSERT(work != NULL);
     GF_ASSERT(participant < DISC_CATCH_PARTICIPANTS);
@@ -267,7 +267,7 @@ void PokeathlonDiscCatch_UpdateCollisions(PokeathlonCourseData *course) {
     int i, j;
     PokeathlonDiscCatchMon *a, *b;
     fx32 power;
-    PokeathlonDiscCatch *work = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonDiscCatch *work = PokeathlonCourse_GetWork(course);
     u8(*touching)[DISC_CATCH_MONS] = work->field.touching;
     for (i = 0; i < DISC_CATCH_MONS; i++) {
         a = &work->field.teams[i / DISC_CATCH_TEAM_SIZE].mons[i % DISC_CATCH_TEAM_SIZE];
@@ -669,7 +669,7 @@ void PokeathlonDiscCatchSprites_Init(PokeathlonDiscCatchSprites *sprites, Sprite
 
 void PokeathlonDiscCatchSprites_Update(PokeathlonDiscCatchSprites *sprites, PokeathlonCourseData *course) {
     PokeathlonDiscCatchFrame *frame = (PokeathlonDiscCatchFrame *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0xF0);
-    PokeathlonDiscCatch *work = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonDiscCatch *work = PokeathlonCourse_GetWork(course);
     PokeathlonDiscCatch_UpdateDiscSprites(sprites, (PokeathlonDiscCatchDiscPacket *)frame, course);
     PokeathlonDiscCatch_UpdateMonSprites(sprites, frame, course);
     u8 participant = frame->scoreParticipant;

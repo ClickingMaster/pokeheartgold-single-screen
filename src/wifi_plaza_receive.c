@@ -30,7 +30,7 @@ void WiFiPlaza_OnTalkRequest(int id, u16 *data, u32 size, WiFiPlazaWork *work) {
         work->talk.partnerSlot = slot;
         work->talk.state = 2;
         work->talk.role = 2;
-        work->talk.unk_07 = 0;
+        work->talk.partnerArrived = 0;
         WiFiPlazaTalkSession_StartTimeout(&work->talk);
     }
 }

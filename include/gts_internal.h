@@ -416,8 +416,8 @@ int Gts_FindLevelRange(int minLevel, int maxLevel, int kind);
 void Gts_SetSearchCountry(GtsApp *app, int index);
 int Gts_GetCountryGroupRange(int group, int *start);
 int Gts_CreateCountryListItems(ListMenuItem **items, MsgData *msgData, int group);
-void GtsUnk1234_Clear(GtsCursorValueTable *arg);
-void GtsUnk1234_SetEntry(GtsCursorValueTable *arg, int index, u16 value1, u16 value2);
+void GtsCursorValueTable_Clear(GtsCursorValueTable *arg);
+void GtsCursorValueTable_SetEntry(GtsCursorValueTable *arg, int index, u16 value1, u16 value2);
 
 // The selector (gts_selector.c). mode: 0 species, 1 gender, 2 level, 3 country. GtsSelector_Main returns -1 while
 // the player chooses, -2 for BACK, else the choice.

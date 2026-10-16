@@ -100,7 +100,7 @@ static inline u8 PokeathlonSnowThrow_OtherMon(int own, int k) {
     return ((u8)(((own + 1) * SNOW_THROW_MEMBERS) % SNOW_THROW_MONS) + k) % SNOW_THROW_MONS;
 }
 
-// Set-up, a step per frame (PokeathlonCourse_GetField1ED): heaps and screens, the top screen and the CPU,
+// Set-up, a step per frame (PokeathlonCourse_GetEventInitState): heaps and screens, the top screen and the CPU,
 // sprites, the Pokemon graphics, then the field once they are loaded.
 #pragma force_active on
 
@@ -124,8 +124,8 @@ BOOL PokeathlonSnowThrow_Init(PokeathlonCourseData *course) {
     int member;
     int y, j;
 
-    work = PokeathlonCourse_GetHeapAllocPtr4(course);
-    switch (PokeathlonCourse_GetField1ED(course)) {
+    work = PokeathlonCourse_GetWork(course);
+    switch (PokeathlonCourse_GetEventInitState(course)) {
     case 0: {
         ObjCharTransferTemplate charTransfer;
 
@@ -137,7 +137,7 @@ BOOL PokeathlonSnowThrow_Init(PokeathlonCourseData *course) {
         reg_GX_DISPCNT &= ~REG_GX_DISPCNT_DISPLAY_MASK;
         reg_GXS_DB_DISPCNT &= ~REG_GXS_DB_DISPCNT_DISPLAY_MASK;
         PokeathlonSnowThrow_SetGfxBanks();
-        data = PokeathlonCourse_AllocPtr4FromHeap(course, sizeof(PokeathlonSnowThrow));
+        data = PokeathlonCourse_AllocWork(course, sizeof(PokeathlonSnowThrow));
         MI_CpuFill8(data, 0, sizeof(PokeathlonSnowThrow));
         data->sortBuffer = Heap_Alloc(HEAP_ID_146, 40);
         MI_CpuFill8(data->sortBuffer, 0, 40);
@@ -157,14 +157,14 @@ BOOL PokeathlonSnowThrow_Init(PokeathlonCourseData *course) {
         PokeathlonSnowThrow_PrintNames(data, course);
         gSystem.screensFlipped = FALSE;
         GfGfx_SwapDisplay();
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
     case 1:
         work->display = PokeathlonSnowThrowDisplay_New(work->heapId, work->bgConfig, course);
         count = PokeathlonCourse_GetParticipantCount(course);
         work->cpu = PokeathlonSnowThrowCpu_New(work->heapId, SNOW_THROW_TEAMS - count, PokeathlonCourse_GetMode(course));
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     case 2: {
         VecFx32 poolTemplate = sSnowThrowSpritePoolTemplate;
@@ -182,7 +182,7 @@ BOOL PokeathlonSnowThrow_Init(PokeathlonCourseData *course) {
         Sprite_SetDrawPriority(*PokeathlonCourse_CreateHudSpritesInPool(course, 0, work->monResources, work->spritePool), 1);
         own = PokeathlonCourse_GetNetId(course);
         PokeathlonSnowThrow_CreateSprites(work, work->spritePool, own);
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
     case 3:
@@ -211,7 +211,7 @@ BOOL PokeathlonSnowThrow_Init(PokeathlonCourseData *course) {
         template.vram = 1;
         template.whichScreen = NNS_G2D_VRAM_TYPE_2DMAIN;
         PokeathlonCourseMonObjects_Load(work->monObjectList, 9, infos, &template, 0, 0);
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     case 4:
         if (!PokeathlonCourseMonObjects_IsLoaded(work->monObjectList)) {
@@ -220,7 +220,7 @@ BOOL PokeathlonSnowThrow_Init(PokeathlonCourseData *course) {
             PokeathlonSnowThrowViewAnims anims = sSnowThrowViewAnims;
 
             PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)work->bgConfig); // takes the BgConfig
-            PokeathlonCourse_SetField1F4(course, 1);
+            PokeathlonCourse_SetEventDrawEnabled(course, 1);
             own = PokeathlonCourse_GetNetId(course);
             for (k = 0; k < SNOW_THROW_MONS - SNOW_THROW_MEMBERS; k++) {
                 work->monObjects[k] = PokeathlonCourseMonObjects_Get(work->monObjectList, (u8)k);
@@ -266,7 +266,7 @@ BOOL PokeathlonSnowThrow_Init(PokeathlonCourseData *course) {
             GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
             WirelessStatusIcon_CreateOnScreenIfConnected(1);
             BeginNormalPaletteFade(FADE_SUB_THEN_MAIN, FADE_TYPE_DOWNWARD_IN, FADE_TYPE_DOWNWARD_IN, RGB_BLACK, 6, 1, work->heapId);
-            PokeathlonCourse_IncrementField1ED(course);
+            PokeathlonCourse_AdvanceEventInitState(course);
         }
         break;
     case 5:
@@ -282,7 +282,7 @@ BOOL PokeathlonSnowThrow_Init(PokeathlonCourseData *course) {
 #pragma force_active reset
 
 BOOL PokeathlonSnowThrow_Draw(PokeathlonCourseData *course) {
-    PokeathlonSnowThrow *work = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonSnowThrow *work = PokeathlonCourse_GetWork(course);
     PokeathlonSnowThrowDisplay_UpdateShake(work->display);
     PokeathlonCourseSpritePool_Draw(work->spritePool);
     return TRUE;
@@ -294,7 +294,7 @@ BOOL PokeathlonSnowThrow_ShowResults(PokeathlonCourseData *course) {
     int i;
     PokeathlonCourseScoreList_Init(gfx);
     for (i = 0; i < SNOW_THROW_TEAMS; i++) {
-        PokeathlonCourse_AddScoreEntry(course, gfx, i, PokeathlonCourse_GetField5F0_AtIndex(course, (u8)i), 0, 3, msg_0309_00299);
+        PokeathlonCourse_AddScoreEntry(course, gfx, i, PokeathlonCourse_GetReceivedScore(course, (u8)i), 0, 3, msg_0309_00299);
     }
     PokeathlonCourseScoreList_Rank(gfx, 1);
     PokeathlonEvent_CalcPoints(gfx, 8);
@@ -306,12 +306,12 @@ BOOL PokeathlonSnowThrow_ShowResults(PokeathlonCourseData *course) {
 #pragma force_active on
 
 BOOL PokeathlonSnowThrow_Exit(PokeathlonCourseData *course) {
-    PokeathlonSnowThrow *work = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonSnowThrow *work = PokeathlonCourse_GetWork(course);
     int i;
     Window *window;
 
     WirelessStatusIcon_Destroy();
-    PokeathlonCourse_ResetField3A4(course);
+    PokeathlonCourse_ClearEventDataTransfer(course);
     FreeBgTilemapBuffer(work->bgConfig, GF_BG_LYR_MAIN_0);
     FreeBgTilemapBuffer(work->bgConfig, GF_BG_LYR_MAIN_1);
     FreeBgTilemapBuffer(work->bgConfig, GF_BG_LYR_MAIN_3);
@@ -336,7 +336,7 @@ BOOL PokeathlonSnowThrow_Exit(PokeathlonCourseData *course) {
     Main_SetVBlankIntrCB(NULL, NULL);
     Main_SetHBlankIntrCB(NULL, NULL);
     Heap_Free(work->sortBuffer);
-    PokeathlonCourse_FreePtr4HeapAlloc(course);
+    PokeathlonCourse_FreeWork(course);
     gSystem.screensFlipped = FALSE;
     GfGfx_SwapDisplay();
     reg_G2_BLDCNT = 0;
@@ -481,7 +481,7 @@ void PokeathlonSnowThrow_CreateSprites(PokeathlonSnowThrow *work, PokeathlonCour
 #pragma pop
 
 BOOL PokeathlonSnowThrow_Play(PokeathlonCourseData *course, u8 *state) {
-    PokeathlonSnowThrow *work = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonSnowThrow *work = PokeathlonCourse_GetWork(course);
     switch (*state) {
     case 0:
         if (PokeathlonCourse_RunStartCountdown(course)) {
@@ -498,7 +498,7 @@ BOOL PokeathlonSnowThrow_Play(PokeathlonCourseData *course, u8 *state) {
         PokeathlonSnowThrow_UpdateHost(course);
         if (PokeathlonCourse_RunFinish(course)) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, work->heapId);
-            PokeathlonCourse_SetStateField07(course, SNOW_THROW_STATE_SAVE_SCORES);
+            PokeathlonCourse_SetNextState(course, SNOW_THROW_STATE_SAVE_SCORES);
         }
         break;
     }
@@ -510,7 +510,7 @@ BOOL PokeathlonSnowThrow_SaveScores(PokeathlonCourseData *course, u8 *state) {
     PokeathlonSnowThrowLink *link = (PokeathlonSnowThrowLink *)PokeathlonCourse_GetDataCopyArea(course);
     PokeathlonSnowThrowPacket *packet;
     int i;
-    PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonCourse_GetWork(course);
     if (*state == 0) {
         if (IsPaletteFadeFinished()) {
             *state = 1;
@@ -522,7 +522,7 @@ BOOL PokeathlonSnowThrow_SaveScores(PokeathlonCourseData *course, u8 *state) {
     }
     packet = (PokeathlonSnowThrowPacket *)PokeathlonCourse_ToBytes(&link->packetToSend);
     for (i = 0; i < SNOW_THROW_TEAMS; i++) {
-        PokeathlonCourse_SetField5E0_AtIndex(course, (u8)i, packet->teams[i] & 0x3FF);
+        PokeathlonCourse_SetEventScore(course, (u8)i, packet->teams[i] & 0x3FF);
     }
     return TRUE;
 }
@@ -546,7 +546,7 @@ void PokeathlonSnowThrow_UpdateHost(PokeathlonCourseData *course) {
     f32 strength;
 
     block = (PokeathlonSnowThrowTouchBlock *)PokeathlonCourse_GetDataCopyArea(course);
-    work = PokeathlonCourse_GetHeapAllocPtr4(course);
+    work = PokeathlonCourse_GetWork(course);
     if (PokeathlonCourse_GetNetId(course) != 0) {
         return;
     }
@@ -748,7 +748,7 @@ BOOL PokeathlonSnowThrow_Update(PokeathlonCourseData *course) {
     PokeathlonSnowThrowLink *link;
     PokeathlonSnowThrowTouch *touch;
 
-    work = PokeathlonCourse_GetHeapAllocPtr4(course);
+    work = PokeathlonCourse_GetWork(course);
     link = (PokeathlonSnowThrowLink *)PokeathlonCourse_GetDataCopyArea(course);
     touch = (PokeathlonSnowThrowTouch *)PokeathlonCourse_ToBytes(link);
     touch->held = FALSE;
@@ -819,7 +819,7 @@ void PokeathlonSnowThrow_DrawPacket(PokeathlonCourseData *course) {
     int done;
     f32 factor;
 
-    work = PokeathlonCourse_GetHeapAllocPtr4(course);
+    work = PokeathlonCourse_GetWork(course);
     packet = (PokeathlonSnowThrowPacket *)PokeathlonCourse_ToBytes((u8 *)PokeathlonCourse_GetDataCopyArea(course) + offsetof(PokeathlonSnowThrowLink, packet));
     own = PokeathlonCourse_GetNetId(course);
     seconds = (packet->flags >> 25) & 0x7F;
@@ -1117,7 +1117,7 @@ void PokeathlonSnowThrow_PrintScore(PokeathlonSnowThrow *work, u16 score) {
 
 // Host: stun and energy recovery of every Pokemon.
 void PokeathlonSnowThrow_UpdateMons(PokeathlonCourseData *course) {
-    volatile PokeathlonSnowThrow *work = PokeathlonCourse_GetHeapAllocPtr4(course); // (re-read after each write, as built)
+    volatile PokeathlonSnowThrow *work = PokeathlonCourse_GetWork(course); // (re-read after each write, as built)
     int i;
 
     for (i = 0; i < SNOW_THROW_MONS; i++) {
@@ -1141,7 +1141,7 @@ void PokeathlonSnowThrow_UpdateMons(PokeathlonCourseData *course) {
 #pragma force_active on
 
 void PokeathlonSnowThrow_MoveBalls(PokeathlonCourseData *course) {
-    PokeathlonSnowThrow *work = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonSnowThrow *work = PokeathlonCourse_GetWork(course);
     int i;
     BOOL gone;
 

@@ -31,6 +31,9 @@ void *DWC_Alloc(int category, u32 size);
 void DWC_Free(int category, void *ptr, u32 size);
 void B64Encode(const void *src, char *dst, int len, int mode);
 BOOL DWC_InitGHTTP(int value);
+BOOL DWC_ProcessGHTTP(void);
+int DWC_GetGHTTPData(char *url, void (*callback)(const char *, int, int), void *arg);
+void DWC_ShutdownGHTTP(void);
 
 void GameStats_SeedRandom(u32 seed) {
     gGameStatsRandState = seed | (seed << 16);
@@ -40,9 +43,6 @@ u8 GameStats_NextRandom(void) {
     gGameStatsRandState = (gGameStatsRandState * 0x45 + 0x1111) & 0x7FFFFFFF;
     return (s32)gGameStatsRandState >> 16;
 }
-
-// force_active matches the section flags of the original objects of these functions.
-#pragma force_active on
 
 int GameStats_EncodePayload(u32 key, const u8 *data, int len, char *out, int outSize) {
     u32 sum = 0;
@@ -92,8 +92,6 @@ int GameStats_EncodePayload(u32 key, const u8 *data, int len, char *out, int out
     return 0;
 }
 
-#pragma force_active reset
-
 // Callers pass a signed length (kept: an unsigned parameter changes their register allocation).
 int GameStats_GetBase64Length(int size) {
     return ((u32)size / 3 + ((u32)size % 3 != 0)) * 4;
@@ -127,8 +125,6 @@ void GameStats_SetRequestError(int result) {
         break;
     }
 }
-
-#pragma force_active on
 
 void GameStats_ResponseCallback(const char *response, int length, int error) {
     char text[54];
@@ -277,8 +273,6 @@ void GameStats_ResponseCallback(const char *response, int length, int error) {
     }
 }
 
-#pragma force_active reset
-
 void GameStats_Start(void) {
     gGameStatsRequest.state = GAME_STATS_STATE_STARTED;
     gGameStatsRequest.requestId = -1;
@@ -287,7 +281,6 @@ void GameStats_Start(void) {
     }
 }
 
-#pragma force_active on
 #pragma opt_propagation off
 
 int GameStats_PrepareRequest(char *url, int pid, void *payload, int payloadSize, void *response, int responseCapacity) {
@@ -323,4 +316,59 @@ int GameStats_PrepareRequest(char *url, int pid, void *payload, int payloadSize,
 }
 
 #pragma opt_propagation reset
-#pragma force_active reset
+
+GameStatsRequest gGameStatsRequest = { GAME_STATS_STATE_IDLE };
+u32 gGameStatsRandState;
+
+int GameStats_Update(void) {
+    switch (gGameStatsRequest.state) {
+    case GAME_STATS_STATE_PREPARED:
+        gGameStatsRequest.requestId = DWC_GetGHTTPData(gGameStatsRequest.url, GameStats_ResponseCallback, &gGameStatsRequest);
+        GameStats_SetRequestError(gGameStatsRequest.requestId);
+        if (gGameStatsRequest.requestId >= 0) {
+            gGameStatsRequest.state = GAME_STATS_STATE_WAIT_CHALLENGE;
+        } else {
+            gGameStatsRequest.state = GAME_STATS_STATE_IDLE;
+        }
+        break;
+    case GAME_STATS_STATE_WAIT_CHALLENGE:
+        if (!DWC_ProcessGHTTP()) {
+            gGameStatsRequest.state = GAME_STATS_STATE_IDLE;
+        }
+        break;
+    case GAME_STATS_STATE_SEND_DATA:
+        gGameStatsRequest.requestId = DWC_GetGHTTPData(gGameStatsRequest.url, GameStats_ResponseCallback, &gGameStatsRequest);
+        GameStats_SetRequestError(gGameStatsRequest.requestId);
+        if (gGameStatsRequest.requestId >= 0) {
+            gGameStatsRequest.state = GAME_STATS_STATE_WAIT_RESPONSE;
+        } else {
+            gGameStatsRequest.state = GAME_STATS_STATE_IDLE;
+        }
+        break;
+    case GAME_STATS_STATE_WAIT_RESPONSE:
+        if (!DWC_ProcessGHTTP()) {
+            gGameStatsRequest.state = GAME_STATS_STATE_IDLE;
+        }
+        break;
+    case GAME_STATS_STATE_DONE:
+        break;
+    }
+    return gGameStatsRequest.state;
+}
+
+void GameStats_Shutdown(void) {
+    if (gGameStatsRequest.url != NULL) {
+        DWC_Free(10, gGameStatsRequest.url, 0);
+        gGameStatsRequest.url = NULL;
+    }
+    DWC_ShutdownGHTTP();
+    gGameStatsRequest.state = GAME_STATS_STATE_IDLE;
+}
+
+int GameStats_GetError(void) {
+    return gGameStatsRequest.error;
+}
+
+int GameStats_GetResponseLength(void) {
+    return gGameStatsRequest.responseLength;
+}

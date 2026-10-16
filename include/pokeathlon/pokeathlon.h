@@ -81,12 +81,12 @@ struct PokeathlonCourseData {
     u8 field_15C;                              // 0x15C
     u8 filler_15D[0x83];                       // 0x15D
     u32 state;                                 // 0x1E0
-    void *heapAllocPtr4;                       // 0x1E4 - Heap allocated pointer
+    void *work;                                // 0x1E4 - Heap allocated pointer
     u8 filler_1E8[0x5];                        // 0x1E8
     u8 eventInitState;                              // 0x1ED
     u8 participantCount;                       // 0x1EE - Number of active participants (1-4)
     u8 receivedCount;                              // 0x1EF
-    u32 currentParticipantIndex;               // 0x1F0
+    u32 round;                                 // 0x1F0
     u32 eventDrawEnabled;                             // 0x1F4
     PokeathlonCourseArgs *args;                // 0x1F8
     u8 filler_1FC[0x74];                       // 0x1FC
@@ -125,8 +125,8 @@ struct PokeathlonCourseData {
     u16 filler_D2A;                            // 0xD2A - Alignment padding
     u32 counterEnabled;                        // 0xD2C - Flag to enable frame counters
     u8 filler_D30[0x34];                       // 0xD30
-    void *heapAllocPtr2;                       // 0xD64 - Heap allocated pointer (freed in Exit if mode == 0)
-    void *heapAllocPtr3;                       // 0xD68 - Heap allocated pointer (freed in Exit if mode == 0)
+    void *juiceRecord;                         // 0xD64 - Heap allocated pointer (freed in Exit if mode == 0)
+    void *playerJuiceRecords;                  // 0xD68 - Heap allocated pointer (freed in Exit if mode == 0)
     u8 filler_D6C[4];                          // 0xD6C
 };
 
@@ -145,38 +145,38 @@ u8 *PokeathlonCourse_GetParticipantMons(PokeathlonCourseData *data, int index);
 SaveData *PokeathlonCourse_GetSaveData(PokeathlonCourseData *data);
 PokeathlonFieldData *PokeathlonCourse_GetFieldData(PokeathlonCourseData *data);
 PokeathlonFieldData *PokeathlonCourse_GetFieldData_AtIndex(PokeathlonCourseData *data, int index);
-void *PokeathlonCourse_GetFieldBA4(PokeathlonCourseData *data);
-void *PokeathlonCourse_AllocPtr4FromHeap(PokeathlonCourseData *data, u32 size);
-void PokeathlonCourse_FreePtr4HeapAlloc(PokeathlonCourseData *data);
-void *PokeathlonCourse_GetHeapAllocPtr4(PokeathlonCourseData *data);
+void *PokeathlonCourse_GetMonCounters(PokeathlonCourseData *data);
+void *PokeathlonCourse_AllocWork(PokeathlonCourseData *data, u32 size);
+void PokeathlonCourse_FreeWork(PokeathlonCourseData *data);
+void *PokeathlonCourse_GetWork(PokeathlonCourseData *data);
 enum HeapID PokeathlonCourse_GetHeapID(PokeathlonCourseData *data);
-u8 PokeathlonCourse_GetField1ED(PokeathlonCourseData *data);
-void PokeathlonCourse_SetField1ED(PokeathlonCourseData *data, int param);
-void PokeathlonCourse_IncrementField1ED(PokeathlonCourseData *data);
-void PokeathlonCourse_SetField1F4(PokeathlonCourseData *data, int param);
+u8 PokeathlonCourse_GetEventInitState(PokeathlonCourseData *data);
+void PokeathlonCourse_SetEventInitState(PokeathlonCourseData *data, int param);
+void PokeathlonCourse_AdvanceEventInitState(PokeathlonCourseData *data);
+void PokeathlonCourse_SetEventDrawEnabled(PokeathlonCourseData *data, int param);
 void PokeathlonCourse_SetEvents(PokeathlonCourseData *data, u8 *param);
-u32 PokeathlonCourse_GetField3D8_ForCurrentParticipant(PokeathlonCourseData *data);
-u32 PokeathlonCourse_GetField3D8_AtIndex(PokeathlonCourseData *data, u8 index);
+u32 PokeathlonCourse_GetCurrentEvent(PokeathlonCourseData *data);
+u32 PokeathlonCourse_GetRoundEvent(PokeathlonCourseData *data, u8 index);
 u32 PokeathlonCourse_FindCourseId(PokeathlonCourseData *data);
-u32 PokeathlonCourse_GetCurrentParticipantIndex(PokeathlonCourseData *data);
+u32 PokeathlonCourse_GetRound(PokeathlonCourseData *data);
 u32 PokeathlonCourse_GetMode(PokeathlonCourseData *data);
-u8 PokeathlonCourse_GetField1EF(PokeathlonCourseData *data);
-void PokeathlonCourse_IncrementField1EF(PokeathlonCourseData *data);
-void PokeathlonCourse_ResetField1EF(PokeathlonCourseData *data);
+u8 PokeathlonCourse_GetReceivedCount(PokeathlonCourseData *data);
+void PokeathlonCourse_IncrementReceivedCount(PokeathlonCourseData *data);
+void PokeathlonCourse_ResetReceivedCount(PokeathlonCourseData *data);
 void *PokeathlonCourse_GetSystem(PokeathlonCourseData *data);
 BOOL PokeathlonCourse_GetNetId(PokeathlonCourseData *data);
 PlayerProfile *PokeathlonCourse_GetPlayerProfileFromData(PokeathlonCourseData *data, int index);
-PokeathlonParticipantStats *PokeathlonCourse_GetField974_AtIndex(PokeathlonCourseData *data, int index);
+PokeathlonParticipantStats *PokeathlonCourse_GetRecord(PokeathlonCourseData *data, int index);
 u8 *PokeathlonCourse_GetDataCopyArea(PokeathlonCourseData *data);
 void PokeathlonCourse_ResetDataCopyArea(PokeathlonCourseData *data);
-void PokeathlonCourse_SetField3A4(PokeathlonCourseData *data, u32 a0, u32 a1, u32 a2);
-void PokeathlonCourse_ResetField3A4(PokeathlonCourseData *data);
-u32 PokeathlonCourse_GetField3A4(PokeathlonCourseData *data);
+void PokeathlonCourse_SetEventDataTransfer(PokeathlonCourseData *data, u32 a0, u32 a1, u32 a2);
+void PokeathlonCourse_ClearEventDataTransfer(PokeathlonCourseData *data);
+u32 PokeathlonCourse_GetEventRecvBuffer(PokeathlonCourseData *data);
 u32 PokeathlonCourse_GetEventResultSize();
-void PokeathlonCourse_SetField5E0_AtIndex(PokeathlonCourseData *data, int index, u16 value);
-u16 PokeathlonCourse_GetField5F0_AtIndex(PokeathlonCourseData *data, int index);
-void PokeathlonCourse_SetStateField07(PokeathlonCourseData *data, u8 value);
-void PokeathlonCourse_SetStateField07_IfDifferent(PokeathlonCourseData *data, u8 value, u8 value2);
+void PokeathlonCourse_SetEventScore(PokeathlonCourseData *data, int index, u16 value);
+u16 PokeathlonCourse_GetReceivedScore(PokeathlonCourseData *data, int index);
+void PokeathlonCourse_SetNextState(PokeathlonCourseData *data, u8 value);
+void PokeathlonCourse_SetNextStateIfNot(PokeathlonCourseData *data, u8 value, u8 value2);
 void PokeathlonCourse_SetStateTransitionType(PokeathlonCourseData *data, u32 transitionType);
 void PokeathlonCourse_SetVBlankIntrCB(PokeathlonCourseData *data);
 void *PokeathlonCourse_GetGraphicsSystem(PokeathlonCourseData *data);

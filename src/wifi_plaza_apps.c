@@ -490,7 +490,7 @@ BOOL WiFiPlazaApps_EndSwalotPlop(WiFiPlazaApps *apps, void **args) {
     WiFiPlazaGameArgs *game;
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_90));
     game = *args;
-    WiFiPlazaWork_SetField508_04(apps->work, game->connectionLost);
+    WiFiPlazaWork_SetGameConnectionLost(apps->work, game->connectionLost);
     WiFiPlazaWork_SetTapToy(apps->work, game->tapToy);
     WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_MAIN);
     return FALSE;
@@ -522,7 +522,7 @@ BOOL WiFiPlazaApps_EndMimeJrTop(WiFiPlazaApps *apps, void **args) {
     WiFiPlazaGameArgs *game;
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_90));
     game = *args;
-    WiFiPlazaWork_SetField508_04(apps->work, game->connectionLost);
+    WiFiPlazaWork_SetGameConnectionLost(apps->work, game->connectionLost);
     WiFiPlazaWork_SetTapToy(apps->work, game->tapToy);
     WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_MAIN);
     return FALSE;
@@ -554,7 +554,7 @@ BOOL WiFiPlazaApps_EndWobbuffetPop(WiFiPlazaApps *apps, void **args) {
     WiFiPlazaGameArgs *game;
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_90));
     game = *args;
-    WiFiPlazaWork_SetField508_04(apps->work, game->connectionLost);
+    WiFiPlazaWork_SetGameConnectionLost(apps->work, game->connectionLost);
     WiFiPlazaWork_SetTapToy(apps->work, game->tapToy);
     WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_MAIN);
     return FALSE;

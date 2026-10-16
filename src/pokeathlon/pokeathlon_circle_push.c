@@ -188,8 +188,8 @@ static inline u32 LoadMonInfo(PokeathlonCourseData *course, int mon, PokeathlonC
 #pragma force_active on
 
 BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
-    PokeathlonCirclePush *circlePush = PokeathlonCourse_GetHeapAllocPtr4(course);
-    switch (PokeathlonCourse_GetField1ED(course)) {
+    PokeathlonCirclePush *circlePush = PokeathlonCourse_GetWork(course);
+    switch (PokeathlonCourse_GetEventInitState(course)) {
     case 0: {
         ObjCharTransferTemplate charTemplate;
         Heap_Create(HEAP_ID_POKEATHLON, HEAP_ID_140, 0x50000);
@@ -200,7 +200,7 @@ BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
         reg_GX_DISPCNT &= 0xFFFFE0FF;
         reg_GXS_DB_DISPCNT &= 0xFFFFE0FF;
         PokeathlonCirclePush_SetBanks();
-        circlePush = PokeathlonCourse_AllocPtr4FromHeap(course, sizeof(PokeathlonCirclePush));
+        circlePush = PokeathlonCourse_AllocWork(course, sizeof(PokeathlonCirclePush));
         MI_CpuFill8(circlePush, 0, sizeof(PokeathlonCirclePush));
         circlePush->sortBuffer = Heap_Alloc(HEAP_ID_140, 40);
         MI_CpuFill8(circlePush->sortBuffer, 0, 40);
@@ -219,7 +219,7 @@ BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
         PokeathlonCirclePush_AddScoreWindow(circlePush);
         gSystem.screensFlipped = TRUE;
         GfGfx_SwapDisplay();
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
     case 1: {
@@ -232,7 +232,7 @@ BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
         circlePush->effects.markers = circlePush->zoneMarkers;
         PokeathlonCirclePushDisplay_LoadPics(circlePush->display);
         PokeathlonCourse_InitMarkers(course);
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
     case 2: {
@@ -280,7 +280,7 @@ BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
         Sprite_SetDrawPriority(circlePush->markerSprite, 1);
         PokeathlonCirclePushDisplay_CreatePicSprites(circlePush->spritePool, circlePush->display);
         PokeathlonCirclePushDisplay_CreateSprites(circlePush->spritePool, circlePush->display);
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
     case 3: {
@@ -301,7 +301,7 @@ BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
         template.vram = 1;
         template.whichScreen = NNS_G2D_VRAM_TYPE_2DMAIN;
         PokeathlonCourseMonObjects_Load(circlePush->objects, 12, infos, &template, FALSE, FALSE);
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
     case 4: {
@@ -324,7 +324,7 @@ BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
         }
         own = PokeathlonCourse_GetNetId(course);
         PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)circlePush->bgConfig);
-        PokeathlonCourse_SetField1F4(course, 1);
+        PokeathlonCourse_SetEventDrawEnabled(course, 1);
         ReadWholeNarcMemberByIdPair(collision, NARC_a_1_7_0, 11);
         for (i = 0; i < 12; i++) {
             PokeathlonCourseObject *object = PokeathlonCourseMonObjects_Get(circlePush->objects, i);
@@ -412,7 +412,7 @@ BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         WirelessStatusIcon_CreateOnScreenIfConnected(1);
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
     case 5:
@@ -424,7 +424,7 @@ BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
 #pragma force_active reset
 
 BOOL PokeathlonCirclePush_Main(PokeathlonCourseData *course) {
-    PokeathlonCirclePush *circlePush = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonCirclePush *circlePush = PokeathlonCourse_GetWork(course);
     PokeathlonCourseSpritePool_Draw(circlePush->spritePool);
     return TRUE;
 }
@@ -433,11 +433,11 @@ BOOL PokeathlonCirclePush_Main(PokeathlonCourseData *course) {
 BOOL PokeathlonCirclePush_CalcResults(PokeathlonCourseData *course) {
     PokeathlonCourseScoreList *scoreList;
     int i;
-    PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonCourse_GetWork(course);
     scoreList = PokeathlonCourse_GetGraphicsSystem(course);
     PokeathlonCourseScoreList_Init(scoreList);
     for (i = 0; i < 4; i++) {
-        PokeathlonCourse_AddScoreEntry(course, scoreList, i, PokeathlonCourse_GetField5F0_AtIndex(course, (u8)i), 0, 3, msg_0309_00293);
+        PokeathlonCourse_AddScoreEntry(course, scoreList, i, PokeathlonCourse_GetReceivedScore(course, (u8)i), 0, 3, msg_0309_00293);
     }
     PokeathlonCourseScoreList_Rank(scoreList, 1);
     PokeathlonEvent_CalcPoints(scoreList, 2);
@@ -449,7 +449,7 @@ BOOL PokeathlonCirclePush_CalcResults(PokeathlonCourseData *course) {
 #pragma force_active on
 
 BOOL PokeathlonCirclePush_Exit(PokeathlonCourseData *course) {
-    PokeathlonCirclePush *circlePush = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonCirclePush *circlePush = PokeathlonCourse_GetWork(course);
     WirelessStatusIcon_Destroy();
     PokeathlonCourse_FreeMarkers(course);
     PokeathlonCirclePushZoneMarkers_Free(circlePush->zoneMarkers);
@@ -476,7 +476,7 @@ BOOL PokeathlonCirclePush_Exit(PokeathlonCourseData *course) {
     Main_SetVBlankIntrCB(NULL, NULL);
     Main_SetHBlankIntrCB(NULL, NULL);
     Heap_Free(circlePush->sortBuffer);
-    PokeathlonCourse_FreePtr4HeapAlloc(course);
+    PokeathlonCourse_FreeWork(course);
     gSystem.screensFlipped = FALSE;
     GfGfx_SwapDisplay();
     reg_G2_BLDCNT = 0;
@@ -492,7 +492,7 @@ void PokeathlonCirclePush_SetBanks(void) {
 }
 
 BOOL PokeathlonCirclePush_FadeIn(PokeathlonCourseData *course, u8 *state) {
-    PokeathlonCirclePush *circlePush = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonCirclePush *circlePush = PokeathlonCourse_GetWork(course);
     switch (*state) {
     case 0:
         PokeathlonCourse_SetStateTransitionType(course, 0x15);
@@ -504,7 +504,7 @@ BOOL PokeathlonCirclePush_FadeIn(PokeathlonCourseData *course, u8 *state) {
         break;
     case 2:
         if (IsPaletteFadeFinished()) {
-            PokeathlonCourse_SetStateField07(course, CIRCLE_PUSH_STATE_PLAY);
+            PokeathlonCourse_SetNextState(course, CIRCLE_PUSH_STATE_PLAY);
         }
         break;
     }
@@ -512,7 +512,7 @@ BOOL PokeathlonCirclePush_FadeIn(PokeathlonCourseData *course, u8 *state) {
 }
 
 BOOL PokeathlonCirclePush_Play(PokeathlonCourseData *course, u8 *state) {
-    PokeathlonCirclePush *circlePush = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonCirclePush *circlePush = PokeathlonCourse_GetWork(course);
 
     switch (*state) {
     case 0:
@@ -529,7 +529,7 @@ BOOL PokeathlonCirclePush_Play(PokeathlonCourseData *course, u8 *state) {
     case 2:
         if (PokeathlonCourse_RunFinish(course)) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, 0, 6, 1, circlePush->heapId);
-            PokeathlonCourse_SetStateField07(course, CIRCLE_PUSH_STATE_END);
+            PokeathlonCourse_SetNextState(course, CIRCLE_PUSH_STATE_END);
         }
         break;
     }
@@ -540,7 +540,7 @@ BOOL PokeathlonCirclePush_Play(PokeathlonCourseData *course, u8 *state) {
 BOOL PokeathlonCirclePush_End(PokeathlonCourseData *course, u8 *state) {
     int team;
     PokeathlonCirclePush *circlePush;
-    circlePush = PokeathlonCourse_GetHeapAllocPtr4(course);
+    circlePush = PokeathlonCourse_GetWork(course);
     if (*state == 0) {
         if (IsPaletteFadeFinished()) {
             *state = 1;
@@ -557,7 +557,7 @@ BOOL PokeathlonCirclePush_End(PokeathlonCourseData *course, u8 *state) {
         PokeathlonCirclePush *view = circlePush;
         for (; member < 3; member++) {
             points += view->mons[0][0].points;
-            PokeathlonCourse_SetField5E0_AtIndex(course, (u8)team, points);
+            PokeathlonCourse_SetEventScore(course, (u8)team, points);
             view = (PokeathlonCirclePush *)((u8 *)view + sizeof(PokeathlonCirclePushMon));
         }
         circlePush = (PokeathlonCirclePush *)((u8 *)circlePush + sizeof(circlePush->mons[0]));
@@ -712,7 +712,7 @@ BOOL PokeathlonCirclePush_Update(PokeathlonCourseData *course) {
     u8 *copyArea;
     PokeathlonCirclePushInput *input;
 
-    circlePush = PokeathlonCourse_GetHeapAllocPtr4(course);
+    circlePush = PokeathlonCourse_GetWork(course);
     copyArea = PokeathlonCourse_GetDataCopyArea(course);
     input = (PokeathlonCirclePushInput *)PokeathlonCourse_ToBytes(copyArea);
     input->touching = FALSE;
@@ -775,7 +775,7 @@ typedef struct CirclePushHostFrame {
 void PokeathlonCirclePush_RunHost(PokeathlonCourseData *course) {
     CirclePushHostFrame frame;
     frame.copyArea = PokeathlonCourse_GetDataCopyArea(course);
-    PokeathlonCirclePush *circlePush = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonCirclePush *circlePush = PokeathlonCourse_GetWork(course);
     if (PokeathlonCourse_GetNetId(course)) {
         return;
     }
@@ -1001,7 +1001,7 @@ void PokeathlonCirclePush_UpdateScreen(PokeathlonCourseData *course) {
     PokeathlonCirclePush *circlePush;
     u8 outOfRing[12];
 
-    circlePush = PokeathlonCourse_GetHeapAllocPtr4(course);
+    circlePush = PokeathlonCourse_GetWork(course);
     packet = (PokeathlonCirclePushPacket *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0xF0);
     own = PokeathlonCourse_GetNetId(course);
     scoringMon = (packet->stateBits >> 28) & 0xF;
@@ -1176,7 +1176,7 @@ void PokeathlonCirclePush_UpdateScreen(PokeathlonCourseData *course) {
 // Host: moves every Pokemon in the ring towards its target; a Pokemon that touches another one
 // pushes it (PokeathlonCirclePush_PushMons).
 void PokeathlonCirclePush_MoveMons(PokeathlonCourseData *course) {
-    PokeathlonCirclePush *circlePush = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonCirclePush *circlePush = PokeathlonCourse_GetWork(course);
     int i;
 
     for (i = 0; i < 12; i++) {

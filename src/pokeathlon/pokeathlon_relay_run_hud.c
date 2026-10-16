@@ -181,7 +181,7 @@ void PokeathlonRelayRun_UpdateSwapSign(PokeathlonRelayRun *relayRun, u8 teamId, 
 // Finish callback: the player's record (laps << 10 | x) and the result window.
 void PokeathlonRelayRun_SaveResult(PokeathlonCourseData *course) {
     PokeathlonRelayRunPacket *packet = (PokeathlonRelayRunPacket *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + offsetof(PokeathlonRelayRunLink, packet));
-    PokeathlonRelayRun *relayRun = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonRelayRun *relayRun = PokeathlonCourse_GetWork(course);
     u8 own = (u8)PokeathlonCourse_GetNetId(course);
     u8 laps = (u8)(packet->laps[own] & 0x7F);
     u16 x = packet->x[own];

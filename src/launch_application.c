@@ -284,7 +284,7 @@ int PartyMenuArgs_GetSelectedAction(PartyMenuArgs *partyWork) {
     return partyWork->selectedAction;
 }
 
-u16 RunningAppData_GetUnk14(MoveSelectionResult *a0) {
+u16 MoveSelectionResult_GetPartySlot(MoveSelectionResult *a0) {
     return a0->partySlot;
 }
 
@@ -399,7 +399,7 @@ PokemonSummaryArgs *LearnForgetMove_LaunchApp(enum HeapID heapID, FieldSystem *f
     return args;
 }
 
-u16 RunningAppData_GetUnk16(MoveSelectionResult *a0) {
+u16 MoveSelectionResult_GetMoveSlot(MoveSelectionResult *a0) {
     return a0->selectedMoveSlot;
 }
 

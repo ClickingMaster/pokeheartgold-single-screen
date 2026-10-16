@@ -340,10 +340,10 @@ void WiFiPlazaWork_GetTalkTimeoutCounter(WiFiPlazaWork *work) {
     WiFiPlazaTalkSession_GetTimeoutCounter(&work->talk);
 }
 
-void WiFiPlazaWork_SetTalkField07(WiFiPlazaWork *work) {
-    work->talk.unk_07 = 1;
+void WiFiPlazaWork_SetTalkPartnerArrived(WiFiPlazaWork *work) {
+    work->talk.partnerArrived = 1;
 }
 
-u8 WiFiPlazaWork_GetTalkField07(WiFiPlazaWork *work) {
-    return work->talk.unk_07;
+u8 WiFiPlazaWork_HasTalkPartnerArrived(WiFiPlazaWork *work) {
+    return work->talk.partnerArrived;
 }

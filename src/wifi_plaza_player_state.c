@@ -834,7 +834,7 @@ BOOL WiFiPlazaPlayerState_OwnReturnFromMinigame(WiFiPlazaPlayerState *state, WiF
     case 2:
         if (WiFiPlazaObj_GetParam(ownPlayer, 5) == 0) {
             WiFiPlazaRoom_SetMode(room, 1);
-            if (WiFiPlazaWork_GetField508_04(lobby) == TRUE) {
+            if (WiFiPlazaWork_GetGameConnectionLost(lobby) == TRUE) {
                 WiFiPlazaPlayerState_SetStep(state, 3);
             } else {
                 WiFiPlazaPlayerState_SetStep(state, 5);
@@ -2318,8 +2318,8 @@ BOOL WiFiPlazaPlayerState_OtherDoActivity(WiFiPlazaPlayerState *state, WiFiPlaza
         break;
     case 5:
         leave = FALSE;
-        if (placement->besideOwnPlayer == TRUE && WiFiPlazaWork_GetTalkField07(lobby) == 0 && WiFiPlazaPlayer_GetActivity(WiFiPlazaWork_GetMyPlayer(lobby)) == 9) {
-            WiFiPlazaWork_SetTalkField07(lobby);
+        if (placement->besideOwnPlayer == TRUE && WiFiPlazaWork_HasTalkPartnerArrived(lobby) == 0 && WiFiPlazaPlayer_GetActivity(WiFiPlazaWork_GetMyPlayer(lobby)) == 9) {
+            WiFiPlazaWork_SetTalkPartnerArrived(lobby);
             WiFiPlazaObj_RunCommand(objManager, ownPlayer, 0, Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(obj, 6)));
         }
         obj = WiFiPlazaWork_GetPlayer(lobby, index);

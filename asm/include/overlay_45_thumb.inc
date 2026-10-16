@@ -183,7 +183,7 @@
 .public WiFiPlazaWork_IsEventFlagSet
 .public WiFiPlazaWork_TakePlayerUpdated
 .public WiFiPlazaWork_GetSaveData
-.public WiFiPlazaWork_GetScheduleValue4
+.public WiFiPlazaWork_IsArceusFootprintShown
 .public WiFiPlazaWork_HasAnsweredSurvey
 .public WiFiPlazaWork_GetEventScheduleHigh
 .public WiFiPlazaWork_SetEventScheduleHigh
@@ -199,7 +199,7 @@
 .public WiFiPlazaWork_GetThirdEvent
 .public WiFiPlazaWork_StartGameEntryCooldown
 .public WiFiPlazaWork_IsGameEntryCoolingDown
-.public WiFiPlazaWork_GetField508_04
+.public WiFiPlazaWork_GetGameConnectionLost
 .public WiFiPlazaWork_ClearGameMembers
 .public WiFiPlazaWork_SetGameMember
 .public WiFiPlazaWork_SetOwnGameMember
@@ -280,8 +280,8 @@
 .public WiFiPlazaWork_GetTalkPartnerMessage
 .public WiFiPlazaWork_IsTalkOver
 .public WiFiPlazaWork_GetTalkTimeoutCounter
-.public WiFiPlazaWork_SetTalkField07
-.public WiFiPlazaWork_GetTalkField07
+.public WiFiPlazaWork_SetTalkPartnerArrived
+.public WiFiPlazaWork_HasTalkPartnerArrived
 .public WiFiPlazaWork_IncPartnerTalkCount
 .public WiFiPlazaWork_IncTalkCount
 .public WiFiPlazaWork_SetTalkedWith

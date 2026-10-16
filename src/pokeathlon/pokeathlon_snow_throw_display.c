@@ -125,7 +125,7 @@ void PokeathlonSnowThrow_ShowOwnScore(PokeathlonCourseData *course) {
     u16 score;
 
     teams = ((PokeathlonSnowThrowPacket *)PokeathlonCourse_ToBytes((u8 *)PokeathlonCourse_GetDataCopyArea(course) + offsetof(PokeathlonSnowThrowLink, packet)))->teams;
-    work = PokeathlonCourse_GetHeapAllocPtr4(course);
+    work = PokeathlonCourse_GetWork(course);
     score = (u16)(teams[(u8)PokeathlonCourse_GetNetId(course)] & 0x3FF);
     if (score > 999) {
         score = 999;

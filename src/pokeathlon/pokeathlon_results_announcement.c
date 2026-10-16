@@ -104,13 +104,13 @@ extern const VecFx32 sResultsAnnouncementPlatePos;
 #pragma force_active on
 
 BOOL PokeathlonResults_Init(PokeathlonCourseData *course) {
-    PokeathlonResultsAnnouncement *announcement = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonResultsAnnouncement *announcement = PokeathlonCourse_GetWork(course);
     PokeathlonResultsAnnouncementSceneConfig sceneConfig;
     PokeathlonResultsAnnouncementAffine affine;
     PokeathlonCourseScoreList *scoreList;
     int value;
 
-    switch (PokeathlonCourse_GetField1ED(course)) {
+    switch (PokeathlonCourse_GetEventInitState(course)) {
     case 0:
         Heap_Create(HEAP_ID_POKEATHLON, (enum HeapID)137, 0x40000);
         Main_SetVBlankIntrCB(NULL, NULL);
@@ -120,18 +120,18 @@ BOOL PokeathlonResults_Init(PokeathlonCourseData *course) {
         GX_SetVisiblePlane(GX_PLANEMASK_NONE);
         GXS_SetVisiblePlane(GX_PLANEMASK_NONE);
         PokeathlonResults_SetGfxBanks();
-        announcement = PokeathlonCourse_AllocPtr4FromHeap(course, sizeof(PokeathlonResultsAnnouncement));
+        announcement = PokeathlonCourse_AllocWork(course, sizeof(PokeathlonResultsAnnouncement));
         MI_CpuFill8(announcement, 0, sizeof(PokeathlonResultsAnnouncement));
         announcement->heapId = (enum HeapID)137;
         FontID_Alloc(4, (enum HeapID)137);
         announcement->bgConfig = BgConfig_Alloc((enum HeapID)137);
         announcement->messageBox = PokeathlonCourseMessageBox_New(announcement->heapId);
         PokeathlonResults_CreatePlates(&announcement->ranking.plates, (enum HeapID)137, announcement->bgConfig, course);
-        announcement->banner = PokeathlonEventBanner_New(PokeathlonCourse_GetField3D8_ForCurrentParticipant(course), announcement->heapId);
+        announcement->banner = PokeathlonEventBanner_New(PokeathlonCourse_GetCurrentEvent(course), announcement->heapId);
         PokeathlonResults_InitSprites(announcement);
         gSystem.screensFlipped = TRUE;
         GfGfx_SwapDisplay();
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     case 1:
         sceneConfig = sResultsAnnouncementSceneConfig;
@@ -147,7 +147,7 @@ BOOL PokeathlonResults_Init(PokeathlonCourseData *course) {
         PokeathlonResults_LoadSpriteResources(announcement);
         PokeathlonResults_CreateSprite(announcement);
         PokeathlonCourse_LoadTrainerPic(announcement->sprites[0], PokeathlonCourse_GetTrainerPicFileId(2), 11, announcement->heapId);
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     case 2:
         PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)announcement->bgConfig); // takes the BgConfig
@@ -171,7 +171,7 @@ BOOL PokeathlonResults_Init(PokeathlonCourseData *course) {
         Bg_SetTextDimAndAffineParams(announcement->bgConfig, GF_BG_LYR_SUB_2, BG_POS_OP_SUB_Y, 16, (MtxFx22 *)&affine, 128, 96);
         PokeathlonResults_InitWindow(&announcement->window, announcement->bgConfig, announcement->heapId);
         PokeathlonResults_PrintTitle(&announcement->window, announcement->heapId);
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     case 3:
         if (PokeathlonCourse_GetNetId(course) == 0) {
@@ -188,13 +188,13 @@ BOOL PokeathlonResults_Init(PokeathlonCourseData *course) {
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
-        PokeathlonCourse_SetField1F4(course, 1);
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_SetEventDrawEnabled(course, 1);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     case 4:
         PlayBGM(SEQ_GS_PT_RESULT);
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, 0, 6, 1, announcement->heapId);
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     case 5:
         if (IsPaletteFadeFinished()) {
@@ -211,7 +211,7 @@ BOOL PokeathlonResults_Init(PokeathlonCourseData *course) {
 #pragma force_active reset
 
 BOOL PokeathlonResults_Draw(PokeathlonCourseData *course) {
-    PokeathlonResultsAnnouncement *announcement = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonResultsAnnouncement *announcement = PokeathlonCourse_GetWork(course);
     PokeathlonCourseSpritePool_Draw(announcement->scene);
     SpriteSystem_DrawSprites(announcement->spriteManager);
     PokeathlonResults_DrawPlates(announcement->ranking.plates);
@@ -219,7 +219,7 @@ BOOL PokeathlonResults_Draw(PokeathlonCourseData *course) {
 }
 
 BOOL PokeathlonResults_Exit(PokeathlonCourseData *course) {
-    PokeathlonResultsAnnouncement *announcement = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonResultsAnnouncement *announcement = PokeathlonCourse_GetWork(course);
     int i;
 
     Main_SetVBlankIntrCB(NULL, NULL);
@@ -237,7 +237,7 @@ BOOL PokeathlonResults_Exit(PokeathlonCourseData *course) {
     PokeathlonCourseSpritePool_Free(announcement->scene);
     PokeathlonResults_FreeSprites(announcement);
     Heap_Free(announcement->bgConfig);
-    PokeathlonCourse_FreePtr4HeapAlloc(course);
+    PokeathlonCourse_FreeWork(course);
     gSystem.screensFlipped = FALSE;
     GfGfx_SwapDisplay();
     Heap_Destroy((enum HeapID)137);
@@ -303,7 +303,7 @@ BOOL PokeathlonResults_AllPlayersFinished(PokeathlonCourseData *course) {
 BOOL PokeathlonResults_Run(PokeathlonCourseData *course, u8 *state) {
     int waiting = FALSE;
     int done;
-    PokeathlonResultsAnnouncement *announcement = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonResultsAnnouncement *announcement = PokeathlonCourse_GetWork(course);
     MessageFormat *messageFormat;
     int msgId;
     PokeathlonResultsAnnouncementScore *ranked[4];
@@ -353,7 +353,7 @@ BOOL PokeathlonResults_Run(PokeathlonCourseData *course, u8 *state) {
             break;
         case 4:
             for (i = 0; i < 4; i++) {
-                u32 field3D8 = PokeathlonCourse_GetField3D8_ForCurrentParticipant(course);
+                u32 field3D8 = PokeathlonCourse_GetCurrentEvent(course);
                 int points = PokeathlonCourseScoreList_GetEventPoints(PokeathlonCourse_GetGraphicsSystem(course), field3D8, i);
                 if (points > 999) {
                     points = 999;
@@ -608,7 +608,7 @@ PokeathlonResultsAnnouncementSlide *PokeathlonResults_GetLeavingSlide(Pokeathlon
 
 // "Results of the first event!?" etc.
 u32 PokeathlonResults_GetIntroMessage(PokeathlonCourseData *course) {
-    u32 msgId = PokeathlonCourse_GetCurrentParticipantIndex(course); // the round
+    u32 msgId = PokeathlonCourse_GetRound(course); // the round
     if (PokeathlonCourse_GetMode(course) == 0) {
         msgId += msg_0309_00246;
     } else {
@@ -619,7 +619,7 @@ u32 PokeathlonResults_GetIntroMessage(PokeathlonCourseData *course) {
 
 // One of 5 comments per round, picked by the host.
 u32 PokeathlonResults_GetCommentMessage(PokeathlonCourseData *course) {
-    u32 round = PokeathlonCourse_GetCurrentParticipantIndex(course);
+    u32 round = PokeathlonCourse_GetRound(course);
     u8 *comment = PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0xF0);
     u32 msgId;
     if (*comment >= 5) {
@@ -685,7 +685,7 @@ void PokeathlonResults_CreateSprite(PokeathlonResultsAnnouncement *announcement)
 // Link play: every player sends how far it got; the host collects them. Returns TRUE while this player has to
 // wait for the others.
 BOOL PokeathlonResults_WaitForPlayers(PokeathlonCourseData *course) {
-    PokeathlonResultsAnnouncement *announcement = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonResultsAnnouncement *announcement = PokeathlonCourse_GetWork(course);
     u8 *data = PokeathlonCourse_GetDataCopyArea(course);
     u8 *out = PokeathlonCourse_ToBytes(data + 0x28); // the host's block for the others
     u8 *host = PokeathlonCourse_ToBytes(data + 0xF0);

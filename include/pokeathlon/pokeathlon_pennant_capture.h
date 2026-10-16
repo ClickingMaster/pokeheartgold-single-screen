@@ -112,7 +112,7 @@ typedef struct PokeathlonPennantCapturePennants {
     u16 count;                                   // 0xB6
 } PokeathlonPennantCapturePennants;
 
-// The event's work (PokeathlonCourse_GetHeapAllocPtr4).
+// The event's work (PokeathlonCourse_GetWork).
 typedef struct PokeathlonPennantCaptureTouch {
     BOOL pressed; // touched this frame
     BOOL held;

@@ -295,7 +295,7 @@ typedef struct PokeathlonGoalRollPaletteData {
     PokeathlonGoalRollWindowData data;
 } PokeathlonGoalRollPaletteData;
 
-// The event's work (PokeathlonCourse_GetHeapAllocPtr4).
+// The event's work (PokeathlonCourse_GetWork).
 typedef struct PokeathlonGoalRoll {
     PokeathlonGoalRollSpritePool *spritePool;                                // 0x000
     BgConfig *bgConfig;                                                      // 0x004

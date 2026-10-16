@@ -99,7 +99,7 @@
 	.public WiFiPlazaWork_TakePlayerLeft
 	.public WiFiPlazaWork_IsEventFlagSet
 	.public WiFiPlazaWork_TakePlayerUpdated
-	.public WiFiPlazaWork_GetScheduleValue4
+	.public WiFiPlazaWork_IsArceusFootprintShown
 	.public WiFiPlazaWork_HasAnsweredSurvey
 	.public WiFiPlazaWork_GetEventScheduleHigh
 	.public WiFiPlazaWork_SetEventScheduleHigh
@@ -604,8 +604,8 @@
 	.public WiFiPlazaWork_GetSaveData
 	.public WiFiPlazaWork_StartGameEntryCooldown
 	.public WiFiPlazaWork_IsGameEntryCoolingDown
-	.public WiFiPlazaWork_GetField508_04
-	.public WiFiPlazaWork_SetField508_04
+	.public WiFiPlazaWork_GetGameConnectionLost
+	.public WiFiPlazaWork_SetGameConnectionLost
 	.public WiFiPlazaWork_GetGameMembers
 	.public WiFiPlazaWork_SetAppQuitForClosing
 	.public WiFiPlazaWork_DidAppQuitForClosing
@@ -621,8 +621,8 @@
 	.public WiFiPlazaWork_IsFirstTalk
 	.public WiFiPlazaWork_GetTalkState
 	.public WiFiPlazaWork_GetTalkPartnerMessage
-	.public WiFiPlazaWork_SetTalkField07
-	.public WiFiPlazaWork_GetTalkField07
+	.public WiFiPlazaWork_SetTalkPartnerArrived
+	.public WiFiPlazaWork_HasTalkPartnerArrived
 	.public WiFiPlaza_ClearEventFlags
 	.public WiFiPlazaSessionState_StartCooldown
 	.public WiFiPlazaSessionState_IsCoolingDown

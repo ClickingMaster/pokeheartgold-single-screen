@@ -173,7 +173,7 @@ BOOL PokeathlonPennantCapture_State_Setup(PokeathlonCourseData *course, u8 *stat
     PokeathlonPennantCaptureLayout layout;
     int i;
     u16 x, y;
-    PokeathlonPennantCapture *work = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonPennantCapture *work = PokeathlonCourse_GetWork(course);
     u8 *fieldItem, *obstacle, *spot;
 
     switch (*state) {
@@ -228,7 +228,7 @@ BOOL PokeathlonPennantCapture_State_Setup(PokeathlonCourseData *course, u8 *stat
         break;
     case 2:
         if (IsPaletteFadeFinished()) {
-            PokeathlonCourse_SetStateField07(course, PENNANT_CAPTURE_STATE_PLAY);
+            PokeathlonCourse_SetNextState(course, PENNANT_CAPTURE_STATE_PLAY);
         }
         break;
     }
@@ -240,7 +240,7 @@ BOOL PokeathlonPennantCapture_State_Setup(PokeathlonCourseData *course, u8 *stat
 
 // Start countdown, play until the time is up, then the finish and the fade out.
 BOOL PokeathlonPennantCapture_State_Play(PokeathlonCourseData *course, u8 *state) {
-    PokeathlonPennantCapture *work = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonPennantCapture *work = PokeathlonCourse_GetWork(course);
 
     switch (*state) {
     case 0:
@@ -259,7 +259,7 @@ BOOL PokeathlonPennantCapture_State_Play(PokeathlonCourseData *course, u8 *state
         PokeathlonPennantCapture_HostStep(course);
         if (PokeathlonCourse_RunFinish(course)) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, work->heapId);
-            PokeathlonCourse_SetStateField07(course, PENNANT_CAPTURE_STATE_END);
+            PokeathlonCourse_SetNextState(course, PENNANT_CAPTURE_STATE_END);
         }
         break;
     }
@@ -273,7 +273,7 @@ BOOL PokeathlonPennantCapture_State_End(PokeathlonCourseData *course, u8 *state)
     int i;
 
     link = PokeathlonCourse_GetDataCopyArea(course);
-    PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonCourse_GetWork(course);
     if (*state == 0) {
         if (IsPaletteFadeFinished()) {
             *state = 1;
@@ -292,7 +292,7 @@ BOOL PokeathlonPennantCapture_State_End(PokeathlonCourseData *course, u8 *state)
         if (total > 999) {
             total = 999;
         }
-        PokeathlonCourse_SetField5E0_AtIndex(course, (u8)i, total);
+        PokeathlonCourse_SetEventScore(course, (u8)i, total);
     }
     return TRUE;
 }
@@ -330,7 +330,7 @@ void PokeathlonPennantCapture_HostStep(PokeathlonCourseData *course) {
     f32 length;
 
     link = (PokeathlonPennantCaptureLinkEntry *)PokeathlonCourse_GetDataCopyArea(course);
-    work = PokeathlonCourse_GetHeapAllocPtr4(course);
+    work = PokeathlonCourse_GetWork(course);
     self = work;
     if (PokeathlonCourse_GetNetId(course) != 0) {
         return;
@@ -511,7 +511,7 @@ BOOL PokeathlonPennantCapture_SendInput(PokeathlonCourseData *course) {
     PokeathlonPennantCaptureInput *input;
     PokeathlonPennantCaptureFrame *frame;
 
-    work = PokeathlonCourse_GetHeapAllocPtr4(course);
+    work = PokeathlonCourse_GetWork(course);
     link = PokeathlonCourse_GetDataCopyArea(course);
     input = (PokeathlonPennantCaptureInput *)PokeathlonCourse_ToBytes(link);
     input->touching = FALSE;
@@ -540,7 +540,7 @@ BOOL PokeathlonPennantCapture_SendInput(PokeathlonCourseData *course) {
 
 // Every participant: scrolls the field to the own Pokemon and shows the host's frame.
 void PokeathlonPennantCapture_ShowFrame(PokeathlonCourseData *course) {
-    PokeathlonPennantCapture *work = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonPennantCapture *work = PokeathlonCourse_GetWork(course);
     u8 *link = PokeathlonCourse_GetDataCopyArea(course);
     PokeathlonPennantCaptureFrame *frame = (PokeathlonPennantCaptureFrame *)PokeathlonCourse_ToBytes(link + 0xF0);
     u8 viewer = PokeathlonCourse_GetNetId(course);

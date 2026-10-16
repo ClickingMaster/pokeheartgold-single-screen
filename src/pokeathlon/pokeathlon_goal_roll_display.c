@@ -283,7 +283,7 @@ void PokeathlonGoalRoll_SortOtherMonsOrder(PokeathlonGoalRoll *goalRoll, Pokeath
 void PokeathlonGoalRoll_OnTimeUp(PokeathlonCourseData *course) {
     void *area = PokeathlonCourse_GetDataCopyArea(course);
     PokeathlonCourse_ToBytes((u8 *)area + 0xF0);
-    PokeathlonGoalRoll *goalRoll = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonGoalRoll *goalRoll = PokeathlonCourse_GetWork(course);
     u32 score = PokeathlonGoalRollDisplay_GetScore(goalRoll->display);
     PokeathlonCourse_SetRecordScore(course, score);
     PokeathlonGoalRoll_PrintTotalPoints(goalRoll, score);

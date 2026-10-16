@@ -65,7 +65,7 @@ void *WiFiPlazaWork_GetSaveData(void **ptr) {
     return *ptr;
 }
 
-int WiFiPlazaWork_GetScheduleValue4(WiFiPlazaWork *work) {
+int WiFiPlazaWork_IsArceusFootprintShown(WiFiPlazaWork *work) {
     GF_ASSERT(work != NULL);
     return WiFiPlazaLobbyClient_GetScheduleValue(4);
 }
@@ -153,11 +153,11 @@ int WiFiPlazaWork_IsGameEntryCoolingDown(WiFiPlazaWork *work) {
     return WiFiPlazaSessionState_IsCoolingDown(&work->sessionState);
 }
 
-void *WiFiPlazaWork_GetField508_04(WiFiPlazaWork *work) {
+void *WiFiPlazaWork_GetGameConnectionLost(WiFiPlazaWork *work) {
     return work->ownProfileData.gameConnectionLost;
 }
 
-void WiFiPlazaWork_SetField508_04(WiFiPlazaWork *work, void *value) {
+void WiFiPlazaWork_SetGameConnectionLost(WiFiPlazaWork *work, void *value) {
     work->ownProfileData.gameConnectionLost = value;
 }
 

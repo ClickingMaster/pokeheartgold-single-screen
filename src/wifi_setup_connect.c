@@ -16,7 +16,7 @@ typedef struct ConnectSetting {
 
 typedef struct ApInfo {
     u8 unk00[0xA];
-    u16 count;
+    u16 ssidLength;
 } ApInfo;
 
 typedef struct ConnectParam {
@@ -96,7 +96,7 @@ int WifiSetup_ConnectAccessPoint(ConnectParam *param, void *out) {
                     } else {
                         WifiSetup_CopyConnectSsid(param, &gWifiSetupConnectApInfo);
                         i = 0;
-                        n = APINFO2->count;
+                        n = APINFO2->ssidLength;
                         for (; i < n; i++) {
                         }
                         if (!WifiSetupWcm_StartConnect(&gWifiSetupConnectApInfo, &gWifiSetupConnectSetting, mode)) {

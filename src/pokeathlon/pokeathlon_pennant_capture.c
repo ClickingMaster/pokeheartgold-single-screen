@@ -67,7 +67,7 @@ static inline void PokeathlonPennantCapture_PlaceAtStart(PokeathlonPennantCaptur
 
 #pragma force_active on
 
-// Set-up, a step per frame (PokeathlonCourse_GetField1ED): heaps and screens, the top screen and the CPU,
+// Set-up, a step per frame (PokeathlonCourse_GetEventInitState): heaps and screens, the top screen and the CPU,
 // sprites, the Pokemon graphics, then the field once they are loaded. The host also picks the field layout.
 BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
     PokeathlonCourseMonInfo infos[12];
@@ -87,8 +87,8 @@ BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
     int memberOnField;
     int teamId;
 
-    work = PokeathlonCourse_GetHeapAllocPtr4(course);
-    switch (PokeathlonCourse_GetField1ED(course)) {
+    work = PokeathlonCourse_GetWork(course);
+    switch (PokeathlonCourse_GetEventInitState(course)) {
     case 0: {
         Heap_Create(HEAP_ID_POKEATHLON, HEAP_ID_139, 0x68000);
         Main_SetVBlankIntrCB(NULL, NULL);
@@ -98,10 +98,10 @@ BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
         reg_GX_DISPCNT &= ~REG_GX_DISPCNT_DISPLAY_MASK;
         reg_GXS_DB_DISPCNT &= ~REG_GXS_DB_DISPCNT_DISPLAY_MASK;
         PokeathlonPennantCapture_SetGfxBanks();
-        PokeathlonPennantCapture *data = PokeathlonCourse_AllocPtr4FromHeap(course, sizeof(PokeathlonPennantCapture));
+        PokeathlonPennantCapture *data = PokeathlonCourse_AllocWork(course, sizeof(PokeathlonPennantCapture));
         MI_CpuFill8(data, 0, sizeof(PokeathlonPennantCapture));
         data->bgConfig = BgConfig_Alloc(HEAP_ID_139);
-        PokeathlonCourse_SetField3A4(course, (u32)&data->layoutChoice, (u32)&data->layoutFileId, sizeof(data->layoutFileId));
+        PokeathlonCourse_SetEventDataTransfer(course, (u32)&data->layoutChoice, (u32)&data->layoutFileId, sizeof(data->layoutFileId));
         PokeathlonCourse_SetHudPlanes(course, 8);
         charTransfer.maxTasks = 202;
         charTransfer.sizeMain = 0x40000;
@@ -116,7 +116,7 @@ BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
         PokeathlonPennantCapture_InitScoreWindow(data);
         gSystem.screensFlipped = TRUE;
         GfGfx_SwapDisplay();
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
     case 1: {
@@ -125,7 +125,7 @@ BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
         int mode = PokeathlonCourse_GetMode(course);
         work->cpu = PokeathlonPennantCaptureCpu_New(work->heapId, 4 - count, mode);
         work->monResources = PokeathlonCourseSprites_CreateResources(work->heapId, 0x2BF, 1);
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
     case 2:
@@ -143,7 +143,7 @@ BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
         Sprite_SetDrawPriority(*PokeathlonCourse_CreateHudSpritesInPool(course, 0, work->monResources, work->spritePool), 1);
         PokeathlonPennantCapture_CreateSprites(work, work->spritePool);
         PokeathlonPennantCaptureDisplay_CreateSprites(work->display, work->spritePool, work->monResources);
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     case 3: {
         int i;
@@ -167,7 +167,7 @@ BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
         template.whichScreen = NNS_G2D_VRAM_TYPE_2DMAIN;
         PokeathlonCourseMonObjects_Load(work->monObjects, 12, infos, &template, 0, 0);
         PokeathlonPennantCaptureDisplay_BringToFront(work->display, PokeathlonCourse_GetNetId(course));
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
     case 4: {
@@ -176,7 +176,7 @@ BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
         }
         own = PokeathlonCourse_GetNetId(course);
         PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)work->bgConfig); // takes the BgConfig
-        PokeathlonCourse_SetField1F4(course, 1);
+        PokeathlonCourse_SetEventDrawEnabled(course, 1);
         ReadWholeNarcMemberByIdPair(collisions, NARC_a_1_7_0, 14);
         s32 i;
         int j;
@@ -225,14 +225,14 @@ BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
         ScheduleSetBgPosText(work->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_SET_X, x - 128);
         ScheduleSetBgPosText(work->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_SET_Y, y - 96);
         WirelessStatusIcon_CreateOnScreenIfConnected(1);
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
     case 5:
         if (PokeathlonCourse_GetNetId(course) == 0) {
             work->layoutChoice = LCRandom() % 20;
         }
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     case 6:
         return TRUE;
@@ -243,7 +243,7 @@ BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
 #pragma force_active reset
 
 BOOL PokeathlonPennantCapture_Draw(PokeathlonCourseData *course) {
-    PokeathlonPennantCapture *work = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonPennantCapture *work = PokeathlonCourse_GetWork(course);
     PokeathlonCourseSpritePool_Draw(work->spritePool);
     return TRUE;
 }
@@ -254,7 +254,7 @@ BOOL PokeathlonPennantCapture_ShowResults(PokeathlonCourseData *course) {
     int i;
     PokeathlonCourseScoreList_Init(gfx);
     for (i = 0; i < 4; i++) {
-        PokeathlonCourse_AddScoreEntry(course, gfx, i, PokeathlonCourse_GetField5F0_AtIndex(course, (u8)i), 0, 3, msg_0309_00292);
+        PokeathlonCourse_AddScoreEntry(course, gfx, i, PokeathlonCourse_GetReceivedScore(course, (u8)i), 0, 3, msg_0309_00292);
     }
     PokeathlonCourseScoreList_Rank(gfx, 1);
     PokeathlonEvent_CalcPoints(gfx, 1);
@@ -264,11 +264,11 @@ BOOL PokeathlonPennantCapture_ShowResults(PokeathlonCourseData *course) {
 }
 
 BOOL PokeathlonPennantCapture_Exit(PokeathlonCourseData *course) {
-    PokeathlonPennantCapture *work = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonPennantCapture *work = PokeathlonCourse_GetWork(course);
     WirelessStatusIcon_Destroy();
     Main_SetVBlankIntrCB(NULL, NULL);
     Main_SetHBlankIntrCB(NULL, NULL);
-    PokeathlonCourse_ResetField3A4(course);
+    PokeathlonCourse_ClearEventDataTransfer(course);
     Heap_Free(work->bgCharsFile);
     FreeBgTilemapBuffer(work->bgConfig, GF_BG_LYR_MAIN_0);
     FreeBgTilemapBuffer(work->bgConfig, GF_BG_LYR_MAIN_3);
@@ -286,7 +286,7 @@ BOOL PokeathlonPennantCapture_Exit(PokeathlonCourseData *course) {
     PokeathlonPennantCaptureCpu_Delete(work->cpu);
     PokeathlonPennantCaptureDisplay_Delete(work->display);
     FontID_Release(4);
-    PokeathlonCourse_FreePtr4HeapAlloc(course);
+    PokeathlonCourse_FreeWork(course);
     gSystem.screensFlipped = FALSE;
     GfGfx_SwapDisplay();
     reg_G2_BLDCNT = 0;

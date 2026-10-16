@@ -99,7 +99,7 @@ typedef struct PokeathlonBlockSmashSwipe {
     u32 unused : 7;
 } PokeathlonBlockSmashSwipe;
 
-// The event's work (PokeathlonCourse_GetHeapAllocPtr4).
+// The event's work (PokeathlonCourse_GetWork).
 typedef struct PokeathlonBlockSmash {
     enum HeapID heapId;                  // 0x000
     BgConfig *bgConfig;                  // 0x004

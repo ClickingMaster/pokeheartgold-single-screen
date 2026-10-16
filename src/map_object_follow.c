@@ -2,18 +2,20 @@
 
 #include "constants/movements.h"
 
+#include "field/field_effect_manager.h"
 #include "field/field_follow_mon.h"
 
 #include "field_system.h"
+#include "field_terrain.h"
 #include "follow_mon.h"
 #include "map_object.h"
+#include "map_object_behavior_internal.h"
 #include "map_object_follow_internal.h"
 #include "map_object_movement_commands_internal.h"
 #include "map_object_movement_utilities_internal.h"
 #include "metatile_behavior.h"
 #include "overlay_01.h"
 #include "player_avatar.h"
-#include "field_terrain.h"
 
 void FollowPlayerMovement_Init(LocalMapObject *object) {
     FollowPlayerMovementState *state = (FollowPlayerMovementState *)MapObject_InitMovementData(object, sizeof(FollowPlayerMovementState));
@@ -307,8 +309,6 @@ int FollowPlayerMovement_GetPlayerMovement(LocalMapObject *object) {
     }
 }
 
-#pragma force_active on
-
 // Steps the following Pokemon onto the player's previous tile, at the player's speed. A pending hop movement of the
 // Pokemon (FollowMon_GetPendingHop) is played instead, twice (FollowPlayerState_Hop).
 BOOL FollowPlayerMovement_StartFollowMonStep(LocalMapObject *object, FollowPlayerMovementState *state) {
@@ -364,8 +364,6 @@ none:
     return FALSE;
 }
 
-#pragma force_active off
-
 BOOL FollowPlayerMovement_StartStep(LocalMapObject *object) {
     PlayerAvatar *avatar = FieldSystem_GetPlayerAvatar(MapObject_GetFieldSystem(object));
     int x = MapObject_GetXCoord(object);
@@ -400,4 +398,284 @@ BOOL FollowPlayerMovement_StartMirrorStep(LocalMapObject *object) {
         MapObject_ForceSetHeldMovement(object, movement);
     }
     return TRUE;
+}
+
+void FollowPartnerMovement_Init(LocalMapObject *object) {
+    FollowPartnerMovementState *state = (FollowPartnerMovementState *)MapObject_InitMovementData(object, sizeof(FollowPartnerMovementState));
+    FollowPartnerMovement_FindPartner(object, state);
+    MapObject_SetAnimation(object, 0);
+    MapObject_ClearSingleMovement(object);
+    state->partnerKnown = FALSE;
+}
+
+void FollowPartnerMovement_Update(LocalMapObject *object) {
+    FollowPartnerMovementState *state = (FollowPartnerMovementState *)MapObject_GetMovementData(object);
+
+    if (FollowPartnerMovement_FindPartner(object, state) != FALSE) {
+        while (gFollowPartnerStates[state->state](object, state) == TRUE) {
+        }
+    }
+}
+
+void FollowPartnerMovement_Delete(LocalMapObject *object) {
+}
+
+void FollowPartnerMovement_Resume(LocalMapObject *object) {
+    ((FollowPartnerMovementState *)MapObject_GetMovementData(object))->partnerKnown = FALSE;
+}
+
+BOOL FollowPartnerState_Start(LocalMapObject *object, FollowPartnerMovementState *state) {
+    MapObject_ClearSingleMovement(object);
+    MapObject_ClearEndMovement(object);
+    if (FollowPartnerMovement_HasPartnerMoved(object, state) == TRUE && FollowPartnerMovement_StartStep(object, state) == TRUE) {
+        MapObject_SetSingleMovement(object);
+        state->state++;
+        return TRUE;
+    }
+    return FALSE;
+}
+
+BOOL FollowPartnerState_Moving(LocalMapObject *object, FollowPartnerMovementState *state) {
+    if (!MapObject_RunForcedMovement(object)) {
+        return FALSE;
+    }
+    MapObject_ClearSingleMovement(object);
+    state->state = 0;
+    return FALSE;
+}
+
+LocalMapObject *MapObject_FindTrainerPartner(LocalMapObject *object) {
+    s32 index = 0;
+    LocalMapObject *other;
+    u32 type = MapObject_GetType(object);
+    u32 mapId = MapObject_GetMapID(object);
+    u32 trainerNum = MapObjectBehavior_GetTrainerNum(object);
+    MapObjectManager *manager = MapObject_GetManager(object);
+
+    switch (type) {
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+        if (MapObjectManager_GetNextObjectWithFlagFromIndex(manager, &other, &index, MAPOBJECTFLAG_ACTIVE) == TRUE) {
+            do {
+                if (object != other && mapId == MapObject_GetMapID(other) && trainerNum == MapObjectBehavior_GetTrainerNum(other)) {
+                    return other;
+                }
+            } while (MapObjectManager_GetNextObjectWithFlagFromIndex(manager, &other, &index, MAPOBJECTFLAG_ACTIVE) == TRUE);
+        }
+        break;
+    }
+    return NULL;
+}
+
+BOOL FollowPartnerMovement_FindPartner(LocalMapObject *object, FollowPartnerMovementState *state) {
+    u32 mapId;
+    u32 trainerNum;
+    MapObjectManager *manager;
+    s32 index;
+    LocalMapObject *other;
+
+    manager = MapObject_GetManager(object);
+    index = 0;
+    mapId = MapObject_GetMapID(object);
+    trainerNum = MapObjectBehavior_GetTrainerNum(object);
+
+    if (MapObjectManager_GetNextObjectWithFlagFromIndex(manager, &other, &index, MAPOBJECTFLAG_ACTIVE) == TRUE) {
+        do {
+            if (object != other && mapId == MapObject_GetMapID(other) && trainerNum == MapObjectBehavior_GetTrainerNum(other)) {
+                if (state->partnerKnown == FALSE) {
+                    FollowPartnerMovement_SetPartner(object, state, other);
+                }
+                return TRUE;
+            }
+        } while (MapObjectManager_GetNextObjectWithFlagFromIndex(manager, &other, &index, MAPOBJECTFLAG_ACTIVE) == TRUE);
+    }
+    state->partnerKnown = FALSE;
+    return FALSE;
+}
+
+void FollowPartnerMovement_SetPartner(LocalMapObject *object, FollowPartnerMovementState *state, LocalMapObject *partner) {
+    state->partnerKnown = TRUE;
+    state->partnerX = MapObject_GetXCoord(partner);
+    state->partnerZ = MapObject_GetZCoord(partner);
+    state->unk6 = 0xff;
+    state->partner = partner;
+}
+
+BOOL FollowPartnerMovement_HasPartnerMoved(LocalMapObject *object, FollowPartnerMovementState *state) {
+    LocalMapObject *partner = state->partner;
+    int x = MapObject_GetXCoord(object);
+    int z = MapObject_GetZCoord(object);
+    int partnerPreviousX = MapObject_GetPreviousXCoord(partner);
+    int partnerPreviousZ = MapObject_GetPreviousZCoord(partner);
+    if ((x != partnerPreviousX || z != partnerPreviousZ) && (MapObject_CheckSingleMovement(partner) == TRUE || MapObject_GetFlagsBitsMask(partner, (MapObjectFlagBits)(MAPOBJECTFLAG_MOVEMENT_PAUSED | MAPOBJECTFLAG_UNK11 | MAPOBJECTFLAG_UNK12)) == 0)) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+BOOL FollowPartnerMovement_StartStep(LocalMapObject *object, FollowPartnerMovementState *state) {
+    int x = MapObject_GetXCoord(object);
+    int z = MapObject_GetZCoord(object);
+    int partnerX = MapObject_GetXCoord(state->partner);
+    int partnerZ = MapObject_GetZCoord(state->partner);
+    int partnerPreviousX = MapObject_GetPreviousXCoord(state->partner);
+    int partnerPreviousZ = MapObject_GetPreviousZCoord(state->partner);
+    int direction;
+    if (x == partnerX && z == partnerZ) {
+        return FALSE;
+    }
+    direction = GetDirectionTowards(x, z, partnerPreviousX, partnerPreviousZ);
+    x += GetDeltaXByFacingDirection(direction);
+    z += GetDeltaYByFacingDirection(direction);
+    if (x != partnerX || z != partnerZ) {
+        MapObject_ForceSetHeldMovement(object, GetMovementForDirection(direction, MOVEMENT_STEP_UP));
+        return TRUE;
+    }
+    return FALSE;
+}
+
+void HiddenObjectMovement_Init(LocalMapObject *object, int coverType) {
+    HiddenObjectMovementState *state = (HiddenObjectMovementState *)MapObject_InitMovementData(object, sizeof(HiddenObjectMovementState));
+    state->coverType = coverType;
+    MapObject_SetAnimation(object, 0);
+    MapObject_ClearSingleMovement(object);
+    MapObject_SetFlagsBits(object, MAPOBJECTFLAG_UNK20);
+    VecFx32 offset = gHiddenObjectOffset;
+    MapObject_SetFacingVector(object, &offset);
+}
+
+void HiddenObjectMovement_InitCover0(LocalMapObject *object) {
+    HiddenObjectMovement_Init(object, 0);
+}
+
+void HiddenObjectMovement_InitCover1(LocalMapObject *object) {
+    HiddenObjectMovement_Init(object, 1);
+}
+
+void HiddenObjectMovement_InitCover2(LocalMapObject *object) {
+    HiddenObjectMovement_Init(object, 2);
+}
+
+void HiddenObjectMovement_InitCover3(LocalMapObject *object) {
+    HiddenObjectMovement_Init(object, 3);
+}
+
+void HiddenObjectMovement_Update(LocalMapObject *object) {
+    HiddenObjectMovementState *state = (HiddenObjectMovementState *)MapObject_GetMovementData(object);
+
+    while (gHiddenObjectStates[state->state](object, state) == TRUE) {
+    }
+}
+
+void HiddenObjectMovement_Delete(LocalMapObject *object) {
+    int effect = HiddenObjectMovement_GetCoverEffect(object);
+    if (effect != 0) {
+        FieldEffectManager_DestroyEffect(effect);
+    }
+}
+
+void HiddenObjectMovement_Resume(LocalMapObject *object) {
+    HiddenObjectMovementState *state = (HiddenObjectMovementState *)MapObject_GetMovementData(object);
+
+    state->state = 0;
+    HiddenObjectMovement_SetCoverEffect(object, 0);
+    if (state->revealed == FALSE) {
+        VecFx32 offset = gHiddenObjectResumeOffset;
+        MapObject_SetFacingVector(object, &offset);
+        MapObject_SetFlagsBits(object, MAPOBJECTFLAG_UNK20);
+    }
+}
+
+BOOL HiddenObjectState_CreateCover(LocalMapObject *object, HiddenObjectMovementState *state) {
+    if (state->revealed == FALSE) {
+        HiddenObjectMovement_SetCoverEffect(object, HiddenObjectCover_Spawn(object, state->coverType));
+    }
+    MapObject_ClearSingleMovement(object);
+    MapObject_ClearEndMovement(object);
+    state->state++;
+    return FALSE;
+}
+
+BOOL HiddenObjectState_Wait(LocalMapObject *object, HiddenObjectMovementState *state) {
+    if (state->revealed == FALSE) {
+        if (HiddenObjectMovement_GetCoverEffect(object) == 0 && MapObject_IsDrawInitialized(object) == TRUE) {
+            HiddenObjectMovement_SetCoverEffect(object, HiddenObjectCover_Spawn(object, state->coverType));
+        }
+        MapObject_SetFlagsBits(object, MAPOBJECTFLAG_UNK20);
+    }
+    return FALSE;
+}
+
+int HiddenObjectMovement_SetCoverEffect(LocalMapObject *object, int effect) {
+    HiddenObjectMovementState *state = (HiddenObjectMovementState *)MapObject_GetMovementData(object);
+    state->coverEffect = effect;
+    return (int)state;
+}
+
+int HiddenObjectMovement_GetCoverEffect(LocalMapObject *object) {
+    return ((HiddenObjectMovementState *)MapObject_GetMovementData(object))->coverEffect;
+}
+
+void HiddenObjectMovement_SetRevealed(LocalMapObject *object) {
+    ((HiddenObjectMovementState *)MapObject_GetMovementData(object))->revealed = TRUE;
+}
+
+// 3 for the step movements, 2 for the run movements, 1 for the fast run movements.
+int GetMovementSpeed(u32 movement) {
+    MovementList step = gStepMovements;
+    MovementList run = gRunMovements;
+    MovementList fastRun = gFastRunMovements;
+    u8 i;
+
+    for (i = 0; i < 4; i++) {
+        if (movement == step.movements[i]) {
+            return 3;
+        }
+    }
+    for (i = 0; i < 4; i++) {
+        if (movement == run.movements[i]) {
+            return 2;
+        }
+    }
+    for (i = 0; i < 4; i++) {
+        if (movement == fastRun.movements[i]) {
+            return 1;
+        }
+    }
+    GF_ASSERT(FALSE);
+    return 0;
+}
+
+void FollowMon_SpawnGrassEffects(LocalMapObject *object) {
+    FieldSystem *fieldSystem = MapObject_GetFieldSystem(object);
+    int x = MapObject_GetXCoord(object);
+    int z = MapObject_GetZCoord(object);
+    u32 behavior = GetMetatileBehavior(fieldSystem, x, z);
+
+    if (MetatileBehavior_IsTallGrass(behavior) == TRUE) {
+        TallGrass_Spawn(object, 0);
+    } else if (MetatileBehavior_IsVeryTallGrass(behavior) == TRUE) {
+        VeryTallGrass_Spawn(object, 0);
+    }
+
+    if (FollowMonObject_IsLarge(object) != FALSE) {
+        u8 direction = MapObject_GetFacingDirection(object);
+        if (direction == DIR_WEST || direction == DIR_EAST) {
+            MapObject_GetCoordsBehind(object, &x, &z);
+            behavior = GetMetatileBehavior(fieldSystem, x, z);
+            if (MetatileBehavior_IsTallGrass(behavior) == TRUE) {
+                TallGrass_SpawnAt(object, 1, x, z, 1);
+                return;
+            }
+            if (MetatileBehavior_IsVeryTallGrass(behavior) == TRUE) {
+                VeryTallGrass_SpawnAt(object, 1, x, z, 1);
+            }
+        }
+    }
 }

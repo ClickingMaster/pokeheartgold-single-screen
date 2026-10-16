@@ -82,7 +82,7 @@ typedef struct PokeathlonPennantCaptureCollisionFrame {
 #pragma force_active on
 
 void PokeathlonPennantCapture_UpdatePlayers(PokeathlonCourseData *course) {
-    PokeathlonPennantCapture *work = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonPennantCapture *work = PokeathlonCourse_GetWork(course);
     u8 handled[4];
     int i;
     u8 *flag;
@@ -302,7 +302,7 @@ void PokeathlonPennantCapture_ApplyFrame(PokeathlonCourseData *course, int viewe
 
     self = PokeathlonCourse_GetNetId(course);
     frame = (PokeathlonPennantCaptureFrame *)PokeathlonCourse_ToBytes(link->frame);
-    work = PokeathlonCourse_GetHeapAllocPtr4(course);
+    work = PokeathlonCourse_GetWork(course);
     baseX = frame->words[viewer] & 0x1FF;
     baseY = (frame->words[viewer] >> 9) & 0x1FF;
 
@@ -1290,7 +1290,7 @@ void PokeathlonPennantCapture_PlaySEIfOnScreen(int x, int y, int seq, BOOL self)
 
 void PokeathlonPennantCapture_UpdateOwnScore(PokeathlonCourseData *course) {
     PokeathlonPennantCaptureFrame *frame = (PokeathlonPennantCaptureFrame *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 240);
-    PokeathlonPennantCapture *work = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonPennantCapture *work = PokeathlonCourse_GetWork(course);
     u8 self = (u8)PokeathlonCourse_GetNetId(course);
     u16 score = (u16)((frame->words[self] >> 18) & 1023);
     u8 bonus = (u8)((frame->spots[self] >> 11) & 31);

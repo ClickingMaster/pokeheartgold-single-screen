@@ -116,24 +116,24 @@ int PokeathlonCourse_GetNpcTrainerPicFileId(int trainerClass) {
 }
 
 BOOL PokeathlonCourseWait_Init(PokeathlonCourseData *course) {
-    PokeathlonCourseWait *wait = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonCourseWait *wait = PokeathlonCourse_GetWork(course);
 
-    switch (PokeathlonCourse_GetField1ED(course)) {
+    switch (PokeathlonCourse_GetEventInitState(course)) {
     case 0:
         PokeathlonCourseWait_Create(course);
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     case 1:
         WirelessStatusIcon_CreateOnScreenIfConnected(1);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, 0, 4, 1, wait->heapId);
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     case 2:
         if (IsPaletteFadeFinished()) {
             PokeathlonCourseMessageBox_Print(wait->messageBox, msg_0309_00310);
-            PokeathlonCourse_IncrementField1ED(course);
+            PokeathlonCourse_AdvanceEventInitState(course);
         }
         break;
     case 3:
@@ -208,7 +208,7 @@ void PokeathlonCourseWait_Create(PokeathlonCourseData *course) {
     reg_GX_DISPCNT &= ~0x1F00;
     reg_GXS_DB_DISPCNT &= ~0x1F00;
     PokeathlonCourseWait_SetBanks();
-    wait = PokeathlonCourse_AllocPtr4FromHeap(course, sizeof(PokeathlonCourseWait));
+    wait = PokeathlonCourse_AllocWork(course, sizeof(PokeathlonCourseWait));
     MI_CpuFill8(wait, 0, sizeof(PokeathlonCourseWait));
     wait->heapId = HEAP_ID_159;
     wait->bgConfig = BgConfig_Alloc(HEAP_ID_159);
@@ -225,18 +225,18 @@ void PokeathlonCourseWait_Create(PokeathlonCourseData *course) {
 #pragma opt_propagation reset
 
 void PokeathlonCourseWait_Free(PokeathlonCourseData *course) {
-    PokeathlonCourseWait *wait = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonCourseWait *wait = PokeathlonCourse_GetWork(course);
     Main_SetVBlankIntrCB(NULL, NULL);
     Main_SetHBlankIntrCB(NULL, NULL);
     WirelessStatusIcon_Destroy();
     PokeathlonCourseMessageBox_Free(wait->messageBox);
     PokeathlonCourseWait_FreeBgs(wait);
-    PokeathlonCourse_FreePtr4HeapAlloc(course);
+    PokeathlonCourse_FreeWork(course);
     Heap_Destroy(HEAP_ID_159);
 }
 
 BOOL PokeathlonCourseWait_FadeOut(PokeathlonCourseData *course, u8 *state) {
-    PokeathlonCourseWait *wait = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonCourseWait *wait = PokeathlonCourse_GetWork(course);
     switch (*state) {
     case 0:
         if (++wait->timer > 15) {
@@ -259,11 +259,11 @@ BOOL PokeathlonCourseWait_FadeOut(PokeathlonCourseData *course, u8 *state) {
 }
 
 BOOL PokeathlonEventIntro_Init(PokeathlonCourseData *course) {
-    PokeathlonEventIntro *intro = PokeathlonCourse_GetHeapAllocPtr4(course);
-    switch (PokeathlonCourse_GetField1ED(course)) {
+    PokeathlonEventIntro *intro = PokeathlonCourse_GetWork(course);
+    switch (PokeathlonCourse_GetEventInitState(course)) {
     case 0:
         PokeathlonEventIntro_Create(course);
-        PokeathlonCourse_IncrementField1ED(course);
+        PokeathlonCourse_AdvanceEventInitState(course);
         break;
     case 1:
         PokeathlonEventIntro_InitSprites(intro);
@@ -276,8 +276,8 @@ BOOL PokeathlonEventIntro_Init(PokeathlonCourseData *course) {
         WirelessStatusIcon_CreateOnScreenIfConnected(2);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
-        PokeathlonCourse_SetField1F4(course, 1);
-        PokeathlonCourse_SetField1ED(course, 0);
+        PokeathlonCourse_SetEventDrawEnabled(course, 1);
+        PokeathlonCourse_SetEventInitState(course, 0);
         return TRUE;
     default:
         GF_AssertFail();
@@ -287,13 +287,13 @@ BOOL PokeathlonEventIntro_Init(PokeathlonCourseData *course) {
 }
 
 BOOL PokeathlonEventIntro_Main(PokeathlonCourseData *course) {
-    PokeathlonEventIntro *intro = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonEventIntro *intro = PokeathlonCourse_GetWork(course);
     SpriteSystem_DrawSprites(intro->spriteManager);
     return TRUE;
 }
 
 BOOL PokeathlonEventIntro_Exit(PokeathlonCourseData *course) {
-    PokeathlonEventIntro *intro = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonEventIntro *intro = PokeathlonCourse_GetWork(course);
     int i;
 
     NARC_Delete(intro->narc);
@@ -314,7 +314,7 @@ BOOL PokeathlonEventIntro_Exit(PokeathlonCourseData *course) {
     SpriteSystem_Free(intro->spriteSystem);
     Main_SetVBlankIntrCB(NULL, NULL);
     Main_SetHBlankIntrCB(NULL, NULL);
-    PokeathlonCourse_FreePtr4HeapAlloc(course);
+    PokeathlonCourse_FreeWork(course);
     gSystem.screensFlipped = FALSE;
     GfGfx_SwapDisplay();
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_98));
@@ -343,7 +343,7 @@ BOOL PokeathlonEventIntro_IsBgmAt(u32 variable, s16 value) {
 }
 
 u8 PokeathlonEventIntro_GetEvent(PokeathlonCourseData *course) {
-    return PokeathlonCourse_GetField3D8_ForCurrentParticipant(course);
+    return PokeathlonCourse_GetCurrentEvent(course);
 }
 
 BOOL PokeathlonEventIntro_HasFlag0EF(PokeathlonCourseData *course) {
@@ -359,7 +359,7 @@ BOOL PokeathlonEventIntro_HasFlag0EF(PokeathlonCourseData *course) {
 void PokeathlonEventIntro_Create(PokeathlonCourseData *course) {
     PokeathlonEventIntro *intro;
     enum HeapID heapId;
-    PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonCourse_GetWork(course);
     Heap_Create(HEAP_ID_POKEATHLON, HEAP_ID_136, 0x40000);
     heapId = HEAP_ID_136;
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_98), OVY_LOAD_ASYNC);
@@ -370,12 +370,12 @@ void PokeathlonEventIntro_Create(PokeathlonCourseData *course) {
     reg_GX_DISPCNT &= 0xFFFFE0FF;
     reg_GXS_DB_DISPCNT &= 0xFFFFE0FF;
     PokeathlonEventIntro_SetBanks();
-    intro = PokeathlonCourse_AllocPtr4FromHeap(course, sizeof(PokeathlonEventIntro));
+    intro = PokeathlonCourse_AllocWork(course, sizeof(PokeathlonEventIntro));
     MI_CpuFill8(intro, 0, sizeof(PokeathlonEventIntro));
     intro->narc = NARC_New(NARC_a_2_1_9, heapId);
     intro->bgConfig = BgConfig_Alloc(heapId);
     intro->event = PokeathlonEventIntro_GetEvent(course);
-    intro->round = PokeathlonCourse_GetCurrentParticipantIndex(course);
+    intro->round = PokeathlonCourse_GetRound(course);
     intro->linkMode = PokeathlonCourse_GetMode(course) == 1 ? TRUE : FALSE;
     intro->course = course;
     intro->heapId = HEAP_ID_136;
@@ -651,7 +651,7 @@ void PokeathlonEventIntro_UpdateZoom(PokeathlonEventIntro *intro) {
 }
 
 void PokeathlonEventIntro_FadeToPage(PokeathlonCourseData *course, int page) {
-    PokeathlonEventIntro *intro = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonEventIntro *intro = PokeathlonCourse_GetWork(course);
 
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, 0x7FFF, 4, 1, intro->heapId);
     intro->page = page;
@@ -721,7 +721,7 @@ void PokeathlonEventIntro_ShowControls(PokeathlonEventIntro *intro) {
 }
 
 void PokeathlonEventIntro_ShowPage(PokeathlonCourseData *course) {
-    PokeathlonEventIntro *intro = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonEventIntro *intro = PokeathlonCourse_GetWork(course);
 
     BgClearTilemapBufferAndCommit(intro->bgConfig, GF_BG_LYR_MAIN_0);
     BgClearTilemapBufferAndCommit(intro->bgConfig, GF_BG_LYR_MAIN_2);
@@ -746,14 +746,14 @@ void PokeathlonEventIntro_ShowPage(PokeathlonCourseData *course) {
         break;
     }
     // pokeathlon.h declares the state as u8; the page is passed as it is.
-    ((void (*)(PokeathlonCourseData *, u32))PokeathlonCourse_SetStateField07)(course, intro->page);
+    ((void (*)(PokeathlonCourseData *, u32))PokeathlonCourse_SetNextState)(course, intro->page);
 }
 
 // The banner zooms in with the music; in link mode the screen goes on by itself after 3 seconds.
 BOOL PokeathlonEventIntro_Appear(PokeathlonCourseData *course, u8 *state) {
     u8 *step = state;
     PokeathlonCourseData *data = course;
-    PokeathlonEventIntro *intro = PokeathlonCourse_GetHeapAllocPtr4(data);
+    PokeathlonEventIntro *intro = PokeathlonCourse_GetWork(data);
     PokeathlonEventIntro_UpdateMascot(intro);
     switch (*step) {
     case 0:
@@ -788,14 +788,14 @@ BOOL PokeathlonEventIntro_Appear(PokeathlonCourseData *course, u8 *state) {
                 intro->timer = 0;
                 (*step)++;
             } else {
-                PokeathlonCourse_SetStateField07(data, EVENT_INTRO_STEP_DETAILS);
+                PokeathlonCourse_SetNextState(data, EVENT_INTRO_STEP_DETAILS);
             }
         }
         break;
     case 5:
         intro->timer++;
         if (intro->timer >= 180) {
-            PokeathlonCourse_SetStateField07(data, EVENT_INTRO_STEP_FADE_OUT);
+            PokeathlonCourse_SetNextState(data, EVENT_INTRO_STEP_FADE_OUT);
         }
         break;
     default:
@@ -806,7 +806,7 @@ BOOL PokeathlonEventIntro_Appear(PokeathlonCourseData *course, u8 *state) {
 }
 
 BOOL PokeathlonEventIntro_DetailsPage(PokeathlonCourseData *course, u8 *state) {
-    PokeathlonEventIntro *intro = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonEventIntro *intro = PokeathlonCourse_GetWork(course);
     PokeathlonEventIntro_UpdateMascot(intro);
     switch (*state) {
     case 0:
@@ -819,7 +819,7 @@ BOOL PokeathlonEventIntro_DetailsPage(PokeathlonCourseData *course, u8 *state) {
                     PokeathlonEventIntro_FadeToPage(course, EVENT_INTRO_PAGE_RULES);
                     break;
                 case 1:
-                    PokeathlonCourse_SetStateField07(course, EVENT_INTRO_STEP_FADE_OUT);
+                    PokeathlonCourse_SetNextState(course, EVENT_INTRO_STEP_FADE_OUT);
                     break;
                 default:
                     GF_AssertFail();
@@ -842,7 +842,7 @@ BOOL PokeathlonEventIntro_DetailsPage(PokeathlonCourseData *course, u8 *state) {
 }
 
 BOOL PokeathlonEventIntro_RulesPage(PokeathlonCourseData *course, u8 *state) {
-    PokeathlonEventIntro *intro = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonEventIntro *intro = PokeathlonCourse_GetWork(course);
     PokeathlonEventIntro_UpdateMascot(intro);
     switch (*state) {
     case 0:
@@ -876,7 +876,7 @@ BOOL PokeathlonEventIntro_RulesPage(PokeathlonCourseData *course, u8 *state) {
 }
 
 BOOL PokeathlonEventIntro_ControlsPage(PokeathlonCourseData *course, u8 *state) {
-    PokeathlonEventIntro *intro = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonEventIntro *intro = PokeathlonCourse_GetWork(course);
     PokeathlonEventIntro_UpdateMascot(intro);
     switch (*state) {
     case 0:
@@ -910,11 +910,11 @@ BOOL PokeathlonEventIntro_ControlsPage(PokeathlonCourseData *course, u8 *state) 
 }
 
 BOOL PokeathlonEventIntro_FadeOut(PokeathlonCourseData *course, u8 *state) {
-    PokeathlonEventIntro *intro = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonEventIntro *intro = PokeathlonCourse_GetWork(course);
     PokeathlonEventIntro_UpdateMascot(intro);
     switch (*state) {
     case 0:
-        if (PokeathlonCourse_GetCurrentParticipantIndex(course) == 0) {
+        if (PokeathlonCourse_GetRound(course) == 0) {
             PlaySE(SEQ_SE_GS_GAMENFADEOPED);
         } else {
             PlaySE(SEQ_SE_GS_GAMENFADE);

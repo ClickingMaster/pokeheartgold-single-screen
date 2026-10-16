@@ -91,7 +91,7 @@ typedef struct WiFiPlazaTalkSession {
     u32 talkedWith;  // bit per lobby slot (WiFiPlazaTalkSession_HasTalkedWith / WiFiPlazaTalkSession_SetTalkedWith / WiFiPlazaTalkSession_ClearTalkedWith)
     u16 partnerSlot; // lobby slot of the other player
     u8 state;
-    u8 unk_07;
+    u8 partnerArrived;
     u16 partnerMessage;
     u8 role; // 0 = none, 1 = asked the other player, 2 = asked by it (WiFiPlazaWork_IsTalking / WiFiPlazaWork_WasAskedToTalk)
     u8 isFirstTalk;
@@ -631,7 +631,7 @@ BOOL WiFiPlazaWork_TakePlayerLeft(WiFiPlazaWork *work, int bit);
 BOOL WiFiPlazaWork_IsEventFlagSet(WiFiPlazaWork *work, int bit);
 BOOL WiFiPlazaWork_TakePlayerUpdated(WiFiPlazaWork *work, int bit);
 void *WiFiPlazaWork_GetSaveData(void **ptr);
-int WiFiPlazaWork_GetScheduleValue4(WiFiPlazaWork *work);
+int WiFiPlazaWork_IsArceusFootprintShown(WiFiPlazaWork *work);
 u32 WiFiPlazaWork_HasAnsweredSurvey(WiFiPlazaWork *work);
 u32 WiFiPlazaWork_GetEventScheduleHigh(WiFiPlazaWork *work);
 void WiFiPlazaWork_SetEventScheduleHigh(WiFiPlazaWork *work);
@@ -647,8 +647,8 @@ u32 WiFiPlazaWork_GetLight1Event(WiFiPlazaWork *work);
 u32 WiFiPlazaWork_GetThirdEvent(WiFiPlazaWork *work);
 void WiFiPlazaWork_StartGameEntryCooldown(WiFiPlazaWork *work);
 int WiFiPlazaWork_IsGameEntryCoolingDown(WiFiPlazaWork *work);
-void *WiFiPlazaWork_GetField508_04(WiFiPlazaWork *work);
-void WiFiPlazaWork_SetField508_04(WiFiPlazaWork *work, void *value);
+void *WiFiPlazaWork_GetGameConnectionLost(WiFiPlazaWork *work);
+void WiFiPlazaWork_SetGameConnectionLost(WiFiPlazaWork *work, void *value);
 void WiFiPlazaWork_ClearGameMembers(WiFiPlazaWork *work);
 void WiFiPlazaWork_SetGameMember(WiFiPlazaWork *work, int id, u32 index);
 void WiFiPlazaWork_SetOwnGameMember(WiFiPlazaWork *work, u32 index);
@@ -735,8 +735,8 @@ u16 WiFiPlazaWork_GetTalkPartnerMessage(WiFiPlazaWork *work);
 BOOL WiFiPlazaWork_CanTalkWith(WiFiPlazaWork *work, u32 index);
 BOOL WiFiPlazaWork_IsTalkOver(WiFiPlazaWork *work);
 void WiFiPlazaWork_GetTalkTimeoutCounter(WiFiPlazaWork *work);
-void WiFiPlazaWork_SetTalkField07(WiFiPlazaWork *work);
-u8 WiFiPlazaWork_GetTalkField07(WiFiPlazaWork *work);
+void WiFiPlazaWork_SetTalkPartnerArrived(WiFiPlazaWork *work);
+u8 WiFiPlazaWork_HasTalkPartnerArrived(WiFiPlazaWork *work);
 
 // wifi_plaza_state.c
 void WiFiPlazaWork_IncPartnerTalkCount(WiFiPlazaWork *work);

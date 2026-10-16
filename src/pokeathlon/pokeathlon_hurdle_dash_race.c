@@ -523,7 +523,7 @@ void PokeathlonHurdleDashRunner_DrawFinishLine(BgConfig *bgConfig, PokeathlonHur
 #pragma force_active on
 
 void PokeathlonHurdleDash_SyncRace(PokeathlonCourseData *course) {
-    PokeathlonHurdleDash *hurdleDash = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonHurdleDash *hurdleDash = PokeathlonCourse_GetWork(course);
     PokeathlonCoursePacket *packets = (PokeathlonCoursePacket *)PokeathlonCourse_GetDataCopyArea(course);
     PokeathlonHurdleDashPacket *packet = (PokeathlonHurdleDashPacket *)PokeathlonCourse_ToBytes(packets);
     int i;
@@ -624,7 +624,7 @@ void PokeathlonHurdleDash_UpdateStandings(PokeathlonHurdleDash *hurdleDash, Poke
 
 void PokeathlonHurdleDash_UpdateRanks(PokeathlonCourseData *course) {
     PokeathlonHurdleDashStatus *status;
-    PokeathlonHurdleDash *hurdleDash = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonHurdleDash *hurdleDash = PokeathlonCourse_GetWork(course);
     status = (PokeathlonHurdleDashStatus *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 6 * sizeof(PokeathlonCoursePacket));
     if (hurdleDash->started) {
         hurdleDash->rankTimer++;
@@ -897,7 +897,7 @@ void PokeathlonHurdleDash_UpdateCpuParticipants(PokeathlonCourseData *course) {
     u8 participantId;
     if (PokeathlonCourse_GetNetId(course) == 0) {
         block = PokeathlonCourse_GetDataCopyArea(course);
-        hurdleDash = PokeathlonCourse_GetHeapAllocPtr4(course);
+        hurdleDash = PokeathlonCourse_GetWork(course);
         count = PokeathlonCourse_GetParticipantCount(course);
         participant = count;
         if (participant < 4) {
@@ -1113,7 +1113,7 @@ void PokeathlonHurdleDash_UpdateCpuRunner(PokeathlonCourseData *course, Pokeathl
 #pragma force_active on
 
 void PokeathlonHurdleDash_InitCpuRunners(PokeathlonCourseData *course, const PokeathlonHurdleDashTable *table) {
-    PokeathlonHurdleDash *hurdleDash = PokeathlonCourse_GetHeapAllocPtr4(course);
+    PokeathlonHurdleDash *hurdleDash = PokeathlonCourse_GetWork(course);
     u8 count = PokeathlonCourse_GetParticipantCount(course);
     u8 participant;
     u8 member;

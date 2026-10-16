@@ -1,6 +1,6 @@
 	.public sWifiSetupSecurityRecordTypes
 	.public sWifiSetupLinkSocConfig
-	.public sWifiSetupChannelMasks
+	.public sWifiSetupRateMasks
 	.public gWifiSetupReply
 	.public gWifiSetupRecvSsid
 	.public gWifiSetupRecvSecurity
@@ -199,7 +199,7 @@
 	.global sWifiSetupSocConfig
 	.global sStr_ESSID_AOSS
 	.global sStr_MELCO
-	.global sWifiSetupChannelMasks
+	.global sWifiSetupRateMasks
 	.global gWifiSetupConfig
 	.global sWifiSetupLinkSocConfig
 	.global sWifiSetupSetupApSsid
@@ -957,7 +957,7 @@ sStr_MELCO: ; 0x02245A20
 	.asciz "MELCO"
 
 	.balign 4, 0
-sWifiSetupChannelMasks: ; 0x02245A28
+sWifiSetupRateMasks: ; 0x02245A28
 	.byte 0x01, 0x00, 0x02, 0x00, 0x02, 0x00, 0x04, 0x00
 	.byte 0x04, 0x00, 0x0B, 0x00, 0x08, 0x00, 0x0C, 0x00, 0x10, 0x00, 0x12, 0x00, 0x20, 0x00, 0x16, 0x00
 	.byte 0x40, 0x00, 0x18, 0x00, 0x80, 0x00, 0x24, 0x00, 0x00, 0x01, 0x30, 0x00, 0x00, 0x02, 0x48, 0x00
