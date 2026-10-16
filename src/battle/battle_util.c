@@ -850,17 +850,17 @@ void BattleMon_AddVar(BattleMon *mon, u32 varId, int data) {
         mon->level += data;
         break;
     case BMON_DATA_FRIENDSHIP: {
-        int temp = mon->friendship;
+        int friendship = mon->friendship;
 
-        if (temp + data > 255) {
-            temp = 255;
-        } else if (temp + data < 0) {
-            temp = 0;
+        if (friendship + data > 255) {
+            friendship = 255;
+        } else if (friendship + data < 0) {
+            friendship = 0;
         } else {
-            temp += data;
+            friendship += data;
         }
 
-        mon->friendship = temp;
+        mon->friendship = friendship;
     } break;
     case BMON_DATA_HP: {
         if (mon->hp + data > mon->maxHp) {
@@ -2892,7 +2892,7 @@ void SortMonsBySpeed(BattleSystem *battleSystem, BattleContext *ctx) {
     int battlerId;
     int maxBattlers;
     int i, j;
-    int temp1, temp2;
+    int battlerId1, battlerId2;
 
     maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
 
@@ -2901,11 +2901,11 @@ void SortMonsBySpeed(BattleSystem *battleSystem, BattleContext *ctx) {
     }
     for (i = 0; i < maxBattlers - 1; i++) {
         for (j = i + 1; j < maxBattlers; j++) {
-            temp1 = ctx->turnOrder[i];
-            temp2 = ctx->turnOrder[j];
-            if (CheckSortSpeed(battleSystem, ctx, temp1, temp2, 1)) {
-                ctx->turnOrder[i] = temp2;
-                ctx->turnOrder[j] = temp1;
+            battlerId1 = ctx->turnOrder[i];
+            battlerId2 = ctx->turnOrder[j];
+            if (CheckSortSpeed(battleSystem, ctx, battlerId1, battlerId2, 1)) {
+                ctx->turnOrder[i] = battlerId2;
+                ctx->turnOrder[j] = battlerId1;
             }
         }
     }

@@ -13,12 +13,12 @@
 #include "phone_rematch.h"
 
 static void PokegearMap_LoadState(PokegearMapAppData *mapApp);
-static void PokegearMap_CalcZoomAffineOrigin(PokegearMapAppData *mapApp, u16 xIn, u16 yIn, s16 a3, s16 a4, int *xOut, int *yOut);
-static BOOL PokegearMap_ShouldLocationBeHidden(PokegearMapAppData *mapApp, int a1);
-static int PokegearMap_GetFlypointIndexAtCoord(PokegearMapAppData *mapApp, u16 a1, u16 a2);
-static BOOL PokegearMap_MapHasPhoneRematchOrGift(PokegearMapAppData *mapApp, int a1);
-static void PokegearMap_PrintLocationPanel(PokegearMapAppData *mapApp, BOOL copyToVram, BOOL a2);
-static void PokegearMap_PrintMarkingECWord(PokegearMapAppData *mapApp, u8 a1, u16 a2);
+static void PokegearMap_CalcZoomAffineOrigin(PokegearMapAppData *mapApp, u16 xIn, u16 yIn, s16 cursorX, s16 cursorY, int *xOut, int *yOut);
+static BOOL PokegearMap_ShouldLocationBeHidden(PokegearMapAppData *mapApp, int mapID);
+static int PokegearMap_GetFlypointIndexAtCoord(PokegearMapAppData *mapApp, u16 x, u16 y);
+static BOOL PokegearMap_MapHasPhoneRematchOrGift(PokegearMapAppData *mapApp, int mapID);
+static void PokegearMap_PrintLocationPanel(PokegearMapAppData *mapApp, BOOL copyToVram, BOOL regionNo);
+static void PokegearMap_PrintMarkingECWord(PokegearMapAppData *mapApp, u8 index, u16 word);
 static void PokegearMap_GetLandmarkNameFromMapID(u16 mapno, enum HeapID heapID, String *dest);
 
 const TouchscreenListMenuTemplate sListMenuTemplate = {
@@ -194,27 +194,27 @@ void PokegearMap_CalcViewAroundPos(PokegearMapAppData *mapApp, u8 zoomed, u16 x0
     mapApp->cursorSpriteState.dyStep = FX_Div(FX32_CONST(mapApp->cursorSpriteState.dy), FX32_CONST(mapApp->cursorSpeed));
 }
 
-static void PokegearMap_CalcZoomAffineOrigin(PokegearMapAppData *mapApp, u16 xIn, u16 yIn, s16 a3, s16 a4, int *xOut, int *yOut) {
-    u8 r2 = 0;
-    u8 r1 = 0;
+static void PokegearMap_CalcZoomAffineOrigin(PokegearMapAppData *mapApp, u16 xIn, u16 yIn, s16 cursorX, s16 cursorY, int *xOut, int *yOut) {
+    u8 cellX = 0;
+    u8 cellY = 0;
     if (!mapApp->zoomed) {
-        r2 = (a3 - mapApp->centerX) / 16;
-        r1 = (a4 - mapApp->centerY) / 16;
-        if (r2 <= 5) {
+        cellX = (cursorX - mapApp->centerX) / 16;
+        cellY = (cursorY - mapApp->centerY) / 16;
+        if (cellX <= 5) {
             *xOut = xIn * 8 + 8;
         } else {
             *xOut = xIn * 8;
         }
-        if (r1 > 4) {
+        if (cellY > 4) {
             *yOut = yIn * 8 + 8;
         } else {
             *yOut = yIn * 8;
         }
     } else {
-        r2 = ((a3 - mapApp->centerX) / 8) % 2;
-        r1 = ((a4 - mapApp->centerY) / 8) % 2;
-        *xOut = xIn * 8 + r2 * 8;
-        *yOut = yIn * 8 + r1 * 8;
+        cellX = ((cursorX - mapApp->centerX) / 8) % 2;
+        cellY = ((cursorY - mapApp->centerY) / 8) % 2;
+        *xOut = xIn * 8 + cellX * 8;
+        *yOut = yIn * 8 + cellY * 8;
     }
 }
 
@@ -1080,7 +1080,7 @@ void PokegearMap_SetButtonState(PokegearMapAppData *mapApp, int button, int stat
     ScheduleBgTilemapBufferTransfer(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_1);
 }
 
-void PokegearMap_SpawnFlyContextMenu(PokegearMapAppData *mapApp, u32 a1) {
+void PokegearMap_SpawnFlyContextMenu(PokegearMapAppData *mapApp, u32 gridX) {
     TouchscreenListMenuHeader header;
 
     MI_CpuClear8(&header, sizeof(TouchscreenListMenuHeader));
@@ -1089,7 +1089,7 @@ void PokegearMap_SpawnFlyContextMenu(PokegearMapAppData *mapApp, u32 a1) {
     header.listMenuItems = mapApp->listMenuItems;
     header.bgConfig = mapApp->pokegear->bgConfig;
     header.numWindows = 2;
-    if (a1 < 8 || a1 > 15) {
+    if (gridX < 8 || gridX > 15) {
         mapApp->listMenu = TouchscreenListMenu_Create(mapApp->listMenuSpawner, &header, mapApp->pokegear->menuInputState, 11, 4, 0, 0);
     } else {
         mapApp->listMenu = TouchscreenListMenu_Create(mapApp->listMenuSpawner, &header, mapApp->pokegear->menuInputState, 3, 4, 0, 0);

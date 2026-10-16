@@ -60,24 +60,24 @@ static u8 TranslateBigMonSizeTableIndex(u32 randValue) {
 }
 
 static u32 GetMonSize(int species, int rand) {
-    u32 r6;
-    int r4;
+    u32 height;
+    int tableIndex;
 
-    r6 = SpeciesGetDexHeight(species, HEAP_ID_FIELD1);
-    r4 = TranslateBigMonSizeTableIndex(rand);
-    return r6 * ((u64)sBigMonSizeTable[r4][0] + ((u64)rand - (u64)sBigMonSizeTable[r4][2]) / (u64)sBigMonSizeTable[r4][1]) / 10;
+    height = SpeciesGetDexHeight(species, HEAP_ID_FIELD1);
+    tableIndex = TranslateBigMonSizeTableIndex(rand);
+    return height * ((u64)sBigMonSizeTable[tableIndex][0] + ((u64)rand - (u64)sBigMonSizeTable[tableIndex][2]) / (u64)sBigMonSizeTable[tableIndex][1]) / 10;
 }
 
 static void FormatSizeRecord(FieldSystem *fieldSystem, u8 idx0, u8 idx1, u16 species, u16 rand) {
     MessageFormat **msgFmt;
     u32 score;
-    u32 r4;
+    u32 inches;
 
     msgFmt = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
     score = GetMonSize(species, rand);
-    r4 = LengthConvertToImperial(score);
-    BufferIntegerAsString(*msgFmt, idx0, r4 / 10, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
-    BufferIntegerAsString(*msgFmt, idx1, r4 % 10, 1, PRINTING_MODE_LEFT_ALIGN, TRUE);
+    inches = LengthConvertToImperial(score);
+    BufferIntegerAsString(*msgFmt, idx0, inches / 10, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
+    BufferIntegerAsString(*msgFmt, idx1, inches % 10, 1, PRINTING_MODE_LEFT_ALIGN, TRUE);
 }
 
 BOOL ScrCmd_SizeRecordCompare(ScriptContext *ctx) {

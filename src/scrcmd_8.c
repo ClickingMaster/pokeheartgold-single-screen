@@ -44,9 +44,9 @@ BOOL ScrCmd_FriendGroupAction(ScriptContext *ctx) {
         break;
     }
     case 4: {
-        u16 *r5 = Save_FriendGroup_GetName(group, 0, 0);
+        u16 *groupName = Save_FriendGroup_GetName(group, 0, 0);
         u16 *retPtr = ScriptGetVarPointer(ctx);
-        CallTask_NamingScreen(ctx->taskman, NAME_SCREEN_GROUP, 0, PLAYER_NAME_LENGTH, 0, r5, retPtr);
+        CallTask_NamingScreen(ctx->taskman, NAME_SCREEN_GROUP, 0, PLAYER_NAME_LENGTH, 0, groupName, retPtr);
         return TRUE;
     }
     case 5: {

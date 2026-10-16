@@ -37,7 +37,7 @@ static int Save_WriteSlotAsync(SaveData *saveData, int idx, u8 slot);
 static int Save_WriteChunkFooterAsync(SaveData *saveData, int idx, u8 slot);
 static void Save_WriteManInit(SaveData *saveData, struct AsyncWriteManager *writeMan, int a2);
 static int HandleWriteSaveAsync_NormalData(SaveData *saveData, struct AsyncWriteManager *writeMan);
-static void Save_WriteManFinish(SaveData *saveData, struct AsyncWriteManager *writeMan, int a2);
+static void Save_WriteManFinish(SaveData *saveData, struct AsyncWriteManager *writeMan, int status);
 static void CancelAsyncSave(SaveData *saveData, struct AsyncWriteManager *writeMan);
 static int _NowWriteFlash(SaveData *saveData);
 static int FlashClobberChunkFooter(SaveData *saveData, int spec, int sector);
@@ -48,8 +48,8 @@ static void Save_InitDynamicRegion_Internal(u8 *dynamic_region, struct SaveArray
 static void CreateChunkFooter(SaveData *saveData, void *data, int idx, u32 size);
 static BOOL ValidateChunk(SaveData *saveData, void *data, int idx, u32 size);
 static u32 SaveArray_GetFooterSaveNo(void *data, u32 size);
-static void Save_GetExtraChunkKeys(SaveData *saveData, int idx, u32 *a2, u32 *a3, u8 *a4);
-static void Save_SetExtraChunkKeys(SaveData *saveData, int idx, u32 a2, u32 a3, u8 a4);
+static void Save_GetExtraChunkKeys(SaveData *saveData, int idx, u32 *key0, u32 *key1, u8 *lastSlot);
+static void Save_SetExtraChunkKeys(SaveData *saveData, int idx, u32 key0, u32 key1, u8 lastSlot);
 static BOOL SaveDetectFlash(void);
 static s32 FlashWriteChunk(u32 offset, void *data, u32 size);
 static BOOL FlashLoadChunk(u32 offset, void *data, u32 size);
@@ -671,10 +671,10 @@ static int HandleWriteSaveAsync_NormalData(SaveData *saveData, struct AsyncWrite
     return WRITE_STATUS_CONTINUE;
 }
 
-static void Save_WriteManFinish(SaveData *saveData, struct AsyncWriteManager *writeMan, int a2) {
+static void Save_WriteManFinish(SaveData *saveData, struct AsyncWriteManager *writeMan, int status) {
     saveData->numModifiedBoxes = 0;
     saveData->nextBoxToWrite = 0;
-    if (a2 == 3) {
+    if (status == 3) {
         if (writeMan->rollbackCounter) {
             saveData->saveCounter = writeMan->count;
         }
@@ -1075,12 +1075,12 @@ void *ReadExtraSaveChunkKeyed(SaveData *saveData, enum HeapID heapID, int idx, i
     return ret;
 }
 
-static void Save_GetExtraChunkKeys(SaveData *saveData, int idx, u32 *a2, u32 *a3, u8 *a4) {
-    SaveMisc_GetExtraChunkKeys(Save_Misc_Get(saveData), idx, a2, a3, a4);
+static void Save_GetExtraChunkKeys(SaveData *saveData, int idx, u32 *key0, u32 *key1, u8 *lastSlot) {
+    SaveMisc_GetExtraChunkKeys(Save_Misc_Get(saveData), idx, key0, key1, lastSlot);
 }
 
-static void Save_SetExtraChunkKeys(SaveData *saveData, int idx, u32 a2, u32 a3, u8 a4) {
-    SaveMisc_SetExtraChunkKeys(Save_Misc_Get(saveData), idx, a2, a3, a4);
+static void Save_SetExtraChunkKeys(SaveData *saveData, int idx, u32 key0, u32 key1, u8 lastSlot) {
+    SaveMisc_SetExtraChunkKeys(Save_Misc_Get(saveData), idx, key0, key1, lastSlot);
 }
 
 static BOOL SaveDetectFlash(void) {

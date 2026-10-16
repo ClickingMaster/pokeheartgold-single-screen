@@ -76,7 +76,7 @@ int BattleArcade_GetMonLevel(ArcadeContext *ctx);
 void FrontierMon_ToPokemon(ArcadeFrontierMon *frontierMon, Pokemon *mon, int level);
 void BattleArcade_AddMonToParty(ArcadeContext *ctx, Party *party, Pokemon *mon);
 void *FrontierTrainer_Load(void *trainer, u16 trainerId, u32 heapId, u32 narcId);
-void FrontierTrainer_GetClassSprite(u8 a0);
+void FrontierTrainer_GetClassSprite(u8 value);
 ManagedSprite *FrontierMap_CreateMonIcon(FrontierMap *map, Pokemon *mon, int index, int x, int y);
 void FrontierMap_DeleteMonIcon(FrontierMap *map, ManagedSprite *sprite, int index);
 ManagedSprite *FrontierMap_CreateItemIcon(FrontierMap *map, int x, int y);
@@ -258,15 +258,15 @@ void BattleArcadeData_InitNew(ArcadeContext *ctx) {
     u8 battleNo;
     u32 count;
     u32 multiplayer;
-    u32 *unk320;
+    u32 *personalities;
     u32 i;
 
     BattleArcade_GetRoundTrainerIds(ctx->type, rank, ctx->trainerIds, 14);
     battleNo = ctx->battleNo;
     count = BattleArcade_GetOpponentMonCount(ctx->type, 1);
     multiplayer = BattleArcade_MultiplayerCheck(ctx->type);
-    unk320 = ctx->personalities;
-    FrontierTrainer_GenerateMons(count, ctx->trainerIds[battleNo], ctx->trainerIds[battleNo + 7], ctx->setIds, ctx->opponentMons, ctx->ivs, unk320, multiplayer);
+    personalities = ctx->personalities;
+    FrontierTrainer_GenerateMons(count, ctx->trainerIds[battleNo], ctx->trainerIds[battleNo + 7], ctx->setIds, ctx->opponentMons, ctx->ivs, personalities, multiplayer);
 
     rank = BattleArcade_GetRound(ctx);
     for (i = 0; i < 3; i++) {
@@ -457,11 +457,11 @@ void BattleArcade_SetPartyAfterBattle(ArcadeContext *ctx) {
     u8 battleNo = ctx->battleNo;
     u32 count = BattleArcade_GetOpponentMonCount(ctx->type, 1);
     u32 multiplayer;
-    u32 *unk320;
+    u32 *personalities;
 
     multiplayer = BattleArcade_MultiplayerCheck(ctx->type);
-    unk320 = ctx->personalities;
-    FrontierTrainer_GenerateMons(count, ctx->trainerIds[battleNo], ctx->trainerIds[battleNo + 7], ctx->setIds, ctx->opponentMons, ctx->ivs, unk320, multiplayer);
+    personalities = ctx->personalities;
+    FrontierTrainer_GenerateMons(count, ctx->trainerIds[battleNo], ctx->trainerIds[battleNo + 7], ctx->setIds, ctx->opponentMons, ctx->ivs, personalities, multiplayer);
     BattleArcade_SetOpponentParty(ctx);
 }
 

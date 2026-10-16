@@ -663,23 +663,23 @@ static void MapObject_InitFlagsAndFacing(LocalMapObject *object, MapObjectManage
 }
 
 static void MapObject_SetMovementCallbacks(LocalMapObject *object) {
-    MapObjectMovementCallbacks *unk = MapObject_GetMovementCallbacks(MapObject_GetMovement(object));
-    MapObject_SetMovementInitCallback(object, MovementCallbacks_GetInit(unk));
-    MapObject_SetMovementUpdateCallback(object, MovementCallbacks_GetUpdate(unk));
-    MapObject_SetMovementDeleteCallback(object, MovementCallbacks_GetDelete(unk));
+    MapObjectMovementCallbacks *callbacks = MapObject_GetMovementCallbacks(MapObject_GetMovement(object));
+    MapObject_SetMovementInitCallback(object, MovementCallbacks_GetInit(callbacks));
+    MapObject_SetMovementUpdateCallback(object, MovementCallbacks_GetUpdate(callbacks));
+    MapObject_SetMovementDeleteCallback(object, MovementCallbacks_GetDelete(callbacks));
 }
 
 extern const MapObjectDrawCallbacks gCameraFocusObjectDrawCallbacks;
 
 static void MapObject_SetDrawCallbacks(LocalMapObject *object) {
     u32 spriteId = MapObject_GetSpriteID(object);
-    MapObjectDrawCallbacks *unk = (spriteId == SPRITE_CAMERA_FOCUS) ? (MapObjectDrawCallbacks *)&gCameraFocusObjectDrawCallbacks : MapObject_GetDrawCallbacksForSprite(spriteId);
+    MapObjectDrawCallbacks *callbacks = (spriteId == SPRITE_CAMERA_FOCUS) ? (MapObjectDrawCallbacks *)&gCameraFocusObjectDrawCallbacks : MapObject_GetDrawCallbacksForSprite(spriteId);
 
-    MapObject_SetDrawInitCallback(object, DrawCallbacks_GetInit(unk));
-    MapObject_SetDrawUpdateCallback(object, DrawCallbacks_GetUpdate(unk));
-    MapObject_SetDrawDeleteCallback(object, DrawCallbacks_GetDelete(unk));
-    MapObject_SetDrawPauseCallback(object, DrawCallbacks_GetPause(unk));
-    MapObject_SetDrawResumeCallback(object, DrawCallbacks_GetResume(unk));
+    MapObject_SetDrawInitCallback(object, DrawCallbacks_GetInit(callbacks));
+    MapObject_SetDrawUpdateCallback(object, DrawCallbacks_GetUpdate(callbacks));
+    MapObject_SetDrawDeleteCallback(object, DrawCallbacks_GetDelete(callbacks));
+    MapObject_SetDrawPauseCallback(object, DrawCallbacks_GetPause(callbacks));
+    MapObject_SetDrawResumeCallback(object, DrawCallbacks_GetResume(callbacks));
 }
 
 static void MapObject_Clear(LocalMapObject *object) {
@@ -1281,8 +1281,8 @@ static void MapObject_CallMovementDelete(LocalMapObject *object) {
 }
 
 static void MapObject_CallMovementRestore(LocalMapObject *object) {
-    MapObjectMovementCallbacks *unk = MapObject_GetMovementCallbacks(MapObject_GetMovement(object));
-    unk->restore(object);
+    MapObjectMovementCallbacks *callbacks = MapObject_GetMovementCallbacks(MapObject_GetMovement(object));
+    callbacks->restore(object);
 }
 
 static void MapObject_SetDrawInitCallback(LocalMapObject *object, LocalMapObject_Callback callback) {
@@ -1361,8 +1361,8 @@ u16 MapObject_GetPreviousMetatileBehavior(LocalMapObject *object) {
     return object->previousBehavior;
 }
 
-void MapObject_SetSavedPreviousBehavior(LocalMapObject *object, u16 param1) {
-    object->savedPreviousBehavior = param1;
+void MapObject_SetSavedPreviousBehavior(LocalMapObject *object, u16 behavior) {
+    object->savedPreviousBehavior = behavior;
 }
 
 u16 MapObject_GetSavedPreviousBehavior(LocalMapObject *object) {

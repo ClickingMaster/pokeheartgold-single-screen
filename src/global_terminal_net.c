@@ -48,7 +48,7 @@ u32 BattleRecord_sizeof(void);
 void *BattleRecord_GetProfile2(void);
 void *BattleRecord_GetProfile(void);
 void VsRecorder_EncryptRecord(SaveData *saveData);
-int VsRecorder_SaveRecordNumber(SaveData *saveData, int arg1, int arg2, void *out1, void *out2);
+int VsRecorder_SaveRecordNumber(SaveData *saveData, int numberLow, int numberHigh, void *out1, void *out2);
 
 extern const GlobalTerminalNetStepFunc *const sGlobalTerminalNetSequences[];
 extern OSHeapHandle sGlobalTerminalNetOsHeap;

@@ -441,8 +441,8 @@ static int PokegearMap_MainTask_FadeInApp(PokegearMapAppData *mapApp) {
 
 static int PokegearMap_MainTask_FadeOutApp(PokegearMapAppData *mapApp) {
     int i;
-    BOOL r4;
-    BOOL r0;
+    BOOL fadeDone;
+    BOOL panelDone;
 
     switch (mapApp->state) {
     case 0:
@@ -455,9 +455,9 @@ static int PokegearMap_MainTask_FadeOutApp(PokegearMapAppData *mapApp) {
         ++mapApp->state;
         break;
     case 1:
-        r4 = PokegearMap_FadeMapScreen(mapApp, 1);
-        r0 = PokegearMap_RunScrollMarkingsPanelTopScreen(mapApp, 1);
-        if (r4 && r0) {
+        fadeDone = PokegearMap_FadeMapScreen(mapApp, 1);
+        panelDone = PokegearMap_RunScrollMarkingsPanelTopScreen(mapApp, 1);
+        if (fadeDone && panelDone) {
             ++mapApp->state;
         }
         break;

@@ -109,7 +109,7 @@ static int PartyMenu_SelectedBattleTeamComplianceCheck(PartyMenu *partyMenu);
 static u8 PartyMenu_CheckTeamDuplicateSpeciesOrItems(PartyMenu *partyMenu);
 static u8 PartyMenu_CheckBattleHallTeamSameSpecies(PartyMenu *partyMenu);
 static u8 PartyMenu_CheckTeamDuplicateSpecies(PartyMenu *partyMenu);
-static void PartyMenu_GetUnusedSlotEffectPos(u8 a0, s16 *px, s16 *py);
+static void PartyMenu_GetUnusedSlotEffectPos(u8 slot, s16 *px, s16 *py);
 static BOOL PartyMenu_Subtask_HandleContextMenuInput(PartyMenu *partyMenu, int *pState);
 static int PartyMenu_Subtask_Softboiled(PartyMenu *partyMenu);
 static u8 PartyMenu_SoftboiledTargetCheck(PartyMenu *partyMenu);
@@ -2140,9 +2140,9 @@ static const u8 _021012B0[][2] = {
     { 26, 17 },
 };
 
-static void PartyMenu_GetUnusedSlotEffectPos(u8 a0, s16 *px, s16 *py) {
-    *px = _021012B0[a0][0] * 8 + 20;
-    *py = _021012B0[a0][1] * 8 + 20;
+static void PartyMenu_GetUnusedSlotEffectPos(u8 slot, s16 *px, s16 *py) {
+    *px = _021012B0[slot][0] * 8 + 20;
+    *py = _021012B0[slot][1] * 8 + 20;
 }
 
 static BOOL PartyMenu_Subtask_HandleContextMenuInput(PartyMenu *partyMenu, int *pState) {

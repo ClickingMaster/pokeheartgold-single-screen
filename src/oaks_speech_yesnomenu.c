@@ -139,19 +139,19 @@ static const s16 sCoords[2][2] = {
 
 static void OakSpeechYesNo_SetCursorSpritePos(OakSpeechYesNo *yesnoMenu) {
     GF_ASSERT(yesnoMenu->sprite != NULL);
-    int r4;
+    int cursorIndex;
     switch (yesnoMenu->result) {
     case YESNORESPONSE_YES:
-        r4 = 0;
+        cursorIndex = 0;
         break;
     case YESNORESPONSE_NO:
-        r4 = 1;
+        cursorIndex = 1;
         break;
     default:
         GF_ASSERT(FALSE);
         break;
     }
-    Sprite_SetPositionXY(yesnoMenu->sprite, sCoords[r4][0], sCoords[r4][1]);
+    Sprite_SetPositionXY(yesnoMenu->sprite, sCoords[cursorIndex][0], sCoords[cursorIndex][1]);
 }
 
 static const TouchscreenHitbox sHitboxes[] = {

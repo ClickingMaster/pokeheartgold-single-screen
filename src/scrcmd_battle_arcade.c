@@ -65,35 +65,35 @@ static const u8 sBattleArcadeSummaryPages[] = {
 
 BOOL ScrCmd_BattleArcadeAction(ScriptContext *ctx) {
     u16 command = ScriptReadHalfword(ctx);
-    u16 arg1 = ScriptGetVar(ctx);
+    u16 arg = ScriptGetVar(ctx);
     u16 *result = ScriptGetVarPointer(ctx);
     Save_Frontier_GetArcadeChallenge(ctx->fieldSystem->saveData);
-    void *unk0 = Save_Frontier_GetArcadeFlags(ctx->fieldSystem->saveData);
-    void *unk1 = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
+    void *arcadeFlags = Save_Frontier_GetArcadeFlags(ctx->fieldSystem->saveData);
+    void *appArgs = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
     switch (command) {
     case 0:
-        *result = PartyIsValidForFrontier(arg1, ctx->fieldSystem->saveData, 0);
+        *result = PartyIsValidForFrontier(arg, ctx->fieldSystem->saveData, 0);
         break;
     case 1: // Unused
-        if (arg1 == 3) {
+        if (arg == 3) {
             *result = FrontierSave_GetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), 110, FrontierStat_GetFriendIndex(110));
         } else {
-            *result = ArcadeFlags_GetField(unk0, 8, arg1, 0, 0);
+            *result = ArcadeFlags_GetField(arcadeFlags, 8, arg, 0, 0);
         }
         break;
     case 3: // Unused
-        BattleArcade_ResetStreak(ctx->fieldSystem->saveData, unk0, arg1);
+        BattleArcade_ResetStreak(ctx->fieldSystem->saveData, arcadeFlags, arg);
         break;
     case 4: {
         BattleArcadeChallengeType challengeType;
-        if (arg1 == 0) {
+        if (arg == 0) {
             challengeType = BATTLE_ARCADE_CHALLENGE_TYPE_SINGLE;
-        } else if (arg1 == 1) {
+        } else if (arg == 1) {
             challengeType = BATTLE_ARCADE_CHALLENGE_TYPE_DOUBLE;
         } else {
             challengeType = BATTLE_ARCADE_CHALLENGE_TYPE_MULTI;
         }
-        BattleArcade_StartSelectMons(ctx->taskman, unk1, challengeType);
+        BattleArcade_StartSelectMons(ctx->taskman, appArgs, challengeType);
         return TRUE;
     }
     default:
@@ -105,15 +105,15 @@ BOOL ScrCmd_BattleArcadeAction(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_BattleArcadeResetStreak(ScriptContext *ctx) {
-    u16 unk = ScriptGetVar(ctx);
-    BattleArcade_ResetStreak(ctx->fieldSystem->saveData, Save_Frontier_GetArcadeFlags(ctx->fieldSystem->saveData), unk);
+    u16 challengeType = ScriptGetVar(ctx);
+    BattleArcade_ResetStreak(ctx->fieldSystem->saveData, Save_Frontier_GetArcadeFlags(ctx->fieldSystem->saveData), challengeType);
     return FALSE;
 }
 
 static void BattleArcade_ResetStreak(SaveData *saveData, void *arcadeFlags, u8 challengeType) {
-    u8 unk;
-    unk = 0;
-    ArcadeFlags_SetField(arcadeFlags, 8, challengeType, 0, &unk);
+    u8 streak;
+    streak = 0;
+    ArcadeFlags_SetField(arcadeFlags, 8, challengeType, 0, &streak);
     if (challengeType == 3) {
         FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), 110, FrontierStat_GetFriendIndex(110), 0);
     }
@@ -129,37 +129,37 @@ BOOL ScrCmd_BattleArcadeCheckTeam(ScriptContext *ctx) {
 }
 
 static void BattleArcade_StartTeamCheck(TaskManager *taskManager, u16 firstMon, u16 secondMon, u16 *result) {
-    BattleArcadeTeamCheck *unk = Heap_Alloc(HEAP_ID_FIELD2, sizeof(BattleArcadeTeamCheck));
-    memset(unk, 0, sizeof(BattleArcadeTeamCheck));
-    unk->playerTeam[0] = firstMon;
-    unk->playerTeam[1] = secondMon;
-    unk->result = result;
-    FieldComm_RegisterCommands(unk);
-    TaskManager_Call(taskManager, Task_BattleArcadeTeamCheck, unk);
+    BattleArcadeTeamCheck *teamCheck = Heap_Alloc(HEAP_ID_FIELD2, sizeof(BattleArcadeTeamCheck));
+    memset(teamCheck, 0, sizeof(BattleArcadeTeamCheck));
+    teamCheck->playerTeam[0] = firstMon;
+    teamCheck->playerTeam[1] = secondMon;
+    teamCheck->result = result;
+    FieldComm_RegisterCommands(teamCheck);
+    TaskManager_Call(taskManager, Task_BattleArcadeTeamCheck, teamCheck);
 }
 
 static BOOL Task_BattleArcadeTeamCheck(TaskManager *taskManager) {
-    BattleArcadeTeamCheck *unk = TaskManager_GetEnvironment(taskManager);
-    switch (unk->state) {
+    BattleArcadeTeamCheck *teamCheck = TaskManager_GetEnvironment(taskManager);
+    switch (teamCheck->state) {
     case 0:
-        if (Comm_SendCommand(134, unk, 16) == 1) {
-            unk->state++;
+        if (Comm_SendCommand(134, teamCheck, 16) == 1) {
+            teamCheck->state++;
         }
         break;
     case 1:
-        if (unk->numReceived >= 2) {
-            *unk->result = 0;
-            if (unk->playerTeam[0] == unk->partnerTeam[0] || unk->playerTeam[0] == unk->partnerTeam[1]) {
-                *unk->result += 1;
+        if (teamCheck->numReceived >= 2) {
+            *teamCheck->result = 0;
+            if (teamCheck->playerTeam[0] == teamCheck->partnerTeam[0] || teamCheck->playerTeam[0] == teamCheck->partnerTeam[1]) {
+                *teamCheck->result += 1;
             }
-            if (unk->playerTeam[1] == unk->partnerTeam[0] || unk->playerTeam[1] == unk->partnerTeam[1]) {
-                *unk->result += 2;
+            if (teamCheck->playerTeam[1] == teamCheck->partnerTeam[0] || teamCheck->playerTeam[1] == teamCheck->partnerTeam[1]) {
+                *teamCheck->result += 2;
             }
-            unk->state++;
+            teamCheck->state++;
         }
         break;
     case 2:
-        Heap_Free(unk);
+        Heap_Free(teamCheck);
         return TRUE;
     }
     return FALSE;
@@ -167,31 +167,31 @@ static BOOL Task_BattleArcadeTeamCheck(TaskManager *taskManager) {
 
 static void BattleArcade_StartSelectMons(TaskManager *taskManager, void *appArgs, BattleArcadeChallengeType challengeType) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    FrontierSelectMonsEnv *unk = Heap_Alloc(HEAP_ID_FIELD2, sizeof(FrontierSelectMonsEnv));
-    MI_CpuFill8(unk, 0, sizeof(FrontierSelectMonsEnv));
-    unk->challengeType = challengeType;
-    unk->appArgs = appArgs;
-    TaskManager_Call(fieldSystem->taskman, Task_BattleArcadeSelectMons, unk);
+    FrontierSelectMonsEnv *env = Heap_Alloc(HEAP_ID_FIELD2, sizeof(FrontierSelectMonsEnv));
+    MI_CpuFill8(env, 0, sizeof(FrontierSelectMonsEnv));
+    env->challengeType = challengeType;
+    env->appArgs = appArgs;
+    TaskManager_Call(fieldSystem->taskman, Task_BattleArcadeSelectMons, env);
 }
 
 static BOOL Task_BattleArcadeSelectMons(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    FrontierSelectMonsEnv *unk = TaskManager_GetEnvironment(taskManager);
-    switch (unk->state) {
+    FrontierSelectMonsEnv *env = TaskManager_GetEnvironment(taskManager);
+    switch (env->state) {
     case 0:
-        unk->state = BattleArcadeSelectMons_OpenPartyMenu(unk, fieldSystem, HEAP_ID_FIELD2);
+        env->state = BattleArcadeSelectMons_OpenPartyMenu(env, fieldSystem, HEAP_ID_FIELD2);
         break;
     case 1:
-        unk->state = BattleArcadeSelectMons_WaitPartyMenu(unk, fieldSystem);
+        env->state = BattleArcadeSelectMons_WaitPartyMenu(env, fieldSystem);
         break;
     case 2:
-        unk->state = BattleArcadeSelectMons_OpenSummary(unk, fieldSystem, HEAP_ID_FIELD2);
+        env->state = BattleArcadeSelectMons_OpenSummary(env, fieldSystem, HEAP_ID_FIELD2);
         break;
     case 3:
-        unk->state = BattleArcadeSelectMons_WaitSummary(unk, fieldSystem);
+        env->state = BattleArcadeSelectMons_WaitSummary(env, fieldSystem);
         break;
     case 4:
-        Heap_Free(unk);
+        Heap_Free(env);
         return TRUE;
     }
     return FALSE;
@@ -244,23 +244,23 @@ static u32 BattleArcadeSelectMons_WaitPartyMenu(FrontierSelectMonsEnv *env, Fiel
 
 static u32 BattleArcadeSelectMons_OpenSummary(FrontierSelectMonsEnv *env, FieldSystem *fieldSystem, enum HeapID heapID) {
     SaveData *saveData = fieldSystem->saveData;
-    PokemonSummaryArgs *unk = Heap_AllocAtEnd(heapID, sizeof(PokemonSummaryArgs));
-    MI_CpuFill8(unk, 0, sizeof(PokemonSummaryArgs));
-    unk->options = Save_PlayerData_GetOptionsAddr(saveData);
-    unk->party = SaveArray_Party_Get(saveData);
-    unk->natDexEnabled = SaveArray_IsNatDexEnabled(saveData);
-    unk->unk2C = PokemonSummary_GetDefaultUnk2C(saveData);
-    unk->monDataType = 1;
-    unk->partySlot = env->partySlot;
-    unk->partyCount = Party_GetCount(unk->party);
-    unk->moveToLearn = MOVE_NONE;
-    unk->mode = 0;
-    unk->ribbons = Save_SpecialRibbons_Get(saveData);
-    unk->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(saveData);
-    PokemonSummary_SetPages(unk, sBattleArcadeSummaryPages);
-    PokemonSummaryArgs_SetPlayer(unk, Save_PlayerData_GetProfile(saveData));
-    FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_PokemonSummary, unk);
-    *(env->appArgs) = unk;
+    PokemonSummaryArgs *summaryArgs = Heap_AllocAtEnd(heapID, sizeof(PokemonSummaryArgs));
+    MI_CpuFill8(summaryArgs, 0, sizeof(PokemonSummaryArgs));
+    summaryArgs->options = Save_PlayerData_GetOptionsAddr(saveData);
+    summaryArgs->party = SaveArray_Party_Get(saveData);
+    summaryArgs->natDexEnabled = SaveArray_IsNatDexEnabled(saveData);
+    summaryArgs->unk2C = PokemonSummary_GetDefaultUnk2C(saveData);
+    summaryArgs->monDataType = 1;
+    summaryArgs->partySlot = env->partySlot;
+    summaryArgs->partyCount = Party_GetCount(summaryArgs->party);
+    summaryArgs->moveToLearn = MOVE_NONE;
+    summaryArgs->mode = 0;
+    summaryArgs->ribbons = Save_SpecialRibbons_Get(saveData);
+    summaryArgs->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(saveData);
+    PokemonSummary_SetPages(summaryArgs, sBattleArcadeSummaryPages);
+    PokemonSummaryArgs_SetPlayer(summaryArgs, Save_PlayerData_GetProfile(saveData));
+    FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_PokemonSummary, summaryArgs);
+    *(env->appArgs) = summaryArgs;
     return 3;
 }
 

@@ -268,18 +268,18 @@ static BOOL ItemFieldUseFunc_Bicycle(struct ItemFieldUseData *data) {
 static BOOL Task_MountOrDismountBicycle(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     u32 *state_p = TaskManager_GetStatePtr(taskManager);
-    int r6;
+    int movement;
 
     switch (*state_p) {
     case 0:
         if (FollowMon_IsActive(fieldSystem)) {
             if (MapObject_IsMovementPaused(FollowMon_GetMapObject(fieldSystem))) {
                 if (PlayerAvatar_GetState(fieldSystem->playerAvatar) == PLAYER_STATE_CYCLING) {
-                    r6 = 0x30;
+                    movement = 0x30;
                 } else {
-                    r6 = 0x38;
+                    movement = 0x38;
                 }
-                MapObject_ChangeMovement(FollowMon_GetMapObject(fieldSystem), r6);
+                MapObject_ChangeMovement(FollowMon_GetMapObject(fieldSystem), movement);
                 (*state_p)++;
             }
         } else {

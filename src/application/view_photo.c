@@ -348,10 +348,10 @@ static void ViewPhotoSysTask_LoadBgGraphics(ViewPhotoSysTaskData *viewPhoto) {
 
     void *ncgrFile;
     NNSG2dCharacterData *pCharData;
-    u8 r3;
+    u8 iconIndex;
     ncgrFile = GfGfxLoader_GetCharDataFromOpenNarc(narc, 5, FALSE, &pCharData, viewPhoto->heapID);
-    r3 = viewPhoto->scrollData.photo->iconId + 1;
-    BG_LoadCharTilesData(viewPhoto->bgConfig, GF_BG_LYR_SUB_3, pCharData->pRawData + ((25 * r3 + 64) * 64), 0x640, 1);
+    iconIndex = viewPhoto->scrollData.photo->iconId + 1;
+    BG_LoadCharTilesData(viewPhoto->bgConfig, GF_BG_LYR_SUB_3, pCharData->pRawData + ((25 * iconIndex + 64) * 64), 0x640, 1);
     Heap_Free(ncgrFile);
     NARC_Delete(narc);
 }

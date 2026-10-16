@@ -86,7 +86,7 @@ void SaveMisc_GetBattleGreeting(SAVE_MISC_DATA *saveMiscData, MailMessage *mailM
 void SaveMisc_SetBattleGreeting(SAVE_MISC_DATA *saveMiscData, MailMessage *mailMessage);
 void SaveMisc_GetVsRecorderColorScheme(SAVE_MISC_DATA *saveMiscData, u8 *colorScheme);
 void SaveMisc_SetVsRecorderColorScheme(SAVE_MISC_DATA *saveMiscData, u8 colorScheme);
-void SaveMisc_GetExtraChunkKeys(SAVE_MISC_DATA *saveMiscData, int chunkId, u32 *key0, u32 *key1, u8 *a4);
-void SaveMisc_SetExtraChunkKeys(SAVE_MISC_DATA *saveMiscData, int chunkId, u32 key0, u32 key1, u8 a4);
+void SaveMisc_GetExtraChunkKeys(SAVE_MISC_DATA *saveMiscData, int chunkId, u32 *key0, u32 *key1, u8 *lastSlot);
+void SaveMisc_SetExtraChunkKeys(SAVE_MISC_DATA *saveMiscData, int chunkId, u32 key0, u32 key1, u8 lastSlot);
 
 #endif // POKEHEARTGOLD_SAVE_MISC_DATA_H

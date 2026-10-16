@@ -197,10 +197,10 @@ static void FieldSystem_UpdateMapLoadTypeForMap(FieldSystem *fieldSystem) {
 
 static void FieldSystem_EnterLocation(FieldSystem *fieldSystem, Location *location) {
     LocalFieldData *localFieldData = Save_LocalFieldData_Get(fieldSystem->saveData);
-    Location *r2 = LocalFieldData_GetPreviousPosition(localFieldData);
+    Location *prevPosition = LocalFieldData_GetPreviousPosition(localFieldData);
     const WarpEvent *warp;
     if (location != NULL) {
-        *r2 = *fieldSystem->location;
+        *prevPosition = *fieldSystem->location;
         *fieldSystem->location = *location;
     }
     Field_InitMapEvents(fieldSystem, fieldSystem->location->mapId);

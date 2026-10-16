@@ -167,7 +167,7 @@ static TouchSaveAppStateFunc sTouchSaveAppStateFuncs[TOUCHSAVEAPP_STATE_COUNT] =
     TouchSaveApp_CloseApp,
 };
 
-SysTask *TouchSaveApp_Init(BgConfig *bgConfig, void *a1, FieldSystem *fieldSystem, void *a3) {
+SysTask *TouchSaveApp_Init(BgConfig *bgConfig, void *lastTouchMenuInput, FieldSystem *fieldSystem, void *a3) {
     Heap_Create(HEAP_ID_3, HEAP_ID_8, 0x18000);
 
     GXS_SetGraphicsMode(GX_BGMODE_0);
@@ -193,7 +193,7 @@ SysTask *TouchSaveApp_Init(BgConfig *bgConfig, void *a1, FieldSystem *fieldSyste
     data->task = task;
     data->unk0 = 0;
     data->bgConfig = bgConfig;
-    data->lastTouchMenuInput = a1;
+    data->lastTouchMenuInput = lastTouchMenuInput;
     data->fieldSystem = fieldSystem;
     data->unk30 = 0;
     data->options = Save_PlayerData_GetOptionsAddr(data->fieldSystem->saveData);
@@ -311,10 +311,10 @@ static void TouchSaveApp_CreateYesNoPrompt(TouchSaveAppData *data) {
 
     BgClearTilemapBufferAndCommit(data->bgConfig, GF_BG_LYR_SUB_2);
 
-    YesNoPrompt *unk = YesNoPrompt_Create(HEAP_ID_FIELD1);
-    data->yesNoPrompt = unk;
+    YesNoPrompt *yesNoPrompt = YesNoPrompt_Create(HEAP_ID_FIELD1);
+    data->yesNoPrompt = yesNoPrompt;
 
-    YesNoPrompt_InitFromTemplate(unk, &template);
+    YesNoPrompt_InitFromTemplate(yesNoPrompt, &template);
 }
 
 static void TouchSaveApp_SetupWaitForTextPrinter(TouchSaveAppData *data, enum TouchSaveApp_State nextState) {
@@ -323,9 +323,9 @@ static void TouchSaveApp_SetupWaitForTextPrinter(TouchSaveAppData *data, enum To
 }
 
 static BOOL TouchSaveApp_DisplaySaveInformation(TouchSaveAppData *data) {
-    struct SaveStatsPrinter *unk = Field_SaveStatsPrinter_NewTouchSave(data->fieldSystem, HEAP_ID_FIELD1, 5);
-    data->saveStatsPrinter = unk;
-    Field_SaveStatsPrinter_PrintTouchSave(unk);
+    struct SaveStatsPrinter *printer = Field_SaveStatsPrinter_NewTouchSave(data->fieldSystem, HEAP_ID_FIELD1, 5);
+    data->saveStatsPrinter = printer;
+    Field_SaveStatsPrinter_PrintTouchSave(printer);
 
     data->state = TOUCHSAVEAPP_STATE_ASK_TO_SAVE;
     return FALSE;

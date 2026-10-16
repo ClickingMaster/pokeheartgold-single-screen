@@ -478,7 +478,7 @@ const int MapPropOneShotAnimationManager_GetAnimationMapPropModelID(MapPropOneSh
     return oneShotAnimation->mapPropModelID;
 }
 
-void MapPropAnimationManager_LoadPropAnimations(int fileCount, NNSG3dResMdl *resMdl, NNSG3dRenderObj *renderObj, NNSG3dResTex *resTex, MapPropAnimListFile *animListFile, MapPropAnimationManager *mapPropAnimationManager, TimeOfDayPropAnimManager *unk104) {
+void MapPropAnimationManager_LoadPropAnimations(int fileCount, NNSG3dResMdl *resMdl, NNSG3dRenderObj *renderObj, NNSG3dResTex *resTex, MapPropAnimListFile *animListFile, MapPropAnimationManager *mapPropAnimationManager, TimeOfDayPropAnimManager *timeOfDayAnimManager) {
     int archiveID;
     int i, j;
     u8 k = 0;
@@ -538,8 +538,8 @@ void MapPropAnimationManager_LoadPropAnimations(int fileCount, NNSG3dResMdl *res
     }
         
     if (animListFile->flags == (1 << 3)) {
-        MapPropAnimation_AddToRenderObj(renderObj, timeOfDayAnimations[TimeOfDayPropAnimManager_GetVisualState(unk104)]);
-        TimeOfDayPropAnimManager_AddProp(unk104, renderObj, &timeOfDayAnimations[0], 4);
+        MapPropAnimation_AddToRenderObj(renderObj, timeOfDayAnimations[TimeOfDayPropAnimManager_GetVisualState(timeOfDayAnimManager)]);
+        TimeOfDayPropAnimManager_AddProp(timeOfDayAnimManager, renderObj, &timeOfDayAnimations[0], 4);
     }
 }
 

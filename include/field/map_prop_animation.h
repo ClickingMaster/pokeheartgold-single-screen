@@ -89,7 +89,7 @@ void MapPropOneShotAnimationManager_PlayAnimationWithSoundEffect(MapPropOneShotA
 void MapPropOneShotAnimationManager_UnloadAnimation(MapPropAnimationManager *animManager, MapPropOneShotAnimationManager *oneShotAnimManager, const int tag);
 const BOOL MapPropOneShotAnimationManager_IsAnimationLoopFinished(MapPropOneShotAnimationManager *const oneShotAnimManager, const int tag);
 const int MapPropOneShotAnimationManager_GetAnimationMapPropModelID(MapPropOneShotAnimationManager *const oneShotAnimManager, const int tag);
-void MapPropAnimationManager_LoadPropAnimations(int fileCount, NNSG3dResMdl *resMdl, NNSG3dRenderObj *renderObj, NNSG3dResTex *resTex, MapPropAnimListFile *animListFile, MapPropAnimationManager *mapPropAnimationManager, TimeOfDayPropAnimManager *unk104);
+void MapPropAnimationManager_LoadPropAnimations(int fileCount, NNSG3dResMdl *resMdl, NNSG3dRenderObj *renderObj, NNSG3dResTex *resTex, MapPropAnimListFile *animListFile, MapPropAnimationManager *mapPropAnimationManager, TimeOfDayPropAnimManager *timeOfDayAnimManager);
 void MapPropOneShotAnimationManager_SetAnimationField35(MapPropOneShotAnimationManager *oneShotAnimManager, const int tag, u8 arg2);
 
 #endif // POKEHEARTGOLD_FIELD_MAP_PROP_ANIMATION_H

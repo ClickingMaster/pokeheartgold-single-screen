@@ -489,35 +489,35 @@ BOOL ScrCmd_CheckPokeathlonDailyMartHasStock(ScriptContext *ctx) {
     u16 *retPtr;
     PokeathlonSave *pokeathlon;
     SaveVarsFlags *varsFlags;
-    int r6;
-    int r4;
+    int numItems;
+    int numBought;
     RTCDate date;
-    const struct MartItem *r3;
+    const struct MartItem *items;
     int i;
 
     retPtr = ScriptGetVarPointer(ctx);
     pokeathlon = Save_Pokeathlon_Get(ctx->fieldSystem->saveData);
-    r6 = 0;
-    r4 = 0;
+    numItems = 0;
+    numBought = 0;
     varsFlags = Save_VarsFlags_Get(ctx->fieldSystem->saveData);
     GF_RTC_CopyDate(&date);
     if (Pokedex_GetNatDexFlag(Save_Pokedex_Get(ctx->fieldSystem->saveData))) {
-        r3 = _0210FA04[date.week + 7];
+        items = _0210FA04[date.week + 7];
     } else {
-        r3 = _0210FA04[date.week];
+        items = _0210FA04[date.week];
     }
     for (i = 0; i < 12; i++) {
-        if (r3[i].item_id == 0xFFFF) {
+        if (items[i].item_id == 0xFFFF) {
             break;
         }
-        r6++;
+        numItems++;
     }
     for (i = 0; i < 12; i++) {
         if (PokeathlonSave_IsDailyItemBought(pokeathlon, i)) {
-            r4++;
+            numBought++;
         }
     }
-    if (r6 <= r4) {
+    if (numItems <= numBought) {
         *retPtr = FALSE;
     } else {
         *retPtr = TRUE;

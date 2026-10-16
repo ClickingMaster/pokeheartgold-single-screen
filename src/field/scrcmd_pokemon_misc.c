@@ -81,20 +81,20 @@ typedef struct SpeciesListMenu {
 } SpeciesListMenu;
 
 static BOOL NativeScript_WaitSpeciesListMenu(ScriptContext *ctx);
-static void *LoadZukanSpeciesList(enum HeapID heapID, s32 fileId, int *unkPtr);
-static void SpeciesListMenu_SetMsgData(SpeciesListMenu *unkPtr, MsgData *msgdata);
-static void SpeciesListMenu_Init(FieldSystem *fieldSystem, SpeciesListMenu *unkPtr, u8 x, u8 y, u8 a4, u8 a5, u16 *input, MessageFormat *msgfmt, Window *window, MsgData *msgdata, u16 *cursorPos, u16 *itemsAbove);
-static SpeciesListMenu *SpeciesListMenu_New(FieldSystem *fieldSystem, u8 x, u8 y, u8 a3, u8 a4, u16 *input, MessageFormat *msgfmt, Window *window, MsgData *msgdata, u16 *cursorPos, u16 *itemsAbove);
-static void SpeciesListMenu_AddItem(SpeciesListMenu *unkPtr, int strNo, u16 a2, u32 value);
-static void SpeciesListMenu_Show(SpeciesListMenu *unkPtr);
-static void SpeciesListMenu_AddItemInternal(SpeciesListMenu *unkPtr, int strNo, u16 a2, u32 value);
-static void SpeciesListMenu_InitTemplate(SpeciesListMenu *unkPtr);
+static void *LoadZukanSpeciesList(enum HeapID heapID, s32 fileId, int *count);
+static void SpeciesListMenu_SetMsgData(SpeciesListMenu *menu, MsgData *msgdata);
+static void SpeciesListMenu_Init(FieldSystem *fieldSystem, SpeciesListMenu *menu, u8 x, u8 y, u8 initCursorPos, u8 a5, u16 *input, MessageFormat *msgfmt, Window *window, MsgData *msgdata, u16 *cursorPos, u16 *itemsAbove);
+static SpeciesListMenu *SpeciesListMenu_New(FieldSystem *fieldSystem, u8 x, u8 y, u8 initCursorPos, u8 a4, u16 *input, MessageFormat *msgfmt, Window *window, MsgData *msgdata, u16 *cursorPos, u16 *itemsAbove);
+static void SpeciesListMenu_AddItem(SpeciesListMenu *menu, int strNo, u16 msgId, u32 value);
+static void SpeciesListMenu_Show(SpeciesListMenu *menu);
+static void SpeciesListMenu_AddItemInternal(SpeciesListMenu *menu, int strNo, u16 msgId, u32 value);
+static void SpeciesListMenu_InitTemplate(SpeciesListMenu *menu);
 static void SpeciesListMenu_ItemPrintFunc(struct ListMenu *listMenu, s32 value, u8 unused);
 static void SpeciesListMenu_MoveCursorFunc(struct ListMenu *listMenu, s32 unused1, u8 unused2);
 static void SpeciesListMenu_Task(SysTask *sysTask, void *work);
-static void SpeciesListMenu_Close(SpeciesListMenu *unkPtr);
+static void SpeciesListMenu_Close(SpeciesListMenu *menu);
 static void GetHiddenPowerPowerType(Pokemon *mon, s32 *power, s32 *type);
-static LocalMapObject *FriendshipRoom_CreateStatueObject(MapObjectManager *mapObjectManager, u8 unkA, u16 species, u16 form, u32 gender, u32 x, u32 y, u32 mapId);
+static LocalMapObject *FriendshipRoom_CreateStatueObject(MapObjectManager *mapObjectManager, u8 slot, u16 species, u16 form, u32 gender, u32 x, u32 y, u32 mapId);
 
 // zukan_data_XXXXX
 static u16 sSpeciesListZukanFiles[9] = {
@@ -112,13 +112,13 @@ static u16 sSpeciesListZukanFiles[9] = {
 BOOL ScrCmd_BattleHallRecordSpeciesListMenu(ScriptContext *ctx) {
     int i;
     u32 out_1;
-    int out_2;
+    int numSpecies;
     u16 *input;
-    u32 unkPtr_2;
+    u32 record;
 
     MsgData *msgdata2;
-    SpeciesListMenu *unkPtr;
-    u32 *unkG;
+    SpeciesListMenu *menu;
+    u32 *records;
     u16 *data;
     u16 *cursorPos;
     u16 *itemsAbove;
@@ -128,50 +128,50 @@ BOOL ScrCmd_BattleHallRecordSpeciesListMenu(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
 
     msgfmt = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
-    u32 unkA = ScriptGetVar(ctx);
+    u32 recordsType = ScriptGetVar(ctx);
     u32 fileIndex = ScriptGetVar(ctx);
-    u16 unkC = ScriptReadHalfword(ctx);
-    u16 unkD = ScriptReadHalfword(ctx);
-    u16 unkE = ScriptReadHalfword(ctx);
+    u16 inputVar = ScriptReadHalfword(ctx);
+    u16 cursorPosVar = ScriptReadHalfword(ctx);
+    u16 itemsAboveVar = ScriptReadHalfword(ctx);
 
-    ctx->data[0] = unkC;
+    ctx->data[0] = inputVar;
 
     msgdata = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 237, HEAP_ID_FIELD3);
 
-    input = GetVarPointer(fieldSystem, unkC);
+    input = GetVarPointer(fieldSystem, inputVar);
 
     window = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_WINDOW);
 
-    cursorPos = GetVarPointer(fieldSystem, unkD);
-    itemsAbove = GetVarPointer(fieldSystem, unkE);
+    cursorPos = GetVarPointer(fieldSystem, cursorPosVar);
+    itemsAbove = GetVarPointer(fieldSystem, itemsAboveVar);
 
-    unkPtr = SpeciesListMenu_New(fieldSystem, 20, 1, 0, 1, input, *msgfmt, window, msgdata, cursorPos, itemsAbove);
+    menu = SpeciesListMenu_New(fieldSystem, 20, 1, 0, 1, input, *msgfmt, window, msgdata, cursorPos, itemsAbove);
 
-    unkG = FrontierSpeciesRecords_Load(fieldSystem->saveData, 0xb, &out_1);
+    records = FrontierSpeciesRecords_Load(fieldSystem->saveData, 0xb, &out_1);
 
     if (out_1 == 1) {
-        data = LoadZukanSpeciesList(HEAP_ID_FIELD3, sSpeciesListZukanFiles[fileIndex], &out_2);
+        data = LoadZukanSpeciesList(HEAP_ID_FIELD3, sSpeciesListZukanFiles[fileIndex], &numSpecies);
 
-        for (i = 0; i < out_2; i++) {
-            unkPtr_2 = FrontierSpeciesRecords_Get(fieldSystem->saveData, unkG, BattleHall_GetSpeciesRecordsType(unkA), data[i]);
-            if (unkPtr_2 != 0) {
-                SpeciesListMenu_AddItem(unkPtr, data[i], 0xff, data[i]);
+        for (i = 0; i < numSpecies; i++) {
+            record = FrontierSpeciesRecords_Get(fieldSystem->saveData, records, BattleHall_GetSpeciesRecordsType(recordsType), data[i]);
+            if (record != 0) {
+                SpeciesListMenu_AddItem(menu, data[i], 0xff, data[i]);
             }
         }
         Heap_Free(data);
     }
-    if (unkG) {
-        Heap_Free(unkG);
+    if (records) {
+        Heap_Free(records);
     }
 
     msgdata2 = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0191_bin, HEAP_ID_FIELD3);
 
-    SpeciesListMenu_SetMsgData(unkPtr, msgdata2);
-    SpeciesListMenu_AddItem(unkPtr, 0xd, 0xff, 0xfffe);
+    SpeciesListMenu_SetMsgData(menu, msgdata2);
+    SpeciesListMenu_AddItem(menu, 0xd, 0xff, 0xfffe);
     DestroyMsgData(msgdata2);
 
-    SpeciesListMenu_SetMsgData(unkPtr, msgdata);
-    SpeciesListMenu_Show(unkPtr);
+    SpeciesListMenu_SetMsgData(menu, msgdata);
+    SpeciesListMenu_Show(menu);
 
     SetupNativeScript(ctx, NativeScript_WaitSpeciesListMenu);
 
@@ -184,113 +184,113 @@ static BOOL NativeScript_WaitSpeciesListMenu(ScriptContext *ctx) {
     return *GetVarPointer(ctx->fieldSystem, ctx->data[0]) != 0xEEEE;
 }
 
-static void *LoadZukanSpeciesList(enum HeapID heapID, s32 fileId, int *unkPtr) {
+static void *LoadZukanSpeciesList(enum HeapID heapID, s32 fileId, int *count) {
     u32 size;
     void *data = GfGfxLoader_LoadFromNarc_GetSizeOut(NARC_application_zukanlist_zkn_data_zukan_data, fileId, FALSE, heapID, FALSE, &size);
-    *unkPtr = size / 2;
+    *count = size / 2;
     return data;
 }
 
-static void SpeciesListMenu_SetMsgData(SpeciesListMenu *unkPtr, MsgData *msgdata) {
-    unkPtr->msgdata = msgdata;
+static void SpeciesListMenu_SetMsgData(SpeciesListMenu *menu, MsgData *msgdata) {
+    menu->msgdata = msgdata;
 }
 
-static void SpeciesListMenu_Init(FieldSystem *fieldSystem, SpeciesListMenu *unkPtr, u8 x, u8 y, u8 a4, u8 a5, u16 *input, MessageFormat *msgfmt, Window *window, MsgData *msgdata, u16 *cursorPos, u16 *itemsAbove) {
+static void SpeciesListMenu_Init(FieldSystem *fieldSystem, SpeciesListMenu *menu, u8 x, u8 y, u8 initCursorPos, u8 a5, u16 *input, MessageFormat *msgfmt, Window *window, MsgData *msgdata, u16 *cursorPos, u16 *itemsAbove) {
     int i;
-    unkPtr->msgdata = msgdata;
-    unkPtr->flags = unkPtr->flags & ~0x2;
-    unkPtr->msgfmt = msgfmt;
-    unkPtr->fieldSystem = fieldSystem;
-    unkPtr->input = input;
+    menu->msgdata = msgdata;
+    menu->flags = menu->flags & ~0x2;
+    menu->msgfmt = msgfmt;
+    menu->fieldSystem = fieldSystem;
+    menu->input = input;
     i = 0;
-    *unkPtr->input = 0;
-    unkPtr->cursorPos = cursorPos;
-    unkPtr->itemsAbove = itemsAbove;
-    unkPtr->flags = unkPtr->flags & ~1 | a5 & 1;
-    unkPtr->initCursorPos = a4;
-    unkPtr->x = x;
-    unkPtr->y = y;
-    unkPtr->totalItems = 0;
-    unkPtr->window_18 = window;
-    unkPtr->delay = 3;
-    unkPtr->lastRow = a4;
+    *menu->input = 0;
+    menu->cursorPos = cursorPos;
+    menu->itemsAbove = itemsAbove;
+    menu->flags = menu->flags & ~1 | a5 & 1;
+    menu->initCursorPos = initCursorPos;
+    menu->x = x;
+    menu->y = y;
+    menu->totalItems = 0;
+    menu->window_18 = window;
+    menu->delay = 3;
+    menu->lastRow = initCursorPos;
 
     for (i = 0; i < 0x78; i++) {
-        unkPtr->items[i].text = NULL;
-        unkPtr->items[i].value = 0;
-        unkPtr->msgIds[i] = 0xff;
+        menu->items[i].text = NULL;
+        menu->items[i].value = 0;
+        menu->msgIds[i] = 0xff;
     }
 
     for (i = 0; i < 0x78; i++) {
-        unkPtr->stringArr_1C[i] = String_New(0x50, HEAP_ID_FIELD1);
+        menu->stringArr_1C[i] = String_New(0x50, HEAP_ID_FIELD1);
     }
 
-    *unkPtr->input = 0xEEEE;
+    *menu->input = 0xEEEE;
 }
 
-static SpeciesListMenu *SpeciesListMenu_New(FieldSystem *fieldSystem, u8 x, u8 y, u8 a3, u8 a4, u16 *input, MessageFormat *msgfmt, Window *window, MsgData *msgdata, u16 *cursorPos, u16 *itemsAbove) {
-    SpeciesListMenu *unkPtr = Heap_Alloc(HEAP_ID_FIELD1, sizeof(SpeciesListMenu));
-    if (!unkPtr) {
+static SpeciesListMenu *SpeciesListMenu_New(FieldSystem *fieldSystem, u8 x, u8 y, u8 initCursorPos, u8 a4, u16 *input, MessageFormat *msgfmt, Window *window, MsgData *msgdata, u16 *cursorPos, u16 *itemsAbove) {
+    SpeciesListMenu *menu = Heap_Alloc(HEAP_ID_FIELD1, sizeof(SpeciesListMenu));
+    if (!menu) {
         return NULL;
     }
-    memset(unkPtr, 0, sizeof(SpeciesListMenu));
-    SpeciesListMenu_Init(fieldSystem, unkPtr, x, y, a3, a4, input, msgfmt, window, msgdata, cursorPos, itemsAbove);
-    return unkPtr;
+    memset(menu, 0, sizeof(SpeciesListMenu));
+    SpeciesListMenu_Init(fieldSystem, menu, x, y, initCursorPos, a4, input, msgfmt, window, msgdata, cursorPos, itemsAbove);
+    return menu;
 }
 
-static void SpeciesListMenu_AddItem(SpeciesListMenu *unkPtr, int strNo, u16 a2, u32 value) {
-    SpeciesListMenu_AddItemInternal(unkPtr, strNo, a2, value);
+static void SpeciesListMenu_AddItem(SpeciesListMenu *menu, int strNo, u16 msgId, u32 value) {
+    SpeciesListMenu_AddItemInternal(menu, strNo, msgId, value);
 }
 
-static void SpeciesListMenu_Show(SpeciesListMenu *unkPtr) {
-    u32 unk = unkPtr->totalItems;
-    if (unk > 8) {
-        AddWindowParameterized(unkPtr->fieldSystem->bgConfig, &unkPtr->window_8, 3, unkPtr->x, unkPtr->y, 11, 0x10, 13, 1);
+static void SpeciesListMenu_Show(SpeciesListMenu *menu) {
+    u32 numItems = menu->totalItems;
+    if (numItems > 8) {
+        AddWindowParameterized(menu->fieldSystem->bgConfig, &menu->window_8, 3, menu->x, menu->y, 11, 0x10, 13, 1);
     } else {
-        AddWindowParameterized(unkPtr->fieldSystem->bgConfig, &unkPtr->window_8, 3, unkPtr->x, unkPtr->y, 11, 2 * unk, 13, 1);
+        AddWindowParameterized(menu->fieldSystem->bgConfig, &menu->window_8, 3, menu->x, menu->y, 11, 2 * numItems, 13, 1);
     }
-    LoadUserFrameGfx1(unkPtr->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0x3D9, 11, 0, HEAP_ID_FIELD1);
-    DrawFrameAndWindow1(&unkPtr->window_8, TRUE, 0x3D9, 11);
-    SpeciesListMenu_InitTemplate(unkPtr);
-    unkPtr->listMenu_23C = ListMenuInit(&unkPtr->listMenuTemplate, *unkPtr->cursorPos, *unkPtr->itemsAbove, HEAP_ID_FIELD1);
-    unkPtr->sysTask = SysTask_CreateOnMainQueue(SpeciesListMenu_Task, unkPtr, 0);
+    LoadUserFrameGfx1(menu->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0x3D9, 11, 0, HEAP_ID_FIELD1);
+    DrawFrameAndWindow1(&menu->window_8, TRUE, 0x3D9, 11);
+    SpeciesListMenu_InitTemplate(menu);
+    menu->listMenu_23C = ListMenuInit(&menu->listMenuTemplate, *menu->cursorPos, *menu->itemsAbove, HEAP_ID_FIELD1);
+    menu->sysTask = SysTask_CreateOnMainQueue(SpeciesListMenu_Task, menu, 0);
 }
 
-static void SpeciesListMenu_AddItemInternal(SpeciesListMenu *unkPtr, int strNo, u16 a2, u32 value) {
+static void SpeciesListMenu_AddItemInternal(SpeciesListMenu *menu, int strNo, u16 msgId, u32 value) {
     String *str = String_New(0x50, HEAP_ID_FIELD1);
-    ReadMsgDataIntoString(unkPtr->msgdata, strNo, str);
-    StringExpandPlaceholders(unkPtr->msgfmt, unkPtr->stringArr_1C[unkPtr->totalItems], str);
-    unkPtr->items[unkPtr->totalItems].text = unkPtr->stringArr_1C[unkPtr->totalItems];
+    ReadMsgDataIntoString(menu->msgdata, strNo, str);
+    StringExpandPlaceholders(menu->msgfmt, menu->stringArr_1C[menu->totalItems], str);
+    menu->items[menu->totalItems].text = menu->stringArr_1C[menu->totalItems];
     String_Delete(str);
     if (value == 0xfa) {
-        unkPtr->items[unkPtr->totalItems].value = -3;
+        menu->items[menu->totalItems].value = -3;
     } else {
-        unkPtr->items[unkPtr->totalItems].value = value;
+        menu->items[menu->totalItems].value = value;
     }
-    unkPtr->msgIds[unkPtr->totalItems] = a2;
-    unkPtr->totalItems++;
+    menu->msgIds[menu->totalItems] = msgId;
+    menu->totalItems++;
 }
 
-static void SpeciesListMenu_InitTemplate(SpeciesListMenu *unkPtr) {
-    unkPtr->listMenuTemplate.items = unkPtr->items;
-    unkPtr->listMenuTemplate.moveCursorFunc = SpeciesListMenu_MoveCursorFunc;
-    unkPtr->listMenuTemplate.itemPrintFunc = SpeciesListMenu_ItemPrintFunc;
-    unkPtr->listMenuTemplate.window = &unkPtr->window_8;
-    unkPtr->listMenuTemplate.totalItems = unkPtr->totalItems;
-    unkPtr->listMenuTemplate.maxShowed = 8;
-    unkPtr->listMenuTemplate.header_X = 1;
-    unkPtr->listMenuTemplate.item_X = 12;
-    unkPtr->listMenuTemplate.cursor_X = 2;
-    unkPtr->listMenuTemplate.upText_Y = 1;
-    unkPtr->listMenuTemplate.cursorPal = 1;
-    unkPtr->listMenuTemplate.fillValue = 15;
-    unkPtr->listMenuTemplate.cursorShadowPal = 2;
-    unkPtr->listMenuTemplate.lettersSpacing = 0;
-    unkPtr->listMenuTemplate.itemVerticalPadding = 0;
-    unkPtr->listMenuTemplate.scrollMultiple = 1;
-    unkPtr->listMenuTemplate.fontId = 0;
-    unkPtr->listMenuTemplate.cursorKind = 0;
-    unkPtr->listMenuTemplate.data = unkPtr;
+static void SpeciesListMenu_InitTemplate(SpeciesListMenu *menu) {
+    menu->listMenuTemplate.items = menu->items;
+    menu->listMenuTemplate.moveCursorFunc = SpeciesListMenu_MoveCursorFunc;
+    menu->listMenuTemplate.itemPrintFunc = SpeciesListMenu_ItemPrintFunc;
+    menu->listMenuTemplate.window = &menu->window_8;
+    menu->listMenuTemplate.totalItems = menu->totalItems;
+    menu->listMenuTemplate.maxShowed = 8;
+    menu->listMenuTemplate.header_X = 1;
+    menu->listMenuTemplate.item_X = 12;
+    menu->listMenuTemplate.cursor_X = 2;
+    menu->listMenuTemplate.upText_Y = 1;
+    menu->listMenuTemplate.cursorPal = 1;
+    menu->listMenuTemplate.fillValue = 15;
+    menu->listMenuTemplate.cursorShadowPal = 2;
+    menu->listMenuTemplate.lettersSpacing = 0;
+    menu->listMenuTemplate.itemVerticalPadding = 0;
+    menu->listMenuTemplate.scrollMultiple = 1;
+    menu->listMenuTemplate.fontId = 0;
+    menu->listMenuTemplate.cursorKind = 0;
+    menu->listMenuTemplate.data = menu;
 }
 
 static void SpeciesListMenu_ItemPrintFunc(struct ListMenu *listMenu, s32 value, u8 unused) {
@@ -303,65 +303,65 @@ static void SpeciesListMenu_ItemPrintFunc(struct ListMenu *listMenu, s32 value, 
 
 static void SpeciesListMenu_MoveCursorFunc(struct ListMenu *listMenu, s32 unused1, u8 unused2) {
     u16 cursorPos = 0, itemsAbove = 0;
-    SpeciesListMenu *unkPtr = (SpeciesListMenu *)ListMenuGetTemplateField(listMenu, LISTMENUATTR_DATA);
+    SpeciesListMenu *menu = (SpeciesListMenu *)ListMenuGetTemplateField(listMenu, LISTMENUATTR_DATA);
     ListMenuGetScrollAndRow(listMenu, &cursorPos, &itemsAbove);
-    if (unkPtr->cursorPos != 0 && unkPtr->itemsAbove != 0) {
-        *unkPtr->cursorPos = cursorPos;
-        *unkPtr->itemsAbove = itemsAbove;
+    if (menu->cursorPos != 0 && menu->itemsAbove != 0) {
+        *menu->cursorPos = cursorPos;
+        *menu->itemsAbove = itemsAbove;
     }
 }
 
 static void SpeciesListMenu_Task(SysTask *sysTask, void *work) {
     u16 prev;
     int input;
-    SpeciesListMenu *unkPtr = work;
-    if (unkPtr->delay) {
-        unkPtr->delay--;
+    SpeciesListMenu *menu = work;
+    if (menu->delay) {
+        menu->delay--;
         return;
     }
     if (IsPaletteFadeFinished()) {
-        input = ListMenu_ProcessInput(unkPtr->listMenu_23C);
-        prev = unkPtr->lastRow;
-        ListMenuGetCurrentItemArrayId(unkPtr->listMenu_23C, &unkPtr->lastRow);
-        if (prev != unkPtr->lastRow) {
+        input = ListMenu_ProcessInput(menu->listMenu_23C);
+        prev = menu->lastRow;
+        ListMenuGetCurrentItemArrayId(menu->listMenu_23C, &menu->lastRow);
+        if (prev != menu->lastRow) {
             PlaySE(SEQ_SE_DP_SELECT);
         }
         switch (input) {
         case -2:
-            if (((u32)(unkPtr->flags << 0x1f) >> 0x1f) == 1) {
+            if (((u32)(menu->flags << 0x1f) >> 0x1f) == 1) {
                 PlaySE(SEQ_SE_DP_SELECT);
-                *unkPtr->input = -2;
-                SpeciesListMenu_Close(unkPtr);
+                *menu->input = -2;
+                SpeciesListMenu_Close(menu);
             }
         case -1:
             break;
         default:
             PlaySE(SEQ_SE_DP_SELECT);
-            *unkPtr->input = input;
-            SpeciesListMenu_Close(unkPtr);
+            *menu->input = input;
+            SpeciesListMenu_Close(menu);
             break;
         }
     }
 }
 
-static void SpeciesListMenu_Close(SpeciesListMenu *unkPtr) {
+static void SpeciesListMenu_Close(SpeciesListMenu *menu) {
     int i;
     PlaySE(SEQ_SE_DP_SELECT);
-    DestroyListMenu(unkPtr->listMenu_23C, NULL, NULL);
-    EraseFrameAndWindow1(unkPtr->listMenuTemplate.window, FALSE);
-    RemoveWindow(&unkPtr->window_8);
+    DestroyListMenu(menu->listMenu_23C, NULL, NULL);
+    EraseFrameAndWindow1(menu->listMenuTemplate.window, FALSE);
+    RemoveWindow(&menu->window_8);
 
     for (i = 0; i < 0x78; i++) {
-        String_Delete(unkPtr->stringArr_1C[i]);
+        String_Delete(menu->stringArr_1C[i]);
     }
 
-    if (((u32)(unkPtr->flags << 0x1e) >> 0x1f) == 1) {
-        DestroyMsgData(unkPtr->msgdata);
+    if (((u32)(menu->flags << 0x1e) >> 0x1f) == 1) {
+        DestroyMsgData(menu->msgdata);
     }
 
-    SysTask_Destroy(unkPtr->sysTask);
+    SysTask_Destroy(menu->sysTask);
 
-    Heap_Free(unkPtr);
+    Heap_Free(menu);
 }
 
 static const u16 sStatJudgeBestStatMsgIdxs[6] = {
@@ -620,7 +620,7 @@ BOOL ScrCmd_GetPartyMonForm(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_SetOtherObjectsFlag13(ScriptContext *ctx) {
-    int unkVar;
+    int index;
     FieldSystem *fieldSystem;
     MapObjectManager *mapObjectManager;
     LocalMapObject *playerObj;
@@ -629,7 +629,7 @@ BOOL ScrCmd_SetOtherObjectsFlag13(ScriptContext *ctx) {
     s32 y;
     VecFx32 vec;
 
-    unkVar = 0;
+    index = 0;
 
     fieldSystem = ctx->fieldSystem;
     mapObjectManager = fieldSystem->mapObjectManager;
@@ -639,7 +639,7 @@ BOOL ScrCmd_SetOtherObjectsFlag13(ScriptContext *ctx) {
 
     y = vec.y;
 
-    while (MapObjectManager_GetNextObjectWithFlagFromIndex(mapObjectManager, &curObj, &unkVar, MAPOBJECTFLAG_ACTIVE) == TRUE) {
+    while (MapObjectManager_GetNextObjectWithFlagFromIndex(mapObjectManager, &curObj, &index, MAPOBJECTFLAG_ACTIVE) == TRUE) {
         if (curObj == playerObj) {
             continue;
         }
@@ -703,14 +703,14 @@ BOOL ScrCmd_CheckMonSeen(ScriptContext *ctx) {
 
 // Related to the trapped floor in the rocket hideout
 BOOL ScrCmd_PlayTrapEffect(ScriptContext *ctx) {
-    u32 unkVar = ScriptGetVar(ctx);
-    ShowTrapEffect(ctx->fieldSystem->taskman, unkVar);
+    u32 kind = ScriptGetVar(ctx);
+    ShowTrapEffect(ctx->fieldSystem->taskman, kind);
     return TRUE;
 }
 
 BOOL ScrCmd_ShowLegendaryWing(ScriptContext *ctx) {
-    u32 unkVar = ScriptGetVar(ctx);
-    ShowLegendaryWing(ctx->fieldSystem->taskman, unkVar);
+    u32 kind = ScriptGetVar(ctx);
+    ShowLegendaryWing(ctx->fieldSystem->taskman, kind);
     return TRUE;
 }
 
@@ -747,53 +747,53 @@ BOOL ScrCmd_OpenAlphHiddenRoom(ScriptContext *ctx) {
     return TRUE;
 }
 
-static u32 ClampToU16Max(u32 unkA) {
+static u32 ClampToU16Max(u32 value) {
     u16 ret = 0xFFFF;
-    if (unkA <= ret) {
-        ret = unkA;
+    if (value <= ret) {
+        ret = value;
     }
     return ret;
 }
 
 // Related to Pokeathlon "Ball Sign"- whatever that is
 BOOL ScrCmd_GetPokeathlonStat(ScriptContext *ctx) {
-    u8 unkVar = ScriptGetVar(ctx);
-    u16 *unkPtrA = ScriptGetVarPointer(ctx);
+    u8 statId = ScriptGetVar(ctx);
+    u16 *result = ScriptGetVarPointer(ctx);
 
-    PokeathlonStatistics *unkPtrB = PokeathlonSave_GetStatistics(Save_Pokeathlon_Get(ctx->fieldSystem->saveData));
+    PokeathlonStatistics *stats = PokeathlonSave_GetStatistics(Save_Pokeathlon_Get(ctx->fieldSystem->saveData));
 
-    if (unkVar <= 9) {
-        *unkPtrA = ClampToU16Max(unkPtrB->eventFirstPlaces[unkVar]);
+    if (statId <= 9) {
+        *result = ClampToU16Max(stats->eventFirstPlaces[statId]);
         return FALSE;
     }
 
-    switch (unkVar - 10) {
+    switch (statId - 10) {
     case 0:
-        *unkPtrA = ClampToU16Max(unkPtrB->courseFirstPlaces);
+        *result = ClampToU16Max(stats->courseFirstPlaces);
         break;
     case 1:
-        *unkPtrA = ClampToU16Max(unkPtrB->fanCount);
+        *result = ClampToU16Max(stats->fanCount);
         break;
     case 2:
-        *unkPtrA = ClampToU16Max(unkPtrB->coursesJoined);
+        *result = ClampToU16Max(stats->coursesJoined);
         break;
     case 3:
-        *unkPtrA = ClampToU16Max(unkPtrB->monInstructions);
+        *result = ClampToU16Max(stats->monInstructions);
         break;
     case 4:
-        *unkPtrA = ClampToU16Max(unkPtrB->monJumps);
+        *result = ClampToU16Max(stats->monJumps);
         break;
     case 5:
-        *unkPtrA = ClampToU16Max(unkPtrB->monTackles);
+        *result = ClampToU16Max(stats->monTackles);
         break;
     case 6:
-        *unkPtrA = ClampToU16Max(unkPtrB->monDashes);
+        *result = ClampToU16Max(stats->monDashes);
         break;
     case 7:
-        *unkPtrA = ClampToU16Max(unkPtrB->monSwitches);
+        *result = ClampToU16Max(stats->monSwitches);
         break;
     default:
-        *unkPtrA = 0;
+        *result = 0;
         break;
     }
 
@@ -804,24 +804,24 @@ BOOL ScrCmd_GetPokeathlonStat(ScriptContext *ctx) {
 BOOL ScrCmd_AdjustPokeathlonStat11(ScriptContext *ctx) {
     s32 val;
 
-    u8 unkA = ScriptReadByte(ctx);
-    u32 unkB = ScriptGetVar(ctx);
+    u8 subtract = ScriptReadByte(ctx);
+    u32 amount = ScriptGetVar(ctx);
 
-    PokeathlonStatistics *unkPtr = PokeathlonSave_GetStatistics2(Save_Pokeathlon_Get(ctx->fieldSystem->saveData));
+    PokeathlonStatistics *stats = PokeathlonSave_GetStatistics2(Save_Pokeathlon_Get(ctx->fieldSystem->saveData));
 
-    if (unkA == 0) {
-        val = unkPtr->fanCount + unkB;
+    if (subtract == 0) {
+        val = stats->fanCount + amount;
         if ((u32)val > 0xFFFF) {
-            unkPtr->fanCount = 0xFFFF;
+            stats->fanCount = 0xFFFF;
         } else {
-            unkPtr->fanCount = val;
+            stats->fanCount = val;
         }
     } else {
-        val = unkPtr->fanCount - unkB;
+        val = stats->fanCount - amount;
         if (val < 0) {
-            unkPtr->fanCount = 0;
+            stats->fanCount = 0;
         } else {
-            unkPtr->fanCount = val;
+            stats->fanCount = val;
         }
     }
 
@@ -847,8 +847,8 @@ BOOL ScrCmd_ClearKurtApricorn(ScriptContext *ctx) {
 
 // Related to Kurt
 BOOL ScrCmd_GetKurtBall(ScriptContext *ctx) {
-    u16 *unkPtr = ScriptGetVarPointer(ctx);
-    *unkPtr = ApricornBox_GetKurtBall(Save_ApricornBox_Get(ctx->fieldSystem->saveData));
+    u16 *ball = ScriptGetVarPointer(ctx);
+    *ball = ApricornBox_GetKurtBall(Save_ApricornBox_Get(ctx->fieldSystem->saveData));
     return FALSE;
 }
 
@@ -856,13 +856,13 @@ BOOL ScrCmd_GetKurtBall(ScriptContext *ctx) {
 BOOL ScrCmd_GetTotalApricornCount(ScriptContext *ctx) {
     s32 i;
     u32 cnt;
-    u16 *unkPtr = ScriptGetVarPointer(ctx);
+    u16 *count = ScriptGetVarPointer(ctx);
     cnt = 0;
     SaveApricornBox *apricornBox = Save_ApricornBox_Get(ctx->fieldSystem->saveData);
     for (i = 0; i < 7; i = i + 1) {
         cnt += ApricornBox_CountApricorn(apricornBox, i);
     }
-    *unkPtr = cnt;
+    *count = cnt;
     return FALSE;
 }
 
@@ -878,45 +878,45 @@ BOOL ScrCmd_LaunchApricornBoxForKurt(ScriptContext *ctx) { // todo: rename struc
 BOOL ScrCmd_LaunchApricornBoxForJuice(ScriptContext *ctx) {
     ApricornBoxArgs **args = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
     u32 unkVar = ScriptGetVar(ctx);
-    u16 *unkPtrB = ScriptGetVarPointer(ctx);
-    *args = ApricornBox_LaunchAppForJuice(ctx->fieldSystem, unkVar, unkPtrB);
+    u16 *juiceUsedVar = ScriptGetVarPointer(ctx);
+    *args = ApricornBox_LaunchAppForJuice(ctx->fieldSystem, unkVar, juiceUsedVar);
     SetupNativeScript(ctx, ScrNative_WaitApplication_DestroyTaskData);
     return TRUE;
 }
 
 // Related to aprijuice stand- viewing label
 BOOL ScrCmd_GetApricornJuiceOffer(ScriptContext *ctx) {
-    ApricornJuice unkOut;
+    ApricornJuice juice;
     RTCDate date;
     s32 unkVar;
     MessageFormat **msgfmt;
     SaveApricornBox *apricornBox;
     u16 *price;
-    u16 *unkPtrA;
+    u16 *juiceIndex;
     u16 *unkPtrC;
     String *str;
 
     apricornBox = Save_ApricornBox_Get(ctx->fieldSystem->saveData);
     msgfmt = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
     unkVar = ScriptGetVar(ctx);
-    unkPtrA = ScriptGetVarPointer(ctx);
+    juiceIndex = ScriptGetVarPointer(ctx);
     price = ScriptGetVarPointer(ctx);
     unkPtrC = ScriptGetVarPointer(ctx);
     GF_RTC_CopyDate(&date);
-    *unkPtrA = unkVar + 5;
-    if (!ApricornBox_GetJuice(apricornBox, *unkPtrA, &unkOut)) {
-        *unkPtrA = (date.week + 2 * unkVar) % 5;
-        ApricornBox_GetJuice(apricornBox, *unkPtrA, &unkOut);
+    *juiceIndex = unkVar + 5;
+    if (!ApricornBox_GetJuice(apricornBox, *juiceIndex, &juice)) {
+        *juiceIndex = (date.week + 2 * unkVar) % 5;
+        ApricornBox_GetJuice(apricornBox, *juiceIndex, &juice);
     }
-    str = ApricornBox_GetJuiceName(apricornBox, *unkPtrA, 0x20);
+    str = ApricornBox_GetJuiceName(apricornBox, *juiceIndex, 0x20);
     BufferString(*msgfmt, 0, str, 2, 1, gGameVersion); // buffer owner..?
     Heap_Free(str);
-    str = ApricornBox_GetJuiceFlavorName(apricornBox, *unkPtrA, 0x20);
+    str = ApricornBox_GetJuiceFlavorName(apricornBox, *juiceIndex, 0x20);
     BufferString(*msgfmt, 1, str, 2, 1, gGameVersion); // buffer juice type..?
     Heap_Free(str);
 
-    unkVar = ApricornJuice_GetFlavorTotal(&unkOut);
-    *price = (unkOut.unk0 / 10) + 2 * unkVar;
+    unkVar = ApricornJuice_GetFlavorTotal(&juice);
+    *price = (juice.unk0 / 10) + 2 * unkVar;
 
     if (*price < 100) {
         *price = 100;
@@ -926,9 +926,9 @@ BOOL ScrCmd_GetApricornJuiceOffer(ScriptContext *ctx) {
 
     BufferIntegerAsString(*msgfmt, 2, *price, 4, PRINTING_MODE_LEFT_ALIGN, 1);
     BufferIntegerAsString(*msgfmt, 3, unkVar, 3, PRINTING_MODE_LEFT_ALIGN, 1);          // richness..?
-    BufferIntegerAsString(*msgfmt, 4, unkOut.mildness, 3, PRINTING_MODE_LEFT_ALIGN, 1); // smoothness..?
+    BufferIntegerAsString(*msgfmt, 4, juice.mildness, 3, PRINTING_MODE_LEFT_ALIGN, 1); // smoothness..?
 
-    *unkPtrC = unkOut.unk0;
+    *unkPtrC = juice.unk0;
 
     return FALSE;
 }
@@ -950,7 +950,7 @@ BOOL ScrCmd_CreatePokeathlonFriendshipRoomStatues(ScriptContext *ctx) {
     u16 species;
     FieldSystem *fieldSystem = ctx->fieldSystem;
 
-    PokeathlonSave_FriendshipRecords *unkPtr = Save_Pokeathlon_FriendshipRecords_Get(fieldSystem->saveData);
+    PokeathlonSave_FriendshipRecords *records = Save_Pokeathlon_FriendshipRecords_Get(fieldSystem->saveData);
 
     for (i = 0; i < 3; i++) {
         LocalMapObject *mapObj = MapObjectManager_GetFirstActiveObjectByID(fieldSystem->mapObjectManager, 0xf6 + i);
@@ -959,22 +959,22 @@ BOOL ScrCmd_CreatePokeathlonFriendshipRoomStatues(ScriptContext *ctx) {
             MapObject_Delete(mapObj);
         }
 
-        species = unkPtr->friendshipRoomStatues[i].species;
+        species = records->friendshipRoomStatues[i].species;
 
         if (species != SPECIES_NONE && species <= SPECIES_ARCEUS) {
-            FriendshipRoom_CreateStatueObject(fieldSystem->mapObjectManager, (u8)i, species, unkPtr->friendshipRoomStatues[i].form, unkPtr->friendshipRoomStatues[i].gender, sFriendshipRoomStatuesPositions[i][0], sFriendshipRoomStatuesPositions[i][1], fieldSystem->location->mapId);
+            FriendshipRoom_CreateStatueObject(fieldSystem->mapObjectManager, (u8)i, species, records->friendshipRoomStatues[i].form, records->friendshipRoomStatues[i].gender, sFriendshipRoomStatuesPositions[i][0], sFriendshipRoomStatuesPositions[i][1], fieldSystem->location->mapId);
         }
     }
     return TRUE;
 }
 
-static LocalMapObject *FriendshipRoom_CreateStatueObject(MapObjectManager *mapObjectManager, u8 unkA, u16 species, u16 form, u32 gender, u32 x, u32 y, u32 mapId) {
+static LocalMapObject *FriendshipRoom_CreateStatueObject(MapObjectManager *mapObjectManager, u8 slot, u16 species, u16 form, u32 gender, u32 x, u32 y, u32 mapId) {
     LocalMapObject *mapObj;
     u32 spriteId;
     u32 size;
 
     spriteId = FollowMon_GetSpriteID(species, form, gender) << 1;
-    size = FollowMon_GetSizeParamBySpecies(species) * 3 + unkA;
+    size = FollowMon_GetSizeParamBySpecies(species) * 3 + slot;
 
     mapObj = MapObject_CreateWithParams(mapObjectManager, x, y, DIR_SOUTH, size + 0x19f, 0, mapId, 0, 0, spriteId);
 
@@ -982,7 +982,7 @@ static LocalMapObject *FriendshipRoom_CreateStatueObject(MapObjectManager *mapOb
         GF_AssertFail();
     }
 
-    MapObject_SetID(mapObj, unkA + 0xf6);
+    MapObject_SetID(mapObj, slot + 0xf6);
     MapObject_SetType(mapObj, 0);
     MapObject_SetEventFlag(mapObj, 0);
     MapObject_SetScriptID(mapObj, 0);
@@ -1080,11 +1080,11 @@ BOOL ScrCmd_GiveTogepiEgg(ScriptContext *ctx) {
 // unused
 BOOL ScrCmd_MonIsFromTogepiEgg(ScriptContext *ctx) {
     u32 partyIndex = ScriptGetVar(ctx);
-    u16 *unkPtr = ScriptGetVarPointer(ctx);
+    u16 *result = ScriptGetVarPointer(ctx);
 
     Pokemon *mon = Party_GetMonByIndex(SaveArray_Party_Get(ctx->fieldSystem->saveData), partyIndex);
 
-    *unkPtr = MonIsFromTogepiEgg(mon, ctx->fieldSystem->saveData);
+    *result = MonIsFromTogepiEgg(mon, ctx->fieldSystem->saveData);
 
     return FALSE;
 }
@@ -1117,8 +1117,8 @@ BOOL ScrCmd_GiveSpikyEarPichu(ScriptContext *ctx) {
     ZeroMonData(mon);
 
     u32 trId = PlayerProfile_GetTrainerID(profile);
-    u32 unkA = ChangePersonalityToNatureGenderAndAbility(trId, 0xac, NATURE_NAUGHTY, MON_FEMALE, 0, 0);
-    CreateMon(mon, SPECIES_PICHU, 30, 0x20, 1, unkA, 1, trId);
+    u32 personality = ChangePersonalityToNatureGenderAndAbility(trId, 0xac, NATURE_NAUGHTY, MON_FEMALE, 0, 0);
+    CreateMon(mon, SPECIES_PICHU, 30, 0x20, 1, personality, 1, trId);
 
     form = 1;
     SetMonData(mon, MON_DATA_FORM, &form);
@@ -1132,9 +1132,9 @@ BOOL ScrCmd_GiveSpikyEarPichu(ScriptContext *ctx) {
     heldItem = ITEM_ZAP_PLATE;
     SetMonData(mon, MON_DATA_HELD_ITEM, &heldItem);
 
-    u32 unkB = Mapsec_FromTypeAndIndex(MAPSECTYPE_NORMAL, MapHeader_GetMapSec(ctx->fieldSystem->location->mapId));
+    u32 mapsec = Mapsec_FromTypeAndIndex(MAPSECTYPE_NORMAL, MapHeader_GetMapSec(ctx->fieldSystem->location->mapId));
 
-    MonSetCatchData(mon, profile, 4, unkB, 0x18, HEAP_ID_FIELD2);
+    MonSetCatchData(mon, profile, 4, mapsec, 0x18, HEAP_ID_FIELD2);
 
     Party_AddMon(party, mon);
 

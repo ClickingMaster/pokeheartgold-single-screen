@@ -115,16 +115,16 @@ static void Task_BerryPotsApp_HarvestBerry(SysTask *task, BerryPotsHarvestBerryA
 }
 
 void BerryPotsApp_FormatMessage(BerryPotsAppData *data, enum BerryPotsAppMessage action, u8 potIndex) {
-    BerryPotsAppPot *unk = &data->pots[potIndex];
+    BerryPotsAppPot *pot = &data->pots[potIndex];
 
     switch (action) {
     case BERRY_POTS_APP_MSG_MULCH_LAID:
     case BERRY_POTS_APP_MSG_MULCH_SCATTERED:
-        BufferItemName(data->msgFmt, 2, MulchIdToItemId(unk->mulch));
+        BufferItemName(data->msgFmt, 2, MulchIdToItemId(pot->mulch));
         break;
     case BERRY_POTS_APP_MSG_HAS_BERRIES:
     case BERRY_POTS_APP_MSG_PICKED:
-        BufferIntegerAsString(data->msgFmt, 1, unk->quantityOrYieldMaybe, 2, PRINTING_MODE_LEFT_ALIGN, 0);
+        BufferIntegerAsString(data->msgFmt, 1, pot->quantityOrYieldMaybe, 2, PRINTING_MODE_LEFT_ALIGN, 0);
         // fallthrough
     case BERRY_POTS_APP_MSG_PLANTED:
     case BERRY_POTS_APP_MSG_SPROUTED:
@@ -133,7 +133,7 @@ void BerryPotsApp_FormatMessage(BerryPotsAppData *data, enum BerryPotsAppMessage
     case BERRY_POTS_APP_MSG_BERRY_PLANTED:
     case BERRY_POTS_APP_MSG_PUT_AWAY:
     case BERRY_POTS_APP_MSG_BAG_FULL: {
-        String *berryName = GetNutName(unk->berryId, data->heapID);
+        String *berryName = GetNutName(pot->berryId, data->heapID);
         BufferString(data->msgFmt, 0, berryName, 0, 0, 2);
         String_Delete(berryName);
         break;
@@ -254,11 +254,11 @@ static void Task_BerryPotsApp_GrowthAnim(SysTask *task, BerryPotsGrowthAnimArgs 
 
 u32 BerryPotsApp_HandleSelectPotInput(BerryPotsAppData *data) {
     BOOL flag = FALSE;
-    u32 r0 = BerryPotsApp_HandleSelectPotTouch(data, &flag);
+    u32 action = BerryPotsApp_HandleSelectPotTouch(data, &flag);
     if (!flag) {
-        r0 = BerryPotsApp_HandleSelectPotKeys(data);
+        action = BerryPotsApp_HandleSelectPotKeys(data);
     }
-    return r0;
+    return action;
 }
 
 BOOL BerryPotsApp_HandleWateringInput(BerryPotsAppData *data) {
@@ -330,18 +330,18 @@ static u32 BerryPotsApp_HandleSelectPotKeys(BerryPotsAppData *data) {
 }
 
 static u32 BerryPotsApp_HandleSelectPotTouch(BerryPotsAppData *data, BOOL *touched) {
-    int unk = BerryPotsApp_GetSelectPotTouch(data);
-    if (unk < 0) {
+    int potIndex = BerryPotsApp_GetSelectPotTouch(data);
+    if (potIndex < 0) {
         return 2;
     }
 
     *touched = TRUE;
     data->fieldMenuState = MENU_INPUT_STATE_TOUCH;
-    return BerryPotsApp_SelectPotAction(data, unk);
+    return BerryPotsApp_SelectPotAction(data, potIndex);
 }
 
 static BOOL BerryPotsApp_HandleWateringKeys(BerryPotsAppData *data) {
-    BOOL unk = FALSE;
+    BOOL moved = FALSE;
 
     if (data->nextWateringPot != 0xFF) {
         return FALSE;
@@ -353,13 +353,13 @@ static BOOL BerryPotsApp_HandleWateringKeys(BerryPotsAppData *data) {
 
     if (gSystem.newKeys & PAD_KEY_LEFT) {
         data->selectedPot = (data->selectedPot + (MAX_BERRY_POT - 1)) % MAX_BERRY_POT;
-        unk = TRUE;
+        moved = TRUE;
     } else if (gSystem.newKeys & PAD_KEY_RIGHT) {
         data->selectedPot = (data->selectedPot + 1) % MAX_BERRY_POT;
-        unk = TRUE;
+        moved = TRUE;
     }
 
-    if (unk) {
+    if (moved) {
         data->nextWateringPot = data->selectedPot;
         Sprite_SetAnimActiveFlag(data->sprites[1], FALSE);
         BerryPotsApp_UpdateCursor(data);
@@ -374,14 +374,14 @@ static BOOL BerryPotsApp_HandleWateringTouch(BerryPotsAppData *data, BOOL *touch
         return FALSE;
     }
 
-    int unk = BerryPotsApp_GetTouchedPot(data);
-    if (unk < 0 || data->selectedPot == unk) {
+    int potIndex = BerryPotsApp_GetTouchedPot(data);
+    if (potIndex < 0 || data->selectedPot == potIndex) {
         return FALSE;
     }
 
     *touched = TRUE;
     data->fieldMenuState = MENU_INPUT_STATE_TOUCH;
-    data->selectedPot = unk;
+    data->selectedPot = potIndex;
     data->nextWateringPot = data->selectedPot;
     Sprite_SetAnimActiveFlag(data->sprites[1], FALSE);
     BerryPotsApp_UpdateCursor(data);
@@ -415,9 +415,9 @@ static int BerryPotsApp_GetSelectPotTouch(BerryPotsAppData *data) {
         return 5;
     }
 
-    int unk = BerryPotsApp_GetTouchedPot(data);
-    if (unk >= 0) {
-        data->selectedPot = unk;
+    int potIndex = BerryPotsApp_GetTouchedPot(data);
+    if (potIndex >= 0) {
+        data->selectedPot = potIndex;
         BerryPotsApp_UpdateCursor(data);
         return 4;
     }
@@ -426,10 +426,10 @@ static int BerryPotsApp_GetSelectPotTouch(BerryPotsAppData *data) {
 }
 
 static u32 BerryPotsApp_GetPotMenuState(BerryPotsAppData *data) {
-    BerryPotsAppPot *unk = &data->pots[data->selectedPot];
-    switch (unk->growthStage) {
+    BerryPotsAppPot *pot = &data->pots[data->selectedPot];
+    switch (pot->growthStage) {
     case BERRY_POT_GROWTH_STAGE_NONE:
-        return (unk->mulch != MULCH_NONE) ? 4 : 3;
+        return (pot->mulch != MULCH_NONE) ? 4 : 3;
     case BERRY_POT_GROWTH_STAGE_PLANTED:
     case BERRY_POT_GROWTH_STAGE_SPROUTED:
     case BERRY_POT_GROWTH_STAGE_GROWING:

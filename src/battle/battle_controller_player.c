@@ -80,10 +80,10 @@ static void BattleControllerPlayer_AfterBattle(BattleSystem *battleSystem, Battl
 static void BattleControllerPlayer_DummyCommand45(BattleSystem *battleSystem, BattleContext *ctx);
 static BOOL BattleControllerPlayer_TryReplaceFaintedMons(BattleSystem *battleSystem, BattleContext *ctx);
 static BOOL BattleControllerPlayer_CheckBattleOver(BattleSystem *battleSystem, BattleContext *ctx);
-static BOOL BattleControllerPlayer_NeedsTargetSelection(BattleSystem *battleSystem, BattleContext *ctx, u8 battlerId, u32 battleType, int *out, int movePos, u32 *a6);
+static BOOL BattleControllerPlayer_NeedsTargetSelection(BattleSystem *battleSystem, BattleContext *ctx, u8 battlerId, u32 battleType, int *out, int movePos, u32 *side);
 static void BattleControllerPlayer_ResetActionStatus(BattleSystem *battleSystem, BattleContext *ctx);
-static BOOL TryFaintMon(BattleContext *ctx, ControllerCommand a1, ControllerCommand a2, int a3);
-static BOOL BattleControllerPlayer_TryGrantExp(BattleContext *ctx, ControllerCommand a1, ControllerCommand a2);
+static BOOL TryFaintMon(BattleContext *ctx, ControllerCommand commandNext, ControllerCommand command, int flag);
+static BOOL BattleControllerPlayer_TryGrantExp(BattleContext *ctx, ControllerCommand commandNext, ControllerCommand command);
 static void BattleControllerPlayer_UpdateTargetMoveHistory(BattleSystem *battleSystem, BattleContext *ctx);
 static BOOL BattleControllerPlayer_RunCriticalHitScript(BattleSystem *battleSystem, BattleContext *ctx);
 static BOOL BattleControllerPlayer_TryFollowupMessage(BattleSystem *battleSystem, BattleContext *ctx);
@@ -507,7 +507,7 @@ static void BattleControllerPlayer_SelectionScreenInput(BattleSystem *battleSyst
         case SSI_STATE_9: // switching..?
         {
             int canSwitch;
-            int v9 = 6;
+            int reservedMon = 6;
             int partnerId;
 
             canSwitch = BattlerCanSwitch(battleSystem, ctx, battlerId);
@@ -516,11 +516,11 @@ static void BattleControllerPlayer_SelectionScreenInput(BattleSystem *battleSyst
                 partnerId = BattleSystem_GetBattlerIdPartner(battleSystem, battlerId);
 
                 if (ctx->playerActions[partnerId].command == CONTROLLER_COMMAND_POKEMON_INPUT) {
-                    v9 = ctx->playerActions[partnerId].commandParam;
+                    reservedMon = ctx->playerActions[partnerId].commandParam;
                 }
             }
 
-            BattleController_EmitShowMonList(battleSystem, ctx, battlerId, 0, canSwitch, v9);
+            BattleController_EmitShowMonList(battleSystem, ctx, battlerId, 0, canSwitch, reservedMon);
             ctx->selectionState[battlerId] = SSI_STATE_10;
         }
         // fallthrough

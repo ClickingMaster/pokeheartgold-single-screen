@@ -165,7 +165,7 @@ extern void WirelessStatusIcon_SetLevel(int level);
 extern void CommState_StartBeaconWatch(SaveData *saveData);
 extern void CommState_StopBeaconWatch(void);
 extern u32 CommState_GetSeenGames(void);
-extern void CommState_SetErrorWatch(s8 a0, s8 a1);
+extern void CommState_SetErrorWatch(s8 watchMembers, s8 reportErrors);
 
 extern MysteryGiftLinkState sMysteryGiftLinkState;
 

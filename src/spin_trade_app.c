@@ -426,8 +426,8 @@ extern int (*const gSpinTradeStateFuncs[])(SpinTradeApp *app);
 extern const int gSpinTradeHoverOffsets[];
 
 // Not declared by the owners' headers
-void Sys_SetSoftResetDisableFlag(int a0);
-void Sys_ClearSoftResetDisableFlag(int a0);
+void Sys_SetSoftResetDisableFlag(int flag);
+void Sys_ClearSoftResetDisableFlag(int flag);
 int GetUserFrameGfx2PaletteMember(int frame);
 BOOL Comm_SendCommandNoCopy(int command, void *data, int size);
 void CommState_SetMaxEntries(int count);

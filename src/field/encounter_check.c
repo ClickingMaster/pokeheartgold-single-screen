@@ -1307,7 +1307,7 @@ static u8 EncounterGen_ChooseUnownForm(EncounterGenState *encounterGen) {
     BOOL isUnownSounds = FALSE;
     u8 *availableUnown;
     u8 *availableUncaughtUnown;
-    const UnlockedUnown *r4;
+    const UnlockedUnown *unlocked;
 
     if (encounterGen->isSinjohMap) {
         return sUnlockedUnown[4].letters[LCRandom() % 2];
@@ -1327,13 +1327,13 @@ static u8 EncounterGen_ChooseUnownForm(EncounterGenState *encounterGen) {
         if (!encounterGen->unownPuzzleFlags[i]) {
             continue;
         }
-        r4 = &sUnlockedUnown[i];
-        for (j = 0; j < r4->num; ++j) {
-            if (!hasCaughtUnownForm(encounterGen->pokedex, numSeenUnown, r4->letters[j])) {
-                availableUncaughtUnown[numUncaughtUnown] = r4->letters[j];
+        unlocked = &sUnlockedUnown[i];
+        for (j = 0; j < unlocked->num; ++j) {
+            if (!hasCaughtUnownForm(encounterGen->pokedex, numSeenUnown, unlocked->letters[j])) {
+                availableUncaughtUnown[numUncaughtUnown] = unlocked->letters[j];
                 ++numUncaughtUnown;
             }
-            availableUnown[numAvailableUnown] = r4->letters[j];
+            availableUnown[numAvailableUnown] = unlocked->letters[j];
             ++numAvailableUnown;
         }
     }

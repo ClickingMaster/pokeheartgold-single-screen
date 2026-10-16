@@ -113,7 +113,7 @@ static void MicTest_MicrophoneCallback(MICResult result, void *data);
 static u32 MicTest_GetVolumeBracket(u8);
 static u32 MicTest_AreFloatingSpritesIdle(MicTestData *micTest);
 static BOOL MicTest_SpawnFloatingSprite(MicTestData *micTest, enum HeapID heapID, s16 x, s16 y);
-static void MicTestFloatingSprite_Start(ManagedSprite *sprite, MicTestFloatingSprite *args, s16 x, s16 y, s32 z, s32 r1, s32 r2, BOOL delay);
+static void MicTestFloatingSprite_Start(ManagedSprite *sprite, MicTestFloatingSprite *args, s16 x, s16 y, s32 z, s32 angle, s32 wobbleAmplitude, BOOL delay);
 static void Task_MicTestFloatingSprite(SysTask *, void *);
 static void MicTest_EndTasks(MicTestData *micTest);
 static int MicTest_CheckReturn(MicTestData *data);
@@ -848,24 +848,24 @@ static void MicTest_MicrophoneCallback(MICResult result, void *data) {
         return;
     }
 
-    MicTestInput *unkF0 = &micTest->input;
+    MicTestInput *input = &micTest->input;
 
-    s32 volumeAvg = MicTest_AverageMicInput(unkF0);
+    s32 volumeAvg = MicTest_AverageMicInput(input);
     u32 volume;
 
-    if (unkF0->curVolume < volumeAvg) {
+    if (input->curVolume < volumeAvg) {
         volume = MicTest_GetVolumeBracket(volumeAvg);
-        unkF0->curVolume = volumeAvg;
-        unkF0->volumeRose = 1;
+        input->curVolume = volumeAvg;
+        input->volumeRose = 1;
     } else {
-        volume = MicTest_GetVolumeBracket(unkF0->curVolume);
-        unkF0->curVolume -= 2;
+        volume = MicTest_GetVolumeBracket(input->curVolume);
+        input->curVolume -= 2;
     }
 
     if (volume) {
-        if (unkF0->volumeRose) {
+        if (input->volumeRose) {
             ManagedSprite_SetAnim(micTest->sprites[2], 1);
-            unkF0->volumeRose = 0;
+            input->volumeRose = 0;
         }
 
         if (MicTest_AreFloatingSpritesIdle(micTest)) {
@@ -940,7 +940,7 @@ static BOOL MicTest_SpawnFloatingSprite(MicTestData *micTest, enum HeapID heapID
     return FALSE;
 }
 
-static void MicTestFloatingSprite_Start(ManagedSprite *sprite, MicTestFloatingSprite *args, s16 x, s16 y, s32 z, s32 r1, s32 r2, BOOL delay) {
+static void MicTestFloatingSprite_Start(ManagedSprite *sprite, MicTestFloatingSprite *args, s16 x, s16 y, s32 z, s32 angle, s32 wobbleAmplitude, BOOL delay) {
     args->task = SysTask_CreateOnMainQueue(Task_MicTestFloatingSprite, args, 0);
     MicTestFloatingSprite *data = SysTask_GetData(args->task);
 
@@ -951,15 +951,15 @@ static void MicTestFloatingSprite_Start(ManagedSprite *sprite, MicTestFloatingSp
     data->pos.y = FX32_CONST(y);
     data->pos.z = 0;
 
-    s32 sine = GF_SinDegNoWrap(r1 + 90);
+    s32 sine = GF_SinDegNoWrap(angle + 90);
     data->velocity.x = FX_MUL(z, sine);
-    sine = GF_SinDegNoWrap(r1);
+    sine = GF_SinDegNoWrap(angle);
     data->velocity.y = -FX_MUL(z, sine);
     data->velocity.z = 0;
 
     data->wobbleAngle = 0;
     data->wobbleSpeed = FX32_CONST(6);
-    data->wobbleAmplitude = r2;
+    data->wobbleAmplitude = wobbleAmplitude;
 
     ManagedSprite_SetPositionXY(data->sprite, x, y);
 }

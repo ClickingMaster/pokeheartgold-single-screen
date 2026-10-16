@@ -260,9 +260,9 @@ void FrontierSave_DeleteRow(FrontierSave *frontier, int row);
 void CommPlayerInfo_RecordTrades(SaveData *saveData, int a1);
 int Comm_SendCommandNoCopy(int command, void *data, int size);
 void CommState_FrameDummy(enum HeapID heapID, BgConfig *bgConfig);
-void Comm_InitSyncedSave(s32 *a0);
-s32 Comm_SyncedSave(SaveData *saveData, s32 a1, s32 *a2);
-void Comm_StoreFriendFromPlayer(SaveData *saveData, s32 netId, s32 slot, enum HeapID heapID, u32 a4);
+void Comm_InitSyncedSave(s32 *state);
+s32 Comm_SyncedSave(SaveData *saveData, s32 a1, s32 *state);
+void Comm_StoreFriendFromPlayer(SaveData *saveData, s32 netId, s32 slot, enum HeapID heapID, u32 mode);
 
 extern const u8 sWirelessTradeSelectMonSummaryPages[];
 extern const TouchscreenListMenuTemplate sWirelessTradeSelectMonTouchMenuTemplate;

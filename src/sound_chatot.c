@@ -161,10 +161,10 @@ u32 Chatot_GetVoiceParam(SOUND_CHATOT *chatot) {
         return 0;
     }
 
-    s8 r0 = Chatot_GetData(chatot)[15];
-    if (r0 < -30) {
+    s8 sample = Chatot_GetData(chatot)[15];
+    if (sample < -30) {
         return 1;
-    } else if (r0 >= 30 && r0 < 128) {
+    } else if (sample >= 30 && sample < 128) {
         return 2;
     }
 

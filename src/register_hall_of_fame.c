@@ -2347,7 +2347,7 @@ static void RegisterHallOfFame_WholePartyScene_CreateSprites(RegisterHallOfFameD
     NARC *narc = NARC_New(NARC_a_0_0_8, HEAP_ID_REGISTER_HALL_OF_FAME);
     u32 i;
     int tag;
-    void *r4;
+    void *charData;
 
     SpriteSystem_LoadCellResObjFromOpenNarc(data->spriteRenderer, data->spriteGfxHandler, narc, 77, FALSE, 55512);
     SpriteSystem_LoadAnimResObjFromOpenNarc(data->spriteRenderer, data->spriteGfxHandler, narc, 78, FALSE, 55512);
@@ -2394,10 +2394,10 @@ static void RegisterHallOfFame_WholePartyScene_CreateSprites(RegisterHallOfFameD
     } else {
         GetTrainerPicFileIdsNoLink(TRAINERCLASS_PKMN_TRAINER_ETHAN, 2, &trainerPicFileIds);
     }
-    r4 = Heap_Alloc(HEAP_ID_REGISTER_HALL_OF_FAME, 0x1900);
-    CharTiles_LoadRectAsObjFromNarc(trainerPicFileIds.narcId, trainerPicFileIds.ncbr_id, HEAP_ID_REGISTER_HALL_OF_FAME, &tileRect, r4);
-    RegisterHallOfFame_ReplaceSpriteChar(r4, NNS_G2dGetImageLocation(Sprite_GetImageProxy(data->monPics[REGHOF_PIC_WHOLE_PLAYER]->sprite), NNS_G2D_VRAM_TYPE_2DMAIN), 3200);
-    Heap_Free(r4);
+    charData = Heap_Alloc(HEAP_ID_REGISTER_HALL_OF_FAME, 0x1900);
+    CharTiles_LoadRectAsObjFromNarc(trainerPicFileIds.narcId, trainerPicFileIds.ncbr_id, HEAP_ID_REGISTER_HALL_OF_FAME, &tileRect, charData);
+    RegisterHallOfFame_ReplaceSpriteChar(charData, NNS_G2dGetImageLocation(Sprite_GetImageProxy(data->monPics[REGHOF_PIC_WHOLE_PLAYER]->sprite), NNS_G2D_VRAM_TYPE_2DMAIN), 3200);
+    Heap_Free(charData);
 
     GfGfxLoader_GXLoadPal(trainerPicFileIds.narcId, trainerPicFileIds.nclr_id, GF_PAL_LOCATION_MAIN_OBJ, (enum GFPalSlotOffset)NNS_G2dGetImagePaletteLocation(Sprite_GetPaletteProxy(data->monPics[REGHOF_PIC_WHOLE_PLAYER]->sprite), NNS_G2D_VRAM_TYPE_2DMAIN), 0x20, HEAP_ID_REGISTER_HALL_OF_FAME);
 
@@ -2549,9 +2549,9 @@ static void Task_RegisterHallOfFame_SpotlightInstance(SysTask *task, void *taskD
             }
         }
 
-        s32 r6 = child->angle >> FX32_SHIFT;
-        fx32 cosVal = child->xOffset + FX_Mul(GF_CosDegNoWrap(r6), FX32_CONST(2.5));
-        fx32 sinVal = -FX32_ONE + FX_Mul(GF_SinDegNoWrap(r6), FX32_CONST(2.5));
+        s32 angle = child->angle >> FX32_SHIFT;
+        fx32 cosVal = child->xOffset + FX_Mul(GF_CosDegNoWrap(angle), FX32_CONST(2.5));
+        fx32 sinVal = -FX32_ONE + FX_Mul(GF_SinDegNoWrap(angle), FX32_CONST(2.5));
 
         SetVec(child->vertices[2], cosVal - FX32_CONST(0.140625), sinVal, 0);
         SetVec(child->vertices[3], cosVal + FX32_CONST(0.140625), sinVal, 0);

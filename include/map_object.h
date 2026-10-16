@@ -261,7 +261,7 @@ void MapObject_SetCurrentMetatileBehavior(LocalMapObject *object, u16 behavior);
 u16 MapObject_GetCurrentMetatileBehavior(LocalMapObject *object);
 void MapObject_SetPreviousMetatileBehavior(LocalMapObject *object, u16 behavior);
 u16 MapObject_GetPreviousMetatileBehavior(LocalMapObject *object);
-void MapObject_SetSavedPreviousBehavior(LocalMapObject *object, u16 param1);
+void MapObject_SetSavedPreviousBehavior(LocalMapObject *object, u16 behavior);
 u16 MapObject_GetSavedPreviousBehavior(LocalMapObject *object);
 FieldSystem *MapObject_GetFieldSystem(LocalMapObject *object);
 u32 MapObject_GetPriority(LocalMapObject *object);

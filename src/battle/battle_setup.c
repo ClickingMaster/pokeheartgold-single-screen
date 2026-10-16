@@ -185,7 +185,7 @@ static void BattleSetup_SetChatotVoiceClip(BattleSetup *setup, SOUND_CHATOT *cha
     Chatot_Copy(setup->chatot[battlerId], chatot);
 }
 
-void BattleSetup_InitFromSaveData(BattleSetup *setup, FieldSystem *fieldSystem, SaveData *saveData, u32 mapno, BagCursor *bagCursor, void *arg5) {
+void BattleSetup_InitFromSaveData(BattleSetup *setup, FieldSystem *fieldSystem, SaveData *saveData, u32 mapno, BagCursor *bagCursor, void *keyPressedSave) {
     PlayerProfile *profile;
     Party *party;
     Bag *bag;
@@ -246,7 +246,7 @@ void BattleSetup_InitFromSaveData(BattleSetup *setup, FieldSystem *fieldSystem, 
     }
     setup->weatherType = LocalFieldData_GetWeatherType(local);
     setup->bagCursor = bagCursor;
-    setup->keyPressedSave = arg5;
+    setup->keyPressedSave = keyPressedSave;
     setup->wifiHistory = Save_WiFiHistory_Get(saveData);
     setup->gameStats = Save_GameStats_Get(saveData);
     setup->palPad = Save_PalPad_Get(saveData);

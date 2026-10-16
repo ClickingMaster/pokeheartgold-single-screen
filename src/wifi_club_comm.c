@@ -3,8 +3,8 @@
 #include "communication_command.h"
 #include "wifi_club_comm_table.h"
 
-void WifiClubComm_RegisterCommands(void *arg0) {
-    Comm_RegisterCommandTable(WifiClubComm_GetCommandTable(), WifiClubComm_GetCommandCount(), arg0);
+void WifiClubComm_RegisterCommands(void *context) {
+    Comm_RegisterCommandTable(WifiClubComm_GetCommandTable(), WifiClubComm_GetCommandCount(), context);
 }
 
 void WifiClubComm_RegisterCommandsNoContext(void) {

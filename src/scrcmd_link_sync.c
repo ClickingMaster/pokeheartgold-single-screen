@@ -59,102 +59,102 @@ static const OverlayManagerTemplate sOverlayTemplate_BallCapsuleEditor = {
 
 static BOOL Task_BallCapsuleEditor(TaskManager *taskManager);
 static BOOL ScrNative_WaitLinkSyncWork(ScriptContext *ctx);
-static void LinkSyncWork_StartSync(LinkSyncWork *a0, u8 syncState);
-static BOOL LinkSyncWork_IsSynced(LinkSyncWork *a0, u8 syncState);
+static void LinkSyncWork_StartSync(LinkSyncWork *work, u8 syncState);
+static BOOL LinkSyncWork_IsSynced(LinkSyncWork *work, u8 syncState);
 static LinkSyncWork *LinkSyncWork_New(void);
 static LinkSyncWork *LinkSyncWork_CreateWithHeap(LinkSyncWorkParams *unused);
-static void LinkSyncWork_Delete(LinkSyncWork *a0);
+static void LinkSyncWork_Delete(LinkSyncWork *work);
 
 void CallTask_BallCapsuleEditor(TaskManager *taskManager, SaveData *saveData) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    BallCapsuleEditorTaskData *r4 = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(BallCapsuleEditorTaskData));
-    memset(r4, 0, sizeof(BallCapsuleEditorTaskData));
-    r4->saveData = saveData;
-    r4->editorArgs = Heap_Alloc(HEAP_ID_FIELD2, sizeof(BallCapsuleEditorArgs));
-    memset(r4->editorArgs, 0, sizeof(BallCapsuleEditorArgs));
-    r4->editorArgs->options = Save_PlayerData_GetOptionsAddr(saveData);
-    r4->editorArgs->saveData = saveData;
-    r4->editorArgs->menuInputStatePtr = &fieldSystem->menuInputState;
-    r4->partyMenu = Heap_Alloc(HEAP_ID_FIELD2, sizeof(PartyMenuArgs));
-    memset(r4->partyMenu, 0, sizeof(PartyMenuArgs));
-    TaskManager_Call(taskManager, Task_BallCapsuleEditor, r4);
+    BallCapsuleEditorTaskData *taskData = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(BallCapsuleEditorTaskData));
+    memset(taskData, 0, sizeof(BallCapsuleEditorTaskData));
+    taskData->saveData = saveData;
+    taskData->editorArgs = Heap_Alloc(HEAP_ID_FIELD2, sizeof(BallCapsuleEditorArgs));
+    memset(taskData->editorArgs, 0, sizeof(BallCapsuleEditorArgs));
+    taskData->editorArgs->options = Save_PlayerData_GetOptionsAddr(saveData);
+    taskData->editorArgs->saveData = saveData;
+    taskData->editorArgs->menuInputStatePtr = &fieldSystem->menuInputState;
+    taskData->partyMenu = Heap_Alloc(HEAP_ID_FIELD2, sizeof(PartyMenuArgs));
+    memset(taskData->partyMenu, 0, sizeof(PartyMenuArgs));
+    TaskManager_Call(taskManager, Task_BallCapsuleEditor, taskData);
 }
 
 static BOOL Task_BallCapsuleEditor(TaskManager *taskManager) {
-    BallCapsuleEditorTaskData *r7 = TaskManager_GetEnvironment(taskManager);
-    BallCapsuleEditorArgs *r6 = r7->editorArgs;
+    BallCapsuleEditorTaskData *taskData = TaskManager_GetEnvironment(taskManager);
+    BallCapsuleEditorArgs *editorArgs = taskData->editorArgs;
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    switch (r7->state) {
+    switch (taskData->state) {
     case 0:
         CallTask_LeaveOverworld(taskManager);
-        SealCase *sealCase = Save_SealCase_Get(r7->saveData);
-        r6->sealCase = sealCase;
-        r6->setCapsuleOnMon = 0;
-        r6->menuInputStatePtr = &fieldSystem->menuInputState;
-        Party *party = SaveArray_Party_Get(r7->saveData);
-        r6->party = party;
+        SealCase *sealCase = Save_SealCase_Get(taskData->saveData);
+        editorArgs->sealCase = sealCase;
+        editorArgs->setCapsuleOnMon = 0;
+        editorArgs->menuInputStatePtr = &fieldSystem->menuInputState;
+        Party *party = SaveArray_Party_Get(taskData->saveData);
+        editorArgs->party = party;
         s32 partyCount = Party_GetCount(party);
-        r6->partyCount = partyCount;
+        editorArgs->partyCount = partyCount;
         s32 i;
         for (i = 0; i < partyCount; i++) {
-            r6->mons[i] = Party_GetMonByIndex(r6->party, i);
+            editorArgs->mons[i] = Party_GetMonByIndex(editorArgs->party, i);
         }
         for (; i < PARTY_SIZE; i++) {
-            r6->mons[i] = NULL;
+            editorArgs->mons[i] = NULL;
         }
-        r7->state = 1;
+        taskData->state = 1;
         break;
     case 1:
-        CallApplicationAsTask(taskManager, &sOverlayTemplate_BallCapsuleEditor, r6);
-        r7->state = 2;
+        CallApplicationAsTask(taskManager, &sOverlayTemplate_BallCapsuleEditor, editorArgs);
+        taskData->state = 2;
         break;
     case 2:
-        switch (r7->editorArgs->setCapsuleOnMon) {
+        switch (taskData->editorArgs->setCapsuleOnMon) {
         default:
             GF_ASSERT(FALSE);
         case 0:
-            r7->state = 5;
+            taskData->state = 5;
             break;
         case 1:
-            r7->state = 3;
+            taskData->state = 3;
             break;
         }
         break;
     case 3:
-        PartyMenuArgs *partyMenu = r7->partyMenu;
-        partyMenu->party = r6->party;
-        partyMenu->bag = Save_Bag_Get(r7->saveData);
-        partyMenu->mailbox = Save_Mailbox_Get(r7->saveData);
+        PartyMenuArgs *partyMenu = taskData->partyMenu;
+        partyMenu->party = editorArgs->party;
+        partyMenu->bag = Save_Bag_Get(taskData->saveData);
+        partyMenu->mailbox = Save_Mailbox_Get(taskData->saveData);
         partyMenu->partySlot = 0;
         partyMenu->panelLayout = 0;
         partyMenu->context = PARTY_MENU_CONTEXT_ATTACH_CAPSULE;
-        partyMenu->options = r6->options;
+        partyMenu->options = editorArgs->options;
         partyMenu->fieldSystem = fieldSystem;
         partyMenu->menuInputStatePtr = &(fieldSystem->menuInputState);
         CallApplicationAsTask(taskManager, &gOverlayTemplate_PartyMenu, partyMenu);
-        r7->state = 4;
+        taskData->state = 4;
         break;
     case 4: {
-        PartyMenuArgs *partyMenu = r7->partyMenu;
-        u32 index = r7->editorArgs->capsuleIndex + 1;
+        PartyMenuArgs *partyMenu = taskData->partyMenu;
+        u32 index = taskData->editorArgs->capsuleIndex + 1;
         if (partyMenu->partySlot != 7) {
-            Pokemon *mon = r7->editorArgs->mons[partyMenu->partySlot];
+            Pokemon *mon = taskData->editorArgs->mons[partyMenu->partySlot];
             SetMonData(mon, MON_DATA_BALL_CAPSULE_ID, &index);
-            SetMonData(mon, MON_DATA_BALL_CAPSULE, SealCase_GetCapsuleI(r6->sealCase, index - 1));
-            Seal_GetNameMsgId(SealOnCapsuleGetID(CapsuleGetSealI(SealCase_GetCapsuleI(r6->sealCase, index - 1), 0)));
+            SetMonData(mon, MON_DATA_BALL_CAPSULE, SealCase_GetCapsuleI(editorArgs->sealCase, index - 1));
+            Seal_GetNameMsgId(SealOnCapsuleGetID(CapsuleGetSealI(SealCase_GetCapsuleI(editorArgs->sealCase, index - 1), 0)));
             Save_Block23_Get(fieldSystem->saveData);
         }
-        r7->state = 1;
+        taskData->state = 1;
         break;
     }
     case 5:
         CallTask_RestoreOverworld(taskManager);
-        r7->state = 6;
+        taskData->state = 6;
         break;
     case 6:
-        Heap_Free(r7->partyMenu);
-        Heap_Free(r7->editorArgs);
-        Heap_Free(r7);
+        Heap_Free(taskData->partyMenu);
+        Heap_Free(taskData->editorArgs);
+        Heap_Free(taskData);
         return TRUE;
     }
     return FALSE;
@@ -214,14 +214,14 @@ BOOL ScrCmd_BeginTextAutoScroll(ScriptContext *ctx) {
     return FALSE;
 }
 
-static void LinkSyncWork_StartSync(LinkSyncWork *a0, u8 syncState) {
-    if (a0->syncEnabled != 0) {
+static void LinkSyncWork_StartSync(LinkSyncWork *work, u8 syncState) {
+    if (work->syncEnabled != 0) {
         LinkSync_StartSync(syncState);
     }
 }
 
-static BOOL LinkSyncWork_IsSynced(LinkSyncWork *a0, u8 syncState) {
-    if (a0->syncEnabled == 0) {
+static BOOL LinkSyncWork_IsSynced(LinkSyncWork *work, u8 syncState) {
+    if (work->syncEnabled == 0) {
         return TRUE;
     }
     return LinkSync_IsSynced(syncState) == TRUE;
@@ -238,7 +238,7 @@ static LinkSyncWork *LinkSyncWork_CreateWithHeap(LinkSyncWorkParams *unused) {
     return LinkSyncWork_New();
 }
 
-static void LinkSyncWork_Delete(LinkSyncWork *a0) {
-    Heap_Free(a0);
+static void LinkSyncWork_Delete(LinkSyncWork *work) {
+    Heap_Free(work);
     Heap_Destroy(HEAP_ID_20);
 }

@@ -44,27 +44,27 @@ static void BerryPot_DrainMoisture(BerryPot *berryPot, BerryGrowthProperties *gr
 static NARC *GetBerryInfoNarc(enum HeapID heapID);
 static BerryFile *GetBerryFileFromNarc(NARC *narc, s32 fileId, enum HeapID heapID);
 static void FreeBerryInfoNarc(NARC *narc);
-static u16 GetBerryAttr(BerryFile *unk, enum BerryAttr attr);
+static u16 GetBerryAttr(BerryFile *berryFile, enum BerryAttr attr);
 
 BerryGrowthProperties *BerryPots_LoadGrowthProperties(enum HeapID heapID) {
-    BerryGrowthProperties *unk;
+    BerryGrowthProperties *growthProperties;
     NARC *narc;
 
     narc = GetBerryInfoNarc(heapID);
-    unk = Heap_Alloc(heapID, NUM_BERRIES * sizeof(BerryGrowthProperties));
+    growthProperties = Heap_Alloc(heapID, NUM_BERRIES * sizeof(BerryGrowthProperties));
 
     for (int fileId = 0; fileId < NUM_BERRIES; fileId++) {
         BerryFile *berryFile = GetBerryFileFromNarc(narc, fileId, heapID);
-        unk[fileId].defaultGrowthTimeInHours = GetBerryAttr(berryFile, BERRY_ATTR_GROWTH_INTERVAL);
-        unk[fileId].defaultDrainRate = GetBerryAttr(berryFile, BERRY_ATTR_DRAIN_RATE);
-        unk[fileId].yieldMultiplier = GetBerryAttr(berryFile, BERRY_ATTR_YIELD_MULTIPLIER);
+        growthProperties[fileId].defaultGrowthTimeInHours = GetBerryAttr(berryFile, BERRY_ATTR_GROWTH_INTERVAL);
+        growthProperties[fileId].defaultDrainRate = GetBerryAttr(berryFile, BERRY_ATTR_DRAIN_RATE);
+        growthProperties[fileId].yieldMultiplier = GetBerryAttr(berryFile, BERRY_ATTR_YIELD_MULTIPLIER);
 
         Heap_Free(berryFile);
     }
 
     FreeBerryInfoNarc(narc);
 
-    return unk;
+    return growthProperties;
 }
 
 static void BerryPot_Clear(BerryPot *berryPot) {
@@ -112,9 +112,9 @@ static u32 BerryPot_GetMaxRegrowths(BerryPot *berryPot) {
 }
 
 static u32 BerryPot_GetLifetimeInIntervals(BerryPot *berryPot) {
-    u32 unk1 = BerryPot_GetRipeDurationFactor(berryPot);
-    u32 unk2 = BerryPot_GetMaxRegrowths(berryPot);
-    return (unk1 + 3) * unk2 + 1;
+    u32 ripeDurationFactor = BerryPot_GetRipeDurationFactor(berryPot);
+    u32 maxRegrowths = BerryPot_GetMaxRegrowths(berryPot);
+    return (ripeDurationFactor + 3) * maxRegrowths + 1;
 }
 
 u8 BerryPots_GetPotGrowthStage(BerryPot *berryPots, u32 idx) {
@@ -180,9 +180,9 @@ u16 BerryPots_GetPotYield(BerryPot *berryPots, u32 idx) {
 }
 
 u16 BerryPots_HarvestPot(BerryPot *berryPots, u32 idx) {
-    u16 unk = berryPots[idx].yield;
+    u16 yield = berryPots[idx].yield;
     BerryPot_Clear(&berryPots[idx]);
-    return unk;
+    return yield;
 }
 
 static void BerryPot_AdvanceGrowthStage(BerryPot *berryPot, BerryGrowthProperties *growthProperties) {
@@ -220,24 +220,24 @@ static void BerryPot_DrainMoisture(BerryPot *berryPot, BerryGrowthProperties *gr
     }
 
     int drainRate = CalculateBerryPotDrainRate(growthProperties, berryPot->berryId, berryPot->mulch);
-    int r4 = (minutes + berryPot->drainMinutes) / 60;
+    int hours = (minutes + berryPot->drainMinutes) / 60;
     berryPot->drainMinutes = (minutes + berryPot->drainMinutes) % 60;
-    if (r4 == 0) {
+    if (hours == 0) {
         return;
     }
 
-    if (berryPot->moisture >= (drainRate * r4)) {
-        berryPot->moisture -= (r4 * drainRate);
+    if (berryPot->moisture >= (drainRate * hours)) {
+        berryPot->moisture -= (hours * drainRate);
         return;
     }
 
     if (berryPot->moisture != 0) {
-        r4 -= (berryPot->moisture + (drainRate - 1)) / drainRate;
+        hours -= (berryPot->moisture + (drainRate - 1)) / drainRate;
         berryPot->moisture = 0;
     }
 
-    if (berryPot->health > r4) {
-        berryPot->health -= r4;
+    if (berryPot->health > hours) {
+        berryPot->health -= hours;
         return;
     }
 
@@ -251,9 +251,9 @@ void BerryPots_UpdateGrowth(BerryPot *berryPots, BerryGrowthProperties *growthPr
         }
 
         s32 growthInterval = CalculateBerryPotGrowthInterval(growthProperties, berryPots[i].berryId, berryPots[i].mulch);
-        s32 unk = BerryPot_GetLifetimeInIntervals(&berryPots[i]);
+        s32 lifetime = BerryPot_GetLifetimeInIntervals(&berryPots[i]);
 
-        if (minutesDelta >= growthInterval * unk) {
+        if (minutesDelta >= growthInterval * lifetime) {
             BerryPot_Clear(&berryPots[i]);
             continue;
         }
@@ -300,30 +300,30 @@ static void FreeBerryInfoNarc(NARC *narc) {
     NARC_Delete(narc);
 }
 
-static u16 GetBerryAttr(BerryFile *unk, enum BerryAttr attr) {
+static u16 GetBerryAttr(BerryFile *berryFile, enum BerryAttr attr) {
     switch (attr) {
     case BERRY_ATTR_SIZE:
-        return unk->sizeInMillimeters;
+        return berryFile->sizeInMillimeters;
     case BERRY_ATTR_FIRMNESS:
-        return unk->firmness;
+        return berryFile->firmness;
     case BERRY_ATTR_YIELD_MULTIPLIER:
-        return unk->yieldMultiplier;
+        return berryFile->yieldMultiplier;
     case BERRY_ATTR_GROWTH_INTERVAL:
-        return unk->defaultGrowthInterval;
+        return berryFile->defaultGrowthInterval;
     case BERRY_ATTR_DRAIN_RATE:
-        return unk->defaultDrainRate;
+        return berryFile->defaultDrainRate;
     case BERRY_ATTR_SPICINESS:
-        return unk->spiciness;
+        return berryFile->spiciness;
     case BERRY_ATTR_DRYNESS:
-        return unk->dryness;
+        return berryFile->dryness;
     case BERRY_ATTR_SWEETNESS:
-        return unk->sweetness;
+        return berryFile->sweetness;
     case BERRY_ATTR_BITTERNESS:
-        return unk->bitterness;
+        return berryFile->bitterness;
     case BERRY_ATTR_SOURNESS:
-        return unk->sourness;
+        return berryFile->sourness;
     case BERRY_ATTR_SMOOTHNESS:
-        return unk->smoothness;
+        return berryFile->smoothness;
     default:
         return 0;
     }

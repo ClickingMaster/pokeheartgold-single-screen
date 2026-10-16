@@ -151,11 +151,11 @@ static void PokeathlonMedals_LaunchApp_Impl(FieldSystem *fieldSystem, Pokeathlon
 static void PokeathlonEventRecord_LaunchApp_Impl(FieldSystem *fieldSystem, PokeathlonEventRecordArgs *args);
 static void PokeathlonTrophies_LaunchApp_Impl(FieldSystem *fieldSystem, PokeathlonTrophiesArgs *args);
 static void UseMail_LaunchApp_Impl(FieldSystem *fieldSystem, UseMailArgs *args);
-static DressUpArgs *DressUp_CreateArgs(enum HeapID heapID, SaveData *saveData, int slot, int *a3, int a4);
+static DressUpArgs *DressUp_CreateArgs(enum HeapID heapID, SaveData *saveData, int slot, int *savedResult, int showTutorial);
 static BOOL Task_DressUp(TaskManager *taskman);
 static BOOL DressUp_LaunchApp_Impl(FieldSystem *fieldSystem, DressUpArgs *args);
-static void InitWirelessTradeSelectMonArgs(WirelessTradeSelectMonArgs *a0, FieldSystem *fieldSystem);
-static void WirelessTradeSelectMon_FreeArgs(WirelessTradeSelectMonArgs *a0);
+static void InitWirelessTradeSelectMonArgs(WirelessTradeSelectMonArgs *args, FieldSystem *fieldSystem);
+static void WirelessTradeSelectMon_FreeArgs(WirelessTradeSelectMonArgs *args);
 static BOOL Task_WirelessTrade(TaskManager *taskman);
 static BOOL Task_NamingScreen(TaskManager *taskman);
 static void SetName(TaskManager *taskman);
@@ -284,8 +284,8 @@ int PartyMenuArgs_GetSelectedAction(PartyMenuArgs *partyWork) {
     return partyWork->selectedAction;
 }
 
-u16 MoveSelectionResult_GetPartySlot(MoveSelectionResult *a0) {
-    return a0->partySlot;
+u16 MoveSelectionResult_GetPartySlot(MoveSelectionResult *result) {
+    return result->partySlot;
 }
 
 static BOOL Task_OpenPartyMenuForUnionRoomBattleSelect(TaskManager *taskman) {
@@ -399,8 +399,8 @@ PokemonSummaryArgs *LearnForgetMove_LaunchApp(enum HeapID heapID, FieldSystem *f
     return args;
 }
 
-u16 MoveSelectionResult_GetMoveSlot(MoveSelectionResult *a0) {
-    return a0->selectedMoveSlot;
+u16 MoveSelectionResult_GetMoveSlot(MoveSelectionResult *result) {
+    return result->selectedMoveSlot;
 }
 
 void PCBox_LaunchApp(FieldSystem *fieldSystem, PCBoxArgs *args) {
@@ -637,14 +637,14 @@ ApricornBoxArgs *ApricornBox_LaunchApp(FieldSystem *fieldSystem, int mode) {
     return args;
 }
 
-ApricornBoxArgs *ApricornBox_LaunchAppForJuice(FieldSystem *fieldSystem, u32 a1, u16 *juiceUsedVar) {
+ApricornBoxArgs *ApricornBox_LaunchAppForJuice(FieldSystem *fieldSystem, u32 juiceIndex, u16 *juiceUsedVar) {
     ApricornBoxArgs *args = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(ApricornBoxArgs));
     MI_CpuFill8(args, 0, sizeof(ApricornBoxArgs));
     args->saveData = FieldSystem_GetSaveData(fieldSystem);
     args->menuInputStatePtr = &fieldSystem->menuInputState;
     args->steps = GameStats_GetCapped(Save_GameStats_Get(args->saveData), GAME_STAT_STEPS_WALKED);
     args->mode = 3;
-    args->juiceIndex = a1;
+    args->juiceIndex = juiceIndex;
     args->juiceUsedVar = juiceUsedVar;
     ApricornBox_LaunchApp_Impl(fieldSystem, args);
     return args;
@@ -795,7 +795,7 @@ void BattleRoomResults_LaunchApp(FieldSystem *fieldSystem, BattleRoomResultsArgs
     FieldSystem_LaunchApplication(fieldSystem, &template, args);
 }
 
-static DressUpArgs *DressUp_CreateArgs(enum HeapID heapID, SaveData *saveData, int partyIdx, int *a3, int a4) {
+static DressUpArgs *DressUp_CreateArgs(enum HeapID heapID, SaveData *saveData, int partyIdx, int *savedResult, int showTutorial) {
     DressUpArgs *ptr = Heap_Alloc(heapID, sizeof(DressUpArgs));
     memset(ptr, 0, sizeof(DressUpArgs));
     ptr->mon = Party_GetMonByIndex(SaveArray_Party_Get(saveData), partyIdx);
@@ -807,8 +807,8 @@ static DressUpArgs *DressUp_CreateArgs(enum HeapID heapID, SaveData *saveData, i
     ptr->options = Save_PlayerData_GetOptionsAddr(saveData);
     ptr->gameStats = Save_GameStats_Get(saveData);
     ptr->profile = Save_PlayerData_GetProfile(saveData);
-    ptr->savedResult = a3;
-    ptr->showTutorial = a4;
+    ptr->savedResult = savedResult;
+    ptr->showTutorial = showTutorial;
     return ptr;
 }
 
@@ -840,10 +840,10 @@ static BOOL Task_DressUp(TaskManager *taskman) {
     return FALSE;
 }
 
-void CallTask_DressUp(TaskManager *taskman, u16 *ret, SaveData *saveData, u16 partyIdx, u16 a4) {
+void CallTask_DressUp(TaskManager *taskman, u16 *ret, SaveData *saveData, u16 partyIdx, u16 showTutorial) {
     DressUpTaskData *data = Heap_Alloc(HEAP_ID_FIELD3, sizeof(DressUpTaskData));
     memset(data, 0, sizeof(DressUpTaskData));
-    data->args = DressUp_CreateArgs(HEAP_ID_FIELD3, saveData, partyIdx, &data->saved, a4);
+    data->args = DressUp_CreateArgs(HEAP_ID_FIELD3, saveData, partyIdx, &data->saved, showTutorial);
     data->retVar = ret;
     TaskManager_Call(taskman, Task_DressUp, data);
 }

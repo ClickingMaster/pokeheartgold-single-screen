@@ -34,12 +34,12 @@ struct MapPropManager {
     Field3dRenderObjManager *fsys_unkC0;
 }; // size: 0x704
 
-static void MapPropManager_Init(MapPropManager *mapPropManager, void *unkC0);
+static void MapPropManager_Init(MapPropManager *mapPropManager, void *renderObjManager);
 static void MapProp_Init(MapProp *mapProp);
 static void DrawModelShapewise(const NNSG3dResMdl *mapPropManager, const VecFx32 *baseTrans, const MtxFx33 *prmBaseRot, const VecFx32 *baseScale, BuildModelShapes *shapes, int buildModel);
 
-static void MapPropManager_Init(MapPropManager *mapPropManager, void *unkC0) {
-    mapPropManager->fsys_unkC0 = unkC0;
+static void MapPropManager_Init(MapPropManager *mapPropManager, void *renderObjManager) {
+    mapPropManager->fsys_unkC0 = renderObjManager;
     for (u8 i = 0; i < MAP_PROP_MAX; ++i) {
         MapProp *mapProp = &mapPropManager->mapProps[i];
         MapProp_Init(mapProp);
@@ -47,10 +47,10 @@ static void MapPropManager_Init(MapPropManager *mapPropManager, void *unkC0) {
     }
 }
 
-MapPropManager *MapPropManager_New(enum HeapID heapID, Field3dRenderObjManager *unkC0) {
+MapPropManager *MapPropManager_New(enum HeapID heapID, Field3dRenderObjManager *renderObjManager) {
     MapPropManager *ret = Heap_Alloc(heapID, sizeof(MapPropManager));
     MI_CpuClearFast(ret, sizeof(MapPropManager));
-    MapPropManager_Init(ret, unkC0);
+    MapPropManager_Init(ret, renderObjManager);
     return ret;
 }
 

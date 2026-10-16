@@ -36,7 +36,7 @@
 #include "battle_frontier_communication.h"
 
 static BOOL ScrNative_WaitFrontierPartnerCheck(ScriptContext *ctx);
-static u32 FrontierFieldSystem_GetAllyIdOrSprite(FrontierFieldSystem *frontierFsys, u8 a1);
+static u32 FrontierFieldSystem_GetAllyIdOrSprite(FrontierFieldSystem *frontierFsys, u8 kind);
 
 static const u16 StatTrainerOverworlds[] = { SPRITE_SEVEN1, SPRITE_SEVEN5, SPRITE_SEVEN2, SPRITE_SEVEN3, SPRITE_SEVEN4 };
 
@@ -59,7 +59,7 @@ BOOL ScrCmd_FrontierFieldSystemFree(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_BattleTowerAction(ScriptContext *ctx) {
-    void **unk;
+    void **runningApp;
     u16 id = ScriptReadHalfword(ctx);
     u16 arg = ScriptGetVar(ctx);
     u16 resultVarId = ScriptReadHalfword(ctx);
@@ -113,12 +113,12 @@ BOOL ScrCmd_BattleTowerAction(ScriptContext *ctx) {
         TaskManager_CallFrontierWifiConnection(ctx->taskman, arg, resultVarId, *result);
         return TRUE;
     case 30:
-        unk = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
-        FrontierFieldSystem_StartPartySelect(frontierFsys, ctx->taskman, unk);
+        runningApp = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
+        FrontierFieldSystem_StartPartySelect(frontierFsys, ctx->taskman, runningApp);
         return TRUE;
     case 31:
-        unk = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
-        *result = FrontierFieldSystem_ReadPartySelection(frontierFsys, unk, ctx->fieldSystem->saveData);
+        runningApp = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
+        *result = FrontierFieldSystem_ReadPartySelection(frontierFsys, runningApp, ctx->fieldSystem->saveData);
         break;
     case 32:
         *result = FrontierFieldSystem_PartyHasDuplicateSpeciesOrItems(frontierFsys, ctx->fieldSystem->saveData);
@@ -207,48 +207,48 @@ BOOL ScrCmd_BattleTowerGetAllyMonSpeciesAndMove(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_BattleTowerClaimRecordMilestone(ScriptContext *ctx) {
-    u16 *unk = ScriptGetVarPointer(ctx);
-    *unk = BattleTower_ClaimRecordMilestone(ctx->fieldSystem->saveData);
+    u16 *result = ScriptGetVarPointer(ctx);
+    *result = BattleTower_ClaimRecordMilestone(ctx->fieldSystem->saveData);
     return FALSE;
 }
 
 BOOL ScrCmd_BattleTowerGetRecordMilestone(ScriptContext *ctx) {
-    u16 *unk = ScriptGetVarPointer(ctx);
-    *unk = BattleTower_GetRecordMilestone(ctx->fieldSystem->saveData);
+    u16 *result = ScriptGetVarPointer(ctx);
+    *result = BattleTower_GetRecordMilestone(ctx->fieldSystem->saveData);
     return FALSE;
 }
 
 BOOL ScrCmd_BattleTowerSendLinkData(ScriptContext *ctx) {
-    u16 unk7 = ScriptGetVar(ctx);
-    u16 unk4 = ScriptGetVar(ctx);
-    u16 *unkPtr = ScriptGetVarPointer(ctx);
+    u16 kind = ScriptGetVar(ctx);
+    u16 linkFlag = ScriptGetVar(ctx);
+    u16 *sent = ScriptGetVarPointer(ctx);
     FrontierFieldSystem *frontierFsys = ctx->fieldSystem->frontierFsys;
-    *unkPtr = FALSE;
-    u32 unk0;
-    switch (unk7) {
+    *sent = FALSE;
+    u32 cmd;
+    switch (kind) {
     case 0:
-        unk0 = 62;
+        cmd = 62;
         FrontierFieldSystem_PackLinkAllyData(ctx->fieldSystem->frontierFsys, ctx->fieldSystem->saveData);
         break;
     case 1:
-        unk0 = 63;
+        cmd = 63;
         FrontierFieldSystem_PackRoundTrainers(ctx->fieldSystem->frontierFsys);
         break;
     case 2:
-        unk0 = 64;
-        FrontierFieldSystem_SetLinkFlag(ctx->fieldSystem->frontierFsys, unk4);
+        cmd = 64;
+        FrontierFieldSystem_SetLinkFlag(ctx->fieldSystem->frontierFsys, linkFlag);
         break;
     }
     if (Save_IsPlayerOrPartnerVersion0(ctx->fieldSystem->saveData) == 1) {
         if (LinkSync_SendPacket(Comm_GetLocalNetId(), frontierFsys->linkSendBuffer) == 1) {
-            *unkPtr = TRUE;
+            *sent = TRUE;
         } else {
             return TRUE;
         }
     } else {
         FrontierLink_RegisterCommands((void *)frontierFsys);
-        if (Comm_SendCommand(unk0, frontierFsys->linkSendBuffer, sizeof(frontierFsys->linkSendBuffer)) == 1) {
-            *unkPtr = TRUE;
+        if (Comm_SendCommand(cmd, frontierFsys->linkSendBuffer, sizeof(frontierFsys->linkSendBuffer)) == 1) {
+            *sent = TRUE;
         }
     }
     return FALSE;
@@ -256,13 +256,13 @@ BOOL ScrCmd_BattleTowerSendLinkData(ScriptContext *ctx) {
 
 BOOL ScrCmd_BattleTowerCheckLinkPartner(ScriptContext *ctx) {
     FrontierFieldSystem *frontierFsys = ctx->fieldSystem->frontierFsys;
-    u16 unk6 = ScriptGetVar(ctx);
-    u16 unk7 = ScriptReadHalfword(ctx);
+    u16 kind = ScriptGetVar(ctx);
+    u16 outputVar = ScriptReadHalfword(ctx);
     if (Save_IsPlayerOrPartnerVersion0(ctx->fieldSystem->saveData) == 1) {
-        TaskManager_CallFrontierLinkPartnerCheck(ctx->fieldSystem->taskman, unk6, unk7);
+        TaskManager_CallFrontierLinkPartnerCheck(ctx->fieldSystem->taskman, kind, outputVar);
     } else {
-        frontierFsys->resultVar = unk7;
-        frontierFsys->unk8D5 = unk6;
+        frontierFsys->resultVar = outputVar;
+        frontierFsys->unk8D5 = kind;
         SetupNativeScript(ctx, ScrNative_WaitFrontierPartnerCheck);
     }
     return TRUE;
@@ -270,11 +270,11 @@ BOOL ScrCmd_BattleTowerCheckLinkPartner(ScriptContext *ctx) {
 
 static BOOL ScrNative_WaitFrontierPartnerCheck(ScriptContext *ctx) {
     FrontierFieldSystem *frontierFsys = ctx->fieldSystem->frontierFsys;
-    u16 *unkPtr = GetVarPointer(ctx->fieldSystem, frontierFsys->resultVar);
-    u32 unk = frontierFsys->unk8D5 == 1 ? 1 : 2;
-    if (frontierFsys->linkReceiveCount == unk) {
+    u16 *result = GetVarPointer(ctx->fieldSystem, frontierFsys->resultVar);
+    u32 expectedCount = frontierFsys->unk8D5 == 1 ? 1 : 2;
+    if (frontierFsys->linkReceiveCount == expectedCount) {
         frontierFsys->linkReceiveCount = 0;
-        *unkPtr = frontierFsys->unk8D8;
+        *result = frontierFsys->unk8D8;
         return TRUE;
     } else {
         return FALSE;
@@ -282,25 +282,25 @@ static BOOL ScrNative_WaitFrontierPartnerCheck(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_GetBattleRoomLeadersRoom(ScriptContext *ctx) {
-    u16 *unk4 = ScriptGetVarPointer(ctx);
-    u16 *unk6 = ScriptGetVarPointer(ctx);
-    u8 unk[2];
-    BattleRoomDownload_GetLeadersRoom(Save_BattleRoomDownload_Get(ctx->fieldSystem->saveData), unk);
-    *unk4 = unk[0];
-    *unk6 = unk[1];
+    u16 *firstRoom = ScriptGetVarPointer(ctx);
+    u16 *secondRoom = ScriptGetVarPointer(ctx);
+    u8 rooms[2];
+    BattleRoomDownload_GetLeadersRoom(Save_BattleRoomDownload_Get(ctx->fieldSystem->saveData), rooms);
+    *firstRoom = rooms[0];
+    *secondRoom = rooms[1];
     return FALSE;
 }
 
 BOOL ScrCmd_BattleRoomHasLeaders(ScriptContext *ctx) {
-    u16 *unk = ScriptGetVarPointer(ctx);
-    *unk = BattleRoomDownload_HasLeaders(Save_BattleRoomDownload_Get(ctx->fieldSystem->saveData));
+    u16 *result = ScriptGetVarPointer(ctx);
+    *result = BattleRoomDownload_HasLeaders(Save_BattleRoomDownload_Get(ctx->fieldSystem->saveData));
     return FALSE;
 }
 
-static u32 FrontierFieldSystem_GetAllyIdOrSprite(FrontierFieldSystem *frontierFsys, u8 a1) {
-    if (a1 == 2) {
+static u32 FrontierFieldSystem_GetAllyIdOrSprite(FrontierFieldSystem *frontierFsys, u8 kind) {
+    if (kind == 2) {
         return frontierFsys->multiBattleAllyID;
-    } else if (a1 == 1) {
+    } else if (kind == 1) {
         if (frontierFsys->towerMode == TOWER_MODE_MULTI) {
             return StatTrainerOverworlds[frontierFsys->multiBattleAllyID];
         }
@@ -312,8 +312,8 @@ static u32 FrontierFieldSystem_GetAllyIdOrSprite(FrontierFieldSystem *frontierFs
 
 BOOL ScrCmd_GetBattlePoints(ScriptContext *ctx) {
     SaveData *saveData = ctx->fieldSystem->saveData;
-    u16 *unk = ScriptGetVarPointer(ctx);
-    *unk = FrontierData_BattlePointAction(Save_FrontierData_Get(saveData), 0, 0);
+    u16 *battlePoints = ScriptGetVarPointer(ctx);
+    *battlePoints = FrontierData_BattlePointAction(Save_FrontierData_Get(saveData), 0, 0);
     return FALSE;
 }
 
@@ -335,12 +335,12 @@ BOOL ScrCmd_TakeBattlePoints(ScriptContext *ctx) {
 
 BOOL ScrCmd_CheckBattlePoints(ScriptContext *ctx) {
     SaveData *saveData = ctx->fieldSystem->saveData;
-    u16 unk = ScriptGetVar(ctx);
-    u16 *unkPtr = ScriptGetVarPointer(ctx);
-    if (FrontierData_BattlePointAction(Save_FrontierData_Get(saveData), 0, 0) < unk) {
-        *unkPtr = FALSE;
+    u16 amount = ScriptGetVar(ctx);
+    u16 *result = ScriptGetVarPointer(ctx);
+    if (FrontierData_BattlePointAction(Save_FrontierData_Get(saveData), 0, 0) < amount) {
+        *result = FALSE;
     } else {
-        *unkPtr = TRUE;
+        *result = TRUE;
     }
     return FALSE;
 }

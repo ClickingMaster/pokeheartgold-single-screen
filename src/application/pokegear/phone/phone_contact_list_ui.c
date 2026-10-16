@@ -118,7 +118,7 @@ void PokegearPhone_ContactLinkedListToSlotsArray(PokegearPhoneAppData *phoneApp)
 
 void PokegearPhone_SetContactListUIAndDraw(PokegearPhoneAppData *phoneApp, PhoneContactListUI *ui, u8 firstContactOnPage, u8 cursorPos) {
     int i;
-    int r4;
+    int contactIndex;
 
     if (firstContactOnPage >= ui->numContacts) {
         firstContactOnPage = 0;
@@ -128,13 +128,13 @@ void PokegearPhone_SetContactListUIAndDraw(PokegearPhoneAppData *phoneApp, Phone
     ui->firstContactOnPage = firstContactOnPage;
     ui->selectedIndex = 0xFF;
     // Check if we are drawing fewer than 6 contacts
-    for (i = 0, r4 = firstContactOnPage; i < 6; ++r4, ++i) {
-        if (r4 >= ui->numContacts) {
-            ui->lastContactIndex = r4 - 1;
+    for (i = 0, contactIndex = firstContactOnPage; i < 6; ++contactIndex, ++i) {
+        if (contactIndex >= ui->numContacts) {
+            ui->lastContactIndex = contactIndex - 1;
             ui->listBottomIndex = i;
             break;
         }
-        PhoneContactListUI_PrintNameAndClass(ui, i + 1, r4, 0, FALSE);
+        PhoneContactListUI_PrintNameAndClass(ui, i + 1, contactIndex, 0, FALSE);
     }
     if (ui->listBottomIndex == 0) {
         ui->listBottomIndex = i;

@@ -11,7 +11,7 @@ u32 FrontierFieldSystem_GetSavedChallenge(u32 record);
 void FrontierFieldSystem_SetReturnWarp(FieldSystem *fieldSystem);
 void FrontierFieldSystem_ClearReturnWarpFlag(FieldSystem *fieldSystem);
 u32 FrontierFieldSystem_GetWinStreak(SaveData *saveData, u32 towerMode);
-void FrontierFieldSystem_SetFrontierFlag5(SaveData *saveData, u8 a1);
+void FrontierFieldSystem_SetFrontierFlag5(SaveData *saveData, u8 enable);
 u16 FrontierFieldSystem_GetFrontierFlag5(SaveData *saveData);
 u32 FrontierFieldSystem_ForfeitSavedChallenge(SaveData *saveData);
 u16 Save_BattleRoomDownload_HasTrainers(SaveData *saveData);

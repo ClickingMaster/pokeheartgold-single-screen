@@ -3,7 +3,7 @@
 
 #include "task.h"
 
-SysTask *TouchSaveApp_Init(BgConfig *bgConfig, void *a1, FieldSystem *fieldSystem, void *a3);
+SysTask *TouchSaveApp_Init(BgConfig *bgConfig, void *lastTouchMenuInput, FieldSystem *fieldSystem, void *a3);
 void TouchSaveApp_Exit(BgConfig *bgConfig, SysTask *task);
 BOOL TouchSaveApp_IsExitDone(void *a0);
 
