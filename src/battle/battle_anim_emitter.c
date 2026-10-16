@@ -17,7 +17,6 @@
 #include "sprite.h"
 #include "sprite_system.h"
 
-// Same layouts as in battle/battle_anim_internal.h (switch to it when it lands)
 struct BattleAnimLinearMotion {
     s16 x;
     s16 y;
@@ -757,8 +756,6 @@ void BattleAnimEmitter_ApplyConfiguredPosition(SPLEmitter *emitter, BattleAnimEm
 #define SET_AXIS_FROM_ROW(row)         SET_AXIS((row).v[0], (row).v[1], (row).v[2])
 #define SET_AXIS_FROM_ROW_NEGATED(row) SET_AXIS(-(row).v[0], -(row).v[1], -(row).v[2])
 
-#pragma force_active on
-
 void BattleAnimEmitter_ApplyConfiguredAxis(SPLEmitter *emitter, BattleAnimEmitterConfig *config) {
     BattleAnimEmitterAxisRows table;
     BattleAnimEmitterAxisRow a, b, c, d, e, f, g, base;
@@ -991,8 +988,6 @@ void BattleAnimEmitter_ApplyConfiguredAxis(SPLEmitter *emitter, BattleAnimEmitte
     emitter->axis.y = ((volatile BattleAnimEmitterAxis *)&axis)->y;
     emitter->axis.z = ((volatile BattleAnimEmitterAxis *)&axis)->z;
 }
-
-#pragma force_active reset
 
 #undef SET_AXIS
 #undef SET_AXIS_FROM_TABLES

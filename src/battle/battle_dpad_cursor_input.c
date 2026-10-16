@@ -1,5 +1,3 @@
-// BattleDpadCursor_HandleInput, the last function of battle_dpad_cursor: a separate object because overlay 8's
-// rodata object is linked between it and the rest of the module.
 #include "global.h"
 
 #include "constants/sndseq.h"
@@ -9,8 +7,6 @@
 
 #include "sound_playback.h"
 #include "system.h"
-
-#pragma force_active on
 
 // Returns the selected box on A, -2 on B and -1 otherwise. The d-pad moves to the neighbour in that direction,
 // skipping boxes that are not enabled; a neighbour flagged as a return link (bit 7) leads back to the previous box.

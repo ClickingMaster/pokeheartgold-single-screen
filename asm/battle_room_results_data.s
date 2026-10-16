@@ -25,43 +25,6 @@
 	.public BattleRoomResults_Init
 	.public BattleRoomResults_Exit
 	.public BattleRoomResults_Main
-	.public BattleRoomResults_SetupScreens
-	.public BattleRoomResults_TeardownScreens
-	.public BattleRoomResults_SetGfxBanks
-	.public BattleRoomResults_VBlankCB
-	.public BattleRoomResults_HandleResultsInput
-	.public BattleRoomResults_HandleLeadersInput
-	.public BattleRoomResults_InitBgs
-	.public BattleRoomResults_FreeBgs
-	.public BattleRoomResults_LoadBgGraphics
-	.public BattleRoomResults_AddWindows
-	.public BattleRoomResults_RemoveWindows
-	.public BattleRoomResults_InitStrings
-	.public BattleRoomResults_FreeStrings
-	.public BattleRoomResults_PrintString
-	.public BattleRoomResults_PrintMessage
-	.public BattleRoomResults_PrintFormattedMessage
-	.public BattleRoomResults_PrintTitle
-	.public BattleRoomResults_PrintResults
-	.public BattleRoomResults_LoadLeaders
-	.public BattleRoomResults_FreeLeaderNames
-	.public BattleRoomResults_PrintLeaderNames
-	.public BattleRoomResults_PrintPageNumber
-	.public BattleRoomResults_PrintLeadersScreen
-	.public BattleRoomResults_PrintLeaderInfo
-	.public BattleRoomResults_LeadersDummy
-	.public BattleRoomResults_InitSprites
-	.public BattleRoomResults_FreeSprites
-	.public BattleRoomResults_UpdateSprites
-	.public BattleRoomResults_TransferOam
-	.public BattleRoomResults_SetSpriteAnim
-	.public BattleRoomResults_SetSpritePosition
-	.public BattleRoomResults_UpdateButtonFlash
-	.public BattleRoomResults_StartSpriteFlash
-	.public BattleRoomResults_StartExitButtonFlash
-	.public BattleRoomResults_CreateGridInput
-	.public BattleRoomResults_FreeGridInput
-	.public BattleRoomResults_MoveCursor
 	.public BattleRoomResults_GridNoop
 	.public BattleRoomResults_GridOnKeyMove
 	.public BattleRoomResults_GridOnTouch

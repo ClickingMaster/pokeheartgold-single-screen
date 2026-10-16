@@ -10,8 +10,6 @@
 #include "sound_playback.h"
 #include "system.h"
 
-#pragma force_active on
-
 BattleDpadCursor *BattleDpadCursor_New(enum HeapID heapID) {
     BattleDpadCursor *cursor = Heap_Alloc(heapID, sizeof(BattleDpadCursor));
     u8 *byte = (u8 *)cursor;
@@ -75,8 +73,6 @@ void BattleDpadCursor_SetBoxes(BattleDpadCursor *cursor, const DpadMenuBox *boxe
 void BattleDpadCursor_SetEnabledMask(BattleDpadCursor *cursor, u32 enabledMask) {
     cursor->enabledMask = enabledMask;
 }
-
-#pragma force_active reset
 
 BOOL BattleDpadCursor_TryActivate(BattleDpadCursor *cursor) {
     if (cursor->active == TRUE) {

@@ -2812,8 +2812,6 @@ void BattleAnimTask_SpritesOrbitAttackerBobbingInit(BattleAnimOrbitSpritesWork *
     } while (i < 6);
 }
 
-#pragma force_active on
-
 void BattleAnimTask_SpritesOrbitAttackerBobbingUpdate(BattleAnimOrbitSpritesWork *work) {
     int i;
 
@@ -2829,8 +2827,6 @@ void BattleAnimTask_SpritesOrbitAttackerBobbingUpdate(BattleAnimOrbitSpritesWork
         }
     }
 }
-
-#pragma force_active reset
 
 enum {
     ORBIT_BOBBING_STATE_FADE_IN,
@@ -2911,8 +2907,6 @@ void BattleAnimSpriteFunc_SpritesOrbitAttackerBobbing(BattleAnimSystem *system, 
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_SpritesOrbitAttackerBobbing, work);
 }
 
-#pragma force_active on
-
 void BattleAnimTask_FloatingSpriteStreamLaunch(ManagedSprite *sprite, BattleAnimLinearMotion *motion, int dirX, int dirY) {
     s16 x;
     s16 y;
@@ -2942,8 +2936,6 @@ BOOL BattleAnimTask_FloatingSpriteStreamUpdateSprite(ManagedSprite *sprite, Batt
     }
     return TRUE;
 }
-
-#pragma force_active reset
 
 BOOL BattleAnimTask_FloatingSpriteStreamUpdate(BattleAnimFloatingSpritesWork *work) {
     int i;
@@ -3041,8 +3033,6 @@ void BattleAnimTask_WobbleDefenderOnBgSetPhase(BattleAnimWobbleOnBgWork *work) {
     }
 }
 
-#pragma force_active on
-
 void BattleAnimTask_WobbleDefenderOnBgUpdateScanlines(BattleAnimWobbleOnBgWork *work) {
     u32 *buffer;
     int start;
@@ -3084,8 +3074,6 @@ void BattleAnimTask_WobbleDefenderOnBgUpdateScanlines(BattleAnimWobbleOnBgWork *
         buffer[dest] = BattleAnimUtil_PackXY(x + offset, y);
     }
 }
-
-#pragma force_active reset
 
 enum {
     WOBBLE_STATE_SET_PHASE,
@@ -3994,7 +3982,6 @@ void BattleAnimObjWindowBg_InitParams(BattleAnimSystem *system, BattleAnimObjWin
 
 #pragma push
 #pragma opt_propagation off
-#pragma force_active on
 
 void BattleAnimObjWindowBg_Start(BattleAnimSystem *system, const BattleAnimObjWindowBgParams *params) {
     BattleAnimObjWindowBgWork *work = BattleAnimUtil_AllocWork(system, sizeof(BattleAnimObjWindowBgWork));
@@ -4037,7 +4024,6 @@ void BattleAnimObjWindowBg_Start(BattleAnimSystem *system, const BattleAnimObjWi
     BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_ObjWindowBgScroll, work);
 }
 
-#pragma force_active reset
 #pragma pop
 
 void BattleAnimFunc_ObjWindowBgScrollUp(BattleAnimSystem *system) {

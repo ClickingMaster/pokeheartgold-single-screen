@@ -106,7 +106,6 @@ typedef struct BattleRoomLeaderRecord {
 
 typedef struct BattleRoomDownload BattleRoomDownload;
 
-// Defined in frontier_data.c; not declared in its header.
 void *BattleRoomDownload_CopyLeaders(BattleRoomDownload *data, enum HeapID heapID);
 
 typedef struct BattleRoomResultsGraphicsBanks {
@@ -131,43 +130,43 @@ extern const DpadMenuBox sBattleRoomResultsGridDpadBoxes[];
 extern const ManagedSpriteTemplate sBattleRoomResultsSpriteTemplates[];
 extern const WindowTemplate sBattleRoomResultsLeaderWindowTemplates[];
 
-BOOL BattleRoomResults_SetupScreens(BattleRoomResults *results);
-BOOL BattleRoomResults_TeardownScreens(BattleRoomResults *results);
-void BattleRoomResults_SetGfxBanks(void);
-void BattleRoomResults_VBlankCB(BattleRoomResults *results);
-int BattleRoomResults_HandleResultsInput(BattleRoomResults *results);
-int BattleRoomResults_HandleLeadersInput(BattleRoomResults *results);
-void BattleRoomResults_InitBgs(BattleRoomResults *results);
-void BattleRoomResults_FreeBgs(BattleRoomResults *results);
-void BattleRoomResults_LoadBgGraphics(BattleRoomResults *results);
-void BattleRoomResults_AddWindows(BattleRoomResults *results);
-void BattleRoomResults_RemoveWindows(BattleRoomResults *results);
-void BattleRoomResults_InitStrings(BattleRoomResults *results);
-void BattleRoomResults_FreeStrings(BattleRoomResults *results);
-void BattleRoomResults_PrintString(Window *window, String *string, u32 x, int y, int fontId, u32 color, int alignment);
-void BattleRoomResults_PrintMessage(BattleRoomResults *results, int windowIndex, int msgId, u32 x, int y, int fontId, u32 color, int alignment);
-void BattleRoomResults_PrintFormattedMessage(BattleRoomResults *results, int windowIndex, int msgId, u32 x, int y, int fontId, u32 color, int alignment);
-void BattleRoomResults_PrintTitle(BattleRoomResults *results);
-void BattleRoomResults_PrintResults(BattleRoomResults *results);
-void BattleRoomResults_LoadLeaders(BattleRoomResults *results);
-void BattleRoomResults_FreeLeaderNames(BattleRoomResults *results);
-void BattleRoomResults_PrintLeaderNames(BattleRoomResults *results);
-void BattleRoomResults_PrintPageNumber(BattleRoomResults *results);
-void BattleRoomResults_PrintLeadersScreen(BattleRoomResults *results);
-void BattleRoomResults_PrintLeaderInfo(BattleRoomResults *results, int leader);
-void BattleRoomResults_LeadersDummy(BattleRoomResults *results);
-void BattleRoomResults_InitSprites(BattleRoomResults *results);
-void BattleRoomResults_FreeSprites(BattleRoomResults *results);
-void BattleRoomResults_UpdateSprites(BattleRoomResults *results);
-void BattleRoomResults_TransferOam(void);
-void BattleRoomResults_SetSpriteAnim(BattleRoomResults *results, int index, int anim);
-void BattleRoomResults_SetSpritePosition(BattleRoomResults *results, int index, int x, int y);
-BOOL BattleRoomResults_UpdateButtonFlash(BattleRoomResults *results);
-void BattleRoomResults_StartSpriteFlash(BattleRoomResults *results, int sprite);
-void BattleRoomResults_StartExitButtonFlash(BattleRoomResults *results);
-void BattleRoomResults_CreateGridInput(BattleRoomResults *results);
-void BattleRoomResults_FreeGridInput(BattleRoomResults *results);
-void BattleRoomResults_MoveCursor(BattleRoomResults *results, int input);
+static BOOL BattleRoomResults_SetupScreens(BattleRoomResults *results);
+static BOOL BattleRoomResults_TeardownScreens(BattleRoomResults *results);
+static void BattleRoomResults_SetGfxBanks(void);
+static void BattleRoomResults_VBlankCB(BattleRoomResults *results);
+static int BattleRoomResults_HandleResultsInput(BattleRoomResults *results);
+static int BattleRoomResults_HandleLeadersInput(BattleRoomResults *results);
+static void BattleRoomResults_InitBgs(BattleRoomResults *results);
+static void BattleRoomResults_FreeBgs(BattleRoomResults *results);
+static void BattleRoomResults_LoadBgGraphics(BattleRoomResults *results);
+static void BattleRoomResults_AddWindows(BattleRoomResults *results);
+static void BattleRoomResults_RemoveWindows(BattleRoomResults *results);
+static void BattleRoomResults_InitStrings(BattleRoomResults *results);
+static void BattleRoomResults_FreeStrings(BattleRoomResults *results);
+static void BattleRoomResults_PrintString(Window *window, String *string, u32 x, int y, int fontId, u32 color, int alignment);
+static void BattleRoomResults_PrintMessage(BattleRoomResults *results, int windowIndex, int msgId, u32 x, int y, int fontId, u32 color, int alignment);
+static void BattleRoomResults_PrintFormattedMessage(BattleRoomResults *results, int windowIndex, int msgId, u32 x, int y, int fontId, u32 color, int alignment);
+static void BattleRoomResults_PrintTitle(BattleRoomResults *results);
+static void BattleRoomResults_PrintResults(BattleRoomResults *results);
+static void BattleRoomResults_LoadLeaders(BattleRoomResults *results);
+static void BattleRoomResults_FreeLeaderNames(BattleRoomResults *results);
+static void BattleRoomResults_PrintLeaderNames(BattleRoomResults *results);
+static void BattleRoomResults_PrintPageNumber(BattleRoomResults *results);
+static void BattleRoomResults_PrintLeadersScreen(BattleRoomResults *results);
+static void BattleRoomResults_PrintLeaderInfo(BattleRoomResults *results, int leader);
+static void BattleRoomResults_LeadersDummy(BattleRoomResults *results);
+static void BattleRoomResults_InitSprites(BattleRoomResults *results);
+static void BattleRoomResults_FreeSprites(BattleRoomResults *results);
+static void BattleRoomResults_UpdateSprites(BattleRoomResults *results);
+static void BattleRoomResults_TransferOam(void);
+static void BattleRoomResults_SetSpriteAnim(BattleRoomResults *results, int index, int anim);
+static void BattleRoomResults_SetSpritePosition(BattleRoomResults *results, int index, int x, int y);
+static BOOL BattleRoomResults_UpdateButtonFlash(BattleRoomResults *results);
+static void BattleRoomResults_StartSpriteFlash(BattleRoomResults *results, int sprite);
+static void BattleRoomResults_StartExitButtonFlash(BattleRoomResults *results);
+static void BattleRoomResults_CreateGridInput(BattleRoomResults *results);
+static void BattleRoomResults_FreeGridInput(BattleRoomResults *results);
+static void BattleRoomResults_MoveCursor(BattleRoomResults *results, int input);
 void BattleRoomResults_GridNoop(void);
 void BattleRoomResults_GridOnKeyMove(BattleRoomResults *results, int newInput, int prevInput);
 void BattleRoomResults_GridOnTouch(BattleRoomResults *results, int input);
@@ -265,7 +264,7 @@ BOOL BattleRoomResults_Main(OverlayManager *man, int *state) {
     return FALSE;
 }
 
-BOOL BattleRoomResults_SetupScreens(BattleRoomResults *results) {
+static BOOL BattleRoomResults_SetupScreens(BattleRoomResults *results) {
     switch (results->subState) {
     case 0:
         Main_SetVBlankIntrCB(NULL, NULL);
@@ -307,7 +306,7 @@ BOOL BattleRoomResults_SetupScreens(BattleRoomResults *results) {
     return FALSE;
 }
 
-BOOL BattleRoomResults_TeardownScreens(BattleRoomResults *results) {
+static BOOL BattleRoomResults_TeardownScreens(BattleRoomResults *results) {
     switch (results->subState) {
     case 0:
         if (results->showLeaders != FALSE) {
@@ -333,22 +332,18 @@ BOOL BattleRoomResults_TeardownScreens(BattleRoomResults *results) {
     return FALSE;
 }
 
-void BattleRoomResults_SetGfxBanks(void) {
+static void BattleRoomResults_SetGfxBanks(void) {
     BattleRoomResultsGraphicsBanks banks = sBattleRoomResultsGraphicsBanks;
     GfGfx_SetBanks((GraphicsBanks *)&banks);
 }
 
-#pragma force_active on
-
-void BattleRoomResults_VBlankCB(BattleRoomResults *results) {
+static void BattleRoomResults_VBlankCB(BattleRoomResults *results) {
     BattleRoomResults_TransferOam();
     DoScheduledBgGpuUpdates(results->bgConfig);
     ((u32 *)0x027E0000)[(HW_INTR_CHECK_BUF - HW_DTCM) / 4] |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag
 }
 
-#pragma force_active reset
-
-int BattleRoomResults_HandleResultsInput(BattleRoomResults *results) {
+static int BattleRoomResults_HandleResultsInput(BattleRoomResults *results) {
     if (TouchscreenHitbox_TouchNewIsIn(gBattleRoomResultsHitbox) == TRUE || (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B))) {
         PlaySE(SEQ_SE_DP_DECIDE);
         BattleRoomResults_StartExitButtonFlash(results);
@@ -358,9 +353,7 @@ int BattleRoomResults_HandleResultsInput(BattleRoomResults *results) {
     return BATTLE_ROOM_RESULTS_STATE_RESULTS_INPUT;
 }
 
-#pragma force_active on
-
-int BattleRoomResults_HandleLeadersInput(BattleRoomResults *results) {
+static int BattleRoomResults_HandleLeadersInput(BattleRoomResults *results) {
     switch ((u32)GridInputHandler_HandleInput_NoHold(results->gridInput)) {
     case BATTLE_ROOM_RESULTS_CANCEL:
     case GRID_MENU_CANCEL:
@@ -420,9 +413,7 @@ int BattleRoomResults_HandleLeadersInput(BattleRoomResults *results) {
     return BATTLE_ROOM_RESULTS_STATE_LEADERS_INPUT;
 }
 
-#pragma force_active reset
-
-void BattleRoomResults_InitBgs(BattleRoomResults *results) {
+static void BattleRoomResults_InitBgs(BattleRoomResults *results) {
     GraphicsModes modes;
     BgTemplate bg0;
     BgTemplate bg1;
@@ -446,7 +437,7 @@ void BattleRoomResults_InitBgs(BattleRoomResults *results) {
     InitBgFromTemplate(results->bgConfig, GF_BG_LYR_SUB_1, &bg5, GF_BG_TYPE_TEXT);
 }
 
-void BattleRoomResults_FreeBgs(BattleRoomResults *results) {
+static void BattleRoomResults_FreeBgs(BattleRoomResults *results) {
     FreeBgTilemapBuffer(results->bgConfig, GF_BG_LYR_SUB_1);
     FreeBgTilemapBuffer(results->bgConfig, GF_BG_LYR_SUB_0);
     FreeBgTilemapBuffer(results->bgConfig, GF_BG_LYR_MAIN_1);
@@ -454,7 +445,7 @@ void BattleRoomResults_FreeBgs(BattleRoomResults *results) {
     Heap_Free(results->bgConfig);
 }
 
-void BattleRoomResults_LoadBgGraphics(BattleRoomResults *results) {
+static void BattleRoomResults_LoadBgGraphics(BattleRoomResults *results) {
     NARC *narc;
 
     if (results->showLeaders == FALSE) {
@@ -480,7 +471,7 @@ void BattleRoomResults_LoadBgGraphics(BattleRoomResults *results) {
     }
 }
 
-void BattleRoomResults_AddWindows(BattleRoomResults *results) {
+static void BattleRoomResults_AddWindows(BattleRoomResults *results) {
     if (results->showLeaders == FALSE) {
         const WindowTemplate *template = sBattleRoomResultsWindowTemplates;
         Window *window;
@@ -510,7 +501,7 @@ void BattleRoomResults_AddWindows(BattleRoomResults *results) {
     LoadFontPal0(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_15_OFFSET, results->heapID);
 }
 
-void BattleRoomResults_RemoveWindows(BattleRoomResults *results) {
+static void BattleRoomResults_RemoveWindows(BattleRoomResults *results) {
     int i;
     int numWindows;
     Window *window;
@@ -533,7 +524,7 @@ void BattleRoomResults_RemoveWindows(BattleRoomResults *results) {
     }
 }
 
-void BattleRoomResults_InitStrings(BattleRoomResults *results) {
+static void BattleRoomResults_InitStrings(BattleRoomResults *results) {
     results->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0028_bin, results->heapID);
     results->msgFormat = MessageFormat_New_Custom(2, 64, results->heapID);
     results->string = String_New(512, results->heapID);
@@ -541,7 +532,7 @@ void BattleRoomResults_InitStrings(BattleRoomResults *results) {
     results->defaultNames[1] = NewString_ReadMsgData(results->msgData, msg_0028_00034);
 }
 
-void BattleRoomResults_FreeStrings(BattleRoomResults *results) {
+static void BattleRoomResults_FreeStrings(BattleRoomResults *results) {
     String_Delete(results->defaultNames[1]);
     String_Delete(results->defaultNames[0]);
     String_Delete(results->string);
@@ -549,24 +540,23 @@ void BattleRoomResults_FreeStrings(BattleRoomResults *results) {
     DestroyMsgData(results->msgData);
 }
 
-void BattleRoomResults_PrintString(Window *window, String *string, u32 x, int y, int fontId, u32 color, int alignment) {
+static void BattleRoomResults_PrintString(Window *window, String *string, u32 x, int y, int fontId, u32 color, int alignment) {
     if (alignment == 1) {
         x -= FontID_String_GetWidth(fontId, string, 0);
     } else if (alignment == 2) {
         x -= FontID_String_GetWidth(fontId, string, 0) >> 1;
     }
-    // The font id is passed without truncation to u8: the callee takes it as u32 (see the FontID TODO).
     ((u8(*)(Window *, u32, String *, u32, u32, u32, u32, PrinterCallback_t))AddTextPrinterParameterizedWithColor)(window, fontId, string, x, y, TEXT_SPEED_NOTRANSFER, color, NULL);
 }
 
-void BattleRoomResults_PrintMessage(BattleRoomResults *results, int windowIndex, int msgId, u32 x, int y, int fontId, u32 color, int alignment) {
+static void BattleRoomResults_PrintMessage(BattleRoomResults *results, int windowIndex, int msgId, u32 x, int y, int fontId, u32 color, int alignment) {
     String *string = NewString_ReadMsgData(results->msgData, msgId);
 
     BattleRoomResults_PrintString(&results->windows[windowIndex], string, x, y, fontId, color, alignment);
     String_Delete(string);
 }
 
-void BattleRoomResults_PrintFormattedMessage(BattleRoomResults *results, int windowIndex, int msgId, u32 x, int y, int fontId, u32 color, int alignment) {
+static void BattleRoomResults_PrintFormattedMessage(BattleRoomResults *results, int windowIndex, int msgId, u32 x, int y, int fontId, u32 color, int alignment) {
     String *string = NewString_ReadMsgData(results->msgData, msgId);
 
     StringExpandPlaceholders(results->msgFormat, results->string, string);
@@ -574,14 +564,12 @@ void BattleRoomResults_PrintFormattedMessage(BattleRoomResults *results, int win
     String_Delete(string);
 }
 
-void BattleRoomResults_PrintTitle(BattleRoomResults *results) {
+static void BattleRoomResults_PrintTitle(BattleRoomResults *results) {
     int width = GetWindowWidth(&results->windows[0]);
     BattleRoomResults_PrintMessage(results, 0, msg_0028_00024, (width * 8) / 2, 0, 4, MAKE_TEXT_COLOR(15, 1, 0), 2);
 }
 
-#pragma force_active on
-
-void BattleRoomResults_PrintResults(BattleRoomResults *results) {
+static void BattleRoomResults_PrintResults(BattleRoomResults *results) {
     u32 i;
     u32 j;
     u8 width;
@@ -614,7 +602,7 @@ void BattleRoomResults_PrintResults(BattleRoomResults *results) {
     }
 }
 
-void BattleRoomResults_LoadLeaders(BattleRoomResults *results) {
+static void BattleRoomResults_LoadLeaders(BattleRoomResults *results) {
     struct {
         int index;
         BattleRoomLeaderRecord *records;
@@ -645,9 +633,7 @@ void BattleRoomResults_LoadLeaders(BattleRoomResults *results) {
     Heap_Free(query.records);
 }
 
-#pragma force_active reset
-
-void BattleRoomResults_FreeLeaderNames(BattleRoomResults *results) {
+static void BattleRoomResults_FreeLeaderNames(BattleRoomResults *results) {
     int i;
     BattleRoomResults *shifted = results; // shifted by i leaders: leaders[0] through it is leaders[i]
 
@@ -656,7 +642,7 @@ void BattleRoomResults_FreeLeaderNames(BattleRoomResults *results) {
     }
 }
 
-void BattleRoomResults_PrintLeaderNames(BattleRoomResults *results) {
+static void BattleRoomResults_PrintLeaderNames(BattleRoomResults *results) {
     u16 leader;
     Window *windows;
     u16 i;
@@ -683,7 +669,7 @@ void BattleRoomResults_PrintLeaderNames(BattleRoomResults *results) {
     results->nameWindowSet ^= 1;
 }
 
-void BattleRoomResults_PrintPageNumber(BattleRoomResults *results) {
+static void BattleRoomResults_PrintPageNumber(BattleRoomResults *results) {
     FillWindowPixelBuffer(&results->windows[4], 0);
     BufferIntegerAsString(results->msgFormat, 0, results->page + 1, 1, PRINTING_MODE_LEFT_ALIGN, TRUE);
     BattleRoomResults_PrintFormattedMessage(results, 4, msg_0028_00020, 8, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 1);
@@ -693,7 +679,7 @@ void BattleRoomResults_PrintPageNumber(BattleRoomResults *results) {
     ScheduleWindowCopyToVram(&results->windows[4]);
 }
 
-void BattleRoomResults_PrintLeadersScreen(BattleRoomResults *results) {
+static void BattleRoomResults_PrintLeadersScreen(BattleRoomResults *results) {
     u32 i;
     Window *window;
     Window *window2;
@@ -718,9 +704,8 @@ void BattleRoomResults_PrintLeadersScreen(BattleRoomResults *results) {
     BattleRoomResults_PrintPageNumber(results);
 }
 
-// The leader's fields are addressed as byte offsets from the work struct; the region byte in particular
-// must be read as *(u8 *)(base + (field offset + offset)), any other spelling swaps two registers.
-void BattleRoomResults_PrintLeaderInfo(BattleRoomResults *results, int leader) {
+// Shows the selected leader's name, home country and region and greeting in the free set of info windows.
+static void BattleRoomResults_PrintLeaderInfo(BattleRoomResults *results, int leader) {
     u32 windowIndex;
     u8 *windows;
     u16 i;
@@ -772,12 +757,10 @@ void BattleRoomResults_PrintLeaderInfo(BattleRoomResults *results, int leader) {
     results->infoWindowSet ^= 1;
 }
 
-void BattleRoomResults_LeadersDummy(BattleRoomResults *results) {
+static void BattleRoomResults_LeadersDummy(BattleRoomResults *results) {
 }
 
-#pragma force_active on
-
-void BattleRoomResults_InitSprites(BattleRoomResults *results) {
+static void BattleRoomResults_InitSprites(BattleRoomResults *results) {
     OamManagerParam oamParam;
     OamCharTransferParam charTransferParam;
     SpriteResourceCountsListUnion resourceCounts;
@@ -809,9 +792,7 @@ void BattleRoomResults_InitSprites(BattleRoomResults *results) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-#pragma force_active reset
-
-void BattleRoomResults_FreeSprites(BattleRoomResults *results) {
+static void BattleRoomResults_FreeSprites(BattleRoomResults *results) {
     u32 i;
     BattleRoomResults *shifted = results; // shifted by i sprites: sprites[0] through it is sprites[i]
 
@@ -826,7 +807,7 @@ void BattleRoomResults_FreeSprites(BattleRoomResults *results) {
     SpriteSystem_Free(results->spriteSystem);
 }
 
-void BattleRoomResults_UpdateSprites(BattleRoomResults *results) {
+static void BattleRoomResults_UpdateSprites(BattleRoomResults *results) {
     u32 i = 0;
     BattleRoomResults *shifted = results; // shifted by i sprites: sprites[0] through it is sprites[i]
 
@@ -836,23 +817,20 @@ void BattleRoomResults_UpdateSprites(BattleRoomResults *results) {
     SpriteSystem_DrawSprites(results->spriteManager);
 }
 
-void BattleRoomResults_TransferOam(void) {
+static void BattleRoomResults_TransferOam(void) {
     SpriteSystem_TransferOam();
 }
 
-void BattleRoomResults_SetSpriteAnim(BattleRoomResults *results, int index, int anim) {
+static void BattleRoomResults_SetSpriteAnim(BattleRoomResults *results, int index, int anim) {
     ManagedSprite_SetAnimationFrame(results->sprites[index], 0);
     ManagedSprite_SetAnim(results->sprites[index], anim);
 }
 
-void BattleRoomResults_SetSpritePosition(BattleRoomResults *results, int index, int x, int y) {
-    // x and y are passed as ints: the callee does not need them truncated (s16 in sprite_system.h).
+static void BattleRoomResults_SetSpritePosition(BattleRoomResults *results, int index, int x, int y) {
     ((void (*)(ManagedSprite *, int, int))ManagedSprite_SetPositionXY)(results->sprites[index], x, y);
 }
 
-#pragma force_active on
-
-BOOL BattleRoomResults_UpdateButtonFlash(BattleRoomResults *results) {
+static BOOL BattleRoomResults_UpdateButtonFlash(BattleRoomResults *results) {
     switch (results->flash.state) {
     case 0:
         if (results->flash.isBgRect == FALSE) {
@@ -886,7 +864,7 @@ BOOL BattleRoomResults_UpdateButtonFlash(BattleRoomResults *results) {
     return TRUE;
 }
 
-void BattleRoomResults_StartSpriteFlash(BattleRoomResults *results, int sprite) {
+static void BattleRoomResults_StartSpriteFlash(BattleRoomResults *results, int sprite) {
     results->flash.isBgRect = FALSE;
     results->flash.target = (u8)sprite;
     results->flash.pressedPltt = 1;
@@ -895,22 +873,20 @@ void BattleRoomResults_StartSpriteFlash(BattleRoomResults *results, int sprite) 
     results->flash.timer = 0;
 }
 
-#pragma force_active reset
-
-void BattleRoomResults_StartExitButtonFlash(BattleRoomResults *results) {
+static void BattleRoomResults_StartExitButtonFlash(BattleRoomResults *results) {
     BattleRoomResults_StartSpriteFlash(results, 1);
 }
 
-void BattleRoomResults_CreateGridInput(BattleRoomResults *results) {
+static void BattleRoomResults_CreateGridInput(BattleRoomResults *results) {
     results->gridInput = GridInputHandler_Create(sBattleRoomResultsGridHitboxes, sBattleRoomResultsGridDpadBoxes, &sBattleRoomResultsGridCallbacks, results, TRUE, 0, results->heapID);
     BattleRoomResults_MoveCursor(results, 0);
 }
 
-void BattleRoomResults_FreeGridInput(BattleRoomResults *results) {
+static void BattleRoomResults_FreeGridInput(BattleRoomResults *results) {
     GridInputHandler_Free(results->gridInput);
 }
 
-void BattleRoomResults_MoveCursor(BattleRoomResults *results, int input) {
+static void BattleRoomResults_MoveCursor(BattleRoomResults *results, int input) {
     u8 position[2];
     const DpadMenuBox *box = GridInputHandler_GetDpadBox(results->gridInput, input);
 

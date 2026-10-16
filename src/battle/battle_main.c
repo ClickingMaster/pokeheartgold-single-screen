@@ -14,10 +14,10 @@
 #include "battle/battle_controller_opponent.h"
 #include "battle/battle_controller_player.h"
 #include "battle/battle_input.h"
+#include "battle/battle_recording_stop.h"
 #include "battle/battle_setup.h"
 #include "battle/battle_system.h"
 #include "battle/battle_util.h"
-#include "battle/battle_recording_stop.h"
 #include "battle/link_battle_screen.h"
 #include "dwc/net_common_internal.h"
 #include "msgdata/msg.naix"
@@ -26,7 +26,9 @@
 #include "bag.h"
 #include "bag_cursor.h"
 #include "battle_link_comm.h"
+#include "comm_state.h"
 #include "comm_wireless.h"
+#include "communication_core.h"
 #include "filesystem_files_def.h"
 #include "font.h"
 #include "game_stats.h"
@@ -34,11 +36,15 @@
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
+#include "link_synchronization.h"
 #include "math_util.h"
 #include "message_printer.h"
 #include "msgdata.h"
 #include "overlay_06.h"
 #include "palette.h"
+#include "palette_blink.h"
+#include "palette_vram_addr.h"
+#include "particle_system.h"
 #include "particle_system_internal.h"
 #include "party.h"
 #include "player_data.h"
@@ -49,35 +55,29 @@
 #include "pokepic_anim_internal.h"
 #include "render_text.h"
 #include "render_window.h"
+#include "screen_fade_legacy.h"
+#include "sound_playback.h"
 #include "sound_system.h"
+#include "swap_3d_buffers.h"
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
-#include "sound_playback.h"
-#include "screen_fade_legacy.h"
-#include "particle_system.h"
-#include "palette_blink.h"
 #include "touchpad.h"
-#include "swap_3d_buffers.h"
-#include "palette_vram_addr.h"
-#include "communication_core.h"
-#include "link_synchronization.h"
-#include "comm_state.h"
-#include "wireless_status_icon.h"
 #include "ui_util.h"
 #include "vram_transfer_manager.h"
+#include "wireless_status_icon.h"
 
 FS_EXTERN_OVERLAY(OVY_5);
 FS_EXTERN_OVERLAY(OVY_6);
 FS_EXTERN_OVERLAY(OVY_18);
 
-// Work of the link data exchange stage (BSTATE_LINK_INIT/MAIN). battle_link*.c sees it as BattleLinkWork, which
-// declares only the members those functions use.
 typedef struct BattlerInitData {
     u8 battler;
     u8 battlerType;
 } BattlerInitData;
 
+// Work of the link data exchange stage (BSTATE_LINK_INIT/MAIN). The link exchange code sees it as BattleLinkWork,
+// which declares only the members it uses.
 typedef struct BattleLinkStageWork {
     BattleSetup *setup;       // 0x00
     BgConfig *bgConfig;       // 0x04
@@ -90,8 +90,7 @@ typedef struct BattleLinkStageWork {
     WaitingIcon *waitingIcon; // 0x1024
 } BattleLinkStageWork;
 
-// BattleSystem.unk1C4 holds the overlay 5 link battle screen arguments while that screen runs. A macro, not an
-// inline function: the field is reloaded at each use, after the calls in the same expression.
+// The overlay 5 link battle screen arguments, held by the battle system while that screen runs.
 #define LINK_SCREEN_ARGS(battleSystem) ((LinkBattleScreenArgs *)(battleSystem)->linkScreenArgs)
 
 extern const OamManagerParam sBattleOamManagerParam;
@@ -842,8 +841,7 @@ void Battle_ReserveTexAndPlttVram(void) {
     ParticleSystem_ZeroAll();
 }
 
-// Sets an IRQ check flag in the DTCM system area through its literal address (OS_SetIrqCheckFlag addresses
-// it through the DTCM section symbol).
+// Sets bits of the IRQ check flag in the DTCM system area.
 static inline void SetIrqCheckFlag(u8 *dtcm, u32 mask) {
     *(volatile u32 *)(dtcm + 0x3FF8) |= mask;
 }

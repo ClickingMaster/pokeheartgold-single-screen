@@ -15,8 +15,11 @@
 
 #include "bag.h"
 #include "battle_record.h"
+#include "battle_recording.h"
 #include "bg_window.h"
 #include "camera.h"
+#include "communication_core.h"
+#include "communication_player_state.h"
 #include "filesystem.h"
 #include "filesystem_files_def.h"
 #include "font.h"
@@ -26,10 +29,12 @@
 #include "gf_gfx_planes.h"
 #include "heap.h"
 #include "item.h"
+#include "link_synchronization.h"
 #include "list_menu_2d.h"
 #include "math_util.h"
 #include "message_format.h"
 #include "message_printer.h"
+#include "message_printer_number.h"
 #include "msgdata.h"
 #include "options.h"
 #include "palette.h"
@@ -40,24 +45,19 @@
 #include "pm_string.h"
 #include "pokemon.h"
 #include "pokemon_icon_idx.h"
+#include "pokemon_summary.h"
 #include "render_window.h"
 #include "screen_fade.h"
 #include "sound_playback.h"
 #include "sprite_system.h"
+#include "swap_3d_buffers.h"
 #include "sys_task.h"
 #include "systask_environment.h"
 #include "system.h"
 #include "text.h"
-#include "message_printer_number.h"
-#include "swap_3d_buffers.h"
-#include "battle_recording.h"
-#include "communication_player_state.h"
-#include "communication_core.h"
-#include "link_synchronization.h"
-#include "wireless_status_icon.h"
 #include "ui_util.h"
-#include "pokemon_summary.h"
 #include "vram_transfer_manager.h"
+#include "wireless_status_icon.h"
 
 #define LINK_BATTLE_SCREEN_PARTY_WINDOW_COUNT 24
 #define LINK_BATTLE_SCREEN_SPRITES_PER_MON    5
@@ -120,8 +120,8 @@ struct LinkBattleScreen {
     u8 delayFrames;                                                 // 0xB81
     u8 frame;                                                       // 0xB82
     u8 unk_B83;                                                     // 0xB83
-    u16 recordSaveState;                                                    // 0xB84, battle record save state
-    u16 recordWriteState;                                                    // 0xB86, battle record save state
+    u16 recordSaveState;                                            // 0xB84, battle record save state
+    u16 recordWriteState;                                           // 0xB86, battle record save state
     Window msgWindow;                                               // 0xB88
     Window yesNoWindow;                                             // 0xB98
     BOOL use3D;                                                     // 0xBA8
@@ -181,10 +181,10 @@ extern const WindowTemplate sPartyWindowTemplates[LINK_BATTLE_SCREEN_PARTY_WINDO
 extern const LinkBattleScreenSpriteTemplate sVsSpriteTemplates[];
 extern const LinkBattleScreenSpriteTemplate sPartySpriteTemplates[];
 
-void LinkBattleScreen_RunTask(SysTask *task, void *data);
-void LinkBattleScreen_SetVramBanks(void);
-void LinkBattleScreen_UpdateBattleVideoPrompt(LinkBattleScreen *screen);
-int LinkBattleScreen_Init(LinkBattleScreen *screen);
+static void LinkBattleScreen_RunTask(SysTask *task, void *data);
+static void LinkBattleScreen_SetVramBanks(void);
+static void LinkBattleScreen_UpdateBattleVideoPrompt(LinkBattleScreen *screen);
+static int LinkBattleScreen_Init(LinkBattleScreen *screen);
 int LinkBattleScreen_InitPartyScreen(LinkBattleScreen *screen);
 int LinkBattleScreen_InitVsScreen(LinkBattleScreen *screen);
 int LinkBattleScreen_InitResultScreen(LinkBattleScreen *screen);
@@ -195,8 +195,8 @@ int LinkBattleScreen_SlidePanelsOut(LinkBattleScreen *screen);
 int LinkBattleScreen_DelayBeforeNudge(LinkBattleScreen *screen);
 int LinkBattleScreen_DetermineNudgeDirection(LinkBattleScreen *screen);
 int LinkBattleScreen_NudgePanels(LinkBattleScreen *screen);
-int LinkBattleScreen_NudgePanelsRight(LinkBattleScreen *screen);
-int LinkBattleScreen_NudgePanelsLeft(LinkBattleScreen *screen);
+static int LinkBattleScreen_NudgePanelsRight(LinkBattleScreen *screen);
+static int LinkBattleScreen_NudgePanelsLeft(LinkBattleScreen *screen);
 int LinkBattleScreen_DelayBeforeReveal(LinkBattleScreen *screen);
 int LinkBattleScreen_RevealCenterBand(LinkBattleScreen *screen);
 int LinkBattleScreen_ShowWinLoseSprites(LinkBattleScreen *screen);
@@ -206,67 +206,67 @@ int LinkBattleScreen_WaitForPartner(LinkBattleScreen *screen);
 int LinkBattleScreen_ApplyOutcomePalette(LinkBattleScreen *screen);
 int LinkBattleScreen_SlidePartyPanelsIn(LinkBattleScreen *screen);
 int LinkBattleScreen_StartExit(LinkBattleScreen *screen);
-int LinkBattleScreen_Finish(SysTask *task, LinkBattleScreen *screen);
-BOOL LinkBattleScreen_IsLocalPlayerOnLeft(void);
-void LinkBattleScreen_InitSpriteSystem(LinkBattleScreen *screen, SpriteResourceCountsListUnion *resourceCounts, u32 count);
-ManagedSprite *LinkBattleScreen_CreateSprite(LinkBattleScreen *screen, const LinkBattleScreenSpriteTemplate *template);
-void LinkBattleScreen_FreeSprites(LinkBattleScreen *screen);
-void LinkBattleScreen_UpdateSpriteAnims(LinkBattleScreen *screen);
-void LinkBattleScreen_VBlankCallback(void *data);
-void LinkBattleScreen_InitVsBgLayers(LinkBattleScreen *screen, BOOL use3D, BOOL shiftBg1);
-void LinkBattleScreen_RemoveMessageWindows(LinkBattleScreen *screen);
-void LinkBattleScreen_FreeMessageData(LinkBattleScreen *screen);
-void LinkBattleScreen_FreeVsBgLayers(LinkBattleScreen *screen);
-void LinkBattleScreen_LoadVsBgGraphics(LinkBattleScreen *screen);
-void LinkBattleScreen_InitMessageWindows(LinkBattleScreen *screen);
-void LinkBattleScreen_SetBg1AlphaBlend(void);
-void LinkBattleScreen_InitVsSprites(LinkBattleScreen *screen);
-void LinkBattleScreen_LoadPartyBallGfx(LinkBattleScreen *screen);
-void LinkBattleScreen_SetBallRowPosition(LinkBattleScreen *screen, u8 row, s16 x, s16 y);
-void LinkBattleScreen_SetPartyBallAnims(LinkBattleScreen *screen, Party *party, int count, int firstSprite);
-void LinkBattleScreen_SetAllPartyBallAnims(LinkBattleScreen *screen);
-void LinkBattleScreen_CreateNameTextObj(LinkBattleScreen *screen, int index, String *name);
-void LinkBattleScreen_CreateNameTextObjs(LinkBattleScreen *screen);
-void LinkBattleScreen_SetNamePosition(LinkBattleScreen *screen, int index, int x, int y);
-void LinkBattleScreen_FreeNameTextObjs(LinkBattleScreen *screen);
-void LinkBattleScreen_InitLayout(LinkBattleScreen *screen, int lowerOffsetY, int upperOffsetY);
-void LinkBattleScreen_InitResultSprites(LinkBattleScreen *screen);
-void LinkBattleScreen_LoadOutcomeGfx(LinkBattleScreen *screen);
-void LinkBattleScreen_SetupOutcomeSprites(LinkBattleScreen *screen);
-void LinkBattleScreen_InitParticles(LinkBattleScreen *screen);
-BOOL LinkBattleScreen_UpdateParticles(LinkBattleScreen *screen);
-void LinkBattleScreen_FreeParticles(LinkBattleScreen *screen);
-u32 LinkBattleScreen_AllocParticleTexVram(u32 size, BOOL is4x4);
-u32 LinkBattleScreen_AllocParticlePlttVram(u32 size, BOOL is4pltt);
-void LinkBattleScreen_InitPartyBgLayers(LinkBattleScreen *screen);
-void LinkBattleScreen_FreePartyBgLayers(LinkBattleScreen *screen);
-void LinkBattleScreen_LoadPartyBgGraphics(LinkBattleScreen *screen);
-void LinkBattleScreen_DrawPartyPanels(LinkBattleScreen *screen);
-void LinkBattleScreen_StashPanelTilemap(LinkBattleScreen *screen, u16 *dest, u8 bgId);
-void LinkBattleScreen_StashPanelTilemaps(LinkBattleScreen *screen);
-void LinkBattleScreen_RevealPanelColumns(LinkBattleScreen *screen, u8 width);
-void LinkBattleScreen_ReadPartyMonInfo(LinkBattleScreen *screen, Party *party, int firstIndex);
-void LinkBattleScreen_ReadMonInfo(LinkBattleScreen *screen);
-u32 LinkBattleScreen_GetMonIconAnim(LinkBattleScreen *screen, u32 index);
-void LinkBattleScreen_CreateMonSprites(LinkBattleScreen *screen, u32 index);
-void LinkBattleScreen_InitPartySprites(LinkBattleScreen *screen);
-void LinkBattleScreen_LoadMonIconGfx(LinkBattleScreen *screen);
-void LinkBattleScreen_LoadItemIconGfx(LinkBattleScreen *screen);
-void LinkBattleScreen_LoadStatusIconGfx(LinkBattleScreen *screen);
-void LinkBattleScreen_LoadPlistSpriteRes(LinkBattleScreen *screen);
-void LinkBattleScreen_SetPartySpriteOffset(LinkBattleScreen *screen, int shift);
-void LinkBattleScreen_AddPartyWindows(LinkBattleScreen *screen);
-void LinkBattleScreen_RemovePartyWindows(LinkBattleScreen *screen);
-void LinkBattleScreen_PrintMonName(LinkBattleScreen *screen, MsgData *msgData, MessagePrinter *unused, MessageFormat *msgFormat, String *string, u32 index);
-void LinkBattleScreen_PrintMonLevel(LinkBattleScreen *screen, MsgData *unused, MessagePrinter *printer, MessageFormat *unused2, String *unused3, u32 index);
-void LinkBattleScreen_PrintMonHp(LinkBattleScreen *screen, MsgData *unused, MessagePrinter *printer, MessageFormat *unused2, String *unused3, u32 index);
-void LinkBattleScreen_DrawMonHpBar(LinkBattleScreen *screen, int index);
-void LinkBattleScreen_DrawMonPanelText(LinkBattleScreen *screen, MsgData *msgData, MessagePrinter *printer, MessageFormat *msgFormat, String *string, u32 index);
-void LinkBattleScreen_DrawAllMonPanelText(LinkBattleScreen *screen);
-void LinkBattleScreen_DrawMessageBox(LinkBattleScreen *screen);
-BOOL LinkBattleScreen_IsBattleRecordActive(LinkBattleScreen *screen);
-void LinkBattleScreen_ShowWaitingIcon(LinkBattleScreen *screen);
-void LinkBattleScreen_HideWaitingIcon(LinkBattleScreen *screen);
+static int LinkBattleScreen_Finish(SysTask *task, LinkBattleScreen *screen);
+static BOOL LinkBattleScreen_IsLocalPlayerOnLeft(void);
+static void LinkBattleScreen_InitSpriteSystem(LinkBattleScreen *screen, SpriteResourceCountsListUnion *resourceCounts, u32 count);
+static ManagedSprite *LinkBattleScreen_CreateSprite(LinkBattleScreen *screen, const LinkBattleScreenSpriteTemplate *template);
+static void LinkBattleScreen_FreeSprites(LinkBattleScreen *screen);
+static void LinkBattleScreen_UpdateSpriteAnims(LinkBattleScreen *screen);
+static void LinkBattleScreen_VBlankCallback(void *data);
+static void LinkBattleScreen_InitVsBgLayers(LinkBattleScreen *screen, BOOL use3D, BOOL shiftBg1);
+static void LinkBattleScreen_RemoveMessageWindows(LinkBattleScreen *screen);
+static void LinkBattleScreen_FreeMessageData(LinkBattleScreen *screen);
+static void LinkBattleScreen_FreeVsBgLayers(LinkBattleScreen *screen);
+static void LinkBattleScreen_LoadVsBgGraphics(LinkBattleScreen *screen);
+static void LinkBattleScreen_InitMessageWindows(LinkBattleScreen *screen);
+static void LinkBattleScreen_SetBg1AlphaBlend(void);
+static void LinkBattleScreen_InitVsSprites(LinkBattleScreen *screen);
+static void LinkBattleScreen_LoadPartyBallGfx(LinkBattleScreen *screen);
+static void LinkBattleScreen_SetBallRowPosition(LinkBattleScreen *screen, u8 row, s16 x, s16 y);
+static void LinkBattleScreen_SetPartyBallAnims(LinkBattleScreen *screen, Party *party, int count, int firstSprite);
+static void LinkBattleScreen_SetAllPartyBallAnims(LinkBattleScreen *screen);
+static void LinkBattleScreen_CreateNameTextObj(LinkBattleScreen *screen, int index, String *name);
+static void LinkBattleScreen_CreateNameTextObjs(LinkBattleScreen *screen);
+static void LinkBattleScreen_SetNamePosition(LinkBattleScreen *screen, int index, int x, int y);
+static void LinkBattleScreen_FreeNameTextObjs(LinkBattleScreen *screen);
+static void LinkBattleScreen_InitLayout(LinkBattleScreen *screen, int lowerOffsetY, int upperOffsetY);
+static void LinkBattleScreen_InitResultSprites(LinkBattleScreen *screen);
+static void LinkBattleScreen_LoadOutcomeGfx(LinkBattleScreen *screen);
+static void LinkBattleScreen_SetupOutcomeSprites(LinkBattleScreen *screen);
+static void LinkBattleScreen_InitParticles(LinkBattleScreen *screen);
+static BOOL LinkBattleScreen_UpdateParticles(LinkBattleScreen *screen);
+static void LinkBattleScreen_FreeParticles(LinkBattleScreen *screen);
+static u32 LinkBattleScreen_AllocParticleTexVram(u32 size, BOOL is4x4);
+static u32 LinkBattleScreen_AllocParticlePlttVram(u32 size, BOOL is4pltt);
+static void LinkBattleScreen_InitPartyBgLayers(LinkBattleScreen *screen);
+static void LinkBattleScreen_FreePartyBgLayers(LinkBattleScreen *screen);
+static void LinkBattleScreen_LoadPartyBgGraphics(LinkBattleScreen *screen);
+static void LinkBattleScreen_DrawPartyPanels(LinkBattleScreen *screen);
+static void LinkBattleScreen_StashPanelTilemap(LinkBattleScreen *screen, u16 *dest, u8 bgId);
+static void LinkBattleScreen_StashPanelTilemaps(LinkBattleScreen *screen);
+static void LinkBattleScreen_RevealPanelColumns(LinkBattleScreen *screen, u8 width);
+static void LinkBattleScreen_ReadPartyMonInfo(LinkBattleScreen *screen, Party *party, int firstIndex);
+static void LinkBattleScreen_ReadMonInfo(LinkBattleScreen *screen);
+static u32 LinkBattleScreen_GetMonIconAnim(LinkBattleScreen *screen, u32 index);
+static void LinkBattleScreen_CreateMonSprites(LinkBattleScreen *screen, u32 index);
+static void LinkBattleScreen_InitPartySprites(LinkBattleScreen *screen);
+static void LinkBattleScreen_LoadMonIconGfx(LinkBattleScreen *screen);
+static void LinkBattleScreen_LoadItemIconGfx(LinkBattleScreen *screen);
+static void LinkBattleScreen_LoadStatusIconGfx(LinkBattleScreen *screen);
+static void LinkBattleScreen_LoadPlistSpriteRes(LinkBattleScreen *screen);
+static void LinkBattleScreen_SetPartySpriteOffset(LinkBattleScreen *screen, int shift);
+static void LinkBattleScreen_AddPartyWindows(LinkBattleScreen *screen);
+static void LinkBattleScreen_RemovePartyWindows(LinkBattleScreen *screen);
+static void LinkBattleScreen_PrintMonName(LinkBattleScreen *screen, MsgData *msgData, MessagePrinter *unused, MessageFormat *msgFormat, String *string, u32 index);
+static void LinkBattleScreen_PrintMonLevel(LinkBattleScreen *screen, MsgData *unused, MessagePrinter *printer, MessageFormat *unused2, String *unused3, u32 index);
+static void LinkBattleScreen_PrintMonHp(LinkBattleScreen *screen, MsgData *unused, MessagePrinter *printer, MessageFormat *unused2, String *unused3, u32 index);
+static void LinkBattleScreen_DrawMonHpBar(LinkBattleScreen *screen, int index);
+static void LinkBattleScreen_DrawMonPanelText(LinkBattleScreen *screen, MsgData *msgData, MessagePrinter *printer, MessageFormat *msgFormat, String *string, u32 index);
+static void LinkBattleScreen_DrawAllMonPanelText(LinkBattleScreen *screen);
+static void LinkBattleScreen_DrawMessageBox(LinkBattleScreen *screen);
+static BOOL LinkBattleScreen_IsBattleRecordActive(LinkBattleScreen *screen);
+static void LinkBattleScreen_ShowWaitingIcon(LinkBattleScreen *screen);
+static void LinkBattleScreen_HideWaitingIcon(LinkBattleScreen *screen);
 
 void LinkBattleScreen_Start(LinkBattleScreenArgs *args) {
     SysTask *task = CreateSysTaskAndEnvironment(LinkBattleScreen_RunTask, sizeof(LinkBattleScreen), 100, args->heapId);
@@ -290,7 +290,7 @@ enum {
     LINK_SCREEN_STATE_FINISH,
 };
 
-void LinkBattleScreen_RunTask(SysTask *task, void *data) {
+static void LinkBattleScreen_RunTask(SysTask *task, void *data) {
     LinkBattleScreen *screen = data;
     int result;
     switch (screen->taskState) {
@@ -323,7 +323,7 @@ void LinkBattleScreen_RunTask(SysTask *task, void *data) {
     }
 }
 
-void LinkBattleScreen_SetVramBanks(void) {
+static void LinkBattleScreen_SetVramBanks(void) {
     GraphicsBanks banks = sVramBanks;
     GfGfx_SetBanks(&banks);
     MIi_CpuClear32(0, (u32 *)HW_BG_VRAM, 0x80000);
@@ -343,7 +343,7 @@ enum {
     VIDEO_PROMPT_STATE_CLOSED,
 };
 
-void LinkBattleScreen_UpdateBattleVideoPrompt(LinkBattleScreen *screen) {
+static void LinkBattleScreen_UpdateBattleVideoPrompt(LinkBattleScreen *screen) {
     if (!LinkBattleScreen_IsBattleRecordActive(screen)) {
         return;
     }
@@ -412,7 +412,7 @@ void LinkBattleScreen_UpdateBattleVideoPrompt(LinkBattleScreen *screen) {
 
 #pragma force_active reset
 
-int LinkBattleScreen_Init(LinkBattleScreen *screen) {
+static int LinkBattleScreen_Init(LinkBattleScreen *screen) {
     reg_G2_BLDCNT = 0;
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
@@ -698,7 +698,7 @@ int LinkBattleScreen_NudgePanels(LinkBattleScreen *screen) {
     return LinkBattleScreen_NudgePanelsLeft(screen);
 }
 
-int LinkBattleScreen_NudgePanelsRight(LinkBattleScreen *screen) {
+static int LinkBattleScreen_NudgePanelsRight(LinkBattleScreen *screen) {
     ScheduleSetBgPosText(screen->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_SUB_X, sPanelNudgeSteps[screen->frame * 2]);
     ScheduleSetBgPosText(screen->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SUB_X, sPanelNudgeSteps[screen->frame * 2]);
     LinkBattleScreen_SetBallRowPosition(screen, 0, sPanelNudgeSpriteSteps[screen->frame * 2], 0);
@@ -720,7 +720,7 @@ int LinkBattleScreen_NudgePanelsRight(LinkBattleScreen *screen) {
     return FALSE;
 }
 
-int LinkBattleScreen_NudgePanelsLeft(LinkBattleScreen *screen) {
+static int LinkBattleScreen_NudgePanelsLeft(LinkBattleScreen *screen) {
     ScheduleSetBgPosText(screen->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_ADD_X, sPanelNudgeSteps[screen->frame * 2]);
     ScheduleSetBgPosText(screen->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_ADD_X, sPanelNudgeSteps[screen->frame * 2]);
     LinkBattleScreen_SetBallRowPosition(screen, 0, (s16)-sPanelNudgeSpriteSteps[screen->frame * 2], 0);
@@ -918,7 +918,7 @@ int LinkBattleScreen_StartExit(LinkBattleScreen *screen) {
     return 1;
 }
 
-int LinkBattleScreen_Finish(SysTask *task, LinkBattleScreen *screen) {
+static int LinkBattleScreen_Finish(SysTask *task, LinkBattleScreen *screen) {
     if (!IsPaletteFadeFinished()) {
         return 0;
     }
@@ -943,7 +943,7 @@ int LinkBattleScreen_Finish(SysTask *task, LinkBattleScreen *screen) {
     return 1;
 }
 
-BOOL LinkBattleScreen_IsLocalPlayerOnLeft(void) {
+static BOOL LinkBattleScreen_IsLocalPlayerOnLeft(void) {
     switch (Comm_GetBattleSlot(Comm_GetLocalNetId())) {
     case 0:
     case 2:
@@ -955,7 +955,7 @@ BOOL LinkBattleScreen_IsLocalPlayerOnLeft(void) {
     return FALSE;
 }
 
-void LinkBattleScreen_InitSpriteSystem(LinkBattleScreen *screen, SpriteResourceCountsListUnion *resourceCounts, u32 count) {
+static void LinkBattleScreen_InitSpriteSystem(LinkBattleScreen *screen, SpriteResourceCountsListUnion *resourceCounts, u32 count) {
     OamManagerParam oamParam;
     OamCharTransferParam transferParam;
 
@@ -971,7 +971,7 @@ void LinkBattleScreen_InitSpriteSystem(LinkBattleScreen *screen, SpriteResourceC
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, TRUE);
 }
 
-ManagedSprite *LinkBattleScreen_CreateSprite(LinkBattleScreen *screen, const LinkBattleScreenSpriteTemplate *template) {
+static ManagedSprite *LinkBattleScreen_CreateSprite(LinkBattleScreen *screen, const LinkBattleScreenSpriteTemplate *template) {
     ManagedSpriteTemplate spriteTemplate;
 
     spriteTemplate.x = 0;
@@ -990,7 +990,7 @@ ManagedSprite *LinkBattleScreen_CreateSprite(LinkBattleScreen *screen, const Lin
     return SpriteSystem_NewSprite(screen->spriteSystem, screen->spriteManager, &spriteTemplate);
 }
 
-void LinkBattleScreen_FreeSprites(LinkBattleScreen *screen) {
+static void LinkBattleScreen_FreeSprites(LinkBattleScreen *screen) {
     u32 i;
 
     for (i = 0; i < screen->spriteCount; i++) {
@@ -1000,7 +1000,7 @@ void LinkBattleScreen_FreeSprites(LinkBattleScreen *screen) {
     SpriteSystem_Free(screen->spriteSystem);
 }
 
-void LinkBattleScreen_UpdateSpriteAnims(LinkBattleScreen *screen) {
+static void LinkBattleScreen_UpdateSpriteAnims(LinkBattleScreen *screen) {
     u16 i;
 
     for (i = 0; i < screen->spriteCount; i++) {
@@ -1008,7 +1008,7 @@ void LinkBattleScreen_UpdateSpriteAnims(LinkBattleScreen *screen) {
     }
 }
 
-void LinkBattleScreen_VBlankCallback(void *data) {
+static void LinkBattleScreen_VBlankCallback(void *data) {
     LinkBattleScreen *screen = data;
     vu32 *dtcm;
 
@@ -1021,7 +1021,7 @@ void LinkBattleScreen_VBlankCallback(void *data) {
     dtcm[0x3FF8 / sizeof(u32)] |= OS_IE_V_BLANK;
 }
 
-void LinkBattleScreen_InitVsBgLayers(LinkBattleScreen *screen, BOOL use3D, BOOL shiftBg1) {
+static void LinkBattleScreen_InitVsBgLayers(LinkBattleScreen *screen, BOOL use3D, BOOL shiftBg1) {
     GraphicsModes graphicsModes;
     BgTemplate bg3Template;
     BgTemplate bg2Template;
@@ -1062,7 +1062,7 @@ void LinkBattleScreen_InitVsBgLayers(LinkBattleScreen *screen, BOOL use3D, BOOL 
     }
 }
 
-void LinkBattleScreen_RemoveMessageWindows(LinkBattleScreen *screen) {
+static void LinkBattleScreen_RemoveMessageWindows(LinkBattleScreen *screen) {
     if (screen->msgWindow.pixelBuffer != NULL) {
         RemoveWindow(&screen->msgWindow);
     }
@@ -1071,7 +1071,7 @@ void LinkBattleScreen_RemoveMessageWindows(LinkBattleScreen *screen) {
     }
 }
 
-void LinkBattleScreen_FreeMessageData(LinkBattleScreen *screen) {
+static void LinkBattleScreen_FreeMessageData(LinkBattleScreen *screen) {
     if (screen->string != NULL) {
         String_Delete(screen->string);
     }
@@ -1083,7 +1083,7 @@ void LinkBattleScreen_FreeMessageData(LinkBattleScreen *screen) {
     }
 }
 
-void LinkBattleScreen_FreeVsBgLayers(LinkBattleScreen *screen) {
+static void LinkBattleScreen_FreeVsBgLayers(LinkBattleScreen *screen) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_ALL, FALSE);
     FreeBgTilemapBuffer(screen->bgConfig, GF_BG_LYR_MAIN_3);
     FreeBgTilemapBuffer(screen->bgConfig, GF_BG_LYR_MAIN_2);
@@ -1094,7 +1094,7 @@ void LinkBattleScreen_FreeVsBgLayers(LinkBattleScreen *screen) {
     Heap_Free(screen->bgConfig);
 }
 
-void LinkBattleScreen_LoadVsBgGraphics(LinkBattleScreen *screen) {
+static void LinkBattleScreen_LoadVsBgGraphics(LinkBattleScreen *screen) {
     NARC *narc = NARC_New(NARC_a_1_0_4, screen->args->heapId);
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 0, screen->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, screen->args->heapId);
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 4, screen->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, screen->args->heapId);
@@ -1106,7 +1106,7 @@ void LinkBattleScreen_LoadVsBgGraphics(LinkBattleScreen *screen) {
     NARC_Delete(narc);
 }
 
-void LinkBattleScreen_InitMessageWindows(LinkBattleScreen *screen) {
+static void LinkBattleScreen_InitMessageWindows(LinkBattleScreen *screen) {
     u8 frame;
     GF_ASSERT(!screen->use3D && screen->args != NULL && screen->args->setup != NULL && screen->args->setup->options != NULL);
     frame = Options_GetFrame(screen->args->setup->options);
@@ -1120,11 +1120,11 @@ void LinkBattleScreen_InitMessageWindows(LinkBattleScreen *screen) {
     AddWindowParameterized(screen->bgConfig, &screen->yesNoWindow, GF_BG_LYR_MAIN_0, 2, 19, 27, 4, 13, 40);
 }
 
-void LinkBattleScreen_SetBg1AlphaBlend(void) {
+static void LinkBattleScreen_SetBg1AlphaBlend(void) {
     G2_SetBlendAlpha(GX_BLEND_PLANEMASK_BG1, GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ, 8, 8);
 }
 
-void LinkBattleScreen_InitVsSprites(LinkBattleScreen *screen) {
+static void LinkBattleScreen_InitVsSprites(LinkBattleScreen *screen) {
     SpriteResourceCountsListUnion resourceCounts = sVsSpriteResourceCounts;
     u32 i;
     LinkBattleScreen_InitSpriteSystem(screen, &resourceCounts, 21);
@@ -1145,7 +1145,7 @@ void LinkBattleScreen_InitVsSprites(LinkBattleScreen *screen) {
     LinkBattleScreen_SetNamePosition(screen, 3, 256, 0);
 }
 
-void LinkBattleScreen_LoadPartyBallGfx(LinkBattleScreen *screen) {
+static void LinkBattleScreen_LoadPartyBallGfx(LinkBattleScreen *screen) {
     NARC *narc = NARC_New(NARC_a_0_0_8, screen->args->heapId);
     SpriteSystem_LoadCharResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, 0xD0, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB807);
     SpriteSystem_LoadPlttResObj(screen->spriteSystem, screen->spriteManager, NARC_a_1_0_4, 8, FALSE, 2, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB807);
@@ -1154,7 +1154,7 @@ void LinkBattleScreen_LoadPartyBallGfx(LinkBattleScreen *screen) {
     NARC_Delete(narc);
 }
 
-void LinkBattleScreen_SetBallRowPosition(LinkBattleScreen *screen, u8 row, s16 x, s16 y) {
+static void LinkBattleScreen_SetBallRowPosition(LinkBattleScreen *screen, u8 row, s16 x, s16 y) {
     LinkBattleScreenBallRows rows = sBallRowFirstSprite;
     u32 i;
 
@@ -1163,7 +1163,7 @@ void LinkBattleScreen_SetBallRowPosition(LinkBattleScreen *screen, u8 row, s16 x
     }
 }
 
-void LinkBattleScreen_SetPartyBallAnims(LinkBattleScreen *screen, Party *party, int count, int firstSprite) {
+static void LinkBattleScreen_SetPartyBallAnims(LinkBattleScreen *screen, Party *party, int count, int firstSprite) {
     u8 i;
     u8 shown;
     u8 partyCount;
@@ -1191,7 +1191,7 @@ void LinkBattleScreen_SetPartyBallAnims(LinkBattleScreen *screen, Party *party, 
     }
 }
 
-void LinkBattleScreen_SetAllPartyBallAnims(LinkBattleScreen *screen) {
+static void LinkBattleScreen_SetAllPartyBallAnims(LinkBattleScreen *screen) {
     LinkBattleScreenArgs *args = screen->args;
     if (args->multiOrSide == FALSE) {
         LinkBattleScreen_SetPartyBallAnims(screen, args->parties[0], PARTY_SIZE, 0);
@@ -1204,7 +1204,7 @@ void LinkBattleScreen_SetAllPartyBallAnims(LinkBattleScreen *screen) {
     }
 }
 
-void LinkBattleScreen_CreateNameTextObj(LinkBattleScreen *screen, int index, String *name) {
+static void LinkBattleScreen_CreateNameTextObj(LinkBattleScreen *screen, int index, String *name) {
     TextOBJTemplate template;
     Window *window = &screen->partyWindows[0];
     AddTextWindowTopLeftCorner(screen->bgConfig, window, 8, 2, 0, 0);
@@ -1226,7 +1226,7 @@ void LinkBattleScreen_CreateNameTextObj(LinkBattleScreen *screen, int index, Str
     RemoveWindow(window);
 }
 
-void LinkBattleScreen_CreateNameTextObjs(LinkBattleScreen *screen) {
+static void LinkBattleScreen_CreateNameTextObjs(LinkBattleScreen *screen) {
     screen->fontSystem = FontSystem_NewInit(8, screen->args->heapId);
     LinkBattleScreen_CreateNameTextObj(screen, 0, screen->args->names[0]);
     LinkBattleScreen_CreateNameTextObj(screen, 2, screen->args->names[1]);
@@ -1241,11 +1241,11 @@ void LinkBattleScreen_CreateNameTextObjs(LinkBattleScreen *screen) {
     }
 }
 
-void LinkBattleScreen_SetNamePosition(LinkBattleScreen *screen, int index, int x, int y) {
+static void LinkBattleScreen_SetNamePosition(LinkBattleScreen *screen, int index, int x, int y) {
     TextOBJ_SetPosition(screen->nameTextObjs[index], x + screen->nameX[index], y + screen->nameY[index]);
 }
 
-void LinkBattleScreen_FreeNameTextObjs(LinkBattleScreen *screen) {
+static void LinkBattleScreen_FreeNameTextObjs(LinkBattleScreen *screen) {
     u32 i;
     if (screen->args->mode != LINK_BATTLE_SCREEN_MODE_PARTY) {
         for (i = 0; i < 4; i++) {
@@ -1255,7 +1255,7 @@ void LinkBattleScreen_FreeNameTextObjs(LinkBattleScreen *screen) {
     }
 }
 
-void LinkBattleScreen_InitLayout(LinkBattleScreen *screen, int lowerOffsetY, int upperOffsetY) {
+static void LinkBattleScreen_InitLayout(LinkBattleScreen *screen, int lowerOffsetY, int upperOffsetY) {
     if (screen->args->multiOrSide == TRUE) {
         screen->ballRowX[0] = 20;
         screen->ballRowY[0] = lowerOffsetY + 0x92;
@@ -1293,7 +1293,7 @@ void LinkBattleScreen_InitLayout(LinkBattleScreen *screen, int lowerOffsetY, int
     }
 }
 
-void LinkBattleScreen_InitResultSprites(LinkBattleScreen *screen) {
+static void LinkBattleScreen_InitResultSprites(LinkBattleScreen *screen) {
     SpriteResourceCountsListUnion resourceCounts = sResultSpriteResourceCounts;
     u32 i;
     LinkBattleScreen_InitSpriteSystem(screen, &resourceCounts, 23);
@@ -1316,7 +1316,7 @@ void LinkBattleScreen_InitResultSprites(LinkBattleScreen *screen) {
     screen->spriteCount = 14;
 }
 
-void LinkBattleScreen_LoadOutcomeGfx(LinkBattleScreen *screen) {
+static void LinkBattleScreen_LoadOutcomeGfx(LinkBattleScreen *screen) {
     NARC *narc = NARC_New(NARC_a_1_0_4, screen->args->heapId);
     SpriteSystem_LoadCharResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, 5, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB808);
     SpriteSystem_LoadCellResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, 6, FALSE, 0xB808);
@@ -1324,7 +1324,7 @@ void LinkBattleScreen_LoadOutcomeGfx(LinkBattleScreen *screen) {
     NARC_Delete(narc);
 }
 
-void LinkBattleScreen_SetupOutcomeSprites(LinkBattleScreen *screen) {
+static void LinkBattleScreen_SetupOutcomeSprites(LinkBattleScreen *screen) {
     ManagedSprite_SetDrawFlag(screen->sprites[12], FALSE);
     ManagedSprite_SetDrawFlag(screen->sprites[13], FALSE);
     if (screen->args->outcome == BATTLE_OUTCOME_DRAW) {
@@ -1353,7 +1353,7 @@ void LinkBattleScreen_SetupOutcomeSprites(LinkBattleScreen *screen) {
     ManagedSprite_SetAnim(screen->sprites[13], 1);
 }
 
-void LinkBattleScreen_InitParticles(LinkBattleScreen *screen) {
+static void LinkBattleScreen_InitParticles(LinkBattleScreen *screen) {
     screen->gfx3DVramMan = GF_3DVramMan_Create(screen->args->heapId, 0, 4, 0, 2, NULL);
     G3X_AlphaBlend(TRUE);
     ParticleSystem_ZeroAll();
@@ -1368,7 +1368,7 @@ void LinkBattleScreen_InitParticles(LinkBattleScreen *screen) {
     ParticleSystem_CreateEmitterWithParam(screen->particleSystem, 4, NULL, NULL);
 }
 
-BOOL LinkBattleScreen_UpdateParticles(LinkBattleScreen *screen) {
+static BOOL LinkBattleScreen_UpdateParticles(LinkBattleScreen *screen) {
     if (screen->args->mode != LINK_BATTLE_SCREEN_MODE_VS) {
         return FALSE;
     }
@@ -1381,7 +1381,7 @@ BOOL LinkBattleScreen_UpdateParticles(LinkBattleScreen *screen) {
     return TRUE;
 }
 
-void LinkBattleScreen_FreeParticles(LinkBattleScreen *screen) {
+static void LinkBattleScreen_FreeParticles(LinkBattleScreen *screen) {
     if (screen->args->mode == LINK_BATTLE_SCREEN_MODE_VS) {
         ParticleSystem_Free(screen->particleSystem);
         Heap_Free(screen->particleHeap);
@@ -1389,21 +1389,21 @@ void LinkBattleScreen_FreeParticles(LinkBattleScreen *screen) {
     }
 }
 
-u32 LinkBattleScreen_AllocParticleTexVram(u32 size, BOOL is4x4) {
+static u32 LinkBattleScreen_AllocParticleTexVram(u32 size, BOOL is4x4) {
     NNSGfdTexKey key = NNS_GfdAllocTexVram(size, is4x4, 0);
     ParticleSystem_RegisterTexKey(key);
     GF_ASSERT(key != 0);
     return NNS_GfdGetTexKeyAddr(key);
 }
 
-u32 LinkBattleScreen_AllocParticlePlttVram(u32 size, BOOL is4pltt) {
+static u32 LinkBattleScreen_AllocParticlePlttVram(u32 size, BOOL is4pltt) {
     NNSGfdPlttKey key = NNS_GfdAllocPlttVram(size, is4pltt, 1);
     ParticleSystem_RegisterPlttKey(key);
     GF_ASSERT(key != 0);
     return NNS_GfdGetPlttKeyAddr(key);
 }
 
-void LinkBattleScreen_InitPartyBgLayers(LinkBattleScreen *screen) {
+static void LinkBattleScreen_InitPartyBgLayers(LinkBattleScreen *screen) {
     GraphicsModes graphicsModes;
     BgTemplate bg1Template;
     BgTemplate bg2Template;
@@ -1420,7 +1420,7 @@ void LinkBattleScreen_InitPartyBgLayers(LinkBattleScreen *screen) {
     InitBgFromTemplate(screen->bgConfig, GF_BG_LYR_MAIN_3, &bg3Template, GF_BG_TYPE_TEXT);
 }
 
-void LinkBattleScreen_FreePartyBgLayers(LinkBattleScreen *screen) {
+static void LinkBattleScreen_FreePartyBgLayers(LinkBattleScreen *screen) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1 | GX_PLANEMASK_BG2 | GX_PLANEMASK_BG3 | GX_PLANEMASK_OBJ, FALSE);
     FreeBgTilemapBuffer(screen->bgConfig, GF_BG_LYR_MAIN_3);
     FreeBgTilemapBuffer(screen->bgConfig, GF_BG_LYR_MAIN_2);
@@ -1428,7 +1428,7 @@ void LinkBattleScreen_FreePartyBgLayers(LinkBattleScreen *screen) {
     Heap_Free(screen->bgConfig);
 }
 
-void LinkBattleScreen_LoadPartyBgGraphics(LinkBattleScreen *screen) {
+static void LinkBattleScreen_LoadPartyBgGraphics(LinkBattleScreen *screen) {
     NARC *narc = NARC_New(NARC_graphic_plist_gra, screen->args->heapId);
     void *nclrFile;
     NNSG2dPaletteData *paletteData;
@@ -1443,7 +1443,7 @@ void LinkBattleScreen_LoadPartyBgGraphics(LinkBattleScreen *screen) {
     NARC_Delete(narc);
 }
 
-void LinkBattleScreen_DrawPartyPanels(LinkBattleScreen *screen) {
+static void LinkBattleScreen_DrawPartyPanels(LinkBattleScreen *screen) {
     u32 i;
     for (i = 0; i < PARTY_SIZE; i++) {
         u16 *tilemap;
@@ -1467,7 +1467,7 @@ void LinkBattleScreen_DrawPartyPanels(LinkBattleScreen *screen) {
     ScheduleBgTilemapBufferTransfer(screen->bgConfig, GF_BG_LYR_MAIN_2);
 }
 
-void LinkBattleScreen_StashPanelTilemap(LinkBattleScreen *screen, u16 *dest, u8 bgId) {
+static void LinkBattleScreen_StashPanelTilemap(LinkBattleScreen *screen, u16 *dest, u8 bgId) {
     u16 *tilemap = GetBgTilemapBuffer(screen->bgConfig, bgId);
     int x;
     if (screen->args->multiOrSide == 0) {
@@ -1483,7 +1483,7 @@ void LinkBattleScreen_StashPanelTilemap(LinkBattleScreen *screen, u16 *dest, u8 
     }
 }
 
-void LinkBattleScreen_StashPanelTilemaps(LinkBattleScreen *screen) {
+static void LinkBattleScreen_StashPanelTilemaps(LinkBattleScreen *screen) {
     LinkBattleScreen_StashPanelTilemap(screen, screen->stashedBg1Tiles[0], GF_BG_LYR_MAIN_1);
     LinkBattleScreen_StashPanelTilemap(screen, screen->stashedBg2Tiles[0], GF_BG_LYR_MAIN_2);
     ScheduleBgTilemapBufferTransfer(screen->bgConfig, GF_BG_LYR_MAIN_1);
@@ -1495,7 +1495,7 @@ static inline void LinkBattleScreen_CopyStashedColumns(LinkBattleScreen *screen,
     CopyToBgTilemapRect(screen->bgConfig, GF_BG_LYR_MAIN_2, (u8)destX, 0, width, 24, screen->stashedBg2Tiles, srcX, 0, 16, 24);
 }
 
-void LinkBattleScreen_RevealPanelColumns(LinkBattleScreen *screen, u8 width) {
+static void LinkBattleScreen_RevealPanelColumns(LinkBattleScreen *screen, u8 width) {
     s32 x;
     if (screen->args->multiOrSide == 0) {
         x = 32 - width;
@@ -1508,7 +1508,7 @@ void LinkBattleScreen_RevealPanelColumns(LinkBattleScreen *screen, u8 width) {
     ScheduleBgTilemapBufferTransfer(screen->bgConfig, GF_BG_LYR_MAIN_2);
 }
 
-void LinkBattleScreen_ReadPartyMonInfo(LinkBattleScreen *screen, Party *party, int firstIndex) {
+static void LinkBattleScreen_ReadPartyMonInfo(LinkBattleScreen *screen, Party *party, int firstIndex) {
     u16 count = Party_GetCount(party);
     u16 i;
     LinkBattleScreen *base;
@@ -1548,13 +1548,13 @@ void LinkBattleScreen_ReadPartyMonInfo(LinkBattleScreen *screen, Party *party, i
     }
 }
 
-void LinkBattleScreen_ReadMonInfo(LinkBattleScreen *screen) {
+static void LinkBattleScreen_ReadMonInfo(LinkBattleScreen *screen) {
     memset(screen->monInfo, 0, sizeof(screen->monInfo));
     LinkBattleScreen_ReadPartyMonInfo(screen, screen->args->parties[0], 0);
     LinkBattleScreen_ReadPartyMonInfo(screen, screen->args->parties[2], 3);
 }
 
-u32 LinkBattleScreen_GetMonIconAnim(LinkBattleScreen *screen, u32 index) {
+static u32 LinkBattleScreen_GetMonIconAnim(LinkBattleScreen *screen, u32 index) {
     u16 hp = screen->monInfo[index].hp;
     if (hp == 0) {
         return 0;
@@ -1576,7 +1576,7 @@ u32 LinkBattleScreen_GetMonIconAnim(LinkBattleScreen *screen, u32 index) {
     }
 }
 
-void LinkBattleScreen_CreateMonSprites(LinkBattleScreen *screen, u32 index) {
+static void LinkBattleScreen_CreateMonSprites(LinkBattleScreen *screen, u32 index) {
     u32 i;
     for (i = 0; i < LINK_BATTLE_SCREEN_SPRITES_PER_MON; i++) {
         screen->sprites[index * 5 + i] = LinkBattleScreen_CreateSprite(screen, &sPartySpriteTemplates[index * 5 + i]);
@@ -1610,7 +1610,7 @@ void LinkBattleScreen_CreateMonSprites(LinkBattleScreen *screen, u32 index) {
     }
 }
 
-void LinkBattleScreen_InitPartySprites(LinkBattleScreen *screen) {
+static void LinkBattleScreen_InitPartySprites(LinkBattleScreen *screen) {
     SpriteResourceCountsListUnion resourceCounts = sPartySpriteResourceCounts;
     u32 i;
     LinkBattleScreen_InitSpriteSystem(screen, &resourceCounts, 31);
@@ -1625,7 +1625,7 @@ void LinkBattleScreen_InitPartySprites(LinkBattleScreen *screen) {
     screen->spriteCount = 30;
 }
 
-void LinkBattleScreen_LoadMonIconGfx(LinkBattleScreen *screen) {
+static void LinkBattleScreen_LoadMonIconGfx(LinkBattleScreen *screen) {
     NARC *narc = NARC_New(NARC_poketool_icongra_poke_icon, screen->args->heapId);
     u32 i;
     SpriteSystem_LoadPlttResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, GetMonIconPlttNaix(), FALSE, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB808);
@@ -1637,7 +1637,7 @@ void LinkBattleScreen_LoadMonIconGfx(LinkBattleScreen *screen) {
     NARC_Delete(narc);
 }
 
-void LinkBattleScreen_LoadItemIconGfx(LinkBattleScreen *screen) {
+static void LinkBattleScreen_LoadItemIconGfx(LinkBattleScreen *screen) {
     NARC *narc = NARC_New(NARC_graphic_plist_gra, screen->args->heapId);
     SpriteSystem_LoadCharResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, NARC_plist_gra_plist_gra_00000020_NCGR, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB80F);
     SpriteSystem_LoadPlttResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, NARC_plist_gra_plist_gra_00000021_NCLR, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB809);
@@ -1646,7 +1646,7 @@ void LinkBattleScreen_LoadItemIconGfx(LinkBattleScreen *screen) {
     NARC_Delete(narc);
 }
 
-void LinkBattleScreen_LoadStatusIconGfx(LinkBattleScreen *screen) {
+static void LinkBattleScreen_LoadStatusIconGfx(LinkBattleScreen *screen) {
     NARC *narc = NARC_New(NARC_a_0_3_9, screen->args->heapId);
     SpriteSystem_LoadCharResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, 0x40, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB810);
     SpriteSystem_LoadPlttResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, 0x41, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB80A);
@@ -1655,7 +1655,7 @@ void LinkBattleScreen_LoadStatusIconGfx(LinkBattleScreen *screen) {
     NARC_Delete(narc);
 }
 
-void LinkBattleScreen_LoadPlistSpriteRes(LinkBattleScreen *screen) {
+static void LinkBattleScreen_LoadPlistSpriteRes(LinkBattleScreen *screen) {
     NARC *narc = NARC_New(NARC_graphic_plist_gra, screen->args->heapId);
     SpriteSystem_LoadCharResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, NARC_plist_gra_plist_gra_00000002_NCGR, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB811);
     SpriteSystem_LoadPlttResObjFromOpenNarc(screen->spriteSystem, screen->spriteManager, narc, NARC_plist_gra_plist_gra_00000008_NCLR, FALSE, 2, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB80B);
@@ -1664,7 +1664,7 @@ void LinkBattleScreen_LoadPlistSpriteRes(LinkBattleScreen *screen) {
     NARC_Delete(narc);
 }
 
-void LinkBattleScreen_SetPartySpriteOffset(LinkBattleScreen *screen, int shift) {
+static void LinkBattleScreen_SetPartySpriteOffset(LinkBattleScreen *screen, int shift) {
     int i;
     int firstMon;
     int j;
@@ -1686,21 +1686,21 @@ void LinkBattleScreen_SetPartySpriteOffset(LinkBattleScreen *screen, int shift) 
     }
 }
 
-void LinkBattleScreen_AddPartyWindows(LinkBattleScreen *screen) {
+static void LinkBattleScreen_AddPartyWindows(LinkBattleScreen *screen) {
     u32 i;
     for (i = 0; i < LINK_BATTLE_SCREEN_PARTY_WINDOW_COUNT; i++) {
         AddWindow(screen->bgConfig, &screen->partyWindows[i], &sPartyWindowTemplates[i]);
     }
 }
 
-void LinkBattleScreen_RemovePartyWindows(LinkBattleScreen *screen) {
+static void LinkBattleScreen_RemovePartyWindows(LinkBattleScreen *screen) {
     u32 i;
     for (i = 0; i < LINK_BATTLE_SCREEN_PARTY_WINDOW_COUNT; i++) {
         RemoveWindow(&screen->partyWindows[i]);
     }
 }
 
-void LinkBattleScreen_PrintMonName(LinkBattleScreen *screen, MsgData *msgData, MessagePrinter *unused, MessageFormat *msgFormat, String *string, u32 index) {
+static void LinkBattleScreen_PrintMonName(LinkBattleScreen *screen, MsgData *msgData, MessagePrinter *unused, MessageFormat *msgFormat, String *string, u32 index) {
     Window *window = &screen->partyWindows[index * 4];
     Pokemon *mon;
     String *template;
@@ -1725,19 +1725,19 @@ void LinkBattleScreen_PrintMonName(LinkBattleScreen *screen, MsgData *msgData, M
     }
 }
 
-void LinkBattleScreen_PrintMonLevel(LinkBattleScreen *screen, MsgData *unused, MessagePrinter *printer, MessageFormat *unused2, String *unused3, u32 index) {
+static void LinkBattleScreen_PrintMonLevel(LinkBattleScreen *screen, MsgData *unused, MessagePrinter *printer, MessageFormat *unused2, String *unused3, u32 index) {
     Window *window = &screen->partyWindows[index * 4 + 1];
     MessagePrinter_PrintGlyphAndUInt(printer, 1, screen->monInfo[index].level, 3, PRINTING_MODE_LEFT_ALIGN, window, 0, 2);
 }
 
-void LinkBattleScreen_PrintMonHp(LinkBattleScreen *screen, MsgData *unused, MessagePrinter *printer, MessageFormat *unused2, String *unused3, u32 index) {
+static void LinkBattleScreen_PrintMonHp(LinkBattleScreen *screen, MsgData *unused, MessagePrinter *printer, MessageFormat *unused2, String *unused3, u32 index) {
     Window *window = &screen->partyWindows[index * 4 + 2];
     PrintUIntOnWindow(printer, screen->monInfo[index].hp, 3, PRINTING_MODE_RIGHT_ALIGN, window, 0, 2);
     MessagePrinter_PrintGlyph(printer, 0, window, 24, 2);
     PrintUIntOnWindow(printer, screen->monInfo[index].maxHp, 3, PRINTING_MODE_LEFT_ALIGN, window, 32, 2);
 }
 
-void LinkBattleScreen_DrawMonHpBar(LinkBattleScreen *screen, int index) {
+static void LinkBattleScreen_DrawMonHpBar(LinkBattleScreen *screen, int index) {
     Window *window = &screen->partyWindows[index * 4 + 3];
     int color = CalculateHpBarColor(screen->monInfo[index].hp, screen->monInfo[index].maxHp, 48);
     switch (color) {
@@ -1758,7 +1758,7 @@ void LinkBattleScreen_DrawMonHpBar(LinkBattleScreen *screen, int index) {
     FillWindowPixelRect(window, 10, 0, 5, (u16)pixels, 1);
 }
 
-void LinkBattleScreen_DrawMonPanelText(LinkBattleScreen *screen, MsgData *msgData, MessagePrinter *printer, MessageFormat *msgFormat, String *string, u32 index) {
+static void LinkBattleScreen_DrawMonPanelText(LinkBattleScreen *screen, MsgData *msgData, MessagePrinter *printer, MessageFormat *msgFormat, String *string, u32 index) {
     Window *windows = &screen->partyWindows[index * 4];
     FillWindowPixelBuffer(&windows[0], 0);
     FillWindowPixelBuffer(&windows[1], 0);
@@ -1774,7 +1774,7 @@ void LinkBattleScreen_DrawMonPanelText(LinkBattleScreen *screen, MsgData *msgDat
     ScheduleWindowCopyToVram(&windows[3]);
 }
 
-void LinkBattleScreen_DrawAllMonPanelText(LinkBattleScreen *screen) {
+static void LinkBattleScreen_DrawAllMonPanelText(LinkBattleScreen *screen) {
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0300_bin, screen->args->heapId);
     MessagePrinter *printer = MessagePrinter_New(15, 14, 0, screen->args->heapId);
     MessageFormat *msgFormat = MessageFormat_New(screen->args->heapId);
@@ -1791,25 +1791,25 @@ void LinkBattleScreen_DrawAllMonPanelText(LinkBattleScreen *screen) {
     MessageFormat_Delete(msgFormat);
 }
 
-void LinkBattleScreen_DrawMessageBox(LinkBattleScreen *screen) {
+static void LinkBattleScreen_DrawMessageBox(LinkBattleScreen *screen) {
     FillWindowPixelRect(&screen->msgWindow, 15, 0, 0, 216, 32);
     DrawFrameAndWindow2(&screen->msgWindow, FALSE, 1, 15);
 }
 
-BOOL LinkBattleScreen_IsBattleRecordActive(LinkBattleScreen *screen) {
+static BOOL LinkBattleScreen_IsBattleRecordActive(LinkBattleScreen *screen) {
     if (screen->args->setup->saveData == NULL || BattleRecord_Exists() == FALSE) {
         return FALSE;
     }
     return TRUE;
 }
 
-void LinkBattleScreen_ShowWaitingIcon(LinkBattleScreen *screen) {
+static void LinkBattleScreen_ShowWaitingIcon(LinkBattleScreen *screen) {
     if (screen->waitingIcon == NULL) {
         screen->waitingIcon = WaitingIcon_New(&screen->msgWindow, 1);
     }
 }
 
-void LinkBattleScreen_HideWaitingIcon(LinkBattleScreen *screen) {
+static void LinkBattleScreen_HideWaitingIcon(LinkBattleScreen *screen) {
     if (screen->waitingIcon != NULL) {
         WaitingIcon_Delete(screen->waitingIcon);
         screen->waitingIcon = NULL;

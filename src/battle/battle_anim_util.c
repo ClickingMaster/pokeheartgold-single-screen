@@ -14,8 +14,6 @@
 extern const BattleAnimFunc sBattleAnimFuncTable[];
 extern const BattleAnimSpriteFunc sBattleAnimSpriteFuncTable[];
 
-#pragma force_active on
-
 void BattleAnimUtil_InitSinMotionFromStep(BattleAnimSinMotion *motion, u32 startX, u32 endX, u32 startY, u16 endY, fx32 ampX, fx32 ampY, u16 step) {
     s16 signedStep;
 
@@ -64,8 +62,6 @@ BOOL BattleAnimUtil_UpdateSinMotionPokepic(BattleAnimSinMotion *motion, int x, i
     return FALSE;
 }
 
-#pragma force_active reset
-
 void BattleAnimUtil_InitLinearMotion(BattleAnimLinearMotion *motion, s16 startX, s16 endX, s16 startY, s16 endY, u16 duration) {
     GF_ASSERT(motion != NULL);
     motion->x = startX;
@@ -106,8 +102,6 @@ BOOL BattleAnimUtil_UpdateLinearMotionPokepic(BattleAnimLinearMotion *motion, Po
     return FALSE;
 }
 
-#pragma force_active on
-
 // Linear motion plus a vertical arc (half a cosine period) of the given amplitude
 void BattleAnimUtil_InitLinearSinMotion(BattleAnimLinearMotion *linear, BattleAnimSinMotion *sin, s16 startX, s16 endX, s16 startY, s16 endY, u16 duration, fx32 amplitude) {
     BattleAnimUtil_InitLinearMotion(linear, startX, endX, startY, endY, duration);
@@ -115,8 +109,6 @@ void BattleAnimUtil_InitLinearSinMotion(BattleAnimLinearMotion *linear, BattleAn
     sin->y = 0;
     BattleAnimUtil_InitSinMotion(sin, 0, 0, 0x3FFF, 0xBFFF, 0, amplitude, duration);
 }
-
-#pragma force_active reset
 
 BOOL BattleAnimUtil_UpdateLinearSinMotion(BattleAnimLinearMotion *linear, BattleAnimSinMotion *sin) {
     BOOL linearActive;
@@ -187,8 +179,6 @@ void BattleAnimUtil_InitCosMotion(BattleAnimCosMotion *motion, u32 startAngle, u
     motion->angleStep = (endAngle - startAngle) / duration;
 }
 
-#pragma force_active on
-
 BOOL BattleAnimUtil_UpdateCosMotion(BattleAnimCosMotion *motion) {
     GF_ASSERT(motion != NULL);
     if (motion->duration != 0) {
@@ -199,8 +189,6 @@ BOOL BattleAnimUtil_UpdateCosMotion(BattleAnimCosMotion *motion) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 // Uniform scale from start / divisor to end / divisor (x and y in 1/256 units)
 void BattleAnimUtil_InitScaleMotion(BattleAnimLinearMotion *motion, int start, int divisor, int end, int duration) {
@@ -275,8 +263,6 @@ s16 BattleAnimUtil_CalcScaleYOffset(int y, int inset, fx32 scale) {
     return pixels / 2;
 }
 
-#pragma force_active on
-
 void BattleAnimUtil_AlignPokepicToScale(Pokepic *pokepic, int y, int inset, fx32 scale, int mode) {
     int offset = BattleAnimUtil_CalcScaleYOffset(y, inset, scale);
     if (mode == 1) {
@@ -297,8 +283,6 @@ void BattleAnimUtil_AlignSpriteToScale(ManagedSprite *sprite, int y, int inset, 
     ManagedSprite_GetPositionXY(sprite, &spriteX, &spriteY);
     ManagedSprite_SetPositionXY(sprite, spriteX, (s16)(y + offset));
 }
-
-#pragma force_active reset
 
 BOOL BattleAnimUtil_UpdateScaleMotionSprite(BattleAnimLinearMotion *motion, ManagedSprite *sprite) {
     if (BattleAnimUtil_UpdateScaleMotion(motion)) {
@@ -575,8 +559,6 @@ void BattleAnimScanline_WaveVBlankCallback(BattleAnimScanlineWave *wave) {
     ScanlineEffect_RestartDma(wave->effect);
 }
 
-#pragma force_active on
-
 BattleAnimScanlineWave *BattleAnimScanline_NewWave(u8 firstLine, u8 lastLine, u8 step, fx32 amplitude, s16 speed, int bgLayer, u32 priority, u32 fill, enum HeapID heapId) {
     BattleAnimScanlineWave *wave = Heap_Alloc(heapId, sizeof(BattleAnimScanlineWave));
     void *destination;
@@ -589,8 +571,6 @@ BattleAnimScanlineWave *BattleAnimScanline_NewWave(u8 firstLine, u8 lastLine, u8
     BattleAnimScanline_StartTasks(&wave->tasks, wave, (BattleAnimScanlineCallback)BattleAnimScanline_WaveVWaitCallback, (BattleAnimScanlineCallback)BattleAnimScanline_WaveVBlankCallback);
     return wave;
 }
-
-#pragma force_active reset
 
 void BattleAnimScanline_FreeWave(BattleAnimScanlineWave *wave) {
     GF_ASSERT(wave != NULL);
@@ -635,8 +615,6 @@ void BattleAnimUtil_CalcMidpoint(int x0, int y0, int x1, int y1, s16 *x, s16 *y)
     *y = (y0 + y1) / 2;
 }
 
-#pragma force_active on
-
 void BattleAnimUtil_CalcDistance(s16 x, s16 y, s16 targetX, s16 targetY, fx32 *distance) {
     s16 dy = -(y - targetY);
     s16 dx = x - targetX;
@@ -652,8 +630,6 @@ void BattleAnimUtil_CalcAngle(s16 x, s16 y, s16 targetX, s16 targetY, u16 *angle
         *angle = (*angle - 0x7FFF) * 0xFFFF;
     }
 }
-
-#pragma force_active reset
 
 // Moves *value by step; TRUE (value = target) once it reaches or passes target
 BOOL BattleAnimUtil_StepTowards(int *value, int target, int step) {
@@ -675,8 +651,6 @@ BOOL BattleAnimUtil_StepTowards(int *value, int target, int step) {
         return TRUE;
     }
 }
-
-#pragma force_active on
 
 void BattleAnimTask_PaletteBlend(SysTask *task, void *data) {
     BattleAnimPaletteBlend *blend = data;
@@ -711,8 +685,6 @@ void BattleAnimTask_PaletteBlend(SysTask *task, void *data) {
     }
 }
 
-#pragma force_active reset
-
 BOOL BattleAnimUtil_IsPaletteBlendActive(BattleAnimPaletteBlend *blend) {
     GF_ASSERT(blend != NULL);
     return blend->active;
@@ -723,8 +695,6 @@ void BattleAnimUtil_FreePaletteBlend(BattleAnimPaletteBlend *blend) {
     SysTask_Destroy(blend->task);
     Heap_Free(blend);
 }
-
-#pragma force_active on
 
 BattleAnimPaletteBlend *BattleAnimUtil_StartPaletteBlend(PaletteData *paletteData, enum HeapID heapId, PaletteBufferId bufferId, u16 offset, u16 size, s8 delay, s8 step, u8 start, u8 end, u16 color, u32 priority) {
     BattleAnimPaletteBlend *blend = Heap_Alloc(heapId, sizeof(BattleAnimPaletteBlend));
@@ -770,8 +740,6 @@ void BattleAnimSystem_ApplyGrayscale(BattleAnimSystem *system) {
         BattleAnimUtil_PaletteToGrayscale(buffer, 128);
     }
 }
-
-#pragma force_active reset
 
 void BattleAnimSystem_RestoreFromGrayscale(BattleAnimSystem *system) {
     PaletteData *paletteData = BattleAnimSystem_GetPaletteData(system);

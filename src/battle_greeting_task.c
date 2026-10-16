@@ -25,9 +25,8 @@ typedef struct BattleGreetingTask {
     u16 *result;
 } BattleGreetingTask;
 
-void CallTask_EditBattleGreeting(TaskManager *taskManager, u16 *result);
-void BattleGreetingTask_Free(BattleGreetingTask *work);
-BOOL Task_EditBattleGreeting(TaskManager *taskManager);
+static void BattleGreetingTask_Free(BattleGreetingTask *work);
+static BOOL Task_EditBattleGreeting(TaskManager *taskManager);
 
 void CallTask_EditBattleGreeting(TaskManager *taskManager, u16 *result) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
@@ -45,7 +44,7 @@ void CallTask_EditBattleGreeting(TaskManager *taskManager, u16 *result) {
     TaskManager_Call(taskManager, Task_EditBattleGreeting, work);
 }
 
-void BattleGreetingTask_Free(BattleGreetingTask *work) {
+static void BattleGreetingTask_Free(BattleGreetingTask *work) {
     EasyChat_FreeArgs(work->easyChat);
     MessageFormat_Delete(work->format);
     Heap_Free(work);
@@ -59,7 +58,7 @@ enum {
     BATTLE_GREETING_STATE_END,
 };
 
-BOOL Task_EditBattleGreeting(TaskManager *taskManager) {
+static BOOL Task_EditBattleGreeting(TaskManager *taskManager) {
     BattleGreetingTask *work = TaskManager_GetEnvironment(taskManager);
 
     switch (work->state) {

@@ -15,6 +15,8 @@
 #include "save_arrays.h"
 #include "system.h"
 
+#define BATTLE_RECORD_MAGIC 0xE281
+
 // Battler order used for the header's species list.
 typedef struct {
     u8 order[2][4];
@@ -73,7 +75,7 @@ typedef struct {
     u16 magic, crc;
 } BattleRecordData;
 
-// Another facility's view of the frontier save's challenge area (Save_Frontier_GetStatic + 0x8E0).
+// The saved Battle Factory challenge, kept in the frontier save.
 typedef struct {
     u8 flag0 : 1, flag1 : 3, flag4 : 1, rest : 3;
     u8 value;
@@ -87,7 +89,6 @@ typedef struct {
     u32 values48[4];
 } FrontierRecord;
 
-// asm/battle_record_data.s
 extern const BattlerOrder gBattleRecordBattlerOrder;
 extern const MultiOrder gBattleRecordMultiOrder;
 extern BattleRecord *gBattleRecord;
@@ -251,9 +252,9 @@ int BattleRecord_Save(SaveData *save, int type, int arg, int index, u16 *state, 
         BattleRecordHeader *header = (BattleRecordHeader *)gBattleRecord->header;
         BattleRecordData *data = (BattleRecordData *)gBattleRecord->data;
         BattleRecord_FillHeader(save, header, data, type, arg);
-        header->magic = 0xe281;
-        header->crc = SaveArray_CalcCRC16(save, header, 0x58);
-        data->magic = 0xe281;
+        header->magic = BATTLE_RECORD_MAGIC;
+        header->crc = SaveArray_CalcCRC16(save, header, offsetof(BattleRecordHeader, videoNumber));
+        data->magic = BATTLE_RECORD_MAGIC;
         data->crc = SaveArray_CalcCRC16(save, data, 0x1c64);
         u32 crc = data->crc;
         BattleRecord_Encrypt(data, 0x1c64, crc + ((crc ^ 0xffff) << 16));
@@ -297,8 +298,8 @@ void BattleRecord_FillHeader(SaveData *save, void *header, void *recordData, int
     MI_CpuFill8(summary, 0, sizeof(*summary));
     BattleRecord_GetBattlerAndPartyCount(type, &count, &partySize);
     k = 0;
-    if (data->flags & 4) {
-        if (data->flags & 128) {
+    if (data->flags & BATTLE_TYPE_LINK) {
+        if (data->flags & BATTLE_TYPE_FRONTIER) {
             player = data->player * 2;
         } else {
             player = data->player;
@@ -308,13 +309,13 @@ void BattleRecord_FillHeader(SaveData *save, void *header, void *recordData, int
     }
     for (int i = 0; i < count; i++) {
         int battler;
-        if ((data->flags & 8) && !(data->flags & 128)) {
+        if ((data->flags & BATTLE_TYPE_MULTI) && !(data->flags & BATTLE_TYPE_FRONTIER)) {
             for (battler = 0; battler < count; battler++) {
                 if (data->positions[battler] == order.order[data->positions[player] & 1][i]) {
                     break;
                 }
             }
-        } else if ((data->flags & 8) && (data->flags & 128)) {
+        } else if ((data->flags & BATTLE_TYPE_MULTI) && (data->flags & BATTLE_TYPE_FRONTIER)) {
             battler = multi.order[i];
         } else {
             battler = i;
@@ -370,7 +371,7 @@ BOOL BattleRecord_IsEmpty(SaveData *save, BattleRecord *record) {
     if (!Save_CheckExtraChunksExist(save)) {
         return TRUE;
     }
-    if (data->magic != 0xe281 || header->magic != 0xe281) {
+    if (data->magic != BATTLE_RECORD_MAGIC || header->magic != BATTLE_RECORD_MAGIC) {
         return TRUE;
     }
     return FALSE;
@@ -379,10 +380,10 @@ BOOL BattleRecord_IsEmpty(SaveData *save, BattleRecord *record) {
 BOOL BattleRecord_IsValid(SaveData *save, BattleRecord *record) {
     BattleRecordData *data = (BattleRecordData *)record->data;
     BattleRecordHeader *header = (BattleRecordHeader *)record->header;
-    if (data->magic != 0xe281 || header->magic != 0xe281) {
+    if (data->magic != BATTLE_RECORD_MAGIC || header->magic != BATTLE_RECORD_MAGIC) {
         return FALSE;
     }
-    u32 crc = SaveArray_CalcCRC16(save, header, 0x58);
+    u32 crc = SaveArray_CalcCRC16(save, header, offsetof(BattleRecordHeader, videoNumber));
     if (crc != header->crc) {
         return FALSE;
     }
@@ -553,15 +554,15 @@ void BattleRecordParty_ToParty(BattleRecordParty *record, Party *party) {
 
 void *BattleRecord_CopyHeader(enum HeapID heapId) {
     GF_ASSERT(gBattleRecord != NULL);
-    void *result = Heap_Alloc(heapId, 0x64);
-    MI_CpuCopy32(gBattleRecord->header, result, 0x64);
+    void *result = Heap_Alloc(heapId, sizeof(gBattleRecord->header));
+    MI_CpuCopy32(gBattleRecord->header, result, sizeof(gBattleRecord->header));
     return result;
 }
 
 void *BattleRecord_CopyProfile(enum HeapID heapId) {
     GF_ASSERT(gBattleRecord != NULL);
-    void *result = Heap_Alloc(heapId, 0x80);
-    MI_CpuCopy32(gBattleRecord->profile, result, 0x80);
+    void *result = Heap_Alloc(heapId, sizeof(gBattleRecord->profile));
+    MI_CpuCopy32(gBattleRecord->profile, result, sizeof(gBattleRecord->profile));
     return result;
 }
 
@@ -577,9 +578,9 @@ void *BattleRecord_GetHeader(void) {
 
 void BattleRecord_Import(void *profile, void *summary, void *data, void *battle, SaveData *save) {
     GF_ASSERT(gBattleRecord != NULL);
-    MI_CpuCopy8(summary, gBattleRecord->header, 0x64);
-    MI_CpuCopy8(data, gBattleRecord->data, 0x1c68);
-    MI_CpuCopy8(profile, gBattleRecord->profile, 0x80);
+    MI_CpuCopy8(summary, gBattleRecord->header, sizeof(gBattleRecord->header));
+    MI_CpuCopy8(data, gBattleRecord->data, sizeof(gBattleRecord->data));
+    MI_CpuCopy8(profile, gBattleRecord->profile, sizeof(gBattleRecord->profile));
     u32 crc = ((BattleRecordData *)gBattleRecord->data)->crc;
     BattleRecord_Decrypt(gBattleRecord->data, 0x1c64, crc + ((crc ^ 0xffff) << 16));
     if (battle != NULL) {
@@ -592,7 +593,7 @@ u64 BattleRecordHeader_GetField(void *summary, int field, int index) {
     switch (field) {
     case 0:
         GF_ASSERT(index < 12);
-        if (header->species[index] > 493) {
+        if (header->species[index] > SPECIES_ARCEUS) {
             return 0;
         }
         return header->species[index];
@@ -619,8 +620,8 @@ u64 BattleRecordHeader_GetField(void *summary, int field, int index) {
 }
 
 void *BattleRecordHeader_New(enum HeapID heapId) {
-    void *result = Heap_Alloc(heapId, 0x64);
-    MI_CpuFill8(result, 0, 0x64);
+    void *result = Heap_Alloc(heapId, sizeof(BattleRecordHeader));
+    MI_CpuFill8(result, 0, sizeof(BattleRecordHeader));
     return result;
 }
 
@@ -629,7 +630,7 @@ void BattleRecordHeader_Free(void *summary) {
 }
 
 void FactoryChallenge_Clear(void *record) {
-    MI_CpuFill8(record, 0, 0x58);
+    MI_CpuFill8(record, 0, sizeof(FrontierRecord));
 }
 
 void *Save_Frontier_GetFactoryChallenge(SaveData *save) {

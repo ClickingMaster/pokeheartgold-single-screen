@@ -193,7 +193,6 @@ void BattleAnimFunc_SetBgPaletteGrayscale(BattleAnimSystem *system) {
     }
 }
 
-#pragma force_active on
 #pragma push
 #pragma opt_propagation off
 
@@ -309,8 +308,6 @@ void BattleAnimTask_DropSpriteStepwise(SysTask *task, void *data) {
         SpriteSystem_DrawSprites(work->common.battlerSpriteManager);
     }
 }
-
-#pragma force_active reset
 
 void BattleAnimFunc_DropSpriteStepwise(BattleAnimSystem *system) {
     BattleAnimDropSpriteStepwiseWork *work;
@@ -719,8 +716,6 @@ void BattleAnimFunc_AttackerGrowFlashRed(BattleAnimSystem *system) {
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_AttackerGrowFlashRed, work);
 }
 
-#pragma force_active on
-
 void BattleAnimTask_AttackerSquashStretch(SysTask *task, void *data) {
     BattleAnimAttackerSquashStretchWork *work = data;
 
@@ -773,8 +768,6 @@ void BattleAnimTask_AttackerSquashStretch(SysTask *task, void *data) {
         return;
     }
 }
-
-#pragma force_active reset
 
 void BattleAnimFunc_AttackerSquashStretch(BattleAnimSystem *system) {
     BattleAnimAttackerSquashStretchWork *work = Heap_Alloc(BattleAnimSystem_GetHeapID(system), sizeof(BattleAnimAttackerSquashStretchWork));
@@ -1025,8 +1018,6 @@ void BattleAnimFunc_AttackerStretchSteps(BattleAnimSystem *system) {
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_AttackerStretchSteps, work);
 }
 
-#pragma force_active on
-
 void BattleAnimTask_AttackerLeapOffscreen(SysTask *task, void *data) {
     BattleAnimAttackerLeapOffscreenWork *work = data;
 
@@ -1082,8 +1073,6 @@ void BattleAnimTask_AttackerLeapOffscreen(SysTask *task, void *data) {
     }
 }
 
-#pragma force_active reset
-
 void BattleAnimFunc_AttackerLeapOffscreen(BattleAnimSystem *system) {
     BattleAnimAttackerLeapOffscreenWork *work = BattleAnimUtil_AllocWork(system, sizeof(BattleAnimAttackerLeapOffscreenWork));
     work->state = 0;
@@ -1120,7 +1109,7 @@ typedef struct BattleAnimAttackerHopWork {
 } BattleAnimAttackerHopWork;       // size: 0x58
 
 typedef struct BattleAnimShowAttackerObjWindowSpritesWork {
-    vu8 state; // volatile: needed to match
+    vu8 state;
     vu8 timer;
     u8 unk_02[2];
     BattleAnimSystem *system;
@@ -2065,7 +2054,7 @@ typedef struct BattleAnimCrossingSpritesWork {
     BattleAnimLinearMotion scale; // 0xCC
 } BattleAnimCrossingSpritesWork;  // size: 0xF0
 
-// A sprite position read into a y-first pair (the layout is needed to match)
+// A sprite position, y first
 typedef struct BattleAnimSpritePos {
     s16 y;
     s16 x;
@@ -2654,7 +2643,6 @@ void BattleAnimSpriteFunc_BlinkSpritesCenter(BattleAnimSystem *system, SpriteSys
     work->count = BattleAnimSystem_GetArg(work->system, 0);
     work->eva = 0;
     work->evb = 15;
-    // volatile reads: needed to match
     evb = *(vu8 *)&work->evb;
     eva = *(vu8 *)&work->eva;
     reg_G2_BLDALPHA = (evb << 8) | eva;
@@ -2712,7 +2700,6 @@ void BattleAnimTask_SlidingSpritePairs(SysTask *task, void *data) {
         if (work->eva == 15 && work->evb == 0) {
             work->state++;
         }
-        // volatile reads: needed to match
         evb = *(vu8 *)&work->evb;
         eva = *(vu8 *)&work->eva;
         reg_G2_BLDALPHA = (evb << 8) | eva;
@@ -3711,7 +3698,6 @@ void BattleAnimFunc_SquashSprite(BattleAnimSystem *system) {
     work->sprites[0] = BattleAnimSystem_GetBattlerSprite(work->common.system, 0);
     work->sprites[1] = BattleAnimSystem_GetBattlerSprite(work->common.system, 1);
     work->sprites[2] = BattleAnimSystem_GetBattlerSprite(work->common.system, 2);
-    // the factor goes through offset (zero first) to match
     offset = 0;
     work->timer = offset;
     offset = -32;

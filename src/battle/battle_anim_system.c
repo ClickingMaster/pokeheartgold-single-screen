@@ -285,8 +285,6 @@ BOOL BattleAnimSystem_Delete(BattleAnimSystem *system) {
     return TRUE;
 }
 
-#pragma force_active on
-
 BOOL BattleAnimSystem_StartMove(BattleAnimSystem *system, MoveAnimData *animData, u16 move, BattleAnimSetup *setup) {
     u32 terrainAnims[25];
     int i;
@@ -381,8 +379,6 @@ BOOL BattleAnimSystem_StartMove(BattleAnimSystem *system, MoveAnimData *animData
     system->active = TRUE;
     return TRUE;
 }
-
-#pragma force_active reset
 
 BOOL BattleAnimSystem_Execute(BattleAnimSystem *system) {
     if (!BattleAnimSystem_IsInitialized(system)) {
@@ -647,8 +643,6 @@ u32 BattleAnimSystem_GetMoveParam(BattleAnimSystem *system, u32 param) {
     }
 }
 
-#pragma force_active on
-
 void BattleAnimSystem_BuildBattlerPicParams(BattleAnimSystem *system, BattleAnimBattlerPicParams *params, u32 mode) {
     int i;
     for (i = 0; i < 4; i++) {
@@ -683,8 +677,6 @@ void BattleAnimSystem_BuildBattlerPicParams(BattleAnimSystem *system, BattleAnim
         break;
     }
 }
-
-#pragma force_active reset
 
 void BattleAnimScriptCmd_ChangeBattlerPic(BattleAnimSystem *system) {
     u32 mode;
@@ -2061,8 +2053,6 @@ void BattleAnimTask_BgScroll(SysTask *task, void *data) {
     }
 }
 
-#pragma force_active on
-
 void BattleAnimBackground_StopMarkedEffects(BattleAnimBgSwitchWork *work) {
     GF_ASSERT(work != NULL);
     GF_ASSERT(work->system != NULL);
@@ -2078,8 +2068,6 @@ void BattleAnimBackground_StopMarkedEffects(BattleAnimBgSwitchWork *work) {
         BattleAnimSystem_StopBgEffects(work->system->bgEffects, 3);
     }
 }
-
-#pragma force_active reset
 
 u32 BattleAnimSystem_GetBattleBgPaletteMask(BattleAnimSystem *system) {
     return system->battleBgPaletteMask;
@@ -2319,8 +2307,6 @@ void BattleAnimBackground_LoadBattleBgToLayerDefault(BattleAnimSystem *system, G
     BattleAnimBackground_LoadBattleBgToLayer(system, layer, 1);
 }
 
-#pragma force_active on
-
 void BattleAnimBackground_LoadBattleBgToLayer(BattleAnimSystem *system, GFBgLayer layer, int colorMode) {
     SetBgPriority(layer, (u8)BattleAnimSystem_GetBgPriority(system, 2));
     ToggleBgLayer(layer, GF_PLANE_TOGGLE_OFF);
@@ -2349,8 +2335,6 @@ void BattleAnimBackground_ResetLayer(BattleAnimSystem *system, GFBgLayer layer) 
     }
     BgClearTilemapBufferAndCommit(system->bgConfig, layer);
 }
-
-#pragma force_active reset
 
 BOOL BattleAnimBackground_MarkScrollForStop(BattleAnimBgSwitchWork *work) {
     work->stopScroll = TRUE;
@@ -2905,8 +2889,6 @@ u8 BattleAnimContext_GetField01(BattleAnimContext *context) {
     return context->unk_01;
 }
 
-#pragma force_active on
-
 s8 BattleAnimSystem_ConvertPan(BattleAnimSystem *system, int pan) {
     int attacker = BattleAnimSystem_GetAttacker(system);
     int defender = BattleAnimSystem_GetDefender(system);
@@ -2970,25 +2952,17 @@ u8 BattleAnimSystem_GetBattlerGender(BattleAnimSystem *system, int battler) {
     return system->context->genders[battler];
 }
 
-#pragma force_active reset
-
 u16 BattleAnimSystem_GetBattlerSpecies(BattleAnimSystem *system, int battler) {
     return system->context->species[battler];
 }
-
-#pragma force_active on
 
 u8 BattleAnimSystem_GetBattlerForm(BattleAnimSystem *system, int battler) {
     return system->context->forms[battler];
 }
 
-#pragma force_active reset
-
 u32 BattleAnimSystem_GetBattlerPersonality(BattleAnimSystem *system, int battler) {
     return system->context->personalities[battler];
 }
-
-#pragma force_active on
 
 Pokepic *BattleAnimSystem_GetBattlerPokepic(BattleAnimSystem *system, int battler) {
     Pokepic *pokepic = system->context->pokepics[battler];
@@ -3000,8 +2974,6 @@ Pokepic *BattleAnimSystem_GetBattlerPokepic(BattleAnimSystem *system, int battle
     }
     return NULL;
 }
-
-#pragma force_active reset
 
 PaletteData *BattleAnimSystem_GetPaletteData(BattleAnimSystem *system) {
     return system->paletteData;
@@ -3068,8 +3040,6 @@ BOOL BattleAnimSystem_ShouldFlipSide(BattleAnimSystem *system, int side) {
 u32 BattleAnimSystem_GetBackgroundFile(u32 bgId, int kind) {
     return sBattleAnimBackgroundFiles[bgId][kind];
 }
-
-#pragma force_active on
 
 BattleAnimBattlerSprites *BattleAnimBattlerSprites_New(BattleSystem *battleSystem, enum HeapID heapId, int battler) {
     u32 priorities[6];
@@ -3169,13 +3139,9 @@ BattleAnimBattlerSprites *BattleAnimBattlerSprites_New(BattleSystem *battleSyste
     return sprites;
 }
 
-#pragma force_active reset
-
 BattleAnimBattlerSprites *BattleAnimBattlerSprites_NewAll(BattleSystem *battleSystem, enum HeapID heapId) {
     return BattleAnimBattlerSprites_New(battleSystem, heapId, 0xFF);
 }
-
-#pragma force_active on
 
 void BattleAnimBattlerSprites_Free(BattleAnimBattlerSprites *sprites) {
     int i;
@@ -3200,8 +3166,6 @@ void BattleAnimBattlerSprites_Free2(BattleAnimBattlerSprites *sprites, int battl
     }
     Heap_Free(sprites);
 }
-
-#pragma force_active reset
 
 u8 Ov07UnkFE70_GetCurrentValue(BattleAnimIndexedBytes *data) {
     GF_ASSERT(data != NULL);
@@ -3249,8 +3213,6 @@ void BattleAnimSystem_FreeParticleSystem(SPLEmitter *particleSystem) {
     BattleParticleSystem_Free(particleSystem);
 }
 
-#pragma force_active on
-
 int BattleAnimSystem_GetSideSign(BattleAnimSystem *system, int battlerA, int battlerB) {
     int result = 1;
     u32 type = BattleAnimUtil_GetBattlerType(system, battlerA);
@@ -3274,8 +3236,6 @@ int BattleAnimSystem_GetSideSign(BattleAnimSystem *system, int battlerA, int bat
     }
     return result;
 }
-
-#pragma force_active reset
 
 void BattleAnimEmitterCb_Dummy(void) {
 }

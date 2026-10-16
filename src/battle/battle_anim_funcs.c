@@ -2432,8 +2432,6 @@ void BattleAnimFunc_ShakeBg(BattleAnimSystem *system) {
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_ShakeBg, work);
 }
 
-#pragma force_active on
-
 void BattleAnimTask_SpriteMosaic(SysTask *task, void *data) {
     BattleAnimSpriteMosaicWork *work = data;
     if (work->sizeH == work->target || work->sizeV == work->target) {
@@ -2463,8 +2461,6 @@ void BattleAnimTask_SpriteMosaic(SysTask *task, void *data) {
     SpriteSystem_DrawSprites(work->common.battlerSpriteManager);
 }
 
-#pragma force_active reset
-
 // Changes the mosaic size of a battler sprite step by step until it reaches 0 (step < 0) or 15
 void BattleAnimFunc_SpriteMosaic(BattleAnimSystem *system) {
     BattleAnimSpriteMosaicWork *work = BattleAnimUtil_AllocWork(system, sizeof(BattleAnimSpriteMosaicWork));
@@ -2481,8 +2477,6 @@ void BattleAnimFunc_SpriteMosaic(BattleAnimSystem *system) {
     ManagedSprite_SetMosaicFlag(work->sprite, TRUE);
     BattleAnim_CreateTaskAndRun(work->common.system, BattleAnimTask_SpriteMosaic, work);
 }
-
-#pragma force_active on
 
 void BattleAnimEmitterMotion_Init(BattleAnimSystem *system, void *data) {
     BattleAnimEmitterMotionWork *work = data;
@@ -2519,8 +2513,6 @@ void BattleAnimEmitterMotion_Init(BattleAnimSystem *system, void *data) {
     }
 }
 
-#pragma force_active reset
-
 // TRUE unless the emitter's last particle has reached the end of its life
 BOOL BattleAnimUtil_IsEmitterActive(SPLEmitter *emitter) {
     BOOL ret = FALSE;
@@ -2538,8 +2530,6 @@ BOOL BattleAnimUtil_IsEmitterActive(SPLEmitter *emitter) {
     }
     return ret;
 }
-
-#pragma force_active on
 
 void BattleAnimTask_MoveEmitter(SysTask *task, void *data) {
     BattleAnimEmitterMotionWork *work = data;
@@ -2563,8 +2553,6 @@ void BattleAnimTask_MoveEmitter(SysTask *task, void *data) {
         }
     }
 }
-
-#pragma force_active reset
 
 // Moves an emitter from one battler to the other (offsets mirrored by side)
 void BattleAnimFunc_MoveEmitter(BattleAnimSystem *system) {

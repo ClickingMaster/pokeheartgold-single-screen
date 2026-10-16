@@ -13,11 +13,11 @@
 #include "battle/battle_util.h"
 
 #include "battle_link_comm.h"
+#include "battle_recording.h"
+#include "communication_core.h"
 #include "move.h"
 #include "party.h"
 #include "pokemon.h"
-#include "battle_recording.h"
-#include "communication_core.h"
 
 // Packets sent by the BattleController_Emit* functions. The first byte is the command that
 // OpponentData_RunCommand dispatches on.
@@ -381,7 +381,7 @@ typedef struct BattleControllerPacketPlaySong {
 typedef struct BattleControllerPacketBattleResults {
     u8 command;
     u8 unk_01;
-    vu16 recordSize; // volatile only to match: the assert re-reads the size from the packet
+    vu16 recordSize;
     u32 outcomeFlags;
     u8 record[28];
 } BattleControllerPacketBattleResults;
@@ -398,9 +398,7 @@ typedef struct BattleControllerPacketScreenFade {
     u16 unk_02;
 } BattleControllerPacketScreenFade;
 
-void BattleController_InitBallGaugePacket(BattleSystem *battleSystem, BattleContext *ctx, BattleControllerPacketBallGauge *packet, int command, int battlerId);
-
-#pragma force_active on
+static void BattleController_InitBallGaugePacket(BattleSystem *battleSystem, BattleContext *ctx, BattleControllerPacketBallGauge *packet, int command, int battlerId);
 
 void BattleController_SendData(BattleSystem *battleSystem, int direction, int battlerId, const u8 *data, u8 size) {
     u8 *buffer;
@@ -468,8 +466,6 @@ BOOL BattleController_RecvData(BattleSystem *battleSystem, const u8 *data) {
     }
     return ret;
 }
-
-#pragma force_active reset
 
 void BattleController_ProcessQueue(BattleSystem *battleSystem, int direction) {
     u8 *buffer;
@@ -569,8 +565,6 @@ void BattleController_EmitPokemonSlideIn(BattleSystem *battleSystem, int battler
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
 
-#pragma force_active on
-
 void BattleController_EmitPokemonSendOut(BattleSystem *battleSystem, int battlerId, int ball, int breakOut) {
     BattleControllerPacketPokemonSendOut packet;
 
@@ -650,8 +644,6 @@ void BattleController_EmitRecallPokemon(BattleSystem *battleSystem, BattleContex
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
 
-#pragma force_active reset
-
 void BattleController_EmitPokemonEnterBall(BattleSystem *battleSystem, s32 battlerId, s32 ball) {
     BattleControllerPacketPokemonEnterBall packet;
     int form;
@@ -674,8 +666,6 @@ void BattleController_EmitDeletePokemon(BattleSystem *battleSystem, int battlerI
     BattleController_EmitPacket(battleSystem, 1, battlerId, &command, sizeof(command));
 }
 
-#pragma force_active on
-
 void BattleController_EmitTrainerEncounter(BattleSystem *battleSystem, int battlerId) {
     BattleControllerPacketTrainerEncounter packet;
 
@@ -694,14 +684,10 @@ void BattleController_EmitThrowPokeball(BattleSystem *battleSystem, int battlerI
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
 
-#pragma force_active reset
-
 void BattleController_EmitTrainerSlideOut(BattleSystem *battleSystem, int battlerId) {
     u32 command = 10;
     BattleController_EmitPacket(battleSystem, 1, battlerId, &command, sizeof(command));
 }
-
-#pragma force_active on
 
 void BattleController_EmitTrainerSlideIn(BattleSystem *battleSystem, int battlerId, u32 index) {
     BattleControllerPacketTrainerSlideIn packet;
@@ -738,8 +724,6 @@ void BattleController_EmitHealthbarSlideIn(BattleSystem *battleSystem, BattleCon
     packet.delay = delay;
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
-
-#pragma force_active reset
 
 void BattleController_EmitHealthbarSlideOut(BattleSystem *battleSystem, int battlerId) {
     u32 command = 13;
@@ -898,7 +882,6 @@ void BattleController_ReplyCommandSelection(BattleSystem *battleSystem, int batt
     BattleController_EmitPacket(battleSystem, 0, battlerId, &input, sizeof(input));
 }
 
-#pragma force_active on
 #pragma push
 #pragma opt_lifetimes off
 
@@ -919,13 +902,10 @@ void BattleController_EmitSelectMove(BattleSystem *battleSystem, BattleContext *
 }
 
 #pragma pop
-#pragma force_active reset
 
 void BattleController_ReplyMoveSelection(BattleSystem *battleSystem, int battlerId, u32 input) {
     BattleController_EmitPacket(battleSystem, 0, battlerId, &input, sizeof(input));
 }
-
-#pragma force_active on
 
 void BattleController_EmitSelectTarget(BattleSystem *battleSystem, BattleContext *ctx, int moveRange, int battlerId) {
     BattleControllerPacketSelectTarget packet;
@@ -965,8 +945,6 @@ void BattleController_EmitSelectTarget(BattleSystem *battleSystem, BattleContext
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
 
-#pragma force_active reset
-
 void BattleController_ReplyTargetSelection(BattleSystem *battleSystem, int battlerId, u32 input) {
     BattleController_EmitPacket(battleSystem, 0, battlerId, &input, sizeof(input));
 }
@@ -984,8 +962,6 @@ static inline void SelectItemPacket_SetTargetFlags(BattleControllerPacketSelectI
         packet->targetSubstitute = FALSE;
     }
 }
-
-#pragma force_active on
 
 void BattleController_EmitSelectItem(BattleSystem *battleSystem, BattleContext *ctx, int battlerId) {
     BattleControllerPacketSelectItem packet;
@@ -1021,13 +997,9 @@ void BattleController_EmitSelectItem(BattleSystem *battleSystem, BattleContext *
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
 
-#pragma force_active reset
-
 void BattleController_ReplyItemSelection(BattleSystem *battleSystem, int battlerId, u32 input) {
     BattleController_EmitPacket(battleSystem, 0, battlerId, &input, sizeof(input));
 }
-
-#pragma force_active on
 
 void BattleController_EmitShowMonList(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, u32 mode, u32 canSwitch, u32 reservedMon) {
     BattleControllerPacketShowMonList packet;
@@ -1050,13 +1022,9 @@ void BattleController_EmitShowMonList(BattleSystem *battleSystem, BattleContext 
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
 
-#pragma force_active reset
-
 void BattleController_ReplyPartySelection(BattleSystem *battleSystem, int battlerId, u32 input) {
     BattleController_EmitPacket(battleSystem, 0, battlerId, &input, sizeof(input));
 }
-
-#pragma force_active on
 
 void BattleController_EmitDrawYesNoBox(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int msgId, int mode, int value, int msgParam) {
     BattleControllerPacketYesNoBox packet;
@@ -1078,8 +1046,6 @@ void BattleController_EmitPrintAttackMessage(BattleSystem *battleSystem, BattleC
     packet.move = ctx->moveNoCur;
     BattleController_EmitPacket(battleSystem, 1, ctx->battlerIdAttacker, &packet, sizeof(packet));
 }
-
-#pragma force_active reset
 
 void BattleController_EmitPrintMessage(BattleSystem *battleSystem, BattleContext *ctx, BattleMessage *msg) {
     msg->command = 21;
@@ -1137,8 +1103,6 @@ void BattleController_EmitExpBarUpdate(BattleSystem *battleSystem, BattleContext
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
 
-#pragma force_active on
-
 void BattleController_EmitPlayFaintAnimation(BattleSystem *battleSystem, BattleContext *ctx, int battlerId) {
     BattleControllerPacketFaintAnimation packet;
 
@@ -1169,8 +1133,6 @@ void BattleController_EmitPlayFaintAnimation(BattleSystem *battleSystem, BattleC
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
 
-#pragma force_active reset
-
 void BattleController_EmitPlaySE(BattleSystem *battleSystem, BattleContext *ctx, u32 sndSeqNo, int battlerId) {
     BattleControllerPacketPlaySE packet;
     packet.command = 27;
@@ -1182,8 +1144,6 @@ void BattleController_EmitFadeOutBattle(BattleSystem *battleSystem, BattleContex
     u32 command = 28;
     BattleController_EmitPacket(battleSystem, 1, 0, &command, sizeof(command));
 }
-
-#pragma force_active on
 
 void BattleController_EmitToggleVanish(BattleSystem *battleSystem, int battlerId, int vanish) {
     BattleControllerPacketToggleVanish packet;
@@ -1206,8 +1166,6 @@ void BattleController_EmitToggleVanish(BattleSystem *battleSystem, int battlerId
     }
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
-
-#pragma force_active reset
 
 void BattleController_EmitHealthbarStatus(BattleSystem *battleSystem, int battlerId, int status) {
     BattleControllerPacketHealthbarStatus packet;
@@ -1235,8 +1193,6 @@ void BattleController_EmitCopyStatus2Effect(BattleSystem *battleSystem, BattleCo
     BattleController_EmitPacket(battleSystem, 1, battlerIdA, &packet, sizeof(packet));
 }
 
-#pragma force_active on
-
 void BattleController_EmitPrintReturnMessage(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int selectedMonIndex) {
     BattleControllerPacketSwitchMessage packet;
 
@@ -1259,14 +1215,10 @@ void BattleController_EmitPrintSendOutMessage(BattleSystem *battleSystem, Battle
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
 
-#pragma force_active reset
-
 void BattleController_EmitPrintEncounterMessage(BattleSystem *battleSystem, BattleContext *ctx, int battlerId) {
     u32 command = 34;
     BattleController_EmitPacket(battleSystem, 1, battlerId, &command, sizeof(command));
 }
-
-#pragma force_active on
 
 void BattleController_EmitPrintFirstSendOutMessage(BattleSystem *battleSystem, BattleContext *ctx, int battlerId) {
     BattleControllerPacketFirstSendOutMessage packet;
@@ -1279,14 +1231,10 @@ void BattleController_EmitPrintFirstSendOutMessage(BattleSystem *battleSystem, B
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
 
-#pragma force_active reset
-
 void BattleController_EmitExpBarFullFlash(BattleSystem *battleSystem, int battlerId) {
     u32 command = 36;
     BattleController_EmitPacket(battleSystem, 1, battlerId, &command, sizeof(command));
 }
-
-#pragma force_active on
 
 void BattleController_EmitPrintSelectionMessage(BattleSystem *battleSystem, int battlerId, BattleMessage msg) {
     BattleControllerPacketSelectionMessage packet;
@@ -1297,14 +1245,10 @@ void BattleController_EmitPrintSelectionMessage(BattleSystem *battleSystem, int 
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
 
-#pragma force_active reset
-
 void BattleController_ReplySelectionMessageDone(BattleSystem *battleSystem, int battlerId) {
     u32 input = 1;
     BattleController_EmitPacket(battleSystem, 0, battlerId, &input, sizeof(input));
 }
-
-#pragma force_active on
 
 void BattleController_EmitRefreshHealthbar(BattleSystem *battleSystem, BattleContext *ctx, int battlerId) {
     Pokemon *mon = BattleSystem_GetPartyMon(battleSystem, battlerId, ctx->selectedMonIndex[battlerId]);
@@ -1368,8 +1312,6 @@ void BattleController_EmitBattleMonToPartyMonCopy(BattleSystem *battleSystem, Ba
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
 
-#pragma force_active reset
-
 void BattleController_EmitBackgroundSlideIn(BattleSystem *battleSystem, int battlerId) {
     u32 command = 40;
     BattleController_EmitPacket(battleSystem, 1, battlerId, &command, sizeof(command));
@@ -1380,8 +1322,6 @@ void BattleController_EmitCancelSelection(BattleSystem *battleSystem, int battle
     BattleController_EmitPacket(battleSystem, 1, battlerId, &command, sizeof(command));
 }
 
-#pragma force_active on
-
 void BattleControl_EmitPartyStatusHeal(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int moveNo) {
     BattleControllerPacketPartyStatusHeal packet;
 
@@ -1390,8 +1330,6 @@ void BattleControl_EmitPartyStatusHeal(BattleSystem *battleSystem, BattleContext
     packet.ability = ctx->battleMons[battlerId].ability;
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
-
-#pragma force_active reset
 
 void BattleController_EmitSelectMoveToForget(BattleSystem *battleSystem, int battlerId, u32 move, int slot) {
     BattleControllerPacketSelectMoveToForget packet;
@@ -1410,8 +1348,6 @@ void BattleController_EmitPlayMosaicAnimation(BattleSystem *battleSystem, int ba
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
 
-#pragma force_active on
-
 void BattleController_EmitChangeForm(BattleSystem *battleSystem, int battlerId) {
     BattleControllerPacketChangeForm packet;
 
@@ -1428,8 +1364,6 @@ void BattleController_EmitChangeForm(BattleSystem *battleSystem, int battlerId) 
     packet.form = battleSystem->ctx->battleMons[battlerId].form;
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
-
-#pragma force_active reset
 
 void BattleController_EmitSetBattleBackground(BattleSystem *battleSystem, int battlerId) {
     u32 command = 46;
@@ -1483,8 +1417,6 @@ void BattleController_EmitIncrementGameStat(BattleSystem *battleSystem, int batt
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
 
-#pragma force_active on
-
 void BattleController_EmitShowWaitMessage(BattleSystem *battleSystem, int battlerId) {
     BattleControllerPacketRecordData packet;
     u32 battleType = BattleSystem_GetBattleType(battleSystem);
@@ -1517,8 +1449,6 @@ void BattleController_EmitRestoreSprite(BattleSystem *battleSystem, BattleContex
     }
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
-
-#pragma force_active reset
 
 void BattleController_EmitSpriteToOAM(BattleSystem *battleSystem, int battlerId) {
     u32 command = 57;
@@ -1568,8 +1498,6 @@ void BattleController_EmitForefitMessage(BattleSystem *battleSystem) {
     BattleController_EmitPacket(battleSystem, 1, 0, &packet, sizeof(packet));
 }
 
-#pragma force_active on
-
 void BattleController_EmitSwapToSubstituteSprite(BattleSystem *battleSystem, BattleContext *ctx, int battlerId) {
     MoveAnimData packet;
     int i;
@@ -1589,8 +1517,6 @@ void BattleController_EmitSwapToSubstituteSprite(BattleSystem *battleSystem, Bat
     }
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
-
-#pragma force_active reset
 
 void BattleController_EmitPlayMoveSE(BattleSystem *battleSystem, BattleContext *ctx, int battlerId) {
     BattleControllerPacketMoveSE packet;
@@ -1613,8 +1539,6 @@ void BattleController_EmitPlaySong(BattleSystem *battleSystem, int battlerId, in
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
 
-#pragma force_active on
-
 void BattleController_EmitSetBattleResults(BattleSystem *battleSystem) {
     u32 battleType = BattleSystem_GetBattleType(battleSystem);
     BattleControllerPacketBattleResults packet;
@@ -1629,8 +1553,6 @@ void BattleController_EmitSetBattleResults(BattleSystem *battleSystem) {
     BattleController_EmitPacket(battleSystem, 1, 0, &packet, sizeof(packet));
 }
 
-#pragma force_active reset
-
 void BattleController_EmitBlankMessage(BattleSystem *battleSystem) {
     u32 command = 66;
     BattleController_EmitPacket(battleSystem, 1, 0, &command, sizeof(command));
@@ -1642,8 +1564,6 @@ void BattleController_EmitCommandComplete(BattleSystem *battleSystem, int battle
     packet.netId = Comm_GetLocalNetId();
     BattleController_EmitPacket(battleSystem, 2, battlerId, &packet, sizeof(packet));
 }
-
-#pragma force_active on
 
 BOOL BattleController_RecvLinkData(BattleSystem *battleSystem, u8 *data) {
     BOOL ret = TRUE;
@@ -1733,8 +1653,6 @@ void BattleController_InitMoveAnimData(BattleSystem *battleSystem, BattleContext
     }
 }
 
-#pragma force_active reset
-
 void BattleController_EmitScreenFade(BattleSystem *battleSystem, BattleContext *ctx, u8 mode) {
     BattleControllerPacketScreenFade packet;
     MI_CpuFill8(&packet, 0, sizeof(packet));
@@ -1743,9 +1661,7 @@ void BattleController_EmitScreenFade(BattleSystem *battleSystem, BattleContext *
     BattleController_EmitPacket(battleSystem, 1, 0, &packet, sizeof(packet));
 }
 
-#pragma force_active on
-
-void BattleController_InitBallGaugePacket(BattleSystem *battleSystem, BattleContext *ctx, BattleControllerPacketBallGauge *packet, int command, int battlerId) {
+static void BattleController_InitBallGaugePacket(BattleSystem *battleSystem, BattleContext *ctx, BattleControllerPacketBallGauge *packet, int command, int battlerId) {
     Party *party;
     int slot;
     int i;
@@ -1829,5 +1745,3 @@ void BattleController_InitBallGaugePacket(BattleSystem *battleSystem, BattleCont
         }
     }
 }
-
-#pragma force_active reset

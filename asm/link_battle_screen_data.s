@@ -1,9 +1,5 @@
 	.include "asm/macros.inc"
 	.public LinkBattleScreen_Start
-	.public LinkBattleScreen_RunTask
-	.public LinkBattleScreen_SetVramBanks
-	.public LinkBattleScreen_UpdateBattleVideoPrompt
-	.public LinkBattleScreen_Init
 	.public LinkBattleScreen_InitPartyScreen
 	.public LinkBattleScreen_InitVsScreen
 	.public LinkBattleScreen_InitResultScreen
@@ -14,8 +10,6 @@
 	.public LinkBattleScreen_DelayBeforeNudge
 	.public LinkBattleScreen_DetermineNudgeDirection
 	.public LinkBattleScreen_NudgePanels
-	.public LinkBattleScreen_NudgePanelsRight
-	.public LinkBattleScreen_NudgePanelsLeft
 	.public LinkBattleScreen_DelayBeforeReveal
 	.public LinkBattleScreen_RevealCenterBand
 	.public LinkBattleScreen_ShowWinLoseSprites
@@ -25,67 +19,6 @@
 	.public LinkBattleScreen_ApplyOutcomePalette
 	.public LinkBattleScreen_SlidePartyPanelsIn
 	.public LinkBattleScreen_StartExit
-	.public LinkBattleScreen_Finish
-	.public LinkBattleScreen_IsLocalPlayerOnLeft
-	.public LinkBattleScreen_InitSpriteSystem
-	.public LinkBattleScreen_CreateSprite
-	.public LinkBattleScreen_FreeSprites
-	.public LinkBattleScreen_UpdateSpriteAnims
-	.public LinkBattleScreen_VBlankCallback
-	.public LinkBattleScreen_InitVsBgLayers
-	.public LinkBattleScreen_RemoveMessageWindows
-	.public LinkBattleScreen_FreeMessageData
-	.public LinkBattleScreen_FreeVsBgLayers
-	.public LinkBattleScreen_LoadVsBgGraphics
-	.public LinkBattleScreen_InitMessageWindows
-	.public LinkBattleScreen_SetBg1AlphaBlend
-	.public LinkBattleScreen_InitVsSprites
-	.public LinkBattleScreen_LoadPartyBallGfx
-	.public LinkBattleScreen_SetBallRowPosition
-	.public LinkBattleScreen_SetPartyBallAnims
-	.public LinkBattleScreen_SetAllPartyBallAnims
-	.public LinkBattleScreen_CreateNameTextObj
-	.public LinkBattleScreen_CreateNameTextObjs
-	.public LinkBattleScreen_SetNamePosition
-	.public LinkBattleScreen_FreeNameTextObjs
-	.public LinkBattleScreen_InitLayout
-	.public LinkBattleScreen_InitResultSprites
-	.public LinkBattleScreen_LoadOutcomeGfx
-	.public LinkBattleScreen_SetupOutcomeSprites
-	.public LinkBattleScreen_InitParticles
-	.public LinkBattleScreen_UpdateParticles
-	.public LinkBattleScreen_FreeParticles
-	.public LinkBattleScreen_AllocParticleTexVram
-	.public LinkBattleScreen_AllocParticlePlttVram
-	.public LinkBattleScreen_InitPartyBgLayers
-	.public LinkBattleScreen_FreePartyBgLayers
-	.public LinkBattleScreen_LoadPartyBgGraphics
-	.public LinkBattleScreen_DrawPartyPanels
-	.public LinkBattleScreen_StashPanelTilemap
-	.public LinkBattleScreen_StashPanelTilemaps
-	.public LinkBattleScreen_RevealPanelColumns
-	.public LinkBattleScreen_ReadPartyMonInfo
-	.public LinkBattleScreen_ReadMonInfo
-	.public LinkBattleScreen_GetMonIconAnim
-	.public LinkBattleScreen_CreateMonSprites
-	.public LinkBattleScreen_InitPartySprites
-	.public LinkBattleScreen_LoadMonIconGfx
-	.public LinkBattleScreen_LoadItemIconGfx
-	.public LinkBattleScreen_LoadStatusIconGfx
-	.public LinkBattleScreen_LoadPlistSpriteRes
-	.public LinkBattleScreen_SetPartySpriteOffset
-	.public LinkBattleScreen_AddPartyWindows
-	.public LinkBattleScreen_RemovePartyWindows
-	.public LinkBattleScreen_PrintMonName
-	.public LinkBattleScreen_PrintMonLevel
-	.public LinkBattleScreen_PrintMonHp
-	.public LinkBattleScreen_DrawMonHpBar
-	.public LinkBattleScreen_DrawMonPanelText
-	.public LinkBattleScreen_DrawAllMonPanelText
-	.public LinkBattleScreen_DrawMessageBox
-	.public LinkBattleScreen_IsBattleRecordActive
-	.public LinkBattleScreen_ShowWaitingIcon
-	.public LinkBattleScreen_HideWaitingIcon
 	.public sBallRowFirstSprite
 	.public sBattleVideoYesNoTemplate
 	.public sPartyPanelPositions

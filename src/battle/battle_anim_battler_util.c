@@ -138,12 +138,12 @@ void BattleAnimUtil_GetEmitterPosition(int battlerType, VecFx32 *pos, int unused
     }
 
 // ... of a battler, for the current particle system's perspective type
-#define BATTLER_EMITTER_POSITION_FUNC(name, func)                                                     \
-    void name(BattleAnimSystem *system, int battler, VecFx32 *pos) {                                  \
+#define BATTLER_EMITTER_POSITION_FUNC(name, func)                                                                                 \
+    void name(BattleAnimSystem *system, int battler, VecFx32 *pos) {                                                              \
         int perspective = ParticleSystem_GetPerspectiveType((ParticleSystem *)BattleAnimSystem_GetCurrentParticleSystem(system)); \
-        int battlerType = BattleAnimUtil_GetBattlerType(system, battler);                             \
-        int unk = BattleAnimSystem_GetField08(system);                                                              \
-        func(battlerType, pos, unk, perspective);                                                     \
+        int battlerType = BattleAnimUtil_GetBattlerType(system, battler);                                                         \
+        int unk = BattleAnimSystem_GetField08(system);                                                                            \
+        func(battlerType, pos, unk, perspective);                                                                                 \
     }
 
 EMITTER_POSITION_FUNC(BattleAnimUtil_GetEmitterPositionKind0, 0)
@@ -223,8 +223,6 @@ void BattleAnimUtil_SetBlendBgOverBattleBg(BattleAnimSystem *system, int eva, in
     G2_SetBlendAlpha(plane1, plane2, eva, evb);
 }
 
-#pragma force_active on
-
 void BattleAnimUtil_SetWindowInsidePlanes(BattleAnimSystem *system, int window, BOOL effect) {
     if (window == 0) {
         G2_SetWnd0InsidePlane((1 << BattleAnimSystem_GetBgMaskLayer(system, 2)) | (1 << BattleAnimSystem_GetBgMaskLayer(system, 0)) | (1 << BattleAnimSystem_GetBgMaskLayer(system, 1)) | GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_OBJ, effect);
@@ -233,8 +231,6 @@ void BattleAnimUtil_SetWindowInsidePlanes(BattleAnimSystem *system, int window, 
     }
     G2_SetWndOutsidePlane((1 << BattleAnimSystem_GetBgMaskLayer(system, 0)) | (1 << BattleAnimSystem_GetBgMaskLayer(system, 1)) | GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_OBJ, TRUE);
 }
-
-#pragma force_active reset
 
 void BattleAnimUtil_GetPicPosition(Pokepic *pokepic, s16 *pos) {
     if (pokepic == NULL) {

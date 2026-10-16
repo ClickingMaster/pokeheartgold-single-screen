@@ -2,7 +2,7 @@
 
 void BattleLink_Start(BattleSystem *battle) {
     BattleLinkTask *send, *recv;
-    if (BattleSystem_GetBattleSpecial(battle) & 0x10) {
+    if (BattleSystem_GetBattleSpecial(battle) & BATTLE_SPECIAL_RECORDING) {
         return;
     }
     send = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattleLinkTask));
@@ -44,7 +44,7 @@ u32 BattleLink_GetTrainerSize(void) {
 
 void *BattleLink_GetProfileRecvBuffer(int sender, BattleLinkWork *work) {
     BattleSetup *setup = work->setup;
-    if (setup->battleType & 0x80) {
+    if (setup->battleType & BATTLE_TYPE_FRONTIER) {
         return setup->profile[sender * 2];
     }
     return setup->profile[sender];
@@ -52,7 +52,7 @@ void *BattleLink_GetProfileRecvBuffer(int sender, BattleLinkWork *work) {
 
 void *BattleLink_GetTrainerRecvBuffer(int sender, BattleLinkWork *work) {
     BattleSetup *setup = work->setup;
-    if (setup->battleType & 0x80) {
+    if (setup->battleType & BATTLE_TYPE_FRONTIER) {
         return &setup->trainer[sender * 2];
     }
     return &setup->trainer[sender];
@@ -60,7 +60,7 @@ void *BattleLink_GetTrainerRecvBuffer(int sender, BattleLinkWork *work) {
 
 void *BattleLink_GetPartyRecvBuffer(int sender, BattleLinkWork *work) {
     BattleSetup *setup = work->setup;
-    if (setup->battleType & 0x80) {
+    if (setup->battleType & BATTLE_TYPE_FRONTIER) {
         return setup->party[sender * 2];
     }
     return setup->party[sender];
@@ -68,7 +68,7 @@ void *BattleLink_GetPartyRecvBuffer(int sender, BattleLinkWork *work) {
 
 void *BattleLink_GetChatotRecvBuffer(int sender, BattleLinkWork *work) {
     BattleSetup *setup = work->setup;
-    if (setup->battleType & 0x80) {
+    if (setup->battleType & BATTLE_TYPE_FRONTIER) {
         return setup->chatot[sender * 2];
     }
     return setup->chatot[sender];
@@ -285,7 +285,7 @@ BOOL BattleLink_PreparePalPad(BattleLinkWork *work) {
         return FALSE;
     }
     setup = work->setup;
-    if (setup->battleType & 0x80) {
+    if (setup->battleType & BATTLE_TYPE_FRONTIER) {
         index = Comm_GetLocalNetId() * 8;
     } else {
         index = Comm_GetLocalNetId() * 4;

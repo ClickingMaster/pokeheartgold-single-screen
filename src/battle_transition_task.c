@@ -8,8 +8,6 @@
 #include "sound_system.h"
 #include "task.h"
 
-// Field task that plays a battle transition effect and the battle music, then waits for the effect to finish.
-
 typedef struct BattleTransitionTaskEnv {
     int state;
     int done; // set to 1 by the transition effect
@@ -17,14 +15,14 @@ typedef struct BattleTransitionTaskEnv {
     u32 bgm;
 } BattleTransitionTaskEnv;
 
-static BOOL Task_BattleTransition(TaskManager *taskMan);
-void CallTask_BattleTransition(TaskManager *taskMan, int effect, int bgm);
-
 enum {
     BATTLE_TRANSITION_STATE_START,
     BATTLE_TRANSITION_STATE_WAIT,
 };
 
+static BOOL Task_BattleTransition(TaskManager *taskMan);
+
+// Plays the battle transition effect and starts the battle music, then waits for the effect to finish.
 static BOOL Task_BattleTransition(TaskManager *taskMan) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskMan);
     BattleTransitionTaskEnv *env = TaskManager_GetEnvironment(taskMan);
@@ -49,7 +47,7 @@ static BOOL Task_BattleTransition(TaskManager *taskMan) {
 
 void CallTask_BattleTransition(TaskManager *taskMan, int effect, int bgm) {
     BattleTransitionTaskEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(BattleTransitionTaskEnv));
-    env->state = 0;
+    env->state = BATTLE_TRANSITION_STATE_START;
     env->done = 0;
     env->effect = effect;
     env->bgm = bgm;

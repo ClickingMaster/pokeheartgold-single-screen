@@ -1,4 +1,3 @@
-
 #include "battle/battle_terrain.h"
 
 #include "global.h"
@@ -13,16 +12,17 @@
 #include "palette.h"
 #include "sprite_system.h"
 
-#define UNK_RES_4E2D 0x4E2D
-#define UNK_RES_4E2E 0x4E2E
-#define UNK_RES_4E29 0x4E29
-#define UNK_RES_4E25 0x4E25
-#define UNK_RES_4E26 0x4E26
+// Sprite resource ids; the cell and animation of each side use its char id - 8
+#define TERRAIN_RES_CHAR_PLAYER 0x4E2D
+#define TERRAIN_RES_CHAR_ENEMY  0x4E2E
+#define TERRAIN_RES_PALETTE     0x4E29
+#define TERRAIN_RES_CELL_PLAYER 0x4E25
+#define TERRAIN_RES_CELL_ENEMY  0x4E26
 
-void BattleTerrain_LoadResources(BattleTerrain *terrain);
-void BattleTerrain_CreateSprite(BattleTerrain *terrain);
-void BattleTerrain_DeleteSprite(BattleTerrain *terrain);
-void BattleTerrain_UnloadResources(BattleTerrain *terrain);
+static void BattleTerrain_LoadResources(BattleTerrain *terrain);
+static void BattleTerrain_CreateSprite(BattleTerrain *terrain);
+static void BattleTerrain_DeleteSprite(BattleTerrain *terrain);
+static void BattleTerrain_UnloadResources(BattleTerrain *terrain);
 void BattleTerrain_Init(BattleTerrain *terrain, BattleSystem *battleSystem, s32 side, s32 terrainId);
 
 static const u16 sEnemyTerrainCharFiles[] = {
@@ -80,8 +80,30 @@ static const u16 sPlayerTerrainCharFiles[] = {
 };
 
 static const ManagedSpriteTemplate sTerrainSpriteTemplates[] = {
-    { .x = 0x150,  .y = 0x88, .z = 0, .animation = 0, .drawPriority = 0x3E8, .pal = 0, .vram = NNS_G2D_VRAM_TYPE_2DMAIN, .resIdList = { UNK_RES_4E2D, UNK_RES_4E29, UNK_RES_4E25, UNK_RES_4E25, -1, -1 }, .bgPriority = 3, .vramTransfer = 0 },
-    { .x = 0xFFB0, .y = 0x58, .z = 0, .animation = 0, .drawPriority = 0x3E8, .pal = 0, .vram = NNS_G2D_VRAM_TYPE_2DMAIN, .resIdList = { UNK_RES_4E2E, UNK_RES_4E29, UNK_RES_4E26, UNK_RES_4E26, -1, -1 }, .bgPriority = 3, .vramTransfer = 0 }
+    {
+     .x = 0x150,
+     .y = 0x88,
+     .z = 0,
+     .animation = 0,
+     .drawPriority = 0x3E8,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { TERRAIN_RES_CHAR_PLAYER, TERRAIN_RES_PALETTE, TERRAIN_RES_CELL_PLAYER, TERRAIN_RES_CELL_PLAYER, -1, -1 },
+     .bgPriority = 3,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 0xFFB0,
+     .y = 0x58,
+     .z = 0,
+     .animation = 0,
+     .drawPriority = 0x3E8,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { TERRAIN_RES_CHAR_ENEMY, TERRAIN_RES_PALETTE, TERRAIN_RES_CELL_ENEMY, TERRAIN_RES_CELL_ENEMY, -1, -1 },
+     .bgPriority = 3,
+     .vramTransfer = 0,
+     },
 };
 
 static const u16 sTerrainPaletteFiles[][3] __attribute__((aligned(4))) = {
@@ -111,7 +133,7 @@ static const u16 sTerrainPaletteFiles[][3] __attribute__((aligned(4))) = {
     { 0x43, 0x44, 0x45 }
 };
 
-void BattleTerrain_LoadResources(BattleTerrain *terrain) {
+static void BattleTerrain_LoadResources(BattleTerrain *terrain) {
     u32 cellAnimResId;
     NARC *narc = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
 
@@ -125,13 +147,13 @@ void BattleTerrain_LoadResources(BattleTerrain *terrain) {
     u32 animFile;
     if (terrain->side == 0) {
         charFile = sPlayerTerrainCharFiles[terrain->terrainId];
-        charResId = UNK_RES_4E2D;
+        charResId = TERRAIN_RES_CHAR_PLAYER;
         cellFile = 0x80;
         cellAnimResId = charResId - 8;
         animFile = 0x81;
     } else {
         charFile = sEnemyTerrainCharFiles[terrain->terrainId];
-        charResId = UNK_RES_4E2E;
+        charResId = TERRAIN_RES_CHAR_ENEMY;
         cellFile = 0x83;
         cellAnimResId = charResId - 8;
         animFile = 0x84;
@@ -139,7 +161,7 @@ void BattleTerrain_LoadResources(BattleTerrain *terrain) {
     SpriteSystem_LoadCharResObjFromOpenNarc(spriteSystem, spriteManager, narc, charFile, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, charResId);
 
     PaletteData *palette = BattleSystem_GetPaletteData(terrain->battleSystem);
-    SpriteSystem_LoadPaletteBufferFromOpenNarc(palette, PLTTBUF_MAIN_OBJ, spriteSystem, spriteManager, narc, sTerrainPaletteFiles[terrain->terrainId][subfile], FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, UNK_RES_4E29);
+    SpriteSystem_LoadPaletteBufferFromOpenNarc(palette, PLTTBUF_MAIN_OBJ, spriteSystem, spriteManager, narc, sTerrainPaletteFiles[terrain->terrainId][subfile], FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, TERRAIN_RES_PALETTE);
 
     palette = BattleSystem_GetPaletteData(terrain->battleSystem);
     PaletteData_LoadNarc(palette, NARC_a_0_0_8, sTerrainPaletteFiles[terrain->terrainId][subfile], HEAP_ID_BATTLE, PLTTBUF_MAIN_BG, 0x20, 0x70);
@@ -151,8 +173,8 @@ void BattleTerrain_LoadResources(BattleTerrain *terrain) {
     NARC_Delete(narc);
 }
 
-void BattleTerrain_CreateSprite(BattleTerrain *terrain) {
-    SpriteSystem *spriteSystem; // r5
+static void BattleTerrain_CreateSprite(BattleTerrain *terrain) {
+    SpriteSystem *spriteSystem;
     ManagedSprite *managed;
 
     spriteSystem = BattleSystem_GetSpriteSystem(terrain->battleSystem);
@@ -161,19 +183,19 @@ void BattleTerrain_CreateSprite(BattleTerrain *terrain) {
     Sprite_TickFrame(managed->sprite);
 }
 
-void BattleTerrain_DeleteSprite(BattleTerrain *terrain) {
+static void BattleTerrain_DeleteSprite(BattleTerrain *terrain) {
     if (terrain->sprite) {
         Sprite_DeleteAndFreeResources(terrain->sprite);
         terrain->sprite = NULL;
     }
 }
 
-void BattleTerrain_UnloadResources(BattleTerrain *terrain) {
+static void BattleTerrain_UnloadResources(BattleTerrain *terrain) {
     SpriteManager *manager = BattleSystem_GetSpriteManager(terrain->battleSystem);
-    s32 resId = terrain->side == 0 ? UNK_RES_4E2D : UNK_RES_4E2E;
+    s32 resId = terrain->side == 0 ? TERRAIN_RES_CHAR_PLAYER : TERRAIN_RES_CHAR_ENEMY;
     u32 cellAnimResId = resId - 8;
     SpriteManager_UnloadCharObjById(manager, resId);
-    SpriteManager_UnloadPlttObjById(manager, UNK_RES_4E29);
+    SpriteManager_UnloadPlttObjById(manager, TERRAIN_RES_PALETTE);
     SpriteManager_UnloadCellObjById(manager, cellAnimResId);
     SpriteManager_UnloadAnimObjById(manager, cellAnimResId);
 }
@@ -190,7 +212,7 @@ void BattleTerrain_Init(BattleTerrain *terrain, BattleSystem *battleSystem, s32 
     terrain->battleSystem = battleSystem;
     terrain->side = side;
     terrain->terrainId = terrainId;
-    if (terrainId >= 0x18) {
+    if (terrainId >= 24) {
         GF_AssertFail();
         terrain->terrainId = 0;
     }
