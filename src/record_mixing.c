@@ -45,9 +45,42 @@
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 
-#define RECORD_MIXING_MAX_MEMBERS     5
-#define RECORD_MIXING_BUFFER_SIZE     0xBC0
-#define RECORD_MIXING_STATE_WAIT_TEXT 30
+#define RECORD_MIXING_MAX_MEMBERS 5
+#define RECORD_MIXING_BUFFER_SIZE 0xBC0
+
+enum RecordMixingState {
+    RECORD_MIXING_STATE_PRINT_GROUP_PROMPT,
+    RECORD_MIXING_STATE_WAIT_TEXT_THEN_RESET_MENU,
+    RECORD_MIXING_STATE_RESET_LEADER_MENU_STATE,
+    RECORD_MIXING_STATE_HANDLE_GROUP_MENU,
+    RECORD_MIXING_STATE_SHOW_CANCEL_YES_NO,
+    RECORD_MIXING_STATE_HANDLE_CANCEL_YES_NO,
+    RECORD_MIXING_STATE_WAIT_LEAVE_REPLY,
+    RECORD_MIXING_STATE_SEND_LEAVE,
+    RECORD_MIXING_STATE_ABORT_LEAVE,
+    RECORD_MIXING_STATE_PRINT_CANCELED,
+    RECORD_MIXING_STATE_FADE_OUT_AFTER_DELAY,
+    RECORD_MIXING_STATE_SHOW_DISBAND_YES_NO,
+    RECORD_MIXING_STATE_HANDLE_DISBAND_YES_NO,
+    RECORD_MIXING_STATE_PRINT_DISBAND,
+    RECORD_MIXING_STATE_WAIT_DISBAND,
+    RECORD_MIXING_STATE_START_EXIT_SYNC,
+    RECORD_MIXING_STATE_WAIT_EXIT_SYNC,
+    RECORD_MIXING_STATE_PRINT_MEMBER_UNAVAILABLE,
+    RECORD_MIXING_STATE_WAIT_MEMBER_UNAVAILABLE,
+    RECORD_MIXING_STATE_PRINT_MEMBER_LEFT,
+    RECORD_MIXING_STATE_START_MEMBER_LEFT_WAIT,
+    RECORD_MIXING_STATE_WAIT_MEMBER_LEFT,
+    RECORD_MIXING_STATE_SHOW_CONFIRM_YES_NO,
+    RECORD_MIXING_STATE_HANDLE_CONFIRM_YES_NO,
+    RECORD_MIXING_STATE_SEND_START_MIXING,
+    RECORD_MIXING_STATE_WAIT_RECORDS,
+    RECORD_MIXING_STATE_MERGE_RECORDS,
+    RECORD_MIXING_STATE_START_SAVE,
+    RECORD_MIXING_STATE_SAVE,
+    RECORD_MIXING_STATE_WAIT_AFTER_SAVE,
+    RECORD_MIXING_STATE_WAIT_TEXT,
+};
 
 typedef struct RecordMixingMember {
     PlayerProfile *cur;
@@ -472,7 +505,7 @@ void RecordMixing_InitResources(RecordMixingApp *app, NARC *narc) {
     }
     app->messageText = String_New(180, HEAP_ID_50);
     app->titleText = String_New(40, HEAP_ID_50);
-    app->state = 0;
+    app->state = RECORD_MIXING_STATE_PRINT_GROUP_PROMPT;
     ReadMsgDataIntoString(app->msgData, msg_0422_00017, app->titleText);
     RecordMixing_LoadAvatarGraphics(app, narc);
     app->avatarPalette = UnionRoom_LoadAvatarPalette(HEAP_ID_50);
@@ -646,7 +679,7 @@ int RecordMixing_State_PrintGroupPrompt(RecordMixingApp *app, int state) {
     } else {
         RecordMixing_PrintMessage(app, msg_0422_00008, FALSE);
     }
-    RecordMixing_SetStateAfterText(app, 3);
+    RecordMixing_SetStateAfterText(app, RECORD_MIXING_STATE_HANDLE_GROUP_MENU);
     return state;
 }
 
@@ -707,7 +740,7 @@ void RecordMixing_HandleInput(RecordMixingApp *app) {
             if (app->participantCount == RecordMixing_CountMembers() && app->leavingMask == 0) {
                 packet.send[2] = 1;
                 RecordMixing_PrintMessage(app, msg_0422_00003, FALSE);
-                RecordMixing_SetStateAfterText(app, 22);
+                RecordMixing_SetStateAfterText(app, RECORD_MIXING_STATE_SHOW_CONFIRM_YES_NO);
                 Comm_SendCommand(117, &packet.send[2], 1);
                 RecordMixing_UpdateMaxEntries(app, 0);
                 PlaySE(SEQ_SE_DP_SELECT);
@@ -721,7 +754,7 @@ void RecordMixing_HandleInput(RecordMixingApp *app) {
         if (Comm_GetLocalNetId()) {
             if (app->leaderJoinPending == 0) {
                 RecordMixing_PrintMessage(app, msg_0422_00004, FALSE);
-                RecordMixing_SetStateAfterText(app, 4);
+                RecordMixing_SetStateAfterText(app, RECORD_MIXING_STATE_SHOW_CANCEL_YES_NO);
                 PlaySE(SEQ_SE_GS_GEARCANCEL);
             } else if (app->buttonHighlightTimer < 0) {
                 app->buttonHighlightTimer = 2;
@@ -731,7 +764,7 @@ void RecordMixing_HandleInput(RecordMixingApp *app) {
             if (app->participantCount == Comm_CountConnected() && app->leavingMask == 0) {
                 packet.send[1] = 1;
                 RecordMixing_PrintMessage(app, msg_0422_00004, FALSE);
-                RecordMixing_SetStateAfterText(app, 4);
+                RecordMixing_SetStateAfterText(app, RECORD_MIXING_STATE_SHOW_CANCEL_YES_NO);
                 Comm_SendCommand(117, &packet.send[1], 1);
                 RecordMixing_UpdateMaxEntries(app, 0);
                 PlaySE(SEQ_SE_GS_GEARCANCEL);
@@ -761,7 +794,7 @@ void RecordMixing_UpdateDummy(RecordMixingApp *app) {
 }
 
 int RecordMixing_State_WaitTextThenResetMenu(RecordMixingApp *app, int state) {
-    RecordMixing_SetStateAfterText(app, 2);
+    RecordMixing_SetStateAfterText(app, RECORD_MIXING_STATE_RESET_LEADER_MENU_STATE);
     RecordMixing_UpdateDummy(app);
     return state;
 }
@@ -774,7 +807,7 @@ void RecordMixing_SetStateAfterText(RecordMixingApp *app, int nextState) {
 int RecordMixing_State_WaitText(RecordMixingApp *app, int state) {
     if (RecordMixing_IsPrinterDone(app->printerId)) {
         app->state = app->nextState;
-        if (app->nextState == 3) {
+        if (app->nextState == RECORD_MIXING_STATE_HANDLE_GROUP_MENU) {
             if (Comm_GetLocalNetId() == 0) {
                 RecordMixing_SetButtonState(app, 0, 0);
             }
@@ -794,7 +827,7 @@ int RecordMixing_State_ResetLeaderMenuState(RecordMixingApp *app, int state) {
         data = 0;
         Comm_SendCommand(117, &data, 1);
     }
-    app->state = 3;
+    app->state = RECORD_MIXING_STATE_HANDLE_GROUP_MENU;
     RecordMixing_UpdateDummy(app);
     return state;
 }
@@ -836,7 +869,7 @@ void RecordMixing_HideYesNo(RecordMixingApp *app) {
 
 int RecordMixing_State_ShowCancelYesNo(RecordMixingApp *app, int state) {
     RecordMixing_ShowYesNo(app);
-    app->state = 5;
+    app->state = RECORD_MIXING_STATE_HANDLE_CANCEL_YES_NO;
     RecordMixing_UpdateDummy(app);
     return state;
 }
@@ -875,9 +908,9 @@ int RecordMixing_State_HandleCancelYesNo(RecordMixingApp *app, int state) {
                 Comm_SendCommand(117, &noData, 1);
                 RecordMixing_UpdateMaxEntries(app, 1);
             }
-            RecordMixing_SetStateAfterText(app, 0);
+            RecordMixing_SetStateAfterText(app, RECORD_MIXING_STATE_PRINT_GROUP_PROMPT);
         } else if (Comm_GetLocalNetId() == 0) {
-            RecordMixing_SetStateAfterText(app, 11);
+            RecordMixing_SetStateAfterText(app, RECORD_MIXING_STATE_SHOW_DISBAND_YES_NO);
             RecordMixing_PrintMessage(app, msg_0422_00014, FALSE);
         } else {
             MI_CpuFill8(data, 0, 4);
@@ -885,7 +918,7 @@ int RecordMixing_State_HandleCancelYesNo(RecordMixingApp *app, int state) {
             data[0] = Comm_GetLocalNetId();
             app->leaveRequested = 1;
             app->leaveWaitFrames = 0;
-            app->state = 6;
+            app->state = RECORD_MIXING_STATE_WAIT_LEAVE_REPLY;
             Comm_SendCommand(112, data, 4);
         }
         RecordMixing_HideYesNo(app);
@@ -907,7 +940,7 @@ int RecordMixing_State_SendLeave(RecordMixingApp *app, int state) {
 
     if (app->assignedCount != Comm_CountConnected() || app->assignedCount != RecordMixing_CountMembers()) {
         app->leaveWaitFrames = 0;
-        app->state = 8;
+        app->state = RECORD_MIXING_STATE_ABORT_LEAVE;
         RecordMixing_UpdateDummy(app);
         return state;
     }
@@ -918,7 +951,7 @@ int RecordMixing_State_SendLeave(RecordMixingApp *app, int state) {
         data[0] = Comm_GetLocalNetId();
         Comm_SendCommand(112, data, 4);
         app->leaveWaitFrames = 0;
-        app->state = 9;
+        app->state = RECORD_MIXING_STATE_PRINT_CANCELED;
     }
     RecordMixing_UpdateDummy(app);
     return state;
@@ -928,14 +961,14 @@ int RecordMixing_State_SendLeave(RecordMixingApp *app, int state) {
 
 int RecordMixing_State_AbortLeave(RecordMixingApp *app, int state) {
     app->leaveRequested = 0;
-    RecordMixing_SetStateAfterText(app, 0);
+    RecordMixing_SetStateAfterText(app, RECORD_MIXING_STATE_PRINT_GROUP_PROMPT);
     RecordMixing_UpdateDummy(app);
     return state;
 }
 
 int RecordMixing_State_ShowConfirmYesNo(RecordMixingApp *app, int state) {
     RecordMixing_ShowYesNo(app);
-    app->state = 23;
+    app->state = RECORD_MIXING_STATE_HANDLE_CONFIRM_YES_NO;
     RecordMixing_UpdateDummy(app);
     return state;
 }
@@ -958,12 +991,12 @@ int RecordMixing_State_HandleConfirmYesNo(RecordMixingApp *app, int state) {
             data = 0;
             Comm_SendCommand(117, &data, 1);
             RecordMixing_UpdateMaxEntries(app, 1);
-            RecordMixing_SetStateAfterText(app, 0);
+            RecordMixing_SetStateAfterText(app, RECORD_MIXING_STATE_PRINT_GROUP_PROMPT);
         } else {
             RecordMixing_SetButtonState(app, 1, 2);
             RecordMixing_SetButtonState(app, 0, 2);
             if (Comm_GetLocalNetId() == 0) {
-                app->state = 24;
+                app->state = RECORD_MIXING_STATE_SEND_START_MIXING;
                 app->startMemberCount = RecordMixing_CountMembers();
             } else {
                 GF_AssertFail();
@@ -993,14 +1026,14 @@ int RecordMixing_State_WaitRecords(RecordMixingApp *app, int state) {
         Comm_CountConnected();
     }
     if (app->recordsReceived == Comm_CountConnected()) {
-        app->state = 26;
+        app->state = RECORD_MIXING_STATE_MERGE_RECORDS;
     }
     return state;
 }
 
 int RecordMixing_State_MergeRecords(RecordMixingApp *app, int state) {
     RecordMixing_MergeReceivedRecords(app->saveData, app->receiveBuffers);
-    app->state = 27;
+    app->state = RECORD_MIXING_STATE_START_SAVE;
     return state;
 }
 
@@ -1008,7 +1041,7 @@ int RecordMixing_State_StartSave(RecordMixingApp *app, int state) {
     gSystem.softResetDisabled = TRUE;
     GameStats_AddScore(app->args->gameStats, SCORE_EVENT_RECORDS_MIXED);
     Comm_InitSyncedSave(&app->saveState);
-    app->state = 28;
+    app->state = RECORD_MIXING_STATE_SAVE;
     return state;
 }
 
@@ -1019,7 +1052,7 @@ int RecordMixing_State_Save(RecordMixingApp *app, int state) {
     if (Comm_SyncedSave(app->args->saveData, 2, (u32 *)&app->saveState)) {
         StopSE(SEQ_SE_DP_F209, 8);
         RecordMixing_PrintMessage(app, msg_0422_00013, FALSE);
-        RecordMixing_SetStateAfterText(app, 29);
+        RecordMixing_SetStateAfterText(app, RECORD_MIXING_STATE_WAIT_AFTER_SAVE);
         Sprite_SetAnimCtrlSeq(app->playerSprite, 0);
         app->flash.active = 0;
         app->counter = 0;
@@ -1031,14 +1064,14 @@ int RecordMixing_State_Save(RecordMixingApp *app, int state) {
 
 int RecordMixing_State_WaitAfterSave(RecordMixingApp *app, int state) {
     if (app->counter++ > 60) {
-        app->state = 15;
+        app->state = RECORD_MIXING_STATE_START_EXIT_SYNC;
     }
     return state;
 }
 
 int RecordMixing_State_PrintCanceled(RecordMixingApp *app, int state) {
     RecordMixing_PrintMessage(app, msg_0422_00005, FALSE);
-    RecordMixing_SetStateAfterText(app, 10);
+    RecordMixing_SetStateAfterText(app, RECORD_MIXING_STATE_FADE_OUT_AFTER_DELAY);
     RecordMixing_UpdateDummy(app);
     return state;
 }
@@ -1055,7 +1088,7 @@ int RecordMixing_State_FadeOutAfterDelay(RecordMixingApp *app, int state) {
 
 int RecordMixing_State_ShowDisbandYesNo(RecordMixingApp *app, int state) {
     RecordMixing_ShowYesNo(app);
-    app->state = 12;
+    app->state = RECORD_MIXING_STATE_HANDLE_DISBAND_YES_NO;
     RecordMixing_UpdateDummy(app);
     return state;
 }
@@ -1077,11 +1110,11 @@ int RecordMixing_State_HandleDisbandYesNo(RecordMixingApp *app, int state) {
     if (input) {
         if (input == YESNORESPONSE_NO) {
             data = 0;
-            app->state = 0;
+            app->state = RECORD_MIXING_STATE_PRINT_GROUP_PROMPT;
             Comm_SendCommand(117, &data, 1);
             RecordMixing_UpdateMaxEntries(app, 1);
         } else {
-            app->state = 13;
+            app->state = RECORD_MIXING_STATE_PRINT_DISBAND;
             Comm_SendCommand(113, NULL, 0);
             BufferPlayersName(app->msgFmt, 0, CommPlayerInfo_GetProfile(0));
         }
@@ -1101,7 +1134,7 @@ int RecordMixing_State_PrintDisband(RecordMixingApp *app, int state) {
         BufferPlayersName(app->msgFmt, 0, leader);
         RecordMixing_PrintMessage(app, msg_0422_00016, FALSE);
     }
-    RecordMixing_SetStateAfterText(app, 14);
+    RecordMixing_SetStateAfterText(app, RECORD_MIXING_STATE_WAIT_DISBAND);
     app->counter = 0;
     RecordMixing_UpdateDummy(app);
     return state;
@@ -1110,7 +1143,7 @@ int RecordMixing_State_PrintDisband(RecordMixingApp *app, int state) {
 int RecordMixing_State_WaitDisband(RecordMixingApp *app, int state) {
     app->counter++;
     if (app->counter > 45) {
-        app->state = 15;
+        app->state = RECORD_MIXING_STATE_START_EXIT_SYNC;
     }
     RecordMixing_UpdateDummy(app);
     return state;
@@ -1118,7 +1151,7 @@ int RecordMixing_State_WaitDisband(RecordMixingApp *app, int state) {
 
 int RecordMixing_State_StartExitSync(RecordMixingApp *app, int state) {
     LinkSync_StartSync(201);
-    app->state = 16;
+    app->state = RECORD_MIXING_STATE_WAIT_EXIT_SYNC;
     RecordMixing_UpdateDummy(app);
     return state;
 }
@@ -1137,14 +1170,14 @@ int RecordMixing_State_PrintMemberUnavailable(RecordMixingApp *app, int state) {
     if (RecordMixing_IsPrinterDone(app->printerId) != FALSE) {
         RecordMixing_PrintMessage(app, msg_0422_00009, FALSE);
     }
-    app->state = 18;
+    app->state = RECORD_MIXING_STATE_WAIT_MEMBER_UNAVAILABLE;
     RecordMixing_UpdateDummy(app);
     return state;
 }
 
 int RecordMixing_State_WaitMemberUnavailable(RecordMixingApp *app, int state) {
     if (RecordMixing_IsPrinterDone(app->printerId) != FALSE) {
-        app->state = 10;
+        app->state = RECORD_MIXING_STATE_FADE_OUT_AFTER_DELAY;
     }
     RecordMixing_UpdateDummy(app);
     return state;
@@ -1161,7 +1194,7 @@ int RecordMixing_State_PrintMemberLeft(RecordMixingApp *app, int state) {
         RemoveTextPrinter((u8)app->printerId);
     }
     RecordMixing_PrintMessage(app, msg_0422_00015, TRUE);
-    app->state = 20;
+    app->state = RECORD_MIXING_STATE_START_MEMBER_LEFT_WAIT;
     if (Comm_GetLocalNetId() == 0) {
         RecordMixing_UpdateMaxEntries(app, 0);
     }
@@ -1178,7 +1211,7 @@ int RecordMixing_State_StartMemberLeftWait(RecordMixingApp *app, int state) {
             app->leaveConnectedCount = 0;
         }
     }
-    app->state = 21;
+    app->state = RECORD_MIXING_STATE_WAIT_MEMBER_LEFT;
     app->counter = 0;
     RecordMixing_UpdateDummy(app);
     return state;
@@ -1197,7 +1230,7 @@ int RecordMixing_State_WaitMemberLeft(RecordMixingApp *app, int state) {
     }
     app->counter++;
     if (app->counter > 60 && app->leaveConnectedCount == 0) {
-        app->state = 0;
+        app->state = RECORD_MIXING_STATE_PRINT_GROUP_PROMPT;
         if (Comm_GetLocalNetId() == 0) {
             RecordMixing_UpdateMaxEntries(app, 1);
         }
@@ -1208,13 +1241,13 @@ int RecordMixing_State_WaitMemberLeft(RecordMixingApp *app, int state) {
 
 void RecordMixing_SetStateFromLink(RecordMixingApp *app, int state, int netId) {
     switch (state) {
-    case 2:
+    case RECORD_MIXING_STATE_RESET_LEADER_MENU_STATE:
         RecordMixing_ClearMessageWindow(app);
         break;
-    case 13:
+    case RECORD_MIXING_STATE_PRINT_DISBAND:
         RecordMixing_HideYesNo(app);
         break;
-    case 25:
+    case RECORD_MIXING_STATE_WAIT_RECORDS:
         if (!RecordMixing_IsPrinterDone(app->printerId)) {
             RemoveTextPrinter((u8)app->printerId);
         }
@@ -1223,7 +1256,7 @@ void RecordMixing_SetStateFromLink(RecordMixingApp *app, int state, int netId) {
         RecordMixing_PrintMessage(app, msg_0422_00012, FALSE);
         RecordMixing_HideYesNo(app);
         break;
-    case 19:
+    case RECORD_MIXING_STATE_PRINT_MEMBER_LEFT:
         if (app->leaveRequested == 1) {
             return;
         }
@@ -1236,8 +1269,8 @@ void RecordMixing_SetStateFromLink(RecordMixingApp *app, int state, int netId) {
             app->leavingMask &= netId ^ 0xFFFF;
         }
         break;
-    case 7:
-    case 8:
+    case RECORD_MIXING_STATE_SEND_LEAVE:
+    case RECORD_MIXING_STATE_ABORT_LEAVE:
         break;
     default:
         return;
@@ -1246,9 +1279,9 @@ void RecordMixing_SetStateFromLink(RecordMixingApp *app, int state, int netId) {
 }
 
 void RecordMixing_SetStateFromLinkInMenu(RecordMixingApp *app, int state, int netId) {
-    if (app->state == 3) {
+    if (app->state == RECORD_MIXING_STATE_HANDLE_GROUP_MENU) {
         switch (state) {
-        case 1: {
+        case RECORD_MIXING_STATE_WAIT_TEXT_THEN_RESET_MENU: {
             u32 one;
             BufferPlayersName(app->msgFmt, 0, CommPlayerInfo_GetProfile(netId));
             RecordMixing_UpdateMaxEntries(app, 1);
@@ -1261,7 +1294,7 @@ void RecordMixing_SetStateFromLinkInMenu(RecordMixingApp *app, int state, int ne
             }
             return;
         }
-        case 19:
+        case RECORD_MIXING_STATE_PRINT_MEMBER_LEFT:
             BufferPlayersName(app->msgFmt, 0, CommPlayerInfo_GetProfile(netId));
             if (netId == Comm_GetLocalNetId()) {
                 return;
@@ -1276,7 +1309,7 @@ void RecordMixing_SetStateFromLinkInMenu(RecordMixingApp *app, int state, int ne
             return;
         }
     }
-    if (state == 1) {
+    if (state == RECORD_MIXING_STATE_WAIT_TEXT_THEN_RESET_MENU) {
         app->leavingMask = 0;
         app->participantCount = Comm_CountConnected();
     }
@@ -1589,7 +1622,7 @@ int RecordMixing_LeaderUpdateMembers(RecordMixingApp *app, int index) {
         if (Comm_CountConnected() > 1 || Wireless_GetConnectedBitmap() > 1) {
             return 1;
         }
-        app->state = 17;
+        app->state = RECORD_MIXING_STATE_PRINT_MEMBER_UNAVAILABLE;
         RecordMixing_UpdateMaxEntries(app, -1);
         RecordMixing_HideYesNo(app);
         return 2;

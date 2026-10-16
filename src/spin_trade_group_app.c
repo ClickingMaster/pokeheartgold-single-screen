@@ -43,6 +43,41 @@
 #include "union_room_avatar.h"
 #include "vram_transfer_manager.h"
 
+enum SpinTradeGroupState {
+    SPIN_TRADE_GROUP_STATE_SHOW_PROMPT,
+    SPIN_TRADE_GROUP_STATE_WAIT_TEXT_THEN_RESET_MENU,
+    SPIN_TRADE_GROUP_STATE_RESET_LEADER_MENU_STATE,
+    SPIN_TRADE_GROUP_STATE_HANDLE_INPUT,
+    SPIN_TRADE_GROUP_STATE_SHOW_CANCEL_YES_NO,
+    SPIN_TRADE_GROUP_STATE_HANDLE_CANCEL_YES_NO,
+    SPIN_TRADE_GROUP_STATE_RESET_LEAVE_WAIT,
+    SPIN_TRADE_GROUP_STATE_SEND_LEAVE,
+    SPIN_TRADE_GROUP_STATE_ABORT_LEAVE,
+    SPIN_TRADE_GROUP_STATE_SHOW_CANCELED,
+    SPIN_TRADE_GROUP_STATE_FADE_OUT_CANCELED,
+    SPIN_TRADE_GROUP_STATE_SHOW_DISBAND_YES_NO,
+    SPIN_TRADE_GROUP_STATE_HANDLE_DISBAND_YES_NO,
+    SPIN_TRADE_GROUP_STATE_SHOW_DISBANDED,
+    SPIN_TRADE_GROUP_STATE_WAIT_BEFORE_EXIT,
+    SPIN_TRADE_GROUP_STATE_START_EXIT_SYNC,
+    SPIN_TRADE_GROUP_STATE_WAIT_EXIT_SYNC,
+    SPIN_TRADE_GROUP_STATE_SHOW_MEMBER_DROPPED,
+    SPIN_TRADE_GROUP_STATE_WAIT_MEMBER_DROPPED,
+    SPIN_TRADE_GROUP_STATE_SHOW_MEMBER_LEFT,
+    SPIN_TRADE_GROUP_STATE_START_MEMBER_LEFT_WAIT,
+    SPIN_TRADE_GROUP_STATE_WAIT_MEMBER_LEFT,
+    SPIN_TRADE_GROUP_STATE_SHOW_CONFIRM_YES_NO,
+    SPIN_TRADE_GROUP_STATE_HANDLE_CONFIRM_YES_NO,
+    SPIN_TRADE_GROUP_STATE_SEND_START_SYNC,
+    SPIN_TRADE_GROUP_STATE_WAIT_SYNC_COUNT,
+    SPIN_TRADE_GROUP_STATE_BEFORE_SAVE,
+    SPIN_TRADE_GROUP_STATE_START_SAVE,
+    SPIN_TRADE_GROUP_STATE_SAVE,
+    SPIN_TRADE_GROUP_STATE_WAIT_AFTER_SAVE,
+    SPIN_TRADE_GROUP_STATE_WAIT_PRINTER,
+    SPIN_TRADE_GROUP_STATE_PROCEED,
+};
+
 // View of the link menu owned by frontier_menu_communication.c (SpinTradeArgs.menu)
 typedef struct SpinTradeGroupMenu {
     u8 unk_00[0x20];
@@ -453,7 +488,7 @@ void SpinTradeGroup_InitData(SpinTradeGroupApp *app, NARC *narc) {
     }
     app->msgString = String_New(0xB4, HEAP_ID_102);
     app->titleString = String_New(0x28, HEAP_ID_102);
-    app->subState = 0;
+    app->subState = SPIN_TRADE_GROUP_STATE_SHOW_PROMPT;
     ReadMsgDataIntoString(app->msgData, msg_0207_00017, app->titleString);
     SpinTradeGroup_LoadAvatarGraphics(app, narc);
     app->avatarPalette = UnionRoom_LoadAvatarPalette(HEAP_ID_102);
@@ -596,7 +631,7 @@ int SpinTradeGroup_State_ShowPrompt(SpinTradeGroupApp *app, int state) {
     } else {
         SpinTradeGroup_PrintMessage(app, msg_0207_00008, 0);
     }
-    SpinTradeGroup_WaitPrinterThen(app, 3);
+    SpinTradeGroup_WaitPrinterThen(app, SPIN_TRADE_GROUP_STATE_HANDLE_INPUT);
     return state;
 }
 
@@ -622,7 +657,7 @@ void SpinTradeGroup_HandleButtons(SpinTradeGroupApp *app) {
             if (app->menu->participantCount == (u32)SpinTradeGroup_CountMembers() && app->menu->leavingMask == 0) {
                 a = 1;
                 SpinTradeGroup_PrintMessage(app, msg_0207_00003, 0);
-                SpinTradeGroup_WaitPrinterThen(app, 0x16);
+                SpinTradeGroup_WaitPrinterThen(app, SPIN_TRADE_GROUP_STATE_SHOW_CONFIRM_YES_NO);
                 SpinTradeLink_SendCommand(app->menu, 7, &a, 1);
                 SpinTradeGroup_SetMaxConnections(app, 0);
             } else {
@@ -633,7 +668,7 @@ void SpinTradeGroup_HandleButtons(SpinTradeGroupApp *app) {
         if (Comm_GetLocalNetId()) {
             if (app->menu->leaderJoinPending == 0) {
                 SpinTradeGroup_PrintMessage(app, msg_0207_00004, 0);
-                SpinTradeGroup_WaitPrinterThen(app, 4);
+                SpinTradeGroup_WaitPrinterThen(app, SPIN_TRADE_GROUP_STATE_SHOW_CANCEL_YES_NO);
             } else {
                 PlaySE(SEQ_SE_DP_CUSTOM06);
             }
@@ -641,7 +676,7 @@ void SpinTradeGroup_HandleButtons(SpinTradeGroupApp *app) {
             if (app->menu->participantCount == Comm_CountConnected() && app->menu->leavingMask == 0) {
                 b = 1;
                 SpinTradeGroup_PrintMessage(app, msg_0207_00004, 0);
-                SpinTradeGroup_WaitPrinterThen(app, 4);
+                SpinTradeGroup_WaitPrinterThen(app, SPIN_TRADE_GROUP_STATE_SHOW_CANCEL_YES_NO);
                 SpinTradeLink_SendCommand(app->menu, 7, &b, 1);
                 SpinTradeGroup_SetMaxConnections(app, 0);
             } else {
@@ -661,13 +696,13 @@ void SpinTradeGroup_UpdateDummy(SpinTradeGroupApp *app) {
 }
 
 int SpinTradeGroup_State_WaitTextThenResetMenu(SpinTradeGroupApp *app, int state) {
-    SpinTradeGroup_WaitPrinterThen(app, 2);
+    SpinTradeGroup_WaitPrinterThen(app, SPIN_TRADE_GROUP_STATE_RESET_LEADER_MENU_STATE);
     SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
 void SpinTradeGroup_WaitPrinterThen(SpinTradeGroupApp *app, u32 nextSubState) {
-    app->subState = 30;
+    app->subState = SPIN_TRADE_GROUP_STATE_WAIT_PRINTER;
     app->nextSubState = nextSubState;
 }
 
@@ -685,14 +720,14 @@ int SpinTradeGroup_State_ResetLeaderMenuState(SpinTradeGroupApp *app, int state)
         v = 0;
         SpinTradeLink_SendCommand(app->menu, 7, &v, 1);
     }
-    app->subState = 3;
+    app->subState = SPIN_TRADE_GROUP_STATE_HANDLE_INPUT;
     SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
 int SpinTradeGroup_State_ShowCancelYesNo(SpinTradeGroupApp *app, int state) {
     app->yesNoMenu = Std_CreateYesNoMenu(app->bgConfig, &gSpinTradeGroupYesNoWindowTemplate, 0x1F, 0xB, HEAP_ID_102);
-    app->subState = 5;
+    app->subState = SPIN_TRADE_GROUP_STATE_HANDLE_CANCEL_YES_NO;
     SpinTradeGroup_UpdateDummy(app);
     return state;
 }
@@ -731,9 +766,9 @@ int SpinTradeGroup_State_HandleCancelYesNo(SpinTradeGroupApp *app, int state) {
                 SpinTradeLink_SendCommand(app->menu, 7, &v, 1);
                 SpinTradeGroup_SetMaxConnections(app, 1);
             }
-            SpinTradeGroup_WaitPrinterThen(app, 0);
+            SpinTradeGroup_WaitPrinterThen(app, SPIN_TRADE_GROUP_STATE_SHOW_PROMPT);
         } else if (!Comm_GetLocalNetId()) {
-            SpinTradeGroup_WaitPrinterThen(app, 0xB);
+            SpinTradeGroup_WaitPrinterThen(app, SPIN_TRADE_GROUP_STATE_SHOW_DISBAND_YES_NO);
             SpinTradeGroup_PrintMessage(app, msg_0207_00014, 0);
         } else {
             MI_CpuFill8(buf, 0, 4);
@@ -741,7 +776,7 @@ int SpinTradeGroup_State_HandleCancelYesNo(SpinTradeGroupApp *app, int state) {
             buf[0] = (u8)Comm_GetLocalNetId();
             app->leaveRequested = 1;
             app->leaveWaitFrames = 0;
-            app->subState = 6;
+            app->subState = SPIN_TRADE_GROUP_STATE_RESET_LEAVE_WAIT;
             SpinTradeLink_SendCommand(app->menu, 2, buf, 4);
         }
         app->yesNoMenu = NULL;
@@ -759,7 +794,7 @@ int SpinTradeGroup_State_ResetLeaveWait(SpinTradeGroupApp *app, int state) {
 int SpinTradeGroup_State_SendLeave(SpinTradeGroupApp *app, int state) {
     if (app->menu->assignedCount != Comm_CountConnected() || app->menu->assignedCount != SpinTradeGroup_CountMembers()) {
         app->leaveWaitFrames = 0;
-        app->subState = 8;
+        app->subState = SPIN_TRADE_GROUP_STATE_ABORT_LEAVE;
         SpinTradeGroup_UpdateDummy(app);
         return state;
     }
@@ -771,7 +806,7 @@ int SpinTradeGroup_State_SendLeave(SpinTradeGroupApp *app, int state) {
         buf[0] = (u8)Comm_GetLocalNetId();
         SpinTradeLink_SendCommand(app->menu, 2, buf, 4);
         app->leaveWaitFrames = 0;
-        app->subState = 9;
+        app->subState = SPIN_TRADE_GROUP_STATE_SHOW_CANCELED;
     }
     SpinTradeGroup_UpdateDummy(app);
     return state;
@@ -779,14 +814,14 @@ int SpinTradeGroup_State_SendLeave(SpinTradeGroupApp *app, int state) {
 
 int SpinTradeGroup_State_AbortLeave(SpinTradeGroupApp *app, int state) {
     app->leaveRequested = 0;
-    SpinTradeGroup_WaitPrinterThen(app, 0);
+    SpinTradeGroup_WaitPrinterThen(app, SPIN_TRADE_GROUP_STATE_SHOW_PROMPT);
     SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
 int SpinTradeGroup_State_ShowConfirmYesNo(SpinTradeGroupApp *app, int state) {
     app->yesNoMenu = Std_CreateYesNoMenu(app->bgConfig, &gSpinTradeGroupYesNoWindowTemplate, 0x1F, 0xB, HEAP_ID_102);
-    app->subState = 0x17;
+    app->subState = SPIN_TRADE_GROUP_STATE_HANDLE_CONFIRM_YES_NO;
     SpinTradeGroup_UpdateDummy(app);
     return state;
 }
@@ -807,9 +842,9 @@ int SpinTradeGroup_State_HandleConfirmYesNo(SpinTradeGroupApp *app, int state) {
                 u32 v = 0;
                 SpinTradeLink_SendCommand(app->menu, 7, &v, 1);
                 SpinTradeGroup_SetMaxConnections(app, 1);
-                SpinTradeGroup_WaitPrinterThen(app, 0);
+                SpinTradeGroup_WaitPrinterThen(app, SPIN_TRADE_GROUP_STATE_SHOW_PROMPT);
             } else if (Comm_GetLocalNetId() == 0) {
-                app->subState = 0x18;
+                app->subState = SPIN_TRADE_GROUP_STATE_SEND_START_SYNC;
                 app->startMemberCount = (u8)SpinTradeGroup_CountMembers();
                 UnionRoom_SetBeaconActivity(0xC);
             } else {
@@ -825,7 +860,7 @@ int SpinTradeGroup_State_HandleConfirmYesNo(SpinTradeGroupApp *app, int state) {
 int SpinTradeGroup_State_SendStartSync(SpinTradeGroupApp *app, int state) {
     if (app->unk_4A53 == 0) {
         if (SpinTradeLink_SendCommand(app->menu, 5, NULL, 0) == 1) {
-            app->subState = 0x1F;
+            app->subState = SPIN_TRADE_GROUP_STATE_PROCEED;
         }
     }
     return state;
@@ -836,14 +871,14 @@ int SpinTradeGroup_State_WaitSyncCount(SpinTradeGroupApp *app, int state) {
         Comm_CountConnected();
     }
     if (app->menu->count == Comm_CountConnected()) {
-        app->subState = 0x1F;
+        app->subState = SPIN_TRADE_GROUP_STATE_PROCEED;
     }
     return state;
 }
 
 int SpinTradeGroup_State_BeforeSave(SpinTradeGroupApp *app, int state) {
     SpinTradeGroup_SaveDummy(app->args->input.saveData, app->unk_F80);
-    app->subState = 0x1B;
+    app->subState = SPIN_TRADE_GROUP_STATE_START_SAVE;
     return state;
 }
 
@@ -851,7 +886,7 @@ int SpinTradeGroup_State_StartSave(SpinTradeGroupApp *app, int state) {
     gSystem.softResetDisabled = 1;
     GameStats_AddScore(app->args->input.gameStats, SCORE_EVENT_RECORDS_MIXED);
     Comm_InitSyncedSave(&app->saveState);
-    app->subState = 0x1C;
+    app->subState = SPIN_TRADE_GROUP_STATE_SAVE;
     return state;
 }
 
@@ -862,7 +897,7 @@ int SpinTradeGroup_State_Save(SpinTradeGroupApp *app, int state) {
     if (Comm_SyncedSave(app->args->input.saveData, 2, &app->saveState) != 0) {
         StopSE(SEQ_SE_DP_F209, 8);
         SpinTradeGroup_PrintMessage(app, msg_0207_00013, 0);
-        SpinTradeGroup_WaitPrinterThen(app, 0x1D);
+        SpinTradeGroup_WaitPrinterThen(app, SPIN_TRADE_GROUP_STATE_WAIT_AFTER_SAVE);
         app->blink.active = FALSE;
         app->timer = 0;
         gSystem.softResetDisabled = 0;
@@ -873,14 +908,14 @@ int SpinTradeGroup_State_Save(SpinTradeGroupApp *app, int state) {
 
 int SpinTradeGroup_State_WaitAfterSave(SpinTradeGroupApp *app, int state) {
     if (app->timer++ > 0x3C) {
-        app->subState = 0xF;
+        app->subState = SPIN_TRADE_GROUP_STATE_START_EXIT_SYNC;
     }
     return state;
 }
 
 int SpinTradeGroup_State_ShowCanceled(SpinTradeGroupApp *app, int state) {
     SpinTradeGroup_PrintMessage(app, msg_0207_00005, 0);
-    SpinTradeGroup_WaitPrinterThen(app, 0xA);
+    SpinTradeGroup_WaitPrinterThen(app, SPIN_TRADE_GROUP_STATE_FADE_OUT_CANCELED);
     SpinTradeGroup_UpdateDummy(app);
     return state;
 }
@@ -897,7 +932,7 @@ int SpinTradeGroup_State_FadeOutCanceled(SpinTradeGroupApp *app, int state) {
 
 int SpinTradeGroup_State_ShowDisbandYesNo(SpinTradeGroupApp *app, int state) {
     app->yesNoMenu = Std_CreateYesNoMenu(app->bgConfig, &gSpinTradeGroupYesNoWindowTemplate, 0x1F, 0xB, HEAP_ID_102);
-    app->subState = 0xC;
+    app->subState = SPIN_TRADE_GROUP_STATE_HANDLE_DISBAND_YES_NO;
     SpinTradeGroup_UpdateDummy(app);
     return state;
 }
@@ -916,11 +951,11 @@ int SpinTradeGroup_State_HandleDisbandYesNo(SpinTradeGroupApp *app, int state) {
         if (r != -1) {
             if (r == -2) {
                 u32 v = 0;
-                app->subState = 0;
+                app->subState = SPIN_TRADE_GROUP_STATE_SHOW_PROMPT;
                 SpinTradeLink_SendCommand(app->menu, 7, &v, 1);
                 SpinTradeGroup_SetMaxConnections(app, 1);
             } else {
-                app->subState = 0xD;
+                app->subState = SPIN_TRADE_GROUP_STATE_SHOW_DISBANDED;
                 SpinTradeLink_SendCommand(app->menu, 3, NULL, 0);
                 BufferPlayersName(app->msgFormat, 0, CommPlayerInfo_GetProfile(0));
             }
@@ -938,7 +973,7 @@ int SpinTradeGroup_State_ShowDisbanded(SpinTradeGroupApp *app, int state) {
         BufferPlayersName(app->msgFormat, 0, CommPlayerInfo_GetProfile(0));
         SpinTradeGroup_PrintMessage(app, msg_0207_00016, 0);
     }
-    SpinTradeGroup_WaitPrinterThen(app, 14);
+    SpinTradeGroup_WaitPrinterThen(app, SPIN_TRADE_GROUP_STATE_WAIT_BEFORE_EXIT);
     app->timer = 0;
     SpinTradeGroup_UpdateDummy(app);
     return state;
@@ -947,7 +982,7 @@ int SpinTradeGroup_State_ShowDisbanded(SpinTradeGroupApp *app, int state) {
 int SpinTradeGroup_State_WaitBeforeExit(SpinTradeGroupApp *app, int state) {
     app->timer++;
     if (app->timer > 0x2D) {
-        app->subState = 0xF;
+        app->subState = SPIN_TRADE_GROUP_STATE_START_EXIT_SYNC;
     }
     SpinTradeGroup_UpdateDummy(app);
     return state;
@@ -955,7 +990,7 @@ int SpinTradeGroup_State_WaitBeforeExit(SpinTradeGroupApp *app, int state) {
 
 int SpinTradeGroup_State_StartExitSync(SpinTradeGroupApp *app, int state) {
     LinkSync_StartSync(0xCA);
-    app->subState = 0x10;
+    app->subState = SPIN_TRADE_GROUP_STATE_WAIT_EXIT_SYNC;
     SpinTradeGroup_UpdateDummy(app);
     return state;
 }
@@ -974,14 +1009,14 @@ int SpinTradeGroup_State_ShowMemberDropped(SpinTradeGroupApp *app, int state) {
     if (SpinTradeGroup_IsPrinterDone(app->printerId)) {
         SpinTradeGroup_PrintMessage(app, msg_0207_00009, 0);
     }
-    app->subState = 0x12;
+    app->subState = SPIN_TRADE_GROUP_STATE_WAIT_MEMBER_DROPPED;
     SpinTradeGroup_UpdateDummy(app);
     return state;
 }
 
 int SpinTradeGroup_State_WaitMemberDropped(SpinTradeGroupApp *app, int state) {
     if (SpinTradeGroup_IsPrinterDone(app->printerId)) {
-        app->subState = 0xA;
+        app->subState = SPIN_TRADE_GROUP_STATE_FADE_OUT_CANCELED;
     }
     SpinTradeGroup_UpdateDummy(app);
     return state;
@@ -992,7 +1027,7 @@ int SpinTradeGroup_State_ShowMemberLeft(SpinTradeGroupApp *app, int state) {
         RemoveTextPrinter((u8)app->printerId);
     }
     SpinTradeGroup_PrintMessage(app, msg_0207_00015, 1);
-    app->subState = 0x14;
+    app->subState = SPIN_TRADE_GROUP_STATE_START_MEMBER_LEFT_WAIT;
     if (Comm_GetLocalNetId() == 0) {
         SpinTradeGroup_SetMaxConnections(app, 0);
     }
@@ -1008,7 +1043,7 @@ int SpinTradeGroup_State_StartMemberLeftWait(SpinTradeGroupApp *app, int state) 
             app->leaveConnectedCount = 0;
         }
     }
-    app->subState = 0x15;
+    app->subState = SPIN_TRADE_GROUP_STATE_WAIT_MEMBER_LEFT;
     app->timer = 0;
     SpinTradeGroup_UpdateDummy(app);
     return state;
@@ -1026,7 +1061,7 @@ int SpinTradeGroup_State_WaitMemberLeft(SpinTradeGroupApp *app, int state) {
     }
     app->timer++;
     if (app->timer > 0x3C && app->leaveConnectedCount == 0) {
-        app->subState = 0;
+        app->subState = SPIN_TRADE_GROUP_STATE_SHOW_PROMPT;
         if (Comm_GetLocalNetId() == 0) {
             SpinTradeGroup_SetMaxConnections(app, 1);
         }
@@ -1100,7 +1135,7 @@ void SpinTradeGroup_HandleLinkEvent(SpinTradeGroupApp *app, int msg, int value) 
 }
 
 void SpinTradeGroup_HandleMemberEvent(SpinTradeGroupApp *app, int event, int netId) {
-    if (app->subState == 3) {
+    if (app->subState == SPIN_TRADE_GROUP_STATE_HANDLE_INPUT) {
         switch (event) {
         case 1: {
             SpinTradeGroupMenu *p;
@@ -1392,7 +1427,7 @@ int SpinTradeGroup_CheckMembers(SpinTradeGroupApp *app, int extraEntries) {
         if ((int)Comm_CountConnected() > 1 || Wireless_GetConnectedBitmap() > 1) {
             return 1;
         }
-        app->subState = 0x11;
+        app->subState = SPIN_TRADE_GROUP_STATE_SHOW_MEMBER_DROPPED;
         SpinTradeGroup_SetMaxConnections(app, -1);
         if (app->yesNoMenu != NULL) {
             Clear2dMenuWindowAndDelete(app->yesNoMenu, HEAP_ID_102);
