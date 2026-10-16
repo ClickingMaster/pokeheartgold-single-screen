@@ -77,7 +77,7 @@ struct Obj {
     void *unkA8;
 };
 
-extern "C" NameTable ov45_02254DC4;
+extern "C" NameTable gLobbyChatPrefixNames;
 extern "C" char sStr_GSP[];
 extern "C" char sStr_Bang_2[];
 extern "C" Obj *LobbyChatManager_Init(Obj *obj, const String &gameName, const String &gameKey, int prefix, u32 userId, const String &nick, const String &userName, const String &realName, const Triple *config);
@@ -115,7 +115,7 @@ extern "C" Obj *LobbyChatManager_Init(Obj *obj, const String &gameName, const St
     obj->unk9C = 0;
     obj->unkA0 = 0;
     obj->unkA8 = &obj->unkA0;
-    NameTable prefixNames = ov45_02254DC4;
+    NameTable prefixNames = gLobbyChatPrefixNames;
     String gsp(sStr_GSP);
     String gspSep = LobbyString_ConcatCStr(gsp, sStr_Bang_2);
     String withGame = LobbyString_Concat(gspSep, obj->str30);

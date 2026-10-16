@@ -69,7 +69,7 @@ struct Table {
     void *ctx;
 };
 
-extern "C" Table ov45_02254D5C, ov45_02254D1C, ov45_02254D3C;
+extern "C" Table gPPWLobbyFootChannelMode, gPPWLobbyClockChannelMode, gPPWLobbyNewsChannelMode;
 extern "C" void PPWLobby_OnPlayerJoined(void), PPWLobby_OnPlayerLeft(void), PPWLobby_OnMessage(void), PPWLobby_OnChannelDataChanged(void), PPWLobby_OnTopicChanged(void), PPWLobby_OnEnterSubChannel(void);
 
 struct Callbacks {
@@ -141,13 +141,13 @@ extern "C" int PPW_LobbyJoinSubChannelAsync(int mode) {
     switch (mode) {
     case 1:
     case 2:
-        t = &ov45_02254D5C;
+        t = &gPPWLobbyFootChannelMode;
         break;
     case 3:
-        t = &ov45_02254D1C;
+        t = &gPPWLobbyClockChannelMode;
         break;
     case 4:
-        t = &ov45_02254D3C;
+        t = &gPPWLobbyNewsChannelMode;
         break;
     default:
         t = 0;
