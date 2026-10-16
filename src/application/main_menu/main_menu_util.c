@@ -72,16 +72,16 @@ typedef struct MainMenuUtilGift {
 // preceding label: a second literal-pool entry of the same address, matching)
 extern enum HeapID sMainMenuUtilCryptoHeapId; // heap of the crypto library
 extern MainMenuUtilWork gMainMenuUtilWork;
-extern MainMenuUtilSprites ov74_0223D488; // = &gMainMenuUtilWork.sprites
-extern G2dRenderer ov74_0223D48C;         // = &gMainMenuUtilWork.sprites.renderer
-extern u32 ov74_0223D654[];               // = gMainMenuUtilWork + 0x200
-extern u32 ov74_0223E2D4[];               // = gMainMenuUtilWork + 0xE80
+extern MainMenuUtilSprites sMainMenuUtilSprites; // = &gMainMenuUtilWork.sprites
+extern G2dRenderer sMainMenuUtilRenderer;        // = &gMainMenuUtilWork.sprites.renderer
+extern u32 ov74_0223D654[];                      // = gMainMenuUtilWork + 0x200
+extern u32 ov74_0223E2D4[];                      // = gMainMenuUtilWork + 0xE80
 extern const u8 sGiftCartridgePublicKey[];
 extern const ObjCharTransferTemplate sMainMenuUtilObjCharTransferTemplate;
 extern const BgTemplate sMainMenuUtilBgTemplate;
 extern const MainMenuUtilGiftPalettes sMainMenuUtilGiftPalettes;
 extern u32 sGiftCartridgeGameCodes[];
-extern u16 ov74_0223CC5E[];
+extern u16 sAgbSpeciesMapNationalDex[];
 
 void MainMenuUtil_SetCryptoHeap(enum HeapID heapID) {
     sMainMenuUtilCryptoHeapId = heapID;
@@ -102,7 +102,7 @@ int MainMenuUtil_CheckGiftCartridgeSignature(void) {
     u32 i = 0;
     if (i < sGiftCartridgeGameCodes[0]) {
         // sGiftCartridgeGameCodes, reached through the end of the preceding table (second literal-pool entry, matching)
-        u32 *codes = (u32 *)(ov74_0223CC5E + 0x11F);
+        u32 *codes = (u32 *)(sAgbSpeciesMapNationalDex + 0x11F);
         do {
             if (code == *codes) {
                 CTRDG_Enable(TRUE);
@@ -379,8 +379,8 @@ void MainMenuUtil_InitSprites(void) {
     int i;
     NNS_G2dInitOamManagerModule();
     OamManager_Create(0, 126, 0, 32, 0, 126, 0, 32, gMainMenuUtilWork.heapId);
-    gMainMenuUtilWork.sprites.spriteList = G2dRenderer_Init(128, &ov74_0223D48C, gMainMenuUtilWork.heapId);
-    G2dRenderer_SetSubSurfaceCoords(&ov74_0223D48C, 0, FX32_CONST(256));
+    gMainMenuUtilWork.sprites.spriteList = G2dRenderer_Init(128, &sMainMenuUtilRenderer, gMainMenuUtilWork.heapId);
+    G2dRenderer_SetSubSurfaceCoords(&sMainMenuUtilRenderer, 0, FX32_CONST(256));
     *(fx32 *)((u8 *)ov74_0223D654 + 0x10) = FX32_CONST(192);
     for (i = 0; i < 6; i++) {
         work->sprites.resMan[i] = Create2DGfxResObjMan(32, (GfGfxResType)i, work->heapId);
@@ -438,7 +438,7 @@ void MainMenuUtil_LoadSpriteResources(NarcId narcId, u32 charFileId, u32 plttFil
 #pragma force_active reset
 
 void MainMenuUtil_SetSubScreenOffset(fx32 x, fx32 y) {
-    G2dRenderer_SetSubSurfaceCoords(&ov74_0223D48C, x, y);
+    G2dRenderer_SetSubSurfaceCoords(&sMainMenuUtilRenderer, x, y);
     *(fx32 *)((u8 *)ov74_0223D654 + 0x10) = y;
 }
 
@@ -506,7 +506,7 @@ Sprite *MainMenuUtil_CreateSprite(u32 screen, Sprite *sprite, u32 x, u32 y, u32 
 
 void MainMenuUtil_FreeSprites(void) {
     MainMenuUtilWork *work = &gMainMenuUtilWork;
-    MainMenuUtilSprites *sprites = &ov74_0223D488;
+    MainMenuUtilSprites *sprites = &sMainMenuUtilSprites;
     int i;
     if (ov74_0223D654[2]) {
         Sprite_Delete(work->giftSprite);

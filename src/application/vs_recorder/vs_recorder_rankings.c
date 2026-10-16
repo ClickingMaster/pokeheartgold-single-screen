@@ -68,6 +68,15 @@ extern u32 sVsRecorderRankedRecordGameStats[];                                //
 
 // ---- box data screens: server responses
 
+// substates of the rankings screens (sVsRecorderRankingsSubStates)
+#define RANKINGS_ENTER      1
+#define RANKINGS_DOWNLOAD   2
+#define RANKINGS_SWITCH     4
+#define RANKINGS_SHOW       5
+#define RANKINGS_MAIN       6
+#define RANKINGS_CLOSE_LIST 7
+#define RANKINGS_EXIT       8
+
 void VsRecorder_OnBoxUploaded(void *arg, GlobalTerminalNetError *error) {
 }
 
@@ -395,17 +404,17 @@ void VsRecorder_OnRankingsTouch(u32 index, u32 event, void *arg) {
         VsRecorder_OnTouchConfirm(work);
         rankings->ranking = rankings->ranking + 1;
         rankings->ranking = rankings->ranking % rankings->rankingCount;
-        VsRecorder_SetSubState(work, 4);
+        VsRecorder_SetSubState(work, RANKINGS_SWITCH);
         break;
     case 1: // SWITCH TEAMS
         VsRecorder_OnTouchConfirm(work);
         rankings->team = rankings->team + 1;
         rankings->team = rankings->team % rankings->teamKindCount;
-        VsRecorder_SetSubState(work, 4);
+        VsRecorder_SetSubState(work, RANKINGS_SWITCH);
         break;
     default:
         VsRecorder_OnTouchConfirm(work);
-        VsRecorder_SetSubState(work, 7);
+        VsRecorder_SetSubState(work, RANKINGS_CLOSE_LIST);
         break;
     }
 }
@@ -429,7 +438,7 @@ BOOL VsRecorder_RankingsInit(VsRecorderWork *work) {
     BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_3);
     VsRecorder_InitBgBlend(&rankings->eva, &rankings->evb, 0);
     rankings->hitboxController = TouchHitboxController_Create(sVsRecorderRankingsHitboxes, 3, VsRecorder_OnRankingsTouch, work, HEAP_ID_109);
-    VsRecorder_SetSubState(work, 1);
+    VsRecorder_SetSubState(work, RANKINGS_ENTER);
     return FALSE;
 }
 
@@ -465,7 +474,7 @@ BOOL VsRecorder_RankingsEnter(VsRecorderWork *work) {
         break;
     default:
         if (VsRecorder_IsFlipScreensDone(work)) {
-            VsRecorder_SetSubState(work, 2);
+            VsRecorder_SetSubState(work, RANKINGS_DOWNLOAD);
         }
         break;
     }
@@ -580,7 +589,7 @@ BOOL VsRecorder_RankingsDownload(VsRecorderWork *work) {
                 VsRecorder_ResetFade(&rankings->fade);
                 PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 12, 16, work->blendColor);
                 VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_MENU, TRUE, work->screenPtr);
-                VsRecorder_SetSubState(work, 5);
+                VsRecorder_SetSubState(work, VS_RECORDER_MENU_SLIDE_IN);
                 Heap_Free(rankings);
             } else {
                 PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_BG, 2, rankings->fade, work->blendColor);
@@ -592,7 +601,7 @@ BOOL VsRecorder_RankingsDownload(VsRecorderWork *work) {
         VsRecorder_FillRankingEntries(work);
         OrbitCursor_SetVisible(work->orbitCursors[0], FALSE);
         OrbitCursor_SetRadius(work->orbitCursors[0], 0, 0);
-        VsRecorder_SetSubState(work, 5);
+        VsRecorder_SetSubState(work, RANKINGS_SHOW);
         break;
     }
     return FALSE;
@@ -636,7 +645,7 @@ BOOL VsRecorder_RankingsShow(VsRecorderWork *work) {
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 12, rankings->fade, work->blendColor);
         break;
     default:
-        VsRecorder_SetSubState(work, 6);
+        VsRecorder_SetSubState(work, RANKINGS_MAIN);
         break;
     }
     return FALSE;
@@ -681,7 +690,7 @@ BOOL VsRecorder_RankingsCloseList(VsRecorderWork *work) {
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 12, rankings->fade, work->blendColor);
         break;
     default:
-        VsRecorder_SetSubState(work, 8);
+        VsRecorder_SetSubState(work, RANKINGS_EXIT);
         break;
     }
     return FALSE;
@@ -720,7 +729,7 @@ BOOL VsRecorder_RankingsExit(VsRecorderWork *work) {
                 VsRecorder_ResetFade(&rankings->fade);
                 PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 12, 16, work->blendColor);
                 VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_MENU, TRUE, work->screenPtr);
-                VsRecorder_SetSubState(work, 5);
+                VsRecorder_SetSubState(work, VS_RECORDER_MENU_SLIDE_IN);
                 Heap_Free(rankings);
             } else {
                 PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_BG, 2, rankings->fade, work->blendColor);
@@ -772,7 +781,7 @@ BOOL VsRecorder_RankingsSwitch(VsRecorderWork *work) {
         }
         break;
     default:
-        VsRecorder_SetSubState(work, 6);
+        VsRecorder_SetSubState(work, RANKINGS_MAIN);
         break;
     }
     return FALSE;

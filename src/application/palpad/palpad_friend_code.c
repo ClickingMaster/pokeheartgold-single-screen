@@ -51,7 +51,7 @@ int PalPadNaming_Main(PalPadNaming *naming, PalPadWork *work, PalPadShared *shar
     u32 codeEntryParams[4];
 
     switch (shared->subState) {
-    case 0: // register a friend: name, then friend code
+    case PALPAD_NAMING_STATE_REGISTER: // register a friend: name, then friend code
         naming->namingArgs = PalPadNaming_CreateNamingArgs(naming, shared, heapId);
         codeEntryParams[0] = 4;
         codeEntryParams[1] = 4;
@@ -60,53 +60,53 @@ int PalPadNaming_Main(PalPadNaming *naming, PalPadWork *work, PalPadShared *shar
         naming->codeEntryArgs = CodeEntryArgs_New(heapId, 12, codeEntryParams, Save_PlayerData_GetOptionsAddr(shared->saveData), 0, 0);
         PalPad_TeardownScreens(work);
         naming->manager = OverlayManager_New(&gOverlayTemplate_NamingScreen, naming->namingArgs, heapId);
-        shared->subState = 1;
+        shared->subState = PALPAD_NAMING_STATE_ENTER_NAME;
         break;
-    case 1:
+    case PALPAD_NAMING_STATE_ENTER_NAME:
         if (OverlayManager_Run(naming->manager)) {
             OverlayManager_Delete(naming->manager);
             if (naming->namingArgs->noInput == FALSE) {
                 naming->manager = OverlayManager_New(&gOverlayTemplate_CodeEntry, naming->codeEntryArgs, heapId);
-                shared->subState = 2;
+                shared->subState = PALPAD_NAMING_STATE_ENTER_CODE;
             } else {
-                PalPadShared_SetNextScreen(shared, PALPAD_SCREEN_MENU, 0);
-                shared->subState = 3;
+                PalPadShared_SetNextScreen(shared, PALPAD_SCREEN_MENU, PALPAD_MENU_STATE_FADE_IN);
+                shared->subState = PALPAD_NAMING_STATE_EXIT_REGISTER;
             }
         }
         break;
-    case 2:
+    case PALPAD_NAMING_STATE_ENTER_CODE:
         if (OverlayManager_Run(naming->manager)) {
             OverlayManager_Delete(naming->manager);
             PalPadShared_SetNameAndCode(shared, naming->namingArgs->nameInputString, ((PalPadCodeEntryArgs *)naming->codeEntryArgs)->text);
-            PalPadShared_SetNextScreen(shared, PALPAD_SCREEN_MENU, 7);
-            shared->subState = 3;
+            PalPadShared_SetNextScreen(shared, PALPAD_SCREEN_MENU, PALPAD_MENU_STATE_RETURN_FROM_NAMING);
+            shared->subState = PALPAD_NAMING_STATE_EXIT_REGISTER;
         }
         break;
-    case 3:
+    case PALPAD_NAMING_STATE_EXIT_REGISTER:
         NamingScreen_DeleteArgs(naming->namingArgs);
         CodeEntryArgs_Delete(naming->codeEntryArgs);
         PalPad_SetupScreens(work, heapId);
         return 1;
-    case 4: // rewrite a friend's name
+    case PALPAD_NAMING_STATE_RENAME: // rewrite a friend's name
         naming->namingArgs = PalPadNaming_CreateNamingArgs(naming, shared, heapId);
         PalPad_TeardownScreens(work);
         naming->manager = OverlayManager_New(&gOverlayTemplate_NamingScreen, naming->namingArgs, heapId);
-        shared->subState = 5;
+        shared->subState = PALPAD_NAMING_STATE_ENTER_NEW_NAME;
         break;
-    case 5:
+    case PALPAD_NAMING_STATE_ENTER_NEW_NAME:
         if (OverlayManager_Run(naming->manager)) {
             OverlayManager_Delete(naming->manager);
             if (naming->namingArgs->noInput == FALSE) {
-                PalPadShared_SetNextScreen(shared, PALPAD_SCREEN_ROSTER, 12);
+                PalPadShared_SetNextScreen(shared, PALPAD_SCREEN_ROSTER, PALPAD_ROSTER_STATE_SET_NEW_NAME);
                 PalPadShared_SetNameAndCode(shared, naming->namingArgs->nameInputString, NULL);
-                shared->subState = 6;
+                shared->subState = PALPAD_NAMING_STATE_EXIT_RENAME;
             } else {
-                PalPadShared_SetNextScreen(shared, PALPAD_SCREEN_ROSTER, 13);
-                shared->subState = 6;
+                PalPadShared_SetNextScreen(shared, PALPAD_SCREEN_ROSTER, PALPAD_ROSTER_STATE_RETURN_FROM_NAMING);
+                shared->subState = PALPAD_NAMING_STATE_EXIT_RENAME;
             }
         }
         break;
-    case 6:
+    case PALPAD_NAMING_STATE_EXIT_RENAME:
         NamingScreen_DeleteArgs(naming->namingArgs);
         PalPad_SetupScreens(work, heapId);
         return 1;
@@ -145,23 +145,23 @@ void PalPadFriendCode_Init(PalPadFriendCode *friendCode, PalPadShared *shared, P
 
 int PalPadFriendCode_Main(PalPadFriendCode *friendCode, PalPadShared *shared, PalPadGfx *gfx) {
     switch (shared->subState) {
-    case 0:
+    case PALPAD_FRIEND_CODE_STATE_SHOW:
         PalPadFriendCode_Show(friendCode, shared, gfx);
-        shared->subState = 1;
+        shared->subState = PALPAD_FRIEND_CODE_STATE_INPUT;
         break;
-    case 1:
+    case PALPAD_FRIEND_CODE_STATE_INPUT:
         if (PalPadFriendCode_HandleInput(friendCode, shared)) {
             PlaySE(SEQ_SE_DP_DECIDE);
             PalPadFriendCode_HighlightReturn(friendCode, gfx, TRUE);
             friendCode->timer = 4;
-            shared->subState = 2;
+            shared->subState = PALPAD_FRIEND_CODE_STATE_EXIT_DELAY;
         }
         break;
-    case 2:
+    case PALPAD_FRIEND_CODE_STATE_EXIT_DELAY:
         friendCode->timer--;
         if (friendCode->timer <= 0) {
             PalPadFriendCode_HighlightReturn(friendCode, gfx, FALSE);
-            PalPadShared_SetNextScreen(shared, PALPAD_SCREEN_MENU, 2);
+            PalPadShared_SetNextScreen(shared, PALPAD_SCREEN_MENU, PALPAD_MENU_STATE_SHOW);
             PalPadFriendCode_Hide(friendCode, gfx);
             return TRUE;
         }

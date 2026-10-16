@@ -1176,15 +1176,15 @@ void PokedexApp_UpdateListEntry(PokedexAppData *pokedexApp) {
     u16 species = PokedexApp_GetCursorSpecies(pokedexApp);
 
     if (species == 0) {
-        PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 6, 0);
-        PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 8, 0);
+        PokedexApp_SetIntlSpritePairVisible(pokedexApp, 6, 0);
+        PokedexApp_SetIntlSpriteVisible(pokedexApp, 8, 0);
     } else {
         if (PokedexApp_HasForeignEntries(pokedexApp, species) == TRUE) {
-            PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 6, 1);
+            PokedexApp_SetIntlSpritePairVisible(pokedexApp, 6, 1);
         } else {
-            PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 6, 0);
+            PokedexApp_SetIntlSpritePairVisible(pokedexApp, 6, 0);
         }
-        PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 8, 1);
+        PokedexApp_SetIntlSpriteVisible(pokedexApp, 8, 1);
     }
     if (!PokedexApp_HasCaughtInLanguage(pokedexApp, species, pokedexApp->language)) {
         pokedexApp->language = GAME_LANGUAGE;
@@ -1494,8 +1494,8 @@ void PokedexApp_BuildListReturnCells(PokedexAppData *pokedexApp) {
 void PokedexApp_UpdateSearchResultEntry(PokedexAppData *pokedexApp) {
     int r6 = PokedexApp_GetListCursorIndex(pokedexApp);
     if (r6 == 0) {
-        PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 22, 0);
-        PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 24, 0);
+        PokedexApp_SetIntlSpritePairVisible(pokedexApp, 22, 0);
+        PokedexApp_SetIntlSpriteVisible(pokedexApp, 24, 0);
         PokedexApp_SetSearchEntrySpritesVisible(pokedexApp, 0);
         PokedexApp_DrawCenteredSpeciesName(pokedexApp, SPECIES_NONE, 94);
         PokedexApp_ClearSearchEntryWindows(pokedexApp);
@@ -1522,19 +1522,19 @@ void PokedexApp_UpdateSearchResultEntry(PokedexAppData *pokedexApp) {
         PokedexApp_UpdateFootprintSprite(pokedexApp, species, r6, 48);
         PokedexApp_UpdateCaughtMarkSprite(pokedexApp, r6, 44);
         if (species == SPECIES_NONE) {
-            PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 22, 0);
-            PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 24, 0);
+            PokedexApp_SetIntlSpritePairVisible(pokedexApp, 22, 0);
+            PokedexApp_SetIntlSpriteVisible(pokedexApp, 24, 0);
             PokedexApp_LoadEmptyEntryDetailsBg(pokedexApp->bgConfig, GF_BG_LYR_SUB_3, pokedexApp->gfxNarc, HEAP_ID_POKEDEX_APP);
             ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[81]);
 
             PokedexApp_SetSpriteVisible(pokedexApp, 45, 0);
         } else {
             if (PokedexApp_HasForeignEntries(pokedexApp, species) == TRUE) {
-                PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 22, 1);
+                PokedexApp_SetIntlSpritePairVisible(pokedexApp, 22, 1);
             } else {
-                PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 22, 0);
+                PokedexApp_SetIntlSpritePairVisible(pokedexApp, 22, 0);
             }
-            PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 24, 1);
+            PokedexApp_SetIntlSpriteVisible(pokedexApp, 24, 1);
             PokedexApp_LoadEntryDetailsBg(pokedexApp->bgConfig, GF_BG_LYR_SUB_3, pokedexApp->language, pokedexApp->gfxNarc, HEAP_ID_POKEDEX_APP);
             ScheduleWindowCopyToVram(&pokedexApp->windows[81]);
         }

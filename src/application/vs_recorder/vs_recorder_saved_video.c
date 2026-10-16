@@ -28,6 +28,17 @@ extern const TouchscreenHitbox sVsRecorderSaveYesHitbox;    // YES
 extern const TouchscreenHitbox sVsRecorderSaveNoHitbox;    // NO
 extern const TouchscreenHitbox sVsRecorderSavedVideoHitboxes[3]; // profile, play, exit
 
+// substates of the saved video screen (sVsRecorderSavedVideoSubStates)
+#define SAVED_VIDEO_ENTER          1
+#define SAVED_VIDEO_SHOW           2
+#define SAVED_VIDEO_MAIN           3
+#define SAVED_VIDEO_TOGGLE_PROFILE 4
+#define SAVED_VIDEO_SAVE_PROMPT    5
+#define SAVED_VIDEO_SAVE           6
+#define SAVED_VIDEO_PLAY           7
+#define SAVED_VIDEO_EXIT           8
+#define SAVED_VIDEO_RESUME         9
+
 // right colour scheme arrow (VS_RECORDER_SCREEN_MENU substate 8): like VsRecorder_MenuPrevScheme the other way round
 BOOL VsRecorder_MenuNextScheme(VsRecorderWork *work) {
     switch (work->step) {
@@ -73,7 +84,7 @@ BOOL VsRecorder_MenuNextScheme(VsRecorderWork *work) {
         break;
     default:
         work->fade = 0;
-        VsRecorder_SetSubState(work, 0);
+        VsRecorder_SetSubState(work, VS_RECORDER_MENU_MAIN);
         break;
     }
     return FALSE;
@@ -88,7 +99,7 @@ BOOL VsRecorder_SavedVideoInit(VsRecorderWork *work) {
     BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_2);
     BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_3);
     VsRecorder_InitBgBlend(&savedVideo->eva, &savedVideo->evb, 0);
-    VsRecorder_SetSubState(work, 1);
+    VsRecorder_SetSubState(work, SAVED_VIDEO_ENTER);
     return FALSE;
 }
 
@@ -137,13 +148,13 @@ BOOL VsRecorder_SavedVideoEnter(VsRecorderWork *work) {
             if (ok) {
                 VsRecorder_CreateExitButton(work);
                 savedVideo->exitMode = 0;
-                VsRecorder_SetSubState(work, 9);
+                VsRecorder_SetSubState(work, SAVED_VIDEO_RESUME);
             } else {
                 savedVideo->exitMode = 1;
-                VsRecorder_SetSubState(work, 6);
+                VsRecorder_SetSubState(work, SAVED_VIDEO_SAVE);
             }
         } else {
-            VsRecorder_SetSubState(work, 2);
+            VsRecorder_SetSubState(work, SAVED_VIDEO_SHOW);
         }
         break;
     }
@@ -188,7 +199,7 @@ BOOL VsRecorder_SavedVideoShow(VsRecorderWork *work) {
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 0xC, savedVideo->fade, work->blendColor);
         break;
     default:
-        VsRecorder_SetSubState(work, 3);
+        VsRecorder_SetSubState(work, SAVED_VIDEO_MAIN);
         break;
     }
     return FALSE;
@@ -247,7 +258,7 @@ BOOL VsRecorder_SavedVideoToggleProfile(VsRecorderWork *work) {
     default:
         savedVideo->showProfile ^= 1;
         VsRecorder_PrintProfileButton(work, savedVideo->showProfile + 0x79); // VIEW PROFILE / CLOSE PROFILE
-        VsRecorder_SetSubState(work, 3);
+        VsRecorder_SetSubState(work, SAVED_VIDEO_MAIN);
         break;
     }
     return FALSE;
@@ -365,11 +376,11 @@ BOOL VsRecorder_SavedVideoSavePrompt(VsRecorderWork *work) {
         break;
     default:
         if (savedVideo->exitMode == 1) {
-            VsRecorder_SetSubState(work, 7);
+            VsRecorder_SetSubState(work, SAVED_VIDEO_PLAY);
         } else {
             savedVideo->exitMode = 0;
             savedVideo->showProfile = FALSE;
-            VsRecorder_SetSubState(work, 2);
+            VsRecorder_SetSubState(work, SAVED_VIDEO_SHOW);
         }
         break;
     }
@@ -405,7 +416,7 @@ BOOL VsRecorder_SavedVideoSave(VsRecorderWork *work) {
     default:
         ((void (*)(void))VsRecorder_HideTopMessage)(); // called without the work
         VsRecorder_CreateExitButton(work);
-        VsRecorder_SetSubState(work, 9);
+        VsRecorder_SetSubState(work, SAVED_VIDEO_RESUME);
         break;
     }
     return FALSE;
@@ -494,7 +505,7 @@ BOOL VsRecorder_SavedVideoExit(VsRecorderWork *work) {
                 VsRecorder_ResetFade(&savedVideo->fade);
                 PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 0xC, 16, work->blendColor);
                 VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_MENU, TRUE, work->screenPtr);
-                VsRecorder_SetSubState(work, 5);
+                VsRecorder_SetSubState(work, VS_RECORDER_MENU_SLIDE_IN);
                 Heap_Free(savedVideo);
             } else {
                 PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 0xC, savedVideo->fade, work->blendColor);
@@ -562,7 +573,7 @@ BOOL VsRecorder_SavedVideoResume(VsRecorderWork *work) {
     default:
         work->menuDepth++;
         VsRecorder_ClearResumeState(work);
-        VsRecorder_SetSubState(work, 3);
+        VsRecorder_SetSubState(work, SAVED_VIDEO_MAIN);
         break;
     }
     return FALSE;
@@ -578,19 +589,19 @@ void VsRecorder_OnSavedVideoTouch(u32 index, u32 event, void *arg) {
     switch (index) {
     case 0: // profile
         VsRecorder_OnTouchConfirm(work);
-        VsRecorder_SetSubState(work, 4);
+        VsRecorder_SetSubState(work, SAVED_VIDEO_TOGGLE_PROFILE);
         break;
     case 1: // play
         VsRecorder_OnTouchConfirm(work);
         if (work->selection == 0 || BattleRecordHeader_GetField(savedVideo->info.header, 5, 0) == 1) {
-            VsRecorder_SetSubState(work, 7);
+            VsRecorder_SetSubState(work, SAVED_VIDEO_PLAY);
         } else {
-            VsRecorder_SetSubState(work, 5);
+            VsRecorder_SetSubState(work, SAVED_VIDEO_SAVE_PROMPT);
         }
         break;
     case 2: // exit
         VsRecorder_OnTouchConfirm(work);
-        VsRecorder_SetSubState(work, 8);
+        VsRecorder_SetSubState(work, SAVED_VIDEO_EXIT);
         break;
     }
 }

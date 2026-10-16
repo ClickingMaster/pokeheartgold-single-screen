@@ -58,29 +58,29 @@ int PalPadMenu_Main(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx, enum
     int valid;
 
     switch (shared->subState) {
-    case 0:
+    case PALPAD_MENU_STATE_FADE_IN:
         PalPadMenu_Show(menu, shared, gfx);
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)17, (enum FadeType)17, RGB_BLACK, 6, 1, heapId);
-        shared->subState = 1;
+        shared->subState = PALPAD_MENU_STATE_WAIT_FADE_IN;
         break;
-    case 1:
+    case PALPAD_MENU_STATE_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
-            shared->subState = 3;
+            shared->subState = PALPAD_MENU_STATE_INPUT;
         }
         break;
-    case 2:
+    case PALPAD_MENU_STATE_SHOW:
         PalPadMenu_Show(menu, shared, gfx);
-        shared->subState = 3;
+        shared->subState = PALPAD_MENU_STATE_INPUT;
         break;
-    case 3:
+    case PALPAD_MENU_STATE_INPUT:
         // the result goes through the stack variable `valid` in the original
         valid = PalPadMenu_HandleInput(&menu->selection, &shared->inputState, gfx);
         if (valid) {
             menu->timer = 2;
-            shared->subState = 4;
+            shared->subState = PALPAD_MENU_STATE_SELECT_DELAY;
         }
         break;
-    case 4: {
+    case PALPAD_MENU_STATE_SELECT_DELAY: {
         u32 timer = menu->timer;
         menu->timer = timer - 1;
         if (timer == 0) {
@@ -88,32 +88,32 @@ int PalPadMenu_Main(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx, enum
             if (PalPadMenu_CanSelect(&menu->selection, shared) == TRUE) {
                 PalPadMenu_SetNextScreen(&menu->selection, shared);
                 if (menu->selection == PALPAD_MENU_EXIT || menu->selection == PALPAD_MENU_REGISTER) {
-                    shared->subState = 5;
+                    shared->subState = PALPAD_MENU_STATE_FADE_OUT;
                 } else {
                     PalPadMenu_Hide(menu, gfx);
                     return 1;
                 }
             } else if (menu->selection == PALPAD_MENU_REGISTER) {
                 PalPadMenu_PrintMessage(menu, gfx, msg_0779_00058, heapId); // roster is full
-                shared->subState = 11;
+                shared->subState = PALPAD_MENU_STATE_WAIT_MESSAGE;
             }
         }
     } break;
-    case 5:
+    case PALPAD_MENU_STATE_FADE_OUT:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)16, (enum FadeType)16, RGB_BLACK, 6, 1, heapId);
         shared->subState++;
         break;
-    case 6:
+    case PALPAD_MENU_STATE_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished() == TRUE) {
             return 1;
         }
         break;
-    case 7: // back from the name / code entry
+    case PALPAD_MENU_STATE_RETURN_FROM_NAMING: // back from the name / code entry
         PalPadMenu_Show(menu, shared, gfx);
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)17, (enum FadeType)17, RGB_BLACK, 6, 1, heapId);
-        shared->subState = 8;
+        shared->subState = PALPAD_MENU_STATE_CHECK_FRIEND_CODE;
         break;
-    case 8:
+    case PALPAD_MENU_STATE_CHECK_FRIEND_CODE:
         if (IsPaletteFadeFinished()) {
             PlayerProfile *profile = PlayerProfile_New(heapId);
             u64 friendCode;
@@ -125,43 +125,43 @@ int PalPadMenu_Main(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx, enum
             if (valid) {
                 PalPadGfx_BufferFriendCode(gfx, friendCode);
                 PalPadMenu_PrintMessage(menu, gfx, msg_0779_00055, heapId); // register this friend?
-                shared->subState = 9;
+                shared->subState = PALPAD_MENU_STATE_START_REGISTER_YES_NO;
             } else {
                 PalPadMenu_PrintMessage(menu, gfx, msg_0779_00056, heapId); // invalid friend code
-                shared->subState = 11;
+                shared->subState = PALPAD_MENU_STATE_WAIT_MESSAGE;
             }
         }
         break;
-    case 9:
+    case PALPAD_MENU_STATE_START_REGISTER_YES_NO:
         if (PalPadMenu_IsMessageDone(menu, &shared->inputState)) {
             PalPadGfx_StartYesNo(&shared->inputState, gfx, 0);
-            shared->subState = 10;
+            shared->subState = PALPAD_MENU_STATE_REGISTER_YES_NO;
         }
         break;
-    case 10:
+    case PALPAD_MENU_STATE_REGISTER_YES_NO:
         switch (PalPadGfx_HandleYesNo(&shared->inputState, gfx)) {
         case YESNORESPONSE_YES: {
             int result = PalPadShared_RegisterFriendCode(shared, shared->code, shared->name);
             if (result == 0) {
                 PalPadMenu_ClearMessage(menu);
-                shared->subState = 3;
+                shared->subState = PALPAD_MENU_STATE_INPUT;
             } else {
                 PalPadMenu_PrintMessage(menu, gfx, sPalPadMenuRegisterErrorMsgIds[result], heapId);
-                shared->subState = 11;
+                shared->subState = PALPAD_MENU_STATE_WAIT_MESSAGE;
             }
             break;
         }
         case YESNORESPONSE_NO:
             PalPadMenu_ClearMessage(menu);
-            shared->subState = 3;
+            shared->subState = PALPAD_MENU_STATE_INPUT;
             break;
         }
         break;
-    case 11:
+    case PALPAD_MENU_STATE_WAIT_MESSAGE:
         if (PalPadMenu_IsMessageDone(menu, &shared->inputState) && ((gSystem.newKeys & PAD_BUTTON_A) || (gSystem.newKeys & PAD_BUTTON_B) || System_GetTouchNew())) {
             PalPadMenu_ClearMessage(menu);
             PalPadMenu_ClearHighlight(menu, gfx);
-            shared->subState = 3;
+            shared->subState = PALPAD_MENU_STATE_INPUT;
         }
         break;
     }

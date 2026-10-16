@@ -120,7 +120,7 @@ extern u32 sPmAgbSaveCounter;
 extern PmAgbRomHeader sPmAgbRomHeader;
 extern const u16 sAgbKeepFirstAbilitySpecies[];
 extern u16 sAgbSpeciesMap[];
-extern u16 ov74_0223CC5E[];
+extern u16 sAgbSpeciesMapNationalDex[];
 
 int IdentifyPmAgbCartridge(PmAgbCartridgeSpec *specs, int count);
 u16 PmAgbCartridge_CalcSectorChecksum(u32 *data, u16 size);
@@ -1340,7 +1340,7 @@ int TranslateAgbSpecies(int species) {
     if (species >= 277) {
         for (i = 0; i < 144; i++) {
             if (species == sAgbSpeciesMap[i * 2]) {
-                return ov74_0223CC5E[i * 2];
+                return sAgbSpeciesMapNationalDex[i * 2];
             }
         }
     }

@@ -52,6 +52,20 @@ typedef struct FootprintStampBgTemplates {
     BgTemplate items[3];
 } FootprintStampBgTemplates;
 
+enum {
+    FOOTPRINT_STAMP_STATE_INIT,
+    FOOTPRINT_STAMP_STATE_WAIT_FADE_IN,
+    FOOTPRINT_STAMP_STATE_STAMP,
+    FOOTPRINT_STAMP_STATE_PRINT_QUIT_PROMPT,
+    FOOTPRINT_STAMP_STATE_SHOW_YES_NO,
+    FOOTPRINT_STAMP_STATE_QUIT_YES_NO,
+    FOOTPRINT_STAMP_STATE_PRINT_CLOSED_MSG,
+    FOOTPRINT_STAMP_STATE_WAIT_CLOSED_MSG,
+    FOOTPRINT_STAMP_STATE_CLOSED_DELAY,
+    FOOTPRINT_STAMP_STATE_FADE_OUT,
+    FOOTPRINT_STAMP_STATE_WAIT_FADE_OUT,
+};
+
 BOOL FootprintStamp_Init(OverlayManager *man, int *state) {
     FootprintStamp *work;
 
@@ -148,19 +162,19 @@ BOOL FootprintStamp_Main(OverlayManager *man, int *state) {
 
     FootprintStampBoard_Update(&work->board, work->camera, work->phase, work->args->boardType);
     switch (*state) {
-    case 0:
+    case FOOTPRINT_STAMP_STATE_INIT:
         work->linkFilter.active = TRUE;
         FootprintStamp_RegisterLinkCommands(work);
         FootprintStampMon_InitDummy(work, &dummy);
         (*state)++;
         break;
-    case 1:
+    case FOOTPRINT_STAMP_STATE_WAIT_FADE_IN:
         if (IsPaletteFadeFinished() == TRUE) {
             work->phase = 1;
             (*state)++;
         }
         break;
-    case 2: {
+    case FOOTPRINT_STAMP_STATE_STAMP: {
         int slot;
         if (gSystem.touchNew && gSystem.touchY < 0xA0 && FootprintStamp_UseInk(work, FOOTPRINT_STAMP_INK_PER_STAMP) == TRUE) {
             work->party[work->selectedSlot].x = gSystem.touchX;
@@ -172,22 +186,22 @@ BOOL FootprintStamp_Main(OverlayManager *man, int *state) {
         if (slot < FOOTPRINT_STAMP_PARTY_SLOTS) {
             work->selectedSlot = slot;
             FootprintStamp_StartSelectEffect(work, slot);
-        } else if (*state == 2 && slot == FOOTPRINT_STAMP_TOUCH_EXIT) {
+        } else if (*state == FOOTPRINT_STAMP_STATE_STAMP && slot == FOOTPRINT_STAMP_TOUCH_EXIT) {
             PlaySE(SEQ_SE_DP_BUTTON3);
             PaletteData_BlendPalette(work->plttData, PLTTBUF_MAIN_BG, 9, 1, 8, RGB_BLACK);
             PaletteData_BlendPalette(work->plttData, PLTTBUF_MAIN_OBJ, (u16)(work->cursorPlttSlot << 4), 16, 8, RGB_BLACK);
-            *state = 3;
+            *state = FOOTPRINT_STAMP_STATE_PRINT_QUIT_PROMPT;
         }
         break;
     }
-    case 3:
+    case FOOTPRINT_STAMP_STATE_PRINT_QUIT_PROMPT:
         FillWindowPixelBuffer(&work->msgWindow, 15);
         DrawFrameAndWindow2(&work->msgWindow, FALSE, 1, 14);
         ReadMsgDataIntoString(work->msgData, msg_0754_00002, work->string);
         work->printerId = AddTextPrinterParameterized(&work->msgWindow, 1, work->string, 0, 0, Options_GetTextFrameDelay(Save_PlayerData_GetOptionsAddr(work->saveData)), NULL);
         (*state)++;
         break;
-    case 4:
+    case FOOTPRINT_STAMP_STATE_SHOW_YES_NO:
         if (!TextPrinterCheckActive(work->printerId)) {
             template.bgConfig = work->bgConfig;
             template.bgId = GF_BG_LYR_MAIN_1;
@@ -201,7 +215,7 @@ BOOL FootprintStamp_Main(OverlayManager *man, int *state) {
             (*state)++;
         }
         break;
-    case 5:
+    case FOOTPRINT_STAMP_STATE_QUIT_YES_NO:
         PaletteData_LoadPaletteSlotFromHardware(work->plttData, PLTTBUF_MAIN_BG, 0xB0, 0x40);
         switch (YesNoPrompt_HandleInput(work->yesNoPrompt)) {
         case YESNORESPONSE_YES:
@@ -210,7 +224,7 @@ BOOL FootprintStamp_Main(OverlayManager *man, int *state) {
             ClearFrameAndWindow2(&work->msgWindow, FALSE);
             work->linkFilter.active = FALSE;
             work->phase = 3;
-            *state = 9;
+            *state = FOOTPRINT_STAMP_STATE_FADE_OUT;
             break;
         case YESNORESPONSE_NO:
             YesNoPrompt_Reset(work->yesNoPrompt);
@@ -218,36 +232,36 @@ BOOL FootprintStamp_Main(OverlayManager *man, int *state) {
             ClearFrameAndWindow2(&work->msgWindow, FALSE);
             PaletteData_BlendPalette(work->plttData, PLTTBUF_MAIN_BG, 9, 1, 0, RGB_BLACK);
             PaletteData_BlendPalette(work->plttData, PLTTBUF_MAIN_OBJ, (u16)(work->cursorPlttSlot << 4), 16, 0, RGB_BLACK);
-            *state = 2;
+            *state = FOOTPRINT_STAMP_STATE_STAMP;
             break;
         }
         break;
-    case 6:
+    case FOOTPRINT_STAMP_STATE_PRINT_CLOSED_MSG:
         FillWindowPixelBuffer(&work->msgWindow, 15);
         DrawFrameAndWindow2(&work->msgWindow, FALSE, 1, 14);
         ReadMsgDataIntoString(work->msgData, msg_0754_00003, work->string);
         work->printerId = AddTextPrinterParameterized(&work->msgWindow, 1, work->string, 0, 0, Options_GetTextFrameDelay(Save_PlayerData_GetOptionsAddr(work->saveData)), NULL);
         (*state)++;
         break;
-    case 7:
+    case FOOTPRINT_STAMP_STATE_WAIT_CLOSED_MSG:
         if (!TextPrinterCheckActive(work->printerId)) {
             (*state)++;
         }
         break;
-    case 8:
+    case FOOTPRINT_STAMP_STATE_CLOSED_DELAY:
         work->closeTimer++;
         if (work->closeTimer > 90) {
-            *state = 9;
+            *state = FOOTPRINT_STAMP_STATE_FADE_OUT;
         }
         break;
-    case 9:
+    case FOOTPRINT_STAMP_STATE_FADE_OUT:
         if (!IsPaletteFadeFinished()) {
             StopPaletteFade();
         }
         BeginNormalPaletteFade(0, 0, 0, RGB_BLACK, 6, 1, HEAP_ID_125);
         (*state)++;
         break;
-    case 10:
+    case FOOTPRINT_STAMP_STATE_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished() == TRUE) {
             (*state)++;
         }
@@ -265,18 +279,18 @@ BOOL FootprintStamp_Main(OverlayManager *man, int *state) {
             FootprintStamp_UpdatePlayers(work);
         }
         // the lobby closes the attraction, or this player has to leave
-        if ((WiFiPlaza_HasConnectionFailed() == TRUE || WiFiPlazaWork_IsClosing(work->args->lobby) == TRUE) && *state != 4) {
+        if ((WiFiPlaza_HasConnectionFailed() == TRUE || WiFiPlazaWork_IsClosing(work->args->lobby) == TRUE) && *state != FOOTPRINT_STAMP_STATE_SHOW_YES_NO) {
             if (work->yesNoActive == TRUE) {
                 YesNoPrompt_Reset(work->yesNoPrompt);
             }
             work->linkFilter.active = FALSE;
             work->phase = 3;
             if (WiFiPlaza_HasConnectionFailed() == TRUE) {
-                *state = 9;
+                *state = FOOTPRINT_STAMP_STATE_FADE_OUT;
             } else {
                 PlaySE(SEQ_SE_DP_PINPON);
                 WiFiPlazaWork_SetAppQuitForClosing(work->args->lobby);
-                *state = 6;
+                *state = FOOTPRINT_STAMP_STATE_PRINT_CLOSED_MSG;
             }
         }
     }

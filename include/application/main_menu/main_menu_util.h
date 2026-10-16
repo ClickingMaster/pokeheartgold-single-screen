@@ -24,7 +24,7 @@ typedef struct MainMenuUtilSpriteRes {
     u8 unk_10[8];
 } MainMenuUtilSpriteRes;
 
-// Sprites of both screens (ov74_0223D488)
+// Sprites of both screens (sMainMenuUtilSprites)
 typedef struct MainMenuUtilSprites {
     SpriteList *spriteList;              // 0x000
     G2dRenderer renderer;                // 0x004
@@ -34,7 +34,7 @@ typedef struct MainMenuUtilSprites {
 } MainMenuUtilSprites;                   // size: 0x1BC
 
 // The overlay's shared work (bss gMainMenuUtilWork, 0xEA8 bytes). The code reaches parts of it through the labels
-// ov74_0223D488 (sprites, +0x34), ov74_0223D48C (+0x38), ov74_0223D654 (+0x200) and ov74_0223E2D4 (+0xE80).
+// sMainMenuUtilSprites (sprites, +0x34), sMainMenuUtilRenderer (+0x38), ov74_0223D654 (+0x200) and ov74_0223E2D4 (+0xE80).
 typedef struct MainMenuUtilWork {
     BgConfig *bgConfig;                                    // 0x000
     u32 unk_004;                                           // 0x004

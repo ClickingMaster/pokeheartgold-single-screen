@@ -35,6 +35,11 @@ extern SpriteTemplate sPalPadArrowSpriteTemplates[2];
 extern SpriteTemplate sPalPadCursorSpriteTemplate;
 extern u8 ov43_0222F160[];
 
+enum {
+    PALPAD_STATE_RUN_SCREEN,
+    PALPAD_STATE_CHANGE_SCREEN,
+};
+
 BOOL PalPad_Init(OverlayManager *man, int *state) {
     PalPadWork *work;
 
@@ -60,7 +65,7 @@ BOOL PalPad_Main(OverlayManager *man, int *state) {
     int result;
 
     switch (*state) {
-    case 0:
+    case PALPAD_STATE_RUN_SCREEN:
         switch (work->screen) {
         case PALPAD_SCREEN_MENU:
             result = PalPadMenu_Main(&work->menu, &work->shared, &work->gfx, HEAP_ID_51);
@@ -84,13 +89,13 @@ BOOL PalPad_Main(OverlayManager *man, int *state) {
             work->screen = work->shared.nextScreen;
             work->shared.subState = work->shared.nextSubState;
             work->screenChangeDelay = 4;
-            *state = 1;
+            *state = PALPAD_STATE_CHANGE_SCREEN;
         }
         break;
-    case 1:
+    case PALPAD_STATE_CHANGE_SCREEN:
         work->screenChangeDelay--;
         if (work->screenChangeDelay <= 0) {
-            *state = 0;
+            *state = PALPAD_STATE_RUN_SCREEN;
         }
         break;
     }

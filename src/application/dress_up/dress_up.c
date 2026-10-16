@@ -51,6 +51,22 @@ typedef struct DressUpTransition {
     int state;
 } DressUpTransition;
 
+enum {
+    DRESS_UP_STATE_INIT,
+    DRESS_UP_STATE_FADE_IN,
+    DRESS_UP_STATE_WAIT_FADE_IN,
+    DRESS_UP_STATE_TUTORIAL,
+    DRESS_UP_STATE_WAIT_TUTORIAL_MSG,
+    DRESS_UP_STATE_WAIT_TUTORIAL_INPUT,
+    DRESS_UP_STATE_EDIT,
+    DRESS_UP_STATE_WAIT_FINISH_TRANSITION,
+    DRESS_UP_STATE_DRESSED_UP_PROMPT,
+    DRESS_UP_STATE_SAVE_PROMPT,
+    DRESS_UP_STATE_WAIT_RETURN_TRANSITION,
+    DRESS_UP_STATE_FADE_OUT,
+    DRESS_UP_STATE_WAIT_FADE_OUT,
+};
+
 void DressUp_FinishTransitionTask(SysTask *task, DressUpTransition *env);
 void DressUp_ReturnTransitionTask(SysTask *task, DressUpTransition *env);
 BOOL DressUp_SlideCanvasStep(DressUpTransition *env, int dx, int dy, int frames);
@@ -147,64 +163,64 @@ BOOL DressUp_Main(OverlayManager *man, int *state) {
     DressUpArgs *args = OverlayManager_GetArgs(man);
 
     switch (*state) {
-    case 0:
-    case 1:
+    case DRESS_UP_STATE_INIT:
+    case DRESS_UP_STATE_FADE_IN:
         BeginNormalPaletteFade(1, 5, 5, RGB_BLACK, 6, 1, HEAP_ID_13);
-        *state = 2;
+        *state = DRESS_UP_STATE_WAIT_FADE_IN;
         break;
-    case 2:
+    case DRESS_UP_STATE_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
             (*state)++;
         }
         break;
-    case 3:
+    case DRESS_UP_STATE_TUTORIAL:
         // tutorial
         if (args->showTutorial == 1) {
             TextFlags_SetCanTouchSpeedUpPrint(TRUE);
             work->printerId = DressUpHud_PrintMsg(&work->hud, NARC_msgdata_msg, NARC_msg_msg_0215_bin, msg_0215_00047);
             (*state)++;
         } else {
-            *state = 6;
+            *state = DRESS_UP_STATE_EDIT;
         }
         break;
-    case 4:
+    case DRESS_UP_STATE_WAIT_TUTORIAL_MSG:
         if (!TextPrinterCheckActive(work->printerId)) {
             DressUpHud_FreeMsgString(&work->hud);
             (*state)++;
         }
         break;
-    case 5:
+    case DRESS_UP_STATE_WAIT_TUTORIAL_INPUT:
         if (((gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) | gSystem.touchNew) != 0) {
             DressUpHud_PrintMsgInstant(&work->hud, NARC_msgdata_msg, NARC_msg_msg_0215_bin, msg_0215_00048);
             TextFlags_SetCanTouchSpeedUpPrint(FALSE);
             (*state)++;
         }
         break;
-    case 6:
+    case DRESS_UP_STATE_EDIT:
         // editing
         if (work->uiState == DRESS_UP_UI_DONE) {
             DressUp_StartFinishTransition(work, &work->transitionDone);
-            *state = 7;
+            *state = DRESS_UP_STATE_WAIT_FINISH_TRANSITION;
         }
         DressUpTouch_Update(&work->touch);
         DressUp_UpdateCountMeter(work);
         DressUpHud_UpdateCountdown(&work->hud);
         DressUp_UpdateButtons(work);
         break;
-    case 7:
+    case DRESS_UP_STATE_WAIT_FINISH_TRANSITION:
         if (work->transitionDone) {
             work->transitionDone = FALSE;
-            *state = 8;
+            *state = DRESS_UP_STATE_DRESSED_UP_PROMPT;
             work->uiState = DRESS_UP_UI_DRESSED_UP;
             DressUp_StartBackdropAnim(&work->backdropAnim, &work->canvas, HEAP_ID_14);
         }
         break;
-    case 8:
+    case DRESS_UP_STATE_DRESSED_UP_PROMPT:
         if (work->uiState == DRESS_UP_UI_DRESSED_NO) {
             DressUp_StartReturnTransition(work, &work->transitionDone);
-            *state = 10;
+            *state = DRESS_UP_STATE_WAIT_RETURN_TRANSITION;
         } else if (work->uiState == DRESS_UP_UI_DRESSED_YES) {
-            *state = 9;
+            *state = DRESS_UP_STATE_SAVE_PROMPT;
             work->uiState = DRESS_UP_UI_SAVE;
             DressUp_ShowSavePrompt(work);
         } else {
@@ -212,33 +228,33 @@ BOOL DressUp_Main(OverlayManager *man, int *state) {
             DressUp_UpdateBackdropAnim(&work->backdropAnim);
         }
         break;
-    case 9:
+    case DRESS_UP_STATE_SAVE_PROMPT:
         if (work->uiState == DRESS_UP_UI_SAVE_YES) {
             work->saveRequested = TRUE;
-            *state = 11;
+            *state = DRESS_UP_STATE_FADE_OUT;
         } else if (work->uiState == DRESS_UP_UI_SAVE_NO) {
             work->saveRequested = FALSE;
-            *state = 11;
+            *state = DRESS_UP_STATE_FADE_OUT;
         } else {
             work->uiState = DressUp_HandleSavePrompt(work);
             DressUp_UpdateBackdropAnim(&work->backdropAnim);
         }
         break;
-    case 10:
+    case DRESS_UP_STATE_WAIT_RETURN_TRANSITION:
         if (work->transitionDone) {
             work->transitionDone = FALSE;
-            *state = 6;
+            *state = DRESS_UP_STATE_EDIT;
             work->uiState = DRESS_UP_UI_ACCESSORIES;
             DressUp_StopBackdropAnim(&work->backdropAnim);
         }
         break;
-    case 11:
+    case DRESS_UP_STATE_FADE_OUT:
         BeginNormalPaletteFade(1, 0, 0, RGB_BLACK, 6, 1, HEAP_ID_13);
         (*state)++;
         break;
-    case 12:
+    case DRESS_UP_STATE_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished()) {
-            *state = 0;
+            *state = DRESS_UP_STATE_INIT;
             work->uiState = DRESS_UP_UI_EXIT;
             done = TRUE;
             DressUp_StopBackdropAnim(&work->backdropAnim);

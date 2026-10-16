@@ -60,11 +60,11 @@ BOOL VsRecorder_MenuMain(VsRecorderWork *work) {
         switch (VsRecorder_CheckSchemeArrowTouch()) {
         case 1:
             PlaySE(SEQ_SE_PL_BREC57);
-            VsRecorder_SetSubState(work, 7);
+            VsRecorder_SetSubState(work, VS_RECORDER_MENU_PREV_SCHEME);
             return FALSE;
         case 2:
             PlaySE(SEQ_SE_PL_BREC57);
-            VsRecorder_SetSubState(work, 8);
+            VsRecorder_SetSubState(work, VS_RECORDER_MENU_NEXT_SCHEME);
             return FALSE;
         }
     }
@@ -86,7 +86,7 @@ int VsRecorder_CheckSchemeArrowTouch(void) {
 BOOL VsRecorder_MenuInvalid(VsRecorderWork *work) {
     GF_ASSERT(FALSE);
     work->cursorHidden = 1;
-    VsRecorder_SetSubState(work, 0);
+    VsRecorder_SetSubState(work, VS_RECORDER_MENU_MAIN);
     return VsRecorder_MenuMain(work);
 }
 
@@ -138,9 +138,9 @@ BOOL VsRecorder_MenuSlideIn(VsRecorderWork *work) {
     if (VsRecorder_SlideInChoiceRows(work)) {
         if (work->cursorHidden == 1) {
             OrbitCursor_SetVisible(work->orbitCursors[0], FALSE);
-            VsRecorder_SetSubState(work, 0);
+            VsRecorder_SetSubState(work, VS_RECORDER_MENU_MAIN);
         } else {
-            VsRecorder_SetSubState(work, 1);
+            VsRecorder_SetSubState(work, VS_RECORDER_MENU_INVALID);
         }
     }
     return FALSE;
@@ -149,9 +149,9 @@ BOOL VsRecorder_MenuSlideIn(VsRecorderWork *work) {
 BOOL VsRecorder_MenuShow(VsRecorderWork *work) {
     if (work->cursorHidden == 1) {
         OrbitCursor_SetVisible(work->orbitCursors[0], FALSE);
-        VsRecorder_SetSubState(work, 0);
+        VsRecorder_SetSubState(work, VS_RECORDER_MENU_MAIN);
     } else {
-        VsRecorder_SetSubState(work, 1);
+        VsRecorder_SetSubState(work, VS_RECORDER_MENU_INVALID);
     }
     return FALSE;
 }
@@ -304,7 +304,7 @@ BOOL VsRecorder_MenuSelect(VsRecorderWork *work) {
         if (menu[work->menuCursor].child == NULL) {
             VsRecorder_MenuRunAction(work);
         } else {
-            VsRecorder_SetSubState(work, 5);
+            VsRecorder_SetSubState(work, VS_RECORDER_MENU_SLIDE_IN);
         }
         VsRecorder_MenuEnterChild(work);
         Heap_Free(work->screenWork);
@@ -401,7 +401,7 @@ BOOL VsRecorder_MenuBack(VsRecorderWork *work) {
     default:
         VsRecorder_MenuRestore(work);
         Heap_Free(work->screenWork);
-        VsRecorder_SetSubState(work, 5);
+        VsRecorder_SetSubState(work, VS_RECORDER_MENU_SLIDE_IN);
         break;
     }
     return FALSE;
@@ -454,7 +454,7 @@ BOOL VsRecorder_MenuPrevScheme(VsRecorderWork *work) {
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_BG, 0xFFFF, work->fade, work->blendColor);
         break;
     default:
-        VsRecorder_SetSubState(work, 0);
+        VsRecorder_SetSubState(work, VS_RECORDER_MENU_MAIN);
         break;
     }
     return FALSE;

@@ -63,7 +63,7 @@ u64 OS_GetTick(void);
 void Sys_SetSoftResetDisableFlag(int a0);
 void Sys_ClearSoftResetDisableFlag(int a0);
 
-extern int _02111864;
+extern int gAgbCartridgePulledOutInSleep;
 extern const ObjCharTransferTemplate sMigrateFromAgbObjCharTransferTemplate;
 extern const GraphicsModes gMigrateFromAgbGraphicsModes;
 extern const BgTemplate sMigrateFromAgbBgTemplate0;
@@ -79,6 +79,70 @@ extern const u16 ov74_0223C9A8[];
 extern const int sMigrateFromAgbResultMessages[];
 extern const u16 sMigrateFromAgbBlockedItems[];
 extern MigrateFromAgbIcon *sMigrateFromAgbIcons;
+
+enum {
+    MIGRATE_STATE_READ_CARTRIDGE,
+    MIGRATE_STATE_INIT_GRAPHICS,
+    MIGRATE_STATE_PRINT_INTRO,
+    MIGRATE_STATE_INTRO_YES_NO,
+    MIGRATE_STATE_PRINT_CONFIRM,
+    MIGRATE_STATE_CONFIRM_YES_NO,
+    MIGRATE_STATE_PRINT_CHOOSE,
+    MIGRATE_STATE_WAIT_CHOOSE_INPUT,
+    MIGRATE_STATE_PRINT_CLOCK_ERROR,
+    MIGRATE_STATE_CLOCK_ERROR_YES_NO,
+    MIGRATE_STATE_ADJUST_RECORD,
+    MIGRATE_STATE_PRINT_RESULT,
+    MIGRATE_STATE_SHOW_BOX,
+    MIGRATE_STATE_PICK_MONS,
+    MIGRATE_STATE_PRINT_PICK_ERROR,
+    MIGRATE_STATE_PICKS_DONE_DELAY,
+    MIGRATE_STATE_SHOW_CONFIRM_SCREEN,
+    MIGRATE_STATE_CONFIRM_PICKS_YES_NO,
+    MIGRATE_STATE_PRINT_NO_RETURN,
+    MIGRATE_STATE_NO_RETURN_YES_NO,
+    MIGRATE_STATE_CLOSE_CONFIRM_SCREEN,
+    MIGRATE_STATE_TRANSFER,
+    MIGRATE_STATE_WAIT_EXIT_INPUT,
+    MIGRATE_STATE_WAIT_FADE,
+    MIGRATE_STATE_EXIT,
+};
+
+enum {
+    TRANSFER_STATE_MOVE_PICKS,
+    TRANSFER_STATE_START_DELAY,
+    TRANSFER_STATE_DELAY,
+    TRANSFER_STATE_PREPARE_SAVE,
+    TRANSFER_STATE_WRITE_SAVE,
+    TRANSFER_STATE_READ_AGB_FLASH,
+    TRANSFER_STATE_START_AGB_SAVE,
+    TRANSFER_STATE_WRITE_AGB_SAVE,
+    TRANSFER_STATE_FINISH_SAVE,
+    TRANSFER_STATE_FINISH_AGB_SAVE,
+};
+
+enum {
+    TRANSFER_IN_PROGRESS = 10,
+    TRANSFER_SUCCESS,
+    TRANSFER_FAILED,
+};
+
+enum {
+    PICK_RESULT_NONE,
+    PICK_RESULT_ADDED,
+    PICK_RESULT_REMOVED,
+    PICK_RESULT_EMPTY_SLOT,
+    PICK_RESULT_EGG,
+    PICK_RESULT_KNOWS_HM,
+    PICK_RESULT_BLOCKED_ITEM,
+    PICK_RESULT_UNAVAILABLE_SPECIES,
+};
+
+enum {
+    MIGRATE_BUTTON_EXIT = AGB_BOX_MON_COUNT,
+    MIGRATE_BUTTON_PREV_BOX,
+    MIGRATE_BUTTON_NEXT_BOX,
+};
 
 BOOL MigrateFromAgb_IsSpeciesUnavailable(int species);
 void MigrateFromAgb_GetAgbVersion(int *version);
@@ -228,7 +292,7 @@ int MigrateFromAgb_RunTransfer(MigrateFromAgbApp *app) {
     u8 buffer[16];
     int result;
     switch (save->state) {
-    case 0: {
+    case TRANSFER_STATE_MOVE_PICKS: {
         MigratedPokemon *migrated;
         MigrateFromAgb_MovePicksToPalPark(app);
         migrated = Save_MigratedPokemon_Get(app->saveData);
@@ -236,40 +300,40 @@ int MigrateFromAgb_RunTransfer(MigrateFromAgbApp *app) {
         save->state++;
         break;
     }
-    case 1:
+    case TRANSFER_STATE_START_DELAY:
         save->delay = OS_GetTick() % 120 + 1;
         save->state++;
         break;
-    case 2:
+    case TRANSFER_STATE_DELAY:
         if (--save->delay == 0) {
             save->state++;
         }
         break;
-    case 3:
+    case TRANSFER_STATE_PREPARE_SAVE:
         Save_PrepareForAsyncWrite(app->saveData, 2);
         save->state++;
         break;
-    case 4:
+    case TRANSFER_STATE_WRITE_SAVE:
         result = Save_WriteFileAsync(app->saveData);
         if (result == 3) {
-            return 12;
+            return TRANSFER_FAILED;
         }
         if (result == 1) {
             save->state++;
         }
         break;
-    case 5:
+    case TRANSFER_STATE_READ_AGB_FLASH:
         CTRDG_ReadAgbFlash(0, 0, buffer, 16);
         save->state++;
         break;
-    case 6:
+    case TRANSFER_STATE_START_AGB_SAVE:
         if (!PmAgbCartridge_StartSave()) {
             Sys_ClearSleepDisableFlag(1);
-            return 12;
+            return TRANSFER_FAILED;
         }
         save->state++;
         break;
-    case 7:
+    case TRANSFER_STATE_WRITE_AGB_SAVE:
         if (PmAgbCartridge_GetSaveStatus() == PM_AGB_RESULT_WRITE_STARTING) {
             break;
         }
@@ -279,33 +343,33 @@ int MigrateFromAgb_RunTransfer(MigrateFromAgbApp *app) {
         }
         if (PmAgbCartridge_ContinueSave() == PM_AGB_RESULT_WRITE_FAILED) {
             Sys_ClearSleepDisableFlag(1);
-            return 12;
+            return TRANSFER_FAILED;
         }
         break;
-    case 8:
+    case TRANSFER_STATE_FINISH_SAVE:
         do {
             result = Save_WriteFileAsync(app->saveData);
             if (result == 3) {
-                return 12;
+                return TRANSFER_FAILED;
             }
         } while (result != 2);
         PmAgbCartridge_ContinueSave();
         Sys_SetSleepDisableFlag(1);
         save->state++;
         break;
-    case 9:
+    case TRANSFER_STATE_FINISH_AGB_SAVE:
         result = PmAgbCartridge_ContinueSave();
         if (result == PM_AGB_RESULT_WRITE_FAILED) {
             Sys_ClearSleepDisableFlag(1);
-            return 12;
+            return TRANSFER_FAILED;
         }
         if (result == PM_AGB_RESULT_OK) {
             Sys_ClearSleepDisableFlag(1);
-            return 11;
+            return TRANSFER_SUCCESS;
         }
         break;
     }
-    return 10;
+    return TRANSFER_IN_PROGRESS;
 }
 
 #pragma force_active reset
@@ -707,11 +771,11 @@ Sprite *MigrateFromAgb_CreateSprite(MigrateFromAgbApp *app, int x, int y, int an
 
 // The exit / next box / previous box buttons and the picked mon icons
 void MigrateFromAgb_CreateButtons(MigrateFromAgbApp *app) {
-    MigrateFromAgb_SetHitbox(&app->hitboxes[30], 228, 176, 50, 32);
+    MigrateFromAgb_SetHitbox(&app->hitboxes[MIGRATE_BUTTON_EXIT], 228, 176, 50, 32);
     app->buttons[0].sprite = MigrateFromAgb_CreateSprite(app, 228, 176, 6, TRUE);
-    MigrateFromAgb_SetHitbox(&app->hitboxes[32], 176, 176, 32, 32);
+    MigrateFromAgb_SetHitbox(&app->hitboxes[MIGRATE_BUTTON_NEXT_BOX], 176, 176, 32, 32);
     app->buttons[1].sprite = MigrateFromAgb_CreateSprite(app, 176, 176, 3, TRUE);
-    MigrateFromAgb_SetHitbox(&app->hitboxes[31], 24, 176, 32, 32);
+    MigrateFromAgb_SetHitbox(&app->hitboxes[MIGRATE_BUTTON_PREV_BOX], 24, 176, 32, 32);
     app->buttons[2].sprite = MigrateFromAgb_CreateSprite(app, 24, 176, 0, TRUE);
     app->hitboxes[33].rect.top = TOUCHSCREEN_RECTLIST_END;
     int i = 0;
@@ -783,7 +847,7 @@ int MigrateFromAgb_TogglePick(MigrateFromAgbApp *app, int slot) {
     int i;
     VecFx32 pos;
     if (app->slots[slot].mon != NULL && !Sprite_GetDrawFlag(app->slots[slot].mon)) {
-        return 3;
+        return PICK_RESULT_EMPTY_SLOT;
     }
     found = -1;
     for (i = 0; found == -1 && i < MIGRATE_FROM_AGB_MON_COUNT; i++) {
@@ -792,20 +856,20 @@ int MigrateFromAgb_TogglePick(MigrateFromAgbApp *app, int slot) {
         }
     }
     if (MigrateFromAgb_IsEgg(app, slot) == TRUE) {
-        return 4;
+        return PICK_RESULT_EGG;
     }
     if (MigrateFromAgb_KnowsHM(app, slot) == TRUE) {
-        return 5;
+        return PICK_RESULT_KNOWS_HM;
     }
     if (MigrateFromAgb_HoldsBlockedItem(app, slot) == TRUE) {
-        return 6;
+        return PICK_RESULT_BLOCKED_ITEM;
     }
     if (MigrateFromAgb_IsBoxMonSpeciesUnavailable(app, slot) == TRUE) {
-        return 7;
+        return PICK_RESULT_UNAVAILABLE_SPECIES;
     }
     if (found == -1) {
         if (app->pickCount == MIGRATE_FROM_AGB_MON_COUNT) {
-            return 0;
+            return PICK_RESULT_NONE;
         }
         for (i = 0; i < MIGRATE_FROM_AGB_MON_COUNT; i++) {
             if (app->picks[i].slot == -1) {
@@ -819,16 +883,16 @@ int MigrateFromAgb_TogglePick(MigrateFromAgbApp *app, int slot) {
                 app->picks[i].slot = slot;
                 app->picks[i].box = app->box;
                 app->pickCount++;
-                return 1;
+                return PICK_RESULT_ADDED;
             }
         }
     } else {
         Sprite_SetDrawFlag(app->picks[found].sprite, FALSE);
         app->picks[found].slot = -1;
         app->pickCount--;
-        return 2;
+        return PICK_RESULT_REMOVED;
     }
-    return 0;
+    return PICK_RESULT_NONE;
 }
 
 #pragma force_active reset
@@ -976,7 +1040,7 @@ void MigrateFromAgb_PrintMonInfo(MigrateFromAgbApp *app, AgbBoxMon *mon) {
 void MigrateFromAgb_StartFadeBlack(MigrateFromAgbApp *app, enum FadeType fadeType, int nextState, int *state) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, fadeType, fadeType, RGB_BLACK, 6, 1, HEAP_ID_76);
     if (state != NULL) {
-        *state = 23;
+        *state = MIGRATE_STATE_WAIT_FADE;
     }
     app->nextState = nextState;
 }
@@ -984,7 +1048,7 @@ void MigrateFromAgb_StartFadeBlack(MigrateFromAgbApp *app, enum FadeType fadeTyp
 void MigrateFromAgb_StartFadeWhite(MigrateFromAgbApp *app, enum FadeType fadeType, int nextState, int *state) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, fadeType, fadeType, RGB_WHITE, 6, 1, HEAP_ID_76);
     if (state != NULL) {
-        *state = 23;
+        *state = MIGRATE_STATE_WAIT_FADE;
     }
     app->nextState = nextState;
 }
@@ -1334,15 +1398,15 @@ BOOL MigrateFromAgb_Init(OverlayManager *man, int *state) {
 BOOL MigrateFromAgb_Main(OverlayManager *man, int *state) {
     MigrateFromAgbApp *app = OverlayManager_GetData(man);
     CTRDG_IsExisting();
-    if (CTRDG_IsPulledOut() == TRUE || _02111864) {
-        if (app->save.state == 3 || app->save.state == 4) {
+    if (CTRDG_IsPulledOut() == TRUE || gAgbCartridgePulledOutInSleep) {
+        if (app->save.state == TRANSFER_STATE_PREPARE_SAVE || app->save.state == TRANSFER_STATE_WRITE_SAVE) {
             Save_Cancel(app->saveData);
         }
         ShowGBACartRemovedError(HEAP_ID_76);
     }
     app->frameCount++;
     switch (*state) {
-    case 0:
+    case MIGRATE_STATE_READ_CARTRIDGE:
         PmAgbCartridgeUnlinkSpec();
         app->cartridgeResult = PmAgbCartridgeGetOffsets(app->agbSave);
         if (!app->cartridgeResult) {
@@ -1355,9 +1419,9 @@ BOOL MigrateFromAgb_Main(OverlayManager *man, int *state) {
             }
         }
         MigrateFromAgb_GetAgbVersion(&app->agbVersion);
-        *state = 1;
+        *state = MIGRATE_STATE_INIT_GRAPHICS;
         break;
-    case 1:
+    case MIGRATE_STATE_INIT_GRAPHICS:
         MigrateFromAgb_InitGraphics(app);
         MigrateFromAgb_InitObjTransfer();
         MigrateFromAgb_InitSpriteResources(app);
@@ -1366,16 +1430,16 @@ BOOL MigrateFromAgb_Main(OverlayManager *man, int *state) {
         Main_SetVBlankIntrCB((GFIntrCB)MigrateFromAgb_VBlankCB, app);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
         if (app->pendingMsg == 1) {
-            MigrateFromAgb_StartFadeBlack(app, FADE_TYPE_BRIGHTNESS_IN, 11, state);
+            MigrateFromAgb_StartFadeBlack(app, FADE_TYPE_BRIGHTNESS_IN, MIGRATE_STATE_PRINT_RESULT, state);
         } else {
-            *state = 2;
+            *state = MIGRATE_STATE_PRINT_INTRO;
         }
         break;
-    case 2:
+    case MIGRATE_STATE_PRINT_INTRO:
         MigrateFromAgb_PrintIntro(app);
-        MigrateFromAgb_StartFadeBlack(app, FADE_TYPE_BRIGHTNESS_IN, 3, state);
+        MigrateFromAgb_StartFadeBlack(app, FADE_TYPE_BRIGHTNESS_IN, MIGRATE_STATE_INTRO_YES_NO, state);
         break;
-    case 3:
+    case MIGRATE_STATE_INTRO_YES_NO:
         switch (YesNoPrompt_HandleInput(app->yesNoPrompt)) {
         case YESNORESPONSE_YES:
             YesNoPrompt_Reset(app->yesNoPrompt);
@@ -1384,58 +1448,58 @@ BOOL MigrateFromAgb_Main(OverlayManager *man, int *state) {
 #else
             app->pendingMsgId = msg_0301_00035;
 #endif
-            *state = 4;
+            *state = MIGRATE_STATE_PRINT_CONFIRM;
             break;
         case YESNORESPONSE_NO:
             YesNoPrompt_Reset(app->yesNoPrompt);
-            MigrateFromAgb_StartFadeWhite(app, FADE_TYPE_BRIGHTNESS_OUT, 24, state);
+            MigrateFromAgb_StartFadeWhite(app, FADE_TYPE_BRIGHTNESS_OUT, MIGRATE_STATE_EXIT, state);
             break;
         }
         break;
-    case 4:
+    case MIGRATE_STATE_PRINT_CONFIRM:
         if (MigrateFromAgb_PrintPendingMsg(app, 1)) {
             MigrateFromAgb_ShowYesNo(app);
-            *state = 5;
+            *state = MIGRATE_STATE_CONFIRM_YES_NO;
         }
         break;
-    case 5:
+    case MIGRATE_STATE_CONFIRM_YES_NO:
         switch (YesNoPrompt_HandleInput(app->yesNoPrompt)) {
         case YESNORESPONSE_YES:
             YesNoPrompt_Reset(app->yesNoPrompt);
             app->pendingMsg = MigrateFromAgb_CheckCanMigrate(app);
             if (app->pendingMsg) {
                 if (app->pendingMsg == 3 || app->pendingMsg == 4) {
-                    *state = 8;
+                    *state = MIGRATE_STATE_PRINT_CLOCK_ERROR;
                 } else {
-                    *state = 11;
+                    *state = MIGRATE_STATE_PRINT_RESULT;
                 }
             } else {
                 app->pendingMsgId = msg_0301_00006;
-                *state = 6;
+                *state = MIGRATE_STATE_PRINT_CHOOSE;
             }
             break;
         case YESNORESPONSE_NO:
             YesNoPrompt_Reset(app->yesNoPrompt);
-            MigrateFromAgb_StartFadeWhite(app, FADE_TYPE_BRIGHTNESS_OUT, 24, state);
+            MigrateFromAgb_StartFadeWhite(app, FADE_TYPE_BRIGHTNESS_OUT, MIGRATE_STATE_EXIT, state);
             break;
         }
         break;
-    case 6:
+    case MIGRATE_STATE_PRINT_CHOOSE:
         if (MigrateFromAgb_PrintPendingMsg(app, 1)) {
-            *state = 7;
+            *state = MIGRATE_STATE_WAIT_CHOOSE_INPUT;
         }
         break;
-    case 7:
+    case MIGRATE_STATE_WAIT_CHOOSE_INPUT:
         if (gSystem.touchNew || gSystem.newKeys) {
-            MigrateFromAgb_StartFadeBlack(app, FADE_TYPE_BRIGHTNESS_OUT, 12, state);
+            MigrateFromAgb_StartFadeBlack(app, FADE_TYPE_BRIGHTNESS_OUT, MIGRATE_STATE_SHOW_BOX, state);
         }
         break;
-    case 8:
+    case MIGRATE_STATE_PRINT_CLOCK_ERROR:
         if (MigrateFromAgb_PrintResultMsgWithYesNo(app, app->pendingMsg)) {
-            *state = 9;
+            *state = MIGRATE_STATE_CLOCK_ERROR_YES_NO;
         }
         break;
-    case 9:
+    case MIGRATE_STATE_CLOCK_ERROR_YES_NO:
         switch (YesNoPrompt_HandleInput(app->yesNoPrompt)) {
         case YESNORESPONSE_YES:
             YesNoPrompt_Reset(app->yesNoPrompt);
@@ -1443,26 +1507,26 @@ BOOL MigrateFromAgb_Main(OverlayManager *man, int *state) {
             app->msgBox.msgId = msg_0301_00040;
             MigrateFromAgb_PrintText(app, &app->msgBox, 0);
             app->waitingIcon = WaitingIcon_New(&app->msgWindow, 0x3D2);
-            *state = 10;
+            *state = MIGRATE_STATE_ADJUST_RECORD;
             break;
         case YESNORESPONSE_NO:
             YesNoPrompt_Reset(app->yesNoPrompt);
-            MigrateFromAgb_StartFadeWhite(app, FADE_TYPE_BRIGHTNESS_OUT, 24, state);
+            MigrateFromAgb_StartFadeWhite(app, FADE_TYPE_BRIGHTNESS_OUT, MIGRATE_STATE_EXIT, state);
             break;
         }
         break;
-    case 10:
+    case MIGRATE_STATE_ADJUST_RECORD:
         MigrateFromAgb_SaveMigrationRecord(app);
         WaitingIcon_Delete(app->waitingIcon);
         app->pendingMsg = 7;
-        *state = 11;
+        *state = MIGRATE_STATE_PRINT_RESULT;
         break;
-    case 11:
+    case MIGRATE_STATE_PRINT_RESULT:
         if (MigrateFromAgb_PrintResultMsg(app, app->pendingMsg)) {
-            *state = 22;
+            *state = MIGRATE_STATE_WAIT_EXIT_INPUT;
         }
         break;
-    case 12:
+    case MIGRATE_STATE_SHOW_BOX:
         MigrateFromAgb_RemoveWindow(&app->msgWindow);
         MigrateFromAgb_LoadBoxBg(app);
         MigrateFromAgb_CreateBoxSprites(app);
@@ -1470,37 +1534,37 @@ BOOL MigrateFromAgb_Main(OverlayManager *man, int *state) {
         Main_SetVBlankIntrCB((GFIntrCB)MigrateFromAgb_VBlankCB, app);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         MigrateFromAgb_PrintMonInfo(app, NULL);
-        MigrateFromAgb_StartFadeBlack(app, FADE_TYPE_BRIGHTNESS_IN, 13, state);
+        MigrateFromAgb_StartFadeBlack(app, FADE_TYPE_BRIGHTNESS_IN, MIGRATE_STATE_PICK_MONS, state);
         break;
-    case 13: {
+    case MIGRATE_STATE_PICK_MONS: {
         int hit = TouchscreenHitbox_FindRectAtTouchNew(app->hitboxes);
         if (hit != -1) {
             if (hit < AGB_BOX_MON_COUNT) {
                 int result = MigrateFromAgb_TogglePick(app, hit);
-                if (result == 1) {
+                if (result == PICK_RESULT_ADDED) {
                     MigrateFromAgb_PrintMonInfo(app, &app->storage->boxes[app->box][hit]);
                     if (app->pickCount == MIGRATE_FROM_AGB_MON_COUNT) {
                         app->pickDoneTimer = 45;
-                        *state = 15;
+                        *state = MIGRATE_STATE_PICKS_DONE_DELAY;
                     }
-                } else if (result == 2) {
+                } else if (result == PICK_RESULT_REMOVED) {
                     MigrateFromAgb_PrintMonInfo(app, NULL);
-                } else if (result == 4) {
+                } else if (result == PICK_RESULT_EGG) {
                     app->pendingMsgId = msg_0301_00008;
-                    *state = 14;
-                } else if (result == 5) {
+                    *state = MIGRATE_STATE_PRINT_PICK_ERROR;
+                } else if (result == PICK_RESULT_KNOWS_HM) {
                     app->pendingMsgId = msg_0301_00009;
-                    *state = 14;
-                } else if (result == 6) {
+                    *state = MIGRATE_STATE_PRINT_PICK_ERROR;
+                } else if (result == PICK_RESULT_BLOCKED_ITEM) {
                     app->pendingMsgId = msg_0301_00038;
-                    *state = 14;
-                } else if (result == 7) {
+                    *state = MIGRATE_STATE_PRINT_PICK_ERROR;
+                } else if (result == PICK_RESULT_UNAVAILABLE_SPECIES) {
                     app->pendingMsgId = msg_0301_00038;
-                    *state = 14;
+                    *state = MIGRATE_STATE_PRINT_PICK_ERROR;
                 }
             } else {
                 switch (hit) {
-                case 31:
+                case MIGRATE_BUTTON_PREV_BOX:
                     if (app->box == 0) {
                         app->box = AGB_BOX_COUNT - 1;
                     } else {
@@ -1509,7 +1573,7 @@ BOOL MigrateFromAgb_Main(OverlayManager *man, int *state) {
                     MigrateFromAgb_ShowBox(app);
                     PlaySE(SEQ_SE_DP_SELECT);
                     break;
-                case 32:
+                case MIGRATE_BUTTON_NEXT_BOX:
                     app->box++;
                     if (app->box == AGB_BOX_COUNT) {
                         app->box = 0;
@@ -1517,8 +1581,8 @@ BOOL MigrateFromAgb_Main(OverlayManager *man, int *state) {
                     MigrateFromAgb_ShowBox(app);
                     PlaySE(SEQ_SE_DP_SELECT);
                     break;
-                case 30:
-                    MigrateFromAgb_StartFadeWhite(app, FADE_TYPE_BRIGHTNESS_OUT, 24, state);
+                case MIGRATE_BUTTON_EXIT:
+                    MigrateFromAgb_StartFadeWhite(app, FADE_TYPE_BRIGHTNESS_OUT, MIGRATE_STATE_EXIT, state);
                     PlaySE(SEQ_SE_DP_SELECT);
                     break;
                 }
@@ -1526,69 +1590,69 @@ BOOL MigrateFromAgb_Main(OverlayManager *man, int *state) {
         }
         break;
     }
-    case 14:
+    case MIGRATE_STATE_PRINT_PICK_ERROR:
         if (MigrateFromAgb_PrintPendingMsg(app, 0)) {
             MigrateFromAgb_RemoveWindow(&app->msgWindow);
-            *state = 13;
+            *state = MIGRATE_STATE_PICK_MONS;
         }
         break;
-    case 15:
+    case MIGRATE_STATE_PICKS_DONE_DELAY:
         app->pickDoneTimer--;
         if (!app->pickDoneTimer) {
-            MigrateFromAgb_StartFadeBlack(app, FADE_TYPE_BRIGHTNESS_OUT, 16, state);
+            MigrateFromAgb_StartFadeBlack(app, FADE_TYPE_BRIGHTNESS_OUT, MIGRATE_STATE_SHOW_CONFIRM_SCREEN, state);
         }
         break;
-    case 16:
+    case MIGRATE_STATE_SHOW_CONFIRM_SCREEN:
         MigrateFromAgb_ShowConfirmScreen(app);
-        MigrateFromAgb_StartFadeBlack(app, FADE_TYPE_BRIGHTNESS_IN, 17, state);
+        MigrateFromAgb_StartFadeBlack(app, FADE_TYPE_BRIGHTNESS_IN, MIGRATE_STATE_CONFIRM_PICKS_YES_NO, state);
         MigrateFromAgb_ShowYesNo(app);
         break;
-    case 17:
+    case MIGRATE_STATE_CONFIRM_PICKS_YES_NO:
         switch (YesNoPrompt_HandleInput(app->yesNoPrompt)) {
         case YESNORESPONSE_YES:
             YesNoPrompt_Reset(app->yesNoPrompt);
-            *state = 18;
+            *state = MIGRATE_STATE_PRINT_NO_RETURN;
             break;
         case YESNORESPONSE_NO:
             YesNoPrompt_Reset(app->yesNoPrompt);
-            MigrateFromAgb_StartFadeBlack(app, FADE_TYPE_BRIGHTNESS_OUT, 20, state);
+            MigrateFromAgb_StartFadeBlack(app, FADE_TYPE_BRIGHTNESS_OUT, MIGRATE_STATE_CLOSE_CONFIRM_SCREEN, state);
             break;
         }
         break;
-    case 18:
+    case MIGRATE_STATE_PRINT_NO_RETURN:
         app->msgBox.msgId = msg_0301_00011;
         MigrateFromAgb_PrintText(app, &app->msgBox, 0);
         MigrateFromAgb_ShowYesNo(app);
         PlaySE(SEQ_SE_DP_SELECT);
-        *state = 19;
+        *state = MIGRATE_STATE_NO_RETURN_YES_NO;
         break;
-    case 19:
+    case MIGRATE_STATE_NO_RETURN_YES_NO:
         switch (YesNoPrompt_HandleInput(app->yesNoPrompt)) {
         case YESNORESPONSE_YES:
             app->msgBox.msgId = sMigrateFromAgbMainMessages[app->agbVersion];
             MigrateFromAgb_PrintText(app, &app->msgBox, 0);
             YesNoPrompt_Reset(app->yesNoPrompt);
-            app->save.state = 0;
+            app->save.state = TRANSFER_STATE_MOVE_PICKS;
             app->waitingIcon = WaitingIcon_New(&app->msgWindow, 0x3D2);
-            *state = 21;
+            *state = MIGRATE_STATE_TRANSFER;
             Sys_SetSoftResetDisableFlag(4);
             break;
         case YESNORESPONSE_NO:
             YesNoPrompt_Reset(app->yesNoPrompt);
-            MigrateFromAgb_StartFadeBlack(app, FADE_TYPE_BRIGHTNESS_OUT, 20, state);
+            MigrateFromAgb_StartFadeBlack(app, FADE_TYPE_BRIGHTNESS_OUT, MIGRATE_STATE_CLOSE_CONFIRM_SCREEN, state);
             break;
         }
         break;
-    case 20:
+    case MIGRATE_STATE_CLOSE_CONFIRM_SCREEN:
         MigrateFromAgb_CloseConfirmScreen(app);
-        *state = 12;
+        *state = MIGRATE_STATE_SHOW_BOX;
         break;
-    case 21: {
+    case MIGRATE_STATE_TRANSFER: {
         int result = MigrateFromAgb_RunTransfer(app);
-        if (result != 10) {
+        if (result != TRANSFER_IN_PROGRESS) {
             WaitingIcon_Delete(app->waitingIcon);
             PlaySE(SEQ_SE_DP_SAVE);
-            if (result == 11) {
+            if (result == TRANSFER_SUCCESS) {
 #ifdef HEARTGOLD
                 app->msgBox.msgId = msg_0301_00029;
 #else
@@ -1598,23 +1662,23 @@ BOOL MigrateFromAgb_Main(OverlayManager *man, int *state) {
                 app->msgBox.msgId = msg_0301_00036;
             }
             MigrateFromAgb_PrintText(app, &app->msgBox, 0);
-            *state = 22;
+            *state = MIGRATE_STATE_WAIT_EXIT_INPUT;
             Sys_ClearSoftResetDisableFlag(4);
         }
         break;
     }
-    case 22:
+    case MIGRATE_STATE_WAIT_EXIT_INPUT:
         if (gSystem.touchNew || gSystem.newKeys) {
-            MigrateFromAgb_StartFadeWhite(app, FADE_TYPE_BRIGHTNESS_OUT, 24, state);
+            MigrateFromAgb_StartFadeWhite(app, FADE_TYPE_BRIGHTNESS_OUT, MIGRATE_STATE_EXIT, state);
             PlaySE(SEQ_SE_DP_SELECT);
         }
         break;
-    case 23:
+    case MIGRATE_STATE_WAIT_FADE:
         if (IsPaletteFadeFinished()) {
             *state = app->nextState;
         }
         break;
-    case 24:
+    case MIGRATE_STATE_EXIT:
         MigrateFromAgb_FreeGraphics(app);
         return TRUE;
     }

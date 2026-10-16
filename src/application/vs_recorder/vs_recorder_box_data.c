@@ -59,6 +59,27 @@ extern const TouchscreenHitbox sVsRecorderBoxDataCategoryHitboxes[];    // categ
 
 // ---- dress-up photo screens: server responses
 
+// substates of sending box data (sVsRecorderBoxDataSendSubStates)
+#define BOX_DATA_SEND_MAIN            3
+#define BOX_DATA_SEND_CHANGE_BOX      4
+#define BOX_DATA_SEND_SHOW_CATEGORIES 5
+#define BOX_DATA_SEND_SELECT_CATEGORY 6
+#define BOX_DATA_SEND_CANCEL_CATEGORY 7
+#define BOX_DATA_SEND_UPLOAD          8
+#define BOX_DATA_SEND_QUIT            9
+#define BOX_DATA_SEND_EXIT            10
+
+// substates of viewing box data (sVsRecorderBoxDataViewSubStates)
+#define BOX_DATA_VIEW_SELECT_CATEGORY       3
+#define BOX_DATA_VIEW_DOWNLOAD              4
+#define BOX_DATA_VIEW_BOX_LIST_BACK         6
+#define BOX_DATA_VIEW_BOX_LIST_SHOW_PROFILE 7
+#define BOX_DATA_VIEW_BOX_LIST_HIDE_PROFILE 8
+#define BOX_DATA_VIEW_OPEN_BOX              9
+#define BOX_DATA_VIEW_CLOSE_BOX             11
+#define BOX_DATA_VIEW_QUIT                  12
+#define BOX_DATA_VIEW_EXIT                  13
+
 void VsRecorder_OnDressUpUploaded(void *arg, GlobalTerminalNetError *error) {
 }
 
@@ -150,7 +171,7 @@ void VsRecorder_OnBoxDataSendTouch(u32 index, u32 event, void *arg) {
             } else {
                 boxData->box = 17;
             }
-            VsRecorder_SetSubState(work, 4);
+            VsRecorder_SetSubState(work, BOX_DATA_SEND_CHANGE_BOX);
         }
         break;
     case 1:
@@ -158,20 +179,20 @@ void VsRecorder_OnBoxDataSendTouch(u32 index, u32 event, void *arg) {
             VsRecorder_OnTouchConfirm(work);
             boxData->box++;
             boxData->box = boxData->box % 18;
-            VsRecorder_SetSubState(work, 4);
+            VsRecorder_SetSubState(work, BOX_DATA_SEND_CHANGE_BOX);
         }
         break;
     case 2:
         if (event == 0) {
             VsRecorder_OnTouchConfirm(work);
-            VsRecorder_SetSubState(work, 9);
+            VsRecorder_SetSubState(work, BOX_DATA_SEND_QUIT);
         }
         break;
     case 3:
         if (event == 0) {
             VsRecorder_OnTouchConfirm(work);
             if (VsRecorder_BoxFormHasMon(&boxData->form)) {
-                VsRecorder_SetSubState(work, 5);
+                VsRecorder_SetSubState(work, BOX_DATA_SEND_SHOW_CATEGORIES);
             } else {
                 VsRecorder_PrintBoxDataMessage(work, msg_0013_00271); // An empty Box's Data can't be sent.
             }
@@ -188,10 +209,10 @@ void VsRecorder_OnBoxDataSendCategoryTouch(u32 index, u32 event, void *arg) {
         if (index != 6) {
             VsRecorder_OnTouchConfirm(work);
             boxData->category = index;
-            VsRecorder_SetSubState(work, 8);
+            VsRecorder_SetSubState(work, BOX_DATA_SEND_UPLOAD);
         } else {
             VsRecorder_OnTouchConfirm(work);
-            VsRecorder_SetSubState(work, 7);
+            VsRecorder_SetSubState(work, BOX_DATA_SEND_CANCEL_CATEGORY);
         }
     }
 }
@@ -204,10 +225,10 @@ void VsRecorder_OnBoxDataViewCategoryTouch(u32 index, u32 event, void *arg) {
         if (index != 6) {
             VsRecorder_OnTouchConfirm(work);
             boxData->category = index;
-            VsRecorder_SetSubState(work, 4);
+            VsRecorder_SetSubState(work, BOX_DATA_VIEW_DOWNLOAD);
         } else {
             VsRecorder_OnTouchConfirm(work);
-            VsRecorder_SetSubState(work, 12);
+            VsRecorder_SetSubState(work, BOX_DATA_VIEW_QUIT);
         }
     }
 }
@@ -222,18 +243,18 @@ void VsRecorder_OnBoxListTouch(u32 index, u32 event, void *arg) {
         default:
             VsRecorder_OnTouchConfirm(work);
             if (boxData->showProfile == FALSE) {
-                VsRecorder_SetSubState(work, 7);
+                VsRecorder_SetSubState(work, BOX_DATA_VIEW_BOX_LIST_SHOW_PROFILE);
             } else {
-                VsRecorder_SetSubState(work, 8);
+                VsRecorder_SetSubState(work, BOX_DATA_VIEW_BOX_LIST_HIDE_PROFILE);
             }
             break;
         case 1:
             VsRecorder_OnTouchConfirm(work);
-            VsRecorder_SetSubState(work, 9);
+            VsRecorder_SetSubState(work, BOX_DATA_VIEW_OPEN_BOX);
             break;
         case 2:
             VsRecorder_OnTouchConfirm(work);
-            VsRecorder_SetSubState(work, 6);
+            VsRecorder_SetSubState(work, BOX_DATA_VIEW_BOX_LIST_BACK);
             break;
         }
     }
@@ -271,7 +292,7 @@ void VsRecorder_OnBoxDataBoxTouch(u32 index, u32 event, void *arg) {
             VsRecorder_OnTouchConfirm(work);
             OrbitCursor_SetVisible(work->orbitCursors[0], FALSE);
             OrbitCursor_SetRadius(work->orbitCursors[0], 0, 0);
-            VsRecorder_SetSubState(work, 11);
+            VsRecorder_SetSubState(work, BOX_DATA_VIEW_CLOSE_BOX);
             break;
         }
     }
@@ -411,7 +432,7 @@ BOOL VsRecorder_BoxDataSendChangeBox(VsRecorderWork *work) {
             VsRecorder_SetBoxMonIconsDrawFlag(work, TRUE);
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
             reg_G2_BLDCNT = 0;
-            VsRecorder_SetSubState(work, 3);
+            VsRecorder_SetSubState(work, BOX_DATA_SEND_MAIN);
         }
         break;
     }
@@ -460,7 +481,7 @@ BOOL VsRecorder_BoxDataSendShowCategories(VsRecorderWork *work) {
         VsRecorder_StepFade(&boxData->fade, 0);
         if (VsRecorder_StepBlend(&boxData->eva, &boxData->evb, FALSE, 2)) {
             GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
-            VsRecorder_SetSubState(work, 6);
+            VsRecorder_SetSubState(work, BOX_DATA_SEND_SELECT_CATEGORY);
             VsRecorder_PrintBoxDataMessage(work, msg_0013_00272); // Where would you like to send this?
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, boxData->fade, work->blendColor);
@@ -547,7 +568,7 @@ BOOL VsRecorder_BoxDataSendUpload(VsRecorderWork *work) {
         work->step++;
         break;
     default:
-        VsRecorder_SetSubState(work, 10);
+        VsRecorder_SetSubState(work, BOX_DATA_SEND_EXIT);
         break;
     }
     return FALSE;
@@ -578,7 +599,7 @@ BOOL VsRecorder_BoxDataSendCancelCategory(VsRecorderWork *work) {
         VsRecorder_StepFade(&boxData->fade, 0);
         if (VsRecorder_StepBlend(&boxData->eva, &boxData->evb, FALSE, 2)) {
             VsRecorder_PrintBoxDataMessage(work, msg_0013_00270); // Please choose a Box.
-            VsRecorder_SetSubState(work, 3);
+            VsRecorder_SetSubState(work, BOX_DATA_SEND_MAIN);
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)boxData->fade, (u16)work->blendColor);
         break;
@@ -610,7 +631,7 @@ BOOL VsRecorder_BoxDataSendQuit(VsRecorderWork *work) {
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)boxData->fade, (u16)work->blendColor);
         break;
     case 2:
-        VsRecorder_SetSubState(work, 10);
+        VsRecorder_SetSubState(work, BOX_DATA_SEND_EXIT);
         break;
     }
     return FALSE;
@@ -634,7 +655,7 @@ BOOL VsRecorder_BoxDataViewQuit(VsRecorderWork *work) {
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)boxData->fade, (u16)work->blendColor);
         break;
     case 2:
-        VsRecorder_SetSubState(work, 13);
+        VsRecorder_SetSubState(work, BOX_DATA_VIEW_EXIT);
         break;
     }
     return FALSE;
@@ -1004,7 +1025,7 @@ BOOL VsRecorder_BoxDataSendShow(VsRecorderWork *work) {
     case 2:
         if (VsRecorder_StepFade(&boxData->fade, 0)) {
             boxData->activeHitbox = boxData->hitboxes[0];
-            VsRecorder_SetSubState(work, 3);
+            VsRecorder_SetSubState(work, BOX_DATA_SEND_MAIN);
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)boxData->fade, (u16)work->blendColor);
         break;
@@ -1058,7 +1079,7 @@ BOOL VsRecorder_BoxDataSendExit(VsRecorderWork *work) {
             VsRecorder_ResetFade(&boxData->fade);
             PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 12, 16, (u16)work->blendColor);
             VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_MENU, TRUE, work->screenPtr);
-            VsRecorder_SetSubState(work, 5);
+            VsRecorder_SetSubState(work, VS_RECORDER_MENU_SLIDE_IN);
             FrontierCard_Delete(boxData->card);
             Heap_Free(boxData);
         } else {
@@ -1105,7 +1126,7 @@ BOOL VsRecorder_BoxDataViewShow(VsRecorderWork *work) {
     case 2:
         if (VsRecorder_StepFade(&boxData->fade, 0)) {
             boxData->activeHitbox = boxData->hitboxes[2];
-            VsRecorder_SetSubState(work, 3);
+            VsRecorder_SetSubState(work, BOX_DATA_VIEW_SELECT_CATEGORY);
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, boxData->fade, (u16)work->blendColor);
         break;

@@ -137,18 +137,18 @@ int PalPadRoster_Main(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx
     FriendRoster *wifiList;
 
     switch (shared->subState) {
-    case 0:
+    case PALPAD_ROSTER_STATE_INIT:
         roster->page = 0;
         roster->prevPage = 0;
         roster->cursor = 0;
         roster->prevCursor = 0;
         // fallthrough
-    case 1:
+    case PALPAD_ROSTER_STATE_SHOW:
         PalPadShared_ReadFriendList(shared);
         PalPadRoster_Show(roster, shared, gfx, heapId);
-        shared->subState = 2;
+        shared->subState = PALPAD_ROSTER_STATE_INPUT;
         break;
-    case 2:
+    case PALPAD_ROSTER_STATE_INPUT:
         switch (PalPadRoster_HandleInput(roster, shared, gfx)) {
         case ROSTER_ACTION_NONE:
             break;
@@ -159,108 +159,108 @@ int PalPadRoster_Main(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx
             PalPadRoster_StartScroll(roster, shared, 3);
             break;
         case ROSTER_ACTION_EXIT:
-            shared->subState = 23;
+            shared->subState = PALPAD_ROSTER_STATE_EXIT;
             break;
         case ROSTER_ACTION_OPEN_MENU:
             roster->timer = 4;
-            shared->subState = 5;
+            shared->subState = PALPAD_ROSTER_STATE_MENU_DELAY;
             break;
         }
         break;
-    case 3:
+    case PALPAD_ROSTER_STATE_START_SCROLL:
         PalPadRoster_StartPageScroll(roster, shared, gfx, heapId);
-        shared->subState = 4;
+        shared->subState = PALPAD_ROSTER_STATE_SCROLL;
         break;
-    case 4:
+    case PALPAD_ROSTER_STATE_SCROLL:
         if (PalPadRoster_UpdatePageScroll(roster, shared, gfx, heapId) == TRUE) {
-            shared->subState = 2;
+            shared->subState = PALPAD_ROSTER_STATE_INPUT;
         }
         break;
-    case 5:
+    case PALPAD_ROSTER_STATE_MENU_DELAY:
         if (roster->timer-- <= 0) {
             roster->timer = 0;
             PalPadShared_SetSelectedFriend(shared, PalPadRoster_GetSelectedIndex(roster));
             PalPadRoster_OpenFriendMenu(roster, shared, gfx, heapId);
-            shared->subState = 6;
+            shared->subState = PALPAD_ROSTER_STATE_FRIEND_MENU;
         }
         break;
-    case 6: // returns the state of the chosen item
+    case PALPAD_ROSTER_STATE_FRIEND_MENU: // returns the state of the chosen item
         shared->subState = PalPadRoster_HandleFriendMenu(roster, &shared->inputState, gfx);
         break;
-    case 7: // details
+    case PALPAD_ROSTER_STATE_OPEN_DETAILS: // details
         roster->timer = 4;
-        shared->subState = 8;
+        shared->subState = PALPAD_ROSTER_STATE_WAIT_OPEN_DETAILS;
         break;
-    case 8:
+    case PALPAD_ROSTER_STATE_WAIT_OPEN_DETAILS:
         roster->timer--;
         if (roster->timer <= 0) {
             PalPadRoster_Hide(roster, shared, gfx);
-            PalPadShared_SetNextScreen(shared, PALPAD_SCREEN_DETAILS, 0);
+            PalPadShared_SetNextScreen(shared, PALPAD_SCREEN_DETAILS, PALPAD_DETAILS_STATE_INIT);
             return 1;
         }
         break;
-    case 9: // back from the details
+    case PALPAD_ROSTER_STATE_RETURN_FROM_DETAILS: // back from the details
         roster->page = shared->selectedFriend / PALPAD_ROSTER_PAGE_SLOT;
         roster->cursor = shared->selectedFriend % PALPAD_ROSTER_PAGE_SLOT;
-        shared->subState = 1;
+        shared->subState = PALPAD_ROSTER_STATE_SHOW;
         break;
-    case 10: // rewrite name
+    case PALPAD_ROSTER_STATE_RENAME: // rewrite name
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)16, (enum FadeType)16, RGB_BLACK, 6, 1, heapId);
         index = PalPadRoster_GetSelectedIndex(roster);
         wifiList = Save_FriendRoster_Get(shared->saveData);
         PalPadShared_SetInitialName(shared, FriendRoster_GetPlayerName(wifiList, shared->friends.slots[index]));
-        shared->subState = 11;
+        shared->subState = PALPAD_ROSTER_STATE_WAIT_RENAME_FADE;
         break;
-    case 11:
+    case PALPAD_ROSTER_STATE_WAIT_RENAME_FADE:
         if (IsPaletteFadeFinished()) {
             PalPadRoster_Hide(roster, shared, gfx);
-            PalPadShared_SetNextScreen(shared, PALPAD_SCREEN_NAMING, 4);
+            PalPadShared_SetNextScreen(shared, PALPAD_SCREEN_NAMING, PALPAD_NAMING_STATE_RENAME);
             return 1;
         }
         break;
-    case 12: // back from the naming screen with a new name
+    case PALPAD_ROSTER_STATE_SET_NEW_NAME: // back from the naming screen with a new name
         index = PalPadRoster_GetSelectedIndex(roster);
         wifiList = Save_FriendRoster_Get(shared->saveData);
         FriendRoster_SetPlayerName(wifiList, shared->friends.slots[index], shared->name);
         // fallthrough
-    case 13:
+    case PALPAD_ROSTER_STATE_RETURN_FROM_NAMING:
         PalPadRoster_Show(roster, shared, gfx, heapId);
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)17, (enum FadeType)17, RGB_BLACK, 6, 1, heapId);
-        shared->subState = 14;
+        shared->subState = PALPAD_ROSTER_STATE_WAIT_FADE_IN;
         break;
-    case 14:
+    case PALPAD_ROSTER_STATE_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
-            shared->subState = 2;
+            shared->subState = PALPAD_ROSTER_STATE_INPUT;
         }
         break;
-    case 15: // delete
+    case PALPAD_ROSTER_STATE_DELETE: // delete
         PalPadRoster_ConfirmDelete(roster, shared, gfx, heapId);
-        shared->subState = 16;
+        shared->subState = PALPAD_ROSTER_STATE_START_DELETE_YES_NO;
         break;
-    case 16:
+    case PALPAD_ROSTER_STATE_START_DELETE_YES_NO:
         if (PalPadRoster_StartDeletePrompt(roster, shared, gfx) == TRUE) {
-            shared->subState = 17;
+            shared->subState = PALPAD_ROSTER_STATE_DELETE_YES_NO;
         }
         break;
-    case 17:
+    case PALPAD_ROSTER_STATE_DELETE_YES_NO:
         switch (PalPadGfx_HandleYesNo(&shared->inputState, gfx)) {
         case YESNORESPONSE_YES:
             PalPadRoster_ClearMessage(roster);
-            shared->subState = 18;
+            shared->subState = PALPAD_ROSTER_STATE_START_DELETE_EFFECT;
             break;
         case YESNORESPONSE_NO:
             PalPadRoster_ClearMessage(roster);
             PalPadGfx_SetArrowsVisible(gfx, TRUE);
             PalPadRosterPage_HighlightSlot(&roster->pages[0], gfx, roster->cursor, FALSE);
-            shared->subState = 2;
+            shared->subState = PALPAD_ROSTER_STATE_INPUT;
             break;
         }
         break;
-    case 18:
+    case PALPAD_ROSTER_STATE_START_DELETE_EFFECT:
         PalPadRoster_StartDeleteEffect(roster, gfx);
-        shared->subState = 19;
+        shared->subState = PALPAD_ROSTER_STATE_DELETE_EFFECT;
         break;
-    case 19:
+    case PALPAD_ROSTER_STATE_DELETE_EFFECT:
         if (PalPadRoster_UpdateDeleteEffect(roster, gfx) == TRUE) {
             wifiList = Save_FriendRoster_Get(shared->saveData);
             index = PalPadRoster_GetSelectedIndex(roster);
@@ -269,32 +269,32 @@ int PalPadRoster_Main(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx
             PalPadShared_ReadFriendList(shared);
             PalPadRoster_DrawPage(roster, shared, gfx, roster->page, roster->cursor, 0, heapId);
             PalPadGfx_SetArrowsVisible(gfx, TRUE);
-            shared->subState = 20;
+            shared->subState = PALPAD_ROSTER_STATE_END_DELETE_EFFECT;
         }
         break;
-    case 20:
+    case PALPAD_ROSTER_STATE_END_DELETE_EFFECT:
         PalPadRoster_EndDeleteEffect(roster, gfx);
-        shared->subState = 2;
+        shared->subState = PALPAD_ROSTER_STATE_INPUT;
         break;
-    case 21: // friend code (friend whose code is not confirmed yet)
+    case PALPAD_ROSTER_STATE_SHOW_FRIEND_CODE: // friend code (friend whose code is not confirmed yet)
         if (PalPadRoster_ShowFriendCode(roster, shared, gfx, heapId) == TRUE) {
-            shared->subState = 22;
+            shared->subState = PALPAD_ROSTER_STATE_WAIT_FRIEND_CODE;
         } else {
             PalPadGfx_SetArrowsVisible(gfx, TRUE);
-            shared->subState = 2;
+            shared->subState = PALPAD_ROSTER_STATE_INPUT;
         }
         break;
-    case 22:
+    case PALPAD_ROSTER_STATE_WAIT_FRIEND_CODE:
         if (PalPadRoster_IsMessageDone(roster, &shared->inputState) && (gSystem.newKeys || System_GetTouchNew())) {
             PalPadGfx_SetArrowsVisible(gfx, TRUE);
             PalPadRosterPage_HighlightSlot(&roster->pages[0], gfx, roster->cursor, FALSE);
-            shared->subState = 2;
+            shared->subState = PALPAD_ROSTER_STATE_INPUT;
             PalPadRoster_ClearMessage(roster);
         }
         break;
-    case 23:
+    case PALPAD_ROSTER_STATE_EXIT:
         PalPadRoster_Hide(roster, shared, gfx);
-        PalPadShared_SetNextScreen(shared, PALPAD_SCREEN_MENU, 2);
+        PalPadShared_SetNextScreen(shared, PALPAD_SCREEN_MENU, PALPAD_MENU_STATE_SHOW);
         return 1;
     }
     return 0;
@@ -665,7 +665,7 @@ int PalPadRoster_HandleFriendMenu(PalPadRoster *roster, u32 *inputState, PalPadG
     int result;
 
     if (!PalPadRoster_IsMessageDone(roster, inputState)) {
-        return 6;
+        return PALPAD_ROSTER_STATE_FRIEND_MENU;
     }
     result = TouchscreenListMenu_HandleInput(roster->menu);
     if (result == 3) {
@@ -675,17 +675,17 @@ int PalPadRoster_HandleFriendMenu(PalPadRoster *roster, u32 *inputState, PalPadG
         goto cancel;
     }
     if (result == LIST_NOTHING_CHOSEN) {
-        return 6;
+        return PALPAD_ROSTER_STATE_FRIEND_MENU;
     }
     goto close;
 cancel:
     PalPadGfx_SetArrowsVisible(gfx, TRUE);
-    result = 2;
+    result = PALPAD_ROSTER_STATE_INPUT;
 close:
     PalPadRoster_ClearMessage(roster);
     *inputState = TouchscreenListMenu_WasLastInputTouch(roster->menu);
     TouchscreenListMenu_Destroy(roster->menu);
-    if (result == 2) {
+    if (result == PALPAD_ROSTER_STATE_INPUT) {
         PalPadGfx_SetArrowsVisible(gfx, TRUE);
         PalPadRosterPage_HighlightSlot(&roster->pages[0], gfx, roster->cursor, FALSE);
     }
@@ -768,7 +768,7 @@ void PalPadRoster_DrawTabsOnScroll(PalPadRoster *roster, PalPadGfx *gfx, s16 pag
 }
 
 void PalPadRoster_StartScroll(PalPadRoster *roster, PalPadShared *shared, u16 dir) {
-    shared->subState = 3;
+    shared->subState = PALPAD_ROSTER_STATE_START_SCROLL;
     roster->scrollDir = dir;
     roster->scrollStep = 0;
 }

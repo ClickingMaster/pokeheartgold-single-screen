@@ -113,6 +113,47 @@ extern const ListMenuTemplate sWonderCardAlbumListMenuTemplate;
 extern const WonderCardTextBox sWonderCardAlbumTextBoxes[19];
 extern u32 sWonderCardAlbumMenuInput;
 
+enum {
+    ALBUM_STATE_LOAD_SAVE,
+    ALBUM_STATE_INIT_BGS,
+    ALBUM_STATE_LOAD_GRAPHICS,
+    ALBUM_STATE_BROWSE_CARDS,
+    ALBUM_STATE_OPEN_CARD_MENU,
+    ALBUM_STATE_CARD_MENU,
+    ALBUM_STATE_START_FLIP,
+    ALBUM_STATE_FLIP_TO_BACK,
+    ALBUM_STATE_VIEW_BACK,
+    ALBUM_STATE_FLIP_TO_FRONT,
+    ALBUM_STATE_FINISH_FLIP,
+    ALBUM_STATE_CLOSE_CARD_MENU,
+    ALBUM_STATE_TRASH_YES_NO,
+    ALBUM_STATE_WAIT_MESSAGE_INPUT,
+    ALBUM_STATE_SHARE_YES_NO,
+    ALBUM_STATE_WIRELESS_YES_NO,
+    ALBUM_STATE_SHARE_FADE_OUT,
+    ALBUM_STATE_SHOW_SHARE_SCREEN,
+    ALBUM_STATE_START_SHARING,
+    ALBUM_STATE_SHARE_INPUT,
+    ALBUM_STATE_LEAVE_SHARE_SCREEN,
+    ALBUM_STATE_RETURN_FROM_SHARE,
+    ALBUM_STATE_SEND_CARD,
+    ALBUM_STATE_WAIT_COMM_END,
+    ALBUM_STATE_WAIT_SAVE,
+    ALBUM_STATE_WAIT_RECEIVERS,
+    ALBUM_STATE_WAIT_SHARE_DONE_INPUT,
+    ALBUM_STATE_NO_CARDS_LEFT,
+    ALBUM_STATE_WAIT_FADE,
+    ALBUM_STATE_EXIT,
+    ALBUM_STATE_IDLE,
+};
+
+enum {
+    SHARE_ACTION_NONE,
+    SHARE_ACTION_SEND,
+    SHARE_ACTION_CANCEL,
+    SHARE_ACTION_NO_RECEIVERS,
+};
+
 void WonderCardAlbum_LoadShareSprites(WonderCardAlbum *album) {
     WonderCardAlbum_DeleteSprites(album);
     MainMenuUtil_InitObjTransfer();
@@ -230,7 +271,7 @@ int WonderCardAlbum_SelectShare(OverlayManager *manager) {
     WonderCardAlbum_DestroyListMenu(album);
     WonderCardAlbum_PrintMessage(&album->messageWindow, msg_0247_00047);
     WonderCardAlbum_PrintTextBox(album, &album->menuWindow, 10, album->menuBaseTile);
-    return 14;
+    return ALBUM_STATE_SHARE_YES_NO;
 }
 
 int WonderCardAlbum_SelectTrash(OverlayManager *manager) {
@@ -243,7 +284,7 @@ int WonderCardAlbum_SelectTrash(OverlayManager *manager) {
         WonderCardAlbum_PrintMessage(&album->messageWindow, msg_0247_00062);
     }
     WonderCardAlbum_PrintTextBox(album, &album->menuWindow, 9, album->menuBaseTile);
-    return 12;
+    return ALBUM_STATE_TRASH_YES_NO;
 }
 
 #pragma force_active on
@@ -262,13 +303,13 @@ int WonderCardAlbum_ConfirmTrash(OverlayManager *manager) {
     SaveGameNormal(album->saveData);
     WaitingIcon_Delete(album->waitingIcon);
     if (!SaveMysteryGift_HasAnyCard(album->mysteryGift)) {
-        return 27;
+        return ALBUM_STATE_NO_CARDS_LEFT;
     }
     album->cardIndex = WonderCardAlbum_FindNextCard(album, album->cardIndex, 1);
     WonderCardAlbum_PrintMessage(&album->messageWindow, msg_0247_00037);
     WonderCardAlbum_PrintTextBox(album, &album->menuWindow, 8, album->menuBaseTile);
     WonderCardAlbum_DrawCard(album, 1, 0);
-    return 5;
+    return ALBUM_STATE_CARD_MENU;
 }
 
 #pragma force_active reset
@@ -279,7 +320,7 @@ int WonderCardAlbum_ReturnToCardMenu(OverlayManager *manager) {
     WonderCardAlbum_DestroyListMenu(album);
     WonderCardAlbum_PrintMessage(&album->messageWindow, msg_0247_00037);
     WonderCardAlbum_PrintTextBox(album, &album->menuWindow, 8, album->menuBaseTile);
-    return 5;
+    return ALBUM_STATE_CARD_MENU;
 }
 
 #pragma force_active on
@@ -418,7 +459,7 @@ BOOL WonderCardAlbum_BufferZero(WonderCardAlbum *album) {
 void WonderCardAlbum_StartFade(WonderCardAlbum *album, enum FadeType fadeType, int nextState, int *state) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, fadeType, fadeType, RGB_BLACK, 6, 1, HEAP_ID_85);
     if (state != NULL) {
-        *state = 28;
+        *state = ALBUM_STATE_WAIT_FADE;
     }
     album->nextState = nextState;
 }
@@ -767,29 +808,29 @@ void WonderCardAlbum_HandleShareInput(WonderCardAlbum *album, BOOL canShare, int
         Sprite_SetAnimCtrlSeq(album->buttonSprites[0], album->selection == 0);
         Sprite_SetAnimCtrlSeq(album->buttonSprites[1], album->selection != 0);
     }
-    action = 0;
+    action = SHARE_ACTION_NONE;
     if (gSystem.newKeys & PAD_BUTTON_B) {
-        action = 2;
+        action = SHARE_ACTION_CANCEL;
     } else if ((gSystem.newKeys & PAD_BUTTON_A) && canShare && album->selection == 0) {
-        action = 1;
+        action = SHARE_ACTION_SEND;
     } else if ((gSystem.newKeys & PAD_BUTTON_A) && album->selection == 1) {
-        action = 2;
+        action = SHARE_ACTION_CANCEL;
     } else if ((gSystem.newKeys & PAD_BUTTON_A) && !canShare) {
-        action = 3;
+        action = SHARE_ACTION_NO_RECEIVERS;
     }
-    if (action == 1) {
+    if (action == SHARE_ACTION_SEND) {
         PlaySE(SEQ_SE_DP_SELECT);
         LinkSync_StartSync(171);
         album->timer = 1;
-        *state = 22;
+        *state = ALBUM_STATE_SEND_CARD;
         WonderCardAlbum_PrintTextBox(album, &album->messageWindow, 17, 640);
         album->waitingIcon = WaitingIcon_New(&album->messageWindow, 19);
     }
-    if (action == 2) {
+    if (action == SHARE_ACTION_CANCEL) {
         PlaySE(SEQ_SE_DP_SELECT);
-        WonderCardAlbum_StopSharing(album, state, 20);
+        WonderCardAlbum_StopSharing(album, state, ALBUM_STATE_LEAVE_SHARE_SCREEN);
     }
-    if (action == 3) {
+    if (action == SHARE_ACTION_NO_RECEIVERS) {
         PlaySE(SEQ_SE_DP_SELECT);
     }
 }
@@ -798,7 +839,7 @@ BOOL WonderCardAlbum_Main(OverlayManager *manager, int *state) {
     WonderCardAlbum *album = OverlayManager_GetData(manager);
 
     switch (*state) {
-    case 0:
+    case ALBUM_STATE_LOAD_SAVE:
         album->saveData = ((MainOverlayArgs *)OverlayManager_GetArgs(manager))->saveData;
         album->mysteryGift = Save_MysteryGift_Get(album->saveData);
         album->options = Save_PlayerData_GetOptionsAddr(album->saveData);
@@ -807,14 +848,14 @@ BOOL WonderCardAlbum_Main(OverlayManager *manager, int *state) {
         album->cards[1] = SaveMysteryGift_CardGetByIdx(album->mysteryGift, 1);
         album->cards[2] = SaveMysteryGift_CardGetByIdx(album->mysteryGift, 2);
         album->cardIndex = WonderCardAlbum_FindNextCard(album, album->cardIndex, 1);
-        *state = 1;
+        *state = ALBUM_STATE_INIT_BGS;
         break;
-    case 1:
+    case ALBUM_STATE_INIT_BGS:
         WonderCard_SetGraphicsBanks();
         WonderCard_InitBgLayers(album->bgConfig);
-        *state = 2;
+        *state = ALBUM_STATE_LOAD_GRAPHICS;
         break;
-    case 2:
+    case ALBUM_STATE_LOAD_GRAPHICS:
         ResetAllTextPrinters();
         WonderCardAlbum_LoadCardBg(album, 0);
         LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_15_OFFSET, HEAP_ID_85);
@@ -822,9 +863,9 @@ BOOL WonderCardAlbum_Main(OverlayManager *manager, int *state) {
         LoadUserFrameGfx1(album->bgConfig, GF_BG_LYR_MAIN_0, 10, 14, 1, HEAP_ID_85);
         LoadUserFrameGfx2(album->bgConfig, GF_BG_LYR_MAIN_0, 19, 10, album->frame, HEAP_ID_85);
         WonderCardAlbum_DrawCard(album, 1, 0);
-        WonderCardAlbum_StartFade(album, FADE_TYPE_BRIGHTNESS_IN, 3, state);
+        WonderCardAlbum_StartFade(album, FADE_TYPE_BRIGHTNESS_IN, ALBUM_STATE_BROWSE_CARDS, state);
         break;
-    case 3: {
+    case ALBUM_STATE_BROWSE_CARDS: {
         int index = album->cardIndex;
         if (gSystem.newKeys & PAD_KEY_UP) {
             index = WonderCardAlbum_FindNextCard(album, index, -1);
@@ -832,10 +873,10 @@ BOOL WonderCardAlbum_Main(OverlayManager *manager, int *state) {
             index = WonderCardAlbum_FindNextCard(album, index, 1);
         } else if (gSystem.newKeys & PAD_BUTTON_B) {
             PlaySE(SEQ_SE_DP_SELECT);
-            WonderCardAlbum_StartFade(album, FADE_TYPE_BRIGHTNESS_OUT, 29, state);
+            WonderCardAlbum_StartFade(album, FADE_TYPE_BRIGHTNESS_OUT, ALBUM_STATE_EXIT, state);
         } else if (gSystem.newKeys & PAD_BUTTON_A) {
             PlaySE(SEQ_SE_DP_SELECT);
-            *state = 4;
+            *state = ALBUM_STATE_OPEN_CARD_MENU;
         }
         if (album->cardIndex != index) {
             PlaySE(SEQ_SE_DP_CARD2);
@@ -844,79 +885,79 @@ BOOL WonderCardAlbum_Main(OverlayManager *manager, int *state) {
         }
         break;
     }
-    case 4:
+    case ALBUM_STATE_OPEN_CARD_MENU:
         album->menuBaseTile = WonderCardAlbum_PrintTextBox(album, &album->messageWindow, 7, 640);
         WonderCardAlbum_PrintTextBox(album, &album->menuWindow, 8, album->menuBaseTile);
-        *state = 5;
+        *state = ALBUM_STATE_CARD_MENU;
         break;
-    case 5:
+    case ALBUM_STATE_CARD_MENU:
         WonderCardAlbum_HandleListMenuInput(manager, state, NULL);
         if (gSystem.newKeys & PAD_BUTTON_B) {
             PlaySE(SEQ_SE_DP_SELECT);
-            *state = 11;
+            *state = ALBUM_STATE_CLOSE_CARD_MENU;
         }
         break;
-    case 6:
+    case ALBUM_STATE_START_FLIP:
         PlaySE(SEQ_SE_DP_CARD2);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
         WonderCardAlbum_ClearWindowIfInUse(&album->messageWindow, FALSE);
         WonderCardAlbum_EraseWindowIfInUse(&album->menuWindow, FALSE);
         WonderCardAlbum_StartFlipEffect(album, 1, FX32_ONE, 0x66);
-        *state = 7;
+        *state = ALBUM_STATE_FLIP_TO_BACK;
         break;
-    case 7:
+    case ALBUM_STATE_FLIP_TO_BACK:
         if (WonderCardAlbum_UpdateFlipEffect(album)) {
             WonderCardAlbum_DrawCard(album, 1, 1);
             WonderCardAlbum_StartFlipEffect(album, 0, 0x708000, 0x708000U >> 1);
-            *state = 8;
+            *state = ALBUM_STATE_VIEW_BACK;
         }
         break;
-    case 8:
+    case ALBUM_STATE_VIEW_BACK:
         WonderCardAlbum_UpdateFlipEffect(album);
         if (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) {
             PlaySE(SEQ_SE_DP_CARD2);
             WonderCardAlbum_StartFlipEffect(album, 1, FX32_ONE, 0x66);
-            *state = 9;
+            *state = ALBUM_STATE_FLIP_TO_FRONT;
         }
         break;
-    case 9:
+    case ALBUM_STATE_FLIP_TO_FRONT:
         if (WonderCardAlbum_UpdateFlipEffect(album)) {
             WonderCardAlbum_DrawCard(album, 1, 0);
             WonderCardAlbum_StartFlipEffect(album, 0, 0x708000, 0x708000U >> 1);
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
-            *state = 10;
+            *state = ALBUM_STATE_FINISH_FLIP;
         }
         break;
-    case 10:
+    case ALBUM_STATE_FINISH_FLIP:
         if (WonderCardAlbum_UpdateFlipEffect(album)) {
             DrawFrameAndWindow2(&album->messageWindow, FALSE, 19, 10);
             DrawFrameAndWindow1(&album->menuWindow, FALSE, 10, 14);
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
             WonderCardAlbum_StopFlipEffect(album);
-            *state = 5;
+            *state = ALBUM_STATE_CARD_MENU;
         }
         break;
-    case 11:
+    case ALBUM_STATE_CLOSE_CARD_MENU:
         WonderCardAlbum_DestroyListMenu(album);
         WonderCardAlbum_ClearWindowIfInUse(&album->messageWindow, FALSE);
         ClearWindowTilemapAndCopyToVram(&album->messageWindow);
         RemoveWindow(&album->messageWindow);
-        *state = 3;
+        *state = ALBUM_STATE_BROWSE_CARDS;
         break;
-    case 12:
+    case ALBUM_STATE_TRASH_YES_NO:
         WonderCardAlbum_HandleListMenuInput(manager, state, WonderCardAlbum_ReturnToCardMenu);
         break;
-    case 14:
+    case ALBUM_STATE_SHARE_YES_NO:
         WonderCardAlbum_HandleListMenuInput(manager, state, WonderCardAlbum_ReturnToCardMenu);
         break;
-    case 15:
+    case ALBUM_STATE_WIRELESS_YES_NO:
         WonderCardAlbum_ShowWirelessYesNo(album, &album->menuWindow, 0x010200);
-        *state = 14;
+        *state = ALBUM_STATE_SHARE_YES_NO;
         break;
-    case 16:
-        WonderCardAlbum_StartFade(album, FADE_TYPE_BRIGHTNESS_OUT, 17, state);
+    case ALBUM_STATE_SHARE_FADE_OUT:
+        WonderCardAlbum_StartFade(album, FADE_TYPE_BRIGHTNESS_OUT, ALBUM_STATE_SHOW_SHARE_SCREEN, state);
         break;
-    case 17:
+    case ALBUM_STATE_SHOW_SHARE_SCREEN:
         WonderCardAlbum_DestroyListMenu(album);
         WonderCardAlbum_ClearWindowIfInUse(&album->messageWindow, FALSE);
         ClearWindowTilemapAndCopyToVram(&album->messageWindow);
@@ -925,14 +966,14 @@ BOOL WonderCardAlbum_Main(OverlayManager *manager, int *state) {
         WonderCardAlbum_LoadShareScreenBg(album->bgConfig);
         WonderCardAlbum_LoadShareSprites(album);
         WonderCardAlbum_CreateButtonSprites(album);
-        *state = 18;
+        *state = ALBUM_STATE_START_SHARING;
         break;
-    case 18:
+    case ALBUM_STATE_START_SHARING:
         WonderCardAlbum_StartSharing(album);
         WirelessStatusIcon_Create();
-        WonderCardAlbum_StartFade(album, FADE_TYPE_BRIGHTNESS_IN, 19, state);
+        WonderCardAlbum_StartFade(album, FADE_TYPE_BRIGHTNESS_IN, ALBUM_STATE_SHARE_INPUT, state);
         break;
-    case 19: {
+    case ALBUM_STATE_SHARE_INPUT: {
         int numReceivers = 0;
         if (Comm_IsNetIdConnected(0)) {
             CommWireless_SetCustomBeacon(&album->shareHeader);
@@ -948,73 +989,73 @@ BOOL WonderCardAlbum_Main(OverlayManager *manager, int *state) {
         WonderCardAlbum_HandleShareInput(album, numReceivers, state);
         break;
     }
-    case 20:
-        WonderCardAlbum_StartFade(album, FADE_TYPE_BRIGHTNESS_OUT, 21, state);
+    case ALBUM_STATE_LEAVE_SHARE_SCREEN:
+        WonderCardAlbum_StartFade(album, FADE_TYPE_BRIGHTNESS_OUT, ALBUM_STATE_RETURN_FROM_SHARE, state);
         break;
-    case 21:
+    case ALBUM_STATE_RETURN_FROM_SHARE:
         WonderCardAlbum_DeleteSprites(album);
         WonderCardAlbum_ClearWindowIfInUse(&album->messageWindow, FALSE);
         WonderCardAlbum_EraseWindowIfInUse(&album->menuWindow, FALSE);
         WonderCardAlbum_DrawCard(album, 1, 0);
         LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_15_OFFSET, HEAP_ID_85);
-        WonderCardAlbum_StartFade(album, FADE_TYPE_BRIGHTNESS_IN, 4, state);
+        WonderCardAlbum_StartFade(album, FADE_TYPE_BRIGHTNESS_IN, ALBUM_STATE_OPEN_CARD_MENU, state);
         break;
-    case 23:
+    case ALBUM_STATE_WAIT_COMM_END:
         if (!CommState_Exists()) {
             *state = album->nextState;
         }
         break;
-    case 22:
+    case ALBUM_STATE_SEND_CARD:
         album->timer--;
         if (album->timer == 0) {
             MainMenuUtil_EncryptWonderCard(&album->shareHeader, album->encryptedCard, album->heapId);
             MysteryGiftWireless_SendCard(album->encryptedCard, (void *)sizeof(WonderCard));
             WonderCardAlbum_CountShare(album);
-            *state = 24;
+            *state = ALBUM_STATE_WAIT_SAVE;
         }
         break;
-    case 24:
+    case ALBUM_STATE_WAIT_SAVE:
         if (MainMenuUtil_GetSaveState() == 4) {
             LinkSync_StartSync(147);
             CommState_SetErrorWatch(1, 1);
-            *state = 25;
+            *state = ALBUM_STATE_WAIT_RECEIVERS;
         }
         break;
-    case 25:
+    case ALBUM_STATE_WAIT_RECEIVERS:
         if (WonderCardAlbum_CountReceivers() == 0 || LinkSync_IsSynced(147) == TRUE) {
             CommState_SetErrorWatch(0, 0);
             MainMenuUtil_ResumeSave();
             WonderCardAlbum_PrintTextBox(album, &album->messageWindow, 18, 640);
             WaitingIcon_Delete(album->waitingIcon);
-            WonderCardAlbum_StopSharing(album, state, 26);
+            WonderCardAlbum_StopSharing(album, state, ALBUM_STATE_WAIT_SHARE_DONE_INPUT);
         }
         break;
-    case 26:
+    case ALBUM_STATE_WAIT_SHARE_DONE_INPUT:
         if (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) {
-            *state = 20;
+            *state = ALBUM_STATE_LEAVE_SHARE_SCREEN;
         }
         break;
-    case 13:
+    case ALBUM_STATE_WAIT_MESSAGE_INPUT:
         if (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) {
             WonderCardAlbum_ClearWindowIfInUse(&album->messageWindow, FALSE);
             ClearWindowTilemapAndCopyToVram(&album->messageWindow);
             RemoveWindow(&album->messageWindow);
-            *state = 3;
+            *state = ALBUM_STATE_BROWSE_CARDS;
         }
         break;
-    case 27:
-        WonderCardAlbum_StartFade(album, FADE_TYPE_BRIGHTNESS_OUT, 29, state);
+    case ALBUM_STATE_NO_CARDS_LEFT:
+        WonderCardAlbum_StartFade(album, FADE_TYPE_BRIGHTNESS_OUT, ALBUM_STATE_EXIT, state);
         break;
-    case 28:
+    case ALBUM_STATE_WAIT_FADE:
         if (IsPaletteFadeFinished()) {
             *state = album->nextState;
         }
         break;
-    case 29:
+    case ALBUM_STATE_EXIT:
         WonderCardAlbum_DeleteSprites(album);
         WonderCardAlbum_StopFlipEffect(album);
         return TRUE;
-    case 30:
+    case ALBUM_STATE_IDLE:
         break;
     }
     if (album->spriteList != NULL) {
@@ -1174,7 +1215,7 @@ void WonderCardAlbum_StopSharing(WonderCardAlbum *album, int *state, int nextSta
     MysteryGiftComm_Free();
     WirelessStatusIcon_Destroy();
     album->nextState = nextState;
-    *state = 23;
+    *state = ALBUM_STATE_WAIT_COMM_END;
 }
 
 #pragma force_active on

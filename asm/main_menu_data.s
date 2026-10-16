@@ -466,7 +466,7 @@
 	.public sMigrateFromAgbBlockedItems
 	.public sAgbKeepFirstAbilitySpecies
 	.public sAgbSpeciesMap
-	.public ov74_0223CC5E
+	.public sAgbSpeciesMapNationalDex
 	.public sGiftCartridgeGameCodes
 	.public sStr_mywh_SYSSTATE_IDLE
 	.public sStr_mywh_SYSSTATE_BUSY
@@ -497,8 +497,8 @@
 	.public sPmAgbSaveCounter
 	.public sMainMenuUtilCryptoHeapId
 	.public gMainMenuUtilWork
-	.public ov74_0223D488
-	.public ov74_0223D48C
+	.public sMainMenuUtilSprites
+	.public sMainMenuUtilRenderer
 	.public ov74_0223D654
 	.public ov74_0223E2D4
 	.public sMysteryGiftBeacon
@@ -1205,7 +1205,7 @@ sAgbKeepFirstAbilitySpecies: ; 0x0223CBA0
 sAgbSpeciesMap: ; 0x0223CC5C
 	.byte 0x15, 0x01
 
-ov74_0223CC5E: ; 0x0223CC5E
+sAgbSpeciesMapNationalDex: ; 0x0223CC5E
 	.byte 0xFC, 0x00
 	.byte 0x16, 0x01, 0xFD, 0x00, 0x17, 0x01, 0xFE, 0x00, 0x18, 0x01, 0xFF, 0x00, 0x19, 0x01, 0x00, 0x01
 	.byte 0x1A, 0x01, 0x01, 0x01, 0x1B, 0x01, 0x02, 0x01, 0x1C, 0x01, 0x03, 0x01, 0x1D, 0x01, 0x04, 0x01
@@ -1335,10 +1335,10 @@ ov74_0223D054: ; 0x0223D054
 	.bss
 
 	.public gRangerLinkWork
-ov74_0223D488: ; 0x0223D488
+sMainMenuUtilSprites: ; 0x0223D488
 	.space 0x4
 
-ov74_0223D48C: ; 0x0223D48C
+sMainMenuUtilRenderer: ; 0x0223D48C
 	.space 0x1C8
 
 ov74_0223D654: ; 0x0223D654

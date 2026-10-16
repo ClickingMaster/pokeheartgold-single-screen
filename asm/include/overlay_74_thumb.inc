@@ -381,7 +381,7 @@
 .public gGameVersion
 .public gGameLanguage
 .public gApp_MainMenu_SelectOption_NintendoWFCSetup
-.public _02111864
+.public gAgbCartridgePulledOutInSleep
 .public gSystem
 .public WifiConnection_ClassifyErrorCode
 .public DWC_GetLastErrorEx

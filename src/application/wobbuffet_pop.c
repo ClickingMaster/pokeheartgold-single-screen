@@ -405,39 +405,39 @@ BOOL WobbuffetPop_Main(OverlayManager *man, int *state) {
         }
         WobbuffetPop_RunHostSteps(game);
         switch (game->gameState) {
-        case 1:
+        case WOBBUFFET_POP_GAME_START_DEMO:
             GX_SetVisibleWnd(GX_WNDMASK_W1);
             G2_SetWnd1Position(4, 168, 76, 184);
             G2_SetWnd1InsidePlane(GX_WND_PLANEMASK_OBJ, FALSE);
             G2_SetWndOutsidePlane(GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2 | GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ, TRUE);
             WobbuffetPop_FreeScoreLabels(game);
-            game->gameState = 2;
-        case 2:
+            game->gameState = WOBBUFFET_POP_GAME_DEMO;
+        case WOBBUFFET_POP_GAME_DEMO:
             if (WobbuffetPop_RunDemo(game, &game->demo) == TRUE) {
                 game->demoDone = TRUE;
-                game->gameState = 0;
+                game->gameState = WOBBUFFET_POP_GAME_IDLE;
             }
             break;
-        case 3:
+        case WOBBUFFET_POP_GAME_START_COUNTDOWN:
             PlazaGameSign_StartCountdown(game->sign);
-            game->gameState = 4;
+            game->gameState = WOBBUFFET_POP_GAME_COUNTDOWN;
             break;
-        case 4:
+        case WOBBUFFET_POP_GAME_COUNTDOWN:
             if (PlazaGameSign_IsDone(game->sign) == TRUE) {
                 game->started = TRUE;
                 game->bonusRing.done = 0;
-                game->gameState = 5;
+                game->gameState = WOBBUFFET_POP_GAME_PLAYING;
                 WobbuffetPop_HideMessageWindow(game);
                 WobbuffetPop_ClearPlayerPanels(game, TRUE);
             }
             break;
-        case 6:
+        case WOBBUFFET_POP_GAME_START_FINISH:
             PlazaGameSign_StartFinish(game->sign);
-            game->gameState = 7;
+            game->gameState = WOBBUFFET_POP_GAME_FINISH;
             break;
-        case 7:
+        case WOBBUFFET_POP_GAME_FINISH:
             if (PlazaGameSign_IsDone(game->sign) == TRUE) {
-                game->gameState = 8;
+                game->gameState = WOBBUFFET_POP_GAME_FINISHED;
             }
             break;
         }
@@ -1160,7 +1160,7 @@ void WobbuffetPop_QueuePlayerEvent(WobbuffetPop *game, int netId, const Wobbuffe
     counts = game->playerEventWriteCounts;
     dest = &game->playerEvents[netId][counts[netId] % WOBBUFFET_POP_EVENT_QUEUE_SIZE];
     counts[netId]++;
-    GF_ASSERT(dest->kind == 0);
+    GF_ASSERT(dest->kind == WOBBUFFET_POP_EVENT_NONE);
     *dest = *event;
 }
 
@@ -1172,7 +1172,7 @@ WobbuffetPopEvent *WobbuffetPop_GetPlayerEvent(WobbuffetPop *game, int netId) {
     counts = game->playerEventReadCounts;
     index = (s32)counts[netId] % WOBBUFFET_POP_EVENT_QUEUE_SIZE;
     queue = game->playerEvents[netId];
-    if (queue[index].kind != 0) {
+    if (queue[index].kind != WOBBUFFET_POP_EVENT_NONE) {
         counts[netId]++;
         return &queue[index];
     }
@@ -1181,17 +1181,17 @@ WobbuffetPopEvent *WobbuffetPop_GetPlayerEvent(WobbuffetPop *game, int netId) {
 
 BOOL WobbuffetPop_HoldPlayerEvent(WobbuffetPop *game, int netId, const WobbuffetPopEvent *event) {
     switch (event->kind) {
-    case 0:
+    case WOBBUFFET_POP_EVENT_NONE:
         break;
-    case 1:
+    case WOBBUFFET_POP_EVENT_PUMP:
         break;
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-        GF_ASSERT(game->pendingEvent.kind == 0);
+    case WOBBUFFET_POP_EVENT_POP:
+    case WOBBUFFET_POP_EVENT_NEW_BALLOON:
+    case WOBBUFFET_POP_EVENT_COUNTDOWN:
+    case WOBBUFFET_POP_EVENT_FINISH:
+    case WOBBUFFET_POP_EVENT_SYNC:
+    case WOBBUFFET_POP_EVENT_DEMO:
+        GF_ASSERT(game->pendingEvent.kind == WOBBUFFET_POP_EVENT_NONE);
         game->pendingEvent = *event;
         return TRUE;
     }
@@ -1206,7 +1206,7 @@ void WobbuffetPop_QueueEvent(WobbuffetPop *game, const WobbuffetPopEvent *event)
     }
     dest = &game->events[game->eventWriteCount % WOBBUFFET_POP_EVENT_QUEUE_SIZE];
     game->eventWriteCount++;
-    GF_ASSERT(dest->kind == 0);
+    GF_ASSERT(dest->kind == WOBBUFFET_POP_EVENT_NONE);
     *dest = *event;
 }
 
@@ -1215,18 +1215,18 @@ BOOL WobbuffetPop_HoldEvent(WobbuffetPop *game, const WobbuffetPopEvent *event) 
     u32 current;
 
     switch (kind) {
-    case 0:
+    case WOBBUFFET_POP_EVENT_NONE:
         break;
-    case 1:
+    case WOBBUFFET_POP_EVENT_PUMP:
         break;
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
+    case WOBBUFFET_POP_EVENT_POP:
+    case WOBBUFFET_POP_EVENT_NEW_BALLOON:
+    case WOBBUFFET_POP_EVENT_COUNTDOWN:
+    case WOBBUFFET_POP_EVENT_FINISH:
+    case WOBBUFFET_POP_EVENT_SYNC:
+    case WOBBUFFET_POP_EVENT_DEMO:
         current = game->currentEvent.kind;
-        if (current == 0) {
+        if (current == WOBBUFFET_POP_EVENT_NONE) {
             game->currentEvent = *event;
             return TRUE;
         }
@@ -1242,7 +1242,7 @@ BOOL WobbuffetPop_HoldEvent(WobbuffetPop *game, const WobbuffetPopEvent *event) 
 WobbuffetPopEvent *WobbuffetPop_PeekEvent(WobbuffetPop *game) {
     WobbuffetPopEvent *event = &game->events[game->eventReadCount % WOBBUFFET_POP_EVENT_QUEUE_SIZE];
 
-    if (event->kind == 0) {
+    if (event->kind == WOBBUFFET_POP_EVENT_NONE) {
         return NULL;
     }
     return event;
@@ -1255,9 +1255,9 @@ BOOL WobbuffetPop_ProcessEvent(WobbuffetPop *game) {
         game->eventDelay = game->eventDelay - 1;
         return FALSE;
     }
-    if (game->currentEvent.kind != 0) {
+    if (game->currentEvent.kind != WOBBUFFET_POP_EVENT_NONE) {
         if (WobbuffetPop_SendEvent(game, &game->currentEvent) == TRUE) {
-            game->currentEvent.kind = 0;
+            game->currentEvent.kind = WOBBUFFET_POP_EVENT_NONE;
             return TRUE;
         }
         return FALSE;
@@ -1267,7 +1267,7 @@ BOOL WobbuffetPop_ProcessEvent(WobbuffetPop *game) {
         return FALSE;
     }
     if (WobbuffetPop_SendEvent(game, event) == TRUE) {
-        event->kind = 0;
+        event->kind = WOBBUFFET_POP_EVENT_NONE;
         game->eventReadCount++;
         return TRUE;
     }
@@ -1501,7 +1501,7 @@ BOOL WobbuffetPop_HostFinishGame(WobbuffetPop *game, WobbuffetPopSequence *seque
         }
         break;
     case 2:
-        if (game->gameState == 8) {
+        if (game->gameState == WOBBUFFET_POP_GAME_FINISHED) {
             sequence->state++;
         }
         break;
@@ -1582,7 +1582,7 @@ void WobbuffetPopBalloon_Update(WobbuffetPop *game, WobbuffetPopBalloon *balloon
     WobbuffetPopPump pump;
 
     balloon->pumpStrength = 0;
-    if (game->gameState == 2) {
+    if (game->gameState == WOBBUFFET_POP_GAME_DEMO) {
         balloon->touch[0] = game->demo.touch[0];
         balloon->touch[1] = game->demo.touch[1];
         balloon->touch[2] = game->demo.touch[2];

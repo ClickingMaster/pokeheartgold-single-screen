@@ -73,8 +73,10 @@ extern const TouchscreenHitbox sVsRecorderSearchDetailHitboxes[4];
 #define NUMBER_SEARCH_PLAY              10
 #define NUMBER_SEARCH_EXIT_DETAILS      11
 #define NUMBER_SEARCH_SHOW_SLOTS        12
+#define NUMBER_SEARCH_SLOTS_MAIN        13
 #define NUMBER_SEARCH_SLOTS_CANCEL      14
 #define NUMBER_SEARCH_CONFIRM_OVERWRITE 15
+#define NUMBER_SEARCH_OVERWRITE_MAIN    16
 #define NUMBER_SEARCH_OVERWRITE_NO      17
 #define NUMBER_SEARCH_SAVE              18
 #define NUMBER_SEARCH_RESUME            19
@@ -418,7 +420,7 @@ BOOL VsRecorder_NumberSearchExit(VsRecorderWork *work) {
         VsRecorder_ResetFade(&search->fade);
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 0xC, 16, (u16)work->blendColor);
         VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_MENU, TRUE, work->screenPtr);
-        VsRecorder_SetSubState(work, 5);
+        VsRecorder_SetSubState(work, VS_RECORDER_MENU_SLIDE_IN);
         BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_MAIN_2);
         BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_2);
         BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_MAIN_3);
@@ -660,7 +662,7 @@ BOOL VsRecorder_NumberSearchExitDetails(VsRecorderWork *work) {
                 VsRecorder_ResetFade(&search->fade);
                 PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 0xC, 16, (u16)work->blendColor);
                 VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_MENU, TRUE, work->screenPtr);
-                VsRecorder_SetSubState(work, 5);
+                VsRecorder_SetSubState(work, VS_RECORDER_MENU_SLIDE_IN);
                 Heap_Free(search);
                 BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_MAIN_2);
                 BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_2);
@@ -918,7 +920,7 @@ BOOL VsRecorder_NumberSearchShowSlots(VsRecorderWork *work) {
                     VsRecorder_ResetFade(&search->fade);
                     PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 0xC, 16, (u16)work->blendColor);
                     VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_MENU, TRUE, work->screenPtr);
-                    VsRecorder_SetSubState(work, 5);
+                    VsRecorder_SetSubState(work, VS_RECORDER_MENU_SLIDE_IN);
                     Heap_Free(search);
                     BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_MAIN_2);
                     BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_2);
@@ -935,7 +937,7 @@ BOOL VsRecorder_NumberSearchShowSlots(VsRecorderWork *work) {
             break;
         }
     } else if (VsRecorder_FoundVideoShowSlots(work)) {
-        VsRecorder_SetSubState(work, 13);
+        VsRecorder_SetSubState(work, NUMBER_SEARCH_SLOTS_MAIN);
     }
     return FALSE;
 }
@@ -961,7 +963,7 @@ BOOL VsRecorder_NumberSearchReturnToDetails(VsRecorderWork *work) {
 
 BOOL VsRecorder_NumberSearchConfirmOverwrite(VsRecorderWork *work) {
     if (VsRecorder_FoundVideoConfirmOverwrite(work)) {
-        VsRecorder_SetSubState(work, 16);
+        VsRecorder_SetSubState(work, NUMBER_SEARCH_OVERWRITE_MAIN);
     }
     return FALSE;
 }
@@ -973,7 +975,7 @@ BOOL VsRecorder_NumberSearchOverwriteMain(VsRecorderWork *work) {
 
 BOOL VsRecorder_NumberSearchOverwriteNo(VsRecorderWork *work) {
     if (VsRecorder_FoundVideoOverwriteNo(work)) {
-        VsRecorder_SetSubState(work, 13);
+        VsRecorder_SetSubState(work, NUMBER_SEARCH_SLOTS_MAIN);
     }
     return FALSE;
 }
@@ -1164,7 +1166,7 @@ BOOL VsRecorder_SendVideoExit(VsRecorderWork *work) {
             VsRecorder_ResetFade(&search->fade);
             PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 0xC, 16, (u16)work->blendColor);
             VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_MENU, TRUE, work->screenPtr);
-            VsRecorder_SetSubState(work, 5);
+            VsRecorder_SetSubState(work, VS_RECORDER_MENU_SLIDE_IN);
             Heap_Free(search);
             BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_MAIN_2);
             BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_2);
@@ -1822,7 +1824,7 @@ BOOL VsRecorder_FoundVideoSave(VsRecorderWork *work) {
                 VsRecorder_ResetFade(&search->fade);
                 PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 0xC, 16, (u16)work->blendColor);
                 VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_MENU, TRUE, work->screenPtr);
-                VsRecorder_SetSubState(work, 5);
+                VsRecorder_SetSubState(work, VS_RECORDER_MENU_SLIDE_IN);
                 Heap_Free(search);
                 BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_MAIN_2);
                 BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_2);

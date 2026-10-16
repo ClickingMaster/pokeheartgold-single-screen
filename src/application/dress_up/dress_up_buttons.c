@@ -23,7 +23,7 @@
 // Button panel of the Dress-Up editor: next / previous page, the accessory and backdrop tabs (a radio pair) and
 // DONE (a text button), driven by touch or by the keys.
 
-extern const u8 ov41_0224C094[2];
+extern const u8 sDressUpKeyPressTouchStates[2];
 
 void DressUpButton_Delete(DressUpButton *button) {
     Sprite_Delete(button->sprite);
@@ -148,7 +148,7 @@ void DressUpButtonPanel_HandleKeys(DressUpButtonPanel *panel) {
     }
     if (panel->keyRepeat) {
         panel->keyRepeat--;
-        DressUpButtonPanel_OnTouch(panel->key, ov41_0224C094[panel->keyRepeat ^ 1], panel);
+        DressUpButtonPanel_OnTouch(panel->key, sDressUpKeyPressTouchStates[panel->keyRepeat ^ 1], panel);
         return;
     }
     keys = gSystem.newKeys;

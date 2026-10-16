@@ -91,28 +91,28 @@ void PalPadDetails_Init(PalPadDetails *details, PalPadShared *shared, PalPadGfx 
 int PalPadDetails_Main(PalPadDetails *details, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     // the friend change delay and held flag are accessed as volatile here (the original reloads them)
     switch (shared->subState) {
-    case 0:
+    case PALPAD_DETAILS_STATE_INIT:
         *(vu16 *)&details->friendChangeHeld = FALSE;
         details->page = 0;
         // fallthrough
-    case 1:
+    case PALPAD_DETAILS_STATE_SHOW:
         PalPadDetails_Show(details, shared, gfx, heapId);
-        shared->subState = 2;
+        shared->subState = PALPAD_DETAILS_STATE_INPUT;
         break;
-    case 2: // returns the next state
+    case PALPAD_DETAILS_STATE_INPUT: // returns the next state
         shared->subState = PalPadDetails_HandleInput(details, shared, gfx);
         break;
-    case 3:
+    case PALPAD_DETAILS_STATE_START_SCROLL:
         PalPadDetails_StartPageScroll(details, shared, gfx, heapId);
         PalPadDetails_UpdatePageScroll(details, shared, gfx, heapId);
-        shared->subState = 4;
+        shared->subState = PALPAD_DETAILS_STATE_SCROLL;
         break;
-    case 4:
+    case PALPAD_DETAILS_STATE_SCROLL:
         if (PalPadDetails_UpdatePageScroll(details, shared, gfx, heapId) == TRUE) {
-            shared->subState = 2;
+            shared->subState = PALPAD_DETAILS_STATE_INPUT;
         }
         break;
-    case 5: // previous / next friend; repeats while the key is held
+    case PALPAD_DETAILS_STATE_CHANGE_FRIEND: // previous / next friend; repeats while the key is held
         if (*(vu16 *)&details->friendChangeHeld) {
             (*(vu16 *)&details->friendChangeDelay)--;
             if (*(vu16 *)&details->friendChangeDelay) {
@@ -122,15 +122,15 @@ int PalPadDetails_Main(PalPadDetails *details, PalPadShared *shared, PalPadGfx *
         if (PalPadDetails_SelectNextFriend(shared, details->direction)) {
             PlaySE(SEQ_SE_DP_BUTTON3);
             PalPadDetails_HideForFriendChange(details, gfx);
-            PalPadShared_SetNextScreen(shared, PALPAD_SCREEN_DETAILS, 1);
+            PalPadShared_SetNextScreen(shared, PALPAD_SCREEN_DETAILS, PALPAD_DETAILS_STATE_SHOW);
             *(vu16 *)&details->friendChangeHeld = TRUE;
             return 1;
         }
-        shared->subState = 2;
+        shared->subState = PALPAD_DETAILS_STATE_INPUT;
         break;
-    case 6:
+    case PALPAD_DETAILS_STATE_EXIT:
         PalPadDetails_Hide(details, gfx);
-        PalPadShared_SetNextScreen(shared, PALPAD_SCREEN_ROSTER, 9);
+        PalPadShared_SetNextScreen(shared, PALPAD_SCREEN_ROSTER, PALPAD_ROSTER_STATE_RETURN_FROM_DETAILS);
         return 1;
     }
     return 0;
@@ -157,32 +157,32 @@ int PalPadDetails_HandleAction(PalPadDetails *details, PalPadShared *shared, Pal
             break;
         }
         PlaySE(SEQ_SE_DP_DECIDE);
-        return 6;
+        return PALPAD_DETAILS_STATE_EXIT;
     case DETAILS_INPUT_BACK:
         PlaySE(SEQ_SE_DP_DECIDE);
-        return 6;
+        return PALPAD_DETAILS_STATE_EXIT;
     case DETAILS_INPUT_PAGE_LEFT:
         PalPadDetails_SetCursor(details, gfx, details->page);
         PalPadDetails_DrawTabs(details, gfx, details->page);
         details->direction = 2;
-        return 3;
+        return PALPAD_DETAILS_STATE_START_SCROLL;
     case DETAILS_INPUT_PAGE_RIGHT:
         PalPadDetails_SetCursor(details, gfx, details->page);
         PalPadDetails_DrawTabs(details, gfx, details->page);
         details->direction = 3;
-        return 3;
+        return PALPAD_DETAILS_STATE_START_SCROLL;
     case DETAILS_INPUT_PREV_FRIEND:
         details->direction = 0;
         details->friendChangeDelay = 4;
         PalPadGfx_AnimateArrow(gfx, 2, 1);
-        return 5;
+        return PALPAD_DETAILS_STATE_CHANGE_FRIEND;
     case DETAILS_INPUT_NEXT_FRIEND:
         details->direction = 1;
         details->friendChangeDelay = 4;
         PalPadGfx_AnimateArrow(gfx, 3, 1);
-        return 5;
+        return PALPAD_DETAILS_STATE_CHANGE_FRIEND;
     }
-    return 2;
+    return PALPAD_DETAILS_STATE_INPUT;
 }
 
 int PalPadDetails_HandleKeys(PalPadDetails *details, PalPadShared *shared, PalPadGfx *gfx) {
@@ -209,7 +209,7 @@ int PalPadDetails_HandleKeys(PalPadDetails *details, PalPadShared *shared, PalPa
     if (gSystem.heldKeys & PAD_KEY_DOWN) {
         return PalPadDetails_HandleAction(details, shared, gfx, DETAILS_INPUT_NEXT_FRIEND);
     }
-    return 2;
+    return PALPAD_DETAILS_STATE_INPUT;
 }
 
 // hitboxes: 0/1 arrows (previous / next friend), 2.. page tabs
@@ -223,7 +223,7 @@ int PalPadDetails_HandleTouch(PalPadDetails *details, PalPadShared *shared, PalP
         hit = TouchscreenHitbox_FindHitboxAtTouchNew(sPalPadDetailsHitboxes);
     }
     if (hit == -1) {
-        return 2;
+        return PALPAD_DETAILS_STATE_INPUT;
     }
     if (hit == 0) {
         *touched = TRUE;
@@ -240,7 +240,7 @@ int PalPadDetails_HandleTouch(PalPadDetails *details, PalPadShared *shared, PalP
     }
     delta = (s16)((hit - 2) - details->page);
     if (delta == 0) {
-        return 2;
+        return PALPAD_DETAILS_STATE_INPUT;
     }
     *touched = TRUE;
     PalPadDetails_MovePage(details, delta);

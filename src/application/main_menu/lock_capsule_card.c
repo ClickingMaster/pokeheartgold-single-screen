@@ -97,6 +97,29 @@ extern const BgTemplate sWonderCardBgTemplate_Main2;
 extern const BgTemplate sWonderCardBgTemplate_Main1;
 extern const GraphicsBanks gWonderCardGraphicsBanks;
 
+enum {
+    LOCK_CAPSULE_STATE_LOAD_SAVE,
+    LOCK_CAPSULE_STATE_INIT_BGS,
+    LOCK_CAPSULE_STATE_LOAD_GRAPHICS,
+    LOCK_CAPSULE_STATE_VIEW_CARD,
+    LOCK_CAPSULE_STATE_OPEN_CARD_MENU,
+    LOCK_CAPSULE_STATE_CARD_MENU,
+    LOCK_CAPSULE_STATE_START_FLIP,
+    LOCK_CAPSULE_STATE_FLIP_TO_BACK,
+    LOCK_CAPSULE_STATE_VIEW_BACK,
+    LOCK_CAPSULE_STATE_FLIP_TO_FRONT,
+    LOCK_CAPSULE_STATE_FINISH_FLIP,
+    LOCK_CAPSULE_STATE_CLOSE_CARD_MENU,
+    LOCK_CAPSULE_STATE_WAIT_MESSAGE_INPUT = 13,
+    LOCK_CAPSULE_STATE_FADE_OUT_TO_CARD = 20,
+    LOCK_CAPSULE_STATE_RETURN_TO_CARD,
+    LOCK_CAPSULE_STATE_WAIT_COMM_END = 23,
+    LOCK_CAPSULE_STATE_FADE_OUT_EXIT = 27,
+    LOCK_CAPSULE_STATE_WAIT_FADE,
+    LOCK_CAPSULE_STATE_EXIT,
+    LOCK_CAPSULE_STATE_IDLE,
+};
+
 #pragma force_active on
 
 void LockCapsuleCard_DeleteSprites(LockCapsuleCardView *view) {
@@ -242,7 +265,7 @@ BOOL LockCapsuleCard_ShowCardMenu(LockCapsuleCardView *view, Window *window, u32
 void LockCapsuleCard_StartFade(LockCapsuleCardView *view, enum FadeType fadeType, int nextState, int *state) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, fadeType, fadeType, RGB_BLACK, 6, 1, HEAP_ID_85);
     if (state != NULL) {
-        *state = 28;
+        *state = LOCK_CAPSULE_STATE_WAIT_FADE;
     }
     view->nextState = nextState;
 }
@@ -537,20 +560,20 @@ BOOL LockCapsuleCard_Main(OverlayManager *manager, int *state) {
     LockCapsuleCardView *view = OverlayManager_GetData(manager);
 
     switch (*state) {
-    case 0:
+    case LOCK_CAPSULE_STATE_LOAD_SAVE:
         view->saveData = ((MainOverlayArgs *)OverlayManager_GetArgs(manager))->saveData;
         view->mysteryGift = Save_MysteryGift_Get(view->saveData);
         view->options = Save_PlayerData_GetOptionsAddr(view->saveData);
         view->frame = Options_GetFrame(view->options);
         view->card = SaveMysteryGift_CardGetByIdx(view->mysteryGift, RECEIVED_WONDER_CARD_IDX);
-        *state = 1;
+        *state = LOCK_CAPSULE_STATE_INIT_BGS;
         break;
-    case 1:
+    case LOCK_CAPSULE_STATE_INIT_BGS:
         WonderCard_SetGraphicsBanks();
         WonderCard_InitBgLayers(view->bgConfig);
-        *state = 2;
+        *state = LOCK_CAPSULE_STATE_LOAD_GRAPHICS;
         break;
-    case 2:
+    case LOCK_CAPSULE_STATE_LOAD_GRAPHICS:
         ResetAllTextPrinters();
         LockCapsuleCard_LoadCardBg(view, 0);
         LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_15_OFFSET, HEAP_ID_85);
@@ -558,113 +581,113 @@ BOOL LockCapsuleCard_Main(OverlayManager *manager, int *state) {
         LoadUserFrameGfx1(view->bgConfig, GF_BG_LYR_MAIN_0, 10, 14, 1, HEAP_ID_85);
         LoadUserFrameGfx2(view->bgConfig, GF_BG_LYR_MAIN_0, 19, 10, view->frame, HEAP_ID_85);
         LockCapsuleCard_DrawCard(view, 1, 0);
-        LockCapsuleCard_StartFade(view, FADE_TYPE_BRIGHTNESS_IN, 3, state);
+        LockCapsuleCard_StartFade(view, FADE_TYPE_BRIGHTNESS_IN, LOCK_CAPSULE_STATE_VIEW_CARD, state);
         break;
-    case 3:
+    case LOCK_CAPSULE_STATE_VIEW_CARD:
         if (gSystem.newKeys & PAD_BUTTON_B) {
             PlaySE(SEQ_SE_DP_SELECT);
-            LockCapsuleCard_StartFade(view, FADE_TYPE_BRIGHTNESS_OUT, 29, state);
+            LockCapsuleCard_StartFade(view, FADE_TYPE_BRIGHTNESS_OUT, LOCK_CAPSULE_STATE_EXIT, state);
         } else if (gSystem.newKeys & PAD_BUTTON_A) {
             PlaySE(SEQ_SE_DP_SELECT);
-            *state = 4;
+            *state = LOCK_CAPSULE_STATE_OPEN_CARD_MENU;
         }
         break;
-    case 4:
+    case LOCK_CAPSULE_STATE_OPEN_CARD_MENU:
         view->menuBaseTile = LockCapsuleCard_PrintTextBox(view, &view->messageWindow, 7, 640);
         LockCapsuleCard_PrintTextBox(view, &view->menuWindow, 8, view->menuBaseTile);
-        *state = 5;
+        *state = LOCK_CAPSULE_STATE_CARD_MENU;
         break;
-    case 5:
+    case LOCK_CAPSULE_STATE_CARD_MENU:
         LockCapsuleCard_HandleListMenuInput(manager, state, NULL);
         if (gSystem.newKeys & PAD_BUTTON_B) {
             PlaySE(SEQ_SE_DP_SELECT);
-            *state = 11;
+            *state = LOCK_CAPSULE_STATE_CLOSE_CARD_MENU;
         }
         break;
-    case 6:
+    case LOCK_CAPSULE_STATE_START_FLIP:
         PlaySE(SEQ_SE_DP_CARD2);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
         LockCapsuleCard_ClearWindowIfInUse(&view->messageWindow, FALSE);
         LockCapsuleCard_EraseWindowIfInUse(&view->menuWindow, FALSE);
         LockCapsuleCard_StartFlipEffect(view, 1, FX32_ONE, 0x66);
-        *state = 7;
+        *state = LOCK_CAPSULE_STATE_FLIP_TO_BACK;
         break;
-    case 7:
+    case LOCK_CAPSULE_STATE_FLIP_TO_BACK:
         if (LockCapsuleCard_UpdateFlipEffect(view)) {
             LockCapsuleCard_DrawCard(view, 1, 1);
             LockCapsuleCard_StartFlipEffect(view, 0, 0x708000, 0x384000);
-            *state = 8;
+            *state = LOCK_CAPSULE_STATE_VIEW_BACK;
         }
         break;
-    case 8:
+    case LOCK_CAPSULE_STATE_VIEW_BACK:
         LockCapsuleCard_UpdateFlipEffect(view);
         if (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) {
             PlaySE(SEQ_SE_DP_CARD2);
             LockCapsuleCard_StartFlipEffect(view, 1, FX32_ONE, 0x66);
-            *state = 9;
+            *state = LOCK_CAPSULE_STATE_FLIP_TO_FRONT;
         }
         break;
-    case 9:
+    case LOCK_CAPSULE_STATE_FLIP_TO_FRONT:
         if (LockCapsuleCard_UpdateFlipEffect(view)) {
             LockCapsuleCard_DrawCard(view, 1, 0);
             LockCapsuleCard_StartFlipEffect(view, 0, 0x708000, 0x384000);
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
-            *state = 10;
+            *state = LOCK_CAPSULE_STATE_FINISH_FLIP;
         }
         break;
-    case 10:
+    case LOCK_CAPSULE_STATE_FINISH_FLIP:
         if (LockCapsuleCard_UpdateFlipEffect(view)) {
             DrawFrameAndWindow2(&view->messageWindow, FALSE, 19, 10);
             DrawFrameAndWindow1(&view->menuWindow, FALSE, 10, 14);
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
             LockCapsuleCard_StopFlipEffect(view);
-            *state = 5;
+            *state = LOCK_CAPSULE_STATE_CARD_MENU;
         }
         break;
-    case 11:
+    case LOCK_CAPSULE_STATE_CLOSE_CARD_MENU:
         LockCapsuleCard_DestroyListMenu(view);
         LockCapsuleCard_ClearWindowIfInUse(&view->messageWindow, FALSE);
         ClearWindowTilemapAndCopyToVram(&view->messageWindow);
         RemoveWindow(&view->messageWindow);
-        *state = 3;
+        *state = LOCK_CAPSULE_STATE_VIEW_CARD;
         break;
-    case 20:
-        LockCapsuleCard_StartFade(view, FADE_TYPE_BRIGHTNESS_OUT, 21, state);
+    case LOCK_CAPSULE_STATE_FADE_OUT_TO_CARD:
+        LockCapsuleCard_StartFade(view, FADE_TYPE_BRIGHTNESS_OUT, LOCK_CAPSULE_STATE_RETURN_TO_CARD, state);
         break;
-    case 21:
+    case LOCK_CAPSULE_STATE_RETURN_TO_CARD:
         LockCapsuleCard_DeleteSprites(view);
         LockCapsuleCard_ClearWindowIfInUse(&view->messageWindow, FALSE);
         LockCapsuleCard_EraseWindowIfInUse(&view->menuWindow, FALSE);
         LockCapsuleCard_DrawCard(view, 1, 0);
         LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_15_OFFSET, HEAP_ID_85);
-        LockCapsuleCard_StartFade(view, FADE_TYPE_BRIGHTNESS_IN, 4, state);
+        LockCapsuleCard_StartFade(view, FADE_TYPE_BRIGHTNESS_IN, LOCK_CAPSULE_STATE_OPEN_CARD_MENU, state);
         break;
-    case 23:
+    case LOCK_CAPSULE_STATE_WAIT_COMM_END:
         if (!CommState_Exists()) {
             *state = view->nextState;
         }
         break;
-    case 13:
+    case LOCK_CAPSULE_STATE_WAIT_MESSAGE_INPUT:
         if (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) {
             LockCapsuleCard_ClearWindowIfInUse(&view->messageWindow, FALSE);
             ClearWindowTilemapAndCopyToVram(&view->messageWindow);
             RemoveWindow(&view->messageWindow);
-            *state = 3;
+            *state = LOCK_CAPSULE_STATE_VIEW_CARD;
         }
         break;
-    case 27:
-        LockCapsuleCard_StartFade(view, FADE_TYPE_BRIGHTNESS_OUT, 29, state);
+    case LOCK_CAPSULE_STATE_FADE_OUT_EXIT:
+        LockCapsuleCard_StartFade(view, FADE_TYPE_BRIGHTNESS_OUT, LOCK_CAPSULE_STATE_EXIT, state);
         break;
-    case 28:
+    case LOCK_CAPSULE_STATE_WAIT_FADE:
         if (IsPaletteFadeFinished()) {
             *state = view->nextState;
         }
         break;
-    case 29:
+    case LOCK_CAPSULE_STATE_EXIT:
         LockCapsuleCard_DeleteSprites(view);
         LockCapsuleCard_StopFlipEffect(view);
         return TRUE;
-    case 30:
+    case LOCK_CAPSULE_STATE_IDLE:
         break;
     }
     if (view->spriteList != NULL) {

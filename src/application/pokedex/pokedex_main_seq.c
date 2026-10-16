@@ -510,7 +510,7 @@ static int PokedexApp_MainSeq_09(PokedexAppData *pokedexApp) {
             if (species != SPECIES_NONE) {
                 PokedexApp_UpdateCurrentLanguageIcon(pokedexApp, species, 8);
                 if (PokedexApp_HasForeignEntries(pokedexApp, species) == TRUE) {
-                    PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 6, 1);
+                    PokedexApp_SetIntlSpritePairVisible(pokedexApp, 6, 1);
                 }
             }
             PokedexApp_DrawCenteredSpeciesName(pokedexApp, species, 6);
@@ -646,8 +646,8 @@ static int PokedexApp_MainSeq_11(PokedexAppData *pokedexApp) {
 
         System_GetTouchNewCoords(&r0->touchX, &r0->touchY);
         BgCellManager_EraseCell(pokedexApp->bgCellManager, 4);
-        PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 6, 0);
-        PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 8, 0);
+        PokedexApp_SetIntlSpritePairVisible(pokedexApp, 6, 0);
+        PokedexApp_SetIntlSpriteVisible(pokedexApp, 8, 0);
         ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[6]);
         return POKEDEXAPP_MAINSEQ_17;
     }
@@ -662,8 +662,8 @@ static int PokedexApp_MainSeq_12(PokedexAppData *pokedexApp) {
     switch (r4->state) {
     case 0:
         BgCellManager_EraseCell(pokedexApp->bgCellManager, 4);
-        PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 6, 0);
-        PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 8, 0);
+        PokedexApp_SetIntlSpritePairVisible(pokedexApp, 6, 0);
+        PokedexApp_SetIntlSpriteVisible(pokedexApp, 8, 0);
         ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[6]);
         PokedexApp_SlideOutEntryButtons(pokedexApp);
         ++r4->state;
@@ -703,8 +703,8 @@ static int PokedexApp_MainSeq_13(PokedexAppData *pokedexApp) {
     case 0:
         PokedexApp_HideListCursor(pokedexApp);
         PokedexApp_SetSpriteAnim(pokedexApp, 2, 6);
-        PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 6, 0);
-        PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 8, 0);
+        PokedexApp_SetIntlSpritePairVisible(pokedexApp, 6, 0);
+        PokedexApp_SetIntlSpriteVisible(pokedexApp, 8, 0);
         ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[6]);
         r4->numberTilemap = PokedexApp_BuildListNumberTilemap(pokedexApp, 15 * (pokedexApp->listPage - 1));
         r4->scrollbarStep = PokedexApp_GetListScrollbarStepCount(pokedexApp, 1, PokedexApp_GetListScrollbarYForPage(pokedexApp, pokedexApp->listPage - 1, 1, 1), 15);
@@ -744,8 +744,8 @@ static int PokedexApp_MainSeq_14(PokedexAppData *pokedexApp) {
     case 0:
         PokedexApp_HideListCursor(pokedexApp);
         PokedexApp_SetSpriteAnim(pokedexApp, 3, 9);
-        PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 6, 0);
-        PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 8, 0);
+        PokedexApp_SetIntlSpritePairVisible(pokedexApp, 6, 0);
+        PokedexApp_SetIntlSpriteVisible(pokedexApp, 8, 0);
         ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[6]);
         r4->numberTilemap = PokedexApp_BuildListNumberTilemap(pokedexApp, 15 * pokedexApp->listPage);
         r4->scrollbarStep = PokedexApp_GetListScrollbarStepCount(pokedexApp, 1, PokedexApp_GetListScrollbarYForPage(pokedexApp, pokedexApp->listPage + 1, 1, 1), 15);
@@ -852,7 +852,7 @@ static int PokedexApp_MainSeq_17(PokedexAppData *pokedexApp) {
             if (r4 != SPECIES_NONE) {
                 PokedexApp_UpdateCurrentLanguageIcon(pokedexApp, r4, 8);
                 if (PokedexApp_HasForeignEntries(pokedexApp, r4) == TRUE) {
-                    PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 6, 1);
+                    PokedexApp_SetIntlSpritePairVisible(pokedexApp, 6, 1);
                 }
             }
             PokedexApp_DrawCenteredSpeciesName(pokedexApp, r4, 6);
@@ -872,8 +872,8 @@ static int PokedexApp_MainSeq_18(PokedexAppData *pokedexApp) {
     switch (pokedexApp->seqState.state_10.state) {
     case 0:
         BgCellManager_EraseCell(pokedexApp->bgCellManager, 4);
-        PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 6, 0);
-        PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 8, 0);
+        PokedexApp_SetIntlSpritePairVisible(pokedexApp, 6, 0);
+        PokedexApp_SetIntlSpriteVisible(pokedexApp, 8, 0);
         ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[6]);
         PokedexApp_SlideOutEntryButtons(pokedexApp);
         PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_BG_F, PLTTFADE_OPAQUE_ALL_F & ~(1 << 0), 0, 0, 16, RGB_BLACK);
@@ -1193,12 +1193,12 @@ static int PokedexApp_MainSeq_19(PokedexAppData *pokedexApp) {
         u16 species = PokedexApp_GetCursorSpecies(pokedexApp);
         PokedexApp_DrawEntryNameBar(pokedexApp);
         if (species != SPECIES_NONE) {
-            PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 8, 1);
+            PokedexApp_SetIntlSpriteVisible(pokedexApp, 8, 1);
         } else {
-            PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 8, 0);
+            PokedexApp_SetIntlSpriteVisible(pokedexApp, 8, 0);
         }
         if (PokedexApp_HasForeignEntries(pokedexApp, species) == TRUE) {
-            PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 6, 1);
+            PokedexApp_SetIntlSpritePairVisible(pokedexApp, 6, 1);
         }
         PokedexApp_DrawCenteredSpeciesName(pokedexApp, species, 6);
         pokedexApp->seqState.state_10.state = 0;
@@ -1215,8 +1215,8 @@ static int PokedexApp_MainSeq_20(PokedexAppData *pokedexApp) {
     switch (r4->state) {
     case 0:
         BgCellManager_EraseCell(pokedexApp->bgCellManager, 4);
-        PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 6, 0);
-        PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 8, 0);
+        PokedexApp_SetIntlSpritePairVisible(pokedexApp, 6, 0);
+        PokedexApp_SetIntlSpriteVisible(pokedexApp, 8, 0);
         ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[6]);
         PokedexApp_SlideOutEntryButtons(pokedexApp);
         r4->timer = 0;
@@ -2000,8 +2000,8 @@ static int PokedexApp_MainSeq_58(PokedexAppData *pokedexApp) {
     case 0:
         PokedexApp_SetSpriteVisible(pokedexApp, 0, 0);
         PokedexApp_SetSpriteAnim(pokedexApp, 19, 6);
-        PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 22, 0);
-        PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 24, 0);
+        PokedexApp_SetIntlSpritePairVisible(pokedexApp, 22, 0);
+        PokedexApp_SetIntlSpriteVisible(pokedexApp, 24, 0);
         ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[94]);
         r4->numberTilemap = PokedexApp_BuildSearchResultNumberTilemap(pokedexApp, 15 * (pokedexApp->listPage - 1));
         r4->scrollbarStep = PokedexApp_GetListScrollbarStepCount(pokedexApp, 18, PokedexApp_GetListScrollbarYForPage(pokedexApp, pokedexApp->listPage - 1, 18, 0), 15);
@@ -2047,8 +2047,8 @@ static int PokedexApp_MainSeq_59(PokedexAppData *pokedexApp) {
     case 0:
         PokedexApp_SetSpriteVisible(pokedexApp, 0, 0);
         PokedexApp_SetSpriteAnim(pokedexApp, 20, 9);
-        PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 22, 0);
-        PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 24, 0);
+        PokedexApp_SetIntlSpritePairVisible(pokedexApp, 22, 0);
+        PokedexApp_SetIntlSpriteVisible(pokedexApp, 24, 0);
         ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[94]);
         r4->numberTilemap = PokedexApp_BuildSearchResultNumberTilemap(pokedexApp, 15 * (pokedexApp->listPage));
         r4->scrollbarStep = PokedexApp_GetListScrollbarStepCount(pokedexApp, 18, PokedexApp_GetListScrollbarYForPage(pokedexApp, pokedexApp->listPage + 1, 18, 0), 15);
@@ -2144,8 +2144,8 @@ PokedexApp_MainSeq_62(PokedexAppData *pokedexApp) {
         PokedexApp_RestoreListCursor(pokedexApp);
         PokedexApp_UpdateEntryButtonsEnabled(pokedexApp);
         BgCellManager_EraseCell(pokedexApp->bgCellManager, 4);
-        PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 22, 0);
-        PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 24, 0);
+        PokedexApp_SetIntlSpritePairVisible(pokedexApp, 22, 0);
+        PokedexApp_SetIntlSpriteVisible(pokedexApp, 24, 0);
         ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[94]);
         PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_BG_F, PLTTFADE_OPAQUE_ALL_F & ~(1 << 0), 0, 0, 16, RGB_BLACK);
         PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_EXCEPT_MAIN_BG_F, PLTTFADE_OPAQUE_ALL_F, 0, 0, 16, RGB_BLACK);
@@ -2189,8 +2189,8 @@ static int PokedexApp_MainSeq_63(PokedexAppData *pokedexApp) {
         BgCellManager_StartCellMove(pokedexApp->bgCellManager, 15, 2, 0, 18);
         BgCellManager_StartCellMove(pokedexApp->bgCellManager, 14, 2, 0, 18);
         BgCellManager_EraseCell(pokedexApp->bgCellManager, 4);
-        PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 22, 0);
-        PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 24, 0);
+        PokedexApp_SetIntlSpritePairVisible(pokedexApp, 22, 0);
+        PokedexApp_SetIntlSpriteVisible(pokedexApp, 24, 0);
         ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[94]);
         PokedexApp_SetSpriteVisible(pokedexApp, 0, 0);
         PokedexApp_ShowReturningDexModeSwitch(pokedexApp);
@@ -2226,8 +2226,8 @@ static int PokedexApp_MainSeq_64(PokedexAppData *pokedexApp) {
             PokedexResumeState_Set(pokedexApp->args->resumeState, r1, pokedexApp->dexMode);
         }
         BgCellManager_EraseCell(pokedexApp->bgCellManager, 4);
-        PokedexApp_SetSpritePairVisibleIfInternationalView(pokedexApp, 22, 0);
-        PokedexApp_SetSpriteVisibleIfInternationalView(pokedexApp, 24, 0);
+        PokedexApp_SetIntlSpritePairVisible(pokedexApp, 22, 0);
+        PokedexApp_SetIntlSpriteVisible(pokedexApp, 24, 0);
         ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[94]);
         PokedexApp_SetSpriteVisible(pokedexApp, 0, 0);
         PokedexApp_SlideOutSearchResultButtons(pokedexApp);

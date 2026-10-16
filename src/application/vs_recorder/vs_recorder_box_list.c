@@ -23,6 +23,11 @@
 
 extern const VsRecorderListConfig sVsRecorderBoxListConfig; // box list
 
+// substates of viewing box data (sVsRecorderBoxDataViewSubStates)
+#define BOX_DATA_VIEW_SELECT_CATEGORY 3
+#define BOX_DATA_VIEW_BOX_LIST_MAIN   5
+#define BOX_DATA_VIEW_BOX_MAIN        10
+
 // view screen, substate 4: receive the boxes of the chosen category
 BOOL VsRecorder_BoxDataViewDownload(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
@@ -133,7 +138,7 @@ BOOL VsRecorder_BoxDataViewDownload(VsRecorderWork *work) {
             VsRecorder_CreateBoxDataCategoryButtons(work);
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
             GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
-            VsRecorder_SetSubState(work, 3);
+            VsRecorder_SetSubState(work, BOX_DATA_VIEW_SELECT_CATEGORY);
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)boxData->fade, (u16)work->blendColor);
         break;
@@ -158,7 +163,7 @@ BOOL VsRecorder_BoxDataViewDownload(VsRecorderWork *work) {
             VsRecorder_PlaceOrbitCursor(work, work->orbitCursors[0], 16, (s16)(work->listWindow.cursorRow * 24 + 68));
             OrbitCursor_SetVisible(work->orbitCursors[0], TRUE);
             OrbitCursor_SetRadius(work->orbitCursors[0], 12, 12);
-            VsRecorder_SetSubState(work, 5);
+            VsRecorder_SetSubState(work, BOX_DATA_VIEW_BOX_LIST_MAIN);
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)boxData->fade, (u16)work->blendColor);
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 12, (u8)boxData->fade, (u16)work->blendColor);
@@ -265,7 +270,7 @@ BOOL VsRecorder_BoxListBack(VsRecorderWork *work) {
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
         VsRecorder_PrintBoxDataMessage(work, msg_0013_00275); // Which category would you like to see?
         VsRecorder_CreateBoxDataCategoryButtons(work);
-        VsRecorder_SetSubState(work, 3);
+        VsRecorder_SetSubState(work, BOX_DATA_VIEW_SELECT_CATEGORY);
         break;
     }
     return FALSE;
@@ -348,7 +353,7 @@ BOOL VsRecorder_BoxDataViewOpenBox(VsRecorderWork *work) {
             if (boxData->form.species[boxData->cursor] != 0 && VsRecorder_HasAllBits(boxData->form.eggFlags, 1 << boxData->cursor) != TRUE) {
                 PlayCry(boxData->form.species[boxData->cursor], boxData->form.forms[boxData->cursor]);
             }
-            VsRecorder_SetSubState(work, 10);
+            VsRecorder_SetSubState(work, BOX_DATA_VIEW_BOX_MAIN);
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)boxData->fade, (u16)work->blendColor);
         break;
@@ -420,7 +425,7 @@ BOOL VsRecorder_BoxDataViewCloseBox(VsRecorderWork *work) {
         VsRecorder_SetVBlankPaused(work, FALSE);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
-        VsRecorder_SetSubState(work, 5);
+        VsRecorder_SetSubState(work, BOX_DATA_VIEW_BOX_LIST_MAIN);
         break;
     }
     return FALSE;
@@ -466,7 +471,7 @@ BOOL VsRecorder_BoxListShowProfile(VsRecorderWork *work) {
         VsRecorder_PrintBoxListProfileButton(work, boxData->showProfile + 121); // VIEW PROFILE / CLOSE PROFILE
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
-        VsRecorder_SetSubState(work, 5);
+        VsRecorder_SetSubState(work, BOX_DATA_VIEW_BOX_LIST_MAIN);
         break;
     }
     return FALSE;
@@ -519,7 +524,7 @@ BOOL VsRecorder_BoxListHideProfile(VsRecorderWork *work) {
         OrbitCursor_SetVisible(work->orbitCursors[0], TRUE);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
         VsRecorder_SetVBlankPaused(work, FALSE);
-        VsRecorder_SetSubState(work, 5);
+        VsRecorder_SetSubState(work, BOX_DATA_VIEW_BOX_LIST_MAIN);
         break;
     }
     return FALSE;
@@ -564,7 +569,7 @@ BOOL VsRecorder_BoxDataViewExit(VsRecorderWork *work) {
             VsRecorder_ResetFade(&boxData->fade);
             PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 12, 16, (u16)work->blendColor);
             VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_MENU, TRUE, work->screenPtr);
-            VsRecorder_SetSubState(work, 5);
+            VsRecorder_SetSubState(work, VS_RECORDER_MENU_SLIDE_IN);
             FrontierCard_Delete(boxData->card);
             Heap_Free(boxData);
         } else {

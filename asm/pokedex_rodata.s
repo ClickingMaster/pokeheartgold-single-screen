@@ -1601,8 +1601,8 @@
 	.public PokedexApp_SetupListSprites
 	.public PokedexApp_LoadListSpriteResources
 	.public PokedexApp_CreateListSprites
-	.public PokedexApp_SetSpritePairVisibleIfInternationalView
-	.public PokedexApp_SetSpriteVisibleIfInternationalView
+	.public PokedexApp_SetIntlSpritePairVisible
+	.public PokedexApp_SetIntlSpriteVisible
 	.public PokedexApp_SetDexModeSwitchPos
 	.public PokedexApp_IsTouchOnSprite0
 	.public PokedexApp_MoveSpriteX

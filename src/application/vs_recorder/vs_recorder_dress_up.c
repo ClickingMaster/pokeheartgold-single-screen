@@ -50,6 +50,22 @@ extern const VsRecorderListConfig sVsRecorderDressUpSpeciesListConfig; // specie
 extern const TouchscreenHitbox sVsRecorderSpeciesGroupHitboxes[];  // species groups (9)
 extern const u16 sVsRecorderDressUpSpeciesGroupStarts[];                // first species list index of each group
 
+// substates of sending a Dress-Up photo (sVsRecorderDressUpSendSubStates)
+#define DRESS_UP_SEND_MAIN   3
+#define DRESS_UP_SEND_UPLOAD 4
+#define DRESS_UP_SEND_EXIT   5
+
+// substates of viewing Dress-Up photos (sVsRecorderDressUpViewSubStates)
+#define DRESS_UP_VIEW_SELECT_CATEGORY 3
+#define DRESS_UP_VIEW_SELECT_SPECIES  4
+#define DRESS_UP_VIEW_EXIT            5
+#define DRESS_UP_VIEW_DOWNLOAD        6
+#define DRESS_UP_VIEW_SHOW_PHOTO      7
+#define DRESS_UP_VIEW_MAIN            8
+#define DRESS_UP_VIEW_CLOSE_PHOTO     9
+#define DRESS_UP_VIEW_TOGGLE_PROFILE  10
+#define DRESS_UP_VIEW_CHANGE_PHOTO    11
+
 BOOL VsRecorder_FrontierExit(VsRecorderWork *work) {
     VsRecorderFrontierRecord *record = work->screenWork;
 
@@ -113,7 +129,7 @@ BOOL VsRecorder_FrontierExit(VsRecorderWork *work) {
             VsRecorder_ResetFade(&record->fade);
             PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 12, 16, (u16)work->blendColor);
             VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_MENU, TRUE, work->screenPtr);
-            VsRecorder_SetSubState(work, 5);
+            VsRecorder_SetSubState(work, VS_RECORDER_MENU_SLIDE_IN);
         } else {
             PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)record->fade, (u16)work->blendColor);
             PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_BG, 2, (u8)record->fade, (u16)work->blendColor);
@@ -228,7 +244,7 @@ BOOL VsRecorder_DressUpSendShow(VsRecorderWork *work) {
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)dressUp->fade, (u16)work->blendColor);
         break;
     default:
-        VsRecorder_SetSubState(work, 3);
+        VsRecorder_SetSubState(work, DRESS_UP_SEND_MAIN);
         break;
     }
     if (dressUp->portrait != NULL) {
@@ -244,11 +260,11 @@ BOOL VsRecorder_DressUpSendMain(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
     if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderDressUpLeftButtonHitbox)) {
         VsRecorder_OnTouchConfirm(work);
-        VsRecorder_SetSubState(work, 5);
+        VsRecorder_SetSubState(work, DRESS_UP_SEND_EXIT);
     }
     if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderDressUpRightButtonHitbox)) {
         VsRecorder_OnTouchConfirm(work);
-        VsRecorder_SetSubState(work, 4);
+        VsRecorder_SetSubState(work, DRESS_UP_SEND_UPLOAD);
     }
     if (dressUp->portrait != NULL) {
         Thunk_G3X_Reset();
@@ -358,7 +374,7 @@ BOOL VsRecorder_DressUpSendUpload(VsRecorderWork *work) {
                 VsRecorder_ResetFade(&dressUp->fade);
                 PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 12, 16, (u16)work->blendColor);
                 VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_MENU, TRUE, work->screenPtr);
-                VsRecorder_SetSubState(work, 5);
+                VsRecorder_SetSubState(work, VS_RECORDER_MENU_SLIDE_IN);
                 Heap_Free(dressUp);
                 UnloadOverlayByID(FS_OVERLAY_ID(OVY_41));
                 Main_SetVBlankIntrCB(VsRecorder_VBlankCB, work);
@@ -434,7 +450,7 @@ BOOL VsRecorder_DressUpSendExit(VsRecorderWork *work) {
                 VsRecorder_ResetFade(&dressUp->fade);
                 PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 12, 16, (u16)work->blendColor);
                 VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_MENU, TRUE, work->screenPtr);
-                VsRecorder_SetSubState(work, 5);
+                VsRecorder_SetSubState(work, VS_RECORDER_MENU_SLIDE_IN);
                 Heap_Free(dressUp);
                 UnloadOverlayByID(FS_OVERLAY_ID(OVY_41));
                 Main_SetVBlankIntrCB(VsRecorder_VBlankCB, work);
@@ -454,7 +470,7 @@ BOOL VsRecorder_DressUpViewInit(VsRecorderWork *work) {
         VsRecorder_SetDressUpSendButtonHidden(work, TRUE);
         work->step = work->step + 1;
     } else {
-        VsRecorder_SetSubState(work, 3);
+        VsRecorder_SetSubState(work, DRESS_UP_VIEW_SELECT_CATEGORY);
     }
     return FALSE;
 }
@@ -509,9 +525,9 @@ BOOL VsRecorder_DressUpViewSelectCategory(VsRecorderWork *work) {
         break;
     default:
         if (dressUp->categoryChosen == TRUE) {
-            VsRecorder_SetSubState(work, 4);
+            VsRecorder_SetSubState(work, DRESS_UP_VIEW_SELECT_SPECIES);
         } else {
-            VsRecorder_SetSubState(work, 5);
+            VsRecorder_SetSubState(work, DRESS_UP_VIEW_EXIT);
         }
         break;
     }
@@ -579,9 +595,9 @@ BOOL VsRecorder_DressUpViewSelectSpecies(VsRecorderWork *work) {
     default:
         VsRecorder_FreeDressUpSpeciesList(work);
         if (dressUp->species != 0) {
-            VsRecorder_SetSubState(work, 6);
+            VsRecorder_SetSubState(work, DRESS_UP_VIEW_DOWNLOAD);
         } else {
-            VsRecorder_SetSubState(work, 3);
+            VsRecorder_SetSubState(work, DRESS_UP_VIEW_SELECT_CATEGORY);
         }
         break;
     }
@@ -646,7 +662,7 @@ BOOL VsRecorder_DressUpViewExit(VsRecorderWork *work) {
                 VsRecorder_ResetFade(&dressUp->fade);
                 PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 12, 16, (u16)work->blendColor);
                 VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_MENU, TRUE, work->screenPtr);
-                VsRecorder_SetSubState(work, 5);
+                VsRecorder_SetSubState(work, VS_RECORDER_MENU_SLIDE_IN);
                 Heap_Free(dressUp);
                 UnloadOverlayByID(FS_OVERLAY_ID(OVY_41));
                 Main_SetVBlankIntrCB(VsRecorder_VBlankCB, work);
@@ -690,7 +706,7 @@ BOOL VsRecorder_DressUpViewDownload(VsRecorderWork *work) {
             dressUp->downloadCount = 0;
             work->counter = 0;
             OrbitCursor_SetVisible(work->orbitCursors[0], FALSE);
-            VsRecorder_SetSubState(work, 3);
+            VsRecorder_SetSubState(work, DRESS_UP_VIEW_SELECT_CATEGORY);
         } else {
             StopSE(SEQ_SE_PL_BREC80, 0);
             PlaySE(SEQ_SE_PL_BREC12);
@@ -709,7 +725,7 @@ BOOL VsRecorder_DressUpViewDownload(VsRecorderWork *work) {
         if (dressUp->downloadCount != 0) {
             dressUp->photoIndex = 0;
             dressUp->unk_230 = 0;
-            VsRecorder_SetSubState(work, 7);
+            VsRecorder_SetSubState(work, DRESS_UP_VIEW_SHOW_PHOTO);
         } else {
             VsRecorder_ShowTopMessage(work, msg_0013_00293); // no photos
             work->step++;
@@ -721,7 +737,7 @@ BOOL VsRecorder_DressUpViewDownload(VsRecorderWork *work) {
         if (work->counter >= 60 || System_GetTouchNew() == TRUE) {
             work->counter = 0;
             VsRecorder_HideTopMessage(work);
-            VsRecorder_SetSubState(work, 3);
+            VsRecorder_SetSubState(work, DRESS_UP_VIEW_SELECT_CATEGORY);
         }
         break;
     }
@@ -769,7 +785,7 @@ BOOL VsRecorder_DressUpViewShowPhoto(VsRecorderWork *work) {
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)dressUp->fade, (u16)work->blendColor);
         break;
     default:
-        VsRecorder_SetSubState(work, 8);
+        VsRecorder_SetSubState(work, DRESS_UP_VIEW_MAIN);
         break;
     }
     if (dressUp->portrait != NULL) {
@@ -786,11 +802,11 @@ BOOL VsRecorder_DressUpViewMain(VsRecorderWork *work) {
 
     if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderDressUpCenterButtonHitbox)) {
         VsRecorder_OnTouchConfirm(work);
-        VsRecorder_SetSubState(work, 9);
+        VsRecorder_SetSubState(work, DRESS_UP_VIEW_CLOSE_PHOTO);
     }
     if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderDressUpTopBarHitbox)) {
         VsRecorder_OnTouchConfirm(work);
-        VsRecorder_SetSubState(work, 10);
+        VsRecorder_SetSubState(work, DRESS_UP_VIEW_TOGGLE_PROFILE);
     }
     if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderDressUpPrevPhotoHitbox)) {
         if (dressUp->photoIndex != 0) {
@@ -799,13 +815,13 @@ BOOL VsRecorder_DressUpViewMain(VsRecorderWork *work) {
             dressUp->photoIndex = dressUp->downloadCount - 1;
         }
         VsRecorder_OnTouchConfirm(work);
-        VsRecorder_SetSubState(work, 11);
+        VsRecorder_SetSubState(work, DRESS_UP_VIEW_CHANGE_PHOTO);
     }
     if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderDressUpNextPhotoHitbox)) {
         dressUp->photoIndex++;
         dressUp->photoIndex %= dressUp->downloadCount;
         VsRecorder_OnTouchConfirm(work);
-        VsRecorder_SetSubState(work, 11);
+        VsRecorder_SetSubState(work, DRESS_UP_VIEW_CHANGE_PHOTO);
     }
     if (dressUp->portrait != NULL) {
         Thunk_G3X_Reset();
@@ -852,7 +868,7 @@ BOOL VsRecorder_DressUpViewClosePhoto(VsRecorderWork *work) {
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)dressUp->fade, (u16)work->blendColor);
         break;
     default:
-        VsRecorder_SetSubState(work, 3);
+        VsRecorder_SetSubState(work, DRESS_UP_VIEW_SELECT_CATEGORY);
         break;
     }
     return FALSE;
@@ -935,7 +951,7 @@ BOOL VsRecorder_DressUpViewToggleProfile(VsRecorderWork *work) {
     default:
         dressUp->showProfile ^= TRUE;
         VsRecorder_PrintDressUpToggleLabel(work, dressUp->showProfile + 121);
-        VsRecorder_SetSubState(work, 8);
+        VsRecorder_SetSubState(work, DRESS_UP_VIEW_MAIN);
         break;
     }
     return FALSE;
@@ -1017,7 +1033,7 @@ BOOL VsRecorder_DressUpViewChangePhoto(VsRecorderWork *work) {
         }
         break;
     default:
-        VsRecorder_SetSubState(work, 8);
+        VsRecorder_SetSubState(work, DRESS_UP_VIEW_MAIN);
         break;
     }
     return FALSE;

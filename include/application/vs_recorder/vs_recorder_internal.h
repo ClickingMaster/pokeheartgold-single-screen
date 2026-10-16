@@ -84,6 +84,13 @@ typedef BOOL (*VsRecorderScreenFunc)(VsRecorderWork *work);
 #define VS_RECORDER_SCREEN_MESSAGE       18
 #define VS_RECORDER_SCREEN_NONE          0xFF
 
+// substates of the menu (sVsRecorderMenuSubStates)
+#define VS_RECORDER_MENU_MAIN        0
+#define VS_RECORDER_MENU_INVALID     1
+#define VS_RECORDER_MENU_SLIDE_IN    5
+#define VS_RECORDER_MENU_PREV_SCHEME 7
+#define VS_RECORDER_MENU_NEXT_SCHEME 8
+
 // one menu entry (main-ARM9 menu trees, 36 bytes)
 typedef struct VsRecorderMenuEntry {
     int enabled;

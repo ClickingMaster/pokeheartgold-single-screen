@@ -65,6 +65,8 @@ extern const VsRecorderIconPositions sVsRecorderVideoListIconPositions;
 #define VIDEO_PARTY(work, i) ((VsRecorderVideoParty *)(work)->net.videoList.headers[i])
 
 // VsRecorderVideoListScreen substates (sVsRecorderVideoListSubStates)
+#define VIDEO_LIST_ENTER             1
+#define VIDEO_LIST_DOWNLOAD_LIST     2
 #define VIDEO_LIST_SHOW_LIST         3
 #define VIDEO_LIST_SELECT            4
 #define VIDEO_LIST_EXIT              5
@@ -81,6 +83,7 @@ extern const VsRecorderIconPositions sVsRecorderVideoListIconPositions;
 #define VIDEO_LIST_OVERWRITE_NO      16
 #define VIDEO_LIST_SAVE              17
 #define VIDEO_LIST_DOWNLOAD_VIDEO    18
+#define VIDEO_LIST_RESUME            19
 #define VIDEO_LIST_RETURN_TO_DETAILS 20
 
 void VsRecorder_OnRankingsHeaderReceived(void *arg, GlobalTerminalNetError *error) {
@@ -418,7 +421,7 @@ BOOL VsRecorder_VideoListSave(VsRecorderWork *work) {
                 VsRecorder_ResetFade(&listWork->fade);
                 PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 0xC, 16, (u16)work->blendColor);
                 VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_MENU, TRUE, work->screenPtr);
-                VsRecorder_SetSubState(work, 5);
+                VsRecorder_SetSubState(work, VS_RECORDER_MENU_SLIDE_IN);
                 BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_MAIN_2);
                 BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_2);
                 BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_MAIN_3);
@@ -825,7 +828,7 @@ BOOL VsRecorder_VideoListInit(VsRecorderWork *work) {
     BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_2);
     BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_3);
     VsRecorder_InitBgBlend(&listWork->eva, &listWork->evb, 0);
-    VsRecorder_SetSubState(work, 1);
+    VsRecorder_SetSubState(work, VIDEO_LIST_ENTER);
     return FALSE;
 }
 
@@ -867,9 +870,9 @@ BOOL VsRecorder_VideoListEnter(VsRecorderWork *work) {
         break;
     default:
         if (VsRecorder_HasResumeScreen(work) == TRUE) {
-            VsRecorder_SetSubState(work, 19);
+            VsRecorder_SetSubState(work, VIDEO_LIST_RESUME);
         } else {
-            VsRecorder_SetSubState(work, 2);
+            VsRecorder_SetSubState(work, VIDEO_LIST_DOWNLOAD_LIST);
         }
         break;
     }
@@ -970,7 +973,7 @@ BOOL VsRecorder_VideoListDownloadList(VsRecorderWork *work) {
                 VsRecorder_ResetFade(&listWork->fade);
                 PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 0xC, 16, (u16)work->blendColor);
                 VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_MENU, TRUE, work->screenPtr);
-                VsRecorder_SetSubState(work, 5);
+                VsRecorder_SetSubState(work, VS_RECORDER_MENU_SLIDE_IN);
                 BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_MAIN_2);
                 BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_2);
                 BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_MAIN_3);
@@ -1181,7 +1184,7 @@ BOOL VsRecorder_VideoListExit(VsRecorderWork *work) {
                 VsRecorder_ResetFade(&listWork->fade);
                 PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 0xC, 16, (u16)work->blendColor);
                 VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_MENU, TRUE, work->screenPtr);
-                VsRecorder_SetSubState(work, 5);
+                VsRecorder_SetSubState(work, VS_RECORDER_MENU_SLIDE_IN);
                 BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_MAIN_2);
                 BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_2);
                 BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_MAIN_3);

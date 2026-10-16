@@ -661,7 +661,7 @@ BOOL VsRecorder_VideoSearchExit(VsRecorderWork *work) {
                 VsRecorder_ResetFade(&search->fade);
                 PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 0xC, 16, (u16)work->blendColor);
                 VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_MENU, TRUE, work->screenPtr);
-                VsRecorder_SetSubState(work, 5);
+                VsRecorder_SetSubState(work, VS_RECORDER_MENU_SLIDE_IN);
                 BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_MAIN_2);
                 BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_2);
                 BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_MAIN_3);

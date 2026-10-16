@@ -33,11 +33,16 @@ typedef struct VsRecorderChoiceSlideIn {
     u8 fade;
 } VsRecorderChoiceSlideIn;
 
+// substates of the title screen (sVsRecorderTitleSubStates)
+#define TITLE_SHOW_MENU        1
+#define TITLE_FLASH            2
+#define TITLE_SLIDE_IN_CHOICES 3
+
 BOOL VsRecorder_TitleIntro(VsRecorderWork *work) {
     switch (work->step) {
     case 0:
         if (VsRecorder_HasResumeScreen(work) == TRUE) {
-            VsRecorder_SetSubState(work, 1);
+            VsRecorder_SetSubState(work, TITLE_SHOW_MENU);
             break;
         }
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, 0, 6, 1, HEAP_ID_109);
@@ -108,7 +113,7 @@ BOOL VsRecorder_TitleIntro(VsRecorderWork *work) {
         }
         break;
     default:
-        VsRecorder_SetSubState(work, 1);
+        VsRecorder_SetSubState(work, TITLE_SHOW_MENU);
         break;
     }
     return FALSE;
@@ -172,7 +177,7 @@ BOOL VsRecorder_TitleShowMenu(VsRecorderWork *work) {
         break;
     default:
         if (work->decor[0].state >= 3) {
-            VsRecorder_SetSubState(work, 2);
+            VsRecorder_SetSubState(work, TITLE_FLASH);
         }
         break;
     }
@@ -205,7 +210,7 @@ BOOL VsRecorder_TitleFlash(VsRecorderWork *work) {
         }
         break;
     default:
-        VsRecorder_SetSubState(work, 3);
+        VsRecorder_SetSubState(work, TITLE_SLIDE_IN_CHOICES);
         break;
     }
     return FALSE;

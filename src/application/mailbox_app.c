@@ -40,6 +40,34 @@
 #include "touchpad.h"
 #include "yes_no_prompt.h"
 
+enum {
+    MAILBOX_STATE_SETUP,
+    MAILBOX_STATE_TEARDOWN,
+    MAILBOX_STATE_WAIT_FADE,
+    MAILBOX_STATE_WAIT_TEXT,
+    MAILBOX_STATE_YES_NO,
+    MAILBOX_STATE_PALETTE_FLASH,
+    MAILBOX_STATE_START_SUB_APP,
+    MAILBOX_STATE_RUN_SUB_APP,
+    MAILBOX_STATE_FADE_IN,
+    MAILBOX_STATE_SELECT_MAIL,
+    MAILBOX_STATE_QUIT,
+    MAILBOX_STATE_CHANGE_PAGE,
+    MAILBOX_STATE_SHOW_MAIL_PROMPT,
+    MAILBOX_STATE_OPEN_MAIL_MENU,
+    MAILBOX_STATE_MAIL_MENU,
+    MAILBOX_STATE_READ_MAIL,
+    MAILBOX_STATE_CLOSE_MAIL,
+    MAILBOX_STATE_CONFIRM_ERASE,
+    MAILBOX_STATE_PRINT_HOLD_MAIL_PROMPT,
+    MAILBOX_STATE_CONFIRM_HOLD_MAIL,
+    MAILBOX_STATE_SELECT_MON_FOR_MAIL_DONE,
+    MAILBOX_STATE_FADE_IN_DIMMED_LIST,
+    MAILBOX_STATE_SHOW_MAIL_TO_BAG_RESULT,
+    MAILBOX_STATE_USE_MAIL_DONE,
+    MAILBOX_STATE_RETURN_TO_MAIL_LIST,
+};
+
 #define MAILBOX_MAIL_PER_PAGE  10
 #define MAILBOX_NO_MAIL        0xFF
 #define MAILBOX_NUM_WINDOWS    30
@@ -293,7 +321,7 @@ BOOL MailboxApp_Init(OverlayManager *man, int *state) {
     app->args = OverlayManager_GetArgs(man);
     app->options = Save_PlayerData_GetOptionsAddr(app->args->saveData);
     app->mailbox = Save_Mailbox_Get(app->args->saveData);
-    app->nextState = 8;
+    app->nextState = MAILBOX_STATE_FADE_IN;
     return TRUE;
 }
 
@@ -684,7 +712,7 @@ int MailboxApp_State_WaitFade(MailboxApp *app) {
     if (IsPaletteFadeFinished() == TRUE) {
         return app->data->stateAfterFade;
     }
-    return 2;
+    return MAILBOX_STATE_WAIT_FADE;
 }
 
 int MailboxApp_State_WaitText(MailboxApp *app) {
@@ -701,7 +729,7 @@ int MailboxApp_State_WaitText(MailboxApp *app) {
             return app->nextState;
         }
     }
-    return 3;
+    return MAILBOX_STATE_WAIT_TEXT;
 }
 
 int MailboxApp_State_YesNo(MailboxApp *app) {
@@ -713,7 +741,7 @@ int MailboxApp_State_YesNo(MailboxApp *app) {
         YesNoPrompt_Reset(app->data->yesNoPrompt);
         return gMailboxYesNoHandlers[app->data->yesNoQuestion][1](app);
     default:
-        return 4;
+        return MAILBOX_STATE_YES_NO;
     }
 }
 
@@ -721,17 +749,17 @@ int MailboxApp_State_PaletteFlash(MailboxApp *app) {
     if (MailboxApp_RunPaletteFlash(app) == FALSE) {
         return app->nextState;
     }
-    return 5;
+    return MAILBOX_STATE_PALETTE_FLASH;
 }
 
 int MailboxApp_State_StartSubApp(MailboxApp *app) {
     gMailboxSubApps[app->subAppId].start(app);
-    return 7;
+    return MAILBOX_STATE_RUN_SUB_APP;
 }
 
 int MailboxApp_State_RunSubApp(MailboxApp *app) {
     if (OverlayManager_Run(app->subApp) == FALSE) {
-        return 7;
+        return MAILBOX_STATE_RUN_SUB_APP;
     }
     OverlayManager_Delete(app->subApp);
     app->nextState = gMailboxSubApps[app->subAppId].finish(app);
@@ -739,7 +767,7 @@ int MailboxApp_State_RunSubApp(MailboxApp *app) {
 }
 
 int MailboxApp_State_FadeIn(MailboxApp *app) {
-    return MailboxApp_StartFadeIn(app, 9);
+    return MailboxApp_StartFadeIn(app, MAILBOX_STATE_SELECT_MAIL);
 }
 
 int MailboxApp_State_SelectMail(MailboxApp *app) {
@@ -750,17 +778,17 @@ int MailboxApp_State_SelectMail(MailboxApp *app) {
         if (app->page != 0) {
             app->page--;
             PlaySE(SEQ_SE_DP_SELECT);
-            return MailboxApp_StartSpriteFlash(app, 0, 11);
+            return MailboxApp_StartSpriteFlash(app, 0, MAILBOX_STATE_CHANGE_PAGE);
         } else {
-            return 9;
+            return MAILBOX_STATE_SELECT_MAIL;
         }
     case 1:
         if (app->page != app->data->lastPage) {
             app->page++;
             PlaySE(SEQ_SE_DP_SELECT);
-            return MailboxApp_StartSpriteFlash(app, 1, 11);
+            return MailboxApp_StartSpriteFlash(app, 1, MAILBOX_STATE_CHANGE_PAGE);
         } else {
-            return 9;
+            return MAILBOX_STATE_SELECT_MAIL;
         }
     }
     input = GridInputHandler_HandleInput_NoHold(app->data->gridInput);
@@ -779,24 +807,24 @@ int MailboxApp_State_SelectMail(MailboxApp *app) {
             app->cursorPos = input;
             app->selectedMail = (app->data->mailOrder + input)[app->page * MAILBOX_MAIL_PER_PAGE];
             PlaySE(SEQ_SE_DP_DECIDE);
-            return MailboxApp_StartCellFlash(app, input, 12);
+            return MailboxApp_StartCellFlash(app, input, MAILBOX_STATE_SHOW_MAIL_PROMPT);
         }
         break;
     case 10:
     case -2:
         PlaySE(SEQ_SE_DP_DECIDE);
-        return MailboxApp_StartSpriteFlash(app, 3, 10);
+        return MailboxApp_StartSpriteFlash(app, 3, MAILBOX_STATE_QUIT);
     case -1:
         input = GridInputHandler_GetNextInput(app->data->gridInput);
         if ((gSystem.newAndRepeatedKeys & PAD_KEY_RIGHT) && (input == 1 || input == 3 || input == 5 || input == 7 || input == 9) && app->page != app->data->lastPage) {
             app->page++;
             PlaySE(SEQ_SE_DP_SELECT);
-            return MailboxApp_StartSpriteFlash(app, 1, 11);
+            return MailboxApp_StartSpriteFlash(app, 1, MAILBOX_STATE_CHANGE_PAGE);
         }
         if ((gSystem.newAndRepeatedKeys & PAD_KEY_LEFT) && (input == 0 || input == 2 || input == 4 || input == 6 || input == 8) && app->page != 0) {
             app->page--;
             PlaySE(SEQ_SE_DP_SELECT);
-            return MailboxApp_StartSpriteFlash(app, 0, 11);
+            return MailboxApp_StartSpriteFlash(app, 0, MAILBOX_STATE_CHANGE_PAGE);
         }
         break;
     case -3:
@@ -805,12 +833,12 @@ int MailboxApp_State_SelectMail(MailboxApp *app) {
     case -4:
         break;
     }
-    return 9;
+    return MAILBOX_STATE_SELECT_MAIL;
 }
 
 int MailboxApp_State_Quit(MailboxApp *app) {
     app->nextState = MAILBOX_STATE_FINISHED;
-    return MailboxApp_StartFadeOut(app, 1);
+    return MailboxApp_StartFadeOut(app, MAILBOX_STATE_TEARDOWN);
 }
 
 int MailboxApp_State_ChangePage(MailboxApp *app) {
@@ -823,7 +851,7 @@ int MailboxApp_State_ChangePage(MailboxApp *app) {
     }
     MailboxApp_PrintPageNumber(app);
     MailboxApp_DrawPage(app);
-    return 9;
+    return MAILBOX_STATE_SELECT_MAIL;
 }
 
 int MailboxApp_State_ShowMailPrompt(MailboxApp *app) {
@@ -832,12 +860,12 @@ int MailboxApp_State_ShowMailPrompt(MailboxApp *app) {
     MailboxApp_DrawSelectedNameplate(app);
     MailboxApp_DrawMessageBox(app);
     MailboxApp_PrintMailPrompt(app);
-    return MailboxApp_WaitForText(app, FALSE, 13);
+    return MailboxApp_WaitForText(app, FALSE, MAILBOX_STATE_OPEN_MAIL_MENU);
 }
 
 int MailboxApp_State_OpenMailMenu(MailboxApp *app) {
     MailboxApp_OpenMailMenu(app);
-    return 14;
+    return MAILBOX_STATE_MAIL_MENU;
 }
 
 int MailboxApp_State_MailMenu(MailboxApp *app) {
@@ -852,18 +880,18 @@ int MailboxApp_State_MailMenu(MailboxApp *app) {
         MailboxAppData_ShowCloseButton(app->data);
         MailboxAppData_MoveCursorToCloseButton(app->data);
         MailboxApp_ShowMail(app);
-        return 15;
+        return MAILBOX_STATE_READ_MAIL;
     case 1: // ERASE
         MailboxApp_CloseMailMenu(app);
         MailboxApp_PrintMessage(app, 0);
-        return MailboxApp_WaitForText(app, FALSE, 17);
+        return MailboxApp_WaitForText(app, FALSE, MAILBOX_STATE_CONFIRM_ERASE);
     case 2: // GIVE
         MailboxApp_CloseMailMenu(app);
         itemId = MailToItemId(Mail_GetType(app->data->mail[app->selectedMail]));
         MailboxApp_CreatePartyMenuArgs(app, 14, itemId, 0);
         app->subAppId = 0;
-        app->nextState = 6;
-        return MailboxApp_StartFadeOut(app, 1);
+        app->nextState = MAILBOX_STATE_START_SUB_APP;
+        return MailboxApp_StartFadeOut(app, MAILBOX_STATE_TEARDOWN);
     case 3: // CANCEL
     case -2:
         MailboxApp_CloseMailMenu(app);
@@ -871,19 +899,19 @@ int MailboxApp_State_MailMenu(MailboxApp *app) {
         BgCellManager_EraseCell(app->data->cellManager, MAILBOX_CELL_SELECTED);
         MailboxAppData_SetListDimmed(app->data, FALSE);
         MailboxAppData_SetSpriteDrawFlag(app->data, 2, TRUE);
-        return 9;
+        return MAILBOX_STATE_SELECT_MAIL;
     case -1:
     default:
-        return 14;
+        return MAILBOX_STATE_MAIL_MENU;
     }
 }
 
 int MailboxApp_State_ReadMail(MailboxApp *app) {
     if (MailboxApp_IsCloseMailInput() == TRUE) {
         PlaySE(SEQ_SE_DP_DECIDE);
-        return MailboxApp_StartSpriteFlash(app, 3, 16);
+        return MailboxApp_StartSpriteFlash(app, 3, MAILBOX_STATE_CLOSE_MAIL);
     }
-    return 15;
+    return MAILBOX_STATE_READ_MAIL;
 }
 
 int MailboxApp_State_CloseMail(MailboxApp *app) {
@@ -892,7 +920,7 @@ int MailboxApp_State_CloseMail(MailboxApp *app) {
     MailboxAppData_ShowCancelButton(app->data);
     BgCellManager_EraseCell(app->data->cellManager, MAILBOX_CELL_SELECTED);
     MailboxAppData_SetListDimmed(app->data, FALSE);
-    return 9;
+    return MAILBOX_STATE_SELECT_MAIL;
 }
 
 int MailboxApp_State_ConfirmErase(MailboxApp *app) {
@@ -901,7 +929,7 @@ int MailboxApp_State_ConfirmErase(MailboxApp *app) {
 
 int MailboxApp_State_PrintHoldMailPrompt(MailboxApp *app) {
     MailboxApp_PrintMessage(app, 2);
-    return MailboxApp_WaitForText(app, FALSE, 19);
+    return MailboxApp_WaitForText(app, FALSE, MAILBOX_STATE_CONFIRM_HOLD_MAIL);
 }
 
 int MailboxApp_State_ConfirmHoldMail(MailboxApp *app) {
@@ -910,17 +938,17 @@ int MailboxApp_State_ConfirmHoldMail(MailboxApp *app) {
 
 int MailboxApp_State_SelectMonForMailDone(MailboxApp *app) {
     if (app->partyMenuAction != 6) {
-        app->nextState = 21;
-        return 0;
+        app->nextState = MAILBOX_STATE_FADE_IN_DIMMED_LIST;
+        return MAILBOX_STATE_SETUP;
     }
     app->subAppId = 2;
-    return 6;
+    return MAILBOX_STATE_START_SUB_APP;
 }
 
 int MailboxApp_State_FadeInDimmedList(MailboxApp *app) {
     MailboxAppData_SetSpriteDrawFlag(app->data, 2, FALSE);
     MailboxAppData_SetListDimmed(app->data, TRUE);
-    return MailboxApp_StartFadeIn(app, 22);
+    return MailboxApp_StartFadeIn(app, MAILBOX_STATE_SHOW_MAIL_TO_BAG_RESULT);
 }
 
 int MailboxApp_State_ShowMailToBagResult(MailboxApp *app) {
@@ -930,12 +958,12 @@ int MailboxApp_State_ShowMailToBagResult(MailboxApp *app) {
 
 int MailboxApp_State_UseMailDone(MailboxApp *app) {
     if (app->useMailResult == 0) {
-        app->nextState = 21;
-        return 0;
+        app->nextState = MAILBOX_STATE_FADE_IN_DIMMED_LIST;
+        return MAILBOX_STATE_SETUP;
     }
     MailboxApp_CreatePartyMenuArgs(app, 11, app->itemId, app->partySlot);
     app->subAppId = 3;
-    return 6;
+    return MAILBOX_STATE_START_SUB_APP;
 }
 
 int MailboxApp_ReturnToMailList(MailboxApp *app) {
@@ -944,31 +972,31 @@ int MailboxApp_ReturnToMailList(MailboxApp *app) {
     MailboxApp_MoveCursor(app, GridInputHandler_GetNextInput(app->data->gridInput));
     MailboxAppData_SetSpriteDrawFlag(app->data, 2, TRUE);
     MailboxAppData_SetListDimmed(app->data, FALSE);
-    return 9;
+    return MAILBOX_STATE_SELECT_MAIL;
 }
 
 int MailboxApp_StartFadeIn(MailboxApp *app, int nextState) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_157);
     app->data->stateAfterFade = nextState;
-    return 2;
+    return MAILBOX_STATE_WAIT_FADE;
 }
 
 int MailboxApp_StartFadeOut(MailboxApp *app, int nextState) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_157);
     app->data->stateAfterFade = nextState;
-    return 2;
+    return MAILBOX_STATE_WAIT_FADE;
 }
 
 int MailboxApp_WaitForText(MailboxApp *app, u8 waitForInput, int nextState) {
     app->data->waitForInput = waitForInput;
     app->nextState = nextState;
-    return 3;
+    return MAILBOX_STATE_WAIT_TEXT;
 }
 
 int MailboxApp_AskYesNo(MailboxApp *app, u32 question) {
     app->data->yesNoQuestion = question;
     MailboxApp_ShowYesNoPrompt(app);
-    return 4;
+    return MAILBOX_STATE_YES_NO;
 }
 
 int MailboxApp_StartCellFlash(MailboxApp *app, int cell, int nextState) {
@@ -991,7 +1019,7 @@ int MailboxApp_StartCellFlash(MailboxApp *app, int cell, int nextState) {
     flash->width = (u8)width;
     flash->height = (u8)height;
     app->nextState = nextState;
-    return 5;
+    return MAILBOX_STATE_PALETTE_FLASH;
 }
 
 int MailboxApp_StartSpriteFlash(MailboxApp *app, int sprite, int nextState) {
@@ -1004,7 +1032,7 @@ int MailboxApp_StartSpriteFlash(MailboxApp *app, int sprite, int nextState) {
     flash->state = 0;
     flash->timer = 0;
     app->nextState = nextState;
-    return 5;
+    return MAILBOX_STATE_PALETTE_FLASH;
 }
 
 void MailboxAppData_SetListDimmed(MailboxAppData *data, BOOL enable) {
@@ -1078,7 +1106,7 @@ int MailboxApp_FinishGiveMail(MailboxApp *app) {
         Mailbox_MoveMessageToMon(app->mailbox->msgs, app->selectedMail, Party_GetMonByIndex(SaveArray_Party_Get(app->args->saveData), partySlot), HEAP_ID_156);
     }
     Heap_Free(app->subAppArgs);
-    return 8;
+    return MAILBOX_STATE_FADE_IN;
 }
 
 int MailboxApp_FinishSelectMonForMail(MailboxApp *app) {
@@ -1087,12 +1115,12 @@ int MailboxApp_FinishSelectMonForMail(MailboxApp *app) {
     app->partySlot = args->partySlot;
     app->partyMenuAction = args->selectedAction;
     Heap_Free(app->subAppArgs);
-    return 0;
+    return MAILBOX_STATE_SETUP;
 }
 
 int MailboxApp_FinishPartyMenu(MailboxApp *app) {
     Heap_Free(app->subAppArgs);
-    return 8;
+    return MAILBOX_STATE_FADE_IN;
 }
 
 int MailboxApp_StartUseMail(MailboxApp *app) {
@@ -1112,7 +1140,7 @@ int MailboxApp_FinishUseMail(MailboxApp *app) {
         Bag_TakeItem(Save_Bag_Get(app->args->saveData), app->itemId, 1, HEAP_ID_156);
     }
     UseMailArgs_Free(app->subAppArgs);
-    return 0;
+    return MAILBOX_STATE_SETUP;
 }
 
 int MailboxApp_EraseMail(MailboxApp *app) {
@@ -1132,14 +1160,14 @@ int MailboxApp_EraseMail(MailboxApp *app) {
     MailboxApp_DrawPage(app);
     BgCellManager_EraseCell(app->data->cellManager, MAILBOX_CELL_SELECTED);
     MailboxApp_PrintMessage(app, 1);
-    return MailboxApp_WaitForText(app, TRUE, 18);
+    return MailboxApp_WaitForText(app, TRUE, MAILBOX_STATE_PRINT_HOLD_MAIL_PROMPT);
 }
 
 int MailboxApp_SelectMonToHoldMail(MailboxApp *app) {
     MailboxApp_CreatePartyMenuArgs(app, 9, app->itemId, 0);
     app->subAppId = 1;
-    app->nextState = 6;
-    return MailboxApp_StartFadeOut(app, 1);
+    app->nextState = MAILBOX_STATE_START_SUB_APP;
+    return MailboxApp_StartFadeOut(app, MAILBOX_STATE_TEARDOWN);
 }
 
 int MailboxApp_PrintMailToBagResult(MailboxApp *app) {
@@ -1148,7 +1176,7 @@ int MailboxApp_PrintMailToBagResult(MailboxApp *app) {
     } else {
         MailboxApp_PrintMessage(app, 4);
     }
-    MailboxApp_WaitForText(app, TRUE, 24);
+    MailboxApp_WaitForText(app, TRUE, MAILBOX_STATE_RETURN_TO_MAIL_LIST);
 }
 
 void MailboxApp_CreateSprites(MailboxApp *app) {

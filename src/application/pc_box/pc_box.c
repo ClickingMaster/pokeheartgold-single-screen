@@ -64,7 +64,7 @@ BOOL PCBox_Init(OverlayManager *manager, int *state) {
     work->options = Save_PlayerData_GetOptionsAddr(work->args->saveData);
     work->selectedSlot = 0xff;
     work->returnCursorPos = 0;
-    work->nextState = 11;
+    work->nextState = PC_BOX_STATE_START;
     return TRUE;
 }
 
@@ -1281,10 +1281,10 @@ void PCBox_LoadWallpaperTilemap(PCBoxWork *work, s32 unused, u32 tile, u32 adden
     FillBgTilemapRect(work->view->bgConfig, GF_BG_LYR_MAIN_3, 0x1001, x, 0, 2, 0x14, 0x11);
 }
 
-void PCBox_LoadWallpaper(PCBoxWork *work, s32 member, u32 a2, u32 a3, u32 palette) {
-    PCBox_LoadWallpaperChars(work, member, a2, a3);
+void PCBox_LoadWallpaper(PCBoxWork *work, s32 member, u32 tile, u32 offset, u32 palette) {
+    PCBox_LoadWallpaperChars(work, member, tile, offset);
     PCBox_LoadWallpaperPalette(work, member, palette);
-    PCBox_LoadWallpaperTilemap(work, member, a2, a3, palette);
+    PCBox_LoadWallpaperTilemap(work, member, tile, offset, palette);
     ScheduleBgTilemapBufferTransfer(work->view->bgConfig, GF_BG_LYR_MAIN_3);
 }
 

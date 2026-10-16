@@ -33,6 +33,10 @@ extern const VsRecorderIntSet5 sVsRecorderFrontierIconPaletteFiles; // facility 
 extern const VsRecorderIntSet5 sVsRecorderFrontierPrintAnims; // print animation per facility
 extern const s16 sVsRecorderFrontierPrintPositions[];                 // print positions (x, y) after the spin
 
+// substates of the Battle Frontier record screen (sVsRecorderFrontierSubStates)
+#define FRONTIER_MAIN 1
+#define FRONTIER_EXIT 2
+
 void VsRecorder_FreeExitButton(VsRecorderWork *work) {
     VsRecorderSavedVideo *savedVideo = work->screenWork;
     VsRecorder_FreeTextSprite(&savedVideo->exitButton);
@@ -523,7 +527,7 @@ BOOL VsRecorder_FrontierEnter(VsRecorderWork *work) {
         break;
     }
     default:
-        VsRecorder_SetSubState(work, 1);
+        VsRecorder_SetSubState(work, FRONTIER_MAIN);
         break;
     }
     return FALSE;
@@ -537,7 +541,7 @@ BOOL VsRecorder_FrontierMain(VsRecorderWork *work) {
     if (System_GetTouchNewCoords(&x, &y)) {
         if (x > 80 && x < 176 && y > 152 && y < 176) {
             PlaySE(SEQ_SE_PL_BREC57);
-            VsRecorder_SetSubState(work, 2);
+            VsRecorder_SetSubState(work, FRONTIER_EXIT);
         }
     }
     return FALSE;

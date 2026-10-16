@@ -21,6 +21,11 @@
 extern const TouchscreenHitbox sVsRecorderDeleteYesHitbox;
 extern const TouchscreenHitbox sVsRecorderDeleteNoHitbox;
 
+// substates of the delete screen (sVsRecorderDeleteSubStates)
+#define DELETE_ENTER 1
+#define DELETE_MAIN  2
+#define DELETE_EXIT  3
+
 // the message window of the delete screen (main screen BG 2)
 void VsRecorder_ShowDeleteWindow(VsRecorderWork *work, BOOL alternate) {
     Window *window = &work->messageWindow;
@@ -104,7 +109,7 @@ BOOL VsRecorder_DeleteInit(VsRecorderWork *work) {
     BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_2);
     BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_3);
     VsRecorder_InitBgBlend(&deleteWork->eva, &deleteWork->evb, 0);
-    VsRecorder_SetSubState(work, 1);
+    VsRecorder_SetSubState(work, DELETE_ENTER);
     return FALSE;
 }
 
@@ -137,7 +142,7 @@ BOOL VsRecorder_DeleteEnter(VsRecorderWork *work) {
         break;
     default:
         VsRecorder_StartFlipScreens(work, 0);
-        VsRecorder_SetSubState(work, 2);
+        VsRecorder_SetSubState(work, DELETE_MAIN);
         break;
     }
     return FALSE;
@@ -202,7 +207,7 @@ BOOL VsRecorder_DeleteMain(VsRecorderWork *work) {
         VsRecorder_StepFade(&deleteWork->fade, 1);
         if (VsRecorder_StepBlend(&deleteWork->eva, &deleteWork->evb, TRUE, 0)) {
             if (deleteWork->cancelled == TRUE) {
-                VsRecorder_SetSubState(work, 3);
+                VsRecorder_SetSubState(work, DELETE_EXIT);
             } else {
                 work->step++;
             }
@@ -216,13 +221,13 @@ BOOL VsRecorder_DeleteMain(VsRecorderWork *work) {
             VsRecorder_PrintDeleteMessage(work, 285, 0);
             work->step++;
         } else {
-            VsRecorder_SetSubState(work, 3);
+            VsRecorder_SetSubState(work, DELETE_EXIT);
         }
         break;
     default:
         if (System_GetTouchNew()) {
             VsRecorder_HideDeleteWindow(work);
-            VsRecorder_SetSubState(work, 3);
+            VsRecorder_SetSubState(work, DELETE_EXIT);
         }
         break;
     }
@@ -254,7 +259,7 @@ BOOL VsRecorder_DeleteExit(VsRecorderWork *work) {
                 VsRecorder_ResetFade(&deleteWork->fade);
                 PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 0xC, 0x10, (u16)work->blendColor);
                 VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_MENU, TRUE, work->screenPtr);
-                VsRecorder_SetSubState(work, 5);
+                VsRecorder_SetSubState(work, VS_RECORDER_MENU_SLIDE_IN);
                 Heap_Free(deleteWork);
             } else {
                 PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_BG, 2, (u8)deleteWork->fade, (u16)work->blendColor);

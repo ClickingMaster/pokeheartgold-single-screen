@@ -35,7 +35,7 @@ struct MainOverlayState {
     struct MainOverlayArgs args;
 };
 
-int _02111864;
+int gAgbCartridgePulledOutInSleep;
 PMBackLightSwitch gBacklightTop;
 struct MainOverlayState gMainOverlayState;
 
@@ -90,7 +90,7 @@ void NitroMain(void) {
     InitializeMainRNG();
     ScreenBrightnessData_InitAll();
     IGTCounter_Init();
-    _02111864 = 0;
+    gAgbCartridgePulledOutInSleep = 0;
     OS_InitTick();
     while (1) {
         HandleCommunicationErrorScreen();
@@ -290,18 +290,18 @@ void HandleDSLidAction(void) {
             GF_TouchpadPauseOnLidClose();
             GF_MicPauseOnLidClose();
             if (CTRDG_IsPulledOut() == TRUE) {
-                _02111864 = 1;
+                gAgbCartridgePulledOutInSleep = 1;
             }
             while (1) {
                 trigger = PM_TRIGGER_COVER_OPEN | PM_TRIGGER_CARD;
-                if (gSystem.agbCartridgeVersion && !_02111864) {
+                if (gSystem.agbCartridgeVersion && !gAgbCartridgePulledOutInSleep) {
                     trigger |= PM_TRIGGER_CARTRIDGE;
                 }
                 PM_GoSleepMode(trigger, PM_PAD_LOGIC_OR, 0);
                 if (CARD_IsPulledOut()) {
                     PM_ForceToPowerOff();
                 } else if (PAD_DetectFold()) {
-                    _02111864 = 1;
+                    gAgbCartridgePulledOutInSleep = 1;
                     continue;
                 }
                 break;
