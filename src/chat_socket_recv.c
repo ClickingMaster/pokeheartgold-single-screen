@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "global.h"
 
 #include "dwc/chat_internal.h"
@@ -6,11 +5,9 @@
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-
 #include <string.h>
 
-// The message reading functions of the chat socket module (assertions name "chatSocket.c") and the key setup and
-// random number generator of the stats upload client (stats_upload.c), which share this object.
+// Reading messages from the chat socket, and the key setup and random numbers of the stats upload client.
 
 extern void __msl_assertion_failed(const char *, const char *, const char *, int);
 extern const char sStr_ciSocketRecv[];
@@ -29,16 +26,16 @@ extern const char sStr_SockOutputQueueLengthGe0[];
 extern const char sStr_SockOutputQueueLengthLeSockOutputQueueSize[];
 
 // Assertion of the socket module with the message, the name of the checking function and the line.
-#define ASSERT(cond, message, func, line)                           \
-    if (!(cond)) {                                                  \
+#define ASSERT(cond, message, func, line)                              \
+    if (!(cond)) {                                                     \
         __msl_assertion_failed(message, sStr_ChatSocketC, func, line); \
     }
 
 // Frees a part of the message and clears it.
-#define FREE_PART(part)      \
-    if (part) {              \
+#define FREE_PART(part)    \
+    if (part) {            \
         DWCi_GsFree(part); \
-        part = NULL;         \
+        part = NULL;       \
     }
 
 // Parses the first complete line of the input buffer into socket->message and removes it from the buffer.

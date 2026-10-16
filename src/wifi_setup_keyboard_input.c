@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "global.h"
 
 #include "wifi_setup_keyboard.h"

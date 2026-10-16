@@ -17,10 +17,10 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-// Access-point setup (ARM code in overlay 13): the screen of the three connection slots (edit,
+// Access-point setup: the screen of the three connection slots (edit,
 // erase, or the Wi-Fi USB connector), the menu of the four setup methods, the connection test
 // (prompt, test, "connection succeeded"), and the screens before and after the Wi-Fi USB connector
-// screen (see wifi_setup_usb_connector_screen.c).
+// screen.
 
 // Copies of path strings (the path is localised in place).
 typedef struct WifiSetupPath22 {
@@ -43,18 +43,18 @@ typedef struct WifiSetupConnectionTestParams {
     u8 unk_0B;
 } WifiSetupConnectionTestParams;
 
-extern u8 gWifiSetupConnectionListSlotIconTemplates[];                    // slot icon template per setup method (3 = empty)
+extern u8 gWifiSetupConnectionListSlotIconTemplates[];              // slot icon template per setup method (3 = empty)
 extern WifiSetupPaletteRows gWifiSetupConnectionListPaletteRows[2]; // palette row per slot, icon palette per setup method
-extern WifiSetupPoint gWifiSetupConnectionListIconPositions[];        // slot icons 0-2, erase buttons 3-5
-extern WifiSetupRect gWifiSetupConnectionListTouchRects[];         // touch rects of the 7 selections
+extern WifiSetupPoint gWifiSetupConnectionListIconPositions[];      // slot icons 0-2, erase buttons 3-5
+extern WifiSetupRect gWifiSetupConnectionListTouchRects[];          // touch rects of the 7 selections
 extern WifiSetupRect gWifiSetupConnectionListCursorRects[];         // cursor rects of the 7 selections
-extern s8 gWifiSetupConnectionListEraseDigitPositions[];                    // digit position of the erase dialog per language
-extern WifiSetupPaletteRows gWifiSetupMethodMenuPaletteRows;    // palette row per setup method
+extern s8 gWifiSetupConnectionListEraseDigitPositions[];            // digit position of the erase dialog per language
+extern WifiSetupPaletteRows gWifiSetupMethodMenuPaletteRows;        // palette row per setup method
 extern WifiSetupPath22 gWifiSetupMethodMenuYbBgStep21NclPath;
 extern s8 gWifiSetupMethodMenuCursorMoves[][4][4];         // next method per method and direction, -1 none, -2 last
-extern WifiSetupRect gWifiSetupMethodMenuTouchRects[][4]; // touch rects of the methods
+extern WifiSetupRect gWifiSetupMethodMenuTouchRects[][4];  // touch rects of the methods
 extern WifiSetupRect gWifiSetupMethodMenuCursorRects[][4]; // cursor rects of the methods
-extern s8 gWifiSetupMethodMenuDigitPositions[];               // digit position of the method menu message per language
+extern s8 gWifiSetupMethodMenuDigitPositions[];            // digit position of the method menu message per language
 extern WifiSetupConnectionTestParams gWifiSetupConnectionTestParams;
 extern WifiSetupTestPromptMessages gWifiSetupTestPromptMessages;
 extern char gWifiSetupConnectionListYbObjMainNclPath[];

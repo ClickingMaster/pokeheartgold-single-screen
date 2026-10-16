@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "global.h"
 
 #include "dwc/net_common_internal.h"
@@ -52,27 +51,28 @@ void LobbyChat_StripChannelPrefixes(Vec *out, LobbyChatManager *manager, int n, 
     }
 }
 
-void LobbyChat_FormatNick(char *buf, int arg) {
-    u32 t = current_time();
-    LobbyString_FormatN(buf, 0x14, sFmt_N_UnderscoreIntUnderscoreUint, arg, t % 1000);
+// Nicks are "N_<user ID>_<n>", n changing with the time so a retry gets a new nick.
+void LobbyChat_FormatNick(char *buf, int userId) {
+    u32 time = current_time();
+    LobbyString_FormatN(buf, 0x14, sFmt_N_UnderscoreIntUnderscoreUint, userId, time % 1000);
 }
 
-int LobbyChat_GetUserIdFromNick(Str *s) {
-    Vec v;
-    Str sep;
+int LobbyChat_GetUserIdFromNick(Str *nick) {
+    Vec parts;
+    Str separator;
     int id;
-    LobbyString_InitFromCStr(&sep, sStr___2);
-    LobbyChat_SplitString(&v, s, &sep, 0);
-    LobbyString_Destroy(&sep);
-    if (v.size < 2) {
-        LobbyStringVector_Destroy(&v);
+    LobbyString_InitFromCStr(&separator, sStr___2);
+    LobbyChat_SplitString(&parts, nick, &separator, 0);
+    LobbyString_Destroy(&separator);
+    if (parts.size < 2) {
+        LobbyStringVector_Destroy(&parts);
         return -1;
     }
-    id = atol(StrData((Str *)v.ptr + 1));
+    id = atol(StrData((Str *)parts.ptr + 1));
     if (id == 0) {
-        LobbyStringVector_Destroy(&v);
+        LobbyStringVector_Destroy(&parts);
         return -1;
     }
-    LobbyStringVector_Destroy(&v);
+    LobbyStringVector_Destroy(&parts);
     return id;
 }

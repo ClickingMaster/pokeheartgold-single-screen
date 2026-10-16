@@ -7,8 +7,6 @@
 
 u32 WifiConnection_GetNumConnectionHost(void);
 
-#pragma force_active on
-
 void WiFiPlazaLobbyMatches_Set(WiFiPlazaLobbyClient *client, int index, int hostId, const WiFiPlazaLobbyMatchInfo *info) {
     GF_ASSERT(index < 3);
     if (WiFiPlazaLobbyMatches_IsActive(client, index) == TRUE && hostId != client->matches[index].hostId) {
@@ -21,8 +19,6 @@ void WiFiPlazaLobbyMatches_Set(WiFiPlazaLobbyClient *client, int index, int host
         client->matches[index].timer = WiFiPlazaLobbyMatches_CalcTimer(client, index);
     }
 }
-
-#pragma force_active reset
 
 // The host closed the session.
 BOOL WiFiPlazaLobbyMatches_Remove(WiFiPlazaLobbyClient *client, int index, int hostId) {
@@ -64,8 +60,6 @@ WiFiPlazaLobbyMatch *WiFiPlazaLobbyMatches_Get(WiFiPlazaLobbyClient *client, int
     return &client->matches[index];
 }
 
-#pragma force_active on
-
 // Once per frame (WiFiPlazaLobbyClient_Update; works on gWiFiPlazaLobbyClient): the player count of the own session, the
 // countdowns.
 void WiFiPlazaLobbyMatches_Update(WiFiPlazaLobbyClient *client) {
@@ -81,7 +75,7 @@ void WiFiPlazaLobbyMatches_Update(WiFiPlazaLobbyClient *client) {
         }
     }
     for (i = 0; i < 3; i++) {
-        // steps the client pointer by one match (0x4C bytes)
+        // p->matches[0] is match i
         WiFiPlazaLobbyClient *p = (WiFiPlazaLobbyClient *)((u8 *)gWiFiPlazaLobbyClient + i * 0x4C);
         if (*(volatile u16 *)&p->matches[0].active == 1) {
             u32 frames;
@@ -96,8 +90,6 @@ void WiFiPlazaLobbyMatches_Update(WiFiPlazaLobbyClient *client) {
         }
     }
 }
-
-#pragma force_active reset
 
 void WiFiPlazaLobbyMatchInfo_SetStartTime(WiFiPlazaLobbyMatchInfo *info, const s64 *time) {
     info->startTime = *(const WiFiPlazaLobbyEntryTime *)time;

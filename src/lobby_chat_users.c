@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "global.h"
 
 #include "dwc/net_common_internal.h"
@@ -63,15 +62,15 @@ Node *LobbyUserMap_LowerBound(Tree *t, int *key, Node *node, Node *res) {
     return res;
 }
 
-BOOL LobbyChat_RemoveChannelUser(LobbyChatManager *manager, Str *name, Str *key2) {
+BOOL LobbyChat_RemoveChannelUser(LobbyChatManager *manager, Str *nick, Str *channel) {
     Tree *channels = (Tree *)manager->channelMap;
     int id;
     Iter it;
-    id = LobbyChat_GetUserIdFromNick(name);
+    id = LobbyChat_GetUserIdFromNick(nick);
     if (id == -1) {
         return FALSE;
     }
-    LobbyChannelMap_Find(&it, channels, key2);
+    LobbyChannelMap_Find(&it, channels, channel);
     if (it.current == &channels->head) {
         return FALSE;
     }

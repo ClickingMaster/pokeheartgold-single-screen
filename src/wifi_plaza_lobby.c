@@ -62,8 +62,6 @@ void WiFiPlaza_SendTapToyTradeNews(void *unused, u32 slot0, u32 slot1, u8 value)
     WiFiPlazaLobbyClient_SendToLobby(4, &msg, sizeof(msg));
 }
 
-#pragma force_active on
-
 void WiFiPlaza_SendActivityNews(void *unused, int selector, int count, int slot0, int slot1, int slot2, int slot3, int flag) {
     WiFiPlazaLobbyMessage msg = { 0 };
     u32 type;
@@ -97,8 +95,6 @@ void WiFiPlaza_SendActivityNews(void *unused, int selector, int count, int slot0
     msg.unk_13_7 = flag;
     WiFiPlazaLobbyClient_SendToLobby(4, &msg, 20);
 }
-
-#pragma force_active reset
 
 void WiFiPlaza_SendMinigameResultNews(void *unused, int mode, u8 kind, u32 slot0, u32 slot1, u32 slot2, u32 slot3) {
     WiFiPlazaLobbyMessage msg;
@@ -221,8 +217,6 @@ void WiFiPlazaWork_ResetTalk(WiFiPlazaWork *work) {
     WiFiPlazaTalkSession_Reset(&work->talk);
 }
 
-#pragma force_active on
-
 int WiFiPlazaWork_StartTalk(WiFiPlazaWork *work, int slot) {
     if (work->talk.role) {
         return 0;
@@ -269,8 +263,6 @@ void WiFiPlazaWork_AdvanceTalk(WiFiPlazaWork *work, int value) {
     WiFiPlazaLobbyClient_SendToPlayer(2, WiFiPlazaLobbyClient_SlotToId(work->talk.partnerSlot), &work->talk.sendMessage, 4);
     WiFiPlazaTalkSession_StartTimeout(&work->talk);
 }
-
-#pragma force_active reset
 
 void WiFiPlazaWork_CancelTalkRequest(WiFiPlazaWork *work) {
     int id;

@@ -8,9 +8,6 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-// WifiSetupApScan_FreeWork + the definition of gWifiSetupApScan (kept in its own translation unit:
-// the code of a function changes when the global it uses is defined in the same file).
-
 WifiSetupApScan *gWifiSetupApScan;
 
 void WifiSetupApScan_FreeWork(void) {

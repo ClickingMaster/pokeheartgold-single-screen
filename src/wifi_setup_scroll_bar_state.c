@@ -7,9 +7,6 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-// WifiSetupScrollBar_Destroy + the definition of gWifiSetupScrollBar (kept in its own translation unit:
-// the code of a function changes when the global it uses is defined in the same file).
-
 WifiSetupScrollBar *gWifiSetupScrollBar;
 
 void WifiSetupScrollBar_Destroy(void) {

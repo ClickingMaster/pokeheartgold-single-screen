@@ -1,59 +1,61 @@
-#pragma force_active on
 #include "global.h"
+
+#include "wifi_setup.h"
+
 typedef struct Record {
     u32 unused;
     int length;
     u8 text[0x28];
     u8 fields[4][0x40];
 } Record;
+
 typedef struct Out {
     u16 flags;
     u8 pad[0x114];
     u8 terminator;
     u8 data[0x154];
 } Out;
+
 extern Record ov13_0224D8C0;
 extern Record ov13_0224D930;
 extern Record gWifiSetupWep64Record;
 extern Record gWifiSetupWep128Record;
-extern u32 gWifiSetupState[];
-void WifiSetup_MemFill(void *dst, int value, u32 size);
-void WifiSetup_MemCopy(void *dst, const void *src, u32 size);
-int WifiSetup_StrLen(const void *str);
+
 int WifiSetup_CheckPrintable(const void *str, int length);
 int WifiSetup_StoreAossResult(Out *out);
-// @fn WifiSetup_StoreAossResult
+
+// Copy the keys of the requested settings that were received into the result.
 int WifiSetup_StoreAossResult(Out *out) {
     Record *a = &ov13_0224D8C0;
     u8 *dst = out->data;
-    Record *c = &gWifiSetupWep64Record;
-    Record *d = &gWifiSetupWep128Record;
+    Record *wep64 = &gWifiSetupWep64Record;
+    Record *wep128 = &gWifiSetupWep128Record;
     Record *b = &ov13_0224D930;
 
     if (dst == NULL) {
         return -1;
     }
-    out->flags = gWifiSetupState[11] & gWifiSetupState[12];
+    out->flags = gWifiSetupState.requestedMask & gWifiSetupState.receivedMask;
     WifiSetup_MemFill(dst, 0, 0x154);
     if (out->flags & 1) {
-        WifiSetup_MemCopy(dst, c->fields[0], c->length);
-        WifiSetup_MemCopy(dst + 6, c->fields[1], c->length);
-        WifiSetup_MemCopy(dst + 12, c->fields[2], c->length);
-        WifiSetup_MemCopy(dst + 18, c->fields[3], c->length);
-        if (WifiSetup_CheckPrintable(c->text, WifiSetup_StrLen(c->text))) {
+        WifiSetup_MemCopy(dst, wep64->fields[0], wep64->length);
+        WifiSetup_MemCopy(dst + 6, wep64->fields[1], wep64->length);
+        WifiSetup_MemCopy(dst + 12, wep64->fields[2], wep64->length);
+        WifiSetup_MemCopy(dst + 18, wep64->fields[3], wep64->length);
+        if (WifiSetup_CheckPrintable(wep64->text, WifiSetup_StrLen(wep64->text))) {
             goto fail;
         }
-        WifiSetup_MemCopy(dst + 0x18, c->text, WifiSetup_StrLen(c->text));
+        WifiSetup_MemCopy(dst + 0x18, wep64->text, WifiSetup_StrLen(wep64->text));
     }
     if (out->flags & 2) {
-        WifiSetup_MemCopy(dst + 0x39, d->fields[0], d->length);
-        WifiSetup_MemCopy(dst + 0x47, d->fields[1], d->length);
-        WifiSetup_MemCopy(dst + 0x55, d->fields[2], d->length);
-        WifiSetup_MemCopy(dst + 0x63, d->fields[3], d->length);
-        if (WifiSetup_CheckPrintable(d->text, WifiSetup_StrLen(d->text))) {
+        WifiSetup_MemCopy(dst + 0x39, wep128->fields[0], wep128->length);
+        WifiSetup_MemCopy(dst + 0x47, wep128->fields[1], wep128->length);
+        WifiSetup_MemCopy(dst + 0x55, wep128->fields[2], wep128->length);
+        WifiSetup_MemCopy(dst + 0x63, wep128->fields[3], wep128->length);
+        if (WifiSetup_CheckPrintable(wep128->text, WifiSetup_StrLen(wep128->text))) {
             goto fail;
         }
-        WifiSetup_MemCopy(dst + 0x71, d->text, WifiSetup_StrLen(d->text));
+        WifiSetup_MemCopy(dst + 0x71, wep128->text, WifiSetup_StrLen(wep128->text));
     }
     if (out->flags & 4) {
         if (WifiSetup_CheckPrintable(a->fields[0], a->length - 1)) {

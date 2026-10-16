@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "global.h"
 
 #include "dwc/chat_internal.h"
@@ -38,28 +37,28 @@ extern const char sStr_SrcParamsNumSuggestedNicksGe0[];
 extern const char sStr_SrcParamsNumGe0[];
 
 // Assertion messages of the callback checks, with the name of the checking function and the line.
-#define ASSERT_CHAT(chat, func, line)                                     \
-    if (!(chat)) {                                                        \
+#define ASSERT_CHAT(chat, func, line)                                             \
+    if (!(chat)) {                                                                \
         __msl_assertion_failed(sStr_ChatNeNULL, sStr_ChatCallbacksC, func, line); \
     }
-#define ASSERT_CALLBACK(callback, func, line)                             \
-    if (!(callback)) {                                                    \
-        __msl_assertion_failed(sStr_DataNeNULL, sStr_ChatCallbacksC, func, line); \
-    }                                                                     \
-    if ((callback)->type < 0) {                                           \
-        __msl_assertion_failed(sStr_DataTypeGe0, sStr_ChatCallbacksC, func, line); \
-    }                                                                     \
-    if ((callback)->type >= CALLBACK_NUM) {                               \
-        __msl_assertion_failed(sStr_DataTypeLtCALLBACK_NUM, sStr_ChatCallbacksC, func, line); \
-    }                                                                     \
-    if (!(callback)->callback) {                                          \
-        __msl_assertion_failed(sStr_DataCallbackNeNULL, sStr_ChatCallbacksC, func, line); \
-    }                                                                     \
-    if (!(callback)->param) {                                             \
+#define ASSERT_CALLBACK(callback, func, line)                                                   \
+    if (!(callback)) {                                                                          \
+        __msl_assertion_failed(sStr_DataNeNULL, sStr_ChatCallbacksC, func, line);               \
+    }                                                                                           \
+    if ((callback)->type < 0) {                                                                 \
+        __msl_assertion_failed(sStr_DataTypeGe0, sStr_ChatCallbacksC, func, line);              \
+    }                                                                                           \
+    if ((callback)->type >= CALLBACK_NUM) {                                                     \
+        __msl_assertion_failed(sStr_DataTypeLtCALLBACK_NUM, sStr_ChatCallbacksC, func, line);   \
+    }                                                                                           \
+    if (!(callback)->callback) {                                                                \
+        __msl_assertion_failed(sStr_DataCallbackNeNULL, sStr_ChatCallbacksC, func, line);       \
+    }                                                                                           \
+    if (!(callback)->param) {                                                                   \
         __msl_assertion_failed(sStr_DataCallbackParamsNeNULL, sStr_ChatCallbacksC, func, line); \
-    }                                                                     \
-    if ((callback)->id < 0) {                                             \
-        __msl_assertion_failed(sStr_DataID_Ge0, sStr_ChatCallbacksC, func, line); \
+    }                                                                                           \
+    if ((callback)->id < 0) {                                                                   \
+        __msl_assertion_failed(sStr_DataID_Ge0, sStr_ChatCallbacksC, func, line);               \
     }
 
 void ciFreeCallbackData(ChatCallback *callback) {
@@ -341,19 +340,19 @@ void ciCleanupCallbacks(ChatConnection *chat) {
 #define ASSERT(test, string, line) \
     if (!(test))                   \
     __msl_assertion_failed(string, sStr_ChatCallbacksC, sStr_ciAddCallback_, line)
-#define FAIL()                       \
-    {                                \
+#define FAIL()                     \
+    {                              \
         DWCi_GsFree(dst);          \
         DWCi_GsFree(item.channel); \
-        return FALSE;                \
+        return FALSE;              \
     }
 // Copies the string argument i into the stored parameters.
-#define COPY_STRING(i)                               \
-    if (src[i]) {                                    \
+#define COPY_STRING(i)                           \
+    if (src[i]) {                                \
         dst[i] = (u32)goastrdup((char *)src[i]); \
-        if (!dst[i]) {                               \
-            FAIL();                                  \
-        }                                            \
+        if (!dst[i]) {                           \
+            FAIL();                              \
+        }                                        \
     }
 
 BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *user, int id, char *channel, int size) {

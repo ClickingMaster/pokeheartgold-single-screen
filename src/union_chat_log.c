@@ -26,8 +26,7 @@
 #include "touchscreen.h"
 #include "union_room_talk.h"
 
-// Link player record of the communication layer (wireless_connection_state_8.c); only the chat
-// message and its sender are read here.
+// Link player record of the communication layer; only the chat message and its sender are read here.
 typedef struct UnionChatLogPeerChat {
     u32 trainerId;
     u32 unk_04;
@@ -39,8 +38,6 @@ typedef struct UnionChatLogPeer {
     UnionChatLogPeerChat chat; // 0x50
 } UnionChatLogPeer;
 
-// wireless_connection_state_8.c; its header declares CommWireless_GetParentProfile with another return type than
-// union_room_talk.h, so the two are declared here.
 extern UnionChatLogPeer *CommWireless_GetParentInfo(int index);
 extern PlayerProfile *CommWireless_GetProfile(void);
 
@@ -415,9 +412,6 @@ void UnionChatLog_UpdateScrollbar(UnionChatLogData *data) {
     data->prevCount = data->count;
 }
 
-// force_active only sets a section flag here; kept so the object stays identical.
-#pragma force_active on
-
 // Buttons: 0/1 arrows, 2-4 rows, 5 scrollbar, 6 "Menu" bar. Touching a row makes the avatar of
 // the message's sender react in the Union Room.
 int UnionChatLog_HandleTouchButtons(UnionChatLogData *data) {
@@ -482,8 +476,6 @@ int UnionChatLog_HandleTouchButtons(UnionChatLogData *data) {
     }
     return hit;
 }
-
-#pragma force_active reset
 
 // Hitbox 0 is the scrollbar strip (dragging the thumb), 1-3 the rows.
 int UnionChatLog_HandleTouchScrollbar(UnionChatLogData *data) {
@@ -562,8 +554,6 @@ void UnionChatLog_HandleInput(UnionChatLogData *data) {
     UnionChatLog_UpdateRowPress(data->bgConfig, data->screenData, data->rows, scrollbarHit - 1, data->log->count, &data->pressSum);
 }
 
-#pragma force_active on
-
 // A pressed row slides down with its press timer; rows that are not held count back.
 void UnionChatLog_UpdateRowPress(BgConfig *bgConfig, NNSG2dScreenData *screenData, UnionChatLogRow *rows, int heldRow, int count, int *pressSum) {
     int i;
@@ -610,8 +600,6 @@ void UnionChatLog_UpdateRowPress(BgConfig *bgConfig, NNSG2dScreenData *screenDat
     BgCopyOrUncompressTilemapBufferRangeToVram(bgConfig, GF_BG_LYR_SUB_3, GetBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_3), 0x600, 0);
 }
 
-#pragma force_active reset
-
 // "{name}'s friend" under a message whose sender is in the Pal Pad: the player's own name when
 // the sender registered the player, else the Pal Pad entry that knows the sender. NULL otherwise.
 String *UnionChatLog_GetFriendOfText(SavePalPad *palPad, u32 trainerId, MessageFormat *msgFormat, MsgData *msgData, PlayerProfile *profile) {
@@ -635,8 +623,6 @@ String *UnionChatLog_GetFriendOfText(SavePalPad *palPad, u32 trainerId, MessageF
     }
     return result;
 }
-
-#pragma force_active on
 
 void UnionChatLog_AddEntry(UnionChatLogData *data, u32 trainerId, MailMessage *mail, PlayerProfile *profile) {
     UnionChatLogMessages *log = data->log;
@@ -665,8 +651,6 @@ void UnionChatLog_AddEntry(UnionChatLogData *data, u32 trainerId, MailMessage *m
         log->head = 0;
     }
 }
-
-#pragma force_active reset
 
 BOOL UnionChatLog_IsNewMessage(UnionChatLogData *data, MailMessage *mail, u32 trainerId) {
     int i;

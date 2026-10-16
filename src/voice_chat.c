@@ -15,8 +15,6 @@ extern u8 *MIC_GetLastSamplingAddress(void);
 extern void MIC_StopAutoSampling(void);
 extern int Comm_IsWifiPeerLinkMode(void);
 
-#pragma force_active on
-
 void VoiceChat_InitAudio(void) {
     int i;
 
@@ -41,12 +39,8 @@ void VoiceChat_InitAudio(void) {
     VCT_EnableEchoCancel(1);
 }
 
-#pragma force_active reset
-
 void VoiceChat_MicCallback(MICResult result, void *arg) {
 }
-
-#pragma force_active on
 
 void VoiceChat_StreamCallback(BOOL isAlarm, int numChannels, void **buffers, u32 size, int format, void *arg) {
     u8 *address = arg; // the stream argument is the work, which starts with the mic buffer
@@ -78,8 +72,6 @@ void VoiceChat_StreamCallback(BOOL isAlarm, int numChannels, void **buffers, u32
     gVoiceChat.work->samplingState = 2;
 }
 
-#pragma force_active reset
-
 BOOL VoiceChat_RequestSession(u32 aid) {
     Session *session = gVoiceChat.work->session;
     if (session == NULL) {
@@ -100,7 +92,7 @@ BOOL VoiceChat_RequestSession(u32 aid) {
     return TRUE;
 }
 
-// The only caller passes 0 (kept: removing the argument changes its code).
+// The only caller passes 0.
 BOOL VoiceChat_AcceptSession(int unused) {
     Session *session = gVoiceChat.work->session;
     if (session != NULL && session->mode == 4) {
@@ -128,8 +120,6 @@ void VoiceChat_ConferenceEventCallback(u32 unusedId, u32 event, Session *session
         return;
     }
 }
-
-#pragma force_active on
 
 void VoiceChat_PhoneEventCallback(u32 unusedId, u32 event, Session *session, void *unusedContext) {
     switch (event) {
@@ -172,15 +162,11 @@ void VoiceChat_PhoneEventCallback(u32 unusedId, u32 event, Session *session, voi
     }
 }
 
-#pragma force_active reset
-
 void VoiceChat_EndSession(Session *session) {
     VCT_StopStreaming(session);
     VCT_DeleteSession(session);
     gVoiceChat.work->session = NULL;
 }
-
-#pragma force_active on
 
 void VoiceChat_Update(void) {
     u64 now = OS_GetTick();
@@ -239,8 +225,6 @@ void VoiceChat_Update(void) {
     }
 }
 
-#pragma force_active reset
-
 BOOL VoiceChat_ReceiveData(u32 aid, void *data, u32 size) {
     if (gVoiceChat.work == NULL) {
         return FALSE;
@@ -257,8 +241,6 @@ void VoiceChat_AllocAligned(void **allocation, void **aligned, u32 size, u32 hea
     MI_CpuFill8(*allocation, 0, allocSize);
     *aligned = (void *)(((u32)*allocation + 0x1F) & ~0x1F);
 }
-
-#pragma force_active on
 
 void VoiceChat_Init(int heapId, int codec, int count) {
     u8 channels[3] = { 0, 0, 0 };
@@ -315,13 +297,11 @@ void VoiceChat_Init(int heapId, int codec, int count) {
     VCT_EnableEchoCancel(1);
 }
 
-#pragma force_active reset
-
 void VoiceChat_StartStream(void) {
     NNS_SndStrmStart(&gVoiceChat.work->stream);
 }
 
-// The only caller passes the voice chat active flag (kept: removing the argument changes its code).
+// The only caller passes the voice chat active flag.
 void VoiceChat_HangUp(int unused) {
     Session *session = gVoiceChat.work->session;
     u32 callState;
@@ -345,8 +325,6 @@ void VoiceChat_HangUp(int unused) {
 void VoiceChat_SetEndCallback(void (*callback)(void)) {
     gVoiceChat.work->endCallback = callback;
 }
-
-#pragma force_active on
 
 void VoiceChat_Shutdown(void) {
     void (*callback)(void);
@@ -375,8 +353,6 @@ int VoiceChat_GetVoiceActivity(void) {
     }
     return 0;
 }
-
-#pragma force_active reset
 
 void VoiceChat_Mute(void) {
     gVoiceChat.work->muted = TRUE;

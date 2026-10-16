@@ -1,11 +1,9 @@
-#pragma force_active on
 #include "global.h"
 
 #include "dwc/chat_internal.h"
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-
 #include <stdarg.h>
 #include <string.h>
 
@@ -51,30 +49,30 @@ extern const char sStr_Space_4[];
 extern char ciSendfBuffer[];
 
 // Assertion with the message, the name of the checking function and the line.
-#define ASSERT(cond, message, func, line)                           \
-    if (!(cond)) {                                                  \
+#define ASSERT(cond, message, func, line)                              \
+    if (!(cond)) {                                                     \
         __msl_assertion_failed(message, sStr_ChatSocketC, func, line); \
     }
 // A valid socket: state 0 .. 2 and both buffers consistent.
-#define ASSERT_SOCKET(sock, func, line)                                            \
-    ASSERT(sock, sStr_SockNeNULL_2, func, line);                                       \
-    ASSERT((sock)->state <= ciDisconnected, sStr_SockConnectStateEqCiNotConnectedOrSock, func, line);            \
-    ASSERT(&(sock)->input, sStr_SockInputQueueNeNULL, func, line);                             \
-    ASSERT((sock)->input.size >= 0, sStr_SockInputQueueSizeGe0, func, line);                    \
-    ASSERT((sock)->input.size % 0x2000 == 0, sStr_SockInputQueueSizeBUFFER_INC_Eq0, func, line);           \
-    ASSERT((sock)->input.length >= 0, sStr_SockInputQueueLengthGe0, func, line);                  \
+#define ASSERT_SOCKET(sock, func, line)                                                                            \
+    ASSERT(sock, sStr_SockNeNULL_2, func, line);                                                                   \
+    ASSERT((sock)->state <= ciDisconnected, sStr_SockConnectStateEqCiNotConnectedOrSock, func, line);              \
+    ASSERT(&(sock)->input, sStr_SockInputQueueNeNULL, func, line);                                                 \
+    ASSERT((sock)->input.size >= 0, sStr_SockInputQueueSizeGe0, func, line);                                       \
+    ASSERT((sock)->input.size % 0x2000 == 0, sStr_SockInputQueueSizeBUFFER_INC_Eq0, func, line);                   \
+    ASSERT((sock)->input.length >= 0, sStr_SockInputQueueLengthGe0, func, line);                                   \
     ASSERT((sock)->input.length <= (sock)->input.size, sStr_SockInputQueueLengthLeSockInputQueueSize, func, line); \
-    ASSERT(&(sock)->output, sStr_SockOutputQueueNeNULL, func, line);                            \
-    ASSERT((sock)->output.size >= 0, sStr_SockOutputQueueSizeGe0, func, line);                   \
-    ASSERT((sock)->output.size % 0x2000 == 0, sStr_SockOutputQueueSizeBUFFER_INC_Eq0, func, line);          \
-    ASSERT((sock)->output.length >= 0, sStr_SockOutputQueueLengthGe0, func, line);                 \
+    ASSERT(&(sock)->output, sStr_SockOutputQueueNeNULL, func, line);                                               \
+    ASSERT((sock)->output.size >= 0, sStr_SockOutputQueueSizeGe0, func, line);                                     \
+    ASSERT((sock)->output.size % 0x2000 == 0, sStr_SockOutputQueueSizeBUFFER_INC_Eq0, func, line);                 \
+    ASSERT((sock)->output.length >= 0, sStr_SockOutputQueueLengthGe0, func, line);                                 \
     ASSERT((sock)->output.length <= (sock)->output.size, sStr_SockOutputQueueLengthLeSockOutputQueueSize, func, line);
 
 // Frees a part of the message and clears it.
-#define FREE_PART(part)      \
-    if (part) {              \
+#define FREE_PART(part)    \
+    if (part) {            \
         DWCi_GsFree(part); \
-        part = NULL;         \
+        part = NULL;       \
     }
 
 // Connects the socket to the server (a dotted address or a host name).

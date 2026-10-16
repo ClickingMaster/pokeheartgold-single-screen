@@ -67,11 +67,11 @@ void *LobbyEnumChannelsRequest_Delete(void *p) {
 
 void LobbyRequestMap_Insert(InsertResult *out, Tree *t, Obj **val) {
     Node *pos;
-    u8 a;
-    u8 b;
-    Node *parent = LobbyRequestMap_FindInsertPos(t, val, &pos, &a, &b);
+    u8 insertLeft;
+    u8 isLeftmost;
+    Node *parent = LobbyRequestMap_FindInsertPos(t, val, &pos, &insertLeft, &isLeftmost);
     if (pos == NULL || pos->key.obj->id < (*val)->id) {
-        out->node = LobbyRequestMap_InsertNode(t, parent, a, b, val);
+        out->node = LobbyRequestMap_InsertNode(t, parent, insertLeft, isLeftmost, val);
         out->inserted = ov45_02255228[1];
         return;
     }

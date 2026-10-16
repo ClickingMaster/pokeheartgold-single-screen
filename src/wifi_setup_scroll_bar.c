@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "wifi_setup_scroll_bar.h"
 
 #include "global.h"
@@ -11,7 +10,7 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-// Vertical scroll bar and the access-point scan work allocation (see include/wifi_setup_scroll_bar.h).
+// Vertical scroll bar and the access-point scan work allocation.
 
 extern u8 gWifiSetupScrollBarThumbLengths[]; // thumb length per kind
 extern s32 FX_DivS32(s32, s32);

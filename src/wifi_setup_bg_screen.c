@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "global.h"
 
 #include "wifi_setup_access_points.h"
@@ -9,7 +8,7 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-// BG 2 screen copy and palette uploads, scroll bar creation (see include/wifi_setup_scroll_bar.h).
+// BG 2 screen copy and palette uploads, scroll bar creation.
 
 extern u8 gWifiSetupScrollBarThumbTemplates[]; // thumb template per kind
 

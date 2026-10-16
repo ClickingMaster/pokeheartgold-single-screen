@@ -79,7 +79,6 @@ static inline int BindSocket(int socket, WifiSetupSockAddr *address) {
     return SOC_Bind(socket, address);
 }
 
-#pragma force_active on
 #pragma opt_dead_assignments off
 
 // Worker state machine: scan for the access point, connect, open the UDP socket (port 486), wait for
@@ -255,4 +254,3 @@ int WifiSetup_RunSession(void) {
 }
 
 #pragma opt_dead_assignments reset
-#pragma force_active reset

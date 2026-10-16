@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "global.h"
 
 #include "wifi_setup_app.h"
@@ -12,10 +11,9 @@
 #include <nitro/code32.h>
 
 // Wi-Fi USB connector screen: waits for the USB connector scan (WifiSetupUsbScan) and reacts to its
-// result with dialogs; the exit code picks the next screen. Followed by the creation of the BG 2
-// screen copy (see wifi_setup_scroll_bar.c).
+// result with dialogs; the exit code picks the next screen. Also the creation of the BG 2 screen copy.
 
-// gWifiSetupUsbConnectorExit
+// values of gWifiSetupUsbConnectorExit
 #define USB_CONNECTOR_RUNNING 0
 #define USB_CONNECTOR_BACK    1
 

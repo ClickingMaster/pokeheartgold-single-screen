@@ -1,15 +1,12 @@
-#pragma force_active on
 #include "global.h"
 
 #include "dwc/chat_internal.h"
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-
 #include <string.h>
 
-// The last two functions of the chat main module (assertions name "chatMain.c") and the line buffer functions of
-// the socket module ("chatSocket.c"), which share this object.
+// Nick checks of the chat connection and the line buffer of the chat socket.
 
 extern void __msl_assertion_failed(const char *, const char *, const char *, int);
 extern char *strchr(const char *, int);
@@ -34,16 +31,16 @@ extern const char sStr_LenLeBufferLength[];
 extern const char sStr_SockNeNULL[];
 
 // Assertion of the socket module with the message, the name of the checking function and the line.
-#define ASSERT(cond, message, func, line)                           \
-    if (!(cond)) {                                                  \
+#define ASSERT(cond, message, func, line)                              \
+    if (!(cond)) {                                                     \
         __msl_assertion_failed(message, sStr_ChatSocketC, func, line); \
     }
 // A valid buffer: size a multiple of 0x2000, 0 <= length <= size.
-#define ASSERT_BUFFER(buffer, func, line)                            \
-    ASSERT(buffer, sStr_BufferNeNULL_3, func, line);                       \
-    ASSERT((buffer)->size >= 0, sStr_BufferSizeGe0, func, line);          \
+#define ASSERT_BUFFER(buffer, func, line)                                            \
+    ASSERT(buffer, sStr_BufferNeNULL_3, func, line);                                 \
+    ASSERT((buffer)->size >= 0, sStr_BufferSizeGe0, func, line);                     \
     ASSERT((buffer)->size % 0x2000 == 0, sStr_BufferSizeBUFFER_INC_Eq0, func, line); \
-    ASSERT((buffer)->length >= 0, sStr_BufferLengthGe0, func, line);        \
+    ASSERT((buffer)->length >= 0, sStr_BufferLengthGe0, func, line);                 \
     ASSERT((buffer)->length <= (buffer)->size, sStr_BufferLengthLeBufferSize, func, line);
 
 // Checks a nick: 0 = valid, 6 = too long, 2 = empty, bad first character or a character outside sStr_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuv_3.

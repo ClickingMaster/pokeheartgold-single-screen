@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "global.h"
 
 #include "wifi_setup_address_entry.h"
@@ -12,12 +11,11 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-// The end of the address entry (the "invalid address" message) and the error screen
-// (0x02232770-0x02232E04): shows gWifiSetupErrorCode with the message for its range and waits for
+// The end of the address entry (the "invalid address" message) and the error screen: shows gWifiSetupErrorCode with the message for its range and waits for
 // the button.
 
-extern const u8 gWifiSetupErrorScreenFonts[];  // font per language
-extern const u16 gWifiSetupErrorCodeX[]; // x, y of the code per language
+extern const u8 gWifiSetupErrorScreenFonts[]; // font per language
+extern const u16 gWifiSetupErrorCodeX[];      // x, y of the code per language
 extern const u16 gWifiSetupErrorCodeY[];
 extern char gWifiSetupErrorScreenJb4ErrorNscPath[];
 extern const u16 gWifiSetupErrorCodeFormat[]; // error code format

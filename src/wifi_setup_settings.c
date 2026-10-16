@@ -19,8 +19,8 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-// Connection settings screen (0x02232E04-0x022347E4). The item handlers, the scroll tasks and the
-// drawing tasks follow in src/wifi_setup_auto_setup.c.
+// Connection settings screen: loading, fading and the item list. The item handlers, scroll tasks and
+// drawing tasks are with the automatic setup screens.
 
 typedef struct WifiSetupGraphicsPath21 {
     char text[21];
@@ -38,7 +38,7 @@ extern const WifiSetupGraphicsPath21 gWifiSetupSettingsYbBgStep2NclPath;
 extern const WifiSetupGraphicsPath22 gWifiSetupSettingsYbBgStep21NclPath;
 extern const WifiSetupGraphicsPath23 gWifiSetupSettingsJb3ListBackNscPath;
 extern u8 gWifiSetupSettingsButtonTemplates[][3]; // OAM template per button type and option
-extern u16 gWifiSetupSettingsRowTileOffsets[];   // top screen tile offset per first visible item
+extern u16 gWifiSetupSettingsRowTileOffsets[];    // top screen tile offset per first visible item
 extern WifiSetupRect gWifiSetupSettingsTouchRects[];
 extern s8 gWifiSetupSettingsDigitPositions[];
 extern u8 gWifiSetupSettingsRowItems[]; // item per row touched
@@ -49,9 +49,8 @@ extern u8 gWifiSetupSettingsJbBgStep21NcgPath[];
 extern u8 gWifiSetupSettingsJb3ListNscPath[];
 extern u8 gWifiSetupSettingsYbObjMainNclPath[];
 extern u16 gWifiSetupSettingsAddressFormat[]; // address format
-extern u32 ov13_0224F554[]; // &gWifiSetupSettings.work
+extern u32 ov13_0224F554[];                   // &gWifiSetupSettings.work
 
-// src/wifi_setup_ui_parts.c; WifiSetupMessage_Hide is called with an argument
 extern int WifiSetupMessage_Show();
 extern int WifiSetupMessage_Hide();
 extern void WifiSetupBanner_Show(int);

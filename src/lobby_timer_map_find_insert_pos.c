@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "global.h"
 
 // The code below is compiled as ARM (32-bit) code.
@@ -15,7 +14,6 @@ typedef struct {
 } Tree;
 
 Node *LobbyTimerMap_FindInsertPos(Tree *, const u32 *, Node **, u8 *, u8 *);
-#pragma force_active on
 
 Node *LobbyTimerMap_FindInsertPos(Tree *t, const u32 *key, Node **last, u8 *left, u8 *first) {
     Node *n;

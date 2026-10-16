@@ -16,8 +16,6 @@ static inline char *CopyName(char *name, const WifiSetupApEntry *entry) {
     return name;
 }
 
-#pragma force_active on
-
 // Compares two scan results. Picks the first access point of current that is also in previous
 // (same SSID and BSSID) but has just dropped privacy, or else the open setup access point
 // (sWifiSetupSetupApSsid) when it is new in current. Returns 1 and its index in *selected if one was found.
@@ -93,5 +91,3 @@ int WifiSetup_PickSetupAccessPoint(const WifiSetupApEntryList *current, const Wi
     }
     return result;
 }
-
-#pragma force_active reset

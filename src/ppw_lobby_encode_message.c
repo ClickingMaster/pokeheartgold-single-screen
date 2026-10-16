@@ -1,4 +1,3 @@
-#pragma force_active on
 #pragma warn_uninitializedvar off
 #include "global.h"
 

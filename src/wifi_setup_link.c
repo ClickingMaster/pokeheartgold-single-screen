@@ -3,7 +3,7 @@
 #include "wifi_setup_internal.h"
 #include "wifi_setup_wcm.h"
 
-// Second copy of the WCM wrapper (see wifi_setup_wcm.h), on the worker's state gWifiSetupWork, plus
+// Second copy of the WCM wrapper, on the worker's state gWifiSetupWork, plus
 // the worker's link steps: open (start WCM), connect to the chosen access point and start the
 // socket library, disconnect, close. WCM events are queued (gWifiSetupLinkEventQueue) and polled by the worker.
 
@@ -13,13 +13,11 @@ extern OSMutex gWifiSetupLinkMutex;
 extern u8 gWifiSetupLinkSearchBssid[6];
 extern u8 gWifiSetupLinkSearchSsid[32];
 extern u8 sWifiSetupLinkSocConfig[]; // socket library configuration
-extern u8 WCM_Bssid_Any[];     // BSSID ff:ff:ff:ff:ff:ff (any)
-extern u8 WCM_Essid_Any[];     // SSID of 0xFF bytes (any)
+extern u8 WCM_Bssid_Any[];           // BSSID ff:ff:ff:ff:ff:ff (any)
+extern u8 WCM_Essid_Any[];           // SSID of 0xFF bytes (any)
 
 int SOC_Startup(void *config);
 void SOC_Cleanup(void);
-
-#pragma force_active on
 
 void WifiSetupLink_HandleEvent(WifiSetupWcmEvent *event) {
     if (!event) {
@@ -201,8 +199,6 @@ void WifiSetupLink_HandleEvent(WifiSetupWcmEvent *event) {
     }
 }
 
-#pragma force_active reset
-
 // Starts the request that leads back to the idle state (stop the search, disconnect, or start up).
 int WifiSetupLink_ReturnToIdle(void) {
     switch (gWifiSetupWork.wcmState) {
@@ -328,8 +324,6 @@ int WifiSetupLink_StartCleanup(void) {
     return 0;
 }
 
-#pragma force_active on
-
 int WifiSetupLink_StartConnect(void *ap, void *key, int option) {
     OSIntrMode irq = OS_DisableInterrupts();
     gWifiSetupWork.connectOption = option;
@@ -391,8 +385,6 @@ int WifiSetupLink_Init(void (*eventCallback)(u32 event, int arg), u8 *buffer, in
     OS_RestoreInterrupts(irq);
     return 0;
 }
-
-#pragma force_active reset
 
 int WifiSetupLink_GetState(void) {
     return gWifiSetupWork.wcmState;
@@ -564,8 +556,6 @@ int WifiSetupLink_Close(void) {
     return 1;
 }
 
-#pragma force_active on
-
 // Connects to the selected access point (retrying after event 13), then starts the socket library.
 // Returns 1, 0 (no access point), -2, -3 (deadline passed) or -8 (stopped).
 int WifiSetupLink_ConnectSelectedAp(void) {
@@ -631,8 +621,6 @@ int WifiSetupLink_ConnectSelectedAp(void) {
     }
     return result;
 }
-
-#pragma force_active reset
 
 // Disconnects (waits for event 14) and stops the socket library.
 void WifiSetupLink_DisconnectAp(void) {

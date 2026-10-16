@@ -13,18 +13,17 @@
 #include "party_menu.h"
 #include "player_data.h"
 #include "pokedex_util.h"
+#include "pokemon_summary.h"
 #include "save.h"
 #include "save_special_ribbons.h"
-#include "pokemon_summary.h"
 
-// The frontier link lobby (frontier/frontier_link_lobby.h): its link messages and the party menu / summary it opens.
+// The frontier link lobby: its link messages and the party menu / summary it opens.
 
 typedef struct FrontierLinkLobbyGlobals {
     FrontierLinkLobby *lobby;
     u8 filler_04[0xC];
 } FrontierLinkLobbyGlobals;
 
-// Link messages (battle_frontier_communication.c).
 extern BOOL FrontierLinkLobby_SendFacility(FrontierLinkLobby *lobby);
 extern BOOL FrontierLinkLobby_SendChoice(FrontierLinkLobby *lobby, u16 choice);
 extern BOOL FrontierLinkLobby_SendParty(FrontierLinkLobby *lobby, u16 first, u16 second);
@@ -40,7 +39,6 @@ void FrontierLinkLobby_ReadSummaryResult(void *frontierWork, FrontierLinkLobby *
 
 FrontierLinkLobbyGlobals gFrontierLinkLobby;
 
-// Declared returning the lobby by its caller (frontier_cmd_link_lobby.c): it is still in r0 after the last store.
 void FrontierLinkLobby_New(SaveData *saveData) {
     gFrontierLinkLobby.lobby = Heap_Alloc(HEAP_ID_FIELD2, sizeof(FrontierLinkLobby));
     MI_CpuFill8(gFrontierLinkLobby.lobby, 0, sizeof(FrontierLinkLobby));

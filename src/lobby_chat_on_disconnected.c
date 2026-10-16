@@ -6,21 +6,23 @@
 #include "lobby_chat_internal.h"
 
 void LobbyChat_OnRaw(void) {
-    if (gLobbyChatManager && gLobbyChatManager->state == 5) {
+    if (gLobbyChatManager && gLobbyChatManager->state == LOBBY_CHAT_STATE_ERROR) {
         return;
     }
 }
 
+// A disconnect requested by LobbyChat_Shutdown frees the session; any other one is an error.
 void LobbyChat_OnDisconnected(void) {
-    int zero;
+    int timerId;
     LobbyChatManager *manager;
-    if (gLobbyChatManager && gLobbyChatManager->state == 5) {
+    if (gLobbyChatManager && gLobbyChatManager->state == LOBBY_CHAT_STATE_ERROR) {
         return;
     }
-    zero = 0;
-    LobbyTimerMap_EraseKey(gLobbyChatManager->timerMap, &zero, 0);
+    // stop the connect timeout
+    timerId = 0;
+    LobbyTimerMap_EraseKey(gLobbyChatManager->timerMap, &timerId, 0);
     manager = gLobbyChatManager;
-    if (manager->state == 4) {
+    if (manager->state == LOBBY_CHAT_STATE_DISCONNECTING) {
         if (!manager) {
             return;
         }
@@ -34,6 +36,6 @@ void LobbyChat_OnDisconnected(void) {
         return;
     }
     manager->lastError = 3;
-    manager->state = 5;
+    manager->state = LOBBY_CHAT_STATE_ERROR;
     gLobbyChatManager->disconnected = 1;
 }

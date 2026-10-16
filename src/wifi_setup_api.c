@@ -64,8 +64,6 @@ void WifiSetup_WorkFree(void *ptr) {
     gWifiSetupWork.free(ptr);
 }
 
-#pragma force_active on
-
 // Two uppercase hex digits of a byte.
 int WifiSetup_FormatHexByte(char *dst, int value) {
     char *cursor = dst;
@@ -89,8 +87,6 @@ int WifiSetup_FormatHexByte(char *dst, int value) {
     return cursor - dst;
 }
 
-#pragma force_active reset
-
 // "XX:XX:XX:XX:XX:XX"
 int WifiSetup_FormatMacAddress(char *dst, const s8 *mac) {
     char *p = dst;
@@ -107,8 +103,6 @@ int WifiSetup_FormatMacAddress(char *dst, const s8 *mac) {
 
 // the worker thread changes the state: read and write it as volatile here
 #define WORK_STATE (*(volatile s32 *)&gWifiSetupWork.state)
-
-#pragma force_active on
 
 int WifiSetup_StartSimpleStart(u32 priority, u32 count, void (*statusCallback)(s32 *), WifiSetupWorkAllocFunc alloc, WifiSetupWorkFreeFunc free, u32 stackSize) {
     int result;
@@ -149,8 +143,6 @@ int WifiSetup_StartSimpleStart(u32 priority, u32 count, void (*statusCallback)(s
     gWifiSetupWork.active = 1;
     return 1;
 }
-
-#pragma force_active reset
 
 #undef WORK_STATE
 

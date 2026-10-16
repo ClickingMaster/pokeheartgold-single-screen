@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "global.h"
 
 #include "wifi_setup_access_points.h"
@@ -26,8 +25,8 @@ typedef struct WifiSetupAddressMessages {
     u8 messages[5];
 } WifiSetupAddressMessages;
 
-// screen layout read by src/wifi_setup_address_entry.c as well: field limit "255", digit positions,
-// and the message shown per address kind at 0x08
+// Screen layout shared with the address entry screen: field limit "255", digit positions and the
+// message shown per address kind
 typedef struct WifiSetupAddressLayout {
     u8 unk_00[8];
     WifiSetupAddressMessages messages; // 0x08

@@ -7,62 +7,65 @@
 
 #include "lobby_chat_internal.h"
 
-void LobbyChat_OnTopicChanged(void *a, char *s, void *b) {
-    Str x, y, z;
+void LobbyChat_OnTopicChanged(void *chat, char *channel, void *topic) {
+    Str channelKey;
+    Str fullName;
+    Str channelName;
     LobbyChannelCallbacks *callbacks;
-    if (gLobbyChatManager && gLobbyChatManager->state == 5) {
+    if (gLobbyChatManager && gLobbyChatManager->state == LOBBY_CHAT_STATE_ERROR) {
         return;
     }
-    LobbyString_InitFromCStr(&x, s);
-    callbacks = LobbyChat_GetChannelCallbacks(gLobbyChatManager, &x);
-    LobbyString_Destroy(&x);
-    LobbyString_InitFromCStr(&y, s);
-    LobbyChat_StripChannelPrefix(&z, gLobbyChatManager, &y);
-    callbacks->onTopicChanged(StrData(&z), b, callbacks->param);
-    LobbyString_Destroy(&z);
-    LobbyString_Destroy(&y);
+    LobbyString_InitFromCStr(&channelKey, channel);
+    callbacks = LobbyChat_GetChannelCallbacks(gLobbyChatManager, &channelKey);
+    LobbyString_Destroy(&channelKey);
+    LobbyString_InitFromCStr(&fullName, channel);
+    LobbyChat_StripChannelPrefix(&channelName, gLobbyChatManager, &fullName);
+    callbacks->onTopicChanged(StrData(&channelName), topic, callbacks->param);
+    LobbyString_Destroy(&channelName);
+    LobbyString_Destroy(&fullName);
 }
 
 void LobbyChat_OnChannelModeChanged(void) {
-    if (gLobbyChatManager && gLobbyChatManager->state == 5) {
+    if (gLobbyChatManager && gLobbyChatManager->state == LOBBY_CHAT_STATE_ERROR) {
         return;
     }
 }
 
 void LobbyChat_OnUserListUpdated(void) {
-    if (gLobbyChatManager && gLobbyChatManager->state == 5) {
+    if (gLobbyChatManager && gLobbyChatManager->state == LOBBY_CHAT_STATE_ERROR) {
         return;
     }
 }
 
-void LobbyChat_OnConnected(void *a, int n) {
-    int zero;
+void LobbyChat_OnConnected(void *chat, int success) {
+    int timerId;
     LobbyChatManager *manager;
-    if (gLobbyChatManager && gLobbyChatManager->state == 5) {
+    if (gLobbyChatManager && gLobbyChatManager->state == LOBBY_CHAT_STATE_ERROR) {
         return;
     }
-    zero = 0;
-    LobbyTimerMap_EraseKey(gLobbyChatManager->timerMap, &zero, 0);
-    if (!n) {
+    // stop the connect timeout
+    timerId = 0;
+    LobbyTimerMap_EraseKey(gLobbyChatManager->timerMap, &timerId, 0);
+    if (!success) {
         manager = gLobbyChatManager;
         manager->lastError = 3;
-        manager->state = 5;
+        manager->state = LOBBY_CHAT_STATE_ERROR;
         gLobbyChatManager->disconnected = 1;
         return;
     }
-    if (gLobbyChatManager->state != 5) {
-        gLobbyChatManager->state = 2;
+    if (gLobbyChatManager->state != LOBBY_CHAT_STATE_ERROR) {
+        gLobbyChatManager->state = LOBBY_CHAT_STATE_CONNECTED;
     }
 }
 
-void LobbyChat_OnFillInUser(void *a, void *b, char *out) {
-    Str t;
-    if (gLobbyChatManager && gLobbyChatManager->state == 5) {
+void LobbyChat_OnFillInUser(void *chat, void *param, char *user) {
+    Str userName;
+    if (gLobbyChatManager && gLobbyChatManager->state == LOBBY_CHAT_STATE_ERROR) {
         return;
     }
-    LobbyChatManager_GetUser(&t, gLobbyChatManager);
-    strncpy(out, StrData(&t), 127);
-    LobbyString_Destroy(&t);
+    LobbyChatManager_GetUser(&userName, gLobbyChatManager);
+    strncpy(user, StrData(&userName), 127);
+    LobbyString_Destroy(&userName);
 }
 
 void LobbyChatManager_GetUser(Str *out, LobbyChatManager *manager) {

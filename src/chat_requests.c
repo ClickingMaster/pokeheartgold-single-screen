@@ -1,4 +1,3 @@
-#pragma force_active on
 #include <string.h>
 
 #include "global.h"
@@ -45,8 +44,8 @@ extern const char sStr_StrlenPasswordLtMAX_PASSWORD[];
 extern const char sStr_B_UnderscoreStar[];
 extern const char sStr_ModeNeNULL[];
 
-#define ASSERT(cond, message, func, line)                           \
-    if (!(cond)) {                                                  \
+#define ASSERT(cond, message, func, line)                                \
+    if (!(cond)) {                                                       \
         __msl_assertion_failed(message, sStr_ChatHandlersC, func, line); \
     }
 #define ASSERT_CHAT(chat, func, line)          ASSERT(chat, sStr_ChatNeNULL_3, func, line)

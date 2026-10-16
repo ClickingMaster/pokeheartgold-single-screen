@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "global.h"
 
 // The code below is compiled as ARM (32-bit) code.
@@ -28,15 +27,15 @@ typedef struct {
 } Vector;
 
 typedef struct {
-    void (*first)(int, void *, void *);
-    void (*second)(int, void *);
-    u32 third;
+    void (*onMessage)(int, void *, void *);
+    void (*onExcessFlood)(int, void *);
+    u32 unk_08;
 } Callbacks;
 
 typedef struct {
-    u32 first;
+    void *connection;
     int state;
-    u8 pad[0x64 - 8];
+    u8 unk_08[0x5C];
     Callbacks callbacks;
 } Work;
 
@@ -50,7 +49,6 @@ extern void LobbyString_Destroy(Text *);
 extern void LobbyStringVector_Destroy(Vector *);
 extern void LobbyChat_SplitString(Vector *, Text *, Text *, int);
 extern int LobbyChat_FindUserIdByNick(Work *, Text *);
-#pragma force_active off
 
 static inline char *TextChars(Text *t) {
     if (t->heap.long_ == 0) {
@@ -60,74 +58,74 @@ static inline char *TextChars(Text *t) {
     }
 }
 
-static inline int Compare(register char *b, char *a, Text *ta, Text *tb, int n) {
+static inline int Compare(register char *key, char *str, Text *strText, Text *keyText, int len) {
     int result;
-    LobbyString_InitFromCStr(ta, a);
-    LobbyString_InitFromCStr(tb, b);
-    result = LobbyString_CompareNoCase(ta, tb, n);
-    LobbyString_Destroy(tb);
-    LobbyString_Destroy(ta);
+    LobbyString_InitFromCStr(strText, str);
+    LobbyString_InitFromCStr(keyText, key);
+    result = LobbyString_CompareNoCase(strText, keyText, len);
+    LobbyString_Destroy(keyText);
+    LobbyString_Destroy(strText);
     return result;
 }
 
-#pragma force_active on
 #pragma opt_propagation off
 void LobbyChat_OnPrivateMessage(void *, char *, char *, int, void *);
 
-void LobbyChat_OnPrivateMessage(void *unused, char *name, char *data, int kind, void *arg) {
+// Messages from the server only matter as excess flood notices; user messages are passed on by user ID.
+void LobbyChat_OnPrivateMessage(void *chat, char *nick, char *message, int type, void *param) {
     struct {
-        Text c, d, a, b;
-        volatile Callbacks second;
-        Text g;
-        volatile Callbacks first;
-        Text f, e;
+        Text messageStr, floodStr, nickStr, serverStr;
+        volatile Callbacks messageCallbacks;
+        Text senderNick;
+        volatile Callbacks floodCallbacks;
+        Text separator, text;
         Vector vector;
     } frame;
 
-    char *firstKey, *secondKey;
-    int firstResult, secondResult, id;
+    char *serverKey, *floodKey;
+    int serverCmp, floodCmp, userId;
     if (gLobbyChatManager && gLobbyChatManager->state == 5) {
         return;
     }
-    firstKey = sStr_SERVER;
-    firstResult = Compare(firstKey, name, &frame.a, &frame.b, 6);
-    if (firstResult == 0) {
-        secondKey = sStr_ExcessFlood;
-        secondResult = Compare(secondKey, data, &frame.c, &frame.d, 12);
-        if (secondResult != 0) {
+    serverKey = sStr_SERVER;
+    serverCmp = Compare(serverKey, nick, &frame.nickStr, &frame.serverStr, 6);
+    if (serverCmp == 0) {
+        floodKey = sStr_ExcessFlood;
+        floodCmp = Compare(floodKey, message, &frame.messageStr, &frame.floodStr, 12);
+        if (floodCmp != 0) {
             return;
         }
-        LobbyString_InitFromCStr(&frame.e, data);
-        LobbyString_InitFromCStr(&frame.f, sStr_SpaceColon);
-        LobbyChat_SplitString(&frame.vector, &frame.e, &frame.f, 0);
-        LobbyString_Destroy(&frame.f);
-        LobbyString_Destroy(&frame.e);
+        LobbyString_InitFromCStr(&frame.text, message);
+        LobbyString_InitFromCStr(&frame.separator, sStr_SpaceColon);
+        LobbyChat_SplitString(&frame.vector, &frame.text, &frame.separator, 0);
+        LobbyString_Destroy(&frame.separator);
+        LobbyString_Destroy(&frame.text);
         if (frame.vector.count == 0) {
             LobbyStringVector_Destroy(&frame.vector);
             return;
         }
         {
             Text *last = &frame.vector.items[frame.vector.count - 1];
-            id = atol(TextChars(last));
+            userId = atol(TextChars(last));
         }
-        if (id == 0) {
+        if (userId == 0) {
             LobbyStringVector_Destroy(&frame.vector);
             return;
         }
-        frame.first = gLobbyChatManager->callbacks;
-        frame.first.second(id, arg);
+        frame.floodCallbacks = gLobbyChatManager->callbacks;
+        frame.floodCallbacks.onExcessFlood(userId, param);
         LobbyStringVector_Destroy(&frame.vector);
         return;
     }
-    if (kind != 3) {
+    if (type != 3) {
         return;
     }
-    LobbyString_InitFromCStr(&frame.g, name);
-    id = LobbyChat_FindUserIdByNick(gLobbyChatManager, &frame.g);
-    LobbyString_Destroy(&frame.g);
-    if (id == -1) {
+    LobbyString_InitFromCStr(&frame.senderNick, nick);
+    userId = LobbyChat_FindUserIdByNick(gLobbyChatManager, &frame.senderNick);
+    LobbyString_Destroy(&frame.senderNick);
+    if (userId == -1) {
         return;
     }
-    frame.second = gLobbyChatManager->callbacks;
-    frame.second.first(id, data, arg);
+    frame.messageCallbacks = gLobbyChatManager->callbacks;
+    frame.messageCallbacks.onMessage(userId, message, param);
 }

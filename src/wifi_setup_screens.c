@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "wifi_setup_screens.h"
 
 #include "global.h"
@@ -16,7 +15,7 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-// Access-point setup screens (0x0222BF60-0x02231AD4): setup client start/stop and status, the top
+// Access-point setup screens: setup client start/stop and status, the top
 // menu, the message screens that follow it, the list screen (gWifiSetupListScreen: rows, scroll
 // bar, row icons) and the text entry screen (gWifiSetupTextEntry). Every screen is a chain of state functions run
 // by WifiSetupApp_SetStateFunc: load graphics, fade in, wait for the button bar, handle input, fade

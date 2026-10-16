@@ -55,7 +55,6 @@ void WifiSetup_SimpleStartThread(void *arg) {
     WifiSetup_ReportSimpleStartStatus();
 }
 
-#pragma force_active on
 // AES key wrap with the default initial value 0xA6A6A6A6A6A6A6A6.
 
 #pragma opt_strength_reduction off
@@ -149,7 +148,6 @@ int WifiSetup_AesKeyUnwrap(u8 *out, const u8 *in, u32 length, const void *key, u
 }
 
 #pragma opt_strength_reduction reset
-#pragma force_active reset
 
 void WifiSetup_XorBlock8(const u8 *a, const u8 *b, u8 *out) {
     out[0] = a[0] ^ b[0];

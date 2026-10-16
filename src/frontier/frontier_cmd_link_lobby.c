@@ -5,31 +5,29 @@
 #include "frontier/frontier_map.h"
 #include "frontier/frontier_script_context.h"
 
+#include "battle_frontier_communication.h"
+#include "communication_core.h"
 #include "frontier_data.h"
 #include "frontier_data_access.h"
+#include "frontier_field_system.h"
 #include "frontier_save_access.h"
+#include "frontier_stat_ids_legacy.h"
 #include "heap.h"
 #include "party.h"
 #include "player_avatar.h"
-#include "scrcmd_battle_hall.h"
 #include "scrcmd_9.h"
-#include "frontier_field_system.h"
-#include "communication_core.h"
-#include "frontier_stat_ids_legacy.h"
-#include "battle_frontier_communication.h"
+#include "scrcmd_battle_hall.h"
 #include "use_item_on_mon.h"
 
-// Script commands of the frontier link lobby (FrontierLinkLobby, frontier/frontier_link_lobby.h) and of the link
+// Script commands of the frontier link lobby and of the link
 // Battle Tower started from it (FrontierFieldSystem).
 
-// Defined in frontier_script_commands.c.
 u16 FrontierScript_ReadVar(FrontierScriptContext *ctx);
 u16 *FrontierScript_ReadVarPtr(FrontierScriptContext *ctx);
 
 u8 LinkSync_GetPlayerState(int netId);
 void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
 BOOL BattleTowerLink_SendTrainers(FrontierFieldSystem *frontierFsys);
-// Defined returning void in frontier_link_lobby.c, which leaves the new lobby in r0.
 FrontierLinkLobby *FrontierLinkLobby_New(SaveData *saveData);
 
 BOOL FrtCmd_LinkLobbyAlloc(FrontierScriptContext *ctx);

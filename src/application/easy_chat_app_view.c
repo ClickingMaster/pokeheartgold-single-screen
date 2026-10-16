@@ -258,8 +258,6 @@ void EasyChatAppView_FreeCharTransfer(EasyChatAppView *view) {
     ObjCharTransfer_Destroy();
 }
 
-#pragma force_active on
-
 void EasyChatAppView_CreateButtonTexts(EasyChatAppView *view) {
     TextOBJTemplate template;
     int i;
@@ -313,8 +311,6 @@ void EasyChatAppView_CreateButtonTexts(EasyChatAppView *view) {
     DestroyMsgData(msgData);
 }
 
-#pragma force_active reset
-
 void EasyChatAppView_DeleteButtonTexts(EasyChatAppView *view) {
     int i;
 
@@ -345,8 +341,6 @@ void EasyChatAppView_VBlankTask(SysTask *task, void *data) {
     dtcm[0x3FF8 / 4] |= OS_IE_V_BLANK;
 }
 
-#pragma force_active on
-
 void EasyChatAppView_StartCommand(EasyChatAppView *view, u32 command) {
     if (command < 32) {
         EasyChatViewCommand *cmd = Heap_Alloc(HEAP_ID_35, sizeof(EasyChatViewCommand));
@@ -371,8 +365,6 @@ void EasyChatAppView_StartCommand(EasyChatAppView *view, u32 command) {
         GF_AssertFail();
     }
 }
-
-#pragma force_active reset
 
 BOOL EasyChatAppView_AreCommandsDone(EasyChatAppView *view) {
     int i;

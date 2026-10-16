@@ -173,11 +173,28 @@ typedef struct Tag {
 
 IntStrPair *LobbyUserMap_GetOrInsert(Tree *t, int *key);
 
+enum LobbyChatState {
+    LOBBY_CHAT_STATE_INIT,
+    LOBBY_CHAT_STATE_CONNECTING,
+    LOBBY_CHAT_STATE_CONNECTED, // logged in, waits 60 frames before READY
+    LOBBY_CHAT_STATE_READY,
+    LOBBY_CHAT_STATE_DISCONNECTING,
+    LOBBY_CHAT_STATE_ERROR,
+};
+
+// Results of the channel and message commands.
+enum LobbyChatResult {
+    LOBBY_CHAT_RESULT_OK = 0,
+    LOBBY_CHAT_RESULT_INVALID_PARAM = 3,
+    LOBBY_CHAT_RESULT_NOT_READY = 4,
+    LOBBY_CHAT_RESULT_ERROR = 7,
+};
+
 // The chat session: the CHAT connection, the strings it logged in with and the user, channel, request and timer maps.
 typedef struct LobbyChatManager {
     void *connection;
     int state;
-    int userData;
+    int userId;
     Str nick;
     Str user;
     Str realName;
@@ -201,15 +218,16 @@ void *LobbyMem_Alloc(u32 size);
 int LobbyString_CompareCStr(Str *a, const char *b);
 void *LobbyChatManager_Destroy(LobbyChatManager *manager);
 
-#define CTX_CHECK(c)                      \
-    if ((c) == NULL) {                    \
-        return 4;                         \
-    }                                     \
-    if ((c) != NULL && (c)->state == 5) { \
-        return 7;                         \
-    }                                     \
-    if ((c) != NULL && CtxState() != 3) { \
-        return 4;                         \
+// Commands need a session that is logged in and has not failed.
+#define CTX_CHECK(c)                                           \
+    if ((c) == NULL) {                                         \
+        return LOBBY_CHAT_RESULT_NOT_READY;                    \
+    }                                                          \
+    if ((c) != NULL && (c)->state == LOBBY_CHAT_STATE_ERROR) { \
+        return LOBBY_CHAT_RESULT_ERROR;                        \
+    }                                                          \
+    if ((c) != NULL && CtxState() != LOBBY_CHAT_STATE_READY) { \
+        return LOBBY_CHAT_RESULT_NOT_READY;                    \
     }
 
 static inline void OpDelete(void *p) {
@@ -245,7 +263,7 @@ extern struct {
 
 void LobbyChat_StripChannelPrefix(Str *out, LobbyChatManager *manager, Str *name);
 void LobbyChat_StripChannelPrefixes(Vec *out, LobbyChatManager *manager, int n, u32 *arr);
-void LobbyChat_FormatNick(char *buf, int arg);
+void LobbyChat_FormatNick(char *buf, int userId);
 
 extern VoidFunc gLobbyMemOutOfMemoryHandler;
 extern u8 ov45_02255228[];
@@ -260,17 +278,17 @@ void LobbyChannelMap_Find(Iter *out, Tree *t, Str *key);
 Node *LobbyChannelMap_LowerBound(Tree *t, Str *key, Node *n, Node *res);
 void LobbyChannelMap_MakeEntry(NamedEntry *dst, Str *name, Entry *src);
 void LobbyChatManager_GetGameKey(Str *out, LobbyChatManager *manager);
-int LobbyChat_AddChannelUser(LobbyChatManager *manager, Str *name, Str *key2);
+int LobbyChat_AddChannelUser(LobbyChatManager *manager, Str *nick, Str *channel);
 void *LobbyChat_GetChannelCallbacks(LobbyChatManager *manager, Str *key);
-void LobbyChat_GetUserNick(Str *out, LobbyChatManager *manager, int a);
-int LobbyChat_LeaveChannel(const char *name);
-void LobbyChat_RemoveChannel(LobbyChatManager *manager, Str *s);
-BOOL LobbyChat_RemoveChannelUser(LobbyChatManager *manager, Str *name, Str *key2);
+void LobbyChat_GetUserNick(Str *out, LobbyChatManager *manager, int userId);
+int LobbyChat_LeaveChannel(const char *channel);
+void LobbyChat_RemoveChannel(LobbyChatManager *manager, Str *channel);
+BOOL LobbyChat_RemoveChannelUser(LobbyChatManager *manager, Str *nick, Str *channel);
 BOOL LobbyChat_RemoveUserIfUnused(LobbyChatManager *manager, int id);
-int LobbyChat_SendChannelMessage(const char *name, const char *msg);
-int LobbyChat_SendUserMessage(int a, const char *msg);
-int LobbyChat_SetChannelKey(const char *name, int a, const char *key, const char *val);
-int LobbyChat_SetChannelMode(const char *name, int arg);
+int LobbyChat_SendChannelMessage(const char *channel, const char *message);
+int LobbyChat_SendUserMessage(int userId, const char *message);
+int LobbyChat_SetChannelKey(const char *channel, int userId, const char *key, const char *value);
+int LobbyChat_SetChannelMode(const char *channel, int mode);
 int LobbyChat_Shutdown(void);
 void *LobbyEnterChannelRequest_Delete(void *p);
 void LobbyEnterChannelRequest_Destroy(void);
@@ -289,11 +307,11 @@ void LobbyMem_ReleaseReserve(void);
 BOOL LobbyRequestMap_DeleteKey(Tree *t, u32 id);
 void LobbyRequestMap_Erase(Iter *out, Tree *t, Iter pos);
 void LobbyRequestMap_Find(Iter *out, Tree *t, void *key);
-Node *LobbyRequestMap_FindInsertPos(Tree *t, Obj **key, Node **pos, u8 *a, u8 *b);
+Node *LobbyRequestMap_FindInsertPos(Tree *t, Obj **key, Node **pos, u8 *insertLeft, u8 *isLeftmost);
 void LobbyRequestMap_Insert(InsertResult *out, Tree *t, Obj **val);
-Node *LobbyRequestMap_InsertNode(Tree *t, Node *parent, u8 a, u8 b, Obj **val);
+Node *LobbyRequestMap_InsertNode(Tree *t, Node *parent, u8 insertLeft, u8 isLeftmost, Obj **val);
 void *LobbyRequest_Delete(void *p);
-int LobbyRequest_GetId(u8 *a);
+int LobbyRequest_GetId(u8 *request);
 void LobbyString_Assign(Str *dst, Str *src);
 void LobbyString_AssignCStr(Str *s, const char *cstr);
 int LobbyString_FindFirstOfChars(Str *s, const char *chars, u32 pos, u32 n);
@@ -304,9 +322,9 @@ Node *LobbyUserIdSet_LowerBound(Tree *t, int *key, Node *node, Node *res);
 void LobbyUserMap_Erase(Iter *out, Tree *t, Iter it);
 BOOL LobbyUserMap_EraseKey(Tree *t, int *key);
 void LobbyUserMap_Find(Iter *out, Tree *t, int *key);
-Node *LobbyUserMap_FindInsertPos2(Tree *t, int *key, Node **pos, u8 *a, u8 *b);
+Node *LobbyUserMap_FindInsertPos2(Tree *t, int *key, Node **pos, u8 *insertLeft, u8 *isLeftmost);
 void LobbyUserMap_Insert(InsertResult *out, Tree *t, const IntStrPair *pair);
-Node *LobbyUserMap_InsertNode(Tree *t, Node *parent, u8 a, u8 b, IntStrPair *val);
+Node *LobbyUserMap_InsertNode(Tree *t, Node *parent, u8 insertLeft, u8 isLeftmost, IntStrPair *val);
 Node *LobbyUserMap_LowerBound(Tree *t, int *key, Node *node, Node *res);
 void LobbyUserMap_MakeEntry(IntStrPair *out, int id, const Str *nick);
 void chatDisconnect(void *p);
@@ -322,21 +340,21 @@ void LobbyChatManager_GetRealName(Str *out, LobbyChatManager *manager);
 void LobbyChatManager_GetUser(Str *out, LobbyChatManager *manager);
 int LobbyChat_FindUserIdByNick(LobbyChatManager *manager, const Str *nick);
 int LobbyChat_GetLastError(void);
-int LobbyChat_IsInChannel(char *s);
-void LobbyChat_OnBroadcastKeyChanged(void *a, char *s, char *name, void *arg, void *extra);
-void LobbyChat_OnChannelMessage(void *a, char *s, char *name, void *arg, int mode);
+int LobbyChat_IsInChannel(char *channel);
+void LobbyChat_OnBroadcastKeyChanged(void *chat, char *channel, char *nick, void *key, void *value);
+void LobbyChat_OnChannelMessage(void *chat, char *channel, char *nick, void *message, int type);
 void LobbyChat_OnChannelModeChanged(void);
-void LobbyChat_OnConnected(void *a, int n);
+void LobbyChat_OnConnected(void *chat, int success);
 void LobbyChat_OnDisconnected(void);
-void LobbyChat_OnFillInUser(void *a, void *b, char *out);
+void LobbyChat_OnFillInUser(void *chat, void *param, char *user);
 void LobbyChat_OnInvited(void);
-void LobbyChat_OnKicked(void *a, char *s);
+void LobbyChat_OnKicked(void *chat, char *channel);
 void LobbyChat_OnRaw(void);
-void LobbyChat_OnTopicChanged(void *a, char *s, void *b);
-void LobbyChat_OnUserChangedNick(void *a, void *b, char *c, char *d);
+void LobbyChat_OnTopicChanged(void *chat, char *channel, void *topic);
+void LobbyChat_OnUserChangedNick(void *chat, void *channel, char *oldNick, char *newNick);
 void LobbyChat_OnUserListUpdated(void);
-void LobbyChat_OnUserModeChanged(int a, int b, int c, int mode);
-void LobbyChat_OnUserParted(int unused, char *name, char *value);
+void LobbyChat_OnUserModeChanged(int chat, int channel, int nick, int mode);
+void LobbyChat_OnUserParted(int chat, char *channel, char *nick);
 int LobbyChat_RenameUser(LobbyChatManager *manager, const Str *oldNick, const Str *newNick);
 int LobbyChat_TimerConnectTimeout(void);
 void *LobbyChat_ToErrorCode(void *p);

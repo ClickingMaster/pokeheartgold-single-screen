@@ -33,8 +33,6 @@ s32 WifiSetup_NotifyStatus(s32 arg) {
     return 0;
 }
 
-#pragma force_active on
-
 void WifiSetupWcm_HandleEvent(WifiSetupWcmEvent *event) {
     if (!event) {
         return;
@@ -203,8 +201,6 @@ void WifiSetupWcm_HandleEvent(WifiSetupWcmEvent *event) {
         break;
     }
 }
-
-#pragma force_active reset
 
 // Starts the request that leads back to the idle state (stop the search, disconnect, or start up).
 int WifiSetupWcm_ReturnToIdle(void) {

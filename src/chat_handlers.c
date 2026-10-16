@@ -113,8 +113,8 @@ extern const char sStr_DataNumBansGe0[];
 extern const char sStr_USRIP[];
 extern const char sStr_Backslash_2[];
 
-#define ASSERT(cond, message, func, line)                           \
-    if (!(cond)) {                                                  \
+#define ASSERT(cond, message, func, line)                                \
+    if (!(cond)) {                                                       \
         __msl_assertion_failed(message, sStr_ChatHandlersC, func, line); \
     }
 #define ASSERT_CHAT(chat, func, line) ASSERT(chat, sStr_ChatNeNULL_3, func, line)
@@ -2028,27 +2028,27 @@ void ciErrNoSuchChannelHandler(ChatConnection *chat, ChatMessage *message) {
 }
 
 // Fails the enter request (request type 1) of the channel in the second parameter.
-#define FAIL_ENTER(chat, message, func, line, reason)                \
-    {                                                                \
-        char *channel;                                               \
-        ChatRequest *request;                                        \
+#define FAIL_ENTER(chat, message, func, line, reason)                           \
+    {                                                                           \
+        char *channel;                                                          \
+        ChatRequest *request;                                                   \
         ASSERT(message->paramCount == 3, sStr_MessageNumParamsEq3, func, line); \
-        if (message->paramCount != 3) {                              \
-            return;                                                  \
-        }                                                            \
-        channel = message->params[1];                                \
-        ChatRequestKey key = { 0 };                                  \
-        u32 results[3]; /* success, reason, channel */               \
-        key.type = 1;                                                \
-        key.name = channel;                                          \
-        request = ciFindFilter(chat, 1, &key);                      \
-        if (!request) {                                              \
-            return;                                                  \
-        }                                                            \
-        results[0] = FALSE;                                          \
-        results[1] = reason;                                         \
-        results[2] = (u32)channel;                                   \
-        ciFinishFilter(chat, request, results);                       \
+        if (message->paramCount != 3) {                                         \
+            return;                                                             \
+        }                                                                       \
+        channel = message->params[1];                                           \
+        ChatRequestKey key = { 0 };                                             \
+        u32 results[3]; /* success, reason, channel */                          \
+        key.type = 1;                                                           \
+        key.name = channel;                                                     \
+        request = ciFindFilter(chat, 1, &key);                                  \
+        if (!request) {                                                         \
+            return;                                                             \
+        }                                                                       \
+        results[0] = FALSE;                                                     \
+        results[1] = reason;                                                    \
+        results[2] = (u32)channel;                                              \
+        ciFinishFilter(chat, request, results);                                 \
     }
 
 // 405: too many channels.

@@ -5,7 +5,6 @@
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-
 #include <string.h>
 
 extern void __msl_assertion_failed(const char *, const char *, const char *, int);
@@ -122,20 +121,20 @@ extern char ciCookieBuffer[];
 extern int ciCookieCounter;
 
 // Assertion with the message, the name of the checking function and the line.
-#define ASSERT(cond, message, func, line)                           \
-    if (!(cond)) {                                                  \
+#define ASSERT(cond, message, func, line)                            \
+    if (!(cond)) {                                                   \
         __msl_assertion_failed(message, sStr_ChatMainC, func, line); \
     }
 #define ASSERT_CHAT(chat, func, line) ASSERT(chat, sStr_ChatNeNULL_4, func, line)
 // A valid channel name: not NULL and not empty.
-#define ASSERT_CHANNEL(name, func, line)     \
+#define ASSERT_CHANNEL(name, func, line)            \
     ASSERT(name, sStr_ChannelNeNULL_3, func, line); \
     ASSERT(*name, sStr_Channel0_Ne0_3, func, line);
 // A string argument of chatConnectDoit: asserted and required.
-#define REQUIRE_STRING(s, message, line)                 \
+#define REQUIRE_STRING(s, message, line)                        \
     ASSERT((s) && (s)[0], message, sStr_chatConnectDoit, line); \
-    if (!(s) || !(s)[0]) {                               \
-        return NULL;                                     \
+    if (!(s) || !(s)[0]) {                                      \
+        return NULL;                                            \
     }
 
 // Queues the connected callback with a failure (the connect attempt has ended).
@@ -149,8 +148,8 @@ static inline void ConnectFailed(ChatConnection *chat) {
 // Calls ciThink until the request id has been answered.
 #define WAIT_FOR_REQUEST(chat, id) \
     do {                           \
-        ciThink(chat, id);   \
-        msleep(10);         \
+        ciThink(chat, id);         \
+        msleep(10);                \
     } while (ciCheckForID(chat, id))
 
 // Calls the handler of the message's command; returns whether the command is known.

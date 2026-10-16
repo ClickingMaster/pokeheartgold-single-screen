@@ -15,9 +15,10 @@ typedef union {
 } String;
 
 typedef struct {
-    int a, state;
-    void *source;
-    String text;
+    void *connection;
+    int state;
+    int userId;
+    String nick;
 } Work;
 
 static inline char *getString(String *s) {
@@ -32,7 +33,7 @@ static inline char *getString(String *s) {
 
 extern Work *volatile gLobbyChatManager;
 extern char sStr_Empty_17[];
-extern void LobbyChat_FormatNick(String *, void *);
+extern void LobbyChat_FormatNick(String *, int);
 extern void LobbyString_Assign(String *, String *);
 extern void LobbyString_Destroy(String *);
 extern void LobbyChatManager_GetNick(String *, Work *);
@@ -40,41 +41,42 @@ extern void chatRetryWithNickA(void *, char *);
 extern void chatRegisterUniqueNickA(void *, int, char *, char *);
 void LobbyChat_OnNickError(void *, int);
 
-void LobbyChat_OnNickError(void *out, int state) {
+// Retry with a new nick for the same user ID; errors 3 and 4 register it as a unique nick instead.
+void LobbyChat_OnNickError(void *chat, int type) {
     String a, b, c, d, e, f, g, h;
-    Work *w = gLobbyChatManager;
-    if (w && w->state == 5) {
+    Work *manager = gLobbyChatManager;
+    if (manager && manager->state == 5) {
         return;
     }
-    if (state == 1) {
-        LobbyChat_FormatNick(&a, gLobbyChatManager->source);
-        LobbyString_Assign(&gLobbyChatManager->text, &a);
+    if (type == 1) {
+        LobbyChat_FormatNick(&a, gLobbyChatManager->userId);
+        LobbyString_Assign(&gLobbyChatManager->nick, &a);
         LobbyString_Destroy(&a);
         LobbyChatManager_GetNick(&b, gLobbyChatManager);
-        chatRetryWithNickA(out, getString(&b));
+        chatRetryWithNickA(chat, getString(&b));
         LobbyString_Destroy(&b);
-    } else if (state == 2) {
-        LobbyChat_FormatNick(&c, gLobbyChatManager->source);
-        LobbyString_Assign(&gLobbyChatManager->text, &c);
+    } else if (type == 2) {
+        LobbyChat_FormatNick(&c, gLobbyChatManager->userId);
+        LobbyString_Assign(&gLobbyChatManager->nick, &c);
         LobbyString_Destroy(&c);
         LobbyChatManager_GetNick(&d, gLobbyChatManager);
-        chatRetryWithNickA(out, getString(&d));
+        chatRetryWithNickA(chat, getString(&d));
         LobbyString_Destroy(&d);
-    } else if ((u32)(state - 3) <= 1) {
-        LobbyChat_FormatNick(&e, gLobbyChatManager->source);
-        LobbyString_Assign(&gLobbyChatManager->text, &e);
+    } else if ((u32)(type - 3) <= 1) {
+        LobbyChat_FormatNick(&e, gLobbyChatManager->userId);
+        LobbyString_Assign(&gLobbyChatManager->nick, &e);
         LobbyString_Destroy(&e);
         LobbyChatManager_GetNick(&f, gLobbyChatManager);
-        chatRegisterUniqueNickA(out, 2, getString(&f), sStr_Empty_17);
+        chatRegisterUniqueNickA(chat, 2, getString(&f), sStr_Empty_17);
         LobbyString_Destroy(&f);
-    } else if (state == 5) {
+    } else if (type == 5) {
         return;
-    } else if (state == 6) {
-        LobbyChat_FormatNick(&g, gLobbyChatManager->source);
-        LobbyString_Assign(&gLobbyChatManager->text, &g);
+    } else if (type == 6) {
+        LobbyChat_FormatNick(&g, gLobbyChatManager->userId);
+        LobbyString_Assign(&gLobbyChatManager->nick, &g);
         LobbyString_Destroy(&g);
         LobbyChatManager_GetNick(&h, gLobbyChatManager);
-        chatRetryWithNickA(out, getString(&h));
+        chatRetryWithNickA(chat, getString(&h));
         LobbyString_Destroy(&h);
     }
 }

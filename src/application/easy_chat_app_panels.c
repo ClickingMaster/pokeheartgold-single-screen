@@ -17,12 +17,12 @@
 #include "pm_string.h"
 #include "render_window.h"
 #include "sprite.h"
+#include "sprite_resource_header.h"
 #include "sprite_system.h"
 #include "string_control_code.h"
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
-#include "sprite_resource_header.h"
 #include "yes_no_prompt.h"
 
 typedef struct EasyChatSentenceView EasyChatSentenceView;
@@ -204,7 +204,6 @@ typedef struct EasyChatInitialGridCell {
 #define GetECWordIntoStringByIndexInt ((void (*)(int, String *))GetECWordIntoStringByIndex)
 #define ListMenuUpdateCursorObjInt    ((void (*)(struct ListMenuCursor *, Window *, int, int))ListMenuUpdateCursorObj)
 
-// render_window.c
 void DrawFrame2AroundWindow(Window *window, u32 baseTile, u32 paletteNum);
 // easy chat save data (category / initial unlocked)
 u32 ECMenu_GetCategoryCount(ECMenu *menu, u32 category);
@@ -332,7 +331,6 @@ void EasyChatInitialGrid_GetPosition(u32 cell, u32 *x, u32 *y);
 
 // Sentence panel
 
-#pragma force_active on
 EasyChatSentenceView *EasyChatSentenceView_Create(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu) {
     EasyChatSentenceView *sentence = Heap_Alloc(HEAP_ID_35, sizeof(EasyChatSentenceView));
 
@@ -353,7 +351,6 @@ EasyChatSentenceView *EasyChatSentenceView_Create(EasyChatAppView *view, EasyCha
     sentence->subScrollY = 0;
     return sentence;
 }
-#pragma force_active reset
 
 void EasyChatSentenceView_Delete(EasyChatSentenceView *sentence) {
     if (sentence->listCursor != NULL) {
@@ -392,7 +389,6 @@ void EasyChatSentenceView_Delete(EasyChatSentenceView *sentence) {
     Heap_Free(sentence);
 }
 
-#pragma force_active on
 void EasyChatSentenceView_Load(EasyChatSentenceView *sentence, NARC *narc) {
     BgConfig *bgConfig = EasyChatAppView_GetBgConfig(sentence->view);
     u32 baseTile;
@@ -431,7 +427,6 @@ void EasyChatSentenceView_Load(EasyChatSentenceView *sentence, NARC *narc) {
         EasyChatSentenceView_UpdateSliderThumb(sentence);
     }
 }
-#pragma force_active reset
 
 void EasyChatSentenceView_HBlankCallback(EasyChatSentenceView *sentence) {
     BgConfig *bgConfig = EasyChatAppView_GetBgConfig(sentence->view);
@@ -478,7 +473,6 @@ void EasyChatSentenceView_StartScroll(EasyChatSentenceView *sentence, u8 directi
     Main_SetHBlankIntrCB((GFIntrCB)EasyChatSentenceView_HBlankCallback, sentence);
 }
 
-#pragma force_active on
 BOOL EasyChatSentenceView_UpdateScroll(EasyChatSentenceView *sentence) {
     BgConfig *bgConfig;
     int delta;
@@ -510,7 +504,6 @@ BOOL EasyChatSentenceView_UpdateScroll(EasyChatSentenceView *sentence) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 void EasyChatSentenceView_LoadPalettes(EasyChatSentenceView *sentence, NARC *narc) {
     NNSG2dPaletteData *paletteData;
@@ -555,7 +548,6 @@ void EasyChatSentenceView_InitSlotPositions(EasyChatSentenceView *sentence) {
     }
 }
 
-#pragma force_active on
 void EasyChatSentenceView_CreateSprites(EasyChatSentenceView *sentence) {
     SpriteResourcesHeader mainHeader, subHeader;
     EasyChatWordSlotPos pos;
@@ -618,7 +610,6 @@ void EasyChatSentenceView_DrawSentence(EasyChatSentenceView *sentence) {
     ScheduleBgTilemapBufferTransfer(bgConfig, GF_BG_LYR_MAIN_0);
     ScheduleBgTilemapBufferTransfer(bgConfig, GF_BG_LYR_SUB_0);
 }
-#pragma force_active reset
 
 void EasyChatSentenceView_GetSlotHitbox(EasyChatSentenceView *sentence, TouchscreenHitbox *hitbox, u32 slot) {
     hitbox->rect.left = sentence->slotPositions[slot].x - 24;
@@ -627,7 +618,6 @@ void EasyChatSentenceView_GetSlotHitbox(EasyChatSentenceView *sentence, Touchscr
     hitbox->rect.bottom = hitbox->rect.top + 16;
 }
 
-#pragma force_active on
 int EasyChatSentenceView_DrawMessage(EasyChatSentenceView *sentence, Window *window) {
     String *string;
     int x, y;
@@ -677,7 +667,6 @@ int EasyChatSentenceView_DrawMessage(EasyChatSentenceView *sentence, Window *win
     String_Delete(string);
     return count;
 }
-#pragma force_active reset
 
 void EasyChatSentenceView_UpdateSliderThumb(EasyChatSentenceView *sentence) {
     u8 index = EasyChatApp_GetMessageIndex(sentence->app);
@@ -687,7 +676,6 @@ void EasyChatSentenceView_UpdateSliderThumb(EasyChatSentenceView *sentence) {
     }
 }
 
-#pragma force_active on
 void EasyChatMessageParser_Init(EasyChatMessageParser *parser, EasyChatSentenceView *sentence) {
     parser->string = EasyChatApp_GetMessageString(sentence->app, HEAP_ID_35);
     parser->cursor = String_cstr(parser->string);
@@ -697,13 +685,11 @@ void EasyChatMessageParser_Init(EasyChatMessageParser *parser, EasyChatSentenceV
         parser->state = EC_PARSE_TEXT;
     }
 }
-#pragma force_active reset
 
 void EasyChatMessageParser_Free(EasyChatMessageParser *parser) {
     String_Delete(parser->string);
 }
 
-#pragma force_active on
 int EasyChatMessageParser_Next(EasyChatMessageParser *parser, String *dest) {
     const u16 *start = parser->cursor;
     int result;
@@ -756,7 +742,6 @@ int EasyChatMessageParser_Next(EasyChatMessageParser *parser, String *dest) {
     }
     return result;
 }
-#pragma force_active reset
 
 void EasyChatSentenceView_GetSlotTextPos(const EasyChatWordSlotPos *slot, EasyChatWordSlotPos *textPos) {
     textPos->x = slot->x - 48;
@@ -775,7 +760,6 @@ void EasyChatSentenceView_ClearSlot(Window *window, const EasyChatWordSlotPos *s
     FillWindowPixelRect(window, 14, pos.x, pos.y, 96, 16);
 }
 
-#pragma force_active on
 void EasyChatSentenceView_DrawWord(EasyChatSentenceView *sentence, Window *window, const EasyChatWordSlotPos *slot, int word) {
     EasyChatWordSlotPos pos;
 
@@ -786,7 +770,6 @@ void EasyChatSentenceView_DrawWord(EasyChatSentenceView *sentence, Window *windo
         AddTextPrinterParameterizedWithColor(window, 1, sentence->string, pos.x, pos.y, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(5, 6, 14), NULL);
     }
 }
-#pragma force_active reset
 
 u32 EasyChatSentenceView_GetNumSlots(EasyChatSentenceView *sentence) {
     return sentence->numSlots;
@@ -858,7 +841,6 @@ void EasyChatSentenceView_HideSlider(EasyChatSentenceView *sentence) {
     }
 }
 
-#pragma force_active on
 void EasyChatSentenceView_ShowSlider(EasyChatSentenceView *sentence) {
     if (EasyChatApp_GetType(sentence->app) == EASY_CHAT_TYPE_MESSAGE) {
         Sprite_SetDrawFlag(sentence->leftArrow, TRUE);
@@ -869,7 +851,6 @@ void EasyChatSentenceView_ShowSlider(EasyChatSentenceView *sentence) {
         Sprite_SetAnimCtrlSeq(sentence->rightArrow, 21);
     }
 }
-#pragma force_active reset
 
 Sprite *EasyChatSentenceView_GetSliderThumb(EasyChatSentenceView *sentence) {
     return sentence->sliderThumb;
@@ -1109,13 +1090,11 @@ void EasyChatMenuView_MoveCursor(EasyChatMenuView *menuView, u16 cursor) {
     Sprite_SetAnimCtrlSeq(menuView->cursor, 2);
 }
 
-#pragma force_active on
 void EasyChatMenuView_DrawModeButton(EasyChatMenuView *menuView, int mode, int selected) {
     NNSG2dScreenData *screen = menuView->modesScreen;
 
     CopyToBgTilemapRect(menuView->bgConfig, GF_BG_LYR_MAIN_3, mode * 17 + 2, 0, 11, 6, screen->rawData, 0, selected * 6, screen->screenWidth >> 3, screen->screenHeight >> 3);
 }
-#pragma force_active reset
 
 void EasyChatMenuView_ModeSwitchTask(SysTask *task, void *data) {
     EasyChatModeSwitch *modeSwitch = data;
@@ -1208,7 +1187,6 @@ void EasyChatCategoryView_Load(EasyChatCategoryView *categories, NARC *narc) {
     BgCommitTilemapBufferToVram(bgConfig, GF_BG_LYR_MAIN_1);
 }
 
-#pragma force_active on
 u32 EasyChatCategoryView_DrawCategories(EasyChatCategoryView *categories, BgConfig *bgConfig, u32 tile) {
     Window window;
     int y;
@@ -1244,7 +1222,6 @@ u32 EasyChatCategoryView_DrawCategories(EasyChatCategoryView *categories, BgConf
     DestroyMsgData(msgData);
     return tile;
 }
-#pragma force_active reset
 
 u32 EasyChatCategoryView_DrawInitials(EasyChatCategoryView *categories, BgConfig *bgConfig, u32 tile) {
     Window window;
@@ -1337,7 +1314,6 @@ void EasyChatCategoryView_StartOpen(EasyChatCategoryView *categories) {
     EasyChatBlendFade_StartBrightness(&categories->fade, GX_BLEND_PLANEMASK_BG1, -10, 0, 16);
 }
 
-#pragma force_active on
 BOOL EasyChatCategoryView_UpdateOpen(EasyChatCategoryView *categories) {
     switch (categories->state) {
     case 0:
@@ -1351,14 +1327,12 @@ BOOL EasyChatCategoryView_UpdateOpen(EasyChatCategoryView *categories) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 void EasyChatCategoryView_StartClose(EasyChatCategoryView *categories) {
     categories->state = 0;
     EasyChatBgScroll_Start(&categories->scroll, categories->bgConfig, GF_BG_LYR_MAIN_1, 1, 0, 6);
 }
 
-#pragma force_active on
 BOOL EasyChatCategoryView_UpdateClose(EasyChatCategoryView *categories) {
     switch (categories->state) {
     case 0:
@@ -1372,7 +1346,6 @@ BOOL EasyChatCategoryView_UpdateClose(EasyChatCategoryView *categories) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 void EasyChatCategoryView_ResetScrollY(EasyChatCategoryView *categories) {
     BgSetPosTextAndCommit(categories->bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_Y, 16);
@@ -1398,13 +1371,11 @@ BOOL EasyChatCategoryView_UpdateFadeOut(EasyChatCategoryView *categories) {
     return FALSE;
 }
 
-#pragma force_active on
 void EasyChatCategoryView_StartFadeIn(EasyChatCategoryView *categories) {
     G2_SetBlendAlpha(GX_BLEND_PLANEMASK_BG1, EC_BLEND_PLANEMASK_ALL, 0, 16);
     ToggleBgLayer(GF_BG_LYR_MAIN_1, GF_PLANE_TOGGLE_ON);
     EasyChatBlendFade_StartAlpha(&categories->fade, GX_BLEND_PLANEMASK_BG1, EC_BLEND_PLANEMASK_ALL, 0, 124, 12);
 }
-#pragma force_active reset
 
 BOOL EasyChatCategoryView_UpdateFadeIn(EasyChatCategoryView *categories) {
     return EasyChatBlendFade_IsAlphaDone(&categories->fade);
@@ -1421,7 +1392,6 @@ void EasyChatCategoryView_ResetScrollX(EasyChatCategoryView *categories) {
     BgSetPosTextAndCommit(categories->bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_X, x);
 }
 
-#pragma force_active on
 void EasyChatCategoryView_StartModeScroll(EasyChatCategoryView *categories) {
     int delta;
 
@@ -1432,7 +1402,6 @@ void EasyChatCategoryView_StartModeScroll(EasyChatCategoryView *categories) {
     }
     EasyChatBgScroll_Start(&categories->scroll, categories->bgConfig, GF_BG_LYR_MAIN_1, 0, delta, 16);
 }
-#pragma force_active reset
 
 BOOL EasyChatCategoryView_UpdateModeScroll(EasyChatCategoryView *categories) {
     return EasyChatBgScroll_Update(&categories->scroll);
@@ -1589,7 +1558,6 @@ void EasyChatWordListView_MoveCursor(EasyChatWordListView *wordList, u32 cursor)
     }
 }
 
-#pragma force_active on
 void EasyChatWordListView_StartScroll(EasyChatWordListView *wordList, int rows) {
     int i;
     u8 y;
@@ -1630,7 +1598,6 @@ void EasyChatWordListView_StartScroll(EasyChatWordListView *wordList, int rows) 
     CopyWindowPixelsToVram_TextMode(&wordList->listWindow);
     EasyChatBgScroll_Start(&wordList->scroll, wordList->bgConfig, GF_BG_LYR_MAIN_2, 1, pixels, words);
 }
-#pragma force_active reset
 
 BOOL EasyChatWordListView_UpdateScroll(EasyChatWordListView *wordList) {
     if (EasyChatBgScroll_Update(&wordList->scroll)) {
@@ -1667,7 +1634,6 @@ void EasyChatWordListView_ResetScroll(EasyChatWordListView *wordList) {
     BgSetPosTextAndCommit(wordList->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_SET_Y, 0);
 }
 
-#pragma force_active on
 void EasyChatWordListView_DrawWord(EasyChatWordListView *wordList, int index, u32 y) {
     u32 x, height;
 
@@ -1684,7 +1650,6 @@ void EasyChatWordListView_DrawWord(EasyChatWordListView *wordList, int index, u3
     BlitBitmapRectToWindow(&wordList->listWindow, wordList->wordWindow.pixelBuffer, 0, 0, 96, 16, x, y, 96, height);
     BlitBitmapRectToWindow(&wordList->listWindow, wordList->wordWindow.pixelBuffer, 0, height, 96, 16, x, 0, 96, 16 - height);
 }
-#pragma force_active reset
 
 // Page buttons
 
@@ -1706,13 +1671,11 @@ void EasyChatPageButtonsView_Delete(EasyChatPageButtonsView *pageButtons) {
     Heap_Free(pageButtons);
 }
 
-#pragma force_active on
 void EasyChatPageButtonsView_Load(EasyChatPageButtonsView *pageButtons, NARC *narc) {
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 11, pageButtons->bgConfig, GF_BG_LYR_SUB_1, 0, 0, TRUE, HEAP_ID_35);
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 12, pageButtons->bgConfig, GF_BG_LYR_SUB_1, 0, 0, TRUE, HEAP_ID_35);
     BgCommitTilemapBufferToVram(pageButtons->bgConfig, GF_BG_LYR_SUB_1);
 }
-#pragma force_active reset
 
 void EasyChatPageButtonsView_SetEnabled(void) {
 }
@@ -1723,7 +1686,6 @@ void EasyChatPageButtonsView_SetPressed(EasyChatPageButtonsView *pageButtons, in
 
 // BG scroll and blend fade tasks
 
-#pragma force_active on
 void EasyChatBgScroll_Start(EasyChatBgScroll *scroll, BgConfig *bgConfig, int layer, int axis, int delta, int frames) {
     scroll->bgConfig = bgConfig;
     scroll->layer = layer;
@@ -1741,7 +1703,6 @@ void EasyChatBgScroll_Start(EasyChatBgScroll *scroll, BgConfig *bgConfig, int la
     scroll->frames = frames;
     scroll->state = 0;
 }
-#pragma force_active reset
 
 BOOL EasyChatBgScroll_Update(EasyChatBgScroll *scroll) {
     switch (scroll->state) {
@@ -1900,7 +1861,6 @@ u8 EasyChatInitialGrid_GetAboveButton(u32 cell) {
     return gEasyChatInitialGridCells[cell].aboveButton;
 }
 
-#pragma force_active on
 int EasyChatInitialGrid_FindCellAt(u32 x, u32 y) {
     u32 i;
     const EasyChatInitialGridCell *cell;
@@ -1912,4 +1872,3 @@ int EasyChatInitialGrid_FindCellAt(u32 x, u32 y) {
     }
     return -1;
 }
-#pragma force_active reset

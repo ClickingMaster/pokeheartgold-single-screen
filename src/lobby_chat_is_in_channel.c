@@ -13,16 +13,17 @@ void *LobbyChat_ToErrorCode(void *p) {
     return (u8 *)p + 0xa410;
 }
 
-int LobbyChat_IsInChannel(char *s) {
-    Str x, y;
-    int r;
+int LobbyChat_IsInChannel(char *channel) {
+    Str channelName;
+    Str fullName;
+    int inChannel;
     if (!gLobbyChatManager) {
         return 0;
     }
-    LobbyString_InitFromCStr(&x, s);
-    LobbyChat_GetFullChannelName(&y, gLobbyChatManager, &x);
-    r = chatInChannelA(gLobbyChatManager->connection, StrData(&y)) == 1;
-    LobbyString_Destroy(&y);
-    LobbyString_Destroy(&x);
-    return r;
+    LobbyString_InitFromCStr(&channelName, channel);
+    LobbyChat_GetFullChannelName(&fullName, gLobbyChatManager, &channelName);
+    inChannel = chatInChannelA(gLobbyChatManager->connection, StrData(&fullName)) == 1;
+    LobbyString_Destroy(&fullName);
+    LobbyString_Destroy(&channelName);
+    return inChannel;
 }

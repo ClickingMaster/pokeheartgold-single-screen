@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "global.h"
 
 // The code below is compiled as ARM (32-bit) code.
@@ -6,30 +5,35 @@
 
 #include "lobby_chat_internal.h"
 
-void LobbyChat_OnUserParted(int unused, char *name, char *value) {
-    Str a, b, c, d, e, f;
-    int id;
+void LobbyChat_OnUserParted(int chat, char *channel, char *nick) {
+    Str nickStr;
+    Str channelKey;
+    Str fullName;
+    Str channelName;
+    Str userNick;
+    Str userChannel;
+    int userId;
     LobbyChannelCallbacks *callbacks;
-    if (gLobbyChatManager && gLobbyChatManager->state == 5) {
+    if (gLobbyChatManager && gLobbyChatManager->state == LOBBY_CHAT_STATE_ERROR) {
         return;
     }
-    LobbyString_InitFromCStr(&a, value);
-    id = LobbyChat_FindUserIdByNick(gLobbyChatManager, &a);
-    LobbyString_Destroy(&a);
-    if (id == -1) {
+    LobbyString_InitFromCStr(&nickStr, nick);
+    userId = LobbyChat_FindUserIdByNick(gLobbyChatManager, &nickStr);
+    LobbyString_Destroy(&nickStr);
+    if (userId == -1) {
         return;
     }
-    LobbyString_InitFromCStr(&b, name);
-    callbacks = LobbyChat_GetChannelCallbacks(gLobbyChatManager, &b);
-    LobbyString_Destroy(&b);
-    LobbyString_InitFromCStr(&c, name);
-    LobbyChat_StripChannelPrefix(&d, gLobbyChatManager, &c);
-    callbacks->onUserParted(StrData(&d), id, callbacks->param);
-    LobbyString_Destroy(&d);
-    LobbyString_Destroy(&c);
-    LobbyString_InitFromCStr(&e, value);
-    LobbyString_InitFromCStr(&f, name);
-    LobbyChat_RemoveChannelUser(gLobbyChatManager, &e, &f);
-    LobbyString_Destroy(&f);
-    LobbyString_Destroy(&e);
+    LobbyString_InitFromCStr(&channelKey, channel);
+    callbacks = LobbyChat_GetChannelCallbacks(gLobbyChatManager, &channelKey);
+    LobbyString_Destroy(&channelKey);
+    LobbyString_InitFromCStr(&fullName, channel);
+    LobbyChat_StripChannelPrefix(&channelName, gLobbyChatManager, &fullName);
+    callbacks->onUserParted(StrData(&channelName), userId, callbacks->param);
+    LobbyString_Destroy(&channelName);
+    LobbyString_Destroy(&fullName);
+    LobbyString_InitFromCStr(&userNick, nick);
+    LobbyString_InitFromCStr(&userChannel, channel);
+    LobbyChat_RemoveChannelUser(gLobbyChatManager, &userNick, &userChannel);
+    LobbyString_Destroy(&userChannel);
+    LobbyString_Destroy(&userNick);
 }

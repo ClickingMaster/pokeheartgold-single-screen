@@ -12,8 +12,6 @@ void WifiSetup_Free(void *ptr) {
     gWifiSetupFreeHook(ptr);
 }
 
-#pragma force_active on
-
 int WifiSetup_RunAoss(WifiSetupRequest *request) {
     int valid;
 
@@ -45,5 +43,3 @@ int WifiSetup_RunAoss(WifiSetupRequest *request) {
     }
     return result;
 }
-
-#pragma force_active reset

@@ -8,90 +8,91 @@
 
 #include "lobby_chat_internal.h"
 
-int LobbyRequest_GetId(u8 *a) {
-    return *(int *)(a + 4);
+int LobbyRequest_GetId(u8 *request) {
+    return *(int *)(request + 4);
 }
 
-int LobbyChat_LeaveChannel(const char *name) {
-    Str s1;
-    Str s2;
-    Str s3;
-    Str s4;
-    LobbyChatManager *c = gLobbyChatManager;
-    CTX_CHECK(c);
-    LobbyString_InitFromCStr(&s1, name);
-    LobbyChat_GetFullChannelName(&s2, gLobbyChatManager, &s1);
-    chatLeaveChannelA(gLobbyChatManager->connection, StrData(&s2), 0);
-    LobbyString_Destroy(&s2);
-    LobbyString_Destroy(&s1);
-    LobbyString_InitFromCStr(&s3, name);
-    LobbyChat_GetFullChannelName(&s4, gLobbyChatManager, &s3);
-    LobbyChat_RemoveChannel(gLobbyChatManager, &s4);
-    LobbyString_Destroy(&s4);
-    LobbyString_Destroy(&s3);
-    return 0;
+int LobbyChat_LeaveChannel(const char *channel) {
+    Str channelName;
+    Str fullName;
+    Str removedName;
+    Str removedFullName;
+    LobbyChatManager *manager = gLobbyChatManager;
+    CTX_CHECK(manager);
+    LobbyString_InitFromCStr(&channelName, channel);
+    LobbyChat_GetFullChannelName(&fullName, gLobbyChatManager, &channelName);
+    chatLeaveChannelA(gLobbyChatManager->connection, StrData(&fullName), 0);
+    LobbyString_Destroy(&fullName);
+    LobbyString_Destroy(&channelName);
+    LobbyString_InitFromCStr(&removedName, channel);
+    LobbyChat_GetFullChannelName(&removedFullName, gLobbyChatManager, &removedName);
+    LobbyChat_RemoveChannel(gLobbyChatManager, &removedFullName);
+    LobbyString_Destroy(&removedFullName);
+    LobbyString_Destroy(&removedName);
+    return LOBBY_CHAT_RESULT_OK;
 }
 
-int LobbyChat_SendChannelMessage(const char *name, const char *msg) {
-    Str s1;
-    Str s2;
-    LobbyChatManager *c = gLobbyChatManager;
-    CTX_CHECK(c);
-    if (strlen(msg) + 1 > 400) {
-        return 3;
+int LobbyChat_SendChannelMessage(const char *channel, const char *message) {
+    Str channelName;
+    Str fullName;
+    LobbyChatManager *manager = gLobbyChatManager;
+    CTX_CHECK(manager);
+    if (strlen(message) + 1 > 400) {
+        return LOBBY_CHAT_RESULT_INVALID_PARAM;
     }
-    LobbyString_InitFromCStr(&s1, name);
-    LobbyChat_GetFullChannelName(&s2, gLobbyChatManager, &s1);
-    chatSendChannelMessageA(gLobbyChatManager->connection, StrData(&s2), msg, 3);
-    LobbyString_Destroy(&s2);
-    LobbyString_Destroy(&s1);
-    return 0;
+    LobbyString_InitFromCStr(&channelName, channel);
+    LobbyChat_GetFullChannelName(&fullName, gLobbyChatManager, &channelName);
+    chatSendChannelMessageA(gLobbyChatManager->connection, StrData(&fullName), message, 3);
+    LobbyString_Destroy(&fullName);
+    LobbyString_Destroy(&channelName);
+    return LOBBY_CHAT_RESULT_OK;
 }
 
-int LobbyChat_SendUserMessage(int a, const char *msg) {
-    Str s;
-    LobbyChatManager *c = gLobbyChatManager;
-    CTX_CHECK(c);
-    if (strlen(msg) + 1 > 400) {
-        return 3;
+int LobbyChat_SendUserMessage(int userId, const char *message) {
+    Str nick;
+    LobbyChatManager *manager = gLobbyChatManager;
+    CTX_CHECK(manager);
+    if (strlen(message) + 1 > 400) {
+        return LOBBY_CHAT_RESULT_INVALID_PARAM;
     }
-    LobbyChat_GetUserNick(&s, c, a);
-    if (StrEqC(&s, sStr_Empty_17)) {
-        LobbyString_Destroy(&s);
-        return 3;
+    LobbyChat_GetUserNick(&nick, manager, userId);
+    if (StrEqC(&nick, sStr_Empty_17)) {
+        LobbyString_Destroy(&nick);
+        return LOBBY_CHAT_RESULT_INVALID_PARAM;
     }
-    chatSendUserMessageA(gLobbyChatManager->connection, StrData(&s), msg, 3);
-    LobbyString_Destroy(&s);
-    return 0;
+    chatSendUserMessageA(gLobbyChatManager->connection, StrData(&nick), message, 3);
+    LobbyString_Destroy(&nick);
+    return LOBBY_CHAT_RESULT_OK;
 }
 
-int LobbyChat_SetChannelKey(const char *name, int a, const char *key, const char *val) {
-    Str s;
-    Str tmp;
-    Str s1;
-    Str s2;
-    LobbyChatManager *c = gLobbyChatManager;
-    CTX_CHECK(c);
-    if (strlen(val) + 1 > 400 || strlen(key) + 1 > 20) {
-        return 3;
+// userId -1 sets a channel key instead of a key of one user in the channel.
+int LobbyChat_SetChannelKey(const char *channel, int userId, const char *key, const char *value) {
+    Str nick;
+    Str userNick;
+    Str channelName;
+    Str fullName;
+    LobbyChatManager *manager = gLobbyChatManager;
+    CTX_CHECK(manager);
+    if (strlen(value) + 1 > 400 || strlen(key) + 1 > 20) {
+        return LOBBY_CHAT_RESULT_INVALID_PARAM;
     }
-    LobbyString_InitFromCStr(&s, sStr_Empty_17);
-    if (a == -1) {
-        LobbyString_AssignCStr(&s, sStr_Empty_17);
+    LobbyString_InitFromCStr(&nick, sStr_Empty_17);
+    if (userId == -1) {
+        LobbyString_AssignCStr(&nick, sStr_Empty_17);
     } else {
-        LobbyChat_GetUserNick(&tmp, gLobbyChatManager, a);
-        LobbyString_Assign(&s, &tmp);
-        LobbyString_Destroy(&tmp);
-        if (StrEqC(&s, sStr_Empty_17)) {
-            LobbyString_Destroy(&s);
-            return 3;
+        LobbyChat_GetUserNick(&userNick, gLobbyChatManager, userId);
+        LobbyString_Assign(&nick, &userNick);
+        LobbyString_Destroy(&userNick);
+        if (StrEqC(&nick, sStr_Empty_17)) {
+            LobbyString_Destroy(&nick);
+            return LOBBY_CHAT_RESULT_INVALID_PARAM;
         }
     }
-    LobbyString_InitFromCStr(&s1, name);
-    LobbyChat_GetFullChannelName(&s2, gLobbyChatManager, &s1);
-    chatSetChannelKeysA(gLobbyChatManager->connection, StrData(&s2), StrData(&s), 1, &key, &val);
-    LobbyString_Destroy(&s2);
-    LobbyString_Destroy(&s1);
-    LobbyString_Destroy(&s);
-    return 0;
+    LobbyString_InitFromCStr(&channelName, channel);
+    LobbyChat_GetFullChannelName(&fullName, gLobbyChatManager, &channelName);
+    chatSetChannelKeysA(gLobbyChatManager->connection, StrData(&fullName), StrData(&nick), 1, &key, &value);
+    LobbyString_Destroy(&fullName);
+    LobbyString_Destroy(&channelName);
+    LobbyString_Destroy(&nick);
+    return LOBBY_CHAT_RESULT_OK;
 }

@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "global.h"
 
 #include "dwc/chat_internal.h"
@@ -94,18 +93,18 @@ extern const char sStr_Nick0_Ne0[];
 extern const char sStr_StrlenNickLtMAX_NAME[];
 
 // Assertion with the message, the name of the checking function and the line.
-#define ASSERT(cond, message, func, line)                           \
-    if (!(cond)) {                                                  \
+#define ASSERT(cond, message, func, line)                               \
+    if (!(cond)) {                                                      \
         __msl_assertion_failed(message, sStr_ChatChannelC, func, line); \
     }
 // A valid channel name: not NULL, not empty, shorter than 257.
-#define ASSERT_CHANNEL(name, func, line)      \
-    ASSERT(name, sStr_ChannelNeNULL, func, line);  \
+#define ASSERT_CHANNEL(name, func, line)          \
+    ASSERT(name, sStr_ChannelNeNULL, func, line); \
     ASSERT(*name, sStr_Channel0_Ne0, func, line); \
     ASSERT(strlen(name) < 257, sStr_StrlenChannelLtMAX_CHANNEL, func, line);
 // A valid nick: not NULL, not empty, shorter than 128.
-#define ASSERT_NICK(nick, func, line)         \
-    ASSERT(nick, sStr_UserNeNULL, func, line);  \
+#define ASSERT_NICK(nick, func, line)          \
+    ASSERT(nick, sStr_UserNeNULL, func, line); \
     ASSERT(*nick, sStr_User0_Ne0, func, line); \
     ASSERT(strlen(nick) < 128, sStr_StrlenUserLtMAX_NAME, func, line);
 

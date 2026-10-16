@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "wifi_setup_keypad.h"
 
 #include "global.h"
@@ -23,8 +22,7 @@ void WifiSetupKeypad_Create(void) {
     int firstLabel;
     int labelIndex;
     int i;
-    // x and y of the label box are taken from the row-count table of wifi_setup_keypad_layout.c,
-    // which follows the key sizes there: { 0, 1 }
+    // the label box position is the { 0, 1 } stored right after the key sizes
     box[0] = ((const u16 *)&gWifiSetupKeypadDigitKeySize)[16];
     box[1] = ((const u16 *)&gWifiSetupKeypadDigitKeySize)[17];
     box[2] = 28;

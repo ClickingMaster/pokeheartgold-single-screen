@@ -34,8 +34,6 @@ BOOL WiFiPlaza_IsMinigamePlayerCountValid(u32 activity, u32 count) {
     return TRUE;
 }
 
-#pragma force_active on
-
 void WiFiPlazaLobbyClient_Init(enum HeapID heapID, SaveData *save, u32 count, WiFiPlazaCallbacks *callbacks, void *callbackArg) {
     GF_ASSERT(gWiFiPlazaLobbyClient == NULL);
     GF_ASSERT(count < 300);
@@ -53,8 +51,6 @@ void WiFiPlazaLobbyClient_Init(enum HeapID heapID, SaveData *save, u32 count, Wi
     gWiFiPlazaLobbyClient->initResult = 0;
 }
 
-#pragma force_active reset
-
 void WiFiPlazaLobbyClient_Free(void) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
     WiFiPlazaLobbyIdValueList_Free(&gWiFiPlazaLobbyClient->surveyData);
@@ -63,8 +59,6 @@ void WiFiPlazaLobbyClient_Free(void) {
     Heap_Free(gWiFiPlazaLobbyClient);
     gWiFiPlazaLobbyClient = NULL;
 }
-
-#pragma force_active on
 
 // Once per frame: follows the state of the lobby library and the channel, refreshes the lobby time and the
 // matchmaking sessions.
@@ -119,8 +113,6 @@ int WiFiPlazaLobbyClient_Update(void) {
     return WiFiPlazaLobbyClient_GetState();
 }
 
-#pragma force_active reset
-
 void WiFiPlazaLobbyClient_GetLastError(void) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
     if (gWiFiPlazaLobbyClient->initResult != 0) {
@@ -137,8 +129,6 @@ void WiFiPlazaLobbyClient_ToErrorCode(void) {
 void WiFiPlazaLobbyClient_Initialize(int value) {
     WiFiPlazaLobbyClient_InitializeEx(value, 0);
 }
-
-#pragma force_active on
 
 void WiFiPlazaLobbyClient_InitializeEx(int value, int mode) {
     void (*callbacks[17])(void);
@@ -165,8 +155,6 @@ void WiFiPlazaLobbyClient_InitializeEx(int value, int mode) {
     gWiFiPlazaLobbyClient->initResult = PPW_LobbyInitializeAsync(sStr_pokemonplatds, sStr_IIup73, mode, callbacks, userData, value, gWiFiPlazaLobbyClient->playerDataSize);
     WiFiPlazaLobbyClient_CheckResult(gWiFiPlazaLobbyClient->initResult);
 }
-
-#pragma force_active reset
 
 BOOL WiFiPlazaLobbyClient_IsInLobby(void) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
@@ -227,8 +215,6 @@ WiFiPlazaPlayer *WiFiPlazaLobbyClient_GetPlayer(int id) {
     return WiFiPlazaLobbyClient_GetPlayerData(gWiFiPlazaLobbyClient, id);
 }
 
-#pragma force_active on
-
 // The time the player entered the lobby.
 void WiFiPlazaLobbyClient_GetEntryTime(int id, s64 *time) {
     WiFiPlazaLobbyEntryTime *entered;
@@ -236,8 +222,6 @@ void WiFiPlazaLobbyClient_GetEntryTime(int id, s64 *time) {
     entered = &WiFiPlazaLobbyClient_GetPlayerRecord(gWiFiPlazaLobbyClient, id)->entryTime;
     *(WiFiPlazaLobbyEntryTime *)time = *entered;
 }
-
-#pragma force_active reset
 
 // The player who has been in the lobby the longest, -1 if none.
 int WiFiPlazaLobbyClient_GetOldestPlayer(void) {
@@ -285,8 +269,6 @@ int WiFiPlazaLobbyClient_GetOldestOtherPlayer(int excluded) {
     return result;
 }
 
-#pragma force_active on
-
 BOOL WiFiPlazaLobbyClient_JoinChannel(int channel) {
     BOOL result;
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
@@ -298,14 +280,10 @@ BOOL WiFiPlazaLobbyClient_JoinChannel(int channel) {
     return result;
 }
 
-#pragma force_active reset
-
 u8 WiFiPlazaLobbyClient_GetJoinChannelResult(void) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
     return gWiFiPlazaLobbyClient->joinChannelResult;
 }
-
-#pragma force_active on
 
 BOOL WiFiPlazaLobbyClient_LeaveChannel(void) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
@@ -317,8 +295,6 @@ BOOL WiFiPlazaLobbyClient_LeaveChannel(void) {
         return result;
     }
 }
-
-#pragma force_active reset
 
 BOOL WiFiPlazaLobbyClient_IsNotInChannel(void) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
@@ -406,8 +382,6 @@ u32 WiFiPlazaLobbyClient_GetScheduleValue(int field) {
     return result;
 }
 
-#pragma force_active on
-
 int WiFiPlazaLobbyClient_StartAddOwnLocation(void) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
     {
@@ -418,8 +392,6 @@ int WiFiPlazaLobbyClient_StartAddOwnLocation(void) {
         return result;
     }
 }
-
-#pragma force_active reset
 
 BOOL WiFiPlazaLobbyClient_IsOwnLocationAdded(void) {
     return gWiFiPlazaLobbyClient->addingLocation == 0;
@@ -520,7 +492,6 @@ void WiFiPlazaLobbyClient_SendToChannel(int type, const void *data, int size) {
     GF_ASSERT(WiFiPlazaLobbyClient_CheckResult(PPW_LobbySendChannelBinaryMessage(WiFiPlazaLobbyClient_ChannelToLib(gWiFiPlazaLobbyClient->channel), type, data, size)) == TRUE);
 }
 
-#pragma force_active on
 #pragma opt_propagation off
 
 // Starts matchmaking session `index` as its host.
@@ -551,7 +522,6 @@ BOOL WiFiPlazaLobbyClient_HostMatch(int index, int maxPlayers) {
 }
 
 #pragma opt_propagation reset
-#pragma force_active reset
 
 void WiFiPlazaLobbyClient_StopMatch(void) {
     WiFiPlazaLobbyClient *client;
@@ -566,8 +536,6 @@ void WiFiPlazaLobbyClient_StopMatch(void) {
     }
 }
 
-#pragma force_active on
-
 void WiFiPlazaLobbyClient_CloseMatch(void) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
     if (gWiFiPlazaLobbyClient->isMatchHost) {
@@ -575,8 +543,6 @@ void WiFiPlazaLobbyClient_CloseMatch(void) {
         GF_ASSERT(WiFiPlazaLobbyClient_CheckResult(PPW_LobbyUpdateRecruitInfo(&gWiFiPlazaLobbyClient->matches[gWiFiPlazaLobbyClient->currentMatch])));
     }
 }
-
-#pragma force_active reset
 
 BOOL WiFiPlazaLobbyClient_IsCurrentMatchClosed(void) {
     u16 index;
@@ -629,8 +595,6 @@ u32 WiFiPlazaLobbyClient_GetMatchPlayerCount(int index) {
     return match->info.playerCount;
 }
 
-#pragma force_active on
-
 // Joins matchmaking session `index` of another host.
 BOOL WiFiPlazaLobbyClient_JoinMatch(int index) {
     WiFiPlazaLobbyClient *client;
@@ -653,8 +617,6 @@ BOOL WiFiPlazaLobbyClient_JoinMatch(int index) {
     WifiConnection_SetDisconnectCallback(WiFiPlazaLobbyClient_OnMatchDisconnect, gWiFiPlazaLobbyClient);
     return TRUE;
 }
-
-#pragma force_active reset
 
 u32 WiFiPlazaLobbyClient_GetMatchTimer(int index) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);

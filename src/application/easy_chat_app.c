@@ -17,7 +17,6 @@
 #include "touch_hitbox_controller.h"
 #include "touchscreen.h"
 
-// Word menus of the easy chat word picker (ARM9, easy_chat_menu_*.c).
 ECMenu *ECMenu_New(enum HeapID heapID, EasyChatArgs *args);
 void ECMenu_Delete(ECMenu *menu);
 u32 ECMenu_GetCategoryCount(ECMenu *menu, u32 category);
@@ -211,8 +210,6 @@ BOOL EasyChatApp_IsComplete(EasyChatApp *app);
 void EasyChatYesNo_Set(u8 *result, u8 a, u8 b);
 u8 EasyChatYesNo_GetCursor(u8 *result);
 
-#pragma force_active on
-
 BOOL EasyChat_Init(OverlayManager *man, int *state) {
     EasyChatApp *app;
 
@@ -288,8 +285,6 @@ void EasyChatApp_OnTouchButton(u32 index, u32 event, void *arg) {
     }
 }
 
-#pragma force_active reset
-
 BOOL EasyChat_Exit(OverlayManager *man, int *state) {
 #pragma unused(state)
     EasyChatApp_Delete(OverlayManager_GetData(man), man);
@@ -297,8 +292,6 @@ BOOL EasyChat_Exit(OverlayManager *man, int *state) {
     Heap_Destroy(HEAP_ID_35);
     return TRUE;
 }
-
-#pragma force_active on
 
 EasyChatApp *EasyChatApp_Create(OverlayManager *man) {
     EasyChatApp *app = OverlayManager_CreateAndGetData(man, sizeof(EasyChatApp), HEAP_ID_34);
@@ -335,8 +328,6 @@ void EasyChatMessageCursor_Init(EasyChatMessageCursor *cursor, MailMessage *mess
         cursor->total += cursor->count;
     }
 }
-
-#pragma force_active reset
 
 void EasyChatMessageCursor_Next(EasyChatMessageCursor *cursor, MailMessage *message) {
     cursor->number++;
@@ -578,8 +569,6 @@ int EasyChatApp_MessageMenuAction(EasyChatApp *app, int action) {
     return EASY_CHAT_MESSAGE_MENU_INPUT;
 }
 
-#pragma force_active on
-
 int EasyChatApp_MessageMenuHandleKeys(EasyChatApp *app) {
     if (app->newKeys & PAD_BUTTON_B) {
         app->menuCursor = EASY_CHAT_MENU_QUIT;
@@ -626,8 +615,6 @@ int EasyChatApp_MessageMenuHandleKeys(EasyChatApp *app) {
     return EASY_CHAT_MESSAGE_MENU_INPUT;
 }
 
-#pragma force_active reset
-
 BOOL EasyChatApp_IsTouchOnSlider(EasyChatApp *app, int x, int y) {
     int touchX;
     int touchY;
@@ -661,8 +648,6 @@ BOOL EasyChatApp_IsTouchInSliderRange(EasyChatApp *app, int x, int y) {
     }
     return TRUE;
 }
-
-#pragma force_active on
 
 int EasyChatApp_GetMessageMenuTouch(EasyChatApp *app) {
     struct {
@@ -729,8 +714,6 @@ int EasyChatApp_GetMessageMenuTouch(EasyChatApp *app) {
         return result;
     }
 }
-
-#pragma force_active reset
 
 int EasyChatApp_MessageMenuHandleTouch(EasyChatApp *app) {
     int choice = EasyChatApp_GetMessageMenuTouch(app);
@@ -902,8 +885,6 @@ int EasyChatApp_GetListButtonTouch(EasyChatApp *app) {
     return 2;
 }
 
-#pragma force_active on
-
 int EasyChatApp_GetCategoryGridTouch(EasyChatApp *app) {
     TouchscreenHitbox hitbox;
     int row;
@@ -935,8 +916,6 @@ int EasyChatApp_GetCategoryGridTouch(EasyChatApp *app) {
     } while (row < 4);
     return -1;
 }
-
-#pragma force_active reset
 
 int EasyChatApp_GetInitialGridTouch(EasyChatApp *app) {
     int result;
@@ -1006,8 +985,6 @@ void EasyChatApp_CategoryMenuHandleInput(EasyChatApp *app, u32 *state) {
     }
 }
 
-#pragma force_active on
-
 BOOL EasyChatApp_CategoryHasWords(ECMenu *menu, u8 listMode, u16 category) {
     if (category == EASY_CHAT_CATEGORY_BACK || category == 0xFF) {
         return FALSE;
@@ -1023,8 +1000,6 @@ BOOL EasyChatApp_CategoryHasWords(ECMenu *menu, u8 listMode, u16 category) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL EasyChatApp_MoveCategoryCursor(EasyChatApp *app) {
     return gEasyChatCategoryCursorFuncs[app->listMode](app);
@@ -1332,8 +1307,6 @@ void EasyChatApp_WordListHandleInput(EasyChatApp *app, u32 *state) {
     }
 }
 
-#pragma force_active on
-
 int EasyChatWordPage_HandleKeys(EasyChatWordPage *page, u32 keys) {
     u32 index;
 
@@ -1397,8 +1370,6 @@ int EasyChatWordPage_HandleKeys(EasyChatWordPage *page, u32 keys) {
     return 0;
 }
 
-#pragma force_active reset
-
 int EasyChatWordPage_PageUp(EasyChatWordPage *page) {
     u16 topRow = page->topRow;
 
@@ -1414,8 +1385,6 @@ int EasyChatWordPage_PageUp(EasyChatWordPage *page) {
     }
     return 4;
 }
-
-#pragma force_active on
 
 int EasyChatWordPage_PageDown(EasyChatWordPage *page) {
     if (page->topRow < page->maxTopRow) {
@@ -1461,8 +1430,6 @@ void EasyChatApp_SetSelectedWord(EasyChatApp *app) {
     EasyChatApp_IsComplete(app);
 }
 
-#pragma force_active reset
-
 BOOL EasyChatApp_Handler_Exit(EasyChatApp *app, u32 *state) {
     switch (*state) {
     case 0:
@@ -1500,8 +1467,6 @@ void EasyChatApp_SubHandler_Start(EasyChatApp *app, u32 *state) {
         break;
     }
 }
-
-#pragma force_active on
 
 void EasyChatApp_SubHandler_ConfirmFinish(EasyChatApp *app, u32 *state) {
     switch (*state) {
@@ -1549,8 +1514,6 @@ void EasyChatApp_SubHandler_ConfirmFinish(EasyChatApp *app, u32 *state) {
     }
 }
 
-#pragma force_active reset
-
 void EasyChatApp_SubHandler_ConfirmQuit(EasyChatApp *app, u32 *state) {
     switch (*state) {
     case 0:
@@ -1585,8 +1548,6 @@ BOOL EasyChatApp_HasChanged(EasyChatApp *app) {
     return TRUE;
 }
 
-#pragma force_active on
-
 BOOL EasyChatApp_IsComplete(EasyChatApp *app) {
     switch (app->type) {
     case EASY_CHAT_TYPE_WORD:
@@ -1605,8 +1566,6 @@ BOOL EasyChatApp_IsComplete(EasyChatApp *app) {
         return FALSE;
     }
 }
-
-#pragma force_active reset
 
 void EasyChatYesNo_Set(u8 *result, u8 a, u8 b) {
     result[0] = b;

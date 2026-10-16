@@ -70,8 +70,6 @@ void ECMenu_Delete(ECMenu *menu) {
     }
 }
 
-#pragma force_active on
-
 void ECMenu_BuildCategoryLists(ECMenu *menu) {
     int i;
     u32 total;
@@ -86,8 +84,6 @@ void ECMenu_BuildCategoryLists(ECMenu *menu) {
         total += n;
     }
 }
-
-#pragma force_active off
 
 u32 ECMenuBuild_Pokemon(ECMenu *menu, const u16 *words, u32 count, u16 *dest) {
     u32 n = 0;

@@ -32,9 +32,9 @@ typedef struct WifiSetupSettings64 {
     u64 words[8];
 } WifiSetupSettings64;
 
-extern char gWifiSetupApSsid[]; // SSID of the chosen access point
-extern u8 gWifiSetupApBssid[6];  // BSSID of the chosen access point
-extern u8 gWifiSetupOwnMacAddress[6];  // own MAC address
+extern char gWifiSetupApSsid[];       // SSID of the chosen access point
+extern u8 gWifiSetupApBssid[6];       // BSSID of the chosen access point
+extern u8 gWifiSetupOwnMacAddress[6]; // own MAC address
 extern u8 gWifiSetupRecordBuffer[];
 extern u8 sStr_WARP[4];
 extern WifiSetupVersion sWifiSetupClientVersion;

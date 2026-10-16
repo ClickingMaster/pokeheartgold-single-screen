@@ -1,11 +1,9 @@
-#pragma force_active on
 #include "global.h"
 
 #include "dwc/chat_internal.h"
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-#pragma force_active on
 
 // Stream cipher of the chat connection (RC4 style, with a reversed initial permutation) and a repeating-key xor.
 

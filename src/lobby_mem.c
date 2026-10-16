@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "global.h"
 
 #include "dwc/net_common_internal.h"
@@ -39,24 +38,25 @@ int LobbyString_FindFirstOfChars(Str *s, const char *chars, u32 pos, u32 n) {
     return -1;
 }
 
-Node *LobbyRequestMap_FindInsertPos(Tree *t, Obj **key, Node **pos, u8 *a, u8 *b) {
+// Find the parent for a new node with this key, the last node not greater than it, and which side it goes on.
+Node *LobbyRequestMap_FindInsertPos(Tree *t, Obj **key, Node **pos, u8 *insertLeft, u8 *isLeftmost) {
     Node *parent;
     Node *n;
     *pos = NULL;
     n = t->head.left;
-    *a = 1;
-    *b = 1;
+    *insertLeft = 1;
+    *isLeftmost = 1;
     parent = &t->head;
     while (n != NULL) {
         parent = n;
         if ((*key)->id < n->key.obj->id) {
             n = n->left;
-            *a = 1;
+            *insertLeft = 1;
         } else {
             *pos = n;
             n = n->right;
-            *a = 0;
-            *b = 0;
+            *insertLeft = 0;
+            *isLeftmost = 0;
         }
     }
     return parent;
@@ -96,7 +96,7 @@ void LobbyMem_OnOutOfMemory(void) {
     }
     manager = ov45_022577E8.manager;
     manager->lastError = 2;
-    manager->state = 5;
+    manager->state = LOBBY_CHAT_STATE_ERROR;
     gLobbyMemOutOfMemoryHandler = LobbyMem_OnOutOfMemoryDisconnect;
 }
 

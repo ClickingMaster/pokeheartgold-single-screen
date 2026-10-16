@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "global.h"
 
 // The code below is compiled as ARM (32-bit) code.
@@ -9,6 +8,6 @@
 int LobbyChat_TimerConnectTimeout(void) {
     LobbyChatManager *manager = gLobbyChatManager;
     manager->lastError = 3;
-    manager->state = 5;
+    manager->state = LOBBY_CHAT_STATE_ERROR;
     return 0;
 }

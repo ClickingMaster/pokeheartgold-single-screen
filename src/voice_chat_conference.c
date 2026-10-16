@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "global.h"
 
 #include "vct/vct_ssp_internal.h"

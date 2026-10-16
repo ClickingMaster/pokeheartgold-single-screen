@@ -10,8 +10,6 @@
 // The players of the lobby client: the data every player sends (playerDataSize bytes per lobby slot), the record of
 // each slot (entry time, channel) and the two id lists (the lobby, the current channel).
 
-#pragma force_active on
-
 // Adds the own country and region to the lobby locations (once) and sends the list.
 BOOL WiFiPlazaLobbyClient_AddOwnLocation(WiFiPlazaLobbyClient *client) {
     int country = WifiHistory_GetPlayerCountry(client->wifiHistory);
@@ -37,8 +35,6 @@ BOOL WiFiPlazaLobbyClient_AddOwnLocation(WiFiPlazaLobbyClient *client) {
     client->locations[i].active = 1;
     return WiFiPlazaLobbyClient_CheckResult(PPW_LobbySetChannelData(-1, 0, sWiFiPlazaLocationListKey, client->locations, sizeof(client->locations)));
 }
-
-#pragma force_active reset
 
 void WiFiPlazaLobbyClient_AllocPlayerData(WiFiPlazaLobbyClient *client, u32 size, enum HeapID heapID) {
     u32 bytes = size * 20;

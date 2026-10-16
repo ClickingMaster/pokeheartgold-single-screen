@@ -3,7 +3,6 @@
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-#pragma force_active on
 
 typedef union String {
     struct {
@@ -20,8 +19,8 @@ typedef union String {
 } String;
 
 typedef struct Hooks {
-    void (*first)(char *, int, void *);
-    void (*second)(char *, char *, void *);
+    void (*onUserJoined)(char *, int, void *);
+    void (*onUserParted)(char *, char *, void *);
     int pad[3];
     void *arg;
 } Hooks;
@@ -47,63 +46,77 @@ static inline char *getStringData(String *s) {
     return s->large.ptr;
 }
 
-void LobbyChat_OnUserJoined(void *unused, const char *key, const char *value) {
-    String result, a, b, c, d, e, f, g, h, i, j, k, l, m;
-    int exists, index;
+// A user ID that is already in the channel is reported as parted before the new join.
+void LobbyChat_OnUserJoined(void *chat, const char *channel, const char *nick) {
+    String oldNick;
+    String limitChannel;
+    String nickStr;
+    String oldChannel;
+    String partedKey;
+    String partedFullName;
+    String partedName;
+    String partedNick;
+    String joinedNick;
+    String joinedChannel;
+    String enumChannel;
+    String joinedKey;
+    String joinedFullName;
+    String joinedName;
+    int status;
+    int index;
     Hooks *hooks;
     if (gLobbyChatManager && *(int *)(gLobbyChatManager + 4) == 5) {
         return;
     }
-    LobbyString_InitFromCStr(&a, key);
-    exists = LobbyChat_GetChannelUserLimit(gLobbyChatManager, &a);
-    LobbyString_Destroy(&a);
-    if (exists && chatGetChannelNumUsersA(*(int *)gLobbyChatManager, key) > exists) {
+    LobbyString_InitFromCStr(&limitChannel, channel);
+    status = LobbyChat_GetChannelUserLimit(gLobbyChatManager, &limitChannel);
+    LobbyString_Destroy(&limitChannel);
+    if (status && chatGetChannelNumUsersA(*(int *)gLobbyChatManager, channel) > status) {
         return;
     }
-    LobbyString_InitFromCStr(&b, value);
-    LobbyChat_GetUserNick(&result, gLobbyChatManager, LobbyChat_GetUserIdFromNick(&b));
-    LobbyString_Destroy(&b);
-    LobbyString_InitFromCStr(&c, key);
-    exists = LobbyChat_RemoveChannelUser(gLobbyChatManager, &result, &c);
-    LobbyString_Destroy(&c);
-    if (exists) {
-        LobbyString_InitFromCStr(&d, key);
-        hooks = LobbyChat_GetChannelCallbacks(gLobbyChatManager, &d);
-        LobbyString_Destroy(&d);
-        LobbyString_InitFromCStr(&e, key);
-        LobbyChat_StripChannelPrefix(&f, gLobbyChatManager, &e);
-        LobbyString_InitFromCStr(&g, value);
+    LobbyString_InitFromCStr(&nickStr, nick);
+    LobbyChat_GetUserNick(&oldNick, gLobbyChatManager, LobbyChat_GetUserIdFromNick(&nickStr));
+    LobbyString_Destroy(&nickStr);
+    LobbyString_InitFromCStr(&oldChannel, channel);
+    status = LobbyChat_RemoveChannelUser(gLobbyChatManager, &oldNick, &oldChannel);
+    LobbyString_Destroy(&oldChannel);
+    if (status) {
+        LobbyString_InitFromCStr(&partedKey, channel);
+        hooks = LobbyChat_GetChannelCallbacks(gLobbyChatManager, &partedKey);
+        LobbyString_Destroy(&partedKey);
+        LobbyString_InitFromCStr(&partedFullName, channel);
+        LobbyChat_StripChannelPrefix(&partedName, gLobbyChatManager, &partedFullName);
+        LobbyString_InitFromCStr(&partedNick, nick);
         {
-            String *second = &g;
-            char *first = getStringData(&f);
-            hooks->second(first, LobbyChat_GetUserIdFromNick(second), hooks->arg);
+            String *partedNickStr = &partedNick;
+            char *channelName = getStringData(&partedName);
+            hooks->onUserParted(channelName, LobbyChat_GetUserIdFromNick(partedNickStr), hooks->arg);
         }
-        LobbyString_Destroy(&g);
-        LobbyString_Destroy(&f);
-        LobbyString_Destroy(&e);
+        LobbyString_Destroy(&partedNick);
+        LobbyString_Destroy(&partedName);
+        LobbyString_Destroy(&partedFullName);
     }
-    LobbyString_InitFromCStr(&h, value);
-    LobbyString_InitFromCStr(&i, key);
-    index = LobbyChat_AddChannelUser(gLobbyChatManager, &h, &i);
-    LobbyString_Destroy(&i);
-    LobbyString_Destroy(&h);
+    LobbyString_InitFromCStr(&joinedNick, nick);
+    LobbyString_InitFromCStr(&joinedChannel, channel);
+    index = LobbyChat_AddChannelUser(gLobbyChatManager, &joinedNick, &joinedChannel);
+    LobbyString_Destroy(&joinedChannel);
+    LobbyString_Destroy(&joinedNick);
     if (index == -1) {
-        LobbyString_Destroy(&result);
+        LobbyString_Destroy(&oldNick);
         return;
     }
-    LobbyString_InitFromCStr(&j, key);
-    exists = LobbyChat_AreChannelUsersEnumerated(gLobbyChatManager, &j);
-    LobbyString_Destroy(&j);
-    if (exists) {
-        LobbyString_InitFromCStr(&k, key);
-        hooks = LobbyChat_GetChannelCallbacks(gLobbyChatManager, &k);
-        LobbyString_Destroy(&k);
-        LobbyString_InitFromCStr(&l, key);
-        LobbyChat_StripChannelPrefix(&m, gLobbyChatManager, &l);
-        hooks->first(getStringData(&m), index, hooks->arg);
-        LobbyString_Destroy(&m);
-        LobbyString_Destroy(&l);
+    LobbyString_InitFromCStr(&enumChannel, channel);
+    status = LobbyChat_AreChannelUsersEnumerated(gLobbyChatManager, &enumChannel);
+    LobbyString_Destroy(&enumChannel);
+    if (status) {
+        LobbyString_InitFromCStr(&joinedKey, channel);
+        hooks = LobbyChat_GetChannelCallbacks(gLobbyChatManager, &joinedKey);
+        LobbyString_Destroy(&joinedKey);
+        LobbyString_InitFromCStr(&joinedFullName, channel);
+        LobbyChat_StripChannelPrefix(&joinedName, gLobbyChatManager, &joinedFullName);
+        hooks->onUserJoined(getStringData(&joinedName), index, hooks->arg);
+        LobbyString_Destroy(&joinedName);
+        LobbyString_Destroy(&joinedFullName);
     }
-    LobbyString_Destroy(&result);
-    (void)unused;
+    LobbyString_Destroy(&oldNick);
 }

@@ -1275,8 +1275,6 @@ static inline volatile u32 *WifiSetup_GetIrqCheckBase(void) {
     return (volatile u32 *)0x027E0000;
 }
 
-#pragma force_active on
-
 // Runs the vblank task queue and sets the vblank bit of the interrupt check flags.
 void WifiSetup_VBlankIntr(void) {
     WifiSetupTask_RunQueue(1);

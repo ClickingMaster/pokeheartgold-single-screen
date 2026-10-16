@@ -14,7 +14,7 @@ typedef struct RowCounts {
 
 const WifiSetupPoint ov13_02244F60 = { 0x1C, 0x02 };
 const WifiSetupPoint gWifiSetupKeyboardButtonSize = { 120, 18 }; // button size
-const WifiSetupPoint gWifiSetupKeyboardKeySize = { 17, 18 };  // character key size
+const WifiSetupPoint gWifiSetupKeyboardKeySize = { 17, 18 };     // character key size
 
 // number of buttons, character keys and extra keys in each of the five rows (row 4: buttons)
 static const RowCounts sButtonsPerRow = {

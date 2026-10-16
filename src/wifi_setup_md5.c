@@ -23,10 +23,8 @@ static inline void AccumulateDigest(WifiSetupMd5Context *ctx, u32 a, u32 b, u32 
     ctx->state[3] += d;
 }
 
-#pragma force_active on
-
 // MD5 block transform. Round 1 step 15 computes ~d once into `inverse` (F14) and round 2 step 1
-// reuses it (G0); the object code depends on that.
+// reuses it (G0).
 void WifiSetup_Md5Transform(WifiSetupMd5Context *context, const u8 *input) {
     u32 *state = context->state;
     u32 a = state[0];
@@ -121,5 +119,3 @@ void WifiSetup_Md5Transform(WifiSetupMd5Context *context, const u8 *input) {
     AccumulateDigest(context, a, b, c, d);
     WifiSetup_FillBytes(words, 0, 64);
 }
-
-#pragma force_active reset
