@@ -53,7 +53,6 @@ extern void ResetAllTextPrinters(void);
 extern u8 TextPrinterCheckActive(u8 printerId);
 extern void TextFlags_SetCanTouchSpeedUpPrint(BOOL enable);
 
-// Overlay helpers (not in a header yet)
 BOOL CTRDG_IsExisting(void);
 BOOL CTRDG_IsPulledOut(void);
 void CTRDG_ReadAgbFlash(u16 sector, u32 offset, void *dest, u32 size);

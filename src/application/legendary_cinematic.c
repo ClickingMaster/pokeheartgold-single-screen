@@ -158,7 +158,6 @@ extern int (*const sScriptCinematicSubs_Arceus[])(LegendaryCinematic *);
 
 // declared only by the NitroSDK internal headers, which clash with lib/include
 u32 GX_GetBankForLCDC(void);
-// defined in sound_se.c, not declared by a header yet
 BOOL PlaySE_SetVolume(u16 seqNo, u16 volume);
 // sound_02004A44.h declares the volume as u16, but LugiaCinematic_Play passes it untruncated
 u16 GF_GetCurrentPlayingBGM();

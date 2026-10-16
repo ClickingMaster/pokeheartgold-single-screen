@@ -83,7 +83,6 @@ struct LockCapsuleCardView {
 extern void ResetAllTextPrinters(void);
 extern u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, void *callback);
 
-// Other modules (not in a header yet).
 extern void RTC_ConvertDayToDate(RTCDate *date, s32 day);
 
 extern const OverlayManagerTemplate gApp_MainMenu_SelectOption_MysteryGift;

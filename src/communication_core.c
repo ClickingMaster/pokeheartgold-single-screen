@@ -13,7 +13,6 @@
 #include "wifi_connection.h"
 #include "wireless_manager.h"
 
-// Called with the argument types their call sites were matched against.
 extern void *SysTask_CreateOnVBlankQueue(void *func, void *data, int priority);
 extern void SysTask_Destroy(void *task);
 extern void LinkSync_Free(void);

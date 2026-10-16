@@ -121,7 +121,6 @@ extern const u8 sLinkDoublesBattlerTypes[2][4];
 extern const u8 sLinkMultiBattlerTypes[4][4];
 extern const u8 sDoublesBattlerTypes[4];
 
-// Declared by no header yet.
 extern u32 *BattleAnimSystem_New(enum HeapID heapId);
 extern void BattleAnimSystem_Delete(u32 *animSystem);
 extern void LinkBattleScreen_Start(BattleLinkScreenArgs *args);

@@ -101,7 +101,6 @@ extern u8 GetFontAttribute(u8 fontId, int attr);
 extern u32 FontID_String_GetCenterAlignmentX(u32 fontId, String *string, u32 letterSpacing, u32 windowWidth);
 extern u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, void *callback);
 
-// Other modules (not in a header yet).
 extern void RTC_ConvertDayToDate(RTCDate *date, s32 day);
 extern void CommWireless_SetCustomBeacon(void *src);
 extern PlayerProfile *CommPlayerInfo_GetProfile(int netId);

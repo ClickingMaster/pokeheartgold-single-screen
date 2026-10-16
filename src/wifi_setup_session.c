@@ -27,7 +27,6 @@ static inline int GetTimeout(State *p){return p->timeout;}
 int WifiSetup_RunAossSession(State *);
 static inline void ClearRetry(Pair*p,int*mode){*(s16*)((u32)p)=0;*mode=0;*(s16*)((u32)p+2)=0;}
 #pragma opt_loop_invariants off
-// @fn WifiSetup_RunAossSession
 int WifiSetup_RunAossSession(State *state){Stack v;int connected;int mode;int nextmode;u32 ip;Data *data;int seconds,microseconds,timeout;int tmp,result,zero;u8 error;s16 i,limit,delay;
  v.connection=_0224267C;ClearRetry(&v.retry,&mode);v.option=1;zero=mode;v.attempts=zero;ip=zero;WifiSetup_MemFill(&v.params,mode,sizeof(Params));
  v.connection.max=state->max;if(v.connection.max==-1)v.connection.max=10;v.retry.max=state->retrymax;if(v.retry.max==-1)v.retry.max=10;v.connection.delay=state->delay;if(v.connection.delay==-1)v.connection.delay=100;v.retry.delay=state->retrydelay;if(v.retry.delay==-1)v.retry.delay=100;tmp=GetTimeout(state);timeout=tmp;if(tmp==-1)timeout=2000;

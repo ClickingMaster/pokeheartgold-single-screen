@@ -160,7 +160,6 @@ extern void (*const sScriptFieldMoveEffectDeleteFuncs[])(Field3dObjectTask *task
 extern Field3dObjectTask *(*const sScriptFieldMoveEffectCreateFuncs[])(FieldSystem *fieldSystem);
 extern BOOL (*const sScriptFieldMoveEffectIsFinishedFuncs[])(Field3dObjectTask *task);
 
-// Not declared in any header yet.
 BOOL FieldSystem_FindMapProp(FieldSystem *fieldSystem, int buildModel, MapProp **outProp, int *outIdx);
 void Terrain_GetChunkOrigin(int idx, int width, VecFx32 *pos);
 NNSG3dResFileHeader **AreaDataManager_GetMapPropModel(u32 mapPropId, AreaDataManager *areaDataManager);

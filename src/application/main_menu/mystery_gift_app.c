@@ -83,7 +83,6 @@ typedef struct MysteryGiftLinkState {
     u32 state;                        // 0x10
 } MysteryGiftLinkState;
 
-// Other modules (not in a header yet).
 extern BOOL CTRDG_IsExisting();
 extern fx32 FX_Sqrt(fx32 value);
 extern void CommWireless_Terminate(void);

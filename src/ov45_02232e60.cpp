@@ -1,7 +1,6 @@
-// Overlay 45 (DWC lobby) translation unit PPW_LobbySubmitQuestionnaire..ov45_022383DF.
-// One file because the original TU owned the -ipa-file pooled .data block at _02254F58
-// (4 one-byte objects + 6 string pointers, MWCC pool order = heapsort by size); 35A0/4D68/2E60/4A88/50FC/6BA8/8104
-// address those objects through the shared pool literal. Each former matched fragment keeps its own namespace.
+// Overlay 45 (DWC lobby) code from PPW_LobbySubmitQuestionnaire to ov45_022383DF.
+// One translation unit: its functions address the pooled .data block at _02254F58 (4 one-byte objects
+// and 6 string pointers, MWCC pool order = heapsort by size) through one shared pool literal.
 #include <nitro/types.h>
 
 // The code below is compiled as ARM (32-bit) code.
@@ -39,7 +38,6 @@ extern "C" const char *ov45_02254F64 = sStr_uLMOGEiiJogofchScpXb000244fd00006015
 extern "C" signed char ov45_02254F59 = 0;
 extern "C" u8 _02254F58 = 0;
 #pragma explicit_zero_data reset
-// ---- formerly src/op90_to70_ov45_extra04_residual_9_r03.cpp
 #pragma push
 
 namespace F00 {
@@ -301,7 +299,6 @@ extern "C" int PPW_LobbySubmitQuestionnaire(int mode) {
 #pragma pop
 #undef PNEW
 
-// ---- formerly src/to70_ov45_extra04_run10.c
 #pragma push
 
 namespace F01 {
@@ -442,7 +439,6 @@ int PPW_LobbyInitResultToLastError(int x) {
 #undef W
 #undef P
 
-// ---- formerly src/op90_to80_extra1435_residual_1_r01.cpp
 #pragma push
 
 namespace F02 {
@@ -572,7 +568,6 @@ extern "C" int PPWLobby_SendMessage(int id, int key, int a, int b, int c, int d,
 
 #pragma pop
 
-// ---- formerly src/to80_extra1435_run01.c
 #pragma push
 
 namespace F03 {
@@ -679,7 +674,6 @@ int PPWLobby_SetChannelData(int id, int key, int mode, void *data, u32 length) {
 
 #pragma pop
 
-// ---- formerly lib/NitroDWC/asm/to80_extra1435_residual_2.s
 #pragma push
 
 namespace F04 {
@@ -910,7 +904,6 @@ extern "C" void PPWLobby_StartCheckProfile(void) {
 
 #pragma pop
 
-// ---- formerly src/to70_ov45_extra16_run01.c
 #pragma push
 
 namespace F05 {
@@ -976,7 +969,6 @@ void PPWLobby_MakeChannelName(Str *out, u32 id, Str *s) {
 #undef I
 #undef P
 
-// ---- formerly lib/NitroDWC/src/to91_ov45_string_concat200.cpp
 #pragma push
 
 namespace F06 {
@@ -1041,7 +1033,6 @@ extern "C" Str *LobbyString_Concat(Str *out, Str *left, Str *right) {
 
 #pragma pop
 
-// ---- formerly lib/NitroDWC/src/to91_ov45_cstring_concat184.cpp
 #pragma push
 
 namespace F07 {
@@ -1101,7 +1092,6 @@ extern "C" Str *LobbyString_ConcatCStr(Str *out, Str *left, char *right) {
 
 #pragma pop
 
-// ---- formerly src/to70_ov45_extra16_run02.c
 #pragma push
 
 namespace F08 {
@@ -1164,7 +1154,6 @@ void PPWLobby_GenerateChannelBaseName(Str *out) {
 #undef I
 #undef P
 
-// ---- formerly lib/NitroDWC/src/to91_ov45_format_string216.cpp
 #pragma push
 using std::va_list;
 extern "C" {
@@ -1229,7 +1218,6 @@ extern "C" void LobbyString_Format(Str *output, const char *format, ...) {
 
 #pragma pop
 
-// ---- formerly src/op90_op90_to91_ov45_format_string216_residual_residual_1_r01.cpp
 #pragma push
 
 namespace F10 {
@@ -1431,7 +1419,6 @@ extern "C" int PPWLobby_EnterMainChannel(void) {
 
 #pragma pop
 
-// ---- formerly src/op90_op90_to91_ov45_format_string216_residual_residual_1_r02.cpp
 #pragma push
 
 namespace F11 {
@@ -1575,7 +1562,6 @@ extern "C" void PPWLobby_HandleReceivedData(int a, int b, char *channel, int id,
 
 #pragma pop
 
-// ---- formerly src/op90_to91_ov45_format_string216_residual_r01.cpp
 #pragma push
 
 namespace F12 {
@@ -1638,7 +1624,6 @@ extern "C" int PPWLobby_DecodeMessageData(const char *text, Vec *out) {
 
 #pragma pop
 
-// ---- formerly src/op90_to91_ov45_format_string216_residual_r02.cpp
 #pragma push
 
 namespace F13 {
@@ -1676,7 +1661,6 @@ extern "C" int LobbyString_Equals(const String &a, const String &b) {
 
 #pragma pop
 
-// ---- formerly src/op90_op90_to91_ov45_format_string216_residual_residual_2_r01.cpp
 #pragma push
 
 namespace F14 {
@@ -1955,7 +1939,6 @@ extern "C" int PPWLobby_HandleLibraryData(int a0, int a1, int sel, int id, const
 
 #pragma pop
 
-// ---- formerly src/to80_extra1657_run01.c
 #pragma push
 
 namespace F15 {
@@ -2037,7 +2020,6 @@ done:
 
 #pragma pop
 
-// ---- formerly src/to90_extra2330_run01.c
 #pragma push
 
 namespace F16 {
@@ -2115,7 +2097,6 @@ int PPWLobby_IsMainChannelReady(void) {
 
 #pragma pop
 
-// ---- formerly src/to90_extra2330_run02.c
 #pragma push
 
 namespace F17 {
@@ -2194,7 +2175,6 @@ int PPWLobby_TimerUploadUserProfile(void) {
 #pragma pop
 #undef W
 
-// ---- formerly src/to70_ov45_extra16_run03.c
 #pragma push
 
 namespace F18 {
@@ -2289,7 +2269,6 @@ int PPWLobby_TimerRequestChannelTime(void) {
 #undef I
 #undef P
 
-// ---- formerly src/to80_extra1916_run01.c
 #pragma push
 
 namespace F19 {
@@ -2337,7 +2316,6 @@ int PPWLobby_TimerRequestLobbyData(void) {
 
 #pragma pop
 
-// ---- formerly src/to70_ov45_extra16_run04.c
 #pragma push
 
 namespace F20 {
@@ -2432,7 +2410,6 @@ int PPWLobby_ParseWebResponse(int valid, u8 *data, u32 size, void **output, u32 
 #undef I
 #undef P
 
-// ---- formerly src/op90_op90_to80_extra1436_residual_1_residual_1_r01.cpp
 #pragma push
 
 namespace F21 {
@@ -2667,7 +2644,6 @@ extern "C" void PPWLobby_OnCheckProfile(int a0, int a1, int a2) {
 
 #pragma pop
 
-// ---- formerly lib/NitroDWC/asm/op90_op90_to80_extra1436_residual_1_residual_1_residual_1.s
 #pragma push
 
 namespace F22 {
@@ -2917,7 +2893,6 @@ extern "C" void PPWLobby_OnGetSchedule(int a0, int a1, int a2) {
 
 #pragma pop
 
-// ---- formerly src/op90_to80_extra1436_residual_1_r01.cpp
 #pragma push
 
 namespace F23 {
@@ -3151,7 +3126,6 @@ extern "C" void PPWLobby_OnGetVip(int a0, int a1, int a2) {
 
 #pragma pop
 
-// ---- formerly src/to80_extra1436_run01.c
 #pragma push
 
 namespace F24 {
@@ -3214,7 +3188,6 @@ void PPWLobby_OnGetQuestionnaire(void *a, void *b, void *c) {
 
 #pragma pop
 
-// ---- formerly src/to70_ov45_extra16_run05.c
 #pragma push
 
 namespace F25 {
@@ -3279,7 +3252,6 @@ void PPWLobby_OnSubmitQuestionnaire(int status) {
 #undef I
 #undef P
 
-// ---- formerly src/op90_op90_to70_ov45_extra16_residual_6_residual_1_r01.cpp
 #pragma push
 
 namespace F26 {
@@ -3598,7 +3570,6 @@ extern "C" void PPWLobby_OnEnterMainChannel(int success, void *unused, void *han
 
 #pragma pop
 
-// ---- formerly src/op90_to70_ov45_extra16_residual_6_r01.cpp
 #pragma push
 
 namespace F27 {
@@ -3752,7 +3723,6 @@ extern "C" void PPWLobby_OnEnterSubChannel(int result, int unused, int arg, int 
 
 #pragma pop
 
-// ---- formerly src/op90_to70_ov45_extra16_residual_6_r02.cpp
 #pragma push
 
 namespace F28 {
@@ -3936,7 +3906,6 @@ extern "C" void PPWLobby_OnPlayerJoined(char *channel, int id) {
 
 #pragma pop
 
-// ---- formerly src/op90_to70_ov45_extra16_residual_6_r03.cpp
 #pragma push
 
 namespace F29 {
@@ -4123,7 +4092,6 @@ extern "C" void PPWLobby_OnPlayerLeft(char *channel, int id) {
 
 #pragma pop
 
-// ---- formerly src/to65_ov45_extra06_run01.c
 #pragma push
 
 namespace F30 {
@@ -4358,7 +4326,6 @@ void PPWLobby_OnPlayerMessage(int a, int b, int c) {
 
 #pragma pop
 
-// ---- formerly src/to80_extra1839_run01.c
 #pragma push
 
 namespace F31 {
@@ -4496,7 +4463,6 @@ void PPWLobby_OnMessage(void *key, int index, void *name) {
 
 #pragma pop
 
-// ---- formerly src/to65_ov45_extra06_run02.c
 #pragma push
 
 namespace F32 {
@@ -4739,7 +4705,6 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f) {
 
 #pragma pop
 
-// ---- formerly src/to70_to70_to65_ov45_extra06_residual_3_extra341_residual_1_extra1156_run01.c
 #pragma push
 
 namespace F33 {
@@ -4817,7 +4782,6 @@ void PPWLobby_OnEnumChannels(int valid, int count, char **names, int unused, int
 
 #pragma pop
 
-// ---- formerly src/op90_to70_to70_to65_ov45_extra06_residual_3_extra341_residual_1_extra1156_residual_1_r01.cpp
 #pragma push
 
 namespace F34 {
@@ -4924,7 +4888,6 @@ extern "C" Vec LobbyString_Split(const Str &s, const Str &delim, int max) {
 
 #pragma pop
 
-// ---- formerly src/to70_to65_ov45_extra06_residual_3_extra341_run01.c
 #pragma push
 
 namespace F35 {
@@ -4943,7 +4906,6 @@ void LobbyString_Substr(void *a, void *b, int c, int d) {
 
 #pragma pop
 
-// ---- formerly src/op90_to70_to65_ov45_extra06_residual_3_extra341_residual_2_r01.cpp
 #pragma push
 
 namespace F36 {
@@ -5056,7 +5018,6 @@ extern "C" void PPWLobby_OnEnumUsers(int a, char *channel, int count, int *ids) 
 
 #pragma pop
 
-// ---- formerly src/to65_ov45_extra06_run03.c
 #pragma push
 
 namespace F37 {
@@ -5301,7 +5262,6 @@ void PPWLobby_OnGetChannelMode(int a, int b, u32 *c) {
 
 #pragma pop
 
-// ---- formerly src/op90_to70_to65_ov45_extra06_residual_4_extra1124_residual_1_r01.cpp
 #pragma push
 
 namespace F38 {
@@ -5394,7 +5354,6 @@ extern "C" void PPWLobby_OnGetChannelTime(int result, int unused1, int unused2, 
 
 #pragma pop
 
-// ---- formerly src/to70_to65_ov45_extra06_residual_4_extra1124_run01.c
 #pragma push
 
 namespace F39 {
@@ -5457,7 +5416,6 @@ void PPWLobby_OnGetLobbyData(int ok, int a, int b, int c, void *data) {
 
 #pragma pop
 
-// ---- formerly src/to65_ov45_extra06_run04.c
 #pragma push
 
 namespace F40 {
@@ -5717,7 +5675,6 @@ void *PPWLobbyPlayer_Delete(u8 *a) {
 
 #pragma pop
 
-// ---- formerly src/to80_extra1643_run01.c
 #pragma push
 
 namespace F41 {
@@ -5768,7 +5725,6 @@ Queue *LobbyEventDeque_Destroy(Queue *p) {
 
 #pragma pop
 
-// ---- formerly src/to65_ov45_extra06_run05.c
 #pragma push
 
 namespace F42 {
@@ -6006,7 +5962,6 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a) {
 
 #pragma pop
 
-// ---- formerly src/to80_extra1644_run01.c
 #pragma push
 
 namespace F43 {
@@ -6045,7 +6000,6 @@ void LobbyTimerMap_Insert(Result *r, void *p, u32 *v) {
 
 #pragma pop
 
-// ---- formerly src/to61_overlay_45_arm_residual_1_run01.c
 #pragma push
 
 namespace F44 {
@@ -6299,7 +6253,6 @@ void LobbyTimerMap_Clear(struct Tree *a) {
 
 #pragma pop
 
-// ---- formerly src/op90_to61_overlay_45_arm_residual_1_residual_2_r01.cpp
 #pragma push
 
 namespace F45 {
@@ -6412,7 +6365,6 @@ extern "C" Node *LobbyTimerMap_InsertNode(Tree *t, Node *parent, int left, int l
 
 #pragma pop
 
-// ---- formerly src/to61_overlay_45_arm_residual_1_run02.c
 #pragma push
 
 namespace F46 {
@@ -6662,7 +6614,6 @@ void *LobbyTimerMap_Destroy(struct Tree *a) {
 
 #pragma pop
 
-// ---- formerly lib/NitroDWC/src/to91_ov45_iterator_advance108.cpp
 #pragma push
 
 namespace F47 {
@@ -6706,7 +6657,6 @@ extern "C" void ov45_02236E58(Iterator *it) {
 
 #pragma pop
 
-// ---- formerly src/to70_to61_overlay_45_arm_residual_1_residual_3_extra1104_run01.c
 #pragma push
 
 namespace F48 {
@@ -6790,7 +6740,6 @@ void LobbyTree_InsertRebalance(Node *n, void *volatile root) {
 
 #pragma pop
 
-// ---- formerly src/to80_extra1731_run01.c
 #pragma push
 
 namespace F49 {
@@ -6971,7 +6920,6 @@ Node *LobbyTree_EraseRebalance(Node *node, void *root) {
 
 #pragma pop
 
-// ---- formerly src/to61_overlay_45_arm_residual_1_run03.c
 #pragma push
 
 namespace F50 {
@@ -7250,7 +7198,6 @@ void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused)
 
 #pragma pop
 
-// ---- formerly src/to90_extra2321_run01.c
 #pragma push
 
 namespace F51 {
@@ -7288,7 +7235,6 @@ u32 *LobbyStringVector_Destroy(u32 *p) {
 
 #pragma pop
 
-// ---- formerly src/to65_ov45_extra07_run01.c
 #pragma push
 
 namespace F52 {
@@ -7555,7 +7501,6 @@ struct Vec *LobbyEventVector_Destroy(struct Vec *a) {
 
 #pragma pop
 
-// ---- formerly src/op90_to65_ov45_extra07_residual_2_r01.cpp
 #pragma push
 
 namespace F53 {
@@ -7590,7 +7535,6 @@ extern "C" void LobbyCharVector_Grow(Vec *v, u32 n) {
 
 #pragma pop
 
-// ---- formerly src/to65_ov45_extra07_run02.c
 #pragma push
 
 namespace F54 {
@@ -7826,7 +7770,6 @@ void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused) {
 
 #pragma pop
 
-// ---- formerly src/to80_extra1913_run01.c
 #pragma push
 
 namespace F55 {
@@ -7876,7 +7819,6 @@ void LobbyCharVector_Reallocate(Buffer *b, Allocator incoming, u32 n) {
 #undef U16
 #undef PTR
 
-// ---- formerly src/to61_overlay_45_arm_residual_1_run04.c
 #pragma push
 
 namespace F56 {
@@ -8105,7 +8047,6 @@ u32 LobbyCharVector_RecommendSize(Vec *a, u32 n) {
 
 #pragma pop
 
-// ---- formerly lib/NitroDWC/src/to91_ov45_vector_grow120.cpp
 #pragma push
 using std::memset;
 using namespace DwcFormatted216Native;
@@ -8129,7 +8070,6 @@ extern "C" void LobbyCharVector_AppendZeros(Vec *vector, u32 count, ResizeDispat
 
 #pragma pop
 
-// ---- formerly lib/NitroDWC/src/to91_ov45_vector_destroy_copy204.cpp
 #pragma push
 using DwcStringConcat200::RangeDispatch;
 using namespace DwcFormatted216Native;
@@ -8177,7 +8117,6 @@ extern "C" Str *LobbyString_InitCopy(Str *output, Str *input) {
 
 #pragma pop
 
-// ---- formerly src/op90_to65_ov45_extra08_residual_2_r01.cpp
 #pragma push
 
 namespace F59 {
@@ -8231,7 +8170,6 @@ extern "C" String *LobbyString_InitSubstring(String *self, String *str, u32 pos,
 
 #pragma pop
 
-// ---- formerly lib/NitroDWC/src/to91_ov45_string_construct_destroy164.cpp
 #pragma push
 using DwcStringConcat200::RangeDispatch;
 using std::strlen;
@@ -8262,7 +8200,6 @@ extern "C" Str *LobbyString_Destroy(Str *output) {
 
 #pragma pop
 
-// ---- formerly src/to90_extra2117_run01.c
 #pragma push
 
 namespace F61 {
@@ -8370,7 +8307,6 @@ void LobbyString_Reserve(Text *w, u32 size) {
 #undef U
 #undef P
 
-// ---- formerly src/to90_w41400_run01.c
 #pragma push
 
 namespace F62 {
@@ -8411,7 +8347,6 @@ struct Str *LobbyString_Assign(struct Str *dst, struct Str *src) {
 
 #pragma pop
 
-// ---- formerly lib/NitroDWC/src/to91_ov45_string_replace80.cpp
 #pragma push
 
 namespace F63 {
@@ -8463,7 +8398,6 @@ extern "C" Str *LobbyString_Replace(Str *out, u32 pos, u32 remove, Str *input) {
 
 #pragma pop
 
-// ---- formerly src/op90_to91_ov45_string_between172_r01.cpp
 #pragma push
 
 namespace F64 {
@@ -8524,7 +8458,6 @@ extern "C" String *LobbyString_ReplaceSubstring(String *self, u32 pos, u32 n1, S
 
 #pragma pop
 
-// ---- formerly lib/NitroDWC/src/to91_ov45_string_search52.cpp
 #pragma push
 #pragma force_active on
 
@@ -8546,7 +8479,6 @@ extern "C" int LobbyString_Find(const StringSearch *a, const StringSearch *b, u3
 
 #pragma pop
 
-// ---- formerly src/to90_extra2336_run01.c
 #pragma push
 extern "C" {
 #pragma force_active on
@@ -8592,7 +8524,6 @@ fail:
 }
 #pragma pop
 
-// ---- formerly src/op90_to90_extra2336_residual_2_r01.cpp
 #pragma push
 
 namespace F67 {
@@ -8662,7 +8593,6 @@ extern "C" int LobbyString_CompareCStr(const String *a, const char *b) {
 
 #pragma pop
 
-// ---- formerly src/to90_extra2336_run02.c
 #pragma push
 
 namespace F68 {
@@ -8709,7 +8639,6 @@ int LobbyString_CompareChars(const u8 *s, u32 pos, u32 length, const void *other
 
 #pragma pop
 
-// ---- formerly src/op90_op90_to90_extra2336_residual_3_residual_1_r01.cpp
 #pragma push
 
 namespace F69 {
