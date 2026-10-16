@@ -44,12 +44,12 @@ extern const u32 sWifiSetupAesTd1[];
 void WifiSetup_SimpleStartThread(void *arg) {
     int result = WifiSetup_RunSession();
 
-    ov13_0224DF30.error = result;
+    gWifiSetupWork.error = result;
     WifiSetupLink_DisconnectAp();
     if (result == 1) {
-        ov13_0224DF30.state = 6;
+        gWifiSetupWork.state = 6;
     } else {
-        ov13_0224DF30.state = 7;
+        gWifiSetupWork.state = 7;
     }
     gWifiSetupConfig.deadline = -1;
     WifiSetup_ReportSimpleStartStatus();

@@ -10,8 +10,8 @@ typedef struct {
     u32 start, size, capacity;
 } Queue;
 
-extern u32 ov45_022577D0;
-extern u32 ov45_022551A4;
+extern u32 gLobbyEventDequeMapMaxSizeSet;
+extern u32 gLobbyEventDequeMapMaxSize;
 extern void LobbyEventDequeMap_LengthError(void);
 
 static inline u32 Count(Queue *q) {
@@ -19,11 +19,11 @@ static inline u32 Count(Queue *q) {
 }
 
 static inline u32 Limit(void) {
-    if (!(ov45_022577D0 & 1)) {
-        ov45_022551A4 = 0x3ffffffe;
-        ov45_022577D0 |= 1;
+    if (!(gLobbyEventDequeMapMaxSizeSet & 1)) {
+        gLobbyEventDequeMapMaxSize = 0x3ffffffe;
+        gLobbyEventDequeMapMaxSizeSet |= 1;
     }
-    return ov45_022551A4;
+    return gLobbyEventDequeMapMaxSize;
 }
 
 static inline const u32 *Max(const u32 *a, const u32 *b) {

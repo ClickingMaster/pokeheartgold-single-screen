@@ -38,11 +38,11 @@ extern u8 gWifiSetupOwnMacAddress[6];  // own MAC address
 extern u8 gWifiSetupRecordBuffer[];
 extern u8 sStr_WARP[4];
 extern WifiSetupVersion sWifiSetupClientVersion;
-extern u32 ov13_0224E284[8];
-extern u32 ov13_0224E2B0[];
+extern u32 gWifiSetupRecvSsid[8];
+extern u32 gWifiSetupRecvSecurity[];
 extern u8 gWifiSetupReply[];
-extern u8 ov13_0224E2E8[][40];
-extern u32 ov13_0224E380[18];
+extern u8 gWifiSetupRecvWepKeys[][40];
+extern u32 gWifiSetupRecvWpaKey[18];
 extern u8 ov13_0224E0B0[];
 extern u8 ov13_0224E0C4[];
 extern WifiSetupSettings64 ov13_0224E144;
@@ -93,7 +93,7 @@ int WifiSetup_FindSetupAccessPoint(void) {
     result = -1;
     previous = NULL;
     selected = 0;
-    size = sizeof(WifiSetupApEntry) * ov13_0224DF30.apListCount + sizeof(WifiSetupApEntryList) + sizeof(WifiSetupApEntry);
+    size = sizeof(WifiSetupApEntry) * gWifiSetupWork.apListCount + sizeof(WifiSetupApEntryList) + sizeof(WifiSetupApEntry);
     out = WifiSetup_WorkCalloc(1, size);
     if (out == NULL) {
         goto done;
@@ -102,7 +102,7 @@ int WifiSetup_FindSetupAccessPoint(void) {
     if (previous == NULL) {
         goto done;
     }
-    for (attempt = 0; attempt < 30 && !ov13_0224DF30.stop; attempt++) {
+    for (attempt = 0; attempt < 30 && !gWifiSetupWork.stop; attempt++) {
         if (WifiSetup_GetMilliseconds() >= gWifiSetupConfig.deadline) {
             break;
         }
@@ -116,7 +116,7 @@ int WifiSetup_FindSetupAccessPoint(void) {
         result = 0;
         do {
             OS_Sleep(10);
-            if (WifiSetup_GetMilliseconds() >= gWifiSetupConfig.deadline || ov13_0224DF30.stop) {
+            if (WifiSetup_GetMilliseconds() >= gWifiSetupConfig.deadline || gWifiSetupWork.stop) {
                 break;
             }
             while ((event = WifiSetupLink_PopEvent()) != 0) {
@@ -125,7 +125,7 @@ int WifiSetup_FindSetupAccessPoint(void) {
                     running = FALSE;
                     break;
                 case 5:
-                    found = WifiSetupLink_CopyApList(ov13_0224DF30.apList, ov13_0224DF30.apListCount);
+                    found = WifiSetupLink_CopyApList(gWifiSetupWork.apList, gWifiSetupWork.apListCount);
                     if (found > result) {
                         result = found;
                         OS_CancelAlarm(&alarm);
@@ -152,15 +152,15 @@ int WifiSetup_FindSetupAccessPoint(void) {
         OS_CancelAlarm(&alarm);
         while (WifiSetupLink_PopEvent() != 0) {
         }
-        if (ov13_0224DF30.stop) {
+        if (gWifiSetupWork.stop) {
             break;
         }
         total = 0;
-        if (result >= ov13_0224DF30.apListCount) {
+        if (result >= gWifiSetupWork.apListCount) {
             result = -6;
             goto done;
         }
-        ap = ov13_0224DF30.apList;
+        ap = gWifiSetupWork.apList;
         i = 0;
         if (result > 0) {
             for (; i < result; i++) {
@@ -174,21 +174,21 @@ int WifiSetup_FindSetupAccessPoint(void) {
             }
         }
         out->count = result;
-        if (ov13_0224DF30.state != 1 && WifiSetup_PickSetupAccessPoint(out, previous, &selected)) {
+        if (gWifiSetupWork.state != 1 && WifiSetup_PickSetupAccessPoint(out, previous, &selected)) {
             WifiSetupApEntry *entry = &out->entries[selected];
-            ov13_0224DF30.selection = selected;
+            gWifiSetupWork.selection = selected;
             strcpy(gWifiSetupApSsid, entry->ssid);
             memcpy(gWifiSetupApBssid, entry->bssid, 6);
             WifiSetup_FormatMacAddress(text, (const s8 *)gWifiSetupApBssid);
             break;
         }
         memcpy(previous, out, size);
-        ov13_0224DF30.state = 2;
+        gWifiSetupWork.state = 2;
         WifiSetup_ReportSimpleStartStatus();
     }
     if (attempt >= 30 || WifiSetup_GetMilliseconds() > gWifiSetupConfig.deadline) {
         result = -3;
-    } else if (ov13_0224DF30.stop) {
+    } else if (gWifiSetupWork.stop) {
         result = -8;
     } else {
         result = 1;
@@ -421,11 +421,11 @@ void WifiSetup_BuildVersionRequest(void *dst) {
     record.version = sWifiSetupClientVersion;
     ptr = WifiSetup_AppendRecord(gWifiSetupConfig.packetBuffer, 1, &record, 2);
     ptr = WifiSetup_AppendRecord(ptr, 2, &record, 2);
-    if (ov13_0224DF30.extendedRequest) {
+    if (gWifiSetupWork.extendedRequest) {
         ptr = WifiSetup_AppendRecord(ptr, 5, &record, 2);
     }
     ptr = WifiSetup_AppendRecord(ptr, 3, &record.version, 7);
-    if (ov13_0224DF30.extendedRequest) {
+    if (gWifiSetupWork.extendedRequest) {
         ptr = WifiSetup_AppendRecord(ptr, 4, gWifiSetupOwnMacAddress, 6);
     }
     WifiSetup_BuildPacket(dst, 2, gWifiSetupRecordBuffer, ptr - gWifiSetupConfig.packetBuffer + 8, NULL);
@@ -481,12 +481,12 @@ int WifiSetup_ParseSettingsRecords(const u8 *data) {
     while (value) {
         switch (type) {
         case 0x201:
-            memset(ov13_0224E284, 0, sizeof(ov13_0224E284));
-            memcpy(ov13_0224E284, value, length);
+            memset(gWifiSetupRecvSsid, 0, sizeof(gWifiSetupRecvSsid));
+            memcpy(gWifiSetupRecvSsid, value, length);
             result = 1;
             break;
         case 0x202:
-            ov13_0224E2B0[0] = Swap16(*(u16 *)value);
+            gWifiSetupRecvSecurity[0] = Swap16(*(u16 *)value);
             break;
         case 0x203: {
             int i = 0;
@@ -511,7 +511,7 @@ int WifiSetup_ParseSettingsRecords(const u8 *data) {
             break;
         }
         case 0x205:
-            ov13_0224E2B0[1] = Swap16(*(u16 *)value);
+            gWifiSetupRecvSecurity[1] = Swap16(*(u16 *)value);
             break;
         case 0x206:
         case 0x207:
@@ -519,20 +519,20 @@ int WifiSetup_ParseSettingsRecords(const u8 *data) {
         case 0x209: {
             u8 *out;
             int i;
-            memset(ov13_0224E2E8[type - 0x206], 0, 32);
-            if (ov13_0224E2B0[12] == 1) {
-                out = ov13_0224E2E8[type - 0x206];
+            memset(gWifiSetupRecvWepKeys[type - 0x206], 0, 32);
+            if (gWifiSetupRecvSecurity[12] == 1) {
+                out = gWifiSetupRecvWepKeys[type - 0x206];
                 for (i = 0; i < (int)length; i++) {
                     out += WifiSetup_FormatHexByte((char *)out, *(s8 *)value++);
                 }
             } else {
-                memcpy(ov13_0224E2E8[type - 0x206], value, length);
+                memcpy(gWifiSetupRecvWepKeys[type - 0x206], value, length);
             }
             break;
         }
         case 0x20a:
-            memset(ov13_0224E380, 0, sizeof(ov13_0224E380));
-            memcpy(ov13_0224E380, value, length);
+            memset(gWifiSetupRecvWpaKey, 0, sizeof(gWifiSetupRecvWpaKey));
+            memcpy(gWifiSetupRecvWpaKey, value, length);
             break;
         }
         value = WifiSetup_NextRecord(&pos, start + bytes, &type, &length);
@@ -602,18 +602,18 @@ int WifiSetup_StoreSimpleStartResult(void) {
     char buf[33];
     char *p;
     u8 *out;
-    strcpy((char *)&ov13_0224E09C, (char *)ov13_0224E284);
-    switch (*(u32 *)ov13_0224E2B0) {
+    strcpy((char *)&gWifiSetupResult, (char *)gWifiSetupRecvSsid);
+    switch (*(u32 *)gWifiSetupRecvSecurity) {
     case 0:
         *(u32 *)(ov13_0224E0B0 + 0xC) = 0;
         break;
     case 1:
-        if (*(u32 *)((u8 *)ov13_0224E2B0 + 4) == 0) {
+        if (*(u32 *)((u8 *)gWifiSetupRecvSecurity + 4) == 0) {
             result = -7;
             break;
         }
-        *(u32 *)(ov13_0224E0B0 + 0x10) = *(u32 *)((u8 *)ov13_0224E2B0 + 4);
-        src = (u8 *)ov13_0224E2E8;
+        *(u32 *)(ov13_0224E0B0 + 0x10) = *(u32 *)((u8 *)gWifiSetupRecvSecurity + 4);
+        src = (u8 *)gWifiSetupRecvWepKeys;
         out = ov13_0224E0C4;
         i = 0;
         p = buf;
@@ -655,11 +655,11 @@ int WifiSetup_StoreSimpleStartResult(void) {
         break;
     case 2:
         *(u32 *)(ov13_0224E0B0 + 0xC) = 4;
-        memcpy(&ov13_0224E144, &ov13_0224E380, sizeof(WifiSetupSettings64));
+        memcpy(&ov13_0224E144, &gWifiSetupRecvWpaKey, sizeof(WifiSetupSettings64));
         break;
     case 3:
         *(u32 *)(ov13_0224E0B0 + 0xC) = 5;
-        memcpy(&ov13_0224E144, &ov13_0224E380, sizeof(WifiSetupSettings64));
+        memcpy(&ov13_0224E144, &gWifiSetupRecvWpaKey, sizeof(WifiSetupSettings64));
         break;
     default:
         result = -7;

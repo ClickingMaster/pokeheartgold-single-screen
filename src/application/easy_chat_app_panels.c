@@ -427,7 +427,7 @@ void EasyChatSentenceView_Load(EasyChatSentenceView *sentence, NARC *narc) {
     EasyChatSentenceView_DrawSentence(sentence);
     EasyChatSentenceView_PrintMessage(sentence, 0);
     EasyChatSentenceView_CreateSprites(sentence);
-    if (EasyChatApp_GetType(sentence->app) == 2) {
+    if (EasyChatApp_GetType(sentence->app) == EASY_CHAT_TYPE_MESSAGE) {
         EasyChatSentenceView_UpdateSliderThumb(sentence);
     }
 }
@@ -525,7 +525,7 @@ void EasyChatSentenceView_LoadPalettes(EasyChatSentenceView *sentence, NARC *nar
 }
 
 void EasyChatSentenceView_ApplyPalette(EasyChatSentenceView *sentence) {
-    if (EasyChatApp_GetType(sentence->app) == 2) {
+    if (EasyChatApp_GetType(sentence->app) == EASY_CHAT_TYPE_MESSAGE) {
         u32 palette = EasyChatApp_GetMsgBank(sentence->app) + 1;
         GX_LoadBGPltt(&sentence->palettes[palette * 16], 0, 32);
         GXS_LoadBGPltt(&sentence->palettes[palette * 16], 0, 32);
@@ -537,19 +537,19 @@ void EasyChatSentenceView_ApplyPalette(EasyChatSentenceView *sentence) {
 
 void EasyChatSentenceView_InitSlotPositions(EasyChatSentenceView *sentence) {
     switch (EasyChatApp_GetType(sentence->app)) {
-    case 0:
+    case EASY_CHAT_TYPE_WORD:
         sentence->slotPositions[0].x = 104;
         sentence->slotPositions[0].y = 16;
         sentence->numSlots = 1;
         break;
-    case 1:
+    case EASY_CHAT_TYPE_TWO_WORDS:
         sentence->slotPositions[0].x = 48;
         sentence->slotPositions[0].y = 16;
         sentence->slotPositions[1].x = 160;
         sentence->slotPositions[1].y = 16;
         sentence->numSlots = 2;
         break;
-    case 2:
+    case EASY_CHAT_TYPE_MESSAGE:
         sentence->numSlots = 0;
         break;
     }
@@ -580,7 +580,7 @@ void EasyChatSentenceView_CreateSprites(EasyChatSentenceView *sentence) {
     Sprite_SetAnimCtrlSeq(sentence->sliderThumb, 18);
     sentence->sliderBar = EasyChatAppView_CreateSprite(sentence->view, &mainHeader, 128, 64, 1, NNS_G2D_VRAM_TYPE_2DMAIN);
     Sprite_SetAnimCtrlSeq(sentence->sliderBar, 23);
-    if (EasyChatApp_GetType(sentence->app) != 2) {
+    if (EasyChatApp_GetType(sentence->app) != EASY_CHAT_TYPE_MESSAGE) {
         Sprite_SetDrawFlag(sentence->rightArrow, FALSE);
         Sprite_SetDrawFlag(sentence->leftArrow, FALSE);
         Sprite_SetDrawFlag(sentence->sliderBar, FALSE);
@@ -598,17 +598,17 @@ void EasyChatSentenceView_DrawSentence(EasyChatSentenceView *sentence) {
     for (i = 0, window = sentence->sentenceWindows, slot0 = &sentence->slotPositions[0], slot1 = &sentence->slotPositions[1]; i < 2; i++, window++) {
         FillWindowPixelBuffer(window, 13);
         switch (EasyChatApp_GetType(sentence->app)) {
-        case 0:
+        case EASY_CHAT_TYPE_WORD:
             EasyChatSentenceView_ClearSlot(window, slot0);
             EasyChatSentenceView_DrawWord(sentence, window, slot0, EasyChatApp_GetWord(sentence->app, 0));
             break;
-        case 1:
+        case EASY_CHAT_TYPE_TWO_WORDS:
             EasyChatSentenceView_ClearSlot(window, slot0);
             EasyChatSentenceView_ClearSlot(window, slot1);
             EasyChatSentenceView_DrawWord(sentence, window, slot0, EasyChatApp_GetWord(sentence->app, 0));
             EasyChatSentenceView_DrawWord(sentence, window, slot1, EasyChatApp_GetWord(sentence->app, 1));
             break;
-        case 2:
+        case EASY_CHAT_TYPE_MESSAGE:
             sentence->numSlots = EasyChatSentenceView_DrawMessage(sentence, window);
             EasyChatSentenceView_UpdateSliderThumb(sentence);
             break;
@@ -850,7 +850,7 @@ void EasyChatSentenceView_SetCursorVisible(EasyChatSentenceView *sentence, BOOL 
 }
 
 void EasyChatSentenceView_HideSlider(EasyChatSentenceView *sentence) {
-    if (EasyChatApp_GetType(sentence->app) == 2) {
+    if (EasyChatApp_GetType(sentence->app) == EASY_CHAT_TYPE_MESSAGE) {
         Sprite_SetDrawFlag(sentence->leftArrow, FALSE);
         Sprite_SetDrawFlag(sentence->rightArrow, FALSE);
         Sprite_SetDrawFlag(sentence->sliderThumb, FALSE);
@@ -860,7 +860,7 @@ void EasyChatSentenceView_HideSlider(EasyChatSentenceView *sentence) {
 
 #pragma force_active on
 void EasyChatSentenceView_ShowSlider(EasyChatSentenceView *sentence) {
-    if (EasyChatApp_GetType(sentence->app) == 2) {
+    if (EasyChatApp_GetType(sentence->app) == EASY_CHAT_TYPE_MESSAGE) {
         Sprite_SetDrawFlag(sentence->leftArrow, TRUE);
         Sprite_SetDrawFlag(sentence->rightArrow, TRUE);
         Sprite_SetDrawFlag(sentence->sliderThumb, TRUE);
@@ -1290,7 +1290,7 @@ void EasyChatCategoryView_CreateCursor(EasyChatCategoryView *categories) {
 void EasyChatCategoryView_SetCursorVisible(EasyChatCategoryView *categories, BOOL draw) {
     if (draw) {
         Sprite_SetDrawFlag(categories->cursor, TRUE);
-        if (EasyChatApp_GetListMode(categories->app) == 0) {
+        if (EasyChatApp_GetListMode(categories->app) == EASY_CHAT_LIST_MODE_CATEGORIES) {
             Sprite_SetAnimCtrlSeq(categories->cursor, 4);
         } else {
             Sprite_SetAnimCtrlSeq(categories->cursor, 6);
@@ -1413,7 +1413,7 @@ BOOL EasyChatCategoryView_UpdateFadeIn(EasyChatCategoryView *categories) {
 void EasyChatCategoryView_ResetScrollX(EasyChatCategoryView *categories) {
     u32 x;
 
-    if (EasyChatApp_GetListMode(categories->app) == 0) {
+    if (EasyChatApp_GetListMode(categories->app) == EASY_CHAT_LIST_MODE_CATEGORIES) {
         x = -4;
     } else {
         x = 252;
@@ -1425,7 +1425,7 @@ void EasyChatCategoryView_ResetScrollX(EasyChatCategoryView *categories) {
 void EasyChatCategoryView_StartModeScroll(EasyChatCategoryView *categories) {
     int delta;
 
-    if (EasyChatApp_GetListMode(categories->app) == 0) {
+    if (EasyChatApp_GetListMode(categories->app) == EASY_CHAT_LIST_MODE_CATEGORIES) {
         delta = -256;
     } else {
         delta = 256;

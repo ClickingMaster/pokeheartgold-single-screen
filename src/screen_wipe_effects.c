@@ -26,19 +26,19 @@ BOOL RectWipe_Update(ScreenFade *fade) {
     RectWipe *wipe = fade->effect;
 
     switch (fade->state) {
-    case 1:
+    case SCREEN_FADE_STATE_RUN:
         if (RectWipe_Step(wipe) == TRUE) {
             ScreenFade_SetEndWindows(wipe->queued, fade->regQueue, fade->screen);
             fade->state++;
         }
         break;
-    case 2:
+    case SCREEN_FADE_STATE_CLEANUP:
         Heap_Free(wipe);
         fade->effect = NULL;
         fade->state++;
         done = TRUE;
         break;
-    case 3:
+    case SCREEN_FADE_STATE_DONE:
         done = TRUE;
         break;
     }
@@ -61,7 +61,7 @@ BOOL DoubleRectWipe_Update(ScreenFade *fade) {
     RectWipe *wipes = fade->effect;
 
     switch (fade->state) {
-    case 1: {
+    case SCREEN_FADE_STATE_RUN: {
         int finished = RectWipe_Step(&wipes[0]);
         finished += RectWipe_Step(&wipes[1]);
         if (finished == 2) {
@@ -70,13 +70,13 @@ BOOL DoubleRectWipe_Update(ScreenFade *fade) {
         }
         break;
     }
-    case 2:
+    case SCREEN_FADE_STATE_CLEANUP:
         Heap_Free(wipes);
         fade->effect = NULL;
         fade->state++;
         done = TRUE;
         break;
-    case 3:
+    case SCREEN_FADE_STATE_DONE:
         done = TRUE;
         break;
     }
@@ -124,20 +124,20 @@ BOOL CircleWipe_Update(ScreenFade *fade) {
     CircleWipe *wipe = fade->effect;
 
     switch (fade->state) {
-    case 1:
+    case SCREEN_FADE_STATE_RUN:
         if (CircleWipe_Step(wipe) == TRUE) {
             ScreenFade_SetEndWindows(wipe->queued, wipe->regQueue, fade->screen);
             fade->state++;
         }
         break;
-    case 2:
+    case SCREEN_FADE_STATE_CLEANUP:
         ScreenWipeScanlines_Free(&wipe->scanlines);
         Heap_Free(fade->effect);
         fade->effect = NULL;
         fade->state++;
         done = TRUE;
         break;
-    case 3:
+    case SCREEN_FADE_STATE_DONE:
         done = TRUE;
         break;
     default:
@@ -256,20 +256,20 @@ BOOL WedgeWipe_Update(ScreenFade *fade) {
     WedgeWipe *wipe = fade->effect;
 
     switch (fade->state) {
-    case 1:
+    case SCREEN_FADE_STATE_RUN:
         if (WedgeWipe_Step(wipe) == TRUE) {
             ScreenFade_SetEndWindows(wipe->queued, wipe->regQueue, fade->screen);
             fade->state++;
         }
         break;
-    case 2:
+    case SCREEN_FADE_STATE_CLEANUP:
         ScreenWipeScanlines_Free(&wipe->scanlines);
         Heap_Free(fade->effect);
         fade->effect = NULL;
         fade->state++;
         done = TRUE;
         break;
-    case 3:
+    case SCREEN_FADE_STATE_DONE:
         done = TRUE;
         break;
     default:
@@ -348,20 +348,20 @@ BOOL SlopeWipe_Update(ScreenFade *fade) {
     SlopeWipe *wipe = fade->effect;
 
     switch (fade->state) {
-    case 1:
+    case SCREEN_FADE_STATE_RUN:
         if (SlopeWipe_Step(wipe) == TRUE) {
             ScreenFade_SetEndWindows(wipe->queued, wipe->regQueue, fade->screen);
             fade->state++;
         }
         break;
-    case 2:
+    case SCREEN_FADE_STATE_CLEANUP:
         ScreenWipeScanlines_Free(&wipe->scanlines);
         Heap_Free(fade->effect);
         fade->effect = NULL;
         fade->state++;
         done = TRUE;
         break;
-    case 3:
+    case SCREEN_FADE_STATE_DONE:
         done = TRUE;
         break;
     }
@@ -464,13 +464,13 @@ BOOL MultiRectWipe_Update(ScreenFade *fade) {
     MultiRectWipe *wipe = fade->effect;
 
     switch (fade->state) {
-    case 1:
+    case SCREEN_FADE_STATE_RUN:
         if (MultiRectWipe_Step(wipe) == TRUE) {
             ScreenFade_SetEndWindows(wipe->queued, wipe->regQueue, fade->screen);
             fade->state++;
         }
         break;
-    case 2:
+    case SCREEN_FADE_STATE_CLEANUP:
         MultiRectWipe_FreeRects(wipe);
         ScreenWipeScanlines_Free(&wipe->scanlines);
         Heap_Free(fade->effect);
@@ -478,7 +478,7 @@ BOOL MultiRectWipe_Update(ScreenFade *fade) {
         fade->state++;
         done = TRUE;
         break;
-    case 3:
+    case SCREEN_FADE_STATE_DONE:
         done = TRUE;
         break;
     default:
@@ -587,13 +587,13 @@ BOOL SectorWipe_Update(ScreenFade *fade) {
     BOOL done = FALSE;
 
     switch (fade->state) {
-    case 1:
+    case SCREEN_FADE_STATE_RUN:
         if (SectorWipe_Step(wipe) == TRUE) {
             ScreenFade_SetEndWindows(wipe->queued, wipe->regQueue, fade->screen);
             fade->state++;
         }
         break;
-    case 2:
+    case SCREEN_FADE_STATE_CLEANUP:
         SectorWipe_Finish(wipe);
         ScreenWipeScanlines_Free(&wipe->scanlines);
         Heap_Free(fade->effect);
@@ -601,7 +601,7 @@ BOOL SectorWipe_Update(ScreenFade *fade) {
         fade->state++;
         done = TRUE;
         break;
-    case 3:
+    case SCREEN_FADE_STATE_DONE:
         done = TRUE;
         break;
     default:
@@ -729,13 +729,13 @@ BOOL MirroredSectorWipe_Update(ScreenFade *fade) {
     BOOL done = FALSE;
 
     switch (fade->state) {
-    case 1:
+    case SCREEN_FADE_STATE_RUN:
         if (MirroredSectorWipe_Step(wipe) == TRUE) {
             ScreenFade_SetEndWindows(wipe->queued, wipe->regQueue, fade->screen);
             fade->state++;
         }
         break;
-    case 2:
+    case SCREEN_FADE_STATE_CLEANUP:
         MirroredSectorWipe_Finish(wipe);
         ScreenWipeScanlines_Free(&wipe->scanlines);
         Heap_Free(fade->effect);
@@ -743,7 +743,7 @@ BOOL MirroredSectorWipe_Update(ScreenFade *fade) {
         fade->state++;
         done = TRUE;
         break;
-    case 3:
+    case SCREEN_FADE_STATE_DONE:
         done = TRUE;
         break;
     default:
@@ -856,20 +856,20 @@ BOOL LineShutterWipe_Update(ScreenFade *fade) {
     LineShutterWipe *wipe = fade->effect;
 
     switch (fade->state) {
-    case 1:
+    case SCREEN_FADE_STATE_RUN:
         if (LineShutterWipe_Step(wipe) == TRUE) {
             ScreenFade_SetEndWindows(wipe->queued, wipe->regQueue, fade->screen);
             fade->state++;
         }
         break;
-    case 2:
+    case SCREEN_FADE_STATE_CLEANUP:
         LineShutterWipe_Finish(wipe);
         Heap_Free(fade->effect);
         fade->effect = NULL;
         fade->state++;
         done = TRUE;
         break;
-    case 3:
+    case SCREEN_FADE_STATE_DONE:
         done = TRUE;
         break;
     default:
@@ -987,7 +987,7 @@ BOOL RectShutterWipe_Update(ScreenFade *fade) {
     BOOL finished;
 
     switch (fade->state) {
-    case 1:
+    case SCREEN_FADE_STATE_RUN:
         if (wipe->shutterFirst == 0) {
             finished = RectShutterWipe_StepRectFirst(wipe, fade);
         } else {
@@ -999,13 +999,13 @@ BOOL RectShutterWipe_Update(ScreenFade *fade) {
             fade->state++;
         }
         break;
-    case 2:
+    case SCREEN_FADE_STATE_CLEANUP:
         Heap_Free(wipe);
         fade->effect = NULL;
         fade->state++;
         done = TRUE;
         break;
-    case 3:
+    case SCREEN_FADE_STATE_DONE:
         done = TRUE;
         break;
     default:

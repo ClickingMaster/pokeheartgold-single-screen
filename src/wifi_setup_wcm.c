@@ -43,163 +43,163 @@ void WifiSetupWcm_HandleEvent(WifiSetupWcmEvent *event) {
     switch (event->type) {
     case 1:
         if (event->result == 0) {
-            if (gWifiSetupWcm.state == 4) {
-                gWifiSetupWcm.state = 3;
+            if (gWifiSetupWcm.state == WIFI_SETUP_WCM_STATE_BUSY) {
+                gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_IDLE;
                 if (gWifiSetupWcm.callback) {
-                    gWifiSetupWcm.callback(6, 0);
+                    gWifiSetupWcm.callback(WIFI_SETUP_WCM_EVENT_STARTED, 0);
                 }
-            } else if (gWifiSetupWcm.state == 6) {
+            } else if (gWifiSetupWcm.state == WIFI_SETUP_WCM_STATE_SEARCH_STARTING) {
                 if (WCM_SearchAsync(gWifiSetupWcm.searchBssid, gWifiSetupWcm.searchSsid, gWifiSetupWcm.searchOption) != 3) {
-                    gWifiSetupWcm.state = 3;
+                    gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_IDLE;
                     if (gWifiSetupWcm.callback) {
-                        gWifiSetupWcm.callback(2, 0);
+                        gWifiSetupWcm.callback(WIFI_SETUP_WCM_EVENT_FAILED, 0);
                     }
                 }
-            } else if (gWifiSetupWcm.state == 8) {
+            } else if (gWifiSetupWcm.state == WIFI_SETUP_WCM_STATE_CONNECTING) {
                 if (WCM_ConnectAsync(gWifiSetupWcm.connectAp, gWifiSetupWcm.connectKey, gWifiSetupWcm.connectOption) != 3) {
-                    gWifiSetupWcm.state = 3;
+                    gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_IDLE;
                     if (gWifiSetupWcm.callback) {
-                        gWifiSetupWcm.callback(2, 0);
+                        gWifiSetupWcm.callback(WIFI_SETUP_WCM_EVENT_FAILED, 0);
                     }
                 }
             }
         } else {
-            gWifiSetupWcm.state = 1;
+            gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_READY;
             if (gWifiSetupWcm.callback) {
-                gWifiSetupWcm.callback(2, 0);
+                gWifiSetupWcm.callback(WIFI_SETUP_WCM_EVENT_FAILED, 0);
             }
         }
         break;
     case 3:
         if (event->result == 0) {
-            if (gWifiSetupWcm.state == 6) {
-                gWifiSetupWcm.state = 5;
+            if (gWifiSetupWcm.state == WIFI_SETUP_WCM_STATE_SEARCH_STARTING) {
+                gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_SEARCHING;
                 if (gWifiSetupWcm.callback) {
-                    gWifiSetupWcm.callback(8, 0);
+                    gWifiSetupWcm.callback(WIFI_SETUP_WCM_EVENT_SEARCH_STARTED, 0);
                 }
             }
         } else {
-            gWifiSetupWcm.state = 3;
+            gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_IDLE;
             if (gWifiSetupWcm.callback) {
-                gWifiSetupWcm.callback(9, 0);
+                gWifiSetupWcm.callback(WIFI_SETUP_WCM_EVENT_SEARCH_FAILED, 0);
             }
         }
         break;
     case 5:
         if (event->result == 0) {
-            if (gWifiSetupWcm.state == 8) {
-                gWifiSetupWcm.state = 7;
+            if (gWifiSetupWcm.state == WIFI_SETUP_WCM_STATE_CONNECTING) {
+                gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_CONNECTED;
                 if (gWifiSetupWcm.callback) {
-                    gWifiSetupWcm.callback(12, 0);
+                    gWifiSetupWcm.callback(WIFI_SETUP_WCM_EVENT_CONNECTED, 0);
                 }
             }
         } else {
-            gWifiSetupWcm.state = 3;
+            gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_IDLE;
             if (gWifiSetupWcm.callback) {
-                gWifiSetupWcm.callback(13, 0);
+                gWifiSetupWcm.callback(WIFI_SETUP_WCM_EVENT_CONNECT_FAILED, 0);
             }
         }
         break;
     case 4:
         if (event->result == 0) {
-            if (gWifiSetupWcm.state == 4) {
-                gWifiSetupWcm.state = 3;
+            if (gWifiSetupWcm.state == WIFI_SETUP_WCM_STATE_BUSY) {
+                gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_IDLE;
                 if (gWifiSetupWcm.callback) {
-                    gWifiSetupWcm.callback(10, 0);
+                    gWifiSetupWcm.callback(WIFI_SETUP_WCM_EVENT_SEARCH_ENDED, 0);
                 }
-            } else if (gWifiSetupWcm.state == 6) {
+            } else if (gWifiSetupWcm.state == WIFI_SETUP_WCM_STATE_SEARCH_STARTING) {
                 if (WCM_SearchAsync(gWifiSetupWcm.searchBssid, gWifiSetupWcm.searchSsid, gWifiSetupWcm.searchOption) != 3) {
-                    gWifiSetupWcm.state = 3;
+                    gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_IDLE;
                     if (gWifiSetupWcm.callback) {
-                        gWifiSetupWcm.callback(2, 0);
+                        gWifiSetupWcm.callback(WIFI_SETUP_WCM_EVENT_FAILED, 0);
                     }
                 }
-            } else if (gWifiSetupWcm.state == 2) {
+            } else if (gWifiSetupWcm.state == WIFI_SETUP_WCM_STATE_CLEANUP) {
                 if (WCM_CleanupAsync() != 3) {
-                    gWifiSetupWcm.state = 3;
+                    gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_IDLE;
                     if (gWifiSetupWcm.callback) {
-                        gWifiSetupWcm.callback(2, 0);
+                        gWifiSetupWcm.callback(WIFI_SETUP_WCM_EVENT_FAILED, 0);
                     }
                 }
-            } else if (gWifiSetupWcm.state == 8) {
+            } else if (gWifiSetupWcm.state == WIFI_SETUP_WCM_STATE_CONNECTING) {
                 if (WCM_ConnectAsync(gWifiSetupWcm.connectAp, gWifiSetupWcm.connectKey, gWifiSetupWcm.connectOption) != 3) {
-                    gWifiSetupWcm.state = 3;
+                    gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_IDLE;
                     if (gWifiSetupWcm.callback) {
-                        gWifiSetupWcm.callback(2, 0);
+                        gWifiSetupWcm.callback(WIFI_SETUP_WCM_EVENT_FAILED, 0);
                     }
                 }
             }
         } else {
-            gWifiSetupWcm.state = 3;
+            gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_IDLE;
             if (gWifiSetupWcm.callback) {
-                gWifiSetupWcm.callback(11, 0);
+                gWifiSetupWcm.callback(WIFI_SETUP_WCM_EVENT_SEARCH_END_FAILED, 0);
             }
         }
         break;
     case 6:
         if (event->result == 0) {
-            if (gWifiSetupWcm.state == 4) {
-                gWifiSetupWcm.state = 3;
+            if (gWifiSetupWcm.state == WIFI_SETUP_WCM_STATE_BUSY) {
+                gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_IDLE;
                 if (gWifiSetupWcm.callback) {
-                    gWifiSetupWcm.callback(14, 0);
+                    gWifiSetupWcm.callback(WIFI_SETUP_WCM_EVENT_DISCONNECTED, 0);
                 }
-            } else if (gWifiSetupWcm.state == 6) {
+            } else if (gWifiSetupWcm.state == WIFI_SETUP_WCM_STATE_SEARCH_STARTING) {
                 if (WCM_SearchAsync(gWifiSetupWcm.searchBssid, gWifiSetupWcm.searchSsid, gWifiSetupWcm.searchOption) != 3) {
-                    gWifiSetupWcm.state = 3;
+                    gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_IDLE;
                     if (gWifiSetupWcm.callback) {
-                        gWifiSetupWcm.callback(2, 0);
+                        gWifiSetupWcm.callback(WIFI_SETUP_WCM_EVENT_FAILED, 0);
                     }
                 }
-            } else if (gWifiSetupWcm.state == 2) {
+            } else if (gWifiSetupWcm.state == WIFI_SETUP_WCM_STATE_CLEANUP) {
                 if (WCM_CleanupAsync() != 3) {
-                    gWifiSetupWcm.state = 3;
+                    gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_IDLE;
                     if (gWifiSetupWcm.callback) {
-                        gWifiSetupWcm.callback(2, 0);
+                        gWifiSetupWcm.callback(WIFI_SETUP_WCM_EVENT_FAILED, 0);
                     }
                 }
-            } else if (gWifiSetupWcm.state == 8) {
+            } else if (gWifiSetupWcm.state == WIFI_SETUP_WCM_STATE_CONNECTING) {
                 if (WCM_ConnectAsync(gWifiSetupWcm.connectAp, gWifiSetupWcm.connectKey, gWifiSetupWcm.connectOption) != 3) {
-                    gWifiSetupWcm.state = 3;
+                    gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_IDLE;
                     if (gWifiSetupWcm.callback) {
-                        gWifiSetupWcm.callback(2, 0);
+                        gWifiSetupWcm.callback(WIFI_SETUP_WCM_EVENT_FAILED, 0);
                     }
                 }
             } else {
-                gWifiSetupWcm.state = 3;
+                gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_IDLE;
             }
         } else {
-            gWifiSetupWcm.state = 3;
+            gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_IDLE;
             if (gWifiSetupWcm.callback) {
-                gWifiSetupWcm.callback(15, 0);
+                gWifiSetupWcm.callback(WIFI_SETUP_WCM_EVENT_DISCONNECT_FAILED, 0);
             }
         }
         break;
     case 2:
         if (event->result == 0) {
-            if (gWifiSetupWcm.state == 2) {
+            if (gWifiSetupWcm.state == WIFI_SETUP_WCM_STATE_CLEANUP) {
                 WCM_Finish();
-                gWifiSetupWcm.state = 0;
+                gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_NONE;
                 if (gWifiSetupWcm.callback) {
-                    gWifiSetupWcm.callback(20, 0);
+                    gWifiSetupWcm.callback(WIFI_SETUP_WCM_EVENT_CLEANED_UP, 0);
                 }
             }
         } else {
-            gWifiSetupWcm.state = 3;
+            gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_IDLE;
             if (gWifiSetupWcm.callback) {
-                gWifiSetupWcm.callback(2, 0);
+                gWifiSetupWcm.callback(WIFI_SETUP_WCM_EVENT_FAILED, 0);
             }
         }
         break;
     case 7:
-        if (gWifiSetupWcm.state == 5) {
+        if (gWifiSetupWcm.state == WIFI_SETUP_WCM_STATE_SEARCHING) {
             if (gWifiSetupWcm.callback) {
-                gWifiSetupWcm.callback(5, 0);
+                gWifiSetupWcm.callback(WIFI_SETUP_WCM_EVENT_FOUND_AP, 0);
             }
         }
         break;
     default:
         if (gWifiSetupWcm.callback) {
-            gWifiSetupWcm.callback(1, 0);
+            gWifiSetupWcm.callback(WIFI_SETUP_WCM_EVENT_UNKNOWN, 0);
         }
         break;
     }
@@ -210,27 +210,27 @@ void WifiSetupWcm_HandleEvent(WifiSetupWcmEvent *event) {
 // Starts the request that leads back to the idle state (stop the search, disconnect, or start up).
 int WifiSetupWcm_ReturnToIdle(void) {
     switch (gWifiSetupWcm.state) {
-    case 5:
+    case WIFI_SETUP_WCM_STATE_SEARCHING:
         if (WCM_SearchAsync(NULL, NULL, 0) != 3) {
             return 0;
         }
         break;
-    case 7:
+    case WIFI_SETUP_WCM_STATE_CONNECTED:
         if (WCM_DisconnectAsync() != 3) {
             return 0;
         }
         break;
-    case 1:
+    case WIFI_SETUP_WCM_STATE_READY:
         if (WCM_StartupAsync(gWifiSetupWcm.config, WifiSetupWcm_HandleEvent) != 3) {
             return 0;
         }
         break;
-    case 0:
-    case 2:
-    case 3:
-    case 4:
-    case 6:
-    case 8:
+    case WIFI_SETUP_WCM_STATE_NONE:
+    case WIFI_SETUP_WCM_STATE_CLEANUP:
+    case WIFI_SETUP_WCM_STATE_IDLE:
+    case WIFI_SETUP_WCM_STATE_BUSY:
+    case WIFI_SETUP_WCM_STATE_SEARCH_STARTING:
+    case WIFI_SETUP_WCM_STATE_CONNECTING:
     default:
         return 0;
     }
@@ -286,14 +286,14 @@ int WifiSetupWcm_StartSearch(const u8 *bssid, const u8 *ssid, int len, int optio
         MI_CpuFill8(gWifiSetupWcmSearchSsid, 0xFF, 32);
         gWifiSetupWcm.searchSsid = WCM_Essid_Any;
     }
-    if (gWifiSetupWcm.state == 3) {
+    if (gWifiSetupWcm.state == WIFI_SETUP_WCM_STATE_IDLE) {
         if (WCM_SearchAsync(gWifiSetupWcm.searchBssid, gWifiSetupWcm.searchSsid, gWifiSetupWcm.searchOption) == 3) {
-            gWifiSetupWcm.state = 6;
+            gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_SEARCH_STARTING;
             OS_RestoreInterrupts(irq);
             return 1;
         }
     } else if (WifiSetupWcm_ReturnToIdle() == 1) {
-        gWifiSetupWcm.state = 6;
+        gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_SEARCH_STARTING;
         OS_RestoreInterrupts(irq);
         return 1;
     }
@@ -303,8 +303,8 @@ int WifiSetupWcm_StartSearch(const u8 *bssid, const u8 *ssid, int len, int optio
 
 int WifiSetupWcm_StopSearch(void) {
     OSIntrMode irq = OS_DisableInterrupts();
-    if (gWifiSetupWcm.state == 5 && WCM_SearchAsync(NULL, NULL, 0) == 3) {
-        gWifiSetupWcm.state = 4;
+    if (gWifiSetupWcm.state == WIFI_SETUP_WCM_STATE_SEARCHING && WCM_SearchAsync(NULL, NULL, 0) == 3) {
+        gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_BUSY;
         OS_RestoreInterrupts(irq);
         return 1;
     }
@@ -314,8 +314,8 @@ int WifiSetupWcm_StopSearch(void) {
 
 int WifiSetupWcm_StartDisconnect(void) {
     OSIntrMode irq = OS_DisableInterrupts();
-    if (gWifiSetupWcm.state == 7 && WCM_DisconnectAsync() == 3) {
-        gWifiSetupWcm.state = 4;
+    if (gWifiSetupWcm.state == WIFI_SETUP_WCM_STATE_CONNECTED && WCM_DisconnectAsync() == 3) {
+        gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_BUSY;
         OS_RestoreInterrupts(irq);
         return 1;
     }
@@ -325,17 +325,17 @@ int WifiSetupWcm_StartDisconnect(void) {
 
 int WifiSetupWcm_StartCleanup(void) {
     OSIntrMode irq = OS_DisableInterrupts();
-    if (gWifiSetupWcm.state == 3) {
+    if (gWifiSetupWcm.state == WIFI_SETUP_WCM_STATE_IDLE) {
         if (WCM_CleanupAsync() != 3) {
             OS_RestoreInterrupts(irq);
             return 0;
         }
-        gWifiSetupWcm.state = 2;
+        gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_CLEANUP;
         OS_RestoreInterrupts(irq);
         return 1;
     }
     if (WifiSetupWcm_ReturnToIdle() == 1) {
-        gWifiSetupWcm.state = 2;
+        gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_CLEANUP;
         OS_RestoreInterrupts(irq);
         return 1;
     }
@@ -354,12 +354,12 @@ int WifiSetupWcm_StartConnect(void *ap, void *key, int option) {
     }
     MIi_CpuCopy32(ap, gWifiSetupWcm.connectAp, 0xC0);
     if (WifiSetupWcm_ReturnToIdle() == 1) {
-        gWifiSetupWcm.state = 8;
+        gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_CONNECTING;
         OS_RestoreInterrupts(irq);
         return 1;
     }
-    if (gWifiSetupWcm.state == 3 && WCM_ConnectAsync(gWifiSetupWcm.connectAp, gWifiSetupWcm.connectKey, gWifiSetupWcm.connectOption) == 3) {
-        gWifiSetupWcm.state = 8;
+    if (gWifiSetupWcm.state == WIFI_SETUP_WCM_STATE_IDLE && WCM_ConnectAsync(gWifiSetupWcm.connectAp, gWifiSetupWcm.connectKey, gWifiSetupWcm.connectOption) == 3) {
+        gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_CONNECTING;
         OS_RestoreInterrupts(irq);
         return 1;
     }
@@ -394,19 +394,19 @@ BOOL WifiSetupWcm_Init(void (*callback)(int event, int arg), void *allocation, u
     gWifiSetupWcm.config->apListMode = 0;
     gWifiSetupWcm.config->dmaNo = 3;
     gWifiSetupWcm.callback = callback;
-    if (gWifiSetupWcm.state == 0) {
+    if (gWifiSetupWcm.state == WIFI_SETUP_WCM_STATE_NONE) {
         if (WCM_Init(gWifiSetupWcm.wcmWork, 0x2300) != 0) {
             OS_RestoreInterrupts(irq);
             return FALSE;
         }
-        gWifiSetupWcm.state = 1;
+        gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_READY;
     }
-    if (gWifiSetupWcm.state == 1) {
+    if (gWifiSetupWcm.state == WIFI_SETUP_WCM_STATE_READY) {
         if (WCM_StartupAsync(gWifiSetupWcm.config, WifiSetupWcm_HandleEvent) != 3) {
             OS_RestoreInterrupts(irq);
             return FALSE;
         }
-        gWifiSetupWcm.state = 4;
+        gWifiSetupWcm.state = WIFI_SETUP_WCM_STATE_BUSY;
         OS_RestoreInterrupts(irq);
         return TRUE;
     }

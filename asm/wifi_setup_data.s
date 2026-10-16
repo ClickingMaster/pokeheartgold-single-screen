@@ -2,22 +2,22 @@
 	.public sWifiSetupLinkSocConfig
 	.public sWifiSetupChannelMasks
 	.public gWifiSetupReply
-	.public ov13_0224E284
-	.public ov13_0224E2B0
-	.public ov13_0224E2E8
-	.public ov13_0224E380
+	.public gWifiSetupRecvSsid
+	.public gWifiSetupRecvSecurity
+	.public gWifiSetupRecvWepKeys
+	.public gWifiSetupRecvWpaKey
 	.public gWifiSetupWcm
 	.public sWifiSetupClientVersion
 	.public gWifiSetupConfig
 	.public gWifiSetupOwnMacAddress
 	.public gWifiSetupRecordBuffer
 	.public gWifiSetupState
-	.public ov13_022459B4
+	.public gWifiSetupSocket
 	.public gWifiSetupRuntime
 	.public gWifiSetupFreeHook
 	.public sStr_MELCO
 	.public gWifiSetupPeerAddress
-	.public ov13_0224DF30
+	.public gWifiSetupWork
 	.public gWifiSetupLinkEventCallback
 	.include "asm/macros.inc"
 	.include "overlay_13_thumb_2.inc"
@@ -195,7 +195,7 @@
 	.global sWifiSetupAesTd0
 	.global sWifiSetupAesTd1
 	.global sWifiSetupSecurityRecordTypes
-	.global ov13_022459B4
+	.global gWifiSetupSocket
 	.global sWifiSetupSocConfig
 	.global sStr_ESSID_AOSS
 	.global sStr_MELCO
@@ -229,22 +229,22 @@
 	.global gWifiSetupWcm
 	.global gWifiSetupWcmSearchBssid
 	.global gWifiSetupWcmSearchSsid
-	.global ov13_0224DF30
+	.global gWifiSetupWork
 	.global ov13_0224DF80
 	.global gWifiSetupLinkEventCallback
 	.global gWifiSetupLinkEventQueue
 	.global gWifiSetupLinkMutex
 	.global gWifiSetupThread
-	.global ov13_0224E09C
+	.global gWifiSetupResult
 	.global ov13_0224E0B0
 	.global ov13_0224E0C4
 	.global ov13_0224E144
 	.global gWifiSetupReply
 	.global gWifiSetupClientSettings
-	.global ov13_0224E284
-	.global ov13_0224E2B0
-	.global ov13_0224E2E8
-	.global ov13_0224E380
+	.global gWifiSetupRecvSsid
+	.global gWifiSetupRecvSecurity
+	.global gWifiSetupRecvWepKeys
+	.global gWifiSetupRecvWpaKey
 	.global gWifiSetupOwnMacAddress
 	.global gWifiSetupApBssid
 	.global gWifiSetupLinkSearchBssid
@@ -934,7 +934,7 @@ sWifiSetupAesTd1: ; 0x02244AB0
 sWifiSetupSecurityRecordTypes:
 	.byte 0x09, 0x08, 0x00, 0x00
 
-ov13_022459B4: ; 0x022459B4
+gWifiSetupSocket: ; 0x022459B4
 	.byte 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 
 sWifiSetupSocConfig: ; 0x022459BC
@@ -1072,7 +1072,7 @@ gWifiSetupWcmSearchBssid: ; 0x0224DF08
 gWifiSetupWcmSearchSsid: ; 0x0224DF10
 	.space 0x20
 
-ov13_0224DF30: ; 0x0224DF30
+gWifiSetupWork: ; 0x0224DF30
 	.space 0x50
 
 ov13_0224DF80: ; 0x0224DF80
@@ -1090,7 +1090,7 @@ gWifiSetupLinkMutex: ; 0x0224DFC4
 gWifiSetupThread: ; 0x0224DFDC
 	.space 0xC0
 
-ov13_0224E09C: ; 0x0224E09C
+gWifiSetupResult: ; 0x0224E09C
 	.space 0x14
 
 ov13_0224E0B0: ; 0x0224E0B0
@@ -1108,16 +1108,16 @@ gWifiSetupReply: ; 0x0224E184
 gWifiSetupClientSettings: ; 0x0224E270
 	.space 0x14
 
-ov13_0224E284: ; 0x0224E284
+gWifiSetupRecvSsid: ; 0x0224E284
 	.space 0x2C
 
-ov13_0224E2B0: ; 0x0224E2B0
+gWifiSetupRecvSecurity: ; 0x0224E2B0
 	.space 0x38
 
-ov13_0224E2E8: ; 0x0224E2E8
+gWifiSetupRecvWepKeys: ; 0x0224E2E8
 	.space 0x98
 
-ov13_0224E380: ; 0x0224E380
+gWifiSetupRecvWpaKey: ; 0x0224E380
 	.space 0x58
 
 gWifiSetupOwnMacAddress: ; 0x0224E3D8

@@ -41,6 +41,21 @@
 #define HOF_SHOWCASE_SPRITE_NEXT_PAGE 16
 #define HOF_SHOWCASE_SPRITE_EXIT      17
 
+enum HallOfFameShowcaseMainState {
+    HOF_SHOWCASE_MAIN_FADE_IN,
+    HOF_SHOWCASE_MAIN_WAIT_FADE_IN,
+    HOF_SHOWCASE_MAIN_INPUT,
+    HOF_SHOWCASE_MAIN_WAIT_FADE_OUT,
+};
+
+enum HallOfFameShowcaseState {
+    HOF_SHOWCASE_STATE_INPUT,
+    HOF_SHOWCASE_STATE_PRESS_BUTTON,
+    HOF_SHOWCASE_STATE_PREV_RECORD,
+    HOF_SHOWCASE_STATE_NEXT_RECORD,
+    HOF_SHOWCASE_STATE_EXIT,
+};
+
 typedef struct HallOfFameShowcase {
     HallOfFame *hallOfFame;                           // 0x000
     BgConfig *bgConfig;                               // 0x004
@@ -180,21 +195,21 @@ BOOL HallOfFameShowcase_Main(OverlayManager *man, int *state) {
     HallOfFameShowcase *showcase = OverlayManager_GetData(man);
 
     switch (*state) {
-    case 0:
+    case HOF_SHOWCASE_MAIN_FADE_IN:
         HallOfFameShowcase_BeginFadeIn();
         (*state)++;
         break;
-    case 1:
+    case HOF_SHOWCASE_MAIN_WAIT_FADE_IN:
         if (IsPaletteFadeFinished() == TRUE) {
             (*state)++;
         }
         break;
-    case 2:
+    case HOF_SHOWCASE_MAIN_INPUT:
         if (HallOfFameShowcase_HandleInput(showcase) == FALSE) {
             (*state)++;
         }
         break;
-    case 3:
+    case HOF_SHOWCASE_MAIN_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished() == TRUE) {
             return TRUE;
         }
@@ -455,16 +470,16 @@ void HallOfFameShowcase_BeginFadeOut(void) {
 
 static inline void HallOfFameShowcase_StartPrevPage(HallOfFameShowcase *showcase) {
     showcase->pressedButton = HOF_SHOWCASE_SPRITE_PREV_PAGE;
-    showcase->nextState = 2;
-    showcase->state = 1;
+    showcase->nextState = HOF_SHOWCASE_STATE_PREV_RECORD;
+    showcase->state = HOF_SHOWCASE_STATE_PRESS_BUTTON;
     HallOfFameShowcase_DeletePartyIcons(showcase);
     PlaySE(SEQ_SE_DP_SELECT);
 }
 
 static inline void HallOfFameShowcase_StartNextPage(HallOfFameShowcase *showcase) {
     showcase->pressedButton = HOF_SHOWCASE_SPRITE_NEXT_PAGE;
-    showcase->nextState = 3;
-    showcase->state = 1;
+    showcase->nextState = HOF_SHOWCASE_STATE_NEXT_RECORD;
+    showcase->state = HOF_SHOWCASE_STATE_PRESS_BUTTON;
     HallOfFameShowcase_DeletePartyIcons(showcase);
     PlaySE(SEQ_SE_DP_SELECT);
 }
@@ -475,7 +490,7 @@ int HallOfFameShowcase_HandleInput(HallOfFameShowcase *showcase) {
     u32 input;
 
     switch (showcase->state) {
-    case 0: {
+    case HOF_SHOWCASE_STATE_INPUT: {
         int hit = TouchscreenHitbox_FindRectAtTouchNew(gHallOfFameShowcaseHitboxes);
         if (hit == 0) {
             if (showcase->record > 0) {
@@ -503,7 +518,7 @@ int HallOfFameShowcase_HandleInput(HallOfFameShowcase *showcase) {
             case GRID_MENU_CANCEL:
                 PlaySE(SEQ_SE_DP_SELECT);
                 showcase->pressedButton = HOF_SHOWCASE_SPRITE_EXIT;
-                showcase->nextState = 4;
+                showcase->nextState = HOF_SHOWCASE_STATE_EXIT;
                 showcase->state++;
                 break;
             case GRID_MENU_CURSOR_MOVE:
@@ -528,20 +543,20 @@ int HallOfFameShowcase_HandleInput(HallOfFameShowcase *showcase) {
         }
         break;
     }
-    case 1:
+    case HOF_SHOWCASE_STATE_PRESS_BUTTON:
         if (!HallOfFameShowcase_AnimateButtonPress(showcase)) {
             showcase->state = showcase->nextState;
         }
         break;
-    case 2:
+    case HOF_SHOWCASE_STATE_PREV_RECORD:
         HallOfFameShowcase_ChangeRecord(showcase, -1);
-        showcase->state = 0;
+        showcase->state = HOF_SHOWCASE_STATE_INPUT;
         break;
-    case 3:
+    case HOF_SHOWCASE_STATE_NEXT_RECORD:
         HallOfFameShowcase_ChangeRecord(showcase, 1);
-        showcase->state = 0;
+        showcase->state = HOF_SHOWCASE_STATE_INPUT;
         break;
-    case 4:
+    case HOF_SHOWCASE_STATE_EXIT:
         HallOfFameShowcase_BeginFadeOut();
         PlaySE(SEQ_SE_DP_PC_LOGOFF);
         return FALSE;

@@ -145,8 +145,8 @@ void BeginNormalPaletteFade(enum FadeMode mode, enum FadeType mainType, enum Fad
         PaletteFade_SetMode(mode, &gPaletteFade);
         FadeBlankPair_Init(&gPaletteFade.blankPair);
         color = PaletteFade_ResolveColor(&gPaletteFade, color);
-        ScreenFade_Init(&gPaletteFade.main, mainType, steps, framesPerStep, 0, NULL, 0, &gPaletteFade.regQueue, &gPaletteFade.blankPair, heapId, color);
-        ScreenFade_Init(&gPaletteFade.sub, subType, steps, framesPerStep, 0, NULL, 1, &gPaletteFade.regQueue, &gPaletteFade.blankPair, heapId, color);
+        ScreenFade_Init(&gPaletteFade.main, mainType, steps, framesPerStep, SCREEN_FADE_STATE_START, NULL, 0, &gPaletteFade.regQueue, &gPaletteFade.blankPair, heapId, color);
+        ScreenFade_Init(&gPaletteFade.sub, subType, steps, framesPerStep, SCREEN_FADE_STATE_START, NULL, 1, &gPaletteFade.regQueue, &gPaletteFade.blankPair, heapId, color);
         gPaletteFade.active = 1;
         FadeWork_UpdateFrame(&gPaletteFade.mainActive, &gPaletteFade.main);
         FadeWork_UpdateFrame(&gPaletteFade.subActive, &gPaletteFade.sub);
@@ -181,10 +181,10 @@ void StopPaletteFade(void) {
     FadeBlankPair_Stop(&gPaletteFade.blankPair, 0);
     FadeBlankPair_Stop(&gPaletteFade.blankPair, 1);
     if (gPaletteFade.mainActive != 0) {
-        gPaletteFade.main.state = 2;
+        gPaletteFade.main.state = SCREEN_FADE_STATE_CLEANUP;
     }
     if (gPaletteFade.subActive != 0) {
-        gPaletteFade.sub.state = 2;
+        gPaletteFade.sub.state = SCREEN_FADE_STATE_CLEANUP;
     }
     FadeWork_UpdateFrame(&gPaletteFade.mainActive, &gPaletteFade.main);
     FadeWork_UpdateFrame(&gPaletteFade.subActive, &gPaletteFade.sub);

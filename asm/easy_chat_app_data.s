@@ -301,9 +301,9 @@
 	.public gEasyChatMessageMenuHitboxes
 	.public gEasyChatButtonHitboxes
 	.public gEasyChatCategoryGridNeighbors
-	.public ov102_021EC65D
-	.public ov102_021EC65E
-	.public ov102_021EC65F
+	.public gEasyChatCategoryGridNeighborDown
+	.public gEasyChatCategoryGridNeighborLeft
+	.public gEasyChatCategoryGridNeighborRight
 	.public gEasyChatObjCharTransferTemplate
 	.public gEasyChatAppViewGraphicsModes
 	.public gEasyChatBgTemplate_Main2
@@ -475,13 +475,13 @@ gEasyChatButtonHitboxes: ; 0x021EC648
 gEasyChatCategoryGridNeighbors: ; 0x021EC65C
 	.byte 0xFE
 
-ov102_021EC65D: ; 0x021EC65D
+gEasyChatCategoryGridNeighborDown: ; 0x021EC65D
 	.byte 0x03
 
-ov102_021EC65E: ; 0x021EC65E
+gEasyChatCategoryGridNeighborLeft: ; 0x021EC65E
 	.byte 0x02
 
-ov102_021EC65F: ; 0x021EC65F
+gEasyChatCategoryGridNeighborRight: ; 0x021EC65F
 	.byte 0x01
 	.byte 0xFE, 0x04, 0x00, 0x02, 0xFE, 0x05, 0x01, 0x00, 0x00, 0x06, 0x05, 0x04, 0x01, 0x07, 0x03, 0x05
 	.byte 0x02, 0x08, 0x04, 0x03, 0x03, 0x09, 0x08, 0x07, 0x04, 0x0A, 0x06, 0x08, 0x05, 0x0B, 0x07, 0x06

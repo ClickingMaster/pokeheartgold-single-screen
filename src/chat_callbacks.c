@@ -50,7 +50,7 @@ extern const char sStr_SrcParamsNumGe0[];
     if ((callback)->type < 0) {                                           \
         __msl_assertion_failed(sStr_DataTypeGe0, sStr_ChatCallbacksC, func, line); \
     }                                                                     \
-    if ((callback)->type >= 32) {                                         \
+    if ((callback)->type >= CALLBACK_NUM) {                               \
         __msl_assertion_failed(sStr_DataTypeLtCALLBACK_NUM, sStr_ChatCallbacksC, func, line); \
     }                                                                     \
     if (!(callback)->callback) {                                          \
@@ -66,49 +66,49 @@ extern const char sStr_SrcParamsNumGe0[];
 void ciFreeCallbackData(ChatCallback *callback) {
     ASSERT_CALLBACK(callback, sStr_ciFreeCallbackData, 171);
     switch (callback->type) {
-    case 0: {
+    case CALLBACK_RAW: {
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[0]);
         break;
     }
-    case 1: {
+    case CALLBACK_DISCONNECTED: {
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[0]);
         break;
     }
-    case 2: {
-        u32 *p = callback->param;
-        DWCi_GsFree((void *)p[0]);
-        DWCi_GsFree((void *)p[1]);
-        break;
-    }
-    case 3: {
+    case CALLBACK_PRIVATE_MESSAGE: {
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[0]);
         DWCi_GsFree((void *)p[1]);
         break;
     }
-    case 4: {
+    case CALLBACK_INVITED: {
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[0]);
         DWCi_GsFree((void *)p[1]);
-        DWCi_GsFree((void *)p[2]);
         break;
     }
-    case 5: {
+    case CALLBACK_CHANNEL_MESSAGE: {
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[0]);
         DWCi_GsFree((void *)p[1]);
         DWCi_GsFree((void *)p[2]);
         break;
     }
-    case 6: {
+    case CALLBACK_KICKED: {
+        u32 *p = callback->param;
+        DWCi_GsFree((void *)p[0]);
+        DWCi_GsFree((void *)p[1]);
+        DWCi_GsFree((void *)p[2]);
+        break;
+    }
+    case CALLBACK_USER_JOINED: {
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[0]);
         DWCi_GsFree((void *)p[1]);
         break;
     }
-    case 7: {
+    case CALLBACK_USER_PARTED: {
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[0]);
         DWCi_GsFree((void *)p[1]);
@@ -116,43 +116,43 @@ void ciFreeCallbackData(ChatCallback *callback) {
         DWCi_GsFree((void *)p[4]);
         break;
     }
-    case 8: {
+    case CALLBACK_USER_CHANGED_NICK: {
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[0]);
         DWCi_GsFree((void *)p[1]);
         DWCi_GsFree((void *)p[2]);
         break;
     }
-    case 9: {
+    case CALLBACK_TOPIC_CHANGED: {
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[0]);
         DWCi_GsFree((void *)p[1]);
         break;
     }
-    case 10: {
+    case CALLBACK_CHANNEL_MODE_CHANGED: {
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[0]);
         DWCi_GsFree((void *)p[1]);
         break;
     }
-    case 11: {
+    case CALLBACK_USER_MODE_CHANGED: {
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[0]);
         DWCi_GsFree((void *)p[1]);
         break;
     }
-    case 12: {
+    case CALLBACK_USER_LIST_UPDATED: {
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[0]);
         break;
     }
-    case 13: {
+    case CALLBACK_ENUM_CHANNELS_EACH: {
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[2]);
         DWCi_GsFree((void *)p[3]);
         break;
     }
-    case 14: {
+    case CALLBACK_ENUM_CHANNELS_ALL: {
         int i;
         u32 *p = callback->param;
         for (i = 0; i < (int)p[1]; i++) {
@@ -164,30 +164,30 @@ void ciFreeCallbackData(ChatCallback *callback) {
         DWCi_GsFree((void *)p[4]);
         break;
     }
-    case 15: {
+    case CALLBACK_ENTER_CHANNEL: {
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[2]);
         break;
     }
-    case 16: {
-        u32 *p = callback->param;
-        DWCi_GsFree((void *)p[1]);
-        DWCi_GsFree((void *)p[2]);
-        break;
-    }
-    case 17: {
+    case CALLBACK_GET_CHANNEL_TOPIC: {
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[1]);
         DWCi_GsFree((void *)p[2]);
         break;
     }
-    case 18: {
+    case CALLBACK_GET_CHANNEL_MODE: {
+        u32 *p = callback->param;
+        DWCi_GsFree((void *)p[1]);
+        DWCi_GsFree((void *)p[2]);
+        break;
+    }
+    case CALLBACK_GET_CHANNEL_PASSWORD: {
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[1]);
         DWCi_GsFree((void *)p[3]);
         break;
     }
-    case 19: {
+    case CALLBACK_ENUM_USERS: {
         int i;
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[1]);
@@ -198,7 +198,7 @@ void ciFreeCallbackData(ChatCallback *callback) {
         DWCi_GsFree((void *)p[4]);
         break;
     }
-    case 20: {
+    case CALLBACK_GET_USER_INFO: {
         int i;
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[1]);
@@ -211,14 +211,14 @@ void ciFreeCallbackData(ChatCallback *callback) {
         DWCi_GsFree((void *)p[6]);
         break;
     }
-    case 21: {
+    case CALLBACK_GET_BASIC_USER_INFO: {
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[1]);
         DWCi_GsFree((void *)p[2]);
         DWCi_GsFree((void *)p[3]);
         break;
     }
-    case 22: {
+    case CALLBACK_GET_CHANNEL_BASIC_USER_INFO: {
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[1]);
         DWCi_GsFree((void *)p[2]);
@@ -226,13 +226,13 @@ void ciFreeCallbackData(ChatCallback *callback) {
         DWCi_GsFree((void *)p[4]);
         break;
     }
-    case 23: {
+    case CALLBACK_GET_USER_MODE: {
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[1]);
         DWCi_GsFree((void *)p[2]);
         break;
     }
-    case 24: {
+    case CALLBACK_ENUM_CHANNEL_BANS: {
         int i;
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[1]);
@@ -242,7 +242,7 @@ void ciFreeCallbackData(ChatCallback *callback) {
         DWCi_GsFree((void *)p[3]);
         break;
     }
-    case 25: {
+    case CALLBACK_NICK_ERROR: {
         int i;
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[1]);
@@ -252,13 +252,13 @@ void ciFreeCallbackData(ChatCallback *callback) {
         DWCi_GsFree((void *)p[3]);
         break;
     }
-    case 26: {
+    case CALLBACK_CHANGE_NICK: {
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[1]);
         DWCi_GsFree((void *)p[2]);
         break;
     }
-    case 27: {
+    case CALLBACK_NEW_USER_LIST: {
         int i;
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[0]);
@@ -269,7 +269,7 @@ void ciFreeCallbackData(ChatCallback *callback) {
         DWCi_GsFree((void *)p[3]);
         break;
     }
-    case 28: {
+    case CALLBACK_BROADCAST_KEY_CHANGED: {
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[0]);
         DWCi_GsFree((void *)p[1]);
@@ -277,7 +277,7 @@ void ciFreeCallbackData(ChatCallback *callback) {
         DWCi_GsFree((void *)p[3]);
         break;
     }
-    case 29: {
+    case CALLBACK_GET_GLOBAL_KEYS: {
         int i;
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[1]);
@@ -291,7 +291,7 @@ void ciFreeCallbackData(ChatCallback *callback) {
         DWCi_GsFree((void *)p[4]);
         break;
     }
-    case 30: {
+    case CALLBACK_GET_CHANNEL_KEYS: {
         int i;
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[1]);
@@ -306,7 +306,7 @@ void ciFreeCallbackData(ChatCallback *callback) {
         DWCi_GsFree((void *)p[5]);
         break;
     }
-    case 31: {
+    case CALLBACK_AUTHENTICATE_CDKEY: {
         u32 *p = callback->param;
         DWCi_GsFree((void *)p[1]);
         break;
@@ -361,7 +361,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
     ChatCallback item;
     ASSERT(chat, sStr_ChatNeNULL, 0x21f);
     ASSERT(type >= 0, sStr_TypeGe0, 0x221);
-    ASSERT(type < 32, sStr_TypeLtCALLBACK_NUM, 0x222);
+    ASSERT(type < CALLBACK_NUM, sStr_TypeLtCALLBACK_NUM, 0x222);
     ASSERT(chat->callbacks, sStr_ConnectionCallbackListNeNULL, 0x223);
     ASSERT(func, sStr_CallbackNeNULL_2, 0x224);
     ASSERT(src, sStr_CallbackParamsNeNULL, 0x225);
@@ -397,49 +397,49 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
         memcpy(item.channel, channel, length + 1);
     }
     switch (item.type) {
-    case 0: {
+    case CALLBACK_RAW: {
         u32 *dst = item.param;
         COPY_STRING(0);
         break;
     }
-    case 1: {
+    case CALLBACK_DISCONNECTED: {
         u32 *dst = item.param;
         COPY_STRING(0);
         break;
     }
-    case 2: {
-        u32 *dst = item.param;
-        COPY_STRING(0);
-        COPY_STRING(1);
-        break;
-    }
-    case 3: {
+    case CALLBACK_PRIVATE_MESSAGE: {
         u32 *dst = item.param;
         COPY_STRING(0);
         COPY_STRING(1);
         break;
     }
-    case 4: {
+    case CALLBACK_INVITED: {
         u32 *dst = item.param;
         COPY_STRING(0);
         COPY_STRING(1);
-        COPY_STRING(2);
         break;
     }
-    case 5: {
+    case CALLBACK_CHANNEL_MESSAGE: {
         u32 *dst = item.param;
         COPY_STRING(0);
         COPY_STRING(1);
         COPY_STRING(2);
         break;
     }
-    case 6: {
+    case CALLBACK_KICKED: {
+        u32 *dst = item.param;
+        COPY_STRING(0);
+        COPY_STRING(1);
+        COPY_STRING(2);
+        break;
+    }
+    case CALLBACK_USER_JOINED: {
         u32 *dst = item.param;
         COPY_STRING(0);
         COPY_STRING(1);
         break;
     }
-    case 7: {
+    case CALLBACK_USER_PARTED: {
         u32 *dst = item.param;
         COPY_STRING(0);
         COPY_STRING(1);
@@ -447,20 +447,20 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
         COPY_STRING(4);
         break;
     }
-    case 8: {
+    case CALLBACK_USER_CHANGED_NICK: {
         u32 *dst = item.param;
         COPY_STRING(0);
         COPY_STRING(1);
         COPY_STRING(2);
         break;
     }
-    case 9: {
+    case CALLBACK_TOPIC_CHANGED: {
         u32 *dst = item.param;
         COPY_STRING(0);
         COPY_STRING(1);
         break;
     }
-    case 10: {
+    case CALLBACK_CHANNEL_MODE_CHANGED: {
         u32 *dst = item.param;
         COPY_STRING(0);
         if (src[1]) {
@@ -472,24 +472,24 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
         }
         break;
     }
-    case 11: {
+    case CALLBACK_USER_MODE_CHANGED: {
         u32 *dst = item.param;
         COPY_STRING(0);
         COPY_STRING(1);
         break;
     }
-    case 12: {
+    case CALLBACK_USER_LIST_UPDATED: {
         u32 *dst = item.param;
         COPY_STRING(0);
         break;
     }
-    case 13: {
+    case CALLBACK_ENUM_CHANNELS_EACH: {
         u32 *dst = item.param;
         COPY_STRING(2);
         COPY_STRING(3);
         break;
     }
-    case 14: {
+    case CALLBACK_ENUM_CHANNELS_ALL: {
         int i;
         u32 *dst = item.param;
         ASSERT((int)src[1] >= 0, sStr_SrcParamsNumChannelsGe0, 0x2d3);
@@ -553,18 +553,18 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
         }
         break;
     }
-    case 15: {
+    case CALLBACK_ENTER_CHANNEL: {
         u32 *dst = item.param;
         COPY_STRING(2);
         break;
     }
-    case 16: {
+    case CALLBACK_GET_CHANNEL_TOPIC: {
         u32 *dst = item.param;
         COPY_STRING(1);
         COPY_STRING(2);
         break;
     }
-    case 17: {
+    case CALLBACK_GET_CHANNEL_MODE: {
         u32 *dst = item.param;
         COPY_STRING(1);
         if (src[2]) {
@@ -576,13 +576,13 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
         }
         break;
     }
-    case 18: {
+    case CALLBACK_GET_CHANNEL_PASSWORD: {
         u32 *dst = item.param;
         COPY_STRING(1);
         COPY_STRING(3);
         break;
     }
-    case 19: {
+    case CALLBACK_ENUM_USERS: {
         u32 *dst = item.param;
         COPY_STRING(1);
         ASSERT((int)src[2] >= 0, sStr_SrcParamsNumUsersGe0, 0x301);
@@ -622,7 +622,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
         }
         break;
     }
-    case 20: {
+    case CALLBACK_GET_USER_INFO: {
         u32 *dst = item.param;
         COPY_STRING(1);
         COPY_STRING(2);
@@ -654,14 +654,14 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
         }
         break;
     }
-    case 21: {
+    case CALLBACK_GET_BASIC_USER_INFO: {
         u32 *dst = item.param;
         COPY_STRING(1);
         COPY_STRING(2);
         COPY_STRING(3);
         break;
     }
-    case 22: {
+    case CALLBACK_GET_CHANNEL_BASIC_USER_INFO: {
         u32 *dst = item.param;
         COPY_STRING(1);
         COPY_STRING(2);
@@ -669,13 +669,13 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
         COPY_STRING(4);
         break;
     }
-    case 23: {
+    case CALLBACK_GET_USER_MODE: {
         u32 *dst = item.param;
         COPY_STRING(1);
         COPY_STRING(2);
         break;
     }
-    case 24: {
+    case CALLBACK_ENUM_CHANNEL_BANS: {
         u32 *dst = item.param;
         COPY_STRING(1);
         ASSERT((int)src[2] >= 0, sStr_SrcParamsNumBansGe0, 0x335);
@@ -704,7 +704,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
         }
         break;
     }
-    case 25: {
+    case CALLBACK_NICK_ERROR: {
         u32 *dst = item.param;
         COPY_STRING(1);
         ASSERT((int)src[2] >= 0, sStr_SrcParamsNumSuggestedNicksGe0, 0x33e);
@@ -733,13 +733,13 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
         }
         break;
     }
-    case 26: {
+    case CALLBACK_CHANGE_NICK: {
         u32 *dst = item.param;
         COPY_STRING(1);
         COPY_STRING(2);
         break;
     }
-    case 27: {
+    case CALLBACK_NEW_USER_LIST: {
         u32 *dst = item.param;
         COPY_STRING(0);
         ASSERT((int)src[1] >= 0, sStr_SrcParamsNumUsersGe0, 0x350);
@@ -779,7 +779,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
         }
         break;
     }
-    case 28: {
+    case CALLBACK_BROADCAST_KEY_CHANGED: {
         u32 *dst = item.param;
         COPY_STRING(0);
         COPY_STRING(1);
@@ -787,7 +787,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
         COPY_STRING(3);
         break;
     }
-    case 29: {
+    case CALLBACK_GET_GLOBAL_KEYS: {
         u32 *dst = item.param;
         COPY_STRING(1);
         ASSERT((int)src[2] >= 0, sStr_SrcParamsNumGe0, 0x365);
@@ -840,7 +840,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
         }
         break;
     }
-    case 30: {
+    case CALLBACK_GET_CHANNEL_KEYS: {
         u32 *dst = item.param;
         COPY_STRING(1);
         COPY_STRING(2);
@@ -894,7 +894,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
         }
         break;
     }
-    case 31: {
+    case CALLBACK_AUTHENTICATE_CDKEY: {
         u32 *dst = item.param;
         COPY_STRING(1);
         break;
@@ -917,194 +917,194 @@ void ciCallCallback(ChatConnection *chat, ChatCallback *callback) {
     ASSERT_CALLBACK(callback, sStr_ciCallCallback, 911);
     user = callback->user;
     switch (callback->type) {
-    case 0: {
+    case CALLBACK_RAW: {
         u32 *args = callback->param;
         ChatCallbackFunc1 func = (ChatCallbackFunc1)callback->callback;
         func(chat, args[0], user);
         break;
     }
-    case 1: {
+    case CALLBACK_DISCONNECTED: {
         u32 *args = callback->param;
         ChatCallbackFunc1 func = (ChatCallbackFunc1)callback->callback;
         func(chat, args[0], user);
         break;
     }
-    case 2: {
+    case CALLBACK_PRIVATE_MESSAGE: {
         u32 *args = callback->param;
         ChatCallbackFunc3 func = (ChatCallbackFunc3)callback->callback;
         func(chat, args[0], args[1], args[2], user);
         break;
     }
-    case 3: {
+    case CALLBACK_INVITED: {
         u32 *args = callback->param;
         ChatCallbackFunc2 func = (ChatCallbackFunc2)callback->callback;
         func(chat, args[0], args[1], user);
         break;
     }
-    case 4: {
+    case CALLBACK_CHANNEL_MESSAGE: {
         u32 *args = callback->param;
         ChatCallbackFunc4 func = (ChatCallbackFunc4)callback->callback;
         func(chat, args[0], args[1], args[2], args[3], user);
         break;
     }
-    case 5: {
+    case CALLBACK_KICKED: {
         u32 *args = callback->param;
         ChatCallbackFunc3 func = (ChatCallbackFunc3)callback->callback;
         func(chat, args[0], args[1], args[2], user);
         break;
     }
-    case 6: {
+    case CALLBACK_USER_JOINED: {
         u32 *args = callback->param;
         ChatCallbackFunc3 func = (ChatCallbackFunc3)callback->callback;
         func(chat, args[0], args[1], args[2], user);
         break;
     }
-    case 7: {
+    case CALLBACK_USER_PARTED: {
         u32 *args = callback->param;
         ChatCallbackFunc5 func = (ChatCallbackFunc5)callback->callback;
         func(chat, args[0], args[1], args[2], args[3], args[4], user);
         break;
     }
-    case 8: {
+    case CALLBACK_USER_CHANGED_NICK: {
         u32 *args = callback->param;
         ChatCallbackFunc3 func = (ChatCallbackFunc3)callback->callback;
         func(chat, args[0], args[1], args[2], user);
         break;
     }
-    case 9: {
+    case CALLBACK_TOPIC_CHANGED: {
         u32 *args = callback->param;
         ChatCallbackFunc2 func = (ChatCallbackFunc2)callback->callback;
         func(chat, args[0], args[1], user);
         break;
     }
-    case 10: {
+    case CALLBACK_CHANNEL_MODE_CHANGED: {
         u32 *args = callback->param;
         ChatCallbackFunc2 func = (ChatCallbackFunc2)callback->callback;
         func(chat, args[0], args[1], user);
         break;
     }
-    case 11: {
+    case CALLBACK_USER_MODE_CHANGED: {
         u32 *args = callback->param;
         ChatCallbackFunc3 func = (ChatCallbackFunc3)callback->callback;
         func(chat, args[0], args[1], args[2], user);
         break;
     }
-    case 12: {
+    case CALLBACK_USER_LIST_UPDATED: {
         u32 *args = callback->param;
         ChatCallbackFunc1 func = (ChatCallbackFunc1)callback->callback;
         func(chat, args[0], user);
         break;
     }
-    case 13: {
+    case CALLBACK_ENUM_CHANNELS_EACH: {
         u32 *args = callback->param;
         ChatCallbackFunc5 func = (ChatCallbackFunc5)callback->callback;
         func(chat, args[0], args[1], args[2], args[3], args[4], user);
         break;
     }
-    case 14: {
+    case CALLBACK_ENUM_CHANNELS_ALL: {
         u32 *args = callback->param;
         ChatCallbackFunc5 func = (ChatCallbackFunc5)callback->callback;
         func(chat, args[0], args[1], args[2], args[3], args[4], user);
         break;
     }
-    case 15: {
+    case CALLBACK_ENTER_CHANNEL: {
         u32 *args = callback->param;
         ChatCallbackFunc3 func = (ChatCallbackFunc3)callback->callback;
         ciJoinCallbackCalled(chat, (const char *)args[2]);
         func(chat, args[0], args[1], args[2], user);
         break;
     }
-    case 16: {
+    case CALLBACK_GET_CHANNEL_TOPIC: {
         u32 *args = callback->param;
         ChatCallbackFunc3 func = (ChatCallbackFunc3)callback->callback;
         func(chat, args[0], args[1], args[2], user);
         break;
     }
-    case 17: {
+    case CALLBACK_GET_CHANNEL_MODE: {
         u32 *args = callback->param;
         ChatCallbackFunc3 func = (ChatCallbackFunc3)callback->callback;
         func(chat, args[0], args[1], args[2], user);
         break;
     }
-    case 18: {
+    case CALLBACK_GET_CHANNEL_PASSWORD: {
         u32 *args = callback->param;
         ChatCallbackFunc4 func = (ChatCallbackFunc4)callback->callback;
         func(chat, args[0], args[1], args[2], args[3], user);
         break;
     }
-    case 19: {
+    case CALLBACK_ENUM_USERS: {
         u32 *args = callback->param;
         ChatCallbackFunc5 func = (ChatCallbackFunc5)callback->callback;
         func(chat, args[0], args[1], args[2], args[3], args[4], user);
         break;
     }
-    case 20: {
+    case CALLBACK_GET_USER_INFO: {
         u32 *args = callback->param;
         ChatCallbackFunc7 func = (ChatCallbackFunc7)callback->callback;
         func(chat, args[0], args[1], args[2], args[3], args[4], args[5], args[6], user);
         break;
     }
-    case 21: {
+    case CALLBACK_GET_BASIC_USER_INFO: {
         u32 *args = callback->param;
         ChatCallbackFunc4 func = (ChatCallbackFunc4)callback->callback;
         func(chat, args[0], args[1], args[2], args[3], user);
         break;
     }
-    case 22: {
+    case CALLBACK_GET_CHANNEL_BASIC_USER_INFO: {
         u32 *args = callback->param;
         ChatCallbackFunc5 func = (ChatCallbackFunc5)callback->callback;
         func(chat, args[0], args[1], args[2], args[3], args[4], user);
         break;
     }
-    case 23: {
+    case CALLBACK_GET_USER_MODE: {
         u32 *args = callback->param;
         ChatCallbackFunc4 func = (ChatCallbackFunc4)callback->callback;
         func(chat, args[0], args[1], args[2], args[3], user);
         break;
     }
-    case 24: {
+    case CALLBACK_ENUM_CHANNEL_BANS: {
         u32 *args = callback->param;
         ChatCallbackFunc4 func = (ChatCallbackFunc4)callback->callback;
         func(chat, args[0], args[1], args[2], args[3], user);
         break;
     }
-    case 25: {
+    case CALLBACK_NICK_ERROR: {
         u32 *args = callback->param;
         ChatCallbackFunc4 func = (ChatCallbackFunc4)callback->callback;
         func(chat, args[0], args[1], args[2], args[3], user);
         break;
     }
-    case 26: {
+    case CALLBACK_CHANGE_NICK: {
         u32 *args = callback->param;
         ChatCallbackFunc3 func = (ChatCallbackFunc3)callback->callback;
         func(chat, args[0], args[1], args[2], user);
         break;
     }
-    case 27: {
+    case CALLBACK_NEW_USER_LIST: {
         u32 *args = callback->param;
         ChatCallbackFunc4 func = (ChatCallbackFunc4)callback->callback;
         func(chat, args[0], args[1], args[2], args[3], user);
         break;
     }
-    case 28: {
+    case CALLBACK_BROADCAST_KEY_CHANGED: {
         u32 *args = callback->param;
         ChatCallbackFunc4 func = (ChatCallbackFunc4)callback->callback;
         func(chat, args[0], args[1], args[2], args[3], user);
         break;
     }
-    case 29: {
+    case CALLBACK_GET_GLOBAL_KEYS: {
         u32 *args = callback->param;
         ChatCallbackFunc5 func = (ChatCallbackFunc5)callback->callback;
         func(chat, args[0], args[1], args[2], args[3], args[4], user);
         break;
     }
-    case 30: {
+    case CALLBACK_GET_CHANNEL_KEYS: {
         u32 *args = callback->param;
         ChatCallbackFunc6 func = (ChatCallbackFunc6)callback->callback;
         func(chat, args[0], args[1], args[2], args[3], args[4], args[5], user);
         break;
     }
-    case 31: {
+    case CALLBACK_AUTHENTICATE_CDKEY: {
         u32 *args = callback->param;
         ChatCallbackFunc2 func = (ChatCallbackFunc2)callback->callback;
         func(chat, args[0], args[1], user);

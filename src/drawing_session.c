@@ -38,6 +38,40 @@
 #include "union_room_talk.h"
 #include "vram_transfer_manager.h"
 
+enum DrawingSessionMainState {
+    DRAWING_SESSION_MAIN_WAIT_FADE_IN,
+    DRAWING_SESSION_MAIN_RUN,
+    DRAWING_SESSION_MAIN_CLOSING,
+    DRAWING_SESSION_MAIN_WAIT_FADE_OUT,
+};
+
+enum DrawingSessionSubState {
+    DRAWING_SESSION_SUB_STATE_INITIAL,
+    DRAWING_SESSION_SUB_STATE_MEMBER_JOINED,
+    DRAWING_SESSION_SUB_STATE_HIDE_PEN_CURSORS,
+    DRAWING_SESSION_SUB_STATE_RESUME_DRAWING,
+    DRAWING_SESSION_SUB_STATE_DRAW,
+    DRAWING_SESSION_SUB_STATE_SHOW_QUIT_PROMPT,
+    DRAWING_SESSION_SUB_STATE_HANDLE_QUIT_PROMPT,
+    DRAWING_SESSION_SUB_STATE_WAIT_LEAVE_REPLY,
+    DRAWING_SESSION_SUB_STATE_LEAVE_ACCEPTED,
+    DRAWING_SESSION_SUB_STATE_LEAVE_REFUSED,
+    DRAWING_SESSION_SUB_STATE_PRINT_SESSION_ENDED,
+    DRAWING_SESSION_SUB_STATE_WAIT_SESSION_ENDED_MSG,
+    DRAWING_SESSION_SUB_STATE_WAIT_AND_FADE_OUT,
+    DRAWING_SESSION_SUB_STATE_SHOW_DISBAND_PROMPT,
+    DRAWING_SESSION_SUB_STATE_HANDLE_DISBAND_PROMPT,
+    DRAWING_SESSION_SUB_STATE_PRINT_LEADER_LEFT,
+    DRAWING_SESSION_SUB_STATE_WAIT_LEADER_LEFT_MSG,
+    DRAWING_SESSION_SUB_STATE_WAIT_SYNC_AND_FADE_OUT,
+    DRAWING_SESSION_SUB_STATE_NONE,
+    DRAWING_SESSION_SUB_STATE_PRINT_NO_MEMBERS,
+    DRAWING_SESSION_SUB_STATE_WAIT_NO_MEMBERS_MSG,
+    DRAWING_SESSION_SUB_STATE_PRINT_MEMBER_LEFT,
+    DRAWING_SESSION_SUB_STATE_WAIT_MEMBER_LEFT_MSG,
+    DRAWING_SESSION_SUB_STATE_WAIT_AFTER_MEMBER_LEFT,
+};
+
 typedef struct DrawingSessionButtonSprite {
     u16 x;
     u16 y;
@@ -198,37 +232,37 @@ BOOL DrawingSession_Main(OverlayManager *man, int *state) {
     work->mainState = *state;
     DrawingSession_ApplyNextSubState(work, *state);
     switch (*state) {
-    case 0:
+    case DRAWING_SESSION_MAIN_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
             if (Comm_GetLocalNetId()) {
                 if (DrawingSession_CountMembers() >= 2) {
                     Comm_SendCommand(128, NULL, 0);
-                    *state = 1;
+                    *state = DRAWING_SESSION_MAIN_RUN;
                 }
             } else {
-                *state = 1;
+                *state = DRAWING_SESSION_MAIN_RUN;
             }
         }
         break;
-    case 1:
+    case DRAWING_SESSION_MAIN_RUN:
         if (sDrawingSessionSubStates[work->subState].func) {
             *state = sDrawingSessionSubStates[work->subState].func(work, *state);
         }
         DrawingSession_PrintMemberNames(work->nameWindows, 0, MAKE_TEXT_COLOR(14, 13, 15), work);
         if (!Comm_GetLocalNetId()) {
             int next = DrawingSession_HandleMemberCount(work);
-            if (*state == 1) {
+            if (*state == DRAWING_SESSION_MAIN_RUN) {
                 *state = next;
             }
         }
         DrawingSession_AnimateCursorPalette(&work->cursorPaletteAngle);
         break;
-    case 2:
+    case DRAWING_SESSION_MAIN_CLOSING:
         if (sDrawingSessionSubStates[work->subState].func && sDrawingSessionSubStates[work->subState].runsWhileClosing) {
             *state = sDrawingSessionSubStates[work->subState].func(work, *state);
         }
         break;
-    case 3:
+    case DRAWING_SESSION_MAIN_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished()) {
             return TRUE;
         }
@@ -359,11 +393,11 @@ void DrawingSession_InitWork(DrawingSessionWork *work) {
     work->connectedBitmap = Wireless_GetConnectedBitmap();
     work->unk_93FC = 0;
     work->waitDisconnect = 0;
-    work->subState = 0;
+    work->subState = DRAWING_SESSION_SUB_STATE_INITIAL;
     work->newConnection = 0;
     work->newConnectionBit = 0;
     Comm_GetLocalNetId();
-    DrawingSession_SetNextSubState(work, 4);
+    DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_DRAW);
     ReadMsgDataIntoString(work->msgData, msg_0252_00007, work->quitText);
     work->unk_43C8 = Heap_Alloc(HEAP_ID_39, 0x3C00);
     work->yesNoPrompt = YesNoPrompt_Create(HEAP_ID_39);
@@ -580,7 +614,7 @@ void DrawingSession_HandleTouch(DrawingSessionWork *work) {
             }
             break;
         case 8:
-            if (work->subState == 4) {
+            if (work->subState == DRAWING_SESSION_SUB_STATE_DRAW) {
                 if (Comm_GetLocalNetId() == 0) {
                     if (work->connectedBitmap != Wireless_GetConnectedBitmap()) {
                         PlaySE(SEQ_SE_DP_CUSTOM06);
@@ -589,7 +623,7 @@ void DrawingSession_HandleTouch(DrawingSessionWork *work) {
                     CommState_SetMaxEntries(Comm_CountConnected());
                     work->joinState = 2;
                     DrawingSession_PrintMessage(work, msg_0252_00001, 1);
-                    DrawingSession_SetNextSubState(work, 5);
+                    DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_SHOW_QUIT_PROMPT);
                     DrawingSession_SetQuitButtonPressed(work->buttons, TRUE);
                     changed = 1;
                     PlaySE(SEQ_SE_DP_SELECT);
@@ -599,7 +633,7 @@ void DrawingSession_HandleTouch(DrawingSessionWork *work) {
                         break;
                     }
                     DrawingSession_PrintMessage(work, msg_0252_00001, 1);
-                    DrawingSession_SetNextSubState(work, 5);
+                    DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_SHOW_QUIT_PROMPT);
                     DrawingSession_SetQuitButtonPressed(work->buttons, TRUE);
                     changed = 1;
                     PlaySE(SEQ_SE_DP_SELECT);
@@ -692,7 +726,7 @@ int DrawingSession_StateMemberJoined(DrawingSessionWork *work, int state) {
     } else {
         DrawingSession_PrintMessage(work, msg_0252_00000, 0);
     }
-    DrawingSession_SetNextSubState(work, 2);
+    DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_HIDE_PEN_CURSORS);
     PlaySE(SEQ_SE_DP_BUTTON9);
     G2_SetBlendBrightness(GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3, -6);
     DrawingSession_UpdateCanvas(work);
@@ -710,7 +744,7 @@ int DrawingSession_StateHidePenCursors(DrawingSessionWork *work, int state) {
 int DrawingSession_StateResumeDrawing(DrawingSessionWork *work, int state) {
     G2_BlendNone();
     DrawingSession_UpdateMaxEntries(work, 1);
-    DrawingSession_SetNextSubState(work, 4);
+    DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_DRAW);
     DrawingSession_UpdateCanvas(work);
     work->newConnection = 0;
     return state;
@@ -730,7 +764,7 @@ int DrawingSession_StateShowQuitPrompt(DrawingSessionWork *work, int state) {
         if (!DrawingSession_ShowYesNo(work, &template)) {
             GF_AssertFail();
         }
-        DrawingSession_SetNextSubState(work, 6);
+        DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_HANDLE_QUIT_PROMPT);
     }
     DrawingSession_UpdateCanvas(work);
     return state;
@@ -760,7 +794,7 @@ int DrawingSession_StateHandleQuitPrompt(DrawingSessionWork *work, int state) {
     switch (YesNoPrompt_HandleInput(work->yesNoPrompt)) {
     case YESNORESPONSE_YES:
         if (Comm_GetLocalNetId() == 0) {
-            DrawingSession_SetNextSubState(work, 13);
+            DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_SHOW_DISBAND_PROMPT);
             DrawingSession_PrintMessage(work, msg_0252_00004, 1);
         } else {
             MI_CpuFill8(packet, 0, 4);
@@ -768,7 +802,7 @@ int DrawingSession_StateHandleQuitPrompt(DrawingSessionWork *work, int state) {
             packet[0] = Comm_GetLocalNetId();
             work->leaveRequested = 1;
             work->networkCounter = 0;
-            DrawingSession_SetNextSubState(work, 7);
+            DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_WAIT_LEAVE_REPLY);
             Comm_SendCommand(0x7E, packet, 4);
             ClearFrameAndWindow2(&work->messageWindow, TRUE);
         }
@@ -776,7 +810,7 @@ int DrawingSession_StateHandleQuitPrompt(DrawingSessionWork *work, int state) {
         CopyWindowToVram(&work->canvasWindow);
         break;
     case YESNORESPONSE_NO:
-        DrawingSession_SetNextSubState(work, 4);
+        DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_DRAW);
         DrawingSession_SetQuitButtonPressed(work->buttons, FALSE);
         ClearFrameAndWindow2(&work->messageWindow, TRUE);
         DrawingSession_HideYesNo(work);
@@ -806,7 +840,7 @@ int DrawingSession_StateLeaveAccepted(DrawingSessionWork *work, int state) {
     work->ownStroke.count = 0;
     if (work->assignedCount != Comm_CountConnected() || work->assignedCount != DrawingSession_CountMembers()) {
         work->networkCounter = 0;
-        DrawingSession_SetNextSubState(work, 9);
+        DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_LEAVE_REFUSED);
         DrawingSession_UpdateCanvas(work);
         return state;
     }
@@ -817,7 +851,7 @@ int DrawingSession_StateLeaveAccepted(DrawingSessionWork *work, int state) {
         packet[0] = Comm_GetLocalNetId();
         Comm_SendCommand(0x7E, packet, 4);
         work->networkCounter = 0;
-        DrawingSession_SetNextSubState(work, 10);
+        DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_PRINT_SESSION_ENDED);
     }
     DrawingSession_UpdateCanvas(work);
     return state;
@@ -826,7 +860,7 @@ int DrawingSession_StateLeaveAccepted(DrawingSessionWork *work, int state) {
 int DrawingSession_StateLeaveRefused(DrawingSessionWork *work, int state) {
     work->ownStroke.count = 0;
     work->leaveRequested = 0;
-    DrawingSession_SetNextSubState(work, 4);
+    DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_DRAW);
     DrawingSession_SetQuitButtonPressed(work->buttons, FALSE);
     DrawingSession_UpdateCanvas(work);
     return state;
@@ -834,7 +868,7 @@ int DrawingSession_StateLeaveRefused(DrawingSessionWork *work, int state) {
 
 int DrawingSession_StatePrintSessionEnded(DrawingSessionWork *work, int state) {
     DrawingSession_PrintMessage(work, msg_0252_00006, 1);
-    DrawingSession_SetNextSubState(work, 11);
+    DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_WAIT_SESSION_ENDED_MSG);
     DrawingSession_UpdateCanvas(work);
     return state;
 }
@@ -842,7 +876,7 @@ int DrawingSession_StatePrintSessionEnded(DrawingSessionWork *work, int state) {
 int DrawingSession_StateWaitSessionEndedMsg(DrawingSessionWork *work, int state) {
     if (DrawingSession_IsPrinterDone(work->printerId)) {
         work->counter = 0;
-        DrawingSession_SetNextSubState(work, 12);
+        DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_WAIT_AND_FADE_OUT);
     }
     DrawingSession_UpdateCanvas(work);
     return state;
@@ -852,7 +886,7 @@ int DrawingSession_StateWaitAndFadeOut(DrawingSessionWork *work, int state) {
     work->counter++;
     if (work->counter > 60) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)0x10, (enum FadeType)0x10, RGB_BLACK, 0x10, 1, HEAP_ID_39);
-        state = 3;
+        state = DRAWING_SESSION_MAIN_WAIT_FADE_OUT;
     }
     DrawingSession_UpdateCanvas(work);
     return state;
@@ -871,7 +905,7 @@ int DrawingSession_StateShowDisbandPrompt(DrawingSessionWork *work, int state) {
         if (!DrawingSession_ShowYesNo(work, &template)) {
             GF_AssertFail();
         }
-        DrawingSession_SetNextSubState(work, 14);
+        DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_HANDLE_DISBAND_PROMPT);
     }
     DrawingSession_UpdateCanvas(work);
     return state;
@@ -887,14 +921,14 @@ int DrawingSession_StateHandleDisbandPrompt(DrawingSessionWork *work, int state)
     }
     switch (input) {
     case YESNORESPONSE_YES:
-        DrawingSession_SetNextSubState(work, 15);
+        DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_PRINT_LEADER_LEFT);
         Comm_SendParentCommand(0x7F, NULL, 0);
         BufferPlayersName(work->msgFormat, 0, CommPlayerInfo_GetProfile(0));
-        state = 2;
+        state = DRAWING_SESSION_MAIN_CLOSING;
         DrawingSession_HideYesNo(work);
         break;
     case YESNORESPONSE_NO:
-        DrawingSession_SetNextSubState(work, 4);
+        DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_DRAW);
         DrawingSession_SetQuitButtonPressed(work->buttons, FALSE);
         ClearFrameAndWindow2(&work->messageWindow, TRUE);
         DrawingSession_HideYesNo(work);
@@ -911,14 +945,14 @@ int DrawingSession_StateHandleDisbandPrompt(DrawingSessionWork *work, int state)
 int DrawingSession_StatePrintLeaderLeft(DrawingSessionWork *work, int state) {
     BufferPlayersName(work->msgFormat, 0, CommPlayerInfo_GetProfile(0));
     DrawingSession_PrintMessage(work, msg_0252_00003, 1);
-    DrawingSession_SetNextSubState(work, 16);
+    DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_WAIT_LEADER_LEFT_MSG);
     DrawingSession_UpdateCanvas(work);
     return state;
 }
 
 int DrawingSession_StateWaitLeaderLeftMsg(DrawingSessionWork *work, int state) {
     if (DrawingSession_IsPrinterDone(work->printerId)) {
-        DrawingSession_SetNextSubState(work, 17);
+        DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_WAIT_SYNC_AND_FADE_OUT);
         LinkSync_StartSync(200);
     }
     DrawingSession_UpdateCanvas(work);
@@ -928,7 +962,7 @@ int DrawingSession_StateWaitLeaderLeftMsg(DrawingSessionWork *work, int state) {
 int DrawingSession_StateWaitSyncAndFadeOut(DrawingSessionWork *work, int state) {
     if (LinkSync_IsSynced(200) || Comm_CountConnected() == 1) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)0x10, (enum FadeType)0x10, RGB_BLACK, 0x10, 1, HEAP_ID_39);
-        state = 3;
+        state = DRAWING_SESSION_MAIN_WAIT_FADE_OUT;
     }
     DrawingSession_UpdateCanvas(work);
     return state;
@@ -941,14 +975,14 @@ int DrawingSession_StateNone(DrawingSessionWork *work, int state) {
 
 int DrawingSession_StatePrintNoMembers(DrawingSessionWork *work, int state) {
     DrawingSession_PrintMessage(work, msg_0252_00005, 1);
-    DrawingSession_SetNextSubState(work, 20);
+    DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_WAIT_NO_MEMBERS_MSG);
     DrawingSession_UpdateCanvas(work);
     return state;
 }
 
 int DrawingSession_StateWaitNoMembersMsg(DrawingSessionWork *work, int state) {
     if (DrawingSession_IsPrinterDone(work->printerId)) {
-        DrawingSession_SetNextSubState(work, 12);
+        DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_WAIT_AND_FADE_OUT);
     }
     DrawingSession_UpdateCanvas(work);
     return state;
@@ -959,7 +993,7 @@ int DrawingSession_StatePrintMemberLeft(DrawingSessionWork *work, int state) {
         RemoveTextPrinter(work->printerId);
     }
     DrawingSession_PrintMessage(work, msg_0252_00002, 1);
-    DrawingSession_SetNextSubState(work, 22);
+    DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_WAIT_MEMBER_LEFT_MSG);
     PlaySE(SEQ_SE_DP_BUTTON9);
     if (!Comm_GetLocalNetId()) {
         DrawingSession_UpdateMaxEntries(work, 0);
@@ -976,7 +1010,7 @@ int DrawingSession_StateWaitMemberLeftMsg(DrawingSessionWork *work, int state) {
         }
     }
     if (DrawingSession_IsPrinterDone(work->printerId)) {
-        DrawingSession_SetNextSubState(work, 23);
+        DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_WAIT_AFTER_MEMBER_LEFT);
         work->counter = 0;
     }
     DrawingSession_UpdateCanvas(work);
@@ -992,7 +1026,7 @@ int DrawingSession_StateWaitAfterMemberLeft(DrawingSessionWork *work, int state)
     work->counter++;
     if (work->counter > 60 && work->leaveConnectedCount == 0) {
         DrawingSession_ClearMessageWindow(work);
-        DrawingSession_SetNextSubState(work, 4);
+        DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_DRAW);
         if (!Comm_GetLocalNetId()) {
             work->joinState = 1;
             DrawingSession_UpdateMaxEntries(work, 1);
@@ -1005,7 +1039,7 @@ int DrawingSession_StateWaitAfterMemberLeft(DrawingSessionWork *work, int state)
 void DrawingSession_HandleNetEvent(DrawingSessionWork *work, int event, u32 member) {
     switch (event) {
     case 1:
-        if (work->subState == 6 || work->subState == 14) {
+        if (work->subState == DRAWING_SESSION_SUB_STATE_HANDLE_QUIT_PROMPT || work->subState == DRAWING_SESSION_SUB_STATE_HANDLE_DISBAND_PROMPT) {
             DrawingSession_HideYesNo(work);
         }
         DrawingSession_SetQuitButtonPressed(work->buttons, FALSE);
@@ -1031,7 +1065,7 @@ void DrawingSession_HandleNetEvent(DrawingSessionWork *work, int event, u32 memb
         if (Comm_GetLocalNetId() == 0) {
             work->leavingMask &= 0xFFFF ^ member;
         }
-        if (work->subState == 6 || work->subState == 14) {
+        if (work->subState == DRAWING_SESSION_SUB_STATE_HANDLE_QUIT_PROMPT || work->subState == DRAWING_SESSION_SUB_STATE_HANDLE_DISBAND_PROMPT) {
             DrawingSession_HideYesNo(work);
             CopyWindowToVram(&work->canvasWindow);
         }
@@ -1411,13 +1445,13 @@ int DrawingSession_HandleMemberCount(DrawingSessionWork *work) {
             if (Wireless_GetConnectedBitmap() != 1) {
                 work->waitDisconnect = 1;
             }
-            work->nextSubState = 19;
+            work->nextSubState = DRAWING_SESSION_SUB_STATE_PRINT_NO_MEMBERS;
             CommState_SetMaxEntries(1);
             if (work->yesNoActive) {
                 DrawingSession_HideYesNo(work);
                 Sprite_SetAnimCtrlSeq(work->buttons[8], 21);
             }
-            return 2;
+            return DRAWING_SESSION_MAIN_CLOSING;
         }
         break;
     case 2:
@@ -1455,7 +1489,7 @@ int DrawingSession_HandleMemberCount(DrawingSessionWork *work) {
         work->newConnectionBit = Wireless_GetConnectedBitmap() ^ work->connectedBitmap;
         GF_ASSERT(DrawingSession_IsOneMemberBit(work->newConnectionBit));
     }
-    return 1;
+    return DRAWING_SESSION_MAIN_RUN;
 }
 
 #pragma opt_common_subs reset
@@ -1468,7 +1502,7 @@ void DrawingSession_SetNextSubState(DrawingSessionWork *work, int state) {
 void DrawingSession_ApplyNextSubState(DrawingSessionWork *work, int mainState) {
     int state = work->nextSubState;
     if (work->subState != state) {
-        if (mainState != 2) {
+        if (mainState != DRAWING_SESSION_MAIN_CLOSING) {
             work->subState = state;
         } else if (sDrawingSessionSubStates[state].runsWhileClosing != 0) {
             work->subState = state;

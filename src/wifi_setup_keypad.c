@@ -25,8 +25,8 @@ void WifiSetupKeypad_Create(void) {
     int i;
     // x and y of the label box are taken from the row-count table of wifi_setup_keypad_layout.c,
     // which follows the key sizes there: { 0, 1 }
-    box[0] = ((const u16 *)&ov13_02245228)[16];
-    box[1] = ((const u16 *)&ov13_02245228)[17];
+    box[0] = ((const u16 *)&gWifiSetupKeypadDigitKeySize)[16];
+    box[1] = ((const u16 *)&gWifiSetupKeypadDigitKeySize)[17];
     box[2] = 28;
     box[3] = 20;
     gWifiSetupKeypad = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupKeypad), 4);
@@ -216,7 +216,7 @@ void WifiSetupKeypad_HandleTouchPress(void) {
     gWifiSetupKeypad->pressedKey = -1;
     pos = gWifiSetupKeypadDigitKeyPositions;
     for (i = 0; i < WIFI_SETUP_KEYPAD_NUM_DIGIT_KEYS; i++, pos++) {
-        WifiSetup_RectFromPosSize(pos, &ov13_02245228, &rect);
+        WifiSetup_RectFromPosSize(pos, &gWifiSetupKeypadDigitKeySize, &rect);
         if (WifiSetupInput_IsTouchPressed(&rect)) {
             if (!gWifiSetupKeypad->canType) {
                 WifiSetupSound_Play(9);
@@ -229,7 +229,7 @@ void WifiSetupKeypad_HandleTouchPress(void) {
     }
     pos = gWifiSetupKeypadExtraKeyPositions;
     for (i = 0; i < WIFI_SETUP_KEYPAD_NUM_EXTRA_KEYS; i++, pos++) {
-        WifiSetup_RectFromPosSize(pos, &ov13_02245230, &rect);
+        WifiSetup_RectFromPosSize(pos, &gWifiSetupKeypadExtraKeySize, &rect);
         if (WifiSetupInput_IsTouchPressed(&rect)) {
             if ((i == 0 && !gWifiSetupKeypad->canDelete) || (i == 1 && !gWifiSetupKeypad->canAdvance)) {
                 WifiSetupSound_Play(9);
@@ -242,7 +242,7 @@ void WifiSetupKeypad_HandleTouchPress(void) {
     }
     pos = gWifiSetupKeypadButtonPositions;
     for (i = 0; i < WIFI_SETUP_KEYPAD_NUM_BUTTONS; i++, pos++) {
-        WifiSetup_RectFromPosSize(pos, &ov13_02245234, &rect);
+        WifiSetup_RectFromPosSize(pos, &gWifiSetupKeypadButtonSize, &rect);
         if (WifiSetupInput_IsTouchPressed(&rect)) {
             WifiSetupSound_Play(0);
             gWifiSetupKeypad->pressedKey = i + WIFI_SETUP_KEYPAD_KEY_BUTTON_0;
@@ -262,7 +262,7 @@ void WifiSetupKeypad_HandleTouchRelease(void) {
     }
     pos = gWifiSetupKeypadDigitKeyPositions;
     for (i = 0; i < WIFI_SETUP_KEYPAD_NUM_DIGIT_KEYS; i++, pos++) {
-        WifiSetup_RectFromPosSize(pos, &ov13_02245228, &rect);
+        WifiSetup_RectFromPosSize(pos, &gWifiSetupKeypadDigitKeySize, &rect);
         if (WifiSetupInput_IsTouchReleased(&rect)) {
             if (gWifiSetupKeypad->pressedKey != i) {
                 return;
@@ -275,7 +275,7 @@ void WifiSetupKeypad_HandleTouchRelease(void) {
     }
     pos = gWifiSetupKeypadExtraKeyPositions;
     for (i = 0; i < WIFI_SETUP_KEYPAD_NUM_EXTRA_KEYS; i++, pos++) {
-        WifiSetup_RectFromPosSize(pos, &ov13_02245230, &rect);
+        WifiSetup_RectFromPosSize(pos, &gWifiSetupKeypadExtraKeySize, &rect);
         if (WifiSetupInput_IsTouchReleased(&rect)) {
             if (gWifiSetupKeypad->pressedKey != i + WIFI_SETUP_KEYPAD_KEY_DELETE) {
                 return;
@@ -288,7 +288,7 @@ void WifiSetupKeypad_HandleTouchRelease(void) {
     }
     pos = gWifiSetupKeypadButtonPositions;
     for (i = 0; i < WIFI_SETUP_KEYPAD_NUM_BUTTONS; i++, pos++) {
-        WifiSetup_RectFromPosSize(pos, &ov13_02245234, &rect);
+        WifiSetup_RectFromPosSize(pos, &gWifiSetupKeypadButtonSize, &rect);
         if (WifiSetupInput_IsTouchReleased(&rect)) {
             if (gWifiSetupKeypad->pressedKey != i + WIFI_SETUP_KEYPAD_KEY_BUTTON_0) {
                 return;
@@ -312,7 +312,7 @@ void WifiSetupKeypad_HandleTouchHold(void) {
     }
     pos = gWifiSetupKeypadDigitKeyPositions;
     for (i = 0; i < WIFI_SETUP_KEYPAD_NUM_DIGIT_KEYS; i++, pos++) {
-        WifiSetup_RectFromPosSize(pos, &ov13_02245228, &rect);
+        WifiSetup_RectFromPosSize(pos, &gWifiSetupKeypadDigitKeySize, &rect);
         if (WifiSetupInput_IsTouchHeld(&rect)) {
             if (gWifiSetupKeypad->pressedKey != i) {
                 goto cancel;
@@ -323,7 +323,7 @@ void WifiSetupKeypad_HandleTouchHold(void) {
     }
     pos = gWifiSetupKeypadExtraKeyPositions;
     for (i = 0; i < WIFI_SETUP_KEYPAD_NUM_EXTRA_KEYS; i++, pos++) {
-        WifiSetup_RectFromPosSize(pos, &ov13_02245230, &rect);
+        WifiSetup_RectFromPosSize(pos, &gWifiSetupKeypadExtraKeySize, &rect);
         if (WifiSetupInput_IsTouchHeld(&rect)) {
             if (gWifiSetupKeypad->pressedKey != i + WIFI_SETUP_KEYPAD_KEY_DELETE) {
                 goto cancel;
@@ -348,7 +348,7 @@ void WifiSetupKeypad_HandleTouchHold(void) {
     }
     pos = gWifiSetupKeypadButtonPositions;
     for (i = 0; i < WIFI_SETUP_KEYPAD_NUM_BUTTONS; i++, pos++) {
-        WifiSetup_RectFromPosSize(pos, &ov13_02245234, &rect);
+        WifiSetup_RectFromPosSize(pos, &gWifiSetupKeypadButtonSize, &rect);
         if (WifiSetupInput_IsTouchHeld(&rect)) {
             if (gWifiSetupKeypad->pressedKey != i + WIFI_SETUP_KEYPAD_KEY_BUTTON_0) {
                 goto cancel;

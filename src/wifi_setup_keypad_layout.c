@@ -12,10 +12,10 @@ typedef struct RowCounts {
     u8 counts[5];
 } RowCounts;
 
-const WifiSetupPoint ov13_02245230 = { 0x1C, 0x14 }; // extra key size
-const WifiSetupPoint ov13_02245228 = { 0x1C, 0x14 }; // digit key size
+const WifiSetupPoint gWifiSetupKeypadExtraKeySize = { 0x1C, 0x14 }; // extra key size
+const WifiSetupPoint gWifiSetupKeypadDigitKeySize = { 0x1C, 0x14 }; // digit key size
 static const WifiSetupPoint sUnused = { 0x0C, 0x04 };
-const WifiSetupPoint ov13_02245234 = { 0x78, 0x12 }; // button size
+const WifiSetupPoint gWifiSetupKeypadButtonSize = { 0x78, 0x12 }; // button size
 
 // number of digit keys, extra keys and buttons in each of the five rows (row 4: buttons)
 static const RowCounts sDigitKeysPerRow = {

@@ -75,26 +75,26 @@ int WifiSetupMbParent_GetChildState(int aid) {
     u16 mask = 1 << aid;
     if (!(gWifiSetupMbParent->head.connectedMask & mask)) {
         OS_RestoreInterrupts(old);
-        return 0;
+        return WIFI_SETUP_MB_CHILD_NONE;
     }
     MI_CpuCopy8(gWifiSetupMbParent, &state, sizeof(state));
     OS_RestoreInterrupts(old);
     if (state.requestedMask & mask) {
-        return 2;
+        return WIFI_SETUP_MB_CHILD_REQUESTED;
     }
     if (state.waitingMask & mask) {
-        return 3;
+        return WIFI_SETUP_MB_CHILD_WAITING;
     }
     if (state.sendingMask & mask) {
-        return 4;
+        return WIFI_SETUP_MB_CHILD_SENDING;
     }
     if (state.sentMask & mask) {
-        return 5;
+        return WIFI_SETUP_MB_CHILD_SENT;
     }
     if (state.bootableMask & mask) {
-        return 6;
+        return WIFI_SETUP_MB_CHILD_BOOTABLE;
     }
-    return 1;
+    return WIFI_SETUP_MB_CHILD_CONNECTED;
 }
 
 WifiSetupMbParentChild *WifiSetupMbParent_GetChild(int aid) {
@@ -803,8 +803,8 @@ void WifiSetupShare_Init(WifiSetupShare *share, const WifiSetupSessionParams *pa
     WifiSetupMbParent_Init(gWifiSetupShare->mbParent);
     gWifiSetupShare->tgid = 0;
     gWifiSetupShare->channel = 0;
-    gWifiSetupShare->state = 1;
-    gWifiSetupShare->prevState = 1;
+    gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_IDLE;
+    gWifiSetupShare->prevState = WIFI_SETUP_SHARE_STATE_IDLE;
     gWifiSetupShare->timer = 0;
     WifiSetupShare_ClearPackets();
     gWifiSetupShare->params.filePath = params->filePath;
@@ -827,26 +827,26 @@ void WifiSetupShare_Init(WifiSetupShare *share, const WifiSetupSessionParams *pa
 int WifiSetupShare_Cancel(void) {
     WifiSetupShare *share = gWifiSetupShare;
     u8 state = share->state;
-    if (state == 1 || state == 20 || state == 23 || state == 26 || state == 29) {
-        share->state = 34;
-        gWifiSetupShare->request = 0;
+    if (state == WIFI_SETUP_SHARE_STATE_IDLE || state == WIFI_SETUP_SHARE_STATE_STOPPED || state == WIFI_SETUP_SHARE_STATE_ABORTED || state == WIFI_SETUP_SHARE_STATE_FAILED || state == WIFI_SETUP_SHARE_STATE_ERROR) {
+        share->state = WIFI_SETUP_SHARE_STATE_END;
+        gWifiSetupShare->request = WIFI_SETUP_SHARE_REQUEST_NONE;
         return 1;
     }
-    if (state == 4 || state == 5 || state == 6 || state == 13) {
-        if (state == 4 && share->counter < 6) {
+    if (state == WIFI_SETUP_SHARE_STATE_WAIT_ENTRY || state == WIFI_SETUP_SHARE_STATE_ENTRY_REQUESTED || state == WIFI_SETUP_SHARE_STATE_DOWNLOADING || state == WIFI_SETUP_SHARE_STATE_ENTRY_CANCELLED) {
+        if (state == WIFI_SETUP_SHARE_STATE_WAIT_ENTRY && share->counter < 6) {
             return 0;
         }
         MB_End();
-        gWifiSetupShare->state = 16;
-        gWifiSetupShare->request = 2;
+        gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_CANCEL_DOWNLOAD;
+        gWifiSetupShare->request = WIFI_SETUP_SHARE_REQUEST_END;
         return 1;
     }
-    if (state == 9 || state == 10) {
-        share->state = 32;
+    if (state == WIFI_SETUP_SHARE_STATE_CHILD_READY || state == WIFI_SETUP_SHARE_STATE_SENDING_SETTINGS) {
+        share->state = WIFI_SETUP_SHARE_STATE_CANCEL_SHARING;
         return 1;
     }
-    if (state == 12) {
-        share->state = 34;
+    if (state == WIFI_SETUP_SHARE_STATE_DONE) {
+        share->state = WIFI_SETUP_SHARE_STATE_END;
         return 1;
     }
     return 0;
@@ -854,7 +854,7 @@ int WifiSetupShare_Cancel(void) {
 
 void WifiSetupShare_Reset(void) {
     WifiSetupWh_SetGgid(gWifiSetupShare->params.ggid);
-    gWifiSetupShare->state = 1;
+    gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_IDLE;
     gWifiSetupShare->tgid = WM_GetNextTgid();
     MI_CpuCopy8(gWifiSetupShare->data, gWifiSetupShare->firstBlock, 64);
     gWifiSetupShare->sendingData = 0;
@@ -863,164 +863,164 @@ void WifiSetupShare_Reset(void) {
 }
 
 int WifiSetupShare_Start(void) {
-    if (gWifiSetupShare->state != 1 && gWifiSetupShare->state != 26 && gWifiSetupShare->state != 29) {
+    if (gWifiSetupShare->state != WIFI_SETUP_SHARE_STATE_IDLE && gWifiSetupShare->state != WIFI_SETUP_SHARE_STATE_FAILED && gWifiSetupShare->state != WIFI_SETUP_SHARE_STATE_ERROR) {
         return 0;
     }
     WifiSetupShare_Reset();
     WifiSetupWh_Start();
-    gWifiSetupShare->state = 2;
+    gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_MEASURE_CHANNEL;
     return 1;
 }
 
 int WifiSetupShare_StartDownload(void) {
-    if (gWifiSetupShare->state != 5) {
+    if (gWifiSetupShare->state != WIFI_SETUP_SHARE_STATE_ENTRY_REQUESTED) {
         return 0;
     }
-    gWifiSetupShare->state = 6;
+    gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_DOWNLOADING;
     WifiSetupMbParent_StartDownload();
     return 1;
 }
 
 void WifiSetupShare_Update(void) {
     switch (gWifiSetupShare->state) {
-    case 1:
-        if (gWifiSetupShare->request == 1) {
-            gWifiSetupShare->request = 0;
+    case WIFI_SETUP_SHARE_STATE_IDLE:
+        if (gWifiSetupShare->request == WIFI_SETUP_SHARE_REQUEST_START) {
+            gWifiSetupShare->request = WIFI_SETUP_SHARE_REQUEST_NONE;
             WifiSetupShare_Start();
             return;
         }
-        if (gWifiSetupShare->request == 2) {
-            gWifiSetupShare->request = 0;
-            gWifiSetupShare->state = 34;
+        if (gWifiSetupShare->request == WIFI_SETUP_SHARE_REQUEST_END) {
+            gWifiSetupShare->request = WIFI_SETUP_SHARE_REQUEST_NONE;
+            gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_END;
         }
         return;
-    case 2:
+    case WIFI_SETUP_SHARE_STATE_MEASURE_CHANNEL:
         WifiSetupShare_UpdateChannelScan();
         return;
-    case 3:
+    case WIFI_SETUP_SHARE_STATE_SETUP_DOWNLOAD:
         WifiSetupShare_SetupMbParent();
-        gWifiSetupShare->state = 4;
+        gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_WAIT_ENTRY;
         return;
-    case 4:
+    case WIFI_SETUP_SHARE_STATE_WAIT_ENTRY:
         gWifiSetupShare->counter++;
         WifiSetupShare_UpdateDownload();
         return;
-    case 5:
-    case 6:
+    case WIFI_SETUP_SHARE_STATE_ENTRY_REQUESTED:
+    case WIFI_SETUP_SHARE_STATE_DOWNLOADING:
         WifiSetupShare_UpdateDownload();
         return;
-    case 7:
+    case WIFI_SETUP_SHARE_STATE_START_SHARING:
         WifiSetupShare_StartSharing();
         return;
-    case 8:
-    case 9:
-    case 10:
+    case WIFI_SETUP_SHARE_STATE_SHARING:
+    case WIFI_SETUP_SHARE_STATE_CHILD_READY:
+    case WIFI_SETUP_SHARE_STATE_SENDING_SETTINGS:
         WifiSetupShare_UpdateSharing();
         return;
-    case 11:
+    case WIFI_SETUP_SHARE_STATE_SETTINGS_RECEIVED:
         WifiSetupShare_SetDone();
         return;
-    case 16:
+    case WIFI_SETUP_SHARE_STATE_CANCEL_DOWNLOAD:
         gWifiSetupShare->timer = 0;
-        gWifiSetupShare->state = 17;
+        gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_CANCEL_DOWNLOAD_WAIT;
         return;
-    case 17:
+    case WIFI_SETUP_SHARE_STATE_CANCEL_DOWNLOAD_WAIT:
         if (gWifiSetupShare->timer++ > 30) {
             WifiSetupShare_EndWireless();
         }
         return;
-    case 18:
+    case WIFI_SETUP_SHARE_STATE_DOWNLOAD_ABORTED:
         MB_End();
         gWifiSetupShare->timer = 0;
-        gWifiSetupShare->state = 22;
+        gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_ABORT_WAIT;
         return;
-    case 19:
+    case WIFI_SETUP_SHARE_STATE_STOP_WAIT:
         if (gWifiSetupShare->timer++ <= 30) {
             return;
         }
         if (WifiSetupWh_GetState() == WIFI_SETUP_WH_STATE_IDLE) {
             WifiSetupWh_End();
-            gWifiSetupShare->state = 20;
+            gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_STOPPED;
             return;
         }
         return;
-    case 21:
+    case WIFI_SETUP_SHARE_STATE_CHILD_ABORT:
         WifiSetupWh_Finalize();
         gWifiSetupShare->timer = 0;
-        gWifiSetupShare->state = 22;
+        gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_ABORT_WAIT;
         return;
-    case 22:
+    case WIFI_SETUP_SHARE_STATE_ABORT_WAIT:
         if (gWifiSetupShare->timer++ <= 30) {
             return;
         }
         if (WifiSetupWh_GetState() == WIFI_SETUP_WH_STATE_IDLE) {
             WifiSetupWh_End();
-            gWifiSetupShare->state = 23;
+            gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_ABORTED;
             return;
         }
         return;
-    case 24:
+    case WIFI_SETUP_SHARE_STATE_CHILD_FAILED:
         WifiSetupWh_Finalize();
         gWifiSetupShare->timer = 0;
-        gWifiSetupShare->state = 25;
+        gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_FAIL_WAIT;
         return;
-    case 25:
+    case WIFI_SETUP_SHARE_STATE_FAIL_WAIT:
         if (gWifiSetupShare->timer++ <= 30) {
             return;
         }
         if (WifiSetupWh_GetState() == WIFI_SETUP_WH_STATE_IDLE) {
             WifiSetupWh_End();
-            gWifiSetupShare->state = 26;
+            gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_FAILED;
             return;
         }
         return;
-    case 27:
+    case WIFI_SETUP_SHARE_STATE_SHARING_ERROR:
         WifiSetupWh_Finalize();
         gWifiSetupShare->timer = 0;
-        gWifiSetupShare->state = 28;
+        gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_ERROR_WAIT;
         return;
-    case 28:
+    case WIFI_SETUP_SHARE_STATE_ERROR_WAIT:
         if (gWifiSetupShare->timer++ <= 30) {
             return;
         }
         if (WifiSetupWh_GetState() == WIFI_SETUP_WH_STATE_IDLE) {
             WifiSetupWh_End();
-            gWifiSetupShare->state = 29;
+            gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_ERROR;
             return;
         }
         if (gWifiSetupShare->timer % 30 == 1 && gWifiSetupShare->timer > 55) {
             WifiSetupWh_Finalize();
         }
         return;
-    case 32:
+    case WIFI_SETUP_SHARE_STATE_CANCEL_SHARING:
         WifiSetupWh_Finalize();
         gWifiSetupShare->timer = 0;
-        gWifiSetupShare->state = 33;
+        gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_CANCEL_SHARING_WAIT;
         return;
-    case 33:
+    case WIFI_SETUP_SHARE_STATE_CANCEL_SHARING_WAIT:
         if (gWifiSetupShare->timer++ <= 30) {
             return;
         }
         if (WifiSetupWh_GetState() == WIFI_SETUP_WH_STATE_IDLE) {
             WifiSetupWh_End();
-            gWifiSetupShare->state = 34;
+            gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_END;
             return;
         }
         return;
-    case 30:
+    case WIFI_SETUP_SHARE_STATE_FINALIZE:
         WifiSetupWh_Finalize();
         return;
-    case 0:
-    case 12:
-    case 13:
+    case WIFI_SETUP_SHARE_STATE_NONE:
+    case WIFI_SETUP_SHARE_STATE_DONE:
+    case WIFI_SETUP_SHARE_STATE_ENTRY_CANCELLED:
     case 14:
     case 15:
-    case 20:
-    case 23:
-    case 26:
-    case 29:
-    case 31:
-    case 34:
+    case WIFI_SETUP_SHARE_STATE_STOPPED:
+    case WIFI_SETUP_SHARE_STATE_ABORTED:
+    case WIFI_SETUP_SHARE_STATE_FAILED:
+    case WIFI_SETUP_SHARE_STATE_ERROR:
+    case WIFI_SETUP_SHARE_STATE_FATAL:
+    case WIFI_SETUP_SHARE_STATE_END:
     default:
         goto done;
     }
@@ -1052,11 +1052,11 @@ void WifiSetupShare_UpdateChannelScan(void) {
     case WIFI_SETUP_WH_STATE_MEASURECHANNEL:
         gWifiSetupShare->channel = WifiSetupWh_DecideChannel();
         gWifiSetupShare->counter = 0;
-        gWifiSetupShare->state = 3;
+        gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_SETUP_DOWNLOAD;
         break;
     case WIFI_SETUP_WH_STATE_STOP:
         gWifiSetupShare->counter = 0;
-        gWifiSetupShare->state = 3;
+        gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_SETUP_DOWNLOAD;
         break;
     case WIFI_SETUP_WH_STATE_ERROR:
         WifiSetupWh_TryReset();
@@ -1079,15 +1079,15 @@ void WifiSetupShare_UpdateDownload(void) {
         break;
     case 2:
         if (WifiSetupMbParent_GetMask(2)) {
-            gWifiSetupShare->state = 5;
+            gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_ENTRY_REQUESTED;
             return;
         }
         if (WifiSetupMbParent_GetMask(3) || WifiSetupMbParent_GetMask(4)) {
-            gWifiSetupShare->state = 6;
+            gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_DOWNLOADING;
             return;
         }
-        if (gWifiSetupShare->state == 5 && !WifiSetupMbParent_GetMask(2)) {
-            gWifiSetupShare->state = 13;
+        if (gWifiSetupShare->state == WIFI_SETUP_SHARE_STATE_ENTRY_REQUESTED && !WifiSetupMbParent_GetMask(2)) {
+            gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_ENTRY_CANCELLED;
         }
         break;
     case 3:
@@ -1096,15 +1096,15 @@ void WifiSetupShare_UpdateDownload(void) {
             return;
         }
         if ((u8)(gWifiSetupShare->state + 250) <= 1 && !WifiSetupMbParent_GetMask(3)) { // states 6 and 7
-            gWifiSetupShare->state = 18;
+            gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_DOWNLOAD_ABORTED;
         }
         break;
     case 5:
-        gWifiSetupShare->state = 7;
+        gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_START_SHARING;
         break;
     case 7:
         WifiSetupMbParent_End();
-        gWifiSetupShare->state = 1;
+        gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_IDLE;
         break;
     case 0:
         state = WifiSetupWh_GetState();
@@ -1113,12 +1113,12 @@ void WifiSetupShare_UpdateDownload(void) {
             WifiSetupWh_End();
             break;
         case WIFI_SETUP_WH_STATE_STOP:
-            gWifiSetupShare->state = 31;
+            gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_FATAL;
             break;
         case WIFI_SETUP_WH_STATE_BUSY:
             break;
         default:
-            gWifiSetupShare->state = 31;
+            gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_FATAL;
             break;
         }
         break;
@@ -1128,7 +1128,7 @@ void WifiSetupShare_UpdateDownload(void) {
 void WifiSetupShare_StartSharing(void) {
     WifiSetupShare_ClearPackets();
     WifiSetupWh_SetJudgeCallback(WifiSetupShare_JudgeChild);
-    gWifiSetupShare->state = 8;
+    gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_SHARING;
 }
 
 void WifiSetupShare_UpdateSharing(void) {
@@ -1141,47 +1141,47 @@ void WifiSetupShare_UpdateSharing(void) {
     case WIFI_SETUP_WH_STATE_KEYSHARING:
         WifiSetupShare_SendPacket(0, gWifiSetupShare->blockIndex, gWifiSetupShare->data + (gWifiSetupShare->blockIndex % 16) * 64);
         WifiSetupShare_UpdateChild();
-        if (gWifiSetupShare->state == 27) {
+        if (gWifiSetupShare->state == WIFI_SETUP_SHARE_STATE_SHARING_ERROR) {
             return;
         }
         if (gWifiSetupShare->errorCount > 480) {
-            gWifiSetupShare->state = 27;
+            gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_SHARING_ERROR;
             return;
         }
         if (WifiSetupShare_GetChildKind() == 16 || WifiSetupShare_GetChildKind() == 32) {
             WifiSetupShare_GetChildKind();
-            gWifiSetupShare->state = 10;
+            gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_SENDING_SETTINGS;
             return;
         }
         if (WifiSetupShare_GetChildKind() == 64) {
-            gWifiSetupShare->state = 11;
+            gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_SETTINGS_RECEIVED;
             return;
         }
         if (WifiSetupShare_GetChildKind() == 255) {
-            gWifiSetupShare->state = 27;
+            gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_SHARING_ERROR;
             return;
         }
         if (WifiSetupShare_GetChildKind() == 80) {
-            gWifiSetupShare->state = 21;
+            gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_CHILD_ABORT;
             return;
         }
         if (WifiSetupShare_GetChildKind() == 96) {
-            gWifiSetupShare->state = 24;
+            gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_CHILD_FAILED;
             return;
         }
         if (WifiSetupShare_GetChildKind() == 112) {
-            gWifiSetupShare->state = 27;
+            gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_SHARING_ERROR;
             return;
         }
         if (WifiSetupShare_GetChildKind() == 0) {
-            gWifiSetupShare->state = 8;
+            gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_SHARING;
             return;
         }
         if (WifiSetupShare_GetChildKind() == WIFI_SETUP_SHARE_PACKET_READY) {
-            gWifiSetupShare->state = 9;
+            gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_CHILD_READY;
             return;
         }
-        gWifiSetupShare->state = 31;
+        gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_FATAL;
         return;
     default:
         return;
@@ -1189,7 +1189,7 @@ void WifiSetupShare_UpdateSharing(void) {
 }
 
 void WifiSetupShare_SetDone(void) {
-    gWifiSetupShare->state = 12;
+    gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_DONE;
 }
 
 int WifiSetupShare_EndWireless(void) {
@@ -1197,7 +1197,7 @@ int WifiSetupShare_EndWireless(void) {
         return 0;
     }
     WifiSetupWh_End();
-    gWifiSetupShare->state = 1;
+    gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_IDLE;
     return 1;
 }
 
@@ -1240,7 +1240,7 @@ void WifiSetupShare_SendPacket(u16 kind, u16 index, void *data) {
     } else {
         gWifiSetupShare->errorCount = 0;
         if (WifiSetupWh_GetConnectedMask() != 3) {
-            gWifiSetupShare->state = 27;
+            gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_SHARING_ERROR;
             return;
         }
     }

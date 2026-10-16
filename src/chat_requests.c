@@ -94,7 +94,7 @@ ChatRequest *ciFindGetKeyFilter(ChatConnection *chat, const char *channel) {
     ASSERT(*channel, sStr_Channel0, sStr_ciFindGetKeyFilter, 0x182);
     request = chat->requests;
     while (request) {
-        if (request->type == 12 && strnicmp(((ChatKeysData *)request->data)->arg.channel, channel) == 0) {
+        if (request->type == TYPE_GETKEY && strnicmp(((ChatKeysData *)request->data)->arg.channel, channel) == 0) {
             return request;
         }
         request = request->next;
@@ -147,10 +147,10 @@ void ciFinishFilter(ChatConnection *chat, ChatRequest *request, u32 *results) {
         valid = 1;
     }
     ASSERT(valid, sStr_FilterTypeGe0_AndFilterTypeLtNUM_TYPES, sStr_ciFinishFilter, 0x1C2);
-    if (request->type == 0) {
+    if (request->type == TYPE_LIST) {
         data = request->data;
         if (request->callback2) {
-            ciAddCallback_(chat, 14, request->callback2, results, request->param, request->id, NULL, 20);
+            ciAddCallback_(chat, CALLBACK_ENUM_CHANNELS_ALL, request->callback2, results, request->param, request->id, NULL, 20);
         }
         for (i = 0; i < data->channels.count; i++) {
             DWCi_GsFree(data->channels.names[i]);
@@ -159,29 +159,29 @@ void ciFinishFilter(ChatConnection *chat, ChatRequest *request, u32 *results) {
         DWCi_GsFree(data->channels.names);
         DWCi_GsFree(data->channels.topics);
         DWCi_GsFree(data->channels.numUsers);
-    } else if (request->type == 1) {
+    } else if (request->type == TYPE_JOIN) {
         if (request->callback) {
-            ciAddCallback_(chat, 15, request->callback, results, request->param, request->id, NULL, 12);
+            ciAddCallback_(chat, CALLBACK_ENTER_CHANNEL, request->callback, results, request->param, request->id, NULL, 12);
         }
-    } else if (request->type == 2) {
+    } else if (request->type == TYPE_TOPIC) {
         i = results[1];
         if (request->callback) {
-            ciAddCallback_(chat, 16, request->callback, results, request->param, request->id, (char *)i, 12);
+            ciAddCallback_(chat, CALLBACK_GET_CHANNEL_TOPIC, request->callback, results, request->param, request->id, (char *)i, 12);
         }
-    } else if (request->type == 3) {
+    } else if (request->type == TYPE_NAMES) {
         data = request->data;
         if (request->callback) {
-            ciAddCallback_(chat, 19, request->callback, results, request->param, request->id, NULL, 20);
+            ciAddCallback_(chat, CALLBACK_ENUM_USERS, request->callback, results, request->param, request->id, NULL, 20);
         }
         for (i = 0; i < data->nicks.count; i++) {
             DWCi_GsFree(data->nicks.nicks[i]);
         }
         DWCi_GsFree(data->nicks.nicks);
         DWCi_GsFree(data->nicks.modes);
-    } else if (request->type == 4) {
+    } else if (request->type == TYPE_WHOIS) {
         data = request->data;
         if (request->callback) {
-            ciAddCallback_(chat, 20, request->callback, results, request->param, request->id, NULL, 28);
+            ciAddCallback_(chat, CALLBACK_GET_USER_INFO, request->callback, results, request->param, request->id, NULL, 28);
         }
         for (i = 0; i < data->whois.channelCount; i++) {
             DWCi_GsFree(data->whois.channels[i]);
@@ -190,77 +190,77 @@ void ciFinishFilter(ChatConnection *chat, ChatRequest *request, u32 *results) {
         DWCi_GsFree(data->whois.realName);
         DWCi_GsFree(data->whois.address);
         DWCi_GsFree(data->whois.user);
-    } else if (request->type == 10) {
+    } else if (request->type == TYPE_WHO) {
         if (request->callback) {
-            ciAddCallback_(chat, 21, request->callback, results, request->param, request->id, NULL, 16);
+            ciAddCallback_(chat, CALLBACK_GET_BASIC_USER_INFO, request->callback, results, request->param, request->id, NULL, 16);
         }
-    } else if (request->type == 11) {
+    } else if (request->type == TYPE_CWHO) {
         if (request->callback) {
-            ciAddCallback_(chat, 22, request->callback, results, request->param, request->id, NULL, 16);
+            ciAddCallback_(chat, CALLBACK_GET_CHANNEL_BASIC_USER_INFO, request->callback, results, request->param, request->id, NULL, 16);
         }
-    } else if (request->type == 5) {
+    } else if (request->type == TYPE_CMODE) {
         if (request->callback) {
-            ciAddCallback_(chat, 17, request->callback, results, request->param, request->id, NULL, 12);
+            ciAddCallback_(chat, CALLBACK_GET_CHANNEL_MODE, request->callback, results, request->param, request->id, NULL, 12);
         }
-    } else if (request->type == 6) {
+    } else if (request->type == TYPE_UMODE) {
         if (request->callback) {
-            ciAddCallback_(chat, 23, request->callback, results, request->param, request->id, NULL, 16);
+            ciAddCallback_(chat, CALLBACK_GET_USER_MODE, request->callback, results, request->param, request->id, NULL, 16);
         }
-    } else if (request->type == 7) {
+    } else if (request->type == TYPE_BAN) {
         DWCi_GsFree(*(void **)request->data);
-    } else if (request->type == 8) {
+    } else if (request->type == TYPE_GETBAN) {
         data = request->data;
         if (request->callback) {
-            ciAddCallback_(chat, 24, request->callback, results, request->param, request->id, NULL, 16);
+            ciAddCallback_(chat, CALLBACK_ENUM_CHANNEL_BANS, request->callback, results, request->param, request->id, NULL, 16);
         }
         for (i = 0; i < data->banList.count; i++) {
             DWCi_GsFree(data->banList.bans[i]);
         }
-    } else if (request->type == 9) {
+    } else if (request->type == TYPE_NICK) {
         if (request->callback) {
-            ciAddCallback_(chat, 26, request->callback, results, request->param, request->id, NULL, 12);
+            ciAddCallback_(chat, CALLBACK_CHANGE_NICK, request->callback, results, request->param, request->id, NULL, 12);
         }
-    } else if (request->type == 12) {
+    } else if (request->type == TYPE_GETKEY) {
         data = request->data;
         if (request->callback) {
-            ciAddCallback_(chat, 29, request->callback, results, request->param, request->id, NULL, 20);
+            ciAddCallback_(chat, CALLBACK_GET_GLOBAL_KEYS, request->callback, results, request->param, request->id, NULL, 20);
         }
         DWCi_GsFree(data->keys.arg.channel);
         for (i = 0; i < data->keys.count; i++) {
             DWCi_GsFree(data->keys.keys[i]);
         }
         DWCi_GsFree(data->keys.keys);
-    } else if (request->type == 13) {
+    } else if (request->type == TYPE_GETCKEY) {
         data = request->data;
         if (request->callback) {
-            ciAddCallback_(chat, 30, request->callback, results, request->param, request->id, NULL, 24);
+            ciAddCallback_(chat, CALLBACK_GET_CHANNEL_KEYS, request->callback, results, request->param, request->id, NULL, 24);
         }
         for (i = 0; i < data->keys.count; i++) {
             DWCi_GsFree(data->keys.keys[i]);
         }
         DWCi_GsFree(data->keys.keys);
-    } else if (request->type == 14) {
+    } else if (request->type == TYPE_GETCHANKEY) {
         data = request->data;
         if (request->callback) {
-            ciAddCallback_(chat, 30, request->callback, results, request->param, request->id, NULL, 24);
+            ciAddCallback_(chat, CALLBACK_GET_CHANNEL_KEYS, request->callback, results, request->param, request->id, NULL, 24);
         }
         for (i = 0; i < data->keys.count; i++) {
             DWCi_GsFree(data->keys.keys[i]);
         }
         DWCi_GsFree(data->keys.keys);
-    } else if (request->type == 15) {
+    } else if (request->type == TYPE_UNQUIET) {
         data = request->data;
         if (request->callback) {
-            ciAddCallback_(chat, 27, request->callback, results, request->param, request->id, NULL, 16);
+            ciAddCallback_(chat, CALLBACK_NEW_USER_LIST, request->callback, results, request->param, request->id, NULL, 16);
         }
         for (i = 0; i < data->nicks.count; i++) {
             DWCi_GsFree(data->nicks.nicks[i]);
         }
         DWCi_GsFree(data->nicks.nicks);
         DWCi_GsFree(data->nicks.modes);
-    } else if (request->type == 16) {
+    } else if (request->type == TYPE_CDKEY) {
         if (request->callback) {
-            ciAddCallback_(chat, 31, request->callback, results, request->param, request->id, NULL, 8);
+            ciAddCallback_(chat, CALLBACK_AUTHENTICATE_CDKEY, request->callback, results, request->param, request->id, NULL, 8);
         }
     } else {
         __msl_assertion_failed(sStr_0_10, sStr_ChatHandlersC, sStr_ciFinishFilter, 0x25C);
@@ -277,7 +277,7 @@ void ciFilterTimedout(ChatConnection *chat, ChatRequest *request) {
         valid = TRUE;
     }
     ASSERT(valid, sStr_FilterTypeGe0_AndFilterTypeLtNUM_TYPES, sStr_ciFilterTimedout, 0x269);
-    if (request->type == 0) {
+    if (request->type == TYPE_LIST) {
         u32 results[5];
         results[0] = 0;
         results[1] = 0;
@@ -287,7 +287,7 @@ void ciFilterTimedout(ChatConnection *chat, ChatRequest *request) {
         ciFinishFilter(chat, request, results);
         return;
     }
-    if (request->type == 1) {
+    if (request->type == TYPE_JOIN) {
         u32 results[3];
         results[0] = 0;
         results[1] = (u32)CHAT_ENTER_TIMED_OUT;
@@ -295,7 +295,7 @@ void ciFilterTimedout(ChatConnection *chat, ChatRequest *request) {
         ciFinishFilter(chat, request, results);
         return;
     }
-    if (request->type == 2) {
+    if (request->type == TYPE_TOPIC) {
         u32 results[3];
         results[0] = 0;
         results[1] = (u32)request->name;
@@ -303,7 +303,7 @@ void ciFilterTimedout(ChatConnection *chat, ChatRequest *request) {
         ciFinishFilter(chat, request, results);
         return;
     }
-    if (request->type == 3) {
+    if (request->type == TYPE_NAMES) {
         u32 results[5];
         results[0] = 0;
         results[1] = (u32)request->name;
@@ -313,7 +313,7 @@ void ciFilterTimedout(ChatConnection *chat, ChatRequest *request) {
         ciFinishFilter(chat, request, results);
         return;
     }
-    if (request->type == 4) {
+    if (request->type == TYPE_WHOIS) {
         u32 results[7];
         results[0] = 0;
         results[1] = (u32)request->name;
@@ -325,7 +325,7 @@ void ciFilterTimedout(ChatConnection *chat, ChatRequest *request) {
         ciFinishFilter(chat, request, results);
         return;
     }
-    if (request->type == 10) {
+    if (request->type == TYPE_WHO) {
         u32 results[4];
         results[0] = 0;
         results[1] = (u32)request->name;
@@ -334,7 +334,7 @@ void ciFilterTimedout(ChatConnection *chat, ChatRequest *request) {
         ciFinishFilter(chat, request, results);
         return;
     }
-    if (request->type == 11) {
+    if (request->type == TYPE_CWHO) {
         u32 results[5];
         results[0] = 0;
         results[1] = (u32)request->name;
@@ -344,7 +344,7 @@ void ciFilterTimedout(ChatConnection *chat, ChatRequest *request) {
         ciFinishFilter(chat, request, results);
         return;
     }
-    if (request->type == 5) {
+    if (request->type == TYPE_CMODE) {
         u32 results[3];
         results[0] = 0;
         results[1] = (u32)request->name;
@@ -352,7 +352,7 @@ void ciFilterTimedout(ChatConnection *chat, ChatRequest *request) {
         ciFinishFilter(chat, request, results);
         return;
     }
-    if (request->type == 6) {
+    if (request->type == TYPE_UMODE) {
         u32 results[4];
         results[0] = 0;
         results[1] = (u32)request->name2;
@@ -361,11 +361,11 @@ void ciFilterTimedout(ChatConnection *chat, ChatRequest *request) {
         ciFinishFilter(chat, request, results);
         return;
     }
-    if (request->type == 7) {
+    if (request->type == TYPE_BAN) {
         ciFinishFilter(chat, request, NULL);
         return;
     }
-    if (request->type == 8) {
+    if (request->type == TYPE_GETBAN) {
         u32 results[4];
         results[1] = (u32)request->name;
         results[2] = 0;
@@ -373,7 +373,7 @@ void ciFilterTimedout(ChatConnection *chat, ChatRequest *request) {
         ciFinishFilter(chat, request, results);
         return;
     }
-    if (request->type == 9) {
+    if (request->type == TYPE_NICK) {
         u32 results[3];
         results[0] = 0;
         results[1] = (u32)request->name;
@@ -381,7 +381,7 @@ void ciFilterTimedout(ChatConnection *chat, ChatRequest *request) {
         ciFinishFilter(chat, request, results);
         return;
     }
-    if (request->type == 12) {
+    if (request->type == TYPE_GETKEY) {
         u32 results[5];
         results[0] = 0;
         results[1] = 0;
@@ -391,7 +391,7 @@ void ciFilterTimedout(ChatConnection *chat, ChatRequest *request) {
         ciFinishFilter(chat, request, results);
         return;
     }
-    if (request->type == 13) {
+    if (request->type == TYPE_GETCKEY) {
         u32 results[6];
         results[0] = 0;
         results[1] = 0;
@@ -402,7 +402,7 @@ void ciFilterTimedout(ChatConnection *chat, ChatRequest *request) {
         ciFinishFilter(chat, request, results);
         return;
     }
-    if (request->type == 14) {
+    if (request->type == TYPE_GETCHANKEY) {
         u32 results[6];
         results[0] = 0;
         results[1] = 0;
@@ -413,11 +413,11 @@ void ciFilterTimedout(ChatConnection *chat, ChatRequest *request) {
         ciFinishFilter(chat, request, results);
         return;
     }
-    if (request->type == 15) {
+    if (request->type == TYPE_UNQUIET) {
         ciRemoveFilter(chat, request);
         return;
     }
-    if (request->type == 16) {
+    if (request->type == TYPE_CDKEY) {
         u32 results[2];
         results[0] = 0;
         results[1] = (u32)sStr_TimedOut;
@@ -509,7 +509,7 @@ int ciAddLISTFilter(ChatConnection *chat, void *callbackEach, void *callbackAll,
         return 0;
     }
     memset(data, 0, sizeof(ChatChannelListData));
-    return ciAddFilter(chat, 0, NULL, NULL, callbackEach, callbackAll, param, data);
+    return ciAddFilter(chat, TYPE_LIST, NULL, NULL, callbackEach, callbackAll, param, data);
 }
 
 int ciAddJOINFilter(ChatConnection *chat, const char *channel, void *callback, void *param, const ChatChannelCallbacks *callbacks, const char *password) {
@@ -525,7 +525,7 @@ int ciAddJOINFilter(ChatConnection *chat, const char *channel, void *callback, v
     data->callbacks = *callbacks;
     strncpy(data->password, password, 32);
     data->password[31] = 0;
-    id = ciAddFilter(chat, 1, channel, NULL, callback, NULL, param, data);
+    id = ciAddFilter(chat, TYPE_JOIN, channel, NULL, callback, NULL, param, data);
     if (!id) {
         DWCi_GsFree(data);
     }
@@ -538,11 +538,11 @@ int ciAddNAMESFilter(ChatConnection *chat, const char *channel, ChatEnumUsersFun
         return 0;
     }
     memset(data, 0, sizeof(ChatNickListData));
-    return ciAddFilter(chat, 3, channel, NULL, callback, NULL, param, data);
+    return ciAddFilter(chat, TYPE_NAMES, channel, NULL, callback, NULL, param, data);
 }
 
 int ciAddCMODEFilter(ChatConnection *chat, const char *channel, void *callback, void *param) {
-    return ciAddFilter(chat, 5, channel, NULL, callback, NULL, param, NULL);
+    return ciAddFilter(chat, TYPE_CMODE, channel, NULL, callback, NULL, param, NULL);
 }
 
 // Copies the keys, without the empty ones.
@@ -582,7 +582,7 @@ int ciAddGETCKEYFilter(ChatConnection *chat, const char *cookie, int count, cons
         }
     }
     data->count = j;
-    return ciAddFilter(chat, 13, cookie, NULL, callback, NULL, param, data);
+    return ciAddFilter(chat, TYPE_GETCKEY, cookie, NULL, callback, NULL, param, data);
 }
 
 int ciAddGETCHANKEYFilter(ChatConnection *chat, const char *cookie, int count, const char **keys, BOOL broadcastKeys, void *callback, void *param) {
@@ -636,7 +636,7 @@ int ciAddGETCHANKEYFilter(ChatConnection *chat, const char *cookie, int count, c
         }
         data->count = j;
     }
-    return ciAddFilter(chat, 14, cookie, NULL, callback, NULL, param, data);
+    return ciAddFilter(chat, TYPE_GETCHANKEY, cookie, NULL, callback, NULL, param, data);
 }
 
 // Parses a channel mode string ("+" / "-" then mode letters, "+" / "-" may appear again; letters b, k, l, o and v

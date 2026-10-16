@@ -2,7 +2,7 @@
 
 #include "wifi_setup.h"
 
-extern int ov13_022459B4[2];
+extern int gWifiSetupSocket[2];
 extern u32 gWifiSetupCrc32Table[256];
 s32 WifiSetup_NotifyStatus(s32 state);
 
@@ -161,11 +161,11 @@ void WifiSetup_InitPacketAddresses(int count, u8 *dst, const void *src) {
 
 int WifiSetup_SetStatus(int value) {
     if (value == -1) {
-        ov13_022459B4[1] = value;
+        gWifiSetupSocket[1] = value;
         return 0;
     }
-    if (ov13_022459B4[1] != value) {
-        ov13_022459B4[1] = value;
+    if (gWifiSetupSocket[1] != value) {
+        gWifiSetupSocket[1] = value;
         return WifiSetup_NotifyStatus(value);
     }
     return 0;

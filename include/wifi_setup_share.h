@@ -41,6 +41,55 @@
 #define WIFI_SETUP_SHARE_PACKET_HELLO 188 // parent: language code, waiting for the child
 #define WIFI_SETUP_SHARE_PACKET_READY 189 // child: ready for the settings blocks
 
+// download state of one child (WifiSetupMbParent_GetChildState)
+#define WIFI_SETUP_MB_CHILD_NONE      0
+#define WIFI_SETUP_MB_CHILD_CONNECTED 1
+#define WIFI_SETUP_MB_CHILD_REQUESTED 2 // asked for the download
+#define WIFI_SETUP_MB_CHILD_WAITING   3
+#define WIFI_SETUP_MB_CHILD_SENDING   4
+#define WIFI_SETUP_MB_CHILD_SENT      5
+#define WIFI_SETUP_MB_CHILD_BOOTABLE  6
+
+// requests handled in WIFI_SETUP_SHARE_STATE_IDLE (gWifiSetupShare->request)
+#define WIFI_SETUP_SHARE_REQUEST_NONE  0
+#define WIFI_SETUP_SHARE_REQUEST_START 1
+#define WIFI_SETUP_SHARE_REQUEST_END   2
+
+// session states (gWifiSetupShare->state, WifiSetupShare_Update)
+#define WIFI_SETUP_SHARE_STATE_NONE                0
+#define WIFI_SETUP_SHARE_STATE_IDLE                1
+#define WIFI_SETUP_SHARE_STATE_MEASURE_CHANNEL     2
+#define WIFI_SETUP_SHARE_STATE_SETUP_DOWNLOAD      3
+#define WIFI_SETUP_SHARE_STATE_WAIT_ENTRY          4
+#define WIFI_SETUP_SHARE_STATE_ENTRY_REQUESTED     5 // a child asked for the download
+#define WIFI_SETUP_SHARE_STATE_DOWNLOADING         6
+#define WIFI_SETUP_SHARE_STATE_START_SHARING       7 // the child booted the program
+#define WIFI_SETUP_SHARE_STATE_SHARING             8
+#define WIFI_SETUP_SHARE_STATE_CHILD_READY         9
+#define WIFI_SETUP_SHARE_STATE_SENDING_SETTINGS    10
+#define WIFI_SETUP_SHARE_STATE_SETTINGS_RECEIVED   11
+#define WIFI_SETUP_SHARE_STATE_DONE                12
+#define WIFI_SETUP_SHARE_STATE_ENTRY_CANCELLED     13 // the child left before the download
+#define WIFI_SETUP_SHARE_STATE_CANCEL_DOWNLOAD      16
+#define WIFI_SETUP_SHARE_STATE_CANCEL_DOWNLOAD_WAIT 17
+#define WIFI_SETUP_SHARE_STATE_DOWNLOAD_ABORTED    18
+#define WIFI_SETUP_SHARE_STATE_STOP_WAIT           19
+#define WIFI_SETUP_SHARE_STATE_STOPPED             20
+#define WIFI_SETUP_SHARE_STATE_CHILD_ABORT         21
+#define WIFI_SETUP_SHARE_STATE_ABORT_WAIT          22
+#define WIFI_SETUP_SHARE_STATE_ABORTED             23
+#define WIFI_SETUP_SHARE_STATE_CHILD_FAILED        24
+#define WIFI_SETUP_SHARE_STATE_FAIL_WAIT           25
+#define WIFI_SETUP_SHARE_STATE_FAILED              26
+#define WIFI_SETUP_SHARE_STATE_SHARING_ERROR       27
+#define WIFI_SETUP_SHARE_STATE_ERROR_WAIT          28
+#define WIFI_SETUP_SHARE_STATE_ERROR               29
+#define WIFI_SETUP_SHARE_STATE_FINALIZE            30
+#define WIFI_SETUP_SHARE_STATE_FATAL               31
+#define WIFI_SETUP_SHARE_STATE_CANCEL_SHARING      32
+#define WIFI_SETUP_SHARE_STATE_CANCEL_SHARING_WAIT 33
+#define WIFI_SETUP_SHARE_STATE_END                 34 // the session can be freed
+
 typedef void (*WifiSetupWhLogFunc)(int level, char *format, ...);
 
 // Head of the argument of every WM callback.

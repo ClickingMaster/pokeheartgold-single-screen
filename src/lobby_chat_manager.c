@@ -54,7 +54,6 @@ static inline const char *StrData(Str *s) {
 }
 
 extern void LobbyString_InitCopy(void *dst, void *src);
-extern void *DWC_Alloc(int a, u32 size);
 extern void LobbyString_Substr(void *a, void *b, u32 len, int d);
 extern void LobbyTimerMap_Clear(void *p);
 extern void LobbyTimerMap_Destroy(void *p);
@@ -96,8 +95,6 @@ typedef struct InsertResult {
 } InsertResult;
 
 extern int LobbyString_Compare(Str *a, Str *b);
-extern void LobbyUserMap_Erase(Iter *out, Tree *t, Iter it);
-extern u8 ov45_02255228[];
 Node *LobbyRequestMap_InsertNode(Tree *t, Node *parent, u8 a, u8 b, Obj **val);
 Node *LobbyChannelMap_LowerBound(Tree *t, Str *key, Node *n, Node *res);
 Node *LobbyRequestMap_FindInsertPos(Tree *t, Obj **key, Node **pos, u8 *a, u8 *b);
@@ -166,8 +163,6 @@ typedef struct Empty2 {
     u8 b;
 } Empty2;
 
-extern Node *LobbyTree_EraseRebalance(Node *n, void *root);
-extern void LobbyRequestMap_Find(Iter *out, Tree *t, void *key);
 extern void *gLobbyRequestVtable;
 extern u32 current_time(void);
 extern void LobbyString_FormatN(char *buf, u32 size, const char *fmt, ...);
@@ -178,10 +173,6 @@ extern void LobbyChat_SplitString(Vec *out, Str *s, Str *sep, int n);
 extern void LobbyStringVector_Destroy(Vec *v);
 extern long atol(const char *s);
 extern void LobbyUserIdSet_Assign(TreeHdr *dst, TreeHdr *src);
-extern void LobbyUserIdSet_Insert(InsertResult *out, Tree *t, int *key);
-extern void LobbyString_Assign(Str *dst, Str *src);
-extern Node *LobbyUserMap_InsertNode(Tree *t, Node *parent, u8 a, u8 b, IntStrPair *val);
-extern BOOL LobbyUserIdSet_EraseKey(Tree *t, int *id);
 int LobbyChat_GetUserIdFromNick(Str *s);
 void LobbyRequestMap_Erase(Iter *out, Tree *t, Iter pos);
 
@@ -253,9 +244,7 @@ typedef struct CbObj {
 } CbObj;
 
 extern int gLobbyChatNextRequestId;
-extern void chatDisconnect(void *p);
 extern void *LobbyMem_Alloc(u32 size);
-extern void LobbyRequestMap_Insert(InsertResult *out, Tree *t, Obj **val);
 
 static inline void CbObjBaseInit(CbObj *o, void *x8) {
     o->vt = (VTable *)&gLobbyRequestVtable;
@@ -291,23 +280,6 @@ static inline CbObj *CbObjCreate(void *vt, int xc, void *x8) {
 }
 
 extern int LobbyString_CompareCStr(Str *a, const char *b);
-extern void chatLeaveChannelA(void *h, const char *name, int x);
-extern void LobbyChat_RemoveChannel(Ctx *c, Str *s);
-extern void chatSendChannelMessageA(void *h, const char *name, const char *msg, int x);
-extern void LobbyChat_GetUserNick(Str *out, Ctx *c, int a);
-extern char sStr_Empty_17[];
-extern void chatSendUserMessageA(void *h, const char *name, const char *msg, int x);
-extern void chatEnumChannelsA(void *h, const char *name, void *f1, void *f2, int h2, int z);
-extern void LobbyChat_OnEnumChannelsEach(void);
-extern void LobbyChat_OnEnumChannels(void);
-extern void LobbyChat_OnEnumUsers(void);
-extern void LobbyChat_OnGetChannelMode(void);
-extern int chatInChannelA(void *h, const char *name);
-extern void chatEnumUsersA(void *h, const char *name, void *f, int h2, int z);
-extern void chatGetChannelModeA(void *h, const char *name, void *f, int h2, int z);
-extern void *gLobbyEnumChannelsRequestVtable;
-extern void *gLobbyEnumUsersRequestVtable;
-extern void *gLobbyGetChannelModeRequestVtable;
 void *LobbyChatManager_Destroy(u8 *p);
 void LobbyMem_ReleaseReserve(void);
 
@@ -328,11 +300,6 @@ static inline void OpDelete(void *p) {
     }
 }
 
-extern void LobbyString_AssignCStr(Str *s, const char *cstr);
-extern void chatSetChannelKeysA(void *h, const char *name, const char *who, int x, const char **key, const char **val);
-
-extern void LobbyChannelMap_Insert(InsertResult *out, Tree *t, NamedEntry *e);
-extern void LobbyUserIdSet_Destroy(TreeHdr *t);
 void LobbyChannelMap_MakeEntry(NamedEntry *dst, Str *name, Entry *src);
 
 static inline void TreeHdrCopy(TreeHdr *d, TreeHdr *s) {
@@ -366,8 +333,6 @@ static inline void NamedEntryCopy(NamedEntry *d, NamedEntry *s) {
     LobbyString_InitCopy(&d->name, &s->name);
     EntryCopy(&d->e, &s->e);
 }
-
-extern void LobbyU32Vector_Allocate(Vec *v, u32 n, Tag t);
 
 extern void LobbyU32Vector_PushBackSlow(Vec *v, u32 *val, Tag t);
 
@@ -407,16 +372,7 @@ typedef struct CtxFull {
     Tree16 t9C;
 } CtxFull;
 
-extern NameTable ov45_02254DC4;
-extern char sStr_GSP[];
-extern char sStr_Bang_2[];
-extern Str *LobbyString_ConcatCStr(Str *out, Str *a, char *b);
 extern Str *LobbyString_Concat(Str *out, Str *a, Str *b);
-
-extern char sStr_TreeInsertLengthError_3[];
-extern int printf(const char *fmt, ...);
-extern void abort(void);
-extern void LobbyTree_InsertRebalance(Node *n, void *root);
 
 typedef struct NodeHolder {
     Node **hdr;
@@ -433,7 +389,6 @@ static inline BOOL StrEqC(Str *a, const char *b) {
 }
 
 extern Ctx *gLobbyChatManager;
-extern void chatSetChannelModeA(void *h, const char *name, int arg);
 
 static inline int CtxState(void) {
     return (*(Ctx *volatile *)&gLobbyChatManager)->state;
@@ -452,7 +407,6 @@ static inline BOOL CtxIsState3(void) {
 }
 
 typedef void (*VoidFunc)(void);
-extern VoidFunc gLobbyMemOutOfMemoryHandler;
 
 extern struct {
     u8 *obj;

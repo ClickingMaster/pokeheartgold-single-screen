@@ -46,8 +46,8 @@ extern WifiSetupKeyboard *gWifiSetupKeyboard;
 // layout (positions and sizes in pixels on the touch screen)
 extern const WifiSetupPoint gWifiSetupKeyboardKeyPositions[47]; // character key positions
 extern const WifiSetupPoint ov13_02244F60;
-extern const WifiSetupPoint ov13_02244F64;    // button size
-extern const WifiSetupPoint ov13_02244F68;    // character key size
+extern const WifiSetupPoint gWifiSetupKeyboardButtonSize;    // button size
+extern const WifiSetupPoint gWifiSetupKeyboardKeySize;    // character key size
 extern const WifiSetupPoint gWifiSetupKeyboardButtonPositions[2]; // button positions
 extern const WifiSetupPoint gWifiSetupKeyboardExtraKeyPositions[];  // extra key positions
 extern const WifiSetupPoint ov13_02244F88[];  // = &gWifiSetupKeyboardExtraKeyPositions[1]

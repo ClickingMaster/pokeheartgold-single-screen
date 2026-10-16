@@ -11,7 +11,7 @@ extern int SOC_Socket(int domain, int type, int protocol);
 extern int SOC_Bind(int socket, void *address, int addressLength);
 extern int SOC_Close(int socket);
 extern int RTC_GetTime(void *time);
-extern u8 ov13_022459B4[];
+extern u8 gWifiSetupSocket[];
 extern u8 sWifiSetupSocConfig[];
 extern volatile u32 gSoclHostAddress;
 
@@ -71,9 +71,9 @@ void *WifiSetup_SocketFree(s32 unused, s32 ptr) {
 }
 
 int WifiSetup_StartupSocket(u32 address, u32 netmask, u32 gateway) {
-    *(u32 *)(ov13_022459B4 + 0x18) = WifiSetup_HostToNet32(address);
-    *(u32 *)(ov13_022459B4 + 0x1C) = WifiSetup_HostToNet32(netmask);
-    *(u32 *)(ov13_022459B4 + 0x20) = WifiSetup_HostToNet32(gateway);
+    *(u32 *)(gWifiSetupSocket + 0x18) = WifiSetup_HostToNet32(address);
+    *(u32 *)(gWifiSetupSocket + 0x1C) = WifiSetup_HostToNet32(netmask);
+    *(u32 *)(gWifiSetupSocket + 0x20) = WifiSetup_HostToNet32(gateway);
     if (SOC_Startup(sWifiSetupSocConfig) < 0) {
         return -1;
     }

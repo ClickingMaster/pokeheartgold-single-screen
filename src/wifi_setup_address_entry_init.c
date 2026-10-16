@@ -35,14 +35,14 @@ typedef struct WifiSetupAddressLayout {
 } WifiSetupAddressLayout;
 
 extern const u8 gWifiSetupAddressEntryUnsetAddress[]; // stored address of an unset entry
-extern const WifiSetupAddressLayout ov13_02245480;
+extern const WifiSetupAddressLayout gWifiSetupAddressLayout;
 extern const WifiSetupAddressLoadFuncs ov13_02245498;
 
 void WifiSetupAddressEntry_Init(void);
 
 void WifiSetupAddressEntry_Init(void) {
     WifiSetupAddressLoadFuncs funcs = ov13_02245498;
-    WifiSetupAddressMessages messages = ov13_02245480.messages;
+    WifiSetupAddressMessages messages = gWifiSetupAddressLayout.messages;
     int kind;
     WifiSetupAddressEntry *work;
     gWifiSetupAddressEntry = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupAddressEntry), 4);
@@ -67,7 +67,7 @@ void WifiSetupAddressEntry_Init(void) {
     WifiSetupApp_SetStateFunc(WifiSetupAddressEntry_FadeIn);
 }
 
-const WifiSetupAddressLayout ov13_02245480 = {
+const WifiSetupAddressLayout gWifiSetupAddressLayout = {
     { 0x32, 0x35, 0x35, 0, 0xb, 0, 0x10, 0 },
     { { 0x3F, 0x40, 0x41, 0x42, 0x43 } },
     { 0, 0, 0, 0x29 }

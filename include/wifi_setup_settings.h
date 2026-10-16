@@ -62,7 +62,7 @@ typedef struct WifiSetupSettings {
 } WifiSetupSettings;
 
 extern WifiSetupSettings gWifiSetupSettings;
-extern const WifiSetupSettingsSwitchItems ov13_022454FC;
+extern const WifiSetupSettingsSwitchItems gWifiSetupSettingsSwitchItems;
 
 void WifiSetupSettings_Init(void);
 void WifiSetupSettings_LoadGraphics(void);

@@ -553,7 +553,7 @@ void ciUserChangeNickMap(void *element, void *arg) {
         args.channel = channel->name;
         args.oldNick = change->oldNick;
         args.newNick = change->newNick;
-        ciAddCallback_(change->chat, 8, channel->callbacks.nickChanged, (u32 *)&args, channel->callbacks.param, 0, channel->name, sizeof(args));
+        ciAddCallback_(change->chat, CALLBACK_USER_CHANGED_NICK, channel->callbacks.nickChanged, (u32 *)&args, channel->callbacks.param, 0, channel->name, sizeof(args));
     }
 }
 
@@ -612,7 +612,7 @@ void ciUserChangedMode(ChatConnection *chat, const char *nick, const char *name,
     frame.args.channel = name;
     frame.args.nick = nick;
     frame.args.mode = user->mode;
-    ciAddCallback_(chat, 11, channel->callbacks.userModeChanged, (u32 *)&frame.args, channel->callbacks.param, 0, (char *)name, sizeof(frame.args));
+    ciAddCallback_(chat, CALLBACK_USER_MODE_CHANGED, channel->callbacks.userModeChanged, (u32 *)&frame.args, channel->callbacks.param, 0, (char *)name, sizeof(frame.args));
 }
 
 void ciSetUserBasicInfoMap(void *element, void *arg) {

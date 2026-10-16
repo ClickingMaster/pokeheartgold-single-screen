@@ -15,6 +15,13 @@
 
 typedef struct WindowRegisterQueue WindowRegisterQueue;
 
+enum ScreenFadeState {
+    SCREEN_FADE_STATE_START,
+    SCREEN_FADE_STATE_RUN,
+    SCREEN_FADE_STATE_CLEANUP,
+    SCREEN_FADE_STATE_DONE,
+};
+
 // One screen's fade
 typedef struct ScreenFade {
     u32 type; // enum FadeType

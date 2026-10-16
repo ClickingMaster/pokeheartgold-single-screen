@@ -7,8 +7,31 @@
 // two copies of it: src/wifi_setup_wcm.c (first module, state gWifiSetupWcm) and
 // src/wifi_setup_link.c (second module, state inside WifiSetupWork).
 //
-// Wrapper states: 0 none, 1 initialised, 2 cleaning up, 3 idle, 4 starting up / stopping,
-// 5 searching, 6 search starting, 7 connected, 8 connecting.
+// wrapper states (gWifiSetupWcm.state)
+#define WIFI_SETUP_WCM_STATE_NONE            0
+#define WIFI_SETUP_WCM_STATE_READY           1 // WCM_Init done
+#define WIFI_SETUP_WCM_STATE_CLEANUP         2
+#define WIFI_SETUP_WCM_STATE_IDLE            3
+#define WIFI_SETUP_WCM_STATE_BUSY            4 // starting up, ending a search or disconnecting
+#define WIFI_SETUP_WCM_STATE_SEARCHING       5
+#define WIFI_SETUP_WCM_STATE_SEARCH_STARTING 6
+#define WIFI_SETUP_WCM_STATE_CONNECTED       7
+#define WIFI_SETUP_WCM_STATE_CONNECTING      8
+
+// events passed to the wrapper's callback
+#define WIFI_SETUP_WCM_EVENT_UNKNOWN           1
+#define WIFI_SETUP_WCM_EVENT_FAILED            2 // a request could not be started
+#define WIFI_SETUP_WCM_EVENT_FOUND_AP          5
+#define WIFI_SETUP_WCM_EVENT_STARTED           6
+#define WIFI_SETUP_WCM_EVENT_SEARCH_STARTED    8
+#define WIFI_SETUP_WCM_EVENT_SEARCH_FAILED     9
+#define WIFI_SETUP_WCM_EVENT_SEARCH_ENDED      10
+#define WIFI_SETUP_WCM_EVENT_SEARCH_END_FAILED 11
+#define WIFI_SETUP_WCM_EVENT_CONNECTED         12
+#define WIFI_SETUP_WCM_EVENT_CONNECT_FAILED    13
+#define WIFI_SETUP_WCM_EVENT_DISCONNECTED      14
+#define WIFI_SETUP_WCM_EVENT_DISCONNECT_FAILED 15
+#define WIFI_SETUP_WCM_EVENT_CLEANED_UP        20
 
 // Event passed to the WCM callback
 typedef struct WifiSetupWcmEvent {

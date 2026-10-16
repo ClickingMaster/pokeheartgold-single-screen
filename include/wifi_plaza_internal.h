@@ -435,7 +435,7 @@ typedef struct WiFiPlazaLobbyMatchInfo {
     int index;
     int maxPlayers;
     int playerCount; // WifiConnection_GetNumConnectionHost for the own session
-    int state;       // 1 once the host closed it (WiFiPlazaLobbyClient_CloseMatch)
+    int state;       // WIFI_PLAZA_MATCH_*, closed by the host (WiFiPlazaLobbyClient_CloseMatch)
     WiFiPlazaLobbyEntryTime startTime;
     u8 unk_18[0x18];
     char name[0x14];
@@ -567,6 +567,24 @@ typedef struct WiFiPlazaBillboardCreateParams {
     VecFx32 scale;
 } WiFiPlazaBillboardCreateParams;
 
+// gWiFiPlazaLobbyClient->state (WiFiPlazaLobbyClient_GetState)
+#define WIFI_PLAZA_LOBBY_STATE_DISCONNECTED 0
+#define WIFI_PLAZA_LOBBY_STATE_CONNECTING   1
+#define WIFI_PLAZA_LOBBY_STATE_IN_LOBBY     2
+#define WIFI_PLAZA_LOBBY_STATE_CLOSING      3
+#define WIFI_PLAZA_LOBBY_STATE_ERROR        4
+
+// gWiFiPlazaLobbyClient->channelState
+#define WIFI_PLAZA_CHANNEL_STATE_NONE    0
+#define WIFI_PLAZA_CHANNEL_STATE_JOINING 1
+#define WIFI_PLAZA_CHANNEL_STATE_JOINED  2
+#define WIFI_PLAZA_CHANNEL_STATE_LEAVING 3
+#define WIFI_PLAZA_CHANNEL_STATE_ERROR   4
+
+// WiFiPlazaLobbyMatchInfo.state
+#define WIFI_PLAZA_MATCH_OPEN   0
+#define WIFI_PLAZA_MATCH_CLOSED 1
+
 // The lobby client (gWiFiPlazaLobbyClient, wifi_plaza_lobby_client.c).
 typedef struct WiFiPlazaLobbyClient {
     SaveData *save;
@@ -578,9 +596,9 @@ typedef struct WiFiPlazaLobbyClient {
     u32 playerDataSize; // WiFiPlazaLobbyClient_AllocPlayerData
     WiFiPlazaLobbyPlayerRecord records[20];
     WiFiPlazaLobbyIdList idLists[2];
-    u8 state;        // 0 = none, 1 = connecting, 2 = in the lobby, 3, 4 = error (WiFiPlazaLobbyClient_Update)
+    u8 state;        // WIFI_PLAZA_LOBBY_STATE_* (WiFiPlazaLobbyClient_Update)
     u8 channel;      // 4 = none (WiFiPlazaLobbyClient_JoinChannel)
-    u8 channelState; // 4 = error
+    u8 channelState; // WIFI_PLAZA_CHANNEL_STATE_*
     u8 joinChannelResult;
     u8 addingLocation;
     u8 unk_131;

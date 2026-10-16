@@ -64,14 +64,6 @@ static inline void initializeGuard(volatile Guard *g, Node *n, void *anchor) {
     g->current = n;
 }
 
-extern const char sStr_TreeInsertLengthError_4[];
-extern int printf(const char *, ...);
-extern void abort(void);
-extern void *LobbyMem_Alloc(int);
-extern void LobbyString_InitCopy(Payload *, Payload *);
-extern void LobbyUserIdSet_Assign(void *, void *);
-extern void LobbyTree_InsertRebalance(void *, void *);
-
 void LobbyChannelMap_Insert(Result *out, Tree *t, void *key) {
     u8 left, first;
     void *previous;

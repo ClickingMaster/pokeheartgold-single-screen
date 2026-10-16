@@ -315,7 +315,7 @@ void WifiSetupSettings_ButtonTask(void) {
 }
 
 void WifiSetupSettings_PressButton(void) {
-    WifiSetupSettingsSwitchItems switches = ov13_022454FC;
+    WifiSetupSettingsSwitchItems switches = gWifiSetupSettingsSwitchItems;
     int i;
     for (i = 0; i < 4; i++) {
         if (gWifiSetupSettings.cursorItem == switches.items[i]) {

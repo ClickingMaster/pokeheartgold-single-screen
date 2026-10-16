@@ -49,9 +49,9 @@ typedef struct WifiSetupKeypad {
 extern WifiSetupKeypad *gWifiSetupKeypad;
 
 // layout (positions and sizes in pixels on the touch screen)
-extern const WifiSetupPoint ov13_02245228;     // digit key size
-extern const WifiSetupPoint ov13_02245230;     // extra key size
-extern const WifiSetupPoint ov13_02245234;     // button size
+extern const WifiSetupPoint gWifiSetupKeypadDigitKeySize;     // digit key size
+extern const WifiSetupPoint gWifiSetupKeypadExtraKeySize;     // extra key size
+extern const WifiSetupPoint gWifiSetupKeypadButtonSize;     // button size
 extern const WifiSetupPoint gWifiSetupKeypadDigitKeyPositions[10]; // digit key positions
 extern const WifiSetupPoint gWifiSetupKeypadExtraKeyPositions[2];  // extra key positions
 extern const WifiSetupPoint gWifiSetupKeypadButtonPositions[2];  // button positions

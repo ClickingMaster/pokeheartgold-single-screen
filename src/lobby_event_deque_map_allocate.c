@@ -50,10 +50,10 @@ struct VObj {
     VTable *vt;
 };
 
-extern u32 ov45_022577CC;
-extern u32 ov45_022551A0;
-extern u32 ov45_022577D0;
-extern u32 ov45_022551A4;
+extern u32 gLobbyEventDequeMapBufferMaxSizeSet;
+extern u32 gLobbyEventDequeMapBufferMaxSize;
+extern u32 gLobbyEventDequeMapMaxSizeSet;
+extern u32 gLobbyEventDequeMapMaxSize;
 extern unsigned char __lower_mapC[];
 
 void DWC_Free(int, void *, int);
@@ -288,11 +288,11 @@ void LobbyU32VectorBuffer_Destroy(SplitBuf *b);
 void LobbyEventDequeMapIterator_Advance2(Iter *it, int n);
 
 void LobbyEventDequeMap_Allocate(DequeBuf *d, u32 n, Tag unused) {
-    if (!(ov45_022577D0 & 1)) {
-        ov45_022551A4 = 0x3FFFFFFE;
-        ov45_022577D0 |= 1;
+    if (!(gLobbyEventDequeMapMaxSizeSet & 1)) {
+        gLobbyEventDequeMapMaxSize = 0x3FFFFFFE;
+        gLobbyEventDequeMapMaxSizeSet |= 1;
     }
-    if (n > ov45_022551A4) {
+    if (n > gLobbyEventDequeMapMaxSize) {
         LobbyEventDequeMap_LengthError();
     }
     d->ptr = LobbyMem_Alloc((n + 1) * 4);

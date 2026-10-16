@@ -862,7 +862,7 @@ void WifiSetupSettings_UpdateObjects(void) {
     gWifiSetupSettings.work->objectsDirty = 1;
 }
 
-const WifiSetupSettingsSwitchItems ov13_022454FC = {
+const WifiSetupSettingsSwitchItems gWifiSetupSettingsSwitchItems = {
     { 2, 3, 7, 8 }
 };
 static const WifiSetupRect sRowButtonBox = { 0xCC, 0x34, 0x1C, 0x18 };
@@ -892,12 +892,12 @@ int WifiSetupSettings_GetTouchedItem(void) {
             r = sSwitchOnBox;
             r.top += i * WIFI_SETUP_SETTINGS_ROW_HEIGHT;
             if (WifiSetupInput_IsTouchPressedInBox(&r)) {
-                return ov13_022454FC.items[0];
+                return gWifiSetupSettingsSwitchItems.items[0];
             }
             r = sSwitchOffBox;
             r.top += i * WIFI_SETUP_SETTINGS_ROW_HEIGHT;
             if (WifiSetupInput_IsTouchPressedInBox(&r)) {
-                return ov13_022454FC.items[1];
+                return gWifiSetupSettingsSwitchItems.items[1];
             }
             break;
         }
@@ -909,12 +909,12 @@ int WifiSetupSettings_GetTouchedItem(void) {
             r = sSwitchOnBox;
             r.top += i * WIFI_SETUP_SETTINGS_ROW_HEIGHT;
             if (WifiSetupInput_IsTouchPressedInBox(&r)) {
-                return ov13_022454FC.items[2];
+                return gWifiSetupSettingsSwitchItems.items[2];
             }
             r = sSwitchOffBox;
             r.top += i * WIFI_SETUP_SETTINGS_ROW_HEIGHT;
             if (WifiSetupInput_IsTouchPressedInBox(&r)) {
-                return ov13_022454FC.items[3];
+                return gWifiSetupSettingsSwitchItems.items[3];
             }
             break;
         }

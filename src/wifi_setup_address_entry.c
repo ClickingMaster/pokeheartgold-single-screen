@@ -39,7 +39,7 @@ extern void *gWifiSetupTextEntry[];
 
 // Screen layout (defined in src/wifi_setup_address_entry_init.c): starts
 // with the field limit; the u16 at index 7 and 8 are the position of the digits.
-extern const WifiSetupFieldLimit ov13_02245480;
+extern const WifiSetupFieldLimit gWifiSetupAddressLayout;
 extern WifiSetupAddressFuncs gWifiSetupAddressEntryFuncs;
 extern const u8 gWifiSetupAddressEntryDigitX[]; // x of every digit
 extern u8 gWifiSetupAddressEntryYbObjKbNclPath[];
@@ -271,8 +271,8 @@ void WifiSetupAddressEntry_DrawDigits(void) {
     u16 rect[4];
     u16 text[2];
     int i;
-    rect[0] = ((const u16 *)&ov13_02245480)[7];
-    rect[1] = ((const u16 *)&ov13_02245480)[8];
+    rect[0] = ((const u16 *)&gWifiSetupAddressLayout)[7];
+    rect[1] = ((const u16 *)&gWifiSetupAddressLayout)[8];
     rect[2] = 11;
     rect[3] = 16;
     WifiSetupText_Clear(entry->canvas, 0);
@@ -359,7 +359,7 @@ void WifiSetupAddressEntry_PadFields(void) {
 // Every field must be at most 255. A subnet mask (kind 1) must be contiguous ones followed by
 // zeros; other addresses are checked by DWC_BACKUPlCheckAddress.
 int WifiSetupAddressEntry_IsValid(void) {
-    WifiSetupFieldLimit limit = ov13_02245480;
+    WifiSetupFieldLimit limit = gWifiSetupAddressLayout;
     int i;
     int kind;
     u8 address[4];

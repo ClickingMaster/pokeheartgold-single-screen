@@ -40,6 +40,17 @@
 #define SCRATCH_CELL_EMPTY    0xB0
 #define SCRATCH_CELL_WILDCARD 4
 
+enum ScratchOffCardsState {
+    SCRATCH_OFF_CARDS_STATE_FADE_IN,
+    SCRATCH_OFF_CARDS_STATE_SLIDE_IN_CHOICES,
+    SCRATCH_OFF_CARDS_STATE_SELECT_CARD,
+    SCRATCH_OFF_CARDS_STATE_ZOOM_CARD,
+    SCRATCH_OFF_CARDS_STATE_SHOW_CARD,
+    SCRATCH_OFF_CARDS_STATE_PLAY_CARD,
+    SCRATCH_OFF_CARDS_STATE_SLIDE_OUT_CARD,
+    SCRATCH_OFF_CARDS_STATE_FADE_OUT,
+};
+
 typedef struct ScratchOffCardsSprite {
     u8 unk_00;
     u8 unk_01;
@@ -310,54 +321,54 @@ BOOL ScratchOffCards_Init(OverlayManager *man, int *state) {
 BOOL ScratchOffCards_Main(OverlayManager *man, int *state) {
     ScratchOffCardsWork *work = OverlayManager_GetData(man);
     switch (*state) {
-    case 0:
+    case SCRATCH_OFF_CARDS_STATE_FADE_IN:
         if (ScratchOffCards_FadeIn(work) == TRUE) {
-            ScratchOffCards_SetState(work, state, 1);
+            ScratchOffCards_SetState(work, state, SCRATCH_OFF_CARDS_STATE_SLIDE_IN_CHOICES);
         }
         break;
-    case 1:
+    case SCRATCH_OFF_CARDS_STATE_SLIDE_IN_CHOICES:
         if (ScratchOffCards_SlideInCardChoices(work) == TRUE) {
-            ScratchOffCards_SetState(work, state, 2);
+            ScratchOffCards_SetState(work, state, SCRATCH_OFF_CARDS_STATE_SELECT_CARD);
         }
         break;
-    case 2:
+    case SCRATCH_OFF_CARDS_STATE_SELECT_CARD:
         if (ScratchOffCards_SelectCard(work) == TRUE) {
-            ScratchOffCards_SetState(work, state, 3);
+            ScratchOffCards_SetState(work, state, SCRATCH_OFF_CARDS_STATE_ZOOM_CARD);
         }
         break;
-    case 3:
+    case SCRATCH_OFF_CARDS_STATE_ZOOM_CARD:
         if (ScratchOffCards_ZoomSelectedCard(work) == TRUE) {
             if (work->cardNo >= 3) {
                 work->cardNo = 0;
                 ScratchOffCards_DeleteCardChoiceSprites(work);
                 ScratchOffCards_CreateHighlightSprites(work);
                 ScratchOffCards_CreateResultSprites(work);
-                ScratchOffCards_SetState(work, state, 4);
+                ScratchOffCards_SetState(work, state, SCRATCH_OFF_CARDS_STATE_SHOW_CARD);
             } else {
-                ScratchOffCards_SetState(work, state, 1);
+                ScratchOffCards_SetState(work, state, SCRATCH_OFF_CARDS_STATE_SLIDE_IN_CHOICES);
             }
         }
         break;
-    case 4:
+    case SCRATCH_OFF_CARDS_STATE_SHOW_CARD:
         if (ScratchOffCards_ShowCard(work) == TRUE) {
-            ScratchOffCards_SetState(work, state, 5);
+            ScratchOffCards_SetState(work, state, SCRATCH_OFF_CARDS_STATE_PLAY_CARD);
         }
         break;
-    case 5:
+    case SCRATCH_OFF_CARDS_STATE_PLAY_CARD:
         if (ScratchOffCards_PlayCard(work) == TRUE) {
             if (work->cardNo >= 3) {
-                ScratchOffCards_SetState(work, state, 7);
+                ScratchOffCards_SetState(work, state, SCRATCH_OFF_CARDS_STATE_FADE_OUT);
             } else {
-                ScratchOffCards_SetState(work, state, 6);
+                ScratchOffCards_SetState(work, state, SCRATCH_OFF_CARDS_STATE_SLIDE_OUT_CARD);
             }
         }
         break;
-    case 6:
+    case SCRATCH_OFF_CARDS_STATE_SLIDE_OUT_CARD:
         if (ScratchOffCards_SlideOutCard(work) == TRUE) {
-            ScratchOffCards_SetState(work, state, 4);
+            ScratchOffCards_SetState(work, state, SCRATCH_OFF_CARDS_STATE_SHOW_CARD);
         }
         break;
-    case 7:
+    case SCRATCH_OFF_CARDS_STATE_FADE_OUT:
         if (ScratchOffCards_FadeOut(work) == TRUE) {
             return TRUE;
         }

@@ -29,12 +29,12 @@ inline void *operator new(std::size_t, void *p) {
 extern "C" char sStr_WebEncLobbySubmitQuestionnaireAsp[], sStr_WebEncLobbyGetQuestionnaireAsp[], sStr_uLMOGEiiJogofchScpXb000244fd00006015100000005b44[], sStr_WebEncLobbyGetScheduleAsp[], sStr_WebEncLobbyGetVIP_Asp[], sStr_WebEncLobbyCheckProfileAsp[];
 #pragma explicit_zero_data on
 extern "C" u8 ov45_02254F5A = 1;
-extern "C" const char *ov45_02254F68 = sStr_WebEncLobbyGetScheduleAsp;
-extern "C" const char *ov45_02254F6C = sStr_WebEncLobbyGetVIP_Asp;
-extern "C" const char *ov45_02254F60 = sStr_WebEncLobbyGetQuestionnaireAsp;
-extern "C" const char *ov45_02254F5C = sStr_WebEncLobbySubmitQuestionnaireAsp;
+extern "C" const char *gPPWLobbyGetScheduleUrl = sStr_WebEncLobbyGetScheduleAsp;
+extern "C" const char *gPPWLobbyGetVipUrl = sStr_WebEncLobbyGetVIP_Asp;
+extern "C" const char *gPPWLobbyGetQuestionnaireUrl = sStr_WebEncLobbyGetQuestionnaireAsp;
+extern "C" const char *gPPWLobbySubmitQuestionnaireUrl = sStr_WebEncLobbySubmitQuestionnaireAsp;
 extern "C" signed char ov45_02254F5B = 0;
-extern "C" const char *ov45_02254F70 = sStr_WebEncLobbyCheckProfileAsp;
+extern "C" const char *gPPWLobbyCheckProfileUrl = sStr_WebEncLobbyCheckProfileAsp;
 extern "C" const char *ov45_02254F64 = sStr_uLMOGEiiJogofchScpXb000244fd00006015100000005b44;
 extern "C" signed char ov45_02254F59 = 0;
 extern "C" u8 _02254F58 = 0;
@@ -259,7 +259,7 @@ extern "C" int PPW_LobbySubmitQuestionnaire(int mode) {
     p.d3c = d->x3c;
     p.d3e = d->x3e;
     x = gPPWLobbyWork->x4c;
-    host = ov45_02254F5C;
+    host = gPPWLobbySubmitQuestionnaireUrl;
     name = ov45_02254F64;
     flag = gPPWLobbyWork->x50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
     if (gPPWLobbyCurrentRequest == 0) {
@@ -869,7 +869,7 @@ extern "C" void PPWLobby_StartCheckProfile(void) {
     OS_GetMacAddress(info.mac);
     info.cfg = *c;
     x = gPPWLobbyWork->x4c;
-    host = ov45_02254F70;
+    host = gPPWLobbyCheckProfileUrl;
     name = ov45_02254F64;
     flag = gPPWLobbyWork->x50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
     if (gPPWLobbyCurrentRequest != 0) {
@@ -2626,7 +2626,7 @@ extern "C" void PPWLobby_OnCheckProfile(int a0, int a1, int a2) {
     info.b = f[0x39];
     OS_GetMacAddress(info.mac);
     x = gPPWLobbyWork->x4c;
-    host = ov45_02254F68;
+    host = gPPWLobbyGetScheduleUrl;
     name = ov45_02254F64;
     flag = gPPWLobbyWork->x50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
     if (gPPWLobbyCurrentRequest != 0) {
@@ -2877,7 +2877,7 @@ extern "C" void PPWLobby_OnGetSchedule(int a0, int a1, int a2) {
     i2.info = info;
     i2.extra = *(const u32 *)(p + 4);
     x = gPPWLobbyWork->x4c;
-    host = ov45_02254F6C;
+    host = gPPWLobbyGetVipUrl;
     name = ov45_02254F64;
     flag = gPPWLobbyWork->x50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
     if (gPPWLobbyCurrentRequest != 0) {
@@ -3110,7 +3110,7 @@ extern "C" void PPWLobby_OnGetVip(int a0, int a1, int a2) {
     info.b = f[0x39];
     OS_GetMacAddress(info.mac);
     x = gPPWLobbyWork->x4c;
-    host = ov45_02254F60;
+    host = gPPWLobbyGetQuestionnaireUrl;
     name = ov45_02254F64;
     flag = gPPWLobbyWork->x50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
     if (gPPWLobbyCurrentRequest != 0) {

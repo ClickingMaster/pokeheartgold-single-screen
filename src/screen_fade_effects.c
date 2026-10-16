@@ -300,7 +300,7 @@ static RectShutterWipeConfig sFadeFunc41RectShutter = {
 };
 
 BOOL FadeFunc_00(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         fade->fadeOut = TRUE;
         fade->isBrightnessFade = TRUE;
         BrightnessTransition_Start(fade, TRUE);
@@ -310,7 +310,7 @@ BOOL FadeFunc_00(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_01(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         fade->fadeOut = FALSE;
         fade->isBrightnessFade = TRUE;
         BrightnessTransition_Start(fade, FALSE);
@@ -320,7 +320,7 @@ BOOL FadeFunc_01(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_02(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         sFadeFunc02Shutter.ranges = sFadeFunc02ShutterRanges;
         SetBothBackdropColors(fade->color);
         LineShutterWipe_Begin(fade, &sFadeFunc02Shutter);
@@ -332,7 +332,7 @@ BOOL FadeFunc_02(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_03(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         sFadeFunc03Shutter.ranges = sFadeFunc03ShutterRanges;
         SetBothBackdropColors(fade->color);
         LineShutterWipe_Begin(fade, &sFadeFunc03Shutter);
@@ -344,7 +344,7 @@ BOOL FadeFunc_03(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_04(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         sFadeFunc04Shutter.ranges = sFadeFunc04ShutterRanges;
         SetBothBackdropColors(fade->color);
         LineShutterWipe_Begin(fade, &sFadeFunc04Shutter);
@@ -356,7 +356,7 @@ BOOL FadeFunc_04(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_05(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         sFadeFunc05Shutter.ranges = sFadeFunc05ShutterRanges;
         SetBothBackdropColors(fade->color);
         LineShutterWipe_Begin(fade, &sFadeFunc05Shutter);
@@ -368,7 +368,7 @@ BOOL FadeFunc_05(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_06(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         SetBothBackdropColors(fade->color);
         RectWipe_Begin(fade, &sFadeFunc06Rect);
         fade->fadeOut = TRUE;
@@ -379,7 +379,7 @@ BOOL FadeFunc_06(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_07(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         SetBothBackdropColors(fade->color);
         RectWipe_Begin(fade, &sFadeFunc07Rect);
         fade->fadeOut = FALSE;
@@ -390,7 +390,7 @@ BOOL FadeFunc_07(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_08(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         sFadeFunc08Shutter.ranges = sFadeFunc08ShutterRanges;
         SetBothBackdropColors(fade->color);
         LineShutterWipe_Begin(fade, &sFadeFunc08Shutter);
@@ -402,7 +402,7 @@ BOOL FadeFunc_08(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_09(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         sFadeFunc09Shutter.ranges = sFadeFunc09ShutterRanges;
         SetBothBackdropColors(fade->color);
         LineShutterWipe_Begin(fade, &sFadeFunc09Shutter);
@@ -414,7 +414,7 @@ BOOL FadeFunc_09(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_10(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         sFadeFunc10Shutter.ranges = sFadeFunc10ShutterRanges;
         SetBothBackdropColors(fade->color);
         LineShutterWipe_Begin(fade, &sFadeFunc10Shutter);
@@ -426,7 +426,7 @@ BOOL FadeFunc_10(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_11(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         sFadeFunc11Shutter.ranges = sFadeFunc11ShutterRanges;
         SetBothBackdropColors(fade->color);
         LineShutterWipe_Begin(fade, &sFadeFunc11Shutter);
@@ -438,7 +438,7 @@ BOOL FadeFunc_11(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_12(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         SetBothBackdropColors(fade->color);
         RectWipe_Begin(fade, &sFadeFunc12Rect);
         fade->fadeOut = TRUE;
@@ -449,7 +449,7 @@ BOOL FadeFunc_12(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_13(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         SetBothBackdropColors(fade->color);
         RectWipe_Begin(fade, &sFadeFunc13Rect);
         fade->fadeOut = FALSE;
@@ -460,7 +460,7 @@ BOOL FadeFunc_13(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_14(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         SetBothBackdropColors(fade->color);
         DoubleRectWipe_Begin(fade, &sFadeFunc14LeftRect, &sFadeFunc14RightRect);
         fade->fadeOut = TRUE;
@@ -471,7 +471,7 @@ BOOL FadeFunc_14(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_15(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         SetBothBackdropColors(fade->color);
         DoubleRectWipe_Begin(fade, &sFadeFunc15LeftRect, &sFadeFunc15RightRect);
         fade->fadeOut = FALSE;
@@ -482,7 +482,7 @@ BOOL FadeFunc_15(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_16(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         SetBothBackdropColors(fade->color);
         CircleWipe_Begin(fade, &sFadeFunc16Circle);
         fade->fadeOut = TRUE;
@@ -493,7 +493,7 @@ BOOL FadeFunc_16(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_17(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         SetBothBackdropColors(fade->color);
         CircleWipe_Begin(fade, &sFadeFunc17Circle);
         fade->fadeOut = FALSE;
@@ -504,7 +504,7 @@ BOOL FadeFunc_17(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_18(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         SetBothBackdropColors(fade->color);
         CircleWipe_Begin(fade, &sFadeFunc18Circle);
         fade->fadeOut = TRUE;
@@ -515,7 +515,7 @@ BOOL FadeFunc_18(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_19(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         SetBothBackdropColors(fade->color);
         CircleWipe_Begin(fade, &sFadeFunc19Circle);
         fade->fadeOut = FALSE;
@@ -526,7 +526,7 @@ BOOL FadeFunc_19(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_20(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         SetBothBackdropColors(fade->color);
         WedgeWipe_Begin(fade, &sFadeFunc20Wedge);
         fade->fadeOut = TRUE;
@@ -537,7 +537,7 @@ BOOL FadeFunc_20(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_21(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         SetBothBackdropColors(fade->color);
         WedgeWipe_Begin(fade, &sFadeFunc21Wedge);
         fade->fadeOut = FALSE;
@@ -548,7 +548,7 @@ BOOL FadeFunc_21(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_22(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         SetBothBackdropColors(fade->color);
         RectWipe_Begin(fade, &sFadeFunc22Rect);
         fade->fadeOut = TRUE;
@@ -559,7 +559,7 @@ BOOL FadeFunc_22(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_23(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         SetBothBackdropColors(fade->color);
         RectWipe_Begin(fade, &sFadeFunc23Rect);
         fade->fadeOut = FALSE;
@@ -570,7 +570,7 @@ BOOL FadeFunc_23(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_24(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         SetBothBackdropColors(fade->color);
         RectWipe_Begin(fade, &sFadeFunc24Rect);
         fade->fadeOut = TRUE;
@@ -581,7 +581,7 @@ BOOL FadeFunc_24(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_25(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         SetBothBackdropColors(fade->color);
         RectWipe_Begin(fade, &sFadeFunc25Rect);
         fade->fadeOut = FALSE;
@@ -592,7 +592,7 @@ BOOL FadeFunc_25(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_26(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         SetBothBackdropColors(fade->color);
         SlopeWipe_Begin(fade, &sFadeFunc26Slope);
         fade->fadeOut = TRUE;
@@ -603,7 +603,7 @@ BOOL FadeFunc_26(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_27(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         SetBothBackdropColors(fade->color);
         SlopeWipe_Begin(fade, &sFadeFunc27Slope);
         fade->fadeOut = FALSE;
@@ -616,7 +616,7 @@ BOOL FadeFunc_27(ScreenFade *fade) {
 BOOL FadeFunc_28(ScreenFade *fade) {
     MultiRectWipeConfig config;
 
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         config.starts = sFadeFunc28RectStarts;
         config.ends = sFadeFunc28RectEnds;
         config.count = 4;
@@ -636,7 +636,7 @@ BOOL FadeFunc_28(ScreenFade *fade) {
 BOOL FadeFunc_29(ScreenFade *fade) {
     MultiRectWipeConfig config;
 
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         config.starts = sFadeFunc29RectStarts;
         config.ends = sFadeFunc29RectEnds;
         config.count = 4;
@@ -654,7 +654,7 @@ BOOL FadeFunc_29(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_30(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         sFadeFunc30Shutter.ranges = sFadeFunc30ShutterRanges;
         SetBothBackdropColors(fade->color);
         LineShutterWipe_Begin(fade, &sFadeFunc30Shutter);
@@ -666,7 +666,7 @@ BOOL FadeFunc_30(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_31(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         sFadeFunc31Shutter.ranges = sFadeFunc31ShutterRanges;
         SetBothBackdropColors(fade->color);
         LineShutterWipe_Begin(fade, &sFadeFunc31Shutter);
@@ -680,7 +680,7 @@ BOOL FadeFunc_31(ScreenFade *fade) {
 BOOL FadeFunc_32(ScreenFade *fade) {
     SectorWipeConfig config;
 
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         config = sFadeFunc32Sector;
         SetBothBackdropColors(fade->color);
         SectorWipe_Begin(fade, &config);
@@ -694,7 +694,7 @@ BOOL FadeFunc_32(ScreenFade *fade) {
 BOOL FadeFunc_33(ScreenFade *fade) {
     SectorWipeConfig config;
 
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         config = sFadeFunc33Sector;
         SetBothBackdropColors(fade->color);
         SectorWipe_Begin(fade, &config);
@@ -708,7 +708,7 @@ BOOL FadeFunc_33(ScreenFade *fade) {
 BOOL FadeFunc_34(ScreenFade *fade) {
     SectorWipeConfig config;
 
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         config = sFadeFunc34Sector;
         SetBothBackdropColors(fade->color);
         MirroredSectorWipe_Begin(fade, &config);
@@ -722,7 +722,7 @@ BOOL FadeFunc_34(ScreenFade *fade) {
 BOOL FadeFunc_35(ScreenFade *fade) {
     SectorWipeConfig config;
 
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         config = sFadeFunc35Sector;
         SetBothBackdropColors(fade->color);
         MirroredSectorWipe_Begin(fade, &config);
@@ -734,7 +734,7 @@ BOOL FadeFunc_35(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_36(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         SetBothBackdropColors(fade->color);
         CircleWipe_Begin(fade, &sFadeFunc36Circle);
         fade->fadeOut = TRUE;
@@ -745,7 +745,7 @@ BOOL FadeFunc_36(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_37(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         SetBothBackdropColors(fade->color);
         CircleWipe_Begin(fade, &sFadeFunc37Circle);
         fade->fadeOut = FALSE;
@@ -756,7 +756,7 @@ BOOL FadeFunc_37(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_38(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         SetBothBackdropColors(fade->color);
         RectWipe_Begin(fade, &sFadeFunc38Rect);
         fade->fadeOut = TRUE;
@@ -767,7 +767,7 @@ BOOL FadeFunc_38(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_39(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         SetBothBackdropColors(fade->color);
         RectWipe_Begin(fade, &sFadeFunc39Rect);
         fade->fadeOut = FALSE;
@@ -778,7 +778,7 @@ BOOL FadeFunc_39(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_40(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         sFadeFunc40RectShutter.shutter.ranges = sFadeFunc40ShutterRanges;
         SetBothBackdropColors(fade->color);
         RectShutterWipe_Begin(fade, &sFadeFunc40RectShutter);
@@ -790,7 +790,7 @@ BOOL FadeFunc_40(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_41(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         sFadeFunc41RectShutter.shutter.ranges = sFadeFunc41ShutterRanges;
         SetBothBackdropColors(fade->color);
         RectShutterWipe_Begin(fade, &sFadeFunc41RectShutter);
@@ -802,7 +802,7 @@ BOOL FadeFunc_41(ScreenFade *fade) {
 }
 
 BOOL FadeFunc_42(ScreenFade *fade) {
-    if (fade->state == 0) {
+    if (fade->state == SCREEN_FADE_STATE_START) {
         SetBothBackdropColors(fade->color);
         ClockWipe_Begin(fade, &sFadeFunc42Clock);
         fade->fadeOut = TRUE;
@@ -927,18 +927,18 @@ BOOL BrightnessTransition_Run(ScreenFade *fade) {
     BrightnessTransition *transition = fade->effect;
 
     switch (fade->state) {
-    case 1:
+    case SCREEN_FADE_STATE_RUN:
         if (BrightnessTransition_Step(transition) == TRUE) {
             fade->state++;
         }
         break;
-    case 2:
+    case SCREEN_FADE_STATE_CLEANUP:
         Heap_Free(transition);
         fade->effect = NULL;
         done = TRUE;
         fade->state++;
         break;
-    case 3:
+    case SCREEN_FADE_STATE_DONE:
         done = TRUE;
         break;
     }

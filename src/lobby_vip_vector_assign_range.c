@@ -26,8 +26,8 @@ typedef struct {
 } Vec;
 
 extern u32 ov45_02255198[];
-extern u32 ov45_022577D0;
-extern u32 ov45_022551A4;
+extern u32 gLobbyEventDequeMapMaxSizeSet;
+extern u32 gLobbyEventDequeMapMaxSize;
 extern char _ZSt7nothrow[];
 extern char sStr_CdequeLengthError[];
 void *_ZnamRKSt9nothrow_t(u32, void *);

@@ -36,7 +36,7 @@ typedef struct WifiSetupApEntryList {
     WifiSetupApEntry entries[];
 } WifiSetupApEntryList;
 
-// ov13_0224DF30 (0x80 bytes, up to gWifiSetupLinkEventCallback)
+// gWifiSetupWork (0x80 bytes, up to gWifiSetupLinkEventCallback)
 typedef struct WifiSetupWork {
     u8 unk_00;                           // 0x00, sent as record 0x301
     u8 unk_01[3];                        // 0x01
@@ -89,7 +89,7 @@ typedef struct WifiSetupMd5Context {
     u8 buffer[64];
 } WifiSetupMd5Context;
 
-extern WifiSetupWork ov13_0224DF30;
+extern WifiSetupWork gWifiSetupWork;
 extern WifiSetupConfig gWifiSetupConfig;
 extern OSThread gWifiSetupThread;
 
@@ -98,7 +98,7 @@ typedef struct WifiSetupResult {
     u32 words[58];
 } WifiSetupResult;
 
-extern WifiSetupResult ov13_0224E09C;
+extern WifiSetupResult gWifiSetupResult;
 
 extern const u8 sWifiSetupMd5Padding[]; // MD5 padding
 

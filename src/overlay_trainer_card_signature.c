@@ -42,6 +42,22 @@
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 
+enum TrainerCardSignatureMainState {
+    TRAINER_CARD_SIGNATURE_MAIN_WAIT_FADE_IN,
+    TRAINER_CARD_SIGNATURE_MAIN_RUN,
+    TRAINER_CARD_SIGNATURE_MAIN_WAIT_FADE_OUT,
+};
+
+enum TrainerCardSignatureState {
+    TRAINER_CARD_SIGNATURE_STATE_NONE,
+    TRAINER_CARD_SIGNATURE_STATE_DRAW,
+    TRAINER_CARD_SIGNATURE_STATE_WAIT_CONFIRM_MESSAGE,
+    TRAINER_CARD_SIGNATURE_STATE_CONFIRM_PROMPT,
+    TRAINER_CARD_SIGNATURE_STATE_PRINT_ERASE_MESSAGE,
+    TRAINER_CARD_SIGNATURE_STATE_WAIT_ERASE_MESSAGE,
+    TRAINER_CARD_SIGNATURE_STATE_ERASE_PROMPT,
+};
+
 typedef int (*TrainerCardSignatureStateFunc)(TrainerCardSignature *signature, int state);
 
 extern const u16 sTrainerCardSignatureDoneButtonPos[];
@@ -156,12 +172,12 @@ int TrainerCardSignature_Main(OverlayManager *manager, int *state) {
     TrainerCardSignature *signature = OverlayManager_GetData(manager);
 
     switch (*state) {
-    case 0:
+    case TRAINER_CARD_SIGNATURE_MAIN_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
-            *state = 1;
+            *state = TRAINER_CARD_SIGNATURE_MAIN_RUN;
         }
         break;
-    case 1: {
+    case TRAINER_CARD_SIGNATURE_MAIN_RUN: {
         func = sTrainerCardSignatureStateFuncs[signature->state];
         if (func != NULL) {
             *state = func(signature, *state);
@@ -169,7 +185,7 @@ int TrainerCardSignature_Main(OverlayManager *manager, int *state) {
         TrainerCardSignature_AnimateButtonPalette(&signature->paletteAngle);
         break;
     }
-    case 2:
+    case TRAINER_CARD_SIGNATURE_MAIN_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished()) {
             return TRUE;
         }
@@ -268,7 +284,7 @@ void TrainerCardSignature_InitStrings(TrainerCardSignature *signature) {
     signature->titleString = String_New(40, HEAP_ID_39);
     signature->messageString = String_New(80, HEAP_ID_39);
     signature->penStyle = 0;
-    signature->state = 1;
+    signature->state = TRAINER_CARD_SIGNATURE_STATE_DRAW;
     ReadMsgDataIntoString(signature->msgData, msg_0252_00012, signature->doneString);
     ReadMsgDataIntoString(signature->msgData, msg_0252_00009, signature->titleString);
     signature->yesNoPrompt = YesNoPrompt_Create(HEAP_ID_39);
@@ -462,9 +478,9 @@ void TrainerCardSignature_HandleTouch(TrainerCardSignature *signature) {
 
     if (hit != -1) {
         if (hit == 0) {
-            if (signature->state == 1) {
+            if (signature->state == TRAINER_CARD_SIGNATURE_STATE_DRAW) {
                 TrainerCardSignature_PrintMessage(signature, msg_0252_00010);
-                signature->state = 2;
+                signature->state = TRAINER_CARD_SIGNATURE_STATE_WAIT_CONFIRM_MESSAGE;
                 TrainerCardSignature_SetDoneButtonPressed(&signature->doneButtonSprite, 1);
                 PlaySE(SEQ_SE_DP_DECIDE);
             }
@@ -535,7 +551,7 @@ int TrainerCardSignature_State_WaitConfirmMessage(TrainerCardSignature *signatur
     if (TrainerCardSignature_IsPrinterDone(signature->textPrinterId)) {
         TrainerCardSignature_ShowYesNoPrompt(signature->bgConfig, signature->yesNoPrompt);
         TrainerCardSignature_SetDoneButtonHidden(signature, 1);
-        signature->state = 3;
+        signature->state = TRAINER_CARD_SIGNATURE_STATE_CONFIRM_PROMPT;
     }
     TrainerCardSignature_UpdateCanvas(signature);
     return state;
@@ -551,9 +567,9 @@ int TrainerCardSignature_State_ConfirmPrompt(TrainerCardSignature *signature, in
         ClearFrameAndWindow2(&signature->messageWindow, TRUE);
         YesNoPrompt_Reset(signature->yesNoPrompt);
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 16, 1, HEAP_ID_39);
-        return 2;
+        return TRAINER_CARD_SIGNATURE_MAIN_WAIT_FADE_OUT;
     case YESNORESPONSE_NO:
-        signature->state = 4;
+        signature->state = TRAINER_CARD_SIGNATURE_STATE_PRINT_ERASE_MESSAGE;
         TrainerCardSignature_SetDoneButtonPressed(&signature->doneButtonSprite, 0);
         ClearFrameAndWindow2(&signature->messageWindow, TRUE);
         YesNoPrompt_Reset(signature->yesNoPrompt);
@@ -567,7 +583,7 @@ int TrainerCardSignature_State_ConfirmPrompt(TrainerCardSignature *signature, in
 int TrainerCardSignature_State_ErasePrompt(TrainerCardSignature *signature, int state) {
     switch (YesNoPrompt_HandleInput(signature->yesNoPrompt)) {
     case YESNORESPONSE_YES:
-        signature->state = 1;
+        signature->state = TRAINER_CARD_SIGNATURE_STATE_DRAW;
         ClearFrameAndWindow2(&signature->messageWindow, TRUE);
         YesNoPrompt_Reset(signature->yesNoPrompt);
         TrainerCardSignature_SetDoneButtonHidden(signature, 0);
@@ -575,7 +591,7 @@ int TrainerCardSignature_State_ErasePrompt(TrainerCardSignature *signature, int 
         CopyWindowToVram(&signature->canvasWindow);
         break;
     case YESNORESPONSE_NO:
-        signature->state = 1;
+        signature->state = TRAINER_CARD_SIGNATURE_STATE_DRAW;
         ClearFrameAndWindow2(&signature->messageWindow, TRUE);
         YesNoPrompt_Reset(signature->yesNoPrompt);
         TrainerCardSignature_SetDoneButtonHidden(signature, 0);
@@ -588,14 +604,14 @@ int TrainerCardSignature_State_ErasePrompt(TrainerCardSignature *signature, int 
 
 int TrainerCardSignature_State_PrintEraseMessage(TrainerCardSignature *signature, int state) {
     TrainerCardSignature_PrintMessage(signature, msg_0252_00011);
-    signature->state = 5;
+    signature->state = TRAINER_CARD_SIGNATURE_STATE_WAIT_ERASE_MESSAGE;
     TrainerCardSignature_UpdateCanvas(signature);
     return state;
 }
 
 int TrainerCardSignature_State_WaitEraseMessage(TrainerCardSignature *signature, int state) {
     if (TrainerCardSignature_IsPrinterDone(signature->textPrinterId)) {
-        signature->state = 6;
+        signature->state = TRAINER_CARD_SIGNATURE_STATE_ERASE_PROMPT;
         TrainerCardSignature_ShowYesNoPrompt(signature->bgConfig, signature->yesNoPrompt);
     }
     TrainerCardSignature_UpdateCanvas(signature);

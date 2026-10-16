@@ -51,10 +51,10 @@ struct VObj {
     VTable *vt;
 };
 
-extern u32 ov45_022577CC;
-extern u32 ov45_022551A0;
-extern u32 ov45_022577D0;
-extern u32 ov45_022551A4;
+extern u32 gLobbyEventDequeMapBufferMaxSizeSet;
+extern u32 gLobbyEventDequeMapBufferMaxSize;
+extern u32 gLobbyEventDequeMapMaxSizeSet;
+extern u32 gLobbyEventDequeMapMaxSize;
 extern unsigned char __lower_mapC[];
 
 void DWC_Free(int, void *, int);

@@ -56,6 +56,15 @@ typedef struct MailViewShiftedArgs {
 
 #define MAIL_VIEW_ICON(args, offset) (&((volatile MailViewShiftedArgs *)((u8 *)(args) + (offset)))->icon)
 
+enum MailViewState {
+    MAIL_VIEW_STATE_RESET_DISPLAY,
+    MAIL_VIEW_STATE_SETUP,
+    MAIL_VIEW_STATE_WAIT_FADE_IN,
+    MAIL_VIEW_STATE_RUN_SCREEN,
+    MAIL_VIEW_STATE_WAIT_FADE_OUT,
+    MAIL_VIEW_STATE_FREE,
+};
+
 enum MailViewScreen {
     MAIL_VIEW_SCREEN_READ,
     MAIL_VIEW_SCREEN_WRITE,
@@ -486,7 +495,7 @@ BOOL MailView_ConfirmQuit(MailView *mailView) {
 
 BOOL MailView_Run(MailView *mailView) {
     switch (mailView->state) {
-    case 0:
+    case MAIL_VIEW_STATE_RESET_DISPLAY:
         Main_SetVBlankIntrCB(NULL, NULL);
         HBlankInterruptDisable();
         GfGfx_DisableEngineAPlanes();
@@ -498,7 +507,7 @@ BOOL MailView_Run(MailView *mailView) {
         ResetVisibleHardwareWindows(PM_LCD_TOP);
         ResetVisibleHardwareWindows(PM_LCD_BOTTOM);
         break;
-    case 1:
+    case MAIL_VIEW_STATE_SETUP:
         if (!MailView_SetupGraphics(mailView)) {
             return FALSE;
         }
@@ -508,7 +517,7 @@ BOOL MailView_Run(MailView *mailView) {
         G2x_SetBlendAlpha_((u32)&reg_G2_BLDCNT, GX_BLEND_PLANEMASK_BG2, GX_BLEND_PLANEMASK_BG3, 28, 4);
         PaletteData_BeginPaletteFade(mailView->palette, PLTTBUF_MAIN_BG_F | PLTTBUF_MAIN_OBJ_F, 0xFFFF, -1, 16, 0, RGB_BLACK);
         break;
-    case 2:
+    case MAIL_VIEW_STATE_WAIT_FADE_IN:
         if (mailView->spriteManager != NULL) {
             SpriteSystem_DrawSprites(mailView->spriteManager);
         }
@@ -516,7 +525,7 @@ BOOL MailView_Run(MailView *mailView) {
             return FALSE;
         }
         break;
-    case 3:
+    case MAIL_VIEW_STATE_RUN_SCREEN:
         if (mailView->spriteManager != NULL) {
             SpriteSystem_DrawSprites(mailView->spriteManager);
         }
@@ -525,7 +534,7 @@ BOOL MailView_Run(MailView *mailView) {
         }
         PaletteData_BeginPaletteFade(mailView->palette, PLTTBUF_MAIN_BG_F | PLTTBUF_MAIN_OBJ_F, 0xFFFF, -1, 0, 16, RGB_BLACK);
         break;
-    case 4:
+    case MAIL_VIEW_STATE_WAIT_FADE_OUT:
         if (PaletteData_GetSelectedBuffersBitmask(mailView->palette) != 0) {
             if (mailView->spriteManager != NULL) {
                 SpriteSystem_DrawSprites(mailView->spriteManager);
@@ -540,7 +549,7 @@ BOOL MailView_Run(MailView *mailView) {
         GX_SetVisiblePlane(0);
         GXS_SetVisiblePlane(0);
         break;
-    case 5:
+    case MAIL_VIEW_STATE_FREE:
         if (MailView_FreeGraphics(mailView)) {
             return TRUE;
         }

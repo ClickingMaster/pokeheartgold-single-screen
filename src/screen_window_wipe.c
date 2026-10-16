@@ -13,20 +13,20 @@ BOOL ClockWipe_Update(ScreenFade *fade) {
     BOOL done = FALSE;
     ClockWipe *wipe = fade->effect;
     switch (fade->state) {
-    case 1:
+    case SCREEN_FADE_STATE_RUN:
         if (ClockWipe_Step(wipe) == TRUE) {
             ScreenFade_SetEndWindows(wipe->queued, wipe->regQueue, fade->screen);
             fade->state++;
         }
         break;
-    case 2:
+    case SCREEN_FADE_STATE_CLEANUP:
         ScreenWipeScanlines_Free(&wipe->scanlines);
         Heap_Free(fade->effect);
         fade->effect = NULL;
         fade->state++;
         done = TRUE;
         break;
-    case 3:
+    case SCREEN_FADE_STATE_DONE:
         done = TRUE;
         break;
     default:
