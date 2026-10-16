@@ -391,8 +391,8 @@ BOOL WifiSetupWcm_Init(void (*callback)(int event, int arg), void *allocation, u
     cursor2 &= ~0x1F;
     gWifiSetupWcm.config->buffer = (void *)cursor2;
     gWifiSetupWcm.config->bufferSize = (u32)allocation + size - (u32)gWifiSetupWcm.config->buffer;
-    gWifiSetupWcm.config->unk_0C = 0;
-    gWifiSetupWcm.config->unk_00 = 3;
+    gWifiSetupWcm.config->apListMode = 0;
+    gWifiSetupWcm.config->dmaNo = 3;
     gWifiSetupWcm.callback = callback;
     if (gWifiSetupWcm.state == 0) {
         if (WCM_Init(gWifiSetupWcm.wcmWork, 0x2300) != 0) {

@@ -18,10 +18,10 @@ typedef struct WifiSetupWcmEvent {
 
 // Start-up parameters handed to WCM_StartupAsync
 typedef struct WifiSetupWcmConfig {
-    u32 unk_00;     // 0x00, always 3
+    u32 dmaNo;      // 0x00, always 3
     void *buffer;   // 0x04, rest of the caller's allocation
     u32 bufferSize; // 0x08
-    u32 unk_0C;     // 0x0C, always 0
+    u32 apListMode; // 0x0C, always 0
 } WifiSetupWcmConfig;
 
 // gWifiSetupWcm (0x28 bytes); followed by its search filter buffers gWifiSetupWcmSearchBssid (BSSID) and

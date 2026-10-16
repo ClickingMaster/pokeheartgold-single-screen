@@ -159,8 +159,8 @@ typedef struct Field2DMapCell {
 } Field2DMapCell;
 
 typedef struct Field2DBgLayerTemplate {
-    u8 unk_0;
-    u8 unk_1;
+    u8 screen;
+    u8 bgLayer;
     u8 colorMode;
     u8 screenBase;
     u8 charBase;

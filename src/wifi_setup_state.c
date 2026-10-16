@@ -34,8 +34,8 @@ void WifiSetup_InitState(WifiSetupRequest *request) {
     WifiSetup_MemFill(gWifiSetupPeerAddress, 0, 8);
     gWifiSetupState.error = 1;
     WifiSetup_MemFill(ov13_0224CFBC, 0, 0x1C);
-    gWifiSetupState.unk_24 = request->key;
-    gWifiSetupState.unk_28 = request->keyLength;
+    gWifiSetupState.key = request->key;
+    gWifiSetupState.keyLength = request->keyLength;
     gWifiSetupState.requestedMask = request->requestMask & 0xF;
     ov13_0224CFB8[0x1D] = request->unk_002;
     gWifiSetupState.receivedMask = 0;

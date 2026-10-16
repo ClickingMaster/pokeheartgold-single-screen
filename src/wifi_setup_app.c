@@ -67,7 +67,7 @@ void WifiSetupApp_StartAossClient(void) {
     gWifiSetupClient.request->receiveRetries = 1;
     gWifiSetupClient.request->receiveDelay = -1;
     gWifiSetupClient.request->receiveTimeout = -1;
-    OS_GetMacAddress(gWifiSetupClient.request->unk_110);
+    OS_GetMacAddress(gWifiSetupClient.request->macAddress);
     if (WifiSetup_Startup(WifiSetupApp_AossClientAlloc, WifiSetupApp_AossClientFree)) {
         OS_Terminate();
     }
@@ -263,30 +263,30 @@ void WifiSetupApp_SetStateFunc(WifiSetupAppStateFunc func) {
 }
 
 void WifiSetupApp_SetTransition(int a, int b) {
-    gWifiSetupApp.unk_10 = a;
-    gWifiSetupApp.unk_14 = b;
+    gWifiSetupApp.bannerMode = a;
+    gWifiSetupApp.buttonBarMode = b;
 }
 
 void WifiSetupApp_GetTransition(int *a, int *b) {
     if (a != NULL) {
-        *a = gWifiSetupApp.unk_10;
+        *a = gWifiSetupApp.bannerMode;
     }
     if (b != NULL) {
-        *b = gWifiSetupApp.unk_14;
+        *b = gWifiSetupApp.buttonBarMode;
     }
 }
 
 void WifiSetupApp_SetScreenArgs(int a, int b) {
-    gWifiSetupApp.unk_18 = a;
-    gWifiSetupApp.unk_1C = b;
+    gWifiSetupApp.screenArg0 = a;
+    gWifiSetupApp.screenArg1 = b;
 }
 
 void WifiSetupApp_GetScreenArgs(int *a, int *b) {
     if (a != NULL) {
-        *a = gWifiSetupApp.unk_18;
+        *a = gWifiSetupApp.screenArg0;
     }
     if (b != NULL) {
-        *b = gWifiSetupApp.unk_1C;
+        *b = gWifiSetupApp.screenArg1;
     }
 }
 

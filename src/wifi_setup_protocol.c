@@ -251,7 +251,7 @@ int WifiSetup_HandleJoinReply(int state, void *packet, int *counter, void *conte
         (*counter)++;
         return state;
     }
-    gWifiSetupState.unk_00 = WifiSetup_IsEncryptionRequested(WifiSetup_NetToHost16(U16_AT(header, 0xC)));
+    gWifiSetupState.encryptBody = WifiSetup_IsEncryptionRequested(WifiSetup_NetToHost16(U16_AT(header, 0xC)));
     *counter = 0;
     return 1;
 }
@@ -799,7 +799,7 @@ int WifiSetup_SendSettingsRequest(void *unused, const u8 *src, void *arg) {
     *(u32 *)(packet + 4) = gWifiSetupState.requestedMask;
     *(u32 *)(packet + 4) = WifiSetup_HostToNet32(*(u32 *)(packet + 4));
     header.length = 8;
-    WifiSetup_WriteBody(gWifiSetupState.unk_00, work + 0x18, packet, &header.length, (u16 *)&header.flag, &header);
+    WifiSetup_WriteBody(gWifiSetupState.encryptBody, work + 0x18, packet, &header.length, (u16 *)&header.flag, &header);
     WifiSetup_MemCopy(data, src + 8, 8);
     size = WifiSetup_Scramble(data, 8, sStr_MELCO, 6);
     if (size != 0) {
@@ -835,8 +835,8 @@ int WifiSetup_BuildJoinPayload(u8 *dst) {
 
     dst[0] = (s8)ov13_0224CFB8[0x1D];
     dst[1] = 1;
-    sourceLen = (s16)gWifiSetupState.unk_28;
-    WifiSetup_MemCopy(dst + 6, gWifiSetupState.unk_24, sourceLen);
+    sourceLen = (s16)gWifiSetupState.keyLength;
+    WifiSetup_MemCopy(dst + 6, gWifiSetupState.key, sourceLen);
     *(u16 *)(dst + 2) = WifiSetup_HostToNet16((u16)sourceLen);
     secondLen = (s16)(sourceLen + 6);
     secondLen = (s16)(((secondLen + 1) / 2) * 2);

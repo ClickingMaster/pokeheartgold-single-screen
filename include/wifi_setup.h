@@ -17,7 +17,7 @@ typedef struct WifiSetupRuntime {
 } WifiSetupRuntime;
 
 typedef struct WifiSetupState {
-    int unk_00;           // 0x00
+    int encryptBody;      // 0x00
     void *connection;     // 0x04
     BOOL randomSeeded;    // 0x08
     int *status;          // 0x0C
@@ -26,8 +26,8 @@ typedef struct WifiSetupState {
     u32 randomState;      // 0x18
     u32 randomMultiplier; // 0x1C
     u32 randomIncrement;  // 0x20
-    void *unk_24;         // 0x24
-    int unk_28;           // 0x28
+    void *key;            // 0x24
+    int keyLength;        // 0x28
     u32 requestedMask;    // 0x2C, settings the caller asked for
     u32 receivedMask;     // 0x30, settings received so far
     u32 address;          // 0x34
@@ -46,7 +46,7 @@ typedef struct WifiSetupRequest {
     s16 receiveRetries; // 0x10A
     s16 receiveDelay;   // 0x10C
     s16 receiveTimeout; // 0x10E
-    u8 unk_110[6];      // 0x110
+    u8 macAddress[6];   // 0x110
     u8 error;           // 0x116
     u8 result[0x154];   // 0x117
 } WifiSetupRequest;

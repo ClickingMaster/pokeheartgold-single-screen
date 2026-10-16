@@ -342,8 +342,8 @@ Field2DBgLayer *Field2DBgLayer_New(G2dRenderer *g2dRenderer, BgConfig *bgConfig,
     memset(layer, 0, sizeof(Field2DBgLayer));
     layer->g2dRenderer = g2dRenderer;
     layer->bgConfig = bgConfig;
-    layer->screen = template->unk_0;
-    layer->bgLayer = template->unk_1;
+    layer->screen = template->screen;
+    layer->bgLayer = template->bgLayer;
     Field2DBgLayer_InitBg(layer->bgConfig, layer->bgLayer, template);
     layer->screenFile = GfGfxLoader_GetScrnData((NarcId)template->narcId, template->fileId, template->compressed, &layer->nnsg2dScreenData, heapID);
     return layer;

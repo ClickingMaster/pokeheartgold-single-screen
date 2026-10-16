@@ -94,8 +94,8 @@ typedef struct GlobalTerminalSocketAddress {
 } GlobalTerminalSocketAddress;
 
 typedef struct GlobalTerminalSocketHostEntry {
-    int unk_00;
-    int unk_04;
+    int name;
+    int aliases;
     void *unk_08;
     u32 **addresses;
 } GlobalTerminalSocketHostEntry;

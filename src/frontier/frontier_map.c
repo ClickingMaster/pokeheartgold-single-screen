@@ -443,7 +443,7 @@ void FrontierMap_InitMapObjects(FrontierMap *map, u32 mapId, void *profile) {
     }
     if (FrontierMap_GetParam(mapId, MAP_PARAM_BG2_SCREEN) != FRONTIER_MAP_NO_ID) {
         layerTemplate.fileId = FrontierMap_GetParam(mapId, MAP_PARAM_BG2_SCREEN);
-        layerTemplate.unk_1 = GF_BG_LYR_MAIN_2;
+        layerTemplate.bgLayer = GF_BG_LYR_MAIN_2;
         layerTemplate.screenBase = GX_BG_SCRBASE_0x0800;
         layerTemplate.charBase = GX_BG_CHARBASE_0x20000;
         layerTemplate.priority = 1;

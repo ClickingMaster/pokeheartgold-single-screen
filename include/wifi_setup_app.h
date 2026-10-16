@@ -31,10 +31,10 @@ typedef struct WifiSetupApp {
     void *heap;                      // 0x04, work memory handed in by the caller
     WifiSetupAppFlags flags;         // 0x08
     WifiSetupAppStateFunc stateFunc; // 0x0C, called once per frame
-    int unk_10;                      // 0x10
-    int unk_14;                      // 0x14
-    int unk_18;                      // 0x18
-    int unk_1C;                      // 0x1C
+    int bannerMode;                  // 0x10
+    int buttonBarMode;               // 0x14
+    int screenArg0;                  // 0x18
+    int screenArg1;                  // 0x1C
 } WifiSetupApp;
 
 typedef struct WifiSetupClient {
@@ -72,8 +72,8 @@ typedef struct WifiSetupSessionParams {
     const char *filePath;
     const u16 *title;
     const u16 *description;
-    int unk_0C;
-    int unk_10;
+    int iconCharPath;
+    int iconPalettePath;
     u32 ggid;
     u8 languageCode; // the session's copy holds 2 here
 } WifiSetupSessionParams;

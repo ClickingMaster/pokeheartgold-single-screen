@@ -340,8 +340,8 @@ void WifiClubRoom_DeleteDrawers(WifiClubRoom *room) {
 
 void WifiClubRoom_CreateMapBg(WifiClubRoom *room, enum HeapID heapID, NARC *narc, s32 mapIndex) {
     Field2DBgLayerTemplate bgLayerTemplate = {
-        .unk_0 = 0,
-        .unk_1 = 0,
+        .screen = 0,
+        .bgLayer = 0,
         .colorMode = GX_BG_COLORMODE_16,
         .screenBase = GX_BG_SCRBASE_0xe000,
         .charBase = GX_BG_CHARBASE_0x00000,

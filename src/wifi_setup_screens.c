@@ -27,7 +27,7 @@ typedef struct WifiSetupClientStatus {
 
 // View of the setup client's result block (WifiSetupResult, 0xE8 bytes).
 typedef struct WifiSetupClientResult {
-    u8 unk_00[0x20];
+    u8 ssid[0x20];
     int securityType;
     int unk_24;
     u8 unk_28[0xC0];

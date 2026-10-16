@@ -81,7 +81,7 @@ struct EasyChatApp {
     u8 listMode;                          // 0x6B, 0: categories, 1: initials
     u8 dragging;                          // 0x6C
     s16 dragX;                            // 0x6E
-    u8 unk_70[2];                         // 0x70
+    u8 yesNo[2];                          // 0x70
     MenuInputState menuInputState;        // 0x74
     int unk_78;                           // 0x78
 }; // size: 0x7C
@@ -1461,7 +1461,7 @@ void EasyChatApp_SubHandler_ConfirmFinish(EasyChatApp *app, u32 *state) {
     case 0:
         if (EasyChatApp_HasChanged(app) || EasyChatArgs_GetAlwaysConfirm(app->args)) {
             if (EasyChatApp_IsComplete(app)) {
-                EasyChatYesNo_Set(app->unk_70, 1, 0);
+                EasyChatYesNo_Set(app->yesNo, 1, 0);
                 EasyChatAppView_StartCommand(app->view, 21);
                 *state = 1;
             } else {
@@ -1507,7 +1507,7 @@ void EasyChatApp_SubHandler_ConfirmFinish(EasyChatApp *app, u32 *state) {
 void EasyChatApp_SubHandler_ConfirmQuit(EasyChatApp *app, u32 *state) {
     switch (*state) {
     case 0:
-        EasyChatYesNo_Set(app->unk_70, 1, 1);
+        EasyChatYesNo_Set(app->yesNo, 1, 1);
         EasyChatAppView_StartCommand(app->view, 22);
         *state = 1;
         break;
@@ -1665,5 +1665,5 @@ u32 EasyChatApp_GetFrame(EasyChatApp *app) {
 }
 
 u8 EasyChatApp_GetYesNoCursor(EasyChatApp *app) {
-    return EasyChatYesNo_GetCursor(app->unk_70);
+    return EasyChatYesNo_GetCursor(app->yesNo);
 }

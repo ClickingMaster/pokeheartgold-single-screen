@@ -809,8 +809,8 @@ void WifiSetupShare_Init(WifiSetupShare *share, const WifiSetupSessionParams *pa
     gWifiSetupShare->params.filePath = params->filePath;
     gWifiSetupShare->params.title = params->title;
     gWifiSetupShare->params.description = params->description;
-    gWifiSetupShare->params.unk_0C = params->unk_0C;
-    gWifiSetupShare->params.unk_10 = params->unk_10;
+    gWifiSetupShare->params.iconCharPath = params->iconCharPath;
+    gWifiSetupShare->params.iconPalettePath = params->iconPalettePath;
     gWifiSetupShare->params.ggid = params->ggid;
     gWifiSetupShare->languageCode = params->languageCode;
     gWifiSetupShare->params.languageCode = 2;

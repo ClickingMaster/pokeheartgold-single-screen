@@ -369,8 +369,8 @@ int WifiSetupLink_Init(void (*eventCallback)(u32 event, int arg), u8 *buffer, in
     cursor = (cursor + 223) & ~31;
     ov13_0224DF30.wcmConfig->buffer = (void *)cursor;
     ov13_0224DF30.wcmConfig->bufferSize = (buffer + size) - (u8 *)ov13_0224DF30.wcmConfig->buffer;
-    ov13_0224DF30.wcmConfig->unk_0C = 0;
-    ov13_0224DF30.wcmConfig->unk_00 = 3;
+    ov13_0224DF30.wcmConfig->apListMode = 0;
+    ov13_0224DF30.wcmConfig->dmaNo = 3;
     gWifiSetupLinkEventCallback = eventCallback;
     if (ov13_0224DF30.wcmState == 0) {
         if (WCM_Init(ov13_0224DF30.wcmWork, 8960) != 0) {
