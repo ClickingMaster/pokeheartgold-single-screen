@@ -429,7 +429,7 @@ void PokewalkerIr_BeginTransfer(void *data, u32 address, int size) {
     ov112_021FFB24.address = address;
     ov112_021FFB24.addressStart = address;
     ov112_021FFB24.remaining = size;
-    stored = *(volatile u16 *)&ov112_021FFB24.remaining;
+    stored = ov112_021FFB24.remaining;
     ov112_021FFB24.size = stored;
     ov112_021FFB24.chunk = 0;
     ov112_021FFB24.numChunks = (size + 0x7F) / 128;

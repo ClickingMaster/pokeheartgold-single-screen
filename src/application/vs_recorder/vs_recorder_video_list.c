@@ -701,7 +701,7 @@ void VsRecorder_CreateSlotButtons(VsRecorderWork *work) {
     VsRecorderSlotButtonTable anims = sVsRecorderSaveSlotAnims;
 
     struct {
-        volatile int y;
+        int y;
         int *msgId;
         VsRecorderGfx *volatile gfx;
     } vars;

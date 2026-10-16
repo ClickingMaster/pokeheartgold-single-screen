@@ -2175,7 +2175,7 @@ int NintendoWfc_RequestLeadersDownload(NintendoWfcConnect *wfc) {
 int NintendoWfc_WaitLeadersDownload(NintendoWfcConnect *wfc) {
     if (NintendoWfcHttp_IsDone()) {
         int result = NintendoWfcHttp_GetResult();
-        *(volatile int *)&wfc->timeoutCounter = 0;
+        wfc->timeoutCounter = 0;
         switch (result) {
         case 0:
             // BattleRoomDownload_SetLeaders takes u32; rank and room are passed as u8 values
@@ -2216,8 +2216,8 @@ int NintendoWfc_WaitLeadersDownload(NintendoWfcConnect *wfc) {
             break;
         }
     } else {
-        ++*(volatile int *)&wfc->timeoutCounter;
-        if (*(volatile int *)&wfc->timeoutCounter == 3600) {
+        ++wfc->timeoutCounter;
+        if (wfc->timeoutCounter == 3600) {
             CommState_ShowRestartErrorAndHalt();
         }
     }
@@ -2400,8 +2400,8 @@ int NintendoWfc_Disconnect(NintendoWfcConnect *wfc) {
         }
         break;
     default:
-        (*(volatile s16 *)&wfc->subTimer)++;
-        if (*(volatile s16 *)&wfc->subTimer > 30) {
+        wfc->subTimer++;
+        if (wfc->subTimer > 30) {
             NintendoWfc_SetNextMode(wfc, 0, 0);
             wfc->state = NINTENDO_WFC_STATE_START_EXIT;
         }

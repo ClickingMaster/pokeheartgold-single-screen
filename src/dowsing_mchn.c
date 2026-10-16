@@ -91,10 +91,10 @@ typedef struct DowsingMchn {
 
 // Sprite parameter block of DowsingMchn_CreateSprite on the stack.
 typedef struct DowsingMchnSpriteParams {
-    volatile u8 x;
-    volatile u8 y;
-    volatile u8 drawPriority;
-    volatile u8 animSeq;
+    u8 x;
+    u8 y;
+    u8 drawPriority;
+    u8 animSeq;
 } DowsingMchnSpriteParams;
 
 // Defined in field/bottom_screen_app.c; its header does not declare these.

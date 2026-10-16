@@ -71,7 +71,7 @@ typedef struct TradeSequenceSendBounce {
     int bounces;                    // 0x20
     BOOL landed;                    // 0x24
     int frames;                     // 0x28
-    volatile s16 spin;              // 0x2C
+    s16 spin;              // 0x2C
 } TradeSequenceSendBounce;          // size: 0x30
 
 typedef BOOL (*TradeSequenceSendStateFunc)(TradeSequenceSend *send, u32 *state);

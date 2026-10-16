@@ -67,7 +67,7 @@ typedef struct EasyChatViewCommand {
     EasyChatApp *app;      // 0x04
     ECMenu *menu;          // 0x08
     u32 command;           // 0x0C
-    volatile u32 slot;     // 0x10
+    u32 slot;     // 0x10
     u32 state;             // 0x14
 } EasyChatViewCommand;     // size: 0x18
 

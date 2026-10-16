@@ -1329,7 +1329,7 @@ int PlazaGamePlayerInfo_HasDifferentCountries(const PlazaGameRoster *roster, con
     result = 0;
     i = 0;
     // The count is reloaded every iteration.
-    for (; i < *(const volatile u8 *)&roster->count - 1; i++) {
+    for (; i < roster->count - 1; i++) {
         int next = countries[i + 1];
         int current = countries[i];
         if (current == next && current != 0 && next != 0) {
@@ -2382,7 +2382,7 @@ BOOL PlazaGameResults_UpdatePlayers(PlazaGameResults *results) {
 
     allDone = TRUE;
     i = 0;
-    if (i < *(volatile u8 *)&results->roster.count) {
+    if (i < results->roster.count) {
         player = results->players;
         // The sprite check walks its own pointer over the rows.
         row = (u8 *)results;
@@ -2401,7 +2401,7 @@ BOOL PlazaGameResults_UpdatePlayers(PlazaGameResults *results) {
             player++;
             scrollPlayer++;
             i++;
-        } while (i < *(volatile u8 *)&results->roster.count);
+        } while (i < results->roster.count);
     }
     return allDone;
 }

@@ -255,10 +255,9 @@ int GlobalTerminalSocket_Start(char *host, int port, GlobalTerminalNetLogin *log
     }
     GlobalTerminalSocket_InitMutex();
     strcpy(sGlobalTerminalSocketHost, host);
-    // volatile keeps these stores in this order
-    *(volatile u16 *)&sGlobalTerminalSocketSettings.port = port;
-    *(u8 *volatile *)&sGlobalTerminalSocket.request = NULL;
-    *(volatile int *)&sGlobalTerminalSocket.socket = -1;
+    sGlobalTerminalSocketSettings.port = port;
+    sGlobalTerminalSocket.request = NULL;
+    sGlobalTerminalSocket.socket = -1;
     GlobalTerminalSocket_ClearRequest();
     return 1;
 }

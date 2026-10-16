@@ -1053,7 +1053,7 @@ int NintendoWfcUnused_RequestInfo(NintendoWfcUnused *wfc) {
 int NintendoWfcUnused_WaitInfo(NintendoWfcUnused *wfc) {
     if (NintendoWfcHttp_IsDone()) {
         int result = NintendoWfcHttp_GetResult();
-        *(volatile int *)&wfc->timeoutCounter = 0;
+        wfc->timeoutCounter = 0;
         switch (result) {
         case 0:
             NintendoWfcUnused_HideWaitingIcon(wfc);
@@ -1098,8 +1098,8 @@ int NintendoWfcUnused_WaitInfo(NintendoWfcUnused *wfc) {
             break;
         }
     } else {
-        (*(volatile int *)&wfc->timeoutCounter)++;
-        if (*(volatile int *)&wfc->timeoutCounter == 3600) {
+        wfc->timeoutCounter++;
+        if (wfc->timeoutCounter == 3600) {
             CommState_ShowRestartErrorAndHalt();
         }
     }
@@ -1214,7 +1214,7 @@ int NintendoWfcUnused_RequestRoomCount(NintendoWfcUnused *wfc) {
 int NintendoWfcUnused_WaitRoomCount(NintendoWfcUnused *wfc) {
     if (NintendoWfcHttp_IsDone()) {
         int result = NintendoWfcHttp_GetResult();
-        *(volatile int *)&wfc->timeoutCounter = 0;
+        wfc->timeoutCounter = 0;
         switch (result) {
         case -1:
             wfc->httpResult = result;
@@ -1252,8 +1252,8 @@ int NintendoWfcUnused_WaitRoomCount(NintendoWfcUnused *wfc) {
         }
         NintendoWfcUnused_HideWaitingIcon(wfc);
     } else {
-        (*(volatile int *)&wfc->timeoutCounter)++;
-        if (*(volatile int *)&wfc->timeoutCounter == 3600) {
+        wfc->timeoutCounter++;
+        if (wfc->timeoutCounter == 3600) {
             CommState_ShowRestartErrorAndHalt();
         }
     }
@@ -1430,7 +1430,7 @@ int NintendoWfcUnused_RequestUpload(NintendoWfcUnused *wfc) {
 int NintendoWfcUnused_WaitUpload(NintendoWfcUnused *wfc) {
     if (NintendoWfcHttp_IsDone()) {
         int result = NintendoWfcHttp_GetResult();
-        *(volatile int *)&wfc->timeoutCounter = 0;
+        wfc->timeoutCounter = 0;
         switch (result) {
         case 0:
             FrontierData_FlagAction(wfc->args->frontierData, 5, 2);
@@ -1470,8 +1470,8 @@ int NintendoWfcUnused_WaitUpload(NintendoWfcUnused *wfc) {
             break;
         }
     } else {
-        (*(volatile int *)&wfc->timeoutCounter)++;
-        if (*(volatile int *)&wfc->timeoutCounter == 3600) {
+        wfc->timeoutCounter++;
+        if (wfc->timeoutCounter == 3600) {
             CommState_ShowRestartErrorAndHalt();
         }
     }
@@ -1509,18 +1509,18 @@ int NintendoWfcUnused_StartLeadersRankInput(NintendoWfcUnused *wfc) {
 // Chooses the rank (1-10) with UP/DOWN; A: continue, B: back.
 int NintendoWfcUnused_HandleLeadersRankInput(NintendoWfcUnused *wfc) {
     if (gSystem.newAndRepeatedKeys & PAD_KEY_UP) {
-        (*(volatile u32 *)&wfc->rank)++;
+        wfc->rank++;
         if (*(volatile int *)&wfc->rank > 10) {
-            *(volatile u32 *)&wfc->rank = 1;
+            wfc->rank = 1;
         }
-        NintendoWfcUnused_PrintNumber(&wfc->rankWindow, wfc->rankString, *(volatile u32 *)&wfc->rank, 2);
+        NintendoWfcUnused_PrintNumber(&wfc->rankWindow, wfc->rankString, wfc->rank, 2);
         PlaySE(SEQ_SE_DP_SELECT);
     } else if (gSystem.newAndRepeatedKeys & PAD_KEY_DOWN) {
-        (*(volatile u32 *)&wfc->rank)--;
+        wfc->rank--;
         if (*(volatile int *)&wfc->rank < 1) {
-            *(volatile u32 *)&wfc->rank = 10;
+            wfc->rank = 10;
         }
-        NintendoWfcUnused_PrintNumber(&wfc->rankWindow, wfc->rankString, *(volatile u32 *)&wfc->rank, 2);
+        NintendoWfcUnused_PrintNumber(&wfc->rankWindow, wfc->rankString, wfc->rank, 2);
         PlaySE(SEQ_SE_DP_SELECT);
     } else if (gSystem.newKeys & PAD_BUTTON_A) {
         NintendoWfcUnused_SetArrowsVisible(wfc, 0, FALSE);
@@ -1557,18 +1557,18 @@ int NintendoWfcUnused_StartLeadersRoomInput(NintendoWfcUnused *wfc) {
 // Chooses the room (1-roomCount) with UP/DOWN; A: continue, B: back.
 int NintendoWfcUnused_HandleLeadersRoomInput(NintendoWfcUnused *wfc) {
     if (gSystem.newAndRepeatedKeys & PAD_KEY_UP) {
-        (*(volatile u32 *)&wfc->room)++;
-        if (*(volatile int *)&wfc->room == wfc->roomCount + 1) {
-            *(volatile u32 *)&wfc->room = 1;
+        wfc->room++;
+        if (wfc->room == wfc->roomCount + 1) {
+            wfc->room = 1;
         }
-        NintendoWfcUnused_PrintNumber(&wfc->roomWindow, wfc->roomString, *(volatile u32 *)&wfc->room, 3);
+        NintendoWfcUnused_PrintNumber(&wfc->roomWindow, wfc->roomString, wfc->room, 3);
         PlaySE(SEQ_SE_DP_SELECT);
     } else if (gSystem.newAndRepeatedKeys & PAD_KEY_DOWN) {
-        (*(volatile u32 *)&wfc->room)--;
+        wfc->room--;
         if (*(volatile int *)&wfc->room < 1) {
-            *(volatile u32 *)&wfc->room = wfc->roomCount;
+            wfc->room = wfc->roomCount;
         }
-        NintendoWfcUnused_PrintNumber(&wfc->roomWindow, wfc->roomString, *(volatile u32 *)&wfc->room, 3);
+        NintendoWfcUnused_PrintNumber(&wfc->roomWindow, wfc->roomString, wfc->room, 3);
         PlaySE(SEQ_SE_DP_SELECT);
     } else if (gSystem.newKeys & PAD_BUTTON_A) {
         NintendoWfcUnused_SetArrowsVisible(wfc, 0, FALSE);

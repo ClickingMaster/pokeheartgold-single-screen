@@ -1398,7 +1398,7 @@ int AGB_GetBoxMonAbility(AgbBoxMon *agbMon, BoxPokemon *boxMon) {
 void MigrateBoxMon(AgbBoxMon *agbMon, BoxPokemon *boxMon) {
     u32 lock;
     u32 data;
-    volatile u32 language;
+    u32 language;
     u8 srcString[12];
     u16 dstString[12];
     int j;

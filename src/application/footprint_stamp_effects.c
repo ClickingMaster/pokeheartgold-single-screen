@@ -659,13 +659,12 @@ BOOL FootprintStamp_UpdateFall(FootprintStampBoard *board, FootprintStampObj *st
         if (x < -0x50000 || x > 0x50000 || y > 0x30000 || y < -0x30000) {
             return TRUE;
         }
-        // the angle is re-read from memory each time (volatile)
-        angle = *(volatile fx32 *)&fall->angle + 0x8000;
-        *(volatile fx32 *)&fall->angle = angle;
+        angle = fall->angle + 0x8000;
+        fall->angle = angle;
         if (angle >= (360 << FX32_SHIFT)) {
-            *(volatile fx32 *)&fall->angle -= 360 << FX32_SHIFT;
+            fall->angle -= 360 << FX32_SHIFT;
         }
-        sine = GF_SinDegFX32(*(volatile fx32 *)&fall->angle);
+        sine = GF_SinDegFX32(fall->angle);
         offset = (fx32)(((s64)sine * 0x8000 + 0x800) >> FX32_SHIFT);
         ModelInstance_SetPosition(&stamp->instance, fall->baseX + offset, y - FX32_ONE, z);
         break;

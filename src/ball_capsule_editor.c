@@ -1064,7 +1064,7 @@ void BallCapsuleEditor_SetButtonLabelsDrawFlag(BallCapsuleEditor *editor, BOOL d
 
 void BallCapsuleEditor_CreateButtonLabel(BallCapsuleEditor *editor, int index, int x, int y, int palette) {
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0011_bin, HEAP_ID_52);
-    String *volatile string = NewString_ReadMsgData(msgData, index + msg_0011_00005);
+    String *string = NewString_ReadMsgData(msgData, index + msg_0011_00005);
     TextOBJTemplate template;
     Window window;
     int chars;
