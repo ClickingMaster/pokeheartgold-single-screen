@@ -381,7 +381,7 @@ void PokeathlonRingDrop_InitMemberParams(PokeathlonCourseData *course) {
         participant = (u8)i;
         for (; member < RING_DROP_TEAM_SIZE; member++) {
             u8 *stats = PokeathlonCourse_GetMonStats(course, i, member);
-            PokeathlonRingDropMemberParams *params = ((PokeathlonRingDropMemberParams * (*)(PokeathlonCourseData *, u8, u8)) PokeathlonRingDrop_GetMemberParams)(course, participant, (u8)member);
+            PokeathlonRingDropMemberParams *params = PokeathlonRingDrop_GetMemberParams(course, participant, member);
             if (stats[0] >= 5) {
                 GF_AssertFail();
             }
@@ -407,7 +407,7 @@ void PokeathlonRingDrop_InitMemberParams(PokeathlonCourseData *course) {
 
 #pragma force_active reset
 
-PokeathlonRingDropMemberParams *PokeathlonRingDrop_GetMemberParams(PokeathlonCourseData *course, u32 participant, u32 member) {
+PokeathlonRingDropMemberParams *PokeathlonRingDrop_GetMemberParams(PokeathlonCourseData *course, u8 participant, u8 member) {
     u8 *params;
     u32 p = participant;
     u32 m = member;

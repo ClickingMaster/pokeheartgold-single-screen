@@ -820,8 +820,7 @@ void WiFiPlazaMsgWindow_HideWaitingIcon(WiFiPlazaMsgWindow *window) {
 void WiFiPlazaMsgWindow_DeleteWaitingIcon(WiFiPlazaMsgWindow *window) {
     WaitingIcon *icon = window->waitingIcon;
     if (icon != NULL) {
-        // render_window.h declares it without its argument
-        ((void (*)(WaitingIcon *))WaitingIcon_DeleteWithoutRestore)(icon);
+        WaitingIcon_DeleteWithoutRestore(icon);
         window->waitingIcon = NULL;
     }
 }

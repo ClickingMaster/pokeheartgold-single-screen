@@ -297,10 +297,8 @@ BOOL PokeathlonPennantCapture_State_End(PokeathlonCourseData *course, u8 *state)
     return TRUE;
 }
 
-// The host step was built against declarations taking non-const 3D vectors (AddPoint2D adds only x and y);
-// with the real prototypes the velocity address is computed once more.
-#define AddVecXY     ((void (*)(VecFx32 *, VecFx32 *, VecFx32 *))PokeathlonPennantCapture_AddPoint2D)
-#define GetDirection ((int (*)(VecFx32 *))PokeathlonPennantCapture_GetDirection)
+// AddPoint2D on 3D vectors: adds x and y only.
+#define AddVecXY ((void (*)(VecFx32 *, VecFx32 *, VecFx32 *))PokeathlonPennantCapture_AddPoint2D)
 
 static inline void ResetDrag(PokeathlonPennantCapturePlayer *player) {
     player->holdTime = 0;
@@ -436,7 +434,7 @@ void PokeathlonPennantCapture_HostStep(PokeathlonCourseData *course) {
                     AddVecXY(&self->players[i].velocity, &delta, &work->players[i].velocity);
                     result = delta;
                 }
-                work->players[i].direction = GetDirection(&self->players[i].velocity);
+                work->players[i].direction = PokeathlonPennantCapture_GetDirection(&self->players[i].velocity);
                 work->flicked = 1;
                 work->flickX = work->players[i].position.x / FX32_ONE;
                 work->flickY = work->players[i].position.y / FX32_ONE;

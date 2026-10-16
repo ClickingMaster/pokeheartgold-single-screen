@@ -104,9 +104,6 @@ NarcId MoveCategoryIcon_GetNarc(u32 category); // the definition takes no argume
 #define Sprite_SetFlipMode_Int(sprite, flip) ((void (*)(Sprite *, int))Sprite_SetFlipMode)(sprite, flip)
 #define GetRibbonAttr_Int(ribbon, attr)      ((u32(*)(int, RibbonAttr))GetRibbonAttr)(ribbon, attr)
 
-// PokemonSummary_SetPokeathlonStatStars passes the star color as an int.
-#define PokemonSummary_GetPokeathlonStarStates_Int(states, maxStars, baseStars, color, modifier) ((int (*)(u8 *, int, int, int, int))PokemonSummary_GetPokeathlonStarStates)(states, maxStars, baseStars, color, modifier)
-
 // The Pokeathlon star counts as CalcBoxmonPokeathlonStars writes them (struct PokeathlonPerformanceStars).
 typedef struct PokeathlonStarCounts {
     u16 stat0 : 3;
@@ -1697,15 +1694,14 @@ void PokemonSummary_ShowSelectedMoveInfo(PokemonSummary *summary) {
     }
 }
 
-// Called with the move as an int (and ClearMoveInfo with it too).
-#define PokemonSummary_ClearMoveInfo_Int(summary, move)         ((void (*)(PokemonSummary *, int))PokemonSummary_ClearMoveInfo)(summary, move)
+// Called with the move as an int.
 #define PokemonSummary_PrintMoveInfo_Int(summary, move)         ((void (*)(PokemonSummary *, int))PokemonSummary_PrintMoveInfo)(summary, move)
 #define PokemonSummary_SetMoveCategorySprite_Int(summary, move) ((void (*)(PokemonSummary *, int))PokemonSummary_SetMoveCategorySprite)(summary, move)
 
 // -1: clear it.
 void PokemonSummary_ShowMoveInfo(PokemonSummary *summary, int move) {
     if (move == -1) {
-        PokemonSummary_ClearMoveInfo_Int(summary, move);
+        PokemonSummary_ClearMoveInfo(summary);
         thunk_Sprite_SetDrawFlag(summary->sprites[18], FALSE);
         return;
     }
@@ -2313,7 +2309,7 @@ void PokemonSummary_InitShinyLeafSprites(PokemonSummary *summary) {
 void PokemonSummary_SetPokeathlonStatStars(Sprite **sprites, int firstStar, int maxStars, int baseStars, int color, int modifier, int modifierSprite) {
     u8 states[5];
     int i;
-    int result = PokemonSummary_GetPokeathlonStarStates_Int(states, maxStars, baseStars, color, modifier);
+    int result = PokemonSummary_GetPokeathlonStarStates(states, maxStars, baseStars, color, modifier);
 
     for (i = 0; i < 5; i++) {
         if (states[i] == 0) {
@@ -2344,7 +2340,7 @@ void PokemonSummary_SetPokeathlonStatStars(Sprite **sprites, int firstStar, int 
 }
 
 // Each star: 0 hidden, 1 empty (above the base), else 2 + color. Returns the sign of the Aprijuice modifier.
-int PokemonSummary_GetPokeathlonStarStates(u8 *states, int maxStars, int baseStars, u8 color, int modifier) {
+int PokemonSummary_GetPokeathlonStarStates(u8 *states, int maxStars, int baseStars, int color, int modifier) {
     int i;
     color += 2;
     for (i = 0; i < 5; i++) {

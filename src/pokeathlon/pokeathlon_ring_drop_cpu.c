@@ -132,7 +132,7 @@ BOOL PokeathlonRingDrop_IsNear(const VecFx32 *a, const VecFx32 *b, fx32 distance
     return FALSE;
 }
 
-BOOL PokeathlonRingDrop_IsInDirection(const VecFx32 *a, const VecFx32 *b, int direction) {
+BOOL PokeathlonRingDrop_IsInDirection(const VecFx32 *a, const VecFx32 *b, u8 direction) {
     VecFx32 delta;
     VEC_Subtract(b, a, &delta);
     VEC_Normalize(&delta, &delta);
@@ -141,9 +141,6 @@ BOOL PokeathlonRingDrop_IsInDirection(const VecFx32 *a, const VecFx32 *b, int di
     }
     return FALSE;
 }
-
-// Decide passes the direction as a u8.
-#define PokeathlonRingDrop_IsInDirectionU8(a, b, direction) (((BOOL(*)(const VecFx32 *, const VecFx32 *, u8))PokeathlonRingDrop_IsInDirection)((a), (b), (direction)))
 
 #pragma force_active on
 
@@ -179,14 +176,14 @@ void PokeathlonRingDropCpu_Decide(PokeathlonRingDropCpuPlayer *player) {
         }
         position = PokeathlonRingDrop_GetMonPosition(player->course, i);
         if (PokeathlonRingDrop_IsNear(ownPosition, position, FX32_CONST(32))) {
-            if (PokeathlonRingDrop_IsInDirectionU8(ownPosition, position, direction)) {
+            if (PokeathlonRingDrop_IsInDirection(ownPosition, position, direction)) {
                 kinds[i] = 3;
             } else {
                 kinds[i] = 1;
             }
             closeCount++;
         } else if (PokeathlonRingDrop_IsNear(ownPosition, position, FX32_CONST(48))) {
-            if (PokeathlonRingDrop_IsInDirectionU8(ownPosition, position, direction)) {
+            if (PokeathlonRingDrop_IsInDirection(ownPosition, position, direction)) {
                 kinds[i] = 2;
             }
             nearCount++;

@@ -22,6 +22,6 @@ struct PokepicManager *DrawPokemonPicFromMon(BgConfig *bgConfig, GFBgLayer layer
 void LoadUserFrameGfx1Tiles(BgConfig *bgConfig, u32 layer, u32 baseTile, u32 frame, enum HeapID heapID);
 u32 GetUserFrameGfx1PaletteMember(void);
 void LoadDownArrowTiles(Window *window, int baseTile);
-void WaitingIcon_DeleteWithoutRestore(void);
+void WaitingIcon_DeleteWithoutRestore(WaitingIcon *);
 
 #endif // POKEHEARTGOLD_RENDER_WINDOW_H

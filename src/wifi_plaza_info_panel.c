@@ -491,8 +491,9 @@ void WiFiPlazaPlayerCard_LoadTypeIcons(WiFiPlazaInfoPanel *unused0, WiFiPlazaPla
     u32 y = 2;
 
     for (; i < 2; i++) {
-        if ((u16)WiFiPlazaPlayer_GetFavoriteType(player, i) != 0) {
-            u16 type = ((u32(*)(void))WiFiPlaza_GetTypeByChoice)(); // called without its argument; it receives the type read above
+        u16 choice = WiFiPlazaPlayer_GetFavoriteType(player, i);
+        if (choice != 0) {
+            u16 type = WiFiPlaza_GetTypeByChoice(choice);
             NarcId narcId = TypeIcon_GetNarc();
             u32 member = TypeIcon_GetCharFile(type);
             void *buf = GfGfxLoader_LoadFromNarc(narcId, member, TRUE, heapID, TRUE);

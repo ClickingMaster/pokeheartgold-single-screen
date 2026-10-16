@@ -168,7 +168,7 @@ BOOL VsRecorder_MenuCanSelect(VsRecorderWork *work) {
         }
         break;
     case 6:
-        if (selection == 100 && ((BOOL(*)(void))VsRecorder_IsBoxUploaded)()) {
+        if (selection == 100 && VsRecorder_IsBoxUploaded(work)) {
             VsRecorder_ShowNotice(work, msg_0013_00273);
             result = FALSE;
         }

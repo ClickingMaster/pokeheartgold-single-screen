@@ -115,7 +115,7 @@ void WiFiPlazaObj_SetGridPosAndDir(WiFiPlazaObj *obj, Field2DPoint pos, s32 dire
 Field2DPoint WiFiPlazaObj_GetGridPos(WiFiPlazaObj *obj);
 s32 WiFiPlazaObj_GetParam(WiFiPlazaObj *obj, s32 param);
 void WiFiPlazaObj_QueueCommand(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, s32 command, s32 direction);
-void WiFiPlazaObj_RunCommand(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, u16 value, u8 kind);
+void WiFiPlazaObj_RunCommand(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, u16 value, u32 kind);
 void WiFiPlazaObj_SetHandler(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, int handler);
 u8 WiFiPlazaObj_IsFinished(WiFiPlazaObj *obj);
 u8 WiFiPlazaObj_GetHandler(WiFiPlazaObj *obj);

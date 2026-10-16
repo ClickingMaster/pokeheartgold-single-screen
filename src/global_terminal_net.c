@@ -286,7 +286,7 @@ BOOL GlobalTerminalNet_RequestDressUpUpload(GlobalTerminalNet *net, const void *
     return TRUE;
 }
 
-BOOL GlobalTerminalNet_RequestDressUpDownload(GlobalTerminalNet *net, u16 arg) {
+BOOL GlobalTerminalNet_RequestDressUpDownload(GlobalTerminalNet *net, int arg) {
     if (!GlobalTerminalNet_IsIdle(net)) {
         return FALSE;
     }
@@ -309,7 +309,7 @@ BOOL GlobalTerminalNet_RequestBoxUpload(GlobalTerminalNet *net, int value, const
     return TRUE;
 }
 
-BOOL GlobalTerminalNet_RequestBoxDownload(GlobalTerminalNet *net, u8 arg) {
+BOOL GlobalTerminalNet_RequestBoxDownload(GlobalTerminalNet *net, int arg) {
     if (!GlobalTerminalNet_IsIdle(net)) {
         return FALSE;
     }

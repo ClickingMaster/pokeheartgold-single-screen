@@ -85,9 +85,9 @@ u8 PokeathlonEvent_BlockSmashPoints(u32 score) {
     return PokeathlonEvent_ClampPoints((float)score);
 }
 
-// Event 4 (Disc Catch). The score goes to PokeathlonEvent_Saturate as a float (through a float, float type).
-u8 PokeathlonEvent_DiscCatchPoints(float score) {
-    return PokeathlonEvent_ClampPoints(((float (*)(float, float))PokeathlonEvent_Saturate)(score, 0.08f));
+// Event 4 (Disc Catch)
+u8 PokeathlonEvent_DiscCatchPoints(u32 score) {
+    return PokeathlonEvent_ClampPoints(PokeathlonEvent_Saturate(score, 0.08f));
 }
 
 // Event 5 (Lamp Jump)

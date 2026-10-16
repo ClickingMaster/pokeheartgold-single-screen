@@ -662,7 +662,7 @@ void VsRecorder_LoadSavedVideos(VsRecorderWork *work);
 void VsRecorder_FreeSavedVideos(VsRecorderWork *work);
 void VsRecorder_LoadMonIconGfx(VsRecorderWork *work);
 void VsRecorder_UnloadMonIconGfx(VsRecorderWork *work);
-NARC *VsRecorder_OpenMonIconNarc(void);
+NARC *VsRecorder_OpenMonIconNarc(enum HeapID heapID);
 void VsRecorder_CloseMonIconNarc(NARC *narc);
 ManagedSprite *VsRecorder_NewMonIcon(VsRecorderWork *work, NARC *narc, int index, int species, int form, int isEgg);
 void VsRecorder_DeleteMonIcon(VsRecorderWork *work, u32 index, ManagedSprite *sprite);

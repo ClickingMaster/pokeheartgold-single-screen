@@ -445,7 +445,7 @@ BOOL WiFiPlazaPlayer_HasTapToy(WiFiPlazaPlayer *player);
 u32 WiFiPlazaWork_HasError(WiFiPlazaWork *work);
 BOOL WiFiPlazaWork_IsClosed(WiFiPlazaWork *work);
 void WiFiPlazaWork_SendTapToyPlayed(void *unused, u32 value);
-u8 WiFiPlaza_GetTypeByChoice(u32 index);
+u32 WiFiPlaza_GetTypeByChoice(u32 index);
 BOOL WiFiPlaza_HasConnectionFailed(void);
 u32 WiFiPlazaLobbyClient_GetLastError(void);
 int WiFiPlaza_GetErrorMessageClass(u32 errorCode, u32 context);

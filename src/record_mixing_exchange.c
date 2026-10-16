@@ -52,8 +52,8 @@ void RecordMixing_FriendGroup_Merge(RecordMixingMergeArgs *args) {
 }
 
 u32 RecordMixing_Fashion_GetSize(SaveData *saveData) {
-    // called with the fashion data, but the definition takes no argument
-    return ((u32(*)(SaveFashionData *))FashionEntry_sizeof)(Save_FashionData_Get(saveData));
+    Save_FashionData_Get(saveData);
+    return FashionEntry_sizeof();
 }
 
 void *RecordMixing_Fashion_Load(SaveData *saveData, enum HeapID heapID, u32 size) {

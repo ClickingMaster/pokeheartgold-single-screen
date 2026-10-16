@@ -1253,7 +1253,7 @@ BOOL VsRecorder_VideoSearchShowResults(VsRecorderWork *work) {
         search->listConfig.entries = NULL;
         search->listConfig.count = work->net.videoList.count;
         VsRecorder_LoadMonIconGfx(work);
-        search->monIconNarc = ((NARC * (*)(enum HeapID)) VsRecorder_OpenMonIconNarc)(HEAP_ID_109);
+        search->monIconNarc = VsRecorder_OpenMonIconNarc(HEAP_ID_109);
         VsRecorder_LoadScreen(work, 4, GF_BG_LYR_MAIN_3);
         VsRecorder_LoadScreen(work, 7, GF_BG_LYR_SUB_3);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);

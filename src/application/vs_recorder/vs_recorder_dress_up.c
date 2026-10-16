@@ -694,7 +694,7 @@ BOOL VsRecorder_DressUpViewDownload(VsRecorderWork *work) {
         break;
     case 1:
         // called with the int species (no u16 truncation)
-        if (((BOOL(*)(GlobalTerminalNet *, int))GlobalTerminalNet_RequestDressUpDownload)(VsRecorder_GetNet(work), dressUp->species) == TRUE) {
+        if (GlobalTerminalNet_RequestDressUpDownload(VsRecorder_GetNet(work), dressUp->species) == TRUE) {
             work->step++;
         }
         break;

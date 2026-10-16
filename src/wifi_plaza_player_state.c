@@ -97,10 +97,6 @@ void WiFiPlazaPlayerState_InitArrivalMenu(WiFiPlazaOwnArrivalWork *work, WiFiPla
 void WiFiPlazaPlayerState_FreeArrivalMenu(WiFiPlazaOwnArrivalWork *work, WiFiPlazaRoomWork *room);
 BOOL WiFiPlazaPlayerState_PlaceOtherForActivity(WiFiPlazaPlacement *placement, WiFiPlazaWork *lobby, WiFiPlazaRoomWork *room, WiFiPlazaObj *obj, u8 kind, u32 justAppeared);
 
-// The tile attribute tests of wifi_plaza_map.h, called with the attribute unnarrowed
-typedef BOOL (*WiFiPlazaTileTest)(u32 attr);
-// WiFiPlazaObj_RunCommand called with the direction unnarrowed
-typedef void (*WiFiPlazaObjMoveFunc)(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, u16 command, u32 direction);
 
 extern const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateOwnWalk;
 extern const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateOtherPresent;
@@ -768,7 +764,7 @@ BOOL WiFiPlazaPlayerState_OwnReturnFromAttraction(WiFiPlazaPlayerState *state, W
             entry = WiFiPlazaRoom_GetStartParams(room);
             if (WiFiPlazaRoom_IsFading(room) == 0) {
                 WiFiPlazaPlayerState_NextStep(state);
-                ((WiFiPlazaObjMoveFunc)WiFiPlazaObj_RunCommand)(objManager, ownPlayer, 2, entry->direction);
+                WiFiPlazaObj_RunCommand(objManager, ownPlayer, 2, entry->direction);
             }
         }
         break;
@@ -828,7 +824,7 @@ BOOL WiFiPlazaPlayerState_OwnReturnFromMinigame(WiFiPlazaPlayerState *state, WiF
         entry = WiFiPlazaRoom_GetStartParams(room);
         if (WiFiPlazaRoom_IsFading(room) == 0) {
             WiFiPlazaPlayerState_NextStep(state);
-            ((WiFiPlazaObjMoveFunc)WiFiPlazaObj_RunCommand)(objManager, ownPlayer, 2, entry->direction);
+            WiFiPlazaObj_RunCommand(objManager, ownPlayer, 2, entry->direction);
         }
         break;
     case 2:
@@ -878,7 +874,7 @@ BOOL WiFiPlazaPlayerState_OwnReturnFromSurvey(WiFiPlazaPlayerState *state, WiFiP
         entry = WiFiPlazaRoom_GetStartParams(room);
         if (WiFiPlazaRoom_IsFading(room) == 0) {
             WiFiPlazaPlayerState_NextStep(state);
-            ((WiFiPlazaObjMoveFunc)WiFiPlazaObj_RunCommand)(objManager, ownPlayer, 2, entry->direction);
+            WiFiPlazaObj_RunCommand(objManager, ownPlayer, 2, entry->direction);
         }
         break;
     case 2:
@@ -976,7 +972,7 @@ BOOL WiFiPlazaPlayerState_OwnWalk(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork
             break;
         }
         WiFiPlazaRoom_SetPanelButtonDisabled(room, 0);
-        if (((WiFiPlazaTileTest)WiFiPlazaMap_IsStandActionTile)(tile) == TRUE) {
+        if (WiFiPlazaMap_IsStandActionTile(tile) == TRUE) {
             WiFiPlazaPlayerState_RunTileAction(state, room, index, sWiFiPlazaStandTileActions, tile);
             WiFiPlazaObj_SetHandler(objManager, ownPlayer, WIFI_PLAZA_OBJ_HANDLER_IDLE);
             WiFiPlazaRoom_SetActionTile(room, (u8)tile);
@@ -1011,13 +1007,13 @@ BOOL WiFiPlazaPlayerState_OwnWalk(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork
                     }
                 }
             }
-            if (((WiFiPlazaTileTest)WiFiPlazaMap_IsPropTile)(frontTile) == TRUE && !WiFiPlazaObj_GetParam(ownPlayer, 6)) {
+            if (WiFiPlazaMap_IsPropTile(frontTile) == TRUE && !WiFiPlazaObj_GetParam(ownPlayer, 6)) {
                 WiFiPlazaModels_TouchPropsAt(models, (u8)frontX, (u8)frontY);
                 WiFiPlazaRoom_SetActionTile(room, (u8)frontTile);
                 WiFiPlazaRoom_SetPanelButtonDisabled(room, 1);
                 return FALSE;
             }
-            if (((WiFiPlazaTileTest)WiFiPlazaMap_IsCheckActionTile)(frontTile) == TRUE) {
+            if (WiFiPlazaMap_IsCheckActionTile(frontTile) == TRUE) {
                 WiFiPlazaPlayerState_RunTileAction(state, room, index, sWiFiPlazaCheckTileActions, frontTile);
                 WiFiPlazaObj_SetHandler(objManager, ownPlayer, WIFI_PLAZA_OBJ_HANDLER_IDLE);
                 WiFiPlazaRoom_SetActionTile(room, (u8)frontTile);
@@ -1027,7 +1023,7 @@ BOOL WiFiPlazaPlayerState_OwnWalk(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork
         }
         if (WiFiPlazaPlayerState_IsDirectionHeld(direction) == TRUE) {
             WiFiPlazaObj *facing;
-            if (!direction && ((WiFiPlazaTileTest)WiFiPlazaMap_IsWalkUpActionTile)(frontTile) == TRUE) {
+            if (!direction && WiFiPlazaMap_IsWalkUpActionTile(frontTile) == TRUE) {
                 WiFiPlazaPlayerState_RunTileAction(state, room, index, sWiFiPlazaWalkUpTileActions, frontTile);
                 WiFiPlazaObj_SetHandler(objManager, ownPlayer, WIFI_PLAZA_OBJ_HANDLER_IDLE);
                 WiFiPlazaRoom_SetActionTile(room, (u8)frontTile);

@@ -282,7 +282,7 @@ void PokemonSummary_UpdateTypeSprites(PokemonSummary *summary);
 void PokemonSummary_HidePokeathlonStars(PokemonSummary *summary);
 void PokemonSummary_InitShinyLeafSprites(PokemonSummary *summary);
 void PokemonSummary_SetPokeathlonStatStars(Sprite **sprites, int firstStar, int maxStars, int baseStars, int color, int modifier, int modifierSprite);
-int PokemonSummary_GetPokeathlonStarStates(u8 *states, int maxStars, int baseStars, u8 color, int modifier);
+int PokemonSummary_GetPokeathlonStarStates(u8 *states, int maxStars, int baseStars, int color, int modifier);
 void PokemonSummary_UpdatePokeathlonStars(PokemonSummary *summary);
 void PokemonSummary_UpdateShinyLeafSprites(PokemonSummary *summary);
 void PokemonSummary_SetMonTypeSprites(PokemonSummary *summary);

@@ -709,7 +709,7 @@ void CommWireless_Update(int count, CommWirelessWork *unused) {
 
 BOOL CommWireless_Main(int count) {
     if (gCommWireless.work != NULL) {
-        return ((BOOL(*)(int, CommWirelessWork *))CommWireless_Update)(count, gCommWireless.work);
+        CommWireless_Update(count, gCommWireless.work);
     }
 }
 

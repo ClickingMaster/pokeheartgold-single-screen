@@ -1162,7 +1162,7 @@ BOOL PokeathlonPennantCapture_CirclesOverlap(const VecFx32 *a, const VecFx32 *b,
 }
 
 // 1 = up, 2 = right, 3 = down, 4 = left (from the angle to sPennantCaptureReferenceVector)
-int PokeathlonPennantCapture_GetDirection(const VecFx32 *vector) {
+int PokeathlonPennantCapture_GetDirection(VecFx32 *vector) {
     VecFx32 normalized;
     VecFx32 reference;
     VecFx32 rotated;

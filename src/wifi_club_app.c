@@ -4117,7 +4117,7 @@ u8 WifiClub_RestoreVoiceChatSetting(WifiClubApp *app) {
 
 void WifiClub_DeleteWaitingIcon(WifiClubApp *app) {
     if (app->waitingIcon != NULL) {
-        WaitingIcon_DeleteWithoutRestore();
+        WaitingIcon_DeleteWithoutRestore(app->waitingIcon);
         app->waitingIcon = NULL;
         if (WindowIsInUse(&app->msgWindow) != 0) {
             ClearFrameAndWindow2(&app->msgWindow, FALSE);

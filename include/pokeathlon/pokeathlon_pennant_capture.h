@@ -359,7 +359,7 @@ void PokeathlonPennantCapture_PlacePennant(PokeathlonPennantCapturePennants *pen
 void PokeathlonPennantCapture_RefillPennants(PokeathlonPennantCapture *work);
 BOOL PokeathlonPennantCapture_PickUpPennants(PokeathlonPennantCapturePennants *pennants, PokeathlonPennantCapturePlayer *player, u8 *full);
 BOOL PokeathlonPennantCapture_CirclesOverlap(const VecFx32 *a, const VecFx32 *b, fx32 radiusA, fx32 radiusB);
-int PokeathlonPennantCapture_GetDirection(const VecFx32 *vector);
+int PokeathlonPennantCapture_GetDirection(VecFx32 *vector);
 BOOL PokeathlonPennantCapture_TryKnockDown(PokeathlonCourseData *course, PokeathlonPennantCapturePlayer *a, PokeathlonPennantCapturePlayer *b);
 BOOL PokeathlonPennantCapture_CanDeposit(PokeathlonPennantCapturePlayer *player);
 u8 PokeathlonPennantCapture_GetDepositPoints(u8 pennants);

@@ -138,7 +138,7 @@ BOOL WiFiPlazaMap_FindTileTag(WiFiPlazaMap *map, int tag, u16 *outX, u16 *outY, 
     return FALSE;
 }
 
-BOOL WiFiPlazaMap_IsStandActionTile(u8 attr) {
+BOOL WiFiPlazaMap_IsStandActionTile(u32 attr) {
     u32 i;
 
     for (i = 0; i < 32; i++) {
@@ -149,7 +149,7 @@ BOOL WiFiPlazaMap_IsStandActionTile(u8 attr) {
     return FALSE;
 }
 
-BOOL WiFiPlazaMap_IsWalkUpActionTile(u8 attr) {
+BOOL WiFiPlazaMap_IsWalkUpActionTile(u32 attr) {
     u32 i;
 
     for (i = 0; i < 3; i++) {
@@ -160,7 +160,7 @@ BOOL WiFiPlazaMap_IsWalkUpActionTile(u8 attr) {
     return FALSE;
 }
 
-BOOL WiFiPlazaMap_IsCheckActionTile(u8 attr) {
+BOOL WiFiPlazaMap_IsCheckActionTile(u32 attr) {
     u32 i;
 
     for (i = 0; i < 7; i++) {
@@ -171,7 +171,7 @@ BOOL WiFiPlazaMap_IsCheckActionTile(u8 attr) {
     return FALSE;
 }
 
-BOOL WiFiPlazaMap_IsPropTile(u8 attr) {
+BOOL WiFiPlazaMap_IsPropTile(u32 attr) {
     u32 i;
 
     for (i = 0; i < 4; i++) {

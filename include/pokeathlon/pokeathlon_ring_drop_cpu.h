@@ -15,7 +15,7 @@ void PokeathlonRingDropCpu_Free(PokeathlonRingDropCpu *cpu);
 void PokeathlonRingDropCpu_Update(PokeathlonRingDropCpu *cpu);
 void PokeathlonRingDropCpu_InitPlayer(PokeathlonRingDropCpuPlayer *player, u8 participant, PokeathlonCourseData *course);
 BOOL PokeathlonRingDrop_IsNear(const VecFx32 *a, const VecFx32 *b, fx32 distance);
-BOOL PokeathlonRingDrop_IsInDirection(const VecFx32 *a, const VecFx32 *b, int direction);
+BOOL PokeathlonRingDrop_IsInDirection(const VecFx32 *a, const VecFx32 *b, u8 direction);
 void PokeathlonRingDropCpu_Decide(PokeathlonRingDropCpuPlayer *player);
 void PokeathlonRingDropCpu_GoSwitch(PokeathlonRingDropCpuPlayer *player);
 BOOL PokeathlonRingDropCpu_ShouldSwitch(PokeathlonRingDropCpuPlayer *player);

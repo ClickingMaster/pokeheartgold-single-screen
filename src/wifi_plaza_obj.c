@@ -247,7 +247,7 @@ void WiFiPlazaObj_QueueCommand(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, 
     WiFiPlazaObj_QueueMove(manager, command, direction, Field2DObject_GetParam(obj->gridObj, 4));
 }
 
-void WiFiPlazaObj_RunCommand(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, u16 value, u8 kind) {
+void WiFiPlazaObj_RunCommand(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, u16 value, u32 kind) {
     Field2DMove data;
 
     data.unk0 = Field2DObject_GetPos(obj->gridObj);

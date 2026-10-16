@@ -65,7 +65,7 @@ BOOL VsRecorder_BoxDataViewDownload(VsRecorderWork *work) {
         work->step++;
         break;
     case 3:
-        if (((BOOL(*)(GlobalTerminalNet *, int))GlobalTerminalNet_RequestBoxDownload)(VsRecorder_GetNet(work), boxData->category) == TRUE) {
+        if (GlobalTerminalNet_RequestBoxDownload(VsRecorder_GetNet(work), boxData->category) == TRUE) {
             work->step++;
         }
         break;
@@ -548,8 +548,7 @@ BOOL VsRecorder_BoxDataViewExit(VsRecorderWork *work) {
         work->step++;
         break;
     case 1:
-        // called without the work (the fragment's prototype had no parameter)
-        if (((u32(*)(void))VsRecorder_IsFlipScreensDone)() != 0) {
+        if (VsRecorder_IsFlipScreensDone(work) != 0) {
             int i;
             for (i = 0; i < 5; i++) {
                 TouchHitboxController_Destroy(boxData->hitboxes[i]);

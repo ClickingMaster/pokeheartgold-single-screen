@@ -898,7 +898,7 @@ u8 WiFiPlazaPlaces_GetValue(WiFiPlazaPlace *places, u32 index);
 u8 WiFiPlazaPlaces_IsOccupied(WiFiPlazaPlace *places, u32 index);
 void WiFiPlaza_DisableModelLighting(void *file);
 BOOL WiFiPlaza_IsRegionValid(u32 country, u32 region);
-u8 WiFiPlaza_GetTypeByChoice(u32 index);
+u32 WiFiPlaza_GetTypeByChoice(u32 index);
 int WiFiPlaza_GetErrorMessageClass(u32 errorCode, u32 context);
 BOOL WiFiPlaza_IsErrorRecoverable(u32 errorCode, u32 context);
 BOOL WiFiPlaza_HasConnectionFailed(void);

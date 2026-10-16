@@ -531,9 +531,6 @@ ApricornRecord *ApricornRecord_New(SaveApricornBox *box, PlayerProfile *profile,
 void ApricornBox_StoreJuiceRecords(SaveApricornBox *box, ApricornRecord *records, int count, int skip);
 BOOL Comm_SendCommandNoCopy(int command, void *data, int size);
 
-// pokeathlon.h declares PokeathlonCourseLink_SendCommand as void; it returns whether the command was sent.
-#define PokeathlonCourse_TrySendCommand(cmd, data, size, link) (((BOOL(*)(int, void *, void *, int))PokeathlonCourseLink_SendCommand)(cmd, data, size, link))
-
 // Course flow, results, link commands (pokeathlon_course_flow.c)
 void PokeathlonCourse_LoadPerformanceData(PokeathlonCourseData *course);
 PokeathlonCoursePerformance *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, int mon);

@@ -146,7 +146,7 @@ BOOL WiFiPlaza_IsRegionValid(u32 country, u32 region) {
     return FALSE;
 }
 
-u8 WiFiPlaza_GetTypeByChoice(u32 index) {
+u32 WiFiPlaza_GetTypeByChoice(u32 index) {
     return sWiFiPlazaTypeChoices[index];
 }
 

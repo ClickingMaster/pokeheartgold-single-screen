@@ -801,8 +801,7 @@ void PlazaGameMessageBox_ShowWaitingIcon(PlazaGameMessageBox *messageBox, int in
 
 void PlazaGameMessageBox_HideWaitingIcon(PlazaGameMessageBox *messageBox, int index) {
     if (messageBox->waitingIcons[index] != NULL) {
-        // render_window.h declares this without its parameter.
-        ((void (*)(WaitingIcon *))WaitingIcon_DeleteWithoutRestore)(messageBox->waitingIcons[index]);
+        WaitingIcon_DeleteWithoutRestore(messageBox->waitingIcons[index]);
         messageBox->waitingIcons[index] = NULL;
     }
 }

@@ -358,7 +358,7 @@ void PokeathlonRingDropMon_FallOut(PokeathlonRingDropMon *mon);
 void PokeathlonRingDropMon_StartSwitch(PokeathlonRingDropMon *mon);
 void PokeathlonRingDropMon_DrainStamina(PokeathlonRingDropMon *mon, int amount);
 void PokeathlonRingDrop_InitMemberParams(PokeathlonCourseData *course);
-PokeathlonRingDropMemberParams *PokeathlonRingDrop_GetMemberParams(PokeathlonCourseData *course, u32 participant, u32 member);
+PokeathlonRingDropMemberParams *PokeathlonRingDrop_GetMemberParams(PokeathlonCourseData *course, u8 participant, u8 member);
 void PokeathlonRingDropMon_NextMember(PokeathlonRingDropMon *mon);
 BOOL PokeathlonRingDrop_PlaySE(u32 seqNo, BOOL own);
 void PokeathlonRingDrop_AddScoreWindow(PokeathlonRingDrop *ringDrop);

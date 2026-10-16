@@ -3,9 +3,9 @@
 
 // Full declarations of the window frame module: src/render_window.c (frames), src/render_window_frame_icon.c and
 // src/render_window_icons.c (down arrow, signposts, waiting icon, Pokemon picture window). include/render_window.h
-// is the public subset other modules use; it declares WaitingIcon_DeleteWithoutRestore() without its argument,
-// WaitingIcon_New() with a u16 tile and the DrawPokemonPic* results as PokepicManager pointers (what their callers
-// were matched against), so the module's own files include this header instead.
+// is the public subset other modules use; it declares WaitingIcon_New() with a u16 tile and the DrawPokemonPic*
+// results as PokepicManager pointers (what their callers expect), so the module's own files include this header
+// instead.
 
 #include "field/field_sprite_manager.h"
 

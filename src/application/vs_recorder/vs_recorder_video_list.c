@@ -1037,7 +1037,7 @@ BOOL VsRecorder_VideoListShowList(VsRecorderWork *work) {
         listWork->listConfig.entries = NULL;
         listWork->listConfig.count = work->net.videoList.count;
         VsRecorder_LoadMonIconGfx(work);
-        listWork->monIconNarc = ((NARC * (*)(enum HeapID)) VsRecorder_OpenMonIconNarc)(HEAP_ID_109);
+        listWork->monIconNarc = VsRecorder_OpenMonIconNarc(HEAP_ID_109);
         listWork->iconResId = 500;
         GfGfxLoader_LoadCharDataFromOpenNarc(work->narc, 0x3E, work->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, FALSE, HEAP_ID_109);
         GfGfxLoader_LoadCharDataFromOpenNarc(work->narc, 0x3E, work->bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, HEAP_ID_109);

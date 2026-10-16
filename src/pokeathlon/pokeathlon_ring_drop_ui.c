@@ -186,7 +186,7 @@ void PokeathlonRingDropUi_SetRanks(PokeathlonRingDropUi *ui, u16 participant, u1
         }
     }
     if (participant == PokeathlonCourse_GetNetId(ui->course) && score != ui->score) {
-        ((void (*)(PokeathlonRingDropUi *, u8))PokeathlonRingDropUi_DrawScore)(ui, score);
+        PokeathlonRingDropUi_DrawScore(ui, (u8)score);
         ui->score = score;
     }
 }

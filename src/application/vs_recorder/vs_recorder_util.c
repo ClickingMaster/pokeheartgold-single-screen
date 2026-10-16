@@ -427,7 +427,7 @@ void VsRecorder_UnloadMonIconGfx(VsRecorderWork *work) {
     SpriteManager_UnloadAnimObjById(work->spriteManager, 100000);
 }
 
-NARC *VsRecorder_OpenMonIconNarc(void) {
+NARC *VsRecorder_OpenMonIconNarc(enum HeapID heapID) {
     return NARC_New(NARC_poketool_icongra_poke_icon, HEAP_ID_109);
 }
 

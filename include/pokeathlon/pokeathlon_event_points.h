@@ -25,7 +25,7 @@ u8 PokeathlonEvent_HurdleDashPoints(u32 frames);
 u8 PokeathlonEvent_PennantCapturePoints(int score);
 u8 PokeathlonEvent_CirclePushPoints(int score);
 u8 PokeathlonEvent_BlockSmashPoints(u32 score);
-u8 PokeathlonEvent_DiscCatchPoints(float score);
+u8 PokeathlonEvent_DiscCatchPoints(u32 score);
 u8 PokeathlonEvent_LampJumpPoints(u32 score);
 u8 PokeathlonEvent_RelayRunPoints(u32 score);
 u8 PokeathlonEvent_RingDropPoints(u32 score);

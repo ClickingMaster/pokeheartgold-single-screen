@@ -188,7 +188,7 @@ void PokeathlonRingDrop_InitMons(PokeathlonRingDrop *ringDrop, PokeathlonCourseD
         teamMember = &ringDrop->players[participant].mon.members[member];
         object = PokeathlonRingDrop_GetMonObject(ringDrop->monObjects, i);
         PokeathlonRingDrop_SetMonObjectDrawn(object, member == 0);
-        size = PokeathlonCourse_GetCollisionSizeClass(((void *(*)(PokeathlonCourseData *, u8, u8))PokeathlonCourse_GetPerformance)(course, participant, member));
+        size = PokeathlonCourse_GetCollisionSizeClass((PokeathlonPerformanceSizeInfo *)PokeathlonCourse_GetPerformance(course, participant, member));
         PokeathlonCourseObject_SetCollision(object, collisions[size - 1].offsetY, collisions[size - 1].radius);
         object = PokeathlonRingDrop_GetMonObject(ringDrop->monObjects, i);
         PokeathlonCourseMonObject_GetGfx(object);
@@ -207,7 +207,7 @@ void PokeathlonRingDrop_InitMons(PokeathlonRingDrop *ringDrop, PokeathlonCourseD
         PokeathlonCourseObject_GroundToCenter(object, x, y, &t.centerX, &t.centerY);
         teamMember->index = i;
         teamMember->object = object;
-        teamMember->params = ((PokeathlonRingDropMemberParams * (*)(PokeathlonCourseData *, u8, u8)) PokeathlonRingDrop_GetMemberParams)(course, participant, member);
+        teamMember->params = PokeathlonRingDrop_GetMemberParams(course, participant, member);
         teamMember->stamina = teamMember->params->stamina;
     }
     PokeathlonCourse_CreateStartSprites(course, 0, ringDrop->resources, SpriteManager_GetSpriteList(ringDrop->spriteManager), NNS_G2D_VRAM_TYPE_2DMAIN, 1, &t.own);
