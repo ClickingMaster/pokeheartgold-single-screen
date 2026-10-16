@@ -122,7 +122,7 @@ void ApricornBox_FeedAprijuice(ApricornJuice *record, Party *party, int slot) {
 
     MI_CpuFill8(newMods, 0, 5);
     ApricornJuice_RankFlavors(record, &juice);
-    level = record->unk2;
+    level = record->mildness;
     if (juice.entries[0].stat >= 5) {
         statA = juice.statOverride[0];
     } else {
@@ -180,7 +180,7 @@ void ApricornBox_InitFromArgs(ApricornBoxApp *app) {
     case 3:
         app->unk_19 = 1;
         app->mode = 0;
-        app->juiceIndex = app->args->unkC;
+        app->juiceIndex = app->args->juiceIndex;
         return;
     }
     app->unk_19 = 0;

@@ -99,7 +99,7 @@ typedef struct TradeSequenceArgs {
     BoxPokemon *receivedMon;
     PlayerProfile *partnerProfile;
     TradeSequenceBackground bgType;
-    int unk10;
+    int tradeMode;
     Options *options;
     EvolutionTaskData *evolutionTaskData;
     u8 unk1C[0x4];
@@ -112,7 +112,7 @@ typedef struct WirelessTradeData {
 } WirelessTradeData;
 
 typedef struct DrawingSessionArgs {
-    struct UnionRoomObjects *unk0;
+    struct UnionRoomObjects *unionRoomObjects;
     Options *options;
 } DrawingSessionArgs;
 

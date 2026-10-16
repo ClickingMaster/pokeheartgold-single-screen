@@ -1427,16 +1427,16 @@ void PartyMenu_SetCursorSlot(PartyMenu *partyMenu, u8 partySlot) {
 
 static void PartyMenu_UpdateUnusedSlotEffect(PartyMenu *partyMenu) {
     s16 x, y;
-    switch (partyMenu->unk_C60) {
+    switch (partyMenu->unusedSlotEffectState) {
     case 0:
         break;
     case 1:
-        PartyMenu_GetUnusedSlotEffectPos(partyMenu->unk_C61, &x, &y);
+        PartyMenu_GetUnusedSlotEffectPos(partyMenu->unusedSlotEffectPosIndex, &x, &y);
         PartyMenu_StartUnusedSlotEffectSprite(partyMenu, x, y);
-        ++partyMenu->unk_C60;
+        ++partyMenu->unusedSlotEffectState;
         break;
     case 2:
-        partyMenu->unk_C60 = 0;
+        partyMenu->unusedSlotEffectState = 0;
         break;
     }
 }

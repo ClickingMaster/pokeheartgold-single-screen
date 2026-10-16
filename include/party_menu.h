@@ -281,7 +281,7 @@ typedef struct PartyMenuArgs {
     Bag *bag;
     Mailbox *mailbox;
     Options *options;
-    SaveBlock23 *unk_10;
+    SaveBlock23 *saveBlock23;
     LinkBattleRuleset *linkBattleRuleset;
     FieldMoveCheckData *fieldMoveCheckData;
     FieldSystem *fieldSystem;
@@ -398,8 +398,8 @@ struct PartyMenu {
     int (*itemUseCallback)(PartyMenu *);
     int (*yesCallback)(PartyMenu *); // 0xc58
     int (*noCallback)(PartyMenu *);  // 0xc5c
-    u8 unk_C60;
-    u8 unk_C61;
+    u8 unusedSlotEffectState;
+    u8 unusedSlotEffectPosIndex;
     u8 afterTextPrinterState;
     u8 softboiledDonorSlot : 6;
     u8 secondCursorActive : 1;

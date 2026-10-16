@@ -130,8 +130,8 @@ typedef struct WobbuffetPopBalloon {
     fx32 scaleX;                                             // 0x260
     fx32 scaleY;                                             // 0x264
     s16 squash;                                              // 0x268
-    s16 unk_26A;                                             // 0x26A
-    s16 unk_26C;                                             // 0x26C
+    s16 extraScaleYPercent;                                  // 0x26A
+    s16 extraScaleXPercent;                                  // 0x26C
     u8 unk_26E[2];                                           // 0x26E
     u32 selection;                                           // 0x270
     u8 playingPumpSe;                                        // 0x274

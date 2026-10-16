@@ -21,9 +21,9 @@ void SaveBlock23_Init(SaveBlock23 *data) {
     SaveSubstruct_UpdateCRC(SAVE_UNK_23);
 }
 void SaveBlock23_ClearArraysAndReset(SaveBlock23 *data) {
-    MI_CpuClearFast(data->unk_00C, sizeof(data->unk_00C));
-    MI_CpuClearFast(data->unk_0CC, sizeof(data->unk_0CC));
-    MI_CpuClearFast(data->unk_18C, sizeof(data->unk_18C));
+    MI_CpuClearFast(data->list0, sizeof(data->list0));
+    MI_CpuClearFast(data->list1, sizeof(data->list1));
+    MI_CpuClearFast(data->list2, sizeof(data->list2));
     SaveBlock23_Reset(data);
     SaveSubstruct_UpdateCRC(SAVE_UNK_23);
 }

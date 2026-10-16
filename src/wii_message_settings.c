@@ -127,7 +127,7 @@ typedef struct WiiMessageSettings {
     Options *options;           // 0x008
     void *expHeapMemory;        // 0x00C
     NNSFndHeapHandle expHeap;   // 0x010
-    u8 unk_14[0x64];            // 0x014, passed to DWC_InitInetEx when connecting
+    u8 netConnection[0x64];     // 0x014, passed to DWC_InitInetEx when connecting
     u16 registrationCodePrefix; // 0x078
     u8 screenStartState;        // 0x07A
     u8 unk_7B;                  // 0x07B
@@ -1601,7 +1601,7 @@ BOOL WiiMessageSettingsScreen_StartConnect(WiiMessageSettingsScreen *screen) {
         break;
     case 2:
         Sys_SetSleepDisableFlag(4);
-        DWC_InitInetEx(screen->app->unk_14, 2, 1, 20);
+        DWC_InitInetEx(screen->app->netConnection, 2, 1, 20);
         DWC_SetAuthServer(2);
         DWC_ConnectInetAsync();
         screen->state = WMS_STATE_WAIT_CONNECT;

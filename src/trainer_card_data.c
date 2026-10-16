@@ -76,7 +76,7 @@ void TrainerCardData_Build(u8 unk_04_0, u8 liveIgt, u8 unk_02, u8 caseVariant, F
     TrainerCardData_SetBadges(profile, fieldSystem, card);
     checksum = 0;
     for (i = 0; i < sizeof(TrainerCardData); i++) {
-        checksum ^= trainerCard->unk0[i];
+        checksum ^= trainerCard->card[i];
     }
     card->checksum = checksum;
     card->received = 0;

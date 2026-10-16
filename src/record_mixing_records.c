@@ -117,7 +117,7 @@ void *RecordMixing_Block23List2_Load(SaveData *saveData, enum HeapID heapID, u32
     if (size != RecordMixing_Block23List2_GetSize(saveData)) {
         GF_AssertFail();
     }
-    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->unk_18C, 4, 1, 3);
+    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->list2, 4, 1, 3);
     return out;
 }
 
@@ -127,7 +127,7 @@ void *RecordMixing_Block23List0_Load(SaveData *saveData, enum HeapID heapID, u32
     if (size != RecordMixing_Block23List0_GetSize(saveData)) {
         GF_AssertFail();
     }
-    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->unk_00C, 4, 1, 4);
+    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->list0, 4, 1, 4);
     return out;
 }
 
@@ -137,7 +137,7 @@ void *RecordMixing_Block23List1_Load(SaveData *saveData, enum HeapID heapID, u32
     if (size != RecordMixing_Block23List1_GetSize(saveData)) {
         GF_AssertFail();
     }
-    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->unk_0CC, 4, 1, 5);
+    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->list1, 4, 1, 5);
     return out;
 }
 
@@ -147,7 +147,7 @@ void *RecordMixing_Block23List2_Load2(SaveData *saveData, enum HeapID heapID, u3
     if (size != RecordMixing_Block23List2_GetSize(saveData)) {
         GF_AssertFail();
     }
-    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->unk_18C, 4, 0, 0);
+    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->list2, 4, 0, 0);
     return out;
 }
 
@@ -157,7 +157,7 @@ void *RecordMixing_Block23List0_Load2(SaveData *saveData, enum HeapID heapID, u3
     if (size != RecordMixing_Block23List0_GetSize(saveData)) {
         GF_AssertFail();
     }
-    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->unk_00C, 4, 0, 1);
+    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->list0, 4, 0, 1);
     return out;
 }
 
@@ -167,7 +167,7 @@ void *RecordMixing_Block23List1_Load2(SaveData *saveData, enum HeapID heapID, u3
     if (size != RecordMixing_Block23List1_GetSize(saveData)) {
         GF_AssertFail();
     }
-    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->unk_0CC, 4, 0, 2);
+    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->list1, 4, 0, 2);
     return out;
 }
 

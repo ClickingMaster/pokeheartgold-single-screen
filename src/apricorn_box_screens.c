@@ -1682,8 +1682,8 @@ void ApricornBoxScreen_ReadMessage(ApricornBoxScreen *screen, int msgNo) {
 #pragma force_active on
 
 u16 ApricornBoxScreen_GetJuiceTasteMsg(ApricornBoxScreen *screen, ApricornJuiceEntry *entry, int line) {
-    u8 high = entry->unk_04 - 1;
-    int nibble = entry->unk_04;
+    u8 high = entry->strength - 1;
+    int nibble = entry->strength;
     int low;
     switch (line) {
     case 2:

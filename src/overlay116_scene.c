@@ -117,7 +117,7 @@ void LegendaryEffect_RunBirdSequence(void *sysTask, Ov116Task *task, const Ov116
         s32 start;
         work->effect = (void *)FieldMotionBlur_Start(seq->angleX, seq->angleY);
         start = Camera_GetPerspectiveAngle(task->fieldSystem->camera);
-        EncounterEffectInterp_Init(&work->perspectiveInterp[0], start, start + seq->perspectiveDelta, seq->unk00);
+        EncounterEffectInterp_Init(&work->perspectiveInterp[0], start, start + seq->perspectiveDelta, seq->perspectiveDuration);
         task->state++;
         break;
     }

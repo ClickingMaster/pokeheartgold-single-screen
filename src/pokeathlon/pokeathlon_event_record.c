@@ -706,7 +706,7 @@ PokeathlonEventRecords *PokeathlonEventRecord_GetRecords(PokeathlonEventRecordDa
 }
 
 BOOL PokeathlonEventRecord_AreFlags0EFTo0F1Set(PokeathlonEventRecordData *data) {
-    return data->args->unk10;
+    return data->args->allGoalsMet;
 }
 
 #pragma force_active on

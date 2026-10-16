@@ -135,12 +135,12 @@ BOOL PokeathlonCourseRecord_Main(OverlayManager *man, int *state) {
 void PokeathlonCourseRecord_CopyArgs(PokeathlonCourseRecord *work, const PokeathlonCourseRecordArgs *args) {
     PokeathlonCourseRecordArgs *copy = Heap_Alloc(work->heapId, sizeof(PokeathlonCourseRecordArgs));
     copy->pokeathlon = args->pokeathlon;
-    copy->unk4 = args->unk4;
+    copy->allGoalsMet = args->allGoalsMet;
     work->args = copy;
 }
 
 BOOL PokeathlonCourseRecord_AreFlags0EFTo0F1Set(PokeathlonCourseRecordArgs *args) {
-    return args->unk4;
+    return args->allGoalsMet;
 }
 
 void PokeathlonCourseRecord_FreeArgs(PokeathlonCourseRecordArgs *args) {

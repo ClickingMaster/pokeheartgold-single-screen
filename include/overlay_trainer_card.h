@@ -15,8 +15,8 @@ typedef struct TrainerCardAppSettings {
 } TrainerCardAppSettings;
 
 typedef struct TrainerCardAppArgs {
-    u8 unk0[0x66c];
-    TrainerCardAppSettings unk66C;
+    u8 card[0x66c];
+    TrainerCardAppSettings settings;
 } TrainerCardAppArgs;
 
 typedef struct {

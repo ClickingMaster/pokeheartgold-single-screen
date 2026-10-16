@@ -44,7 +44,7 @@ BOOL PokeathlonMedals_GetSpeciesOrderFileIndex(void) {
 }
 
 BOOL PokeathlonMedals_AreFlags0EFTo0F1Set(PokeathlonMedals *work) {
-    return work->args->unkC;
+    return work->args->allGoalsMet;
 }
 
 u8 PokeathlonMedals_GetPageSpeciesCount(PokeathlonMedals *work) {

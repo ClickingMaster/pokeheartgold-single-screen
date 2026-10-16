@@ -179,7 +179,7 @@ u32 GearPhoneRingManager_TryRandomCall(GearPhoneRingManager *gearPhone, PhoneBoo
     for (i = 0; i < numContacts; i++) {
         u8 id = contacts[i].id;
         PhoneBookEntry *entry = &phoneBook->entries[id];
-        if (timeOfDay == entry->unkF) {
+        if (timeOfDay == entry->randomCallGroup) {
             if (entry->type == 0 || entry->type == 12 || entry->type == 11 || entry->type == 10 || entry->type == 14) {
                 candidates[numCandidates++] = id;
             }

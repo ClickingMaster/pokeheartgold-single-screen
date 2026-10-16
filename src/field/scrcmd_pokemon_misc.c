@@ -925,8 +925,8 @@ BOOL ScrCmd_GetApricornJuiceOffer(ScriptContext *ctx) {
     }
 
     BufferIntegerAsString(*msgfmt, 2, *price, 4, PRINTING_MODE_LEFT_ALIGN, 1);
-    BufferIntegerAsString(*msgfmt, 3, unkVar, 3, PRINTING_MODE_LEFT_ALIGN, 1);      // richness..?
-    BufferIntegerAsString(*msgfmt, 4, unkOut.unk2, 3, PRINTING_MODE_LEFT_ALIGN, 1); // smoothness..?
+    BufferIntegerAsString(*msgfmt, 3, unkVar, 3, PRINTING_MODE_LEFT_ALIGN, 1);          // richness..?
+    BufferIntegerAsString(*msgfmt, 4, unkOut.mildness, 3, PRINTING_MODE_LEFT_ALIGN, 1); // smoothness..?
 
     *unkPtrC = unkOut.unk0;
 

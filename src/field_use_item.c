@@ -232,7 +232,7 @@ static void ItemMenuUseFunc_HealingItem(struct ItemMenuUseData *data, const stru
     usedat->bag = Save_Bag_Get(fieldSystem->saveData);
     usedat->mailbox = Save_Mailbox_Get(fieldSystem->saveData);
     usedat->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
-    usedat->unk_10 = Save_Block23_Get(fieldSystem->saveData);
+    usedat->saveBlock23 = Save_Block23_Get(fieldSystem->saveData);
     usedat->fieldMoveCheckData = &env->fieldMoveCheckData;
     usedat->panelLayout = 0;
     usedat->context = PARTY_MENU_CONTEXT_USE_ITEM;
@@ -545,7 +545,7 @@ static void ItemMenuUseFunc_EvoStone(struct ItemMenuUseData *data, const struct 
     usedat->bag = Save_Bag_Get(fieldSystem->saveData);
     usedat->mailbox = Save_Mailbox_Get(fieldSystem->saveData);
     usedat->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
-    usedat->unk_10 = Save_Block23_Get(fieldSystem->saveData);
+    usedat->saveBlock23 = Save_Block23_Get(fieldSystem->saveData);
     usedat->fieldMoveCheckData = &env->fieldMoveCheckData;
     usedat->panelLayout = 0;
     usedat->context = PARTY_MENU_CONTEXT_EVO_STONE;

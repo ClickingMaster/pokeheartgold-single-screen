@@ -9,7 +9,7 @@ typedef struct ApricornBoxArgs {
     u8 mode;
     u8 unk1[0x7];
     u16 *juiceUsedVar;
-    u32 unkC;
+    u32 juiceIndex;
     u32 steps;
     MenuInputStateMgr *menuInputStatePtr;
     SaveData *saveData;

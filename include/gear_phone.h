@@ -17,10 +17,10 @@ typedef struct PhoneBookEntry {
     u16 mapId;              // 0x06
     u16 gift;               // 0x08
     u16 phoneScriptIfLocal; // 0x0A
-    u8 unkC;                // 0x0C
+    u8 greetingMsgSet;      // 0x0C
     u8 rematchWeekday;      // 0x0D
     u8 rematchTimeOfDay;    // 0xE
-    u8 unkF;                // 0x0F
+    u8 randomCallGroup;     // 0x0F
     u8 sortParam[4];        // 0x10
 } PhoneBookEntry;
 

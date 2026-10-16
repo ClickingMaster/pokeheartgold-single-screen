@@ -897,7 +897,7 @@ BOOL Task_ColosseumTrainerCard(TaskManager *taskManager) {
         }
         break;
     case 3:
-        MI_CpuCopy8(card, env->cardArgs.unk0, sizeof(env->cardArgs.unk0));
+        MI_CpuCopy8(card, env->cardArgs.card, sizeof(env->cardArgs.card));
         TrainerCard_LaunchApp(fieldSystem, &env->cardArgs);
         env->state++;
         break;

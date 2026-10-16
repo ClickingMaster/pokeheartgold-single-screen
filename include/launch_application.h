@@ -72,14 +72,14 @@ typedef struct GlobalTerminalLaunchArgs {
 
 struct LinkBattleScriptWork {
     u8 filler_00[0x30];
-    u8 unk_30[6];
+    u8 selectedOrder[6];
 };
 
 typedef struct MoveSelectionResult {
     u8 unk0[0x14];
-    u8 unk14;
-    u8 unk15;
-    u8 unk16;
+    u8 partySlot;
+    u8 pageFlags;
+    u8 selectedMoveSlot;
 } MoveSelectionResult;
 
 typedef struct EasyChatResult {

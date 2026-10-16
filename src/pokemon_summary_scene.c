@@ -20,7 +20,7 @@ typedef struct PokemonSummaryScene {
     u8 pad_2AC[0x2CC - 0x2AC];
     void *pokepicAnimManager; // 0x2CC
     void *pokepic;            // 0x2D0
-    u32 unk_2D4;              // 0x2D4
+    u32 pokepicAnimReverseX;  // 0x2D4
     u8 pad_2D8[0x7B8 - 0x2D8];
     void *pokepicAnimNarc; // 0x7B8
     u8 pad_7BC[3];
@@ -91,7 +91,7 @@ typedef char AssertPicture2A0[(offsetof(PokemonSummaryScene, pokepicManager) == 
 typedef char AssertPicture2A4[(offsetof(PokemonSummaryScene, pokepicAnimScript) == 0x2A4) ? 1 : -1];
 typedef char AssertPicture2CC[(offsetof(PokemonSummaryScene, pokepicAnimManager) == 0x2CC) ? 1 : -1];
 typedef char AssertPicture2D0[(offsetof(PokemonSummaryScene, pokepic) == 0x2D0) ? 1 : -1];
-typedef char AssertPicture2D4[(offsetof(PokemonSummaryScene, unk_2D4) == 0x2D4) ? 1 : -1];
+typedef char AssertPicture2D4[(offsetof(PokemonSummaryScene, pokepicAnimReverseX) == 0x2D4) ? 1 : -1];
 typedef char AssertPicture7B8[(offsetof(PokemonSummaryScene, pokepicAnimNarc) == 0x7B8) ? 1 : -1];
 
 void PokemonSummary_Init3D(void);
@@ -256,7 +256,7 @@ void PokemonSummary_CreatePokepic(PokemonSummaryScene *a) {
         GetPokemonSpriteCharAndPlttNarcIds(pokepicTemplate, species, 2);
     }
     NARC_ReadPokepicAnimScript(a->pokepicAnimNarc, a->pokepicAnimScript, a->species, 1);
-    a->unk_2D4 = 0;
+    a->pokepicAnimReverseX = 0;
     a->pokepic = PokepicManager_CreatePokepic(a->pokepicManager, pokepicTemplate, 0xd0, 0x68, 0, 0, a->pokepicAnimScript, 0);
     Pokepic_SetAttr(a->pokepic, 6, 1);
     Pokepic_SetAttr(a->pokepic, 0x23, 0);
@@ -264,10 +264,10 @@ void PokemonSummary_CreatePokepic(PokemonSummaryScene *a) {
 
 void PokemonSummary_StartPokepicAnim(PokemonSummaryScene *a) {
     if (a->isEgg) {
-        NARC_StartPokepicAnim(a->pokepicAnimNarc, a->pokepicAnimManager, a->pokepic, 0, 2, a->unk_2D4, 0);
+        NARC_StartPokepicAnim(a->pokepicAnimNarc, a->pokepicAnimManager, a->pokepic, 0, 2, a->pokepicAnimReverseX, 0);
     } else {
         Pokepic_StartAnim(a->pokepic, 1);
-        NARC_StartPokepicAnim(a->pokepicAnimNarc, a->pokepicAnimManager, a->pokepic, a->species, 2, a->unk_2D4, 0);
+        NARC_StartPokepicAnim(a->pokepicAnimNarc, a->pokepicAnimManager, a->pokepic, a->species, 2, a->pokepicAnimReverseX, 0);
     }
 }
 

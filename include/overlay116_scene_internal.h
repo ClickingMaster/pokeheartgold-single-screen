@@ -25,7 +25,7 @@ typedef struct {
 } Ov116CameraKey;
 
 typedef struct {
-    u8 unk00;
+    u8 perspectiveDuration;
     u8 delay;
     u8 duration;
     u8 fadeFrames;

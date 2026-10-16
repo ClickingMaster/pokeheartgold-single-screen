@@ -48,7 +48,7 @@ typedef struct TrainerCardMainCard {
     u32 linkBattleWins;
     u32 linkBattleLosses;
     u32 linkTrades;
-    u8 unk_48[0x20];
+    u8 badgeShininess[0x20];
     u8 signature[0x600]; // 0x68, 1 bit per pixel
 } TrainerCardMainCard;
 

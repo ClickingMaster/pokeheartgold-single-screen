@@ -442,7 +442,7 @@ BOOL PhoneCall_PrintGreeting(PokegearPhoneCallContext *ctx) {
     switch (state->hangupToneState) {
     case 0:
         idx = state->timeOfDay * 2 + state->isIncomingCall * 6;
-        PhoneCallMessagePrint_Gendered(ctx, ctx->msgData_0640, sGreetingMsgIDs[state->phoneBookEntry->unkC][idx], sGreetingMsgIDs[state->phoneBookEntry->unkC][idx + 1]);
+        PhoneCallMessagePrint_Gendered(ctx, ctx->msgData_0640, sGreetingMsgIDs[state->phoneBookEntry->greetingMsgSet][idx], sGreetingMsgIDs[state->phoneBookEntry->greetingMsgSet][idx + 1]);
         break;
     case 1:
         if (!PhoneCall_IsMessageDonePrinting(ctx)) {
@@ -464,7 +464,7 @@ BOOL GearPhoneCall_Simple(PokegearPhoneCallContext *ctx) {
     case 0:
         PhoneCall_InitMsgDataAndBufferNames(ctx);
         PhoneCall_ApplyGenericNPCcallSideEffect(ctx, scriptDef);
-        if (state->phoneBookEntry->unkC == 0xFF) {
+        if (state->phoneBookEntry->greetingMsgSet == 0xFF) {
             ++state->scriptState;
         }
         break;

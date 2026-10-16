@@ -11,7 +11,7 @@ typedef struct PokeathlonMedalsArgs {
     Pokedex *pokedex;
     void *speciesMedals;
     BOOL natDexEnabled;
-    BOOL unkC;
+    BOOL allGoalsMet;
 } PokeathlonMedalsArgs;
 
 typedef struct PokeathlonEventRecordArgs {
@@ -19,12 +19,12 @@ typedef struct PokeathlonEventRecordArgs {
     Pokeathlon_RecordsLink *recordsLink;
     void *eventTotals;
     PlayerProfile *profile;
-    BOOL unk10;
+    BOOL allGoalsMet;
 } PokeathlonEventRecordArgs;
 
 typedef struct PokeathlonCourseRecordArgs {
     PokeathlonSave *pokeathlon;
-    BOOL unk4;
+    BOOL allGoalsMet;
 } PokeathlonCourseRecordArgs;
 
 typedef struct PokeathlonTrophiesArgs {

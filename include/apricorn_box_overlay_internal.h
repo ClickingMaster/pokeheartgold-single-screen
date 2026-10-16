@@ -40,17 +40,17 @@ typedef struct ApricornBoxApp {
 // No tracked definition: output block of ApricornJuice_RankFlavors.
 typedef struct ApricornJuiceEntry {
     u16 stat : 4;
-    u16 unk_04 : 4;
+    u16 strength : 4;
     u16 amount : 8;
 } ApricornJuiceEntry;
 
 typedef struct ApricornJuiceData {
     /* 0x00 */ ApricornJuiceEntry entries[2];
-    /* 0x04 */ u16 unk_04;
+    /* 0x04 */ u16 thirdEntry;
     /* 0x06 */ u8 statOverride[2];
     /* 0x08 */ u16 unk_08;
     /* 0x0A */ u8 penaltyStat;
-    /* 0x0B */ u8 unk_0B;
+    /* 0x0B */ u8 ties;
 } ApricornJuiceData;
 
 void SetMasterBrightnessByColor(PMLCDTarget screen, u16 color);

@@ -285,7 +285,7 @@ int PartyMenuArgs_GetSelectedAction(PartyMenuArgs *partyWork) {
 }
 
 u16 RunningAppData_GetUnk14(MoveSelectionResult *a0) {
-    return a0->unk14;
+    return a0->partySlot;
 }
 
 static BOOL Task_OpenPartyMenuForUnionRoomBattleSelect(TaskManager *taskman) {
@@ -400,7 +400,7 @@ PokemonSummaryArgs *LearnForgetMove_LaunchApp(enum HeapID heapID, FieldSystem *f
 }
 
 u16 RunningAppData_GetUnk16(MoveSelectionResult *a0) {
-    return a0->unk16;
+    return a0->selectedMoveSlot;
 }
 
 void PCBox_LaunchApp(FieldSystem *fieldSystem, PCBoxArgs *args) {
@@ -644,7 +644,7 @@ ApricornBoxArgs *ApricornBox_LaunchAppForJuice(FieldSystem *fieldSystem, u32 a1,
     args->menuInputStatePtr = &fieldSystem->menuInputState;
     args->steps = GameStats_GetCapped(Save_GameStats_Get(args->saveData), GAME_STAT_STEPS_WALKED);
     args->mode = 3;
-    args->unkC = a1;
+    args->juiceIndex = a1;
     args->juiceUsedVar = juiceUsedVar;
     ApricornBox_LaunchApp_Impl(fieldSystem, args);
     return args;
@@ -693,7 +693,7 @@ PokeathlonCourseRecordArgs *PokeathlonCourseRecord_LaunchApp(FieldSystem *fieldS
     SaveData *saveData = FieldSystem_GetSaveData(fieldSystem);
     PokeathlonSave *pokeathlon = Save_Pokeathlon_Get(saveData);
     args->pokeathlon = PokeathlonSave_dummy1(pokeathlon);
-    args->unk4 = LaunchApp_AreFlags0EFTo0F1Set(saveData);
+    args->allGoalsMet = LaunchApp_AreFlags0EFTo0F1Set(saveData);
     PokeathlonCourseRecord_LaunchApp_Impl(fieldSystem, args);
     return args;
 }
@@ -711,7 +711,7 @@ PokeathlonMedalsArgs *PokeathlonMedals_LaunchApp(FieldSystem *fieldSystem) {
     args->pokedex = pokedex;
     args->speciesMedals = PokeathlonSave_GetMonMedals(pokeathlonSave);
     args->natDexEnabled = Pokedex_GetNatDexFlag(pokedex);
-    args->unkC = LaunchApp_AreFlags0EFTo0F1Set(saveData);
+    args->allGoalsMet = LaunchApp_AreFlags0EFTo0F1Set(saveData);
     PokeathlonMedals_LaunchApp_Impl(fieldSystem, args);
     return args;
 }
@@ -728,7 +728,7 @@ PokeathlonEventRecordArgs *PokeathlonEventRecord_LaunchApp(FieldSystem *fieldSys
     args->recordsSolo = PokeathlonSave_GetRecordsSolo(pokeathlonSave);
     args->recordsLink = PokeathlonSave_GetRecordsLink(pokeathlonSave);
     args->profile = Save_PlayerData_GetProfile(saveData);
-    args->unk10 = LaunchApp_AreFlags0EFTo0F1Set(saveData);
+    args->allGoalsMet = LaunchApp_AreFlags0EFTo0F1Set(saveData);
     args->eventTotals = PokeathlonSave_GetSoloEventBestPoints(pokeathlonSave);
     PokeathlonEventRecord_LaunchApp_Impl(fieldSystem, args);
     return args;
@@ -929,7 +929,7 @@ static BOOL Task_WirelessTrade(TaskManager *taskman) {
         data->tradeSequence.sentMon = Mon_GetBoxMon(data->wirelessTradeSelectMon.sentMon);
         data->tradeSequence.receivedMon = Mon_GetBoxMon(data->wirelessTradeSelectMon.receivedMon);
         data->tradeSequence.options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
-        data->tradeSequence.unk10 = 1;
+        data->tradeSequence.tradeMode = 1;
 
         TIMEOFDAY timeOfDay = Field_GetTimeOfDay(fieldSystem);
         switch (timeOfDay) {
@@ -996,7 +996,7 @@ static const OverlayManagerTemplate sOverlayTemplate_RecordMixing = { RecordMixi
 
 void DrawingSession_LaunchApp(FieldSystem *fieldSystem) {
     DrawingSessionArgs *args = Heap_Alloc(HEAP_ID_FIELD3, sizeof(DrawingSessionArgs));
-    args->unk0 = fieldSystem->unionRoomObjects;
+    args->unionRoomObjects = fieldSystem->unionRoomObjects;
     args->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
     FieldSystem_LaunchApplication(fieldSystem, &sOverlayTemplate_DrawingSession, args);
 }
@@ -1142,10 +1142,10 @@ void CallTask_NamingScreen(TaskManager *taskman, NameScreenType type, int specie
 
 void TrainerCard_LaunchApp(FieldSystem *fieldSystem, TrainerCardAppArgs *args) {
     static const OverlayManagerTemplate sOverlayTemplate_TrainerCard = { TrainerCard_Init, TrainerCard_Main, TrainerCard_Exit, FS_OVERLAY_ID(trainer_card) };
-    args->unk66C.menuInputStatePtr = &fieldSystem->menuInputState;
-    args->unk66C.saveData = fieldSystem->saveData;
-    args->unk66C.gameCleared = CheckGameClearFlag(Save_VarsFlags_Get(fieldSystem->saveData));
-    args->unk66C.showBack = 0;
+    args->settings.menuInputStatePtr = &fieldSystem->menuInputState;
+    args->settings.saveData = fieldSystem->saveData;
+    args->settings.gameCleared = CheckGameClearFlag(Save_VarsFlags_Get(fieldSystem->saveData));
+    args->settings.showBack = 0;
     FieldSystem_LaunchApplication(fieldSystem, &sOverlayTemplate_TrainerCard, args);
 }
 
@@ -1304,7 +1304,7 @@ PartyMenuArgs *PartyMenu_LaunchApp_Gracidea(FieldSystem *fieldSystem, enum HeapI
     args->bag = Save_Bag_Get(fieldSystem->saveData);
     args->mailbox = Save_Mailbox_Get(fieldSystem->saveData);
     args->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
-    args->unk_10 = Save_Block23_Get(fieldSystem->saveData);
+    args->saveBlock23 = Save_Block23_Get(fieldSystem->saveData);
     args->fieldMoveCheckData = NULL;
     args->panelLayout = 0;
     args->context = PARTY_MENU_CONTEXT_USE_ITEM;

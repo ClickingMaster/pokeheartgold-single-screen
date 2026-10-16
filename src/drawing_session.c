@@ -270,7 +270,7 @@ BOOL DrawingSession_Exit(OverlayManager *man, int *state) {
     case 1:
         CommState_SetMaxEntries(1);
         CommState_ResumeAlternateSearch();
-        UnionRoomObjects_ResetSlots(args->unk0);
+        UnionRoomObjects_ResetSlots(args->unionRoomObjects);
         GX_SetDispSelect(GX_DISP_SELECT_MAIN_SUB);
         UnionRoom_SetBeaconActivity(0);
         CommWireless_SetDetectDrops(FALSE);

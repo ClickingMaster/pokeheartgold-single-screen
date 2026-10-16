@@ -2481,7 +2481,7 @@ BOOL ScrCmd_Dummy229(ScriptContext *ctx) {
 BOOL ScrCmd_LinkBattle(ScriptContext *ctx) {
     struct LinkBattleScriptWork **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
     struct LinkBattleScriptWork *work = *p_work;
-    CallTask_LinkBattle(ctx->fieldSystem->taskman, &work->unk_30, 5);
+    CallTask_LinkBattle(ctx->fieldSystem->taskman, &work->selectedOrder, 5);
     Heap_Free(work);
     *p_work = NULL;
     return TRUE;

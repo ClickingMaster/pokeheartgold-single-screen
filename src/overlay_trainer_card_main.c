@@ -167,8 +167,8 @@ int TrainerCardMainApp_Init(OverlayManager *manager, int *state) {
     memset(cardMain, 0, sizeof(TrainerCardMain));
     cardMain->args = OverlayManager_GetArgs(manager);
     cardMain->card = (TrainerCardMainCard *)cardMain->args;
-    cardMain->inTouchMode = MenuInputStateMgr_GetState(cardMain->args->unk66C.menuInputStatePtr);
-    options = Save_PlayerData_GetOptionsAddr(cardMain->args->unk66C.saveData);
+    cardMain->inTouchMode = MenuInputStateMgr_GetState(cardMain->args->settings.menuInputStatePtr);
+    options = Save_PlayerData_GetOptionsAddr(cardMain->args->settings.saveData);
     cardMain->textSpeed = Options_GetTextFrameDelay(options);
     cardMain->frame = Options_GetFrame(options);
     if (Comm_IsActive() == 1) {
@@ -179,7 +179,7 @@ int TrainerCardMainApp_Init(OverlayManager *manager, int *state) {
     } else {
         cardMain->showKantoBadges = FALSE;
     }
-    if (cardMain->isConnected == TRUE && cardMain->args->unk66C.gameCleared == FALSE) {
+    if (cardMain->isConnected == TRUE && cardMain->args->settings.gameCleared == FALSE) {
         cardMain->showKantoBadges = FALSE;
     }
     if ((u8)(cardMain->card->version + 0xf9) <= 1) {
@@ -214,12 +214,12 @@ int TrainerCardMainApp_Init(OverlayManager *manager, int *state) {
     TrainerCardMain_CreateButtonSprites(&cardMain->sprites);
     TrainerCardMain_CreateWindows(cardMain);
     TrainerCardMain_DrawPlayTimeColon(&cardMain->windows[5], TRUE, cardMain->colonString);
-    if (cardMain->args->unk66C.showBack) {
+    if (cardMain->args->settings.showBack) {
         cardMain->showingBack = TRUE;
     } else {
         cardMain->showingBack = FALSE;
     }
-    cardMain->args->unk66C.showBack = 0;
+    cardMain->args->settings.showBack = 0;
     cardMain->unk_3434 = 0;
     cardMain->unk_3108 = -1;
     cardMain->unk_339C = 0;
@@ -288,7 +288,7 @@ int TrainerCardMainApp_Main(OverlayManager *manager, int *state) {
     }
     case 5:
         BeginNormalPaletteFade(FADE_MAIN_THEN_SUB, FADE_TYPE_UPWARD_OUT, FADE_TYPE_UPWARD_OUT, RGB_BLACK, 6, 1, HEAP_ID_25);
-        cardMain->args->unk66C.showBack = 1;
+        cardMain->args->settings.showBack = 1;
         *state = 2;
         break;
     }
@@ -314,7 +314,7 @@ int TrainerCardMainApp_Exit(OverlayManager *manager, int *state) {
     GF_TouchpadStopSampling();
     TextFlags_SetCanTouchSpeedUpPrint(FALSE);
     TextFlags_SetCanABSpeedUpPrint(FALSE);
-    MenuInputStateMgr_SetState(cardMain->args->unk66C.menuInputStatePtr, (MenuInputState)cardMain->inTouchMode);
+    MenuInputStateMgr_SetState(cardMain->args->settings.menuInputStatePtr, (MenuInputState)cardMain->inTouchMode);
     OverlayManager_FreeData(manager);
     Main_SetVBlankIntrCB(NULL, NULL);
     Heap_Destroy(HEAP_ID_25);

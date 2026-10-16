@@ -61,7 +61,7 @@ typedef struct TouchMartAppData {
     u32 state;
     u32 unk_10;
     MartData *martData;
-    void *unk_18;
+    void *lastTouchMenuInput;
     FieldSystem *fieldSystem;
     u8 unk_20[0x10];
     u32 unk_30;
@@ -165,7 +165,7 @@ SysTask *TouchMartApp_Init(BgConfig *bgConfig, void *a1, FieldSystem *fieldSyste
     data->task = task;
     data->unk_00 = 0;
     data->bgConfig = bgConfig;
-    data->unk_18 = a1;
+    data->lastTouchMenuInput = a1;
     data->fieldSystem = fieldSystem;
     data->unk_30 = 0;
     data->options = Save_PlayerData_GetOptionsAddr(data->fieldSystem->saveData);

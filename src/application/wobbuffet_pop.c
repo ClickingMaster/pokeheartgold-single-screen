@@ -1738,9 +1738,9 @@ void WobbuffetPopBalloon_Draw(WobbuffetPopBalloon *balloon) {
     translate.z = -5 * FX32_ONE;
     NNS_G3dGeBufferOP_N(G3OP_MTX_TRANS, (u32 *)&translate, 3);
     base = balloon->scaleY;
-    scaleY = base + base * balloon->unk_26A / 100;
+    scaleY = base + base * balloon->extraScaleYPercent / 100;
     base = balloon->scaleX;
-    scaleX = base + base * (balloon->squash + balloon->unk_26C) / 100;
+    scaleX = base + base * (balloon->squash + balloon->extraScaleXPercent) / 100;
     scale.x = scaleX;
     scale.z = FX32_ONE;
     scale.y = scaleY;

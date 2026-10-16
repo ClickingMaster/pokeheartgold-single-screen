@@ -6,7 +6,7 @@
 
 typedef struct ApricornJuice {
     u16 unk0;
-    u8 unk2;
+    u8 mildness;
     u8 unk3;
     u32 unk4;
 } ApricornJuice; // size: 0x8
