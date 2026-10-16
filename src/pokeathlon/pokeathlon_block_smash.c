@@ -7,6 +7,7 @@
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0309.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
+#include "pokeathlon/pokeathlon_event_points.h"
 #include "pokeathlon/pokeathlon_pennant_capture.h"
 
 #include "assert.h"
@@ -23,11 +24,11 @@
 #include "pokemon_icon_idx.h"
 #include "screen_fade.h"
 #include "sound_playback.h"
+#include "sprite_resource_header.h"
 #include "sprite_system.h"
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "sprite_resource_header.h"
 #include "wireless_status_icon.h"
 
 enum {
@@ -46,8 +47,6 @@ enum {
     BLOCK_STATE_LANDED,
 };
 
-// Course helpers (OVY_96, not yet tidied).
-u8 *PokeathlonCourse_ToBytes(void *block);
 void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, int participant, int member, void *out);
 void *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, int member);
 u32 PokeathlonCourse_GetSpriteSizeType(void *mon);
@@ -74,7 +73,6 @@ void PokeathlonCourseMonObjects_Load(void *monPics, int count, void *mons, void 
 BOOL PokeathlonCourseMonObjects_IsLoaded(PokeathlonCourseMonObjects *monPics);
 void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseObjects *monPics, int paused);
 void PokeathlonCourse_LoadMonIcon(ManagedSprite *sprite, void *mon, u16 plttId, NARC *narc, u32 offset, enum HeapID heapId);
-void PokeathlonEvent_CalcPoints(void *graphics, int event);
 
 typedef struct PokeathlonBlockSmashBannerPosition {
     u16 x;
@@ -97,10 +95,8 @@ typedef struct PokeathlonBlockSmashBgTemplates {
 
 extern const PokeathlonBlockSmashBgTemplates gPokeathlonBlockSmashBgTemplates;
 
-// sound_system.c (no header declares it)
 void GF_SndSetTrackPitchBySeqNo(u16 seqNo, u32 trackMask, int pitch);
 
-// The rest of Block Smash (OVY_96, not yet tidied), declared as the calls were built.
 PokeathlonBlockSmashMon *PokeathlonBlockSmashMon_New(enum HeapID heapId, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonCourseData *course);
 void PokeathlonBlockSmashMon_Delete(PokeathlonBlockSmashMon *mon);
 void PokeathlonBlockSmashMon_Update(PokeathlonBlockSmashMon *mon, int touched);
@@ -129,7 +125,7 @@ ManagedSprite *PokeathlonBlockSmash_NewSubSprite(SpriteSystem *spriteSystem, Spr
 extern const TouchscreenHitbox *gPokeathlonBlockSmashSpotHitboxes[3];
 extern const u8 gPokeathlonBlockSmashSpotHitboxCounts[3];
 extern const s16 gPokeathlonBlockSmashSpotPositions[4][2]; // x, y of the four weak spot positions
-extern const s16 gPokeathlonBlockSmashSpotPositionsY[];     // their y (the second half of each gPokeathlonBlockSmashSpotPositions entry)
+extern const s16 gPokeathlonBlockSmashSpotPositionsY[];    // their y (the second half of each gPokeathlonBlockSmashSpotPositions entry)
 extern const s16 gPokeathlonBlockSmashBlockTouchOffsets[4][2];
 
 // The sprites of a participant's row on the top screen
@@ -141,10 +137,58 @@ typedef struct PokeathlonBlockSmashRowSprites {
 
 extern const PokeathlonBlockSmashRowSprites gPokeathlonBlockSmashRowSprites[4];
 
-// The Pennant Capture CPU's cell checks (used by pokeathlon_pennant_capture_cpu.c) are compiled at the
-// head of this unit.
 BOOL PokeathlonPennantCaptureCpu_IsNearCellTarget(PokeathlonPennantCaptureCpuCell *cell, s32 x, s32 y);
 BOOL PokeathlonPennantCaptureCpu_IsCellTargetOnField(PokeathlonPennantCaptureCpuCell *cell);
+
+static void PokeathlonBlockSmash_SetVramBanks(void);
+static void PokeathlonBlockSmash_InitSpriteSystem(PokeathlonBlockSmash *work);
+static void PokeathlonBlockSmash_FreeSpriteSystem(PokeathlonBlockSmash *work);
+static void PokeathlonBlockSmash_CreateHudSprites(PokeathlonBlockSmash *work);
+static void PokeathlonBlockSmash_DeleteHudSprites(PokeathlonBlockSmash *work);
+static void PokeathlonBlockSmash_LoadSpriteResources(PokeathlonBlockSmash *work);
+static void PokeathlonBlockSmash_LoadMainAndSubSpriteRes(SpriteSystem *spriteSystem, SpriteManager *spriteManager);
+static void PokeathlonBlockSmash_UpdateScoreDigits(PokeathlonBlockSmash *work);
+static void PokeathlonBlockSmash_StopHudAnims(PokeathlonBlockSmash *work);
+static void PokeathlonBlockSmash_InitBgs(BgConfig *bgConfig, enum HeapID heapId);
+static void PokeathlonBlockSmash_FreeBgsAndText(PokeathlonBlockSmash *work);
+static void PokeathlonBlockSmash_LoadBgGraphics(PokeathlonBlockSmash *work);
+static void PokeathlonBlockSmash_InitText(PokeathlonCourseData *course);
+static void PokeathlonBlockSmash_UpdateTimer(PokeathlonBlockSmash *work);
+static void PokeathlonBlockSmash_PrintInitialText(PokeathlonBlockSmash *work);
+static void PokeathlonBlockSmash_PrintMessage(Window *window, MessageFormat *msgFormat, MsgData *msgData, u32 msgId, enum HeapID heapId);
+static void PokeathlonBlockSmash_CreateTeamRows(PokeathlonCourseData *course);
+static void PokeathlonBlockSmash_DeleteTeamRows(PokeathlonBlockSmash *work);
+static void PokeathlonBlockSmash_UpdateTeamRows(PokeathlonCourseData *course);
+static void PokeathlonBlockSmash_SetTeamRowIcon(PokeathlonCourseData *course, u32 participant, u32 member);
+static void PokeathlonBlockSmash_HandleSwipe(PokeathlonBlockSmash *work, BOOL anywhere);
+static void PokeathlonBlockSmash_WriteReport(PokeathlonCourseData *course);
+static void PokeathlonBlockSmash_UpdateLinkData(PokeathlonCourseData *course);
+static void PokeathlonBlockSmash_PrintScore(PokeathlonCourseData *course, u32 score);
+static void PokeathlonBlockSmash_StartShake(PokeathlonBlockSmash *work, int offset, int decay);
+static PokeathlonBlockSmashBlocks *PokeathlonBlockSmashBlocks_New(enum HeapID heapId, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonCourseData *course);
+static void PokeathlonBlockSmashBlocks_Delete(PokeathlonBlockSmashBlocks *blocks);
+static void PokeathlonBlockSmashBlocks_Update(PokeathlonBlockSmashBlocks *blocks);
+static void PokeathlonBlockSmashBlocks_Pause(PokeathlonBlockSmashBlocks *blocks);
+static BOOL PokeathlonBlockSmashBlocks_IsSpotTouched(PokeathlonBlockSmashBlocks *blocks, int kind);
+static BOOL PokeathlonBlockSmashBlocks_IsTopBlockTouched(PokeathlonBlockSmashBlocks *blocks);
+static u32 PokeathlonBlockSmashBlocks_GetState(PokeathlonBlockSmashBlocks *blocks);
+static u16 PokeathlonBlockSmashBlocks_GetScore(PokeathlonBlockSmashBlocks *blocks);
+static void PokeathlonBlockSmashBlocks_UpdateDrop(PokeathlonBlockSmashBlocks *blocks);
+static void PokeathlonBlockSmashBlocks_CheckEmpty(PokeathlonBlockSmashBlocks *blocks);
+static PokeathlonBlockSmashBlock *PokeathlonBlockSmashBlock_New(enum HeapID heapId, SpriteSystem *spriteSystem, SpriteManager *spriteManager, u32 index);
+static void PokeathlonBlockSmashBlock_Drop(PokeathlonBlockSmashBlock *block);
+static void PokeathlonBlockSmashBlock_Delete(PokeathlonBlockSmashBlock *block);
+static void PokeathlonBlockSmashBlock_Update(PokeathlonBlockSmashBlock *block);
+static void PokeathlonBlockSmashBlock_MoveSpot(PokeathlonBlockSmashBlock *block);
+static void PokeathlonBlockSmashBlock_UpdateSpot(PokeathlonBlockSmashBlock *block);
+static BOOL PokeathlonBlockSmashBlock_IsSpotTouched(PokeathlonBlockSmashBlock *block, int kind);
+static void PokeathlonBlockSmashBlock_GetPosition(PokeathlonBlockSmashBlock *block, s16 *x, s16 *y);
+static u32 PokeathlonBlockSmashBlock_GetState(PokeathlonBlockSmashBlock *block);
+static void PokeathlonBlockSmashFragments_Init(PokeathlonBlockSmashFragment *fragments, SpriteSystem *spriteSystem, SpriteManager *spriteManager);
+static void PokeathlonBlockSmashFragments_Delete(PokeathlonBlockSmashFragment *fragments);
+static void PokeathlonBlockSmashFragments_Spawn(PokeathlonBlockSmashFragment *fragments, u8 count, s16 x, s16 y);
+static void PokeathlonBlockSmashFragments_Update(PokeathlonBlockSmashFragment *fragments);
+static void PokeathlonBlockSmashFragments_Pause(PokeathlonBlockSmashFragment *fragments);
 
 BOOL PokeathlonPennantCaptureCpu_IsNearCellTarget(PokeathlonPennantCaptureCpuCell *cell, s32 x, s32 y) {
     s32 left = cell->targetX - 16;
@@ -210,7 +254,7 @@ BOOL PokeathlonBlockSmash_Intro(PokeathlonCourseData *course, u8 *state) {
 }
 
 // Returns TRUE once the host's frame says the event is over.
-BOOL PokeathlonBlockSmash_UpdateGame(PokeathlonCourseData *course) {
+static BOOL PokeathlonBlockSmash_UpdateGame(PokeathlonCourseData *course) {
     PokeathlonBlockSmash *work = PokeathlonCourse_GetWork(course);
     int state;
     BOOL touched;
@@ -498,12 +542,12 @@ BOOL PokeathlonBlockSmash_Exit(PokeathlonCourseData *course) {
     return TRUE;
 }
 
-void PokeathlonBlockSmash_SetVramBanks(void) {
+static void PokeathlonBlockSmash_SetVramBanks(void) {
     GraphicsBanks banks = gPokeathlonBlockSmashGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
-void PokeathlonBlockSmash_InitSpriteSystem(PokeathlonBlockSmash *work) {
+static void PokeathlonBlockSmash_InitSpriteSystem(PokeathlonBlockSmash *work) {
     SpriteResourceCountsListUnion counts = gPokeathlonBlockSmashSpriteResourceCounts;
     OamManagerParam oamParam = gPokeathlonBlockSmashOamManagerParam;
     OamCharTransferParam transferParam = gPokeathlonBlockSmashOamCharTransferParam;
@@ -520,7 +564,7 @@ void PokeathlonBlockSmash_InitSpriteSystem(PokeathlonBlockSmash *work) {
 
 #pragma force_active reset
 
-void PokeathlonBlockSmash_FreeSpriteSystem(PokeathlonBlockSmash *work) {
+static void PokeathlonBlockSmash_FreeSpriteSystem(PokeathlonBlockSmash *work) {
     NARC_Delete(work->icons.narc);
     PokeathlonCourseMonObjects_Free(work->monPics);
     PokeathlonCourseSprites_FreeResources(work->iconResources);
@@ -529,7 +573,7 @@ void PokeathlonBlockSmash_FreeSpriteSystem(PokeathlonBlockSmash *work) {
 }
 
 // The timer (top screen), the score frame and the digits.
-void PokeathlonBlockSmash_CreateHudSprites(PokeathlonBlockSmash *work) {
+static void PokeathlonBlockSmash_CreateHudSprites(PokeathlonBlockSmash *work) {
     VecFx32 position = { 0, 0, 0 };
     int i;
     int x = FX32_CONST(8);
@@ -565,7 +609,7 @@ void PokeathlonBlockSmash_CreateHudSprites(PokeathlonBlockSmash *work) {
     work->switchButton = PokeathlonBlockSmash_NewMainSprite(work->spriteSystem, work->spriteManager, 32, 16, 19, 2);
 }
 
-void PokeathlonBlockSmash_DeleteHudSprites(PokeathlonBlockSmash *work) {
+static void PokeathlonBlockSmash_DeleteHudSprites(PokeathlonBlockSmash *work) {
     s32 i;
     GF_ASSERT(work != NULL);
     for (i = 0; i < 2; i++, work = (PokeathlonBlockSmash *)((u8 *)work + sizeof(ManagedSprite *))) {
@@ -574,7 +618,7 @@ void PokeathlonBlockSmash_DeleteHudSprites(PokeathlonBlockSmash *work) {
     }
 }
 
-void PokeathlonBlockSmash_LoadSpriteResources(PokeathlonBlockSmash *work) {
+static void PokeathlonBlockSmash_LoadSpriteResources(PokeathlonBlockSmash *work) {
     SpriteSystem *spriteSystem;
     SpriteManager *spriteManager;
     spriteManager = work->spriteManager;
@@ -594,7 +638,7 @@ void PokeathlonBlockSmash_LoadSpriteResources(PokeathlonBlockSmash *work) {
 
 #pragma opt_propagation off
 
-void PokeathlonBlockSmash_LoadMainAndSubSpriteRes(SpriteSystem *spriteSystem, SpriteManager *spriteManager) {
+static void PokeathlonBlockSmash_LoadMainAndSubSpriteRes(SpriteSystem *spriteSystem, SpriteManager *spriteManager) {
     int i;
     int vram;
     vram = NNS_G2D_VRAM_TYPE_2DMAIN;
@@ -613,7 +657,7 @@ void PokeathlonBlockSmash_LoadMainAndSubSpriteRes(SpriteSystem *spriteSystem, Sp
 
 #pragma opt_propagation reset
 
-void PokeathlonBlockSmash_UpdateScoreDigits(PokeathlonBlockSmash *work) {
+static void PokeathlonBlockSmash_UpdateScoreDigits(PokeathlonBlockSmash *work) {
     s32 i;
     u16 score;
     GF_ASSERT(work != NULL);
@@ -627,14 +671,14 @@ void PokeathlonBlockSmash_UpdateScoreDigits(PokeathlonBlockSmash *work) {
     }
 }
 
-void PokeathlonBlockSmash_StopHudAnims(PokeathlonBlockSmash *work) {
+static void PokeathlonBlockSmash_StopHudAnims(PokeathlonBlockSmash *work) {
     s32 i;
     for (i = 0; i < 2; i++, work = (PokeathlonBlockSmash *)((u8 *)work + sizeof(ManagedSprite *))) {
         ManagedSprite_SetAnimateFlag(work->timerFrame, FALSE);
     }
 }
 
-void PokeathlonBlockSmash_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {
+static void PokeathlonBlockSmash_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {
     GraphicsModes modes = gPokeathlonBlockSmashGraphicsModes;
     s32 i;
     SetBothScreensModesAndDisable(&modes);
@@ -651,7 +695,7 @@ void PokeathlonBlockSmash_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {
     }
 }
 
-void PokeathlonBlockSmash_FreeBgsAndText(PokeathlonBlockSmash *work) {
+static void PokeathlonBlockSmash_FreeBgsAndText(PokeathlonBlockSmash *work) {
     s32 i;
     PokeathlonBlockSmash *cursor;
     for (i = 0, cursor = work; i < 3; i++, cursor = (PokeathlonBlockSmash *)((u8 *)cursor + sizeof(String *))) {
@@ -669,7 +713,7 @@ void PokeathlonBlockSmash_FreeBgsAndText(PokeathlonBlockSmash *work) {
     Heap_Free(work->bgConfig);
 }
 
-void PokeathlonBlockSmash_LoadBgGraphics(PokeathlonBlockSmash *work) {
+static void PokeathlonBlockSmash_LoadBgGraphics(PokeathlonBlockSmash *work) {
     GfGfxLoader_LoadCharData(NARC_a_2_3_2, 1, work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, TRUE, work->heapId);
     GfGfxLoader_LoadScrnData(NARC_a_2_3_2, 2, work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, TRUE, work->heapId);
     GfGfxLoader_GXLoadPal(NARC_a_2_3_2, 0, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0, work->heapId);
@@ -681,7 +725,7 @@ void PokeathlonBlockSmash_LoadBgGraphics(PokeathlonBlockSmash *work) {
     GfGfxLoader_GXLoadPal(NARC_a_2_3_2, 3, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0, work->heapId);
 }
 
-void PokeathlonBlockSmash_InitText(PokeathlonCourseData *course) {
+static void PokeathlonBlockSmash_InitText(PokeathlonCourseData *course) {
     PokeathlonBlockSmash *work = PokeathlonCourse_GetWork(course);
     int i;
     PokeathlonBlockSmashTeamMon *mons;
@@ -700,7 +744,7 @@ void PokeathlonBlockSmash_InitText(PokeathlonCourseData *course) {
 }
 
 // The seconds left and the name of the Pokemon next in line.
-void PokeathlonBlockSmash_UpdateTimer(PokeathlonBlockSmash *work) {
+static void PokeathlonBlockSmash_UpdateTimer(PokeathlonBlockSmash *work) {
     int seconds;
     u8 value;
     GF_ASSERT(work != NULL);
@@ -717,12 +761,12 @@ void PokeathlonBlockSmash_UpdateTimer(PokeathlonBlockSmash *work) {
     PokeathlonBlockSmash_PrintMessage(&work->windows[3], work->msgFormat, work->msgData, msg_0309_00154, work->heapId);
 }
 
-void PokeathlonBlockSmash_PrintInitialText(PokeathlonBlockSmash *work) {
+static void PokeathlonBlockSmash_PrintInitialText(PokeathlonBlockSmash *work) {
     PokeathlonBlockSmash_PrintMessage(&work->windows[0], work->msgFormat, work->msgData, msg_0309_00301, work->heapId);
     PokeathlonBlockSmash_UpdateTimer(work);
 }
 
-void PokeathlonBlockSmash_PrintMessage(Window *window, MessageFormat *msgFormat, MsgData *msgData, u32 msgId, enum HeapID heapId) {
+static void PokeathlonBlockSmash_PrintMessage(Window *window, MessageFormat *msgFormat, MsgData *msgData, u32 msgId, enum HeapID heapId) {
     String *string;
     FillWindowPixelBuffer(window, 0);
     string = ReadMsgData_ExpandPlaceholders(msgFormat, msgData, msgId, heapId);
@@ -732,7 +776,7 @@ void PokeathlonBlockSmash_PrintMessage(Window *window, MessageFormat *msgFormat,
 }
 
 // The four participants' rows on the top screen.
-void PokeathlonBlockSmash_CreateTeamRows(PokeathlonCourseData *course) {
+static void PokeathlonBlockSmash_CreateTeamRows(PokeathlonCourseData *course) {
     PokeathlonBlockSmash *work;
     int i;
     PokeathlonBlockSmashTeamRow *row;
@@ -764,7 +808,7 @@ void PokeathlonBlockSmash_CreateTeamRows(PokeathlonCourseData *course) {
     }
 }
 
-void PokeathlonBlockSmash_DeleteTeamRows(PokeathlonBlockSmash *work) {
+static void PokeathlonBlockSmash_DeleteTeamRows(PokeathlonBlockSmash *work) {
     s32 i, j;
     PokeathlonBlockSmashTeamRow *row;
     PokeathlonBlockSmashTeamRow *cursor;
@@ -789,7 +833,7 @@ void PokeathlonBlockSmash_DeleteTeamRows(PokeathlonBlockSmash *work) {
 }
 
 // Shows each participant's score as bars (one per 5 blocks) and its active Pokemon.
-void PokeathlonBlockSmash_UpdateTeamRows(PokeathlonCourseData *course) {
+static void PokeathlonBlockSmash_UpdateTeamRows(PokeathlonCourseData *course) {
     PokeathlonBlockSmashTeamRow *row;
     int participant;
     PokeathlonBlockSmashReport *report;
@@ -842,7 +886,7 @@ void PokeathlonBlockSmash_UpdateTeamRows(PokeathlonCourseData *course) {
     } while (participant < 4);
 }
 
-void PokeathlonBlockSmash_SetTeamRowIcon(PokeathlonCourseData *course, u32 participant, u32 member) {
+static void PokeathlonBlockSmash_SetTeamRowIcon(PokeathlonCourseData *course, u32 participant, u32 member) {
     PokeathlonBlockSmashMonInfo info;
     PokeathlonBlockSmash *work = PokeathlonCourse_GetWork(course);
     PokeathlonBlockSmashTeamIcons *icons = &work->icons;
@@ -852,7 +896,7 @@ void PokeathlonBlockSmash_SetTeamRowIcon(PokeathlonCourseData *course, u32 parti
 
 // Swiping the active Pokemon up (from inside the block area unless `anywhere`) switches to the next
 // one; the switch button does the same.
-void PokeathlonBlockSmash_HandleSwipe(PokeathlonBlockSmash *work, BOOL anywhere) {
+static void PokeathlonBlockSmash_HandleSwipe(PokeathlonBlockSmash *work, BOOL anywhere) {
     u32 x, y, heldX, heldY;
     int anim;
     PokeathlonBlockSmashSwipe *swipe;
@@ -914,7 +958,7 @@ void PokeathlonBlockSmash_HandleSwipe(PokeathlonBlockSmash *work, BOOL anywhere)
 }
 
 // Fills in the own report of the link data.
-void PokeathlonBlockSmash_WriteReport(PokeathlonCourseData *course) {
+static void PokeathlonBlockSmash_WriteReport(PokeathlonCourseData *course) {
     PokeathlonBlockSmash *work = PokeathlonCourse_GetWork(course);
     PokeathlonBlockSmashReport *report = (PokeathlonBlockSmashReport *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course));
     PokeathlonBlockSmashMember *member = PokeathlonBlockSmashMon_GetActiveMember(work->mon);
@@ -928,7 +972,7 @@ void PokeathlonBlockSmash_WriteReport(PokeathlonCourseData *course) {
 }
 
 // The host builds the frame from all reports; every participant then writes its own report.
-void PokeathlonBlockSmash_UpdateLinkData(PokeathlonCourseData *course) {
+static void PokeathlonBlockSmash_UpdateLinkData(PokeathlonCourseData *course) {
     BOOL participant = PokeathlonCourse_GetNetId(course);
     PokeathlonBlockSmash *work = PokeathlonCourse_GetWork(course);
     u8 *data = PokeathlonCourse_GetDataCopyArea(course);
@@ -954,7 +998,7 @@ void PokeathlonBlockSmash_UpdateLinkData(PokeathlonCourseData *course) {
     PokeathlonBlockSmash_WriteReport(course);
 }
 
-void PokeathlonBlockSmash_PrintScore(PokeathlonCourseData *course, u32 score) {
+static void PokeathlonBlockSmash_PrintScore(PokeathlonCourseData *course, u32 score) {
     PokeathlonBlockSmash *work;
     MessageFormat *msgFormat;
     MsgData *msgData;
@@ -972,7 +1016,7 @@ void PokeathlonBlockSmash_PrintScore(PokeathlonCourseData *course, u32 score) {
 }
 
 // Shakes the touch screen up and down with a shrinking amplitude.
-void PokeathlonBlockSmash_ShakeTask(SysTask *task, void *data) {
+static void PokeathlonBlockSmash_ShakeTask(SysTask *task, void *data) {
     PokeathlonBlockSmash *work = data;
     s32 offset;
     s32 sign;
@@ -996,7 +1040,7 @@ void PokeathlonBlockSmash_ShakeTask(SysTask *task, void *data) {
     }
 }
 
-void PokeathlonBlockSmash_StartShake(PokeathlonBlockSmash *work, int offset, int decay) {
+static void PokeathlonBlockSmash_StartShake(PokeathlonBlockSmash *work, int offset, int decay) {
     if (work->shakeTask != NULL) {
         SysTask_Destroy(work->shakeTask);
     }
@@ -1006,7 +1050,7 @@ void PokeathlonBlockSmash_StartShake(PokeathlonBlockSmash *work, int offset, int
     work->shakeTask = SysTask_CreateOnMainQueue(PokeathlonBlockSmash_ShakeTask, work, 2);
 }
 
-PokeathlonBlockSmashBlocks *PokeathlonBlockSmashBlocks_New(enum HeapID heapId, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonCourseData *course) {
+static PokeathlonBlockSmashBlocks *PokeathlonBlockSmashBlocks_New(enum HeapID heapId, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonCourseData *course) {
     PokeathlonBlockSmashBlocks *blocks;
     s32 i;
     blocks = Heap_Alloc(heapId, sizeof(PokeathlonBlockSmashBlocks));
@@ -1027,7 +1071,7 @@ PokeathlonBlockSmashBlocks *PokeathlonBlockSmashBlocks_New(enum HeapID heapId, S
     return blocks;
 }
 
-void PokeathlonBlockSmashBlocks_Delete(PokeathlonBlockSmashBlocks *blocks) {
+static void PokeathlonBlockSmashBlocks_Delete(PokeathlonBlockSmashBlocks *blocks) {
     s32 i;
     GF_ASSERT(blocks != NULL);
     GF_ASSERT(blocks->hitSprite != NULL);
@@ -1040,7 +1084,7 @@ void PokeathlonBlockSmashBlocks_Delete(PokeathlonBlockSmashBlocks *blocks) {
     Heap_Free(blocks);
 }
 
-void PokeathlonBlockSmashBlocks_Update(PokeathlonBlockSmashBlocks *blocks) {
+static void PokeathlonBlockSmashBlocks_Update(PokeathlonBlockSmashBlocks *blocks) {
     GF_ASSERT(blocks != NULL);
     switch (blocks->state) {
     case BLOCKS_STATE_DROPPING:
@@ -1056,7 +1100,7 @@ void PokeathlonBlockSmashBlocks_Update(PokeathlonBlockSmashBlocks *blocks) {
     PokeathlonBlockSmashFragments_Update(blocks->fragments);
 }
 
-void PokeathlonBlockSmashBlocks_Pause(PokeathlonBlockSmashBlocks *blocks) {
+static void PokeathlonBlockSmashBlocks_Pause(PokeathlonBlockSmashBlocks *blocks) {
     s32 i;
     ManagedSprite_SetAnimateFlag(blocks->missSprite, FALSE);
     ManagedSprite_SetAnimateFlag(blocks->hitSprite, FALSE);
@@ -1070,7 +1114,7 @@ void PokeathlonBlockSmashBlocks_Pause(PokeathlonBlockSmashBlocks *blocks) {
 }
 
 // Whether the touch hits the weak spot of the top block (`kind`: the spot's shape).
-BOOL PokeathlonBlockSmashBlocks_IsSpotTouched(PokeathlonBlockSmashBlocks *blocks, int kind) {
+static BOOL PokeathlonBlockSmashBlocks_IsSpotTouched(PokeathlonBlockSmashBlocks *blocks, int kind) {
     GF_ASSERT(blocks != NULL);
     GF_ASSERT(blocks->count != 0);
     if (PokeathlonBlockSmashBlock_IsSpotTouched(blocks->blocks[blocks->count - 1], kind)) {
@@ -1087,7 +1131,7 @@ typedef struct PokeathlonBlockSmashVec {
 
 // Whether the new touch is on the top block: within its height and inside the trapezoid
 // gPokeathlonBlockSmashBlockTouchOffsets (offsets from the block's position).
-BOOL PokeathlonBlockSmashBlocks_IsTopBlockTouched(PokeathlonBlockSmashBlocks *blocks) {
+static BOOL PokeathlonBlockSmashBlocks_IsTopBlockTouched(PokeathlonBlockSmashBlocks *blocks) {
     PokeathlonBlockSmashVec points[4];
     u32 touchX;
     u32 touchY;
@@ -1221,19 +1265,19 @@ u16 PokeathlonBlockSmashBlocks_Hit(PokeathlonBlockSmashBlocks *blocks, int membe
     return (u16)broken;
 }
 
-u32 PokeathlonBlockSmashBlocks_GetState(PokeathlonBlockSmashBlocks *blocks) {
+static u32 PokeathlonBlockSmashBlocks_GetState(PokeathlonBlockSmashBlocks *blocks) {
     GF_ASSERT(blocks != NULL);
     return blocks->state;
 }
 
-u16 PokeathlonBlockSmashBlocks_GetScore(PokeathlonBlockSmashBlocks *blocks) {
+static u16 PokeathlonBlockSmashBlocks_GetScore(PokeathlonBlockSmashBlocks *blocks) {
     GF_ASSERT(blocks != NULL);
     return blocks->score;
 }
 
 // Drops the next block every three frames; once all ten are dropped and none is falling any more,
 // the stack is ready.
-void PokeathlonBlockSmashBlocks_UpdateDrop(PokeathlonBlockSmashBlocks *blocks) {
+static void PokeathlonBlockSmashBlocks_UpdateDrop(PokeathlonBlockSmashBlocks *blocks) {
     int i;
     u32 timer;
     if (blocks->count >= 10) {
@@ -1262,13 +1306,13 @@ void PokeathlonBlockSmashBlocks_UpdateDrop(PokeathlonBlockSmashBlocks *blocks) {
 }
 
 // A cleared stack is rebuilt.
-void PokeathlonBlockSmashBlocks_CheckEmpty(PokeathlonBlockSmashBlocks *blocks) {
+static void PokeathlonBlockSmashBlocks_CheckEmpty(PokeathlonBlockSmashBlocks *blocks) {
     if (blocks->count == 0) {
         blocks->state = BLOCKS_STATE_DROPPING;
     }
 }
 
-PokeathlonBlockSmashBlock *PokeathlonBlockSmashBlock_New(enum HeapID heapId, SpriteSystem *spriteSystem, SpriteManager *spriteManager, u32 index) {
+static PokeathlonBlockSmashBlock *PokeathlonBlockSmashBlock_New(enum HeapID heapId, SpriteSystem *spriteSystem, SpriteManager *spriteManager, u32 index) {
     PokeathlonBlockSmashBlock *block;
     u16 priority;
     GF_ASSERT(spriteSystem != NULL);
@@ -1285,7 +1329,7 @@ PokeathlonBlockSmashBlock *PokeathlonBlockSmashBlock_New(enum HeapID heapId, Spr
     return block;
 }
 
-void PokeathlonBlockSmashBlock_Drop(PokeathlonBlockSmashBlock *block) {
+static void PokeathlonBlockSmashBlock_Drop(PokeathlonBlockSmashBlock *block) {
     GF_ASSERT(block != NULL);
     block->health = 100;
     block->fallSpeed = 0;
@@ -1299,7 +1343,7 @@ void PokeathlonBlockSmashBlock_Drop(PokeathlonBlockSmashBlock *block) {
     ManagedSprite_SetDrawFlag(block->spot, TRUE);
 }
 
-void PokeathlonBlockSmashBlock_Delete(PokeathlonBlockSmashBlock *block) {
+static void PokeathlonBlockSmashBlock_Delete(PokeathlonBlockSmashBlock *block) {
     GF_ASSERT(block != NULL);
     GF_ASSERT(block->sprite != NULL);
     GF_ASSERT(block->spot != NULL);
@@ -1309,7 +1353,7 @@ void PokeathlonBlockSmashBlock_Delete(PokeathlonBlockSmashBlock *block) {
 }
 
 // Falls with increasing speed until it lands on the block below (4 pixels per block).
-void PokeathlonBlockSmashBlock_Update(PokeathlonBlockSmashBlock *block) {
+static void PokeathlonBlockSmashBlock_Update(PokeathlonBlockSmashBlock *block) {
     if (block->state == BLOCK_STATE_FALLING) {
         u32 bottom = 168 - block->index * 4;
         s16 x, y;
@@ -1328,7 +1372,7 @@ void PokeathlonBlockSmashBlock_Update(PokeathlonBlockSmashBlock *block) {
 }
 
 // Moves the weak spot to one of the other three positions, with some randomness.
-void PokeathlonBlockSmashBlock_MoveSpot(PokeathlonBlockSmashBlock *block) {
+static void PokeathlonBlockSmashBlock_MoveSpot(PokeathlonBlockSmashBlock *block) {
     u8 slot;
     GF_ASSERT(block != NULL);
     slot = MTRandom() % 3;
@@ -1340,7 +1384,7 @@ void PokeathlonBlockSmashBlock_MoveSpot(PokeathlonBlockSmashBlock *block) {
     block->spotY = gPokeathlonBlockSmashSpotPositionsY[block->spotSlot * 2] + MTRandom() % 12;
 }
 
-void PokeathlonBlockSmashBlock_UpdateSpot(PokeathlonBlockSmashBlock *block) {
+static void PokeathlonBlockSmashBlock_UpdateSpot(PokeathlonBlockSmashBlock *block) {
     s16 position[2];
     GF_ASSERT(block != NULL);
     PokeathlonBlockSmashBlock_GetPosition(block, &position[1], &position[0]);
@@ -1350,7 +1394,7 @@ void PokeathlonBlockSmashBlock_UpdateSpot(PokeathlonBlockSmashBlock *block) {
 }
 
 // The touch areas of the weak spot (gPokeathlonBlockSmashSpotHitboxes[kind], gPokeathlonBlockSmashSpotHitboxCounts[kind] entries) around it.
-BOOL PokeathlonBlockSmashBlock_IsSpotTouched(PokeathlonBlockSmashBlock *block, int kind) {
+static BOOL PokeathlonBlockSmashBlock_IsSpotTouched(PokeathlonBlockSmashBlock *block, int kind) {
     TouchscreenHitbox hitboxes[3] = {
         { 0, 0, 0, 0 },
         { 0, 0, 0, 0 },
@@ -1386,17 +1430,17 @@ BOOL PokeathlonBlockSmashBlock_IsSpotTouched(PokeathlonBlockSmashBlock *block, i
     return FALSE;
 }
 
-void PokeathlonBlockSmashBlock_GetPosition(PokeathlonBlockSmashBlock *block, s16 *x, s16 *y) {
+static void PokeathlonBlockSmashBlock_GetPosition(PokeathlonBlockSmashBlock *block, s16 *x, s16 *y) {
     GF_ASSERT(block != NULL);
     ManagedSprite_GetPositionXY(block->sprite, x, y);
 }
 
-u32 PokeathlonBlockSmashBlock_GetState(PokeathlonBlockSmashBlock *block) {
+static u32 PokeathlonBlockSmashBlock_GetState(PokeathlonBlockSmashBlock *block) {
     GF_ASSERT(block != NULL);
     return block->state;
 }
 
-void PokeathlonBlockSmashFragments_Init(PokeathlonBlockSmashFragment *fragments, SpriteSystem *spriteSystem, SpriteManager *spriteManager) {
+static void PokeathlonBlockSmashFragments_Init(PokeathlonBlockSmashFragment *fragments, SpriteSystem *spriteSystem, SpriteManager *spriteManager) {
     int i;
     for (i = 0; i < 16; i++, fragments++) {
         fragments->sprite = PokeathlonBlockSmash_NewMainSprite(spriteSystem, spriteManager, 0, 0, (u16)(i % 3 + 28), 1);
@@ -1404,7 +1448,7 @@ void PokeathlonBlockSmashFragments_Init(PokeathlonBlockSmashFragment *fragments,
     }
 }
 
-void PokeathlonBlockSmashFragments_Delete(PokeathlonBlockSmashFragment *fragments) {
+static void PokeathlonBlockSmashFragments_Delete(PokeathlonBlockSmashFragment *fragments) {
     s32 i;
     for (i = 0; i < 16; i++, fragments++) {
         GF_ASSERT(fragments->sprite != NULL);
@@ -1413,7 +1457,7 @@ void PokeathlonBlockSmashFragments_Delete(PokeathlonBlockSmashFragment *fragment
 }
 
 // Throws `count` free fragments from (x, y), alternately to the right and to the left.
-void PokeathlonBlockSmashFragments_Spawn(PokeathlonBlockSmashFragment *fragments, u8 count, s16 x, s16 y) {
+static void PokeathlonBlockSmashFragments_Spawn(PokeathlonBlockSmashFragment *fragments, u8 count, s16 x, s16 y) {
     int i;
     int spawned = 0;
     for (i = 0; i < 16; i++, fragments++) {
@@ -1435,7 +1479,7 @@ void PokeathlonBlockSmashFragments_Spawn(PokeathlonBlockSmashFragment *fragments
 }
 
 // TRUE once the fragment left the screen.
-BOOL PokeathlonBlockSmashFragment_Update(PokeathlonBlockSmashFragment *fragment) {
+static BOOL PokeathlonBlockSmashFragment_Update(PokeathlonBlockSmashFragment *fragment) {
     fragment->x += (fragment->velocityX >> FX32_SHIFT);
     fragment->velocityX = (fragment->velocityX << 2) / 3;
     fragment->y -= (fragment->velocityY >> FX32_SHIFT);
@@ -1447,7 +1491,7 @@ BOOL PokeathlonBlockSmashFragment_Update(PokeathlonBlockSmashFragment *fragment)
     return FALSE;
 }
 
-void PokeathlonBlockSmashFragments_Update(PokeathlonBlockSmashFragment *fragments) {
+static void PokeathlonBlockSmashFragments_Update(PokeathlonBlockSmashFragment *fragments) {
     s32 i;
     for (i = 0; i < 16; i++, fragments++) {
         if (fragments->active == 1 && PokeathlonBlockSmashFragment_Update(fragments)) {
@@ -1457,7 +1501,7 @@ void PokeathlonBlockSmashFragments_Update(PokeathlonBlockSmashFragment *fragment
     }
 }
 
-void PokeathlonBlockSmashFragments_Pause(PokeathlonBlockSmashFragment *fragments) {
+static void PokeathlonBlockSmashFragments_Pause(PokeathlonBlockSmashFragment *fragments) {
     s32 i;
     for (i = 0; i < 16; i++, fragments++) {
         if (fragments->active == 1) {

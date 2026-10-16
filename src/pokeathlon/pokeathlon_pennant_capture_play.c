@@ -20,7 +20,6 @@ enum {
     PENNANT_CAPTURE_STATE_END,
 };
 
-// Course helpers of other OVY_96 parts that have no module header yet.
 PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_CreateAndTake(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, int tag, int cell);
 void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *sprite, int anim);
 void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *sprite, int priority);
@@ -60,6 +59,11 @@ typedef struct PokeathlonPennantCaptureLayout {
 } PokeathlonPennantCaptureLayout;
 
 #pragma force_active on
+
+static void PokeathlonPennantCapture_HostStep(PokeathlonCourseData *course);
+static BOOL PokeathlonPennantCapture_SendInput(PokeathlonCourseData *course);
+static void PokeathlonPennantCapture_ShowFrame(PokeathlonCourseData *course);
+static BOOL PokeathlonPennantCapture_IsTouchOnOwnMon(PokeathlonPennantCapture *work, int participant, int x, int y);
 
 void PokeathlonPennantCapture_InitBgs(BgConfig *bgConfig) {
     GraphicsModes modes = sPennantCaptureGraphicsModes;
@@ -312,7 +316,7 @@ static inline void ResetDrag(PokeathlonPennantCapturePlayer *player) {
 
 // Host only: reads the participants' inputs, turns touch drags on the own Pokemon into flicks, moves everything
 // and packs the frame every participant shows.
-void PokeathlonPennantCapture_HostStep(PokeathlonCourseData *course) {
+static void PokeathlonPennantCapture_HostStep(PokeathlonCourseData *course) {
     VecFx32 velocity;
     VecFx32 delta;
     int i;
@@ -503,7 +507,7 @@ void PokeathlonPennantCapture_PackFrame(PokeathlonPennantCapture *work, Pokeathl
 #pragma force_active reset
 
 // Sends the own touch input; TRUE once the host's frame says the event is finished.
-BOOL PokeathlonPennantCapture_SendInput(PokeathlonCourseData *course) {
+static BOOL PokeathlonPennantCapture_SendInput(PokeathlonCourseData *course) {
     PokeathlonPennantCapture *work;
     u8 *link;
     PokeathlonPennantCaptureInput *input;
@@ -537,7 +541,7 @@ BOOL PokeathlonPennantCapture_SendInput(PokeathlonCourseData *course) {
 }
 
 // Every participant: scrolls the field to the own Pokemon and shows the host's frame.
-void PokeathlonPennantCapture_ShowFrame(PokeathlonCourseData *course) {
+static void PokeathlonPennantCapture_ShowFrame(PokeathlonCourseData *course) {
     PokeathlonPennantCapture *work = PokeathlonCourse_GetWork(course);
     u8 *link = PokeathlonCourse_GetDataCopyArea(course);
     PokeathlonPennantCaptureFrame *frame = (PokeathlonPennantCaptureFrame *)PokeathlonCourse_ToBytes(link + 0xF0);
@@ -557,7 +561,7 @@ void PokeathlonPennantCapture_ShowFrame(PokeathlonCourseData *course) {
     PokeathlonCourse_UpdateTimeUpCountdown(course, frame->timeLeft);
 }
 
-BOOL PokeathlonPennantCapture_IsTouchOnOwnMon(PokeathlonPennantCapture *work, int participant, int x, int y) {
+static BOOL PokeathlonPennantCapture_IsTouchOnOwnMon(PokeathlonPennantCapture *work, int participant, int x, int y) {
     PokeathlonPennantCapturePlayer *player = &work->players[participant];
     int monX;
     int monY;

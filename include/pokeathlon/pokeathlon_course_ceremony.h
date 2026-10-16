@@ -69,14 +69,14 @@ typedef struct PokeathlonCourseCeremonyMon {
 
 // Statistics of a Pokemon in the events of the course (PokeathlonCourseData field data, 0x20).
 typedef struct PokeathlonCourseMonEventStats {
-    u32 failed; // 0x00
-    u32 jumped; // 0x04
-    u32 points; // 0x08
-    u32 hit;    // 0x0C
-    u32 fellDown;  // 0x10
-    u32 dashed; // 0x14
-    u32 switched;  // 0x18
-    u32 selfImpeded;  // 0x1C
+    u32 failed;      // 0x00
+    u32 jumped;      // 0x04
+    u32 points;      // 0x08
+    u32 hit;         // 0x0C
+    u32 fellDown;    // 0x10
+    u32 dashed;      // 0x14
+    u32 switched;    // 0x18
+    u32 selfImpeded; // 0x1C
 } PokeathlonCourseMonEventStats;
 
 // Result of the ceremony kept in the field data for the course statistics.
@@ -147,14 +147,14 @@ typedef struct PokeathlonCourseCeremonyCryTask {
 } PokeathlonCourseCeremonyCryTask;
 
 typedef struct PokeathlonCourseCeremony {
-    enum HeapID heapId;                     // 0x00
-    BgConfig *bgConfig;                     // 0x04
-    SysTask *cryTask;                       // 0x08
-    PokeathlonCourseMessageBox *messageBox; // 0x0C
-    PokeathlonCourseSpriteResources *spriteResources;                  // 0x10
-    PokeathlonCourseMonObjects *objects;                          // 0x14: the 12 Pokemon
-    SpriteSystem *spriteSystem;             // 0x18
-    SpriteManager *spriteManager;           // 0x1C
+    enum HeapID heapId;                               // 0x00
+    BgConfig *bgConfig;                               // 0x04
+    SysTask *cryTask;                                 // 0x08
+    PokeathlonCourseMessageBox *messageBox;           // 0x0C
+    PokeathlonCourseSpriteResources *spriteResources; // 0x10
+    PokeathlonCourseMonObjects *objects;              // 0x14: the 12 Pokemon
+    SpriteSystem *spriteSystem;                       // 0x18
+    SpriteManager *spriteManager;                     // 0x1C
 
     union {
         ManagedSprite *sprites[26]; // 0x20
@@ -193,95 +193,11 @@ BOOL PokeathlonCourseOpening_Exit(PokeathlonCourseData *course);
 BOOL PokeathlonCourseClosing_Init(PokeathlonCourseData *course);
 BOOL PokeathlonCourseClosing_Main(PokeathlonCourseData *course);
 BOOL PokeathlonCourseClosing_Exit(PokeathlonCourseData *course);
-void PokeathlonCourseCeremony_SetBanks(void);
 BOOL PokeathlonCourseOpening_FadeIn(PokeathlonCourseData *course, u8 *state);
 BOOL PokeathlonCourseOpening_Introduce(PokeathlonCourseData *course);
 BOOL PokeathlonCourseOpening_FadeOut(PokeathlonCourseData *course, u8 *state);
 BOOL PokeathlonCourseClosing_FadeIn(PokeathlonCourseData *course, u8 *state);
 BOOL PokeathlonCourseClosing_Awards(PokeathlonCourseData *course);
 BOOL PokeathlonCourseClosing_FadeOut(PokeathlonCourseData *course, u8 *state);
-void PokeathlonCourseCeremony_CryTask(SysTask *task, void *data);
-void PokeathlonCourseCeremony_StartCry(PokeathlonCourseCeremony *ceremony, u8 index);
-BOOL PokeathlonCourseCeremony_IsCryActive(PokeathlonCourseCeremony *ceremony);
-void PokeathlonCourseCeremony_InitBgs(BgConfig *bgConfig);
-void PokeathlonCourseCeremony_LoadBgGfx(BgConfig *bgConfig, enum HeapID heapId);
-void PokeathlonCourseCeremony_LoadWinnerBg(BgConfig *bgConfig, enum HeapID heapId);
-void PokeathlonCourseCeremony_InitSpriteSystem(PokeathlonCourseCeremony *ceremony);
-void PokeathlonCourseCeremony_FreeSprites(PokeathlonCourseCeremony *ceremony);
-void PokeathlonCourseCeremony_CreateTrainerSprites(PokeathlonCourseCeremony *ceremony);
-void PokeathlonCourseCeremony_CreateScoreSprites(PokeathlonCourseCeremony *ceremony);
-void PokeathlonCourseCeremony_CreateMonPicSprites(PokeathlonCourseCeremony *ceremony);
-void PokeathlonCourseCeremony_CreateMedalSprites(PokeathlonCourseCeremony *ceremony);
-void PokeathlonCourseCeremony_LoadWinnerMonPics(PokeathlonCourseData *course, int team);
-void PokeathlonCourseCeremony_LoadSpriteResources(PokeathlonCourseData *course);
-void PokeathlonCourseCeremony_LoadMonPicResources(PokeathlonCourseCeremony *ceremony);
-void PokeathlonCourseCeremony_ShowWinnerTeam(PokeathlonCourseData *course, int team);
-void PokeathlonCourseCeremony_LoadTrainerSprites(PokeathlonCourseData *course);
-void PokeathlonCourseCeremony_SetTrainerPose(ManagedSprite **sprites, PokeathlonCourseData *course, int team, int pose, enum HeapID heapId);
-PokeathlonCourseCeremonyScore *PokeathlonCourseCeremony_CreateScores(enum HeapID heapId, ManagedSprite **sprites);
-void PokeathlonCourseCeremony_FreeScores(PokeathlonCourseCeremonyScore *scores);
-void PokeathlonCourseCeremony_UpdateScores(PokeathlonCourseCeremonyScore *scores);
-BOOL PokeathlonCourseCeremony_AreScoresCounted(PokeathlonCourseCeremonyScore *scores);
-void PokeathlonCourseCeremony_AddPoints(PokeathlonCourseCeremonyScore *scores, int team, u32 points);
-u32 PokeathlonCourseCeremony_GetPoints(PokeathlonCourseCeremonyScore *scores, u8 team);
-int PokeathlonCourseCeremony_CompareRanks(const void *a, const void *b);
-void PokeathlonCourseCeremony_RankTeams(PokeathlonCourseCeremonyScore *scores, PokeathlonCourseCeremonyRank *ranks, const u8 *drawingLots);
-void PokeathlonCourseCeremonyScore_Update(PokeathlonCourseCeremonyScore *score);
-BOOL PokeathlonCourseCeremonyScore_IsCounted(PokeathlonCourseCeremonyScore *score);
-void PokeathlonCourseCeremonyScore_Add(PokeathlonCourseCeremonyScore *score, u32 points);
-void PokeathlonCourseConfetti_Spawn(PokeathlonCourseConfettiPiece *piece, SpriteSystem *spriteSystem, SpriteManager *spriteManager);
-BOOL PokeathlonCourseConfetti_Fall(PokeathlonCourseConfettiPiece *piece);
-void PokeathlonCourseConfetti_MoveToTopScreen(PokeathlonCourseConfettiPiece *piece, SpriteSystem *spriteSystem, SpriteManager *spriteManager);
-PokeathlonCourseConfetti *PokeathlonCourseConfetti_New(enum HeapID heapId, SpriteSystem *spriteSystem, SpriteManager *spriteManager);
-void PokeathlonCourseConfetti_Free(PokeathlonCourseConfetti *confetti);
-void PokeathlonCourseConfetti_Update(PokeathlonCourseConfetti *confetti);
-void PokeathlonCourseConfetti_Start(PokeathlonCourseConfetti *confetti, BOOL active);
-void PokeathlonCourseConfetti_SpawnPieces(PokeathlonCourseConfetti *confetti, u8 count);
-BOOL PokeathlonCourseCeremony_Init(PokeathlonCourseData *course);
-BOOL PokeathlonCourseCeremony_Main(PokeathlonCourseData *course);
-BOOL PokeathlonCourseCeremony_Exit(PokeathlonCourseData *course);
-void PokeathlonCourseCeremony_BufferMonName(PokeathlonCourseData *course, int team, int member, int field);
-void PokeathlonCourseCeremony_BufferTeamPoints(PokeathlonCourseData *course, int team, int points);
-void PokeathlonCourseCeremony_BufferTeamMon(PokeathlonCourseData *course, int team, int member);
-u32 PokeathlonCourseCeremony_HasNoMissBonus(PokeathlonCourseData *course);
-u32 PokeathlonCourseCeremony_IsNoMissMon(PokeathlonCourseData *course, int team, int member);
-u32 PokeathlonCourseCeremony_IsPointsLeader(PokeathlonCourseData *course, int team, int member);
-u32 PokeathlonCourseCeremony_IsEffortPrizeMon(PokeathlonCourseData *course, int team, int member);
-int PokeathlonCourseConfetti_GetRandomDelay(void);
-u8 PokeathlonCourseCeremony_GetChallengeBonus(PokeathlonCourseData *course, u8 team);
-u32 PokeathlonCourseCeremony_GetEventPoints(PokeathlonCourseData *course, u8 team, u8 round);
-int PokeathlonCourseCeremony_GetNoMissPoints(PokeathlonCourseCeremony *ceremony);
-int PokeathlonCourseCeremony_GetPointsLeaderPoints(PokeathlonCourseCeremony *ceremony);
-int PokeathlonCourseCeremony_GetEffortPrizePoints(PokeathlonCourseCeremony *ceremony);
-u32 PokeathlonCourseCeremony_CountNoMissMons(PokeathlonCourseData *course);
-u32 PokeathlonCourseCeremony_CountPointsLeaders(PokeathlonCourseData *course);
-u32 PokeathlonCourseCeremony_CountEffortPrizes(PokeathlonCourseData *course);
-void PokeathlonCourseCeremony_GetDrawingLots(PokeathlonCourseData *course, u8 *drawingLots);
-u32 PokeathlonCourseCeremony_GetIntroMsgId(PokeathlonCourseData *course, u32 team);
-u32 PokeathlonCourseCeremony_GetIntroValue(PokeathlonCourseData *course, u32 team);
-u32 PokeathlonCourseCeremony_GetIntroCheer(PokeathlonCourseData *course, u32 team);
-void PokeathlonCourseCeremony_ChooseIntros(PokeathlonCourseData *course);
-u32 PokeathlonCourseCeremony_CalcChallengeBonus(PokeathlonCourseData *course, u8 team);
-u32 PokeathlonCourseCeremony_ChooseEffortPrizeKind(PokeathlonCourseData *course);
-void PokeathlonCourseCeremony_ChooseAwards(PokeathlonCourseData *course);
-u32 PokeathlonCourseCeremony_GetCourseMedal(u32 course, u32 which);
-u8 PokeathlonCourseCeremony_GetEffortPrizeKind(PokeathlonCourseData *course);
-u32 PokeathlonCourseCeremony_GetMonStat(PokeathlonCourseData *course, u8 kind, u8 team, u8 member);
-BOOL PokeathlonCourseCeremony_NextMon(PokeathlonCourseCeremony *ceremony);
-BOOL PokeathlonCourseCeremony_AwardNextMon(PokeathlonCourseData *course, PokeathlonCourseCeremonyAwardTest test, int points);
-void PokeathlonCourseCeremony_SaveResult(PokeathlonCourseData *course, PokeathlonCourseCeremonyScore *scores);
-void PokeathlonCourseCeremony_BufferNumber(MessageFormat *msgFormat, s32 value, u32 digits, u32 field);
-u32 PokeathlonCourseCeremony_GetCheerLevel(s32 value);
-int PokeathlonCourseCeremony_GetIntroMsgBase(int statistic);
-void PokeathlonCourseCeremony_GetIntroStats(PokeathlonStatistics *dest, const PokeathlonStatistics *src);
-void PokeathlonCourseCeremony_WeighIntroStats(u8 *weights, const u32 *stats);
-int PokeathlonCourseCeremony_PickIntroStat(const u8 *weights, u8 *level);
-void PokeathlonCourseCeremony_ChooseOwnIntro(PokeathlonCourseCeremonyIntro *intro, PokeathlonCourseData *course);
-void PokeathlonCourseCeremony_ChooseLinkIntro(PokeathlonCourseCeremonyIntro *intro, PokeathlonCourseData *course, int team);
-void PokeathlonCourseCeremony_ChooseNpcIntro(PokeathlonCourseCeremonyIntro *intro, PokeathlonCourseData *course, int team);
-int PokeathlonCourseCeremony_FindPlace(const PokeathlonCourseCeremonyRank *ranks, u8 team);
-void PokeathlonCourseCeremony_BreakTie(PokeathlonCourseCeremonyRank *ranks);
-BOOL PokeathlonCourseCeremony_SyncOpening(PokeathlonCourseData *course);
-BOOL PokeathlonCourseCeremony_SyncClosing(PokeathlonCourseData *course);
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_COURSE_CEREMONY_H

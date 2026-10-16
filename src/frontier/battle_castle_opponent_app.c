@@ -54,13 +54,11 @@
 
 FS_EXTERN_OVERLAY(OVY_80);
 
-// text.h is not included: it declares the font id of AddTextPrinterParameterizedWithColor as FontID (u8),
-// but BattleCastle_PrintString passes its int font id through without narrowing
 u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, PrinterCallback_t callback);
 #define MAKE_TEXT_COLOR(fg, sh, bg) ((((fg) & 0xFF) << 16) | (((sh) & 0xFF) << 8) | (((bg) & 0xFF) << 0))
 #define TEXT_SPEED_NOTRANSFER       0xFF
 
-// Battle Castle opponent app (overlay 83, second half): spend Castle Points on
+// Battle Castle opponent app: spend Castle Points on
 // information about the opponent's party (CHECK / LEVEL / SUMMARY). Texts: msg_0033.
 // The file ends with the sprite, prompt, window and grid helpers both Battle Castle apps use.
 
@@ -281,7 +279,7 @@ typedef struct BattleCastleOpponentAppArgs {
     u16 partnerPoints;  // 0x28
 } BattleCastleOpponentAppArgs;
 
-// Tables still defined in the overlay's data asm
+// Data tables in assembly
 extern const u8 gBattleCastlePartyAppButtonRects[][4]; // party app button rects (x, y, width, height in tiles)
 extern const u8 gBattleCastleOpponentAppListMenuY[];   // list menu y, by number of entries
 extern const TouchscreenListMenuTemplate gBattleCastleOpponentAppListMenuTemplate;
@@ -320,7 +318,7 @@ extern const DpadMenuBox gBattleCastlePartyGrid4Boxes[];
 extern const DpadMenuBox gBattleCastleItemGridBoxes[]; // rental item grid
 extern const u8 gBattleCastleItemGridBoxTops[];        // = &gBattleCastleItemGridBoxes[0].top, referenced by its own label
 
-// Frontier overlay (80) helpers
+// Frontier helpers
 void Frontier_SetSpriteAnim(Sprite *sprite, int value);
 void Frontier_SetSpritePosition(Sprite *sprite, s16 x, s16 y, int value);
 u32 Frontier_GetHpGaugeFrame(u16 hp, u16 maxHp);
@@ -329,7 +327,7 @@ int BattleCastle_GetPartySize(u8 frontierType, int kind);
 u8 BattleCastle_GetOpponentMonCount(u8 frontierType, int kind); // number of opponent mons (defined with an int result)
 void BattleCastle_SpendPoints(FrontierSave *frontierSave, int frontierType, int points);
 
-// Entry points and link receive callbacks (their names are referenced from asm)
+// Entry points and link receive callbacks
 BOOL BattleCastleOpponentApp_Init(OverlayManager *manager, int *state);
 BOOL BattleCastleOpponentApp_Main(OverlayManager *manager, int *state);
 BOOL BattleCastleOpponentApp_Exit(OverlayManager *manager);
@@ -338,104 +336,104 @@ void BattleCastleOpponentApp_ReceiveAction(int netId, int unused, u16 *data, Bat
 void BattleCastleOpponentApp_ReceiveCursor(int netId, int unused, u16 *data, BattleCastleOpponentApp *app);
 void BattleCastleOpponentApp_ReceiveExit(int netId, int unused, u16 *data, BattleCastleOpponentApp *app);
 
-BOOL BattleCastleOpponentApp_FadeIn(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_DrawScreen(BattleCastleOpponentApp *app);
-BOOL BattleCastleOpponentApp_HandleMenu(BattleCastleOpponentApp *app);
-BOOL BattleCastleOpponentApp_LinkAction(BattleCastleOpponentApp *app);
-BOOL BattleCastleOpponentApp_LinkExit(BattleCastleOpponentApp *app);
-BOOL BattleCastleOpponentApp_FadeOut(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_FreeResources(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_DisableDisplay(void);
-void BattleCastleOpponentApp_InitGraphics(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_InitBgGraphics(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_InitSpriteGfx(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_FreeBgLayers(BgConfig *bgConfig);
-void BattleCastleOpponentApp_VBlankCallback(void *arg);
-void BattleCastleOpponentApp_SetGraphicsBanks(void);
-void BattleCastleOpponentApp_InitBgLayers(BgConfig *bgConfig);
-void BattleCastleOpponentApp_LoadPartyBg(BattleCastleOpponentApp *app, GFBgLayer bgId);
-void BattleCastleOpponentApp_LoadBgPalette(void);
-void BattleCastleOpponentApp_LoadSummaryBg(BattleCastleOpponentApp *app, GFBgLayer bgId);
-void BattleCastleOpponentApp_LoadSummaryBgPalette(void);
-void BattleCastleOpponentApp_LoadSubScreenBg(BattleCastleOpponentApp *app, GFBgLayer bgId);
-u8 BattleCastleOpponentApp_PrintMessage(BattleCastleOpponentApp *app, Window *window, int msgNo, int x, int y, int speed, u8 fg, u8 shadow, u8 bg, u8 fontId);
-u8 BattleCastleOpponentApp_AddMessage(BattleCastleOpponentApp *app, Window *window, int msgNo, int x, int y, int speed, u8 fg, u8 shadow, u8 bg, u8 fontId);
-int BattleCastleOpponentApp_ShowMessage(BattleCastleOpponentApp *app, int msgNo, u8 fontId);
-void BattleCastleOpponentApp_PrintPartyHp(BattleCastleOpponentApp *app, Window *window);
-void BattleCastleOpponentApp_PrintPartyLevels(BattleCastleOpponentApp *app, Window *window);
-void BattleCastleOpponentApp_ShowYesNoPrompt(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_OpenLevelMenu(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_CloseLevelMenu(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_BufferNumber(BattleCastleOpponentApp *app, int field, int value, int digits, int mode);
-void BattleCastleOpponentApp_BufferSpeciesName(BattleCastleOpponentApp *app, int field, BoxPokemon *boxMon);
-void BattleCastleOpponentApp_BufferPlayerName(BattleCastleOpponentApp *app, int field);
-void BattleCastleOpponentApp_PrintPlayerName(BattleCastleOpponentApp *app, Window *window, int x, int y, u8 fontId);
-void BattleCastleOpponentApp_PrintPartnerName(BattleCastleOpponentApp *app, Window *window, int x, int y, u8 fontId);
-void BattleCastleOpponentApp_PrintGenderSymbol(BattleCastleOpponentApp *app, Window *window, int x, int y, u8 fontId, u8 gender);
-void BattleCastleOpponentApp_PrintChoosePrompt(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_HideChoosePrompt(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_OpenMainMenu(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_CloseMainMenu(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_OpenSummaryMenu(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_CloseSummaryMenu(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_SetMainState(BattleCastleOpponentApp *app, int *state, int newState);
-void BattleCastleOpponentApp_MoveCursor(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_DrawCursor(BattleCastleOpponentApp *app, u32 index, int isPartner);
-void BattleCastleOpponentApp_GetCursorPos(BattleCastleOpponentApp *app, u32 *x, u32 *y, u32 index);
-void BattleCastleOpponentApp_GetTrainerNamePositions(BattleCastleOpponentApp *app, u16 *x1, u16 *y1, u16 *x2, u16 *y2);
-int BattleCastleOpponentApp_PlayActionEffect(BattleCastleOpponentApp *app, int slot, u32 action);
-int BattleCastleOpponentApp_FinishLinkAction(BattleCastleOpponentApp *app, int slot, int action);
-int BattleCastleOpponentApp_GetLevelChangeCost(int levelChange);
-void BattleCastleOpponentApp_CloseAll(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_CloseWindow(Window *window);
-BOOL BattleCastleOpponentApp_SendLinkCommand(BattleCastleOpponentApp *app, int command, int param);
-void BattleCastleOpponentApp_PrepareLinkRanks(BattleCastleOpponentApp *app, int command);
-void BattleCastleOpponentApp_PrepareLinkAction(BattleCastleOpponentApp *app, int command, int slot);
-void BattleCastleOpponentApp_PrepareLinkCursor(BattleCastleOpponentApp *app, int command);
-void BattleCastleOpponentApp_PrepareLinkExit(BattleCastleOpponentApp *app, int command);
-void BattleCastleOpponentApp_SetStatsBought(BattleCastleOpponentApp *app, int slot);
-void BattleCastleOpponentApp_BuyStats(BattleCastleOpponentApp *app, int slot);
-void BattleCastleOpponentApp_SetMovesBought(BattleCastleOpponentApp *app, int slot);
-void BattleCastleOpponentApp_BuyMoves(BattleCastleOpponentApp *app, int slot);
-void BattleCastleOpponentApp_CloseMenus(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_OpenMessageBox(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_PrintCastlePoints(BattleCastleOpponentApp *app, Window *window);
-void BattleCastleOpponentApp_ConfirmLevelChange(BattleCastleOpponentApp *app, u8 levelChange);
-void BattleCastleOpponentApp_PrintTrainerNames(BattleCastleOpponentApp *app, Window *window);
-void BattleCastleOpponentApp_ApplyAction(BattleCastleOpponentApp *app, u8 slot, u32 action);
-void BattleCastleOpponentApp_CheckMon(BattleCastleOpponentApp *app, u32 slot);
-void BattleCastleOpponentApp_CheckMonAndRedrawHp(BattleCastleOpponentApp *app, int slot);
-void BattleCastleOpponentApp_ChangeLevel(BattleCastleOpponentApp *app, int slot, int levelChange);
-void BattleCastleOpponentApp_HideSummaryBg(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_UpdateMonIcons(BattleCastleOpponentApp *app);
-int BattleCastleOpponentApp_TryBuy(BattleCastleOpponentApp *app, int cost, int failMsg);
-void BattleCastleOpponentApp_RankUp(BattleCastleOpponentApp *app, u8 slot, int action);
-void BattleCastleOpponentApp_ShowBoughtMarks(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_ShowMonBoughtMarks(BattleCastleOpponentApp *app, u8 slot);
-void BattleCastleOpponentApp_GetBoughtMarkPos(BattleCastleOpponentApp *app, u32 *x, u32 *y);
-void BattleCastleOpponentApp_PrintExpandedMessage(BattleCastleOpponentApp *app, Window *window, MsgData *msgData, int msgNo, int x, int y, int fontId, int color, int alignment);
-void BattleCastleOpponentApp_LoadMonSummary(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_PrintSummaryLabels(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_PrintMonSummary(BattleCastleOpponentApp *app, int copyMode);
-void BattleCastleOpponentApp_ShowMonSummary(BattleCastleOpponentApp *app, int copyMode);
-void BattleCastleOpponentApp_ShowSummaryPanel(BattleCastleOpponentApp *app, int show);
-void BattleCastleOpponentApp_LoadMonPic(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_SetCursorPos(BattleCastleOpponentApp *app, u32 cursorPos, u32 prevCursorPos);
-void BattleCastleOpponentApp_CreateListMenu(BattleCastleOpponentApp *app, u8 count, u8 x, u8 y, u8 width);
-void BattleCastleOpponentApp_CreateMainMenuList(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_CreateSummaryMenuList(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_CreateLevelMenuList(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_DestroyListMenu(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_PrintMainMenuHelp(BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_PrintSummaryMenuHelp(BattleCastleOpponentApp *app);
+static BOOL BattleCastleOpponentApp_FadeIn(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_DrawScreen(BattleCastleOpponentApp *app);
+static BOOL BattleCastleOpponentApp_HandleMenu(BattleCastleOpponentApp *app);
+static BOOL BattleCastleOpponentApp_LinkAction(BattleCastleOpponentApp *app);
+static BOOL BattleCastleOpponentApp_LinkExit(BattleCastleOpponentApp *app);
+static BOOL BattleCastleOpponentApp_FadeOut(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_FreeResources(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_DisableDisplay(void);
+static void BattleCastleOpponentApp_InitGraphics(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_InitBgGraphics(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_InitSpriteGfx(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_FreeBgLayers(BgConfig *bgConfig);
+static void BattleCastleOpponentApp_VBlankCallback(void *arg);
+static void BattleCastleOpponentApp_SetGraphicsBanks(void);
+static void BattleCastleOpponentApp_InitBgLayers(BgConfig *bgConfig);
+static void BattleCastleOpponentApp_LoadPartyBg(BattleCastleOpponentApp *app, GFBgLayer bgId);
+static void BattleCastleOpponentApp_LoadBgPalette(void);
+static void BattleCastleOpponentApp_LoadSummaryBg(BattleCastleOpponentApp *app, GFBgLayer bgId);
+static void BattleCastleOpponentApp_LoadSummaryBgPalette(void);
+static void BattleCastleOpponentApp_LoadSubScreenBg(BattleCastleOpponentApp *app, GFBgLayer bgId);
+static u8 BattleCastleOpponentApp_PrintMessage(BattleCastleOpponentApp *app, Window *window, int msgNo, int x, int y, int speed, u8 fg, u8 shadow, u8 bg, u8 fontId);
+static u8 BattleCastleOpponentApp_AddMessage(BattleCastleOpponentApp *app, Window *window, int msgNo, int x, int y, int speed, u8 fg, u8 shadow, u8 bg, u8 fontId);
+static int BattleCastleOpponentApp_ShowMessage(BattleCastleOpponentApp *app, int msgNo, u8 fontId);
+static void BattleCastleOpponentApp_PrintPartyHp(BattleCastleOpponentApp *app, Window *window);
+static void BattleCastleOpponentApp_PrintPartyLevels(BattleCastleOpponentApp *app, Window *window);
+static void BattleCastleOpponentApp_ShowYesNoPrompt(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_OpenLevelMenu(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_CloseLevelMenu(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_BufferNumber(BattleCastleOpponentApp *app, int field, int value, int digits, int mode);
+static void BattleCastleOpponentApp_BufferSpeciesName(BattleCastleOpponentApp *app, int field, BoxPokemon *boxMon);
+static void BattleCastleOpponentApp_BufferPlayerName(BattleCastleOpponentApp *app, int field);
+static void BattleCastleOpponentApp_PrintPlayerName(BattleCastleOpponentApp *app, Window *window, int x, int y, u8 fontId);
+static void BattleCastleOpponentApp_PrintPartnerName(BattleCastleOpponentApp *app, Window *window, int x, int y, u8 fontId);
+static void BattleCastleOpponentApp_PrintGenderSymbol(BattleCastleOpponentApp *app, Window *window, int x, int y, u8 fontId, u8 gender);
+static void BattleCastleOpponentApp_PrintChoosePrompt(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_HideChoosePrompt(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_OpenMainMenu(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_CloseMainMenu(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_OpenSummaryMenu(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_CloseSummaryMenu(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_SetMainState(BattleCastleOpponentApp *app, int *state, int newState);
+static void BattleCastleOpponentApp_MoveCursor(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_DrawCursor(BattleCastleOpponentApp *app, u32 index, int isPartner);
+static void BattleCastleOpponentApp_GetCursorPos(BattleCastleOpponentApp *app, u32 *x, u32 *y, u32 index);
+static void BattleCastleOpponentApp_GetTrainerNamePositions(BattleCastleOpponentApp *app, u16 *x1, u16 *y1, u16 *x2, u16 *y2);
+static int BattleCastleOpponentApp_PlayActionEffect(BattleCastleOpponentApp *app, int slot, u32 action);
+static int BattleCastleOpponentApp_FinishLinkAction(BattleCastleOpponentApp *app, int slot, int action);
+static int BattleCastleOpponentApp_GetLevelChangeCost(int levelChange);
+static void BattleCastleOpponentApp_CloseAll(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_CloseWindow(Window *window);
+static BOOL BattleCastleOpponentApp_SendLinkCommand(BattleCastleOpponentApp *app, int command, int param);
+static void BattleCastleOpponentApp_PrepareLinkRanks(BattleCastleOpponentApp *app, int command);
+static void BattleCastleOpponentApp_PrepareLinkAction(BattleCastleOpponentApp *app, int command, int slot);
+static void BattleCastleOpponentApp_PrepareLinkCursor(BattleCastleOpponentApp *app, int command);
+static void BattleCastleOpponentApp_PrepareLinkExit(BattleCastleOpponentApp *app, int command);
+static void BattleCastleOpponentApp_SetStatsBought(BattleCastleOpponentApp *app, int slot);
+static void BattleCastleOpponentApp_BuyStats(BattleCastleOpponentApp *app, int slot);
+static void BattleCastleOpponentApp_SetMovesBought(BattleCastleOpponentApp *app, int slot);
+static void BattleCastleOpponentApp_BuyMoves(BattleCastleOpponentApp *app, int slot);
+static void BattleCastleOpponentApp_CloseMenus(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_OpenMessageBox(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_PrintCastlePoints(BattleCastleOpponentApp *app, Window *window);
+static void BattleCastleOpponentApp_ConfirmLevelChange(BattleCastleOpponentApp *app, u8 levelChange);
+static void BattleCastleOpponentApp_PrintTrainerNames(BattleCastleOpponentApp *app, Window *window);
+static void BattleCastleOpponentApp_ApplyAction(BattleCastleOpponentApp *app, u8 slot, u32 action);
+static void BattleCastleOpponentApp_CheckMon(BattleCastleOpponentApp *app, u32 slot);
+static void BattleCastleOpponentApp_CheckMonAndRedrawHp(BattleCastleOpponentApp *app, int slot);
+static void BattleCastleOpponentApp_ChangeLevel(BattleCastleOpponentApp *app, int slot, int levelChange);
+static void BattleCastleOpponentApp_HideSummaryBg(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_UpdateMonIcons(BattleCastleOpponentApp *app);
+static int BattleCastleOpponentApp_TryBuy(BattleCastleOpponentApp *app, int cost, int failMsg);
+static void BattleCastleOpponentApp_RankUp(BattleCastleOpponentApp *app, u8 slot, int action);
+static void BattleCastleOpponentApp_ShowBoughtMarks(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_ShowMonBoughtMarks(BattleCastleOpponentApp *app, u8 slot);
+static void BattleCastleOpponentApp_GetBoughtMarkPos(BattleCastleOpponentApp *app, u32 *x, u32 *y);
+static void BattleCastleOpponentApp_PrintExpandedMessage(BattleCastleOpponentApp *app, Window *window, MsgData *msgData, int msgNo, int x, int y, int fontId, int color, int alignment);
+static void BattleCastleOpponentApp_LoadMonSummary(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_PrintSummaryLabels(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_PrintMonSummary(BattleCastleOpponentApp *app, int copyMode);
+static void BattleCastleOpponentApp_ShowMonSummary(BattleCastleOpponentApp *app, int copyMode);
+static void BattleCastleOpponentApp_ShowSummaryPanel(BattleCastleOpponentApp *app, int show);
+static void BattleCastleOpponentApp_LoadMonPic(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_SetCursorPos(BattleCastleOpponentApp *app, u32 cursorPos, u32 prevCursorPos);
+static void BattleCastleOpponentApp_CreateListMenu(BattleCastleOpponentApp *app, u8 count, u8 x, u8 y, u8 width);
+static void BattleCastleOpponentApp_CreateMainMenuList(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_CreateSummaryMenuList(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_CreateLevelMenuList(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_DestroyListMenu(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_PrintMainMenuHelp(BattleCastleOpponentApp *app);
+static void BattleCastleOpponentApp_PrintSummaryMenuHelp(BattleCastleOpponentApp *app);
 
 // Helpers that only this file uses
-Sprite *BattleCastle_CreateSprite(BattleCastleSpriteGfx *gfx, int charId, int plttId, int cellId, int animSeq, int drawPriority, int priority, u8 screen);
-void BattleCastle_InitSpriteTransfer(void);
-void BattleCastle_LoadPartyListGfx(BattleCastleSpriteGfx *gfx);
-void BattleCastle_LoadMonPicGfx(BattleCastleSpriteGfx *gfx);
+static Sprite *BattleCastle_CreateSprite(BattleCastleSpriteGfx *gfx, int charId, int plttId, int cellId, int animSeq, int drawPriority, int priority, u8 screen);
+static void BattleCastle_InitSpriteTransfer(void);
+static void BattleCastle_LoadPartyListGfx(BattleCastleSpriteGfx *gfx);
+static void BattleCastle_LoadMonPicGfx(BattleCastleSpriteGfx *gfx);
 void BattleCastle_GridCallbackNoOp(void);
-GridInputHandler *BattleCastleOpponentApp_CreatePartyGrid(BattleCastleOpponentApp *app, int initialPos, int numMons);
+static GridInputHandler *BattleCastleOpponentApp_CreatePartyGrid(BattleCastleOpponentApp *app, int initialPos, int numMons);
 void BattleCastlePartyApp_OnPartyGridKeyMove(BattleCastlePartyApp *app, int newTarget, int prevTarget);
 void BattleCastlePartyApp_OnPartyGridTouch(BattleCastlePartyApp *app, int newTarget, int prevTarget);
 void BattleCastleOpponentApp_OnPartyGridKeyMove(BattleCastleOpponentApp *app, int newTarget, int prevTarget);
@@ -606,7 +604,7 @@ enum {
     CASTLE_OPP_FADE_IN_WAIT_FADE,
 };
 
-BOOL BattleCastleOpponentApp_FadeIn(BattleCastleOpponentApp *app) {
+static BOOL BattleCastleOpponentApp_FadeIn(BattleCastleOpponentApp *app) {
     switch (app->subState) {
     case CASTLE_OPP_FADE_IN_START_SYNC:
         if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
@@ -658,7 +656,7 @@ BOOL BattleCastleOpponentApp_FadeIn(BattleCastleOpponentApp *app) {
     return FALSE;
 }
 
-void BattleCastleOpponentApp_DrawScreen(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_DrawScreen(BattleCastleOpponentApp *app) {
     Window *window = &app->windows[CASTLE_OPP_WIN_POINTS];
 
     FillWindowPixelBuffer(window, 0);
@@ -670,7 +668,7 @@ void BattleCastleOpponentApp_DrawScreen(BattleCastleOpponentApp *app) {
     GfGfx_BothDispOn();
 }
 
-BOOL BattleCastleOpponentApp_HandleMenu(BattleCastleOpponentApp *app) {
+static BOOL BattleCastleOpponentApp_HandleMenu(BattleCastleOpponentApp *app) {
     u32 input;
     u32 points;
     Pokemon *mon;
@@ -1065,7 +1063,7 @@ enum {
     CASTLE_OPP_LINK_ACTION_FINISH,
 };
 
-BOOL BattleCastleOpponentApp_LinkAction(BattleCastleOpponentApp *app) {
+static BOOL BattleCastleOpponentApp_LinkAction(BattleCastleOpponentApp *app) {
     switch (app->subState) {
     case CASTLE_OPP_LINK_ACTION_SEND:
         app->flags.bits.linkResume = CASTLE_OPP_RESUME_SELECT_MON;
@@ -1132,7 +1130,7 @@ enum {
     CASTLE_OPP_LINK_EXIT_WAIT_SYNC,
 };
 
-BOOL BattleCastleOpponentApp_LinkExit(BattleCastleOpponentApp *app) {
+static BOOL BattleCastleOpponentApp_LinkExit(BattleCastleOpponentApp *app) {
     switch (app->subState) {
     case CASTLE_OPP_LINK_EXIT_SEND:
         if (BattleCastleOpponentApp_SendLinkCommand(app, CASTLE_OPP_LINK_CMD_EXIT, 0) == TRUE) {
@@ -1166,7 +1164,7 @@ enum {
     CASTLE_OPP_FADE_OUT_WAIT,
 };
 
-BOOL BattleCastleOpponentApp_FadeOut(BattleCastleOpponentApp *app) {
+static BOOL BattleCastleOpponentApp_FadeOut(BattleCastleOpponentApp *app) {
     switch (app->subState) {
     case CASTLE_OPP_FADE_OUT_START:
         BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, HEAP_ID_107);
@@ -1181,7 +1179,7 @@ BOOL BattleCastleOpponentApp_FadeOut(BattleCastleOpponentApp *app) {
     return FALSE;
 }
 
-void BattleCastleOpponentApp_FreeResources(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_FreeResources(BattleCastleOpponentApp *app) {
     int numMons;
     int i;
     int j;
@@ -1224,7 +1222,7 @@ void BattleCastleOpponentApp_FreeResources(BattleCastleOpponentApp *app) {
     NARC_Delete(app->narc);
 }
 
-void BattleCastleOpponentApp_DisableDisplay(void) {
+static void BattleCastleOpponentApp_DisableDisplay(void) {
     Main_SetVBlankIntrCB(NULL, NULL);
     Main_SetHBlankIntrCB(NULL, NULL);
     GfGfx_DisableEngineAPlanes();
@@ -1233,8 +1231,7 @@ void BattleCastleOpponentApp_DisableDisplay(void) {
     GXS_SetVisiblePlane(0);
 }
 
-void BattleCastleOpponentApp_InitGraphics(BattleCastleOpponentApp *app) {
-    // kept in one struct: these locals live on the stack in this order
+static void BattleCastleOpponentApp_InitGraphics(BattleCastleOpponentApp *app) {
     struct {
         int row;
         int numMons;
@@ -1338,7 +1335,7 @@ void BattleCastleOpponentApp_InitGraphics(BattleCastleOpponentApp *app) {
     Main_SetVBlankIntrCB(BattleCastleOpponentApp_VBlankCallback, app);
 }
 
-void BattleCastleOpponentApp_InitBgGraphics(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_InitBgGraphics(BattleCastleOpponentApp *app) {
     GX_SetDispSelect(GX_DISP_SELECT_SUB_MAIN);
     BattleCastleOpponentApp_SetGraphicsBanks();
     BattleCastleOpponentApp_InitBgLayers(app->bgConfig);
@@ -1353,11 +1350,11 @@ void BattleCastleOpponentApp_InitBgGraphics(BattleCastleOpponentApp *app) {
     BattleCastleOpponentApp_LoadSubScreenBg(app, GF_BG_LYR_SUB_0);
 }
 
-void BattleCastleOpponentApp_InitSpriteGfx(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_InitSpriteGfx(BattleCastleOpponentApp *app) {
     BattleCastle_InitSpriteGfx(&app->spriteGfx, app->party, BattleCastle_IsMultiType(app->frontierType));
 }
 
-void BattleCastleOpponentApp_FreeBgLayers(BgConfig *bgConfig) {
+static void BattleCastleOpponentApp_FreeBgLayers(BgConfig *bgConfig) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_ALL, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_ALL, GF_PLANE_TOGGLE_OFF);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_3);
@@ -1370,7 +1367,7 @@ void BattleCastleOpponentApp_FreeBgLayers(BgConfig *bgConfig) {
     reg_GX_POWCNT |= REG_GX_POWCNT_DSEL_MASK; // GX_SetDispSelect(GX_DISP_SELECT_MAIN_SUB)
 }
 
-void BattleCastleOpponentApp_VBlankCallback(void *arg) {
+static void BattleCastleOpponentApp_VBlankCallback(void *arg) {
     // OS_SetIrqCheckFlag(OS_IE_V_BLANK) with the DTCM address written out
     vu32 *dtcm = (vu32 *)0x027E0000;
     BattleCastleOpponentApp *app = arg;
@@ -1384,12 +1381,12 @@ void BattleCastleOpponentApp_VBlankCallback(void *arg) {
     dtcm[0x3FF8 / 4] |= OS_IE_V_BLANK;
 }
 
-void BattleCastleOpponentApp_SetGraphicsBanks(void) {
+static void BattleCastleOpponentApp_SetGraphicsBanks(void) {
     GraphicsBanks banks = gBattleCastleOpponentAppGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
-void BattleCastleOpponentApp_InitBgLayers(BgConfig *bgConfig) {
+static void BattleCastleOpponentApp_InitBgLayers(BgConfig *bgConfig) {
     GraphicsModes modes;
     BgTemplate main1;
     BgTemplate main0;
@@ -1427,7 +1424,7 @@ void BattleCastleOpponentApp_InitBgLayers(BgConfig *bgConfig) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
 }
 
-void BattleCastleOpponentApp_LoadPartyBg(BattleCastleOpponentApp *app, GFBgLayer bgId) {
+static void BattleCastleOpponentApp_LoadPartyBg(BattleCastleOpponentApp *app, GFBgLayer bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(app->narc, 0x30, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_107);
     if (BattleCastle_IsMultiType(app->frontierType) == FALSE) {
         GfGfxLoader_LoadScrnDataFromOpenNarc(app->narc, 0x2C, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_107);
@@ -1436,7 +1433,7 @@ void BattleCastleOpponentApp_LoadPartyBg(BattleCastleOpponentApp *app, GFBgLayer
     }
 }
 
-void BattleCastleOpponentApp_LoadBgPalette(void) {
+static void BattleCastleOpponentApp_LoadBgPalette(void) {
     NNSG2dPaletteData *plttData;
     void *file = GfGfxLoader_GetPlttData(NARC_a_1_8_3, 0x9D, &plttData, HEAP_ID_107);
 
@@ -1445,12 +1442,12 @@ void BattleCastleOpponentApp_LoadBgPalette(void) {
     Heap_Free(file);
 }
 
-void BattleCastleOpponentApp_LoadSummaryBg(BattleCastleOpponentApp *app, GFBgLayer bgId) {
+static void BattleCastleOpponentApp_LoadSummaryBg(BattleCastleOpponentApp *app, GFBgLayer bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(app->narc, 0x30, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_107);
     GfGfxLoader_LoadScrnDataFromOpenNarc(app->narc, 0x2E, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_107);
 }
 
-void BattleCastleOpponentApp_LoadSummaryBgPalette(void) {
+static void BattleCastleOpponentApp_LoadSummaryBgPalette(void) {
     NNSG2dPaletteData *plttData;
     void *file = GfGfxLoader_GetPlttData(NARC_a_1_8_3, 0x9D, &plttData, HEAP_ID_107);
 
@@ -1459,13 +1456,13 @@ void BattleCastleOpponentApp_LoadSummaryBgPalette(void) {
     Heap_Free(file);
 }
 
-void BattleCastleOpponentApp_LoadSubScreenBg(BattleCastleOpponentApp *app, GFBgLayer bgId) {
+static void BattleCastleOpponentApp_LoadSubScreenBg(BattleCastleOpponentApp *app, GFBgLayer bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(app->narc, 0x28, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_107);
     GfGfxLoader_LoadScrnDataFromOpenNarc(app->narc, 0x93, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_107);
     GfGfxLoader_GXLoadPalFromOpenNarc(app->narc, 0xBE, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0, HEAP_ID_107);
 }
 
-u8 BattleCastleOpponentApp_PrintMessage(BattleCastleOpponentApp *app, Window *window, int msgNo, int x, int y, int speed, u8 fg, u8 shadow, u8 bg, u8 fontId) {
+static u8 BattleCastleOpponentApp_PrintMessage(BattleCastleOpponentApp *app, Window *window, int msgNo, int x, int y, int speed, u8 fg, u8 shadow, u8 bg, u8 fontId) {
     u8 printerId;
 
     FillWindowPixelBuffer(window, bg);
@@ -1476,7 +1473,7 @@ u8 BattleCastleOpponentApp_PrintMessage(BattleCastleOpponentApp *app, Window *wi
     return printerId;
 }
 
-u8 BattleCastleOpponentApp_AddMessage(BattleCastleOpponentApp *app, Window *window, int msgNo, int x, int y, int speed, u8 fg, u8 shadow, u8 bg, u8 fontId) {
+static u8 BattleCastleOpponentApp_AddMessage(BattleCastleOpponentApp *app, Window *window, int msgNo, int x, int y, int speed, u8 fg, u8 shadow, u8 bg, u8 fontId) {
     u8 printerId;
 
     ReadMsgDataIntoString(app->msgData, msgNo, app->rawString);
@@ -1486,14 +1483,14 @@ u8 BattleCastleOpponentApp_AddMessage(BattleCastleOpponentApp *app, Window *wind
     return printerId;
 }
 
-int BattleCastleOpponentApp_ShowMessage(BattleCastleOpponentApp *app, int msgNo, u8 fontId) {
+static int BattleCastleOpponentApp_ShowMessage(BattleCastleOpponentApp *app, int msgNo, u8 fontId) {
     int printerId = BattleCastleOpponentApp_PrintMessage(app, &app->windows[CASTLE_OPP_WIN_MESSAGE], msgNo, 1, 1, TEXT_SPEED_NOTRANSFER, 1, 2, 15, fontId);
 
     ScheduleWindowCopyToVram(&app->windows[CASTLE_OPP_WIN_MESSAGE]);
     return printerId;
 }
 
-void BattleCastleOpponentApp_PrintPartyHp(BattleCastleOpponentApp *app, Window *window) {
+static void BattleCastleOpponentApp_PrintPartyHp(BattleCastleOpponentApp *app, Window *window) {
     int x;
     int i;
     u8 numMons;
@@ -1519,7 +1516,7 @@ void BattleCastleOpponentApp_PrintPartyHp(BattleCastleOpponentApp *app, Window *
     ScheduleWindowCopyToVram(window);
 }
 
-void BattleCastleOpponentApp_PrintPartyLevels(BattleCastleOpponentApp *app, Window *window) {
+static void BattleCastleOpponentApp_PrintPartyLevels(BattleCastleOpponentApp *app, Window *window) {
     int x;
     int genderX;
     int i;
@@ -1546,32 +1543,32 @@ void BattleCastleOpponentApp_PrintPartyLevels(BattleCastleOpponentApp *app, Wind
     ScheduleWindowCopyToVram(window);
 }
 
-void BattleCastleOpponentApp_ShowYesNoPrompt(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_ShowYesNoPrompt(BattleCastleOpponentApp *app) {
     BattleCastlePrompt_Show(&app->yesNoPrompt, app->bgConfig);
 }
 
-void BattleCastleOpponentApp_OpenLevelMenu(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_OpenLevelMenu(BattleCastleOpponentApp *app) {
     BattleCastleOpponentApp_CreateLevelMenuList(app);
 }
 
-void BattleCastleOpponentApp_CloseLevelMenu(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_CloseLevelMenu(BattleCastleOpponentApp *app) {
     BattleCastleOpponentApp_DestroyListMenu(app);
 }
 
-void BattleCastleOpponentApp_BufferNumber(BattleCastleOpponentApp *app, int field, int value, int digits, int mode) {
+static void BattleCastleOpponentApp_BufferNumber(BattleCastleOpponentApp *app, int field, int value, int digits, int mode) {
     BufferIntegerAsString(app->msgFormat, field, value, digits, (PrintingMode)mode, TRUE);
 }
 
-void BattleCastleOpponentApp_BufferSpeciesName(BattleCastleOpponentApp *app, int field, BoxPokemon *boxMon) {
+static void BattleCastleOpponentApp_BufferSpeciesName(BattleCastleOpponentApp *app, int field, BoxPokemon *boxMon) {
     BufferBoxMonSpeciesName(app->msgFormat, field, boxMon);
 }
 
-void BattleCastleOpponentApp_BufferPlayerName(BattleCastleOpponentApp *app, int field) {
+static void BattleCastleOpponentApp_BufferPlayerName(BattleCastleOpponentApp *app, int field) {
     PlayerProfile *profile = Save_PlayerData_GetProfile(app->saveData);
     BufferPlayersName(app->msgFormat, field, profile);
 }
 
-void BattleCastleOpponentApp_PrintPlayerName(BattleCastleOpponentApp *app, Window *window, int x, int y, u8 fontId) {
+static void BattleCastleOpponentApp_PrintPlayerName(BattleCastleOpponentApp *app, Window *window, int x, int y, u8 fontId) {
     PlayerProfile *profile = Save_PlayerData_GetProfile(app->saveData);
     String *name = String_New(PLAYER_NAME_LENGTH + 1, HEAP_ID_107);
     u32 color;
@@ -1582,7 +1579,7 @@ void BattleCastleOpponentApp_PrintPlayerName(BattleCastleOpponentApp *app, Windo
     String_Delete(name);
 }
 
-void BattleCastleOpponentApp_PrintPartnerName(BattleCastleOpponentApp *app, Window *window, int x, int y, u8 fontId) {
+static void BattleCastleOpponentApp_PrintPartnerName(BattleCastleOpponentApp *app, Window *window, int x, int y, u8 fontId) {
     PlayerProfile *profile = CommPlayerInfo_GetProfile(Comm_GetLocalNetId() ^ 1);
     u32 color = PlayerProfile_GetTrainerGender(profile) == PLAYER_GENDER_MALE ? CASTLE_OPP_TEXT_COLOR_MALE_NAME : CASTLE_OPP_TEXT_COLOR_FEMALE;
 
@@ -1590,7 +1587,7 @@ void BattleCastleOpponentApp_PrintPartnerName(BattleCastleOpponentApp *app, Wind
     BattleCastleOpponentApp_AddMessage(app, window, msg_0033_00001, x, y, TEXT_SPEED_NOTRANSFER, (color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF, 0);
 }
 
-void BattleCastleOpponentApp_PrintGenderSymbol(BattleCastleOpponentApp *app, Window *window, int x, int y, u8 fontId, u8 gender) {
+static void BattleCastleOpponentApp_PrintGenderSymbol(BattleCastleOpponentApp *app, Window *window, int x, int y, u8 fontId, u8 gender) {
     int msgNo;
     u8 fg;
     u8 shadow;
@@ -1612,45 +1609,45 @@ void BattleCastleOpponentApp_PrintGenderSymbol(BattleCastleOpponentApp *app, Win
     BattleCastleOpponentApp_AddMessage(app, window, msgNo, x, y, TEXT_SPEED_NOTRANSFER, fg, shadow, bg, fontId);
 }
 
-void BattleCastleOpponentApp_PrintChoosePrompt(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_PrintChoosePrompt(BattleCastleOpponentApp *app) {
     app->printerId = BattleCastleOpponentApp_PrintMessage(app, &app->windows[CASTLE_OPP_WIN_TRAINER_NAMES], msg_0033_00005, 0, 5, TEXT_SPEED_NOTRANSFER, 1, 2, 0, 0); // "EXIT"
     BattleCastle_DrawWindowFrame(&app->windows[CASTLE_OPP_WIN_CHOOSE_PROMPT], Options_GetFrame(app->options));
     app->printerId = BattleCastleOpponentApp_PrintMessage(app, &app->windows[CASTLE_OPP_WIN_CHOOSE_PROMPT], msg_0033_00004, 1, 1, TEXT_SPEED_NOTRANSFER, 1, 2, 15, 1);
 }
 
-void BattleCastleOpponentApp_HideChoosePrompt(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_HideChoosePrompt(BattleCastleOpponentApp *app) {
     BattleCastleOpponentApp_CloseWindow(&app->windows[CASTLE_OPP_WIN_CHOOSE_PROMPT]);
 }
 
-void BattleCastleOpponentApp_OpenMainMenu(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_OpenMainMenu(BattleCastleOpponentApp *app) {
     BattleCastle_DrawWindowFrame(&app->windows[CASTLE_OPP_WIN_MESSAGE], Options_GetFrame(app->options));
     app->listCursorPos = CASTLE_OPP_LIST_POS_NONE;
     BattleCastleOpponentApp_CreateMainMenuList(app);
     BattleCastleOpponentApp_PrintMainMenuHelp(app);
 }
 
-void BattleCastleOpponentApp_CloseMainMenu(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_CloseMainMenu(BattleCastleOpponentApp *app) {
     BattleCastleOpponentApp_CloseWindow(&app->windows[CASTLE_OPP_WIN_MESSAGE]);
     BattleCastleOpponentApp_DestroyListMenu(app);
 }
 
-void BattleCastleOpponentApp_OpenSummaryMenu(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_OpenSummaryMenu(BattleCastleOpponentApp *app) {
     BattleCastle_DrawWindowFrame(&app->windows[CASTLE_OPP_WIN_MESSAGE], Options_GetFrame(app->options));
     app->listCursorPos = CASTLE_OPP_LIST_POS_NONE;
     BattleCastleOpponentApp_CreateSummaryMenuList(app);
     BattleCastleOpponentApp_PrintSummaryMenuHelp(app);
 }
 
-void BattleCastleOpponentApp_CloseSummaryMenu(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_CloseSummaryMenu(BattleCastleOpponentApp *app) {
     BattleCastleOpponentApp_DestroyListMenu(app);
 }
 
-void BattleCastleOpponentApp_SetMainState(BattleCastleOpponentApp *app, int *state, int newState) {
+static void BattleCastleOpponentApp_SetMainState(BattleCastleOpponentApp *app, int *state, int newState) {
     app->subState = 0;
     *state = newState;
 }
 
-void BattleCastleOpponentApp_MoveCursor(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_MoveCursor(BattleCastleOpponentApp *app) {
     PlaySE(SEQ_SE_DP_SELECT);
     if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
         BattleCastleOpponentApp_SendLinkCommand(app, CASTLE_OPP_LINK_CMD_CURSOR, app->cursorPos);
@@ -1658,7 +1655,7 @@ void BattleCastleOpponentApp_MoveCursor(BattleCastleOpponentApp *app) {
     BattleCastleOpponentApp_DrawCursor(app, app->cursorPos, FALSE);
 }
 
-void BattleCastleOpponentApp_DrawCursor(BattleCastleOpponentApp *app, u32 index, int isPartner) {
+static void BattleCastleOpponentApp_DrawCursor(BattleCastleOpponentApp *app, u32 index, int isPartner) {
     BattleCastleSprite *cursor;
     int seq;
     int exitSeq;
@@ -1693,7 +1690,7 @@ void BattleCastleOpponentApp_DrawCursor(BattleCastleOpponentApp *app, u32 index,
     }
 }
 
-void BattleCastleOpponentApp_GetCursorPos(BattleCastleOpponentApp *app, u32 *x, u32 *y, u32 index) {
+static void BattleCastleOpponentApp_GetCursorPos(BattleCastleOpponentApp *app, u32 *x, u32 *y, u32 index) {
     if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
         if (index == 0) {
             *x = 40;
@@ -1716,7 +1713,7 @@ void BattleCastleOpponentApp_GetCursorPos(BattleCastleOpponentApp *app, u32 *x, 
     *y = 88;
 }
 
-void BattleCastleOpponentApp_GetTrainerNamePositions(BattleCastleOpponentApp *app, u16 *x1, u16 *y1, u16 *x2, u16 *y2) {
+static void BattleCastleOpponentApp_GetTrainerNamePositions(BattleCastleOpponentApp *app, u16 *x1, u16 *y1, u16 *x2, u16 *y2) {
     if (BattleCastle_IsMultiType(app->frontierType) == FALSE) {
         *x1 = 40;
         *y1 = 0;
@@ -1731,7 +1728,7 @@ void BattleCastleOpponentApp_GetTrainerNamePositions(BattleCastleOpponentApp *ap
 }
 
 // The slot's level-change effect (LEVEL) / summary redraw; TRUE when done
-int BattleCastleOpponentApp_PlayActionEffect(BattleCastleOpponentApp *app, int slot, u32 action) {
+static int BattleCastleOpponentApp_PlayActionEffect(BattleCastleOpponentApp *app, int slot, u32 action) {
     int index = BattleCastle_GetMonIndex(app->numMons, slot);
 
     Party_GetMonByIndex(app->party, index);
@@ -1778,7 +1775,7 @@ int BattleCastleOpponentApp_PlayActionEffect(BattleCastleOpponentApp *app, int s
 }
 
 // After a link action: which menu to reopen; TRUE when done
-int BattleCastleOpponentApp_FinishLinkAction(BattleCastleOpponentApp *app, int slot, int action) {
+static int BattleCastleOpponentApp_FinishLinkAction(BattleCastleOpponentApp *app, int slot, int action) {
     u8 ownSlots = app->numOwnSlots;
     int index = BattleCastle_GetMonIndex(app->numMons, slot);
 
@@ -1834,22 +1831,22 @@ int BattleCastleOpponentApp_FinishLinkAction(BattleCastleOpponentApp *app, int s
     return FALSE;
 }
 
-int BattleCastleOpponentApp_GetLevelChangeCost(int levelChange) {
+static int BattleCastleOpponentApp_GetLevelChangeCost(int levelChange) {
     return levelChange == CASTLE_LEVEL_UP ? 1 : 15;
 }
 
-void BattleCastleOpponentApp_CloseAll(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_CloseAll(BattleCastleOpponentApp *app) {
     BattleCastleOpponentApp_CloseMenus(app);
     BattleCastleOpponentApp_CloseWindow(&app->windows[CASTLE_OPP_WIN_MESSAGE]);
     BattleCastleSprite_SetDrawFlag(app->menuOpenSprite, FALSE);
 }
 
-void BattleCastleOpponentApp_CloseWindow(Window *window) {
+static void BattleCastleOpponentApp_CloseWindow(Window *window) {
     ClearFrameAndWindow2(window, TRUE);
     ClearWindowTilemapAndScheduleTransfer(window);
 }
 
-BOOL BattleCastleOpponentApp_SendLinkCommand(BattleCastleOpponentApp *app, int command, int param) {
+static BOOL BattleCastleOpponentApp_SendLinkCommand(BattleCastleOpponentApp *app, int command, int param) {
     int cmd;
 
     switch (command) {
@@ -1876,7 +1873,7 @@ BOOL BattleCastleOpponentApp_SendLinkCommand(BattleCastleOpponentApp *app, int c
     return FALSE;
 }
 
-void BattleCastleOpponentApp_PrepareLinkRanks(BattleCastleOpponentApp *app, int command) {
+static void BattleCastleOpponentApp_PrepareLinkRanks(BattleCastleOpponentApp *app, int command) {
     PlayerProfile *profile = Save_PlayerData_GetProfile(app->saveData);
     int i;
     int gender;
@@ -1886,7 +1883,6 @@ void BattleCastleOpponentApp_PrepareLinkRanks(BattleCastleOpponentApp *app, int 
     gender = PlayerProfile_GetTrainerGender(profile);
     i = 0;
     app->linkSendBuf[1] = gender;
-    // linkSendBuf[2 + i], addressed from a cursor that steps through the app
     dest = (u8 *)app + 2 * sizeof(u16);
     do {
         *(u16 *)(dest + offsetof(BattleCastleOpponentApp, linkSendBuf)) = BattleCastle_GetRank(app->saveData, app->frontierType, i);
@@ -1912,7 +1908,7 @@ void BattleCastleOpponentApp_ReceiveRanks(int netId, void *unused, u16 *data, Ba
     }
 }
 
-void BattleCastleOpponentApp_PrepareLinkAction(BattleCastleOpponentApp *app, int command, int slot) {
+static void BattleCastleOpponentApp_PrepareLinkAction(BattleCastleOpponentApp *app, int command, int slot) {
     app->linkSendBuf[0] = command;
     app->linkSendBuf[1] = slot;
     if (Comm_GetLocalNetId() == 0 && app->linkSlot == 0xFF) {
@@ -1946,7 +1942,7 @@ void BattleCastleOpponentApp_ReceiveAction(int netId, int unused, u16 *data, Bat
 }
 #pragma force_active reset
 
-void BattleCastleOpponentApp_PrepareLinkCursor(BattleCastleOpponentApp *app, int command) {
+static void BattleCastleOpponentApp_PrepareLinkCursor(BattleCastleOpponentApp *app, int command) {
     app->linkSendBuf[0] = command;
     app->linkSendBuf[1] = app->cursorPos;
 }
@@ -1961,7 +1957,7 @@ void BattleCastleOpponentApp_ReceiveCursor(int netId, int unused, u16 *data, Bat
 }
 #pragma force_active reset
 
-void BattleCastleOpponentApp_PrepareLinkExit(BattleCastleOpponentApp *app, int command) {
+static void BattleCastleOpponentApp_PrepareLinkExit(BattleCastleOpponentApp *app, int command) {
     app->linkSendBuf[0] = TRUE;
 }
 
@@ -1972,12 +1968,12 @@ void BattleCastleOpponentApp_ReceiveExit(int netId, int unused, u16 *data, Battl
     }
 }
 
-void BattleCastleOpponentApp_SetStatsBought(BattleCastleOpponentApp *app, int slot) {
+static void BattleCastleOpponentApp_SetStatsBought(BattleCastleOpponentApp *app, int slot) {
     int index = BattleCastle_GetMonIndex(app->numMons, slot);
     app->statsBought[index] = TRUE;
 }
 
-void BattleCastleOpponentApp_BuyStats(BattleCastleOpponentApp *app, int slot) {
+static void BattleCastleOpponentApp_BuyStats(BattleCastleOpponentApp *app, int slot) {
     BattleCastle_DrawWindowFrame(&app->windows[CASTLE_OPP_WIN_MESSAGE], Options_GetFrame(app->options));
     BattleCastleOpponentApp_BufferSpeciesName(app, 0, Mon_GetBoxMon(Party_GetMonByIndex(app->party, BattleCastle_GetMonIndex(app->numMons, slot))));
     app->printerId = BattleCastleOpponentApp_ShowMessage(app, msg_0033_00047, 1);
@@ -1990,12 +1986,12 @@ void BattleCastleOpponentApp_BuyStats(BattleCastleOpponentApp *app, int slot) {
     PlaySE(SEQ_SE_DP_UG_020);
 }
 
-void BattleCastleOpponentApp_SetMovesBought(BattleCastleOpponentApp *app, int slot) {
+static void BattleCastleOpponentApp_SetMovesBought(BattleCastleOpponentApp *app, int slot) {
     int index = BattleCastle_GetMonIndex(app->numMons, slot);
     app->movesBought[index] = TRUE;
 }
 
-void BattleCastleOpponentApp_BuyMoves(BattleCastleOpponentApp *app, int slot) {
+static void BattleCastleOpponentApp_BuyMoves(BattleCastleOpponentApp *app, int slot) {
     BattleCastle_DrawWindowFrame(&app->windows[CASTLE_OPP_WIN_MESSAGE], Options_GetFrame(app->options));
     BattleCastleOpponentApp_BufferSpeciesName(app, 0, Mon_GetBoxMon(Party_GetMonByIndex(app->party, BattleCastle_GetMonIndex(app->numMons, slot))));
     app->printerId = BattleCastleOpponentApp_ShowMessage(app, msg_0033_00083, 1);
@@ -2008,7 +2004,7 @@ void BattleCastleOpponentApp_BuyMoves(BattleCastleOpponentApp *app, int slot) {
     PlaySE(SEQ_SE_DP_UG_020);
 }
 
-void BattleCastleOpponentApp_CloseMenus(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_CloseMenus(BattleCastleOpponentApp *app) {
     if (app->flags.bits.listMenuOpen == TRUE) {
         TouchscreenListMenu_DestroyButtons(app->listMenu);
         BattleCastleOpponentApp_DestroyListMenu(app);
@@ -2016,11 +2012,11 @@ void BattleCastleOpponentApp_CloseMenus(BattleCastleOpponentApp *app) {
     BattleCastlePrompt_Hide(&app->yesNoPrompt);
 }
 
-void BattleCastleOpponentApp_OpenMessageBox(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_OpenMessageBox(BattleCastleOpponentApp *app) {
     BattleCastle_DrawWindowFrame(&app->windows[CASTLE_OPP_WIN_MESSAGE], Options_GetFrame(app->options));
 }
 
-void BattleCastleOpponentApp_PrintCastlePoints(BattleCastleOpponentApp *app, Window *window) {
+static void BattleCastleOpponentApp_PrintCastlePoints(BattleCastleOpponentApp *app, Window *window) {
     u16 x1;
     u16 y1;
     u16 x2;
@@ -2059,7 +2055,7 @@ void BattleCastleOpponentApp_PrintCastlePoints(BattleCastleOpponentApp *app, Win
     ScheduleWindowCopyToVram(window);
 }
 
-void BattleCastleOpponentApp_ConfirmLevelChange(BattleCastleOpponentApp *app, u8 levelChange) {
+static void BattleCastleOpponentApp_ConfirmLevelChange(BattleCastleOpponentApp *app, u8 levelChange) {
     int cost = BattleCastleOpponentApp_GetLevelChangeCost(levelChange);
 
     BattleCastleOpponentApp_BufferNumber(app, 0, cost, 4, 0);
@@ -2068,7 +2064,7 @@ void BattleCastleOpponentApp_ConfirmLevelChange(BattleCastleOpponentApp *app, u8
     app->levelChange = levelChange;
 }
 
-void BattleCastleOpponentApp_PrintTrainerNames(BattleCastleOpponentApp *app, Window *window) {
+static void BattleCastleOpponentApp_PrintTrainerNames(BattleCastleOpponentApp *app, Window *window) {
     u16 x1;
     u16 y1;
     u16 x2;
@@ -2092,7 +2088,7 @@ void BattleCastleOpponentApp_PrintTrainerNames(BattleCastleOpponentApp *app, Win
 }
 
 // Pay for and apply a link action (also the partner's); the partner pays with its own points
-void BattleCastleOpponentApp_ApplyAction(BattleCastleOpponentApp *app, u8 slot, u32 action) {
+static void BattleCastleOpponentApp_ApplyAction(BattleCastleOpponentApp *app, u8 slot, u32 action) {
     u32 index;
     u32 ownSlots;
     int cost;
@@ -2149,7 +2145,7 @@ void BattleCastleOpponentApp_ApplyAction(BattleCastleOpponentApp *app, u8 slot, 
     }
 }
 
-void BattleCastleOpponentApp_CheckMon(BattleCastleOpponentApp *app, u32 slot) {
+static void BattleCastleOpponentApp_CheckMon(BattleCastleOpponentApp *app, u32 slot) {
     int index;
     Pokemon *mon;
 
@@ -2178,13 +2174,13 @@ void BattleCastleOpponentApp_CheckMon(BattleCastleOpponentApp *app, u32 slot) {
     PlaySE(SEQ_SE_DP_UG_020);
 }
 
-void BattleCastleOpponentApp_CheckMonAndRedrawHp(BattleCastleOpponentApp *app, int slot) {
+static void BattleCastleOpponentApp_CheckMonAndRedrawHp(BattleCastleOpponentApp *app, int slot) {
     BattleCastleOpponentApp_CheckMon(app, slot);
     BattleCastleOpponentApp_PrintPartyHp(app, &app->windows[CASTLE_OPP_WIN_HP]);
 }
 
 // LEVEL +5 / -5 toggles: a second purchase of the same change resets the mon to level 50
-void BattleCastleOpponentApp_ChangeLevel(BattleCastleOpponentApp *app, int slot, int levelChange) {
+static void BattleCastleOpponentApp_ChangeLevel(BattleCastleOpponentApp *app, int slot, int levelChange) {
     Pokemon *mon;
     u32 exp;
 
@@ -2224,11 +2220,11 @@ void BattleCastleOpponentApp_ChangeLevel(BattleCastleOpponentApp *app, int slot,
     }
 }
 
-void BattleCastleOpponentApp_HideSummaryBg(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_HideSummaryBg(BattleCastleOpponentApp *app) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
 }
 
-void BattleCastleOpponentApp_UpdateMonIcons(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_UpdateMonIcons(BattleCastleOpponentApp *app) {
     int count = BattleCastle_GetPartySize(app->frontierType, 1);
     int i;
 
@@ -2250,7 +2246,7 @@ void BattleCastleOpponentApp_UpdateMonIcons(BattleCastleOpponentApp *app) {
 }
 
 // Buy the stats (cost CASTLE_CP_STATS) or moves of the selected mon; TRUE when the link exchange takes over
-int BattleCastleOpponentApp_TryBuy(BattleCastleOpponentApp *app, int cost, int failMsg) {
+static int BattleCastleOpponentApp_TryBuy(BattleCastleOpponentApp *app, int cost, int failMsg) {
     int cpStat = BattleCastle_GetPointsStat(app->frontierType);
     int cpStatKind = FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(app->frontierType));
 
@@ -2277,7 +2273,7 @@ int BattleCastleOpponentApp_TryBuy(BattleCastleOpponentApp *app, int cost, int f
 }
 
 // RANK UP (info rank): the player or the partner pays CASTLE_CP_RANK_UP
-void BattleCastleOpponentApp_RankUp(BattleCastleOpponentApp *app, u8 slot, int action) {
+static void BattleCastleOpponentApp_RankUp(BattleCastleOpponentApp *app, u8 slot, int action) {
     u8 kind;
     u32 ownSlots;
 
@@ -2339,7 +2335,7 @@ void BattleCastleOpponentApp_RankUp(BattleCastleOpponentApp *app, u8 slot, int a
     app->printerId = BattleCastleOpponentApp_ShowMessage(app, gBattleCastleOpponentAppRankUpMessages[kind][slot], 1);
 }
 
-void BattleCastleOpponentApp_ShowBoughtMarks(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_ShowBoughtMarks(BattleCastleOpponentApp *app) {
     int i;
     int numMons = BattleCastle_GetOpponentMonCount(app->frontierType, 1);
 
@@ -2348,7 +2344,7 @@ void BattleCastleOpponentApp_ShowBoughtMarks(BattleCastleOpponentApp *app) {
     }
 }
 
-void BattleCastleOpponentApp_ShowMonBoughtMarks(BattleCastleOpponentApp *app, u8 slot) {
+static void BattleCastleOpponentApp_ShowMonBoughtMarks(BattleCastleOpponentApp *app, u8 slot) {
     if (app->statsBought[slot] == TRUE) {
         BattleCastleSprite_SetDrawFlag(app->boughtMarks[slot][0], TRUE);
     }
@@ -2357,12 +2353,12 @@ void BattleCastleOpponentApp_ShowMonBoughtMarks(BattleCastleOpponentApp *app, u8
     }
 }
 
-void BattleCastleOpponentApp_GetBoughtMarkPos(BattleCastleOpponentApp *app, u32 *x, u32 *y) {
+static void BattleCastleOpponentApp_GetBoughtMarkPos(BattleCastleOpponentApp *app, u32 *x, u32 *y) {
     *x = BattleCastle_IsMultiType(app->frontierType) == TRUE ? 64 : 96;
     *y = 60;
 }
 
-void BattleCastleOpponentApp_PrintExpandedMessage(BattleCastleOpponentApp *app, Window *window, MsgData *msgData, int msgNo, int x, int y, int fontId, int color, int alignment) {
+static void BattleCastleOpponentApp_PrintExpandedMessage(BattleCastleOpponentApp *app, Window *window, MsgData *msgData, int msgNo, int x, int y, int fontId, int color, int alignment) {
     String *string = NewString_ReadMsgData(msgData, msgNo);
 
     StringExpandPlaceholders(app->msgFormat, app->expandedString, string);
@@ -2370,7 +2366,7 @@ void BattleCastleOpponentApp_PrintExpandedMessage(BattleCastleOpponentApp *app, 
     String_Delete(string);
 }
 
-void BattleCastleOpponentApp_LoadMonSummary(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_LoadMonSummary(BattleCastleOpponentApp *app) {
     Pokemon *mon = Party_GetMonByIndex(app->party, BattleCastle_GetMonIndex(app->numMons, app->cursorPos));
     BOOL lock = AcquireMonLock(mon);
     u16 i;
@@ -2408,7 +2404,7 @@ void BattleCastleOpponentApp_LoadMonSummary(BattleCastleOpponentApp *app) {
     ReleaseMonLock(mon, lock);
 }
 
-void BattleCastleOpponentApp_PrintSummaryLabels(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_PrintSummaryLabels(BattleCastleOpponentApp *app) {
     FillWindowPixelBuffer(&app->windows[CASTLE_OPP_WIN_LEVEL_LABEL], 0);
     FillWindowPixelBuffer(&app->windows[CASTLE_OPP_WIN_ABILITY_LABEL], 0);
     FillWindowPixelBuffer(&app->windows[CASTLE_OPP_WIN_NATURE_LABEL], 0);
@@ -2442,7 +2438,7 @@ void BattleCastleOpponentApp_PrintSummaryLabels(BattleCastleOpponentApp *app) {
 }
 
 // Summary panel of the selected mon; what is shown depends on what was bought (CHECK / stats / moves)
-void BattleCastleOpponentApp_PrintMonSummary(BattleCastleOpponentApp *app, int copyMode) {
+static void BattleCastleOpponentApp_PrintMonSummary(BattleCastleOpponentApp *app, int copyMode) {
     int infoRank;
     int index;
     u8 i;
@@ -2578,13 +2574,13 @@ void BattleCastleOpponentApp_PrintMonSummary(BattleCastleOpponentApp *app, int c
     }
 }
 
-void BattleCastleOpponentApp_ShowMonSummary(BattleCastleOpponentApp *app, int copyMode) {
+static void BattleCastleOpponentApp_ShowMonSummary(BattleCastleOpponentApp *app, int copyMode) {
     BattleCastleOpponentApp_LoadMonSummary(app);
     BattleCastleOpponentApp_PrintMonSummary(app, copyMode);
     BattleCastleOpponentApp_LoadMonPic(app);
 }
 
-void BattleCastleOpponentApp_ShowSummaryPanel(BattleCastleOpponentApp *app, int show) {
+static void BattleCastleOpponentApp_ShowSummaryPanel(BattleCastleOpponentApp *app, int show) {
     u32 i;
 
     if (show == TRUE) {
@@ -2601,7 +2597,7 @@ void BattleCastleOpponentApp_ShowSummaryPanel(BattleCastleOpponentApp *app, int 
 }
 
 // Picture of the selected mon; a placeholder until it is checked
-void BattleCastleOpponentApp_LoadMonPic(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_LoadMonPic(BattleCastleOpponentApp *app) {
     int index = BattleCastle_GetMonIndex(app->numMons, app->cursorPos);
 
     if (app->checked[index] == FALSE) {
@@ -2611,13 +2607,13 @@ void BattleCastleOpponentApp_LoadMonPic(BattleCastleOpponentApp *app) {
     }
 }
 
-void BattleCastleOpponentApp_SetCursorPos(BattleCastleOpponentApp *app, u32 cursorPos, u32 prevCursorPos) {
+static void BattleCastleOpponentApp_SetCursorPos(BattleCastleOpponentApp *app, u32 cursorPos, u32 prevCursorPos) {
     app->cursorPos = cursorPos;
     app->prevCursorPos = prevCursorPos;
     BattleCastleOpponentApp_MoveCursor(app);
 }
 
-void BattleCastleOpponentApp_CreateListMenu(BattleCastleOpponentApp *app, u8 count, u8 x, u8 y, u8 width) {
+static void BattleCastleOpponentApp_CreateListMenu(BattleCastleOpponentApp *app, u8 count, u8 x, u8 y, u8 width) {
     TouchscreenListMenuTemplate template;
     TouchscreenListMenuHeader header;
     u16 tileStart;
@@ -2641,7 +2637,7 @@ void BattleCastleOpponentApp_CreateListMenu(BattleCastleOpponentApp *app, u8 cou
 }
 
 // CHECK (until checked) / LEVEL / SUMMARY (until everything is bought) / CANCEL
-void BattleCastleOpponentApp_CreateMainMenuList(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_CreateMainMenuList(BattleCastleOpponentApp *app) {
     u16 count;
     u8 infoRank;
     int index;
@@ -2666,7 +2662,7 @@ void BattleCastleOpponentApp_CreateMainMenuList(BattleCastleOpponentApp *app) {
 }
 
 // SUMMARY (until bought) / MOVES (until bought, needs info rank 2) / RANK UP (below rank 2) / CANCEL
-void BattleCastleOpponentApp_CreateSummaryMenuList(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_CreateSummaryMenuList(BattleCastleOpponentApp *app) {
     u16 count;
     u8 infoRank;
     int index;
@@ -2693,7 +2689,7 @@ void BattleCastleOpponentApp_CreateSummaryMenuList(BattleCastleOpponentApp *app)
 }
 
 // LEVEL +5 / LEVEL -5 / CANCEL
-void BattleCastleOpponentApp_CreateLevelMenuList(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_CreateLevelMenuList(BattleCastleOpponentApp *app) {
     u32 i;
 
     app->listMenuItems = ListMenuItems_New(3, HEAP_ID_107);
@@ -2703,7 +2699,7 @@ void BattleCastleOpponentApp_CreateLevelMenuList(BattleCastleOpponentApp *app) {
     BattleCastleOpponentApp_CreateListMenu(app, 3, 17, 8, 13);
 }
 
-void BattleCastleOpponentApp_DestroyListMenu(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_DestroyListMenu(BattleCastleOpponentApp *app) {
     int numMons = BattleCastle_GetPartySize(app->frontierType, 1);
 
     BattleCastle_SetSpritesTranslucent(app->monIcons, numMons, 0);
@@ -2713,7 +2709,7 @@ void BattleCastleOpponentApp_DestroyListMenu(BattleCastleOpponentApp *app) {
     app->flags.bits.listMenuOpen = FALSE;
 }
 
-void BattleCastleOpponentApp_PrintMainMenuHelp(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_PrintMainMenuHelp(BattleCastleOpponentApp *app) {
     int msgNo;
 
     if (app->listCursorPos != app->listMenu->cursorPos) {
@@ -2736,7 +2732,7 @@ void BattleCastleOpponentApp_PrintMainMenuHelp(BattleCastleOpponentApp *app) {
     }
 }
 
-void BattleCastleOpponentApp_PrintSummaryMenuHelp(BattleCastleOpponentApp *app) {
+static void BattleCastleOpponentApp_PrintSummaryMenuHelp(BattleCastleOpponentApp *app) {
     int msgNo;
     int variant;
 
@@ -2832,7 +2828,7 @@ void BattleCastle_InitSpriteGfx(BattleCastleSpriteGfx *gfx, Party *party, u8 isL
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-Sprite *BattleCastle_CreateSprite(BattleCastleSpriteGfx *gfx, int charId, int plttId, int cellId, int animSeq, int drawPriority, int priority, u8 screen) {
+static Sprite *BattleCastle_CreateSprite(BattleCastleSpriteGfx *gfx, int charId, int plttId, int cellId, int animSeq, int drawPriority, int priority, u8 screen) {
     SpriteResourcesHeader header;
     SpriteTemplate template;
     Sprite *sprite;
@@ -2899,7 +2895,7 @@ void BattleCastle_LoadItemIconPalette(BattleCastleSpriteGfx *gfx, int resId, u16
     SpriteTransfer_ReplacePlttData(res);
 }
 
-void BattleCastle_InitSpriteTransfer(void) {
+static void BattleCastle_InitSpriteTransfer(void) {
     ObjCharTransferTemplate template = gBattleCastleObjCharTransferTemplate;
 
     ObjCharTransfer_InitEx(&template, GX_OBJVRAMMODE_CHAR_1D_32K, GX_OBJVRAMMODE_CHAR_1D_64K);
@@ -2908,7 +2904,7 @@ void BattleCastle_InitSpriteTransfer(void) {
     ObjPlttTransfer_Reset();
 }
 
-void BattleCastle_LoadPartyListGfx(BattleCastleSpriteGfx *gfx) {
+static void BattleCastle_LoadPartyListGfx(BattleCastleSpriteGfx *gfx) {
     NARC *narc = NARC_New(NARC_graphic_plist_gra, HEAP_ID_107);
 
     gfx->resObj[1][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CHAR], narc, PartyMenu_GetHeldItemIconNCGR(), FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_107);
@@ -2918,7 +2914,7 @@ void BattleCastle_LoadPartyListGfx(BattleCastleSpriteGfx *gfx) {
     NARC_Delete(narc);
 }
 
-void BattleCastle_LoadMonPicGfx(BattleCastleSpriteGfx *gfx) {
+static void BattleCastle_LoadMonPicGfx(BattleCastleSpriteGfx *gfx) {
     NARC *narc = NARC_New(NARC_a_0_0_8, HEAP_ID_107);
 
     gfx->resObj[2][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CHAR], narc, 0x4C, FALSE, 2, NNS_G2D_VRAM_TYPE_2DSUB, HEAP_ID_107);
@@ -3223,7 +3219,7 @@ GridInputHandler *BattleCastlePartyApp_CreatePartyGrid(BattleCastlePartyApp *app
     return GridInputHandler_Create(gBattleCastlePartyGrid4Hitboxes, gBattleCastlePartyGrid4Boxes, &gBattleCastlePartyAppPartyGridCallbacks, app, TRUE, initialPos, HEAP_ID_107);
 }
 
-GridInputHandler *BattleCastleOpponentApp_CreatePartyGrid(BattleCastleOpponentApp *app, int initialPos, int numMons) {
+static GridInputHandler *BattleCastleOpponentApp_CreatePartyGrid(BattleCastleOpponentApp *app, int initialPos, int numMons) {
     if (numMons == 3) {
         return GridInputHandler_Create(gBattleCastlePartyGrid3Hitboxes, gBattleCastlePartyGrid3Boxes, &gBattleCastleOpponentAppPartyGridCallbacks, app, TRUE, initialPos, HEAP_ID_107);
     }

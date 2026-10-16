@@ -6,25 +6,31 @@
 
 #include "msgdata/msg.naix"
 
+#include "char_tiles.h"
 #include "filesystem_files_def.h"
 #include "heap.h"
 #include "pokemon.h"
 #include "pokemon_icon_idx.h"
 #include "screen_fade.h"
-#include "char_tiles.h"
 
 #define MON_PIC_BUFFER_SIZE 0xC80
 
 #define TEXT_SPEED_NOTRANSFER     0xFF
 #define TEXT_COLOR_BLACK_ON_WHITE 0x10200
 
-// text.h declares the font id as FontID (u8); this module passes it on as a u32 without truncating it
 u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, PrinterCallback_t callback);
 
 u32 MATH_CountPopulation(u32 value);
 
 extern const u32 sPokeathlonUtilScreenVramTypes[2];
 extern const TileRect sPokeathlonMonPicRect;
+
+static void PokeathlonUtil_LoadSpriteChars(ManagedSprite *sprite, void *data, u32 size);
+static void PokeathlonUtil_LoadSpritePalette(ManagedSprite *sprite, NarcId narcId, s32 memberNo, BOOL isMain, BOOL grayscale, enum HeapID heapId);
+static void *PokeathlonUtil_LoadCharDataFromNarc(PokeathlonSpriteContext *ctx, int member, NNSG2dCharacterData **out);
+static void PokeathlonUtil_PrintMessageEx(PokeathlonTextContext *ctx, u32 window, u32 message, BOOL center, u8 x, u8 y, u32 font, u8 fill);
+static void PokeathlonUtil_ClearWindow(PokeathlonTextContext *ctx, u32 window);
+static void PokeathlonUtil_SetGfxBanks(void);
 
 void *PokeathlonUtil_GetSpriteSystem(PokeathlonSpriteContext *ctx) {
     GF_ASSERT(ctx != NULL);
@@ -188,7 +194,7 @@ void PokeathlonUtil_SetMonIconSprite(PokeathlonSpriteContext *ctx, ManagedSprite
     }
 }
 
-void PokeathlonUtil_LoadSpriteChars(ManagedSprite *sprite, void *data, u32 size) {
+static void PokeathlonUtil_LoadSpriteChars(ManagedSprite *sprite, void *data, u32 size) {
     NNS_G2D_VRAM_TYPE type = Sprite_GetVramType(sprite->sprite);
     u32 address = NNS_G2dGetImageLocation(Sprite_GetImageProxy(sprite->sprite), type);
 
@@ -206,7 +212,7 @@ void PokeathlonUtil_LoadSpriteChars(ManagedSprite *sprite, void *data, u32 size)
     }
 }
 
-void PokeathlonUtil_LoadSpritePalette(ManagedSprite *sprite, NarcId narcId, s32 memberNo, BOOL isMain, BOOL grayscale, enum HeapID heapId) {
+static void PokeathlonUtil_LoadSpritePalette(ManagedSprite *sprite, NarcId narcId, s32 memberNo, BOOL isMain, BOOL grayscale, enum HeapID heapId) {
     NNS_G2D_VRAM_TYPE vramType;
     enum GFPalLoadLocation location;
     u32 palLocation;
@@ -231,7 +237,7 @@ void PokeathlonUtil_LoadSpritePalette(ManagedSprite *sprite, NarcId narcId, s32 
     }
 }
 
-void *PokeathlonUtil_LoadCharDataFromNarc(PokeathlonSpriteContext *ctx, int member, NNSG2dCharacterData **out) {
+static void *PokeathlonUtil_LoadCharDataFromNarc(PokeathlonSpriteContext *ctx, int member, NNSG2dCharacterData **out) {
     return GfGfxLoader_GetCharDataFromOpenNarc(ctx->narc, member, FALSE, out, ctx->heapId);
 }
 
@@ -293,7 +299,7 @@ void PokeathlonUtil_PrintMessageCentered(PokeathlonTextContext *ctx, u32 window,
     PokeathlonUtil_PrintMessageEx(ctx, window, message, TRUE, 0, 0, 0, fill);
 }
 
-void PokeathlonUtil_PrintMessageEx(PokeathlonTextContext *ctx, u32 window, u32 message, BOOL center, u8 x, u8 y, u32 fontId, u8 fill) {
+static void PokeathlonUtil_PrintMessageEx(PokeathlonTextContext *ctx, u32 window, u32 message, BOOL center, u8 x, u8 y, u32 fontId, u8 fill) {
     u8 xOffset = 0;
     String *string;
 
@@ -383,7 +389,7 @@ void *PokeathlonUtil_GetMessageFormat(PokeathlonTextContext *ctx) {
     return ctx->msgFormat;
 }
 
-void PokeathlonUtil_ClearWindow(PokeathlonTextContext *ctx, u32 index) {
+static void PokeathlonUtil_ClearWindow(PokeathlonTextContext *ctx, u32 index) {
     FillWindowPixelBuffer(&ctx->windows[index], 0);
 }
 
@@ -516,7 +522,7 @@ u8 PokeathlonUtil_CountDecimalDigits(s32 value) {
     return count;
 }
 
-void PokeathlonUtil_SetGfxBanks(void) {
+static void PokeathlonUtil_SetGfxBanks(void) {
     GraphicsBanks banks = sPokeathlonUtilGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }

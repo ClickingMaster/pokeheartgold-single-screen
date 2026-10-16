@@ -4,6 +4,7 @@
 
 #include "msgdata/msg/msg_0309.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
+#include "pokeathlon/pokeathlon_event_points.h"
 
 #include "bg_window.h"
 #include "filesystem.h"
@@ -24,7 +25,6 @@ enum {
     HURDLE_DASH_STATE_CALC_SCORES,
 };
 
-// Course helpers, sprite scene and the rest of the event (OVY_96, not yet tidied).
 void *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, int member);
 int PokeathlonCourse_GetSpriteSizeType(void *mon);
 void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, int participant, int member, PokeathlonHurdleDashMonView *view);
@@ -93,7 +93,6 @@ void PokeathlonHurdleDashStandings_Draw(void *standings);
 void *PokeathlonHurdleDashDust_New(enum HeapID heapId);
 void PokeathlonHurdleDashDust_CreateSprites(void *lanes, PokeathlonCourseSpritePool *scene, int priority);
 void PokeathlonHurdleDashDust_Free(void *lanes);
-void PokeathlonEvent_CalcPoints(void *gfx, int event);
 
 extern const PokeathlonHurdleDashSceneConfig sHurdleDashSceneConfig;
 extern const PokeathlonHurdleDashNumberX sHurdleDashNumberX;
@@ -109,6 +108,11 @@ extern const BgTemplate sHurdleDashBgTemplate_Main3;
 extern const BgTemplate sHurdleDashBgTemplate_Sub3;
 extern const BgTemplate sHurdleDashBgTemplate_Sub2;
 extern const GraphicsBanks sHurdleDashGraphicsBanks;
+
+static void PokeathlonHurdleDash_SetGfxBanks(void);
+static void PokeathlonHurdleDash_InitBgs(BgConfig *bgConfig);
+static void PokeathlonHurdleDash_LoadBgTiles(BgConfig *bgConfig, enum HeapID heapId);
+static void PokeathlonHurdleDash_LoadBgScreens(BgConfig *bgConfig, enum HeapID heapId);
 
 BOOL PokeathlonHurdleDash_Start(PokeathlonCourseData *course) {
     PokeathlonCourse_SetNextState(course, HURDLE_DASH_STATE_PLAY);
@@ -525,12 +529,12 @@ BOOL PokeathlonHurdleDash_Exit(PokeathlonCourseData *course) {
     return TRUE;
 }
 
-void PokeathlonHurdleDash_SetGfxBanks(void) {
+static void PokeathlonHurdleDash_SetGfxBanks(void) {
     GraphicsBanks banks = sHurdleDashGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
-void PokeathlonHurdleDash_InitBgs(BgConfig *bgConfig) {
+static void PokeathlonHurdleDash_InitBgs(BgConfig *bgConfig) {
     GraphicsModes modes = sHurdleDashGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     {
@@ -576,12 +580,12 @@ void PokeathlonHurdleDash_InitBgs(BgConfig *bgConfig) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
 }
 
-void PokeathlonHurdleDash_LoadBgTiles(BgConfig *bgConfig, enum HeapID heapId) {
+static void PokeathlonHurdleDash_LoadBgTiles(BgConfig *bgConfig, enum HeapID heapId) {
     GfGfxLoader_LoadCharData(NARC_a_1_5_6, 1, bgConfig, GF_BG_LYR_MAIN_0, 0, 0, FALSE, heapId);
     GfGfxLoader_LoadCharData(NARC_a_1_5_6, 1, bgConfig, GF_BG_LYR_SUB_0, 0, 0, FALSE, heapId);
 }
 
-void PokeathlonHurdleDash_LoadBgScreens(BgConfig *bgConfig, enum HeapID heapId) {
+static void PokeathlonHurdleDash_LoadBgScreens(BgConfig *bgConfig, enum HeapID heapId) {
     GfGfxLoader_LoadScrnData(NARC_a_1_5_6, 2, bgConfig, GF_BG_LYR_MAIN_0, 0, 0, FALSE, heapId);
     GfGfxLoader_LoadScrnData(NARC_a_1_5_6, 3, bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, heapId);
     GfGfxLoader_LoadScrnData(NARC_a_1_5_6, 4, bgConfig, GF_BG_LYR_MAIN_2, 0, 0, FALSE, heapId);

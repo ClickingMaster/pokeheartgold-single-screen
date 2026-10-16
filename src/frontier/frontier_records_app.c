@@ -10,8 +10,12 @@
 #include "filesystem.h"
 #include "font.h"
 #include "frontier_data.h"
+#include "frontier_data_access.h"
+#include "frontier_save_access.h"
+#include "frontier_stat_ids_legacy.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
+#include "grid_input_handler.h"
 #include "heap.h"
 #include "message_format.h"
 #include "msgdata.h"
@@ -19,20 +23,16 @@
 #include "overlay_86.h"
 #include "overlay_manager.h"
 #include "palette.h"
+#include "palette_blink.h"
 #include "player_avatar.h"
 #include "player_data.h"
 #include "pm_string.h"
 #include "render_window.h"
+#include "screen_fade_legacy.h"
+#include "sound_playback.h"
 #include "sprite_system.h"
 #include "system.h"
 #include "touchscreen.h"
-#include "sound_playback.h"
-#include "screen_fade_legacy.h"
-#include "palette_blink.h"
-#include "grid_input_handler.h"
-#include "frontier_data_access.h"
-#include "frontier_save_access.h"
-#include "frontier_stat_ids_legacy.h"
 
 // Facilities, as passed in FrontierRecordsAppArgs.facility
 #define FRONTIER_RECORDS_TOWER        1
@@ -130,7 +130,7 @@ typedef struct FrontierRecordsApp {
     s8 lastPage;                                     // 0x25D
     u16 speciesWindowBank;                           // 0x25E
     FrontierRecordsSpeciesGroup groups[NUM_LETTERS]; // 0x260
-    PaletteBlink *scrollArrows;                // 0x330
+    PaletteBlink *scrollArrows;                      // 0x330
     u16 pageArrowTiles[3][16];                       // 0x334
 } FrontierRecordsApp;
 
@@ -162,86 +162,85 @@ u32 BattleCastle_GetBestStreakStat(u8 type);
 u32 BattleCastle_GetBestStreakPointsStat(u8 type);
 u32 FactoryFlags_GetField(int flags, u32 field, u8 index, u32 a3);
 
-// text.h is not included: it declares fontId as u8 (FontID), but this module passes it unnarrowed
 u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, void *callback);
 
-BOOL FrontierRecordsApp_FadeIn(FrontierRecordsApp *app);
-BOOL FrontierRecordsApp_Run(FrontierRecordsApp *app);
-BOOL FrontierRecordsApp_FadeOut(FrontierRecordsApp *app);
-void FrontierRecordsApp_VBlankCallback(void *cbArg);
-void FrontierRecordsApp_SetGraphicsBanks(FrontierRecordsApp *app);
-void FrontierRecordsApp_InitBgLayers(BgConfig *bgConfig);
-void FrontierRecordsApp_InitGraphics(FrontierRecordsApp *app);
-void FrontierRecordsApp_FreeBgLayers(BgConfig *bgConfig);
-void FrontierRecordsApp_SetMainState(FrontierRecordsApp *app, int *state, int nextState);
-u32 FrontierRecordsApp_GetWindowSet(u32 facility);
-void FrontierRecordsApp_LoadMainBgGraphics(FrontierRecordsApp *app, GFBgLayer layer);
-void FrontierRecordsApp_LoadSubBgGraphics(FrontierRecordsApp *app, GFBgLayer layer);
-void FrontierRecordsApp_BufferNumber(FrontierRecordsApp *app, u32 field, u32 value);
-void FrontierRecordsApp_PrintStringAligned(Window *window, String *string, u32 x, u32 y, u32 fontId, u32 color, u32 align);
-void FrontierRecordsApp_PrintMessage(FrontierRecordsApp *app, u32 windowId, u32 msgId, u32 x, u32 y, u32 fontId, u32 color, u32 align);
-void FrontierRecordsApp_PrintFormattedMessage(FrontierRecordsApp *app, u32 windowId, u32 msgId, u32 x, u32 y, u32 fontId, u32 color, u32 align);
-void FrontierRecordsApp_PrintRecords(FrontierRecordsApp *app);
-void FrontierRecordsApp_PrintFactoryLevel50Records(FrontierRecordsApp *app);
-void FrontierRecordsApp_PrintFactoryOpenLevelRecords(FrontierRecordsApp *app);
-u32 FrontierRecordsApp_GetFactoryStreakLabel(FrontierRecordsApp *app, u32 level);
-void FrontierRecordsApp_PrintHallRecords(FrontierRecordsApp *app);
-void FrontierRecordsApp_BufferSpeciesName(FrontierRecordsApp *app, int species);
-void FrontierRecordsApp_PrintCastleRecords(FrontierRecordsApp *app);
-u32 FrontierRecordsApp_GetCastleStreakLabel(FrontierRecordsApp *app);
-void FrontierRecordsApp_PrintArcadeRecords(FrontierRecordsApp *app);
-u32 FrontierRecordsApp_GetArcadeStreakLabel(FrontierRecordsApp *app);
-void FrontierRecordsApp_PrintTowerRecords(FrontierRecordsApp *app);
-void FrontierRecordsApp_PrintTowerMultiRecords(FrontierRecordsApp *app);
-u32 FrontierRecordsApp_GetTowerStreakLabel(FrontierRecordsApp *app, u32 mode);
-void FrontierRecordsApp_PrintReturnButton(FrontierRecordsApp *app);
-void FrontierRecordsApp_CreateSprites(FrontierRecordsApp *app);
-void FrontierRecordsApp_FreeSprites(FrontierRecordsApp *app);
-void FrontierRecordsApp_TickSprites(FrontierRecordsApp *app);
-void FrontierRecordsApp_SetSpriteAnim(FrontierRecordsApp *app, int index, int anim);
-void FrontierRecordsApp_SetSpritePosition(FrontierRecordsApp *app, int index, s16 x, s16 y);
-int FrontierRecordsApp_RunButtonFlash(FrontierRecordsApp *app);
-void FrontierRecordsApp_StartReturnButtonFlash(FrontierRecordsApp *app);
-BOOL FrontierRecordsApp_IsHall(FrontierRecordsApp *app);
-void FrontierRecordsApp_InitHallPicker(FrontierRecordsApp *app);
-void FrontierRecordsApp_FreeHallPicker(FrontierRecordsApp *app);
-void FrontierRecordsApp_ShowHallPage(FrontierRecordsApp *app, int page);
-void FrontierRecordsApp_DrawPageArrows(FrontierRecordsApp *app);
-void FrontierRecordsApp_FreeGridInput(FrontierRecordsApp *app);
+static BOOL FrontierRecordsApp_FadeIn(FrontierRecordsApp *app);
+static BOOL FrontierRecordsApp_Run(FrontierRecordsApp *app);
+static BOOL FrontierRecordsApp_FadeOut(FrontierRecordsApp *app);
+static void FrontierRecordsApp_VBlankCallback(void *cbArg);
+static void FrontierRecordsApp_SetGraphicsBanks(FrontierRecordsApp *app);
+static void FrontierRecordsApp_InitBgLayers(BgConfig *bgConfig);
+static void FrontierRecordsApp_InitGraphics(FrontierRecordsApp *app);
+static void FrontierRecordsApp_FreeBgLayers(BgConfig *bgConfig);
+static void FrontierRecordsApp_SetMainState(FrontierRecordsApp *app, int *state, int nextState);
+static u32 FrontierRecordsApp_GetWindowSet(u32 facility);
+static void FrontierRecordsApp_LoadMainBgGraphics(FrontierRecordsApp *app, GFBgLayer layer);
+static void FrontierRecordsApp_LoadSubBgGraphics(FrontierRecordsApp *app, GFBgLayer layer);
+static void FrontierRecordsApp_BufferNumber(FrontierRecordsApp *app, u32 field, u32 value);
+static void FrontierRecordsApp_PrintStringAligned(Window *window, String *string, u32 x, u32 y, u32 fontId, u32 color, u32 align);
+static void FrontierRecordsApp_PrintMessage(FrontierRecordsApp *app, u32 windowId, u32 msgId, u32 x, u32 y, u32 fontId, u32 color, u32 align);
+static void FrontierRecordsApp_PrintFormattedMessage(FrontierRecordsApp *app, u32 windowId, u32 msgId, u32 x, u32 y, u32 fontId, u32 color, u32 align);
+static void FrontierRecordsApp_PrintRecords(FrontierRecordsApp *app);
+static void FrontierRecordsApp_PrintFactoryLevel50Records(FrontierRecordsApp *app);
+static void FrontierRecordsApp_PrintFactoryOpenLevelRecords(FrontierRecordsApp *app);
+static u32 FrontierRecordsApp_GetFactoryStreakLabel(FrontierRecordsApp *app, u32 level);
+static void FrontierRecordsApp_PrintHallRecords(FrontierRecordsApp *app);
+static void FrontierRecordsApp_BufferSpeciesName(FrontierRecordsApp *app, int species);
+static void FrontierRecordsApp_PrintCastleRecords(FrontierRecordsApp *app);
+static u32 FrontierRecordsApp_GetCastleStreakLabel(FrontierRecordsApp *app);
+static void FrontierRecordsApp_PrintArcadeRecords(FrontierRecordsApp *app);
+static u32 FrontierRecordsApp_GetArcadeStreakLabel(FrontierRecordsApp *app);
+static void FrontierRecordsApp_PrintTowerRecords(FrontierRecordsApp *app);
+static void FrontierRecordsApp_PrintTowerMultiRecords(FrontierRecordsApp *app);
+static u32 FrontierRecordsApp_GetTowerStreakLabel(FrontierRecordsApp *app, u32 mode);
+static void FrontierRecordsApp_PrintReturnButton(FrontierRecordsApp *app);
+static void FrontierRecordsApp_CreateSprites(FrontierRecordsApp *app);
+static void FrontierRecordsApp_FreeSprites(FrontierRecordsApp *app);
+static void FrontierRecordsApp_TickSprites(FrontierRecordsApp *app);
+static void FrontierRecordsApp_SetSpriteAnim(FrontierRecordsApp *app, int index, int anim);
+static void FrontierRecordsApp_SetSpritePosition(FrontierRecordsApp *app, int index, s16 x, s16 y);
+static int FrontierRecordsApp_RunButtonFlash(FrontierRecordsApp *app);
+static void FrontierRecordsApp_StartReturnButtonFlash(FrontierRecordsApp *app);
+static BOOL FrontierRecordsApp_IsHall(FrontierRecordsApp *app);
+static void FrontierRecordsApp_InitHallPicker(FrontierRecordsApp *app);
+static void FrontierRecordsApp_FreeHallPicker(FrontierRecordsApp *app);
+static void FrontierRecordsApp_ShowHallPage(FrontierRecordsApp *app, int page);
+static void FrontierRecordsApp_DrawPageArrows(FrontierRecordsApp *app);
+static void FrontierRecordsApp_FreeGridInput(FrontierRecordsApp *app);
 void FrontierRecordsApp_GridCallback_Nop(void);
-u16 *FrontierRecordsApp_LoadSortedSpecies(int letter, u32 *count);
-void FrontierRecordsApp_InitSpeciesGroups(FrontierRecordsApp *app);
-void FrontierRecordsApp_FreeSpeciesGroups(FrontierRecordsApp *app);
-void FrontierRecordsApp_LoadWindowFrame(FrontierRecordsApp *app);
-void FrontierRecordsApp_ShowPrompt(FrontierRecordsApp *app);
-void FrontierRecordsApp_ClearPrompt(FrontierRecordsApp *app);
-void FrontierRecordsApp_PrintLetters(FrontierRecordsApp *app);
-void FrontierRecordsApp_MoveLetterCursor(FrontierRecordsApp *app, int selection);
-void FrontierRecordsApp_CreateLetterGrid(FrontierRecordsApp *app);
+static u16 *FrontierRecordsApp_LoadSortedSpecies(int letter, u32 *count);
+static void FrontierRecordsApp_InitSpeciesGroups(FrontierRecordsApp *app);
+static void FrontierRecordsApp_FreeSpeciesGroups(FrontierRecordsApp *app);
+static void FrontierRecordsApp_LoadWindowFrame(FrontierRecordsApp *app);
+static void FrontierRecordsApp_ShowPrompt(FrontierRecordsApp *app);
+static void FrontierRecordsApp_ClearPrompt(FrontierRecordsApp *app);
+static void FrontierRecordsApp_PrintLetters(FrontierRecordsApp *app);
+static void FrontierRecordsApp_MoveLetterCursor(FrontierRecordsApp *app, int selection);
+static void FrontierRecordsApp_CreateLetterGrid(FrontierRecordsApp *app);
 void FrontierRecordsApp_LetterGrid_OnKeyMove(FrontierRecordsApp *app, int selection);
 void FrontierRecordsApp_LetterGrid_OnTouch(FrontierRecordsApp *app, int selection);
-void FrontierRecordsApp_StartLetterFlash(FrontierRecordsApp *app, int letter);
-u8 FrontierRecordsApp_HandleLetterInput(FrontierRecordsApp *app);
-void FrontierRecordsApp_GrayOutEmptyLetters(FrontierRecordsApp *app);
-void FrontierRecordsApp_MoveSpeciesCursor(FrontierRecordsApp *app, int selection);
-void FrontierRecordsApp_CreateSpeciesGrid(FrontierRecordsApp *app);
+static void FrontierRecordsApp_StartLetterFlash(FrontierRecordsApp *app, int letter);
+static u8 FrontierRecordsApp_HandleLetterInput(FrontierRecordsApp *app);
+static void FrontierRecordsApp_GrayOutEmptyLetters(FrontierRecordsApp *app);
+static void FrontierRecordsApp_MoveSpeciesCursor(FrontierRecordsApp *app, int selection);
+static void FrontierRecordsApp_CreateSpeciesGrid(FrontierRecordsApp *app);
 void FrontierRecordsApp_SpeciesGrid_OnKeyMove(FrontierRecordsApp *app, int selection);
 void FrontierRecordsApp_SpeciesGrid_OnTouch(FrontierRecordsApp *app, int selection);
-void FrontierRecordsApp_StartSpeciesFlash(FrontierRecordsApp *app, int slot);
-void FrontierRecordsApp_StartArrowFlash(FrontierRecordsApp *app, u8 x, u8 y);
-int FrontierRecordsApp_HandleSpeciesInput(FrontierRecordsApp *app);
-int FrontierRecordsApp_FlipSpeciesPage(FrontierRecordsApp *app);
-void FrontierRecordsApp_PrintSpeciesPage(FrontierRecordsApp *app);
-void FrontierRecordsApp_ClearSpeciesWindows(FrontierRecordsApp *app);
-void FrontierRecordsApp_PrintLetterTitle(FrontierRecordsApp *app);
-void FrontierRecordsApp_PrintPageNumber(FrontierRecordsApp *app);
-void FrontierRecordsApp_ResetCursor(FrontierRecordsApp *app);
-void FrontierRecordsApp_SelectSpecies(FrontierRecordsApp *app);
-void FrontierRecordsApp_ClearRecordWindows(FrontierRecordsApp *app);
-void FrontierRecordsApp_AddWindows(BgConfig *bgConfig, Window *windows, int set);
-void FrontierRecordsApp_RemoveWindows(Window *windows, int set);
-void FrontierRecordsApp_AddReturnButtonWindow(BgConfig *bgConfig, Window *window);
-void FrontierRecordsApp_RemoveReturnButtonWindow(Window *window);
+static void FrontierRecordsApp_StartSpeciesFlash(FrontierRecordsApp *app, int slot);
+static void FrontierRecordsApp_StartArrowFlash(FrontierRecordsApp *app, u8 x, u8 y);
+static int FrontierRecordsApp_HandleSpeciesInput(FrontierRecordsApp *app);
+static int FrontierRecordsApp_FlipSpeciesPage(FrontierRecordsApp *app);
+static void FrontierRecordsApp_PrintSpeciesPage(FrontierRecordsApp *app);
+static void FrontierRecordsApp_ClearSpeciesWindows(FrontierRecordsApp *app);
+static void FrontierRecordsApp_PrintLetterTitle(FrontierRecordsApp *app);
+static void FrontierRecordsApp_PrintPageNumber(FrontierRecordsApp *app);
+static void FrontierRecordsApp_ResetCursor(FrontierRecordsApp *app);
+static void FrontierRecordsApp_SelectSpecies(FrontierRecordsApp *app);
+static void FrontierRecordsApp_ClearRecordWindows(FrontierRecordsApp *app);
+static void FrontierRecordsApp_AddWindows(BgConfig *bgConfig, Window *windows, int set);
+static void FrontierRecordsApp_RemoveWindows(Window *windows, int set);
+static void FrontierRecordsApp_AddReturnButtonWindow(BgConfig *bgConfig, Window *window);
+static void FrontierRecordsApp_RemoveReturnButtonWindow(Window *window);
 
 BOOL FrontierRecordsApp_Init(OverlayManager *man, int *state) {
     FrontierRecordsApp *app;
@@ -335,7 +334,7 @@ enum {
     RECORDS_FADE_IN_WAIT,
 };
 
-BOOL FrontierRecordsApp_FadeIn(FrontierRecordsApp *app) {
+static BOOL FrontierRecordsApp_FadeIn(FrontierRecordsApp *app) {
     switch (app->state) {
     case RECORDS_FADE_IN_PRINT:
         if (FrontierRecordsApp_IsHall(app) == TRUE) {
@@ -358,7 +357,7 @@ BOOL FrontierRecordsApp_FadeIn(FrontierRecordsApp *app) {
     return FALSE;
 }
 
-BOOL FrontierRecordsApp_Run(FrontierRecordsApp *app) {
+static BOOL FrontierRecordsApp_Run(FrontierRecordsApp *app) {
     switch (app->state) {
     case RUN_STATE_START:
         if (FrontierRecordsApp_IsHall(app) == TRUE) {
@@ -420,7 +419,7 @@ enum {
     RECORDS_FADE_OUT_WAIT,
 };
 
-BOOL FrontierRecordsApp_FadeOut(FrontierRecordsApp *app) {
+static BOOL FrontierRecordsApp_FadeOut(FrontierRecordsApp *app) {
     switch (app->state) {
     case RECORDS_FADE_OUT_START:
         BeginNormalPaletteFade(0, 0, 0, RGB_BLACK, 6, 1, HEAP_ID_121);
@@ -435,7 +434,7 @@ BOOL FrontierRecordsApp_FadeOut(FrontierRecordsApp *app) {
     return FALSE;
 }
 
-void FrontierRecordsApp_VBlankCallback(void *cbArg) {
+static void FrontierRecordsApp_VBlankCallback(void *cbArg) {
     FrontierRecordsApp *app = cbArg;
 
     if (app->paletteData != NULL) {
@@ -446,13 +445,13 @@ void FrontierRecordsApp_VBlankCallback(void *cbArg) {
     OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
-void FrontierRecordsApp_SetGraphicsBanks(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_SetGraphicsBanks(FrontierRecordsApp *app) {
     GraphicsBanks banks = gFrontierRecordsAppGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
 #pragma force_active on
-void FrontierRecordsApp_InitBgLayers(BgConfig *bgConfig) {
+static void FrontierRecordsApp_InitBgLayers(BgConfig *bgConfig) {
     GraphicsModes modes = gFrontierRecordsAppGraphicsModes;
     BgTemplate mainText;
     BgTemplate mainRecords;
@@ -474,7 +473,7 @@ void FrontierRecordsApp_InitBgLayers(BgConfig *bgConfig) {
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &subBackground, GF_BG_TYPE_TEXT);
 }
 
-void FrontierRecordsApp_InitGraphics(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_InitGraphics(FrontierRecordsApp *app) {
     FrontierRecordsApp_SetGraphicsBanks(app);
     FrontierRecordsApp_InitBgLayers(app->bgConfig);
     app->paletteData = PaletteData_Init(HEAP_ID_121);
@@ -485,7 +484,7 @@ void FrontierRecordsApp_InitGraphics(FrontierRecordsApp *app) {
 }
 #pragma force_active reset
 
-void FrontierRecordsApp_FreeBgLayers(BgConfig *bgConfig) {
+static void FrontierRecordsApp_FreeBgLayers(BgConfig *bgConfig) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_ALL, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_ALL, GF_PLANE_TOGGLE_OFF);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_0);
@@ -495,12 +494,12 @@ void FrontierRecordsApp_FreeBgLayers(BgConfig *bgConfig) {
     Heap_Free(bgConfig);
 }
 
-void FrontierRecordsApp_SetMainState(FrontierRecordsApp *app, int *state, int nextState) {
+static void FrontierRecordsApp_SetMainState(FrontierRecordsApp *app, int *state, int nextState) {
     app->state = 0;
     *state = nextState;
 }
 
-u32 FrontierRecordsApp_GetWindowSet(u32 facility) {
+static u32 FrontierRecordsApp_GetWindowSet(u32 facility) {
     u32 set = 0;
 
     switch (facility) {
@@ -524,7 +523,7 @@ u32 FrontierRecordsApp_GetWindowSet(u32 facility) {
     return set;
 }
 
-void FrontierRecordsApp_LoadMainBgGraphics(FrontierRecordsApp *app, GFBgLayer layer) {
+static void FrontierRecordsApp_LoadMainBgGraphics(FrontierRecordsApp *app, GFBgLayer layer) {
     NNSG2dScreenData *screenData;
     NARC *narc = NARC_New(NARC_a_1_8_3, HEAP_ID_121);
 
@@ -537,7 +536,7 @@ void FrontierRecordsApp_LoadMainBgGraphics(FrontierRecordsApp *app, GFBgLayer la
     NARC_Delete(narc);
 }
 
-void FrontierRecordsApp_LoadSubBgGraphics(FrontierRecordsApp *app, GFBgLayer layer) {
+static void FrontierRecordsApp_LoadSubBgGraphics(FrontierRecordsApp *app, GFBgLayer layer) {
     NARC *narc = NARC_New(NARC_a_1_8_3, HEAP_ID_121);
 
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 0x8E, app->bgConfig, layer, 0, 0, TRUE, HEAP_ID_121);
@@ -546,12 +545,12 @@ void FrontierRecordsApp_LoadSubBgGraphics(FrontierRecordsApp *app, GFBgLayer lay
     NARC_Delete(narc);
 }
 
-void FrontierRecordsApp_BufferNumber(FrontierRecordsApp *app, u32 field, u32 value) {
+static void FrontierRecordsApp_BufferNumber(FrontierRecordsApp *app, u32 field, u32 value) {
     BufferIntegerAsString(app->msgFormat, field, value, 4, PRINTING_MODE_RIGHT_ALIGN, TRUE);
 }
 
 // align: 0 = left, 1 = right of x, 2 = centered on x
-void FrontierRecordsApp_PrintStringAligned(Window *window, String *string, u32 x, u32 y, u32 fontId, u32 color, u32 align) {
+static void FrontierRecordsApp_PrintStringAligned(Window *window, String *string, u32 x, u32 y, u32 fontId, u32 color, u32 align) {
     if (align == 1) {
         x -= FontID_String_GetWidth(fontId, string, 0);
     } else if (align == 2) {
@@ -560,20 +559,20 @@ void FrontierRecordsApp_PrintStringAligned(Window *window, String *string, u32 x
     AddTextPrinterParameterizedWithColor(window, fontId, string, x, y, 0xFF, color, NULL);
 }
 
-void FrontierRecordsApp_PrintMessage(FrontierRecordsApp *app, u32 windowId, u32 msgId, u32 x, u32 y, u32 fontId, u32 color, u32 align) {
+static void FrontierRecordsApp_PrintMessage(FrontierRecordsApp *app, u32 windowId, u32 msgId, u32 x, u32 y, u32 fontId, u32 color, u32 align) {
     String *string = NewString_ReadMsgData(app->msgData, msgId);
     FrontierRecordsApp_PrintStringAligned(&app->windows[windowId], string, x, y, fontId, color, align);
     String_Delete(string);
 }
 
-void FrontierRecordsApp_PrintFormattedMessage(FrontierRecordsApp *app, u32 windowId, u32 msgId, u32 x, u32 y, u32 fontId, u32 color, u32 align) {
+static void FrontierRecordsApp_PrintFormattedMessage(FrontierRecordsApp *app, u32 windowId, u32 msgId, u32 x, u32 y, u32 fontId, u32 color, u32 align) {
     String *string = NewString_ReadMsgData(app->msgData, msgId);
     StringExpandPlaceholders(app->msgFormat, app->string, string);
     FrontierRecordsApp_PrintStringAligned(&app->windows[windowId], app->string, x, y, fontId, color, align);
     String_Delete(string);
 }
 
-void FrontierRecordsApp_PrintRecords(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_PrintRecords(FrontierRecordsApp *app) {
     switch (app->facility) {
     case FRONTIER_RECORDS_FACTORY_LV50:
     case FRONTIER_RECORDS_FACTORY_OPEN:
@@ -602,7 +601,7 @@ void FrontierRecordsApp_PrintRecords(FrontierRecordsApp *app) {
     }
 }
 
-void FrontierRecordsApp_PrintFactoryLevel50Records(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_PrintFactoryLevel50Records(FrontierRecordsApp *app) {
     u32 msgOrValue;
 
     FillWindowPixelBuffer(&app->windows[0], 0);
@@ -640,7 +639,7 @@ void FrontierRecordsApp_PrintFactoryLevel50Records(FrontierRecordsApp *app) {
     ScheduleWindowCopyToVram(&app->windows[3]);
 }
 
-void FrontierRecordsApp_PrintFactoryOpenLevelRecords(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_PrintFactoryOpenLevelRecords(FrontierRecordsApp *app) {
     u32 value;
 
     FillWindowPixelBuffer(&app->windows[4], 0);
@@ -670,7 +669,7 @@ void FrontierRecordsApp_PrintFactoryOpenLevelRecords(FrontierRecordsApp *app) {
 #define FACTORY_FLAGS_HAS_STREAK 10
 
 // Returns CURRENT if the streak is still running, PREV otherwise
-u32 FrontierRecordsApp_GetFactoryStreakLabel(FrontierRecordsApp *app, u32 level) {
+static u32 FrontierRecordsApp_GetFactoryStreakLabel(FrontierRecordsApp *app, u32 level) {
     u32 stat;
     u32 result;
 
@@ -690,7 +689,7 @@ u32 FrontierRecordsApp_GetFactoryStreakLabel(FrontierRecordsApp *app, u32 level)
     return (u8)result == 1 ? msg_0019_00030 : msg_0019_00029;
 }
 
-void FrontierRecordsApp_PrintHallRecords(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_PrintHallRecords(FrontierRecordsApp *app) {
     FrontierSave *frontierSave;
     u32 stat;
     u32 value;
@@ -741,7 +740,7 @@ void FrontierRecordsApp_PrintHallRecords(FrontierRecordsApp *app) {
     ScheduleWindowCopyToVram(&app->windows[3]);
 }
 
-void FrontierRecordsApp_BufferSpeciesName(FrontierRecordsApp *app, int species) {
+static void FrontierRecordsApp_BufferSpeciesName(FrontierRecordsApp *app, int species) {
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0237_bin, HEAP_ID_121);
     String *name = NewString_ReadMsgData(msgData, species);
     DestroyMsgData(msgData);
@@ -749,7 +748,7 @@ void FrontierRecordsApp_BufferSpeciesName(FrontierRecordsApp *app, int species) 
     String_Delete(name);
 }
 
-void FrontierRecordsApp_PrintCastleRecords(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_PrintCastleRecords(FrontierRecordsApp *app) {
     u32 msg, stat;
     FrontierSave *frontierSave;
 
@@ -789,7 +788,7 @@ void FrontierRecordsApp_PrintCastleRecords(FrontierRecordsApp *app) {
 
 #define CASTLE_FLAGS_HAS_STREAK 9
 
-u32 FrontierRecordsApp_GetCastleStreakLabel(FrontierRecordsApp *app) {
+static u32 FrontierRecordsApp_GetCastleStreakLabel(FrontierRecordsApp *app) {
     u32 result;
     u8 mode = app->mode;
 
@@ -802,7 +801,7 @@ u32 FrontierRecordsApp_GetCastleStreakLabel(FrontierRecordsApp *app) {
     return (u8)result == 1 ? msg_0019_00030 : msg_0019_00029;
 }
 
-void FrontierRecordsApp_PrintArcadeRecords(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_PrintArcadeRecords(FrontierRecordsApp *app) {
     u32 msg;
 
     FillWindowPixelBuffer(&app->windows[0], 0);
@@ -830,7 +829,7 @@ void FrontierRecordsApp_PrintArcadeRecords(FrontierRecordsApp *app) {
 
 #define ARCADE_FLAGS_HAS_STREAK 8
 
-u32 FrontierRecordsApp_GetArcadeStreakLabel(FrontierRecordsApp *app) {
+static u32 FrontierRecordsApp_GetArcadeStreakLabel(FrontierRecordsApp *app) {
     u32 result;
     u8 mode = app->mode;
 
@@ -843,7 +842,7 @@ u32 FrontierRecordsApp_GetArcadeStreakLabel(FrontierRecordsApp *app) {
     return (u8)result == 1 ? msg_0019_00030 : msg_0019_00029;
 }
 
-void FrontierRecordsApp_PrintTowerRecords(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_PrintTowerRecords(FrontierRecordsApp *app) {
     u32 msg;
 
     FillWindowPixelBuffer(&app->windows[0], 0);
@@ -869,7 +868,7 @@ static inline void FrontierRecordsApp_PrintTowerStreak(FrontierRecordsApp *app, 
 }
 
 #pragma force_active on
-void FrontierRecordsApp_PrintTowerMultiRecords(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_PrintTowerMultiRecords(FrontierRecordsApp *app) {
     FillWindowPixelBuffer(&app->windows[0], 0);
     FillWindowPixelBuffer(&app->windows[1], 0);
     FillWindowPixelBuffer(&app->windows[4], 0);
@@ -899,7 +898,7 @@ void FrontierRecordsApp_PrintTowerMultiRecords(FrontierRecordsApp *app) {
 }
 #pragma force_active reset
 
-u32 FrontierRecordsApp_GetTowerStreakLabel(FrontierRecordsApp *app, u32 mode) {
+static u32 FrontierRecordsApp_GetTowerStreakLabel(FrontierRecordsApp *app, u32 mode) {
     FrontierData *frontierData = Save_FrontierData_Get(app->saveData);
     u16 index;
 
@@ -929,7 +928,7 @@ u32 FrontierRecordsApp_GetTowerStreakLabel(FrontierRecordsApp *app, u32 mode) {
     return FrontierData_FlagAction(frontierData, index, 0) == 1 ? msg_0019_00030 : msg_0019_00029;
 }
 
-void FrontierRecordsApp_PrintReturnButton(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_PrintReturnButton(FrontierRecordsApp *app) {
     String *string = NewString_ReadMsgData(app->msgData, msg_0019_00039);
     FillWindowPixelBuffer(&app->returnButtonWindow, 0);
     FrontierRecordsApp_PrintStringAligned(&app->returnButtonWindow, string, GetWindowWidth(&app->returnButtonWindow) * 8 / 2, 0, 4, COLOR_BUTTON, 2);
@@ -938,7 +937,7 @@ void FrontierRecordsApp_PrintReturnButton(FrontierRecordsApp *app) {
 }
 
 #pragma force_active on
-void FrontierRecordsApp_CreateSprites(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_CreateSprites(FrontierRecordsApp *app) {
     OamManagerParam oamParam;
     OamCharTransferParam transferParam;
     SpriteResourceCountsListUnion capacities;
@@ -968,7 +967,7 @@ void FrontierRecordsApp_CreateSprites(FrontierRecordsApp *app) {
 }
 #pragma force_active reset
 
-void FrontierRecordsApp_FreeSprites(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_FreeSprites(FrontierRecordsApp *app) {
     u32 i;
 
     for (i = 0; i < 2; i++) {
@@ -981,7 +980,7 @@ void FrontierRecordsApp_FreeSprites(FrontierRecordsApp *app) {
     SpriteSystem_Free(app->spriteSystem);
 }
 
-void FrontierRecordsApp_TickSprites(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_TickSprites(FrontierRecordsApp *app) {
     u32 i;
 
     for (i = 0; i < 2; i++) {
@@ -991,12 +990,12 @@ void FrontierRecordsApp_TickSprites(FrontierRecordsApp *app) {
     }
 }
 
-void FrontierRecordsApp_SetSpriteAnim(FrontierRecordsApp *app, int index, int anim) {
+static void FrontierRecordsApp_SetSpriteAnim(FrontierRecordsApp *app, int index, int anim) {
     ManagedSprite_SetAnimationFrame(app->sprites[index], 0);
     ManagedSprite_SetAnim(app->sprites[index], anim);
 }
 
-void FrontierRecordsApp_SetSpritePosition(FrontierRecordsApp *app, int index, s16 x, s16 y) {
+static void FrontierRecordsApp_SetSpritePosition(FrontierRecordsApp *app, int index, s16 x, s16 y) {
     ManagedSprite_SetPositionXY(app->sprites[index], x, y);
 }
 
@@ -1008,7 +1007,7 @@ enum {
 
 #pragma force_active on
 // Returns 0 once the flash has finished
-int FrontierRecordsApp_RunButtonFlash(FrontierRecordsApp *app) {
+static int FrontierRecordsApp_RunButtonFlash(FrontierRecordsApp *app) {
     switch (app->flash.state) {
     case BUTTON_FLASH_ON:
         if (!app->flash.isBg) {
@@ -1043,7 +1042,7 @@ int FrontierRecordsApp_RunButtonFlash(FrontierRecordsApp *app) {
     return 1;
 }
 
-void FrontierRecordsApp_StartReturnButtonFlash(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_StartReturnButtonFlash(FrontierRecordsApp *app) {
     app->flash.isBg = FALSE;
     app->flash.index = 0;
     app->flash.paletteOn = 1;
@@ -1053,11 +1052,11 @@ void FrontierRecordsApp_StartReturnButtonFlash(FrontierRecordsApp *app) {
 }
 #pragma force_active reset
 
-BOOL FrontierRecordsApp_IsHall(FrontierRecordsApp *app) {
+static BOOL FrontierRecordsApp_IsHall(FrontierRecordsApp *app) {
     return app->facility == FRONTIER_RECORDS_HALL;
 }
 
-void FrontierRecordsApp_InitHallPicker(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_InitHallPicker(FrontierRecordsApp *app) {
     FrontierRecordsApp_LoadWindowFrame(app);
     FrontierRecordsApp_InitSpeciesGroups(app);
     FrontierRecordsApp_PrintLetters(app);
@@ -1065,14 +1064,14 @@ void FrontierRecordsApp_InitHallPicker(FrontierRecordsApp *app) {
     app->scrollArrows = PaletteBlink_New(NULL, PM_LCD_BOTTOM, 13, HEAP_ID_121);
 }
 
-void FrontierRecordsApp_FreeHallPicker(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_FreeHallPicker(FrontierRecordsApp *app) {
     PaletteBlink_Delete(app->scrollArrows);
     FrontierRecordsApp_FreeSpeciesGroups(app);
     FrontierRecordsApp_FreeGridInput(app);
 }
 
 #pragma force_active on
-void FrontierRecordsApp_ShowHallPage(FrontierRecordsApp *app, int page) {
+static void FrontierRecordsApp_ShowHallPage(FrontierRecordsApp *app, int page) {
     switch (page) {
     case HALL_PAGE_RECORDS:
         ScheduleSetBgPosText(app->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_SET_X, 0);
@@ -1111,7 +1110,7 @@ void FrontierRecordsApp_ShowHallPage(FrontierRecordsApp *app, int page) {
 }
 
 // Arrow tiles: 0 = left, 1 = right, 2 = disabled
-void FrontierRecordsApp_DrawPageArrows(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_DrawPageArrows(FrontierRecordsApp *app) {
     if (app->lastPage == 0) {
         LoadRectToBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_2, app->pageArrowTiles[2], 34, 52, 4, 4);
         LoadRectToBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_2, app->pageArrowTiles[2], 38, 52, 4, 4);
@@ -1123,7 +1122,7 @@ void FrontierRecordsApp_DrawPageArrows(FrontierRecordsApp *app) {
 }
 #pragma force_active reset
 
-void FrontierRecordsApp_FreeGridInput(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_FreeGridInput(FrontierRecordsApp *app) {
     if (app->gridInput != NULL) {
         GridInputHandler_Free(app->gridInput);
         app->gridInput = NULL;
@@ -1135,7 +1134,7 @@ void FrontierRecordsApp_GridCallback_Nop(void) {
 
 #pragma force_active on
 // Species of one letter in alphabetical order (members 18-43 of the Pokedex sort data)
-u16 *FrontierRecordsApp_LoadSortedSpecies(int letter, u32 *count) {
+static u16 *FrontierRecordsApp_LoadSortedSpecies(int letter, u32 *count) {
     u32 size;
     u16 *species = GfGfxLoader_LoadFromNarc_GetSizeOut(GetPokedexDataNarcID(), letter + 18, FALSE, HEAP_ID_121, TRUE, &size);
     *count = size / 2;
@@ -1143,7 +1142,7 @@ u16 *FrontierRecordsApp_LoadSortedSpecies(int letter, u32 *count) {
 }
 
 // Keeps the species that have a Battle Hall record
-void FrontierRecordsApp_InitSpeciesGroups(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_InitSpeciesGroups(FrontierRecordsApp *app) {
     u32 enabled;
     u32 count;
     u32 *records = FrontierSpeciesRecords_Load(app->saveData, 11, &enabled);
@@ -1169,7 +1168,7 @@ void FrontierRecordsApp_InitSpeciesGroups(FrontierRecordsApp *app) {
 }
 #pragma force_active reset
 
-void FrontierRecordsApp_FreeSpeciesGroups(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_FreeSpeciesGroups(FrontierRecordsApp *app) {
     u32 i;
 
     for (i = 0; i < NUM_LETTERS; i++) {
@@ -1179,14 +1178,14 @@ void FrontierRecordsApp_FreeSpeciesGroups(FrontierRecordsApp *app) {
     }
 }
 
-void FrontierRecordsApp_LoadWindowFrame(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_LoadWindowFrame(FrontierRecordsApp *app) {
     u8 frame = Options_GetFrame(app->options);
     LoadUserFrameGfx2(app->bgConfig, GF_BG_LYR_SUB_0, 0x3E2, 14, frame, HEAP_ID_121);
     LoadFontPal1(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_13_OFFSET, HEAP_ID_121);
 }
 
 #pragma force_active on
-void FrontierRecordsApp_ShowPrompt(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_ShowPrompt(FrontierRecordsApp *app) {
     DrawFrameAndWindow2(&app->windows[23], TRUE, 0x3E2, 14);
     FillWindowPixelBuffer(&app->windows[23], 15);
     FrontierRecordsApp_PrintMessage(app, 23, msg_0019_00042, 0, 0, 1, COLOR_PROMPT, 0);
@@ -1194,14 +1193,14 @@ void FrontierRecordsApp_ShowPrompt(FrontierRecordsApp *app) {
 }
 #pragma force_active reset
 
-void FrontierRecordsApp_ClearPrompt(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_ClearPrompt(FrontierRecordsApp *app) {
     ClearFrameAndWindow2(&app->windows[23], TRUE);
     ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_SUB_0);
 }
 
 #pragma force_active on
 // Letter buttons are laid out 7 per row, 32 pixels apart
-void FrontierRecordsApp_PrintLetters(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_PrintLetters(FrontierRecordsApp *app) {
     u16 i;
     int position, column;
 
@@ -1213,7 +1212,7 @@ void FrontierRecordsApp_PrintLetters(FrontierRecordsApp *app) {
 }
 #pragma force_active reset
 
-void FrontierRecordsApp_MoveLetterCursor(FrontierRecordsApp *app, int selection) {
+static void FrontierRecordsApp_MoveLetterCursor(FrontierRecordsApp *app, int selection) {
     u8 x;
     u8 y;
     const DpadMenuBox *box = GridInputHandler_GetDpadBox(app->gridInput, selection);
@@ -1228,7 +1227,7 @@ void FrontierRecordsApp_MoveLetterCursor(FrontierRecordsApp *app, int selection)
 }
 
 #pragma force_active on
-void FrontierRecordsApp_CreateLetterGrid(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_CreateLetterGrid(FrontierRecordsApp *app) {
     app->gridInput = GridInputHandler_Create(gFrontierRecordsLetterGridHitboxes, gFrontierRecordsLetterGridBoxes, &gFrontierRecordsLetterGridCallbacks, app, TRUE, (u8)app->letter, HEAP_ID_121);
     FrontierRecordsApp_MoveLetterCursor(app, app->letter);
 }
@@ -1252,7 +1251,7 @@ static inline void FrontierRecordsApp_InitLetterFlash(FrontierRecordsApp *app) {
 #pragma force_active on
 #pragma push
 #pragma opt_lifetimes off
-void FrontierRecordsApp_StartLetterFlash(FrontierRecordsApp *app, int letter) {
+static void FrontierRecordsApp_StartLetterFlash(FrontierRecordsApp *app, int letter) {
     u32 position = letter;
 
     FrontierRecordsApp_InitLetterFlash(app);
@@ -1267,7 +1266,7 @@ void FrontierRecordsApp_StartLetterFlash(FrontierRecordsApp *app, int letter) {
 #pragma pop
 #pragma force_active reset
 
-u8 FrontierRecordsApp_HandleLetterInput(FrontierRecordsApp *app) {
+static u8 FrontierRecordsApp_HandleLetterInput(FrontierRecordsApp *app) {
     u32 input;
     FrontierRecordsSpeciesGroup *groups;
 
@@ -1305,7 +1304,7 @@ exit:
     return RUN_STATE_LETTERS;
 }
 
-void FrontierRecordsApp_GrayOutEmptyLetters(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_GrayOutEmptyLetters(FrontierRecordsApp *app) {
     u32 i;
 
     for (i = 0; i < NUM_LETTERS; i++) {
@@ -1317,7 +1316,7 @@ void FrontierRecordsApp_GrayOutEmptyLetters(FrontierRecordsApp *app) {
     ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_2);
 }
 
-void FrontierRecordsApp_MoveSpeciesCursor(FrontierRecordsApp *app, int selection) {
+static void FrontierRecordsApp_MoveSpeciesCursor(FrontierRecordsApp *app, int selection) {
     u8 x;
     u8 y;
     const DpadMenuBox *box = GridInputHandler_GetDpadBox(app->gridInput, selection);
@@ -1332,7 +1331,7 @@ void FrontierRecordsApp_MoveSpeciesCursor(FrontierRecordsApp *app, int selection
 }
 
 #pragma force_active on
-void FrontierRecordsApp_CreateSpeciesGrid(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_CreateSpeciesGrid(FrontierRecordsApp *app) {
     int selection = app->speciesIndex;
     app->gridInput = GridInputHandler_Create(gFrontierRecordsSpeciesGridHitboxes, gFrontierRecordsSpeciesGridBoxes, &gFrontierRecordsSpeciesGridCallbacks, app, TRUE, (u8)selection, HEAP_ID_121);
     FrontierRecordsApp_MoveSpeciesCursor(app, selection);
@@ -1348,7 +1347,7 @@ void FrontierRecordsApp_SpeciesGrid_OnTouch(FrontierRecordsApp *app, int selecti
 }
 
 // Species buttons: two columns, 13 tiles apart
-void FrontierRecordsApp_StartSpeciesFlash(FrontierRecordsApp *app, int slot) {
+static void FrontierRecordsApp_StartSpeciesFlash(FrontierRecordsApp *app, int slot) {
     unsigned int position;
 
     app->flash.isBg = TRUE;
@@ -1364,7 +1363,7 @@ void FrontierRecordsApp_StartSpeciesFlash(FrontierRecordsApp *app, int slot) {
     app->flash.timer = 0;
 }
 
-void FrontierRecordsApp_StartArrowFlash(FrontierRecordsApp *app, u8 x, u8 y) {
+static void FrontierRecordsApp_StartArrowFlash(FrontierRecordsApp *app, u8 x, u8 y) {
     app->flash.isBg = TRUE;
     app->flash.index = GF_BG_LYR_MAIN_2;
     app->flash.paletteOn = 2;
@@ -1392,7 +1391,7 @@ static inline void FrontierRecordsApp_NextPage(FrontierRecordsApp *app) {
 }
 
 #pragma force_active on
-int FrontierRecordsApp_HandleSpeciesInput(FrontierRecordsApp *app) {
+static int FrontierRecordsApp_HandleSpeciesInput(FrontierRecordsApp *app) {
     int input = GridInputHandler_HandleInput_NoHold(app->gridInput);
 
     switch ((u32)input) {
@@ -1469,7 +1468,7 @@ int FrontierRecordsApp_HandleSpeciesInput(FrontierRecordsApp *app) {
 }
 #pragma force_active reset
 
-int FrontierRecordsApp_FlipSpeciesPage(FrontierRecordsApp *app) {
+static int FrontierRecordsApp_FlipSpeciesPage(FrontierRecordsApp *app) {
     FrontierRecordsApp_PrintSpeciesPage(app);
     FrontierRecordsApp_PrintPageNumber(app);
     return RUN_STATE_SPECIES;
@@ -1477,7 +1476,7 @@ int FrontierRecordsApp_FlipSpeciesPage(FrontierRecordsApp *app) {
 
 #pragma force_active on
 // The species page alternates between two sets of eight windows (5-12 and 13-20)
-void FrontierRecordsApp_PrintSpeciesPage(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_PrintSpeciesPage(FrontierRecordsApp *app) {
     int windowId;
     u16 start;
     u8 i;
@@ -1507,7 +1506,7 @@ void FrontierRecordsApp_PrintSpeciesPage(FrontierRecordsApp *app) {
 }
 #pragma force_active reset
 
-void FrontierRecordsApp_ClearSpeciesWindows(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_ClearSpeciesWindows(FrontierRecordsApp *app) {
     u32 i = 5;
     Window *window = &app->windows[5];
 
@@ -1521,7 +1520,7 @@ void FrontierRecordsApp_ClearSpeciesWindows(FrontierRecordsApp *app) {
 }
 
 #pragma force_active on
-void FrontierRecordsApp_PrintLetterTitle(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_PrintLetterTitle(FrontierRecordsApp *app) {
     int width;
 
     FillWindowPixelBuffer(&app->windows[21], 0);
@@ -1530,7 +1529,7 @@ void FrontierRecordsApp_PrintLetterTitle(FrontierRecordsApp *app) {
     ScheduleWindowCopyToVram(&app->windows[21]);
 }
 
-void FrontierRecordsApp_PrintPageNumber(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_PrintPageNumber(FrontierRecordsApp *app) {
     FillWindowPixelBuffer(&app->windows[22], 0);
     FrontierRecordsApp_BufferNumber(app, 0, app->page + 1);
     FrontierRecordsApp_PrintFormattedMessage(app, 22, msg_0019_00040, 8, 0, 0, COLOR_TEXT, 1);
@@ -1541,20 +1540,20 @@ void FrontierRecordsApp_PrintPageNumber(FrontierRecordsApp *app) {
 }
 #pragma force_active reset
 
-void FrontierRecordsApp_ResetCursor(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_ResetCursor(FrontierRecordsApp *app) {
     FrontierRecordsApp_SetSpritePosition(app, 1, 224, 176);
     FrontierRecordsApp_SetSpriteAnim(app, 1, 1);
 }
 
 #pragma force_active on
-void FrontierRecordsApp_SelectSpecies(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_SelectSpecies(FrontierRecordsApp *app) {
     u16 *species = app->groups[app->letter].species;
     app->species = species[app->speciesIndex + app->page * SPECIES_PER_PAGE];
     FrontierRecordsApp_PrintHallRecords(app);
 }
 #pragma force_active reset
 
-void FrontierRecordsApp_ClearRecordWindows(FrontierRecordsApp *app) {
+static void FrontierRecordsApp_ClearRecordWindows(FrontierRecordsApp *app) {
     ClearWindowTilemapAndScheduleTransfer(&app->windows[0]);
     ClearWindowTilemapAndScheduleTransfer(&app->windows[1]);
     ClearWindowTilemapAndScheduleTransfer(&app->windows[2]);
@@ -1562,7 +1561,7 @@ void FrontierRecordsApp_ClearRecordWindows(FrontierRecordsApp *app) {
 }
 
 #pragma force_active on
-void FrontierRecordsApp_AddWindows(BgConfig *bgConfig, Window *windows, int set) {
+static void FrontierRecordsApp_AddWindows(BgConfig *bgConfig, Window *windows, int set) {
     u8 i;
     const WindowTemplate *templates = gFrontierRecordsWindowSets[set].templates;
     u32 count = gFrontierRecordsWindowSets[set].count;
@@ -1574,7 +1573,7 @@ void FrontierRecordsApp_AddWindows(BgConfig *bgConfig, Window *windows, int set)
 }
 #pragma force_active reset
 
-void FrontierRecordsApp_RemoveWindows(Window *windows, int set) {
+static void FrontierRecordsApp_RemoveWindows(Window *windows, int set) {
     u16 i;
     u32 count = gFrontierRecordsWindowSets[set].count;
 
@@ -1583,10 +1582,10 @@ void FrontierRecordsApp_RemoveWindows(Window *windows, int set) {
     }
 }
 
-void FrontierRecordsApp_AddReturnButtonWindow(BgConfig *bgConfig, Window *window) {
+static void FrontierRecordsApp_AddReturnButtonWindow(BgConfig *bgConfig, Window *window) {
     AddWindowParameterized(bgConfig, window, GF_BG_LYR_MAIN_0, 25, 21, 6, 2, 13, 0x3F4);
 }
 
-void FrontierRecordsApp_RemoveReturnButtonWindow(Window *window) {
+static void FrontierRecordsApp_RemoveReturnButtonWindow(Window *window) {
     RemoveWindow(window);
 }

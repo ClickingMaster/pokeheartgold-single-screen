@@ -13,8 +13,7 @@
 // wait, or walk to a random spot. After a number of decisions it may go to its switch spot and switch, the more
 // likely the more tired it is.
 
-#define RING_DROP_PARTICIPANTS 4
-// PokeathlonRingDropMon states (pokeathlon_ring_drop.h: RING_DROP_MON_FALL_OUT, RING_DROP_MON_RETURN)
+#define RING_DROP_PARTICIPANTS    4
 #define RING_DROP_MON_FALLING_OUT 3
 #define RING_DROP_MON_RETURNING   4
 
@@ -39,7 +38,6 @@ struct PokeathlonRingDropCpu {
     volatile u8 count;                      // 0x2C
 }; // size: 0x30
 
-// The Ring Drop accessors (pokeathlon_ring_drop.c); the computer passes u8 participants.
 s32 PokeathlonRingDrop_GetMonState(PokeathlonCourseData *course, u8 participant);
 VecFx32 *PokeathlonRingDrop_GetMonPosition(PokeathlonCourseData *course, u8 participant);
 void PokeathlonRingDrop_GetMonScreenPosition(PokeathlonCourseData *course, u8 participant, VecFx32 *out);
@@ -70,6 +68,9 @@ extern const PokeathlonRingDropCpuSpot gPokeathlonRingDropCpuSwitchSpots[];
 extern const s16 gPokeathlonRingDropCpuSwitchSpotsY[];
 
 #pragma force_active on
+
+static void PokeathlonRingDropCpu_InitPlayer(PokeathlonRingDropCpuPlayer *player, u8 participant, PokeathlonCourseData *course);
+static void PokeathlonRingDropCpu_UpdatePlayer(PokeathlonRingDropCpuPlayer *player);
 
 PokeathlonRingDropCpu *PokeathlonRingDropCpu_New(PokeathlonCourseData *course, enum HeapID heapId) {
     int i, participant;
@@ -116,14 +117,14 @@ void PokeathlonRingDropCpu_Update(PokeathlonRingDropCpu *cpu) {
 
 #pragma force_active reset
 
-void PokeathlonRingDropCpu_InitPlayer(PokeathlonRingDropCpuPlayer *player, u8 participant, PokeathlonCourseData *course) {
+static void PokeathlonRingDropCpu_InitPlayer(PokeathlonRingDropCpuPlayer *player, u8 participant, PokeathlonCourseData *course) {
     MI_CpuFill8(player, 0, sizeof(*player));
     player->course = course;
     player->participant = participant;
     player->unk08_2 = 0;
 }
 
-BOOL PokeathlonRingDrop_IsNear(const VecFx32 *a, const VecFx32 *b, fx32 distance) {
+static BOOL PokeathlonRingDrop_IsNear(const VecFx32 *a, const VecFx32 *b, fx32 distance) {
     VecFx32 delta;
     VEC_Subtract(b, a, &delta);
     if (VEC_Mag(&delta) <= distance) {
@@ -132,7 +133,7 @@ BOOL PokeathlonRingDrop_IsNear(const VecFx32 *a, const VecFx32 *b, fx32 distance
     return FALSE;
 }
 
-BOOL PokeathlonRingDrop_IsInDirection(const VecFx32 *a, const VecFx32 *b, u8 direction) {
+static BOOL PokeathlonRingDrop_IsInDirection(const VecFx32 *a, const VecFx32 *b, u8 direction) {
     VecFx32 delta;
     VEC_Subtract(b, a, &delta);
     VEC_Normalize(&delta, &delta);
@@ -144,7 +145,7 @@ BOOL PokeathlonRingDrop_IsInDirection(const VecFx32 *a, const VecFx32 *b, u8 dir
 
 #pragma force_active on
 
-void PokeathlonRingDropCpu_Decide(PokeathlonRingDropCpuPlayer *player) {
+static void PokeathlonRingDropCpu_Decide(PokeathlonRingDropCpuPlayer *player) {
     int direction;
     VecFx32 *position;
     u8 kinds[4];
@@ -259,7 +260,7 @@ void PokeathlonRingDropCpu_Decide(PokeathlonRingDropCpuPlayer *player) {
 }
 
 // Walks to the switch spot and switches there.
-void PokeathlonRingDropCpu_GoSwitch(PokeathlonRingDropCpuPlayer *player) {
+static void PokeathlonRingDropCpu_GoSwitch(PokeathlonRingDropCpuPlayer *player) {
     const PokeathlonRingDropCpuSpot *spot = &gPokeathlonRingDropCpuSwitchSpots[player->participant];
     VecFx32 position = { 0, 0, 0 };
     VecFx32 spotPosition = { 0, 0, 0 };
@@ -276,7 +277,7 @@ void PokeathlonRingDropCpu_GoSwitch(PokeathlonRingDropCpuPlayer *player) {
 #pragma force_active reset
 
 // Switches for sure below 10% stamina, never at 50% or more.
-BOOL PokeathlonRingDropCpu_ShouldSwitch(PokeathlonRingDropCpuPlayer *player) {
+static BOOL PokeathlonRingDropCpu_ShouldSwitch(PokeathlonRingDropCpuPlayer *player) {
     s32 roll = MTRandom() % 100;
     s32 chance = 0;
     u32 stamina = PokeathlonRingDrop_GetMonStaminaPercent(player->course, (u8)player->participant);
@@ -296,7 +297,7 @@ BOOL PokeathlonRingDropCpu_ShouldSwitch(PokeathlonRingDropCpuPlayer *player) {
 
 #pragma force_active on
 
-void PokeathlonRingDropCpu_UpdatePlayer(PokeathlonRingDropCpuPlayer *player) {
+static void PokeathlonRingDropCpu_UpdatePlayer(PokeathlonRingDropCpuPlayer *player) {
     s16 position[2];
 
     if (PokeathlonRingDrop_IsMonSwitching(player->course, (u8)player->participant)) {

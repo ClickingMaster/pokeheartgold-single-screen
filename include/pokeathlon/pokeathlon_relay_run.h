@@ -93,10 +93,10 @@ typedef struct PokeathlonRelayRunTeam {
     void *monObjects[RELAY_RUN_MEMBERS];                 // 0x00: PokeathlonCourseMonObject
     fx32 distance[RELAY_RUN_MEMBERS];                    // 0x0C: distance each member ran
     PokeathlonRelayRunMember members[RELAY_RUN_MEMBERS]; // 0x18
-    PokeathlonCourseSpritePoolSprite *conditionSprite;                               // 0x6C: tired / exhausted marks above the runner
-    PokeathlonCourseSpritePoolSprite *shadowSprite;                                  // 0x70
-    PokeathlonCourseSpritePoolSprite *swapSprite;                                    // 0x74: flies up from the leaving member and down with the next
-    PokeathlonCourseSpritePoolSprite *speedSprite;                                   // 0x78: dash lines
+    PokeathlonCourseSpritePoolSprite *conditionSprite;   // 0x6C: tired / exhausted marks above the runner
+    PokeathlonCourseSpritePoolSprite *shadowSprite;      // 0x70
+    PokeathlonCourseSpritePoolSprite *swapSprite;        // 0x74: flies up from the leaving member and down with the next
+    PokeathlonCourseSpritePoolSprite *speedSprite;       // 0x78: dash lines
     VecFx32 position;                                    // 0x7C: x along the lap (wraps at RELAY_RUN_TRACK_LENGTH), y on the track
     u8 animState;                                        // 0x88
     u8 unk89[2];                                         // 0x89
@@ -139,11 +139,11 @@ typedef struct PokeathlonRelayRunPress {
 
 // An obstacle on the track (0xC). The host loads the obstacle layout (NARC a/2/2/7, one of ten).
 typedef struct PokeathlonRelayRunObstacle {
-    BOOL active;  // 0x0
+    BOOL active;                              // 0x0
     PokeathlonCourseSpritePoolSprite *sprite; // 0x4: PokeathlonCourseSpritePoolSprite
-    u16 x;        // 0x8: along the lap
-    u8 y;         // 0xA
-    u8 kind;      // 0xB: RELAY_RUN_OBSTACLE_*
+    u16 x;                                    // 0x8: along the lap
+    u8 y;                                     // 0xA
+    u8 kind;                                  // 0xB: RELAY_RUN_OBSTACLE_*
 } PokeathlonRelayRunObstacle;
 
 // The outline of an obstacle for collisions (0x64, PokeathlonRelayRun_GetObstacleShape).
@@ -165,10 +165,10 @@ typedef struct PokeathlonRelayRunSetup {
 
 // The lap count shown for a second when it goes up (0x10).
 typedef struct PokeathlonRelayRunLapCounter {
-    Sprite *digits[2]; // 0x0
-    PokeathlonCourseSpritePoolSprite *plate;       // 0x8: PokeathlonCourseSpritePoolSprite
-    u16 timer;         // 0xC
-    u16 laps;          // 0xE
+    Sprite *digits[2];                       // 0x0
+    PokeathlonCourseSpritePoolSprite *plate; // 0x8: PokeathlonCourseSpritePoolSprite
+    u16 timer;                               // 0xC
+    u16 laps;                                // 0xE
 } PokeathlonRelayRunLapCounter;
 
 // The stylus of a player (0x24).
@@ -215,8 +215,8 @@ typedef struct PokeathlonRelayRun {
     BgConfig *bgConfig;                                        // 0x000
     Window window;                                             // 0x004
     enum HeapID heapId;                                        // 0x014
-    PokeathlonCourseSpritePool *spritePool;                                          // 0x018: PokeathlonCourseSpritePool
-    PokeathlonCourseSpritePoolSprite *signSprite;                                          // 0x01C
+    PokeathlonCourseSpritePool *spritePool;                    // 0x018: PokeathlonCourseSpritePool
+    PokeathlonCourseSpritePoolSprite *signSprite;              // 0x01C
     PokeathlonRelayRunLapCounter lapCounter;                   // 0x020
     PokeathlonRelayRunTeam teams[RELAY_RUN_TEAMS];             // 0x030
     PokeathlonRelayRunPress presses[RELAY_RUN_TEAMS];          // 0x380
@@ -225,7 +225,7 @@ typedef struct PokeathlonRelayRun {
     u8 unk3C1;                                                 // 0x3C1
     u8 heldTooLong;                                            // 0x3C2: someone held the stylus down for 255 frames: more friction
     u8 nextBumpMark;                                           // 0x3C3
-    PokeathlonCourseSpriteResources *monResources;                                        // 0x3C4: PokeathlonCourseSpriteResources
+    PokeathlonCourseSpriteResources *monResources;             // 0x3C4: PokeathlonCourseSpriteResources
     void *monObjects;                                          // 0x3C8: PokeathlonCourseMonObjects
     void *bumpMarks[4];                                        // 0x3CC
     struct PokeathlonRelayRunCpu *cpu;                         // 0x3DC: the teams without a player
@@ -248,8 +248,8 @@ typedef struct PokeathlonRelayRunHudTeam {
     PokeathlonCourseSpritePoolSprite *conditionMark; // 0x04: tired / exhausted
     PokeathlonCourseSpritePoolSprite *swapMark;      // 0x08: shown instead of the icon while it swaps
     PokeathlonCourseSpritePoolSprite *colorMark;     // 0x0C: the team's colour
-    u8 lastCondition;    // 0x10
-    u8 unk11[0xF];       // 0x11
+    u8 lastCondition;                                // 0x10
+    u8 unk11[0xF];                                   // 0x11
 } PokeathlonRelayRunHudTeam;
 
 // A member's picture (char and palette data, loaded into one of the two picture slots when needed).
@@ -304,49 +304,24 @@ BOOL PokeathlonRelayRun_Init(PokeathlonCourseData *course);
 BOOL PokeathlonRelayRun_Draw(PokeathlonCourseData *course);
 BOOL PokeathlonRelayRun_ShowResults(PokeathlonCourseData *course);
 BOOL PokeathlonRelayRun_Exit(PokeathlonCourseData *course);
-void PokeathlonRelayRun_SetGfxBanks(void);
-void PokeathlonRelayRun_InitBgs(BgConfig *bgConfig);
-void PokeathlonRelayRun_LoadBgGraphics(PokeathlonRelayRun *relayRun);
-void PokeathlonRelayRun_LoadSpriteGraphics(PokeathlonCourseSpritePool *spritePool);
-void PokeathlonRelayRun_CreateSprites(PokeathlonRelayRun *relayRun, PokeathlonCourseSpritePool *spritePool);
 BOOL PokeathlonRelayRun_Start(PokeathlonCourseData *course, u8 *state);
 BOOL PokeathlonRelayRun_Play(PokeathlonCourseData *course, u8 *state);
 BOOL PokeathlonRelayRun_SaveScores(PokeathlonCourseData *course, u8 *state);
-void PokeathlonRelayRun_UpdateHost(PokeathlonCourseData *course);
-void PokeathlonRelayRun_PackPacket(PokeathlonRelayRun *relayRun, PokeathlonRelayRunPacket *packet);
-BOOL PokeathlonRelayRun_Update(PokeathlonCourseData *course);
-void PokeathlonRelayRun_DrawPacket(PokeathlonCourseData *course);
-BOOL PokeathlonRelayRun_IsTouchingRunner(PokeathlonRelayRun *relayRun, int teamId, int x, int y);
-BOOL PokeathlonRelayRun_IsTouchingSwapButton(PokeathlonRelayRun *relayRun, u32 x, u32 y);
-void PokeathlonRelayRun_MoveTeams(PokeathlonCourseData *course);
-void PokeathlonRelayRunTeam_UpdateStun(PokeathlonCourseData *course, PokeathlonRelayRun *relayRun, PokeathlonRelayRunTeam *team);
 
-// pokeathlon_relay_run_track.c
 void PokeathlonRelayRun_DrawTeams(PokeathlonCourseData *course, int own, PokeathlonRelayRunTeam *team, PokeathlonRelayRunLink *link);
 void PokeathlonRelayRun_ScrollObstacles(PokeathlonRelayRun *relayRun, int x);
-void PokeathlonRelayRunTeam_AnimateLeave(PokeathlonRelayRunHud *hud, PokeathlonRelayRunTeam *team, VecFx32 *position, u8 teamId, u8 member, PokeathlonRelayRunTouch *touch, BOOL isHostForCpu, BOOL isOwn);
-void PokeathlonRelayRunTeam_AnimateArrive(PokeathlonRelayRunTeam *team, VecFx32 *position, u8 unused, u8 member, PokeathlonRelayRunTouch *touch, BOOL reportPhase, BOOL isOwn);
-void PokeathlonRelayRunTeam_EndSwap(PokeathlonRelayRunTeam *team, u8 unused, u8 member, PokeathlonRelayRunTouch *touch, BOOL reportPhase, int isOwn);
-void PokeathlonRelayRunTeam_DrawSwap(PokeathlonRelayRunHud *hud, PokeathlonRelayRunTeam *team, VecFx32 *ground, PokeathlonRelayRunPacket *packet, u8 teamId, u8 member, PokeathlonRelayRunTouch *touch, int isHost, int isOwn, int isCpu);
 void PokeathlonRelayRun_InitMember(PokeathlonCourseData *course, void *setupFile, u8 participant, u8 member, PokeathlonRelayRunTeam *team);
-void PokeathlonRelayRun_FindNearbyObstacles(PokeathlonRelayRun *relayRun, fx32 x, s32 **walls, s32 **patches, u8 *wallCount, u8 *patchCount);
 void PokeathlonRelayRun_GetObstacleShape(int inset, const s32 *entry, volatile s32 *shape);
-int PokeathlonRelayRun_CollideWithObstacle(VecFx32 *start, VecFx32 *end, int radius, PokeathlonRelayRunObstacleShape *shape, VecFx32 *out);
-BOOL PokeathlonRelayRun_IsOnSlowPatch(const VecFx32 *position, const PokeathlonRelayRunObstacleShape *shape);
 u16 PokeathlonRelayRun_CollideWithObstacles(PokeathlonRelayRun *relayRun, int wallState, int radius, VecFx32 *from, VecFx32 *to, VecFx32 *out);
-fx32 PokeathlonRelayRun_CalcCircleEntry(const VecFx32 *a, const VecFx32 *b, const VecFx32 *c, fx32 r);
 f32 PokeathlonRelayRunTeam_GetMaxSpeed(PokeathlonRelayRunTeam *team, int member);
 void PokeathlonRelayRun_AddFlick(const VecFx32 *velocity, const VecFx32 *flick, VecFx32 *out);
 BOOL PokeathlonRelayRun_CollideRunners(PokeathlonCourseData *course, PokeathlonRelayRunTeam *teams, VecFx32 *where);
-void PokeathlonRelayRun_PlaceAboveMon(PokeathlonCoursePerformance *performance, const VecFx32 *position, PokeathlonCourseSpritePoolSprite *sprite);
 void PokeathlonRelayRunObstacle_SetDrawPriority(PokeathlonRelayRunObstacle *obstacle);
 void PokeathlonRelayRunTeam_SetDrawPriority(PokeathlonRelayRunTeam *team, u8 y, int isOwn);
 void PokeathlonRelayRun_UpdateStartLine(BgConfig *bgConfig, int x);
 
-// pokeathlon_relay_run_hud.c
 void PokeathlonRelayRun_UpdateLapCounter(PokeathlonRelayRunLapCounter *counter, u8 laps);
 void PokeathlonRelayRun_AddResultWindow(PokeathlonRelayRun *relayRun);
-void PokeathlonRelayRun_PrintResult(PokeathlonRelayRun *relayRun, int laps, int x);
 void PokeathlonRelayRun_PlaySEIfOnScreen(int x, int seqNo, int isOwn);
 void PokeathlonRelayRun_UpdateSwapSign(PokeathlonRelayRun *relayRun, u8 teamId, int touchingSwapButton);
 void PokeathlonRelayRun_SaveResult(PokeathlonCourseData *course);
@@ -358,7 +333,6 @@ void PokeathlonRelayRunHud_CreateSprites(PokeathlonRelayRunHud *hud, PokeathlonC
 void PokeathlonRelayRunHud_LoadMonIcons(PokeathlonRelayRunHud *hud, PokeathlonCoursePoint *mons);
 void PokeathlonRelayRunHud_LoadMonPics(PokeathlonRelayRunHud *hud, const PokeathlonCourseMonInfo *mon);
 void PokeathlonRelayRunHud_ShowMonPic(PokeathlonRelayRunHud *hud, u32 slot, u32 member);
-void PokeathlonRelayRunHud_SetMonIcon(PokeathlonRelayRunHud *hud, u8 teamId, int member);
 void PokeathlonRelayRunHud_SetMapPosition(PokeathlonRelayRunHud *hud, u8 teamId, u16 x);
 void PokeathlonRelayRunHud_PrintDistance(PokeathlonRelayRunHud *hud, u8 laps, u32 x);
 BOOL PokeathlonRelayRunHud_RotateMonPics(PokeathlonRelayRunHud *hud, int member);
@@ -368,8 +342,6 @@ void PokeathlonRelayRunHud_ShowTiredMarks(PokeathlonRelayRunHud *hud, u8 conditi
 void PokeathlonRelayRunHud_SetTimer(PokeathlonRelayRunHud *hud, int frames);
 void PokeathlonRelayRunHud_SetDrawPriorities(PokeathlonRelayRunHud *hud, int own);
 u8 PokeathlonRelayRunHud_GetBenchMember(PokeathlonRelayRunHud *hud, int slot);
-void PokeathlonRelayRunHud_PrintMonName(PokeathlonRelayRunHud *hud, s32 member);
-void PokeathlonRelayRunHud_PrintLaps(PokeathlonRelayRunHud *hud);
 
 // Defined further on in the event (still under their address names).
 void PokeathlonRelayRunHud_CreatePicFrames(PokeathlonCourseSpritePool *spritePool, PokeathlonRelayRunHud *hud);

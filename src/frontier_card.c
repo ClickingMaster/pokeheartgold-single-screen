@@ -8,6 +8,7 @@
 #include "mail_message.h"
 #include "player_data.h"
 #include "pm_string.h"
+#include "pokemon.h"
 #include "sav_system_info.h"
 #include "save.h"
 #include "save_misc_data.h"
@@ -50,7 +51,6 @@ u32 FrontierCard_GetRegion(FrontierCard *card);
 String *FrontierCard_GetGreeting(FrontierCard *card, MailMessage *message, enum HeapID heapId);
 u32 FrontierCard_GetBirthdayMonth(FrontierCard *card);
 u32 FrontierCard_GetAvatar(FrontierCard *card);
-u8 SanitizeMonForm(u16 species, u8 form);
 
 FrontierCard *FrontierCard_New(enum HeapID heapId) {
     FrontierCard *ret = Heap_Alloc(heapId, sizeof(FrontierCard));

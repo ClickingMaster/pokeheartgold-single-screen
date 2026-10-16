@@ -15,7 +15,7 @@
 #include "system.h"
 #include "touchscreen.h"
 
-// Sprite and text helpers shared by the Pokeathlon course, event and record screens (OVY_98).
+// Sprite and text helpers shared by the Pokeathlon course, event and record screens.
 
 typedef struct PokeathlonSpriteContext {
     enum HeapID heapId;
@@ -63,9 +63,6 @@ void PokeathlonUtil_LoadMonPicSpriteResources(SpriteSystem *system, SpriteManage
 void PokeathlonUtil_LoadMonPicSprite(ManagedSprite *sprite, const PokeathlonMonInfo *mon, BOOL isMain, BOOL grayscale, enum HeapID heapId);
 void PokeathlonUtil_LoadMonIconResources(PokeathlonSpriteContext *ctx, const int *resIds, int count, int screen, BOOL flag);
 void PokeathlonUtil_SetMonIconSprite(PokeathlonSpriteContext *ctx, ManagedSprite *sprite, const PokeathlonMonInfo *mon, BOOL isMain, BOOL animate);
-void PokeathlonUtil_LoadSpriteChars(ManagedSprite *sprite, void *data, u32 size);
-void PokeathlonUtil_LoadSpritePalette(ManagedSprite *sprite, NarcId narcId, s32 memberNo, BOOL isMain, BOOL grayscale, enum HeapID heapId);
-void *PokeathlonUtil_LoadCharDataFromNarc(PokeathlonSpriteContext *ctx, int member, NNSG2dCharacterData **out);
 
 PokeathlonTextContext *PokeathlonUtil_CreateTextContext(enum HeapID heapId, BgConfig *bgConfig, int windowCount, const WindowTemplate *templates, s32 msgBank);
 void PokeathlonUtil_FreeTextContext(PokeathlonTextContext *ctx, int count);
@@ -73,7 +70,6 @@ void PokeathlonUtil_PrintAlignedMessage(PokeathlonTextContext *ctx, u32 window, 
 void PokeathlonUtil_PrintAlignedMessageAtY(PokeathlonTextContext *ctx, u32 window, u32 message, BOOL center, u8 y, u32 font);
 void PokeathlonUtil_PrintMessageAtXY(PokeathlonTextContext *ctx, u32 window, u32 message, u8 x, u8 y);
 void PokeathlonUtil_PrintMessageCentered(PokeathlonTextContext *ctx, u32 window, u32 message, u8 fill);
-void PokeathlonUtil_PrintMessageEx(PokeathlonTextContext *ctx, u32 window, u32 message, BOOL center, u8 x, u8 y, u32 font, u8 fill);
 void PokeathlonUtil_PrintMessageWithNumber(PokeathlonTextContext *ctx, u32 window, u32 message, s32 number, u32 digits, u32 field);
 void PokeathlonUtil_PrintMessage(PokeathlonTextContext *ctx, u32 window, u32 message);
 void PokeathlonUtil_PrintMessageAt(PokeathlonTextContext *ctx, u32 window, u32 message, u32 x, u8 y);
@@ -85,7 +81,6 @@ void PokeathlonUtil_PrintString(PokeathlonTextContext *ctx, u32 window, String *
 void PokeathlonUtil_ClearWindowTilemap(PokeathlonTextContext *ctx, u32 window);
 void PokeathlonUtil_SetWindowY(PokeathlonTextContext *ctx, u32 window, u8 y);
 void *PokeathlonUtil_GetMessageFormat(PokeathlonTextContext *ctx);
-void PokeathlonUtil_ClearWindow(PokeathlonTextContext *ctx, u32 window);
 
 BOOL PokeathlonUtil_CheckExitInput(void);
 u32 PokeathlonUtil_GetCourseMedal(u32 value);
@@ -100,6 +95,5 @@ void PokeathlonUtil_ResetDisplay(void);
 void PokeathlonUtil_DisableDisplay(void);
 u32 PokeathlonUtil_GetDecimalDigit(u32 value, u32 digit);
 u8 PokeathlonUtil_CountDecimalDigits(s32 value);
-void PokeathlonUtil_SetGfxBanks(void);
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_UTIL_H

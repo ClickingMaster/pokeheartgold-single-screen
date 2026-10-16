@@ -1,3 +1,5 @@
+#include "frontier/frontier_cmd_castle.h"
+
 #include "global.h"
 
 #include "constants/pokemon.h"
@@ -9,16 +11,14 @@
 #include "frontier/frontier_script_context.h"
 #include "frontier/frontier_trainers.h"
 
+#include "battle_frontier_communication.h"
 #include "frontier_save_access.h"
+#include "frontier_stat_ids_legacy.h"
 #include "heap.h"
 #include "launch_application.h"
 #include "party.h"
 #include "pokemon.h"
-#include "battle_frontier_communication.h"
 
-// Script commands of the Battle Castle (BattleCastleData, frontier/battle_castle_data.h).
-
-// Defined in frontier_script_commands.c.
 u16 FrontierScript_ReadVar(FrontierScriptContext *ctx);
 u16 *FrontierScript_ReadVarPtr(FrontierScriptContext *ctx);
 u16 *FrontierScript_GetVarPtr(FrontierScriptContext *ctx, u32 index);
@@ -29,45 +29,19 @@ extern const OverlayManagerTemplate gBattleCastleEmptyAppTemplate;
 extern const OverlayManagerTemplate gOverlayTemplate_BattleCastlePartyApp;
 extern const OverlayManagerTemplate gOverlayTemplate_BattleCastleOpponentApp;
 
-u32 BattleCastle_GetPointsStat(u8 type);
-u32 FrontierStat_GetFriendIndex(u32 stat);
 u32 CastleChallenge_GetSaved(void *challenge);
-void OS_ResetSystem(u32 parameter);
 u32 Comm_GetLocalNetId(void);
 BattleSetup *BattleCastle_NewBattleSetup(BattleCastleData *data, FrontierLaunchArgs *args);
 BOOL BattleCastle_IsMultiType(u8 type);
 void BattleCastle_SetOpponentParty(BattleCastleData *data);
 u16 BattleCastle_GetRound(BattleCastleData *data);
-void BattleCastle_DrawRoundTiles(BgConfig *bgConfig, BattleCastleData *data, int a2);
+void BattleCastle_DrawRoundTiles(BgConfig *bgConfig, BattleCastleData *data, int bgId);
 void BattleCastle_SpendPoints(FrontierSave *frontierSave, u8 type, int points);
 
-void BattleCastle_FillAppArgs(BattleCastleAppArgs *args, BattleCastleData *data);
-void BattleCastle_OnAppExit(void *args);
-BOOL FrontierScriptNative_WaitCastleLink(FrontierScriptContext *ctx);
-BOOL FrontierScriptNative_WaitCastleLinkChoice(FrontierScriptContext *ctx);
-
-BOOL FrtCmd_CastleAlloc(FrontierScriptContext *ctx);
-BOOL FrtCmd_CastleInit(FrontierScriptContext *ctx);
-BOOL FrtCmd_CastleFree(FrontierScriptContext *ctx);
-BOOL FrtCmd_CastleLaunchPartyApp(FrontierScriptContext *ctx);
-BOOL FrtCmd_CastleLaunchEmptyApp(FrontierScriptContext *ctx);
-BOOL FrtCmd_CastleEndBattle(FrontierScriptContext *ctx);
-BOOL FrtCmd_CastleStartBattle(FrontierScriptContext *ctx);
-BOOL FrtCmd_CastleLaunchOpponentApp(FrontierScriptContext *ctx);
-BOOL FrtCmd_CastleSetPartyBeforeBattle(FrontierScriptContext *ctx);
-BOOL FrtCmd_CastleGenerateOpponents(FrontierScriptContext *ctx);
-BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx);
-BOOL FrtCmd_CastleGetBattleResult(FrontierScriptContext *ctx);
-BOOL FrtCmd_CastleSendLinkMessage(FrontierScriptContext *ctx);
-BOOL FrtCmd_CastleWaitLink(FrontierScriptContext *ctx);
-BOOL FrtCmd_CastleWaitLinkChoice(FrontierScriptContext *ctx);
-BOOL FrtCmd_CastleShowPoints(FrontierScriptContext *ctx);
-BOOL FrtCmd_CastleHidePoints(FrontierScriptContext *ctx);
-BOOL FrtCmd_CastlePrintPoints(FrontierScriptContext *ctx);
-BOOL FrtCmd_CastleGetPoints(FrontierScriptContext *ctx);
-BOOL FrtCmd_CastleSpendPoints(FrontierScriptContext *ctx);
-BOOL FrtCmd_CastleAddPoints(FrontierScriptContext *ctx);
-BOOL FrtCmd_CastlePrintTrainerMessage(FrontierScriptContext *ctx);
+static void BattleCastle_FillAppArgs(BattleCastleAppArgs *args, BattleCastleData *data);
+static void BattleCastle_OnAppExit(void *args);
+static BOOL FrontierScriptNative_WaitCastleLink(FrontierScriptContext *ctx);
+static BOOL FrontierScriptNative_WaitCastleLinkChoice(FrontierScriptContext *ctx);
 
 static inline BOOL BattleCastle_LaunchApp(FrontierScriptContext *ctx, const OverlayManagerTemplate *template) {
     FrontierLaunchArgs *launchArgs = Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
@@ -141,7 +115,7 @@ BOOL FrtCmd_CastleLaunchOpponentApp(FrontierScriptContext *ctx) {
     return BattleCastle_LaunchApp(ctx, &gOverlayTemplate_BattleCastleOpponentApp);
 }
 
-void BattleCastle_FillAppArgs(BattleCastleAppArgs *args, BattleCastleData *data) {
+static void BattleCastle_FillAppArgs(BattleCastleAppArgs *args, BattleCastleData *data) {
     int i;
 
     args->type = data->type;
@@ -157,7 +131,7 @@ void BattleCastle_FillAppArgs(BattleCastleAppArgs *args, BattleCastleData *data)
     }
 }
 
-void BattleCastle_OnAppExit(void *args) {
+static void BattleCastle_OnAppExit(void *args) {
     BattleCastleAppArgs *appArgs = args;
     BattleCastleData_ReadAppResult(appArgs->data, appArgs);
     Heap_Free(appArgs);
@@ -430,7 +404,7 @@ BOOL FrtCmd_CastleWaitLink(FrontierScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL FrontierScriptNative_WaitCastleLink(FrontierScriptContext *ctx) {
+static BOOL FrontierScriptNative_WaitCastleLink(FrontierScriptContext *ctx) {
     FrontierScript_GetVar(ctx, ctx->data[0]);
     BattleCastleData *data = Frontier_GetData(ctx->frontierSystem->frontierWork);
     if (data->linkMessageCount >= 2) {
@@ -446,7 +420,7 @@ BOOL FrtCmd_CastleWaitLinkChoice(FrontierScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL FrontierScriptNative_WaitCastleLinkChoice(FrontierScriptContext *ctx) {
+static BOOL FrontierScriptNative_WaitCastleLinkChoice(FrontierScriptContext *ctx) {
     u16 *result = FrontierScript_GetVarPtr(ctx, ctx->data[0]);
     BattleCastleData *data = Frontier_GetData(ctx->frontierSystem->frontierWork);
     if (data->decidedChoice == 0) {

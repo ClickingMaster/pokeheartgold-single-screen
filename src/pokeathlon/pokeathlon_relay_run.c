@@ -7,6 +7,7 @@
 #include "msgdata/msg/msg_0309.h"
 #include "pokeathlon/pokeathlon_course_internal.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
+#include "pokeathlon/pokeathlon_event_points.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -35,10 +36,8 @@ enum {
 typedef char PokeathlonRelayRunSizeCheck[(sizeof(PokeathlonRelayRun) == 0x648 && sizeof(PokeathlonRelayRunTeam) == 0xD4 && sizeof(PokeathlonRelayRunMember) == 0x1C && sizeof(PokeathlonRelayRunPacket) == 0x28 && sizeof(PokeathlonRelayRunTouch) == 0x24 && sizeof(PokeathlonRelayRunLink) == 0x118) ? 1 : -1];
 typedef char PokeathlonRelayRunLayoutCheck[(offsetof(PokeathlonRelayRun, teams) == 0x30 && offsetof(PokeathlonRelayRun, finished) == 0x3C0 && offsetof(PokeathlonRelayRun, cpu) == 0x3DC && offsetof(PokeathlonRelayRun, obstacles) == 0x4D4 && offsetof(PokeathlonRelayRun, timer) == 0x640 && offsetof(PokeathlonRelayRunTeam, position) == 0x7C && offsetof(PokeathlonRelayRunTeam, laps) == 0x9C && offsetof(PokeathlonRelayRunTeam, owner) == 0xD0) ? 1 : -1];
 
-// The compiler's int to float helper: the flick strength is converted and dropped.
 f32 _fflt(int value);
 
-// Sprite pool helpers (pokeathlon_course_objects.c), declared with untyped entries as the course objects use them.
 void PokeathlonCourseSpritePool_Draw(PokeathlonCourseSpritePool *pool);
 void PokeathlonCourseSpritePool_Free(PokeathlonCourseSpritePool *pool);
 PokeathlonCourseSpritePool *PokeathlonCourseSpritePool_New(enum HeapID heapId, VecFx32 *template);
@@ -65,7 +64,6 @@ BOOL PokeathlonCourseObject_IsInTouchRange(PokeathlonCourseObject *object, fx32 
 s32 PokeathlonCourseObject_GetCollisionRadius(PokeathlonCourseObject *object);
 
 // Course points of an event from its score list (course points code).
-void PokeathlonEvent_CalcPoints(void *scoreList, int event);
 
 extern const GraphicsBanks sRelayRunGraphicsBanks;
 extern const GraphicsModes sRelayRunGraphicsModes;
@@ -81,6 +79,20 @@ extern const VecFx32 sRelayRunSpritePoolTemplate; // sprite pool template
 #pragma push
 #pragma opt_common_subs off
 #pragma force_active on
+
+static void PokeathlonRelayRun_SetGfxBanks(void);
+static void PokeathlonRelayRun_InitBgs(BgConfig *bgConfig);
+static void PokeathlonRelayRun_LoadBgGraphics(PokeathlonRelayRun *relayRun);
+static void PokeathlonRelayRun_LoadSpriteGraphics(PokeathlonCourseSpritePool *spritePool);
+static void PokeathlonRelayRun_CreateSprites(PokeathlonRelayRun *relayRun, PokeathlonCourseSpritePool *spritePool);
+static void PokeathlonRelayRun_UpdateHost(PokeathlonCourseData *course);
+static void PokeathlonRelayRun_PackPacket(PokeathlonRelayRun *relayRun, PokeathlonRelayRunPacket *packet);
+static BOOL PokeathlonRelayRun_Update(PokeathlonCourseData *course);
+static void PokeathlonRelayRun_DrawPacket(PokeathlonCourseData *course);
+static BOOL PokeathlonRelayRun_IsTouchingRunner(PokeathlonRelayRun *relayRun, int teamId, int x, int y);
+static BOOL PokeathlonRelayRun_IsTouchingSwapButton(PokeathlonRelayRun *relayRun, u32 x, u32 y);
+static void PokeathlonRelayRun_MoveTeams(PokeathlonCourseData *course);
+static void PokeathlonRelayRunTeam_UpdateStun(PokeathlonCourseData *course, PokeathlonRelayRun *relayRun, PokeathlonRelayRunTeam *team);
 
 BOOL PokeathlonRelayRun_Init(PokeathlonCourseData *course) {
     PokeathlonRelayRun *relayRun = PokeathlonCourse_GetWork(course);
@@ -323,14 +335,14 @@ BOOL PokeathlonRelayRun_Exit(PokeathlonCourseData *course) {
     return TRUE;
 }
 
-void PokeathlonRelayRun_SetGfxBanks(void) {
+static void PokeathlonRelayRun_SetGfxBanks(void) {
     GraphicsBanks banks = sRelayRunGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
 #pragma force_active on
 
-void PokeathlonRelayRun_InitBgs(BgConfig *bgConfig) {
+static void PokeathlonRelayRun_InitBgs(BgConfig *bgConfig) {
     GraphicsModes modes;
     BgTemplate main0, main1, main2, main3, sub0, sub1, sub2;
     modes = sRelayRunGraphicsModes;
@@ -361,7 +373,7 @@ void PokeathlonRelayRun_InitBgs(BgConfig *bgConfig) {
 
 #pragma force_active reset
 
-void PokeathlonRelayRun_LoadBgGraphics(PokeathlonRelayRun *relayRun) {
+static void PokeathlonRelayRun_LoadBgGraphics(PokeathlonRelayRun *relayRun) {
     GfGfxLoader_LoadCharData(NARC_a_1_7_8, 1, relayRun->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, FALSE, relayRun->heapId);
     GfGfxLoader_LoadScrnData(NARC_a_1_7_8, 2, relayRun->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, FALSE, relayRun->heapId);
     GfGfxLoader_LoadScrnData(NARC_a_1_7_8, 3, relayRun->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, relayRun->heapId);
@@ -370,7 +382,7 @@ void PokeathlonRelayRun_LoadBgGraphics(PokeathlonRelayRun *relayRun) {
     PokeathlonRelayRunHud_LoadBgGraphics(relayRun->hud);
 }
 
-void PokeathlonRelayRun_LoadSpriteGraphics(PokeathlonCourseSpritePool *spritePool) {
+static void PokeathlonRelayRun_LoadSpriteGraphics(PokeathlonCourseSpritePool *spritePool) {
     PokeathlonCourseSpritePool_LoadChar(spritePool, NARC_a_1_7_8, 17, 104, 1);
     PokeathlonCourseSpritePool_LoadPltt(spritePool, NARC_a_1_7_8, 14, 104, 1, 2);
     PokeathlonCourseSpritePool_LoadCell(spritePool, NARC_a_1_7_8, 16, 104);
@@ -379,7 +391,7 @@ void PokeathlonRelayRun_LoadSpriteGraphics(PokeathlonCourseSpritePool *spritePoo
 
 #pragma force_active on
 
-void PokeathlonRelayRun_CreateSprites(PokeathlonRelayRun *relayRun, PokeathlonCourseSpritePool *spritePool) {
+static void PokeathlonRelayRun_CreateSprites(PokeathlonRelayRun *relayRun, PokeathlonCourseSpritePool *spritePool) {
     int i;
     VecFx32 position;
     for (i = 0; i < RELAY_RUN_OBSTACLES; i++) {
@@ -534,7 +546,7 @@ static inline void PokeathlonRelayRun_ClearDrag(PokeathlonRelayRun *teamCursor, 
 // and the stronger the Pokemon, up to its top speed.
 #pragma force_active on
 
-void PokeathlonRelayRun_UpdateHost(PokeathlonCourseData *course) {
+static void PokeathlonRelayRun_UpdateHost(PokeathlonCourseData *course) {
     int i;
     PokeathlonRelayRun *relayRun;
     u8 *link;
@@ -715,7 +727,7 @@ void PokeathlonRelayRun_UpdateHost(PokeathlonCourseData *course) {
     PokeathlonRelayRun_PackPacket(relayRun, (PokeathlonRelayRunPacket *)PokeathlonCourse_ToBytes(link));
 }
 
-void PokeathlonRelayRun_PackPacket(PokeathlonRelayRun *relayRun, PokeathlonRelayRunPacket *packet) {
+static void PokeathlonRelayRun_PackPacket(PokeathlonRelayRun *relayRun, PokeathlonRelayRunPacket *packet) {
     int i;
     int j;
     u32 flags;
@@ -757,7 +769,7 @@ void PokeathlonRelayRun_PackPacket(PokeathlonRelayRun *relayRun, PokeathlonRelay
 
 // Every player, every frame: sends the stylus to the host and draws the packet it received. TRUE once the
 // host says the time is up (then stops the animations and, on the host, counts each member's distance).
-BOOL PokeathlonRelayRun_Update(PokeathlonCourseData *course) {
+static BOOL PokeathlonRelayRun_Update(PokeathlonCourseData *course) {
     PokeathlonRelayRun *relayRun;
     PokeathlonRelayRunPacket *packet;
     PokeathlonRelayRunTouch *touch;
@@ -807,7 +819,7 @@ BOOL PokeathlonRelayRun_Update(PokeathlonCourseData *course) {
 // the timer and the sign at the top of the screen.
 #pragma force_active on
 
-void PokeathlonRelayRun_DrawPacket(PokeathlonCourseData *course) {
+static void PokeathlonRelayRun_DrawPacket(PokeathlonCourseData *course) {
     PokeathlonRelayRun *relayRun = PokeathlonCourse_GetWork(course);
     u8 *link = PokeathlonCourse_GetDataCopyArea(course);
     PokeathlonRelayRunPacket *packet = (PokeathlonRelayRunPacket *)PokeathlonCourse_ToBytes(link + offsetof(PokeathlonRelayRunLink, packet));
@@ -862,7 +874,7 @@ void PokeathlonRelayRun_DrawPacket(PokeathlonCourseData *course) {
 
 #pragma force_active reset
 
-BOOL PokeathlonRelayRun_IsTouchingRunner(PokeathlonRelayRun *relayRun, int teamId, int x, int y) {
+static BOOL PokeathlonRelayRun_IsTouchingRunner(PokeathlonRelayRun *relayRun, int teamId, int x, int y) {
     s32 centerX;
     s32 centerY;
     PokeathlonRelayRunTeam *team = &relayRun->teams[teamId];
@@ -877,7 +889,7 @@ BOOL PokeathlonRelayRun_IsTouchingRunner(PokeathlonRelayRun *relayRun, int teamI
 }
 
 // The swap button: the top-left 64x32 corner of the touch screen.
-BOOL PokeathlonRelayRun_IsTouchingSwapButton(PokeathlonRelayRun *relayRun, u32 x, u32 y) {
+static BOOL PokeathlonRelayRun_IsTouchingSwapButton(PokeathlonRelayRun *relayRun, u32 x, u32 y) {
     if (x < 64 && y < 32) {
         return TRUE;
     }
@@ -888,7 +900,7 @@ BOOL PokeathlonRelayRun_IsTouchingSwapButton(PokeathlonRelayRun *relayRun, u32 x
 // the friction, grades the speed and spends / restores the members' energy.
 #pragma force_active on
 
-void PokeathlonRelayRun_MoveTeams(PokeathlonCourseData *course) {
+static void PokeathlonRelayRun_MoveTeams(PokeathlonCourseData *course) {
     VecFx32 bump;
     VecFx32 from;
     VecFx32 direction;
@@ -1118,7 +1130,7 @@ void PokeathlonRelayRun_MoveTeams(PokeathlonCourseData *course) {
 
 #pragma force_active reset
 
-void PokeathlonRelayRunTeam_UpdateStun(PokeathlonCourseData *course, PokeathlonRelayRun *relayRun, PokeathlonRelayRunTeam *team) {
+static void PokeathlonRelayRunTeam_UpdateStun(PokeathlonCourseData *course, PokeathlonRelayRun *relayRun, PokeathlonRelayRunTeam *team) {
     if (team->stunTimer != 0) {
         team->stunTimer--;
     }

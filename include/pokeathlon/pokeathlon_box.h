@@ -12,8 +12,8 @@
 #include "pokemon_storage_system.h"
 #include "pokemon_types_def.h"
 #include "sprite.h"
-#include "sprite_resource_header.h"
 #include "sprite_resource.h"
+#include "sprite_resource_header.h"
 
 typedef PartyExtraSub PartyAprijuiceModifier;
 typedef struct PokeathlonTodayPerformance PokeathlonTodayPerformance;
@@ -101,20 +101,20 @@ typedef struct PokeathlonBox_StatRow {
 } PokeathlonBox_StatRow; // size: 0x18
 
 typedef struct PokeathlonBox_SubGraphics {
-    enum HeapID heapID;                        // 0x000 / 0x078
-    SpriteList *spriteList;                    // 0x004 / 0x07C
-    G2dRenderer renderer;                      // 0x008 / 0x080
-    GF_2DGfxResMan *mgrs[6];                   // 0x130 / 0x1A8
+    enum HeapID heapID;                         // 0x000 / 0x078
+    SpriteList *spriteList;                     // 0x004 / 0x07C
+    G2dRenderer renderer;                       // 0x008 / 0x080
+    GF_2DGfxResMan *mgrs[6];                    // 0x130 / 0x1A8
     PokeathlonBox_SpriteResources resources[3]; // 0x148 / 0x1C0
-    u8 filler190[0x24];                        // 0x190 / 0x208
-    Sprite *sprites[5];                        // 0x1B4 / 0x22C
-    Sprite *unk1C8[5];                         // 0x1C8 / 0x23C
-    PokeathlonBox_StatRow statRows[5]; // 0x1DC / 0x250
-    Sprite *monPicSprite;                            // 0x254 / 0x2C8
-    void *monPicChars;                         // 0x258 / 0x2CC
-    u8 monPicPalette[0x20];                    // 0x25C / 0x2D0
-    u32 monPicCharOffset;                      // 0x27C / 0x2F0
-    u32 monPicPlttOffset;                      // 0x280 / 0x2F4
+    u8 filler190[0x24];                         // 0x190 / 0x208
+    Sprite *sprites[5];                         // 0x1B4 / 0x22C
+    Sprite *unk1C8[5];                          // 0x1C8 / 0x23C
+    PokeathlonBox_StatRow statRows[5];          // 0x1DC / 0x250
+    Sprite *monPicSprite;                       // 0x254 / 0x2C8
+    void *monPicChars;                          // 0x258 / 0x2CC
+    u8 monPicPalette[0x20];                     // 0x25C / 0x2D0
+    u32 monPicCharOffset;                       // 0x27C / 0x2F0
+    u32 monPicPlttOffset;                       // 0x280 / 0x2F4
 } PokeathlonBox_SubGraphics;
 
 typedef struct PokeathlonBox_Graphics {
@@ -127,7 +127,7 @@ typedef struct PokeathlonBox_Graphics {
     Window window5;                // 0x048
     Window window6;                // 0x058
     u16 courseId;                  // 0x068
-    u16 isSupreme;                     // 0x06A
+    u16 isSupreme;                 // 0x06A
     MsgData *msgData;              // 0x06C
     MessageFormat *msgFormat;      // 0x070
     String *nickname;              // 0x074
@@ -148,42 +148,5 @@ typedef struct PokeathlonBox {
 BOOL PokeathlonBox_Init(OverlayManager *manager);
 BOOL PokeathlonBox_Main(OverlayManager *manager);
 BOOL PokeathlonBox_Exit(OverlayManager *manager);
-BOOL PokeathlonBox_RunSetup(OverlayManager *manager);
-BOOL PokeathlonBox_Setup(OverlayManager *manager);
-void PokeathlonBox_SetGraphicsBanks();
-void PokeathlonBox_SetGraphicsModes(BgConfig *bgConfig);
-void PokeathlonBox_SetObjCharTransferTemplate();
-void PokeathlonBox_CreateOamManager(PokeathlonBox *data);
-void PokeathlonBox_VBlankCallback(void *data);
-BOOL PokeathlonBox_GetBoxMon(PCStorage *storage, u32 boxno, u32 slotno, PokeathlonBox_BoxMon *ptr);
-BOOL PokeathlonBox_GetLightBoxMon(PCStorage *storage, u32 boxno, u32 slotno, PokeathlonBox_BoxMon *ptr);
-void PokeathlonBox_GetBoxName(String *dest, PCStorage *storage, u32 boxno);
-void PokeathlonBox_CopySelectedMons(PokeathlonBox *data, PokeathlonBoxArgs *args);
-void PokeathlonBox_GetPartyMonStats(Party *party, u8 slot, PokeathlonBox_MonStats *stats);
-void PokeathlonBox_GetBoxMonStats(BoxPokemon *boxMon, PokeathlonBox_MonStats *stats);
-void PokeathlonBox_GetLightBoxMonStats(BoxPokemon *boxMon, PokeathlonBox_MonStats *stats);
-void PokeathlonBox_ShowMonInfo(int boxno, u8 slot, PokeathlonBox *data);
-void PokeathlonBox_CalcStatChanges(PokeathlonBox_MonStats *stats1, PokeathlonBox_MonStats *stats2, PartyAprijuiceModifier *aprijuiceModifier, PokeathlonBox_MonInfo *mon);
-PokeathlonBox_Graphics *PokeathlonBox_InitGraphics(enum HeapID heapID);
-void PokeathlonBox_SetupGraphics(PokeathlonBox_Graphics *graphics, BgConfig *bgConfig, u8 courseId, u32 isSupreme);
-void PokeathlonBox_DrawMonInfo(PokeathlonBox_Graphics *graphics, PokeathlonBox_MonInfo *mon);
-void PokeathlonBox_RenderAndAnimateSprites(PokeathlonBox_Graphics *graphics);
-void PokeathlonBox_ReleaseGraphics(PokeathlonBox_Graphics *graphics);
-void PokeathlonBox_DeleteSprites(PokeathlonBox_SubGraphics *subGraphics);
-void PokeathlonBox_LoadBgGraphics(BgConfig *bgConfig, enum HeapID heapID);
-void PokeathlonBox_InitBgFromTemplates(BgConfig *bgConfig);
-void PokeathlonBox_PrintStaticTexts(PokeathlonBox_Graphics *graphics);
-void PokeathlonBox_PrintMonTexts(PokeathlonBox_Graphics *graphics, PokeathlonBox_MonInfo *mon);
-void PokeathlonBox_ShowMonSprites(PokeathlonBox_Graphics *graphics, PokeathlonBox_MonInfo *mon);
-
-void PokeathlonBox_ShowStatStars(PokeathlonBox_SubGraphics *subGraphics, PokeathlonBox_MonInfo *mon);
-void PokeathlonBox_HideMonSprites();
-void PokeathlonBox_LoadSpriteResources(PokeathlonBox_SubGraphics *subGraphics);
-void PokeathlonBox_CreateSprites(PokeathlonBox_SubGraphics *subGraphics);
-Sprite *PokeathlonBox_CreateSprite(PokeathlonBox_SubGraphics *sub, int resourceId, int drawPriority, int priority, int x, int y, int anim, BOOL draw);
-void PokeathlonBox_InitSpriteTemplate(SpriteTemplate *template, SpriteList *spriteList, SpriteResourcesHeader *header, NNS_G2D_VRAM_TYPE whichScreen, enum HeapID heapID);
-void PokeathlonBox_GetMonPicVramOffsets(PokeathlonBox_SubGraphics *sub);
-void PokeathlonBox_LoadMonPic(); // (PokeathlonBox_SubGraphics *, PokeathlonBox_MonInfo *), called with the second argument left in r1
-void PokeathlonBox_TransferMonPic(PokeathlonBox_SubGraphics *subGraphics);
 
 #endif // POKEHEARTGOLD_POKEATHLON_BOX_H

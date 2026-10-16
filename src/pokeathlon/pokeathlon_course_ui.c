@@ -7,6 +7,7 @@
 #include "pokeathlon/pokeathlon_course_ceremony.h"
 
 #include "assert.h"
+#include "char_tiles.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
 #include "heap.h"
@@ -14,9 +15,7 @@
 #include "player_data.h"
 #include "pokemon.h"
 #include "pokemon_icon_idx.h"
-#include "char_tiles.h"
 
-// text.h declares these with a u8 font id; the code was compiled against these.
 u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, void *callback);
 u8 TextPrinterCheckActive(u8 printerId);
 void RemoveTextPrinter(u8 printerId);
@@ -25,6 +24,13 @@ void ResetAllTextPrinters(void);
 extern const WindowTemplate gPokeathlonEventBannerWindowTemplates[2];
 extern const u32 gPokeathlonCourseTrainerPicFileIds[6];
 extern const TileRect gPokeathlonCourseMonPicRect;
+
+static void PokeathlonEventBanner_PrintText(Window *window, MsgData *msgData, String *string, u32 msgId, u32 font);
+static void PokeathlonCourseMessageBox_LoadFrame(BgConfig *bgConfig, int layer, enum HeapID heapId);
+static u8 PokeathlonCourseMessageBox_PrintToWindow(BgConfig *bgConfig, Window *window, String **string, u32 textSpeed, MessageFormat *msgFormat, MsgData *msgData, u32 msgId, u8 bgLayer, enum HeapID heapId);
+static void PokeathlonCourse_LoadMonPicEx(ManagedSprite *sprite, PokeathlonCourseObjectInfo *info, BOOL mainScreen, u32 grayScale, enum HeapID heapId, BOOL loadPalette);
+static void PokeathlonCourse_LoadSpriteCharsAt(Sprite *sprite, void *data, u32 size, u32 offset);
+static void PokeathlonCourse_LoadSpriteChars(Sprite *sprite, void *data, u32 size);
 
 static inline void *GetTexDictData(NNSG3dResTex *tex, u32 index) {
     if (tex) {
@@ -119,7 +125,7 @@ void PokeathlonEventBanner_PrintTexts(PokeathlonEventBanner *banner) {
     DestroyMsgData(msgData);
 }
 
-void PokeathlonEventBanner_PrintText(Window *window, MsgData *msgData, String *string, u32 msgId, u32 font) {
+static void PokeathlonEventBanner_PrintText(Window *window, MsgData *msgData, String *string, u32 msgId, u32 font) {
     ReadMsgDataIntoString(msgData, msgId, string);
     FillWindowPixelBuffer(window, 0);
     AddTextPrinterParameterizedWithColor(window, font, string, 0, 0, 0xFF, 0x10200, NULL); // no transfer; colours 1, 2, 0
@@ -241,14 +247,14 @@ void PokeathlonCourseMessageBox_HideWaitingIcon(PokeathlonCourseMessageBox *box)
     WaitingIcon_Delete(box->waitingIcon);
 }
 
-void PokeathlonCourseMessageBox_LoadFrame(BgConfig *bgConfig, int layer, enum HeapID heapId) {
+static void PokeathlonCourseMessageBox_LoadFrame(BgConfig *bgConfig, int layer, enum HeapID heapId) {
     LoadFontPal0(GF_PAL_LOCATION_SUB_BG, (enum GFPalSlotOffset)0x1C0, heapId);
     LoadUserFrameGfx2(bgConfig, (GFBgLayer)layer, 0x3D2, 13, 0, heapId);
 }
 
 #pragma force_active on
 
-u8 PokeathlonCourseMessageBox_PrintToWindow(BgConfig *bgConfig, Window *window, String **string, u32 textSpeed, MessageFormat *msgFormat, MsgData *msgData, u32 msgId, u8 bgLayer, enum HeapID heapId) {
+static u8 PokeathlonCourseMessageBox_PrintToWindow(BgConfig *bgConfig, Window *window, String **string, u32 textSpeed, MessageFormat *msgFormat, MsgData *msgData, u32 msgId, u8 bgLayer, enum HeapID heapId) {
     u8 printerId;
     if (window->bgConfig == NULL) {
         AddWindowParameterized(bgConfig, window, bgLayer, 2, 19, 27, 4, 15, 1);
@@ -348,7 +354,7 @@ void PokeathlonCourse_LoadMonPicWithPalette(ManagedSprite *sprite, PokeathlonCou
 // Front picture of the Pokemon (no sprite if species is 0).
 #pragma force_active on
 
-void PokeathlonCourse_LoadMonPicEx(ManagedSprite *sprite, PokeathlonCourseObjectInfo *info, BOOL mainScreen, u32 grayScale, enum HeapID heapId, BOOL loadPalette) {
+static void PokeathlonCourse_LoadMonPicEx(ManagedSprite *sprite, PokeathlonCourseObjectInfo *info, BOOL mainScreen, u32 grayScale, enum HeapID heapId, BOOL loadPalette) {
     PokepicTemplate template;
     TileRect rect;
     void *buffer;
@@ -379,7 +385,7 @@ void PokeathlonCourse_LoadMonIcon(ManagedSprite *sprite, const u16 *monForm, int
 
 #pragma force_active reset
 
-void PokeathlonCourse_LoadSpriteCharsAt(Sprite *sprite, void *data, u32 size, u32 offset) {
+static void PokeathlonCourse_LoadSpriteCharsAt(Sprite *sprite, void *data, u32 size, u32 offset) {
     NNS_G2D_VRAM_TYPE vramType = Sprite_GetVramType(sprite);
     u32 location = NNS_G2dGetImageLocation(Sprite_GetImageProxy(sprite), vramType);
     DC_FlushRange(data, size);
@@ -396,6 +402,6 @@ void PokeathlonCourse_LoadSpriteCharsAt(Sprite *sprite, void *data, u32 size, u3
     }
 }
 
-void PokeathlonCourse_LoadSpriteChars(Sprite *sprite, void *data, u32 size) {
+static void PokeathlonCourse_LoadSpriteChars(Sprite *sprite, void *data, u32 size) {
     PokeathlonCourse_LoadSpriteCharsAt(sprite, data, size, 0);
 }

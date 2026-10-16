@@ -6,6 +6,7 @@
 #include "frontier/frontier_script_ui.h"
 #include "frontier/frontier_system.h"
 
+#include "communication_core.h"
 #include "communication_player_state.h"
 #include "filesystem.h"
 #include "heap.h"
@@ -17,7 +18,6 @@
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
-#include "communication_core.h"
 
 // Script variables: 0x8000-0x8007 are the task's own, 0x8008-0x800F the frontier system's (shared by all tasks),
 // 0x8010-0x8013 the task's data words. Other values are literals.
@@ -394,9 +394,9 @@ BOOL FrtCmd_MenuItemAdd(FrontierScriptContext *ctx) {
 BOOL FrtCmd_MenuItemAddWithDescription(FrontierScriptContext *ctx) {
     FrontierSystem *system = ctx->frontierSystem;
     u16 msgId = FrontierScriptContext_ReadHalfWord(ctx);
-    u16 unk2 = FrontierScriptContext_ReadHalfWord(ctx);
+    u16 description = FrontierScriptContext_ReadHalfWord(ctx);
     u16 value = FrontierScriptContext_ReadHalfWord(ctx);
-    FrontierMenu_AddItem(system->menu, msgId, unk2, value);
+    FrontierMenu_AddItem(system->menu, msgId, description, value);
     return FALSE;
 }
 
@@ -450,9 +450,9 @@ BOOL FrtCmd_ListMenuInit(FrontierScriptContext *ctx) {
 BOOL FrtCmd_ListMenuItemAdd(FrontierScriptContext *ctx) {
     FrontierSystem *system = ctx->frontierSystem;
     u16 msgId = FrontierScriptContext_ReadHalfWord(ctx);
-    u16 unk2 = FrontierScriptContext_ReadHalfWord(ctx);
+    u16 description = FrontierScriptContext_ReadHalfWord(ctx);
     u16 value = FrontierScriptContext_ReadHalfWord(ctx);
-    FrontierListMenu_AddItem(system->menu, msgId, unk2, value);
+    FrontierListMenu_AddItem(system->menu, msgId, description, value);
     return FALSE;
 }
 
@@ -583,7 +583,6 @@ BOOL FrtCmd_CreateObjects(FrontierScriptContext *ctx) {
 
 BOOL FrtCmd_DeleteObject(FrontierScriptContext *ctx) {
     FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
-    // the id goes to overlay 42 as the full halfword (the original call does not narrow it to the u8 parameter)
     Field2DObject *object = ((FrontierMapGetObjectFunc)Field2DObjectManager_FindById)(map->objectManager, FrontierScript_ReadVar(ctx));
     FrontierMap_DeleteObject(map, object);
     return FALSE;

@@ -1,11 +1,10 @@
-#include "frontier/battle_castle_data.h"
-
 #include "global.h"
 
 #include "constants/game_stats.h"
 #include "constants/items.h"
 #include "constants/pokemon.h"
 
+#include "frontier/battle_castle_data.h"
 #include "frontier/frontier_map.h"
 #include "frontier/frontier_system.h"
 #include "frontier/frontier_trainers.h"
@@ -25,7 +24,7 @@
 #include "sys_vars.h"
 #include "text.h"
 
-// The Battle Castle's script data (frontier/battle_castle_data.h): the challenge (party, opponents, saved records),
+// The Battle Castle's script data: the challenge (party, opponents, saved records),
 // the castle points and their windows.
 
 u32 BattleCastle_GetRankStat(u8 type, u8 slot);
@@ -67,12 +66,12 @@ BOOL BattleCastleLink_SendPartyMons(BattleCastleData *data);
 extern const u8 gBattleCastleRoundValues_Single[];
 extern const u8 gBattleCastleRoundValues_Multi[];
 
-void BattleCastleData_SetupNewChallenge(BattleCastleData *data);
-void BattleCastleData_RestoreChallenge(BattleCastleData *data);
-void BattleCastleData_RestoreParty(BattleCastleData *data);
-u16 BattleCastleAppArgs_GetSelection(BattleCastleAppArgs *args, u32 index);
-void BattleCastle_DrawPointsWindowFrame(BgConfig *bgConfig, Window *window);
-void BattleCastle_PrintPlayerPoints(FrontierSystem *system, Window *window, PlayerProfile *profile, u16 points);
+static void BattleCastleData_SetupNewChallenge(BattleCastleData *data);
+static void BattleCastleData_RestoreChallenge(BattleCastleData *data);
+static void BattleCastleData_RestoreParty(BattleCastleData *data);
+static u16 BattleCastleAppArgs_GetSelection(BattleCastleAppArgs *args, u32 index);
+static void BattleCastle_DrawPointsWindowFrame(BgConfig *bgConfig, Window *window);
+static void BattleCastle_PrintPlayerPoints(FrontierSystem *system, Window *window, PlayerProfile *profile, u16 points);
 
 #define CASTLE_CHALLENGE_TYPE        0
 #define CASTLE_CHALLENGE_BATTLE_NO   1
@@ -207,7 +206,7 @@ void BattleCastleData_Init(BattleCastleData *data, u32 resume) {
 #pragma opt_movepostops off
 #pragma opt_common_subs off
 #pragma force_active on
-void BattleCastleData_SetupNewChallenge(BattleCastleData *data) {
+static void BattleCastleData_SetupNewChallenge(BattleCastleData *data) {
     int count = (u8)Party_GetCount(data->playerParty), i, battleNo;
     u8 *cursor;
     Pokemon *mon;
@@ -237,7 +236,7 @@ void BattleCastleData_SetupNewChallenge(BattleCastleData *data) {
 #pragma opt_movepostops reset
 
 #pragma force_active on
-void BattleCastleData_RestoreChallenge(BattleCastleData *data) {
+static void BattleCastleData_RestoreChallenge(BattleCastleData *data) {
     struct {
         u8 ivs[8];
         u32 personalities[6];
@@ -272,7 +271,7 @@ void BattleCastleData_RestoreChallenge(BattleCastleData *data) {
 }
 #pragma force_active reset
 
-void BattleCastleData_RestoreParty(BattleCastleData *data) {
+static void BattleCastleData_RestoreParty(BattleCastleData *data) {
     int count = (u8)Party_GetCount(data->playerParty);
     int i;
     u8 byteValue;
@@ -326,7 +325,7 @@ void BattleCastleData_ReadAppResult(BattleCastleData *data, BattleCastleAppArgs 
 }
 #pragma force_active reset
 
-u16 BattleCastleAppArgs_GetSelection(BattleCastleAppArgs *args, u32 index) {
+static u16 BattleCastleAppArgs_GetSelection(BattleCastleAppArgs *args, u32 index) {
     if (index >= 6) {
         GF_AssertFail();
         return 0;
@@ -663,7 +662,7 @@ void BattleCastle_ShowPointsWindows(FrontierSystem *system, BattleCastleData *da
 }
 #pragma force_active reset
 
-void BattleCastle_DrawPointsWindowFrame(BgConfig *bgConfig, Window *window) {
+static void BattleCastle_DrawPointsWindowFrame(BgConfig *bgConfig, Window *window) {
     DrawFrameAndWindow1(window, TRUE, 0x3D9, 12);
     FillWindowPixelBuffer(window, 15);
 }
@@ -727,7 +726,7 @@ void BattleCastle_PrintPoints(FrontierSystem *system, BattleCastleData *data) {
 #pragma force_active reset
 
 #pragma force_active on
-void BattleCastle_PrintPlayerPoints(FrontierSystem *system, Window *window, PlayerProfile *profile, u16 points) {
+static void BattleCastle_PrintPlayerPoints(FrontierSystem *system, Window *window, PlayerProfile *profile, u16 points) {
     String *tmp = String_New(20, system->heapId);
     String *buf = String_New(20, system->heapId);
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0031_bin, HEAP_ID_FIELD2);

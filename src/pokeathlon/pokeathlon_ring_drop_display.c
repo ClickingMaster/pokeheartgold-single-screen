@@ -46,7 +46,6 @@ void MATH_QSort(void *base, u32 count, u32 width, int (*compare)(const void *, c
 #define PokeathlonRingDropUi_SetMemberSwitching(ui, participant, member, switching) (((void (*)(PokeathlonRingDropUi *, u8, int, int))PokeathlonRingDropUi_SetSwitching)((ui), (participant), (member), (switching)))
 #define PokeathlonRingDrop_GetTeamMemberParams(course, participant, member)         (((PokeathlonRingDropMemberParams * (*)(PokeathlonCourseData *, u8, int)) PokeathlonRingDrop_GetMemberParams)((course), (participant), (member)))
 
-// Course helpers, mon objects and the computer participants (OVY_96).
 PokeathlonCourseSpriteResources *PokeathlonCourseSprites_CreateResources(int heapId, int flags, int charVram);
 void PokeathlonCourseSprites_FreeResources(PokeathlonCourseSpriteResources *resources);
 void PokeathlonCourse_UpdateTimeUpCountdown(PokeathlonCourseData *course, u32 timer);
@@ -127,7 +126,7 @@ void PokeathlonRingDrop_LoadSpriteResources(PokeathlonRingDrop *ringDrop) {
 
 #pragma force_active reset
 
-ManagedSprite *PokeathlonRingDrop_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u16 animation, u16 drawPriority) {
+static ManagedSprite *PokeathlonRingDrop_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u16 animation, u16 drawPriority) {
     ManagedSpriteTemplate template = gPokeathlonRingDropSpriteTemplate;
     ManagedSprite *sprite;
 
@@ -199,7 +198,7 @@ void PokeathlonRingDrop_LoadBgGraphics(PokeathlonRingDrop *ringDrop) {
 // Switch mode 1: the ball flies up off the Pokemon; then the next member is requested.
 #pragma force_active on
 
-void PokeathlonRingDropDisplay_SwitchOut(PokeathlonRingDropMonSprites *mon, s16 *position, PokeathlonRingDropUi *ui, u8 participant, PokeathlonRingDropInput *input, BOOL cpu, BOOL own) {
+static void PokeathlonRingDropDisplay_SwitchOut(PokeathlonRingDropMonSprites *mon, s16 *position, PokeathlonRingDropUi *ui, u8 participant, PokeathlonRingDropInput *input, BOOL cpu, BOOL own) {
     s16 x, y;
 
     switch (mon->switchStep) {
@@ -248,7 +247,7 @@ void PokeathlonRingDropDisplay_SwitchOut(PokeathlonRingDropMonSprites *mon, s16 
 }
 
 // Switch mode 2: the ball comes down to the Pokemon's position.
-void PokeathlonRingDropDisplay_SwitchIn(PokeathlonRingDropMonSprites *mon, s16 *position, void *ui, u8 participant, PokeathlonRingDropInput *input, BOOL report, BOOL own) {
+static void PokeathlonRingDropDisplay_SwitchIn(PokeathlonRingDropMonSprites *mon, s16 *position, void *ui, u8 participant, PokeathlonRingDropInput *input, BOOL report, BOOL own) {
     s16 x, y;
 
     switch (mon->switchStep) {
@@ -285,7 +284,7 @@ void PokeathlonRingDropDisplay_SwitchIn(PokeathlonRingDropMonSprites *mon, s16 *
 #pragma force_active reset
 
 // Switch mode 0: the new Pokemon appears.
-void PokeathlonRingDropDisplay_EndSwitch(PokeathlonRingDropMonSprites *mon, const s16 *position, PokeathlonRingDropInput *input, BOOL report, BOOL own) {
+static void PokeathlonRingDropDisplay_EndSwitch(PokeathlonRingDropMonSprites *mon, const s16 *position, PokeathlonRingDropInput *input, BOOL report, BOOL own) {
     PokeathlonCourseMonObject_SetDrawFlag(mon->monObject, 1);
     ManagedSprite_SetPositionXYWithSubscreenOffset(mon->dustSprite, position[0], position[1], FX32_CONST(480));
     ManagedSprite_ResetSpriteAnimCtrlState(mon->dustSprite);
@@ -298,7 +297,7 @@ void PokeathlonRingDropDisplay_EndSwitch(PokeathlonRingDropMonSprites *mon, cons
 
 #pragma force_active on
 
-void PokeathlonRingDropDisplay_UpdateSwitch(PokeathlonRingDropMonPacket *packet, PokeathlonRingDropMonSprites *mon, void *ui, PokeathlonCourseData *course, u8 participant) {
+static void PokeathlonRingDropDisplay_UpdateSwitch(PokeathlonRingDropMonPacket *packet, PokeathlonRingDropMonSprites *mon, void *ui, PokeathlonCourseData *course, u8 participant) {
     PokeathlonRingDropInput *input;
     BOOL cpu;
     BOOL changed;
@@ -354,7 +353,7 @@ void PokeathlonRingDropDisplay_UpdateSwitch(PokeathlonRingDropMonPacket *packet,
 
 #pragma force_active reset
 
-int PokeathlonRingDropDisplay_CompareDepth(const void *a, const void *b) {
+static int PokeathlonRingDropDisplay_CompareDepth(const void *a, const void *b) {
     if (*(const u8 *)a == *(const u8 *)b) {
         return 0;
     }
@@ -364,7 +363,7 @@ int PokeathlonRingDropDisplay_CompareDepth(const void *a, const void *b) {
     return -1;
 }
 
-int PokeathlonRingDropDisplay_CompareScores(const void *a, const void *b) {
+static int PokeathlonRingDropDisplay_CompareScores(const void *a, const void *b) {
     if (*(const u8 *)a == *(const u8 *)b) {
         return 0;
     }
@@ -378,7 +377,7 @@ int PokeathlonRingDropDisplay_CompareScores(const void *a, const void *b) {
 // marks above the Pokemon, switching, jumps and squashing), then sorts the Pokemon by depth.
 #pragma force_active on
 
-void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay *display, PokeathlonRingDropFramePacket *framePacket, PokeathlonCourseData *course) {
+static void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay *display, PokeathlonRingDropFramePacket *framePacket, PokeathlonCourseData *course) {
     int participant;
     PokeathlonRingDropMonPacket *packet;
     PokeathlonRingDropMonSprites *mon;

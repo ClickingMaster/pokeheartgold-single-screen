@@ -331,49 +331,27 @@ typedef struct PokeathlonGoalRoll {
     void *sortWork;                                                          // 0x81C
 } PokeathlonGoalRoll;                                                        // size: 0x820
 
-// pokeathlon_goal_roll.c
 BOOL PokeathlonGoalRoll_Init(PokeathlonCourseData *course);
 BOOL PokeathlonGoalRoll_Draw(PokeathlonCourseData *course);
 BOOL PokeathlonGoalRoll_ShowResults(PokeathlonCourseData *course);
 BOOL PokeathlonGoalRoll_Exit(PokeathlonCourseData *course);
-void PokeathlonGoalRoll_SetGfxBanks(void);
 BOOL PokeathlonGoalRoll_State_Play(PokeathlonCourseData *course, u8 *state);
 BOOL PokeathlonGoalRoll_State_Finish(PokeathlonCourseData *course, u8 *state);
-void PokeathlonGoalRoll_InitBgs(BgConfig *bgConfig);
-void PokeathlonGoalRoll_LoadBgGfx(PokeathlonGoalRoll *goalRoll);
-BOOL PokeathlonGoalRoll_HandleInput(PokeathlonCourseData *course);
-void PokeathlonGoalRoll_HostUpdate(PokeathlonCourseData *course);
-void PokeathlonGoalRoll_PackFrame(PokeathlonGoalRoll *goalRoll, PokeathlonGoalRollFramePacket *out);
-void PokeathlonGoalRoll_ApplyFrame(PokeathlonCourseData *course);
-void PokeathlonGoalRoll_ApplyFrameScore(PokeathlonCourseData *course);
 
-// pokeathlon_goal_roll_field.c
 void PokeathlonGoalRoll_ShowGoal(PokeathlonGoalRoll *goalRoll, u8 ballIndex, int bigBall, u8 x, u8 code, u8 own);
 void PokeathlonGoalRoll_MoveMons(PokeathlonCourseData *course);
 void PokeathlonGoalRoll_CollideBalls(PokeathlonCourseData *course);
 void PokeathlonGoalRoll_MoveBalls(PokeathlonCourseData *course);
-void PokeathlonGoalRoll_CollideBallPair(PokeathlonGoalRollBall *first, PokeathlonGoalRollBall *second);
-void PokeathlonGoalRoll_BounceBallOff(PokeathlonGoalRollBall *ball, const PokeathlonGoalRollBall *other, int side);
 void PokeathlonGoalRoll_CheckGoals(PokeathlonCourseData *course);
 void PokeathlonGoalRoll_UpdateTiredMons(PokeathlonCourseData *course);
 void PokeathlonGoalRoll_SetTouchTarget(int x, int y, VecFx32 *out);
 int PokeathlonGoalRoll_GetTouchedMon(PokeathlonGoalRoll *goalRoll, u8 participant, u8 touchX, u8 touchY);
-BOOL PokeathlonGoalRoll_CirclesOverlap(const VecFx32 *a, fx32 radiusA, const VecFx32 *b, fx32 radiusB);
 void PokeathlonGoalRoll_ResetBall(PokeathlonGoalRollBall *ball);
-void PokeathlonGoalRoll_SetBallDirection(PokeathlonGoalRoll *goalRoll, PokeathlonGoalRollBall *ball, const VecFx32 *direction);
-fx32 PokeathlonGoalRoll_CalcNormalizedDot(const VecFx32 *a, const VecFx32 *b);
-BOOL PokeathlonGoalRoll_IsWithinAngle(const VecFx32 *a, const VecFx32 *b, u32 angle);
-void PokeathlonGoalRoll_RecoverPower(PokeathlonGoalRollMon *mon);
 void PokeathlonGoalRoll_InitMonStats(PokeathlonCourseData *course, PokeathlonGoalRollMonParams *params, u8 participant, u8 member, PokeathlonGoalRollMon *mon);
 void PokeathlonGoalRoll_InitWindows(PokeathlonGoalRoll *goalRoll);
 void PokeathlonGoalRoll_PrintTotalPoints(PokeathlonGoalRoll *goalRoll, u32 score);
-int PokeathlonGoalRoll_CollideWithWalls(VecFx32 *position, VecFx32 *previous, s32 radius, int checkCorners, VecFx32 *out);
-BOOL PokeathlonGoalRoll_SegmentsIntersect(Point2D *a, Point2D *b, Point2D *c, const VecFx32 *point);
-BOOL PokeathlonGoalRoll_IntersectWall(const VecFx32 *a, const VecFx32 *b, const VecFx32 *c, const VecFx32 *d, VecFx32 *out);
-void PokeathlonGoalRoll_PickBallSpawn(PokeathlonGoalRoll *goalRoll, PokeathlonGoalRollBall *ball);
 u8 PokeathlonGoalRoll_EncodeBallY(PokeathlonGoalRollBall *ball);
 s32 PokeathlonGoalRoll_DecodeBallY(s32 code);
-void PokeathlonGoalRoll_NextFacing(PokeathlonGoalRollMon *mon);
 void PokeathlonGoalRoll_PlayGoalAreaSE(PokeathlonGoalRoll *goalRoll, u32 ballIndex, BOOL bigBall, s32 code);
 void PokeathlonGoalRoll_PrintPlate(PokeathlonGoalRoll *goalRoll, u8 participant, int mode);
 void PokeathlonGoalRoll_LoadStrings(PokeathlonCourseData *course);
@@ -381,16 +359,13 @@ void PokeathlonGoalRoll_FreeStrings(PokeathlonCourseData *course);
 void PokeathlonGoalRoll_CreatePlateTasks(PokeathlonGoalRoll *goalRoll);
 void PokeathlonGoalRoll_DestroyPlateTasks(PokeathlonGoalRoll *goalRoll);
 
-// pokeathlon_goal_roll_display.c
 void PokeathlonGoalRoll_StartPlateFlash(PokeathlonGoalRoll *goalRoll, int participant, int gained, int bigBall);
 void PokeathlonGoalRoll_PlateTask(SysTask *task, PokeathlonGoalRollPlate *plate);
 u32 PokeathlonGoalRoll_GetGoalCode(u32 goal, u8 team);
 u32 PokeathlonGoalRoll_GetBallQuadrant(PokeathlonGoalRollBall *ball);
-u32 PokeathlonGoalRoll_GetQuadrant(s32 x, s32 y);
 void PokeathlonGoalRoll_UpdateLeaders(PokeathlonGoalRoll *goalRoll);
 void PokeathlonGoalRoll_RefreshPlates(PokeathlonGoalRoll *goalRoll);
 void PokeathlonGoalRoll_SortOwnTeamOrder(PokeathlonGoalRollMon *team, u8 *monY);
-int PokeathlonGoalRoll_CompareMonY(const void *a, const void *b);
 void PokeathlonGoalRoll_SortOtherMonsOrder(PokeathlonGoalRoll *goalRoll, PokeathlonGoalRollFramePacket *frame, u8 own);
 void PokeathlonGoalRoll_OnTimeUp(PokeathlonCourseData *course);
 PokeathlonGoalRollDisplay *PokeathlonGoalRollDisplay_New(enum HeapID heapId, BgConfig *bgConfig, PokeathlonCourseData *course);
@@ -399,33 +374,18 @@ void PokeathlonGoalRollDisplay_LoadBgGfx(PokeathlonGoalRollDisplay *display);
 void PokeathlonGoalRollDisplay_CreateSprites(PokeathlonGoalRollSpritePool *pool, PokeathlonGoalRollDisplay *display, PokeathlonGoalRollResources *resources);
 void PokeathlonGoalRollDisplay_PrintName(PokeathlonGoalRollDisplay *display);
 void PokeathlonGoalRollDisplay_PrintSecondWind(PokeathlonGoalRollDisplay *display);
-void PokeathlonGoalRollDisplay_InitWindows(PokeathlonGoalRollDisplay *display);
 void PokeathlonGoalRollDisplay_SetScore(PokeathlonGoalRollDisplay *display, u32 score, u32 participant);
 u32 PokeathlonGoalRollDisplay_GetScore(PokeathlonGoalRollDisplay *display);
 
-// pokeathlon_goal_roll_cpu.c
 void PokeathlonGoalRollDisplay_UpdateTimer(PokeathlonGoalRollDisplay *display, s32 timer);
 void PokeathlonGoalRollDisplay_DrawScore(PokeathlonGoalRollDisplay *display, s32 score);
 PokeathlonGoalRollCpu *PokeathlonGoalRollCpu_New(enum HeapID heapId, u8 cpuCount);
 void PokeathlonGoalRollCpu_SetMon(PokeathlonGoalRollCpuTeam *teams, s32 index, PokeathlonGoalRollMon *mon);
 void PokeathlonGoalRollCpu_ChooseAllRoles(PokeathlonGoalRollCpuTeam *teams);
-void PokeathlonGoalRollCpu_ChooseRoles(PokeathlonGoalRollCpuTeam *team);
 void PokeathlonGoalRollCpu_SetBalls(PokeathlonGoalRollCpu *cpu, PokeathlonGoalRollBall *balls);
 void PokeathlonGoalRollCpu_Free(PokeathlonGoalRollCpu *cpu);
 void PokeathlonGoalRollCpu_Update(PokeathlonCourseData *course, PokeathlonGoalRollCpu *cpu);
-int PokeathlonGoalRollCpu_ThinkChaser(PokeathlonCourseData *course, u8 participant, u8 member, PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *balls);
-int PokeathlonGoalRollCpu_ApplyChaserDecision(PokeathlonGoalRollMon *mon, const PokeathlonGoalRollBall *ball, u8 decision, int quadrant);
-int PokeathlonGoalRollCpu_ThinkGuard(PokeathlonCourseData *course, u8 participant, u8 member, PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *balls);
-int PokeathlonGoalRollCpu_ApplyGuardDecision(PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *ball, int decision, int participant);
-int PokeathlonGoalRollCpu_ThinkFlex(PokeathlonCourseData *course, u8 participant, u8 member, PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *balls, PokeathlonGoalRollCpuTeam *teams);
-int PokeathlonGoalRollCpu_ApplyFlexDecision(PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *ball, int decision, int participant, PokeathlonGoalRollCpuTeam *teams);
-int PokeathlonGoalRollCpu_MoveToEmptierQuadrant(PokeathlonGoalRollMon *mon, PokeathlonGoalRollCpuTeam *teams, u8 excluded);
-void PokeathlonGoalRollCpu_Think(PokeathlonCourseData *course, PokeathlonGoalRollCpu *cpu, PokeathlonGoalRollCpuSlot *slot);
-int PokeathlonGoalRollCpu_GetQuadrant(int x, int y, int pointX, int pointY);
-BOOL PokeathlonGoalRollCpu_IsMonInTargetQuadrantOfBall(int x1, int y1, int x2, int y2, int quadrantInput, int participantInput);
-BOOL PokeathlonGoalRollCpu_IsMonNotOppositeOfBall(int x1, int y1, int x2, int y2, int quadrantInput, int participantInput);
 BOOL PokeathlonGoalRollCpu_IsNearPoint(int x, int y, const u16 (*points)[2]);
-BOOL PokeathlonGoalRollCpu_CirclesTouch(const VecFx32 *a, fx32 radiusA, const VecFx32 *b, fx32 radiusB);
 void PokeathlonScreenShake_Task(SysTask *task, PokeathlonScreenShake *shake);
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_GOAL_ROLL_H

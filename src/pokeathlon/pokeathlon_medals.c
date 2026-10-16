@@ -6,6 +6,7 @@
 #include "msgdata/msg/msg_0314.h"
 #include "pokeathlon/pokeathlon_record_screens.h"
 
+#include "dpad_menu_box.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
@@ -14,12 +15,9 @@
 #include "pokemon.h"
 #include "sound_playback.h"
 #include "system.h"
-#include "dpad_menu_box.h"
 
 FS_EXTERN_OVERLAY(OVY_98);
 
-// work->sprites[index], addressed as (work + index) first: with plain array indexing the compiler
-// strength-reduces the sprite loops below, which the original code does not.
 #define MEDALS_SPRITE(work, index) (((PokeathlonMedals *)((u8 *)(work) + (index) * sizeof(ManagedSprite *)))->sprites[0])
 
 extern const s32 sPokeathlonMedalsSpeciesOrderFiles[];
@@ -39,15 +37,33 @@ extern const DpadMenuBox sPokeathlonMedalsGridMenuBoxes[];
 extern const u8 sPokeathlonMedalsBgLayers[7];
 extern const char sStr_SeqError_3[]; // "seq error!"
 
-BOOL PokeathlonMedals_GetSpeciesOrderFileIndex(void) {
+static void PokeathlonMedals_ShowSelectedSpecies(PokeathlonMedals *work);
+static void PokeathlonMedals_HideSelectedSpecies(PokeathlonMedals *work);
+static void PokeathlonMedals_VBlankCallback(PokeathlonMedals *work);
+static void PokeathlonMedals_CreateGridInput(PokeathlonMedals *work);
+static void PokeathlonMedals_FreeGridInput(PokeathlonMedals *work);
+static BOOL PokeathlonMedals_HandleInput(PokeathlonMedals *work);
+static void PokeathlonMedals_MoveCursor(PokeathlonMedals *work, u32 target);
+static void PokeathlonMedals_OnCursorMoved(PokeathlonMedals *work, u32 newTarget, int prevTarget, BOOL touch);
+static void PokeathlonMedals_InitBgs(PokeathlonMedals *work);
+static void PokeathlonMedals_LoadBgGraphics(PokeathlonMedals *work);
+static void PokeathlonMedals_FreeBgs(PokeathlonMedals *work);
+static void PokeathlonMedals_CreateSprites(PokeathlonMedals *work);
+static void PokeathlonMedals_LoadSpriteResources(PokeathlonMedals *work);
+static void PokeathlonMedals_CreateUiSprites(PokeathlonMedals *work);
+static void PokeathlonMedals_CreateMedalSprites(PokeathlonMedals *work);
+static void PokeathlonMedals_CreateIconSprites(PokeathlonMedals *work);
+static void PokeathlonMedals_PrintStaticText(PokeathlonMedals *work);
+
+static BOOL PokeathlonMedals_GetSpeciesOrderFileIndex(void) {
     return TRUE;
 }
 
-BOOL PokeathlonMedals_AreFlags0EFTo0F1Set(PokeathlonMedals *work) {
+static BOOL PokeathlonMedals_AreFlags0EFTo0F1Set(PokeathlonMedals *work) {
     return work->args->allGoalsMet;
 }
 
-u8 PokeathlonMedals_GetPageSpeciesCount(PokeathlonMedals *work) {
+static u8 PokeathlonMedals_GetPageSpeciesCount(PokeathlonMedals *work) {
     const PokeathlonMedalsFlags *flags = &work->flags;
     u8 count;
 
@@ -60,22 +76,22 @@ u8 PokeathlonMedals_GetPageSpeciesCount(PokeathlonMedals *work) {
     return 30;
 }
 
-u8 PokeathlonMedals_GetSpeciesMedals(PokeathlonMedals *work, int species) {
+static u8 PokeathlonMedals_GetSpeciesMedals(PokeathlonMedals *work, int species) {
     return ((u8 *)work->args->speciesMedals)[species - 1];
 }
 
-u32 PokeathlonMedals_CountMedalists(PokeathlonMedals *work) {
+static u32 PokeathlonMedals_CountMedalists(PokeathlonMedals *work) {
     return PokeathlonUtil_CountSpeciesWithAllMedals(work->args->speciesMedals);
 }
 
-BOOL PokeathlonMedals_HasAllMedals(PokeathlonMedals *work, int species) {
+static BOOL PokeathlonMedals_HasAllMedals(PokeathlonMedals *work, int species) {
     if (MATH_CountPopulation(PokeathlonMedals_GetSpeciesMedals(work, species)) == 5) {
         return TRUE;
     }
     return FALSE;
 }
 
-u16 PokeathlonMedals_GetSelectedSpecies(PokeathlonMedals *work) {
+static u16 PokeathlonMedals_GetSelectedSpecies(PokeathlonMedals *work) {
     const PokeathlonMedalsFlags *flags = &work->flags;
     int index = flags->cursor + flags->page * 30;
 
@@ -85,18 +101,18 @@ u16 PokeathlonMedals_GetSelectedSpecies(PokeathlonMedals *work) {
     return work->species[index];
 }
 
-Pokedex *PokeathlonMedals_GetPokedex(PokeathlonMedals *work) {
+static Pokedex *PokeathlonMedals_GetPokedex(PokeathlonMedals *work) {
     return work->args->pokedex;
 }
 
-int PokeathlonMedals_GetSeenForm(PokeathlonMedals *work, u16 species) {
+static int PokeathlonMedals_GetSeenForm(PokeathlonMedals *work, u16 species) {
     if (species == SPECIES_NONE || species > MAX_SPECIES) {
         return 0;
     }
     return Pokedex_GetSeenFormByIdx(PokeathlonMedals_GetPokedex(work), species, 0);
 }
 
-int PokeathlonMedals_GetSeenGender(PokeathlonMedals *work, u16 species) {
+static int PokeathlonMedals_GetSeenGender(PokeathlonMedals *work, u16 species) {
     int gender;
 
     if (species == SPECIES_NONE || species > MAX_SPECIES) {
@@ -109,15 +125,15 @@ int PokeathlonMedals_GetSeenGender(PokeathlonMedals *work, u16 species) {
     return gender;
 }
 
-u32 PokeathlonMedals_GetSpindaPersonality(PokeathlonMedals *work) {
+static u32 PokeathlonMedals_GetSpindaPersonality(PokeathlonMedals *work) {
     return Pokedex_GetSeenSpindaPersonality(PokeathlonMedals_GetPokedex(work), 0);
 }
 
-u8 PokeathlonMedals_CountTrustTrophies(PokeathlonMedals *work) {
+static u8 PokeathlonMedals_CountTrustTrophies(PokeathlonMedals *work) {
     return PokeathlonUtil_GetMedalistTrophyCount(PokeathlonMedals_CountMedalists(work));
 }
 
-void PokeathlonMedals_ShowSpeciesMedals(PokeathlonMedals *work, u16 species) {
+static void PokeathlonMedals_ShowSpeciesMedals(PokeathlonMedals *work, u16 species) {
     u8 i;
     u8 medals = PokeathlonMedals_GetSpeciesMedals(work, species);
 
@@ -129,7 +145,7 @@ void PokeathlonMedals_ShowSpeciesMedals(PokeathlonMedals *work, u16 species) {
     } while (i < 5);
 }
 
-u16 *PokeathlonMedals_LoadSpeciesOrder(PokeathlonMedals *work, u32 *count) {
+static u16 *PokeathlonMedals_LoadSpeciesOrder(PokeathlonMedals *work, u32 *count) {
     u32 size;
     u16 *order = GfGfxLoader_LoadFromOpenNarc_GetSizeOut(work->zukanNarc, sPokeathlonMedalsSpeciesOrderFiles[PokeathlonMedals_GetSpeciesOrderFileIndex()], FALSE, work->heapId, FALSE, &size);
 
@@ -139,7 +155,7 @@ u16 *PokeathlonMedals_LoadSpeciesOrder(PokeathlonMedals *work, u32 *count) {
 
 #pragma force_active on
 
-void PokeathlonMedals_BuildSpeciesList(PokeathlonMedals *work) {
+static void PokeathlonMedals_BuildSpeciesList(PokeathlonMedals *work) {
     u32 count;
     u32 i;
     u16 species;
@@ -161,7 +177,7 @@ void PokeathlonMedals_BuildSpeciesList(PokeathlonMedals *work) {
     }
 }
 
-void PokeathlonMedals_DrawMedalistTiles(PokeathlonMedals *work, s16 x, s16 y) {
+static void PokeathlonMedals_DrawMedalistTiles(PokeathlonMedals *work, s16 x, s16 y) {
     int ypos = y;
     int row;
     int col;
@@ -178,7 +194,7 @@ void PokeathlonMedals_DrawMedalistTiles(PokeathlonMedals *work, s16 x, s16 y) {
     }
 }
 
-void PokeathlonMedals_DrawMedalistMark(PokeathlonMedals *work, int slot, int species) {
+static void PokeathlonMedals_DrawMedalistMark(PokeathlonMedals *work, int slot, int species) {
     if (PokeathlonMedals_HasAllMedals(work, species)) {
         int col = slot % 6;
         int row = slot / 6;
@@ -189,7 +205,7 @@ void PokeathlonMedals_DrawMedalistMark(PokeathlonMedals *work, int slot, int spe
 
 #pragma force_active reset
 
-void PokeathlonMedals_SetIconsVisible(PokeathlonMedals *work, BOOL visible) {
+static void PokeathlonMedals_SetIconsVisible(PokeathlonMedals *work, BOOL visible) {
     int i = 0;
 
     do {
@@ -198,7 +214,7 @@ void PokeathlonMedals_SetIconsVisible(PokeathlonMedals *work, BOOL visible) {
     } while (i < 30);
 }
 
-void PokeathlonMedals_ShowPage(PokeathlonMedals *work) {
+static void PokeathlonMedals_ShowPage(PokeathlonMedals *work) {
     s32 count = PokeathlonMedals_GetPageSpeciesCount(work);
     PokeathlonRecordMon mon = { 0 };
     s32 i;
@@ -217,7 +233,7 @@ void PokeathlonMedals_ShowPage(PokeathlonMedals *work) {
 
 #pragma force_active on
 
-void PokeathlonMedals_UpdatePageIndicator(PokeathlonMedals *work) {
+static void PokeathlonMedals_UpdatePageIndicator(PokeathlonMedals *work) {
     BOOL showUp = FALSE;
     BOOL showDown;
 
@@ -236,7 +252,7 @@ void PokeathlonMedals_UpdatePageIndicator(PokeathlonMedals *work) {
     PokeathlonUtil_PrintMessageAt(work->textContext, 3, msg_0314_00129, 0, 0);
 }
 
-BOOL PokeathlonMedals_UpdatePageScroll(PokeathlonMedals *work) {
+static BOOL PokeathlonMedals_UpdatePageScroll(PokeathlonMedals *work) {
     int direction = work->flags.scrollBackward ? 1 : -1;
     int delta = direction << 6;
     int i;
@@ -278,7 +294,7 @@ BOOL PokeathlonMedals_UpdatePageScroll(PokeathlonMedals *work) {
 
 #pragma force_active reset
 
-void PokeathlonMedals_LoadMonPic(PokeathlonMedals *work, u16 species) {
+static void PokeathlonMedals_LoadMonPic(PokeathlonMedals *work, u16 species) {
     PokeathlonRecordMon mon = { 0 };
 
     mon.info.species = species;
@@ -290,7 +306,7 @@ void PokeathlonMedals_LoadMonPic(PokeathlonMedals *work, u16 species) {
     PokeathlonUtil_LoadMonPicSprite(work->sprites[3], &mon.info, FALSE, FALSE, work->heapId);
 }
 
-void PokeathlonMedals_PrintSpeciesName(PokeathlonMedals *work, u16 species) {
+static void PokeathlonMedals_PrintSpeciesName(PokeathlonMedals *work, u16 species) {
     MessageFormat *msgFormat = PokeathlonUtil_GetMessageFormat(work->textContext);
 
     if (species != SPECIES_NONE) {
@@ -301,7 +317,7 @@ void PokeathlonMedals_PrintSpeciesName(PokeathlonMedals *work, u16 species) {
     }
 }
 
-void PokeathlonMedals_ShowSelectedSpecies(PokeathlonMedals *work) {
+static void PokeathlonMedals_ShowSelectedSpecies(PokeathlonMedals *work) {
     u16 species = PokeathlonMedals_GetSelectedSpecies(work);
 
     if (species > MAX_SPECIES) {
@@ -313,7 +329,7 @@ void PokeathlonMedals_ShowSelectedSpecies(PokeathlonMedals *work) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, (u8)PokeathlonMedals_HasAllMedals(work, species));
 }
 
-void PokeathlonMedals_HideSelectedSpecies(PokeathlonMedals *work) {
+static void PokeathlonMedals_HideSelectedSpecies(PokeathlonMedals *work) {
     int i;
 
     ManagedSprite_SetDrawFlag(work->sprites[3], FALSE);
@@ -423,7 +439,7 @@ BOOL PokeathlonMedals_Main(OverlayManager *man, int *state) {
     return FALSE;
 }
 
-void PokeathlonMedals_VBlankCallback(PokeathlonMedals *work) {
+static void PokeathlonMedals_VBlankCallback(PokeathlonMedals *work) {
     vu8 *dtcm = (vu8 *)0x027E0000;
 
     SpriteSystem_TransferOam();
@@ -431,11 +447,11 @@ void PokeathlonMedals_VBlankCallback(PokeathlonMedals *work) {
     *(vu32 *)(dtcm + 0x3FF8) |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag(OS_IE_V_BLANK), DTCM address as a literal
 }
 
-void PokeathlonMedals_CreateGridInput(PokeathlonMedals *work) {
+static void PokeathlonMedals_CreateGridInput(PokeathlonMedals *work) {
     work->grid = GridInputHandler_Create(sPokeathlonMedalsGridHitboxes, sPokeathlonMedalsGridMenuBoxes, &sPokeathlonMedalsGridCallbacks, work, TRUE, work->flags.cursor, work->heapId);
 }
 
-void PokeathlonMedals_FreeGridInput(PokeathlonMedals *work) {
+static void PokeathlonMedals_FreeGridInput(PokeathlonMedals *work) {
     if (work->grid != NULL) {
         GridInputHandler_Free(work->grid);
         work->grid = NULL;
@@ -444,7 +460,7 @@ void PokeathlonMedals_FreeGridInput(PokeathlonMedals *work) {
 
 #pragma force_active on
 
-void PokeathlonMedals_ChangePage(PokeathlonMedals *work, BOOL forward, BOOL touch) {
+static void PokeathlonMedals_ChangePage(PokeathlonMedals *work, BOOL forward, BOOL touch) {
     u32 oldPage = work->flags.page;
     int input;
 
@@ -480,7 +496,7 @@ void PokeathlonMedals_ChangePage(PokeathlonMedals *work, BOOL forward, BOOL touc
     }
 }
 
-BOOL PokeathlonMedals_HandleInput(PokeathlonMedals *work) {
+static BOOL PokeathlonMedals_HandleInput(PokeathlonMedals *work) {
     int input = GridInputHandler_HandleInput_AllowHold(work->grid);
     u32 next = GridInputHandler_GetNextInput(work->grid);
     int hit = TouchscreenHitbox_FindHitboxAtTouchNew(sPokeathlonMedalsHitboxes);
@@ -507,7 +523,7 @@ BOOL PokeathlonMedals_HandleInput(PokeathlonMedals *work) {
 
 #pragma force_active reset
 
-void PokeathlonMedals_MoveCursor(PokeathlonMedals *work, u32 target) {
+static void PokeathlonMedals_MoveCursor(PokeathlonMedals *work, u32 target) {
     u8 x;
     u8 y;
     const DpadMenuBox *box = GridInputHandler_GetDpadBox(work->grid, target);
@@ -534,7 +550,7 @@ void PokeathlonMedals_OnTouch(PokeathlonMedals *work, int newTarget, int prevTar
     PokeathlonMedals_OnCursorMoved(work, newTarget, prevTarget, TRUE);
 }
 
-void PokeathlonMedals_OnCursorMoved(PokeathlonMedals *work, u32 newTarget, int prevTarget, BOOL touch) {
+static void PokeathlonMedals_OnCursorMoved(PokeathlonMedals *work, u32 newTarget, int prevTarget, BOOL touch) {
     int anim;
 
     if (newTarget != prevTarget && newTarget < 32) {
@@ -558,7 +574,7 @@ void PokeathlonMedals_OnCursorMoved(PokeathlonMedals *work, u32 newTarget, int p
 
 #pragma force_active on
 
-void PokeathlonMedals_InitBgs(PokeathlonMedals *work) {
+static void PokeathlonMedals_InitBgs(PokeathlonMedals *work) {
     GraphicsModes modes;
     PokeathlonMedalsBgTemplates templates;
     int i;
@@ -578,7 +594,7 @@ void PokeathlonMedals_InitBgs(PokeathlonMedals *work) {
 
 #pragma force_active reset
 
-void PokeathlonMedals_LoadBgGraphics(PokeathlonMedals *work) {
+static void PokeathlonMedals_LoadBgGraphics(PokeathlonMedals *work) {
     GfGfxLoader_GXLoadPalFromOpenNarc(work->narc, 42, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0x40, work->heapId);
     GfGfxLoader_LoadCharDataFromOpenNarc(work->narc, 44, work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, TRUE, work->heapId);
     GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, 46, work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, TRUE, work->heapId);
@@ -592,7 +608,7 @@ void PokeathlonMedals_LoadBgGraphics(PokeathlonMedals *work) {
     GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, 50, work->bgConfig, GF_BG_LYR_SUB_2, 0, 0, TRUE, work->heapId);
 }
 
-void PokeathlonMedals_FreeBgs(PokeathlonMedals *work) {
+static void PokeathlonMedals_FreeBgs(PokeathlonMedals *work) {
     u8 i;
 
     NARC_Delete(work->zukanNarc);
@@ -603,7 +619,7 @@ void PokeathlonMedals_FreeBgs(PokeathlonMedals *work) {
     Heap_Free(work->bgConfig);
 }
 
-void PokeathlonMedals_CreateSprites(PokeathlonMedals *work) {
+static void PokeathlonMedals_CreateSprites(PokeathlonMedals *work) {
     SpriteResourceCountsListUnion counts = sPokeathlonMedalsSpriteResourceCounts;
 
     work->spriteContext = PokeathlonUtil_CreateSpriteContext(work->heapId, &counts, 50);
@@ -614,14 +630,14 @@ void PokeathlonMedals_CreateSprites(PokeathlonMedals *work) {
     PokeathlonUtil_CreateSpriteRow(work->spriteContext, work->sprites, sPokeathlonMedalsTrustTrophyResIds, PokeathlonMedals_CountTrustTrophies(work), 5, 8, 152, TRUE);
 }
 
-void PokeathlonMedals_LoadMonPicResources(PokeathlonMedals *work) {
+static void PokeathlonMedals_LoadMonPicResources(PokeathlonMedals *work) {
     SpriteSystem *spriteSystem = PokeathlonUtil_GetSpriteSystem(work->spriteContext);
     SpriteManager *spriteManager = PokeathlonUtil_GetSpriteManager(work->spriteContext);
 
     PokeathlonUtil_LoadMonPicSpriteResources(spriteSystem, spriteManager, sPokeathlonMedalsMonPicResIds, NNS_G2D_VRAM_TYPE_2DSUB);
 }
 
-void PokeathlonMedals_LoadSpriteResources(PokeathlonMedals *work) {
+static void PokeathlonMedals_LoadSpriteResources(PokeathlonMedals *work) {
     SpriteSystem *spriteSystem = PokeathlonUtil_GetSpriteSystem(work->spriteContext);
     SpriteManager *spriteManager = PokeathlonUtil_GetSpriteManager(work->spriteContext);
 
@@ -641,7 +657,7 @@ void PokeathlonMedals_LoadSpriteResources(PokeathlonMedals *work) {
     PokeathlonMedals_LoadMonPicResources(work);
 }
 
-void PokeathlonMedals_CreateUiSprites(PokeathlonMedals *work) {
+static void PokeathlonMedals_CreateUiSprites(PokeathlonMedals *work) {
     const ManagedSpriteTemplate *spriteTemplate = sPokeathlonMedalsUiSpriteTemplates;
     int i = 0;
 
@@ -655,7 +671,7 @@ void PokeathlonMedals_CreateUiSprites(PokeathlonMedals *work) {
 
 #pragma force_active on
 
-void PokeathlonMedals_CreateMedalSprites(PokeathlonMedals *work) {
+static void PokeathlonMedals_CreateMedalSprites(PokeathlonMedals *work) {
     ManagedSpriteTemplate spriteTemplate = { 0 };
     const int *columns = sPokeathlonMedalsMedalColumns;
     int y = 48;
@@ -677,7 +693,7 @@ void PokeathlonMedals_CreateMedalSprites(PokeathlonMedals *work) {
     }
 }
 
-void PokeathlonMedals_CreateIconSprites(PokeathlonMedals *work) {
+static void PokeathlonMedals_CreateIconSprites(PokeathlonMedals *work) {
     int ypos;
     ManagedSpriteTemplate spriteTemplate = { 0 };
     u32 row = 0;
@@ -709,7 +725,7 @@ void PokeathlonMedals_CreateIconSprites(PokeathlonMedals *work) {
 
 #pragma force_active reset
 
-void PokeathlonMedals_PrintStaticText(PokeathlonMedals *work) {
+static void PokeathlonMedals_PrintStaticText(PokeathlonMedals *work) {
     MessageFormat *msgFormat = PokeathlonUtil_GetMessageFormat(work->textContext);
     int i;
 

@@ -21,12 +21,9 @@
 // NitroSDK fixed-point square root (not declared in lib/include yet)
 fx32 FX_Sqrt(fx32 x);
 
-// sound_playback.c (no header declares them)
 BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
 u32 GF_SndCountPlayingSeqOnPlayer(u32 playerNo);
 
-// Course helpers and the rest of the event (OVY_96, not yet tidied).
-u8 *PokeathlonCourse_ToBytes(void *block);
 u8 *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, u16 member);
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, u8 member);
 void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int kind, int amount);
@@ -61,7 +58,7 @@ typedef struct PokeathlonPennantCaptureHitCodes {
     int sides[4];
 } PokeathlonPennantCaptureHitCodes;
 
-extern const PokeathlonPennantCaptureHitCodes sPennantCaptureEdgeHits; // edge hits
+extern const PokeathlonPennantCaptureHitCodes sPennantCaptureEdgeHits;   // edge hits
 extern const PokeathlonPennantCaptureHitCodes sPennantCaptureCornerHits; // corner hits
 
 typedef struct PokeathlonPennantCaptureCollisionFrame {
@@ -80,6 +77,22 @@ typedef struct PokeathlonPennantCaptureCollisionFrame {
 } PokeathlonPennantCaptureCollisionFrame;
 
 #pragma force_active on
+
+static void PokeathlonPennantCapture_TickFreezeTimer(PokeathlonCourseData *course, PokeathlonPennantCapture *work, PokeathlonPennantCapturePlayer *player);
+static void PokeathlonPennantCapture_UpdateMonSwap(PokeathlonPennantCaptureDisplay *display, PokeathlonPennantCapturePlayer *player, PokeathlonPennantCaptureFrame *frame, u8 participant, u8 member, u8 *block, int isHost, int isSelf, int remote);
+static int PokeathlonPennantCapture_CollideWithObstacles(PokeathlonPennantCapture *work, int excluded, int radius, VecFx32 *position, VecFx32 *end, VecFx32 *out);
+static fx32 PokeathlonPennantCapture_CalcCircleEntry(VecFx32 *a, VecFx32 *b, VecFx32 *point, fx32 radius);
+static int PokeathlonPennantCapture_CollidePlayers(PokeathlonCourseData *course, PokeathlonPennantCapturePlayer *players, VecFx32 *out);
+static void PokeathlonPennantCapture_SetPennantDrawPriority(PokeathlonPennantCapturePennant *pennant, int y);
+static void PokeathlonPennantCapture_SetDropEffectDrawPriority(PokeathlonPennantCapture *work);
+static void PokeathlonPennantCapture_SetPlayerDrawPriority(PokeathlonPennantCapturePlayer *player, int y);
+static BOOL PokeathlonPennantCapture_PickUpPennants(PokeathlonPennantCapturePennants *pennants, PokeathlonPennantCapturePlayer *player, u8 *full);
+static BOOL PokeathlonPennantCapture_CirclesOverlap(const VecFx32 *a, const VecFx32 *b, fx32 radiusA, fx32 radiusB);
+static BOOL PokeathlonPennantCapture_TryKnockDown(PokeathlonCourseData *course, PokeathlonPennantCapturePlayer *a, PokeathlonPennantCapturePlayer *b);
+static BOOL PokeathlonPennantCapture_CanDeposit(PokeathlonPennantCapturePlayer *player);
+static u8 PokeathlonPennantCapture_GetDepositPoints(u8 pennants);
+static int PokeathlonPennantCapture_GetDrawPriority(int y);
+static void PokeathlonPennantCapture_PlaySEIfOnScreen(int x, int y, int seq, BOOL self);
 
 void PokeathlonPennantCapture_UpdatePlayers(PokeathlonCourseData *course) {
     PokeathlonPennantCapture *work = PokeathlonCourse_GetWork(course);
@@ -262,14 +275,12 @@ void PokeathlonPennantCapture_UpdatePlayers(PokeathlonCourseData *course) {
 
 #pragma force_active reset
 
-void PokeathlonPennantCapture_TickFreezeTimer(PokeathlonCourseData *course, PokeathlonPennantCapture *work, PokeathlonPennantCapturePlayer *player) {
+static void PokeathlonPennantCapture_TickFreezeTimer(PokeathlonCourseData *course, PokeathlonPennantCapture *work, PokeathlonPennantCapturePlayer *player) {
     if (player->freezeTimer != 0) {
         player->freezeTimer--;
     }
 }
 
-// The frame update was built against a declaration that took the member as u16 (it only shows in the
-// register allocation of the caller); the definition takes a u8.
 typedef void (*PokeathlonPennantCaptureMonSwapFunc)(PokeathlonPennantCaptureDisplay *display, PokeathlonPennantCapturePlayer *player, PokeathlonPennantCaptureFrame *frame, u8 participant, u16 member, u8 *block, int isHost, int isSelf, int remote);
 #define UpdateMonSwapAsU16 ((PokeathlonPennantCaptureMonSwapFunc)PokeathlonPennantCapture_UpdateMonSwap)
 
@@ -559,7 +570,7 @@ void PokeathlonPennantCapture_UpdatePennantSprites(PokeathlonPennantCapture *wor
 }
 
 // The Pokemon jumps off the field (32 frames), then the top screen swaps the team member's picture.
-void PokeathlonPennantCapture_RunMonExit(PokeathlonPennantCaptureDisplay *display, PokeathlonPennantCapturePlayer *player, int participant, int member, u8 *block, int waitOther, int isSelf) {
+static void PokeathlonPennantCapture_RunMonExit(PokeathlonPennantCaptureDisplay *display, PokeathlonPennantCapturePlayer *player, int participant, int member, u8 *block, int waitOther, int isSelf) {
     switch (player->swapStep) {
     case 0:
         player->swapTimer = 0;
@@ -594,7 +605,7 @@ void PokeathlonPennantCapture_RunMonExit(PokeathlonPennantCaptureDisplay *displa
 }
 
 // The new team member drops back onto the field (32 frames).
-void PokeathlonPennantCapture_RunMonEnter(PokeathlonPennantCapturePlayer *player, int participant, int member, u8 *block, int report) {
+static void PokeathlonPennantCapture_RunMonEnter(PokeathlonPennantCapturePlayer *player, int participant, int member, u8 *block, int report) {
     switch (player->swapStep) {
     case 0:
         player->swapTimer = 0;
@@ -620,7 +631,7 @@ void PokeathlonPennantCapture_RunMonEnter(PokeathlonPennantCapturePlayer *player
     }
 }
 
-void PokeathlonPennantCapture_UpdateMonSwap(PokeathlonPennantCaptureDisplay *display, PokeathlonPennantCapturePlayer *player, PokeathlonPennantCaptureFrame *frame, u8 participant, u8 member, u8 *block, int isHost, int isSelf, int remote) {
+static void PokeathlonPennantCapture_UpdateMonSwap(PokeathlonPennantCaptureDisplay *display, PokeathlonPennantCapturePlayer *player, PokeathlonPennantCaptureFrame *frame, u8 participant, u8 member, u8 *block, int isHost, int isSelf, int remote) {
     u8 states = frame->words[4] >> 23;
     u8 state = (states >> (participant * 2)) & 3;
 
@@ -654,7 +665,7 @@ void PokeathlonPennantCapture_SetMoveParams(PokeathlonCourseData *course, const 
 
 #pragma force_active reset
 
-void PokeathlonPennantCapture_GetObstaclesNear(PokeathlonPennantCapture *work, fx32 fieldX, fx32 fieldY, PokeathlonPennantCapturePoint **out, u8 *count) {
+static void PokeathlonPennantCapture_GetObstaclesNear(PokeathlonPennantCapture *work, fx32 fieldX, fx32 fieldY, PokeathlonPennantCapturePoint **out, u8 *count) {
     int i;
     int x;
     int y;
@@ -681,7 +692,7 @@ void PokeathlonPennantCapture_GetObstaclesNear(PokeathlonPennantCapture *work, f
     }
 }
 
-void PokeathlonPennantCapture_CalcObstacleBounds(int radius, const PokeathlonPennantCapturePoint *center, PokeathlonPennantCaptureBounds *bounds) {
+static void PokeathlonPennantCapture_CalcObstacleBounds(int radius, const PokeathlonPennantCapturePoint *center, PokeathlonPennantCaptureBounds *bounds) {
     Point2D *out = bounds->corners;
     int x = center->x;
     int y = center->y;
@@ -714,7 +725,7 @@ void PokeathlonPennantCapture_CalcObstacleBounds(int radius, const PokeathlonPen
 
 #pragma force_active on
 
-int PokeathlonPennantCapture_CollideWithObstacle(VecFx32 *from, VecFx32 *to, int radius, PokeathlonPennantCaptureBounds *bounds, VecFx32 *out) {
+static int PokeathlonPennantCapture_CollideWithObstacle(VecFx32 *from, VecFx32 *to, int radius, PokeathlonPennantCaptureBounds *bounds, VecFx32 *out) {
     VecFx32 *end = to;
     VecFx32 *result = out;
     int i;
@@ -864,7 +875,7 @@ int PokeathlonPennantCapture_CollideWithObstacle(VecFx32 *from, VecFx32 *to, int
 
 #pragma force_active reset
 
-int PokeathlonPennantCapture_CollideWithObstacles(PokeathlonPennantCapture *work, int excluded, int radius, VecFx32 *position, VecFx32 *end, VecFx32 *out) {
+static int PokeathlonPennantCapture_CollideWithObstacles(PokeathlonPennantCapture *work, int excluded, int radius, VecFx32 *position, VecFx32 *end, VecFx32 *out) {
     u8 count;
     u8 result;
     int i;
@@ -897,7 +908,7 @@ int PokeathlonPennantCapture_CollideWithObstacles(PokeathlonPennantCapture *work
 }
 
 // The smaller root t of |a + t (b - a) - point| = radius.
-fx32 PokeathlonPennantCapture_CalcCircleEntry(VecFx32 *a, VecFx32 *b, VecFx32 *point, fx32 radius) {
+static fx32 PokeathlonPennantCapture_CalcCircleEntry(VecFx32 *a, VecFx32 *b, VecFx32 *point, fx32 radius) {
     VecFx32 delta;
     fx32 magnitude;
     fx32 dot;
@@ -940,7 +951,7 @@ static inline void PokeathlonPennantCapture_ZeroVec(VecFx32 *v) {
 // Written as byte address arithmetic: indexing contacts[] directly does not match.
 #define CONTACT(player, i) (*((u8 *)((u32)(player) + (u32)(i)) + 0x94))
 
-int PokeathlonPennantCapture_CollidePlayers(PokeathlonCourseData *course, PokeathlonPennantCapturePlayer *players, VecFx32 *out) {
+static int PokeathlonPennantCapture_CollidePlayers(PokeathlonCourseData *course, PokeathlonPennantCapturePlayer *players, VecFx32 *out) {
     PokeathlonCourseObject *objectA;
     PokeathlonCourseObject *objectB;
     int applied;
@@ -1030,14 +1041,14 @@ void PokeathlonPennantCapture_UpdateFieldDrawPriorities(PokeathlonPennantCapture
     }
 }
 
-void PokeathlonPennantCapture_SetPennantDrawPriority(PokeathlonPennantCapturePennant *pennant, int y) {
+static void PokeathlonPennantCapture_SetPennantDrawPriority(PokeathlonPennantCapturePennant *pennant, int y) {
     int priority = PokeathlonPennantCapture_GetDrawPriority(y);
 
     PokeathlonCourseSpritePoolSprite_SetDrawPriority(pennant->sprite, priority + 9);
     PokeathlonCourseSpritePoolSprite_SetDrawPriority(pennant->poleSprite, priority + 8);
 }
 
-void PokeathlonPennantCapture_SetDropEffectDrawPriority(PokeathlonPennantCapture *work) {
+static void PokeathlonPennantCapture_SetDropEffectDrawPriority(PokeathlonPennantCapture *work) {
     int i;
 
     for (i = 0; i < 4; i++) {
@@ -1046,7 +1057,7 @@ void PokeathlonPennantCapture_SetDropEffectDrawPriority(PokeathlonPennantCapture
     }
 }
 
-void PokeathlonPennantCapture_SetPlayerDrawPriority(PokeathlonPennantCapturePlayer *player, int y) {
+static void PokeathlonPennantCapture_SetPlayerDrawPriority(PokeathlonPennantCapturePlayer *player, int y) {
     int i;
     int priority = PokeathlonPennantCapture_GetDrawPriority(y);
 
@@ -1062,7 +1073,7 @@ void PokeathlonPennantCapture_InitScoreWindow(PokeathlonPennantCapture *work) {
     LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_15_OFFSET, work->heapId);
 }
 
-void PokeathlonPennantCapture_PrintScore(PokeathlonPennantCapture *work, u16 score) {
+static void PokeathlonPennantCapture_PrintScore(PokeathlonPennantCapture *work, u16 score) {
     MsgData *msgData;
     MessageFormat *format;
     String *string;
@@ -1083,11 +1094,11 @@ void PokeathlonPennantCapture_ResetPennantSpots(PokeathlonPennantCapture *work) 
     work->pennants.nextSpot = 0;
 }
 
-void PokeathlonPennantCapture_AdvancePennantSpot(PokeathlonPennantCapturePennants *pennants) {
+static void PokeathlonPennantCapture_AdvancePennantSpot(PokeathlonPennantCapturePennants *pennants) {
     pennants->nextSpot = (pennants->nextSpot + 1) % 20;
 }
 
-void PokeathlonPennantCapture_PlacePennant(PokeathlonPennantCapturePennants *pennants) {
+static void PokeathlonPennantCapture_PlacePennant(PokeathlonPennantCapturePennants *pennants) {
     int i;
 
     for (i = 0; i < 5; i++) {
@@ -1116,7 +1127,7 @@ void PokeathlonPennantCapture_RefillPennants(PokeathlonPennantCapture *work) {
     }
 }
 
-BOOL PokeathlonPennantCapture_PickUpPennants(PokeathlonPennantCapturePennants *pennants, PokeathlonPennantCapturePlayer *player, u8 *full) {
+static BOOL PokeathlonPennantCapture_PickUpPennants(PokeathlonPennantCapturePennants *pennants, PokeathlonPennantCapturePlayer *player, u8 *full) {
     int i;
     VecFx32 position;
 
@@ -1151,7 +1162,7 @@ BOOL PokeathlonPennantCapture_PickUpPennants(PokeathlonPennantCapturePennants *p
     return FALSE;
 }
 
-BOOL PokeathlonPennantCapture_CirclesOverlap(const VecFx32 *a, const VecFx32 *b, fx32 radiusA, fx32 radiusB) {
+static BOOL PokeathlonPennantCapture_CirclesOverlap(const VecFx32 *a, const VecFx32 *b, fx32 radiusA, fx32 radiusB) {
     VecFx32 delta;
 
     VEC_Subtract(a, b, &delta);
@@ -1190,7 +1201,7 @@ int PokeathlonPennantCapture_GetDirection(VecFx32 *vector) {
 }
 
 // A faster Pokemon running into another one that faces the same way knocks it down and takes up to two pennants.
-BOOL PokeathlonPennantCapture_TryKnockDown(PokeathlonCourseData *course, PokeathlonPennantCapturePlayer *a, PokeathlonPennantCapturePlayer *b) {
+static BOOL PokeathlonPennantCapture_TryKnockDown(PokeathlonCourseData *course, PokeathlonPennantCapturePlayer *a, PokeathlonPennantCapturePlayer *b) {
     fx32 magA;
     fx32 magB;
     PokeathlonPennantCapturePlayer *fast;
@@ -1241,7 +1252,7 @@ BOOL PokeathlonPennantCapture_TryKnockDown(PokeathlonCourseData *course, Pokeath
     return TRUE;
 }
 
-BOOL PokeathlonPennantCapture_CanDeposit(PokeathlonPennantCapturePlayer *player) {
+static BOOL PokeathlonPennantCapture_CanDeposit(PokeathlonPennantCapturePlayer *player) {
     BOOL inGoal = FALSE;
 
     if (player->position.y > 0x198000 && player->position.x >= 0xD0000 && player->position.x <= 0x130000) {
@@ -1260,10 +1271,10 @@ BOOL PokeathlonPennantCapture_CanDeposit(PokeathlonPennantCapturePlayer *player)
 }
 
 // Called as if it returned its argument (it does: r0 is left unchanged).
-u8 PokeathlonPennantCapture_GetDepositPoints(u8 pennants) {
+static u8 PokeathlonPennantCapture_GetDepositPoints(u8 pennants) {
 }
 
-int PokeathlonPennantCapture_GetDrawPriority(int y) {
+static int PokeathlonPennantCapture_GetDrawPriority(int y) {
     return (0x100 - y) * 8 + 5;
 }
 
@@ -1280,7 +1291,7 @@ void PokeathlonPennantCapture_AnimateBg(PokeathlonPennantCapture *work) {
     }
 }
 
-void PokeathlonPennantCapture_PlaySEIfOnScreen(int x, int y, int seq, BOOL self) {
+static void PokeathlonPennantCapture_PlaySEIfOnScreen(int x, int y, int seq, BOOL self) {
     if (x >= 0 && x < 256 && y >= 0 && y < 192) {
         PlaySEOnPlayer((u16)seq, self ? 3 : 4);
     }

@@ -23,7 +23,6 @@ typedef struct PokeathlonDiscCatchMonInfo {
     u32 personality; // 0x0C
 } PokeathlonDiscCatchMonInfo;
 
-// Course and course object helpers (OVY_96), declared as the calls were built.
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int member);
 void *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, int member);
 void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, int participant, int member, PokeathlonDiscCatchMonInfo *info);
@@ -85,7 +84,7 @@ BOOL PokeathlonDiscCatch_UpdateFrame(PokeathlonCourseData *course) {
 
 // The Pokemon's abilities from their ratings: jump (frames, height) and the power and speed tables
 // (NARC a/1/7/0 file 7, in tenths of a pixel).
-void PokeathlonDiscCatch_InitStats(PokeathlonCourseData *course) {
+static void PokeathlonDiscCatch_InitStats(PokeathlonCourseData *course) {
     u32 participantArg;
     int member;
     int participant;
@@ -137,7 +136,7 @@ u16 PokeathlonDiscCatchStats_GetJumpDuration(PokeathlonDiscCatchStats *stats) {
     return stats->jumpFrames * 2;
 }
 
-u32 PokeathlonDiscCatchDisc_GetPoints(const PokeathlonDiscCatchDisc *disc) {
+static u32 PokeathlonDiscCatchDisc_GetPoints(const PokeathlonDiscCatchDisc *disc) {
     switch (disc->state) {
     case DISC_CATCH_DISC_CAUGHT_1:
         return 1;
@@ -263,7 +262,7 @@ void PokeathlonDiscCatch_InitMons(PokeathlonDiscCatch *work) {
 // for a small Pokemon), once per contact.
 #pragma force_active on
 
-void PokeathlonDiscCatch_UpdateCollisions(PokeathlonCourseData *course) {
+static void PokeathlonDiscCatch_UpdateCollisions(PokeathlonCourseData *course) {
     int i, j;
     PokeathlonDiscCatchMon *a, *b;
     fx32 power;
@@ -395,7 +394,7 @@ void PokeathlonDiscCatch_WriteFramePacket(PokeathlonDiscCatchField *field, Pokea
 
 #pragma force_active reset
 
-void PokeathlonDiscCatchDisc_Launch(PokeathlonDiscCatchDisc *disc, u8 speed, u8 index) {
+static void PokeathlonDiscCatchDisc_Launch(PokeathlonDiscCatchDisc *disc, u8 speed, u8 index) {
     disc->active = TRUE;
     disc->x = 128; // overwritten below
     disc->progress = 0;
@@ -407,7 +406,7 @@ void PokeathlonDiscCatchDisc_Launch(PokeathlonDiscCatchDisc *disc, u8 speed, u8 
     disc->speed = speed;
 }
 
-void PokeathlonDiscCatchDisc_Remove(PokeathlonDiscCatchDisc *disc) {
+static void PokeathlonDiscCatchDisc_Remove(PokeathlonDiscCatchDisc *disc) {
     disc->active = FALSE;
     disc->state = DISC_CATCH_DISC_NONE;
 }
@@ -415,7 +414,7 @@ void PokeathlonDiscCatchDisc_Remove(PokeathlonDiscCatchDisc *disc) {
 // Once the disc is over the touch screen: the first jumping Pokemon it is over catches it.
 #pragma force_active on
 
-BOOL PokeathlonDiscCatchDisc_FindCatcher(PokeathlonDiscCatchDisc *disc, PokeathlonDiscCatchTeam *teams, PokeathlonDiscCatchCatcher *catcher) {
+static BOOL PokeathlonDiscCatchDisc_FindCatcher(PokeathlonDiscCatchDisc *disc, PokeathlonDiscCatchTeam *teams, PokeathlonDiscCatchCatcher *catcher) {
     s16 y;
     int i;
     if (disc->progress < 288) {
@@ -449,7 +448,7 @@ BOOL PokeathlonDiscCatchDisc_FindCatcher(PokeathlonDiscCatchDisc *disc, Pokeathl
 
 // The outer corners of a scoring band (the last one to three tile rows, outside a narrowing middle)
 // are worth the next band's points.
-BOOL PokeathlonDiscCatch_IsInBonusZone(const s16 *tile, int bandEnd) {
+static BOOL PokeathlonDiscCatch_IsInBonusZone(const s16 *tile, int bandEnd) {
     BOOL result = TRUE;
     BOOL inside = TRUE;
     BOOL lastRow = FALSE;
@@ -497,7 +496,7 @@ BOOL PokeathlonDiscCatch_IsInBonusZone(const s16 *tile, int bandEnd) {
 }
 
 // The disc's points by where it was caught (bands of tile rows down the touch screen).
-void PokeathlonDiscCatchDisc_Catch(PokeathlonDiscCatchDisc *disc, PokeathlonDiscCatchTeam *teams, const PokeathlonDiscCatchCatcher *catcher) {
+static void PokeathlonDiscCatchDisc_Catch(PokeathlonDiscCatchDisc *disc, PokeathlonDiscCatchTeam *teams, const PokeathlonDiscCatchCatcher *catcher) {
     s16 tile[2];
     PokeathlonDiscCatchTeam *team;
     int score;
@@ -537,7 +536,7 @@ void PokeathlonDiscCatchDisc_Catch(PokeathlonDiscCatchDisc *disc, PokeathlonDisc
 }
 
 // A disc's frame: flying (until caught or landed), landed (sliding off) or caught (shown for 20 frames).
-void PokeathlonDiscCatchDisc_Update(PokeathlonDiscCatchDisc *disc, PokeathlonDiscCatchDiscPacket *packet, PokeathlonDiscCatchTeam *teams) {
+static void PokeathlonDiscCatchDisc_Update(PokeathlonDiscCatchDisc *disc, PokeathlonDiscCatchDiscPacket *packet, PokeathlonDiscCatchTeam *teams) {
     PokeathlonDiscCatchCatcher catcher;
     if (!disc->active) {
         return;
@@ -584,7 +583,7 @@ void PokeathlonDiscCatchDiscs_Init(PokeathlonDiscCatchDiscs *discs, PokeathlonDi
 }
 
 // The phase of the event by the seconds left (more discs, faster, towards the end).
-int PokeathlonDiscCatch_GetPhase(u32 seconds) {
+static int PokeathlonDiscCatch_GetPhase(u32 seconds) {
     s32 i;
     for (i = 0; i < 4; i++) {
         if (gPokeathlonDiscCatchPhaseSeconds[i] <= seconds) {
@@ -596,7 +595,7 @@ int PokeathlonDiscCatch_GetPhase(u32 seconds) {
 
 #pragma force_active on
 
-void PokeathlonDiscCatchDiscs_LaunchNext(PokeathlonDiscCatchDiscs *discs, u32 seconds) {
+static void PokeathlonDiscCatchDiscs_LaunchNext(PokeathlonDiscCatchDiscs *discs, u32 seconds) {
     int count = 1;
     discs->phase = PokeathlonDiscCatch_GetPhase(seconds);
     switch (discs->phase) {

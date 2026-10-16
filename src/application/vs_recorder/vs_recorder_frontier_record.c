@@ -28,10 +28,10 @@ typedef struct VsRecorderIntSet5 {
 } VsRecorderIntSet5;
 
 extern const VsRecorderIntSet5 sVsRecorderFrontierPrintPaletteSlots; // print palette slots
-extern const VsRecorderIntSet5 sVsRecorderFrontierIconCharFiles; // facility icon char files (NARC_a_1_7_9)
-extern const VsRecorderIntSet5 sVsRecorderFrontierIconPaletteFiles; // facility icon palette files (NARC_a_1_7_9)
-extern const VsRecorderIntSet5 sVsRecorderFrontierPrintAnims; // print animation per facility
-extern const s16 sVsRecorderFrontierPrintPositions[];                 // print positions (x, y) after the spin
+extern const VsRecorderIntSet5 sVsRecorderFrontierIconCharFiles;     // facility icon char files (NARC_a_1_7_9)
+extern const VsRecorderIntSet5 sVsRecorderFrontierIconPaletteFiles;  // facility icon palette files (NARC_a_1_7_9)
+extern const VsRecorderIntSet5 sVsRecorderFrontierPrintAnims;        // print animation per facility
+extern const s16 sVsRecorderFrontierPrintPositions[];                // print positions (x, y) after the spin
 
 // substates of the Battle Frontier record screen (sVsRecorderFrontierSubStates)
 #define FRONTIER_MAIN 1

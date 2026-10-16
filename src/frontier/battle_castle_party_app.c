@@ -5,23 +5,32 @@
 #include "constants/pokemon.h"
 #include "constants/sndseq.h"
 
-#include "frontier/battle_castle.h"
 #include "frontier/battle_arcade_data.h"
+#include "frontier/battle_castle.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0031.h"
 
+#include "battle_frontier_communication.h"
 #include "bg_window.h"
+#include "communication_core.h"
+#include "communication_player_state.h"
 #include "error_handling.h"
 #include "filesystem.h"
 #include "font.h"
+#include "frontier_save_access.h"
+#include "frontier_stat_ids_legacy.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
+#include "grid_input_handler.h"
 #include "heap.h"
+#include "link_synchronization.h"
 #include "list_menu_items.h"
 #include "message_format.h"
 #include "message_printer.h"
+#include "message_printer_number.h"
 #include "move.h"
 #include "msgdata.h"
+#include "oam_manager.h"
 #include "options.h"
 #include "overlay_manager.h"
 #include "palette.h"
@@ -34,33 +43,24 @@
 #include "render_window.h"
 #include "save.h"
 #include "save_frontier.h"
+#include "screen_fade_legacy.h"
 #include "sound_playback.h"
 #include "sprite.h"
+#include "sprite_resource.h"
+#include "sprite_resource_header.h"
 #include "string_util.h"
 #include "system.h"
 #include "text.h"
 #include "touchscreen_list_menu.h"
-#include "sprite_resource_header.h"
-#include "sprite_resource.h"
-#include "oam_manager.h"
-#include "message_printer_number.h"
-#include "screen_fade_legacy.h"
-#include "grid_input_handler.h"
-#include "frontier_save_access.h"
-#include "communication_player_state.h"
-#include "communication_core.h"
-#include "link_synchronization.h"
-#include "wireless_status_icon.h"
-#include "frontier_stat_ids_legacy.h"
 #include "ui_util.h"
-#include "battle_frontier_communication.h"
 #include "use_item_on_mon.h"
 #include "vram_transfer_manager.h"
+#include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
 FS_EXTERN_OVERLAY(OVY_80);
 
-// Battle Castle party app (overlay 83, first half): manage your own party with
+// Battle Castle party app: manage your own party with
 // Castle Points (HEAL / RENTAL / RESTORE HP / RANK UP). Texts: msg_0031.
 
 // Main loop states (*state of Main)
@@ -232,23 +232,23 @@ typedef struct BattleCastleMenuItem {
     int value;
 } BattleCastleMenuItem;
 
-// Tables still defined in the overlay's data asm
+// Data tables in assembly
 extern const u16 gBattleCastlePartyAppHealMessages[];         // heal result messages, by action - 1; bytes 0x1E.. hold the list menu template
-extern const u16 gBattleCastlePartyAppBerryCounts[];     // number of rentable berries, by rental rank - 1
-extern const u16 gBattleCastlePartyAppHealCosts[];     // CP cost of RESTORE HP / PP / ALL
-extern const u16 gBattleCastlePartyAppMainMenuHelpMessages[];     // main menu help messages, by cursor position
-extern const u16 gBattleCastlePartyAppItemCounts[];     // number of rentable items, by rental rank - 1
-extern const u16 gBattleCastlePartyAppRankUpCosts[2][3]; // CP cost of the next rank, by rank kind (CASTLE_RANK_*) and rank
-extern const u16 gBattleCastlePartyAppRentalRankUpCosts[];     // = gBattleCastlePartyAppRankUpCosts[CASTLE_RANK_RENTAL] (referenced by its own label)
-extern const u16 gBattleCastlePartyAppRankUpMessages[2][3]; // "gained the ability to..." messages, by rank kind and rank
+extern const u16 gBattleCastlePartyAppBerryCounts[];          // number of rentable berries, by rental rank - 1
+extern const u16 gBattleCastlePartyAppHealCosts[];            // CP cost of RESTORE HP / PP / ALL
+extern const u16 gBattleCastlePartyAppMainMenuHelpMessages[]; // main menu help messages, by cursor position
+extern const u16 gBattleCastlePartyAppItemCounts[];           // number of rentable items, by rental rank - 1
+extern const u16 gBattleCastlePartyAppRankUpCosts[2][3];      // CP cost of the next rank, by rank kind (CASTLE_RANK_*) and rank
+extern const u16 gBattleCastlePartyAppRentalRankUpCosts[];    // = gBattleCastlePartyAppRankUpCosts[CASTLE_RANK_RENTAL] (referenced by its own label)
+extern const u16 gBattleCastlePartyAppRankUpMessages[2][3];   // "gained the ability to..." messages, by rank kind and rank
 extern const BattleCastleMenuItem gBattleCastlePartyAppMainMenuItems[];
 extern const BattleCastleMenuOption gBattleCastlePartyAppRentalMenuOptions[]; // BERRIES / ITEMS / RANK UP / CANCEL
-extern const u16 gBattleCastleRentalItems[];                    // rentable items
-extern const u16 gBattleCastleRentalItemCosts[];                    // item costs in CP
-extern const BattleCastleMenuOption gBattleCastlePartyAppHealMenuOptions[]; // RESTORE HP / PP / ALL / RANK UP / CANCEL
-extern const u16 gBattleCastleRentalBerries[];                    // rentable berries
-extern const u16 gBattleCastleRentalBerryCosts[];                    // berry costs in CP
-extern const u8 gBattleCastlePartyAppListMenuY[];                     // list menu y, by number of entries
+extern const u16 gBattleCastleRentalItems[];                                  // rentable items
+extern const u16 gBattleCastleRentalItemCosts[];                              // item costs in CP
+extern const BattleCastleMenuOption gBattleCastlePartyAppHealMenuOptions[];   // RESTORE HP / PP / ALL / RANK UP / CANCEL
+extern const u16 gBattleCastleRentalBerries[];                                // rentable berries
+extern const u16 gBattleCastleRentalBerryCosts[];                             // berry costs in CP
+extern const u8 gBattleCastlePartyAppListMenuY[];                             // list menu y, by number of entries
 extern const GraphicsModes gBattleCastlePartyAppGraphicsModes;
 extern const BgTemplate gBattleCastlePartyAppBgTemplate_Sub2;
 extern const BgTemplate gBattleCastlePartyAppBgTemplate_Main1;
@@ -260,135 +260,135 @@ extern const BgTemplate gBattleCastlePartyAppBgTemplate_Sub0;
 extern const BgTemplate gBattleCastlePartyAppBgTemplate_Sub1;
 extern const GraphicsBanks gBattleCastlePartyAppGraphicsBanks;
 
-// Frontier overlay (80) helpers
+// Frontier helpers
 u32 Frontier_GetHpGaugeFrame(u16 hp, u16 maxHp);
 void Frontier_BufferPartnerName(MessageFormat *msgFormat, int value);
 int BattleCastle_GetPartySize(u8 frontierType, int kind);
 void BattleCastle_SpendPoints(FrontierSave *frontierSave, int frontierType, int points);
 
-// Entry points and link receive callbacks (their names are referenced from asm)
+// Entry points and link receive callbacks
 BOOL BattleCastlePartyApp_Init(OverlayManager *manager, int *state);
 int BattleCastlePartyApp_Main(OverlayManager *manager, int *state);
 BOOL BattleCastlePartyApp_Exit(OverlayManager *manager);
-void BattleCastlePartyApp_ReloadBgPalette(void);
+static void BattleCastlePartyApp_ReloadBgPalette(void);
 void BattleCastlePartyApp_ReceiveRanks(int netId, void *unused, void *data, BattleCastlePartyApp *app);
 void BattleCastlePartyApp_ReceiveAction(int netId, int unused, u16 *data, BattleCastlePartyApp *app);
 void BattleCastlePartyApp_ReceiveCursor(int netId, int unused, u16 *data, BattleCastlePartyApp *app);
 void BattleCastlePartyApp_ReceiveExit(int netId, int unused, u16 *data, BattleCastlePartyApp *app);
 
-BOOL BattleCastlePartyApp_FadeIn(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_DrawScreen(BattleCastlePartyApp *app);
+static BOOL BattleCastlePartyApp_FadeIn(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_DrawScreen(BattleCastlePartyApp *app);
 BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app);
 BOOL BattleCastlePartyApp_LinkAction(BattleCastlePartyApp *app);
-BOOL BattleCastlePartyApp_LinkExit(BattleCastlePartyApp *app);
-BOOL BattleCastlePartyApp_FadeOut(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_FreeResources(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_DisableDisplay(void);
-void BattleCastlePartyApp_InitGraphics(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_InitBgGraphics(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_InitSpriteGfx(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_FreeBgLayers(BgConfig *bgConfig);
-void BattleCastlePartyApp_VBlankCallback(void *arg);
-void BattleCastlePartyApp_SetGraphicsBanks(void);
-void BattleCastlePartyApp_InitBgLayers(BgConfig *bgConfig);
-void BattleCastlePartyApp_LoadPartyBg(BattleCastlePartyApp *app, GFBgLayer bgId);
-void BattleCastlePartyApp_LoadBgPalette(void);
-void BattleCastlePartyApp_LoadStatsSummaryBg(BattleCastlePartyApp *app, GFBgLayer bgId);
-void BattleCastlePartyApp_LoadMovesSummaryBg(BattleCastlePartyApp *app, GFBgLayer bgId);
-void BattleCastlePartyApp_LoadItemGridBg(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_LoadSubScreenBg(BattleCastlePartyApp *app, GFBgLayer bgId);
-int BattleCastlePartyApp_PrintMessage(BattleCastlePartyApp *app, Window *window, int msgNo, int x, int y, int speed, u8 fg, u8 shadow, u8 bg, u8 fontId);
-int BattleCastlePartyApp_AddMessage(BattleCastlePartyApp *app, Window *window, int msgNo, int x, int y, int speed, u8 fg, u8 shadow, u8 bg, u8 fontId);
-int BattleCastlePartyApp_ShowMessage(BattleCastlePartyApp *app, int msgNo, u8 fontId);
-void BattleCastlePartyApp_PrintStatsSummary(BattleCastlePartyApp *app, Window *window, Pokemon *mon);
-int BattleCastlePartyApp_PrintSummaryText(BattleCastlePartyApp *app, Window *window, int msgNo, int x, u16 y);
-void BattleCastlePartyApp_PrintMovesSummary(BattleCastlePartyApp *app, Window *window, Pokemon *mon);
-void BattleCastlePartyApp_PrintMove(BattleCastlePartyApp *app, Window *window, int moveSlot, int msgNo, int ppMsgNo, Pokemon *mon, int moveField, int ppField, int maxPpField);
-void BattleCastlePartyApp_PrintPartyHp(BattleCastlePartyApp *app, Window *window);
-void BattleCastlePartyApp_PrintMonHp(BattleCastlePartyApp *app, Window *window, int slot, int mode);
-void BattleCastlePartyApp_PrintPartyLevels(BattleCastlePartyApp *app, Window *window);
-void BattleCastlePartyApp_PrintMonLevelAndGender(BattleCastlePartyApp *app, Window *window, u32 slot, u8 mode);
-void BattleCastlePartyApp_RedrawMonHp(BattleCastlePartyApp *app, Window *window, int slot, int hp);
-void BattleCastlePartyApp_PrintChoosePrompt(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_HideChoosePrompt(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_OpenMainMenu(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_CloseMainMenu(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_OpenHealMenu(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_CloseHealMenu(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_OpenRentalMenu(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_CloseRentalMenu(BattleCastlePartyApp *app);
+static BOOL BattleCastlePartyApp_LinkExit(BattleCastlePartyApp *app);
+static BOOL BattleCastlePartyApp_FadeOut(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_FreeResources(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_DisableDisplay(void);
+static void BattleCastlePartyApp_InitGraphics(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_InitBgGraphics(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_InitSpriteGfx(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_FreeBgLayers(BgConfig *bgConfig);
+static void BattleCastlePartyApp_VBlankCallback(void *arg);
+static void BattleCastlePartyApp_SetGraphicsBanks(void);
+static void BattleCastlePartyApp_InitBgLayers(BgConfig *bgConfig);
+static void BattleCastlePartyApp_LoadPartyBg(BattleCastlePartyApp *app, GFBgLayer bgId);
+static void BattleCastlePartyApp_LoadBgPalette(void);
+static void BattleCastlePartyApp_LoadStatsSummaryBg(BattleCastlePartyApp *app, GFBgLayer bgId);
+static void BattleCastlePartyApp_LoadMovesSummaryBg(BattleCastlePartyApp *app, GFBgLayer bgId);
+static void BattleCastlePartyApp_LoadItemGridBg(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_LoadSubScreenBg(BattleCastlePartyApp *app, GFBgLayer bgId);
+static int BattleCastlePartyApp_PrintMessage(BattleCastlePartyApp *app, Window *window, int msgNo, int x, int y, int speed, u8 fg, u8 shadow, u8 bg, u8 fontId);
+static int BattleCastlePartyApp_AddMessage(BattleCastlePartyApp *app, Window *window, int msgNo, int x, int y, int speed, u8 fg, u8 shadow, u8 bg, u8 fontId);
+static int BattleCastlePartyApp_ShowMessage(BattleCastlePartyApp *app, int msgNo, u8 fontId);
+static void BattleCastlePartyApp_PrintStatsSummary(BattleCastlePartyApp *app, Window *window, Pokemon *mon);
+static int BattleCastlePartyApp_PrintSummaryText(BattleCastlePartyApp *app, Window *window, int msgNo, int x, u16 y);
+static void BattleCastlePartyApp_PrintMovesSummary(BattleCastlePartyApp *app, Window *window, Pokemon *mon);
+static void BattleCastlePartyApp_PrintMove(BattleCastlePartyApp *app, Window *window, int moveSlot, int msgNo, int ppMsgNo, Pokemon *mon, int moveField, int ppField, int maxPpField);
+static void BattleCastlePartyApp_PrintPartyHp(BattleCastlePartyApp *app, Window *window);
+static void BattleCastlePartyApp_PrintMonHp(BattleCastlePartyApp *app, Window *window, int slot, int mode);
+static void BattleCastlePartyApp_PrintPartyLevels(BattleCastlePartyApp *app, Window *window);
+static void BattleCastlePartyApp_PrintMonLevelAndGender(BattleCastlePartyApp *app, Window *window, u32 slot, u8 mode);
+static void BattleCastlePartyApp_RedrawMonHp(BattleCastlePartyApp *app, Window *window, int slot, int hp);
+static void BattleCastlePartyApp_PrintChoosePrompt(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_HideChoosePrompt(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_OpenMainMenu(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_CloseMainMenu(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_OpenHealMenu(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_CloseHealMenu(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_OpenRentalMenu(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_CloseRentalMenu(BattleCastlePartyApp *app);
 void BattleCastlePartyApp_OpenItemGrid(BattleCastlePartyApp *app, int mode);
 void BattleCastlePartyApp_CloseItemGrid(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_ShowYesNoPrompt(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_PrintItemGridHeader(BattleCastlePartyApp *app, int mode);
-void BattleCastlePartyApp_PrintItemNames(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_DrawItemIcons(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_PrintItemPageNumber(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_PrintReturnButton(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_PrintItemDescription(BattleCastlePartyApp *app, u32 item);
-void BattleCastlePartyApp_PrintSelectedMonInfo(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_SetupItemGrid(BattleCastlePartyApp *app, int mode);
-void BattleCastlePartyApp_BufferNumber(BattleCastlePartyApp *app, int field, int value, int digits, int mode);
-void BattleCastlePartyApp_BufferMonNickname(BattleCastlePartyApp *app, int field, BoxPokemon *boxMon);
-void BattleCastlePartyApp_BufferPlayerName(BattleCastlePartyApp *app, int field);
-void BattleCastlePartyApp_PrintPlayerName(BattleCastlePartyApp *app, Window *window, u32 x, u32 y, u8 fontId);
-void BattleCastlePartyApp_PrintPartnerName(BattleCastlePartyApp *app, Window *window, u32 x, u32 y, u8 fontId);
-void BattleCastlePartyApp_PrintGenderSymbol(BattleCastlePartyApp *app, Window *window, u32 x, u32 y, u8 fontId, u8 gender);
-void BattleCastlePartyApp_SetMainState(BattleCastlePartyApp *app, int *state, u32 newState);
-void BattleCastlePartyApp_MoveCursor(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_DrawCursor(BattleCastlePartyApp *app, u32 index, int isPartner);
-void BattleCastlePartyApp_GetCursorPos(BattleCastlePartyApp *app, int *x, int *y, u32 index);
-u16 BattleCastlePartyApp_GetRentalCost(BattleCastlePartyApp *app, int index, int kind);
-u16 BattleCastlePartyApp_GetRentalCostByItemId(u16 itemId);
-u16 BattleCastlePartyApp_GetRentalItemId(BattleCastlePartyApp *app, int index, int kind);
-void BattleCastlePartyApp_GetTrainerNamePositions(BattleCastlePartyApp *app, u16 *x1, u16 *y1, u16 *x2, u16 *y2);
+static void BattleCastlePartyApp_ShowYesNoPrompt(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_PrintItemGridHeader(BattleCastlePartyApp *app, int mode);
+static void BattleCastlePartyApp_PrintItemNames(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_DrawItemIcons(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_PrintItemPageNumber(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_PrintReturnButton(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_PrintItemDescription(BattleCastlePartyApp *app, u32 item);
+static void BattleCastlePartyApp_PrintSelectedMonInfo(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_SetupItemGrid(BattleCastlePartyApp *app, int mode);
+static void BattleCastlePartyApp_BufferNumber(BattleCastlePartyApp *app, int field, int value, int digits, int mode);
+static void BattleCastlePartyApp_BufferMonNickname(BattleCastlePartyApp *app, int field, BoxPokemon *boxMon);
+static void BattleCastlePartyApp_BufferPlayerName(BattleCastlePartyApp *app, int field);
+static void BattleCastlePartyApp_PrintPlayerName(BattleCastlePartyApp *app, Window *window, u32 x, u32 y, u8 fontId);
+static void BattleCastlePartyApp_PrintPartnerName(BattleCastlePartyApp *app, Window *window, u32 x, u32 y, u8 fontId);
+static void BattleCastlePartyApp_PrintGenderSymbol(BattleCastlePartyApp *app, Window *window, u32 x, u32 y, u8 fontId, u8 gender);
+static void BattleCastlePartyApp_SetMainState(BattleCastlePartyApp *app, int *state, u32 newState);
+static void BattleCastlePartyApp_MoveCursor(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_DrawCursor(BattleCastlePartyApp *app, u32 index, int isPartner);
+static void BattleCastlePartyApp_GetCursorPos(BattleCastlePartyApp *app, int *x, int *y, u32 index);
+static u16 BattleCastlePartyApp_GetRentalCost(BattleCastlePartyApp *app, int index, int kind);
+static u16 BattleCastlePartyApp_GetRentalCostByItemId(u16 itemId);
+static u16 BattleCastlePartyApp_GetRentalItemId(BattleCastlePartyApp *app, int index, int kind);
+static void BattleCastlePartyApp_GetTrainerNamePositions(BattleCastlePartyApp *app, u16 *x1, u16 *y1, u16 *x2, u16 *y2);
 int BattleCastlePartyApp_PlayActionEffect(BattleCastlePartyApp *app, u32 selected, u32 action);
-int BattleCastlePartyApp_GetMonIconHpPalette(BattleCastlePartyApp *app, u32 hpBarColor);
-int BattleCastlePartyApp_GetHpBarAnimSeq(BattleCastlePartyApp *app, u32 hpBarColor);
-void BattleCastlePartyApp_ScrollStatsSummary(BattleCastlePartyApp *app, int delta);
-void BattleCastlePartyApp_ScrollMovesSummary(BattleCastlePartyApp *app, int delta);
-void BattleCastlePartyApp_CloseAll(BattleCastlePartyApp *app);
-int BattleCastlePartyApp_IsAnyPpUsed(Pokemon *mon);
-void BattleCastlePartyApp_CloseWindow(Window *window);
-BOOL BattleCastlePartyApp_SendLinkCommand(BattleCastlePartyApp *app, int command, int param);
-void BattleCastlePartyApp_PrepareLinkRanks(BattleCastlePartyApp *app, int command);
-void BattleCastlePartyApp_PrepareLinkAction(BattleCastlePartyApp *app, int command, int slot);
-void BattleCastlePartyApp_PrepareLinkCursor(BattleCastlePartyApp *app, int command);
-void BattleCastlePartyApp_PrepareLinkExit(BattleCastlePartyApp *app, int command);
-void BattleCastlePartyApp_UseItemOnMon(Pokemon *mon, u16 itemId);
-void BattleCastlePartyApp_PrintTrainerNames(BattleCastlePartyApp *app, Window *window);
-void BattleCastlePartyApp_HealMon(BattleCastlePartyApp *app, int slot, int action);
-void BattleCastlePartyApp_GiveRentalItem(BattleCastlePartyApp *app, int slot, u16 itemId);
-void BattleCastlePartyApp_CloseMenus(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_ReturnToItemList(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_PrintCastlePoints(BattleCastlePartyApp *app, Window *window);
-void BattleCastlePartyApp_ApplyAction(BattleCastlePartyApp *app, u32 slot, u8 action);
-void BattleCastlePartyApp_ShowMonStats(BattleCastlePartyApp *app, u32 slot);
-void BattleCastlePartyApp_ShowMonMoves(BattleCastlePartyApp *app, u32 slot);
-void BattleCastlePartyApp_HideSummaryPanel(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_UpdateMonIcons(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_RankUp(BattleCastlePartyApp *app, u8 slot, u16 action);
-void BattleCastlePartyApp_PrintExpandedMessage(BattleCastlePartyApp *app, Window *window, MsgData *msgData, int msgNo, int x, int y, int fontId, int color, int alignment);
+static int BattleCastlePartyApp_GetMonIconHpPalette(BattleCastlePartyApp *app, u32 hpBarColor);
+static int BattleCastlePartyApp_GetHpBarAnimSeq(BattleCastlePartyApp *app, u32 hpBarColor);
+static void BattleCastlePartyApp_ScrollStatsSummary(BattleCastlePartyApp *app, int delta);
+static void BattleCastlePartyApp_ScrollMovesSummary(BattleCastlePartyApp *app, int delta);
+static void BattleCastlePartyApp_CloseAll(BattleCastlePartyApp *app);
+static int BattleCastlePartyApp_IsAnyPpUsed(Pokemon *mon);
+static void BattleCastlePartyApp_CloseWindow(Window *window);
+static BOOL BattleCastlePartyApp_SendLinkCommand(BattleCastlePartyApp *app, int command, int param);
+static void BattleCastlePartyApp_PrepareLinkRanks(BattleCastlePartyApp *app, int command);
+static void BattleCastlePartyApp_PrepareLinkAction(BattleCastlePartyApp *app, int command, int slot);
+static void BattleCastlePartyApp_PrepareLinkCursor(BattleCastlePartyApp *app, int command);
+static void BattleCastlePartyApp_PrepareLinkExit(BattleCastlePartyApp *app, int command);
+static void BattleCastlePartyApp_UseItemOnMon(Pokemon *mon, u16 itemId);
+static void BattleCastlePartyApp_PrintTrainerNames(BattleCastlePartyApp *app, Window *window);
+static void BattleCastlePartyApp_HealMon(BattleCastlePartyApp *app, int slot, int action);
+static void BattleCastlePartyApp_GiveRentalItem(BattleCastlePartyApp *app, int slot, u16 itemId);
+static void BattleCastlePartyApp_CloseMenus(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_ReturnToItemList(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_PrintCastlePoints(BattleCastlePartyApp *app, Window *window);
+static void BattleCastlePartyApp_ApplyAction(BattleCastlePartyApp *app, u32 slot, u8 action);
+static void BattleCastlePartyApp_ShowMonStats(BattleCastlePartyApp *app, u32 slot);
+static void BattleCastlePartyApp_ShowMonMoves(BattleCastlePartyApp *app, u32 slot);
+static void BattleCastlePartyApp_HideSummaryPanel(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_UpdateMonIcons(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_RankUp(BattleCastlePartyApp *app, u8 slot, u16 action);
+static void BattleCastlePartyApp_PrintExpandedMessage(BattleCastlePartyApp *app, Window *window, MsgData *msgData, int msgNo, int x, int y, int fontId, int color, int alignment);
 void BattleCastlePartyApp_LoadMonSummary(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_PrintSummaryLabels(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_PrintMonSummary(BattleCastlePartyApp *app, int scheduleCopy);
-void BattleCastlePartyApp_RefreshMonSummary(BattleCastlePartyApp *app, int scheduleCopy);
-void BattleCastlePartyApp_ShowMonSummary(BattleCastlePartyApp *app, int show);
-void BattleCastlePartyApp_GetItemButtonPos(u32 slot, s16 *x, s16 *y);
-void BattleCastlePartyApp_ShowSelectedItem(BattleCastlePartyApp *app, u32 selected);
-void BattleCastlePartyApp_ShowItemGrid(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_PrintSummaryLabels(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_PrintMonSummary(BattleCastlePartyApp *app, int scheduleCopy);
+static void BattleCastlePartyApp_RefreshMonSummary(BattleCastlePartyApp *app, int scheduleCopy);
+static void BattleCastlePartyApp_ShowMonSummary(BattleCastlePartyApp *app, int show);
+static void BattleCastlePartyApp_GetItemButtonPos(u32 slot, s16 *x, s16 *y);
+static void BattleCastlePartyApp_ShowSelectedItem(BattleCastlePartyApp *app, u32 selected);
+static void BattleCastlePartyApp_ShowItemGrid(BattleCastlePartyApp *app);
 void BattleCastlePartyApp_SetCursorPos(BattleCastlePartyApp *app, u32 cursorPos, u32 prevCursorPos);
 void BattleCastlePartyApp_SetItemCursor(BattleCastlePartyApp *app, int x, int y, int seq);
 void BattleCastlePartyApp_ShowItemDescription(BattleCastlePartyApp *app, int button);
 void BattleCastlePartyApp_CreateListMenu(BattleCastlePartyApp *app, int count, u8 x, u8 y, u8 width);
-void BattleCastlePartyApp_CreateMainMenuList(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_CreateHealMenuList(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_CreateRentalMenuList(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_CreateMainMenuList(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_CreateHealMenuList(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_CreateRentalMenuList(BattleCastlePartyApp *app);
 void BattleCastlePartyApp_DestroyListMenu(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_PrintMainMenuHelp(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_PrintHealMenuHelp(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_PrintRentalMenuHelp(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_StartButtonAnim(BattleCastlePartyApp *app, u16 button);
+static void BattleCastlePartyApp_PrintMainMenuHelp(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_PrintHealMenuHelp(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_PrintRentalMenuHelp(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_StartButtonAnim(BattleCastlePartyApp *app, u16 button);
 
 // BattleCastlePartyApp init
 BOOL BattleCastlePartyApp_Init(OverlayManager *manager, int *state) {
@@ -518,7 +518,7 @@ enum {
     CASTLE_PARTY_FADE_IN_WAIT_FADE,
 };
 
-BOOL BattleCastlePartyApp_FadeIn(BattleCastlePartyApp *app) {
+static BOOL BattleCastlePartyApp_FadeIn(BattleCastlePartyApp *app) {
     switch (app->subState) {
     case CASTLE_PARTY_FADE_IN_START_SYNC:
         if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
@@ -569,7 +569,7 @@ BOOL BattleCastlePartyApp_FadeIn(BattleCastlePartyApp *app) {
     return FALSE;
 }
 
-void BattleCastlePartyApp_DrawScreen(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_DrawScreen(BattleCastlePartyApp *app) {
     Window *window = &app->windows[0];
 
     FillWindowPixelBuffer(window, 0);
@@ -1190,7 +1190,7 @@ enum {
     CASTLE_PARTY_LINK_EXIT_WAIT_SYNC,
 };
 
-BOOL BattleCastlePartyApp_LinkExit(BattleCastlePartyApp *app) {
+static BOOL BattleCastlePartyApp_LinkExit(BattleCastlePartyApp *app) {
     switch (app->subState) {
     case CASTLE_PARTY_LINK_EXIT_SEND:
         if (BattleCastlePartyApp_SendLinkCommand(app, CASTLE_LINK_CMD_EXIT, 0) == TRUE) {
@@ -1224,7 +1224,7 @@ enum {
     CASTLE_PARTY_FADE_OUT_WAIT,
 };
 
-BOOL BattleCastlePartyApp_FadeOut(BattleCastlePartyApp *app) {
+static BOOL BattleCastlePartyApp_FadeOut(BattleCastlePartyApp *app) {
     switch (app->subState) {
     case CASTLE_PARTY_FADE_OUT_START:
         BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, HEAP_ID_107);
@@ -1239,7 +1239,7 @@ BOOL BattleCastlePartyApp_FadeOut(BattleCastlePartyApp *app) {
     return FALSE;
 }
 
-void BattleCastlePartyApp_FreeResources(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_FreeResources(BattleCastlePartyApp *app) {
     int numMons;
     int i;
 
@@ -1284,7 +1284,7 @@ void BattleCastlePartyApp_FreeResources(BattleCastlePartyApp *app) {
     NARC_Delete(app->narc);
 }
 
-void BattleCastlePartyApp_DisableDisplay(void) {
+static void BattleCastlePartyApp_DisableDisplay(void) {
     Main_SetVBlankIntrCB(NULL, NULL);
     Main_SetHBlankIntrCB(NULL, NULL);
     GfGfx_DisableEngineAPlanes();
@@ -1293,7 +1293,7 @@ void BattleCastlePartyApp_DisableDisplay(void) {
     GXS_SetVisiblePlane(0);
 }
 
-void BattleCastlePartyApp_InitGraphics(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_InitGraphics(BattleCastlePartyApp *app) {
     Pokemon *mon;
     int i;
     int itemX;
@@ -1383,7 +1383,7 @@ void BattleCastlePartyApp_InitGraphics(BattleCastlePartyApp *app) {
     Main_SetVBlankIntrCB(BattleCastlePartyApp_VBlankCallback, app);
 }
 
-void BattleCastlePartyApp_InitBgGraphics(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_InitBgGraphics(BattleCastlePartyApp *app) {
     GX_SetDispSelect(GX_DISP_SELECT_SUB_MAIN);
     BattleCastlePartyApp_SetGraphicsBanks();
     BattleCastlePartyApp_InitBgLayers(app->bgConfig);
@@ -1398,11 +1398,11 @@ void BattleCastlePartyApp_InitBgGraphics(BattleCastlePartyApp *app) {
     BattleCastlePartyApp_LoadSubScreenBg(app, GF_BG_LYR_SUB_0);
 }
 
-void BattleCastlePartyApp_InitSpriteGfx(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_InitSpriteGfx(BattleCastlePartyApp *app) {
     BattleCastle_InitSpriteGfx(&app->spriteGfx, app->party, BattleCastle_IsMultiType(app->frontierType));
 }
 
-void BattleCastlePartyApp_FreeBgLayers(BgConfig *bgConfig) {
+static void BattleCastlePartyApp_FreeBgLayers(BgConfig *bgConfig) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_ALL, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_ALL, GF_PLANE_TOGGLE_OFF);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_3);
@@ -1417,7 +1417,7 @@ void BattleCastlePartyApp_FreeBgLayers(BgConfig *bgConfig) {
     reg_GX_POWCNT |= REG_GX_POWCNT_DSEL_MASK; // GX_SetDispSelect(GX_DISP_SELECT_MAIN_SUB)
 }
 
-void BattleCastlePartyApp_VBlankCallback(void *arg) {
+static void BattleCastlePartyApp_VBlankCallback(void *arg) {
     // OS_SetIrqCheckFlag(OS_IE_V_BLANK) with the DTCM address written out
     vu32 *dtcm = (vu32 *)0x027E0000;
     BattleCastlePartyApp *app = arg;
@@ -1432,12 +1432,12 @@ void BattleCastlePartyApp_VBlankCallback(void *arg) {
     dtcm[0x3FF8 / 4] |= OS_IE_V_BLANK;
 }
 
-void BattleCastlePartyApp_SetGraphicsBanks(void) {
+static void BattleCastlePartyApp_SetGraphicsBanks(void) {
     GraphicsBanks banks = gBattleCastlePartyAppGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
-void BattleCastlePartyApp_InitBgLayers(BgConfig *bgConfig) {
+static void BattleCastlePartyApp_InitBgLayers(BgConfig *bgConfig) {
     GraphicsModes modes;
     BgTemplate main1;
     BgTemplate main0;
@@ -1487,7 +1487,7 @@ void BattleCastlePartyApp_InitBgLayers(BgConfig *bgConfig) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
 }
 
-void BattleCastlePartyApp_LoadPartyBg(BattleCastlePartyApp *app, GFBgLayer bgId) {
+static void BattleCastlePartyApp_LoadPartyBg(BattleCastlePartyApp *app, GFBgLayer bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(app->narc, 0x22, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_107);
     if (BattleCastle_IsMultiType(app->frontierType) == FALSE) {
         GfGfxLoader_LoadScrnDataFromOpenNarc(app->narc, 0x23, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_107);
@@ -1496,7 +1496,7 @@ void BattleCastlePartyApp_LoadPartyBg(BattleCastlePartyApp *app, GFBgLayer bgId)
     }
 }
 
-void BattleCastlePartyApp_LoadBgPalette(void) {
+static void BattleCastlePartyApp_LoadBgPalette(void) {
     NNSG2dPaletteData *plttData;
     void *file = GfGfxLoader_GetPlttData(NARC_a_1_8_3, 0x9C, &plttData, HEAP_ID_107);
 
@@ -1505,13 +1505,13 @@ void BattleCastlePartyApp_LoadBgPalette(void) {
     Heap_Free(file);
 }
 
-void BattleCastlePartyApp_LoadStatsSummaryBg(BattleCastlePartyApp *app, GFBgLayer bgId) {
+static void BattleCastlePartyApp_LoadStatsSummaryBg(BattleCastlePartyApp *app, GFBgLayer bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(app->narc, 0x22, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_107);
     GfGfxLoader_LoadScrnDataFromOpenNarc(app->narc, 0x2A, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_107);
 }
 
 // Reloads the first 4 palettes of the same file as BattleCastlePartyApp_LoadBgPalette
-void BattleCastlePartyApp_ReloadBgPalette(void) {
+static void BattleCastlePartyApp_ReloadBgPalette(void) {
     NNSG2dPaletteData *plttData;
     void *file = GfGfxLoader_GetPlttData(NARC_a_1_8_3, 0x9C, &plttData, HEAP_ID_107);
 
@@ -1520,25 +1520,25 @@ void BattleCastlePartyApp_ReloadBgPalette(void) {
     Heap_Free(file);
 }
 
-void BattleCastlePartyApp_LoadMovesSummaryBg(BattleCastlePartyApp *app, GFBgLayer bgId) {
+static void BattleCastlePartyApp_LoadMovesSummaryBg(BattleCastlePartyApp *app, GFBgLayer bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(app->narc, 0x22, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_107);
     GfGfxLoader_LoadScrnDataFromOpenNarc(app->narc, 0x2B, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_107);
 }
 
-void BattleCastlePartyApp_LoadItemGridBg(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_LoadItemGridBg(BattleCastlePartyApp *app) {
     GfGfxLoader_LoadCharDataFromOpenNarc(app->narc, 0x22, app->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, TRUE, HEAP_ID_107);
     GfGfxLoader_LoadScrnDataFromOpenNarc(app->narc, 0x26, app->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, TRUE, HEAP_ID_107);
     GfGfxLoader_LoadCharDataFromOpenNarc(app->narc, 0x28, app->bgConfig, GF_BG_LYR_SUB_2, 0, 0, TRUE, HEAP_ID_107);
     GfGfxLoader_LoadScrnDataFromOpenNarc(app->narc, 0x29, app->bgConfig, GF_BG_LYR_SUB_2, 0, 0, TRUE, HEAP_ID_107);
 }
 
-void BattleCastlePartyApp_LoadSubScreenBg(BattleCastlePartyApp *app, GFBgLayer bgId) {
+static void BattleCastlePartyApp_LoadSubScreenBg(BattleCastlePartyApp *app, GFBgLayer bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(app->narc, 0x28, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_107);
     GfGfxLoader_LoadScrnDataFromOpenNarc(app->narc, 0x93, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_107);
     GfGfxLoader_GXLoadPalFromOpenNarc(app->narc, 0xBE, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0, HEAP_ID_107);
 }
 
-int BattleCastlePartyApp_PrintMessage(BattleCastlePartyApp *app, Window *window, int msgNo, int x, int y, int speed, u8 fg, u8 shadow, u8 bg, u8 fontId) {
+static int BattleCastlePartyApp_PrintMessage(BattleCastlePartyApp *app, Window *window, int msgNo, int x, int y, int speed, u8 fg, u8 shadow, u8 bg, u8 fontId) {
     int printerId;
 
     FillWindowPixelBuffer(window, bg);
@@ -1550,7 +1550,7 @@ int BattleCastlePartyApp_PrintMessage(BattleCastlePartyApp *app, Window *window,
 }
 
 // Same as BattleCastlePartyApp_PrintMessage without clearing the window first
-int BattleCastlePartyApp_AddMessage(BattleCastlePartyApp *app, Window *window, int msgNo, int x, int y, int speed, u8 fg, u8 shadow, u8 bg, u8 fontId) {
+static int BattleCastlePartyApp_AddMessage(BattleCastlePartyApp *app, Window *window, int msgNo, int x, int y, int speed, u8 fg, u8 shadow, u8 bg, u8 fontId) {
     int printerId;
 
     ReadMsgDataIntoString(app->msgData, msgNo, app->rawString);
@@ -1560,14 +1560,14 @@ int BattleCastlePartyApp_AddMessage(BattleCastlePartyApp *app, Window *window, i
     return printerId;
 }
 
-int BattleCastlePartyApp_ShowMessage(BattleCastlePartyApp *app, int msgNo, u8 fontId) {
+static int BattleCastlePartyApp_ShowMessage(BattleCastlePartyApp *app, int msgNo, u8 fontId) {
     int printerId = BattleCastlePartyApp_PrintMessage(app, &app->windows[CASTLE_PARTY_WIN_MESSAGE], msgNo, 1, 1, TEXT_SPEED_NOTRANSFER, 1, 2, 15, fontId);
 
     ScheduleWindowCopyToVram(&app->windows[CASTLE_PARTY_WIN_MESSAGE]);
     return printerId;
 }
 
-void BattleCastlePartyApp_PrintStatsSummary(BattleCastlePartyApp *app, Window *window, Pokemon *mon) {
+static void BattleCastlePartyApp_PrintStatsSummary(BattleCastlePartyApp *app, Window *window, Pokemon *mon) {
     u32 value;
 
     FillWindowPixelBuffer(window, 0);
@@ -1606,11 +1606,11 @@ void BattleCastlePartyApp_PrintStatsSummary(BattleCastlePartyApp *app, Window *w
     ScheduleWindowCopyToVram(window);
 }
 
-int BattleCastlePartyApp_PrintSummaryText(BattleCastlePartyApp *app, Window *window, int msgNo, int x, u16 y) {
+static int BattleCastlePartyApp_PrintSummaryText(BattleCastlePartyApp *app, Window *window, int msgNo, int x, u16 y) {
     return BattleCastlePartyApp_AddMessage(app, window, msgNo, x, y, TEXT_SPEED_NOTRANSFER, 1, 2, 0, 0);
 }
 
-void BattleCastlePartyApp_PrintMovesSummary(BattleCastlePartyApp *app, Window *window, Pokemon *mon) {
+static void BattleCastlePartyApp_PrintMovesSummary(BattleCastlePartyApp *app, Window *window, Pokemon *mon) {
     FillWindowPixelBuffer(window, 0);
     BattleCastlePartyApp_PrintMove(app, window, 0, msg_0031_00096, msg_0031_00100, mon, MON_DATA_MOVE1, MON_DATA_MOVE1_PP, MON_DATA_MOVE1_MAX_PP);
     BattleCastlePartyApp_PrintMove(app, window, 1, msg_0031_00097, msg_0031_00100, mon, MON_DATA_MOVE2, MON_DATA_MOVE2_PP, MON_DATA_MOVE2_MAX_PP);
@@ -1619,7 +1619,7 @@ void BattleCastlePartyApp_PrintMovesSummary(BattleCastlePartyApp *app, Window *w
     ScheduleWindowCopyToVram(window);
 }
 
-void BattleCastlePartyApp_PrintMove(BattleCastlePartyApp *app, Window *window, int moveSlot, int msgNo, int ppMsgNo, Pokemon *mon, int moveField, int ppField, int maxPpField) {
+static void BattleCastlePartyApp_PrintMove(BattleCastlePartyApp *app, Window *window, int moveSlot, int msgNo, int ppMsgNo, Pokemon *mon, int moveField, int ppField, int maxPpField) {
     u32 value;
     u16 y;
 
@@ -1634,21 +1634,20 @@ void BattleCastlePartyApp_PrintMove(BattleCastlePartyApp *app, Window *window, i
     app->printerId = BattleCastlePartyApp_AddMessage(app, window, ppMsgNo, 96, y, TEXT_SPEED_NOTRANSFER, 1, 2, 0, 0);
 }
 
-void BattleCastlePartyApp_PrintPartyHp(BattleCastlePartyApp *app, Window *window) {
+static void BattleCastlePartyApp_PrintPartyHp(BattleCastlePartyApp *app, Window *window) {
     int numMons;
     int i;
 
     FillWindowPixelBuffer(window, 0);
     numMons = BattleCastle_GetPartySize(app->frontierType, 1);
     for (i = 0; i < numMons; i++) {
-        // the slot is narrowed to u8 at this call site
         BattleCastlePartyApp_PrintMonHp(app, window, (u8)i, 0);
     }
     ScheduleWindowCopyToVram(window);
 }
 
 // mode 0: in the party panel column of the slot; otherwise at the start of a single-mon window
-void BattleCastlePartyApp_PrintMonHp(BattleCastlePartyApp *app, Window *window, int slot, int mode) {
+static void BattleCastlePartyApp_PrintMonHp(BattleCastlePartyApp *app, Window *window, int slot, int mode) {
     u16 maxHpX;
     u16 slashX;
     Pokemon *mon;
@@ -1679,7 +1678,7 @@ void BattleCastlePartyApp_PrintMonHp(BattleCastlePartyApp *app, Window *window, 
     PrintUIntOnWindow(app->msgPrinter, GetMonData(mon, MON_DATA_MAX_HP, NULL), 3, PRINTING_MODE_LEFT_ALIGN, window, maxHpX, y);
 }
 
-void BattleCastlePartyApp_PrintPartyLevels(BattleCastlePartyApp *app, Window *window) {
+static void BattleCastlePartyApp_PrintPartyLevels(BattleCastlePartyApp *app, Window *window) {
     int numMons = BattleCastle_GetPartySize(app->frontierType, 1);
     int i;
 
@@ -1690,7 +1689,7 @@ void BattleCastlePartyApp_PrintPartyLevels(BattleCastlePartyApp *app, Window *wi
 }
 
 // mode 0: in the party panel column of the slot; otherwise at the start of a single-mon window
-void BattleCastlePartyApp_PrintMonLevelAndGender(BattleCastlePartyApp *app, Window *window, u32 slot, u8 mode) {
+static void BattleCastlePartyApp_PrintMonLevelAndGender(BattleCastlePartyApp *app, Window *window, u32 slot, u8 mode) {
     unsigned int levelBaseX;
     unsigned int genderX;
     unsigned int levelX;
@@ -1719,7 +1718,7 @@ void BattleCastlePartyApp_PrintMonLevelAndGender(BattleCastlePartyApp *app, Wind
 }
 
 // Redraws the current HP of the mon in the party panel column of the slot
-void BattleCastlePartyApp_RedrawMonHp(BattleCastlePartyApp *app, Window *window, int slot, int hp) {
+static void BattleCastlePartyApp_RedrawMonHp(BattleCastlePartyApp *app, Window *window, int slot, int hp) {
     int x = BattleCastle_IsMultiType(app->frontierType) == FALSE ? 36 : 4;
 
     x += slot * CASTLE_PARTY_COLUMN_WIDTH;
@@ -1728,49 +1727,49 @@ void BattleCastlePartyApp_RedrawMonHp(BattleCastlePartyApp *app, Window *window,
     ScheduleWindowCopyToVram(window);
 }
 
-void BattleCastlePartyApp_PrintChoosePrompt(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_PrintChoosePrompt(BattleCastlePartyApp *app) {
     app->printerId = BattleCastlePartyApp_PrintMessage(app, &app->windows[1], msg_0031_00006, 0, 5, 0xFF, 1, 2, 0, 0); // "EXIT"
     BattleCastle_DrawWindowFrame(&app->windows[7], Options_GetFrame(app->options));
     app->printerId = BattleCastlePartyApp_PrintMessage(app, &app->windows[7], msg_0031_00005, 1, 1, 0xFF, 1, 2, 15, 1); // "Please choose your Pokémon."
 }
 
-void BattleCastlePartyApp_HideChoosePrompt(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_HideChoosePrompt(BattleCastlePartyApp *app) {
     BattleCastlePartyApp_CloseWindow(&app->windows[7]);
 }
 
 // HEAL / RENTAL / CANCEL
-void BattleCastlePartyApp_OpenMainMenu(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_OpenMainMenu(BattleCastlePartyApp *app) {
     BattleCastle_DrawWindowFrame(&app->windows[6], Options_GetFrame(app->options));
     app->listCursorPos = CASTLE_PARTY_LIST_POS_NONE;
     BattleCastlePartyApp_CreateMainMenuList(app);
     BattleCastlePartyApp_PrintMainMenuHelp(app);
 }
 
-void BattleCastlePartyApp_CloseMainMenu(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_CloseMainMenu(BattleCastlePartyApp *app) {
     BattleCastlePartyApp_CloseWindow(&app->windows[6]);
     BattleCastlePartyApp_DestroyListMenu(app);
 }
 
 // RESTORE HP / RESTORE PP / RESTORE ALL / RANK UP / CANCEL
-void BattleCastlePartyApp_OpenHealMenu(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_OpenHealMenu(BattleCastlePartyApp *app) {
     BattleCastle_DrawWindowFrame(&app->windows[6], Options_GetFrame(app->options));
     app->listCursorPos = CASTLE_PARTY_LIST_POS_NONE;
     BattleCastlePartyApp_CreateHealMenuList(app);
     BattleCastlePartyApp_PrintHealMenuHelp(app);
 }
 
-void BattleCastlePartyApp_CloseHealMenu(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_CloseHealMenu(BattleCastlePartyApp *app) {
     BattleCastlePartyApp_DestroyListMenu(app);
 }
 
-void BattleCastlePartyApp_OpenRentalMenu(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_OpenRentalMenu(BattleCastlePartyApp *app) {
     BattleCastle_DrawWindowFrame(&app->windows[6], Options_GetFrame(app->options));
     app->listCursorPos = CASTLE_PARTY_LIST_POS_NONE;
     BattleCastlePartyApp_CreateRentalMenuList(app);
     BattleCastlePartyApp_PrintRentalMenuHelp(app);
 }
 
-void BattleCastlePartyApp_CloseRentalMenu(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_CloseRentalMenu(BattleCastlePartyApp *app) {
     BattleCastlePartyApp_DestroyListMenu(app);
 }
 
@@ -1820,12 +1819,12 @@ void BattleCastlePartyApp_CloseItemGrid(BattleCastlePartyApp *app) {
     }
 }
 
-void BattleCastlePartyApp_ShowYesNoPrompt(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_ShowYesNoPrompt(BattleCastlePartyApp *app) {
     BattleCastlePrompt_Show(&app->yesNoPrompt, app->bgConfig);
 }
 
 // Title ("Rental/Berry" or "Rental/Item"), the player's name and their Castle Points
-void BattleCastlePartyApp_PrintItemGridHeader(BattleCastlePartyApp *app, int mode) {
+static void BattleCastlePartyApp_PrintItemGridHeader(BattleCastlePartyApp *app, int mode) {
     PlayerProfile *profile;
     String *name;
     u32 color;
@@ -1858,7 +1857,7 @@ void BattleCastlePartyApp_PrintItemGridHeader(BattleCastlePartyApp *app, int mod
 }
 
 // Names and costs of the items on the current page
-void BattleCastlePartyApp_PrintItemNames(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_PrintItemNames(BattleCastlePartyApp *app) {
     u16 first;
     u16 i;
     int width;
@@ -1877,9 +1876,7 @@ void BattleCastlePartyApp_PrintItemNames(BattleCastlePartyApp *app) {
 }
 
 // Icons of the items on the current page
-void BattleCastlePartyApp_DrawItemIcons(BattleCastlePartyApp *app) {
-    // The list entry offset and the icon slot (iconSlot->itemIcons[0] == app->itemIcons[i])
-    // are stepped by hand: keeps the original codegen
+static void BattleCastlePartyApp_DrawItemIcons(BattleCastlePartyApp *app) {
     u32 itemOffset = 0;
     u32 pageOffset;
     u32 i = 0;
@@ -1908,7 +1905,7 @@ void BattleCastlePartyApp_DrawItemIcons(BattleCastlePartyApp *app) {
 }
 
 // "{page}/{numPages}"
-void BattleCastlePartyApp_PrintItemPageNumber(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_PrintItemPageNumber(BattleCastlePartyApp *app) {
     int x;
 
     FillWindowPixelBuffer(&app->windows[CASTLE_PARTY_WIN_PAGE_NUMBER], 0);
@@ -1919,7 +1916,7 @@ void BattleCastlePartyApp_PrintItemPageNumber(BattleCastlePartyApp *app) {
     ScheduleWindowCopyToVram(&app->windows[CASTLE_PARTY_WIN_PAGE_NUMBER]);
 }
 
-void BattleCastlePartyApp_PrintReturnButton(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_PrintReturnButton(BattleCastlePartyApp *app) {
     int width;
 
     FillWindowPixelBuffer(&app->windows[CASTLE_PARTY_WIN_RETURN], 0);
@@ -1929,7 +1926,7 @@ void BattleCastlePartyApp_PrintReturnButton(BattleCastlePartyApp *app) {
 }
 
 // Description and icon of the item under the cursor (item: position on the page)
-void BattleCastlePartyApp_PrintItemDescription(BattleCastlePartyApp *app, u32 item) {
+static void BattleCastlePartyApp_PrintItemDescription(BattleCastlePartyApp *app, u32 item) {
     u16 index;
     u16 itemId;
 
@@ -1947,7 +1944,7 @@ void BattleCastlePartyApp_PrintItemDescription(BattleCastlePartyApp *app, u32 it
 }
 
 // Nickname, gender, level, HP and held item of the mon the item is for
-void BattleCastlePartyApp_PrintSelectedMonInfo(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_PrintSelectedMonInfo(BattleCastlePartyApp *app) {
     u32 i;
 
     for (i = CASTLE_PARTY_WIN_MON_NICKNAME; i <= CASTLE_PARTY_WIN_MON_ITEM; i++) {
@@ -1978,7 +1975,7 @@ void BattleCastlePartyApp_PrintSelectedMonInfo(BattleCastlePartyApp *app) {
 }
 
 // Builds the rental list for the player's rental rank and draws the item grid
-void BattleCastlePartyApp_SetupItemGrid(BattleCastlePartyApp *app, int mode) {
+static void BattleCastlePartyApp_SetupItemGrid(BattleCastlePartyApp *app, int mode) {
     MsgData *itemNames = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0222_bin, HEAP_ID_107);
     int rank = BattleCastle_GetRank(app->saveData, app->frontierType, CASTLE_RANK_RENTAL);
     const u16 *items;
@@ -2008,20 +2005,20 @@ void BattleCastlePartyApp_SetupItemGrid(BattleCastlePartyApp *app, int mode) {
     BattleCastleSprite_SetPositionSubScreen(app->monPic, 48, 72);
 }
 
-void BattleCastlePartyApp_BufferNumber(BattleCastlePartyApp *app, int field, int value, int digits, int mode) {
+static void BattleCastlePartyApp_BufferNumber(BattleCastlePartyApp *app, int field, int value, int digits, int mode) {
     BufferIntegerAsString(app->msgFormat, field, value, digits, (PrintingMode)mode, TRUE);
 }
 
-void BattleCastlePartyApp_BufferMonNickname(BattleCastlePartyApp *app, int field, BoxPokemon *boxMon) {
+static void BattleCastlePartyApp_BufferMonNickname(BattleCastlePartyApp *app, int field, BoxPokemon *boxMon) {
     BufferBoxMonNickname(app->msgFormat, field, boxMon);
 }
 
-void BattleCastlePartyApp_BufferPlayerName(BattleCastlePartyApp *app, int field) {
+static void BattleCastlePartyApp_BufferPlayerName(BattleCastlePartyApp *app, int field) {
     PlayerProfile *profile = Save_PlayerData_GetProfile(app->saveData);
     BufferPlayersName(app->msgFormat, field, profile);
 }
 
-void BattleCastlePartyApp_PrintPlayerName(BattleCastlePartyApp *app, Window *window, u32 x, u32 y, u8 fontId) {
+static void BattleCastlePartyApp_PrintPlayerName(BattleCastlePartyApp *app, Window *window, u32 x, u32 y, u8 fontId) {
     PlayerProfile *profile = Save_PlayerData_GetProfile(app->saveData);
     String *name = String_New(PLAYER_NAME_LENGTH + 1, HEAP_ID_107);
     u32 color;
@@ -2037,7 +2034,7 @@ void BattleCastlePartyApp_PrintPlayerName(BattleCastlePartyApp *app, Window *win
     String_Delete(name);
 }
 
-void BattleCastlePartyApp_PrintPartnerName(BattleCastlePartyApp *app, Window *window, u32 x, u32 y, u8 fontId) {
+static void BattleCastlePartyApp_PrintPartnerName(BattleCastlePartyApp *app, Window *window, u32 x, u32 y, u8 fontId) {
     PlayerProfile *profile = CommPlayerInfo_GetProfile(Comm_GetLocalNetId() ^ 1);
     u32 color;
 
@@ -2050,7 +2047,7 @@ void BattleCastlePartyApp_PrintPartnerName(BattleCastlePartyApp *app, Window *wi
     BattleCastlePartyApp_AddMessage(app, window, msg_0031_00001, x, y, TEXT_SPEED_NOTRANSFER, (u8)(color >> 16), (color >> 8) & 0xFF, color & 0xFF, 0);
 }
 
-void BattleCastlePartyApp_PrintGenderSymbol(BattleCastlePartyApp *app, Window *window, u32 x, u32 y, u8 fontId, u8 gender) {
+static void BattleCastlePartyApp_PrintGenderSymbol(BattleCastlePartyApp *app, Window *window, u32 x, u32 y, u8 fontId, u8 gender) {
     u32 msgNo;
     u8 fg;
     u8 shadow;
@@ -2072,12 +2069,12 @@ void BattleCastlePartyApp_PrintGenderSymbol(BattleCastlePartyApp *app, Window *w
     BattleCastlePartyApp_AddMessage(app, window, msgNo, x, y, TEXT_SPEED_NOTRANSFER, fg, shadow, bg, fontId);
 }
 
-void BattleCastlePartyApp_SetMainState(BattleCastlePartyApp *app, int *state, u32 newState) {
+static void BattleCastlePartyApp_SetMainState(BattleCastlePartyApp *app, int *state, u32 newState) {
     app->subState = 0;
     *state = newState;
 }
 
-void BattleCastlePartyApp_MoveCursor(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_MoveCursor(BattleCastlePartyApp *app) {
     PlaySE(SEQ_SE_DP_SELECT);
     if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
         BattleCastlePartyApp_SendLinkCommand(app, CASTLE_LINK_CMD_CURSOR, app->cursorPos);
@@ -2086,7 +2083,7 @@ void BattleCastlePartyApp_MoveCursor(BattleCastlePartyApp *app) {
 }
 
 // Moves the player's (or the partner's) cursor to a party slot, or onto EXIT
-void BattleCastlePartyApp_DrawCursor(BattleCastlePartyApp *app, u32 index, int isPartner) {
+static void BattleCastlePartyApp_DrawCursor(BattleCastlePartyApp *app, u32 index, int isPartner) {
     BattleCastleSprite *cursor;
     int x;
     int y;
@@ -2123,7 +2120,7 @@ void BattleCastlePartyApp_DrawCursor(BattleCastlePartyApp *app, u32 index, int i
     }
 }
 
-void BattleCastlePartyApp_GetCursorPos(BattleCastlePartyApp *app, int *x, int *y, u32 index) {
+static void BattleCastlePartyApp_GetCursorPos(BattleCastlePartyApp *app, int *x, int *y, u32 index) {
     if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
         if (index == 0) {
             *x = 40;
@@ -2147,7 +2144,7 @@ void BattleCastlePartyApp_GetCursorPos(BattleCastlePartyApp *app, int *x, int *y
 }
 
 // Cost in CP of a rental entry
-u16 BattleCastlePartyApp_GetRentalCost(BattleCastlePartyApp *app, int index, int kind) {
+static u16 BattleCastlePartyApp_GetRentalCost(BattleCastlePartyApp *app, int index, int kind) {
     BattleCastle_GetRank(app->saveData, app->frontierType, CASTLE_RANK_RENTAL);
     if (kind == CASTLE_PARTY_ACTION_RENT_BERRY) {
         return gBattleCastleRentalBerryCosts[index];
@@ -2155,7 +2152,7 @@ u16 BattleCastlePartyApp_GetRentalCost(BattleCastlePartyApp *app, int index, int
     return gBattleCastleRentalItemCosts[index];
 }
 
-u16 BattleCastlePartyApp_GetRentalCostByItemId(u16 itemId) {
+static u16 BattleCastlePartyApp_GetRentalCostByItemId(u16 itemId) {
     u32 i;
 
     for (i = 0; i < CASTLE_ITEM_GRID_NUM_ITEMS; i++) {
@@ -2173,7 +2170,7 @@ u16 BattleCastlePartyApp_GetRentalCostByItemId(u16 itemId) {
 }
 
 // Item id of a rental entry
-u16 BattleCastlePartyApp_GetRentalItemId(BattleCastlePartyApp *app, int index, int kind) {
+static u16 BattleCastlePartyApp_GetRentalItemId(BattleCastlePartyApp *app, int index, int kind) {
     BattleCastle_GetRank(app->saveData, app->frontierType, CASTLE_RANK_RENTAL);
     if (kind == CASTLE_PARTY_ACTION_RENT_BERRY) {
         return gBattleCastleRentalBerries[index];
@@ -2182,7 +2179,7 @@ u16 BattleCastlePartyApp_GetRentalItemId(BattleCastlePartyApp *app, int index, i
 }
 
 // Positions of the player's and the partner's name
-void BattleCastlePartyApp_GetTrainerNamePositions(BattleCastlePartyApp *app, u16 *x1, u16 *y1, u16 *x2, u16 *y2) {
+static void BattleCastlePartyApp_GetTrainerNamePositions(BattleCastlePartyApp *app, u16 *x1, u16 *y1, u16 *x2, u16 *y2) {
     if (BattleCastle_IsMultiType(app->frontierType) == FALSE) {
         *x1 = 40;
         *y1 = 0;
@@ -2278,7 +2275,7 @@ int BattleCastlePartyApp_PlayActionEffect(BattleCastlePartyApp *app, u32 selecte
     return FALSE;
 }
 
-int BattleCastlePartyApp_GetMonIconHpPalette(BattleCastlePartyApp *app, u32 hpBarColor) {
+static int BattleCastlePartyApp_GetMonIconHpPalette(BattleCastlePartyApp *app, u32 hpBarColor) {
     switch (hpBarColor) {
     case 4:
         return 1;
@@ -2293,7 +2290,7 @@ int BattleCastlePartyApp_GetMonIconHpPalette(BattleCastlePartyApp *app, u32 hpBa
     }
 }
 
-int BattleCastlePartyApp_GetHpBarAnimSeq(BattleCastlePartyApp *app, u32 hpBarColor) {
+static int BattleCastlePartyApp_GetHpBarAnimSeq(BattleCastlePartyApp *app, u32 hpBarColor) {
     switch (hpBarColor) {
     case 4:
         return 15;
@@ -2309,7 +2306,7 @@ int BattleCastlePartyApp_GetHpBarAnimSeq(BattleCastlePartyApp *app, u32 hpBarCol
 }
 
 // LEFT / RIGHT on the stats summary page: next mon, wrapping around
-void BattleCastlePartyApp_ScrollStatsSummary(BattleCastlePartyApp *app, int delta) {
+static void BattleCastlePartyApp_ScrollStatsSummary(BattleCastlePartyApp *app, int delta) {
     s8 cursorPos = (s8)app->cursorPos + delta;
     Pokemon *mon;
 
@@ -2325,7 +2322,7 @@ void BattleCastlePartyApp_ScrollStatsSummary(BattleCastlePartyApp *app, int delt
 }
 
 // LEFT / RIGHT on the moves summary page: next mon, wrapping around
-void BattleCastlePartyApp_ScrollMovesSummary(BattleCastlePartyApp *app, int delta) {
+static void BattleCastlePartyApp_ScrollMovesSummary(BattleCastlePartyApp *app, int delta) {
     s8 cursorPos = (s8)app->cursorPos + delta;
     Pokemon *mon;
 
@@ -2341,7 +2338,7 @@ void BattleCastlePartyApp_ScrollMovesSummary(BattleCastlePartyApp *app, int delt
 }
 
 // Closes whatever menu or panel is open (the partner left the link challenge)
-void BattleCastlePartyApp_CloseAll(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_CloseAll(BattleCastlePartyApp *app) {
     BattleCastlePartyApp_CloseMenus(app);
     BattleCastlePartyApp_CloseItemGrid(app);
     BattleCastlePartyApp_CloseWindow(&app->windows[6]);
@@ -2351,7 +2348,7 @@ void BattleCastlePartyApp_CloseAll(BattleCastlePartyApp *app) {
 }
 
 // TRUE if any move has less than its max PP
-int BattleCastlePartyApp_IsAnyPpUsed(Pokemon *mon) {
+static int BattleCastlePartyApp_IsAnyPpUsed(Pokemon *mon) {
     int used = FALSE;
     u32 pp;
 
@@ -2374,12 +2371,12 @@ int BattleCastlePartyApp_IsAnyPpUsed(Pokemon *mon) {
     return used;
 }
 
-void BattleCastlePartyApp_CloseWindow(Window *window) {
+static void BattleCastlePartyApp_CloseWindow(Window *window) {
     ClearFrameAndWindow2(window, TRUE);
     ClearWindowTilemapAndScheduleTransfer(window);
 }
 
-BOOL BattleCastlePartyApp_SendLinkCommand(BattleCastlePartyApp *app, int command, int param) {
+static BOOL BattleCastlePartyApp_SendLinkCommand(BattleCastlePartyApp *app, int command, int param) {
     int cmd;
 
     switch (command) {
@@ -2406,7 +2403,7 @@ BOOL BattleCastlePartyApp_SendLinkCommand(BattleCastlePartyApp *app, int command
     return FALSE;
 }
 
-void BattleCastlePartyApp_PrepareLinkRanks(BattleCastlePartyApp *app, int command) {
+static void BattleCastlePartyApp_PrepareLinkRanks(BattleCastlePartyApp *app, int command) {
     PlayerProfile *profile;
     int i;
     u8 *dest;
@@ -2414,7 +2411,6 @@ void BattleCastlePartyApp_PrepareLinkRanks(BattleCastlePartyApp *app, int comman
     profile = Save_PlayerData_GetProfile(app->saveData);
     app->linkSendBuf[0] = command;
     app->linkSendBuf[1] = PlayerProfile_GetTrainerGender(profile);
-    // linkSendBuf[2 + i], addressed from a cursor that steps through the app (keeps the original codegen)
     for (i = 0, dest = (u8 *)app + 2 * sizeof(u16); i < 3; i++, dest += sizeof(u16)) {
         *(u16 *)(dest + offsetof(BattleCastlePartyApp, linkSendBuf)) = BattleCastle_GetRank(app->saveData, app->frontierType, i);
     }
@@ -2433,7 +2429,7 @@ void BattleCastlePartyApp_ReceiveRanks(int netId, void *unused, void *data, Batt
     }
 }
 
-void BattleCastlePartyApp_PrepareLinkAction(BattleCastlePartyApp *app, int command, int slot) {
+static void BattleCastlePartyApp_PrepareLinkAction(BattleCastlePartyApp *app, int command, int slot) {
     app->linkSendBuf[0] = command;
     app->linkSendBuf[1] = slot;
     if (Comm_GetLocalNetId() == 0 && app->linkSlot == 0xFF) {
@@ -2468,7 +2464,7 @@ void BattleCastlePartyApp_ReceiveAction(int netId, int unused, u16 *data, Battle
 }
 #pragma force_active reset
 
-void BattleCastlePartyApp_PrepareLinkCursor(BattleCastlePartyApp *app, int command) {
+static void BattleCastlePartyApp_PrepareLinkCursor(BattleCastlePartyApp *app, int command) {
     app->linkSendBuf[0] = command;
     app->linkSendBuf[1] = app->cursorPos;
 }
@@ -2483,7 +2479,7 @@ void BattleCastlePartyApp_ReceiveCursor(int netId, int unused, u16 *data, Battle
 }
 #pragma force_active reset
 
-void BattleCastlePartyApp_PrepareLinkExit(BattleCastlePartyApp *app, int command) {
+static void BattleCastlePartyApp_PrepareLinkExit(BattleCastlePartyApp *app, int command) {
     app->linkSendBuf[0] = 1;
 }
 
@@ -2494,11 +2490,11 @@ void BattleCastlePartyApp_ReceiveExit(int netId, int unused, u16 *data, BattleCa
     }
 }
 
-void BattleCastlePartyApp_UseItemOnMon(Pokemon *mon, u16 itemId) {
+static void BattleCastlePartyApp_UseItemOnMon(Pokemon *mon, u16 itemId) {
     UseItemOnPokemon(mon, itemId, 0, 0, HEAP_ID_107);
 }
 
-void BattleCastlePartyApp_PrintTrainerNames(BattleCastlePartyApp *app, Window *window) {
+static void BattleCastlePartyApp_PrintTrainerNames(BattleCastlePartyApp *app, Window *window) {
     u16 x1;
     u16 y1;
     u16 x2;
@@ -2508,7 +2504,7 @@ void BattleCastlePartyApp_PrintTrainerNames(BattleCastlePartyApp *app, Window *w
     if (!BattleCastle_IsMultiType(app->frontierType)) {
         BattleCastlePartyApp_PrintPlayerName(app, window, (u16)(x1 + 4), (u16)(y1 + 1), 0);
     } else if (!Comm_GetLocalNetId()) {
-        int y = y1; // widened copy of y1 keeps the original register allocation
+        int y = y1;
         y = (u16)(y + 1);
         BattleCastlePartyApp_PrintPlayerName(app, window, x1, y, 0);
         BattleCastlePartyApp_PrintPartnerName(app, window, x2, (u16)(y2 + 1), 0);
@@ -2521,7 +2517,7 @@ void BattleCastlePartyApp_PrintTrainerNames(BattleCastlePartyApp *app, Window *w
     ScheduleWindowCopyToVram(window);
 }
 
-void BattleCastlePartyApp_HealMon(BattleCastlePartyApp *app, int slot, int action) {
+static void BattleCastlePartyApp_HealMon(BattleCastlePartyApp *app, int slot, int action) {
     Pokemon *mon;
     int index = BattleCastle_GetMonIndex(app->numMons, slot);
 
@@ -2548,7 +2544,7 @@ void BattleCastlePartyApp_HealMon(BattleCastlePartyApp *app, int slot, int actio
     PlaySE(SEQ_SE_DP_KAIFUKU);
 }
 
-void BattleCastlePartyApp_GiveRentalItem(BattleCastlePartyApp *app, int slot, u16 itemId) {
+static void BattleCastlePartyApp_GiveRentalItem(BattleCastlePartyApp *app, int slot, u16 itemId) {
     Pokemon *mon = Party_GetMonByIndex(app->party, BattleCastle_GetMonIndex(app->numMons, slot));
 
     SetMonData(mon, MON_DATA_HELD_ITEM, &itemId);
@@ -2563,7 +2559,7 @@ void BattleCastlePartyApp_GiveRentalItem(BattleCastlePartyApp *app, int slot, u1
     PlaySE(SEQ_SE_DP_UG_020);
 }
 
-void BattleCastlePartyApp_CloseMenus(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_CloseMenus(BattleCastlePartyApp *app) {
     if (app->flags.bits.listMenuOpen == TRUE) {
         TouchscreenListMenu_DestroyButtons(app->listMenu);
         BattleCastlePartyApp_DestroyListMenu(app);
@@ -2571,12 +2567,12 @@ void BattleCastlePartyApp_CloseMenus(BattleCastlePartyApp *app) {
     BattleCastlePrompt_Hide(&app->yesNoPrompt);
 }
 
-void BattleCastlePartyApp_ReturnToItemList(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_ReturnToItemList(BattleCastlePartyApp *app) {
     BattleCastlePartyApp_CloseWindow(&app->windows[6]);
     BattleCastlePartyApp_ShowItemGrid(app);
 }
 
-void BattleCastlePartyApp_PrintCastlePoints(BattleCastlePartyApp *app, Window *window) {
+static void BattleCastlePartyApp_PrintCastlePoints(BattleCastlePartyApp *app, Window *window) {
     u16 x1;
     u16 y1;
     u16 x2;
@@ -2618,7 +2614,7 @@ void BattleCastlePartyApp_PrintCastlePoints(BattleCastlePartyApp *app, Window *w
 
 // Spends the Castle Points for a heal (1-3), rental item (6, 7) or summary page (9, 10)
 // once both players agreed on it; the cost is paid by whoever owns the mon.
-void BattleCastlePartyApp_ApplyAction(BattleCastlePartyApp *app, u32 slot, u8 action) {
+static void BattleCastlePartyApp_ApplyAction(BattleCastlePartyApp *app, u32 slot, u8 action) {
     u32 monSlot;
     u32 numOwnMons;
     int cost;
@@ -2688,7 +2684,7 @@ void BattleCastlePartyApp_ApplyAction(BattleCastlePartyApp *app, u32 slot, u8 ac
     }
 }
 
-void BattleCastlePartyApp_ShowMonStats(BattleCastlePartyApp *app, u32 slot) {
+static void BattleCastlePartyApp_ShowMonStats(BattleCastlePartyApp *app, u32 slot) {
     Pokemon *mon;
 
     BattleCastlePartyApp_LoadStatsSummaryBg(app, GF_BG_LYR_MAIN_2);
@@ -2700,7 +2696,7 @@ void BattleCastlePartyApp_ShowMonStats(BattleCastlePartyApp *app, u32 slot) {
     BattleCastle_RequestBgToggle(2, 1, &app->bgToggleRequests);
 }
 
-void BattleCastlePartyApp_ShowMonMoves(BattleCastlePartyApp *app, u32 slot) {
+static void BattleCastlePartyApp_ShowMonMoves(BattleCastlePartyApp *app, u32 slot) {
     Pokemon *mon;
 
     BattleCastlePartyApp_LoadMovesSummaryBg(app, GF_BG_LYR_MAIN_2);
@@ -2712,11 +2708,11 @@ void BattleCastlePartyApp_ShowMonMoves(BattleCastlePartyApp *app, u32 slot) {
     BattleCastle_RequestBgToggle(2, 1, &app->bgToggleRequests);
 }
 
-void BattleCastlePartyApp_HideSummaryPanel(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_HideSummaryPanel(BattleCastlePartyApp *app) {
     BattleCastle_RequestBgToggle(2, 0, &app->bgToggleRequests);
 }
 
-void BattleCastlePartyApp_UpdateMonIcons(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_UpdateMonIcons(BattleCastlePartyApp *app) {
     int count = BattleCastle_GetPartySize(app->frontierType, 1);
     int i;
 
@@ -2738,7 +2734,7 @@ void BattleCastlePartyApp_UpdateMonIcons(BattleCastlePartyApp *app) {
 }
 
 // Raises the heal (action 4) or rental rank of whoever owns the mon in slot and pays for it
-void BattleCastlePartyApp_RankUp(BattleCastlePartyApp *app, u8 slot, u16 action) {
+static void BattleCastlePartyApp_RankUp(BattleCastlePartyApp *app, u8 slot, u16 action) {
     u8 kind;
     u8 numOwnMons;
     int rank;
@@ -2804,7 +2800,7 @@ void BattleCastlePartyApp_RankUp(BattleCastlePartyApp *app, u8 slot, u16 action)
     app->printerId = BattleCastlePartyApp_ShowMessage(app, gBattleCastlePartyAppRankUpMessages[kind][rank], 1);
 }
 
-void BattleCastlePartyApp_PrintExpandedMessage(BattleCastlePartyApp *app, Window *window, MsgData *msgData, int msgNo, int x, int y, int fontId, int color, int alignment) {
+static void BattleCastlePartyApp_PrintExpandedMessage(BattleCastlePartyApp *app, Window *window, MsgData *msgData, int msgNo, int x, int y, int fontId, int color, int alignment) {
     String *string = NewString_ReadMsgData(msgData, msgNo);
 
     StringExpandPlaceholders(app->msgFormat, app->expandedString, string);
@@ -2850,7 +2846,7 @@ void BattleCastlePartyApp_LoadMonSummary(BattleCastlePartyApp *app) {
     ReleaseMonLock(mon, lock);
 }
 
-void BattleCastlePartyApp_PrintSummaryLabels(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_PrintSummaryLabels(BattleCastlePartyApp *app) {
     FillWindowPixelBuffer(&app->windows[CASTLE_PARTY_WIN_LEVEL_LABEL], 0);
     FillWindowPixelBuffer(&app->windows[CASTLE_PARTY_WIN_ABILITY_LABEL], 0);
     FillWindowPixelBuffer(&app->windows[CASTLE_PARTY_WIN_NATURE_LABEL], 0);
@@ -2884,7 +2880,7 @@ void BattleCastlePartyApp_PrintSummaryLabels(BattleCastlePartyApp *app) {
 }
 
 // Prints the values of the summary panel (scheduleCopy == TRUE: schedule the copy, else copy now)
-void BattleCastlePartyApp_PrintMonSummary(BattleCastlePartyApp *app, int scheduleCopy) {
+static void BattleCastlePartyApp_PrintMonSummary(BattleCastlePartyApp *app, int scheduleCopy) {
     u32 i;
     u32 move;
     u16 halfSlashWidth;
@@ -2948,7 +2944,6 @@ void BattleCastlePartyApp_PrintMonSummary(BattleCastlePartyApp *app, int schedul
     BattleCastlePartyApp_PrintExpandedMessage(app, &app->windows[CASTLE_PARTY_WIN_SPEED], app->msgData, msg_0031_00085, GetWindowWidth(&app->windows[CASTLE_PARTY_WIN_SPEED]) * 8, 0, 0, CASTLE_PARTY_TEXT_COLOR, CASTLE_ALIGN_RIGHT);
 
     // moves: name, then "pp / maxPp" centered on the slash ("--" for an empty slot)
-    // (summary.moves[move] is read through a cursor stepping over the app; keeps the original codegen)
     for (move = 0, cursor = (u8 *)app; move < 4; move++, cursor += sizeof(u16)) {
         BufferMoveName(app->msgFormat, move, *(u16 *)(cursor + offsetof(BattleCastlePartyApp, summary.moves)));
         BattleCastlePartyApp_PrintExpandedMessage(app, &app->windows[CASTLE_PARTY_WIN_MOVE_NAMES + move], app->msgData, msg_0031_00096 + move, 0, 0, 0, CASTLE_PARTY_TEXT_COLOR, CASTLE_ALIGN_LEFT);
@@ -3007,13 +3002,13 @@ void BattleCastlePartyApp_PrintMonSummary(BattleCastlePartyApp *app, int schedul
     }
 }
 
-void BattleCastlePartyApp_RefreshMonSummary(BattleCastlePartyApp *app, int scheduleCopy) {
+static void BattleCastlePartyApp_RefreshMonSummary(BattleCastlePartyApp *app, int scheduleCopy) {
     BattleCastlePartyApp_LoadMonSummary(app);
     BattleCastlePartyApp_PrintMonSummary(app, scheduleCopy);
     BattleCastleSprite_LoadMonPic(app->monPic, app->summary.boxMon, app->summary.species, app->summary.personality);
 }
 
-void BattleCastlePartyApp_ShowMonSummary(BattleCastlePartyApp *app, int show) {
+static void BattleCastlePartyApp_ShowMonSummary(BattleCastlePartyApp *app, int show) {
     if (show == TRUE) {
         u32 i;
         Window *window;
@@ -3034,13 +3029,13 @@ void BattleCastlePartyApp_ShowMonSummary(BattleCastlePartyApp *app, int show) {
 }
 
 // Item buttons: two columns, three rows
-void BattleCastlePartyApp_GetItemButtonPos(u32 slot, s16 *x, s16 *y) {
+static void BattleCastlePartyApp_GetItemButtonPos(u32 slot, s16 *x, s16 *y) {
     *x = (slot & 1) * 128 + 20;
     *y = (slot >> 1) * 40 + 56;
 }
 
 // Rental item chosen: hide the other buttons and show its name and cost
-void BattleCastlePartyApp_ShowSelectedItem(BattleCastlePartyApp *app, u32 selected) {
+static void BattleCastlePartyApp_ShowSelectedItem(BattleCastlePartyApp *app, u32 selected) {
     void *screenRaw;
     NNSG2dScreenData *screen;
     u32 i;
@@ -3074,7 +3069,7 @@ void BattleCastlePartyApp_ShowSelectedItem(BattleCastlePartyApp *app, u32 select
 }
 
 // Back from BattleCastlePartyApp_ShowSelectedItem to the item grid
-void BattleCastlePartyApp_ShowItemGrid(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_ShowItemGrid(BattleCastlePartyApp *app) {
     void *screenRaw;
     NNSG2dScreenData *screen;
     u32 i;
@@ -3140,7 +3135,7 @@ void BattleCastlePartyApp_CreateListMenu(BattleCastlePartyApp *app, int count, u
     BattleCastle_SetSpritesTranslucent(app->heldItemIcons, numMons, 1);
 }
 
-void BattleCastlePartyApp_CreateMainMenuList(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_CreateMainMenuList(BattleCastlePartyApp *app) {
     u32 i;
 
     app->listMenuItems = ListMenuItems_New(3, HEAP_ID_107);
@@ -3151,7 +3146,7 @@ void BattleCastlePartyApp_CreateMainMenuList(BattleCastlePartyApp *app) {
 }
 
 // Options above the current heal rank are left out; RANK UP is left out at the max rank
-void BattleCastlePartyApp_CreateHealMenuList(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_CreateHealMenuList(BattleCastlePartyApp *app) {
     u8 count;
     u8 rank;
     u8 i;
@@ -3185,7 +3180,7 @@ void BattleCastlePartyApp_CreateHealMenuList(BattleCastlePartyApp *app) {
 }
 
 // Options above the current rental rank are left out; RANK UP is left out at the max rank
-void BattleCastlePartyApp_CreateRentalMenuList(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_CreateRentalMenuList(BattleCastlePartyApp *app) {
     u8 count;
     u8 rank;
     u8 i;
@@ -3228,7 +3223,7 @@ void BattleCastlePartyApp_DestroyListMenu(BattleCastlePartyApp *app) {
 }
 
 // Help text for the entry under the cursor, reprinted when the cursor moves
-void BattleCastlePartyApp_PrintMainMenuHelp(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_PrintMainMenuHelp(BattleCastlePartyApp *app) {
     u8 cursorPos = app->listMenu->cursorPos;
 
     if (app->listCursorPos != cursorPos) {
@@ -3237,7 +3232,7 @@ void BattleCastlePartyApp_PrintMainMenuHelp(BattleCastlePartyApp *app) {
     }
 }
 
-void BattleCastlePartyApp_PrintHealMenuHelp(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_PrintHealMenuHelp(BattleCastlePartyApp *app) {
     u8 cursorPos = app->listMenu->cursorPos;
     u8 rank;
     int msgNo;
@@ -3266,7 +3261,7 @@ void BattleCastlePartyApp_PrintHealMenuHelp(BattleCastlePartyApp *app) {
     }
 }
 
-void BattleCastlePartyApp_PrintRentalMenuHelp(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_PrintRentalMenuHelp(BattleCastlePartyApp *app) {
     u8 cursorPos = app->listMenu->cursorPos;
     u8 rank;
     int msgNo;
@@ -3298,7 +3293,7 @@ void BattleCastlePartyApp_PrintRentalMenuHelp(BattleCastlePartyApp *app) {
     }
 }
 
-void BattleCastlePartyApp_StartButtonAnim(BattleCastlePartyApp *app, u16 button) {
+static void BattleCastlePartyApp_StartButtonAnim(BattleCastlePartyApp *app, u16 button) {
     app->pressedButton = button;
     app->buttonAnimState = 0;
     app->buttonAnimTimer = 0;

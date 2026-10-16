@@ -181,43 +181,43 @@ typedef struct PokeathlonCirclePushStack {
 } PokeathlonCirclePushStack;
 
 typedef struct PokeathlonCirclePush {
-    BgConfig *bgConfig;                           // 0x000
-    Window scoreWindow;                           // 0x004
-    enum HeapID heapId;                           // 0x014
-    PokeathlonCourseSpritePool *spritePool;       // 0x018
-    Sprite *markerSprite;                         // 0x01C
-    PokeathlonCirclePushMon mons[4][3];           // 0x020
-    int scores[4];                                // 0x6E0
-    PokeathlonCirclePushTouch touches[4];         // 0x6F0
-    u8 heldMons[4];                               // 0x720: per player, 12: none
-    u8 packetTeam;                                // 0x724: team whose score the next packet carries
-    u8 timerTick;                                 // 0x725
-    u8 timer;                                     // 0x726: 0..43
-    u8 round;                                     // 0x727
-    u8 roundDelay;                                // 0x728
-    u8 over;                                      // 0x729
-    u8 changeLayout;                              // 0x72A
-    u8 scoreZones;                                // 0x72B
-    PokeathlonCirclePushZoneMarkers *zoneMarkers; // 0x72C
-    u16 layout;                                   // 0x730: drawn
-    u16 nextLayout;                               // 0x732
-    void *ringScreenFile;                         // 0x734
-    NNSG2dScreenData *ringScreen;                 // 0x738
-    u8 grayed[12];                                // 0x73C: drawn with the gray palette
-    u8 roundStart;                                // 0x748
-    u8 scoringDelay;                              // 0x749
-    u8 scoring;                                   // 0x74A
-    u8 scoringMon;                                // 0x74B: 12: none
-    u8 scoringEffect;                             // 0x74C
-    u8 scoringTimer;                              // 0x74D
-    u8 scoringCount;                              // 0x74E
-    u8 scoringIndex;                              // 0x74F
-    u8 scoringMons[12];                           // 0x750
-    u8 scoringPoints[12];                         // 0x75C
-    PokeathlonCourseSpriteResources *spriteResources;                        // 0x768
-    void *objects;                                // 0x76C
-    PokeathlonCirclePushAi *ai;                   // 0x770
-    PokeathlonCirclePushDisplay *display;         // 0x774
+    BgConfig *bgConfig;                               // 0x000
+    Window scoreWindow;                               // 0x004
+    enum HeapID heapId;                               // 0x014
+    PokeathlonCourseSpritePool *spritePool;           // 0x018
+    Sprite *markerSprite;                             // 0x01C
+    PokeathlonCirclePushMon mons[4][3];               // 0x020
+    int scores[4];                                    // 0x6E0
+    PokeathlonCirclePushTouch touches[4];             // 0x6F0
+    u8 heldMons[4];                                   // 0x720: per player, 12: none
+    u8 packetTeam;                                    // 0x724: team whose score the next packet carries
+    u8 timerTick;                                     // 0x725
+    u8 timer;                                         // 0x726: 0..43
+    u8 round;                                         // 0x727
+    u8 roundDelay;                                    // 0x728
+    u8 over;                                          // 0x729
+    u8 changeLayout;                                  // 0x72A
+    u8 scoreZones;                                    // 0x72B
+    PokeathlonCirclePushZoneMarkers *zoneMarkers;     // 0x72C
+    u16 layout;                                       // 0x730: drawn
+    u16 nextLayout;                                   // 0x732
+    void *ringScreenFile;                             // 0x734
+    NNSG2dScreenData *ringScreen;                     // 0x738
+    u8 grayed[12];                                    // 0x73C: drawn with the gray palette
+    u8 roundStart;                                    // 0x748
+    u8 scoringDelay;                                  // 0x749
+    u8 scoring;                                       // 0x74A
+    u8 scoringMon;                                    // 0x74B: 12: none
+    u8 scoringEffect;                                 // 0x74C
+    u8 scoringTimer;                                  // 0x74D
+    u8 scoringCount;                                  // 0x74E
+    u8 scoringIndex;                                  // 0x74F
+    u8 scoringMons[12];                               // 0x750
+    u8 scoringPoints[12];                             // 0x75C
+    PokeathlonCourseSpriteResources *spriteResources; // 0x768
+    void *objects;                                    // 0x76C
+    PokeathlonCirclePushAi *ai;                       // 0x770
+    PokeathlonCirclePushDisplay *display;             // 0x774
 
     struct {
         u16 state;
@@ -235,77 +235,8 @@ BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course);
 BOOL PokeathlonCirclePush_Main(PokeathlonCourseData *course);
 BOOL PokeathlonCirclePush_CalcResults(PokeathlonCourseData *course);
 BOOL PokeathlonCirclePush_Exit(PokeathlonCourseData *course);
-void PokeathlonCirclePush_SetBanks(void);
 BOOL PokeathlonCirclePush_FadeIn(PokeathlonCourseData *course, u8 *state);
 BOOL PokeathlonCirclePush_Play(PokeathlonCourseData *course, u8 *state);
 BOOL PokeathlonCirclePush_End(PokeathlonCourseData *course, u8 *state);
-void PokeathlonCirclePush_InitBgs(BgConfig *bgConfig);
-void PokeathlonCirclePush_LoadBgGfx(PokeathlonCirclePush *circlePush);
-void PokeathlonCirclePush_MakePacket(PokeathlonCirclePush *circlePush, PokeathlonCirclePushPacket *packet);
-BOOL PokeathlonCirclePush_Update(PokeathlonCourseData *course);
-void PokeathlonCirclePush_RunHost(PokeathlonCourseData *course);
-void PokeathlonCirclePush_UpdateScreen(PokeathlonCourseData *course);
-void PokeathlonCirclePush_MoveMons(PokeathlonCourseData *course);
-void PokeathlonCirclePush_SetTarget(int x, int y, const VecFx32 *position, fx32 range, VecFx32 *target);
-u8 PokeathlonCirclePush_FindTouchedMon(PokeathlonCirclePush *circlePush, u8 team, u16 x, u16 y);
-BOOL PokeathlonCirclePush_MonsCollide(PokeathlonCirclePushMon *a, PokeathlonCirclePushMon *b);
-void PokeathlonCirclePush_UpdateContacts(PokeathlonCirclePush *circlePush);
-BOOL PokeathlonCirclePush_CanMove(PokeathlonCirclePush *circlePush, PokeathlonCirclePushMon *mon, u32 index, const VecFx32 *delta);
-void PokeathlonCirclePush_PushMons(PokeathlonCirclePush *circlePush);
-u8 PokeathlonCirclePushStack_Push(PokeathlonCirclePushStack *stack, u8 mon);
-u8 PokeathlonCirclePushStack_Pop(PokeathlonCirclePushStack *stack);
-void PokeathlonCirclePush_Project(VecFx32 *a, VecFx32 *b, VecFx32 *out);
-fx32 PokeathlonCirclePush_Cosine(const VecFx32 *a, const VecFx32 *b);
-void PokeathlonCirclePush_ScoreZones(PokeathlonCirclePush *circlePush);
-void PokeathlonCirclePush_DrawTimer(int time, BgConfig *bgConfig);
-void PokeathlonCirclePush_DrawTimerTile(u32 index, BgConfig *bgConfig);
-void PokeathlonCirclePush_RespawnMons(PokeathlonCirclePush *circlePush);
-BOOL PokeathlonCirclePush_IsTeamOut(PokeathlonCirclePush *circlePush, int team);
-void PokeathlonCirclePush_RecoverStamina(PokeathlonCirclePushMon *mon);
-void PokeathlonCirclePush_SetMonStats(PokeathlonCourseData *course, PokeathlonCirclePushRingData *ringData, u8 team, u8 member, PokeathlonCirclePushMon *mon);
-void PokeathlonCirclePush_StartLayoutChange(PokeathlonCirclePushEffects *effects, u8 oldLayout, u8 newLayout, PokeathlonCourseData *course);
-void PokeathlonCirclePush_LayoutChangeTask(SysTask *task, PokeathlonCirclePushEffects *effects);
-void PokeathlonCirclePush_LayoutFadeTask(SysTask *task, PokeathlonCirclePushEffects *effects);
-void PokeathlonCirclePush_RingSlideTask(SysTask *task, PokeathlonCirclePushEffects *effects);
-void PokeathlonCirclePush_ShakeTask(SysTask *task, void *data);
-void PokeathlonCirclePush_StopEffects(PokeathlonCirclePushEffects *effects);
-void PokeathlonCirclePush_StartBounce(PokeathlonCirclePushEffects *effects, u8 mon);
-void PokeathlonCirclePush_BounceTask(SysTask *task, void *data);
-void PokeathlonCirclePush_ApplyBounce(PokeathlonCourseData *course, PokeathlonCirclePushEffects *effects, void *object, u8 mon, int anim);
-void PokeathlonCirclePush_AddScoreWindow(PokeathlonCirclePush *circlePush);
-void PokeathlonCirclePush_PrintScore(PokeathlonCirclePush *circlePush, s32 score);
-BOOL PokeathlonCirclePush_IsOutOfRing(PokeathlonCourseObject *object, fx32 x, fx32 y);
-int PokeathlonCirclePush_CompareDepth(const void *a, const void *b);
-void PokeathlonCirclePush_SortByDepth(PokeathlonCirclePush *circlePush, PokeathlonCirclePushPacket *packet);
-PokeathlonCirclePushZoneMarkers *PokeathlonCirclePushZoneMarkers_New(enum HeapID heapId);
-void PokeathlonCirclePushZoneMarkers_Free(PokeathlonCirclePushZoneMarkers *markers);
-void PokeathlonCirclePushZoneMarkers_CreateSprites(PokeathlonCirclePushZoneMarkers *markers, PokeathlonCourseSpritePool *pool);
-u8 PokeathlonCirclePush_ChooseLayout(u8 layout, int kind);
-int PokeathlonCirclePush_GetZonePoints(u8 layout, u16 x, u16 y, u8 *zone);
-void PokeathlonCirclePushZoneMarkers_Show(PokeathlonCirclePushZoneMarkers *markers, u8 layout);
-void PokeathlonCirclePushZoneMarkers_Hide(PokeathlonCirclePushZoneMarkers *markers, u8 layout);
-int PokeathlonCirclePush_GetPointsEffect(int points);
-BOOL PokeathlonCirclePush_IsInCircle(int x, int y, int centerX, int centerY, u16 radius);
-u8 PokeathlonCirclePush_GetZoneCircles(int layout, PokeathlonCirclePushAiZone *circles);
-PokeathlonCirclePushAi *PokeathlonCirclePushAi_New(enum HeapID heapId, int teamCount, int linkMode);
-void PokeathlonCirclePushAi_SetMon(PokeathlonCirclePushAi *ai, u8 slot, u16 speed, u16 *stamina, VecFx32 *position, u32 *state, VecFx32 *target, PokeathlonCourseObject *object);
-void PokeathlonCirclePushAi_Free(PokeathlonCirclePushAi *ai);
-int PokeathlonCirclePushAi_Update(PokeathlonCirclePushAi *ai, u8 layout);
-void PokeathlonCirclePushAi_ChooseTarget(PokeathlonCirclePushAi *ai, u8 index, u8 layout);
-void PokeathlonCirclePushAi_PlaceInCells(u8 count, PokeathlonCirclePushAiCell **cells);
-void PokeathlonCirclePushAi_ScoreCells(PokeathlonCirclePushAi *ai, u8 count, PokeathlonCirclePushAiZone *zones, PokeathlonCirclePushAiMon *mon, PokeathlonCirclePushAiCell **cells);
-int PokeathlonCirclePushAi_GetCell(int x, int y);
-int PokeathlonCirclePushAi_ScoreCell(PokeathlonCirclePushAi *ai, PokeathlonCirclePushAiZone *zones, int cell, PokeathlonCirclePushAiMon *mon, int x, int y, BOOL *inZone);
-int PokeathlonCirclePushAi_CountRivals(const PokeathlonCirclePushAiMon *mons, const PokeathlonCirclePushAiMon *mon, int cell);
-BOOL PokeathlonCirclePushAi_IsInZone(PokeathlonCirclePushAiZone *zones, fx32 x, fx32 y);
-BOOL PokeathlonCirclePushAi_IsZoneCell(PokeathlonCirclePushAi *ai, u8 cell);
-void PokeathlonCirclePushAi_SnapToZone(PokeathlonCirclePushAi *ai, PokeathlonCirclePushAiZone *zones, s32 cell, s32 *x, s32 *y);
-BOOL PokeathlonCirclePushAi_GetColumnRow(s32 x, s32 y, s16 *column, s16 *row);
-u8 PokeathlonCirclePushAi_SortCells(u32 count, PokeathlonCirclePushAiCell **cells, PokeathlonCirclePushAiCell **sorted);
-PokeathlonCirclePushDisplay *PokeathlonCirclePushDisplay_New(enum HeapID heapId, BgConfig *bgConfig, PokeathlonCourseData *course);
-void PokeathlonCirclePushDisplay_Free(PokeathlonCirclePushDisplay *display);
-void PokeathlonCirclePushDisplay_LoadScreens(PokeathlonCirclePushDisplay *display);
-void PokeathlonCirclePushDisplay_LoadPics(PokeathlonCirclePushDisplay *display);
-void PokeathlonCirclePushDisplay_LoadSpriteResources(PokeathlonCourseSpritePool *pool, PokeathlonCirclePushDisplay *display);
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_CIRCLE_PUSH_H

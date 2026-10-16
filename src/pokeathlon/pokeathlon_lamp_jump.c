@@ -23,19 +23,17 @@
 #include "sprite.h"
 #include "system.h"
 #include "touchscreen.h"
-#include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
+#include "wireless_status_icon.h"
 
 enum {
     LAMP_JUMP_STATE_PLAY,
     LAMP_JUMP_STATE_CALC_SCORES,
 };
 
-// sound_playback.c (no header declares them)
 BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
 u32 GF_SndCountPlayingSeqOnPlayer(u32 playerNo);
 
-// Course helpers, sprite scene and the rest of the event (OVY_96, not yet tidied).
 void *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, int member);
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int member);
 int PokeathlonCourse_GetTouchRadius(); // called with and without an argument
@@ -119,6 +117,19 @@ extern const GraphicsBanks sLampJumpGraphicsBanks;
 extern const u8 gPokeathlonLampJumpSoundPlayers[]; // sound player of each Pokemon
 
 #pragma force_active on
+
+static void PokeathlonLampJump_SetGfxBanks(void);
+static void PokeathlonLampJump_InitBgs(BgConfig *bgConfig);
+static void PokeathlonLampJump_LoadBgGfx(PokeathlonLampJump *lampJump);
+static BOOL PokeathlonLampJump_Update(PokeathlonCourseData *course);
+static void PokeathlonLampJump_UpdateDisplay(PokeathlonCourseData *course);
+static void PokeathlonLampJump_HandleTouch(PokeathlonCourseData *course);
+static void PokeathlonLampJump_UpdateMonSprites(PokeathlonCourseData *course);
+static void PokeathlonLampJump_UpdatePlayerSprites(PokeathlonCourseData *course);
+static void PokeathlonLampJump_GetFlick(int touchX, int touchY, const VecFx32 *start, VecFx32 *flick);
+static u8 PokeathlonLampJump_FindTouchedMon(PokeathlonLampJump *lampJump, u16 touchX, u16 touchY);
+static void PokeathlonLampJump_LaunchMon(PokeathlonLampJump *lampJump, s32 mon, VecFx32 *flick);
+static void PokeathlonLampJump_Init3D(PokeathlonLampJump *lampJump);
 
 BOOL PokeathlonLampJump_Init(PokeathlonCourseData *course) {
     PokeathlonLampJumpMonSpriteInfo info;
@@ -344,7 +355,7 @@ BOOL PokeathlonLampJump_Exit(PokeathlonCourseData *course) {
 
 #pragma force_active reset
 
-void PokeathlonLampJump_SetGfxBanks(void) {
+static void PokeathlonLampJump_SetGfxBanks(void) {
     GraphicsBanks banks = sLampJumpGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
@@ -441,7 +452,7 @@ BOOL PokeathlonLampJump_CalcScores(PokeathlonCourseData *course, u8 *state) {
 
 #pragma force_active reset
 
-void PokeathlonLampJump_InitBgs(BgConfig *bgConfig) {
+static void PokeathlonLampJump_InitBgs(BgConfig *bgConfig) {
     GraphicsModes modes;
     BgTemplate main2;
     BgTemplate main1;
@@ -473,7 +484,7 @@ void PokeathlonLampJump_InitBgs(BgConfig *bgConfig) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
 }
 
-void PokeathlonLampJump_LoadBgGfx(PokeathlonLampJump *lampJump) {
+static void PokeathlonLampJump_LoadBgGfx(PokeathlonLampJump *lampJump) {
     GfGfxLoader_LoadCharData(NARC_a_1_6_8, 7, lampJump->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, FALSE, lampJump->heapId);
     GfGfxLoader_LoadCharData(NARC_a_1_6_8, 5, lampJump->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, lampJump->heapId);
     GfGfxLoader_LoadCharData(NARC_a_1_6_8, 10, lampJump->bgConfig, GF_BG_LYR_SUB_0, 0, 0, FALSE, lampJump->heapId);
@@ -489,7 +500,7 @@ void PokeathlonLampJump_LoadBgGfx(PokeathlonLampJump *lampJump) {
 
 #pragma force_active on
 
-BOOL PokeathlonLampJump_Update(PokeathlonCourseData *course) {
+static BOOL PokeathlonLampJump_Update(PokeathlonCourseData *course) {
     PokeathlonLampJump *lampJump = PokeathlonCourse_GetWork(course);
     u32 *sent = (u32 *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course));
 
@@ -525,7 +536,7 @@ BOOL PokeathlonLampJump_Update(PokeathlonCourseData *course) {
 
 #pragma force_active reset
 
-void PokeathlonLampJump_UpdateDisplay(PokeathlonCourseData *course) {
+static void PokeathlonLampJump_UpdateDisplay(PokeathlonCourseData *course) {
     PokeathlonLampJump *lampJump = PokeathlonCourse_GetWork(course);
 
     PokeathlonLampJump_UpdateMonSprites(course);
@@ -538,7 +549,7 @@ void PokeathlonLampJump_UpdateDisplay(PokeathlonCourseData *course) {
 
 #pragma force_active on
 
-void PokeathlonLampJump_HandleTouch(PokeathlonCourseData *course) {
+static void PokeathlonLampJump_HandleTouch(PokeathlonCourseData *course) {
     u8 *data = PokeathlonCourse_GetDataCopyArea(course);
     PokeathlonLampJump *lampJump = PokeathlonCourse_GetWork(course);
     u32 selected;
@@ -596,7 +607,7 @@ void PokeathlonLampJump_HandleTouch(PokeathlonCourseData *course) {
     }
 }
 
-void PokeathlonLampJump_UpdateMonSprites(PokeathlonCourseData *course) {
+static void PokeathlonLampJump_UpdateMonSprites(PokeathlonCourseData *course) {
     int i, x, y;
     PokeathlonLampJump *lampJump = PokeathlonCourse_GetWork(course);
     PokeathlonLampJumpMon *mon;
@@ -652,7 +663,7 @@ void PokeathlonLampJump_UpdateMonSprites(PokeathlonCourseData *course) {
 
 #pragma force_active reset
 
-void PokeathlonLampJump_UpdatePlayerSprites(PokeathlonCourseData *course) {
+static void PokeathlonLampJump_UpdatePlayerSprites(PokeathlonCourseData *course) {
     u8 *received;
     PokeathlonLampJump *lampJump;
     int i;
@@ -670,7 +681,7 @@ void PokeathlonLampJump_UpdatePlayerSprites(PokeathlonCourseData *course) {
     }
 }
 
-void PokeathlonLampJump_GetFlick(int touchX, int touchY, const VecFx32 *start, VecFx32 *flick) {
+static void PokeathlonLampJump_GetFlick(int touchX, int touchY, const VecFx32 *start, VecFx32 *flick) {
     VecFx32 touch;
 
     touch.x = touchX << FX32_SHIFT;
@@ -684,7 +695,7 @@ void PokeathlonLampJump_GetFlick(int touchX, int touchY, const VecFx32 *start, V
 
 #pragma force_active on
 
-u8 PokeathlonLampJump_FindTouchedMon(PokeathlonLampJump *lampJump, u16 touchX, u16 touchY) {
+static u8 PokeathlonLampJump_FindTouchedMon(PokeathlonLampJump *lampJump, u16 touchX, u16 touchY) {
     fx32 minDistance = PokeathlonCourse_GetTouchRadius(lampJump) << FX32_SHIFT;
     u8 i;
     u8 count = 0;
@@ -742,7 +753,7 @@ BOOL PokeathlonLampJump_CheckCollision(const VecFx32 *a, fx32 radiusA, const Vec
     return TRUE;
 }
 
-void PokeathlonLampJump_LaunchMon(PokeathlonLampJump *lampJump, s32 mon, VecFx32 *flick) {
+static void PokeathlonLampJump_LaunchMon(PokeathlonLampJump *lampJump, s32 mon, VecFx32 *flick) {
     PokeathlonLampJumpJump *jump;
     s32 velocity;
     s32 velocityX;
@@ -771,7 +782,7 @@ void PokeathlonLampJump_LaunchMon(PokeathlonLampJump *lampJump, s32 mon, VecFx32
     }
 }
 
-void PokeathlonLampJump_Init3D(PokeathlonLampJump *lampJump) {
+static void PokeathlonLampJump_Init3D(PokeathlonLampJump *lampJump) {
     NNS_G3dInit();
     G3X_InitMtxStack();
     reg_G3_SWAP_BUFFERS = 2;

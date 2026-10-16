@@ -12,6 +12,7 @@
 
 #include "assert.h"
 #include "bg_window.h"
+#include "char_tiles.h"
 #include "filesystem.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
@@ -25,9 +26,7 @@
 #include "sprite.h"
 #include "string_util.h"
 #include "text.h"
-#include "char_tiles.h"
 
-// Sprite pool helpers (pokeathlon_course_objects.c), declared with untyped entries as the course objects use them.
 void PokeathlonCourseSpritePool_LoadChar(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId, int vram);
 void PokeathlonCourseSpritePool_LoadPltt(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId, int vram, int count);
 void PokeathlonCourseSpritePool_LoadCell(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId);
@@ -35,7 +34,6 @@ void PokeathlonCourseSpritePool_LoadAnim(PokeathlonCourseSpritePool *pool, int n
 void PokeathlonCourseSpritePool_CreateSprite(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, int resId, int kind);
 PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_Take(PokeathlonCourseSpritePool *pool, int resId, int kind);
 PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_CreateAndTake(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, int resId, int kind);
-SpriteList *PokeathlonCourseSpritePool_GetSpriteList(void *pool);
 void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *entry, BOOL shown, BOOL draw);
 void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *entry, int seq);
 void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *entry, VecFx32 *position);
@@ -46,17 +44,21 @@ void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePool
 BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
 
 extern const WindowTemplate sRelayRunResultWindowTemplate; // the result window
-extern const VecFx32 sRelayRunLapCounterPlatePos;        // lap counter: the plate
-extern const VecFx32 sRelayRunLapCounterFirstDigitPos;        // lap counter: the first digit
-extern const VecFx32 sRelayRunLapCounterSecondDigitPos;        // lap counter: the second digit
-extern const u32 gPokeathlonRelayRunPicIds[];          // touch screen sprite resource ids
-extern const u8 sRelayRunTimerSpriteX[6];          // x of the timer's sprites
-extern const u8 sRelayRunTimerSpriteAnims[6];          // their animations: digits and separators
-extern const VecFx32 sRelayRunMapStartOffset;        // track map: offset of the start from its centre
-extern const VecFx32 sRelayRunMapCenter;        // track map: centre
+extern const VecFx32 sRelayRunLapCounterPlatePos;          // lap counter: the plate
+extern const VecFx32 sRelayRunLapCounterFirstDigitPos;     // lap counter: the first digit
+extern const VecFx32 sRelayRunLapCounterSecondDigitPos;    // lap counter: the second digit
+extern const u32 gPokeathlonRelayRunPicIds[];              // touch screen sprite resource ids
+extern const u8 sRelayRunTimerSpriteX[6];                  // x of the timer's sprites
+extern const u8 sRelayRunTimerSpriteAnims[6];              // their animations: digits and separators
+extern const VecFx32 sRelayRunMapStartOffset;              // track map: offset of the start from its centre
+extern const VecFx32 sRelayRunMapCenter;                   // track map: centre
 
 // Shows the lap count for a second (60 frames) each time it goes up.
 #pragma force_active on
+
+static void PokeathlonRelayRunHud_SetMonIcon(PokeathlonRelayRunHud *hud, u8 teamId, int member);
+static void PokeathlonRelayRunHud_PrintMonName(PokeathlonRelayRunHud *hud, s32 member);
+static void PokeathlonRelayRunHud_PrintLaps(PokeathlonRelayRunHud *hud);
 
 void PokeathlonRelayRun_UpdateLapCounter(PokeathlonRelayRunLapCounter *counter, u8 laps) {
     VecFx32 platePosition = sRelayRunLapCounterPlatePos, firstPosition = sRelayRunLapCounterFirstDigitPos, secondPosition = sRelayRunLapCounterSecondDigitPos;
@@ -110,7 +112,7 @@ void PokeathlonRelayRun_AddResultWindow(PokeathlonRelayRun *relayRun) {
 }
 
 // "Pokemon Total: laps.tenths Laps" (x: distance into the last lap).
-void PokeathlonRelayRun_PrintResult(PokeathlonRelayRun *relayRun, int laps, int x) {
+static void PokeathlonRelayRun_PrintResult(PokeathlonRelayRun *relayRun, int laps, int x) {
     MsgData *msgData;
     MessageFormat *msgFormat;
     String *string;
@@ -144,7 +146,6 @@ void PokeathlonRelayRun_PlaySEIfOnScreen(int x, int seqNo, int isOwn) {
 // 3 a swap is not possible now (swapping, stunned or exhausted), 4 pressed while it is not possible.
 void PokeathlonRelayRun_UpdateSwapSign(PokeathlonRelayRun *relayRun, u8 teamId, int touchingSwapButton) {
     u8 *signs = relayRun->swapSigns;
-    // team teamId through relayRun moved by teamId teams (shifted->teams[0]), the way the original addresses it
     PokeathlonRelayRun *shifted = (PokeathlonRelayRun *)((u8 *)relayRun + teamId * sizeof(PokeathlonRelayRunTeam));
     u8 sign = 0;
     u8 condition = shifted->teams[0].members[shifted->teams[0].current].condition;
@@ -326,7 +327,6 @@ void PokeathlonRelayRunHud_LoadMonIcons(PokeathlonRelayRunHud *hud, PokeathlonCo
     PokeathlonRelayRunHud *cursor;
     narc = NARC_New(NARC_poketool_icongra_poke_icon, hud->heapId);
     GfGfxLoader_GXLoadPal(NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), GF_PAL_LOCATION_SUB_OBJ, GF_PAL_SLOT_1_OFFSET, 0x60, hud->heapId);
-    // cursor: hud moved on by one file per Pokemon (cursor->map.icons.files[0]), the way the original addresses them
     for (i = 0, cursor = hud, chars = hud->iconChars; i < RELAY_RUN_TEAMS * RELAY_RUN_MEMBERS; cursor = (PokeathlonRelayRunHud *)((u8 *)cursor + sizeof(void *)), mons++, chars++, i++) {
         cursor->map.icons.files[0] = Heap_AllocAtEnd(hud->heapId, 0x1000);
         form = (u8)mons->y;
@@ -355,7 +355,6 @@ void PokeathlonRelayRunHud_LoadMonPics(PokeathlonRelayRunHud *hud, const Pokeath
     PokepicTemplate template;
     int i;
     PokeathlonRelayRunHud *cursor;
-    // cursor: hud moved on by one picture per member (cursor->pics[0]), the way the original addresses them
     for (i = 0, cursor = hud; i < RELAY_RUN_MEMBERS; i++, mon++, cursor = (PokeathlonRelayRunHud *)((u8 *)cursor + sizeof(PokeathlonRelayRunHudPic))) {
         GetMonSpriteCharAndPlttNarcIdsEx(&template, mon->species, mon->gender, 2, mon->isShiny, (u8)mon->form, mon->personality);
         cursor->pics[0].chars = CharTiles_AllocAndLoadMonPicAsObjFromNarc((NarcId) template.narcID, template.charDataID, hud->heapId, mon->personality, FALSE, 2, mon->species);
@@ -378,7 +377,7 @@ void PokeathlonRelayRunHud_ShowMonPic(PokeathlonRelayRunHud *hud, u32 slot, u32 
 }
 
 // Shows the icon of a team's member on the track map.
-void PokeathlonRelayRunHud_SetMonIcon(PokeathlonRelayRunHud *hud, u8 teamId, int member) {
+static void PokeathlonRelayRunHud_SetMonIcon(PokeathlonRelayRunHud *hud, u8 teamId, int member) {
     Sprite *sprite = PokeathlonCourseSpritePoolSprite_GetSprite(hud->map.teams[teamId].icon);
     int index = member + teamId * RELAY_RUN_MEMBERS;
     DC_FlushRange(hud->iconChars[index]->pRawData, 0x200);
@@ -622,7 +621,7 @@ u8 PokeathlonRelayRunHud_GetBenchMember(PokeathlonRelayRunHud *hud, int slot) {
 }
 
 // "Next {name}" for member.
-void PokeathlonRelayRunHud_PrintMonName(PokeathlonRelayRunHud *hud, s32 member) {
+static void PokeathlonRelayRunHud_PrintMonName(PokeathlonRelayRunHud *hud, s32 member) {
     String *string;
     FillWindowPixelBuffer(&hud->nameWindow, 0);
     BufferString(hud->msgFormat, 0, hud->names[member], 2, 1, 2);
@@ -633,7 +632,7 @@ void PokeathlonRelayRunHud_PrintMonName(PokeathlonRelayRunHud *hud, s32 member) 
 }
 
 // "Laps"
-void PokeathlonRelayRunHud_PrintLaps(PokeathlonRelayRunHud *hud) {
+static void PokeathlonRelayRunHud_PrintLaps(PokeathlonRelayRunHud *hud) {
     String *string;
     FillWindowPixelBuffer(&hud->lapsWindow, 0);
     string = NewString_ReadMsgData(hud->msgData, msg_0309_00305);

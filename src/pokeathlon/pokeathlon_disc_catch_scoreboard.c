@@ -20,6 +20,14 @@ extern const ManagedSpriteTemplate gPokeathlonDiscCatchScoreboardSpriteTemplate;
 
 #pragma force_active on
 
+static ManagedSprite *PokeathlonDiscCatchScoreboard_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u16 animation, u16 priority);
+static void PokeathlonDiscCatchScoreboard_InitWindows(PokeathlonDiscCatchScoreboard *scoreboard);
+static void PokeathlonDiscCatchScoreboard_DrawScore(PokeathlonDiscCatchScoreboard *scoreboard, s32 score);
+static void PokeathlonDiscCatchScoreboard_NewSecondsDigits(PokeathlonDiscCatchScoreboard *scoreboard);
+static void PokeathlonDiscCatchScoreboard_PrintNames(PokeathlonDiscCatchScoreboard *scoreboard);
+static void PokeathlonDiscCatchScoreboard_NewSideMarks(PokeathlonDiscCatchScoreboard *scoreboard);
+static void PokeathlonDiscCatchScoreboard_StopAnims(PokeathlonDiscCatchScoreboard *scoreboard);
+
 PokeathlonDiscCatchScoreboard *PokeathlonDiscCatchScoreboard_New(SpriteSystem *spriteSystem, SpriteManager *spriteManager, BgConfig *bgConfig, MsgData *msgData, MessageFormat *messageFormat, u8 participant, enum HeapID heapId, PokeathlonCourseData *course) {
     PokeathlonDiscCatchScoreboard *scoreboard = Heap_Alloc(heapId, sizeof(PokeathlonDiscCatchScoreboard));
     MI_CpuFill8(scoreboard, 0, sizeof(PokeathlonDiscCatchScoreboard));
@@ -158,7 +166,7 @@ u16 PokeathlonDiscCatchScoreboard_GetOwnScore(PokeathlonDiscCatchScoreboard *sco
 
 #pragma force_active on
 
-ManagedSprite *PokeathlonDiscCatchScoreboard_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u16 animation, u16 priority) {
+static ManagedSprite *PokeathlonDiscCatchScoreboard_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u16 animation, u16 priority) {
     ManagedSpriteTemplate template = gPokeathlonDiscCatchScoreboardSpriteTemplate;
     ManagedSprite *sprite;
     GF_ASSERT(spriteSystem != NULL);
@@ -174,7 +182,7 @@ ManagedSprite *PokeathlonDiscCatchScoreboard_NewSprite(SpriteSystem *spriteSyste
 
 #pragma force_active reset
 
-void PokeathlonDiscCatchScoreboard_InitWindows(PokeathlonDiscCatchScoreboard *scoreboard) {
+static void PokeathlonDiscCatchScoreboard_InitWindows(PokeathlonDiscCatchScoreboard *scoreboard) {
     u8 i;
     GF_ASSERT(scoreboard != NULL);
     GF_ASSERT(scoreboard->bgConfig != NULL);
@@ -186,7 +194,7 @@ void PokeathlonDiscCatchScoreboard_InitWindows(PokeathlonDiscCatchScoreboard *sc
 }
 
 // The own score in three big digits (5 x 2 digits of 4 x 8 tiles in the screen file).
-void PokeathlonDiscCatchScoreboard_DrawScore(PokeathlonDiscCatchScoreboard *scoreboard, s32 score) {
+static void PokeathlonDiscCatchScoreboard_DrawScore(PokeathlonDiscCatchScoreboard *scoreboard, s32 score) {
     u8 srcX[3];
     u8 srcY[3];
     u8 digit;
@@ -208,7 +216,7 @@ void PokeathlonDiscCatchScoreboard_DrawScore(PokeathlonDiscCatchScoreboard *scor
 
 #pragma force_active on
 
-void PokeathlonDiscCatchScoreboard_NewSecondsDigits(PokeathlonDiscCatchScoreboard *scoreboard) {
+static void PokeathlonDiscCatchScoreboard_NewSecondsDigits(PokeathlonDiscCatchScoreboard *scoreboard) {
     int i, x;
     for (i = 0, x = 230; i < 2; x += 16, i++) {
         scoreboard->sprites[DISC_CATCH_SCOREBOARD_SECONDS + i] = PokeathlonDiscCatchScoreboard_NewSprite(scoreboard->spriteSystem, scoreboard->spriteManager, x, 76, i + 9, 0);
@@ -219,7 +227,7 @@ void PokeathlonDiscCatchScoreboard_NewSecondsDigits(PokeathlonDiscCatchScoreboar
 #pragma force_active reset
 
 // The players' names (the own one in the big window) and their badges.
-void PokeathlonDiscCatchScoreboard_PrintNames(PokeathlonDiscCatchScoreboard *scoreboard) {
+static void PokeathlonDiscCatchScoreboard_PrintNames(PokeathlonDiscCatchScoreboard *scoreboard) {
     u8 other = 0;
     s16 x;
     s16 y;
@@ -256,7 +264,7 @@ static inline int GetSideSign(int column) {
 
 #pragma force_active on
 
-void PokeathlonDiscCatchScoreboard_NewSideMarks(PokeathlonDiscCatchScoreboard *scoreboard) {
+static void PokeathlonDiscCatchScoreboard_NewSideMarks(PokeathlonDiscCatchScoreboard *scoreboard) {
     int row, column;
     int y, first;
     s16 x;
@@ -274,7 +282,7 @@ void PokeathlonDiscCatchScoreboard_NewSideMarks(PokeathlonDiscCatchScoreboard *s
 
 #pragma force_active reset
 
-void PokeathlonDiscCatchScoreboard_StopAnims(PokeathlonDiscCatchScoreboard *scoreboard) {
+static void PokeathlonDiscCatchScoreboard_StopAnims(PokeathlonDiscCatchScoreboard *scoreboard) {
     int i;
     for (i = 0; i < DISC_CATCH_SCOREBOARD_SPRITES; i++) {
         ManagedSprite_SetAnimateFlag(scoreboard->sprites[i], FALSE);

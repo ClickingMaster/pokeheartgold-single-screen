@@ -27,6 +27,25 @@ extern const int sPokeathlonTrophiesMainNumberResIds[];
 extern const int sPokeathlonTrophiesSubNumberResIds[];
 extern const int sPokeathlonTrophiesFriendshipThresholds[10];
 
+static void PokeathlonTrophies_VBlankCallback(PokeathlonTrophies *work);
+static void PokeathlonTrophies_InitBgs(PokeathlonTrophies *work);
+static void PokeathlonTrophies_LoadBgGraphics(PokeathlonTrophies *work);
+static void PokeathlonTrophies_FreeBgs(PokeathlonTrophies *work);
+static void PokeathlonTrophies_LoadSpriteResources(PokeathlonTrophies *work);
+static void PokeathlonTrophies_DrawScreen(PokeathlonTrophies *work);
+static void PokeathlonTrophies_CreateSummary(PokeathlonTrophies *work, PokeathlonTrophiesArgs *args);
+static void PokeathlonTrophies_FreeSummary(PokeathlonTrophiesSummary *summary);
+static u8 PokeathlonTrophies_GetPotentialTrophyCount(PokeathlonTrophiesSummary *summary);
+static u8 PokeathlonTrophies_GetMedalistCount(PokeathlonTrophiesSummary *summary);
+static u8 PokeathlonTrophies_GetGender(PokeathlonTrophiesSummary *summary);
+static PlayerProfile *PokeathlonTrophies_GetProfile(PokeathlonTrophiesSummary *summary);
+static u16 PokeathlonTrophies_GetMedalTotal(PokeathlonTrophiesSummary *summary);
+static u16 PokeathlonTrophies_GetEventRecordTotal(PokeathlonTrophiesSummary *summary);
+static u16 PokeathlonTrophies_GetCourseRecordTotal(PokeathlonTrophiesSummary *summary);
+static u16 PokeathlonTrophies_GetTotalPoints(PokeathlonTrophiesSummary *summary);
+static u8 PokeathlonTrophies_CountFriendshipTrophies(int totalPoints);
+static u8 PokeathlonTrophies_CountCollectiveTrophies(PokeathlonTrophies *work);
+
 BOOL PokeathlonTrophies_Init(OverlayManager *man, int *state) {
     PokeathlonTrophies *work;
     PokeathlonTrophiesArgs *args;
@@ -103,7 +122,7 @@ BOOL PokeathlonTrophies_Main(OverlayManager *man, int *state) {
     return FALSE;
 }
 
-void PokeathlonTrophies_VBlankCallback(PokeathlonTrophies *work) {
+static void PokeathlonTrophies_VBlankCallback(PokeathlonTrophies *work) {
     vu8 *dtcm = (vu8 *)0x027E0000;
 
     SpriteSystem_TransferOam();
@@ -113,7 +132,7 @@ void PokeathlonTrophies_VBlankCallback(PokeathlonTrophies *work) {
 
 #pragma force_active on
 
-void PokeathlonTrophies_InitBgs(PokeathlonTrophies *work) {
+static void PokeathlonTrophies_InitBgs(PokeathlonTrophies *work) {
     GraphicsModes modes;
     PokeathlonTrophiesBgTemplates templates;
     int i;
@@ -132,7 +151,7 @@ void PokeathlonTrophies_InitBgs(PokeathlonTrophies *work) {
 
 #pragma force_active reset
 
-void PokeathlonTrophies_LoadBgGraphics(PokeathlonTrophies *work) {
+static void PokeathlonTrophies_LoadBgGraphics(PokeathlonTrophies *work) {
     GfGfxLoader_GXLoadPalFromOpenNarc(work->narc, 56, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0x40, work->heapId);
     GfGfxLoader_LoadCharDataFromOpenNarc(work->narc, 57, work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, TRUE, work->heapId);
     GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, 58, work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, TRUE, work->heapId);
@@ -141,7 +160,7 @@ void PokeathlonTrophies_LoadBgGraphics(PokeathlonTrophies *work) {
     GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, 61, work->bgConfig, GF_BG_LYR_SUB_0, 0, 0, TRUE, work->heapId);
 }
 
-void PokeathlonTrophies_FreeBgs(PokeathlonTrophies *work) {
+static void PokeathlonTrophies_FreeBgs(PokeathlonTrophies *work) {
     u8 i;
 
     NARC_Delete(work->narc);
@@ -151,7 +170,7 @@ void PokeathlonTrophies_FreeBgs(PokeathlonTrophies *work) {
     Heap_Free(work->bgConfig);
 }
 
-void PokeathlonTrophies_LoadSpriteResources(PokeathlonTrophies *work) {
+static void PokeathlonTrophies_LoadSpriteResources(PokeathlonTrophies *work) {
     SpriteSystem *spriteSystem = PokeathlonUtil_GetSpriteSystem(work->spriteContext);
     SpriteManager *spriteManager = PokeathlonUtil_GetSpriteManager(work->spriteContext);
 
@@ -173,13 +192,13 @@ void PokeathlonTrophies_LoadSpriteResources(PokeathlonTrophies *work) {
     SpriteSystem_LoadAnimResObjFromOpenNarc(spriteSystem, spriteManager, work->narc, 3, TRUE, 2);
 }
 
-void PokeathlonTrophies_CreatePlayerSprite(PokeathlonTrophies *work) {
+static void PokeathlonTrophies_CreatePlayerSprite(PokeathlonTrophies *work) {
     ManagedSprite *sprite = PokeathlonUtil_NewSprite(work->spriteContext, &sPokeathlonTrophiesPlayerSpriteTemplate);
     work->sprites[0] = sprite;
     ManagedSprite_SetAnimateFlag(sprite, TRUE);
 }
 
-void PokeathlonTrophies_CreateNumberSprites(PokeathlonTrophies *work, s32 value, u32 index, u32 count, s16 x, s16 y, u8 spacing, BOOL mainScreen) {
+static void PokeathlonTrophies_CreateNumberSprites(PokeathlonTrophies *work, s32 value, u32 index, u32 count, s16 x, s16 y, u8 spacing, BOOL mainScreen) {
     ManagedSpriteTemplate spriteTemplate = { 0 };
     u32 i;
     u32 digits = PokeathlonUtil_CountDecimalDigits(value);
@@ -200,17 +219,17 @@ void PokeathlonTrophies_CreateNumberSprites(PokeathlonTrophies *work, s32 value,
     }
 }
 
-void PokeathlonTrophies_PrintTitle(PokeathlonTrophies *work, u32 trophyCount) {
+static void PokeathlonTrophies_PrintTitle(PokeathlonTrophies *work, u32 trophyCount) {
     GF_ASSERT(trophyCount <= 40);
     PokeathlonUtil_PrintAlignedMessage(work->textContext, 6, trophyCount / 2 + msg_0314_00033, FALSE);
 }
 
-void PokeathlonTrophies_PrintNextFriendshipTrophy(PokeathlonTrophies *work, u32 friendshipTrophies) {
+static void PokeathlonTrophies_PrintNextFriendshipTrophy(PokeathlonTrophies *work, u32 friendshipTrophies) {
     GF_ASSERT(friendshipTrophies <= 10);
     PokeathlonUtil_PrintAlignedMessage(work->textContext, 9, friendshipTrophies + msg_0314_00017, FALSE);
 }
 
-void PokeathlonTrophies_DrawScreen(PokeathlonTrophies *work) {
+static void PokeathlonTrophies_DrawScreen(PokeathlonTrophies *work) {
     MessageFormat *msgFormat;
     int gender;
     int medalTotal;
@@ -265,7 +284,7 @@ void PokeathlonTrophies_DrawScreen(PokeathlonTrophies *work) {
     PokeathlonUtil_CreateSpriteRow(work->spriteContext, work->sprites, sPokeathlonTrophiesMainRowResIds, friendshipTrophies, 57, 96, 120, FALSE);
 }
 
-u16 PokeathlonTrophies_CalcEventRecordTotal(PokeathlonSave *pokeathlon) {
+static u16 PokeathlonTrophies_CalcEventRecordTotal(PokeathlonSave *pokeathlon) {
     u16 sum = 0;
     u8 i;
     const u16 *records;
@@ -278,7 +297,7 @@ u16 PokeathlonTrophies_CalcEventRecordTotal(PokeathlonSave *pokeathlon) {
     return sum;
 }
 
-u16 PokeathlonTrophies_CountMedals(const u8 *medals) {
+static u16 PokeathlonTrophies_CountMedals(const u8 *medals) {
     int i;
     u16 count = 0;
 
@@ -289,7 +308,7 @@ u16 PokeathlonTrophies_CountMedals(const u8 *medals) {
     return count;
 }
 
-void PokeathlonTrophies_CreateSummary(PokeathlonTrophies *work, PokeathlonTrophiesArgs *args) {
+static void PokeathlonTrophies_CreateSummary(PokeathlonTrophies *work, PokeathlonTrophiesArgs *args) {
     PokeathlonTrophiesSummary *summary;
     PokeathlonSave *pokeathlon;
     PlayerProfile *profile;
@@ -320,56 +339,56 @@ void PokeathlonTrophies_CreateSummary(PokeathlonTrophies *work, PokeathlonTrophi
     work->summary = summary;
 }
 
-void PokeathlonTrophies_FreeSummary(PokeathlonTrophiesSummary *summary) {
+static void PokeathlonTrophies_FreeSummary(PokeathlonTrophiesSummary *summary) {
     Heap_Free(summary);
 }
 
-u8 PokeathlonTrophies_GetPotentialTrophyCount(PokeathlonTrophiesSummary *summary) {
+static u8 PokeathlonTrophies_GetPotentialTrophyCount(PokeathlonTrophiesSummary *summary) {
     GF_ASSERT(summary != NULL);
     return summary->potentialTrophies;
 }
 
-u8 PokeathlonTrophies_GetMedalistCount(PokeathlonTrophiesSummary *summary) {
+static u8 PokeathlonTrophies_GetMedalistCount(PokeathlonTrophiesSummary *summary) {
     GF_ASSERT(summary != NULL);
     return summary->medalistCount;
 }
 
-u8 PokeathlonTrophies_GetGender(PokeathlonTrophiesSummary *summary) {
+static u8 PokeathlonTrophies_GetGender(PokeathlonTrophiesSummary *summary) {
     GF_ASSERT(summary != NULL);
     return summary->gender;
 }
 
-PlayerProfile *PokeathlonTrophies_GetProfile(PokeathlonTrophiesSummary *summary) {
+static PlayerProfile *PokeathlonTrophies_GetProfile(PokeathlonTrophiesSummary *summary) {
     GF_ASSERT(summary != NULL);
     return summary->profile;
 }
 
-u16 PokeathlonTrophies_GetMedalTotal(PokeathlonTrophiesSummary *summary) {
+static u16 PokeathlonTrophies_GetMedalTotal(PokeathlonTrophiesSummary *summary) {
     GF_ASSERT(summary != NULL);
     return summary->medalTotal;
 }
 
-u16 PokeathlonTrophies_GetEventRecordTotal(PokeathlonTrophiesSummary *summary) {
+static u16 PokeathlonTrophies_GetEventRecordTotal(PokeathlonTrophiesSummary *summary) {
     GF_ASSERT(summary != NULL);
     return summary->eventRecordTotal;
 }
 
-u16 PokeathlonTrophies_GetCourseRecordTotal(PokeathlonTrophiesSummary *summary) {
+static u16 PokeathlonTrophies_GetCourseRecordTotal(PokeathlonTrophiesSummary *summary) {
     GF_ASSERT(summary != NULL);
     return summary->courseRecordTotal;
 }
 
-u16 PokeathlonTrophies_GetTotalPoints(PokeathlonTrophiesSummary *summary) {
+static u16 PokeathlonTrophies_GetTotalPoints(PokeathlonTrophiesSummary *summary) {
     GF_ASSERT(summary != NULL);
     return summary->totalPoints;
 }
 
-u16 PokeathlonTrophies_GetCourseScore(PokeathlonTrophiesSummary *summary, int course) {
+static u16 PokeathlonTrophies_GetCourseScore(PokeathlonTrophiesSummary *summary, int course) {
     GF_ASSERT(summary != NULL);
     return summary->courseScores[course];
 }
 
-u8 PokeathlonTrophies_CountFriendshipTrophies(int totalPoints) {
+static u8 PokeathlonTrophies_CountFriendshipTrophies(int totalPoints) {
     const int *thresholds = sPokeathlonTrophiesFriendshipThresholds;
     u8 i = 0;
 
@@ -382,7 +401,7 @@ u8 PokeathlonTrophies_CountFriendshipTrophies(int totalPoints) {
     return 10 - i;
 }
 
-u8 PokeathlonTrophies_CountCollectiveTrophies(PokeathlonTrophies *work) {
+static u8 PokeathlonTrophies_CountCollectiveTrophies(PokeathlonTrophies *work) {
     int i;
     u8 count = 0;
 

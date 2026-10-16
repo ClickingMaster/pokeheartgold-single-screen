@@ -13,17 +13,23 @@ typedef struct PokeathlonCirclePushPicIds {
 
 // The definition order fixes the .rodata layout: the display reads past the nameplate positions
 // (gPokeathlonCirclePushNameplateCoords) into the ids that follow them.
-static const PokeathlonCirclePushPicIds sPicKinds = { { 5, 6 } };
-static const PokeathlonCirclePushPicIds sPicResIds = { { 0x66, 0x67 } };
-static const PokeathlonCirclePushPicIds sPicResIds2 = { { 0x66, 0x67 } };
+static const PokeathlonCirclePushPicIds sPicKinds = {
+    { 5, 6 }
+};
+static const PokeathlonCirclePushPicIds sPicResIds = {
+    { 0x66, 0x67 }
+};
+static const PokeathlonCirclePushPicIds sPicResIds2 = {
+    { 0x66, 0x67 }
+};
 const PokeathlonCirclePushNameplateCoords gPokeathlonCirclePushNameplateCoords = {
     { 0x88, 0x48, 0x68, 0x88 },
     { 0x20, 0x98, 0x98, 0x98 },
 };
-static const PokeathlonCirclePushPicIds sPicResIds3 = { { 0x66, 0x67 } };
+static const PokeathlonCirclePushPicIds sPicResIds3 = {
+    { 0x66, 0x67 }
+};
 
-// Sprite pool helpers (pokeathlon_course_objects.c), declared with untyped entries and the argument
-// types this caller passes.
 void PokeathlonCourseSpritePool_CreateSprite(PokeathlonCourseSpritePool *pool, u8 priority, u8 whichScreen, u8 resId, u8 kind);
 PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_Take(PokeathlonCourseSpritePool *pool, u8 resId, u8 kind);
 Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(PokeathlonCourseSpritePoolSprite *entry);

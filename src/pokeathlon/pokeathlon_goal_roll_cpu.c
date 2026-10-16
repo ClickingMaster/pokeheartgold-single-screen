@@ -6,10 +6,9 @@
 #include "bg_window.h"
 #include "heap.h"
 #include "math_util.h"
-#include "sprite_system.h"
 #include "sprite_resource_header.h"
+#include "sprite_system.h"
 
-// Course helpers and the sprite pool (OVY_96, not yet tidied).
 void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int event, int value);
 s32 PokeathlonCourseObject_GetCollisionRadius(void *object);
 void PokeathlonCourseSpritePoolSprite_Show(PokeathlonGoalRollSprite *sprite, BOOL shown, BOOL show);
@@ -19,6 +18,17 @@ extern const u16 gPokeathlonGoalRollCpuGuardPoints[][3][2];
 extern const u16 gPokeathlonGoalRollCpuGuardPointsY[][3][2];
 extern const u16 gPokeathlonGoalRollCpuGuardPoints1[][3][2];
 extern const u16 gPokeathlonGoalRollCpuGuardPoints2[][3][2];
+
+static void PokeathlonGoalRollCpu_ChooseRoles(PokeathlonGoalRollCpuTeam *team);
+static int PokeathlonGoalRollCpu_ApplyChaserDecision(PokeathlonGoalRollMon *mon, const PokeathlonGoalRollBall *ball, u8 decision, int quadrant);
+static int PokeathlonGoalRollCpu_ApplyGuardDecision(PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *ball, int decision, int participant);
+static int PokeathlonGoalRollCpu_ApplyFlexDecision(PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *ball, int decision, int participant, PokeathlonGoalRollCpuTeam *teams);
+static int PokeathlonGoalRollCpu_MoveToEmptierQuadrant(PokeathlonGoalRollMon *mon, PokeathlonGoalRollCpuTeam *teams, u8 excluded);
+static void PokeathlonGoalRollCpu_Think(PokeathlonCourseData *course, PokeathlonGoalRollCpu *cpu, PokeathlonGoalRollCpuSlot *slot);
+static int PokeathlonGoalRollCpu_GetQuadrant(int x, int y, int pointX, int pointY);
+static BOOL PokeathlonGoalRollCpu_IsMonInTargetQuadrantOfBall(int x1, int y1, int x2, int y2, int quadrantInput, int participantInput);
+static BOOL PokeathlonGoalRollCpu_IsMonNotOppositeOfBall(int x1, int y1, int x2, int y2, int quadrantInput, int participantInput);
+static BOOL PokeathlonGoalRollCpu_CirclesTouch(const VecFx32 *a, fx32 radiusA, const VecFx32 *b, fx32 radiusB);
 
 // The timer on the top screen: seconds left; "Second Wind!" from the last 900 frames on.
 void PokeathlonGoalRollDisplay_UpdateTimer(PokeathlonGoalRollDisplay *display, s32 timer) {
@@ -84,7 +94,7 @@ void PokeathlonGoalRollCpu_ChooseAllRoles(PokeathlonGoalRollCpuTeam *teams) {
 }
 
 // The member best at kicking and with most power moves first; the others follow by kick strength.
-void PokeathlonGoalRollCpu_ChooseRoles(PokeathlonGoalRollCpuTeam *team) {
+static void PokeathlonGoalRollCpu_ChooseRoles(PokeathlonGoalRollCpuTeam *team) {
     u8 first[3];
     u8 second[3];
     u8 selected;
@@ -174,7 +184,7 @@ void PokeathlonGoalRollCpu_Update(PokeathlonCourseData *course, PokeathlonGoalRo
 
 #pragma force_active on
 
-int PokeathlonGoalRollCpu_ThinkChaser(PokeathlonCourseData *course, u8 participant, u8 member, PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *balls) {
+static int PokeathlonGoalRollCpu_ThinkChaser(PokeathlonCourseData *course, u8 participant, u8 member, PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *balls) {
     VecFx32 *position;
     int radius, quadrant;
 
@@ -240,7 +250,7 @@ int PokeathlonGoalRollCpu_ThinkChaser(PokeathlonCourseData *course, u8 participa
 
 #pragma force_active reset
 
-int PokeathlonGoalRollCpu_ApplyChaserDecision(PokeathlonGoalRollMon *mon, const PokeathlonGoalRollBall *ball, u8 decision, int quadrant) {
+static int PokeathlonGoalRollCpu_ApplyChaserDecision(PokeathlonGoalRollMon *mon, const PokeathlonGoalRollBall *ball, u8 decision, int quadrant) {
     u8 random = (s32)LCRandom() % 100;
 
     switch (decision) {
@@ -293,7 +303,7 @@ int PokeathlonGoalRollCpu_ApplyChaserDecision(PokeathlonGoalRollMon *mon, const 
 
 #pragma force_active on
 
-int PokeathlonGoalRollCpu_ThinkGuard(PokeathlonCourseData *course, u8 participant, u8 member, PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *balls) {
+static int PokeathlonGoalRollCpu_ThinkGuard(PokeathlonCourseData *course, u8 participant, u8 member, PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *balls) {
     int quadrant, result;
     u32 ballQuadrant;
     u8 i, decisions[2];
@@ -355,7 +365,7 @@ int PokeathlonGoalRollCpu_ThinkGuard(PokeathlonCourseData *course, u8 participan
 
 #pragma force_active reset
 
-int PokeathlonGoalRollCpu_ApplyGuardDecision(PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *ball, int decision, int participant) {
+static int PokeathlonGoalRollCpu_ApplyGuardDecision(PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *ball, int decision, int participant) {
     volatile u16 point[2];
 
     switch (decision) {
@@ -401,7 +411,7 @@ int PokeathlonGoalRollCpu_ApplyGuardDecision(PokeathlonGoalRollMon *mon, Pokeath
 
 #pragma force_active on
 
-int PokeathlonGoalRollCpu_ThinkFlex(PokeathlonCourseData *course, u8 participant, u8 member, PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *balls, PokeathlonGoalRollCpuTeam *teams) {
+static int PokeathlonGoalRollCpu_ThinkFlex(PokeathlonCourseData *course, u8 participant, u8 member, PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *balls, PokeathlonGoalRollCpuTeam *teams) {
     u8 i;
     int ballQuadrant;
     int quadrant;
@@ -512,7 +522,7 @@ int PokeathlonGoalRollCpu_ThinkFlex(PokeathlonCourseData *course, u8 participant
 // PokeathlonGoalRollCpu_MoveToEmptierQuadrant with the participant passed as int (this call was built against such a declaration).
 typedef int (*PokeathlonGoalRollCpuSpreadFunc)(PokeathlonGoalRollMon *mon, PokeathlonGoalRollCpuTeam *teams, int participant);
 
-int PokeathlonGoalRollCpu_ApplyFlexDecision(PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *ball, int decision, int participant, PokeathlonGoalRollCpuTeam *teams) {
+static int PokeathlonGoalRollCpu_ApplyFlexDecision(PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *ball, int decision, int participant, PokeathlonGoalRollCpuTeam *teams) {
     if (decision == 10) {
         return ((PokeathlonGoalRollCpuSpreadFunc)PokeathlonGoalRollCpu_MoveToEmptierQuadrant)(mon, teams, participant);
     }
@@ -522,7 +532,7 @@ int PokeathlonGoalRollCpu_ApplyFlexDecision(PokeathlonGoalRollMon *mon, Pokeathl
 #pragma force_active on
 
 // Sends the Pokemon to a random spot in a quadrant with fewer Pokemon than the one before it.
-int PokeathlonGoalRollCpu_MoveToEmptierQuadrant(PokeathlonGoalRollMon *mon, PokeathlonGoalRollCpuTeam *teams, u8 excluded) {
+static int PokeathlonGoalRollCpu_MoveToEmptierQuadrant(PokeathlonGoalRollMon *mon, PokeathlonGoalRollCpuTeam *teams, u8 excluded) {
     u8 counts[4] = { 0, 0, 0, 0 };
     u8 i, j;
     int chosen, x, y;
@@ -571,7 +581,7 @@ next:;
 }
 
 // Lets the Pokemon in `slot` act according to its role; the result is how long it waits.
-void PokeathlonGoalRollCpu_Think(PokeathlonCourseData *course, PokeathlonGoalRollCpu *cpu, PokeathlonGoalRollCpuSlot *slot) {
+static void PokeathlonGoalRollCpu_Think(PokeathlonCourseData *course, PokeathlonGoalRollCpu *cpu, PokeathlonGoalRollCpuSlot *slot) {
     u8 participant = cpu->firstCpu + cpu->current;
     u8 role = cpu->orderSlot;
     switch (role) {
@@ -593,7 +603,7 @@ void PokeathlonGoalRollCpu_Think(PokeathlonCourseData *course, PokeathlonGoalRol
 #pragma force_active reset
 
 // 0 top left, 1 top right, 2 bottom left, 3 bottom right of (x, y)
-int PokeathlonGoalRollCpu_GetQuadrant(int x, int y, int pointX, int pointY) {
+static int PokeathlonGoalRollCpu_GetQuadrant(int x, int y, int pointX, int pointY) {
     if (pointX < x && pointY < y) {
         return 0;
     }
@@ -610,7 +620,7 @@ int PokeathlonGoalRollCpu_GetQuadrant(int x, int y, int pointX, int pointY) {
     return 4;
 }
 
-BOOL PokeathlonGoalRollCpu_IsMonInTargetQuadrantOfBall(int x1, int y1, int x2, int y2, int quadrantInput, int participantInput) {
+static BOOL PokeathlonGoalRollCpu_IsMonInTargetQuadrantOfBall(int x1, int y1, int x2, int y2, int quadrantInput, int participantInput) {
     int result = PokeathlonGoalRollCpu_GetQuadrant(x1, y1, x2, y2);
     u8 participant = *(const u8 *)&participantInput;
     u8 quadrant = *(const u8 *)&quadrantInput;
@@ -624,7 +634,7 @@ BOOL PokeathlonGoalRollCpu_IsMonInTargetQuadrantOfBall(int x1, int y1, int x2, i
     return result == target;
 }
 
-BOOL PokeathlonGoalRollCpu_IsMonNotOppositeOfBall(int x1, int y1, int x2, int y2, int quadrantInput, int participantInput) {
+static BOOL PokeathlonGoalRollCpu_IsMonNotOppositeOfBall(int x1, int y1, int x2, int y2, int quadrantInput, int participantInput) {
     int result = PokeathlonGoalRollCpu_GetQuadrant(x1, y1, x2, y2);
     u8 quadrant = *(const u8 *)&quadrantInput;
     u8 participant = *(const u8 *)&participantInput;
@@ -649,7 +659,7 @@ BOOL PokeathlonGoalRollCpu_IsNearPoint(int x, int y, const u16 (*points)[2]) {
     return FALSE;
 }
 
-BOOL PokeathlonGoalRollCpu_CirclesTouch(const VecFx32 *a, fx32 radiusA, const VecFx32 *b, fx32 radiusB) {
+static BOOL PokeathlonGoalRollCpu_CirclesTouch(const VecFx32 *a, fx32 radiusA, const VecFx32 *b, fx32 radiusB) {
     VecFx32 delta;
 
     VEC_Subtract(a, b, &delta);

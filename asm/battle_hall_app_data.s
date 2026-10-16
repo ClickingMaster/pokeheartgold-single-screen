@@ -7,41 +7,6 @@
 	.public BattleHallApp_Init
 	.public BattleHallApp_Main
 	.public BattleHallApp_Exit
-	.public BattleHallApp_FadeIn
-	.public BattleHallApp_PrintTypeGrid
-	.public BattleHallApp_PrintTitle
-	.public BattleHallApp_DrawFrame
-	.public BattleHallApp_RunSummary
-	.public BattleHallApp_SelectType
-	.public BattleHallApp_LinkDecide
-	.public BattleHallApp_FadeOut
-	.public BattleHallApp_ClosePrompt
-	.public BattleHallApp_FreeGraphics
-	.public BattleHallApp_ResumeAfterSummary
-	.public BattleHallApp_InitGraphics
-	.public BattleHallApp_InitBgGraphics
-	.public BattleHallApp_FreeBgLayers
-	.public BattleHallApp_VBlankCallback
-	.public BattleHallApp_InitBgLayers
-	.public BattleHallApp_InitLinkWindow
-	.public BattleHallApp_LoadTypeGridGraphics
-	.public BattleHallApp_LoadSubBgGraphics
-	.public BattleHallApp_LoadTitleFrameGraphics
-	.public BattleHallApp_PrintMessage
-	.public BattleHallApp_PrintMonName
-	.public BattleHallApp_PrintTypeNames
-	.public BattleHallApp_PrintTypeRanks
-	.public BattleHallApp_PrintSelectPrompt
-	.public BattleHallApp_CreateSummaryArgs
-	.public BattleHallApp_HandleDpad
-	.public BattleHallApp_HandleTouch
-	.public BattleHallApp_SetCellPalette
-	.public BattleHallApp_ShowConfirmPrompt
-	.public BattleHallSpriteGfx_Init
-	.public BattleHallSpriteGfx_CreateSprite
-	.public BattleHallSpriteGfx_Free
-	.public BattleHallSprite_Create
-	.public BattleHallApp_InitYesNo
 	.public gBattleHallAppGraphicsModes
 	.public gBattleHallAppSubBg0Template
 	.public gBattleHallAppBg0Template
@@ -52,45 +17,9 @@
 	.public gBattleHallAppResObjCounts
 	.public gBattleHallAppCharTransferTemplate
 	.public gBattleHallAppWindowTemplates
-	.public BattleHallApp_LinkSync
-	.public BattleHallApp_DisableDisplay
-	.public BattleHallApp_InitSprites
-	.public BattleHallApp_SetGraphicsBanks
-	.public BattleHallApp_LoadBgPalette
-	.public BattleHallApp_ShowMessage
-	.public BattleHallApp_BufferNumber
-	.public BattleHallApp_PrintNumber
-	.public BattleHallApp_SetMainState
-	.public BattleHallApp_HandleConfirm
-	.public BattleHallApp_GetCursorX
-	.public BattleHallApp_GetCursorY
-	.public BattleHallApp_GrayOutTypes
-	.public BattleHallApp_GetRecordIndex
-	.public BattleHallApp_IsMatronBattle
-	.public BattleHallApp_IsMatronMode
-	.public BattleHallApp_SendLinkCommand
-	.public BattleHallApp_PrepareLinkPing
 	.public BattleHall_ReceivePing
-	.public BattleHallApp_PrepareLinkChoice
 	.public BattleHall_ReceiveChoice
-	.public BattleHallApp_PrepareLinkAnswer
 	.public BattleHall_ReceiveAnswer
-	.public BattleHallApp_ResetYesNo
-	.public BattleHallApp_CancelConfirm
-	.public BattleHallApp_ClearMessage
-	.public BattleHallApp_SetBrightness
-	.public BattleHallSpriteGfx_InitTransfers
-	.public BattleHallSprite_Delete
-	.public BattleHallSprite_SetVisible
-	.public BattleHallSprite_SetPosition
-	.public BattleHallSprite_SetAnim
-	.public BattleHallSprite_SetIconPalette
-	.public BattleHallApp_AddWindows
-	.public BattleHallApp_RemoveWindows
-	.public BattleHallApp_DrawMessageFrame
-	.public BattleHallApp_CreateYesNo
-	.public BattleHallApp_DestroyYesNo
-	.public BattleHallApp_HandleYesNo
 	.rodata
 
 gBattleHallAppSummaryPages:

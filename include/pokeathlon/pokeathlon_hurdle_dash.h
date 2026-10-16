@@ -9,9 +9,9 @@
 #include "bg_window.h"
 #include "sprite.h"
 
-// Hurdle Dash (Pokeathlon event 0): the three Pokemon of each team race over a track of hurdles; the team's
+// Hurdle Dash: the three Pokemon of each team race over a track of hurdles; the team's
 // result is the sum of its Pokemon's times. Event template gPokeathlonHurdleDashEvent = {Init, Draw, ShowResults, Exit},
-// states gPokeathlonHurdleDashStates = {Start, Play, CalcScores}. The race: pokeathlon_hurdle_dash_race.c.
+// states gPokeathlonHurdleDashStates = {Start, Play, CalcScores}.
 
 enum PokeathlonHurdleDashMonState {
     HURDLE_DASH_MON_RUNNING,
@@ -31,28 +31,28 @@ enum PokeathlonHurdleDashJumpPhase {
 
 // A Pokemon on its lane (0x40, at 0x24 of its runner).
 typedef struct PokeathlonHurdleDashMon {
-    void *monObject;   // 0x00: PokeathlonCourseMonObject
-    u32 state;         // 0x04: 0 running, 1 jumping, 2 tripped, 3 back to the middle after the finish, 4 stopped
-    u32 phase;         // 0x08: of a jump: 1 up, 2 in the air, 3 down; 4 after tripping
-    u8 timer;          // 0x0C
-    u8 spinTimer;      // 0x0D: tripped: turns every 4 frames
-    u8 direction;      // 0x0E: tripped: the animation it faces
-    u8 unk0F;          // 0x0F
-    s32 x;             // 0x10: sprite position when the jump started
-    s32 y;             // 0x14
-    s32 groundY;       // 0x18
-    s32 markerY;       // 0x1C
+    void *monObject;                               // 0x00: PokeathlonCourseMonObject
+    u32 state;                                     // 0x04: 0 running, 1 jumping, 2 tripped, 3 back to the middle after the finish, 4 stopped
+    u32 phase;                                     // 0x08: of a jump: 1 up, 2 in the air, 3 down; 4 after tripping
+    u8 timer;                                      // 0x0C
+    u8 spinTimer;                                  // 0x0D: tripped: turns every 4 frames
+    u8 direction;                                  // 0x0E: tripped: the animation it faces
+    u8 unk0F;                                      // 0x0F
+    s32 x;                                         // 0x10: sprite position when the jump started
+    s32 y;                                         // 0x14
+    s32 groundY;                                   // 0x18
+    s32 markerY;                                   // 0x1C
     PokeathlonCourseSpritePoolSprite *jumpMarker;  // 0x20: PokeathlonCourseSpritePoolSprite: shows whether a jump was timed
     PokeathlonCourseSpritePoolSprite *rankSprite;  // 0x24: PokeathlonCourseSpritePoolSprite
     PokeathlonCourseSpritePoolSprite *boostEffect; // 0x28: PokeathlonCourseSpritePoolSprite
-    f32 topSpeed;      // 0x2C
-    f32 acceleration;  // 0x30
-    u8 jumpStat;       // 0x34: 0 hops instead of jumping
-    u8 unk35[3];       // 0x35
-    u16 riseFrames;    // 0x38: of a jump, up and down each
-    u16 hangFrames;    // 0x3A
-    u16 jumpQueued;    // 0x3C: touched again while coming down
-    u16 queuedJumps;   // 0x3E
+    f32 topSpeed;                                  // 0x2C
+    f32 acceleration;                              // 0x30
+    u8 jumpStat;                                   // 0x34: 0 hops instead of jumping
+    u8 unk35[3];                                   // 0x35
+    u16 riseFrames;                                // 0x38: of a jump, up and down each
+    u16 hangFrames;                                // 0x3A
+    u16 jumpQueued;                                // 0x3C: touched again while coming down
+    u16 queuedJumps;                               // 0x3E
 } PokeathlonHurdleDashMon;
 
 // One of the player's three Pokemon and its lane.
@@ -99,27 +99,27 @@ typedef struct PokeathlonHurdleDashCpuRunner {
 } PokeathlonHurdleDashCpuRunner; // size: 0x28
 
 typedef struct PokeathlonHurdleDash {
-    enum HeapID heapId;                          // 0x000
-    BgConfig *bgConfig;                          // 0x004
-    Window window;                               // 0x008
-    u8 unk018[0xC0];                             // 0x018
-    void *track;                                 // 0x0D8: PokeathlonHurdleDashTrack
-    void *dust;                                  // 0x0DC: PokeathlonHurdleDashDustLane[3]
-    PokeathlonHurdleDashRunner runners[3];       // 0x0E0
-    void *scene;                                 // 0x224
-    void *standings;                             // 0x228: PokeathlonHurdleDashStandings
-    u32 raceTime;                                // 0x22C: frames until the own Pokemon have finished
-    u32 frame;                                   // 0x230
-    u32 endTimer;                                // 0x234
-    PokeathlonHurdleDashCpuRunner cpuRunners[9]; // 0x238: 3 per participant without a player
-    PokeathlonCourseSpriteResources *spriteResources;                                // 0x3A0
-    void *monSpriteManager;                      // 0x3A4
-    PokeathlonCourseSpritePoolSprite *unk3A8;                                // 0x3A8
-    Sprite *sprites[6];                          // 0x3AC
-    u16 rankTimer;                               // 0x3C4
-    u8 ranksShown;                               // 0x3C6
-    u8 started;                                  // 0x3C7
-} PokeathlonHurdleDash;                          // size: 0x3C8
+    enum HeapID heapId;                               // 0x000
+    BgConfig *bgConfig;                               // 0x004
+    Window window;                                    // 0x008
+    u8 unk018[0xC0];                                  // 0x018
+    void *track;                                      // 0x0D8: PokeathlonHurdleDashTrack
+    void *dust;                                       // 0x0DC: PokeathlonHurdleDashDustLane[3]
+    PokeathlonHurdleDashRunner runners[3];            // 0x0E0
+    void *scene;                                      // 0x224
+    void *standings;                                  // 0x228: PokeathlonHurdleDashStandings
+    u32 raceTime;                                     // 0x22C: frames until the own Pokemon have finished
+    u32 frame;                                        // 0x230
+    u32 endTimer;                                     // 0x234
+    PokeathlonHurdleDashCpuRunner cpuRunners[9];      // 0x238: 3 per participant without a player
+    PokeathlonCourseSpriteResources *spriteResources; // 0x3A0
+    void *monSpriteManager;                           // 0x3A4
+    PokeathlonCourseSpritePoolSprite *unk3A8;         // 0x3A8
+    Sprite *sprites[6];                               // 0x3AC
+    u16 rankTimer;                                    // 0x3C4
+    u8 ranksShown;                                    // 0x3C6
+    u8 started;                                       // 0x3C7
+} PokeathlonHurdleDash;                               // size: 0x3C8
 
 // What PokeathlonCourse_GetMonInfo reports about one Pokemon of a team (for the Pokemon sprite loader).
 typedef struct PokeathlonHurdleDashMonView {
@@ -166,9 +166,5 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course);
 BOOL PokeathlonHurdleDash_Draw(PokeathlonCourseData *course);
 BOOL PokeathlonHurdleDash_ShowResults(PokeathlonCourseData *course);
 BOOL PokeathlonHurdleDash_Exit(PokeathlonCourseData *course);
-void PokeathlonHurdleDash_SetGfxBanks(void);
-void PokeathlonHurdleDash_InitBgs(BgConfig *bgConfig);
-void PokeathlonHurdleDash_LoadBgTiles(BgConfig *bgConfig, enum HeapID heapId);
-void PokeathlonHurdleDash_LoadBgScreens(BgConfig *bgConfig, enum HeapID heapId);
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_HURDLE_DASH_H

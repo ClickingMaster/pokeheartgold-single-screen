@@ -73,33 +73,20 @@ struct PokeathlonDiscCatchCpu {
     u8 count;                                                                    // 0xBC
 }; // size: 0xC0
 
-// pokeathlon_disc_catch_field.c
 BOOL PokeathlonDiscCatch_UpdateFrame(PokeathlonCourseData *course);
-void PokeathlonDiscCatch_InitStats(PokeathlonCourseData *course);
 PokeathlonDiscCatchStats *PokeathlonDiscCatch_GetStats(PokeathlonCourseData *course, u32 participant, u32 member);
 u16 PokeathlonDiscCatchStats_GetJumpDuration(PokeathlonDiscCatchStats *stats);
-u32 PokeathlonDiscCatchDisc_GetPoints(const PokeathlonDiscCatchDisc *disc);
 void PokeathlonDiscCatch_CreateMonPics(PokeathlonDiscCatch *work);
 void PokeathlonDiscCatch_InitMons(PokeathlonDiscCatch *work);
-void PokeathlonDiscCatch_UpdateCollisions(PokeathlonCourseData *course);
 void PokeathlonDiscCatch_UpdateField(PokeathlonDiscCatchTeam *teams, PokeathlonCourseData *course);
 void PokeathlonDiscCatch_WriteFramePacket(PokeathlonDiscCatchField *field, PokeathlonCourseData *course);
-void PokeathlonDiscCatchDisc_Launch(PokeathlonDiscCatchDisc *disc, u8 speed, u8 index);
-void PokeathlonDiscCatchDisc_Remove(PokeathlonDiscCatchDisc *disc);
-BOOL PokeathlonDiscCatchDisc_FindCatcher(PokeathlonDiscCatchDisc *disc, PokeathlonDiscCatchTeam *teams, PokeathlonDiscCatchCatcher *catcher);
-BOOL PokeathlonDiscCatch_IsInBonusZone(const s16 *tile, int bandEnd);
-void PokeathlonDiscCatchDisc_Catch(PokeathlonDiscCatchDisc *disc, PokeathlonDiscCatchTeam *teams, const PokeathlonDiscCatchCatcher *catcher);
-void PokeathlonDiscCatchDisc_Update(PokeathlonDiscCatchDisc *disc, PokeathlonDiscCatchDiscPacket *packet, PokeathlonDiscCatchTeam *teams);
 void PokeathlonDiscCatchDiscs_Init(PokeathlonDiscCatchDiscs *discs, PokeathlonDiscCatchTeam *teams);
-int PokeathlonDiscCatch_GetPhase(u32 seconds);
-void PokeathlonDiscCatchDiscs_LaunchNext(PokeathlonDiscCatchDiscs *discs, u32 seconds);
 void PokeathlonDiscCatchDiscs_Update(PokeathlonDiscCatchDiscs *discs, u8 *area, u32 seconds);
 void PokeathlonDiscCatchSprites_Init(PokeathlonDiscCatchSprites *sprites, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonDiscCatchScoreboard *scoreboard);
 void PokeathlonDiscCatchSprites_Update(PokeathlonDiscCatchSprites *sprites, PokeathlonCourseData *course);
 void PokeathlonDiscCatchSprites_Delete(PokeathlonDiscCatchSprites *sprites);
 void PokeathlonDiscCatch_AddScoreWindow(PokeathlonDiscCatch *work);
 
-// pokeathlon_disc_catch_scoreboard.c
 PokeathlonDiscCatchScoreboard *PokeathlonDiscCatchScoreboard_New(SpriteSystem *spriteSystem, SpriteManager *spriteManager, BgConfig *bgConfig, MsgData *msgData, MessageFormat *messageFormat, u8 participant, enum HeapID heapId, PokeathlonCourseData *course);
 void PokeathlonDiscCatchScoreboard_Delete(PokeathlonDiscCatchScoreboard *scoreboard);
 void PokeathlonDiscCatchScoreboard_Pause(PokeathlonDiscCatchScoreboard *scoreboard);
@@ -107,25 +94,9 @@ u8 PokeathlonDiscCatchScoreboard_SetOwnScore(PokeathlonDiscCatchScoreboard *scor
 BOOL PokeathlonDiscCatchScoreboard_OnScore(PokeathlonDiscCatchScoreboard *scoreboard, u32 participant, u16 score);
 void PokeathlonDiscCatchScoreboard_SetSeconds(PokeathlonDiscCatchScoreboard *scoreboard, int seconds);
 u16 PokeathlonDiscCatchScoreboard_GetOwnScore(PokeathlonDiscCatchScoreboard *scoreboard);
-ManagedSprite *PokeathlonDiscCatchScoreboard_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u16 animation, u16 priority);
-void PokeathlonDiscCatchScoreboard_InitWindows(PokeathlonDiscCatchScoreboard *scoreboard);
-void PokeathlonDiscCatchScoreboard_DrawScore(PokeathlonDiscCatchScoreboard *scoreboard, s32 score);
-void PokeathlonDiscCatchScoreboard_NewSecondsDigits(PokeathlonDiscCatchScoreboard *scoreboard);
-void PokeathlonDiscCatchScoreboard_PrintNames(PokeathlonDiscCatchScoreboard *scoreboard);
-void PokeathlonDiscCatchScoreboard_NewSideMarks(PokeathlonDiscCatchScoreboard *scoreboard);
-void PokeathlonDiscCatchScoreboard_StopAnims(PokeathlonDiscCatchScoreboard *scoreboard);
 
-// pokeathlon_disc_catch_cpu.c
 PokeathlonDiscCatchCpu *PokeathlonDiscCatchCpu_New(PokeathlonCourseData *course, enum HeapID heapId);
 void PokeathlonDiscCatchCpu_Delete(PokeathlonDiscCatchCpu *cpu);
 void PokeathlonDiscCatchCpu_Update(PokeathlonDiscCatchCpu *cpu);
-void PokeathlonDiscCatchCpuTeam_Init(PokeathlonDiscCatchCpuMon *mons, int participant, PokeathlonCourseData *course);
-void PokeathlonDiscCatchCpuTeam_Update(PokeathlonDiscCatchCpuMon *mons, u16 average, u16 score);
-void PokeathlonDiscCatchCpuMon_PickHome(PokeathlonDiscCatchCpuMon *mon);
-void PokeathlonDiscCatchCpuMon_Init(PokeathlonDiscCatchCpuMon *mon, PokeathlonCourseData *course, u8 index);
-void PokeathlonDiscCatchCpuMon_Think(PokeathlonDiscCatchCpuMon *mon);
-void PokeathlonDiscCatchCpuMon_Update(PokeathlonDiscCatchCpuMon *mon, u16 average, u16 score);
-BOOL PokeathlonDiscCatchCpuMon_IsNearDisc(PokeathlonDiscCatchCpuMon *mon, int index, int reach);
-BOOL PokeathlonDiscCatch_CirclesOverlap(s16 x0, s16 y0, int radius0, s16 x1, s16 y1, int radius1);
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_DISC_CATCH_PLAY_H

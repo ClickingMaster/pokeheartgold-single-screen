@@ -1296,230 +1296,33 @@
 	.public BattleCastlePartyApp_Init
 	.public BattleCastlePartyApp_Main
 	.public BattleCastlePartyApp_Exit
-	.public BattleCastlePartyApp_FadeIn
-	.public BattleCastlePartyApp_DrawScreen
 	.public BattleCastlePartyApp_HandleMenu
 	.public BattleCastlePartyApp_LinkAction
-	.public BattleCastlePartyApp_LinkExit
-	.public BattleCastlePartyApp_FadeOut
-	.public BattleCastlePartyApp_FreeResources
-	.public BattleCastlePartyApp_DisableDisplay
-	.public BattleCastlePartyApp_InitGraphics
-	.public BattleCastlePartyApp_InitBgGraphics
-	.public BattleCastlePartyApp_InitSpriteGfx
-	.public BattleCastlePartyApp_FreeBgLayers
-	.public BattleCastlePartyApp_VBlankCallback
-	.public BattleCastlePartyApp_SetGraphicsBanks
-	.public BattleCastlePartyApp_InitBgLayers
-	.public BattleCastlePartyApp_LoadPartyBg
-	.public BattleCastlePartyApp_LoadBgPalette
-	.public BattleCastlePartyApp_LoadStatsSummaryBg
-	.public BattleCastlePartyApp_ReloadBgPalette
-	.public BattleCastlePartyApp_LoadMovesSummaryBg
-	.public BattleCastlePartyApp_LoadItemGridBg
-	.public BattleCastlePartyApp_LoadSubScreenBg
-	.public BattleCastlePartyApp_PrintMessage
-	.public BattleCastlePartyApp_AddMessage
-	.public BattleCastlePartyApp_ShowMessage
-	.public BattleCastlePartyApp_PrintStatsSummary
-	.public BattleCastlePartyApp_PrintSummaryText
-	.public BattleCastlePartyApp_PrintMovesSummary
-	.public BattleCastlePartyApp_PrintMove
-	.public BattleCastlePartyApp_PrintPartyHp
-	.public BattleCastlePartyApp_PrintMonHp
-	.public BattleCastlePartyApp_PrintPartyLevels
-	.public BattleCastlePartyApp_PrintMonLevelAndGender
-	.public BattleCastlePartyApp_RedrawMonHp
-	.public BattleCastlePartyApp_PrintChoosePrompt
-	.public BattleCastlePartyApp_HideChoosePrompt
-	.public BattleCastlePartyApp_OpenMainMenu
-	.public BattleCastlePartyApp_CloseMainMenu
-	.public BattleCastlePartyApp_OpenHealMenu
-	.public BattleCastlePartyApp_CloseHealMenu
-	.public BattleCastlePartyApp_OpenRentalMenu
-	.public BattleCastlePartyApp_CloseRentalMenu
 	.public BattleCastlePartyApp_OpenItemGrid
 	.public BattleCastlePartyApp_CloseItemGrid
-	.public BattleCastlePartyApp_ShowYesNoPrompt
-	.public BattleCastlePartyApp_PrintItemGridHeader
-	.public BattleCastlePartyApp_PrintItemNames
-	.public BattleCastlePartyApp_DrawItemIcons
-	.public BattleCastlePartyApp_PrintItemPageNumber
-	.public BattleCastlePartyApp_PrintReturnButton
-	.public BattleCastlePartyApp_PrintItemDescription
-	.public BattleCastlePartyApp_PrintSelectedMonInfo
-	.public BattleCastlePartyApp_SetupItemGrid
-	.public BattleCastlePartyApp_BufferNumber
-	.public BattleCastlePartyApp_BufferMonNickname
-	.public BattleCastlePartyApp_BufferPlayerName
-	.public BattleCastlePartyApp_PrintPlayerName
-	.public BattleCastlePartyApp_PrintPartnerName
-	.public BattleCastlePartyApp_PrintGenderSymbol
-	.public BattleCastlePartyApp_SetMainState
-	.public BattleCastlePartyApp_MoveCursor
-	.public BattleCastlePartyApp_DrawCursor
-	.public BattleCastlePartyApp_GetCursorPos
-	.public BattleCastlePartyApp_GetRentalCost
-	.public BattleCastlePartyApp_GetRentalCostByItemId
-	.public BattleCastlePartyApp_GetRentalItemId
-	.public BattleCastlePartyApp_GetTrainerNamePositions
 	.public BattleCastlePartyApp_PlayActionEffect
-	.public BattleCastlePartyApp_GetMonIconHpPalette
-	.public BattleCastlePartyApp_GetHpBarAnimSeq
-	.public BattleCastlePartyApp_ScrollStatsSummary
-	.public BattleCastlePartyApp_ScrollMovesSummary
-	.public BattleCastlePartyApp_CloseAll
-	.public BattleCastlePartyApp_IsAnyPpUsed
-	.public BattleCastlePartyApp_CloseWindow
-	.public BattleCastlePartyApp_SendLinkCommand
-	.public BattleCastlePartyApp_PrepareLinkRanks
 	.public BattleCastlePartyApp_ReceiveRanks
-	.public BattleCastlePartyApp_PrepareLinkAction
 	.public BattleCastlePartyApp_ReceiveAction
-	.public BattleCastlePartyApp_PrepareLinkCursor
 	.public BattleCastlePartyApp_ReceiveCursor
-	.public BattleCastlePartyApp_PrepareLinkExit
 	.public BattleCastlePartyApp_ReceiveExit
-	.public BattleCastlePartyApp_UseItemOnMon
-	.public BattleCastlePartyApp_PrintTrainerNames
-	.public BattleCastlePartyApp_HealMon
-	.public BattleCastlePartyApp_GiveRentalItem
-	.public BattleCastlePartyApp_CloseMenus
-	.public BattleCastlePartyApp_ReturnToItemList
-	.public BattleCastlePartyApp_PrintCastlePoints
-	.public BattleCastlePartyApp_ApplyAction
-	.public BattleCastlePartyApp_ShowMonStats
-	.public BattleCastlePartyApp_ShowMonMoves
-	.public BattleCastlePartyApp_HideSummaryPanel
-	.public BattleCastlePartyApp_UpdateMonIcons
-	.public BattleCastlePartyApp_RankUp
-	.public BattleCastlePartyApp_PrintExpandedMessage
 	.public BattleCastlePartyApp_LoadMonSummary
-	.public BattleCastlePartyApp_PrintSummaryLabels
-	.public BattleCastlePartyApp_PrintMonSummary
-	.public BattleCastlePartyApp_RefreshMonSummary
-	.public BattleCastlePartyApp_ShowMonSummary
-	.public BattleCastlePartyApp_GetItemButtonPos
-	.public BattleCastlePartyApp_ShowSelectedItem
-	.public BattleCastlePartyApp_ShowItemGrid
 	.public BattleCastlePartyApp_SetCursorPos
 	.public BattleCastlePartyApp_SetItemCursor
 	.public BattleCastlePartyApp_ShowItemDescription
 	.public BattleCastlePartyApp_CreateListMenu
-	.public BattleCastlePartyApp_CreateMainMenuList
-	.public BattleCastlePartyApp_CreateHealMenuList
-	.public BattleCastlePartyApp_CreateRentalMenuList
 	.public BattleCastlePartyApp_DestroyListMenu
-	.public BattleCastlePartyApp_PrintMainMenuHelp
-	.public BattleCastlePartyApp_PrintHealMenuHelp
-	.public BattleCastlePartyApp_PrintRentalMenuHelp
-	.public BattleCastlePartyApp_StartButtonAnim
 	.public BattleCastlePartyApp_AnimatePressedButton
 	.public BattleCastleOpponentApp_Init
 	.public BattleCastleOpponentApp_Main
 	.public BattleCastleOpponentApp_Exit
-	.public BattleCastleOpponentApp_FadeIn
-	.public BattleCastleOpponentApp_DrawScreen
-	.public BattleCastleOpponentApp_HandleMenu
-	.public BattleCastleOpponentApp_LinkAction
-	.public BattleCastleOpponentApp_LinkExit
-	.public BattleCastleOpponentApp_FadeOut
-	.public BattleCastleOpponentApp_FreeResources
-	.public BattleCastleOpponentApp_DisableDisplay
-	.public BattleCastleOpponentApp_InitGraphics
-	.public BattleCastleOpponentApp_InitBgGraphics
-	.public BattleCastleOpponentApp_InitSpriteGfx
-	.public BattleCastleOpponentApp_FreeBgLayers
-	.public BattleCastleOpponentApp_VBlankCallback
-	.public BattleCastleOpponentApp_SetGraphicsBanks
-	.public BattleCastleOpponentApp_InitBgLayers
-	.public BattleCastleOpponentApp_LoadPartyBg
-	.public BattleCastleOpponentApp_LoadBgPalette
-	.public BattleCastleOpponentApp_LoadSummaryBg
-	.public BattleCastleOpponentApp_LoadSummaryBgPalette
-	.public BattleCastleOpponentApp_LoadSubScreenBg
-	.public BattleCastleOpponentApp_PrintMessage
-	.public BattleCastleOpponentApp_AddMessage
-	.public BattleCastleOpponentApp_ShowMessage
-	.public BattleCastleOpponentApp_PrintPartyHp
-	.public BattleCastleOpponentApp_PrintPartyLevels
-	.public BattleCastleOpponentApp_ShowYesNoPrompt
-	.public BattleCastleOpponentApp_OpenLevelMenu
-	.public BattleCastleOpponentApp_CloseLevelMenu
-	.public BattleCastleOpponentApp_BufferNumber
-	.public BattleCastleOpponentApp_BufferSpeciesName
-	.public BattleCastleOpponentApp_BufferPlayerName
-	.public BattleCastleOpponentApp_PrintPlayerName
-	.public BattleCastleOpponentApp_PrintPartnerName
-	.public BattleCastleOpponentApp_PrintGenderSymbol
-	.public BattleCastleOpponentApp_PrintChoosePrompt
-	.public BattleCastleOpponentApp_HideChoosePrompt
-	.public BattleCastleOpponentApp_OpenMainMenu
-	.public BattleCastleOpponentApp_CloseMainMenu
-	.public BattleCastleOpponentApp_OpenSummaryMenu
-	.public BattleCastleOpponentApp_CloseSummaryMenu
-	.public BattleCastleOpponentApp_SetMainState
-	.public BattleCastleOpponentApp_MoveCursor
-	.public BattleCastleOpponentApp_DrawCursor
-	.public BattleCastleOpponentApp_GetCursorPos
-	.public BattleCastleOpponentApp_GetTrainerNamePositions
-	.public BattleCastleOpponentApp_PlayActionEffect
-	.public BattleCastleOpponentApp_FinishLinkAction
-	.public BattleCastleOpponentApp_GetLevelChangeCost
-	.public BattleCastleOpponentApp_CloseAll
-	.public BattleCastleOpponentApp_CloseWindow
-	.public BattleCastleOpponentApp_SendLinkCommand
-	.public BattleCastleOpponentApp_PrepareLinkRanks
 	.public BattleCastleOpponentApp_ReceiveRanks
-	.public BattleCastleOpponentApp_PrepareLinkAction
 	.public BattleCastleOpponentApp_ReceiveAction
-	.public BattleCastleOpponentApp_PrepareLinkCursor
 	.public BattleCastleOpponentApp_ReceiveCursor
-	.public BattleCastleOpponentApp_PrepareLinkExit
 	.public BattleCastleOpponentApp_ReceiveExit
-	.public BattleCastleOpponentApp_SetStatsBought
-	.public BattleCastleOpponentApp_BuyStats
-	.public BattleCastleOpponentApp_SetMovesBought
-	.public BattleCastleOpponentApp_BuyMoves
-	.public BattleCastleOpponentApp_CloseMenus
-	.public BattleCastleOpponentApp_OpenMessageBox
-	.public BattleCastleOpponentApp_PrintCastlePoints
-	.public BattleCastleOpponentApp_ConfirmLevelChange
-	.public BattleCastleOpponentApp_PrintTrainerNames
-	.public BattleCastleOpponentApp_ApplyAction
-	.public BattleCastleOpponentApp_CheckMon
-	.public BattleCastleOpponentApp_CheckMonAndRedrawHp
-	.public BattleCastleOpponentApp_ChangeLevel
-	.public BattleCastleOpponentApp_HideSummaryBg
-	.public BattleCastleOpponentApp_UpdateMonIcons
-	.public BattleCastleOpponentApp_TryBuy
-	.public BattleCastleOpponentApp_RankUp
-	.public BattleCastleOpponentApp_ShowBoughtMarks
-	.public BattleCastleOpponentApp_ShowMonBoughtMarks
-	.public BattleCastleOpponentApp_GetBoughtMarkPos
-	.public BattleCastleOpponentApp_PrintExpandedMessage
-	.public BattleCastleOpponentApp_LoadMonSummary
-	.public BattleCastleOpponentApp_PrintSummaryLabels
-	.public BattleCastleOpponentApp_PrintMonSummary
-	.public BattleCastleOpponentApp_ShowMonSummary
-	.public BattleCastleOpponentApp_ShowSummaryPanel
-	.public BattleCastleOpponentApp_LoadMonPic
-	.public BattleCastleOpponentApp_SetCursorPos
-	.public BattleCastleOpponentApp_CreateListMenu
-	.public BattleCastleOpponentApp_CreateMainMenuList
-	.public BattleCastleOpponentApp_CreateSummaryMenuList
-	.public BattleCastleOpponentApp_CreateLevelMenuList
-	.public BattleCastleOpponentApp_DestroyListMenu
-	.public BattleCastleOpponentApp_PrintMainMenuHelp
-	.public BattleCastleOpponentApp_PrintSummaryMenuHelp
 	.public BattleCastle_InitSpriteGfx
-	.public BattleCastle_CreateSprite
 	.public BattleCastle_FreeSpriteGfx
 	.public BattleCastle_LoadItemIconChar
 	.public BattleCastle_LoadItemIconPalette
-	.public BattleCastle_InitSpriteTransfer
-	.public BattleCastle_LoadPartyListGfx
-	.public BattleCastle_LoadMonPicGfx
 	.public BattleCastleSprite_New
 	.public BattleCastleSprite_NewSubScreen
 	.public BattleCastleSprite_Delete
@@ -1555,7 +1358,6 @@
 	.public BattleCastle_FreeGrid
 	.public BattleCastle_GridCallbackNoOp
 	.public BattleCastlePartyApp_CreatePartyGrid
-	.public BattleCastleOpponentApp_CreatePartyGrid
 	.public BattleCastle_HandlePartyGridInput
 	.public BattleCastle_SetGridInputsToNext
 	.public BattleCastlePartyApp_OnPartyGridKeyMove
@@ -1636,64 +1438,10 @@
 	.include "global.inc"
 
 	.text
-	.public BattleCastlePartyApp_DrawScreen
-	.public BattleCastlePartyApp_FadeOut
-	.public BattleCastlePartyApp_DisableDisplay
-	.public BattleCastlePartyApp_PrintPartyHp
-	.public BattleCastlePartyApp_PrintPartyLevels
-	.public BattleCastlePartyApp_HideChoosePrompt
-	.public BattleCastlePartyApp_CloseMainMenu
-	.public BattleCastlePartyApp_CloseHealMenu
-	.public BattleCastlePartyApp_CloseRentalMenu
-	.public BattleCastlePartyApp_ShowYesNoPrompt
-	.public BattleCastlePartyApp_BufferNumber
-	.public BattleCastlePartyApp_BufferMonNickname
-	.public BattleCastlePartyApp_BufferPlayerName
-	.public BattleCastlePartyApp_SetMainState
-	.public BattleCastlePartyApp_GetTrainerNamePositions
-	.public BattleCastlePartyApp_CloseAll
-	.public BattleCastlePartyApp_CloseWindow
-	.public BattleCastlePartyApp_PrepareLinkCursor
-	.public BattleCastlePartyApp_PrepareLinkExit
 	.public BattleCastlePartyApp_ReceiveExit
-	.public BattleCastlePartyApp_UseItemOnMon
-	.public BattleCastlePartyApp_ReturnToItemList
-	.public BattleCastlePartyApp_HideSummaryPanel
-	.public BattleCastlePartyApp_GetItemButtonPos
 	.public BattleCastlePartyApp_SetCursorPos
 	.public BattleCastlePartyApp_ShowItemDescription
-	.public BattleCastlePartyApp_StartButtonAnim
-	.public BattleCastleOpponentApp_DrawScreen
-	.public BattleCastleOpponentApp_FadeOut
-	.public BattleCastleOpponentApp_DisableDisplay
-	.public BattleCastleOpponentApp_ShowYesNoPrompt
-	.public BattleCastleOpponentApp_OpenLevelMenu
-	.public BattleCastleOpponentApp_CloseLevelMenu
-	.public BattleCastleOpponentApp_BufferNumber
-	.public BattleCastleOpponentApp_BufferSpeciesName
-	.public BattleCastleOpponentApp_BufferPlayerName
-	.public BattleCastleOpponentApp_HideChoosePrompt
-	.public BattleCastleOpponentApp_OpenMainMenu
-	.public BattleCastleOpponentApp_CloseMainMenu
-	.public BattleCastleOpponentApp_OpenSummaryMenu
-	.public BattleCastleOpponentApp_CloseSummaryMenu
-	.public BattleCastleOpponentApp_SetMainState
-	.public BattleCastleOpponentApp_GetTrainerNamePositions
-	.public BattleCastleOpponentApp_GetLevelChangeCost
-	.public BattleCastleOpponentApp_CloseAll
-	.public BattleCastleOpponentApp_CloseWindow
-	.public BattleCastleOpponentApp_PrepareLinkCursor
-	.public BattleCastleOpponentApp_PrepareLinkExit
 	.public BattleCastleOpponentApp_ReceiveExit
-	.public BattleCastleOpponentApp_SetStatsBought
-	.public BattleCastleOpponentApp_SetMovesBought
-	.public BattleCastleOpponentApp_OpenMessageBox
-	.public BattleCastleOpponentApp_CheckMonAndRedrawHp
-	.public BattleCastleOpponentApp_HideSummaryBg
-	.public BattleCastleOpponentApp_ShowMonBoughtMarks
-	.public BattleCastleOpponentApp_GetBoughtMarkPos
-	.public BattleCastleOpponentApp_ShowMonSummary
-	.public BattleCastleOpponentApp_SetCursorPos
 	.public BattleCastleSprite_Delete
 	.public BattleCastleSprite_SetDrawFlag
 	.public BattleCastleSprite_SetAnim

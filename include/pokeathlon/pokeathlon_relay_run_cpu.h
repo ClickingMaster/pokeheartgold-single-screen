@@ -72,9 +72,6 @@ void PokeathlonRelayRunCpu_SetTeam(PokeathlonRelayRunCpu *cpu, u8 index, Pokeath
 void PokeathlonRelayRunCpu_SetObstacles(PokeathlonRelayRunCpu *cpu, s32 *layout);
 void PokeathlonRelayRunCpu_Delete(PokeathlonRelayRunCpu *cpu);
 u8 PokeathlonRelayRunCpu_Update(PokeathlonCourseData *course, PokeathlonRelayRunCpu *cpu, s32 timer);
-void PokeathlonRelayRunCpu_Think(PokeathlonCourseData *course, PokeathlonRelayRunCpu *cpu, u8 index, s32 timer);
-void PokeathlonRelayRunCpu_WrapX(s32 *x, s32 delta);
-PokeathlonRelayRunCpuCell *PokeathlonRelayRunCpu_PickBestCell(PokeathlonRelayRunCpu *cpu);
 u8 PokeathlonRelayRunCpu_SortCells(PokeathlonRelayRunCpuCell **cells, PokeathlonRelayRunCpuCell **out);
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_RELAY_RUN_CPU_H

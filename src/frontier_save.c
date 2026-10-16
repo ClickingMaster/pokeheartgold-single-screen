@@ -1,6 +1,8 @@
 #include "frontier_save_access.h"
 #include "save_arrays.h"
+
 extern FrontierSave gFrontierSave;
+
 u32 Save_Frontier_sizeof(void);
 void Save_Frontier_Init(FrontierSave *frontier);
 void FrontierData_Reset(void *data);

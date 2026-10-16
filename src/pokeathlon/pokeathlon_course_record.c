@@ -33,6 +33,27 @@ extern const s16 sPokeathlonCourseRecordCursorPositionsY[];
 extern const WindowTemplate sPokeathlonCourseRecordWindowTemplates[17];
 extern const char sStr_SeqError[]; // "seq error!"
 
+static void PokeathlonCourseRecord_CopyArgs(PokeathlonCourseRecord *work, const PokeathlonCourseRecordArgs *args);
+static void PokeathlonCourseRecord_FreeArgs(PokeathlonCourseRecordArgs *args);
+static void PokeathlonCourseRecord_InitBgs(PokeathlonCourseRecord *work);
+static void PokeathlonCourseRecord_FreeBgs(PokeathlonCourseRecord *work);
+static void PokeathlonCourseRecord_LoadBgGraphics(PokeathlonCourseRecord *work);
+static void PokeathlonCourseRecord_UpdatePageScroll(PokeathlonCourseRecord *work);
+static void PokeathlonCourseRecord_ShowCoursePanel(PokeathlonCourseRecord *work, u32 course);
+static void PokeathlonCourseRecord_PrintStaticText(PokeathlonCourseRecord *work);
+static void PokeathlonCourseRecord_PrintPage(PokeathlonCourseRecord *work, u32 course);
+static void PokeathlonCourseRecord_PrintEventScores(PokeathlonCourseRecord *work, int course);
+static void PokeathlonCourseRecord_PrintMonNames(PokeathlonCourseRecord *work, BOOL show);
+static void PokeathlonCourseRecord_PrintCourseName(PokeathlonCourseRecord *work, int course);
+static void PokeathlonCourseRecord_PrintTotalLabel(PokeathlonCourseRecord *work);
+static void PokeathlonCourseRecord_VBlankCallback(PokeathlonCourseRecord *work);
+static void PokeathlonCourseRecord_LoadSpriteResources(PokeathlonCourseRecord *work);
+static void PokeathlonCourseRecord_LoadMonPicResources(PokeathlonCourseRecord *work);
+static void PokeathlonCourseRecord_CreateSprites(PokeathlonCourseRecord *work);
+static void PokeathlonCourseRecord_SetMonSpritesVisible(PokeathlonCourseRecord *work, BOOL visible);
+static void PokeathlonCourseRecord_UpdatePageSprites(PokeathlonCourseRecord *work, int course);
+static BOOL PokeathlonCourseRecord_HandleInput(PokeathlonCourseRecord *work);
+
 // The first 0xDC bytes of PokeathlonSave hold the five course records.
 static inline PokeathlonCourseRecordEntry *PokeathlonCourseRecord_GetRecords(PokeathlonCourseRecordArgs *args) {
     return (PokeathlonCourseRecordEntry *)args->pokeathlon;
@@ -132,39 +153,39 @@ BOOL PokeathlonCourseRecord_Main(OverlayManager *man, int *state) {
     return FALSE;
 }
 
-void PokeathlonCourseRecord_CopyArgs(PokeathlonCourseRecord *work, const PokeathlonCourseRecordArgs *args) {
+static void PokeathlonCourseRecord_CopyArgs(PokeathlonCourseRecord *work, const PokeathlonCourseRecordArgs *args) {
     PokeathlonCourseRecordArgs *copy = Heap_Alloc(work->heapId, sizeof(PokeathlonCourseRecordArgs));
     copy->pokeathlon = args->pokeathlon;
     copy->allGoalsMet = args->allGoalsMet;
     work->args = copy;
 }
 
-BOOL PokeathlonCourseRecord_AreFlags0EFTo0F1Set(PokeathlonCourseRecordArgs *args) {
+static BOOL PokeathlonCourseRecord_AreFlags0EFTo0F1Set(PokeathlonCourseRecordArgs *args) {
     return args->allGoalsMet;
 }
 
-void PokeathlonCourseRecord_FreeArgs(PokeathlonCourseRecordArgs *args) {
+static void PokeathlonCourseRecord_FreeArgs(PokeathlonCourseRecordArgs *args) {
     Heap_Free(args);
 }
 
-PokeathlonRecordMon *PokeathlonCourseRecord_GetMon(PokeathlonCourseRecordArgs *args, int course, int slot) {
+static PokeathlonRecordMon *PokeathlonCourseRecord_GetMon(PokeathlonCourseRecordArgs *args, int course, int slot) {
     return &PokeathlonCourseRecord_GetRecords(args)[course].mons[slot];
 }
 
-u16 PokeathlonCourseRecord_GetTotalScore(PokeathlonCourseRecordArgs *args, int course) {
+static u16 PokeathlonCourseRecord_GetTotalScore(PokeathlonCourseRecordArgs *args, int course) {
     GF_ASSERT(args != NULL);
     GF_ASSERT(course < 5);
     return PokeathlonCourseRecord_GetRecords(args)[course].totalScore;
 }
 
-BOOL PokeathlonCourseRecord_HasRecord(PokeathlonCourseRecordArgs *args, int course) {
+static BOOL PokeathlonCourseRecord_HasRecord(PokeathlonCourseRecordArgs *args, int course) {
     GF_ASSERT(args != NULL);
     return PokeathlonCourseRecord_GetTotalScore(args, course) != 0;
 }
 
 #pragma force_active on
 
-u16 PokeathlonCourseRecord_GetScore(PokeathlonCourseRecordArgs *args, int course, int event) {
+static u16 PokeathlonCourseRecord_GetScore(PokeathlonCourseRecordArgs *args, int course, int event) {
     GF_ASSERT(args != NULL);
     if (event == 3) {
         u16 bonus = PokeathlonCourseRecord_GetRecords(args)[course].totalScore - PokeathlonCourseRecord_GetRecords(args)[course].eventScores[0];
@@ -177,7 +198,7 @@ u16 PokeathlonCourseRecord_GetScore(PokeathlonCourseRecordArgs *args, int course
 
 #pragma force_active reset
 
-int PokeathlonCourseRecord_GetEventId(PokeathlonCourseRecordArgs *args, s32 course, u32 event) {
+static int PokeathlonCourseRecord_GetEventId(PokeathlonCourseRecordArgs *args, s32 course, u32 event) {
     const u8 *events;
 
     GF_ASSERT(args != NULL);
@@ -187,7 +208,7 @@ int PokeathlonCourseRecord_GetEventId(PokeathlonCourseRecordArgs *args, s32 cour
     return events[event];
 }
 
-u16 PokeathlonCourseRecord_GetMonSpecies(PokeathlonCourseRecordArgs *args, u32 course, u32 slot) {
+static u16 PokeathlonCourseRecord_GetMonSpecies(PokeathlonCourseRecordArgs *args, u32 course, u32 slot) {
     GF_ASSERT(args != NULL);
     GF_ASSERT(slot < 3);
     GF_ASSERT(course < 5);
@@ -196,7 +217,7 @@ u16 PokeathlonCourseRecord_GetMonSpecies(PokeathlonCourseRecordArgs *args, u32 c
 
 #pragma force_active on
 
-void PokeathlonCourseRecord_InitBgs(PokeathlonCourseRecord *work) {
+static void PokeathlonCourseRecord_InitBgs(PokeathlonCourseRecord *work) {
     GraphicsModes modes;
     PokeathlonCourseRecordBgTemplates templates;
     int i;
@@ -217,7 +238,7 @@ void PokeathlonCourseRecord_InitBgs(PokeathlonCourseRecord *work) {
 
 #pragma force_active reset
 
-void PokeathlonCourseRecord_FreeBgs(PokeathlonCourseRecord *work) {
+static void PokeathlonCourseRecord_FreeBgs(PokeathlonCourseRecord *work) {
     u8 i;
 
     NARC_Delete(work->narc);
@@ -227,7 +248,7 @@ void PokeathlonCourseRecord_FreeBgs(PokeathlonCourseRecord *work) {
     Heap_Free(work->bgConfig);
 }
 
-void PokeathlonCourseRecord_LoadBgGraphics(PokeathlonCourseRecord *work) {
+static void PokeathlonCourseRecord_LoadBgGraphics(PokeathlonCourseRecord *work) {
     GfGfxLoader_GXLoadPalFromOpenNarc(work->narc, 30, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0, work->heapId);
     GfGfxLoader_LoadCharDataFromOpenNarc(work->narc, 31, work->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, TRUE, work->heapId);
     GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, 32, work->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, TRUE, work->heapId);
@@ -246,7 +267,7 @@ void PokeathlonCourseRecord_LoadBgGraphics(PokeathlonCourseRecord *work) {
 
 #pragma force_active on
 
-void PokeathlonCourseRecord_StartPageScroll(PokeathlonCourseRecord *work, int course, BOOL forward) {
+static void PokeathlonCourseRecord_StartPageScroll(PokeathlonCourseRecord *work, int course, BOOL forward) {
     s16 offset;
     u8 i;
 
@@ -270,7 +291,7 @@ void PokeathlonCourseRecord_StartPageScroll(PokeathlonCourseRecord *work, int co
 
 #pragma force_active reset
 
-void PokeathlonCourseRecord_UpdatePageScroll(PokeathlonCourseRecord *work) {
+static void PokeathlonCourseRecord_UpdatePageScroll(PokeathlonCourseRecord *work) {
     s32 xpos;
     s32 x;
     u8 i;
@@ -294,7 +315,7 @@ void PokeathlonCourseRecord_UpdatePageScroll(PokeathlonCourseRecord *work) {
     }
 }
 
-void PokeathlonCourseRecord_ShowCoursePanel(PokeathlonCourseRecord *work, u32 course) {
+static void PokeathlonCourseRecord_ShowCoursePanel(PokeathlonCourseRecord *work, u32 course) {
     if (PokeathlonCourseRecord_HasRecord(work->args, course)) {
         PokeathlonCourseRecord_StartPageScroll(work, course, work->selection.scrollForward);
     } else {
@@ -303,20 +324,20 @@ void PokeathlonCourseRecord_ShowCoursePanel(PokeathlonCourseRecord *work, u32 co
     }
 }
 
-void PokeathlonCourseRecord_PrintStaticText(PokeathlonCourseRecord *work) {
+static void PokeathlonCourseRecord_PrintStaticText(PokeathlonCourseRecord *work) {
     PokeathlonUtil_PrintMessageAtXY(work->textContext, 0, msg_0314_00002, 1, 0);
     PokeathlonUtil_PrintAlignedMessageAtY(work->textContext, 2, msg_0314_00000, TRUE, 0, 4);
     PokeathlonUtil_PrintAlignedMessage(work->textContext, 11, msg_0314_00007, FALSE);
 }
 
-void PokeathlonCourseRecord_PrintPage(PokeathlonCourseRecord *work, u32 course) {
+static void PokeathlonCourseRecord_PrintPage(PokeathlonCourseRecord *work, u32 course) {
     PokeathlonCourseRecord_PrintCourseName(work, course);
     PokeathlonCourseRecord_PrintEventScores(work, course);
     PokeathlonCourseRecord_PrintMonNames(work, PokeathlonCourseRecord_HasRecord(work->args, course));
     PokeathlonCourseRecord_PrintTotalLabel(work);
 }
 
-void PokeathlonCourseRecord_PrintEventScores(PokeathlonCourseRecord *work, int course) {
+static void PokeathlonCourseRecord_PrintEventScores(PokeathlonCourseRecord *work, int course) {
     MessageFormat *msgFormat = PokeathlonUtil_GetMessageFormat(work->textContext);
     int i;
     const u32 *windows = sPokeathlonCourseRecordScoreWindows;
@@ -337,7 +358,7 @@ void PokeathlonCourseRecord_PrintEventScores(PokeathlonCourseRecord *work, int c
     }
 }
 
-void PokeathlonCourseRecord_PrintMonNames(PokeathlonCourseRecord *work, BOOL show) {
+static void PokeathlonCourseRecord_PrintMonNames(PokeathlonCourseRecord *work, BOOL show) {
     s32 i;
     PokeathlonTextContext *textContext = work->textContext;
 
@@ -352,7 +373,7 @@ void PokeathlonCourseRecord_PrintMonNames(PokeathlonCourseRecord *work, BOOL sho
 
 #pragma force_active on
 
-void PokeathlonCourseRecord_PrintCourseName(PokeathlonCourseRecord *work, int course) {
+static void PokeathlonCourseRecord_PrintCourseName(PokeathlonCourseRecord *work, int course) {
     PokeathlonTextContext *textContext = work->textContext;
     MessageFormat *msgFormat = PokeathlonUtil_GetMessageFormat(textContext);
     int medal;
@@ -376,7 +397,7 @@ void PokeathlonCourseRecord_PrintCourseName(PokeathlonCourseRecord *work, int co
 
 #pragma force_active reset
 
-void PokeathlonCourseRecord_PrintTotalLabel(PokeathlonCourseRecord *work) {
+static void PokeathlonCourseRecord_PrintTotalLabel(PokeathlonCourseRecord *work) {
     PokeathlonTextContext *textContext = work->textContext;
 
     if (PokeathlonCourseRecord_HasRecord(work->args, work->selection.page)) {
@@ -387,7 +408,7 @@ void PokeathlonCourseRecord_PrintTotalLabel(PokeathlonCourseRecord *work) {
     }
 }
 
-void PokeathlonCourseRecord_VBlankCallback(PokeathlonCourseRecord *work) {
+static void PokeathlonCourseRecord_VBlankCallback(PokeathlonCourseRecord *work) {
     vu8 *dtcm = (vu8 *)0x027E0000;
 
     SpriteSystem_TransferOam();
@@ -395,7 +416,7 @@ void PokeathlonCourseRecord_VBlankCallback(PokeathlonCourseRecord *work) {
     *(vu32 *)(dtcm + 0x3FF8) |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag(OS_IE_V_BLANK), DTCM address as a literal
 }
 
-void PokeathlonCourseRecord_LoadSpriteResources(PokeathlonCourseRecord *work) {
+static void PokeathlonCourseRecord_LoadSpriteResources(PokeathlonCourseRecord *work) {
     SpriteSystem *spriteSystem = PokeathlonUtil_GetSpriteSystem(work->spriteContext);
     SpriteManager *spriteManager = PokeathlonUtil_GetSpriteManager(work->spriteContext);
 
@@ -423,7 +444,7 @@ void PokeathlonCourseRecord_LoadSpriteResources(PokeathlonCourseRecord *work) {
     PokeathlonUtil_LoadMonIconResources(work->spriteContext, sPokeathlonCourseRecordMonIconResIds, 3, 0, TRUE);
 }
 
-void PokeathlonCourseRecord_LoadMonPicResources(PokeathlonCourseRecord *work) {
+static void PokeathlonCourseRecord_LoadMonPicResources(PokeathlonCourseRecord *work) {
     u8 i;
     SpriteSystem *spriteSystem = PokeathlonUtil_GetSpriteSystem(work->spriteContext);
     SpriteManager *spriteManager = PokeathlonUtil_GetSpriteManager(work->spriteContext);
@@ -435,7 +456,7 @@ void PokeathlonCourseRecord_LoadMonPicResources(PokeathlonCourseRecord *work) {
 
 #pragma force_active on
 
-void PokeathlonCourseRecord_CreateSprites(PokeathlonCourseRecord *work) {
+static void PokeathlonCourseRecord_CreateSprites(PokeathlonCourseRecord *work) {
     int i;
     s32 course;
     const ManagedSpriteTemplate *spriteTemplate = sPokeathlonCourseRecordSpriteTemplates;
@@ -471,7 +492,7 @@ void PokeathlonCourseRecord_CreateSprites(PokeathlonCourseRecord *work) {
 
 #pragma force_active reset
 
-void PokeathlonCourseRecord_SetMonSpritesVisible(PokeathlonCourseRecord *work, BOOL visible) {
+static void PokeathlonCourseRecord_SetMonSpritesVisible(PokeathlonCourseRecord *work, BOOL visible) {
     ManagedSprite_SetDrawFlag(work->sprites[14], visible);
     ManagedSprite_SetDrawFlag(work->sprites[15], visible);
     ManagedSprite_SetDrawFlag(work->sprites[16], visible);
@@ -485,7 +506,7 @@ void PokeathlonCourseRecord_SetMonSpritesVisible(PokeathlonCourseRecord *work, B
 
 #pragma force_active on
 
-void PokeathlonCourseRecord_UpdatePageSprites(PokeathlonCourseRecord *work, int course) {
+static void PokeathlonCourseRecord_UpdatePageSprites(PokeathlonCourseRecord *work, int course) {
     u32 totalScore = PokeathlonCourseRecord_GetTotalScore(work->args, course);
     u8 i;
 
@@ -517,7 +538,7 @@ void PokeathlonCourseRecord_UpdatePageSprites(PokeathlonCourseRecord *work, int 
     }
 }
 
-BOOL PokeathlonCourseRecord_HandleInput(PokeathlonCourseRecord *work) {
+static BOOL PokeathlonCourseRecord_HandleInput(PokeathlonCourseRecord *work) {
     PokeathlonCourseRecordSelection *selection = &work->selection;
     int oldCursor = selection->cursor;
     int cursor;

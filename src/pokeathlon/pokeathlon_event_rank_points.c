@@ -7,7 +7,6 @@
 // of the event score adds 5. At most 200.
 extern const u8 gPokeathlonEventRankPoints[4];
 
-// PokeathlonCourseScoreList_GetRanked (pokeathlon_course_internal.h)
 PokeathlonEventPointsEntry *PokeathlonCourseScoreList_GetRanked(PokeathlonCourseScoreList *list, int index);
 
 #pragma force_active on

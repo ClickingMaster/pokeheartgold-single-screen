@@ -22,8 +22,6 @@ enum {
 // NitroSDK MATH_QSort (no header declares it)
 void MATH_QSort(void *base, u32 count, u32 width, int (*compare)(const void *, const void *), void *context);
 
-// Course helpers and the sprite pool (OVY_96, not yet tidied).
-u8 *PokeathlonCourse_ToBytes(void *ptr);
 void PokeathlonCourse_SetRecordScore(PokeathlonCourseData *course, u32 score);
 Sprite *PokeathlonCourseSprites_CreateTimerDigit(PokeathlonGoalRollResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
 void PokeathlonCourseMonObject_SetDrawPriority(void *object, u32 priority);
@@ -45,6 +43,9 @@ extern const VecFx32 gPokeathlonGoalRollLabelPosition;
 // BgTilemapRectChangePalette as the plate task was built: with int arguments.
 typedef void (*PokeathlonGoalRollChangePaletteFunc)(BgConfig *bgConfig, int bgId, int x, int y, int width, int height, int palette);
 #define ChangePlatePalette ((PokeathlonGoalRollChangePaletteFunc)BgTilemapRectChangePalette)
+
+static u32 PokeathlonGoalRoll_GetQuadrant(s32 x, s32 y);
+static void PokeathlonGoalRollDisplay_InitWindows(PokeathlonGoalRollDisplay *display);
 
 void PokeathlonGoalRoll_StartPlateFlash(PokeathlonGoalRoll *goalRoll, int participant, int gained, int bigBall) {
     goalRoll->plates[participant].state = PLATE_STATE_START_FLASH;
@@ -144,7 +145,7 @@ u32 PokeathlonGoalRoll_GetBallQuadrant(PokeathlonGoalRollBall *ball) {
 }
 
 // 0 top left, 1 top right, 2 bottom left, 3 bottom right
-u32 PokeathlonGoalRoll_GetQuadrant(s32 x, s32 y) {
+static u32 PokeathlonGoalRoll_GetQuadrant(s32 x, s32 y) {
     if (x < 128) {
         if (y < 112) {
             return 0;
@@ -238,7 +239,7 @@ typedef struct PokeathlonGoalRollMonY {
 } PokeathlonGoalRollMonY;
 
 // MATH_QSort order: lower on the screen first, then by mon index.
-int PokeathlonGoalRoll_CompareMonY(const void *a, const void *b) {
+static int PokeathlonGoalRoll_CompareMonY(const void *a, const void *b) {
     const PokeathlonGoalRollMonY *monA = a, *monB = b;
     if (monA->y > monB->y) {
         return -1;
@@ -366,7 +367,7 @@ void PokeathlonGoalRollDisplay_PrintSecondWind(PokeathlonGoalRollDisplay *displa
     CopyWindowToVram(&display->messageWindow);
 }
 
-void PokeathlonGoalRollDisplay_InitWindows(PokeathlonGoalRollDisplay *display) {
+static void PokeathlonGoalRollDisplay_InitWindows(PokeathlonGoalRollDisplay *display) {
     AddWindow(display->bgConfig, &display->nameWindow, &gPokeathlonGoalRollNameWindowTemplate);
     AddWindow(display->bgConfig, &display->messageWindow, &gPokeathlonGoalRollMessageWindowTemplate);
     BG_FillCharDataRange(display->bgConfig, GF_BG_LYR_SUB_0, 0, 1, 0);

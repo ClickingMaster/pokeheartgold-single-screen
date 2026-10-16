@@ -3,83 +3,11 @@
 	.public FrontierRecordsApp_Init
 	.public FrontierRecordsApp_Main
 	.public FrontierRecordsApp_Exit
-	.public FrontierRecordsApp_FadeIn
-	.public FrontierRecordsApp_Run
-	.public FrontierRecordsApp_FadeOut
-	.public FrontierRecordsApp_VBlankCallback
-	.public FrontierRecordsApp_SetGraphicsBanks
-	.public FrontierRecordsApp_InitBgLayers
-	.public FrontierRecordsApp_InitGraphics
-	.public FrontierRecordsApp_FreeBgLayers
-	.public FrontierRecordsApp_SetMainState
-	.public FrontierRecordsApp_GetWindowSet
-	.public FrontierRecordsApp_LoadMainBgGraphics
-	.public FrontierRecordsApp_LoadSubBgGraphics
-	.public FrontierRecordsApp_BufferNumber
-	.public FrontierRecordsApp_PrintStringAligned
-	.public FrontierRecordsApp_PrintMessage
-	.public FrontierRecordsApp_PrintFormattedMessage
-	.public FrontierRecordsApp_PrintRecords
-	.public FrontierRecordsApp_PrintFactoryLevel50Records
-	.public FrontierRecordsApp_PrintFactoryOpenLevelRecords
-	.public FrontierRecordsApp_GetFactoryStreakLabel
-	.public FrontierRecordsApp_PrintHallRecords
-	.public FrontierRecordsApp_BufferSpeciesName
-	.public FrontierRecordsApp_PrintCastleRecords
-	.public FrontierRecordsApp_GetCastleStreakLabel
-	.public FrontierRecordsApp_PrintArcadeRecords
-	.public FrontierRecordsApp_GetArcadeStreakLabel
-	.public FrontierRecordsApp_PrintTowerRecords
-	.public FrontierRecordsApp_PrintTowerMultiRecords
-	.public FrontierRecordsApp_GetTowerStreakLabel
-	.public FrontierRecordsApp_PrintReturnButton
-	.public FrontierRecordsApp_CreateSprites
-	.public FrontierRecordsApp_FreeSprites
-	.public FrontierRecordsApp_TickSprites
-	.public FrontierRecordsApp_SetSpriteAnim
-	.public FrontierRecordsApp_SetSpritePosition
-	.public FrontierRecordsApp_RunButtonFlash
-	.public FrontierRecordsApp_StartReturnButtonFlash
-	.public FrontierRecordsApp_IsHall
-	.public FrontierRecordsApp_InitHallPicker
-	.public FrontierRecordsApp_FreeHallPicker
-	.public FrontierRecordsApp_ShowHallPage
-	.public FrontierRecordsApp_DrawPageArrows
-	.public FrontierRecordsApp_FreeGridInput
 	.public FrontierRecordsApp_GridCallback_Nop
-	.public FrontierRecordsApp_LoadSortedSpecies
-	.public FrontierRecordsApp_InitSpeciesGroups
-	.public FrontierRecordsApp_FreeSpeciesGroups
-	.public FrontierRecordsApp_LoadWindowFrame
-	.public FrontierRecordsApp_ShowPrompt
-	.public FrontierRecordsApp_ClearPrompt
-	.public FrontierRecordsApp_PrintLetters
-	.public FrontierRecordsApp_MoveLetterCursor
-	.public FrontierRecordsApp_CreateLetterGrid
 	.public FrontierRecordsApp_LetterGrid_OnKeyMove
 	.public FrontierRecordsApp_LetterGrid_OnTouch
-	.public FrontierRecordsApp_StartLetterFlash
-	.public FrontierRecordsApp_HandleLetterInput
-	.public FrontierRecordsApp_GrayOutEmptyLetters
-	.public FrontierRecordsApp_MoveSpeciesCursor
-	.public FrontierRecordsApp_CreateSpeciesGrid
 	.public FrontierRecordsApp_SpeciesGrid_OnKeyMove
 	.public FrontierRecordsApp_SpeciesGrid_OnTouch
-	.public FrontierRecordsApp_StartSpeciesFlash
-	.public FrontierRecordsApp_StartArrowFlash
-	.public FrontierRecordsApp_HandleSpeciesInput
-	.public FrontierRecordsApp_FlipSpeciesPage
-	.public FrontierRecordsApp_PrintSpeciesPage
-	.public FrontierRecordsApp_ClearSpeciesWindows
-	.public FrontierRecordsApp_PrintLetterTitle
-	.public FrontierRecordsApp_PrintPageNumber
-	.public FrontierRecordsApp_ResetCursor
-	.public FrontierRecordsApp_SelectSpecies
-	.public FrontierRecordsApp_ClearRecordWindows
-	.public FrontierRecordsApp_AddWindows
-	.public FrontierRecordsApp_RemoveWindows
-	.public FrontierRecordsApp_AddReturnButtonWindow
-	.public FrontierRecordsApp_RemoveReturnButtonWindow
 	.public gFrontierRecordsSpeciesHitboxes
 	.public gFrontierRecordsSpeciesGridCallbacks
 	.public gFrontierRecordsLetterGridCallbacks
@@ -108,35 +36,11 @@
 	.include "global.inc"
 
 	.text
-	.public FrontierRecordsApp_SetGraphicsBanks
-	.public FrontierRecordsApp_FreeBgLayers
-	.public FrontierRecordsApp_SetMainState
-	.public FrontierRecordsApp_BufferNumber
-	.public FrontierRecordsApp_BufferSpeciesName
-	.public FrontierRecordsApp_TickSprites
-	.public FrontierRecordsApp_SetSpriteAnim
-	.public FrontierRecordsApp_SetSpritePosition
-	.public FrontierRecordsApp_IsHall
-	.public FrontierRecordsApp_InitHallPicker
-	.public FrontierRecordsApp_FreeHallPicker
-	.public FrontierRecordsApp_FreeGridInput
 	.public FrontierRecordsApp_GridCallback_Nop
-	.public FrontierRecordsApp_FreeSpeciesGroups
-	.public FrontierRecordsApp_LoadWindowFrame
-	.public FrontierRecordsApp_ClearPrompt
-	.public FrontierRecordsApp_MoveLetterCursor
 	.public FrontierRecordsApp_LetterGrid_OnKeyMove
 	.public FrontierRecordsApp_LetterGrid_OnTouch
-	.public FrontierRecordsApp_MoveSpeciesCursor
 	.public FrontierRecordsApp_SpeciesGrid_OnKeyMove
 	.public FrontierRecordsApp_SpeciesGrid_OnTouch
-	.public FrontierRecordsApp_FlipSpeciesPage
-	.public FrontierRecordsApp_ClearSpeciesWindows
-	.public FrontierRecordsApp_ResetCursor
-	.public FrontierRecordsApp_ClearRecordWindows
-	.public FrontierRecordsApp_RemoveWindows
-	.public FrontierRecordsApp_AddReturnButtonWindow
-	.public FrontierRecordsApp_RemoveReturnButtonWindow
 	.rodata
 
 gFrontierRecordsExitHitbox:

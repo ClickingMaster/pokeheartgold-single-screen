@@ -8,13 +8,19 @@
 
 // The definition order fixes the .rodata layout: the display parts and the CPU read the ids through
 // gPokeathlonPennantCaptureSpriteIds as an array.
-static const PokeathlonPennantCaptureSpriteIds sPicKinds = { { 4, 5 } };
-static const PokeathlonPennantCaptureSpriteIds sPicResIds2 = { { 0x66, 0x67 } };
-const PokeathlonPennantCaptureSpriteIds gPokeathlonPennantCaptureSpriteIds = { { 0x66, 0x67 } };
-static const PokeathlonPennantCaptureSpriteIds sPicResIds3 = { { 0x66, 0x67 } };
+static const PokeathlonPennantCaptureSpriteIds sPicKinds = {
+    { 4, 5 }
+};
+static const PokeathlonPennantCaptureSpriteIds sPicResIds2 = {
+    { 0x66, 0x67 }
+};
+const PokeathlonPennantCaptureSpriteIds gPokeathlonPennantCaptureSpriteIds = {
+    { 0x66, 0x67 }
+};
+static const PokeathlonPennantCaptureSpriteIds sPicResIds3 = {
+    { 0x66, 0x67 }
+};
 
-// Sprite pool helpers (pokeathlon_course_objects.c), declared with untyped entries and the argument
-// types this caller passes.
 void PokeathlonCourseSpritePool_CreateSprite(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, u8 resId, u8 kind);
 void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *entry, BOOL shown, BOOL draw);
 PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_Take(PokeathlonCourseSpritePool *pool, u8 resId, u8 kind);

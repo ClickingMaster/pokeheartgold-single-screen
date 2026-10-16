@@ -1,4 +1,5 @@
 #include "frontier_save_access.h"
+
 void *Save_Frontier_GetCastleChallenge(SaveData *save);
 void *Save_Frontier_GetHallChallenge(SaveData *save);
 void FactoryFlags_Init(void *state);
@@ -137,7 +138,6 @@ int Save_Frontier_GetHallFlags(SaveData *save) {
 }
 
 void HallFlags_SetField(u32 address, u32 field, u32 index, u32 unused, u8 *volatile input) {
-    // Preserve the original unconditional load of the stack argument.
     u8 *value = input;
     switch (field) {
     case 5:
@@ -269,7 +269,6 @@ u32 Save_Frontier_GetCastleFlags(SaveData *save) {
 }
 
 void CastleFlags_SetField(u32 address, u32 field, u32 index, u32 unused, u8 *volatile input) {
-    // Preserve the original unconditional load of the stack argument.
     u8 *value = input;
     switch (field) {
     case 9:
@@ -398,7 +397,6 @@ void *Save_Frontier_GetArcadeFlags(SaveData *save) {
 }
 
 void ArcadeFlags_SetField(void *address, u32 field, u32 index, u32 unused, u8 *volatile input) {
-    // Preserve the original unconditional load of the stack argument.
     u8 *value = input;
     if (field == 8) {
         if (*value >= 1) {

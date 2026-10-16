@@ -3,20 +3,23 @@
 #include "constants/pokemon.h"
 #include "constants/sndseq.h"
 
+#include "frontier/battle_hall_data.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0441.h"
 
-#include "frontier/battle_hall_data.h"
-
+#include "battle_frontier_communication.h"
 #include "bg_window.h"
+#include "communication_core.h"
 #include "filesystem.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
+#include "link_synchronization.h"
 #include "message_format.h"
 #include "message_printer.h"
 #include "msgdata.h"
+#include "oam_manager.h"
 #include "obj_char_transfer.h"
 #include "obj_pltt_transfer.h"
 #include "options.h"
@@ -29,22 +32,18 @@
 #include "pokedex_util.h"
 #include "pokemon.h"
 #include "pokemon_icon_idx.h"
+#include "pokemon_summary.h"
 #include "render_window.h"
 #include "save_special_ribbons.h"
+#include "screen_fade_legacy.h"
+#include "sound_playback.h"
 #include "sprite.h"
+#include "sprite_resource.h"
+#include "sprite_resource_header.h"
 #include "sprite_transfer.h"
 #include "system.h"
-#include "sound_playback.h"
-#include "sprite_resource_header.h"
-#include "sprite_resource.h"
-#include "oam_manager.h"
-#include "screen_fade_legacy.h"
-#include "communication_core.h"
-#include "link_synchronization.h"
-#include "wireless_status_icon.h"
-#include "pokemon_summary.h"
-#include "battle_frontier_communication.h"
 #include "vram_transfer_manager.h"
+#include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
 FS_EXTERN_OVERLAY(OVY_80);
@@ -125,7 +124,7 @@ typedef struct BattleHallApp {
     u16 *resultOut;                  // 0x210
     Party *party;                    // 0x214
     void *hallRecords;               // 0x218
-    u16 *partnerLevel;                    // 0x21C
+    u16 *partnerLevel;               // 0x21C
     NARC *narc;                      // 0x220
     u16 linkCommand;                 // 0x224
     u16 linkArg;                     // 0x226
@@ -149,7 +148,7 @@ extern const u8 gBattleHallAppResObjCounts[4];
 extern const ObjCharTransferTemplate gBattleHallAppCharTransferTemplate;
 extern const WindowTemplate gBattleHallAppWindowTemplates[4];
 
-// Frontier overlay (80) helpers
+// Frontier helpers
 u8 BattleHall_GetCellType(u8 index);
 u32 BattleHall_IsMultiType(u8 mode);
 void Frontier_BufferPartnerName(MessageFormat *msgFmt, u32 field);
@@ -158,8 +157,6 @@ void Frontier_BufferPartnerName(MessageFormat *msgFmt, u32 field);
 u32 HallTypeRanks_Get(u8 type, void *hallRecords);
 void GX_LoadBGPltt(const void *src, u32 offset, u32 size);
 
-// text.h (and render_text.h, which includes it) are not included: text.h declares fontId as u8
-// (FontID), but this module passes it unnarrowed
 #define MAKE_TEXT_COLOR(fg, sh, bg) ((((fg) & 0xFF) << 16) | (((sh) & 0xFF) << 8) | (((bg) & 0xFF) << 0))
 u8 AddTextPrinterParameterizedWithColor(Window *window, int fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, void *callback);
 u8 TextPrinterCheckActive(u8 printerId);
@@ -168,80 +165,80 @@ void TextFlags_SetCanTouchSpeedUpPrint(BOOL enable);
 BOOL BattleHallApp_Init(OverlayManager *man, int *state);
 BOOL BattleHallApp_Main(OverlayManager *man, int *state);
 BOOL BattleHallApp_Exit(OverlayManager *man);
-BOOL BattleHallApp_FadeIn(BattleHallApp *app);
-void BattleHallApp_PrintTypeGrid(BattleHallApp *app);
-void BattleHallApp_PrintTitle(BattleHallApp *app);
-void BattleHallApp_DrawFrame(BgConfig *bgConfig, u8 bgId, u8 x, u8 y, u8 width, u8 height, u16 tile, u16 palette);
-BOOL BattleHallApp_RunSummary(BattleHallApp *app);
-BOOL BattleHallApp_SelectType(BattleHallApp *app);
-BOOL BattleHallApp_LinkDecide(BattleHallApp *app);
-BOOL BattleHallApp_LinkSync(BattleHallApp *app);
-BOOL BattleHallApp_FadeOut(BattleHallApp *app);
-BOOL BattleHallApp_ClosePrompt(BattleHallApp *app);
-void BattleHallApp_FreeGraphics(BattleHallApp *app);
-void BattleHallApp_ResumeAfterSummary(BattleHallApp *app);
-void BattleHallApp_DisableDisplay(void);
-void BattleHallApp_InitGraphics(BattleHallApp *app);
-void BattleHallApp_InitBgGraphics(BattleHallApp *app);
-void BattleHallApp_InitSprites(BattleHallApp *app);
-void BattleHallApp_FreeBgLayers(BgConfig *bgConfig);
-void BattleHallApp_VBlankCallback(BattleHallApp *app);
-void BattleHallApp_SetGraphicsBanks(void);
-void BattleHallApp_InitBgLayers(BgConfig *bgConfig);
-void BattleHallApp_InitLinkWindow(BattleHallApp *app);
-void BattleHallApp_LoadTypeGridGraphics(BattleHallApp *app, u8 bgId);
-void BattleHallApp_LoadBgPalette(void);
-void BattleHallApp_LoadSubBgGraphics(BattleHallApp *app, u32 bgId);
-void BattleHallApp_LoadTitleFrameGraphics(BattleHallApp *app, u32 bgId);
-u8 BattleHallApp_PrintMessage(BattleHallApp *app, Window *window, u32 msgId, u32 x, u32 y, u32 textSpeed, u8 fg, u8 shadow, u8 bg, u8 fontId);
-u8 BattleHallApp_ShowMessage(BattleHallApp *app, u32 msgId, u8 fontId);
-void BattleHallApp_BufferNumber(BattleHallApp *app, u32 field, u32 value);
-void BattleHallApp_PrintMonName(BattleHallApp *app, Window *window, int x, int y, u8 fg, u8 shadow, u8 bg, u8 fontId);
-void BattleHallApp_PrintTypeNames(BattleHallApp *app, Window *window, int fg, int shadow, u8 bg, u8 fontId);
-void BattleHallApp_PrintNumber(BattleHallApp *app, Window *window, u32 value, u32 x, u32 y);
-void BattleHallApp_PrintTypeRanks(BattleHallApp *app, Window *window);
-void BattleHallApp_PrintSelectPrompt(BattleHallApp *app, Window *window, u32 x, u32 y, u8 fg, u8 shadow, u8 bg, u8 fontId);
-void BattleHallApp_CreateSummaryArgs(BattleHallApp *app);
-void BattleHallApp_SetMainState(BattleHallApp *app, int *state, int nextState);
-void BattleHallApp_HandleDpad(BattleHallApp *app, int unused);
-BOOL BattleHallApp_HandleTouch(BattleHallApp *app);
-BOOL BattleHallApp_HandleConfirm(BattleHallApp *app);
-u16 BattleHallApp_GetCursorX(BattleHallApp *app);
-u16 BattleHallApp_GetCursorY(BattleHallApp *app);
-void BattleHallApp_GrayOutTypes(BattleHallApp *app, BgConfig *bgConfig);
-void BattleHallApp_SetCellPalette(BgConfig *bgConfig, int index, int state);
-u8 BattleHallApp_GetRecordIndex(u8 index);
-BOOL BattleHallApp_IsMatronBattle(BattleHallApp *app);
-u8 BattleHallApp_IsMatronMode(BattleHallApp *app);
-BOOL BattleHallApp_SendLinkCommand(BattleHallApp *app, u16 command, u16 arg);
-void BattleHallApp_PrepareLinkPing(BattleHallApp *app, u16 command);
+static BOOL BattleHallApp_FadeIn(BattleHallApp *app);
+static void BattleHallApp_PrintTypeGrid(BattleHallApp *app);
+static void BattleHallApp_PrintTitle(BattleHallApp *app);
+static void BattleHallApp_DrawFrame(BgConfig *bgConfig, u8 bgId, u8 x, u8 y, u8 width, u8 height, u16 tile, u16 palette);
+static BOOL BattleHallApp_RunSummary(BattleHallApp *app);
+static BOOL BattleHallApp_SelectType(BattleHallApp *app);
+static BOOL BattleHallApp_LinkDecide(BattleHallApp *app);
+static BOOL BattleHallApp_LinkSync(BattleHallApp *app);
+static BOOL BattleHallApp_FadeOut(BattleHallApp *app);
+static BOOL BattleHallApp_ClosePrompt(BattleHallApp *app);
+static void BattleHallApp_FreeGraphics(BattleHallApp *app);
+static void BattleHallApp_ResumeAfterSummary(BattleHallApp *app);
+static void BattleHallApp_DisableDisplay(void);
+static void BattleHallApp_InitGraphics(BattleHallApp *app);
+static void BattleHallApp_InitBgGraphics(BattleHallApp *app);
+static void BattleHallApp_InitSprites(BattleHallApp *app);
+static void BattleHallApp_FreeBgLayers(BgConfig *bgConfig);
+static void BattleHallApp_VBlankCallback(BattleHallApp *app);
+static void BattleHallApp_SetGraphicsBanks(void);
+static void BattleHallApp_InitBgLayers(BgConfig *bgConfig);
+static void BattleHallApp_InitLinkWindow(BattleHallApp *app);
+static void BattleHallApp_LoadTypeGridGraphics(BattleHallApp *app, u8 bgId);
+static void BattleHallApp_LoadBgPalette(void);
+static void BattleHallApp_LoadSubBgGraphics(BattleHallApp *app, u32 bgId);
+static void BattleHallApp_LoadTitleFrameGraphics(BattleHallApp *app, u32 bgId);
+static u8 BattleHallApp_PrintMessage(BattleHallApp *app, Window *window, u32 msgId, u32 x, u32 y, u32 textSpeed, u8 fg, u8 shadow, u8 bg, u8 fontId);
+static u8 BattleHallApp_ShowMessage(BattleHallApp *app, u32 msgId, u8 fontId);
+static void BattleHallApp_BufferNumber(BattleHallApp *app, u32 field, u32 value);
+static void BattleHallApp_PrintMonName(BattleHallApp *app, Window *window, int x, int y, u8 fg, u8 shadow, u8 bg, u8 fontId);
+static void BattleHallApp_PrintTypeNames(BattleHallApp *app, Window *window, int fg, int shadow, u8 bg, u8 fontId);
+static void BattleHallApp_PrintNumber(BattleHallApp *app, Window *window, u32 value, u32 x, u32 y);
+static void BattleHallApp_PrintTypeRanks(BattleHallApp *app, Window *window);
+static void BattleHallApp_PrintSelectPrompt(BattleHallApp *app, Window *window, u32 x, u32 y, u8 fg, u8 shadow, u8 bg, u8 fontId);
+static void BattleHallApp_CreateSummaryArgs(BattleHallApp *app);
+static void BattleHallApp_SetMainState(BattleHallApp *app, int *state, int nextState);
+static void BattleHallApp_HandleDpad(BattleHallApp *app, int unused);
+static BOOL BattleHallApp_HandleTouch(BattleHallApp *app);
+static BOOL BattleHallApp_HandleConfirm(BattleHallApp *app);
+static u16 BattleHallApp_GetCursorX(BattleHallApp *app);
+static u16 BattleHallApp_GetCursorY(BattleHallApp *app);
+static void BattleHallApp_GrayOutTypes(BattleHallApp *app, BgConfig *bgConfig);
+static void BattleHallApp_SetCellPalette(BgConfig *bgConfig, int index, int state);
+static u8 BattleHallApp_GetRecordIndex(u8 index);
+static BOOL BattleHallApp_IsMatronBattle(BattleHallApp *app);
+static u8 BattleHallApp_IsMatronMode(BattleHallApp *app);
+static BOOL BattleHallApp_SendLinkCommand(BattleHallApp *app, u16 command, u16 arg);
+static void BattleHallApp_PrepareLinkPing(BattleHallApp *app, u16 command);
 void BattleHall_ReceivePing(u32 netId);
-void BattleHallApp_PrepareLinkChoice(BattleHallApp *app, u16 command, u16 choice);
+static void BattleHallApp_PrepareLinkChoice(BattleHallApp *app, u16 command, u16 choice);
 void BattleHall_ReceiveChoice(u32 netId, u32 unused, const u16 *msg, BattleHallApp *app);
-void BattleHallApp_PrepareLinkAnswer(BattleHallApp *app, u16 command, u16 answer);
+static void BattleHallApp_PrepareLinkAnswer(BattleHallApp *app, u16 command, u16 answer);
 void BattleHall_ReceiveAnswer(u32 netId, u32 unused, const u16 *msg, BattleHallApp *app);
-void BattleHallApp_ResetYesNo(BattleHallApp *app);
-void BattleHallApp_ShowConfirmPrompt(BattleHallApp *app);
-void BattleHallApp_CancelConfirm(BattleHallApp *app);
-void BattleHallApp_ClearMessage(BattleHallApp *app);
-void BattleHallApp_SetBrightness(s32 brightness);
-void BattleHallSpriteGfx_Init(BattleHallSpriteGfx *gfx, Pokemon *mon);
-Sprite *BattleHallSpriteGfx_CreateSprite(BattleHallSpriteGfx *gfx, int resourceId, int animSeq, int drawPriority, u8 screen);
-void BattleHallSpriteGfx_Free(BattleHallSpriteGfx *gfx);
-void BattleHallSpriteGfx_InitTransfers(void);
-BattleHallSprite *BattleHallSprite_Create(BattleHallSpriteGfx *gfx, u32 resourceId, u32 animSeq, s32 x, u16 y, const u8 *anim);
-u32 BattleHallSprite_Delete(BattleHallSprite *sprite);
-void BattleHallSprite_SetVisible(BattleHallSprite *sprite, BOOL visible);
-void BattleHallSprite_SetPosition(BattleHallSprite *sprite, s32 x, s32 y);
-void BattleHallSprite_SetAnim(BattleHallSprite *sprite, u32 animSeq);
-void BattleHallSprite_SetIconPalette(BattleHallSprite *sprite, Pokemon *mon);
-void BattleHallApp_AddWindows(BgConfig *bgConfig, Window *windows);
-void BattleHallApp_RemoveWindows(Window *windows);
-void BattleHallApp_DrawMessageFrame(Window *window, u32 frame);
-YesNoPrompt *BattleHallApp_CreateYesNo(enum HeapID heapId);
-void BattleHallApp_DestroyYesNo(YesNoPrompt *prompt);
-void BattleHallApp_InitYesNo(YesNoPrompt *prompt, BgConfig *bgConfig, u8 ignoreTouch);
-u32 BattleHallApp_HandleYesNo(YesNoPrompt *prompt);
+static void BattleHallApp_ResetYesNo(BattleHallApp *app);
+static void BattleHallApp_ShowConfirmPrompt(BattleHallApp *app);
+static void BattleHallApp_CancelConfirm(BattleHallApp *app);
+static void BattleHallApp_ClearMessage(BattleHallApp *app);
+static void BattleHallApp_SetBrightness(s32 brightness);
+static void BattleHallSpriteGfx_Init(BattleHallSpriteGfx *gfx, Pokemon *mon);
+static Sprite *BattleHallSpriteGfx_CreateSprite(BattleHallSpriteGfx *gfx, int resourceId, int animSeq, int drawPriority, u8 screen);
+static void BattleHallSpriteGfx_Free(BattleHallSpriteGfx *gfx);
+static void BattleHallSpriteGfx_InitTransfers(void);
+static BattleHallSprite *BattleHallSprite_Create(BattleHallSpriteGfx *gfx, u32 resourceId, u32 animSeq, s32 x, u16 y, const u8 *anim);
+static u32 BattleHallSprite_Delete(BattleHallSprite *sprite);
+static void BattleHallSprite_SetVisible(BattleHallSprite *sprite, BOOL visible);
+static void BattleHallSprite_SetPosition(BattleHallSprite *sprite, s32 x, s32 y);
+static void BattleHallSprite_SetAnim(BattleHallSprite *sprite, u32 animSeq);
+static void BattleHallSprite_SetIconPalette(BattleHallSprite *sprite, Pokemon *mon);
+static void BattleHallApp_AddWindows(BgConfig *bgConfig, Window *windows);
+static void BattleHallApp_RemoveWindows(Window *windows);
+static void BattleHallApp_DrawMessageFrame(Window *window, u32 frame);
+static YesNoPrompt *BattleHallApp_CreateYesNo(enum HeapID heapId);
+static void BattleHallApp_DestroyYesNo(YesNoPrompt *prompt);
+static void BattleHallApp_InitYesNo(YesNoPrompt *prompt, BgConfig *bgConfig, u8 ignoreTouch);
+static u32 BattleHallApp_HandleYesNo(YesNoPrompt *prompt);
 
 BOOL BattleHallApp_Init(OverlayManager *man, int *state) {
     BattleHallApp *app;
@@ -361,7 +358,7 @@ enum {
     HALL_FADE_IN_WAIT_FADE,
 };
 
-BOOL BattleHallApp_FadeIn(BattleHallApp *app) {
+static BOOL BattleHallApp_FadeIn(BattleHallApp *app) {
     switch (app->subState) {
     case HALL_FADE_IN_START_SYNC:
         if (app->linkReady == 0 && BattleHall_IsMultiType(app->mode) == TRUE) {
@@ -396,13 +393,13 @@ BOOL BattleHallApp_FadeIn(BattleHallApp *app) {
     return FALSE;
 }
 
-void BattleHallApp_PrintTypeGrid(BattleHallApp *app) {
+static void BattleHallApp_PrintTypeGrid(BattleHallApp *app) {
     BattleHallApp_PrintTypeNames(app, &app->windows[2], 1, 2, 0, 0);
     BattleHallApp_PrintTypeRanks(app, &app->windows[2]);
     BattleHallApp_PrintMonName(app, &app->windows[1], 0, 0, 1, 2, 0, 0);
 }
 
-void BattleHallApp_PrintTitle(BattleHallApp *app) {
+static void BattleHallApp_PrintTitle(BattleHallApp *app) {
     u8 x = GetWindowX(&app->windows[3]) - 1;
     u8 y = GetWindowY(&app->windows[3]) - 1;
     u8 width = GetWindowWidth(&app->windows[3]) + 2;
@@ -417,7 +414,7 @@ void BattleHallApp_PrintTitle(BattleHallApp *app) {
 
 #pragma force_active on
 // Frame tiles: corners at tile+0/2/6/8, edges at tile+1/3/5/7
-void BattleHallApp_DrawFrame(BgConfig *bgConfig, u8 bgId, u8 x, u8 y, u8 width, u8 height, u16 tile, u16 palette) {
+static void BattleHallApp_DrawFrame(BgConfig *bgConfig, u8 bgId, u8 x, u8 y, u8 width, u8 height, u16 tile, u16 palette) {
     FillBgTilemapRect(bgConfig, bgId, tile, x, y, 1, 1, palette);
     FillBgTilemapRect(bgConfig, bgId, tile + 2, x + width - 1, y, 1, 1, palette);
     FillBgTilemapRect(bgConfig, bgId, tile + 6, x, y + height - 1, 1, 1, palette);
@@ -429,7 +426,7 @@ void BattleHallApp_DrawFrame(BgConfig *bgConfig, u8 bgId, u8 x, u8 y, u8 width, 
 }
 #pragma force_active reset
 
-BOOL BattleHallApp_RunSummary(BattleHallApp *app) {
+static BOOL BattleHallApp_RunSummary(BattleHallApp *app) {
     if (app->subState == 0) {
         if (OverlayManager_Run(app->summaryApp) == TRUE) {
             app->summaryResult = app->summaryArgs->partySlot;
@@ -456,7 +453,7 @@ enum {
 };
 
 #pragma force_active on
-BOOL BattleHallApp_SelectType(BattleHallApp *app) {
+static BOOL BattleHallApp_SelectType(BattleHallApp *app) {
     switch (app->subState) {
     case HALL_SELECT_INIT:
         app->openSummary = 0;
@@ -606,7 +603,7 @@ enum {
     HALL_LINK_DECIDE_WAIT_SYNC,
 };
 
-BOOL BattleHallApp_LinkDecide(BattleHallApp *app) {
+static BOOL BattleHallApp_LinkDecide(BattleHallApp *app) {
     switch (app->subState) {
     case HALL_LINK_DECIDE_SEND_CHOICE:
         if (BattleHallApp_SendLinkCommand(app, HALL_LINK_CMD_CHOICE, BattleHallApp_GetRecordIndex(app->linkCursor)) == TRUE) {
@@ -726,7 +723,7 @@ enum {
     HALL_LINK_SYNC_WAIT,
 };
 
-BOOL BattleHallApp_LinkSync(BattleHallApp *app) {
+static BOOL BattleHallApp_LinkSync(BattleHallApp *app) {
     switch (app->subState) {
     case HALL_LINK_SYNC_START:
         LinkSync_ClearPackets();
@@ -749,7 +746,7 @@ enum {
     HALL_FADE_OUT_WAIT,
 };
 
-BOOL BattleHallApp_FadeOut(BattleHallApp *app) {
+static BOOL BattleHallApp_FadeOut(BattleHallApp *app) {
     switch (app->subState) {
     case HALL_FADE_OUT_DELAY:
         app->timer = 10;
@@ -777,7 +774,7 @@ enum {
     HALL_CLOSE_PROMPT_DONE,
 };
 
-BOOL BattleHallApp_ClosePrompt(BattleHallApp *app) {
+static BOOL BattleHallApp_ClosePrompt(BattleHallApp *app) {
     switch (app->subState) {
     case HALL_CLOSE_PROMPT_CLOSE:
         BattleHallApp_ResetYesNo(app);
@@ -791,7 +788,7 @@ BOOL BattleHallApp_ClosePrompt(BattleHallApp *app) {
     return FALSE;
 }
 
-void BattleHallApp_FreeGraphics(BattleHallApp *app) {
+static void BattleHallApp_FreeGraphics(BattleHallApp *app) {
     int i;
 
     if (app->cursorSprite != NULL) {
@@ -822,7 +819,7 @@ void BattleHallApp_FreeGraphics(BattleHallApp *app) {
     NARC_Delete(app->narc);
 }
 
-void BattleHallApp_ResumeAfterSummary(BattleHallApp *app) {
+static void BattleHallApp_ResumeAfterSummary(BattleHallApp *app) {
     BattleHallApp_DisableDisplay();
     app->bgConfig = BgConfig_Alloc(HEAP_ID_105);
     BattleHallApp_InitGraphics(app);
@@ -832,7 +829,7 @@ void BattleHallApp_ResumeAfterSummary(BattleHallApp *app) {
     }
 }
 
-void BattleHallApp_DisableDisplay(void) {
+static void BattleHallApp_DisableDisplay(void) {
     Main_SetVBlankIntrCB(NULL, NULL);
     Main_SetHBlankIntrCB(NULL, NULL);
     GfGfx_DisableEngineAPlanes();
@@ -842,7 +839,7 @@ void BattleHallApp_DisableDisplay(void) {
 }
 
 #pragma force_active on
-void BattleHallApp_InitGraphics(BattleHallApp *app) {
+static void BattleHallApp_InitGraphics(BattleHallApp *app) {
     int i, x;
     u16 y;
 
@@ -878,7 +875,7 @@ void BattleHallApp_InitGraphics(BattleHallApp *app) {
     Main_SetVBlankIntrCB((GFIntrCB)BattleHallApp_VBlankCallback, app);
 }
 
-void BattleHallApp_InitBgGraphics(BattleHallApp *app) {
+static void BattleHallApp_InitBgGraphics(BattleHallApp *app) {
     BattleHallApp_SetGraphicsBanks();
     BattleHallApp_InitBgLayers(app->bgConfig);
     BattleHallApp_InitLinkWindow(app);
@@ -892,12 +889,12 @@ void BattleHallApp_InitBgGraphics(BattleHallApp *app) {
 }
 #pragma force_active reset
 
-void BattleHallApp_InitSprites(BattleHallApp *app) {
+static void BattleHallApp_InitSprites(BattleHallApp *app) {
     Pokemon *mon = Party_GetMonByIndex(app->party, 0);
     BattleHallSpriteGfx_Init(&app->spriteGfx, mon);
 }
 
-void BattleHallApp_FreeBgLayers(BgConfig *bgConfig) {
+static void BattleHallApp_FreeBgLayers(BgConfig *bgConfig) {
     reg_GX_DISPCNT &= ~(REG_GX_DISPCNT_W0_MASK | REG_GX_DISPCNT_W1_MASK | REG_GX_DISPCNT_OW_MASK);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_ALL, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_ALL, GF_PLANE_TOGGLE_OFF);
@@ -909,7 +906,7 @@ void BattleHallApp_FreeBgLayers(BgConfig *bgConfig) {
     Heap_Free(bgConfig);
 }
 
-void BattleHallApp_VBlankCallback(BattleHallApp *app) {
+static void BattleHallApp_VBlankCallback(BattleHallApp *app) {
     if (app->summaryApp == NULL) {
         if (app->paletteData != NULL) {
             PaletteData_PushTransparentBuffers(app->paletteData);
@@ -921,12 +918,12 @@ void BattleHallApp_VBlankCallback(BattleHallApp *app) {
     }
 }
 
-void BattleHallApp_SetGraphicsBanks(void) {
+static void BattleHallApp_SetGraphicsBanks(void) {
     GraphicsBanks banks = gBattleHallAppGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
-void BattleHallApp_InitBgLayers(BgConfig *bgConfig) {
+static void BattleHallApp_InitBgLayers(BgConfig *bgConfig) {
     GraphicsModes modes = gBattleHallAppGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     {
@@ -961,7 +958,7 @@ void BattleHallApp_InitBgLayers(BgConfig *bgConfig) {
 }
 
 // In link mode the top 16 lines of the main screen are masked
-void BattleHallApp_InitLinkWindow(BattleHallApp *app) {
+static void BattleHallApp_InitLinkWindow(BattleHallApp *app) {
     if (BattleHall_IsMultiType(app->mode) != FALSE) {
         reg_GX_DISPCNT &= ~(REG_GX_DISPCNT_W0_MASK | REG_GX_DISPCNT_W1_MASK | REG_GX_DISPCNT_OW_MASK);
         G2_SetWnd0InsidePlane(GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2 | GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ, FALSE);
@@ -971,12 +968,12 @@ void BattleHallApp_InitLinkWindow(BattleHallApp *app) {
     }
 }
 
-void BattleHallApp_LoadTypeGridGraphics(BattleHallApp *app, u8 bgId) {
+static void BattleHallApp_LoadTypeGridGraphics(BattleHallApp *app, u8 bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(app->narc, 0x17, app->bgConfig, (GFBgLayer)bgId, 0, 0, TRUE, HEAP_ID_105);
     GfGfxLoader_LoadScrnDataFromOpenNarc(app->narc, 0x18, app->bgConfig, (GFBgLayer)bgId, 0, 0, TRUE, HEAP_ID_105);
 }
 
-void BattleHallApp_LoadBgPalette(void) {
+static void BattleHallApp_LoadBgPalette(void) {
     NNSG2dPaletteData *plttData;
     void *file = GfGfxLoader_GetPlttData(NARC_a_1_8_3, 0x99, &plttData, HEAP_ID_105);
     DC_FlushRange(plttData->pRawData, 0xC0);
@@ -984,37 +981,37 @@ void BattleHallApp_LoadBgPalette(void) {
     Heap_Free(file);
 }
 
-void BattleHallApp_LoadSubBgGraphics(BattleHallApp *app, u32 bgId) {
+static void BattleHallApp_LoadSubBgGraphics(BattleHallApp *app, u32 bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(app->narc, 0x81, app->bgConfig, (GFBgLayer)bgId, 0, 0, TRUE, HEAP_ID_105);
     GfGfxLoader_LoadScrnDataFromOpenNarc(app->narc, 0x82, app->bgConfig, (GFBgLayer)bgId, 0, 0, TRUE, HEAP_ID_105);
     GfGfxLoader_GXLoadPalFromOpenNarc(app->narc, 0xBE, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0x20, HEAP_ID_105);
 }
 
-void BattleHallApp_LoadTitleFrameGraphics(BattleHallApp *app, u32 bgId) {
+static void BattleHallApp_LoadTitleFrameGraphics(BattleHallApp *app, u32 bgId) {
     BG_ClearCharDataRange((u8)bgId, 0x20, 0, HEAP_ID_105);
     GfGfxLoader_LoadCharDataFromOpenNarc(app->narc, 0x85, app->bgConfig, (GFBgLayer)bgId, 1, 0, TRUE, HEAP_ID_105);
     GfGfxLoader_GXLoadPalFromOpenNarc(app->narc, 0xC0, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_1_OFFSET, 0x20, HEAP_ID_105);
 }
 
-u8 BattleHallApp_PrintMessage(BattleHallApp *app, Window *window, u32 msgId, u32 x, u32 y, u32 textSpeed, u8 fg, u8 shadow, u8 bg, u8 fontId) {
+static u8 BattleHallApp_PrintMessage(BattleHallApp *app, Window *window, u32 msgId, u32 x, u32 y, u32 textSpeed, u8 fg, u8 shadow, u8 bg, u8 fontId) {
     FillWindowPixelBuffer(window, bg);
     ReadMsgDataIntoString(app->msgData, msgId, app->rawString);
     StringExpandPlaceholders(app->msgFormat, app->expandedString, app->rawString);
     return AddTextPrinterParameterizedWithColor(window, fontId, app->expandedString, x, y, textSpeed, MAKE_TEXT_COLOR(fg, shadow, bg), NULL);
 }
 
-u8 BattleHallApp_ShowMessage(BattleHallApp *app, u32 msgId, u8 fontId) {
+static u8 BattleHallApp_ShowMessage(BattleHallApp *app, u32 msgId, u8 fontId) {
     u8 printerId = BattleHallApp_PrintMessage(app, &app->windows[0], msgId, 1, 1, 0, 1, 2, 15, fontId);
     CopyWindowToVram(&app->windows[0]);
     return printerId;
 }
 
-void BattleHallApp_BufferNumber(BattleHallApp *app, u32 field, u32 value) {
+static void BattleHallApp_BufferNumber(BattleHallApp *app, u32 field, u32 value) {
     BufferIntegerAsString(app->msgFormat, field, value, 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
 }
 
 #pragma force_active on
-void BattleHallApp_PrintMonName(BattleHallApp *app, Window *window, int x, int y, u8 fg, u8 shadow, u8 bg, u8 fontId) {
+static void BattleHallApp_PrintMonName(BattleHallApp *app, Window *window, int x, int y, u8 fg, u8 shadow, u8 bg, u8 fontId) {
     u16 name[12];
     String *string;
 
@@ -1027,7 +1024,7 @@ void BattleHallApp_PrintMonName(BattleHallApp *app, Window *window, int x, int y
     CopyWindowToVram(window);
 }
 
-void BattleHallApp_PrintTypeNames(BattleHallApp *app, Window *window, int fg, int shadow, u8 bg, u8 fontId) {
+static void BattleHallApp_PrintTypeNames(BattleHallApp *app, Window *window, int fg, int shadow, u8 bg, u8 fontId) {
     int row;
     MsgData *msgData;
     int base;
@@ -1056,12 +1053,12 @@ void BattleHallApp_PrintTypeNames(BattleHallApp *app, Window *window, int fg, in
 }
 #pragma force_active reset
 
-void BattleHallApp_PrintNumber(BattleHallApp *app, Window *window, u32 value, u32 x, u32 y) {
+static void BattleHallApp_PrintNumber(BattleHallApp *app, Window *window, u32 value, u32 x, u32 y) {
     PrintUIntOnWindow(app->messagePrinter, value, 2, PRINTING_MODE_LEFT_ALIGN, window, x, y);
     ScheduleWindowCopyToVram(window);
 }
 
-void BattleHallApp_PrintTypeRanks(BattleHallApp *app, Window *window) {
+static void BattleHallApp_PrintTypeRanks(BattleHallApp *app, Window *window) {
     int row;
     int base;
     int y;
@@ -1091,7 +1088,7 @@ void BattleHallApp_PrintTypeRanks(BattleHallApp *app, Window *window) {
     } while (row < TYPE_GRID_ROWS);
 }
 
-void BattleHallApp_PrintSelectPrompt(BattleHallApp *app, Window *window, u32 x, u32 y, u8 fg, u8 shadow, u8 bg, u8 fontId) {
+static void BattleHallApp_PrintSelectPrompt(BattleHallApp *app, Window *window, u32 x, u32 y, u8 fg, u8 shadow, u8 bg, u8 fontId) {
     MsgData *msgData;
     String *string;
 
@@ -1105,7 +1102,7 @@ void BattleHallApp_PrintSelectPrompt(BattleHallApp *app, Window *window, u32 x, 
     CopyWindowToVram(window);
 }
 
-void BattleHallApp_CreateSummaryArgs(BattleHallApp *app) {
+static void BattleHallApp_CreateSummaryArgs(BattleHallApp *app) {
     app->summaryArgs = Heap_Alloc(HEAP_ID_105, sizeof(PokemonSummaryArgs));
     memset(app->summaryArgs, 0, sizeof(PokemonSummaryArgs));
     app->summaryArgs->party = app->party;
@@ -1123,13 +1120,13 @@ void BattleHallApp_CreateSummaryArgs(BattleHallApp *app) {
     PokemonSummaryArgs_SetPlayer(app->summaryArgs, Save_PlayerData_GetProfile(app->saveData));
 }
 
-void BattleHallApp_SetMainState(BattleHallApp *app, int *state, int nextState) {
+static void BattleHallApp_SetMainState(BattleHallApp *app, int *state, int nextState) {
     app->subState = 0;
     *state = nextState;
 }
 
 // The grid is 4 columns by 5 rows; the empty cells (row 4) select the summary button
-void BattleHallApp_HandleDpad(BattleHallApp *app, int unused) {
+static void BattleHallApp_HandleDpad(BattleHallApp *app, int unused) {
     BOOL moved = FALSE;
     u8 type;
 
@@ -1207,7 +1204,7 @@ void BattleHallApp_HandleDpad(BattleHallApp *app, int unused) {
 }
 
 #pragma force_active on
-BOOL BattleHallApp_HandleTouch(BattleHallApp *app) {
+static BOOL BattleHallApp_HandleTouch(BattleHallApp *app) {
     u16 x, y;
     int row, column;
     int top, bottom, left, right;
@@ -1240,7 +1237,7 @@ BOOL BattleHallApp_HandleTouch(BattleHallApp *app) {
 }
 #pragma force_active reset
 
-BOOL BattleHallApp_HandleConfirm(BattleHallApp *app) {
+static BOOL BattleHallApp_HandleConfirm(BattleHallApp *app) {
     if (gSystem.newKeys & PAD_BUTTON_A) {
         app->usedTouch = 0;
         return TRUE;
@@ -1248,15 +1245,15 @@ BOOL BattleHallApp_HandleConfirm(BattleHallApp *app) {
     return FALSE;
 }
 
-u16 BattleHallApp_GetCursorX(BattleHallApp *app) {
+static u16 BattleHallApp_GetCursorX(BattleHallApp *app) {
     return (u16)((app->cursor % 4) * 64 + 32);
 }
 
-u16 BattleHallApp_GetCursorY(BattleHallApp *app) {
+static u16 BattleHallApp_GetCursorY(BattleHallApp *app) {
     return (u16)((app->cursor / 4) * 36 + 16);
 }
 
-void BattleHallApp_GrayOutTypes(BattleHallApp *app, BgConfig *bgConfig) {
+static void BattleHallApp_GrayOutTypes(BattleHallApp *app, BgConfig *bgConfig) {
     int i;
 
     if (BattleHallApp_IsMatronMode(app) == 1) {
@@ -1276,7 +1273,7 @@ void BattleHallApp_GrayOutTypes(BattleHallApp *app, BgConfig *bgConfig) {
 
 #pragma force_active on
 // state: 0 = normal, 1 = selected, 2 = partner's choice, 3 = unavailable
-void BattleHallApp_SetCellPalette(BgConfig *bgConfig, int index, int state) {
+static void BattleHallApp_SetCellPalette(BgConfig *bgConfig, int index, int state) {
     u8 palette;
     int x;
     u8 cellX;
@@ -1340,7 +1337,7 @@ void BattleHallApp_SetCellPalette(BgConfig *bgConfig, int index, int state) {
 }
 #pragma force_active reset
 
-u8 BattleHallApp_GetRecordIndex(u8 index) {
+static u8 BattleHallApp_GetRecordIndex(u8 index) {
     if (index >= 17) {
         index = 17;
     }
@@ -1348,7 +1345,7 @@ u8 BattleHallApp_GetRecordIndex(u8 index) {
 }
 
 // The Hall Matron appears in the 50th and 170th single battles
-BOOL BattleHallApp_IsMatronBattle(BattleHallApp *app) {
+static BOOL BattleHallApp_IsMatronBattle(BattleHallApp *app) {
     if (app->mode == 0) {
         if (app->battleNo == 50 || app->battleNo == 170) {
             return TRUE;
@@ -1357,11 +1354,11 @@ BOOL BattleHallApp_IsMatronBattle(BattleHallApp *app) {
     return FALSE;
 }
 
-u8 BattleHallApp_IsMatronMode(BattleHallApp *app) {
+static u8 BattleHallApp_IsMatronMode(BattleHallApp *app) {
     return app->matronMode;
 }
 
-BOOL BattleHallApp_SendLinkCommand(BattleHallApp *app, u16 command, u16 arg) {
+static BOOL BattleHallApp_SendLinkCommand(BattleHallApp *app, u16 command, u16 arg) {
     u32 id;
 
     if (BattleHall_IsMultiType(app->mode) == FALSE) {
@@ -1387,7 +1384,7 @@ BOOL BattleHallApp_SendLinkCommand(BattleHallApp *app, u16 command, u16 arg) {
     return FALSE;
 }
 
-void BattleHallApp_PrepareLinkPing(BattleHallApp *app, u16 command) {
+static void BattleHallApp_PrepareLinkPing(BattleHallApp *app, u16 command) {
     Save_PlayerData_GetProfile(app->saveData);
     app->linkCommand = command;
 }
@@ -1398,7 +1395,7 @@ void BattleHall_ReceivePing(u32 netId) {
     }
 }
 
-void BattleHallApp_PrepareLinkChoice(BattleHallApp *app, u16 command, u16 choice) {
+static void BattleHallApp_PrepareLinkChoice(BattleHallApp *app, u16 command, u16 choice) {
     Pokemon *mon;
 
     app->linkCommand = command;
@@ -1429,7 +1426,7 @@ void BattleHall_ReceiveChoice(u32 netId, u32 unused, const u16 *msg, BattleHallA
     *app->partnerLevel = msg[3];
 }
 
-void BattleHallApp_PrepareLinkAnswer(BattleHallApp *app, u16 command, u16 answer) {
+static void BattleHallApp_PrepareLinkAnswer(BattleHallApp *app, u16 command, u16 answer) {
     app->linkCommand = command;
     app->linkArg = answer;
 }
@@ -1446,7 +1443,7 @@ void BattleHall_ReceiveAnswer(u32 netId, u32 unused, const u16 *msg, BattleHallA
     }
 }
 
-void BattleHallApp_ResetYesNo(BattleHallApp *app) {
+static void BattleHallApp_ResetYesNo(BattleHallApp *app) {
     if (app->yesNoActive == 1) {
         app->yesNoActive = 0;
         YesNoPrompt_Reset(app->yesNoPrompt);
@@ -1454,7 +1451,7 @@ void BattleHallApp_ResetYesNo(BattleHallApp *app) {
 }
 
 #pragma force_active on
-void BattleHallApp_ShowConfirmPrompt(BattleHallApp *app) {
+static void BattleHallApp_ShowConfirmPrompt(BattleHallApp *app) {
     u8 rank;
     int msgId;
 
@@ -1478,24 +1475,24 @@ void BattleHallApp_ShowConfirmPrompt(BattleHallApp *app) {
 }
 #pragma force_active reset
 
-void BattleHallApp_CancelConfirm(BattleHallApp *app) {
+static void BattleHallApp_CancelConfirm(BattleHallApp *app) {
     BattleHallApp_ClearMessage(app);
     BattleHallApp_SetCellPalette(app->bgConfig, app->cursor, 0);
     ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_3);
     BattleHallSprite_SetAnim(app->cursorSprite, 1);
 }
 
-void BattleHallApp_ClearMessage(BattleHallApp *app) {
+static void BattleHallApp_ClearMessage(BattleHallApp *app) {
     BattleHallSprite_SetVisible(app->monIcon, TRUE);
     ClearFrameAndWindow2(&app->windows[0], FALSE);
     BattleHallApp_PrintMonName(app, &app->windows[1], 0, 0, 1, 2, 0, 0);
 }
 
-void BattleHallApp_SetBrightness(s32 brightness) {
+static void BattleHallApp_SetBrightness(s32 brightness) {
     G2_SetBlendBrightness(GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ, brightness);
 }
 
-void BattleHallSpriteGfx_Init(BattleHallSpriteGfx *gfx, Pokemon *mon) {
+static void BattleHallSpriteGfx_Init(BattleHallSpriteGfx *gfx, Pokemon *mon) {
     NARC *narc;
     int i;
 
@@ -1524,7 +1521,7 @@ void BattleHallSpriteGfx_Init(BattleHallSpriteGfx *gfx, Pokemon *mon) {
     NARC_Delete(narc);
 }
 
-Sprite *BattleHallSpriteGfx_CreateSprite(BattleHallSpriteGfx *gfx, int resourceId, int animSeq, int drawPriority, u8 screen) {
+static Sprite *BattleHallSpriteGfx_CreateSprite(BattleHallSpriteGfx *gfx, int resourceId, int animSeq, int drawPriority, u8 screen) {
     SpriteResourcesHeader header;
     SpriteTemplate template;
     Sprite *sprite;
@@ -1556,7 +1553,7 @@ Sprite *BattleHallSpriteGfx_CreateSprite(BattleHallSpriteGfx *gfx, int resourceI
     return sprite;
 }
 
-void BattleHallSpriteGfx_Free(BattleHallSpriteGfx *gfx) {
+static void BattleHallSpriteGfx_Free(BattleHallSpriteGfx *gfx) {
     u8 i;
 
     for (i = 0; i < 2; i++) {
@@ -1572,7 +1569,7 @@ void BattleHallSpriteGfx_Free(BattleHallSpriteGfx *gfx) {
     ObjPlttTransfer_Destroy();
 }
 
-void BattleHallSpriteGfx_InitTransfers(void) {
+static void BattleHallSpriteGfx_InitTransfers(void) {
     ObjCharTransferTemplate template = gBattleHallAppCharTransferTemplate;
     ObjCharTransfer_InitEx(&template, GX_OBJVRAMMODE_CHAR_1D_32K, GX_OBJVRAMMODE_CHAR_1D_32K);
     ObjPlttTransfer_Init(4, HEAP_ID_105);
@@ -1580,7 +1577,7 @@ void BattleHallSpriteGfx_InitTransfers(void) {
     ObjPlttTransfer_Reset();
 }
 
-BattleHallSprite *BattleHallSprite_Create(BattleHallSpriteGfx *gfx, u32 resourceId, u32 animSeq, s32 x, u16 y, const u8 *anim) {
+static BattleHallSprite *BattleHallSprite_Create(BattleHallSpriteGfx *gfx, u32 resourceId, u32 animSeq, s32 x, u16 y, const u8 *anim) {
     BattleHallSprite *sprite = Heap_Alloc(HEAP_ID_105, sizeof(BattleHallSprite));
     VecFx32 position;
 
@@ -1593,17 +1590,17 @@ BattleHallSprite *BattleHallSprite_Create(BattleHallSpriteGfx *gfx, u32 resource
     return sprite;
 }
 
-u32 BattleHallSprite_Delete(BattleHallSprite *sprite) {
+static u32 BattleHallSprite_Delete(BattleHallSprite *sprite) {
     Sprite_Delete(sprite->sprite);
     Heap_Free(sprite);
     return 0;
 }
 
-void BattleHallSprite_SetVisible(BattleHallSprite *sprite, BOOL visible) {
+static void BattleHallSprite_SetVisible(BattleHallSprite *sprite, BOOL visible) {
     Sprite_SetDrawFlag(sprite->sprite, visible);
 }
 
-void BattleHallSprite_SetPosition(BattleHallSprite *sprite, s32 x, s32 y) {
+static void BattleHallSprite_SetPosition(BattleHallSprite *sprite, s32 x, s32 y) {
     VecFx32 position;
 
     if (sprite->anim != NULL) {
@@ -1615,16 +1612,16 @@ void BattleHallSprite_SetPosition(BattleHallSprite *sprite, s32 x, s32 y) {
     Sprite_SetMatrix(sprite->sprite, &position);
 }
 
-void BattleHallSprite_SetAnim(BattleHallSprite *sprite, u32 animSeq) {
+static void BattleHallSprite_SetAnim(BattleHallSprite *sprite, u32 animSeq) {
     Sprite_SetAnimSpeed(sprite->sprite, FX32_ONE);
     Sprite_TryChangeAnimSeq(sprite->sprite, animSeq);
 }
 
-void BattleHallSprite_SetIconPalette(BattleHallSprite *sprite, Pokemon *mon) {
+static void BattleHallSprite_SetIconPalette(BattleHallSprite *sprite, Pokemon *mon) {
     Sprite_SetPalOffsetRespectVramOffset(sprite->sprite, Pokemon_GetIconPalette(mon));
 }
 
-void BattleHallApp_AddWindows(BgConfig *bgConfig, Window *windows) {
+static void BattleHallApp_AddWindows(BgConfig *bgConfig, Window *windows) {
     u8 i;
 
     for (i = 0; i < 4; i++) {
@@ -1633,7 +1630,7 @@ void BattleHallApp_AddWindows(BgConfig *bgConfig, Window *windows) {
     }
 }
 
-void BattleHallApp_RemoveWindows(Window *windows) {
+static void BattleHallApp_RemoveWindows(Window *windows) {
     u16 i;
 
     for (i = 0; i < 4; i++) {
@@ -1641,24 +1638,24 @@ void BattleHallApp_RemoveWindows(Window *windows) {
     }
 }
 
-void BattleHallApp_DrawMessageFrame(Window *window, u32 frame) {
+static void BattleHallApp_DrawMessageFrame(Window *window, u32 frame) {
     LoadUserFrameGfx2(window->bgConfig, (GFBgLayer)GetWindowBgId(window), 0x3D9, 10, (u8)frame, HEAP_ID_105);
     FillWindowPixelBuffer(window, 15);
     DrawFrameAndWindow2(window, FALSE, 0x3D9, 10);
 }
 
-YesNoPrompt *BattleHallApp_CreateYesNo(enum HeapID heapId) {
+static YesNoPrompt *BattleHallApp_CreateYesNo(enum HeapID heapId) {
     return YesNoPrompt_Create(heapId);
 }
 
-void BattleHallApp_DestroyYesNo(YesNoPrompt *prompt) {
+static void BattleHallApp_DestroyYesNo(YesNoPrompt *prompt) {
     YesNoPrompt_Destroy(prompt);
 }
 
 #pragma force_active on
 #pragma push
 #pragma opt_propagation off
-void BattleHallApp_InitYesNo(YesNoPrompt *prompt, BgConfig *bgConfig, u8 ignoreTouch) {
+static void BattleHallApp_InitYesNo(YesNoPrompt *prompt, BgConfig *bgConfig, u8 ignoreTouch) {
     YesNoPromptTemplate template;
 
     MI_CpuFill8(&template, 0, sizeof(template));
@@ -1679,6 +1676,6 @@ void BattleHallApp_InitYesNo(YesNoPrompt *prompt, BgConfig *bgConfig, u8 ignoreT
 #pragma pop
 #pragma force_active reset
 
-u32 BattleHallApp_HandleYesNo(YesNoPrompt *prompt) {
+static u32 BattleHallApp_HandleYesNo(YesNoPrompt *prompt) {
     return YesNoPrompt_HandleInput(prompt);
 }

@@ -56,10 +56,8 @@ u32 FrontierStat_GetFriendIndex(u32 stat);
 void *FrontierTrainer_Load(BattleHallTrainerRecord *record, u32 trainerId, enum HeapID heapID, u32 narcId);
 void FrontierTrainer_GetClassSprite(u8 trainerClass);
 void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
-// Defined in battle_hall_setup.c with other types (returning u8 and int); declared as these callers use them.
 int BattleHall_GetLevelRank(BattleHallData *data);
 u8 BattleHall_GetPartySize(u8 type);
-// Not in battle_hall_data.h: frontier_cmd_hall.c uses their (undefined) return values.
 void BattleHallData_GetTrainerSprite(BattleHallData *data, u32 index);
 void BattleHallData_SendLinkMessage(BattleHallData *data, u32 kind, u32 value);
 

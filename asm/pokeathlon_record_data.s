@@ -17,111 +17,9 @@
 	.public sStr_SeqError_2
 	.public sStr_SeqError_3
 	.public sStr_SeqError_4
-	.public PokeathlonCourseRecord_GetTotalScore
-	.public PokeathlonCourseRecord_HasRecord
-	.public PokeathlonCourseRecord_GetScore
-	.public PokeathlonCourseRecord_GetEventId
-	.public PokeathlonCourseRecord_GetMonSpecies
-	.public PokeathlonCourseRecord_InitBgs
-	.public PokeathlonCourseRecord_FreeBgs
-	.public PokeathlonCourseRecord_LoadBgGraphics
-	.public PokeathlonCourseRecord_StartPageScroll
-	.public PokeathlonCourseRecord_UpdatePageScroll
-	.public PokeathlonCourseRecord_ShowCoursePanel
-	.public PokeathlonCourseRecord_PrintStaticText
-	.public PokeathlonCourseRecord_PrintPage
-	.public PokeathlonCourseRecord_PrintEventScores
-	.public PokeathlonCourseRecord_PrintMonNames
-	.public PokeathlonCourseRecord_PrintCourseName
-	.public PokeathlonCourseRecord_PrintTotalLabel
-	.public PokeathlonCourseRecord_VBlankCallback
-	.public PokeathlonCourseRecord_LoadSpriteResources
-	.public PokeathlonCourseRecord_LoadMonPicResources
-	.public PokeathlonCourseRecord_CreateSprites
-	.public PokeathlonCourseRecord_SetMonSpritesVisible
-	.public PokeathlonCourseRecord_UpdatePageSprites
-	.public PokeathlonCourseRecord_HandleInput
 	.public PokeathlonTrophies_Init
 	.public PokeathlonTrophies_Exit
 	.public PokeathlonTrophies_Main
-	.public PokeathlonTrophies_VBlankCallback
-	.public PokeathlonTrophies_InitBgs
-	.public PokeathlonTrophies_LoadBgGraphics
-	.public PokeathlonTrophies_FreeBgs
-	.public PokeathlonTrophies_LoadSpriteResources
-	.public PokeathlonTrophies_CreateNumberSprites
-	.public PokeathlonTrophies_PrintTitle
-	.public PokeathlonTrophies_PrintNextFriendshipTrophy
-	.public PokeathlonTrophies_DrawScreen
-	.public PokeathlonTrophies_CalcEventRecordTotal
-	.public PokeathlonTrophies_CountMedals
-	.public PokeathlonTrophies_CreateSummary
-	.public PokeathlonTrophies_CountFriendshipTrophies
-	.public PokeathlonTrophies_CountCollectiveTrophies
-	.public PokeathlonMedals_GetPageSpeciesCount
-	.public PokeathlonMedals_GetSelectedSpecies
-	.public PokeathlonMedals_GetSeenForm
-	.public PokeathlonMedals_GetSeenGender
-	.public PokeathlonMedals_ShowSpeciesMedals
-	.public PokeathlonMedals_LoadSpeciesOrder
-	.public PokeathlonMedals_BuildSpeciesList
-	.public PokeathlonMedals_DrawMedalistTiles
-	.public PokeathlonMedals_DrawMedalistMark
-	.public PokeathlonMedals_SetIconsVisible
-	.public PokeathlonMedals_ShowPage
-	.public PokeathlonMedals_UpdatePageIndicator
-	.public PokeathlonMedals_UpdatePageScroll
-	.public PokeathlonMedals_LoadMonPic
-	.public PokeathlonMedals_PrintSpeciesName
-	.public PokeathlonMedals_ShowSelectedSpecies
-	.public PokeathlonMedals_HideSelectedSpecies
-	.public PokeathlonMedals_VBlankCallback
-	.public PokeathlonMedals_CreateGridInput
-	.public PokeathlonMedals_FreeGridInput
-	.public PokeathlonMedals_ChangePage
-	.public PokeathlonMedals_HandleInput
-	.public PokeathlonMedals_MoveCursor
-	.public PokeathlonMedals_OnCursorMoved
-	.public PokeathlonMedals_InitBgs
-	.public PokeathlonMedals_LoadBgGraphics
-	.public PokeathlonMedals_FreeBgs
-	.public PokeathlonMedals_CreateSprites
-	.public PokeathlonMedals_LoadMonPicResources
-	.public PokeathlonMedals_LoadSpriteResources
-	.public PokeathlonMedals_CreateUiSprites
-	.public PokeathlonMedals_CreateMedalSprites
-	.public PokeathlonMedals_CreateIconSprites
-	.public PokeathlonMedals_PrintStaticText
-	.public PokeathlonEventRecord_GetEventTotal
-	.public PokeathlonEventRecord_RecordReachesThreshold
-	.public PokeathlonEventRecord_SoloRecordReachesThreshold
-	.public PokeathlonEventRecord_IsRankEmpty
-	.public PokeathlonEventRecord_VBlankCallback
-	.public PokeathlonEventRecord_InitBgs
-	.public PokeathlonEventRecord_LoadBgGraphics
-	.public PokeathlonEventRecord_DrawEventIcon
-	.public PokeathlonEventRecord_FreeBgs
-	.public PokeathlonEventRecord_ShowEvent
-	.public PokeathlonEventRecord_LoadModePalette
-	.public PokeathlonEventRecord_SwitchMode
-	.public PokeathlonEventRecord_PrintRecordValue
-	.public PokeathlonEventRecord_PrintModeTitle
-	.public PokeathlonEventRecord_PrintEventRecord
-	.public PokeathlonEventRecord_CreateSprites
-	.public PokeathlonEventRecord_ShowEventRecordMons
-	.public PokeathlonEventRecord_LoadSpriteResources
-	.public PokeathlonEventRecord_CreateUiSprites
-	.public PokeathlonEventRecord_CreateEventSprites
-	.public PokeathlonEventRecord_CreateMonIconSprites
-	.public PokeathlonEventRecord_ShowRecordMonIcons
-	.public PokeathlonEventRecord_SetMonIconsVisible
-	.public PokeathlonEventRecord_UpdateEventGrid
-	.public PokeathlonEventRecord_HandleInput
-	.public PokeathlonEventRecord_CopyRecords
-	.public PokeathlonEventRecord_CreateRecordData
-	.public PokeathlonEventRecord_GetRecords
-	.public PokeathlonEventRecord_GetRecordMon
-	.public PokeathlonEventRecord_GetRecordScore
 	.public sPokeathlonCourseRecordMonIconResIds
 	.public sPokeathlonCourseRecordGraphicsModes
 	.public sPokeathlonCourseRecordCursorPositions
@@ -178,40 +76,10 @@
 	.public sPokeathlonEventRecordBgTemplates
 	.public sPokeathlonEventRecordBgLayers
 
-	.public PokeathlonCourseRecord_CopyArgs
-	.public PokeathlonCourseRecord_AreFlags0EFTo0F1Set
-	.public PokeathlonCourseRecord_FreeArgs
-	.public PokeathlonCourseRecord_GetMon
-	.public PokeathlonTrophies_CreatePlayerSprite
-	.public PokeathlonTrophies_FreeSummary
-	.public PokeathlonTrophies_GetPotentialTrophyCount
-	.public PokeathlonTrophies_GetMedalistCount
-	.public PokeathlonTrophies_GetGender
-	.public PokeathlonTrophies_GetProfile
-	.public PokeathlonTrophies_GetMedalTotal
-	.public PokeathlonTrophies_GetEventRecordTotal
-	.public PokeathlonTrophies_GetCourseRecordTotal
-	.public PokeathlonTrophies_GetTotalPoints
-	.public PokeathlonTrophies_GetCourseScore
-	.public PokeathlonMedals_GetSpeciesOrderFileIndex
-	.public PokeathlonMedals_AreFlags0EFTo0F1Set
-	.public PokeathlonMedals_GetSpeciesMedals
-	.public PokeathlonMedals_CountMedalists
-	.public PokeathlonMedals_HasAllMedals
-	.public PokeathlonMedals_GetPokedex
-	.public PokeathlonMedals_GetSpindaPersonality
-	.public PokeathlonMedals_CountTrustTrophies
 	.public PokeathlonMedals_OnButton
 	.public PokeathlonMedals_OnSwitchToTouchMode
 	.public PokeathlonMedals_OnKeyMove
 	.public PokeathlonMedals_OnTouch
-	.public PokeathlonEventRecord_DrawModeScreen
-	.public PokeathlonEventRecord_PrintReturnButton
-	.public PokeathlonEventRecord_ClearNameWindows
-	.public PokeathlonEventRecord_FreeRecordData
-	.public PokeathlonEventRecord_AreFlags0EFTo0F1Set
-	.public PokeathlonEventRecord_GetTimesJoined
-	.public PokeathlonEventRecord_GetProfile
 
 
 	.rodata

@@ -9,13 +9,13 @@
 
 #include "battle/battle_setup.h"
 #include "frontier/frontier.h"
-
 #include "msgdata/msg.naix"
 
 #include "assert.h"
 #include "communication_player_state.h"
 #include "filesystem.h"
 #include "frontier_data_access.h"
+#include "frontier_field_system.h"
 #include "heap.h"
 #include "msgdata.h"
 #include "party.h"
@@ -23,9 +23,8 @@
 #include "pm_version.h"
 #include "pokemon.h"
 #include "scrcmd_9.h"
-#include "frontier_field_system.h"
 
-// The Battle Tower inside the Battle Frontier overlay: opponent trainers and their Pokemon generated from the Battle
+// The Battle Tower of the Battle Frontier: opponent trainers and their Pokemon generated from the Battle
 // Tower sets, the sample Wi-Fi room used when no room has been downloaded, and the battle setup of a tower battle.
 // Linked games only use the newer trainer and set narcs when both players have a known version.
 

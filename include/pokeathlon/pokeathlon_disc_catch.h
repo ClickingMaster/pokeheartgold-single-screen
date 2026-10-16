@@ -47,7 +47,7 @@ enum PokeathlonDiscCatchMonState {
 // One Pokemon on the field (positions in touch screen pixels, fx32).
 typedef struct PokeathlonDiscCatchMon {
     PokeathlonCourseData *course;    // 0x00
-    PokeathlonCourseObject *monPic;                    // 0x04: its course 3D object (PokeathlonCourseMonObjects_Get)
+    PokeathlonCourseObject *monPic;  // 0x04: its course 3D object (PokeathlonCourseMonObjects_Get)
     PokeathlonDiscCatchStats *stats; // 0x08
     u32 state;                       // 0x0C
     VecFx32 target;                  // 0x10: where it walks to
@@ -154,11 +154,11 @@ typedef struct PokeathlonDiscCatchFrame {
 
 // Squashes a Pokemon that taps without being able to jump.
 typedef struct PokeathlonDiscCatchSquash {
-    PokeathlonCourseObject *monPic;  // 0x00
-    SysTask *task; // 0x04
-    f32 scale;     // 0x08
-    u16 frames;    // 0x0C
-    u16 state;     // 0x0E
+    PokeathlonCourseObject *monPic; // 0x00
+    SysTask *task;                  // 0x04
+    f32 scale;                      // 0x08
+    u16 frames;                     // 0x0C
+    u16 state;                      // 0x0E
 } PokeathlonDiscCatchSquash;
 
 typedef struct PokeathlonDiscCatchMonSprites {
@@ -209,7 +209,7 @@ typedef struct PokeathlonDiscCatch {
     SpriteManager *spriteManager;                                                  // 0x010
     MessageFormat *messageFormat;                                                  // 0x014
     MsgData *msgData;                                                              // 0x018
-    PokeathlonCourseSpriteResources *monPicResources;                                                         // 0x01C
+    PokeathlonCourseSpriteResources *monPicResources;                              // 0x01C
     void *monPics;                                                                 // 0x020
     Window window;                                                                 // 0x024
     PokeathlonDiscCatchStats stats[DISC_CATCH_PARTICIPANTS][DISC_CATCH_TEAM_SIZE]; // 0x034
@@ -224,30 +224,16 @@ typedef struct PokeathlonDiscCatch {
     PokeathlonDiscCatchShake shake;                                                // 0x6A8
 } PokeathlonDiscCatch;                                                             // size: 0x6BC
 
-// pokeathlon_disc_catch.c
-void PokeathlonDiscCatch_ShakeTask(SysTask *task, PokeathlonDiscCatchShake *shake);
-BOOL PokeathlonDiscCatchShake_IsDone(PokeathlonDiscCatchShake *shake);
-void PokeathlonDiscCatchShake_Init(PokeathlonDiscCatchShake *shake, BgConfig *bgConfig, SpriteSystem *spriteSystem);
-void PokeathlonDiscCatchShake_Start(PokeathlonDiscCatchShake *shake, u8 distance, u8 frames);
-void PokeathlonDiscCatch_SquashTask(SysTask *task, void *data);
-void PokeathlonDiscCatch_StartSquash(PokeathlonDiscCatchSquash *squash, PokeathlonCourseObject *monPic);
 void PokeathlonDiscCatch_SetMonScaleCenter(PokeathlonCourseMonObject *monPic, int falling);
 BOOL PokeathlonDiscCatchMon_IsTouching(PokeathlonDiscCatchMon *mon, PokeathlonDiscCatchMon *other);
 void PokeathlonDiscCatchMon_Jump(PokeathlonDiscCatchMon *mon);
 BOOL PokeathlonDiscCatchMon_IsInPlay(PokeathlonDiscCatchMon *mon);
 void PokeathlonDiscCatchMon_SetTarget(PokeathlonDiscCatchMon *mon, const s16 *position);
 int PokeathlonDiscCatch_GetFacing(const VecFx32 *direction);
-void PokeathlonDiscCatchMon_Move(PokeathlonDiscCatchMon *mon);
 BOOL PokeathlonDiscCatchMon_IsOffField(PokeathlonDiscCatchMon *mon, fx32 x, fx32 y);
-void PokeathlonDiscCatchMon_Respawn(PokeathlonDiscCatchMon *mon);
 void PokeathlonDiscCatchMon_Update(PokeathlonDiscCatchMon *mon, PokeathlonCourseData *course);
 int PokeathlonDiscCatch_FindTouchedMon(PokeathlonDiscCatchMon *mons, s16 x, s16 y);
-void PokeathlonDiscCatch_ShowDisc(PokeathlonDiscCatchDiscSprites *sprites, u32 mode, BOOL draw);
-void PokeathlonDiscCatch_ScaleDisc(PokeathlonDiscCatchDiscSprites *sprites, f32 scale);
-void PokeathlonDiscCatch_ShowPoints(PokeathlonDiscCatchDiscSprites *sprites, int state, s16 x, s16 y);
-void PokeathlonDiscCatch_PlayCatchSound(u32 state);
 void PokeathlonDiscCatch_UpdateDiscSprites(PokeathlonDiscCatchSprites *sprites, PokeathlonDiscCatchDiscPacket *discs, PokeathlonCourseData *course);
-s32 PokeathlonDiscCatch_CompareDrawOrder(const void *a, const void *b);
 void PokeathlonDiscCatch_UpdateMonSprites(PokeathlonDiscCatchSprites *sprites, PokeathlonDiscCatchFrame *frame, PokeathlonCourseData *course);
 u32 PokeathlonDiscCatch_Intro(PokeathlonCourseData *course, u8 *state);
 void PokeathlonDiscCatch_EndGame(PokeathlonCourseData *course);
@@ -265,23 +251,9 @@ u8 PokeathlonDiscCatch_CountTeamsAhead(PokeathlonCourseData *course, u32 partici
 void PokeathlonDiscCatch_SetMonTarget(PokeathlonDiscCatch *work, const s16 *position, u32 participant, u32 member);
 void PokeathlonDiscCatch_MakeMonJump(PokeathlonDiscCatch *work, u32 participant, u32 member);
 u8 PokeathlonDiscCatch_GetTeamScore(PokeathlonDiscCatch *work, int participant);
-void PokeathlonDiscCatch_SetVramBanks(void);
-int PokeathlonDiscCatch_Square(int value);
-void PokeathlonDiscCatch_Approach0(fx32 *value, fx32 step);
-int PokeathlonDiscCatch_GetJumpOffset(PokeathlonDiscCatchStats *stats, int frame, f32 *scale);
-void PokeathlonDiscCatch_SlowDown(VecFx32 *velocity, fx32 stepX, fx32 stepY);
 void PokeathlonDiscCatch_ClampVelocity(VecFx32 *velocity, fx32 limit);
-void PokeathlonDiscCatch_PrintScore(PokeathlonCourseData *course, int score);
-void PokeathlonDiscCatch_InitSpriteSystem(PokeathlonDiscCatch *work);
-void PokeathlonDiscCatch_FreeSpriteSystem(PokeathlonDiscCatch *work);
 void PokeathlonDiscCatch_StopAnims(PokeathlonDiscCatch *work);
-void PokeathlonDiscCatch_LoadSpriteResources(PokeathlonDiscCatch *work);
 ManagedSprite *PokeathlonDiscCatch_NewDiscSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u16 anim, u16 priority, BOOL onTouchScreen);
 ManagedSprite *PokeathlonDiscCatch_NewEffectSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u16 anim, u16 priority);
-void PokeathlonDiscCatch_InitBgs(PokeathlonDiscCatch *work);
-void PokeathlonDiscCatch_FreeBgs(PokeathlonDiscCatch *work);
-void PokeathlonDiscCatch_LoadBgGraphics(PokeathlonDiscCatch *work);
-void PokeathlonDiscCatch_AnimateBg(u8 *timer, BgConfig *bgConfig, enum HeapID heapId);
-void PokeathlonDiscCatch_UpdateHost(PokeathlonCourseData *course);
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_DISC_CATCH_H

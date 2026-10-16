@@ -8,14 +8,15 @@
 #include "battle/battle_setup.h"
 #include "frontier/battle_hall_data.h"
 #include "frontier/frontier.h"
+#include "frontier/frontier_link_lobby.h"
 
+#include "communication_core.h"
 #include "communication_player_state.h"
 #include "heap.h"
 #include "math_util.h"
 #include "party.h"
 #include "player_data.h"
 #include "pokemon.h"
-#include "communication_core.h"
 #include "use_item_on_mon.h"
 
 // Battle Hall trainers and battles: the trainers and sets of the next battle (from the cell's type and its rank),
@@ -47,13 +48,10 @@ extern const u16 gBattleHallRankTrainerClasses[];
 extern const u16 gBattleHallTrainerClasses[];
 extern const u16 gBattleHallSetSpecies[];
 extern const BattleHallSetTypes gBattleHallSetTypes[];
-extern const u8 gBattleHallCellTypes[];
 
 u32 HallTypeRanks_Get(u32 cell, void *ranks);
 fx32 FX_Sqrt(fx32 x);
 
-// Not in battle_hall_setup.h: battle_hall_data.c and frontier_cmd_hall.c declare them with the types they call them
-// with.
 int BattleHall_GetPartySize(int type);
 u8 BattleHall_GetLevelRank(BattleHallData *data);
 void *FrontierTrainer_Load(BattleHallTrainerRecord *record, u32 trainerId, enum HeapID heapID, u32 narcId);

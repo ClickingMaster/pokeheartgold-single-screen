@@ -13,6 +13,7 @@
 #include "msgdata/msg.naix"
 
 #include "bg_window.h"
+#include "char_tiles.h"
 #include "filesystem.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
@@ -38,7 +39,6 @@
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
-#include "char_tiles.h"
 
 typedef void (*FrontierPrintMailMessageFunc)(FrontierSystem *system, int speed, u16 bank, u16 number, u16 field0, s16 field1, u8 canABSpeedUp);
 typedef u32 (*FrontierObjectGetPosFunc)(Field2DObject *object);
@@ -231,7 +231,6 @@ u32 FrontierMenu_GetWidth(FrontierMenu *menu) {
     s32 count = menu->count;
     const u8 *cursor;
 
-    // walks the items with a byte cursor (as the original code does)
     if (count > 0) {
         cursor = (const u8 *)menu;
         do {
@@ -623,7 +622,6 @@ void FrontierScript_MovementTask(SysTask *task, FrontierMovementTask *data) {
     }
 }
 
-// The object position comes from overlay 42 as a packed word; the halfwords go through a volatile copy.
 void FrontierScript_GetMovementStep(FrontierMovementStep *step, Field2DObject *object, u16 id, s32 opcode) {
     step->id = id;
     step->direction = gFrontierMovementDirections[opcode * 2];
@@ -793,7 +791,6 @@ void FrontierScript_PrintMessageEntryFromBank(FrontierScriptContext *ctx, const 
         DestroyMsgData(msgData);
     } else {
         u32 speed = Options_GetTextFrameDelay(Save_PlayerData_GetOptionsAddr(args->saveData));
-        // the last field is passed sign-extended (the original call saw it as s16)
         ((FrontierPrintMailMessageFunc)FrontierSystem_PrintMailMessage)(ctx->frontierSystem, speed, entry[0], entry[1], entry[2], (s16)entry[3], TRUE);
     }
     FrontierScriptContext_Pause(ctx, FrontierScriptNative_WaitMessageEntry);

@@ -75,6 +75,18 @@ extern const TouchscreenHitbox gPokeathlonEventIntroDetailsHitboxes[];
 extern const TouchscreenHitbox gPokeathlonEventIntroRulesHitboxes[];
 extern const TouchscreenHitbox gPokeathlonEventIntroControlsHitboxes[];
 
+static void PokeathlonCourseWait_Create(PokeathlonCourseData *course);
+static void PokeathlonCourseWait_Free(PokeathlonCourseData *course);
+static void PokeathlonEventIntro_Create(PokeathlonCourseData *course);
+static void PokeathlonEventIntro_InitBgs(BgConfig *bgConfig, enum HeapID heapId);
+static void PokeathlonEventIntro_LoadGraphics(PokeathlonEventIntro *intro);
+static void PokeathlonEventIntro_PrintDetails(PokeathlonEventIntro *intro);
+static void PokeathlonEventIntro_InitSprites(PokeathlonEventIntro *intro);
+static void PokeathlonEventIntro_LoadSpriteResources(PokeathlonEventIntro *intro);
+static void PokeathlonEventIntro_CreateSprites(PokeathlonEventIntro *intro);
+static void PokeathlonEventIntro_SetMascotAnim(PokeathlonEventIntro *intro);
+static void PokeathlonEventIntro_HideZoomBgs(PokeathlonEventIntro *intro);
+
 void PokeathlonCourse_LoadSpritePalette(ManagedSprite *sprite, NarcId narcId, int fileId, BOOL mainScreen, BOOL grayScale, enum HeapID heapId) {
     int vramType;
     int location;
@@ -159,19 +171,19 @@ BOOL PokeathlonCourseWait_Exit(PokeathlonCourseData *course) {
     return TRUE;
 }
 
-void PokeathlonCourseWait_SetBanks(void) {
+static void PokeathlonCourseWait_SetBanks(void) {
     GraphicsBanks banks = gPokeathlonCourseWaitGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
-void PokeathlonCourseWait_VBlankCallback(void *data) {
+static void PokeathlonCourseWait_VBlankCallback(void *data) {
     PokeathlonCourseWait *wait = data;
     vu32 *dtcm = (vu32 *)0x027E0000;
     DoScheduledBgGpuUpdates(wait->bgConfig);
     dtcm[0x3FF8 / sizeof(u32)] |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag
 }
 
-void PokeathlonCourseWait_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {
+static void PokeathlonCourseWait_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {
     GraphicsModes modes = gPokeathlonCourseWaitGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     {
@@ -188,7 +200,7 @@ void PokeathlonCourseWait_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {
     }
 }
 
-void PokeathlonCourseWait_FreeBgs(PokeathlonCourseWait *wait) {
+static void PokeathlonCourseWait_FreeBgs(PokeathlonCourseWait *wait) {
     FreeBgTilemapBuffer(wait->bgConfig, GF_BG_LYR_MAIN_0);
     Heap_Free(wait->bgConfig);
 }
@@ -197,7 +209,7 @@ void PokeathlonCourseWait_FreeBgs(PokeathlonCourseWait *wait) {
 
 #pragma force_active on
 
-void PokeathlonCourseWait_Create(PokeathlonCourseData *course) {
+static void PokeathlonCourseWait_Create(PokeathlonCourseData *course) {
     PokeathlonCourseWait *wait;
     enum HeapID heapId = HEAP_ID_159;
     Heap_Create(HEAP_ID_POKEATHLON, heapId, 0x40000);
@@ -224,7 +236,7 @@ void PokeathlonCourseWait_Create(PokeathlonCourseData *course) {
 
 #pragma opt_propagation reset
 
-void PokeathlonCourseWait_Free(PokeathlonCourseData *course) {
+static void PokeathlonCourseWait_Free(PokeathlonCourseData *course) {
     PokeathlonCourseWait *wait = PokeathlonCourse_GetWork(course);
     Main_SetVBlankIntrCB(NULL, NULL);
     Main_SetHBlankIntrCB(NULL, NULL);
@@ -322,7 +334,7 @@ BOOL PokeathlonEventIntro_Exit(PokeathlonCourseData *course) {
     return TRUE;
 }
 
-void PokeathlonEventIntro_VBlankCallback(PokeathlonEventIntro *intro) {
+static void PokeathlonEventIntro_VBlankCallback(PokeathlonEventIntro *intro) {
     vu32 *dtcm = (vu32 *)0x027E0000;
 
     SpriteSystem_TransferOam();
@@ -330,23 +342,23 @@ void PokeathlonEventIntro_VBlankCallback(PokeathlonEventIntro *intro) {
     dtcm[0x3FF8 / sizeof(u32)] |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag
 }
 
-void PokeathlonEventIntro_SetBanks(void) {
+static void PokeathlonEventIntro_SetBanks(void) {
     GraphicsBanks banks = gPokeathlonEventIntroGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
 // Whether the sequence variable of the playing BGM has reached value (the screen follows the music).
-BOOL PokeathlonEventIntro_IsBgmAt(u32 variable, s16 value) {
+static BOOL PokeathlonEventIntro_IsBgmAt(u32 variable, s16 value) {
     s16 current;
     GF_SndReadSeqVariable(GF_GetCurrentPlayingBGM(), variable, &current);
     return current >= value;
 }
 
-u8 PokeathlonEventIntro_GetEvent(PokeathlonCourseData *course) {
+static u8 PokeathlonEventIntro_GetEvent(PokeathlonCourseData *course) {
     return PokeathlonCourse_GetCurrentEvent(course);
 }
 
-BOOL PokeathlonEventIntro_HasFlag0EF(PokeathlonCourseData *course) {
+static BOOL PokeathlonEventIntro_HasFlag0EF(PokeathlonCourseData *course) {
     SaveData *saveData = PokeathlonCourse_GetSaveData(course);
     SaveVarsFlags *varsFlags = Save_VarsFlags_Get(saveData);
     return Save_VarsFlags_CheckFlagInArray(varsFlags, FLAG_UNK_0EF);
@@ -356,7 +368,7 @@ BOOL PokeathlonEventIntro_HasFlag0EF(PokeathlonCourseData *course) {
 
 #pragma force_active on
 
-void PokeathlonEventIntro_Create(PokeathlonCourseData *course) {
+static void PokeathlonEventIntro_Create(PokeathlonCourseData *course) {
     PokeathlonEventIntro *intro;
     enum HeapID heapId;
     PokeathlonCourse_GetWork(course);
@@ -394,7 +406,7 @@ void PokeathlonEventIntro_Create(PokeathlonCourseData *course) {
 
 #pragma opt_propagation reset
 
-void PokeathlonEventIntro_LoadDetailsBg(PokeathlonEventIntro *intro) {
+static void PokeathlonEventIntro_LoadDetailsBg(PokeathlonEventIntro *intro) {
     LoadFontPal0(GF_PAL_LOCATION_SUB_BGEXT, (enum GFPalSlotOffset)0x4000, intro->heapId);
     PokeathlonEventBanner_LoadGraphics(intro->banner);
     GfGfxLoader_GXLoadPalFromOpenNarc(intro->narc, 4, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0, intro->heapId);
@@ -407,7 +419,7 @@ void PokeathlonEventIntro_LoadDetailsBg(PokeathlonEventIntro *intro) {
 }
 
 // Picture of a rules / controls page of the event on sub BG 3.
-void PokeathlonEventIntro_LoadPagePicture(PokeathlonEventIntro *intro, int event) {
+static void PokeathlonEventIntro_LoadPagePicture(PokeathlonEventIntro *intro, int event) {
     MtxFx22 matrix;
 
     GF_ASSERT(event < 10);
@@ -424,7 +436,7 @@ void PokeathlonEventIntro_LoadPagePicture(PokeathlonEventIntro *intro, int event
     Bg_SetTextDimAndAffineParams(intro->bgConfig, GF_BG_LYR_SUB_3, BG_POS_OP_SET_Y, 0, &matrix, 0, 0);
 }
 
-void PokeathlonEventIntro_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {
+static void PokeathlonEventIntro_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {
     EventIntroBgTemplates templates;
     GraphicsModes modes;
     int i;
@@ -439,7 +451,7 @@ void PokeathlonEventIntro_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {
     }
 }
 
-void PokeathlonEventIntro_LoadGraphics(PokeathlonEventIntro *intro) {
+static void PokeathlonEventIntro_LoadGraphics(PokeathlonEventIntro *intro) {
     GfGfxLoader_GXLoadPalFromOpenNarc(intro->narc, 4, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0, intro->heapId);
     GfGfxLoader_LoadCharDataFromOpenNarc(intro->narc, 5, intro->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, TRUE, intro->heapId);
     GfGfxLoader_LoadScrnDataFromOpenNarc(intro->narc, 6, intro->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, TRUE, intro->heapId);
@@ -453,14 +465,14 @@ void PokeathlonEventIntro_LoadGraphics(PokeathlonEventIntro *intro) {
 }
 
 // Best solo record of the event.
-u16 PokeathlonEventIntro_GetRecord(PokeathlonEventIntro *intro, int event) {
+static u16 PokeathlonEventIntro_GetRecord(PokeathlonEventIntro *intro, int event) {
     Pokeathlon_RecordsSolo *records = PokeathlonSave_GetRecordsSolo2(Save_Pokeathlon_Get(PokeathlonCourse_GetSaveData(intro->course)));
     return records[event].entries[0].score;
 }
 
 #pragma force_active on
 
-void PokeathlonEventIntro_PrintDetails(PokeathlonEventIntro *intro) {
+static void PokeathlonEventIntro_PrintDetails(PokeathlonEventIntro *intro) {
     int event = intro->event;
     u8 number = intro->round + 1;
     if (!intro->showRecord) {
@@ -499,7 +511,7 @@ void PokeathlonEventIntro_PrintDetails(PokeathlonEventIntro *intro) {
 
 #pragma force_active reset
 
-void PokeathlonEventIntro_PrintRules(PokeathlonEventIntro *intro) {
+static void PokeathlonEventIntro_PrintRules(PokeathlonEventIntro *intro) {
     int msgId = intro->event * 3 + 210;
     PokeathlonUtil_PrintAlignedMessage(intro->text, 8, msg_0309_00244, FALSE);
     PokeathlonUtil_PrintAlignedMessageAtY(intro->text, 9, msg_0309_00242, FALSE, 0, 4);
@@ -507,7 +519,7 @@ void PokeathlonEventIntro_PrintRules(PokeathlonEventIntro *intro) {
     PokeathlonUtil_PrintMessageAtXY(intro->text, 11, msgId, 0, 0);
 }
 
-void PokeathlonEventIntro_PrintControls(PokeathlonEventIntro *intro) {
+static void PokeathlonEventIntro_PrintControls(PokeathlonEventIntro *intro) {
     int msgId = intro->event * 3 + 211;
     PokeathlonUtil_PrintAlignedMessage(intro->text, 8, msg_0309_00245, FALSE);
     PokeathlonUtil_PrintAlignedMessageAtY(intro->text, 9, msg_0309_00241, FALSE, 0, 4);
@@ -517,7 +529,7 @@ void PokeathlonEventIntro_PrintControls(PokeathlonEventIntro *intro) {
 
 #pragma force_active on
 
-void PokeathlonEventIntro_InitSprites(PokeathlonEventIntro *intro) {
+static void PokeathlonEventIntro_InitSprites(PokeathlonEventIntro *intro) {
     SpriteResourceCountsListUnion counts = gPokeathlonEventIntroSpriteResourceCounts;
     OamManagerParam oamManagerParam = gPokeathlonEventIntroOamManagerParam;
     OamCharTransferParam charTransferParam = gPokeathlonEventIntroOamCharTransferParam;
@@ -536,7 +548,7 @@ void PokeathlonEventIntro_InitSprites(PokeathlonEventIntro *intro) {
 
 #pragma force_active reset
 
-void PokeathlonEventIntro_LoadSpriteResources(PokeathlonEventIntro *intro) {
+static void PokeathlonEventIntro_LoadSpriteResources(PokeathlonEventIntro *intro) {
     SpriteSystem *spriteSystem = intro->spriteSystem;
     SpriteManager *spriteManager = intro->spriteManager;
 
@@ -546,7 +558,7 @@ void PokeathlonEventIntro_LoadSpriteResources(PokeathlonEventIntro *intro) {
     SpriteSystem_LoadAnimResObjFromOpenNarc(spriteSystem, spriteManager, intro->narc, 3, TRUE, 0);
 }
 
-void PokeathlonEventIntro_UpdateMascot(PokeathlonEventIntro *intro) {
+static void PokeathlonEventIntro_UpdateMascot(PokeathlonEventIntro *intro) {
     if (!ManagedSprite_IsAnimated(intro->sprites[2])) {
         intro->animStep++;
         if (intro->animStep >= 2) {
@@ -558,7 +570,7 @@ void PokeathlonEventIntro_UpdateMascot(PokeathlonEventIntro *intro) {
 
 #pragma force_active on
 
-void PokeathlonEventIntro_PlaceSprites(PokeathlonEventIntro *intro, int layout) {
+static void PokeathlonEventIntro_PlaceSprites(PokeathlonEventIntro *intro, int layout) {
     int i = 0;
     const s16(*position)[2] = gPokeathlonEventIntroSpritePositions + layout * 4;
     do {
@@ -569,7 +581,7 @@ void PokeathlonEventIntro_PlaceSprites(PokeathlonEventIntro *intro, int layout) 
 
 #pragma force_active reset
 
-void PokeathlonEventIntro_ResetMascot(PokeathlonEventIntro *intro) {
+static void PokeathlonEventIntro_ResetMascot(PokeathlonEventIntro *intro) {
     intro->animStep = 0;
     PokeathlonEventIntro_SetMascotAnim(intro);
 }
@@ -578,7 +590,7 @@ void PokeathlonEventIntro_ResetMascot(PokeathlonEventIntro *intro) {
 // template is written through one pointer and read through another.
 #pragma force_active on
 
-void PokeathlonEventIntro_CreateSprites(PokeathlonEventIntro *intro) {
+static void PokeathlonEventIntro_CreateSprites(PokeathlonEventIntro *intro) {
     const s16(*position)[2] = gPokeathlonEventIntroSpritePositions;
     int i = 0;
     s16 *coords = &gPokeathlonEventIntroSpriteTemplates[0].x;
@@ -600,18 +612,18 @@ void PokeathlonEventIntro_CreateSprites(PokeathlonEventIntro *intro) {
     PokeathlonEventIntro_SetMascotAnim(intro);
 }
 
-void PokeathlonEventIntro_SetMascotAnim(PokeathlonEventIntro *intro) {
+static void PokeathlonEventIntro_SetMascotAnim(PokeathlonEventIntro *intro) {
     ManagedSprite_SetAnim(intro->sprites[2], gPokeathlonEventIntroMascotAnims[intro->event][intro->animStep]);
 }
 
 #pragma force_active reset
 
-void PokeathlonEventIntro_HideZoomBgs(PokeathlonEventIntro *intro) {
+static void PokeathlonEventIntro_HideZoomBgs(PokeathlonEventIntro *intro) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
 }
 
-void PokeathlonEventIntro_StartZoom(PokeathlonEventIntro *intro) {
+static void PokeathlonEventIntro_StartZoom(PokeathlonEventIntro *intro) {
     int offset = 0;
     MtxFx22 matrix;
 
@@ -633,7 +645,7 @@ void PokeathlonEventIntro_StartZoom(PokeathlonEventIntro *intro) {
     intro->zooming = TRUE;
 }
 
-void PokeathlonEventIntro_UpdateZoom(PokeathlonEventIntro *intro) {
+static void PokeathlonEventIntro_UpdateZoom(PokeathlonEventIntro *intro) {
     MtxFx22 matrix;
     fx32 scale = (++intro->timer << FX32_SHIFT) / 14;
 
@@ -650,18 +662,18 @@ void PokeathlonEventIntro_UpdateZoom(PokeathlonEventIntro *intro) {
     }
 }
 
-void PokeathlonEventIntro_FadeToPage(PokeathlonCourseData *course, int page) {
+static void PokeathlonEventIntro_FadeToPage(PokeathlonCourseData *course, int page) {
     PokeathlonEventIntro *intro = PokeathlonCourse_GetWork(course);
 
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, 0x7FFF, 4, 1, intro->heapId);
     intro->page = page;
 }
 
-BOOL PokeathlonEventIntro_IsFadeFinished(PokeathlonCourseData *course) {
+static BOOL PokeathlonEventIntro_IsFadeFinished(PokeathlonCourseData *course) {
     return IsPaletteFadeFinished();
 }
 
-void PokeathlonEventIntro_ShowDetails(PokeathlonEventIntro *intro) {
+static void PokeathlonEventIntro_ShowDetails(PokeathlonEventIntro *intro) {
     MtxFx22 matrix;
     int y;
 
@@ -690,7 +702,7 @@ void PokeathlonEventIntro_ShowDetails(PokeathlonEventIntro *intro) {
     Bg_SetTextDimAndAffineParams(intro->bgConfig, GF_BG_LYR_SUB_3, BG_POS_OP_SET_Y, y, &matrix, 0, 0);
 }
 
-void PokeathlonEventIntro_ShowRules(PokeathlonEventIntro *intro) {
+static void PokeathlonEventIntro_ShowRules(PokeathlonEventIntro *intro) {
     PokeathlonEventIntro_LoadPagePicture(intro, intro->event);
     GfGfxLoader_LoadScrnDataFromOpenNarc(intro->narc, 7, intro->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, TRUE, intro->heapId);
     PokeathlonEventIntro_PlaceSprites(intro, 1);
@@ -705,7 +717,7 @@ void PokeathlonEventIntro_ShowRules(PokeathlonEventIntro *intro) {
     PokeathlonEventIntro_PrintRules(intro);
 }
 
-void PokeathlonEventIntro_ShowControls(PokeathlonEventIntro *intro) {
+static void PokeathlonEventIntro_ShowControls(PokeathlonEventIntro *intro) {
     PokeathlonEventIntro_LoadPagePicture(intro, intro->event);
     GfGfxLoader_LoadScrnDataFromOpenNarc(intro->narc, 7, intro->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, TRUE, intro->heapId);
     PokeathlonEventIntro_PlaceSprites(intro, 1);
@@ -720,7 +732,7 @@ void PokeathlonEventIntro_ShowControls(PokeathlonEventIntro *intro) {
     PokeathlonEventIntro_PrintControls(intro);
 }
 
-void PokeathlonEventIntro_ShowPage(PokeathlonCourseData *course) {
+static void PokeathlonEventIntro_ShowPage(PokeathlonCourseData *course) {
     PokeathlonEventIntro *intro = PokeathlonCourse_GetWork(course);
 
     BgClearTilemapBufferAndCommit(intro->bgConfig, GF_BG_LYR_MAIN_0);
@@ -745,7 +757,6 @@ void PokeathlonEventIntro_ShowPage(PokeathlonCourseData *course) {
         GF_AssertFail();
         break;
     }
-    // pokeathlon.h declares the state as u8; the page is passed as it is.
     ((void (*)(PokeathlonCourseData *, u32))PokeathlonCourse_SetNextState)(course, intro->page);
 }
 

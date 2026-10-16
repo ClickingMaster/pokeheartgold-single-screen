@@ -10,16 +10,12 @@
 	.public PokeathlonUtil_LoadMonPicSprite
 	.public PokeathlonUtil_LoadMonIconResources
 	.public PokeathlonUtil_SetMonIconSprite
-	.public PokeathlonUtil_LoadSpriteChars
-	.public PokeathlonUtil_LoadSpritePalette
-	.public PokeathlonUtil_LoadCharDataFromNarc
 	.public PokeathlonUtil_CreateTextContext
 	.public PokeathlonUtil_FreeTextContext
 	.public PokeathlonUtil_PrintAlignedMessage
 	.public PokeathlonUtil_PrintAlignedMessageAtY
 	.public PokeathlonUtil_PrintMessageAtXY
 	.public PokeathlonUtil_PrintMessageCentered
-	.public PokeathlonUtil_PrintMessageEx
 	.public PokeathlonUtil_PrintMessageWithNumber
 	.public PokeathlonUtil_PrintMessage
 	.public PokeathlonUtil_PrintMessageAt
@@ -31,7 +27,6 @@
 	.public PokeathlonUtil_ClearWindowTilemap
 	.public PokeathlonUtil_SetWindowY
 	.public PokeathlonUtil_GetMessageFormat
-	.public PokeathlonUtil_ClearWindow
 	.public PokeathlonUtil_CheckExitInput
 	.public PokeathlonUtil_GetCourseMedal
 	.public PokeathlonUtil_GetMedalistTrophyCount
@@ -45,7 +40,6 @@
 	.public PokeathlonUtil_DisableDisplay
 	.public PokeathlonUtil_GetDecimalDigit
 	.public PokeathlonUtil_CountDecimalDigits
-	.public PokeathlonUtil_SetGfxBanks
 	.public sPokeathlonUtilScreenVramTypes
 	.public sPokeathlonMonPicRect
 	.public sPokeathlonUtilOamCharTransferParam

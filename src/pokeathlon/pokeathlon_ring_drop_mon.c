@@ -14,7 +14,6 @@
 #include "string_util.h"
 #include "text.h"
 
-// Course helpers and mon objects (OVY_96).
 void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseObject *object, int x, int y, int *outX, int *outY);
 void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int counter, int amount);
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int member);
@@ -27,7 +26,14 @@ extern const s16 gPokeathlonRingDropJumpHeights[5][10];
 extern const u8 gPokeathlonRingDropFallSpeeds[8];
 extern const WindowTemplate gPokeathlonRingDropScoreWindowTemplate;
 
-void PokeathlonRingDropMon_Respawn(PokeathlonRingDropMon *mon) {
+static void PokeathlonRingDropMon_StartDash(PokeathlonRingDropMon *mon, const s16 *target);
+static void PokeathlonRingDropMon_EndDash(PokeathlonRingDropMon *mon);
+static void PokeathlonRingDropMon_UpdateDash(PokeathlonRingDropMon *mon);
+static void PokeathlonRingDropMon_StartJump(PokeathlonRingDropMon *mon);
+static void PokeathlonRingDropMon_Land(PokeathlonRingDropMon *mon);
+static void PokeathlonRingDropMon_FallOut(PokeathlonRingDropMon *mon);
+
+static void PokeathlonRingDropMon_Respawn(PokeathlonRingDropMon *mon) {
     PokeathlonRingDropMember *member = mon->member;
     member->stamina = member->params->stamina;
     PokeathlonRingDropMon_NextMember(mon);
@@ -56,7 +62,7 @@ void PokeathlonRingDropMon_ResetToStart(PokeathlonRingDropMon *mon) {
 #pragma force_active reset
 
 // The height of a jump falls back (faster every frame) except while jumping.
-void PokeathlonRingDropMon_ApplyGravity(PokeathlonRingDropMon *mon) {
+static void PokeathlonRingDropMon_ApplyGravity(PokeathlonRingDropMon *mon) {
     if ((u32)(mon->state - RING_DROP_MON_JUMP_RISE) <= RING_DROP_MON_JUMP_FALL - RING_DROP_MON_JUMP_RISE) {
         return;
     }
@@ -221,7 +227,7 @@ done:;
 #pragma force_active reset
 
 // A dash towards target (ground pixels): 4 frames of wind-up, then 6 frames of speeding up.
-void PokeathlonRingDropMon_StartDash(PokeathlonRingDropMon *mon, const s16 *target) {
+static void PokeathlonRingDropMon_StartDash(PokeathlonRingDropMon *mon, const s16 *target) {
     VecFx32 vec = { 0, 0, 0 };
     BOOL valid = TRUE;
     if (mon->state != RING_DROP_MON_STAND && mon->state != RING_DROP_MON_RETURN) {
@@ -249,7 +255,7 @@ void PokeathlonRingDropMon_StartDash(PokeathlonRingDropMon *mon, const s16 *targ
     }
 }
 
-void PokeathlonRingDropMon_EndDash(PokeathlonRingDropMon *mon) {
+static void PokeathlonRingDropMon_EndDash(PokeathlonRingDropMon *mon) {
     BOOL valid = TRUE;
     if (mon->state != RING_DROP_MON_DASH_END && mon->state != RING_DROP_MON_DASH) {
         valid = FALSE;
@@ -266,7 +272,7 @@ void PokeathlonRingDropMon_EndDash(PokeathlonRingDropMon *mon) {
     }
 }
 
-void PokeathlonRingDropMon_UpdateDash(PokeathlonRingDropMon *mon) {
+static void PokeathlonRingDropMon_UpdateDash(PokeathlonRingDropMon *mon) {
     VecFx32 step;
     VecFx32 zero = { 0, 0, 0 };
     VEC_MultAdd(0xB33, &mon->dashDirection, &zero, &step);
@@ -277,7 +283,7 @@ void PokeathlonRingDropMon_UpdateDash(PokeathlonRingDropMon *mon) {
 // A jump: 5 frames of wind-up, 10 rising, 10 at the top, then it falls and presses.
 #pragma force_active on
 
-void PokeathlonRingDropMon_StartJump(PokeathlonRingDropMon *mon) {
+static void PokeathlonRingDropMon_StartJump(PokeathlonRingDropMon *mon) {
     GF_ASSERT(mon->state == RING_DROP_MON_STAND || mon->state == RING_DROP_MON_RETURN);
     GF_ASSERT(mon->flags.bits.exhausted == 0);
     GF_ASSERT(mon->flags.bits.switching == 0);
@@ -291,7 +297,7 @@ void PokeathlonRingDropMon_StartJump(PokeathlonRingDropMon *mon) {
 
 #pragma force_active reset
 
-void PokeathlonRingDropMon_Land(PokeathlonRingDropMon *mon) {
+static void PokeathlonRingDropMon_Land(PokeathlonRingDropMon *mon) {
     PokeathlonRingDropMon_SetState(mon, RING_DROP_MON_LANDING);
     mon->jumpFrames = 10;
     mon->height = 0;
@@ -312,7 +318,7 @@ void PokeathlonRingDropMon_Stagger(PokeathlonRingDropMon *mon) {
 // The Pokemon falls out of the ring: the last attacker gets 10 points, or the Pokemon loses 10 if nobody pushed it.
 #pragma force_active on
 
-void PokeathlonRingDropMon_FallOut(PokeathlonRingDropMon *mon) {
+static void PokeathlonRingDropMon_FallOut(PokeathlonRingDropMon *mon) {
     PokeathlonRingDropMon *attacker;
     int score;
     mon->fallOutFrames = 60;

@@ -13,12 +13,12 @@
 
 // One lamp. It is lit while `lit`; touching a lit lamp puts it out and scores.
 typedef struct PokeathlonLampJumpLamp {
-    BOOL lit;             // 0x00
-    VecFx32 pos;          // 0x04
-    PokeathlonCourseSpritePoolSprite *sprite;         // 0x10
-    PokeathlonCourseSpritePoolSprite *pointsSprite;   // 0x14: the points of the hit
-    PokeathlonCourseSpritePoolSprite *hitSprite;      // 0x18
-} PokeathlonLampJumpLamp; // size: 0x1C
+    BOOL lit;                                       // 0x00
+    VecFx32 pos;                                    // 0x04
+    PokeathlonCourseSpritePoolSprite *sprite;       // 0x10
+    PokeathlonCourseSpritePoolSprite *pointsSprite; // 0x14: the points of the hit
+    PokeathlonCourseSpritePoolSprite *hitSprite;    // 0x18
+} PokeathlonLampJumpLamp;                           // size: 0x1C
 
 typedef struct PokeathlonLampJumpLamps {
     PokeathlonLampJumpLamp lamps[29]; // 0x000
@@ -42,45 +42,27 @@ typedef struct PokeathlonLampJumpCpuPlayers {
     u8 unk22[2];                // 0x22
 } PokeathlonLampJumpCpuPlayers; // size: 0x24
 
-void PokeathlonLampJump_DrawTrampoline(PokeathlonLampJump *lampJump);
 void PokeathlonLampJump_Draw3D(PokeathlonLampJump *lampJump);
 void PokeathlonLampJump_InitCamera(PokeathlonLampJump *lampJump);
 void PokeathlonLampJump_CalcTrampolineSurface(PokeathlonLampJumpTrampoline *trampoline);
-void PokeathlonLampJump_CalcPartialSurface(PokeathlonLampJumpTrampoline *trampoline, int parts, s32 *heights);
-void PokeathlonLampJump_CalcLine(PokeathlonLampJumpTrampoline *trampoline, int line, u8 monA, u8 monB);
-u8 PokeathlonLampJump_ScoreLamp(PokeathlonLampJumpMon *mon);
 void PokeathlonLampJump_UpdateJumps(PokeathlonCourseData *course, PokeathlonLampJump *lampJump);
-void PokeathlonLampJump_UpdateJump(PokeathlonCourseData *course, PokeathlonLampJump *lampJump, u8 mon);
-void PokeathlonLampJump_MoveSideways(PokeathlonLampJumpMon *mon, PokeathlonLampJumpJump *jump);
-void PokeathlonLampJump_CalcDent(int column, int depth, s32 *dent);
 void PokeathlonLampJump_SetRestingHeights(PokeathlonLampJump *lampJump);
-void PokeathlonLampJump_SetDent(PokeathlonLampJump *lampJump, int mon, u8 column, fx32 depth);
 void PokeathlonLampJump_LoadSpriteResources(PokeathlonCourseSpritePool *scene);
 void PokeathlonLampJump_CreateSprites(PokeathlonLampJump *lampJump, PokeathlonCourseSpritePool *scene);
 void PokeathlonLampJump_PlaceSprites(PokeathlonLampJump *lampJump, u8 self);
 void PokeathlonLampJump_UpdateScoreDisplay(PokeathlonLampJump *lampJump);
-void PokeathlonLampJump_PrintScore(PokeathlonLampJump *lampJump, int score);
 void PokeathlonLampJump_UpdateTimerDisplay(PokeathlonLampJump *lampJump, int frames);
 void PokeathlonLampJump_PrintPlayerNames(PokeathlonCourseData *course, PokeathlonLampJump *lampJump);
 void PokeathlonLampJump_InitWindows(PokeathlonLampJump *lampJump);
 void PokeathlonLampJump_PrintTotal(PokeathlonLampJump *lampJump, int score);
-void PokeathlonLampJump_SlowDownSideways(PokeathlonLampJumpMon *mon);
 void PokeathlonLampJump_SetMonParams(PokeathlonCourseData *course, PokeathlonLampJumpMonParams *params, u8 member, PokeathlonLampJumpMon *mon);
 BOOL PokeathlonLampJump_CollideMons(PokeathlonCourseData *course, PokeathlonLampJump *lampJump);
 PokeathlonLampJumpLamps *PokeathlonLampJump_NewLamps(enum HeapID heapId);
 void PokeathlonLampJump_FreeLamps(PokeathlonLampJumpLamps *lamps);
-void PokeathlonLampJump_CreateLampSprites(PokeathlonLampJumpLamps *lamps, PokeathlonCourseSpritePool *scene, int priority);
-void PokeathlonLampJump_PlaceLamps(PokeathlonLampJumpLamps *lamps);
 void PokeathlonLampJump_UpdateLamps(PokeathlonLampJumpLamps *lamps);
-void PokeathlonLampJump_PutOutLamp(PokeathlonLampJumpLamps *lamps, u8 index);
-VecFx32 *PokeathlonLampJump_GetLampPos(PokeathlonLampJumpLamps *lamps, u8 index);
-BOOL PokeathlonLampJump_IsLampLit(PokeathlonLampJumpLamps *lamps, u8 index);
-void PokeathlonLampJump_ShowLampPoints(PokeathlonLampJumpLamps *lamps, u8 index, u8 points);
-void PokeathlonLampJump_LightLamps(PokeathlonLampJumpLamps *lamps);
 PokeathlonLampJumpCpuPlayers *PokeathlonLampJump_NewCpuPlayers(enum HeapID heapId, u8 count, int unused, u8 *dataCopy, PokeathlonCourseData *course);
 void PokeathlonLampJump_FreeCpuPlayers(PokeathlonLampJumpCpuPlayers *cpu);
 int PokeathlonLampJump_UpdateCpuPlayers(PokeathlonCourseData *course, PokeathlonLampJumpCpuPlayers *cpu);
-void PokeathlonLampJump_UpdateCpuPlayer(PokeathlonCourseData *course, PokeathlonLampJumpCpuPlayers *cpu, u8 participant);
 void PokeathlonResults_InitWindow(Window *window, BgConfig *bgConfig, enum HeapID heapId);
 void PokeathlonResults_PrintTitle(Window *window, enum HeapID heapId);
 

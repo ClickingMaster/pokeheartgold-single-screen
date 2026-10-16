@@ -13,8 +13,15 @@ enum {
 
 extern const u8 gPokeathlonDiscCatchCpuHomeRowStarts[];                                                  // per member: first home row (tiles) of its band ...
 extern const u8 gPokeathlonDiscCatchCpuHomeRowCounts[];                                                  // ... and the band's rows
-extern const int gPokeathlonDiscCatchCpuJumpChances[DISC_CATCH_TEAM_SIZE];                             // per member: chance (%) to jump at a disc in reach
+extern const int gPokeathlonDiscCatchCpuJumpChances[DISC_CATCH_TEAM_SIZE];                               // per member: chance (%) to jump at a disc in reach
 extern const s16 gPokeathlonDiscCatchCpuHomePositions[DISC_CATCH_PARTICIPANTS][DISC_CATCH_TEAM_SIZE][2]; // home x
+
+static void PokeathlonDiscCatchCpuTeam_Init(PokeathlonDiscCatchCpuMon *mons, int participant, PokeathlonCourseData *course);
+static void PokeathlonDiscCatchCpuTeam_Update(PokeathlonDiscCatchCpuMon *mons, u16 average, u16 score);
+static void PokeathlonDiscCatchCpuMon_Init(PokeathlonDiscCatchCpuMon *mon, PokeathlonCourseData *course, u8 index);
+static void PokeathlonDiscCatchCpuMon_Update(PokeathlonDiscCatchCpuMon *mon, u16 average, u16 score);
+static BOOL PokeathlonDiscCatchCpuMon_IsNearDisc(PokeathlonDiscCatchCpuMon *mon, int index, int reach);
+static BOOL PokeathlonDiscCatch_CirclesOverlap(s16 x0, s16 y0, int radius0, s16 x1, s16 y1, int radius1);
 
 static inline int GetParticipantCount(PokeathlonCourseData *course) {
     return PokeathlonCourse_GetParticipantCount(course);
@@ -64,7 +71,7 @@ void PokeathlonDiscCatchCpu_Update(PokeathlonDiscCatchCpu *cpu) {
     int j = 0;
     if (j < cpu->count) {
         u16 average;
-        i = (u32)cpu->teams[0]; // the counter is reused as the team pointer (the original register use)
+        i = (u32)cpu->teams[0];
         average = total / DISC_CATCH_PARTICIPANTS;
         do {
             int score = PokeathlonDiscCatch_GetTeamScore(work, (u8)j);
@@ -79,7 +86,7 @@ void PokeathlonDiscCatchCpu_Update(PokeathlonDiscCatchCpu *cpu) {
 #pragma opt_lifetimes reset
 #pragma opt_common_subs reset
 
-void PokeathlonDiscCatchCpuTeam_Init(PokeathlonDiscCatchCpuMon *mons, int participant, PokeathlonCourseData *course) {
+static void PokeathlonDiscCatchCpuTeam_Init(PokeathlonDiscCatchCpuMon *mons, int participant, PokeathlonCourseData *course) {
     int i;
     int index;
     MI_CpuFill8(mons, 0, sizeof(PokeathlonDiscCatchCpuMon) * DISC_CATCH_TEAM_SIZE);
@@ -89,7 +96,7 @@ void PokeathlonDiscCatchCpuTeam_Init(PokeathlonDiscCatchCpuMon *mons, int partic
     }
 }
 
-void PokeathlonDiscCatchCpuTeam_Update(PokeathlonDiscCatchCpuMon *mons, u16 average, u16 score) {
+static void PokeathlonDiscCatchCpuTeam_Update(PokeathlonDiscCatchCpuMon *mons, u16 average, u16 score) {
     int i;
     for (i = 0; i < DISC_CATCH_TEAM_SIZE; i++) {
         PokeathlonDiscCatchCpuMon_Update(&mons[i], average, score);
@@ -97,7 +104,7 @@ void PokeathlonDiscCatchCpuTeam_Update(PokeathlonDiscCatchCpuMon *mons, u16 aver
 }
 
 // A new home spot: a random row of the member's band and the team's column, give or take two tiles.
-void PokeathlonDiscCatchCpuMon_PickHome(PokeathlonDiscCatchCpuMon *mon) {
+static void PokeathlonDiscCatchCpuMon_PickHome(PokeathlonDiscCatchCpuMon *mon) {
     int band = mon->member * 2;
     mon->targetY = gPokeathlonDiscCatchCpuHomeRowStarts[band] + MTRandom() % gPokeathlonDiscCatchCpuHomeRowCounts[band];
     mon->targetY = mon->targetY * 8;
@@ -107,7 +114,7 @@ void PokeathlonDiscCatchCpuMon_PickHome(PokeathlonDiscCatchCpuMon *mon) {
     mon->state = CPU_MON_STATE_IDLE;
 }
 
-void PokeathlonDiscCatchCpuMon_Init(PokeathlonDiscCatchCpuMon *mon, PokeathlonCourseData *course, u8 index) {
+static void PokeathlonDiscCatchCpuMon_Init(PokeathlonDiscCatchCpuMon *mon, PokeathlonCourseData *course, u8 index) {
     u8 participant = index / DISC_CATCH_TEAM_SIZE;
     u8 member = index % DISC_CATCH_TEAM_SIZE;
     mon->course = course;
@@ -120,7 +127,7 @@ void PokeathlonDiscCatchCpuMon_Init(PokeathlonDiscCatchCpuMon *mon, PokeathlonCo
 
 // Every 20 frames: an idle Pokemon goes home or after a disc coming down near it; a chasing one
 // follows its disc along the home row until the disc is gone.
-void PokeathlonDiscCatchCpuMon_Think(PokeathlonDiscCatchCpuMon *mon) {
+static void PokeathlonDiscCatchCpuMon_Think(PokeathlonDiscCatchCpuMon *mon) {
     PokeathlonDiscCatch *work = PokeathlonCourse_GetWork(mon->course);
     PokeathlonDiscCatchDisc *disc;
     int i;
@@ -160,7 +167,7 @@ void PokeathlonDiscCatchCpuMon_Think(PokeathlonDiscCatchCpuMon *mon) {
 
 // Each frame: a new home every 90 frames, a new decision every 20; jumps at its disc once in reach
 // (by the member's chance; never while the team leads the average by more than 20).
-void PokeathlonDiscCatchCpuMon_Update(PokeathlonDiscCatchCpuMon *mon, u16 average, u16 score) {
+static void PokeathlonDiscCatchCpuMon_Update(PokeathlonDiscCatchCpuMon *mon, u16 average, u16 score) {
     s16 position[2];
     void *radius;
     PokeathlonDiscCatch *work = PokeathlonCourse_GetWork(mon->course);
@@ -197,7 +204,7 @@ void PokeathlonDiscCatchCpuMon_Update(PokeathlonDiscCatchCpuMon *mon, u16 averag
     }
 }
 
-BOOL PokeathlonDiscCatchCpuMon_IsNearDisc(PokeathlonDiscCatchCpuMon *mon, int index, int reach) {
+static BOOL PokeathlonDiscCatchCpuMon_IsNearDisc(PokeathlonDiscCatchCpuMon *mon, int index, int reach) {
     s16 position[2];
     void *radius;
     PokeathlonDiscCatch *work = PokeathlonCourse_GetWork(mon->course);
@@ -209,7 +216,7 @@ BOOL PokeathlonDiscCatchCpuMon_IsNearDisc(PokeathlonDiscCatchCpuMon *mon, int in
     return PokeathlonDiscCatch_CirclesOverlap(position[0], position[1], (int)radius, disc->x, disc->progress - 288, reach);
 }
 
-BOOL PokeathlonDiscCatch_CirclesOverlap(s16 x0, s16 y0, int radius0, s16 x1, s16 y1, int radius1) {
+static BOOL PokeathlonDiscCatch_CirclesOverlap(s16 x0, s16 y0, int radius0, s16 x1, s16 y1, int radius1) {
     if ((radius0 + radius1) * (radius0 + radius1) >= DISC_CATCH_ABS(x0 - x1) * DISC_CATCH_ABS(x0 - x1) + DISC_CATCH_ABS(y0 - y1) * DISC_CATCH_ABS(y0 - y1)) {
         return TRUE;
     }

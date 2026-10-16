@@ -4,10 +4,12 @@
 
 #include "bag.h"
 #include "comm_state.h"
+#include "communication_core.h"
 #include "field_system.h"
 #include "friend_group.h"
 #include "friend_group_access.h"
 #include "frontier_data_access.h"
+#include "frontier_opponents.h"
 #include "frontier_save_access.h"
 #include "heap.h"
 #include "launch_application.h"
@@ -16,12 +18,10 @@
 #include "party_menu.h"
 #include "player_data.h"
 #include "pokedex_util.h"
+#include "pokemon_summary.h"
 #include "save_special_ribbons.h"
 #include "save_trainer_card.h"
 #include "task.h"
-#include "communication_core.h"
-#include "frontier_opponents.h"
-#include "pokemon_summary.h"
 
 // Party menu + summary for a Battle Frontier entry (TaskManager_CallFrontierPartySelect).
 typedef struct FrontierPartySelectEnv {

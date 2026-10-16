@@ -5,27 +5,23 @@
 #include "frontier/battle_arcade_data.h"
 #include "frontier/battle_arcade_setup.h"
 
+#include "battle_link_comm.h"
+#include "communication_core.h"
+#include "frontier_save_access.h"
+#include "frontier_stat_ids_legacy.h"
 #include "heap.h"
 #include "party.h"
 #include "player_data.h"
 #include "pokemon.h"
-#include "frontier_save_access.h"
-#include "communication_core.h"
-#include "frontier_stat_ids_legacy.h"
 
-// Link messages of the Battle Frontier facilities' script side in multi battles with a friend (wireless): for each
-// facility a sender (packs the local data into the work's link buffer and sends it) and a receive callback
-// (registered in the command table in asm/battle_frontier_communication_data.s, entries 0x16 onwards). Every receive callback counts the
-// messages it got, also its own echo, and ignores its own data; most only take the partner's data when the local
-// player is not the parent (net id 0), whose data wins.
-//   Battle Factory 0x16-0x1C, Battle Hall 0x21-0x26, Battle Castle 0x2A-0x30, Battle Arcade 0x41-0x46.
-// The facilities' script work structs are defined by their own modules (BattleHallData, BattleFactoryData,
-// BattleCastleData, ArcadeContext).
+// Link messages of the frontier facilities in multi battles with a friend: each sender packs the local data into
+// the work's link buffer and sends it; each receive callback counts the messages it got, also its own echo, and
+// most only take the partner's data when the local player is not the parent (net id 0), whose data wins.
+// Commands: Battle Factory 0x16-0x1C, Battle Hall 0x21-0x26, Battle Castle 0x2A-0x30, Battle Arcade 0x41-0x46.
 
+// Partner Pokemon are sent as raw Pokemon structs through a large-data command.
 #define LINK_MON_BUFFER_SIZE 0x200
 
-// Partner Pokemon are sent as raw Pokemon structs through a large-data command (up to 0x200 bytes).
-BOOL Comm_SendCommandNoCopy(int command, void *data, int size);
 u32 BattleCastle_GetPartySize(u8 type, int both);
 u32 BattleFactory_GetPartySize(u8 type);
 

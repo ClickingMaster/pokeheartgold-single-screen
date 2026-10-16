@@ -20,7 +20,6 @@
 #include "sprite.h"
 #include "text.h"
 
-// Course sprite helpers (OVY_96, not yet tidied).
 Sprite *PokeathlonCourseSprites_CreateTimerDigit(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
 void PokeathlonCourseSpritePool_LoadChar(PokeathlonCourseSpritePool *pool, int narc, int file, int id, int vram);
 void PokeathlonCourseSpritePool_LoadPltt(PokeathlonCourseSpritePool *pool, int narc, int file, int id, int vram, int count);
@@ -34,7 +33,6 @@ VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(PokeathlonCourseSpritePool
 Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(PokeathlonCourseSpritePoolSprite *sprite);
 SpriteList *PokeathlonCourseSpritePool_GetSpriteList(PokeathlonCourseSpritePool *pool);
 void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *sprite, int priority);
-// monsters.c / pokemon_icon_idx.c, declared here with the argument types the calls were built with
 void *CharTiles_AllocAndLoadMonPicAsObjFromNarc(u16 charNarc, u16 charFile, u32 heapId, u32 personality, int isAnimated, int whichFacing, u16 species);
 void *AllocAndLoadPltt16FromNarc(u16 plttNarc, u16 plttFile, u32 heapId);
 u32 GetMonIconPlttNaix(void);
@@ -51,6 +49,9 @@ extern const VecFx32 gPokeathlonPennantCaptureInitialPosition;
 #define DISPLAY_CURSOR_STEP(cursor, size) ((PokeathlonPennantCaptureDisplay *)((u8 *)(cursor) + (size)))
 
 #pragma force_active on
+
+static void PokeathlonPennantCaptureDisplay_SetIcon(PokeathlonPennantCaptureDisplay *display, int participant, int member);
+static void PokeathlonPennantCaptureDisplay_PrintName(PokeathlonPennantCaptureDisplay *display, u32 member);
 
 PokeathlonPennantCaptureDisplay *PokeathlonPennantCaptureDisplay_New(enum HeapID heapId, BgConfig *bgConfig, PokeathlonCourseData *course) {
     PokeathlonPennantCaptureDisplay *display = Heap_Alloc(heapId, sizeof(PokeathlonPennantCaptureDisplay));
@@ -284,7 +285,7 @@ void PokeathlonPennantCaptureDisplay_LoadMonPicToVram(PokeathlonPennantCaptureDi
     GXS_LoadOBJPltt(display->monPics[member].palette, display->picPlttOffsets[slot], 0x20);
 }
 
-void PokeathlonPennantCaptureDisplay_SetIcon(PokeathlonPennantCaptureDisplay *display, int participant, int member) {
+static void PokeathlonPennantCaptureDisplay_SetIcon(PokeathlonPennantCaptureDisplay *display, int participant, int member) {
     Sprite *sprite;
     int slot;
 
@@ -473,7 +474,7 @@ void PokeathlonPennantCaptureDisplay_ShowPoint(PokeathlonPennantCaptureDisplay *
     display->nextPointSprite = (display->nextPointSprite + 1) % 2;
 }
 
-void PokeathlonPennantCaptureDisplay_PrintName(PokeathlonPennantCaptureDisplay *display, u32 member) {
+static void PokeathlonPennantCaptureDisplay_PrintName(PokeathlonPennantCaptureDisplay *display, u32 member) {
     String *string;
     FillWindowPixelBuffer(&display->window, 0);
     BufferString(display->msgFormat, 0, display->names[member], 2, 1, 2);

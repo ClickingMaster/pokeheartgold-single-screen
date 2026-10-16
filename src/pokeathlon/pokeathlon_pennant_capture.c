@@ -20,7 +20,6 @@
 #include "system.h"
 #include "wireless_status_icon.h"
 
-// Sprite pool helpers (pokeathlon_course_objects.c), declared with untyped entries as the course objects use them.
 void PokeathlonCourseSpritePool_Draw(PokeathlonCourseSpritePool *pool);
 void PokeathlonCourseSpritePool_Free(PokeathlonCourseSpritePool *pool);
 PokeathlonCourseSpritePool *PokeathlonCourseSpritePool_New(enum HeapID heapId, VecFx32 *template);
@@ -40,6 +39,8 @@ typedef struct PokeathlonPennantCaptureCollision {
     s32 offsetY;
     s32 radius;
 } PokeathlonPennantCaptureCollision;
+
+static void PokeathlonPennantCapture_SetGfxBanks(void);
 
 // The performance of Pokemon i (team i / 3, member i % 3).
 static inline PokeathlonPerformanceSizeInfo *PokeathlonPennantCapture_GetPerformance(PokeathlonCourseData *course, int i) {
@@ -294,7 +295,7 @@ BOOL PokeathlonPennantCapture_Exit(PokeathlonCourseData *course) {
     return TRUE;
 }
 
-void PokeathlonPennantCapture_SetGfxBanks(void) {
+static void PokeathlonPennantCapture_SetGfxBanks(void) {
     GraphicsBanks banks = sPennantCaptureGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }

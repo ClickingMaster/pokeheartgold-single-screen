@@ -6,17 +6,17 @@
 #include "constants/pokemon.h"
 
 #include "battle/battle_setup.h"
-#include "frontier/frontier.h"
 #include "frontier/battle_arcade_data.h"
+#include "frontier/frontier.h"
 
 #include "assert.h"
+#include "communication_core.h"
 #include "communication_player_state.h"
 #include "heap.h"
 #include "math_util.h"
 #include "party.h"
 #include "player_data.h"
 #include "pokemon.h"
-#include "communication_core.h"
 #include "use_item_on_mon.h"
 
 // Battle Arcade trainers and battles: the trainers of a round, the battle setup of an arcade battle (with the weather
@@ -38,7 +38,6 @@ extern const u16 gBattleArcadeRoundLastBattleMaxes[];
 void *FrontierTrainer_Load(BattleArcadeTrainerRecord *record, u16 trainerId, enum HeapID heapID, int narcId);
 void FrontierTrainer_SetBattleTrainer(BattleSetup *setup, BattleArcadeTrainerRecord *record, int count, int battler, enum HeapID heapID);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
-// not in the header: battle_arcade_data.c declares it with an unsigned count
 void BattleArcade_GetRoundTrainerIds(u32 type, u32 round, u16 *trainerIds, int count);
 
 u32 BattleArcade_GetRandomTrainerId(u32 type, u32 round, u32 battleNo) {

@@ -1,7 +1,7 @@
-#include "frontier_script_commands_misc_internal.h"
-
 #include "constants/game_stats.h"
 #include "constants/sndseq.h"
+
+#include "frontier_script_commands_misc_internal.h"
 
 BOOL FrtCmd_StopBGM(FrontierScriptContext *ctx) {
     FrontierScriptContext_ReadHalfWord(ctx);

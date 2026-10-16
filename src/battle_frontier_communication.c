@@ -1,11 +1,13 @@
 #include "global.h"
 
+#include "frontier/frontier_map.h"
+
+#include "communication_command.h"
+#include "communication_core.h"
+#include "frontier_save_access.h"
 #include "party.h"
 #include "player_avatar.h"
 #include "pokemon.h"
-#include "frontier_save_access.h"
-#include "communication_command.h"
-#include "communication_core.h"
 
 extern const u32 gFrontierLinkCommands[];
 typedef struct CommDataBits {
@@ -30,7 +32,6 @@ BOOL FrontierLinkLobby_SendValue74(u8 *data, u16 value);
 void FrontierLinkLobby_ReceiveValue74(int sender, int unused, const u16 *src, u8 *data);
 BOOL FrontierLinkLobby_SendValue71(u8 *data, u16 value);
 void FrontierLinkLobby_ReceiveValue71(int sender, int unused, const u16 *src, u8 *data);
-int FrontierLinkLobby_GetWinStreakStat(int value);
 
 void FrontierLink_RegisterCommands(void *data) {
     Comm_RegisterCommandTable(gFrontierLinkCommands, 52, data);

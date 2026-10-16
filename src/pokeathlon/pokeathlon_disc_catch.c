@@ -22,10 +22,10 @@
 #include "pm_string.h"
 #include "screen_fade.h"
 #include "sound_playback.h"
+#include "sprite_resource_header.h"
 #include "sprite_system.h"
 #include "system.h"
 #include "text.h"
-#include "sprite_resource_header.h"
 #include "wireless_status_icon.h"
 
 enum {
@@ -34,7 +34,6 @@ enum {
     DISC_CATCH_STATE_FINISH,
 };
 
-// Course helpers (OVY_96, not yet tidied).
 BOOL PokeathlonCourse_RunStartCountdown(PokeathlonCourseData *course);
 void PokeathlonCourse_UpdateTimeUpCountdown(PokeathlonCourseData *course, int timer);
 void PokeathlonCourse_InitMarkers(PokeathlonCourseData *course);
@@ -78,7 +77,6 @@ s32 _s32_div_f(s32 dividend, s32 divisor);
 // NitroSDK (no header declares it)
 void MATH_QSort(void *head, u32 num, u32 size, s32 (*compare)(const void *, const void *), void *work);
 
-// The rest of Disc Catch (pokeathlon_disc_catch_play.h), declared as the calls were built.
 u32 PokeathlonDiscCatch_UpdateFrame(PokeathlonCourseData *course);
 PokeathlonDiscCatchStats *PokeathlonDiscCatch_GetStats(PokeathlonCourseData *course, u8 participant, u8 member);
 u16 PokeathlonDiscCatchStats_GetJumpDuration(PokeathlonDiscCatchStats *stats);
@@ -110,7 +108,7 @@ extern const OamCharTransferParam gPokeathlonDiscCatchOamCharTransferParam;
 extern const u32 gPokeathlonDiscCatchBgLayers[7];
 extern const GraphicsBanks gPokeathlonDiscCatchGraphicsBanks;
 extern const s16 gPokeathlonDiscCatchMonStartPositions[DISC_CATCH_PARTICIPANTS][DISC_CATCH_TEAM_SIZE][2]; // where the Pokemon start
-extern const s16 gPokeathlonDiscCatchMonStartPositionsY[][3][2];                                           // their y (the second half of each entry)
+extern const s16 gPokeathlonDiscCatchMonStartPositionsY[][3][2];                                          // their y (the second half of each entry)
 extern const ManagedSpriteTemplate gPokeathlonDiscCatchDiscTopSpriteTemplate;
 extern const ManagedSpriteTemplate gPokeathlonDiscCatchDiscTouchSpriteTemplate;
 extern const ManagedSpriteTemplate gPokeathlonDiscCatchEffectSpriteTemplate;
@@ -132,7 +130,20 @@ typedef struct PokeathlonDiscCatchDrawOrder {
 
 #pragma force_active on
 
-void PokeathlonDiscCatch_ShakeTask(SysTask *task, PokeathlonDiscCatchShake *shake) {
+static void PokeathlonDiscCatch_SetVramBanks(void);
+static int PokeathlonDiscCatch_GetJumpOffset(PokeathlonDiscCatchStats *stats, int frame, f32 *scale);
+static void PokeathlonDiscCatch_SlowDown(VecFx32 *velocity, fx32 stepX, fx32 stepY);
+static void PokeathlonDiscCatch_PrintScore(PokeathlonCourseData *course, int score);
+static void PokeathlonDiscCatch_InitSpriteSystem(PokeathlonDiscCatch *work);
+static void PokeathlonDiscCatch_FreeSpriteSystem(PokeathlonDiscCatch *work);
+static void PokeathlonDiscCatch_LoadSpriteResources(PokeathlonDiscCatch *work);
+static void PokeathlonDiscCatch_InitBgs(PokeathlonDiscCatch *work);
+static void PokeathlonDiscCatch_FreeBgs(PokeathlonDiscCatch *work);
+static void PokeathlonDiscCatch_LoadBgGraphics(PokeathlonDiscCatch *work);
+static void PokeathlonDiscCatch_AnimateBg(u8 *timer, BgConfig *bgConfig, enum HeapID heapId);
+static void PokeathlonDiscCatch_UpdateHost(PokeathlonCourseData *course);
+
+static void PokeathlonDiscCatch_ShakeTask(SysTask *task, PokeathlonDiscCatchShake *shake) {
     int sign, offset;
     if (shake->flip == 0) {
         sign = 1;
@@ -159,17 +170,17 @@ void PokeathlonDiscCatch_ShakeTask(SysTask *task, PokeathlonDiscCatchShake *shak
 
 #pragma force_active reset
 
-BOOL PokeathlonDiscCatchShake_IsDone(PokeathlonDiscCatchShake *shake) {
+static BOOL PokeathlonDiscCatchShake_IsDone(PokeathlonDiscCatchShake *shake) {
     GF_ASSERT(shake != NULL);
     return shake->task == NULL;
 }
 
-void PokeathlonDiscCatchShake_Init(PokeathlonDiscCatchShake *shake, BgConfig *bgConfig, SpriteSystem *spriteSystem) {
+static void PokeathlonDiscCatchShake_Init(PokeathlonDiscCatchShake *shake, BgConfig *bgConfig, SpriteSystem *spriteSystem) {
     shake->bgConfig = bgConfig;
     shake->spriteSystem = spriteSystem;
 }
 
-void PokeathlonDiscCatchShake_Start(PokeathlonDiscCatchShake *shake, u8 distance, u8 frames) {
+static void PokeathlonDiscCatchShake_Start(PokeathlonDiscCatchShake *shake, u8 distance, u8 frames) {
     GF_ASSERT(shake->bgConfig != NULL);
     GF_ASSERT(shake->spriteSystem != NULL);
     if (shake->task != NULL) {
@@ -182,7 +193,7 @@ void PokeathlonDiscCatchShake_Start(PokeathlonDiscCatchShake *shake, u8 distance
 }
 
 // Squashes the Pokemon for two frames and stretches it back.
-void PokeathlonDiscCatch_SquashTask(SysTask *task, void *data) {
+static void PokeathlonDiscCatch_SquashTask(SysTask *task, void *data) {
     PokeathlonDiscCatchSquash *squash = data;
     switch (squash->state) {
     case 0:
@@ -212,7 +223,7 @@ void PokeathlonDiscCatch_SquashTask(SysTask *task, void *data) {
     }
 }
 
-void PokeathlonDiscCatch_StartSquash(PokeathlonDiscCatchSquash *squash, PokeathlonCourseObject *monPic) {
+static void PokeathlonDiscCatch_StartSquash(PokeathlonDiscCatchSquash *squash, PokeathlonCourseObject *monPic) {
     if (squash->task != NULL) {
         SysTask_Destroy(squash->task);
     }
@@ -317,7 +328,7 @@ int PokeathlonDiscCatch_GetFacing(const VecFx32 *direction) {
 // Walks towards the target; while knocked back the velocity runs down first.
 #pragma opt_propagation off
 
-void PokeathlonDiscCatchMon_Move(PokeathlonDiscCatchMon *mon) {
+static void PokeathlonDiscCatchMon_Move(PokeathlonDiscCatchMon *mon) {
     VecFx32 delta, normal, step, zero2, zero1, deceleration, push, zero3;
     int distance;
     if (!mon->state) {
@@ -393,7 +404,7 @@ BOOL PokeathlonDiscCatchMon_IsOffField(PokeathlonDiscCatchMon *mon, fx32 x, fx32
     return FALSE;
 }
 
-void PokeathlonDiscCatchMon_Respawn(PokeathlonDiscCatchMon *mon) {
+static void PokeathlonDiscCatchMon_Respawn(PokeathlonDiscCatchMon *mon) {
     u8 index;
     int member;
     int participant;
@@ -499,7 +510,7 @@ int PokeathlonDiscCatch_FindTouchedMon(PokeathlonDiscCatchMon *mons, s16 x, s16 
 }
 
 // mode 0: on the top screen, 1: on the touch screen, 2: both.
-void PokeathlonDiscCatch_ShowDisc(PokeathlonDiscCatchDiscSprites *sprites, u32 mode, BOOL draw) {
+static void PokeathlonDiscCatch_ShowDisc(PokeathlonDiscCatchDiscSprites *sprites, u32 mode, BOOL draw) {
     BOOL hidden;
     switch (mode) {
     case 0:
@@ -525,12 +536,12 @@ void PokeathlonDiscCatch_ShowDisc(PokeathlonDiscCatchDiscSprites *sprites, u32 m
     }
 }
 
-void PokeathlonDiscCatch_ScaleDisc(PokeathlonDiscCatchDiscSprites *sprites, f32 scale) {
+static void PokeathlonDiscCatch_ScaleDisc(PokeathlonDiscCatchDiscSprites *sprites, f32 scale) {
     ManagedSprite_SetAffineScale(sprites->disc[0], scale, scale);
     ManagedSprite_SetAffineScale(sprites->disc[1], scale, scale);
 }
 
-void PokeathlonDiscCatch_ShowPoints(PokeathlonDiscCatchDiscSprites *sprites, int state, s16 x, s16 y) {
+static void PokeathlonDiscCatch_ShowPoints(PokeathlonDiscCatchDiscSprites *sprites, int state, s16 x, s16 y) {
     int anim = state - DISC_CATCH_DISC_CAUGHT_1;
     GF_ASSERT(anim < 4);
     ManagedSprite_SetPositionXYWithSubscreenOffset(sprites->points, x, y, FX32_CONST(480));
@@ -541,7 +552,7 @@ void PokeathlonDiscCatch_ShowPoints(PokeathlonDiscCatchDiscSprites *sprites, int
     ManagedSprite_SetDrawFlag(sprites->sparkle, TRUE);
 }
 
-void PokeathlonDiscCatch_PlayCatchSound(u32 state) {
+static void PokeathlonDiscCatch_PlayCatchSound(u32 state) {
     s16 pitch;
     switch (state) {
     case DISC_CATCH_DISC_CAUGHT_1:
@@ -633,7 +644,7 @@ void PokeathlonDiscCatch_UpdateDiscSprites(PokeathlonDiscCatchSprites *sprites, 
 #pragma force_active reset
 
 // The lower Pokemon is drawn in front.
-s32 PokeathlonDiscCatch_CompareDrawOrder(const void *a, const void *b) {
+static s32 PokeathlonDiscCatch_CompareDrawOrder(const void *a, const void *b) {
     if (*(const u8 *)a == *(const u8 *)b) {
         return 0;
     }
@@ -1035,21 +1046,21 @@ u8 PokeathlonDiscCatch_GetTeamScore(PokeathlonDiscCatch *work, int participant) 
 
 #pragma force_active on
 
-void PokeathlonDiscCatch_SetVramBanks(void) {
+static void PokeathlonDiscCatch_SetVramBanks(void) {
     GraphicsBanks banks = gPokeathlonDiscCatchGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
 #pragma force_active reset
 
-int PokeathlonDiscCatch_Square(int value) {
+static int PokeathlonDiscCatch_Square(int value) {
     return value * value;
 }
 
 #pragma force_active on
 
 // Moves the value towards 0 by step.
-void PokeathlonDiscCatch_Approach0(fx32 *value, fx32 step) {
+static void PokeathlonDiscCatch_Approach0(fx32 *value, fx32 step) {
     if (*value != 0) {
         int magnitude = *value < 0 ? -*value : *value;
         if (magnitude < step) {
@@ -1061,7 +1072,7 @@ void PokeathlonDiscCatch_Approach0(fx32 *value, fx32 step) {
 }
 
 // The height of a jumping Pokemon at the frame and its scale.
-int PokeathlonDiscCatch_GetJumpOffset(PokeathlonDiscCatchStats *stats, int frame, f32 *scale) {
+static int PokeathlonDiscCatch_GetJumpOffset(PokeathlonDiscCatchStats *stats, int frame, f32 *scale) {
     int offset = 0;
     f32 result = 1.0f;
     int half, curve;
@@ -1091,7 +1102,7 @@ int PokeathlonDiscCatch_GetJumpOffset(PokeathlonDiscCatchStats *stats, int frame
 
 #pragma force_active reset
 
-void PokeathlonDiscCatch_SlowDown(VecFx32 *velocity, fx32 stepX, fx32 stepY) {
+static void PokeathlonDiscCatch_SlowDown(VecFx32 *velocity, fx32 stepX, fx32 stepY) {
     PokeathlonDiscCatch_Approach0(&velocity->x, stepX);
     PokeathlonDiscCatch_Approach0(&velocity->y, stepY);
 }
@@ -1118,7 +1129,7 @@ void PokeathlonDiscCatch_ClampVelocity(VecFx32 *velocity, fx32 limit) {
 
 #pragma force_active on
 
-void PokeathlonDiscCatch_PrintScore(PokeathlonCourseData *course, int score) {
+static void PokeathlonDiscCatch_PrintScore(PokeathlonCourseData *course, int score) {
     PokeathlonDiscCatch *work = PokeathlonCourse_GetWork(course);
     MessageFormat *messageFormat = work->messageFormat;
     MsgData *msgData = work->msgData;
@@ -1131,7 +1142,7 @@ void PokeathlonDiscCatch_PrintScore(PokeathlonCourseData *course, int score) {
     CopyWindowToVram(&work->window);
 }
 
-void PokeathlonDiscCatch_InitSpriteSystem(PokeathlonDiscCatch *work) {
+static void PokeathlonDiscCatch_InitSpriteSystem(PokeathlonDiscCatch *work) {
     SpriteResourceCountsListUnion counts = gPokeathlonDiscCatchSpriteResourceCounts;
     OamManagerParam oamParam = gPokeathlonDiscCatchOamManagerParam;
     OamCharTransferParam transferParam = gPokeathlonDiscCatchOamCharTransferParam;
@@ -1147,7 +1158,7 @@ void PokeathlonDiscCatch_InitSpriteSystem(PokeathlonDiscCatch *work) {
 
 #pragma force_active reset
 
-void PokeathlonDiscCatch_FreeSpriteSystem(PokeathlonDiscCatch *work) {
+static void PokeathlonDiscCatch_FreeSpriteSystem(PokeathlonDiscCatch *work) {
     PokeathlonCourseMonObjects_Free(work->monPics);
     PokeathlonCourseSprites_FreeResources(work->monPicResources);
     SpriteSystem_FreeResourcesAndManager(work->spriteSystem, work->spriteManager);
@@ -1186,7 +1197,7 @@ void PokeathlonDiscCatch_StopAnims(PokeathlonDiscCatch *work) {
 #pragma force_active on
 #pragma opt_propagation off
 
-void PokeathlonDiscCatch_LoadSpriteResources(PokeathlonDiscCatch *work) {
+static void PokeathlonDiscCatch_LoadSpriteResources(PokeathlonDiscCatch *work) {
     SpriteSystem *spriteSystem = work->spriteSystem;
     SpriteManager *spriteManager = work->spriteManager;
     int vram;
@@ -1250,7 +1261,7 @@ ManagedSprite *PokeathlonDiscCatch_NewEffectSprite(SpriteSystem *spriteSystem, S
     return sprite;
 }
 
-void PokeathlonDiscCatch_InitBgs(PokeathlonDiscCatch *work) {
+static void PokeathlonDiscCatch_InitBgs(PokeathlonDiscCatch *work) {
     BgConfig *bgConfig = work->bgConfig;
     enum HeapID heapId = work->heapId;
     GraphicsModes modes = gPokeathlonDiscCatchGraphicsModes;
@@ -1270,7 +1281,7 @@ void PokeathlonDiscCatch_InitBgs(PokeathlonDiscCatch *work) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
 }
 
-void PokeathlonDiscCatch_FreeBgs(PokeathlonDiscCatch *work) {
+static void PokeathlonDiscCatch_FreeBgs(PokeathlonDiscCatch *work) {
     int i;
 
     RemoveWindow(&work->window);
@@ -1285,7 +1296,7 @@ void PokeathlonDiscCatch_FreeBgs(PokeathlonDiscCatch *work) {
 
 #pragma force_active on
 
-void PokeathlonDiscCatch_LoadBgGraphics(PokeathlonDiscCatch *work) {
+static void PokeathlonDiscCatch_LoadBgGraphics(PokeathlonDiscCatch *work) {
     GfGfxLoader_LoadCharData(NARC_a_2_3_5, 4, work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, TRUE, work->heapId);
     GfGfxLoader_LoadCharData(NARC_a_2_3_5, 2, work->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, TRUE, work->heapId);
     GfGfxLoader_LoadScrnData(NARC_a_2_3_5, 5, work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, TRUE, work->heapId);
@@ -1305,7 +1316,7 @@ void PokeathlonDiscCatch_LoadBgGraphics(PokeathlonDiscCatch *work) {
 #pragma force_active reset
 
 // The water of both screens' background: the next of 6 tilemaps every 4 frames.
-void PokeathlonDiscCatch_AnimateBg(u8 *timer, BgConfig *bgConfig, enum HeapID heapId) {
+static void PokeathlonDiscCatch_AnimateBg(u8 *timer, BgConfig *bgConfig, enum HeapID heapId) {
     GF_ASSERT(timer != NULL);
     GF_ASSERT(bgConfig != NULL);
 
@@ -1321,7 +1332,7 @@ void PokeathlonDiscCatch_AnimateBg(u8 *timer, BgConfig *bgConfig, enum HeapID he
 #pragma force_active on
 
 // Host: counts the time down, takes in the participants' touches, runs the field and writes the frame packet.
-void PokeathlonDiscCatch_UpdateHost(PokeathlonCourseData *course) {
+static void PokeathlonDiscCatch_UpdateHost(PokeathlonCourseData *course) {
     PokeathlonDiscCatch *work = PokeathlonCourse_GetWork(course);
     u8 *area = PokeathlonCourse_GetDataCopyArea(course);
     int seconds, i;

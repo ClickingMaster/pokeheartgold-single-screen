@@ -6,14 +6,11 @@
 #include "msgdata/msg/msg_0028.h"
 
 #include "frontier_data_access.h"
+#include "frontier_save_access.h"
 #include "heap.h"
 #include "mail_message.h"
 #include "msgdata.h"
 #include "to91_frontier_download_names.h"
-#include "frontier_save_access.h"
-
-// Sub-blocks of the frontier save (Save_Frontier_GetStatic):
-//   0x8E0 BattleTowerChallenge, 0x954 FrontierData, 0xABC 4 tower messages, 0xADC BattleRoomDownload
 
 // The Battle Tower challenge in progress (BattleTowerChallenge_GetField / SetField field ids in comments).
 typedef struct BattleTowerChallenge {
@@ -79,7 +76,6 @@ typedef struct BattleTowerOpponent {
     u8 team[0xA8];
 } BattleTowerOpponent;
 
-// asm/frontier_data_rodata.s
 extern const MailMessageTemplate gTowerMessageTemplates[4];
 
 u32 BattleRoomTrainer_sizeof(void);
@@ -90,8 +86,8 @@ u8 FrontierData_GetWifiWinCount(FrontierData *data);
 void FrontierData_SetTowerSeed(FrontierData *data, u32 value);
 u32 FrontierData_GetTowerSeed(FrontierData *data);
 void BattleRoomDownload_MarkRoom(BattleRoomDownload *download, u32 rank, u32 room, u32 *date);
-void BattleRoomDownload_ClearRoomMarks(BattleRoomDownload *download);
-BOOL BattleRoomDownload_IsDateNewer(u32 *date, u32 *stored);
+static void BattleRoomDownload_ClearRoomMarks(BattleRoomDownload *download);
+static BOOL BattleRoomDownload_IsDateNewer(u32 *date, u32 *stored);
 BOOL BattleRoomDownload_IsRoomMarked(BattleRoomDownload *download, u32 rank, u32 room, u32 *date);
 void BattleRoomDownload_SetTrainers(BattleRoomDownload *download, void *trainers, u32 rank, u32 room);
 void BattleRoomDownload_GetTrainersRoom(BattleRoomDownload *download, u8 *out);
@@ -397,7 +393,6 @@ u32 FrontierData_FlagAction(FrontierData *data, u16 flag, u32 action) {
         mask <<= 1;
     }
     switch (action) {
-    // Preserve the original mask calculation before reading the flags.
     case FRONTIER_DATA_RESET:
         mask ^= 0xFFFF;
         data->state.flags = mask & *(volatile u16 *)&data->state.flags;
@@ -441,12 +436,12 @@ void BattleRoomDownload_MarkRoom(BattleRoomDownload *download, u32 rank, u32 roo
     }
 }
 
-void BattleRoomDownload_ClearRoomMarks(BattleRoomDownload *download) {
+static void BattleRoomDownload_ClearRoomMarks(BattleRoomDownload *download) {
     MI_CpuFill8(download->roomMarks, 0, 250);
     MI_CpuFill8(&download->markDate, 0, 4);
 }
 
-BOOL BattleRoomDownload_IsDateNewer(u32 *date, u32 *stored) {
+static BOOL BattleRoomDownload_IsDateNewer(u32 *date, u32 *stored) {
     if (date[0] > stored[0]) {
         return TRUE;
     }

@@ -1,9 +1,8 @@
 #ifndef POKEHEARTGOLD_POKEATHLON_POKEATHLON_PENNANT_CAPTURE_PLAY_H
 #define POKEHEARTGOLD_POKEATHLON_POKEATHLON_PENNANT_CAPTURE_PLAY_H
 
-#include "pokeathlon/pokeathlon_pennant_capture.h"
-
 #include "pokeathlon/pokeathlon_course_types_def.h"
+#include "pokeathlon/pokeathlon_pennant_capture.h"
 
 // Pennant Capture (event 1): screen set-up, the event states and the host's frame step.
 
@@ -24,10 +23,6 @@ void PokeathlonPennantCapture_CreateSprites(PokeathlonPennantCapture *work, Poke
 BOOL PokeathlonPennantCapture_State_Setup(PokeathlonCourseData *course, u8 *state);
 BOOL PokeathlonPennantCapture_State_Play(PokeathlonCourseData *course, u8 *state);
 BOOL PokeathlonPennantCapture_State_End(PokeathlonCourseData *course, u8 *state);
-void PokeathlonPennantCapture_HostStep(PokeathlonCourseData *course);
 void PokeathlonPennantCapture_PackFrame(PokeathlonPennantCapture *work, PokeathlonPennantCaptureFrame *frame);
-BOOL PokeathlonPennantCapture_SendInput(PokeathlonCourseData *course);
-void PokeathlonPennantCapture_ShowFrame(PokeathlonCourseData *course);
-BOOL PokeathlonPennantCapture_IsTouchOnOwnMon(PokeathlonPennantCapture *work, int participant, int x, int y);
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_PENNANT_CAPTURE_PLAY_H

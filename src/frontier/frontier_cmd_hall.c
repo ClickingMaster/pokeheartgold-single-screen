@@ -1,3 +1,5 @@
+#include "frontier/frontier_cmd_hall.h"
+
 #include "global.h"
 
 #include "constants/pokemon.h"
@@ -12,49 +14,28 @@
 
 #include "gf_gfx_planes.h"
 #include "heap.h"
+#include "launch_application.h"
 #include "party.h"
 #include "pokemon.h"
 #include "sound_system.h"
 
-// Script commands of the Battle Hall (BattleHallData, frontier/battle_hall_data.h).
-
-// Defined in frontier_script_commands.c.
 u16 FrontierScript_ReadVar(FrontierScriptContext *ctx);
 u16 *FrontierScript_ReadVarPtr(FrontierScriptContext *ctx);
 u16 FrontierScript_GetVar(FrontierScriptContext *ctx, u16 index);
 void FrontierScript_PrintMessageEntry(FrontierScriptContext *ctx, u16 *message);
 
-extern const OverlayManagerTemplate gOverlayTemplate_Battle;
 extern const OverlayManagerTemplate gOverlayTemplate_BattleHallApp;
 
 u32 HallChallenge_GetSaved(void *challenge);
 u32 HallTypeRanks_Get(u8 cell, void *ranks);
 void HallTypeRanks_Set(u8 cell, void *ranks, u8 rank);
-void OS_ResetSystem(u32 parameter);
-// Defined in battle_hall_data.c and battle_hall_setup.c with other types (returning nothing, int); declared as
-// these callers use them.
 u32 BattleHallData_GetTrainerSprite(BattleHallData *data, u8 index);
 u32 BattleHallData_SendLinkMessage(BattleHallData *data, u32 kind, u32 value);
 int BattleHall_GetPartySize(u8 type);
-// battle_frontier_communication.h declares it with a parameter; this call passes none.
 void FrontierLink_RegisterCommands(void);
 
-void BattleHall_OnAppExit(void *args);
-BOOL FrontierScriptNative_WaitHallLink(FrontierScriptContext *ctx);
-
-BOOL FrtCmd_HallAlloc(FrontierScriptContext *ctx);
-BOOL FrtCmd_HallInit(FrontierScriptContext *ctx);
-BOOL FrtCmd_HallFree(FrontierScriptContext *ctx);
-BOOL FrtCmd_HallLaunchApp(FrontierScriptContext *ctx);
-BOOL FrtCmd_HallEndBattle(FrontierScriptContext *ctx);
-BOOL FrtCmd_HallStartBattle(FrontierScriptContext *ctx);
-BOOL FrtCmd_HallAction(FrontierScriptContext *ctx);
-BOOL FrtCmd_HallGetBattleResult(FrontierScriptContext *ctx);
-BOOL FrtCmd_HallSendLinkMessage(FrontierScriptContext *ctx);
-BOOL FrtCmd_HallWaitLink(FrontierScriptContext *ctx);
-BOOL FrtCmd_HallPrintTrainerMessage(FrontierScriptContext *ctx);
-BOOL FrtCmd_HallUpdateSpeciesRecord(FrontierScriptContext *ctx);
-BOOL FrtCmd_Dummy199(FrontierScriptContext *ctx);
+static void BattleHall_OnAppExit(void *args);
+static BOOL FrontierScriptNative_WaitHallLink(FrontierScriptContext *ctx);
 
 BOOL FrtCmd_HallAlloc(FrontierScriptContext *ctx) {
     u16 resume = FrontierScript_ReadVar(ctx);
@@ -67,8 +48,8 @@ BOOL FrtCmd_HallAlloc(FrontierScriptContext *ctx) {
 }
 
 BOOL FrtCmd_HallInit(FrontierScriptContext *ctx) {
-    u16 unused = FrontierScript_ReadVar(ctx);
-    BattleHallData_Init(Frontier_GetData(ctx->frontierSystem->frontierWork), unused);
+    u16 resume = FrontierScript_ReadVar(ctx);
+    BattleHallData_Init(Frontier_GetData(ctx->frontierSystem->frontierWork), resume);
     return FALSE;
 }
 
@@ -101,7 +82,7 @@ BOOL FrtCmd_HallLaunchApp(FrontierScriptContext *ctx) {
         mon = Party_GetMonByIndex(party, data->partySlots[1]);
         Party_AddMon(args->party, mon);
     } else if ((u8)(args->mode + 0xFE) <= 1) {
-        // multi battles (mode 2 or 3; 0xFE is -2 as a u8): the partner's Pokemon
+        // Multi battles (modes 2 and 3) also bring the partner's Pokemon
         Party_AddMon(args->party, data->partnerMon);
     }
     Frontier_LaunchApplication(ctx->frontierSystem->frontierWork, &gOverlayTemplate_BattleHallApp, args, 0, BattleHall_OnAppExit);
@@ -126,7 +107,7 @@ BOOL FrtCmd_HallStartBattle(FrontierScriptContext *ctx) {
     return TRUE;
 }
 
-void BattleHall_OnAppExit(void *args) {
+static void BattleHall_OnAppExit(void *args) {
     BattleHallAppArgs *appArgs = args;
     BattleHallData_ReadAppResult(appArgs->data, appArgs);
     Heap_Free(appArgs);
@@ -226,7 +207,7 @@ BOOL FrtCmd_HallAction(FrontierScriptContext *ctx) {
         *result = data->partnerValue;
         break;
     case HALL_ACTION_RESTORE_HELD_ITEMS: {
-        // gives the held items back
+        // Give the party back the items they held before the challenge
         Party *party = SaveArray_Party_Get(launchArgs->saveData);
         int count = BattleHall_GetPartySize(data->type);
         int i = 0;
@@ -287,7 +268,7 @@ BOOL FrtCmd_HallAction(FrontierScriptContext *ctx) {
         BattleHallData_UpdateLevelSqrt(data);
         break;
     case HALL_ACTION_GET_MATRON_BATTLE:
-        // the Hall Matron battles of the single battle streak
+        // The Hall Matron appears in the single battle streak
         *result = 0;
         if (data->type == 0) {
             if (data->winStreak + 1 == 50) {
@@ -305,7 +286,7 @@ BOOL FrtCmd_HallAction(FrontierScriptContext *ctx) {
 
 BOOL FrtCmd_HallGetBattleResult(FrontierScriptContext *ctx) {
     u16 *result = FrontierScript_ReadVarPtr(ctx);
-    *result = (u16)((BattleHallData *)Frontier_GetData(ctx->frontierSystem->frontierWork))->battleWon;
+    *result = ((BattleHallData *)Frontier_GetData(ctx->frontierSystem->frontierWork))->battleWon;
     return FALSE;
 }
 
@@ -313,7 +294,7 @@ BOOL FrtCmd_HallSendLinkMessage(FrontierScriptContext *ctx) {
     u16 kind = FrontierScript_ReadVar(ctx);
     u16 value = FrontierScript_ReadVar(ctx);
     u16 *result = FrontierScript_ReadVarPtr(ctx);
-    *result = (u16)BattleHallData_SendLinkMessage(Frontier_GetData(ctx->frontierSystem->frontierWork), kind, value);
+    *result = BattleHallData_SendLinkMessage(Frontier_GetData(ctx->frontierSystem->frontierWork), kind, value);
     return TRUE;
 }
 
@@ -323,7 +304,7 @@ BOOL FrtCmd_HallWaitLink(FrontierScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL FrontierScriptNative_WaitHallLink(FrontierScriptContext *ctx) {
+static BOOL FrontierScriptNative_WaitHallLink(FrontierScriptContext *ctx) {
     BattleHallData *data;
     FrontierScript_GetVar(ctx, ctx->data[0]);
     data = Frontier_GetData(ctx->frontierSystem->frontierWork);

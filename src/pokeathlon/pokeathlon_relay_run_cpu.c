@@ -14,7 +14,6 @@
 
 typedef char PokeathlonRelayRunCpuSizeCheck[(sizeof(PokeathlonRelayRunCpu) == 0x3E8 && offsetof(PokeathlonRelayRunCpu, cells) == 0x29C && offsetof(PokeathlonRelayRunCpu, thinking) == 0x3DC) ? 1 : -1];
 
-// Course sprite and object helpers (pokeathlon_course_objects.c), with untyped entries as the event uses them.
 void PokeathlonCourseObject_GroundToCenter(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
 void PokeathlonCourseObject_GetCollisionCenter(PokeathlonCourseObject *object, fx32 x, fx32 y, fx32 *outX, fx32 *outY);
 void **PokeathlonCourseSpritePool_GetResourceSlot(PokeathlonCourseSpritePool *pool, u32 id, u32 kind);
@@ -25,6 +24,10 @@ extern const WindowTemplate sRelayRunNameWindowTemplate;
 extern const WindowTemplate sRelayRunLapsWindowTemplate;
 // Base score of each cell ahead of the runner: the farther, the better.
 extern const s32 sRelayRunCpuCellScores[RELAY_RUN_CPU_CELLS];
+
+static void PokeathlonRelayRunCpu_Think(PokeathlonCourseData *course, PokeathlonRelayRunCpu *cpu, u8 index, s32 timer);
+static void PokeathlonRelayRunCpu_WrapX(s32 *x, s32 delta);
+static PokeathlonRelayRunCpuCell *PokeathlonRelayRunCpu_PickBestCell(PokeathlonRelayRunCpu *cpu);
 
 // The touch screen: where the two picture slots are in VRAM.
 void PokeathlonRelayRunHud_GetPicVramOffsets(PokeathlonCourseSpritePool *pool, PokeathlonRelayRunHud *hud) {
@@ -134,7 +137,7 @@ u8 PokeathlonRelayRunCpu_Update(PokeathlonCourseData *course, PokeathlonRelayRun
 // next member when the best is below the threshold (raised while the runner is tired).
 #pragma force_active on
 
-void PokeathlonRelayRunCpu_Think(PokeathlonCourseData *course, PokeathlonRelayRunCpu *cpu, u8 index, s32 timer) {
+static void PokeathlonRelayRunCpu_Think(PokeathlonCourseData *course, PokeathlonRelayRunCpu *cpu, u8 index, s32 timer) {
     PokeathlonRelayRunCpuObstacle obstacles[RELAY_RUN_OBSTACLES];
     PokeathlonRelayRunCpuTeam teams[RELAY_RUN_TEAMS];
     int laneScores[RELAY_RUN_TEAMS];
@@ -290,7 +293,7 @@ void PokeathlonRelayRunCpu_Think(PokeathlonCourseData *course, PokeathlonRelayRu
 #pragma force_active reset
 
 // Moves x along the lap, wrapping at its ends.
-void PokeathlonRelayRunCpu_WrapX(s32 *x, s32 delta) {
+static void PokeathlonRelayRunCpu_WrapX(s32 *x, s32 delta) {
     *x += delta;
     if (*x >= RELAY_RUN_TRACK_LENGTH) {
         *x -= RELAY_RUN_TRACK_LENGTH;
@@ -300,7 +303,7 @@ void PokeathlonRelayRunCpu_WrapX(s32 *x, s32 delta) {
 }
 
 // A random one of the cells with the best score.
-PokeathlonRelayRunCpuCell *PokeathlonRelayRunCpu_PickBestCell(PokeathlonRelayRunCpu *cpu) {
+static PokeathlonRelayRunCpuCell *PokeathlonRelayRunCpu_PickBestCell(PokeathlonRelayRunCpu *cpu) {
     PokeathlonRelayRunCpuCell *sorted[RELAY_RUN_CPU_CELLS];
     PokeathlonRelayRunCpuCell *list[RELAY_RUN_CPU_CELLS];
     int i;

@@ -2,7 +2,6 @@
 #define POKEHEARTGOLD_POKEATHLON_POKEATHLON_BLOCK_SMASH_TEAMS_H
 
 #include "pokeathlon/pokeathlon_block_smash.h"
-
 #include "pokeathlon/pokeathlon_course_types_def.h"
 
 // Block Smash: the own team's Pokemon (the active one hits, the other two wait at the side), the
@@ -60,12 +59,12 @@ typedef struct PokeathlonBlockSmashRival {
 } PokeathlonBlockSmashRival; // size: 0x3C
 
 struct PokeathlonBlockSmashRivals {
-    enum HeapID heapId;                // 0x00
-    SpriteSystem *spriteSystem;        // 0x04
-    SpriteManager *spriteManager;      // 0x08
-    PokeathlonCourseData *course;      // 0x0C
-    PokeathlonCourseMonObjects *monPics;                     // 0x10
-    PokeathlonBlockSmashRival rows[3]; // 0x14
+    enum HeapID heapId;                  // 0x00
+    SpriteSystem *spriteSystem;          // 0x04
+    SpriteManager *spriteManager;        // 0x08
+    PokeathlonCourseData *course;        // 0x0C
+    PokeathlonCourseMonObjects *monPics; // 0x10
+    PokeathlonBlockSmashRival rows[3];   // 0x14
 }; // size: 0xC8
 
 enum PokeathlonBlockSmashCpuMode {
@@ -103,7 +102,6 @@ struct PokeathlonBlockSmashCpu {
     u32 count;                                // 0x74
 };
 
-// pokeathlon_block_smash_teams.c
 PokeathlonBlockSmashMon *PokeathlonBlockSmashMon_New(enum HeapID heapId, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonCourseData *course);
 void PokeathlonBlockSmashMon_Delete(PokeathlonBlockSmashMon *mon);
 void PokeathlonBlockSmashMon_Update(PokeathlonBlockSmashMon *mon, BOOL stackDropping);
@@ -122,52 +120,11 @@ PokeathlonBlockSmashRivals *PokeathlonBlockSmashRivals_New(enum HeapID heapId, S
 void PokeathlonBlockSmashRivals_Delete(PokeathlonBlockSmashRivals *rivals);
 void PokeathlonBlockSmashRivals_Update(PokeathlonBlockSmashRivals *rivals);
 void PokeathlonBlockSmashRivals_Pause(PokeathlonBlockSmashRivals *rivals);
-void PokeathlonBlockSmashMon_UpdateReady(PokeathlonBlockSmashMon *mon, BOOL stackDropping);
-void PokeathlonBlockSmashMon_UpdateHit(PokeathlonBlockSmashMon *mon);
-void PokeathlonBlockSmashMon_UpdateExhausted(PokeathlonBlockSmashMon *mon);
-void PokeathlonBlockSmashMon_UpdateSwitch(PokeathlonBlockSmashMon *mon);
-void PokeathlonBlockSmashMon_UpdateTired(PokeathlonBlockSmashMon *mon);
-void PokeathlonBlockSmashRival_Init(PokeathlonBlockSmashRival *row, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonCourseMonObjects *monPics, u8 participant, PokeathlonCourseData *course, u32 *maxStamina);
-void PokeathlonBlockSmashRival_ShowStaminaMark(PokeathlonBlockSmashRival *row, int anim);
-void PokeathlonBlockSmashRival_UpdateStatus(PokeathlonBlockSmashRival *row, PokeathlonBlockSmashReport *report);
-void PokeathlonBlockSmashRival_UpdateScore(PokeathlonBlockSmashRival *row, PokeathlonBlockSmashReport *report);
-void PokeathlonBlockSmashRival_SwitchTask(SysTask *task, void *data);
-void PokeathlonBlockSmashRival_StartSwitch(PokeathlonBlockSmashRival *row);
-void PokeathlonBlockSmashRival_Update(PokeathlonBlockSmashRival *row);
-void PokeathlonBlockSmashMon_CreateSprites(ManagedSprite **sprites, SpriteSystem *spriteSystem, SpriteManager *spriteManager);
-void PokeathlonBlockSmashMon_SetMonSprite(PokeathlonBlockSmashMon *mon, int sprite, u8 participant, u8 member, BOOL mainScreen);
-void PokeathlonBlockSmashMon_SetMode(PokeathlonBlockSmashMon *mon, int mode);
-void PokeathlonBlockSmashMon_UpdateGauge(PokeathlonBlockSmashMon *mon);
-void PokeathlonBlockSmashMon_AddGauge(PokeathlonBlockSmashMon *mon, BOOL hitSpot, u8 broken);
-BOOL PokeathlonBlockSmash_SetTiredAnimSpeed(ManagedSprite *sprite, fx32 stamina, fx32 maxStamina);
-void PokeathlonBlockSmashMon_StartFullGauge(PokeathlonBlockSmashMon *mon);
-void PokeathlonBlockSmashMon_EndFullGauge(PokeathlonBlockSmashMon *mon);
-void PokeathlonBlockSmashRivals_InitMonPics(PokeathlonCourseMonObjects *monPics, u32 self);
-void PokeathlonBlockSmash_ShowGaugeEffect(ManagedSprite *sprite, u16 gauge, BOOL playSE);
-void PokeathlonBlockSmashMon_SetWaitingPosition(PokeathlonBlockSmashMon *mon, int sprite, s16 x, s16 y);
 PokeathlonBlockSmashCpu *PokeathlonBlockSmashCpu_New(PokeathlonCourseData *course, enum HeapID heapId);
 void PokeathlonBlockSmashCpu_Delete(PokeathlonBlockSmashCpu *cpu);
 void PokeathlonBlockSmashCpu_Update(PokeathlonBlockSmashCpu *cpu);
 void PokeathlonBlockSmashCpu_WriteReports(PokeathlonBlockSmashCpu *cpu);
-void PokeathlonBlockSmashCpuPlayer_Init(PokeathlonBlockSmashCpuPlayer *player, u8 participant, PokeathlonCourseData *course);
-u32 PokeathlonBlockSmashCpuPlayer_Update(PokeathlonBlockSmashCpuPlayer *player);
-u32 PokeathlonBlockSmashCpuPlayer_UpdateReady(PokeathlonBlockSmashCpuPlayer *player);
-u32 PokeathlonBlockSmashCpuPlayer_UpdateSwitch(PokeathlonBlockSmashCpuPlayer *player);
-u32 PokeathlonBlockSmashCpuPlayer_UpdateNewStack(PokeathlonBlockSmashCpuPlayer *player);
-u32 PokeathlonBlockSmashCpuPlayer_UpdateExhausted(PokeathlonBlockSmashCpuPlayer *player);
-BOOL PokeathlonBlockSmashCpuPlayer_DecideHitAgain(PokeathlonBlockSmashCpuPlayer *player);
-u32 PokeathlonBlockSmashCpuPlayer_DecideSpotHit(PokeathlonBlockSmashCpuPlayer *player);
-BOOL PokeathlonBlockSmashCpuPlayer_DecideSwitch(PokeathlonBlockSmashCpuPlayer *player);
-void PokeathlonBlockSmashCpuPlayer_SetMode(PokeathlonBlockSmashCpuPlayer *player, int mode);
-void PokeathlonBlockSmashCpuPlayer_Hit(PokeathlonBlockSmashCpuPlayer *player, int hitSpot);
-void PokeathlonBlockSmashCpuPlayer_WriteReport(PokeathlonBlockSmashCpuPlayer *player, u32 result, PokeathlonCourseData *course);
-void PokeathlonBlockSmashCpuPlayer_AddGauge(PokeathlonBlockSmashCpuPlayer *player, int hitSpot, u32 broken);
-void PokeathlonBlockSmashCpuPlayer_UpdateGauge(PokeathlonBlockSmashCpuPlayer *player);
-void PokeathlonBlockSmashCpuPlayer_EndFullGauge(PokeathlonBlockSmashCpuPlayer *player);
 ManagedSprite *PokeathlonBlockSmash_NewMainSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u16 anim, u16 priority);
 ManagedSprite *PokeathlonBlockSmash_NewSubSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u16 anim, u16 priority);
-void PokeathlonBlockSmash_InitMembers(PokeathlonBlockSmashMember *members, u32 participant, PokeathlonCourseData *course);
-void PokeathlonBlockSmash_RecoverStamina(PokeathlonBlockSmashMember *members, u32 frames, int active);
-s32 PokeathlonBlockSmash_TakeStamina(s32 stamina, u32 frames);
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_BLOCK_SMASH_TEAMS_H

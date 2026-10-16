@@ -11,6 +11,7 @@
 
 #include "error_handling.h"
 #include "filesystem.h"
+#include "frontier_save_access.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
@@ -21,7 +22,6 @@
 #include "save_vars_flags.h"
 #include "sprite.h"
 #include "sys_vars.h"
-#include "frontier_save_access.h"
 
 // ArcadeContext is allocated together with a pointer to the script's result variable.
 typedef struct ArcadeContextStorage {
@@ -42,7 +42,6 @@ typedef struct ArcadeSpritePos {
 
 typedef void (*ArcadeEventFunc)(ArcadeContext *ctx, Party *party, int count);
 
-// BlendPalette called without narrowing its arguments
 typedef void (*BlendPaletteWideFunc)(const void *src, void *dst, int size, int cur, int target);
 
 extern ArcadeContext *gBattleArcadeData;
@@ -62,7 +61,6 @@ extern const u8 gBattleArcadeRoundValues_Multi[];
 extern const u16 *const gBattleArcadeEventItemLists[];
 extern const ArcadeEventFunc gBattleArcadeEventFuncs[];
 
-// The script command (frontier/frontier_cmd_arcade.h) declares the slots as u32; it passes them unnarrowed.
 u32 BattleArcadeData_Alloc(SaveData *saveData, u32 resume, u8 type, u8 slot0, u16 slot1, u16 slot2, u16 *resultVar);
 
 u32 ArcadeChallenge_GetField(void *record, int kind, u8 index, int unused, void *dst);
@@ -72,9 +70,7 @@ void ArcadeChallenge_SetField(void *record, int kind, u8 index, int unused, void
 void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
 void BattleArcade_GetRoundTrainerIds(u32 type, u32 rank, u16 *trainerIds, u32 count);
 void FrontierTrainer_GenerateMons(u32 count, u16 trainerId, u16 partnerTrainerId, u16 *monIds, FrontierMon *mons, u8 *ivs, u32 *otIds, u8 multiplayer);
-int BattleArcade_GetMonLevel(ArcadeContext *ctx);
 void FrontierMon_ToPokemon(ArcadeFrontierMon *frontierMon, Pokemon *mon, int level);
-void BattleArcade_AddMonToParty(ArcadeContext *ctx, Party *party, Pokemon *mon);
 void *FrontierTrainer_Load(void *trainer, u16 trainerId, u32 heapId, u32 narcId);
 void FrontierTrainer_GetClassSprite(u8 value);
 ManagedSprite *FrontierMap_CreateMonIcon(FrontierMap *map, Pokemon *mon, int index, int x, int y);
@@ -88,11 +84,11 @@ void BattleArcadeLink_SendValueA(ArcadeContext *ctx, u32 value);
 void BattleArcadeLink_SendValueB(ArcadeContext *ctx, u32 value);
 void BattleArcadeLink_SendPartyMons(ArcadeContext *ctx);
 
-void BattleArcadeData_InitNew(ArcadeContext *ctx);
-void BattleArcadeData_InitResume(ArcadeContext *ctx);
-void BattleArcadeData_RestoreHeldItems(ArcadeContext *ctx);
-u16 BattleArcade_GetGameBoardResult(const GAME_BOARD_ARGS *args, u32 index);
-int BattleArcade_GetPartyConditionPoints(ArcadeContext *ctx, Party *party, Party *partnerParty, u8 count);
+static void BattleArcadeData_InitNew(ArcadeContext *ctx);
+static void BattleArcadeData_InitResume(ArcadeContext *ctx);
+static void BattleArcadeData_RestoreHeldItems(ArcadeContext *ctx);
+static u16 BattleArcade_GetGameBoardResult(const GAME_BOARD_ARGS *args, u32 index);
+static int BattleArcade_GetPartyConditionPoints(ArcadeContext *ctx, Party *party, Party *partnerParty, u8 count);
 void BattleArcade_Event_LowerHp(ArcadeContext *ctx, Party *party, int count);
 void BattleArcade_Event_Poison(ArcadeContext *ctx, Party *party, int count);
 void BattleArcade_Event_Paralyze(ArcadeContext *ctx, Party *party, int count);
@@ -156,7 +152,7 @@ static inline void BattleArcadeData_AddPartyMon(Party *party, u16 slot) {
 #pragma force_active on
 u32 BattleArcadeData_Alloc(SaveData *saveData, u32 resume, u8 type, u8 slot0, u16 slot1, u16 slot2, u16 *resultVar) {
     u16 i;
-    ArcadeContext *ctx[1]; // re-loaded from gBattleArcadeData before each group of accesses; an array to match
+    ArcadeContext *ctx[1];
     ArcadeContext *saved;
     u32 index;
     int count;
@@ -214,7 +210,7 @@ u32 BattleArcadeData_Alloc(SaveData *saveData, u32 resume, u8 type, u8 slot0, u1
         ctx[0]->battleNo = i;
         ctx[0]->cursorSpeed = ArcadeChallenge_GetField(record, ARCADE_CHALLENGE_CURSOR_SPEED, 0, 0, 0);
         ctx[0]->randomFlag = ArcadeChallenge_GetField(record, ARCADE_CHALLENGE_RANDOM_FLAG, 0, 0, 0);
-        saved = (ArcadeContext *)gBattleArcadeData; // the redundant cast is needed to match
+        saved = (ArcadeContext *)gBattleArcadeData;
         frontier = Save_Frontier_GetStatic(saved->saveData);
         index = BattleArcade_GetWinStreakStat(gBattleArcadeData->type);
         saved->winStreak = FrontierSave_GetStat(frontier, index, FrontierStat_GetFriendIndex(BattleArcade_GetWinStreakStat(ctx[0]->type)));
@@ -253,7 +249,7 @@ void BattleArcadeData_Init(ArcadeContext *ctx, u32 resume) {
     }
 }
 
-void BattleArcadeData_InitNew(ArcadeContext *ctx) {
+static void BattleArcadeData_InitNew(ArcadeContext *ctx) {
     s32 rank = BattleArcade_GetRound(ctx);
     u8 battleNo;
     u32 count;
@@ -278,7 +274,7 @@ void BattleArcadeData_InitNew(ArcadeContext *ctx) {
 }
 
 #pragma force_active on
-void BattleArcadeData_InitResume(ArcadeContext *ctx) {
+static void BattleArcadeData_InitResume(ArcadeContext *ctx) {
     ArcadeFrontierMon frontierMons[6];
     u16 monIds[6];
     u32 unkFlags[2];
@@ -304,7 +300,7 @@ void BattleArcadeData_InitResume(ArcadeContext *ctx) {
 }
 #pragma force_active reset
 
-void BattleArcadeData_RestoreHeldItems(ArcadeContext *ctx) {
+static void BattleArcadeData_RestoreHeldItems(ArcadeContext *ctx) {
     u8 count = Party_GetCount(ctx->playerParty);
     s32 i;
 
@@ -336,7 +332,7 @@ void BattleArcade_StoreGameBoardResult(ArcadeContext *ctx, GAME_BOARD_ARGS *args
     }
 }
 
-u16 BattleArcade_GetGameBoardResult(const GAME_BOARD_ARGS *args, u32 index) {
+static u16 BattleArcade_GetGameBoardResult(const GAME_BOARD_ARGS *args, u32 index) {
     if (index >= 6) {
         GF_AssertFail();
         return 0;
@@ -481,7 +477,7 @@ u32 BattleArcade_GetWonBattlePoints(ArcadeContext *ctx, Party *playerParty, Part
 }
 
 #pragma force_active on
-int BattleArcade_GetPartyConditionPoints(ArcadeContext *ctx, Party *party, Party *partnerParty, u8 count) {
+static int BattleArcade_GetPartyConditionPoints(ArcadeContext *ctx, Party *party, Party *partnerParty, u8 count) {
     u8 fainted, statused;
     int result;
     int i;
@@ -766,7 +762,6 @@ void BattleArcade_Event_LowerHp(ArcadeContext *ctx, Party *party, int count) {
 
 #pragma force_active on
 void BattleArcade_Event_Poison(ArcadeContext *ctx, Party *party, int count) {
-    // volatile count: matches the original stack frame
     struct {
         ArcadeContext *ctx;
         Party *party;
@@ -798,7 +793,6 @@ void BattleArcade_Event_Poison(ArcadeContext *ctx, Party *party, int count) {
 }
 
 void BattleArcade_Event_Paralyze(ArcadeContext *ctx, Party *party, int count) {
-    // volatile count: matches the original stack frame
     struct {
         volatile int count;
         int type2;
@@ -826,7 +820,6 @@ void BattleArcade_Event_Paralyze(ArcadeContext *ctx, Party *party, int count) {
 }
 
 void BattleArcade_Event_Burn(ArcadeContext *ctx, Party *party, int count) {
-    // volatile count: matches the original stack frame
     struct {
         volatile int count;
         int type2;

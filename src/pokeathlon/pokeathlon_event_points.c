@@ -8,7 +8,6 @@
 // The course points (at most 200) every participant gets for an event: events 0-8 convert each participant's
 // event score (gPokeathlonEventScorePointsFuncs[event]), event 9 (Goal Roll) gives points by rank.
 
-// PokeathlonCourseScoreList_GetRanked entries (pokeathlon_course_internal.h)
 void *PokeathlonCourseScoreList_GetRanked(void *list, u8 index);
 
 typedef u32 (*PokeathlonEventPointsFunc)(u32 score);
@@ -47,13 +46,13 @@ void PokeathlonEvent_CalcPointsFromRanks(void *list, int event) {
 #pragma force_active on
 
 // 30 points at 0, approaching 150.
-float PokeathlonEvent_Saturate(u32 score, float rate) {
+static float PokeathlonEvent_Saturate(u32 score, float rate) {
     return (float)(150.0 - 120.0 / (1.0 + (float)score * rate));
 }
 
 #pragma force_active reset
 
-u8 PokeathlonEvent_ClampPoints(float points) {
+static u8 PokeathlonEvent_ClampPoints(float points) {
     u32 n = (u32)points;
     if ((double)n > 200.0) {
         n = 200;

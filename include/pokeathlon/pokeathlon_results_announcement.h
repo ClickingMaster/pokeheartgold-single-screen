@@ -10,9 +10,9 @@
 #include "font_sprite.h"
 #include "obj_char_transfer.h"
 #include "sprite.h"
+#include "sprite_resource_header.h"
 #include "sprite_system.h"
 #include "string_util.h"
-#include "sprite_resource_header.h"
 
 // The "Results Announcement" screen the course shows after an event (event template gPokeathlonCourseEvent_ResultsAnnouncement,
 // states gPokeathlonResultsAnnouncementSteps): the announcer comments on the event (msg 309 #246..), the teams' plates slide in
@@ -21,9 +21,9 @@
 
 // A text drawn as sprites, with its slot in the OBJ character VRAM.
 typedef struct PokeathlonResultsAnnouncementText {
-    TextOBJ *textObj;                // 0x00
-    ObjCharSpaceReservation charSlot;     // 0x04
-} PokeathlonResultsAnnouncementText; // size: 0x10
+    TextOBJ *textObj;                 // 0x00
+    ObjCharSpaceReservation charSlot; // 0x04
+} PokeathlonResultsAnnouncementText;  // size: 0x10
 
 // A window the sprite texts are rendered from.
 typedef struct PokeathlonResultsAnnouncementTextWindow {
@@ -90,7 +90,7 @@ typedef struct PokeathlonResultsAnnouncementRanking {
 
 // One team on the scoreboard: name plate, three digits and the name.
 typedef struct PokeathlonResultsAnnouncementScoreboardTeam {
-    PokeathlonCourseSpritePoolSprite *plate;                               // 0x00
+    PokeathlonCourseSpritePoolSprite *plate;   // 0x00
     void *digits[3];                           // 0x04
     PokeathlonResultsAnnouncementText name;    // 0x10
     u32 points;                                // 0x20
@@ -100,7 +100,7 @@ typedef struct PokeathlonResultsAnnouncementScoreboardTeam {
 // The course points of the four teams (sub screen).
 typedef struct PokeathlonResultsAnnouncementScoreboard {
     enum HeapID heapId;                                   // 0x00
-    PokeathlonCourseSpritePool *scene;                                          // 0x04
+    PokeathlonCourseSpritePool *scene;                    // 0x04
     FontSystem *fontSystem;                               // 0x08
     PokeathlonResultsAnnouncementTextWindow window;       // 0x0C
     PokeathlonResultsAnnouncementScoreboardTeam teams[4]; // 0x24
@@ -110,11 +110,11 @@ typedef struct PokeathlonResultsAnnouncement {
     enum HeapID heapId;                                  // 0x00
     u32 unk04[2];                                        // 0x04
     BgConfig *bgConfig;                                  // 0x0C
-    PokeathlonCourseSpritePool *scene;                                         // 0x10
+    PokeathlonCourseSpritePool *scene;                   // 0x10
     PokeathlonResultsAnnouncementScoreboard *scoreboard; // 0x14
-    PokeathlonCourseMessageBox *messageBox;                                    // 0x18: the announcer's text box
+    PokeathlonCourseMessageBox *messageBox;              // 0x18: the announcer's text box
     PokeathlonResultsAnnouncementRanking ranking;        // 0x1C
-    PokeathlonEventBanner *banner;                                         // 0x80
+    PokeathlonEventBanner *banner;                       // 0x80
     Window window;                                       // 0x84: "Results Announcement"
     SpriteSystem *spriteSystem;                          // 0x94
     SpriteManager *spriteManager;                        // 0x98
@@ -151,70 +151,12 @@ typedef struct PokeathlonResultsAnnouncementAffine {
     int d;
 } PokeathlonResultsAnnouncementAffine;
 
-// in pokeathlon_lamp_jump_stage.c
 void PokeathlonResults_InitWindow(Window *window, BgConfig *bgConfig, enum HeapID heapId);
 void PokeathlonResults_PrintTitle(Window *window, enum HeapID heapId);
 
 BOOL PokeathlonResults_Init(PokeathlonCourseData *course);
 BOOL PokeathlonResults_Draw(PokeathlonCourseData *course);
 BOOL PokeathlonResults_Exit(PokeathlonCourseData *course);
-void PokeathlonResults_SetGfxBanks(void);
-void PokeathlonResults_InitBgs(BgConfig *bgConfig, enum HeapID heapId);
-void PokeathlonResults_LoadBgGfx(PokeathlonResultsAnnouncement *announcement);
-BOOL PokeathlonResults_AllPlayersFinished(PokeathlonCourseData *course);
 BOOL PokeathlonResults_Run(PokeathlonCourseData *course, u8 *state);
-void PokeathlonResults_CreatePlates(PokeathlonResultsAnnouncementPlates **plates, enum HeapID heapId, BgConfig *bgConfig, PokeathlonCourseData *course);
-void PokeathlonResults_StartRanking(PokeathlonResultsAnnouncementRanking *ranking, PokeathlonCourseData *course, u8 total, int unused);
-void PokeathlonResults_MoveSlide(PokeathlonResultsAnnouncementSlide *slide, int dx, int dy);
-void PokeathlonResults_MoveSlides(PokeathlonResultsAnnouncementRanking *ranking, int dx, int dy);
-BOOL PokeathlonResults_IsSlideDone(PokeathlonResultsAnnouncementSlide *slide, int direction);
-void PokeathlonResults_Wait(PokeathlonResultsAnnouncementRanking *ranking, int frames);
-BOOL PokeathlonResults_UpdateRanking(PokeathlonResultsAnnouncementRanking *ranking, PokeathlonCourseData *course);
-void PokeathlonResults_QueueSlide(PokeathlonResultsAnnouncementRanking *ranking, PokeathlonResultsAnnouncementPlate *plate, int delay);
-void PokeathlonResults_SetIncomingSlide(PokeathlonResultsAnnouncementRanking *ranking, PokeathlonResultsAnnouncementPlate *plate, int delay);
-void PokeathlonResults_ClearSlide(PokeathlonResultsAnnouncementSlide *slide);
-BOOL PokeathlonResults_HasMorePlates(PokeathlonResultsAnnouncementRanking *ranking);
-PokeathlonResultsAnnouncementPlate *PokeathlonResults_AddPlate(PokeathlonResultsAnnouncementRanking *ranking, PokeathlonCourseData *course, int x, int y);
-void PokeathlonResults_RemoveSlide(PokeathlonResultsAnnouncementRanking *ranking, PokeathlonResultsAnnouncementSlide *slide);
-PokeathlonResultsAnnouncementSlide *PokeathlonResults_GetLeavingSlide(PokeathlonResultsAnnouncementRanking *ranking);
-u32 PokeathlonResults_GetIntroMessage(PokeathlonCourseData *course);
-u32 PokeathlonResults_GetCommentMessage(PokeathlonCourseData *course);
-void PokeathlonResults_InitSprites(PokeathlonResultsAnnouncement *announcement);
-void PokeathlonResults_FreeSprites(PokeathlonResultsAnnouncement *announcement);
-void PokeathlonResults_LoadSpriteResources(PokeathlonResultsAnnouncement *announcement);
-void PokeathlonResults_CreateSprite(PokeathlonResultsAnnouncement *announcement);
-BOOL PokeathlonResults_WaitForPlayers(PokeathlonCourseData *course);
-PokeathlonResultsAnnouncementPlates *PokeathlonResults_NewPlates(enum HeapID heapId, BgConfig *bgConfig, PokeathlonCourseData *course);
-void PokeathlonResults_FreePlates(PokeathlonResultsAnnouncementPlates *plates);
-void PokeathlonResults_DrawPlates(PokeathlonResultsAnnouncementPlates *plates);
-void PokeathlonResults_InitPlates(PokeathlonResultsAnnouncementPlates *plates, int unused);
-PokeathlonResultsAnnouncementPlate *PokeathlonResults_ShowPlate(PokeathlonResultsAnnouncementPlates *plates, int x, int y, PokeathlonResultsAnnouncementScore *score);
-void PokeathlonResults_HidePlate(PokeathlonResultsAnnouncementPlate *plate);
-void PokeathlonResults_GetPlatePos(PokeathlonResultsAnnouncementPlate *plate, int *x, int *y);
-void PokeathlonResults_SetPlatePos(PokeathlonResultsAnnouncementPlate *plate, int x, int y);
-void PokeathlonResults_MovePlate(PokeathlonResultsAnnouncementPlate *plate, int dx, int dy);
-void PokeathlonResults_LoadPlateResources(PokeathlonResultsAnnouncementPlates *plates);
-void PokeathlonResults_InitPlateResourcesHeader(PokeathlonResultsAnnouncementPlates *plates);
-void PokeathlonResults_InitPlateSpriteTemplate(SpriteTemplate *template, PokeathlonResultsAnnouncementPlates *plates, SpriteResourcesHeader *unused, NNS_G2D_VRAM_TYPE whichScreen);
-Sprite *PokeathlonResults_CreatePlateSprite(SpriteTemplate *template, int anim, int priority);
-void PokeathlonResults_CreatePlateSprites(PokeathlonResultsAnnouncementPlates *plates, int index, Sprite **sprites);
-void PokeathlonResults_PrintPlateName(PokeathlonResultsAnnouncementPlates *plates, int participant, PokeathlonResultsAnnouncementPlate *plate);
-void PokeathlonResults_PrintPlateText(PokeathlonResultsAnnouncementPlates *plates, String *string, PokeathlonResultsAnnouncementPlate *plate);
-void PokeathlonResults_RefreshPlate(PokeathlonResultsAnnouncementPlate *plate);
-void PokeathlonResults_SetPlateVisible(BOOL firstPlace, BOOL draw, PokeathlonResultsAnnouncementPlate *plate);
-void PokeathlonResults_SetPlateSpritePositions(int x, int y, PokeathlonResultsAnnouncementPlate *plate);
-void PokeathlonResults_MovePlateSprites(int dx, int dy, PokeathlonResultsAnnouncementPlate *plate);
-void PokeathlonResults_InitTextWindow(PokeathlonResultsAnnouncementPlates *plates, PokeathlonResultsAnnouncementTextWindow *window, int width);
-void PokeathlonResults_InitTextWindows(PokeathlonResultsAnnouncementPlates *plates);
-void PokeathlonResults_CreateText(PokeathlonResultsAnnouncementPlates *plates, PokeathlonResultsAnnouncementTextWindow *window, String *string, int x, int dx, int dy, Sprite *parent, PokeathlonResultsAnnouncementText *out);
-void PokeathlonResults_DestroyText(PokeathlonResultsAnnouncementText *text);
-PokeathlonResultsAnnouncementScoreboard *PokeathlonResults_NewScoreboard(enum HeapID heapId, BgConfig *bgConfig, PokeathlonCourseSpritePool *scene);
-void PokeathlonResults_FreeScoreboard(PokeathlonResultsAnnouncementScoreboard *scoreboard);
-void PokeathlonResults_LoadScoreboardResources(PokeathlonResultsAnnouncementScoreboard *scoreboard, s32 index);
-void PokeathlonResults_InitScoreboard(PokeathlonResultsAnnouncementScoreboard *scoreboard, PokeathlonCourseData *course, int y);
-void PokeathlonResults_SetScore(PokeathlonResultsAnnouncementScoreboard *scoreboard, u32 points, u32 team);
-void PokeathlonResults_CreateScoreboardText(PokeathlonResultsAnnouncementScoreboard *scoreboard, PokeathlonResultsAnnouncementTextWindow *window, String *string, int x, int dx, int dy, Sprite *parent, PokeathlonResultsAnnouncementText *out);
-void PokeathlonResults_DestroyScoreboardText(PokeathlonResultsAnnouncementText *text);
-void PokeathlonResults_SetScoreDigits(PokeathlonResultsAnnouncementScoreboardTeam *team, s32 points);
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_RESULTS_ANNOUNCEMENT_H

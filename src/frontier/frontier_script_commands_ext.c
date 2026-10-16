@@ -7,16 +7,20 @@
 #include "frontier/frontier.h"
 #include "frontier/frontier_brain_intro.h"
 #include "frontier/frontier_map.h"
+#include "frontier/frontier_particles.h"
 #include "frontier/frontier_script_context.h"
 #include "frontier/frontier_system.h"
 #include "frontier/frontier_transition.h"
-#include "frontier/frontier_particles.h"
 #include "msgdata/msg.naix"
 
 #include "battle_record.h"
 #include "battle_recording.h"
 #include "bg_window.h"
 #include "brightness.h"
+#include "comm_state.h"
+#include "comm_wireless.h"
+#include "communication_club_link.h"
+#include "communication_core.h"
 #include "communication_player_state.h"
 #include "friend_roster.h"
 #include "frontier_data.h"
@@ -41,10 +45,6 @@
 #include "sprite_system.h"
 #include "sys_task_api.h"
 #include "system.h"
-#include "comm_wireless.h"
-#include "communication_core.h"
-#include "comm_state.h"
-#include "communication_club_link.h"
 #include "use_item_on_mon.h"
 #include "wifi_connection.h"
 
@@ -955,7 +955,8 @@ void FrontierTransition_RowScrollTask(SysTask *task, FrontierTransitionWork *wor
                 do {
                     MTX22_2DAffine(&matrix, 0, FX32_ONE, FX32_ONE, 0);
                     {
-                        s16 x = bg2X + line->x, y = bg2Y + line->y;
+                        s16 x = bg2X + line->x;
+                        s16 y = bg2Y + line->y;
                         if (rows->mode == 2) {
                             x %= 256;
                             y %= 256;
@@ -971,7 +972,8 @@ void FrontierTransition_RowScrollTask(SysTask *task, FrontierTransitionWork *wor
                         G2x_SetBGyAffine_((u32)dest, &matrix, 0, 0, x, y);
                     }
                     {
-                        s16 x = bg3X + line->x, y = bg3Y + line->y;
+                        s16 x = bg3X + line->x;
+                        s16 y = bg3Y + line->y;
                         if (rows->mode == 2) {
                             x %= 256;
                             y %= 256;
@@ -1009,7 +1011,8 @@ void FrontierTransition_RowScrollTask(SysTask *task, FrontierTransitionWork *wor
                 do {
                     MTX22_2DAffine(&matrix, 0, FX32_ONE, FX32_ONE, 0);
                     {
-                        s16 x = bg2X + line->x, y = bg2Y + line->y;
+                        s16 x = bg2X + line->x;
+                        s16 y = bg2Y + line->y;
                         if (rows->mode == 2) {
                             x %= 256;
                             y %= 256;
@@ -1025,7 +1028,8 @@ void FrontierTransition_RowScrollTask(SysTask *task, FrontierTransitionWork *wor
                         G2x_SetBGyAffine_((u32)dest, &matrix, 0, 0, x, y);
                     }
                     {
-                        s16 x = bg3X + line->x, y = bg3Y + line->y;
+                        s16 x = bg3X + line->x;
+                        s16 y = bg3Y + line->y;
                         if (rows->mode == 2) {
                             x %= 256;
                             y %= 256;
@@ -1189,7 +1193,7 @@ BOOL FrontierTransition_Wave(FrontierTransitionWork *work) {
     return TRUE;
 }
 
-// Runs screen transition var (table gFrontierTransitionFuncs) while the frontier app's data points to its work.
+// Runs screen transition var while the frontier app's data points to its work.
 BOOL FrtCmd_BattleTransition(FrontierScriptContext *ctx) {
     FrontierTransitionWork *work;
     Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
@@ -1336,7 +1340,8 @@ BOOL FrtCmd_Dummy150(FrontierScriptContext *ctx) {
 BOOL FrtCmd_CreatePartyMonSprite(FrontierScriptContext *ctx) {
     FrontierMap *map = FrontierSystem_GetFrontierMap(ctx->frontierSystem);
     u32 slot = FrontierScript_ReadVar(ctx);
-    int x = FrontierScript_ReadVar(ctx), y = FrontierScript_ReadVar(ctx);
+    int x = FrontierScript_ReadVar(ctx);
+    int y = FrontierScript_ReadVar(ctx);
     int id = FrontierScriptContext_ReadHalfWord(ctx);
     Pokemon *mon;
     FrontierScriptContext_ReadHalfWord(ctx);

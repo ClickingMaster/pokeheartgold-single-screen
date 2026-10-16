@@ -15,7 +15,6 @@
 #include "sound_playback.h"
 #include "text.h"
 
-// Course helpers, sprite scene and object helpers (OVY_96, not yet tidied).
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int member);
 int PokeathlonCourse_GetTouchRadius(void);
 void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int event, int value);
@@ -44,6 +43,18 @@ extern const u8 gPokeathlonGoalRollBounceOffsets[];
 extern const PokeathlonGoalRollWindowData gPokeathlonGoalRollWindowData;
 
 #pragma force_active on
+
+static void PokeathlonGoalRoll_CollideBallPair(PokeathlonGoalRollBall *first, PokeathlonGoalRollBall *second);
+static void PokeathlonGoalRoll_BounceBallOff(PokeathlonGoalRollBall *ball, const PokeathlonGoalRollBall *other, int side);
+static BOOL PokeathlonGoalRoll_CirclesOverlap(const VecFx32 *a, fx32 radiusA, const VecFx32 *b, fx32 radiusB);
+static void PokeathlonGoalRoll_SetBallDirection(PokeathlonGoalRoll *goalRoll, PokeathlonGoalRollBall *ball, const VecFx32 *direction);
+static BOOL PokeathlonGoalRoll_IsWithinAngle(const VecFx32 *a, const VecFx32 *b, u32 angle);
+static void PokeathlonGoalRoll_RecoverPower(PokeathlonGoalRollMon *mon);
+static int PokeathlonGoalRoll_CollideWithWalls(VecFx32 *position, VecFx32 *previous, s32 radius, int checkCorners, VecFx32 *out);
+static BOOL PokeathlonGoalRoll_SegmentsIntersect(Point2D *a, Point2D *b, Point2D *c, const VecFx32 *point);
+static BOOL PokeathlonGoalRoll_IntersectWall(const VecFx32 *a, const VecFx32 *b, const VecFx32 *c, const VecFx32 *d, VecFx32 *out);
+static void PokeathlonGoalRoll_PickBallSpawn(PokeathlonGoalRoll *goalRoll, PokeathlonGoalRollBall *ball);
+static void PokeathlonGoalRoll_NextFacing(PokeathlonGoalRollMon *mon);
 
 void PokeathlonGoalRoll_ShowGoal(PokeathlonGoalRoll *goalRoll, u8 ballIndex, int bigBall, u8 x, u8 code, u8 own) {
     u8 goal, owner, scorer;
@@ -497,7 +508,7 @@ void PokeathlonGoalRoll_MoveBalls(PokeathlonCourseData *course) {
 
 #pragma force_active reset
 
-void PokeathlonGoalRoll_CollideBallPair(PokeathlonGoalRollBall *first, PokeathlonGoalRollBall *second) {
+static void PokeathlonGoalRoll_CollideBallPair(PokeathlonGoalRollBall *first, PokeathlonGoalRollBall *second) {
     PokeathlonGoalRollBall saved;
 
     saved.velocity = first->velocity;
@@ -517,7 +528,7 @@ void PokeathlonGoalRoll_CollideBallPair(PokeathlonGoalRollBall *first, Pokeathlo
 #pragma force_active on
 
 // Sends `ball` away from `other`, taking over the other ball's kick if it was faster.
-void PokeathlonGoalRoll_BounceBallOff(PokeathlonGoalRollBall *ball, const PokeathlonGoalRollBall *other, int side) {
+static void PokeathlonGoalRoll_BounceBallOff(PokeathlonGoalRollBall *ball, const PokeathlonGoalRollBall *other, int side) {
     struct {
         volatile int side;
         VecFx32 right;
@@ -707,7 +718,7 @@ int PokeathlonGoalRoll_GetTouchedMon(PokeathlonGoalRoll *goalRoll, u8 participan
 
 #pragma force_active reset
 
-BOOL PokeathlonGoalRoll_CirclesOverlap(const VecFx32 *a, fx32 radiusA, const VecFx32 *b, fx32 radiusB) {
+static BOOL PokeathlonGoalRoll_CirclesOverlap(const VecFx32 *a, fx32 radiusA, const VecFx32 *b, fx32 radiusB) {
     VecFx32 delta;
     VEC_Subtract(a, b, &delta);
     return VEC_Mag(&delta) <= radiusA + radiusB;
@@ -738,7 +749,7 @@ void PokeathlonGoalRoll_ResetBall(PokeathlonGoalRollBall *ball) {
 }
 
 // velocity = direction * speed
-void PokeathlonGoalRoll_SetBallDirection(PokeathlonGoalRoll *goalRoll, PokeathlonGoalRollBall *ball, const VecFx32 *direction) {
+static void PokeathlonGoalRoll_SetBallDirection(PokeathlonGoalRoll *goalRoll, PokeathlonGoalRollBall *ball, const VecFx32 *direction) {
     VecFx32 zero = { 0, 0, 0 };
     VEC_Normalize(direction, &ball->direction);
     ball->velocity = ball->direction;
@@ -747,19 +758,19 @@ void PokeathlonGoalRoll_SetBallDirection(PokeathlonGoalRoll *goalRoll, Pokeathlo
 
 #pragma force_active reset
 
-fx32 PokeathlonGoalRoll_CalcNormalizedDot(const VecFx32 *a, const VecFx32 *b) {
+static fx32 PokeathlonGoalRoll_CalcNormalizedDot(const VecFx32 *a, const VecFx32 *b) {
     VecFx32 normA, normB;
     VEC_Normalize(a, &normA);
     VEC_Normalize(b, &normB);
     return VEC_DotProduct(&normA, &normB);
 }
 
-BOOL PokeathlonGoalRoll_IsWithinAngle(const VecFx32 *a, const VecFx32 *b, u32 angle) {
+static BOOL PokeathlonGoalRoll_IsWithinAngle(const VecFx32 *a, const VecFx32 *b, u32 angle) {
     fx32 dot = PokeathlonGoalRoll_CalcNormalizedDot(a, b);
     return dot >= FX_CosIdx(angle);
 }
 
-void PokeathlonGoalRoll_RecoverPower(PokeathlonGoalRollMon *mon) {
+static void PokeathlonGoalRoll_RecoverPower(PokeathlonGoalRollMon *mon) {
     mon->recoverTimer++;
     if (mon->recoverTimer >= 10) {
         mon->recoverTimer = 0;
@@ -821,7 +832,7 @@ void PokeathlonGoalRoll_PrintTotalPoints(PokeathlonGoalRoll *goalRoll, u32 score
 // walls (only with `checkCorners`) and the straight edges. Returns the wall hit (1 left, 2 right,
 // 3 top, 4 bottom, 5..8 the corners top left, top right, bottom left, bottom right; 0 none) and
 // the corrected position in `out`. The field is 256 x 184 with its centre at (128, 112).
-int PokeathlonGoalRoll_CollideWithWalls(VecFx32 *position, VecFx32 *previous, s32 radius, int checkCorners, VecFx32 *out) {
+static int PokeathlonGoalRoll_CollideWithWalls(VecFx32 *position, VecFx32 *previous, s32 radius, int checkCorners, VecFx32 *out) {
     VecFx32 edgeStart = { 0 }, edgeEnd = { 0 }, hit, normal, cornerStart = { 0 }, cornerEnd = { 0 };
     VecFx32 normalTopLeft = gPokeathlonGoalRollNormalTopLeft, normalTopRight = gPokeathlonGoalRollNormalTopRight, normalBottomLeft = gPokeathlonGoalRollNormalBottomLeft, normalBottomRight = gPokeathlonGoalRollNormalBottomRight;
     Point2D cornerA, cornerB, previousPoint, positionPoint, crossing;
@@ -1053,7 +1064,7 @@ edges:
 
 #pragma force_active reset
 
-BOOL PokeathlonGoalRoll_SegmentsIntersect(Point2D *a, Point2D *b, Point2D *c, const VecFx32 *point) {
+static BOOL PokeathlonGoalRoll_SegmentsIntersect(Point2D *a, Point2D *b, Point2D *c, const VecFx32 *point) {
     Point2D d;
     Point2D out;
     d.x = point->x / FX32_ONE;
@@ -1064,7 +1075,7 @@ BOOL PokeathlonGoalRoll_SegmentsIntersect(Point2D *a, Point2D *b, Point2D *c, co
 #pragma force_active on
 
 // Where the segment c-d crosses the axis-aligned wall a-b (into `out`); FALSE if it doesn't.
-BOOL PokeathlonGoalRoll_IntersectWall(const VecFx32 *a, const VecFx32 *b, const VecFx32 *c, const VecFx32 *d, VecFx32 *out) {
+static BOOL PokeathlonGoalRoll_IntersectWall(const VecFx32 *a, const VecFx32 *b, const VecFx32 *c, const VecFx32 *d, VecFx32 *out) {
     VecFx32 point = { 0, 0, 0 };
     VecFx32 direction;
     Point2D pointA, pointB, pointC, pointD;
@@ -1133,7 +1144,7 @@ BOOL PokeathlonGoalRoll_IntersectWall(const VecFx32 *a, const VecFx32 *b, const 
 #pragma force_active reset
 
 // Places a scored ball at a random one of the 15 spawn points not used by either ball.
-void PokeathlonGoalRoll_PickBallSpawn(PokeathlonGoalRoll *goalRoll, PokeathlonGoalRollBall *ball) {
+static void PokeathlonGoalRoll_PickBallSpawn(PokeathlonGoalRoll *goalRoll, PokeathlonGoalRollBall *ball) {
     u8 candidates[16];
     u8 count = 0;
     s32 i;
@@ -1207,7 +1218,7 @@ s32 PokeathlonGoalRoll_DecodeBallY(s32 code) {
     return code << 12;
 }
 
-void PokeathlonGoalRoll_NextFacing(PokeathlonGoalRollMon *mon) {
+static void PokeathlonGoalRoll_NextFacing(PokeathlonGoalRollMon *mon) {
     switch (mon->facing) {
     case 1:
         mon->facing = 4;

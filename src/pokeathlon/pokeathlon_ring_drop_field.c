@@ -9,7 +9,6 @@
 #include "math_util.h"
 #include "sprite_system.h"
 
-// Course mon objects (OVY_96; not declared by pokeathlon_course_internal.h).
 void PokeathlonCourseObject_SetCollision(PokeathlonCourseObject *object, s32 offsetY, s32 radius);
 void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseObject *object, s32 x, s32 y);
 void PokeathlonCourseObject_SetTouchRadius(PokeathlonCourseObject *object, int radius);
@@ -43,7 +42,10 @@ extern VecFx32 gPokeathlonRingDropDirectionReference;
 // The ring's edge: two lines (x, y pairs) the Pokemon must stay right of between y 64 and 160.
 extern const s16 gPokeathlonRingDropRingEdge[4][2];
 
-BOOL PokeathlonRingDrop_IsAttackState(int state) {
+static BOOL PokeathlonRingDropMon_Collide(PokeathlonRingDropMon *a, PokeathlonRingDropMon *b);
+static BOOL PokeathlonRingDropMon_CanCollide(PokeathlonRingDropMon *mon);
+
+static BOOL PokeathlonRingDrop_IsAttackState(int state) {
     if (state == RING_DROP_MON_DASH || state == RING_DROP_MON_JUMP_FALL) {
         return TRUE;
     }
@@ -54,7 +56,7 @@ BOOL PokeathlonRingDrop_IsAttackState(int state) {
 
 // source pushes target (they collide; direction points from source to target). A dash pushes three times its
 // power and takes stamina, a press pushes with the press power; the attacker scores. Other pushes are weak bumps.
-BOOL PokeathlonRingDropMon_Push(PokeathlonRingDropMon *target, PokeathlonRingDropMon *source, VecFx32 *direction) {
+static BOOL PokeathlonRingDropMon_Push(PokeathlonRingDropMon *target, PokeathlonRingDropMon *source, VecFx32 *direction) {
     int power = source->member->params->dashPower;
     int damage = source->member->params->dashDamage;
     if (PokeathlonRingDropMon_CanBePushed(target->state, source->state)) {
@@ -237,7 +239,7 @@ void PokeathlonRingDrop_FreeMonObjects(PokeathlonRingDrop *ringDrop) {
     PokeathlonCourseMonObjects_Free(ringDrop->monObjects);
 }
 
-void PokeathlonRingDropMon_ApplyPushReaction(PokeathlonRingDropMon *mon, int reaction) {
+static void PokeathlonRingDropMon_ApplyPushReaction(PokeathlonRingDropMon *mon, int reaction) {
     switch (reaction) {
     case RING_DROP_REACTION_NONE:
         break;
@@ -306,7 +308,7 @@ int PokeathlonRingDropMon_GetPushReaction(PokeathlonRingDropMon *mon) {
 // Host: every pair of Pokemon that touch pushes each other once (until one of them stops sliding).
 #pragma force_active on
 
-void PokeathlonRingDrop_UpdateCollisions(PokeathlonCourseData *course) {
+static void PokeathlonRingDrop_UpdateCollisions(PokeathlonCourseData *course) {
     int i;
     PokeathlonRingDrop *ringDrop;
     u8(*contacts)[RING_DROP_PARTICIPANTS];
@@ -356,7 +358,7 @@ void PokeathlonRingDrop_UpdateCollisions(PokeathlonCourseData *course) {
 
 // Host: the Pokemon in the ring loses stamina; when it runs out, the Pokemon rests for 60 frames and comes back
 // with 20. The members on the bench get theirs back (0.2 a frame).
-void PokeathlonRingDrop_UpdateStamina(PokeathlonRingDropPlayer *players, PokeathlonCourseData *course) {
+static void PokeathlonRingDrop_UpdateStamina(PokeathlonRingDropPlayer *players, PokeathlonCourseData *course) {
     int i;
     int member;
 
@@ -568,7 +570,7 @@ void PokeathlonRingDropMon_SetState(PokeathlonRingDropMon *mon, int state) {
 // the circle 8 bigger).
 #pragma force_active on
 
-BOOL PokeathlonRingDropMon_Collide(PokeathlonRingDropMon *a, PokeathlonRingDropMon *b) {
+static BOOL PokeathlonRingDropMon_Collide(PokeathlonRingDropMon *a, PokeathlonRingDropMon *b) {
     VecFx32 delta, centerA, centerB;
     int radiusA, radiusB;
     fx32 height = a->height - b->height;
@@ -651,7 +653,7 @@ int PokeathlonRingDrop_VecToDirection(const VecFx32 *vec) {
     return 1;
 }
 
-BOOL PokeathlonRingDropMon_CanCollide(PokeathlonRingDropMon *mon) {
+static BOOL PokeathlonRingDropMon_CanCollide(PokeathlonRingDropMon *mon) {
     GF_ASSERT(mon);
     GF_ASSERT(mon->state);
     return mon->state != RING_DROP_MON_JUMP_TOP && !mon->flags.bits.switching && mon->state != RING_DROP_MON_RETURN && mon->state != RING_DROP_MON_FALL_OUT;
@@ -659,7 +661,7 @@ BOOL PokeathlonRingDropMon_CanCollide(PokeathlonRingDropMon *mon) {
 
 #pragma force_active reset
 
-void PokeathlonRingDrop_ClearContacts(PokeathlonCourseData *course, s32 participant) {
+static void PokeathlonRingDrop_ClearContacts(PokeathlonCourseData *course, s32 participant) {
     u8 *contact = ((PokeathlonRingDrop *)PokeathlonCourse_GetWork(course))->contacts[participant];
     s32 i = 0;
     do {

@@ -16,7 +16,6 @@ void *PokeathlonCourseScoreList_New(enum HeapID heapId) {
     int i;
 
     MI_CpuFill8(list, 0, sizeof(PokeathlonCourseScoreList));
-    // entryBase: the list pointer moved on by one entry per step, entries[0] is the current one (needed to match)
     entryBase = list;
     for (i = 0; i < POKEATHLON_COURSE_SCORE_ENTRY_MAX; i++, entryBase = (PokeathlonCourseScoreList *)((u8 *)entryBase + sizeof(PokeathlonCourseScore))) {
         entryBase->entries[0].text = String_New(37, heapId);
@@ -39,7 +38,7 @@ void PokeathlonCourseScoreList_Free(void *ptr) {
     Heap_Free(ptr);
 }
 
-PokeathlonCourseScore *PokeathlonCourseScoreList_AddEntry(PokeathlonCourseScoreList *list) {
+static PokeathlonCourseScore *PokeathlonCourseScoreList_AddEntry(PokeathlonCourseScoreList *list) {
     if (list->next >= 4) {
         GF_AssertFail();
     }
@@ -59,7 +58,7 @@ PokeathlonCourseScore *PokeathlonCourseScoreList_GetEntry(PokeathlonCourseScoreL
     return &list->entries[index];
 }
 
-void PokeathlonCourseScoreList_Reset(PokeathlonCourseScoreList *list) {
+static void PokeathlonCourseScoreList_Reset(PokeathlonCourseScoreList *list) {
     int i;
     list->count = 0;
     list->unk04 = 0;
@@ -421,7 +420,6 @@ int PokeathlonCourseCmd_RecordSize(void) {
     return sizeof(PokeathlonStatistics);
 }
 
-// pokeathlon.h declares this size as a pointer, as PokeathlonCourseLink_SendCommand takes it
 void *PokeathlonCourseCmd_PacketSize(void) {
     return (void *)0x26;
 }

@@ -1,3 +1,5 @@
+#include "frontier/frontier_cmd_sound.h"
+
 #include "global.h"
 
 #include "frontier/frontier_script_context.h"
@@ -6,19 +8,10 @@
 #include "sound_playback.h"
 #include "sound_system.h"
 
-// Sound script commands: sound effects, fanfares and the background music.
-
-// Defined in frontier_script_commands.c.
 u16 FrontierScript_ReadVar(FrontierScriptContext *ctx);
 
-BOOL FrtCmd_PlaySE(FrontierScriptContext *ctx);
-BOOL FrtCmd_StopSE(FrontierScriptContext *ctx);
-BOOL FrtCmd_WaitSE(FrontierScriptContext *ctx);
-BOOL FrontierScriptNative_WaitSE(FrontierScriptContext *ctx);
-BOOL FrtCmd_PlayFanfare(FrontierScriptContext *ctx);
-BOOL FrtCmd_WaitFanfare(FrontierScriptContext *ctx);
-BOOL FrontierScriptNative_WaitFanfare(FrontierScriptContext *ctx);
-BOOL FrtCmd_PlayBGM(FrontierScriptContext *ctx);
+static BOOL FrontierScriptNative_WaitSE(FrontierScriptContext *ctx);
+static BOOL FrontierScriptNative_WaitFanfare(FrontierScriptContext *ctx);
 
 BOOL FrtCmd_PlaySE(FrontierScriptContext *ctx) {
     PlaySE(FrontierScript_ReadVar(ctx));
@@ -36,7 +29,7 @@ BOOL FrtCmd_WaitSE(FrontierScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL FrontierScriptNative_WaitSE(FrontierScriptContext *ctx) {
+static BOOL FrontierScriptNative_WaitSE(FrontierScriptContext *ctx) {
     if (!IsSEPlaying(ctx->data[0])) {
         return TRUE;
     }
@@ -53,7 +46,7 @@ BOOL FrtCmd_WaitFanfare(FrontierScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL FrontierScriptNative_WaitFanfare(FrontierScriptContext *ctx) {
+static BOOL FrontierScriptNative_WaitFanfare(FrontierScriptContext *ctx) {
     if (!IsFanfarePlaying()) {
         return TRUE;
     }

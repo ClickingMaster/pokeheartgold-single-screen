@@ -16,8 +16,6 @@
 	.public PokeathlonCourse_FreeMarkers
 	.public PokeathlonCourse_SetMarkerAnim
 	.public PokeathlonCourse_StopMarkerAnims
-	.public PokeathlonCourse_ShowStartSprites
-	.public PokeathlonCourse_IsStartAnimDone
 	.public PokeathlonCourse_SetHudPlanes
 	.public PokeathlonCourse_RunFinish
 	.public PokeathlonCourse_GetPerformanceFileId
@@ -62,50 +60,20 @@
 	.public PokeathlonCourse_State_Exit
 	.public PokeathlonCourse_State_WaitForCommand
 	.public PokeathlonCourse_VBlankCallback
-	.public PokeathlonCourse_SendEventResults
-	.public PokeathlonCourse_StoreRoundResults
-	.public PokeathlonCourse_SaveResults
-	.public PokeathlonCourse_SaveCourseRecord
-	.public PokeathlonCourse_SaveSoloEventRecords
-	.public PokeathlonCourse_SaveLinkEventRecords
-	.public PokeathlonCourse_SaveSoloEventBests
-	.public PokeathlonCourse_InsertRankEntry
-	.public PokeathlonCourse_CopySoloRanking
-	.public PokeathlonCourse_CopyLinkRanking
-	.public PokeathlonCourse_BeatsRecord
-	.public PokeathlonCourse_BeatsRecordInOrder
-	.public PokeathlonCourse_SaveStatistics
-	.public PokeathlonCourse_SaveFriendshipStatues
 	.public PokeathlonCourse_AddCapped
-	.public PokeathlonCourse_SetCourseMedals
-	.public PokeathlonCourse_SetMonMedals
-	.public PokeathlonCourse_HasAllCourseRecords
-	.public PokeathlonCourse_HasAllMedalsOfAMon
-	.public PokeathlonCourse_BeatsAllEventTargets
-	.public PokeathlonCourse_ChooseEvents
-	.public PokeathlonCourse_MarkerTask
 	.public PokeathlonCourse_AddMonCounter
 	.public PokeathlonCourse_SetRecordScore
 	.public PokeathlonCourse_SetFinishCallback
-	.public PokeathlonCourse_AddToCounter
-	.public PokeathlonCourse_IsNewRecord
 	.public PokeathlonCourse_GetNpcTeamSpriteId
 	.public PokeathlonCourse_GetNpcTeamMsgId
 	.public PokeathlonCourse_SetupNpcParticipants
-	.public PokeathlonCourse_ChooseNpcTeams
 	.public PokeathlonCourse_GetJuiceRecord
 	.public PokeathlonCourse_IsInRange
 	.public PokeathlonCourseLink_New
 	.public PokeathlonCourseLink_SetCheckSize
 	.public PokeathlonCourseLink_SendCommand
-	.public PokeathlonCourseLink_SendLargeCommand
 	.public PokeathlonCourseLink_Free
 	.public PokeathlonCourseLink_GetNetId
-	.public PokeathlonCourseCmdQueue_New
-	.public PokeathlonCourseCmdQueue_Task
-	.public PokeathlonCourseCmdQueue_Free
-	.public PokeathlonCourseCmdQueue_Add
-	.public PokeathlonCourseCmdQueue_AddLarge
 	.public PokeathlonCourse_ToBytes
 	.public PokeathlonCourseCmd_GetTable
 	.public PokeathlonCourseCmd_GetCount
@@ -119,14 +87,7 @@
 	.public PokeathlonCourseMonGfx_GetInfo
 	.public PokeathlonCourseMonGfx_LoadPalette
 	.public PokeathlonCourseMonGfx_SetPalette
-	.public PokeathlonCourseMonGfx_Load
-	.public PokeathlonCourseMonGfx_CreateSprite
-	.public PokeathlonCourseMonGfx_LoadTask
-	.public PokeathlonCourseMonGfx_LoadStep
 	.public PokeathlonCourseMonGfx_GetTopRow
-	.public PokeathlonCourseMonGfx_FindTopRow
-	.public PokeathlonCourseMonGfx_FindTopRowInTile
-	.public PokeathlonCourse_GetMonModelFileId
 	.public PokeathlonCourseMonGfx_SetScale
 	.public PokeathlonCourseMonGfx_ShiftLargeUp
 	.public PokeathlonCourseMonGfx_IsShiftedUp
@@ -134,9 +95,7 @@
 	.public PokeathlonCourse_FreeObjTransfer
 	.public PokeathlonCourseScoreList_New
 	.public PokeathlonCourseScoreList_Free
-	.public PokeathlonCourseScoreList_AddEntry
 	.public PokeathlonCourseScoreList_GetEntry
-	.public PokeathlonCourseScoreList_Reset
 	.public PokeathlonCourseScoreList_Rank
 	.public PokeathlonCourseScoreList_GetRanked
 	.public PokeathlonCourseScoreList_Init
@@ -175,9 +134,6 @@
 	.public PokeathlonCourseCmd_GetJuiceRecordBuffer
 	.public PokeathlonCourseSprites_CreateResources
 	.public PokeathlonCourseSprites_FreeResources
-	.public PokeathlonCourseSprites_HasGroup
-	.public PokeathlonCourseSprites_GetResMan
-	.public PokeathlonCourseSprites_LoadResources
 	.public PokeathlonCourseSprites_CreateCountdown
 	.public PokeathlonCourseSprites_CreateTimerDigit
 	.public PokeathlonCourse_CreateTimerDigitSprite
@@ -193,8 +149,6 @@
 	.public PokeathlonCourseMonObjects_IsLoaded
 	.public PokeathlonCourseMonObjects_Get
 	.public PokeathlonCourseMonObject_GetGfx
-	.public PokeathlonCourseMonObjects_FinishLoad
-	.public PokeathlonCourseMonObjects_CreateSprite
 	.public PokeathlonCourseMonObject_SetDrawFlag
 	.public PokeathlonCourseMonObject_SetShadowDrawFlag
 	.public PokeathlonCourseMonObject_SetMonDrawFlag
@@ -260,96 +214,12 @@
 	.public PokeathlonCourseClosing_Init
 	.public PokeathlonCourseClosing_Main
 	.public PokeathlonCourseClosing_Exit
-	.public PokeathlonCourseCeremony_SetBanks
 	.public PokeathlonCourseOpening_FadeIn
 	.public PokeathlonCourseOpening_Introduce
 	.public PokeathlonCourseOpening_FadeOut
 	.public PokeathlonCourseClosing_FadeIn
 	.public PokeathlonCourseClosing_Awards
 	.public PokeathlonCourseClosing_FadeOut
-	.public PokeathlonCourseCeremony_CryTask
-	.public PokeathlonCourseCeremony_StartCry
-	.public PokeathlonCourseCeremony_IsCryActive
-	.public PokeathlonCourseCeremony_InitBgs
-	.public PokeathlonCourseCeremony_LoadBgGfx
-	.public PokeathlonCourseCeremony_LoadWinnerBg
-	.public PokeathlonCourseCeremony_InitSpriteSystem
-	.public PokeathlonCourseCeremony_FreeSprites
-	.public PokeathlonCourseCeremony_CreateTrainerSprites
-	.public PokeathlonCourseCeremony_CreateScoreSprites
-	.public PokeathlonCourseCeremony_CreateMonPicSprites
-	.public PokeathlonCourseCeremony_CreateMedalSprites
-	.public PokeathlonCourseCeremony_LoadWinnerMonPics
-	.public PokeathlonCourseCeremony_LoadSpriteResources
-	.public PokeathlonCourseCeremony_LoadMonPicResources
-	.public PokeathlonCourseCeremony_ShowWinnerTeam
-	.public PokeathlonCourseCeremony_LoadTrainerSprites
-	.public PokeathlonCourseCeremony_SetTrainerPose
-	.public PokeathlonCourseCeremony_CreateScores
-	.public PokeathlonCourseCeremony_FreeScores
-	.public PokeathlonCourseCeremony_UpdateScores
-	.public PokeathlonCourseCeremony_AreScoresCounted
-	.public PokeathlonCourseCeremony_AddPoints
-	.public PokeathlonCourseCeremony_GetPoints
-	.public PokeathlonCourseCeremony_CompareRanks
-	.public PokeathlonCourseCeremony_RankTeams
-	.public PokeathlonCourseCeremonyScore_Update
-	.public PokeathlonCourseCeremonyScore_IsCounted
-	.public PokeathlonCourseCeremonyScore_Add
-	.public PokeathlonCourseConfetti_Spawn
-	.public PokeathlonCourseConfetti_Fall
-	.public PokeathlonCourseConfetti_MoveToTopScreen
-	.public PokeathlonCourseConfetti_New
-	.public PokeathlonCourseConfetti_Free
-	.public PokeathlonCourseConfetti_Update
-	.public PokeathlonCourseConfetti_Start
-	.public PokeathlonCourseConfetti_SpawnPieces
-	.public PokeathlonCourseCeremony_Init
-	.public PokeathlonCourseCeremony_Main
-	.public PokeathlonCourseCeremony_Exit
-	.public PokeathlonCourseCeremony_BufferMonName
-	.public PokeathlonCourseCeremony_BufferTeamPoints
-	.public PokeathlonCourseCeremony_BufferTeamMon
-	.public PokeathlonCourseCeremony_HasNoMissBonus
-	.public PokeathlonCourseCeremony_IsNoMissMon
-	.public PokeathlonCourseCeremony_IsPointsLeader
-	.public PokeathlonCourseCeremony_IsEffortPrizeMon
-	.public PokeathlonCourseConfetti_GetRandomDelay
-	.public PokeathlonCourseCeremony_GetChallengeBonus
-	.public PokeathlonCourseCeremony_GetEventPoints
-	.public PokeathlonCourseCeremony_GetNoMissPoints
-	.public PokeathlonCourseCeremony_GetPointsLeaderPoints
-	.public PokeathlonCourseCeremony_GetEffortPrizePoints
-	.public PokeathlonCourseCeremony_CountNoMissMons
-	.public PokeathlonCourseCeremony_CountPointsLeaders
-	.public PokeathlonCourseCeremony_CountEffortPrizes
-	.public PokeathlonCourseCeremony_GetDrawingLots
-	.public PokeathlonCourseCeremony_GetIntroMsgId
-	.public PokeathlonCourseCeremony_GetIntroValue
-	.public PokeathlonCourseCeremony_GetIntroCheer
-	.public PokeathlonCourseCeremony_ChooseIntros
-	.public PokeathlonCourseCeremony_CalcChallengeBonus
-	.public PokeathlonCourseCeremony_ChooseEffortPrizeKind
-	.public PokeathlonCourseCeremony_ChooseAwards
-	.public PokeathlonCourseCeremony_GetCourseMedal
-	.public PokeathlonCourseCeremony_GetEffortPrizeKind
-	.public PokeathlonCourseCeremony_GetMonStat
-	.public PokeathlonCourseCeremony_NextMon
-	.public PokeathlonCourseCeremony_AwardNextMon
-	.public PokeathlonCourseCeremony_SaveResult
-	.public PokeathlonCourseCeremony_BufferNumber
-	.public PokeathlonCourseCeremony_GetCheerLevel
-	.public PokeathlonCourseCeremony_GetIntroMsgBase
-	.public PokeathlonCourseCeremony_GetIntroStats
-	.public PokeathlonCourseCeremony_WeighIntroStats
-	.public PokeathlonCourseCeremony_PickIntroStat
-	.public PokeathlonCourseCeremony_ChooseOwnIntro
-	.public PokeathlonCourseCeremony_ChooseLinkIntro
-	.public PokeathlonCourseCeremony_ChooseNpcIntro
-	.public PokeathlonCourseCeremony_FindPlace
-	.public PokeathlonCourseCeremony_BreakTie
-	.public PokeathlonCourseCeremony_SyncOpening
-	.public PokeathlonCourseCeremony_SyncClosing
 	.public PokeathlonCourseCeremony_IsOpeningFinished
 	.public PokeathlonCourseCeremony_IsClosingFinished
 	.public PokeathlonEventBanner_New
@@ -357,7 +227,6 @@
 	.public PokeathlonEventBanner_AddWindows
 	.public PokeathlonEventBanner_LoadGraphics
 	.public PokeathlonEventBanner_PrintTexts
-	.public PokeathlonEventBanner_PrintText
 	.public PokeathlonCourseMessageBox_New
 	.public PokeathlonCourseMessageBox_Init
 	.public PokeathlonCourseMessageBox_Free
@@ -368,8 +237,6 @@
 	.public PokeathlonCourseMessageBox_GetMsgFormat
 	.public PokeathlonCourseMessageBox_ShowWaitingIcon
 	.public PokeathlonCourseMessageBox_HideWaitingIcon
-	.public PokeathlonCourseMessageBox_LoadFrame
-	.public PokeathlonCourseMessageBox_PrintToWindow
 	.public PokeathlonCourseMessageBox_IsBusy
 	.public PokeathlonCourse_LoadTrainerPic
 	.public PokeathlonCourse_LoadTrainerPicIntoSprite
@@ -378,55 +245,16 @@
 	.public PokeathlonCourse_GetTrainerPicFileId
 	.public PokeathlonCourse_LoadMonPic
 	.public PokeathlonCourse_LoadMonPicWithPalette
-	.public PokeathlonCourse_LoadMonPicEx
 	.public PokeathlonCourse_LoadMonIcon
-	.public PokeathlonCourse_LoadSpriteCharsAt
-	.public PokeathlonCourse_LoadSpriteChars
 	.public PokeathlonCourse_LoadSpritePalette
 	.public PokeathlonCourse_GetNpcTrainerPicFileId
 	.public PokeathlonCourseWait_Init
 	.public PokeathlonCourseWait_Main
 	.public PokeathlonCourseWait_Exit
-	.public PokeathlonCourseWait_SetBanks
-	.public PokeathlonCourseWait_VBlankCallback
-	.public PokeathlonCourseWait_InitBgs
-	.public PokeathlonCourseWait_FreeBgs
-	.public PokeathlonCourseWait_Create
-	.public PokeathlonCourseWait_Free
 	.public PokeathlonCourseWait_FadeOut
 	.public PokeathlonEventIntro_Init
 	.public PokeathlonEventIntro_Main
 	.public PokeathlonEventIntro_Exit
-	.public PokeathlonEventIntro_VBlankCallback
-	.public PokeathlonEventIntro_SetBanks
-	.public PokeathlonEventIntro_IsBgmAt
-	.public PokeathlonEventIntro_GetEvent
-	.public PokeathlonEventIntro_HasFlag0EF
-	.public PokeathlonEventIntro_Create
-	.public PokeathlonEventIntro_LoadDetailsBg
-	.public PokeathlonEventIntro_LoadPagePicture
-	.public PokeathlonEventIntro_InitBgs
-	.public PokeathlonEventIntro_LoadGraphics
-	.public PokeathlonEventIntro_GetRecord
-	.public PokeathlonEventIntro_PrintDetails
-	.public PokeathlonEventIntro_PrintRules
-	.public PokeathlonEventIntro_PrintControls
-	.public PokeathlonEventIntro_InitSprites
-	.public PokeathlonEventIntro_LoadSpriteResources
-	.public PokeathlonEventIntro_UpdateMascot
-	.public PokeathlonEventIntro_PlaceSprites
-	.public PokeathlonEventIntro_ResetMascot
-	.public PokeathlonEventIntro_CreateSprites
-	.public PokeathlonEventIntro_SetMascotAnim
-	.public PokeathlonEventIntro_HideZoomBgs
-	.public PokeathlonEventIntro_StartZoom
-	.public PokeathlonEventIntro_UpdateZoom
-	.public PokeathlonEventIntro_FadeToPage
-	.public PokeathlonEventIntro_IsFadeFinished
-	.public PokeathlonEventIntro_ShowDetails
-	.public PokeathlonEventIntro_ShowRules
-	.public PokeathlonEventIntro_ShowControls
-	.public PokeathlonEventIntro_ShowPage
 	.public PokeathlonEventIntro_Appear
 	.public PokeathlonEventIntro_DetailsPage
 	.public PokeathlonEventIntro_RulesPage
@@ -436,234 +264,56 @@
 	.public PokeathlonCirclePush_Main
 	.public PokeathlonCirclePush_CalcResults
 	.public PokeathlonCirclePush_Exit
-	.public PokeathlonCirclePush_SetBanks
 	.public PokeathlonCirclePush_FadeIn
 	.public PokeathlonCirclePush_Play
 	.public PokeathlonCirclePush_End
-	.public PokeathlonCirclePush_InitBgs
-	.public PokeathlonCirclePush_LoadBgGfx
-	.public PokeathlonCirclePush_MakePacket
-	.public PokeathlonCirclePush_Update
-	.public PokeathlonCirclePush_RunHost
-	.public PokeathlonCirclePush_UpdateScreen
-	.public PokeathlonCirclePush_MoveMons
-	.public PokeathlonCirclePush_SetTarget
-	.public PokeathlonCirclePush_FindTouchedMon
-	.public PokeathlonCirclePush_MonsCollide
-	.public PokeathlonCirclePush_UpdateContacts
-	.public PokeathlonCirclePush_CanMove
-	.public PokeathlonCirclePush_PushMons
-	.public PokeathlonCirclePushStack_Push
-	.public PokeathlonCirclePushStack_Pop
-	.public PokeathlonCirclePush_Project
-	.public PokeathlonCirclePush_Cosine
-	.public PokeathlonCirclePush_ScoreZones
-	.public PokeathlonCirclePush_DrawTimer
-	.public PokeathlonCirclePush_DrawTimerTile
-	.public PokeathlonCirclePush_RespawnMons
-	.public PokeathlonCirclePush_IsTeamOut
-	.public PokeathlonCirclePush_RecoverStamina
-	.public PokeathlonCirclePush_SetMonStats
-	.public PokeathlonCirclePush_StartLayoutChange
-	.public PokeathlonCirclePush_LayoutChangeTask
-	.public PokeathlonCirclePush_LayoutFadeTask
-	.public PokeathlonCirclePush_RingSlideTask
-	.public PokeathlonCirclePush_ShakeTask
-	.public PokeathlonCirclePush_StopEffects
-	.public PokeathlonCirclePush_StartBounce
-	.public PokeathlonCirclePush_BounceTask
-	.public PokeathlonCirclePush_ApplyBounce
-	.public PokeathlonCirclePush_AddScoreWindow
-	.public PokeathlonCirclePush_PrintScore
-	.public PokeathlonCirclePush_IsOutOfRing
-	.public PokeathlonCirclePush_CompareDepth
-	.public PokeathlonCirclePush_SortByDepth
-	.public PokeathlonCirclePushZoneMarkers_New
-	.public PokeathlonCirclePushZoneMarkers_Free
-	.public PokeathlonCirclePushZoneMarkers_CreateSprites
-	.public PokeathlonCirclePush_ChooseLayout
-	.public PokeathlonCirclePush_GetZonePoints
-	.public PokeathlonCirclePushZoneMarkers_Show
-	.public PokeathlonCirclePushZoneMarkers_Hide
-	.public PokeathlonCirclePush_GetPointsEffect
-	.public PokeathlonCirclePush_IsInCircle
-	.public PokeathlonCirclePush_GetZoneCircles
-	.public PokeathlonCirclePushAi_New
-	.public PokeathlonCirclePushAi_SetMon
-	.public PokeathlonCirclePushAi_Free
-	.public PokeathlonCirclePushAi_Update
-	.public PokeathlonCirclePushAi_ChooseTarget
-	.public PokeathlonCirclePushAi_PlaceInCells
-	.public PokeathlonCirclePushAi_ScoreCells
-	.public PokeathlonCirclePushAi_GetCell
-	.public PokeathlonCirclePushAi_ScoreCell
-	.public PokeathlonCirclePushAi_CountRivals
-	.public PokeathlonCirclePushAi_IsInZone
-	.public PokeathlonCirclePushAi_IsZoneCell
-	.public PokeathlonCirclePushAi_SnapToZone
-	.public PokeathlonCirclePushAi_GetColumnRow
-	.public PokeathlonCirclePushAi_SortCells
-	.public PokeathlonCirclePushDisplay_New
-	.public PokeathlonCirclePushDisplay_Free
-	.public PokeathlonCirclePushDisplay_LoadScreens
-	.public PokeathlonCirclePushDisplay_LoadPics
-	.public PokeathlonCirclePushDisplay_LoadSpriteResources
 	.public PokeathlonCirclePushDisplay_CreatePicSprites
 	.public PokeathlonCirclePushDisplay_CreateSprites
 	.public PokeathlonCirclePushDisplay_PrintPlayerNames
 	.public PokeathlonCirclePushDisplay_SetRound
 	.public PokeathlonCirclePushDisplay_ShowPlayerEvent
-	.public PokeathlonCirclePushDisplay_ResetAnim
 	.public PokeathlonCirclePushDisplay_GetPicVramLocations
 	.public PokeathlonCirclePushDisplay_LoadMonPics
-	.public PokeathlonCirclePushDisplayAnim_LoadMonPic
 	.public PokeathlonCirclePushDisplay_CreateWindows
-	.public PokeathlonCirclePushDisplay_PrintRound
 	.public PokeathlonCirclePushDisplay_Update
 	.public PokeathlonCirclePushDisplay_SetScore
 	.public PokeathlonCirclePushDisplay_GetScore
-	.public PokeathlonCirclePushDisplayAnim_TakeNewMon
-	.public PokeathlonCirclePushDisplayAnim_CanStart
-	.public PokeathlonCirclePushDisplayAnim_Stop
-	.public PokeathlonCirclePushDisplayAnim_HideSprites
-	.public PokeathlonCirclePushDisplayAnim_TryStart
-	.public PokeathlonCirclePushDisplayAnim_StartScoreboard
-	.public PokeathlonCirclePushDisplayAnim_StartMonPic
-	.public PokeathlonCirclePushDisplayAnim_StartMatchup
-	.public PokeathlonCirclePushDisplayAnim_StartZoom
-	.public PokeathlonCirclePushDisplayAnim_StartIdle
-	.public PokeathlonCirclePushDisplay_UpdateScoreboard
-	.public PokeathlonCirclePushDisplay_UpdateMonPic
-	.public PokeathlonCirclePushDisplay_UpdateMatchup
-	.public PokeathlonCirclePushDisplay_UpdateZoom
-	.public PokeathlonCirclePushDisplayAnim_SetupMatchup
-	.public PokeathlonCirclePushDisplayAnim_MovePicAlongPath
-	.public PokeathlonCirclePushDisplayAnim_SetupMonPic
-	.public PokeathlonCirclePushDisplayAnim_MovePicVertically
 	.public PokeathlonCirclePushDisplayAnim_PrintScore
 	.public PokeathlonCirclePushDisplay_OffsetScreenTiles
 	.public PokeathlonLampJump_Init
 	.public PokeathlonLampJump_Draw
 	.public PokeathlonLampJump_ShowResults
 	.public PokeathlonLampJump_Exit
-	.public PokeathlonLampJump_SetGfxBanks
 	.public PokeathlonLampJump_Play
 	.public PokeathlonLampJump_CalcScores
-	.public PokeathlonLampJump_InitBgs
-	.public PokeathlonLampJump_LoadBgGfx
-	.public PokeathlonLampJump_Update
-	.public PokeathlonLampJump_UpdateDisplay
-	.public PokeathlonLampJump_HandleTouch
-	.public PokeathlonLampJump_UpdateMonSprites
-	.public PokeathlonLampJump_UpdatePlayerSprites
-	.public PokeathlonLampJump_GetFlick
-	.public PokeathlonLampJump_FindTouchedMon
 	.public PokeathlonLampJump_CheckCollision
-	.public PokeathlonLampJump_LaunchMon
-	.public PokeathlonLampJump_Init3D
-	.public PokeathlonLampJump_DrawTrampoline
 	.public PokeathlonLampJump_Draw3D
 	.public PokeathlonLampJump_InitCamera
 	.public PokeathlonLampJump_CalcTrampolineSurface
-	.public PokeathlonLampJump_CalcPartialSurface
-	.public PokeathlonLampJump_CalcLine
-	.public PokeathlonLampJump_ScoreLamp
 	.public PokeathlonLampJump_UpdateJumps
-	.public PokeathlonLampJump_UpdateJump
-	.public PokeathlonLampJump_MoveSideways
-	.public PokeathlonLampJump_CalcDent
 	.public PokeathlonLampJump_SetRestingHeights
-	.public PokeathlonLampJump_SetDent
 	.public PokeathlonLampJump_LoadSpriteResources
 	.public PokeathlonLampJump_CreateSprites
 	.public PokeathlonLampJump_PlaceSprites
 	.public PokeathlonLampJump_UpdateScoreDisplay
-	.public PokeathlonLampJump_PrintScore
 	.public PokeathlonLampJump_UpdateTimerDisplay
 	.public PokeathlonLampJump_PrintPlayerNames
 	.public PokeathlonLampJump_InitWindows
 	.public PokeathlonLampJump_PrintTotal
-	.public PokeathlonLampJump_SlowDownSideways
 	.public PokeathlonLampJump_SetMonParams
 	.public PokeathlonLampJump_CollideMons
 	.public PokeathlonLampJump_NewLamps
 	.public PokeathlonLampJump_FreeLamps
-	.public PokeathlonLampJump_CreateLampSprites
-	.public PokeathlonLampJump_PlaceLamps
 	.public PokeathlonLampJump_UpdateLamps
-	.public PokeathlonLampJump_PutOutLamp
-	.public PokeathlonLampJump_GetLampPos
-	.public PokeathlonLampJump_IsLampLit
-	.public PokeathlonLampJump_ShowLampPoints
-	.public PokeathlonLampJump_LightLamps
 	.public PokeathlonLampJump_NewCpuPlayers
 	.public PokeathlonLampJump_FreeCpuPlayers
 	.public PokeathlonLampJump_UpdateCpuPlayers
-	.public PokeathlonLampJump_UpdateCpuPlayer
 	.public PokeathlonResults_InitWindow
 	.public PokeathlonResults_PrintTitle
 	.public PokeathlonResults_Init
 	.public PokeathlonResults_Draw
 	.public PokeathlonResults_Exit
-	.public PokeathlonResults_SetGfxBanks
-	.public PokeathlonResults_InitBgs
-	.public PokeathlonResults_LoadBgGfx
-	.public PokeathlonResults_AllPlayersFinished
 	.public PokeathlonResults_Run
-	.public PokeathlonResults_CreatePlates
-	.public PokeathlonResults_StartRanking
-	.public PokeathlonResults_MoveSlide
-	.public PokeathlonResults_MoveSlides
-	.public PokeathlonResults_IsSlideDone
-	.public PokeathlonResults_Wait
-	.public PokeathlonResults_UpdateRanking
-	.public PokeathlonResults_QueueSlide
-	.public PokeathlonResults_SetIncomingSlide
-	.public PokeathlonResults_ClearSlide
-	.public PokeathlonResults_HasMorePlates
-	.public PokeathlonResults_AddPlate
-	.public PokeathlonResults_RemoveSlide
-	.public PokeathlonResults_GetLeavingSlide
-	.public PokeathlonResults_GetIntroMessage
-	.public PokeathlonResults_GetCommentMessage
-	.public PokeathlonResults_InitSprites
-	.public PokeathlonResults_FreeSprites
-	.public PokeathlonResults_LoadSpriteResources
-	.public PokeathlonResults_CreateSprite
-	.public PokeathlonResults_WaitForPlayers
-	.public PokeathlonResults_NewPlates
-	.public PokeathlonResults_FreePlates
-	.public PokeathlonResults_DrawPlates
-	.public PokeathlonResults_InitPlates
-	.public PokeathlonResults_ShowPlate
-	.public PokeathlonResults_HidePlate
-	.public PokeathlonResults_GetPlatePos
-	.public PokeathlonResults_SetPlatePos
-	.public PokeathlonResults_MovePlate
-	.public PokeathlonResults_GetPlateRank
-	.public PokeathlonResults_LoadPlateResources
-	.public PokeathlonResults_InitPlateResourcesHeader
-	.public PokeathlonResults_InitPlateSpriteTemplate
-	.public PokeathlonResults_CreatePlateSprite
-	.public PokeathlonResults_CreatePlateSprites
-	.public PokeathlonResults_PrintPlateName
-	.public PokeathlonResults_PrintPlateText
-	.public PokeathlonResults_RefreshPlate
-	.public PokeathlonResults_SetPlateVisible
-	.public PokeathlonResults_SetPlateSpritePositions
-	.public PokeathlonResults_MovePlateSprites
-	.public PokeathlonResults_InitTextWindow
-	.public PokeathlonResults_InitTextWindows
-	.public PokeathlonResults_CreateText
-	.public PokeathlonResults_DestroyText
-	.public PokeathlonResults_NewScoreboard
-	.public PokeathlonResults_FreeScoreboard
-	.public PokeathlonResults_LoadScoreboardResources
-	.public PokeathlonResults_InitScoreboard
-	.public PokeathlonResults_SetScore
-	.public PokeathlonResults_CreateScoreboardText
-	.public PokeathlonResults_DestroyScoreboardText
-	.public PokeathlonResults_SetScoreDigits
 	.public PokeathlonHurdleDash_Start
 	.public PokeathlonHurdleDash_Play
 	.public PokeathlonHurdleDash_CalcScores
@@ -671,53 +321,16 @@
 	.public PokeathlonHurdleDash_Draw
 	.public PokeathlonHurdleDash_ShowResults
 	.public PokeathlonHurdleDash_Exit
-	.public PokeathlonHurdleDash_SetGfxBanks
-	.public PokeathlonHurdleDash_InitBgs
-	.public PokeathlonHurdleDash_LoadBgTiles
-	.public PokeathlonHurdleDash_LoadBgScreens
 	.public PokeathlonHurdleDashRunner_Init
-	.public PokeathlonHurdleDashRunner_GetHurdle
-	.public PokeathlonHurdleDash_UpdateRunner
 	.public PokeathlonHurdleDash_UpdateRunners
-	.public PokeathlonHurdleDashMon_StartJump
-	.public PokeathlonHurdleDashMon_Update
-	.public PokeathlonHurdleDash_IsTouchingHurdle
-	.public PokeathlonHurdleDash_IsJumpTimed
-	.public PokeathlonHurdleDashRunner_DrawFinishLine
 	.public PokeathlonHurdleDash_SyncRace
-	.public PokeathlonHurdleDash_UpdateStandings
-	.public PokeathlonHurdleDash_UpdateRanks
-	.public PokeathlonHurdleDash_CalcRanks
-	.public PokeathlonHurdleDashRankNode_InsertFinished
-	.public PokeathlonHurdleDashRankNode_InsertRunning
-	.public PokeathlonHurdleDash_SetRank
 	.public PokeathlonHurdleDash_HaveAllStopped
 	.public PokeathlonHurdleDash_UpdateCpuParticipants
-	.public PokeathlonHurdleDash_RevealHurdles
-	.public PokeathlonHurdleDashRunner_UpdateDust
-	.public PokeathlonHurdleDash_GetTouchedLane
 	.public PokeathlonHurdleDash_InitTimeWindow
 	.public PokeathlonHurdleDash_PrintTime
-	.public PokeathlonHurdleDashMon_ScaleForHeight
-	.public PokeathlonHurdleDashMon_ScaleForHop
-	.public PokeathlonHurdleDash_UpdateTimerDigits
-	.public PokeathlonHurdleDash_UpdateCpuRunner
 	.public PokeathlonHurdleDash_InitCpuRunners
-	.public PokeathlonHurdleDashRunner_Boost
 	.public PokeathlonHurdleDash_CountFrame
 	.public PokeathlonHurdleDash_RoundTime
-	.public PokeathlonHurdleDash_AllocHurdles
-	.public PokeathlonHurdleDash_FreeHurdles
-	.public PokeathlonHurdleDash_GetHurdle
-	.public PokeathlonHurdle_SetSprites
-	.public PokeathlonHurdle_SetActive
-	.public PokeathlonHurdle_IsVisible
-	.public PokeathlonHurdle_IsStanding
-	.public PokeathlonHurdle_KnockDown
-	.public PokeathlonHurdle_SetPosition
-	.public PokeathlonHurdle_Scroll
-	.public PokeathlonHurdle_GetRect
-	.public PokeathlonHurdleDashTrack_PlaceHurdle
 	.public PokeathlonHurdleDashTrack_New
 	.public PokeathlonHurdleDashTrack_Free
 	.public PokeathlonHurdleDashTrack_CreateHurdleSprites
@@ -725,70 +338,35 @@
 	.public PokeathlonHurdleDashTrack_GetLayoutToSend
 	.public PokeathlonHurdleDashTrack_GetLayout
 	.public PokeathlonHurdleDashTrack_GetLayoutSize
-	.public PokeathlonHurdleDashTrack_RevealHurdles
 	.public PokeathlonHurdleDashTrack_LoadRandomLayout
-	.public PokeathlonHurdleDashTrack_GetHurdleAt
 	.public PokeathlonHurdleDashStandings_New
 	.public PokeathlonHurdleDashStandings_Free
 	.public PokeathlonHurdleDashStandings_Init
-	.public PokeathlonHurdleDashStandings_SetMonX
-	.public PokeathlonHurdleDashStandings_SetRank
 	.public PokeathlonHurdleDashStandings_SetDrawFlag
-	.public PokeathlonHurdleDashStandings_SetMonDrawFlag
 	.public PokeathlonHurdleDashStandings_Draw
-	.public PokeathlonHurdleDashStandings_LoadResources
-	.public PokeathlonHurdleDashStandings_InitResourcesHeader
-	.public PokeathlonHurdleDashStandings_CreateSprites
-	.public PokeathlonHurdleDashStandings_InitSpriteTemplate
 	.public PokeathlonHurdleDashDust_New
 	.public PokeathlonHurdleDashDust_CreateSprites
 	.public PokeathlonHurdleDashDust_Free
-	.public PokeathlonHurdleDashDust_Spawn
-	.public PokeathlonHurdleDashDust_Scroll
-	.public PokeathlonHurdleDashDust_Remove
 	.public PokeathlonRelayRun_Init
 	.public PokeathlonRelayRun_Draw
 	.public PokeathlonRelayRun_ShowResults
 	.public PokeathlonRelayRun_Exit
-	.public PokeathlonRelayRun_SetGfxBanks
-	.public PokeathlonRelayRun_InitBgs
-	.public PokeathlonRelayRun_LoadBgGraphics
-	.public PokeathlonRelayRun_LoadSpriteGraphics
-	.public PokeathlonRelayRun_CreateSprites
 	.public PokeathlonRelayRun_Start
 	.public PokeathlonRelayRun_Play
 	.public PokeathlonRelayRun_SaveScores
-	.public PokeathlonRelayRun_UpdateHost
-	.public PokeathlonRelayRun_PackPacket
-	.public PokeathlonRelayRun_Update
-	.public PokeathlonRelayRun_DrawPacket
-	.public PokeathlonRelayRun_IsTouchingRunner
-	.public PokeathlonRelayRun_IsTouchingSwapButton
-	.public PokeathlonRelayRun_MoveTeams
-	.public PokeathlonRelayRunTeam_UpdateStun
 	.public PokeathlonRelayRun_DrawTeams
 	.public PokeathlonRelayRun_ScrollObstacles
-	.public PokeathlonRelayRunTeam_AnimateLeave
-	.public PokeathlonRelayRunTeam_AnimateArrive
-	.public PokeathlonRelayRunTeam_EndSwap
-	.public PokeathlonRelayRunTeam_DrawSwap
 	.public PokeathlonRelayRun_InitMember
-	.public PokeathlonRelayRun_FindNearbyObstacles
 	.public PokeathlonRelayRun_GetObstacleShape
-	.public PokeathlonRelayRun_CollideWithObstacle
-	.public PokeathlonRelayRun_IsOnSlowPatch
 	.public PokeathlonRelayRun_CollideWithObstacles
-	.public PokeathlonRelayRun_CalcCircleEntry
 	.public PokeathlonRelayRunTeam_GetMaxSpeed
 	.public PokeathlonRelayRun_AddFlick
 	.public PokeathlonRelayRun_CollideRunners
-	.public PokeathlonRelayRun_PlaceAboveMon
 	.public PokeathlonRelayRunObstacle_SetDrawPriority
 	.public PokeathlonRelayRunTeam_SetDrawPriority
 	.public PokeathlonRelayRun_UpdateStartLine
 	.public PokeathlonRelayRun_UpdateLapCounter
 	.public PokeathlonRelayRun_AddResultWindow
-	.public PokeathlonRelayRun_PrintResult
 	.public PokeathlonRelayRun_PlaySEIfOnScreen
 	.public PokeathlonRelayRun_UpdateSwapSign
 	.public PokeathlonRelayRun_SaveResult
@@ -800,7 +378,6 @@
 	.public PokeathlonRelayRunHud_LoadMonIcons
 	.public PokeathlonRelayRunHud_LoadMonPics
 	.public PokeathlonRelayRunHud_ShowMonPic
-	.public PokeathlonRelayRunHud_SetMonIcon
 	.public PokeathlonRelayRunHud_SetMapPosition
 	.public PokeathlonRelayRunHud_PrintDistance
 	.public PokeathlonRelayRunHud_RotateMonPics
@@ -810,8 +387,6 @@
 	.public PokeathlonRelayRunHud_SetTimer
 	.public PokeathlonRelayRunHud_SetDrawPriorities
 	.public PokeathlonRelayRunHud_GetBenchMember
-	.public PokeathlonRelayRunHud_PrintMonName
-	.public PokeathlonRelayRunHud_PrintLaps
 	.public PokeathlonRelayRunHud_CreatePicFrames
 	.public PokeathlonRelayRunHud_GetPicVramOffsets
 	.public PokeathlonRelayRunHud_InitWindows
@@ -820,70 +395,18 @@
 	.public PokeathlonRelayRunCpu_SetObstacles
 	.public PokeathlonRelayRunCpu_Delete
 	.public PokeathlonRelayRunCpu_Update
-	.public PokeathlonRelayRunCpu_Think
-	.public PokeathlonRelayRunCpu_WrapX
-	.public PokeathlonRelayRunCpu_PickBestCell
 	.public PokeathlonRelayRunCpu_SortCells
 	.public PokeathlonSnowThrow_Init
 	.public PokeathlonSnowThrow_Draw
 	.public PokeathlonSnowThrow_ShowResults
 	.public PokeathlonSnowThrow_Exit
-	.public PokeathlonSnowThrow_SetGfxBanks
-	.public PokeathlonSnowThrow_InitBgs
-	.public PokeathlonSnowThrow_LoadBgGraphics
-	.public PokeathlonSnowThrow_LoadSpriteGraphics
-	.public PokeathlonSnowThrow_CreateSprites
 	.public PokeathlonSnowThrow_Play
 	.public PokeathlonSnowThrow_SaveScores
-	.public PokeathlonSnowThrow_UpdateHost
-	.public PokeathlonSnowThrow_PackPacket
-	.public PokeathlonSnowThrow_Update
-	.public PokeathlonSnowThrow_DrawPacket
-	.public PokeathlonSnowThrow_FindOwnMonAt
-	.public PokeathlonSnowThrow_InitMon
-	.public PokeathlonSnowThrow_InitWindows
-	.public PokeathlonSnowThrow_PrintScore
-	.public PokeathlonSnowThrow_UpdateMons
-	.public PokeathlonSnowThrow_MoveBalls
-	.public PokeathlonSnowThrow_HitMons
-	.public PokeathlonSnowThrow_CollideBalls
-	.public PokeathlonSnowThrow_PrintNames
-	.public PokeathlonSnowThrow_SetTimerDigits
-	.public PokeathlonSnowThrow_ShowOwnScore
-	.public PokeathlonSnowThrow_CompareDrawOrder
-	.public PokeathlonSnowThrow_SortSprites
-	.public PokeathlonSnowThrowDisplay_New
-	.public PokeathlonSnowThrowDisplay_Delete
-	.public PokeathlonSnowThrowDisplay_LoadBgGraphics
-	.public PokeathlonSnowThrowDisplay_LoadSpriteGraphics
-	.public PokeathlonSnowThrowDisplay_CreateSprites
-	.public PokeathlonSnowThrowDisplay_ShowTired
-	.public PokeathlonSnowThrowDisplay_SetScore
-	.public PokeathlonSnowThrowDisplay_SetPicAnim
-	.public PokeathlonSnowThrowDisplay_IsPicAnimated
-	.public PokeathlonSnowThrowDisplay_Shake
-	.public PokeathlonSnowThrowDisplay_UpdateShake
-	.public PokeathlonSnowThrowDisplay_SetMonShadows
-	.public PokeathlonSnowThrowDisplay_LoadMonPics
-	.public PokeathlonSnowThrowDisplay_CreatePicSprites
-	.public PokeathlonSnowThrowDisplay_TransferMonPics
-	.public PokeathlonSnowThrowDisplay_GetPicVramOffsets
-	.public PokeathlonSnowThrowDisplay_InitWindow
-	.public PokeathlonSnowThrowDisplay_PrintName
-	.public PokeathlonSnowThrow_ScreenToField
-	.public PokeathlonSnowThrow_FieldToScreen
-	.public PokeathlonSnowThrow_AddAimSpread
-	.public PokeathlonSnowThrowCpu_New
-	.public PokeathlonSnowThrowCpu_SetMon
-	.public PokeathlonSnowThrowCpu_Delete
-	.public PokeathlonSnowThrowCpu_Update
-	.public PokeathlonSnowThrowCpu_Think
 	.public PokeathlonSnowThrowCpu_SortTargets
 	.public PokeathlonPennantCapture_Init
 	.public PokeathlonPennantCapture_Draw
 	.public PokeathlonPennantCapture_ShowResults
 	.public PokeathlonPennantCapture_Exit
-	.public PokeathlonPennantCapture_SetGfxBanks
 	.public PokeathlonPennantCapture_InitBgs
 	.public PokeathlonPennantCapture_LoadBgGfx
 	.public PokeathlonPennantCapture_LoadSpriteResources
@@ -891,48 +414,21 @@
 	.public PokeathlonPennantCapture_State_Setup
 	.public PokeathlonPennantCapture_State_Play
 	.public PokeathlonPennantCapture_State_End
-	.public PokeathlonPennantCapture_HostStep
 	.public PokeathlonPennantCapture_PackFrame
-	.public PokeathlonPennantCapture_SendInput
-	.public PokeathlonPennantCapture_ShowFrame
-	.public PokeathlonPennantCapture_IsTouchOnOwnMon
 	.public PokeathlonPennantCapture_UpdatePlayers
-	.public PokeathlonPennantCapture_TickFreezeTimer
 	.public PokeathlonPennantCapture_ApplyFrame
 	.public PokeathlonPennantCapture_UpdateObstacleSprites
 	.public PokeathlonPennantCapture_UpdateFieldItemSprites
 	.public PokeathlonPennantCapture_UpdatePennantSprites
-	.public PokeathlonPennantCapture_RunMonExit
-	.public PokeathlonPennantCapture_RunMonEnter
-	.public PokeathlonPennantCapture_UpdateMonSwap
 	.public PokeathlonPennantCapture_SetMoveParams
-	.public PokeathlonPennantCapture_GetObstaclesNear
-	.public PokeathlonPennantCapture_CalcObstacleBounds
-	.public PokeathlonPennantCapture_CollideWithObstacle
-	.public PokeathlonPennantCapture_CollideWithObstacles
-	.public PokeathlonPennantCapture_CalcCircleEntry
 	.public PokeathlonPennantCapture_GetMaxSpeed
 	.public PokeathlonPennantCapture_AddPoint2D
-	.public PokeathlonPennantCapture_CollidePlayers
 	.public PokeathlonPennantCapture_UpdateFieldDrawPriorities
-	.public PokeathlonPennantCapture_SetPennantDrawPriority
-	.public PokeathlonPennantCapture_SetDropEffectDrawPriority
-	.public PokeathlonPennantCapture_SetPlayerDrawPriority
 	.public PokeathlonPennantCapture_InitScoreWindow
-	.public PokeathlonPennantCapture_PrintScore
 	.public PokeathlonPennantCapture_ResetPennantSpots
-	.public PokeathlonPennantCapture_AdvancePennantSpot
-	.public PokeathlonPennantCapture_PlacePennant
 	.public PokeathlonPennantCapture_RefillPennants
-	.public PokeathlonPennantCapture_PickUpPennants
-	.public PokeathlonPennantCapture_CirclesOverlap
 	.public PokeathlonPennantCapture_GetDirection
-	.public PokeathlonPennantCapture_TryKnockDown
-	.public PokeathlonPennantCapture_CanDeposit
-	.public PokeathlonPennantCapture_GetDepositPoints
-	.public PokeathlonPennantCapture_GetDrawPriority
 	.public PokeathlonPennantCapture_AnimateBg
-	.public PokeathlonPennantCapture_PlaySEIfOnScreen
 	.public PokeathlonPennantCapture_UpdateOwnScore
 	.public PokeathlonPennantCaptureDisplay_New
 	.public PokeathlonPennantCaptureDisplay_Delete
@@ -942,7 +438,6 @@
 	.public PokeathlonPennantCaptureDisplay_LoadIcons
 	.public PokeathlonPennantCaptureDisplay_LoadMonPics
 	.public PokeathlonPennantCaptureDisplay_LoadMonPicToVram
-	.public PokeathlonPennantCaptureDisplay_SetIcon
 	.public PokeathlonPennantCaptureDisplay_SetScore
 	.public PokeathlonPennantCaptureDisplay_SlideMonPic
 	.public PokeathlonPennantCaptureDisplay_StepSwapWait
@@ -951,7 +446,6 @@
 	.public PokeathlonPennantCaptureDisplay_BringToFront
 	.public PokeathlonPennantCaptureDisplay_SetPennants
 	.public PokeathlonPennantCaptureDisplay_ShowPoint
-	.public PokeathlonPennantCaptureDisplay_PrintName
 	.public PokeathlonPennantCaptureDisplay_CreatePicSprites
 	.public PokeathlonPennantCaptureDisplay_GetPicVramOffsets
 	.public PokeathlonPennantCaptureDisplay_InitWindow
@@ -962,71 +456,16 @@
 	.public PokeathlonPennantCaptureCpu_SetObstacles
 	.public PokeathlonPennantCaptureCpu_Delete
 	.public PokeathlonPennantCaptureCpu_Update
-	.public PokeathlonPennantCaptureCpu_ChooseTarget
-	.public PokeathlonPennantCaptureCpu_PickBestCell
-	.public PokeathlonPennantCaptureCpu_SortCells
 	.public PokeathlonPennantCaptureCpu_IsNearCellTarget
 	.public PokeathlonPennantCaptureCpu_IsCellTargetOnField
 	.public PokeathlonBlockSmash_Intro
-	.public PokeathlonBlockSmash_UpdateGame
 	.public PokeathlonBlockSmash_Play
 	.public PokeathlonBlockSmash_Finish
 	.public PokeathlonBlockSmash_Init
 	.public PokeathlonBlockSmash_Draw
 	.public PokeathlonBlockSmash_ShowResults
 	.public PokeathlonBlockSmash_Exit
-	.public PokeathlonBlockSmash_SetVramBanks
-	.public PokeathlonBlockSmash_InitSpriteSystem
-	.public PokeathlonBlockSmash_FreeSpriteSystem
-	.public PokeathlonBlockSmash_CreateHudSprites
-	.public PokeathlonBlockSmash_DeleteHudSprites
-	.public PokeathlonBlockSmash_LoadSpriteResources
-	.public PokeathlonBlockSmash_LoadMainAndSubSpriteRes
-	.public PokeathlonBlockSmash_UpdateScoreDigits
-	.public PokeathlonBlockSmash_StopHudAnims
-	.public PokeathlonBlockSmash_InitBgs
-	.public PokeathlonBlockSmash_FreeBgsAndText
-	.public PokeathlonBlockSmash_LoadBgGraphics
-	.public PokeathlonBlockSmash_InitText
-	.public PokeathlonBlockSmash_UpdateTimer
-	.public PokeathlonBlockSmash_PrintInitialText
-	.public PokeathlonBlockSmash_PrintMessage
-	.public PokeathlonBlockSmash_CreateTeamRows
-	.public PokeathlonBlockSmash_DeleteTeamRows
-	.public PokeathlonBlockSmash_UpdateTeamRows
-	.public PokeathlonBlockSmash_SetTeamRowIcon
-	.public PokeathlonBlockSmash_HandleSwipe
-	.public PokeathlonBlockSmash_WriteReport
-	.public PokeathlonBlockSmash_UpdateLinkData
-	.public PokeathlonBlockSmash_PrintScore
-	.public PokeathlonBlockSmash_ShakeTask
-	.public PokeathlonBlockSmash_StartShake
-	.public PokeathlonBlockSmashBlocks_New
-	.public PokeathlonBlockSmashBlocks_Delete
-	.public PokeathlonBlockSmashBlocks_Update
-	.public PokeathlonBlockSmashBlocks_Pause
-	.public PokeathlonBlockSmashBlocks_IsSpotTouched
-	.public PokeathlonBlockSmashBlocks_IsTopBlockTouched
 	.public PokeathlonBlockSmashBlocks_Hit
-	.public PokeathlonBlockSmashBlocks_GetState
-	.public PokeathlonBlockSmashBlocks_GetScore
-	.public PokeathlonBlockSmashBlocks_UpdateDrop
-	.public PokeathlonBlockSmashBlocks_CheckEmpty
-	.public PokeathlonBlockSmashBlock_New
-	.public PokeathlonBlockSmashBlock_Drop
-	.public PokeathlonBlockSmashBlock_Delete
-	.public PokeathlonBlockSmashBlock_Update
-	.public PokeathlonBlockSmashBlock_MoveSpot
-	.public PokeathlonBlockSmashBlock_UpdateSpot
-	.public PokeathlonBlockSmashBlock_IsSpotTouched
-	.public PokeathlonBlockSmashBlock_GetPosition
-	.public PokeathlonBlockSmashBlock_GetState
-	.public PokeathlonBlockSmashFragments_Init
-	.public PokeathlonBlockSmashFragments_Delete
-	.public PokeathlonBlockSmashFragments_Spawn
-	.public PokeathlonBlockSmashFragment_Update
-	.public PokeathlonBlockSmashFragments_Update
-	.public PokeathlonBlockSmashFragments_Pause
 	.public PokeathlonBlockSmashMon_New
 	.public PokeathlonBlockSmashMon_Delete
 	.public PokeathlonBlockSmashMon_Update
@@ -1045,76 +484,22 @@
 	.public PokeathlonBlockSmashRivals_Delete
 	.public PokeathlonBlockSmashRivals_Update
 	.public PokeathlonBlockSmashRivals_Pause
-	.public PokeathlonBlockSmashMon_UpdateReady
-	.public PokeathlonBlockSmashMon_UpdateHit
-	.public PokeathlonBlockSmashMon_UpdateExhausted
-	.public PokeathlonBlockSmashMon_UpdateSwitch
-	.public PokeathlonBlockSmashMon_UpdateTired
-	.public PokeathlonBlockSmashRival_Init
-	.public PokeathlonBlockSmashRival_ShowStaminaMark
-	.public PokeathlonBlockSmashRival_UpdateStatus
-	.public PokeathlonBlockSmashRival_UpdateScore
-	.public PokeathlonBlockSmashRival_SwitchTask
-	.public PokeathlonBlockSmashRival_StartSwitch
-	.public PokeathlonBlockSmashRival_Update
-	.public PokeathlonBlockSmashMon_CreateSprites
-	.public PokeathlonBlockSmashMon_SetMonSprite
-	.public PokeathlonBlockSmashMon_SetMode
-	.public PokeathlonBlockSmashMon_UpdateGauge
-	.public PokeathlonBlockSmashMon_AddGauge
-	.public PokeathlonBlockSmash_SetTiredAnimSpeed
-	.public PokeathlonBlockSmashMon_StartFullGauge
-	.public PokeathlonBlockSmashMon_EndFullGauge
-	.public PokeathlonBlockSmashRivals_InitMonPics
-	.public PokeathlonBlockSmash_ShowGaugeEffect
-	.public PokeathlonBlockSmashMon_SetWaitingPosition
 	.public PokeathlonBlockSmashCpu_New
 	.public PokeathlonBlockSmashCpu_Delete
 	.public PokeathlonBlockSmashCpu_Update
 	.public PokeathlonBlockSmashCpu_WriteReports
-	.public PokeathlonBlockSmashCpuPlayer_Init
-	.public PokeathlonBlockSmashCpuPlayer_Update
-	.public PokeathlonBlockSmashCpuPlayer_UpdateReady
-	.public PokeathlonBlockSmashCpuPlayer_UpdateSwitch
-	.public PokeathlonBlockSmashCpuPlayer_UpdateNewStack
-	.public PokeathlonBlockSmashCpuPlayer_UpdateExhausted
-	.public PokeathlonBlockSmashCpuPlayer_DecideHitAgain
-	.public PokeathlonBlockSmashCpuPlayer_DecideSpotHit
-	.public PokeathlonBlockSmashCpuPlayer_DecideSwitch
-	.public PokeathlonBlockSmashCpuPlayer_SetMode
-	.public PokeathlonBlockSmashCpuPlayer_Hit
-	.public PokeathlonBlockSmashCpuPlayer_WriteReport
-	.public PokeathlonBlockSmashCpuPlayer_AddGauge
-	.public PokeathlonBlockSmashCpuPlayer_UpdateGauge
-	.public PokeathlonBlockSmashCpuPlayer_EndFullGauge
 	.public PokeathlonBlockSmash_NewMainSprite
 	.public PokeathlonBlockSmash_NewSubSprite
-	.public PokeathlonBlockSmash_InitMembers
-	.public PokeathlonBlockSmash_RecoverStamina
-	.public PokeathlonBlockSmash_TakeStamina
-	.public PokeathlonDiscCatch_ShakeTask
-	.public PokeathlonDiscCatchShake_IsDone
-	.public PokeathlonDiscCatchShake_Init
-	.public PokeathlonDiscCatchShake_Start
-	.public PokeathlonDiscCatch_SquashTask
-	.public PokeathlonDiscCatch_StartSquash
 	.public PokeathlonDiscCatch_SetMonScaleCenter
 	.public PokeathlonDiscCatchMon_IsTouching
 	.public PokeathlonDiscCatchMon_Jump
 	.public PokeathlonDiscCatchMon_IsInPlay
 	.public PokeathlonDiscCatchMon_SetTarget
 	.public PokeathlonDiscCatch_GetFacing
-	.public PokeathlonDiscCatchMon_Move
 	.public PokeathlonDiscCatchMon_IsOffField
-	.public PokeathlonDiscCatchMon_Respawn
 	.public PokeathlonDiscCatchMon_Update
 	.public PokeathlonDiscCatch_FindTouchedMon
-	.public PokeathlonDiscCatch_ShowDisc
-	.public PokeathlonDiscCatch_ScaleDisc
-	.public PokeathlonDiscCatch_ShowPoints
-	.public PokeathlonDiscCatch_PlayCatchSound
 	.public PokeathlonDiscCatch_UpdateDiscSprites
-	.public PokeathlonDiscCatch_CompareDrawOrder
 	.public PokeathlonDiscCatch_UpdateMonSprites
 	.public PokeathlonDiscCatch_Intro
 	.public PokeathlonDiscCatch_EndGame
@@ -1132,43 +517,18 @@
 	.public PokeathlonDiscCatch_SetMonTarget
 	.public PokeathlonDiscCatch_MakeMonJump
 	.public PokeathlonDiscCatch_GetTeamScore
-	.public PokeathlonDiscCatch_SetVramBanks
-	.public PokeathlonDiscCatch_Square
-	.public PokeathlonDiscCatch_Approach0
-	.public PokeathlonDiscCatch_GetJumpOffset
-	.public PokeathlonDiscCatch_SlowDown
 	.public PokeathlonDiscCatch_ClampVelocity
-	.public PokeathlonDiscCatch_PrintScore
-	.public PokeathlonDiscCatch_InitSpriteSystem
-	.public PokeathlonDiscCatch_FreeSpriteSystem
 	.public PokeathlonDiscCatch_StopAnims
-	.public PokeathlonDiscCatch_LoadSpriteResources
 	.public PokeathlonDiscCatch_NewDiscSprite
 	.public PokeathlonDiscCatch_NewEffectSprite
-	.public PokeathlonDiscCatch_InitBgs
-	.public PokeathlonDiscCatch_FreeBgs
-	.public PokeathlonDiscCatch_LoadBgGraphics
-	.public PokeathlonDiscCatch_AnimateBg
-	.public PokeathlonDiscCatch_UpdateHost
 	.public PokeathlonDiscCatch_UpdateFrame
-	.public PokeathlonDiscCatch_InitStats
 	.public PokeathlonDiscCatch_GetStats
 	.public PokeathlonDiscCatchStats_GetJumpDuration
-	.public PokeathlonDiscCatchDisc_GetPoints
 	.public PokeathlonDiscCatch_CreateMonPics
 	.public PokeathlonDiscCatch_InitMons
-	.public PokeathlonDiscCatch_UpdateCollisions
 	.public PokeathlonDiscCatch_UpdateField
 	.public PokeathlonDiscCatch_WriteFramePacket
-	.public PokeathlonDiscCatchDisc_Launch
-	.public PokeathlonDiscCatchDisc_Remove
-	.public PokeathlonDiscCatchDisc_FindCatcher
-	.public PokeathlonDiscCatch_IsInBonusZone
-	.public PokeathlonDiscCatchDisc_Catch
-	.public PokeathlonDiscCatchDisc_Update
 	.public PokeathlonDiscCatchDiscs_Init
-	.public PokeathlonDiscCatch_GetPhase
-	.public PokeathlonDiscCatchDiscs_LaunchNext
 	.public PokeathlonDiscCatchDiscs_Update
 	.public PokeathlonDiscCatchSprites_Init
 	.public PokeathlonDiscCatchSprites_Update
@@ -1181,64 +541,29 @@
 	.public PokeathlonDiscCatchScoreboard_OnScore
 	.public PokeathlonDiscCatchScoreboard_SetSeconds
 	.public PokeathlonDiscCatchScoreboard_GetOwnScore
-	.public PokeathlonDiscCatchScoreboard_NewSprite
-	.public PokeathlonDiscCatchScoreboard_InitWindows
-	.public PokeathlonDiscCatchScoreboard_DrawScore
-	.public PokeathlonDiscCatchScoreboard_NewSecondsDigits
-	.public PokeathlonDiscCatchScoreboard_PrintNames
-	.public PokeathlonDiscCatchScoreboard_NewSideMarks
-	.public PokeathlonDiscCatchScoreboard_StopAnims
 	.public PokeathlonDiscCatchCpu_New
 	.public PokeathlonDiscCatchCpu_Delete
 	.public PokeathlonDiscCatchCpu_Update
-	.public PokeathlonDiscCatchCpuTeam_Init
-	.public PokeathlonDiscCatchCpuTeam_Update
-	.public PokeathlonDiscCatchCpuMon_PickHome
-	.public PokeathlonDiscCatchCpuMon_Init
-	.public PokeathlonDiscCatchCpuMon_Think
-	.public PokeathlonDiscCatchCpuMon_Update
-	.public PokeathlonDiscCatchCpuMon_IsNearDisc
-	.public PokeathlonDiscCatch_CirclesOverlap
 	.public PokeathlonGoalRoll_Init
 	.public PokeathlonGoalRoll_Draw
 	.public PokeathlonGoalRoll_ShowResults
 	.public PokeathlonGoalRoll_Exit
-	.public PokeathlonGoalRoll_SetGfxBanks
 	.public PokeathlonGoalRoll_State_Play
 	.public PokeathlonGoalRoll_State_Finish
-	.public PokeathlonGoalRoll_InitBgs
-	.public PokeathlonGoalRoll_LoadBgGfx
-	.public PokeathlonGoalRoll_HandleInput
-	.public PokeathlonGoalRoll_HostUpdate
-	.public PokeathlonGoalRoll_PackFrame
-	.public PokeathlonGoalRoll_ApplyFrame
-	.public PokeathlonGoalRoll_ApplyFrameScore
 	.public PokeathlonGoalRoll_ShowGoal
 	.public PokeathlonGoalRoll_MoveMons
 	.public PokeathlonGoalRoll_CollideBalls
 	.public PokeathlonGoalRoll_MoveBalls
-	.public PokeathlonGoalRoll_CollideBallPair
-	.public PokeathlonGoalRoll_BounceBallOff
 	.public PokeathlonGoalRoll_CheckGoals
 	.public PokeathlonGoalRoll_UpdateTiredMons
 	.public PokeathlonGoalRoll_SetTouchTarget
 	.public PokeathlonGoalRoll_GetTouchedMon
-	.public PokeathlonGoalRoll_CirclesOverlap
 	.public PokeathlonGoalRoll_ResetBall
-	.public PokeathlonGoalRoll_SetBallDirection
-	.public PokeathlonGoalRoll_CalcNormalizedDot
-	.public PokeathlonGoalRoll_IsWithinAngle
-	.public PokeathlonGoalRoll_RecoverPower
 	.public PokeathlonGoalRoll_InitMonStats
 	.public PokeathlonGoalRoll_InitWindows
 	.public PokeathlonGoalRoll_PrintTotalPoints
-	.public PokeathlonGoalRoll_CollideWithWalls
-	.public PokeathlonGoalRoll_SegmentsIntersect
-	.public PokeathlonGoalRoll_IntersectWall
-	.public PokeathlonGoalRoll_PickBallSpawn
 	.public PokeathlonGoalRoll_EncodeBallY
 	.public PokeathlonGoalRoll_DecodeBallY
-	.public PokeathlonGoalRoll_NextFacing
 	.public PokeathlonGoalRoll_PlayGoalAreaSE
 	.public PokeathlonGoalRoll_PrintPlate
 	.public PokeathlonGoalRoll_LoadStrings
@@ -1249,11 +574,9 @@
 	.public PokeathlonGoalRoll_PlateTask
 	.public PokeathlonGoalRoll_GetGoalCode
 	.public PokeathlonGoalRoll_GetBallQuadrant
-	.public PokeathlonGoalRoll_GetQuadrant
 	.public PokeathlonGoalRoll_UpdateLeaders
 	.public PokeathlonGoalRoll_RefreshPlates
 	.public PokeathlonGoalRoll_SortOwnTeamOrder
-	.public PokeathlonGoalRoll_CompareMonY
 	.public PokeathlonGoalRoll_SortOtherMonsOrder
 	.public PokeathlonGoalRoll_OnTimeUp
 	.public PokeathlonGoalRollDisplay_New
@@ -1262,7 +585,6 @@
 	.public PokeathlonGoalRollDisplay_CreateSprites
 	.public PokeathlonGoalRollDisplay_PrintName
 	.public PokeathlonGoalRollDisplay_PrintSecondWind
-	.public PokeathlonGoalRollDisplay_InitWindows
 	.public PokeathlonGoalRollDisplay_SetScore
 	.public PokeathlonGoalRollDisplay_GetScore
 	.public PokeathlonGoalRollDisplay_UpdateTimer
@@ -1270,30 +592,14 @@
 	.public PokeathlonGoalRollCpu_New
 	.public PokeathlonGoalRollCpu_SetMon
 	.public PokeathlonGoalRollCpu_ChooseAllRoles
-	.public PokeathlonGoalRollCpu_ChooseRoles
 	.public PokeathlonGoalRollCpu_SetBalls
 	.public PokeathlonGoalRollCpu_Free
 	.public PokeathlonGoalRollCpu_Update
-	.public PokeathlonGoalRollCpu_ThinkChaser
-	.public PokeathlonGoalRollCpu_ApplyChaserDecision
-	.public PokeathlonGoalRollCpu_ThinkGuard
-	.public PokeathlonGoalRollCpu_ApplyGuardDecision
-	.public PokeathlonGoalRollCpu_ThinkFlex
-	.public PokeathlonGoalRollCpu_ApplyFlexDecision
-	.public PokeathlonGoalRollCpu_MoveToEmptierQuadrant
-	.public PokeathlonGoalRollCpu_Think
-	.public PokeathlonGoalRollCpu_GetQuadrant
-	.public PokeathlonGoalRollCpu_IsMonInTargetQuadrantOfBall
-	.public PokeathlonGoalRollCpu_IsMonNotOppositeOfBall
 	.public PokeathlonGoalRollCpu_IsNearPoint
-	.public PokeathlonGoalRollCpu_CirclesTouch
 	.public PokeathlonScreenShake_Task
-	.public PokeathlonScreenShake_IsDone
-	.public PokeathlonScreenShake_Init
 	.public PokeathlonScreenShake_Start
 	.public PokeathlonRingDrop_IsOnSwitchButton
 	.public PokeathlonRingDrop_IsWithinDistance
-	.public PokeathlonRingDrop_Decay
 	.public PokeathlonRingDrop_DecayVelocity
 	.public PokeathlonRingDrop_ClampVelocity
 	.public PokeathlonRingDrop_State_FadeIn
@@ -1317,63 +623,35 @@
 	.public PokeathlonRingDrop_StartMonSwitch
 	.public PokeathlonRingDrop_SetMonDestination
 	.public PokeathlonRingDrop_GetDirection
-	.public PokeathlonRingDrop_SetGfxBanks
-	.public PokeathlonRingDrop_Update
-	.public PokeathlonRingDrop_OnFinish
-	.public PokeathlonRingDrop_ReadInput
 	.public PokeathlonRingDrop_InitSprites
 	.public PokeathlonRingDrop_FreeSprites
 	.public PokeathlonRingDrop_LoadSpriteResources
-	.public PokeathlonRingDrop_NewSprite
 	.public PokeathlonRingDrop_InitBgs
 	.public PokeathlonRingDrop_FreeBgs
 	.public PokeathlonRingDrop_LoadBgGraphics
-	.public PokeathlonRingDropDisplay_SwitchOut
-	.public PokeathlonRingDropDisplay_SwitchIn
-	.public PokeathlonRingDropDisplay_EndSwitch
-	.public PokeathlonRingDropDisplay_UpdateSwitch
-	.public PokeathlonRingDropDisplay_CompareDepth
-	.public PokeathlonRingDropDisplay_CompareScores
-	.public PokeathlonRingDropDisplay_ApplyFramePacket
 	.public PokeathlonRingDropDisplay_Init
 	.public PokeathlonRingDropDisplay_Update
 	.public PokeathlonRingDropDisplay_Free
 	.public PokeathlonRingDropDisplay_StopAnimations
 	.public PokeathlonRingDropMon_CanBePushed
 	.public PokeathlonRingDropMon_FaceDirection
-	.public PokeathlonRingDrop_IsAttackState
-	.public PokeathlonRingDropMon_Push
 	.public PokeathlonRingDrop_CreateMonObjects
 	.public PokeathlonRingDrop_InitMons
 	.public PokeathlonRingDrop_FreeMonObjects
-	.public PokeathlonRingDropMon_ApplyPushReaction
 	.public PokeathlonRingDropMon_GetPushReaction
-	.public PokeathlonRingDrop_UpdateCollisions
-	.public PokeathlonRingDrop_UpdateStamina
 	.public PokeathlonRingDrop_UpdateMons
 	.public PokeathlonRingDrop_BuildFramePacket
 	.public PokeathlonRingDrop_SetMonAffineCenter
 	.public PokeathlonRingDropMon_SetState
-	.public PokeathlonRingDropMon_Collide
 	.public PokeathlonRingDropMon_CanSwitch
 	.public PokeathlonRingDropMon_CanAct
 	.public PokeathlonRingDropMon_SetDestination
 	.public PokeathlonRingDrop_VecToDirection
-	.public PokeathlonRingDropMon_CanCollide
-	.public PokeathlonRingDrop_ClearContacts
 	.public PokeathlonRingDropMon_Move
 	.public PokeathlonRingDropMon_IsOutOfRing
-	.public PokeathlonRingDropMon_Respawn
 	.public PokeathlonRingDropMon_ResetToStart
-	.public PokeathlonRingDropMon_ApplyGravity
 	.public PokeathlonRingDropMon_Update
-	.public PokeathlonRingDropMon_StartDash
-	.public PokeathlonRingDropMon_EndDash
-	.public PokeathlonRingDropMon_UpdateDash
-	.public PokeathlonRingDropMon_StartJump
-	.public PokeathlonRingDropMon_Land
 	.public PokeathlonRingDropMon_Stagger
-	.public PokeathlonRingDropMon_FallOut
 	.public PokeathlonRingDropMon_StartSwitch
 	.public PokeathlonRingDropMon_DrainStamina
 	.public PokeathlonRingDrop_InitMemberParams
@@ -1394,35 +672,12 @@
 	.public PokeathlonRingDropUi_RunSwitch
 	.public PokeathlonRingDropUi_WaitSwitch
 	.public PokeathlonRingDropUi_SetSwitching
-	.public PokeathlonRingDropUi_NewSprite
-	.public PokeathlonRingDropUi_AddWindows
-	.public PokeathlonRingDropUi_DrawScore
-	.public PokeathlonRingDropUi_PrintNames
-	.public PokeathlonRingDropUi_PrintMessage
-	.public PokeathlonRingDropUi_PrintMessageAt
-	.public PokeathlonRingDropUi_CreateSprites
-	.public PokeathlonRingDropUi_LoadMonPic
-	.public PokeathlonRingDropUi_LoadMonIcon
-	.public PokeathlonRingDropUi_NewTimerSprite
-	.public PokeathlonRingDropUi_CreateTimerSprites
-	.public PokeathlonRingDropUi_PrintNextName
-	.public PokeathlonRingDropUi_SetPicPosition
-	.public PokeathlonRingDropUi_ShowSwitching
 	.public PokeathlonRingDropCpu_New
 	.public PokeathlonRingDropCpu_Free
 	.public PokeathlonRingDropCpu_Update
-	.public PokeathlonRingDropCpu_InitPlayer
-	.public PokeathlonRingDrop_IsNear
-	.public PokeathlonRingDrop_IsInDirection
-	.public PokeathlonRingDropCpu_Decide
-	.public PokeathlonRingDropCpu_GoSwitch
-	.public PokeathlonRingDropCpu_ShouldSwitch
-	.public PokeathlonRingDropCpu_UpdatePlayer
 	.public PokeathlonEvent_CalcPoints
 	.public PokeathlonEvent_CalcPointsFromScores
 	.public PokeathlonEvent_CalcPointsFromRanks
-	.public PokeathlonEvent_Saturate
-	.public PokeathlonEvent_ClampPoints
 	.public PokeathlonEvent_HurdleDashPoints
 	.public PokeathlonEvent_PennantCapturePoints
 	.public PokeathlonEvent_CirclePushPoints

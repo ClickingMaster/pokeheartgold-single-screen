@@ -14,13 +14,19 @@ typedef struct PokeathlonRelayRunPicIds {
 
 // The definition order fixes the .rodata layout: the HUD and the CPU read the ids through
 // gPokeathlonRelayRunPicIds as one array.
-static const PokeathlonRelayRunPicIds sPicResIds2 = { { 0x66, 0x67 } };
-static const PokeathlonRelayRunPicIds sPicKinds = { { 4, 5 } };
-const PokeathlonRelayRunPicIds gPokeathlonRelayRunPicIds = { { 0x66, 0x67 } };
-static const PokeathlonRelayRunPicIds sPicResIds3 = { { 0x66, 0x67 } };
+static const PokeathlonRelayRunPicIds sPicResIds2 = {
+    { 0x66, 0x67 }
+};
+static const PokeathlonRelayRunPicIds sPicKinds = {
+    { 4, 5 }
+};
+const PokeathlonRelayRunPicIds gPokeathlonRelayRunPicIds = {
+    { 0x66, 0x67 }
+};
+static const PokeathlonRelayRunPicIds sPicResIds3 = {
+    { 0x66, 0x67 }
+};
 
-// Sprite pool helpers (pokeathlon_course_objects.c), declared with untyped entries and the argument
-// types this caller passes.
 void PokeathlonCourseSpritePool_CreateSprite(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, u8 resId, u8 kind);
 PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_Take(PokeathlonCourseSpritePool *pool, u8 resId, u8 kind);
 Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(PokeathlonCourseSpritePoolSprite *entry);

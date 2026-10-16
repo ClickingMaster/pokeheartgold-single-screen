@@ -6,6 +6,7 @@
 
 #include "msgdata/msg/msg_0309.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
+#include "pokeathlon/pokeathlon_event_points.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -28,7 +29,6 @@ enum {
     GOAL_ROLL_STATE_FINISH,
 };
 
-// Course helpers, sprite scene and object helpers (OVY_96, not yet tidied).
 void *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, int member);
 int PokeathlonCourse_GetTouchRadius(void);
 int PokeathlonCourse_GetSpriteSizeType(const void *mon);
@@ -45,7 +45,6 @@ void PokeathlonCourse_SetHudPlanes(PokeathlonCourseData *course, u32 planes);
 BOOL PokeathlonCourse_RunFinish(PokeathlonCourseData *course);
 void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int event, int value);
 void PokeathlonCourse_SetFinishCallback(PokeathlonCourseData *course, void (*callback)(PokeathlonCourseData *));
-u8 *PokeathlonCourse_ToBytes(void *ptr);
 void PokeathlonCourseMonGfx_GetSprite(void *object);
 u8 PokeathlonCourseMonGfx_GetTopRow(u8 *image);
 void PokeathlonCourse_InitObjTransfer(ObjCharTransferTemplate *config, int plttCount, enum HeapID heapId, GXOBJVRamModeChar modeMain, GXOBJVRamModeChar modeSub);
@@ -95,7 +94,6 @@ void PokeathlonCourseSpritePool_SetSurfaceCoords(PokeathlonGoalRollSpritePool *p
 SpriteList *PokeathlonCourseSpritePool_GetSpriteList(void *pool);
 void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonGoalRollSprite *sprite, int priority);
 void PokeathlonCourseSpritePool_PauseAnims(PokeathlonGoalRollSpritePool *pool);
-void PokeathlonEvent_CalcPoints(void *gfx, int event);
 
 extern const VecFx32 gPokeathlonGoalRollWallPost;
 extern const VecFx32 gPokeathlonGoalRollWallNormal;
@@ -157,6 +155,15 @@ typedef struct PokeathlonGoalRollInitWork {
 // The goal sprites are set up through one cursor that moves by one pointer per goal, so that
 // goal->goalSprites[0], goal->goalFlashSprites[0] and goal->goalLabelSprites[0] address goal i.
 #define GOAL_CURSOR_NEXT(cursor) ((PokeathlonGoalRoll *)((u32 *)(cursor) + 1))
+
+static void PokeathlonGoalRoll_SetGfxBanks(void);
+static void PokeathlonGoalRoll_InitBgs(BgConfig *bgConfig);
+static void PokeathlonGoalRoll_LoadBgGfx(PokeathlonGoalRoll *goalRoll);
+static BOOL PokeathlonGoalRoll_HandleInput(PokeathlonCourseData *course);
+static void PokeathlonGoalRoll_HostUpdate(PokeathlonCourseData *course);
+static void PokeathlonGoalRoll_PackFrame(PokeathlonGoalRoll *goalRoll, PokeathlonGoalRollFramePacket *out);
+static void PokeathlonGoalRoll_ApplyFrame(PokeathlonCourseData *course);
+static void PokeathlonGoalRoll_ApplyFrameScore(PokeathlonCourseData *course);
 
 static inline void PokeathlonGoalRoll_SetModelSize(PokeathlonCourseData *course, PokeathlonGoalRollMonObjects *monObjects, s32 index, const PokeathlonGoalRollModelSize *sizes) {
     PokeathlonGoalRollMonObject *object;
@@ -537,7 +544,7 @@ BOOL PokeathlonGoalRoll_Exit(PokeathlonCourseData *course) {
     return TRUE;
 }
 
-void PokeathlonGoalRoll_SetGfxBanks(void) {
+static void PokeathlonGoalRoll_SetGfxBanks(void) {
     GraphicsBanks banks = gPokeathlonGoalRollGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
@@ -591,7 +598,7 @@ BOOL PokeathlonGoalRoll_State_Finish(PokeathlonCourseData *course, u8 *state) {
     return TRUE;
 }
 
-void PokeathlonGoalRoll_InitBgs(BgConfig *bgConfig) {
+static void PokeathlonGoalRoll_InitBgs(BgConfig *bgConfig) {
     GraphicsModes modes;
     BgTemplate main0;
     BgTemplate main1;
@@ -627,7 +634,7 @@ void PokeathlonGoalRoll_InitBgs(BgConfig *bgConfig) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
 }
 
-void PokeathlonGoalRoll_LoadBgGfx(PokeathlonGoalRoll *goalRoll) {
+static void PokeathlonGoalRoll_LoadBgGfx(PokeathlonGoalRoll *goalRoll) {
     GfGfxLoader_LoadCharData(NARC_a_2_3_4, 1, goalRoll->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, goalRoll->heapId);
     GfGfxLoader_LoadCharData(NARC_a_2_3_4, 3, goalRoll->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, FALSE, goalRoll->heapId);
     GfGfxLoader_LoadCharData(NARC_a_2_3_4, 6, goalRoll->bgConfig, GF_BG_LYR_SUB_1, 0, 0, FALSE, goalRoll->heapId);
@@ -640,7 +647,7 @@ void PokeathlonGoalRoll_LoadBgGfx(PokeathlonGoalRoll *goalRoll) {
 }
 
 // Every participant: reads the received frame; TRUE once the host reports the time is up.
-BOOL PokeathlonGoalRoll_HandleInput(PokeathlonCourseData *course) {
+static BOOL PokeathlonGoalRoll_HandleInput(PokeathlonCourseData *course) {
     PokeathlonGoalRoll *goalRoll = PokeathlonCourse_GetWork(course);
     u8 *area = PokeathlonCourse_GetDataCopyArea(course);
     PokeathlonGoalRollInput *input = (PokeathlonGoalRollInput *)PokeathlonCourse_ToBytes(area);
@@ -672,7 +679,7 @@ BOOL PokeathlonGoalRoll_HandleInput(PokeathlonCourseData *course) {
 #pragma force_active on
 
 // The host: applies all participants' inputs, runs the field and sends the frame.
-void PokeathlonGoalRoll_HostUpdate(PokeathlonCourseData *course) {
+static void PokeathlonGoalRoll_HostUpdate(PokeathlonCourseData *course) {
     struct {
         PokeathlonCourseData *course;
         PokeathlonGoalRollMon *team;
@@ -771,7 +778,7 @@ void PokeathlonGoalRoll_HostUpdate(PokeathlonCourseData *course) {
     PokeathlonGoalRoll_PackFrame(goalRoll, out);
 }
 
-void PokeathlonGoalRoll_PackFrame(PokeathlonGoalRoll *goalRoll, PokeathlonGoalRollFramePacket *out) {
+static void PokeathlonGoalRoll_PackFrame(PokeathlonGoalRoll *goalRoll, PokeathlonGoalRollFramePacket *out) {
     PokeathlonGoalRoll *work = goalRoll;
     PokeathlonGoalRollBall *ball;
     u8 ballY;
@@ -852,7 +859,7 @@ typedef void (*PokeathlonGoalRollDrawScoreFunc)(PokeathlonGoalRollDisplay *displ
 typedef void (*PokeathlonGoalRollPlayGoalAreaSEFunc)(PokeathlonGoalRoll *goalRoll, u8 ballIndex, u8 bigBall, u8 code);
 
 // Every participant: shows the frame the host sent.
-void PokeathlonGoalRoll_ApplyFrame(PokeathlonCourseData *course) {
+static void PokeathlonGoalRoll_ApplyFrame(PokeathlonCourseData *course) {
     u8 secondBall;
     PokeathlonGoalRoll *goalRoll;
     int x, y;
@@ -1006,7 +1013,7 @@ void PokeathlonGoalRoll_ApplyFrame(PokeathlonCourseData *course) {
 // PokeathlonGoalRollDisplay_SetScore as this call was built: with u8 arguments.
 typedef void (*PokeathlonGoalRollSetScoreFunc)(PokeathlonGoalRollDisplay *display, u8 score, u8 participant);
 
-void PokeathlonGoalRoll_ApplyFrameScore(PokeathlonCourseData *course) {
+static void PokeathlonGoalRoll_ApplyFrameScore(PokeathlonCourseData *course) {
     PokeathlonGoalRoll *goalRoll = PokeathlonCourse_GetWork(course);
     PokeathlonGoalRollFramePacket *frame = (PokeathlonGoalRollFramePacket *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0xF0);
     u8 slot = (frame->states >> 28) & 3;

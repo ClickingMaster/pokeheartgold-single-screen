@@ -10,6 +10,10 @@
 
 #pragma force_active on
 
+static void PokeathlonCourseSprites_LoadResources(PokeathlonCourseSpriteResources *resources);
+static void PokeathlonCourseMonObjects_FinishLoad(SysTask *task, void *data);
+static Sprite *PokeathlonCourseMonObjects_CreateSprite(PokeathlonCourseMonObjects *objects, int priority, NNS_G2D_VRAM_TYPE whichScreen, int resourceId);
+
 // Allocates the course sprite resources; flags selects which of the 12 sprite groups get loaded.
 PokeathlonCourseSpriteResources *PokeathlonCourseSprites_CreateResources(enum HeapID heapId, u32 flags, int charVram) {
     u8 counts[4];
@@ -141,21 +145,21 @@ void PokeathlonCourseSprites_FreeResources(PokeathlonCourseSpriteResources *reso
 
 #pragma force_active reset
 
-u8 PokeathlonCourseSprites_HasGroup(PokeathlonCourseSpriteResources *resources, u32 mask) {
+static u8 PokeathlonCourseSprites_HasGroup(PokeathlonCourseSpriteResources *resources, u32 mask) {
     if (resources == NULL) {
         return 0;
     }
     return resources->flags & mask;
 }
 
-GF_2DGfxResMan *PokeathlonCourseSprites_GetResMan(PokeathlonCourseSpriteResources *resources, int type) {
+static GF_2DGfxResMan *PokeathlonCourseSprites_GetResMan(PokeathlonCourseSpriteResources *resources, int type) {
     return resources->resMans[type];
 }
 
 #pragma force_active on
 
 // Loads the character, cell and animation files of each selected group (NARC a/1/5/3) and the palettes.
-void PokeathlonCourseSprites_LoadResources(PokeathlonCourseSpriteResources *resources) {
+static void PokeathlonCourseSprites_LoadResources(PokeathlonCourseSpriteResources *resources) {
     int vram;
 
     if (resources->flags & 0x001) {
@@ -682,7 +686,7 @@ PokeathlonCourseMonGfx *PokeathlonCourseMonObject_GetGfx(PokeathlonCourseMonObje
     return object->gfx;
 }
 
-void PokeathlonCourseMonObjects_FinishLoad(SysTask *task, void *data) {
+static void PokeathlonCourseMonObjects_FinishLoad(SysTask *task, void *data) {
     PokeathlonCourseMonObjects *objects = data;
     int i;
     int drawPriority;
@@ -700,7 +704,7 @@ void PokeathlonCourseMonObjects_FinishLoad(SysTask *task, void *data) {
     SysTask_Destroy(task);
 }
 
-Sprite *PokeathlonCourseMonObjects_CreateSprite(PokeathlonCourseMonObjects *objects, int priority, NNS_G2D_VRAM_TYPE whichScreen, int resourceId) {
+static Sprite *PokeathlonCourseMonObjects_CreateSprite(PokeathlonCourseMonObjects *objects, int priority, NNS_G2D_VRAM_TYPE whichScreen, int resourceId) {
     SpriteResourcesHeader header;
     SpriteTemplate template;
     Sprite *sprite;

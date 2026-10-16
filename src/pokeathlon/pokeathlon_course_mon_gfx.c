@@ -2,6 +2,7 @@
 
 #include "pokeathlon/pokeathlon_course_internal.h"
 
+#include "char_tiles.h"
 #include "filesystem.h"
 #include "follow_mon.h"
 #include "gf_gfx_loader.h"
@@ -11,12 +12,17 @@
 #include "obj_pltt_transfer.h"
 #include "sprite_transfer.h"
 #include "sys_task_api.h"
-#include "char_tiles.h"
 
 enum {
     MON_GFX_LOAD_GRAPHICS,
     MON_GFX_LOAD_CREATE_SPRITES,
 };
+
+static void PokeathlonCourseMonGfx_LoadTask(SysTask *task, void *data);
+static BOOL PokeathlonCourseMonGfx_LoadStep(PokeathlonCourseMonGfxLoad *load);
+static u8 PokeathlonCourseMonGfx_FindTopRow(PokeathlonCourseMonGfx *mon);
+static u8 PokeathlonCourseMonGfx_FindTopRowInTile(const u8 *data, u32 offset);
+static int PokeathlonCourse_GetMonModelFileId(int species, int form, int gender);
 
 void PokeathlonCourseMonGfx_InitManager(PokeathlonCourseMonGfxManager *manager, u32 count, SpriteList *spriteList) {
     int i;
@@ -139,7 +145,7 @@ void PokeathlonCourseMonGfx_SetPalette(PokeathlonCourseMonGfxManager *manager, i
 
 // Adds the sprite resources of one Pokemon (cell / animation files of NARC a/1/4/9 by size and transfer mode)
 // and converts the 8 frames of its overworld model texture into sprite characters.
-void PokeathlonCourseMonGfx_Load(PokeathlonCourseMonGfxManager *manager, PokeathlonCourseMonGfx *mon, PokeathlonCourseMonInfo *info, int vram, u8 id, BOOL vramTransfer) {
+static void PokeathlonCourseMonGfx_Load(PokeathlonCourseMonGfxManager *manager, PokeathlonCourseMonGfx *mon, PokeathlonCourseMonInfo *info, int vram, u8 id, BOOL vramTransfer) {
     int cellFile;
     int animFile;
     int dim;
@@ -248,7 +254,7 @@ void PokeathlonCourseMonGfx_Load(PokeathlonCourseMonGfxManager *manager, Pokeath
 
 #pragma force_active reset
 
-void PokeathlonCourseMonGfx_CreateSprite(PokeathlonCourseMonGfxManager *manager, int priority, int vramTransfer, NNS_G2D_VRAM_TYPE whichScreen, u8 resourceId, u8 index) {
+static void PokeathlonCourseMonGfx_CreateSprite(PokeathlonCourseMonGfxManager *manager, int priority, int vramTransfer, NNS_G2D_VRAM_TYPE whichScreen, u8 resourceId, u8 index) {
     SpriteResourcesHeader header;
     SpriteTemplate template;
     Sprite *sprite;
@@ -270,7 +276,6 @@ void PokeathlonCourseMonGfx_CreateSprite(PokeathlonCourseMonGfxManager *manager,
     template.rotation = 0;
     template.whichScreen = whichScreen;
     template.drawPriority = 0;
-    // (byte offset of the Pokemon, computed before the sprite is created: needed to match)
     offset = index * sizeof(PokeathlonCourseMonGfx);
     sprite = Sprite_CreateAffine(&template);
     ((PokeathlonCourseMonGfx *)((u8 *)manager->mons + offset))->sprite = sprite;
@@ -282,7 +287,7 @@ void PokeathlonCourseMonGfx_CreateSprite(PokeathlonCourseMonGfxManager *manager,
     Sprite_SetDrawFlag(((PokeathlonCourseMonGfx *)((u8 *)manager->mons + offset))->sprite, FALSE);
 }
 
-void PokeathlonCourseMonGfx_LoadTask(SysTask *task, void *data) {
+static void PokeathlonCourseMonGfx_LoadTask(SysTask *task, void *data) {
     PokeathlonCourseMonGfxLoad *load = data;
     do {
         if (PokeathlonCourseMonGfx_LoadStep(load)) {
@@ -296,7 +301,7 @@ void PokeathlonCourseMonGfx_LoadTask(SysTask *task, void *data) {
 
 #pragma force_active on
 
-BOOL PokeathlonCourseMonGfx_LoadStep(PokeathlonCourseMonGfxLoad *load) {
+static BOOL PokeathlonCourseMonGfx_LoadStep(PokeathlonCourseMonGfxLoad *load) {
     u8 index;
     PokeathlonCourseMonGfx *mon;
     switch (load->state) {
@@ -341,7 +346,7 @@ u8 PokeathlonCourseMonGfx_GetTopRow(PokeathlonCourseMonGfx *mon) {
 
 #pragma force_active on
 
-u8 PokeathlonCourseMonGfx_FindTopRow(PokeathlonCourseMonGfx *mon) {
+static u8 PokeathlonCourseMonGfx_FindTopRow(PokeathlonCourseMonGfx *mon) {
     NNSG2dCharacterData *charData = GF2DGfxResObj_GetCharDataPtr(mon->charRes);
     int size = mon->info.isLarge ? 8 : 4;
     u8 result = 255;
@@ -375,7 +380,7 @@ u8 PokeathlonCourseMonGfx_FindTopRow(PokeathlonCourseMonGfx *mon) {
 #pragma force_active reset
 
 // Returns the first pixel row of the 8x8 tile at data + offset that is not transparent, 0xFF if none.
-u8 PokeathlonCourseMonGfx_FindTopRowInTile(const u8 *data, u32 offset) {
+static u8 PokeathlonCourseMonGfx_FindTopRowInTile(const u8 *data, u32 offset) {
     u8 row = 0;
     u8 result = 0xFF;
 
@@ -399,7 +404,7 @@ u8 PokeathlonCourseMonGfx_FindTopRowInTile(const u8 *data, u32 offset) {
 }
 
 // File of the Pokemon's overworld model in NARC data/mmodel/mmodel.
-int PokeathlonCourse_GetMonModelFileId(int species, int form, int gender) {
+static int PokeathlonCourse_GetMonModelFileId(int species, int form, int gender) {
     int model;
 
     if (species <= 0 || species > NATIONAL_DEX_COUNT) {

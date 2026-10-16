@@ -5,29 +5,6 @@
 	.text
 	.public gPokeathlonBoxObjCharTransferTemplate
 	.public PokeathlonBox_Main
-	.public PokeathlonBox_Setup
-	.public PokeathlonBox_GetBoxMon
-	.public PokeathlonBox_GetLightBoxMon
-	.public PokeathlonBox_CopySelectedMons
-	.public PokeathlonBox_GetPartyMonStats
-	.public PokeathlonBox_GetBoxMonStats
-	.public PokeathlonBox_ShowMonInfo
-	.public PokeathlonBox_CalcStatChanges
-	.public PokeathlonBox_SetupGraphics
-	.public PokeathlonBox_DrawMonInfo
-	.public PokeathlonBox_ReleaseGraphics
-	.public PokeathlonBox_DeleteSprites
-	.public PokeathlonBox_LoadBgGraphics
-	.public PokeathlonBox_InitBgFromTemplates
-	.public PokeathlonBox_PrintStaticTexts
-	.public PokeathlonBox_PrintMonTexts
-	.public PokeathlonBox_ShowMonSprites
-	.public PokeathlonBox_ShowStatStars
-	.public PokeathlonBox_HideMonSprites
-	.public PokeathlonBox_LoadSpriteResources
-	.public PokeathlonBox_CreateSprites
-	.public PokeathlonBox_CreateSprite
-	.public PokeathlonBox_LoadMonPic
 	.public gPokeathlonBoxGraphicsModes
 	.public gPokeathlonBoxMedalShifts
 	.public gPokeathlonBoxGraphicsBanks
@@ -39,19 +16,6 @@
 	.public gPokeathlonBoxBgTemplate4
 	.public PokeathlonBox_Init
 	.public PokeathlonBox_Exit
-	.public PokeathlonBox_RunSetup
-	.public PokeathlonBox_SetGraphicsBanks
-	.public PokeathlonBox_SetGraphicsModes
-	.public PokeathlonBox_SetObjCharTransferTemplate
-	.public PokeathlonBox_CreateOamManager
-	.public PokeathlonBox_VBlankCallback
-	.public PokeathlonBox_GetBoxName
-	.public PokeathlonBox_GetLightBoxMonStats
-	.public PokeathlonBox_InitGraphics
-	.public PokeathlonBox_RenderAndAnimateSprites
-	.public PokeathlonBox_InitSpriteTemplate
-	.public PokeathlonBox_GetMonPicVramOffsets
-	.public PokeathlonBox_TransferMonPic
 	.rodata
 
 gPokeathlonBoxObjCharTransferTemplate:

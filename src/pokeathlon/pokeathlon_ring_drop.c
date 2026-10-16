@@ -4,6 +4,7 @@
 
 #include "msgdata/msg/msg_0309.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
+#include "pokeathlon/pokeathlon_event_points.h"
 #include "pokeathlon/pokeathlon_ring_drop_cpu.h"
 
 #include "assert.h"
@@ -23,7 +24,6 @@ enum {
     RING_DROP_STATE_FINISH,
 };
 
-// Course helpers, mon objects and the computer participants (OVY_96).
 BOOL PokeathlonCourse_RunStartCountdown(PokeathlonCourseData *course);
 void PokeathlonCourse_SetHudPlanes(PokeathlonCourseData *course, u32 planes);
 BOOL PokeathlonCourse_RunFinish(PokeathlonCourseData *course);
@@ -39,18 +39,19 @@ void PokeathlonCourse_AddScoreEntry(PokeathlonCourseData *course, PokeathlonCour
 BOOL PokeathlonCourseMonObjects_IsLoaded(PokeathlonCourseMonObjects *monObjects);
 void PokeathlonCourseObject_CenterToGround(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
 void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseObjects *monObjects, int paused);
-void PokeathlonEvent_CalcPoints(void *gfx, int event);
 
 extern const GraphicsBanks gPokeathlonRingDropGraphicsBanks;
 
-void PokeathlonScreenShake_Task(SysTask *task, PokeathlonScreenShake *shake);
+static void PokeathlonRingDrop_SetGfxBanks(void);
+static void PokeathlonRingDrop_Update(PokeathlonCourseData *course);
+static BOOL PokeathlonRingDrop_ReadInput(PokeathlonCourseData *course);
 
-BOOL PokeathlonScreenShake_IsDone(PokeathlonScreenShake *shake) {
+static BOOL PokeathlonScreenShake_IsDone(PokeathlonScreenShake *shake) {
     GF_ASSERT(shake != NULL);
     return shake->task == NULL;
 }
 
-void PokeathlonScreenShake_Init(PokeathlonScreenShake *shake, BgConfig *bgConfig, SpriteSystem *spriteSystem) {
+static void PokeathlonScreenShake_Init(PokeathlonScreenShake *shake, BgConfig *bgConfig, SpriteSystem *spriteSystem) {
     shake->bgConfig = bgConfig;
     shake->spriteSystem = spriteSystem;
 }
@@ -90,7 +91,7 @@ BOOL PokeathlonRingDrop_IsWithinDistance(VecFx32 *a, VecFx32 *b, fx32 distance) 
     return FALSE;
 }
 
-void PokeathlonRingDrop_Decay(fx32 *value, fx32 amount) {
+static void PokeathlonRingDrop_Decay(fx32 *value, fx32 amount) {
     if (*value != 0) {
         if ((*value < 0 ? -*value : *value) < amount) {
             *value = 0;
@@ -402,7 +403,7 @@ int PokeathlonRingDrop_GetDirection(const VecFx32 *vec) {
     return PokeathlonRingDrop_VecToDirection(vec);
 }
 
-void PokeathlonRingDrop_SetGfxBanks(void) {
+static void PokeathlonRingDrop_SetGfxBanks(void) {
     GraphicsBanks banks = gPokeathlonRingDropGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
@@ -412,7 +413,7 @@ void PokeathlonRingDrop_SetGfxBanks(void) {
 #pragma force_active on
 #pragma opt_lifetimes off
 
-void PokeathlonRingDrop_Update(PokeathlonCourseData *course) {
+static void PokeathlonRingDrop_Update(PokeathlonCourseData *course) {
     int i;
     PokeathlonRingDrop *ringDrop;
     PokeathlonRingDropFramePacket *packet;
@@ -484,7 +485,7 @@ void PokeathlonRingDrop_Update(PokeathlonCourseData *course) {
 #pragma force_active reset
 
 // Callback when the course ends: reports the own score.
-void PokeathlonRingDrop_OnFinish(PokeathlonCourseData *course) {
+static void PokeathlonRingDrop_OnFinish(PokeathlonCourseData *course) {
     u8 score;
 
     PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + RING_DROP_DATA_FRAME_IN);
@@ -497,7 +498,7 @@ void PokeathlonRingDrop_OnFinish(PokeathlonCourseData *course) {
 // time is up.
 #pragma force_active on
 
-BOOL PokeathlonRingDrop_ReadInput(PokeathlonCourseData *course) {
+static BOOL PokeathlonRingDrop_ReadInput(PokeathlonCourseData *course) {
     PokeathlonRingDrop *ringDrop = PokeathlonCourse_GetWork(course);
     u8 *data = PokeathlonCourse_GetDataCopyArea(course);
     PokeathlonRingDropInput *input = (PokeathlonRingDropInput *)PokeathlonCourse_ToBytes(data);

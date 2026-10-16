@@ -1,13 +1,11 @@
 #include "global.h"
 
 #include "frontier/frontier_map.h"
+#include "frontier/frontier_script_commands.h"
 #include "frontier/frontier_script_context.h"
 
 #include "sprite_system.h"
 
-// This command is compiled with MWCC 2.0/sp2 (see Makefile), so it stays in its own file.
-
-u32 FrontierScript_ReadVar(FrontierScriptContext *ctx);
 FrontierMap *Frontier_GetMap(void *frontierWork);
 ManagedSprite *FrontierMap_CreateSprite(FrontierMap *map, u32 idx, u32 id);
 void FrontierMap_SetSpriteAnimActive(FrontierMap *map, u32 idx, u32 on);

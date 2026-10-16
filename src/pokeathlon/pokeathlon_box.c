@@ -6,11 +6,13 @@
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0278.h"
 
+#include "char_tiles.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
 #include "nnsys.h"
+#include "oam_manager.h"
 #include "obj_char_transfer.h"
 #include "obj_pltt_transfer.h"
 #include "pokemon.h"
@@ -19,8 +21,6 @@
 #include "sprite_transfer.h"
 #include "system.h"
 #include "text.h"
-#include "oam_manager.h"
-#include "char_tiles.h"
 #include "wireless_status_icon.h"
 
 enum {
@@ -32,7 +32,7 @@ enum {
     BOX_STATE_WAIT_FADE_OUT,
 };
 
-// functions in asm:
+// Functions in assembly
 int BoxMonSelector_Run(int);
 void BoxMonSelector_RenderSprites(u32);
 void BoxMonSelector_Delete(u32);
@@ -59,6 +59,41 @@ extern const BgTemplate pokeathlonBoxBgTemplate2;
 extern const BgTemplate pokeathlonBoxBgTemplate4;
 extern const u8 gPokeathlonBoxSpriteRows[5];
 extern const u8 gPokeathlonBoxMonSpriteRows[5];
+
+static BOOL PokeathlonBox_RunSetup(OverlayManager *manager);
+static BOOL PokeathlonBox_Setup(OverlayManager *manager);
+static void PokeathlonBox_SetGraphicsBanks();
+static void PokeathlonBox_SetGraphicsModes(BgConfig *bgConfig);
+static void PokeathlonBox_SetObjCharTransferTemplate();
+static void PokeathlonBox_CreateOamManager(PokeathlonBox *data);
+static void PokeathlonBox_VBlankCallback(void *data);
+static BOOL PokeathlonBox_GetLightBoxMon(PCStorage *storage, u32 boxno, u32 slotno, PokeathlonBox_BoxMon *ptr);
+static void PokeathlonBox_GetBoxName(String *dest, PCStorage *storage, u32 boxno);
+static void PokeathlonBox_CopySelectedMons(PokeathlonBox *data, PokeathlonBoxArgs *args);
+static void PokeathlonBox_GetPartyMonStats(Party *party, u8 slot, PokeathlonBox_MonStats *stats);
+static void PokeathlonBox_GetBoxMonStats(BoxPokemon *boxMon, PokeathlonBox_MonStats *stats);
+static void PokeathlonBox_ShowMonInfo(int boxno, u8 slot, PokeathlonBox *data);
+static void PokeathlonBox_CalcStatChanges(PokeathlonBox_MonStats *stats1, PokeathlonBox_MonStats *stats2, PartyAprijuiceModifier *aprijuiceModifier, PokeathlonBox_MonInfo *mon);
+static PokeathlonBox_Graphics *PokeathlonBox_InitGraphics(enum HeapID heapID);
+static void PokeathlonBox_SetupGraphics(PokeathlonBox_Graphics *graphics, BgConfig *bgConfig, u8 courseId, u32 isSupreme);
+static void PokeathlonBox_DrawMonInfo(PokeathlonBox_Graphics *graphics, PokeathlonBox_MonInfo *mon);
+static void PokeathlonBox_RenderAndAnimateSprites(PokeathlonBox_Graphics *graphics);
+static void PokeathlonBox_ReleaseGraphics(PokeathlonBox_Graphics *graphics);
+static void PokeathlonBox_DeleteSprites(PokeathlonBox_SubGraphics *subGraphics);
+static void PokeathlonBox_LoadBgGraphics(BgConfig *bgConfig, enum HeapID heapID);
+static void PokeathlonBox_InitBgFromTemplates(BgConfig *bgConfig);
+static void PokeathlonBox_PrintStaticTexts(PokeathlonBox_Graphics *graphics);
+static void PokeathlonBox_PrintMonTexts(PokeathlonBox_Graphics *graphics, PokeathlonBox_MonInfo *mon);
+static void PokeathlonBox_ShowMonSprites(PokeathlonBox_Graphics *graphics, PokeathlonBox_MonInfo *mon);
+static void PokeathlonBox_ShowStatStars(PokeathlonBox_SubGraphics *subGraphics, PokeathlonBox_MonInfo *mon);
+static void PokeathlonBox_HideMonSprites();
+static void PokeathlonBox_LoadSpriteResources(PokeathlonBox_SubGraphics *subGraphics);
+static void PokeathlonBox_CreateSprites(PokeathlonBox_SubGraphics *subGraphics);
+static Sprite *PokeathlonBox_CreateSprite(PokeathlonBox_SubGraphics *sub, int resourceId, int drawPriority, int priority, int x, int y, int anim, BOOL draw);
+static void PokeathlonBox_InitSpriteTemplate(SpriteTemplate *template, SpriteList *spriteList, SpriteResourcesHeader *header, NNS_G2D_VRAM_TYPE whichScreen, enum HeapID heapID);
+static void PokeathlonBox_GetMonPicVramOffsets(PokeathlonBox_SubGraphics *sub);
+static void PokeathlonBox_LoadMonPic(); // (PokeathlonBox_SubGraphics *, PokeathlonBox_MonInfo *), called with the second argument left in r1
+static void PokeathlonBox_TransferMonPic(PokeathlonBox_SubGraphics *subGraphics);
 
 BOOL PokeathlonBox_Init(OverlayManager *manager) {
     if (PokeathlonBox_RunSetup(manager)) {
@@ -132,7 +167,7 @@ BOOL PokeathlonBox_Exit(OverlayManager *manager) {
     return TRUE;
 }
 
-BOOL PokeathlonBox_RunSetup(OverlayManager *manager) {
+static BOOL PokeathlonBox_RunSetup(OverlayManager *manager) {
     PokeathlonBoxArgs *args = OverlayManager_GetArgs(manager);
 
     do {
@@ -144,7 +179,7 @@ BOOL PokeathlonBox_RunSetup(OverlayManager *manager) {
     return FALSE;
 }
 
-BOOL PokeathlonBox_Setup(OverlayManager *manager) {
+static BOOL PokeathlonBox_Setup(OverlayManager *manager) {
     PokeathlonBox *data;
     PokeathlonCourseArgs *courseArgs;
     PokeathlonBoxArgs *args;
@@ -190,17 +225,17 @@ BOOL PokeathlonBox_Setup(OverlayManager *manager) {
     return TRUE;
 }
 
-void PokeathlonBox_SetGraphicsBanks() {
+static void PokeathlonBox_SetGraphicsBanks() {
     GraphicsBanks banks = pokeathlonBoxGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
-void PokeathlonBox_SetGraphicsModes(BgConfig *bgConfig) {
+static void PokeathlonBox_SetGraphicsModes(BgConfig *bgConfig) {
     GraphicsModes modes = pokeathlonBoxGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
 }
 
-void PokeathlonBox_SetObjCharTransferTemplate() {
+static void PokeathlonBox_SetObjCharTransferTemplate() {
     ObjCharTransferTemplate template = pokeathlonBoxObjCharTransferTemplate;
     ObjCharTransfer_Init(&template);
     ObjPlttTransfer_Init(0x14, HEAP_ID_POKEATHLON);
@@ -208,16 +243,16 @@ void PokeathlonBox_SetObjCharTransferTemplate() {
     ObjPlttTransfer_Reset();
 }
 
-void PokeathlonBox_CreateOamManager(PokeathlonBox *data) {
+static void PokeathlonBox_CreateOamManager(PokeathlonBox *data) {
     NNS_G2dInitOamManagerModule();
     OamManager_Create(0, 126, 0, 32, 1, 126, 0, 32, HEAP_ID_POKEATHLON);
 }
 
-void PokeathlonBox_VBlankCallback(void *data) {
+static void PokeathlonBox_VBlankCallback(void *data) {
     BoxMonSelector_VBlank(((PokeathlonBox *)data)->monSelector);
 }
 
-BOOL PokeathlonBox_GetBoxMon(PCStorage *storage, u32 boxno, u32 slotno, PokeathlonBox_BoxMon *ptr) {
+static BOOL PokeathlonBox_GetBoxMon(PCStorage *storage, u32 boxno, u32 slotno, PokeathlonBox_BoxMon *ptr) {
     BoxPokemon *boxMon = PCStorage_GetMonByIndexPair(storage, boxno, slotno);
     if (GetBoxMonData(boxMon, MON_DATA_SPECIES_EXISTS, NULL)) {
         ptr->species = GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL);
@@ -242,7 +277,7 @@ BOOL PokeathlonBox_GetBoxMon(PCStorage *storage, u32 boxno, u32 slotno, Pokeathl
     return FALSE;
 }
 
-BOOL PokeathlonBox_GetLightBoxMon(PCStorage *storage, u32 boxno, u32 slotno, PokeathlonBox_BoxMon *ptr) {
+static BOOL PokeathlonBox_GetLightBoxMon(PCStorage *storage, u32 boxno, u32 slotno, PokeathlonBox_BoxMon *ptr) {
     BoxPokemon *boxMon = PCStorage_GetMonByIndexPair(storage, boxno, slotno);
     if (GetBoxMonData(boxMon, MON_DATA_SPECIES_EXISTS, NULL)) {
         ptr->species = GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL);
@@ -266,11 +301,11 @@ BOOL PokeathlonBox_GetLightBoxMon(PCStorage *storage, u32 boxno, u32 slotno, Pok
     return FALSE;
 }
 
-void PokeathlonBox_GetBoxName(String *dest, PCStorage *storage, u32 boxno) {
+static void PokeathlonBox_GetBoxName(String *dest, PCStorage *storage, u32 boxno) {
     PCStorage_GetBoxName(storage, boxno, dest);
 }
 
-void PokeathlonBox_CopySelectedMons(PokeathlonBox *data, PokeathlonBoxArgs *args) {
+static void PokeathlonBox_CopySelectedMons(PokeathlonBox *data, PokeathlonBoxArgs *args) {
     PokeathlonBox_BoxMon boxMon;
 
     args->selectedMons[0].cancelled = data->cancelled;
@@ -299,7 +334,7 @@ void PokeathlonBox_CopySelectedMons(PokeathlonBox *data, PokeathlonBoxArgs *args
     }
 }
 
-void PokeathlonBox_GetPartyMonStats(Party *party, u8 slot, PokeathlonBox_MonStats *stats) {
+static void PokeathlonBox_GetPartyMonStats(Party *party, u8 slot, PokeathlonBox_MonStats *stats) {
     PartyAprijuiceModifier aprijuiceModifier;
     PokeathlonPerformanceStars stars;
 
@@ -317,7 +352,7 @@ void PokeathlonBox_GetPartyMonStats(Party *party, u8 slot, PokeathlonBox_MonStat
     stats->stars = (stats->stars & 0xFFFF8FFF) | ((u32)(stars.color[PERFORMANCE_SPEED] << 0x1D) >> 0x11);
 }
 
-void PokeathlonBox_GetBoxMonStats(BoxPokemon *boxMon, PokeathlonBox_MonStats *stats) {
+static void PokeathlonBox_GetBoxMonStats(BoxPokemon *boxMon, PokeathlonBox_MonStats *stats) {
     PokeathlonPerformanceStars stars;
 
     CalcBoxmonPokeathlonStars(&stars, boxMon, NULL, HEAP_ID_POKEATHLON);
@@ -333,7 +368,7 @@ void PokeathlonBox_GetBoxMonStats(BoxPokemon *boxMon, PokeathlonBox_MonStats *st
     stats->stars = (stats->stars & 0xFFFF8FFF) | ((u32)(stars.color[PERFORMANCE_SPEED] << 0x1D) >> 0x11);
 }
 
-void PokeathlonBox_GetLightBoxMonStats(BoxPokemon *boxMon, PokeathlonBox_MonStats *stats) {
+static void PokeathlonBox_GetLightBoxMonStats(BoxPokemon *boxMon, PokeathlonBox_MonStats *stats) {
     PokeathlonTodayPerformance performance;
 
     CalcBoxMonPokeathlonPerformance(boxMon, &performance);
@@ -344,7 +379,7 @@ void PokeathlonBox_GetLightBoxMonStats(BoxPokemon *boxMon, PokeathlonBox_MonStat
     stats->speed = performance.stats[PERFORMANCE_SPEED].hi;
 }
 
-void PokeathlonBox_ShowMonInfo(int boxno, u8 slot, PokeathlonBox *data) {
+static void PokeathlonBox_ShowMonInfo(int boxno, u8 slot, PokeathlonBox *data) {
     PokeathlonBox_MonInfo monInfo;
     u32 medalShifts[5];
 
@@ -413,7 +448,7 @@ void PokeathlonBox_ShowMonInfo(int boxno, u8 slot, PokeathlonBox *data) {
     PokeathlonBox_DrawMonInfo(data->graphics, &monInfo);
 }
 
-void PokeathlonBox_CalcStatChanges(PokeathlonBox_MonStats *stats1, PokeathlonBox_MonStats *stats2, PartyAprijuiceModifier *aprijuiceModifier, PokeathlonBox_MonInfo *mon) {
+static void PokeathlonBox_CalcStatChanges(PokeathlonBox_MonStats *stats1, PokeathlonBox_MonStats *stats2, PartyAprijuiceModifier *aprijuiceModifier, PokeathlonBox_MonInfo *mon) {
     mon->statChanges[0].direction = PokemonSummary_GetPokeathlonStarStates(mon->statChanges[0].stars, stats1->power, stats2->power, (u32)(stats2->stars << 0x1D) >> 0x1D, aprijuiceModifier->stats[0]);
     mon->statChanges[1].direction = PokemonSummary_GetPokeathlonStarStates(mon->statChanges[1].stars, stats1->skill, stats2->skill, (u32)(stats2->stars << 0x14) >> 0x1D, aprijuiceModifier->stats[1]);
     mon->statChanges[2].direction = PokemonSummary_GetPokeathlonStarStates(mon->statChanges[2].stars, stats1->speed, stats2->speed, (u32)(stats2->stars << 0x11) >> 0x1D, aprijuiceModifier->stats[2]);
@@ -421,7 +456,7 @@ void PokeathlonBox_CalcStatChanges(PokeathlonBox_MonStats *stats1, PokeathlonBox
     mon->statChanges[4].direction = PokemonSummary_GetPokeathlonStarStates(mon->statChanges[4].stars, stats1->stamina, stats2->stamina, (u32)(stats2->stars << 0x1A) >> 0x1D, aprijuiceModifier->stats[4]);
 }
 
-PokeathlonBox_Graphics *PokeathlonBox_InitGraphics(enum HeapID heapID) {
+static PokeathlonBox_Graphics *PokeathlonBox_InitGraphics(enum HeapID heapID) {
     PokeathlonBox_Graphics *ptr = Heap_Alloc(heapID, sizeof(PokeathlonBox_Graphics));
     MI_CpuFill8(ptr, 0, sizeof(PokeathlonBox_Graphics));
     ptr->heapID = heapID;
@@ -429,7 +464,7 @@ PokeathlonBox_Graphics *PokeathlonBox_InitGraphics(enum HeapID heapID) {
     return ptr;
 }
 
-void PokeathlonBox_SetupGraphics(PokeathlonBox_Graphics *graphics, BgConfig *bgConfig, u8 courseId, u32 isSupreme) {
+static void PokeathlonBox_SetupGraphics(PokeathlonBox_Graphics *graphics, BgConfig *bgConfig, u8 courseId, u32 isSupreme) {
     graphics->bgConfig = bgConfig;
     PokeathlonBox_LoadBgGraphics(bgConfig, graphics->heapID);
     AddWindowParameterized(graphics->bgConfig, &graphics->window1, GF_BG_LYR_SUB_0, 1, 1, 17, 2, 15, 0x01);
@@ -450,7 +485,7 @@ void PokeathlonBox_SetupGraphics(PokeathlonBox_Graphics *graphics, BgConfig *bgC
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
 }
 
-void PokeathlonBox_DrawMonInfo(PokeathlonBox_Graphics *graphics, PokeathlonBox_MonInfo *mon) {
+static void PokeathlonBox_DrawMonInfo(PokeathlonBox_Graphics *graphics, PokeathlonBox_MonInfo *mon) {
     if (mon->displayMode == 2) {
         PokeathlonBox_ShowMonSprites(graphics, mon);
         PokeathlonBox_PrintMonTexts(graphics, mon);
@@ -463,13 +498,13 @@ void PokeathlonBox_DrawMonInfo(PokeathlonBox_Graphics *graphics, PokeathlonBox_M
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
 }
 
-void PokeathlonBox_RenderAndAnimateSprites(PokeathlonBox_Graphics *graphics) {
+static void PokeathlonBox_RenderAndAnimateSprites(PokeathlonBox_Graphics *graphics) {
     if (graphics->sub.spriteList != NULL) {
         SpriteList_RenderAndAnimateSprites(graphics->sub.spriteList);
     }
 }
 
-void PokeathlonBox_ReleaseGraphics(PokeathlonBox_Graphics *graphics) {
+static void PokeathlonBox_ReleaseGraphics(PokeathlonBox_Graphics *graphics) {
     u8 i;
 
     DestroyMsgData(graphics->msgData);
@@ -499,7 +534,7 @@ void PokeathlonBox_ReleaseGraphics(PokeathlonBox_Graphics *graphics) {
     Heap_Free(graphics);
 }
 
-void PokeathlonBox_DeleteSprites(PokeathlonBox_SubGraphics *subGraphics) {
+static void PokeathlonBox_DeleteSprites(PokeathlonBox_SubGraphics *subGraphics) {
     int i, j;
 
     for (i = 0; i < 5; i++) {
@@ -516,7 +551,7 @@ void PokeathlonBox_DeleteSprites(PokeathlonBox_SubGraphics *subGraphics) {
     Heap_Free(subGraphics->monPicChars);
 }
 
-void PokeathlonBox_LoadBgGraphics(BgConfig *bgConfig, enum HeapID heapID) {
+static void PokeathlonBox_LoadBgGraphics(BgConfig *bgConfig, enum HeapID heapID) {
     PokeathlonBox_InitBgFromTemplates(bgConfig);
     GfGfxLoader_GXLoadPal(NARC_a_2_4_1 /*243*/, 0, GF_PAL_LOCATION_SUB_BG, (enum GFPalSlotOffset)0, 0, heapID);
     GfGfxLoader_LoadCharData(NARC_a_2_4_1 /*243*/, 1, bgConfig, GF_BG_LYR_SUB_3, 0, 0, 1, heapID);
@@ -527,7 +562,7 @@ void PokeathlonBox_LoadBgGraphics(BgConfig *bgConfig, enum HeapID heapID) {
     LoadFontPal0(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_15_OFFSET, heapID);
 }
 
-void PokeathlonBox_InitBgFromTemplates(BgConfig *bgConfig) {
+static void PokeathlonBox_InitBgFromTemplates(BgConfig *bgConfig) {
     BgTemplate bgTemplate1 = pokeathlonBoxBgTemplate1;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &bgTemplate1, 0);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
@@ -545,7 +580,7 @@ void PokeathlonBox_InitBgFromTemplates(BgConfig *bgConfig) {
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_3);
 }
 
-void PokeathlonBox_PrintStaticTexts(PokeathlonBox_Graphics *graphics) {
+static void PokeathlonBox_PrintStaticTexts(PokeathlonBox_Graphics *graphics) {
     BufferPokeathlonCourseName(graphics->msgFormat, 0, (u8)graphics->courseId);
     String *str = ReadMsgData_ExpandPlaceholders(graphics->msgFormat, graphics->msgData, msg_0278_00000, graphics->heapID);
     FillWindowPixelBuffer(&graphics->window1, 0);
@@ -578,7 +613,7 @@ void PokeathlonBox_PrintStaticTexts(PokeathlonBox_Graphics *graphics) {
     CopyWindowToVram(&graphics->window5);
 }
 
-void PokeathlonBox_PrintMonTexts(PokeathlonBox_Graphics *graphics, PokeathlonBox_MonInfo *mon) {
+static void PokeathlonBox_PrintMonTexts(PokeathlonBox_Graphics *graphics, PokeathlonBox_MonInfo *mon) {
     String *str;
 
     CopyU16ArrayToString(graphics->nickname, mon->nickname);
@@ -611,7 +646,7 @@ void PokeathlonBox_PrintMonTexts(PokeathlonBox_Graphics *graphics, PokeathlonBox
     String_Delete(str);
 }
 
-void PokeathlonBox_ShowMonSprites(PokeathlonBox_Graphics *graphics, PokeathlonBox_MonInfo *mon) {
+static void PokeathlonBox_ShowMonSprites(PokeathlonBox_Graphics *graphics, PokeathlonBox_MonInfo *mon) {
     u8 i;
     PokeathlonBox_SubGraphics *sub = &graphics->sub;
     u8 subroutine_arg0[5];
@@ -630,10 +665,10 @@ void PokeathlonBox_ShowMonSprites(PokeathlonBox_Graphics *graphics, PokeathlonBo
     }
 }
 
-// The direction sprite of stat row i, addressed the way the original code did (base + i * row size).
+// The direction sprite of stat row i.
 #define STAT_ROW_SPRITE(subGraphics, i) (((PokeathlonBox_SubGraphics *)((u8 *)(subGraphics) + (i) * sizeof(PokeathlonBox_StatRow)))->statRows[0].sprite)
 
-void PokeathlonBox_ShowStatStars(PokeathlonBox_SubGraphics *subGraphics, PokeathlonBox_MonInfo *mon) {
+static void PokeathlonBox_ShowStatStars(PokeathlonBox_SubGraphics *subGraphics, PokeathlonBox_MonInfo *mon) {
     u8 i;
     u8 j;
 
@@ -681,7 +716,7 @@ void PokeathlonBox_ShowStatStars(PokeathlonBox_SubGraphics *subGraphics, Pokeath
 
 #pragma force_active on
 
-void PokeathlonBox_HideMonSprites(PokeathlonBox_Graphics *graphics) {
+static void PokeathlonBox_HideMonSprites(PokeathlonBox_Graphics *graphics) {
     PokeathlonBox_SubGraphics *sub = &graphics->sub;
     u8 i;
     u8 j;
@@ -699,7 +734,7 @@ void PokeathlonBox_HideMonSprites(PokeathlonBox_Graphics *graphics) {
     Sprite_SetDrawFlag(sub->monPicSprite, FALSE);
 }
 
-void PokeathlonBox_LoadSpriteResources(PokeathlonBox_SubGraphics *sub) {
+static void PokeathlonBox_LoadSpriteResources(PokeathlonBox_SubGraphics *sub) {
     int i;
 
     sub->spriteList = G2dRenderer_Init(66, &sub->renderer, sub->heapID);
@@ -730,7 +765,7 @@ void PokeathlonBox_LoadSpriteResources(PokeathlonBox_SubGraphics *sub) {
 
 #pragma force_active reset
 
-void PokeathlonBox_CreateSprites(PokeathlonBox_SubGraphics *sub) {
+static void PokeathlonBox_CreateSprites(PokeathlonBox_SubGraphics *sub) {
     u8 i;
     u8 j;
     int x;
@@ -753,7 +788,7 @@ void PokeathlonBox_CreateSprites(PokeathlonBox_SubGraphics *sub) {
     PokeathlonBox_GetMonPicVramOffsets(sub);
 }
 
-Sprite *PokeathlonBox_CreateSprite(PokeathlonBox_SubGraphics *sub, int resourceId, int drawPriority, int priority, int x, int y, int anim, BOOL draw) {
+static Sprite *PokeathlonBox_CreateSprite(PokeathlonBox_SubGraphics *sub, int resourceId, int drawPriority, int priority, int x, int y, int anim, BOOL draw) {
     SpriteTemplate template;
     SpriteResourcesHeader header;
     Sprite *sprite;
@@ -771,7 +806,7 @@ Sprite *PokeathlonBox_CreateSprite(PokeathlonBox_SubGraphics *sub, int resourceI
     return sprite;
 }
 
-void PokeathlonBox_InitSpriteTemplate(SpriteTemplate *template, SpriteList *spriteList, SpriteResourcesHeader *header, NNS_G2D_VRAM_TYPE whichScreen, enum HeapID heapID) {
+static void PokeathlonBox_InitSpriteTemplate(SpriteTemplate *template, SpriteList *spriteList, SpriteResourcesHeader *header, NNS_G2D_VRAM_TYPE whichScreen, enum HeapID heapID) {
     template->spriteList = spriteList;
     template->header = header;
     template->position.z = 0;
@@ -784,7 +819,7 @@ void PokeathlonBox_InitSpriteTemplate(SpriteTemplate *template, SpriteList *spri
     template->heapID = heapID;
 }
 
-void PokeathlonBox_GetMonPicVramOffsets(PokeathlonBox_SubGraphics *sub) {
+static void PokeathlonBox_GetMonPicVramOffsets(PokeathlonBox_SubGraphics *sub) {
     SpriteResource *plttResObj = sub->resources[2].plttResObj;
     NNSG2dImageProxy *charProxy = SpriteTransfer_GetCharProxy(sub->resources[2].charResObj);
     NNSG2dImagePaletteProxy *plttProxy = SpriteTransfer_GetPaletteProxy(plttResObj, charProxy);
@@ -795,7 +830,7 @@ void PokeathlonBox_GetMonPicVramOffsets(PokeathlonBox_SubGraphics *sub) {
 // Loads the front sprite chars and palette of `mon` into the buffers drawn by PokeathlonBox_TransferMonPic.
 #pragma force_active on
 
-void PokeathlonBox_LoadMonPic(PokeathlonBox_SubGraphics *sub, PokeathlonBox_MonInfo *mon) {
+static void PokeathlonBox_LoadMonPic(PokeathlonBox_SubGraphics *sub, PokeathlonBox_MonInfo *mon) {
     PokepicTemplate pokepic;
     NNSG2dPaletteData *plttData;
     void *file;
@@ -812,7 +847,7 @@ void PokeathlonBox_LoadMonPic(PokeathlonBox_SubGraphics *sub, PokeathlonBox_MonI
 
 #pragma force_active reset
 
-void PokeathlonBox_TransferMonPic(PokeathlonBox_SubGraphics *sub) {
+static void PokeathlonBox_TransferMonPic(PokeathlonBox_SubGraphics *sub) {
     DC_FlushRange(sub->monPicChars, 0xc80);
     GXS_LoadOBJ(sub->monPicChars, sub->monPicCharOffset, 0xc80);
     DC_FlushRange(sub->monPicPalette, 0x20);

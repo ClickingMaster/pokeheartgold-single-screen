@@ -11,14 +11,15 @@
 
 #include "assert.h"
 #include "bg_window.h"
+#include "communication_core.h"
 #include "communication_player_state.h"
 #include "frontier_save_access.h"
+#include "frontier_stat_ids.h"
 #include "heap.h"
 #include "math_util.h"
 #include "party.h"
 #include "player_data.h"
 #include "pokemon.h"
-#include "communication_core.h"
 #include "use_item_on_mon.h"
 
 // Battle Castle trainers and battles: the trainers of a round, the battle setup of a castle battle, the party kept
@@ -45,8 +46,6 @@ extern const u16 gBattleCastleRoundLastBattleMaxes[];
 void *FrontierTrainer_Load(BattleCastleTrainerRecord *record, int trainerId, enum HeapID heapID, int narcId);
 void FrontierTrainer_SetBattleTrainer(BattleSetup *setup, BattleCastleTrainerRecord *record, int count, int battler, enum HeapID heapID);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
-int BattleCastle_GetPointsStat(int type);
-int BattleCastle_GetSpentPointsStat(int type);
 void FrontierSave_SubStat(FrontierSave *frontierSave, int stat, int substat, int amount);
 void FrontierSave_AddStat(FrontierSave *frontierSave, int stat, int substat, int amount);
 

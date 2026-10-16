@@ -8,15 +8,16 @@
 #include "frontier/frontier_link_messages.h"
 
 #include "error_handling.h"
+#include "frontier_save_access.h"
+#include "frontier_stat_ids_legacy.h"
 #include "game_stats.h"
 #include "heap.h"
 #include "math_util.h"
 #include "party.h"
+#include "player_avatar.h"
 #include "pokemon.h"
 #include "save_vars_flags.h"
 #include "sys_vars.h"
-#include "frontier_save_access.h"
-#include "frontier_stat_ids_legacy.h"
 
 // The Battle Factory's script data: rentals and opponents generated from Battle Factory sets, the player's rental
 // party, trades and the record kept in the FactoryChallenge save.
@@ -40,7 +41,6 @@ void FactoryChallenge_SetSaved(void *challenge, int saved);
 int FactoryFlags_GetField(int flags, int field, u8 index, int a3);
 u32 BattleFactory_GetBestStreakStat(u8 type, u8 levelMode);
 u32 BattleFactory_GetBestTradeCountStat(u8 type, u8 levelMode);
-u32 FrontierStat_GetFriendIndex(u32 stat);
 void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
 void *FrontierTrainer_Load(BattleFactoryTrainer *trainer, int trainerId, enum HeapID heapId, int narcId);
 int FrontierTrainer_GetClassSprite(int trainerClass);

@@ -23,8 +23,6 @@
 #include "vram_transfer_manager.h"
 #include "wireless_status_icon.h"
 
-// Battle Frontier map (overlay 80): the facility map behind the frontier scripts.
-//
 // Map effect of some frontier maps: two 2x2 tile blocks of BG3 alternate every third frame.
 
 typedef struct FrontierMapTileBlinkTask {
@@ -39,10 +37,10 @@ struct FrontierMapTileBlink {
     FrontierMapTileBlinkTask *task;
 };
 
-FrontierMapTileBlinkTask *FrontierMapTileBlink_CreateTask(BgConfig *bgConfig);
-void FrontierMapTileBlink_Task(SysTask *task, void *data);
-void FrontierMapTileBlink_GetTiles(u16 *tiles, u8 state);
-void FrontierMapTileBlink_DestroyTask(FrontierMapTileBlinkTask *blinkTask);
+static FrontierMapTileBlinkTask *FrontierMapTileBlink_CreateTask(BgConfig *bgConfig);
+static void FrontierMapTileBlink_Task(SysTask *task, void *data);
+static void FrontierMapTileBlink_GetTiles(u16 *tiles, u8 state);
+static void FrontierMapTileBlink_DestroyTask(FrontierMapTileBlinkTask *blinkTask);
 
 typedef struct FrontierMapMainBgTemplates {
     BgTemplate bg1;
@@ -50,14 +48,14 @@ typedef struct FrontierMapMainBgTemplates {
     BgTemplate bg3;
 } FrontierMapMainBgTemplates;
 
-// Frontier application work (frontier_runtime.c)
+// Frontier application work
 FrontierMapObjectGfx *Frontier_GetMapObjectGfx(void *frontier);
 FrontierMapObject *Frontier_GetMapObjects(void *frontier);
 FrontierMapObject *Frontier_GetMapObject(void *frontier, int index);
 FrontierMapSpriteState *Frontier_GetMapSpriteState(void *frontier);
 void Frontier_ResetMapSpriteState(void *frontier);
 
-// Other frontier overlay modules (no header yet)
+// Other frontier modules
 u32 FrontierMap_GetParam(u32 mapId, u32 field);
 void FrontierMap_InitEffect(void *map, void *effect, u32 mapId);
 void FrontierMap_ExitEffect(void *map, void *effect, u32 mapId);
@@ -66,7 +64,6 @@ u32 FrontierParticles_New(enum HeapID heapID);
 void FrontierParticles_Free(u32 resourceManager);
 void FrontierParticles_Update(void);
 
-// Not in frontier/frontier_map.h: the script commands declare these with u32 indexes (their code depends on it).
 ManagedSprite *FrontierMap_CreateSprite(FrontierMap *map, u16 index, u16 resourceId);
 void FrontierMap_SetSpriteAnimActive(FrontierMap *map, u16 index, u32 active);
 
@@ -103,7 +100,7 @@ FrontierMapTileBlink *FrontierMapTileBlink_Create(BgConfig *bgConfig) {
     return blink;
 }
 
-FrontierMapTileBlinkTask *FrontierMapTileBlink_CreateTask(BgConfig *bgConfig) {
+static FrontierMapTileBlinkTask *FrontierMapTileBlink_CreateTask(BgConfig *bgConfig) {
     FrontierMapTileBlinkTask *blinkTask = Heap_Alloc(HEAP_ID_101, sizeof(FrontierMapTileBlinkTask));
 
     MI_CpuFill8(blinkTask, 0, sizeof(FrontierMapTileBlinkTask));
@@ -113,7 +110,7 @@ FrontierMapTileBlinkTask *FrontierMapTileBlink_CreateTask(BgConfig *bgConfig) {
     return blinkTask;
 }
 
-void FrontierMapTileBlink_Task(SysTask *task, void *data) {
+static void FrontierMapTileBlink_Task(SysTask *task, void *data) {
     FrontierMapTileBlinkTask *blinkTask = data;
     u16 tiles[4];
 
@@ -128,7 +125,7 @@ void FrontierMapTileBlink_Task(SysTask *task, void *data) {
     ScheduleBgTilemapBufferTransfer(blinkTask->bgConfig, GF_BG_LYR_MAIN_3);
 }
 
-void FrontierMapTileBlink_GetTiles(u16 *tiles, u8 state) {
+static void FrontierMapTileBlink_GetTiles(u16 *tiles, u8 state) {
     int base;
     int i;
     int j;
@@ -153,7 +150,7 @@ void FrontierMapTileBlink_Free(FrontierMapTileBlink *blink) {
     Heap_Free(blink);
 }
 
-void FrontierMapTileBlink_DestroyTask(FrontierMapTileBlinkTask *blinkTask) {
+static void FrontierMapTileBlink_DestroyTask(FrontierMapTileBlinkTask *blinkTask) {
     SysTask_Destroy(blinkTask->task);
     Heap_Free(blinkTask);
 }
@@ -196,8 +193,8 @@ u32 FrontierLinkLobby_GetStreakActiveStat(u32 value) {
     }
 }
 
-// The facility map: BGs from the map parameter table, the scrolling camera, the overlay 42 map objects and up to 8
-// extra sprites, plus saving/restoring that state in the frontier application's work while another app runs.
+// The facility map: BGs from the map parameter table, the scrolling camera, the map objects and up to 8 extra
+// sprites, plus saving/restoring that state in the frontier application's work while another app runs.
 
 void *FrontierMap_Init(void *frontier) {
     FrontierLaunchArgs *args = Frontier_GetLaunchArgs(frontier);
@@ -537,7 +534,7 @@ void FrontierMap_LoadSubScreenGfx(FrontierMap *map) {
     NARC_Delete(narc);
 }
 
-// Creates the overlay 42 object system for the map and loads the map BGs (BG3, optional BG2).
+// Creates the 2D object system for the map and loads the map BGs (BG3, optional BG2).
 void FrontierMap_InitMapObjects(FrontierMap *map, u32 mapId, void *profile) {
     Field2DBgLayerTemplate layerTemplate;
     NNSG2dPaletteData *bg3Pltt;
@@ -662,8 +659,6 @@ void FrontierMap_InitSpriteSystem(FrontierMap *map) {
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(map->spriteSystem), 0, FX32_CONST(512));
 }
 
-// The original was compiled against int-id prototypes of the four unload functions; calling them through
-// this type keeps its code (the id constant is reloaded for each call).
 typedef BOOL (*SpriteManagerUnloadFunc)(SpriteManager *spriteManager, int id);
 
 void FrontierMap_FreeSpriteSystem(FrontierMap *map) {
@@ -878,7 +873,7 @@ void FrontierMap_SaveSprites(FrontierMap *map) {
         u16 resourceId = spriteSet->loadedResourceIds[i];
         if (resourceId != FRONTIER_MAP_NO_ID) {
             state->resourceIds[i] = resourceId;
-            i++; // skips the next slot (as the original does)
+            i++; // skips the next slot
         }
     }
     for (i = 0; i < FRONTIER_MAP_SPRITE_MAX; i++) {

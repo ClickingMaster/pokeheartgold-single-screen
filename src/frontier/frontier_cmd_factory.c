@@ -6,12 +6,14 @@
 
 #include "battle/battle_setup.h"
 #include "frontier/battle_factory_data.h"
+#include "frontier/battle_factory_setup.h"
 #include "frontier/frontier.h"
 #include "frontier/frontier_map.h"
+#include "frontier/frontier_script_commands.h"
 #include "frontier/frontier_script_context.h"
 #include "frontier/frontier_trainers.h"
-#include "frontier/frontier_script_commands.h"
 
+#include "battle_frontier_communication.h"
 #include "bg_window.h"
 #include "heap.h"
 #include "launch_application.h"
@@ -19,30 +21,21 @@
 #include "party.h"
 #include "pokemon.h"
 #include "sys_task_api.h"
-#include "battle_frontier_communication.h"
-
-// Script commands of the Battle Factory (BattleFactoryData, frontier/battle_factory_data.h).
 
 extern const OverlayManagerTemplate gOverlayTemplate_BattleFactoryRentalApp;
 extern const OverlayManagerTemplate gOverlayTemplate_BattleFactoryTradeApp;
 
 u32 FactoryChallenge_GetSaved(void *challenge);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
-int BattleFactory_GetPartySize(int type);
-int BattleFactory_GetOpponentMonCount(int type, int a1);
-BattleSetup *BattleFactory_NewBattleSetup(BattleFactoryData *data, FrontierLaunchArgs *args);
-int BattleFactory_GetMonLevel(BattleFactoryData *data);
-void BattleFactory_SetPartyToRentals(BattleFactoryData *data);
-void BattleFactory_AddPartnerMonsToParty(BattleFactoryData *data);
-BOOL BattleFactory_IsMultiType(int type);
-u16 BattleFactory_GetRound(BattleFactoryData *data);
 
-void BattleFactory_OnAppExit(void *args);
-void BattleFactory_BgScrollTask(SysTask *task, void *map);
-BOOL FrontierScriptNative_WaitFactoryLink(FrontierScriptContext *ctx);
+static void BattleFactory_OnAppExit(void *args);
+static void BattleFactory_BgScrollTask(SysTask *task, void *data);
+static BOOL FrontierScriptNative_WaitFactoryLink(FrontierScriptContext *ctx);
 
 BOOL FrtCmd_FactoryAlloc(FrontierScriptContext *ctx) {
-    u32 resume = FrontierScript_ReadVar(ctx), type = FrontierScript_ReadVar(ctx), levelMode = FrontierScript_ReadVar(ctx);
+    u32 resume = FrontierScript_ReadVar(ctx);
+    u32 type = FrontierScript_ReadVar(ctx);
+    u32 levelMode = FrontierScript_ReadVar(ctx);
     BattleFactoryData *data = BattleFactoryData_Alloc(Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork)->saveData, resume, (u8)type, (u8)levelMode);
     Frontier_SetData(ctx->frontierSystem->frontierWork, (u32)data);
     return FALSE;
@@ -99,6 +92,7 @@ BOOL FrtCmd_FactoryLaunchTradeApp(FrontierScriptContext *ctx) {
     int i = 0;
     u8 *p = (u8 *)data;
     u16 zero = i;
+    // Clear the six selections before the trade
     do {
         i++;
         ((BattleFactoryData *)p)->selection[0] = zero;
@@ -117,7 +111,7 @@ BOOL FrtCmd_FactoryLaunchTradeApp(FrontierScriptContext *ctx) {
     return TRUE;
 }
 
-void BattleFactory_OnAppExit(void *args) {
+static void BattleFactory_OnAppExit(void *args) {
     BattleFactory_StoreAppResult(((BattleFactoryAppLaunchArgs *)args)->data, args);
     Heap_Free(args);
 }
@@ -241,7 +235,7 @@ BOOL FrtCmd_FactoryAction(FrontierScriptContext *ctx) {
         Heap_Free(mon);
         break;
     }
-    // the type most of the opponent's Pokemon have, 0xFF when no type is shared
+    // The type most of the opponent's Pokemon share, 0xFF when no two share one
     case FACTORY_ACTION_GET_OPPONENT_MAIN_TYPE: {
         int count;
         int i;
@@ -380,23 +374,24 @@ BOOL FrtCmd_FactoryAction(FrontierScriptContext *ctx) {
     return FALSE;
 }
 
-void BattleFactory_BgScrollTask(SysTask *task, void *map) {
-    (void)task;
-    if (Bg_GetYpos(((FrontierMap *)map)->bgConfig, GF_BG_LYR_MAIN_2) >= 0xFF) {
-        ScheduleSetBgPosText(((FrontierMap *)map)->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_SET_Y, 0);
+static void BattleFactory_BgScrollTask(SysTask *task, void *data) {
+    FrontierMap *map = data;
+    if (Bg_GetYpos(map->bgConfig, GF_BG_LYR_MAIN_2) >= 0xFF) {
+        ScheduleSetBgPosText(map->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_SET_Y, 0);
     } else {
-        ScheduleSetBgPosText(((FrontierMap *)map)->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_ADD_Y, 1);
+        ScheduleSetBgPosText(map->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_ADD_Y, 1);
     }
 }
 
 BOOL FrtCmd_FactoryGetBattleResult(FrontierScriptContext *ctx) {
     u16 *var = FrontierScript_ReadVarPtr(ctx);
-    *var = (u16)((BattleFactoryData *)Frontier_GetData(ctx->frontierSystem->frontierWork))->battleWon;
+    *var = ((BattleFactoryData *)Frontier_GetData(ctx->frontierSystem->frontierWork))->battleWon;
     return FALSE;
 }
 
 BOOL FrtCmd_FactorySendBuffer(FrontierScriptContext *ctx) {
-    u32 command = FrontierScript_ReadVar(ctx), value = FrontierScript_ReadVar(ctx);
+    u32 command = FrontierScript_ReadVar(ctx);
+    u32 value = FrontierScript_ReadVar(ctx);
     u16 *var = FrontierScript_ReadVarPtr(ctx);
     *var = BattleFactory_SendBuffer(Frontier_GetData(ctx->frontierSystem->frontierWork), command, value);
     return TRUE;
@@ -408,7 +403,7 @@ BOOL FrtCmd_FactoryReceiveBuffer(FrontierScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL FrontierScriptNative_WaitFactoryLink(FrontierScriptContext *ctx) {
+static BOOL FrontierScriptNative_WaitFactoryLink(FrontierScriptContext *ctx) {
     BattleFactoryData *data;
     FrontierScript_GetVar(ctx, ctx->data[0]);
     data = Frontier_GetData(ctx->frontierSystem->frontierWork);

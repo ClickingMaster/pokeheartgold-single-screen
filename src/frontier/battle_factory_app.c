@@ -3,19 +3,27 @@
 #include "constants/pokemon.h"
 #include "constants/sndseq.h"
 
+#include "frontier/battle_factory_setup.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0194.h"
 
+#include "battle_frontier_communication.h"
+#include "bg_cell_manager.h"
 #include "bg_window.h"
+#include "communication_core.h"
+#include "communication_player_state.h"
 #include "filesystem.h"
 #include "font.h"
 #include "gf_3d_vramman.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
+#include "grid_input_handler.h"
 #include "heap.h"
+#include "link_synchronization.h"
 #include "list_menu_2d.h"
 #include "message_format.h"
 #include "msgdata.h"
+#include "oam_manager.h"
 #include "obj_char_transfer.h"
 #include "obj_pltt_transfer.h"
 #include "options.h"
@@ -28,26 +36,19 @@
 #include "pokedex_util.h"
 #include "pokemon.h"
 #include "pokemon_icon_idx.h"
+#include "pokemon_summary.h"
 #include "pokepic.h"
 #include "render_window.h"
-#include "sprite.h"
-#include "sprite_transfer.h"
-#include "system.h"
-#include "sound_playback.h"
-#include "sprite_resource_header.h"
-#include "sprite_resource.h"
-#include "oam_manager.h"
 #include "screen_fade_legacy.h"
-#include "bg_cell_manager.h"
-#include "grid_input_handler.h"
+#include "sound_playback.h"
+#include "sprite.h"
+#include "sprite_resource.h"
+#include "sprite_resource_header.h"
+#include "sprite_transfer.h"
 #include "swap_3d_buffers.h"
-#include "communication_player_state.h"
-#include "communication_core.h"
-#include "link_synchronization.h"
-#include "wireless_status_icon.h"
-#include "pokemon_summary.h"
-#include "battle_frontier_communication.h"
+#include "system.h"
 #include "vram_transfer_manager.h"
+#include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
 FS_EXTERN_OVERLAY(OVY_80);
@@ -188,7 +189,7 @@ typedef struct BattleFactoryApp {
     u32 cursorPos;                        // 0x468
     YesNoPrompt *yesNoPrompt;             // 0x46C
     u8 unk_470[4];                        // 0x470
-    BgCellManager *bgCellManager;          // 0x474
+    BgCellManager *bgCellManager;         // 0x474
     int paletteBlinkState;                // 0x478
     u32 numPokepics;                      // 0x47C
     u32 monIconIndex;                     // 0x480
@@ -237,13 +238,9 @@ extern const DpadMenuBox gBattleFactorySwapInGridBoxesA[];
 extern const DpadMenuBox gBattleFactorySwapInGridBoxesB[];
 extern const DpadMenuBox gBattleFactoryRentalGridBoxes[];
 
-// Frontier overlay (80) helpers
-int BattleFactory_GetPartySize(int frontierType);
-BOOL BattleFactory_IsMultiType(int frontierType);
+// Frontier helpers
 void Frontier_BufferPartnerName(MessageFormat *msgFmt, u32 field);
 
-// text.h (and render_text.h, which includes it) are not included: text.h declares fontId as u8
-// (FontID), but this module passes it unnarrowed
 #define TEXT_COLOR(fg, sh, bg) ((((u32)(fg) << 24) >> 8) | (((u32)(sh) << 24) >> 16) | (bg))
 u8 AddTextPrinterParameterizedWithColor(Window *window, int fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, void *callback);
 #define MAKE_TEXT_COLOR(fg, sh, bg) ((((fg) & 0xFF) << 16) | (((sh) & 0xFF) << 8) | (((bg) & 0xFF) << 0))
@@ -254,199 +251,199 @@ void TextFlags_SetCanTouchSpeedUpPrint(BOOL enable);
 BOOL BattleFactoryApp_Init(OverlayManager *man, int *state);
 BOOL BattleFactoryApp_Main(OverlayManager *man, int *state);
 BOOL BattleFactoryApp_Exit(OverlayManager *man, int *state);
-BOOL BattleFactoryApp_SlideIn(BattleFactoryApp *app);
-BOOL BattleFactoryApp_ShowScreen(BattleFactoryApp *app);
-void BattleFactoryApp_SetupRentalScreen(BattleFactoryApp *app);
-void BattleFactoryApp_CreateRentalBalls(BattleFactoryApp *app);
-void BattleFactoryApp_CreateRentalPokepics(BattleFactoryApp *app);
-void BattleFactoryApp_SetupSwapOutScreen(BattleFactoryApp *app);
-void BattleFactoryApp_SetupSwapInScreen(BattleFactoryApp *app);
-void BattleFactoryApp_CreateSwapBalls(BattleFactoryApp *app);
-void BattleFactoryApp_CreateSwapPokepics(BattleFactoryApp *app);
-BOOL BattleFactoryApp_WaitSummary(BattleFactoryApp *app);
-BOOL BattleFactoryApp_SelectRentals(BattleFactoryApp *app);
-void BattleFactoryApp_UndoLastRental(BattleFactoryApp *app);
-void BattleFactoryApp_AddRental(BattleFactoryApp *app);
-void BattleFactoryApp_RemoveRental(BattleFactoryApp *app);
-BOOL BattleFactoryApp_ConfirmRentals(BattleFactoryApp *app);
-BOOL BattleFactoryApp_CancelLastRental(BattleFactoryApp *app);
-void BattleFactoryApp_DeselectCursorRental(BattleFactoryApp *app);
-BOOL BattleFactoryApp_SelectSwapOut(BattleFactoryApp *app);
-void BattleFactoryApp_PickSwapOut(BattleFactoryApp *app);
-BOOL BattleFactoryApp_ConfirmCancelSwap(BattleFactoryApp *app);
-void BattleFactoryApp_ResumeSwapOut(BattleFactoryApp *app);
-BOOL BattleFactoryApp_SelectSwapIn(BattleFactoryApp *app);
-void BattleFactoryApp_UnpickSwapOut(BattleFactoryApp *app);
-void BattleFactoryApp_PickSwapIn(BattleFactoryApp *app);
-void BattleFactoryApp_ShowSwapInPrompt(BattleFactoryApp *app);
-BOOL BattleFactoryApp_ConfirmCancelSwapIn(BattleFactoryApp *app);
-void BattleFactoryApp_ResumeSwapIn(BattleFactoryApp *app);
-BOOL BattleFactoryApp_SwitchPage(BattleFactoryApp *app);
-BOOL BattleFactoryApp_LinkSendSwap(BattleFactoryApp *app);
-BOOL BattleFactoryApp_LinkSync(BattleFactoryApp *app);
-BOOL BattleFactoryApp_FadeOut(BattleFactoryApp *app);
-BOOL BattleFactoryApp_ShowLinkTradeResult(BattleFactoryApp *app);
-void BattleFactoryApp_VBlankCallback(BattleFactoryApp *app);
-void BattleFactoryApp_SetGraphicsBanks(void);
-void BattleFactoryApp_InitBgLayers(BgConfig *bgConfig);
-void BattleFactoryApp_InitBgGraphics(BattleFactoryApp *app);
-void BattleFactoryApp_InitSprites(BattleFactoryApp *app);
-void BattleFactoryApp_FreeBgLayers(BgConfig *bgConfig);
-void BattleFactoryApp_SetMainState(BattleFactoryApp *app, int *state, int nextState);
-BOOL BattleFactoryApp_ScrollBallsIn(BattleFactoryApp *app);
-BOOL BattleFactoryApp_ScrollBallsOut(BattleFactoryApp *app);
-void BattleFactoryApp_AnimateBackground(BattleFactoryApp *app);
-void BattleFactoryApp_SetBgPalette(BattleFactoryApp *app, int bgId, u8 palette, u8 width, u8 height);
-void BattleFactoryApp_SetCenterAnim(BattleFactoryApp *app, int kind);
-void BattleFactoryApp_LoadBgGfx81(BattleFactoryApp *app, GFBgLayer bgId);
-void BattleFactoryApp_LoadBgGfx92(BattleFactoryApp *app, GFBgLayer bgId);
-void BattleFactoryApp_LoadBgGfx4(BattleFactoryApp *app, GFBgLayer bgId);
-void BattleFactoryApp_LoadBgPalette(void);
-void BattleFactoryApp_LoadSubScreenBg(BattleFactoryApp *app, GFBgLayer bgId);
-u8 BattleFactoryApp_PrintMessage(BattleFactoryApp *app, Window *window, u32 msgId, u32 x, u32 y, u32 textSpeed, u8 fg, u8 shadow, u8 bg, u8 fontId);
-u8 BattleFactoryApp_ShowMessage(BattleFactoryApp *app, u32 msgId);
-void BattleFactoryApp_BufferNumber(BattleFactoryApp *app, u32 field, s32 value);
-void BattleFactoryApp_BufferSpeciesName(BattleFactoryApp *app, u32 field, BoxPokemon *boxMon);
-void BattleFactoryApp_PrintPlayerName(BattleFactoryApp *app, Window *window, int x, int y, u8 fontId);
-void BattleFactoryApp_PrintPartnerName(BattleFactoryApp *app, Window *window, int x, int y, u8 fontId);
-void BattleFactoryApp_PrintMonName(BattleFactoryApp *app, Window *window, int monIndex, int x, int y, u8 fg, u8 shadow, volatile u8 bg, u8 fontId, Party *party);
-void BattleFactoryApp_PrintPartnerMonName(BattleFactoryApp *app, Window *window, int x, int y, u8 fg, u8 shadow, volatile u8 bg, u8 fontId, u16 species, u8 gender);
-void BattleFactoryApp_FreeGraphics(BattleFactoryApp *app);
-void BattleFactoryApp_ResumeAfterSummary(BattleFactoryApp *app);
-void BattleFactoryApp_DisableDisplay(void);
-void BattleFactoryApp_InitGraphics(BattleFactoryApp *app);
-void BattleFactoryApp_CreateSummaryArgs(BattleFactoryApp *app);
-BOOL BattleFactoryApp_IsScreen(BattleFactoryApp *app, u8 screen);
-int BattleFactory_GetRentalCount(int frontierType);
-BOOL BattleFactoryApp_IsCancelRequested(BattleFactoryApp *app);
-void BattleFactoryApp_SetCancelRequested(BattleFactoryApp *app, u8 value);
-void BattleFactoryApp_CreatePokepic(BattleFactoryApp *app, int index, Pokemon *mon, int x, int y, int hFlip);
-BOOL BattleFactoryApp_SendLinkCommand(BattleFactoryApp *app, int command, int arg);
-void BattleFactoryApp_PrepareLinkPing(BattleFactoryApp *app, int command);
+static BOOL BattleFactoryApp_SlideIn(BattleFactoryApp *app);
+static BOOL BattleFactoryApp_ShowScreen(BattleFactoryApp *app);
+static void BattleFactoryApp_SetupRentalScreen(BattleFactoryApp *app);
+static void BattleFactoryApp_CreateRentalBalls(BattleFactoryApp *app);
+static void BattleFactoryApp_CreateRentalPokepics(BattleFactoryApp *app);
+static void BattleFactoryApp_SetupSwapOutScreen(BattleFactoryApp *app);
+static void BattleFactoryApp_SetupSwapInScreen(BattleFactoryApp *app);
+static void BattleFactoryApp_CreateSwapBalls(BattleFactoryApp *app);
+static void BattleFactoryApp_CreateSwapPokepics(BattleFactoryApp *app);
+static BOOL BattleFactoryApp_WaitSummary(BattleFactoryApp *app);
+static BOOL BattleFactoryApp_SelectRentals(BattleFactoryApp *app);
+static void BattleFactoryApp_UndoLastRental(BattleFactoryApp *app);
+static void BattleFactoryApp_AddRental(BattleFactoryApp *app);
+static void BattleFactoryApp_RemoveRental(BattleFactoryApp *app);
+static BOOL BattleFactoryApp_ConfirmRentals(BattleFactoryApp *app);
+static BOOL BattleFactoryApp_CancelLastRental(BattleFactoryApp *app);
+static void BattleFactoryApp_DeselectCursorRental(BattleFactoryApp *app);
+static BOOL BattleFactoryApp_SelectSwapOut(BattleFactoryApp *app);
+static void BattleFactoryApp_PickSwapOut(BattleFactoryApp *app);
+static BOOL BattleFactoryApp_ConfirmCancelSwap(BattleFactoryApp *app);
+static void BattleFactoryApp_ResumeSwapOut(BattleFactoryApp *app);
+static BOOL BattleFactoryApp_SelectSwapIn(BattleFactoryApp *app);
+static void BattleFactoryApp_UnpickSwapOut(BattleFactoryApp *app);
+static void BattleFactoryApp_PickSwapIn(BattleFactoryApp *app);
+static void BattleFactoryApp_ShowSwapInPrompt(BattleFactoryApp *app);
+static BOOL BattleFactoryApp_ConfirmCancelSwapIn(BattleFactoryApp *app);
+static void BattleFactoryApp_ResumeSwapIn(BattleFactoryApp *app);
+static BOOL BattleFactoryApp_SwitchPage(BattleFactoryApp *app);
+static BOOL BattleFactoryApp_LinkSendSwap(BattleFactoryApp *app);
+static BOOL BattleFactoryApp_LinkSync(BattleFactoryApp *app);
+static BOOL BattleFactoryApp_FadeOut(BattleFactoryApp *app);
+static BOOL BattleFactoryApp_ShowLinkTradeResult(BattleFactoryApp *app);
+static void BattleFactoryApp_VBlankCallback(BattleFactoryApp *app);
+static void BattleFactoryApp_SetGraphicsBanks(void);
+static void BattleFactoryApp_InitBgLayers(BgConfig *bgConfig);
+static void BattleFactoryApp_InitBgGraphics(BattleFactoryApp *app);
+static void BattleFactoryApp_InitSprites(BattleFactoryApp *app);
+static void BattleFactoryApp_FreeBgLayers(BgConfig *bgConfig);
+static void BattleFactoryApp_SetMainState(BattleFactoryApp *app, int *state, int nextState);
+static BOOL BattleFactoryApp_ScrollBallsIn(BattleFactoryApp *app);
+static BOOL BattleFactoryApp_ScrollBallsOut(BattleFactoryApp *app);
+static void BattleFactoryApp_AnimateBackground(BattleFactoryApp *app);
+static void BattleFactoryApp_SetBgPalette(BattleFactoryApp *app, int bgId, u8 palette, u8 width, u8 height);
+static void BattleFactoryApp_SetCenterAnim(BattleFactoryApp *app, int kind);
+static void BattleFactoryApp_LoadBgGfx81(BattleFactoryApp *app, GFBgLayer bgId);
+static void BattleFactoryApp_LoadBgGfx92(BattleFactoryApp *app, GFBgLayer bgId);
+static void BattleFactoryApp_LoadBgGfx4(BattleFactoryApp *app, GFBgLayer bgId);
+static void BattleFactoryApp_LoadBgPalette(void);
+static void BattleFactoryApp_LoadSubScreenBg(BattleFactoryApp *app, GFBgLayer bgId);
+static u8 BattleFactoryApp_PrintMessage(BattleFactoryApp *app, Window *window, u32 msgId, u32 x, u32 y, u32 textSpeed, u8 fg, u8 shadow, u8 bg, u8 fontId);
+static u8 BattleFactoryApp_ShowMessage(BattleFactoryApp *app, u32 msgId);
+static void BattleFactoryApp_BufferNumber(BattleFactoryApp *app, u32 field, s32 value);
+static void BattleFactoryApp_BufferSpeciesName(BattleFactoryApp *app, u32 field, BoxPokemon *boxMon);
+static void BattleFactoryApp_PrintPlayerName(BattleFactoryApp *app, Window *window, int x, int y, u8 fontId);
+static void BattleFactoryApp_PrintPartnerName(BattleFactoryApp *app, Window *window, int x, int y, u8 fontId);
+static void BattleFactoryApp_PrintMonName(BattleFactoryApp *app, Window *window, int monIndex, int x, int y, u8 fg, u8 shadow, volatile u8 bg, u8 fontId, Party *party);
+static void BattleFactoryApp_PrintPartnerMonName(BattleFactoryApp *app, Window *window, int x, int y, u8 fg, u8 shadow, volatile u8 bg, u8 fontId, u16 species, u8 gender);
+static void BattleFactoryApp_FreeGraphics(BattleFactoryApp *app);
+static void BattleFactoryApp_ResumeAfterSummary(BattleFactoryApp *app);
+static void BattleFactoryApp_DisableDisplay(void);
+static void BattleFactoryApp_InitGraphics(BattleFactoryApp *app);
+static void BattleFactoryApp_CreateSummaryArgs(BattleFactoryApp *app);
+static BOOL BattleFactoryApp_IsScreen(BattleFactoryApp *app, u8 screen);
+static int BattleFactory_GetRentalCount(int frontierType);
+static BOOL BattleFactoryApp_IsCancelRequested(BattleFactoryApp *app);
+static void BattleFactoryApp_SetCancelRequested(BattleFactoryApp *app, u8 value);
+static void BattleFactoryApp_CreatePokepic(BattleFactoryApp *app, int index, Pokemon *mon, int x, int y, int hFlip);
+static BOOL BattleFactoryApp_SendLinkCommand(BattleFactoryApp *app, int command, int arg);
+static void BattleFactoryApp_PrepareLinkPing(BattleFactoryApp *app, int command);
 void BattleFactory_ReceivePing(int netId);
-void BattleFactoryApp_PrepareLinkRentals(BattleFactoryApp *app, int command, int arg);
+static void BattleFactoryApp_PrepareLinkRentals(BattleFactoryApp *app, int command, int arg);
 void BattleFactory_ReceiveRentals(int netId, int size, const u16 *data, BattleFactoryApp *app);
 void BattleFactory_ReceiveUnused(void);
-void BattleFactoryApp_PrintPartnerRentals(BattleFactoryApp *app);
-void BattleFactoryApp_PrepareLinkSwap(BattleFactoryApp *app, int command, int accepted);
+static void BattleFactoryApp_PrintPartnerRentals(BattleFactoryApp *app);
+static void BattleFactoryApp_PrepareLinkSwap(BattleFactoryApp *app, int command, int accepted);
 void BattleFactory_ReceiveSwap(int netId, int size, const BattleFactoryLinkMessage *msg, BattleFactoryApp *app);
-BattleFactoryBall *BattleFactoryApp_CreateBall(BattleFactoryApp *app, int index);
-BattleFactorySprite *BattleFactoryApp_CreateCenterSprite(BattleFactoryApp *app, int animSeq);
-void BattleFactoryApp_DeleteCenterSprites(BattleFactoryApp *app);
-void BattleFactoryApp_InitWindows(BattleFactoryApp *app);
-void BattleFactoryApp_CloseWindow(Window *window);
-void BattleFactoryApp_MoveRentalCursor(BattleFactoryApp *app, int target);
-void BattleFactoryApp_MoveButtonCursor(BattleFactoryApp *app, int target);
-void BattleFactoryApp_OpenRentalMenu(BattleFactoryApp *app);
-void BattleFactoryApp_CloseRentalMenu(BattleFactoryApp *app);
-void BattleFactoryApp_PrintRentalMenu(BattleFactoryApp *app);
-void BattleFactoryApp_MoveSwapOutCursor(BattleFactoryApp *app, int target);
-void BattleFactoryApp_MoveSwapInCursor(BattleFactoryApp *app, int target);
-void BattleFactoryApp_OpenSwapOutMenu(BattleFactoryApp *app);
-void BattleFactoryApp_CloseSwapOutMenu(BattleFactoryApp *app);
-void BattleFactoryApp_RedrawSwapOutButtons(BattleFactoryApp *app);
-void BattleFactoryApp_ClearSwapOutMenu(BattleFactoryApp *app);
-void BattleFactoryApp_PrintSwapOutMenu(BattleFactoryApp *app);
-void BattleFactoryApp_OpenSwapInMenu(BattleFactoryApp *app);
-void BattleFactoryApp_CloseSwapInMenu(BattleFactoryApp *app);
-void BattleFactoryApp_RedrawSwapInButtons(BattleFactoryApp *app);
-void BattleFactoryApp_ClearSwapInMenu(BattleFactoryApp *app);
-void BattleFactoryApp_PrintSwapInMenu(BattleFactoryApp *app);
-void BattleFactoryApp_CreateYesNo(YesNoPrompt **prompt);
-void BattleFactoryApp_DestroyYesNo(YesNoPrompt *prompt);
-void BattleFactoryApp_InitYesNo(YesNoPrompt *prompt, BgConfig *bgConfig);
-void BattleFactoryApp_UpdatePreviewPokepic(BattleFactoryApp *app);
-void BattleFactory_GetPokepicPos(int slot, int numPokepics, int *x, int *y);
-void BattleFactoryApp_GetCursorPokepicPos(BattleFactoryApp *app, int *x, int *y);
-void BattleFactoryApp_MovePicCursor(BattleFactoryApp *app);
-int BattleFactoryApp_GetCursorSlot(BattleFactoryApp *app);
-void BattleFactoryApp_UpdateSwapOutPicCursor(BattleFactoryApp *app);
-void BattleFactoryApp_UpdateSwapInPicCursor(BattleFactoryApp *app);
-void BattleFactoryApp_CreatePartyPokepics(BattleFactoryApp *app, int hFlip);
-void BattleFactoryApp_ReplacePokepic(BattleFactoryApp *app, int slot, int monIndex, int hFlip);
-void BattleFactoryApp_ReplacePokepicFromOther(BattleFactoryApp *app, int slot, int monIndex, int hFlip);
-void BattleFactoryApp_CreateSlotMarkers(BattleFactoryApp *app);
-void BattleFactoryApp_DeleteSlotMarkers(BattleFactoryApp *app);
-void BattleFactoryApp_UpdateSlotMarkers(BattleFactoryApp *app);
-void BattleFactoryApp_SetSlotMarkers(BattleFactoryApp *app, int highlightCursor);
-void BattleFactoryApp_CreateOrderSprites(BattleFactoryApp *app);
-void BattleFactoryApp_DeleteOrderSprites(BattleFactoryApp *app);
-void BattleFactoryApp_UpdateOrderSprites(BattleFactoryApp *app);
-void BattleFactoryApp_ShowMonIcon(BattleFactoryApp *app, Party *party, u32 index, u32 limit);
-void BattleFactoryApp_PrintRentalNames(BattleFactoryApp *app, u32 target, u32 limit);
-void BattleFactoryApp_PrintPartyNames(BattleFactoryApp *app, Party *party);
-void BattleFactoryApp_PrintSwapNames(BattleFactoryApp *app, u32 swapIn);
-void BattleFactoryApp_PrintSwapInName(BattleFactoryApp *app, u32 index);
-void BattleFactoryApp_LoadSubPalette(BattleFactoryApp *app);
-void BattleFactoryApp_UpdatePaletteBlink(BattleFactoryApp *app);
-void BattleFactoryApp_StartButtonFlash(BattleFactoryApp *app, u8 x, u8 y, u8 width, u8 height, u8 nextState);
-void BattleFactoryApp_FlashWideButton(BattleFactoryApp *app, u8 x, u8 y, u8 nextState);
-void BattleFactoryApp_FlashNarrowButton(BattleFactoryApp *app, u8 x, u8 y, u8 nextState);
-BOOL BattleFactoryApp_UpdateButtonFlash(BattleFactoryApp *app);
-void BattleFactoryApp_SetBallsTranslucent(BattleFactoryApp *app, int enable);
-BOOL BattleFactory_IsLinkMode(int frontierType);
-BOOL BattleFactoryApp_IsLinkMode(BattleFactoryApp *app);
-void BattleFactoryApp_InitBgCellManager(BattleFactoryApp *app);
-void BattleFactoryApp_FreeBgCellManager(BattleFactoryApp *app);
-void BattleFactorySpriteGfx_Init(BattleFactorySpriteGfx *gfx);
-Sprite *BattleFactorySpriteGfx_CreateSprite(BattleFactorySpriteGfx *gfx, int resourceId, int animSeq, int drawPriority, int priority, u8 screen);
-void BattleFactorySpriteGfx_Free(BattleFactorySpriteGfx *gfx);
-void BattleFactoryApp_InitObjTransfers(void);
-void BattleFactoryApp_Setup3D(void);
-void BattleFactoryApp_Draw3D(PokepicManager *pokepicManager);
-Pokepic *BattleFactory_CreatePokepic(PokepicManager *pokepicManager, int polygonId, Pokemon *mon, int x, int y, int z);
-void BattleFactory_SetPokepicHFlip(Pokepic *pokepic, int hFlip);
-BattleFactorySprite *BattleFactorySprite_Create(BattleFactorySpriteGfx *gfx, int resourceId, int animSeq, int priority, int drawPriority, int x, int y);
-BattleFactorySprite *BattleFactorySprite_CreateSub(BattleFactorySpriteGfx *gfx, int resourceId, int animSeq, int priority, int drawPriority, int x, int y);
-BattleFactorySprite *BattleFactorySprite_Delete(BattleFactorySprite *sprite);
-void BattleFactorySprite_SetVisible(BattleFactorySprite *sprite, int visible);
-void BattleFactorySprite_SetPosition(BattleFactorySprite *sprite, int x, int y);
-void BattleFactorySprite_SetPositionSub(BattleFactorySprite *sprite, int x, int y);
-void BattleFactorySprite_SetMatrix(BattleFactorySprite *sprite, VecFx32 *pos);
-BOOL BattleFactorySprite_IsAnimated(BattleFactorySprite *sprite);
-void BattleFactorySprite_SetAnim(BattleFactorySprite *sprite, int animSeq);
-void BattleFactorySprite_SetPaletteOverride(BattleFactorySprite *sprite, int palette);
-void BattleFactorySprite_SetPalette(BattleFactorySprite *sprite, int palette);
-void BattleFactorySprite_LoadCharData(BattleFactorySprite *sprite, void *data, u32 size, int screen);
-BattleFactoryBall *BattleFactoryBall_Create(BattleFactorySpriteGfx *gfx, u32 x, u32 y, enum HeapID heapID);
-BattleFactoryBall *BattleFactoryBall_Delete(BattleFactoryBall *ball);
-void BattleFactoryBall_SetVisible(BattleFactoryBall *ball, int visible);
-void BattleFactoryBall_Move(VecFx32 *out, BattleFactoryBall *ball, int dx, int dy);
-void BattleFactoryBall_SetPosition(BattleFactoryBall *ball, int x, int y);
-VecFx32 *BattleFactoryBall_GetPosition(BattleFactoryBall *ball);
-void BattleFactoryBall_SetSelected(BattleFactoryBall *ball, u16 selected);
-u8 BattleFactoryBall_IsSelected(BattleFactoryBall *ball);
-void BattleFactoryBall_Select(BattleFactoryBall *ball);
-void BattleFactoryBall_Deselect(BattleFactoryBall *ball);
-void BattleFactoryBall_MoveOffscreen(BattleFactoryBall *ball);
-int BattleFactoryBall_GetX(BattleFactoryBall *ball);
-int BattleFactoryBall_GetY(BattleFactoryBall *ball);
-void BattleFactoryBall_SetAnim(BattleFactoryBall *ball, int animSeq);
-void BattleFactoryBall_SetPaletteOverride(BattleFactoryBall *ball, int palette);
-void BattleFactoryBall_SetOamMode(BattleFactoryBall *ball, GXOamMode mode);
-BattleFactoryBall *BattleFactoryBall_Free(BattleFactoryBall *ball);
-void BattleFactoryApp_AddWindows(BgConfig *bgConfig, Window *windows);
-void BattleFactoryApp_RemoveWindows(Window *windows);
-void BattleFactoryApp_DrawMessageFrame(Window *window, int frame);
-void BattleFactoryApp_PrintStringAligned(Window *window, String *string, int x, int y, int fontId, u32 color, int align);
-void BattleFactoryApp_PrintMsgAligned(Window *window, MsgData *msgData, int msgId, int x, int y, int fontId, u32 color, int align);
-void BattleFactoryApp_SetLinkNameWindows(Window *windows);
-void BattleFactoryApp_LoadButtonGraphics(BgConfig *bgConfig, NARC *narc);
-void BattleFactoryApp_DrawButtons(BgConfig *bgConfig, NARC *narc, int which);
-void BattleFactoryApp_ClearButtons(BgConfig *bgConfig, int which);
-void BattleFactory_FreeGrid(GridInputHandler *grid);
-void BattleFactory_GetGridCursorPos(GridInputHandler *grid, int target, u32 *x, u32 *y);
+static BattleFactoryBall *BattleFactoryApp_CreateBall(BattleFactoryApp *app, int index);
+static BattleFactorySprite *BattleFactoryApp_CreateCenterSprite(BattleFactoryApp *app, int animSeq);
+static void BattleFactoryApp_DeleteCenterSprites(BattleFactoryApp *app);
+static void BattleFactoryApp_InitWindows(BattleFactoryApp *app);
+static void BattleFactoryApp_CloseWindow(Window *window);
+static void BattleFactoryApp_MoveRentalCursor(BattleFactoryApp *app, int target);
+static void BattleFactoryApp_MoveButtonCursor(BattleFactoryApp *app, int target);
+static void BattleFactoryApp_OpenRentalMenu(BattleFactoryApp *app);
+static void BattleFactoryApp_CloseRentalMenu(BattleFactoryApp *app);
+static void BattleFactoryApp_PrintRentalMenu(BattleFactoryApp *app);
+static void BattleFactoryApp_MoveSwapOutCursor(BattleFactoryApp *app, int target);
+static void BattleFactoryApp_MoveSwapInCursor(BattleFactoryApp *app, int target);
+static void BattleFactoryApp_OpenSwapOutMenu(BattleFactoryApp *app);
+static void BattleFactoryApp_CloseSwapOutMenu(BattleFactoryApp *app);
+static void BattleFactoryApp_RedrawSwapOutButtons(BattleFactoryApp *app);
+static void BattleFactoryApp_ClearSwapOutMenu(BattleFactoryApp *app);
+static void BattleFactoryApp_PrintSwapOutMenu(BattleFactoryApp *app);
+static void BattleFactoryApp_OpenSwapInMenu(BattleFactoryApp *app);
+static void BattleFactoryApp_CloseSwapInMenu(BattleFactoryApp *app);
+static void BattleFactoryApp_RedrawSwapInButtons(BattleFactoryApp *app);
+static void BattleFactoryApp_ClearSwapInMenu(BattleFactoryApp *app);
+static void BattleFactoryApp_PrintSwapInMenu(BattleFactoryApp *app);
+static void BattleFactoryApp_CreateYesNo(YesNoPrompt **prompt);
+static void BattleFactoryApp_DestroyYesNo(YesNoPrompt *prompt);
+static void BattleFactoryApp_InitYesNo(YesNoPrompt *prompt, BgConfig *bgConfig);
+static void BattleFactoryApp_UpdatePreviewPokepic(BattleFactoryApp *app);
+static void BattleFactory_GetPokepicPos(int slot, int numPokepics, int *x, int *y);
+static void BattleFactoryApp_GetCursorPokepicPos(BattleFactoryApp *app, int *x, int *y);
+static void BattleFactoryApp_MovePicCursor(BattleFactoryApp *app);
+static int BattleFactoryApp_GetCursorSlot(BattleFactoryApp *app);
+static void BattleFactoryApp_UpdateSwapOutPicCursor(BattleFactoryApp *app);
+static void BattleFactoryApp_UpdateSwapInPicCursor(BattleFactoryApp *app);
+static void BattleFactoryApp_CreatePartyPokepics(BattleFactoryApp *app, int hFlip);
+static void BattleFactoryApp_ReplacePokepic(BattleFactoryApp *app, int slot, int monIndex, int hFlip);
+static void BattleFactoryApp_ReplacePokepicFromOther(BattleFactoryApp *app, int slot, int monIndex, int hFlip);
+static void BattleFactoryApp_CreateSlotMarkers(BattleFactoryApp *app);
+static void BattleFactoryApp_DeleteSlotMarkers(BattleFactoryApp *app);
+static void BattleFactoryApp_UpdateSlotMarkers(BattleFactoryApp *app);
+static void BattleFactoryApp_SetSlotMarkers(BattleFactoryApp *app, int highlightCursor);
+static void BattleFactoryApp_CreateOrderSprites(BattleFactoryApp *app);
+static void BattleFactoryApp_DeleteOrderSprites(BattleFactoryApp *app);
+static void BattleFactoryApp_UpdateOrderSprites(BattleFactoryApp *app);
+static void BattleFactoryApp_ShowMonIcon(BattleFactoryApp *app, Party *party, u32 index, u32 limit);
+static void BattleFactoryApp_PrintRentalNames(BattleFactoryApp *app, u32 target, u32 limit);
+static void BattleFactoryApp_PrintPartyNames(BattleFactoryApp *app, Party *party);
+static void BattleFactoryApp_PrintSwapNames(BattleFactoryApp *app, u32 swapIn);
+static void BattleFactoryApp_PrintSwapInName(BattleFactoryApp *app, u32 index);
+static void BattleFactoryApp_LoadSubPalette(BattleFactoryApp *app);
+static void BattleFactoryApp_UpdatePaletteBlink(BattleFactoryApp *app);
+static void BattleFactoryApp_StartButtonFlash(BattleFactoryApp *app, u8 x, u8 y, u8 width, u8 height, u8 nextState);
+static void BattleFactoryApp_FlashWideButton(BattleFactoryApp *app, u8 x, u8 y, u8 nextState);
+static void BattleFactoryApp_FlashNarrowButton(BattleFactoryApp *app, u8 x, u8 y, u8 nextState);
+static BOOL BattleFactoryApp_UpdateButtonFlash(BattleFactoryApp *app);
+static void BattleFactoryApp_SetBallsTranslucent(BattleFactoryApp *app, int enable);
+static BOOL BattleFactory_IsLinkMode(int frontierType);
+static BOOL BattleFactoryApp_IsLinkMode(BattleFactoryApp *app);
+static void BattleFactoryApp_InitBgCellManager(BattleFactoryApp *app);
+static void BattleFactoryApp_FreeBgCellManager(BattleFactoryApp *app);
+static void BattleFactorySpriteGfx_Init(BattleFactorySpriteGfx *gfx);
+static Sprite *BattleFactorySpriteGfx_CreateSprite(BattleFactorySpriteGfx *gfx, int resourceId, int animSeq, int drawPriority, int priority, u8 screen);
+static void BattleFactorySpriteGfx_Free(BattleFactorySpriteGfx *gfx);
+static void BattleFactoryApp_InitObjTransfers(void);
+static void BattleFactoryApp_Setup3D(void);
+static void BattleFactoryApp_Draw3D(PokepicManager *pokepicManager);
+static Pokepic *BattleFactory_CreatePokepic(PokepicManager *pokepicManager, int polygonId, Pokemon *mon, int x, int y, int z);
+static void BattleFactory_SetPokepicHFlip(Pokepic *pokepic, int hFlip);
+static BattleFactorySprite *BattleFactorySprite_Create(BattleFactorySpriteGfx *gfx, int resourceId, int animSeq, int priority, int drawPriority, int x, int y);
+static BattleFactorySprite *BattleFactorySprite_CreateSub(BattleFactorySpriteGfx *gfx, int resourceId, int animSeq, int priority, int drawPriority, int x, int y);
+static BattleFactorySprite *BattleFactorySprite_Delete(BattleFactorySprite *sprite);
+static void BattleFactorySprite_SetVisible(BattleFactorySprite *sprite, int visible);
+static void BattleFactorySprite_SetPosition(BattleFactorySprite *sprite, int x, int y);
+static void BattleFactorySprite_SetPositionSub(BattleFactorySprite *sprite, int x, int y);
+static void BattleFactorySprite_SetMatrix(BattleFactorySprite *sprite, VecFx32 *pos);
+static BOOL BattleFactorySprite_IsAnimated(BattleFactorySprite *sprite);
+static void BattleFactorySprite_SetAnim(BattleFactorySprite *sprite, int animSeq);
+static void BattleFactorySprite_SetPaletteOverride(BattleFactorySprite *sprite, int palette);
+static void BattleFactorySprite_SetPalette(BattleFactorySprite *sprite, int palette);
+static void BattleFactorySprite_LoadCharData(BattleFactorySprite *sprite, void *data, u32 size, int screen);
+static BattleFactoryBall *BattleFactoryBall_Create(BattleFactorySpriteGfx *gfx, u32 x, u32 y, enum HeapID heapID);
+static BattleFactoryBall *BattleFactoryBall_Delete(BattleFactoryBall *ball);
+static void BattleFactoryBall_SetVisible(BattleFactoryBall *ball, int visible);
+static void BattleFactoryBall_Move(VecFx32 *out, BattleFactoryBall *ball, int dx, int dy);
+static void BattleFactoryBall_SetPosition(BattleFactoryBall *ball, int x, int y);
+static VecFx32 *BattleFactoryBall_GetPosition(BattleFactoryBall *ball);
+static void BattleFactoryBall_SetSelected(BattleFactoryBall *ball, u16 selected);
+static u8 BattleFactoryBall_IsSelected(BattleFactoryBall *ball);
+static void BattleFactoryBall_Select(BattleFactoryBall *ball);
+static void BattleFactoryBall_Deselect(BattleFactoryBall *ball);
+static void BattleFactoryBall_MoveOffscreen(BattleFactoryBall *ball);
+static int BattleFactoryBall_GetX(BattleFactoryBall *ball);
+static int BattleFactoryBall_GetY(BattleFactoryBall *ball);
+static void BattleFactoryBall_SetAnim(BattleFactoryBall *ball, int animSeq);
+static void BattleFactoryBall_SetPaletteOverride(BattleFactoryBall *ball, int palette);
+static void BattleFactoryBall_SetOamMode(BattleFactoryBall *ball, GXOamMode mode);
+static BattleFactoryBall *BattleFactoryBall_Free(BattleFactoryBall *ball);
+static void BattleFactoryApp_AddWindows(BgConfig *bgConfig, Window *windows);
+static void BattleFactoryApp_RemoveWindows(Window *windows);
+static void BattleFactoryApp_DrawMessageFrame(Window *window, int frame);
+static void BattleFactoryApp_PrintStringAligned(Window *window, String *string, int x, int y, int fontId, u32 color, int align);
+static void BattleFactoryApp_PrintMsgAligned(Window *window, MsgData *msgData, int msgId, int x, int y, int fontId, u32 color, int align);
+static void BattleFactoryApp_SetLinkNameWindows(Window *windows);
+static void BattleFactoryApp_LoadButtonGraphics(BgConfig *bgConfig, NARC *narc);
+static void BattleFactoryApp_DrawButtons(BgConfig *bgConfig, NARC *narc, int which);
+static void BattleFactoryApp_ClearButtons(BgConfig *bgConfig, int which);
+static void BattleFactory_FreeGrid(GridInputHandler *grid);
+static void BattleFactory_GetGridCursorPos(GridInputHandler *grid, int target, u32 *x, u32 *y);
 void BattleFactory_GridNop(void);
-GridInputHandler *BattleFactoryApp_CreateRentalGrid(BattleFactoryApp *app, int cursor);
-void BattleFactory_SetRentalGridMenu(GridInputHandler *grid, int menuOpen);
+static GridInputHandler *BattleFactoryApp_CreateRentalGrid(BattleFactoryApp *app, int cursor);
+static void BattleFactory_SetRentalGridMenu(GridInputHandler *grid, int menuOpen);
 void BattleFactoryApp_OnRentalCursorMove(BattleFactoryApp *app, int target);
-GridInputHandler *BattleFactoryApp_CreateSwapOutGrid(BattleFactoryApp *app, int cursor);
-GridInputHandler *BattleFactoryApp_CreateLinkSwapOutGrid(BattleFactoryApp *app, int cursor);
-void BattleFactory_SetSwapOutGridMenu(GridInputHandler *grid, int menuOpen, int frontierType);
+static GridInputHandler *BattleFactoryApp_CreateSwapOutGrid(BattleFactoryApp *app, int cursor);
+static GridInputHandler *BattleFactoryApp_CreateLinkSwapOutGrid(BattleFactoryApp *app, int cursor);
+static void BattleFactory_SetSwapOutGridMenu(GridInputHandler *grid, int menuOpen, int frontierType);
 void BattleFactoryApp_OnSwapOutCursorMove(BattleFactoryApp *app, int target);
-GridInputHandler *BattleFactoryApp_RecreateSwapOutGrid(BattleFactoryApp *app, GridInputHandler *grid);
-GridInputHandler *BattleFactoryApp_CreateSwapInGrid(BattleFactoryApp *app, GridInputHandler *grid);
-void BattleFactory_SetSwapInGridMenu(GridInputHandler *grid, int menuOpen, int frontierType);
+static GridInputHandler *BattleFactoryApp_RecreateSwapOutGrid(BattleFactoryApp *app, GridInputHandler *grid);
+static GridInputHandler *BattleFactoryApp_CreateSwapInGrid(BattleFactoryApp *app, GridInputHandler *grid);
+static void BattleFactory_SetSwapInGridMenu(GridInputHandler *grid, int menuOpen, int frontierType);
 void BattleFactoryApp_OnSwapInCursorMove(BattleFactoryApp *app, int target);
 
 BOOL BattleFactoryApp_Init(OverlayManager *man, int *state) {
@@ -706,7 +703,7 @@ enum {
 };
 
 #pragma force_active on
-BOOL BattleFactoryApp_SlideIn(BattleFactoryApp *app) {
+static BOOL BattleFactoryApp_SlideIn(BattleFactoryApp *app) {
     int i;
     u32 j;
 
@@ -798,7 +795,7 @@ enum {
     FACTORY_SHOW_SCREEN_WAIT_FADE,
 };
 
-BOOL BattleFactoryApp_ShowScreen(BattleFactoryApp *app) {
+static BOOL BattleFactoryApp_ShowScreen(BattleFactoryApp *app) {
     switch (app->subState) {
     case FACTORY_SHOW_SCREEN_SETUP:
         if (BattleFactoryApp_IsScreen(app, FACTORY_SCREEN_RENTAL) == TRUE) {
@@ -826,7 +823,7 @@ BOOL BattleFactoryApp_ShowScreen(BattleFactoryApp *app) {
 }
 
 #pragma force_active on
-void BattleFactoryApp_SetupRentalScreen(BattleFactoryApp *app) {
+static void BattleFactoryApp_SetupRentalScreen(BattleFactoryApp *app) {
     int x;
     int y;
     int slot;
@@ -886,7 +883,7 @@ void BattleFactoryApp_SetupRentalScreen(BattleFactoryApp *app) {
 }
 #pragma force_active reset
 
-void BattleFactoryApp_CreateRentalBalls(BattleFactoryApp *app) {
+static void BattleFactoryApp_CreateRentalBalls(BattleFactoryApp *app) {
     int i;
 
     for (i = 0; i < app->numBalls; i++) {
@@ -895,11 +892,11 @@ void BattleFactoryApp_CreateRentalBalls(BattleFactoryApp *app) {
     }
 }
 
-void BattleFactoryApp_CreateRentalPokepics(BattleFactoryApp *app) {
+static void BattleFactoryApp_CreateRentalPokepics(BattleFactoryApp *app) {
     BattleFactoryApp_CreatePartyPokepics(app, 0);
 }
 
-void BattleFactoryApp_SetupSwapOutScreen(BattleFactoryApp *app) {
+static void BattleFactoryApp_SetupSwapOutScreen(BattleFactoryApp *app) {
     u32 x;
     u32 y;
     u32 i;
@@ -939,7 +936,7 @@ void BattleFactoryApp_SetupSwapOutScreen(BattleFactoryApp *app) {
     }
 }
 
-void BattleFactoryApp_SetupSwapInScreen(BattleFactoryApp *app) {
+static void BattleFactoryApp_SetupSwapInScreen(BattleFactoryApp *app) {
     u32 x;
     u32 y;
 
@@ -965,7 +962,7 @@ void BattleFactoryApp_SetupSwapInScreen(BattleFactoryApp *app) {
 }
 
 #pragma force_active on
-void BattleFactoryApp_CreateSwapBalls(BattleFactoryApp *app) {
+static void BattleFactoryApp_CreateSwapBalls(BattleFactoryApp *app) {
     int i;
 
     for (i = 0; i < app->numBalls; i++) {
@@ -980,7 +977,7 @@ void BattleFactoryApp_CreateSwapBalls(BattleFactoryApp *app) {
 }
 #pragma force_active reset
 
-void BattleFactoryApp_CreateSwapPokepics(BattleFactoryApp *app) {
+static void BattleFactoryApp_CreateSwapPokepics(BattleFactoryApp *app) {
     u32 i;
 
     BattleFactoryApp_CreatePartyPokepics(app, 1);
@@ -990,7 +987,7 @@ void BattleFactoryApp_CreateSwapPokepics(BattleFactoryApp *app) {
     }
 }
 
-BOOL BattleFactoryApp_WaitSummary(BattleFactoryApp *app) {
+static BOOL BattleFactoryApp_WaitSummary(BattleFactoryApp *app) {
     if (app->subState == 0 && OverlayManager_Run(app->summaryApp) == TRUE) {
         u8 partySlot = app->summaryArgs->partySlot;
         app->summaryResult = partySlot;
@@ -1019,7 +1016,7 @@ enum {
 };
 
 #pragma force_active on
-BOOL BattleFactoryApp_SelectRentals(BattleFactoryApp *app) {
+static BOOL BattleFactoryApp_SelectRentals(BattleFactoryApp *app) {
     u32 input;
 
     switch (app->subState) {
@@ -1132,7 +1129,7 @@ BOOL BattleFactoryApp_SelectRentals(BattleFactoryApp *app) {
 }
 #pragma force_active reset
 
-void BattleFactoryApp_UndoLastRental(BattleFactoryApp *app) {
+static void BattleFactoryApp_UndoLastRental(BattleFactoryApp *app) {
     Pokepic_SetAttr(app->pokepics[app->numPicked], POKEPIC_VANISHED, TRUE);
     FillWindowPixelBuffer(&app->windows[app->numPicked + 2], 0);
     ScheduleWindowCopyToVram(&app->windows[app->numPicked + 2]);
@@ -1149,7 +1146,7 @@ void BattleFactoryApp_UndoLastRental(BattleFactoryApp *app) {
     BattleFactoryApp_PrintRentalNames(app, GridInputHandler_GetNextInput(app->grid), 6);
 }
 
-void BattleFactoryApp_AddRental(BattleFactoryApp *app) {
+static void BattleFactoryApp_AddRental(BattleFactoryApp *app) {
     u32 numPicked;
 
     BattleFactoryBall_Select(app->balls[app->cursorPos]);
@@ -1166,7 +1163,7 @@ void BattleFactoryApp_AddRental(BattleFactoryApp *app) {
     BattleFactoryApp_UpdateOrderSprites(app);
 }
 
-void BattleFactoryApp_RemoveRental(BattleFactoryApp *app) {
+static void BattleFactoryApp_RemoveRental(BattleFactoryApp *app) {
     int count;
     int i;
 
@@ -1204,7 +1201,7 @@ enum {
 };
 
 #pragma force_active on
-BOOL BattleFactoryApp_ConfirmRentals(BattleFactoryApp *app) {
+static BOOL BattleFactoryApp_ConfirmRentals(BattleFactoryApp *app) {
     int result = BattleFactory_GetPartySize(app->frontierType);
 
     switch (app->subState) {
@@ -1276,12 +1273,12 @@ BOOL BattleFactoryApp_ConfirmRentals(BattleFactoryApp *app) {
 }
 #pragma force_active reset
 
-BOOL BattleFactoryApp_CancelLastRental(BattleFactoryApp *app) {
+static BOOL BattleFactoryApp_CancelLastRental(BattleFactoryApp *app) {
     BattleFactoryApp_DeselectCursorRental(app);
     return TRUE;
 }
 
-void BattleFactoryApp_DeselectCursorRental(BattleFactoryApp *app) {
+static void BattleFactoryApp_DeselectCursorRental(BattleFactoryApp *app) {
     BattleFactory_GetPartySize(app->frontierType);
     BattleFactoryBall_Deselect(app->balls[app->cursorPos]);
     BattleFactoryBall_SetPaletteOverride(app->balls[app->cursorPos], 1);
@@ -1306,7 +1303,7 @@ enum {
 };
 
 #pragma force_active on
-BOOL BattleFactoryApp_SelectSwapOut(BattleFactoryApp *app) {
+static BOOL BattleFactoryApp_SelectSwapOut(BattleFactoryApp *app) {
     u32 input;
 
     switch (app->subState) {
@@ -1437,7 +1434,7 @@ BOOL BattleFactoryApp_SelectSwapOut(BattleFactoryApp *app) {
 }
 #pragma force_active reset
 
-void BattleFactoryApp_PickSwapOut(BattleFactoryApp *app) {
+static void BattleFactoryApp_PickSwapOut(BattleFactoryApp *app) {
     app->picked[app->numPicked] = app->cursorPos;
     app->numPicked++;
     app->swapOutPicked = TRUE;
@@ -1450,7 +1447,7 @@ enum {
 };
 
 #pragma force_active on
-BOOL BattleFactoryApp_ConfirmCancelSwap(BattleFactoryApp *app) {
+static BOOL BattleFactoryApp_ConfirmCancelSwap(BattleFactoryApp *app) {
     switch (app->subState) {
     case FACTORY_CANCEL_SWAP_SHOW_PROMPT:
         app->printerId = BattleFactoryApp_ShowMessage(app, msg_0194_00010);
@@ -1484,7 +1481,7 @@ BOOL BattleFactoryApp_ConfirmCancelSwap(BattleFactoryApp *app) {
 }
 #pragma force_active reset
 
-void BattleFactoryApp_ResumeSwapOut(BattleFactoryApp *app) {
+static void BattleFactoryApp_ResumeSwapOut(BattleFactoryApp *app) {
     BattleFactoryApp_RedrawSwapOutButtons(app);
     BattleFactoryApp_SetCancelRequested(app, TRUE);
     app->printerId = BattleFactoryApp_ShowMessage(app, msg_0194_00009);
@@ -1503,7 +1500,7 @@ enum {
 };
 
 #pragma force_active on
-BOOL BattleFactoryApp_SelectSwapIn(BattleFactoryApp *app) {
+static BOOL BattleFactoryApp_SelectSwapIn(BattleFactoryApp *app) {
     u32 input;
 
     switch (app->subState) {
@@ -1652,7 +1649,7 @@ BOOL BattleFactoryApp_SelectSwapIn(BattleFactoryApp *app) {
 }
 #pragma force_active reset
 
-void BattleFactoryApp_UnpickSwapOut(BattleFactoryApp *app) {
+static void BattleFactoryApp_UnpickSwapOut(BattleFactoryApp *app) {
     app->swapOutPicked = FALSE;
     app->numPicked--;
     app->picked[0] = 0;
@@ -1660,13 +1657,13 @@ void BattleFactoryApp_UnpickSwapOut(BattleFactoryApp *app) {
     GridInputHandler_SetNextInput(app->grid, 0);
 }
 
-void BattleFactoryApp_PickSwapIn(BattleFactoryApp *app) {
+static void BattleFactoryApp_PickSwapIn(BattleFactoryApp *app) {
     app->swapAccepted = TRUE;
     app->picked[app->numPicked] = app->cursorPos;
     app->numPicked++;
 }
 
-void BattleFactoryApp_ShowSwapInPrompt(BattleFactoryApp *app) {
+static void BattleFactoryApp_ShowSwapInPrompt(BattleFactoryApp *app) {
     u32 frame = Options_GetFrame(app->options);
     BattleFactoryApp_DrawMessageFrame(&app->windows[7], frame);
     app->printerId = BattleFactoryApp_ShowMessage(app, msg_0194_00013);
@@ -1679,7 +1676,7 @@ enum {
 };
 
 #pragma force_active on
-BOOL BattleFactoryApp_ConfirmCancelSwapIn(BattleFactoryApp *app) {
+static BOOL BattleFactoryApp_ConfirmCancelSwapIn(BattleFactoryApp *app) {
     switch (app->subState) {
     case FACTORY_CANCEL_SWAP_IN_SHOW_PROMPT:
         app->printerId = BattleFactoryApp_ShowMessage(app, msg_0194_00010);
@@ -1714,7 +1711,7 @@ BOOL BattleFactoryApp_ConfirmCancelSwapIn(BattleFactoryApp *app) {
 }
 #pragma force_active reset
 
-void BattleFactoryApp_ResumeSwapIn(BattleFactoryApp *app) {
+static void BattleFactoryApp_ResumeSwapIn(BattleFactoryApp *app) {
     BattleFactoryApp_RedrawSwapInButtons(app);
     BattleFactoryApp_SetCancelRequested(app, TRUE);
 }
@@ -1729,7 +1726,7 @@ enum {
     FACTORY_SWITCH_PAGE_SHOW_POKEPICS,
 };
 
-BOOL BattleFactoryApp_SwitchPage(BattleFactoryApp *app) {
+static BOOL BattleFactoryApp_SwitchPage(BattleFactoryApp *app) {
     int count;
     int i;
 
@@ -1875,7 +1872,7 @@ enum {
     FACTORY_SEND_SWAP_WAIT_PARTNER,
 };
 
-BOOL BattleFactoryApp_LinkSendSwap(BattleFactoryApp *app) {
+static BOOL BattleFactoryApp_LinkSendSwap(BattleFactoryApp *app) {
     switch (app->subState) {
     case FACTORY_SEND_SWAP_START:
         if (BattleFactoryApp_SendLinkCommand(app, FACTORY_LINK_SWAP, app->swapAccepted) == TRUE) {
@@ -1897,7 +1894,7 @@ enum {
     FACTORY_SYNC_WAIT,
 };
 
-BOOL BattleFactoryApp_LinkSync(BattleFactoryApp *app) {
+static BOOL BattleFactoryApp_LinkSync(BattleFactoryApp *app) {
     switch (app->subState) {
     case FACTORY_SYNC_START:
         app->printerId = BattleFactoryApp_ShowMessage(app, msg_0194_00015);
@@ -1920,7 +1917,7 @@ enum {
     FACTORY_FADE_OUT_WAIT,
 };
 
-BOOL BattleFactoryApp_FadeOut(BattleFactoryApp *app) {
+static BOOL BattleFactoryApp_FadeOut(BattleFactoryApp *app) {
     switch (app->subState) {
     case FACTORY_FADE_OUT_START:
         BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, HEAP_ID_100);
@@ -1940,7 +1937,7 @@ enum {
     FACTORY_TRADE_RESULT_WAIT_PRINT,
 };
 
-BOOL BattleFactoryApp_ShowLinkTradeResult(BattleFactoryApp *app) {
+static BOOL BattleFactoryApp_ShowLinkTradeResult(BattleFactoryApp *app) {
     switch (app->subState) {
     case FACTORY_TRADE_RESULT_PRINT:
         if (app->unk_378[1] != NULL) {
@@ -1968,7 +1965,7 @@ BOOL BattleFactoryApp_ShowLinkTradeResult(BattleFactoryApp *app) {
     return FALSE;
 }
 
-void BattleFactoryApp_VBlankCallback(BattleFactoryApp *app) {
+static void BattleFactoryApp_VBlankCallback(BattleFactoryApp *app) {
     if (app->summaryApp == NULL) {
         PokepicManager_HandleLoadImgAndOrPltt(app->pokepicManager);
         if (app->paletteData != NULL) {
@@ -1985,12 +1982,12 @@ void BattleFactoryApp_VBlankCallback(BattleFactoryApp *app) {
     }
 }
 
-void BattleFactoryApp_SetGraphicsBanks(void) {
+static void BattleFactoryApp_SetGraphicsBanks(void) {
     GraphicsBanks banks = gBattleFactoryAppGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
-void BattleFactoryApp_InitBgLayers(BgConfig *bgConfig) {
+static void BattleFactoryApp_InitBgLayers(BgConfig *bgConfig) {
     {
         GraphicsModes modes = gBattleFactoryAppGraphicsModes;
         SetBothScreensModesAndDisable(&modes);
@@ -2037,7 +2034,7 @@ void BattleFactoryApp_InitBgLayers(BgConfig *bgConfig) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
 }
 
-void BattleFactoryApp_InitBgGraphics(BattleFactoryApp *app) {
+static void BattleFactoryApp_InitBgGraphics(BattleFactoryApp *app) {
     BattleFactoryApp_SetGraphicsBanks();
     BattleFactoryApp_InitBgLayers(app->bgConfig);
     app->paletteData = PaletteData_Init(HEAP_ID_100);
@@ -2056,12 +2053,12 @@ void BattleFactoryApp_InitBgGraphics(BattleFactoryApp *app) {
     BattleFactoryApp_LoadSubScreenBg(app, GF_BG_LYR_SUB_3);
 }
 
-void BattleFactoryApp_InitSprites(BattleFactoryApp *app) {
+static void BattleFactoryApp_InitSprites(BattleFactoryApp *app) {
     BattleFactorySpriteGfx_Init(&app->spriteGfx);
 }
 
 #pragma force_active on
-void BattleFactoryApp_FreeBgLayers(BgConfig *bgConfig) {
+static void BattleFactoryApp_FreeBgLayers(BgConfig *bgConfig) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_ALL, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_ALL, GF_PLANE_TOGGLE_OFF);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_3);
@@ -2075,13 +2072,13 @@ void BattleFactoryApp_FreeBgLayers(BgConfig *bgConfig) {
 }
 #pragma force_active reset
 
-void BattleFactoryApp_SetMainState(BattleFactoryApp *app, int *state, int nextState) {
+static void BattleFactoryApp_SetMainState(BattleFactoryApp *app, int *state, int nextState) {
     app->subState = 0;
     *state = nextState;
 }
 
 #pragma force_active on
-BOOL BattleFactoryApp_ScrollBallsIn(BattleFactoryApp *app) {
+static BOOL BattleFactoryApp_ScrollBallsIn(BattleFactoryApp *app) {
     int done = FALSE;
     int i;
     VecFx32 pos;
@@ -2105,7 +2102,7 @@ BOOL BattleFactoryApp_ScrollBallsIn(BattleFactoryApp *app) {
     return FALSE;
 }
 
-BOOL BattleFactoryApp_ScrollBallsOut(BattleFactoryApp *app) {
+static BOOL BattleFactoryApp_ScrollBallsOut(BattleFactoryApp *app) {
     int hidden = 0;
     int i;
     VecFx32 pos;
@@ -2129,7 +2126,7 @@ BOOL BattleFactoryApp_ScrollBallsOut(BattleFactoryApp *app) {
 }
 #pragma force_active reset
 
-void BattleFactoryApp_AnimateBackground(BattleFactoryApp *app) {
+static void BattleFactoryApp_AnimateBackground(BattleFactoryApp *app) {
     u32 timer = app->bgAnimTimer;
     if ((timer & 3) == 0) {
         if ((timer >> 2) >= 4) {
@@ -2140,12 +2137,12 @@ void BattleFactoryApp_AnimateBackground(BattleFactoryApp *app) {
     app->bgAnimTimer++;
 }
 
-void BattleFactoryApp_SetBgPalette(BattleFactoryApp *app, int bgId, u8 palette, u8 width, u8 height) {
+static void BattleFactoryApp_SetBgPalette(BattleFactoryApp *app, int bgId, u8 palette, u8 width, u8 height) {
     BgTilemapRectChangePalette(app->bgConfig, bgId, 0, 0, width, height, palette);
     ScheduleBgTilemapBufferTransfer(app->bgConfig, bgId);
 }
 
-void BattleFactoryApp_SetCenterAnim(BattleFactoryApp *app, int kind) {
+static void BattleFactoryApp_SetCenterAnim(BattleFactoryApp *app, int kind) {
     int animSeq;
 
     switch (kind) {
@@ -2168,22 +2165,22 @@ void BattleFactoryApp_SetCenterAnim(BattleFactoryApp *app, int kind) {
     app->centerSprite = BattleFactoryApp_CreateCenterSprite(app, animSeq);
 }
 
-void BattleFactoryApp_LoadBgGfx81(BattleFactoryApp *app, GFBgLayer bgId) {
+static void BattleFactoryApp_LoadBgGfx81(BattleFactoryApp *app, GFBgLayer bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(app->narc, 0x81, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_100);
     GfGfxLoader_LoadScrnDataFromOpenNarc(app->narc, 0x82, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_100);
 }
 
-void BattleFactoryApp_LoadBgGfx92(BattleFactoryApp *app, GFBgLayer bgId) {
+static void BattleFactoryApp_LoadBgGfx92(BattleFactoryApp *app, GFBgLayer bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(app->narc, 0x92, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_100);
     GfGfxLoader_LoadScrnDataFromOpenNarc(app->narc, 0x91, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_100);
 }
 
-void BattleFactoryApp_LoadBgGfx4(BattleFactoryApp *app, GFBgLayer bgId) {
+static void BattleFactoryApp_LoadBgGfx4(BattleFactoryApp *app, GFBgLayer bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(app->narc, 4, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_100);
     GfGfxLoader_LoadScrnDataFromOpenNarc(app->narc, 8, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_100);
 }
 
-void BattleFactoryApp_LoadBgPalette(void) {
+static void BattleFactoryApp_LoadBgPalette(void) {
     NNSG2dPaletteData *plttData;
     void *file = GfGfxLoader_GetPlttData(NARC_a_1_8_3, 0xC1, &plttData, HEAP_ID_100);
     DC_FlushRange(plttData->pRawData, 0x160);
@@ -2191,36 +2188,36 @@ void BattleFactoryApp_LoadBgPalette(void) {
     Heap_Free(file);
 }
 
-void BattleFactoryApp_LoadSubScreenBg(BattleFactoryApp *app, GFBgLayer bgId) {
+static void BattleFactoryApp_LoadSubScreenBg(BattleFactoryApp *app, GFBgLayer bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(app->narc, 4, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_100);
     GfGfxLoader_LoadScrnDataFromOpenNarc(app->narc, 7, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_100);
     GfGfxLoader_GXLoadPalFromOpenNarc(app->narc, 0x95, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0x160, HEAP_ID_100);
 }
 
 #pragma force_active on
-u8 BattleFactoryApp_PrintMessage(BattleFactoryApp *app, Window *window, u32 msgId, u32 x, u32 y, u32 textSpeed, u8 fg, u8 shadow, u8 bg, u8 fontId) {
+static u8 BattleFactoryApp_PrintMessage(BattleFactoryApp *app, Window *window, u32 msgId, u32 x, u32 y, u32 textSpeed, u8 fg, u8 shadow, u8 bg, u8 fontId) {
     FillWindowPixelBuffer(window, bg);
     ReadMsgDataIntoString(app->msgData, msgId, app->rawString);
     StringExpandPlaceholders(app->msgFormat, app->expandedString, app->rawString);
     return AddTextPrinterParameterizedWithColor(window, fontId, app->expandedString, x, y, textSpeed, TEXT_COLOR(fg, shadow, bg), NULL);
 }
 
-u8 BattleFactoryApp_ShowMessage(BattleFactoryApp *app, u32 msgId) {
+static u8 BattleFactoryApp_ShowMessage(BattleFactoryApp *app, u32 msgId) {
     u8 printerId = BattleFactoryApp_PrintMessage(app, &app->windows[7], msgId, 1, 1, TEXT_SPEED_NOTRANSFER, 1, 2, 15, 1);
     ScheduleWindowCopyToVram(&app->windows[7]);
     return printerId;
 }
 
-void BattleFactoryApp_BufferNumber(BattleFactoryApp *app, u32 field, s32 value) {
+static void BattleFactoryApp_BufferNumber(BattleFactoryApp *app, u32 field, s32 value) {
     BufferIntegerAsString(app->msgFormat, field, value, 1, PRINTING_MODE_LEFT_ALIGN, TRUE);
 }
 #pragma force_active reset
 
-void BattleFactoryApp_BufferSpeciesName(BattleFactoryApp *app, u32 field, BoxPokemon *boxMon) {
+static void BattleFactoryApp_BufferSpeciesName(BattleFactoryApp *app, u32 field, BoxPokemon *boxMon) {
     BufferBoxMonSpeciesName(app->msgFormat, field, boxMon);
 }
 
-void BattleFactoryApp_PrintPlayerName(BattleFactoryApp *app, Window *window, int x, int y, u8 fontId) {
+static void BattleFactoryApp_PrintPlayerName(BattleFactoryApp *app, Window *window, int x, int y, u8 fontId) {
     PlayerProfile *profile = Save_PlayerData_GetProfile(app->saveData);
     String *string = String_New(PLAYER_NAME_LENGTH + 1, HEAP_ID_100);
     u32 color;
@@ -2237,7 +2234,7 @@ void BattleFactoryApp_PrintPlayerName(BattleFactoryApp *app, Window *window, int
     ScheduleWindowCopyToVram(window);
 }
 
-void BattleFactoryApp_PrintPartnerName(BattleFactoryApp *app, Window *window, int x, int y, u8 fontId) {
+static void BattleFactoryApp_PrintPartnerName(BattleFactoryApp *app, Window *window, int x, int y, u8 fontId) {
     PlayerProfile *profile = CommPlayerInfo_GetProfile(1 - Comm_GetLocalNetId());
     String *string = String_New(PLAYER_NAME_LENGTH + 1, HEAP_ID_100);
     u32 color;
@@ -2255,7 +2252,7 @@ void BattleFactoryApp_PrintPartnerName(BattleFactoryApp *app, Window *window, in
 }
 
 #pragma force_active on
-void BattleFactoryApp_PrintMonName(BattleFactoryApp *app, Window *window, int monIndex, int x, int y, u8 fg, u8 shadow, volatile u8 bg, u8 fontId, Party *party) {
+static void BattleFactoryApp_PrintMonName(BattleFactoryApp *app, Window *window, int monIndex, int x, int y, u8 fg, u8 shadow, volatile u8 bg, u8 fontId, Party *party) {
     Pokemon *mon;
     String *name;
     String *format;
@@ -2268,7 +2265,6 @@ void BattleFactoryApp_PrintMonName(BattleFactoryApp *app, Window *window, int mo
     format = NewString_ReadMsgData(app->msgData, msg_0194_00028);
     BufferBoxMonSpeciesName(app->msgFormat, 0, Mon_GetBoxMon(mon));
     StringExpandPlaceholders(app->msgFormat, name, format);
-    // the (int) cast keeps the original register allocation
     AddTextPrinterParameterizedWithColor(window, fontId, name, x, (int)y, TEXT_SPEED_NOTRANSFER, TEXT_COLOR(fg, shadow, bg), NULL);
     String_Delete(format);
     String_Delete(name);
@@ -2288,7 +2284,7 @@ void BattleFactoryApp_PrintMonName(BattleFactoryApp *app, Window *window, int mo
     ScheduleWindowCopyToVram(window);
 }
 
-void BattleFactoryApp_PrintPartnerMonName(BattleFactoryApp *app, Window *window, int x, int y, u8 fg, u8 shadow, volatile u8 bg, u8 fontId, u16 species, u8 gender) {
+static void BattleFactoryApp_PrintPartnerMonName(BattleFactoryApp *app, Window *window, int x, int y, u8 fg, u8 shadow, volatile u8 bg, u8 fontId, u16 species, u8 gender) {
     MsgData *speciesNames;
     String *string;
     u8 width;
@@ -2312,7 +2308,7 @@ void BattleFactoryApp_PrintPartnerMonName(BattleFactoryApp *app, Window *window,
 }
 #pragma force_active reset
 
-void BattleFactoryApp_FreeGraphics(BattleFactoryApp *app) {
+static void BattleFactoryApp_FreeGraphics(BattleFactoryApp *app) {
     BattleFactoryApp_FreeBgCellManager(app);
     {
         int i;
@@ -2362,7 +2358,7 @@ void BattleFactoryApp_FreeGraphics(BattleFactoryApp *app) {
     GF_3DVramMan_Delete(app->vramMan);
 }
 
-void BattleFactoryApp_ResumeAfterSummary(BattleFactoryApp *app) {
+static void BattleFactoryApp_ResumeAfterSummary(BattleFactoryApp *app) {
     BattleFactoryApp_DisableDisplay();
     app->vramMan = GF_3DVramMan_Create(HEAP_ID_100, 0, 2, 0, 2, BattleFactoryApp_Setup3D);
     app->bgConfig = BgConfig_Alloc(HEAP_ID_100);
@@ -2373,7 +2369,7 @@ void BattleFactoryApp_ResumeAfterSummary(BattleFactoryApp *app) {
     }
 }
 
-void BattleFactoryApp_DisableDisplay(void) {
+static void BattleFactoryApp_DisableDisplay(void) {
     Main_SetVBlankIntrCB(NULL, NULL);
     Main_SetHBlankIntrCB(NULL, NULL);
     GfGfx_DisableEngineAPlanes();
@@ -2383,7 +2379,7 @@ void BattleFactoryApp_DisableDisplay(void) {
 }
 
 #pragma force_active on
-void BattleFactoryApp_InitGraphics(BattleFactoryApp *app) {
+static void BattleFactoryApp_InitGraphics(BattleFactoryApp *app) {
     int i;
 
     app->narc = NARC_New(NARC_a_1_8_3, HEAP_ID_100);
@@ -2422,7 +2418,7 @@ void BattleFactoryApp_InitGraphics(BattleFactoryApp *app) {
 }
 #pragma force_active reset
 
-void BattleFactoryApp_CreateSummaryArgs(BattleFactoryApp *app) {
+static void BattleFactoryApp_CreateSummaryArgs(BattleFactoryApp *app) {
     app->summaryArgs = Heap_Alloc(HEAP_ID_100, sizeof(PokemonSummaryArgs));
     memset(app->summaryArgs, 0, sizeof(PokemonSummaryArgs));
     app->summaryArgs->party = app->party;
@@ -2439,16 +2435,16 @@ void BattleFactoryApp_CreateSummaryArgs(BattleFactoryApp *app) {
     PokemonSummaryArgs_SetPlayer(app->summaryArgs, Save_PlayerData_GetProfile(app->saveData));
 }
 
-BOOL BattleFactoryApp_IsScreen(BattleFactoryApp *app, u8 screen) {
+static BOOL BattleFactoryApp_IsScreen(BattleFactoryApp *app, u8 screen) {
     return app->screen == screen;
 }
 
-int BattleFactory_GetRentalCount(int frontierType) {
+static int BattleFactory_GetRentalCount(int frontierType) {
     return frontierType == 0 || frontierType == 1 ? 3 : 2;
 }
 
 #pragma force_active on
-BOOL BattleFactoryApp_IsCancelRequested(BattleFactoryApp *app) {
+static BOOL BattleFactoryApp_IsCancelRequested(BattleFactoryApp *app) {
     if (app->cancelRequested) {
         return TRUE;
     }
@@ -2456,12 +2452,12 @@ BOOL BattleFactoryApp_IsCancelRequested(BattleFactoryApp *app) {
 }
 #pragma force_active reset
 
-void BattleFactoryApp_SetCancelRequested(BattleFactoryApp *app, u8 value) {
+static void BattleFactoryApp_SetCancelRequested(BattleFactoryApp *app, u8 value) {
     app->cancelRequested = value;
 }
 
 #pragma force_active on
-void BattleFactoryApp_CreatePokepic(BattleFactoryApp *app, int index, Pokemon *mon, int x, int y, int hFlip) {
+static void BattleFactoryApp_CreatePokepic(BattleFactoryApp *app, int index, Pokemon *mon, int x, int y, int hFlip) {
     u32 species;
 
     app->pokepics[index] = BattleFactory_CreatePokepic(app->pokepicManager, 0, mon, x, y, 0);
@@ -2473,7 +2469,7 @@ void BattleFactoryApp_CreatePokepic(BattleFactoryApp *app, int index, Pokemon *m
 }
 #pragma force_active reset
 
-BOOL BattleFactoryApp_SendLinkCommand(BattleFactoryApp *app, int command, int arg) {
+static BOOL BattleFactoryApp_SendLinkCommand(BattleFactoryApp *app, int command, int arg) {
     int linkCommand;
 
     if (!BattleFactory_IsMultiType(app->frontierType)) {
@@ -2499,7 +2495,7 @@ BOOL BattleFactoryApp_SendLinkCommand(BattleFactoryApp *app, int command, int ar
     return FALSE;
 }
 
-void BattleFactoryApp_PrepareLinkPing(BattleFactoryApp *app, int command) {
+static void BattleFactoryApp_PrepareLinkPing(BattleFactoryApp *app, int command) {
     Save_PlayerData_GetProfile(app->saveData);
     app->sendBuf[0] = command;
 }
@@ -2511,7 +2507,7 @@ void BattleFactory_ReceivePing(int netId) {
 }
 
 #pragma force_active on
-void BattleFactoryApp_PrepareLinkRentals(BattleFactoryApp *app, int command, int arg) {
+static void BattleFactoryApp_PrepareLinkRentals(BattleFactoryApp *app, int command, int arg) {
     int i = 0;
     int pos = i;
 
@@ -2555,7 +2551,7 @@ void BattleFactory_ReceiveUnused(void) {
 }
 
 #pragma force_active on
-void BattleFactoryApp_PrintPartnerRentals(BattleFactoryApp *app) {
+static void BattleFactoryApp_PrintPartnerRentals(BattleFactoryApp *app) {
     int count = BattleFactory_GetPartySize(app->frontierType);
 
     if (app->switchingPage == TRUE) {
@@ -2582,7 +2578,7 @@ void BattleFactoryApp_PrintPartnerRentals(BattleFactoryApp *app) {
 }
 #pragma force_active reset
 
-void BattleFactoryApp_PrepareLinkSwap(BattleFactoryApp *app, int command, int accepted) {
+static void BattleFactoryApp_PrepareLinkSwap(BattleFactoryApp *app, int command, int accepted) {
     app->sendBuf[0] = command;
     app->sendBuf[1] = accepted;
     app->sendBuf[2] = app->picked[0];
@@ -2611,7 +2607,7 @@ void BattleFactory_ReceiveSwap(int netId, int size, const BattleFactoryLinkMessa
     }
 }
 
-BattleFactoryBall *BattleFactoryApp_CreateBall(BattleFactoryApp *app, int index) {
+static BattleFactoryBall *BattleFactoryApp_CreateBall(BattleFactoryApp *app, int index) {
     u16 x;
     u16 y;
 
@@ -2631,11 +2627,11 @@ BattleFactoryBall *BattleFactoryApp_CreateBall(BattleFactoryApp *app, int index)
     return BattleFactoryBall_Create(&app->spriteGfx, x, y, HEAP_ID_100);
 }
 
-BattleFactorySprite *BattleFactoryApp_CreateCenterSprite(BattleFactoryApp *app, int animSeq) {
+static BattleFactorySprite *BattleFactoryApp_CreateCenterSprite(BattleFactoryApp *app, int animSeq) {
     return BattleFactorySprite_Create(&app->spriteGfx, 1, animSeq, 2, 10, 128, 124);
 }
 
-void BattleFactoryApp_DeleteCenterSprites(BattleFactoryApp *app) {
+static void BattleFactoryApp_DeleteCenterSprites(BattleFactoryApp *app) {
     if (app->centerSprite != NULL) {
         BattleFactorySprite_Delete(app->centerSprite);
         app->centerSprite = NULL;
@@ -2646,7 +2642,7 @@ void BattleFactoryApp_DeleteCenterSprites(BattleFactoryApp *app) {
     }
 }
 
-void BattleFactoryApp_InitWindows(BattleFactoryApp *app) {
+static void BattleFactoryApp_InitWindows(BattleFactoryApp *app) {
     SetBgPriority(GF_BG_LYR_MAIN_1, 1);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_1, 0x20, 0, HEAP_ID_100);
     BgClearTilemapBufferAndCommit(app->bgConfig, GF_BG_LYR_MAIN_1);
@@ -2657,12 +2653,12 @@ void BattleFactoryApp_InitWindows(BattleFactoryApp *app) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
 }
 
-void BattleFactoryApp_CloseWindow(Window *window) {
+static void BattleFactoryApp_CloseWindow(Window *window) {
     EraseFrameAndWindow1(window, TRUE);
     ClearWindowTilemapAndScheduleTransfer(window);
 }
 
-void BattleFactoryApp_MoveRentalCursor(BattleFactoryApp *app, int target) {
+static void BattleFactoryApp_MoveRentalCursor(BattleFactoryApp *app, int target) {
     u32 x;
     u32 y;
 
@@ -2670,7 +2666,7 @@ void BattleFactoryApp_MoveRentalCursor(BattleFactoryApp *app, int target) {
     BattleFactorySprite_SetPositionSub(app->cursor, x, y);
 }
 
-void BattleFactoryApp_MoveButtonCursor(BattleFactoryApp *app, int target) {
+static void BattleFactoryApp_MoveButtonCursor(BattleFactoryApp *app, int target) {
     u32 x;
     u32 y;
 
@@ -2679,7 +2675,7 @@ void BattleFactoryApp_MoveButtonCursor(BattleFactoryApp *app, int target) {
     BattleFactorySprite_SetPositionSub(app->buttonCursor, x, y);
 }
 
-void BattleFactoryApp_OpenRentalMenu(BattleFactoryApp *app) {
+static void BattleFactoryApp_OpenRentalMenu(BattleFactoryApp *app) {
     BattleFactoryApp_DrawButtons(app->bgConfig, app->narc, 0);
     ScheduleWindowCopyToVram(&app->windows[11]);
     ScheduleWindowCopyToVram(&app->windows[14]);
@@ -2695,7 +2691,7 @@ void BattleFactoryApp_OpenRentalMenu(BattleFactoryApp *app) {
     BattleFactorySprite_SetPalette(app->cursor, 1);
 }
 
-void BattleFactoryApp_CloseRentalMenu(BattleFactoryApp *app) {
+static void BattleFactoryApp_CloseRentalMenu(BattleFactoryApp *app) {
     BattleFactoryApp_ClearButtons(app->bgConfig, 0);
     GridInputHandler_SetNextInput(app->grid, (u8)app->cursorPos);
     BattleFactory_SetRentalGridMenu(app->grid, FALSE);
@@ -2704,7 +2700,7 @@ void BattleFactoryApp_CloseRentalMenu(BattleFactoryApp *app) {
 }
 
 #pragma force_active on
-void BattleFactoryApp_PrintRentalMenu(BattleFactoryApp *app) {
+static void BattleFactoryApp_PrintRentalMenu(BattleFactoryApp *app) {
     int width;
 
     FillWindowPixelBuffer(&app->windows[11], 2);
@@ -2726,7 +2722,7 @@ void BattleFactoryApp_PrintRentalMenu(BattleFactoryApp *app) {
 }
 #pragma force_active reset
 
-void BattleFactoryApp_MoveSwapOutCursor(BattleFactoryApp *app, int target) {
+static void BattleFactoryApp_MoveSwapOutCursor(BattleFactoryApp *app, int target) {
     u32 x;
     u32 y;
 
@@ -2743,7 +2739,7 @@ void BattleFactoryApp_MoveSwapOutCursor(BattleFactoryApp *app, int target) {
     }
 }
 
-void BattleFactoryApp_MoveSwapInCursor(BattleFactoryApp *app, int target) {
+static void BattleFactoryApp_MoveSwapInCursor(BattleFactoryApp *app, int target) {
     u32 x;
     u32 y;
 
@@ -2760,7 +2756,7 @@ void BattleFactoryApp_MoveSwapInCursor(BattleFactoryApp *app, int target) {
     }
 }
 
-void BattleFactoryApp_OpenSwapOutMenu(BattleFactoryApp *app) {
+static void BattleFactoryApp_OpenSwapOutMenu(BattleFactoryApp *app) {
     BattleFactoryApp_ClearButtons(app->bgConfig, 3);
     BattleFactoryApp_DrawButtons(app->bgConfig, app->narc, 0);
     ScheduleWindowCopyToVram(&app->windows[11]);
@@ -2772,7 +2768,7 @@ void BattleFactoryApp_OpenSwapOutMenu(BattleFactoryApp *app) {
     BattleFactorySprite_SetVisible(app->buttonCursor, TRUE);
 }
 
-void BattleFactoryApp_CloseSwapOutMenu(BattleFactoryApp *app) {
+static void BattleFactoryApp_CloseSwapOutMenu(BattleFactoryApp *app) {
     BattleFactoryApp_ClearButtons(app->bgConfig, 0);
     BattleFactoryApp_DrawButtons(app->bgConfig, app->narc, 3);
     ScheduleWindowCopyToVram(&app->windows[10]);
@@ -2781,7 +2777,7 @@ void BattleFactoryApp_CloseSwapOutMenu(BattleFactoryApp *app) {
     BattleFactorySprite_SetVisible(app->buttonCursor, FALSE);
 }
 
-void BattleFactoryApp_RedrawSwapOutButtons(BattleFactoryApp *app) {
+static void BattleFactoryApp_RedrawSwapOutButtons(BattleFactoryApp *app) {
     int target = GridInputHandler_GetNextInput(app->grid);
 
     BattleFactoryApp_DrawButtons(app->bgConfig, app->narc, 3);
@@ -2791,12 +2787,12 @@ void BattleFactoryApp_RedrawSwapOutButtons(BattleFactoryApp *app) {
     }
 }
 
-void BattleFactoryApp_ClearSwapOutMenu(BattleFactoryApp *app) {
+static void BattleFactoryApp_ClearSwapOutMenu(BattleFactoryApp *app) {
     BattleFactoryApp_ClearButtons(app->bgConfig, 3);
     BattleFactorySprite_SetVisible(app->buttonCursor, FALSE);
 }
 
-void BattleFactoryApp_PrintSwapOutMenu(BattleFactoryApp *app) {
+static void BattleFactoryApp_PrintSwapOutMenu(BattleFactoryApp *app) {
     FillWindowPixelBuffer(&app->windows[11], 2);
     FillWindowPixelBuffer(&app->windows[15], 2);
     FillWindowPixelBuffer(&app->windows[14], 2);
@@ -2811,7 +2807,7 @@ void BattleFactoryApp_PrintSwapOutMenu(BattleFactoryApp *app) {
     CopyWindowPixelsToVram_TextMode(&app->windows[10]);
 }
 
-void BattleFactoryApp_OpenSwapInMenu(BattleFactoryApp *app) {
+static void BattleFactoryApp_OpenSwapInMenu(BattleFactoryApp *app) {
     BattleFactoryApp_ClearButtons(app->bgConfig, 2);
     BattleFactoryApp_DrawButtons(app->bgConfig, app->narc, 1);
     ScheduleWindowCopyToVram(&app->windows[16]);
@@ -2822,7 +2818,7 @@ void BattleFactoryApp_OpenSwapInMenu(BattleFactoryApp *app) {
     BattleFactorySprite_SetVisible(app->buttonCursor, TRUE);
 }
 
-void BattleFactoryApp_CloseSwapInMenu(BattleFactoryApp *app) {
+static void BattleFactoryApp_CloseSwapInMenu(BattleFactoryApp *app) {
     BattleFactoryApp_ClearButtons(app->bgConfig, 1);
     BattleFactoryApp_DrawButtons(app->bgConfig, app->narc, 2);
     ScheduleWindowCopyToVram(&app->windows[9]);
@@ -2832,7 +2828,7 @@ void BattleFactoryApp_CloseSwapInMenu(BattleFactoryApp *app) {
     BattleFactorySprite_SetVisible(app->buttonCursor, FALSE);
 }
 
-void BattleFactoryApp_RedrawSwapInButtons(BattleFactoryApp *app) {
+static void BattleFactoryApp_RedrawSwapInButtons(BattleFactoryApp *app) {
     int target = GridInputHandler_GetNextInput(app->grid);
 
     BattleFactoryApp_DrawButtons(app->bgConfig, app->narc, 2);
@@ -2843,13 +2839,13 @@ void BattleFactoryApp_RedrawSwapInButtons(BattleFactoryApp *app) {
     }
 }
 
-void BattleFactoryApp_ClearSwapInMenu(BattleFactoryApp *app) {
+static void BattleFactoryApp_ClearSwapInMenu(BattleFactoryApp *app) {
     BattleFactoryApp_ClearButtons(app->bgConfig, 2);
     BattleFactorySprite_SetVisible(app->buttonCursor, FALSE);
 }
 
 #pragma force_active on
-void BattleFactoryApp_PrintSwapInMenu(BattleFactoryApp *app) {
+static void BattleFactoryApp_PrintSwapInMenu(BattleFactoryApp *app) {
     int width;
 
     FillWindowPixelBuffer(&app->windows[16], 2);
@@ -2871,15 +2867,15 @@ void BattleFactoryApp_PrintSwapInMenu(BattleFactoryApp *app) {
 }
 #pragma force_active reset
 
-void BattleFactoryApp_CreateYesNo(YesNoPrompt **prompt) {
+static void BattleFactoryApp_CreateYesNo(YesNoPrompt **prompt) {
     *prompt = YesNoPrompt_Create(HEAP_ID_100);
 }
 
-void BattleFactoryApp_DestroyYesNo(YesNoPrompt *prompt) {
+static void BattleFactoryApp_DestroyYesNo(YesNoPrompt *prompt) {
     YesNoPrompt_Destroy(prompt);
 }
 
-void BattleFactoryApp_InitYesNo(YesNoPrompt *prompt, BgConfig *bgConfig) {
+static void BattleFactoryApp_InitYesNo(YesNoPrompt *prompt, BgConfig *bgConfig) {
     YesNoPromptTemplate template;
 
     template.bgConfig = bgConfig;
@@ -2895,7 +2891,7 @@ void BattleFactoryApp_InitYesNo(YesNoPrompt *prompt, BgConfig *bgConfig) {
 }
 
 #pragma force_active on
-void BattleFactoryApp_UpdatePreviewPokepic(BattleFactoryApp *app) {
+static void BattleFactoryApp_UpdatePreviewPokepic(BattleFactoryApp *app) {
     u32 target = GridInputHandler_GetNextInput(app->grid);
 
     if (target < 6) {
@@ -2917,7 +2913,7 @@ void BattleFactoryApp_UpdatePreviewPokepic(BattleFactoryApp *app) {
 }
 #pragma force_active reset
 
-void BattleFactory_GetPokepicPos(int slot, int numPokepics, int *x, int *y) {
+static void BattleFactory_GetPokepicPos(int slot, int numPokepics, int *x, int *y) {
     if (numPokepics == 3) {
         *x = slot * 80 + 48;
     } else {
@@ -2927,7 +2923,7 @@ void BattleFactory_GetPokepicPos(int slot, int numPokepics, int *x, int *y) {
 }
 
 #pragma force_active on
-void BattleFactoryApp_GetCursorPokepicPos(BattleFactoryApp *app, int *x, int *y) {
+static void BattleFactoryApp_GetCursorPokepicPos(BattleFactoryApp *app, int *x, int *y) {
     u32 target = GridInputHandler_GetNextInput(app->grid);
     u16 i;
 
@@ -2942,7 +2938,7 @@ void BattleFactoryApp_GetCursorPokepicPos(BattleFactoryApp *app, int *x, int *y)
 }
 #pragma force_active reset
 
-void BattleFactoryApp_MovePicCursor(BattleFactoryApp *app) {
+static void BattleFactoryApp_MovePicCursor(BattleFactoryApp *app) {
     int x;
     int y;
 
@@ -2950,7 +2946,7 @@ void BattleFactoryApp_MovePicCursor(BattleFactoryApp *app) {
     BattleFactorySprite_SetPosition(app->picCursor, x, y);
 }
 
-int BattleFactoryApp_GetCursorSlot(BattleFactoryApp *app) {
+static int BattleFactoryApp_GetCursorSlot(BattleFactoryApp *app) {
     u32 i;
 
     for (i = 0; i < 3; i++) {
@@ -2961,7 +2957,7 @@ int BattleFactoryApp_GetCursorSlot(BattleFactoryApp *app) {
     return app->numPicked;
 }
 
-void BattleFactoryApp_UpdateSwapOutPicCursor(BattleFactoryApp *app) {
+static void BattleFactoryApp_UpdateSwapOutPicCursor(BattleFactoryApp *app) {
     int x;
     int y;
     u32 target = GridInputHandler_GetNextInput(app->grid);
@@ -2978,7 +2974,7 @@ void BattleFactoryApp_UpdateSwapOutPicCursor(BattleFactoryApp *app) {
     BattleFactorySprite_SetPosition(app->picCursor, x, y);
 }
 
-void BattleFactoryApp_UpdateSwapInPicCursor(BattleFactoryApp *app) {
+static void BattleFactoryApp_UpdateSwapInPicCursor(BattleFactoryApp *app) {
     u32 target = GridInputHandler_GetNextInput(app->grid);
 
     if (target >= 6) {
@@ -2992,7 +2988,7 @@ void BattleFactoryApp_UpdateSwapInPicCursor(BattleFactoryApp *app) {
     BattleFactoryApp_ReplacePokepicFromOther(app, app->picked[0], target, 0);
 }
 
-void BattleFactoryApp_CreatePartyPokepics(BattleFactoryApp *app, int hFlip) {
+static void BattleFactoryApp_CreatePartyPokepics(BattleFactoryApp *app, int hFlip) {
     u32 offset;
     u32 x;
     u32 step;
@@ -3007,7 +3003,6 @@ void BattleFactoryApp_CreatePartyPokepics(BattleFactoryApp *app, int hFlip) {
         x = 72;
         step = 112;
     }
-    // byte cursors over the work struct reproduce the original code
     i = 0;
     if (i < app->numPokepics) {
         offset = i;
@@ -3025,7 +3020,7 @@ void BattleFactoryApp_CreatePartyPokepics(BattleFactoryApp *app, int hFlip) {
     }
 }
 
-void BattleFactoryApp_ReplacePokepic(BattleFactoryApp *app, int slot, int monIndex, int hFlip) {
+static void BattleFactoryApp_ReplacePokepic(BattleFactoryApp *app, int slot, int monIndex, int hFlip) {
     Pokepic_Delete(app->pokepics[slot]);
     if (app->numPokepics == 3) {
         Pokemon *mon = Party_GetMonByIndex(app->party, monIndex);
@@ -3036,7 +3031,7 @@ void BattleFactoryApp_ReplacePokepic(BattleFactoryApp *app, int slot, int monInd
     }
 }
 
-void BattleFactoryApp_ReplacePokepicFromOther(BattleFactoryApp *app, int slot, int monIndex, int hFlip) {
+static void BattleFactoryApp_ReplacePokepicFromOther(BattleFactoryApp *app, int slot, int monIndex, int hFlip) {
     Pokepic_Delete(app->pokepics[slot]);
     if (app->numPokepics == 3) {
         Pokemon *mon = Party_GetMonByIndex(app->otherParty, monIndex);
@@ -3047,7 +3042,7 @@ void BattleFactoryApp_ReplacePokepicFromOther(BattleFactoryApp *app, int slot, i
     }
 }
 
-void BattleFactoryApp_CreateSlotMarkers(BattleFactoryApp *app) {
+static void BattleFactoryApp_CreateSlotMarkers(BattleFactoryApp *app) {
     u32 x;
     u32 step;
     u32 i;
@@ -3065,7 +3060,7 @@ void BattleFactoryApp_CreateSlotMarkers(BattleFactoryApp *app) {
     }
 }
 
-void BattleFactoryApp_DeleteSlotMarkers(BattleFactoryApp *app) {
+static void BattleFactoryApp_DeleteSlotMarkers(BattleFactoryApp *app) {
     u32 i;
 
     for (i = 0; i < app->numPokepics; i++) {
@@ -3073,7 +3068,7 @@ void BattleFactoryApp_DeleteSlotMarkers(BattleFactoryApp *app) {
     }
 }
 
-void BattleFactoryApp_UpdateSlotMarkers(BattleFactoryApp *app) {
+static void BattleFactoryApp_UpdateSlotMarkers(BattleFactoryApp *app) {
     u32 i;
 
     for (i = 0; i < app->numPokepics; i++) {
@@ -3089,7 +3084,7 @@ void BattleFactoryApp_UpdateSlotMarkers(BattleFactoryApp *app) {
     }
 }
 
-void BattleFactoryApp_SetSlotMarkers(BattleFactoryApp *app, int highlightCursor) {
+static void BattleFactoryApp_SetSlotMarkers(BattleFactoryApp *app, int highlightCursor) {
     u32 i;
 
     for (i = 0; i < app->numPokepics; i++) {
@@ -3102,7 +3097,7 @@ void BattleFactoryApp_SetSlotMarkers(BattleFactoryApp *app, int highlightCursor)
     }
 }
 
-void BattleFactoryApp_CreateOrderSprites(BattleFactoryApp *app) {
+static void BattleFactoryApp_CreateOrderSprites(BattleFactoryApp *app) {
     u16 i;
     u16 animSeq;
     int step;
@@ -3134,7 +3129,7 @@ void BattleFactoryApp_CreateOrderSprites(BattleFactoryApp *app) {
     }
 }
 
-void BattleFactoryApp_DeleteOrderSprites(BattleFactoryApp *app) {
+static void BattleFactoryApp_DeleteOrderSprites(BattleFactoryApp *app) {
     u32 i = 0;
 
     for (; i < 6; i++) {
@@ -3142,7 +3137,7 @@ void BattleFactoryApp_DeleteOrderSprites(BattleFactoryApp *app) {
     }
 }
 
-void BattleFactoryApp_UpdateOrderSprites(BattleFactoryApp *app) {
+static void BattleFactoryApp_UpdateOrderSprites(BattleFactoryApp *app) {
     u16 i = 3;
 
     do {
@@ -3160,7 +3155,7 @@ void BattleFactoryApp_UpdateOrderSprites(BattleFactoryApp *app) {
     } while (i < 6);
 }
 
-void BattleFactoryApp_ShowMonIcon(BattleFactoryApp *app, Party *party, u32 index, u32 limit) {
+static void BattleFactoryApp_ShowMonIcon(BattleFactoryApp *app, Party *party, u32 index, u32 limit) {
     Pokemon *mon;
     u16 species;
     u16 form;
@@ -3190,7 +3185,7 @@ void BattleFactoryApp_ShowMonIcon(BattleFactoryApp *app, Party *party, u32 index
     BattleFactoryApp_PrintMonName(app, &app->windows[8], (u8)index, 4, 0, 15, 2, 0, 0, party);
 }
 
-void BattleFactoryApp_PrintRentalNames(BattleFactoryApp *app, u32 target, u32 limit) {
+static void BattleFactoryApp_PrintRentalNames(BattleFactoryApp *app, u32 target, u32 limit) {
     u16 i;
     volatile BOOL found;
     s32 count;
@@ -3221,7 +3216,7 @@ void BattleFactoryApp_PrintRentalNames(BattleFactoryApp *app, u32 target, u32 li
     }
 }
 
-void BattleFactoryApp_PrintPartyNames(BattleFactoryApp *app, Party *party) {
+static void BattleFactoryApp_PrintPartyNames(BattleFactoryApp *app, Party *party) {
     u32 i;
 
     for (i = 0; i < app->numPokepics; i++) {
@@ -3229,7 +3224,7 @@ void BattleFactoryApp_PrintPartyNames(BattleFactoryApp *app, Party *party) {
     }
 }
 
-void BattleFactoryApp_PrintSwapNames(BattleFactoryApp *app, u32 swapIn) {
+static void BattleFactoryApp_PrintSwapNames(BattleFactoryApp *app, u32 swapIn) {
     u32 i = 0;
 
     if (i < app->numPokepics) {
@@ -3246,7 +3241,7 @@ void BattleFactoryApp_PrintSwapNames(BattleFactoryApp *app, u32 swapIn) {
     }
 }
 
-void BattleFactoryApp_PrintSwapInName(BattleFactoryApp *app, u32 index) {
+static void BattleFactoryApp_PrintSwapInName(BattleFactoryApp *app, u32 index) {
     u32 slot = app->picked[0] + 2;
 
     if (index >= 4) {
@@ -3257,12 +3252,12 @@ void BattleFactoryApp_PrintSwapInName(BattleFactoryApp *app, u32 index) {
     }
 }
 
-void BattleFactoryApp_LoadSubPalette(BattleFactoryApp *app) {
+static void BattleFactoryApp_LoadSubPalette(BattleFactoryApp *app) {
     PaletteData_LoadPaletteSlotFromHardware(app->paletteData, PLTTBUF_MAIN_OBJ, 0, 0x200);
 }
 
 #pragma force_active on
-void BattleFactoryApp_UpdatePaletteBlink(BattleFactoryApp *app) {
+static void BattleFactoryApp_UpdatePaletteBlink(BattleFactoryApp *app) {
     if (app->paletteData != NULL && app->paletteBlinkState != 0xFF && PaletteData_GetSelectedBuffersBitmask(app->paletteData) == 0) {
         if (app->paletteBlinkState == 0) {
             PaletteData_BeginPaletteFade(app->paletteData, PLTTBUF_MAIN_OBJ_F, 8, 2, 0, 16, 0xFFFF);
@@ -3273,7 +3268,7 @@ void BattleFactoryApp_UpdatePaletteBlink(BattleFactoryApp *app) {
     }
 }
 
-void BattleFactoryApp_StartButtonFlash(BattleFactoryApp *app, u8 x, u8 y, u8 width, u8 height, u8 nextState) {
+static void BattleFactoryApp_StartButtonFlash(BattleFactoryApp *app, u8 x, u8 y, u8 width, u8 height, u8 nextState) {
     app->flashX = x;
     app->flashY = y;
     app->flashWidth = width;
@@ -3285,16 +3280,16 @@ void BattleFactoryApp_StartButtonFlash(BattleFactoryApp *app, u8 x, u8 y, u8 wid
 }
 #pragma force_active reset
 
-void BattleFactoryApp_FlashWideButton(BattleFactoryApp *app, u8 x, u8 y, u8 nextState) {
+static void BattleFactoryApp_FlashWideButton(BattleFactoryApp *app, u8 x, u8 y, u8 nextState) {
     BattleFactoryApp_StartButtonFlash(app, x, y, 12, 2, nextState);
 }
 
-void BattleFactoryApp_FlashNarrowButton(BattleFactoryApp *app, u8 x, u8 y, u8 nextState) {
+static void BattleFactoryApp_FlashNarrowButton(BattleFactoryApp *app, u8 x, u8 y, u8 nextState) {
     BattleFactoryApp_StartButtonFlash(app, x, y, 7, 2, nextState);
 }
 
 #pragma force_active on
-BOOL BattleFactoryApp_UpdateButtonFlash(BattleFactoryApp *app) {
+static BOOL BattleFactoryApp_UpdateButtonFlash(BattleFactoryApp *app) {
     if (app->flashTimer == 0) {
         if (app->flashPalette == 0) {
             BgTilemapRectChangePalette(app->bgConfig, GF_BG_LYR_SUB_1, app->flashX, app->flashY, app->flashWidth, app->flashHeight, 10);
@@ -3316,7 +3311,7 @@ BOOL BattleFactoryApp_UpdateButtonFlash(BattleFactoryApp *app) {
     return TRUE;
 }
 
-void BattleFactoryApp_SetBallsTranslucent(BattleFactoryApp *app, int enable) {
+static void BattleFactoryApp_SetBallsTranslucent(BattleFactoryApp *app, int enable) {
     u32 i;
 
     if (enable == TRUE) {
@@ -3337,27 +3332,27 @@ void BattleFactoryApp_SetBallsTranslucent(BattleFactoryApp *app, int enable) {
 }
 #pragma force_active reset
 
-BOOL BattleFactory_IsLinkMode(int frontierType) {
+static BOOL BattleFactory_IsLinkMode(int frontierType) {
     return BattleFactory_IsMultiType((u8)frontierType);
 }
 
-BOOL BattleFactoryApp_IsLinkMode(BattleFactoryApp *app) {
+static BOOL BattleFactoryApp_IsLinkMode(BattleFactoryApp *app) {
     return BattleFactory_IsMultiType(app->frontierType);
 }
 
 #pragma force_active on
-void BattleFactoryApp_InitBgCellManager(BattleFactoryApp *app) {
+static void BattleFactoryApp_InitBgCellManager(BattleFactoryApp *app) {
     app->bgCellManager = BgCellManager_New(app->bgConfig, 2, 1, HEAP_ID_100);
     BgCellManager_InitCell(app->bgCellManager, 0, 4, 18, 4);
     BgCellManager_LoadCellTilemapFromOpenNarc(app->bgCellManager, 0, app->narc, 144, 1);
 }
 #pragma force_active reset
 
-void BattleFactoryApp_FreeBgCellManager(BattleFactoryApp *app) {
+static void BattleFactoryApp_FreeBgCellManager(BattleFactoryApp *app) {
     BgCellManager_Delete(app->bgCellManager);
 }
 
-void BattleFactorySpriteGfx_Init(BattleFactorySpriteGfx *gfx) {
+static void BattleFactorySpriteGfx_Init(BattleFactorySpriteGfx *gfx) {
     int i;
 
     BattleFactoryApp_InitObjTransfers();
@@ -3398,7 +3393,7 @@ void BattleFactorySpriteGfx_Init(BattleFactorySpriteGfx *gfx) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-Sprite *BattleFactorySpriteGfx_CreateSprite(BattleFactorySpriteGfx *gfx, int resourceId, int animSeq, int drawPriority, int priority, u8 screen) {
+static Sprite *BattleFactorySpriteGfx_CreateSprite(BattleFactorySpriteGfx *gfx, int resourceId, int animSeq, int drawPriority, int priority, u8 screen) {
     SpriteResourcesHeader header;
     SpriteTemplate template;
     Sprite *sprite;
@@ -3429,7 +3424,7 @@ Sprite *BattleFactorySpriteGfx_CreateSprite(BattleFactorySpriteGfx *gfx, int res
     return sprite;
 }
 
-void BattleFactorySpriteGfx_Free(BattleFactorySpriteGfx *gfx) {
+static void BattleFactorySpriteGfx_Free(BattleFactorySpriteGfx *gfx) {
     u8 i;
 
     for (i = 0; i < 6; i++) {
@@ -3445,7 +3440,7 @@ void BattleFactorySpriteGfx_Free(BattleFactorySpriteGfx *gfx) {
     ObjPlttTransfer_Destroy();
 }
 
-void BattleFactoryApp_InitObjTransfers(void) {
+static void BattleFactoryApp_InitObjTransfers(void) {
     ObjCharTransferTemplate template = gBattleFactoryObjCharTransferTemplate;
     ObjCharTransfer_InitEx(&template, GX_OBJVRAMMODE_CHAR_1D_64K, GX_OBJVRAMMODE_CHAR_1D_64K);
     ObjPlttTransfer_Init(8, HEAP_ID_100);
@@ -3453,7 +3448,7 @@ void BattleFactoryApp_InitObjTransfers(void) {
     ObjPlttTransfer_Reset();
 }
 
-void BattleFactoryApp_Setup3D(void) {
+static void BattleFactoryApp_Setup3D(void) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
     G2_SetBG0Priority(0);
     G3X_SetShading(GX_SHADING_TOON);
@@ -3466,7 +3461,7 @@ void BattleFactoryApp_Setup3D(void) {
     G3_ViewPort(0, 0, 255, 191);
 }
 
-void BattleFactoryApp_Draw3D(PokepicManager *pokepicManager) {
+static void BattleFactoryApp_Draw3D(PokepicManager *pokepicManager) {
     Thunk_G3X_Reset();
     G3_MtxMode(GX_MTXMODE_PROJECTION);
     G3_Identity();
@@ -3478,19 +3473,19 @@ void BattleFactoryApp_Draw3D(PokepicManager *pokepicManager) {
     G3_SwapBuffers(GX_SORTMODE_MANUAL, GX_BUFFERMODE_Z);
 }
 
-Pokepic *BattleFactory_CreatePokepic(PokepicManager *pokepicManager, int polygonId, Pokemon *mon, int x, int y, int z) {
+static Pokepic *BattleFactory_CreatePokepic(PokepicManager *pokepicManager, int polygonId, Pokemon *mon, int x, int y, int z) {
     PokepicTemplate template;
 
     GetPokemonSpriteCharAndPlttNarcIds(&template, mon, 2);
     return PokepicManager_CreatePokepic(pokepicManager, &template, x, y, z, polygonId, NULL, NULL);
 }
 
-void BattleFactory_SetPokepicHFlip(Pokepic *pokepic, int hFlip) {
+static void BattleFactory_SetPokepicHFlip(Pokepic *pokepic, int hFlip) {
     Pokepic_SetAttr(pokepic, POKEPIC_HFLIP, hFlip);
 }
 
 #pragma force_active on
-BattleFactorySprite *BattleFactorySprite_Create(BattleFactorySpriteGfx *gfx, int resourceId, int animSeq, int priority, int drawPriority, int x, int y) {
+static BattleFactorySprite *BattleFactorySprite_Create(BattleFactorySpriteGfx *gfx, int resourceId, int animSeq, int priority, int drawPriority, int x, int y) {
     BattleFactorySprite *sprite = Heap_Alloc(HEAP_ID_100, sizeof(BattleFactorySprite));
 
     ((u8 *)sprite)[0] = 0;
@@ -3512,7 +3507,7 @@ BattleFactorySprite *BattleFactorySprite_Create(BattleFactorySpriteGfx *gfx, int
     return sprite;
 }
 
-BattleFactorySprite *BattleFactorySprite_CreateSub(BattleFactorySpriteGfx *gfx, int resourceId, int animSeq, int priority, int drawPriority, int x, int y) {
+static BattleFactorySprite *BattleFactorySprite_CreateSub(BattleFactorySpriteGfx *gfx, int resourceId, int animSeq, int priority, int drawPriority, int x, int y) {
     BattleFactorySprite *sprite = Heap_Alloc(HEAP_ID_100, sizeof(BattleFactorySprite));
 
     ((u8 *)sprite)[0] = 0;
@@ -3535,17 +3530,17 @@ BattleFactorySprite *BattleFactorySprite_CreateSub(BattleFactorySpriteGfx *gfx, 
 }
 #pragma force_active reset
 
-BattleFactorySprite *BattleFactorySprite_Delete(BattleFactorySprite *sprite) {
+static BattleFactorySprite *BattleFactorySprite_Delete(BattleFactorySprite *sprite) {
     Sprite_Delete(sprite->sprite);
     Heap_Free(sprite);
     return NULL;
 }
 
-void BattleFactorySprite_SetVisible(BattleFactorySprite *sprite, int visible) {
+static void BattleFactorySprite_SetVisible(BattleFactorySprite *sprite, int visible) {
     Sprite_SetDrawFlag(sprite->sprite, visible);
 }
 
-void BattleFactorySprite_SetPosition(BattleFactorySprite *sprite, int x, int y) {
+static void BattleFactorySprite_SetPosition(BattleFactorySprite *sprite, int x, int y) {
     VecFx32 pos;
 
     pos.x = x * FX32_ONE;
@@ -3553,7 +3548,7 @@ void BattleFactorySprite_SetPosition(BattleFactorySprite *sprite, int x, int y) 
     Sprite_SetMatrix(sprite->sprite, &pos);
 }
 
-void BattleFactorySprite_SetPositionSub(BattleFactorySprite *sprite, int x, int y) {
+static void BattleFactorySprite_SetPositionSub(BattleFactorySprite *sprite, int x, int y) {
     VecFx32 pos;
 
     pos.x = x * FX32_ONE;
@@ -3561,29 +3556,29 @@ void BattleFactorySprite_SetPositionSub(BattleFactorySprite *sprite, int x, int 
     Sprite_SetMatrix(sprite->sprite, &pos);
 }
 
-void BattleFactorySprite_SetMatrix(BattleFactorySprite *sprite, VecFx32 *pos) {
+static void BattleFactorySprite_SetMatrix(BattleFactorySprite *sprite, VecFx32 *pos) {
     Sprite_SetMatrix(sprite->sprite, pos);
 }
 
-BOOL BattleFactorySprite_IsAnimated(BattleFactorySprite *sprite) {
+static BOOL BattleFactorySprite_IsAnimated(BattleFactorySprite *sprite) {
     return Sprite_IsAnimated(sprite->sprite);
 }
 
-void BattleFactorySprite_SetAnim(BattleFactorySprite *sprite, int animSeq) {
+static void BattleFactorySprite_SetAnim(BattleFactorySprite *sprite, int animSeq) {
     Sprite_SetAnimationFrame(sprite->sprite, 0);
     Sprite_SetAnimCtrlSeq(sprite->sprite, animSeq);
 }
 
-void BattleFactorySprite_SetPaletteOverride(BattleFactorySprite *sprite, int palette) {
+static void BattleFactorySprite_SetPaletteOverride(BattleFactorySprite *sprite, int palette) {
     Sprite_SetPaletteOverride(sprite->sprite, palette);
 }
 
-void BattleFactorySprite_SetPalette(BattleFactorySprite *sprite, int palette) {
+static void BattleFactorySprite_SetPalette(BattleFactorySprite *sprite, int palette) {
     Sprite_SetPalIndexRespectVramOffset(sprite->sprite, palette);
 }
 
 #pragma force_active on
-void BattleFactorySprite_LoadCharData(BattleFactorySprite *sprite, void *data, u32 size, int screen) {
+static void BattleFactorySprite_LoadCharData(BattleFactorySprite *sprite, void *data, u32 size, int screen) {
     u32 addr = NNS_G2dGetImageLocation(Sprite_GetImageProxy(sprite->sprite), (NNS_G2D_VRAM_TYPE)screen);
 
     DC_FlushRange(data, size);
@@ -3594,7 +3589,7 @@ void BattleFactorySprite_LoadCharData(BattleFactorySprite *sprite, void *data, u
     }
 }
 
-BattleFactoryBall *BattleFactoryBall_Create(BattleFactorySpriteGfx *gfx, u32 x, u32 y, enum HeapID heapID) {
+static BattleFactoryBall *BattleFactoryBall_Create(BattleFactorySpriteGfx *gfx, u32 x, u32 y, enum HeapID heapID) {
     BattleFactoryBall *ball = Heap_Alloc(heapID, sizeof(BattleFactoryBall));
 
     memset(ball, 0, sizeof(BattleFactoryBall));
@@ -3608,18 +3603,18 @@ BattleFactoryBall *BattleFactoryBall_Create(BattleFactorySpriteGfx *gfx, u32 x, 
 }
 #pragma force_active reset
 
-BattleFactoryBall *BattleFactoryBall_Delete(BattleFactoryBall *ball) {
+static BattleFactoryBall *BattleFactoryBall_Delete(BattleFactoryBall *ball) {
     Sprite_Delete(ball->sprite);
     Heap_Free(ball);
     return NULL;
 }
 
-void BattleFactoryBall_SetVisible(BattleFactoryBall *ball, int visible) {
+static void BattleFactoryBall_SetVisible(BattleFactoryBall *ball, int visible) {
     Sprite_SetDrawFlag(ball->sprite, visible);
 }
 
 #pragma force_active on
-void BattleFactoryBall_Move(VecFx32 *out, BattleFactoryBall *ball, int dx, int dy) {
+static void BattleFactoryBall_Move(VecFx32 *out, BattleFactoryBall *ball, int dx, int dy) {
     VecFx32 pos = *Sprite_GetMatrixPtr(ball->sprite);
 
     pos.x += dx * FX32_ONE;
@@ -3629,7 +3624,7 @@ void BattleFactoryBall_Move(VecFx32 *out, BattleFactoryBall *ball, int dx, int d
 }
 #pragma force_active reset
 
-void BattleFactoryBall_SetPosition(BattleFactoryBall *ball, int x, int y) {
+static void BattleFactoryBall_SetPosition(BattleFactoryBall *ball, int x, int y) {
     VecFx32 pos;
 
     pos.x = x * FX32_ONE;
@@ -3637,28 +3632,28 @@ void BattleFactoryBall_SetPosition(BattleFactoryBall *ball, int x, int y) {
     Sprite_SetMatrix(ball->sprite, &pos);
 }
 
-VecFx32 *BattleFactoryBall_GetPosition(BattleFactoryBall *ball) {
+static VecFx32 *BattleFactoryBall_GetPosition(BattleFactoryBall *ball) {
     return (VecFx32 *)Sprite_GetMatrixPtr(ball->sprite);
 }
 
-void BattleFactoryBall_SetSelected(BattleFactoryBall *ball, u16 selected) {
+static void BattleFactoryBall_SetSelected(BattleFactoryBall *ball, u16 selected) {
     ball->selected = selected;
 }
 
-u8 BattleFactoryBall_IsSelected(BattleFactoryBall *ball) {
+static u8 BattleFactoryBall_IsSelected(BattleFactoryBall *ball) {
     return ball->selected;
 }
 
-void BattleFactoryBall_Select(BattleFactoryBall *ball) {
+static void BattleFactoryBall_Select(BattleFactoryBall *ball) {
     BattleFactoryBall_SetSelected(ball, TRUE);
 }
 
-void BattleFactoryBall_Deselect(BattleFactoryBall *ball) {
+static void BattleFactoryBall_Deselect(BattleFactoryBall *ball) {
     BattleFactoryBall_SetSelected(ball, FALSE);
 }
 
 #pragma force_active on
-void BattleFactoryBall_MoveOffscreen(BattleFactoryBall *ball) {
+static void BattleFactoryBall_MoveOffscreen(BattleFactoryBall *ball) {
     VecFx32 pos;
     VecFx32 *cur = BattleFactoryBall_GetPosition(ball);
 
@@ -3668,35 +3663,35 @@ void BattleFactoryBall_MoveOffscreen(BattleFactoryBall *ball) {
 }
 #pragma force_active reset
 
-int BattleFactoryBall_GetX(BattleFactoryBall *ball) {
+static int BattleFactoryBall_GetX(BattleFactoryBall *ball) {
     return ball->x;
 }
 
-int BattleFactoryBall_GetY(BattleFactoryBall *ball) {
+static int BattleFactoryBall_GetY(BattleFactoryBall *ball) {
     return ball->y;
 }
 
-void BattleFactoryBall_SetAnim(BattleFactoryBall *ball, int animSeq) {
+static void BattleFactoryBall_SetAnim(BattleFactoryBall *ball, int animSeq) {
     Sprite_SetAnimSpeed(ball->sprite, FX32_ONE);
     Sprite_SetAnimCtrlSeq(ball->sprite, animSeq);
 }
 
-void BattleFactoryBall_SetPaletteOverride(BattleFactoryBall *ball, int palette) {
+static void BattleFactoryBall_SetPaletteOverride(BattleFactoryBall *ball, int palette) {
     Sprite_SetPaletteOverride(ball->sprite, palette);
 }
 
-void BattleFactoryBall_SetOamMode(BattleFactoryBall *ball, GXOamMode mode) {
+static void BattleFactoryBall_SetOamMode(BattleFactoryBall *ball, GXOamMode mode) {
     Sprite_SetOamMode(ball->sprite, mode);
 }
 
-BattleFactoryBall *BattleFactoryBall_Free(BattleFactoryBall *ball) {
+static BattleFactoryBall *BattleFactoryBall_Free(BattleFactoryBall *ball) {
     Sprite_Delete(ball->sprite);
     Heap_Free(ball);
     return NULL;
 }
 
 #pragma force_active on
-void BattleFactoryApp_AddWindows(BgConfig *bgConfig, Window *windows) {
+static void BattleFactoryApp_AddWindows(BgConfig *bgConfig, Window *windows) {
     u8 i;
 
     for (i = 0; i < 18; i++) {
@@ -3706,7 +3701,7 @@ void BattleFactoryApp_AddWindows(BgConfig *bgConfig, Window *windows) {
 }
 #pragma force_active reset
 
-void BattleFactoryApp_RemoveWindows(Window *windows) {
+static void BattleFactoryApp_RemoveWindows(Window *windows) {
     u16 i;
 
     for (i = 0; i < 18; i++) {
@@ -3715,13 +3710,13 @@ void BattleFactoryApp_RemoveWindows(Window *windows) {
 }
 
 #pragma force_active on
-void BattleFactoryApp_DrawMessageFrame(Window *window, int frame) {
+static void BattleFactoryApp_DrawMessageFrame(Window *window, int frame) {
     LoadUserFrameGfx2(window->bgConfig, (GFBgLayer)GetWindowBgId(window), 994, 11, (u8)frame, HEAP_ID_100);
     FillWindowPixelBuffer(window, 15);
     DrawFrameAndWindow2(window, TRUE, 994, 11);
 }
 
-void BattleFactoryApp_PrintStringAligned(Window *window, String *string, int x, int y, int fontId, u32 color, int align) {
+static void BattleFactoryApp_PrintStringAligned(Window *window, String *string, int x, int y, int fontId, u32 color, int align) {
     if (align == 1) {
         x -= FontID_String_GetWidth(fontId, string, 0);
     } else if (align == 2) {
@@ -3730,25 +3725,25 @@ void BattleFactoryApp_PrintStringAligned(Window *window, String *string, int x, 
     AddTextPrinterParameterizedWithColor(window, fontId, string, x, y, TEXT_SPEED_NOTRANSFER, color, NULL);
 }
 
-void BattleFactoryApp_PrintMsgAligned(Window *window, MsgData *msgData, int msgId, int x, int y, int fontId, u32 color, int align) {
+static void BattleFactoryApp_PrintMsgAligned(Window *window, MsgData *msgData, int msgId, int x, int y, int fontId, u32 color, int align) {
     String *string = NewString_ReadMsgData(msgData, msgId);
     BattleFactoryApp_PrintStringAligned(window, string, x, y, fontId, color, align);
     String_Delete(string);
 }
 #pragma force_active reset
 
-void BattleFactoryApp_SetLinkNameWindows(Window *windows) {
+static void BattleFactoryApp_SetLinkNameWindows(Window *windows) {
     SetWindowX(&windows[0], 4);
     SetWindowX(&windows[1], 18);
 }
 
-void BattleFactoryApp_LoadButtonGraphics(BgConfig *bgConfig, NARC *narc) {
+static void BattleFactoryApp_LoadButtonGraphics(BgConfig *bgConfig, NARC *narc) {
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 0x86, bgConfig, GF_BG_LYR_SUB_1, 0x3D9, 0, TRUE, HEAP_ID_100);
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 0xC2, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_9_OFFSET, 0x40, HEAP_ID_100);
 }
 
 #pragma force_active on
-void BattleFactoryApp_DrawButtons(BgConfig *bgConfig, NARC *narc, int which) {
+static void BattleFactoryApp_DrawButtons(BgConfig *bgConfig, NARC *narc, int which) {
     NNSG2dScreenData *scrnData;
     void *data;
     u8 top;
@@ -3775,7 +3770,7 @@ void BattleFactoryApp_DrawButtons(BgConfig *bgConfig, NARC *narc, int which) {
 }
 #pragma force_active reset
 
-void BattleFactoryApp_ClearButtons(BgConfig *bgConfig, int which) {
+static void BattleFactoryApp_ClearButtons(BgConfig *bgConfig, int which) {
     int top;
     int height;
 
@@ -3790,11 +3785,11 @@ void BattleFactoryApp_ClearButtons(BgConfig *bgConfig, int which) {
     ScheduleBgTilemapBufferTransfer(bgConfig, GF_BG_LYR_SUB_1);
 }
 
-void BattleFactory_FreeGrid(GridInputHandler *grid) {
+static void BattleFactory_FreeGrid(GridInputHandler *grid) {
     GridInputHandler_Free(grid);
 }
 
-void BattleFactory_GetGridCursorPos(GridInputHandler *grid, int target, u32 *x, u32 *y) {
+static void BattleFactory_GetGridCursorPos(GridInputHandler *grid, int target, u32 *x, u32 *y) {
     const DpadMenuBox *box = GridInputHandler_GetDpadBox(grid, target);
     *x = box->left;
     *y = box->top;
@@ -3804,11 +3799,11 @@ void BattleFactory_GridNop(void) {
 }
 
 #pragma force_active on
-GridInputHandler *BattleFactoryApp_CreateRentalGrid(BattleFactoryApp *app, int cursor) {
+static GridInputHandler *BattleFactoryApp_CreateRentalGrid(BattleFactoryApp *app, int cursor) {
     return GridInputHandler_Create(gBattleFactoryRentalGridHitboxes, gBattleFactoryRentalGridBoxes, &gBattleFactoryRentalGridCallbacks, app, TRUE, (u8)cursor, HEAP_ID_100);
 }
 
-void BattleFactory_SetRentalGridMenu(GridInputHandler *grid, int menuOpen) {
+static void BattleFactory_SetRentalGridMenu(GridInputHandler *grid, int menuOpen) {
     if (menuOpen == TRUE) {
         GridInputHandler_SetAllEnabled(grid);
     } else {
@@ -3828,17 +3823,17 @@ void BattleFactoryApp_OnRentalCursorMove(BattleFactoryApp *app, int target) {
 }
 
 #pragma force_active on
-GridInputHandler *BattleFactoryApp_CreateSwapOutGrid(BattleFactoryApp *app, int cursor) {
+static GridInputHandler *BattleFactoryApp_CreateSwapOutGrid(BattleFactoryApp *app, int cursor) {
     return GridInputHandler_Create(gBattleFactorySwapOutGridHitboxes, gBattleFactorySwapOutGridBoxes, &gBattleFactorySwapOutGridCallbacks, app, TRUE, (u8)cursor, HEAP_ID_100);
 }
 
-GridInputHandler *BattleFactoryApp_CreateLinkSwapOutGrid(BattleFactoryApp *app, int cursor) {
+static GridInputHandler *BattleFactoryApp_CreateLinkSwapOutGrid(BattleFactoryApp *app, int cursor) {
     GridInputHandler *grid = GridInputHandler_Create(gBattleFactoryLinkSwapOutGridHitboxes, gBattleFactoryLinkSwapOutGridBoxes, &gBattleFactorySwapOutGridCallbacks, app, TRUE, (u8)cursor, HEAP_ID_100);
     GridInputHandler_ClearEnabledFlag(grid, 2);
     return grid;
 }
 
-void BattleFactory_SetSwapOutGridMenu(GridInputHandler *grid, int menuOpen, int frontierType) {
+static void BattleFactory_SetSwapOutGridMenu(GridInputHandler *grid, int menuOpen, int frontierType) {
     if (menuOpen == TRUE) {
         GridInputHandler_SetAllEnabled(grid);
         GridInputHandler_ClearEnabledFlag(grid, 3);
@@ -3862,7 +3857,7 @@ void BattleFactoryApp_OnSwapOutCursorMove(BattleFactoryApp *app, int target) {
     }
 }
 
-GridInputHandler *BattleFactoryApp_RecreateSwapOutGrid(BattleFactoryApp *app, GridInputHandler *grid) {
+static GridInputHandler *BattleFactoryApp_RecreateSwapOutGrid(BattleFactoryApp *app, GridInputHandler *grid) {
     BattleFactory_FreeGrid(grid);
     if (BattleFactoryApp_IsLinkMode(app) == TRUE) {
         return BattleFactoryApp_CreateLinkSwapOutGrid(app, 0);
@@ -3871,7 +3866,7 @@ GridInputHandler *BattleFactoryApp_RecreateSwapOutGrid(BattleFactoryApp *app, Gr
     }
 }
 
-GridInputHandler *BattleFactoryApp_CreateSwapInGrid(BattleFactoryApp *app, GridInputHandler *grid) {
+static GridInputHandler *BattleFactoryApp_CreateSwapInGrid(BattleFactoryApp *app, GridInputHandler *grid) {
     BattleFactory_FreeGrid(grid);
     if (BattleFactoryApp_IsLinkMode(app) == TRUE) {
         return GridInputHandler_Create(gBattleFactorySwapInGridHitboxesA, gBattleFactorySwapInGridBoxesA, &gBattleFactorySwapInGridCallbacks, app, TRUE, 0, HEAP_ID_100);
@@ -3879,7 +3874,7 @@ GridInputHandler *BattleFactoryApp_CreateSwapInGrid(BattleFactoryApp *app, GridI
     return GridInputHandler_Create(gBattleFactorySwapInGridHitboxesB, gBattleFactorySwapInGridBoxesB, &gBattleFactorySwapInGridCallbacks, app, TRUE, 0, HEAP_ID_100);
 }
 
-void BattleFactory_SetSwapInGridMenu(GridInputHandler *grid, int menuOpen, int frontierType) {
+static void BattleFactory_SetSwapInGridMenu(GridInputHandler *grid, int menuOpen, int frontierType) {
     if (menuOpen == TRUE) {
         GridInputHandler_SetAllEnabled(grid);
         GridInputHandler_ClearEnabledFlag(grid, 4);
