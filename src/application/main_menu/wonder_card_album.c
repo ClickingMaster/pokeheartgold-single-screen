@@ -16,6 +16,7 @@
 #include "msgdata/msg/msg_0247.h"
 
 #include "bg_window.h"
+#include "comm_state.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
@@ -103,8 +104,6 @@ extern u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, Strin
 // Other modules (not in a header yet).
 extern void RTC_ConvertDayToDate(RTCDate *date, s32 day);
 extern void CommWireless_SetCustomBeacon(void *src);
-extern BOOL CommState_Exists(void);
-extern void CommState_SetErrorWatch(u32 a0, u32 a1);
 extern PlayerProfile *CommPlayerInfo_GetProfile(int netId);
 
 extern const OverlayManagerTemplate gApp_MainMenu_SelectOption_MysteryGift;

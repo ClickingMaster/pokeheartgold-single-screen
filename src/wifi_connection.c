@@ -4,6 +4,7 @@
 
 #include "nnsys/fnd_internal.h"
 
+#include "comm_state.h"
 #include "communication_core_internal.h"
 #include "friend_roster.h"
 #include "frontier_save_access.h"
@@ -29,8 +30,6 @@ extern void FrontierSave_ClearRow(void *, int, int);
 extern int Comm_IsWifiPeerLinkMode(void);
 extern int Comm_IsLinkMode19To23Or34(void);
 extern void CommState_SetWifiError(int, u32, int);
-extern int CommState_GetLinkMode(void);
-extern void CommState_SetError(int);
 extern int DWC_CheckHasProfile(void *);
 extern int DWC_CheckValidConsole(void *);
 extern int DWC_CheckDirtyFlag(void *);

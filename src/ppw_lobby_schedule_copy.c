@@ -10,8 +10,6 @@
 void *LobbyEventVector_Data(void *);
 int PPWLobbySchedule_Copy(u8 *, u8 *, u32 *);
 void PPWLobbySchedule_CopyToVector(u32 *, u8 *);
-extern void LobbyCharVector_Grow(void *, u32);
-extern void *LobbyByteVector_Data(void *);
 
 int PPWLobbySchedule_Copy(u8 *s, u8 *out, u32 *len) {
     u32 needed = ((W(s, 0x30) - 1) << 3) + 0x18;

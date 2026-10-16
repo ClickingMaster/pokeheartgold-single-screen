@@ -13,7 +13,6 @@
 
 // Vertical scroll bar and the access-point scan work allocation (see include/wifi_setup_scroll_bar.h).
 
-extern u8 gWifiSetupScrollBarThumbTemplates[]; // thumb template per kind
 extern u8 gWifiSetupScrollBarThumbLengths[]; // thumb length per kind
 extern s32 FX_DivS32(s32, s32);
 typedef struct WifiSetupApScan WifiSetupApScan; // wifi_setup_access_points.c

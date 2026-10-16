@@ -3,6 +3,7 @@
 #include "dwc/dwc_main_internal.h"
 
 #include "comm_wireless.h"
+#include "communication_command.h"
 #include "communication_core_internal.h"
 #include "error_handling.h"
 #include "gf_rtc.h"
@@ -43,10 +44,7 @@ extern int Comm_GetMaxChildren(u16);
 extern int Comm_GetMinChildren(u16);
 extern int Comm_IsWifiLinkMode(int);
 extern int Comm_IsWifiPeerLinkMode(int);
-extern void Comm_CallCommandRecv(int netId, int command, int size, void *data);
-extern u32 Comm_GetCommandSize(int command);
 extern int Comm_CommandHasBuffer(int command);
-extern void *Comm_GetCommandBuffer(int command, int netId, int size);
 extern void CommPlayerInfo_Free(void);
 extern void CommWireless_ClearParents(void);
 extern int CommWireless_StartParent(int, int, int);

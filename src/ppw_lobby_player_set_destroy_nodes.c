@@ -46,14 +46,7 @@ typedef struct E {
     int key, val;
 } E;
 
-extern void LobbyCharVector_Allocate(Vec *, u32, Small);
-extern int LobbyString_CompareChars(const u8 *, u32, u32, const void *, u32);
-extern S *LobbyString_ReplaceRange(S *, u32, u32, char *, char *, Small);
-extern void *LobbyMem_Alloc(u32);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
-extern u8 *LobbyByteVector_Data(S *);
-extern int LobbyCharVector_Grow();
-extern int LobbyString_Destroy();
 #include "overlay45_string_search.h"
 void LobbyString_Compare(S *p, S *q);
 void LobbyString_CompareCStr(S *p, char *q);

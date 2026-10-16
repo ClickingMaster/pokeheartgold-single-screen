@@ -13,6 +13,7 @@
 
 #include "bg_window.h"
 #include "comm_state.h"
+#include "font.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
@@ -80,8 +81,6 @@ struct LockCapsuleCardView {
 // Declared here rather than through font.h / text.h: the card screens pass the u32 font ids of their text box
 // tables unconverted (those headers type them as the u8 FontID; matching).
 extern void ResetAllTextPrinters(void);
-extern void LoadFontPal0(enum GFPalLoadLocation location, enum GFPalSlotOffset palSlotOffset, enum HeapID heapID);
-extern u8 GetFontAttribute(u8 fontId, int attr);
 extern u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, void *callback);
 
 // Other modules (not in a header yet).

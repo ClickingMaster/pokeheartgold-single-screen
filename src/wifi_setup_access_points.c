@@ -3,6 +3,7 @@
 
 #include "global.h"
 
+#include "wifi_setup_local_wireless.h"
 #include "wifi_setup_ui.h"
 
 // The code below is compiled as ARM (32-bit) code.
@@ -108,8 +109,6 @@ extern void DWCi_BACKUPlWritePage(WifiSetupConnections *, int *, void *);
 extern u16 MATH_CalcCRC16(const MATHCRC16Table *, const void *, u32);
 extern long atol(const char *);
 extern void NNS_SndArcInitOnMemory(void *, void *);
-
-extern void WifiSetupSound_UpdateTask(void *, void *);
 
 void WifiSetupApScan_StoreResults(WifiSetupScanCallback *cb);
 

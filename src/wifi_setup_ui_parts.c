@@ -1,5 +1,6 @@
 #include "wifi_setup_ui_parts.h"
 
+#include <nitro/wm/wm_internal.h>
 #include <string.h>
 
 #include "global.h"
@@ -46,8 +47,6 @@ extern char sStr_CharJbBgHlNcgL[];
 extern u16 *gWifiSetupKeyboardPageLabels[];
 
 extern s32 FX_DivS32(s32, s32);
-extern int WM_GetAllowedChannel(void);
-extern int WM_GetLinkLevel(void);
 
 void WifiSetupBusyIcon_Task(void *task) {
     GXOamAttr *oam;
