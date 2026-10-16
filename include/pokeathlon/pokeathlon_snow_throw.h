@@ -219,7 +219,6 @@ void PokeathlonSnowThrow_UpdateMons(PokeathlonCourseData *course);
 void PokeathlonSnowThrow_MoveBalls(PokeathlonCourseData *course);
 void PokeathlonSnowThrow_HitMons(PokeathlonCourseData *course, PokeathlonSnowThrow *work);
 
-// pokeathlon_snow_throw_display.c
 void PokeathlonSnowThrow_CollideBalls(PokeathlonSnowThrow *work);
 void PokeathlonSnowThrow_PrintNames(PokeathlonSnowThrow *work, PokeathlonCourseData *course);
 void PokeathlonSnowThrow_SetTimerDigits(PokeathlonSnowThrow *work, u32 seconds);
@@ -247,7 +246,6 @@ void PokeathlonSnowThrowDisplay_PrintName(PokeathlonSnowThrowDisplay *display);
 void PokeathlonSnowThrow_ScreenToField(int screenX, int screenY, float *fieldX, float *fieldZ);
 void PokeathlonSnowThrow_FieldToScreen(float fieldX, float fieldZ, int *screenX, int *screenY);
 
-// pokeathlon_snow_throw_cpu.c
 void PokeathlonSnowThrow_AddAimSpread(int degrees, VecFx32 *direction);
 PokeathlonSnowThrowCpu *PokeathlonSnowThrowCpu_New(enum HeapID heapId, int cpuCount, int mode);
 void PokeathlonSnowThrowCpu_SetMon(PokeathlonSnowThrowCpu *cpu, u8 index, PokeathlonSnowThrowMon *mon, PokeathlonSnowThrowBall *ball);

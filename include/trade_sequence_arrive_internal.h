@@ -6,7 +6,7 @@
 #include "trade_sequence_internal.h"
 #include "trade_sequence_models.h"
 
-// Scene 5 of the trade animation (trade_sequence_arrive.c, trade_sequence_arrive_tasks.c).
+// Scene 5 of the trade animation (trade_sequence.c, trade_sequence_arrive_tasks.c).
 
 typedef struct TradeSequenceArrive {
     TradeSequence *ts;              // 0x00

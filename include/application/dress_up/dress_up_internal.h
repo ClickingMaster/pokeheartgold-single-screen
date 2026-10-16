@@ -601,7 +601,6 @@ void DressUp_PrintPromptMsgWindow(DressUpWork *work, int msgId);
 void DressUp_RemovePromptMsgWindow(DressUpWork *work);
 void DressUp_UpdateCountMeter(DressUpWork *work);
 
-// dress_up_canvas.c
 void DressUp_ShowSavePrompt(DressUpWork *work);
 int DressUp_HandleSavePrompt(DressUpWork *work);
 void DressUpCanvas_GetRectSamplePoint(u32 top, u32 bottom, u32 left, u32 right, u32 index, u32 *outX, u32 *outY);
@@ -631,7 +630,6 @@ int DressUpCanvas_GetCount(DressUpCanvas *canvas);
 void DressUpCanvas_GetMaxOverflow(DressUpCanvas *canvas, int *outX, int *outY);
 void DressUpCanvas_LinkByMonOverlap(DressUpCanvas *canvas, DressUpNode *node, BOOL atFront, NNSG2dCharacterData **hitMaps);
 
-// dress_up_tray.c
 void DressUpCanvas_GetPushback(DressUpNode *node, int *outX, int *outY);
 void DressUpTray_Init(DressUpTray *tray, const DressUpTrayTemplate *template);
 void DressUpTray_Destroy(DressUpTray *tray);
@@ -673,7 +671,6 @@ DressUpSlideAnim *DressUp_FindFreeSlideAnim(DressUpSlideAnim *anims, int count);
 void DressUp_TickSlideAnims(DressUpSlideAnim *anims, int count);
 void DressUp_TickSlideAnim(DressUpSlideAnim *anim);
 
-// dress_up_touch.c
 int DressUp_DivFloorPlusOne(int value, int divisor);
 void DressUpTouch_Reset(DressUpTouch *touch);
 void DressUpTouch_Update(DressUpTouch *touch);
@@ -701,7 +698,6 @@ void DressUp_PrintSelectedItemName(DressUpDrag *drag);
 void DressUp_MoveMonWithAccessories(DressUpTouch *touch, int x, int y);
 void DressUp_LoadMonHitMap(DressUpGfx *gfx, const PokepicTemplate *template);
 
-// dress_up_objects.c
 void DressUpMon_Create(DressUpMonPic *monPic, PokepicManager *pokepicManager, Pokemon *mon, PokepicTemplate *template, enum HeapID heapID);
 void DressUpMon_CreateEx(DressUpMonPic *monPic, PokepicManager *pokepicManager, Pokemon *mon, PokepicTemplate *template, enum HeapID heapID, int mode);
 void DressUpMon_Delete(DressUpMonPic *monPic);
@@ -747,7 +743,6 @@ void DressUpBgScreen_QueueLoadPltt(NarcId narcId, int fileId, u32 location, u32 
 void DressUpButton_Init(DressUpButton *button, const DressUpButtonTemplate *template);
 void DressUpButton_InitWithText(DressUpTextButton *button, const DressUpTextButtonTemplate *template);
 
-// dress_up_buttons.c
 void DressUpButton_Delete(DressUpButton *button);
 void DressUpButton_DeleteWithText(DressUpTextButton *button);
 void DressUpButton_TryCallback(DressUpButton *button, u32 state);
@@ -774,7 +769,6 @@ void DressUpButtonPanel_FreeResources(DressUpGfx *gfx);
 void DressUpButton_SetAnimByTouchState(DressUpButton *button, u32 state);
 void DressUpButton_SetTextByState(DressUpTextButton *button, u32 state);
 
-// dress_up_hud.c
 void DressUpButton_PlaySE(DressUpButton *button, u32 se, u32 trigger, u32 state);
 Window *DressUpButton_CreateTextBitmap(DressUpGfx *gfx, NarcId narcId, int bank, int msgId, int width, int height);
 void DressUpButton_DeleteTextBitmap(Window *window);

@@ -12,7 +12,7 @@
 #include "trade_sequence_internal.h"
 #include "trade_sequence_models.h"
 
-// Scene 5 of the trade animation, continued (trade_sequence_arrive.c): its 3D setup and the tasks that lower the
+// Scene 5 of the trade animation, continued (trade_sequence.c): its 3D setup and the tasks that lower the
 // ball, scroll the backgrounds and fade the ball out. A separate TU: the bss of the data asm lies between the two.
 
 // Scrolls layer 2 of both screens down into place.

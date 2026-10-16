@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · afcc66195 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · e746e3f5d · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -19,636 +19,627 @@
 <text x="47" y="124" font-size="14">Build-tool generated 0.1%</text>
 <rect x="252" y="113" width="12" height="12" rx="2" fill="#9aa5b1"/>
 <text x="270" y="124" font-size="14">Linker-style veneers &lt;0.1%</text>
-<rect x="28.000" y="147.000" width="80.126" height="60.295" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_c.o
+<rect x="28.000" y="147.000" width="59.841" height="80.734" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_c.o
 30,194 bytes · C-only source
 src/scrcmd_c.c</title></rect>
-<rect x="28.000" y="207.295" width="80.126" height="43.833" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pokemon.o
+<rect x="87.841" y="147.000" width="79.989" height="43.907" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pokemon.o
 21,950 bytes · C-only source
 src/pokemon.c</title></rect>
-<rect x="28.000" y="251.128" width="80.126" height="36.763" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / bg_window.o
+<rect x="87.841" y="190.907" width="79.989" height="36.826" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / bg_window.o
 18,410 bytes · C-only source
 src/bg_window.c</title></rect>
-<rect x="108.126" y="147.000" width="65.639" height="38.222" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / party_menu.o
+<rect x="28.000" y="227.734" width="42.982" height="62.146" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pokemon_summary.o
+16,694 bytes · C-only source
+src/pokemon_summary.c</title></rect>
+<rect x="70.982" y="227.734" width="40.371" height="62.146" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / party_menu.o
 15,680 bytes · C-only source
 src/party_menu.c</title></rect>
-<rect x="108.126" y="185.222" width="65.639" height="27.672" fill="#6f8fd8" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_fp_runtime.o
+<rect x="111.353" y="227.734" width="56.478" height="32.161" fill="#6f8fd8" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_fp_runtime.o
 11,352 bytes · Original hand-written assembly
 lib/MSL_C/src/msl_fp_runtime.c
 _dadd</title></rect>
-<rect x="108.126" y="212.895" width="65.639" height="25.800" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / spl_draw_ptcl.o
+<rect x="111.353" y="259.894" width="56.478" height="29.985" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / spl_draw_ptcl.o
 10,584 bytes · C-only source
 lib/src/spl_draw_ptcl.c</title></rect>
-<rect x="108.126" y="238.695" width="33.187" height="49.197" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / naming_screen.o
+<rect x="167.831" y="147.000" width="64.401" height="25.352" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / naming_screen.o
 10,204 bytes · C-only source
 src/naming_screen.c</title></rect>
-<rect x="141.313" y="238.695" width="32.452" height="49.197" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / comm_state.o
+<rect x="167.831" y="172.352" width="33.140" height="48.175" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / comm_state.o
 9,978 bytes · C-only source
 src/comm_state.c</title></rect>
-<rect x="173.765" y="147.000" width="60.958" height="24.705" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / box_mon_selector.o
+<rect x="200.971" y="172.352" width="31.260" height="48.175" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / box_mon_selector.o
 9,412 bytes · C-only source
 src/box_mon_selector.c</title></rect>
-<rect x="173.765" y="171.705" width="30.885" height="47.310" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g3d_sbc.o
+<rect x="232.232" y="147.000" width="39.223" height="37.253" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g3d_sbc.o
 9,132 bytes · C-only source
 lib/NitroSystem/src/g3d_sbc.c</title></rect>
-<rect x="204.650" y="171.705" width="30.073" height="47.310" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_printf_formatter.o
+<rect x="232.232" y="184.253" width="39.223" height="36.274" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_printf_formatter.o
 8,892 bytes · C-only source
 lib/MSL_C/src/msl_printf_formatter.c</title></rect>
-<rect x="234.724" y="147.000" width="37.558" height="36.485" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / code_entry.o
+<rect x="271.454" y="147.000" width="36.785" height="37.251" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / code_entry.o
 8,564 bytes · C-only source
 src/code_entry.c</title></rect>
-<rect x="234.724" y="183.485" width="37.558" height="35.530" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / communication_core.o
+<rect x="271.454" y="184.251" width="36.785" height="36.277" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / communication_core.o
 8,340 bytes · C-only source
 src/communication_core.c</title></rect>
-<rect x="272.281" y="147.000" width="35.958" height="36.025" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / party_context_menu.o
+<rect x="167.831" y="220.527" width="37.339" height="34.693" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / party_context_menu.o
 8,096 bytes · C-only source
 src/party_context_menu.c</title></rect>
-<rect x="272.281" y="183.025" width="35.958" height="35.990" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_wprintf_formatter.o
+<rect x="167.831" y="255.221" width="37.339" height="34.659" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_wprintf_formatter.o
 8,088 bytes · C-only source
 lib/MSL_C/src/msl_wprintf_formatter.c</title></rect>
-<rect x="173.765" y="219.015" width="36.268" height="35.285" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / start_menu.o
+<rect x="205.170" y="220.527" width="36.019" height="35.529" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / start_menu.o
 7,998 bytes · C-only source
 src/start_menu.c</title></rect>
-<rect x="173.765" y="254.300" width="36.268" height="33.591" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / evolution_scene.o
+<rect x="205.170" y="256.056" width="36.019" height="33.823" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / evolution_scene.o
 7,614 bytes · C-only source
 src/evolution_scene.c</title></rect>
-<rect x="210.033" y="219.015" width="34.874" height="34.438" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / party_menu_items.o
+<rect x="241.189" y="220.527" width="33.525" height="35.824" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / party_menu_items.o
 7,506 bytes · C-only source
 src/party_menu_items.c</title></rect>
-<rect x="210.033" y="253.453" width="34.874" height="34.438" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pokepic.o
+<rect x="274.714" y="220.527" width="33.525" height="35.824" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pokepic.o
 7,506 bytes · C-only source
 src/pokepic.c</title></rect>
-<rect x="244.908" y="219.015" width="31.887" height="35.497" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / map_object.o
+<rect x="241.189" y="256.351" width="33.759" height="33.528" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / map_object.o
 7,074 bytes · C-only source
 src/map_object.c</title></rect>
-<rect x="276.794" y="219.015" width="31.445" height="35.497" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / save.o
+<rect x="274.948" y="256.351" width="33.291" height="33.528" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / save.o
 6,976 bytes · C-only source
 src/save.c</title></rect>
-<rect x="244.908" y="254.512" width="32.337" height="33.380" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pokemon_summary_text.o
+<rect x="28.000" y="289.879" width="35.071" height="30.777" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pokemon_summary_text.o
 6,746 bytes · C-only source
 src/pokemon_summary_text.c</title></rect>
-<rect x="277.245" y="254.512" width="30.995" height="33.380" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / launch_application.o
+<rect x="63.071" y="289.879" width="33.616" height="30.777" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / launch_application.o
 6,466 bytes · C-only source
 src/launch_application.c</title></rect>
-<rect x="28.000" y="287.891" width="34.372" height="29.318" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / map_object_movement_commands.o
+<rect x="28.000" y="320.657" width="23.610" height="42.681" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / map_object_movement_commands.o
 6,298 bytes · C-only source
 src/map_object_movement_commands.c</title></rect>
-<rect x="62.372" y="287.891" width="32.866" height="29.318" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / party_menu_list_items.o
+<rect x="51.610" y="320.657" width="22.576" height="42.681" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / party_menu_list_items.o
 6,022 bytes · C-only source
 src/party_menu_list_items.c</title></rect>
-<rect x="28.000" y="317.209" width="23.392" height="41.054" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / screen_wipe_effects.o
+<rect x="74.186" y="320.657" width="22.501" height="42.681" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / screen_wipe_effects.o
 6,002 bytes · C-only source
 src/screen_wipe_effects.c</title></rect>
-<rect x="51.392" y="317.209" width="22.714" height="41.054" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / get_egg.o
+<rect x="96.687" y="289.879" width="24.743" height="37.688" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / get_egg.o
 5,828 bytes · C-only source
 src/get_egg.c</title></rect>
-<rect x="74.107" y="317.209" width="21.132" height="41.054" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / screen_fade_effects.o
+<rect x="121.430" y="289.879" width="23.020" height="37.688" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / screen_fade_effects.o
 5,422 bytes · C-only source
 src/screen_fade_effects.c</title></rect>
-<rect x="95.238" y="287.891" width="36.539" height="23.735" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / player_avatar_movement.o
+<rect x="144.450" y="289.879" width="23.011" height="37.688" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / player_avatar_movement.o
 5,420 bytes · C-only source
 src/player_avatar_movement.c</title></rect>
-<rect x="95.238" y="311.626" width="36.539" height="23.586" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_party.o
+<rect x="96.687" y="327.567" width="24.092" height="35.770" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_party.o
 5,386 bytes · C-only source
 src/scrcmd_party.c</title></rect>
-<rect x="95.238" y="335.212" width="36.539" height="23.052" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pokedex.o
+<rect x="120.779" y="327.567" width="23.547" height="35.770" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pokedex.o
 5,264 bytes · C-only source
 src/pokedex.c</title></rect>
-<rect x="131.777" y="287.891" width="34.433" height="24.034" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / spl_generate.o
+<rect x="144.326" y="327.567" width="23.135" height="35.770" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / spl_generate.o
 5,172 bytes · C-only source
 lib/src/spl_generate.c</title></rect>
-<rect x="131.777" y="311.925" width="34.433" height="23.606" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / sprite_system.o
+<rect x="28.000" y="363.337" width="23.279" height="34.917" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / sprite_system.o
 5,080 bytes · C-only source
 src/sprite_system.c</title></rect>
-<rect x="131.777" y="335.531" width="34.433" height="22.732" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pokemon_summary_ui.o
-4,892 bytes · C-only source
-src/pokemon_summary_ui.c</title></rect>
-<rect x="28.000" y="358.263" width="23.892" height="31.998" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / colosseum.o
+<rect x="51.279" y="363.337" width="21.895" height="34.917" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / colosseum.o
 4,778 bytes · C-only source
 src/colosseum.c</title></rect>
-<rect x="51.892" y="358.263" width="23.742" height="31.998" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wireless_manager.o
+<rect x="73.174" y="363.337" width="21.758" height="34.917" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wireless_manager.o
 4,748 bytes · C-only source
 src/wireless_manager.c</title></rect>
-<rect x="75.634" y="358.263" width="23.612" height="31.998" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_warp_tasks.o
+<rect x="28.000" y="398.254" width="22.431" height="33.683" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_warp_tasks.o
 4,722 bytes · C-only source
 src/field_warp_tasks.c</title></rect>
-<rect x="28.000" y="390.261" width="35.837" height="20.913" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_scanf_sformatter.o
+<rect x="50.431" y="398.254" width="22.250" height="33.683" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_scanf_sformatter.o
 4,684 bytes · C-only source
 lib/MSL_C/src/msl_scanf_sformatter.c</title></rect>
-<rect x="28.000" y="411.174" width="35.837" height="20.913" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_strtold_core.o
+<rect x="72.681" y="398.254" width="22.250" height="33.683" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_strtold_core.o
 4,684 bytes · C-only source
 lib/MSL_C/src/msl_strtold_core.c</title></rect>
-<rect x="63.837" y="390.261" width="35.409" height="21.058" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pokemon_summary_sprites.o
-4,660 bytes · C-only source
-src/pokemon_summary_sprites.c</title></rect>
-<rect x="63.837" y="411.319" width="35.409" height="20.768" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / comm_player_sync.o
+<rect x="94.932" y="363.337" width="31.684" height="23.210" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / comm_player_sync.o
 4,596 bytes · C-only source
 src/comm_player_sync.c</title></rect>
-<rect x="99.246" y="358.263" width="22.424" height="32.109" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / vct_adpcm.o
+<rect x="94.932" y="386.548" width="31.684" height="22.725" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / vct_adpcm.o
 4,500 bytes · C-only source
 lib/libVCT/src/vct_adpcm.c</title></rect>
-<rect x="121.671" y="358.263" width="22.364" height="32.109" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_e_pow.o
+<rect x="94.932" y="409.273" width="31.684" height="22.665" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_e_pow.o
 4,488 bytes · C-only source
 lib/MSL_C/src/msl_e_pow.c</title></rect>
-<rect x="144.035" y="358.263" width="22.175" height="32.109" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_take_photo.o
+<rect x="126.615" y="363.337" width="20.552" height="34.645" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_take_photo.o
 4,450 bytes · C-only source
 src/field_take_photo.c</title></rect>
-<rect x="99.246" y="390.373" width="33.716" height="20.862" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pokemon_summary_states.o
-4,396 bytes · C-only source
-src/pokemon_summary_states.c</title></rect>
-<rect x="99.246" y="411.235" width="33.716" height="20.853" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / frontier_field_system.o
+<rect x="147.167" y="363.337" width="20.293" height="34.645" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / frontier_field_system.o
 4,394 bytes · C-only source
 src/frontier_field_system.c</title></rect>
-<rect x="132.962" y="390.373" width="33.248" height="20.867" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / gx_vramcnt.o
+<rect x="126.615" y="397.982" width="20.432" height="33.955" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / gx_vramcnt.o
 4,336 bytes · C-only source
 lib/NitroSDK/src/gx/gx_vramcnt.c</title></rect>
-<rect x="132.962" y="411.240" width="33.248" height="20.848" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g2d_renderer.o
+<rect x="147.048" y="397.982" width="20.413" height="33.955" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g2d_renderer.o
 4,332 bytes · C-only source
 lib/NitroSystem/src/g2d_renderer.c</title></rect>
-<rect x="166.210" y="287.891" width="18.862" height="36.460" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / sound_system.o
+<rect x="167.461" y="289.879" width="18.696" height="36.784" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / sound_system.o
 4,298 bytes · C-only source
 src/sound_system.c</title></rect>
-<rect x="185.072" y="287.891" width="18.818" height="36.460" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / encounter.o
+<rect x="186.157" y="289.879" width="18.652" height="36.784" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / encounter.o
 4,288 bytes · C-only source
 src/encounter.c</title></rect>
-<rect x="166.210" y="324.352" width="18.965" height="35.908" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pokepic_anim.o
+<rect x="167.461" y="326.664" width="18.798" height="36.227" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pokepic_anim.o
 4,256 bytes · C-only source
 src/pokepic_anim.c</title></rect>
-<rect x="185.175" y="324.352" width="18.715" height="35.908" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / palette.o
+<rect x="186.259" y="326.664" width="18.550" height="36.227" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / palette.o
 4,200 bytes · C-only source
 src/palette.c</title></rect>
-<rect x="203.890" y="287.891" width="36.176" height="18.453" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / trainer_memo.o
+<rect x="204.809" y="289.879" width="35.858" height="18.617" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / trainer_memo.o
 4,172 bytes · C-only source
 src/trainer_memo.c</title></rect>
-<rect x="203.890" y="306.344" width="36.176" height="18.152" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wm_core.o
+<rect x="204.809" y="308.496" width="35.858" height="18.313" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wm_core.o
 4,104 bytes · C-only source
 lib/NitroSDK/src/wm_core.c</title></rect>
-<rect x="203.890" y="324.496" width="18.102" height="35.764" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / obj_char_transfer.o
+<rect x="204.809" y="326.809" width="35.858" height="18.054" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / obj_char_transfer.o
 4,046 bytes · C-only source
 src/obj_char_transfer.c</title></rect>
-<rect x="221.991" y="324.496" width="18.075" height="35.764" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / vct_ssp.o
+<rect x="204.809" y="344.863" width="35.858" height="18.027" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / vct_ssp.o
 4,040 bytes · C-only source
 lib/libVCT/src/vct_ssp.c</title></rect>
-<rect x="240.066" y="287.891" width="34.234" height="18.471" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wcm_callback.o
+<rect x="240.666" y="289.879" width="33.933" height="18.635" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wcm_callback.o
 3,952 bytes · C-only source
 lib/NitroWiFi/src/wcm_callback.c</title></rect>
-<rect x="240.066" y="306.362" width="34.234" height="18.387" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / sound_playback.o
+<rect x="240.666" y="308.514" width="33.933" height="18.550" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / sound_playback.o
 3,934 bytes · C-only source
 src/sound_playback.c</title></rect>
-<rect x="274.300" y="287.891" width="33.939" height="18.443" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_use_item.o
+<rect x="274.599" y="289.879" width="33.640" height="18.607" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_use_item.o
 3,912 bytes · C-only source
 src/field_use_item.c</title></rect>
-<rect x="274.300" y="306.334" width="33.939" height="18.415" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / message_format.o
+<rect x="274.599" y="308.486" width="33.640" height="18.578" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / message_format.o
 3,906 bytes · C-only source
 src/message_format.c</title></rect>
-<rect x="240.066" y="324.749" width="34.227" height="17.858" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / use_item_on_mon.o
+<rect x="240.666" y="327.065" width="33.925" height="18.017" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / use_item_on_mon.o
 3,820 bytes · C-only source
 src/use_item_on_mon.c</title></rect>
-<rect x="240.066" y="342.607" width="34.227" height="17.652" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / battle_record.o
+<rect x="240.666" y="345.081" width="33.925" height="17.809" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / battle_record.o
 3,776 bytes · C-only source
 src/battle_record.c</title></rect>
-<rect x="274.293" y="324.749" width="33.947" height="17.769" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / map_object_update.o
+<rect x="274.591" y="327.065" width="33.648" height="17.927" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / map_object_update.o
 3,770 bytes · C-only source
 src/map_object_update.c</title></rect>
-<rect x="274.293" y="342.519" width="33.947" height="17.741" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / render_window_icons.o
+<rect x="274.591" y="344.992" width="33.648" height="17.899" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / render_window_icons.o
 3,764 bytes · C-only source
 src/render_window_icons.c</title></rect>
-<rect x="166.210" y="360.260" width="18.116" height="33.192" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / map_object_behavior.o
+<rect x="167.461" y="362.891" width="34.255" height="17.554" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / map_object_behavior.o
 3,758 bytes · C-only source
 src/map_object_behavior.c</title></rect>
-<rect x="184.326" y="360.260" width="18.067" height="33.192" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wm_requests.o
+<rect x="167.461" y="380.444" width="34.255" height="17.507" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wm_requests.o
 3,748 bytes · C-only source
 lib/NitroSDK/src/wm_requests.c</title></rect>
-<rect x="202.393" y="360.260" width="17.547" height="33.192" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g2d_renderer_core.o
+<rect x="167.461" y="397.951" width="17.137" height="33.986" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g2d_renderer_core.o
 3,640 bytes · C-only source
 lib/NitroSystem/src/g2d_renderer_core.c</title></rect>
-<rect x="219.940" y="360.260" width="17.528" height="33.192" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / map_object_movement.o
+<rect x="184.598" y="397.951" width="17.118" height="33.986" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / map_object_movement.o
 3,636 bytes · C-only source
 src/map_object_movement.c</title></rect>
-<rect x="166.210" y="393.452" width="29.164" height="19.565" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / comm_wireless.o
+<rect x="201.716" y="362.891" width="20.191" height="28.259" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / comm_wireless.o
 3,566 bytes · C-only source
 src/comm_wireless.c</title></rect>
-<rect x="166.210" y="413.017" width="29.164" height="19.071" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / billboard_lists.o
+<rect x="221.907" y="362.891" width="19.681" height="28.259" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / billboard_lists.o
 3,476 bytes · C-only source
 src/billboard_lists.c</title></rect>
-<rect x="195.374" y="393.452" width="14.230" height="38.635" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_bignum.o
+<rect x="201.716" y="391.150" width="39.872" height="13.789" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_bignum.o
 3,436 bytes · C-only source
 lib/libCPS/src/cps_bignum.c</title></rect>
-<rect x="209.604" y="393.452" width="27.864" height="19.662" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / vct_audio.o
+<rect x="201.716" y="404.939" width="20.292" height="26.999" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / vct_audio.o
 3,424 bytes · C-only source
 lib/libVCT/src/vct_audio.c</title></rect>
-<rect x="209.604" y="413.114" width="27.864" height="18.973" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_tcp.o
+<rect x="222.008" y="404.939" width="19.581" height="26.999" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_tcp.o
 3,304 bytes · C-only source
 lib/libCPS/src/cps_tcp.c</title></rect>
-<rect x="237.468" y="360.260" width="28.471" height="18.456" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / battle_setup.o
+<rect x="241.588" y="362.891" width="16.832" height="31.218" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / battle_setup.o
 3,284 bytes · C-only source
 src/battle/battle_setup.c</title></rect>
-<rect x="237.468" y="378.716" width="28.471" height="18.242" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / sprite.o
+<rect x="258.420" y="362.891" width="16.637" height="31.218" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / sprite.o
 3,246 bytes · C-only source
 src/sprite.c</title></rect>
-<rect x="265.939" y="360.260" width="14.144" height="36.698" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wcm.o
+<rect x="275.057" y="362.891" width="16.627" height="31.218" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wcm.o
 3,244 bytes · C-only source
 lib/NitroWiFi/src/wcm.c</title></rect>
-<rect x="280.083" y="360.260" width="28.157" height="18.355" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / map_object_follow.o
+<rect x="291.684" y="362.891" width="16.555" height="31.218" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / map_object_follow.o
 3,230 bytes · C-only source
 src/map_object_follow.c</title></rect>
-<rect x="280.083" y="378.615" width="28.157" height="18.343" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pm.o
+<rect x="241.588" y="394.109" width="27.188" height="18.997" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pm.o
 3,228 bytes · C-only source
 lib/NitroSDK/src/pm.c</title></rect>
-<rect x="237.468" y="396.958" width="29.059" height="17.620" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / gx_load2d.o
+<rect x="241.588" y="413.106" width="27.188" height="18.832" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / gx_load2d.o
 3,200 bytes · C-only source
 lib/NitroSDK/src/gx/gx_load2d.c</title></rect>
-<rect x="237.468" y="414.578" width="29.059" height="17.510" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g3d_model.o
+<rect x="268.777" y="394.109" width="13.450" height="37.829" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g3d_model.o
 3,180 bytes · C-only source
 lib/NitroSystem/src/g3d_model.c</title></rect>
-<rect x="266.527" y="396.958" width="14.165" height="35.129" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / sprite_resource.o
+<rect x="282.227" y="394.109" width="26.013" height="19.130" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / sprite_resource.o
 3,110 bytes · C-only source
 src/sprite_resource.c</title></rect>
-<rect x="280.692" y="396.958" width="27.547" height="17.658" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / touchscreen_list_menu.o
+<rect x="282.227" y="413.238" width="26.013" height="18.699" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / touchscreen_list_menu.o
 3,040 bytes · C-only source
 src/touchscreen_list_menu.c</title></rect>
-<rect x="280.692" y="414.616" width="27.547" height="17.472" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / tp.o
+<rect x="28.000" y="431.938" width="28.467" height="16.907" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / tp.o
 3,008 bytes · C-only source
 lib/NitroSDK/src/tp.c</title></rect>
-<rect x="28.000" y="432.087" width="28.333" height="16.942" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_ssl_cert.o
+<rect x="28.000" y="448.845" width="28.467" height="16.862" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_ssl_cert.o
 3,000 bytes · C-only source
 lib/libCPS/src/cps_ssl_cert.c</title></rect>
-<rect x="28.000" y="449.029" width="28.333" height="16.784" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_move.o
+<rect x="56.467" y="431.938" width="14.082" height="33.770" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_move.o
 2,972 bytes · C-only source
 src/field_move.c</title></rect>
-<rect x="56.333" y="432.087" width="14.100" height="33.726" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / os_thread.o
+<rect x="70.549" y="431.938" width="28.031" height="16.965" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / os_thread.o
 2,972 bytes · C-only source
 lib/NitroSDK/src/os/os_thread.c</title></rect>
-<rect x="70.433" y="432.087" width="27.783" height="16.955" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wm_data_sharing.o
+<rect x="70.549" y="448.902" width="28.031" height="16.805" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wm_data_sharing.o
 2,944 bytes · C-only source
 lib/NitroSDK/src/wm_data_sharing.c</title></rect>
-<rect x="70.433" y="449.042" width="27.783" height="16.771" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / dgt_hash.o
+<rect x="28.000" y="465.707" width="35.635" height="13.075" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / dgt_hash.o
 2,912 bytes · C-only source
 lib/NitroSDK/src/dgt_hash.c</title></rect>
-<rect x="28.000" y="465.813" width="35.417" height="12.812" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / spl_emitter.o
+<rect x="28.000" y="478.783" width="17.868" height="25.396" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / spl_emitter.o
 2,836 bytes · C-only source
 lib/src/spl_emitter.c</title></rect>
-<rect x="28.000" y="478.626" width="17.709" height="25.480" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / render_text.o
+<rect x="45.868" y="478.783" width="17.767" height="25.396" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / render_text.o
 2,820 bytes · C-only source
 src/render_text.c</title></rect>
-<rect x="45.709" y="478.626" width="17.709" height="25.480" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / snd_player.o
+<rect x="63.635" y="465.707" width="34.945" height="12.912" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / snd_player.o
 2,820 bytes · C-only source
 lib/NitroSystem/src/snd_player.c</title></rect>
-<rect x="63.417" y="465.813" width="34.799" height="12.948" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / spl_manager.o
+<rect x="63.635" y="478.620" width="17.629" height="25.559" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / spl_manager.o
 2,816 bytes · C-only source
 lib/src/spl_manager.c</title></rect>
-<rect x="63.417" y="478.761" width="17.462" height="25.344" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / apricorn_box.o
+<rect x="81.264" y="478.620" width="17.316" height="25.559" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / apricorn_box.o
 2,766 bytes · C-only source
 src/apricorn_box.c</title></rect>
-<rect x="80.879" y="478.761" width="17.336" height="25.344" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pokemon_summary.o
-2,746 bytes · C-only source
-src/pokemon_summary.c</title></rect>
-<rect x="98.216" y="432.087" width="35.542" height="12.317" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / communication_club_link.o
+<rect x="98.580" y="431.938" width="35.432" height="12.355" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / communication_club_link.o
 2,736 bytes · C-only source
 src/communication_club_link.c</title></rect>
-<rect x="98.216" y="444.405" width="17.797" height="24.562" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_battle_hall.o
+<rect x="98.580" y="444.293" width="17.742" height="24.638" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_battle_hall.o
 2,732 bytes · C-only source
 src/scrcmd_battle_hall.c</title></rect>
-<rect x="116.013" y="444.405" width="17.745" height="24.562" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_strbuf.o
+<rect x="116.322" y="444.293" width="17.690" height="24.638" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_strbuf.o
 2,724 bytes · C-only source
 src/scrcmd_strbuf.c</title></rect>
-<rect x="133.757" y="432.087" width="35.038" height="12.330" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_transition_effects.o
+<rect x="134.012" y="431.938" width="34.930" height="12.368" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_transition_effects.o
 2,700 bytes · C-only source
 src/field_transition_effects.c</title></rect>
-<rect x="133.757" y="444.417" width="17.545" height="24.550" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_mystery_gift.o
+<rect x="134.012" y="444.306" width="17.491" height="24.626" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_mystery_gift.o
 2,692 bytes · C-only source
 src/scrcmd_mystery_gift.c</title></rect>
-<rect x="151.303" y="444.417" width="17.493" height="24.550" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / font_sprite.o
+<rect x="151.503" y="444.306" width="17.439" height="24.626" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / font_sprite.o
 2,684 bytes · C-only source
 src/font_sprite.c</title></rect>
-<rect x="98.216" y="468.967" width="12.076" height="35.139" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g3d_anm_bca_data.o
+<rect x="98.580" y="468.931" width="12.039" height="35.247" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g3d_anm_bca_data.o
 2,652 bytes · C-only source
 lib/NitroSystem/src/g3d_anm_bca_data.c</title></rect>
-<rect x="110.292" y="468.967" width="23.824" height="17.757" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_ssl_handshake.o
+<rect x="110.618" y="468.931" width="23.751" height="17.812" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_ssl_handshake.o
 2,644 bytes · C-only source
 lib/libCPS/src/cps_ssl_handshake.c</title></rect>
-<rect x="110.292" y="486.724" width="23.824" height="17.381" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / dwc_account.o
+<rect x="110.618" y="486.744" width="23.751" height="17.435" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / dwc_account.o
 2,588 bytes · C-only source
 lib/NitroDWC/src/dwc_account.c</title></rect>
-<rect x="134.116" y="468.967" width="34.680" height="11.830" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / script_manager.o
+<rect x="134.369" y="468.931" width="34.573" height="11.866" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / script_manager.o
 2,564 bytes · C-only source
 src/script_manager.c</title></rect>
-<rect x="134.116" y="480.797" width="17.436" height="23.309" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / save_fashion.o
+<rect x="134.369" y="480.798" width="17.382" height="23.381" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / save_fashion.o
 2,540 bytes · C-only source
 src/save_fashion.c</title></rect>
-<rect x="151.552" y="480.797" width="17.244" height="23.309" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / particle_system.o
+<rect x="151.751" y="480.798" width="17.191" height="23.381" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / particle_system.o
 2,512 bytes · C-only source
 src/particle_system.c</title></rect>
-<rect x="28.000" y="504.106" width="11.833" height="33.319" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / FS_command_default.o
+<rect x="28.000" y="504.179" width="11.845" height="33.285" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / FS_command_default.o
 2,464 bytes · C-only source
 lib/NitroSDK/src/fs/FS_command_default.c</title></rect>
-<rect x="39.833" y="504.106" width="23.118" height="16.833" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g2d_char_canvas.o
+<rect x="39.845" y="504.179" width="23.142" height="16.815" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g2d_char_canvas.o
 2,432 bytes · C-only source
 lib/NitroSystem/src/g2d_char_canvas.c</title></rect>
-<rect x="39.833" y="520.938" width="23.118" height="16.487" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / follow_mon.o
+<rect x="39.845" y="520.994" width="23.142" height="16.469" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / follow_mon.o
 2,382 bytes · C-only source
 src/follow_mon.c</title></rect>
-<rect x="62.950" y="504.106" width="11.429" height="33.319" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g2d_image.o
+<rect x="62.987" y="504.179" width="11.441" height="33.285" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g2d_image.o
 2,380 bytes · C-only source
 lib/NitroSystem/src/g2d_image.c</title></rect>
-<rect x="74.380" y="504.106" width="22.426" height="16.724" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_ssl_record.o
+<rect x="74.428" y="504.179" width="22.450" height="16.706" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_ssl_record.o
 2,344 bytes · C-only source
 lib/libCPS/src/cps_ssl_record.c</title></rect>
-<rect x="74.380" y="520.830" width="22.426" height="16.595" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / camera.o
+<rect x="74.428" y="520.885" width="22.450" height="16.578" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / camera.o
 2,326 bytes · C-only source
 src/camera.c</title></rect>
-<rect x="28.000" y="537.425" width="29.959" height="12.348" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / list_menu.o
+<rect x="28.000" y="537.463" width="29.990" height="12.335" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / list_menu.o
 2,312 bytes · C-only source
 src/list_menu.c</title></rect>
-<rect x="28.000" y="549.773" width="14.992" height="24.590" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / party_menu_sprites.o
+<rect x="28.000" y="549.799" width="15.008" height="24.564" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / party_menu_sprites.o
 2,304 bytes · C-only source
 src/party_menu_sprites.c</title></rect>
-<rect x="42.992" y="549.773" width="14.966" height="24.590" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_sha1.o
+<rect x="43.008" y="549.799" width="14.982" height="24.564" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_sha1.o
 2,300 bytes · C-only source
 lib/libCPS/src/cps_sha1.c</title></rect>
-<rect x="57.959" y="537.425" width="19.580" height="18.698" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pm_string.o
+<rect x="57.990" y="537.463" width="19.600" height="18.678" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pm_string.o
 2,288 bytes · C-only source
 src/pm_string.c</title></rect>
-<rect x="57.959" y="556.123" width="19.580" height="18.240" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / yes_no_prompt.o
+<rect x="57.990" y="556.142" width="19.600" height="18.221" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / yes_no_prompt.o
 2,232 bytes · C-only source
 src/yes_no_prompt.c</title></rect>
-<rect x="77.538" y="537.425" width="19.268" height="18.469" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_unwind_stack.o
+<rect x="77.590" y="537.463" width="19.288" height="18.450" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_unwind_stack.o
 2,224 bytes · C++-only source
 lib/MSL_C/src/msl_unwind_stack.cpp</title></rect>
-<rect x="77.538" y="555.894" width="19.268" height="18.469" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / player_avatar.o
+<rect x="77.590" y="555.913" width="19.288" height="18.450" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / player_avatar.o
 2,224 bytes · C-only source
 src/player_avatar.c</title></rect>
-<rect x="96.806" y="504.106" width="11.543" height="30.551" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_dhcp.o
+<rect x="96.878" y="504.179" width="11.555" height="30.519" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_dhcp.o
 2,204 bytes · C-only source
 lib/libCPS/src/cps_dhcp.c</title></rect>
-<rect x="108.349" y="504.106" width="22.919" height="15.387" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g3d_mdl_bind.o
+<rect x="108.433" y="504.179" width="22.943" height="15.371" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g3d_mdl_bind.o
 2,204 bytes · C-only source
 lib/NitroSystem/src/g3d_mdl_bind.c</title></rect>
-<rect x="108.349" y="519.493" width="22.919" height="15.164" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / std_sprintf.o
+<rect x="108.433" y="519.550" width="22.943" height="15.148" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / std_sprintf.o
 2,172 bytes · C-only source
 lib/NitroSDK/src/std_sprintf.c</title></rect>
-<rect x="96.806" y="534.656" width="17.279" height="19.965" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / vct_audio_queue.o
+<rect x="96.878" y="534.698" width="17.297" height="19.944" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / vct_audio_queue.o
 2,156 bytes · C-only source
 lib/libVCT/src/vct_audio_queue.c</title></rect>
-<rect x="114.085" y="534.656" width="17.183" height="19.965" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / socl_read.o
+<rect x="114.175" y="534.698" width="17.201" height="19.944" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / socl_read.o
 2,144 bytes · C-only source
 lib/NitroWiFi/src/socl_read.c</title></rect>
-<rect x="96.806" y="554.621" width="17.264" height="19.742" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / communication_command.o
+<rect x="96.878" y="554.641" width="17.281" height="19.721" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / communication_command.o
 2,130 bytes · C-only source
 src/communication_command.c</title></rect>
-<rect x="114.069" y="554.621" width="17.199" height="19.742" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_misc_events.o
+<rect x="114.159" y="554.641" width="17.217" height="19.721" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_misc_events.o
 2,122 bytes · C-only source
 src/field_misc_events.c</title></rect>
-<rect x="131.268" y="504.106" width="18.948" height="17.868" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / rtc_api.o
+<rect x="131.376" y="504.179" width="18.968" height="17.850" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / rtc_api.o
 2,116 bytes · C-only source
 lib/NitroSDK/src/rtc/rtc_api.c</title></rect>
-<rect x="131.268" y="521.974" width="18.948" height="17.682" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / union_room_talk.o
+<rect x="131.376" y="522.028" width="18.968" height="17.664" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / union_room_talk.o
 2,094 bytes · C-only source
 src/union_room_talk.c</title></rect>
-<rect x="150.216" y="504.106" width="18.579" height="17.844" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / socl_socket.o
+<rect x="150.344" y="504.179" width="18.599" height="17.826" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / socl_socket.o
 2,072 bytes · C-only source
 lib/NitroWiFi/src/socl_socket.c</title></rect>
-<rect x="150.216" y="521.950" width="18.579" height="17.706" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / fx_mtx43_inverse_concat.o
+<rect x="150.344" y="522.004" width="18.599" height="17.688" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / fx_mtx43_inverse_concat.o
 2,056 bytes · C-only source
 lib/NitroSDK/src/fx/fx_mtx43_inverse_concat.c</title></rect>
-<rect x="131.268" y="539.656" width="18.856" height="17.379" fill="#6f8fd8" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / libsyscall.a _secure_ipke.o
+<rect x="131.376" y="539.692" width="18.876" height="17.361" fill="#6f8fd8" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / libsyscall.a _secure_ipke.o
 2,048 bytes · Original hand-written assembly
 lib/syscall/src/_secure_IPKE.c
 _secure</title></rect>
-<rect x="131.268" y="557.035" width="18.856" height="17.328" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / sound.o
+<rect x="131.376" y="557.053" width="18.876" height="17.310" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / sound.o
 2,042 bytes · C-only source
 src/sound.c</title></rect>
-<rect x="150.124" y="539.656" width="18.672" height="17.362" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_terrain.o
+<rect x="150.251" y="539.692" width="18.691" height="17.344" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_terrain.o
 2,026 bytes · C-only source
 src/field_terrain.c</title></rect>
-<rect x="150.124" y="557.018" width="18.672" height="17.345" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / orbit_cursor.o
+<rect x="150.251" y="557.036" width="18.691" height="17.327" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / orbit_cursor.o
 2,024 bytes · C-only source
 src/orbit_cursor.c</title></rect>
-<rect x="168.796" y="432.087" width="18.336" height="17.418" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / snd_arc_loader.o
+<rect x="168.942" y="431.938" width="18.317" height="17.436" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / snd_arc_loader.o
 1,996 bytes · C-only source
 lib/NitroSystem/src/snd_arc_loader.c</title></rect>
-<rect x="168.796" y="449.505" width="18.336" height="17.278" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_ssl_keys.o
+<rect x="168.942" y="449.374" width="18.317" height="17.296" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_ssl_keys.o
 1,980 bytes · C-only source
 lib/libCPS/src/cps_ssl_keys.c</title></rect>
-<rect x="187.132" y="432.087" width="17.875" height="17.652" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / communication_player_state.o
+<rect x="187.259" y="431.938" width="17.856" height="17.671" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / communication_player_state.o
 1,972 bytes · C-only source
 src/communication_player_state.c</title></rect>
-<rect x="187.132" y="449.740" width="17.875" height="17.043" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / battle_link_comm.o
+<rect x="187.259" y="449.608" width="17.856" height="17.061" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / battle_link_comm.o
 1,904 bytes · C-only source
 src/battle_link_comm.c</title></rect>
-<rect x="205.007" y="432.087" width="17.317" height="17.352" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / frontier_opponents.o
+<rect x="205.115" y="431.938" width="17.299" height="17.371" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / frontier_opponents.o
 1,878 bytes · C-only source
 src/frontier_opponents.c</title></rect>
-<rect x="222.324" y="432.087" width="17.298" height="17.352" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / fnd_expheap.o
+<rect x="222.414" y="431.938" width="17.280" height="17.371" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / fnd_expheap.o
 1,876 bytes · C-only source
 lib/NitroSystem/src/fnd_expheap.c</title></rect>
-<rect x="205.007" y="449.440" width="17.308" height="17.343" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / screen_window_wipe.o
+<rect x="205.115" y="449.308" width="17.290" height="17.361" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / screen_window_wipe.o
 1,876 bytes · C-only source
 src/screen_window_wipe.c</title></rect>
-<rect x="222.314" y="449.440" width="17.308" height="17.343" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / trainer_data.o
+<rect x="222.405" y="449.308" width="17.290" height="17.361" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / trainer_data.o
 1,876 bytes · C-only source
 src/trainer_data.c</title></rect>
-<rect x="168.796" y="466.783" width="15.944" height="18.747" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g2d_oam.o
+<rect x="168.942" y="466.670" width="15.927" height="18.767" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g2d_oam.o
 1,868 bytes · C-only source
 lib/NitroSystem/src/g2d_oam.c</title></rect>
-<rect x="184.739" y="466.783" width="15.892" height="18.747" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / union_room_objects.o
+<rect x="184.869" y="466.670" width="15.876" height="18.767" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / union_room_objects.o
 1,862 bytes · C-only source
 src/union_room_objects.c</title></rect>
-<rect x="168.796" y="485.530" width="15.987" height="18.556" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_9.o
+<rect x="168.942" y="485.436" width="15.970" height="18.575" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_9.o
 1,854 bytes · C-only source
 src/scrcmd_9.c</title></rect>
-<rect x="184.783" y="485.530" width="15.849" height="18.556" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / system.o
+<rect x="184.912" y="485.436" width="15.832" height="18.575" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / system.o
 1,838 bytes · C-only source
 src/system.c</title></rect>
-<rect x="200.632" y="466.783" width="15.682" height="18.733" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / CTRDG_common.o
+<rect x="200.745" y="466.670" width="15.666" height="18.753" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / CTRDG_common.o
 1,836 bytes · C-only source
 lib/NitroSDK/src/ctrdg/CTRDG_common.c</title></rect>
-<rect x="200.632" y="485.516" width="15.682" height="18.570" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pokemon_summary_scene.o
+<rect x="200.745" y="485.423" width="15.666" height="18.589" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pokemon_summary_scene.o
 1,820 bytes · C-only source
 src/pokemon_summary_scene.c</title></rect>
-<rect x="216.314" y="466.783" width="23.309" height="12.480" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / frontier_field_support.o
+<rect x="216.410" y="466.670" width="23.284" height="12.493" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / frontier_field_support.o
 1,818 bytes · C-only source
 src/frontier_field_support.c</title></rect>
-<rect x="216.314" y="479.263" width="23.309" height="12.439" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g3d_anm_bca.o
+<rect x="216.410" y="479.163" width="23.284" height="12.452" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g3d_anm_bca.o
 1,812 bytes · C-only source
 lib/NitroSystem/src/g3d_anm_bca.c</title></rect>
-<rect x="216.314" y="491.702" width="23.309" height="12.384" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / snd_arc.o
+<rect x="216.410" y="491.615" width="23.284" height="12.397" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / snd_arc.o
 1,804 bytes · C-only source
 lib/NitroSystem/src/snd_arc.c</title></rect>
-<rect x="239.622" y="432.087" width="15.410" height="18.523" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_socket.o
+<rect x="239.694" y="431.938" width="15.394" height="18.543" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_socket.o
 1,784 bytes · C-only source
 lib/libCPS/src/cps_socket.c</title></rect>
-<rect x="255.032" y="432.087" width="15.410" height="18.523" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_transition_tasks.o
+<rect x="255.088" y="431.938" width="15.394" height="18.543" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_transition_tasks.o
 1,784 bytes · C-only source
 src/field_transition_tasks.c</title></rect>
-<rect x="239.622" y="450.611" width="15.436" height="18.492" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / frontier_data.o
+<rect x="239.694" y="450.481" width="15.420" height="18.512" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / frontier_data.o
 1,784 bytes · C-only source
 src/frontier_data.c</title></rect>
-<rect x="255.058" y="450.611" width="15.384" height="18.492" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / friend_roster.o
+<rect x="255.114" y="450.481" width="15.368" height="18.512" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / friend_roster.o
 1,778 bytes · C-only source
 src/friend_roster.c</title></rect>
-<rect x="270.443" y="432.087" width="15.276" height="18.581" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msgdata.o
+<rect x="270.482" y="431.938" width="15.260" height="18.601" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msgdata.o
 1,774 bytes · C-only source
 src/msgdata.c</title></rect>
-<rect x="270.443" y="450.669" width="15.276" height="18.435" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / gf_3d_loader.o
+<rect x="270.482" y="450.539" width="15.260" height="18.454" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / gf_3d_loader.o
 1,760 bytes · C-only source
 src/gf_3d_loader.c</title></rect>
-<rect x="285.719" y="432.087" width="22.521" height="12.476" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / screen_fade.o
+<rect x="285.742" y="431.938" width="22.497" height="12.489" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / screen_fade.o
 1,756 bytes · C-only source
 src/screen_fade.c</title></rect>
-<rect x="285.719" y="444.563" width="22.521" height="12.291" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / render_window.o
+<rect x="285.742" y="444.427" width="22.497" height="12.304" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / render_window.o
 1,730 bytes · C-only source
 src/render_window.c</title></rect>
-<rect x="285.719" y="456.855" width="22.521" height="12.249" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / gf_gfx_loader.o
+<rect x="285.742" y="456.731" width="22.497" height="12.261" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / gf_gfx_loader.o
 1,724 bytes · C-only source
 src/gf_gfx_loader.c</title></rect>
-<rect x="239.622" y="469.103" width="15.642" height="17.594" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / FS_overlay.o
+<rect x="239.694" y="468.992" width="15.626" height="17.613" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / FS_overlay.o
 1,720 bytes · C-only source
 lib/NitroSDK/src/fs/FS_overlay.c</title></rect>
-<rect x="255.264" y="469.103" width="15.424" height="17.594" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / bag.o
+<rect x="255.320" y="468.992" width="15.408" height="17.613" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / bag.o
 1,696 bytes · C-only source
 src/bag.c</title></rect>
-<rect x="239.622" y="486.697" width="15.607" height="17.388" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / socl_write.o
+<rect x="239.694" y="486.605" width="15.590" height="17.406" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / socl_write.o
 1,696 bytes · C-only source
 lib/NitroWiFi/src/socl_write.c</title></rect>
-<rect x="255.229" y="486.697" width="15.459" height="17.388" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / union_room.o
+<rect x="255.284" y="486.605" width="15.443" height="17.406" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / union_room.o
 1,680 bytes · C-only source
 src/union_room.c</title></rect>
-<rect x="270.688" y="469.103" width="15.085" height="17.523" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g2d_mc_animation.o
+<rect x="270.727" y="468.992" width="15.069" height="17.541" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g2d_mc_animation.o
 1,652 bytes · C-only source
 lib/NitroSystem/src/g2d_mc_animation.c</title></rect>
-<rect x="270.688" y="486.626" width="15.085" height="17.459" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / map_object_movement_utilities.o
+<rect x="270.727" y="486.534" width="15.069" height="17.478" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / map_object_movement_utilities.o
 1,646 bytes · C-only source
 src/map_object_movement_utilities.c</title></rect>
-<rect x="285.773" y="469.103" width="22.467" height="11.708" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / save_rankings.o
+<rect x="285.796" y="468.992" width="22.443" height="11.721" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / save_rankings.o
 1,644 bytes · C-only source
 src/save_rankings.c</title></rect>
-<rect x="285.773" y="480.811" width="22.467" height="11.651" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / fx_mtx44_concat.o
+<rect x="285.796" y="480.713" width="22.443" height="11.664" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / fx_mtx44_concat.o
 1,636 bytes · C-only source
 lib/NitroSDK/src/fx/fx_mtx44_concat.c</title></rect>
-<rect x="285.773" y="492.463" width="22.467" height="11.623" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / dwc_nvram.o
+<rect x="285.796" y="492.377" width="22.443" height="11.635" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / dwc_nvram.o
 1,632 bytes · C-only source
 lib/NitroDWC/src/dwc_nvram.c</title></rect>
-<rect x="168.796" y="504.086" width="15.260" height="16.902" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / ctrdg_flash_common.o
+<rect x="168.942" y="504.012" width="15.244" height="16.920" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / ctrdg_flash_common.o
 1,612 bytes · C-only source
 lib/NitroSDK/src/ctrdg/ctrdg_flash_common.c</title></rect>
-<rect x="184.056" y="504.086" width="15.241" height="16.902" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / char_tiles.o
+<rect x="184.186" y="504.012" width="15.225" height="16.920" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / char_tiles.o
 1,610 bytes · C-only source
 src/char_tiles.c</title></rect>
-<rect x="168.796" y="520.988" width="15.251" height="16.871" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_link.o
+<rect x="168.942" y="520.932" width="15.235" height="16.888" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_link.o
 1,608 bytes · C-only source
 lib/libCPS/src/cps_link.c</title></rect>
-<rect x="184.046" y="520.988" width="15.251" height="16.871" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / obj_pltt_transfer.o
+<rect x="184.177" y="520.932" width="15.235" height="16.888" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / obj_pltt_transfer.o
 1,608 bytes · C-only source
 src/obj_pltt_transfer.c</title></rect>
-<rect x="199.297" y="504.086" width="15.151" height="16.960" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pokemon_storage_system.o
+<rect x="199.412" y="504.012" width="15.135" height="16.978" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / pokemon_storage_system.o
 1,606 bytes · C-only source
 src/pokemon_storage_system.c</title></rect>
-<rect x="199.297" y="521.046" width="15.151" height="16.812" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / dwc_auth_wifi_id.o
+<rect x="199.412" y="520.990" width="15.135" height="16.830" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / dwc_auth_wifi_id.o
 1,592 bytes · C-only source
 lib/NitroDWC/src/dwc_auth_wifi_id.c</title></rect>
-<rect x="214.449" y="504.086" width="22.523" height="11.281" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / FS_archive_suffix.o
+<rect x="214.547" y="504.012" width="22.500" height="11.293" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / FS_archive_suffix.o
 1,588 bytes · C-only source
 lib/NitroSDK/src/fs/FS_archive_suffix.c</title></rect>
-<rect x="214.449" y="515.367" width="11.269" height="22.491" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_ssl.o
+<rect x="214.547" y="515.305" width="22.500" height="11.265" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_ssl.o
 1,584 bytes · C-only source
 lib/libCPS/src/cps_ssl.c</title></rect>
-<rect x="225.717" y="515.367" width="11.254" height="22.491" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / grid_cursor.o
+<rect x="214.547" y="526.569" width="22.500" height="11.250" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / grid_cursor.o
 1,582 bytes · C-only source
 src/grid_cursor.c</title></rect>
-<rect x="168.796" y="537.858" width="17.246" height="14.641" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / bg_cell_manager.o
+<rect x="168.942" y="537.820" width="17.227" height="14.656" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / bg_cell_manager.o
 1,578 bytes · C-only source
 src/bg_cell_manager.c</title></rect>
-<rect x="186.041" y="537.858" width="17.224" height="14.641" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_exception_table.o
+<rect x="186.170" y="537.820" width="17.206" height="14.656" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_exception_table.o
 1,576 bytes · C-only source
 lib/MSL_C/src/msl_exception_table.c</title></rect>
-<rect x="168.796" y="552.499" width="11.519" height="21.864" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wireless_status_icon.o
+<rect x="168.942" y="552.476" width="11.507" height="21.887" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wireless_status_icon.o
 1,574 bytes · C-only source
 src/wireless_status_icon.c</title></rect>
-<rect x="180.315" y="552.499" width="11.504" height="21.864" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_fp_ansi_dec2num.o
+<rect x="180.449" y="552.476" width="11.492" height="21.887" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_fp_ansi_dec2num.o
 1,572 bytes · C-only source
 lib/MSL_C/src/msl_fp_ansi_dec2num.c</title></rect>
-<rect x="191.819" y="552.499" width="11.446" height="21.864" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / item.o
+<rect x="191.941" y="552.476" width="11.434" height="21.887" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / item.o
 1,564 bytes · C-only source
 src/item.c</title></rect>
-<rect x="203.265" y="537.858" width="16.897" height="14.811" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / socl_close.o
+<rect x="203.375" y="537.820" width="16.879" height="14.826" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / socl_close.o
 1,564 bytes · C-only source
 lib/NitroWiFi/src/socl_close.c</title></rect>
-<rect x="220.162" y="537.858" width="16.810" height="14.811" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / CTRDG_flash_AT29LV512.o
+<rect x="220.254" y="537.820" width="16.792" height="14.826" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / CTRDG_flash_AT29LV512.o
 1,556 bytes · C-only source
 lib/NitroSDK/src/ctrdg/CTRDG_flash_AT29LV512.c</title></rect>
-<rect x="203.265" y="552.669" width="11.329" height="21.694" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g3d_kernel.o
+<rect x="203.375" y="552.646" width="11.317" height="21.717" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g3d_kernel.o
 1,536 bytes · C-only source
 lib/NitroSystem/src/g3d_kernel.c</title></rect>
-<rect x="214.594" y="552.669" width="11.196" height="21.694" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / save_pokegear.o
+<rect x="214.692" y="552.646" width="11.184" height="21.717" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / save_pokegear.o
 1,518 bytes · C-only source
 src/save_pokegear.c</title></rect>
-<rect x="225.790" y="552.669" width="11.181" height="21.694" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / graphics_object_manager.o
+<rect x="225.877" y="552.646" width="11.170" height="21.717" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / graphics_object_manager.o
 1,516 bytes · C-only source
 src/graphics_object_manager.c</title></rect>
-<rect x="236.972" y="504.086" width="14.771" height="16.292" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / ctrdg_flash_le39fw512.o
+<rect x="237.047" y="504.012" width="14.756" height="16.309" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / ctrdg_flash_le39fw512.o
 1,504 bytes · C-only source
 lib/NitroSDK/src/ctrdg/ctrdg_flash_le39fw512.c</title></rect>
-<rect x="236.972" y="520.377" width="14.771" height="16.183" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / gear_phone_ring_manager.o
+<rect x="237.047" y="520.321" width="14.756" height="16.200" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / gear_phone_ring_manager.o
 1,494 bytes · C-only source
 src/gear_phone_ring_manager.c</title></rect>
-<rect x="251.743" y="504.086" width="21.817" height="10.884" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_battle.o
+<rect x="251.802" y="504.012" width="21.794" height="10.895" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_battle.o
 1,484 bytes · C-only source
 src/scrcmd_battle.c</title></rect>
-<rect x="251.743" y="514.969" width="10.908" height="21.592" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g2d_load.o
+<rect x="251.802" y="514.907" width="10.897" height="21.614" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g2d_load.o
 1,472 bytes · C-only source
 lib/NitroSystem/src/g2d_load.c</title></rect>
-<rect x="262.651" y="514.969" width="10.908" height="21.592" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / soc_inet.o
+<rect x="262.699" y="514.907" width="10.897" height="21.614" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / soc_inet.o
 1,472 bytes · C-only source
 lib/NitroWiFi/src/soc_inet.c</title></rect>
-<rect x="236.972" y="536.561" width="12.319" height="19.015" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / filesystem.o
+<rect x="237.047" y="536.521" width="12.306" height="19.035" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / filesystem.o
 1,464 bytes · C-only source
 src/filesystem.c</title></rect>
-<rect x="249.291" y="536.561" width="12.151" height="19.015" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / mail.o
+<rect x="249.353" y="536.521" width="12.138" height="19.035" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / mail.o
 1,444 bytes · C-only source
 src/mail.c</title></rect>
-<rect x="261.442" y="536.561" width="12.117" height="19.015" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wifi_club.o
+<rect x="261.491" y="536.521" width="12.105" height="19.035" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wifi_club.o
 1,440 bytes · C-only source
 src/wifi_club.c</title></rect>
-<rect x="236.972" y="555.575" width="12.230" height="18.787" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / game_clear.o
+<rect x="237.047" y="555.556" width="12.217" height="18.807" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / game_clear.o
 1,436 bytes · C-only source
 src/game_clear.c</title></rect>
-<rect x="249.202" y="555.575" width="12.230" height="18.787" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / snd_stream.o
+<rect x="249.264" y="555.556" width="12.217" height="18.807" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / snd_stream.o
 1,436 bytes · C-only source
 lib/NitroSystem/src/snd_stream.c</title></rect>
-<rect x="261.432" y="555.575" width="12.128" height="18.787" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_battle_castle.o
+<rect x="261.481" y="555.556" width="12.115" height="18.807" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_battle_castle.o
 1,424 bytes · C-only source
 src/scrcmd_battle_castle.c</title></rect>
-<rect x="273.560" y="504.086" width="13.966" height="16.314" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wcm_cpsif.o
+<rect x="273.596" y="504.012" width="13.952" height="16.331" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wcm_cpsif.o
 1,424 bytes · C-only source
 lib/NitroWiFi/src/wcm_cpsif.c</title></rect>
-<rect x="273.560" y="520.400" width="13.966" height="16.268" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / fx_mtx33_inverse_concat.o
+<rect x="273.596" y="520.343" width="13.952" height="16.285" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / fx_mtx33_inverse_concat.o
 1,420 bytes · C-only source
 lib/NitroSDK/src/fx/fx_mtx33_inverse_concat.c</title></rect>
-<rect x="287.526" y="504.086" width="20.714" height="10.907" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_md5.o
+<rect x="287.548" y="504.012" width="20.692" height="10.919" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / cps_md5.o
 1,412 bytes · C-only source
 lib/libCPS/src/cps_md5.c</title></rect>
-<rect x="287.526" y="514.993" width="20.714" height="10.876" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / dwc_bm_init.o
+<rect x="287.548" y="514.930" width="20.692" height="10.888" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / dwc_bm_init.o
 1,408 bytes · C-only source
 lib/NitroDWC/src/dwc_bm_init.c</title></rect>
-<rect x="287.526" y="525.869" width="20.714" height="10.799" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / text.o
+<rect x="287.548" y="525.818" width="20.692" height="10.810" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / text.o
 1,398 bytes · C-only source
 src/text.c</title></rect>
-<rect x="273.560" y="536.668" width="11.605" height="18.944" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / trainer_card_data.o
+<rect x="273.596" y="536.628" width="11.593" height="18.964" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / trainer_card_data.o
 1,374 bytes · C-only source
 src/trainer_card_data.c</title></rect>
-<rect x="285.165" y="536.668" width="11.554" height="18.944" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g3d_glb_state.o
+<rect x="285.189" y="536.628" width="11.542" height="18.964" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g3d_glb_state.o
 1,368 bytes · C-only source
 lib/NitroSystem/src/g3d_glb_state.c</title></rect>
-<rect x="296.719" y="536.668" width="11.521" height="18.944" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / SND_command.o
+<rect x="296.731" y="536.628" width="11.508" height="18.964" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / SND_command.o
 1,364 bytes · C-only source
 lib/NitroSDK/src/snd/SND_command.c</title></rect>
-<rect x="273.560" y="555.612" width="11.606" height="18.750" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / frontier_state.o
+<rect x="273.596" y="555.593" width="11.593" height="18.770" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / frontier_state.o
 1,360 bytes · C-only source
 src/frontier_state.c</title></rect>
-<rect x="285.165" y="555.612" width="11.606" height="18.750" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g3d_anm_blend.o
+<rect x="285.189" y="555.593" width="11.593" height="18.770" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / g3d_anm_blend.o
 1,360 bytes · C-only source
 lib/NitroSystem/src/g3d_anm_blend.c</title></rect>
-<rect x="296.771" y="555.612" width="11.469" height="18.750" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / FS_file.o
+<rect x="296.783" y="555.593" width="11.457" height="18.770" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / FS_file.o
 1,344 bytes · C-only source
 lib/NitroSDK/src/fs/FS_file.c</title></rect>
 <rect x="28.000" y="574.363" width="11.696" height="18.249" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / main.o
@@ -2422,157 +2413,151 @@ lib/MSL_C/src/msl_fp_init.c</title></rect>
 <rect x="28.000" y="147.000" width="280.240" height="570.000" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="31.000" y="150.000" width="91.000" height="22" rx="3" fill="#101722" opacity="0.88"/>
 <text x="37.000" y="166.000" font-size="12">ARM9 / main</text>
-<rect x="308.240" y="147.000" width="45.760" height="55.121" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_circle_push.o
+<rect x="308.240" y="147.000" width="40.115" height="62.878" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_circle_push.o
 15,764 bytes · C-only source
 src/pokeathlon/pokeathlon_circle_push.c</title></rect>
-<rect x="353.999" y="147.000" width="34.584" height="55.121" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_ceremony.o
+<rect x="348.354" y="147.000" width="32.872" height="62.878" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_snow_throw.o
+12,918 bytes · C-only source
+src/pokeathlon/pokeathlon_snow_throw.c</title></rect>
+<rect x="308.240" y="209.878" width="38.459" height="49.567" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_ceremony.o
 11,914 bytes · C-only source
 src/pokeathlon/pokeathlon_course_ceremony.c</title></rect>
-<rect x="308.240" y="202.121" width="29.855" height="57.324" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_flow.o
+<rect x="346.699" y="209.878" width="34.528" height="49.567" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_flow.o
 10,696 bytes · C-only source
 src/pokeathlon/pokeathlon_course_flow.c</title></rect>
-<rect x="338.095" y="202.121" width="50.488" height="29.201" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_hurdle_dash_race.o
+<rect x="381.227" y="147.000" width="28.638" height="51.481" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_hurdle_dash_race.o
 9,214 bytes · C-only source
 src/pokeathlon/pokeathlon_hurdle_dash_race.c</title></rect>
-<rect x="338.095" y="231.322" width="50.488" height="28.123" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_block_smash.o
+<rect x="409.864" y="147.000" width="27.581" height="51.481" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_block_smash.o
 8,874 bytes · C-only source
 src/pokeathlon/pokeathlon_block_smash.c</title></rect>
-<rect x="388.583" y="147.000" width="27.205" height="51.146" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_snow_throw.o
-8,696 bytes · C-only source
-src/pokeathlon/pokeathlon_snow_throw.c</title></rect>
-<rect x="415.788" y="147.000" width="49.955" height="26.053" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_block_smash_teams.o
+<rect x="437.445" y="147.000" width="25.281" height="51.481" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_block_smash_teams.o
 8,134 bytes · C-only source
 src/pokeathlon/pokeathlon_block_smash_teams.c</title></rect>
-<rect x="415.788" y="173.053" width="49.955" height="25.093" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_goal_roll_field.o
+<rect x="381.227" y="198.481" width="41.065" height="30.525" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_goal_roll_field.o
 7,834 bytes · C-only source
 src/pokeathlon/pokeathlon_goal_roll_field.c</title></rect>
-<rect x="388.583" y="198.146" width="40.636" height="30.760" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture_field.o
+<rect x="381.227" y="229.006" width="41.065" height="30.439" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture_field.o
 7,812 bytes · C-only source
 src/pokeathlon/pokeathlon_pennant_capture_field.c</title></rect>
-<rect x="388.583" y="228.906" width="40.636" height="30.539" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_disc_catch.o
+<rect x="422.291" y="198.481" width="40.435" height="30.692" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_disc_catch.o
 7,756 bytes · C-only source
 src/pokeathlon/pokeathlon_disc_catch.c</title></rect>
-<rect x="429.220" y="198.146" width="36.523" height="33.515" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_relay_run.o
+<rect x="422.291" y="229.173" width="40.435" height="30.272" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_relay_run.o
 7,650 bytes · C-only source
 src/pokeathlon/pokeathlon_relay_run.c</title></rect>
-<rect x="429.220" y="231.661" width="36.523" height="27.784" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_results_announcement.o
+<rect x="462.726" y="147.000" width="38.694" height="26.225" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_results_announcement.o
 6,342 bytes · C-only source
 src/pokeathlon/pokeathlon_results_announcement.c</title></rect>
-<rect x="465.743" y="147.000" width="37.094" height="25.743" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_lamp_jump_stage.o
+<rect x="462.726" y="173.225" width="38.694" height="24.679" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_lamp_jump_stage.o
 5,968 bytes · C-only source
 src/pokeathlon/pokeathlon_lamp_jump_stage.c</title></rect>
-<rect x="465.743" y="172.743" width="37.094" height="25.493" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_goal_roll.o
+<rect x="501.420" y="147.000" width="36.971" height="25.578" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_goal_roll.o
 5,910 bytes · C-only source
 src/pokeathlon/pokeathlon_goal_roll.c</title></rect>
-<rect x="502.836" y="147.000" width="35.526" height="26.357" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_relay_run_track.o
+<rect x="501.420" y="172.578" width="36.971" height="25.327" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_relay_run_track.o
 5,852 bytes · C-only source
 src/pokeathlon/pokeathlon_relay_run_track.c</title></rect>
-<rect x="502.836" y="173.357" width="35.526" height="24.879" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop_display.o
+<rect x="462.726" y="197.904" width="41.127" height="21.491" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop_display.o
 5,524 bytes · C-only source
 src/pokeathlon/pokeathlon_ring_drop_display.c</title></rect>
-<rect x="465.743" y="198.236" width="38.752" height="21.900" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_sprites.o
+<rect x="462.726" y="219.395" width="21.191" height="40.049" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_sprites.o
 5,304 bytes · C-only source
 src/pokeathlon/pokeathlon_course_sprites.c</title></rect>
-<rect x="465.743" y="220.137" width="38.752" height="20.604" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_event_intro.o
+<rect x="483.917" y="219.395" width="19.936" height="40.049" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_event_intro.o
 4,990 bytes · C-only source
 src/pokeathlon/pokeathlon_event_intro.c</title></rect>
-<rect x="465.743" y="240.740" width="38.752" height="18.704" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop_field.o
+<rect x="503.853" y="197.904" width="34.538" height="20.986" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop_field.o
 4,530 bytes · C-only source
 src/pokeathlon/pokeathlon_ring_drop_field.c</title></rect>
-<rect x="504.494" y="198.236" width="33.868" height="21.354" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_lamp_jump.o
+<rect x="503.853" y="218.890" width="34.538" height="20.940" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_lamp_jump.o
 4,520 bytes · C-only source
 src/pokeathlon/pokeathlon_lamp_jump.c</title></rect>
-<rect x="504.494" y="219.590" width="33.868" height="20.003" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_circle_push_display.o
+<rect x="503.853" y="239.830" width="34.538" height="19.615" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_circle_push_display.o
 4,234 bytes · C-only source
 src/pokeathlon/pokeathlon_circle_push_display.c</title></rect>
-<rect x="504.494" y="239.593" width="33.868" height="19.852" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_disc_catch_field.o
+<rect x="538.391" y="147.000" width="21.940" height="30.645" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_disc_catch_field.o
 4,202 bytes · C-only source
 src/pokeathlon/pokeathlon_disc_catch_field.c</title></rect>
-<rect x="538.363" y="147.000" width="33.756" height="19.776" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_relay_run_hud.o
+<rect x="560.331" y="147.000" width="21.783" height="30.645" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_relay_run_hud.o
 4,172 bytes · C-only source
 src/pokeathlon/pokeathlon_relay_run_hud.c</title></rect>
-<rect x="538.363" y="166.776" width="33.756" height="18.515" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_goal_roll_cpu.o
+<rect x="538.391" y="177.645" width="22.099" height="28.281" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_goal_roll_cpu.o
 3,906 bytes · C-only source
 src/pokeathlon/pokeathlon_goal_roll_cpu.c</title></rect>
-<rect x="538.363" y="185.290" width="33.756" height="18.117" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture_play.o
+<rect x="560.490" y="177.645" width="21.624" height="28.281" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture_play.o
 3,822 bytes · C-only source
 src/pokeathlon/pokeathlon_pennant_capture_play.c</title></rect>
-<rect x="572.118" y="147.000" width="23.669" height="25.418" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_hurdle_dash.o
+<rect x="582.114" y="147.000" width="18.214" height="33.030" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_hurdle_dash.o
 3,760 bytes · C-only source
 src/pokeathlon/pokeathlon_hurdle_dash.c</title></rect>
-<rect x="595.787" y="147.000" width="19.703" height="25.418" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture_display.o
+<rect x="600.328" y="147.000" width="15.163" height="33.030" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture_display.o
 3,130 bytes · C-only source
 src/pokeathlon/pokeathlon_pennant_capture_display.c</title></rect>
-<rect x="572.118" y="172.418" width="15.480" height="30.989" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_snow_throw_display.o
-2,998 bytes · C-only source
-src/pokeathlon/pokeathlon_snow_throw_display.c</title></rect>
-<rect x="587.598" y="172.418" width="27.892" height="15.615" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop_ui.o
+<rect x="582.114" y="180.030" width="16.818" height="25.897" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop_ui.o
 2,722 bytes · C-only source
 src/pokeathlon/pokeathlon_ring_drop_ui.c</title></rect>
-<rect x="587.598" y="188.033" width="27.892" height="15.374" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop.o
+<rect x="598.932" y="180.030" width="16.559" height="25.897" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop.o
 2,680 bytes · C-only source
 src/pokeathlon/pokeathlon_ring_drop.c</title></rect>
-<rect x="538.363" y="203.407" width="13.972" height="30.507" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop_mon.o
+<rect x="538.391" y="205.927" width="14.630" height="29.136" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop_mon.o
 2,664 bytes · C-only source
 src/pokeathlon/pokeathlon_ring_drop_mon.c</title></rect>
-<rect x="552.335" y="203.407" width="22.290" height="15.706" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_mon_gfx.o
+<rect x="553.021" y="205.927" width="23.340" height="15.000" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_mon_gfx.o
 2,188 bytes · C-only source
 src/pokeathlon/pokeathlon_course_mon_gfx.c</title></rect>
-<rect x="552.335" y="219.113" width="22.290" height="14.802" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_ui.o
+<rect x="553.021" y="220.926" width="23.340" height="14.136" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_ui.o
 2,062 bytes · C-only source
 src/pokeathlon/pokeathlon_course_ui.c</title></rect>
-<rect x="538.363" y="233.915" width="12.560" height="25.530" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_relay_run_cpu.o
+<rect x="538.391" y="235.062" width="13.151" height="24.382" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_relay_run_cpu.o
 2,004 bytes · C-only source
 src/pokeathlon/pokeathlon_relay_run_cpu.c</title></rect>
-<rect x="550.922" y="233.915" width="23.703" height="12.866" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_scores.o
+<rect x="551.542" y="235.062" width="12.508" height="24.382" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_scores.o
 1,906 bytes · C-only source
 src/pokeathlon/pokeathlon_course_scores.c</title></rect>
-<rect x="550.922" y="246.781" width="23.703" height="12.664" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture.o
+<rect x="564.050" y="235.062" width="12.311" height="24.382" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture.o
 1,876 bytes · C-only source
 src/pokeathlon/pokeathlon_pennant_capture.c</title></rect>
-<rect x="574.625" y="203.407" width="20.951" height="14.175" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course.o
+<rect x="576.361" y="205.927" width="20.061" height="14.803" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course.o
 1,856 bytes · C-only source
 src/pokeathlon/pokeathlon_course.c</title></rect>
-<rect x="574.625" y="217.582" width="20.951" height="13.609" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_objects.o
+<rect x="576.361" y="220.730" width="20.061" height="14.213" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_objects.o
 1,782 bytes · C-only source
 src/pokeathlon/pokeathlon_course_objects.c</title></rect>
-<rect x="595.576" y="203.407" width="19.914" height="14.045" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture_cpu.o
+<rect x="596.422" y="205.927" width="19.069" height="14.668" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture_cpu.o
 1,748 bytes · C-only source
 src/pokeathlon/pokeathlon_pennant_capture_cpu.c</title></rect>
-<rect x="595.576" y="217.452" width="19.914" height="13.739" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_goal_roll_display.o
+<rect x="596.422" y="220.594" width="19.069" height="14.349" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_goal_roll_display.o
 1,710 bytes · C-only source
 src/pokeathlon/pokeathlon_goal_roll_display.c</title></rect>
-<rect x="574.625" y="231.191" width="23.683" height="10.229" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop_cpu.o
+<rect x="576.361" y="234.943" width="19.317" height="12.541" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop_cpu.o
 1,514 bytes · C-only source
 src/pokeathlon/pokeathlon_ring_drop_cpu.c</title></rect>
-<rect x="574.625" y="241.420" width="12.818" height="18.025" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_disc_catch_scoreboard.o
+<rect x="576.361" y="247.484" width="19.317" height="11.961" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_disc_catch_scoreboard.o
 1,444 bytes · C-only source
 src/pokeathlon/pokeathlon_disc_catch_scoreboard.c</title></rect>
-<rect x="587.443" y="241.420" width="10.865" height="18.025" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_snow_throw_cpu.o
-1,224 bytes · C-only source
-src/pokeathlon/pokeathlon_snow_throw_cpu.c</title></rect>
-<rect x="598.309" y="231.191" width="11.403" height="16.613" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_disc_catch_cpu.o
+<rect x="595.678" y="234.943" width="13.149" height="14.407" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_disc_catch_cpu.o
 1,184 bytes · C-only source
 src/pokeathlon/pokeathlon_disc_catch_cpu.c</title></rect>
-<rect x="609.712" y="231.191" width="5.779" height="16.613" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_hurdle_dash_runner.o
+<rect x="608.827" y="234.943" width="6.664" height="14.407" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_hurdle_dash_runner.o
 600 bytes · C-only source
 src/pokeathlon/pokeathlon_hurdle_dash_runner.c</title></rect>
-<rect x="598.309" y="247.804" width="9.512" height="7.603" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_event_points.o
+<rect x="595.678" y="249.350" width="7.164" height="10.095" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_event_points.o
 452 bytes · C-only source
 src/pokeathlon/pokeathlon_event_points.c</title></rect>
-<rect x="598.309" y="255.408" width="9.512" height="4.037" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_relay_run_pic_frames.o
+<rect x="602.842" y="249.350" width="3.804" height="10.095" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_relay_run_pic_frames.o
 240 bytes · C-only source
 src/pokeathlon/pokeathlon_relay_run_pic_frames.c</title></rect>
-<rect x="607.820" y="247.804" width="7.670" height="4.005" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_circle_push_pic_sprites.o
+<rect x="606.646" y="249.350" width="8.845" height="3.473" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_circle_push_pic_sprites.o
 192 bytes · C-only source
 src/pokeathlon/pokeathlon_circle_push_pic_sprites.c</title></rect>
-<rect x="607.820" y="251.810" width="3.940" height="7.635" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture_pic_sprites.o
+<rect x="606.646" y="252.824" width="4.543" height="6.621" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture_pic_sprites.o
 188 bytes · C-only source
 src/pokeathlon/pokeathlon_pennant_capture_pic_sprites.c</title></rect>
-<rect x="611.760" y="251.810" width="3.730" height="7.206" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_event_rank_points.o
+<rect x="611.189" y="252.824" width="4.301" height="6.249" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_event_rank_points.o
 168 bytes · C-only source
 src/pokeathlon/pokeathlon_event_rank_points.c</title></rect>
-<rect x="611.760" y="259.016" width="3.730" height="0.429" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_mon_palette.o
+<rect x="611.189" y="259.073" width="4.301" height="0.372" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_mon_palette.o
 10 bytes · C-only source
 src/pokeathlon/pokeathlon_course_mon_palette.c</title></rect>
 <rect x="308.240" y="147.000" width="307.251" height="112.445" fill="none" stroke="#101722" stroke-width="2"/>
@@ -4356,112 +4341,109 @@ src/application/pc_box/pc_box_sprites.c</title></rect>
 4,140 bytes · C-only source
 src/application/pc_box/pc_box_grid_input.c</title></rect>
 <rect x="883.121" y="147.000" width="81.381" height="145.663" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="964.502" y="147.000" width="34.729" height="29.283" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_script_commands_ext.o
+<rect x="964.502" y="147.000" width="35.157" height="28.927" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_script_commands_ext.o
 6,356 bytes · C-only source
 src/frontier/frontier_script_commands_ext.c</title></rect>
-<rect x="964.502" y="176.283" width="34.729" height="22.446" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_map.o
-4,872 bytes · C-only source
+<rect x="964.502" y="175.927" width="35.157" height="23.802" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_map.o
+5,230 bytes · C-only source
 src/frontier/frontier_map.c</title></rect>
-<rect x="964.502" y="198.730" width="34.729" height="21.783" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / battle_arcade_data.o
+<rect x="964.502" y="199.729" width="35.157" height="21.518" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / battle_arcade_data.o
 4,728 bytes · C-only source
 src/frontier/battle_arcade_data.c</title></rect>
-<rect x="999.231" y="147.000" width="22.059" height="34.222" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_script_ui.o
+<rect x="999.659" y="147.000" width="21.841" height="34.564" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_script_ui.o
 4,718 bytes · C-only source
 src/frontier/frontier_script_ui.c</title></rect>
-<rect x="1021.290" y="147.000" width="21.189" height="34.222" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / battle_castle_challenge.o
+<rect x="1021.500" y="147.000" width="20.980" height="34.564" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / battle_castle_challenge.o
 4,532 bytes · C-only source
 src/frontier/battle_castle_challenge.c</title></rect>
-<rect x="999.231" y="181.222" width="15.589" height="39.291" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_link_messages.o
+<rect x="999.659" y="181.564" width="15.435" height="39.683" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_link_messages.o
 3,828 bytes · C-only source
 src/frontier/frontier_link_messages.c</title></rect>
-<rect x="1014.820" y="181.222" width="27.660" height="21.450" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / battle_factory_data.o
+<rect x="1015.094" y="181.564" width="27.386" height="21.665" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / battle_factory_data.o
 3,708 bytes · C-only source
 src/frontier/battle_factory_data.c</title></rect>
-<rect x="1014.820" y="202.672" width="27.660" height="17.840" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_brain_intro.o
+<rect x="1015.094" y="203.229" width="27.386" height="18.019" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_brain_intro.o
 3,084 bytes · C-only source
 src/frontier/frontier_brain_intro.c</title></rect>
-<rect x="964.502" y="220.513" width="13.384" height="34.192" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / battle_hall_data.o
+<rect x="964.502" y="221.247" width="13.521" height="33.844" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / battle_hall_data.o
 2,860 bytes · C-only source
 src/frontier/battle_hall_data.c</title></rect>
-<rect x="977.885" y="220.513" width="25.017" height="17.281" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_script_commands.o
+<rect x="978.023" y="221.247" width="25.275" height="17.105" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_script_commands.o
 2,702 bytes · C-only source
 src/frontier/frontier_script_commands.c</title></rect>
-<rect x="977.885" y="237.794" width="25.017" height="16.910" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_cmd_arcade.o
+<rect x="978.023" y="238.353" width="25.275" height="16.738" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_cmd_arcade.o
 2,644 bytes · C-only source
 src/frontier/frontier_cmd_arcade.c</title></rect>
-<rect x="964.502" y="254.704" width="20.781" height="19.495" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_transition.o
+<rect x="964.502" y="255.091" width="20.995" height="19.297" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_transition.o
 2,532 bytes · C-only source
 src/frontier/frontier_transition.c</title></rect>
-<rect x="964.502" y="274.200" width="20.781" height="18.463" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_trainers.o
+<rect x="964.502" y="274.387" width="20.995" height="18.275" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_trainers.o
 2,398 bytes · C-only source
 src/frontier/frontier_trainers.c</title></rect>
-<rect x="985.283" y="254.704" width="17.620" height="20.305" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_cmd_castle.o
+<rect x="985.497" y="255.091" width="17.801" height="20.098" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_cmd_castle.o
 2,236 bytes · C-only source
 src/frontier/frontier_cmd_castle.c</title></rect>
-<rect x="985.283" y="275.009" width="17.620" height="17.653" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / battle_hall_setup.o
+<rect x="985.497" y="275.189" width="17.801" height="17.474" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / battle_hall_setup.o
 1,944 bytes · C-only source
 src/frontier/battle_hall_setup.c</title></rect>
-<rect x="1002.903" y="220.513" width="16.905" height="17.832" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / battle_factory_setup.o
+<rect x="1003.298" y="221.247" width="16.737" height="18.012" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / battle_factory_setup.o
 1,884 bytes · C-only source
 src/frontier/battle_factory_setup.c</title></rect>
-<rect x="1002.903" y="238.344" width="16.905" height="17.188" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / battle_tower_setup.o
+<rect x="1003.298" y="239.259" width="16.737" height="17.361" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / battle_tower_setup.o
 1,816 bytes · C-only source
 src/frontier/battle_tower_setup.c</title></rect>
-<rect x="1019.808" y="220.513" width="22.671" height="12.548" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_cmd_factory.o
+<rect x="1020.034" y="221.247" width="22.445" height="12.675" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_cmd_factory.o
 1,778 bytes · C-only source
 src/frontier/frontier_cmd_factory.c</title></rect>
-<rect x="1019.808" y="233.061" width="12.276" height="22.471" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_cmd_link_lobby.o
+<rect x="1020.034" y="233.922" width="22.445" height="12.290" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_cmd_link_lobby.o
 1,724 bytes · C-only source
 src/frontier/frontier_cmd_link_lobby.c</title></rect>
-<rect x="1032.084" y="233.061" width="10.396" height="22.471" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / battle_castle_setup.o
+<rect x="1020.034" y="246.212" width="22.445" height="10.408" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / battle_castle_setup.o
 1,460 bytes · C-only source
 src/frontier/battle_castle_setup.c</title></rect>
-<rect x="1002.903" y="255.533" width="19.590" height="10.863" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_cmd_hall.o
+<rect x="1003.298" y="256.620" width="10.719" height="19.853" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_cmd_hall.o
 1,330 bytes · C-only source
 src/frontier/frontier_cmd_hall.c</title></rect>
-<rect x="1002.903" y="266.396" width="19.590" height="9.589" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / battle_arcade_setup.o
+<rect x="1014.017" y="256.620" width="9.462" height="19.853" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / battle_arcade_setup.o
 1,174 bytes · C-only source
 src/frontier/battle_arcade_setup.c</title></rect>
-<rect x="1002.903" y="275.984" width="11.052" height="16.678" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_link_lobby.o
+<rect x="1003.298" y="276.473" width="11.385" height="16.190" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_link_lobby.o
 1,152 bytes · C-only source
 src/frontier/frontier_link_lobby.c</title></rect>
-<rect x="1013.955" y="275.984" width="8.538" height="16.678" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_script_commands_misc.o
+<rect x="1014.683" y="276.473" width="8.796" height="16.190" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_script_commands_misc.o
 890 bytes · C-only source
 src/frontier/frontier_script_commands_misc.c</title></rect>
-<rect x="1022.493" y="255.533" width="11.727" height="10.124" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_system.o
+<rect x="1023.479" y="256.620" width="7.106" height="16.708" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_system.o
 742 bytes · C-only source
 src/frontier/frontier_system.c</title></rect>
-<rect x="1022.493" y="265.656" width="11.727" height="8.978" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_map_bg_animation.o
+<rect x="1030.585" y="256.620" width="11.894" height="8.852" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_map_bg_animation.o
 658 bytes · C-only source
 src/frontier/frontier_map_bg_animation.c</title></rect>
-<rect x="1034.220" y="255.533" width="8.259" height="11.314" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_map_params.o
+<rect x="1030.585" y="265.472" width="11.894" height="7.856" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_map_params.o
 584 bytes · C-only source
 src/frontier/frontier_map_params.c</title></rect>
-<rect x="1034.220" y="266.846" width="8.259" height="7.788" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_particles.o
+<rect x="1023.479" y="273.328" width="6.759" height="9.516" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_particles.o
 402 bytes · C-only source
 src/frontier/frontier_particles.c</title></rect>
-<rect x="1022.493" y="274.634" width="9.638" height="6.342" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_map_object_movement.o
+<rect x="1030.239" y="273.328" width="6.423" height="9.516" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_map_object_movement.o
 382 bytes · C-only source
 src/frontier/frontier_map_object_movement.c</title></rect>
-<rect x="1022.493" y="280.976" width="9.638" height="5.943" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_map_tile_blink.o
-358 bytes · C-only source
-src/frontier/frontier_map_tile_blink.c</title></rect>
-<rect x="1022.493" y="286.919" width="9.638" height="5.744" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_script_context.o
+<rect x="1036.662" y="273.328" width="5.818" height="9.516" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_script_context.o
 346 bytes · C-only source
 src/frontier/frontier_script_context.c</title></rect>
-<rect x="1032.131" y="274.634" width="5.638" height="9.308" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_save_data_helpers.o
+<rect x="1023.479" y="282.844" width="9.810" height="5.350" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_save_data_helpers.o
 328 bytes · C-only source
 src/frontier/frontier_save_data_helpers.c</title></rect>
-<rect x="1037.769" y="274.634" width="4.710" height="9.308" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_script_tasks.o
+<rect x="1023.479" y="288.194" width="9.810" height="4.469" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_script_tasks.o
 274 bytes · C-only source
 src/frontier/frontier_script_tasks.c</title></rect>
-<rect x="1032.131" y="283.942" width="4.550" height="8.721" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_map_sprites.o
+<rect x="1033.289" y="282.844" width="9.191" height="4.318" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_map_sprites.o
 248 bytes · C-only source
 src/frontier/frontier_map_sprites.c</title></rect>
-<rect x="1036.682" y="283.942" width="5.798" height="4.415" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_cmd_sound.o
+<rect x="1033.289" y="287.161" width="4.653" height="5.501" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_cmd_sound.o
 160 bytes · C-only source
 src/frontier/frontier_cmd_sound.c</title></rect>
-<rect x="1036.682" y="288.358" width="5.798" height="4.305" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_cmd_create_sprites.o
+<rect x="1037.942" y="287.161" width="4.537" height="5.501" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_80 / frontier_cmd_create_sprites.o
 156 bytes · C-only source
 src/frontier/frontier_cmd_create_sprites.c</title></rect>
 <rect x="964.502" y="147.000" width="77.978" height="145.663" fill="none" stroke="#101722" stroke-width="2"/>
@@ -4859,86 +4841,80 @@ OS_UnLockCartridge</title></rect>
 sub/lib/src/mi_swap_arm7.c
 MI_SwapWord</title></rect>
 <rect x="1042.480" y="147.000" width="129.520" height="73.505" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="1042.480" y="220.505" width="40.129" height="38.151" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_event_log.o
+<rect x="1042.480" y="220.505" width="59.783" height="25.608" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_event_log.o
 9,568 bytes · C-only source
 src/application/pokewalker/pokewalker_event_log.c</title></rect>
-<rect x="1042.480" y="258.655" width="40.129" height="31.667" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_app_modes.o
+<rect x="1042.480" y="246.113" width="31.039" height="44.210" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_link.o
+8,576 bytes · C-only source
+src/application/pokewalker/pokewalker_link.c</title></rect>
+<rect x="1073.518" y="246.113" width="28.744" height="44.210" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_app_modes.o
 7,942 bytes · C-only source
 src/application/pokewalker/pokewalker_app_modes.c</title></rect>
-<rect x="1082.608" y="220.505" width="30.095" height="37.610" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_ir.o
+<rect x="1102.262" y="220.505" width="37.567" height="30.130" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_ir.o
 7,074 bytes · C-only source
 src/application/pokewalker/pokewalker_ir.c</title></rect>
-<rect x="1082.608" y="258.114" width="30.095" height="32.208" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_ui.o
+<rect x="1139.829" y="220.505" width="32.171" height="30.130" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_ui.o
 6,058 bytes · C-only source
 src/application/pokewalker/pokewalker_ui.c</title></rect>
-<rect x="1112.703" y="220.505" width="23.750" height="38.603" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_upload.o
+<rect x="1102.262" y="250.634" width="37.461" height="24.474" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_upload.o
 5,730 bytes · C-only source
 src/application/pokewalker/pokewalker_upload.c</title></rect>
-<rect x="1136.453" y="220.505" width="35.547" height="19.365" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_link_results.o
-4,302 bytes · C-only source
-src/application/pokewalker/pokewalker_link_results.c</title></rect>
-<rect x="1136.453" y="239.869" width="35.547" height="19.239" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_link.o
-4,274 bytes · C-only source
-src/application/pokewalker/pokewalker_link.c</title></rect>
-<rect x="1112.703" y="259.108" width="18.259" height="31.215" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_main_menu.o
+<rect x="1102.262" y="275.109" width="37.461" height="15.214" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_main_menu.o
 3,562 bytes · C-only source
 src/application/pokewalker/pokewalker_main_menu.c</title></rect>
-<rect x="1130.962" y="259.108" width="13.666" height="31.215" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_erase.o
+<rect x="1139.723" y="250.634" width="19.105" height="22.328" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_erase.o
 2,666 bytes · C-only source
 src/application/pokewalker/pokewalker_erase.c</title></rect>
-<rect x="1144.628" y="259.108" width="27.372" height="10.744" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_app.o
+<rect x="1158.828" y="250.634" width="13.172" height="22.328" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_app.o
 1,838 bytes · C-only source
 src/application/pokewalker/pokewalker_app.c</title></rect>
-<rect x="1144.628" y="269.852" width="14.007" height="20.471" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_stroll.o
+<rect x="1139.723" y="272.962" width="16.516" height="17.361" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_stroll.o
 1,792 bytes · C-only source
 src/application/pokewalker/pokewalker_stroll.c</title></rect>
-<rect x="1158.634" y="269.852" width="13.366" height="13.911" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_trainer_house.o
+<rect x="1156.240" y="272.962" width="15.760" height="11.797" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_trainer_house.o
 1,162 bytes · C-only source
 src/application/pokewalker/pokewalker_trainer_house.c</title></rect>
-<rect x="1158.634" y="283.762" width="9.171" height="6.560" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_ir_requests.o
+<rect x="1156.240" y="284.759" width="10.814" height="5.563" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_ir_requests.o
 376 bytes · C-only source
 src/application/pokewalker/pokewalker_ir_requests.c</title></rect>
-<rect x="1167.805" y="283.762" width="4.195" height="6.560" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_ir_status.o
+<rect x="1167.053" y="284.759" width="4.947" height="5.563" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_112 / pokewalker_ir_status.o
 172 bytes · C-only source
 src/application/pokewalker/pokewalker_ir_status.c</title></rect>
 <rect x="1042.480" y="220.505" width="129.520" height="69.818" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="1042.480" y="290.323" width="36.499" height="43.417" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_selector.o
+<rect x="1042.480" y="290.323" width="60.629" height="26.138" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_selector.o
 9,904 bytes · C-only source
 src/gts_selector.c</title></rect>
-<rect x="1078.979" y="290.323" width="28.546" height="43.417" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_select_mon.o
+<rect x="1042.480" y="316.460" width="31.358" height="42.342" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_search.o
+8,298 bytes · C-only source
+src/gts_search.c</title></rect>
+<rect x="1073.837" y="316.460" width="29.272" height="42.342" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_select_mon.o
 7,746 bytes · C-only source
 src/gts_select_mon.c</title></rect>
-<rect x="1042.480" y="333.740" width="32.663" height="25.062" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_transaction.o
+<rect x="1103.109" y="290.323" width="33.361" height="24.537" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_transaction.o
 5,116 bytes · C-only source
 src/gts_transaction.c</title></rect>
-<rect x="1075.143" y="333.740" width="32.382" height="25.062" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_search.o
-5,072 bytes · C-only source
-src/gts_search.c</title></rect>
-<rect x="1107.525" y="290.323" width="22.090" height="33.363" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_connection.o
+<rect x="1103.109" y="314.860" width="33.361" height="22.091" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_connection.o
 4,606 bytes · C-only source
 src/gts_connection.c</title></rect>
-<rect x="1129.614" y="290.323" width="21.850" height="33.363" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_wanted.o
+<rect x="1103.109" y="336.951" width="33.361" height="21.851" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_wanted.o
 4,556 bytes · C-only source
 src/gts_wanted.c</title></rect>
-<rect x="1151.464" y="290.323" width="20.536" height="33.363" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts.o
+<rect x="1136.470" y="290.323" width="20.383" height="33.614" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts.o
 4,282 bytes · C-only source
 src/gts.c</title></rect>
-<rect x="1107.525" y="323.686" width="29.198" height="17.678" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_search_result.o
-3,226 bytes · C-only source
-src/gts_search_result.c</title></rect>
-<rect x="1107.525" y="341.364" width="29.198" height="17.437" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_main_menu.o
+<rect x="1156.853" y="290.323" width="15.147" height="33.614" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_main_menu.o
 3,182 bytes · C-only source
 src/gts_main_menu.c</title></rect>
-<rect x="1136.723" y="323.686" width="14.298" height="35.116" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_summary.o
+<rect x="1136.470" y="323.936" width="14.401" height="34.865" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_summary.o
 3,138 bytes · C-only source
 src/gts_summary.c</title></rect>
-<rect x="1151.022" y="323.686" width="20.978" height="13.973" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_avatars.o
+<rect x="1150.871" y="323.936" width="21.129" height="13.873" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_avatars.o
 1,832 bytes · C-only source
 src/gts_avatars.c</title></rect>
-<rect x="1151.022" y="337.659" width="20.978" height="12.539" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_server.o
+<rect x="1150.871" y="337.810" width="12.531" height="20.992" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_server.o
 1,644 bytes · C-only source
 src/gts_server.c</title></rect>
-<rect x="1151.022" y="350.198" width="20.978" height="8.603" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_trade.o
+<rect x="1163.402" y="337.810" width="8.598" height="20.992" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_trade.o
 1,128 bytes · C-only source
 src/gts_trade.c</title></rect>
 <rect x="1042.480" y="290.323" width="129.520" height="68.479" fill="none" stroke="#101722" stroke-width="2"/>
@@ -5079,33 +5055,12 @@ src/application/wobbuffet_pop.c</title></rect>
 3,416 bytes · C-only source
 src/application/wobbuffet_pop_balloon_mesh.c</title></rect>
 <rect x="825.473" y="505.044" width="63.214" height="65.041" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="615.491" y="570.086" width="20.108" height="33.691" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_41 / dress_up.o
-4,234 bytes · C-only source
+<rect x="615.491" y="570.086" width="51.595" height="67.984" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_41 / dress_up.o
+21,922 bytes · C-only source
 src/application/dress_up/dress_up.c</title></rect>
-<rect x="635.599" y="570.086" width="31.487" height="18.101" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_41 / dress_up_gfx.o
-3,562 bytes · C-only source
-src/application/dress_up/dress_up_gfx.c</title></rect>
-<rect x="635.599" y="588.187" width="31.487" height="15.590" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_41 / dress_up_hud.o
-3,068 bytes · C-only source
-src/application/dress_up/dress_up_hud.c</title></rect>
-<rect x="615.491" y="603.777" width="21.099" height="22.478" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_41 / dress_up_objects.o
-2,964 bytes · C-only source
-src/application/dress_up/dress_up_objects.c</title></rect>
-<rect x="615.491" y="626.255" width="21.099" height="19.990" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_41 / accessory_portrait.o
+<rect x="615.491" y="638.070" width="51.595" height="8.175" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_41 / accessory_portrait.o
 2,636 bytes · C-only source
 src/application/dress_up/accessory_portrait.c</title></rect>
-<rect x="636.590" y="603.777" width="17.105" height="23.779" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_41 / dress_up_tray.o
-2,542 bytes · C-only source
-src/application/dress_up/dress_up_tray.c</title></rect>
-<rect x="653.695" y="603.777" width="13.391" height="23.779" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_41 / dress_up_touch.o
-1,990 bytes · C-only source
-src/application/dress_up/dress_up_touch.c</title></rect>
-<rect x="636.590" y="627.556" width="16.130" height="18.689" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_41 / dress_up_buttons.o
-1,884 bytes · C-only source
-src/application/dress_up/dress_up_buttons.c</title></rect>
-<rect x="652.719" y="627.556" width="14.366" height="18.689" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_41 / dress_up_canvas.o
-1,678 bytes · C-only source
-src/application/dress_up/dress_up_canvas.c</title></rect>
 <rect x="615.491" y="570.086" width="51.595" height="76.159" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="667.086" y="570.086" width="46.612" height="76.159" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_81 / battle_factory_app.o
 22,186 bytes · C-only source
@@ -5159,37 +5114,16 @@ src/overlay_03/overlay_03_scrcmds.c</title></rect>
 310 bytes · C-only source
 src/overlay_03/custom_safari_zone.c</title></rect>
 <rect x="664.640" y="646.245" width="47.951" height="70.755" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="712.590" y="646.245" width="21.673" height="33.282" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_depart.o
-4,508 bytes · C-only source
-src/trade_sequence_depart.c</title></rect>
-<rect x="734.263" y="646.245" width="25.730" height="17.250" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence.o
-2,774 bytes · C-only source
+<rect x="712.590" y="646.245" width="47.403" height="58.773" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence.o
+17,412 bytes · C-only source
 src/trade_sequence.c</title></rect>
-<rect x="734.263" y="663.495" width="25.730" height="16.031" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_send.o
-2,578 bytes · C-only source
-src/trade_sequence_send.c</title></rect>
-<rect x="712.590" y="679.526" width="19.351" height="20.027" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_receive.o
+<rect x="712.590" y="705.017" width="32.341" height="11.983" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_receive.o
 2,422 bytes · C-only source
 src/trade_sequence_receive.c</title></rect>
-<rect x="712.590" y="699.553" width="19.351" height="17.447" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_recede.o
-2,110 bytes · C-only source
-src/trade_sequence_recede.c</title></rect>
-<rect x="731.941" y="679.526" width="17.725" height="18.777" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_approach.o
-2,080 bytes · C-only source
-src/trade_sequence_approach.c</title></rect>
-<rect x="749.666" y="679.526" width="10.328" height="18.777" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_arrive.o
-1,212 bytes · C-only source
-src/trade_sequence_arrive.c</title></rect>
-<rect x="731.941" y="698.303" width="9.705" height="18.697" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_models.o
-1,134 bytes · C-only source
-src/trade_sequence_models.c</title></rect>
-<rect x="741.646" y="698.303" width="18.348" height="8.860" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_exchange.o
-1,016 bytes · C-only source
-src/trade_sequence_exchange.c</title></rect>
-<rect x="741.646" y="707.163" width="13.794" height="9.837" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_arrive_tasks.o
+<rect x="744.931" y="705.017" width="11.323" height="11.983" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_arrive_tasks.o
 848 bytes · C-only source
 src/trade_sequence_arrive_tasks.c</title></rect>
-<rect x="755.439" y="707.163" width="4.554" height="9.837" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_receive_bounce.o
+<rect x="756.255" y="705.017" width="3.739" height="11.983" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_receive_bounce.o
 280 bytes · C-only source
 src/trade_sequence_receive_bounce.c</title></rect>
 <rect x="712.590" y="646.245" width="47.403" height="70.755" fill="none" stroke="#101722" stroke-width="2"/>
@@ -5233,19 +5167,16 @@ src/application/safari_decoration.c</title></rect>
 19,544 bytes · C-only source
 src/battle/trainer_ai.c</title></rect>
 <rect x="759.994" y="644.575" width="43.178" height="72.425" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="803.171" y="644.575" width="42.855" height="34.394" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / nintendo_wfc_connect_unused.o
+<rect x="803.171" y="644.575" width="42.855" height="35.432" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / record_mixing.o
+9,490 bytes · C-only source
+src/record_mixing.c</title></rect>
+<rect x="803.171" y="680.007" width="39.845" height="36.993" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / nintendo_wfc_connect_unused.o
 9,212 bytes · C-only source
 src/nintendo_wfc_connect_unused.c</title></rect>
-<rect x="803.171" y="678.969" width="34.693" height="38.031" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / record_mixing.o
-8,246 bytes · C-only source
-src/record_mixing.c</title></rect>
-<rect x="837.864" y="678.969" width="8.162" height="24.387" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / record_mixing_records.o
-1,244 bytes · C-only source
-src/record_mixing_records.c</title></rect>
-<rect x="837.864" y="703.356" width="8.162" height="7.136" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / record_mixing_exchange.o
+<rect x="843.016" y="680.007" width="3.010" height="19.347" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / record_mixing_exchange.o
 364 bytes · C-only source
 src/record_mixing_exchange.c</title></rect>
-<rect x="837.864" y="710.492" width="8.162" height="6.508" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / record_mixing_merge.o
+<rect x="843.016" y="699.354" width="3.010" height="17.646" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / record_mixing_merge.o
 332 bytes · C-only source
 src/record_mixing_merge.c</title></rect>
 <rect x="803.171" y="644.575" width="42.855" height="72.425" fill="none" stroke="#101722" stroke-width="2"/>

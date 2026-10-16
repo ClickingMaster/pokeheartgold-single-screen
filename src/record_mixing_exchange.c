@@ -12,7 +12,7 @@
 #include "save_block_23.h"
 #include "save_rankings.h"
 
-// record_mixing_records.c
+// record_mixing.c
 u32 RecordMixing_GetGroupRecordSize(SAV_FRIEND_GRP *friendGroup);
 FRIEND_GROUP *RecordMixing_GetGroupRecord(SAV_FRIEND_GRP *friendGroup);
 void RecordMixing_MergeGroups(int count, int localId, FRIEND_GROUP *groups, FRIEND_GROUP **received);

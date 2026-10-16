@@ -9,10 +9,14 @@
 
 #include "assert.h"
 #include "bg_window.h"
+#include "comm_state.h"
+#include "communication_core.h"
+#include "communication_player_state.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
+#include "link_synchronization.h"
 #include "math_util.h"
 #include "message_format.h"
 #include "msgdata.h"
@@ -21,28 +25,28 @@
 #include "obj_pltt_transfer.h"
 #include "player_data.h"
 #include "pm_string.h"
+#include "record_mixing_records.h"
 #include "render_window.h"
+#include "save_arrays.h"
+#include "save_block_23.h"
 #include "screen_fade.h"
 #include "sound_playback.h"
 #include "sound_system.h"
 #include "sprite.h"
+#include "sprite_resource.h"
+#include "sprite_resource_header.h"
 #include "sprite_transfer.h"
+#include "string_util.h"
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
 #include "touchpad.h"
 #include "touchscreen.h"
-#include "sprite_resource_header.h"
-#include "sprite_resource.h"
-#include "wireless_manager.h"
-#include "communication_player_state.h"
-#include "communication_core.h"
-#include "link_synchronization.h"
-#include "comm_state.h"
-#include "wireless_status_icon.h"
-#include "union_room_talk.h"
 #include "union_room_avatar.h"
+#include "union_room_talk.h"
 #include "vram_transfer_manager.h"
+#include "wireless_manager.h"
+#include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
 #define RECORD_MIXING_MAX_MEMBERS 5
@@ -157,31 +161,31 @@ typedef struct RecordMixingApp {
     u8 unk_0328[0x10];                                                       // 0x0328
     RecordMixingMember members[RECORD_MIXING_MAX_MEMBERS];                   // 0x0338
     int memberStates[RECORD_MIXING_MAX_MEMBERS];                             // 0x0360
-    s32 saveState;                                                            // 0x0374
+    s32 saveState;                                                           // 0x0374
     u16 pulseAngle;                                                          // 0x0378
     u8 unk_037A[2];                                                          // 0x037A
-    u16 *avatarPalette;                                                           // 0x037C
+    u16 *avatarPalette;                                                      // 0x037C
     u8 unk_0380[8];                                                          // 0x0380
     u8 sendBuffer[RECORD_MIXING_BUFFER_SIZE];                                // 0x0388
     u8 receiveBuffers[RECORD_MIXING_MAX_MEMBERS][RECORD_MIXING_BUFFER_SIZE]; // 0x0F48
-    u32 recordsReceived;                                                            // 0x4A08
+    u32 recordsReceived;                                                     // 0x4A08
     SaveData *saveData;                                                      // 0x4A0C
-    u32 leaderJoinPending;                                                            // 0x4A10
+    u32 leaderJoinPending;                                                   // 0x4A10
     u8 isMixing;                                                             // 0x4A14
     u8 yesNoActive;                                                          // 0x4A15
     u16 unk_4A16;                                                            // 0x4A16
-    int lastMemberCount;                                                            // 0x4A18
-    int participantCount;                                                            // 0x4A1C
-    int joinPending;                                                            // 0x4A20
-    u32 leavingMask;                                                            // 0x4A24
-    u8 leaveRequested;                                                             // 0x4A28
-    s8 maxEntriesMode;                                                             // 0x4A29
-    u8 startMemberCount;                                                             // 0x4A2A
-    u8 startMixingSent;                                                             // 0x4A2B
-    int leaveConnectedCount;                                                            // 0x4A2C
-    u16 assignedCount;                                                            // 0x4A30
-    s16 leaveWaitFrames;                                                            // 0x4A32
-    s32 leaveTimeout;                                                            // 0x4A34
+    int lastMemberCount;                                                     // 0x4A18
+    int participantCount;                                                    // 0x4A1C
+    int joinPending;                                                         // 0x4A20
+    u32 leavingMask;                                                         // 0x4A24
+    u8 leaveRequested;                                                       // 0x4A28
+    s8 maxEntriesMode;                                                       // 0x4A29
+    u8 startMemberCount;                                                     // 0x4A2A
+    u8 startMixingSent;                                                      // 0x4A2B
+    int leaveConnectedCount;                                                 // 0x4A2C
+    u16 assignedCount;                                                       // 0x4A30
+    s16 leaveWaitFrames;                                                     // 0x4A32
+    s32 leaveTimeout;                                                        // 0x4A34
     s32 buttonHighlightTimer;                                                // 0x4A38
     RecordMixingMemberKeys memberKeys[RECORD_MIXING_MAX_MEMBERS];            // 0x4A3C
 } RecordMixingApp;                                                           // size: 0x4A8C
@@ -287,6 +291,14 @@ extern const BgTemplate sRecordMixingBgTemplate_Sub0;
 extern const BgTemplate sRecordMixingBgTemplate_Sub1;
 extern const GraphicsBanks sRecordMixingGraphicsBanks;
 extern int (*sRecordMixingStateFuncs[])(RecordMixingApp *app, int state);
+
+#define RECORD_MIXING_MAX_GROUPS_KEPT 4
+
+// friend_group.c
+BOOL FriendGroup_IsEmpty(FRIEND_GROUP *group);
+BOOL FriendGroup_Equals(FRIEND_GROUP *a, FRIEND_GROUP *b);
+
+extern const u8 *sRecordMixingAllowedEntryKinds[];
 
 BOOL RecordMixing_Init(OverlayManager *man, int *state) {
     RecordMixingApp *app;
@@ -1606,4 +1618,218 @@ int RecordMixing_LeaderUpdateMembers(RecordMixingApp *app, int index) {
     }
     app->lastMemberCount = RecordMixing_CountMembers();
     return 1;
+}
+
+u32 RecordMixing_GetGroupRecordSize(SAV_FRIEND_GRP *friendGroup) {
+    return sizeof(FRIEND_GROUP);
+}
+
+FRIEND_GROUP *RecordMixing_GetGroupRecord(SAV_FRIEND_GRP *friendGroup) {
+    return &friendGroup->groups[1];
+}
+
+// groups[2..5] hold the groups received by mixing, newest first
+void RecordMixing_InsertGroup(FRIEND_GROUP *groups, const FRIEND_GROUP *group) {
+    int i;
+    for (i = 5; i > 2; --i) {
+        groups[i] = groups[i - 1];
+    }
+    groups[2] = *group;
+}
+
+void RecordMixing_RemoveGroup(FRIEND_GROUP *groups, int index) {
+    int i;
+    if (index < 2 || index > 5) {
+        GF_AssertFail();
+    }
+    for (i = index + 1; i <= 5; ++i) {
+        groups[i - 1] = groups[i];
+    }
+    u8 *last = (u8 *)&groups[5];
+    *(u16 *)last = EOS;
+    *(u16 *)(last + 0x10) = EOS;
+}
+
+void RecordMixing_MergeGroups(int count, int localId, FRIEND_GROUP *groups, FRIEND_GROUP **received) {
+    int i;
+    for (i = 0; i < count; i++) {
+        FRIEND_GROUP *group = received[i];
+        if (i == localId || group == NULL || FriendGroup_IsEmpty(group) == TRUE || FriendGroup_Equals(group, groups) != FALSE) {
+            continue;
+        }
+        int j;
+        for (j = 0; j < RECORD_MIXING_MAX_GROUPS_KEPT; ++j) {
+            if (FriendGroup_Equals(group, &groups[j + 2]) != FALSE) {
+                RecordMixing_RemoveGroup(groups, j + 2);
+            }
+        }
+        RecordMixing_InsertGroup(groups, group);
+    }
+}
+
+u32 RecordMixing_Block23List2_GetSize(SaveData *saveData) {
+    return 4 * sizeof(RecordMixingEntry);
+}
+
+u32 RecordMixing_Block23List0_GetSize(SaveData *saveData) {
+    return 4 * sizeof(RecordMixingEntry);
+}
+
+u32 RecordMixing_Block23List1_GetSize(SaveData *saveData) {
+    return 4 * sizeof(RecordMixingEntry);
+}
+
+BOOL RecordMixing_IsAllowedEntryKind(int idx, int val) {
+    int i;
+    for (i = 0; sRecordMixingAllowedEntryKinds[idx][i] != 0xFF; i++) {
+        if (val == sRecordMixingAllowedEntryKinds[idx][i]) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+void RecordMixing_FillBlock23Entries(SaveData *saveData, RecordMixingEntry *out, RecordMixingEntryData *in, int count, int unused4, int unused5) {
+    PlayerProfile *profile = Save_PlayerData_GetProfile(saveData);
+    int i;
+    for (i = 0; i < count; i++, in++, out++) {
+        MI_CpuClearFast(out, sizeof(RecordMixingEntry));
+        out->trainerId = PlayerProfile_GetTrainerID(profile);
+        out->gender = PlayerProfile_GetTrainerGender(profile);
+        out->version = GAME_VERSION;
+        out->language = GAME_LANGUAGE;
+        CopyU16StringArrayN(out->name, PlayerProfile_GetNamePtr(profile), 8);
+        out->data = *in;
+        out->data.unk_01 = 0;
+        out->data.kind = 0;
+    }
+}
+
+void *RecordMixing_Block23List2_Load(SaveData *saveData, enum HeapID heapID, u32 size) {
+    void *out = Heap_AllocAtEnd(heapID, size);
+    SaveBlock23 *data = Save_Block23_Get(saveData);
+    if (size != RecordMixing_Block23List2_GetSize(saveData)) {
+        GF_AssertFail();
+    }
+    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->list2, 4, 1, 3);
+    return out;
+}
+
+void *RecordMixing_Block23List0_Load(SaveData *saveData, enum HeapID heapID, u32 size) {
+    void *out = Heap_AllocAtEnd(heapID, size);
+    SaveBlock23 *data = Save_Block23_Get(saveData);
+    if (size != RecordMixing_Block23List0_GetSize(saveData)) {
+        GF_AssertFail();
+    }
+    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->list0, 4, 1, 4);
+    return out;
+}
+
+void *RecordMixing_Block23List1_Load(SaveData *saveData, enum HeapID heapID, u32 size) {
+    void *out = Heap_AllocAtEnd(heapID, size);
+    SaveBlock23 *data = Save_Block23_Get(saveData);
+    if (size != RecordMixing_Block23List1_GetSize(saveData)) {
+        GF_AssertFail();
+    }
+    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->list1, 4, 1, 5);
+    return out;
+}
+
+void *RecordMixing_Block23List2_Load2(SaveData *saveData, enum HeapID heapID, u32 size) {
+    void *out = Heap_AllocAtEnd(heapID, size);
+    SaveBlock23 *data = Save_Block23_Get(saveData);
+    if (size != RecordMixing_Block23List2_GetSize(saveData)) {
+        GF_AssertFail();
+    }
+    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->list2, 4, 0, 0);
+    return out;
+}
+
+void *RecordMixing_Block23List0_Load2(SaveData *saveData, enum HeapID heapID, u32 size) {
+    void *out = Heap_AllocAtEnd(heapID, size);
+    SaveBlock23 *data = Save_Block23_Get(saveData);
+    if (size != RecordMixing_Block23List0_GetSize(saveData)) {
+        GF_AssertFail();
+    }
+    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->list0, 4, 0, 1);
+    return out;
+}
+
+void *RecordMixing_Block23List1_Load2(SaveData *saveData, enum HeapID heapID, u32 size) {
+    void *out = Heap_AllocAtEnd(heapID, size);
+    SaveBlock23 *data = Save_Block23_Get(saveData);
+    if (size != RecordMixing_Block23List1_GetSize(saveData)) {
+        GF_AssertFail();
+    }
+    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->list1, 4, 0, 2);
+    return out;
+}
+
+int RecordMixing_InsertBlock23Entry(RecordMixingEntry *entries, int count, RecordMixingEntry *entry, int idx) {
+    int i;
+    if (entry->data.kind == 0) {
+        return 0;
+    }
+    if (!RecordMixing_IsAllowedEntryKind(idx, entry->data.kind)) {
+        return -1;
+    }
+    for (i = 0; i < count; i++) {
+        if (entries[i].data.kind == 0) {
+            entries[i] = *entry;
+            return 1;
+        }
+    }
+    for (i = 0; i < count; i++) {
+        if (entries[i].data.unk_01 >= 3) {
+            entries[i] = *entry;
+            return 1;
+        }
+    }
+    return 0;
+}
+
+// a for partners whose profile has a version set, b otherwise
+void *RecordMixing_SelectReceivedBuffer(u32 netId, void *a, void *b) {
+    PlayerProfile *profile = CommPlayerInfo_GetProfile(netId);
+    if (!profile) {
+        return NULL;
+    }
+    if (PlayerProfile_GetVersion(profile)) {
+        b = a;
+    }
+    return b;
+}
+
+// every member takes 4 entries, from the other members in turn
+
+void RecordMixing_MergeBlock23List(RecordMixingEntry *entries, int count, int numPlayers, int localId, RecordMixingEntry **received, void *received2, int idx) {
+    u8 given[16];
+    int j;
+    int i;
+    int k;
+    RecordMixingEntry **list;
+    MI_CpuFill8(given, 0, sizeof(given));
+    j = 0;
+    for (i = 0; i < numPlayers; i++) {
+        if (received[i] == NULL) {
+            continue;
+        }
+        for (k = 0; k < 4; k++) {
+            while (received[j] == NULL || j == i || given[j] == 4) {
+                j = (j + 1) % numPlayers;
+            }
+            given[j]++;
+            if (j != localId) {
+                list = RecordMixing_SelectReceivedBuffer(j, received, received2);
+                if (list != NULL) {
+                    RecordMixing_InsertBlock23Entry(entries, count, &list[j][k], idx);
+                }
+            }
+        }
+    }
+    SaveSubstruct_UpdateCRC(23);
+}
+
+void RecordMixing_MergeBlock23(void *saveBlock23, int numPlayers, int localId, RecordMixingEntry **received, void *received2) {
+    RecordMixing_MergeBlock23List((RecordMixingEntry *)((u8 *)saveBlock23 + 0x90C), 8, numPlayers, localId, received, received2, 0);
 }

@@ -102,7 +102,7 @@ typedef struct PokemonSummary {
     u8 unk2D4[0x3FC - 0x2D4];           // 0x2D4
     SpriteSystem *spriteSystem;         // 0x3FC
     SpriteManager *spriteManager;       // 0x400
-    Sprite *sprites[POKEMON_SUMMARY_SPRITE_COUNT]; // 0x404: see pokemon_summary_sprites.c for what each one shows
+    Sprite *sprites[POKEMON_SUMMARY_SPRITE_COUNT]; // 0x404: see pokemon_summary.c for what each one shows
     u8 unk5D0[0x79C - 0x5D0];           // 0x5D0
     MessagePrinter *numberPrinter;      // 0x79C
     MsgData *msgData;                   // 0x7A0
@@ -176,7 +176,7 @@ void PokemonSummary_ShowForgetLabel(PokemonSummary *summary, int show);
 void PokemonSummary_ShowSwitchLabel(PokemonSummary *summary, int show);
 void PokemonSummary_PrintConditionChangeMessage(PokemonSummary *summary, int result);
 
-// pokemon_summary_states.c
+// pokemon_summary.c
 int PokemonSummary_HandleMoveSelectInput(PokemonSummary *summary);
 int PokemonSummary_StartMoveSwap(PokemonSummary *summary);
 int PokemonSummary_HandleMoveSwapInput(PokemonSummary *summary);
@@ -203,7 +203,6 @@ void PokemonSummary_SetPage(PokemonSummary *summary, int page);
 void PokemonSummary_ChangePage(PokemonSummary *summary, int page);
 void PokemonSummary_ScrollPage(PokemonSummary *summary, int direction);
 
-// pokemon_summary_ui.c
 BOOL PokemonSummary_HasPage(PokemonSummary *summary, int page);
 int PokemonSummary_HandleTouchInput(PokemonSummary *summary);
 void PokemonSummary_LoadBgScreen(PokemonSummary *summary, BgConfig *bgConfig, int member, int bgId);
@@ -251,7 +250,6 @@ int PokemonSummary_FlashMonButton(PokemonSummary *summary, int which, u8 nextSta
 int PokemonSummary_FlashRibbonCancelButton(PokemonSummary *summary, u8 nextState);
 void PokemonSummary_DrawMonButtons(PokemonSummary *summary);
 
-// pokemon_summary.c
 BOOL PokemonSummary_IsPokeathlonUnlocked(SaveData *saveData);
 BOOL PokemonSummary_Init(OverlayManager *manager, int *state);
 BOOL PokemonSummary_Main(OverlayManager *manager, int *state);
@@ -271,7 +269,6 @@ int PokemonSummary_HandleInput(PokemonSummary *summary);
 int PokemonSummary_WaitSlideInMoveInfo(PokemonSummary *summary);
 int PokemonSummary_WaitSlideOutMoveInfo(PokemonSummary *summary);
 
-// pokemon_summary_sprites.c
 void PokemonSummary_InitSpriteSystem(PokemonSummary *summary);
 void PokemonSummary_FreeSpriteSystem(PokemonSummary *summary);
 void PokemonSummary_UpdateSpriteAnims(PokemonSummary *summary);

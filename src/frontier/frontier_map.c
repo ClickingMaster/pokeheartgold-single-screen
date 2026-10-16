@@ -15,17 +15,34 @@
 #include "render_text.h"
 #include "render_window.h"
 #include "sound_system.h"
+#include "sprite_resource_header.h"
+#include "swap_3d_buffers.h"
 #include "sys_task_api.h"
 #include "system.h"
 #include "touchpad.h"
-#include "sprite_resource_header.h"
-#include "swap_3d_buffers.h"
-#include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
+#include "wireless_status_icon.h"
 
-// Battle Frontier map (overlay 80): the facility map behind the frontier scripts - BGs from the map
-// parameter table, the scrolling camera, the overlay 42 map objects and up to 8 extra sprites, plus
-// saving/restoring that state in the frontier application's work while another app runs.
+// Battle Frontier map (overlay 80): the facility map behind the frontier scripts.
+//
+// Map effect of some frontier maps: two 2x2 tile blocks of BG3 alternate every third frame.
+
+typedef struct FrontierMapTileBlinkTask {
+    SysTask *task;
+    BgConfig *bgConfig;
+    u16 state;
+    u16 timer;
+} FrontierMapTileBlinkTask;
+
+struct FrontierMapTileBlink {
+    u32 unused;
+    FrontierMapTileBlinkTask *task;
+};
+
+FrontierMapTileBlinkTask *FrontierMapTileBlink_CreateTask(BgConfig *bgConfig);
+void FrontierMapTileBlink_Task(SysTask *task, void *data);
+void FrontierMapTileBlink_GetTiles(u16 *tiles, u8 state);
+void FrontierMapTileBlink_DestroyTask(FrontierMapTileBlinkTask *blinkTask);
 
 typedef struct FrontierMapMainBgTemplates {
     BgTemplate bg1;
@@ -76,6 +93,111 @@ extern const u8 gFrontierMapLayout[];
 #define MAP_PARAM_BG2_PALETTE 11
 #define MAP_PARAM_SCROLL_MODE 12
 #define MAP_PARAM_BG2_SCROLLS 13
+
+FrontierMapTileBlink *FrontierMapTileBlink_Create(BgConfig *bgConfig) {
+    FrontierMapTileBlink *blink;
+
+    blink = Heap_Alloc(HEAP_ID_101, sizeof(FrontierMapTileBlink));
+    MI_CpuFill8(blink, 0, sizeof(FrontierMapTileBlink));
+    blink->task = FrontierMapTileBlink_CreateTask(bgConfig);
+    return blink;
+}
+
+FrontierMapTileBlinkTask *FrontierMapTileBlink_CreateTask(BgConfig *bgConfig) {
+    FrontierMapTileBlinkTask *blinkTask = Heap_Alloc(HEAP_ID_101, sizeof(FrontierMapTileBlinkTask));
+
+    MI_CpuFill8(blinkTask, 0, sizeof(FrontierMapTileBlinkTask));
+    blinkTask->bgConfig = bgConfig;
+    blinkTask->state = 0;
+    blinkTask->task = SysTask_CreateOnMainQueue(FrontierMapTileBlink_Task, blinkTask, 79500);
+    return blinkTask;
+}
+
+void FrontierMapTileBlink_Task(SysTask *task, void *data) {
+    FrontierMapTileBlinkTask *blinkTask = data;
+    u16 tiles[4];
+
+    if (blinkTask->timer < 2) {
+        blinkTask->timer++;
+        return;
+    }
+    blinkTask->timer = 0;
+    blinkTask->state ^= 1;
+    FrontierMapTileBlink_GetTiles(tiles, (u8)blinkTask->state);
+    LoadRectToBgTilemapRect(blinkTask->bgConfig, GF_BG_LYR_MAIN_3, tiles, 14, 2, 2, 2);
+    ScheduleBgTilemapBufferTransfer(blinkTask->bgConfig, GF_BG_LYR_MAIN_3);
+}
+
+void FrontierMapTileBlink_GetTiles(u16 *tiles, u8 state) {
+    int base;
+    int i;
+    int j;
+    int rowBase;
+
+    if (state == 0) {
+        base = 0xC;
+    } else {
+        base = 0xE;
+    }
+    rowBase = 0x60;
+    for (i = 0; i < 2u; i++) {
+        for (j = 0; j < 2u; j++) {
+            tiles[i * 2 + j] = base + j + rowBase;
+        }
+        rowBase += 0x10;
+    }
+}
+
+void FrontierMapTileBlink_Free(FrontierMapTileBlink *blink) {
+    FrontierMapTileBlink_DestroyTask(blink->task);
+    Heap_Free(blink);
+}
+
+void FrontierMapTileBlink_DestroyTask(FrontierMapTileBlinkTask *blinkTask) {
+    SysTask_Destroy(blinkTask->task);
+    Heap_Free(blinkTask);
+}
+
+u32 FrontierLinkLobby_GetWinStreakStat(u32 value) {
+    switch (value) {
+    case 2:
+        return 0x73;
+    case 3:
+        return 0x77;
+    case 4:
+        return 0x87;
+    case 5:
+        return 0x7B;
+    case 6:
+        return 0x8F;
+    case 1:
+        return 0x71;
+    default:
+        return value;
+    }
+}
+
+u32 FrontierLinkLobby_GetStreakActiveStat(u32 value) {
+    switch (value) {
+    case 2:
+        return 0x66;
+    case 3:
+        return 0x68;
+    case 4:
+        return 0x6C;
+    case 5:
+        return 0x6A;
+    case 6:
+        return 0x6E;
+    case 1:
+        return 0x64;
+    default:
+        return value;
+    }
+}
+
+// The facility map: BGs from the map parameter table, the scrolling camera, the overlay 42 map objects and up to 8
+// extra sprites, plus saving/restoring that state in the frontier application's work while another app runs.
 
 void *FrontierMap_Init(void *frontier) {
     FrontierLaunchArgs *args = Frontier_GetLaunchArgs(frontier);
@@ -201,7 +323,6 @@ void FrontierMap_SaveObjects(FrontierMap *map) {
     FrontierMap_SaveSprites(map);
 }
 
-#pragma force_active on
 // Recreates the object graphics, objects and sprites saved by FrontierMap_SaveObjects.
 void FrontierMap_RestoreObjects(FrontierMap *map) {
     FrontierMapObjectTemplate template;
@@ -222,7 +343,6 @@ void FrontierMap_RestoreObjects(FrontierMap *map) {
     }
     FrontierMap_RestoreSprites(map);
 }
-#pragma force_active reset
 
 void FrontierMap_VBlank(FrontierMap *map) {
     GF_RunVramTransferTasks();
@@ -333,7 +453,6 @@ void FrontierMap_ProcessEvents(FrontierMap *map) {
     }
 }
 
-#pragma force_active on
 void FrontierMap_SetVramBank(BgConfig *bgConfig, u32 mapId) {
     GraphicsBanks banks;
     GraphicsModes graphicsModes;
@@ -399,7 +518,6 @@ void FrontierMap_SetVramBank(BgConfig *bgConfig, u32 mapId) {
     BgSetPosTextAndCommit(bgConfig, GF_BG_LYR_SUB_0, BG_POS_OP_SET_X, 0);
     BgSetPosTextAndCommit(bgConfig, GF_BG_LYR_SUB_0, BG_POS_OP_SET_Y, 0);
 }
-#pragma force_active reset
 
 void FrontierMap_LoadPaletteData(FrontierMap *map) {
     PaletteData_LoadNarc(map->paletteData, NARC_graphic_font, 7, HEAP_ID_101, PLTTBUF_MAIN_BG, 0x20, 0xE0);
@@ -516,7 +634,6 @@ GF3DVramMan *FrontierMap_Create3DVramMan(enum HeapID heapID) {
     return GF_3DVramMan_Create(heapID, 0, 1, 0, 1, FrontierMap_Init3D);
 }
 
-#pragma force_active on
 void FrontierMap_Init3D(void) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
     G2_SetBG0Priority(1);
@@ -529,7 +646,6 @@ void FrontierMap_Init3D(void) {
     G3X_SetClearColor(GX_RGB(0, 0, 0), 0, 0x7FFF, 63, FALSE);
     G3_ViewPort(0, 0, 255, 191);
 }
-#pragma force_active reset
 
 void FrontierMap_Delete3DVramMan(GF3DVramMan *vramMan) {
     GF_3DVramMan_Delete(vramMan);
@@ -550,7 +666,6 @@ void FrontierMap_InitSpriteSystem(FrontierMap *map) {
 // this type keeps its code (the id constant is reloaded for each call).
 typedef BOOL (*SpriteManagerUnloadFunc)(SpriteManager *spriteManager, int id);
 
-#pragma force_active on
 void FrontierMap_FreeSpriteSystem(FrontierMap *map) {
     int i;
 
@@ -608,7 +723,6 @@ void FrontierMap_AddObjectGfx(FrontierMap *map, const FrontierMapObjectGfx *gfx)
     table[slot] = *gfx;
     Field2DObjectSpriteManager_LoadChar(map->objectGfx, gfx->id, gfx->animSet, HEAP_ID_101);
 }
-#pragma force_active reset
 
 void FrontierMap_RemoveObjectGfx(FrontierMap *map, u16 id) {
     s32 i;
@@ -623,7 +737,6 @@ void FrontierMap_RemoveObjectGfx(FrontierMap *map, u16 id) {
     }
 }
 
-#pragma force_active on
 // index -1: first free object slot.
 Field2DObject *FrontierMap_CreateObject(FrontierMap *map, const FrontierMapObjectTemplate *template, int index) {
     FrontierMapObject *slot = Frontier_GetMapObjects(map->frontier);
@@ -653,7 +766,6 @@ Field2DObject *FrontierMap_CreateObject(FrontierMap *map, const FrontierMapObjec
     FrontierMap_SetObject(map->frontier, index, object, objectSprite, template);
     return object;
 }
-#pragma force_active reset
 
 void FrontierMap_DeleteObject(FrontierMap *map, Field2DObject *object) {
     s32 i;
@@ -757,7 +869,6 @@ u32 FrontierMap_IsSpriteAnimActive(FrontierMap *map, u16 index) {
     return (map->spriteSet.animActiveMask >> index) & 1;
 }
 
-#pragma force_active on
 void FrontierMap_SaveSprites(FrontierMap *map) {
     FrontierMapSpriteState *state = Frontier_GetMapSpriteState(map->frontier);
     FrontierMapSpriteSet *spriteSet = &map->spriteSet;
@@ -808,7 +919,6 @@ void FrontierMap_RestoreSprites(FrontierMap *map) {
     NARC_Delete(narc);
     Frontier_ResetMapSpriteState(map->frontier);
 }
-#pragma force_active reset
 
 void FrontierMap_GetCameraPos(FrontierMap *map, u16 *x, u16 *y) {
     *y = Field2DCamera_GetY(&map->camera);
@@ -824,7 +934,6 @@ void FrontierMapObject_GetTemplate(FrontierMapObject *object, u16 *dest) {
     } while (--i != 0);
 }
 
-#pragma force_active on
 void FrontierMap_SetObject(void *frontier, u32 index, Field2DObject *object, Field2DObjectSprite *objectSprite, const FrontierMapObjectTemplate *template) {
     FrontierMapObject *slot = Frontier_GetMapObject(frontier, index);
 
@@ -832,7 +941,6 @@ void FrontierMap_SetObject(void *frontier, u32 index, Field2DObject *object, Fie
     slot->objectSprite = objectSprite;
     slot->template = *template;
 }
-#pragma force_active reset
 
 FrontierMapObject *FrontierMap_FindObject(void *frontier, u32 id) {
     s32 i;

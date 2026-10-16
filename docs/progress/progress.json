@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "afcc6619581601cf6976263981d07ff1d9eb1dae",
+  "commit": "e746e3f5d1288a9fc57fb96aa0235868e9390351",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "cfce2354e78485f1bda18f5668441ecc33984f09b9ec8d823668c0047d59a8ca",
+    "ARM9": "a40b12967418c51d244c0d66ab964b2877416ec8b0ebe718a6965f397ed69bfc",
     "ARM7": "985179e08068b2c1549d530df2e13c352f6e3ddc4d1f434e15b082467f2c6245"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -621,17 +621,9 @@
       "cpu": "ARM9",
       "module": "OVY_112",
       "object": "pokewalker_link.o",
-      "bytes": 4274,
+      "bytes": 8576,
       "status": "c",
       "source": "src/application/pokewalker/pokewalker_link.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_112",
-      "object": "pokewalker_link_results.o",
-      "bytes": 4302,
-      "status": "c",
-      "source": "src/application/pokewalker/pokewalker_link_results.c"
     },
     {
       "cpu": "ARM9",
@@ -2325,65 +2317,9 @@
       "cpu": "ARM9",
       "module": "OVY_41",
       "object": "dress_up.o",
-      "bytes": 4234,
+      "bytes": 21922,
       "status": "c",
       "source": "src/application/dress_up/dress_up.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_41",
-      "object": "dress_up_buttons.o",
-      "bytes": 1884,
-      "status": "c",
-      "source": "src/application/dress_up/dress_up_buttons.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_41",
-      "object": "dress_up_canvas.o",
-      "bytes": 1678,
-      "status": "c",
-      "source": "src/application/dress_up/dress_up_canvas.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_41",
-      "object": "dress_up_gfx.o",
-      "bytes": 3562,
-      "status": "c",
-      "source": "src/application/dress_up/dress_up_gfx.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_41",
-      "object": "dress_up_hud.o",
-      "bytes": 3068,
-      "status": "c",
-      "source": "src/application/dress_up/dress_up_hud.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_41",
-      "object": "dress_up_objects.o",
-      "bytes": 2964,
-      "status": "c",
-      "source": "src/application/dress_up/dress_up_objects.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_41",
-      "object": "dress_up_touch.o",
-      "bytes": 1990,
-      "status": "c",
-      "source": "src/application/dress_up/dress_up_touch.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_41",
-      "object": "dress_up_tray.o",
-      "bytes": 2542,
-      "status": "c",
-      "source": "src/application/dress_up/dress_up_tray.c"
     },
     {
       "cpu": "ARM9",
@@ -4485,17 +4421,9 @@
       "cpu": "ARM9",
       "module": "OVY_70",
       "object": "gts_search.o",
-      "bytes": 5072,
+      "bytes": 8298,
       "status": "c",
       "source": "src/gts_search.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "gts_search_result.o",
-      "bytes": 3226,
-      "status": "c",
-      "source": "src/gts_search_result.c"
     },
     {
       "cpu": "ARM9",
@@ -4557,25 +4485,9 @@
       "cpu": "ARM9",
       "module": "OVY_71",
       "object": "trade_sequence.o",
-      "bytes": 2774,
+      "bytes": 17412,
       "status": "c",
       "source": "src/trade_sequence.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_71",
-      "object": "trade_sequence_approach.o",
-      "bytes": 2080,
-      "status": "c",
-      "source": "src/trade_sequence_approach.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_71",
-      "object": "trade_sequence_arrive.o",
-      "bytes": 1212,
-      "status": "c",
-      "source": "src/trade_sequence_arrive.c"
     },
     {
       "cpu": "ARM9",
@@ -4584,38 +4496,6 @@
       "bytes": 848,
       "status": "c",
       "source": "src/trade_sequence_arrive_tasks.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_71",
-      "object": "trade_sequence_depart.o",
-      "bytes": 4508,
-      "status": "c",
-      "source": "src/trade_sequence_depart.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_71",
-      "object": "trade_sequence_exchange.o",
-      "bytes": 1016,
-      "status": "c",
-      "source": "src/trade_sequence_exchange.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_71",
-      "object": "trade_sequence_models.o",
-      "bytes": 1134,
-      "status": "c",
-      "source": "src/trade_sequence_models.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_71",
-      "object": "trade_sequence_recede.o",
-      "bytes": 2110,
-      "status": "c",
-      "source": "src/trade_sequence_recede.c"
     },
     {
       "cpu": "ARM9",
@@ -4632,14 +4512,6 @@
       "bytes": 280,
       "status": "c",
       "source": "src/trade_sequence_receive_bounce.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_71",
-      "object": "trade_sequence_send.o",
-      "bytes": 2578,
-      "status": "c",
-      "source": "src/trade_sequence_send.c"
     },
     {
       "cpu": "ARM9",
@@ -4669,7 +4541,7 @@
       "cpu": "ARM9",
       "module": "OVY_73",
       "object": "record_mixing.o",
-      "bytes": 8246,
+      "bytes": 9490,
       "status": "c",
       "source": "src/record_mixing.c"
     },
@@ -4688,14 +4560,6 @@
       "bytes": 332,
       "status": "c",
       "source": "src/record_mixing_merge.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_73",
-      "object": "record_mixing_records.o",
-      "bytes": 1244,
-      "status": "c",
-      "source": "src/record_mixing_records.c"
     },
     {
       "cpu": "ARM9",
@@ -5120,7 +4984,7 @@
       "cpu": "ARM9",
       "module": "OVY_80",
       "object": "frontier_map.o",
-      "bytes": 4872,
+      "bytes": 5230,
       "status": "c",
       "source": "src/frontier/frontier_map.c"
     },
@@ -5155,14 +5019,6 @@
       "bytes": 248,
       "status": "c",
       "source": "src/frontier/frontier_map_sprites.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
-      "object": "frontier_map_tile_blink.o",
-      "bytes": 358,
-      "status": "c",
-      "source": "src/frontier/frontier_map_tile_blink.c"
     },
     {
       "cpu": "ARM9",
@@ -5824,25 +5680,9 @@
       "cpu": "ARM9",
       "module": "OVY_96",
       "object": "pokeathlon_snow_throw.o",
-      "bytes": 8696,
+      "bytes": 12918,
       "status": "c",
       "source": "src/pokeathlon/pokeathlon_snow_throw.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_96",
-      "object": "pokeathlon_snow_throw_cpu.o",
-      "bytes": 1224,
-      "status": "c",
-      "source": "src/pokeathlon/pokeathlon_snow_throw_cpu.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_96",
-      "object": "pokeathlon_snow_throw_display.o",
-      "bytes": 2998,
-      "status": "c",
-      "source": "src/pokeathlon/pokeathlon_snow_throw_display.c"
     },
     {
       "cpu": "ARM9",
@@ -11483,7 +11323,7 @@
       "cpu": "ARM9",
       "module": "main",
       "object": "pokemon_summary.o",
-      "bytes": 2746,
+      "bytes": 16694,
       "status": "c",
       "source": "src/pokemon_summary.c"
     },
@@ -11498,34 +11338,10 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "pokemon_summary_sprites.o",
-      "bytes": 4660,
-      "status": "c",
-      "source": "src/pokemon_summary_sprites.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "pokemon_summary_states.o",
-      "bytes": 4396,
-      "status": "c",
-      "source": "src/pokemon_summary_states.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "pokemon_summary_text.o",
       "bytes": 6746,
       "status": "c",
       "source": "src/pokemon_summary_text.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "pokemon_summary_ui.o",
-      "bytes": 4892,
-      "status": "c",
-      "source": "src/pokemon_summary_ui.c"
     },
     {
       "cpu": "ARM9",
