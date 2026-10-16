@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "635df2d7669120ff0fac1aad4eed9baad2bccf08",
+  "commit": "5d4d7928c4b98088dd9a89d2538202c288947f89",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "37a8b25b8bd26dacd1bf0a5b4a182ee017224354c04bc1bb7be7fa2be7547003",
+    "ARM9": "e7b0d0eacb85477aac9ceef04cc35e30d5d2def458c766139e30dde5fc2c33cb",
     "ARM7": "985179e08068b2c1549d530df2e13c352f6e3ddc4d1f434e15b082467f2c6245"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",

@@ -118,8 +118,6 @@ BOOL VsRecorder_BoxFormHasMon(GlobalTerminalNetBoxForm *form) {
 
 #pragma force_active on
 
-void VsRecorder_SkipToOccupiedSlot(VsRecorderBoxData *boxData);
-
 // from the cursor on, then from the first slot: put the cursor on the next slot with a Pokemon
 void VsRecorder_SkipToOccupiedSlot(VsRecorderBoxData *boxData) {
     // the slots are walked through a view of the work shifted by one u16 per slot
@@ -393,8 +391,6 @@ BOOL VsRecorder_BoxDataEnter(VsRecorderWork *work) {
 
 #pragma force_active on
 
-BOOL VsRecorder_BoxDataSendChangeBox(VsRecorderWork *work);
-
 // send screen, substate 4: show the previous / next box of the PC
 BOOL VsRecorder_BoxDataSendChangeBox(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
@@ -459,8 +455,6 @@ void VsRecorder_SetBoxDataSendButtonHidden(VsRecorderWork *work, BOOL hidden) {
 
 #pragma force_active on
 
-BOOL VsRecorder_BoxDataSendShowCategories(VsRecorderWork *work);
-
 // send screen, substate 5: ask for the category
 BOOL VsRecorder_BoxDataSendShowCategories(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
@@ -499,8 +493,6 @@ BOOL VsRecorder_BoxDataSendSelectCategory(VsRecorderWork *work) {
 }
 
 #pragma force_active on
-
-BOOL VsRecorder_BoxDataSendUpload(VsRecorderWork *work);
 
 // send screen, substate 8: send the box
 BOOL VsRecorder_BoxDataSendUpload(VsRecorderWork *work) {
@@ -763,8 +755,6 @@ void VsRecorder_PrintBoxDataOwnerMessage(VsRecorderWork *work, int unused) {
 
 #pragma force_active on
 
-void VsRecorder_PrintBoxName(VsRecorderWork *work);
-
 void VsRecorder_PrintBoxName(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
     Window *window = &boxData->windows[1];
@@ -823,8 +813,6 @@ void VsRecorder_PrintBoxMonName(VsRecorderWork *work, int slot) {
 }
 
 #pragma force_active on
-
-void VsRecorder_CreateBoxMonIcons(VsRecorderWork *work);
 
 void VsRecorder_CreateBoxMonIcons(VsRecorderWork *work) {
     VsRecorderBoxData *boxData;
@@ -900,8 +888,6 @@ void VsRecorder_FreeBoxMonIcons(VsRecorderWork *work) {
 }
 
 #pragma force_active on
-
-void VsRecorder_CreateBoxMonPic(VsRecorderWork *work);
 
 void VsRecorder_CreateBoxMonPic(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
@@ -1042,8 +1028,6 @@ BOOL VsRecorder_BoxDataSendMain(VsRecorderWork *work) {
 
 #pragma force_active on
 
-BOOL VsRecorder_BoxDataSendExit(VsRecorderWork *work);
-
 // send screen, substate 10: back to the menu
 BOOL VsRecorder_BoxDataSendExit(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
@@ -1090,8 +1074,6 @@ BOOL VsRecorder_BoxDataSendExit(VsRecorderWork *work) {
     }
     return FALSE;
 }
-
-BOOL VsRecorder_BoxDataViewShow(VsRecorderWork *work);
 
 // view screen, substate 2: show the categories
 BOOL VsRecorder_BoxDataViewShow(VsRecorderWork *work) {
@@ -1143,8 +1125,6 @@ BOOL VsRecorder_BoxDataViewSelectCategory(VsRecorderWork *work) {
 }
 
 #pragma force_active on
-
-void VsRecorder_CreateBoxListButtons(VsRecorderWork *work);
 
 // VIEW PROFILE and VIEW BOX DATA
 void VsRecorder_CreateBoxListButtons(VsRecorderWork *work) {

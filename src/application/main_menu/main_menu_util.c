@@ -32,7 +32,6 @@
 // GBA cartridge access (NitroSDK CTRDG) and the crypto library
 u32 CTRDG_GetAgbGameCode(void);
 u16 CTRDG_GetAgbMakerCode(void);
-void CTRDG_Init(void);
 BOOL CTRDG_IsAgbCartridge(void);
 BOOL CTRDG_IsExisting(void);
 void CTRDG_Enable(BOOL enable);

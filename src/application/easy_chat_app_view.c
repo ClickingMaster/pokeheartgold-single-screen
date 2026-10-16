@@ -153,7 +153,6 @@ void EasyChatPageButtonsView_Load(EasyChatPageButtonsView *pageButtons, NARC *na
 void EasyChatPageButtonsView_SetEnabled(EasyChatPageButtonsView *pageButtons, int a1);
 void EasyChatPageButtonsView_SetPressed(EasyChatPageButtonsView *pageButtons, int button, int pressed);
 
-void EasyChatAppView_Delete(EasyChatAppView *view);
 void EasyChatAppView_InitCharTransfer(EasyChatAppView *view);
 void EasyChatAppView_FreeCharTransfer(EasyChatAppView *view);
 void EasyChatAppView_CreateButtonTexts(EasyChatAppView *view);
@@ -167,10 +166,6 @@ void EasyChatAppView_LoadSpriteGraphics(EasyChatViewCommand *command, NARC *narc
 void EasyChatAppView_Cmd_Unload(SysTask *task, EasyChatViewCommand *command);
 void EasyChatAppView_InitBgs(EasyChatViewCommand *command);
 void EasyChatAppView_Cmd_FadeIn(SysTask *task, EasyChatViewCommand *command);
-EasyChatAppView *EasyChatAppView_Create(EasyChatApp *app, ECMenu *menu);
-void EasyChatAppView_StartCommand(EasyChatAppView *view, u32 command);
-BOOL EasyChatAppView_AreCommandsDone(EasyChatAppView *view);
-BOOL EasyChatAppView_IsCommandDone(EasyChatAppView *view, u32 command);
 void EasyChatAppView_Cmd_RedrawSentence(SysTask *task, EasyChatViewCommand *command);
 void EasyChatAppView_Cmd_Nop(SysTask *task, EasyChatViewCommand *command);
 void EasyChatAppView_Cmd_ShowCategoryCursor(SysTask *task, EasyChatViewCommand *command);
@@ -200,10 +195,6 @@ void EasyChatAppView_Cmd_PressPageUp(SysTask *task, EasyChatViewCommand *command
 void EasyChatAppView_Cmd_PressPageDown(SysTask *task, EasyChatViewCommand *command);
 void EasyChatAppView_Cmd_ReleasePageUp(SysTask *task, EasyChatViewCommand *command);
 void EasyChatAppView_Cmd_ReleasePageDown(SysTask *task, EasyChatViewCommand *command);
-Sprite *EasyChatAppView_GetSliderSprite(EasyChatAppView *view);
-u32 EasyChatAppView_GetNumWordSlots(EasyChatAppView *view);
-void EasyChatAppView_GetWordSlotHitbox(EasyChatAppView *view, TouchscreenHitbox *hitbox, u8 slot);
-int EasyChatAppView_GetYesNoResult(EasyChatAppView *view);
 BgConfig *EasyChatAppView_GetBgConfig(EasyChatAppView *view);
 SpriteList *EasyChatAppView_GetSpriteList(EasyChatAppView *view);
 void EasyChatAppView_InitSpriteHeader(EasyChatAppView *view, SpriteResourcesHeader *header, u32 index, u8 priority);

@@ -61,7 +61,6 @@ u32 GraphicsObject_GetPosition(void *object);
 int GraphicsObject_GetDepth(void *object);
 void MATHi_CRC32InitTableRev(u32 *table, u32 polynomial);
 u32 MATH_CalcCRC32(const u32 *table, const void *data, u32 size);
-void *SaveArray_Get(SaveData *saveData, int id);
 
 BOOL IsValidFashionMagic(u32 value);
 void GetFashionObjectPlacement(int monPicId, u8 *outX, u8 *outY, u8 *outZ);

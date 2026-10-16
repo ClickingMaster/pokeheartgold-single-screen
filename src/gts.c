@@ -77,12 +77,6 @@ BOOL LoadOVY38(void);
 void UnloadOVY38(void);
 void CommWireless_Terminate(void);
 
-// Other GTS screens.
-void Gts_LoadSubScreenBg(GtsApp *app);
-void Gts_ShowSubScreenPanel(GtsApp *app);
-void Gts_CreateAvatars(GtsApp *app, u32 gender);
-void Gts_FreeAvatarGraphics(GtsApp *app);
-
 BOOL GtsServer_StartRequest(const char *url, void *payload, int payloadSize, void *response, int responseCapacity);
 void Gts_VBlankCB(void *arg);
 void Gts_SetGfxBanks(void);

@@ -290,7 +290,6 @@ void GtsServer_RequestSetProfile(WifiServerProfile *request, int *response);
 
 extern NNSFndHeapHandle sWiiMessageSettingsHeap;
 extern const WiiMessageSettingsAppEntry sWiiMessageSettingsApps[];
-extern const OverlayManagerTemplate gOverlayTemplate_CodeEntry;
 extern const WiiMessageSettingsWindowRect sWiiMessageSettingsRegisteredMenuWindow;
 extern const WiiMessageSettingsWindowRect sWiiMessageSettingsUnregisteredMenuWindow;
 extern const GraphicsModes sWiiMessageSettingsGraphicsModes;

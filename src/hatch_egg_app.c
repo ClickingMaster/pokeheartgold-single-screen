@@ -166,7 +166,6 @@ extern const ManagedSpriteTemplate gHatchEggYesNoCursorTemplate;
 extern const HatchEggBgTemplates gHatchEggYesNoBgTemplates;
 
 u32 GetUserFrameGfx2PaletteMember(u32 frame);
-void NNS_G2dSetupSoftwareSpriteCamera(void);
 
 void HatchEggApp_HideLayers(void);
 void HatchEggApp_InitBlend(void);

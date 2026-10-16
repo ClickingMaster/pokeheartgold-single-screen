@@ -22,7 +22,6 @@ extern char sStr_MELCO[];
 #define U8_AT(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 #define U16_AT(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define U32_AT(p, o) (*(u32 *)((u8 *)(p) + (o)))
-void WifiSetup_SetError(int value);
 extern u8 gWifiSetupJoinReply[];
 extern u8 gWifiSetupSecurityRecords[];
 
@@ -56,7 +55,6 @@ int WifiSetup_CheckPrintable(const u8 *data, int length);
 int WifiSetup_FindAossAccessPoint(List *list);
 int WifiSetup_InitAossConnectInfo(void *out);
 void WifiSetup_InitPacketAddresses(int count, u8 *dst, const void *src);
-int WifiSetup_SetStatus(int value);
 int WifiSetup_HandlePacket(int state, void *packet, int *counter, void *context);
 int WifiSetup_HandleJoinReply(int state, void *packet, int *counter, void *context);
 int WifiSetup_HandleSettingsReply(int state, void *packet, int *counter, void *context);

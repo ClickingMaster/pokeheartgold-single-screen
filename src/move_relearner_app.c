@@ -138,13 +138,7 @@ typedef struct MoveRelearnerYesNoAction {
     int (*other)(MoveRelearner *relearner);
 } MoveRelearnerYesNoAction;
 
-// Defined in type_icon_resources.c; not declared in unk_02077678.h.
-void TypeIcon_LoadPltt(SpriteSystem *spriteSystem, SpriteManager *spriteManager, int vram, int resId);
-u32 TypeIcon_GetPalette(u32 type);
-int MoveCategoryIcon_GetCharFile(u32 category);
-u32 MoveCategoryIcon_GetPalette(u32 category);
 NarcId MoveCategoryIcon_GetNarc(u32 category); // the definition takes no argument; the call passes one
-void MoveCategoryIcon_LoadChar(SpriteSystem *spriteSystem, SpriteManager *spriteManager, int vram, int category, int resId);
 
 extern const u8 sMoveRelearnerSummaryPages[2];
 extern const VecFx32 sMoveRelearnerCameraPos;
