@@ -6,18 +6,18 @@
 #include "field/field_effect_manager.h"
 #include "field/field_follow_mon.h"
 #include "field/map_object_model_list.h"
+#include "field/map_object_render.h"
 
 #include "field_system.h"
 #include "follow_mon.h"
 #include "map_object.h"
 #include "map_object_movement_commands.h"
-#include "field/map_object_render.h"
 #include "party.h"
 #include "pokemon.h"
 #include "script_pokemon_util.h"
 
 // Billboard sequence callback: called with the map object, its billboard, the object's draw work and the facing
-// direction. The dispatch tables are in asm/map_object_billboard_motion_data.s.
+// direction.
 typedef void (*BillboardMotionFunc)(void *object, void *billboard, void *work, int facing);
 
 typedef struct BillboardFrameSteps4 {
@@ -42,7 +42,7 @@ typedef struct FollowMonDrawWork {
     Sprite *sprite;
     VecFx32 vector;
     s8 direction;
-    u8 unk11[6];
+    u8 unk_11[6];
     u8 active : 1;
     u8 : 7;
 } FollowMonDrawWork;
@@ -64,7 +64,7 @@ typedef struct HeldStepWork {
 
 typedef struct HeldMotionWork {
     s8 facing;
-    u8 unk1;
+    u8 unk_01;
     s8 movement;
     u8 held : 1;
     u8 rest : 7;
@@ -73,17 +73,17 @@ typedef struct HeldMotionWork {
 
 typedef struct FacingMotionWork {
     u8 facing;
-    u8 unk1;
+    u8 unk_01;
     u8 movement;
-    u8 unk3;
+    u8 unk_03;
     void *billboard;
 } FacingMotionWork;
 
 typedef struct SignedFacingMotionWork {
     s8 facing;
-    u8 unk1;
+    u8 unk_01;
     s8 movement;
-    u8 unk3;
+    u8 unk_03;
     void *billboard;
 } SignedFacingMotionWork;
 
@@ -108,9 +108,7 @@ extern const BillboardFrameSteps8 gWalkEverSoSlightlyFastFrameSteps;
 extern const BillboardFrameSteps8 gPlayerWalkEverSoSlightlyFastFrameSteps;
 extern const u32 gEffectModelOffsets[];
 
-// map_object_behavior.c, field_object_models.c, field_map_object_render
 void *ApricornTreeObject_GetBillboard(LocalMapObject *object);
-// billboard_lists.h takes an int; this file passes the flag as a u8 (the caller narrows it)
 void BillboardObject_SetVisible(void *billboard, u8 visible);
 void FollowMonBillboard_AddFacingOffset(LocalMapObject *object, u32 direction, VecFx32 *out);
 void FollowMonBillboard_Update(LocalMapObject *object, Sprite *sprite, void *work, u32 direction, BOOL update);
@@ -168,11 +166,11 @@ void PlayerBillboardMotion_FishingIdle(void *object, void *billboard, const s8 *
 void PlayerBillboardMotion_FishingCast(void *object, void *billboard, const s8 *work, int facing);
 void PlayerBillboardMotion_FishingBite(void *object, void *billboard, void *workRaw, int facing);
 void PlayerBillboardMotion_FishingReel(void *object, void *billboard, const s8 *work, int facing);
-void PlayerDraw_SetFishingOffset(LocalMapObject *object, void *billboard, u32 facing);
+static void PlayerDraw_SetFishingOffset(LocalMapObject *object, void *billboard, u32 facing);
 void PlayerDraw_UpdateLadder(void *object);
 void PlayerBillboardMotion_Ladder0(void *object, void *billboard, const s8 *work, int facing);
 void PlayerBillboardMotion_Ladder1(void *object, void *billboard, const s8 *work, int facing);
-void PlayerDraw_SetLadderOffset(LocalMapObject *object, void *billboard, u32 facing);
+static void PlayerDraw_SetLadderOffset(LocalMapObject *object, void *billboard, u32 facing);
 void PlayerDraw_UpdateSurfing(void *object);
 void PlayerDraw_UpdateUseHmOrSaving(void *object);
 void PlayerDraw_UpdateWatering(void *object);
@@ -180,13 +178,13 @@ void PlayerDraw_UpdatePoketch(void *object);
 void PlayerDraw_UpdateHeal(void *object);
 void PlayerDraw_UpdateApricornShake(void *object);
 void PlayerBillboardMotion_ApricornShake(void *object, void *billboard, const s8 *work, int facing);
-void PlayerDraw_SetApricornShakeOffset(LocalMapObject *object, void *billboard, int facing);
-void BillboardObject_AlignSequenceFrame(void *billboard, int divisor);
-void BillboardObject_AlignSequenceFrameTo8(void *billboard);
-void BillboardObject_SetSequenceKeepAlignedFrame(void *billboard, u32 sequence, int divisor);
-void BillboardObject_SetSequenceKeepAlignedFrameTo8(void *billboard, u32 sequence);
-void MapObject_UpdateBillboardVisibility(LocalMapObject *object, void *billboard);
-void MapObject_GetEffectModelOffset(u32 spriteId, VecFx32 *offset);
+static void PlayerDraw_SetApricornShakeOffset(LocalMapObject *object, void *billboard, int facing);
+static void BillboardObject_AlignSequenceFrame(void *billboard, int divisor);
+static void BillboardObject_AlignSequenceFrameTo8(void *billboard);
+static void BillboardObject_SetSequenceKeepAlignedFrame(void *billboard, u32 sequence, int divisor);
+static void BillboardObject_SetSequenceKeepAlignedFrameTo8(void *billboard, u32 sequence);
+static void MapObject_UpdateBillboardVisibility(LocalMapObject *object, void *billboard);
+static void MapObject_GetEffectModelOffset(u32 spriteId, VecFx32 *offset);
 void ModelObjectDraw_Init(void *object);
 void ModelObjectDraw_Update(void);
 void ModelObjectDraw_Delete(void *object);
@@ -308,17 +306,17 @@ void BillboardDraw_Resume(void *object) {
 void FollowMonDraw_Init(void *object) {
     typedef struct {
         void *billboard;
-        u8 unk04[0xC];
+        u8 unk_04[0xC];
         s8 facing;
-        u8 unk11[4];
-        u8 unk15;
-        u8 unk16;
+        u8 unk_11[4];
+        u8 unk_15;
+        u8 unk_16;
         u8 flags;
     } Work;
     Work *work = (Work *)MapObject_InitDrawData(object, 0x18);
     work->facing = -1;
     MapObject_CreateBillboard(object, work);
-    work->unk15 = 0;
+    work->unk_15 = 0;
     work->flags &= ~2;
     work->flags &= ~1;
     if (work->billboard != NULL) {
@@ -429,8 +427,8 @@ void *MapObjectManager_GetFollowMonBillboard(MapObjectManager *manager) {
 #pragma force_active on
 void BillboardDraw_UpdateNpc(void *object) {
     typedef struct {
-        u8 unk0;
-        u8 unk1;
+        u8 unk_00;
+        u8 unk_01;
         u8 facing;
         u8 movement;
         void *billboard;
@@ -663,7 +661,7 @@ void BillboardMotion_WalkEverSoSlightlyFast(void *object, void *billboard, s8 *w
 #pragma force_active on
 void BillboardDraw_UpdatePcWoman(void *object) {
     typedef struct {
-        u8 unk0[2];
+        u8 unk_00[2];
         u8 facing;
         u8 movement;
         void *billboard;
@@ -710,8 +708,8 @@ void BillboardMotion_PcWomanBow(void *object, void *billboard, const s8 *work, i
 #pragma force_active on
 void BillboardDraw_UpdateTwoSequences(void *object) {
     typedef struct {
-        s8 unk0;
-        s8 unk1;
+        s8 unk_00;
+        s8 unk_01;
         s8 facing;
         volatile s8 movement;
         void *billboard;
@@ -1088,7 +1086,7 @@ void PlayerBillboardMotion_FishingReel(void *object, void *billboard, const s8 *
 }
 
 #pragma force_active on
-void PlayerDraw_SetFishingOffset(LocalMapObject *object, void *billboard, u32 facing) {
+static void PlayerDraw_SetFishingOffset(LocalMapObject *object, void *billboard, u32 facing) {
     VecFx32 offset = { 0, 0, 0 };
     int frame = BillboardObject_GetFrame(billboard) / FX32_ONE;
     switch (facing) {
@@ -1150,7 +1148,7 @@ void PlayerBillboardMotion_Ladder1(void *object, void *billboard, const s8 *work
 }
 
 #pragma force_active on
-void PlayerDraw_SetLadderOffset(LocalMapObject *object, void *billboard, u32 facing) {
+static void PlayerDraw_SetLadderOffset(LocalMapObject *object, void *billboard, u32 facing) {
     VecFx32 offset = { 0, 0, 0 };
     int frame = BillboardObject_GetFrame(billboard) / FX32_ONE;
     switch (facing) {
@@ -1309,7 +1307,7 @@ void PlayerBillboardMotion_ApricornShake(void *object, void *billboard, const s8
     BillboardMotion_Loop(billboard, work, facing, 0, gPlayerApricornShakeSequences);
 }
 
-void PlayerDraw_SetApricornShakeOffset(LocalMapObject *object, void *billboard, int facing) {
+static void PlayerDraw_SetApricornShakeOffset(LocalMapObject *object, void *billboard, int facing) {
 #pragma unused(billboard, facing)
     VecFx32 offset = { 0, 0, 0 };
     offset.z += FX32_CONST(0.5);
@@ -1317,17 +1315,17 @@ void PlayerDraw_SetApricornShakeOffset(LocalMapObject *object, void *billboard, 
 }
 
 // Rounds the sequence frame down to a multiple of divisor frames
-void BillboardObject_AlignSequenceFrame(void *billboard, int divisor) {
+static void BillboardObject_AlignSequenceFrame(void *billboard, int divisor) {
     s32 frame = BillboardObject_GetSequenceFrame(billboard) / FX32_ONE;
     BillboardObject_SetSequenceFrame(billboard, (frame - frame % divisor) * FX32_ONE);
     BillboardObject_AdvanceFrame(billboard, 0);
 }
 
-void BillboardObject_AlignSequenceFrameTo8(void *billboard) {
+static void BillboardObject_AlignSequenceFrameTo8(void *billboard) {
     BillboardObject_AlignSequenceFrame(billboard, 8);
 }
 
-void BillboardObject_SetSequenceKeepAlignedFrame(void *billboard, u32 sequence, int divisor) {
+static void BillboardObject_SetSequenceKeepAlignedFrame(void *billboard, u32 sequence, int divisor) {
     fx32 frame;
     BillboardObject_AlignSequenceFrame(billboard, divisor);
     frame = BillboardObject_GetSequenceFrame(billboard);
@@ -1335,7 +1333,7 @@ void BillboardObject_SetSequenceKeepAlignedFrame(void *billboard, u32 sequence, 
     BillboardObject_SetSequenceFrame(billboard, frame);
 }
 
-void BillboardObject_SetSequenceKeepAlignedFrameTo8(void *billboard, u32 sequence) {
+static void BillboardObject_SetSequenceKeepAlignedFrameTo8(void *billboard, u32 sequence) {
     fx32 frame;
     BillboardObject_AlignSequenceFrameTo8(billboard);
     frame = BillboardObject_GetSequenceFrame(billboard);
@@ -1343,7 +1341,7 @@ void BillboardObject_SetSequenceKeepAlignedFrameTo8(void *billboard, u32 sequenc
     BillboardObject_SetSequenceFrame(billboard, frame);
 }
 
-void MapObject_UpdateBillboardVisibility(LocalMapObject *object, void *billboard) {
+static void MapObject_UpdateBillboardVisibility(LocalMapObject *object, void *billboard) {
     int visible = TRUE;
     if (MapObject_TestFlagsBits(object, MAPOBJECTFLAG_VISIBLE) == TRUE) {
         visible = FALSE;
@@ -1354,7 +1352,7 @@ void MapObject_UpdateBillboardVisibility(LocalMapObject *object, void *billboard
     BillboardObject_SetVisible(billboard, visible);
 }
 
-void MapObject_GetEffectModelOffset(u32 spriteId, VecFx32 *offset) {
+static void MapObject_GetEffectModelOffset(u32 spriteId, VecFx32 *offset) {
     const u32 *entry = gEffectModelOffsets;
     while (entry[0] != 0xFFFF) {
         if (entry[0] == spriteId) {

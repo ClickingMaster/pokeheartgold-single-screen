@@ -1,7 +1,8 @@
-#pragma force_active on
 #include "global.h"
 
 #include "field/field_effect_manager_internal.h"
+
+#pragma force_active on
 
 NNSG3dResTex *FieldEffectManager_GetTexture(FieldEffectManager *manager, u32 id) {
     NNSG3dResTex *tex;

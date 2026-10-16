@@ -31,20 +31,20 @@ typedef struct TrainerRevealEffect {
     BOOL paused;
     u32 objectId;
     u32 mapId;
-    u8 unk0C[4];
+    u8 unk_0C[4];
     TrainerRevealEffectArgs args;
     void *billboard;
 } TrainerRevealEffect;
 
 TrainerReveal *TrainerReveal_New(FieldEffectManager *manager);
 void TrainerReveal_Free(TrainerReveal *reveal);
-void TrainerReveal_LoadGfx(TrainerReveal *reveal);
-void TrainerReveal_FreeGfx(TrainerReveal *reveal);
+static void TrainerReveal_LoadGfx(TrainerReveal *reveal);
+static void TrainerReveal_FreeGfx(TrainerReveal *reveal);
 void TrainerReveal_Spawn(LocalMapObject *mapObject);
-BOOL TrainerRevealEffect_Init(FieldEffect *effect, TrainerRevealEffect *work);
-void TrainerRevealEffect_Destroy(FieldEffect *effect, TrainerRevealEffect *work);
-void TrainerRevealEffect_Update(FieldEffect *effect, TrainerRevealEffect *work);
-void TrainerRevealEffect_Draw(FieldEffect *effect, TrainerRevealEffect *work);
+static BOOL TrainerRevealEffect_Init(FieldEffect *effect, TrainerRevealEffect *work);
+static void TrainerRevealEffect_Destroy(FieldEffect *effect, TrainerRevealEffect *work);
+static void TrainerRevealEffect_Update(FieldEffect *effect, TrainerRevealEffect *work);
+static void TrainerRevealEffect_Draw(FieldEffect *effect, TrainerRevealEffect *work);
 
 static const FieldEffectBasicTemplate sTrainerRevealEffectTemplate;
 static const u32 sTrainerRevealRecordParams[6];
@@ -61,14 +61,14 @@ void TrainerReveal_Free(TrainerReveal *reveal) {
     FieldEffectManager_HeapFree(reveal);
 }
 
-void TrainerReveal_LoadGfx(TrainerReveal *reveal) {
+static void TrainerReveal_LoadGfx(TrainerReveal *reveal) {
     FieldEffectManager_LoadBillboardResource(reveal->manager, TRAINER_REVEAL_RESOURCE, 0x7C);
     FieldEffectManager_LoadBillboardSequence(reveal->manager, TRAINER_REVEAL_SEQUENCE, 0x94);
     FieldEffectManager_LoadTexResource(reveal->manager, TRAINER_REVEAL_TEXTURE, 0x17, TRUE);
     FieldEffectManager_AddRecord(reveal->manager, TRAINER_REVEAL_RECORD, TRAINER_REVEAL_RESOURCE, TRAINER_REVEAL_SEQUENCE, TRAINER_REVEAL_TEXTURE, 0, sTrainerRevealRecordParams);
 }
 
-void TrainerReveal_FreeGfx(TrainerReveal *reveal) {
+static void TrainerReveal_FreeGfx(TrainerReveal *reveal) {
     FieldEffectManager_FreeBillboardResource(reveal->manager, TRAINER_REVEAL_RESOURCE);
     FieldEffectManager_FreeBillboardSequence(reveal->manager, TRAINER_REVEAL_SEQUENCE);
     FieldEffectManager_FreeTexResource(reveal->manager, TRAINER_REVEAL_TEXTURE);
@@ -93,7 +93,7 @@ void TrainerReveal_Spawn(LocalMapObject *mapObject) {
     FieldEffectManager_CreateEffect(manager, &sTrainerRevealEffectTemplate, &position, 0, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 
-BOOL TrainerRevealEffect_Init(FieldEffect *effect, TrainerRevealEffect *work) {
+static BOOL TrainerRevealEffect_Init(FieldEffect *effect, TrainerRevealEffect *work) {
     VecFx32 position;
     work->args = *(TrainerRevealEffectArgs *)FieldEffect_GetUserData(effect);
     work->objectId = MapObject_GetID(work->args.mapObject);
@@ -103,11 +103,11 @@ BOOL TrainerRevealEffect_Init(FieldEffect *effect, TrainerRevealEffect *work) {
     return TRUE;
 }
 
-void TrainerRevealEffect_Destroy(FieldEffect *effect, TrainerRevealEffect *work) {
+static void TrainerRevealEffect_Destroy(FieldEffect *effect, TrainerRevealEffect *work) {
     BillboardObject_Delete(work->billboard);
 }
 
-void TrainerRevealEffect_Update(FieldEffect *effect, TrainerRevealEffect *work) {
+static void TrainerRevealEffect_Update(FieldEffect *effect, TrainerRevealEffect *work) {
     if (work->paused == FALSE) {
         BillboardObject_AdvanceFrame(work->billboard, FX32_ONE);
         if (BillboardObject_GetSequenceFrame(work->billboard) / FX32_ONE >= 7) {
@@ -116,7 +116,7 @@ void TrainerRevealEffect_Update(FieldEffect *effect, TrainerRevealEffect *work) 
     }
 }
 
-void TrainerRevealEffect_Draw(FieldEffect *effect, TrainerRevealEffect *work) {
+static void TrainerRevealEffect_Draw(FieldEffect *effect, TrainerRevealEffect *work) {
     VecFx32 position;
     FieldEffect_GetPosition(effect, &position);
     position.z += 8 * FX32_ONE;

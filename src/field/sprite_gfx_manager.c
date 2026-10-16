@@ -1,15 +1,14 @@
-#include "global.h"
-
 #include "field/sprite_gfx_manager.h"
+
+#include "global.h"
 
 #include "filesystem.h"
 #include "heap.h"
 #include "sprite.h"
-#include "sprite_transfer.h"
-#include "sprite_resource_header.h"
 #include "sprite_resource.h"
+#include "sprite_resource_header.h"
+#include "sprite_transfer.h"
 
-// Defined with overlay 2's Pokecenter healing animation.
 void *FlyLanding_AllocZeroed(enum HeapID heapID, u32 size);
 
 #pragma force_active on

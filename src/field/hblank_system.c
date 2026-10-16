@@ -6,9 +6,6 @@
 #include "heap.h"
 #include "system.h"
 
-typedef struct HBlankTask HBlankTask;
-typedef void (*HBlankTaskCallback)(HBlankTask *, void *);
-
 struct HBlankTask {
     BOOL active;
     void *arg;
@@ -20,8 +17,6 @@ struct HBlankSystem {
     HBlankTask tasks[2];
 };
 
-HBlankTask *HBlankSystem_StartTask(HBlankSystem *system, HBlankTaskCallback callback, void *arg);
-void HBlankTask_Delete(HBlankTask *task);
 static void HBlankSystem_Init(HBlankSystem *system);
 static void HBlankTask_Reset(HBlankTask *task);
 static void HBlankSystem_Callback(void *arg);

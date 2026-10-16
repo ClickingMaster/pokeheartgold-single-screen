@@ -5,18 +5,16 @@
 #include "field/field_effect_helpers.h"
 #include "field/field_effect_manager.h"
 
+#include "field_effects.h"
 #include "geometry_math.h"
 #include "map_object.h"
 #include "render_animation.h"
 #include "render_model.h"
-#include "field_effects.h"
 
 // The Pokemon the player rides while surfing (field effect renderer 4): one model, turned to the
 // rider's facing; while bobbing it rides along with the map object, rising and sinking between one and
 // four units and lifting the rider with it.
 
-// Puts position->y on the ground of the tile at position->x/z; FALSE while that tile has no ground yet.
-// (unk_0205FD20.h declares it returning void.)
 BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position);
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 4).
@@ -48,13 +46,13 @@ typedef struct SurfMountEffect {
 
 SurfMount *SurfMount_New(FieldEffectManager *manager);
 void SurfMount_Free(SurfMount *mount);
-void SurfMount_LoadGfx(SurfMount *mount);
-void SurfMount_FreeGfx(SurfMount *mount);
+static void SurfMount_LoadGfx(SurfMount *mount);
+static void SurfMount_FreeGfx(SurfMount *mount);
 FieldEffect *SurfMountEffect_Create(LocalMapObject *mapObject, u32 x, u32 z, u32 direction, BOOL bobbing);
-BOOL SurfMountEffect_Init(FieldEffect *effect, SurfMountEffect *work);
-void SurfMountEffect_Destroy(FieldEffect *effect, SurfMountEffect *work);
-void SurfMountEffect_Update(FieldEffect *effect, SurfMountEffect *work);
-void SurfMountEffect_Draw(FieldEffect *effect, SurfMountEffect *work);
+static BOOL SurfMountEffect_Init(FieldEffect *effect, SurfMountEffect *work);
+static void SurfMountEffect_Destroy(FieldEffect *effect, SurfMountEffect *work);
+static void SurfMountEffect_Update(FieldEffect *effect, SurfMountEffect *work);
+static void SurfMountEffect_Draw(FieldEffect *effect, SurfMountEffect *work);
 void SurfMountEffect_SetBobbing(FieldEffect *effect, BOOL bobbing);
 
 const VecFx32 sSurfMountBobbingOffset = { 0, 4 * FX32_ONE, 4 * FX32_ONE };
@@ -80,12 +78,12 @@ void SurfMount_Free(SurfMount *mount) {
     FieldEffectManager_HeapFree(mount);
 }
 
-void SurfMount_LoadGfx(SurfMount *mount) {
+static void SurfMount_LoadGfx(SurfMount *mount) {
     FieldEffectManager_LoadRenderModel(mount->manager, &mount->model, 0, 0x56, FALSE);
     RenderObj_InitFromModel(&mount->renderObj, &mount->model);
 }
 
-void SurfMount_FreeGfx(SurfMount *mount) {
+static void SurfMount_FreeGfx(SurfMount *mount) {
     RenderModel_Free(&mount->model);
 }
 
@@ -111,7 +109,7 @@ FieldEffect *SurfMountEffect_Create(LocalMapObject *mapObject, u32 x, u32 z, u32
     return FieldEffectManager_CreateEffect(args.manager, &sSurfMountEffectTemplate, &position, bobbing, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 
-BOOL SurfMountEffect_Init(FieldEffect *effect, SurfMountEffect *work) {
+static BOOL SurfMountEffect_Init(FieldEffect *effect, SurfMountEffect *work) {
     SurfMountEffectArgs *args = (SurfMountEffectArgs *)FieldEffect_GetUserData(effect);
     LocalMapObject *mapObject = args->mapObject;
 
@@ -125,14 +123,14 @@ BOOL SurfMountEffect_Init(FieldEffect *effect, SurfMountEffect *work) {
     return TRUE;
 }
 
-void SurfMountEffect_Destroy(FieldEffect *effect, SurfMountEffect *work) {
+static void SurfMountEffect_Destroy(FieldEffect *effect, SurfMountEffect *work) {
     LocalMapObject *mapObject = work->args.mapObject;
     VecFx32 offset = { 0, 0, 0 };
 
     MapObject_SetDrawOffset(mapObject, &offset);
 }
 
-void SurfMountEffect_Update(FieldEffect *effect, SurfMountEffect *work) {
+static void SurfMountEffect_Update(FieldEffect *effect, SurfMountEffect *work) {
     VecFx32 offset;
     VecFx32 position;
     LocalMapObject *mapObject = work->args.mapObject;
@@ -171,7 +169,7 @@ void SurfMountEffect_Update(FieldEffect *effect, SurfMountEffect *work) {
     }
 }
 
-void SurfMountEffect_Draw(FieldEffect *effect, SurfMountEffect *work) {
+static void SurfMountEffect_Draw(FieldEffect *effect, SurfMountEffect *work) {
     MtxFx33 rotation;
     VecFx32 position;
     VecFx32 scale;

@@ -10,35 +10,35 @@
 #include "bg_window.h"
 #include "filesystem.h"
 #include "font.h"
+#include "font_sprite.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
 #include "list_menu_items.h"
 #include "message_format.h"
 #include "msgdata.h"
+#include "oam_manager.h"
 #include "obj_char_transfer.h"
 #include "options.h"
 #include "player_data.h"
 #include "pm_string.h"
 #include "safari_zone.h"
+#include "safari_zone_encounters.h"
 #include "save_vars_flags.h"
 #include "screen_fade.h"
 #include "sound_playback.h"
 #include "sound_system.h"
 #include "sprite.h"
+#include "sprite_resource_header.h"
 #include "sprite_system.h"
 #include "sprite_transfer.h"
 #include "sys_flags.h"
 #include "system.h"
 #include "text.h"
+#include "touchpad.h"
 #include "touchscreen.h"
 #include "touchscreen_list_menu.h"
-#include "sprite_resource_header.h"
-#include "oam_manager.h"
-#include "font_sprite.h"
-#include "touchpad.h"
 #include "ui_util.h"
-#include "safari_zone_encounters.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 
@@ -110,10 +110,10 @@ typedef struct SafariAreaCustomizer {
     SpriteManager *spriteManager;                             // 0x00350
     Sprite *sprites[6];                                       // 0x00354: 0 slot cursor, 1 area cursor, 4/5 page arrows
     ManagedSprite *areaSprites[2 * NUM_AREA_SLOTS];           // 0x0036C: 2 banks of 6, swapped when the page changes
-    FontSystem *fontSystem;                           // 0x0039C
-    TextOBJLayout *fontLayout;                           // 0x003A0
+    FontSystem *fontSystem;                                   // 0x0039C
+    TextOBJLayout *fontLayout;                                // 0x003A0
     TextOBJ *textObj;                                         // 0x003A4
-    ObjCharSpaceReservation charTransfer;                          // 0x003A8
+    ObjCharSpaceReservation charTransfer;                     // 0x003A8
     Window windows[15];                                       // 0x003B4
     Window textObjWindow;                                     // 0x004A4
     ListMenuItem *areaMenuItems;                              // 0x004B4
@@ -151,8 +151,7 @@ typedef struct SafariAreaCustomizerResCounts {
     u8 counts[4];
 } SafariAreaCustomizerResCounts;
 
-// sSafariAreaCustomizerConsts holds the per-row scroll directions of the slot swap; sSafariAreaCustomizerLabelColors (the label text colours)
-// and the list menu template follow it without labels of their own.
+// The per-row scroll directions of the slot swap, the label text colours and the list menu template.
 typedef struct SafariAreaCustomizerConsts {
     s8 swapDir[2][2];
     u32 labelColors[2];

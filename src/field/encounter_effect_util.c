@@ -2,6 +2,7 @@
 
 #include "battle/battle_setup.h"
 #include "field/encounter_effect.h"
+#include "field/hblank_system.h"
 
 #include "bg_window.h"
 #include "heap.h"
@@ -18,12 +19,6 @@
 #define BLOCK_WIPE_BLOCKS  (BLOCK_WIPE_COLUMNS * BLOCK_WIPE_ROWS)
 #define BLOCK_WIPE_SIZE    32
 
-// From field/hblank_system.c.
-typedef void (*HBlankTaskFunc)(void *, void *);
-void *HBlankSystem_StartTask(HBlankSystem *hBlankSystem, HBlankTaskFunc func, void *data);
-void HBlankTask_Delete(void *task);
-
-// NitroSDK gx.c; the SDK headers in lib/include only declare the getter.
 void GXx_SetMasterBrightness_(vu16 *reg, s32 brightness);
 
 // A width x height rectangle filled with fill, moved from (x.start, y.start) to (x.end, y.end); positions are
@@ -59,7 +54,7 @@ struct ZigzagWipe {
     u32 state;                  // 0x14
     u8 lines[192];              // 0x18
     HBlankSystem *hBlankSystem; // 0xD8
-    void *hBlankTask;           // 0xDC
+    HBlankTask *hBlankTask;     // 0xDC
     SysTask *task;              // 0xE0
     BOOL *done;                 // 0xE4
 };
@@ -72,7 +67,7 @@ static void MovingRect_Start(FilledRect *rect, int startX, int endX, int startY,
 static BOOL MovingRect_Update(FilledRect *rect);
 static void Task_ZigzagWipe_Begin(SysTask *task, void *data);
 static void Task_ZigzagWipe_Update(SysTask *task, void *data);
-static void HBlank_ZigzagWipe(void *unused, void *data);
+static void HBlank_ZigzagWipe(HBlankTask *task, void *data);
 static void ZigzagWipe_End(ZigzagWipe *wipe);
 int EncounterEffect_GetDefaultEffect(BattleSetup *setup);
 static void Task_ApplyMainBrightness(SysTask *task, void *data);
@@ -374,7 +369,7 @@ static void Task_ZigzagWipe_Update(SysTask *task, void *data) {
     }
 }
 
-static void HBlank_ZigzagWipe(void *unused, void *data) {
+static void HBlank_ZigzagWipe(HBlankTask *task, void *data) {
     ZigzagWipe *wipe = data;
     s32 line = reg_GX_VCOUNT;
     s32 left;

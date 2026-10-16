@@ -30,11 +30,9 @@ struct EncounterEffectParticles {
     u32 plttOffset;           // 0x14, next free palette VRAM offset
 };
 
-// particle_system_internal.h declares these with its ParticleSystem type (the third argument there is a callback).
 void ParticleSystem_CreateEmitter(SPLEmitter *system, int resNo, const VecFx32 *position);
 void ParticleSystem_FreeAll(void);
 
-// NitroSDK fx_mtx22.c; lib/include's fx_mtx22.h does not declare it.
 void MTX_Identity22_(MtxFx22 *mtx);
 
 extern const VecFx32 sParticleBaseScale;

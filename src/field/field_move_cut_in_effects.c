@@ -3,16 +3,19 @@
 #include "constants/std_script.h"
 
 #include "application/choose_starter/choose_starter_sub_res.naix"
+#include "field/field_3d_model.h"
 #include "field/field_camera_zoom.h"
 #include "field/field_effect_helpers.h"
 #include "field/field_move_cut_in.h"
 #include "field/fly_landing_effect.h"
-#include "field/field_3d_model.h"
 #include "field/sprite_gfx_manager.h"
+#include "overlay_2/overlay_02_field_utils.h"
 
+#include "char_tiles.h"
 #include "field_effects.h"
 #include "field_roamer.h"
 #include "field_system.h"
+#include "field_terrain.h"
 #include "filesystem.h"
 #include "heap.h"
 #include "map_matrix.h"
@@ -29,16 +32,12 @@
 #include "sys_task_api.h"
 #include "sys_vars.h"
 #include "task.h"
-#include "char_tiles.h"
-#include "field_terrain.h"
-#include "overlay_2/overlay_02_field_utils.h"
 
-// The second half of the field move cut-in (see field_move_cut_in.h): its HBlank window, the Pokemon sprite
+// The second half of the field move cut-in: its HBlank window, the Pokemon sprite
 // resources, the effects drawn in the cut-in (scrolling banner sprites, the Pokemon flying off with the trainer,
 // the trainer's jump, the trainer clipped to the window, the 3D model at a second map object), the Fly landing
 // task, and the roamer updates after a battle.
 
-// The field effect pool of field_effects.c (the pool API is not in a header yet).
 void *FieldEffectPool_New(enum HeapID heapID, u32 count);
 void FieldEffectPool_Delete(void *pool);
 void FieldEffectPool_DrawAll(void *pool);
@@ -69,26 +68,26 @@ typedef struct CutInScrollSprite {
 
 // The flying Pokemon (FieldMoveCutIn.flyerEffect): a small state machine per mode (step tables sCutInFlyerModeSteps).
 typedef struct CutInFlyer {
-    u8 mode;               // 0: hidden, 1: take off, 2: pick up the trainer and fly away
+    u8 mode; // 0: hidden, 1: take off, 2: pick up the trainer and fly away
     u8 step;
-    u8 status;             // read by FieldMoveCutIn_GetFlyerStatus
-    int timer;             // 0x04
-    VecFx32 origin;        // 0x08
-    VecFx32 offset;        // 0x14
+    u8 status;      // read by FieldMoveCutIn_GetFlyerStatus
+    int timer;      // 0x04
+    VecFx32 origin; // 0x08
+    VecFx32 offset; // 0x14
     u8 filler_20[0xC];
-    VecFx32 scale;         // 0x2C
-    fx32 rotation;         // 0x38, degrees
+    VecFx32 scale; // 0x2C
+    fx32 rotation; // 0x38, degrees
     int unk_3C;
-    fx32 angle;            // 0x40, degrees, direction of the motion
+    fx32 angle; // 0x40, degrees, direction of the motion
     int unk_44;
-    fx32 distance;         // 0x48
-    fx32 speed;            // 0x4C
-    fx32 scaleSpeed;       // 0x50
-    fx32 trainerOffsetY;   // 0x54
-    Sprite *sprite;        // 0x58
-    FieldMoveCutIn *cutIn; // 0x5C
+    fx32 distance;                  // 0x48
+    fx32 speed;                     // 0x4C
+    fx32 scaleSpeed;                // 0x50
+    fx32 trainerOffsetY;            // 0x54
+    Sprite *sprite;                 // 0x58
+    FieldMoveCutIn *cutIn;          // 0x5C
     FieldEffect *trainerJumpEffect; // 0x60
-    SysTask *cameraZoom;   // 0x64
+    SysTask *cameraZoom;            // 0x64
 } CutInFlyer;
 
 typedef BOOL (*CutInFlyerStep)(CutInFlyer *flyer);
@@ -228,12 +227,12 @@ void FieldMoveCutIn_GetMonPicIds(FieldMoveCutIn *cutIn, PokepicTemplate *templat
 void *FieldMoveCutIn_LoadMonChar(Pokemon *mon, PokepicTemplate *template, enum HeapID heapID) {
     void *buffer = Heap_Alloc(HEAP_ID_FIELD1, 0xc80);
     GF_ASSERT(buffer);
-    CharTiles_LoadMonPicAsObjFromNarc((NarcId)template->narcID, template->charDataID, heapID, buffer, GetMonData(mon, MON_DATA_PERSONALITY, NULL), FALSE, 2, template->species);
+    CharTiles_LoadMonPicAsObjFromNarc((NarcId) template->narcID, template->charDataID, heapID, buffer, GetMonData(mon, MON_DATA_PERSONALITY, NULL), FALSE, 2, template->species);
     return buffer;
 }
 
 void *FieldMoveCutIn_LoadMonPltt(PokepicTemplate *template, enum HeapID heapID) {
-    return AllocAndLoadPltt16FromNarc((NarcId)template->narcID, template->palDataID, heapID);
+    return AllocAndLoadPltt16FromNarc((NarcId) template->narcID, template->palDataID, heapID);
 }
 
 SpriteResource *FieldMoveCutIn_AddMonCharResource(FieldMoveCutIn *cutIn, NARC *narc) {
@@ -322,7 +321,7 @@ void FieldMoveCutIn_CreateScrollSprites(FieldMoveCutIn *cutIn, int mode) {
     u32 drawPriority;
     cutIn->scrollSpriteMode = 2;
 
-    for (i = 0; i < 13; i++, template++) {
+    for (i = 0; i < 13; i++, template ++) {
         position.x = template->x;
         position.y = template->y;
         position.z = 0;
@@ -362,7 +361,6 @@ void CutInScrollSprite_Destroy(FieldEffect *effect, CutInScrollSprite *work) {
     Sprite_Delete(work->sprite);
 }
 
-// Kept alive in the object file (the original was too), though only the effect template refers to it.
 #pragma force_active on
 void CutInScrollSprite_Update(FieldEffect *effect, CutInScrollSprite *work) {
     VecFx32 pos;

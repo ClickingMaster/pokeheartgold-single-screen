@@ -1,10 +1,11 @@
+#include "field/field_move_cut_in.h"
+
 #include "global.h"
 
 #include "constants/sndseq.h"
 
 #include "application/choose_starter/choose_starter_sub_res.naix"
 #include "field/field_effect_helpers.h"
-#include "field/field_move_cut_in.h"
 #include "field/fly_landing_effect.h"
 
 #include "assert.h"
@@ -24,15 +25,14 @@
 #include "sound_chatot.h"
 #include "sound_playback.h"
 #include "sprite.h"
+#include "sprite_resource.h"
+#include "sprite_resource_header.h"
 #include "sprite_transfer.h"
 #include "sys_task_api.h"
-#include "sprite_resource_header.h"
-#include "sprite_resource.h"
 
 // A step of the cut-in's step table: TRUE to run the next step in the same frame.
 typedef BOOL (*FieldMoveCutInStep)(FieldMoveCutIn *cutIn);
 
-// Defined in field_effects.c, which has no public prototypes for its pool.
 void *FieldEffectPool_New(enum HeapID heapID, int count);
 void FieldEffectPool_Delete(void *pool);
 void FieldEffectPool_DrawAll(void *pool);

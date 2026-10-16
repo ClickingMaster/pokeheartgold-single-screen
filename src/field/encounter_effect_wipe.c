@@ -1,6 +1,7 @@
 #include "global.h"
 
 #include "field/encounter_effect.h"
+#include "field/hblank_system.h"
 
 #include "bg_window.h"
 #include "gf_gfx_loader.h"
@@ -14,11 +15,6 @@
 // BG0-3 and OBJ
 #define WND_PLANEMASK_ALL (GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2 | GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ)
 
-// From field/hblank_system.c.
-typedef void (*HBlankTaskFunc)(void *, void *);
-void *HBlankSystem_StartTask(HBlankSystem *hBlankSystem, HBlankTaskFunc func, void *data);
-void HBlankTask_Delete(void *task);
-
 // The screen is cut into horizontal stripes of stripeHeight lines; every other stripe slides right, the
 // others slide left, until the window closes the screen.
 struct StripeWipe {
@@ -26,7 +22,7 @@ struct StripeWipe {
     u32 stripeHeight;                 // 0x18
     u32 state;                        // 0x1C
     HBlankSystem *hBlankSystem;       // 0x20
-    void *hBlankTask;                 // 0x24
+    HBlankTask *hBlankTask;           // 0x24
     SysTask *task;                    // 0x28
     BOOL *done;                       // 0x2C
 };
@@ -38,7 +34,7 @@ struct SplitWipe {
     u32 middleLine;              // 0x30
     u32 state;                   // 0x34
     HBlankSystem *hBlankSystem;  // 0x38
-    void *hBlankTask;            // 0x3C
+    HBlankTask *hBlankTask;      // 0x3C
     SysTask *task;               // 0x40
     BOOL *done;                  // 0x44
 };
@@ -46,10 +42,10 @@ struct SplitWipe {
 static void Task_StripeWipe_Begin(SysTask *task, void *data);
 static void Task_StripeWipe_Update(SysTask *task, void *data);
 static void StripeWipe_End(StripeWipe *wipe);
-static void HBlank_StripeWipe(void *unused, void *data);
+static void HBlank_StripeWipe(HBlankTask *task, void *data);
 static void Task_SplitWipe_Begin(SysTask *task, void *data);
 static void Task_SplitWipe_Update(SysTask *task, void *data);
-static void HBlank_SplitWipe(void *unused, void *data);
+static void HBlank_SplitWipe(HBlankTask *task, void *data);
 static void SplitWipe_End(SplitWipe *wipe);
 
 #pragma force_active on
@@ -146,7 +142,7 @@ static void StripeWipe_End(StripeWipe *wipe) {
 #pragma force_active on
 
 // Even stripes scroll every BG by +offset and show window 0, odd stripes by -offset and show window 1.
-static void HBlank_StripeWipe(void *unused, void *data) {
+static void HBlank_StripeWipe(HBlankTask *task, void *data) {
     StripeWipe *wipe = data;
     int offset;
     u32 scroll;
@@ -242,7 +238,7 @@ static void Task_SplitWipe_Update(SysTask *task, void *data) {
 }
 
 // Window 0 above the middle line, window 1 below it.
-static void HBlank_SplitWipe(void *unused, void *data) {
+static void HBlank_SplitWipe(HBlankTask *task, void *data) {
     SplitWipe *wipe = data;
 
     if (reg_GX_VCOUNT <= wipe->middleLine) {

@@ -1,11 +1,11 @@
 #include "field/dynamic_terrain_height.h"
+#include "field/field_follow_mon.h"
 
 #include "field_system.h"
 #include "overlay_01.h"
-#include "field/field_follow_mon.h"
 #include "overlay_04.h"
-#include "task.h"
 #include "sound_playback.h"
+#include "task.h"
 
 #define ELEVATOR_Y_DOWN  (FX32_CONST(32))
 #define ELEVATOR_Y_UP    (FX32_CONST(496))
@@ -86,7 +86,7 @@ static BOOL Task_VioletGymmick_ElevatorUp(TaskManager *taskman) {
 
     switch (taskData->state) {
     case 0:
-        // decomper's note: taskman == fieldSystem->taskman
+        // taskman is fieldSystem->taskman
         TaskManager_Call(fieldSystem->taskman, Task_WaitFollowMonMovement, NULL);
         ++taskData->state;
         break;
@@ -108,7 +108,7 @@ static BOOL Task_VioletGymmick_ElevatorDown(TaskManager *taskman) {
 
     switch (taskData->state) {
     case 0:
-        // decomper's note: taskman == fieldSystem->taskman
+        // taskman is fieldSystem->taskman
         TaskManager_Call(fieldSystem->taskman, Task_WaitFollowMonMovement, NULL);
         ++taskData->state;
         break;

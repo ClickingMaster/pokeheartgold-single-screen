@@ -148,7 +148,7 @@ void PokewalkerApp_FillTrainerHouseParty(TrainerHouseMon *mons, Party *party) {
         mons->level = GetMonData(mon, MON_DATA_LEVEL, NULL);
         GetMonData(mon, MON_DATA_NICKNAME, nickname);
         CopyU16StringArrayN(mons->nickname, nickname, POKEMON_NAME_LENGTH);
-        // matching: the moves are written through a byte pointer to the entry stepped by 2 per move
+        // The moves are written through a byte pointer to the entry, 2 bytes per move
         j = 0;
         bits = 0;
         move = (u8 *)mons;

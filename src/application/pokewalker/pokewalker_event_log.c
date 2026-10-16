@@ -1,8 +1,4 @@
-// Pokewalker connection app: the event log app (mode 8, sEventLogAppTemplate), which shows the 24 entries of the
-// event log read from the Pokewalker one page at a time: the date and time, the Pokemon of the entry walking over the
-// course background, and a message. Left / Right or the arrow buttons turn the page, B or the Quit button ends it.
-// Before it: the picture loaders of the PC box selection's sub screen (pokewalker_app_modes.c) and the block table
-// of the data sent to the Pokewalker (pokewalker_upload.c). After it: the event log records added by the link.
+// Pokewalker connection app: the event log (mode 8), one page per entry read from the Pokewalker.
 
 #include "application/pokewalker/pokewalker_event_log.h"
 
@@ -14,6 +10,7 @@
 #include "msgdata/msg/msg_0275.h"
 
 #include "assert.h"
+#include "char_tiles.h"
 #include "filesystem.h"
 #include "follow_mon.h"
 #include "font.h"
@@ -32,7 +29,6 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "char_tiles.h"
 
 // Entry of NARC_fielddata_tsurepoke_tp_param (by SpeciesToOverworldModelIndexOffset).
 typedef struct FollowMonModelParam {
@@ -380,7 +376,6 @@ void PokewalkerEventLog_PrintToWindowWithFont(PokewalkerEventLog *eventLog, u32 
     GF_ASSERT(windowId < 4);
     FillWindowPixelBuffer(&eventLog->windows[windowId], 0);
     string = ReadMsgData_ExpandPlaceholders(eventLog->msgFormat, eventLog->msgData, msgId, eventLog->heapId);
-    // called with an int font (FontID is u8 in font_types_def.h but a full word here)
     ((u8(*)(Window *, int, String *, u32, u32, u32, u32, PrinterCallback_t))AddTextPrinterParameterizedWithColor)(&eventLog->windows[windowId], fontId, string, x, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     String_Delete(string);
     CopyWindowToVram(&eventLog->windows[windowId]);

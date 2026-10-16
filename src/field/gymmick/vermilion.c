@@ -1,9 +1,9 @@
 #include "fielddata/script/scr_seq/event_T06GYM0101.h"
 
 #include "field_system.h"
+#include "map_object_movement_commands.h"
 #include "overlay_04.h"
 #include "sound_playback.h"
-#include "map_object_movement_commands.h"
 
 typedef struct VermilionGymmickLocalData {
     FieldSystem *fieldSystem;

@@ -3,16 +3,15 @@
 #include "field/field_effect_manager.h"
 #include "field/map_object_models.h"
 
+#include "field_effects.h"
 #include "field_system.h"
 #include "gf_rtc.h"
 #include "map_object.h"
 #include "render_animation.h"
 #include "render_model.h"
-#include "field_effects.h"
 
 // Map object ground shadows: four shadow models whose alpha and scale follow the time of day.
 
-// Not declared in any header yet.
 void *FieldEffect_GetParam(void *effect);
 void FieldEffect_SetPosition(void *effect, VecFx32 *position);
 void NNS_G3dMdlSetMdlAlphaAll(NNSG3dResMdl *mdl, u32 alpha);
@@ -60,16 +59,16 @@ extern const VecFx32 sShadowScaleByTimeOfDay[5];
 
 FieldShadow *FieldShadow_New(FieldEffectManager *manager);
 void FieldShadow_Free(FieldShadow *shadow);
-void FieldShadow_StartTask(FieldShadow *shadow);
-void FieldShadow_StopTask(FieldShadow *shadow);
-void FieldShadow_GetScale(FieldShadow *shadow, VecFx32 *dest);
-int FieldShadow_FxToAlpha(fx32 value);
-void FieldShadow_SetTimeOfDayParams(FieldShadow *shadow, int timeOfDay);
-void FieldShadow_StepTowards(fx32 *value, fx32 target, fx32 step);
-void FieldShadow_UpdateTask(SysTask *task, FieldShadow *shadow);
-void FieldShadow_LoadModels(FieldShadow *shadow);
-void FieldShadow_FreeModels(FieldShadow *shadow);
-void FieldShadow_SetAlpha(FieldShadow *shadow, u32 alpha);
+static void FieldShadow_StartTask(FieldShadow *shadow);
+static void FieldShadow_StopTask(FieldShadow *shadow);
+static void FieldShadow_GetScale(FieldShadow *shadow, VecFx32 *dest);
+static int FieldShadow_FxToAlpha(fx32 value);
+static void FieldShadow_SetTimeOfDayParams(FieldShadow *shadow, int timeOfDay);
+static void FieldShadow_StepTowards(fx32 *value, fx32 target, fx32 step);
+static void FieldShadow_UpdateTask(SysTask *task, FieldShadow *shadow);
+static void FieldShadow_LoadModels(FieldShadow *shadow);
+static void FieldShadow_FreeModels(FieldShadow *shadow);
+static void FieldShadow_SetAlpha(FieldShadow *shadow, u32 alpha);
 void FieldShadow_CreateMapObjectShadow(LocalMapObject *object);
 void FieldShadow_CreateFollowMonShadow(LocalMapObject *object);
 BOOL FieldShadowEffect_Init(FieldEffect *effect, FieldShadowEffect *work);
@@ -97,30 +96,30 @@ void FieldShadow_Free(FieldShadow *shadow) {
     FieldEffectManager_HeapFree(shadow);
 }
 
-void FieldShadow_StartTask(FieldShadow *shadow) {
+static void FieldShadow_StartTask(FieldShadow *shadow) {
     FieldSystem *fieldSystem = FieldEffectManager_GetFieldSystem(shadow->manager);
     u32 priority = MapObjectManager_GetPriority(fieldSystem->mapObjectManager) - 1;
     shadow->task = SysTask_CreateOnMainQueue((SysTaskFunc)FieldShadow_UpdateTask, shadow, priority);
 }
 
-void FieldShadow_StopTask(FieldShadow *shadow) {
+static void FieldShadow_StopTask(FieldShadow *shadow) {
     SysTask_Destroy(shadow->task);
 }
 
-void FieldShadow_GetScale(FieldShadow *shadow, VecFx32 *dest) {
+static void FieldShadow_GetScale(FieldShadow *shadow, VecFx32 *dest) {
     *dest = shadow->scale;
 }
 
-int FieldShadow_FxToAlpha(fx32 value) {
+static int FieldShadow_FxToAlpha(fx32 value) {
     return value / 0x1000;
 }
 
-void FieldShadow_SetTimeOfDayParams(FieldShadow *shadow, int timeOfDay) {
+static void FieldShadow_SetTimeOfDayParams(FieldShadow *shadow, int timeOfDay) {
     shadow->alpha = sShadowAlphaByTimeOfDay[shadow->timeOfDay];
     shadow->scale = sShadowScaleByTimeOfDay[shadow->timeOfDay];
 }
 
-void FieldShadow_StepTowards(fx32 *value, fx32 target, fx32 step) {
+static void FieldShadow_StepTowards(fx32 *value, fx32 target, fx32 step) {
     fx32 cur = *value;
     if (cur < target) {
         cur += step;
@@ -138,7 +137,7 @@ void FieldShadow_StepTowards(fx32 *value, fx32 target, fx32 step) {
 }
 
 // Fades alpha and scale to the values of the current time of day.
-void FieldShadow_UpdateTask(SysTask *task, FieldShadow *shadow) {
+static void FieldShadow_UpdateTask(SysTask *task, FieldShadow *shadow) {
     fx32 y;
     VecFx32 scale;
     fx32 alpha;
@@ -178,7 +177,7 @@ void FieldShadow_UpdateTask(SysTask *task, FieldShadow *shadow) {
     }
 }
 
-void FieldShadow_LoadModels(FieldShadow *shadow) {
+static void FieldShadow_LoadModels(FieldShadow *shadow) {
     int i;
     for (i = 0; i < 4; i++) {
         FieldEffectManager_LoadRenderModel(shadow->manager, &shadow->models[i], 0, sShadowModelFiles[i], FALSE);
@@ -186,14 +185,14 @@ void FieldShadow_LoadModels(FieldShadow *shadow) {
     }
 }
 
-void FieldShadow_FreeModels(FieldShadow *shadow) {
+static void FieldShadow_FreeModels(FieldShadow *shadow) {
     int i;
     for (i = 0; i < 4; i++) {
         RenderModel_Free(&shadow->models[i]);
     }
 }
 
-void FieldShadow_SetAlpha(FieldShadow *shadow, u32 alpha) {
+static void FieldShadow_SetAlpha(FieldShadow *shadow, u32 alpha) {
     NNSi_G3dModifyPolygonAttrMask(shadow->models[0].model, TRUE, 0x1F << 16);
     NNS_G3dMdlSetMdlAlphaAll(shadow->models[0].model, alpha);
 }

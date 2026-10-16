@@ -1,7 +1,4 @@
-// Pokewalker connection app, modes 1 and 2. Mode 1 shows a message and waits for A or a touch, then leaves the app.
-// Mode 2 erases the Pokewalker's records: after two confirmations and the step count question it links with the
-// Pokewalker, takes the Pokemon on a Stroll back into a PC box, resets the Pokewalker save data and saves.
-// The state functions are in tables sMode1States (mode 1) and sEraseRecordsStates (mode 2) (asm data).
+// Pokewalker connection app, modes 1 and 2: a message that leaves the app, and erasing the Pokewalker's records.
 
 #include "global.h"
 
@@ -13,11 +10,11 @@
 #include "pokemon_storage_system.h"
 #include "save.h"
 #include "save_arrays.h"
+#include "screen_fade_legacy.h"
 #include "sound_playback.h"
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "screen_fade_legacy.h"
 
 typedef int (*PokewalkerAppStateFunc)(PokewalkerApp *app);
 

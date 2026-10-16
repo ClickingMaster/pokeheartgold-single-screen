@@ -39,7 +39,6 @@ typedef struct EncounterEffectFlash {
     BOOL *done;                 // 0x48
 } EncounterEffectFlash;
 
-// NitroSDK gx.c; the SDK headers in lib/include only declare the getter.
 void GXx_SetMasterBrightness_(vu16 *reg, s32 brightness);
 
 extern void (*const sEncounterEffectFuncs[])(SysTask *task, EncounterEffectTask *effect);

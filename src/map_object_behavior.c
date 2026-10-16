@@ -3,9 +3,12 @@
 #include "constants/std_script.h"
 
 #include "field/field_effect_helpers.h"
+#include "field/map_object_render.h"
 
 #include "field_effects.h"
+#include "field_emote_mark.h"
 #include "field_system.h"
+#include "field_time_events.h"
 #include "heap.h"
 #include "map_object.h"
 #include "map_object_behavior_internal.h"
@@ -14,12 +17,9 @@
 #include "map_object_movement_utilities.h"
 #include "map_object_movement_utilities_internal.h"
 #include "overlay_01.h"
-#include "field/map_object_render.h"
-#include "field_emote_mark.h"
 #include "player_avatar.h"
 #include "script_manager.h"
 #include "sys_task_api.h"
-#include "field_time_events.h"
 
 void MapObject_InitTypeBehavior(LocalMapObject *object) {
     MapObject_CallTypeBehaviorInit(object);

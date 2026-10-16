@@ -1,15 +1,14 @@
 #include "global.h"
 
+#include "comm_state.h"
+#include "communication_command.h"
 #include "field_system.h"
+#include "field_terrain.h"
 #include "map_object.h"
 #include "map_object_movement_utilities_internal.h"
 #include "metatile_behavior.h"
 #include "overlay_01.h"
-#include "communication_command.h"
-#include "comm_state.h"
-#include "field_terrain.h"
 
-// Defined elsewhere without a header yet.
 void MapObject_ExecuteMovementCommand(LocalMapObject *object);
 void MapObject_InitTypeBehavior(LocalMapObject *object);
 BOOL MapObject_UpdateTypeBehavior(LocalMapObject *object);
@@ -330,10 +329,10 @@ void MapObject_CreateShadowWithSavedBehavior(LocalMapObject *object, u8 behavior
     MapObject_CreateShadow(object, behavior, value, flags);
 }
 
-#define IS_GROUND_EFFECT_TILE(object, behavior)                                                           \
-    (MetatileBehavior_IsTallGrass(behavior) == TRUE || MetatileBehavior_IsVeryTallGrass(behavior) == TRUE \
-        || MapObject_CheckWaterBehavior(object, behavior) == TRUE || MetatileBehavior_IsPuddle(behavior) == TRUE          \
-        || MetatileBehavior_IsShallowWater(behavior) == TRUE || MapObject_CheckSnowBehavior(object, behavior) == TRUE    \
+#define IS_GROUND_EFFECT_TILE(object, behavior)                                                                       \
+    (MetatileBehavior_IsTallGrass(behavior) == TRUE || MetatileBehavior_IsVeryTallGrass(behavior) == TRUE             \
+        || MapObject_CheckWaterBehavior(object, behavior) == TRUE || MetatileBehavior_IsPuddle(behavior) == TRUE      \
+        || MetatileBehavior_IsShallowWater(behavior) == TRUE || MapObject_CheckSnowBehavior(object, behavior) == TRUE \
         || MetatileBehavior_IsMud(behavior) == TRUE || MetatileBehavior_IsReflective(behavior) != FALSE)
 
 void MapObject_CreateShadow(LocalMapObject *object, u8 behavior, u8 prevBehavior, const MapObjectEffectFlags *flags) {
@@ -387,7 +386,6 @@ void MapObject_UpdateShadowVisibility(LocalMapObject *object, u8 behavior, u8 pr
         return;
     }
     if (flags->shadow == 2) {
-        // called as returning a full word: the matched code narrows the result here
         previous = (u16)((u32(*)(LocalMapObject *))MapObject_GetSavedPreviousBehavior)(object);
         if (MetatileBehavior_IsTallGrass(behavior) == 1 || MetatileBehavior_IsVeryTallGrass(behavior) == 1 || MetatileBehavior_IsTallGrass((u8)previous) == 1 || MetatileBehavior_IsVeryTallGrass((u8)previous) == 1 || MapObject_CheckWaterBehavior(object, behavior) == 1 || MetatileBehavior_IsPuddle(behavior) == 1 || MetatileBehavior_IsShallowWater(behavior) == 1 || MapObject_CheckSnowBehavior(object, behavior) == 1 || MetatileBehavior_IsMud(behavior) == 1 || MetatileBehavior_IsReflective(behavior)) {
             MapObject_SetFlagsBits(object, MAPOBJECTFLAG_UNK20);

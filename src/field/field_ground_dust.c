@@ -3,9 +3,9 @@
 #include "field/field_effect_helpers.h"
 #include "field/field_effect_manager.h"
 
+#include "field_effects.h"
 #include "map_object.h"
 #include "map_object_movement_utilities.h"
-#include "field_effects.h"
 
 // The dust a map object raises when it lands on plain ground (field effect renderer 11): a billboard
 // at the tile that plays its 9 frames once.
@@ -31,20 +31,20 @@ typedef struct GroundDustEffect {
     BOOL paused;
     u32 objectId;
     u32 mapId;
-    u8 unk0C[4];
+    u8 unk_0C[4];
     GroundDustEffectArgs args;
     void *billboard;
 } GroundDustEffect;
 
 GroundDust *GroundDust_New(FieldEffectManager *manager);
 void GroundDust_Free(GroundDust *dust);
-void GroundDust_LoadGfx(GroundDust *dust);
-void GroundDust_FreeGfx(GroundDust *dust);
+static void GroundDust_LoadGfx(GroundDust *dust);
+static void GroundDust_FreeGfx(GroundDust *dust);
 void GroundDust_Spawn(LocalMapObject *mapObject);
-BOOL GroundDustEffect_Init(FieldEffect *effect, GroundDustEffect *work);
-void GroundDustEffect_Destroy(FieldEffect *effect, GroundDustEffect *work);
-void GroundDustEffect_Update(FieldEffect *effect, GroundDustEffect *work);
-void GroundDustEffect_Draw(FieldEffect *effect, GroundDustEffect *work);
+static BOOL GroundDustEffect_Init(FieldEffect *effect, GroundDustEffect *work);
+static void GroundDustEffect_Destroy(FieldEffect *effect, GroundDustEffect *work);
+static void GroundDustEffect_Update(FieldEffect *effect, GroundDustEffect *work);
+static void GroundDustEffect_Draw(FieldEffect *effect, GroundDustEffect *work);
 
 static const FieldEffectBasicTemplate sGroundDustEffectTemplate = {
     sizeof(GroundDustEffect),
@@ -68,14 +68,14 @@ void GroundDust_Free(GroundDust *dust) {
     FieldEffectManager_HeapFree(dust);
 }
 
-void GroundDust_LoadGfx(GroundDust *dust) {
+static void GroundDust_LoadGfx(GroundDust *dust) {
     FieldEffectManager_LoadBillboardResource(dust->manager, GROUND_DUST_RESOURCE, 0x79);
     FieldEffectManager_LoadBillboardSequence(dust->manager, GROUND_DUST_SEQUENCE, 0x91);
     FieldEffectManager_LoadTexResource(dust->manager, GROUND_DUST_TEXTURE, 0x14, TRUE);
     FieldEffectManager_AddRecord(dust->manager, GROUND_DUST_RECORD, GROUND_DUST_RESOURCE, GROUND_DUST_SEQUENCE, GROUND_DUST_TEXTURE, 0, sGroundDustRecordParams);
 }
 
-void GroundDust_FreeGfx(GroundDust *dust) {
+static void GroundDust_FreeGfx(GroundDust *dust) {
     FieldEffectManager_FreeBillboardResource(dust->manager, GROUND_DUST_RESOURCE);
     FieldEffectManager_FreeBillboardSequence(dust->manager, GROUND_DUST_SEQUENCE);
     FieldEffectManager_FreeTexResource(dust->manager, GROUND_DUST_TEXTURE);
@@ -100,7 +100,7 @@ void GroundDust_Spawn(LocalMapObject *mapObject) {
     FieldEffectManager_CreateEffect(manager, &sGroundDustEffectTemplate, &position, 0, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 
-BOOL GroundDustEffect_Init(FieldEffect *effect, GroundDustEffect *work) {
+static BOOL GroundDustEffect_Init(FieldEffect *effect, GroundDustEffect *work) {
     VecFx32 position;
     work->args = *(GroundDustEffectArgs *)FieldEffect_GetUserData(effect);
     work->objectId = MapObject_GetID(work->args.mapObject);
@@ -110,11 +110,11 @@ BOOL GroundDustEffect_Init(FieldEffect *effect, GroundDustEffect *work) {
     return TRUE;
 }
 
-void GroundDustEffect_Destroy(FieldEffect *effect, GroundDustEffect *work) {
+static void GroundDustEffect_Destroy(FieldEffect *effect, GroundDustEffect *work) {
     BillboardObject_Delete(work->billboard);
 }
 
-void GroundDustEffect_Update(FieldEffect *effect, GroundDustEffect *work) {
+static void GroundDustEffect_Update(FieldEffect *effect, GroundDustEffect *work) {
     if (work->paused == FALSE) {
         fx32 frame;
         BillboardObject_AdvanceFrame(work->billboard, FX32_ONE);
@@ -125,7 +125,7 @@ void GroundDustEffect_Update(FieldEffect *effect, GroundDustEffect *work) {
     }
 }
 
-void GroundDustEffect_Draw(FieldEffect *effect, GroundDustEffect *work) {
+static void GroundDustEffect_Draw(FieldEffect *effect, GroundDustEffect *work) {
     VecFx32 position;
     FieldEffect_GetPosition(effect, &position);
     position.z += 0x8000;

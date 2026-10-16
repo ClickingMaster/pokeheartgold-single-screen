@@ -6,14 +6,13 @@
 #include "heap.h"
 #include "vram_transfer_manager.h"
 
-// Defined in texture_animation.c, which has no header yet.
 void *Texture_GetImageData(NNSG3dResTex *texture, u32 index);
 u32 Texture_GetImageVramOffsetByName(NNSG3dResTex *texture, const char *name);
 u32 Texture_GetImageSizeByName(NNSG3dResTex *texture, const char *name);
 int sprintf(char *buf, const char *fmt, ...);
 
-int FieldTextureManager_AddAnimatedTexture(FieldTextureManager *textureManager, NNSG3dResTex *textureResource, int index, NARC *narc);
-void FieldTextureManager_FreeSlot(FieldTextureManager *textureManager, u32 index);
+static int FieldTextureManager_AddAnimatedTexture(FieldTextureManager *textureManager, NNSG3dResTex *textureResource, int index, NARC *narc);
+static void FieldTextureManager_FreeSlot(FieldTextureManager *textureManager, u32 index);
 
 char gAnimatedTextureFileFormat[] = "data/fld_anime%d.bin";
 
@@ -53,7 +52,7 @@ u32 FieldTextureManager_LoadTexture(FieldTextureManager *textureManager, NNSG3dR
     return loaded;
 }
 
-int FieldTextureManager_AddAnimatedTexture(FieldTextureManager *textureManager, NNSG3dResTex *textureResource, int index, NARC *narc) {
+static int FieldTextureManager_AddAnimatedTexture(FieldTextureManager *textureManager, NNSG3dResTex *textureResource, int index, NARC *narc) {
     char fileName[40];
     int slot;
     if (textureManager == NULL) {
@@ -105,7 +104,7 @@ void FieldTextureManager_Free(FieldTextureManager *textureManager) {
     }
 }
 
-void FieldTextureManager_FreeSlot(FieldTextureManager *textureManager, u32 index) {
+static void FieldTextureManager_FreeSlot(FieldTextureManager *textureManager, u32 index) {
     if (textureManager != NULL) {
         if (textureManager->textureSlots[index].fileData != NULL) {
             Heap_Free(textureManager->textureSlots[index].fileData);

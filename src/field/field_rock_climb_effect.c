@@ -7,12 +7,12 @@
 #include "field/field_effect_helpers.h"
 #include "field/field_effect_manager.h"
 
+#include "field_effects.h"
 #include "geometry_math.h"
 #include "map_object.h"
+#include "map_object_movement_utilities.h"
 #include "render_animation.h"
 #include "render_model.h"
-#include "map_object_movement_utilities.h"
-#include "field_effects.h"
 
 // The rock the player climbs on with Rock Climb (field effect renderer 5): one model, loaded while any
 // effect uses it, placed on the tile ahead and turned to the climbing direction; once the climb starts
@@ -22,7 +22,7 @@
 typedef struct RockClimb {
     int refCount;
     BOOL loaded;
-    u8 unk08[8];
+    u8 unk_08[8];
     FieldEffectManager *manager;
     RenderModelStorage model;
     NNSG3dRenderObj renderObj;
@@ -46,18 +46,18 @@ typedef struct RockClimbEffect {
 
 RockClimb *RockClimb_New(FieldEffectManager *manager);
 void RockClimb_Free(RockClimb *rockClimb);
-void RockClimb_Retain(RockClimb *rockClimb);
-void RockClimb_Release(RockClimb *rockClimb);
-void RockClimb_LoadGfx(RockClimb *rockClimb);
-void RockClimb_FreeGfx(RockClimb *rockClimb);
-void RockClimb_LoadGfxIfUnused(RockClimb *rockClimb);
-void RockClimb_FreeGfxIfUnused(RockClimb *rockClimb);
+static void RockClimb_Retain(RockClimb *rockClimb);
+static void RockClimb_Release(RockClimb *rockClimb);
+static void RockClimb_LoadGfx(RockClimb *rockClimb);
+static void RockClimb_FreeGfx(RockClimb *rockClimb);
+static void RockClimb_LoadGfxIfUnused(RockClimb *rockClimb);
+static void RockClimb_FreeGfxIfUnused(RockClimb *rockClimb);
 FieldEffect *RockClimbEffect_Create(LocalMapObject *mapObject, int x, int z, int direction, BOOL follow);
 void RockClimbEffect_SetFollow(FieldEffect *effect, BOOL follow);
-BOOL RockClimbEffect_Init(FieldEffect *effect, RockClimbEffect *work);
-void RockClimbEffect_Destroy(FieldEffect *effect, RockClimbEffect *work);
-void RockClimbEffect_Update(FieldEffect *effect, RockClimbEffect *work);
-void RockClimbEffect_Draw(FieldEffect *effect, RockClimbEffect *work);
+static BOOL RockClimbEffect_Init(FieldEffect *effect, RockClimbEffect *work);
+static void RockClimbEffect_Destroy(FieldEffect *effect, RockClimbEffect *work);
+static void RockClimbEffect_Update(FieldEffect *effect, RockClimbEffect *work);
+static void RockClimbEffect_Draw(FieldEffect *effect, RockClimbEffect *work);
 
 static const VecFx32 sRockClimbScale = { FX32_ONE, FX32_ONE, FX32_ONE };
 
@@ -80,17 +80,17 @@ void RockClimb_Free(RockClimb *rockClimb) {
     FieldEffectManager_HeapFree(rockClimb);
 }
 
-void RockClimb_Retain(RockClimb *rockClimb) {
+static void RockClimb_Retain(RockClimb *rockClimb) {
     ++rockClimb->refCount;
 }
 
-void RockClimb_Release(RockClimb *rockClimb) {
+static void RockClimb_Release(RockClimb *rockClimb) {
     if (--rockClimb->refCount < 0) {
         GF_AssertFail();
     }
 }
 
-void RockClimb_LoadGfx(RockClimb *rockClimb) {
+static void RockClimb_LoadGfx(RockClimb *rockClimb) {
     if (rockClimb->loaded == FALSE) {
         FieldEffectManager_LoadRenderModel(rockClimb->manager, &rockClimb->model, 0, 0x57, TRUE);
         RenderObj_InitFromModel(&rockClimb->renderObj, &rockClimb->model);
@@ -98,20 +98,20 @@ void RockClimb_LoadGfx(RockClimb *rockClimb) {
     }
 }
 
-void RockClimb_FreeGfx(RockClimb *rockClimb) {
+static void RockClimb_FreeGfx(RockClimb *rockClimb) {
     if (rockClimb->loaded == TRUE) {
         rockClimb->loaded = FALSE;
         RenderModel_Free(&rockClimb->model);
     }
 }
 
-void RockClimb_LoadGfxIfUnused(RockClimb *rockClimb) {
+static void RockClimb_LoadGfxIfUnused(RockClimb *rockClimb) {
     if (rockClimb->refCount == 0) {
         RockClimb_LoadGfx(rockClimb);
     }
 }
 
-void RockClimb_FreeGfxIfUnused(RockClimb *rockClimb) {
+static void RockClimb_FreeGfxIfUnused(RockClimb *rockClimb) {
     if (rockClimb->refCount == 0) {
         RockClimb_FreeGfx(rockClimb);
     }
@@ -144,7 +144,7 @@ void RockClimbEffect_SetFollow(FieldEffect *effect, BOOL follow) {
     work->follow = follow;
 }
 
-BOOL RockClimbEffect_Init(FieldEffect *effect, RockClimbEffect *work) {
+static BOOL RockClimbEffect_Init(FieldEffect *effect, RockClimbEffect *work) {
     RockClimbEffectArgs *args = (RockClimbEffectArgs *)FieldEffect_GetUserData(effect);
     work->args = *args;
     work->direction = args->direction;
@@ -154,12 +154,12 @@ BOOL RockClimbEffect_Init(FieldEffect *effect, RockClimbEffect *work) {
     return TRUE;
 }
 
-void RockClimbEffect_Destroy(FieldEffect *effect, RockClimbEffect *work) {
+static void RockClimbEffect_Destroy(FieldEffect *effect, RockClimbEffect *work) {
     RockClimb_Release(work->args.rockClimb);
     RockClimb_FreeGfxIfUnused(work->args.rockClimb);
 }
 
-void RockClimbEffect_Update(FieldEffect *effect, RockClimbEffect *work) {
+static void RockClimbEffect_Update(FieldEffect *effect, RockClimbEffect *work) {
     VecFx32 offset;
     VecFx32 position;
     LocalMapObject *mapObject = work->args.mapObject;
@@ -172,7 +172,7 @@ void RockClimbEffect_Update(FieldEffect *effect, RockClimbEffect *work) {
     }
 }
 
-void RockClimbEffect_Draw(FieldEffect *effect, RockClimbEffect *work) {
+static void RockClimbEffect_Draw(FieldEffect *effect, RockClimbEffect *work) {
     MtxFx33 rotation;
     VecFx32 position;
     VecFx32 scale;

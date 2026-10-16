@@ -9,6 +9,7 @@
 #include "assert.h"
 #include "bg_window.h"
 #include "field_system.h"
+#include "field_terrain.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
 #include "map_header.h"
@@ -17,7 +18,6 @@
 #include "script_manager.h"
 #include "sound_playback.h"
 #include "task.h"
-#include "field_terrain.h"
 
 // The darkening of Honey and Sweet Scent: a BG2 tint faded in (blend alpha), an encounter check, then faded out
 // with a "nothing happened" script when no wild Pokemon appears. Field_UseItem (Honey) and the Sweet Scent field
@@ -53,30 +53,30 @@ enum HoneySweetScentState {
     HONEY_SWEET_SCENT_STATE_END,
 };
 
-void HoneySweetScentFade_InitIn(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-void HoneySweetScentFade_InitOut(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-void HoneySweetScentFade_Destroy(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-void HoneySweetScentFade_Update(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-void HoneySweetScentFade_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
-Field3dObjectTask *HoneySweetScent_StartFadeIn(FieldSystem *fieldSystem);
-void HoneySweetScent_DeleteFade(Field3dObjectTask *task);
-int HoneySweetScent_IsFadeDone(Field3dObjectTask *task);
-Field3dObjectTask *HoneySweetScent_StartFadeOut(FieldSystem *fieldSystem);
-void HoneySweetScent_LoadBg2Tint(BgConfig *bgConfig);
-void HoneySweetScentFade_Set(HoneySweetScentFade *anim, int start, int end, int frames);
-BOOL HoneySweetScentFade_Step(HoneySweetScentFade *anim);
-void HoneySweetScent_SetBg2MaskBlack(FieldSystem *fieldSystem);
-void HoneySweetScent_SetBg2MaskWhite(FieldSystem *fieldSystem);
-void HoneySweetScent_ShowWhiteBg2(FieldSystem *fieldSystem);
-void HoneySweetScent_ShowWhiteBg3(FieldSystem *fieldSystem);
-int HoneySweetScent_UseWhiteFlash(FieldSystem *fieldSystem);
-BOOL HoneySweetScent_IsWeatherSuitable(FieldSystem *fieldSystem);
-void HoneySweetScentEnv_Free(HoneySweetScentEnv *env);
+static void HoneySweetScentFade_InitIn(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
+static void HoneySweetScentFade_InitOut(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
+static void HoneySweetScentFade_Destroy(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
+static void HoneySweetScentFade_Update(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
+static void HoneySweetScentFade_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data);
+static Field3dObjectTask *HoneySweetScent_StartFadeIn(FieldSystem *fieldSystem);
+static void HoneySweetScent_DeleteFade(Field3dObjectTask *task);
+static int HoneySweetScent_IsFadeDone(Field3dObjectTask *task);
+static Field3dObjectTask *HoneySweetScent_StartFadeOut(FieldSystem *fieldSystem);
+static void HoneySweetScent_LoadBg2Tint(BgConfig *bgConfig);
+static void HoneySweetScentFade_Set(HoneySweetScentFade *anim, int start, int end, int frames);
+static BOOL HoneySweetScentFade_Step(HoneySweetScentFade *anim);
+static void HoneySweetScent_SetBg2MaskBlack(FieldSystem *fieldSystem);
+static void HoneySweetScent_SetBg2MaskWhite(FieldSystem *fieldSystem);
+static void HoneySweetScent_ShowWhiteBg2(FieldSystem *fieldSystem);
+static void HoneySweetScent_ShowWhiteBg3(FieldSystem *fieldSystem);
+static int HoneySweetScent_UseWhiteFlash(FieldSystem *fieldSystem);
+static BOOL HoneySweetScent_IsWeatherSuitable(FieldSystem *fieldSystem);
+static void HoneySweetScentEnv_Free(HoneySweetScentEnv *env);
 
 // Weather in which Honey and Sweet Scent fail.
 const u32 gHoneySweetScentBlockingWeather[] = { WEATHER_RAIN, WEATHER_SNOW, WEATHER_UNKNOWN_9 };
 
-void HoneySweetScentFade_InitIn(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data) {
+static void HoneySweetScentFade_InitIn(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data) {
     HoneySweetScentFade *anim = data;
     HoneySweetScent_LoadBg2Tint(fieldSystem->bgConfig);
     HoneySweetScentFade_Set(anim, 0, 10, 19);
@@ -87,7 +87,7 @@ void HoneySweetScentFade_InitIn(Field3dObjectTask *task, FieldSystem *fieldSyste
     PlaySE(SEQ_SE_DP_FW230);
 }
 
-void HoneySweetScentFade_InitOut(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data) {
+static void HoneySweetScentFade_InitOut(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data) {
     HoneySweetScentFade *anim = data;
     HoneySweetScent_LoadBg2Tint(fieldSystem->bgConfig);
     HoneySweetScentFade_Set(anim, 10, 0, 15);
@@ -95,10 +95,10 @@ void HoneySweetScentFade_InitOut(Field3dObjectTask *task, FieldSystem *fieldSyst
     G2_SetBlendAlpha(GX_BLEND_PLANEMASK_BG2, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BD, 10, 6);
 }
 
-void HoneySweetScentFade_Destroy(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data) {
+static void HoneySweetScentFade_Destroy(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data) {
 }
 
-void HoneySweetScentFade_Update(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data) {
+static void HoneySweetScentFade_Update(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data) {
     HoneySweetScentFade *anim = data;
     if (anim->done != TRUE) {
         if (HoneySweetScentFade_Step(anim)) {
@@ -108,7 +108,7 @@ void HoneySweetScentFade_Update(Field3dObjectTask *task, FieldSystem *fieldSyste
     }
 }
 
-void HoneySweetScentFade_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data) {
+static void HoneySweetScentFade_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, void *data) {
 }
 
 const Field3dObjectTaskTemplate gHoneySweetScentFadeInTemplate = {
@@ -129,24 +129,24 @@ const Field3dObjectTaskTemplate gHoneySweetScentFadeOutTemplate = {
     HoneySweetScentFade_Render,
 };
 
-Field3dObjectTask *HoneySweetScent_StartFadeIn(FieldSystem *fieldSystem) {
+static Field3dObjectTask *HoneySweetScent_StartFadeIn(FieldSystem *fieldSystem) {
     return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &gHoneySweetScentFadeInTemplate);
 }
 
-void HoneySweetScent_DeleteFade(Field3dObjectTask *task) {
+static void HoneySweetScent_DeleteFade(Field3dObjectTask *task) {
     Field3dObjectTask_Delete(task);
 }
 
-int HoneySweetScent_IsFadeDone(Field3dObjectTask *task) {
+static int HoneySweetScent_IsFadeDone(Field3dObjectTask *task) {
     HoneySweetScentFade *anim = Field3dObjectTask_GetData(task);
     return anim->done;
 }
 
-Field3dObjectTask *HoneySweetScent_StartFadeOut(FieldSystem *fieldSystem) {
+static Field3dObjectTask *HoneySweetScent_StartFadeOut(FieldSystem *fieldSystem) {
     return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &gHoneySweetScentFadeOutTemplate);
 }
 
-void HoneySweetScent_LoadBg2Tint(BgConfig *bgConfig) {
+static void HoneySweetScent_LoadBg2Tint(BgConfig *bgConfig) {
     u16 color = 0x5D5F;
     void *buf;
     BG_LoadPlttData(2, &color, 2, 0xc2);
@@ -157,7 +157,7 @@ void HoneySweetScent_LoadBg2Tint(BgConfig *bgConfig) {
     BgFillTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2, 0x6001);
 }
 
-void HoneySweetScentFade_Set(HoneySweetScentFade *anim, int start, int end, int frames) {
+static void HoneySweetScentFade_Set(HoneySweetScentFade *anim, int start, int end, int frames) {
     anim->cur = start;
     anim->start = start;
     anim->delta = end - start;
@@ -165,7 +165,7 @@ void HoneySweetScentFade_Set(HoneySweetScentFade *anim, int start, int end, int 
     anim->counter = 0;
 }
 
-BOOL HoneySweetScentFade_Step(HoneySweetScentFade *anim) {
+static BOOL HoneySweetScentFade_Step(HoneySweetScentFade *anim) {
     int offset = anim->delta * anim->counter / anim->max;
     anim->cur = offset + anim->start;
     if (anim->counter + 1 <= anim->max) {
@@ -176,15 +176,15 @@ BOOL HoneySweetScentFade_Step(HoneySweetScentFade *anim) {
     return TRUE;
 }
 
-void HoneySweetScent_SetBg2MaskBlack(FieldSystem *fieldSystem) {
+static void HoneySweetScent_SetBg2MaskBlack(FieldSystem *fieldSystem) {
     BG_SetMaskColor(GF_BG_LYR_MAIN_2, 0);
 }
 
-void HoneySweetScent_SetBg2MaskWhite(FieldSystem *fieldSystem) {
+static void HoneySweetScent_SetBg2MaskWhite(FieldSystem *fieldSystem) {
     BG_SetMaskColor(GF_BG_LYR_MAIN_2, 0x7FFF);
 }
 
-void HoneySweetScent_ShowWhiteBg2(FieldSystem *fieldSystem) {
+static void HoneySweetScent_ShowWhiteBg2(FieldSystem *fieldSystem) {
     u16 color = 0x7FFF;
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
     reg_G2_BG2CNT = (reg_G2_BG2CNT & ~3) | 3;
@@ -195,7 +195,7 @@ void HoneySweetScent_ShowWhiteBg2(FieldSystem *fieldSystem) {
     HoneySweetScent_SetBg2MaskBlack(fieldSystem);
 }
 
-void HoneySweetScent_ShowWhiteBg3(FieldSystem *fieldSystem) {
+static void HoneySweetScent_ShowWhiteBg3(FieldSystem *fieldSystem) {
     u16 color = 0x7FFF;
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
     reg_G2_BG3CNT = (reg_G2_BG3CNT & ~3) | 3;
@@ -207,11 +207,11 @@ void HoneySweetScent_ShowWhiteBg3(FieldSystem *fieldSystem) {
 }
 
 // Never on in this game: the white BG flash after the darkening is unused.
-int HoneySweetScent_UseWhiteFlash(FieldSystem *fieldSystem) {
+static int HoneySweetScent_UseWhiteFlash(FieldSystem *fieldSystem) {
     return 0;
 }
 
-BOOL HoneySweetScent_IsWeatherSuitable(FieldSystem *fieldSystem) {
+static BOOL HoneySweetScent_IsWeatherSuitable(FieldSystem *fieldSystem) {
     int i;
     u32 value = WeatherManager_GetWeather(fieldSystem->mapSystems->weatherManager);
     for (i = 0; i < 3; i++) {
@@ -222,7 +222,7 @@ BOOL HoneySweetScent_IsWeatherSuitable(FieldSystem *fieldSystem) {
     return TRUE;
 }
 
-void HoneySweetScentEnv_Free(HoneySweetScentEnv *env) {
+static void HoneySweetScentEnv_Free(HoneySweetScentEnv *env) {
     if (env->task != NULL) {
         HoneySweetScent_DeleteFade(env->task);
         env->task = NULL;

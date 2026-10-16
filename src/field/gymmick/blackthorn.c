@@ -1,9 +1,9 @@
 #include "field_system.h"
+#include "field_terrain.h"
+#include "map_object_movement_utilities.h"
 #include "metatile_behavior.h"
 #include "overlay_04.h"
 #include "sound_playback.h"
-#include "field_terrain.h"
-#include "map_object_movement_utilities.h"
 
 #define PLATFORM_TYPE_0_W    5
 #define PLATFORM_TYPE_0_H    7
@@ -207,8 +207,6 @@ BOOL GymmickCheckCollision_Blackthorn(FieldSystem *fieldSystem, u32 tileX, u32 t
     return FALSE;
 }
 
-// This function is weird. I promise, every oddity is required to match.
-// Scratch: https://decomp.me/scratch/6ql5q
 static void BlackthornPlatform_Init(u8 index, u8 rot, u16 x, u16 z, BlackthornGymmickPlatformData *platform) {
     BlackthornGymXZPoint basePos;
 
@@ -222,7 +220,6 @@ static void BlackthornPlatform_Init(u8 index, u8 rot, u16 x, u16 z, BlackthornGy
     platform->unusedCoords.z = z;
 
     if (index != 1) {
-        // Declaration here is required to match
         int i, j;
         platform->shape = 0;
         platform->width = 5;
@@ -275,7 +272,6 @@ static void BlackthornPlatform_Init(u8 index, u8 rot, u16 x, u16 z, BlackthornGy
             platform->rightEdgeOuter[i].z += i;
         }
     } else {
-        // Declaration here is required to match
         int i, j;
         platform->shape = 1;
         platform->width = 4;
@@ -329,7 +325,6 @@ static void BlackthornPlatform_Init(u8 index, u8 rot, u16 x, u16 z, BlackthornGy
         }
     }
     {
-        // Declaration here is required to match
         int i, j;
         basePos.x = x - 1;
         basePos.z = z - 1;
@@ -380,8 +375,6 @@ static void BlackthornGymmick_ApplyZTranslation(const int dz, const u8 width, Bl
     }
 }
 
-// the const is required to match
-// i don't make the rules
 static void BlackthornPlatform_ApplyRotation(const u8 rot, const u16 x, const u16 z, BlackthornGymmickPlatformData *platform) {
     int i;
     int area;

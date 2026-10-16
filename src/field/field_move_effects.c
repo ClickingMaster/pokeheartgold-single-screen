@@ -1,3 +1,5 @@
+#include "field/field_move_effects.h"
+
 #include "global.h"
 
 #include "constants/buildmodel.h"
@@ -6,11 +8,10 @@
 #include "constants/sndseq.h"
 
 #include "field/area_data.h"
+#include "field/field_3d_model.h"
 #include "field/field_3d_object_task.h"
-#include "field/field_move_effects.h"
 #include "field/map_prop.h"
 #include "field/map_prop_animation.h"
-#include "field/field_3d_model.h"
 
 #include "camera.h"
 #include "field_system.h"
@@ -36,8 +37,8 @@
 #define HALL_OF_FAME_ANIM_TAG 0x10
 
 // A map tile is 16 units wide; objects stand at the tile center.
-#define TILE_SIZE           FX32_CONST(16)
-#define TILE_TO_POS(tile)   ((tile) * TILE_SIZE + TILE_SIZE / 2)
+#define TILE_SIZE         FX32_CONST(16)
+#define TILE_TO_POS(tile) ((tile) * TILE_SIZE + TILE_SIZE / 2)
 
 #define NUM_ROCK_CLIMB_DEBRIS_PIECES 16
 #define NUM_ROCK_DEBRIS_PIECES       18

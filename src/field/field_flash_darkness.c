@@ -18,7 +18,6 @@
 
 #define FLASH_DARKNESS_MODEL_FILE 0x6A
 
-// Defined in lib/NitroSDK/src/fx/fx_vec_mult_add.c; nitro/fx/fx_vec.h does not declare it.
 fx32 VEC_Distance(const VecFx32 *a, const VecFx32 *b);
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 19).
@@ -50,14 +49,13 @@ typedef struct FlashDarknessRotation {
 
 FlashDarkness *FlashDarkness_New(FieldEffectManager *manager);
 void FlashDarkness_Free(FlashDarkness *darkness);
-void FlashDarkness_LoadModel(FlashDarkness *darkness);
-void FlashDarkness_FreeModel(FlashDarkness *darkness);
+static void FlashDarkness_LoadModel(FlashDarkness *darkness);
+static void FlashDarkness_FreeModel(FlashDarkness *darkness);
 BOOL FlashDarknessEffect_Init(FieldEffect *effect, FlashDarknessEffect *work);
 void FlashDarknessEffect_Destroy(void);
 void FlashDarknessEffect_Update(FieldEffect *effect, FlashDarknessEffect *work);
 void FlashDarknessEffect_Draw(FieldEffect *effect, FlashDarknessEffect *work);
 
-// The effect template stays in asm (asm/field_flash_darkness_data.s, linked ahead of this file).
 extern const FieldEffectBasicTemplate sFlashDarknessTemplate;
 
 FlashDarkness *FlashDarkness_New(FieldEffectManager *manager) {
@@ -74,11 +72,11 @@ void FlashDarkness_Free(FlashDarkness *darkness) {
     FieldEffectManager_HeapFree(darkness);
 }
 
-void FlashDarkness_LoadModel(FlashDarkness *darkness) {
+static void FlashDarkness_LoadModel(FlashDarkness *darkness) {
     FieldEffectManager_LoadModel(darkness->manager, FLASH_DARKNESS_MODEL_FILE, FALSE, &darkness->renderObj, &darkness->model, &darkness->resource);
 }
 
-void FlashDarkness_FreeModel(FlashDarkness *darkness) {
+static void FlashDarkness_FreeModel(FlashDarkness *darkness) {
     FieldEffectManager_HeapFree(darkness->resource);
 }
 

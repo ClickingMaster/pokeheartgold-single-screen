@@ -28,7 +28,7 @@ typedef BOOL (*FieldEffectInitFunc)(FieldEffect *, void *);
 struct FieldEffect {
     u32 flags;
     int parameter;
-    u32 unk8;
+    u32 unk_08;
     void *userData;
     SysTask *task;
     FieldEffectPool *pool;
@@ -63,53 +63,53 @@ typedef struct FieldEffectBasicTemplate {
 } FieldEffectBasicTemplate;
 
 FieldEffectPool *FieldEffectPool_New(enum HeapID heapID, int count);
-void FieldEffectPool_Free(FieldEffectPool *pool);
+static void FieldEffectPool_Free(FieldEffectPool *pool);
 void FieldEffectPool_Delete(FieldEffectPool *pool);
-FieldEffect *FieldEffectPool_AddEffect(FieldEffectPool *pool, const FieldEffectTemplate *template, const VecFx32 *position, int parameter, void *userData, u32 priority);
+static FieldEffect *FieldEffectPool_AddEffect(FieldEffectPool *pool, const FieldEffectTemplate *template, const VecFx32 *position, int parameter, void *userData, u32 priority);
 FieldEffect *FieldEffectPool_AddBasicEffect(FieldEffectPool *pool, const FieldEffectBasicTemplate *template, const VecFx32 *position, int parameter, void *userData, u32 priority);
 void FieldEffect_Destroy(int value);
-void FieldEffectPool_DestroyAll(FieldEffectPool *pool);
+static void FieldEffectPool_DestroyAll(FieldEffectPool *pool);
 void FieldEffectPool_DrawAll(FieldEffectPool *pool);
-SysTask *FieldEffect_CreateTask(FieldEffect *effect, u32 priority);
-void FieldEffect_Task(SysTask *task, void *data);
-FieldEffectPool *FieldEffectPool_AllocHeader(enum HeapID heapID);
-void FieldEffectPool_FreeHeader(FieldEffectPool *pool);
-FieldEffect *FieldEffectPool_AllocEffects(enum HeapID heapID, int count);
-void FieldEffectPool_FreeEffects(FieldEffectPool *pool);
-void FieldEffect_Reset(FieldEffect *effect);
-int FieldEffectPool_GetCount(FieldEffectPool *pool);
-FieldEffect *FieldEffectPool_GetEffects(FieldEffectPool *pool);
+static SysTask *FieldEffect_CreateTask(FieldEffect *effect, u32 priority);
+static void FieldEffect_Task(SysTask *task, void *data);
+static FieldEffectPool *FieldEffectPool_AllocHeader(enum HeapID heapID);
+static void FieldEffectPool_FreeHeader(FieldEffectPool *pool);
+static FieldEffect *FieldEffectPool_AllocEffects(enum HeapID heapID, int count);
+static void FieldEffectPool_FreeEffects(FieldEffectPool *pool);
+static void FieldEffect_Reset(FieldEffect *effect);
+static int FieldEffectPool_GetCount(FieldEffectPool *pool);
+static FieldEffect *FieldEffectPool_GetEffects(FieldEffectPool *pool);
 BOOL FieldEffect_IsActive(FieldEffect *effect);
-void FieldEffect_SetActive(FieldEffect *effect);
-void FieldEffect_SetFlags(FieldEffect *effect, u32 flags);
-u32 FieldEffect_TestFlags(FieldEffect *effect, u32 flags);
-void FieldEffect_SetInitFunc(FieldEffect *effect, FieldEffectInitFunc callback);
-BOOL FieldEffect_RunInit(FieldEffect *effect);
-void FieldEffect_SetUpdateFunc(FieldEffect *effect, FieldEffectFunc callback);
+static void FieldEffect_SetActive(FieldEffect *effect);
+static void FieldEffect_SetFlags(FieldEffect *effect, u32 flags);
+static u32 FieldEffect_TestFlags(FieldEffect *effect, u32 flags);
+static void FieldEffect_SetInitFunc(FieldEffect *effect, FieldEffectInitFunc callback);
+static BOOL FieldEffect_RunInit(FieldEffect *effect);
+static void FieldEffect_SetUpdateFunc(FieldEffect *effect, FieldEffectFunc callback);
 void FieldEffect_RunUpdate(FieldEffect *effect);
-void FieldEffect_SetDrawFunc(FieldEffect *effect, FieldEffectFunc callback);
-void FieldEffect_RunDraw(FieldEffect *effect);
-void FieldEffect_SetDestroyFunc(FieldEffect *effect, FieldEffectFunc callback);
-void FieldEffect_RunDestroy(FieldEffect *effect);
-void FieldEffect_SetExtraFunc1(FieldEffect *effect, FieldEffectFunc callback);
-void FieldEffect_SetExtraFunc2(FieldEffect *effect, FieldEffectFunc callback);
+static void FieldEffect_SetDrawFunc(FieldEffect *effect, FieldEffectFunc callback);
+static void FieldEffect_RunDraw(FieldEffect *effect);
+static void FieldEffect_SetDestroyFunc(FieldEffect *effect, FieldEffectFunc callback);
+static void FieldEffect_RunDestroy(FieldEffect *effect);
+static void FieldEffect_SetExtraFunc1(FieldEffect *effect, FieldEffectFunc callback);
+static void FieldEffect_SetExtraFunc2(FieldEffect *effect, FieldEffectFunc callback);
 void *FieldEffect_GetState(FieldEffect *effect);
-void FieldEffect_ClearState(FieldEffect *effect, u32 size);
-void FieldEffect_SetParam(FieldEffect *effect, int parameter);
+static void FieldEffect_ClearState(FieldEffect *effect, u32 size);
+static void FieldEffect_SetParam(FieldEffect *effect, int parameter);
 int FieldEffect_GetParam(FieldEffect *effect);
-void FieldEffect_SetUserData(FieldEffect *effect, void *userData);
+static void FieldEffect_SetUserData(FieldEffect *effect, void *userData);
 FieldEffectUserData *FieldEffect_GetUserData(void *data);
-void FieldEffect_SetTask(FieldEffect *effect, SysTask *task);
-SysTask *FieldEffect_GetTask(FieldEffect *effect);
-void FieldEffect_SetPool(FieldEffect *effect, FieldEffectPool *pool);
+static void FieldEffect_SetTask(FieldEffect *effect, SysTask *task);
+static SysTask *FieldEffect_GetTask(FieldEffect *effect);
+static void FieldEffect_SetPool(FieldEffect *effect, FieldEffectPool *pool);
 void FieldEffect_SetPosition(FieldEffect *effect, const VecFx32 *position);
 void FieldEffect_GetPosition(void *data, VecFx32 *position);
-BOOL FieldEffect_DefaultInit(FieldEffect *effect, void *state);
-void FieldEffect_DefaultUpdate(FieldEffect *effect, void *state);
+static BOOL FieldEffect_DefaultInit(FieldEffect *effect, void *state);
+static void FieldEffect_DefaultUpdate(FieldEffect *effect, void *state);
 void FieldEffect_DefaultDraw(FieldEffect *effect, void *state);
 void FieldEffect_DefaultDestroy(FieldEffect *effect, void *state);
-void FieldEffect_DefaultExtra1(FieldEffect *effect, void *state);
-void FieldEffect_DefaultExtra2(FieldEffect *effect, void *state);
+static void FieldEffect_DefaultExtra1(FieldEffect *effect, void *state);
+static void FieldEffect_DefaultExtra2(FieldEffect *effect, void *state);
 
 FieldEffectPool *FieldEffectPool_New(enum HeapID heapID, int count) {
     FieldEffectPool *pool = FieldEffectPool_AllocHeader(heapID);
@@ -119,7 +119,7 @@ FieldEffectPool *FieldEffectPool_New(enum HeapID heapID, int count) {
     return pool;
 }
 
-void FieldEffectPool_Free(FieldEffectPool *pool) {
+static void FieldEffectPool_Free(FieldEffectPool *pool) {
     FieldEffectPool_FreeEffects(pool);
     FieldEffectPool_FreeHeader(pool);
 }
@@ -131,7 +131,7 @@ void FieldEffectPool_Delete(FieldEffectPool *pool) {
 
 // Takes a free slot, runs the template's init callback and starts the effect's task; NULL if the pool is full or
 // init fails.
-FieldEffect *FieldEffectPool_AddEffect(FieldEffectPool *pool, const FieldEffectTemplate *template, const VecFx32 *position, int parameter, void *userData, u32 priority) {
+static FieldEffect *FieldEffectPool_AddEffect(FieldEffectPool *pool, const FieldEffectTemplate *template, const VecFx32 *position, int parameter, void *userData, u32 priority) {
     int i = 0;
     int count = FieldEffectPool_GetCount(pool);
     FieldEffect *effect = FieldEffectPool_GetEffects(pool);
@@ -203,7 +203,7 @@ void FieldEffect_Destroy(int value) {
     }
 }
 
-void FieldEffectPool_DestroyAll(FieldEffectPool *pool) {
+static void FieldEffectPool_DestroyAll(FieldEffectPool *pool) {
     int count = FieldEffectPool_GetCount(pool);
     FieldEffect *effect = FieldEffectPool_GetEffects(pool);
     do {
@@ -225,17 +225,17 @@ void FieldEffectPool_DrawAll(FieldEffectPool *pool) {
     } while (--count);
 }
 
-SysTask *FieldEffect_CreateTask(FieldEffect *effect, u32 priority) {
+static SysTask *FieldEffect_CreateTask(FieldEffect *effect, u32 priority) {
     SysTask *task = SysTask_CreateOnMainQueue(FieldEffect_Task, effect, priority);
     GF_ASSERT(task != NULL);
     return task;
 }
 
-void FieldEffect_Task(SysTask *task, void *data) {
+static void FieldEffect_Task(SysTask *task, void *data) {
     FieldEffect_RunUpdate(data);
 }
 
-FieldEffectPool *FieldEffectPool_AllocHeader(enum HeapID heapID) {
+static FieldEffectPool *FieldEffectPool_AllocHeader(enum HeapID heapID) {
     FieldEffectPool *pool = Heap_Alloc(heapID, sizeof(*pool));
     u8 *bytes;
     u32 count;
@@ -248,11 +248,11 @@ FieldEffectPool *FieldEffectPool_AllocHeader(enum HeapID heapID) {
     return pool;
 }
 
-void FieldEffectPool_FreeHeader(FieldEffectPool *pool) {
+static void FieldEffectPool_FreeHeader(FieldEffectPool *pool) {
     Heap_FreeExplicit(pool->heapID, pool);
 }
 
-FieldEffect *FieldEffectPool_AllocEffects(enum HeapID heapID, int count) {
+static FieldEffect *FieldEffectPool_AllocEffects(enum HeapID heapID, int count) {
     FieldEffect *effects;
     count *= sizeof(FieldEffect);
     effects = Heap_Alloc(heapID, count);
@@ -261,12 +261,12 @@ FieldEffect *FieldEffectPool_AllocEffects(enum HeapID heapID, int count) {
     return effects;
 }
 
-void FieldEffectPool_FreeEffects(FieldEffectPool *pool) {
+static void FieldEffectPool_FreeEffects(FieldEffectPool *pool) {
     Heap_FreeExplicit(pool->heapID, pool->effects);
 }
 
 // Clears the slot and installs the no-op callbacks.
-void FieldEffect_Reset(FieldEffect *effect) {
+static void FieldEffect_Reset(FieldEffect *effect) {
     memset(effect, 0, sizeof(*effect));
     FieldEffect_SetInitFunc(effect, FieldEffect_DefaultInit);
     FieldEffect_SetDestroyFunc(effect, FieldEffect_DefaultDestroy);
@@ -276,11 +276,11 @@ void FieldEffect_Reset(FieldEffect *effect) {
     FieldEffect_SetExtraFunc2(effect, FieldEffect_DefaultExtra2);
 }
 
-int FieldEffectPool_GetCount(FieldEffectPool *pool) {
+static int FieldEffectPool_GetCount(FieldEffectPool *pool) {
     return pool->count;
 }
 
-FieldEffect *FieldEffectPool_GetEffects(FieldEffectPool *pool) {
+static FieldEffect *FieldEffectPool_GetEffects(FieldEffectPool *pool) {
     return pool->effects;
 }
 
@@ -288,28 +288,28 @@ BOOL FieldEffect_IsActive(FieldEffect *effect) {
     return (effect->flags & FIELD_EFFECT_FLAG_ACTIVE) ? TRUE : FALSE;
 }
 
-void FieldEffect_SetActive(FieldEffect *effect) {
+static void FieldEffect_SetActive(FieldEffect *effect) {
     effect->flags |= FIELD_EFFECT_FLAG_ACTIVE;
 }
 
-void FieldEffect_SetFlags(FieldEffect *effect, u32 flags) {
+static void FieldEffect_SetFlags(FieldEffect *effect, u32 flags) {
     effect->flags |= flags;
 }
 
-u32 FieldEffect_TestFlags(FieldEffect *effect, u32 flags) {
+static u32 FieldEffect_TestFlags(FieldEffect *effect, u32 flags) {
     return effect->flags & flags;
 }
 
-void FieldEffect_SetInitFunc(FieldEffect *effect, FieldEffectInitFunc callback) {
+static void FieldEffect_SetInitFunc(FieldEffect *effect, FieldEffectInitFunc callback) {
     effect->init = callback;
 }
 
-BOOL FieldEffect_RunInit(FieldEffect *effect) {
+static BOOL FieldEffect_RunInit(FieldEffect *effect) {
     void *state = FieldEffect_GetState(effect);
     return effect->init(effect, state);
 }
 
-void FieldEffect_SetUpdateFunc(FieldEffect *effect, FieldEffectFunc callback) {
+static void FieldEffect_SetUpdateFunc(FieldEffect *effect, FieldEffectFunc callback) {
     effect->update = callback;
 }
 
@@ -318,29 +318,29 @@ void FieldEffect_RunUpdate(FieldEffect *effect) {
     effect->update(effect, state);
 }
 
-void FieldEffect_SetDrawFunc(FieldEffect *effect, FieldEffectFunc callback) {
+static void FieldEffect_SetDrawFunc(FieldEffect *effect, FieldEffectFunc callback) {
     effect->draw = callback;
 }
 
-void FieldEffect_RunDraw(FieldEffect *effect) {
+static void FieldEffect_RunDraw(FieldEffect *effect) {
     void *state = FieldEffect_GetState(effect);
     effect->draw(effect, state);
 }
 
-void FieldEffect_SetDestroyFunc(FieldEffect *effect, FieldEffectFunc callback) {
+static void FieldEffect_SetDestroyFunc(FieldEffect *effect, FieldEffectFunc callback) {
     effect->destroy = callback;
 }
 
-void FieldEffect_RunDestroy(FieldEffect *effect) {
+static void FieldEffect_RunDestroy(FieldEffect *effect) {
     void *state = FieldEffect_GetState(effect);
     effect->destroy(effect, state);
 }
 
-void FieldEffect_SetExtraFunc1(FieldEffect *effect, FieldEffectFunc callback) {
+static void FieldEffect_SetExtraFunc1(FieldEffect *effect, FieldEffectFunc callback) {
     effect->extra1 = callback;
 }
 
-void FieldEffect_SetExtraFunc2(FieldEffect *effect, FieldEffectFunc callback) {
+static void FieldEffect_SetExtraFunc2(FieldEffect *effect, FieldEffectFunc callback) {
     effect->extra2 = callback;
 }
 
@@ -348,11 +348,11 @@ void *FieldEffect_GetState(FieldEffect *effect) {
     return effect->state;
 }
 
-void FieldEffect_ClearState(FieldEffect *effect, u32 size) {
+static void FieldEffect_ClearState(FieldEffect *effect, u32 size) {
     memset(FieldEffect_GetState(effect), 0, size);
 }
 
-void FieldEffect_SetParam(FieldEffect *effect, int parameter) {
+static void FieldEffect_SetParam(FieldEffect *effect, int parameter) {
     effect->parameter = parameter;
 }
 
@@ -360,7 +360,7 @@ int FieldEffect_GetParam(FieldEffect *effect) {
     return effect->parameter;
 }
 
-void FieldEffect_SetUserData(FieldEffect *effect, void *userData) {
+static void FieldEffect_SetUserData(FieldEffect *effect, void *userData) {
     effect->userData = userData;
 }
 
@@ -368,15 +368,15 @@ FieldEffectUserData *FieldEffect_GetUserData(void *data) {
     return ((FieldEffect *)data)->userData;
 }
 
-void FieldEffect_SetTask(FieldEffect *effect, SysTask *task) {
+static void FieldEffect_SetTask(FieldEffect *effect, SysTask *task) {
     effect->task = task;
 }
 
-SysTask *FieldEffect_GetTask(FieldEffect *effect) {
+static SysTask *FieldEffect_GetTask(FieldEffect *effect) {
     return effect->task;
 }
 
-void FieldEffect_SetPool(FieldEffect *effect, FieldEffectPool *pool) {
+static void FieldEffect_SetPool(FieldEffect *effect, FieldEffectPool *pool) {
     effect->pool = pool;
 }
 
@@ -388,11 +388,11 @@ void FieldEffect_GetPosition(void *data, VecFx32 *position) {
     *position = ((FieldEffect *)data)->position;
 }
 
-BOOL FieldEffect_DefaultInit(FieldEffect *effect, void *state) {
+static BOOL FieldEffect_DefaultInit(FieldEffect *effect, void *state) {
     return TRUE;
 }
 
-void FieldEffect_DefaultUpdate(FieldEffect *effect, void *state) {
+static void FieldEffect_DefaultUpdate(FieldEffect *effect, void *state) {
 }
 
 void FieldEffect_DefaultDraw(FieldEffect *effect, void *state) {
@@ -401,8 +401,8 @@ void FieldEffect_DefaultDraw(FieldEffect *effect, void *state) {
 void FieldEffect_DefaultDestroy(FieldEffect *effect, void *state) {
 }
 
-void FieldEffect_DefaultExtra1(FieldEffect *effect, void *state) {
+static void FieldEffect_DefaultExtra1(FieldEffect *effect, void *state) {
 }
 
-void FieldEffect_DefaultExtra2(FieldEffect *effect, void *state) {
+static void FieldEffect_DefaultExtra2(FieldEffect *effect, void *state) {
 }

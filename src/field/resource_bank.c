@@ -16,12 +16,12 @@ struct ResourceBank {
     ResourceBankEntry *entries; // stored right after the bank itself
 };
 
-void *ResourceBank_AllocBlock(ResourceBank *bank, u32 size, BOOL atEnd);
-void ResourceBank_FreeBlock(void *block);
-ResourceBankEntry *ResourceBank_FindEntry(ResourceBank *bank, u32 id);
-ResourceBankEntry *ResourceBank_FindFreeEntry(ResourceBank *bank);
-void ResourceBankEntry_Set(ResourceBankEntry *entry, u32 id, void *data);
-void ResourceBankEntry_Clear(ResourceBankEntry *entry);
+static void *ResourceBank_AllocBlock(ResourceBank *bank, u32 size, BOOL atEnd);
+static void ResourceBank_FreeBlock(void *block);
+static ResourceBankEntry *ResourceBank_FindEntry(ResourceBank *bank, u32 id);
+static ResourceBankEntry *ResourceBank_FindFreeEntry(ResourceBank *bank);
+static void ResourceBankEntry_Set(ResourceBankEntry *entry, u32 id, void *data);
+static void ResourceBankEntry_Clear(ResourceBankEntry *entry);
 
 ResourceBank *ResourceBank_Create(enum HeapID parentHeapID, enum HeapID heapID, u32 heapSize, u32 capacity) {
     ResourceBank *bank;
@@ -107,7 +107,7 @@ void *ResourceBank_LoadFromNarc(ResourceBank *bank, u32 id, NARC *narc, u32 file
     return data;
 }
 
-void *ResourceBank_AllocBlock(ResourceBank *bank, u32 size, BOOL atEnd) {
+static void *ResourceBank_AllocBlock(ResourceBank *bank, u32 size, BOOL atEnd) {
     void *data;
     if (atEnd == FALSE) {
         data = Heap_Alloc(bank->heapID, size);
@@ -120,11 +120,11 @@ void *ResourceBank_AllocBlock(ResourceBank *bank, u32 size, BOOL atEnd) {
     return data;
 }
 
-void ResourceBank_FreeBlock(void *block) {
+static void ResourceBank_FreeBlock(void *block) {
     Heap_Free(block);
 }
 
-ResourceBankEntry *ResourceBank_FindEntry(ResourceBank *bank, u32 id) {
+static ResourceBankEntry *ResourceBank_FindEntry(ResourceBank *bank, u32 id) {
     u32 count = bank->capacity;
     ResourceBankEntry *entry = bank->entries;
 
@@ -138,7 +138,7 @@ ResourceBankEntry *ResourceBank_FindEntry(ResourceBank *bank, u32 id) {
     return NULL;
 }
 
-ResourceBankEntry *ResourceBank_FindFreeEntry(ResourceBank *bank) {
+static ResourceBankEntry *ResourceBank_FindFreeEntry(ResourceBank *bank) {
     u32 count = bank->capacity;
     ResourceBankEntry *entry = bank->entries;
 
@@ -152,12 +152,12 @@ ResourceBankEntry *ResourceBank_FindFreeEntry(ResourceBank *bank) {
     return NULL;
 }
 
-void ResourceBankEntry_Set(ResourceBankEntry *entry, u32 id, void *data) {
+static void ResourceBankEntry_Set(ResourceBankEntry *entry, u32 id, void *data) {
     entry->data = data;
     entry->id = id;
 }
 
-void ResourceBankEntry_Clear(ResourceBankEntry *entry) {
+static void ResourceBankEntry_Clear(ResourceBankEntry *entry) {
     entry->data = NULL;
     entry->id = 0;
 }

@@ -4,8 +4,8 @@
 #include "field/field_effect_manager.h"
 
 #include "billboard_lists.h"
-#include "map_object.h"
 #include "field_effects.h"
+#include "map_object.h"
 
 // The very tall grass a map object stands in (field effect renderer 12): like the tall grass, a billboard
 // over the tile that rustles (12 frames) when the object walks in, then holds its last frame until the
@@ -16,8 +16,6 @@
 #define VERY_TALL_GRASS_SEQUENCE 7
 #define VERY_TALL_GRASS_TEXTURE  8
 
-// Puts position->y on the ground of the tile at position->x/z; FALSE while that tile has no ground yet.
-// (unk_0205FD20.h declares it returning void.)
 BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position);
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 12).
@@ -43,7 +41,7 @@ typedef struct VeryTallGrassEffect {
     u32 spriteId;
     u32 objectId;
     u32 mapId;
-    u8 unk10[4];
+    u8 unk_10[4];
     BOOL onGround;
     VeryTallGrassEffectArgs args;
     void *billboard;
@@ -51,8 +49,8 @@ typedef struct VeryTallGrassEffect {
 
 VeryTallGrass *VeryTallGrass_New(FieldEffectManager *manager);
 void VeryTallGrass_Free(VeryTallGrass *grass);
-void VeryTallGrass_LoadGfx(VeryTallGrass *grass);
-void VeryTallGrass_FreeGfx(VeryTallGrass *grass);
+static void VeryTallGrass_LoadGfx(VeryTallGrass *grass);
+static void VeryTallGrass_FreeGfx(VeryTallGrass *grass);
 void VeryTallGrass_Spawn(LocalMapObject *mapObject, BOOL animate);
 void VeryTallGrass_SpawnAt(LocalMapObject *mapObject, BOOL animate, int x, int z, BOOL checkFacing);
 BOOL VeryTallGrassEffect_Init(FieldEffect *effect, VeryTallGrassEffect *work);
@@ -60,9 +58,8 @@ void VeryTallGrassEffect_Destroy(FieldEffect *effect, VeryTallGrassEffect *work)
 void VeryTallGrassEffect_Update(FieldEffect *effect, VeryTallGrassEffect *work);
 void VeryTallGrassEffect_Draw(FieldEffect *effect, VeryTallGrassEffect *work);
 
-// In asm/field_very_tall_grass_data.s.
 extern const FieldEffectBasicTemplate sVeryTallGrassEffectTemplate; // very tall grass effect
-extern const u32 sVeryTallGrassRecordParams[6];                   // very tall grass record params
+extern const u32 sVeryTallGrassRecordParams[6];                     // very tall grass record params
 
 VeryTallGrass *VeryTallGrass_New(FieldEffectManager *manager) {
     VeryTallGrass *grass = FieldEffectManager_HeapAllocAndFill(manager, sizeof(VeryTallGrass), FALSE, 0);
@@ -76,14 +73,14 @@ void VeryTallGrass_Free(VeryTallGrass *grass) {
     FieldEffectManager_HeapFree(grass);
 }
 
-void VeryTallGrass_LoadGfx(VeryTallGrass *grass) {
+static void VeryTallGrass_LoadGfx(VeryTallGrass *grass) {
     FieldEffectManager_LoadBillboardResource(grass->manager, VERY_TALL_GRASS_RESOURCE, 0x7A);
     FieldEffectManager_LoadBillboardSequence(grass->manager, VERY_TALL_GRASS_SEQUENCE, 0x92);
     FieldEffectManager_LoadTexResource(grass->manager, VERY_TALL_GRASS_TEXTURE, 0x15, TRUE);
     FieldEffectManager_AddRecord(grass->manager, VERY_TALL_GRASS_RECORD, VERY_TALL_GRASS_RESOURCE, VERY_TALL_GRASS_SEQUENCE, VERY_TALL_GRASS_TEXTURE, 0, sVeryTallGrassRecordParams);
 }
 
-void VeryTallGrass_FreeGfx(VeryTallGrass *grass) {
+static void VeryTallGrass_FreeGfx(VeryTallGrass *grass) {
     FieldEffectManager_FreeBillboardResource(grass->manager, VERY_TALL_GRASS_RESOURCE);
     FieldEffectManager_FreeBillboardSequence(grass->manager, VERY_TALL_GRASS_SEQUENCE);
     FieldEffectManager_FreeTexResource(grass->manager, VERY_TALL_GRASS_TEXTURE);

@@ -526,24 +526,24 @@ void PokewalkerIr_RequestChunk(void) {
 
 #pragma force_active on
 
-#define LOAD_NEXT_BLOCK()                                                                                             \
-    switch (ov112_021FFAA4.blockIndex) {                                                                              \
-    case 0:                                                                                                           \
-        ov112_021FFB24.step = 176;                                                                                    \
-        PokewalkerIr_BeginTransfer((void *)(ov112_021FFAA4.blocks->block0), (u32)((void *)0xB804), 576);              \
-        break;                                                                                                        \
-    case 1:                                                                                                           \
-        ov112_021FFB24.step = 178;                                                                                    \
+#define LOAD_NEXT_BLOCK()                                                                                   \
+    switch (ov112_021FFAA4.blockIndex) {                                                                    \
+    case 0:                                                                                                 \
+        ov112_021FFB24.step = 176;                                                                          \
+        PokewalkerIr_BeginTransfer((void *)(ov112_021FFAA4.blocks->block0), (u32)((void *)0xB804), 576);    \
+        break;                                                                                              \
+    case 1:                                                                                                 \
+        ov112_021FFB24.step = 178;                                                                          \
         PokewalkerIr_BeginTransfer((void *)((s32)ov112_021FFAA4.blocks + 580), (u32)((void *)0xBA44), 764); \
-        break;                                                                                                        \
-    case 2:                                                                                                           \
-        ov112_021FFB24.step = 180;                                                                                    \
-        PokewalkerIr_BeginTransfer((void *)(&ov112_021FFAA4.blocks->giftItem), (u32)((void *)0xBD40), 392);           \
-        break;                                                                                                        \
-    case 3:                                                                                                           \
-        ov112_021FFB24.step = 182;                                                                                    \
+        break;                                                                                              \
+    case 2:                                                                                                 \
+        ov112_021FFB24.step = 180;                                                                          \
+        PokewalkerIr_BeginTransfer((void *)(&ov112_021FFAA4.blocks->giftItem), (u32)((void *)0xBD40), 392); \
+        break;                                                                                              \
+    case 3:                                                                                                 \
+        ov112_021FFB24.step = 182;                                                                          \
         PokewalkerIr_BeginTransfer(ov112_021FFAA4.unk_0C, (u32)((void *)0xBF00), 3260);                     \
-        break;                                                                                                        \
+        break;                                                                                              \
     }
 
 #define CHECK_BLOCK_LOCKED()                            \

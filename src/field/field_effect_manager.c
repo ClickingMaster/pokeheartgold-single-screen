@@ -6,7 +6,6 @@
 #include "gf_3d_render.h"
 #include "map_object.h"
 
-// Not declared in any header yet.
 void *FieldEffectPool_New(enum HeapID heapID, u32 count);
 void FieldEffectPool_Delete(void *manager);
 void FieldEffectPool_DrawAll(void *manager);
@@ -106,7 +105,6 @@ FieldSystem *FieldEffectManager_GetFieldSystem(FieldEffectManager *manager) {
 }
 
 FieldEffectManager *FieldEffectManager_GetFromMapObject(LocalMapObject *mapObject) {
-    // fieldSystem->fieldEffectManager (field_system.h declares the opaque FieldEffectManager)
     return MapObject_GetFieldSystem(mapObject)->fieldEffectManager;
 }
 

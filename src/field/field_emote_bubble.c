@@ -2,21 +2,20 @@
 
 #include "constants/sndseq.h"
 
+#include "field/field_effect_manager.h"
 #include "nnsys/g3d/binres/res_struct_accessor.h"
 
 #include "billboard_lists.h"
-#include "field/field_effect_manager.h"
+#include "field_effects.h"
 #include "field_system.h"
 #include "heap.h"
 #include "map_object.h"
 #include "task.h"
-#include "field_effects.h"
 #include "vram_transfer_manager.h"
 
 // The emote bubble that pops up above a map object (field effect renderer 0x12): one billboard that
 // rises into place, then plays one of 14 texture animations by streaming frames into its VRAM slot.
 
-// Not declared in any header yet.
 void *BillboardObject_Delete(void *billboard);
 void BillboardObject_SetPosition(void *billboard, const VecFx32 *position);
 void BillboardGfxSequence_Init(void *data, void *sequence);
@@ -53,7 +52,7 @@ typedef struct EmoteBubbleTaskEnv {
 typedef struct EmoteBubbleAnim {
     u16 *durations;
     u8 *frames;
-    u32 unk8;
+    u32 unk_08;
     u32 frameCount;
     NNSG3dResTex *tex;
     void *sequenceFile;
@@ -72,9 +71,9 @@ typedef struct EmoteBubbleEffect {
     int hidden;
     int done;
     VecFx32 offset;
-    u8 unk24[4];
+    u8 unk_24[4];
     fx32 velocity;
-    u8 unk2C[4];
+    u8 unk_2C[4];
     EmoteBubbleEffectArgs args;
     void *billboard;
     EmoteBubbleAnim anim;
@@ -87,17 +86,17 @@ typedef struct EmoteBubbleFiles {
 
 EmoteBubble *EmoteBubble_New(FieldEffectManager *manager);
 void EmoteBubble_Free(EmoteBubble *bubble);
-BOOL EmoteBubble_Show(LocalMapObject *mapObject, int kind);
+static BOOL EmoteBubble_Show(LocalMapObject *mapObject, int kind);
 void FieldSystem_ShowEmoteBubble(FieldSystem *fieldSystem, LocalMapObject *mapObject, int kind);
-BOOL EmoteBubble_ShowTask(TaskManager *taskManager);
-void EmoteBubble_LoadGfx(EmoteBubble *bubble);
-void EmoteBubble_FreeGfx(EmoteBubble *bubble);
-void *EmoteBubble_CreateBillboard(FieldEffectManager *manager, const VecFx32 *position);
-BOOL EmoteBubbleEffect_Init(FieldEffect *effect, EmoteBubbleEffect *work);
-void EmoteBubbleEffect_Destroy(FieldEffect *effect, EmoteBubbleEffect *work);
-void EmoteBubbleEffect_Update(FieldEffect *effect, EmoteBubbleEffect *work);
-void EmoteBubbleEffect_Draw(FieldEffect *effect, EmoteBubbleEffect *work);
-BOOL EmoteBubbleAnim_Advance(EmoteBubbleAnim *anim);
+static BOOL EmoteBubble_ShowTask(TaskManager *taskManager);
+static void EmoteBubble_LoadGfx(EmoteBubble *bubble);
+static void EmoteBubble_FreeGfx(EmoteBubble *bubble);
+static void *EmoteBubble_CreateBillboard(FieldEffectManager *manager, const VecFx32 *position);
+static BOOL EmoteBubbleEffect_Init(FieldEffect *effect, EmoteBubbleEffect *work);
+static void EmoteBubbleEffect_Destroy(FieldEffect *effect, EmoteBubbleEffect *work);
+static void EmoteBubbleEffect_Update(FieldEffect *effect, EmoteBubbleEffect *work);
+static void EmoteBubbleEffect_Draw(FieldEffect *effect, EmoteBubbleEffect *work);
+static BOOL EmoteBubbleAnim_Advance(EmoteBubbleAnim *anim);
 
 static const FieldEffectBasicTemplate sEmoteBubbleEffectTemplate = {
     sizeof(EmoteBubbleEffect),
@@ -140,7 +139,7 @@ void EmoteBubble_Free(EmoteBubble *bubble) {
 }
 
 // Returns FALSE while another bubble is up; the success path falls off the end without a value.
-BOOL EmoteBubble_Show(LocalMapObject *mapObject, int kind) {
+static BOOL EmoteBubble_Show(LocalMapObject *mapObject, int kind) {
     EmoteBubbleEffectArgs args;
     VecFx32 position;
     VecFx32 facing;
@@ -169,7 +168,7 @@ void FieldSystem_ShowEmoteBubble(FieldSystem *fieldSystem, LocalMapObject *mapOb
     TaskManager_Call(fieldSystem->taskman, EmoteBubble_ShowTask, env);
 }
 
-BOOL EmoteBubble_ShowTask(TaskManager *taskManager) {
+static BOOL EmoteBubble_ShowTask(TaskManager *taskManager) {
     u32 *state = TaskManager_GetStatePtr(taskManager);
     EmoteBubbleTaskEnv *env = TaskManager_GetEnvironment(taskManager);
     switch (*state) {
@@ -189,27 +188,27 @@ BOOL EmoteBubble_ShowTask(TaskManager *taskManager) {
     return FALSE;
 }
 
-void EmoteBubble_LoadGfx(EmoteBubble *bubble) {
+static void EmoteBubble_LoadGfx(EmoteBubble *bubble) {
     FieldEffectManager_LoadBillboardResource(bubble->manager, EMOTE_BUBBLE_RESOURCE, 0x82);
     FieldEffectManager_LoadBillboardSequence(bubble->manager, EMOTE_BUBBLE_RESOURCE, 0x8c);
     FieldEffectManager_LoadTexResource(bubble->manager, EMOTE_BUBBLE_TEXTURE, 0x1c, TRUE);
     FieldEffectManager_AddRecord(bubble->manager, EMOTE_BUBBLE_RECORD, EMOTE_BUBBLE_RESOURCE, EMOTE_BUBBLE_RESOURCE, EMOTE_BUBBLE_TEXTURE, 0, sEmoteBubbleRecordParams);
 }
 
-void EmoteBubble_FreeGfx(EmoteBubble *bubble) {
+static void EmoteBubble_FreeGfx(EmoteBubble *bubble) {
     FieldEffectManager_FreeBillboardResource(bubble->manager, EMOTE_BUBBLE_RESOURCE);
     FieldEffectManager_FreeBillboardSequence(bubble->manager, EMOTE_BUBBLE_RESOURCE);
     FieldEffectManager_FreeTexResource(bubble->manager, EMOTE_BUBBLE_TEXTURE);
     FieldEffectManager_ReleaseRecord(bubble->manager, EMOTE_BUBBLE_RECORD);
 }
 
-void *EmoteBubble_CreateBillboard(FieldEffectManager *manager, const VecFx32 *position) {
+static void *EmoteBubble_CreateBillboard(FieldEffectManager *manager, const VecFx32 *position) {
     void *billboard = FieldEffectManager_CreateBillboardFromRecord(manager, EMOTE_BUBBLE_RECORD, position);
     NNS_G3dMdlSetMdlFogEnableFlagAll(BillboardObject_GetModel(billboard), FALSE);
     return billboard;
 }
 
-BOOL EmoteBubbleEffect_Init(FieldEffect *effect, EmoteBubbleEffect *work) {
+static BOOL EmoteBubbleEffect_Init(FieldEffect *effect, EmoteBubbleEffect *work) {
     VecFx32 position;
 
     work->args = *(EmoteBubbleEffectArgs *)FieldEffect_GetUserData(effect);
@@ -236,13 +235,13 @@ BOOL EmoteBubbleEffect_Init(FieldEffect *effect, EmoteBubbleEffect *work) {
     return TRUE;
 }
 
-void EmoteBubbleEffect_Destroy(FieldEffect *effect, EmoteBubbleEffect *work) {
+static void EmoteBubbleEffect_Destroy(FieldEffect *effect, EmoteBubbleEffect *work) {
     BillboardObject_Delete(work->billboard);
     Heap_Free(work->anim.sequenceFile);
     Heap_Free(work->anim.texFile);
 }
 
-void EmoteBubbleEffect_Update(FieldEffect *effect, EmoteBubbleEffect *work) {
+static void EmoteBubbleEffect_Update(FieldEffect *effect, EmoteBubbleEffect *work) {
     VecFx32 result;
     VecFx32 position;
     VecFx32 facing;
@@ -294,7 +293,7 @@ void EmoteBubbleEffect_Update(FieldEffect *effect, EmoteBubbleEffect *work) {
     FieldEffect_SetPosition(effect, &result);
 }
 
-void EmoteBubbleEffect_Draw(FieldEffect *effect, EmoteBubbleEffect *work) {
+static void EmoteBubbleEffect_Draw(FieldEffect *effect, EmoteBubbleEffect *work) {
     VecFx32 position;
 
     if (work->hidden != 1) {
@@ -306,7 +305,7 @@ void EmoteBubbleEffect_Draw(FieldEffect *effect, EmoteBubbleEffect *work) {
     }
 }
 
-BOOL EmoteBubbleAnim_Advance(EmoteBubbleAnim *anim) {
+static BOOL EmoteBubbleAnim_Advance(EmoteBubbleAnim *anim) {
     anim->timer++;
     if (anim->timer >= anim->durations[anim->frame]) {
         anim->frame++;

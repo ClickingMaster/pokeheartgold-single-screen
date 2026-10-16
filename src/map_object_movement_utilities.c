@@ -1,14 +1,13 @@
 #include "global.h"
 
 #include "field_system.h"
+#include "field_terrain.h"
 #include "map_object.h"
 #include "map_object_movement_utilities_internal.h"
 #include "metatile_behavior.h"
 #include "overlay_01.h"
-#include "field_terrain.h"
 
-// Defined elsewhere without a header yet.
-int FieldSystem_GetTileAttrBits8To14(FieldSystem *fieldSystem, int x, int z); // defined as u8; the caller truncates the result itself
+int FieldSystem_GetTileAttrBits8To14(FieldSystem *fieldSystem, int x, int z);
 int FieldSystem_GetTerrainHeight(FieldSystem *fieldSystem, int y, int x, int z, u8 *floorType);
 void MapObject_GetPreviousCoordsBehind(LocalMapObject *object, int *x, int *z);
 

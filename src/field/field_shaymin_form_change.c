@@ -1,11 +1,12 @@
+#include "field/field_shaymin_form_change.h"
+
 #include "global.h"
 
 #include "constants/sndseq.h"
 
+#include "field/field_3d_model.h"
 #include "field/field_effect_helpers.h"
 #include "field/field_effect_manager.h"
-#include "field/field_shaymin_form_change.h"
-#include "field/field_3d_model.h"
 
 #include "field_effects.h"
 #include "filesystem_files_def.h"
@@ -39,16 +40,15 @@ typedef struct ShayminFormChangeEffect {
 
 ShayminFormChange *ShayminFormChange_New(FieldEffectManager *manager);
 void ShayminFormChange_Free(ShayminFormChange *formChange);
-void ShayminFormChange_LoadModel(ShayminFormChange *formChange);
-void ShayminFormChange_FreeModel(ShayminFormChange *formChange);
+static void ShayminFormChange_LoadModel(ShayminFormChange *formChange);
+static void ShayminFormChange_FreeModel(ShayminFormChange *formChange);
 BOOL ShayminFormChangeEffect_Init(FieldEffect *effect, ShayminFormChangeEffect *work);
 void ShayminFormChangeEffect_Update(void);
 void ShayminFormChangeEffect_Destroy(FieldEffect *effect, ShayminFormChangeEffect *work);
 void ShayminFormChangeEffect_Draw(FieldEffect *effect, ShayminFormChangeEffect *work);
-BOOL ShayminFormChange_AdvanceAnimations(Field3DModelAnimation *animations, u32 count);
-void ShayminFormChange_SetAnimationsFrame(Field3DModelAnimation *animations, u32 count, fx32 frame);
+static BOOL ShayminFormChange_AdvanceAnimations(Field3DModelAnimation *animations, u32 count);
+static void ShayminFormChange_SetAnimationsFrame(Field3DModelAnimation *animations, u32 count, fx32 frame);
 
-// The effect template stays in asm (asm/field_shaymin_form_change_data.s, linked after this file).
 extern const FieldEffectBasicTemplate sShayminFormChangeTemplate;
 
 ShayminFormChange *ShayminFormChange_New(FieldEffectManager *manager) {
@@ -63,7 +63,7 @@ void ShayminFormChange_Free(ShayminFormChange *formChange) {
     FieldEffectManager_HeapFree(formChange);
 }
 
-void ShayminFormChange_LoadModel(ShayminFormChange *formChange) {
+static void ShayminFormChange_LoadModel(ShayminFormChange *formChange) {
     HeapExp_FndInitAllocator(&formChange->allocator, HEAP_ID_FIELD1, 32);
     Field3dModel_LoadFromFilesystem(&formChange->model, NARC_a_1_0_3, 0x84, HEAP_ID_FIELD1);
     Field3dModelAnimation_LoadFromFilesystem(&formChange->animations[0], &formChange->model, NARC_a_1_0_3, 0xA8, HEAP_ID_FIELD1, &formChange->allocator);
@@ -75,7 +75,7 @@ void ShayminFormChange_LoadModel(ShayminFormChange *formChange) {
     Field3dObject_SetActiveFlag(&formChange->object, FALSE);
 }
 
-void ShayminFormChange_FreeModel(ShayminFormChange *formChange) {
+static void ShayminFormChange_FreeModel(ShayminFormChange *formChange) {
     Field3dModelAnimation_Unload(&formChange->animations[1], &formChange->allocator);
     Field3dModelAnimation_Unload(&formChange->animations[0], &formChange->allocator);
     Field3dModel_Unload(&formChange->model);
@@ -123,7 +123,7 @@ void ShayminFormChangeEffect_Draw(FieldEffect *effect, ShayminFormChangeEffect *
     Field3dObject_Draw(&formChange->object);
 }
 
-BOOL ShayminFormChange_AdvanceAnimations(Field3DModelAnimation *animations, u32 count) {
+static BOOL ShayminFormChange_AdvanceAnimations(Field3DModelAnimation *animations, u32 count) {
     u8 i;
     u8 done = 0;
     for (i = 0; i < count; i++) {
@@ -134,7 +134,7 @@ BOOL ShayminFormChange_AdvanceAnimations(Field3DModelAnimation *animations, u32 
     return done == count;
 }
 
-void ShayminFormChange_SetAnimationsFrame(Field3DModelAnimation *animations, u32 count, fx32 frame) {
+static void ShayminFormChange_SetAnimationsFrame(Field3DModelAnimation *animations, u32 count, fx32 frame) {
     u8 i;
     for (i = 0; i < count; i++) {
         Field3dModelAnimation_FrameSet(&animations[i], frame);

@@ -1,8 +1,4 @@
-// Pokewalker connection app, modes 4 and 5, and taking Pokemon and gifts from the Pokewalker.
-// Mode 4 waits for Down, then goes to mode 6 (save). Mode 5 starts a Stroll: it puts the Pokemon chosen in mode 7 on the
-// Pokewalker (and the course chosen for it), takes the Pokewalker's caught Pokemon and items, saves, and then shows the
-// Stroll report (mode 10), or on the first Stroll the "registered to this DS Card" message.
-// The state functions of mode 5 are in the table sStartStrollStates (asm data).
+// Pokewalker connection app, modes 4 and 5: waiting before the save, and starting a Stroll.
 
 #include "global.h"
 

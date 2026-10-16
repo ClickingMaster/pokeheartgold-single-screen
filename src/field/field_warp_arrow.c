@@ -7,11 +7,11 @@
 #include "field_system.h"
 #include "geometry_math.h"
 #include "map_object.h"
+#include "map_object_movement_utilities.h"
 #include "metatile_behavior.h"
 #include "player_avatar.h"
 #include "render_animation.h"
 #include "render_model.h"
-#include "map_object_movement_utilities.h"
 
 // The arrow shown on the tile ahead of the player while it stands on a warp entrance (door mat, cave exit,
 // ...) facing the way out (field effect renderer 3, created with the player avatar): a model turned to the
@@ -36,7 +36,7 @@ typedef struct WarpArrowEffect {
     BOOL hidden;
     int direction; // of the warp the player stands on, -1 if none
     u8 behavior;
-    u8 unk09[0xB];
+    u8 unk_09[0xB];
     u32 objectId;
     u32 mapId;
     int timer;
@@ -46,17 +46,16 @@ typedef struct WarpArrowEffect {
 
 WarpArrow *WarpArrow_New(FieldEffectManager *manager);
 void WarpArrow_Free(WarpArrow *arrow);
-void WarpArrow_LoadModel(WarpArrow *arrow);
-void WarpArrow_FreeModel(WarpArrow *arrow);
+static void WarpArrow_LoadModel(WarpArrow *arrow);
+static void WarpArrow_FreeModel(WarpArrow *arrow);
 void WarpArrow_Spawn(PlayerAvatar *playerAvatar);
 BOOL WarpArrowEffect_Init(FieldEffect *effect, WarpArrowEffect *work);
 void WarpArrowEffect_Destroy(FieldEffect *effect, WarpArrowEffect *work);
 void WarpArrowEffect_Update(FieldEffect *effect, WarpArrowEffect *work);
 void WarpArrowEffect_Draw(FieldEffect *effect, WarpArrowEffect *work);
-int WarpArrow_GetWarpDirection(u8 behavior);
+static int WarpArrow_GetWarpDirection(u8 behavior);
 
-// Data stays in asm (asm/field_warp_arrow_data.s, linked after this file): the model scale (1, 1, 1),
-// the effect template and the arrow's two offsets per direction (none, 2 units towards the exit).
+// The model scale (1, 1, 1), the effect template and the arrow's two offsets per direction (none, 2 units towards the exit).
 extern const VecFx32 sWarpArrowScale;
 extern const FieldEffectBasicTemplate sWarpArrowTemplate;
 extern const VecFx32 sWarpArrowOffsets[4][2];
@@ -73,12 +72,12 @@ void WarpArrow_Free(WarpArrow *arrow) {
     FieldEffectManager_HeapFree(arrow);
 }
 
-void WarpArrow_LoadModel(WarpArrow *arrow) {
+static void WarpArrow_LoadModel(WarpArrow *arrow) {
     FieldEffectManager_LoadRenderModel(arrow->manager, &arrow->model, 0, 0x55, FALSE);
     RenderObj_InitFromModel(&arrow->renderObj, &arrow->model);
 }
 
-void WarpArrow_FreeModel(WarpArrow *arrow) {
+static void WarpArrow_FreeModel(WarpArrow *arrow) {
     RenderModel_Free(&arrow->model);
 }
 
@@ -187,7 +186,7 @@ void WarpArrowEffect_Draw(FieldEffect *effect, WarpArrowEffect *work) {
 #pragma force_active reset
 
 // The way out of a warp entrance tile (DIR_NORTH..DIR_EAST), -1 for other tiles.
-int WarpArrow_GetWarpDirection(u8 behavior) {
+static int WarpArrow_GetWarpDirection(u8 behavior) {
     if (MetatileBehavior_IsWarpEntranceNorth(behavior)) {
         return 0;
     }

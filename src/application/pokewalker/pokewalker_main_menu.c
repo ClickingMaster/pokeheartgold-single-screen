@@ -1,7 +1,4 @@
-// Pokewalker connection app, mode 0: the main menu. Checks the PC boxes (at least five free spaces, at least one
-// Pokemon), shows the Pokewalker's records on the sub screen, and lets the player pick what to do (go for a Stroll,
-// receive gifts, return from a Stroll); the choice selects the next app mode. The state functions are in table
-// sMainMenuStates (asm data); state 27 leaves the mode.
+// Pokewalker connection app, mode 0: the main menu.
 
 #include "global.h"
 
@@ -12,13 +9,13 @@
 #include "pokemon.h"
 #include "pokemon_storage_system.h"
 #include "save_arrays.h"
+#include "screen_fade_legacy.h"
 #include "sound.h"
 #include "sound_playback.h"
 #include "sound_system.h"
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "screen_fade_legacy.h"
 
 typedef int (*PokewalkerAppStateFunc)(PokewalkerApp *app);
 

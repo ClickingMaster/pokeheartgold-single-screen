@@ -1,13 +1,13 @@
 #include "global.h"
 
-#include "field/field_effect_manager.h"
 #include "field/field_effect_helpers.h"
+#include "field/field_effect_manager.h"
 
+#include "field_effects.h"
 #include "map_object.h"
+#include "map_object_movement_utilities.h"
 #include "render_animation.h"
 #include "render_model.h"
-#include "map_object_movement_utilities.h"
-#include "field_effects.h"
 
 // The splash a map object kicks up when it steps into a puddle (field effect renderer 6): one animated
 // model played once at the tile, then the effect ends.
@@ -32,13 +32,13 @@ typedef struct PuddleSplashEffect {
 
 PuddleSplash *PuddleSplash_New(FieldEffectManager *manager);
 void PuddleSplash_Free(PuddleSplash *splash);
-void PuddleSplash_LoadGfx(PuddleSplash *splash);
-void PuddleSplash_FreeGfx(PuddleSplash *splash);
+static void PuddleSplash_LoadGfx(PuddleSplash *splash);
+static void PuddleSplash_FreeGfx(PuddleSplash *splash);
 void PuddleSplash_Spawn(LocalMapObject *mapObject, int x, int y, int z);
-BOOL PuddleSplashEffect_Init(FieldEffect *effect, PuddleSplashEffect *work);
-void PuddleSplashEffect_Destroy(FieldEffect *effect, PuddleSplashEffect *work);
-void PuddleSplashEffect_Update(FieldEffect *effect, PuddleSplashEffect *work);
-void PuddleSplashEffect_Draw(FieldEffect *effect, PuddleSplashEffect *work);
+static BOOL PuddleSplashEffect_Init(FieldEffect *effect, PuddleSplashEffect *work);
+static void PuddleSplashEffect_Destroy(FieldEffect *effect, PuddleSplashEffect *work);
+static void PuddleSplashEffect_Update(FieldEffect *effect, PuddleSplashEffect *work);
+static void PuddleSplashEffect_Draw(FieldEffect *effect, PuddleSplashEffect *work);
 
 static const FieldEffectBasicTemplate sPuddleSplashEffectTemplate = {
     sizeof(PuddleSplashEffect),
@@ -60,12 +60,12 @@ void PuddleSplash_Free(PuddleSplash *splash) {
     FieldEffectManager_HeapFree(splash);
 }
 
-void PuddleSplash_LoadGfx(PuddleSplash *splash) {
+static void PuddleSplash_LoadGfx(PuddleSplash *splash) {
     FieldEffectManager_LoadRenderModel(splash->manager, &splash->model, 0, 0x1D, FALSE);
     FieldEffectManager_LoadRenderAnimation(splash->manager, &splash->animation, 0, 0x86, FALSE);
 }
 
-void PuddleSplash_FreeGfx(PuddleSplash *splash) {
+static void PuddleSplash_FreeGfx(PuddleSplash *splash) {
     RenderModel_Free(&splash->model);
     RenderAnimation_Free(&splash->animation);
 }
@@ -85,7 +85,7 @@ void PuddleSplash_Spawn(LocalMapObject *mapObject, int x, int y, int z) {
     FieldEffectManager_CreateEffect(args.manager, &sPuddleSplashEffectTemplate, &position, 0, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 
-BOOL PuddleSplashEffect_Init(FieldEffect *effect, PuddleSplashEffect *work) {
+static BOOL PuddleSplashEffect_Init(FieldEffect *effect, PuddleSplashEffect *work) {
     PuddleSplashEffectArgs *args = (PuddleSplashEffectArgs *)FieldEffect_GetUserData(effect);
     work->args = *args;
     FieldEffectManager_InitRenderAnimation(work->args.manager, &work->animation, &work->args.splash->model, &work->args.splash->animation, 0);
@@ -93,11 +93,11 @@ BOOL PuddleSplashEffect_Init(FieldEffect *effect, PuddleSplashEffect *work) {
     return TRUE;
 }
 
-void PuddleSplashEffect_Destroy(FieldEffect *effect, PuddleSplashEffect *work) {
+static void PuddleSplashEffect_Destroy(FieldEffect *effect, PuddleSplashEffect *work) {
     RenderAnimation_Free(&work->animation);
 }
 
-void PuddleSplashEffect_Update(FieldEffect *effect, PuddleSplashEffect *work) {
+static void PuddleSplashEffect_Update(FieldEffect *effect, PuddleSplashEffect *work) {
     if (RenderAnimation_IsDone(&work->animation) == TRUE) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
@@ -105,7 +105,7 @@ void PuddleSplashEffect_Update(FieldEffect *effect, PuddleSplashEffect *work) {
     RenderAnimation_Advance(&work->animation, FX32_ONE, FALSE);
 }
 
-void PuddleSplashEffect_Draw(FieldEffect *effect, PuddleSplashEffect *work) {
+static void PuddleSplashEffect_Draw(FieldEffect *effect, PuddleSplashEffect *work) {
     VecFx32 position;
     FieldEffect_GetPosition(effect, &position);
     RenderObj_DrawAt((int)&work->renderObj, &position);

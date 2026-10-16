@@ -3,11 +3,11 @@
 #include "field/field_effect_helpers.h"
 #include "field/field_effect_manager.h"
 
+#include "field_effects.h"
 #include "map_object.h"
+#include "map_object_movement_utilities.h"
 #include "render_animation.h"
 #include "render_model.h"
-#include "map_object_movement_utilities.h"
-#include "field_effects.h"
 
 // Footprints and tire tracks a map object leaves behind (field effect renderer 2): two banks of ten
 // models (four facings plus six straight/turning track pieces each), one mark per step at the tile the
@@ -46,20 +46,20 @@ typedef struct FootprintEffect {
 
 Footprints *Footprints_New(FieldEffectManager *manager);
 void Footprints_Free(Footprints *footprints);
-void Footprints_LoadModels(Footprints *footprints);
-void Footprints_FreeModels(Footprints *footprints);
-NNSG3dRenderObj *Footprints_GetRenderObj(Footprints *footprints, u32 kind, u32 direction, u32 prevDirection);
-RenderModelStorage *Footprints_GetModel(Footprints *footprints, u32 kind, u32 direction, u32 prevDirection);
+static void Footprints_LoadModels(Footprints *footprints);
+static void Footprints_FreeModels(Footprints *footprints);
+static NNSG3dRenderObj *Footprints_GetRenderObj(Footprints *footprints, u32 kind, u32 direction, u32 prevDirection);
+static RenderModelStorage *Footprints_GetModel(Footprints *footprints, u32 kind, u32 direction, u32 prevDirection);
 BOOL Footprints_SpawnInSand(LocalMapObject *mapObject);
 BOOL Footprints_SpawnTracksInSand(LocalMapObject *mapObject);
 BOOL Footprints_SpawnInSnow(LocalMapObject *mapObject);
 BOOL Footprints_SpawnOnBehavior169(LocalMapObject *mapObject);
 BOOL Footprints_SpawnTracksOnBehavior169(LocalMapObject *mapObject);
-BOOL Footprints_Spawn(LocalMapObject *mapObject, u32 kind);
-BOOL FootprintEffect_Init(FieldEffect *effect, FootprintEffect *work);
-void FootprintEffect_Destroy(FieldEffect *effect, FootprintEffect *work);
-void FootprintEffect_Update(FieldEffect *effect, FootprintEffect *work);
-void FootprintEffect_Draw(FieldEffect *effect, FootprintEffect *work);
+static BOOL Footprints_Spawn(LocalMapObject *mapObject, u32 kind);
+static BOOL FootprintEffect_Init(FieldEffect *effect, FootprintEffect *work);
+static void FootprintEffect_Destroy(FieldEffect *effect, FootprintEffect *work);
+static void FootprintEffect_Update(FieldEffect *effect, FootprintEffect *work);
+static void FootprintEffect_Draw(FieldEffect *effect, FootprintEffect *work);
 
 static const FieldEffectBasicTemplate sFootprintEffectTemplate = {
     sizeof(FootprintEffect),
@@ -117,7 +117,7 @@ void Footprints_Free(Footprints *footprints) {
     FieldEffectManager_HeapFree(footprints);
 }
 
-void Footprints_LoadModels(Footprints *footprints) {
+static void Footprints_LoadModels(Footprints *footprints) {
     u32 i;
 
     for (i = 0; i < FOOTPRINT_MODEL_COUNT; i++) {
@@ -128,7 +128,7 @@ void Footprints_LoadModels(Footprints *footprints) {
     }
 }
 
-void Footprints_FreeModels(Footprints *footprints) {
+static void Footprints_FreeModels(Footprints *footprints) {
     int i;
 
     for (i = 0; i < FOOTPRINT_MODEL_COUNT; i++) {
@@ -137,7 +137,7 @@ void Footprints_FreeModels(Footprints *footprints) {
     }
 }
 
-NNSG3dRenderObj *Footprints_GetRenderObj(Footprints *footprints, u32 kind, u32 direction, u32 prevDirection) {
+static NNSG3dRenderObj *Footprints_GetRenderObj(Footprints *footprints, u32 kind, u32 direction, u32 prevDirection) {
     NNSG3dRenderObj *renderObj = NULL;
 
     switch (kind) {
@@ -162,7 +162,7 @@ NNSG3dRenderObj *Footprints_GetRenderObj(Footprints *footprints, u32 kind, u32 d
     return renderObj;
 }
 
-RenderModelStorage *Footprints_GetModel(Footprints *footprints, u32 kind, u32 direction, u32 prevDirection) {
+static RenderModelStorage *Footprints_GetModel(Footprints *footprints, u32 kind, u32 direction, u32 prevDirection) {
     RenderModelStorage *model = NULL;
 
     switch (kind) {
@@ -207,7 +207,7 @@ BOOL Footprints_SpawnTracksOnBehavior169(LocalMapObject *mapObject) {
     return FALSE;
 }
 
-BOOL Footprints_Spawn(LocalMapObject *mapObject, u32 kind) {
+static BOOL Footprints_Spawn(LocalMapObject *mapObject, u32 kind) {
     VecFx32 position;
     FootprintEffectArgs args;
     int x;
@@ -263,7 +263,7 @@ BOOL Footprints_Spawn(LocalMapObject *mapObject, u32 kind) {
     return (BOOL)FieldEffectManager_CreateEffect(manager, &sFootprintEffectTemplate, &position, 0, &args, priority);
 }
 
-BOOL FootprintEffect_Init(FieldEffect *effect, FootprintEffect *work) {
+static BOOL FootprintEffect_Init(FieldEffect *effect, FootprintEffect *work) {
     FootprintEffectArgs *args;
 
     work->kind = FieldEffect_GetParam(effect);
@@ -275,10 +275,10 @@ BOOL FootprintEffect_Init(FieldEffect *effect, FootprintEffect *work) {
     return TRUE;
 }
 
-void FootprintEffect_Destroy(FieldEffect *effect, FootprintEffect *work) {
+static void FootprintEffect_Destroy(FieldEffect *effect, FootprintEffect *work) {
 }
 
-void FootprintEffect_Update(FieldEffect *effect, FootprintEffect *work) {
+static void FootprintEffect_Update(FieldEffect *effect, FootprintEffect *work) {
     switch (work->state) {
     case 0:
         work->timer++;
@@ -295,7 +295,7 @@ void FootprintEffect_Update(FieldEffect *effect, FootprintEffect *work) {
     }
 }
 
-void FootprintEffect_Draw(FieldEffect *effect, FootprintEffect *work) {
+static void FootprintEffect_Draw(FieldEffect *effect, FootprintEffect *work) {
     VecFx32 position;
 
     if (work->hidden == FALSE) {

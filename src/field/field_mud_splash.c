@@ -1,13 +1,13 @@
 #include "global.h"
 
-#include "field/field_effect_manager.h"
 #include "field/field_effect_helpers.h"
+#include "field/field_effect_manager.h"
 
+#include "field_effects.h"
 #include "map_object.h"
+#include "map_object_movement_utilities.h"
 #include "render_animation.h"
 #include "render_model.h"
-#include "map_object_movement_utilities.h"
-#include "field_effects.h"
 
 // The mud a map object splashes up when it steps into mud (field effect renderer 7): one animated model
 // played once at the tile, then the effect ends.
@@ -32,13 +32,13 @@ typedef struct MudSplashEffect {
 
 MudSplash *MudSplash_New(FieldEffectManager *manager);
 void MudSplash_Free(MudSplash *splash);
-void MudSplash_LoadGfx(MudSplash *splash);
-void MudSplash_FreeGfx(MudSplash *splash);
+static void MudSplash_LoadGfx(MudSplash *splash);
+static void MudSplash_FreeGfx(MudSplash *splash);
 void MudSplash_Spawn(LocalMapObject *mapObject, int x, int y, int z);
-BOOL MudSplashEffect_Init(FieldEffect *effect, MudSplashEffect *work);
-void MudSplashEffect_Destroy(FieldEffect *effect, MudSplashEffect *work);
-void MudSplashEffect_Update(FieldEffect *effect, MudSplashEffect *work);
-void MudSplashEffect_Draw(FieldEffect *effect, MudSplashEffect *work);
+static BOOL MudSplashEffect_Init(FieldEffect *effect, MudSplashEffect *work);
+static void MudSplashEffect_Destroy(FieldEffect *effect, MudSplashEffect *work);
+static void MudSplashEffect_Update(FieldEffect *effect, MudSplashEffect *work);
+static void MudSplashEffect_Draw(FieldEffect *effect, MudSplashEffect *work);
 
 static const FieldEffectBasicTemplate sMudSplashEffectTemplate = {
     sizeof(MudSplashEffect),
@@ -60,12 +60,12 @@ void MudSplash_Free(MudSplash *splash) {
     FieldEffectManager_HeapFree(splash);
 }
 
-void MudSplash_LoadGfx(MudSplash *splash) {
+static void MudSplash_LoadGfx(MudSplash *splash) {
     FieldEffectManager_LoadRenderModel(splash->manager, &splash->model, 0, 0x1E, FALSE);
     FieldEffectManager_LoadRenderAnimation(splash->manager, &splash->animation, 0, 0x87, FALSE);
 }
 
-void MudSplash_FreeGfx(MudSplash *splash) {
+static void MudSplash_FreeGfx(MudSplash *splash) {
     RenderModel_Free(&splash->model);
     RenderAnimation_Free(&splash->animation);
 }
@@ -81,7 +81,7 @@ void MudSplash_Spawn(LocalMapObject *mapObject, int x, int y, int z) {
     FieldEffectManager_CreateEffect(args.manager, &sMudSplashEffectTemplate, &position, 0, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 
-BOOL MudSplashEffect_Init(FieldEffect *effect, MudSplashEffect *work) {
+static BOOL MudSplashEffect_Init(FieldEffect *effect, MudSplashEffect *work) {
     MudSplashEffectArgs *args = (MudSplashEffectArgs *)FieldEffect_GetUserData(effect);
     work->args = *args;
     FieldEffectManager_InitRenderAnimation(work->args.manager, &work->animation, &work->args.splash->model, &work->args.splash->animation, 0);
@@ -89,11 +89,11 @@ BOOL MudSplashEffect_Init(FieldEffect *effect, MudSplashEffect *work) {
     return TRUE;
 }
 
-void MudSplashEffect_Destroy(FieldEffect *effect, MudSplashEffect *work) {
+static void MudSplashEffect_Destroy(FieldEffect *effect, MudSplashEffect *work) {
     RenderAnimation_Free(&work->animation);
 }
 
-void MudSplashEffect_Update(FieldEffect *effect, MudSplashEffect *work) {
+static void MudSplashEffect_Update(FieldEffect *effect, MudSplashEffect *work) {
     if (RenderAnimation_IsDone(&work->animation) == TRUE) {
         FieldEffectManager_DestroyEffect((int)effect);
     } else {
@@ -101,7 +101,7 @@ void MudSplashEffect_Update(FieldEffect *effect, MudSplashEffect *work) {
     }
 }
 
-void MudSplashEffect_Draw(FieldEffect *effect, MudSplashEffect *work) {
+static void MudSplashEffect_Draw(FieldEffect *effect, MudSplashEffect *work) {
     VecFx32 position;
     FieldEffect_GetPosition(effect, &position);
     RenderObj_DrawAt((int)&work->renderObj, &position);

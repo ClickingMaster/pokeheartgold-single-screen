@@ -1,13 +1,13 @@
 #include "field_bgm.h"
 #include "field_effect_launch_internal.h"
+#include "field_time_events.h"
 #include "field_warp_tasks.h"
 #include "heap.h"
 #include "player_data.h"
 #include "screen_fade.h"
 #include "sound.h"
-#include "sound_system.h"
 #include "sound_playback.h"
-#include "field_time_events.h"
+#include "sound_system.h"
 
 void CallTask_MagnetTrainRide(FieldSystem *fieldSystem, u8 param1, u8 param2, u32 mapId, u32 x, u32 y) {
     AreaLightTaskEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(AreaLightTaskEnv));

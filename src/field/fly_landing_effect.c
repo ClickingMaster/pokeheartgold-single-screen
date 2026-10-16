@@ -1,8 +1,9 @@
+#include "field/fly_landing_effect.h"
+
 #include "global.h"
 
 #include "field/field_camera_zoom.h"
 #include "field/field_effect_helpers.h"
-#include "field/fly_landing_effect.h"
 #include "field/sprite_gfx_manager.h"
 
 #include "field_effects.h"
@@ -16,10 +17,8 @@
 
 typedef BOOL (*FlyLandingStepFunc)(FlyLandingEffect *effect);
 
-// Defined in field_effects.c, which has no public prototypes for its pool.
 FieldEffect *FieldEffectPool_AddBasicEffect(void *pool, const FieldEffectBasicTemplate *template, const VecFx32 *position, int parameter, void *userData, u32 priority);
 
-// Defined with overlay 2's Fly cut-in: the trainer sprite's jump effect.
 FieldEffect *FieldMoveCutIn_CreateTrainerJumpEffect(void *effectPool, Sprite *trainerSprite);
 void TrainerJumpEffect_StartHop(FieldEffect *effect);
 

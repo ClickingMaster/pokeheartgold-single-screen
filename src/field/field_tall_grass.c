@@ -4,8 +4,8 @@
 #include "field/field_effect_manager.h"
 
 #include "billboard_lists.h"
-#include "map_object.h"
 #include "field_effects.h"
+#include "map_object.h"
 
 // The tall grass a map object stands in (field effect renderer 8): a billboard over the tile that rustles
 // (12 frames) when the object walks in, then holds its last frame until the object leaves the tile (or
@@ -14,8 +14,6 @@
 
 #define TALL_GRASS_RECORD 0
 
-// Puts position->y on the ground of the tile at position->x/z; FALSE while that tile has no ground yet.
-// (unk_0205FD20.h declares it returning void.)
 BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position);
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 8).
@@ -41,7 +39,7 @@ typedef struct TallGrassEffect {
     u32 spriteId;
     u32 objectId;
     u32 mapId;
-    u8 unk10[4];
+    u8 unk_10[4];
     BOOL onGround;
     TallGrassEffectArgs args;
     void *billboard;
@@ -52,13 +50,13 @@ typedef struct TallGrassUnusedEffectArgs {
     int z;
     FieldSystem *fieldSystem;
     FieldEffectManager *manager;
-    u8 unk10[4];
+    u8 unk_10[4];
 } TallGrassUnusedEffectArgs;
 
 typedef struct TallGrassUnusedEffect {
     int state;
     BOOL done;
-    u8 unk08[4];
+    u8 unk_08[4];
     int kind;
     TallGrassUnusedEffectArgs args;
     void *billboard;
@@ -79,13 +77,12 @@ BOOL TallGrassUnusedEffect_Destroy(FieldEffect *effect, TallGrassUnusedEffect *w
 void TallGrassUnusedEffect_Update(FieldEffect *effect, TallGrassUnusedEffect *work);
 void TallGrassUnusedEffect_Draw(FieldEffect *effect, TallGrassUnusedEffect *work);
 
-// In asm/field_tall_grass_data.s (its order of these objects is not one MWCC reproduces).
-extern const FieldEffectBasicTemplate gTallGrassEffectTemplate; // tall grass effect
+extern const FieldEffectBasicTemplate gTallGrassEffectTemplate;       // tall grass effect
 extern const FieldEffectBasicTemplate sTallGrassUnusedEffectTemplate; // created nowhere
-extern const u32 gTallGrassRecord6Params[6];                   // record 6 params
-extern const u32 gTallGrassRecordParams[6];                   // tall grass record params
-extern const u32 gTallGrassRecord5Params[6];                   // record 5 params
-extern const u32 gTallGrassRecord7Params[6];                   // record 7 params
+extern const u32 gTallGrassRecord6Params[6];                          // record 6 params
+extern const u32 gTallGrassRecordParams[6];                           // tall grass record params
+extern const u32 gTallGrassRecord5Params[6];                          // record 5 params
+extern const u32 gTallGrassRecord7Params[6];                          // record 7 params
 
 TallGrass *TallGrass_New(FieldEffectManager *manager) {
     TallGrass *grass = FieldEffectManager_HeapAllocAndFill(manager, sizeof(TallGrass), FALSE, 0);

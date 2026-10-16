@@ -1,5 +1,4 @@
-// Pokewalker connection app (main menu option): overlay manager callbacks, graphics/message setup and teardown,
-// and the start of the IR link with the player's identity.
+// Pokewalker connection app: overlay callbacks, graphics and message setup, and the start of the IR link.
 
 #include "application/pokewalker/pokewalker_app.h"
 
@@ -23,7 +22,7 @@
 
 typedef int (*PokewalkerAppModeFunc)(PokewalkerApp *app);
 
-// Mode table: {enter, update, exit} for each mode (asm data). Each column is reached through its own label.
+// Mode table: {enter, update, exit} for each mode.
 typedef struct PokewalkerAppModeEntry {
     PokewalkerAppModeFunc func;
     PokewalkerAppModeFunc other[2];

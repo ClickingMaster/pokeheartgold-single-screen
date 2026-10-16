@@ -1,6 +1,4 @@
-// Pokewalker connection app: the data sent to the Pokewalker. The upload image (graphics the Pokewalker shows,
-// with the player's name), the stroll data (the Pokemon, its course, the course's Pokemon and items with their
-// pictures), and the conversion of rendered text and pictures to the Pokewalker's 2bpp format.
+// Pokewalker connection app: the upload image and Stroll data sent to the Pokewalker, in its 2bpp format.
 
 #include "global.h"
 
@@ -8,6 +6,7 @@
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0274.h"
 
+#include "char_tiles.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
 #include "gf_rtc.h"
@@ -17,9 +16,8 @@
 #include "pokemon.h"
 #include "pokemon_icon_idx.h"
 #include "text.h"
-#include "char_tiles.h"
 
-// Bitmaps of the upload image (asm data).
+// Bitmaps of the upload image
 extern const u8 sPokewalkerUploadImageArrowRightShifted[];
 extern const u8 sPokewalkerUploadImageArrowDownShifted[];
 extern const u8 sPokewalkerUploadImageArrowRightHollow[];
@@ -186,7 +184,7 @@ extern const u8 ov112_021FDE98[];
 extern const u8 ov112_021FE018[];
 extern const u8 ov112_021FE198[];
 
-// The routeImageId column of the course table has its own label.
+// The routeImageId column of the course table
 typedef struct PokewalkerCourseImageColumn {
     u32 routeImageId;
     u8 unk_04[0xBC];

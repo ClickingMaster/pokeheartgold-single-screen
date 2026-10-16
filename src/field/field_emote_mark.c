@@ -58,9 +58,9 @@ typedef struct EmoteMarkEffect {
     BOOL hidden;
     BOOL done;
     VecFx32 offset;
-    u8 unk24[4];
+    u8 unk_24[4];
     fx32 velocity;
-    u8 unk2C[4];
+    u8 unk_2C[4];
     EmoteMarkEffectArgs args;
     void *billboard;
 } EmoteMarkEffect;
@@ -94,8 +94,7 @@ FieldEffect *EmoteMark_Spawn(LocalMapObject *mapObject, int kind, BOOL playSound
 BOOL MapObjectEmoteMarkEffect_Init(FieldEffect *effect, EmoteMarkEffect *work);
 void MapObjectEmoteMarkEffect_Update(FieldEffect *effect, EmoteMarkEffect *work);
 
-// The effect templates and the record parameters ({ 0, 1, 0, 0, 0, 2 }) stay in asm
-// (asm/field_emote_mark_data.s, linked after this file). sEmoteMarkTemplate is a mark at a fixed position that
+// The record parameters are { 0, 1, 0, 0, 0, 2 }. sEmoteMarkTemplate is a mark at a fixed position that
 // nothing creates; sMapObjectEmoteMarkTemplate follows a map object.
 extern const FieldEffectBasicTemplate sMapObjectEmoteMarkTemplate;
 extern const u32 sEmoteMarkRecordParams[6];

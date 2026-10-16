@@ -1,13 +1,13 @@
 #include "constants/sprites.h"
 
-#include "fielddata/script/scr_seq/event_T27GYM0101.h"
-
-#include "field_system.h"
 #include "field/map_object_billboard_motion.h"
 #include "field/map_object_render.h"
+#include "fielddata/script/scr_seq/event_T27GYM0101.h"
+
+#include "billboard_lists.h"
+#include "field_system.h"
 #include "overlay_04.h"
 #include "sound_playback.h"
-#include "billboard_lists.h"
 
 #define NUM_CANDLES 4
 

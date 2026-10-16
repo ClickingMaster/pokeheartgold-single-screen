@@ -65,7 +65,7 @@ typedef struct EncounterEffectHBlankWave {
     u32 frames;
 } EncounterEffectHBlankWave;
 
-// Encounter effect core (src/field/encounter_effect.c): overlay loading, the effect task, brightness flashes
+// Encounter effect core: overlay loading, the effect task, brightness flashes
 // and the interpolators.
 void Task_RunEncounterEffect(SysTask *task, EncounterEffectTask *effect);
 void EncounterEffect_LoadOverlay(s32 effect);
@@ -81,7 +81,7 @@ BOOL EncounterEffectInterp_UpdateFx(EncounterEffectInterp *interp);
 void EncounterEffectQuadInterp_Init(EncounterEffectQuadInterp *interp, s32 start, s32 end, s32 velocity, s32 duration);
 BOOL EncounterEffectQuadInterp_Update(EncounterEffectQuadInterp *interp);
 
-// Window wipes and BG loaders (src/field/encounter_effect_wipe.c)
+// Window wipes and BG loaders
 void EncounterEffect_LoadBgGraphics(NARC *narc, int screenMember, int charMember, int paletteMember, int palette, int paletteCount, BgConfig *bgConfig, int bgId);
 void EncounterEffect_LoadBgGraphicsMirrored(NARC *narc, int screenMember, int charMember, int paletteMember, int palette, int paletteCount, BgConfig *bgConfig, int bgId, int mirrorBgId);
 
@@ -95,7 +95,7 @@ SplitWipe *SplitWipe_New(void);
 void SplitWipe_Free(SplitWipe *wipe);
 void SplitWipe_Start(EncounterEffectTask *effect, SplitWipe *wipe, s32 duration, s32 velocityX, s32 velocityY);
 
-// Sprites, filled rectangles, wipes and main screen brightness (src/field/encounter_effect_util.c)
+// Sprites, filled rectangles, wipes and main screen brightness
 void EncounterEffect_InitSprites(EncounterEffectSpriteManager *spriteManager, int maxSprites, int resourceCount);
 void EncounterEffect_FreeSprites(EncounterEffectSpriteManager *spriteManager);
 void EncounterEffect_LoadSpriteResources(NARC *narc, EncounterEffectSpriteManager *spriteManager, EncounterEffectSpriteResources *resources, int plttMember, int plttCount, int charMember, int cellMember, int animMember, int resourceId);
@@ -121,24 +121,24 @@ ZigzagWipe *ZigzagWipe_New(void);
 void ZigzagWipe_Free(ZigzagWipe *wipe);
 SysTask *ZigzagWipe_Start(EncounterEffectTask *effect, ZigzagWipe *wipe, s32 duration, u32 period, u32 width, u32 insidePlanes, u32 outsidePlanes);
 
-// State of the running encounter effect (src/field/encounter_effect.c)
+// State of the running encounter effect
 typedef struct EncounterEffectParticles EncounterEffectParticles;
 
 typedef struct EncounterEffectState {
-    EncounterEffectParticles *particles; // particle mode of the leader effects (src/field/encounter_effect_particles.c)
+    EncounterEffectParticles *particles; // particle mode of the leader effects
     s32 effect;
     u32 frameCount;
 } EncounterEffectState;
 
 extern EncounterEffectState gEncounterEffectState;
 
-// HBlank BG offset wave (src/field/encounter_effect_particles.c)
+// HBlank BG offset wave
 void EncounterEffectHBlankWave_Init(EncounterEffectHBlankWave *wave, int heapID);
 void EncounterEffectHBlankWave_Free(EncounterEffectHBlankWave *wave);
 void EncounterEffectHBlankWave_Start(EncounterEffectHBlankWave *wave, u8 firstLine, u8 lastLine, u32 step, fx32 amplitude, s16 speed, void *destination, u32 fill, u32 priority);
 void EncounterEffectHBlankWave_AlternateDirection(EncounterEffectHBlankWave *wave, u32 period);
 
-// Particle mode of the leader effects (src/field/encounter_effect_particles.c)
+// Particle mode of the leader effects
 void EncounterEffect_StartParticleMode(FieldSystem *fieldSystem);
 void EncounterEffect_RequestParticleSetup(void);
 u8 EncounterEffect_IsParticleSetupDone(void);

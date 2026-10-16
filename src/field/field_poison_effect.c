@@ -13,12 +13,6 @@
 #include "sys_task.h"
 #include "sys_task_api.h"
 
-// From field/hblank_system.c.
-typedef void (*HBlankTaskFunc)(void *, void *);
-void *HBlankSystem_StartTask(HBlankSystem *hBlankSystem, HBlankTaskFunc func, void *data);
-void HBlankTask_Delete(void *task);
-
-// SDK function without a prototype in lib/include.
 void G3X_SetHOffset(int offset);
 
 // Screen shake shown when a poisoned party loses HP while walking: every HBlank shifts the 3D layer
@@ -30,7 +24,7 @@ typedef struct PoisonEffect {
     u16 buffers[2][192];        // 0x00C, 0x18C
     DoubleBuffer *doubleBuffer; // 0x30C
     HBlankSystem *hBlankSystem; // 0x310
-    void *hblankTask;           // 0x314
+    HBlankTask *hblankTask;     // 0x314
     u32 hblankReady;            // 0x318
     SysTask *mainTask;          // 0x31C
     SysTask *vblankTask;        // 0x320
@@ -41,7 +35,7 @@ static void PoisonEffect_Task(SysTask *task, void *data);
 static void PoisonEffect_ApplyNextLineOffset(PoisonEffect *effect);
 static void PoisonEffect_FillOffsets(u16 *offsets, int num, int denom);
 static void PoisonEffect_VBlankResetTask(SysTask *task, void *data);
-static void PoisonEffect_HBlankCallback(void *unused, void *data);
+static void PoisonEffect_HBlankCallback(HBlankTask *task, void *data);
 static void PoisonEffect_OnHBlank(PoisonEffect *effect);
 static void PoisonEffect_SwapBuffersTask(SysTask *task, void *data);
 static void PoisonEffect_SwapBuffers(PoisonEffect *effect);
@@ -144,7 +138,7 @@ static void PoisonEffect_VBlankResetTask(SysTask *task, void *data) {
     G3X_SetHOffset(0);
 }
 
-static void PoisonEffect_HBlankCallback(void *unused, void *data) {
+static void PoisonEffect_HBlankCallback(HBlankTask *task, void *data) {
     PoisonEffect_OnHBlank(data);
 }
 

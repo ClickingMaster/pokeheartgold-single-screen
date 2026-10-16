@@ -1,13 +1,14 @@
 #include "field_hidden_object_cover.h"
 
-#include "map_object.h"
 #include "field/field_effect_manager.h"
-#include "player_avatar.h"
-#include "map_object_movement_utilities.h"
-#include "map_object_follow.h"
+
 #include "field_effects.h"
-#include "render_model.h"
+#include "map_object.h"
+#include "map_object_follow.h"
+#include "map_object_movement_utilities.h"
+#include "player_avatar.h"
 #include "render_animation.h"
+#include "render_model.h"
 
 struct HiddenObjectCover {
     FieldEffectManager *manager;
@@ -15,7 +16,7 @@ struct HiddenObjectCover {
     NNSG3dRenderObj renderObjs[4];
 };
 
-typedef struct {
+typedef struct HiddenObjectCoverEffectArgs {
     int coverIndex;
     FieldEffectManager *manager;
     HiddenObjectCover *cover;
@@ -23,9 +24,9 @@ typedef struct {
     NNSG3dRenderObj *renderObj;
 } HiddenObjectCoverEffectArgs;
 
-typedef struct {
-    int unk0;
-    BOOL unk4;
+typedef struct HiddenObjectCoverEffect {
+    int unk_00;
+    BOOL unk_04;
     u32 localMapObjectId;
     u32 mapId;
     HiddenObjectCoverEffectArgs args;
@@ -48,10 +49,10 @@ static const FieldEffectBasicTemplate sHiddenObjectCoverEffectTemplate = {
 };
 
 HiddenObjectCover *HiddenObjectCover_New(FieldEffectManager *manager) {
-    HiddenObjectCover *ptr = FieldEffectManager_HeapAllocAndFill(manager, sizeof(HiddenObjectCover), FALSE, 0);
-    ptr->manager = manager;
-    HiddenObjectCover_LoadModels(ptr);
-    return ptr;
+    HiddenObjectCover *cover = FieldEffectManager_HeapAllocAndFill(manager, sizeof(HiddenObjectCover), FALSE, 0);
+    cover->manager = manager;
+    HiddenObjectCover_LoadModels(cover);
+    return cover;
 }
 
 void HiddenObjectCover_Free(HiddenObjectCover *cover) {
@@ -72,13 +73,13 @@ static void HiddenObjectCover_FreeModels(HiddenObjectCover *cover) {
     }
 }
 
-static NNSG3dRenderObj *HiddenObjectCover_GetRenderObj(HiddenObjectCover *cover, int idx) {
-    return &cover->renderObjs[idx];
+static NNSG3dRenderObj *HiddenObjectCover_GetRenderObj(HiddenObjectCover *cover, int index) {
+    return &cover->renderObjs[index];
 }
 
 void HiddenObjectCover_Spawn(LocalMapObject *mapObject, int index) {
-    VecFx32 temp;
-    HiddenObjectCoverEffectArgs temp2;
+    VecFx32 position;
+    HiddenObjectCoverEffectArgs args;
 
     FieldEffectManager *manager = FieldEffectManager_GetFromMapObject(mapObject);
     FieldSystem *fieldSystem = FieldEffectManager_GetFieldSystem(manager);
@@ -86,19 +87,19 @@ void HiddenObjectCover_Spawn(LocalMapObject *mapObject, int index) {
     int x = MapObject_GetXCoord(mapObject);
     int z = MapObject_GetZCoord(mapObject);
 
-    SetPositionToTileCenter(x, z, &temp);
-    FieldSystem_SnapToTerrainHeight(fieldSystem, &temp);
+    SetPositionToTileCenter(x, z, &position);
+    FieldSystem_SnapToTerrainHeight(fieldSystem, &position);
 
-    temp2.coverIndex = index;
-    temp2.manager = manager;
+    args.coverIndex = index;
+    args.manager = manager;
 
-    HiddenObjectCover *val1 = FieldEffectManager_GetRendererData(manager, 0xe);
-    temp2.cover = val1;
-    temp2.mapObject = mapObject;
-    temp2.renderObj = HiddenObjectCover_GetRenderObj(val1, index);
+    HiddenObjectCover *cover = FieldEffectManager_GetRendererData(manager, 14);
+    args.cover = cover;
+    args.mapObject = mapObject;
+    args.renderObj = HiddenObjectCover_GetRenderObj(cover, index);
 
-    int val3 = MapObject_GetPriorityPlusValue(mapObject, 2);
-    FieldEffectManager_CreateEffect(manager, &sHiddenObjectCoverEffectTemplate, &temp, 0, &temp2, val3);
+    int priority = MapObject_GetPriorityPlusValue(mapObject, 2);
+    FieldEffectManager_CreateEffect(manager, &sHiddenObjectCoverEffectTemplate, &position, 0, &args, priority);
 }
 
 static BOOL HiddenObjectCoverEffect_Init(FieldEffect *effect, HiddenObjectCoverEffect *coverEffect) {
@@ -114,11 +115,11 @@ static BOOL HiddenObjectCoverEffect_Init(FieldEffect *effect, HiddenObjectCoverE
 static BOOL HiddenObjectCoverEffect_Destroy(FieldEffect *effect, HiddenObjectCoverEffect *coverEffect) {
     LocalMapObject *mapObject = coverEffect->args.mapObject;
 
-    BOOL val = MapObject_CheckIDAndMap(mapObject, coverEffect->localMapObjectId, coverEffect->mapId);
-    if (val == TRUE) {
+    BOOL sameObject = MapObject_CheckIDAndMap(mapObject, coverEffect->localMapObjectId, coverEffect->mapId);
+    if (sameObject == TRUE) {
         return HiddenObjectMovement_SetCoverEffect(mapObject, 0);
     }
-    return val;
+    return sameObject;
 }
 
 static void HiddenObjectCoverEffect_Update(FieldEffect *effect, HiddenObjectCoverEffect *coverEffect) {
@@ -127,7 +128,7 @@ static void HiddenObjectCoverEffect_Update(FieldEffect *effect, HiddenObjectCove
 static void HiddenObjectCoverEffect_Draw(FieldEffect *effect, HiddenObjectCoverEffect *coverEffect) {
     VecFx32 translation;
 
-    if (coverEffect->unk4 != TRUE) {
+    if (coverEffect->unk_04 != TRUE) {
         FieldEffect_GetPosition(effect, &translation);
         RenderObj_DrawAt((int)coverEffect->args.renderObj, &translation);
     }

@@ -6,14 +6,15 @@
 #include "constants/pokemon.h"
 #include "constants/sndseq.h"
 
+#include "battle/battle_setup.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0040.h"
 
-#include "battle/battle_setup.h"
 #include "bg_window.h"
 #include "dialog_box.h"
 #include "encounter.h"
 #include "field_effects.h"
+#include "field_emote_mark.h"
 #include "field_system.h"
 #include "follow_mon.h"
 #include "game_stats.h"
@@ -25,10 +26,9 @@
 #include "message_format.h"
 #include "msgdata.h"
 #include "overlay_01.h"
-#include "player_avatar_actions.h"
-#include "field_emote_mark.h"
 #include "party.h"
 #include "player_avatar.h"
+#include "player_avatar_actions.h"
 #include "player_data.h"
 #include "pokemon.h"
 #include "render_window.h"
@@ -74,13 +74,13 @@ enum FishingRodAnim {
 
 // The rod animation SysTask's data.
 typedef struct FishingRod {
-    BOOL hooked;      // a wild Pokemon will bite
+    BOOL hooked; // a wild Pokemon will bite
     BOOL finished;
     BOOL landed;
     u32 state;
     s32 timer;
-    s32 biteDelay;    // frames until the bite
-    s32 reelWindow;   // frames the player has to press A after the bite
+    s32 biteDelay;  // frames until the bite
+    s32 reelWindow; // frames the player has to press A after the bite
     u32 rodType;
     FieldSystem *fieldSystem;
     int emoteMark;
@@ -102,43 +102,42 @@ struct FishingRodWork {
     SysTask *rodTask;
 };
 
-SysTask *FishingRod_Start(FieldSystem *fieldSystem, u32 rodType, BOOL hooked);
-BOOL FishingRod_IsFinished(SysTask *task);
-BOOL FishingRod_HasLandedMon(SysTask *task);
-void FishingRod_Delete(SysTask *task);
-void Task_FishingRod(SysTask *task, void *data);
-int FishingRodState_Init(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
-int FishingRodState_StartCast(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
-int FishingRodState_Cast(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
-int FishingRodState_SetupBite(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
-int FishingRodState_WaitBite(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
-int FishingRodState_WaitReel(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
-int FishingRodState_Hooked(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
-int FishingRodState_ShowLanded(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
-int FishingRodState_WaitLandedMessage(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
-int FishingRodState_Landed(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
-int FishingRodState_ReeledTooSoon(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
-int FishingRodState_GotAway(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
-int FishingRodState_SetupNoBite(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
-int FishingRodState_WaitNoBite(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
-int FishingRodState_WaitFailMessage(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
-int FishingRodState_PutAway(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
-int FishingRodState_WaitPutAway(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
-int FishingRodState_Finish(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
-void *FishingRod_AllocZeroed(u32 size);
-BOOL FishingRod_IsAPressed(void);
-BOOL FishingRod_IsAOrBPressed(void);
-void FishingRod_InitMessages(FishingRod *rod);
-void FishingRod_FreeMessages(FishingRod *rod);
-void FishingRod_OpenMessageBox(FishingRod *rod);
-void FishingRod_PrintMessage(FishingRod *rod, u32 msgId);
-BOOL FishingRod_IsMessageDismissed(FishingRod *rod);
-u32 GetRodItemId(u32 rodType);
-BOOL FishingRod_FollowMonNoticesBite(FishingRod *rod);
-BOOL FishingRod_RollFriendshipNotice(u8 friendship);
-u8 FishingRod_GetMoodReelBonus(FishingRod *rod);
+static SysTask *FishingRod_Start(FieldSystem *fieldSystem, u32 rodType, BOOL hooked);
+static BOOL FishingRod_IsFinished(SysTask *task);
+static BOOL FishingRod_HasLandedMon(SysTask *task);
+static void FishingRod_Delete(SysTask *task);
+static void Task_FishingRod(SysTask *task, void *data);
+static int FishingRodState_Init(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
+static int FishingRodState_StartCast(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
+static int FishingRodState_Cast(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
+static int FishingRodState_SetupBite(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
+static int FishingRodState_WaitBite(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
+static int FishingRodState_WaitReel(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
+static int FishingRodState_Hooked(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
+static int FishingRodState_ShowLanded(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
+static int FishingRodState_WaitLandedMessage(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
+static int FishingRodState_Landed(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
+static int FishingRodState_ReeledTooSoon(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
+static int FishingRodState_GotAway(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
+static int FishingRodState_SetupNoBite(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
+static int FishingRodState_WaitNoBite(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
+static int FishingRodState_WaitFailMessage(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
+static int FishingRodState_PutAway(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
+static int FishingRodState_WaitPutAway(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
+static int FishingRodState_Finish(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object);
+static void *FishingRod_AllocZeroed(u32 size);
+static BOOL FishingRod_IsAPressed(void);
+static BOOL FishingRod_IsAOrBPressed(void);
+static void FishingRod_InitMessages(FishingRod *rod);
+static void FishingRod_FreeMessages(FishingRod *rod);
+static void FishingRod_OpenMessageBox(FishingRod *rod);
+static void FishingRod_PrintMessage(FishingRod *rod, u32 msgId);
+static BOOL FishingRod_IsMessageDismissed(FishingRod *rod);
+static u32 GetRodItemId(u32 rodType);
+static BOOL FishingRod_FollowMonNoticesBite(FishingRod *rod);
+static BOOL FishingRod_RollFriendshipNotice(u8 friendship);
+static u8 FishingRod_GetMoodReelBonus(FishingRod *rod);
 
-// field/encounter_check.h declares rodType as u8; this caller was built against a full-width parameter (no narrowing).
 BOOL FieldSystem_PerformFishEncounterCheck(FieldSystem *fieldSystem, u32 rodType, BattleSetup **pBattleSetup);
 
 // Frames to press A after the bite, per rod.
@@ -228,7 +227,7 @@ BOOL Task_OverworldFish(TaskManager *taskManager) {
     return FALSE;
 }
 
-SysTask *FishingRod_Start(FieldSystem *fieldSystem, u32 rodType, BOOL hooked) {
+static SysTask *FishingRod_Start(FieldSystem *fieldSystem, u32 rodType, BOOL hooked) {
     FishingRod *rod = FishingRod_AllocZeroed(sizeof(FishingRod));
     rod->fieldSystem = fieldSystem;
     rod->rodType = rodType;
@@ -236,22 +235,22 @@ SysTask *FishingRod_Start(FieldSystem *fieldSystem, u32 rodType, BOOL hooked) {
     return SysTask_CreateOnMainQueue(Task_FishingRod, rod, 0x80);
 }
 
-BOOL FishingRod_IsFinished(SysTask *task) {
+static BOOL FishingRod_IsFinished(SysTask *task) {
     FishingRod *rod = SysTask_GetData(task);
     return rod->finished;
 }
 
-BOOL FishingRod_HasLandedMon(SysTask *task) {
+static BOOL FishingRod_HasLandedMon(SysTask *task) {
     FishingRod *rod = SysTask_GetData(task);
     return rod->landed;
 }
 
-void FishingRod_Delete(SysTask *task) {
+static void FishingRod_Delete(SysTask *task) {
     Heap_Free(SysTask_GetData(task));
     SysTask_Destroy(task);
 }
 
-void Task_FishingRod(SysTask *task, void *data) {
+static void Task_FishingRod(SysTask *task, void *data) {
     FishingRod *rod = data;
     PlayerAvatar *avatar = rod->fieldSystem->playerAvatar;
     LocalMapObject *object = PlayerAvatar_GetMapObject(avatar);
@@ -261,14 +260,14 @@ void Task_FishingRod(SysTask *task, void *data) {
     }
 }
 
-int FishingRodState_Init(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
+static int FishingRodState_Init(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
     FishingRod_InitMessages(rod);
     MapObject_UnpauseMovement(object);
     rod->state = FISHING_ROD_STATE_START_CAST;
     return 1;
 }
 
-int FishingRodState_StartCast(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
+static int FishingRodState_StartCast(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
     if (MapObject_AreBitsSetForMovementScriptInit(object) == TRUE) {
         MapObject_ClearHeldMovementIfActive(object);
         Field_PlayerAvatar_OrrTransitionFlags(avatar, PLAYER_TRANSITION_FISHING);
@@ -279,7 +278,7 @@ int FishingRodState_StartCast(FishingRod *rod, PlayerAvatar *avatar, LocalMapObj
     return 0;
 }
 
-int FishingRodState_Cast(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
+static int FishingRodState_Cast(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
     rod->timer++;
     if (rod->timer == 10) {
         PlaySE(SEQ_SE_DP_FW104);
@@ -296,7 +295,7 @@ int FishingRodState_Cast(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *
     return 1;
 }
 
-int FishingRodState_SetupBite(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
+static int FishingRodState_SetupBite(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
     rod->biteDelay = (LCRandom() % 4 + 1) * 30;
     rod->reelWindow = sReelWindow[rod->rodType];
     rod->reelWindow += FishingRod_GetMoodReelBonus(rod);
@@ -304,7 +303,7 @@ int FishingRodState_SetupBite(FishingRod *rod, PlayerAvatar *avatar, LocalMapObj
     return 1;
 }
 
-int FishingRodState_WaitBite(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
+static int FishingRodState_WaitBite(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
     rod->biteDelay--;
     if (FishingRod_IsAPressed() == TRUE) {
         rod->state = FISHING_ROD_STATE_REELED_TOO_SOON;
@@ -323,7 +322,7 @@ int FishingRodState_WaitBite(FishingRod *rod, PlayerAvatar *avatar, LocalMapObje
     return 1;
 }
 
-int FishingRodState_WaitReel(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
+static int FishingRodState_WaitReel(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
     rod->reelWindow--;
     if (FishingRod_IsAPressed() == TRUE) {
         rod->state = FISHING_ROD_STATE_HOOKED;
@@ -336,7 +335,7 @@ int FishingRodState_WaitReel(FishingRod *rod, PlayerAvatar *avatar, LocalMapObje
     return 0;
 }
 
-int FishingRodState_Hooked(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
+static int FishingRodState_Hooked(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
     EmoteMark_Hide(rod->emoteMark);
     MapObject_SetAnimation(object, FISHING_ROD_ANIM_REEL);
     rod->timer = 0;
@@ -344,7 +343,7 @@ int FishingRodState_Hooked(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject
     return 0;
 }
 
-int FishingRodState_ShowLanded(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
+static int FishingRodState_ShowLanded(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
     rod->timer++;
     if (rod->emoteMark != 0) {
         FieldEffect_Destroy(rod->emoteMark);
@@ -358,7 +357,7 @@ int FishingRodState_ShowLanded(FishingRod *rod, PlayerAvatar *avatar, LocalMapOb
     return 0;
 }
 
-int FishingRodState_WaitLandedMessage(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
+static int FishingRodState_WaitLandedMessage(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
     if (FishingRod_IsMessageDismissed(rod) == FALSE) {
         return 0;
     }
@@ -366,13 +365,13 @@ int FishingRodState_WaitLandedMessage(FishingRod *rod, PlayerAvatar *avatar, Loc
     return 1;
 }
 
-int FishingRodState_Landed(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
+static int FishingRodState_Landed(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
     rod->landed = TRUE;
     rod->state = FISHING_ROD_STATE_PUT_AWAY;
     return 1;
 }
 
-int FishingRodState_ReeledTooSoon(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
+static int FishingRodState_ReeledTooSoon(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
     MapObject_SetAnimation(object, FISHING_ROD_ANIM_IDLE);
     FishingRod_PrintMessage(rod, msg_0040_00051);
     rod->timer = 16;
@@ -380,7 +379,7 @@ int FishingRodState_ReeledTooSoon(FishingRod *rod, PlayerAvatar *avatar, LocalMa
     return 1;
 }
 
-int FishingRodState_GotAway(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
+static int FishingRodState_GotAway(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
     MapObject_SetAnimation(object, FISHING_ROD_ANIM_IDLE);
     FishingRod_PrintMessage(rod, msg_0040_00050);
     rod->timer = 16;
@@ -389,13 +388,13 @@ int FishingRodState_GotAway(FishingRod *rod, PlayerAvatar *avatar, LocalMapObjec
     return 1;
 }
 
-int FishingRodState_SetupNoBite(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
+static int FishingRodState_SetupNoBite(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
     rod->timer = 120;
     rod->state = FISHING_ROD_STATE_WAIT_NO_BITE;
     return 1;
 }
 
-int FishingRodState_WaitNoBite(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
+static int FishingRodState_WaitNoBite(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
     rod->timer--;
     if (FishingRod_IsAPressed() == TRUE) {
         rod->state = FISHING_ROD_STATE_REELED_TOO_SOON;
@@ -411,7 +410,7 @@ int FishingRodState_WaitNoBite(FishingRod *rod, PlayerAvatar *avatar, LocalMapOb
     return 0;
 }
 
-int FishingRodState_WaitFailMessage(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
+static int FishingRodState_WaitFailMessage(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
     rod->timer++;
     if (rod->timer < 16) {
         return 0;
@@ -424,7 +423,7 @@ int FishingRodState_WaitFailMessage(FishingRod *rod, PlayerAvatar *avatar, Local
     return 1;
 }
 
-int FishingRodState_PutAway(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
+static int FishingRodState_PutAway(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
     if (rod->emoteMark != 0) {
         EmoteMark_Hide(rod->emoteMark);
     }
@@ -436,7 +435,7 @@ int FishingRodState_PutAway(FishingRod *rod, PlayerAvatar *avatar, LocalMapObjec
     return 1;
 }
 
-int FishingRodState_WaitPutAway(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
+static int FishingRodState_WaitPutAway(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
     rod->timer++;
     if (rod->timer > 2) {
         rod->state = FISHING_ROD_STATE_FINISH;
@@ -444,7 +443,7 @@ int FishingRodState_WaitPutAway(FishingRod *rod, PlayerAvatar *avatar, LocalMapO
     return 0;
 }
 
-int FishingRodState_Finish(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
+static int FishingRodState_Finish(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject *object) {
     if (rod->emoteMark != 0) {
         FieldEffect_Destroy(rod->emoteMark);
         rod->emoteMark = 0;
@@ -453,7 +452,7 @@ int FishingRodState_Finish(FishingRod *rod, PlayerAvatar *avatar, LocalMapObject
     return 0;
 }
 
-void *FishingRod_AllocZeroed(u32 size) {
+static void *FishingRod_AllocZeroed(u32 size) {
     void *ptr = Heap_AllocAtEnd(HEAP_ID_FIELD1, size);
     if (ptr == NULL) {
         GF_AssertFail();
@@ -462,38 +461,38 @@ void *FishingRod_AllocZeroed(u32 size) {
     return ptr;
 }
 
-BOOL FishingRod_IsAPressed(void) {
+static BOOL FishingRod_IsAPressed(void) {
     return (gSystem.newKeys & PAD_BUTTON_A) != 0;
 }
 
-BOOL FishingRod_IsAOrBPressed(void) {
+static BOOL FishingRod_IsAOrBPressed(void) {
     if (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) {
         return TRUE;
     }
     return FALSE;
 }
 
-void FishingRod_InitMessages(FishingRod *rod) {
+static void FishingRod_InitMessages(FishingRod *rod) {
     rod->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0040_bin, HEAP_ID_FIELD1);
     rod->string = String_New(1024, HEAP_ID_FIELD1);
     rod->template = String_New(1024, HEAP_ID_FIELD1);
     rod->msgFmt = MessageFormat_New_Custom(8, 64, HEAP_ID_FIELD1);
 }
 
-void FishingRod_FreeMessages(FishingRod *rod) {
+static void FishingRod_FreeMessages(FishingRod *rod) {
     MessageFormat_Delete(rod->msgFmt);
     String_Delete(rod->string);
     String_Delete(rod->template);
     DestroyMsgData(rod->msgData);
 }
 
-void FishingRod_OpenMessageBox(FishingRod *rod) {
+static void FishingRod_OpenMessageBox(FishingRod *rod) {
     FieldSystem *fieldSystem = rod->fieldSystem;
     DialogBox_AddWindowToLayer3(fieldSystem->bgConfig, &rod->window, GF_BG_LYR_MAIN_3);
     DialogBox_LoadFrame(&rod->window, Save_PlayerData_GetOptionsAddr(fieldSystem->saveData));
 }
 
-void FishingRod_PrintMessage(FishingRod *rod, u32 msgId) {
+static void FishingRod_PrintMessage(FishingRod *rod, u32 msgId) {
     FieldSystem *fieldSystem;
     FishingRod_OpenMessageBox(rod);
     fieldSystem = rod->fieldSystem;
@@ -502,7 +501,7 @@ void FishingRod_PrintMessage(FishingRod *rod, u32 msgId) {
     rod->printerId = DialogBox_PrintMessage(&rod->window, rod->string, Save_PlayerData_GetOptionsAddr(fieldSystem->saveData), TRUE);
 }
 
-BOOL FishingRod_IsMessageDismissed(FishingRod *rod) {
+static BOOL FishingRod_IsMessageDismissed(FishingRod *rod) {
     if (DialogBox_IsPrintFinished(rod->printerId) == TRUE) {
         if (FishingRod_IsAOrBPressed() == TRUE) {
             ClearFrameAndWindow2(&rod->window, FALSE);
@@ -513,7 +512,7 @@ BOOL FishingRod_IsMessageDismissed(FishingRod *rod) {
     return FALSE;
 }
 
-u32 GetRodItemId(u32 rodType) {
+static u32 GetRodItemId(u32 rodType) {
     switch (rodType) {
     default:
         GF_AssertFail();
@@ -527,7 +526,7 @@ u32 GetRodItemId(u32 rodType) {
 }
 
 // Whether the following Pokemon shows the "!" instead of the player (not while surfing).
-BOOL FishingRod_FollowMonNoticesBite(FishingRod *rod) {
+static BOOL FishingRod_FollowMonNoticesBite(FishingRod *rod) {
     if (PlayerAvatar_GetState(rod->fieldSystem->playerAvatar) == PLAYER_STATE_SURFING) {
         return FALSE;
     }
@@ -540,7 +539,7 @@ BOOL FishingRod_FollowMonNoticesBite(FishingRod *rod) {
     return FALSE;
 }
 
-BOOL FishingRod_RollFriendshipNotice(u8 friendship) {
+static BOOL FishingRod_RollFriendshipNotice(u8 friendship) {
     s32 chance;
     if (friendship <= 99) {
         return FALSE;
@@ -560,7 +559,7 @@ BOOL FishingRod_RollFriendshipNotice(u8 friendship) {
     return FALSE;
 }
 
-u8 FishingRod_GetMoodReelBonus(FishingRod *rod) {
+static u8 FishingRod_GetMoodReelBonus(FishingRod *rod) {
     s32 mood;
     u32 bucket;
     u8 rodType;

@@ -1,15 +1,15 @@
-#include "field/map_load_manager.h"
 #include "field/field_3d_model.h"
+#include "field/field_follow_mon.h"
+#include "field/map_load_manager.h"
 #include "field/map_prop_render.h"
 
 #include "field_system.h"
 #include "follow_mon.h"
-#include "field/field_follow_mon.h"
-#include "overlay_04.h"
-#include "task.h"
-#include "sound_playback.h"
-#include "map_object_movement_utilities.h"
 #include "map_object_movement_commands.h"
+#include "map_object_movement_utilities.h"
+#include "overlay_04.h"
+#include "sound_playback.h"
+#include "task.h"
 
 typedef struct AzaleaGymmickSpinarakRouteNode {
     u16 x;
@@ -56,7 +56,6 @@ static int AzaleaGymmick_GetMovementDoneParams(BOOL sign, fx32 cur, fx32 delta, 
 static void SysTask_DoSpinarakRide(SysTask *sysTask, void *taskData);
 static BOOL Task_WaitSwitchFlipSFX(TaskManager *taskman);
 
-// FIXME: clang-format is misbehaving on these data
 static const AzaleaGymmickSpinarakRouteNode sSpinarakRoute_1to5[] = {
     { 3,  31 },
     { 3,  29 },

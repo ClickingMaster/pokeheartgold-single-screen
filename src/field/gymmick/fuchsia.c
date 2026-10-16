@@ -545,7 +545,7 @@ void GymmickInit_Fuchsia(FieldSystem *fieldSystem) {
 }
 
 void GymmickFree_Fuchsia(FieldSystem *fieldSystem) {
-    u8 i; // declaration here is required to match
+    u8 i;
     FuchsiaGymmickLocalData *localData = fieldSystem->mapSystems->localData;
 
     FuchsiaGymmick_Unload3DGraphics(localData);

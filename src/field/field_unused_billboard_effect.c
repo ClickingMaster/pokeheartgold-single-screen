@@ -4,8 +4,8 @@
 #include "field/field_effect_manager.h"
 
 #include "billboard_lists.h"
-#include "map_object.h"
 #include "field_effects.h"
+#include "map_object.h"
 
 // Field effect renderer 13: a billboard over a map object's tile in the style of the grass effects (two
 // frames, then held while the object stays on the tile). Nothing creates it: its template, sUnusedBillboardEffectTemplate,
@@ -16,8 +16,6 @@
 #define UNUSED_BILLBOARD_SEQUENCE 8
 #define UNUSED_BILLBOARD_TEXTURE  9
 
-// Puts position->y on the ground of the tile at position->x/z; FALSE while that tile has no ground yet.
-// (unk_0205FD20.h declares it returning void.)
 BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position);
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 13).
@@ -43,7 +41,7 @@ typedef struct UnusedBillboardEffect {
     u32 spriteId;
     u32 objectId;
     u32 mapId;
-    u8 unk10[4];
+    u8 unk_10[4];
     BOOL onGround;
     UnusedBillboardEffectArgs args;
     void *billboard;
@@ -51,8 +49,8 @@ typedef struct UnusedBillboardEffect {
 
 UnusedBillboard *UnusedBillboard_New(FieldEffectManager *manager);
 void UnusedBillboard_Free(UnusedBillboard *renderer);
-void UnusedBillboard_LoadGfx(UnusedBillboard *renderer);
-void UnusedBillboard_FreeGfx(UnusedBillboard *renderer);
+static void UnusedBillboard_LoadGfx(UnusedBillboard *renderer);
+static void UnusedBillboard_FreeGfx(UnusedBillboard *renderer);
 BOOL UnusedBillboardEffect_Init(FieldEffect *effect, UnusedBillboardEffect *work);
 void UnusedBillboardEffect_Destroy(FieldEffect *effect, UnusedBillboardEffect *work);
 void UnusedBillboardEffect_Update(FieldEffect *effect, UnusedBillboardEffect *work);
@@ -72,14 +70,14 @@ void UnusedBillboard_Free(UnusedBillboard *renderer) {
     FieldEffectManager_HeapFree(renderer);
 }
 
-void UnusedBillboard_LoadGfx(UnusedBillboard *renderer) {
+static void UnusedBillboard_LoadGfx(UnusedBillboard *renderer) {
     FieldEffectManager_LoadBillboardResource(renderer->manager, UNUSED_BILLBOARD_RESOURCE, 0x7B);
     FieldEffectManager_LoadBillboardSequence(renderer->manager, UNUSED_BILLBOARD_SEQUENCE, 0x93);
     FieldEffectManager_LoadTexResource(renderer->manager, UNUSED_BILLBOARD_TEXTURE, 0x16, TRUE);
     FieldEffectManager_AddRecord(renderer->manager, UNUSED_BILLBOARD_RECORD, UNUSED_BILLBOARD_RESOURCE, UNUSED_BILLBOARD_SEQUENCE, UNUSED_BILLBOARD_TEXTURE, 0, sUnusedBillboardRecordParams);
 }
 
-void UnusedBillboard_FreeGfx(UnusedBillboard *renderer) {
+static void UnusedBillboard_FreeGfx(UnusedBillboard *renderer) {
     FieldEffectManager_FreeBillboardResource(renderer->manager, UNUSED_BILLBOARD_RESOURCE);
     FieldEffectManager_FreeBillboardSequence(renderer->manager, UNUSED_BILLBOARD_SEQUENCE);
     FieldEffectManager_FreeTexResource(renderer->manager, UNUSED_BILLBOARD_TEXTURE);

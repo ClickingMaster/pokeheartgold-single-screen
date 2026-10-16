@@ -1,9 +1,5 @@
-
-// Pokewalker connection app, mode 3 = link with the Pokewalker: the mode's enter/update/exit, choosing a course for
-// the Stroll (pages of 5 unlocked courses), the instructions shown before connecting, the Pokemon picture and sub
-// screen effects, and starting / following the IR requests. linkAction selects what is done: 0 = send a Pokemon on
-// a Stroll, 1 / 2 = receive the Pokemon and gifts, 4 = send the Pokemon back. The state functions are in the table
-// sLinkStates (asm data).
+// Pokewalker connection app, mode 3: choosing a course and linking with the Pokewalker. linkAction: 0 = send a
+// Pokemon on a Stroll, 1 / 2 = receive the Pokemon and gifts, 4 = send the Pokemon back.
 
 #include "global.h"
 
@@ -48,7 +44,6 @@ extern const s32 sCourseMenuCursorPositions[];
 #include "system.h"
 #include "text.h"
 
-// not declared in the SDK headers of this repo
 void RTC_GetDateTime(RTCDate *date, RTCTime *time);
 
 #define LINK_MOTION(app) ((PokewalkerAppMotion *)(app)->unk_1F2C0)

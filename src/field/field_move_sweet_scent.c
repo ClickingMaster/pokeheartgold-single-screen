@@ -4,8 +4,8 @@
 
 #include "constants/pokemon.h"
 
-#include "field/field_follow_mon.h"
 #include "field/field_3d_model.h"
+#include "field/field_follow_mon.h"
 
 #include "field_move_environment.h"
 #include "field_system.h"
@@ -35,12 +35,12 @@ typedef struct SweetScentAnimWork {
 } SweetScentAnimWork;
 
 BOOL Task_UseSweetScentInField(TaskManager *taskManager);
-void FieldSystem_StartSweetScentFollowMonAnim(FieldSystem *fieldSystem);
-BOOL Task_SweetScentFollowMonAnim(TaskManager *taskManager);
-void SweetScentFollowMonAnim_Load(enum HeapID heapID, FieldSystem *fieldSystem, SweetScentAnimWork *work);
-void SweetScentFollowMonAnim_Unload(SweetScentAnimWork *work);
-BOOL SweetScentFollowMonAnims_Advance(Field3DModelAnimation *anims, u32 count);
-void SweetScentFollowMonAnims_SetFrame(Field3DModelAnimation *anims, u32 count, fx32 frame);
+static void FieldSystem_StartSweetScentFollowMonAnim(FieldSystem *fieldSystem);
+static BOOL Task_SweetScentFollowMonAnim(TaskManager *taskManager);
+static void SweetScentFollowMonAnim_Load(enum HeapID heapID, FieldSystem *fieldSystem, SweetScentAnimWork *work);
+static void SweetScentFollowMonAnim_Unload(SweetScentAnimWork *work);
+static BOOL SweetScentFollowMonAnims_Advance(Field3DModelAnimation *anims, u32 count);
+static void SweetScentFollowMonAnims_SetFrame(Field3DModelAnimation *anims, u32 count, fx32 frame);
 
 BOOL Task_UseSweetScentInField(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
@@ -115,13 +115,13 @@ BOOL Task_UseSweetScentInField(TaskManager *taskManager) {
     return FALSE;
 }
 
-void FieldSystem_StartSweetScentFollowMonAnim(FieldSystem *fieldSystem) {
+static void FieldSystem_StartSweetScentFollowMonAnim(FieldSystem *fieldSystem) {
     SweetScentAnimWork *work = Heap_AllocAtEnd(HEAP_ID_FIELD1, sizeof(SweetScentAnimWork));
     SweetScentFollowMonAnim_Load(HEAP_ID_FIELD1, fieldSystem, work);
     TaskManager_Call(fieldSystem->taskman, Task_SweetScentFollowMonAnim, work);
 }
 
-BOOL Task_SweetScentFollowMonAnim(TaskManager *taskManager) {
+static BOOL Task_SweetScentFollowMonAnim(TaskManager *taskManager) {
     SweetScentAnimWork *work = TaskManager_GetEnvironment(taskManager);
     u32 *state = TaskManager_GetStatePtr(taskManager);
 
@@ -140,7 +140,7 @@ BOOL Task_SweetScentFollowMonAnim(TaskManager *taskManager) {
     return FALSE;
 }
 
-void SweetScentFollowMonAnim_Load(enum HeapID heapID, FieldSystem *fieldSystem, SweetScentAnimWork *work) {
+static void SweetScentFollowMonAnim_Load(enum HeapID heapID, FieldSystem *fieldSystem, SweetScentAnimWork *work) {
     VecFx32 position;
 
     HeapExp_FndInitAllocator(&work->allocator, heapID, 0x20);
@@ -158,14 +158,14 @@ void SweetScentFollowMonAnim_Load(enum HeapID heapID, FieldSystem *fieldSystem, 
     Field3dObject_SetActiveFlag(&work->object, TRUE);
 }
 
-void SweetScentFollowMonAnim_Unload(SweetScentAnimWork *work) {
+static void SweetScentFollowMonAnim_Unload(SweetScentAnimWork *work) {
     Field3dModelAnimation_Unload(&work->anims[2], &work->allocator);
     Field3dModelAnimation_Unload(&work->anims[1], &work->allocator);
     Field3dModelAnimation_Unload(&work->anims[0], &work->allocator);
     Field3dModel_Unload(&work->model);
 }
 
-BOOL SweetScentFollowMonAnims_Advance(Field3DModelAnimation *anims, u32 count) {
+static BOOL SweetScentFollowMonAnims_Advance(Field3DModelAnimation *anims, u32 count) {
     u8 i;
     u8 numDone = 0;
 
@@ -177,7 +177,7 @@ BOOL SweetScentFollowMonAnims_Advance(Field3DModelAnimation *anims, u32 count) {
     return numDone == count;
 }
 
-void SweetScentFollowMonAnims_SetFrame(Field3DModelAnimation *anims, u32 count, fx32 frame) {
+static void SweetScentFollowMonAnims_SetFrame(Field3DModelAnimation *anims, u32 count, fx32 frame) {
     u8 i;
 
     for (i = 0; i < count; ++i) {

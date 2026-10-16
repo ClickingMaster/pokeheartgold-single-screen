@@ -1,10 +1,5 @@
-// Pokewalker connection app, modes 6 to 10 (the mode table is in pokewalker_app.c).
-// Mode 6 saves the game after a link (showing the Pokemon that came back first), then goes to mode 8 or 10.
-// Mode 7 lets the player pick the Pokemon for a stroll from the party or the PC boxes with the box selector.
-// Mode 8 runs the Pokewalker event log app over the log read from the Pokewalker.
-// Mode 9 waits for Down, then goes to the link mode. Mode 10 is the stroll report (states in sStrollReportStates):
-// steps and watts of the Stroll, then the Pokemon caught and the items found (or only the gifts / the records).
-// Then the sub screen of mode 7 (PokewalkerBoxDisplay): the Pokemon under the box selector's cursor.
+// Pokewalker connection app, modes 6 to 10: saving after a link, choosing the Pokemon for a Stroll, the event
+// log and the Stroll report.
 
 #include "global.h"
 
@@ -222,8 +217,7 @@ int PokewalkerApp_LinkSave_End(PokewalkerApp *app) {
     return 11;
 }
 
-// Addresses the mode's work as byte offsets from PokewalkerApp 0x1D764 (selectMonState); member accesses
-// compile differently here.
+// The mode's work, reached as byte offsets from the app's selectMonState.
 #define SELECT_MON_WORK(app, member) ((u8 *)(app) + 0x1D764 + offsetof(PokewalkerSelectMonWork, member))
 
 #pragma force_active on

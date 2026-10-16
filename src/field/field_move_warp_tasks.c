@@ -31,9 +31,9 @@
 
 // Return values of the state functions.
 enum FieldMoveStepResult {
-    FIELD_MOVE_STEP_WAIT,  // run the same state again next frame
-    FIELD_MOVE_STEP_NEXT,  // run the next state now
-    FIELD_MOVE_STEP_DONE,  // the task is over (warp started): free the environment
+    FIELD_MOVE_STEP_WAIT, // run the same state again next frame
+    FIELD_MOVE_STEP_NEXT, // run the next state now
+    FIELD_MOVE_STEP_DONE, // the task is over (warp started): free the environment
 };
 
 // What JumpTask_FieldMoveWarp is told about the warp, and which animation the arrival task plays.
@@ -60,13 +60,13 @@ struct FieldMoveTaskEnvironment {
 
 typedef int (*FieldMoveStepFunc)(TaskManager *taskManager, FieldSystem *fieldSystem, FieldMoveTaskEnvironment *env);
 
-// state tables and movement scripts (asm data)
-extern const FieldMoveStepFunc sFieldMoveArrivalSteps[]; // arrival
-extern const FieldMoveStepFunc sEscapeRopeSteps[]; // Escape Rope
-extern const FieldMoveStepFunc sDigWithFollowMonSteps[]; // Dig by the following Pokemon
-extern const FieldMoveStepFunc sTeleportSteps[]; // Teleport after the cut-in
+// Step tables and movement scripts
+extern const FieldMoveStepFunc sFieldMoveArrivalSteps[];      // arrival
+extern const FieldMoveStepFunc sEscapeRopeSteps[];            // Escape Rope
+extern const FieldMoveStepFunc sDigWithFollowMonSteps[];      // Dig by the following Pokemon
+extern const FieldMoveStepFunc sTeleportSteps[];              // Teleport after the cut-in
 extern const FieldMoveStepFunc sTeleportWithFollowMonSteps[]; // Teleport by the following Pokemon
-extern const FieldMoveStepFunc sDigSteps[]; // Dig after the cut-in
+extern const FieldMoveStepFunc sDigSteps[];                   // Dig after the cut-in
 extern const MovementScriptCommand sTeleportFollowMonSpinMovement[];
 extern const MovementScriptCommand sEscapeRopeSpinMovement[];
 extern const MovementScriptCommand sDigHoleMovement[];
@@ -196,7 +196,7 @@ int FieldEscapeRope_Warp(TaskManager *taskManager, FieldSystem *fieldSystem, Fie
     return FIELD_MOVE_STEP_DONE;
 }
 
-// Arrival after the warp (field_warp_tasks.c); kind is the warp's FieldMoveWarpKind.
+// Arrival after the warp; kind is the warp's FieldMoveWarpKind.
 FieldMoveTaskEnvironment *FieldMoveTask_CreateArrivalEnvironment(FieldSystem *fieldSystem, enum HeapID heapID, int kind) {
     FieldMoveTaskEnvironment *env = FieldMoveTaskEnvironment_New(heapID, sizeof(FieldMoveTaskEnvironment));
     env->kind = kind;

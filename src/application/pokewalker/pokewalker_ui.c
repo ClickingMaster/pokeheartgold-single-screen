@@ -1,6 +1,4 @@
-// Pokewalker connection app: shared UI helpers. Pokewalker picture files, course unlocking, the yes/no menu,
-// 2bpp pixel access and Spinda's spots, window banks, message strings and printing, the waiting icon, sprites
-// (cursor, Pokemon icons) and the particle effect shown while data is transferred.
+// Pokewalker connection app: shared UI helpers (pictures, menus, windows, messages, sprites).
 
 #include "global.h"
 
@@ -16,10 +14,10 @@
 #include "pokemon_icon_idx.h"
 #include "render_window.h"
 #include "sound_playback.h"
+#include "sprite_resource_header.h"
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "sprite_resource_header.h"
 #include "vram_transfer_manager.h"
 
 // Pixel positions of one of Spinda's four spots, terminated by x = 0xFF.
@@ -28,13 +26,13 @@ typedef struct PokewalkerSpotPixel {
     u8 y;
 } PokewalkerSpotPixel;
 
-extern const u16 sPokewalkerPictureFiles[][2]; // Pokewalker picture file per species: {male, female}
-extern const u8 sWindowBankScreens[];          // window bank -> 0 main screen, 1 sub screen
-extern const u8 sPokewalkerAppSpritePalettes[];              // palettes of the first 17 sprites
+extern const u16 sPokewalkerPictureFiles[][2];  // Pokewalker picture file per species: {male, female}
+extern const u8 sWindowBankScreens[];           // window bank -> 0 main screen, 1 sub screen
+extern const u8 sPokewalkerAppSpritePalettes[]; // palettes of the first 17 sprites
 extern const OamCharTransferParam sPokewalkerAppOamCharTransferParam;
 extern const SpriteResourceCountsListUnion sPokewalkerAppSpriteResourceCounts;
 extern const OamManagerParam sPokewalkerAppOamManagerParam;
-// Cursor positions {x, y, anim, palette}; each column has its own label.
+// Cursor positions {x, y, anim, palette}
 extern const u8 sPokewalkerAppCursorX[];
 extern const u8 sPokewalkerAppCursorY[];
 extern const u8 sPokewalkerAppCursorAnims[];

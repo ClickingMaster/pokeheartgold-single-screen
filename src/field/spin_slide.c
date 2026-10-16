@@ -12,7 +12,6 @@
 #include "overlay_04.h"
 #include "sound_playback.h"
 
-// player avatar movement helpers, not declared by a header yet
 BOOL PlayerAvatar_IsReadyForMovement(PlayerAvatar *avatar);
 void PlayerAvatar_SetMovement(PlayerAvatar *avatar, int movement);
 int GetMovementForDirection(int direction, int movement);
