@@ -171,7 +171,7 @@ typedef struct Lobby {
 } Lobby;
 
 extern "C" Request *gPPWLobbyCurrentRequest;
-extern "C" Deletable *ov45_022577D8;
+extern "C" Deletable *gPPWLobbyFinishedRequest;
 extern "C" Lobby *gPPWLobbyWork;
 extern "C" u8 gPPWLobbyPlayersVtable[];
 extern "C" char sStr_Star[];
@@ -220,8 +220,8 @@ static inline void Request_Finish(Request *r, int ok, void *buf, u32 len) {
     void *arg = r->arg;
     Request *tmp;
     StatsUpload_Stop();
-    tmp = (Request *)ov45_022577D8;
-    ov45_022577D8 = (Deletable *)gPPWLobbyCurrentRequest;
+    tmp = (Request *)gPPWLobbyFinishedRequest;
+    gPPWLobbyFinishedRequest = (Deletable *)gPPWLobbyCurrentRequest;
     gPPWLobbyCurrentRequest = tmp;
     r->fn(ok, buf, len, arg);
 }
@@ -231,8 +231,8 @@ static inline void Request_Succeed(Request *r, void *buf, const u32 &size) {
     u32 len = size;
     Request *tmp;
     StatsUpload_Stop();
-    tmp = (Request *)ov45_022577D8;
-    ov45_022577D8 = (Deletable *)gPPWLobbyCurrentRequest;
+    tmp = (Request *)gPPWLobbyFinishedRequest;
+    gPPWLobbyFinishedRequest = (Deletable *)gPPWLobbyCurrentRequest;
     gPPWLobbyCurrentRequest = tmp;
     r->fn(1, buf, len, arg);
 }
@@ -302,9 +302,9 @@ static inline int Request_Update(void) {
     if (r == NULL) {
         return 0;
     }
-    if (Request_Poll(r) && ov45_022577D8 != NULL) {
-        Deletable_Delete(ov45_022577D8);
-        ov45_022577D8 = NULL;
+    if (Request_Poll(r) && gPPWLobbyFinishedRequest != NULL) {
+        Deletable_Delete(gPPWLobbyFinishedRequest);
+        gPPWLobbyFinishedRequest = NULL;
     }
     return 1;
 }

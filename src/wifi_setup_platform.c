@@ -1,6 +1,7 @@
 #include "global.h"
 
 #include "wifi_setup.h"
+#include "wifi_setup_wcm.h"
 
 extern int SOC_Startup(void *config);
 extern int SOC_Cleanup(void);
@@ -294,24 +295,24 @@ int WifiSetup_Startup(WifiSetupAllocFunc alloc, WifiSetupFreeFunc free) {
     while (running) {
         OS_ReceiveMessage(&gWifiSetupMessageQueue, &message, OS_MESSAGE_BLOCK);
         switch ((u32)message) {
-        case 6:
+        case WIFI_SETUP_WCM_EVENT_STARTED:
             return 0;
         case 4:
-        case 5:
+        case WIFI_SETUP_WCM_EVENT_FOUND_AP:
             break;
         case 0:
-        case 1:
-        case 2:
+        case WIFI_SETUP_WCM_EVENT_UNKNOWN:
+        case WIFI_SETUP_WCM_EVENT_FAILED:
         case 3:
         case 7:
-        case 8:
-        case 9:
-        case 10:
-        case 11:
-        case 12:
-        case 13:
-        case 14:
-        case 15:
+        case WIFI_SETUP_WCM_EVENT_SEARCH_STARTED:
+        case WIFI_SETUP_WCM_EVENT_SEARCH_FAILED:
+        case WIFI_SETUP_WCM_EVENT_SEARCH_ENDED:
+        case WIFI_SETUP_WCM_EVENT_SEARCH_END_FAILED:
+        case WIFI_SETUP_WCM_EVENT_CONNECTED:
+        case WIFI_SETUP_WCM_EVENT_CONNECT_FAILED:
+        case WIFI_SETUP_WCM_EVENT_DISCONNECTED:
+        case WIFI_SETUP_WCM_EVENT_DISCONNECT_FAILED:
         default:
             running = FALSE;
             break;
@@ -338,27 +339,27 @@ int WifiSetup_Cleanup(void) {
         OS_ReceiveMessage(&gWifiSetupMessageQueue, &message, OS_MESSAGE_BLOCK);
         switch ((u32)message) {
         case 4:
-        case 5:
+        case WIFI_SETUP_WCM_EVENT_FOUND_AP:
             break;
-        case 20:
+        case WIFI_SETUP_WCM_EVENT_CLEANED_UP:
             running = FALSE;
             result = 0;
             gWifiSetupRuntime.free(gWifiSetupRuntime.allocation);
             break;
         case 0:
-        case 1:
-        case 2:
+        case WIFI_SETUP_WCM_EVENT_UNKNOWN:
+        case WIFI_SETUP_WCM_EVENT_FAILED:
         case 3:
-        case 6:
+        case WIFI_SETUP_WCM_EVENT_STARTED:
         case 7:
-        case 8:
-        case 9:
-        case 10:
-        case 11:
-        case 12:
-        case 13:
-        case 14:
-        case 15:
+        case WIFI_SETUP_WCM_EVENT_SEARCH_STARTED:
+        case WIFI_SETUP_WCM_EVENT_SEARCH_FAILED:
+        case WIFI_SETUP_WCM_EVENT_SEARCH_ENDED:
+        case WIFI_SETUP_WCM_EVENT_SEARCH_END_FAILED:
+        case WIFI_SETUP_WCM_EVENT_CONNECTED:
+        case WIFI_SETUP_WCM_EVENT_CONNECT_FAILED:
+        case WIFI_SETUP_WCM_EVENT_DISCONNECTED:
+        case WIFI_SETUP_WCM_EVENT_DISCONNECT_FAILED:
         case 16:
         case 17:
         case 18:
@@ -445,7 +446,7 @@ started:
                 }
             }
             break;
-        case 5:
+        case WIFI_SETUP_WCM_EVENT_FOUND_AP:
             if (state == 0) {
                 if (count < 8) {
                     count++;
@@ -459,26 +460,26 @@ started:
                 }
             }
             break;
-        case 10:
+        case WIFI_SETUP_WCM_EVENT_SEARCH_ENDED:
             local.running = FALSE;
             local.result = 0;
             break;
         case 4:
-        case 8:
+        case WIFI_SETUP_WCM_EVENT_SEARCH_STARTED:
         case 18:
             break;
         case 0:
-        case 1:
-        case 2:
+        case WIFI_SETUP_WCM_EVENT_UNKNOWN:
+        case WIFI_SETUP_WCM_EVENT_FAILED:
         case 3:
-        case 6:
+        case WIFI_SETUP_WCM_EVENT_STARTED:
         case 7:
-        case 9:
-        case 11:
-        case 12:
-        case 13:
-        case 14:
-        case 15:
+        case WIFI_SETUP_WCM_EVENT_SEARCH_FAILED:
+        case WIFI_SETUP_WCM_EVENT_SEARCH_END_FAILED:
+        case WIFI_SETUP_WCM_EVENT_CONNECTED:
+        case WIFI_SETUP_WCM_EVENT_CONNECT_FAILED:
+        case WIFI_SETUP_WCM_EVENT_DISCONNECTED:
+        case WIFI_SETUP_WCM_EVENT_DISCONNECT_FAILED:
         case 16:
         case 17:
         default:

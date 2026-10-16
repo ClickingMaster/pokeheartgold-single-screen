@@ -210,16 +210,16 @@
 	.global ov13_0224CF9C
 	.global ov13_0224CFB8
 	.global ov13_0224CFBC
-	.global ov13_0224CFD8
+	.global gWifiSetupJoinReply
 	.global gWifiSetupCrc32Table
-	.global ov13_0224D658
-	.global ov13_0224D660
-	.global ov13_0224D790
+	.global gWifiSetupSecurityRecords
+	.global gWifiSetupWep64Record
+	.global gWifiSetupWep128Record
 	.global ov13_0224D8C0
 	.global ov13_0224D930
 	.global gWifiSetupPeerAddress
 	.global gWifiSetupCipherSeed
-	.global ov13_0224DD02
+	.global gWifiSetupCipherKey
 	.global gWifiSetupRuntime
 	.global gWifiSetupFreeHook
 	.global gWifiSetupMessages
@@ -230,7 +230,7 @@
 	.global gWifiSetupWcmSearchBssid
 	.global gWifiSetupWcmSearchSsid
 	.global gWifiSetupWork
-	.global ov13_0224DF80
+	.global gWifiSetupExtendedRequest
 	.global gWifiSetupLinkEventCallback
 	.global gWifiSetupLinkEventQueue
 	.global gWifiSetupLinkMutex
@@ -249,8 +249,8 @@
 	.global gWifiSetupApBssid
 	.global gWifiSetupLinkSearchBssid
 	.global gWifiSetupSessionKey
-	.global ov13_0224E400
-	.global ov13_0224E408
+	.global gWifiSetupSettingsKey
+	.global gWifiSetupTimestampDigest
 	.global gWifiSetupLinkSearchSsid
 	.global gWifiSetupApSsid
 	.global gWifiSetupRecordBuffer
@@ -1015,19 +1015,19 @@ ov13_0224CFB8: ; 0x0224CFB8
 ov13_0224CFBC: ; 0x0224CFBC
 	.space 0x1C
 
-ov13_0224CFD8: ; 0x0224CFD8
+gWifiSetupJoinReply: ; 0x0224CFD8
 	.space 0x280
 
 gWifiSetupCrc32Table: ; 0x0224D258
 	.space 0x400
 
-ov13_0224D658: ; 0x0224D658
+gWifiSetupSecurityRecords: ; 0x0224D658
 	.space 0x8
 
-ov13_0224D660: ; 0x0224D660
+gWifiSetupWep64Record: ; 0x0224D660
 	.space 0x130
 
-ov13_0224D790: ; 0x0224D790
+gWifiSetupWep128Record: ; 0x0224D790
 	.space 0x130
 
 ov13_0224D8C0: ; 0x0224D8C0
@@ -1042,7 +1042,7 @@ gWifiSetupPeerAddress: ; 0x0224DCF8
 gWifiSetupCipherSeed: ; 0x0224DD00
 	.space 0x2
 
-ov13_0224DD02: ; 0x0224DD02
+gWifiSetupCipherKey: ; 0x0224DD02
 	.space 0x7E
 
 gWifiSetupRuntime: ; 0x0224DD80
@@ -1075,7 +1075,7 @@ gWifiSetupWcmSearchSsid: ; 0x0224DF10
 gWifiSetupWork: ; 0x0224DF30
 	.space 0x50
 
-ov13_0224DF80: ; 0x0224DF80
+gWifiSetupExtendedRequest: ; 0x0224DF80
 	.space 0x30
 
 gWifiSetupLinkEventCallback: ; 0x0224DFB0
@@ -1132,10 +1132,10 @@ gWifiSetupLinkSearchBssid: ; 0x0224E3E8
 gWifiSetupSessionKey: ; 0x0224E3F0
 	.space 0x10
 
-ov13_0224E400: ; 0x0224E400
+gWifiSetupSettingsKey: ; 0x0224E400
 	.space 0x8
 
-ov13_0224E408: ; 0x0224E408
+gWifiSetupTimestampDigest: ; 0x0224E408
 	.space 0x18
 
 gWifiSetupLinkSearchSsid: ; 0x0224E420

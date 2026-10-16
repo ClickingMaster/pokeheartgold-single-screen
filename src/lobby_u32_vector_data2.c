@@ -25,9 +25,6 @@ typedef struct {
     Six value;
 } Record;
 
-extern void *LobbyCharVector_RecommendSize(Vec *, u32);
-extern void LobbyCharVector_Reallocate(Vec *, u32, void *);
-
 typedef struct {
     u8 *p;
     u32 extra;

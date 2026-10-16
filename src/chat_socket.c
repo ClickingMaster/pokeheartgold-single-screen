@@ -59,7 +59,7 @@ extern char ciSendfBuffer[];
 // A valid socket: state 0 .. 2 and both buffers consistent.
 #define ASSERT_SOCKET(sock, func, line)                                            \
     ASSERT(sock, sStr_SockNeNULL_2, func, line);                                       \
-    ASSERT((sock)->state <= 2, sStr_SockConnectStateEqCiNotConnectedOrSock, func, line);                         \
+    ASSERT((sock)->state <= ciDisconnected, sStr_SockConnectStateEqCiNotConnectedOrSock, func, line);            \
     ASSERT(&(sock)->input, sStr_SockInputQueueNeNULL, func, line);                             \
     ASSERT((sock)->input.size >= 0, sStr_SockInputQueueSizeGe0, func, line);                    \
     ASSERT((sock)->input.size % 0x2000 == 0, sStr_SockInputQueueSizeBUFFER_INC_Eq0, func, line);           \
@@ -86,7 +86,7 @@ BOOL ciSocketConnect(ChatSocket *socket, const char *address, int port) {
     ASSERT(address, sStr_ServerAddressNeNULL_2, sStr_ciSocketConnect, 217);
     ASSERT(port >= 0, sStr_PortGe0, sStr_ciSocketConnect, 218);
     ASSERT(port <= 65535, sStr_PortLeUSHRT_MAX, sStr_ciSocketConnect, 219);
-    ASSERT(socket->state == 0, sStr_SockConnectStateEqCiNotConnected, sStr_ciSocketConnect, 220);
+    ASSERT(socket->state == ciNotConnected, sStr_SockConnectStateEqCiNotConnected, sStr_ciSocketConnect, 220);
     strncpy(socket->host, address, 255);
     socket->host[254] = 0;
     ip = gsSocketInetAddr(address);
@@ -106,7 +106,7 @@ BOOL ciSocketConnect(ChatSocket *socket, const char *address, int port) {
         return FALSE;
     }
     if (gsSocketConnect(socket->handle, &addr, sizeof(addr)) != -1) {
-        socket->state = 1;
+        socket->state = ciConnected;
         return TRUE;
     }
     gsSocketClose(socket->handle);
@@ -121,7 +121,7 @@ void ciSocketDisconnect(ChatSocket *socket) {
         gsSocketShutdown(socket->handle, 2);
         gsSocketClose(socket->handle);
     }
-    socket->state = 2;
+    socket->state = ciDisconnected;
     ciBufferFree(&socket->input);
     ciBufferFree(&socket->output);
     DWCi_GsFree(socket->message.text);
@@ -156,7 +156,7 @@ void ciSocketSelect(int handle, BOOL *readable, BOOL *writable, BOOL *except) {
 // Sends as much of the output buffer as the socket takes (1024 bytes at a time).
 void ciSocketThinkSend(ChatSocket *socket) {
     ASSERT_SOCKET(socket, sStr_ciSocketThinkSend, 340);
-    ASSERT(socket->state == 1, sStr_SockConnectStateEqCiConnected, sStr_ciSocketThinkSend, 341);
+    ASSERT(socket->state == ciConnected, sStr_SockConnectStateEqCiConnected, sStr_ciSocketThinkSend, 341);
     while (socket->output.length > 0) {
         BOOL writable;
         int sent;
@@ -179,7 +179,7 @@ void ciSocketThinkRecv(ChatSocket *socket) {
     int received, length;
     u8 *data;
     ASSERT_SOCKET(socket, sStr_ciSocketThinkRecv, 378);
-    ASSERT(socket->state == 1, sStr_SockConnectStateEqCiConnected, sStr_ciSocketThinkRecv, 379);
+    ASSERT(socket->state == ciConnected, sStr_SockConnectStateEqCiConnected, sStr_ciSocketThinkRecv, 379);
     for (;;) {
         ciSocketSelect(socket->handle, &readable, NULL, NULL);
         if (!readable) {
@@ -192,7 +192,7 @@ void ciSocketThinkRecv(ChatSocket *socket) {
         length = socket->input.length;
         received = gsSocketRecv(socket->handle, data + length, 4096, 0);
         if (received <= 0) {
-            socket->state = 2;
+            socket->state = ciDisconnected;
             return;
         }
         if (socket->encrypted) {
@@ -206,8 +206,8 @@ void ciSocketThinkRecv(ChatSocket *socket) {
 // Sends and receives.
 void ciSocketThink(ChatSocket *socket) {
     ASSERT_SOCKET(socket, sStr_ciSocketThink, 446);
-    ASSERT(socket->state == 1, sStr_SockConnectStateEqCiConnected, sStr_ciSocketThink, 447);
-    if (socket->state == 2) {
+    ASSERT(socket->state == ciConnected, sStr_SockConnectStateEqCiConnected, sStr_ciSocketThink, 447);
+    if (socket->state == ciDisconnected) {
         return;
     }
     ciSocketThinkSend(socket);
@@ -220,9 +220,9 @@ BOOL ciSocketSend(ChatSocket *socket, const char *line) {
     u8 *data;
     int start;
     ASSERT_SOCKET(socket, sStr_ciSocketSend, 472);
-    ASSERT(socket->state == 1, sStr_SockConnectStateEqCiConnected, sStr_ciSocketSend, 473);
+    ASSERT(socket->state == ciConnected, sStr_SockConnectStateEqCiConnected, sStr_ciSocketSend, 473);
     ASSERT(line, sStr_BufferNeNULL_2, sStr_ciSocketSend, 474);
-    if (socket->state == 2) {
+    if (socket->state == ciDisconnected) {
         return TRUE;
     }
     length = strlen(line);
@@ -252,8 +252,8 @@ BOOL ciSocketSendf(ChatSocket *socket, const char *format, ...) {
     va_list args;
     int length;
     ASSERT_SOCKET(socket, sStr_ciSocketSendf, 531);
-    ASSERT(socket->state == 1, sStr_SockConnectStateEqCiConnected, sStr_ciSocketSendf, 532);
-    if (socket->state == 2) {
+    ASSERT(socket->state == ciConnected, sStr_SockConnectStateEqCiConnected, sStr_ciSocketSendf, 532);
+    if (socket->state == ciDisconnected) {
         return TRUE;
     }
     va_start(args, format);

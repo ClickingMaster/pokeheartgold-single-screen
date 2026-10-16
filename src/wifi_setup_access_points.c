@@ -296,18 +296,18 @@ void WifiSetupConnections_SetWepKey(const char *key) {
     }
     switch (len) {
     case 0:
-        gWifiSetupConnections->edit.keyType = 0;
+        gWifiSetupConnections->edit.keyType = WM_WEPMODE_NO;
         break;
     case 5:
     case 10:
-        gWifiSetupConnections->edit.keyType = 1;
+        gWifiSetupConnections->edit.keyType = WM_WEPMODE_40BIT;
         break;
     case 13:
     case 26:
-        gWifiSetupConnections->edit.keyType = 2;
+        gWifiSetupConnections->edit.keyType = WM_WEPMODE_104BIT;
         break;
     default:
-        gWifiSetupConnections->edit.keyType = 3;
+        gWifiSetupConnections->edit.keyType = WM_WEPMODE_128BIT;
         break;
     }
 }
@@ -418,20 +418,20 @@ void WifiSetupConnections_SetFromClientResult(WifiSetupClientResultData *src) {
     MI_CpuFill8(w, 0, 0xef);
     MI_CpuCopy8(src, w->ssid, 0x20);
     switch (src->keyType) {
-    case 1:
-        w->keyType = 1;
+    case WM_WEPMODE_40BIT:
+        w->keyType = WM_WEPMODE_40BIT;
         len = 5;
         break;
-    case 2:
-        w->keyType = 2;
+    case WM_WEPMODE_104BIT:
+        w->keyType = WM_WEPMODE_104BIT;
         len = 13;
         break;
-    case 3:
-        w->keyType = 3;
+    case WM_WEPMODE_128BIT:
+        w->keyType = WM_WEPMODE_128BIT;
         len = 16;
         break;
     default:
-        w->keyType = 0;
+        w->keyType = WM_WEPMODE_NO;
         len = 0;
         break;
     }
@@ -459,7 +459,7 @@ void WifiSetupConnections_SetFromInfo(u8 *src) {
     MI_CpuCopy8(src + 0x55, work->wepKeys[2], 0xd);
     MI_CpuCopy8(src + 0x63, work->wepKeys[3], 0xd);
     MI_CpuCopy8(src + 0x71, work->ssid, 0x20);
-    work->keyType = 2;
+    work->keyType = WM_WEPMODE_104BIT;
     work->keyFormat = 0;
     work->setupMethod = WIFI_SETUP_METHOD_COPIED;
     MI_CpuFill8(work->mask, 0, 4);

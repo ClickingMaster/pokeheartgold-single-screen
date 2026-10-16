@@ -14,8 +14,8 @@ typedef struct Out {
 } Out;
 extern Record ov13_0224D8C0;
 extern Record ov13_0224D930;
-extern Record ov13_0224D660;
-extern Record ov13_0224D790;
+extern Record gWifiSetupWep64Record;
+extern Record gWifiSetupWep128Record;
 extern u32 gWifiSetupState[];
 void WifiSetup_MemFill(void *dst, int value, u32 size);
 void WifiSetup_MemCopy(void *dst, const void *src, u32 size);
@@ -26,8 +26,8 @@ int WifiSetup_StoreAossResult(Out *out);
 int WifiSetup_StoreAossResult(Out *out) {
     Record *a = &ov13_0224D8C0;
     u8 *dst = out->data;
-    Record *c = &ov13_0224D660;
-    Record *d = &ov13_0224D790;
+    Record *c = &gWifiSetupWep64Record;
+    Record *d = &gWifiSetupWep128Record;
     Record *b = &ov13_0224D930;
 
     if (dst == NULL) {

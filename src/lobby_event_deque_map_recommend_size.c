@@ -45,11 +45,6 @@ typedef struct {
     u8 byte;
 } Empty;
 
-extern void LobbyEventDequeMapBuffer_Allocate(Temp *, u32, Empty);
-extern void LobbyEventDequeMapBuffer_AppendRange(Temp *, Iter *, Iter *, Empty);
-extern void LobbyEventDequeMapBuffer_PrependRange(Temp *, Iter *, Iter *, Empty);
-extern void LobbyEventDequeMapBuffer_Destroy(Temp *);
-
 static inline void Init(Temp *t, Queue *q) {
     t->q.data = 0;
     t->q.start = 0;

@@ -20,7 +20,6 @@ typedef struct {
 } Tree;
 
 extern Node *LobbyTree_EraseRebalance(Node *, void *);
-extern Node *LobbyMem_Alloc(u32);
 
 typedef struct {
     Node *first, *second;

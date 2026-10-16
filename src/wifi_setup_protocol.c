@@ -23,8 +23,8 @@ extern char sStr_MELCO[];
 #define U16_AT(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define U32_AT(p, o) (*(u32 *)((u8 *)(p) + (o)))
 void WifiSetup_SetError(int value);
-extern u8 ov13_0224CFD8[];
-extern u8 ov13_0224D658[];
+extern u8 gWifiSetupJoinReply[];
+extern u8 gWifiSetupSecurityRecords[];
 
 typedef struct Packet {
     u8 pad[6];
@@ -50,7 +50,7 @@ typedef struct {
 
 extern s8 ov13_0224CFB8[];
 extern u8 gWifiSetupCipherSeed[];
-extern u8 ov13_0224DD02[];
+extern u8 gWifiSetupCipherKey[];
 u32 _u32_div_f(u32, u32);
 
 int WifiSetup_CheckPrintable(const u8 *data, int length);
@@ -78,8 +78,8 @@ int WifiSetup_SendSettingsRequest(void *unused, const u8 *src, void *arg);
 int WifiSetup_SendDoneRequest(void *unused, const u8 *src, void *arg);
 int WifiSetup_BuildJoinPayload(u8 *dst);
 void WifiSetup_WriteBody(int mode, u8 *dst, const void *src, s16 *length, u16 *flag, const void *extra);
-void WifiSetup_WritePacketHeader(u8 *dst, int a1, int a2, int a3, s8 a4, s8 a5, const void *src);
-void WifiSetup_SendPacket(void *a0, void *a1, int index, void *a3);
+void WifiSetup_WritePacketHeader(u8 *dst, int type, int length, int flags, s8 value, s8 a5, const void *src);
+void WifiSetup_SendPacket(void *buffer, void *size, int index, void *socket);
 int WifiSetup_Encrypt(void *src, void *dst, int size, u8 *checksum, void *seedDst, const void *seedSrc, int seedSize);
 int WifiSetup_Decrypt(void *dst, const void *src, int size, int expected, void *seedDst, const void *seedSrc, int seedSize);
 void WifiSetup_CipherInit(WifiSetupCipher *state, const u8 *key, u32 keySize, u32 tableSize);
@@ -239,7 +239,7 @@ int WifiSetup_HandleJoinReply(int state, void *packet, int *counter, void *conte
         (*counter)++;
         return state;
     }
-    value = WifiSetup_ParseJoinReply(body + 4, ov13_0224CFD8);
+    value = WifiSetup_ParseJoinReply(body + 4, gWifiSetupJoinReply);
     if (value < 0) {
         if (value == -2) {
             WifiSetup_SetError(0x16);
@@ -286,9 +286,9 @@ int WifiSetup_HandleSettingsReply(int state, void *packet, int *counter, void *c
         }
         return -1;
     }
-    WifiSetup_MemFill(ov13_0224D658, 0, 0x6A0);
+    WifiSetup_MemFill(gWifiSetupSecurityRecords, 0, 0x6A0);
     value = WifiSetup_NetToHost16(U16_AT(header, 0xA));
-    if (WifiSetup_ParseSecurityRecords(0, body, value, ov13_0224D658, ov13_0224CFD8) < 0) {
+    if (WifiSetup_ParseSecurityRecords(0, body, value, gWifiSetupSecurityRecords, gWifiSetupJoinReply) < 0) {
         (*counter)++;
         return state;
     }
@@ -861,20 +861,20 @@ void WifiSetup_WriteBody(int mode, u8 *dst, const void *src, s16 *length, u16 *f
     }
 }
 
-void WifiSetup_WritePacketHeader(u8 *dst, int a1, int a2, int a3, s8 a4, s8 a5, const void *src) {
+void WifiSetup_WritePacketHeader(u8 *dst, int type, int length, int flags, s8 value, s8 a5, const void *src) {
     *(u16 *)(dst + 0) = WifiSetup_HostToNet16(1);
     *(u16 *)(dst + 2) = 0;
     *(u16 *)(dst + 4) = 0;
-    *(u16 *)(dst + 6) = WifiSetup_HostToNet16((u16)a1);
+    *(u16 *)(dst + 6) = WifiSetup_HostToNet16((u16)type);
     *(u16 *)(dst + 8) = 0;
-    *(u16 *)(dst + 10) = WifiSetup_HostToNet16((u16)a2);
-    *(u16 *)(dst + 12) = WifiSetup_HostToNet16((u16)a3);
-    dst[14] = a4;
+    *(u16 *)(dst + 10) = WifiSetup_HostToNet16((u16)length);
+    *(u16 *)(dst + 12) = WifiSetup_HostToNet16((u16)flags);
+    dst[14] = value;
     dst[15] = a5;
     WifiSetup_MemCopy(dst + 16, src, 8);
 }
 
-void WifiSetup_SendPacket(void *a0, void *a1, int index, void *a3) {
+void WifiSetup_SendPacket(void *buffer, void *size, int index, void *socket) {
     u8 packet[8];
     int value;
 
@@ -886,7 +886,7 @@ void WifiSetup_SendPacket(void *a0, void *a1, int index, void *a3) {
     if (index == 0xFF || (s8)ov13_0224CFB8[0x1C] == 0) {
         *(int *)(packet + 4) = -1;
     }
-    WifiSetup_SendTo((int)a3, a0, (int)a1, 0, packet, sizeof(packet));
+    WifiSetup_SendTo((int)socket, buffer, (int)size, 0, packet, sizeof(packet));
 }
 
 int WifiSetup_Encrypt(void *src, void *dst, int size, u8 *checksum, void *seedDst, const void *seedSrc, int seedSize) {
@@ -901,7 +901,7 @@ int WifiSetup_Encrypt(void *src, void *dst, int size, u8 *checksum, void *seedDs
     seed = WifiSetup_Random();
     WifiSetup_MemCopy(seedDst, &seed, 2);
     WifiSetup_MemCopy(gWifiSetupCipherSeed, seedDst, 2);
-    WifiSetup_MemCopy(ov13_0224DD02, seedSrc, seedSize);
+    WifiSetup_MemCopy(gWifiSetupCipherKey, seedSrc, seedSize);
     WifiSetup_CipherInit(&state, gWifiSetupCipherSeed, seedSize + 2, size);
     WifiSetup_CipherXor(&state, dst, src, size);
     WifiSetup_Free(state.table);
@@ -917,7 +917,7 @@ int WifiSetup_Decrypt(void *dst, const void *src, int size, int expected, void *
         return -1;
     }
     WifiSetup_MemCopy(gWifiSetupCipherSeed, seedDst, 2);
-    WifiSetup_MemCopy(ov13_0224DD02, seedSrc, seedSize);
+    WifiSetup_MemCopy(gWifiSetupCipherKey, seedSrc, seedSize);
     WifiSetup_CipherInit(&state, gWifiSetupCipherSeed, seedSize + 2, size);
     WifiSetup_CipherXor(&state, src, dst, size);
     {

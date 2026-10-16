@@ -1,5 +1,7 @@
 #pragma force_active on
 #include "to55_overlay13_r14_private.h"
+#include "WM.h"
+#include "wifi_setup_wcm.h"
 
 typedef struct ConnectKey {
     u8 data[0x14];
@@ -58,11 +60,11 @@ int WifiSetup_ConnectAccessPoint(ConnectParam *param, void *out) {
     mode |= 0x30000;
     MI_CpuFill8(&gWifiSetupConnectSetting, 0, sizeof(ConnectSetting));
     if (param->keyLength == 5) {
-        gWifiSetupConnectSetting.keyType = 1;
+        gWifiSetupConnectSetting.keyType = WM_WEPMODE_40BIT;
     } else if (param->keyLength == 13) {
-        gWifiSetupConnectSetting.keyType = 2;
+        gWifiSetupConnectSetting.keyType = WM_WEPMODE_104BIT;
     } else if (param->keyLength == 16) {
-        gWifiSetupConnectSetting.keyType = 3;
+        gWifiSetupConnectSetting.keyType = WM_WEPMODE_128BIT;
     } else {
         return -1;
     }
@@ -86,7 +88,7 @@ int WifiSetup_ConnectAccessPoint(ConnectParam *param, void *out) {
                     break;
                 }
                 break;
-            case 5:
+            case WIFI_SETUP_WCM_EVENT_FOUND_AP:
                 if (!connected) {
                     OS_CancelAlarm(&alarm);
                     if (WifiSetupWcm_CopyApList(&gWifiSetupConnectApInfo, 1) != 1) {
@@ -105,17 +107,17 @@ int WifiSetup_ConnectAccessPoint(ConnectParam *param, void *out) {
                     }
                 }
                 break;
-            case 10:
+            case WIFI_SETUP_WCM_EVENT_SEARCH_ENDED:
                 WifiSetup_CopyConnectSsid(param, &gWifiSetupConnectApInfo);
                 if (!WifiSetupWcm_StartConnect(&gWifiSetupConnectApInfo, &gWifiSetupConnectSetting, mode)) {
                     running = FALSE;
                 }
                 break;
-            case 12:
+            case WIFI_SETUP_WCM_EVENT_CONNECTED:
                 running = FALSE;
                 result = 0;
                 break;
-            case 13:
+            case WIFI_SETUP_WCM_EVENT_CONNECT_FAILED:
                 if (++retries < 3) {
                     if (!WifiSetupWcm_StartConnect(&gWifiSetupConnectApInfo, &gWifiSetupConnectSetting, mode)) {
                         running = FALSE;
@@ -125,7 +127,7 @@ int WifiSetup_ConnectAccessPoint(ConnectParam *param, void *out) {
                 }
                 break;
             case 4:
-            case 8:
+            case WIFI_SETUP_WCM_EVENT_SEARCH_STARTED:
                 break;
             case 0:
             default:

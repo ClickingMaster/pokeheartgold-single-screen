@@ -46,7 +46,7 @@ extern WifiSetupPoint gWifiSetupDialogFrameSizes[];
 extern WifiSetupPoint gWifiSetupDialogButtonPos[][2];
 extern u8 gWifiSetupDialogFrameTemplates[];
 extern u8 gWifiSetupDialogButtonCounts[];
-extern char *ov13_02246854[];
+extern char *gWifiSetupBannerScreenPaths[];
 
 int WM_Initialize(void *buf, void *callback, u16 dmaNo);
 int WM_ReadStatus(void *status);
@@ -120,7 +120,7 @@ static inline void WifiSetupMbParent_DisconnectChild(u16 aid) {
     MB_DisconnectChild(aid);
 }
 
-WifiSetupMbParentData ov13_022468D8 = {
+WifiSetupMbParentData gWifiSetupMbParentData = {
     { NULL, NULL, NULL, NULL, NULL, NULL },
     {
      0xC0,
@@ -2493,7 +2493,7 @@ BOOL WifiSetupBanner_IsNotClosing(void) {
 }
 
 void WifiSetupBanner_LoadScreen(int n) {
-    gWifiSetupBanner.screen = WifiSetupFile_Load(WifiSetup_LocalizePath(ov13_02246854[n]), 0, 4);
+    gWifiSetupBanner.screen = WifiSetupFile_Load(WifiSetup_LocalizePath(gWifiSetupBannerScreenPaths[n]), 0, 4);
     WifiSetupTask_Create(1, WifiSetupBanner_LoadScreenTask, 0, 0x78);
 }
 
@@ -3188,11 +3188,11 @@ u16 WifiSetupMbParent_GetState(void) {
 
 u16 WifiSetupMbParent_GetMask(int index) {
     u8 *base = (u8 *)gWifiSetupMbParent;
-    ov13_022468D8.masks[0] = (u16 *)(base + 2);
-    ov13_022468D8.masks[1] = (u16 *)(base + 4);
-    ov13_022468D8.masks[2] = (u16 *)(base + 6);
-    ov13_022468D8.masks[3] = (u16 *)(base + 8);
-    ov13_022468D8.masks[4] = (u16 *)(base + 10);
-    ov13_022468D8.masks[5] = (u16 *)(base + 12);
-    return *ov13_022468D8.masks[index];
+    gWifiSetupMbParentData.masks[0] = (u16 *)(base + 2);
+    gWifiSetupMbParentData.masks[1] = (u16 *)(base + 4);
+    gWifiSetupMbParentData.masks[2] = (u16 *)(base + 6);
+    gWifiSetupMbParentData.masks[3] = (u16 *)(base + 8);
+    gWifiSetupMbParentData.masks[4] = (u16 *)(base + 10);
+    gWifiSetupMbParentData.masks[5] = (u16 *)(base + 12);
+    return *gWifiSetupMbParentData.masks[index];
 }

@@ -160,7 +160,7 @@ extern OSThread sGlobalTerminalSocketThread;
 extern OSMutex sGlobalTerminalSocketMutex;
 extern u8 sGlobalTerminalSocketThreadStackEnd[];
 extern const GlobalTerminalServerCommandIds sGlobalTerminalServerCommandIds;
-extern u8 _0222AA58[];
+extern u8 sGlobalTerminalSocketSvl[];
 extern char sGlobalTerminalServerHostName[];
 extern u8 ov39_0222AA78[];
 extern u8 sGlobalTerminalSocketCipher[];
@@ -736,7 +736,7 @@ int GlobalTerminalSocket_FetchToken(void) {
     if (sGlobalTerminalSocket.hasToken == TRUE) {
         return 1;
     }
-    if (!DWC_SVLGetTokenAsync((const char *)_0222AA58, &request)) {
+    if (!DWC_SVLGetTokenAsync((const char *)sGlobalTerminalSocketSvl, &request)) {
         sGlobalTerminalSocket.error = GTS_SOCKET_ERROR_TOKEN;
         return 0;
     }

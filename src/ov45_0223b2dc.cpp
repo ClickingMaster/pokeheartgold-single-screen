@@ -88,8 +88,8 @@ extern "C" void LobbyEventDequeMap_InsertRange(Ring *r, It pos, WIt first, WIt l
 extern "C" void *LobbyMem_Alloc(u32 n);
 extern "C" void LobbyEventDeque_LengthError(char *msg);
 extern char sStr_DequeLengthError[];
-extern u32 ov45_022577C8;
-extern u32 ov45_022551A8;
+extern u32 gLobbyDequeMaxSizeInit;
+extern u32 gLobbyDequeMaxSize;
 
 struct Alloc {
     void destroy(P *) {
@@ -238,11 +238,11 @@ struct Deque {
 };
 
 inline u32 max_size() {
-    if (!(ov45_022577C8 & 1)) {
-        ov45_022551A8 = ~0xFF;
-        ov45_022577C8 |= 1;
+    if (!(gLobbyDequeMaxSizeInit & 1)) {
+        gLobbyDequeMaxSize = ~0xFF;
+        gLobbyDequeMaxSizeInit |= 1;
     }
-    return ov45_022551A8;
+    return gLobbyDequeMaxSize;
 }
 
 inline void CopyBlocks(Ring *m, Ring *src) {

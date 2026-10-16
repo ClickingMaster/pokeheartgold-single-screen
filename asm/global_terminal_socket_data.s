@@ -1,6 +1,6 @@
 	.public _0222A9AC
 	.public sGlobalTerminalServerCommandIds
-	.public _0222AA58
+	.public sGlobalTerminalSocketSvl
 	.public sGlobalTerminalSocket
 	.public sGlobalTerminalServerHostName
 	.public ov39_0222AA78
@@ -30,7 +30,7 @@ _0222A9AC:
 
 	.data
 
-_0222AA58:
+sGlobalTerminalSocketSvl:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 sGlobalTerminalServerHostName: ; 0x0222AA5C

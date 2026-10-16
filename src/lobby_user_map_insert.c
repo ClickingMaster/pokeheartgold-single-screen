@@ -19,58 +19,17 @@ typedef struct {
     void *root, *last;
 } Tree;
 
-extern void DWC_Free(int, void *, int);
-extern void DWCi_GsFree(void *);
-extern void LobbyString_InitCopy(void *, void *);
-extern void LobbyString_Destroy(void *);
-extern void LobbyChannelMap_Find(void **, void *, void *);
-extern void __msl_assertion_failed(char *, char *, char *, int);
-extern void *ArrayNew(int, int, void (*)(void *));
-extern char sStr_DataNeNULL[];
-extern char sStr_ChatCallbacksC[];
-extern char sStr_ciCallbacksArrayElementFreeFn[];
-extern int LobbyString_Compare(void *, void *);
-extern void LobbyUserMap_MakeEntry(void *p, int a, void *b);
-extern int LobbyChat_AreChannelUsersEnumerated(void *p, void *key);
-extern int LobbyChat_SetChannelUsersEnumerated(void *p, void *key);
-extern int LobbyChat_GetChannelUserLimit(void *p, void *key);
 extern void *LobbyUserIdSet_Destroy(void *p);
-extern void *LobbyUserMap_Destroy(void *p);
-extern void *LobbyRequestMap_Destroy(void *p);
-extern void *LobbyChannelMap_FindInsertPos(void *p, void *key, void **prev, u8 *left, u8 *first);
-extern Node *LobbyUserIdSet_FindInsertPos(Tree *p, int *key, Node **prev, u8 *left, u8 *first);
 extern Node *LobbyUserMap_FindInsertPos(Tree *p, int *key, Node **prev, u8 *left, u8 *first);
-extern void LobbyChannelMap_DestroyNodes(void *p, void *node);
-extern void *LobbyUserIdSet_Destroy2(void *p);
-extern void LobbyUserIdSet_Swap(Tree *p, Tree *q);
 extern void LobbyUserIdSet_DestroyNodes(void *p, void *node);
-extern void LobbyUserMap_DestroyNodes(void *p, void *node);
-extern void LobbyRequestMap_DestroyNodes(void *p, void *node);
-extern void ciCallbacksArrayElementFreeFn(void *p);
-extern int ciInitCallbacks(void *p);
-extern int ArrayLength(void *);
-extern void *ArrayNth(void *, int);
-extern void ArrayFree(void *);
-extern void ciFreeCallbackData(void *);
-extern char sStr_ChatNeNULL[];
-extern char sStr_ciCleanupCallbacks[];
-extern char sStr_DataTypeGe0[];
-extern char sStr_DataTypeLtCALLBACK_NUM[];
-extern char sStr_DataCallbackNeNULL[];
-extern char sStr_DataCallbackParamsNeNULL[];
-extern char sStr_DataID_Ge0[];
-extern void *LobbyChannelMap_Destroy(void *p);
-extern void ciCleanupCallbacks(void *p);
 
 typedef struct {
     Node *node;
     u8 ok;
 } InsertResult;
 
-extern Node *LobbyUserIdSet_InsertNode(Tree *, Node *, int, int, int *);
 extern Node *LobbyUserMap_InsertNode(Tree *, Node *, int, int, int *);
 extern u8 ov45_02255358[];
-extern void LobbyUserIdSet_Insert(InsertResult *, Tree *, int *);
 extern void LobbyUserMap_Insert(InsertResult *, Tree *, int *);
 
 void *LobbyUserIdSet_Destroy(void *p) {

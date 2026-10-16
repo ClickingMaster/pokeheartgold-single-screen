@@ -7,6 +7,7 @@
 
 #include "dwc/dwc_bm_internal.h"
 
+#include "WM.h"
 #include "wifi_setup_app.h"
 #include "wifi_setup_connection.h"
 #include "wifi_setup_keyboard.h"
@@ -576,15 +577,15 @@ void WifiSetupSettings_DrawValue(u32 item, int row) {
         int len;
         u8 buf[33];
         switch (record->keyType) {
-        case 0:
+        case WM_WEPMODE_NO:
             return;
-        case 1:
+        case WM_WEPMODE_40BIT:
             len = 10;
             break;
-        case 2:
+        case WM_WEPMODE_104BIT:
             len = 26;
             break;
-        case 3:
+        case WM_WEPMODE_128BIT:
             len = 32;
             break;
         }
