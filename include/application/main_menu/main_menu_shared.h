@@ -8,9 +8,8 @@
 #include "mystery_gift.h"
 #include "save.h"
 
-// Shared services of the main menu overlay, part 2 (src/application/main_menu/main_menu_shared.c; part 1 is
-// main_menu_util.c, they share the MainMenuUtilWork): the sub screen of the card screens, the encryption of a shared
-// Wonder Card, the list menu cursor sound, the GBA cartridge interrupt and an asynchronous save.
+// Shared services of the main menu overlay, sharing the MainMenuUtilWork: the sub screen of the card screens, the
+// encryption of a shared Wonder Card, the list menu cursor sound, the GBA cartridge interrupt and an asynchronous save.
 
 // States of the asynchronous save (MainMenuUtil_GetSaveState)
 #define SAVE_STATE_START   0
@@ -23,9 +22,7 @@ void MainMenuUtil_ShowCardSubScreen(BgConfig *bgConfig, WonderCard *card);
 void MainMenuUtil_EncryptWonderCard(WonderCardInfo *header, void *dest, enum HeapID heapID);
 void MainMenuUtil_DecryptWonderCard(WonderCardInfo *header, WonderCard *dest, enum HeapID heapID);
 void MainMenuUtil_ListMenuCursorCallback(ListMenu *list, s32 index, u8 onInit);
-void MainMenuUtil_CartridgeIrqHandler(void);
 void MainMenuUtil_EnableCartridgePullOutCheck(BOOL enable);
-void MainMenuUtil_IgnoreCartridgeIrqHandler(void);
 void MainMenuUtil_IgnoreCartridgeIrq(void);
 void MainMenuUtil_StartSave(SaveData *saveData);
 int MainMenuUtil_RunSave(void);

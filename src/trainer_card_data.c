@@ -4,6 +4,7 @@
 
 #include "constants/game_stats.h"
 
+#include "field_time_events.h"
 #include "frontier_save_access.h"
 #include "game_stats.h"
 #include "heap.h"
@@ -15,7 +16,6 @@
 #include "sys_flags.h"
 #include "task.h"
 #include "union_room_talk.h"
-#include "field_time_events.h"
 
 typedef struct LinkTrainerCardTaskEnv {
     int state;
@@ -23,13 +23,15 @@ typedef struct LinkTrainerCardTaskEnv {
     TrainerCardAppArgs args;
 } LinkTrainerCardTaskEnv;
 
+static inline u32 GameStats_GetLinkCount(GameStats *stats);
+static void TrainerCardData_SetHeader(u8 unk_04_0, u32 version, u32 stars, u32 unk_02, u8 language, TrainerCardData *card);
+static void TrainerCardData_SetProfile(u32 trainerId, u8 gender, const u16 *name, u32 money, u32 pokedexCount, u32 pokedexObtained, u32 score, TrainerCardData *card);
+static void TrainerCardData_SetTimes(u8 gameCleared, IGT *igt, const RTCDate *startDate, const RTCDate *clearDate, const RTCTime *clearTime, u8 liveIgt, TrainerCardData *card);
+static void TrainerCardData_SetRecords(u32 linkCount, u32 linkBattleWins, u32 linkBattleLosses, u32 linkTrades, u8 signatureExists, const void *signature, TrainerCardData *card);
+static void TrainerCardData_SetBadges(PlayerProfile *profile, FieldSystem *fieldSystem, TrainerCardData *card);
+static BOOL Task_LinkTrainerCard(TaskManager *taskManager);
+
 TrainerCardData *TrainerCardData_New(enum HeapID heapID);
-void TrainerCardData_SetHeader(u8 unk_04_0, u32 version, u32 stars, u32 unk_02, u8 language, TrainerCardData *card);
-void TrainerCardData_SetProfile(u32 trainerId, u8 gender, const u16 *name, u32 money, u32 pokedexCount, u32 pokedexObtained, u32 score, TrainerCardData *card);
-void TrainerCardData_SetTimes(u8 gameCleared, IGT *igt, const RTCDate *startDate, const RTCDate *clearDate, const RTCTime *clearTime, u8 liveIgt, TrainerCardData *card);
-void TrainerCardData_SetRecords(u32 linkCount, u32 linkBattleWins, u32 linkBattleLosses, u32 linkTrades, u8 signatureExists, const void *signature, TrainerCardData *card);
-void TrainerCardData_SetBadges(PlayerProfile *profile, FieldSystem *fieldSystem, TrainerCardData *card);
-BOOL Task_LinkTrainerCard(TaskManager *taskManager);
 
 static inline u32 GameStats_GetLinkCount(GameStats *stats) {
     return GameStats_GetCapped(stats, GAME_STAT_UNK33)
@@ -133,7 +135,7 @@ u8 FieldSystem_GetTrainerCardStars(FieldSystem *fieldSystem) {
     return stars;
 }
 
-void TrainerCardData_SetHeader(u8 unk_04_0, u32 version, u32 stars, u32 unk_02, u8 language, TrainerCardData *card) {
+static void TrainerCardData_SetHeader(u8 unk_04_0, u32 version, u32 stars, u32 unk_02, u8 language, TrainerCardData *card) {
     card->unk_04_0 = unk_04_0;
     card->version = version;
     card->stars = stars;
@@ -141,7 +143,7 @@ void TrainerCardData_SetHeader(u8 unk_04_0, u32 version, u32 stars, u32 unk_02, 
     card->unk_02 = unk_02;
 }
 
-void TrainerCardData_SetProfile(u32 trainerId, u8 gender, const u16 *name, u32 money, u32 pokedexCount, u32 pokedexObtained, u32 score, TrainerCardData *card) {
+static void TrainerCardData_SetProfile(u32 trainerId, u8 gender, const u16 *name, u32 money, u32 pokedexCount, u32 pokedexObtained, u32 score, TrainerCardData *card) {
     card->trainerId = trainerId;
     card->gender = gender;
     CopyU16StringArrayN(card->name, name, 8);
@@ -151,7 +153,7 @@ void TrainerCardData_SetProfile(u32 trainerId, u8 gender, const u16 *name, u32 m
     card->score = score;
 }
 
-void TrainerCardData_SetTimes(u8 gameCleared, IGT *igt, const RTCDate *startDate, const RTCDate *clearDate, const RTCTime *clearTime, u8 liveIgt, TrainerCardData *card) {
+static void TrainerCardData_SetTimes(u8 gameCleared, IGT *igt, const RTCDate *startDate, const RTCDate *clearDate, const RTCTime *clearTime, u8 liveIgt, TrainerCardData *card) {
     card->playHours = GetIGTHours(igt);
     card->playMinutes = GetIGTMinutes(igt);
     card->startYear = startDate->year;
@@ -178,7 +180,7 @@ void TrainerCardData_SetTimes(u8 gameCleared, IGT *igt, const RTCDate *startDate
     }
 }
 
-void TrainerCardData_SetRecords(u32 linkCount, u32 linkBattleWins, u32 linkBattleLosses, u32 linkTrades, u8 signatureExists, const void *signature, TrainerCardData *card) {
+static void TrainerCardData_SetRecords(u32 linkCount, u32 linkBattleWins, u32 linkBattleLosses, u32 linkTrades, u8 signatureExists, const void *signature, TrainerCardData *card) {
     card->linkCount = linkCount;
     if (linkCount > 999999) {
         card->linkCount = 999999;
@@ -199,7 +201,7 @@ void TrainerCardData_SetRecords(u32 linkCount, u32 linkBattleWins, u32 linkBattl
     MI_CpuCopy8(signature, card->signature, sizeof(card->signature));
 }
 
-void TrainerCardData_SetBadges(PlayerProfile *profile, FieldSystem *fieldSystem, TrainerCardData *card) {
+static void TrainerCardData_SetBadges(PlayerProfile *profile, FieldSystem *fieldSystem, TrainerCardData *card) {
     u32 *words;
     u8 i;
     u16 mask;
@@ -228,7 +230,7 @@ void LinkTrainerCard_StartTask(FieldSystem *fieldSystem) {
     TaskManager_Call(fieldSystem->taskman, Task_LinkTrainerCard, env);
 }
 
-BOOL Task_LinkTrainerCard(TaskManager *taskManager) {
+static BOOL Task_LinkTrainerCard(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     LinkTrainerCardTaskEnv *env = TaskManager_GetEnvironment(taskManager);
 

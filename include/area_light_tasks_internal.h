@@ -19,7 +19,4 @@ void CallTask_ShipVoyage(FieldSystem *, u8, u8, u32, u32, u32);
 void ShipDepartureCutscene_LaunchApp(FieldSystem *, void *);
 void CallTask_LeaveOverworld(TaskManager *);
 void CallTask_RestoreOverworldAndFadeIn(TaskManager *);
-void CallTask_ShipDepartureCutscene(FieldSystem *, u8, void *);
-BOOL Task_ShipDepartureCutscene(TaskManager *);
-BOOL Task_ShipVoyage(TaskManager *);
 #endif

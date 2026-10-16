@@ -17,8 +17,8 @@
 #include "sprite_system.h"
 #include "string.h"
 
-// VS Recorder screen framework, part 2: menu row labels, text sprites, menu row rebuild, alpha blend / fade
-// steps and the colour-scheme palettes.
+// VS Recorder screen framework: menu row labels, text sprites, menu row rebuild, alpha blend / fade steps and the
+// colour-scheme palettes.
 
 typedef struct VsRecorderSchemeTable {
     u32 values[7];
@@ -26,11 +26,11 @@ typedef struct VsRecorderSchemeTable {
 
 // per colour scheme (VsRecorderWork.colorScheme)
 extern const u32 sVsRecorderSchemeFileIds1[7];
-extern const u32 sVsRecorderSchemeBlendColors[7]; // blend colour
+extern const u32 sVsRecorderSchemeBlendColors[7];    // blend colour
 extern const u32 sVsRecorderSchemeBgPaletteFiles[7]; // BG palette file
 extern const u32 sVsRecorderSchemeMenuBlendColors[7];
 extern const u32 sVsRecorderSchemeBgFramePaletteFiles[7]; // BG frame palette file
-extern const u32 sVsRecorderSchemeObjPaletteFiles[7]; // OBJ palette file
+extern const u32 sVsRecorderSchemeObjPaletteFiles[7];     // OBJ palette file
 
 void OrbitCursor_ReloadPalette(void *banner, int colorScheme);
 

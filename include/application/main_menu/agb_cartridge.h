@@ -7,7 +7,7 @@
 
 // Access to a Pokemon Ruby/Sapphire/Emerald/FireRed/LeafGreen cartridge in the GBA slot for Migrate from
 // Ruby/Sapphire/... (Pal Park): identification, the cartridge's save (2 save slots of 14 flash sectors) and its
-// boxed Pokemon (src/application/main_menu/agb_cartridge.c).
+// boxed Pokemon.
 
 // Results of PmAgbCartridgeGetOffsets / PmAgbCartridge_LoadSave / the save functions
 #define PM_AGB_RESULT_OK                 0
@@ -144,7 +144,6 @@ enum AgbMonData {
     AGB_MON_DATA_FATEFUL_ENCOUNTER = 80,
 };
 
-BOOL PmAgbCartridgeHasFlash(void);
 int PmAgbCartridgeGetOffsets(void *buffer);
 void PmAgbCartridgeUnlinkSpec(void);
 u8 PmAgbCartridge_GetVersionInternal(void);
@@ -154,7 +153,6 @@ BOOL PmAgbCartridge_StartSave(void);
 int PmAgbCartridge_ContinueSave(void);
 int PmAgbCartridge_GetSaveStatus(void);
 AgbPokemonStorage *PmAgbCartridge_GetPCStorage(void);
-void *PmAgbCartridge_GetTrainerInfo(void);
 u32 PmAgbCartridge_GetTrainerId(void);
 void *PmAgbCartridge_GetPlayerName(void *unused);
 u32 AGB_GetBoxMonData(AgbBoxMon *mon, int field, u8 *dest);

@@ -10,9 +10,9 @@
 #include "gf_gfx_planes.h"
 #include "heap.h"
 #include "screen_fade.h"
-#include "system.h"
 #include "sound_playback.h"
 #include "swap_3d_buffers.h"
+#include "system.h"
 #include "ui_util.h"
 
 #define SHIP_CUTSCENE_NUM_ANIMS  4
@@ -62,10 +62,10 @@ extern ShipCutsceneFiles sShipDepartureCutscenePort0DayFiles;
 extern ShipCutsceneFiles sShipDepartureCutscenePort1NightFiles;
 extern ShipCutsceneFiles sShipDepartureCutscenePort1DayFiles;
 
-void ShipDepartureCutscene_InitGraphics(void);
-void ShipDepartureCutscene_InitCamera(ShipDepartureCutscene *cutscene);
-void ShipDepartureCutscene_SetBanks(void);
-void ShipDepartureCutscene_LoadModel(ShipDepartureCutscene *cutscene);
+static void ShipDepartureCutscene_InitGraphics(void);
+static void ShipDepartureCutscene_InitCamera(ShipDepartureCutscene *cutscene);
+static void ShipDepartureCutscene_SetBanks(void);
+static void ShipDepartureCutscene_LoadModel(ShipDepartureCutscene *cutscene);
 
 BOOL ShipDepartureCutscene_Init(OverlayManager *man, int *state) {
     u8 i;
@@ -171,7 +171,7 @@ BOOL ShipDepartureCutscene_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-void ShipDepartureCutscene_InitGraphics(void) {
+static void ShipDepartureCutscene_InitGraphics(void) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     GfGfx_DisableEngineAPlanes();
@@ -185,7 +185,7 @@ void ShipDepartureCutscene_InitGraphics(void) {
     GfGfx_SwapDisplay();
 }
 
-void ShipDepartureCutscene_InitCamera(ShipDepartureCutscene *cutscene) {
+static void ShipDepartureCutscene_InitCamera(ShipDepartureCutscene *cutscene) {
     u8 scene;
     u8 port;
     VecFx32 target = { 0, 0, 0 };
@@ -199,12 +199,12 @@ void ShipDepartureCutscene_InitCamera(ShipDepartureCutscene *cutscene) {
     Camera_SetStaticPtr(cutscene->camera);
 }
 
-void ShipDepartureCutscene_SetBanks(void) {
+static void ShipDepartureCutscene_SetBanks(void) {
     GraphicsBanks banks = sShipDepartureCutsceneGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
-void ShipDepartureCutscene_LoadModel(ShipDepartureCutscene *cutscene) {
+static void ShipDepartureCutscene_LoadModel(ShipDepartureCutscene *cutscene) {
     u8 i;
     NNSG3dResTex *tex;
     NARC *narc;

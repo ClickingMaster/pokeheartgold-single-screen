@@ -9,63 +9,44 @@
 	.public _021E59AE
 	.public _021E59B2
 	.public _021E59DE
-	.public UnownReport_ResetDisplay
 	.public _021E5A40
 	.public _021E5A44
-	.public UnownReport_GetSeenPunctuationForms
 	.public _021E5A52
 	.public _021E5A70
-	.public UnownReport_InitData
 	.public _021E5ADE
 	.public _021E5AFE
 	.public _021E5B10
 	.public _021E5B1A
 	.public _021E5B32
 	.public _021E5B52
-	.public UnownReport_RestoreMenuInputState
 	.public _021E5B6C
-	.public UnownReport_SetupGraphics
 	.public _021E5B80
 	.public _021E5B8C
 	.public _021E5BAC
-	.public UnownReport_Teardown
-	.public UnownReport_FadeIn
 	.public _021E5BD6
 	.public _021E5BF4
 	.public _021E5C06
-	.public UnownReport_FadeOut
 	.public _021E5C1E
 	.public _021E5C46
 	.public _021E5C58
-	.public UnownReport_HandleInput
 	.public _021E5C64
-	.public UnownReport_TurnPage
 	.public _021E5C80
 	.public _021E5C88
 	.public _021E5CA8
 	.public _021E5CC0
 	.public _021E5CE0
 	.public _021E5CF2
-	.public UnownReport_CreateGraphics
 	.public _021E5D24
-	.public UnownReport_DestroyGraphics
-	.public UnownReport_DrawFirstPage
-	.public UnownReport_ProcessInput
 	.public _021E5D7C
-	.public UnownReport_GetNumInfoPages
 	.public _021E5D88
 	.public _021E5D9A
 	.public _021E5DA0
-	.public UnownReport_DrawPage
 	.public _021E5DD4
 	.public _021E5DE8
 	.public _021E5DF6
 	.public _021E5E60
-	.public UnownReport_DrawTitle
 	.public _021E5EC0
-	.public UnownReport_IsBookAnimating
 	.public _021E5ECC
-	.public UnownReport_HandleButton
 	.public _021E5EE2
 	.public _021E5EF4
 	.public _021E5EFE
@@ -74,24 +55,19 @@
 	.public _021E5F3C
 	.public _021E5F40
 	.public _021E5F44
-	.public UnownReport_HandleKeys
 	.public _021E5F58
 	.public _021E5F6C
 	.public _021E5F7A
 	.public _021E5F86
 	.public _021E5F8C
 	.public _021E5F90
-	.public UnownReport_HandleTouch
 	.public _021E5FAE
 	.public _021E5FBC
-	.public UnownReport_DrawCoverPage
 	.public _021E5FE6
-	.public UnownReport_DrawFormSpread
 	.public _021E60C2
 	.public _021E60DA
 	.public _021E6118
 	.public _021E612A
-	.public UnownReport_DrawInfoPage
 	.public _021E6168
 	.public _021E617C
 	.public _021E61A2
@@ -101,18 +77,12 @@
 	.public _021E6206
 	.public _021E622E
 	.public _021E6234
-	.public UnownReport_ShowScreen
-	.public UnownReport_PrintText
 	.public _021E6298
-	.public UnownReport_PrintTextFont0
-	.public UnownReport_VBlankCallback
 	.public _021E62C0
 	.public _021E62D8
 	.public _021E62DC
-	.public UnownReport_SetVramBanks
 	.public _021E62EA
 	.public _021E62FC
-	.public UnownReport_InitBgs
 	.public _021E646C
 	.public _021E6470
 	.public _021E6474
@@ -122,41 +92,25 @@
 	.public _021E6484
 	.public _021E6488
 	.public _021E648C
-	.public UnownReport_FreeBgs
 	.public _021E64D8
-	.public UnownReport_LoadScreen
-	.public UnownReport_LoadBgGraphics
-	.public UnownReport_FreeScreens
-	.public UnownReport_InitMessages
-	.public UnownReport_FreeMessages
-	.public UnownReport_InitWindows
 	.public _021E6728
 	.public _021E6750
-	.public UnownReport_FreeWindows
 	.public _021E675E
-	.public UnownReport_InitSpriteSystem
 	.public _021E68B4
 	.public _021E68EA
 	.public _021E6920
 	.public _021E6924
 	.public _021E6928
 	.public _021E692C
-	.public UnownReport_FreeSpriteSystem
-	.public UnownReport_CreateSprites
-	.public UnownReport_DestroySprites
-	.public UnownReport_CreateSpriteObjects
 	.public _021E69D8
 	.public _021E6A56
 	.public _021E6A64
 	.public _021E6A6E
 	.public _021E6AAC
-	.public UnownReport_DeleteSpriteObjects
 	.public _021E6AB8
 	.public _021E6AC6
 	.public _021E6AD0
 	.public _021E6ADE
-	.public UnownReport_LoadIcon
-	.public UnownReport_UpdateArrows
 	.public _021E6B2C
 	.public _021E6B3A
 	.public _021E6B46

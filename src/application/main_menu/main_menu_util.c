@@ -41,8 +41,6 @@ BOOL CTRDG_CpuCopy16(const void *src, void *dest, u32 size);
 void CRYPTO_SetAllocator(void *(*alloc)(u32), void (*free)(void *));
 BOOL CRYPTO_VerifySignature(const void *data, u32 size, const void *signature, const void *publicKey);
 
-// Declared here rather than through text.h / font.h / pokemon.h / item.h: the font id is passed as an int, and the
-// gift graphics use the pieces' own signatures of the Pokemon and item helpers.
 int AddTextPrinterParameterizedWithColor(Window *window, int fontId, String *string, int x, int y, int textSpeed, u32 color, void *callback);
 int FontID_String_GetWidth(int fontId, String *string, int letterSpacing);
 u8 GetFontAttribute(u8 fontId, int attr);
@@ -68,7 +66,7 @@ typedef struct MainMenuUtilGift {
 } MainMenuUtilGift;
 
 // The work and the labels inside it; sMainMenuUtilCryptoHeapId + 1 is gMainMenuUtilWork (some functions take its address through the
-// preceding label: a second literal-pool entry of the same address, matching)
+// preceding label)
 extern enum HeapID sMainMenuUtilCryptoHeapId; // heap of the crypto library
 extern MainMenuUtilWork gMainMenuUtilWork;
 extern MainMenuUtilSprites sMainMenuUtilSprites; // = &gMainMenuUtilWork.sprites
@@ -82,18 +80,26 @@ extern const MainMenuUtilGiftPalettes sMainMenuUtilGiftPalettes;
 extern u32 sGiftCartridgeGameCodes[];
 extern u16 sAgbSpeciesMapNationalDex[];
 
+static void *MainMenuUtil_CryptoAlloc(u32 size);
+static int MainMenuUtil_CheckGiftCartridgeSignature(void);
+static BOOL MainMenuUtil_IsGiftCartridgeInserted(void);
+static int MainMenuTextPrinter_Print(MainMenuTextPrinter *printer, int msgId);
+static void MainMenuUtil_SetSubScreenOffset(fx32 x, fx32 y);
+static void MainMenuUtil_VBlankCB(void);
+static void MainMenuUtil_LoadGiftMonSprite(Sprite *sprite, Pokemon *mon, int species, int form, void *charData, u16 *narcIds);
+
 void MainMenuUtil_SetCryptoHeap(enum HeapID heapID) {
     sMainMenuUtilCryptoHeapId = heapID;
 }
 
-void *MainMenuUtil_CryptoAlloc(u32 size) {
+static void *MainMenuUtil_CryptoAlloc(u32 size) {
     return Heap_Alloc(sMainMenuUtilCryptoHeapId, size);
 }
 
 #pragma force_active on
 
 // A Mystery Gift GBA cartridge: one of the game codes of sGiftCartridgeGameCodes, with a payload signed with the key sGiftCartridgePublicKey
-int MainMenuUtil_CheckGiftCartridgeSignature(void) {
+static int MainMenuUtil_CheckGiftCartridgeSignature(void) {
     u8 payload[0x4A8];
     u8 signature[0x80];
     u32 gameCode = CTRDG_GetAgbGameCode();
@@ -122,7 +128,7 @@ int MainMenuUtil_CheckGiftCartridgeSignature(void) {
 
 #pragma force_active reset
 
-BOOL MainMenuUtil_IsGiftCartridgeInserted(void) {
+static BOOL MainMenuUtil_IsGiftCartridgeInserted(void) {
     CTRDG_Init();
     if (CTRDG_IsAgbCartridge() == FALSE) {
         return FALSE;
@@ -281,7 +287,7 @@ void MainMenuTextPrinter_SetTextPos(MainMenuTextPrinter *printer, u32 textX, u32
 #pragma force_active on
 
 // Prints message msgId of the printer's message file (if it is not already shown); returns the text printer id
-int MainMenuTextPrinter_Print(MainMenuTextPrinter *printer, int msgId) {
+static int MainMenuTextPrinter_Print(MainMenuTextPrinter *printer, int msgId) {
     MainMenuUtilWork *work = &gMainMenuUtilWork;
     int printerId;
     if (msgId != -1 && printer->msgId != msgId) {
@@ -436,7 +442,7 @@ void MainMenuUtil_LoadSpriteResources(NarcId narcId, u32 charFileId, u32 plttFil
 #pragma pop
 #pragma force_active reset
 
-void MainMenuUtil_SetSubScreenOffset(fx32 x, fx32 y) {
+static void MainMenuUtil_SetSubScreenOffset(fx32 x, fx32 y) {
     G2dRenderer_SetSubSurfaceCoords(&sMainMenuUtilRenderer, x, y);
     *(fx32 *)((u8 *)ov74_0223D654 + 0x10) = y;
 }
@@ -543,7 +549,7 @@ u32 MainMenuUtil_GetVersionMaskBit(int spriteId) {
 
 #pragma force_active on
 
-void MainMenuUtil_VBlankCB(void) {
+static void MainMenuUtil_VBlankCB(void) {
     MainMenuUtilWork *work = &gMainMenuUtilWork;
     if (ov74_0223E2D4[9]) { // = work->vblankCallback
         work->vblankCallback(work);
@@ -584,7 +590,7 @@ int MainMenuUtil_GetGiftPalette(int giftType) {
 #pragma force_active reset
 
 // Loads the front sprite of the gift Pokemon into the gift sprite of the sub screen
-void MainMenuUtil_LoadGiftMonSprite(Sprite *sprite, Pokemon *mon, int species, int form, void *charData, u16 *narcIds) {
+static void MainMenuUtil_LoadGiftMonSprite(Sprite *sprite, Pokemon *mon, int species, int form, void *charData, u16 *narcIds) {
     u32 gender = GetMonGender(mon);
     u8 shiny = MonIsShiny(mon);
     GetMonSpriteCharAndPlttNarcIdsEx(narcIds, species, gender, 2, shiny, form, 0);

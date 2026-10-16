@@ -70,47 +70,6 @@
 .public memcmp
 .public _s32_div_f
 
-	.public Wireless_SetState
-	.public Wireless_SetError
-	.public Wireless_SendParentParameter
-	.public Wireless_OnParentParameterSet
-	.public Wireless_StartParentRun
-	.public Wireless_EndChild
-	.public Wireless_OnChildMPEnded
-	.public Wireless_Disconnect
-	.public Wireless_OnDisconnected
-	.public Wireless_Reset
-	.public Wireless_OnReset
-	.public Wireless_SetSendData
-	.public Wireless_OnDataSent
-	.public Wireless_OnPortEvent
-	.public Wireless_OnEnded
-	.public Wireless_CountConnected
-	.public Wireless_OnEntrySet
 	.public gWirelessManager
 	.public gWirelessConnectTag
 
-	.public Wireless_OnParentEvent
-	.public Wireless_StartParentMP
-	.public Wireless_OnParentMPEvent
-	.public Wireless_EndParent
-	.public Wireless_OnParentMPEnded
-	.public Wireless_EndParentRun
-	.public Wireless_OnParentEnded
-	.public Wireless_ScanNextChannel
-	.public Wireless_OnScanEvent
-	.public Wireless_EndScan
-	.public Wireless_OnScanEnded
-	.public Wireless_StartConnect
-	.public Wireless_OnConnectEvent
-	.public Wireless_StartChildMP
-	.public Wireless_OnChildMPEvent
-	.public Wireless_MeasureFromChannel
-	.public Wireless_OnChannelMeasured
-	.public Wireless_MeasureChannel
-	.public Wireless_PickChannel
-	.public Wireless_OnIndication
-	.public Wireless_Initialize
-	.public Wireless_OnInitialized
-	.public Wireless_OnLifeTimeSet
-	.public Wireless_ForceReset

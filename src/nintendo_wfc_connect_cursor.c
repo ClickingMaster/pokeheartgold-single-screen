@@ -3,10 +3,9 @@
 
 #include "sprite.h"
 
-// Cursor of the Nintendo WFC connection screen's touch YES/NO menu (src/nintendo_wfc_connect.c);
-// linked after the overlay's data, so it is its own TU.
+// Cursor of the Nintendo WFC connection screen's touch YES/NO menu.
 
-// fields of NintendoWfcYesNoMenu (src/nintendo_wfc_connect.c) used here
+// fields of NintendoWfcYesNoMenu used here
 typedef struct NintendoWfcYesNoCursor {
     void *bgConfig;       // 0x00
     Sprite *cursorSprite; // 0x04

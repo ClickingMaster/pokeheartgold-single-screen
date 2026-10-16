@@ -8,12 +8,17 @@
 #include "msgdata/msg/msg_0252.h"
 
 #include "assert.h"
+#include "comm_state.h"
+#include "communication_core.h"
+#include "communication_player_state.h"
 #include "filesystem_files_def.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
+#include "link_synchronization.h"
 #include "math_util.h"
+#include "oam_manager.h"
 #include "obj_char_transfer.h"
 #include "obj_pltt_transfer.h"
 #include "options.h"
@@ -26,17 +31,12 @@
 #include "sprite_transfer.h"
 #include "system.h"
 #include "text.h"
-#include "touchscreen.h"
-#include "oam_manager.h"
 #include "touchpad.h"
-#include "wireless_manager.h"
-#include "communication_player_state.h"
-#include "communication_core.h"
-#include "link_synchronization.h"
-#include "comm_state.h"
-#include "wireless_status_icon.h"
+#include "touchscreen.h"
 #include "union_room_talk.h"
 #include "vram_transfer_manager.h"
+#include "wireless_manager.h"
+#include "wireless_status_icon.h"
 
 enum DrawingSessionMainState {
     DRAWING_SESSION_MAIN_WAIT_FADE_IN,
@@ -86,7 +86,7 @@ extern int Comm_IsChildQueueEmpty(void);
 extern void CommState_SetMaxEntries(int count);
 extern void CommWireless_SetDetectDrops(BOOL value);
 extern void UnionRoomObjects_ResetSlots(struct UnionRoomObjects *unionRoom);
-extern void DrawingSessionLink_RegisterCommands(DrawingSessionWork *work); // wireless_room_packets.c: registers the command table
+extern void DrawingSessionLink_RegisterCommands(DrawingSessionWork *work);
 
 extern const TouchscreenHitbox sDrawingSessionYesNoHitbox[];
 extern const TouchscreenHitbox sDrawingSessionCanvasHitbox[];
@@ -103,24 +103,47 @@ extern const DrawingSessionButtonSprite sDrawingSessionButtonSprites[];
 extern const u8 sDrawingSessionBrushBitmaps[3][8][0x18]; // [pen size][pen colour], 6x6 dots, 4bpp
 extern const DrawingSessionState sDrawingSessionSubStates[];
 
-void DrawingSession_VBlankCB(void *bgConfig);
-void DrawingSession_SetVramBanks(void);
-void DrawingSession_InitBgs(BgConfig *bgConfig);
-void DrawingSession_InitWork(DrawingSessionWork *work);
-void DrawingSession_FreeWork(DrawingSessionWork *work);
-void DrawingSession_FreeBgs(BgConfig *bgConfig);
-void DrawingSession_LoadBgGraphics(DrawingSessionWork *work, NARC *narc);
-void DrawingSession_InitObjTransfer(void);
-void DrawingSession_InitSpriteResources(DrawingSessionWork *work, NARC *narc);
-void DrawingSession_CreateSprites(DrawingSessionWork *work);
-void DrawingSession_AddWindows(DrawingSessionWork *work, OverlayManager *man);
-void DrawingSession_RemoveWindows(DrawingSessionWork *work);
-void DrawingSession_SetPenCursorPos(Sprite *sprite, s32 x, s32 y);
-void DrawingSession_HandleTouch(DrawingSessionWork *work);
-void DrawingSession_SetColorButtonSelected(Sprite **buttons, int selected);
-void DrawingSession_SetQuitButtonPressed(Sprite **buttons, BOOL pressed);
+static void DrawingSession_VBlankCB(void *bgConfig);
+static void DrawingSession_SetVramBanks(void);
+static void DrawingSession_InitBgs(BgConfig *bgConfig);
+static void DrawingSession_InitWork(DrawingSessionWork *work);
+static void DrawingSession_FreeWork(DrawingSessionWork *work);
+static void DrawingSession_FreeBgs(BgConfig *bgConfig);
+static void DrawingSession_LoadBgGraphics(DrawingSessionWork *work, NARC *narc);
+static void DrawingSession_InitObjTransfer(void);
+static void DrawingSession_InitSpriteResources(DrawingSessionWork *work, NARC *narc);
+static void DrawingSession_CreateSprites(DrawingSessionWork *work);
+static void DrawingSession_AddWindows(DrawingSessionWork *work, OverlayManager *man);
+static void DrawingSession_RemoveWindows(DrawingSessionWork *work);
+static void DrawingSession_SetPenCursorPos(Sprite *sprite, s32 x, s32 y);
+static void DrawingSession_HandleTouch(DrawingSessionWork *work);
+static void DrawingSession_SetColorButtonSelected(Sprite **buttons, int selected);
+static void DrawingSession_SetQuitButtonPressed(Sprite **buttons, BOOL pressed);
+static void DrawingSession_UpdateCanvas(DrawingSessionWork *work);
+static void DrawingSession_BlitClipped(Window *window, const void *src, s32 srcX, s32 srcY, s32 srcWidth, s32 srcHeight, s32 destX, s32 destY, s32 destWidth, s32 destHeight);
+static void DrawingSession_DrawLine(Window *window, const void *brush, s32 x1, s32 y1, s32 *lastX, s32 *lastY, s32 pointIndex, s32 lastCount);
+static void DrawingSession_SaveLastPoints(const DrawingSessionStroke *strokes, DrawingSessionPoint *points);
+static void DrawingSession_DrawStrokes(Window *window, DrawingSessionStroke *strokes, DrawingSessionPoint *points, BOOL copyToVram);
+static void DrawingSession_UpdatePenCursors(DrawingSessionWork *work);
+static void DrawingSession_AnimateCursorPalette(u16 *angle);
+static u32 DrawingSession_CountPlayerProfiles(void);
+static void DrawingSession_PrintMemberNames(Window *windows, int unused, u32 color, DrawingSessionWork *work);
+static void DrawingSession_SendStrokes(DrawingSessionWork *work);
+static int DrawingSession_CountMembers(void);
+static BOOL DrawingSession_UpdateMembers(DrawingSessionWork *work);
+static void DrawingSession_PrintMessage(DrawingSessionWork *work, u32 msgId, u32 speed);
+static BOOL DrawingSession_IsPrinterDone(u32 printerId);
+static void DrawingSession_ClearMessageWindow(DrawingSessionWork *work);
+static void DrawingSession_UpdateMaxEntries(DrawingSessionWork *work, int extra);
+static inline BOOL DrawingSession_IsOneMemberBit(u32 bits);
+static int DrawingSession_HandleMemberCount(DrawingSessionWork *work);
+static void DrawingSession_SetNextSubState(DrawingSessionWork *work, int state);
+static void DrawingSession_ApplyNextSubState(DrawingSessionWork *work, int mainState);
+static BOOL DrawingSession_ShowYesNo(DrawingSessionWork *work, const YesNoPromptTemplate *template);
+static void DrawingSession_HideYesNo(DrawingSessionWork *work);
+static BOOL DrawingSession_IsYesNoAreaTouched(DrawingSessionWork *work);
+
 int DrawingSession_StateDraw(DrawingSessionWork *work, int state);
-void DrawingSession_UpdateCanvas(DrawingSessionWork *work);
 int DrawingSession_StateMemberJoined(DrawingSessionWork *work, int state);
 int DrawingSession_StateHidePenCursors(DrawingSessionWork *work, int state);
 int DrawingSession_StateResumeDrawing(DrawingSessionWork *work, int state);
@@ -143,27 +166,6 @@ int DrawingSession_StateWaitNoMembersMsg(DrawingSessionWork *work, int state);
 int DrawingSession_StatePrintMemberLeft(DrawingSessionWork *work, int state);
 int DrawingSession_StateWaitMemberLeftMsg(DrawingSessionWork *work, int state);
 int DrawingSession_StateWaitAfterMemberLeft(DrawingSessionWork *work, int state);
-void DrawingSession_BlitClipped(Window *window, const void *src, s32 srcX, s32 srcY, s32 srcWidth, s32 srcHeight, s32 destX, s32 destY, s32 destWidth, s32 destHeight);
-void DrawingSession_DrawLine(Window *window, const void *brush, s32 x1, s32 y1, s32 *lastX, s32 *lastY, s32 pointIndex, s32 lastCount);
-void DrawingSession_SaveLastPoints(const DrawingSessionStroke *strokes, DrawingSessionPoint *points);
-void DrawingSession_DrawStrokes(Window *window, DrawingSessionStroke *strokes, DrawingSessionPoint *points, BOOL copyToVram);
-void DrawingSession_UpdatePenCursors(DrawingSessionWork *work);
-void DrawingSession_AnimateCursorPalette(u16 *angle);
-u32 DrawingSession_CountPlayerProfiles(void);
-void DrawingSession_PrintMemberNames(Window *windows, int unused, u32 color, DrawingSessionWork *work);
-void DrawingSession_SendStrokes(DrawingSessionWork *work);
-int DrawingSession_CountMembers(void);
-BOOL DrawingSession_UpdateMembers(DrawingSessionWork *work);
-void DrawingSession_PrintMessage(DrawingSessionWork *work, u32 msgId, u32 speed);
-BOOL DrawingSession_IsPrinterDone(u32 printerId);
-void DrawingSession_ClearMessageWindow(DrawingSessionWork *work);
-void DrawingSession_UpdateMaxEntries(DrawingSessionWork *work, int extra);
-int DrawingSession_HandleMemberCount(DrawingSessionWork *work);
-void DrawingSession_SetNextSubState(DrawingSessionWork *work, int state);
-void DrawingSession_ApplyNextSubState(DrawingSessionWork *work, int mainState);
-BOOL DrawingSession_ShowYesNo(DrawingSessionWork *work, const YesNoPromptTemplate *template);
-void DrawingSession_HideYesNo(DrawingSessionWork *work);
-BOOL DrawingSession_IsYesNoAreaTouched(DrawingSessionWork *work);
 
 BOOL DrawingSession_Init(OverlayManager *man, int *state) {
     DrawingSessionWork *work;
@@ -332,7 +334,7 @@ BOOL DrawingSession_Exit(OverlayManager *man, int *state) {
     return FALSE;
 }
 
-void DrawingSession_VBlankCB(void *bgConfig) {
+static void DrawingSession_VBlankCB(void *bgConfig) {
     // OS_SetIrqCheckFlag(OS_IE_VBLANK), with the DTCM base as a constant address
     volatile u32 *dtcm = (volatile u32 *)0x027E0000;
     GF_RunVramTransferTasks();
@@ -341,12 +343,12 @@ void DrawingSession_VBlankCB(void *bgConfig) {
     dtcm[0x3FF8 / 4] |= OS_IE_VBLANK;
 }
 
-void DrawingSession_SetVramBanks(void) {
+static void DrawingSession_SetVramBanks(void) {
     GraphicsBanks banks = sDrawingSessionGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
-void DrawingSession_InitBgs(BgConfig *bgConfig) {
+static void DrawingSession_InitBgs(BgConfig *bgConfig) {
     GraphicsModes modes;
     BgTemplate main0;
     BgTemplate main1;
@@ -374,7 +376,7 @@ void DrawingSession_InitBgs(BgConfig *bgConfig) {
     BG_ClearCharDataRange(GF_BG_LYR_SUB_1, 0x20, 0, HEAP_ID_39);
 }
 
-void DrawingSession_InitWork(DrawingSessionWork *work) {
+static void DrawingSession_InitWork(DrawingSessionWork *work) {
     s32 i;
     for (i = 0; i < DRAWING_SESSION_MAX_MEMBERS; i++) {
         work->memberNames[i] = String_New(8, HEAP_ID_39);
@@ -404,7 +406,7 @@ void DrawingSession_InitWork(DrawingSessionWork *work) {
     work->memberCount = 0;
 }
 
-void DrawingSession_FreeWork(DrawingSessionWork *work) {
+static void DrawingSession_FreeWork(DrawingSessionWork *work) {
     int i;
     Heap_Free(work->unk_43C8);
     YesNoPrompt_Destroy(work->yesNoPrompt);
@@ -415,7 +417,7 @@ void DrawingSession_FreeWork(DrawingSessionWork *work) {
     String_Delete(work->quitText);
 }
 
-void DrawingSession_FreeBgs(BgConfig *bgConfig) {
+static void DrawingSession_FreeBgs(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_1);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_0);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_3);
@@ -425,7 +427,7 @@ void DrawingSession_FreeBgs(BgConfig *bgConfig) {
     Heap_Free(bgConfig);
 }
 
-void DrawingSession_LoadBgGraphics(DrawingSessionWork *work, NARC *narc) {
+static void DrawingSession_LoadBgGraphics(DrawingSessionWork *work, NARC *narc) {
     BgConfig *bgConfig = work->bgConfig;
 
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 0, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0x40, HEAP_ID_39);
@@ -440,7 +442,7 @@ void DrawingSession_LoadBgGraphics(DrawingSessionWork *work, NARC *narc) {
     LoadUserFrameGfx1(bgConfig, GF_BG_LYR_MAIN_0, 0x1F, 11, 0, HEAP_ID_39);
 }
 
-void DrawingSession_InitObjTransfer(void) {
+static void DrawingSession_InitObjTransfer(void) {
     ObjCharTransferTemplate template = sDrawingSessionObjCharTransferTemplate;
 
     ObjCharTransfer_Init(&template);
@@ -449,9 +451,9 @@ void DrawingSession_InitObjTransfer(void) {
     ObjPlttTransfer_Reset();
 }
 
-void DrawingSession_InitSpriteResources(DrawingSessionWork *work, NARC *narc) {
+static void DrawingSession_InitSpriteResources(DrawingSessionWork *work, NARC *narc) {
     int i;
-    int zero = 0; // a variable, not a literal: the three palette arguments share one register
+    int zero = 0;
 
     NNS_G2dInitOamManagerModule();
     OamManager_Create(0, 0x7E, 0, 0x20, 0, 0x7E, 0, 0x20, HEAP_ID_39);
@@ -477,7 +479,7 @@ void DrawingSession_InitSpriteResources(DrawingSessionWork *work, NARC *narc) {
 
 #pragma force_active on
 
-void DrawingSession_CreateSprites(DrawingSessionWork *work) {
+static void DrawingSession_CreateSprites(DrawingSessionWork *work) {
     SpriteTemplate spriteTemplate;
     int i;
 
@@ -531,7 +533,7 @@ void DrawingSession_CreateSprites(DrawingSessionWork *work) {
 #pragma force_active reset
 
 // man is not used.
-void DrawingSession_AddWindows(DrawingSessionWork *work, OverlayManager *man) {
+static void DrawingSession_AddWindows(DrawingSessionWork *work, OverlayManager *man) {
     int i;
     int baseTile;
     int y;
@@ -554,7 +556,7 @@ void DrawingSession_AddWindows(DrawingSessionWork *work, OverlayManager *man) {
     DrawingSession_PrintMemberNames(work->nameWindows, 0, MAKE_TEXT_COLOR(14, 13, 15), work);
 }
 
-void DrawingSession_RemoveWindows(DrawingSessionWork *work) {
+static void DrawingSession_RemoveWindows(DrawingSessionWork *work) {
     int i;
     Window *window;
     for (i = 0, window = work->nameWindows; i < DRAWING_SESSION_MAX_MEMBERS; i++, window++) {
@@ -565,7 +567,7 @@ void DrawingSession_RemoveWindows(DrawingSessionWork *work) {
     RemoveWindow(&work->messageWindow);
 }
 
-void DrawingSession_SetPenCursorPos(Sprite *sprite, s32 x, s32 y) {
+static void DrawingSession_SetPenCursorPos(Sprite *sprite, s32 x, s32 y) {
     VecFx32 vec;
     float value;
 
@@ -589,7 +591,7 @@ void DrawingSession_SetPenCursorPos(Sprite *sprite, s32 x, s32 y) {
 
 #pragma force_active on
 
-void DrawingSession_HandleTouch(DrawingSessionWork *work) {
+static void DrawingSession_HandleTouch(DrawingSessionWork *work) {
     int selected;
     int hit;
     int changed;
@@ -682,7 +684,7 @@ void DrawingSession_HandleTouch(DrawingSessionWork *work) {
 
 #pragma force_active reset
 
-void DrawingSession_SetColorButtonSelected(Sprite **buttons, int selected) {
+static void DrawingSession_SetColorButtonSelected(Sprite **buttons, int selected) {
     int i;
     for (i = 0; i < 8; i++) {
         if (i == selected) {
@@ -693,7 +695,7 @@ void DrawingSession_SetColorButtonSelected(Sprite **buttons, int selected) {
     }
 }
 
-void DrawingSession_SetQuitButtonPressed(Sprite **buttons, BOOL pressed) {
+static void DrawingSession_SetQuitButtonPressed(Sprite **buttons, BOOL pressed) {
     if (pressed == TRUE) {
         Sprite_SetAnimCtrlSeq(buttons[8], 0x16);
     } else {
@@ -715,7 +717,7 @@ int DrawingSession_StateDraw(DrawingSessionWork *work, int state) {
     return state;
 }
 
-void DrawingSession_UpdateCanvas(DrawingSessionWork *work) {
+static void DrawingSession_UpdateCanvas(DrawingSessionWork *work) {
     DrawingSession_UpdatePenCursors(work);
     DrawingSession_DrawStrokes(&work->canvasWindow, work->strokes, work->lastPoints, FALSE);
 }
@@ -1077,7 +1079,7 @@ void DrawingSession_HandleNetEvent(DrawingSessionWork *work, int event, u32 memb
     DrawingSession_SetNextSubState(work, event);
 }
 
-void DrawingSession_BlitClipped(Window *window, const void *src, s32 srcX, s32 srcY, s32 srcWidth, s32 srcHeight, s32 destX, s32 destY, s32 destWidth, s32 destHeight) {
+static void DrawingSession_BlitClipped(Window *window, const void *src, s32 srcX, s32 srcY, s32 srcWidth, s32 srcHeight, s32 destX, s32 destY, s32 destWidth, s32 destHeight) {
     if (destX < 0) {
         s32 clip = -destX;
         if (clip > destWidth) {
@@ -1103,7 +1105,7 @@ void DrawingSession_BlitClipped(Window *window, const void *src, s32 srcX, s32 s
 
 // Bresenham line from (*lastX, *lastY) to (x1, y1), stamping the 6x6 brush at every step. The first
 // point of a stroke without a previous one only moves the pen.
-void DrawingSession_DrawLine(Window *window, const void *brush, s32 x1, s32 y1, s32 *lastX, s32 *lastY, s32 pointIndex, s32 lastCount) {
+static void DrawingSession_DrawLine(Window *window, const void *brush, s32 x1, s32 y1, s32 *lastX, s32 *lastY, s32 pointIndex, s32 lastCount) {
     s32 endX;
     s32 dx;
     s32 endY;
@@ -1190,7 +1192,7 @@ void DrawingSession_DrawLine(Window *window, const void *brush, s32 x1, s32 y1, 
     *lastY = y1;
 }
 
-void DrawingSession_SaveLastPoints(const DrawingSessionStroke *strokes, DrawingSessionPoint *points) {
+static void DrawingSession_SaveLastPoints(const DrawingSessionStroke *strokes, DrawingSessionPoint *points) {
     int i;
 
     for (i = 0; i < DRAWING_SESSION_MAX_MEMBERS; i++, strokes++, points++) {
@@ -1202,7 +1204,7 @@ void DrawingSession_SaveLastPoints(const DrawingSessionStroke *strokes, DrawingS
     }
 }
 
-void DrawingSession_DrawStrokes(Window *window, DrawingSessionStroke *strokes, DrawingSessionPoint *points, BOOL copyToVram) {
+static void DrawingSession_DrawStrokes(Window *window, DrawingSessionStroke *strokes, DrawingSessionPoint *points, BOOL copyToVram) {
     s32 lastX;
     s32 lastY;
     int i;
@@ -1234,7 +1236,7 @@ void DrawingSession_DrawStrokes(Window *window, DrawingSessionStroke *strokes, D
     }
 }
 
-void DrawingSession_UpdatePenCursors(DrawingSessionWork *work) {
+static void DrawingSession_UpdatePenCursors(DrawingSessionWork *work) {
     int i;
     DrawingSessionStroke *stroke;
 
@@ -1251,7 +1253,7 @@ void DrawingSession_UpdatePenCursors(DrawingSessionWork *work) {
     }
 }
 
-void DrawingSession_AnimateCursorPalette(u16 *angle) {
+static void DrawingSession_AnimateCursorPalette(u16 *angle) {
     u16 color;
 
     *angle += 20;
@@ -1263,7 +1265,7 @@ void DrawingSession_AnimateCursorPalette(u16 *angle) {
 }
 
 // Same body as DrawingSession_CountMembers.
-u32 DrawingSession_CountPlayerProfiles(void) {
+static u32 DrawingSession_CountPlayerProfiles(void) {
     int i;
     u32 count = 0;
     for (i = 0; i < DRAWING_SESSION_MAX_MEMBERS; i++) {
@@ -1276,7 +1278,7 @@ u32 DrawingSession_CountPlayerProfiles(void) {
 
 #pragma force_active on
 
-void DrawingSession_PrintMemberNames(Window *windows, int unused, u32 color, DrawingSessionWork *work) {
+static void DrawingSession_PrintMemberNames(Window *windows, int unused, u32 color, DrawingSessionWork *work) {
     int ownId = Comm_GetLocalNetId();
     int i;
     int member;
@@ -1284,7 +1286,7 @@ void DrawingSession_PrintMemberNames(Window *windows, int unused, u32 color, Dra
     Window *window;
 
     if (DrawingSession_UpdateMembers(work)) {
-        volatile int counter = 0; // volatile keeps the original loop shape
+        volatile int counter = 0;
         member = 0;
         icon = 0;
         do {
@@ -1320,7 +1322,7 @@ void DrawingSession_PrintMemberNames(Window *windows, int unused, u32 color, Dra
     }
 }
 
-void DrawingSession_SendStrokes(DrawingSessionWork *work) {
+static void DrawingSession_SendStrokes(DrawingSessionWork *work) {
     if (Comm_GetLocalNetId() == 0) {
         if (Comm_IsParentQueueEmpty()) {
             work->ownStroke.joinState = work->joinState;
@@ -1348,7 +1350,7 @@ void DrawingSession_SendStrokes(DrawingSessionWork *work) {
 
 #pragma force_active reset
 
-int DrawingSession_CountMembers(void) {
+static int DrawingSession_CountMembers(void) {
     int i;
     u32 count = 0;
     for (i = 0; i < DRAWING_SESSION_MAX_MEMBERS; i++) {
@@ -1363,7 +1365,7 @@ u32 DrawingSession_GetMemberCount(void) {
     return DrawingSession_CountMembers();
 }
 
-BOOL DrawingSession_UpdateMembers(DrawingSessionWork *work) {
+static BOOL DrawingSession_UpdateMembers(DrawingSessionWork *work) {
     int i;
     BOOL changed = FALSE;
     for (i = 0; i < DRAWING_SESSION_MAX_MEMBERS; i++) {
@@ -1378,7 +1380,7 @@ BOOL DrawingSession_UpdateMembers(DrawingSessionWork *work) {
     return changed;
 }
 
-void DrawingSession_PrintMessage(DrawingSessionWork *work, u32 msgId, u32 speed) {
+static void DrawingSession_PrintMessage(DrawingSessionWork *work, u32 msgId, u32 speed) {
     String *string;
 
     string = String_New(0x50, HEAP_ID_39);
@@ -1396,7 +1398,7 @@ void DrawingSession_PrintMessage(DrawingSessionWork *work, u32 msgId, u32 speed)
     }
 }
 
-BOOL DrawingSession_IsPrinterDone(u32 printerId) {
+static BOOL DrawingSession_IsPrinterDone(u32 printerId) {
     if (printerId == 0xFF) {
         return TRUE;
     }
@@ -1406,11 +1408,11 @@ BOOL DrawingSession_IsPrinterDone(u32 printerId) {
     return FALSE;
 }
 
-void DrawingSession_ClearMessageWindow(DrawingSessionWork *work) {
+static void DrawingSession_ClearMessageWindow(DrawingSessionWork *work) {
     ClearFrameAndWindow2(&work->messageWindow, FALSE);
 }
 
-void DrawingSession_UpdateMaxEntries(DrawingSessionWork *work, int extra) {
+static void DrawingSession_UpdateMaxEntries(DrawingSessionWork *work, int extra) {
 #pragma unused(work)
     s32 count;
     if (!Comm_GetLocalNetId()) {
@@ -1437,7 +1439,7 @@ static inline BOOL DrawingSession_IsOneMemberBit(u32 bits) {
     return result;
 }
 
-int DrawingSession_HandleMemberCount(DrawingSessionWork *work) {
+static int DrawingSession_HandleMemberCount(DrawingSessionWork *work) {
     int count = DrawingSession_CountMembers();
     switch (count) {
     case 1:
@@ -1495,11 +1497,11 @@ int DrawingSession_HandleMemberCount(DrawingSessionWork *work) {
 #pragma opt_common_subs reset
 #pragma force_active reset
 
-void DrawingSession_SetNextSubState(DrawingSessionWork *work, int state) {
+static void DrawingSession_SetNextSubState(DrawingSessionWork *work, int state) {
     work->nextSubState = state;
 }
 
-void DrawingSession_ApplyNextSubState(DrawingSessionWork *work, int mainState) {
+static void DrawingSession_ApplyNextSubState(DrawingSessionWork *work, int mainState) {
     int state = work->nextSubState;
     if (work->subState != state) {
         if (mainState != DRAWING_SESSION_MAIN_CLOSING) {
@@ -1510,7 +1512,7 @@ void DrawingSession_ApplyNextSubState(DrawingSessionWork *work, int mainState) {
     }
 }
 
-BOOL DrawingSession_ShowYesNo(DrawingSessionWork *work, const YesNoPromptTemplate *template) {
+static BOOL DrawingSession_ShowYesNo(DrawingSessionWork *work, const YesNoPromptTemplate *template) {
     if (work->yesNoActive == FALSE) {
         YesNoPrompt_InitFromTemplate(work->yesNoPrompt, template);
         work->yesNoActive = TRUE;
@@ -1519,7 +1521,7 @@ BOOL DrawingSession_ShowYesNo(DrawingSessionWork *work, const YesNoPromptTemplat
     return FALSE;
 }
 
-void DrawingSession_HideYesNo(DrawingSessionWork *work) {
+static void DrawingSession_HideYesNo(DrawingSessionWork *work) {
     if (work->yesNoActive != FALSE) {
         YesNoPrompt_Reset(work->yesNoPrompt);
         work->yesNoActive = FALSE;
@@ -1527,7 +1529,7 @@ void DrawingSession_HideYesNo(DrawingSessionWork *work) {
 }
 
 // work is not used.
-BOOL DrawingSession_IsYesNoAreaTouched(DrawingSessionWork *work) {
+static BOOL DrawingSession_IsYesNoAreaTouched(DrawingSessionWork *work) {
     if (TouchscreenHitbox_FindRectAtTouchNew(sDrawingSessionYesNoHitbox) != -1) {
         return TRUE;
     }

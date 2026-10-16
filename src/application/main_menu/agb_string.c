@@ -4,14 +4,14 @@
 
 // Conversion of Ruby/Sapphire/Emerald/FireRed/LeafGreen strings to this game's characters (Migrate from GBA).
 
-u32 AgbString_GetSpaceChar(u32 language);
-u16 AgbString_GetOpenQuoteChar(u32 language);
-u16 AgbString_GetCloseQuoteChar(u32 language);
-
 extern const u16 sAgbToDpCharMap[][2]; // GBA character -> character of this game (Japanese, other languages)
 
+static u32 AgbString_GetSpaceChar(u32 language);
+static u16 AgbString_GetOpenQuoteChar(u32 language);
+static u16 AgbString_GetCloseQuoteChar(u32 language);
+
 // The space
-u32 AgbString_GetSpaceChar(u32 language) {
+static u32 AgbString_GetSpaceChar(u32 language) {
     u32 result;
     if (language == LANGUAGE_JAPANESE) {
         result = 1;
@@ -22,7 +22,7 @@ u32 AgbString_GetSpaceChar(u32 language) {
 }
 
 // The opening double quote
-u16 AgbString_GetOpenQuoteChar(u32 language) {
+static u16 AgbString_GetOpenQuoteChar(u32 language) {
     switch (language) {
     case LANGUAGE_JAPANESE:
     default:
@@ -39,7 +39,7 @@ u16 AgbString_GetOpenQuoteChar(u32 language) {
 }
 
 // The closing double quote
-u16 AgbString_GetCloseQuoteChar(u32 language) {
+static u16 AgbString_GetCloseQuoteChar(u32 language) {
     switch (language) {
     case LANGUAGE_JAPANESE:
     default:

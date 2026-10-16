@@ -23,6 +23,8 @@
 #include "render_text.h"
 #include "sound_playback.h"
 #include "sprite.h"
+#include "sprite_resource.h"
+#include "sprite_resource_header.h"
 #include "sprite_transfer.h"
 #include "sys_task.h"
 #include "systask_environment.h"
@@ -30,13 +32,11 @@
 #include "task.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "sprite_resource_header.h"
-#include "sprite_resource.h"
 
-// Field bottom-screen app 3 (ScrCmd_TouchscreenMenuHide, sBottomScreenApps[3] of field/bottom_screen_app.c):
-// the touch YES/NO buttons of ScrCmd_GetMenuChoice and the touch multichoice list of ScrCmd_MenuExec
-// (up to 28 rows of the field MoveTutorMenu). FieldSystem_SetTouchscreenChoiceMenuState sets the state (3 YES/NO, 7 list) and the
-// result pointer; scripts wait for state 6 or for *result != 0xEEEE.
+// Field bottom-screen app 3 (ScrCmd_TouchscreenMenuHide): the touch YES/NO buttons of ScrCmd_GetMenuChoice and the
+// touch multichoice list of ScrCmd_MenuExec (up to 28 rows of the field MoveTutorMenu).
+// FieldSystem_SetTouchscreenChoiceMenuState sets the state (3 YES/NO, 7 list) and the result pointer; scripts wait
+// for state 6 or for *result != 0xEEEE.
 
 #define TOUCHSCREEN_CHOICE_MENU_MAX_ITEMS 28
 
@@ -86,7 +86,6 @@ typedef struct TouchscreenChoiceMenuData {
     void *selectionCallbackArg;
 } TouchscreenChoiceMenuData; // size: 0x3A4
 
-// field_move_tutor_menu_internal.h declares these, but its prototypes conflict with text.h.
 ListMenuItem *ScriptMenu_GetListItems(struct ScriptMenu *menu);
 u8 ScriptMenu_GetCount(struct ScriptMenu *menu);
 u8 ScriptMenu_IsCancellable(struct ScriptMenu *menu);
@@ -115,21 +114,27 @@ extern const TouchscreenHitbox *sTouchscreenChoiceMenuListHitboxes[];
 extern const WindowTemplate *sTouchscreenChoiceMenuListWindowTemplates[];
 extern TouchscreenChoiceMenuStateFunc sTouchscreenChoiceMenuStateFuncs[];
 
+static void TouchscreenChoiceMenu_Task(SysTask *task, void *taskData);
+static void TouchscreenChoiceMenu_LoadBgGraphics(TouchscreenChoiceMenuData *data);
+static void TouchscreenChoiceMenu_ShowYesNo(TouchscreenChoiceMenuData *data);
+static void TouchscreenChoiceMenu_HideYesNo(TouchscreenChoiceMenuData *data);
+static void TouchscreenChoiceMenu_ShowList(TouchscreenChoiceMenuData *data);
+static void TouchscreenChoiceMenu_HideList(TouchscreenChoiceMenuData *data);
+static void TouchscreenChoiceMenu_LoadSpriteResources(TouchscreenChoiceMenuData *data);
+static void TouchscreenChoiceMenu_CreateCursor(TouchscreenChoiceMenuData *data, int selection);
+static void TouchscreenChoiceMenu_PrintMessage(Window *window, MsgData *msgData, u32 msgId);
+static void TouchscreenChoiceMenu_LoadMessages(TouchscreenChoiceMenuData *data, u32 unused);
+static void TouchscreenChoiceMenu_FreeMessages(TouchscreenChoiceMenuData *data);
+static BOOL TouchscreenChoiceMenu_MoveListSelection(int *selection, int count, int dir);
+static void TouchscreenChoiceMenu_SetYesNoCursorPos(TouchscreenChoiceMenuData *data, int selection);
+static void TouchscreenChoiceMenu_SetListCursorPos(TouchscreenChoiceMenuData *data, int count, int selection);
+static void TouchscreenChoiceMenu_SetListCursorPressed(TouchscreenChoiceMenuData *data, int count);
+static BOOL TouchscreenChoiceMenu_HandleYesNoInput(TouchscreenChoiceMenuData *data);
+
 SysTask *TouchscreenChoiceMenu_Create(BgConfig *bgConfig, u16 *lastTouchMenuInput, FieldSystem *fieldSystem, u16 *result);
 void TouchscreenChoiceMenu_Destroy(BgConfig *bgConfig, SysTask *task);
 BOOL TouchscreenChoiceMenu_IsExitDone(void *unused);
 void TouchscreenChoiceMenu_SetCallback(SysTask *task, void (*callback)(void *arg, int selection), void *arg);
-void TouchscreenChoiceMenu_Task(SysTask *task, void *taskData);
-void TouchscreenChoiceMenu_LoadBgGraphics(TouchscreenChoiceMenuData *data);
-void TouchscreenChoiceMenu_ShowYesNo(TouchscreenChoiceMenuData *data);
-void TouchscreenChoiceMenu_HideYesNo(TouchscreenChoiceMenuData *data);
-void TouchscreenChoiceMenu_ShowList(TouchscreenChoiceMenuData *data);
-void TouchscreenChoiceMenu_HideList(TouchscreenChoiceMenuData *data);
-void TouchscreenChoiceMenu_LoadSpriteResources(TouchscreenChoiceMenuData *data);
-void TouchscreenChoiceMenu_CreateCursor(TouchscreenChoiceMenuData *data, int selection);
-void TouchscreenChoiceMenu_PrintMessage(Window *window, MsgData *msgData, u32 msgId);
-void TouchscreenChoiceMenu_LoadMessages(TouchscreenChoiceMenuData *data, u32 unused);
-void TouchscreenChoiceMenu_FreeMessages(TouchscreenChoiceMenuData *data);
 BOOL TouchscreenChoiceMenu_State_Init(TouchscreenChoiceMenuData *data);
 BOOL TouchscreenChoiceMenu_State_ShowYesNo(TouchscreenChoiceMenuData *data);
 BOOL TouchscreenChoiceMenu_State_YesNoInput(TouchscreenChoiceMenuData *data);
@@ -138,14 +143,9 @@ BOOL TouchscreenChoiceMenu_State_Done(TouchscreenChoiceMenuData *data);
 BOOL TouchscreenChoiceMenu_State_WaitReturn(TouchscreenChoiceMenuData *data);
 BOOL TouchscreenChoiceMenu_State_Idle(TouchscreenChoiceMenuData *data);
 BOOL TouchscreenChoiceMenu_State_ShowList(TouchscreenChoiceMenuData *data);
-BOOL TouchscreenChoiceMenu_MoveListSelection(int *selection, int count, int dir);
 BOOL TouchscreenChoiceMenu_State_ListInput(TouchscreenChoiceMenuData *data);
 BOOL TouchscreenChoiceMenu_State_ListEnd(TouchscreenChoiceMenuData *data);
 BOOL TouchscreenChoiceMenu_State_ListWriteResult(TouchscreenChoiceMenuData *data);
-void TouchscreenChoiceMenu_SetYesNoCursorPos(TouchscreenChoiceMenuData *data, int selection);
-void TouchscreenChoiceMenu_SetListCursorPos(TouchscreenChoiceMenuData *data, int count, int selection);
-void TouchscreenChoiceMenu_SetListCursorPressed(TouchscreenChoiceMenuData *data, int count);
-BOOL TouchscreenChoiceMenu_HandleYesNoInput(TouchscreenChoiceMenuData *data);
 BOOL TouchscreenChoiceMenu_State_CancelYesNo(TouchscreenChoiceMenuData *data);
 
 SysTask *TouchscreenChoiceMenu_Create(BgConfig *bgConfig, u16 *lastTouchMenuInput, FieldSystem *fieldSystem, u16 *result) {
@@ -225,7 +225,7 @@ void TouchscreenChoiceMenu_SetCallback(SysTask *task, void (*callback)(void *arg
     data->selectionCallbackArg = arg;
 }
 
-void TouchscreenChoiceMenu_Task(SysTask *task, void *taskData) {
+static void TouchscreenChoiceMenu_Task(SysTask *task, void *taskData) {
     TouchscreenChoiceMenuData *data = taskData;
 
     if (!FieldSystem_TaskIsRunning(data->fieldSystem)) {
@@ -240,7 +240,7 @@ void TouchscreenChoiceMenu_Task(SysTask *task, void *taskData) {
     SpriteList_RenderAndAnimateSprites(data->spriteList);
 }
 
-void TouchscreenChoiceMenu_LoadBgGraphics(TouchscreenChoiceMenuData *data) {
+static void TouchscreenChoiceMenu_LoadBgGraphics(TouchscreenChoiceMenuData *data) {
     NNSG2dScreenData *screenData;
     void *nscr;
     NARC *narc = NARC_New(NARC_a_2_3_7, HEAP_ID_8);
@@ -256,7 +256,7 @@ void TouchscreenChoiceMenu_LoadBgGraphics(TouchscreenChoiceMenuData *data) {
     NARC_Delete(narc);
 }
 
-void TouchscreenChoiceMenu_ShowYesNo(TouchscreenChoiceMenuData *data) {
+static void TouchscreenChoiceMenu_ShowYesNo(TouchscreenChoiceMenuData *data) {
     NARC *narc = NARC_New(NARC_a_2_3_7, HEAP_ID_8);
 
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 1, data->bgConfig, GF_BG_LYR_SUB_0, 0, 0, FALSE, HEAP_ID_8);
@@ -268,7 +268,7 @@ void TouchscreenChoiceMenu_ShowYesNo(TouchscreenChoiceMenuData *data) {
     TouchscreenChoiceMenu_PrintMessage(&data->noWindow, data->msgData, msg_0191_00047);
 }
 
-void TouchscreenChoiceMenu_HideYesNo(TouchscreenChoiceMenuData *data) {
+static void TouchscreenChoiceMenu_HideYesNo(TouchscreenChoiceMenuData *data) {
     BgClearTilemapBufferAndCommit(data->bgConfig, GF_BG_LYR_SUB_0);
     BgClearTilemapBufferAndCommit(data->bgConfig, GF_BG_LYR_SUB_1);
     if (data->yesWindow.pixelBuffer != NULL) {
@@ -282,7 +282,7 @@ void TouchscreenChoiceMenu_HideYesNo(TouchscreenChoiceMenuData *data) {
 #pragma force_active on
 
 // The list background of NARC 239 is file itemCount (2-8).
-void TouchscreenChoiceMenu_ShowList(TouchscreenChoiceMenuData *data) {
+static void TouchscreenChoiceMenu_ShowList(TouchscreenChoiceMenuData *data) {
     ListMenuItem *items = ScriptMenu_GetListItems(data->menu);
     int count = ScriptMenu_GetCount(data->menu);
     NARC *narc = NARC_New(NARC_a_2_3_7, HEAP_ID_8);
@@ -304,7 +304,7 @@ void TouchscreenChoiceMenu_ShowList(TouchscreenChoiceMenuData *data) {
 
 #pragma force_active reset
 
-void TouchscreenChoiceMenu_HideList(TouchscreenChoiceMenuData *data) {
+static void TouchscreenChoiceMenu_HideList(TouchscreenChoiceMenuData *data) {
     int count = ScriptMenu_GetCount(data->menu);
     int i;
 
@@ -317,7 +317,7 @@ void TouchscreenChoiceMenu_HideList(TouchscreenChoiceMenuData *data) {
 
 #pragma force_active on
 
-void TouchscreenChoiceMenu_LoadSpriteResources(TouchscreenChoiceMenuData *data) {
+static void TouchscreenChoiceMenu_LoadSpriteResources(TouchscreenChoiceMenuData *data) {
     int i;
 
     data->spriteList = G2dRenderer_Init(21, &data->renderer, HEAP_ID_8);
@@ -333,7 +333,7 @@ void TouchscreenChoiceMenu_LoadSpriteResources(TouchscreenChoiceMenuData *data) 
     SpriteTransfer_CreatePlttTransferTask(data->resObjs[GF_GFX_RES_TYPE_PLTT]);
 }
 
-void TouchscreenChoiceMenu_CreateCursor(TouchscreenChoiceMenuData *data, int selection) {
+static void TouchscreenChoiceMenu_CreateCursor(TouchscreenChoiceMenuData *data, int selection) {
     SpriteTemplate template;
 
     CreateSpriteResourcesHeader(&data->header, 10, 10, 10, 10, -1, -1, FALSE, 0, data->resMans[GF_GFX_RES_TYPE_CHAR], data->resMans[GF_GFX_RES_TYPE_PLTT], data->resMans[GF_GFX_RES_TYPE_CELL], data->resMans[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
@@ -357,7 +357,7 @@ void TouchscreenChoiceMenu_CreateCursor(TouchscreenChoiceMenuData *data, int sel
 
 #pragma force_active reset
 
-void TouchscreenChoiceMenu_PrintMessage(Window *window, MsgData *msgData, u32 msgId) {
+static void TouchscreenChoiceMenu_PrintMessage(Window *window, MsgData *msgData, u32 msgId) {
     String *string = NewString_ReadMsgData(msgData, msgId);
     FillWindowPixelBuffer(window, 0);
     AddTextPrinterParameterizedWithColor(window, 4, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(2, 1, 0), NULL);
@@ -365,12 +365,12 @@ void TouchscreenChoiceMenu_PrintMessage(Window *window, MsgData *msgData, u32 ms
     String_Delete(string);
 }
 
-void TouchscreenChoiceMenu_LoadMessages(TouchscreenChoiceMenuData *data, u32 unused) {
+static void TouchscreenChoiceMenu_LoadMessages(TouchscreenChoiceMenuData *data, u32 unused) {
     data->msgFormat = MessageFormat_New(HEAP_ID_8);
     data->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0191_bin, HEAP_ID_8);
 }
 
-void TouchscreenChoiceMenu_FreeMessages(TouchscreenChoiceMenuData *data) {
+static void TouchscreenChoiceMenu_FreeMessages(TouchscreenChoiceMenuData *data) {
     DestroyMsgData(data->msgData);
     MessageFormat_Delete(data->msgFormat);
 }
@@ -444,9 +444,9 @@ BOOL TouchscreenChoiceMenu_State_ShowList(TouchscreenChoiceMenuData *data) {
 
 #pragma force_active reset
 
-BOOL TouchscreenChoiceMenu_MoveListSelection(int *selection, int count, int dir) {
+static BOOL TouchscreenChoiceMenu_MoveListSelection(int *selection, int count, int dir) {
     int cur = *selection;
-    s8 next = *(dir + &sTouchscreenChoiceMenuListNeighbors[count - 2][cur * 4]); // operand order kept for codegen
+    s8 next = *(dir + &sTouchscreenChoiceMenuListNeighbors[count - 2][cur * 4]);
     if (next == -1 || cur == next) {
         return FALSE;
     }
@@ -527,7 +527,7 @@ BOOL TouchscreenChoiceMenu_State_ListWriteResult(TouchscreenChoiceMenuData *data
     return FALSE;
 }
 
-void TouchscreenChoiceMenu_SetYesNoCursorPos(TouchscreenChoiceMenuData *data, int selection) {
+static void TouchscreenChoiceMenu_SetYesNoCursorPos(TouchscreenChoiceMenuData *data, int selection) {
     VecFx32 pos;
     pos.x = sTouchscreenChoiceMenuYesNoCursorX[selection].value << FX32_SHIFT;
     pos.y = (sTouchscreenChoiceMenuYesNoCursorY[selection].value + 256) << FX32_SHIFT;
@@ -537,7 +537,7 @@ void TouchscreenChoiceMenu_SetYesNoCursorPos(TouchscreenChoiceMenuData *data, in
 
 #pragma force_active on
 
-void TouchscreenChoiceMenu_SetListCursorPos(TouchscreenChoiceMenuData *data, int count, int selection) {
+static void TouchscreenChoiceMenu_SetListCursorPos(TouchscreenChoiceMenuData *data, int count, int selection) {
     VecFx32 pos;
     count -= 2;
     selection *= 3;
@@ -550,12 +550,12 @@ void TouchscreenChoiceMenu_SetListCursorPos(TouchscreenChoiceMenuData *data, int
 
 #pragma force_active reset
 
-void TouchscreenChoiceMenu_SetListCursorPressed(TouchscreenChoiceMenuData *data, int count) {
+static void TouchscreenChoiceMenu_SetListCursorPressed(TouchscreenChoiceMenuData *data, int count) {
     Sprite_SetAnimCtrlSeq(data->cursorSprite, sTouchscreenChoiceMenuListCursorAnim[count - 2][0] + 2);
 }
 
 // 0 = YES, 1 = NO; B selects NO.
-BOOL TouchscreenChoiceMenu_HandleYesNoInput(TouchscreenChoiceMenuData *data) {
+static BOOL TouchscreenChoiceMenu_HandleYesNoInput(TouchscreenChoiceMenuData *data) {
     int hit = TouchscreenHitbox_FindRectAtTouchNew(sTouchscreenChoiceMenuYesNoHitboxes);
 
     if (hit != -1) {

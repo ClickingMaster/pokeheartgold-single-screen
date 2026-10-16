@@ -13,6 +13,7 @@
 #include "mail_message.h"
 #include "menu_input_state.h"
 #include "msgdata.h"
+#include "oam_manager.h"
 #include "options.h"
 #include "overlay_55.h"
 #include "overlay_manager.h"
@@ -27,13 +28,12 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "oam_manager.h"
-#include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
+#include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
 // args->mailMessageIdx is the cursor row (0-2: message lines, 3: button row); the byte after it in
-// MailViewArgs (not declared in overlay_55.h) holds the selected button.
+// MailViewArgs holds the selected button.
 #define MAIL_VIEW_ARGS_BUTTON(args) (((u8 *)(args))[3])
 
 #define MAIL_VIEW_ROW_BUTTONS 3
@@ -91,7 +91,7 @@ typedef struct MailView {
     u8 cursorPos;                              // 0x16
     u8 prevCursorPos;                          // 0x17
     BgConfig *bgConfig;                        // 0x18
-    MailViewArgs *args;             // 0x1C
+    MailViewArgs *args;                        // 0x1C
     MsgData *msgData;                          // 0x20
     u8 filler_24[0xC];                         // 0x24
     PaletteData *palette;                      // 0x30
@@ -122,37 +122,38 @@ typedef struct MailViewBgTemplates {
 
 extern const MailViewBgTemplates sMailViewBgTemplates;
 
+static BOOL MailView_AreAllMessagesEmpty(MailView *mailView);
+static void MailView_ResetCursorHighlight(MailView *mailView);
+static int MailView_OnSwitchToTouch(MailView *mailView);
+static int MailView_OnSwitchToKeys(MailView *mailView);
+static BOOL MailView_CheckInputModeSwitch(MailView *mailView);
+static BOOL MailView_HandleWriteKeys(MailView *mailView);
+static BOOL MailView_HandleWriteTouch(MailView *mailView);
+static void MailView_InitYesNoPrompt(MailView *mailView);
+static int MailView_HandleYesNoPrompt(MailView *mailView);
+static BOOL MailView_Run(MailView *mailView);
+static void MailView_VBlankCB(MailView *mailView);
+static void MailView_CursorBlinkTask(SysTask *task, MailView *mailView);
+static BOOL MailView_SetupGraphics(MailView *mailView);
+static BOOL MailView_FreeGraphics(MailView *mailView);
+static void MailView_SetGfxBanks(void);
+static void MailView_InitBgs(MailView *mailView);
+static void MailView_FreeBgs(MailView *mailView);
+static void MailView_LoadBgGraphics(void *data);
+static void MailView_FreeBgGraphics(MailView *mailView);
+static void MailView_CreateWindows(MailView *mailView);
+static void MailView_DeleteWindows(MailView *mailView);
+static void MailView_PrintTexts(MailView *mailView);
+static void MailView_CreateMonIcons(MailView *mailView);
+static void MailView_DeleteMonIcons(MailView *mailView);
+
 BOOL MailView_Init(OverlayManager *man, int *state);
 BOOL MailView_Main(OverlayManager *man, int *state);
 BOOL MailView_Exit(OverlayManager *man, int *state);
-BOOL MailView_AreAllMessagesEmpty(MailView *mailView);
-void MailView_ResetCursorHighlight(MailView *mailView);
-int MailView_OnSwitchToTouch(MailView *mailView);
-int MailView_OnSwitchToKeys(MailView *mailView);
-BOOL MailView_CheckInputModeSwitch(MailView *mailView);
 BOOL MailView_HandleReadInput(MailView *mailView);
-BOOL MailView_HandleWriteKeys(MailView *mailView);
-BOOL MailView_HandleWriteTouch(MailView *mailView);
 BOOL MailView_HandleWriteInput(MailView *mailView);
 BOOL MailView_ShowEmptyMailWarning(MailView *mailView);
-void MailView_InitYesNoPrompt(MailView *mailView);
-int MailView_HandleYesNoPrompt(MailView *mailView);
 BOOL MailView_ConfirmQuit(MailView *mailView);
-BOOL MailView_Run(MailView *mailView);
-void MailView_VBlankCB(MailView *mailView);
-void MailView_CursorBlinkTask(SysTask *task, MailView *mailView);
-BOOL MailView_SetupGraphics(MailView *mailView);
-BOOL MailView_FreeGraphics(MailView *mailView);
-void MailView_SetGfxBanks(void);
-void MailView_InitBgs(MailView *mailView);
-void MailView_FreeBgs(MailView *mailView);
-void MailView_LoadBgGraphics(void *data);
-void MailView_FreeBgGraphics(MailView *mailView);
-void MailView_CreateWindows(MailView *mailView);
-void MailView_DeleteWindows(MailView *mailView);
-void MailView_PrintTexts(MailView *mailView);
-void MailView_CreateMonIcons(MailView *mailView);
-void MailView_DeleteMonIcons(MailView *mailView);
 
 BOOL MailView_Init(OverlayManager *man, int *state) {
     MailView *mailView;
@@ -194,7 +195,7 @@ BOOL MailView_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-BOOL MailView_AreAllMessagesEmpty(MailView *mailView) {
+static BOOL MailView_AreAllMessagesEmpty(MailView *mailView) {
     int i;
 
     for (i = 0; i < 3; i++) {
@@ -205,22 +206,22 @@ BOOL MailView_AreAllMessagesEmpty(MailView *mailView) {
     return TRUE;
 }
 
-void MailView_ResetCursorHighlight(MailView *mailView) {
+static void MailView_ResetCursorHighlight(MailView *mailView) {
     PaletteData_BlendPalette(mailView->palette, PLTTBUF_MAIN_BG, (u16)(mailView->prevCursorPos + 0x22), 1, 0, RGB_WHITE);
     mailView->cursorBlinkFalling = 0;
     mailView->cursorBlinkLevel = 0;
 }
 
-int MailView_OnSwitchToTouch(MailView *mailView) {
+static int MailView_OnSwitchToTouch(MailView *mailView) {
     MailView_ResetCursorHighlight(mailView);
     return 0;
 }
 
-int MailView_OnSwitchToKeys(MailView *mailView) {
+static int MailView_OnSwitchToKeys(MailView *mailView) {
     return 0;
 }
 
-BOOL MailView_CheckInputModeSwitch(MailView *mailView) {
+static BOOL MailView_CheckInputModeSwitch(MailView *mailView) {
     int (*callback)(MailView *);
 
     if (mailView->inputMode == MENU_INPUT_STATE_TOUCH) {
@@ -263,7 +264,7 @@ BOOL MailView_HandleReadInput(MailView *mailView) {
     return TRUE;
 }
 
-BOOL MailView_HandleWriteKeys(MailView *mailView) {
+static BOOL MailView_HandleWriteKeys(MailView *mailView) {
     u32 keys = gSystem.newKeys;
     BOOL moved = FALSE;
 
@@ -326,7 +327,7 @@ BOOL MailView_HandleWriteKeys(MailView *mailView) {
     return FALSE;
 }
 
-BOOL MailView_HandleWriteTouch(MailView *mailView) {
+static BOOL MailView_HandleWriteTouch(MailView *mailView) {
     int hit;
     u16 transparent;
 
@@ -407,7 +408,7 @@ BOOL MailView_ShowEmptyMailWarning(MailView *mailView) {
     return FALSE;
 }
 
-void MailView_InitYesNoPrompt(MailView *mailView) {
+static void MailView_InitYesNoPrompt(MailView *mailView) {
     YesNoPromptTemplate template;
 
     MI_CpuFill8(&template, 0, sizeof(template));
@@ -422,7 +423,7 @@ void MailView_InitYesNoPrompt(MailView *mailView) {
     YesNoPrompt_InitFromTemplateWithPalette(mailView->yesNoPrompt, &template, mailView->palette);
 }
 
-int MailView_HandleYesNoPrompt(MailView *mailView) {
+static int MailView_HandleYesNoPrompt(MailView *mailView) {
     int result;
     int inputMode;
 
@@ -493,7 +494,7 @@ BOOL MailView_ConfirmQuit(MailView *mailView) {
     return FALSE;
 }
 
-BOOL MailView_Run(MailView *mailView) {
+static BOOL MailView_Run(MailView *mailView) {
     switch (mailView->state) {
     case MAIL_VIEW_STATE_RESET_DISPLAY:
         Main_SetVBlankIntrCB(NULL, NULL);
@@ -559,7 +560,7 @@ BOOL MailView_Run(MailView *mailView) {
     return FALSE;
 }
 
-void MailView_VBlankCB(MailView *mailView) {
+static void MailView_VBlankCB(MailView *mailView) {
     if (mailView->palette != NULL) {
         PaletteData_PushTransparentBuffers(mailView->palette);
     }
@@ -571,7 +572,7 @@ void MailView_VBlankCB(MailView *mailView) {
     *(u32 *)((u8 *)OS_IRQTable + 0x3FF8) |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag
 }
 
-void MailView_CursorBlinkTask(SysTask *task, MailView *mailView) {
+static void MailView_CursorBlinkTask(SysTask *task, MailView *mailView) {
     u8 level;
 
     if (mailView->palette == NULL) {
@@ -604,7 +605,7 @@ void MailView_CursorBlinkTask(SysTask *task, MailView *mailView) {
     }
 }
 
-BOOL MailView_SetupGraphics(MailView *mailView) {
+static BOOL MailView_SetupGraphics(MailView *mailView) {
     switch (mailView->subState) {
     case 0:
         MailView_InitBgs(mailView);
@@ -625,7 +626,7 @@ BOOL MailView_SetupGraphics(MailView *mailView) {
     return FALSE;
 }
 
-BOOL MailView_FreeGraphics(MailView *mailView) {
+static BOOL MailView_FreeGraphics(MailView *mailView) {
     MailView_DeleteMonIcons(mailView);
     if (mailView->filler_24 != NULL) {
         DestroyMsgData(mailView->msgData);
@@ -636,12 +637,12 @@ BOOL MailView_FreeGraphics(MailView *mailView) {
     return TRUE;
 }
 
-void MailView_SetGfxBanks(void) {
+static void MailView_SetGfxBanks(void) {
     GraphicsBanks banks = sMailViewGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
-void MailView_InitBgs(MailView *mailView) {
+static void MailView_InitBgs(MailView *mailView) {
     GraphicsModes modes;
     MailViewBgTemplates templates;
 
@@ -668,7 +669,7 @@ void MailView_InitBgs(MailView *mailView) {
     BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 0x20, 0, mailView->heapID);
 }
 
-void MailView_FreeBgs(MailView *mailView) {
+static void MailView_FreeBgs(MailView *mailView) {
     FreeBgTilemapBuffer(mailView->bgConfig, GF_BG_LYR_SUB_0);
     FreeBgTilemapBuffer(mailView->bgConfig, GF_BG_LYR_MAIN_3);
     FreeBgTilemapBuffer(mailView->bgConfig, GF_BG_LYR_MAIN_2);
@@ -678,7 +679,7 @@ void MailView_FreeBgs(MailView *mailView) {
     Heap_Free(mailView->bgConfig);
 }
 
-void MailView_LoadBgGraphics(void *data) {
+static void MailView_LoadBgGraphics(void *data) {
     MailView *mailView = data;
     NARC *narc;
     void *buffer;
@@ -748,7 +749,7 @@ void MailView_LoadBgGraphics(void *data) {
     }
 }
 
-void MailView_FreeBgGraphics(MailView *mailView) {
+static void MailView_FreeBgGraphics(MailView *mailView) {
     Heap_Free(mailView->buttonScreenFile);
     Heap_Free(mailView->bgScreenFile);
     PaletteData_FreeBuffers(mailView->palette, PLTTBUF_MAIN_OBJ);
@@ -758,7 +759,7 @@ void MailView_FreeBgGraphics(MailView *mailView) {
     G2x_SetBlendAlpha_((u32)&reg_G2_BLDCNT, 0, 0, 31, 0);
 }
 
-void MailView_CreateWindows(MailView *mailView) {
+static void MailView_CreateWindows(MailView *mailView) {
     int i;
     Window *window;
 
@@ -781,7 +782,7 @@ void MailView_CreateWindows(MailView *mailView) {
     mailView->yesNoPrompt = YesNoPrompt_Create(mailView->heapID);
 }
 
-void MailView_DeleteWindows(MailView *mailView) {
+static void MailView_DeleteWindows(MailView *mailView) {
     int i;
     Window *window;
 
@@ -796,7 +797,7 @@ void MailView_DeleteWindows(MailView *mailView) {
     } while (i < 6);
 }
 
-void MailView_PrintTexts(MailView *mailView) {
+static void MailView_PrintTexts(MailView *mailView) {
     int i;
     int msgOffset;
     Window *window;
@@ -832,7 +833,7 @@ void MailView_PrintTexts(MailView *mailView) {
     }
 }
 
-void MailView_CreateMonIcons(MailView *mailView) {
+static void MailView_CreateMonIcons(MailView *mailView) {
     ManagedSpriteTemplate template;
     OamManagerParam oamParam;
     OamCharTransferParam charTransferParam;
@@ -894,7 +895,7 @@ void MailView_CreateMonIcons(MailView *mailView) {
     }
 }
 
-void MailView_DeleteMonIcons(MailView *mailView) {
+static void MailView_DeleteMonIcons(MailView *mailView) {
     int i;
     MailView *shifted;
 

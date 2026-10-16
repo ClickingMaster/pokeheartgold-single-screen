@@ -46,28 +46,34 @@ typedef struct ApricornMixState {
     u8 values[5];
 } ApricornMixState;
 
-// asm/apricorn_box_data.s
 extern const u16 gApricornBallItems[];
 extern const s8 gApricornFlavorDeltas[][5];
 extern const ApricornPreset gApricornJuicePresets[];
 
-void ApricornBox_ClearJuiceRecords(SaveApricornBox *apricornBox);
-void ClearApricornJuiceRecord(void *ptr);
+static void InitApricornBox(SaveApricornBox *apricornBox);
+static void ApricornBox_ClearJuiceRecords(SaveApricornBox *apricornBox);
+static void ClearApricornJuice(void *ptr);
+static int ApricornBox_TakeApricorn(SaveApricornBox *apricornBox, int apricorn, u32 quantity);
+static BOOL ApricornJuice_IsValid(ApricornJuice *data);
+static BOOL ApricornRecord_IsSameTrainer(ApricornRecord *a, ApricornRecord *b);
+static void ApricornBox_AddJuiceMildness(SaveApricornBox *box, u8 amount);
+static void ApricornBox_MixQueuedApricorns(SaveApricornBox *box);
+static void ApricornJuice_GetFlavors(ApricornJuice *data, u8 *out);
+static u8 GetJuiceFlavorLevel(int type, u8 value);
+static void PackJuiceFlavor(u16 *out, u8 *pair, int type);
+static void ClearApricornJuiceRecord(void *data);
+
 u32 Save_ApricornBox_sizeof(void);
 u32 ApricornJuiceRecord_sizeof(void);
-void InitApricornBox(SaveApricornBox *apricornBox);
 void Save_ApricornBox_Init(SaveApricornBox *apricornBox);
 u32 ApricornBox_GetMixState(SaveApricornBox *apricornBox);
 BOOL ApricornBox_QueueApricorn(SaveApricornBox *box, int apricorn, u32 value);
 int ApricornBox_GetMixProgressLevel(SaveApricornBox *box);
 u8 ApricornBox_GetJuiceServings(SaveApricornBox *box);
-void PackJuiceFlavor(u16 *out, u8 *pair, int type);
 int ApricornJuice_GetTopMixIndex(void *data);
 int ApricornBox_UseJuiceServing(SaveApricornBox *box);
 ApricornRecord *ApricornRecord_New(SaveApricornBox *box, PlayerProfile *profile, u32 value, enum HeapID heapId);
-BOOL ApricornRecord_IsSameTrainer(ApricornRecord *a, ApricornRecord *b);
 void ApricornBox_StoreJuiceRecords(SaveApricornBox *box, ApricornRecord *records, int count, int skip);
-void ApricornJuice_GetFlavors(ApricornJuice *data, u8 *out);
 
 u32 Save_ApricornBox_sizeof(void) {
     return sizeof(SaveApricornBox);
@@ -81,13 +87,13 @@ SaveApricornBox *Save_ApricornBox_Get(SaveData *saveData) {
     return SaveArray_Get(saveData, SAVE_APRICORN_BOX);
 }
 
-void InitApricornBox(SaveApricornBox *apricornBox) {
+static void InitApricornBox(SaveApricornBox *apricornBox) {
     MI_CpuFill8(apricornBox, 0, sizeof(SaveApricornBox));
     ClearApricornJuice(&apricornBox->juice);
     ApricornBox_ClearJuiceRecords(apricornBox);
 }
 
-void ApricornBox_ClearJuiceRecords(SaveApricornBox *apricornBox) {
+static void ApricornBox_ClearJuiceRecords(SaveApricornBox *apricornBox) {
     int i;
     for (i = 0; i < 3; i++) {
         ClearApricornJuiceRecord(&apricornBox->juiceRecords[i]);
@@ -98,7 +104,7 @@ void Save_ApricornBox_Init(SaveApricornBox *apricornBox) {
     InitApricornBox(apricornBox);
 }
 
-void ClearApricornJuice(void *ptr) {
+static void ClearApricornJuice(void *ptr) {
     MI_CpuFill8(ptr, 0, 8);
 }
 
@@ -117,7 +123,7 @@ int ApricornBox_GiveApricorn(SaveApricornBox *apricornBox, int apricorn, u8 amou
     return apricornBox->apricorns[apricorn];
 }
 
-int ApricornBox_TakeApricorn(SaveApricornBox *apricornBox, int apricorn, u32 quantity) {
+static int ApricornBox_TakeApricorn(SaveApricornBox *apricornBox, int apricorn, u32 quantity) {
     u8 count;
     if (apricorn >= 7) {
         GF_ASSERT(FALSE);
@@ -272,7 +278,7 @@ BOOL ApricornBox_GetJuice(SaveApricornBox *box, int index, ApricornJuice *out) {
     return TRUE;
 }
 
-BOOL ApricornJuice_IsValid(ApricornJuice *data) {
+static BOOL ApricornJuice_IsValid(ApricornJuice *data) {
     if (ApricornJuice_GetFlavorTotal(data) != 0) {
         return TRUE;
     }
@@ -471,7 +477,7 @@ ApricornRecord *ApricornRecord_New(SaveApricornBox *box, PlayerProfile *profile,
     return record;
 }
 
-BOOL ApricornRecord_IsSameTrainer(ApricornRecord *a, ApricornRecord *b) {
+static BOOL ApricornRecord_IsSameTrainer(ApricornRecord *a, ApricornRecord *b) {
     if (a->trainerId != b->trainerId) {
         return FALSE;
     }
@@ -584,7 +590,7 @@ String *ApricornBox_GetJuiceFlavorName(SaveApricornBox *box, u16 type, u32 heapI
     return result;
 }
 
-void ApricornBox_AddJuiceMildness(SaveApricornBox *box, u8 amount) {
+static void ApricornBox_AddJuiceMildness(SaveApricornBox *box, u8 amount) {
     int value = box->juice.mildness + amount;
     if (value > 255) {
         box->juice.mildness = 255;
@@ -593,7 +599,7 @@ void ApricornBox_AddJuiceMildness(SaveApricornBox *box, u8 amount) {
     }
 }
 
-void ApricornBox_MixQueuedApricorns(SaveApricornBox *box) {
+static void ApricornBox_MixQueuedApricorns(SaveApricornBox *box) {
     ApricornMixState *s = (ApricornMixState *)box;
     s8 values[5], order[5];
     int n;
@@ -675,7 +681,7 @@ void ApricornBox_MixQueuedApricorns(SaveApricornBox *box) {
     s->actions = 0;
 }
 
-void ApricornJuice_GetFlavors(ApricornJuice *data, u8 *out) {
+static void ApricornJuice_GetFlavors(ApricornJuice *data, u8 *out) {
     int i;
     ApricornMix *mix = (ApricornMix *)data;
     for (i = 0; i < 5; i++) {
@@ -683,7 +689,7 @@ void ApricornJuice_GetFlavors(ApricornJuice *data, u8 *out) {
     }
 }
 
-u8 GetJuiceFlavorLevel(int type, u8 value) {
+static u8 GetJuiceFlavorLevel(int type, u8 value) {
     if (value == 0) {
         return 0;
     }
@@ -737,14 +743,14 @@ u8 GetJuiceFlavorLevel(int type, u8 value) {
     return 0;
 }
 
-void PackJuiceFlavor(u16 *out, u8 *pair, int type) {
+static void PackJuiceFlavor(u16 *out, u8 *pair, int type) {
     struct PackedMix *packed = (struct PackedMix *)out;
     packed->index = pair[0];
     packed->amount = pair[1];
     packed->strength = GetJuiceFlavorLevel((u8)type, pair[1]);
 }
 
-void ClearApricornJuiceRecord(void *data) {
+static void ClearApricornJuiceRecord(void *data) {
     u8 *bytes = data;
     MI_CpuFill8(data, 0, 0x20);
     ClearApricornJuice(bytes + 0x18);

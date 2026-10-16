@@ -24,8 +24,9 @@ struct FriendRoster {
     FriendEntryArray roster;
 };
 
-// asm/friend_roster_data.s
 extern FriendRoster gFriendRoster;
+
+static void FriendRoster_MoveFriend(FriendRoster *data, int dest, int src);
 
 void Comm_EnsureDwcUserData(FriendRoster *data);
 BOOL DWC_IsValidFriendData(void *data);
@@ -44,7 +45,6 @@ BOOL FriendRoster_IsFriendValid(FriendRoster *data, int index);
 int FriendRoster_CountFriends(FriendRoster *data);
 int FriendRoster_GetUsedSlotCount(FriendRoster *data);
 void FriendRoster_RemoveFriend(FriendRoster *data, int index);
-void FriendRoster_MoveFriend(FriendRoster *data, int dest, int src);
 void FriendRoster_Compact(FriendRoster *data);
 void FriendRoster_UpdateDate(FriendRoster *data, s32 index);
 void FriendRoster_AddWinsLossesTrades(FriendRoster *data, s32 index, s32 a, s32 b, s32 c);
@@ -224,7 +224,7 @@ void FriendRoster_RemoveFriend(FriendRoster *data, int index) {
     }
 }
 
-void FriendRoster_MoveFriend(FriendRoster *data, int dest, int src) {
+static void FriendRoster_MoveFriend(FriendRoster *data, int dest, int src) {
     if (dest >= 0 && dest < 32 && src >= 0 && src < 32) {
         MI_CpuCopy8(&data->roster.entries[src], &data->roster.entries[dest], sizeof(FriendEntry));
         MI_CpuCopy8(data->friendData[src], data->friendData[dest], sizeof(data->friendData[src]));

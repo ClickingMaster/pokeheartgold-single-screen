@@ -7,54 +7,11 @@
 	.public _0225CEBC
 	.public TouchscreenMenu_Create
 	.public TouchscreenMenu_Destroy
-	.public TouchscreenMenu_Task
-	.public TouchscreenMenu_UpdateRunningShoesVisibility
-	.public TouchscreenMenu_HandleActionButton
-	.public TouchscreenMenu_GetActionType
-	.public TouchscreenMenu_PrintActionLabel
-	.public TouchscreenMenu_SetButtonsActive
-	.public TouchscreenMenu_SyncStartMenuState
-	.public TouchscreenMenu_UpdateForStartMenu
-	.public TouchscreenMenu_IsFieldBusy
-	.public TouchscreenMenu_SetDimmed
-	.public TouchscreenMenu_UpdateRegisteredItemButtons
-	.public TouchscreenMenu_ShowIcons
-	.public TouchscreenMenu_ShowNewIcons
-	.public TouchscreenMenu_LoadBgAndWindows
-	.public TouchscreenMenu_LoadSpriteResources
-	.public TouchscreenMenu_LoadIconResources
-	.public TouchscreenMenu_CreateSprites
-	.public TouchscreenMenu_FindNeighborIcon
-	.public TouchscreenMenu_HighlightIcon
-	.public TouchscreenMenu_HandleDpadInput
-	.public TouchscreenMenu_HandleTouchInput
-	.public TouchscreenMenu_DrawWindowFrame
-	.public TouchscreenMenu_LoadStrings
-	.public TouchscreenMenu_FreeStrings
-	.public TouchscreenMenu_CopyIconLabelsToVram
-	.public TouchscreenMenu_PrintIconLabels
-	.public TouchscreenMenu_GetLayout
-	.public TouchscreenMenu_UpdatePhoneRing
-	.public TouchscreenMenu_PrintMessageAt
-	.public TouchscreenMenu_PrintItemCount
-	.public TouchscreenMenu_PrintContestMonLevel
-	.public TouchscreenMenu_PrintBugContestInfo
-	.public TouchscreenMenu_InitIconFlags
-	.public TouchscreenMenu_GetMenuIndex
-	.public TouchscreenMenu_GetSlotFromMenuIndex
-	.public TouchscreenMenu_ValidateSelection
 	.public TouchscreenChoiceMenu_Create
 	.public TouchscreenChoiceMenu_Destroy
-	.public TouchscreenChoiceMenu_Task
-	.public TouchscreenChoiceMenu_LoadBgGraphics
-	.public TouchscreenChoiceMenu_ShowYesNo
-	.public TouchscreenChoiceMenu_ShowList
-	.public TouchscreenChoiceMenu_LoadSpriteResources
-	.public TouchscreenChoiceMenu_CreateCursor
 	.public TouchscreenChoiceMenu_State_Idle
 	.public TouchscreenChoiceMenu_State_ShowList
 	.public TouchscreenChoiceMenu_State_ListInput
-	.public TouchscreenChoiceMenu_SetListCursorPos
 	.public sTouchscreenMenuTextColors
 	.public sTouchscreenMenuButtonHitboxes
 	.public sTouchscreenMenuActionMsgIds
@@ -111,47 +68,16 @@
 	.public TouchscreenMenu_IsExitDone
 	.public TouchscreenMenu_RequestSelectedIconAnim
 	.public TouchscreenMenu_RequestRegisteredItemAnim
-	.public TouchscreenMenu_SetRunningShoesSprites
-	.public TouchscreenMenu_HandleRunningShoesButton
-	.public TouchscreenMenu_UpdateRunningShoesSprites
-	.public TouchscreenMenu_UpdateActionLabel
-	.public TouchscreenMenu_RefreshLabelAndNewIcons
-	.public TouchscreenMenu_HighlightSelectionAndDisable
-	.public TouchscreenMenu_RestoreAfterStartMenu
-	.public TouchscreenMenu_SumBytes
-	.public TouchscreenMenu_GetBallItem
-	.public TouchscreenMenu_SetIconsTranslucent
-	.public TouchscreenMenu_PrintFramedText
-	.public TouchscreenMenu_IsTextboxOpen
-	.public TouchscreenMenu_LayoutHasRegisteredItems
-	.public TouchscreenMenu_HasRunningShoes
-	.public TouchscreenMenu_InitPhoneRing
-	.public TouchscreenMenu_HidePhoneCaller
-	.public TouchscreenMenu_PrintBallLabel
-	.public TouchscreenMenu_PrintSafariBalls
-	.public TouchscreenMenu_PrintParkBalls
-	.public TouchscreenMenu_PrintBallInfo
-	.public TouchscreenMenu_OnFlashcartDetected
-	.public TouchscreenMenu_OnEmulatorCheckDummy
-	.public TouchscreenMenu_OnDummyCheckDummy
 	.public TouchscreenChoiceMenu_IsExitDone
 	.public TouchscreenChoiceMenu_SetCallback
-	.public TouchscreenChoiceMenu_HideYesNo
-	.public TouchscreenChoiceMenu_HideList
-	.public TouchscreenChoiceMenu_PrintMessage
-	.public TouchscreenChoiceMenu_LoadMessages
-	.public TouchscreenChoiceMenu_FreeMessages
 	.public TouchscreenChoiceMenu_State_Init
 	.public TouchscreenChoiceMenu_State_ShowYesNo
 	.public TouchscreenChoiceMenu_State_YesNoInput
 	.public TouchscreenChoiceMenu_State_YesNoEnd
 	.public TouchscreenChoiceMenu_State_Done
 	.public TouchscreenChoiceMenu_State_WaitReturn
-	.public TouchscreenChoiceMenu_MoveListSelection
 	.public TouchscreenChoiceMenu_State_ListEnd
 	.public TouchscreenChoiceMenu_State_ListWriteResult
-	.public TouchscreenChoiceMenu_SetYesNoCursorPos
-	.public TouchscreenChoiceMenu_SetListCursorPressed
 	.rodata
 
 _0225CEBC:

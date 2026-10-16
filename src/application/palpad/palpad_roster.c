@@ -6,6 +6,7 @@
 #include "msgdata/msg/msg_0779.h"
 
 #include "brightness.h"
+#include "frontier_save_access.h"
 #include "gf_g2d_renderer.h"
 #include "list_menu_items.h"
 #include "options.h"
@@ -17,7 +18,6 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "frontier_save_access.h"
 
 // input given to PalPadRoster_HandleAction
 enum PalPadRosterInput {
@@ -82,40 +82,42 @@ extern const struct {
 extern const NNSG2dViewRect sPalPadRenderSurfaceRect;
 extern const PalPadRosterScrollCallback sPalPadRosterScrollCallbacks[4];
 
-void PalPadRoster_Show(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
-void PalPadRoster_Hide(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx);
-int PalPadRoster_HandleAction(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, int input);
-int PalPadRoster_HandleKeys(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx);
-int PalPadRoster_HandleTouch(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, BOOL *touched);
-int PalPadRoster_HandleInput(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx);
-void PalPadRoster_StartPageScroll(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
-BOOL PalPadRoster_UpdatePageScroll(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
-void PalPadRoster_OpenFriendMenu(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
-int PalPadRoster_HandleFriendMenu(PalPadRoster *roster, u32 *inputState, PalPadGfx *gfx);
-BOOL PalPadRoster_ShowFriendCode(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
-void PalPadRoster_ConfirmDelete(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
-BOOL PalPadRoster_StartDeletePrompt(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx);
-void PalPadRoster_DrawPage(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, int page, int cursor, int panel, enum HeapID heapId);
-void PalPadRoster_DrawTabs(PalPadRoster *roster, PalPadGfx *gfx, int page);
-void PalPadRoster_StartScroll(PalPadRoster *roster, PalPadShared *shared, u16 dir);
-void PalPadRoster_PrintMessage(PalPadRoster *roster, PalPadGfx *gfx, int msgId, enum HeapID heapId);
-BOOL PalPadRoster_IsMessageDone(PalPadRoster *roster, u32 *inputState);
-void PalPadRoster_ClearMessage(PalPadRoster *roster);
-int PalPadRoster_GetSelectedIndex(PalPadRoster *roster);
-void PalPadRoster_MenuCallback(TouchscreenListMenu *menu, u8 index, void *data, int event);
-void PalPadRoster_StartDeleteEffect(PalPadRoster *roster, PalPadGfx *gfx);
-BOOL PalPadRoster_UpdateDeleteEffect(PalPadRoster *roster, PalPadGfx *gfx);
-void PalPadRoster_EndDeleteEffect(PalPadRoster *roster, PalPadGfx *gfx);
-void PalPadRosterPage_Init(PalPadRosterPage *page, PalPadGfx *gfx, const PalPadPanelLayout *layout, int baseTile, enum HeapID heapId);
-void PalPadRosterPage_Free(PalPadRosterPage *page, PalPadGfx *gfx);
-void PalPadRosterPage_DrawFrame(PalPadRosterPage *page, PalPadGfx *gfx, PalPadScreens *screens);
-void PalPadRoster_SetCursor(PalPadRosterPage *page, PalPadGfx *gfx, int cursor);
-void PalPadRosterPage_HighlightSlot(PalPadRosterPage *page, PalPadGfx *gfx, int cursor, int highlight);
-void PalPadRosterPage_Draw(PalPadRosterPage *page, PalPadShared *shared, PalPadGfx *gfx, CharSpriteManager *trainerIcons, PalPadScreens *screens, PalPadFriendList *friends, int pageNo, enum HeapID heapId);
-void PalPadRosterPage_Clear(PalPadRosterPage *page, PalPadGfx *gfx, PalPadScreens *screens);
-void PalPadRosterPage_DeleteIcons(PalPadRosterPage *page, PalPadGfx *gfx);
-void PalPadRosterPage_DrawFriend(PalPadRosterPage *page, CharSpriteManager *trainerIcons, PalPadGfx *gfx, PalPadScreens *screens, int slot, FriendRoster *wifiList, int friendSlot, enum HeapID heapId);
-void PalPadRosterPage_DrawEmptySlot(PalPadRosterPage *page, PalPadGfx *gfx, PalPadScreens *screens, int slot);
+static inline int Abs16(s16 value);
+static inline int AddTiles(int a, int b);
+static void PalPadRoster_Show(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
+static void PalPadRoster_Hide(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx);
+static int PalPadRoster_HandleAction(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, int input);
+static int PalPadRoster_HandleKeys(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx);
+static int PalPadRoster_HandleTouch(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, BOOL *touched);
+static int PalPadRoster_HandleInput(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx);
+static void PalPadRoster_StartPageScroll(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
+static BOOL PalPadRoster_UpdatePageScroll(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
+static void PalPadRoster_OpenFriendMenu(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
+static int PalPadRoster_HandleFriendMenu(PalPadRoster *roster, u32 *inputState, PalPadGfx *gfx);
+static BOOL PalPadRoster_ShowFriendCode(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
+static void PalPadRoster_ConfirmDelete(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
+static BOOL PalPadRoster_StartDeletePrompt(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx);
+static void PalPadRoster_DrawPage(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, int page, int cursor, int panel, enum HeapID heapId);
+static void PalPadRoster_DrawTabs(PalPadRoster *roster, PalPadGfx *gfx, int page);
+static void PalPadRoster_StartScroll(PalPadRoster *roster, PalPadShared *shared, u16 dir);
+static void PalPadRoster_PrintMessage(PalPadRoster *roster, PalPadGfx *gfx, int msgId, enum HeapID heapId);
+static BOOL PalPadRoster_IsMessageDone(PalPadRoster *roster, u32 *inputState);
+static void PalPadRoster_ClearMessage(PalPadRoster *roster);
+static int PalPadRoster_GetSelectedIndex(PalPadRoster *roster);
+static void PalPadRoster_MenuCallback(TouchscreenListMenu *menu, u8 index, void *data, int event);
+static void PalPadRoster_StartDeleteEffect(PalPadRoster *roster, PalPadGfx *gfx);
+static BOOL PalPadRoster_UpdateDeleteEffect(PalPadRoster *roster, PalPadGfx *gfx);
+static void PalPadRoster_EndDeleteEffect(PalPadRoster *roster, PalPadGfx *gfx);
+static void PalPadRosterPage_Init(PalPadRosterPage *page, PalPadGfx *gfx, const PalPadPanelLayout *layout, int baseTile, enum HeapID heapId);
+static void PalPadRosterPage_Free(PalPadRosterPage *page, PalPadGfx *gfx);
+static void PalPadRosterPage_DrawFrame(PalPadRosterPage *page, PalPadGfx *gfx, PalPadScreens *screens);
+static void PalPadRoster_SetCursor(PalPadRosterPage *page, PalPadGfx *gfx, int cursor);
+static void PalPadRosterPage_HighlightSlot(PalPadRosterPage *page, PalPadGfx *gfx, int cursor, int highlight);
+static void PalPadRosterPage_Draw(PalPadRosterPage *page, PalPadShared *shared, PalPadGfx *gfx, CharSpriteManager *trainerIcons, PalPadScreens *screens, PalPadFriendList *friends, int pageNo, enum HeapID heapId);
+static void PalPadRosterPage_Clear(PalPadRosterPage *page, PalPadGfx *gfx, PalPadScreens *screens);
+static void PalPadRosterPage_DeleteIcons(PalPadRosterPage *page, PalPadGfx *gfx);
+static void PalPadRosterPage_DrawFriend(PalPadRosterPage *page, CharSpriteManager *trainerIcons, PalPadGfx *gfx, PalPadScreens *screens, int slot, FriendRoster *wifiList, int friendSlot, enum HeapID heapId);
+static void PalPadRosterPage_DrawEmptySlot(PalPadRosterPage *page, PalPadGfx *gfx, PalPadScreens *screens, int slot);
 
 static inline int Abs16(s16 value) {
     return value < 0 ? -value : value;
@@ -359,7 +361,7 @@ void PalPadRoster_Teardown(PalPadRoster *roster, PalPadShared *shared, PalPadGfx
     }
 }
 
-void PalPadRoster_Show(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
+static void PalPadRoster_Show(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     NNSG2dScreenData *screen;
 
     PalPadGfx_PrintTitle(gfx, &gfx->titleWindow, msg_0779_00005);
@@ -373,7 +375,7 @@ void PalPadRoster_Show(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gf
     PalPadGfx_SetCursorPriority(gfx, 1, 16);
 }
 
-void PalPadRoster_Hide(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx) {
+static void PalPadRoster_Hide(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx) {
     int i;
     PalPadRosterPage *page;
 
@@ -390,7 +392,7 @@ void PalPadRoster_Hide(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gf
     ScheduleBgTilemapBufferTransfer(gfx->bgConfig, GF_BG_LYR_MAIN_0);
 }
 
-int PalPadRoster_HandleAction(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, int input) {
+static int PalPadRoster_HandleAction(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, int input) {
     int cursor;
     int page;
     u32 count;
@@ -428,7 +430,7 @@ int PalPadRoster_HandleAction(PalPadRoster *roster, PalPadShared *shared, PalPad
 #pragma force_active on
 
 // Slots 0-3 are the left column, 4-7 the right one, 8 the return button.
-int PalPadRoster_HandleKeys(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx) {
+static int PalPadRoster_HandleKeys(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx) {
     u16 prevCursor;
     BOOL moved, turnPage, right;
 
@@ -531,7 +533,7 @@ int PalPadRoster_HandleKeys(PalPadRoster *roster, PalPadShared *shared, PalPadGf
 #pragma force_active reset
 
 // hitboxes: 0-7 slots, 8 return, 9/10 arrows, 11-14 page tabs
-int PalPadRoster_HandleTouch(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, BOOL *touched) {
+static int PalPadRoster_HandleTouch(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, BOOL *touched) {
     u32 hit;
     int delta;
 
@@ -571,7 +573,7 @@ int PalPadRoster_HandleTouch(PalPadRoster *roster, PalPadShared *shared, PalPadG
 
 #pragma force_active on
 
-int PalPadRoster_HandleInput(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx) {
+static int PalPadRoster_HandleInput(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx) {
     BOOL touched = FALSE;
     int result = PalPadRoster_HandleTouch(roster, shared, gfx, &touched);
 
@@ -584,7 +586,7 @@ int PalPadRoster_HandleInput(PalPadRoster *roster, PalPadShared *shared, PalPadG
 
 #pragma force_active reset
 
-void PalPadRoster_StartPageScroll(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
+static void PalPadRoster_StartPageScroll(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     int panel;
 
     if (roster->scrollDir == 2) {
@@ -600,7 +602,7 @@ void PalPadRoster_StartPageScroll(PalPadRoster *roster, PalPadShared *shared, Pa
 
 #pragma force_active on
 
-BOOL PalPadRoster_UpdatePageScroll(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
+static BOOL PalPadRoster_UpdatePageScroll(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     NNSG2dViewRect rect;
     int offset;
 
@@ -633,7 +635,7 @@ BOOL PalPadRoster_UpdatePageScroll(PalPadRoster *roster, PalPadShared *shared, P
     return FALSE;
 }
 
-void PalPadRoster_OpenFriendMenu(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
+static void PalPadRoster_OpenFriendMenu(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     FriendRoster *wifiList;
     int index, codeState;
     TouchscreenListMenuHeader header;
@@ -661,7 +663,7 @@ void PalPadRoster_OpenFriendMenu(PalPadRoster *roster, PalPadShared *shared, Pal
 
 #pragma force_active reset
 
-int PalPadRoster_HandleFriendMenu(PalPadRoster *roster, u32 *inputState, PalPadGfx *gfx) {
+static int PalPadRoster_HandleFriendMenu(PalPadRoster *roster, u32 *inputState, PalPadGfx *gfx) {
     int result;
 
     if (!PalPadRoster_IsMessageDone(roster, inputState)) {
@@ -693,7 +695,7 @@ close:
     return result;
 }
 
-BOOL PalPadRoster_ShowFriendCode(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
+static BOOL PalPadRoster_ShowFriendCode(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     int index;
     u8 *slots;
     FriendRoster *wifiList;
@@ -712,14 +714,14 @@ BOOL PalPadRoster_ShowFriendCode(PalPadRoster *roster, PalPadShared *shared, Pal
     return TRUE;
 }
 
-void PalPadRoster_ConfirmDelete(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
+static void PalPadRoster_ConfirmDelete(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     int index = PalPadRoster_GetSelectedIndex(roster);
 
     PalPadGfx_BufferFriendName(gfx, shared->saveData, shared->friends.slots[index], heapId);
     PalPadRoster_PrintMessage(roster, gfx, msg_0779_00057, heapId);
 }
 
-BOOL PalPadRoster_StartDeletePrompt(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx) {
+static BOOL PalPadRoster_StartDeletePrompt(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx) {
     if (!PalPadRoster_IsMessageDone(roster, &shared->inputState)) {
         return FALSE;
     }
@@ -728,7 +730,7 @@ BOOL PalPadRoster_StartDeletePrompt(PalPadRoster *roster, PalPadShared *shared, 
 }
 
 // panel 0 is the visible page; 1 / 2 are drawn off screen for a scroll to the right / left
-void PalPadRoster_DrawPage(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, int page, int cursor, int panel, enum HeapID heapId) {
+static void PalPadRoster_DrawPage(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, int page, int cursor, int panel, enum HeapID heapId) {
     PalPadRosterPage *rosterPage;
 
     if (panel == 0) {
@@ -742,7 +744,7 @@ void PalPadRoster_DrawPage(PalPadRoster *roster, PalPadShared *shared, PalPadGfx
     PalPadRoster_SetCursor(rosterPage, gfx, cursor);
 }
 
-void PalPadRoster_DrawTabs(PalPadRoster *roster, PalPadGfx *gfx, int page) {
+static void PalPadRoster_DrawTabs(PalPadRoster *roster, PalPadGfx *gfx, int page) {
     NNSG2dScreenData *screen = gfx->screens.data[1];
 
     CopyToBgTilemapRect(gfx->bgConfig, GF_BG_LYR_MAIN_0, 16, 0, 16, 4, screen->rawData, 0, 4, screen->screenWidth >> 3, screen->screenHeight >> 3);
@@ -767,7 +769,7 @@ void PalPadRoster_DrawTabsOnScroll(PalPadRoster *roster, PalPadGfx *gfx, s16 pag
     ScheduleBgTilemapBufferTransfer(gfx->bgConfig, GF_BG_LYR_MAIN_0);
 }
 
-void PalPadRoster_StartScroll(PalPadRoster *roster, PalPadShared *shared, u16 dir) {
+static void PalPadRoster_StartScroll(PalPadRoster *roster, PalPadShared *shared, u16 dir) {
     shared->subState = PALPAD_ROSTER_STATE_START_SCROLL;
     roster->scrollDir = dir;
     roster->scrollStep = 0;
@@ -775,7 +777,7 @@ void PalPadRoster_StartScroll(PalPadRoster *roster, PalPadShared *shared, u16 di
 
 #pragma force_active on
 
-void PalPadRoster_PrintMessage(PalPadRoster *roster, PalPadGfx *gfx, int msgId, enum HeapID heapId) {
+static void PalPadRoster_PrintMessage(PalPadRoster *roster, PalPadGfx *gfx, int msgId, enum HeapID heapId) {
     String *buffer;
 
     FillWindowPixelBuffer(&roster->msgWindow, 15);
@@ -789,7 +791,7 @@ void PalPadRoster_PrintMessage(PalPadRoster *roster, PalPadGfx *gfx, int msgId, 
     String_Delete(buffer);
 }
 
-BOOL PalPadRoster_IsMessageDone(PalPadRoster *roster, u32 *inputState) {
+static BOOL PalPadRoster_IsMessageDone(PalPadRoster *roster, u32 *inputState) {
     if (TextPrinterCheckActive(roster->printerId) == FALSE) {
         TextFlags_SetCanTouchSpeedUpPrint(FALSE);
         *inputState = TextFlags_GetIsTouchSpeedingUpPrint();
@@ -800,18 +802,18 @@ BOOL PalPadRoster_IsMessageDone(PalPadRoster *roster, u32 *inputState) {
 
 #pragma force_active reset
 
-void PalPadRoster_ClearMessage(PalPadRoster *roster) {
+static void PalPadRoster_ClearMessage(PalPadRoster *roster) {
     ClearFrameAndWindow2(&roster->msgWindow, TRUE);
     ClearWindowTilemapAndScheduleTransfer(&roster->msgWindow);
     ScheduleWindowCopyToVram(&roster->returnWindow);
 }
 
-int PalPadRoster_GetSelectedIndex(PalPadRoster *roster) {
+static int PalPadRoster_GetSelectedIndex(PalPadRoster *roster) {
     int index = roster->page << 3;
     return index + roster->cursor;
 }
 
-void PalPadRoster_MenuCallback(TouchscreenListMenu *menu, u8 index, void *data, int event) {
+static void PalPadRoster_MenuCallback(TouchscreenListMenu *menu, u8 index, void *data, int event) {
     if (event == 1) {
         PlaySE(SEQ_SE_DP_SELECT);
         return;
@@ -826,7 +828,7 @@ void PalPadRoster_MenuCallback(TouchscreenListMenu *menu, u8 index, void *data, 
 }
 
 // The deleted friend's slot is wiped by an animated sprite inside an OBJ window.
-void PalPadRoster_StartDeleteEffect(PalPadRoster *roster, PalPadGfx *gfx) {
+static void PalPadRoster_StartDeleteEffect(PalPadRoster *roster, PalPadGfx *gfx) {
     VecFx32 pos;
     int cursor;
     u32 reg;
@@ -853,7 +855,7 @@ void PalPadRoster_StartDeleteEffect(PalPadRoster *roster, PalPadGfx *gfx) {
     PlaySE(SEQ_SE_DP_UG_025);
 }
 
-BOOL PalPadRoster_UpdateDeleteEffect(PalPadRoster *roster, PalPadGfx *gfx) {
+static BOOL PalPadRoster_UpdateDeleteEffect(PalPadRoster *roster, PalPadGfx *gfx) {
     int frame;
 
     if (!Sprite_IsAnimated(roster->deleteEffect)) {
@@ -869,14 +871,14 @@ BOOL PalPadRoster_UpdateDeleteEffect(PalPadRoster *roster, PalPadGfx *gfx) {
 
 #pragma force_active on
 
-void PalPadRoster_EndDeleteEffect(PalPadRoster *roster, PalPadGfx *gfx) {
+static void PalPadRoster_EndDeleteEffect(PalPadRoster *roster, PalPadGfx *gfx) {
     reg_GX_DISPCNT &= 0xFFFF1FFF;
     Sprite_SetDrawFlag(roster->deleteEffect, FALSE);
     Sprite_SetAnimActiveFlag(roster->deleteEffect, FALSE);
     PalPadGfx_SetCursor(gfx, TRUE, 0xFF);
 }
 
-void PalPadRosterPage_Init(PalPadRosterPage *page, PalPadGfx *gfx, const PalPadPanelLayout *layout, int baseTile, enum HeapID heapId) {
+static void PalPadRosterPage_Init(PalPadRosterPage *page, PalPadGfx *gfx, const PalPadPanelLayout *layout, int baseTile, enum HeapID heapId) {
     int y, x;
 
     page->layout = *layout;
@@ -894,11 +896,11 @@ void PalPadRosterPage_Init(PalPadRosterPage *page, PalPadGfx *gfx, const PalPadP
 
 #pragma force_active reset
 
-void PalPadRosterPage_Free(PalPadRosterPage *page, PalPadGfx *gfx) {
+static void PalPadRosterPage_Free(PalPadRosterPage *page, PalPadGfx *gfx) {
     RemoveWindow(&page->window);
 }
 
-void PalPadRosterPage_DrawFrame(PalPadRosterPage *page, PalPadGfx *gfx, PalPadScreens *screens) {
+static void PalPadRosterPage_DrawFrame(PalPadRosterPage *page, PalPadGfx *gfx, PalPadScreens *screens) {
     int y = page->layout.y;
     if (y < 0) {
         y = -y;
@@ -912,7 +914,7 @@ void PalPadRosterPage_DrawFrame(PalPadRosterPage *page, PalPadGfx *gfx, PalPadSc
     ScheduleBgTilemapBufferTransfer(gfx->bgConfig, GF_BG_LYR_MAIN_2);
 }
 
-void PalPadRoster_SetCursor(PalPadRosterPage *page, PalPadGfx *gfx, int cursor) {
+static void PalPadRoster_SetCursor(PalPadRosterPage *page, PalPadGfx *gfx, int cursor) {
     if (cursor == ROSTER_CURSOR_HIDDEN) {
         PalPadGfx_SetCursor(gfx, FALSE, 0xFF);
         return;
@@ -922,7 +924,7 @@ void PalPadRoster_SetCursor(PalPadRosterPage *page, PalPadGfx *gfx, int cursor) 
     PalPadGfx_SetCursor(gfx, TRUE, 0xFF);
 }
 
-void PalPadRosterPage_HighlightSlot(PalPadRosterPage *page, PalPadGfx *gfx, int cursor, int highlight) {
+static void PalPadRosterPage_HighlightSlot(PalPadRosterPage *page, PalPadGfx *gfx, int cursor, int highlight) {
     int i;
 
     for (i = 0; i < 9; i++) {
@@ -934,7 +936,7 @@ void PalPadRosterPage_HighlightSlot(PalPadRosterPage *page, PalPadGfx *gfx, int 
     ScheduleBgTilemapBufferTransfer(gfx->bgConfig, GF_BG_LYR_MAIN_0);
 }
 
-void PalPadRosterPage_Draw(PalPadRosterPage *page, PalPadShared *shared, PalPadGfx *gfx, CharSpriteManager *trainerIcons, PalPadScreens *screens, PalPadFriendList *friends, int pageNo, enum HeapID heapId) {
+static void PalPadRosterPage_Draw(PalPadRosterPage *page, PalPadShared *shared, PalPadGfx *gfx, CharSpriteManager *trainerIcons, PalPadScreens *screens, PalPadFriendList *friends, int pageNo, enum HeapID heapId) {
     int first, i;
     FriendRoster *wifiList;
 
@@ -955,7 +957,7 @@ void PalPadRosterPage_Draw(PalPadRosterPage *page, PalPadShared *shared, PalPadG
     ScheduleWindowCopyToVram(&page->window);
 }
 
-void PalPadRosterPage_Clear(PalPadRosterPage *page, PalPadGfx *gfx, PalPadScreens *screens) {
+static void PalPadRosterPage_Clear(PalPadRosterPage *page, PalPadGfx *gfx, PalPadScreens *screens) {
     PalPadRosterPage_DeleteIcons(page, gfx);
     ClearWindowTilemapAndScheduleTransfer(&page->window);
     FillBgTilemapRect(gfx->bgConfig, GF_BG_LYR_MAIN_2, 0, Abs16(page->layout.x), Abs16(page->layout.y), page->layout.width, page->layout.height, 0);
@@ -964,7 +966,7 @@ void PalPadRosterPage_Clear(PalPadRosterPage *page, PalPadGfx *gfx, PalPadScreen
     ScheduleBgTilemapBufferTransfer(gfx->bgConfig, GF_BG_LYR_MAIN_3);
 }
 
-void PalPadRosterPage_DeleteIcons(PalPadRosterPage *page, PalPadGfx *gfx) {
+static void PalPadRosterPage_DeleteIcons(PalPadRosterPage *page, PalPadGfx *gfx) {
     int i;
 
     for (i = 0; i < PALPAD_ROSTER_PAGE_SLOT; i++) {
@@ -977,11 +979,11 @@ void PalPadRosterPage_DeleteIcons(PalPadRosterPage *page, PalPadGfx *gfx) {
 
 #pragma force_active on
 
-void PalPadRosterPage_DrawFriend(PalPadRosterPage *page, CharSpriteManager *trainerIcons, PalPadGfx *gfx, PalPadScreens *screens, int slot, FriendRoster *wifiList, int friendSlot, enum HeapID heapId) {
+static void PalPadRosterPage_DrawFriend(PalPadRosterPage *page, CharSpriteManager *trainerIcons, PalPadGfx *gfx, PalPadScreens *screens, int slot, FriendRoster *wifiList, int friendSlot, enum HeapID heapId) {
     int avatar, gender;
     s16 position[4];
     String *string;
-    u8 *owner = (u8 *)page; // the original addresses the icons and the window through a byte pointer
+    u8 *owner = (u8 *)page;
 
     avatar = FriendRoster_GetEntryField(wifiList, friendSlot, 7);
     gender = FriendRoster_GetEntryField(wifiList, friendSlot, 8);
@@ -1002,10 +1004,10 @@ void PalPadRosterPage_DrawFriend(PalPadRosterPage *page, CharSpriteManager *trai
 
 #pragma force_active reset
 
-void PalPadRosterPage_DrawEmptySlot(PalPadRosterPage *page, PalPadGfx *gfx, PalPadScreens *screens, int slot) {
+static void PalPadRosterPage_DrawEmptySlot(PalPadRosterPage *page, PalPadGfx *gfx, PalPadScreens *screens, int slot) {
     int y = page->layout.y;
     int x;
-    int offset = slot; // byte offset into the slot table, scaled below (kept for the original's order)
+    int offset = slot; // byte offset into the slot table, scaled below
     NNSG2dScreenData *screen;
 
     if (y < 0) {

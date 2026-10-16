@@ -46,9 +46,6 @@
 .public gOverlayTemplate_Battle
 .public gNatureStatMods
 
-	.public ConditionChart_GetVertex
-	.public ConditionChart_GetStep
-	.public PokemonSummary_GetTouchedButton
 	.public _02104EA4
 	.public _02104EB0
 	.public _02104EC2

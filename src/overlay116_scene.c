@@ -1,6 +1,9 @@
 #include "overlay116_scene_internal.h"
 
-const Ov116Sequence gLugiaSequence = { 0x28, 5, 8, 0x3C, 0x100, -0x226000, 0x800, 5, 13 };
+static void LegendaryEffect_ApplyCameraKey(Ov116FieldSystem *fieldSystem, const Ov116CameraKey *key);
+static void LegendaryEffect_RunBirdSequence(void *sysTask, Ov116Task *task, const Ov116Sequence *seq);
+
+static const Ov116Sequence sLugiaSequence = { 0x28, 5, 8, 0x3C, 0x100, -0x226000, 0x800, 5, 13 };
 static const Ov116Sequence sHoOhSequence = { 0x28, 5, 8, 0x3C, 0x100, -0x294000, 0x800, 5, 13 };
 
 static const Ov116CameraKey sPanKeys[] = {
@@ -22,7 +25,7 @@ static const Ov116CameraKey sPanKeys[] = {
     { 0x29AEC1, 0xD602, 0,      0x0241, 1 },
 };
 
-void LegendaryEffect_ApplyCameraKey(Ov116FieldSystem *fieldSystem, const Ov116CameraKey *key) {
+static void LegendaryEffect_ApplyCameraKey(Ov116FieldSystem *fieldSystem, const Ov116CameraKey *key) {
     Ov116CameraAngle angle;
     Camera_SetPerspectiveAngle(key->perspective, fieldSystem->camera);
     Camera_SetDistance(key->distance, fieldSystem->camera);
@@ -92,7 +95,7 @@ void EncounterEffect_Legendary(void *sysTask, Ov116Task *task) {
     }
 }
 
-void LegendaryEffect_RunBirdSequence(void *sysTask, Ov116Task *task, const Ov116Sequence *seq) {
+static void LegendaryEffect_RunBirdSequence(void *sysTask, Ov116Task *task, const Ov116Sequence *seq) {
     Ov116MoveWork *work = task->work;
     int done;
     switch (task->state) {
@@ -173,5 +176,5 @@ void EncounterEffect_HoOh(void *sysTask, Ov116Task *task) {
 }
 
 void EncounterEffect_Lugia(void *sysTask, Ov116Task *task) {
-    LegendaryEffect_RunBirdSequence(sysTask, task, &gLugiaSequence);
+    LegendaryEffect_RunBirdSequence(sysTask, task, &sLugiaSequence);
 }

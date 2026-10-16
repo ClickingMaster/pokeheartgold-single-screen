@@ -15,15 +15,15 @@
 #include "pokepic.h"
 #include "render_text.h"
 #include "save_misc_data.h"
+#include "sprite_resource_header.h"
 #include "sprite_system.h"
+#include "swap_3d_buffers.h"
 #include "sys_task_api.h"
 #include "system.h"
 #include "touch_hitbox_controller.h"
 #include "touchpad.h"
-#include "sprite_resource_header.h"
-#include "swap_3d_buffers.h"
-#include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
+#include "wireless_status_icon.h"
 
 // VS Recorder app core: resources, BG / sprite setup, V-blank and the screen dispatcher.
 
@@ -73,6 +73,9 @@ extern VsRecorderScreenFunc sVsRecorderVideoSearchSubStates[];
 extern VsRecorderScreenFunc sVsRecorderNumberSearchSubStates[];
 extern VsRecorderScreenFunc sVsRecorderSendVideoSubStates[];
 extern VsRecorderScreenFunc sVsRecorderDeleteSubStates[];
+
+static void VsRecorder_InitBgLayers(BgConfig *bgConfig);
+static void VsRecorder_InitSpriteSystem(VsRecorderWork *work);
 
 #pragma force_active on
 
@@ -210,7 +213,7 @@ void VsRecorder_FreeResources(VsRecorderWork *work) {
 
 #pragma force_active on
 
-void VsRecorder_InitBgLayers(BgConfig *bgConfig) {
+static void VsRecorder_InitBgLayers(BgConfig *bgConfig) {
     GraphicsModes modes;
     GraphicsBanks banks;
     GfGfx_DisableEngineAPlanes();
@@ -264,7 +267,7 @@ void VsRecorder_ResetBg2(VsRecorderWork *work) {
     InitBgFromTemplate(work->bgConfig, GF_BG_LYR_MAIN_2, &sVsRecorderBgTemplate_Main2, GF_BG_TYPE_TEXT);
 }
 
-void VsRecorder_InitSpriteSystem(VsRecorderWork *work) {
+static void VsRecorder_InitSpriteSystem(VsRecorderWork *work) {
     OamManagerParam oamManagerParam;
     OamCharTransferParam oamCharTransferParam;
     SpriteResourceCountsListUnion counts;

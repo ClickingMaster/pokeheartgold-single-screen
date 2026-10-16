@@ -13,14 +13,9 @@
 	.public sShipDepartureCutsceneGraphicsBanks
 	.public ShipDepartureCutscene_Init
 	.public ShipDepartureCutscene_Exit
-	.public ShipDepartureCutscene_InitGraphics
-	.public ShipDepartureCutscene_SetBanks
-	.public ShipDepartureCutscene_InitCamera
-	.public ShipDepartureCutscene_LoadModel
 	.public sShipDepartureCutsceneModelScale
 	.public sShipDepartureCutsceneModelRotation
 	.public ShipDepartureCutscene_Main
-	.public ShipDepartureCutscene_SetBanks
 
 
 	.public sShipDepartureCutscenePort1SceneSE

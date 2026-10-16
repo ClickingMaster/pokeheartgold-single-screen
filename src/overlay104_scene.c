@@ -1,14 +1,15 @@
 #include "overlay104_scene_internal.h"
 
+static void Ov104Scene_InitGraphics(void);
+static void Ov104Scene_SetupCamera(Ov104Work *work);
+static void Ov104Scene_SetGfxBanks(void);
+static void Ov104Scene_LoadModels(Ov104Work *work);
+static BOOL Ov104Scene_IsStepAnimDone(Ov104Model *model, int idx);
+static void Ov104Scene_StartStepFadeOut(int idx, enum HeapID heapId);
+
 BOOL Ov104Scene_Init(OverlayManager *man, int *state);
 BOOL Ov104Scene_Main(OverlayManager *man, int *state);
 BOOL Ov104Scene_Exit(OverlayManager *man, int *state);
-void Ov104Scene_InitGraphics(void);
-void Ov104Scene_SetupCamera(Ov104Work *work);
-void Ov104Scene_SetGfxBanks(void);
-void Ov104Scene_LoadModels(Ov104Work *work);
-BOOL Ov104Scene_IsStepAnimDone(Ov104Model *model, int idx);
-void Ov104Scene_StartStepFadeOut(int idx, enum HeapID heapId);
 
 static const u32 sSeTableA[3] = { 0x6D5, 0x6F3, 0x6F1 };
 static const VecFx32 sModelScale = { FX32_ONE, FX32_ONE, FX32_ONE };
@@ -203,7 +204,7 @@ BOOL Ov104Scene_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-void Ov104Scene_InitGraphics(void) {
+static void Ov104Scene_InitGraphics(void) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     GfGfx_DisableEngineAPlanes();
@@ -217,7 +218,7 @@ void Ov104Scene_InitGraphics(void) {
     GfGfx_SwapDisplay();
 }
 
-void Ov104Scene_SetupCamera(Ov104Work *work) {
+static void Ov104Scene_SetupCamera(Ov104Work *work) {
     VecFx32 target = { 0, 0, 0 };
     u8 step;
     u8 scene;
@@ -231,12 +232,12 @@ void Ov104Scene_SetupCamera(Ov104Work *work) {
     Camera_SetStaticPtr(work->camera);
 }
 
-void Ov104Scene_SetGfxBanks(void) {
+static void Ov104Scene_SetGfxBanks(void) {
     GraphicsBanks banks = sBanks;
     GfGfx_SetBanks(&banks);
 }
 
-void Ov104Scene_LoadModels(Ov104Work *work) {
+static void Ov104Scene_LoadModels(Ov104Work *work) {
     u8 i;
     u8 j;
     Ov104ModelIds *ids;
@@ -302,7 +303,7 @@ void Ov104Scene_LoadModels(Ov104Work *work) {
     NARC_Delete(narc);
 }
 
-BOOL Ov104Scene_IsStepAnimDone(Ov104Model *model, int idx) {
+static BOOL Ov104Scene_IsStepAnimDone(Ov104Model *model, int idx) {
     if (idx + 1 >= 3) {
         if (((Ov104AnmObj *)model->anmObj[0])->frame + FX32_ONE == 205 * FX32_ONE) {
             return TRUE;
@@ -315,7 +316,7 @@ BOOL Ov104Scene_IsStepAnimDone(Ov104Model *model, int idx) {
     return FALSE;
 }
 
-void Ov104Scene_StartStepFadeOut(int idx, enum HeapID heapId) {
+static void Ov104Scene_StartStepFadeOut(int idx, enum HeapID heapId) {
     if (idx + 1 >= 3) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, 0, 6, 1, heapId);
     } else {

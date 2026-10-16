@@ -6,12 +6,15 @@
 
 #include "bag.h"
 #include "colosseum_internal.h"
+#include "comm_state.h"
+#include "communication_core.h"
 #include "communication_player_state.h"
 #include "dialog_box.h"
 #include "heap.h"
 #include "launch_application.h"
 #include "link_synchronization.h"
 #include "map_object.h"
+#include "map_object_movement_commands.h"
 #include "player_avatar.h"
 #include "pokedex_util.h"
 #include "pokemon.h"
@@ -23,12 +26,7 @@
 #include "system.h"
 #include "text.h"
 #include "union_room_internal.h"
-#include "communication_core.h"
-#include "comm_state.h"
-#include "map_object_movement_commands.h"
 
-// Communication core and communication player manager functions, declared with the types their call sites were
-// matched against.
 BOOL Comm_SendParentCommand(int command, void *data, int size);
 BOOL Comm_SendParentCommandNoCopy(int command, void *data, u32 size);
 BOOL Comm_SendCommandNoCopy(int command, void *data, u32 size);
@@ -43,20 +41,41 @@ int CommPlayerManager_GetPlayerFrontZ(int netId);
 u8 *CommClubLink_GetCard(int netId, int a1, int a2);
 int LinkSync_GetPlayerState(int netId);
 
-// The cursor position is passed as an int here (u8 x, y in list_menu_cursor.h).
 #define ListMenuUpdateCursorObj_Int ((void (*)(struct ListMenuCursor *, Window *, int, int))ListMenuUpdateCursorObj)
+
+static void Colosseum_OpenSummary(ColosseumEntry *entry, FieldSystem *fieldSystem, Party *party, int partySlot, int mode, enum HeapID heapId);
+static void Colosseum_OpenPartyMenu(ColosseumEntry *entry, enum HeapID heapId);
+static BOOL Colosseum_FinishSummary(ColosseumEntry *entry, FieldSystem *fieldSystem);
+static BOOL Colosseum_WaitFieldResumed(ColosseumEntry *entry);
+static BOOL Colosseum_AnyPlayerCancelled(void);
+static BOOL Task_ColosseumEntry(TaskManager *taskManager);
+static u8 Colosseum_PrintMessage(ColosseumEntry *entry, String *message);
+static void Colosseum_RemoveWindows(ColosseumEntry *entry, BOOL clearFrame);
+static void Colosseum_FreeEntry(ColosseumEntry *entry);
+static ColosseumEntry *Colosseum_GetEntry(FieldSystem *fieldSystem);
+static void Colosseum_PackMixBattleMons(ColosseumEntry *entry, BOOL ready);
+static BOOL Colosseum_SendMixBattleMons(ColosseumEntry *entry);
+static BOOL Colosseum_MixBattleMonsExchanged(ColosseumEntry *entry);
+static BOOL Colosseum_OpponentIsReady(ColosseumEntry *entry);
+static BOOL Colosseum_SendMixBattleChoice(ColosseumEntry *entry);
+static BOOL Colosseum_MixBattleChoicesExchanged(ColosseumEntry *entry);
+static void Colosseum_SetOpponentParty(ColosseumEntry *entry);
+static void Colosseum_ExchangeMixBattleMons(ColosseumEntry *entry);
+static void Colosseum_ShowOpponentMons(ColosseumEntry *entry, int cursor);
+static void Colosseum_ShowChoiceMenu(ColosseumEntry *entry, int cursor);
+static void Colosseum_CloseMenu(ColosseumEntry *entry);
 
 // Summary pages shown for a Pokemon of the party being entered.
 ALIGN(4)
-const u8 _020FC7CC[8] = { 0, 1, 2, 3, 4, 0, 0, 0 };
+static const u8 _020FC7CC[8] = { 0, 1, 2, 3, 4, 0, 0, 0 };
 
-// Union Room state (union_room.c); defined here for link order.
+// Union Room state.
 ALIGN(4)
 UnionRoomScratch _021D41CC = { 0 };
 ALIGN(4)
 void *_021D41D8[UNION_ROOM_MAX_RECORDS] = { 0 };
 
-void Colosseum_OpenSummary(ColosseumEntry *entry, FieldSystem *fieldSystem, Party *party, int partySlot, int mode, enum HeapID heapId) {
+static void Colosseum_OpenSummary(ColosseumEntry *entry, FieldSystem *fieldSystem, Party *party, int partySlot, int mode, enum HeapID heapId) {
     SaveData *saveData = fieldSystem->saveData;
     PokemonSummaryArgs *args = Heap_AllocAtEnd(heapId, sizeof(PokemonSummaryArgs));
     MI_CpuFill8(args, 0, sizeof(PokemonSummaryArgs));
@@ -78,7 +97,7 @@ void Colosseum_OpenSummary(ColosseumEntry *entry, FieldSystem *fieldSystem, Part
     entry->summaryArgs = args;
 }
 
-void Colosseum_OpenPartyMenu(ColosseumEntry *entry, enum HeapID heapId) {
+static void Colosseum_OpenPartyMenu(ColosseumEntry *entry, enum HeapID heapId) {
     PartyMenuArgs *args = Heap_Alloc(heapId, sizeof(PartyMenuArgs));
     int i;
     MI_CpuFill8(args, 0, sizeof(PartyMenuArgs));
@@ -130,7 +149,7 @@ done:
     return TRUE;
 }
 
-BOOL Colosseum_FinishSummary(ColosseumEntry *entry, FieldSystem *fieldSystem) {
+static BOOL Colosseum_FinishSummary(ColosseumEntry *entry, FieldSystem *fieldSystem) {
     if (FieldSystem_ApplicationIsRunning(fieldSystem)) {
         return FALSE;
     }
@@ -140,7 +159,7 @@ BOOL Colosseum_FinishSummary(ColosseumEntry *entry, FieldSystem *fieldSystem) {
     return TRUE;
 }
 
-BOOL Colosseum_WaitFieldResumed(ColosseumEntry *entry) {
+static BOOL Colosseum_WaitFieldResumed(ColosseumEntry *entry) {
     if (FieldSystem_IsOverworldRestored(entry->fieldSystem) != 0) {
         FieldMap_FadeScreen(FADE_TYPE_BRIGHTNESS_IN);
         CommPlayerManager_ResyncLocalPlayer();
@@ -149,7 +168,7 @@ BOOL Colosseum_WaitFieldResumed(ColosseumEntry *entry) {
     return FALSE;
 }
 
-BOOL Colosseum_AnyPlayerCancelled(void) {
+static BOOL Colosseum_AnyPlayerCancelled(void) {
     int i;
     int count = Comm_CountConnected();
     i = 0;
@@ -161,7 +180,7 @@ BOOL Colosseum_AnyPlayerCancelled(void) {
     return FALSE;
 }
 
-BOOL Task_ColosseumEntry(TaskManager *taskManager) {
+static BOOL Task_ColosseumEntry(TaskManager *taskManager) {
     ColosseumEntry *entry = TaskManager_GetEnvironment(taskManager);
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
 
@@ -523,7 +542,7 @@ BOOL Task_ColosseumEntry(TaskManager *taskManager) {
     return FALSE;
 }
 
-u8 Colosseum_PrintMessage(ColosseumEntry *entry, String *message) {
+static u8 Colosseum_PrintMessage(ColosseumEntry *entry, String *message) {
     Window *window = &entry->messageWindow;
     Options *options;
     if (!WindowIsInUse(window)) {
@@ -537,7 +556,7 @@ u8 Colosseum_PrintMessage(ColosseumEntry *entry, String *message) {
     return DialogBox_PrintMessage(window, message, options, TRUE);
 }
 
-void Colosseum_RemoveWindows(ColosseumEntry *entry, BOOL clearFrame) {
+static void Colosseum_RemoveWindows(ColosseumEntry *entry, BOOL clearFrame) {
     if (WindowIsInUse(&entry->messageWindow)) {
         if (clearFrame) {
             ClearFrameAndWindow2(&entry->messageWindow, FALSE);
@@ -606,7 +625,7 @@ void Colosseum_StartEntry(FieldSystem *fieldSystem, ColosseumEntryCallback callb
     FieldSystem_CreateTask(fieldSystem, Task_ColosseumEntry, entry);
 }
 
-void Colosseum_FreeEntry(ColosseumEntry *entry) {
+static void Colosseum_FreeEntry(ColosseumEntry *entry) {
     if (entry->party) {
         Heap_Free(entry->party);
     }
@@ -624,12 +643,12 @@ void Colosseum_FreeEntry(ColosseumEntry *entry) {
     Colosseum_RemoveWindows(entry, TRUE);
 }
 
-ColosseumEntry *Colosseum_GetEntry(FieldSystem *fieldSystem) {
+static ColosseumEntry *Colosseum_GetEntry(FieldSystem *fieldSystem) {
     return TaskManager_GetEnvironment(fieldSystem->taskman);
 }
 
 // The three Pokemon sent in a Mix Battle, followed by the ready flag (NULL: we cancelled).
-void Colosseum_PackMixBattleMons(ColosseumEntry *entry, BOOL ready) {
+static void Colosseum_PackMixBattleMons(ColosseumEntry *entry, BOOL ready) {
     Party *party = SaveArray_Party_Get(entry->fieldSystem->saveData);
     u8 *buffer = entry->sentMons;
     u32 size = Pokemon_sizeof();
@@ -646,7 +665,7 @@ void Colosseum_PackMixBattleMons(ColosseumEntry *entry, BOOL ready) {
 
 #pragma force_active on
 
-BOOL Colosseum_SendMixBattleMons(ColosseumEntry *entry) {
+static BOOL Colosseum_SendMixBattleMons(ColosseumEntry *entry) {
     BOOL result;
     if ((entry->exchangeFlags & COLOSSEUM_EXCHANGE_SENT) == 0) {
         u8 *mons = entry->sentMons;
@@ -667,16 +686,16 @@ BOOL Colosseum_SendMixBattleMons(ColosseumEntry *entry) {
 
 #pragma force_active off
 
-BOOL Colosseum_MixBattleMonsExchanged(ColosseumEntry *entry) {
+static BOOL Colosseum_MixBattleMonsExchanged(ColosseumEntry *entry) {
     return entry->exchangeFlags == COLOSSEUM_EXCHANGE_DONE;
 }
 
-BOOL Colosseum_OpponentIsReady(ColosseumEntry *entry) {
+static BOOL Colosseum_OpponentIsReady(ColosseumEntry *entry) {
     u32 size = Pokemon_sizeof();
     return *(BOOL *)(entry->receivedMons + size * COLOSSEUM_MIX_BATTLE_MONS);
 }
 
-BOOL Colosseum_SendMixBattleChoice(ColosseumEntry *entry) {
+static BOOL Colosseum_SendMixBattleChoice(ColosseumEntry *entry) {
     BOOL result;
     if (entry->netId == 0) {
         result = Comm_SendParentCommand(107, &entry->choice, 1);
@@ -689,11 +708,11 @@ BOOL Colosseum_SendMixBattleChoice(ColosseumEntry *entry) {
     return result;
 }
 
-BOOL Colosseum_MixBattleChoicesExchanged(ColosseumEntry *entry) {
+static BOOL Colosseum_MixBattleChoicesExchanged(ColosseumEntry *entry) {
     return entry->exchangeFlags == COLOSSEUM_EXCHANGE_DONE;
 }
 
-void Colosseum_SetOpponentParty(ColosseumEntry *entry) {
+static void Colosseum_SetOpponentParty(ColosseumEntry *entry) {
     u32 size = Pokemon_sizeof();
     int i;
     Party_InitWithMaxSize(entry->party, COLOSSEUM_MIX_BATTLE_MONS);
@@ -703,7 +722,7 @@ void Colosseum_SetOpponentParty(ColosseumEntry *entry) {
 }
 
 // Our Pokemon the opponent picked is replaced with the one we picked from theirs.
-void Colosseum_ExchangeMixBattleMons(ColosseumEntry *entry) {
+static void Colosseum_ExchangeMixBattleMons(ColosseumEntry *entry) {
     u32 size = Pokemon_sizeof();
     u8 choice = entry->choice;
     u8 opponentChoice = entry->opponentChoice;
@@ -717,7 +736,7 @@ void Colosseum_ExchangeMixBattleMons(ColosseumEntry *entry) {
 
 #pragma force_active on
 
-void Colosseum_ShowOpponentMons(ColosseumEntry *entry, int cursor) {
+static void Colosseum_ShowOpponentMons(ColosseumEntry *entry, int cursor) {
     Window *window = &entry->monListWindow;
     u32 monSize;
     MsgData *speciesNames;
@@ -752,7 +771,7 @@ void Colosseum_ShowOpponentMons(ColosseumEntry *entry, int cursor) {
 #pragma force_active off
 
 // SUMMARY / OK / CANCEL for the picked Pokemon.
-void Colosseum_ShowChoiceMenu(ColosseumEntry *entry, int cursor) {
+static void Colosseum_ShowChoiceMenu(ColosseumEntry *entry, int cursor) {
     Window *window = &entry->choiceWindow;
     int i;
     int y;
@@ -807,7 +826,7 @@ int Colosseum_HandleMenuInput(ColosseumEntry *entry) {
     return COLOSSEUM_MENU_NONE;
 }
 
-void Colosseum_CloseMenu(ColosseumEntry *entry) {
+static void Colosseum_CloseMenu(ColosseumEntry *entry) {
     EraseFrameAndWindow1(entry->menuWindow, TRUE);
 }
 

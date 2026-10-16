@@ -8,24 +8,8 @@
 	.public TrainerCardSignature_Init
 	.public TrainerCardSignature_Main
 	.public sTrainerCardSignatureDoneButtonPos
-	.public TrainerCardSignature_InitBgLayers
-	.public TrainerCardSignature_InitStrings
-	.public TrainerCardSignature_LoadBgGraphics
-	.public TrainerCardSignature_InitSpriteResources
-	.public TrainerCardSignature_CreateDoneButtonSprite
-	.public TrainerCardSignature_PrintCentered
-	.public TrainerCardSignature_CreateWindows
-	.public TrainerCardSignature_HandleTouch
 	.public TrainerCardSignature_State_ConfirmPrompt
 	.public TrainerCardSignature_State_ErasePrompt
-	.public TrainerCardSignature_BlitClipped
-	.public TrainerCardSignature_DrawLine
-	.public TrainerCardSignature_SavePenPositions
-	.public TrainerCardSignature_DrawStrokes
-	.public TrainerCardSignature_TakeNewStroke
-	.public TrainerCardSignature_PrintMessage
-	.public TrainerCardSignature_PackCanvas
-	.public TrainerCardSignature_UpdatePenSound
 	.public sTrainerCardSignatureCanvasHitbox
 	.public sTrainerCardSignatureButtonHitboxes
 	.public sTrainerCardSignatureGraphicsModes
@@ -38,27 +22,10 @@
 	.public sTrainerCardSignatureGraphicsBanks
 	.public sTrainerCardSignaturePenBitmaps
 	.public sTrainerCardSignatureStateFuncs
-	.public TrainerCardSignature_VBlankCB
-	.public TrainerCardSignature_SetGfxBanks
-	.public TrainerCardSignature_FreeStrings
-	.public TrainerCardSignature_FreeBgLayers
-	.public TrainerCardSignature_InitObjTransfer
-	.public TrainerCardSignature_RemoveWindows
-	.public TrainerCardSignature_UpdateCanvasDummy
-	.public TrainerCardSignature_SetDoneButtonSpriteSeq
-	.public TrainerCardSignature_SetDoneButtonPressed
 	.public TrainerCardSignature_State_Draw
-	.public TrainerCardSignature_UpdateCanvas
-	.public TrainerCardSignature_ShowYesNoPrompt
 	.public TrainerCardSignature_State_WaitConfirmMessage
 	.public TrainerCardSignature_State_PrintEraseMessage
 	.public TrainerCardSignature_State_WaitEraseMessage
-	.public TrainerCardSignature_DrawDummy
-	.public TrainerCardSignature_AnimateButtonPalette
-	.public TrainerCardSignature_PrintPenNamesDummy
-	.public TrainerCardSignature_IsPrinterDone
-	.public TrainerCardSignature_PlayPenSoundOnTurn
-	.public TrainerCardSignature_SetDoneButtonHidden
 	.rodata
 
 sTrainerCardSignatureDoneButtonPos:

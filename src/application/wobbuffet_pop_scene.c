@@ -3,6 +3,8 @@
 #include "constants/sndseq.h"
 
 #include "bg_window.h"
+#include "communication_command.h"
+#include "communication_core.h"
 #include "error_handling.h"
 #include "filesystem.h"
 #include "font.h"
@@ -17,11 +19,8 @@
 #include "sound_playback.h"
 #include "sprite_system.h"
 #include "text.h"
-#include "communication_command.h"
-#include "communication_core.h"
 #include "wobbuffet_pop.h"
 
-// Data of this part of the overlay, still in asm.
 extern const u16 sWobbuffetPopConfettiPalettes[];
 extern const u16 sWobbuffetPopSubBgColorIndices[];
 extern const u16 sWobbuffetPopBonusTargetAnims[];
@@ -58,48 +57,52 @@ extern const u8 sWobbuffetPopPuffConfigs[];
 extern const u32 sWobbuffetPopCommands[];
 extern void (*const sWobbuffetPopEventFuncs[])(WobbuffetPop *game, WobbuffetPopEvent *event);
 
-// font_sprite.c; called without its palette argument.
+static void WobbuffetPopInflation_Start(BgConfig *bgConfig, int playerCount, int size, WobbuffetPopInflation *inflation);
+static void WobbuffetPopInflation_Stop(BgConfig *bgConfig, WobbuffetPopInflation *inflation);
+static void WobbuffetPopInflation_UpdateBg(BgConfig *bgConfig, WobbuffetPopInflation *inflation, int playerCount);
+static void WobbuffetPopInflation_CalcScale(int playerCount, int size, int air, int *scaleX, int *scaleY);
+static s32 WobbuffetPopInflation_AddAir(WobbuffetPop *game, WobbuffetPopInflation *inflation, s32 amount, s16 netId, u8 bonus);
+static BOOL WobbuffetPopInflation_StepAir(WobbuffetPopInflation *inflation);
+static s32 WobbuffetPop_GetInflationPercent(WobbuffetPop *game);
+static u32 WobbuffetPopPuff_Init(WobbuffetPop *game, const WobbuffetPopPump *pump, WobbuffetPopPuff *puff);
+static BOOL WobbuffetPopPuff_Move(WobbuffetPop *game, WobbuffetPopPuff *puff);
+static ManagedSprite *WobbuffetPop_CreatePuffSprite(WobbuffetPop *game, const u8 *config);
+static void WobbuffetPopConfetti_Create(WobbuffetPop *game, WobbuffetPopConfetti *confetti, WobbuffetPopInflation *inflation);
+static BOOL WobbuffetPop_PopBalloon(WobbuffetPop *game);
+static ManagedSprite *WobbuffetPop_CreateBalloonIconSprite(WobbuffetPop *game, u32 anim, u32 position);
+static BOOL WobbuffetPopBalloonIcon_Init(WobbuffetPop *game, WobbuffetPopBalloonIcon *icon, u32 position, u32 number);
+static void WobbuffetPopBalloonIcon_Slide(WobbuffetPopBalloonIcon *icon);
+static void WobbuffetPopBalloonIcon_Update(WobbuffetPop *game, WobbuffetPopBalloonIcon *icon);
+static u32 WobbuffetPopBalloonIcon_GetSize(s32 n);
+static void WobbuffetPop_PopBalloonIcon(WobbuffetPop *game);
+static inline int WobbuffetPop_FindPlayer(WobbuffetPop *game, int netId);
+static inline int WobbuffetPop_GetSubBgPaletteIndex(WobbuffetPop *game, int i);
+static inline int WobbuffetPop_GetSubObjPaletteIndex(WobbuffetPop *game, int i, int offset);
+static WobbuffetPopPump *WobbuffetPop_DequeuePump(WobbuffetPop *game);
+static BOOL WobbuffetPop_SetPumpBonus(WobbuffetPop *game, int bonus);
+static u8 WobbuffetPop_FindBonusTargetAtFront(WobbuffetPop *game, WobbuffetPopBonusTarget **outTarget);
+static void WobbuffetPopBonusTarget_SetState(WobbuffetPopBonusTarget *target, u8 state);
+static u32 WobbuffetPopBonusTarget_Run(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target);
+static inline void WobbuffetPopBonusTarget_StartHop(WobbuffetPopBonusTarget *target, fx32 sine, fx32 cosine, s16 x, s16 y, int duration);
+static void WobbuffetPop_ShowBonusPopup(WobbuffetPop *game, WobbuffetPopBonusPopup *popups, int bonus, int netId, int delay);
+static BOOL WobbuffetPopBonusPopup_Update(WobbuffetPopBonusPopup *popups, WobbuffetPopBonusPopup *popup);
+static void WobbuffetPopScoreDisplay_SetScore(WobbuffetPopScoreDisplay *display, s32 score);
+static void WobbuffetPopScoreDisplay_StartRoll(WobbuffetPopScoreDisplay *display);
+static BOOL WobbuffetPopScoreDisplay_IsSettled(WobbuffetPopScoreDisplay *display);
+static BOOL WobbuffetPopScoreDisplay_RollDigits(WobbuffetPopScoreDisplay *display);
+static void WobbuffetPopDust_Create(WobbuffetPop *game, WobbuffetPopDust *dust);
+static void WobbuffetPopDust_Free(WobbuffetPop *game, WobbuffetPopDust *dust);
+static void WobbuffetPopDust_Start(WobbuffetPop *game, WobbuffetPopBonusTarget *target, WobbuffetPopDust *dust);
+static void WobbuffetPopDust_Update(WobbuffetPop *game, WobbuffetPopBonusTarget *target, WobbuffetPopDust *dust);
+static void WobbuffetPop_QueuePumpEvent(WobbuffetPop *game, const WobbuffetPopPump *pump);
+
 void TextOBJ_SetPalOffset(TextOBJ *object);
-// Without a header here.
 void SetBothScreensBrightnessByColor(u16 color);
 
-void WobbuffetPopInflation_Start(BgConfig *bgConfig, int playerCount, int size, WobbuffetPopInflation *inflation);
-void WobbuffetPopInflation_Stop(BgConfig *bgConfig, WobbuffetPopInflation *inflation);
-void WobbuffetPopInflation_UpdateBg(BgConfig *bgConfig, WobbuffetPopInflation *inflation, int playerCount);
-void WobbuffetPopInflation_CalcScale(int playerCount, int size, int air, int *scaleX, int *scaleY);
-s32 WobbuffetPopInflation_AddAir(WobbuffetPop *game, WobbuffetPopInflation *inflation, s32 amount, s16 netId, u8 bonus);
-BOOL WobbuffetPopInflation_StepAir(WobbuffetPopInflation *inflation);
-s32 WobbuffetPop_GetInflationPercent(WobbuffetPop *game);
-u32 WobbuffetPopPuff_Init(WobbuffetPop *game, const WobbuffetPopPump *pump, WobbuffetPopPuff *puff);
-BOOL WobbuffetPopPuff_Move(WobbuffetPop *game, WobbuffetPopPuff *puff);
-ManagedSprite *WobbuffetPop_CreatePuffSprite(WobbuffetPop *game, const u8 *config);
-void WobbuffetPopConfetti_Create(WobbuffetPop *game, WobbuffetPopConfetti *confetti, WobbuffetPopInflation *inflation);
-BOOL WobbuffetPop_PopBalloon(WobbuffetPop *game);
-ManagedSprite *WobbuffetPop_CreateBalloonIconSprite(WobbuffetPop *game, u32 anim, u32 position);
-BOOL WobbuffetPopBalloonIcon_Init(WobbuffetPop *game, WobbuffetPopBalloonIcon *icon, u32 position, u32 number);
-void WobbuffetPopBalloonIcon_Slide(WobbuffetPopBalloonIcon *icon);
-void WobbuffetPopBalloonIcon_Update(WobbuffetPop *game, WobbuffetPopBalloonIcon *icon);
-u32 WobbuffetPopBalloonIcon_GetSize(s32 n);
-void WobbuffetPop_PopBalloonIcon(WobbuffetPop *game);
-WobbuffetPopPump *WobbuffetPop_DequeuePump(WobbuffetPop *game);
-BOOL WobbuffetPop_SetPumpBonus(WobbuffetPop *game, int bonus);
-u8 WobbuffetPop_FindBonusTargetAtFront(WobbuffetPop *game, WobbuffetPopBonusTarget **outTarget);
-void WobbuffetPopBonusTarget_SetState(WobbuffetPopBonusTarget *target, u8 state);
-u32 WobbuffetPopBonusTarget_Run(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target);
 u32 WobbuffetPopBonusTarget_Idle(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target);
 u32 WobbuffetPopBonusTarget_Enter(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target);
 u32 WobbuffetPopBonusTarget_Walk(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target);
 u32 WobbuffetPopBonusTarget_Hit(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target);
-void WobbuffetPop_ShowBonusPopup(WobbuffetPop *game, WobbuffetPopBonusPopup *popups, int bonus, int netId, int delay);
-BOOL WobbuffetPopBonusPopup_Update(WobbuffetPopBonusPopup *popups, WobbuffetPopBonusPopup *popup);
-void WobbuffetPopScoreDisplay_SetScore(WobbuffetPopScoreDisplay *display, s32 score);
-void WobbuffetPopScoreDisplay_StartRoll(WobbuffetPopScoreDisplay *display);
-BOOL WobbuffetPopScoreDisplay_IsSettled(WobbuffetPopScoreDisplay *display);
-BOOL WobbuffetPopScoreDisplay_RollDigits(WobbuffetPopScoreDisplay *display);
-void WobbuffetPopDust_Create(WobbuffetPop *game, WobbuffetPopDust *dust);
-void WobbuffetPopDust_Free(WobbuffetPop *game, WobbuffetPopDust *dust);
-void WobbuffetPopDust_Start(WobbuffetPop *game, WobbuffetPopBonusTarget *target, WobbuffetPopDust *dust);
-void WobbuffetPopDust_Update(WobbuffetPop *game, WobbuffetPopBonusTarget *target, WobbuffetPopDust *dust);
 BOOL WobbuffetPopPlazaScreen_Init(OverlayManager *man, int *state);
 BOOL WobbuffetPopPlazaScreen_Main(OverlayManager *man, int *state);
 BOOL WobbuffetPopPlazaScreen_Exit(OverlayManager *man, int *state);
@@ -108,7 +111,6 @@ u32 WobbuffetPop_GetPlayerValueCommandSize(void);
 void WobbuffetPop_RecvEvent(int netId, int size, void *data, void *arg);
 void WobbuffetPop_RecvFinished(int netId, int size, void *data, void *arg);
 void WobbuffetPop_RecvPlayerValue(int netId, int size, const void *data, void *arg);
-void WobbuffetPop_QueuePumpEvent(WobbuffetPop *game, const WobbuffetPopPump *pump);
 void WobbuffetPop_HandlePumpEvent(WobbuffetPop *game, WobbuffetPopEvent *event);
 void WobbuffetPop_HandlePopEvent(WobbuffetPop *game, WobbuffetPopEvent *event);
 void WobbuffetPop_HandleNewBalloonEvent(WobbuffetPop *game, WobbuffetPopEvent *event);
@@ -117,7 +119,7 @@ void WobbuffetPop_HandleFinishEvent(WobbuffetPop *game, WobbuffetPopEvent *event
 void WobbuffetPop_HandleSyncEvent(WobbuffetPop *game, WobbuffetPopEvent *event);
 void WobbuffetPop_HandleDemoEvent(WobbuffetPop *game, WobbuffetPopEvent *event);
 
-void WobbuffetPopInflation_Start(BgConfig *bgConfig, int playerCount, int size, WobbuffetPopInflation *inflation) {
+static void WobbuffetPopInflation_Start(BgConfig *bgConfig, int playerCount, int size, WobbuffetPopInflation *inflation) {
     NARC *narc = NARC_New(NARC_a_1_9_9, HEAP_ID_117);
 
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, sWobbuffetPopInflationCharFiles[size * 4], bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, HEAP_ID_117);
@@ -132,13 +134,13 @@ void WobbuffetPopInflation_Start(BgConfig *bgConfig, int playerCount, int size, 
     PlaySE(SEQ_SE_DP_BOX02);
 }
 
-void WobbuffetPopInflation_Stop(BgConfig *bgConfig, WobbuffetPopInflation *inflation) {
+static void WobbuffetPopInflation_Stop(BgConfig *bgConfig, WobbuffetPopInflation *inflation) {
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_3);
     inflation->active = FALSE;
     inflation->hideBg = TRUE;
 }
 
-void WobbuffetPopInflation_UpdateBg(BgConfig *bgConfig, WobbuffetPopInflation *inflation, int playerCount) {
+static void WobbuffetPopInflation_UpdateBg(BgConfig *bgConfig, WobbuffetPopInflation *inflation, int playerCount) {
     int x;
     int y;
     int dx;
@@ -181,7 +183,7 @@ void WobbuffetPopInflation_UpdateBg(BgConfig *bgConfig, WobbuffetPopInflation *i
     }
 }
 
-void WobbuffetPopInflation_CalcScale(int playerCount, int size, int air, int *scaleX, int *scaleY) {
+static void WobbuffetPopInflation_CalcScale(int playerCount, int size, int air, int *scaleX, int *scaleY) {
     int q = sWobbuffetPopInflationScales[size][0] * air / sWobbuffetPopInflationCapacities[playerCount][size];
     int scale = q + 768;
 
@@ -202,7 +204,7 @@ int WobbuffetPop_GetBalloonSize(int n) {
     return 0;
 }
 
-s32 WobbuffetPopInflation_AddAir(WobbuffetPop *game, WobbuffetPopInflation *inflation, s32 amount, s16 netId, u8 bonus) {
+static s32 WobbuffetPopInflation_AddAir(WobbuffetPop *game, WobbuffetPopInflation *inflation, s32 amount, s16 netId, u8 bonus) {
     s32 seat;
 
     inflation->pendingAir += amount;
@@ -216,7 +218,7 @@ s32 WobbuffetPopInflation_AddAir(WobbuffetPop *game, WobbuffetPopInflation *infl
     return inflation->pendingAir;
 }
 
-BOOL WobbuffetPopInflation_StepAir(WobbuffetPopInflation *inflation) {
+static BOOL WobbuffetPopInflation_StepAir(WobbuffetPopInflation *inflation) {
     s32 step;
 
     if (inflation->pendingAir == 0) {
@@ -238,7 +240,7 @@ void WobbuffetPop_UpdateInflation(WobbuffetPop *game, BgConfig *bgConfig, Wobbuf
     }
 }
 
-s32 WobbuffetPop_GetInflationPercent(WobbuffetPop *game) {
+static s32 WobbuffetPop_GetInflationPercent(WobbuffetPop *game) {
     WobbuffetPopInflation *inflation = &game->inflation;
 
     return inflation->air * 100 / inflation->capacity;
@@ -248,7 +250,7 @@ BOOL WobbuffetPop_LaunchPuff(WobbuffetPop *game, const WobbuffetPopPump *pump) {
     int i;
     u8 *scan;
 
-    // Walks the puffs by moving the game pointer (the original's addressing).
+    // Walks the puffs by moving the game pointer.
     for (i = 0, scan = (u8 *)game; i < 40; i++, scan += sizeof(WobbuffetPopPuff)) {
         if (((WobbuffetPop *)scan)->puffs[0].active == FALSE) {
             WobbuffetPop_ShowBonusPopup(game, game->bonusPopups, pump->bonus, pump->netId, WobbuffetPopPuff_Init(game, pump, &game->puffs[i]));
@@ -259,7 +261,7 @@ BOOL WobbuffetPop_LaunchPuff(WobbuffetPop *game, const WobbuffetPopPump *pump) {
     return FALSE;
 }
 
-u32 WobbuffetPopPuff_Init(WobbuffetPop *game, const WobbuffetPopPump *pump, WobbuffetPopPuff *puff) {
+static u32 WobbuffetPopPuff_Init(WobbuffetPop *game, const WobbuffetPopPump *pump, WobbuffetPopPuff *puff) {
     s16 x;
     s16 y;
     const u8 *config;
@@ -323,7 +325,7 @@ void WobbuffetPop_UpdatePuffs(WobbuffetPop *game) {
     }
 }
 
-BOOL WobbuffetPopPuff_Move(WobbuffetPop *game, WobbuffetPopPuff *puff) {
+static BOOL WobbuffetPopPuff_Move(WobbuffetPop *game, WobbuffetPopPuff *puff) {
     s16 nextX;
     s16 nextY;
     s16 x;
@@ -420,7 +422,7 @@ BOOL WobbuffetPopPuff_Move(WobbuffetPop *game, WobbuffetPopPuff *puff) {
     return FALSE;
 }
 
-ManagedSprite *WobbuffetPop_CreatePuffSprite(WobbuffetPop *game, const u8 *config) {
+static ManagedSprite *WobbuffetPop_CreatePuffSprite(WobbuffetPop *game, const u8 *config) {
     ManagedSpriteTemplate template = sWobbuffetPopPuffSpriteTemplate;
     ManagedSprite *sprite;
 
@@ -450,7 +452,7 @@ void WobbuffetPop_FreePuffs(WobbuffetPop *game) {
 
 #pragma optimization_level 2
 #pragma opt_common_subs off
-void WobbuffetPopConfetti_Create(WobbuffetPop *game, WobbuffetPopConfetti *confetti, WobbuffetPopInflation *inflation) {
+static void WobbuffetPopConfetti_Create(WobbuffetPop *game, WobbuffetPopConfetti *confetti, WobbuffetPopInflation *inflation) {
     ManagedSpriteTemplate tmpl;
     s32 counts[4];
     s32 pendingAir;
@@ -623,7 +625,7 @@ BOOL WobbuffetPop_UpdateConfetti(WobbuffetPop *game) {
     return TRUE;
 }
 
-BOOL WobbuffetPop_PopBalloon(WobbuffetPop *game) {
+static BOOL WobbuffetPop_PopBalloon(WobbuffetPop *game) {
     WobbuffetPopConfetti *confetti = &game->confetti;
     s32 i;
 
@@ -639,14 +641,14 @@ BOOL WobbuffetPop_PopBalloon(WobbuffetPop *game) {
     game->inflation.pendingAir = 0;
     for (i = 0; i < 4; i++) {
         game->inflation.playerAir[0] = 0;
-        game = (WobbuffetPop *)((u8 *)game + 4); // the original steps the game pointer
+        game = (WobbuffetPop *)((u8 *)game + 4);
     }
     PlaySE(SEQ_SE_PL_BALLOON07);
     confetti->active = TRUE;
     return TRUE;
 }
 
-ManagedSprite *WobbuffetPop_CreateBalloonIconSprite(WobbuffetPop *game, u32 anim, u32 position) {
+static ManagedSprite *WobbuffetPop_CreateBalloonIconSprite(WobbuffetPop *game, u32 anim, u32 position) {
     ManagedSpriteTemplate template = sWobbuffetPopBalloonIconSpriteTemplate;
     ManagedSprite *sprite = SpriteSystem_NewSprite(game->spriteSystem, game->spriteManager, &template);
 
@@ -690,7 +692,7 @@ BOOL WobbuffetPop_UpdateBalloonIcons(WobbuffetPop *game) {
     return TRUE;
 }
 
-BOOL WobbuffetPopBalloonIcon_Init(WobbuffetPop *game, WobbuffetPopBalloonIcon *icon, u32 position, u32 number) {
+static BOOL WobbuffetPopBalloonIcon_Init(WobbuffetPop *game, WobbuffetPopBalloonIcon *icon, u32 position, u32 number) {
     MI_CpuFill8(icon, 0, sizeof(WobbuffetPopBalloonIcon));
     icon->size = WobbuffetPopBalloonIcon_GetSize((s32)number);
     icon->state = 1;
@@ -700,7 +702,7 @@ BOOL WobbuffetPopBalloonIcon_Init(WobbuffetPop *game, WobbuffetPopBalloonIcon *i
     return TRUE;
 }
 
-void WobbuffetPopBalloonIcon_Slide(WobbuffetPopBalloonIcon *icon) {
+static void WobbuffetPopBalloonIcon_Slide(WobbuffetPopBalloonIcon *icon) {
     s16 x;
     s16 y;
     s16 target = 72 - icon->position * 16;
@@ -715,7 +717,7 @@ void WobbuffetPopBalloonIcon_Slide(WobbuffetPopBalloonIcon *icon) {
     }
 }
 
-void WobbuffetPopBalloonIcon_Update(WobbuffetPop *game, WobbuffetPopBalloonIcon *icon) {
+static void WobbuffetPopBalloonIcon_Update(WobbuffetPop *game, WobbuffetPopBalloonIcon *icon) {
     int i;
     WobbuffetPopBalloonIcon *other;
     u8 state;
@@ -754,7 +756,7 @@ void WobbuffetPopBalloonIcon_Update(WobbuffetPop *game, WobbuffetPopBalloonIcon 
     }
 }
 
-u32 WobbuffetPopBalloonIcon_GetSize(s32 n) {
+static u32 WobbuffetPopBalloonIcon_GetSize(s32 n) {
     if (n >= 10) {
         return 2;
     }
@@ -764,7 +766,7 @@ u32 WobbuffetPopBalloonIcon_GetSize(s32 n) {
     return 0;
 }
 
-void WobbuffetPop_PopBalloonIcon(WobbuffetPop *game) {
+static void WobbuffetPop_PopBalloonIcon(WobbuffetPop *game) {
     WobbuffetPopBalloonIcon *icon = game->balloonIcons;
     s32 i;
 
@@ -908,7 +910,7 @@ BOOL WobbuffetPop_QueuePump(WobbuffetPop *game, const WobbuffetPopPump *pump) {
     return TRUE;
 }
 
-WobbuffetPopPump *WobbuffetPop_DequeuePump(WobbuffetPop *game) {
+static WobbuffetPopPump *WobbuffetPop_DequeuePump(WobbuffetPop *game) {
     s32 n = game->pumpQueueRead;
 
     if (n >= game->pumpQueueWrite) {
@@ -918,7 +920,7 @@ WobbuffetPopPump *WobbuffetPop_DequeuePump(WobbuffetPop *game) {
     return &game->pumpQueue[n % 8];
 }
 
-BOOL WobbuffetPop_SetPumpBonus(WobbuffetPop *game, int bonus) {
+static BOOL WobbuffetPop_SetPumpBonus(WobbuffetPop *game, int bonus) {
     WobbuffetPopPump *pump = NULL;
     int start;
     int end;
@@ -1125,7 +1127,7 @@ void WobbuffetPopBonusRing_Update(WobbuffetPop *game, WobbuffetPopBonusRing *rin
     }
 }
 
-u8 WobbuffetPop_FindBonusTargetAtFront(WobbuffetPop *game, WobbuffetPopBonusTarget **outTarget) {
+static u8 WobbuffetPop_FindBonusTargetAtFront(WobbuffetPop *game, WobbuffetPopBonusTarget **outTarget) {
     s32 i;
     WobbuffetPopBonusTarget *targets;
     WobbuffetPopBonusTarget *target;
@@ -1141,7 +1143,7 @@ u8 WobbuffetPop_FindBonusTargetAtFront(WobbuffetPop *game, WobbuffetPopBonusTarg
     return 0;
 }
 
-void WobbuffetPopBonusTarget_SetState(WobbuffetPopBonusTarget *target, u8 state) {
+static void WobbuffetPopBonusTarget_SetState(WobbuffetPopBonusTarget *target, u8 state) {
     target->state = state;
     target->step = 0;
     target->timer = 0;
@@ -1149,7 +1151,7 @@ void WobbuffetPopBonusTarget_SetState(WobbuffetPopBonusTarget *target, u8 state)
     target->atFront = FALSE;
 }
 
-u32 WobbuffetPopBonusTarget_Run(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target) {
+static u32 WobbuffetPopBonusTarget_Run(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target) {
     return sWobbuffetPopBonusTargetStateFuncs[target->state](game, ring, target);
 }
 
@@ -1389,7 +1391,7 @@ void WobbuffetPop_FreeBonusPopupSprites(WobbuffetPop *game, WobbuffetPopBonusPop
     }
 }
 
-void WobbuffetPop_ShowBonusPopup(WobbuffetPop *game, WobbuffetPopBonusPopup *popups, int bonus, int netId, int delay) {
+static void WobbuffetPop_ShowBonusPopup(WobbuffetPop *game, WobbuffetPopBonusPopup *popups, int bonus, int netId, int delay) {
     int bonusCopy = bonus;
     WobbuffetPopBonusPopup *popup = NULL;
     int i;
@@ -1439,7 +1441,7 @@ void WobbuffetPop_UpdateBonusPopups(WobbuffetPop *game, WobbuffetPopBonusPopup *
     }
 }
 
-BOOL WobbuffetPopBonusPopup_Update(WobbuffetPopBonusPopup *popups, WobbuffetPopBonusPopup *popup) {
+static BOOL WobbuffetPopBonusPopup_Update(WobbuffetPopBonusPopup *popups, WobbuffetPopBonusPopup *popup) {
     s16 x;
     s16 y;
 
@@ -1597,7 +1599,7 @@ void WobbuffetPopScoreDisplay_Update(WobbuffetPop *game, WobbuffetPopScoreDispla
     }
 }
 
-void WobbuffetPopScoreDisplay_SetScore(WobbuffetPopScoreDisplay *display, s32 score) {
+static void WobbuffetPopScoreDisplay_SetScore(WobbuffetPopScoreDisplay *display, s32 score) {
     s32 i;
     s32 divisor = 100000;
 
@@ -1609,7 +1611,7 @@ void WobbuffetPopScoreDisplay_SetScore(WobbuffetPopScoreDisplay *display, s32 sc
     }
 }
 
-void WobbuffetPopScoreDisplay_StartRoll(WobbuffetPopScoreDisplay *display) {
+static void WobbuffetPopScoreDisplay_StartRoll(WobbuffetPopScoreDisplay *display) {
     s32 i;
 
     for (i = 0; i < 6; i++) {
@@ -1620,7 +1622,7 @@ void WobbuffetPopScoreDisplay_StartRoll(WobbuffetPopScoreDisplay *display) {
     display->settled = 0;
 }
 
-BOOL WobbuffetPopScoreDisplay_IsSettled(WobbuffetPopScoreDisplay *display) {
+static BOOL WobbuffetPopScoreDisplay_IsSettled(WobbuffetPopScoreDisplay *display) {
     s32 i;
 
     for (i = 0; i < 6; i++) {
@@ -1632,7 +1634,7 @@ BOOL WobbuffetPopScoreDisplay_IsSettled(WobbuffetPopScoreDisplay *display) {
 }
 
 #pragma opt_strength_reduction off
-BOOL WobbuffetPopScoreDisplay_RollDigits(WobbuffetPopScoreDisplay *display) {
+static BOOL WobbuffetPopScoreDisplay_RollDigits(WobbuffetPopScoreDisplay *display) {
     int digit = 5;
     int i;
     int prior;
@@ -1791,7 +1793,7 @@ BOOL WobbuffetPop_RunDemo(WobbuffetPop *game, WobbuffetPopDemo *demo) {
     return FALSE;
 }
 
-void WobbuffetPopDust_Create(WobbuffetPop *game, WobbuffetPopDust *dust) {
+static void WobbuffetPopDust_Create(WobbuffetPop *game, WobbuffetPopDust *dust) {
     s32 i;
     ManagedSprite **out = dust->sprites;
 
@@ -1806,7 +1808,7 @@ void WobbuffetPopDust_Create(WobbuffetPop *game, WobbuffetPopDust *dust) {
     }
 }
 
-void WobbuffetPopDust_Free(WobbuffetPop *game, WobbuffetPopDust *dust) {
+static void WobbuffetPopDust_Free(WobbuffetPop *game, WobbuffetPopDust *dust) {
     ManagedSprite **sprites = dust->sprites;
     s32 i;
 
@@ -1816,7 +1818,7 @@ void WobbuffetPopDust_Free(WobbuffetPop *game, WobbuffetPopDust *dust) {
     }
 }
 
-void WobbuffetPopDust_Start(WobbuffetPop *game, WobbuffetPopBonusTarget *target, WobbuffetPopDust *dust) {
+static void WobbuffetPopDust_Start(WobbuffetPop *game, WobbuffetPopBonusTarget *target, WobbuffetPopDust *dust) {
     s16 xy[2];
     int i;
 
@@ -1836,7 +1838,7 @@ void WobbuffetPopDust_Start(WobbuffetPop *game, WobbuffetPopBonusTarget *target,
     dust->active = TRUE;
 }
 
-void WobbuffetPopDust_Update(WobbuffetPop *game, WobbuffetPopBonusTarget *target, WobbuffetPopDust *dust) {
+static void WobbuffetPopDust_Update(WobbuffetPop *game, WobbuffetPopBonusTarget *target, WobbuffetPopDust *dust) {
     int i;
 
     switch (dust->active) {
@@ -2022,7 +2024,7 @@ BOOL WobbuffetPop_RunEvent(WobbuffetPop *game, WobbuffetPopEvent *event) {
     return FALSE;
 }
 
-void WobbuffetPop_QueuePumpEvent(WobbuffetPop *game, const WobbuffetPopPump *pump) {
+static void WobbuffetPop_QueuePumpEvent(WobbuffetPop *game, const WobbuffetPopPump *pump) {
     WobbuffetPopEvent event;
 
     MI_CpuFill8(&event, 0, sizeof(event));

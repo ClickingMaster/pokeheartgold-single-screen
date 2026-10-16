@@ -15,9 +15,11 @@
 #include "gf_gfx_planes.h"
 #include "heap.h"
 #include "list_menu_items.h"
+#include "map_landmark_name.h"
 #include "menu_input_state.h"
 #include "message_format.h"
 #include "msgdata.h"
+#include "oam_manager.h"
 #include "options.h"
 #include "overlay_manager.h"
 #include "photo_album.h"
@@ -25,6 +27,7 @@
 #include "pm_string.h"
 #include "render_window.h"
 #include "screen_fade.h"
+#include "sound_playback.h"
 #include "sprite.h"
 #include "sprite_system.h"
 #include "string_util.h"
@@ -32,12 +35,9 @@
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
+#include "touchpad.h"
 #include "touchscreen.h"
 #include "touchscreen_list_menu.h"
-#include "sound_playback.h"
-#include "oam_manager.h"
-#include "touchpad.h"
-#include "map_landmark_name.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 
@@ -158,82 +158,82 @@ extern const GraphicsBanks gPhotoAlbumAppGraphicsBanks;
 extern const TouchscreenHitbox gPhotoAlbumGridHitboxes[];
 extern u8 gPhotoAlbumSpriteTemplates[];
 
-void PhotoAlbumApp_ResetDisplay(void);
-void PhotoAlbumApp_InitState(PhotoAlbumApp *app);
-void PhotoAlbumApp_Finish(PhotoAlbumApp *app);
-BOOL PhotoAlbumApp_Setup(PhotoAlbumApp *app);
-BOOL PhotoAlbumApp_Teardown(PhotoAlbumApp *app);
-int PhotoAlbumApp_State_FadeIn(PhotoAlbumApp *app);
-int PhotoAlbumApp_State_FadeOut(PhotoAlbumApp *app);
-int PhotoAlbumApp_State_Grid(PhotoAlbumApp *app);
-int PhotoAlbumApp_State_FlipToPrevPage(PhotoAlbumApp *app);
-int PhotoAlbumApp_State_FlipToNextPage(PhotoAlbumApp *app);
-int PhotoAlbumApp_State_ContextMenu(PhotoAlbumApp *app);
-int PhotoAlbumApp_State_MovePhoto(PhotoAlbumApp *app);
-int PhotoAlbumApp_State_MovePhotoDone(PhotoAlbumApp *app);
-int PhotoAlbumApp_State_DeletePrompt(PhotoAlbumApp *app);
-void PhotoAlbumApp_InitGraphics(PhotoAlbumApp *app);
-void PhotoAlbumApp_FreeGraphics(PhotoAlbumApp *app);
-void PhotoAlbumApp_InitEntries(PhotoAlbumApp *app);
-void PhotoAlbumApp_WritePhotosToSave(PhotoAlbumApp *app);
-void PhotoAlbumApp_SwapEntries(PhotoAlbumApp *app, int a, int b);
-void PhotoAlbumApp_RemoveEntry(PhotoAlbumApp *app, u8 selected);
-void PhotoAlbumApp_DrawInitialScreen(PhotoAlbumApp *app);
-int PhotoAlbumApp_HandleGridInput(PhotoAlbumApp *app);
-int PhotoAlbumApp_HandleGridSelection(PhotoAlbumApp *app, int input);
-int PhotoAlbumApp_HandleGridTouch(PhotoAlbumApp *app, int *a);
-int PhotoAlbumApp_HandleGridKeys(PhotoAlbumApp *app);
-int PhotoAlbumApp_HandleMoveInput(PhotoAlbumApp *app);
-int PhotoAlbumApp_RunMoveDone(PhotoAlbumApp *app);
-int PhotoAlbumApp_HandleMoveSelection(PhotoAlbumApp *app, u32 input);
-int PhotoAlbumApp_HandleMoveTouch(PhotoAlbumApp *app, int *a);
-int PhotoAlbumApp_HandleMoveKeys(PhotoAlbumApp *app);
-int PhotoAlbumApp_FlipToPrevPage(PhotoAlbumApp *app);
-int PhotoAlbumApp_FlipToNextPage(PhotoAlbumApp *app);
-int PhotoAlbumApp_RunContextMenu(PhotoAlbumApp *app);
-int PhotoAlbumApp_RunDeletePrompt(PhotoAlbumApp *app);
-void PhotoAlbumApp_VBlankCB(PhotoAlbumApp *app);
-void PhotoAlbumApp_ApplyBgToggle(PhotoAlbumApp *app);
-void PhotoAlbumApp_RequestBgToggle(PhotoAlbumApp *app, int on);
-void PhotoAlbumApp_ApplyZoom(PhotoAlbumApp *app);
-void PhotoAlbumApp_SetZoom(PhotoAlbumApp *app, fx32 v);
-void PhotoAlbumApp_SetBanks(void);
-void PhotoAlbumApp_InitBgs(PhotoAlbumApp *app);
-void PhotoAlbumApp_FreeBgs(PhotoAlbumApp *app);
-void PhotoAlbumApp_LoadBgGfx(PhotoAlbumApp *app);
-void PhotoAlbumApp_FreeScreenData(PhotoAlbumApp *app);
-void PhotoAlbumApp_LoadStrings(PhotoAlbumApp *app);
-void PhotoAlbumApp_FreeStrings(PhotoAlbumApp *app);
-void PhotoAlbumApp_CreateWindows(PhotoAlbumApp *app);
-void PhotoAlbumApp_RemoveWindows(PhotoAlbumApp *app);
-void PhotoAlbumApp_InitSpriteSystem(PhotoAlbumApp *app);
-void PhotoAlbumApp_FreeSpriteSystem(PhotoAlbumApp *app);
-void PhotoAlbumApp_InitSpritesAndMenus(PhotoAlbumApp *app);
-void PhotoAlbumApp_FreeSpritesAndMenus(PhotoAlbumApp *app);
-void PhotoAlbumApp_CreateSprites(PhotoAlbumApp *app);
-void PhotoAlbumApp_DeleteSprites(PhotoAlbumApp *app);
-void PhotoAlbumApp_DrawPageArrows(PhotoAlbumApp *app, int position, int draw);
-void PhotoAlbumApp_DrawPageArrowBg(PhotoAlbumApp *app, int bgId, int mode, int index);
-void PhotoAlbumApp_DrawGridColumns(PhotoAlbumApp *app, int bgId, int page, u8 start);
-void PhotoAlbumApp_DrawPage(PhotoAlbumApp *app, int bgId, int mask, u8 page);
-void PhotoAlbumApp_DrawPhotoIcon(PhotoAlbumApp *app, int index, u8 bgId, u8 destX, u8 destY);
-void PhotoAlbumApp_DrawGridIcon(PhotoAlbumApp *app, Photo *photo, int bgId, u8 x, u8 y);
-void PhotoAlbumApp_RedrawSwappedIcons(PhotoAlbumApp *app, int oldIndex, int newIndex);
-void PhotoAlbumApp_PrintPhotoDetails(PhotoAlbumApp *app, Photo *photo);
-void PhotoAlbumApp_PrintCloseButton(PhotoAlbumApp *app, int a);
-void PhotoAlbumApp_PrintMessage(PhotoAlbumApp *app, int msgIdx, BOOL drawFrame, u8 textDelay);
-void PhotoAlbumApp_SetCursorPos(PhotoAlbumApp *app, u8 x, u8 y, int draw);
-void PhotoAlbumApp_UpdateSelectionSprite(PhotoAlbumApp *app, int draw);
-void PhotoAlbumApp_UpdatePageArrows(PhotoAlbumApp *app);
-void PhotoAlbumApp_AnimatePageArrow(PhotoAlbumApp *app, int idx);
-int PhotoAlbumApp_ToggleMenuInputState(PhotoAlbumApp *app);
-void PhotoAlbumApp_OpenContextMenu(PhotoAlbumApp *app);
-int PhotoAlbumApp_HandleContextMenu(PhotoAlbumApp *app);
-void PhotoAlbumApp_OpenDeletePrompt(PhotoAlbumApp *app);
-int PhotoAlbumApp_HandleDeletePrompt(PhotoAlbumApp *app);
-void PhotoAlbumApp_StartCloseButtonAnim(PhotoAlbumApp *app);
-void Task_PhotoAlbumApp_WaitCloseButtonAnim(SysTask *task, PhotoAlbumTask *data);
-u8 Photo_CountPartyMons(Photo *photo);
+static void PhotoAlbumApp_ResetDisplay(void);
+static void PhotoAlbumApp_InitState(PhotoAlbumApp *app);
+static void PhotoAlbumApp_Finish(PhotoAlbumApp *app);
+static BOOL PhotoAlbumApp_Setup(PhotoAlbumApp *app);
+static BOOL PhotoAlbumApp_Teardown(PhotoAlbumApp *app);
+static int PhotoAlbumApp_State_FadeIn(PhotoAlbumApp *app);
+static int PhotoAlbumApp_State_FadeOut(PhotoAlbumApp *app);
+static int PhotoAlbumApp_State_Grid(PhotoAlbumApp *app);
+static int PhotoAlbumApp_State_FlipToPrevPage(PhotoAlbumApp *app);
+static int PhotoAlbumApp_State_FlipToNextPage(PhotoAlbumApp *app);
+static int PhotoAlbumApp_State_ContextMenu(PhotoAlbumApp *app);
+static int PhotoAlbumApp_State_MovePhoto(PhotoAlbumApp *app);
+static int PhotoAlbumApp_State_MovePhotoDone(PhotoAlbumApp *app);
+static int PhotoAlbumApp_State_DeletePrompt(PhotoAlbumApp *app);
+static void PhotoAlbumApp_InitGraphics(PhotoAlbumApp *app);
+static void PhotoAlbumApp_FreeGraphics(PhotoAlbumApp *app);
+static void PhotoAlbumApp_InitEntries(PhotoAlbumApp *app);
+static void PhotoAlbumApp_WritePhotosToSave(PhotoAlbumApp *app);
+static void PhotoAlbumApp_SwapEntries(PhotoAlbumApp *app, int a, int b);
+static void PhotoAlbumApp_RemoveEntry(PhotoAlbumApp *app, u8 selected);
+static void PhotoAlbumApp_DrawInitialScreen(PhotoAlbumApp *app);
+static int PhotoAlbumApp_HandleGridInput(PhotoAlbumApp *app);
+static int PhotoAlbumApp_HandleGridSelection(PhotoAlbumApp *app, int input);
+static int PhotoAlbumApp_HandleGridTouch(PhotoAlbumApp *app, int *a);
+static int PhotoAlbumApp_HandleGridKeys(PhotoAlbumApp *app);
+static int PhotoAlbumApp_HandleMoveInput(PhotoAlbumApp *app);
+static int PhotoAlbumApp_RunMoveDone(PhotoAlbumApp *app);
+static int PhotoAlbumApp_HandleMoveSelection(PhotoAlbumApp *app, u32 input);
+static int PhotoAlbumApp_HandleMoveTouch(PhotoAlbumApp *app, int *a);
+static int PhotoAlbumApp_HandleMoveKeys(PhotoAlbumApp *app);
+static int PhotoAlbumApp_FlipToPrevPage(PhotoAlbumApp *app);
+static int PhotoAlbumApp_FlipToNextPage(PhotoAlbumApp *app);
+static int PhotoAlbumApp_RunContextMenu(PhotoAlbumApp *app);
+static int PhotoAlbumApp_RunDeletePrompt(PhotoAlbumApp *app);
+static void PhotoAlbumApp_VBlankCB(PhotoAlbumApp *app);
+static void PhotoAlbumApp_ApplyBgToggle(PhotoAlbumApp *app);
+static void PhotoAlbumApp_RequestBgToggle(PhotoAlbumApp *app, int on);
+static void PhotoAlbumApp_ApplyZoom(PhotoAlbumApp *app);
+static void PhotoAlbumApp_SetZoom(PhotoAlbumApp *app, fx32 v);
+static void PhotoAlbumApp_SetBanks(void);
+static void PhotoAlbumApp_InitBgs(PhotoAlbumApp *app);
+static void PhotoAlbumApp_FreeBgs(PhotoAlbumApp *app);
+static void PhotoAlbumApp_LoadBgGfx(PhotoAlbumApp *app);
+static void PhotoAlbumApp_FreeScreenData(PhotoAlbumApp *app);
+static void PhotoAlbumApp_LoadStrings(PhotoAlbumApp *app);
+static void PhotoAlbumApp_FreeStrings(PhotoAlbumApp *app);
+static void PhotoAlbumApp_CreateWindows(PhotoAlbumApp *app);
+static void PhotoAlbumApp_RemoveWindows(PhotoAlbumApp *app);
+static void PhotoAlbumApp_InitSpriteSystem(PhotoAlbumApp *app);
+static void PhotoAlbumApp_FreeSpriteSystem(PhotoAlbumApp *app);
+static void PhotoAlbumApp_InitSpritesAndMenus(PhotoAlbumApp *app);
+static void PhotoAlbumApp_FreeSpritesAndMenus(PhotoAlbumApp *app);
+static void PhotoAlbumApp_CreateSprites(PhotoAlbumApp *app);
+static void PhotoAlbumApp_DeleteSprites(PhotoAlbumApp *app);
+static void PhotoAlbumApp_DrawPageArrows(PhotoAlbumApp *app, int position, int draw);
+static void PhotoAlbumApp_DrawPageArrowBg(PhotoAlbumApp *app, int bgId, int mode, int index);
+static void PhotoAlbumApp_DrawGridColumns(PhotoAlbumApp *app, int bgId, int page, u8 start);
+static void PhotoAlbumApp_DrawPage(PhotoAlbumApp *app, int bgId, int mask, u8 page);
+static void PhotoAlbumApp_DrawPhotoIcon(PhotoAlbumApp *app, int index, u8 bgId, u8 destX, u8 destY);
+static void PhotoAlbumApp_DrawGridIcon(PhotoAlbumApp *app, Photo *photo, int bgId, u8 x, u8 y);
+static void PhotoAlbumApp_RedrawSwappedIcons(PhotoAlbumApp *app, int oldIndex, int newIndex);
+static void PhotoAlbumApp_PrintPhotoDetails(PhotoAlbumApp *app, Photo *photo);
+static void PhotoAlbumApp_PrintCloseButton(PhotoAlbumApp *app, int a);
+static void PhotoAlbumApp_PrintMessage(PhotoAlbumApp *app, int msgIdx, BOOL drawFrame, u8 textDelay);
+static void PhotoAlbumApp_SetCursorPos(PhotoAlbumApp *app, u8 x, u8 y, int draw);
+static void PhotoAlbumApp_UpdateSelectionSprite(PhotoAlbumApp *app, int draw);
+static void PhotoAlbumApp_UpdatePageArrows(PhotoAlbumApp *app);
+static void PhotoAlbumApp_AnimatePageArrow(PhotoAlbumApp *app, int idx);
+static int PhotoAlbumApp_ToggleMenuInputState(PhotoAlbumApp *app);
+static void PhotoAlbumApp_OpenContextMenu(PhotoAlbumApp *app);
+static int PhotoAlbumApp_HandleContextMenu(PhotoAlbumApp *app);
+static void PhotoAlbumApp_OpenDeletePrompt(PhotoAlbumApp *app);
+static int PhotoAlbumApp_HandleDeletePrompt(PhotoAlbumApp *app);
+static void PhotoAlbumApp_StartCloseButtonAnim(PhotoAlbumApp *app);
+static void Task_PhotoAlbumApp_WaitCloseButtonAnim(SysTask *task, PhotoAlbumTask *data);
+static u8 Photo_CountPartyMons(Photo *photo);
 
 BOOL PhotoAlbum_Init(OverlayManager *man, int *state) {
     PhotoAlbumApp *app;
@@ -307,7 +307,7 @@ BOOL PhotoAlbum_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-void PhotoAlbumApp_ResetDisplay(void) {
+static void PhotoAlbumApp_ResetDisplay(void) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     GfGfx_DisableEngineAPlanes();
@@ -321,7 +321,7 @@ void PhotoAlbumApp_ResetDisplay(void) {
 }
 
 #pragma force_active on
-void PhotoAlbumApp_InitState(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_InitState(PhotoAlbumApp *app) {
     Options *options;
     int cursorPos;
     int gridPos;
@@ -349,13 +349,13 @@ void PhotoAlbumApp_InitState(PhotoAlbumApp *app) {
 }
 #pragma force_active reset
 
-void PhotoAlbumApp_Finish(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_Finish(PhotoAlbumApp *app) {
     PhotoAlbumApp_WritePhotosToSave(app);
     Heap_Free(app->photos);
     MenuInputStateMgr_SetState(app->args->menuInputStatePtr, (MenuInputState)app->nextMenuState);
 }
 
-BOOL PhotoAlbumApp_Setup(PhotoAlbumApp *app) {
+static BOOL PhotoAlbumApp_Setup(PhotoAlbumApp *app) {
     switch (app->state) {
     case 0:
         PhotoAlbumApp_InitGraphics(app);
@@ -371,13 +371,13 @@ BOOL PhotoAlbumApp_Setup(PhotoAlbumApp *app) {
     return FALSE;
 }
 
-BOOL PhotoAlbumApp_Teardown(PhotoAlbumApp *app) {
+static BOOL PhotoAlbumApp_Teardown(PhotoAlbumApp *app) {
     GF_TouchpadStopSampling();
     PhotoAlbumApp_FreeGraphics(app);
     return TRUE;
 }
 
-int PhotoAlbumApp_State_FadeIn(PhotoAlbumApp *app) {
+static int PhotoAlbumApp_State_FadeIn(PhotoAlbumApp *app) {
     switch (app->state) {
     case 0:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, 0, 6, 1, app->heapId);
@@ -393,7 +393,7 @@ int PhotoAlbumApp_State_FadeIn(PhotoAlbumApp *app) {
     return PHOTO_ALBUM_STATE_FADE_IN;
 }
 
-int PhotoAlbumApp_State_FadeOut(PhotoAlbumApp *app) {
+static int PhotoAlbumApp_State_FadeOut(PhotoAlbumApp *app) {
     switch (app->state) {
     case 0:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, 0, 6, 1, app->heapId);
@@ -409,11 +409,11 @@ int PhotoAlbumApp_State_FadeOut(PhotoAlbumApp *app) {
     return PHOTO_ALBUM_STATE_FADE_OUT;
 }
 
-int PhotoAlbumApp_State_Grid(PhotoAlbumApp *app) {
+static int PhotoAlbumApp_State_Grid(PhotoAlbumApp *app) {
     return PhotoAlbumApp_HandleGridInput(app);
 }
 
-int PhotoAlbumApp_State_FlipToPrevPage(PhotoAlbumApp *app) {
+static int PhotoAlbumApp_State_FlipToPrevPage(PhotoAlbumApp *app) {
     if (!PhotoAlbumApp_FlipToPrevPage(app)) {
         return PHOTO_ALBUM_STATE_FLIP_TO_PREV_PAGE;
     }
@@ -423,7 +423,7 @@ int PhotoAlbumApp_State_FlipToPrevPage(PhotoAlbumApp *app) {
     return PHOTO_ALBUM_STATE_GRID;
 }
 
-int PhotoAlbumApp_State_FlipToNextPage(PhotoAlbumApp *app) {
+static int PhotoAlbumApp_State_FlipToNextPage(PhotoAlbumApp *app) {
     if (!PhotoAlbumApp_FlipToNextPage(app)) {
         return PHOTO_ALBUM_STATE_FLIP_TO_NEXT_PAGE;
     }
@@ -433,26 +433,26 @@ int PhotoAlbumApp_State_FlipToNextPage(PhotoAlbumApp *app) {
     return PHOTO_ALBUM_STATE_GRID;
 }
 
-int PhotoAlbumApp_State_ContextMenu(PhotoAlbumApp *app) {
+static int PhotoAlbumApp_State_ContextMenu(PhotoAlbumApp *app) {
     return PhotoAlbumApp_RunContextMenu(app);
 }
 
-int PhotoAlbumApp_State_MovePhoto(PhotoAlbumApp *app) {
+static int PhotoAlbumApp_State_MovePhoto(PhotoAlbumApp *app) {
     return PhotoAlbumApp_HandleMoveInput(app);
 }
 
-int PhotoAlbumApp_State_MovePhotoDone(PhotoAlbumApp *app) {
+static int PhotoAlbumApp_State_MovePhotoDone(PhotoAlbumApp *app) {
     if (PhotoAlbumApp_RunMoveDone(app)) {
         return PHOTO_ALBUM_STATE_GRID;
     }
     return PHOTO_ALBUM_STATE_MOVE_PHOTO_DONE;
 }
 
-int PhotoAlbumApp_State_DeletePrompt(PhotoAlbumApp *app) {
+static int PhotoAlbumApp_State_DeletePrompt(PhotoAlbumApp *app) {
     return PhotoAlbumApp_RunDeletePrompt(app);
 }
 
-void PhotoAlbumApp_InitGraphics(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_InitGraphics(PhotoAlbumApp *app) {
     PhotoAlbumApp_InitBgs(app);
     PhotoAlbumApp_LoadBgGfx(app);
     PhotoAlbumApp_LoadStrings(app);
@@ -461,7 +461,7 @@ void PhotoAlbumApp_InitGraphics(PhotoAlbumApp *app) {
     Main_SetVBlankIntrCB((void (*)(void *))PhotoAlbumApp_VBlankCB, app);
 }
 
-void PhotoAlbumApp_FreeGraphics(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_FreeGraphics(PhotoAlbumApp *app) {
     PhotoAlbumApp_FreeSpritesAndMenus(app);
     PhotoAlbumApp_RemoveWindows(app);
     PhotoAlbumApp_FreeStrings(app);
@@ -470,7 +470,7 @@ void PhotoAlbumApp_FreeGraphics(PhotoAlbumApp *app) {
 }
 
 #pragma force_active on
-void PhotoAlbumApp_InitEntries(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_InitEntries(PhotoAlbumApp *app) {
     u8 i;
     app->numPhotos = app->numPhotosPrev;
     MI_CpuFill8(app->entries, 0, sizeof(app->entries));
@@ -482,7 +482,7 @@ void PhotoAlbumApp_InitEntries(PhotoAlbumApp *app) {
 }
 #pragma force_active reset
 
-void PhotoAlbumApp_WritePhotosToSave(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_WritePhotosToSave(PhotoAlbumApp *app) {
     u8 i = 0;
     while (i < app->numPhotos) {
         PhotoAlbum_SetPhotoAtIndex(app->photoAlbum, app->entries[i].photo, i);
@@ -494,7 +494,7 @@ void PhotoAlbumApp_WritePhotosToSave(PhotoAlbumApp *app) {
     }
 }
 
-void PhotoAlbumApp_SwapEntries(PhotoAlbumApp *app, int a, int b) {
+static void PhotoAlbumApp_SwapEntries(PhotoAlbumApp *app, int a, int b) {
     PhotoEntry tmp;
     MI_CpuCopy8(&app->entries[a], &tmp, sizeof(PhotoEntry));
     MI_CpuCopy8(&app->entries[b], &app->entries[a], sizeof(PhotoEntry));
@@ -503,7 +503,7 @@ void PhotoAlbumApp_SwapEntries(PhotoAlbumApp *app, int a, int b) {
 
 #pragma force_active on
 // Removes the photo in slot `selected` from the list and moves the cursor onto a remaining photo.
-void PhotoAlbumApp_RemoveEntry(PhotoAlbumApp *app, u8 selected) {
+static void PhotoAlbumApp_RemoveEntry(PhotoAlbumApp *app, u8 selected) {
     u8 i;
     int gridPos;
     app->numPhotos--;
@@ -538,7 +538,7 @@ void PhotoAlbumApp_RemoveEntry(PhotoAlbumApp *app, u8 selected) {
 }
 #pragma force_active reset
 
-void PhotoAlbumApp_DrawInitialScreen(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_DrawInitialScreen(PhotoAlbumApp *app) {
     PhotoAlbumApp_DrawPage(app, 3, 3, app->curPage);
     PhotoAlbumApp_UpdatePageArrows(app);
     PhotoAlbumApp_PrintCloseButton(app, 0);
@@ -548,7 +548,7 @@ void PhotoAlbumApp_DrawInitialScreen(PhotoAlbumApp *app) {
     ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_2);
 }
 
-int PhotoAlbumApp_HandleGridInput(PhotoAlbumApp *app) {
+static int PhotoAlbumApp_HandleGridInput(PhotoAlbumApp *app) {
     int done = 0;
     if (app->fadeRunning) {
         return PHOTO_ALBUM_STATE_GRID;
@@ -561,7 +561,7 @@ int PhotoAlbumApp_HandleGridInput(PhotoAlbumApp *app) {
 
 #pragma force_active on
 // Handles a selection on the photo grid: 0-11 = photo, 12 = close, 13/14 = previous/next page.
-int PhotoAlbumApp_HandleGridSelection(PhotoAlbumApp *app, int input) {
+static int PhotoAlbumApp_HandleGridSelection(PhotoAlbumApp *app, int input) {
     u8 selected;
     switch (input) {
     case PHOTO_ALBUM_INPUT_CLOSE:
@@ -599,7 +599,7 @@ int PhotoAlbumApp_HandleGridSelection(PhotoAlbumApp *app, int input) {
 }
 #pragma force_active reset
 
-int PhotoAlbumApp_HandleGridTouch(PhotoAlbumApp *app, int *a) {
+static int PhotoAlbumApp_HandleGridTouch(PhotoAlbumApp *app, int *a) {
     int hit = TouchscreenHitbox_FindRectAtTouchNew(gPhotoAlbumGridHitboxes);
     if (hit == -1) {
         return PHOTO_ALBUM_STATE_GRID;
@@ -617,7 +617,7 @@ int PhotoAlbumApp_HandleGridTouch(PhotoAlbumApp *app, int *a) {
     PhotoAlbumApp_HandleGridSelection(app, (u8)hit);
 }
 
-int PhotoAlbumApp_HandleGridKeys(PhotoAlbumApp *app) {
+static int PhotoAlbumApp_HandleGridKeys(PhotoAlbumApp *app) {
     u32 keys;
     u8 hit;
     if (app->nextMenuState == 1 && (gSystem.newKeys & 0xF3)) {
@@ -685,7 +685,7 @@ int PhotoAlbumApp_HandleGridKeys(PhotoAlbumApp *app) {
     return PHOTO_ALBUM_STATE_GRID;
 }
 
-int PhotoAlbumApp_HandleMoveInput(PhotoAlbumApp *app) {
+static int PhotoAlbumApp_HandleMoveInput(PhotoAlbumApp *app) {
     int done = 0;
     PhotoAlbumApp_HandleMoveTouch(app, &done);
     if (!done) {
@@ -693,7 +693,7 @@ int PhotoAlbumApp_HandleMoveInput(PhotoAlbumApp *app) {
     }
 }
 
-int PhotoAlbumApp_RunMoveDone(PhotoAlbumApp *app) {
+static int PhotoAlbumApp_RunMoveDone(PhotoAlbumApp *app) {
     switch (app->subState) {
     case 0:
         if (app->timer++ < 15) {
@@ -727,7 +727,7 @@ int PhotoAlbumApp_RunMoveDone(PhotoAlbumApp *app) {
     return 0;
 }
 
-int PhotoAlbumApp_HandleMoveSelection(PhotoAlbumApp *app, u32 input) {
+static int PhotoAlbumApp_HandleMoveSelection(PhotoAlbumApp *app, u32 input) {
     u8 slot;
     switch (input) {
     case PHOTO_ALBUM_INPUT_CLOSE:
@@ -773,7 +773,7 @@ int PhotoAlbumApp_HandleMoveSelection(PhotoAlbumApp *app, u32 input) {
     }
 }
 
-int PhotoAlbumApp_HandleMoveTouch(PhotoAlbumApp *app, int *a) {
+static int PhotoAlbumApp_HandleMoveTouch(PhotoAlbumApp *app, int *a) {
     int hit = TouchscreenHitbox_FindRectAtTouchNew(gPhotoAlbumGridHitboxes);
     if (hit == -1) {
         return PHOTO_ALBUM_STATE_MOVE_PHOTO;
@@ -791,7 +791,7 @@ int PhotoAlbumApp_HandleMoveTouch(PhotoAlbumApp *app, int *a) {
     PhotoAlbumApp_HandleMoveSelection(app, (u8)hit);
 }
 
-int PhotoAlbumApp_HandleMoveKeys(PhotoAlbumApp *app) {
+static int PhotoAlbumApp_HandleMoveKeys(PhotoAlbumApp *app) {
     u8 hit;
 
     if (app->nextMenuState == 1 && (gSystem.newKeys & 0xF3)) {
@@ -861,7 +861,7 @@ int PhotoAlbumApp_HandleMoveKeys(PhotoAlbumApp *app) {
     return PHOTO_ALBUM_STATE_MOVE_PHOTO;
 }
 
-int PhotoAlbumApp_FlipToPrevPage(PhotoAlbumApp *app) {
+static int PhotoAlbumApp_FlipToPrevPage(PhotoAlbumApp *app) {
     switch (app->subState) {
     case 0:
         PhotoAlbumApp_SetCursorPos(app, app->cursorX, app->cursorY, 0);
@@ -904,7 +904,7 @@ int PhotoAlbumApp_FlipToPrevPage(PhotoAlbumApp *app) {
     return 0;
 }
 
-int PhotoAlbumApp_FlipToNextPage(PhotoAlbumApp *app) {
+static int PhotoAlbumApp_FlipToNextPage(PhotoAlbumApp *app) {
     switch (app->subState) {
     case 0:
         PhotoAlbumApp_SetCursorPos(app, app->cursorX, app->cursorY, 0);
@@ -947,7 +947,7 @@ int PhotoAlbumApp_FlipToNextPage(PhotoAlbumApp *app) {
     return 0;
 }
 
-int PhotoAlbumApp_RunContextMenu(PhotoAlbumApp *app) {
+static int PhotoAlbumApp_RunContextMenu(PhotoAlbumApp *app) {
     int r = PhotoAlbumApp_HandleContextMenu(app);
     if (r < 0) {
         r = PHOTO_ALBUM_STATE_CONTEXT_MENU;
@@ -955,7 +955,7 @@ int PhotoAlbumApp_RunContextMenu(PhotoAlbumApp *app) {
     return r;
 }
 
-int PhotoAlbumApp_RunDeletePrompt(PhotoAlbumApp *app) {
+static int PhotoAlbumApp_RunDeletePrompt(PhotoAlbumApp *app) {
     switch (app->subState) {
     case 0:
         PhotoAlbumApp_OpenDeletePrompt(app);
@@ -971,7 +971,7 @@ int PhotoAlbumApp_RunDeletePrompt(PhotoAlbumApp *app) {
     return PHOTO_ALBUM_STATE_DELETE_PROMPT;
 }
 
-void PhotoAlbumApp_VBlankCB(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_VBlankCB(PhotoAlbumApp *app) {
     if (app->spriteSystem != NULL) {
         SpriteSystem_TransferOam();
     }
@@ -982,19 +982,19 @@ void PhotoAlbumApp_VBlankCB(PhotoAlbumApp *app) {
     OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
-void PhotoAlbumApp_ApplyBgToggle(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_ApplyBgToggle(PhotoAlbumApp *app) {
     if (app->bgToggleReq) {
         ToggleBgLayer(GF_BG_LYR_MAIN_2, app->bgToggleVal);
     }
     app->bgToggleReq = FALSE;
 }
 
-void PhotoAlbumApp_RequestBgToggle(PhotoAlbumApp *app, int on) {
+static void PhotoAlbumApp_RequestBgToggle(PhotoAlbumApp *app, int on) {
     app->bgToggleVal = on;
     app->bgToggleReq = TRUE;
 }
 
-void PhotoAlbumApp_ApplyZoom(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_ApplyZoom(PhotoAlbumApp *app) {
     MtxFx22 mtx;
     if (app->zoomChanged) {
         mtx._01 = 0;
@@ -1006,18 +1006,18 @@ void PhotoAlbumApp_ApplyZoom(PhotoAlbumApp *app) {
     }
 }
 
-void PhotoAlbumApp_SetZoom(PhotoAlbumApp *app, fx32 v) {
+static void PhotoAlbumApp_SetZoom(PhotoAlbumApp *app, fx32 v) {
     app->zoom = v;
     app->zoomChanged = TRUE;
 }
 
-void PhotoAlbumApp_SetBanks(void) {
+static void PhotoAlbumApp_SetBanks(void) {
     GraphicsBanks banks = gPhotoAlbumAppGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
 #pragma force_active on
-void PhotoAlbumApp_InitBgs(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_InitBgs(PhotoAlbumApp *app) {
     GraphicsModes modes;
     BgTemplate template4;
     BgTemplate template7;
@@ -1061,7 +1061,7 @@ void PhotoAlbumApp_InitBgs(PhotoAlbumApp *app) {
 }
 #pragma force_active reset
 
-void PhotoAlbumApp_FreeBgs(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_FreeBgs(PhotoAlbumApp *app) {
     vu16 *reg = (vu16 *)0x04000304;
     BgSetPosTextAndCommit(app->bgConfig, GF_BG_LYR_SUB_3, (enum BgPosAdjustOp)0, 0);
     FreeBgTilemapBuffer(app->bgConfig, GF_BG_LYR_MAIN_3);
@@ -1075,7 +1075,7 @@ void PhotoAlbumApp_FreeBgs(PhotoAlbumApp *app) {
     *reg |= (u32)reg >> 11;
 }
 
-void PhotoAlbumApp_LoadBgGfx(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_LoadBgGfx(PhotoAlbumApp *app) {
     NARC *narc = NARC_New(NARC_a_1_7_1, (enum HeapID)app->heapId);
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 4, (enum GFPalLoadLocation)0, (enum GFPalSlotOffset)0, 0, (enum HeapID)app->heapId);
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 4, (enum GFPalLoadLocation)4, (enum GFPalSlotOffset)0, 0, (enum HeapID)app->heapId);
@@ -1092,13 +1092,13 @@ void PhotoAlbumApp_LoadBgGfx(PhotoAlbumApp *app) {
     LoadUserFrameGfx2(app->bgConfig, (GFBgLayer)0, 1, 0xD, app->frame, (enum HeapID)app->heapId);
 }
 
-void PhotoAlbumApp_FreeScreenData(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_FreeScreenData(PhotoAlbumApp *app) {
     Heap_Free(app->pageArrowsFile);
     Heap_Free(app->photoIconsFile);
     Heap_Free(app->screenFile_B0);
 }
 
-void PhotoAlbumApp_LoadStrings(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_LoadStrings(PhotoAlbumApp *app) {
     int i;
     FontID_Alloc(4, app->heapId);
     app->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0000_bin, app->heapId);
@@ -1117,7 +1117,7 @@ void PhotoAlbumApp_LoadStrings(PhotoAlbumApp *app) {
     }
 }
 
-void PhotoAlbumApp_FreeStrings(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_FreeStrings(PhotoAlbumApp *app) {
     int i;
     ListMenuItems_Delete(app->listMenuItems);
     app->listMenuItems = NULL;
@@ -1134,7 +1134,7 @@ void PhotoAlbumApp_FreeStrings(PhotoAlbumApp *app) {
     FontID_Release(4);
 }
 
-void PhotoAlbumApp_CreateWindows(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_CreateWindows(PhotoAlbumApp *app) {
     int i;
     for (i = 0; i < 3; ++i) {
         AddWindow(app->bgConfig, &app->windows[i], &gPhotoAlbumWindowTemplates[i]);
@@ -1143,7 +1143,7 @@ void PhotoAlbumApp_CreateWindows(PhotoAlbumApp *app) {
     app->yesNoPrompt = YesNoPrompt_Create(app->heapId);
 }
 
-void PhotoAlbumApp_RemoveWindows(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_RemoveWindows(PhotoAlbumApp *app) {
     int i;
     for (i = 0; i < 3; ++i) {
         ClearWindowTilemapAndCopyToVram(&app->windows[i]);
@@ -1152,7 +1152,7 @@ void PhotoAlbumApp_RemoveWindows(PhotoAlbumApp *app) {
     YesNoPrompt_Destroy(app->yesNoPrompt);
 }
 
-void PhotoAlbumApp_InitSpriteSystem(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_InitSpriteSystem(PhotoAlbumApp *app) {
     GF_CreateVramTransferManager(0x20, app->heapId);
     app->spriteSystem = SpriteSystem_Alloc(app->heapId);
     SpriteSystem_Init(app->spriteSystem, &gPhotoAlbumAppOamManagerParam, &gPhotoAlbumAppOamCharTransferParam, 3);
@@ -1163,7 +1163,7 @@ void PhotoAlbumApp_InitSpriteSystem(PhotoAlbumApp *app) {
     SpriteSystem_LoadResourceDataFromFileIdListEx(app->spriteSystem, app->spriteManager, &gPhotoAlbumSpriteResources, 2, 1);
 }
 
-void PhotoAlbumApp_FreeSpriteSystem(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_FreeSpriteSystem(PhotoAlbumApp *app) {
     SpriteSystem_DestroySpriteManager(app->spriteSystem, app->spriteManager);
     app->spriteManager = NULL;
     SpriteSystem_Free(app->spriteSystem);
@@ -1172,14 +1172,14 @@ void PhotoAlbumApp_FreeSpriteSystem(PhotoAlbumApp *app) {
     thunk_ClearMainOAM(app->heapId);
 }
 
-void PhotoAlbumApp_InitSpritesAndMenus(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_InitSpritesAndMenus(PhotoAlbumApp *app) {
     PhotoAlbumApp_InitSpriteSystem(app);
     PhotoAlbumApp_CreateSprites(app);
     app->listMenuSpawner = TouchscreenListMenuSpawner_Create(app->heapId, NULL);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-void PhotoAlbumApp_FreeSpritesAndMenus(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_FreeSpritesAndMenus(PhotoAlbumApp *app) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
     PhotoAlbumApp_DeleteSprites(app);
     TouchscreenListMenuSpawner_Destroy(app->listMenuSpawner);
@@ -1187,7 +1187,7 @@ void PhotoAlbumApp_FreeSpritesAndMenus(PhotoAlbumApp *app) {
 }
 
 #pragma force_active on
-void PhotoAlbumApp_CreateSprites(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_CreateSprites(PhotoAlbumApp *app) {
     u8 *template = gPhotoAlbumSpriteTemplates;
     int i;
     for (i = 0; i < 5; i++) {
@@ -1203,7 +1203,7 @@ void PhotoAlbumApp_CreateSprites(PhotoAlbumApp *app) {
 }
 #pragma force_active reset
 
-void PhotoAlbumApp_DeleteSprites(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_DeleteSprites(PhotoAlbumApp *app) {
     int i;
     for (i = 0; i < 5; ++i) {
         thunk_Sprite_Delete(app->sprites[i]);
@@ -1211,14 +1211,14 @@ void PhotoAlbumApp_DeleteSprites(PhotoAlbumApp *app) {
 }
 
 #pragma force_active on
-void PhotoAlbumApp_DrawPageArrows(PhotoAlbumApp *app, int position, int draw) {
+static void PhotoAlbumApp_DrawPageArrows(PhotoAlbumApp *app, int position, int draw) {
     BgClearTilemapBufferAndCommit(app->bgConfig, GF_BG_LYR_MAIN_2);
     if (draw) {
         CopyToBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_2, (u8)(16 * (position / 2)), 0, 16, 24, app->pageArrows->rawData, (u8)(16 * (position / 2)), 0, (u8)(app->pageArrows->screenWidth >> 3), (u8)(app->pageArrows->screenHeight >> 3));
     }
 }
 
-void PhotoAlbumApp_DrawPageArrowBg(PhotoAlbumApp *app, int bgId, int mode, int index) {
+static void PhotoAlbumApp_DrawPageArrowBg(PhotoAlbumApp *app, int bgId, int mode, int index) {
     NNSG2dScreenData *screen;
     u8 x;
     int row;
@@ -1233,7 +1233,7 @@ void PhotoAlbumApp_DrawPageArrowBg(PhotoAlbumApp *app, int bgId, int mode, int i
     CopyToBgTilemapRect(app->bgConfig, (u8)bgId, x, 15, 1, 2, screen->rawData, (u8)row, 24, screen->screenWidth >> 3, screen->screenHeight >> 3);
 }
 
-void PhotoAlbumApp_DrawGridColumns(PhotoAlbumApp *app, int bgId, int page, u8 start) {
+static void PhotoAlbumApp_DrawGridColumns(PhotoAlbumApp *app, int bgId, int page, u8 start) {
     int row;
     int x;
     u8 n;
@@ -1250,7 +1250,7 @@ void PhotoAlbumApp_DrawGridColumns(PhotoAlbumApp *app, int bgId, int page, u8 st
 }
 #pragma force_active reset
 
-void PhotoAlbumApp_DrawPage(PhotoAlbumApp *app, int bgId, int mask, u8 page) {
+static void PhotoAlbumApp_DrawPage(PhotoAlbumApp *app, int bgId, int mask, u8 page) {
     if (mask & 1) {
         PhotoAlbumApp_DrawGridColumns(app, bgId, page, 0);
         PhotoAlbumApp_DrawPageArrowBg(app, bgId, 1, page);
@@ -1262,7 +1262,7 @@ void PhotoAlbumApp_DrawPage(PhotoAlbumApp *app, int bgId, int mask, u8 page) {
     ScheduleBgTilemapBufferTransfer(app->bgConfig, (u8)bgId);
 }
 
-void PhotoAlbumApp_DrawPhotoIcon(PhotoAlbumApp *app, int index, u8 bgId, u8 destX, u8 destY) {
+static void PhotoAlbumApp_DrawPhotoIcon(PhotoAlbumApp *app, int index, u8 bgId, u8 destX, u8 destY) {
     NNSG2dScreenData *tiles;
     int rem;
     int quot;
@@ -1274,7 +1274,7 @@ void PhotoAlbumApp_DrawPhotoIcon(PhotoAlbumApp *app, int index, u8 bgId, u8 dest
 }
 
 #pragma force_active on
-void PhotoAlbumApp_DrawGridIcon(PhotoAlbumApp *app, Photo *photo, int bgId, u8 x, u8 y) {
+static void PhotoAlbumApp_DrawGridIcon(PhotoAlbumApp *app, Photo *photo, int bgId, u8 x, u8 y) {
     u8 icon = 0;
     if (photo) {
         icon = photo->iconId + 1;
@@ -1283,7 +1283,7 @@ void PhotoAlbumApp_DrawGridIcon(PhotoAlbumApp *app, Photo *photo, int bgId, u8 x
 }
 #pragma force_active reset
 
-void PhotoAlbumApp_RedrawSwappedIcons(PhotoAlbumApp *app, int oldIndex, int newIndex) {
+static void PhotoAlbumApp_RedrawSwappedIcons(PhotoAlbumApp *app, int oldIndex, int newIndex) {
     int page;
     u8 packed;
 
@@ -1302,7 +1302,7 @@ void PhotoAlbumApp_RedrawSwappedIcons(PhotoAlbumApp *app, int oldIndex, int newI
 
 #pragma force_active on
 // Prints the details of `photo` (where, which Pokemon, when) on the top screen; NULL clears them.
-void PhotoAlbumApp_PrintPhotoDetails(PhotoAlbumApp *app, Photo *photo) {
+static void PhotoAlbumApp_PrintPhotoDetails(PhotoAlbumApp *app, Photo *photo) {
     ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_SUB_2);
     ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_SUB_3);
     FillWindowPixelBuffer(&app->windows[2], 0);
@@ -1331,7 +1331,7 @@ void PhotoAlbumApp_PrintPhotoDetails(PhotoAlbumApp *app, Photo *photo) {
 }
 #pragma force_active reset
 
-void PhotoAlbumApp_PrintCloseButton(PhotoAlbumApp *app, int a) {
+static void PhotoAlbumApp_PrintCloseButton(PhotoAlbumApp *app, int a) {
     FillWindowPixelBuffer(&app->windows[0], 0);
     if (a) {
         Sprite_SetAnimCtrlSeq(app->sprites[4], 9);
@@ -1343,7 +1343,7 @@ void PhotoAlbumApp_PrintCloseButton(PhotoAlbumApp *app, int a) {
 }
 
 #pragma force_active on
-void PhotoAlbumApp_PrintMessage(PhotoAlbumApp *app, int msgIdx, BOOL drawFrame, u8 textDelay) {
+static void PhotoAlbumApp_PrintMessage(PhotoAlbumApp *app, int msgIdx, BOOL drawFrame, u8 textDelay) {
     if (drawFrame) {
         DrawFrameAndWindow2(&app->windows[1], TRUE, 1, 13);
     }
@@ -1357,7 +1357,7 @@ void PhotoAlbumApp_PrintMessage(PhotoAlbumApp *app, int msgIdx, BOOL drawFrame, 
 }
 #pragma force_active reset
 
-void PhotoAlbumApp_SetCursorPos(PhotoAlbumApp *app, u8 x, u8 y, int draw) {
+static void PhotoAlbumApp_SetCursorPos(PhotoAlbumApp *app, u8 x, u8 y, int draw) {
     s16 px;
     s16 py;
     Sprite_SetDrawFlag(app->sprites[0], draw);
@@ -1374,7 +1374,7 @@ void PhotoAlbumApp_SetCursorPos(PhotoAlbumApp *app, u8 x, u8 y, int draw) {
     Sprite_SetPositionXY(app->sprites[0], px, py);
 }
 
-void PhotoAlbumApp_UpdateSelectionSprite(PhotoAlbumApp *app, int draw) {
+static void PhotoAlbumApp_UpdateSelectionSprite(PhotoAlbumApp *app, int draw) {
     int xoff;
     if (app->curPage != (u8)(app->slotIdx / 12)) {
         draw = 0;
@@ -1386,7 +1386,7 @@ void PhotoAlbumApp_UpdateSelectionSprite(PhotoAlbumApp *app, int draw) {
     Sprite_SetDrawFlag(app->sprites[1], draw);
 }
 
-void PhotoAlbumApp_UpdatePageArrows(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_UpdatePageArrows(PhotoAlbumApp *app) {
     Sprite_SetAnimActiveFlag(app->sprites[2], FALSE);
     Sprite_SetAnimActiveFlag(app->sprites[3], FALSE);
     if (app->curPage == 0) {
@@ -1401,7 +1401,7 @@ void PhotoAlbumApp_UpdatePageArrows(PhotoAlbumApp *app) {
     }
 }
 
-void PhotoAlbumApp_AnimatePageArrow(PhotoAlbumApp *app, int idx) {
+static void PhotoAlbumApp_AnimatePageArrow(PhotoAlbumApp *app, int idx) {
     Sprite_ResetAnimCtrlState(app->sprites[idx]);
     Sprite_SetAnimActiveFlag(app->sprites[idx], TRUE);
     if (idx == 2) {
@@ -1411,7 +1411,7 @@ void PhotoAlbumApp_AnimatePageArrow(PhotoAlbumApp *app, int idx) {
     }
 }
 
-int PhotoAlbumApp_ToggleMenuInputState(PhotoAlbumApp *app) {
+static int PhotoAlbumApp_ToggleMenuInputState(PhotoAlbumApp *app) {
     if (app->nextMenuState == 0) {
         app->nextMenuState = 1;
     } else {
@@ -1420,7 +1420,7 @@ int PhotoAlbumApp_ToggleMenuInputState(PhotoAlbumApp *app) {
     return 0;
 }
 
-void PhotoAlbumApp_OpenContextMenu(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_OpenContextMenu(PhotoAlbumApp *app) {
     TouchscreenListMenuHeader header;
     MI_CpuFill8(&header, 0, sizeof(header));
     header.template = gPhotoAlbumContextMenuTemplate;
@@ -1431,7 +1431,7 @@ void PhotoAlbumApp_OpenContextMenu(PhotoAlbumApp *app) {
     PhotoAlbumApp_SetCursorPos(app, app->cursorX, app->cursorY, 0);
 }
 
-int PhotoAlbumApp_HandleContextMenu(PhotoAlbumApp *app) {
+static int PhotoAlbumApp_HandleContextMenu(PhotoAlbumApp *app) {
     int result = TouchscreenListMenu_HandleInput(app->listMenu);
     u32 touch;
     if (result == -1) {
@@ -1464,7 +1464,7 @@ int PhotoAlbumApp_HandleContextMenu(PhotoAlbumApp *app) {
     }
 }
 
-void PhotoAlbumApp_OpenDeletePrompt(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_OpenDeletePrompt(PhotoAlbumApp *app) {
     YesNoPromptTemplate template;
     MI_CpuFill8(&template, 0, sizeof(template));
     template.bgConfig = app->bgConfig;
@@ -1478,7 +1478,7 @@ void PhotoAlbumApp_OpenDeletePrompt(PhotoAlbumApp *app) {
     YesNoPrompt_InitFromTemplate(app->yesNoPrompt, &template);
 }
 
-int PhotoAlbumApp_HandleDeletePrompt(PhotoAlbumApp *app) {
+static int PhotoAlbumApp_HandleDeletePrompt(PhotoAlbumApp *app) {
     int result = YesNoPrompt_HandleInput(app->yesNoPrompt);
     switch (result) {
     case YESNORESPONSE_YES:
@@ -1508,7 +1508,7 @@ int PhotoAlbumApp_HandleDeletePrompt(PhotoAlbumApp *app) {
     return PHOTO_ALBUM_STATE_GRID;
 }
 
-void PhotoAlbumApp_StartCloseButtonAnim(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_StartCloseButtonAnim(PhotoAlbumApp *app) {
     PhotoAlbumTask *task = Heap_AllocAtEnd(app->heapId, sizeof(PhotoAlbumTask));
     MI_CpuFill8(task, 0, sizeof(PhotoAlbumTask));
     task->app = app;
@@ -1517,7 +1517,7 @@ void PhotoAlbumApp_StartCloseButtonAnim(PhotoAlbumApp *app) {
     app->fadeRunning = TRUE;
 }
 
-void Task_PhotoAlbumApp_WaitCloseButtonAnim(SysTask *task, PhotoAlbumTask *data) {
+static void Task_PhotoAlbumApp_WaitCloseButtonAnim(SysTask *task, PhotoAlbumTask *data) {
     if (!Sprite_IsAnimated(data->app->sprites[4])) {
         PhotoAlbumApp_PrintCloseButton(data->app, 0);
         data->app->fadeRunning = FALSE;
@@ -1527,7 +1527,7 @@ void Task_PhotoAlbumApp_WaitCloseButtonAnim(SysTask *task, PhotoAlbumTask *data)
     }
 }
 
-u8 Photo_CountPartyMons(Photo *photo) {
+static u8 Photo_CountPartyMons(Photo *photo) {
     u8 count = 0;
     u8 i;
     for (i = 0; i < PARTY_SIZE; ++i) {

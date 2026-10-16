@@ -64,6 +64,36 @@ extern const ManagedSpriteTemplate sPCBoxItemIconSprite12Template;
 extern const ManagedSpriteTemplate sPCBoxTypeIconSprite13Template;
 extern const ManagedSpriteTemplate sPCBoxTypeIconSprite14Template;
 
+static void PCBox_SetSpriteDrawPriority(PCBoxView *view, u32 index, u32 priority);
+static void PCBox_SetSpriteTranslucent(PCBoxView *view, u32 index, u32 enabled);
+static void PCBox_FreeSpriteSystem(PCBoxView *view);
+static void PCBox_DeleteSprite(PCBoxView *view, u32 index);
+static void PCBox_DeleteAllSprites(PCBoxView *view);
+static void PCBox_LoadSpriteCharsSub(PCBoxView *view, int index, void *src, u32 size);
+static void PCBox_LoadMonIconResources(PCBoxView *view);
+static void PCBox_CreateMonIconSprites(PCBoxView *view);
+static void *PCBox_LoadMonIconChars(PCBoxView *view, BoxPokemon *boxMon, NNSG2dCharacterData **charData);
+static void PCBox_SetIconImage(PCBoxView *view, void *src, int index, int palette);
+static void PCBox_LoadMonIcon(PCBoxWork *work, BoxPokemon *boxMon, int index);
+static void PCBox_SetIconRangeTranslucent(PCBoxWork *work, u32 enabled, u32 first, u32 end, u32 check);
+static void PCBox_UpdateSlotIconItemTranslucency(PCBoxWork *work, u32 slot);
+static void PCBox_LoadMonPicResources(PCBoxView *view);
+static void PCBox_CreateMonPicSprites(PCBoxWork *work);
+static void PCBox_LoadMonPic(PCBoxView *view, PCBoxMonInfo *monInfo, u32 index);
+static void PCBox_LoadItemIconResources(PCBoxView *view);
+static void PCBox_CreateItemIconSprites(PCBoxView *view);
+static void PCBox_LoadTypeIconResources(PCBoxView *view);
+static void PCBox_CreateTypeIconSprites(PCBoxView *view);
+static void PCBox_LoadTypeIcon(PCBoxView *view, u32 type, u32 index, u32 resourceId);
+static void PCBox_LoadUiSpriteResources(PCBoxView *view);
+static void PCBox_CreateUiSprites(PCBoxView *view);
+static void PCBox_LoadTrayBoxResources(PCBoxView *view);
+static void PCBox_CreateTrayBoxSprites(PCBoxView *view);
+static void PCBox_LoadWallpaperListResources(PCBoxView *view);
+static void PCBox_CreateWallpaperListSprites(PCBoxView *view);
+static void PCBox_PlaceWallpaperMenuTextObj(PCBoxView *view);
+static void PCBox_ColorWallpaperThumbnail(PCBoxWork *work, u8 *buf, u32 wallpaper, u32 match, u32 size);
+
 void PCBox_FreeSprites(PCBoxView *view) {
     PCBox_DestroyTrayTextObjs(view);
     PCBox_DeleteAllSprites(view);
@@ -112,13 +142,13 @@ void PCBox_SetSpritePriority(PCBoxView *view, u32 index, u32 priority) {
     ManagedSprite_SetPriority(view->sprites[index], priority);
 }
 
-void PCBox_SetSpriteDrawPriority(PCBoxView *view, u32 index, u32 priority) {
+static void PCBox_SetSpriteDrawPriority(PCBoxView *view, u32 index, u32 priority) {
     view->spriteDrawLock = 1;
     ((void (*)(ManagedSprite *, u32))ManagedSprite_SetDrawPriority)(view->sprites[index], priority);
     view->spriteDrawLock = 0;
 }
 
-void PCBox_SetSpriteTranslucent(PCBoxView *view, u32 index, u32 enabled) {
+static void PCBox_SetSpriteTranslucent(PCBoxView *view, u32 index, u32 enabled) {
     if (enabled == 1) {
         ManagedSprite_SetOamMode(view->sprites[index], GX_OAM_MODE_XLU);
     } else {
@@ -142,7 +172,7 @@ void PCBox_InitSpriteSystem(PCBoxView *view) {
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(view->spriteSystem), 0, 2 << 20);
 }
 
-void PCBox_FreeSpriteSystem(PCBoxView *view) {
+static void PCBox_FreeSpriteSystem(PCBoxView *view) {
     SpriteSystem_FreeResourcesAndManager(view->spriteSystem, view->spriteManager);
     SpriteSystem_Free(view->spriteSystem);
 }
@@ -167,14 +197,14 @@ void PCBox_CreateSprites(PCBoxWork *work) {
     PCBox_CreateTypeIconSprites(work->view);
 }
 
-void PCBox_DeleteSprite(PCBoxView *view, u32 index) {
+static void PCBox_DeleteSprite(PCBoxView *view, u32 index) {
     if (view->sprites[index] != NULL) {
         Sprite_DeleteAndFreeResources(view->sprites[index]);
         view->sprites[index] = NULL;
     }
 }
 
-void PCBox_DeleteAllSprites(PCBoxView *view) {
+static void PCBox_DeleteAllSprites(PCBoxView *view) {
     u32 i;
 
     for (i = 0; i < 69; i++) {
@@ -189,14 +219,14 @@ void PCBox_LoadSpriteCharsMain(PCBoxView *view, int index, void *src, u32 size) 
     GX_LoadOBJ(src, location, size);
 }
 
-void PCBox_LoadSpriteCharsSub(PCBoxView *view, int index, void *src, u32 size) {
+static void PCBox_LoadSpriteCharsSub(PCBoxView *view, int index, void *src, u32 size) {
     u32 location = NNS_G2dGetImageLocation(Sprite_GetImageProxy(view->sprites[index]->sprite), NNS_G2D_VRAM_TYPE_2DSUB);
 
     DC_FlushRange(src, size);
     GXS_LoadOBJ(src, location, size);
 }
 
-void PCBox_LoadMonIconResources(PCBoxView *view) {
+static void PCBox_LoadMonIconResources(PCBoxView *view) {
     u32 i;
 
     for (i = 0; i < PC_BOX_SLOT_COUNT; i++) {
@@ -207,7 +237,7 @@ void PCBox_LoadMonIconResources(PCBoxView *view) {
     SpriteSystem_LoadAnimResObj(view->spriteSystem, view->spriteManager, NARC_poketool_icongra_poke_icon, GetMonIconAnim64KNaix(), FALSE, 0xC0F9);
 }
 
-void PCBox_CreateMonIconSprites(PCBoxView *view) {
+static void PCBox_CreateMonIconSprites(PCBoxView *view) {
     ManagedSpriteTemplate template;
     ManagedSpriteTemplate base;
     int priority;
@@ -231,7 +261,7 @@ void PCBox_CreateMonIconSprites(PCBoxView *view) {
     }
 }
 
-void *PCBox_LoadMonIconChars(PCBoxView *view, BoxPokemon *boxMon, NNSG2dCharacterData **charData) {
+static void *PCBox_LoadMonIconChars(PCBoxView *view, BoxPokemon *boxMon, NNSG2dCharacterData **charData) {
     return GfGfxLoader_GetCharDataFromOpenNarc(view->iconNarc, Boxmon_GetIconNaix(boxMon), FALSE, charData, HEAP_ID_10);
 }
 
@@ -260,12 +290,12 @@ void PCBox_LoadBoxIconImages(PCBoxWork *work, int box) {
 
 #pragma force_active reset
 
-void PCBox_SetIconImage(PCBoxView *view, void *src, int index, int palette) {
+static void PCBox_SetIconImage(PCBoxView *view, void *src, int index, int palette) {
     PCBox_LoadSpriteCharsMain(view, index, src, 0x200);
     ManagedSprite_SetPaletteOverride(view->sprites[index], palette + 3);
 }
 
-void PCBox_LoadMonIcon(PCBoxWork *work, BoxPokemon *boxMon, int index) {
+static void PCBox_LoadMonIcon(PCBoxWork *work, BoxPokemon *boxMon, int index) {
     NNSG2dCharacterData *charData;
     void *allocation = PCBox_LoadMonIconChars(work->view, boxMon, &charData);
     int palette = Boxmon_GetIconPalette(boxMon);
@@ -524,7 +554,7 @@ void PCBox_ResetSpriteAffine(PCBoxReleaseWork *releaseWork) {
 }
 
 // Item mode: icons of mons without a held item are translucent (check == 1), or all icons get ENABLED.
-void PCBox_SetIconRangeTranslucent(PCBoxWork *work, u32 enabled, u32 first, u32 end, u32 check) {
+static void PCBox_SetIconRangeTranslucent(PCBoxWork *work, u32 enabled, u32 first, u32 end, u32 check) {
     if (check == 1) {
         for (; first < end; first++) {
             if (PCBox_GetSlotMonData(work, first, MON_DATA_HELD_ITEM, NULL) == ITEM_NONE) {
@@ -556,11 +586,11 @@ void PCBox_SetSlotIconTranslucent(PCBoxView *view, u32 slot, u32 enabled) {
     PCBox_SetSpriteTranslucent(view, view->slotIcons[slot], enabled);
 }
 
-void PCBox_UpdateSlotIconItemTranslucency(PCBoxWork *work, u32 slot) {
+static void PCBox_UpdateSlotIconItemTranslucency(PCBoxWork *work, u32 slot) {
     PCBox_SetIconRangeTranslucent(work, 1, slot, slot + 1, 1);
 }
 
-void PCBox_LoadMonPicResources(PCBoxView *view) {
+static void PCBox_LoadMonPicResources(PCBoxView *view) {
     SpriteSystem_LoadCharResObj(view->spriteSystem, view->spriteManager, NARC_a_0_0_8, 0x4c, FALSE, 2, 0xc11d);
     SpriteSystem_LoadCharResObj(view->spriteSystem, view->spriteManager, NARC_a_0_0_8, 0x4c, FALSE, 2, 0xc11e);
     SpriteSystem_LoadPlttResObj(view->spriteSystem, view->spriteManager, NARC_a_0_0_8, 0x4b, FALSE, 1, 2, 0xc0fa);
@@ -569,7 +599,7 @@ void PCBox_LoadMonPicResources(PCBoxView *view) {
     SpriteSystem_LoadAnimResObj(view->spriteSystem, view->spriteManager, NARC_a_0_0_8, 0x4e, FALSE, 0xc0fa);
 }
 
-void PCBox_CreateMonPicSprites(PCBoxWork *work) {
+static void PCBox_CreateMonPicSprites(PCBoxWork *work) {
     PCBoxView *view = work->view;
 
     view->sprites[2] = SpriteSystem_NewSpriteWithYOffset(view->spriteSystem, view->spriteManager, &sPCBoxMonPicSprite2Template, 2 << 20);
@@ -578,7 +608,7 @@ void PCBox_CreateMonPicSprites(PCBoxWork *work) {
     ManagedSprite_SetDrawFlag(view->sprites[3], 0);
 }
 
-void PCBox_LoadMonPic(PCBoxView *view, PCBoxMonInfo *monInfo, u32 index) {
+static void PCBox_LoadMonPic(PCBoxView *view, PCBoxMonInfo *monInfo, u32 index) {
     PokepicTemplate pic;
     TileRect dims = sPCBoxMonPicRect;
     void *buf;
@@ -608,7 +638,7 @@ void PCBox_ShowMonPic(PCBoxWork *work, PCBoxMonInfo *monInfo, u32 index) {
     work->view->monPicBuffer ^= 1;
 }
 
-void PCBox_LoadItemIconResources(PCBoxView *view) {
+static void PCBox_LoadItemIconResources(PCBoxView *view) {
     u32 fileId;
 
     SpriteSystem_LoadCharResObj(view->spriteSystem, view->spriteManager, NARC_a_0_1_9, 0x4f, TRUE, 1, 0xc11f);
@@ -621,7 +651,7 @@ void PCBox_LoadItemIconResources(PCBoxView *view) {
     SpriteSystem_LoadAnimResObj(view->spriteSystem, view->spriteManager, NARC_a_0_1_9, 0x51, TRUE, 0xc0fb);
 }
 
-void PCBox_CreateItemIconSprites(PCBoxView *view) {
+static void PCBox_CreateItemIconSprites(PCBoxView *view) {
     view->sprites[11] = SpriteSystem_NewSprite(view->spriteSystem, view->spriteManager, &sPCBoxItemIconSpriteTemplate);
     ManagedSprite_SetDrawFlag(view->sprites[11], 0);
     view->sprites[12] = SpriteSystem_NewSpriteWithYOffset(view->spriteSystem, view->spriteManager, &sPCBoxItemIconSprite12Template, 2 << 20);
@@ -747,7 +777,7 @@ void PCBox_UpdateInfoItemIconPosition(PCBoxView *view) {
     ManagedSprite_SetDrawFlag(view->sprites[12], TRUE);
 }
 
-void PCBox_LoadTypeIconResources(PCBoxView *view) {
+static void PCBox_LoadTypeIconResources(PCBoxView *view) {
     SpriteSystem_LoadCharResObj(view->spriteSystem, view->spriteManager, NARC_a_0_1_9, 0x52, TRUE, 2, 0xc121);
     SpriteSystem_LoadCharResObj(view->spriteSystem, view->spriteManager, NARC_a_0_1_9, 0x52, TRUE, 2, 0xc122);
     SpriteSystem_LoadPlttResObj(view->spriteSystem, view->spriteManager, NARC_a_0_0_8, 0x4a, FALSE, 3, 2, 0xc0fe);
@@ -755,14 +785,14 @@ void PCBox_LoadTypeIconResources(PCBoxView *view) {
     SpriteSystem_LoadAnimResObj(view->spriteSystem, view->spriteManager, NARC_a_0_1_9, 0x54, TRUE, 0xc0fc);
 }
 
-void PCBox_CreateTypeIconSprites(PCBoxView *view) {
+static void PCBox_CreateTypeIconSprites(PCBoxView *view) {
     view->sprites[13] = SpriteSystem_NewSpriteWithYOffset(view->spriteSystem, view->spriteManager, &sPCBoxTypeIconSprite13Template, 2 << 20);
     view->sprites[14] = SpriteSystem_NewSpriteWithYOffset(view->spriteSystem, view->spriteManager, &sPCBoxTypeIconSprite14Template, 2 << 20);
     ManagedSprite_SetDrawFlag(view->sprites[13], FALSE);
     ManagedSprite_SetDrawFlag(view->sprites[14], FALSE);
 }
 
-void PCBox_LoadTypeIcon(PCBoxView *view, u32 type, u32 index, u32 resourceId) {
+static void PCBox_LoadTypeIcon(PCBoxView *view, u32 type, u32 index, u32 resourceId) {
     NNSG2dCharacterData *charData;
     void *buf;
     u32 palette;
@@ -790,14 +820,14 @@ void PCBox_DrawTypeIcons(PCBoxView *view, PCBoxMonInfo *monInfo) {
     }
 }
 
-void PCBox_LoadUiSpriteResources(PCBoxView *view) {
+static void PCBox_LoadUiSpriteResources(PCBoxView *view) {
     SpriteSystem_LoadCharResObj(view->spriteSystem, view->spriteManager, NARC_a_0_1_9, 0x42, TRUE, 1, 0xc12d);
     SpriteSystem_LoadPlttResObj(view->spriteSystem, view->spriteManager, NARC_a_0_1_9, 0x45, FALSE, 3, 1, 0xc101);
     SpriteSystem_LoadCellResObj(view->spriteSystem, view->spriteManager, NARC_a_0_1_9, 0x43, TRUE, 0xc0ff);
     SpriteSystem_LoadAnimResObj(view->spriteSystem, view->spriteManager, NARC_a_0_1_9, 0x44, TRUE, 0xc0ff);
 }
 
-void PCBox_CreateUiSprites(PCBoxView *view) {
+static void PCBox_CreateUiSprites(PCBoxView *view) {
     view->sprites[0] = SpriteSystem_NewSprite(view->spriteSystem, view->spriteManager, &sPCBoxUiSprite0Template);
     view->sprites[1] = SpriteSystem_NewSprite(view->spriteSystem, view->spriteManager, &sPCBoxUiSprite1Template);
     view->sprites[4] = SpriteSystem_NewSprite(view->spriteSystem, view->spriteManager, &sPCBoxUiSprite4Template);
@@ -902,7 +932,7 @@ void PCBox_UpdateSelectedIconOutline(PCBoxWork *work) {
     }
 }
 
-void PCBox_LoadTrayBoxResources(PCBoxView *view) {
+static void PCBox_LoadTrayBoxResources(PCBoxView *view) {
     u32 i;
 
     for (i = 0; i < 6; i++) {
@@ -913,7 +943,7 @@ void PCBox_LoadTrayBoxResources(PCBoxView *view) {
     SpriteSystem_LoadAnimResObj(view->spriteSystem, view->spriteManager, NARC_a_0_1_9, 0x49, TRUE, 0xc0fd);
 }
 
-void PCBox_CreateTrayBoxSprites(PCBoxView *view) {
+static void PCBox_CreateTrayBoxSprites(PCBoxView *view) {
     ManagedSpriteTemplate template[2];
     u32 i = 0;
     s32 dx = 0;
@@ -928,7 +958,7 @@ void PCBox_CreateTrayBoxSprites(PCBoxView *view) {
     }
 }
 
-void PCBox_LoadWallpaperListResources(PCBoxView *view) {
+static void PCBox_LoadWallpaperListResources(PCBoxView *view) {
     u32 i;
 
     for (i = 0; i < 4; i++) {
@@ -939,7 +969,7 @@ void PCBox_LoadWallpaperListResources(PCBoxView *view) {
     SpriteSystem_LoadAnimResObj(view->spriteSystem, view->spriteManager, NARC_a_0_1_9, 0x4d, TRUE, 0xc0fe);
 }
 
-void PCBox_CreateWallpaperListSprites(PCBoxView *view) {
+static void PCBox_CreateWallpaperListSprites(PCBoxView *view) {
     ManagedSpriteTemplate template[2];
     u32 i = 0;
     s32 dx = 0;
@@ -959,7 +989,7 @@ void PCBox_SetBoxArrowsVisible(PCBoxView *view, u32 visible) {
     PCBox_SetSpriteVisible(view, 1, visible);
 }
 
-void PCBox_PlaceWallpaperMenuTextObj(PCBoxView *view) {
+static void PCBox_PlaceWallpaperMenuTextObj(PCBoxView *view) {
     TextOBJ_SetPosition(view->textObjs[0].textObj, -48, -8);
 }
 
@@ -1046,7 +1076,7 @@ void PCBox_LoadWallpaperThumbnails(PCBoxWork *work) {
 }
 
 // Recolors pixels MATCH of a thumbnail to the palette color of WALLPAPER (locked bonus wallpapers are gray).
-void PCBox_ColorWallpaperThumbnail(PCBoxWork *work, u8 *buf, u32 wallpaper, u32 match, u32 size) {
+static void PCBox_ColorWallpaperThumbnail(PCBoxWork *work, u8 *buf, u32 wallpaper, u32 match, u32 size) {
     u32 i;
     u8 color;
 

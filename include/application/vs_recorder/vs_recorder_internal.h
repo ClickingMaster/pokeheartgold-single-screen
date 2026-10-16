@@ -26,11 +26,10 @@
 #include "touchscreen.h"
 
 // VS Recorder app (overlay 40): the VS Recorder item (mode 0) and the Global Terminal data browser (modes 1-6).
-// The work is allocated by the main-ARM9 launcher (vs_recorder_app.c), so only the fields known so far are named.
+// The work is allocated by the main-ARM9 launcher, so only the fields known so far are named.
 
 typedef struct VsRecorderWork VsRecorderWork;
 
-// frontier_card.c (no public header)
 typedef struct FrontierCard FrontierCard;
 String *FrontierCard_NewNameString(const u16 *name, enum HeapID heapID); // the name is the card's first field
 u32 FrontierCard_GetGender(FrontierCard *card);
@@ -46,7 +45,6 @@ FrontierCard *FrontierCard_New(enum HeapID heapID);
 void FrontierCard_Delete(FrontierCard *card);
 void FrontierCard_InitFromSave(FrontierCard *card, SaveData *saveData);
 
-// battle_record.c (not in battle_recording.h)
 BOOL BattleRecord_Load(SaveData *save, enum HeapID heapID, int *out, void *battle, int index);
 void BattleRecord_Delete(void);
 void *BattleRecord_CopyHeader(enum HeapID heapID);
@@ -54,7 +52,6 @@ FrontierCard *BattleRecord_CopyProfile(enum HeapID heapID);
 void BattleRecord_Import(void *profile, void *summary, void *data, void *battle, SaveData *save);
 u64 BattleRecordHeader_GetField(void *summary, int field, int index);
 
-// save_fashion.c (not in fashion_case.h)
 SaveFashionDataSub *FashionEntry_New(enum HeapID heapID);
 void FashionEntry_GetMonSecondText(SaveFashionDataSub *entry, String *string);
 u16 FashionEntry_GetMailMessageWord(SaveFashionDataSub *entry);
@@ -489,7 +486,7 @@ struct VsRecorderWork {
     int choiceCount;                         // 0x06E0, rows of the current choices
     u32 menuCursor;                          // 0x06E4
     u8 unk_06E8[8];                          // 0x06E8
-    struct OrbitCursor *orbitCursors[2];     // 0x06F0, touch cursors (orbit_cursor.h)
+    struct OrbitCursor *orbitCursors[2];     // 0x06F0, touch cursors
     VsRecorderDecor decor[6];                // 0x06F8
     const VsRecorderMenuEntry *menu;         // 0x0818, current choices
     const VsRecorderMenuEntry *menuStack[5]; // 0x081C
@@ -516,29 +513,21 @@ struct VsRecorderWork {
     SysTask *task;                           // 0x416C
 }; // size 0x4170
 
-// vs_recorder.c
 void VsRecorder_InitResources(VsRecorderWork *work);
 void VsRecorder_FreeResources(VsRecorderWork *work);
-void VsRecorder_InitBgLayers(BgConfig *bgConfig);
 void VsRecorder_SetScreensFlipped(int flipped);
 void VsRecorder_ResetBg2(VsRecorderWork *work);
-void VsRecorder_InitSpriteSystem(VsRecorderWork *work);
 void VsRecorder_VBlankCB(void *data);
 BOOL VsRecorder_Main(VsRecorderWork *work, int *screen);
 
-// vs_recorder_ui.c
 void VsRecorder_SetScreenIfDone(VsRecorderWork *work, int nextScreen, BOOL done, int *screen);
 void VsRecorder_SetSubState(VsRecorderWork *work, int subState);
-void VsRecorder_SetStep(VsRecorderWork *work, u32 step);
-void VsRecorder_RefreshMenu(VsRecorderWork *work);
 BOOL VsRecorder_MenuEnterChild(VsRecorderWork *work);
 BOOL VsRecorder_MenuRestore(VsRecorderWork *work);
 void VsRecorder_MenuRunAction(VsRecorderWork *work);
-BOOL VsRecorder_MenuCanSelect(VsRecorderWork *work);
 void VsRecorder_OnMenuTouch(u32 index, u32 event, void *arg);
 void VsRecorder_InitMenuHitboxes(VsRecorderWork *work);
 void VsRecorder_UpdateMenuHitboxes(VsRecorderWork *work);
-void VsRecorder_ClearMenuHitboxes(VsRecorderWork *work);
 void VsRecorder_UpdateMenuTouch(VsRecorderWork *work);
 void VsRecorder_MenuPop(VsRecorderWork *work);
 void VsRecorder_ClearResumeState(VsRecorderWork *work);
@@ -560,14 +549,11 @@ void VsRecorder_AttachMenuRowText(VsRecorderWork *work);
 void VsRecorder_RefreshPathRows(VsRecorderWork *work);
 void VsRecorder_DeleteMenuRowSprites(VsRecorderWork *work);
 void VsRecorder_SetMenuRowsDrawFlag(VsRecorderWork *work, BOOL draw);
-void VsRecorder_DecorTask(SysTask *task, void *data);
 void VsRecorder_SetSpritePos(ManagedSprite *sprite, s16 x, s16 y);
 void VsRecorder_GetSpritePos(ManagedSprite *sprite, s16 *x, s16 *y);
 
-// vs_recorder_row_text.c
 void VsRecorder_CreateMenuRowText(VsRecorderWork *work);
 
-// vs_recorder_gfx.c
 void VsRecorder_SetMenuRowText(VsRecorderWork *work, VsRecorderMenuRow *row, int msgId, const VsRecorderMenuEntry *entry);
 void VsRecorder_FreeMenuRowText(VsRecorderWork *work);
 void VsRecorder_CreateTextSprite(VsRecorderTextSprite *textSprite, VsRecorderGfx *gfx, NNS_G2D_VRAM_TYPE vram);
@@ -597,7 +583,6 @@ u16 *VsRecorder_LoadSpeciesList(enum HeapID heapID, int unused, int *count);
 void VsRecorder_SetBoxUploaded(VsRecorderWork *work, u32 uploaded);
 u32 VsRecorder_IsBoxUploaded(VsRecorderWork *work);
 
-// vs_recorder_windows.c
 void VsRecorder_ShowNotice(VsRecorderWork *work, int msgId);
 void VsRecorder_HideNotice(VsRecorderWork *work);
 void VsRecorder_RemoveTopMessage(VsRecorderWork *work);
@@ -605,21 +590,11 @@ void VsRecorder_ShowTopMessage(VsRecorderWork *work, int msgId);
 void VsRecorder_SetMessageText(VsRecorderWork *work, int msgId);
 void VsRecorder_HideTopMessage(VsRecorderWork *work);
 void VsRecorder_ShowMenuNotice(VsRecorderWork *work, int msgId);
-void VsRecorder_PrintProfile(VsRecorderProfile *profile, VsRecorderWork *work);
-void VsRecorder_RemoveProfileWindows(VsRecorderProfile *profile);
-void VsRecorder_SetProfileMonIconDrawFlag(VsRecorderProfile *profile, BOOL draw);
-void VsRecorder_FreeProfileMonIcon(VsRecorderProfile *profile, VsRecorderWork *work);
-void VsRecorder_CreateProfileMonIcon(VsRecorderProfile *profile, VsRecorderWork *work);
-void VsRecorder_SetProfileAvatarDrawFlag(VsRecorderProfile *profile, BOOL draw);
-void VsRecorder_FreeProfileAvatar(VsRecorderProfile *profile, VsRecorderWork *work);
 u32 VsRecorder_GetAvatarFileId(int avatar, int kind);
-void VsRecorder_CreateProfileAvatar(VsRecorderProfile *profile, VsRecorderWork *work);
 void VsRecorder_CreateProfile(VsRecorderProfile *profile, VsRecorderWork *work);
 void VsRecorder_FreeProfile(VsRecorderProfile *profile, VsRecorderWork *work);
 void VsRecorder_SetProfileDrawFlag(VsRecorderProfile *profile, BOOL draw);
 
-// vs_recorder_list.c
-void VsRecorder_PrintListLocation(VsRecorderListWindow *list, VsRecorderWork *work);
 void VsRecorder_InitMessageList(VsRecorderListWindow *list, VsRecorderWork *work, VsRecorderListConfig *config);
 void VsRecorder_InitList(VsRecorderListWindow *list, VsRecorderWork *work, MsgData *msgData, VsRecorderListConfig *config);
 void VsRecorder_InitRankingList(VsRecorderListWindow *list, VsRecorderWork *work, MsgData *msgData, VsRecorderListConfig *config, int unused, int type, String *valueTemplate);
@@ -631,7 +606,6 @@ int VsRecorder_RedrawNameList(VsRecorderListWindow *list, VsRecorderWork *work);
 void VsRecorder_ListMoveCursor(VsRecorderListWindow *list, s16 delta);
 void VsRecorder_ListScroll(VsRecorderListWindow *list, s16 delta);
 
-// vs_recorder_util.c
 void VsRecorder_RemoveListWindow(VsRecorderListWindow *list);
 void VsRecorder_ClearListWindow(VsRecorderListWindow *list);
 void VsRecorder_CreateListArrows(VsRecorderListWindow *list, VsRecorderWork *work, NNS_G2D_VRAM_TYPE vram);
@@ -639,21 +613,16 @@ void VsRecorder_SetListArrowsY(VsRecorderListWindow *list, int upY, int downY);
 void VsRecorder_UpdateListArrows(VsRecorderListWindow *list);
 void VsRecorder_UpdateListArrowsCursor(VsRecorderListWindow *list);
 void VsRecorder_FreeListArrows(VsRecorderListWindow *list, VsRecorderWork *work);
-ManagedSprite *VsRecorder_NewScrollSprite(void *unused, VsRecorderWork *work, NNS_G2D_VRAM_TYPE vram, int anim);
-void VsRecorder_DeleteTouchScrollSprites(VsRecorderTouchScroll *scroll);
 void VsRecorder_CreateTouchScrollSprites(VsRecorderTouchScroll *scroll, VsRecorderWork *work);
 void VsRecorder_CreateTouchScrollSpritesWithAnim(VsRecorderTouchScroll *scroll, VsRecorderWork *work, int anim);
 void VsRecorder_InitTouchScroll(VsRecorderTouchScroll *scroll);
 void VsRecorder_FreeTouchScroll(VsRecorderTouchScroll *scroll);
-void VsRecorder_TouchScrollTrack(VsRecorderTouchScroll *scroll, int y);
 void VsRecorder_TouchScrollSetEnabled(VsRecorderTouchScroll *scroll, VsRecorderListWindow *list);
 void VsRecorder_UpdateTouchScroll(VsRecorderTouchScroll *scroll);
 void VsRecorder_AddGameStatsScore(VsRecorderWork *work, int score);
 void VsRecorder_ImportBattleRecord(VsRecorderWork *work);
-void VsRecorder_FlipScreensTask(SysTask *task, void *data);
 SysTask *VsRecorder_StartFlipScreens(VsRecorderWork *work, int flipped);
 u32 VsRecorder_IsFlipScreensDone(VsRecorderWork *work);
-void VsRecorder_VBlankTask(SysTask *task, void *data);
 void VsRecorder_StartVBlankTask(VsRecorderWork *work);
 BOOL VsRecorder_StepRecordSave(VsRecorderWork *work, u32 index, u32 sealed); // TRUE when done
 void VsRecorder_SetBattleResult(VsRecorderWork *work, u32 result);
@@ -668,13 +637,8 @@ ManagedSprite *VsRecorder_NewMonIcon(VsRecorderWork *work, NARC *narc, int index
 void VsRecorder_DeleteMonIcon(VsRecorderWork *work, u32 index, ManagedSprite *sprite);
 void VsRecorder_DeleteSprite(void *unused0, void *unused1, ManagedSprite *sprite);
 
-// vs_recorder_screen.c
-void VsRecorder_PrintVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work);
-void VsRecorder_RemoveVideoInfoWindows(VsRecorderVideoInfo *info, VsRecorderWork *work);
 BOOL VsRecorder_HeaderUsesThreeMonLayout(void *header);
-BOOL VsRecorderVideoInfo_UsesThreeMonLayout(VsRecorderVideoInfo *info);
 int VsRecorderVideoInfo_GetScreenId(VsRecorderVideoInfo *info);
-void VsRecorder_CreateVideoPartyIcons(VsRecorderVideoInfo *info, VsRecorderWork *work);
 void VsRecorder_CreateVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work);
 void VsRecorder_FreeVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work);
 void VsRecorder_SetVideoPartyIconsDrawFlag(VsRecorderVideoInfo *info, BOOL draw);
@@ -685,8 +649,6 @@ void VsRecorder_ResetBgPriorities(void);
 void VsRecorder_PlaceOrbitCursor(VsRecorderWork *work, struct OrbitCursor *cursor, s16 x, s16 y);
 int VsRecorder_CountDigits(u64 value);
 void VsRecorder_LoadScreen(VsRecorderWork *work, int fileId, GFBgLayer layer);
-void VsRecorder_TouchIndicatorTask(SysTask *task, void *data);
-void VsRecorder_ShowTouchIndicator(VsRecorderWork *work);
 void VsRecorder_OnTouchConfirm(VsRecorderWork *work);
 u32 VsRecorder_IsVBlankPaused(VsRecorderWork *work);
 void VsRecorder_SetVBlankPaused(VsRecorderWork *work, u32 paused);
@@ -697,51 +659,36 @@ void VsRecorder_ShowMessageScreen(VsRecorderWork *work, int group, u32 index, u3
 void VsRecorder_MessageScreen(VsRecorderWork *work);
 BOOL VsRecorder_IsVideoSaved(VsRecorderWork *work, u64 number);
 void VsRecorder_SanitizeName(VsRecorderWork *work, String *str);
-void VsRecorder_SetPlaceholderName(String *str, enum HeapID heapID);
 void VsRecorder_ShowTouchHere(VsRecorderWork *work);
 void VsRecorder_HideTouchHere(VsRecorderWork *work);
 
-// vs_recorder_title.c
 BOOL VsRecorder_TitleIntro(VsRecorderWork *work);
 BOOL VsRecorder_TitleShowMenu(VsRecorderWork *work);
 BOOL VsRecorder_TitleFlash(VsRecorderWork *work);
 BOOL VsRecorder_TitleSlideInChoices(VsRecorderWork *work);
 BOOL VsRecorder_SlideInChoiceRows(VsRecorderWork *work);
 
-// vs_recorder_menu.c
 BOOL VsRecorder_MenuMain(VsRecorderWork *work);
-int VsRecorder_CheckSchemeArrowTouch(void);
 BOOL VsRecorder_MenuInvalid(VsRecorderWork *work);
 BOOL VsRecorder_MenuExit(VsRecorderWork *work);
 BOOL VsRecorder_MenuSlideIn(VsRecorderWork *work);
 BOOL VsRecorder_MenuShow(VsRecorderWork *work);
-void VsRecorder_RowMoveTask(SysTask *task, void *data);
 BOOL VsRecorder_MenuSelect(VsRecorderWork *work);
 BOOL VsRecorder_MenuBack(VsRecorderWork *work);
 BOOL VsRecorder_MenuPrevScheme(VsRecorderWork *work);
 
-// vs_recorder_saved_video.c
 BOOL VsRecorder_MenuNextScheme(VsRecorderWork *work);
 BOOL VsRecorder_SavedVideoInit(VsRecorderWork *work);
 BOOL VsRecorder_SavedVideoEnter(VsRecorderWork *work);
 BOOL VsRecorder_SavedVideoShow(VsRecorderWork *work);
 BOOL VsRecorder_SavedVideoMain(VsRecorderWork *work);
 BOOL VsRecorder_SavedVideoToggleProfile(VsRecorderWork *work);
-void VsRecorder_ShowYesNoWindows(VsRecorderWork *work);
-void VsRecorder_HideYesNoWindows(VsRecorderWork *work);
 BOOL VsRecorder_SavedVideoSavePrompt(VsRecorderWork *work);
 BOOL VsRecorder_SavedVideoSave(VsRecorderWork *work);
 BOOL VsRecorder_SavedVideoPlay(VsRecorderWork *work);
 BOOL VsRecorder_SavedVideoExit(VsRecorderWork *work);
 BOOL VsRecorder_SavedVideoResume(VsRecorderWork *work);
-void VsRecorder_OnSavedVideoTouch(u32 index, u32 event, void *arg);
-void VsRecorder_SetSavedVideoSlot(VsRecorderWork *work);
-void VsRecorder_ShowProfileButton(VsRecorderWork *work);
-void VsRecorder_RemoveProfileButton(VsRecorderWork *work);
-void VsRecorder_PrintProfileButton(VsRecorderWork *work, u32 msgId);
-void VsRecorder_CreateExitButton(VsRecorderWork *work);
 
-// vs_recorder_frontier_record.c
 void VsRecorder_FreeExitButton(VsRecorderWork *work);
 void VsRecorder_PlaceFrontierExitButton(VsRecorderWork *work, BOOL left);
 void VsRecorder_LoadFrontierButtonGfx(VsRecorderWork *work, u32 vram);
@@ -758,7 +705,6 @@ void VsRecorder_PlaceFrontierSprites(VsRecorderWork *work);
 BOOL VsRecorder_FrontierEnter(VsRecorderWork *work);
 BOOL VsRecorder_FrontierMain(VsRecorderWork *work);
 
-// vs_recorder_dress_up.c
 BOOL VsRecorder_FrontierExit(VsRecorderWork *work);
 BOOL VsRecorder_DressUpInit(VsRecorderWork *work);
 BOOL VsRecorder_DressUpEnter(VsRecorderWork *work);
@@ -776,45 +722,16 @@ BOOL VsRecorder_DressUpViewMain(VsRecorderWork *work);
 BOOL VsRecorder_DressUpViewClosePhoto(VsRecorderWork *work);
 BOOL VsRecorder_DressUpViewToggleProfile(VsRecorderWork *work);
 BOOL VsRecorder_DressUpViewChangePhoto(VsRecorderWork *work);
-void VsRecorder_RemoveDressUpToggleWindow(VsRecorderWork *work);
-void VsRecorder_PrintDressUpToggleLabel(VsRecorderWork *work, u32 msgId);
-void VsRecorder_CreateDressUpToggleWindow(VsRecorderWork *work);
-void VsRecorder_DressUpVBlankCB(void *data);
-void VsRecorder_SetPhotoWindow(void);
-void VsRecorder_DisablePhotoWindow(void);
-void VsRecorder_SetDressUpSendButtonHidden(VsRecorderWork *work, BOOL hidden);
-void VsRecorder_CreateDressUpButtons(VsRecorderWork *work);
-void VsRecorder_FreeDressUpButtons(VsRecorderWork *work);
-void VsRecorder_PrintOwnPhotoCaption(VsRecorderWork *work);
-void VsRecorder_PrintPhotoCaption(VsRecorderWork *work, int index);
-BOOL VsRecorder_DressUpCategoryHasSeen(VsRecorderWork *work, int category);
-void VsRecorder_BuildDressUpSpeciesList(VsRecorderWork *work, int category);
-void VsRecorder_FreeDressUpSpeciesList(VsRecorderWork *work);
-void VsRecorder_OnDressUpCategoryTouch(u32 index, u32 event, void *arg);
-void VsRecorder_CreateDressUpCategoryWindows(VsRecorderWork *work);
-void VsRecorder_RemoveDressUpCategoryWindows(VsRecorderWork *work);
-void VsRecorder_RemovePhotoCaption(VsRecorderWork *work);
 
-// vs_recorder_box_data.c
 void VsRecorder_OnDressUpUploaded(void *arg, GlobalTerminalNetError *error);
 void VsRecorder_OnDressUpListReceived(void *arg, GlobalTerminalNetError *error);
 void VsRecorder_LoadBoxDataOwner(VsRecorderWork *work, int index);
 void VsRecorder_FreeBoxDataOwner(VsRecorderWork *work);
-BOOL VsRecorder_BoxFormHasMon(GlobalTerminalNetBoxForm *form);
-void VsRecorder_SkipToOccupiedSlot(VsRecorderBoxData *boxData);
-void VsRecorder_OnBoxDataSendTouch(u32 index, u32 event, void *arg);
-void VsRecorder_OnBoxDataSendCategoryTouch(u32 index, u32 event, void *arg);
-void VsRecorder_OnBoxDataViewCategoryTouch(u32 index, u32 event, void *arg);
-void VsRecorder_OnBoxListTouch(u32 index, u32 event, void *arg);
-void VsRecorder_OnBoxDataBoxTouch(u32 index, u32 event, void *arg);
-void VsRecorder_CreateBoxDataButtons(VsRecorderWork *work);
 void VsRecorder_FreeBoxDataButtons(VsRecorderWork *work);
 void VsRecorder_SelectFirstBoxMon(VsRecorderBoxData *boxData);
-void VsRecorder_PackBoxForm(SaveData *saveData, PCStorage *storage, int box, GlobalTerminalNetBoxForm *form);
 BOOL VsRecorder_BoxDataInit(VsRecorderWork *work);
 BOOL VsRecorder_BoxDataEnter(VsRecorderWork *work);
 BOOL VsRecorder_BoxDataSendChangeBox(VsRecorderWork *work);
-void VsRecorder_SetBoxDataSendButtonHidden(VsRecorderWork *work, BOOL hidden);
 BOOL VsRecorder_BoxDataSendShowCategories(VsRecorderWork *work);
 BOOL VsRecorder_BoxDataSendSelectCategory(VsRecorderWork *work);
 BOOL VsRecorder_BoxDataSendUpload(VsRecorderWork *work);
@@ -827,18 +744,13 @@ void VsRecorder_RemoveBoxDataCategoryButtons(VsRecorderWork *work);
 void VsRecorder_RemoveBoxDataWindows(VsRecorderWork *work);
 void VsRecorder_PrintBoxDataMessage(VsRecorderWork *work, int msgId);
 void VsRecorder_PrintBoxDataOwnerMessage(VsRecorderWork *work, int unused);
-void VsRecorder_PrintBoxName(VsRecorderWork *work);
 void VsRecorder_ClearBoxDataInfoWindows(VsRecorderWork *work);
 BOOL VsRecorder_HasAllBits(u32 flags, u32 mask);
-void VsRecorder_PrintBoxMonName(VsRecorderWork *work, int slot);
-void VsRecorder_CreateBoxMonIcons(VsRecorderWork *work);
 void VsRecorder_SetBoxMonIconsDrawFlag(VsRecorderWork *work, BOOL draw);
 void VsRecorder_FreeBoxMonIcons(VsRecorderWork *work);
-void VsRecorder_CreateBoxMonPic(VsRecorderWork *work);
 void VsRecorder_SetBoxMonPicVanished(VsRecorderWork *work, BOOL vanished);
 void VsRecorder_FreeBoxMonPic(VsRecorderWork *work);
 void VsRecorder_ShowBox(VsRecorderWork *work);
-void VsRecorder_RefreshOwnBox(VsRecorderWork *work);
 BOOL VsRecorder_BoxDataSendShow(VsRecorderWork *work);
 BOOL VsRecorder_BoxDataSendMain(VsRecorderWork *work);
 BOOL VsRecorder_BoxDataSendExit(VsRecorderWork *work);
@@ -851,13 +763,9 @@ void VsRecorder_RemoveNextMonButton(VsRecorderWork *work);
 void VsRecorder_RemoveBoxListButtons(VsRecorderWork *work);
 void VsRecorder_CreateBoxListTitle(VsRecorderWork *work);
 
-// vs_recorder_box_list_title.c
 void VsRecorder_RemoveBoxListTitle(VsRecorderWork *work);
 
-// vs_recorder_box_list.c
 BOOL VsRecorder_BoxDataViewDownload(VsRecorderWork *work);
-void VsRecorder_CreateBoxListItems(VsRecorderWork *work);
-void VsRecorder_FreeBoxListItems(VsRecorderWork *work);
 BOOL VsRecorder_BoxListMain(VsRecorderWork *work);
 BOOL VsRecorder_BoxListBack(VsRecorderWork *work);
 BOOL VsRecorder_BoxDataViewOpenBox(VsRecorderWork *work);
@@ -867,22 +775,8 @@ BOOL VsRecorder_BoxListShowProfile(VsRecorderWork *work);
 BOOL VsRecorder_BoxListHideProfile(VsRecorderWork *work);
 BOOL VsRecorder_BoxDataViewExit(VsRecorderWork *work);
 
-// vs_recorder_rankings.c
 void VsRecorder_OnBoxUploaded(void *arg, GlobalTerminalNetError *error);
 void VsRecorder_OnBoxListReceived(void *arg, GlobalTerminalNetError *error);
-void VsRecorder_InitRankingsList(VsRecorderWork *work);
-void VsRecorder_FillRankingEntries(VsRecorderWork *work);
-void VsRecorder_CreateRankingsButtonLabels(VsRecorderWork *work);
-void VsRecorder_RemoveRankingsButtonLabels(VsRecorderWork *work);
-void VsRecorder_CreateRankingsWindows(VsRecorderWork *work);
-void VsRecorder_RemoveRankingsWindows(VsRecorderWork *work);
-u32 VsRecorder_GetRankedRecordValue(VsRecorderWork *work, int record);
-void VsRecorder_PrintRankingsInfo(VsRecorderWork *work);
-void VsRecorder_SetRankingsSendButtonHidden(VsRecorderWork *work, BOOL hidden);
-void VsRecorder_CreateRankingsButtons(VsRecorderWork *work);
-void VsRecorder_FreeRankingsButtons(VsRecorderWork *work);
-void VsRecorder_UpdateRankingTeamCount(VsRecorderRankings *rankings);
-void VsRecorder_OnRankingsTouch(u32 index, u32 event, void *arg);
 BOOL VsRecorder_RankingsInit(VsRecorderWork *work);
 BOOL VsRecorder_RankingsEnter(VsRecorderWork *work);
 BOOL VsRecorder_RankingsDownload(VsRecorderWork *work);
@@ -902,7 +796,7 @@ void VsRecorder_InitNet(VsRecorderWork *work);
 void VsRecorder_UpdateNet(VsRecorderWork *work);
 void VsRecorder_FreeNet(VsRecorderWork *work);
 
-// main ARM9 (vs_recorder_app.c launcher, banner object)
+// main ARM9
 void VsRecorderApp_SetResult(void *result, u32 first, u32 second);
 void VsRecorderApp_CountMenuChoices(VsRecorderWork *work);
 

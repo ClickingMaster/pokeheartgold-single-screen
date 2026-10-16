@@ -23,13 +23,13 @@
 #include "render_text.h"
 #include "render_window.h"
 #include "screen_fade.h"
+#include "sound_playback.h"
 #include "sprite.h"
+#include "sprite_resource_header.h"
 #include "sprite_system.h"
 #include "string_util.h"
 #include "system.h"
 #include "text.h"
-#include "sound_playback.h"
-#include "sprite_resource_header.h"
 #include "ui_util.h"
 #include "yes_no_prompt.h"
 
@@ -117,10 +117,8 @@ typedef struct SwapMonPanelWindowTemplate {
 
 typedef BOOL (*BugContestSwapMonStateFunc)(BugContestSwapMon *swapMon);
 
-// SwapMonText_PrintString(WithColor) pass x and y to SwapMonText_PrintOnWindow untruncated
 typedef void (*SwapMonTextPrintOnWindowUntruncated)(BgConfig *bgConfig, Window *window, MessageFormat *messageFormat, MsgData *msgData, int msgId, int bgLayer, int x, int y, u32 color, enum HeapID heapID);
 
-// message_printer_number.h declares glyphId as u8; SwapMonText_PrintNumber passes it untruncated
 void MessagePrinter_PrintGlyphAndUInt(MessagePrinter *msgPrinter, int glyphId, u32 num, u32 ndigits, PrintingMode mode, Window *window, u32 x, u32 y);
 
 typedef struct BugContestSwapMonBgTemplates {
@@ -139,53 +137,54 @@ extern const SwapMonPanelWindowTemplate gSwapMonPanelWindowTemplates[SWAP_MON_PA
 extern const BugContestSwapMonBgTemplates gBugContestSwapMonBgTemplates;
 extern const BugContestSwapMonStateFunc gBugContestSwapMonStateFuncs[];
 
+static void BugContestSwapMon_ShowBothMons(BugContestSwapMon *swapMon);
+static void BugContestSwapMon_InitYesNoPrompt(BugContestSwapMon *swapMon);
+static int BugContestSwapMon_GetInitialState(int noPokemonCaught);
+static void BugContestSwapMon_SetBanks(void);
+static void BugContestSwapMon_ResetDisplay(void);
+static void BugContestSwapMon_SetResult(BugContestSwapMon *swapMon, int choice);
+static void BugContestSwapMon_DrawHpBar(Window *window, u16 hp, u16 maxHp);
+static void BugContestSwapMon_VBlank(void *data);
+static void BugContestSwapMon_Setup(OverlayManager *man);
+static void BugContestSwapMon_Teardown(OverlayManager *man);
+static void BugContestSwapMon_InitBgs(BugContestSwapMon *swapMon);
+static void BugContestSwapMon_FreeBgs(BugContestSwapMon *swapMon);
+static void BugContestSwapMon_LoadBgGfx(BugContestSwapMon *swapMon);
+static void BugContestSwapMon_InitSpriteSystem(BugContestSwapMon *swapMon);
+static void BugContestSwapMon_FreeSpriteSystem(SpriteSystem *spriteSystem, SpriteManager *spriteManager);
+static void BugContestSwapMon_LoadSpriteGfx(BugContestSwapMon *swapMon);
+static void BugContestSwapMon_SetMonIcon(ManagedSprite *sprite, Pokemon *mon, int paletteOffset, enum HeapID heapID);
+static void BugContestSwapMon_LoadSpriteChar(ManagedSprite *sprite, void *data, u32 size);
+static ManagedSprite *BugContestSwapMon_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u8 animation, u8 priority);
+static ManagedSprite *BugContestSwapMon_NewMonIconSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u8 slot);
+static SwapMonPanel *SwapMonPanel_New(SwapMonPanels *panels, u16 x, u16 y, int slot, Pokemon *mon);
+static void SwapMonPanel_Draw(SwapMonPanel *panel, SwapMonText *text);
+static void SwapMonPanel_StartScroll(SwapMonPanel *panel, void *scrolling, s16 targetY);
+static void SwapMonPanel_Scroll(SwapMonPanel *panel);
+static BOOL SwapMonPanel_IsScrollDone(SwapMonPanel *panel);
+static void SwapMonPanel_Delete(SwapMonPanel *panel);
+static SwapMonPanels *SwapMonPanels_New(enum HeapID heapID, BgConfig *bgConfig, SwapMonText *text, SpriteSystem *spriteSystem, SpriteManager *spriteManager, s8 iconPalette);
+static void SwapMonPanels_Delete(SwapMonPanels *panels);
+static void SwapMonPanels_Add(SwapMonPanels *panels, int slot, u16 x, u16 y, Pokemon *mon);
+static void SwapMonPanels_StartScroll(SwapMonPanels *panels, int slot, void *scrolling, s16 targetY);
+static void SwapMonPanels_Scroll(SwapMonPanels *panels);
+static BOOL SwapMonPanels_IsScrollDone(SwapMonPanels *panels);
+static SwapMonText *SwapMonText_New(enum HeapID heapID);
+static void SwapMonText_Init(SwapMonText *text, BgConfig *bgConfig, int bgLayer, Options *options);
+static void SwapMonText_Delete(SwapMonText *text);
+static BOOL SwapMonText_IsPrinting(SwapMonText *text);
+static void SwapMonText_PrintMessage(SwapMonText *text, int msgId);
+static void SwapMonText_PrintString(SwapMonText *text, Window *window, int msgId, int x, u8 y);
+static void SwapMonText_PrintStringWithColor(SwapMonText *text, Window *window, int msgId, int x, u8 y, u32 color);
+static void SwapMonText_PrintNumber(SwapMonText *text, Window *window, int value, int digits, BOOL withGlyph, int glyphId);
+static void SwapMonText_CloseMessageBox(SwapMonText *text);
+static MessageFormat *SwapMonText_GetMessageFormat(SwapMonText *text);
+static void SwapMonText_LoadGfx(BgConfig *bgConfig, int bgLayer, enum HeapID heapID);
+static u8 SwapMonText_ShowMessageBox(BgConfig *bgConfig, Window *window, String **string, MessageFormat *messageFormat, MsgData *msgData, int msgId, u8 bgLayer, enum HeapID heapID, Options *options);
+static void SwapMonText_PrintOnWindow(BgConfig *bgConfig, Window *window, MessageFormat *messageFormat, MsgData *msgData, int msgId, int bgLayer, u8 x, u8 y, u32 color, enum HeapID heapID);
+
 BOOL BugContestSwapMon_ShowCaughtMon(BugContestSwapMon *swapMon);
 BOOL BugContestSwapMon_ChooseMon(BugContestSwapMon *swapMon);
-void BugContestSwapMon_ShowBothMons(BugContestSwapMon *swapMon);
-void BugContestSwapMon_InitYesNoPrompt(BugContestSwapMon *swapMon);
-int BugContestSwapMon_GetInitialState(int noPokemonCaught);
-void BugContestSwapMon_SetBanks(void);
-void BugContestSwapMon_ResetDisplay(void);
-void BugContestSwapMon_SetResult(BugContestSwapMon *swapMon, int choice);
-void BugContestSwapMon_DrawHpBar(Window *window, u16 hp, u16 maxHp);
-void BugContestSwapMon_VBlank(void *data);
-void BugContestSwapMon_Setup(OverlayManager *man);
-void BugContestSwapMon_Teardown(OverlayManager *man);
-void BugContestSwapMon_InitBgs(BugContestSwapMon *swapMon);
-void BugContestSwapMon_FreeBgs(BugContestSwapMon *swapMon);
-void BugContestSwapMon_LoadBgGfx(BugContestSwapMon *swapMon);
-void BugContestSwapMon_InitSpriteSystem(BugContestSwapMon *swapMon);
-void BugContestSwapMon_FreeSpriteSystem(SpriteSystem *spriteSystem, SpriteManager *spriteManager);
-void BugContestSwapMon_LoadSpriteGfx(BugContestSwapMon *swapMon);
-void BugContestSwapMon_SetMonIcon(ManagedSprite *sprite, Pokemon *mon, int paletteOffset, enum HeapID heapID);
-void BugContestSwapMon_LoadSpriteChar(ManagedSprite *sprite, void *data, u32 size);
-ManagedSprite *BugContestSwapMon_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u8 animation, u8 priority);
-ManagedSprite *BugContestSwapMon_NewMonIconSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u8 slot);
-SwapMonPanel *SwapMonPanel_New(SwapMonPanels *panels, u16 x, u16 y, int slot, Pokemon *mon);
-void SwapMonPanel_Draw(SwapMonPanel *panel, SwapMonText *text);
-void SwapMonPanel_StartScroll(SwapMonPanel *panel, void *scrolling, s16 targetY);
-void SwapMonPanel_Scroll(SwapMonPanel *panel);
-BOOL SwapMonPanel_IsScrollDone(SwapMonPanel *panel);
-void SwapMonPanel_Delete(SwapMonPanel *panel);
-SwapMonPanels *SwapMonPanels_New(enum HeapID heapID, BgConfig *bgConfig, SwapMonText *text, SpriteSystem *spriteSystem, SpriteManager *spriteManager, s8 iconPalette);
-void SwapMonPanels_Delete(SwapMonPanels *panels);
-void SwapMonPanels_Add(SwapMonPanels *panels, int slot, u16 x, u16 y, Pokemon *mon);
-void SwapMonPanels_StartScroll(SwapMonPanels *panels, int slot, void *scrolling, s16 targetY);
-void SwapMonPanels_Scroll(SwapMonPanels *panels);
-BOOL SwapMonPanels_IsScrollDone(SwapMonPanels *panels);
-SwapMonText *SwapMonText_New(enum HeapID heapID);
-void SwapMonText_Init(SwapMonText *text, BgConfig *bgConfig, int bgLayer, Options *options);
-void SwapMonText_Delete(SwapMonText *text);
-BOOL SwapMonText_IsPrinting(SwapMonText *text);
-void SwapMonText_PrintMessage(SwapMonText *text, int msgId);
-void SwapMonText_PrintString(SwapMonText *text, Window *window, int msgId, int x, u8 y);
-void SwapMonText_PrintStringWithColor(SwapMonText *text, Window *window, int msgId, int x, u8 y, u32 color);
-void SwapMonText_PrintNumber(SwapMonText *text, Window *window, int value, int digits, BOOL withGlyph, int glyphId);
-void SwapMonText_CloseMessageBox(SwapMonText *text);
-MessageFormat *SwapMonText_GetMessageFormat(SwapMonText *text);
-void SwapMonText_LoadGfx(BgConfig *bgConfig, int bgLayer, enum HeapID heapID);
-u8 SwapMonText_ShowMessageBox(BgConfig *bgConfig, Window *window, String **string, MessageFormat *messageFormat, MsgData *msgData, int msgId, u8 bgLayer, enum HeapID heapID, Options *options);
-void SwapMonText_PrintOnWindow(BgConfig *bgConfig, Window *window, MessageFormat *messageFormat, MsgData *msgData, int msgId, int bgLayer, u8 x, u8 y, u32 color, enum HeapID heapID);
 
 BOOL BugContestSwapMon_Init(OverlayManager *man, int *state) {
     BugContestSwapMon *swapMon;
@@ -349,7 +348,7 @@ BOOL BugContestSwapMon_ChooseMon(BugContestSwapMon *swapMon) {
     return FALSE;
 }
 
-void BugContestSwapMon_ShowBothMons(BugContestSwapMon *swapMon) {
+static void BugContestSwapMon_ShowBothMons(BugContestSwapMon *swapMon) {
     MessageFormat *messageFormat = SwapMonText_GetMessageFormat(swapMon->text);
     Pokemon *newlyCaughtMon = swapMon->args->newlyCaughtMon;
     Pokemon *currentMon = swapMon->args->currentMon;
@@ -363,7 +362,7 @@ void BugContestSwapMon_ShowBothMons(BugContestSwapMon *swapMon) {
     ManagedSprite_SetPaletteOverride(sprite, 1);
 }
 
-void BugContestSwapMon_InitYesNoPrompt(BugContestSwapMon *swapMon) {
+static void BugContestSwapMon_InitYesNoPrompt(BugContestSwapMon *swapMon) {
     YesNoPromptTemplate template = { 0 };
     template.bgConfig = swapMon->bgConfig;
     template.bgId = GF_BG_LYR_MAIN_1;
@@ -375,7 +374,7 @@ void BugContestSwapMon_InitYesNoPrompt(BugContestSwapMon *swapMon) {
     YesNoPrompt_InitFromTemplate(swapMon->yesNoPrompt, &template);
 }
 
-int BugContestSwapMon_GetInitialState(int noPokemonCaught) {
+static int BugContestSwapMon_GetInitialState(int noPokemonCaught) {
     switch (noPokemonCaught) {
     case FALSE:
         goto chooseMon;
@@ -394,13 +393,13 @@ invalid:
     return SWAP_MON_STATE_SHOW_CAUGHT_MON;
 }
 
-void BugContestSwapMon_SetBanks(void) {
+static void BugContestSwapMon_SetBanks(void) {
     GraphicsBanks banks = gBugContestSwapMonGraphicsBanks;
 
     GfGfx_SetBanks(&banks);
 }
 
-void BugContestSwapMon_ResetDisplay(void) {
+static void BugContestSwapMon_ResetDisplay(void) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     GfGfx_DisableEngineAPlanes();
@@ -409,7 +408,7 @@ void BugContestSwapMon_ResetDisplay(void) {
     reg_GXS_DB_DISPCNT &= ~REG_GXS_DB_DISPCNT_DISPLAY_MASK;
 }
 
-void BugContestSwapMon_SetResult(BugContestSwapMon *swapMon, int choice) {
+static void BugContestSwapMon_SetResult(BugContestSwapMon *swapMon, int choice) {
     switch (choice) {
     case 1: {
         BugContestSwapMonArgs *args = swapMon->args;
@@ -426,7 +425,7 @@ void BugContestSwapMon_SetResult(BugContestSwapMon *swapMon, int choice) {
     }
 }
 
-void BugContestSwapMon_DrawHpBar(Window *window, u16 hp, u16 maxHp) {
+static void BugContestSwapMon_DrawHpBar(Window *window, u16 hp, u16 maxHp) {
     BgConfig *bgConfig = GetWindowBgConfig(window);
     u8 bgId = GetWindowBgId(window);
     u8 x = GetWindowX(window);
@@ -468,7 +467,7 @@ void BugContestSwapMon_DrawHpBar(Window *window, u16 hp, u16 maxHp) {
     ScheduleBgTilemapBufferTransfer(bgConfig, bgId);
 }
 
-void BugContestSwapMon_VBlank(void *data) {
+static void BugContestSwapMon_VBlank(void *data) {
     BugContestSwapMon *swapMon = data;
     vu32 *dtcm = (vu32 *)0x027E0000;
 
@@ -488,7 +487,7 @@ void BugContestSwapMon_VBlank(void *data) {
 }
 
 #pragma force_active on
-void BugContestSwapMon_Setup(OverlayManager *man) {
+static void BugContestSwapMon_Setup(OverlayManager *man) {
     BugContestSwapMonArgs *args = OverlayManager_GetArgs(man);
     BugContestSwapMon *swapMon;
     GF_ASSERT(args);
@@ -517,7 +516,7 @@ void BugContestSwapMon_Setup(OverlayManager *man) {
 }
 #pragma force_active reset
 
-void BugContestSwapMon_Teardown(OverlayManager *man) {
+static void BugContestSwapMon_Teardown(OverlayManager *man) {
     BugContestSwapMon *swapMon = OverlayManager_GetData(man);
     YesNoPrompt_Destroy(swapMon->yesNoPrompt);
     SwapMonPanels_Delete(swapMon->panels);
@@ -534,7 +533,7 @@ void BugContestSwapMon_Teardown(OverlayManager *man) {
 }
 
 #pragma force_active on
-void BugContestSwapMon_InitBgs(BugContestSwapMon *swapMon) {
+static void BugContestSwapMon_InitBgs(BugContestSwapMon *swapMon) {
     GraphicsModes modes;
     BugContestSwapMonBgTemplates templates;
     int i;
@@ -557,7 +556,7 @@ void BugContestSwapMon_InitBgs(BugContestSwapMon *swapMon) {
 }
 #pragma force_active reset
 
-void BugContestSwapMon_FreeBgs(BugContestSwapMon *swapMon) {
+static void BugContestSwapMon_FreeBgs(BugContestSwapMon *swapMon) {
     int i;
     NARC_Delete(swapMon->narc);
     for (i = 0; i < 5; i++) {
@@ -566,7 +565,7 @@ void BugContestSwapMon_FreeBgs(BugContestSwapMon *swapMon) {
     Heap_Free(swapMon->bgConfig);
 }
 
-void BugContestSwapMon_LoadBgGfx(BugContestSwapMon *swapMon) {
+static void BugContestSwapMon_LoadBgGfx(BugContestSwapMon *swapMon) {
     if (swapMon->bgConfig == NULL) {
         GF_AssertFail();
     }
@@ -580,7 +579,7 @@ void BugContestSwapMon_LoadBgGfx(BugContestSwapMon *swapMon) {
     GfGfxLoader_LoadScrnDataFromOpenNarc(swapMon->narc, 3, swapMon->bgConfig, GF_BG_LYR_SUB_0, 0, 0, TRUE, swapMon->heapID);
 }
 
-void BugContestSwapMon_InitSpriteSystem(BugContestSwapMon *swapMon) {
+static void BugContestSwapMon_InitSpriteSystem(BugContestSwapMon *swapMon) {
     OamManagerParam oamManagerParam;
     OamCharTransferParam oamCharTransferParam;
     SpriteResourceCountsListUnion resourceCounts;
@@ -599,12 +598,12 @@ void BugContestSwapMon_InitSpriteSystem(BugContestSwapMon *swapMon) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-void BugContestSwapMon_FreeSpriteSystem(SpriteSystem *spriteSystem, SpriteManager *spriteManager) {
+static void BugContestSwapMon_FreeSpriteSystem(SpriteSystem *spriteSystem, SpriteManager *spriteManager) {
     SpriteSystem_FreeResourcesAndManager(spriteSystem, spriteManager);
     SpriteSystem_Free(spriteSystem);
 }
 
-void BugContestSwapMon_LoadSpriteGfx(BugContestSwapMon *swapMon) {
+static void BugContestSwapMon_LoadSpriteGfx(BugContestSwapMon *swapMon) {
     int i;
     NARC *narc;
     SpriteSystem *spriteSystem = swapMon->spriteSystem;
@@ -624,7 +623,7 @@ void BugContestSwapMon_LoadSpriteGfx(BugContestSwapMon *swapMon) {
     NARC_Delete(narc);
 }
 
-void BugContestSwapMon_SetMonIcon(ManagedSprite *sprite, Pokemon *mon, int paletteOffset, enum HeapID heapID) {
+static void BugContestSwapMon_SetMonIcon(ManagedSprite *sprite, Pokemon *mon, int paletteOffset, enum HeapID heapID) {
     NNSG2dCharacterData *charData;
     u8 palette;
     NARC *narc = NARC_New(NARC_poketool_icongra_poke_icon, heapID);
@@ -640,7 +639,7 @@ void BugContestSwapMon_SetMonIcon(ManagedSprite *sprite, Pokemon *mon, int palet
     NARC_Delete(narc);
 }
 
-void BugContestSwapMon_LoadSpriteChar(ManagedSprite *sprite, void *data, u32 size) {
+static void BugContestSwapMon_LoadSpriteChar(ManagedSprite *sprite, void *data, u32 size) {
     NNS_G2D_VRAM_TYPE vramType = Sprite_GetVramType(sprite->sprite);
     u32 location = NNS_G2dGetImageLocation(Sprite_GetImageProxy(sprite->sprite), vramType);
 
@@ -658,7 +657,7 @@ void BugContestSwapMon_LoadSpriteChar(ManagedSprite *sprite, void *data, u32 siz
     }
 }
 
-ManagedSprite *BugContestSwapMon_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u8 animation, u8 priority) {
+static ManagedSprite *BugContestSwapMon_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u8 animation, u8 priority) {
     ManagedSpriteTemplate template = gBugContestSwapMonSpriteTemplate;
     ManagedSprite *sprite;
 
@@ -671,7 +670,7 @@ ManagedSprite *BugContestSwapMon_NewSprite(SpriteSystem *spriteSystem, SpriteMan
     return sprite;
 }
 
-ManagedSprite *BugContestSwapMon_NewMonIconSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u8 slot) {
+static ManagedSprite *BugContestSwapMon_NewMonIconSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u8 slot) {
     ManagedSpriteTemplate template = gBugContestSwapMonIconSpriteTemplate;
 
     if (slot >= 2) {
@@ -684,7 +683,7 @@ ManagedSprite *BugContestSwapMon_NewMonIconSprite(SpriteSystem *spriteSystem, Sp
 }
 
 #pragma force_active on
-SwapMonPanel *SwapMonPanel_New(SwapMonPanels *panels, u16 x, u16 y, int slot, Pokemon *mon) {
+static SwapMonPanel *SwapMonPanel_New(SwapMonPanels *panels, u16 x, u16 y, int slot, Pokemon *mon) {
     SwapMonPanel *panel;
     u8 bgId = slot == 0 ? GF_BG_LYR_MAIN_2 : GF_BG_LYR_MAIN_3;
     panel = Heap_Alloc(panels->heapID, sizeof(SwapMonPanel));
@@ -701,7 +700,7 @@ SwapMonPanel *SwapMonPanel_New(SwapMonPanels *panels, u16 x, u16 y, int slot, Po
     return panel;
 }
 
-void SwapMonPanel_Draw(SwapMonPanel *panel, SwapMonText *text) {
+static void SwapMonPanel_Draw(SwapMonPanel *panel, SwapMonText *text) {
     MessageFormat *messageFormat = SwapMonText_GetMessageFormat(text);
     Pokemon *mon = panel->mon;
     int hp;
@@ -738,13 +737,13 @@ void SwapMonPanel_Draw(SwapMonPanel *panel, SwapMonText *text) {
 }
 #pragma force_active reset
 
-void SwapMonPanel_StartScroll(SwapMonPanel *panel, void *scrolling, s16 targetY) {
+static void SwapMonPanel_StartScroll(SwapMonPanel *panel, void *scrolling, s16 targetY) {
     panel->scrolling = scrolling;
     panel->targetY = targetY;
 }
 
 #pragma force_active on
-void SwapMonPanel_Scroll(SwapMonPanel *panel) {
+static void SwapMonPanel_Scroll(SwapMonPanel *panel) {
     BgConfig *bgConfig;
     Window *window;
     u8 bgId;
@@ -791,11 +790,11 @@ void SwapMonPanel_Scroll(SwapMonPanel *panel) {
 }
 #pragma force_active reset
 
-BOOL SwapMonPanel_IsScrollDone(SwapMonPanel *panel) {
+static BOOL SwapMonPanel_IsScrollDone(SwapMonPanel *panel) {
     return panel->scrolling == NULL;
 }
 
-void SwapMonPanel_Delete(SwapMonPanel *panel) {
+static void SwapMonPanel_Delete(SwapMonPanel *panel) {
     int i;
 
     GF_ASSERT(panel != NULL);
@@ -812,7 +811,7 @@ void SwapMonPanel_Delete(SwapMonPanel *panel) {
     Heap_Free(panel);
 }
 
-SwapMonPanels *SwapMonPanels_New(enum HeapID heapID, BgConfig *bgConfig, SwapMonText *text, SpriteSystem *spriteSystem, SpriteManager *spriteManager, s8 iconPalette) {
+static SwapMonPanels *SwapMonPanels_New(enum HeapID heapID, BgConfig *bgConfig, SwapMonText *text, SpriteSystem *spriteSystem, SpriteManager *spriteManager, s8 iconPalette) {
     SwapMonPanels *panels = Heap_Alloc(heapID, sizeof(SwapMonPanels));
 
     MI_CpuFill8(panels, 0, sizeof(SwapMonPanels));
@@ -825,7 +824,7 @@ SwapMonPanels *SwapMonPanels_New(enum HeapID heapID, BgConfig *bgConfig, SwapMon
     return panels;
 }
 
-void SwapMonPanels_Delete(SwapMonPanels *panels) {
+static void SwapMonPanels_Delete(SwapMonPanels *panels) {
     int i;
 
     GF_ASSERT(panels != NULL);
@@ -837,7 +836,7 @@ void SwapMonPanels_Delete(SwapMonPanels *panels) {
     Heap_Free(panels);
 }
 
-void SwapMonPanels_Add(SwapMonPanels *panels, int slot, u16 x, u16 y, Pokemon *mon) {
+static void SwapMonPanels_Add(SwapMonPanels *panels, int slot, u16 x, u16 y, Pokemon *mon) {
     SwapMonPanel *panel = SwapMonPanel_New(panels, x, y, slot, mon);
 
     BugContestSwapMon_SetMonIcon(panel->sprites[1], panel->mon, panels->iconPalette, panels->heapID);
@@ -845,12 +844,12 @@ void SwapMonPanels_Add(SwapMonPanels *panels, int slot, u16 x, u16 y, Pokemon *m
     panels->panels[slot] = panel;
 }
 
-void SwapMonPanels_StartScroll(SwapMonPanels *panels, int slot, void *scrolling, s16 targetY) {
+static void SwapMonPanels_StartScroll(SwapMonPanels *panels, int slot, void *scrolling, s16 targetY) {
     SwapMonPanel_StartScroll(panels->panels[slot], scrolling, targetY);
 }
 
 #pragma force_active on
-void SwapMonPanels_Scroll(SwapMonPanels *panels) {
+static void SwapMonPanels_Scroll(SwapMonPanels *panels) {
     int i;
     u8 *slot = (u8 *)panels;
     // walks panels[] with a byte pointer
@@ -862,7 +861,7 @@ void SwapMonPanels_Scroll(SwapMonPanels *panels) {
 }
 #pragma force_active reset
 
-BOOL SwapMonPanels_IsScrollDone(SwapMonPanels *panels) {
+static BOOL SwapMonPanels_IsScrollDone(SwapMonPanels *panels) {
     int i;
     u8 *slot = (u8 *)panels;
     for (i = 0; i < 2; i++, slot += sizeof(SwapMonPanel *)) {
@@ -874,7 +873,7 @@ BOOL SwapMonPanels_IsScrollDone(SwapMonPanels *panels) {
 }
 
 #pragma force_active on
-SwapMonText *SwapMonText_New(enum HeapID heapID) {
+static SwapMonText *SwapMonText_New(enum HeapID heapID) {
     SwapMonText *text = Heap_Alloc(heapID, sizeof(SwapMonText));
     MI_CpuFill8(text, 0, sizeof(SwapMonText));
     text->heapID = heapID;
@@ -882,7 +881,7 @@ SwapMonText *SwapMonText_New(enum HeapID heapID) {
     return text;
 }
 
-void SwapMonText_Init(SwapMonText *text, BgConfig *bgConfig, int bgLayer, Options *options) {
+static void SwapMonText_Init(SwapMonText *text, BgConfig *bgConfig, int bgLayer, Options *options) {
     text->bgConfig = bgConfig;
     text->printerId = -1;
     text->bgLayer = bgLayer;
@@ -896,7 +895,7 @@ void SwapMonText_Init(SwapMonText *text, BgConfig *bgConfig, int bgLayer, Option
 }
 #pragma force_active reset
 
-void SwapMonText_Delete(SwapMonText *text) {
+static void SwapMonText_Delete(SwapMonText *text) {
     SwapMonText_CloseMessageBox(text);
     DestroyMsgData(text->msgData);
     MessageFormat_Delete(text->messageFormat);
@@ -907,7 +906,7 @@ void SwapMonText_Delete(SwapMonText *text) {
     Heap_Free(text);
 }
 
-BOOL SwapMonText_IsPrinting(SwapMonText *text) {
+static BOOL SwapMonText_IsPrinting(SwapMonText *text) {
     if (text->printerId != -1) {
         if (!TextPrinterCheckActive((u8)text->printerId)) {
             text->waitFrames = 0;
@@ -929,19 +928,19 @@ BOOL SwapMonText_IsPrinting(SwapMonText *text) {
     return FALSE;
 }
 
-void SwapMonText_PrintMessage(SwapMonText *text, int msgId) {
+static void SwapMonText_PrintMessage(SwapMonText *text, int msgId) {
     text->printerId = SwapMonText_ShowMessageBox(text->bgConfig, &text->messageBox, &text->string, text->messageFormat, text->msgData, msgId, (u8)text->bgLayer, text->heapID, text->options);
 }
 
-void SwapMonText_PrintString(SwapMonText *text, Window *window, int msgId, int x, u8 y) {
+static void SwapMonText_PrintString(SwapMonText *text, Window *window, int msgId, int x, u8 y) {
     ((SwapMonTextPrintOnWindowUntruncated)SwapMonText_PrintOnWindow)(text->bgConfig, window, text->messageFormat, text->msgData, msgId, (u8)text->bgLayer, x, y, MAKE_TEXT_COLOR(1, 2, 0), text->heapID);
 }
 
-void SwapMonText_PrintStringWithColor(SwapMonText *text, Window *window, int msgId, int x, u8 y, u32 color) {
+static void SwapMonText_PrintStringWithColor(SwapMonText *text, Window *window, int msgId, int x, u8 y, u32 color) {
     ((SwapMonTextPrintOnWindowUntruncated)SwapMonText_PrintOnWindow)(text->bgConfig, window, text->messageFormat, text->msgData, msgId, (u8)text->bgLayer, x, y, color, text->heapID);
 }
 
-void SwapMonText_PrintNumber(SwapMonText *text, Window *window, int value, int digits, BOOL withGlyph, int glyphId) {
+static void SwapMonText_PrintNumber(SwapMonText *text, Window *window, int value, int digits, BOOL withGlyph, int glyphId) {
     FillWindowPixelBuffer(window, 0);
     if (withGlyph) {
         MessagePrinter_PrintGlyphAndUInt(text->messagePrinter, glyphId, value, digits, PRINTING_MODE_RIGHT_ALIGN, window, 0, 0);
@@ -951,7 +950,7 @@ void SwapMonText_PrintNumber(SwapMonText *text, Window *window, int value, int d
     ScheduleWindowCopyToVram(window);
 }
 
-void SwapMonText_CloseMessageBox(SwapMonText *text) {
+static void SwapMonText_CloseMessageBox(SwapMonText *text) {
     int printerId = text->printerId;
     if (printerId != -1) {
         RemoveTextPrinter((u8)printerId);
@@ -963,7 +962,7 @@ void SwapMonText_CloseMessageBox(SwapMonText *text) {
     }
 }
 
-MessageFormat *SwapMonText_GetMessageFormat(SwapMonText *text) {
+static MessageFormat *SwapMonText_GetMessageFormat(SwapMonText *text) {
     if (text == NULL) {
         GF_AssertFail();
     }
@@ -973,13 +972,13 @@ MessageFormat *SwapMonText_GetMessageFormat(SwapMonText *text) {
     return text->messageFormat;
 }
 
-void SwapMonText_LoadGfx(BgConfig *bgConfig, int bgLayer, enum HeapID heapID) {
+static void SwapMonText_LoadGfx(BgConfig *bgConfig, int bgLayer, enum HeapID heapID) {
     LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_14_OFFSET, heapID);
     LoadUserFrameGfx2(bgConfig, (GFBgLayer)bgLayer, 978, 13, 0, heapID);
 }
 
 #pragma force_active on
-u8 SwapMonText_ShowMessageBox(BgConfig *bgConfig, Window *window, String **string, MessageFormat *messageFormat, MsgData *msgData, int msgId, u8 bgLayer, enum HeapID heapID, Options *options) {
+static u8 SwapMonText_ShowMessageBox(BgConfig *bgConfig, Window *window, String **string, MessageFormat *messageFormat, MsgData *msgData, int msgId, u8 bgLayer, enum HeapID heapID, Options *options) {
     int textSpeed;
     u8 printerId;
     if (bgConfig == NULL) {
@@ -1002,7 +1001,7 @@ u8 SwapMonText_ShowMessageBox(BgConfig *bgConfig, Window *window, String **strin
     return printerId;
 }
 
-void SwapMonText_PrintOnWindow(BgConfig *bgConfig, Window *window, MessageFormat *messageFormat, MsgData *msgData, int msgId, int bgLayer, u8 x, u8 y, u32 color, enum HeapID heapID) {
+static void SwapMonText_PrintOnWindow(BgConfig *bgConfig, Window *window, MessageFormat *messageFormat, MsgData *msgData, int msgId, int bgLayer, u8 x, u8 y, u32 color, enum HeapID heapID) {
     String *string;
     FillWindowPixelBuffer(window, 0);
     string = ReadMsgData_ExpandPlaceholders(messageFormat, msgData, msgId, heapID);

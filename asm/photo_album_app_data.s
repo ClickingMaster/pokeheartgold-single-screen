@@ -238,82 +238,6 @@
 	.public _021E786E
 	.public _021E7880
 	.public gPhotoAlbumGridSlots
-	.public PhotoAlbumApp_ResetDisplay
-	.public PhotoAlbumApp_InitState
-	.public PhotoAlbumApp_Finish
-	.public PhotoAlbumApp_Setup
-	.public PhotoAlbumApp_Teardown
-	.public PhotoAlbumApp_State_FadeIn
-	.public PhotoAlbumApp_State_FadeOut
-	.public PhotoAlbumApp_State_Grid
-	.public PhotoAlbumApp_State_FlipToPrevPage
-	.public PhotoAlbumApp_State_FlipToNextPage
-	.public PhotoAlbumApp_State_ContextMenu
-	.public PhotoAlbumApp_State_MovePhoto
-	.public PhotoAlbumApp_State_MovePhotoDone
-	.public PhotoAlbumApp_State_DeletePrompt
-	.public PhotoAlbumApp_InitGraphics
-	.public PhotoAlbumApp_FreeGraphics
-	.public PhotoAlbumApp_InitEntries
-	.public PhotoAlbumApp_WritePhotosToSave
-	.public PhotoAlbumApp_SwapEntries
-	.public PhotoAlbumApp_RemoveEntry
-	.public PhotoAlbumApp_DrawInitialScreen
-	.public PhotoAlbumApp_HandleGridInput
-	.public PhotoAlbumApp_HandleGridSelection
-	.public PhotoAlbumApp_HandleGridTouch
-	.public PhotoAlbumApp_HandleGridKeys
-	.public PhotoAlbumApp_HandleMoveInput
-	.public PhotoAlbumApp_RunMoveDone
-	.public PhotoAlbumApp_HandleMoveSelection
-	.public PhotoAlbumApp_HandleMoveTouch
-	.public PhotoAlbumApp_HandleMoveKeys
-	.public PhotoAlbumApp_FlipToPrevPage
-	.public PhotoAlbumApp_FlipToNextPage
-	.public PhotoAlbumApp_RunContextMenu
-	.public PhotoAlbumApp_RunDeletePrompt
-	.public PhotoAlbumApp_VBlankCB
-	.public PhotoAlbumApp_ApplyBgToggle
-	.public PhotoAlbumApp_RequestBgToggle
-	.public PhotoAlbumApp_ApplyZoom
-	.public PhotoAlbumApp_SetZoom
-	.public PhotoAlbumApp_SetBanks
-	.public PhotoAlbumApp_InitBgs
-	.public PhotoAlbumApp_FreeBgs
-	.public PhotoAlbumApp_LoadBgGfx
-	.public PhotoAlbumApp_FreeScreenData
-	.public PhotoAlbumApp_LoadStrings
-	.public PhotoAlbumApp_FreeStrings
-	.public PhotoAlbumApp_CreateWindows
-	.public PhotoAlbumApp_RemoveWindows
-	.public PhotoAlbumApp_InitSpriteSystem
-	.public PhotoAlbumApp_FreeSpriteSystem
-	.public PhotoAlbumApp_InitSpritesAndMenus
-	.public PhotoAlbumApp_FreeSpritesAndMenus
-	.public PhotoAlbumApp_CreateSprites
-	.public PhotoAlbumApp_DeleteSprites
-	.public PhotoAlbumApp_DrawPageArrows
-	.public PhotoAlbumApp_DrawPageArrowBg
-	.public PhotoAlbumApp_DrawGridColumns
-	.public PhotoAlbumApp_DrawPage
-	.public PhotoAlbumApp_DrawPhotoIcon
-	.public PhotoAlbumApp_DrawGridIcon
-	.public PhotoAlbumApp_RedrawSwappedIcons
-	.public PhotoAlbumApp_PrintPhotoDetails
-	.public PhotoAlbumApp_PrintCloseButton
-	.public PhotoAlbumApp_PrintMessage
-	.public PhotoAlbumApp_SetCursorPos
-	.public PhotoAlbumApp_UpdateSelectionSprite
-	.public PhotoAlbumApp_UpdatePageArrows
-	.public PhotoAlbumApp_AnimatePageArrow
-	.public PhotoAlbumApp_ToggleMenuInputState
-	.public PhotoAlbumApp_OpenContextMenu
-	.public PhotoAlbumApp_HandleContextMenu
-	.public PhotoAlbumApp_OpenDeletePrompt
-	.public PhotoAlbumApp_HandleDeletePrompt
-	.public PhotoAlbumApp_StartCloseButtonAnim
-	.public Task_PhotoAlbumApp_WaitCloseButtonAnim
-	.public Photo_CountPartyMons
 	.public gPhotoAlbumSlotGridPositions
 	.public gPhotoAlbumContextMenuTemplate
 	.public gPhotoAlbumSpriteResources
@@ -339,53 +263,6 @@
 	.public PhotoAlbum_Exit
 	.public PhotoAlbum_Init
 	.public PhotoAlbum_Main
-	.public PhotoAlbumApp_ResetDisplay
-	.public PhotoAlbumApp_Finish
-	.public PhotoAlbumApp_Setup
-	.public PhotoAlbumApp_Teardown
-	.public PhotoAlbumApp_State_FadeIn
-	.public PhotoAlbumApp_State_FadeOut
-	.public PhotoAlbumApp_State_Grid
-	.public PhotoAlbumApp_State_FlipToPrevPage
-	.public PhotoAlbumApp_State_FlipToNextPage
-	.public PhotoAlbumApp_State_ContextMenu
-	.public PhotoAlbumApp_State_MovePhoto
-	.public PhotoAlbumApp_State_MovePhotoDone
-	.public PhotoAlbumApp_State_DeletePrompt
-	.public PhotoAlbumApp_InitGraphics
-	.public PhotoAlbumApp_FreeGraphics
-	.public PhotoAlbumApp_WritePhotosToSave
-	.public PhotoAlbumApp_SwapEntries
-	.public PhotoAlbumApp_DrawInitialScreen
-	.public PhotoAlbumApp_HandleGridInput
-	.public PhotoAlbumApp_HandleGridTouch
-	.public PhotoAlbumApp_HandleMoveInput
-	.public PhotoAlbumApp_HandleMoveTouch
-	.public PhotoAlbumApp_RunContextMenu
-	.public PhotoAlbumApp_RunDeletePrompt
-	.public PhotoAlbumApp_VBlankCB
-	.public PhotoAlbumApp_ApplyBgToggle
-	.public PhotoAlbumApp_RequestBgToggle
-	.public PhotoAlbumApp_ApplyZoom
-	.public PhotoAlbumApp_SetZoom
-	.public PhotoAlbumApp_SetBanks
-	.public PhotoAlbumApp_FreeScreenData
-	.public PhotoAlbumApp_FreeStrings
-	.public PhotoAlbumApp_CreateWindows
-	.public PhotoAlbumApp_RemoveWindows
-	.public PhotoAlbumApp_FreeSpriteSystem
-	.public PhotoAlbumApp_InitSpritesAndMenus
-	.public PhotoAlbumApp_FreeSpritesAndMenus
-	.public PhotoAlbumApp_DeleteSprites
-	.public PhotoAlbumApp_PrintCloseButton
-	.public PhotoAlbumApp_SetCursorPos
-	.public PhotoAlbumApp_UpdateSelectionSprite
-	.public PhotoAlbumApp_UpdatePageArrows
-	.public PhotoAlbumApp_AnimatePageArrow
-	.public PhotoAlbumApp_ToggleMenuInputState
-	.public PhotoAlbumApp_StartCloseButtonAnim
-	.public Task_PhotoAlbumApp_WaitCloseButtonAnim
-	.public Photo_CountPartyMons
 	.rodata
 
 gPhotoAlbumGridSlots:

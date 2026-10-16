@@ -354,7 +354,6 @@ void PokedexApp_ScrollListIconsBackward(PokedexAppData *pokedexApp, int first, i
     }
 }
 
-// (an inline sum: written as a plain expression the operands are evaluated in another order)
 static inline int AddInts(int a, int b) {
     return b + a;
 }
@@ -373,15 +372,15 @@ void PokedexApp_ScrollListIconsForward(PokedexAppData *pokedexApp, int first, in
     base = (row + 5) * 5;
     for (; i < 30; i++) {
         sprite = first + i + pokedexApp->iconPage * 30;
-        slot = (u8 *)pokedexApp + sprite * 4;
-        ManagedSprite_GetPositionXY(*(ManagedSprite **)(slot + 0x670), &pos.x, &pos.y);
+        slot = (u8 *)pokedexApp + sprite * sizeof(ManagedSprite *);
+        ManagedSprite_GetPositionXY(*(ManagedSprite **)(slot + offsetof(PokedexAppData, sprites)), &pos.x, &pos.y);
         if (pos.y == -16) {
             pos.y = 224;
             PokedexApp_SetListIcon(pokedexApp, count + AddInts(base, 15 * pokedexApp->listPage), sprite);
             count++;
         }
         pos.y += dy;
-        ManagedSprite_SetPositionXY(*(ManagedSprite **)(slot + 0x670), pos.x, pos.y);
+        ManagedSprite_SetPositionXY(*(ManagedSprite **)(slot + offsetof(PokedexAppData, sprites)), pos.x, pos.y);
     }
 }
 
@@ -444,7 +443,6 @@ void PokedexApp_LoadMonPicToSprite(PokedexAppData *pokedexApp, int species, u8 f
     } else {
         personality = 0;
     }
-    // compiled against a prototype with an int species (no narrowing at the call)
     ((void (*)(PokepicTemplate *, int, u8, u8, u8, u8, u32))GetMonSpriteCharAndPlttNarcIdsEx)(&pokepic, species, gender, facing, 0, form, personality);
     CharTiles_LoadMonRectAsObjFromNarc((NarcId)pokepic.narcID, pokepic.charDataID, HEAP_ID_POKEDEX_APP, &rect, buffer, personality, FALSE, facing, species);
     sprites = pokedexApp->sprites;
@@ -479,7 +477,6 @@ void PokedexApp_SwapMonPic(PokedexAppData *pokedexApp, int species, int index, i
     }
     ManagedSprite_SetDrawFlag(pokedexApp->sprites[old], FALSE);
     ManagedSprite_SetDrawFlag(pokedexApp->sprites[index], TRUE);
-    // compiled against a prototype with an int species (no narrowing at the call)
     gender = ((int (*)(Pokedex *, int, u32))Pokedex_SpeciesGetLastSeenGender)(pokedexApp->args->pokedex, species, 0);
     form = Pokedex_GetSeenFormByIdx(pokedexApp->args->pokedex, species, 0);
     if (species == SPECIES_PICHU) {

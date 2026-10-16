@@ -4,35 +4,13 @@
 
 	.text
 	.public gMailboxMailMenuTemplate
-	.public MailboxApp_VBlankCB
-	.public MailboxApp_InitBgLayers
-	.public MailboxApp_LoadBgGraphics
-	.public MailboxApp_CreateNameplateCells
-	.public MailboxApp_OpenMailMenu
-	.public MailboxApp_LoadMail
-	.public MailboxApp_DrawPage
-	.public MailboxApp_RunPaletteFlash
 	.public MailboxApp_State_YesNo
 	.public MailboxApp_State_SelectMail
 	.public MailboxApp_State_MailMenu
 	.public MailboxApp_State_UseMailDone
-	.public MailboxApp_StartCellFlash
 	.public MailboxApp_StartUseMail
 	.public MailboxApp_FinishUseMail
 	.public MailboxApp_PrintMailToBagResult
-	.public MailboxApp_CreateSprites
-	.public MailboxAppData_InitSpriteSystem
-	.public MailboxAppData_DeleteSprite
-	.public MailboxAppData_LoadMonIconResources
-	.public MailboxApp_ShowMailMonIcons
-	.public MailboxAppData_LoadSpriteResources
-	.public MailboxApp_DrawNameplate
-	.public MailboxApp_PrintTitleAndButtons
-	.public MailboxApp_PrintPageNumber
-	.public MailboxApp_PrintMessageBox
-	.public MailboxApp_PrintMessage
-	.public MailboxApp_PrintMail
-	.public MailboxApp_PrintMailLine
 	.public gMailboxAppGraphicsModes
 	.public gMailboxBgTemplate1
 	.public gMailboxBgTemplate2
@@ -60,23 +38,6 @@
 	.public MailboxApp_Init
 	.public MailboxApp_Main
 	.public MailboxApp_Exit
-	.public MailboxApp_SetGfxBanks
-	.public MailboxApp_FreeBgLayers
-	.public MailboxApp_LoadFrameAndFontGfx
-	.public MailboxApp_DeleteNameplateCells
-	.public MailboxAppData_CreateStrings
-	.public MailboxAppData_DeleteStrings
-	.public MailboxApp_CreateYesNoPrompt
-	.public MailboxApp_DestroyYesNoPrompt
-	.public MailboxApp_ShowYesNoPrompt
-	.public MailboxApp_CreateMailMenuItems
-	.public MailboxApp_DeleteMailMenuItems
-	.public MailboxApp_CloseMailMenu
-	.public MailboxApp_FreeMail
-	.public MailboxApp_DrawSelectedNameplate
-	.public MailboxApp_LoadStationeryGfx
-	.public MailboxApp_GetMailMenuItemCount
-	.public MailboxApp_RunState
 	.public MailboxApp_State_Setup
 	.public MailboxApp_State_Teardown
 	.public MailboxApp_State_WaitFade
@@ -98,54 +59,16 @@
 	.public MailboxApp_State_FadeInDimmedList
 	.public MailboxApp_State_ShowMailToBagResult
 	.public MailboxApp_ReturnToMailList
-	.public MailboxApp_StartFadeIn
-	.public MailboxApp_StartFadeOut
-	.public MailboxApp_WaitForText
-	.public MailboxApp_AskYesNo
-	.public MailboxApp_StartSpriteFlash
-	.public MailboxAppData_SetListDimmed
-	.public MailboxApp_ShowMail
-	.public MailboxApp_HideMail
-	.public MailboxApp_PutMailInBag
-	.public MailboxApp_DeleteSelectedMail
-	.public MailboxApp_CreatePartyMenuArgs
 	.public MailboxApp_StartPartyMenu
 	.public MailboxApp_FinishGiveMail
 	.public MailboxApp_FinishSelectMonForMail
 	.public MailboxApp_FinishPartyMenu
 	.public MailboxApp_EraseMail
 	.public MailboxApp_SelectMonToHoldMail
-	.public MailboxApp_DeleteSprites
-	.public MailboxAppData_TickSprites
-	.public MailboxAppData_FreeSpriteSystem
-	.public MailboxAppData_NewSprite
-	.public MailboxAppData_DeleteAllSprites
-	.public MailboxAppData_SetSpriteAnim
-	.public MailboxAppData_SetSpriteDrawFlag
-	.public MailboxAppData_SetSpritePosition
-	.public MailboxAppData_SetSpriteTranslucent
-	.public MailboxAppData_OpenMonIconNarc
-	.public MailboxAppData_CloseMonIconNarc
-	.public MailboxAppData_MoveCursorToCloseButton
-	.public MailboxApp_AddWindows
-	.public MailboxApp_RemoveWindows
-	.public MailboxApp_PrintString
-	.public MailboxAppData_PrintMsg
-	.public MailboxAppData_ShowCloseButton
-	.public MailboxAppData_ShowCancelButton
-	.public MailboxApp_BufferAuthorName
-	.public MailboxApp_PrintMailPrompt
-	.public MailboxApp_DrawMessageBox
-	.public MailboxApp_ClearMessageBox
-	.public MailboxApp_GetTouchedPageArrow
-	.public MailboxApp_CreateGridInput
-	.public MailboxApp_FreeGridInput
 	.public MailboxApp_GridOnButton
 	.public MailboxApp_GridOnSwitchToTouchMode
 	.public MailboxApp_GridOnKeyMove
 	.public MailboxApp_GridOnTouch
-	.public MailboxApp_MoveCursor
-	.public MailboxApp_IsCloseMailInput
 	.rodata
 
 gMailboxMailMenuTemplate:

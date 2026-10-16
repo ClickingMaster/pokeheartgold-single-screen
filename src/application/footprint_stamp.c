@@ -15,18 +15,17 @@
 #include "player_data.h"
 #include "render_text.h"
 #include "render_window.h"
+#include "screen_fade_legacy.h"
 #include "sound_playback.h"
+#include "sprite_resource_header.h"
+#include "swap_3d_buffers.h"
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
 #include "touchpad.h"
-#include "sprite_resource_header.h"
-#include "screen_fade_legacy.h"
-#include "swap_3d_buffers.h"
-#include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
+#include "wireless_status_icon.h"
 
-// Declared only in other modules' private headers.
 void *WiFiPlazaWork_GetSaveData(void *lobby);
 void *WiFiPlazaWork_IsArceusFootprintShown(void *lobby);
 void WiFiPlazaWork_SetLowVolume(void *lobby, int value);
@@ -65,6 +64,16 @@ enum {
     FOOTPRINT_STAMP_STATE_FADE_OUT,
     FOOTPRINT_STAMP_STATE_WAIT_FADE_OUT,
 };
+
+static void FootprintStamp_MainTask(SysTask *task, void *data);
+static void FootprintStamp_VBlank(void *data);
+static void FootprintStamp_InitBgs(BgConfig *bgConfig);
+static void FootprintStamp_FreeBgs(BgConfig *bgConfig);
+static void FootprintStamp_LoadBgGfx(FootprintStamp *work, NARC *narc);
+static void FootprintStamp_LoadPartySpriteGfx(FootprintStamp *work, NARC *narc);
+static void FootprintStamp_CreatePartySprites(FootprintStamp *work);
+static void FootprintStamp_FreePartySprites(FootprintStamp *work);
+static void FootprintStamp_LoadPlayerSpriteGfx(FootprintStamp *work, NARC *narc);
 
 BOOL FootprintStamp_Init(OverlayManager *man, int *state) {
     FootprintStamp *work;
@@ -341,7 +350,7 @@ BOOL FootprintStamp_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-void FootprintStamp_MainTask(SysTask *task, void *data) {
+static void FootprintStamp_MainTask(SysTask *task, void *data) {
     FootprintStamp *work = data;
 
     FootprintStampBoard_ResolveChains(&work->board);
@@ -351,7 +360,7 @@ void FootprintStamp_MainTask(SysTask *task, void *data) {
     RequestSwap3DBuffers(GX_SORTMODE_AUTO, GX_BUFFERMODE_Z);
 }
 
-void FootprintStamp_VBlank(void *data) {
+static void FootprintStamp_VBlank(void *data) {
     FootprintStamp *work = data;
     vu32 *base;
 
@@ -364,7 +373,7 @@ void FootprintStamp_VBlank(void *data) {
     base[0x3FF8 / 4] |= 1; // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
 }
 
-void FootprintStamp_InitBgs(BgConfig *bgConfig) {
+static void FootprintStamp_InitBgs(BgConfig *bgConfig) {
     FootprintStampBgTemplates mainTemplates;
     FootprintStampBgTemplates subTemplates;
     GraphicsBanks banks;
@@ -411,7 +420,7 @@ void FootprintStamp_InitBgs(BgConfig *bgConfig) {
     BG_ClearCharDataRange(GF_BG_LYR_SUB_1, 0x20, 0, HEAP_ID_125);
 }
 
-void FootprintStamp_FreeBgs(BgConfig *bgConfig) {
+static void FootprintStamp_FreeBgs(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_2);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_1);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_3);
@@ -420,7 +429,7 @@ void FootprintStamp_FreeBgs(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_1);
 }
 
-void FootprintStamp_LoadBgGfx(FootprintStamp *work, NARC *narc) {
+static void FootprintStamp_LoadBgGfx(FootprintStamp *work, NARC *narc) {
     void *tilemap;
     int frame;
 
@@ -451,7 +460,7 @@ void FootprintStamp_LoadBgGfx(FootprintStamp *work, NARC *narc) {
     ScheduleBgTilemapBufferTransfer(work->bgConfig, GF_BG_LYR_SUB_2);
 }
 
-void FootprintStamp_LoadPartySpriteGfx(FootprintStamp *work, NARC *narc) {
+static void FootprintStamp_LoadPartySpriteGfx(FootprintStamp *work, NARC *narc) {
     int i;
     u16 color;
     u8 plttNum;
@@ -478,7 +487,7 @@ void FootprintStamp_LoadPartySpriteGfx(FootprintStamp *work, NARC *narc) {
     work->cursorPlttSlot = SpriteSystem_LoadPaletteBuffer(work->plttData, PLTTBUF_MAIN_OBJ, work->spriteSystem, work->spriteManager, NARC_a_2_0_8, 26, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 10003);
 }
 
-void FootprintStamp_CreatePartySprites(FootprintStamp *work) {
+static void FootprintStamp_CreatePartySprites(FootprintStamp *work) {
     ManagedSpriteTemplate template;
     int i;
     String *string;
@@ -513,7 +522,7 @@ void FootprintStamp_CreatePartySprites(FootprintStamp *work) {
     String_Delete(string);
 }
 
-void FootprintStamp_FreePartySprites(FootprintStamp *work) {
+static void FootprintStamp_FreePartySprites(FootprintStamp *work) {
     {
         int i = 0;
         FootprintStamp *slot = work;
@@ -542,7 +551,7 @@ void FootprintStamp_FreePartySprites(FootprintStamp *work) {
     FootprintStamp_FreeTextSprite(&work->exitText);
 }
 
-void FootprintStamp_LoadPlayerSpriteGfx(FootprintStamp *work, NARC *narc) {
+static void FootprintStamp_LoadPlayerSpriteGfx(FootprintStamp *work, NARC *narc) {
     int i;
 
     SpriteSystem_LoadPaletteBufferFromOpenNarc(work->plttData, PLTTBUF_SUB_OBJ, work->spriteSystem, work->spriteManager, narc, 10, FALSE, 1, NNS_G2D_VRAM_TYPE_2DSUB, 10004);

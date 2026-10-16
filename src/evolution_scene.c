@@ -54,7 +54,6 @@
 // Pokemon's data is updated and any moves it learns at its new level are taught (with the move summary screen when
 // it already knows four moves). Started from the field, after battles and after trades.
 
-// particle_scene.c has no header
 typedef struct ParticleScene ParticleScene;
 
 typedef struct EvolutionParticleSceneParam {
@@ -72,11 +71,9 @@ void ParticleScene_CreateEmitter(ParticleScene *scene, int resource);
 BOOL ParticleScene_IsActive(ParticleScene *scene);
 void ParticleScene_Free(ParticleScene *scene);
 
-// render_window.c, declared only in the module's internal header
 u32 GetUserFrameGfx2PaletteMember(u32 frame);
 void LoadUserFrameGfx2WithFill(BgConfig *bgConfig, u8 bgId, u16 baseTile, u8 color, u8 frame, enum HeapID heapId);
 
-// sound_playback.c, not in its header
 BOOL PlayBGMDirect(u16 seqNo);
 
 // The scene calls Pokepic_StartAnim() with a second argument, which the function ignores.
@@ -205,7 +202,6 @@ typedef struct EvolutionBgTemplates {
     BgTemplate bg[3];
 } EvolutionBgTemplates;
 
-// asm/evolution_scene_data.s
 extern const u8 gEvolutionSummaryPages[];
 extern const s16 gEvolutionMenuCursorX[];
 extern const s16 gEvolutionMenuCursorY[];
@@ -219,27 +215,27 @@ extern const ManagedSpriteTemplate gEvolutionCursorSpriteTemplate;
 extern const EvolutionBgTemplates gEvolutionMainBgTemplates;
 extern const EvolutionBgTemplates gEvolutionSubBgTemplates;
 
-ManagedSprite *EvolutionScene_CreateSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u8 animation);
-void EvolutionScene_InitSprites(EvolutionTaskData *data);
-void EvolutionScene_FreeSprites(EvolutionTaskData *data);
-void EvolutionScene_UpdateMenuCursor(EvolutionTaskData *data);
-void EvolutionScene_PrintMenuOption(EvolutionTaskData *data, Window *window, MsgData *msgData, int msgNo);
-void EvolutionScene_ShowMenu(EvolutionTaskData *data, BOOL deleteMovePrompt);
-BOOL EvolutionScene_HandleMenuInput(EvolutionTaskData *data);
-BOOL EvolutionScene_IsMenuCursorAnimDone(EvolutionTaskData *data);
-int EvolutionScene_RunMenu(EvolutionTaskData *data);
-void EvolutionScene_Task(SysTask *task, void *taskData);
-void EvolutionScene_Run(EvolutionTaskData *data);
-void EvolutionScene_ApplyEvolutionEffects(EvolutionTaskData *data);
-void EvolutionScene_InitGraphics(EvolutionTaskData *data, BgConfig *bgConfig);
-void EvolutionScene_FreeBgs(BgConfig *bgConfig);
-void EvolutionScene_CreatePokepics(EvolutionTaskData *data);
-void EvolutionScene_VBlankCB(void *cbData);
-u8 EvolutionScene_PrintMessage(EvolutionTaskData *data, int msgNo);
-BOOL EvolutionScene_TextCallback(TextPrinterTemplate *template, u16 glyphId);
-void EvolutionScene_OpenSummary(EvolutionTaskData *data);
+static ManagedSprite *EvolutionScene_CreateSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u8 animation);
+static void EvolutionScene_InitSprites(EvolutionTaskData *data);
+static void EvolutionScene_FreeSprites(EvolutionTaskData *data);
+static void EvolutionScene_UpdateMenuCursor(EvolutionTaskData *data);
+static void EvolutionScene_PrintMenuOption(EvolutionTaskData *data, Window *window, MsgData *msgData, int msgNo);
+static void EvolutionScene_ShowMenu(EvolutionTaskData *data, BOOL deleteMovePrompt);
+static BOOL EvolutionScene_HandleMenuInput(EvolutionTaskData *data);
+static BOOL EvolutionScene_IsMenuCursorAnimDone(EvolutionTaskData *data);
+static int EvolutionScene_RunMenu(EvolutionTaskData *data);
+static void EvolutionScene_Task(SysTask *task, void *taskData);
+static void EvolutionScene_Run(EvolutionTaskData *data);
+static void EvolutionScene_ApplyEvolutionEffects(EvolutionTaskData *data);
+static void EvolutionScene_InitGraphics(EvolutionTaskData *data, BgConfig *bgConfig);
+static void EvolutionScene_FreeBgs(BgConfig *bgConfig);
+static void EvolutionScene_CreatePokepics(EvolutionTaskData *data);
+static void EvolutionScene_VBlankCB(void *cbData);
+static u8 EvolutionScene_PrintMessage(EvolutionTaskData *data, int msgNo);
+static BOOL EvolutionScene_TextCallback(TextPrinterTemplate *template, u16 glyphId);
+static void EvolutionScene_OpenSummary(EvolutionTaskData *data);
 
-ManagedSprite *EvolutionScene_CreateSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u8 animation) {
+static ManagedSprite *EvolutionScene_CreateSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u8 animation) {
     ManagedSpriteTemplate template = gEvolutionCursorSpriteTemplate;
     ManagedSprite *sprite;
 
@@ -251,7 +247,7 @@ ManagedSprite *EvolutionScene_CreateSprite(SpriteSystem *spriteSystem, SpriteMan
     return sprite;
 }
 
-void EvolutionScene_InitSprites(EvolutionTaskData *data) {
+static void EvolutionScene_InitSprites(EvolutionTaskData *data) {
     OamManagerParam oamManagerParam;
     OamCharTransferParam oamCharTransferParam;
     SpriteResourceCountsListUnion resourceCounts;
@@ -283,7 +279,7 @@ void EvolutionScene_InitSprites(EvolutionTaskData *data) {
     data->spritesReady = TRUE;
 }
 
-void EvolutionScene_FreeSprites(EvolutionTaskData *data) {
+static void EvolutionScene_FreeSprites(EvolutionTaskData *data) {
     SpriteSystem *spriteSystem = data->spriteSystem;
     SpriteManager *spriteManager = data->spriteManager;
 
@@ -294,7 +290,7 @@ void EvolutionScene_FreeSprites(EvolutionTaskData *data) {
     data->spritesReady = FALSE;
 }
 
-void EvolutionScene_UpdateMenuCursor(EvolutionTaskData *data) {
+static void EvolutionScene_UpdateMenuCursor(EvolutionTaskData *data) {
     int option;
 
     GF_ASSERT(data->spritesReady);
@@ -313,7 +309,7 @@ void EvolutionScene_UpdateMenuCursor(EvolutionTaskData *data) {
     ManagedSprite_SetPositionXY(data->cursorSprite, gEvolutionMenuCursorX[option * 2], gEvolutionMenuCursorY[option * 2]);
 }
 
-void EvolutionScene_PrintMenuOption(EvolutionTaskData *data, Window *window, MsgData *msgData, int msgNo) {
+static void EvolutionScene_PrintMenuOption(EvolutionTaskData *data, Window *window, MsgData *msgData, int msgNo) {
     String *string = ReadMsgData_ExpandPlaceholders(data->msgFormat, data->msgData, msgNo, data->heapId);
 
     FillWindowPixelBuffer(window, 0);
@@ -322,7 +318,7 @@ void EvolutionScene_PrintMenuOption(EvolutionTaskData *data, Window *window, Msg
     String_Delete(string);
 }
 
-void EvolutionScene_ShowMenu(EvolutionTaskData *data, BOOL deleteMovePrompt) {
+static void EvolutionScene_ShowMenu(EvolutionTaskData *data, BOOL deleteMovePrompt) {
     int topMsg = msg_0197_01181;    // Forget a move!
     int bottomMsg = msg_0197_01182; // Keep old moves!
 
@@ -342,7 +338,7 @@ void EvolutionScene_ShowMenu(EvolutionTaskData *data, BOOL deleteMovePrompt) {
     ManagedSprite_SetDrawFlag(data->cursorSprite, TRUE);
 }
 
-BOOL EvolutionScene_HandleMenuInput(EvolutionTaskData *data) {
+static BOOL EvolutionScene_HandleMenuInput(EvolutionTaskData *data) {
     BOOL selected = FALSE;
     int hitbox = TouchscreenHitbox_FindRectAtTouchNew(gEvolutionMenuHitboxes);
 
@@ -392,7 +388,7 @@ BOOL EvolutionScene_HandleMenuInput(EvolutionTaskData *data) {
     return selected;
 }
 
-BOOL EvolutionScene_IsMenuCursorAnimDone(EvolutionTaskData *data) {
+static BOOL EvolutionScene_IsMenuCursorAnimDone(EvolutionTaskData *data) {
     GF_ASSERT(data->spritesReady);
     GF_ASSERT(ManagedSprite_GetActiveAnim(data->cursorSprite) == 3);
     if (!ManagedSprite_IsAnimated(data->cursorSprite)) {
@@ -401,7 +397,7 @@ BOOL EvolutionScene_IsMenuCursorAnimDone(EvolutionTaskData *data) {
     return FALSE;
 }
 
-int EvolutionScene_RunMenu(EvolutionTaskData *data) {
+static int EvolutionScene_RunMenu(EvolutionTaskData *data) {
     switch (data->menuState) {
     case 0:
         if (EvolutionScene_HandleMenuInput(data)) {
@@ -499,7 +495,7 @@ EvolutionTaskData *EvolutionScene_New(Party *party, Pokemon *mon, int species, O
 
 #pragma force_active reset
 
-void EvolutionScene_Task(SysTask *task, void *taskData) {
+static void EvolutionScene_Task(SysTask *task, void *taskData) {
     EvolutionTaskData *data = taskData;
 
     EvolutionScene_Run(data);
@@ -553,7 +549,7 @@ void EvolutionScene_Delete(EvolutionTaskData *data) {
 
 #pragma force_active on
 
-void EvolutionScene_Run(EvolutionTaskData *data) {
+static void EvolutionScene_Run(EvolutionTaskData *data) {
     if (data->scaleOscillation) {
         if ((data->scaleOscillation & 1) == 0) {
             Pokepic_AddAttr(data->oldPokepic, POKEPIC_AFFINEW, -data->scaleStep);
@@ -996,7 +992,7 @@ void EvolutionScene_Run(EvolutionTaskData *data) {
 
 // Ninjask's evolution leaves a Shedinja in a free party slot when the bag holds a Poke Ball (which it uses up);
 // evolutions that consume the held item clear it.
-void EvolutionScene_ApplyEvolutionEffects(EvolutionTaskData *data) {
+static void EvolutionScene_ApplyEvolutionEffects(EvolutionTaskData *data) {
     int i;
     int value;
     Pokemon *shedinja;
@@ -1066,7 +1062,7 @@ void EvolutionScene_ApplyEvolutionEffects(EvolutionTaskData *data) {
 
 #pragma force_active on
 
-void EvolutionScene_InitGraphics(EvolutionTaskData *data, BgConfig *bgConfig) {
+static void EvolutionScene_InitGraphics(EvolutionTaskData *data, BgConfig *bgConfig) {
     EvolutionBgTemplates mainTemplates;
     EvolutionBgTemplates subTemplates;
     GraphicsBanks banks;
@@ -1140,7 +1136,7 @@ void EvolutionScene_InitGraphics(EvolutionTaskData *data, BgConfig *bgConfig) {
 
 #pragma force_active reset
 
-void EvolutionScene_FreeBgs(BgConfig *bgConfig) {
+static void EvolutionScene_FreeBgs(BgConfig *bgConfig) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_1);
@@ -1151,7 +1147,7 @@ void EvolutionScene_FreeBgs(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_2);
 }
 
-void EvolutionScene_CreatePokepics(EvolutionTaskData *data) {
+static void EvolutionScene_CreatePokepics(EvolutionTaskData *data) {
     PokepicTemplate template;
     Pokemon *newMon;
 
@@ -1168,7 +1164,7 @@ void EvolutionScene_CreatePokepics(EvolutionTaskData *data) {
     Pokepic_SetAttr(data->newPokepic, POKEPIC_AFFINEH, 0);
 }
 
-void EvolutionScene_VBlankCB(void *cbData) {
+static void EvolutionScene_VBlankCB(void *cbData) {
     EvolutionTaskData *data = cbData;
 
     G2_SetWnd0Position(data->wnd0Left, data->wnd0Top, data->wnd0Right, data->wnd0Bottom);
@@ -1184,7 +1180,7 @@ void EvolutionScene_VBlankCB(void *cbData) {
     *(u32 *)((u8 *)OS_IRQTable + (HW_INTR_CHECK_BUF - HW_DTCM)) |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
 }
 
-u8 EvolutionScene_PrintMessage(EvolutionTaskData *data, int msgNo) {
+static u8 EvolutionScene_PrintMessage(EvolutionTaskData *data, int msgNo) {
     String *string = NewString_ReadMsgData(data->msgData, msgNo);
 
     StringExpandPlaceholders(data->msgFormat, data->string, string);
@@ -1194,7 +1190,7 @@ u8 EvolutionScene_PrintMessage(EvolutionTaskData *data, int msgNo) {
 }
 
 // {WAIT n} commands of the scene's messages
-BOOL EvolutionScene_TextCallback(TextPrinterTemplate *template, u16 glyphId) {
+static BOOL EvolutionScene_TextCallback(TextPrinterTemplate *template, u16 glyphId) {
     BOOL result = FALSE;
 
     switch (glyphId) {
@@ -1217,6 +1213,6 @@ BOOL EvolutionScene_TextCallback(TextPrinterTemplate *template, u16 glyphId) {
     return result;
 }
 
-void EvolutionScene_OpenSummary(EvolutionTaskData *data) {
+static void EvolutionScene_OpenSummary(EvolutionTaskData *data) {
     data->summaryApp = OverlayManager_New(&gOverlayTemplate_PokemonSummary, data->summaryArgs, data->heapId);
 }

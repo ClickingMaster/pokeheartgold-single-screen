@@ -4,41 +4,8 @@
 	.public HatchEggApp_Exit
 	.public HatchEggApp_Init
 	.public HatchEggApp_Main
-	.public HatchEggApp_Create3DVramMan
-	.public HatchEggApp_Init3D
-	.public HatchEggApp_InitParticleVram
-	.public HatchEggApp_InitBgs
-	.public HatchEggApp_LoadWindowGfx
-	.public HatchEggApp_CreateMessageWindow
-	.public HatchEggApp_PrintMessage
-	.public HatchEggApp_LoadBackground
-	.public HatchEggApp_AllocParticleTexVram
-	.public HatchEggApp_AllocParticlePlttVram
-	.public HatchEggApp_CreateParticleSystem
-	.public HatchEggApp_CreateParticleSystemFromNarc
-	.public HatchEggParticles_New
-	.public HatchEggParticles_Emit
-	.public HatchEggApp_LoadSpriteResources
-	.public HatchEggApp_CreateSprites
-	.public HatchEggApp_StepEggShake
-	.public HatchEggApp_InitSpriteSystem
-	.public HatchEggApp_CreatePokepic
-	.public HatchEggApp_StartPokepicAnim
 	.public HatchEggApp_RunEggScene
 	.public HatchEggApp_RunManaphyEggScene
-	.public HatchEggApp_ShakeEggOnce
-	.public HatchEggApp_ShakeEggTwice
-	.public HatchEggApp_ShakeEggCrack
-	.public HatchEggApp_HatchEgg
-	.public HatchEggApp_HatchManaphyEgg
-	.public HatchEggYesNoMenu_New
-	.public HatchEggYesNoMenu_LoadGfx
-	.public HatchEggYesNoMenu_Run
-	.public HatchEggYesNoMenu_RemoveWindows
-	.public HatchEggYesNoMenu_PrintButton
-	.public HatchEggYesNoMenu_CreateCursor
-	.public HatchEggYesNoMenu_UpdateCursor
-	.public HatchEggYesNoMenu_HandleInput
 	.public gHatchEggAppOamCharTransferParam
 	.public gHatchEggAppSpriteResourceCounts
 	.public gHatchEggAppOamManagerParam
@@ -55,30 +22,6 @@
 
 
 	.text
-	.public HatchEggApp_HideLayers
-	.public HatchEggApp_InitBlend
-	.public HatchEggApp_VBlankCB
-	.public HatchEggApp_Draw3D
-	.public HatchEggApp_FadeIn
-	.public HatchEggApp_FadeOut
-	.public HatchEggApp_RemoveMessageWindow
-	.public HatchEggApp_DestroyParticleSystem
-	.public HatchEggParticles_EmitterCB
-	.public HatchEggParticles_IsRunning
-	.public HatchEggParticles_Free
-	.public HatchEggApp_UpdateEggShake
-	.public HatchEggApp_DeleteSprites
-	.public HatchEggApp_FreeSpriteSystem
-	.public HatchEggApp_DeletePokepic
-	.public HatchEggApp_SetPokepicVanished
-	.public HatchEggApp_RunScene
-	.public HatchEggApp_WaitBeforeShake
-	.public HatchEggYesNoMenu_InitBgs
-	.public HatchEggYesNoMenu_Free
-	.public HatchEggYesNoMenu_Show
-	.public HatchEggYesNoMenu_AddWindows
-	.public HatchEggYesNoMenu_DeleteCursor
-	.public HatchEggYesNoMenu_IsPressAnimFinished
 	.rodata
 
 	.public gHatchEggAppGraphicsModes

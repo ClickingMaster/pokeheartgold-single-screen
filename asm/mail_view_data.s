@@ -2,34 +2,10 @@
 	.public MailView_Init
 	.public MailView_Main
 	.public MailView_Exit
-	.public MailView_AreAllMessagesEmpty
-	.public MailView_ResetCursorHighlight
-	.public MailView_OnSwitchToTouch
-	.public MailView_OnSwitchToKeys
-	.public MailView_CheckInputModeSwitch
 	.public MailView_HandleReadInput
-	.public MailView_HandleWriteKeys
-	.public MailView_HandleWriteTouch
 	.public MailView_HandleWriteInput
 	.public MailView_ShowEmptyMailWarning
-	.public MailView_InitYesNoPrompt
-	.public MailView_HandleYesNoPrompt
 	.public MailView_ConfirmQuit
-	.public MailView_Run
-	.public MailView_VBlankCB
-	.public MailView_CursorBlinkTask
-	.public MailView_SetupGraphics
-	.public MailView_FreeGraphics
-	.public MailView_SetGfxBanks
-	.public MailView_InitBgs
-	.public MailView_FreeBgs
-	.public MailView_LoadBgGraphics
-	.public MailView_FreeBgGraphics
-	.public MailView_CreateWindows
-	.public MailView_DeleteWindows
-	.public MailView_PrintTexts
-	.public MailView_CreateMonIcons
-	.public MailView_DeleteMonIcons
 	.public gMailViewGraphicsModes
 	.public sMailViewScreenFuncs
 	.public sMailViewOamCharTransferParam

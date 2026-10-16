@@ -7,7 +7,7 @@
 
 #include "WM.h"
 
-// Local wireless manager (ARM9 static 0x02032844-0x02033AE0): drives the WM library for the communication layer.
+// Local wireless manager: drives the WM library for the communication layer.
 // A parent sets its parent parameters, starts the parent and MP communication and accepts or refuses the
 // children that connect; a child scans for a parent (all allowed channels in turn, or one), connects to it and
 // starts MP communication. Every request is asynchronous: the state is WIRELESS_STATE_BUSY until its callback
@@ -157,6 +157,48 @@ typedef struct WirelessManager {
 extern WirelessManager gWirelessManager;
 extern const u8 gWirelessConnectTag[3];
 
+static void Wireless_SetState(int state);
+static void Wireless_SetError(int error);
+static BOOL Wireless_SendParentParameter(void);
+static void Wireless_OnParentParameterSet(void *arg);
+static BOOL Wireless_StartParentRun(void);
+static void Wireless_OnParentEvent(void *arg);
+static BOOL Wireless_StartParentMP(void);
+static void Wireless_OnParentMPEvent(void *arg);
+static BOOL Wireless_EndParent(void);
+static void Wireless_OnParentMPEnded(void *arg);
+static BOOL Wireless_EndParentRun(void);
+static void Wireless_OnParentEnded(void *arg);
+static BOOL Wireless_ScanNextChannel(void);
+static void Wireless_OnScanEvent(void *input);
+static BOOL Wireless_EndScan(void);
+static void Wireless_OnScanEnded(void *arg);
+static BOOL Wireless_StartConnect(void);
+static void Wireless_OnConnectEvent(void *arg);
+static BOOL Wireless_StartChildMP(void);
+static void Wireless_OnChildMPEvent(void *arg);
+static BOOL Wireless_EndChild(void);
+static void Wireless_OnChildMPEnded(void *arg);
+static BOOL Wireless_Disconnect(void);
+static void Wireless_OnDisconnected(void *arg);
+static BOOL Wireless_Reset(void);
+static void Wireless_OnReset(void *arg);
+static BOOL Wireless_SetSendData(const void *data, u32 length, int port, WirelessSentFunc callback);
+static void Wireless_OnDataSent(void *arg);
+static void Wireless_OnPortEvent(void *arg);
+static void Wireless_OnEnded(void *arg);
+static u16 Wireless_CountConnected(void);
+static u16 Wireless_MeasureFromChannel(u16 channel);
+static void Wireless_OnChannelMeasured(void *arg);
+static int Wireless_MeasureChannel(WMCallback callback, u16 channel);
+static s16 Wireless_PickChannel(u16 channels);
+static void Wireless_OnIndication(void *arg);
+static BOOL Wireless_Initialize(int mode);
+static void Wireless_OnInitialized(void *arg);
+static void Wireless_OnLifeTimeSet(void);
+static void Wireless_ForceReset(void);
+static void Wireless_OnEntrySet(void *arg);
+
 int WM_Initialize(void *work, WMCallback callback, int dma);
 int WM_InitializeForListening(void *work, WMCallback callback, int dma, int flags);
 int WM_SetIndCallback(WMCallback callback);
@@ -186,62 +228,22 @@ int CommState_ReportsErrors(void);
 void CommState_SetError(int);
 BOOL Comm_IsCommClubLinkMode(int);
 
-void Wireless_SetState(int state);
-void Wireless_SetError(int error);
-BOOL Wireless_SendParentParameter(void);
-void Wireless_OnParentParameterSet(void *arg);
-BOOL Wireless_StartParentRun(void);
-void Wireless_OnParentEvent(void *arg);
-BOOL Wireless_StartParentMP(void);
-void Wireless_OnParentMPEvent(void *arg);
-BOOL Wireless_EndParent(void);
-void Wireless_OnParentMPEnded(void *arg);
-BOOL Wireless_EndParentRun(void);
-void Wireless_OnParentEnded(void *arg);
 BOOL Wireless_ScanAndConnect(int mode, const u16 *bssid, u16 channel);
 BOOL Wireless_StartScan(void *callback, const u16 *bssid, u16 channel);
-BOOL Wireless_ScanNextChannel(void);
-void Wireless_OnScanEvent(void *arg);
 BOOL Wireless_StopScan(void);
-BOOL Wireless_EndScan(void);
-void Wireless_OnScanEnded(void *arg);
-BOOL Wireless_StartConnect(void);
-void Wireless_OnConnectEvent(void *arg);
-BOOL Wireless_StartChildMP(void);
-void Wireless_OnChildMPEvent(void *arg);
-BOOL Wireless_EndChild(void);
-void Wireless_OnChildMPEnded(void *arg);
-BOOL Wireless_Disconnect(void);
-void Wireless_OnDisconnected(void *arg);
-BOOL Wireless_Reset(void);
-void Wireless_OnReset(void *arg);
-BOOL Wireless_SetSendData(const void *data, u32 length, int port, WirelessSentFunc callback);
-void Wireless_OnDataSent(void *arg);
-void Wireless_OnPortEvent(void *arg);
-void Wireless_OnEnded(void *arg);
 void Wireless_SetGgid(u32 ggid);
 void Wireless_SetParentGameInfo(void *gameInfo, u16 length);
 u16 Wireless_GetConnectedBitmap(void);
-u16 Wireless_CountConnected(void);
 u32 Wireless_GetState(void);
 u32 Wireless_GetError(void);
 BOOL Wireless_StartMeasureChannels(void);
-u16 Wireless_MeasureFromChannel(u16 channel);
-void Wireless_OnChannelMeasured(void *arg);
-int Wireless_MeasureChannel(WMCallback callback, u16 channel);
 u16 Wireless_SelectChannel(void);
-s16 Wireless_PickChannel(u16 channels);
 BOOL Wireless_Init(void *buffer, int mode);
 u32 Wireless_GetWorkSize(void);
-void Wireless_OnIndication(void *arg);
-BOOL Wireless_Initialize(int mode);
-void Wireless_OnInitialized(void *arg);
-void Wireless_OnLifeTimeSet(void);
 BOOL Wireless_StartParent(int mode, u16 tgid, u16 channel, u16 maxEntry, u16 beaconPeriod, u32 entryFlag);
 BOOL Wireless_StartChild(int mode, const void *parentInfo);
 void Wireless_SetReceiveCallback(void *callback, int port);
 BOOL Wireless_SendData(const void *data, u32 length, int port, WirelessSentFunc callback);
-void Wireless_ForceReset(void);
 void Wireless_Stop(void);
 BOOL Wireless_End(void);
 u16 Wireless_GetAid(void);
@@ -252,7 +254,6 @@ BOOL Wireless_HasError(void);
 BOOL Wireless_HasFatalError(void);
 BOOL Wireless_IsScanning(void);
 void Wireless_UpdateGameInfo(const void *gameInfo, int length, u32 ggid, int tgid);
-void Wireless_OnEntrySet(void *arg);
 BOOL Wireless_SetEntry(BOOL enabled);
 BOOL Wireless_HasSentBeacons(void);
 void Wireless_ClearBeaconCount(void);
@@ -262,18 +263,18 @@ void Wireless_SetEntryLocked(u8 locked);
 u8 Wireless_IsEntryLocked(void);
 void Wireless_SetEntryClosed(u8 closed);
 
-void Wireless_SetState(int state) {
+static void Wireless_SetState(int state) {
     gWirelessManager.work->state = state;
 }
 
-void Wireless_SetError(int error) {
+static void Wireless_SetError(int error) {
     int state = gWirelessManager.work->state;
     if ((u32)(state - WIRELESS_STATE_ERROR) > 1) {
         gWirelessManager.work->error = error;
     }
 }
 
-BOOL Wireless_SendParentParameter(void) {
+static BOOL Wireless_SendParentParameter(void) {
     int result;
     Wireless_SetState(WIRELESS_STATE_BUSY);
     result = WM_SetParentParameter(Wireless_OnParentParameterSet, gWirelessManager.work);
@@ -285,7 +286,7 @@ BOOL Wireless_SendParentParameter(void) {
     return TRUE;
 }
 
-void Wireless_OnParentParameterSet(void *arg) {
+static void Wireless_OnParentParameterSet(void *arg) {
     WirelessEvent *event = arg;
     if (event->errcode != WM_ERRCODE_SUCCESS) {
         Wireless_SetError(event->errcode);
@@ -295,7 +296,7 @@ void Wireless_OnParentParameterSet(void *arg) {
     }
 }
 
-BOOL Wireless_StartParentRun(void) {
+static BOOL Wireless_StartParentRun(void) {
     u8 *status;
     int result;
     if ((u32)(gWirelessManager.work->state - WIRELESS_STATE_PARENT) <= 2) {
@@ -319,7 +320,7 @@ BOOL Wireless_StartParentRun(void) {
 
 // A child connecting is refused when entry is locked or closed, the parent is full, or its connect data
 // (CommState_GetLinkMode(), gWirelessConnectTag) differ from ours.
-void Wireless_OnParentEvent(void *arg) {
+static void Wireless_OnParentEvent(void *arg) {
     WirelessParentEvent *event = arg;
     u16 mask = 1 << event->aid;
     if (event->errcode) {
@@ -363,7 +364,7 @@ void Wireless_OnParentEvent(void *arg) {
 
 #pragma force_active off
 
-BOOL Wireless_StartParentMP(void) {
+static BOOL Wireless_StartParentMP(void) {
     WirelessWork *work;
     int result;
 
@@ -385,7 +386,7 @@ BOOL Wireless_StartParentMP(void) {
     return TRUE;
 }
 
-void Wireless_OnParentMPEvent(void *arg) {
+static void Wireless_OnParentMPEvent(void *arg) {
     WirelessEvent *event = arg;
     u16 error = event->errcode;
     u16 state;
@@ -415,7 +416,7 @@ void Wireless_OnParentMPEvent(void *arg) {
     }
 }
 
-BOOL Wireless_EndParent(void) {
+static BOOL Wireless_EndParent(void) {
     int result;
     Wireless_SetState(WIRELESS_STATE_BUSY);
     result = WM_EndMP(Wireless_OnParentMPEnded);
@@ -426,7 +427,7 @@ BOOL Wireless_EndParent(void) {
     return TRUE;
 }
 
-void Wireless_OnParentMPEnded(void *arg) {
+static void Wireless_OnParentMPEnded(void *arg) {
     WirelessEvent *event = arg;
     if (event->errcode != WM_ERRCODE_SUCCESS) {
         Wireless_SetError(event->errcode);
@@ -436,7 +437,7 @@ void Wireless_OnParentMPEnded(void *arg) {
     }
 }
 
-BOOL Wireless_EndParentRun(void) {
+static BOOL Wireless_EndParentRun(void) {
     int result = WM_EndParent(Wireless_OnParentEnded);
     if (result != WM_OK) {
         Wireless_SetError(result);
@@ -445,7 +446,7 @@ BOOL Wireless_EndParentRun(void) {
     return TRUE;
 }
 
-void Wireless_OnParentEnded(void *arg) {
+static void Wireless_OnParentEnded(void *arg) {
     WirelessEvent *event = arg;
     if (event->errcode != WM_ERRCODE_SUCCESS) {
         Wireless_SetError(event->errcode);
@@ -496,7 +497,7 @@ BOOL Wireless_StartScan(void *callback, const u16 *bssid, u16 channel) {
 #pragma optimization_level 2
 #pragma opt_common_subs off
 
-BOOL Wireless_ScanNextChannel(void) {
+static BOOL Wireless_ScanNextChannel(void) {
     u16 channels = WM_GetAllowedChannel();
     if (channels == 0x8000) {
         Wireless_SetError(3);
@@ -557,7 +558,7 @@ typedef struct WirelessScanEvent {
 
 #pragma opt_propagation off
 
-void Wireless_OnScanEvent(void *input) {
+static void Wireless_OnScanEvent(void *input) {
     WirelessScanEvent *event = input;
     WirelessWork *work;
     u16 errcode = event->errcode;
@@ -622,7 +623,7 @@ BOOL Wireless_StopScan(void) {
     return TRUE;
 }
 
-BOOL Wireless_EndScan(void) {
+static BOOL Wireless_EndScan(void) {
     int result = WM_EndScan(Wireless_OnScanEnded);
     if (result != WM_OK) {
         Wireless_SetError(result);
@@ -631,7 +632,7 @@ BOOL Wireless_EndScan(void) {
     return TRUE;
 }
 
-void Wireless_OnScanEnded(void *arg) {
+static void Wireless_OnScanEnded(void *arg) {
     WirelessEvent *event = arg;
     if (event->errcode != WM_ERRCODE_SUCCESS) {
         Wireless_SetError(event->errcode);
@@ -644,7 +645,7 @@ void Wireless_OnScanEnded(void *arg) {
 }
 
 // Connects to the parent in parentInfo; the connect data are CommState_GetLinkMode() and gWirelessConnectTag.
-BOOL Wireless_StartConnect(void) {
+static BOOL Wireless_StartConnect(void) {
     u8 data[0x20];
     int result;
     if ((u32)(gWirelessManager.work->state - WIRELESS_STATE_PARENT) <= 2) {
@@ -661,7 +662,7 @@ BOOL Wireless_StartConnect(void) {
     return TRUE;
 }
 
-void Wireless_OnConnectEvent(void *arg) {
+static void Wireless_OnConnectEvent(void *arg) {
     WirelessConnectEvent *event = arg;
     u16 code;
     if (event->errcode != WM_ERRCODE_SUCCESS) {
@@ -718,7 +719,7 @@ void Wireless_OnConnectEvent(void *arg) {
     Wireless_SetState(WIRELESS_STATE_ERROR);
 }
 
-BOOL Wireless_StartChildMP(void) {
+static BOOL Wireless_StartChildMP(void) {
     WirelessWork *work = gWirelessManager.work;
     int result = WM_StartMP(Wireless_OnChildMPEvent, work->receiveBuffer, (u16)work->receiveBufferSize, work->sendBuffer, (u16)work->sendBufferSize, 1);
     if (result != WM_OK) {
@@ -728,7 +729,7 @@ BOOL Wireless_StartChildMP(void) {
     return TRUE;
 }
 
-void Wireless_OnChildMPEvent(void *arg) {
+static void Wireless_OnChildMPEvent(void *arg) {
     WirelessEvent *event = arg;
     u16 error = event->errcode;
     u16 state;
@@ -755,7 +756,7 @@ void Wireless_OnChildMPEvent(void *arg) {
     }
 }
 
-BOOL Wireless_EndChild(void) {
+static BOOL Wireless_EndChild(void) {
     int result;
     Wireless_SetState(WIRELESS_STATE_BUSY);
     result = WM_EndMP(Wireless_OnChildMPEnded);
@@ -766,7 +767,7 @@ BOOL Wireless_EndChild(void) {
     return TRUE;
 }
 
-void Wireless_OnChildMPEnded(void *arg) {
+static void Wireless_OnChildMPEnded(void *arg) {
     WirelessEvent *event = arg;
     u16 error = event->errcode;
     if (error != WM_ERRCODE_SUCCESS) {
@@ -777,7 +778,7 @@ void Wireless_OnChildMPEnded(void *arg) {
     }
 }
 
-BOOL Wireless_Disconnect(void) {
+static BOOL Wireless_Disconnect(void) {
     int result;
     Wireless_SetState(WIRELESS_STATE_BUSY);
     result = WM_Disconnect(Wireless_OnDisconnected, 0);
@@ -789,7 +790,7 @@ BOOL Wireless_Disconnect(void) {
     return TRUE;
 }
 
-void Wireless_OnDisconnected(void *arg) {
+static void Wireless_OnDisconnected(void *arg) {
     WirelessEvent *event = arg;
     u16 error = event->errcode;
     if (error != WM_ERRCODE_SUCCESS) {
@@ -799,7 +800,7 @@ void Wireless_OnDisconnected(void *arg) {
     }
 }
 
-BOOL Wireless_Reset(void) {
+static BOOL Wireless_Reset(void) {
     int result;
     Wireless_SetState(WIRELESS_STATE_BUSY);
     result = WM_Reset(Wireless_OnReset);
@@ -810,7 +811,7 @@ BOOL Wireless_Reset(void) {
     return TRUE;
 }
 
-void Wireless_OnReset(void *arg) {
+static void Wireless_OnReset(void *arg) {
     WirelessEvent *event = arg;
     if (event->errcode != WM_ERRCODE_SUCCESS) {
         Wireless_SetState(WIRELESS_STATE_ERROR);
@@ -821,7 +822,7 @@ void Wireless_OnReset(void *arg) {
 }
 
 // Sends data to every AID on port; callback (the request's argument) learns whether it was sent.
-BOOL Wireless_SetSendData(const void *data, u32 length, int port, WirelessSentFunc callback) {
+static BOOL Wireless_SetSendData(const void *data, u32 length, int port, WirelessSentFunc callback) {
     int result;
     DC_FlushRange(gWirelessManager.work->sendBuffer, gWirelessManager.work->sendBufferSize);
     result = WM_SetMPDataToPortEx(Wireless_OnDataSent, (u32)callback, data, length, 0xFFFF, port, 2);
@@ -831,7 +832,7 @@ BOOL Wireless_SetSendData(const void *data, u32 length, int port, WirelessSentFu
     return FALSE;
 }
 
-void Wireless_OnDataSent(void *arg) {
+static void Wireless_OnDataSent(void *arg) {
     WirelessSendEvent *event = arg;
     u16 error = event->errcode;
     if (error != WM_ERRCODE_SUCCESS && error != WM_ERRCODE_SEND_FAILED) {
@@ -843,7 +844,7 @@ void Wireless_OnDataSent(void *arg) {
     }
 }
 
-void Wireless_OnPortEvent(void *arg) {
+static void Wireless_OnPortEvent(void *arg) {
     WirelessPortEvent *event = arg;
     u16 error = event->errcode;
     WirelessReceiveFunc callback;
@@ -867,7 +868,7 @@ void Wireless_OnPortEvent(void *arg) {
 
 void WVR_TerminateAsync(void (*callback)(void *), void *arg);
 
-void Wireless_OnEnded(void *arg) {
+static void Wireless_OnEnded(void *arg) {
     WirelessEvent *event = arg;
     if (event->errcode != WM_ERRCODE_SUCCESS) {
         Wireless_SetState(WIRELESS_STATE_FATAL);
@@ -890,7 +891,7 @@ u16 Wireless_GetConnectedBitmap(void) {
     return gWirelessManager.work->connectedBitmap;
 }
 
-u16 Wireless_CountConnected(void) {
+static u16 Wireless_CountConnected(void) {
     int count = 0;
     int i = count;
     u16 bits = gWirelessManager.work->connectedBitmap;
@@ -951,7 +952,7 @@ BOOL Wireless_StartMeasureChannels(void) {
 }
 
 // Measures the first allowed channel from channel on; 0x18 when there is none.
-u16 Wireless_MeasureFromChannel(u16 channel) {
+static u16 Wireless_MeasureFromChannel(u16 channel) {
     int allowed;
 
     allowed = WM_GetAllowedChannel();
@@ -976,7 +977,7 @@ u16 Wireless_MeasureFromChannel(u16 channel) {
     return (u16)Wireless_MeasureChannel(Wireless_OnChannelMeasured, channel);
 }
 
-void Wireless_OnChannelMeasured(void *arg) {
+static void Wireless_OnChannelMeasured(void *arg) {
     WirelessMeasureEvent *event = arg;
     u16 channel;
     u16 ratio;
@@ -1006,7 +1007,7 @@ void Wireless_OnChannelMeasured(void *arg) {
     }
 }
 
-int Wireless_MeasureChannel(WMCallback callback, u16 channel) {
+static int Wireless_MeasureChannel(WMCallback callback, u16 channel) {
     return WM_MeasureChannel(callback, 3, 0x11, channel, 30);
 }
 
@@ -1020,7 +1021,7 @@ u16 Wireless_SelectChannel(void) {
 #pragma force_active on
 
 // A random channel of the bitmap channels (1-16).
-s16 Wireless_PickChannel(u16 channels) {
+static s16 Wireless_PickChannel(u16 channels) {
     s16 result = 0, i;
     u16 count = 0;
     for (i = 0; i < 16; i++) {
@@ -1083,7 +1084,7 @@ u32 Wireless_GetWorkSize(void) {
     return sizeof(WirelessWork);
 }
 
-void Wireless_OnIndication(void *arg) {
+static void Wireless_OnIndication(void *arg) {
     WirelessEvent *event = arg;
     if (event->errcode == WM_ERRCODE_FIFO_ERROR) {
         Wireless_SetState(WIRELESS_STATE_ERROR);
@@ -1091,7 +1092,7 @@ void Wireless_OnIndication(void *arg) {
     }
 }
 
-BOOL Wireless_Initialize(int mode) {
+static BOOL Wireless_Initialize(int mode) {
     int result;
     Wireless_SetState(WIRELESS_STATE_BUSY);
     if (mode == 1) {
@@ -1107,7 +1108,7 @@ BOOL Wireless_Initialize(int mode) {
     return TRUE;
 }
 
-void Wireless_OnInitialized(void *arg) {
+static void Wireless_OnInitialized(void *arg) {
     WirelessEvent *event = arg;
     int result;
     if (event->errcode != WM_ERRCODE_SUCCESS) {
@@ -1126,7 +1127,7 @@ void Wireless_OnInitialized(void *arg) {
     Wireless_SetState(WIRELESS_STATE_IDLE);
 }
 
-void Wireless_OnLifeTimeSet(void) {
+static void Wireless_OnLifeTimeSet(void) {
 }
 
 // Starts a parent (mode 0, 2 or 4).
@@ -1209,7 +1210,7 @@ BOOL Wireless_SendData(const void *data, u32 length, int port, WirelessSentFunc 
     return Wireless_SetSendData(data, length, port, callback);
 }
 
-void Wireless_ForceReset(void) {
+static void Wireless_ForceReset(void) {
     if (gWirelessManager.work->state == WIRELESS_STATE_SCANNING) {
         for (;;) {}
     }
@@ -1301,7 +1302,7 @@ void Wireless_UpdateGameInfo(const void *gameInfo, int length, u32 ggid, int tgi
     }
 }
 
-void Wireless_OnEntrySet(void *arg) {
+static void Wireless_OnEntrySet(void *arg) {
     WirelessEvent *event = arg;
     if (event->errcode == WM_ERRCODE_SUCCESS) {
         gWirelessManager.work->entrySet = 1;

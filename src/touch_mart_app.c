@@ -24,14 +24,14 @@
 #include "render_window.h"
 #include "screen_fade.h"
 #include "sound.h"
+#include "sound_playback.h"
 #include "sys_task.h"
 #include "systask_environment.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "sound_playback.h"
 #include "yes_no_prompt.h"
 
-// Bottom-screen counterpart of the field mart (overlay_03 shop_menu.c): the item list, the
+// Bottom-screen counterpart of the field mart: the item list, the
 // quantity/price panel and the purchase messages, driven by the MartData of the shop task.
 
 enum TouchMartAppWindow {
@@ -111,49 +111,49 @@ extern const BgTemplate sTouchMartBgTemplate_Sub2;
 extern const TouchscreenHitbox *sTouchMartButtonSets[];
 extern const TouchMartBgOp sTouchMartListTilemapEdits[][4];
 
-void TouchMartApp_RunTask(SysTask *task, TouchMartAppData *data);
-void TouchMartApp_SetupText(TouchMartAppData *data);
-void TouchMartApp_FreeText(TouchMartAppData *data);
-void TouchMartApp_PrintCancel(TouchMartAppData *data, int leftAligned);
-BOOL TouchMartApp_IsSelectionValid(TouchMartAppData *data, u32 selection);
-void TouchMartApp_HandleAction(TouchMartAppData *data, int action);
-void TouchMartApp_LoadMainTilemap(TouchMartAppData *data, int screen);
-int TouchMartApp_GetTouchedButton(TouchMartAppData *data, int buttonSet);
-void TouchMartApp_SetupBgs(TouchMartAppData *data);
-void TouchMartApp_LoadGraphics(TouchMartAppData *data);
-void TouchMartApp_FreeWindows(TouchMartAppData *data);
-void TouchMartApp_AddWindows(TouchMartAppData *data);
-void TouchMartApp_AddItemWindows(TouchMartAppData *data);
-void TouchMartApp_RemoveItemWindows(TouchMartAppData *data);
-void TouchMartApp_PrintItemList(TouchMartAppData *data);
-void TouchMartApp_PrintItemName(TouchMartAppData *data, Window *window, String *string, int slot);
-void TouchMartApp_PrintPrice(MessageFormat *messageFormat, MsgData *msgData, Window *window, s32 price, int martType);
-void TouchMartApp_PrintMoney(TouchMartAppData *data);
-void TouchMartApp_PrintPageNumber(TouchMartAppData *data);
-void TouchMartApp_EditListTilemap(BgConfig *bgConfig, int bgId, int itemCount);
-void TouchMartApp_LoadListTilemap(TouchMartAppData *data, int itemCount);
-BOOL TouchMartApp_IsItemPurchasable(MartData *martData, int index, int itemId);
-void TouchMartApp_PrintSelectedItem(TouchMartAppData *data);
-void TouchMartApp_PrintInBag(TouchMartAppData *data, int unused);
-void TouchMartApp_PrintQuantity(TouchMartAppData *data, int quantity);
-void TouchMartApp_PrintBuyButton(TouchMartAppData *data);
-void TouchMartApp_BufferItemName(int martType, MessageFormat *messageFormat, int itemId, int fieldno);
-void TouchMartApp_BufferItemNamePlural(int martType, MessageFormat *messageFormat, int itemId, int fieldno);
-void TouchMartApp_BufferItemNameWithIndefArticle(int martType, MessageFormat *messageFormat, int itemId, int fieldno);
-void TouchMartApp_PrintHowMany(TouchMartAppData *data);
-void TouchMartApp_PrintConfirmPurchase(TouchMartAppData *data);
-void TouchMartApp_CreateYesNoPrompt(TouchMartAppData *data);
-BOOL TouchMartApp_HandleYesNoPrompt(TouchMartAppData *data);
-void TouchMartApp_PrintPurchaseDone(TouchMartAppData *data);
-BOOL TouchMartApp_PurchaseDonePrinterCallback(TextPrinterTemplate *template, u16 glyphId);
-String *TouchMartApp_GetCannotAffordMessage(MartData *martData, MsgData *msgData);
-String *TouchMartApp_GetNoRoomMessage(const MartData *martData, MsgData *msgData);
-void TouchMartApp_PrintCannotAfford(TouchMartAppData *data);
-void TouchMartApp_PrintNoRoom(TouchMartAppData *data);
-void TouchMartApp_PrintNoRoomInBag(TouchMartAppData *data);
-void TouchMartApp_PrintPremierBallBonus(TouchMartAppData *data);
-void TouchMartApp_AddDetailWindows(TouchMartAppData *data);
-void TouchMartApp_RemoveDetailWindows(TouchMartAppData *data);
+static void TouchMartApp_SetupText(TouchMartAppData *data);
+static void TouchMartApp_FreeText(TouchMartAppData *data);
+static void TouchMartApp_PrintCancel(TouchMartAppData *data, int leftAligned);
+static BOOL TouchMartApp_IsSelectionValid(TouchMartAppData *data, u32 selection);
+static void TouchMartApp_RunTask(SysTask *task, TouchMartAppData *data);
+static void TouchMartApp_HandleAction(TouchMartAppData *data, int action);
+static void TouchMartApp_LoadMainTilemap(TouchMartAppData *data, int screen);
+static int TouchMartApp_GetTouchedButton(TouchMartAppData *data, int buttonSet);
+static void TouchMartApp_SetupBgs(TouchMartAppData *data);
+static void TouchMartApp_LoadGraphics(TouchMartAppData *data);
+static void TouchMartApp_FreeWindows(TouchMartAppData *data);
+static void TouchMartApp_AddWindows(TouchMartAppData *data);
+static void TouchMartApp_AddItemWindows(TouchMartAppData *data);
+static void TouchMartApp_RemoveItemWindows(TouchMartAppData *data);
+static void TouchMartApp_PrintItemList(TouchMartAppData *data);
+static void TouchMartApp_PrintItemName(TouchMartAppData *data, Window *window, String *string, int slot);
+static void TouchMartApp_PrintPrice(MessageFormat *messageFormat, MsgData *msgData, Window *window, s32 price, int martType);
+static void TouchMartApp_PrintMoney(TouchMartAppData *data);
+static void TouchMartApp_PrintPageNumber(TouchMartAppData *data);
+static void TouchMartApp_EditListTilemap(BgConfig *bgConfig, int bgId, int itemCount);
+static void TouchMartApp_LoadListTilemap(TouchMartAppData *data, int itemCount);
+static BOOL TouchMartApp_IsItemPurchasable(MartData *martData, int index, int itemId);
+static void TouchMartApp_PrintSelectedItem(TouchMartAppData *data);
+static void TouchMartApp_PrintInBag(TouchMartAppData *data, int unused);
+static void TouchMartApp_PrintQuantity(TouchMartAppData *data, int quantity);
+static void TouchMartApp_PrintBuyButton(TouchMartAppData *data);
+static void TouchMartApp_BufferItemName(int martType, MessageFormat *messageFormat, int itemId, int fieldno);
+static void TouchMartApp_BufferItemNamePlural(int martType, MessageFormat *messageFormat, int itemId, int fieldno);
+static void TouchMartApp_BufferItemNameWithIndefArticle(int martType, MessageFormat *messageFormat, int itemId, int fieldno);
+static void TouchMartApp_PrintHowMany(TouchMartAppData *data);
+static void TouchMartApp_PrintConfirmPurchase(TouchMartAppData *data);
+static void TouchMartApp_CreateYesNoPrompt(TouchMartAppData *data);
+static BOOL TouchMartApp_HandleYesNoPrompt(TouchMartAppData *data);
+static void TouchMartApp_PrintPurchaseDone(TouchMartAppData *data);
+static BOOL TouchMartApp_PurchaseDonePrinterCallback(TextPrinterTemplate *template, u16 glyphId);
+static String *TouchMartApp_GetCannotAffordMessage(MartData *martData, MsgData *msgData);
+static String *TouchMartApp_GetNoRoomMessage(const MartData *martData, MsgData *msgData);
+static void TouchMartApp_PrintCannotAfford(TouchMartAppData *data);
+static void TouchMartApp_PrintNoRoom(TouchMartAppData *data);
+static void TouchMartApp_PrintNoRoomInBag(TouchMartAppData *data);
+static void TouchMartApp_PrintPremierBallBonus(TouchMartAppData *data);
+static void TouchMartApp_AddDetailWindows(TouchMartAppData *data);
+static void TouchMartApp_RemoveDetailWindows(TouchMartAppData *data);
 
 SysTask *TouchMartApp_Init(BgConfig *bgConfig, void *lastTouchMenuInput, FieldSystem *fieldSystem, MartData *martData) {
     SysTask *task;
@@ -191,14 +191,14 @@ SysTask *TouchMartApp_Init(BgConfig *bgConfig, void *lastTouchMenuInput, FieldSy
     return task;
 }
 
-void TouchMartApp_SetupText(TouchMartAppData *data) {
+static void TouchMartApp_SetupText(TouchMartAppData *data) {
     data->messageFormat = MessageFormat_New_Custom(8, 64, HEAP_ID_8);
     data->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0435_bin, HEAP_ID_8);
     data->itemNameMsgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0222_bin, HEAP_ID_8);
     data->string = String_New(144, HEAP_ID_8);
 }
 
-void TouchMartApp_FreeText(TouchMartAppData *data) {
+static void TouchMartApp_FreeText(TouchMartAppData *data) {
     String_Delete(data->string);
     DestroyMsgData(data->itemNameMsgData);
     DestroyMsgData(data->msgData);
@@ -208,7 +208,7 @@ void TouchMartApp_FreeText(TouchMartAppData *data) {
 // force_active only sets a section flag here; kept so the object stays identical.
 #pragma force_active on
 
-void TouchMartApp_PrintCancel(TouchMartAppData *data, int leftAligned) {
+static void TouchMartApp_PrintCancel(TouchMartAppData *data, int leftAligned) {
     String *string = NewString_ReadMsgData(data->msgData, msg_0435_00017);
     ClearWindowTilemapAndCopyToVram(&data->cancelWindow);
     FillWindowPixelBuffer(&data->cancelWindow, 0);
@@ -240,7 +240,7 @@ BOOL TouchMartApp_IsExitDone(void) {
     return TRUE;
 }
 
-BOOL TouchMartApp_IsSelectionValid(TouchMartAppData *data, u32 selection) {
+static BOOL TouchMartApp_IsSelectionValid(TouchMartAppData *data, u32 selection) {
     switch (selection) {
     case 0:
     case 1:
@@ -262,7 +262,7 @@ BOOL TouchMartApp_IsSelectionValid(TouchMartAppData *data, u32 selection) {
     return FALSE;
 }
 
-void TouchMartApp_RunTask(SysTask *task, TouchMartAppData *data) {
+static void TouchMartApp_RunTask(SysTask *task, TouchMartAppData *data) {
     int selection;
     switch (data->state) {
     case 0:
@@ -296,7 +296,7 @@ void TouchMartApp_RunTask(SysTask *task, TouchMartAppData *data) {
     }
 }
 
-void TouchMartApp_HandleAction(TouchMartAppData *data, int action) {
+static void TouchMartApp_HandleAction(TouchMartAppData *data, int action) {
     switch (action) {
     case 0:
         break;
@@ -376,7 +376,7 @@ void TouchMartApp_HandleAction(TouchMartAppData *data, int action) {
     }
 }
 
-void TouchMartApp_LoadMainTilemap(TouchMartAppData *data, int screen) {
+static void TouchMartApp_LoadMainTilemap(TouchMartAppData *data, int screen) {
     void *raw;
     NNSG2dScreenData *screenData;
     switch (screen) {
@@ -404,12 +404,12 @@ void TouchMartApp_LoadMainTilemap(TouchMartAppData *data, int screen) {
     }
 }
 
-int TouchMartApp_GetTouchedButton(TouchMartAppData *data, int buttonSet) {
+static int TouchMartApp_GetTouchedButton(TouchMartAppData *data, int buttonSet) {
     GF_ASSERT(buttonSet == 0 || buttonSet == 1);
     return TouchscreenHitbox_FindRectAtTouchNew(sTouchMartButtonSets[buttonSet]);
 }
 
-void TouchMartApp_SetupBgs(TouchMartAppData *data) {
+static void TouchMartApp_SetupBgs(TouchMartAppData *data) {
     vu32 *dispcnt = &reg_GXS_DB_DISPCNT;
     GXS_SetGraphicsMode(GX_BGMODE_0);
     GX_SetBankForSubBG(GX_VRAM_SUB_BG_32_H);
@@ -422,7 +422,7 @@ void TouchMartApp_SetupBgs(TouchMartAppData *data) {
     BgClearTilemapBufferAndCommit(data->bgConfig, GF_BG_LYR_SUB_2);
 }
 
-void TouchMartApp_LoadGraphics(TouchMartAppData *data) {
+static void TouchMartApp_LoadGraphics(TouchMartAppData *data) {
     reg_G2S_DB_BLDCNT = 0;
     GfGfxLoader_GXLoadPal(NARC_a_0_6_0, 15, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0, HEAP_ID_8);
     GfGfxLoader_LoadCharData(NARC_a_0_6_0, 16, data->bgConfig, GF_BG_LYR_SUB_1, 0, 0, FALSE, HEAP_ID_8);
@@ -433,7 +433,7 @@ void TouchMartApp_LoadGraphics(TouchMartAppData *data) {
     TouchMartApp_AddItemWindows(data);
 }
 
-void TouchMartApp_FreeWindows(TouchMartAppData *data) {
+static void TouchMartApp_FreeWindows(TouchMartAppData *data) {
     TouchMartApp_RemoveItemWindows(data);
     RemoveWindow(&data->unk_34);
     RemoveWindow(&data->messageWindow);
@@ -442,7 +442,7 @@ void TouchMartApp_FreeWindows(TouchMartAppData *data) {
     RemoveWindow(&data->cancelWindow);
 }
 
-void TouchMartApp_AddWindows(TouchMartAppData *data) {
+static void TouchMartApp_AddWindows(TouchMartAppData *data) {
     int i;
     AddWindowParameterized(data->bgConfig, &data->unk_34, GF_BG_LYR_SUB_0, 2, 1, 27, 2, 11, 1);
     AddWindowParameterized(data->bgConfig, &data->messageWindow, GF_BG_LYR_SUB_0, 2, 1, 27, 4, 11, 29);
@@ -456,14 +456,14 @@ void TouchMartApp_AddWindows(TouchMartAppData *data) {
     }
 }
 
-void TouchMartApp_AddItemWindows(TouchMartAppData *data) {
+static void TouchMartApp_AddItemWindows(TouchMartAppData *data) {
     int i;
     for (i = 0; i < TOUCH_MART_ITEMS_PER_PAGE; i++) {
         AddWindowParameterized(data->bgConfig, &data->windows[i], GF_BG_LYR_SUB_0, (u8)sTouchMartItemWindowPositions[i].x, (u8)sTouchMartItemWindowPositions[i].y, 11, 4, 12, (u16)sTouchMartItemWindowPositions[i].baseTile);
     }
 }
 
-void TouchMartApp_RemoveItemWindows(TouchMartAppData *data) {
+static void TouchMartApp_RemoveItemWindows(TouchMartAppData *data) {
     int i = 0;
     Window *window = &data->windows[TOUCH_MART_WINDOW_ITEM_0];
     for (; i < TOUCH_MART_ITEMS_PER_PAGE; i++, window++) {
@@ -472,7 +472,7 @@ void TouchMartApp_RemoveItemWindows(TouchMartAppData *data) {
     }
 }
 
-void TouchMartApp_PrintItemList(TouchMartAppData *data) {
+static void TouchMartApp_PrintItemList(TouchMartAppData *data) {
     Window *window;
     MartData *martData;
     int itemId;
@@ -526,11 +526,11 @@ void TouchMartApp_PrintItemList(TouchMartAppData *data) {
     TouchMartApp_LoadListTilemap(data, count);
 }
 
-void TouchMartApp_PrintItemName(TouchMartAppData *data, Window *window, String *string, int slot) {
+static void TouchMartApp_PrintItemName(TouchMartAppData *data, Window *window, String *string, int slot) {
     AddTextPrinterParameterizedWithColor(window, 0, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
 }
 
-void TouchMartApp_PrintPrice(MessageFormat *messageFormat, MsgData *msgData, Window *window, s32 price, int martType) {
+static void TouchMartApp_PrintPrice(MessageFormat *messageFormat, MsgData *msgData, Window *window, s32 price, int martType) {
     int msgId = msg_0435_00018;
     String *string;
     if ((u32)(martType - 3) <= 1) {
@@ -542,7 +542,7 @@ void TouchMartApp_PrintPrice(MessageFormat *messageFormat, MsgData *msgData, Win
     String_Delete(string);
 }
 
-void TouchMartApp_PrintMoney(TouchMartAppData *data) {
+static void TouchMartApp_PrintMoney(TouchMartAppData *data) {
     String *label;
     String *template;
     String *string;
@@ -582,7 +582,7 @@ void TouchMartApp_PrintMoney(TouchMartAppData *data) {
     ScheduleWindowCopyToVram(&data->moneyWindow);
 }
 
-void TouchMartApp_PrintPageNumber(TouchMartAppData *data) {
+static void TouchMartApp_PrintPageNumber(TouchMartAppData *data) {
     MartData *martData;
     String *string;
     String *template;
@@ -609,7 +609,7 @@ void TouchMartApp_PrintPageNumber(TouchMartAppData *data) {
     ScheduleWindowCopyToVram(&data->pageWindow);
 }
 
-void TouchMartApp_EditListTilemap(BgConfig *bgConfig, int bgId, int itemCount) {
+static void TouchMartApp_EditListTilemap(BgConfig *bgConfig, int bgId, int itemCount) {
     void *tilemap = GetBgTilemapBuffer(bgConfig, (u8)bgId);
     int i;
     const TouchMartBgOp *op;
@@ -626,7 +626,7 @@ void TouchMartApp_EditListTilemap(BgConfig *bgConfig, int bgId, int itemCount) {
     }
 }
 
-void TouchMartApp_LoadListTilemap(TouchMartAppData *data, int itemCount) {
+static void TouchMartApp_LoadListTilemap(TouchMartAppData *data, int itemCount) {
     NNSG2dScreenData *screenData;
     void *raw = GfGfxLoader_GetScrnData(NARC_a_0_6_0, 18, FALSE, &screenData, HEAP_ID_8);
     BG_LoadScreenTilemapData(data->bgConfig, GF_BG_LYR_SUB_1, screenData->rawData, screenData->szByte);
@@ -635,7 +635,7 @@ void TouchMartApp_LoadListTilemap(TouchMartAppData *data, int itemCount) {
     Heap_Free(raw);
 }
 
-BOOL TouchMartApp_IsItemPurchasable(MartData *martData, int index, int itemId) {
+static BOOL TouchMartApp_IsItemPurchasable(MartData *martData, int index, int itemId) {
     if (martData->martType == 3) {
         return PokeathlonSave_IsDailyItemBought(martData->pokeathlonSave, index) == 0;
     }
@@ -645,7 +645,7 @@ BOOL TouchMartApp_IsItemPurchasable(MartData *martData, int index, int itemId) {
     return TRUE;
 }
 
-void TouchMartApp_PrintSelectedItem(TouchMartAppData *data) {
+static void TouchMartApp_PrintSelectedItem(TouchMartAppData *data) {
     MartData *martData;
     int index;
     int itemId;
@@ -668,7 +668,7 @@ void TouchMartApp_PrintSelectedItem(TouchMartAppData *data) {
     ScheduleWindowCopyToVram(&data->windows[TOUCH_MART_WINDOW_SELECTED_ITEM]);
 }
 
-void TouchMartApp_PrintInBag(TouchMartAppData *data, int unused) {
+static void TouchMartApp_PrintInBag(TouchMartAppData *data, int unused) {
     String *string;
     String *template;
     int count;
@@ -689,7 +689,7 @@ void TouchMartApp_PrintInBag(TouchMartAppData *data, int unused) {
     ScheduleWindowCopyToVram(&data->windows[TOUCH_MART_WINDOW_IN_BAG]);
 }
 
-void TouchMartApp_PrintQuantity(TouchMartAppData *data, int quantity) {
+static void TouchMartApp_PrintQuantity(TouchMartAppData *data, int quantity) {
     String *tensString;
     String *onesString;
     String *tensTemplate;
@@ -726,14 +726,14 @@ void TouchMartApp_PrintQuantity(TouchMartAppData *data, int quantity) {
     ScheduleWindowCopyToVram(&data->windows[TOUCH_MART_WINDOW_TOTAL_PRICE]);
 }
 
-void TouchMartApp_PrintBuyButton(TouchMartAppData *data) {
+static void TouchMartApp_PrintBuyButton(TouchMartAppData *data) {
     String *string = NewString_ReadMsgData(data->msgData, msg_0435_00042);
     AddTextPrinterParameterizedWithColor(&data->windows[TOUCH_MART_WINDOW_BUY], 0, string, 4, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);
     ScheduleWindowCopyToVram(&data->windows[TOUCH_MART_WINDOW_BUY]);
     String_Delete(string);
 }
 
-void TouchMartApp_BufferItemName(int martType, MessageFormat *messageFormat, int itemId, int fieldno) {
+static void TouchMartApp_BufferItemName(int martType, MessageFormat *messageFormat, int itemId, int fieldno) {
     switch (martType) {
     case 0:
     case 3:
@@ -746,7 +746,7 @@ void TouchMartApp_BufferItemName(int martType, MessageFormat *messageFormat, int
     }
 }
 
-void TouchMartApp_BufferItemNamePlural(int martType, MessageFormat *messageFormat, int itemId, int fieldno) {
+static void TouchMartApp_BufferItemNamePlural(int martType, MessageFormat *messageFormat, int itemId, int fieldno) {
     switch (martType) {
     case 0:
     case 3:
@@ -759,7 +759,7 @@ void TouchMartApp_BufferItemNamePlural(int martType, MessageFormat *messageForma
     }
 }
 
-void TouchMartApp_BufferItemNameWithIndefArticle(int martType, MessageFormat *messageFormat, int itemId, int fieldno) {
+static void TouchMartApp_BufferItemNameWithIndefArticle(int martType, MessageFormat *messageFormat, int itemId, int fieldno) {
     switch (martType) {
     case 0:
     case 3:
@@ -775,7 +775,7 @@ void TouchMartApp_BufferItemNameWithIndefArticle(int martType, MessageFormat *me
 // force_active only sets a section flag here; kept so the object stays identical.
 #pragma force_active on
 
-void TouchMartApp_PrintHowMany(TouchMartAppData *data) {
+static void TouchMartApp_PrintHowMany(TouchMartAppData *data) {
     String *template;
     FillWindowPixelBuffer(&data->windows[TOUCH_MART_WINDOW_PROMPT], 15);
     TouchMartApp_BufferItemName(data->martData->martType, data->messageFormat, data->martData->item, 0);
@@ -787,7 +787,7 @@ void TouchMartApp_PrintHowMany(TouchMartAppData *data) {
     data->martData->printerID = AddTextPrinterParameterized(&data->windows[TOUCH_MART_WINDOW_PROMPT], 1, data->string, 0, 0, Options_GetTextFrameDelay(data->options), NULL);
 }
 
-void TouchMartApp_PrintConfirmPurchase(TouchMartAppData *data) {
+static void TouchMartApp_PrintConfirmPurchase(TouchMartAppData *data) {
     String *template;
     FillWindowPixelBuffer(&data->windows[TOUCH_MART_WINDOW_PROMPT], 15);
     if ((u8)(data->martData->martType + 0xFD) <= 1) {
@@ -807,7 +807,7 @@ void TouchMartApp_PrintConfirmPurchase(TouchMartAppData *data) {
 
 #pragma force_active reset
 
-void TouchMartApp_CreateYesNoPrompt(TouchMartAppData *data) {
+static void TouchMartApp_CreateYesNoPrompt(TouchMartAppData *data) {
     YesNoPromptTemplate template;
     MI_CpuFill8(&template, 0, sizeof(template));
     template.bgConfig = data->bgConfig;
@@ -824,7 +824,7 @@ void TouchMartApp_CreateYesNoPrompt(TouchMartAppData *data) {
     YesNoPrompt_InitFromTemplate(data->yesNoPrompt, &template);
 }
 
-BOOL TouchMartApp_HandleYesNoPrompt(TouchMartAppData *data) {
+static BOOL TouchMartApp_HandleYesNoPrompt(TouchMartAppData *data) {
     int result;
     if (data->yesNoPrompt == NULL) {
         return FALSE;
@@ -848,7 +848,7 @@ BOOL TouchMartApp_HandleYesNoPrompt(TouchMartAppData *data) {
 // force_active only sets a section flag here; kept so the object stays identical.
 #pragma force_active on
 
-void TouchMartApp_PrintPurchaseDone(TouchMartAppData *data) {
+static void TouchMartApp_PrintPurchaseDone(TouchMartAppData *data) {
     String *template;
     MartData *martData = data->martData;
     if (martData->quantity > 1) {
@@ -888,14 +888,14 @@ void TouchMartApp_PrintPurchaseDone(TouchMartAppData *data) {
 
 #pragma force_active reset
 
-BOOL TouchMartApp_PurchaseDonePrinterCallback(TextPrinterTemplate *template, u16 glyphId) {
+static BOOL TouchMartApp_PurchaseDonePrinterCallback(TextPrinterTemplate *template, u16 glyphId) {
     if (glyphId == 1) {
         PlaySE(SEQ_SE_DP_REGI);
     }
     return FALSE;
 }
 
-String *TouchMartApp_GetCannotAffordMessage(MartData *martData, MsgData *msgData) {
+static String *TouchMartApp_GetCannotAffordMessage(MartData *martData, MsgData *msgData) {
     int amount;
     int result;
     u8 martType = martData->martType;
@@ -920,7 +920,7 @@ String *TouchMartApp_GetCannotAffordMessage(MartData *martData, MsgData *msgData
     return NewString_ReadMsgData(msgData, msg_0435_00011);
 }
 
-String *TouchMartApp_GetNoRoomMessage(const MartData *martData, MsgData *msgData) {
+static String *TouchMartApp_GetNoRoomMessage(const MartData *martData, MsgData *msgData) {
     int msgId;
     if (martData->martType == 0) {
         msgId = msg_0435_00016;
@@ -952,23 +952,23 @@ String *TouchMartApp_GetNoRoomMessage(const MartData *martData, MsgData *msgData
         (data)->martData->printerID = AddTextPrinterParameterized(&(data)->messageWindow, 1, (data)->string, 0, 0, delay_, NULL); \
     }
 
-void TouchMartApp_PrintCannotAfford(TouchMartAppData *data) {
+static void TouchMartApp_PrintCannotAfford(TouchMartAppData *data) {
     TOUCH_MART_PRINT_MESSAGE(data, TouchMartApp_GetCannotAffordMessage(data->martData, data->msgData));
 }
 
-void TouchMartApp_PrintNoRoom(TouchMartAppData *data) {
+static void TouchMartApp_PrintNoRoom(TouchMartAppData *data) {
     TOUCH_MART_PRINT_MESSAGE(data, TouchMartApp_GetNoRoomMessage(data->martData, data->msgData));
 }
 
-void TouchMartApp_PrintNoRoomInBag(TouchMartAppData *data) {
+static void TouchMartApp_PrintNoRoomInBag(TouchMartAppData *data) {
     TOUCH_MART_PRINT_MESSAGE(data, NewString_ReadMsgData(data->msgData, msg_0435_00016));
 }
 
-void TouchMartApp_PrintPremierBallBonus(TouchMartAppData *data) {
+static void TouchMartApp_PrintPremierBallBonus(TouchMartAppData *data) {
     TOUCH_MART_PRINT_MESSAGE(data, NewString_ReadMsgData(data->msgData, msg_0435_00020));
 }
 
-void TouchMartApp_AddDetailWindows(TouchMartAppData *data) {
+static void TouchMartApp_AddDetailWindows(TouchMartAppData *data) {
     AddWindowParameterized(data->bgConfig, &data->windows[TOUCH_MART_WINDOW_SELECTED_ITEM], GF_BG_LYR_SUB_0, 12, 7, 11, 4, 12, 173);
     AddWindowParameterized(data->bgConfig, &data->windows[TOUCH_MART_WINDOW_QUANTITY_TENS], GF_BG_LYR_SUB_0, 16, 14, 2, 3, 12, 217);
     AddWindowParameterized(data->bgConfig, &data->windows[TOUCH_MART_WINDOW_QUANTITY_ONES], GF_BG_LYR_SUB_0, 20, 14, 2, 3, 12, 223);
@@ -985,7 +985,7 @@ void TouchMartApp_AddDetailWindows(TouchMartAppData *data) {
     FillWindowPixelBuffer(&data->windows[TOUCH_MART_WINDOW_PROMPT], 15);
 }
 
-void TouchMartApp_RemoveDetailWindows(TouchMartAppData *data) {
+static void TouchMartApp_RemoveDetailWindows(TouchMartAppData *data) {
     ClearWindowTilemapAndScheduleTransfer(&data->windows[TOUCH_MART_WINDOW_SELECTED_ITEM]);
     ClearWindowTilemapAndScheduleTransfer(&data->windows[TOUCH_MART_WINDOW_QUANTITY_TENS]);
     ClearWindowTilemapAndScheduleTransfer(&data->windows[TOUCH_MART_WINDOW_QUANTITY_ONES]);

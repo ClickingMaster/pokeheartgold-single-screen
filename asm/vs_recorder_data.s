@@ -3306,24 +3306,18 @@
 	.public sVsRecorderFrontierPrintPositions
 	.public VsRecorder_InitResources
 	.public VsRecorder_FreeResources
-	.public VsRecorder_InitBgLayers
 	.public VsRecorder_SetScreensFlipped
 	.public VsRecorder_ResetBg2
-	.public VsRecorder_InitSpriteSystem
 	.public VsRecorder_VBlankCB
 	.public VsRecorder_Main
 	.public VsRecorder_SetScreenIfDone
 	.public VsRecorder_SetSubState
-	.public VsRecorder_SetStep
-	.public VsRecorder_RefreshMenu
 	.public VsRecorder_MenuEnterChild
 	.public VsRecorder_MenuRestore
 	.public VsRecorder_MenuRunAction
-	.public VsRecorder_MenuCanSelect
 	.public VsRecorder_OnMenuTouch
 	.public VsRecorder_InitMenuHitboxes
 	.public VsRecorder_UpdateMenuHitboxes
-	.public VsRecorder_ClearMenuHitboxes
 	.public VsRecorder_UpdateMenuTouch
 	.public VsRecorder_MenuPop
 	.public VsRecorder_ClearResumeState
@@ -3345,7 +3339,6 @@
 	.public VsRecorder_RefreshPathRows
 	.public VsRecorder_DeleteMenuRowSprites
 	.public VsRecorder_SetMenuRowsDrawFlag
-	.public VsRecorder_DecorTask
 	.public VsRecorder_SetSpritePos
 	.public VsRecorder_GetSpritePos
 	.public VsRecorder_CreateMenuRowText
@@ -3384,19 +3377,10 @@
 	.public VsRecorder_SetMessageText
 	.public VsRecorder_HideTopMessage
 	.public VsRecorder_ShowMenuNotice
-	.public VsRecorder_PrintProfile
-	.public VsRecorder_RemoveProfileWindows
-	.public VsRecorder_SetProfileMonIconDrawFlag
-	.public VsRecorder_FreeProfileMonIcon
-	.public VsRecorder_CreateProfileMonIcon
-	.public VsRecorder_SetProfileAvatarDrawFlag
-	.public VsRecorder_FreeProfileAvatar
 	.public VsRecorder_GetAvatarFileId
-	.public VsRecorder_CreateProfileAvatar
 	.public VsRecorder_CreateProfile
 	.public VsRecorder_FreeProfile
 	.public VsRecorder_SetProfileDrawFlag
-	.public VsRecorder_PrintListLocation
 	.public VsRecorder_InitMessageList
 	.public VsRecorder_InitList
 	.public VsRecorder_InitRankingList
@@ -3414,21 +3398,16 @@
 	.public VsRecorder_UpdateListArrows
 	.public VsRecorder_UpdateListArrowsCursor
 	.public VsRecorder_FreeListArrows
-	.public VsRecorder_NewScrollSprite
-	.public VsRecorder_DeleteTouchScrollSprites
 	.public VsRecorder_CreateTouchScrollSprites
 	.public VsRecorder_CreateTouchScrollSpritesWithAnim
 	.public VsRecorder_InitTouchScroll
 	.public VsRecorder_FreeTouchScroll
-	.public VsRecorder_TouchScrollTrack
 	.public VsRecorder_TouchScrollSetEnabled
 	.public VsRecorder_UpdateTouchScroll
 	.public VsRecorder_AddGameStatsScore
 	.public VsRecorder_ImportBattleRecord
-	.public VsRecorder_FlipScreensTask
 	.public VsRecorder_StartFlipScreens
 	.public VsRecorder_IsFlipScreensDone
-	.public VsRecorder_VBlankTask
 	.public VsRecorder_StartVBlankTask
 	.public VsRecorder_StepRecordSave
 	.public VsRecorder_SetBattleResult
@@ -3442,12 +3421,8 @@
 	.public VsRecorder_NewMonIcon
 	.public VsRecorder_DeleteMonIcon
 	.public VsRecorder_DeleteSprite
-	.public VsRecorder_PrintVideoInfo
-	.public VsRecorder_RemoveVideoInfoWindows
 	.public VsRecorder_HeaderUsesThreeMonLayout
-	.public VsRecorderVideoInfo_UsesThreeMonLayout
 	.public VsRecorderVideoInfo_GetScreenId
-	.public VsRecorder_CreateVideoPartyIcons
 	.public VsRecorder_CreateVideoInfo
 	.public VsRecorder_FreeVideoInfo
 	.public VsRecorder_SetVideoPartyIconsDrawFlag
@@ -3458,8 +3433,6 @@
 	.public VsRecorder_PlaceOrbitCursor
 	.public VsRecorder_CountDigits
 	.public VsRecorder_LoadScreen
-	.public VsRecorder_TouchIndicatorTask
-	.public VsRecorder_ShowTouchIndicator
 	.public VsRecorder_OnTouchConfirm
 	.public VsRecorder_IsVBlankPaused
 	.public VsRecorder_SetVBlankPaused
@@ -3470,7 +3443,6 @@
 	.public VsRecorder_MessageScreen
 	.public VsRecorder_IsVideoSaved
 	.public VsRecorder_SanitizeName
-	.public VsRecorder_SetPlaceholderName
 	.public VsRecorder_ShowTouchHere
 	.public VsRecorder_HideTouchHere
 	.public VsRecorder_TitleIntro
@@ -3479,12 +3451,10 @@
 	.public VsRecorder_TitleSlideInChoices
 	.public VsRecorder_SlideInChoiceRows
 	.public VsRecorder_MenuMain
-	.public VsRecorder_CheckSchemeArrowTouch
 	.public VsRecorder_MenuInvalid
 	.public VsRecorder_MenuExit
 	.public VsRecorder_MenuSlideIn
 	.public VsRecorder_MenuShow
-	.public VsRecorder_RowMoveTask
 	.public VsRecorder_MenuSelect
 	.public VsRecorder_MenuBack
 	.public VsRecorder_MenuPrevScheme
@@ -3494,19 +3464,11 @@
 	.public VsRecorder_SavedVideoShow
 	.public VsRecorder_SavedVideoMain
 	.public VsRecorder_SavedVideoToggleProfile
-	.public VsRecorder_ShowYesNoWindows
-	.public VsRecorder_HideYesNoWindows
 	.public VsRecorder_SavedVideoSavePrompt
 	.public VsRecorder_SavedVideoSave
 	.public VsRecorder_SavedVideoPlay
 	.public VsRecorder_SavedVideoExit
 	.public VsRecorder_SavedVideoResume
-	.public VsRecorder_OnSavedVideoTouch
-	.public VsRecorder_SetSavedVideoSlot
-	.public VsRecorder_ShowProfileButton
-	.public VsRecorder_RemoveProfileButton
-	.public VsRecorder_PrintProfileButton
-	.public VsRecorder_CreateExitButton
 	.public VsRecorder_FreeExitButton
 	.public VsRecorder_PlaceFrontierExitButton
 	.public VsRecorder_LoadFrontierButtonGfx
@@ -3539,43 +3501,15 @@
 	.public VsRecorder_DressUpViewClosePhoto
 	.public VsRecorder_DressUpViewToggleProfile
 	.public VsRecorder_DressUpViewChangePhoto
-	.public VsRecorder_RemoveDressUpToggleWindow
-	.public VsRecorder_PrintDressUpToggleLabel
-	.public VsRecorder_CreateDressUpToggleWindow
-	.public VsRecorder_DressUpVBlankCB
-	.public VsRecorder_SetPhotoWindow
-	.public VsRecorder_DisablePhotoWindow
-	.public VsRecorder_SetDressUpSendButtonHidden
-	.public VsRecorder_CreateDressUpButtons
-	.public VsRecorder_FreeDressUpButtons
-	.public VsRecorder_PrintOwnPhotoCaption
-	.public VsRecorder_PrintPhotoCaption
-	.public VsRecorder_DressUpCategoryHasSeen
-	.public VsRecorder_BuildDressUpSpeciesList
-	.public VsRecorder_FreeDressUpSpeciesList
-	.public VsRecorder_OnDressUpCategoryTouch
-	.public VsRecorder_CreateDressUpCategoryWindows
-	.public VsRecorder_RemoveDressUpCategoryWindows
-	.public VsRecorder_RemovePhotoCaption
 	.public VsRecorder_OnDressUpUploaded
 	.public VsRecorder_OnDressUpListReceived
 	.public VsRecorder_LoadBoxDataOwner
 	.public VsRecorder_FreeBoxDataOwner
-	.public VsRecorder_BoxFormHasMon
-	.public VsRecorder_SkipToOccupiedSlot
-	.public VsRecorder_OnBoxDataSendTouch
-	.public VsRecorder_OnBoxDataSendCategoryTouch
-	.public VsRecorder_OnBoxDataViewCategoryTouch
-	.public VsRecorder_OnBoxListTouch
-	.public VsRecorder_OnBoxDataBoxTouch
-	.public VsRecorder_CreateBoxDataButtons
 	.public VsRecorder_FreeBoxDataButtons
 	.public VsRecorder_SelectFirstBoxMon
-	.public VsRecorder_PackBoxForm
 	.public VsRecorder_BoxDataInit
 	.public VsRecorder_BoxDataEnter
 	.public VsRecorder_BoxDataSendChangeBox
-	.public VsRecorder_SetBoxDataSendButtonHidden
 	.public VsRecorder_BoxDataSendShowCategories
 	.public VsRecorder_BoxDataSendSelectCategory
 	.public VsRecorder_BoxDataSendUpload
@@ -3588,18 +3522,13 @@
 	.public VsRecorder_RemoveBoxDataWindows
 	.public VsRecorder_PrintBoxDataMessage
 	.public VsRecorder_PrintBoxDataOwnerMessage
-	.public VsRecorder_PrintBoxName
 	.public VsRecorder_ClearBoxDataInfoWindows
 	.public VsRecorder_HasAllBits
-	.public VsRecorder_PrintBoxMonName
-	.public VsRecorder_CreateBoxMonIcons
 	.public VsRecorder_SetBoxMonIconsDrawFlag
 	.public VsRecorder_FreeBoxMonIcons
-	.public VsRecorder_CreateBoxMonPic
 	.public VsRecorder_SetBoxMonPicVanished
 	.public VsRecorder_FreeBoxMonPic
 	.public VsRecorder_ShowBox
-	.public VsRecorder_RefreshOwnBox
 	.public VsRecorder_BoxDataSendShow
 	.public VsRecorder_BoxDataSendMain
 	.public VsRecorder_BoxDataSendExit
@@ -3613,8 +3542,6 @@
 	.public VsRecorder_CreateBoxListTitle
 	.public VsRecorder_RemoveBoxListTitle
 	.public VsRecorder_BoxDataViewDownload
-	.public VsRecorder_CreateBoxListItems
-	.public VsRecorder_FreeBoxListItems
 	.public VsRecorder_BoxListMain
 	.public VsRecorder_BoxListBack
 	.public VsRecorder_BoxDataViewOpenBox
@@ -3625,19 +3552,6 @@
 	.public VsRecorder_BoxDataViewExit
 	.public VsRecorder_OnBoxUploaded
 	.public VsRecorder_OnBoxListReceived
-	.public VsRecorder_InitRankingsList
-	.public VsRecorder_FillRankingEntries
-	.public VsRecorder_CreateRankingsButtonLabels
-	.public VsRecorder_RemoveRankingsButtonLabels
-	.public VsRecorder_CreateRankingsWindows
-	.public VsRecorder_RemoveRankingsWindows
-	.public VsRecorder_GetRankedRecordValue
-	.public VsRecorder_PrintRankingsInfo
-	.public VsRecorder_SetRankingsSendButtonHidden
-	.public VsRecorder_CreateRankingsButtons
-	.public VsRecorder_FreeRankingsButtons
-	.public VsRecorder_UpdateRankingTeamCount
-	.public VsRecorder_OnRankingsTouch
 	.public VsRecorder_RankingsInit
 	.public VsRecorder_RankingsEnter
 	.public VsRecorder_RankingsDownload
@@ -3649,11 +3563,7 @@
 	.public VsRecorder_RankingsSwitch
 	.public VsRecorder_OnRankingsHeaderReceived
 	.public VsRecorder_OnRankingsReceived
-	.public VsRecorder_PlaceVideoListIcons
-	.public VsRecorder_CreateVideoListButtons
-	.public VsRecorder_PrintVideoListMessage
 	.public VsRecorder_VideoListDownloadVideo
-	.public VsRecorder_FreeVideoDetails
 	.public VsRecorder_VideoListOverwriteMain
 	.public VsRecorder_VideoListOverwriteNo
 	.public VsRecorder_VideoListSave
@@ -3662,17 +3572,9 @@
 	.public VsRecorder_VideoListSlotsMain
 	.public VsRecorder_VideoListSlotsCancel
 	.public VsRecorder_VideoListBackToList
-	.public VsRecorder_SetSlotButtonName
-	.public VsRecorder_CreateSlotButtons
-	.public VsRecorder_FreeSlotButtons
-	.public VsRecorder_FreeVideoListButtons
-	.public VsRecorder_SetVideoListButtonsMode
-	.public VsRecorder_RemoveVideoListWindows
-	.public VsRecorder_RemoveVideoListButtonWindows
 	.public VsRecorder_VideoListInit
 	.public VsRecorder_VideoListEnter
 	.public VsRecorder_VideoListDownloadList
-	.public VsRecorder_CreateVideoListWindows
 	.public VsRecorder_VideoListShowList
 	.public VsRecorder_VideoListSelect
 	.public VsRecorder_VideoListExit
@@ -3681,55 +3583,25 @@
 	.public VsRecorder_VideoListToggleProfile
 	.public VsRecorder_VideoListPlay
 	.public VsRecorder_VideoListResume
-	.public VsRecorder_ShowVideoListMessage
 	.public VsRecorder_VideoListShowSlots
-	.public VsRecorder_RemoveDetailsButtonWindow
-	.public VsRecorder_PrintDetailsButtonLabel
-	.public VsRecorder_CreateDetailsButtonWindow
-	.public VsRecorder_CreateOverwriteWindows
-	.public VsRecorder_RemoveOverwriteWindows
-	.public VsRecorder_OnVideoDetailsTouch
-	.public VsRecorder_OnSaveSlotTouch
-	.public VsRecorder_OnOverwriteTouch
-	.public VsRecorder_LoadVideoDetails
-	.public VsRecorder_CreateVideoListIcons
-	.public VsRecorder_SetVideoListIconsDrawFlag
-	.public VsRecorder_FreeVideoListIcons
-	.public VsRecorder_ScrollVideoListIcons
-	.public VsRecorder_FreeDetailsButtons
 	.public VsRecorder_GetNet
 	.public VsRecorder_InitNet
 	.public VsRecorder_IsNetIdle
 	.public VsRecorder_UpdateNet
 	.public VsRecorder_FreeNet
-	.public VsRecorder_PlaceSearchResultIcons
-	.public VsRecorder_CreateSearchResultIcons
-	.public VsRecorder_SetSearchResultIconsDrawFlag
-	.public VsRecorder_FreeSearchResultIcons
-	.public VsRecorder_ScrollSearchResultIcons
 	.public VsRecorder_HasSearchConditions
-	.public VsRecorder_CreateSearchConditionWindows
-	.public VsRecorder_PrintSearchFacility
-	.public VsRecorder_PrintSearchSpecies
 	.public VsRecorder_PrintSearchLocation
 	.public VsRecorder_PrintLocationButtonLabel
-	.public VsRecorder_CreateSearchButtonWindows
-	.public VsRecorder_RemoveSearchWindows
-	.public VsRecorder_RemoveSearchButtonWindows
-	.public VsRecorder_CreateSearchResultWindows
 	.public VsRecorder_VideoSearchShowConditions
 	.public VsRecorder_VideoSearchConditionsMain
 	.public VsRecorder_VideoSearchExit
 	.public VsRecorder_VideoSearchOpenCondition
 	.public VsRecorder_VideoSearchSelectFacility
 	.public VsRecorder_VideoSearchClearSpecies
-	.public VsRecorder_CreateSearchCategoryWindows
-	.public VsRecorder_RemoveSearchCategoryWindows
 	.public VsRecorder_VideoSearchSelectCategory
 	.public VsRecorder_VideoSearchSelectSpecies
 	.public VsRecorder_SearchCategoryHasSeen
 	.public VsRecorder_BuildSearchSpeciesList
-	.public VsRecorder_FreeSearchSpeciesList
 	.public VsRecorder_VideoSearchSelectLocation
 	.public VsRecorder_VideoSearchReturnToConditions
 	.public VsRecorder_VideoSearchRequest
@@ -3759,7 +3631,6 @@
 	.public VsRecorder_NumberSearchClosePad
 	.public VsRecorder_NumberSearchExit
 	.public VsRecorder_NumberSearchDownloadVideo
-	.public VsRecorder_LoadFoundVideoDetails
 	.public VsRecorder_LoadSearchResultDetails
 	.public VsRecorder_FreeFoundVideoDetails
 	.public VsRecorder_NumberSearchShowDetails
@@ -3767,9 +3638,6 @@
 	.public VsRecorder_NumberSearchToggleProfile
 	.public VsRecorder_NumberSearchPlay
 	.public VsRecorder_NumberSearchExitDetails
-	.public VsRecorder_SetSearchSlotButtonName
-	.public VsRecorder_ShowSearchMessage
-	.public VsRecorder_PrintSearchMessage
 	.public VsRecorder_CreateSearchSlotButtons
 	.public VsRecorder_FreeSearchSlotButtons
 	.public VsRecorder_NumberSearchShowSlots
@@ -3785,21 +3653,12 @@
 	.public VsRecorder_SendVideoUpload
 	.public VsRecorder_SendVideoExit
 	.public VsRecorder_RemoveSearchDetailsButtonWindow
-	.public VsRecorder_PrintSearchDetailsButtonLabel
 	.public VsRecorder_CreateSearchDetailsButtonWindow
-	.public VsRecorder_CreateSearchOverwriteWindows
-	.public VsRecorder_RemoveSearchOverwriteWindows
-	.public VsRecorder_OnNumberSearchDetailsTouch
-	.public VsRecorder_OnNumberSearchSlotTouch
-	.public VsRecorder_OnNumberSearchOverwriteTouch
 	.public VsRecorder_OnSearchConditionTouch
 	.public VsRecorder_OnSpeciesGroupTouch
 	.public VsRecorder_OnSearchDetailsTouch
 	.public VsRecorder_OnSearchSlotTouch
 	.public VsRecorder_OnSearchOverwriteTouch
-	.public VsRecorder_SetNumberPadButtonsMode
-	.public VsRecorder_CreateNumberPadButtons
-	.public VsRecorder_FreeNumberPadButtons
 	.public VsRecorder_SetSearchButtonsMode
 	.public VsRecorder_CreateSearchButtons
 	.public VsRecorder_FreeSearchButtons
@@ -3817,41 +3676,11 @@
 	.public VsRecorder_PrintVideoNumber
 	.public VsRecorder_NewNumberPadConfig
 	.public VsRecorder_FreeNumberPadConfig
-	.public VsRecorder_NumberPadSetGroup
-	.public VsRecorder_NumberPadInitLayout
-	.public VsRecorder_NumberPadSetState
 	.public VsRecorder_NumberPadInit
 	.public VsRecorder_NumberPadFree
 	.public VsRecorder_NumberPadInput
 	.public VsRecorder_NumberPadSwitchGroup
 	.public VsRecorder_NumberPadMain
-	.public VsRecorder_NumberPadConfirm
-	.public VsRecorder_NumberPadBack
-	.public VsRecorder_NumberPadInitHitboxes
-	.public VsRecorder_OnNumberPadTouch
-	.public VsRecorder_NumberPadRunAction
-	.public VsRecorder_NumberPadClearAction
-	.public VsRecorder_NumberPadFindGroupFirst
-	.public VsRecorder_NumberPadFindGroupLast
-	.public VsRecorder_NumberPadLoadGfx
-	.public VsRecorder_NumberPadShowSprites
-	.public VsRecorder_NumberPadFreeSprites
-	.public VsRecorder_NumberPadCreateDigitSprites
-	.public VsRecorder_NumberPadCreateCursors
-	.public VsRecorder_NumberPadSetCursorDrawFlag
-	.public VsRecorder_NumberPadMoveCursor
-	.public VsRecorder_NumberPadPlaceKeyCursor
-	.public VsRecorder_NumberPadPlaceCursorOnKey
-	.public VsRecorder_NumberPadUpdateCursors
-	.public VsRecorder_GetDigitAnim
-	.public VsRecorder_NumberPadUpdateEnabled
-	.public VsRecorder_NumberPadLayoutDigits
-	.public VsRecorder_NumberPadUpdateHitboxes
-	.public VsRecorder_ShowDeleteWindow
-	.public VsRecorder_HideDeleteWindow
-	.public VsRecorder_PrintDeleteMessage
-	.public VsRecorder_ShowDeleteYesNo
-	.public VsRecorder_HideDeleteYesNo
 	.public VsRecorder_DeleteInit
 	.public VsRecorder_DeleteEnter
 	.public VsRecorder_DeleteMain
@@ -3996,8 +3825,6 @@
 	.text
 	.public VsRecorder_SetScreenIfDone
 	.public VsRecorder_SetSubState
-	.public VsRecorder_SetStep
-	.public VsRecorder_RefreshMenu
 	.public VsRecorder_UpdateMenuTouch
 	.public VsRecorder_HasResumeScreen
 	.public VsRecorder_SetResumeScreen
@@ -4008,14 +3835,11 @@
 	.public VsRecorder_NewMessageFormat
 	.public VsRecorder_SetBoxUploaded
 	.public VsRecorder_IsBoxUploaded
-	.public VsRecorder_SetProfileMonIconDrawFlag
-	.public VsRecorder_SetProfileAvatarDrawFlag
 	.public VsRecorder_CreateProfile
 	.public VsRecorder_SetProfileDrawFlag
 	.public VsRecorder_RemoveListWindow
 	.public VsRecorder_ClearListWindow
 	.public VsRecorder_SetListArrowsY
-	.public VsRecorder_DeleteTouchScrollSprites
 	.public VsRecorder_CreateTouchScrollSprites
 	.public VsRecorder_InitTouchScroll
 	.public VsRecorder_FreeTouchScroll
@@ -4025,7 +3849,6 @@
 	.public VsRecorder_OpenMonIconNarc
 	.public VsRecorder_CloseMonIconNarc
 	.public VsRecorder_DeleteSprite
-	.public VsRecorderVideoInfo_UsesThreeMonLayout
 	.public VsRecorderVideoInfo_GetScreenId
 	.public VsRecorder_CreateVideoInfo
 	.public VsRecorder_SetVideoPartyIconsDrawFlag
@@ -4035,7 +3858,6 @@
 	.public VsRecorder_SetVBlankPaused
 	.public VsRecorder_FreeLabeledSprite
 	.public VsRecorder_OnDressUpUploaded
-	.public VsRecorder_BoxFormHasMon
 	.public VsRecorder_HasAllBits
 	.public VsRecorder_FreeBoxMonPic
 	.public VsRecorder_OnBoxUploaded
@@ -4047,9 +3869,7 @@
 	.public VsRecorder_VideoSearchSave
 	.public VsRecorder_NumberSearchSave
 	.public VsRecorder_OnVideoSaveReported
-	.public VsRecorder_NumberPadSetState
 	.public VsRecorder_NumberPadFree
-	.public VsRecorder_NumberPadClearAction
 	.public VsRecorder_DeleteEnter
 	.public VsRecorder_DeleteExit
 

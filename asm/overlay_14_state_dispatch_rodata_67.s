@@ -2203,7 +2203,6 @@
 	.public _021F7BB8
 	.public sPCBoxSlotGridRect
 	.public PCBox_VBlankCallback
-	.public PCBox_UpdateDetailPanel
 	.public PCBox_SetUpdateFunc
 	.public PCBox_SetPendingUpdateFunc
 	.public PCBox_StartPendingUpdateFunc
@@ -2226,66 +2225,37 @@
 	.public PCBox_SetSlotMonData
 	.public PCBox_GetSlotBoxMon
 	.public PCBox_DeleteSlotMon
-	.public PCBox_SwapBoxAndPartyMon
-	.public PCBox_MoveBoxMonToParty
-	.public PCBox_MovePartyMonToBox
-	.public PCBox_SwapPartyMons
-	.public PCBox_MovePartyMonToEnd
-	.public PCBox_MoveBoxMonToOtherBox
-	.public PCBox_MovePartyMonToOtherBox
 	.public PCBox_ApplyMonMove
-	.public PCBox_GetTargetBoxId
 	.public PCBox_PartyHasOtherUsableMon
 	.public PCBox_UpdateArceusGiratinaForm
 	.public PCBox_RevertShayminFormOnMove
 	.public PCBox_AnimateMonMove
 	.public PCBox_AnimateSelectedSlotMoveEntry
 	.public PCBox_AnimateMoveEntries
-	.public PCBox_CanMoveMon
-	.public PCBox_CanMovePartyMonToEmptySlot
 	.public PCBox_CanSwapHeldItems
-	.public PCBox_SetupMoveEntryToSlot
-	.public PCBox_SetupMoveEntryToSprite
-	.public PCBox_SetupMonSwapEntries
 	.public PCBox_SetupMonMove
 	.public PCBox_SetupDepositMoveEntries
 	.public PCBox_SetupMonMoveToPartyEnd
 	.public PCBox_GetMoveEntryTarget
 	.public PCBox_SetupPartyShiftAfterRelease
 	.public PCBox_ApplyMoveEntryIcons
-	.public PCBox_GetReleaseCheckMoveIndex
 	.public PCBox_StartReleaseMoveCheck
 	.public PCBox_FreeReleaseMoveCheck
 	.public PCBox_RunReleaseMoveCheck
 	.public PCBox_CreateMonInfo
-	.public PCBox_FreeMonInfo
-	.public PCBox_DrawMonInfo
-	.public PCBox_DrawMonItemInfo
 	.public PCBox_ShowSlotMonInfo
 	.public PCBox_RedrawSlotMonInfo
 	.public PCBox_ClearMonInfo
 	.public PCBox_ClearMonInfoAndSelection
-	.public PCBox_LoadWallpaperChars
-	.public PCBox_LoadWallpaperPalette
-	.public PCBox_LoadWallpaperTilemap
-	.public PCBox_LoadWallpaper
 	.public PCBox_LoadScrolledWallpaper
 	.public PCBox_SwapWallpaper
 	.public PCBox_GetWallpaperGfxIndex
-	.public PCBox_IsPointInRect
 	.public PCBox_GetTouchedBoxSlot
 	.public PCBox_GetTouchedPartySlot
 	.public PCBox_GetTouchedTrayBox
 	.public PCBox_StartHeldItemMove
-	.public PCBox_StartHeldItemMoveWithIcon
-	.public PCBox_StartHeldItemMoveFromDropTarget
-	.public PCBox_UpdateHeldItemMove
-	.public PCBox_UpdateHeldItemMoveWithIcon
-	.public PCBox_UpdateHeldItemMoveNoIcon
 	.public PCBox_InitPanels
 	.public PCBox_FreePanels
-	.public PCBox_LoadPanelTilemap
-	.public PCBox_DrawMarkingMenuEntry
 	.public PCBox_DrawMarkingMenu
 	.public PCBox_ToggleMarking
 	.public PCBox_SlideInMarkingMenu
@@ -2297,23 +2267,17 @@
 	.public PCBox_PlacePartyPanelRightHidden
 	.public PCBox_SlideInPartyPanel
 	.public PCBox_SlideOutPartyPanel
-	.public PCBox_LowerPartyPanel
-	.public PCBox_RaisePartyPanel
 	.public PCBox_ShiftPartyPanelAndReturnButtonRight
 	.public PCBox_ShiftPartyPanelRight
 	.public PCBox_ShiftPartyPanelAndReturnButtonLeft
 	.public PCBox_ShiftPartyPanelLeft
-	.public PCBox_UpdatePartyPanelSlide
-	.public PCBox_UpdatePartyPanelMove
 	.public PCBox_LoadPartyPanelTilemap
 	.public PCBox_SlideInWallpaperList
 	.public PCBox_SlideOutWallpaperList
 	.public PCBox_ShowPartyButton
-	.public PCBox_HidePartyButton
 	.public PCBox_SlideOutPartyButton
 	.public PCBox_SlideInPartyButton
 	.public PCBox_ShowTrayTab
-	.public PCBox_HideTrayTab
 	.public PCBox_SlideOutTrayTab
 	.public PCBox_SlideInTrayTab
 	.public PCBox_ShowReturnButton
@@ -2323,20 +2287,15 @@
 	.public PCBox_SlideInReturnButton
 	.public PCBox_IsMenuExitButtonShown
 	.public PCBox_HidePartyButtonAndTrayTab
-	.public PCBox_HideActionMenu
 	.public PCBox_ShowActionMenu
 	.public PCBox_ResetActionMenu
 	.public PCBox_SlideInActionMenu
 	.public PCBox_SlideOutActionMenu
-	.public PCBox_UpdateActionMenuSlide
 	.public PCBox_IsActionMenuOpen
 	.public PCBox_SlideInTitlePanel
 	.public PCBox_SlideOutTitlePanel
-	.public PCBox_HideChangeBoxButton
-	.public PCBox_SlideInChangeBoxButton
 	.public PCBox_SlideOutChangeBoxButton
 	.public PCBox_IsChangeBoxButtonShown
-	.public PCBox_HideSummaryButton
 	.public PCBox_ShowSummaryButton
 	.public PCBox_SlideInSummaryButton
 	.public PCBox_SlideOutSummaryButton
@@ -2344,7 +2303,6 @@
 	.public PCBox_ShowBoxTray
 	.public PCBox_SlideInBoxTray
 	.public PCBox_SlideOutBoxTray
-	.public PCBox_ShowBoxMenuPanels
 	.public PCBox_ShowBoxTrayAndMenu
 	.public PCBox_SlideInBoxMenu
 	.public PCBox_SlideOutBoxMenu
@@ -2560,73 +2518,6 @@
 	.public PCBox_State_ResumeItemModePartyAfterMail
 	.public PCBox_State_PrintEggCantHoldItem
 	.public PCBox_State_PrintMailCantBeTaken
-	.public PCBox_StartFadeIn
-	.public PCBox_StartFadeOut
-	.public PCBox_WaitForUpdateFunc
-	.public PCBox_WaitForPendingUpdateFunc
-	.public PCBox_ShowYesNo
-	.public PCBox_StartSubApp
-	.public PCBox_ScrollToPrevBox
-	.public PCBox_ScrollToNextBox
-	.public PCBox_StartMoveModeBoxDrag
-	.public PCBox_StartWithdrawDrag
-	.public PCBox_SelectWithdrawMon
-	.public PCBox_SelectMoveModeBoxMon
-	.public PCBox_StartMoveModePartyDrag
-	.public PCBox_StartDepositDrag
-	.public PCBox_SelectDepositMon
-	.public PCBox_SelectMoveModePartyMon
-	.public PCBox_StartBoxTrayDrag
-	.public PCBox_AllocMoveWork
-	.public PCBox_FreeMoveWork
-	.public PCBox_HandleItemCommand
-	.public PCBox_CloseMarkingMenu
-	.public PCBox_StartMarking
-	.public PCBox_StartRelease
-	.public PCBox_OpenPartyPanel
-	.public PCBox_ClosePartyPanel
-	.public PCBox_ShowPartyPanelLeft
-	.public PCBox_ShowPartyPanelRight
-	.public PCBox_ShowDepositPartyPanel
-	.public PCBox_OpenTrayFromPartyPanel
-	.public PCBox_CloseTrayToPartyPanel
-	.public PCBox_OpenTrayFromBox
-	.public PCBox_CloseTray
-	.public PCBox_HideInfoPanelAndWait
-	.public PCBox_SelectTrayBox
-	.public PCBox_HideChangeBoxButtonAndWait
-	.public PCBox_JumpToTrayBox
-	.public PCBox_ChangeTrayPage
-	.public PCBox_OpenBoxTray
-	.public PCBox_CloseBoxTray
-	.public PCBox_ShowExitButtonAndWait
-	.public PCBox_SlideOutReturnButtonAndWait
-	.public PCBox_CloseActionMenuAndWait
-	.public PCBox_StartBoxMenu
-	.public PCBox_SelectBoxMenuBox
-	.public PCBox_ChangeBoxMenuPage
-	.public PCBox_ChangeWallpaperPage
-	.public PCBox_SelectWallpaperInPage
-	.public PCBox_ConfirmWallpaperChoice
-	.public PCBox_TryWithdraw
-	.public PCBox_StartDeposit
-	.public PCBox_SelectDepositBox
-	.public PCBox_ChangeDepositBoxPage
-	.public PCBox_CancelDepositBoxSelect
-	.public PCBox_ConfirmDepositBox
-	.public PCBox_PickUpTrayMon
-	.public PCBox_DropTrayMon
-	.public PCBox_SelectItemModeBoxMon
-	.public PCBox_StartItemModeBoxDrag
-	.public PCBox_StartItemTrayDrag
-	.public PCBox_PickUpTrayItem
-	.public PCBox_ReturnTrayItem
-	.public PCBox_DropTrayItem
-	.public PCBox_SelectItemModePartyMon
-	.public PCBox_StartItemModePartyDrag
-	.public PCBox_HandleBagGiveCommand
-	.public PCBox_AllocHeldItemMove
-	.public PCBox_FreeHeldItemMove
 	.public PCBox_State_BoxTrayHoldingInput
 	.public PCBox_State_EndCursorSlideToBoxTrayHolding
 	.public PCBox_TakeHeldItemToBag
@@ -2635,10 +2526,6 @@
 	.public PCBox_ConfirmExit
 	.public PCBox_CancelExit
 	.public PCBox_FlashPanel
-	.public PCBox_StartCellPaletteFlash
-	.public PCBox_FlashMarkingMenuButton
-	.public PCBox_FlashPartyPanelButton
-	.public PCBox_DimForExitPrompt
 	.public PCBox_State_AskExit
 	.public PCBox_State_AskContinue
 	.public PCBox_State_ChooseParty
@@ -2671,7 +2558,6 @@
 	.public PCBox_State_ItemModeChooseTrayBox
 	.public PCBox_State_ItemModePartyChooseTray
 	.public PCBox_State_CloseItemModePartyActionMenu
-	.public PCBox_InitSprites
 	.public PCBox_FreeSprites
 	.public PCBox_TickSprites
 	.public PCBox_SetSpriteAnim
@@ -2679,22 +2565,11 @@
 	.public PCBox_SetSpriteVisible
 	.public PCBox_IsSpriteVisible
 	.public PCBox_SetSpritePriority
-	.public PCBox_SetSpriteDrawPriority
-	.public PCBox_SetSpriteTranslucent
 	.public PCBox_InitSpriteSystem
-	.public PCBox_FreeSpriteSystem
 	.public PCBox_LoadSpriteResources
 	.public PCBox_CreateSprites
-	.public PCBox_DeleteSprite
-	.public PCBox_DeleteAllSprites
 	.public PCBox_LoadSpriteCharsMain
-	.public PCBox_LoadSpriteCharsSub
-	.public PCBox_LoadMonIconResources
-	.public PCBox_CreateMonIconSprites
-	.public PCBox_LoadMonIconChars
 	.public PCBox_LoadBoxIconImages
-	.public PCBox_SetIconImage
-	.public PCBox_LoadMonIcon
 	.public PCBox_RefreshSlotIcon
 	.public PCBox_LoadBoxIcons
 	.public PCBox_LoadPartyIcons
@@ -2712,16 +2587,9 @@
 	.public PCBox_UpdateReleaseGrow
 	.public PCBox_EndReleaseShrink
 	.public PCBox_ResetSpriteAffine
-	.public PCBox_SetIconRangeTranslucent
 	.public PCBox_SetIconsTranslucent
 	.public PCBox_SetSlotIconTranslucent
-	.public PCBox_UpdateSlotIconItemTranslucency
-	.public PCBox_LoadMonPicResources
-	.public PCBox_CreateMonPicSprites
-	.public PCBox_LoadMonPic
 	.public PCBox_ShowMonPic
-	.public PCBox_LoadItemIconResources
-	.public PCBox_CreateItemIconSprites
 	.public PCBox_LoadHeldItemIcon
 	.public PCBox_LoadInfoItemIcon
 	.public PCBox_SetHeldItemIconAffine
@@ -2732,28 +2600,17 @@
 	.public PCBox_ShowHeldItemIconOutline
 	.public PCBox_UpdateHeldItemIconOutline
 	.public PCBox_UpdateInfoItemIconPosition
-	.public PCBox_LoadTypeIconResources
-	.public PCBox_CreateTypeIconSprites
-	.public PCBox_LoadTypeIcon
 	.public PCBox_DrawTypeIcons
-	.public PCBox_LoadUiSpriteResources
-	.public PCBox_CreateUiSprites
 	.public PCBox_CreateSelectedIconOutline
 	.public PCBox_HideSelectedIconOutline
 	.public PCBox_SetSelectedIconOutlineVisible
 	.public PCBox_UpdateSelectedIconOutline
-	.public PCBox_LoadTrayBoxResources
-	.public PCBox_CreateTrayBoxSprites
-	.public PCBox_LoadWallpaperListResources
-	.public PCBox_CreateWallpaperListSprites
 	.public PCBox_SetBoxArrowsVisible
-	.public PCBox_PlaceWallpaperMenuTextObj
 	.public PCBox_SetupWallpaperMenuSprites
 	.public PCBox_MoveWallpaperMenuSprites
 	.public PCBox_UpdateCurrentWallpaperMarker
 	.public PCBox_UpdateWallpaperCursor
 	.public PCBox_LoadWallpaperThumbnails
-	.public PCBox_ColorWallpaperThumbnail
 	.public PCBox_PlaceTrayTextObjs
 	.public PCBox_SetupBoxTraySprites
 	.public PCBox_MoveBoxTraySprites
@@ -2765,25 +2622,12 @@
 	.public PCBox_LoadTrayPageThumbnails
 	.public PCBox_RefreshTrayBoxThumbnail
 	.public PCBox_DrawBoxThumbnailMons
-	.public PCBox_PlaceSpriteOnTop
 	.public PCBox_SetupDepositBoxSprites
 	.public PCBox_HideBoxTraySprites
 	.public PCBox_CreateTrayTextObjs
 	.public PCBox_DestroyTrayTextObjs
-	.public PCBox_CopyWindowToTextObj
 	.public PCBox_AddWindows
 	.public PCBox_RemoveWindows
-	.public PCBox_PrintAligned
-	.public PCBox_PrintMsg
-	.public PCBox_PrintExpandedMsg
-	.public PCBox_PrintSpeciesName
-	.public PCBox_PrintNickname
-	.public PCBox_PrintLevel
-	.public PCBox_PrintGender
-	.public PCBox_PrintDexNumber
-	.public PCBox_PrintNature
-	.public PCBox_PrintAbility
-	.public PCBox_PrintHeldItem
 	.public PCBox_PrintMonInfo
 	.public PCBox_ClearMonInfoWindows
 	.public PCBox_DrawMoveWindows
@@ -2793,41 +2637,30 @@
 	.public PCBox_DrawBoxNameOnWallpaper
 	.public PCBox_DrawTrayBoxNameAndCount
 	.public PCBox_DrawWallpaperName
-	.public PCBox_DrawButtonWindow
-	.public PCBox_PrintWindowMessage
 	.public PCBox_DrawPartyButton
-	.public PCBox_DrawTabWindow
 	.public PCBox_DrawTrayTab
 	.public PCBox_DrawReturnButton
 	.public PCBox_DrawExitButton
-	.public PCBox_DrawMenuExitButton
 	.public PCBox_DrawActionMenu
 	.public PCBox_DrawBagGiveButton
 	.public PCBox_DrawChangeBoxButton
-	.public PCBox_DrawChangeBoxTitle
 	.public PCBox_DrawBoxMenu
 	.public PCBox_DrawChangeWallpaperTitle
 	.public PCBox_DrawDepositTitle
-	.public PCBox_SetPanelWindowFrame
-	.public PCBox_AttachWindowToPanel
 	.public PCBox_AttachPanelWindows
 	.public PCBox_AttachPartyButtonWindow
 	.public PCBox_AttachTrayTabWindow
 	.public PCBox_AttachReturnButtonWindow
 	.public PCBox_AttachMenuExitButtonWindow
-	.public PCBox_PrintCenteredLabel
 	.public PCBox_DrawConfirmCancel
 	.public PCBox_PrintPartyPanelSwitchLabel
 	.public PCBox_PrintPartyPanelExitLabel
 	.public PCBox_AttachMarkingMenuWindows
 	.public PCBox_AttachPartyPanelLabelWindow
 	.public PCBox_DrawSummaryButton
-	.public PCBox_LoadBoxMessages
-	.public PCBox_DrawMessageFrame
 	.public PCBox_CloseMessageWindow
 	.public PCBox_ClearWindowFrameNoTransfer
 	.public PCBox_ClearWindowFrame
-	.public PCBox_PrintMessage
 	.public PCBox_PrintExitPrompt
 	.public PCBox_PrintTakeItemPrompt
 	.public PCBox_PrintMailCantBeTaken

@@ -43,6 +43,15 @@ extern const VsRecorderWindowCoordsTable sVsRecorderProfileLabelWindows; // prof
 extern const VsRecorderMsgIdTable sVsRecorderProfileLabelMsgIds;         // profile label messages
 extern const u32 sVsRecorderAvatarFileIds[][4];                          // trainer avatar files
 
+static void VsRecorder_PrintProfile(VsRecorderProfile *profile, VsRecorderWork *work);
+static void VsRecorder_RemoveProfileWindows(VsRecorderProfile *profile);
+static void VsRecorder_SetProfileMonIconDrawFlag(VsRecorderProfile *profile, BOOL draw);
+static void VsRecorder_FreeProfileMonIcon(VsRecorderProfile *profile, VsRecorderWork *work);
+static void VsRecorder_CreateProfileMonIcon(VsRecorderProfile *profile, VsRecorderWork *work);
+static void VsRecorder_SetProfileAvatarDrawFlag(VsRecorderProfile *profile, BOOL draw);
+static void VsRecorder_FreeProfileAvatar(VsRecorderProfile *profile, VsRecorderWork *work);
+static void VsRecorder_CreateProfileAvatar(VsRecorderProfile *profile, VsRecorderWork *work);
+
 // touch screen notice (BG 6 window)
 void VsRecorder_ShowNotice(VsRecorderWork *work, int msgId) {
     Window *window = &work->messageWindow;
@@ -148,7 +157,7 @@ void VsRecorder_ShowMenuNotice(VsRecorderWork *work, int msgId) {
     }
 }
 
-void VsRecorder_PrintProfile(VsRecorderProfile *profile, VsRecorderWork *work) {
+static void VsRecorder_PrintProfile(VsRecorderProfile *profile, VsRecorderWork *work) {
     VsRecorderWindowCoordsTable coords = sVsRecorderProfileLabelWindows;
     VsRecorderMsgIdTable msgIds = sVsRecorderProfileLabelMsgIds;
     VsRecorderMailBuf mail;
@@ -283,7 +292,7 @@ void VsRecorder_PrintProfile(VsRecorderProfile *profile, VsRecorderWork *work) {
     MessageFormat_Delete(fmt);
 }
 
-void VsRecorder_RemoveProfileWindows(VsRecorderProfile *profile) {
+static void VsRecorder_RemoveProfileWindows(VsRecorderProfile *profile) {
     int i;
     Window *window;
 
@@ -296,7 +305,7 @@ void VsRecorder_RemoveProfileWindows(VsRecorderProfile *profile) {
     }
 }
 
-void VsRecorder_SetProfileMonIconDrawFlag(VsRecorderProfile *profile, BOOL draw) {
+static void VsRecorder_SetProfileMonIconDrawFlag(VsRecorderProfile *profile, BOOL draw) {
     ManagedSprite *sprite = profile->monIcon;
     if (sprite != NULL) {
         ManagedSprite_SetDrawFlag(sprite, draw);
@@ -305,7 +314,7 @@ void VsRecorder_SetProfileMonIconDrawFlag(VsRecorderProfile *profile, BOOL draw)
 
 #pragma force_active on
 
-void VsRecorder_FreeProfileMonIcon(VsRecorderProfile *profile, VsRecorderWork *work) {
+static void VsRecorder_FreeProfileMonIcon(VsRecorderProfile *profile, VsRecorderWork *work) {
     SpriteManager_UnloadCharObjById(work->spriteManager, 100000);
     SpriteManager_UnloadPlttObjById(work->spriteManager, 100000);
     SpriteManager_UnloadCellObjById(work->spriteManager, 100000);
@@ -317,7 +326,7 @@ void VsRecorder_FreeProfileMonIcon(VsRecorderProfile *profile, VsRecorderWork *w
 }
 
 // icon of the card's Pokemon (top screen)
-void VsRecorder_CreateProfileMonIcon(VsRecorderProfile *profile, VsRecorderWork *work) {
+static void VsRecorder_CreateProfileMonIcon(VsRecorderProfile *profile, VsRecorderWork *work) {
     SpriteSystem *spriteSystem = work->spriteSystem;
     SpriteManager *spriteManager = work->spriteManager;
     PaletteData *plttData = work->plttData;
@@ -348,7 +357,6 @@ void VsRecorder_CreateProfileMonIcon(VsRecorderProfile *profile, VsRecorderWork 
         template.bgPriority = 0;
         template.vramTransfer = 0;
         profile->monIcon = SpriteSystem_NewSprite(work->spriteSystem, work->spriteManager, &template);
-        // the offset is passed without u8 truncation
         ((void (*)(ManagedSprite *, int))ManagedSprite_SetPaletteOverrideOffset)(profile->monIcon, slot + GetMonIconPaletteEx(species, form, isEgg));
         ManagedSprite_SetAnim(profile->monIcon, 1);
     }
@@ -356,11 +364,11 @@ void VsRecorder_CreateProfileMonIcon(VsRecorderProfile *profile, VsRecorderWork 
 
 #pragma force_active reset
 
-void VsRecorder_SetProfileAvatarDrawFlag(VsRecorderProfile *profile, BOOL draw) {
+static void VsRecorder_SetProfileAvatarDrawFlag(VsRecorderProfile *profile, BOOL draw) {
     ManagedSprite_SetDrawFlag(profile->avatar, draw);
 }
 
-void VsRecorder_FreeProfileAvatar(VsRecorderProfile *profile, VsRecorderWork *work) {
+static void VsRecorder_FreeProfileAvatar(VsRecorderProfile *profile, VsRecorderWork *work) {
     SpriteManager_UnloadCharObjById(work->spriteManager, 165535);
     SpriteManager_UnloadPlttObjById(work->spriteManager, 165535);
     SpriteManager_UnloadCellObjById(work->spriteManager, 165535);
@@ -384,7 +392,7 @@ u32 VsRecorder_GetAvatarFileId(int avatar, int kind) {
 }
 
 // trainer sprite of the card (top screen): the player's own gender sprite unless a video is selected
-void VsRecorder_CreateProfileAvatar(VsRecorderProfile *profile, VsRecorderWork *work) {
+static void VsRecorder_CreateProfileAvatar(VsRecorderProfile *profile, VsRecorderWork *work) {
     ManagedSpriteTemplate template;
     PaletteData *plttData;
     int charFile = 14;

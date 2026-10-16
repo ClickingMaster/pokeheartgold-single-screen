@@ -412,7 +412,6 @@ BOOL PokedexApp_HitTestSpecialAreaMarkers(PokedexAppData *pokedexApp, u32 start,
     i = start;
     end = start + 4;
     if (i < end) {
-        // a byte pointer walks the struct (indexing sprites[i] directly changes the code)
         walker = (u8 *)pokedexApp + i * sizeof(ManagedSprite *);
         do {
             if (ManagedSprite_GetDrawFlag(((PokedexAppData *)walker)->sprites[0]) != FALSE) {

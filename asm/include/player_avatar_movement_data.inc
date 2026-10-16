@@ -122,56 +122,9 @@
 .public FollowMon_QueuePlayerStep
 .public FuchsiaGymmick_CheckCollision
 
-	.public PlayerAvatar_IsReadyToMove
-	.public PlayerAvatar_StoreHeldDirections
-	.public PlayerAvatar_ClearFlag1IfFlag6Moving
-	.public PlayerAvatar_PlayTerrainSounds
-	.public PlayerAvatar_PlayFootstepSound
-	.public PlayerAvatar_TryForcedMovement
-	.public PlayerAvatar_GetForcedMovementKind
-	.public PlayerAvatar_RunForcedMovement
 	.public ForcedMovement_None
 	.public ForcedMovement_Ice
 	.public ForcedMovement_CyclingRoadSlope
-	.public PlayerAvatar_EndForcedMovement
-	.public PlayerAvatar_GetSlopeInDirection
-	.public PlayerAvatar_AdjustSpeedForSlope
-	.public PlayerAvatar_SlideInDirection
-	.public PlayerAvatar_MoveByState
-	.public PlayerAvatar_MoveOnFoot
-	.public PlayerAvatar_UpdateFootStepKind
-	.public FootStepKindToMoveState
-	.public PlayerAvatar_AdjustMovementDummy
-	.public PlayerAvatar_GetFootStepKind
-	.public PlayerAvatar_FootStand
-	.public PlayerAvatar_FootStep
-	.public PlayerAvatar_FootTurn
-	.public PlayerAvatar_MoveOnBike
-	.public PlayerAvatar_GetBikeMovement
-	.public PlayerAvatar_AccelerateBike
-	.public PlayerAvatar_DecelerateBike
-	.public PlayerAvatar_DispatchBikeStep
-	.public PlayerAvatar_UpdateBikeStepKind
-	.public BikeStepKindToMoveState
-	.public PlayerAvatar_GetBikeStepKind
-	.public PlayerAvatar_BikeStop
-	.public PlayerAvatar_BikeRide
-	.public PlayerAvatar_BikeTurn
-	.public PlayerAvatar_BikeCoast
-	.public PlayerAvatar_SetObjectMovement
-	.public MapObject_GetCollisionInDirection
-	.public MapObject_IsLedgeInDirection
-	.public MapObject_IsWarpInDirection
-	.public MapObject_IsWaterInDirection
-	.public PlayerAvatar_IsBikeBlockedInDirection
-	.public GetHorizontalDirectionFromKeys
-	.public GetVerticalDirectionFromKeys
-	.public PlayerAvatar_ChooseInputDirection
-	.public IsWallBumpMovement
-	.public IsRunButtonHeld
-	.public PlayerAvatar_GetCoordsInDirection
-	.public PlayerAvatar_CountStep
-	.public PlayerAvatar_IsOnCyclingRoadSlope
 	.public gPlayerForcedMovementFuncs
 	.public gPlayerForcedMovementBehaviors
 	.public gPlayerFootstepSounds

@@ -23,13 +23,16 @@ BOOL CTRDG_IsAgbCartridge(void);
 void CTRDG_TerminateForPulledOut(void);
 
 extern enum HeapID sMainMenuUtilCryptoHeapId;
-extern u32 ov74_0223E2D4[]; // = gMainMenuUtilWork + 0xE80
+extern u32 ov74_0223E2D4[];
 
 #pragma force_active on
-// The first 0x34 bytes of the MainMenuUtilWork (up to .sprites); the rest of it is .bss of asm/main_menu_data.s
+// The start of the MainMenuUtilWork, up to its sprites; the rest is defined with the overlay's other data.
 u32 gMainMenuUtilWork[13];
 
 #define sMainMenuUtilWork ((MainMenuUtilWork *)gMainMenuUtilWork)
+
+static void MainMenuUtil_CartridgeIrqHandler(void);
+static void MainMenuUtil_IgnoreCartridgeIrqHandler(void);
 
 // Sub screen of the card screens: background, palette by gift type, and the gift sprite (hidden)
 void MainMenuUtil_ShowCardSubScreen(BgConfig *bgConfig, WonderCard *card) {
@@ -157,7 +160,7 @@ void MainMenuUtil_ListMenuCursorCallback(ListMenu *list, s32 index, u8 onInit) {
 #pragma force_active on
 
 // Cartridge interrupt: the GBA cartridge was pulled out
-void MainMenuUtil_CartridgeIrqHandler(void) {
+static void MainMenuUtil_CartridgeIrqHandler(void) {
     if (((*(vu16 *)HW_BUTTON_XY_BUF & 0x8000) >> 15) == 0 && !CTRDG_IsAgbCartridge()) {
         CTRDG_TerminateForPulledOut();
     }
@@ -176,7 +179,7 @@ void MainMenuUtil_EnableCartridgePullOutCheck(BOOL enable) {
 
 #pragma force_active reset
 
-void MainMenuUtil_IgnoreCartridgeIrqHandler(void) {
+static void MainMenuUtil_IgnoreCartridgeIrqHandler(void) {
 }
 
 #pragma force_active on

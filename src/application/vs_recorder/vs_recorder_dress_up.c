@@ -66,6 +66,25 @@ extern const u16 sVsRecorderDressUpSpeciesGroupStarts[];               // first 
 #define DRESS_UP_VIEW_TOGGLE_PROFILE  10
 #define DRESS_UP_VIEW_CHANGE_PHOTO    11
 
+static void VsRecorder_RemoveDressUpToggleWindow(VsRecorderWork *work);
+static void VsRecorder_PrintDressUpToggleLabel(VsRecorderWork *work, u32 msgId);
+static void VsRecorder_CreateDressUpToggleWindow(VsRecorderWork *work);
+static void VsRecorder_DressUpVBlankCB(void *data);
+static void VsRecorder_SetPhotoWindow(void);
+static void VsRecorder_DisablePhotoWindow(void);
+static void VsRecorder_SetDressUpSendButtonHidden(VsRecorderWork *work, BOOL hidden);
+static void VsRecorder_CreateDressUpButtons(VsRecorderWork *work);
+static void VsRecorder_FreeDressUpButtons(VsRecorderWork *work);
+static void VsRecorder_PrintOwnPhotoCaption(VsRecorderWork *work);
+static void VsRecorder_PrintPhotoCaption(VsRecorderWork *work, int index);
+static BOOL VsRecorder_DressUpCategoryHasSeen(VsRecorderWork *work, int category);
+static void VsRecorder_BuildDressUpSpeciesList(VsRecorderWork *work, int category);
+static void VsRecorder_FreeDressUpSpeciesList(VsRecorderWork *work);
+static void VsRecorder_OnDressUpCategoryTouch(u32 index, u32 event, void *arg);
+static void VsRecorder_CreateDressUpCategoryWindows(VsRecorderWork *work);
+static void VsRecorder_RemoveDressUpCategoryWindows(VsRecorderWork *work);
+static void VsRecorder_RemovePhotoCaption(VsRecorderWork *work);
+
 BOOL VsRecorder_FrontierExit(VsRecorderWork *work) {
     VsRecorderFrontierRecord *record = work->screenWork;
 
@@ -693,7 +712,6 @@ BOOL VsRecorder_DressUpViewDownload(VsRecorderWork *work) {
         work->step++;
         break;
     case 1:
-        // called with the int species (no u16 truncation)
         if (GlobalTerminalNet_RequestDressUpDownload(VsRecorder_GetNet(work), dressUp->species) == TRUE) {
             work->step++;
         }
@@ -1039,13 +1057,13 @@ BOOL VsRecorder_DressUpViewChangePhoto(VsRecorderWork *work) {
     return FALSE;
 }
 
-void VsRecorder_RemoveDressUpToggleWindow(VsRecorderWork *work) {
+static void VsRecorder_RemoveDressUpToggleWindow(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
     ClearWindowTilemapAndCopyToVram(&dressUp->windows[0]);
     RemoveWindow(&dressUp->windows[0]);
 }
 
-void VsRecorder_PrintDressUpToggleLabel(VsRecorderWork *work, u32 msgId) {
+static void VsRecorder_PrintDressUpToggleLabel(VsRecorderWork *work, u32 msgId) {
     Window *window = &((VsRecorderDressUp *)work->screenWork)->windows[0];
     String *str;
     FillWindowPixelBuffer(window, 0);
@@ -1055,14 +1073,14 @@ void VsRecorder_PrintDressUpToggleLabel(VsRecorderWork *work, u32 msgId) {
     ScheduleWindowCopyToVram(window);
 }
 
-void VsRecorder_CreateDressUpToggleWindow(VsRecorderWork *work) {
+static void VsRecorder_CreateDressUpToggleWindow(VsRecorderWork *work) {
     Window *window = &((VsRecorderDressUp *)work->screenWork)->windows[0];
     InitWindow(window);
     AddWindowParameterized(work->bgConfig, window, GF_BG_LYR_SUB_2, 8, 3, 16, 2, 14, 1);
     VsRecorder_PrintDressUpToggleLabel(work, msg_0013_00121); // the photo is shown
 }
 
-void VsRecorder_DressUpVBlankCB(void *data) {
+static void VsRecorder_DressUpVBlankCB(void *data) {
     vu32 *dtcm = (vu32 *)0x027E0000; // DTCM as a constant, for OS_SetIrqCheckFlag below
     VsRecorderWork *work = data;
     if (((VsRecorderDressUp *)work->screenWork)->portrait != NULL) {
@@ -1075,20 +1093,20 @@ void VsRecorder_DressUpVBlankCB(void *data) {
 }
 
 // window 0 around the photo: everything inside, BG0 (the frame) hidden outside
-void VsRecorder_SetPhotoWindow(void) {
+static void VsRecorder_SetPhotoWindow(void) {
     GX_SetVisibleWnd(GX_WNDMASK_W0);
     G2_SetWnd0InsidePlane(GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2 | GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ, TRUE);
     G2_SetWndOutsidePlane(GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2 | GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ, TRUE);
     G2_SetWnd0Position(72, 16, 184, 144);
 }
 
-void VsRecorder_DisablePhotoWindow(void) {
+static void VsRecorder_DisablePhotoWindow(void) {
     GX_SetVisibleWnd(GX_WNDMASK_NONE);
     GXS_SetVisibleWnd(GX_WNDMASK_NONE);
 }
 
 // send screen: EXIT on the left and SEND on the right; view screens: SEND hidden, EXIT centred
-void VsRecorder_SetDressUpSendButtonHidden(VsRecorderWork *work, BOOL hidden) {
+static void VsRecorder_SetDressUpSendButtonHidden(VsRecorderWork *work, BOOL hidden) {
     VsRecorderDressUp *dressUp = work->screenWork;
     if (hidden == FALSE) {
         ManagedSprite_SetDrawFlag(dressUp->sendButton.sprite, TRUE);
@@ -1105,7 +1123,7 @@ void VsRecorder_SetDressUpSendButtonHidden(VsRecorderWork *work, BOOL hidden) {
 
 #pragma force_active on
 
-void VsRecorder_CreateDressUpButtons(VsRecorderWork *work) {
+static void VsRecorder_CreateDressUpButtons(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
     VsRecorder_LoadButtonGfx31(work, NNS_G2D_VRAM_TYPE_2DSUB);
     dressUp->exitButton.sprite = VsRecorder_NewButtonSprite(work, NNS_G2D_VRAM_TYPE_2DSUB);
@@ -1127,7 +1145,7 @@ void VsRecorder_CreateDressUpButtons(VsRecorderWork *work) {
 
 #pragma force_active reset
 
-void VsRecorder_FreeDressUpButtons(VsRecorderWork *work) {
+static void VsRecorder_FreeDressUpButtons(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
     VsRecorder_FreeTextSprite(&dressUp->exitButton);
     VsRecorder_FreeTextSprite(&dressUp->sendButton);
@@ -1137,7 +1155,7 @@ void VsRecorder_FreeDressUpButtons(VsRecorderWork *work) {
 }
 
 // caption under the player's own photo: the Pokemon's name and the photo's phrase
-void VsRecorder_PrintOwnPhotoCaption(VsRecorderWork *work) {
+static void VsRecorder_PrintOwnPhotoCaption(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
     Window *window;
     String *formatted;
@@ -1183,7 +1201,7 @@ void VsRecorder_PrintOwnPhotoCaption(VsRecorderWork *work) {
 }
 
 // the same for the downloaded photo (index: unused, the photo is already unpacked)
-void VsRecorder_PrintPhotoCaption(VsRecorderWork *work, int index) {
+static void VsRecorder_PrintPhotoCaption(VsRecorderWork *work, int index) {
     VsRecorderDressUp *dressUp = work->screenWork;
     Window *window;
     String *formatted;
@@ -1231,7 +1249,7 @@ void VsRecorder_PrintPhotoCaption(VsRecorderWork *work, int index) {
 #pragma force_active on
 
 // TRUE if the player has seen a species of the group
-BOOL VsRecorder_DressUpCategoryHasSeen(VsRecorderWork *work, int category) {
+static BOOL VsRecorder_DressUpCategoryHasSeen(VsRecorderWork *work, int category) {
     BOOL found = FALSE;
     int end = sVsRecorderDressUpSpeciesGroupStarts[category + 1];
     int start = sVsRecorderDressUpSpeciesGroupStarts[category];
@@ -1254,7 +1272,7 @@ BOOL VsRecorder_DressUpCategoryHasSeen(VsRecorderWork *work, int category) {
 }
 
 // the seen species of the group first, then the rest of the list; entries for the list window
-void VsRecorder_BuildDressUpSpeciesList(VsRecorderWork *work, int category) {
+static void VsRecorder_BuildDressUpSpeciesList(VsRecorderWork *work, int category) {
     VsRecorderDressUp *dressUp = work->screenWork;
     int end = sVsRecorderDressUpSpeciesGroupStarts[category + 1];
     u16 *tmp;
@@ -1296,7 +1314,7 @@ void VsRecorder_BuildDressUpSpeciesList(VsRecorderWork *work, int category) {
 
 #pragma force_active reset
 
-void VsRecorder_FreeDressUpSpeciesList(VsRecorderWork *work) {
+static void VsRecorder_FreeDressUpSpeciesList(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
     DestroyMsgData(dressUp->speciesNames);
     Heap_Free(dressUp->entries);
@@ -1304,7 +1322,7 @@ void VsRecorder_FreeDressUpSpeciesList(VsRecorderWork *work) {
     dressUp->categoryChosen = FALSE;
 }
 
-void VsRecorder_OnDressUpCategoryTouch(u32 index, u32 event, void *arg) {
+static void VsRecorder_OnDressUpCategoryTouch(u32 index, u32 event, void *arg) {
     if (event != 0) {
         return;
     }
@@ -1318,7 +1336,7 @@ void VsRecorder_OnDressUpCategoryTouch(u32 index, u32 event, void *arg) {
 #pragma force_active on
 
 // one window per species group, grayed out if no species of it was seen
-void VsRecorder_CreateDressUpCategoryWindows(VsRecorderWork *work) {
+static void VsRecorder_CreateDressUpCategoryWindows(VsRecorderWork *work) {
     u32 textX;
     String *string;
     int baseTile;
@@ -1357,7 +1375,7 @@ void VsRecorder_CreateDressUpCategoryWindows(VsRecorderWork *work) {
 
 #pragma force_active reset
 
-void VsRecorder_RemoveDressUpCategoryWindows(VsRecorderWork *work) {
+static void VsRecorder_RemoveDressUpCategoryWindows(VsRecorderWork *work) {
     u32 i;
     Window *window = ((VsRecorderDressUp *)work->screenWork)->windows;
     for (i = 0; i < 9; i++) {
@@ -1367,7 +1385,7 @@ void VsRecorder_RemoveDressUpCategoryWindows(VsRecorderWork *work) {
     }
 }
 
-void VsRecorder_RemovePhotoCaption(VsRecorderWork *work) {
+static void VsRecorder_RemovePhotoCaption(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
     if (WindowIsInUse(&dressUp->caption) == TRUE) {
         ClearWindowTilemapAndCopyToVram(&dressUp->caption);

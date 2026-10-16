@@ -57,7 +57,6 @@ void *BattleRecord_Get(void);
 void Sound_SetChatotRecordingDisabled(BOOL enabled);
 
 VsRecorderWork *VsRecorderApp_GetRecorderWork(OverlayManager *manager);
-void VsRecorderApp_Create(OverlayManager *manager, u32 mode);
 BOOL VsRecorderApp_InitMode0(OverlayManager *manager, int *state);
 BOOL VsRecorderApp_InitMode1(OverlayManager *manager, int *state);
 BOOL VsRecorderApp_InitMode2(OverlayManager *manager, int *state);
@@ -67,16 +66,8 @@ BOOL VsRecorderApp_InitMode5(OverlayManager *manager, int *state);
 BOOL VsRecorderApp_InitMode6(OverlayManager *manager, int *state);
 BOOL VsRecorderApp_Main(OverlayManager *manager, int *state);
 BOOL VsRecorderApp_Exit(OverlayManager *manager, int *state);
-BOOL VsRecorderApp_RunMenu(VsRecorderApp *work, enum HeapID heapId);
-BOOL VsRecorderApp_RunPlayback(VsRecorderApp *work, enum HeapID heapId);
 BOOL VsRecorderApp_HasVisitedBattleFrontier(void *work);
 BOOL VsRecorderApp_IsFrontierBrainClass(u32 trainerClass);
-int VsRecorderMenu_InitCommon(OverlayManager *manager, int *state, BOOL fromTerminal);
-int VsRecorderMenu_Init(OverlayManager *manager, int *state);
-int VsRecorderMenu_InitFromTerminal(OverlayManager *manager, int *state);
-int VsRecorderMenu_Main(OverlayManager *manager, int *state);
-int VsRecorderMenu_Exit(OverlayManager *manager, int *state);
-const VsRecorderMenuEntry *VsRecorderApp_GetRootMenu(int mode);
 const VsRecorderMenuEntry *VsRecorderApp_GetStartMenu(VsRecorderWork *recorder, int mode);
 
 #endif // POKEHEARTGOLD_VS_RECORDER_APP_INTERNAL_H

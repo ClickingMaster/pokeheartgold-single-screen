@@ -15,32 +15,39 @@
 #include "vs_recorder_app.h"
 #include "vs_recorder_app_internal.h"
 
+static int VsRecorderMenu_InitCommon(OverlayManager *manager, int *state, BOOL fromTerminal);
+static int VsRecorderMenu_Init(OverlayManager *manager, int *state);
+static int VsRecorderMenu_InitFromTerminal(OverlayManager *manager, int *state);
+static int VsRecorderMenu_Main(OverlayManager *manager, int *state);
+static int VsRecorderMenu_Exit(OverlayManager *manager, int *state);
+static const VsRecorderMenuEntry *VsRecorderApp_GetRootMenu(int mode);
+
 FS_EXTERN_OVERLAY(OVY_40);
 
 const OverlayManagerTemplate gOverlayTemplate_VsRecorderApp = { VsRecorderApp_InitMode0, VsRecorderApp_Main, VsRecorderApp_Exit, FS_OVERLAY_ID_NONE };
-const OverlayManagerTemplate gOverlayTemplate_VsRecorderAppMode1 = { VsRecorderApp_InitMode1, VsRecorderApp_Main, VsRecorderApp_Exit, FS_OVERLAY_ID_NONE };
-const OverlayManagerTemplate gOverlayTemplate_VsRecorderAppMode2 = { VsRecorderApp_InitMode2, VsRecorderApp_Main, VsRecorderApp_Exit, FS_OVERLAY_ID_NONE };
-const OverlayManagerTemplate gOverlayTemplate_VsRecorderAppMode3 = { VsRecorderApp_InitMode3, VsRecorderApp_Main, VsRecorderApp_Exit, FS_OVERLAY_ID_NONE };
-const OverlayManagerTemplate gOverlayTemplate_VsRecorderAppMode4 = { VsRecorderApp_InitMode4, VsRecorderApp_Main, VsRecorderApp_Exit, FS_OVERLAY_ID_NONE };
-const OverlayManagerTemplate gOverlayTemplate_VsRecorderAppMode5 = { VsRecorderApp_InitMode5, VsRecorderApp_Main, VsRecorderApp_Exit, FS_OVERLAY_ID_NONE };
-const OverlayManagerTemplate gOverlayTemplate_VsRecorderAppMode6 = { VsRecorderApp_InitMode6, VsRecorderApp_Main, VsRecorderApp_Exit, FS_OVERLAY_ID_NONE };
+static const OverlayManagerTemplate sOverlayTemplate_VsRecorderAppMode1 = { VsRecorderApp_InitMode1, VsRecorderApp_Main, VsRecorderApp_Exit, FS_OVERLAY_ID_NONE };
+static const OverlayManagerTemplate sOverlayTemplate_VsRecorderAppMode2 = { VsRecorderApp_InitMode2, VsRecorderApp_Main, VsRecorderApp_Exit, FS_OVERLAY_ID_NONE };
+static const OverlayManagerTemplate sOverlayTemplate_VsRecorderAppMode3 = { VsRecorderApp_InitMode3, VsRecorderApp_Main, VsRecorderApp_Exit, FS_OVERLAY_ID_NONE };
+static const OverlayManagerTemplate sOverlayTemplate_VsRecorderAppMode4 = { VsRecorderApp_InitMode4, VsRecorderApp_Main, VsRecorderApp_Exit, FS_OVERLAY_ID_NONE };
+static const OverlayManagerTemplate sOverlayTemplate_VsRecorderAppMode5 = { VsRecorderApp_InitMode5, VsRecorderApp_Main, VsRecorderApp_Exit, FS_OVERLAY_ID_NONE };
+static const OverlayManagerTemplate sOverlayTemplate_VsRecorderAppMode6 = { VsRecorderApp_InitMode6, VsRecorderApp_Main, VsRecorderApp_Exit, FS_OVERLAY_ID_NONE };
 
-const FrontierBrainClasses gFrontierBrainTrainerClasses = {
+static const FrontierBrainClasses sFrontierBrainTrainerClasses = {
     { TRAINERCLASS_TOWER_TYCOON, TRAINERCLASS_HALL_MATRON, TRAINERCLASS_FACTORY_HEAD, TRAINERCLASS_ARCADE_STAR, TRAINERCLASS_CASTLE_VALET }
 };
 
-const OverlayManagerTemplate *gVsRecorderAppTemplates[] = {
+static const OverlayManagerTemplate *sVsRecorderAppTemplates[] = {
     &gOverlayTemplate_VsRecorderApp,
-    &gOverlayTemplate_VsRecorderAppMode1,
-    &gOverlayTemplate_VsRecorderAppMode2,
-    &gOverlayTemplate_VsRecorderAppMode3,
-    &gOverlayTemplate_VsRecorderAppMode4,
-    &gOverlayTemplate_VsRecorderAppMode5,
-    &gOverlayTemplate_VsRecorderAppMode6,
+    &sOverlayTemplate_VsRecorderAppMode1,
+    &sOverlayTemplate_VsRecorderAppMode2,
+    &sOverlayTemplate_VsRecorderAppMode3,
+    &sOverlayTemplate_VsRecorderAppMode4,
+    &sOverlayTemplate_VsRecorderAppMode5,
+    &sOverlayTemplate_VsRecorderAppMode6,
 };
 
 const OverlayManagerTemplate *VsRecorderApp_GetTemplate(u8 mode) {
-    return gVsRecorderAppTemplates[mode];
+    return sVsRecorderAppTemplates[mode];
 }
 
 // Fly point flag 27 (FLYPOINT_UNION_CAVE) doubles as the Battle Frontier's visited flag: the Frontier Access gatehouse
@@ -53,7 +60,7 @@ BOOL VsRecorderApp_HasVisitedBattleFrontier(void *work) {
 }
 
 BOOL VsRecorderApp_IsFrontierBrainClass(u32 trainerClass) {
-    FrontierBrainClasses classes = gFrontierBrainTrainerClasses;
+    FrontierBrainClasses classes = sFrontierBrainTrainerClasses;
     u32 i;
     for (i = 0; i < 5; i++) {
         if (trainerClass == classes.trainerClass[i]) {
@@ -63,7 +70,7 @@ BOOL VsRecorderApp_IsFrontierBrainClass(u32 trainerClass) {
     return FALSE;
 }
 
-int VsRecorderMenu_InitCommon(OverlayManager *manager, int *state, BOOL fromTerminal) {
+static int VsRecorderMenu_InitCommon(OverlayManager *manager, int *state, BOOL fromTerminal) {
     VsRecorderWork *recorder;
 
     StopAllSE(0);
@@ -88,15 +95,15 @@ int VsRecorderMenu_InitCommon(OverlayManager *manager, int *state, BOOL fromTerm
     return TRUE;
 }
 
-int VsRecorderMenu_Init(OverlayManager *manager, int *state) {
+static int VsRecorderMenu_Init(OverlayManager *manager, int *state) {
     return VsRecorderMenu_InitCommon(manager, state, FALSE);
 }
 
-int VsRecorderMenu_InitFromTerminal(OverlayManager *manager, int *state) {
+static int VsRecorderMenu_InitFromTerminal(OverlayManager *manager, int *state) {
     return VsRecorderMenu_InitCommon(manager, state, TRUE);
 }
 
-int VsRecorderMenu_Main(OverlayManager *manager, int *state) {
+static int VsRecorderMenu_Main(OverlayManager *manager, int *state) {
     VsRecorderWork *recorder = VsRecorderApp_GetRecorderWork(manager);
     recorder->screenPtr = state;
     if (VsRecorder_Main(recorder, state)) {
@@ -105,7 +112,7 @@ int VsRecorderMenu_Main(OverlayManager *manager, int *state) {
     return FALSE;
 }
 
-int VsRecorderMenu_Exit(OverlayManager *manager, int *state) {
+static int VsRecorderMenu_Exit(OverlayManager *manager, int *state) {
     VsRecorderWork *recorder = VsRecorderApp_GetRecorderWork(manager);
 
     switch (*state) {
@@ -141,11 +148,10 @@ int VsRecorderMenu_Exit(OverlayManager *manager, int *state) {
     return FALSE;
 }
 
-// MWCC emits these two (unreferenced in this TU, one section each) in reverse order of definition
 const OverlayManagerTemplate gOverlayTemplate_VsRecorderMenuFromTerminal = { VsRecorderMenu_InitFromTerminal, VsRecorderMenu_Main, VsRecorderMenu_Exit, FS_OVERLAY_ID(OVY_40) };
 const OverlayManagerTemplate gOverlayTemplate_VsRecorderMenu = { VsRecorderMenu_Init, VsRecorderMenu_Main, VsRecorderMenu_Exit, FS_OVERLAY_ID(OVY_40) };
 
-const VsRecorderMenuEntry *VsRecorderApp_GetRootMenu(int mode) {
+static const VsRecorderMenuEntry *VsRecorderApp_GetRootMenu(int mode) {
     if (mode >= 7) {
         GF_ASSERT(mode < 7);
         return *(const VsRecorderMenuEntry **)(_02103754 + 0x64);

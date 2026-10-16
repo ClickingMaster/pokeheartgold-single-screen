@@ -5,6 +5,7 @@
 
 #include "bg_window.h"
 #include "filesystem.h"
+#include "friend_roster.h"
 #include "message_format.h"
 #include "msgdata.h"
 #include "naming_screen.h"
@@ -15,9 +16,8 @@
 #include "pm_string.h"
 #include "save.h"
 #include "sprite.h"
-#include "touchscreen_list_menu.h"
 #include "sprite_resource_header.h"
-#include "friend_roster.h"
+#include "touchscreen_list_menu.h"
 #include "yes_no_prompt.h"
 
 // Pal Pad (OVY_43): friend roster, friend code registration and friend records.
@@ -188,27 +188,27 @@ typedef struct PalPadPanelLayout {
 } PalPadPanelLayout;
 
 typedef struct PalPadRosterPage {
-    PalPadPanelLayout layout;                                // 0x00
-    Window window;                                           // 0x08
+    PalPadPanelLayout layout;                   // 0x00
+    Window window;                              // 0x08
     CharSprite *icons[PALPAD_ROSTER_PAGE_SLOT]; // 0x18
 } PalPadRosterPage;
 
 typedef struct PalPadRoster {
-    s16 page;                              // 0x00
-    s16 prevPage;                          // 0x02
-    s16 cursor;                            // 0x04, 0-7 = slot, 8 = return
-    s16 prevCursor;                        // 0x06
-    PalPadRosterPage pages[3];             // 0x08
-    s16 scrollStep;                        // 0xB0
-    u16 scrollDir;                         // 0xB2
+    s16 page;                        // 0x00
+    s16 prevPage;                    // 0x02
+    s16 cursor;                      // 0x04, 0-7 = slot, 8 = return
+    s16 prevCursor;                  // 0x06
+    PalPadRosterPage pages[3];       // 0x08
+    s16 scrollStep;                  // 0xB0
+    u16 scrollDir;                   // 0xB2
     CharSpriteManager *trainerIcons; // 0xB4
-    Window returnWindow;                   // 0xB8
-    Window msgWindow;                      // 0xC8
-    String *msgText;                       // 0xD8
-    u32 printerId;                         // 0xDC
-    u32 textSpeed;                         // 0xE0
-    ListMenuItem *menuItems[2];            // 0xE4
-    TouchscreenListMenu *menu;             // 0xEC
+    Window returnWindow;             // 0xB8
+    Window msgWindow;                // 0xC8
+    String *msgText;                 // 0xD8
+    u32 printerId;                   // 0xDC
+    u32 textSpeed;                   // 0xE0
+    ListMenuItem *menuItems[2];      // 0xE4
+    TouchscreenListMenu *menu;       // 0xEC
     u8 unk_F0[4];
     int timer;            // 0xF4
     Sprite *deleteEffect; // 0xF8
@@ -288,13 +288,9 @@ int DWC_CheckFriendKey(void *userData, u64 friendKey);
 void DWC_CreateFriendKeyToken(void *friendData, u64 friendKey);
 u64 DWC_GetFriendKey(void *friendData);
 
-// palpad.c
-void PalPad_VBlankCallback(void *data);
 void PalPad_SetupScreens(PalPadWork *work, enum HeapID heapId);
 void PalPad_TeardownScreens(PalPadWork *work);
 void PalPad_AddWindow(BgConfig *bgConfig, Window *window, u8 bgId, u8 x, u8 y, u8 width, u8 height, u8 paletteNum, u16 baseTile, u8 fillValue);
-void PalPadShared_Init(PalPadShared *shared, PalPadArgs *args, enum HeapID heapId);
-void PalPadShared_Free(PalPadShared *shared, PalPadArgs *args);
 void PalPadShared_SetNextScreen(PalPadShared *shared, u8 screen, u8 subState);
 void PalPadShared_ResetInputStateOnKey(u32 *inputState);
 void PalPadShared_SetNameAndCode(PalPadShared *shared, const String *name, const String *code);
@@ -302,21 +298,6 @@ int PalPadShared_RegisterFriendCode(PalPadShared *shared, String *code, String *
 void PalPadShared_SetInitialName(PalPadShared *shared, const u16 *name);
 void PalPadShared_SetSelectedFriend(PalPadShared *shared, int index);
 void PalPadShared_ReadFriendList(PalPadShared *shared);
-void PalPadGfx_Init(PalPadGfx *gfx, PalPadShared *shared, enum HeapID heapId);
-void PalPadGfx_RenderSprites(PalPadGfx *gfx);
-void PalPadGfx_VBlank(PalPadGfx *gfx);
-void PalPadGfx_Free(PalPadGfx *gfx);
-void PalPadGfx_SetVramBanks(void);
-void PalPadGfx_InitBgs(PalPadGfx *gfx, enum HeapID heapId);
-void PalPadGfx_FreeBgs(PalPadGfx *gfx);
-void PalPadGfx_InitSpriteSystem(PalPadGfx *gfx, enum HeapID heapId);
-void PalPadGfx_FreeSpriteSystem(PalPadGfx *gfx);
-void PalPadGfx_InitMsg(PalPadGfx *gfx, enum HeapID heapId);
-void PalPadGfx_FreeMsg(PalPadGfx *gfx);
-void PalPadGfx_InitWindows(PalPadGfx *gfx, PalPadShared *shared, enum HeapID heapId);
-void PalPadGfx_FreeWindows(PalPadGfx *gfx);
-void PalPadGfx_LoadScreens(PalPadGfx *gfx, enum HeapID heapId);
-void PalPadGfx_FreeScreens(PalPadGfx *gfx);
 void PalPadGfx_PrintTitle(PalPadGfx *gfx, Window *window, int msgId);
 void PalPadGfx_ClearTitle(PalPadGfx *gfx);
 void PalPadGfx_BufferFriendCode(PalPadGfx *gfx, u64 friendCode);
@@ -325,8 +306,6 @@ void PalPadGfx_BufferFriendGroupName(PalPadGfx *gfx, SaveData *saveData, int slo
 BOOL PalPadGfx_BufferLastDate(PalPadGfx *gfx, SaveData *saveData, int slot);
 void PalPadGfx_BufferNumber(PalPadGfx *gfx, int value);
 void PalPadGfx_BufferActivityName(PalPadGfx *gfx, int activity);
-void PalPadGfx_CreateSprites(PalPadGfx *gfx, enum HeapID heapId);
-void PalPadGfx_DeleteSprites(PalPadGfx *gfx);
 void PalPadGfx_SetArrowsVisible(PalPadGfx *gfx, BOOL visible);
 void PalPadGfx_SetArrowsAnimActive(PalPadGfx *gfx, BOOL active);
 void PalPadGfx_AnimateArrow(PalPadGfx *gfx, u8 arrow, int pressed);
@@ -335,14 +314,12 @@ void PalPadGfx_SetCursorPriority(PalPadGfx *gfx, u8 priority, int drawPriority);
 void PalPadGfx_StartYesNo(u32 *inputState, PalPadGfx *gfx, int initialCursorPos);
 int PalPadGfx_HandleYesNo(u32 *inputState, PalPadGfx *gfx);
 
-// palpad_menu.c
 void PalPadMenu_Init(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
 int PalPadMenu_Main(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
 void PalPadMenu_Exit(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx);
 void PalPadMenu_Setup(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
 void PalPadMenu_Teardown(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx);
 
-// palpad_roster.c (+ PalPadNaming_Init)
 void PalPadRoster_Init(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
 int PalPadRoster_Main(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
 void PalPadRoster_Exit(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx);
@@ -353,7 +330,6 @@ void PalPadRoster_DrawTabsOnScroll(PalPadRoster *roster, PalPadGfx *gfx, s16 pag
 
 void PalPadNaming_Init(PalPadNaming *naming, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
 
-// palpad_friend_code.c
 int PalPadNaming_Main(PalPadNaming *naming, PalPadWork *work, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
 void PalPadNaming_Exit(PalPadNaming *naming, PalPadShared *shared, PalPadGfx *gfx);
 void PalPadNaming_Setup(PalPadNaming *naming, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
@@ -365,14 +341,11 @@ void PalPadFriendCode_Exit(PalPadFriendCode *friendCode, PalPadShared *shared, P
 void PalPadFriendCode_Setup(PalPadFriendCode *friendCode, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
 void PalPadFriendCode_Teardown(PalPadFriendCode *friendCode, PalPadShared *shared, PalPadGfx *gfx);
 
-// palpad_details.c
 void PalPadDetails_Init(PalPadDetails *details, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
 int PalPadDetails_Main(PalPadDetails *details, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
 void PalPadDetails_Exit(PalPadDetails *details, PalPadShared *shared, PalPadGfx *gfx);
 void PalPadDetails_Setup(PalPadDetails *details, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
 void PalPadDetails_Teardown(PalPadDetails *details, PalPadShared *shared, PalPadGfx *gfx);
-void PalPadDetailsSlot_CopyWindowsToVram(PalPadDetailsSlot *slot, u32 page);
-void PalPadDetailsSlot_ClearWindows(PalPadDetailsSlot *slot, u32 page);
 void PalPadDetails_PrintUnionRoomPage(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx);
 void PalPadDetails_PrintBattleTowerPage(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx);
 void PalPadDetails_PrintBattleFactoryPage(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
@@ -382,7 +355,6 @@ void PalPadDetails_PrintBattleArcadePage(PalPadDetailsSlot *slot, PalPadShared *
 void PalPadDetails_PrintWiFiPlazaPage(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
 void PalPadDetails_PrintReturnPage(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx);
 
-// palpad_details_text.c
 void PalPadDetailsSlot_ClearBg(PalPadGfx *gfx, PalPadDetailsSlot *slot);
 void PalPadDetailsSlot_Print(PalPadDetailsSlot *slot, u32 page, u32 window, PalPadShared *shared, PalPadGfx *gfx, int msgId, int x, int y, u32 color, String *text, String *buffer, int align);
 void PalPadDetails_PrintProfileText(Window *window, PalPadShared *shared, PalPadGfx *gfx, int msgId, int x, int y, u32 color);

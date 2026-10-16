@@ -16,7 +16,7 @@
 #include "sys_task_api.h"
 #include "touch_hitbox_controller.h"
 
-// VS Recorder screen framework, part 1: screen / step helpers, the menu tree (stack, actions, touch input),
+// VS Recorder screen framework: screen / step helpers, the menu tree (stack, actions, touch input),
 // shared BG / sprite resources, the drifting decor sprites and the menu row sprites.
 
 typedef struct VsRecorderS8x6 {
@@ -43,6 +43,12 @@ extern const u8 sVsRecorderMenuRowDrawPriorities[];
 extern const VsRecorderAngles sVsRecorderDecorAngles;
 extern const VsRecorderF32x6 sVsRecorderDecorScales;
 
+static void VsRecorder_SetStep(VsRecorderWork *work, u32 step);
+static void VsRecorder_RefreshMenu(VsRecorderWork *work);
+static BOOL VsRecorder_MenuCanSelect(VsRecorderWork *work);
+static void VsRecorder_ClearMenuHitboxes(VsRecorderWork *work);
+static void VsRecorder_DecorTask(SysTask *task, void *data);
+
 void VsRecorder_SetScreenIfDone(VsRecorderWork *work, int nextScreen, BOOL done, int *screen) {
     if (done) {
         *screen = nextScreen;
@@ -57,12 +63,12 @@ void VsRecorder_SetSubState(VsRecorderWork *work, int subState) {
     work->counter = 0;
 }
 
-void VsRecorder_SetStep(VsRecorderWork *work, u32 step) {
+static void VsRecorder_SetStep(VsRecorderWork *work, u32 step) {
     work->step = step;
     work->counter = 0;
 }
 
-void VsRecorder_RefreshMenu(VsRecorderWork *work) {
+static void VsRecorder_RefreshMenu(VsRecorderWork *work) {
     VsRecorderApp_CountMenuChoices(work);
     VsRecorder_RefreshChoiceRows(work);
     work->menuCursor = 0;
@@ -145,7 +151,7 @@ void VsRecorder_MenuRunAction(VsRecorderWork *work) {
     }
 }
 
-BOOL VsRecorder_MenuCanSelect(VsRecorderWork *work) {
+static BOOL VsRecorder_MenuCanSelect(VsRecorderWork *work) {
     u32 index = work->menuCursor;
     const VsRecorderMenuEntry *entry = &work->menu[index];
     u32 selection = entry->selection;
@@ -285,7 +291,7 @@ void VsRecorder_UpdateMenuHitboxes(VsRecorderWork *work) {
     } while (i < 5);
 }
 
-void VsRecorder_ClearMenuHitboxes(VsRecorderWork *work) {
+static void VsRecorder_ClearMenuHitboxes(VsRecorderWork *work) {
     s16 pos[2];
     s32 i = 0;
     u32 zero = i;
@@ -776,7 +782,7 @@ void VsRecorder_SetMenuRowsDrawFlag(VsRecorderWork *work, BOOL draw) {
 #pragma force_active on
 
 // V-blank task of one decor pair: wait, wobble in, slide to the target x, then sway in place
-void VsRecorder_DecorTask(SysTask *task, void *data) {
+static void VsRecorder_DecorTask(SysTask *task, void *data) {
     struct {
         struct {
             s16 y2, y1, x, pad;

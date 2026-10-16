@@ -54,9 +54,17 @@ extern const VsRecorderWindowRectSet sVsRecorderVideoInfoLabelWindows; // video 
 extern const VsRecorderMsgIdSet sVsRecorderVideoInfoLabelMsgIds;       // video info labels
 extern const VsRecorderIconLayout sVsRecorderVideoPartyIconLayout;     // party icon positions: [0] two trainers, [1] four
 
+static void VsRecorder_PrintVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work);
+static void VsRecorder_RemoveVideoInfoWindows(VsRecorderVideoInfo *info, VsRecorderWork *work);
+static BOOL VsRecorderVideoInfo_UsesThreeMonLayout(VsRecorderVideoInfo *info);
+static void VsRecorder_CreateVideoPartyIcons(VsRecorderVideoInfo *info, VsRecorderWork *work);
+static void VsRecorder_TouchIndicatorTask(SysTask *task, void *data);
+static void VsRecorder_ShowTouchIndicator(VsRecorderWork *work);
+static void VsRecorder_SetPlaceholderName(String *str, enum HeapID heapID);
+
 #pragma force_active on
 
-void VsRecorder_PrintVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work) {
+static void VsRecorder_PrintVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work) {
     VsRecorderWindowRectSet templates = sVsRecorderVideoInfoLabelWindows;
     VsRecorderMsgIdSet msgIds = sVsRecorderVideoInfoLabelMsgIds;
     String *unitStr;
@@ -183,7 +191,7 @@ void VsRecorder_PrintVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work) 
 
 #pragma force_active reset
 
-void VsRecorder_RemoveVideoInfoWindows(VsRecorderVideoInfo *info, VsRecorderWork *work) {
+static void VsRecorder_RemoveVideoInfoWindows(VsRecorderVideoInfo *info, VsRecorderWork *work) {
     int i;
     Window *window = (Window *)info;
     i = 0;
@@ -211,7 +219,7 @@ BOOL VsRecorder_HeaderUsesThreeMonLayout(void *header) {
     }
 }
 
-BOOL VsRecorderVideoInfo_UsesThreeMonLayout(VsRecorderVideoInfo *info) {
+static BOOL VsRecorderVideoInfo_UsesThreeMonLayout(VsRecorderVideoInfo *info) {
     return VsRecorder_HeaderUsesThreeMonLayout(info->header);
 }
 
@@ -221,7 +229,7 @@ int VsRecorderVideoInfo_GetScreenId(VsRecorderVideoInfo *info) {
 
 #pragma force_active on
 
-void VsRecorder_CreateVideoPartyIcons(VsRecorderVideoInfo *info, VsRecorderWork *work) {
+static void VsRecorder_CreateVideoPartyIcons(VsRecorderVideoInfo *info, VsRecorderWork *work) {
     int mon;
     int count = 0;
     VsRecorderIconLayout layout = sVsRecorderVideoPartyIconLayout;
@@ -402,7 +410,7 @@ void VsRecorder_LoadScreen(VsRecorderWork *work, int fileId, GFBgLayer layer) {
 }
 
 // expanding ring at the touched point, 7 frames
-void VsRecorder_TouchIndicatorTask(SysTask *task, void *data) {
+static void VsRecorder_TouchIndicatorTask(SysTask *task, void *data) {
     VsRecorderWork *work = data;
     s16 radius;
     work->touchIndicator.counter++;
@@ -420,7 +428,7 @@ void VsRecorder_TouchIndicatorTask(SysTask *task, void *data) {
     }
 }
 
-void VsRecorder_ShowTouchIndicator(VsRecorderWork *work) {
+static void VsRecorder_ShowTouchIndicator(VsRecorderWork *work) {
     u32 x;
     u32 y;
     if (work->touchIndicator.active == TRUE) {
@@ -863,7 +871,7 @@ void VsRecorder_SanitizeName(VsRecorderWork *work, String *str) {
     String_Delete(tmp);
 }
 
-void VsRecorder_SetPlaceholderName(String *str, enum HeapID heapID) {
+static void VsRecorder_SetPlaceholderName(String *str, enum HeapID heapID) {
     MsgData *msgData;
     String_SetEmpty(str);
     msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0013_bin, heapID);

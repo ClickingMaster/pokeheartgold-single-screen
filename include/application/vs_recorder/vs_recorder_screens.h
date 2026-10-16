@@ -7,16 +7,14 @@
 #include "battle_recording.h"
 
 // VS Recorder (overlay 40): the Global Terminal screens (video lists, video search, video number keypad, delete)
-// and the battle video helpers used outside the app. Shared work and framework: vs_recorder_internal.h.
+// and the battle video helpers used outside the app.
 
-// global_terminal_net.c (not in global_terminal_net.h)
 BOOL GlobalTerminalNet_IsIdle(GlobalTerminalNet *net);
 
 // main ARM9 (no public header)
 void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapID);
 BOOL VsRecorderApp_HasVisitedBattleFrontier(void *work);
 
-// battle_record.c (not in battle_recording.h)
 extern BattleRecord *gBattleRecord;
 void BattleRecord_GetBattlerAndPartyCount(int type, int *count, int *partySize);
 int BattleRecord_WriteSlot(SaveData *save, BattleRecord *record, int index, u16 *state);
@@ -210,63 +208,26 @@ typedef struct VsRecorderVideoSearch {
     u8 unk_79D[3];
 } VsRecorderVideoSearch; // size 0x7A0
 
-// vs_recorder_net.c (the Global Terminal client is embedded at VsRecorderWork.netClient)
+// the Global Terminal client is embedded at VsRecorderWork.netClient
 BOOL VsRecorder_IsNetIdle(VsRecorderWork *work);
 
-// vs_recorder_number_pad.c
 void VsRecorder_PrintVideoNumber(VsRecorderVideoSearch *search, VsRecorderWork *work);
 VsRecorderNumberPadConfig *VsRecorder_NewNumberPadConfig(enum HeapID heapID, u32 length, const int *groupLengths, void *options);
 void VsRecorder_FreeNumberPadConfig(VsRecorderNumberPadConfig *config);
-void VsRecorder_NumberPadSetGroup(VsRecorderNumberPad *pad, int group);
-void VsRecorder_NumberPadInitLayout(VsRecorderNumberPad *pad);
-void VsRecorder_NumberPadSetState(VsRecorderNumberPad *pad, int state);
 BOOL VsRecorder_NumberPadInit(VsRecorderNumberPad *pad);
 BOOL VsRecorder_NumberPadFree(VsRecorderNumberPad *pad);
 BOOL VsRecorder_NumberPadInput(VsRecorderNumberPad *pad);
 BOOL VsRecorder_NumberPadSwitchGroup(VsRecorderNumberPad *pad);
 BOOL VsRecorder_NumberPadMain(VsRecorderNumberPad *pad);
-void VsRecorder_NumberPadConfirm(VsRecorderNumberPad *pad);
-void VsRecorder_NumberPadBack(VsRecorderNumberPad *pad);
-void VsRecorder_NumberPadInitHitboxes(VsRecorderNumberPad *pad);
-void VsRecorder_OnNumberPadTouch(u32 index, u32 event, void *arg);
-void VsRecorder_NumberPadRunAction(VsRecorderNumberPad *pad);
-void VsRecorder_NumberPadClearAction(VsRecorderNumberPad *pad);
-int VsRecorder_NumberPadFindGroupFirst(VsRecorderNumberPad *pad, int group);
-int VsRecorder_NumberPadFindGroupLast(VsRecorderNumberPad *pad, int group);
-void VsRecorder_NumberPadLoadGfx(VsRecorderNumberPad *pad);
-void VsRecorder_NumberPadShowSprites(VsRecorderNumberPad *pad);
-void VsRecorder_NumberPadFreeSprites(VsRecorderNumberPad *pad);
-void VsRecorder_NumberPadCreateDigitSprites(VsRecorderNumberPad *pad);
-void VsRecorder_NumberPadCreateCursors(VsRecorderNumberPad *pad);
-void VsRecorder_NumberPadSetCursorDrawFlag(VsRecorderNumberPad *pad, int cursor, int draw);
-void VsRecorder_NumberPadMoveCursor(VsRecorderNumberPad *pad, int digit);
-void VsRecorder_NumberPadPlaceKeyCursor(VsRecorderNumberPad *pad, int key);
-void VsRecorder_NumberPadPlaceCursorOnKey(VsRecorderNumberPad *pad, int key, int cursor);
-void VsRecorder_NumberPadUpdateCursors(VsRecorderNumberPad *pad);
-int VsRecorder_GetDigitAnim(int value, BOOL enabled);
-void VsRecorder_NumberPadUpdateEnabled(VsRecorderNumberPad *pad);
-void VsRecorder_NumberPadLayoutDigits(VsRecorderNumberPad *pad, BOOL animate);
-void VsRecorder_NumberPadUpdateHitboxes(VsRecorderNumberPad *pad);
 
-// vs_recorder_delete.c
-void VsRecorder_ShowDeleteWindow(VsRecorderWork *work, BOOL alternate);
-void VsRecorder_HideDeleteWindow(VsRecorderWork *work);
-void VsRecorder_PrintDeleteMessage(VsRecorderWork *work, int msgId, int slot);
-void VsRecorder_ShowDeleteYesNo(VsRecorderWork *work);
-void VsRecorder_HideDeleteYesNo(VsRecorderWork *work);
 BOOL VsRecorder_DeleteInit(VsRecorderWork *work);
 BOOL VsRecorder_DeleteEnter(VsRecorderWork *work);
 BOOL VsRecorder_DeleteMain(VsRecorderWork *work);
 BOOL VsRecorder_DeleteExit(VsRecorderWork *work);
 
-// vs_recorder_video_list.c
 void VsRecorder_OnRankingsHeaderReceived(void *arg, GlobalTerminalNetError *error);
 void VsRecorder_OnRankingsReceived(void *arg, GlobalTerminalNetError *error);
-void VsRecorder_PlaceVideoListIcons(VsRecorderWork *work);
-void VsRecorder_CreateVideoListButtons(VsRecorderWork *work);
-void VsRecorder_PrintVideoListMessage(VsRecorderWork *work, int msgId, int slot);
 BOOL VsRecorder_VideoListDownloadVideo(VsRecorderWork *work);
-void VsRecorder_FreeVideoDetails(VsRecorderWork *work);
 BOOL VsRecorder_VideoListOverwriteMain(VsRecorderWork *work);
 BOOL VsRecorder_VideoListOverwriteNo(VsRecorderWork *work);
 BOOL VsRecorder_VideoListSave(VsRecorderWork *work);
@@ -275,17 +236,9 @@ BOOL VsRecorder_VideoListReturnToDetails(VsRecorderWork *work);
 BOOL VsRecorder_VideoListSlotsMain(VsRecorderWork *work);
 BOOL VsRecorder_VideoListSlotsCancel(VsRecorderWork *work);
 BOOL VsRecorder_VideoListBackToList(VsRecorderWork *work);
-void VsRecorder_SetSlotButtonName(VsRecorderTextSprite *button, VsRecorderWork *work, int slot);
-void VsRecorder_CreateSlotButtons(VsRecorderWork *work);
-void VsRecorder_FreeSlotButtons(VsRecorderWork *work);
-void VsRecorder_FreeVideoListButtons(VsRecorderWork *work);
-void VsRecorder_SetVideoListButtonsMode(VsRecorderWork *work, int backOnly);
-void VsRecorder_RemoveVideoListWindows(VsRecorderWork *work);
-void VsRecorder_RemoveVideoListButtonWindows(VsRecorderWork *work);
 BOOL VsRecorder_VideoListInit(VsRecorderWork *work);
 BOOL VsRecorder_VideoListEnter(VsRecorderWork *work);
 BOOL VsRecorder_VideoListDownloadList(VsRecorderWork *work);
-void VsRecorder_CreateVideoListWindows(VsRecorderWork *work);
 BOOL VsRecorder_VideoListShowList(VsRecorderWork *work);
 BOOL VsRecorder_VideoListSelect(VsRecorderWork *work);
 BOOL VsRecorder_VideoListExit(VsRecorderWork *work);
@@ -294,56 +247,21 @@ BOOL VsRecorder_VideoListDetailsMain(VsRecorderWork *work);
 BOOL VsRecorder_VideoListToggleProfile(VsRecorderWork *work);
 BOOL VsRecorder_VideoListPlay(VsRecorderWork *work);
 BOOL VsRecorder_VideoListResume(VsRecorderWork *work);
-void VsRecorder_ShowVideoListMessage(VsRecorderWork *work, int msgId, int unused);
 BOOL VsRecorder_VideoListShowSlots(VsRecorderWork *work);
-void VsRecorder_RemoveDetailsButtonWindow(VsRecorderWork *work);
-void VsRecorder_PrintDetailsButtonLabel(VsRecorderWork *work, int msgId);
-void VsRecorder_CreateDetailsButtonWindow(VsRecorderWork *work);
-void VsRecorder_CreateOverwriteWindows(VsRecorderWork *work);
-void VsRecorder_RemoveOverwriteWindows(VsRecorderWork *work);
-void VsRecorder_OnVideoDetailsTouch(u32 index, u32 event, void *arg);
-void VsRecorder_OnSaveSlotTouch(u32 index, u32 event, void *arg);
-void VsRecorder_OnOverwriteTouch(u32 index, u32 event, void *arg);
-void VsRecorder_LoadVideoDetails(VsRecorderWork *work);
-void VsRecorder_CreateVideoListIcons(VsRecorderWork *work);
-void VsRecorder_SetVideoListIconsDrawFlag(VsRecorderWork *work, BOOL draw);
-void VsRecorder_FreeVideoListIcons(VsRecorderWork *work);
 
-// vs_recorder_video_list_scroll.c
-void VsRecorder_ScrollVideoListIcons(VsRecorderWork *work);
-
-// vs_recorder_video_list_end.c
-void VsRecorder_FreeDetailsButtons(VsRecorderWork *work);
-
-// vs_recorder_video_search.c
-void VsRecorder_PlaceSearchResultIcons(VsRecorderWork *work);
-void VsRecorder_CreateSearchResultIcons(VsRecorderWork *work);
-void VsRecorder_SetSearchResultIconsDrawFlag(VsRecorderWork *work, BOOL draw);
-void VsRecorder_FreeSearchResultIcons(VsRecorderWork *work);
-void VsRecorder_ScrollSearchResultIcons(VsRecorderWork *work);
 BOOL VsRecorder_HasSearchConditions(VsRecorderWork *work);
-void VsRecorder_CreateSearchConditionWindows(VsRecorderWork *work, int mode);
-void VsRecorder_PrintSearchFacility(VsRecorderWork *work, u32 facility);
-void VsRecorder_PrintSearchSpecies(VsRecorderWork *work, u16 species);
 void VsRecorder_PrintSearchLocation(VsRecorderWork *work, u32 country, u32 region);
 void VsRecorder_PrintLocationButtonLabel(VsRecorderWork *work);
-void VsRecorder_CreateSearchButtonWindows(VsRecorderWork *work, int mode);
-void VsRecorder_RemoveSearchWindows(VsRecorderWork *work);
-void VsRecorder_RemoveSearchButtonWindows(VsRecorderWork *work);
-void VsRecorder_CreateSearchResultWindows(VsRecorderWork *work);
 BOOL VsRecorder_VideoSearchShowConditions(VsRecorderWork *work);
 BOOL VsRecorder_VideoSearchConditionsMain(VsRecorderWork *work);
 BOOL VsRecorder_VideoSearchExit(VsRecorderWork *work);
 BOOL VsRecorder_VideoSearchOpenCondition(VsRecorderWork *work);
 BOOL VsRecorder_VideoSearchSelectFacility(VsRecorderWork *work);
 BOOL VsRecorder_VideoSearchClearSpecies(VsRecorderWork *work);
-void VsRecorder_CreateSearchCategoryWindows(VsRecorderWork *work);
-void VsRecorder_RemoveSearchCategoryWindows(VsRecorderWork *work);
 BOOL VsRecorder_VideoSearchSelectCategory(VsRecorderWork *work);
 BOOL VsRecorder_VideoSearchSelectSpecies(VsRecorderWork *work);
 BOOL VsRecorder_SearchCategoryHasSeen(VsRecorderWork *work, int category);
 void VsRecorder_BuildSearchSpeciesList(VsRecorderWork *work, int category);
-void VsRecorder_FreeSearchSpeciesList(VsRecorderWork *work);
 BOOL VsRecorder_VideoSearchSelectLocation(VsRecorderWork *work);
 BOOL VsRecorder_VideoSearchReturnToConditions(VsRecorderWork *work);
 BOOL VsRecorder_VideoSearchRequest(VsRecorderWork *work);
@@ -365,7 +283,6 @@ BOOL VsRecorder_VideoSearchOverwriteMain(VsRecorderWork *work);
 BOOL VsRecorder_VideoSearchOverwriteNo(VsRecorderWork *work);
 BOOL VsRecorder_VideoSearchSave(VsRecorderWork *work);
 
-// vs_recorder_video_transfer.c
 BOOL VsRecorder_VideoSearchDownloadVideo(VsRecorderWork *work);
 BOOL VsRecorder_VideoSearchResume(VsRecorderWork *work);
 BOOL VsRecorder_VideoSearchInit(VsRecorderWork *work);
@@ -375,7 +292,6 @@ BOOL VsRecorder_NumberSearchPadMain(VsRecorderWork *work);
 BOOL VsRecorder_NumberSearchClosePad(VsRecorderWork *work);
 BOOL VsRecorder_NumberSearchExit(VsRecorderWork *work);
 BOOL VsRecorder_NumberSearchDownloadVideo(VsRecorderWork *work);
-void VsRecorder_LoadFoundVideoDetails(VsRecorderWork *work);
 void VsRecorder_LoadSearchResultDetails(VsRecorderWork *work);
 void VsRecorder_FreeFoundVideoDetails(VsRecorderWork *work);
 BOOL VsRecorder_NumberSearchShowDetails(VsRecorderWork *work);
@@ -383,9 +299,6 @@ BOOL VsRecorder_NumberSearchDetailsMain(VsRecorderWork *work);
 BOOL VsRecorder_NumberSearchToggleProfile(VsRecorderWork *work);
 BOOL VsRecorder_NumberSearchPlay(VsRecorderWork *work);
 BOOL VsRecorder_NumberSearchExitDetails(VsRecorderWork *work);
-void VsRecorder_SetSearchSlotButtonName(VsRecorderTextSprite *button, VsRecorderWork *work, int slot);
-void VsRecorder_ShowSearchMessage(VsRecorderWork *work, int msgId, int unused);
-void VsRecorder_PrintSearchMessage(VsRecorderWork *work, int msgId, int slot);
 void VsRecorder_CreateSearchSlotButtons(VsRecorderWork *work);
 void VsRecorder_FreeSearchSlotButtons(VsRecorderWork *work);
 BOOL VsRecorder_NumberSearchShowSlots(VsRecorderWork *work);
@@ -401,21 +314,12 @@ BOOL VsRecorder_SendVideoShowCursor(VsRecorderWork *work);
 BOOL VsRecorder_SendVideoUpload(VsRecorderWork *work);
 BOOL VsRecorder_SendVideoExit(VsRecorderWork *work);
 void VsRecorder_RemoveSearchDetailsButtonWindow(VsRecorderWork *work);
-void VsRecorder_PrintSearchDetailsButtonLabel(VsRecorderWork *work, int msgId);
 void VsRecorder_CreateSearchDetailsButtonWindow(VsRecorderWork *work);
-void VsRecorder_CreateSearchOverwriteWindows(VsRecorderWork *work);
-void VsRecorder_RemoveSearchOverwriteWindows(VsRecorderWork *work);
-void VsRecorder_OnNumberSearchDetailsTouch(u32 index, u32 event, void *arg);
-void VsRecorder_OnNumberSearchSlotTouch(u32 index, u32 event, void *arg);
-void VsRecorder_OnNumberSearchOverwriteTouch(u32 index, u32 event, void *arg);
 void VsRecorder_OnSearchConditionTouch(u32 index, u32 event, void *arg);
 void VsRecorder_OnSpeciesGroupTouch(u32 index, u32 event, void *arg);
 void VsRecorder_OnSearchDetailsTouch(u32 index, u32 event, void *arg);
 void VsRecorder_OnSearchSlotTouch(u32 index, u32 event, void *arg);
 void VsRecorder_OnSearchOverwriteTouch(u32 index, u32 event, void *arg);
-void VsRecorder_SetNumberPadButtonsMode(VsRecorderWork *work, int backOnly);
-void VsRecorder_CreateNumberPadButtons(VsRecorderWork *work);
-void VsRecorder_FreeNumberPadButtons(VsRecorderWork *work);
 void VsRecorder_SetSearchButtonsMode(VsRecorderWork *work, int backOnly);
 void VsRecorder_CreateSearchButtons(VsRecorderWork *work);
 void VsRecorder_FreeSearchButtons(VsRecorderWork *work);
@@ -431,10 +335,8 @@ void VsRecorder_OnVideoUploaded(void *arg, GlobalTerminalNetError *error);
 void VsRecorder_OnVideoDownloaded(void *arg, GlobalTerminalNetError *error);
 void VsRecorder_OnVideoSaveReported(void *arg, GlobalTerminalNetError *error);
 
-// vs_recorder_battle_names.c
 void VsRecorder_SanitizeBattleSetupNames(BattleRecord *record, BattleSetup *setup, enum HeapID heapID);
 
-// vs_recorder_record.c
 void VsRecorder_LoadPlaceholderTrainerName(String *str, enum HeapID heapID);
 void VsRecorder_EncryptRecord(SaveData *saveData);
 int VsRecorder_SaveRecordNumber(SaveData *saveData, u32 numberLow, u32 numberHigh, u16 *state, u16 *writeState);

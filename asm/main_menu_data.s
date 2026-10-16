@@ -208,13 +208,10 @@
 	.extern RangerLink_GetGameInfo
 	.extern RangerLink_GetSsid
 	.extern RangerLink_GetPacketHeaderSize
-	.public AGB_GetBoxMonAbility
 	.public AGB_GetBoxMonData
 	.public ConvertRSStringToDPStringInternational
-	.public IdentifyPmAgbCartridge
 	.public MigrateBoxMon
 	.public PmAgbCartridgeGetOffsets
-	.public PmAgbCartridgeHasFlash
 	.public PmAgbCartridgeUnlinkSpec
 	.public PmAgbCartridge_GetLanguage
 	.public PmAgbCartridge_GetVersionInternal
@@ -275,86 +272,25 @@
 	.public RangerLink_WmPowerOff
 	.public RangerLink_WmReset
 	.public RangerLink_WmEnd
-	.public MigrateFromAgb_IsSpeciesUnavailable
-	.public MigrateFromAgb_GetAgbVersion
 	.public MigrateFromAgb_RunTransfer
-	.public MigrateFromAgb_SaveMigrationRecord
-	.public MigrateFromAgb_MovePicksToPalPark
-	.public MigrateFromAgb_GetTextX
 	.public MigrateFromAgb_PrintText
-	.public MigrateFromAgb_InitObjTransfer
-	.public MigrateFromAgb_InitSpriteResources
-	.public MigrateFromAgb_InitSpriteHeader
-	.public MigrateFromAgb_InitSpriteTemplate
-	.public MigrateFromAgb_GetBoxMonSpecies
-	.public MigrateFromAgb_GetBoxMonIsEgg
-	.public MigrateFromAgb_GetBoxMonPersonality
-	.public MigrateFromAgb_SetHitbox
-	.public MigrateFromAgb_LoadCharData
-	.public MigrateFromAgb_ReadCharData
-	.public MigrateFromAgb_GetMonForm
-	.public MigrateFromAgb_LoadMonIcon
-	.public MigrateFromAgb_PrepareBoxIcon
-	.public MigrateFromAgb_UploadBoxIcons
-	.public MigrateFromAgb_ShowBox
-	.public MigrateFromAgb_CreateBoxSprites
-	.public MigrateFromAgb_CreateSprite
-	.public MigrateFromAgb_CreateButtons
-	.public MigrateFromAgb_IsEgg
-	.public MigrateFromAgb_KnowsHM
-	.public MigrateFromAgb_HoldsBlockedItem
-	.public MigrateFromAgb_IsBoxMonSpeciesUnavailable
-	.public MigrateFromAgb_TogglePick
-	.public MigrateFromAgb_ShowBoxPicks
-	.public MigrateFromAgb_PrintBoxName
-	.public MigrateFromAgb_ShowMarkings
-	.public MigrateFromAgb_PrintMonInfo
-	.public MigrateFromAgb_StartFadeBlack
-	.public MigrateFromAgb_StartFadeWhite
-	.public MigrateFromAgb_InitBgs
-	.public MigrateFromAgb_InitGraphics
-	.public MigrateFromAgb_LoadBoxBg
-	.public MigrateFromAgb_InitMsgBox
-	.public MigrateFromAgb_ShowConfirmScreen
-	.public MigrateFromAgb_RemoveWindow
-	.public MigrateFromAgb_CloseConfirmScreen
-	.public MigrateFromAgb_FreeGraphics
-	.public MigrateFromAgb_ShowYesNo
-	.public MigrateFromAgb_PrintIntro
-	.public MigrateFromAgb_VBlankCB
-	.public MigrateFromAgb_CheckCanMigrate
 	.public MigrateFromAgb_PrintResultMsg
 	.public MigrateFromAgb_PrintResultMsgWithYesNo
 	.public MigrateFromAgb_PrintPendingMsg
 	.public MigrateFromAgb_Init
 	.public MigrateFromAgb_Main
 	.public MigrateFromAgb_Exit
-	.public PmAgbCartridge_CalcSectorChecksum
-	.public PmAgbCartridge_ReadSector
-	.public PmAgbCartridge_GetSectorDataSize
-	.public PmAgbCartridge_GetSectorData
-	.public PmAgbCartridge_CheckSaveSlot
-	.public PmAgbCartridge_FindLatestSaveSlot
 	.public PmAgbCartridge_LoadSave
-	.public PmAgbCartridge_WriteSectorAsync
-	.public PmAgbCartridge_WriteSectorCallback
 	.public PmAgbCartridge_StartSave
 	.public PmAgbCartridge_ContinueSave
 	.public PmAgbCartridge_GetSaveStatus
 	.public PmAgbCartridge_GetPCStorage
-	.public PmAgbCartridge_GetTrainerInfo
 	.public PmAgbCartridge_GetTrainerId
 	.public PmAgbCartridge_GetPlayerName
 	.public AGB_GetBoxMonSubstruct
-	.public AGB_DecryptBoxMon
-	.public AGB_EncryptBoxMon
-	.public AGB_CalcBoxMonChecksum
 	.public AGB_SetBoxMonData
 	.public AGB_GetBoxMonLevel
 	.public MainMenuUtil_SetCryptoHeap
-	.public MainMenuUtil_CryptoAlloc
-	.public MainMenuUtil_CheckGiftCartridgeSignature
-	.public MainMenuUtil_IsGiftCartridgeInserted
 	.public MainMenuUtil_GetCartridgeGiftSize
 	.public MainMenuUtil_ReadCartridgeGift
 	.public MainMenuUtil_InitWork
@@ -367,7 +303,6 @@
 	.public MainMenuTextPrinter_SetSize
 	.public MainMenuTextPrinter_SetFrameAndFont
 	.public MainMenuTextPrinter_SetTextPos
-	.public MainMenuTextPrinter_Print
 	.public MainMenuTextPrinter_AddWindowAndPrint
 	.public MainMenuTextPrinter_GetTileCount
 	.public MainMenuUtil_InitObjTransfer
@@ -375,15 +310,12 @@
 	.public MainMenuUtil_InitSprites
 	.public MainMenuUtil_GetSpriteList
 	.public MainMenuUtil_LoadSpriteResources
-	.public MainMenuUtil_SetSubScreenOffset
 	.public MainMenuUtil_UpdateSprites
 	.public MainMenuUtil_UpdateGiftSprite
 	.public MainMenuUtil_CreateSprite
 	.public MainMenuUtil_FreeSprites
 	.public MainMenuUtil_GetVersionMaskBit
-	.public MainMenuUtil_VBlankCB
 	.public MainMenuUtil_GetGiftPalette
-	.public MainMenuUtil_LoadGiftMonSprite
 	.public MainMenuUtil_ShowGiftBox
 	.public MainMenuUtil_ShowGiftPokemon
 	.public MainMenuUtil_ShowGiftItem
@@ -392,9 +324,7 @@
 	.public MainMenuUtil_EncryptWonderCard
 	.public MainMenuUtil_DecryptWonderCard
 	.public MainMenuUtil_ListMenuCursorCallback
-	.public MainMenuUtil_CartridgeIrqHandler
 	.public MainMenuUtil_EnableCartridgePullOutCheck
-	.public MainMenuUtil_IgnoreCartridgeIrqHandler
 	.public MainMenuUtil_IgnoreCartridgeIrq
 	.public MainMenuUtil_StartSave
 	.public MainMenuUtil_RunSave
@@ -434,9 +364,6 @@
 	.public MysteryGiftWfc_OnCleanupDone
 	.public MysteryGiftWfc_Shutdown
 	.public MysteryGiftWfc_Run
-	.public AgbString_GetSpaceChar
-	.public AgbString_GetOpenQuoteChar
-	.public AgbString_GetCloseQuoteChar
 	.public sConnectToRangerLinkParams
 	.public sRangerCharTable
 	.public sConnectToRangerLinkCommand

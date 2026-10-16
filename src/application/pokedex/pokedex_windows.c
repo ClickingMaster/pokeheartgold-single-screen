@@ -30,7 +30,6 @@ extern const WindowTemplate sPokedexEntryMenuWindowTemplates[];
 extern const WindowTemplate sFormsWindowTemplates[];
 extern const u8 sSearchTypeMsgIds[];
 
-// defined in src/bg_cell_manager.c, not declared in bg_cell_manager.h
 void BgCellManager_PutWindowTiles(BgCellManager *manager, int index, Window *window);
 void BgCellManager_GetCellPosition(BgCellManager *manager, int index, s8 *x, s8 *y);
 
@@ -642,7 +641,7 @@ void PokedexApp_DrawSearchNamePage(PokedexAppData *pokedexApp) {
     FillWindowPixelBuffer(&pokedexApp->windows[67], 0);
     PokedexApp_PrintMessage(&pokedexApp->windows[65], pokedexApp->msgData, msg_0802_00027, 24, 0, 0, MAKE_TEXT_COLOR(2, 1, 0), 2);
     for (i = 0; i < 27; i++) {
-        u16 position = ((int (*)(int))PokedexApp_GetLetterGridCell)(i); // read through an int-returning prototype
+        u16 position = ((int (*)(int))PokedexApp_GetLetterGridCell)(i);
         int msgNo;
         if (i == 26) {
             msgNo = 113;
@@ -1025,7 +1024,6 @@ void PokedexApp_FreeAreaWindows(PokedexAppData *pokedexApp) {
     u32 i;
     u8 *window = (u8 *)pokedexApp;
 
-    // a byte pointer walks the windows (indexing them changes the code)
     i = 0;
     window += offsetof(PokedexAppData, windows);
     for (; i < 14; i++) {
@@ -1154,7 +1152,6 @@ void PokedexApp_FreeSizeCheckWindows(PokedexAppData *pokedexApp) {
     u32 i;
     u8 *window = (u8 *)pokedexApp;
 
-    // a byte pointer walks the windows (indexing them changes the code)
     i = 0;
     window += offsetof(PokedexAppData, windows);
     for (; i < 13; i++) {
@@ -1192,7 +1189,6 @@ void PokedexApp_FreeEntryMenuWindows(PokedexAppData *pokedexApp) {
     u32 i;
     u8 *window = (u8 *)pokedexApp;
 
-    // a byte pointer walks the windows (indexing them changes the code)
     i = 0;
     window += offsetof(PokedexAppData, windows);
     for (; i < 2; i++) {

@@ -14,6 +14,7 @@
 #include "font.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
+#include "grid_input_handler.h"
 #include "heap.h"
 #include "item.h"
 #include "list_menu_items.h"
@@ -31,13 +32,12 @@
 #include "render_window.h"
 #include "screen_fade.h"
 #include "sound_playback.h"
+#include "sprite_resource_header.h"
 #include "sprite_system.h"
 #include "system.h"
+#include "touchpad.h"
 #include "touchscreen.h"
 #include "touchscreen_list_menu.h"
-#include "sprite_resource_header.h"
-#include "grid_input_handler.h"
-#include "touchpad.h"
 #include "yes_no_prompt.h"
 
 enum {
@@ -131,23 +131,23 @@ typedef struct MailboxAppData {
 } MailboxAppData;                                // size: 0x2F0
 
 typedef struct MailboxApp {
-    Options *options;         // 0x00
-    Mailbox *mailbox;         // 0x04
-    MailboxAppArgs *args; // 0x08
-    MailboxAppData *data;     // 0x0C
-    OverlayManager *subApp;   // 0x10
-    void *subAppArgs;         // 0x14
-    u32 subAppId;             // 0x18: index into gMailboxSubApps
-    u16 page;                 // 0x1C
-    u8 cursorPos;             // 0x1E
-    u8 selectedMail;          // 0x1F
-    u8 partyMenuAction;       // 0x20
-    u8 partySlot : 7;         // 0x21
-    u8 bagFull : 1;           // 0x21: the erased mail could not be put back in the bag
-    u16 itemId;               // 0x22
-    u32 useMailResult;        // 0x24
-    int nextState;            // 0x28
-} MailboxApp;                 // size: 0x2C
+    Options *options;       // 0x00
+    Mailbox *mailbox;       // 0x04
+    MailboxAppArgs *args;   // 0x08
+    MailboxAppData *data;   // 0x0C
+    OverlayManager *subApp; // 0x10
+    void *subAppArgs;       // 0x14
+    u32 subAppId;           // 0x18: index into gMailboxSubApps
+    u16 page;               // 0x1C
+    u8 cursorPos;           // 0x1E
+    u8 selectedMail;        // 0x1F
+    u8 partyMenuAction;     // 0x20
+    u8 partySlot : 7;       // 0x21
+    u8 bagFull : 1;         // 0x21: the erased mail could not be put back in the bag
+    u16 itemId;             // 0x22
+    u32 useMailResult;      // 0x24
+    int nextState;          // 0x28
+} MailboxApp;               // size: 0x2C
 
 typedef int (*MailboxAppStateFunc)(MailboxApp *app);
 
@@ -183,31 +183,85 @@ extern const GridCallbacks gMailboxGridCallbacks;
 extern const TouchscreenHitbox gMailboxGridHitboxes[];
 extern const DpadMenuBox gMailboxGridBoxes[];
 
-void MailboxApp_VBlankCB(void *cbArg);
-void MailboxApp_SetGfxBanks(void);
-void MailboxApp_InitBgLayers(MailboxApp *app);
-void MailboxApp_FreeBgLayers(MailboxApp *app);
-void MailboxApp_LoadBgGraphics(MailboxApp *app);
-void MailboxApp_LoadFrameAndFontGfx(MailboxApp *app);
-void MailboxApp_CreateNameplateCells(MailboxApp *app);
-void MailboxApp_DeleteNameplateCells(MailboxApp *app);
-void MailboxAppData_CreateStrings(MailboxAppData *data);
-void MailboxAppData_DeleteStrings(MailboxAppData *data);
-void MailboxApp_CreateYesNoPrompt(MailboxApp *app);
-void MailboxApp_DestroyYesNoPrompt(MailboxApp *app);
-void MailboxApp_ShowYesNoPrompt(MailboxApp *app);
-void MailboxApp_CreateMailMenuItems(MailboxApp *app);
-void MailboxApp_DeleteMailMenuItems(MailboxApp *app);
-void MailboxApp_OpenMailMenu(MailboxApp *app);
-void MailboxApp_CloseMailMenu(MailboxApp *app);
-void MailboxApp_LoadMail(MailboxApp *app);
-void MailboxApp_FreeMail(MailboxApp *app);
-void MailboxApp_DrawPage(MailboxApp *app);
-void MailboxApp_DrawSelectedNameplate(MailboxApp *app);
-BOOL MailboxApp_RunPaletteFlash(MailboxApp *app);
-void MailboxApp_LoadStationeryGfx(MailboxApp *app);
-u32 MailboxApp_GetMailMenuItemCount(MailboxApp *app);
-BOOL MailboxApp_RunState(MailboxApp *app, int *state);
+static void MailboxApp_VBlankCB(void *cbArg);
+static void MailboxApp_SetGfxBanks(void);
+static void MailboxApp_InitBgLayers(MailboxApp *app);
+static void MailboxApp_FreeBgLayers(MailboxApp *app);
+static void MailboxApp_LoadBgGraphics(MailboxApp *app);
+static void MailboxApp_LoadFrameAndFontGfx(MailboxApp *app);
+static void MailboxApp_CreateNameplateCells(MailboxApp *app);
+static void MailboxApp_DeleteNameplateCells(MailboxApp *app);
+static void MailboxAppData_CreateStrings(MailboxAppData *data);
+static void MailboxAppData_DeleteStrings(MailboxAppData *data);
+static void MailboxApp_CreateYesNoPrompt(MailboxApp *app);
+static void MailboxApp_DestroyYesNoPrompt(MailboxApp *app);
+static void MailboxApp_ShowYesNoPrompt(MailboxApp *app);
+static void MailboxApp_CreateMailMenuItems(MailboxApp *app);
+static void MailboxApp_DeleteMailMenuItems(MailboxApp *app);
+static void MailboxApp_OpenMailMenu(MailboxApp *app);
+static void MailboxApp_CloseMailMenu(MailboxApp *app);
+static void MailboxApp_LoadMail(MailboxApp *app);
+static void MailboxApp_FreeMail(MailboxApp *app);
+static void MailboxApp_DrawPage(MailboxApp *app);
+static void MailboxApp_DrawSelectedNameplate(MailboxApp *app);
+static BOOL MailboxApp_RunPaletteFlash(MailboxApp *app);
+static void MailboxApp_LoadStationeryGfx(MailboxApp *app);
+static u32 MailboxApp_GetMailMenuItemCount(MailboxApp *app);
+static BOOL MailboxApp_RunState(MailboxApp *app, int *state);
+static int MailboxApp_StartFadeIn(MailboxApp *app, int nextState);
+static int MailboxApp_StartFadeOut(MailboxApp *app, int nextState);
+static int MailboxApp_WaitForText(MailboxApp *app, u8 waitForInput, int nextState);
+static int MailboxApp_AskYesNo(MailboxApp *app, u32 question);
+static int MailboxApp_StartCellFlash(MailboxApp *app, int cell, int nextState);
+static int MailboxApp_StartSpriteFlash(MailboxApp *app, int sprite, int nextState);
+static void MailboxAppData_SetListDimmed(MailboxAppData *data, BOOL enable);
+static void MailboxApp_ShowMail(MailboxApp *app);
+static void MailboxApp_HideMail(MailboxApp *app);
+static void MailboxApp_PutMailInBag(MailboxApp *app);
+static void MailboxApp_DeleteSelectedMail(MailboxApp *app);
+static void MailboxApp_CreatePartyMenuArgs(MailboxApp *app, u8 context, u16 itemId, u8 partySlot);
+static void MailboxApp_CreateSprites(MailboxApp *app);
+static void MailboxApp_DeleteSprites(MailboxApp *app);
+static void MailboxAppData_TickSprites(MailboxAppData *data);
+static void MailboxAppData_InitSpriteSystem(MailboxAppData *data);
+static void MailboxAppData_FreeSpriteSystem(MailboxAppData *data);
+static ManagedSprite *MailboxAppData_NewSprite(MailboxAppData *data, const ManagedSpriteTemplate *template);
+static void MailboxAppData_DeleteSprite(MailboxAppData *data, u32 index);
+static void MailboxAppData_DeleteAllSprites(MailboxAppData *data);
+static void MailboxAppData_SetSpriteAnim(MailboxAppData *data, u32 index, u32 anim);
+static void MailboxAppData_SetSpriteDrawFlag(MailboxAppData *data, u32 index, BOOL draw);
+static void MailboxAppData_SetSpritePosition(MailboxAppData *data, u32 index, s16 x, s16 y);
+static void MailboxAppData_SetSpriteTranslucent(MailboxAppData *data, u32 index, BOOL blend);
+static void MailboxAppData_OpenMonIconNarc(MailboxAppData *data);
+static void MailboxAppData_CloseMonIconNarc(MailboxAppData *data);
+static void MailboxAppData_LoadMonIconResources(MailboxAppData *data);
+static void MailboxApp_ShowMailMonIcons(MailboxApp *app);
+static void MailboxAppData_LoadSpriteResources(MailboxAppData *data);
+static void MailboxAppData_MoveCursorToCloseButton(MailboxAppData *data);
+static void MailboxApp_AddWindows(MailboxApp *app);
+static void MailboxApp_RemoveWindows(MailboxApp *app);
+static void MailboxApp_PrintString(Window *window, String *string, u32 x, u32 y, u32 fontId, u32 color, u32 align);
+static void MailboxAppData_PrintMsg(MailboxAppData *data, MsgData *msgData, u32 windowId, u32 msgId, u32 x, u32 y, u32 fontId, u32 color, u32 align);
+static void MailboxApp_DrawNameplate(MailboxApp *app, u32 cell, u32 windowId, u32 mailIdx);
+static void MailboxApp_PrintTitleAndButtons(MailboxApp *app);
+static void MailboxAppData_ShowCloseButton(MailboxAppData *data);
+static void MailboxAppData_ShowCancelButton(MailboxAppData *data);
+static void MailboxApp_PrintPageNumber(MailboxApp *app);
+static void MailboxApp_BufferAuthorName(MailboxApp *app, u32 unused);
+static inline u32 MailboxAppData_GetMessageWindowOffset(void);
+static void MailboxApp_PrintMessageBox(MailboxApp *app);
+static void MailboxApp_PrintMailPrompt(MailboxApp *app);
+static void MailboxApp_DrawMessageBox(MailboxApp *app);
+static void MailboxApp_ClearMessageBox(MailboxApp *app);
+static void MailboxApp_PrintMessage(MailboxApp *app, u32 message);
+static void MailboxApp_PrintMail(MailboxApp *app);
+static void MailboxApp_PrintMailLine(MailboxApp *app, u32 windowId, u32 line);
+static int MailboxApp_GetTouchedPageArrow(MailboxApp *app);
+static void MailboxApp_CreateGridInput(MailboxApp *app);
+static void MailboxApp_FreeGridInput(MailboxApp *app);
+static void MailboxApp_MoveCursor(MailboxApp *app, u32 input);
+static BOOL MailboxApp_IsCloseMailInput(void);
+
 int MailboxApp_State_Setup(MailboxApp *app);
 int MailboxApp_State_Teardown(MailboxApp *app);
 int MailboxApp_State_WaitFade(MailboxApp *app);
@@ -233,18 +287,6 @@ int MailboxApp_State_FadeInDimmedList(MailboxApp *app);
 int MailboxApp_State_ShowMailToBagResult(MailboxApp *app);
 int MailboxApp_State_UseMailDone(MailboxApp *app);
 int MailboxApp_ReturnToMailList(MailboxApp *app);
-int MailboxApp_StartFadeIn(MailboxApp *app, int nextState);
-int MailboxApp_StartFadeOut(MailboxApp *app, int nextState);
-int MailboxApp_WaitForText(MailboxApp *app, u8 waitForInput, int nextState);
-int MailboxApp_AskYesNo(MailboxApp *app, u32 question);
-int MailboxApp_StartCellFlash(MailboxApp *app, int cell, int nextState);
-int MailboxApp_StartSpriteFlash(MailboxApp *app, int sprite, int nextState);
-void MailboxAppData_SetListDimmed(MailboxAppData *data, BOOL enable);
-void MailboxApp_ShowMail(MailboxApp *app);
-void MailboxApp_HideMail(MailboxApp *app);
-void MailboxApp_PutMailInBag(MailboxApp *app);
-void MailboxApp_DeleteSelectedMail(MailboxApp *app);
-void MailboxApp_CreatePartyMenuArgs(MailboxApp *app, u8 context, u16 itemId, u8 partySlot);
 int MailboxApp_StartPartyMenu(MailboxApp *app);
 int MailboxApp_FinishGiveMail(MailboxApp *app);
 int MailboxApp_FinishSelectMonForMail(MailboxApp *app);
@@ -254,58 +296,14 @@ int MailboxApp_FinishUseMail(MailboxApp *app);
 int MailboxApp_EraseMail(MailboxApp *app);
 int MailboxApp_SelectMonToHoldMail(MailboxApp *app);
 int MailboxApp_PrintMailToBagResult(MailboxApp *app);
-void MailboxApp_CreateSprites(MailboxApp *app);
-void MailboxApp_DeleteSprites(MailboxApp *app);
-void MailboxAppData_TickSprites(MailboxAppData *data);
-void MailboxAppData_InitSpriteSystem(MailboxAppData *data);
-void MailboxAppData_FreeSpriteSystem(MailboxAppData *data);
-ManagedSprite *MailboxAppData_NewSprite(MailboxAppData *data, const ManagedSpriteTemplate *template);
-void MailboxAppData_DeleteSprite(MailboxAppData *data, u32 index);
-void MailboxAppData_DeleteAllSprites(MailboxAppData *data);
-void MailboxAppData_SetSpriteAnim(MailboxAppData *data, u32 index, u32 anim);
-void MailboxAppData_SetSpriteDrawFlag(MailboxAppData *data, u32 index, BOOL draw);
-void MailboxAppData_SetSpritePosition(MailboxAppData *data, u32 index, s16 x, s16 y);
-void MailboxAppData_SetSpriteTranslucent(MailboxAppData *data, u32 index, BOOL blend);
-void MailboxAppData_OpenMonIconNarc(MailboxAppData *data);
-void MailboxAppData_CloseMonIconNarc(MailboxAppData *data);
-void MailboxAppData_LoadMonIconResources(MailboxAppData *data);
-void MailboxApp_ShowMailMonIcons(MailboxApp *app);
-void MailboxAppData_LoadSpriteResources(MailboxAppData *data);
-void MailboxAppData_MoveCursorToCloseButton(MailboxAppData *data);
-void MailboxApp_AddWindows(MailboxApp *app);
-void MailboxApp_RemoveWindows(MailboxApp *app);
-void MailboxApp_PrintString(Window *window, String *string, u32 x, u32 y, u32 fontId, u32 color, u32 align);
-void MailboxAppData_PrintMsg(MailboxAppData *data, MsgData *msgData, u32 windowId, u32 msgId, u32 x, u32 y, u32 fontId, u32 color, u32 align);
-void MailboxApp_DrawNameplate(MailboxApp *app, u32 cell, u32 windowId, u32 mailIdx);
-void MailboxApp_PrintTitleAndButtons(MailboxApp *app);
-void MailboxAppData_ShowCloseButton(MailboxAppData *data);
-void MailboxAppData_ShowCancelButton(MailboxAppData *data);
-void MailboxApp_PrintPageNumber(MailboxApp *app);
-void MailboxApp_BufferAuthorName(MailboxApp *app, u32 unused);
-void MailboxApp_PrintMessageBox(MailboxApp *app);
-void MailboxApp_PrintMailPrompt(MailboxApp *app);
-void MailboxApp_DrawMessageBox(MailboxApp *app);
-void MailboxApp_ClearMessageBox(MailboxApp *app);
-void MailboxApp_PrintMessage(MailboxApp *app, u32 message);
-void MailboxApp_PrintMail(MailboxApp *app);
-void MailboxApp_PrintMailLine(MailboxApp *app, u32 windowId, u32 line);
-int MailboxApp_GetTouchedPageArrow(MailboxApp *app);
-void MailboxApp_CreateGridInput(MailboxApp *app);
-void MailboxApp_FreeGridInput(MailboxApp *app);
 void MailboxApp_GridOnButton(void);
 void MailboxApp_GridOnSwitchToTouchMode(void);
 void MailboxApp_GridOnKeyMove(MailboxApp *app, u32 input);
 void MailboxApp_GridOnTouch(MailboxApp *app, u32 input);
-void MailboxApp_MoveCursor(MailboxApp *app, u32 input);
-BOOL MailboxApp_IsCloseMailInput(void);
 
-// text.h (and render_text.h, which includes it) is not included: it declares fontId as u8 (FontID), but
-// this module passes it unnarrowed
 void TextFlags_SetCanTouchSpeedUpPrint(BOOL enable);
 u8 TextPrinterCheckActive(u8 printerId);
 
-// Defined in src/bg_cell_manager.c but not declared in bg_cell_manager.h (other modules declare them with their
-// own parameter types)
 void BgCellManager_LoadCellTilemap(BgCellManager *manager, int index, int narcId, int fileId, int compressed);
 void BgCellManager_DrawCell(BgCellManager *manager, int index);
 void BgCellManager_GetCellPosition(BgCellManager *manager, int index, s8 *x, s8 *y);
@@ -339,7 +337,7 @@ BOOL MailboxApp_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-void MailboxApp_VBlankCB(void *cbArg) {
+static void MailboxApp_VBlankCB(void *cbArg) {
     MailboxApp *app = cbArg;
     vu32 *dtcm = (vu32 *)0x027E0000;
 
@@ -348,11 +346,11 @@ void MailboxApp_VBlankCB(void *cbArg) {
     dtcm[0x3FF8 / sizeof(u32)] |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
 }
 
-void MailboxApp_SetGfxBanks(void) {
+static void MailboxApp_SetGfxBanks(void) {
     GfGfx_SetBanks(&gMailboxAppGraphicsBanks);
 }
 
-void MailboxApp_InitBgLayers(MailboxApp *app) {
+static void MailboxApp_InitBgLayers(MailboxApp *app) {
     GraphicsModes modes;
     BgTemplate bg4, bg5, bg6, bg7, bg0, bg1, bg2, bg3;
 
@@ -388,7 +386,7 @@ void MailboxApp_InitBgLayers(MailboxApp *app) {
     InitBgFromTemplate(app->data->bgConfig, GF_BG_LYR_MAIN_3, &bg3, GF_BG_TYPE_TEXT);
 }
 
-void MailboxApp_FreeBgLayers(MailboxApp *app) {
+static void MailboxApp_FreeBgLayers(MailboxApp *app) {
     FreeBgTilemapBuffer(app->data->bgConfig, GF_BG_LYR_MAIN_3);
     FreeBgTilemapBuffer(app->data->bgConfig, GF_BG_LYR_MAIN_2);
     FreeBgTilemapBuffer(app->data->bgConfig, GF_BG_LYR_MAIN_1);
@@ -400,7 +398,7 @@ void MailboxApp_FreeBgLayers(MailboxApp *app) {
     Heap_Free(app->data->bgConfig);
 }
 
-void MailboxApp_LoadBgGraphics(MailboxApp *app) {
+static void MailboxApp_LoadBgGraphics(MailboxApp *app) {
     NARC *narc = NARC_New(NARC_a_2_5_0, HEAP_ID_157);
     NNSG2dCharacterData *charData;
     void *charFile;
@@ -421,7 +419,7 @@ void MailboxApp_LoadBgGraphics(MailboxApp *app) {
     NARC_Delete(narc);
 }
 
-void MailboxApp_LoadFrameAndFontGfx(MailboxApp *app) {
+static void MailboxApp_LoadFrameAndFontGfx(MailboxApp *app) {
     MailboxAppData *data = app->data;
     u8 frame = Options_GetFrame(app->options);
 
@@ -431,7 +429,7 @@ void MailboxApp_LoadFrameAndFontGfx(MailboxApp *app) {
     LoadFontPal0(GF_PAL_LOCATION_SUB_BG, (enum GFPalSlotOffset)(0x1E << 4), HEAP_ID_157);
 }
 
-void MailboxApp_CreateNameplateCells(MailboxApp *app) {
+static void MailboxApp_CreateNameplateCells(MailboxApp *app) {
     u32 i;
     u16 *firstTilemap;
 
@@ -450,33 +448,33 @@ void MailboxApp_CreateNameplateCells(MailboxApp *app) {
     }
 }
 
-void MailboxApp_DeleteNameplateCells(MailboxApp *app) {
+static void MailboxApp_DeleteNameplateCells(MailboxApp *app) {
     BgCellManager_Delete(app->data->cellManager);
 }
 
-void MailboxAppData_CreateStrings(MailboxAppData *data) {
+static void MailboxAppData_CreateStrings(MailboxAppData *data) {
     data->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0232_bin, HEAP_ID_157);
     data->msgFormat = MessageFormat_New(HEAP_ID_157);
     data->string = String_New(0x400, HEAP_ID_157);
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);
 }
 
-void MailboxAppData_DeleteStrings(MailboxAppData *data) {
+static void MailboxAppData_DeleteStrings(MailboxAppData *data) {
     TextFlags_SetCanTouchSpeedUpPrint(FALSE);
     String_Delete(data->string);
     MessageFormat_Delete(data->msgFormat);
     DestroyMsgData(data->msgData);
 }
 
-void MailboxApp_CreateYesNoPrompt(MailboxApp *app) {
+static void MailboxApp_CreateYesNoPrompt(MailboxApp *app) {
     app->data->yesNoPrompt = YesNoPrompt_Create(HEAP_ID_157);
 }
 
-void MailboxApp_DestroyYesNoPrompt(MailboxApp *app) {
+static void MailboxApp_DestroyYesNoPrompt(MailboxApp *app) {
     YesNoPrompt_Destroy(app->data->yesNoPrompt);
 }
 
-void MailboxApp_ShowYesNoPrompt(MailboxApp *app) {
+static void MailboxApp_ShowYesNoPrompt(MailboxApp *app) {
     YesNoPromptTemplate template;
 
     template.bgConfig = app->data->bgConfig;
@@ -492,7 +490,7 @@ void MailboxApp_ShowYesNoPrompt(MailboxApp *app) {
 }
 
 // READ / ERASE / GIVE / CANCEL; only READ and CANCEL when the party is empty.
-void MailboxApp_CreateMailMenuItems(MailboxApp *app) {
+static void MailboxApp_CreateMailMenuItems(MailboxApp *app) {
     u32 numItems;
     u16 i;
 
@@ -508,12 +506,12 @@ void MailboxApp_CreateMailMenuItems(MailboxApp *app) {
     } while (i < 4);
 }
 
-void MailboxApp_DeleteMailMenuItems(MailboxApp *app) {
+static void MailboxApp_DeleteMailMenuItems(MailboxApp *app) {
     ListMenuItems_Delete(app->data->listMenuItems);
     TouchscreenListMenuSpawner_Destroy(app->data->listMenuSpawner);
 }
 
-void MailboxApp_OpenMailMenu(MailboxApp *app) {
+static void MailboxApp_OpenMailMenu(MailboxApp *app) {
     TouchscreenListMenuHeader header;
     TouchscreenListMenuTemplate template = gMailboxMailMenuTemplate;
 
@@ -528,11 +526,11 @@ void MailboxApp_OpenMailMenu(MailboxApp *app) {
     }
 }
 
-void MailboxApp_CloseMailMenu(MailboxApp *app) {
+static void MailboxApp_CloseMailMenu(MailboxApp *app) {
     TouchscreenListMenu_Destroy(app->data->listMenu);
 }
 
-void MailboxApp_LoadMail(MailboxApp *app) {
+static void MailboxApp_LoadMail(MailboxApp *app) {
     u32 i;
 
     app->data->mailCount = 0;
@@ -551,7 +549,7 @@ void MailboxApp_LoadMail(MailboxApp *app) {
     }
 }
 
-void MailboxApp_FreeMail(MailboxApp *app) {
+static void MailboxApp_FreeMail(MailboxApp *app) {
     u32 i;
 
     for (i = 0; i < MAILBOX_MSG_COUNT; i++) {
@@ -559,7 +557,7 @@ void MailboxApp_FreeMail(MailboxApp *app) {
     }
 }
 
-void MailboxApp_DrawPage(MailboxApp *app) {
+static void MailboxApp_DrawPage(MailboxApp *app) {
     u32 first = (u16)(app->page * MAILBOX_MAIL_PER_PAGE);
     u16 cell = 0;
     u8 *mailOrder = app->data->mailOrder + first;
@@ -579,12 +577,12 @@ void MailboxApp_DrawPage(MailboxApp *app) {
     }
 }
 
-void MailboxApp_DrawSelectedNameplate(MailboxApp *app) {
+static void MailboxApp_DrawSelectedNameplate(MailboxApp *app) {
     MailboxApp_DrawNameplate(app, MAILBOX_CELL_SELECTED, 20, app->selectedMail);
     BgCellManager_DrawCellAt(app->data->cellManager, MAILBOX_CELL_SELECTED, 4, 7);
 }
 
-BOOL MailboxApp_RunPaletteFlash(MailboxApp *app) {
+static BOOL MailboxApp_RunPaletteFlash(MailboxApp *app) {
     MailboxAppPaletteFlash *flash = &app->data->flash;
 
     switch (flash->state) {
@@ -620,7 +618,7 @@ BOOL MailboxApp_RunPaletteFlash(MailboxApp *app) {
     return TRUE;
 }
 
-void MailboxApp_LoadStationeryGfx(MailboxApp *app) {
+static void MailboxApp_LoadStationeryGfx(MailboxApp *app) {
     NARC *narc = NARC_New(NARC_a_0_7_9, HEAP_ID_157);
     u32 mailType = Mail_GetType(app->data->mail[app->selectedMail]);
 
@@ -630,14 +628,14 @@ void MailboxApp_LoadStationeryGfx(MailboxApp *app) {
     NARC_Delete(narc);
 }
 
-u32 MailboxApp_GetMailMenuItemCount(MailboxApp *app) {
+static u32 MailboxApp_GetMailMenuItemCount(MailboxApp *app) {
     if (Party_GetCount(SaveArray_Party_Get(app->args->saveData)) > 0) {
         return 4;
     }
     return 2;
 }
 
-BOOL MailboxApp_RunState(MailboxApp *app, int *state) {
+static BOOL MailboxApp_RunState(MailboxApp *app, int *state) {
     *state = gMailboxStateFuncs[*state](app);
     if (*state == MAILBOX_STATE_FINISHED) {
         return FALSE;
@@ -971,31 +969,31 @@ int MailboxApp_ReturnToMailList(MailboxApp *app) {
     return MAILBOX_STATE_SELECT_MAIL;
 }
 
-int MailboxApp_StartFadeIn(MailboxApp *app, int nextState) {
+static int MailboxApp_StartFadeIn(MailboxApp *app, int nextState) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_157);
     app->data->stateAfterFade = nextState;
     return MAILBOX_STATE_WAIT_FADE;
 }
 
-int MailboxApp_StartFadeOut(MailboxApp *app, int nextState) {
+static int MailboxApp_StartFadeOut(MailboxApp *app, int nextState) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_157);
     app->data->stateAfterFade = nextState;
     return MAILBOX_STATE_WAIT_FADE;
 }
 
-int MailboxApp_WaitForText(MailboxApp *app, u8 waitForInput, int nextState) {
+static int MailboxApp_WaitForText(MailboxApp *app, u8 waitForInput, int nextState) {
     app->data->waitForInput = waitForInput;
     app->nextState = nextState;
     return MAILBOX_STATE_WAIT_TEXT;
 }
 
-int MailboxApp_AskYesNo(MailboxApp *app, u32 question) {
+static int MailboxApp_AskYesNo(MailboxApp *app, u32 question) {
     app->data->yesNoQuestion = question;
     MailboxApp_ShowYesNoPrompt(app);
     return MAILBOX_STATE_YES_NO;
 }
 
-int MailboxApp_StartCellFlash(MailboxApp *app, int cell, int nextState) {
+static int MailboxApp_StartCellFlash(MailboxApp *app, int cell, int nextState) {
     u16 width;
     u16 height;
     s8 pos[2];
@@ -1018,7 +1016,7 @@ int MailboxApp_StartCellFlash(MailboxApp *app, int cell, int nextState) {
     return MAILBOX_STATE_PALETTE_FLASH;
 }
 
-int MailboxApp_StartSpriteFlash(MailboxApp *app, int sprite, int nextState) {
+static int MailboxApp_StartSpriteFlash(MailboxApp *app, int sprite, int nextState) {
     MailboxAppPaletteFlash *flash = &app->data->flash;
 
     flash->isBg = FALSE;
@@ -1031,7 +1029,7 @@ int MailboxApp_StartSpriteFlash(MailboxApp *app, int sprite, int nextState) {
     return MAILBOX_STATE_PALETTE_FLASH;
 }
 
-void MailboxAppData_SetListDimmed(MailboxAppData *data, BOOL enable) {
+static void MailboxAppData_SetListDimmed(MailboxAppData *data, BOOL enable) {
     if (enable == TRUE) {
         MailboxAppData_SetSpriteTranslucent(data, 0, TRUE);
         MailboxAppData_SetSpriteTranslucent(data, 1, TRUE);
@@ -1043,13 +1041,13 @@ void MailboxAppData_SetListDimmed(MailboxAppData *data, BOOL enable) {
     }
 }
 
-void MailboxApp_ShowMail(MailboxApp *app) {
+static void MailboxApp_ShowMail(MailboxApp *app) {
     MailboxApp_LoadStationeryGfx(app);
     MailboxApp_PrintMail(app);
     MailboxApp_ShowMailMonIcons(app);
 }
 
-void MailboxApp_HideMail(MailboxApp *app) {
+static void MailboxApp_HideMail(MailboxApp *app) {
     MailboxAppData_SetSpriteDrawFlag(app->data, 4, FALSE);
     MailboxAppData_SetSpriteDrawFlag(app->data, 5, FALSE);
     MailboxAppData_SetSpriteDrawFlag(app->data, 6, FALSE);
@@ -1057,7 +1055,7 @@ void MailboxApp_HideMail(MailboxApp *app) {
     BgClearTilemapBufferAndCommit(app->data->bgConfig, GF_BG_LYR_SUB_1);
 }
 
-void MailboxApp_PutMailInBag(MailboxApp *app) {
+static void MailboxApp_PutMailInBag(MailboxApp *app) {
     Bag *bag = Save_Bag_Get(app->args->saveData);
 
     app->itemId = MailToItemId(Mail_GetType(app->data->mail[app->selectedMail]));
@@ -1068,11 +1066,11 @@ void MailboxApp_PutMailInBag(MailboxApp *app) {
     }
 }
 
-void MailboxApp_DeleteSelectedMail(MailboxApp *app) {
+static void MailboxApp_DeleteSelectedMail(MailboxApp *app) {
     Mailbox_DeleteSlotI(app->mailbox->msgs, 0, app->selectedMail);
 }
 
-void MailboxApp_CreatePartyMenuArgs(MailboxApp *app, u8 context, u16 itemId, u8 partySlot) {
+static void MailboxApp_CreatePartyMenuArgs(MailboxApp *app, u8 context, u16 itemId, u8 partySlot) {
     PartyMenuArgs *args = Heap_Alloc(HEAP_ID_156, sizeof(PartyMenuArgs));
 
     MI_CpuFill8(args, 0, sizeof(PartyMenuArgs));
@@ -1175,7 +1173,7 @@ int MailboxApp_PrintMailToBagResult(MailboxApp *app) {
     MailboxApp_WaitForText(app, TRUE, MAILBOX_STATE_RETURN_TO_MAIL_LIST);
 }
 
-void MailboxApp_CreateSprites(MailboxApp *app) {
+static void MailboxApp_CreateSprites(MailboxApp *app) {
     u32 i;
 
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
@@ -1200,13 +1198,13 @@ void MailboxApp_CreateSprites(MailboxApp *app) {
     MailboxAppData_SetSpriteDrawFlag(app->data, 6, FALSE);
 }
 
-void MailboxApp_DeleteSprites(MailboxApp *app) {
+static void MailboxApp_DeleteSprites(MailboxApp *app) {
     MailboxAppData_DeleteAllSprites(app->data);
     MailboxAppData_FreeSpriteSystem(app->data);
     MailboxAppData_CloseMonIconNarc(app->data);
 }
 
-void MailboxAppData_TickSprites(MailboxAppData *data) {
+static void MailboxAppData_TickSprites(MailboxAppData *data) {
     u32 i;
 
     for (i = 0; i < MAILBOX_NUM_SPRITES; i++) {
@@ -1216,7 +1214,7 @@ void MailboxAppData_TickSprites(MailboxAppData *data) {
     }
 }
 
-void MailboxAppData_InitSpriteSystem(MailboxAppData *data) {
+static void MailboxAppData_InitSpriteSystem(MailboxAppData *data) {
     OamManagerParam oamManagerParam;
     OamCharTransferParam oamCharTransferParam;
     SpriteResourceCountsListUnion resourceCounts;
@@ -1232,26 +1230,26 @@ void MailboxAppData_InitSpriteSystem(MailboxAppData *data) {
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(data->spriteSystem), 0, FX32_CONST(512));
 }
 
-void MailboxAppData_FreeSpriteSystem(MailboxAppData *data) {
+static void MailboxAppData_FreeSpriteSystem(MailboxAppData *data) {
     SpriteSystem_FreeResourcesAndManager(data->spriteSystem, data->spriteManager);
     SpriteSystem_Free(data->spriteSystem);
 }
 
-ManagedSprite *MailboxAppData_NewSprite(MailboxAppData *data, const ManagedSpriteTemplate *template) {
+static ManagedSprite *MailboxAppData_NewSprite(MailboxAppData *data, const ManagedSpriteTemplate *template) {
     if (template->vram == NNS_G2D_VRAM_TYPE_2DMAIN) {
         return SpriteSystem_NewSprite(data->spriteSystem, data->spriteManager, template);
     }
     return SpriteSystem_NewSpriteWithYOffset(data->spriteSystem, data->spriteManager, template, FX32_CONST(512));
 }
 
-void MailboxAppData_DeleteSprite(MailboxAppData *data, u32 index) {
+static void MailboxAppData_DeleteSprite(MailboxAppData *data, u32 index) {
     if (data->sprites[index] != NULL) {
         Sprite_DeleteAndFreeResources(data->sprites[index]);
         data->sprites[index] = NULL;
     }
 }
 
-void MailboxAppData_DeleteAllSprites(MailboxAppData *data) {
+static void MailboxAppData_DeleteAllSprites(MailboxAppData *data) {
     u32 i;
 
     for (i = 0; i < MAILBOX_NUM_SPRITES; i++) {
@@ -1259,12 +1257,12 @@ void MailboxAppData_DeleteAllSprites(MailboxAppData *data) {
     }
 }
 
-void MailboxAppData_SetSpriteAnim(MailboxAppData *data, u32 index, u32 anim) {
+static void MailboxAppData_SetSpriteAnim(MailboxAppData *data, u32 index, u32 anim) {
     ManagedSprite_SetAnimationFrame(data->sprites[index], 0);
     ManagedSprite_SetAnim(data->sprites[index], anim);
 }
 
-void MailboxAppData_SetSpriteDrawFlag(MailboxAppData *data, u32 index, BOOL draw) {
+static void MailboxAppData_SetSpriteDrawFlag(MailboxAppData *data, u32 index, BOOL draw) {
     if (draw == TRUE) {
         ManagedSprite_SetDrawFlag(data->sprites[index], TRUE);
     } else {
@@ -1272,11 +1270,11 @@ void MailboxAppData_SetSpriteDrawFlag(MailboxAppData *data, u32 index, BOOL draw
     }
 }
 
-void MailboxAppData_SetSpritePosition(MailboxAppData *data, u32 index, s16 x, s16 y) {
+static void MailboxAppData_SetSpritePosition(MailboxAppData *data, u32 index, s16 x, s16 y) {
     ManagedSprite_SetPositionXY(data->sprites[index], x, y);
 }
 
-void MailboxAppData_SetSpriteTranslucent(MailboxAppData *data, u32 index, BOOL blend) {
+static void MailboxAppData_SetSpriteTranslucent(MailboxAppData *data, u32 index, BOOL blend) {
     if (blend == TRUE) {
         ManagedSprite_SetOamMode(data->sprites[index], GX_OAM_MODE_XLU);
     } else {
@@ -1284,15 +1282,15 @@ void MailboxAppData_SetSpriteTranslucent(MailboxAppData *data, u32 index, BOOL b
     }
 }
 
-void MailboxAppData_OpenMonIconNarc(MailboxAppData *data) {
+static void MailboxAppData_OpenMonIconNarc(MailboxAppData *data) {
     data->monIconNarc = NARC_New(NARC_poketool_icongra_poke_icon, HEAP_ID_157);
 }
 
-void MailboxAppData_CloseMonIconNarc(MailboxAppData *data) {
+static void MailboxAppData_CloseMonIconNarc(MailboxAppData *data) {
     NARC_Delete(data->monIconNarc);
 }
 
-void MailboxAppData_LoadMonIconResources(MailboxAppData *data) {
+static void MailboxAppData_LoadMonIconResources(MailboxAppData *data) {
     u32 resId;
 
     for (resId = 0x37F0; resId <= 0x37F2; resId++) {
@@ -1304,7 +1302,7 @@ void MailboxAppData_LoadMonIconResources(MailboxAppData *data) {
 }
 
 // Shows the icons of the (up to three) Pokemon the mail's author attached.
-void MailboxApp_ShowMailMonIcons(MailboxApp *app) {
+static void MailboxApp_ShowMailMonIcons(MailboxApp *app) {
     union {
         u16 raw;
         struct {
@@ -1335,7 +1333,7 @@ void MailboxApp_ShowMailMonIcons(MailboxApp *app) {
     }
 }
 
-void MailboxAppData_LoadSpriteResources(MailboxAppData *data) {
+static void MailboxAppData_LoadSpriteResources(MailboxAppData *data) {
     NARC *narc = NARC_New(NARC_a_2_5_0, HEAP_ID_157);
 
     SpriteSystem_LoadCharResObjFromOpenNarc(data->spriteSystem, data->spriteManager, narc, 7, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, 0x37F3);
@@ -1345,12 +1343,12 @@ void MailboxAppData_LoadSpriteResources(MailboxAppData *data) {
     NARC_Delete(narc);
 }
 
-void MailboxAppData_MoveCursorToCloseButton(MailboxAppData *data) {
+static void MailboxAppData_MoveCursorToCloseButton(MailboxAppData *data) {
     MailboxAppData_SetSpritePosition(data, 2, 224, 176);
     MailboxAppData_SetSpriteAnim(data, 2, 4);
 }
 
-void MailboxApp_AddWindows(MailboxApp *app) {
+static void MailboxApp_AddWindows(MailboxApp *app) {
     u32 i;
 
     FontID_Alloc(4, HEAP_ID_157);
@@ -1359,7 +1357,7 @@ void MailboxApp_AddWindows(MailboxApp *app) {
     }
 }
 
-void MailboxApp_RemoveWindows(MailboxApp *app) {
+static void MailboxApp_RemoveWindows(MailboxApp *app) {
     u32 i;
 
     for (i = 0; i < MAILBOX_NUM_WINDOWS; i++) {
@@ -1369,7 +1367,7 @@ void MailboxApp_RemoveWindows(MailboxApp *app) {
 }
 
 // align: 0 left, 1 right, 2 centred on x
-void MailboxApp_PrintString(Window *window, String *string, u32 x, u32 y, u32 fontId, u32 color, u32 align) {
+static void MailboxApp_PrintString(Window *window, String *string, u32 x, u32 y, u32 fontId, u32 color, u32 align) {
     if (align == 1) {
         x -= FontID_String_GetWidth(fontId, string, 0);
     } else if (align == 2) {
@@ -1378,14 +1376,14 @@ void MailboxApp_PrintString(Window *window, String *string, u32 x, u32 y, u32 fo
     AddTextPrinterParameterizedWithColor(window, fontId, string, x, y, 0xFF, color, NULL);
 }
 
-void MailboxAppData_PrintMsg(MailboxAppData *data, MsgData *msgData, u32 windowId, u32 msgId, u32 x, u32 y, u32 fontId, u32 color, u32 align) {
+static void MailboxAppData_PrintMsg(MailboxAppData *data, MsgData *msgData, u32 windowId, u32 msgId, u32 x, u32 y, u32 fontId, u32 color, u32 align) {
     String *string = NewString_ReadMsgData(msgData, msgId);
     MailboxApp_PrintString(&data->windows[windowId], string, x, y, fontId, color, align);
     String_Delete(string);
 }
 
 // Draws a name plate (author name on the plate tiles) into a window and puts it into a cell.
-void MailboxApp_DrawNameplate(MailboxApp *app, u32 cell, u32 windowId, u32 mailIdx) {
+static void MailboxApp_DrawNameplate(MailboxApp *app, u32 cell, u32 windowId, u32 mailIdx) {
     Window *window = &app->data->windows[windowId];
     Mail *mail = app->data->mail[mailIdx];
     u32 i;
@@ -1407,7 +1405,7 @@ void MailboxApp_DrawNameplate(MailboxApp *app, u32 cell, u32 windowId, u32 mailI
     BgCellManager_PutWindowTiles(app->data->cellManager, cell, window);
 }
 
-void MailboxApp_PrintTitleAndButtons(MailboxApp *app) {
+static void MailboxApp_PrintTitleAndButtons(MailboxApp *app) {
     FillWindowPixelBuffer(&app->data->windows[MAILBOX_WIN_TITLE], 0);
     MailboxAppData_PrintMsg(app->data, app->data->msgData, MAILBOX_WIN_TITLE, msg_0232_00000, 44, 0, 0, 0x10200, 2);
     ScheduleWindowCopyToVram(&app->data->windows[MAILBOX_WIN_TITLE]);
@@ -1418,18 +1416,18 @@ void MailboxApp_PrintTitleAndButtons(MailboxApp *app) {
     MailboxAppData_PrintMsg(app->data, app->data->msgData, MAILBOX_WIN_CLOSE, msg_0232_00004, 24, 0, 4, 0xF0100, 2);
 }
 
-void MailboxAppData_ShowCloseButton(MailboxAppData *data) {
+static void MailboxAppData_ShowCloseButton(MailboxAppData *data) {
     ClearWindowTilemapAndScheduleTransfer(&data->windows[MAILBOX_WIN_CANCEL]);
     ScheduleWindowCopyToVram(&data->windows[MAILBOX_WIN_CLOSE]);
 }
 
-void MailboxAppData_ShowCancelButton(MailboxAppData *data) {
+static void MailboxAppData_ShowCancelButton(MailboxAppData *data) {
     ClearWindowTilemapAndScheduleTransfer(&data->windows[MAILBOX_WIN_CLOSE]);
     ScheduleWindowCopyToVram(&data->windows[MAILBOX_WIN_CANCEL]);
 }
 
 // "page / last page"
-void MailboxApp_PrintPageNumber(MailboxApp *app) {
+static void MailboxApp_PrintPageNumber(MailboxApp *app) {
     String *template;
     u16 slashWidth;
     u16 pageWidth;
@@ -1452,7 +1450,7 @@ void MailboxApp_PrintPageNumber(MailboxApp *app) {
     ScheduleWindowCopyToVram(&app->data->windows[MAILBOX_WIN_PAGE]);
 }
 
-void MailboxApp_BufferAuthorName(MailboxApp *app, u32 unused) {
+static void MailboxApp_BufferAuthorName(MailboxApp *app, u32 unused) {
     Mail *mail = app->data->mail[app->selectedMail];
     String *name = String_New(8, HEAP_ID_157);
 
@@ -1465,9 +1463,8 @@ static inline u32 MailboxAppData_GetMessageWindowOffset(void) {
     return offsetof(MailboxAppData, windows[MAILBOX_WIN_MESSAGE]);
 }
 
-void MailboxApp_PrintMessageBox(MailboxApp *app) {
-    // Matching quirk: the window, the string and the printer id are addressed relative to the message
-    // window's offset, which must not be folded into the member offsets at compile time.
+static void MailboxApp_PrintMessageBox(MailboxApp *app) {
+    // The window, its string and the printer id are all reached through the message window's offset.
     MailboxAppData *data = app->data;
     u32 offset = MailboxAppData_GetMessageWindowOffset();
 
@@ -1475,7 +1472,7 @@ void MailboxApp_PrintMessageBox(MailboxApp *app) {
     *(u8 *)((u32)app->data + offset + (offsetof(MailboxAppData, printerId) - offsetof(MailboxAppData, windows[MAILBOX_WIN_MESSAGE]))) = AddTextPrinterParameterizedWithColor((Window *)((u32)data + offset), 1, *(String **)((u32)app->data + offset + (offsetof(MailboxAppData, string) - offsetof(MailboxAppData, windows[MAILBOX_WIN_MESSAGE]))), 0, 0, Options_GetTextFrameDelay(app->options), 0x1020F, NULL);
 }
 
-void MailboxApp_PrintMailPrompt(MailboxApp *app) {
+static void MailboxApp_PrintMailPrompt(MailboxApp *app) {
     String *template;
 
     MailboxApp_BufferAuthorName(app, 0);
@@ -1485,17 +1482,17 @@ void MailboxApp_PrintMailPrompt(MailboxApp *app) {
     MailboxApp_PrintMessageBox(app);
 }
 
-void MailboxApp_DrawMessageBox(MailboxApp *app) {
+static void MailboxApp_DrawMessageBox(MailboxApp *app) {
     DrawFrameAndWindow2(&app->data->windows[MAILBOX_WIN_MESSAGE], TRUE, 0x3E2, 13);
     ScheduleWindowCopyToVram(&app->data->windows[MAILBOX_WIN_MESSAGE]);
 }
 
-void MailboxApp_ClearMessageBox(MailboxApp *app) {
+static void MailboxApp_ClearMessageBox(MailboxApp *app) {
     ClearFrameAndWindow2(&app->data->windows[MAILBOX_WIN_MESSAGE], TRUE);
     ScheduleBgTilemapBufferTransfer(app->data->bgConfig, GF_BG_LYR_MAIN_0);
 }
 
-void MailboxApp_PrintMessage(MailboxApp *app, u32 message) {
+static void MailboxApp_PrintMessage(MailboxApp *app, u32 message) {
     switch (message) {
     case 0:
         ReadMsgDataIntoString(app->data->msgData, msg_0232_00010, app->data->string);
@@ -1516,7 +1513,7 @@ void MailboxApp_PrintMessage(MailboxApp *app, u32 message) {
     MailboxApp_PrintMessageBox(app);
 }
 
-void MailboxApp_PrintMail(MailboxApp *app) {
+static void MailboxApp_PrintMail(MailboxApp *app) {
     u32 i;
 
     for (i = 0; i < 3; i++) {
@@ -1530,7 +1527,7 @@ void MailboxApp_PrintMail(MailboxApp *app) {
     ScheduleWindowCopyToVram(&app->data->windows[MAILBOX_WIN_AUTHOR]);
 }
 
-void MailboxApp_PrintMailLine(MailboxApp *app, u32 windowId, u32 line) {
+static void MailboxApp_PrintMailLine(MailboxApp *app, u32 windowId, u32 line) {
     MailMessage *message;
     String *string;
     u8 selectedMail = app->selectedMail;
@@ -1545,14 +1542,14 @@ void MailboxApp_PrintMailLine(MailboxApp *app, u32 windowId, u32 line) {
 }
 
 // 0 / 1: the page arrows were touched.
-int MailboxApp_GetTouchedPageArrow(MailboxApp *app) {
+static int MailboxApp_GetTouchedPageArrow(MailboxApp *app) {
     if (app->data->lastPage == 0) {
         return -1;
     }
     return TouchscreenHitbox_FindRectAtTouchNew(gMailboxPageArrowHitboxes);
 }
 
-void MailboxApp_CreateGridInput(MailboxApp *app) {
+static void MailboxApp_CreateGridInput(MailboxApp *app) {
     u32 cursorPos;
 
     if (app->page > app->data->lastPage) {
@@ -1565,7 +1562,7 @@ void MailboxApp_CreateGridInput(MailboxApp *app) {
     MailboxApp_MoveCursor(app, cursorPos);
 }
 
-void MailboxApp_FreeGridInput(MailboxApp *app) {
+static void MailboxApp_FreeGridInput(MailboxApp *app) {
     GridInputHandler_Free(app->data->gridInput);
 }
 
@@ -1583,7 +1580,7 @@ void MailboxApp_GridOnTouch(MailboxApp *app, u32 input) {
     MailboxApp_MoveCursor(app, input);
 }
 
-void MailboxApp_MoveCursor(MailboxApp *app, u32 input) {
+static void MailboxApp_MoveCursor(MailboxApp *app, u32 input) {
     const DpadMenuBox *box = GridInputHandler_GetDpadBox(app->data->gridInput, input);
 
     MailboxAppData_SetSpritePosition(app->data, 2, box->left, box->top);
@@ -1595,7 +1592,7 @@ void MailboxApp_MoveCursor(MailboxApp *app, u32 input) {
 }
 
 // The mail being read is closed by touching the CLOSE button or pressing A or B.
-BOOL MailboxApp_IsCloseMailInput(void) {
+static BOOL MailboxApp_IsCloseMailInput(void) {
     if (TouchscreenHitbox_FindRectAtTouchNew(gMailboxCloseMailHitboxes) != -1) {
         return TRUE;
     }

@@ -28,6 +28,9 @@ extern const VsRecorderListConfig sVsRecorderBoxListConfig; // box list
 #define BOX_DATA_VIEW_BOX_LIST_MAIN   5
 #define BOX_DATA_VIEW_BOX_MAIN        10
 
+static void VsRecorder_CreateBoxListItems(VsRecorderWork *work);
+static void VsRecorder_FreeBoxListItems(VsRecorderWork *work);
+
 // view screen, substate 4: receive the boxes of the chosen category
 BOOL VsRecorder_BoxDataViewDownload(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
@@ -173,7 +176,7 @@ BOOL VsRecorder_BoxDataViewDownload(VsRecorderWork *work) {
 }
 
 // box list rows: box name and sender's name
-void VsRecorder_CreateBoxListItems(VsRecorderWork *work) {
+static void VsRecorder_CreateBoxListItems(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
     int i;
 
@@ -186,7 +189,7 @@ void VsRecorder_CreateBoxListItems(VsRecorderWork *work) {
     }
 }
 
-void VsRecorder_FreeBoxListItems(VsRecorderWork *work) {
+static void VsRecorder_FreeBoxListItems(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
     int i;
     String *str;

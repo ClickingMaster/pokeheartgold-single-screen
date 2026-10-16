@@ -4,14 +4,14 @@
 
 #include "application/pokedex/pokedex_internal.h"
 
+#include "dpad_menu_box.h"
+#include "grid_input_handler.h"
 #include "menu_input_state.h"
 #include "pokedex.h"
 #include "sound_playback.h"
 #include "sprite_system.h"
 #include "system.h"
 #include "touchscreen.h"
-#include "grid_input_handler.h"
-#include "dpad_menu_box.h"
 
 extern const TouchscreenHitbox sPokedexListMenuHitboxes[];
 extern const int sPokedexListMenuHitResults[];
@@ -312,7 +312,6 @@ void PokedexApp_UpdateSearchNameCursor(PokedexAppData *pokedexApp, int target) {
     }
 }
 
-// These calls were compiled against a prototype with u8 inputs (the arguments are narrowed once).
 typedef void (*GridSetInputsU8Func)(GridInputHandler *inputHandler, u8 nextInput, u8 lastInput, u8 unk0F);
 
 // Moving up or down from OK / cancel lands in the letter column the cursor left from.

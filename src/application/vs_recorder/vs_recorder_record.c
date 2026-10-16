@@ -11,8 +11,8 @@
 #include "save_arrays.h"
 #include "system.h"
 
-// gBattleRecord->header (0x84): type at 0x26, sealed flag at 0x27, magic at 0x48, video number at 0x58,
-// CRC of the first 0x58 bytes at 0x60. gBattleRecord->data (0xE8) is encrypted with its CRC (at 0x1C64) as seed.
+// Battle record header fields: the sealed flag, the magic and the video number, then the CRC of everything before it.
+// The record data is encrypted with its own CRC as seed.
 #define RECORD_HEADER_SEALED  0x27
 #define RECORD_HEADER_MAGIC   0x48
 #define RECORD_HEADER_NUMBER  0x58

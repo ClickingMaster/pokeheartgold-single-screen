@@ -6,14 +6,12 @@
 #include "msgdata.h"
 #include "pm_string.h"
 
-// Species name / category / flavor text strings, src/application/pokedex/pokedex_species_text.c. Its definitions take
-// a u16 species, but every caller was compiled against a 32-bit species (no narrowing at the call), so they are
-// declared that way here; the definition file has its own prototypes.
+// Species name / category / flavor text strings.
 String *PokedexApp_GetSpeciesNameString(u32 species, int language, enum HeapID heapId);
 String *PokedexApp_GetCategoryString(u32 species, int language, enum HeapID heapId);
 String *PokedexApp_GetFlavorTextString(u32 species, int language, int a2, enum HeapID heapId);
 
-// footprint graphics, src/poketool/pokefoot.c (which has no header)
+// footprint graphics
 NarcId Pokefoot_GetNarcId(void);
 int Pokefoot_GetCharFileId(int species);
 int Pokefoot_GetPlttFileId(void);

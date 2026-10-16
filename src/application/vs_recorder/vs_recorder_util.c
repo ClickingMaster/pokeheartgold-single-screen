@@ -21,6 +21,12 @@
 extern const TouchscreenHitbox sVsRecorderTouchScrollLeftHitbox[];
 extern const TouchscreenHitbox sVsRecorderTouchScrollRightHitbox[];
 
+static ManagedSprite *VsRecorder_NewScrollSprite(void *unused, VsRecorderWork *work, NNS_G2D_VRAM_TYPE vram, int anim);
+static void VsRecorder_DeleteTouchScrollSprites(VsRecorderTouchScroll *scroll);
+static void VsRecorder_TouchScrollTrack(VsRecorderTouchScroll *scroll, int y);
+static void VsRecorder_FlipScreensTask(SysTask *task, void *data);
+static void VsRecorder_VBlankTask(SysTask *task, void *data);
+
 void WirelessStatusIcon_Refresh(void);
 
 void VsRecorder_RemoveListWindow(VsRecorderListWindow *list) {
@@ -85,7 +91,6 @@ void VsRecorder_CreateListArrows(VsRecorderListWindow *list, VsRecorderWork *wor
 #pragma force_active reset
 
 void VsRecorder_SetListArrowsY(VsRecorderListWindow *list, int upY, int downY) {
-    // the positions are passed without s16 truncation
     ((void (*)(ManagedSprite *, int, int))ManagedSprite_SetPositionXY)(list->arrows[0], 0x80, upY);
     ((void (*)(ManagedSprite *, int, int))ManagedSprite_SetPositionXY)(list->arrows[1], 0x80, downY);
 }
@@ -130,7 +135,7 @@ void VsRecorder_FreeListArrows(VsRecorderListWindow *list, VsRecorderWork *work)
     Sprite_DeleteAndFreeResources(list->arrows[1]);
 }
 
-ManagedSprite *VsRecorder_NewScrollSprite(void *unused, VsRecorderWork *work, NNS_G2D_VRAM_TYPE vram, int anim) {
+static ManagedSprite *VsRecorder_NewScrollSprite(void *unused, VsRecorderWork *work, NNS_G2D_VRAM_TYPE vram, int anim) {
     ManagedSpriteTemplate template;
     ManagedSprite *sprite;
 
@@ -160,7 +165,7 @@ ManagedSprite *VsRecorder_NewScrollSprite(void *unused, VsRecorderWork *work, NN
     return sprite;
 }
 
-void VsRecorder_DeleteTouchScrollSprites(VsRecorderTouchScroll *scroll) {
+static void VsRecorder_DeleteTouchScrollSprites(VsRecorderTouchScroll *scroll) {
     Sprite_DeleteAndFreeResources(scroll->sprites[0]);
     Sprite_DeleteAndFreeResources(scroll->sprites[1]);
 }
@@ -189,7 +194,7 @@ void VsRecorder_FreeTouchScroll(VsRecorderTouchScroll *scroll) {
 }
 
 // direction of a drag that moved 16 pixels or more
-void VsRecorder_TouchScrollTrack(VsRecorderTouchScroll *scroll, int y) {
+static void VsRecorder_TouchScrollTrack(VsRecorderTouchScroll *scroll, int y) {
     int delta = y - scroll->lastY;
     if (delta * delta >= 0x100) {
         scroll->direction = delta < 0 ? -1 : 1;
@@ -268,7 +273,7 @@ void VsRecorder_ImportBattleRecord(VsRecorderWork *work) {
     BattleRecord_Import(video, video + 0x80, video + 0xE4, NULL, work->saveData);
 }
 
-void VsRecorder_FlipScreensTask(SysTask *task, void *data) {
+static void VsRecorder_FlipScreensTask(SysTask *task, void *data) {
     VsRecorderFlipArgs *args = data;
     VsRecorder_SetScreensFlipped(args->flipped);
     WirelessStatusIcon_Refresh();
@@ -286,7 +291,7 @@ u32 VsRecorder_IsFlipScreensDone(VsRecorderWork *work) {
     return work->flipArgs.done;
 }
 
-void VsRecorder_VBlankTask(SysTask *task, void *data) {
+static void VsRecorder_VBlankTask(SysTask *task, void *data) {
     VsRecorderWork *work = data;
     if (work->spriteManager == NULL) {
         return;

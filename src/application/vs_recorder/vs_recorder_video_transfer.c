@@ -33,7 +33,6 @@ typedef struct VsRecorderSlotButtonTable {
     int values[4];
 } VsRecorderSlotButtonTable;
 
-// asm/vs_recorder_data.s
 extern const VsRecorderSlotButtonTable sVsRecorderSearchSlotMsgIds;
 extern const VsRecorderSlotButtonTable sVsRecorderSearchSlotAnims;
 extern const TouchscreenHitbox sVsRecorderSearchSaveSlotHitboxes[4];
@@ -84,6 +83,20 @@ extern const TouchscreenHitbox sVsRecorderSearchDetailHitboxes[4];
 // substates of sending the own video (sVsRecorderSendVideoSubStates)
 #define SEND_VIDEO_UPLOAD 3
 #define SEND_VIDEO_EXIT   4
+
+static void VsRecorder_LoadFoundVideoDetails(VsRecorderWork *work);
+static void VsRecorder_SetSearchSlotButtonName(VsRecorderTextSprite *button, VsRecorderWork *work, int slot);
+static void VsRecorder_ShowSearchMessage(VsRecorderWork *work, int msgId, int unused);
+static void VsRecorder_PrintSearchMessage(VsRecorderWork *work, int msgId, int slot);
+static void VsRecorder_PrintSearchDetailsButtonLabel(VsRecorderWork *work, int msgId);
+static void VsRecorder_CreateSearchOverwriteWindows(VsRecorderWork *work);
+static void VsRecorder_RemoveSearchOverwriteWindows(VsRecorderWork *work);
+static void VsRecorder_OnNumberSearchDetailsTouch(u32 index, u32 event, void *arg);
+static void VsRecorder_OnNumberSearchSlotTouch(u32 index, u32 event, void *arg);
+static void VsRecorder_OnNumberSearchOverwriteTouch(u32 index, u32 event, void *arg);
+static void VsRecorder_SetNumberPadButtonsMode(VsRecorderWork *work, int backOnly);
+static void VsRecorder_CreateNumberPadButtons(VsRecorderWork *work);
+static void VsRecorder_FreeNumberPadButtons(VsRecorderWork *work);
 
 // download the chosen result's video, then go on to search->nextSubState
 BOOL VsRecorder_VideoSearchDownloadVideo(VsRecorderWork *work) {
@@ -504,7 +517,7 @@ BOOL VsRecorder_NumberSearchDownloadVideo(VsRecorderWork *work) {
 }
 
 // owner's profile and battle header of the video found by number
-void VsRecorder_LoadFoundVideoDetails(VsRecorderWork *work) {
+static void VsRecorder_LoadFoundVideoDetails(VsRecorderWork *work) {
     VsRecorderVideoSearch *search = work->screenWork;
 
     search->profile.card = FrontierCard_New(HEAP_ID_109);
@@ -684,7 +697,7 @@ BOOL VsRecorder_NumberSearchExitDetails(VsRecorderWork *work) {
 #pragma force_active on
 
 // slot button label: the owner of the video saved there, or empty
-void VsRecorder_SetSearchSlotButtonName(VsRecorderTextSprite *button, VsRecorderWork *work, int slot) {
+static void VsRecorder_SetSearchSlotButtonName(VsRecorderTextSprite *button, VsRecorderWork *work, int slot) {
     Window window;
     String *text;
     MsgData *msgData = work->msgData;
@@ -715,7 +728,7 @@ void VsRecorder_SetSearchSlotButtonName(VsRecorderTextSprite *button, VsRecorder
 #pragma force_active reset
 
 // message window over the details (main screen BG 2); msg 0x64 names the video's owner
-void VsRecorder_ShowSearchMessage(VsRecorderWork *work, int msgId, int unused) {
+static void VsRecorder_ShowSearchMessage(VsRecorderWork *work, int msgId, int unused) {
     Window *window = &work->messageWindow;
     VsRecorderVideoSearch *search = work->screenWork;
     String *str;
@@ -749,7 +762,7 @@ void VsRecorder_ShowSearchMessage(VsRecorderWork *work, int msgId, int unused) {
 }
 
 // message window; msg 0x64 names the video's owner, msg 0x66 the owner of the video in slot
-void VsRecorder_PrintSearchMessage(VsRecorderWork *work, int msgId, int slot) {
+static void VsRecorder_PrintSearchMessage(VsRecorderWork *work, int msgId, int slot) {
     Window *window = &work->messageWindow;
     VsRecorderVideoSearch *search = work->screenWork;
     String *str;
@@ -1187,7 +1200,7 @@ void VsRecorder_RemoveSearchDetailsButtonWindow(VsRecorderWork *work) {
     RemoveWindow(&search->buttonWindows[0]);
 }
 
-void VsRecorder_PrintSearchDetailsButtonLabel(VsRecorderWork *work, int msgId) {
+static void VsRecorder_PrintSearchDetailsButtonLabel(VsRecorderWork *work, int msgId) {
     VsRecorderVideoSearch *search = work->screenWork;
     Window *window = &search->buttonWindows[0];
     String *str;
@@ -1210,7 +1223,7 @@ void VsRecorder_CreateSearchDetailsButtonWindow(VsRecorderWork *work) {
 }
 
 // YES / NO to overwrite a saved video
-void VsRecorder_CreateSearchOverwriteWindows(VsRecorderWork *work) {
+static void VsRecorder_CreateSearchOverwriteWindows(VsRecorderWork *work) {
     VsRecorderVideoSearch *search = work->screenWork;
     Window *window = &search->buttonWindows[0];
     String *str;
@@ -1232,7 +1245,7 @@ void VsRecorder_CreateSearchOverwriteWindows(VsRecorderWork *work) {
     ScheduleWindowCopyToVram(window);
 }
 
-void VsRecorder_RemoveSearchOverwriteWindows(VsRecorderWork *work) {
+static void VsRecorder_RemoveSearchOverwriteWindows(VsRecorderWork *work) {
     VsRecorderVideoSearch *search = work->screenWork;
 
     ClearWindowTilemapAndCopyToVram(&search->buttonWindows[0]);
@@ -1242,7 +1255,7 @@ void VsRecorder_RemoveSearchOverwriteWindows(VsRecorderWork *work) {
 }
 
 // number search details: video info / profile toggle, play, save, back
-void VsRecorder_OnNumberSearchDetailsTouch(u32 index, u32 event, void *arg) {
+static void VsRecorder_OnNumberSearchDetailsTouch(u32 index, u32 event, void *arg) {
     VsRecorderWork *work = arg;
 
     if (event != 0) {
@@ -1269,7 +1282,7 @@ void VsRecorder_OnNumberSearchDetailsTouch(u32 index, u32 event, void *arg) {
 }
 
 // number search slot menu: slots 1-3 (a used slot asks first), cancel
-void VsRecorder_OnNumberSearchSlotTouch(u32 index, u32 event, void *arg) {
+static void VsRecorder_OnNumberSearchSlotTouch(u32 index, u32 event, void *arg) {
     VsRecorderWork *work = arg;
     VsRecorderVideoSearch *search = work->screenWork;
 
@@ -1295,7 +1308,7 @@ void VsRecorder_OnNumberSearchSlotTouch(u32 index, u32 event, void *arg) {
     }
 }
 
-void VsRecorder_OnNumberSearchOverwriteTouch(u32 index, u32 event, void *arg) {
+static void VsRecorder_OnNumberSearchOverwriteTouch(u32 index, u32 event, void *arg) {
     VsRecorderWork *work = arg;
 
     if (event != 0) {
@@ -1468,7 +1481,7 @@ void VsRecorder_OnSearchOverwriteTouch(u32 index, u32 event, void *arg) {
 }
 
 // backOnly: hide the first button and move the second one left
-void VsRecorder_SetNumberPadButtonsMode(VsRecorderWork *work, int backOnly) {
+static void VsRecorder_SetNumberPadButtonsMode(VsRecorderWork *work, int backOnly) {
     VsRecorderVideoSearch *search = work->screenWork;
 
     if (backOnly == FALSE) {
@@ -1485,7 +1498,7 @@ void VsRecorder_SetNumberPadButtonsMode(VsRecorderWork *work, int backOnly) {
 }
 
 // exit and back buttons under the number pad (main screen)
-void VsRecorder_CreateNumberPadButtons(VsRecorderWork *work) {
+static void VsRecorder_CreateNumberPadButtons(VsRecorderWork *work) {
     VsRecorderVideoSearch *search = work->screenWork;
 
     VsRecorder_LoadButtonGfx31(work, NNS_G2D_VRAM_TYPE_2DMAIN);
@@ -1506,7 +1519,7 @@ void VsRecorder_CreateNumberPadButtons(VsRecorderWork *work) {
     VsRecorder_SetNumberPadButtonsMode(work, FALSE);
 }
 
-void VsRecorder_FreeNumberPadButtons(VsRecorderWork *work) {
+static void VsRecorder_FreeNumberPadButtons(VsRecorderWork *work) {
     VsRecorderVideoSearch *search = work->screenWork;
 
     VsRecorder_FreeTextSprite(&search->buttons[0]);

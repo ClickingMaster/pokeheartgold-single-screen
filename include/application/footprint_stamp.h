@@ -7,6 +7,7 @@
 
 #include "bg_window.h"
 #include "camera.h"
+#include "font_sprite.h"
 #include "gf_3d_vramman.h"
 #include "message_format.h"
 #include "msgdata.h"
@@ -15,7 +16,6 @@
 #include "palette.h"
 #include "save.h"
 #include "sprite_system.h"
-#include "font_sprite.h"
 #include "yes_no_prompt.h"
 
 #define FOOTPRINT_STAMP_PARTY_SLOTS   6
@@ -46,7 +46,7 @@ enum FootprintStampEffect {
 
 // Launch args (the lobby's overlay template for OVY_89).
 typedef struct FootprintStampArgs {
-    void *lobby; // ov45 Wi-Fi Plaza lobby state
+    void *lobby;  // ov45 Wi-Fi Plaza lobby state
     u8 boardType; // selects the board model, palettes and ink color column
 } FootprintStampArgs;
 
@@ -61,7 +61,7 @@ typedef struct FootprintStampMon {
     u8 padding;
 } FootprintStampMon;
 
-// Same layout as ModelResource / ModelInstance in src/model_animation.c (no header declares them).
+// A loaded 3D model and its render object.
 typedef struct FootprintStampModel {
     NNSG3dResFileHeader *file;
     NNSG3dResMdlSet *set;
@@ -344,27 +344,16 @@ typedef struct FootprintStamp {
     void *showArceusFootprint;
 } FootprintStamp;
 
-// app (footprint_stamp.c)
+// app
 BOOL FootprintStamp_Init(OverlayManager *man, int *state);
 BOOL FootprintStamp_Main(OverlayManager *man, int *state);
 BOOL FootprintStamp_Exit(OverlayManager *man, int *state);
-void FootprintStamp_MainTask(SysTask *task, void *data);
-void FootprintStamp_VBlank(void *data);
-void FootprintStamp_InitBgs(BgConfig *bgConfig);
-void FootprintStamp_FreeBgs(BgConfig *bgConfig);
-void FootprintStamp_LoadBgGfx(FootprintStamp *work, NARC *narc);
-void FootprintStamp_LoadPartySpriteGfx(FootprintStamp *work, NARC *narc);
-void FootprintStamp_CreatePartySprites(FootprintStamp *work);
-void FootprintStamp_FreePartySprites(FootprintStamp *work);
-void FootprintStamp_LoadPlayerSpriteGfx(FootprintStamp *work, NARC *narc);
 
-// footprint_stamp_sprites.c
 void FootprintStamp_CreatePlayerSprites(FootprintStamp *work);
 
-// screens, party, players, ink, stamp objects (footprint_stamp_board.c)
+// screens, party, players, ink, stamp objects
 void FootprintStamp_FreePlayerSprites(FootprintStamp *work);
 void FootprintStamp_ShowParty(FootprintStamp *work);
-BOOL FootprintStamp_LoadFootprintIcon(int species, int form, ManagedSprite *sprite, NARC *narc, NARC *footprintNarc, int screen, void *unk19E0);
 void FootprintStamp_CreateCamera(FootprintStamp *work);
 void FootprintStamp_FreeCamera(FootprintStamp *work);
 void FootprintStamp_LoadBoardModel(FootprintStamp *work, NARC *narc);
@@ -373,7 +362,6 @@ void FootprintStamp_Draw3D(FootprintStamp *work);
 void FootprintStamp_CreateWindows(FootprintStamp *work);
 void FootprintStamp_FreeWindows(FootprintStamp *work);
 GF3DVramMan *FootprintStamp_Create3DVramMan(enum HeapID heapId);
-void FootprintStamp_Setup3D(void);
 void FootprintStamp_Free3DVramMan(GF3DVramMan *vramMan);
 void FootprintStamp_InitLinkFilter(FootprintStamp *work);
 void FootprintStampMon_InitDummy(void *unused, FootprintStampMon *mon);
@@ -384,45 +372,30 @@ int FootprintStamp_UpdatePlayers(FootprintStamp *work);
 void FootprintStamp_ShowPlayerName(FootprintStamp *work, u32 playerId);
 void FootprintStamp_ClearPlayerName(FootprintStamp *work, u32 index);
 void FootprintStamp_StartSelectEffect(FootprintStamp *work, int slot);
-void FootprintStamp_HighlightPartySlot(FootprintStamp *work, int slot);
 void FootprintStamp_UpdateSelectEffects(FootprintStamp *work);
 void FootprintStamp_CreateTextSprite(FootprintStamp *work, FootprintStampTextSprite *text, String *string, int font, int color, int priority, int plttResId, int x, int y, BOOL centered);
 void FootprintStamp_FreeTextSprite(FootprintStampTextSprite *text);
-void FootprintStamp_GetTextSize(String *string, int font, int *width, int *tiles);
 void FootprintStamp_UpdateInkGauge(FootprintStamp *work);
 BOOL FootprintStamp_UseInk(FootprintStamp *work, fx32 amount);
 void FootprintStamp_UpdateDummy(FootprintStamp *work);
 void FootprintStampBoard_Init(FootprintStampBoard *board, void *unk19E0);
 void FootprintStampBoard_Free(FootprintStampBoard *board);
-BOOL FootprintStampBoard_AddStamp(FootprintStamp *work, FootprintStampBoard *board, const FootprintStampMon *mon, NARC *narc, NARC *footprintNarc, void *unk19E0);
 void FootprintStampBoard_Update(FootprintStampBoard *board, Camera *camera, int phase, u32 inkColumn);
-void FootprintStampBoard_Draw(FootprintStampBoard *board);
 void FootprintStampBoard_ResolveChains(FootprintStampBoard *board);
 void FootprintStampBoard_VBlank(FootprintStampBoard *board, int phase);
-FootprintStampObj *FootprintStampBoard_CreateStamp(FootprintStamp *work, FootprintStampBoard *board, const FootprintStampMon *mon, NARC *narc, NARC *footprintNarc, void *unk19E0);
-BOOL FootprintStamp_LoadStampModel(FootprintStampBoard *board, FootprintStampModel *model, NARC *narc, NARC *footprintNarc, FootprintStampMon *mon, void *unk19E0);
 BOOL FootprintStampBoard_QueueTexture(FootprintStampBoard *board, NNSG3dResTex *texture);
 void FootprintStampBoard_UnqueueTexture(FootprintStampBoard *board, NNSG3dResTex *texture);
-BOOL FootprintStamp_AllocTextureVram(NNSG3dResTex *texture);
 
-// footprint_stamp_texture.c
 void FootprintStamp_DrawFootprintTexture(NNSG3dResTex *texture, NARC *narc, NARC *footprintNarc, FootprintStampMon *mon, u32 unk19E0);
 
-// effects, camera moves, player names, tables, link commands (footprint_stamp_effects.c)
-void FootprintStamp_RotateFootprintTexture(NNSG3dResTex *texture, int direction);
+// effects, camera moves, player names, tables, link commands
 void FootprintStamp_DeleteStamp(FootprintStampObj *stamp);
 void FootprintStampBoard_RemoveStamp(FootprintStampBoard *board, FootprintStampObj *stamp, int slot);
 void FootprintStamp_TouchToBoardPos(void *unused, int x, int y, fx32 *outX, fx32 *outY);
-int FootprintStampBoard_AllocPolygonId(FootprintStampBoard *board);
-void FootprintStampBoard_FreePolygonId(FootprintStampBoard *board, int id);
 void FootprintStamp_GetBounds(FootprintStampModelInstance *instance, FootprintStampMon *mon, FootprintStampBounds *bounds, BOOL scaled);
-BOOL FootprintStamp_BoundsOverlap(const FootprintStampBounds *a, const FootprintStampBounds *b);
-void FootprintStampBoard_NewChain(FootprintStampBoard *board, FootprintStampObj *stamp);
 BOOL FootprintStampBoard_AddToChain(FootprintStampBoard *board, int chain, int effect);
-void FootprintStampBoard_ReleaseChain(FootprintStampBoard *board, int chain);
 void FootprintStampBoard_StartCameraEffect(FootprintStampBoard *board);
 BOOL FootprintStamp_SetEffect(FootprintStampObj *stamp, int effect);
-u8 FootprintStamp_GetNatureEffect(FootprintStampObj *stamp);
 BOOL FootprintStamp_UpdateIdle(FootprintStampBoard *board, FootprintStampObj *stamp);
 BOOL FootprintStamp_HitIdle(void);
 BOOL FootprintStamp_UpdateVanish(FootprintStampBoard *board, FootprintStampObj *stamp);
@@ -466,9 +439,7 @@ void FootprintStamp_ClearPlayerNameWindow(Window *windows, u32 index);
 u16 FootprintStamp_GetInkColor(u32 column, u32 otId);
 u32 FootprintStamp_GetTouchedPartySlot(const FootprintStampMon *party, int current);
 u32 FootprintStamp_GetFootprintType(u32 species, int form, u32 unk19E0);
-u32 FootprintStamp_GetFootprintSize(u32 species, int form);
 int FootprintStamp_RegisterLinkCommands(FootprintStamp *work);
-BOOL FootprintStamp_IsFromOtherPlayer(u32 playerId, const FootprintStampLinkFilter *filter);
 BOOL FootprintStamp_SendStamp(FootprintStampMon *mon);
 void FootprintStamp_HandlePlayerJoined(u32 playerId, void *data, u32 unused, FootprintStamp *work);
 void FootprintStamp_HandlePlayerLeft(u32 playerId, void *data, u32 unused, FootprintStamp *work);

@@ -18,47 +18,7 @@
 	.public gPokemonSummarySpriteTemplates
 	.public gPokemonSummaryBallPalettes
 	.public gPokemonSummaryPartySlotPositions
-	.public PokemonSummary_InitSpriteSystem
-	.public PokemonSummary_FreeSpriteSystem
-	.public PokemonSummary_UpdateSpriteAnims
-	.public PokemonSummary_CreateSprites
-	.public PokemonSummary_UpdatePartySlotSprite
-	.public PokemonSummary_HideSprites0To7And21And22
-	.public PokemonSummary_LoadBallSprite
-	.public PokemonSummary_UpdateStatusSprite
-	.public PokemonSummary_LoadTypeAndIconSprites
-	.public PokemonSummary_UpdateTypeSprites
-	.public PokemonSummary_HidePokeathlonStars
-	.public PokemonSummary_InitShinyLeafSprites
-	.public PokemonSummary_SetPokeathlonStatStars
 	.public PokemonSummary_GetPokeathlonStarStates
-	.public PokemonSummary_UpdatePokeathlonStars
-	.public PokemonSummary_UpdateShinyLeafSprites
-	.public PokemonSummary_SetMonTypeSprites
-	.public PokemonSummary_SetTypeSprite
-	.public PokemonSummary_FindMoveTypeSprite
-	.public PokemonSummary_SwapMoveTypeSprites
-	.public PokemonSummary_SetMoveCategorySprite
-	.public PokemonSummary_UpdateMoveCursorSprite
-	.public PokemonSummary_ShowSwapCursorSprite
-	.public PokemonSummary_ResetSwapCursorSprite
-	.public PokemonSummary_InitSheenSparkles
-	.public PokemonSummary_UpdateMarkingSprites
-	.public PokemonSummary_ShowConditionChangeSprites
-	.public PokemonSummary_LoadMonIcon
-	.public PokemonSummary_LoadShownMonIcon
-	.public PokemonSummary_LoadPartyIcons
-	.public PokemonSummary_SetBoxMonIconPos
-	.public PokemonSummary_AlternateBoxMonIcon
-	.public PokemonSummary_ShowMonIconSprite
-	.public PokemonSummary_GetConditionPoint
-	.public PokemonSummary_ShowConditionSprites
-	.public PokemonSummary_HideConditionSprites
-	.public PokemonSummary_SetRibbonSprite
-	.public PokemonSummary_ShowRibbonSprites
-	.public PokemonSummary_UpdateRibbonSprites
-	.public PokemonSummary_UpdateRibbonCursorSprite
-	.public PokemonSummary_AnimateRibbonSprite66
 	.rodata
 gPokemonSummarySpriteResdatIds:
 	.short 0x0036  // NARC_resdat_resdat_00000054

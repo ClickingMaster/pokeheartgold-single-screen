@@ -6,31 +6,6 @@
 	.public sTouchMartTextSkipHitbox
 	.public sTouchMartButtonSets
 	.public TouchMartApp_Init
-	.public TouchMartApp_PrintCancel
-	.public TouchMartApp_RunTask
-	.public TouchMartApp_HandleAction
-	.public TouchMartApp_LoadMainTilemap
-	.public TouchMartApp_SetupBgs
-	.public TouchMartApp_LoadGraphics
-	.public TouchMartApp_AddWindows
-	.public TouchMartApp_AddItemWindows
-	.public TouchMartApp_PrintItemList
-	.public TouchMartApp_PrintPrice
-	.public TouchMartApp_PrintMoney
-	.public TouchMartApp_PrintPageNumber
-	.public TouchMartApp_EditListTilemap
-	.public TouchMartApp_PrintSelectedItem
-	.public TouchMartApp_PrintInBag
-	.public TouchMartApp_PrintQuantity
-	.public TouchMartApp_PrintHowMany
-	.public TouchMartApp_PrintConfirmPurchase
-	.public TouchMartApp_CreateYesNoPrompt
-	.public TouchMartApp_PrintPurchaseDone
-	.public TouchMartApp_PrintCannotAfford
-	.public TouchMartApp_PrintNoRoom
-	.public TouchMartApp_PrintNoRoomInBag
-	.public TouchMartApp_PrintPremierBallBonus
-	.public TouchMartApp_AddDetailWindows
 	.public sTouchMartQuantityButtons
 	.public sTouchMartItemListButtons
 	.public sTouchMartItemWindowPositions
@@ -38,26 +13,8 @@
 	.public sTouchMartBgTemplate_Sub1
 	.public sTouchMartBgTemplate_Sub2
 	.public sTouchMartListTilemapEdits
-	.public TouchMartApp_SetupText
-	.public TouchMartApp_FreeText
 	.public TouchMartApp_Exit
 	.public TouchMartApp_IsExitDone
-	.public TouchMartApp_IsSelectionValid
-	.public TouchMartApp_GetTouchedButton
-	.public TouchMartApp_FreeWindows
-	.public TouchMartApp_RemoveItemWindows
-	.public TouchMartApp_PrintItemName
-	.public TouchMartApp_LoadListTilemap
-	.public TouchMartApp_IsItemPurchasable
-	.public TouchMartApp_PrintBuyButton
-	.public TouchMartApp_BufferItemName
-	.public TouchMartApp_BufferItemNamePlural
-	.public TouchMartApp_BufferItemNameWithIndefArticle
-	.public TouchMartApp_HandleYesNoPrompt
-	.public TouchMartApp_PurchaseDonePrinterCallback
-	.public TouchMartApp_GetCannotAffordMessage
-	.public TouchMartApp_GetNoRoomMessage
-	.public TouchMartApp_RemoveDetailWindows
 	.rodata
 
 sTouchMartTextSkipHitbox:

@@ -29,19 +29,19 @@ extern const TouchscreenHitbox sPalPadMenuHitboxes[];
 extern const u8 sPalPadMenuRegisterErrorMsgIds[];
 extern const u8 sPalPadMenuItemScreens[];
 
-void PalPadMenu_Show(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx);
-BOOL PalPadMenu_HandleKeys(u32 *selection, u32 *inputState, PalPadGfx *gfx);
-BOOL PalPadMenu_HandleTouch(u32 *selection, u32 *inputState, PalPadGfx *gfx, BOOL *touched);
-BOOL PalPadMenu_HandleInput(u32 *selection, u32 *inputState, PalPadGfx *gfx);
-void PalPadMenu_MoveCursor(u32 *selection, PalPadGfx *gfx);
-void PalPadMenu_HighlightSelection(u32 *selection, PalPadGfx *gfx);
-void PalPadMenu_ClearHighlight(PalPadMenu *menu, PalPadGfx *gfx);
-void PalPadMenu_SetNextScreen(u32 *selection, PalPadShared *shared);
-void PalPadMenu_Hide(PalPadMenu *menu, PalPadGfx *gfx);
-void PalPadMenu_PrintMessage(PalPadMenu *menu, PalPadGfx *gfx, int msgId, enum HeapID heapId);
-BOOL PalPadMenu_IsMessageDone(PalPadMenu *menu, u32 *inputState);
-void PalPadMenu_ClearMessage(PalPadMenu *menu);
-BOOL PalPadMenu_CanSelect(u32 *selection, PalPadShared *shared);
+static void PalPadMenu_Show(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx);
+static BOOL PalPadMenu_HandleKeys(u32 *selection, u32 *inputState, PalPadGfx *gfx);
+static BOOL PalPadMenu_HandleTouch(u32 *selection, u32 *inputState, PalPadGfx *gfx, BOOL *touched);
+static BOOL PalPadMenu_HandleInput(u32 *selection, u32 *inputState, PalPadGfx *gfx);
+static void PalPadMenu_MoveCursor(u32 *selection, PalPadGfx *gfx);
+static void PalPadMenu_HighlightSelection(u32 *selection, PalPadGfx *gfx);
+static void PalPadMenu_ClearHighlight(PalPadMenu *menu, PalPadGfx *gfx);
+static void PalPadMenu_SetNextScreen(u32 *selection, PalPadShared *shared);
+static void PalPadMenu_Hide(PalPadMenu *menu, PalPadGfx *gfx);
+static void PalPadMenu_PrintMessage(PalPadMenu *menu, PalPadGfx *gfx, int msgId, enum HeapID heapId);
+static BOOL PalPadMenu_IsMessageDone(PalPadMenu *menu, u32 *inputState);
+static void PalPadMenu_ClearMessage(PalPadMenu *menu);
+static BOOL PalPadMenu_CanSelect(u32 *selection, PalPadShared *shared);
 
 #pragma force_active on
 
@@ -213,7 +213,7 @@ void PalPadMenu_Teardown(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx)
     Heap_Free(menu->screenFile);
 }
 
-void PalPadMenu_Show(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx) {
+static void PalPadMenu_Show(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx) {
     NNSG2dScreenData *screen;
 
     PalPadGfx_PrintTitle(gfx, &gfx->titleWindow, msg_0779_00000);
@@ -228,7 +228,7 @@ void PalPadMenu_Show(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx) {
     ScheduleBgTilemapBufferTransfer(gfx->bgConfig, GF_BG_LYR_MAIN_2);
 }
 
-BOOL PalPadMenu_HandleKeys(u32 *selection, u32 *inputState, PalPadGfx *gfx) {
+static BOOL PalPadMenu_HandleKeys(u32 *selection, u32 *inputState, PalPadGfx *gfx) {
     BOOL moved = FALSE;
 
     if (gSystem.newKeys & PALPAD_KEYS_ANY) {
@@ -269,7 +269,7 @@ BOOL PalPadMenu_HandleKeys(u32 *selection, u32 *inputState, PalPadGfx *gfx) {
     return FALSE;
 }
 
-BOOL PalPadMenu_HandleTouch(u32 *selection, u32 *inputState, PalPadGfx *gfx, BOOL *touched) {
+static BOOL PalPadMenu_HandleTouch(u32 *selection, u32 *inputState, PalPadGfx *gfx, BOOL *touched) {
     int hit = TouchscreenHitbox_FindHitboxAtTouchNew(sPalPadMenuHitboxes);
 
     if (hit == -1) {
@@ -285,7 +285,7 @@ BOOL PalPadMenu_HandleTouch(u32 *selection, u32 *inputState, PalPadGfx *gfx, BOO
     return TRUE;
 }
 
-BOOL PalPadMenu_HandleInput(u32 *selection, u32 *inputState, PalPadGfx *gfx) {
+static BOOL PalPadMenu_HandleInput(u32 *selection, u32 *inputState, PalPadGfx *gfx) {
     BOOL touched = FALSE;
     BOOL result = PalPadMenu_HandleTouch(selection, inputState, gfx, &touched);
 
@@ -296,17 +296,16 @@ BOOL PalPadMenu_HandleInput(u32 *selection, u32 *inputState, PalPadGfx *gfx) {
     return PalPadMenu_HandleKeys(selection, inputState, gfx);
 }
 
-void PalPadMenu_MoveCursor(u32 *selection, PalPadGfx *gfx) {
+static void PalPadMenu_MoveCursor(u32 *selection, PalPadGfx *gfx) {
     Sprite_SetPositionXY(gfx->cursor, 128, *selection * 40 + 48);
 }
 
-void PalPadMenu_HighlightSelection(u32 *selection, PalPadGfx *gfx) {
+static void PalPadMenu_HighlightSelection(u32 *selection, PalPadGfx *gfx) {
     int i = 0;
     int y = 4;
 
     while (i < 4) {
         int palette = (*selection == i) ? 9 : 2;
-        // the palette is not truncated to u8
         ((void (*)(BgConfig *, int, int, int, int, int, int))BgTilemapRectChangePalette)(gfx->bgConfig, GF_BG_LYR_MAIN_2, 2, (u8)y, 28, 4, palette);
         i++;
         y += 5;
@@ -316,7 +315,7 @@ void PalPadMenu_HighlightSelection(u32 *selection, PalPadGfx *gfx) {
 
 #pragma force_active on
 
-void PalPadMenu_ClearHighlight(PalPadMenu *menu, PalPadGfx *gfx) {
+static void PalPadMenu_ClearHighlight(PalPadMenu *menu, PalPadGfx *gfx) {
     int i;
 
     for (i = 0; i < 4; i++) {
@@ -328,11 +327,11 @@ void PalPadMenu_ClearHighlight(PalPadMenu *menu, PalPadGfx *gfx) {
 
 #pragma force_active reset
 
-void PalPadMenu_SetNextScreen(u32 *selection, PalPadShared *shared) {
+static void PalPadMenu_SetNextScreen(u32 *selection, PalPadShared *shared) {
     PalPadShared_SetNextScreen(shared, sPalPadMenuItemScreens[*selection], 0);
 }
 
-void PalPadMenu_Hide(PalPadMenu *menu, PalPadGfx *gfx) {
+static void PalPadMenu_Hide(PalPadMenu *menu, PalPadGfx *gfx) {
     PalPadGfx_ClearTitle(gfx);
     FillBgTilemapRect(gfx->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 0, 32, 24, 0);
     ScheduleBgTilemapBufferTransfer(gfx->bgConfig, GF_BG_LYR_MAIN_2);
@@ -342,7 +341,7 @@ void PalPadMenu_Hide(PalPadMenu *menu, PalPadGfx *gfx) {
     PalPadGfx_SetCursor(gfx, FALSE, 0xFF);
 }
 
-void PalPadMenu_PrintMessage(PalPadMenu *menu, PalPadGfx *gfx, int msgId, enum HeapID heapId) {
+static void PalPadMenu_PrintMessage(PalPadMenu *menu, PalPadGfx *gfx, int msgId, enum HeapID heapId) {
     String *buffer = String_New(0x80, heapId);
 
     FillWindowPixelBuffer(&menu->msgWindow, 15);
@@ -355,7 +354,7 @@ void PalPadMenu_PrintMessage(PalPadMenu *menu, PalPadGfx *gfx, int msgId, enum H
     String_Delete(buffer);
 }
 
-BOOL PalPadMenu_IsMessageDone(PalPadMenu *menu, u32 *inputState) {
+static BOOL PalPadMenu_IsMessageDone(PalPadMenu *menu, u32 *inputState) {
     if (!TextPrinterCheckActive(menu->printerId)) {
         TextFlags_SetCanTouchSpeedUpPrint(FALSE);
         *inputState = TextFlags_GetIsTouchSpeedingUpPrint();
@@ -364,7 +363,7 @@ BOOL PalPadMenu_IsMessageDone(PalPadMenu *menu, u32 *inputState) {
     return FALSE;
 }
 
-void PalPadMenu_ClearMessage(PalPadMenu *menu) {
+static void PalPadMenu_ClearMessage(PalPadMenu *menu) {
     ClearFrameAndWindow2(&menu->msgWindow, TRUE);
     ClearWindowTilemapAndScheduleTransfer(&menu->msgWindow);
 }
@@ -372,7 +371,7 @@ void PalPadMenu_ClearMessage(PalPadMenu *menu) {
 #pragma force_active on
 
 // Registering needs a free roster slot.
-BOOL PalPadMenu_CanSelect(u32 *selection, PalPadShared *shared) {
+static BOOL PalPadMenu_CanSelect(u32 *selection, PalPadShared *shared) {
     int i;
     FriendRoster *wifiList;
 

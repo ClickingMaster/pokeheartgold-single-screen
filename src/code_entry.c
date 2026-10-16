@@ -135,7 +135,6 @@ typedef struct CodeEntrySubBgTemplates {
     BgTemplate templates[4];
 } CodeEntrySubBgTemplates;
 
-// data in asm/code_entry_data.s
 extern const GraphicsBanks sCodeEntryGraphicsBanks;
 extern const CodeEntryMainBgTemplates sCodeEntryMainBgTemplates;
 extern const CodeEntrySubBgTemplates sCodeEntrySubBgTemplates;
@@ -148,58 +147,60 @@ extern const OamManagerParam sCodeEntryOamManagerParam;
 extern f32 sCodeEntryGrowScales[];
 extern f32 sCodeEntryShrinkScales[];
 
+static CodeEntryArgs *CodeEntryArgs_Alloc(enum HeapID heapID, u32 length, const int *groupLengths, Options *options, int promptMsg, u32 showWirelessIcon);
+static void CodeEntry_SetupBgs(BgConfig *bgConfig);
+static void CodeEntry_VBlank(CodeEntryApp *app);
+static void CodeEntry_SelectGroup(CodeEntryApp *app, int group);
+static void CodeEntry_InitLayout(CodeEntryApp *app);
+static void CodeEntry_SetState(CodeEntryApp *app, int state);
+static BOOL CodeEntry_RunState(CodeEntryApp *app);
+static void CodeEntry_HandleKeys(CodeEntryApp *app);
+static void CodeEntry_Confirm(CodeEntryApp *app);
+static void CodeEntry_Backspace(CodeEntryApp *app);
+static inline void CodeEntry_CopyKeyRects(u16 *dst, const u16 *src);
+static void CodeEntry_InitTouch(CodeEntryApp *app);
+static void CodeEntry_OnTouch(u32 index, u32 event, void *arg);
+static void CodeEntry_RunPendingAction(CodeEntryApp *app);
+static void CodeEntry_ClearPendingAction(CodeEntryApp *app);
+static int CodeEntry_GetGroupFirstDigit(CodeEntryApp *app, int group);
+static int CodeEntry_GetGroupLastDigit(CodeEntryApp *app, int group);
+static void CodeEntry_InitSpriteSystem(CodeEntryApp *app);
+static void CodeEntry_LoadGraphics(CodeEntryApp *app);
+static void CodeEntry_FreeGraphics(CodeEntryApp *app);
+static void CodeEntry_CreateDigitSprites(CodeEntryApp *app);
+static void CodeEntry_CreateCursorSprites(CodeEntryApp *app);
+static void CodeEntry_CreateButtonSprites(CodeEntryApp *app);
+static void CodeEntry_SetCursorVisible(CodeEntryApp *app, int cursor, int visible);
+static void CodeEntry_MoveDigitCursor(CodeEntryApp *app, int digit);
+static void CodeEntry_MoveKeyCursor(CodeEntryApp *app, int key);
+static void CodeEntry_MoveCursorToKey(CodeEntryApp *app, int key, int cursor);
+static void CodeEntry_UpdateCursors(CodeEntryApp *app);
+static void CodeEntry_SetButtonLabelPosition(TextOBJ *label, int x, int y);
+static void CodeEntry_UpdateButtons(CodeEntryApp *app);
+static int CodeEntry_GetDigitAnim(int value, int active);
+static void CodeEntry_MarkSelectedDigits(CodeEntryApp *app);
+static void CodeEntry_LayoutDigits(CodeEntryApp *app, int animate);
+static void CodeEntry_UpdateDigitHitboxes(CodeEntryApp *app);
+static void CodeEntry_InitFont(CodeEntryApp *app);
+static void CodeEntry_FreeButtonLabels(CodeEntryApp *app);
+static void CodeEntry_LoadButtonLabelPalette(CodeEntryApp *app);
+static void CodeEntry_CreateButtonLabels(CodeEntryApp *app);
+static void CodeEntry_CreateButtonLabel(CodeEntryApp *app, int button, int x, int y, int palette);
+static void CodeEntry_CreatePromptWindow(BgConfig *bgConfig, Window *window, int bgId, int x, int y, int width, int height, int baseTile, int msgNo);
+static void CodeEntry_PrintPrompt(Window *window, int msgNo);
+
 void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapID);
 void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapID);
 void WirelessStatusIcon_SetLevel(int level);
 void WirelessStatusIcon_Create(void);
 void WirelessStatusIcon_Destroy(void);
 int DWC_GetLinkLevel(void);
-u32 GetUserFrameGfx2PaletteMember(u32 frame); // render_window.c
+u32 GetUserFrameGfx2PaletteMember(u32 frame);
 
-CodeEntryArgs *CodeEntryArgs_Alloc(enum HeapID heapID, u32 length, const int *groupLengths, Options *options, int promptMsg, u32 showWirelessIcon);
-void CodeEntry_SetupBgs(BgConfig *bgConfig);
-void CodeEntry_VBlank(CodeEntryApp *app);
-void CodeEntry_SelectGroup(CodeEntryApp *app, int group);
-void CodeEntry_InitLayout(CodeEntryApp *app);
-void CodeEntry_SetState(CodeEntryApp *app, int state);
 BOOL CodeEntry_State_Setup(CodeEntryApp *app);
 BOOL CodeEntry_State_FadeOut(CodeEntryApp *app);
 BOOL CodeEntry_State_Input(CodeEntryApp *app);
 BOOL CodeEntry_State_SwitchGroup(CodeEntryApp *app);
-BOOL CodeEntry_RunState(CodeEntryApp *app);
-void CodeEntry_HandleKeys(CodeEntryApp *app);
-void CodeEntry_Confirm(CodeEntryApp *app);
-void CodeEntry_Backspace(CodeEntryApp *app);
-void CodeEntry_InitTouch(CodeEntryApp *app);
-void CodeEntry_OnTouch(u32 index, u32 event, void *arg);
-void CodeEntry_RunPendingAction(CodeEntryApp *app);
-void CodeEntry_ClearPendingAction(CodeEntryApp *app);
-int CodeEntry_GetGroupFirstDigit(CodeEntryApp *app, int group);
-int CodeEntry_GetGroupLastDigit(CodeEntryApp *app, int group);
-void CodeEntry_InitSpriteSystem(CodeEntryApp *app);
-void CodeEntry_LoadGraphics(CodeEntryApp *app);
-void CodeEntry_FreeGraphics(CodeEntryApp *app);
-void CodeEntry_CreateDigitSprites(CodeEntryApp *app);
-void CodeEntry_CreateCursorSprites(CodeEntryApp *app);
-void CodeEntry_CreateButtonSprites(CodeEntryApp *app);
-void CodeEntry_SetCursorVisible(CodeEntryApp *app, int cursor, int visible);
-void CodeEntry_MoveDigitCursor(CodeEntryApp *app, int digit);
-void CodeEntry_MoveKeyCursor(CodeEntryApp *app, int key);
-void CodeEntry_MoveCursorToKey(CodeEntryApp *app, int key, int cursor);
-void CodeEntry_UpdateCursors(CodeEntryApp *app);
-void CodeEntry_SetButtonLabelPosition(TextOBJ *label, int x, int y);
-void CodeEntry_UpdateButtons(CodeEntryApp *app);
-int CodeEntry_GetDigitAnim(int value, int active);
-void CodeEntry_MarkSelectedDigits(CodeEntryApp *app);
-void CodeEntry_LayoutDigits(CodeEntryApp *app, int animate);
-void CodeEntry_UpdateDigitHitboxes(CodeEntryApp *app);
-void CodeEntry_InitFont(CodeEntryApp *app);
-void CodeEntry_FreeButtonLabels(CodeEntryApp *app);
-void CodeEntry_LoadButtonLabelPalette(CodeEntryApp *app);
-void CodeEntry_CreateButtonLabels(CodeEntryApp *app);
-void CodeEntry_CreateButtonLabel(CodeEntryApp *app, int button, int x, int y, int palette);
-void CodeEntry_CreatePromptWindow(BgConfig *bgConfig, Window *window, int bgId, int x, int y, int width, int height, int baseTile, int msgNo);
-void CodeEntry_PrintPrompt(Window *window, int msgNo);
 
 BOOL CodeEntry_Init(OverlayManager *manager, int *state) {
     CodeEntryApp *app;
@@ -289,7 +290,7 @@ BOOL CodeEntry_Exit(OverlayManager *manager, int *state) {
     return TRUE;
 }
 
-CodeEntryArgs *CodeEntryArgs_Alloc(enum HeapID heapID, u32 length, const int *groupLengths, Options *options, int promptMsg, u32 showWirelessIcon) {
+static CodeEntryArgs *CodeEntryArgs_Alloc(enum HeapID heapID, u32 length, const int *groupLengths, Options *options, int promptMsg, u32 showWirelessIcon) {
     CodeEntryArgs *args = Heap_Alloc(heapID, sizeof(CodeEntryArgs));
     int i;
 
@@ -330,7 +331,7 @@ void CodeEntryArgs_Delete(CodeEntryArgs *args) {
     Heap_Free(args);
 }
 
-void CodeEntry_SetupBgs(BgConfig *bgConfig) {
+static void CodeEntry_SetupBgs(BgConfig *bgConfig) {
     GraphicsBanks banks;
     CodeEntryMainBgTemplates mainBgs;
     CodeEntrySubBgTemplates subBgs;
@@ -372,7 +373,7 @@ void CodeEntry_SetupBgs(BgConfig *bgConfig) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-void CodeEntry_VBlank(CodeEntryApp *app) {
+static void CodeEntry_VBlank(CodeEntryApp *app) {
     GF_RunVramTransferTasks();
     SpriteSystem_TransferOam();
     PaletteData_PushTransparentBuffers(app->paletteData);
@@ -380,7 +381,7 @@ void CodeEntry_VBlank(CodeEntryApp *app) {
     *(u32 *)((u8 *)OS_IRQTable + 0x3FF8) |= OS_IE_V_BLANK;
 }
 
-void CodeEntry_SelectGroup(CodeEntryApp *app, int group) {
+static void CodeEntry_SelectGroup(CodeEntryApp *app, int group) {
     app->previousGroup = app->selectedGroup;
     app->selectedGroup = group;
     app->selectedStart = 0;
@@ -401,7 +402,7 @@ void CodeEntry_SelectGroup(CodeEntryApp *app, int group) {
     }
 }
 
-void CodeEntry_InitLayout(CodeEntryApp *app) {
+static void CodeEntry_InitLayout(CodeEntryApp *app) {
     int i, group, j, end;
     u16 start;
 
@@ -445,7 +446,7 @@ void CodeEntry_InitLayout(CodeEntryApp *app) {
     }
 }
 
-void CodeEntry_SetState(CodeEntryApp *app, int state) {
+static void CodeEntry_SetState(CodeEntryApp *app, int state) {
     app->state = state;
     app->unk2C4 = 0;
     app->subState = 0;
@@ -586,7 +587,7 @@ BOOL CodeEntry_State_SwitchGroup(CodeEntryApp *app) {
 
 #pragma force_active off
 
-BOOL CodeEntry_RunState(CodeEntryApp *app) {
+static BOOL CodeEntry_RunState(CodeEntryApp *app) {
     BOOL result = sCodeEntryStates[app->state](app);
     CodeEntry_UpdateCursors(app);
     CodeEntry_UpdateButtons(app);
@@ -594,7 +595,7 @@ BOOL CodeEntry_RunState(CodeEntryApp *app) {
     return result;
 }
 
-void CodeEntry_HandleKeys(CodeEntryApp *app) {
+static void CodeEntry_HandleKeys(CodeEntryApp *app) {
     CodeEntryKeyGrid grid = sCodeEntryKeyGrid;
     BOOL moved = FALSE;
     s16 column = app->cursors[1].velocityX;
@@ -747,7 +748,7 @@ void CodeEntry_HandleKeys(CodeEntryApp *app) {
 }
 
 // OK: empty digits become 0, all digits are appended to args.text.
-void CodeEntry_Confirm(CodeEntryApp *app) {
+static void CodeEntry_Confirm(CodeEntryApp *app) {
     String *digitString = String_New(100, HEAP_ID_108);
     int i;
     CodeEntryCell *digit;
@@ -773,7 +774,7 @@ void CodeEntry_Confirm(CodeEntryApp *app) {
 }
 
 // BACK: clears the digit under the cursor and moves the cursor back by one.
-void CodeEntry_Backspace(CodeEntryApp *app) {
+static void CodeEntry_Backspace(CodeEntryApp *app) {
     s32 index;
     u32 value;
     u32 group;
@@ -822,7 +823,7 @@ static inline void CodeEntry_CopyKeyRects(u16 *dst, const u16 *src) {
     } while (--count);
 }
 
-void CodeEntry_InitTouch(CodeEntryApp *app) {
+static void CodeEntry_InitTouch(CodeEntryApp *app) {
     int i;
     CodeEntryKeyRect rects[12];
 
@@ -839,7 +840,7 @@ void CodeEntry_InitTouch(CodeEntryApp *app) {
     app->touchController = TouchHitboxController_Create(app->hitboxes, CODE_ENTRY_HITBOX_NUM, CodeEntry_OnTouch, app, HEAP_ID_108);
 }
 
-void CodeEntry_OnTouch(u32 index, u32 event, void *arg) {
+static void CodeEntry_OnTouch(u32 index, u32 event, void *arg) {
     CodeEntryApp *app = arg;
     int cursor;
     int group, nextGroup;
@@ -916,7 +917,7 @@ void CodeEntry_OnTouch(u32 index, u32 event, void *arg) {
 
 #pragma force_active off
 
-void CodeEntry_RunPendingAction(CodeEntryApp *app) {
+static void CodeEntry_RunPendingAction(CodeEntryApp *app) {
     switch (app->pendingAction) {
     case CODE_ENTRY_ACTION_NONE:
         break;
@@ -936,13 +937,13 @@ void CodeEntry_RunPendingAction(CodeEntryApp *app) {
     }
 }
 
-void CodeEntry_ClearPendingAction(CodeEntryApp *app) {
+static void CodeEntry_ClearPendingAction(CodeEntryApp *app) {
     app->pendingAction = CODE_ENTRY_ACTION_NONE;
     app->pendingArg = 0;
     app->pendingToLast = FALSE;
 }
 
-int CodeEntry_GetGroupFirstDigit(CodeEntryApp *app, int group) {
+static int CodeEntry_GetGroupFirstDigit(CodeEntryApp *app, int group) {
     int i = 0, count = app->digitCount;
     for (; i < count; i++) {
         if (app->digits[i].group == group) {
@@ -952,7 +953,7 @@ int CodeEntry_GetGroupFirstDigit(CodeEntryApp *app, int group) {
     return 0;
 }
 
-int CodeEntry_GetGroupLastDigit(CodeEntryApp *app, int group) {
+static int CodeEntry_GetGroupLastDigit(CodeEntryApp *app, int group) {
     int i;
     int found = FALSE;
     int count = app->digitCount;
@@ -966,7 +967,7 @@ int CodeEntry_GetGroupLastDigit(CodeEntryApp *app, int group) {
     return count - 1;
 }
 
-void CodeEntry_InitSpriteSystem(CodeEntryApp *app) {
+static void CodeEntry_InitSpriteSystem(CodeEntryApp *app) {
     OamManagerParam oamManagerParam;
     OamCharTransferParam oamCharTransferParam;
 
@@ -986,7 +987,7 @@ void CodeEntry_InitSpriteSystem(CodeEntryApp *app) {
     }
 }
 
-void CodeEntry_LoadGraphics(CodeEntryApp *app) {
+static void CodeEntry_LoadGraphics(CodeEntryApp *app) {
     NARC *narc;
     SpriteSystem *spriteSystem;
     SpriteManager *spriteManager;
@@ -1022,7 +1023,7 @@ void CodeEntry_LoadGraphics(CodeEntryApp *app) {
     PaletteData_LoadNarc(paletteData, NARC_graphic_font, 8, HEAP_ID_108, PLTTBUF_SUB_BG, 0x20, 0xC0);
 }
 
-void CodeEntry_FreeGraphics(CodeEntryApp *app) {
+static void CodeEntry_FreeGraphics(CodeEntryApp *app) {
     int i;
 
     for (i = 0; i < app->digitCount; i++) {
@@ -1041,7 +1042,7 @@ void CodeEntry_FreeGraphics(CodeEntryApp *app) {
     RemoveWindow(&app->promptWindow);
 }
 
-void CodeEntry_CreateDigitSprites(CodeEntryApp *app) {
+static void CodeEntry_CreateDigitSprites(CodeEntryApp *app) {
     int placed = 0;
     SpriteSystem *spriteSystem = app->spriteSystem;
     SpriteManager *spriteManager = app->spriteManager;
@@ -1107,7 +1108,7 @@ void CodeEntry_CreateDigitSprites(CodeEntryApp *app) {
     }
 }
 
-void CodeEntry_CreateCursorSprites(CodeEntryApp *app) {
+static void CodeEntry_CreateCursorSprites(CodeEntryApp *app) {
     ManagedSpriteTemplate template;
     SpriteSystem *spriteSystem = app->spriteSystem;
     SpriteManager *spriteManager = app->spriteManager;
@@ -1164,7 +1165,7 @@ typedef struct CodeEntryButtonSpriteTemplate {
     int vramTransfer;
 } CodeEntryButtonSpriteTemplate;
 
-void CodeEntry_CreateButtonSprites(CodeEntryApp *app) {
+static void CodeEntry_CreateButtonSprites(CodeEntryApp *app) {
     CodeEntryButtonSpriteTemplate template;
     SpriteSystem *spriteSystem = app->spriteSystem;
     SpriteManager *spriteManager = app->spriteManager;
@@ -1196,7 +1197,7 @@ void CodeEntry_CreateButtonSprites(CodeEntryApp *app) {
     ManagedSprite_TickFrame(app->buttons[1].sprite);
 }
 
-void CodeEntry_SetCursorVisible(CodeEntryApp *app, int cursor, int visible) {
+static void CodeEntry_SetCursorVisible(CodeEntryApp *app, int cursor, int visible) {
     if (visible == TRUE) {
         ManagedSprite_SetDrawFlag(app->cursors[cursor].sprite, TRUE);
     } else {
@@ -1204,7 +1205,7 @@ void CodeEntry_SetCursorVisible(CodeEntryApp *app, int cursor, int visible) {
     }
 }
 
-void CodeEntry_MoveDigitCursor(CodeEntryApp *app, int digit) {
+static void CodeEntry_MoveDigitCursor(CodeEntryApp *app, int digit) {
     s16 x, y;
     if (digit >= app->firstEditable) {
         ManagedSprite *sprite = app->digits[digit].sprite;
@@ -1214,15 +1215,15 @@ void CodeEntry_MoveDigitCursor(CodeEntryApp *app, int digit) {
     }
 }
 
-void CodeEntry_MoveKeyCursor(CodeEntryApp *app, int key) {
+static void CodeEntry_MoveKeyCursor(CodeEntryApp *app, int key) {
     ManagedSprite_SetPositionXY(app->cursors[1].sprite, (app->hitboxes[key + 16].rect.left + app->hitboxes[key + 16].rect.right) / 2, (app->hitboxes[key + 16].rect.top + app->hitboxes[key + 16].rect.bottom) / 2);
 }
 
-void CodeEntry_MoveCursorToKey(CodeEntryApp *app, int key, int cursor) {
+static void CodeEntry_MoveCursorToKey(CodeEntryApp *app, int key, int cursor) {
     ManagedSprite_SetPositionXY(app->cursors[cursor].sprite, (app->hitboxes[key + 16].rect.left + app->hitboxes[key + 16].rect.right) / 2, (app->hitboxes[key + 16].rect.top + app->hitboxes[key + 16].rect.bottom) / 2);
 }
 
-void CodeEntry_UpdateCursors(CodeEntryApp *app) {
+static void CodeEntry_UpdateCursors(CodeEntryApp *app) {
     int i;
 
     ManagedSprite_TickFrame(app->cursors[0].sprite);
@@ -1255,14 +1256,14 @@ void CodeEntry_UpdateCursors(CodeEntryApp *app) {
     }
 }
 
-void CodeEntry_SetButtonLabelPosition(TextOBJ *label, int x, int y) {
+static void CodeEntry_SetButtonLabelPosition(TextOBJ *label, int x, int y) {
     if (label != NULL) {
         TextOBJ_SetPosition(label, x, y);
     }
 }
 
 // A pressed button shows its pressed frames (the label moves up by one pixel), then springs back.
-void CodeEntry_UpdateButtons(CodeEntryApp *app) {
+static void CodeEntry_UpdateButtons(CodeEntryApp *app) {
     int i;
 
     for (i = 0; i < 2; i++) {
@@ -1295,7 +1296,7 @@ void CodeEntry_UpdateButtons(CodeEntryApp *app) {
     }
 }
 
-int CodeEntry_GetDigitAnim(int value, int active) {
+static int CodeEntry_GetDigitAnim(int value, int active) {
     int add = 0;
     if (active == FALSE) {
         add = 11;
@@ -1303,7 +1304,7 @@ int CodeEntry_GetDigitAnim(int value, int active) {
     return add + value;
 }
 
-void CodeEntry_MarkSelectedDigits(CodeEntryApp *app) {
+static void CodeEntry_MarkSelectedDigits(CodeEntryApp *app) {
     int i = 0;
     if (app->digitCount > 0) {
         CodeEntryCell *digit = app->digits;
@@ -1321,7 +1322,7 @@ void CodeEntry_MarkSelectedDigits(CodeEntryApp *app) {
 
 // Places the digits and separators: the selected group is spread out (32 px per digit), the others are packed
 // (8 px). With animate, sets the sprites moving there over 2 frames instead.
-void CodeEntry_LayoutDigits(CodeEntryApp *app, int animate) {
+static void CodeEntry_LayoutDigits(CodeEntryApp *app, int animate) {
     s16 x, y;
     int i;
     int separator;
@@ -1373,7 +1374,7 @@ void CodeEntry_LayoutDigits(CodeEntryApp *app, int animate) {
     }
 }
 
-void CodeEntry_UpdateDigitHitboxes(CodeEntryApp *app) {
+static void CodeEntry_UpdateDigitHitboxes(CodeEntryApp *app) {
     int i = 0;
     if (app->digitCount > 0) {
         CodeEntryCell *digit = app->digits;
@@ -1399,12 +1400,12 @@ void CodeEntry_UpdateDigitHitboxes(CodeEntryApp *app) {
     }
 }
 
-void CodeEntry_InitFont(CodeEntryApp *app) {
+static void CodeEntry_InitFont(CodeEntryApp *app) {
     app->fontSystem = FontSystem_NewInit(2, HEAP_ID_108);
     FontID_Alloc(2, HEAP_ID_108);
 }
 
-void CodeEntry_FreeButtonLabels(CodeEntryApp *app) {
+static void CodeEntry_FreeButtonLabels(CodeEntryApp *app) {
     FontID_Release(2);
     FontOAM_Delete(app->buttonLabels[0]);
     ObjCharTransfer_FreeCharSpace(&app->buttonLabelAllocs[0].charAlloc);
@@ -1413,17 +1414,17 @@ void CodeEntry_FreeButtonLabels(CodeEntryApp *app) {
     FontSystem_Delete(app->fontSystem);
 }
 
-void CodeEntry_LoadButtonLabelPalette(CodeEntryApp *app) {
+static void CodeEntry_LoadButtonLabelPalette(CodeEntryApp *app) {
     SpriteSystem_LoadPaletteBuffer(app->paletteData, PLTTBUF_MAIN_OBJ, app->spriteSystem, app->spriteManager, NARC_graphic_font, 8, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 1003);
 }
 
-void CodeEntry_CreateButtonLabels(CodeEntryApp *app) {
+static void CodeEntry_CreateButtonLabels(CodeEntryApp *app) {
     CodeEntry_LoadButtonLabelPalette(app);
     CodeEntry_CreateButtonLabel(app, 0, 0x4E, 0xA5, 0);
     CodeEntry_CreateButtonLabel(app, 1, 0xAC, 0xA5, 0);
 }
 
-void CodeEntry_CreateButtonLabel(CodeEntryApp *app, int button, int x, int y, int palette) {
+static void CodeEntry_CreateButtonLabel(CodeEntryApp *app, int button, int x, int y, int palette) {
     TextOBJTemplate template;
     Window window;
     MsgData *msgData;
@@ -1459,7 +1460,7 @@ void CodeEntry_CreateButtonLabel(CodeEntryApp *app, int button, int x, int y, in
     RemoveWindow(&window);
 }
 
-void CodeEntry_CreatePromptWindow(BgConfig *bgConfig, Window *window, int bgId, int x, int y, int width, int height, int baseTile, int msgNo) {
+static void CodeEntry_CreatePromptWindow(BgConfig *bgConfig, Window *window, int bgId, int x, int y, int width, int height, int baseTile, int msgNo) {
     InitWindow(window);
     AddWindowParameterized(bgConfig, window, (u8)bgId, (u8)x, (u8)y, (u8)width, height, 12, (u16)baseTile);
     DrawFrameAndWindow2(window, TRUE, 1, 11);
@@ -1468,7 +1469,7 @@ void CodeEntry_CreatePromptWindow(BgConfig *bgConfig, Window *window, int bgId, 
     CodeEntry_PrintPrompt(window, msgNo);
 }
 
-void CodeEntry_PrintPrompt(Window *window, int msgNo) {
+static void CodeEntry_PrintPrompt(Window *window, int msgNo) {
     MsgData *msgData;
     String *string;
 

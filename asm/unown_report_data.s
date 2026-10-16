@@ -18,27 +18,6 @@
 
 	.text
 	.public UnownReport_Exit
-	.public UnownReport_ResetDisplay
-	.public UnownReport_GetSeenPunctuationForms
-	.public UnownReport_RestoreMenuInputState
-	.public UnownReport_SetupGraphics
-	.public UnownReport_Teardown
-	.public UnownReport_HandleInput
-	.public UnownReport_CreateGraphics
-	.public UnownReport_DestroyGraphics
-	.public UnownReport_DrawFirstPage
-	.public UnownReport_IsBookAnimating
-	.public UnownReport_PrintText
-	.public UnownReport_PrintTextFont0
-	.public UnownReport_SetVramBanks
-	.public UnownReport_LoadScreen
-	.public UnownReport_FreeScreens
-	.public UnownReport_FreeMessages
-	.public UnownReport_FreeWindows
-	.public UnownReport_FreeSpriteSystem
-	.public UnownReport_CreateSprites
-	.public UnownReport_DestroySprites
-	.public UnownReport_UpdateArrows
 	.rodata
 
 _021E6B6C:

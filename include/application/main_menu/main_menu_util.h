@@ -8,10 +8,10 @@
 #include "bg_window.h"
 #include "save.h"
 #include "sprite.h"
-#include "sprite_resource_header.h"
 #include "sprite_resource.h"
+#include "sprite_resource_header.h"
 
-// Shared services of the main menu overlay (src/application/main_menu/main_menu_util.c): heap of the crypto library,
+// Shared services of the main menu overlay: heap of the crypto library,
 // the Mystery Gift GBA cartridge, screen setup, fades, the message box printer (MainMenuTextPrinter), sprites on both
 // screens and the gift graphics of the card screens.
 
@@ -55,19 +55,12 @@ typedef struct MainMenuUtilWork {
 } MainMenuUtilWork;                                        // size: 0xEA8
 
 void MainMenuUtil_SetCryptoHeap(enum HeapID heapID);
-void *MainMenuUtil_CryptoAlloc(u32 size);
-int MainMenuUtil_CheckGiftCartridgeSignature(void);
-BOOL MainMenuUtil_IsGiftCartridgeInserted(void);
 u32 MainMenuUtil_GetCartridgeGiftSize(void);
 BOOL MainMenuUtil_ReadCartridgeGift(void *dest, int size);
-int MainMenuTextPrinter_Print(MainMenuTextPrinter *printer, int msgId);
 u32 MainMenuUtil_SpritesActive(void);
 MainMenuUtilSprites *MainMenuUtil_GetSpriteList(void);
-void MainMenuUtil_SetSubScreenOffset(fx32 x, fx32 y);
 void MainMenuUtil_UpdateGiftSprite(int hideGiftSprite);
-void MainMenuUtil_VBlankCB(void);
 int MainMenuUtil_GetGiftPalette(int giftType);
-void MainMenuUtil_LoadGiftMonSprite(Sprite *sprite, Pokemon *mon, int species, int form, void *charData, u16 *narcIds);
 void MainMenuUtil_ShowGiftBox(MainMenuUtilWork *work, int giftType, void *gift);
 void MainMenuUtil_ShowGiftPokemon(MainMenuUtilWork *work, int giftType, void *gift);
 void MainMenuUtil_ShowGiftItem(MainMenuUtilWork *work, int giftType, void *gift);

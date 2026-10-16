@@ -36,7 +36,6 @@ typedef struct VsRecorderNumberPadKeys {
     VsRecorderNumberPadKey keys[12];
 } VsRecorderNumberPadKeys;
 
-// asm/vs_recorder_data.s
 extern const VsRecorderNumberPadFunc sVsRecorderNumberPadStates[];
 extern const VsRecorderNumberPadStartX sVsRecorderNumberPadStartX;
 extern const VsRecorderNumberPadKeys sVsRecorderNumberPadKeys;
@@ -51,6 +50,33 @@ extern f32 sVsRecorderDigitScalesOldGroup[];
 
 #define NUMBER_PAD_RES_DIGITS  1000
 #define NUMBER_PAD_RES_CURSORS 1001
+
+static void VsRecorder_NumberPadSetGroup(VsRecorderNumberPad *pad, int group);
+static void VsRecorder_NumberPadInitLayout(VsRecorderNumberPad *pad);
+static void VsRecorder_NumberPadSetState(VsRecorderNumberPad *pad, int state);
+static void VsRecorder_NumberPadConfirm(VsRecorderNumberPad *pad);
+static void VsRecorder_NumberPadBack(VsRecorderNumberPad *pad);
+static void VsRecorder_NumberPadInitHitboxes(VsRecorderNumberPad *pad);
+static void VsRecorder_OnNumberPadTouch(u32 index, u32 event, void *arg);
+static void VsRecorder_NumberPadRunAction(VsRecorderNumberPad *pad);
+static void VsRecorder_NumberPadClearAction(VsRecorderNumberPad *pad);
+static int VsRecorder_NumberPadFindGroupFirst(VsRecorderNumberPad *pad, int group);
+static int VsRecorder_NumberPadFindGroupLast(VsRecorderNumberPad *pad, int group);
+static void VsRecorder_NumberPadLoadGfx(VsRecorderNumberPad *pad);
+static void VsRecorder_NumberPadShowSprites(VsRecorderNumberPad *pad);
+static void VsRecorder_NumberPadFreeSprites(VsRecorderNumberPad *pad);
+static void VsRecorder_NumberPadCreateDigitSprites(VsRecorderNumberPad *pad);
+static inline void VsRecorder_InitKeyCursor(VsRecorderNumberPad *pad, VsRecorderNumberPadDigit *cursor);
+static void VsRecorder_NumberPadCreateCursors(VsRecorderNumberPad *pad);
+static void VsRecorder_NumberPadSetCursorDrawFlag(VsRecorderNumberPad *pad, int cursor, int draw);
+static void VsRecorder_NumberPadMoveCursor(VsRecorderNumberPad *pad, int digit);
+static void VsRecorder_NumberPadPlaceKeyCursor(VsRecorderNumberPad *pad, int key);
+static void VsRecorder_NumberPadPlaceCursorOnKey(VsRecorderNumberPad *pad, int key, int cursor);
+static void VsRecorder_NumberPadUpdateCursors(VsRecorderNumberPad *pad);
+static int VsRecorder_GetDigitAnim(int value, BOOL enabled);
+static void VsRecorder_NumberPadUpdateEnabled(VsRecorderNumberPad *pad);
+static void VsRecorder_NumberPadLayoutDigits(VsRecorderNumberPad *pad, BOOL animate);
+static void VsRecorder_NumberPadUpdateHitboxes(VsRecorderNumberPad *pad);
 
 #pragma force_active on
 
@@ -118,7 +144,7 @@ void VsRecorder_FreeNumberPadConfig(VsRecorderNumberPadConfig *config) {
     Heap_Free(config);
 }
 
-void VsRecorder_NumberPadSetGroup(VsRecorderNumberPad *pad, int group) {
+static void VsRecorder_NumberPadSetGroup(VsRecorderNumberPad *pad, int group) {
     int previous = pad->group;
     pad->prevGroup = previous;
     pad->group = group;
@@ -139,7 +165,7 @@ void VsRecorder_NumberPadSetGroup(VsRecorderNumberPad *pad, int group) {
 
 #pragma force_active on
 
-void VsRecorder_NumberPadInitLayout(VsRecorderNumberPad *pad) {
+static void VsRecorder_NumberPadInitLayout(VsRecorderNumberPad *pad) {
     VsRecorderNumberPadStartX startX;
     int i;
     int sel;
@@ -185,7 +211,7 @@ void VsRecorder_NumberPadInitLayout(VsRecorderNumberPad *pad) {
 
 #pragma force_active reset
 
-void VsRecorder_NumberPadSetState(VsRecorderNumberPad *pad, int state) {
+static void VsRecorder_NumberPadSetState(VsRecorderNumberPad *pad, int state) {
     pad->state = state;
     pad->unk_1F8 = 0;
     pad->step = 0;
@@ -328,7 +354,7 @@ BOOL VsRecorder_NumberPadMain(VsRecorderNumberPad *pad) {
 }
 
 // OK: empty digits become 0, the number and its text are stored
-void VsRecorder_NumberPadConfirm(VsRecorderNumberPad *pad) {
+static void VsRecorder_NumberPadConfirm(VsRecorderNumberPad *pad) {
     u32 num;
     String *str;
     int i;
@@ -363,7 +389,7 @@ void VsRecorder_NumberPadConfirm(VsRecorderNumberPad *pad) {
 #pragma force_active on
 
 // back: clears the selected digit and moves to the previous one; on the first digit the pad closes (cancelled)
-void VsRecorder_NumberPadBack(VsRecorderNumberPad *pad) {
+static void VsRecorder_NumberPadBack(VsRecorderNumberPad *pad) {
     if (pad->group == 0) {
         pad->cursors[0].value = pad->count - 1;
         u32 group = pad->digits[pad->cursors[0].value].group;
@@ -393,7 +419,7 @@ void VsRecorder_NumberPadBack(VsRecorderNumberPad *pad) {
     }
 }
 
-void VsRecorder_NumberPadInitHitboxes(VsRecorderNumberPad *pad) {
+static void VsRecorder_NumberPadInitHitboxes(VsRecorderNumberPad *pad) {
     int i;
     VsRecorderNumberPadKeys keys;
 
@@ -419,7 +445,7 @@ void VsRecorder_NumberPadInitHitboxes(VsRecorderNumberPad *pad) {
 }
 
 // digits select a digit (or its group); keys 0-9 enter a digit and advance; back; OK
-void VsRecorder_OnNumberPadTouch(u32 index, u32 event, void *arg) {
+static void VsRecorder_OnNumberPadTouch(u32 index, u32 event, void *arg) {
     VsRecorderNumberPad *pad = arg;
     VsRecorderNumberPadDigit *digit;
     int slot, group, next, nextGroup;
@@ -497,7 +523,7 @@ void VsRecorder_OnNumberPadTouch(u32 index, u32 event, void *arg) {
 
 #pragma force_active reset
 
-void VsRecorder_NumberPadRunAction(VsRecorderNumberPad *pad) {
+static void VsRecorder_NumberPadRunAction(VsRecorderNumberPad *pad) {
     switch (pad->action) {
     case VS_RECORDER_NUMBER_PAD_ACTION_GROUP:
         VsRecorder_NumberPadSetGroup(pad, pad->actionValue);
@@ -516,13 +542,13 @@ void VsRecorder_NumberPadRunAction(VsRecorderNumberPad *pad) {
     }
 }
 
-void VsRecorder_NumberPadClearAction(VsRecorderNumberPad *pad) {
+static void VsRecorder_NumberPadClearAction(VsRecorderNumberPad *pad) {
     pad->action = VS_RECORDER_NUMBER_PAD_ACTION_NONE;
     pad->actionValue = 0;
     pad->actionMode = 0;
 }
 
-int VsRecorder_NumberPadFindGroupFirst(VsRecorderNumberPad *pad, int group) {
+static int VsRecorder_NumberPadFindGroupFirst(VsRecorderNumberPad *pad, int group) {
     int i;
     int n = pad->count;
     VsRecorderNumberPadDigit *digit = pad->digits;
@@ -535,7 +561,7 @@ int VsRecorder_NumberPadFindGroupFirst(VsRecorderNumberPad *pad, int group) {
     return 0;
 }
 
-int VsRecorder_NumberPadFindGroupLast(VsRecorderNumberPad *pad, int group) {
+static int VsRecorder_NumberPadFindGroupLast(VsRecorderNumberPad *pad, int group) {
     int i;
     int found;
     int n = pad->count;
@@ -554,7 +580,7 @@ int VsRecorder_NumberPadFindGroupLast(VsRecorderNumberPad *pad, int group) {
 
 #pragma force_active on
 
-void VsRecorder_NumberPadLoadGfx(VsRecorderNumberPad *pad) {
+static void VsRecorder_NumberPadLoadGfx(VsRecorderNumberPad *pad) {
     NARC *narc;
     SpriteSystem *spriteSystem;
     SpriteManager *spriteManager;
@@ -581,7 +607,7 @@ void VsRecorder_NumberPadLoadGfx(VsRecorderNumberPad *pad) {
 
 #pragma force_active reset
 
-void VsRecorder_NumberPadShowSprites(VsRecorderNumberPad *pad) {
+static void VsRecorder_NumberPadShowSprites(VsRecorderNumberPad *pad) {
     int i = 0;
     VsRecorderNumberPadDigit *digit;
     if (pad->count > 0) {
@@ -601,7 +627,7 @@ void VsRecorder_NumberPadShowSprites(VsRecorderNumberPad *pad) {
     }
 }
 
-void VsRecorder_NumberPadFreeSprites(VsRecorderNumberPad *pad) {
+static void VsRecorder_NumberPadFreeSprites(VsRecorderNumberPad *pad) {
     int i = 0;
     VsRecorderNumberPadDigit *digit;
     if (pad->count > 0) {
@@ -629,7 +655,7 @@ void VsRecorder_NumberPadFreeSprites(VsRecorderNumberPad *pad) {
 }
 
 // digit and separator sprites in one row (VsRecorder_NumberPadLayoutDigits spaces them out)
-void VsRecorder_NumberPadCreateDigitSprites(VsRecorderNumberPad *pad) {
+static void VsRecorder_NumberPadCreateDigitSprites(VsRecorderNumberPad *pad) {
     int separators = 0;
     SpriteSystem *spriteSystem = pad->spriteSystem;
     SpriteManager *spriteManager = pad->spriteManager;
@@ -696,7 +722,7 @@ static inline void VsRecorder_InitKeyCursor(VsRecorderNumberPad *pad, VsRecorder
     ManagedSprite_SetOamMode(cursor->sprite, GX_OAM_MODE_XLU);
 }
 
-void VsRecorder_NumberPadCreateCursors(VsRecorderNumberPad *pad) {
+static void VsRecorder_NumberPadCreateCursors(VsRecorderNumberPad *pad) {
     SpriteSystem *spriteSystem = pad->spriteSystem;
     SpriteManager *spriteManager = pad->spriteManager;
     ManagedSpriteTemplate template;
@@ -730,7 +756,7 @@ void VsRecorder_NumberPadCreateCursors(VsRecorderNumberPad *pad) {
 
 #pragma force_active reset
 
-void VsRecorder_NumberPadSetCursorDrawFlag(VsRecorderNumberPad *pad, int cursor, int draw) {
+static void VsRecorder_NumberPadSetCursorDrawFlag(VsRecorderNumberPad *pad, int cursor, int draw) {
     if (draw == TRUE) {
         ManagedSprite_SetDrawFlag(pad->cursors[cursor].sprite, TRUE);
     } else {
@@ -738,7 +764,7 @@ void VsRecorder_NumberPadSetCursorDrawFlag(VsRecorderNumberPad *pad, int cursor,
     }
 }
 
-void VsRecorder_NumberPadMoveCursor(VsRecorderNumberPad *pad, int digit) {
+static void VsRecorder_NumberPadMoveCursor(VsRecorderNumberPad *pad, int digit) {
     s16 x;
     s16 y;
     ManagedSprite *sprite = pad->digits[digit].sprite;
@@ -749,13 +775,13 @@ void VsRecorder_NumberPadMoveCursor(VsRecorderNumberPad *pad, int digit) {
 
 #pragma force_active on
 
-void VsRecorder_NumberPadPlaceKeyCursor(VsRecorderNumberPad *pad, int key) {
+static void VsRecorder_NumberPadPlaceKeyCursor(VsRecorderNumberPad *pad, int key) {
     int x = (s16)((pad->hitboxes[key + NUMBER_PAD_KEY_0].rect.left + pad->hitboxes[key + NUMBER_PAD_KEY_0].rect.right) / 2);
     int y = (s16)((pad->hitboxes[key + NUMBER_PAD_KEY_0].rect.top + pad->hitboxes[key + NUMBER_PAD_KEY_0].rect.bottom) / 2);
     ManagedSprite_SetPositionXY(pad->cursors[1].sprite, x, y - 8);
 }
 
-void VsRecorder_NumberPadPlaceCursorOnKey(VsRecorderNumberPad *pad, int key, int cursor) {
+static void VsRecorder_NumberPadPlaceCursorOnKey(VsRecorderNumberPad *pad, int key, int cursor) {
     int x = (s16)((pad->hitboxes[key + NUMBER_PAD_KEY_0].rect.left + pad->hitboxes[key + NUMBER_PAD_KEY_0].rect.right) / 2);
     int y = (s16)((pad->hitboxes[key + NUMBER_PAD_KEY_0].rect.top + pad->hitboxes[key + NUMBER_PAD_KEY_0].rect.bottom) / 2);
     ManagedSprite_SetPositionXY(pad->cursors[cursor].sprite, x, y - 8);
@@ -764,7 +790,7 @@ void VsRecorder_NumberPadPlaceCursorOnKey(VsRecorderNumberPad *pad, int key, int
 #pragma force_active reset
 
 // the key press (anim 3) hides itself when it ends; the key cursor shows unless the input was a touch
-void VsRecorder_NumberPadUpdateCursors(VsRecorderNumberPad *pad) {
+static void VsRecorder_NumberPadUpdateCursors(VsRecorderNumberPad *pad) {
     VsRecorderNumberPad *entry; // entry->cursors[0] is cursors[i]
     int i;
 
@@ -800,7 +826,7 @@ void VsRecorder_NumberPadUpdateCursors(VsRecorderNumberPad *pad) {
 }
 
 // digits outside the current group use the small frames (anims from 11)
-int VsRecorder_GetDigitAnim(int value, BOOL enabled) {
+static int VsRecorder_GetDigitAnim(int value, BOOL enabled) {
     int anim = 0;
     if (enabled == FALSE) {
         anim = 11;
@@ -808,7 +834,7 @@ int VsRecorder_GetDigitAnim(int value, BOOL enabled) {
     return anim + value;
 }
 
-void VsRecorder_NumberPadUpdateEnabled(VsRecorderNumberPad *pad) {
+static void VsRecorder_NumberPadUpdateEnabled(VsRecorderNumberPad *pad) {
     int i;
     VsRecorderNumberPadDigit *digit;
     i = 0;
@@ -829,7 +855,7 @@ void VsRecorder_NumberPadUpdateEnabled(VsRecorderNumberPad *pad) {
 #pragma force_active on
 
 // the digits of the current group are 32 pixels apart, the others 8; animate: move there in 2 frames
-void VsRecorder_NumberPadLayoutDigits(VsRecorderNumberPad *pad, BOOL animate) {
+static void VsRecorder_NumberPadLayoutDigits(VsRecorderNumberPad *pad, BOOL animate) {
     int i = 0, separators = 0;
     s16 x = pad->startX[pad->group];
     s16 position[2];
@@ -885,7 +911,7 @@ void VsRecorder_NumberPadLayoutDigits(VsRecorderNumberPad *pad, BOOL animate) {
 }
 
 // each digit's touch box follows its sprite (16x16 around the current group's digits, 4x8 around the others)
-void VsRecorder_NumberPadUpdateHitboxes(VsRecorderNumberPad *pad) {
+static void VsRecorder_NumberPadUpdateHitboxes(VsRecorderNumberPad *pad) {
     int i, dx, dy;
     VsRecorderNumberPadDigit *digit;
     s16 y, x;

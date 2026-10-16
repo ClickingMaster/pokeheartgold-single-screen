@@ -10,8 +10,7 @@
 
 #include <string.h>
 
-// Web stats upload client of the OVY_45 network library (see dwc/stats_upload_internal.h). Its key setup and
-// random number generator are at the end of ciSocketParseNextLine.c.
+// Web stats upload client of the OVY_45 network library.
 
 int snprintf(char *, u32, const char *, ...);
 int sprintf(char *, const char *, ...);
@@ -27,23 +26,30 @@ typedef struct SecretKey {
     u8 bytes[20];
 } SecretKey;
 
-extern const HexDigits sStr_0123456789abcdef; // "0123456789abcdef"
-extern const char sStr_0123456789abcdef_2[17];  // "0123456789abcdef"
-extern const char sStr_Hash[];    // "&hash="
-extern const char sStr_Error[];    // "error:"
-extern char gStatsUploadServerRelease[];          // server addresses
+extern const HexDigits sStr_0123456789abcdef;  // "0123456789abcdef"
+extern const char sStr_0123456789abcdef_2[17]; // "0123456789abcdef"
+extern const char sStr_Hash[];                 // "&hash="
+extern const char sStr_Error[];                // "error:"
+extern char gStatsUploadServerRelease[];       // server addresses
 extern char gStatsUploadServerDev1[];
 extern char gStatsUploadServerDev2[];
-extern const char sStr_Data[]; // "&data="
-extern const char sFmt_Int_7[]; // "%d"
-extern const char sStr_Pid[]; // "?pid="
-extern const char sFmt_PidHashData[]; // "%s%s%s?pid=%d&hash=%s&data="
+extern const char sStr_Data[];                                     // "&data="
+extern const char sFmt_Int_7[];                                    // "%d"
+extern const char sStr_Pid[];                                      // "?pid="
+extern const char sFmt_PidHashData[];                              // "%s%s%s?pid=%d&hash=%s&data="
 extern const char sStr_0000000000000000000000000000000000000000[]; // 40 '0' characters, the hash placeholder
-extern const char gStatsUploadEmptyString[]; // ""
+extern const char gStatsUploadEmptyString[];                       // ""
+
+static BOOL StatsUpload_CheckResponseHash(const char *response, int length);
+static void StatsUpload_OnRequestProgress(void);
+static void StatsUpload_OnRequestCompleted(char *response, int length, int error);
+static int StatsUpload_EncodeData(char *out, const u8 *first, int firstLength, const u8 *second, volatile int secondLength);
+static void StatsUpload_SetFailed(void);
+static int StatsUpload_PrepareUpload(char *name, int pid, const void *data, int size, StatsUploadResponseFunc callback, BOOL useLastHash);
 
 // Checks the 40 hex digit SHA-1 at the end of the response: it is computed over the base64 encoding of the rest,
 // between two copies of the secret key. On success the rest becomes the body.
-BOOL StatsUpload_CheckResponseHash(const char *response, int length) {
+static BOOL StatsUpload_CheckResponseHash(const char *response, int length) {
     char hash[41];
     u8 digest[20];
     HexDigits hex;
@@ -83,11 +89,11 @@ BOOL StatsUpload_CheckResponseHash(const char *response, int length) {
 }
 
 // Progress callback of the HTTP requests.
-void StatsUpload_OnRequestProgress(void) {
+static void StatsUpload_OnRequestProgress(void) {
 }
 
 // Completion callback of the HTTP requests: the challenge (state 5) or the upload response (state 7).
-void StatsUpload_OnRequestCompleted(char *response, int length, int error) {
+static void StatsUpload_OnRequestCompleted(char *response, int length, int error) {
     gStatsUpload.request = -1;
     if (gStatsUpload.state == STATS_UPLOAD_FAILED) {
         return;
@@ -153,7 +159,7 @@ void StatsUpload_OnRequestCompleted(char *response, int length, int error) {
 // Writes the base64 encoding of [checksum][first][second] to out (NUL terminated). The data bytes are xored
 // with the random number generator seeded with their sum; the checksum (big endian) is that sum xored with
 // checksumKey. Returns 0, or 2 when out of memory.
-int StatsUpload_EncodeData(char *out, const u8 *first, int firstLength, const u8 *second, volatile int secondLength) {
+static int StatsUpload_EncodeData(char *out, const u8 *first, int firstLength, const u8 *second, volatile int secondLength) {
     u8 *buf;
     u32 sum = 0;
     int length = secondLength + firstLength;
@@ -166,8 +172,6 @@ int StatsUpload_EncodeData(char *out, const u8 *first, int firstLength, const u8
         buf[i + 4] = first[i];
     }
     {
-        // (written this way for the matching code: the index lives in first, which is no longer needed, and
-        // secondLength is volatile)
         int n = secondLength;
         first = NULL;
         if (n > 0) {
@@ -231,7 +235,7 @@ void StatsUpload_Start(int server, char *key) {
     gStatsUpload.active = TRUE;
 }
 
-void StatsUpload_SetFailed(void) {
+static void StatsUpload_SetFailed(void) {
     if (!DWCi_IsError()) {
         DWCi_SetError(6, -90040);
     }
@@ -309,7 +313,7 @@ const char *StatsUpload_GetResponseBody(int *length) {
 // Builds the upload URL for size bytes of data. With useLastHash the hash of the last challenge is used and
 // the URL is sent at once, else a new challenge is fetched first. Returns 0, 2 when out of memory or 3 when
 // the key is not set.
-int StatsUpload_PrepareUpload(char *name, int pid, const void *data, int size, StatsUploadResponseFunc callback, BOOL useLastHash) {
+static int StatsUpload_PrepareUpload(char *name, int pid, const void *data, int size, StatsUploadResponseFunc callback, BOOL useLastHash) {
     int dataLength, dataTagLength, hashTagLength, pidLength, pidTagLength, nameLength, serverLength, gameNameLength;
     char pidText[16];
 

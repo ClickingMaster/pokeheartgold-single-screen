@@ -10,12 +10,14 @@
 
 #include "filesystem.h"
 #include "font.h"
+#include "font_sprite.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
 #include "math_util.h"
 #include "message_format.h"
 #include "msgdata.h"
+#include "oam_manager.h"
 #include "obj_char_transfer.h"
 #include "obj_pltt_transfer.h"
 #include "options.h"
@@ -28,17 +30,15 @@
 #include "save_trainer_card.h"
 #include "screen_fade.h"
 #include "sound.h"
+#include "sound_playback.h"
 #include "sound_system.h"
 #include "sprite.h"
 #include "sprite_transfer.h"
 #include "system.h"
 #include "text.h"
+#include "touchpad.h"
 #include "touchpad_internal.h"
 #include "touchscreen.h"
-#include "sound_playback.h"
-#include "oam_manager.h"
-#include "font_sprite.h"
-#include "touchpad.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 
@@ -74,45 +74,46 @@ extern const GraphicsBanks sTrainerCardSignatureGraphicsBanks;
 extern const u8 sTrainerCardSignaturePenBitmaps[][16];
 extern const TrainerCardSignatureStateFunc sTrainerCardSignatureStateFuncs[];
 
-void TrainerCardSignature_VBlankCB(BgConfig *bgConfig);
-void TrainerCardSignature_SetGfxBanks(void);
-void TrainerCardSignature_InitBgLayers(BgConfig *bgConfig);
-void TrainerCardSignature_InitStrings(TrainerCardSignature *signature);
-void TrainerCardSignature_FreeStrings(TrainerCardSignature *signature);
-void TrainerCardSignature_FreeBgLayers(BgConfig *bgConfig);
-void TrainerCardSignature_LoadBgGraphics(TrainerCardSignature *signature, NARC *narc);
-void TrainerCardSignature_InitObjTransfer(void);
-void TrainerCardSignature_InitSpriteResources(TrainerCardSignature *signature, NARC *narc);
-void TrainerCardSignature_CreateDoneButtonSprite(TrainerCardSignature *signature);
-void *TrainerCardSignature_PrintCentered(Window *window, String *string, u32 y, u8 fontId, u32 color);
-void TrainerCardSignature_CreateWindows(TrainerCardSignature *signature, OverlayManager *unused);
-void TrainerCardSignature_RemoveWindows(TrainerCardSignature *signature);
-void TrainerCardSignature_UpdateCanvasDummy(void);
-void TrainerCardSignature_HandleTouch(TrainerCardSignature *signature);
-void TrainerCardSignature_SetDoneButtonSpriteSeq(Sprite **sprite, int pressed);
-void TrainerCardSignature_SetDoneButtonPressed(Sprite **sprite, int pressed);
+static void TrainerCardSignature_VBlankCB(BgConfig *bgConfig);
+static void TrainerCardSignature_SetGfxBanks(void);
+static void TrainerCardSignature_InitBgLayers(BgConfig *bgConfig);
+static void TrainerCardSignature_InitStrings(TrainerCardSignature *signature);
+static void TrainerCardSignature_FreeStrings(TrainerCardSignature *signature);
+static void TrainerCardSignature_FreeBgLayers(BgConfig *bgConfig);
+static void TrainerCardSignature_LoadBgGraphics(TrainerCardSignature *signature, NARC *narc);
+static void TrainerCardSignature_InitObjTransfer(void);
+static void TrainerCardSignature_InitSpriteResources(TrainerCardSignature *signature, NARC *narc);
+static void TrainerCardSignature_CreateDoneButtonSprite(TrainerCardSignature *signature);
+static void *TrainerCardSignature_PrintCentered(Window *window, String *string, u32 y, u8 fontId, u32 color);
+static void TrainerCardSignature_CreateWindows(TrainerCardSignature *signature, OverlayManager *unused);
+static void TrainerCardSignature_RemoveWindows(TrainerCardSignature *signature);
+static void TrainerCardSignature_UpdateCanvasDummy(void);
+static void TrainerCardSignature_HandleTouch(TrainerCardSignature *signature);
+static void TrainerCardSignature_SetDoneButtonSpriteSeq(Sprite **sprite, int pressed);
+static void TrainerCardSignature_SetDoneButtonPressed(Sprite **sprite, int pressed);
+static void TrainerCardSignature_UpdateCanvas(TrainerCardSignature *signature);
+static void TrainerCardSignature_ShowYesNoPrompt(BgConfig *bgConfig, YesNoPrompt *yesNoPrompt);
+static void TrainerCardSignature_BlitClipped(Window *window, const void *src, s32 srcX, s32 srcY, s32 srcWidth, s32 srcHeight, s32 destX, s32 destY, s32 destWidth, s32 destHeight);
+static void TrainerCardSignature_DrawLine(Window *window, const void *src, s32 x1, s32 y1, s32 *lastX, s32 *lastY, s32 sample, s32 hasLast);
+static void TrainerCardSignature_SavePenPositions(const TrainerCardSignatureStroke *strokes, TrainerCardSignaturePenPos *penPos);
+static void TrainerCardSignature_DrawStrokes(Window *window, TrainerCardSignatureStroke *strokes, TrainerCardSignaturePenPos *penPos, u32 copyToVram);
+static void TrainerCardSignature_DrawDummy(TrainerCardSignature *signature);
+static void TrainerCardSignature_AnimateButtonPalette(u16 *angle);
+static void TrainerCardSignature_PrintPenNamesDummy(Window *windows, int unused1, u32 unused2, TrainerCardSignature *unused3);
+static void TrainerCardSignature_TakeNewStroke(TrainerCardSignature *signature);
+static void TrainerCardSignature_PrintMessage(TrainerCardSignature *signature, int msgId);
+static BOOL TrainerCardSignature_IsPrinterDone(u32 textPrinterId);
+static void TrainerCardSignature_PackCanvas(u8 *signature, const u8 *pixels);
+static void TrainerCardSignature_UpdatePenSound(TrainerCardSignature *signature);
+static void TrainerCardSignature_PlayPenSoundOnTurn(s8 *moves);
+static void TrainerCardSignature_SetDoneButtonHidden(TrainerCardSignature *signature, int hide);
+
 int TrainerCardSignature_State_Draw(TrainerCardSignature *signature, int state);
-void TrainerCardSignature_UpdateCanvas(TrainerCardSignature *signature);
-void TrainerCardSignature_ShowYesNoPrompt(BgConfig *bgConfig, YesNoPrompt *yesNoPrompt);
 int TrainerCardSignature_State_WaitConfirmMessage(TrainerCardSignature *signature, int state);
 int TrainerCardSignature_State_ConfirmPrompt(TrainerCardSignature *signature, int state);
 int TrainerCardSignature_State_ErasePrompt(TrainerCardSignature *signature, int state);
 int TrainerCardSignature_State_PrintEraseMessage(TrainerCardSignature *signature, int state);
 int TrainerCardSignature_State_WaitEraseMessage(TrainerCardSignature *signature, int state);
-void TrainerCardSignature_BlitClipped(Window *window, const void *src, s32 srcX, s32 srcY, s32 srcWidth, s32 srcHeight, s32 destX, s32 destY, s32 destWidth, s32 destHeight);
-void TrainerCardSignature_DrawLine(Window *window, const void *src, s32 x1, s32 y1, s32 *lastX, s32 *lastY, s32 sample, s32 hasLast);
-void TrainerCardSignature_SavePenPositions(const TrainerCardSignatureStroke *strokes, TrainerCardSignaturePenPos *penPos);
-void TrainerCardSignature_DrawStrokes(Window *window, TrainerCardSignatureStroke *strokes, TrainerCardSignaturePenPos *penPos, u32 copyToVram);
-void TrainerCardSignature_DrawDummy(TrainerCardSignature *signature);
-void TrainerCardSignature_AnimateButtonPalette(u16 *angle);
-void TrainerCardSignature_PrintPenNamesDummy(Window *windows, int unused1, u32 unused2, TrainerCardSignature *unused3);
-void TrainerCardSignature_TakeNewStroke(TrainerCardSignature *signature);
-void TrainerCardSignature_PrintMessage(TrainerCardSignature *signature, int msgId);
-BOOL TrainerCardSignature_IsPrinterDone(u32 textPrinterId);
-void TrainerCardSignature_PackCanvas(u8 *signature, const u8 *pixels);
-void TrainerCardSignature_UpdatePenSound(TrainerCardSignature *signature);
-void TrainerCardSignature_PlayPenSoundOnTurn(s8 *moves);
-void TrainerCardSignature_SetDoneButtonHidden(TrainerCardSignature *signature, int hide);
 
 int TrainerCardSignature_Init(OverlayManager *manager, int *state) {
     TrainerCardSignature *signature;
@@ -228,19 +229,19 @@ int TrainerCardSignature_Exit(OverlayManager *manager, int *state) {
     return TRUE;
 }
 
-void TrainerCardSignature_VBlankCB(BgConfig *bgConfig) {
+static void TrainerCardSignature_VBlankCB(BgConfig *bgConfig) {
     GF_RunVramTransferTasks();
     OamManager_ApplyAndResetBuffers();
     DoScheduledBgGpuUpdates(bgConfig);
     *(vu32 *)((u8 *)OS_IRQTable + 0x3ff8) |= OS_IE_VBLANK; // OS_SetIrqCheckFlag, addressed from OS_IRQTable
 }
 
-void TrainerCardSignature_SetGfxBanks(void) {
+static void TrainerCardSignature_SetGfxBanks(void) {
     GraphicsBanks banks = sTrainerCardSignatureGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
-void TrainerCardSignature_InitBgLayers(BgConfig *bgConfig) {
+static void TrainerCardSignature_InitBgLayers(BgConfig *bgConfig) {
     GraphicsModes modes;
     BgTemplate bg0;
     BgTemplate bg1;
@@ -267,7 +268,7 @@ void TrainerCardSignature_InitBgLayers(BgConfig *bgConfig) {
     BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 32, 0, HEAP_ID_39);
 }
 
-void TrainerCardSignature_InitStrings(TrainerCardSignature *signature) {
+static void TrainerCardSignature_InitStrings(TrainerCardSignature *signature) {
     u8 *pen;           // steps 4 bytes per pen: penNames[] and penPos[] have 4-byte elements
     u8 *styleAndCount; // the bit-field byte of each stroke
     int i;
@@ -289,7 +290,7 @@ void TrainerCardSignature_InitStrings(TrainerCardSignature *signature) {
     MIi_CpuClearFast(0, (u32 *)&signature->prevMoveX, 5);
 }
 
-void TrainerCardSignature_FreeStrings(TrainerCardSignature *signature) {
+static void TrainerCardSignature_FreeStrings(TrainerCardSignature *signature) {
     int i;
 
     YesNoPrompt_Destroy(signature->yesNoPrompt);
@@ -301,7 +302,7 @@ void TrainerCardSignature_FreeStrings(TrainerCardSignature *signature) {
     String_Delete(signature->doneString);
 }
 
-void TrainerCardSignature_FreeBgLayers(BgConfig *bgConfig) {
+static void TrainerCardSignature_FreeBgLayers(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_1);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_0);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_3);
@@ -311,7 +312,7 @@ void TrainerCardSignature_FreeBgLayers(BgConfig *bgConfig) {
     Heap_Free(bgConfig);
 }
 
-void TrainerCardSignature_LoadBgGraphics(TrainerCardSignature *signature, NARC *narc) {
+static void TrainerCardSignature_LoadBgGraphics(TrainerCardSignature *signature, NARC *narc) {
     BgConfig *bgConfig = signature->bgConfig;
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 0, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 96, HEAP_ID_39);
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 2, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 64, HEAP_ID_39);
@@ -326,7 +327,7 @@ void TrainerCardSignature_LoadBgGraphics(TrainerCardSignature *signature, NARC *
     LoadUserFrameGfx1(bgConfig, GF_BG_LYR_MAIN_0, 31, 11, 0, HEAP_ID_39);
 }
 
-void TrainerCardSignature_InitObjTransfer(void) {
+static void TrainerCardSignature_InitObjTransfer(void) {
     ObjCharTransferTemplate template = sTrainerCardSignatureObjCharTransferTemplate;
     ObjCharTransfer_Init(&template);
     ObjPlttTransfer_Init(20, HEAP_ID_39);
@@ -334,7 +335,7 @@ void TrainerCardSignature_InitObjTransfer(void) {
     ObjPlttTransfer_Reset();
 }
 
-void TrainerCardSignature_InitSpriteResources(TrainerCardSignature *signature, NARC *narc) {
+static void TrainerCardSignature_InitSpriteResources(TrainerCardSignature *signature, NARC *narc) {
     int i;
 
     NNS_G2dInitOamManagerModule();
@@ -360,7 +361,7 @@ void TrainerCardSignature_InitSpriteResources(TrainerCardSignature *signature, N
     SpriteTransfer_CreateExtPlttTransferTask(signature->resourceObjects[1][1]);
 }
 
-void TrainerCardSignature_CreateDoneButtonSprite(TrainerCardSignature *signature) {
+static void TrainerCardSignature_CreateDoneButtonSprite(TrainerCardSignature *signature) {
     SpriteTemplate template;
 
     CreateSpriteResourcesHeader(&signature->resourceHeaders[0], 0, 0, 0, 0, -1, -1, 0, 0, signature->resourceManagers[0], signature->resourceManagers[1], signature->resourceManagers[2], signature->resourceManagers[3], NULL, NULL);
@@ -387,14 +388,14 @@ void TrainerCardSignature_CreateDoneButtonSprite(TrainerCardSignature *signature
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-void *TrainerCardSignature_PrintCentered(Window *window, String *string, u32 y, u8 fontId, u32 color) {
+static void *TrainerCardSignature_PrintCentered(Window *window, String *string, u32 y, u8 fontId, u32 color) {
     int width = FontID_String_GetWidth(2, string, 0);
     int x = ((window->width << 3) - width) / 2;
     AddTextPrinterParameterizedWithColor(window, fontId, string, x, y, TEXT_SPEED_NOTRANSFER, color, NULL);
     return window->pixelBuffer;
 }
 
-void TrainerCardSignature_CreateWindows(TrainerCardSignature *signature, OverlayManager *unused) {
+static void TrainerCardSignature_CreateWindows(TrainerCardSignature *signature, OverlayManager *unused) {
     int i;
     int x;
     int width;
@@ -442,7 +443,7 @@ void TrainerCardSignature_CreateWindows(TrainerCardSignature *signature, Overlay
     TrainerCardSignature_PrintPenNamesDummy(signature->penNameWindows, 0, MAKE_TEXT_COLOR(14, 13, 15), signature);
 }
 
-void TrainerCardSignature_RemoveWindows(TrainerCardSignature *signature) {
+static void TrainerCardSignature_RemoveWindows(TrainerCardSignature *signature) {
     int i;
 
     for (i = 0; i < TRAINER_CARD_SIGNATURE_PEN_COUNT; i++) {
@@ -454,10 +455,10 @@ void TrainerCardSignature_RemoveWindows(TrainerCardSignature *signature) {
     RemoveWindow(&signature->messageWindow);
 }
 
-void TrainerCardSignature_UpdateCanvasDummy(void) {
+static void TrainerCardSignature_UpdateCanvasDummy(void) {
 }
 
-void TrainerCardSignature_HandleTouch(TrainerCardSignature *signature) {
+static void TrainerCardSignature_HandleTouch(TrainerCardSignature *signature) {
     TouchOutput touches;
     int i;
     int hit = TouchscreenHitbox_FindRectAtTouchNew(sTrainerCardSignatureButtonHitboxes);
@@ -488,7 +489,7 @@ void TrainerCardSignature_HandleTouch(TrainerCardSignature *signature) {
     }
 }
 
-void TrainerCardSignature_SetDoneButtonSpriteSeq(Sprite **sprite, int pressed) {
+static void TrainerCardSignature_SetDoneButtonSpriteSeq(Sprite **sprite, int pressed) {
     const volatile u16 *anims = sTrainerCardSignatureDoneButtonPos;
     if (pressed == 0) {
         Sprite_SetAnimCtrlSeq(*sprite, anims[2] + 1);
@@ -497,7 +498,7 @@ void TrainerCardSignature_SetDoneButtonSpriteSeq(Sprite **sprite, int pressed) {
     }
 }
 
-void TrainerCardSignature_SetDoneButtonPressed(Sprite **sprite, int pressed) {
+static void TrainerCardSignature_SetDoneButtonPressed(Sprite **sprite, int pressed) {
     if (pressed == 1) {
         Sprite_SetAnimCtrlSeq(*sprite, 1);
     } else {
@@ -514,13 +515,13 @@ int TrainerCardSignature_State_Draw(TrainerCardSignature *signature, int state) 
     return state;
 }
 
-void TrainerCardSignature_UpdateCanvas(TrainerCardSignature *signature) {
+static void TrainerCardSignature_UpdateCanvas(TrainerCardSignature *signature) {
     TrainerCardSignature_UpdateCanvasDummy();
     TrainerCardSignature_DrawDummy(signature);
     TrainerCardSignature_DrawStrokes(&signature->canvasWindow, signature->strokes, signature->penPos, FALSE);
 }
 
-void TrainerCardSignature_ShowYesNoPrompt(BgConfig *bgConfig, YesNoPrompt *yesNoPrompt) {
+static void TrainerCardSignature_ShowYesNoPrompt(BgConfig *bgConfig, YesNoPrompt *yesNoPrompt) {
     YesNoPromptTemplate template;
     template.bgConfig = bgConfig;
     template.bgId = 0;
@@ -602,7 +603,7 @@ int TrainerCardSignature_State_WaitEraseMessage(TrainerCardSignature *signature,
     return state;
 }
 
-void TrainerCardSignature_BlitClipped(Window *window, const void *src, s32 srcX, s32 srcY, s32 srcWidth, s32 srcHeight, s32 destX, s32 destY, s32 destWidth, s32 destHeight) {
+static void TrainerCardSignature_BlitClipped(Window *window, const void *src, s32 srcX, s32 srcY, s32 srcWidth, s32 srcHeight, s32 destX, s32 destY, s32 destWidth, s32 destHeight) {
     if (destX < 0) {
         s32 clip = -destX;
         if (clip > destWidth) {
@@ -627,7 +628,7 @@ void TrainerCardSignature_BlitClipped(Window *window, const void *src, s32 srcX,
 }
 
 // Draws a line of 4x4 pen dots from (*lastX, *lastY) to (x1, y1) (Bresenham).
-void TrainerCardSignature_DrawLine(Window *window, const void *src, s32 x1, s32 y1, s32 *lastX, s32 *lastY, s32 sample, s32 hasLast) {
+static void TrainerCardSignature_DrawLine(Window *window, const void *src, s32 x1, s32 y1, s32 *lastX, s32 *lastY, s32 sample, s32 hasLast) {
     s32 endX;
     s32 dx;
     s32 endY;
@@ -714,7 +715,7 @@ void TrainerCardSignature_DrawLine(Window *window, const void *src, s32 x1, s32 
     *lastY = y1;
 }
 
-void TrainerCardSignature_SavePenPositions(const TrainerCardSignatureStroke *strokes, TrainerCardSignaturePenPos *penPos) {
+static void TrainerCardSignature_SavePenPositions(const TrainerCardSignatureStroke *strokes, TrainerCardSignaturePenPos *penPos) {
     int i;
     for (i = 0; i < TRAINER_CARD_SIGNATURE_PEN_COUNT; i++, strokes++, penPos++) {
         penPos->count = strokes->count;
@@ -725,7 +726,7 @@ void TrainerCardSignature_SavePenPositions(const TrainerCardSignatureStroke *str
     }
 }
 
-void TrainerCardSignature_DrawStrokes(Window *window, TrainerCardSignatureStroke *strokes, TrainerCardSignaturePenPos *penPos, u32 copyToVram) {
+static void TrainerCardSignature_DrawStrokes(Window *window, TrainerCardSignatureStroke *strokes, TrainerCardSignaturePenPos *penPos, u32 copyToVram) {
     s32 lastX;
     s32 lastY;
     int i;
@@ -757,11 +758,11 @@ void TrainerCardSignature_DrawStrokes(Window *window, TrainerCardSignatureStroke
     }
 }
 
-void TrainerCardSignature_DrawDummy(TrainerCardSignature *signature) {
+static void TrainerCardSignature_DrawDummy(TrainerCardSignature *signature) {
 #pragma unused(signature)
 }
 
-void TrainerCardSignature_AnimateButtonPalette(u16 *angle) {
+static void TrainerCardSignature_AnimateButtonPalette(u16 *angle) {
     u16 color;
     s32 value;
 
@@ -774,15 +775,15 @@ void TrainerCardSignature_AnimateButtonPalette(u16 *angle) {
     GX_LoadOBJPltt(&color, 0x18, 2);
 }
 
-void TrainerCardSignature_PrintPenNamesDummy(Window *windows, int unused1, u32 unused2, TrainerCardSignature *unused3) {
+static void TrainerCardSignature_PrintPenNamesDummy(Window *windows, int unused1, u32 unused2, TrainerCardSignature *unused3) {
 #pragma unused(windows, unused1, unused2, unused3)
 }
 
-void TrainerCardSignature_TakeNewStroke(TrainerCardSignature *signature) {
+static void TrainerCardSignature_TakeNewStroke(TrainerCardSignature *signature) {
     signature->strokes[0] = signature->newStroke;
 }
 
-void TrainerCardSignature_PrintMessage(TrainerCardSignature *signature, int msgId) {
+static void TrainerCardSignature_PrintMessage(TrainerCardSignature *signature, int msgId) {
     String *template = String_New(80, HEAP_ID_39);
     ReadMsgDataIntoString(signature->msgData, msgId, template);
     StringExpandPlaceholders(signature->msgFormat, signature->messageString, template);
@@ -792,13 +793,13 @@ void TrainerCardSignature_PrintMessage(TrainerCardSignature *signature, int msgI
     signature->textPrinterId = AddTextPrinterParameterized(&signature->messageWindow, 1, signature->messageString, 0, 0, Options_GetTextFrameDelay(signature->options), NULL);
 }
 
-BOOL TrainerCardSignature_IsPrinterDone(u32 textPrinterId) {
+static BOOL TrainerCardSignature_IsPrinterDone(u32 textPrinterId) {
     return TextPrinterCheckActive((u8)textPrinterId) ? FALSE : TRUE;
 }
 
 // Packs the 4bpp canvas (colour 1 = ink) into the save's 1bpp signature.
 
-void TrainerCardSignature_PackCanvas(u8 *signature, const u8 *pixels) {
+static void TrainerCardSignature_PackCanvas(u8 *signature, const u8 *pixels) {
     int n = 0;
     int bit = 0;
     int i = 0;
@@ -822,7 +823,7 @@ void TrainerCardSignature_PackCanvas(u8 *signature, const u8 *pixels) {
     }
 }
 
-void TrainerCardSignature_UpdatePenSound(TrainerCardSignature *signature) {
+static void TrainerCardSignature_UpdatePenSound(TrainerCardSignature *signature) {
     int diff;
 
     if (gSystem.touchX != 0xFFFF && gSystem.touchY != 0xFFFF && signature->lastTouchX != 0xFFFF && signature->lastTouchY != 0xFFFF) {
@@ -863,7 +864,7 @@ void TrainerCardSignature_UpdatePenSound(TrainerCardSignature *signature) {
 
 // moves: previous x/y direction, current x/y direction. Plays the pen sound when the pen starts
 // moving or changes direction.
-void TrainerCardSignature_PlayPenSoundOnTurn(s8 *moves) {
+static void TrainerCardSignature_PlayPenSoundOnTurn(s8 *moves) {
     if (moves[0] == 0 && moves[1] == 0) {
         if (!IsSEPlaying(SEQ_SE_DP_KYU01)) {
             PlaySE(SEQ_SE_DP_KYU01);
@@ -886,7 +887,7 @@ done:
     moves[3] = 0;
 }
 
-void TrainerCardSignature_SetDoneButtonHidden(TrainerCardSignature *signature, int hide) {
+static void TrainerCardSignature_SetDoneButtonHidden(TrainerCardSignature *signature, int hide) {
     if (hide == 1) {
         Sprite_SetDrawFlag(signature->doneButtonSprite, FALSE);
         return;

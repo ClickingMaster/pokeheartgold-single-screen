@@ -4,30 +4,11 @@
 	.include "overlay_106.inc"
 	.include "global.inc"
 	.public gLegendaryCinematicModelScale
-	.public LegendaryCinematic_SetLights
-	.public LegendaryCinematic_SetEdgeMarking
-	.public LegendaryCinematic_LoadModels
-	.public LegendaryCinematic_FreeModels
-	.public LegendaryCinematic_DrawModels
-	.public LegendaryCinematic_IsModelAnimating
-	.public LegendaryCinematic_InitCameraAndLights
-	.public LegendaryCinematic_StartCapture
-	.public LegendaryCinematic_StopCapture
-	.public LegendaryCinematic_CaptureTask
-	.public LegendaryCinematic_CaptureStartTask
-	.public LegendaryCinematic_InitCapture
 	.public LugiaCinematic_Init
 	.public LugiaCinematic_Play
-	.public ArceusCinematic_InitBgs
-	.public ArceusCinematic_InitSprites
-	.public ArceusCinematic_DeleteSprite
-	.public ArceusCinematic_GetOverworldModel
-	.public ArceusCinematic_LoadArceusSprite
 	.public ArceusCinematic_Init
 	.public ArceusCinematic_Blend
 	.public ArceusCinematic_RunScript
-	.public ArceusCinematic_LoadBgPalette
-	.public ArceusCinematic_TransferBgPalettes
 	.public ArceusScriptCmd_WaitFade
 	.public gLegendaryCinematicGraphicsModes
 	.public gLegendaryCinematicModelRotation
@@ -62,19 +43,6 @@
 	.public ScriptCinematic_Arceus
 	.public ScriptCinematic_HoOh
 	.public ScriptCinematic_Lugia
-	.public LegendaryCinematic_Init3D
-	.public LegendaryCinematic_Free3D
-	.public LegendaryCinematic_FadeInFromBlack
-	.public LegendaryCinematic_FadeOutToBlack
-	.public LegendaryCinematic_FadeInFromWhite
-	.public LegendaryCinematic_FadeOutToWhite
-	.public LegendaryCinematic_SetCamera
-	.public LegendaryCinematic_AreModelsAnimating
-	.public LegendaryCinematic_SetBanks
-	.public LegendaryCinematic_SetGraphicsModes
-	.public LegendaryCinematic_FreeCamera
-	.public LegendaryCinematic_StartMotionBlur
-	.public LegendaryCinematic_StopMotionBlur
 	.public HoOhCinematic_Init
 	.public HoOhCinematic_Exit
 	.public HoOhCinematic_WaitFade
@@ -83,13 +51,6 @@
 	.public HoOhCinematic_PlaySecondScene
 	.public LugiaCinematic_Exit
 	.public LugiaCinematic_WaitFade
-	.public ArceusCinematic_VBlank
-	.public ArceusCinematic_SetBanks
-	.public ArceusCinematic_FreeBgs
-	.public ArceusCinematic_FreeSprites
-	.public ArceusCinematic_UpdateSprites
-	.public ArceusCinematic_LoadObjChar
-	.public ArceusCinematic_LoadObjPltt
 	.public ArceusCinematic_Exit
 	.public ArceusCinematic_WaitFade
 	.public ArceusScriptCmd_Wait

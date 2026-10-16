@@ -25,7 +25,7 @@ typedef struct VsRecorderS8x6 {
 
 extern const u8 sVsRecorderMenuRowDrawPriorities[2][5];
 
-// x offsets of the decor sprites (vs_recorder_ui.c)
+// x offsets of the decor sprites
 const VsRecorderS8x6 gVsRecorderDecorSpriteXOffsets = {
     { -1, -3, 2, -1, -3, 2 }
 };

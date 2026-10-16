@@ -20,21 +20,6 @@
 .public _s32_div_f
 .public FX_SinCosTable_
 
-	.public PokepicScriptAnim_Task
-	.public PokepicScriptAnim_RunFrame
-	.public PokepicScriptAnim_GetScriptWordAt
-	.public PokepicScriptAnim_GetScriptWordChecked
-	.public PokepicScriptAnim_GetScriptWord
-	.public PokepicScriptAnim_AllocMotion
-	.public PokepicScriptAnim_ReadArg
-	.public PokepicScriptAnim_ReadArgByte
-	.public PokepicScriptAnim_ReadVarIndex
-	.public PokepicScriptAnim_ReadVarIndexPair
-	.public PokepicScriptAnim_ReadDestVarAndOperands
-	.public PokepicScriptAnim_ReadDestAndOperands
-	.public PokepicScriptAnim_ReadDestAngleAndAmplitude
-	.public PokepicScriptAnim_Compare
-	.public PokepicScriptAnim_AdjustYForScale
 	.public PokepicScriptAnimCmd_End
 	.public PokepicScriptAnimCmd_Yield
 	.public PokepicScriptAnimCmd_ResetTransform
@@ -69,9 +54,6 @@
 	.public PokepicScriptAnimCmd_StartAccelMotion
 	.public PokepicScriptAnimCmd_StartLinearMotion
 	.public PokepicScriptAnimCmd_StartAccelMotionToLimit
-	.public PokepicMotion_ApplyValue
-	.public PokepicMotion_SetTarget
-	.public PokepicScriptAnim_StartMotion
 	.public PokepicMotion_UpdateWave
 	.public PokepicMotion_UpdateWaveOverDuration
 	.public PokepicMotion_UpdateAccel

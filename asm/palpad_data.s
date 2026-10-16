@@ -499,12 +499,9 @@
 	.public _0222ED58
 	.public _0222ED5C
 	.public sPalPadDetailsPagePrinters
-	.public PalPad_VBlankCallback
 	.public PalPad_SetupScreens
 	.public PalPad_TeardownScreens
 	.public PalPad_AddWindow
-	.public PalPadShared_Init
-	.public PalPadShared_Free
 	.public PalPadShared_SetNextScreen
 	.public PalPadShared_ResetInputStateOnKey
 	.public PalPadShared_SetNameAndCode
@@ -512,21 +509,6 @@
 	.public PalPadShared_SetInitialName
 	.public PalPadShared_SetSelectedFriend
 	.public PalPadShared_ReadFriendList
-	.public PalPadGfx_Init
-	.public PalPadGfx_RenderSprites
-	.public PalPadGfx_VBlank
-	.public PalPadGfx_Free
-	.public PalPadGfx_SetVramBanks
-	.public PalPadGfx_InitBgs
-	.public PalPadGfx_FreeBgs
-	.public PalPadGfx_InitSpriteSystem
-	.public PalPadGfx_FreeSpriteSystem
-	.public PalPadGfx_InitMsg
-	.public PalPadGfx_FreeMsg
-	.public PalPadGfx_InitWindows
-	.public PalPadGfx_FreeWindows
-	.public PalPadGfx_LoadScreens
-	.public PalPadGfx_FreeScreens
 	.public PalPadGfx_PrintTitle
 	.public PalPadGfx_ClearTitle
 	.public PalPadGfx_BufferFriendCode
@@ -535,8 +517,6 @@
 	.public PalPadGfx_BufferLastDate
 	.public PalPadGfx_BufferNumber
 	.public PalPadGfx_BufferActivityName
-	.public PalPadGfx_CreateSprites
-	.public PalPadGfx_DeleteSprites
 	.public PalPadGfx_SetArrowsVisible
 	.public PalPadGfx_SetArrowsAnimActive
 	.public PalPadGfx_AnimateArrow
@@ -549,110 +529,28 @@
 	.public PalPadMenu_Exit
 	.public PalPadMenu_Setup
 	.public PalPadMenu_Teardown
-	.public PalPadMenu_Show
-	.public PalPadMenu_HandleKeys
-	.public PalPadMenu_HandleTouch
-	.public PalPadMenu_HandleInput
-	.public PalPadMenu_MoveCursor
-	.public PalPadMenu_HighlightSelection
-	.public PalPadMenu_ClearHighlight
-	.public PalPadMenu_SetNextScreen
-	.public PalPadMenu_Hide
-	.public PalPadMenu_PrintMessage
-	.public PalPadMenu_IsMessageDone
-	.public PalPadMenu_ClearMessage
-	.public PalPadMenu_CanSelect
 	.public PalPadRoster_Init
 	.public PalPadRoster_Main
 	.public PalPadRoster_Exit
 	.public PalPadRoster_Setup
 	.public PalPadRoster_Teardown
-	.public PalPadRoster_Show
-	.public PalPadRoster_Hide
-	.public PalPadRoster_HandleAction
-	.public PalPadRoster_HandleKeys
-	.public PalPadRoster_HandleTouch
-	.public PalPadRoster_HandleInput
-	.public PalPadRoster_StartPageScroll
-	.public PalPadRoster_UpdatePageScroll
-	.public PalPadRoster_OpenFriendMenu
-	.public PalPadRoster_HandleFriendMenu
-	.public PalPadRoster_ShowFriendCode
-	.public PalPadRoster_ConfirmDelete
-	.public PalPadRoster_StartDeletePrompt
-	.public PalPadRoster_DrawPage
-	.public PalPadRoster_DrawTabs
 	.public PalPadRoster_DeselectTab
 	.public PalPadRoster_DrawTabsOnScroll
-	.public PalPadRoster_StartScroll
-	.public PalPadRoster_PrintMessage
-	.public PalPadRoster_IsMessageDone
-	.public PalPadRoster_ClearMessage
-	.public PalPadRoster_GetSelectedIndex
-	.public PalPadRoster_MenuCallback
-	.public PalPadRoster_StartDeleteEffect
-	.public PalPadRoster_UpdateDeleteEffect
-	.public PalPadRoster_EndDeleteEffect
-	.public PalPadRosterPage_Init
-	.public PalPadRosterPage_Free
-	.public PalPadRosterPage_DrawFrame
-	.public PalPadRoster_SetCursor
-	.public PalPadRosterPage_HighlightSlot
-	.public PalPadRosterPage_Draw
-	.public PalPadRosterPage_Clear
-	.public PalPadRosterPage_DeleteIcons
-	.public PalPadRosterPage_DrawFriend
-	.public PalPadRosterPage_DrawEmptySlot
 	.public PalPadNaming_Init
 	.public PalPadNaming_Main
 	.public PalPadNaming_Exit
 	.public PalPadNaming_Setup
 	.public PalPadNaming_Teardown
-	.public PalPadNaming_CreateNamingArgs
 	.public PalPadFriendCode_Init
 	.public PalPadFriendCode_Main
 	.public PalPadFriendCode_Exit
-	.public PalPadFriendCode_HandleInput
 	.public PalPadFriendCode_Setup
 	.public PalPadFriendCode_Teardown
-	.public PalPadFriendCode_Show
-	.public PalPadFriendCode_Hide
-	.public PalPadFriendCode_HighlightReturn
 	.public PalPadDetails_Init
 	.public PalPadDetails_Main
 	.public PalPadDetails_Exit
-	.public PalPadDetails_IsLastPage
-	.public PalPadDetails_HandleAction
-	.public PalPadDetails_HandleKeys
-	.public PalPadDetails_HandleTouch
-	.public PalPadDetails_HandleInput
-	.public PalPadDetails_StartPageScroll
-	.public PalPadDetails_UpdatePageScroll
 	.public PalPadDetails_Setup
 	.public PalPadDetails_Teardown
-	.public PalPadDetails_Show
-	.public PalPadDetails_Hide
-	.public PalPadDetails_HideForFriendChange
-	.public PalPadDetails_DrawProfile
-	.public PalPadDetails_ClearProfile
-	.public PalPadDetails_DrawPage
-	.public PalPadDetails_SetCursor
-	.public PalPadDetails_HideCursor
-	.public PalPadDetails_DrawTabs
-	.public PalPadDetails_ClearTabs
-	.public PalPadDetails_SelectNextFriend
-	.public PalPadDetails_LoadScreens
-	.public PalPadDetails_FreeScreens
-	.public PalPadDetails_AddProfileWindows
-	.public PalPadDetails_RemoveProfileWindows
-	.public PalPadDetailsSlot_Init
-	.public PalPadDetailsSlot_Free
-	.public PalPadDetailsSlot_AddWindows
-	.public PalPadDetailsSlot_RemoveWindows
-	.public PalPadDetailsSlot_CopyWindowsToVram
-	.public PalPadDetailsSlot_ClearWindows
-	.public PalPadDetailsSlot_DrawPage
-	.public PalPadDetailsSlot_Clear
 	.public PalPadDetails_PrintUnionRoomPage
 	.public PalPadDetails_PrintBattleTowerPage
 	.public PalPadDetails_PrintBattleFactoryPage
@@ -733,32 +631,18 @@
 	.extern PalPadDetails_PrintBattleArcadePage
 	.extern PalPadDetails_PrintWiFiPlazaPage
 	.extern PalPadDetails_PrintReturnPage
-	.public PalPad_VBlankCallback
-	.public PalPadShared_Free
 	.public PalPadShared_SetNextScreen
 	.public PalPadShared_SetNameAndCode
 	.public PalPadShared_SetInitialName
 	.public PalPadShared_SetSelectedFriend
-	.public PalPadGfx_RenderSprites
-	.public PalPadGfx_VBlank
-	.public PalPadGfx_Free
-	.public PalPadGfx_InitMsg
-	.public PalPadGfx_FreeMsg
 	.public PalPadGfx_BufferNumber
 	.public PalPadGfx_BufferActivityName
 	.public PalPadGfx_SetCursor
 	.public PalPadGfx_HandleYesNo
 	.public PalPadMenu_Exit
 	.public PalPadMenu_Teardown
-	.public PalPadMenu_ClearMessage
 	.public PalPadRoster_Init
 	.public PalPadRoster_Exit
-	.public PalPadRoster_StartDeletePrompt
-	.public PalPadRoster_StartScroll
-	.public PalPadRoster_ClearMessage
-	.public PalPadRoster_UpdateDeleteEffect
-	.public PalPadRosterPage_Free
-	.public PalPadRosterPage_DeleteIcons
 	.public PalPadNaming_Exit
 	.public PalPadNaming_Setup
 	.public PalPadNaming_Teardown
@@ -766,10 +650,6 @@
 	.public PalPadFriendCode_Teardown
 	.public PalPadDetails_Init
 	.public PalPadDetails_Exit
-	.public PalPadDetails_IsLastPage
-	.public PalPadDetails_HideCursor
-	.public PalPadDetails_FreeScreens
-	.public PalPadDetailsSlot_Free
 	.include "asm/macros.inc"
 	.include "overlay_43.inc"
 	.include "global.inc"

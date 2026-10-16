@@ -24,7 +24,7 @@ BOOL Pokedex_Init(OverlayManager *man, int *state);
 BOOL Pokedex_Main(OverlayManager *man, int *state);
 BOOL Pokedex_Exit(OverlayManager *man, int *state);
 
-OverlayManager *PokedexEntryPopup_Create(PokedexEntryPopupArgs *unkStruct);
+OverlayManager *PokedexEntryPopup_Create(PokedexEntryPopupArgs *args);
 s32 PokedexEntryPopup_IsDone(OverlayManager *man);
 void PokedexEntryPopup_Delete(OverlayManager *man);
 Pokepic *PokedexEntryPopup_GetPokepic(OverlayManager *man);

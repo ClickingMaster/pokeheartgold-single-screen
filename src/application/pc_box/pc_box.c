@@ -50,6 +50,30 @@ extern const u16 sPCBoxReleaseCheckMoves[];
 extern const u8 sPCBoxSlotGridRect[];
 extern const u8 sPCBoxTrayRects[];
 
+static void PCBox_UpdateDetailPanel(PCBoxWork *work);
+static void PCBox_SwapBoxAndPartyMon(PCBoxWork *work, PCBoxMoveEntry *a, PCBoxMoveEntry *b);
+static void PCBox_MoveBoxMonToParty(PCBoxWork *work, PCBoxMoveEntry *e);
+static void PCBox_MovePartyMonToBox(PCBoxWork *work, PCBoxMoveEntry *e);
+static void PCBox_SwapPartyMons(PCBoxWork *work, PCBoxMoveEntry *e);
+static void PCBox_MovePartyMonToEnd(PCBoxWork *work, PCBoxMoveEntry *e);
+static void PCBox_MoveBoxMonToOtherBox(PCBoxWork *work, PCBoxMoveEntry *e);
+static void PCBox_MovePartyMonToOtherBox(PCBoxWork *work, PCBoxMoveEntry *e);
+static u32 PCBox_GetTargetBoxId(PCBoxWork *work, u32 v);
+static u32 PCBox_CanMoveMon(PCBoxWork *work, u32 a, u32 b);
+static u32 PCBox_CanMovePartyMonToEmptySlot(PCBoxWork *work, u32 a, u32 b);
+static void PCBox_SetupMoveEntryToSlot(PCBoxWork *work, PCBoxMoveEntry *e);
+static void PCBox_SetupMoveEntryToSprite(PCBoxWork *work, PCBoxMoveEntry *e);
+static void PCBox_SetupMonSwapEntries(PCBoxWork *work, u32 a, u32 b);
+static s32 PCBox_GetReleaseCheckMoveIndex(u16 v);
+static void PCBox_FreeMonInfo(PCBoxMonInfo *monInfo);
+static void PCBox_DrawMonInfo(PCBoxWork *work, PCBoxMonInfo *monInfo);
+static void PCBox_DrawMonItemInfo(PCBoxWork *work, PCBoxMonInfo *monInfo);
+static void PCBox_LoadWallpaperChars(PCBoxWork *work, s32 member, u32 unused, u32 offset);
+static void PCBox_LoadWallpaperPalette(PCBoxWork *work, s32 member, u32 palette);
+static void PCBox_LoadWallpaperTilemap(PCBoxWork *work, s32 unused, u32 tile, u32 addend, u32 palette);
+static void PCBox_LoadWallpaper(PCBoxWork *work, s32 member, u32 tile, u32 offset, u32 palette);
+static u32 PCBox_IsPointInRect(s32 x, s32 y, const u8 *r);
+
 BOOL PCBox_Init(OverlayManager *manager, int *state) {
     PCBoxWork *work;
 
@@ -103,7 +127,7 @@ void PCBox_VBlankCallback(SysTask *task, void *data) {
     OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
-void PCBox_UpdateDetailPanel(PCBoxWork *work) {
+static void PCBox_UpdateDetailPanel(PCBoxWork *work) {
     if (work->args->mode != PC_BOX_MODE_MOVE_ITEMS) {
         BgCellManager_UpdateCellMove(work->view->panels, 0x10);
         return;
@@ -351,7 +375,7 @@ void PCBox_DeleteSlotMon(PCBoxWork *work, u32 boxId, u32 idx) {
     }
 }
 
-void PCBox_SwapBoxAndPartyMon(PCBoxWork *work, PCBoxMoveEntry *a, PCBoxMoveEntry *b) {
+static void PCBox_SwapBoxAndPartyMon(PCBoxWork *work, PCBoxMoveEntry *a, PCBoxMoveEntry *b) {
     u8 mood;
     u32 slot;
     CopyBoxPokemonToPokemon(PCBox_GetSlotBoxMon(work, work->activeBox, a->from), a->mon);
@@ -365,7 +389,7 @@ void PCBox_SwapBoxAndPartyMon(PCBoxWork *work, PCBoxMoveEntry *a, PCBoxMoveEntry
     PCBox_RefreshTrayBoxThumbnail(work, work->activeBox);
 }
 
-void PCBox_MoveBoxMonToParty(PCBoxWork *work, PCBoxMoveEntry *e) {
+static void PCBox_MoveBoxMonToParty(PCBoxWork *work, PCBoxMoveEntry *e) {
     CopyBoxPokemonToPokemon(PCBox_GetSlotBoxMon(work, work->activeBox, e->from), e->mon);
     Party_AddMon(work->party, e->mon);
     PCBox_DeleteSlotMon(work, work->activeBox, e->from);
@@ -373,7 +397,7 @@ void PCBox_MoveBoxMonToParty(PCBoxWork *work, PCBoxMoveEntry *e) {
     PCBox_RefreshTrayBoxThumbnail(work, work->activeBox);
 }
 
-void PCBox_MovePartyMonToBox(PCBoxWork *work, PCBoxMoveEntry *e) {
+static void PCBox_MovePartyMonToBox(PCBoxWork *work, PCBoxMoveEntry *e) {
     u8 mood;
     Pokemon *mon;
     mon = Party_GetMonByIndex(work->party, e->from - 30);
@@ -385,7 +409,7 @@ void PCBox_MovePartyMonToBox(PCBoxWork *work, PCBoxMoveEntry *e) {
     PCBox_RefreshTrayBoxThumbnail(work, work->activeBox);
 }
 
-void PCBox_SwapPartyMons(PCBoxWork *work, PCBoxMoveEntry *e) {
+static void PCBox_SwapPartyMons(PCBoxWork *work, PCBoxMoveEntry *e) {
     PartyExtraSub subA;
     PartyExtraSub subB;
     u32 slotA;
@@ -401,7 +425,7 @@ void PCBox_SwapPartyMons(PCBoxWork *work, PCBoxMoveEntry *e) {
     Party_SetMonAprijuiceModifiers(work->party, &subA, slotB);
 }
 
-void PCBox_MovePartyMonToEnd(PCBoxWork *work, PCBoxMoveEntry *e) {
+static void PCBox_MovePartyMonToEnd(PCBoxWork *work, PCBoxMoveEntry *e) {
     PartyExtraSub sub;
     u32 slot = e->from - 30;
     u32 last;
@@ -413,7 +437,7 @@ void PCBox_MovePartyMonToEnd(PCBoxWork *work, PCBoxMoveEntry *e) {
     Party_SetMonAprijuiceModifiers(work->party, &sub, last);
 }
 
-void PCBox_MoveBoxMonToOtherBox(PCBoxWork *work, PCBoxMoveEntry *e) {
+static void PCBox_MoveBoxMonToOtherBox(PCBoxWork *work, PCBoxMoveEntry *e) {
     BoxPokemon *mon = PCBox_GetSlotBoxMon(work, work->activeBox, e->from);
     u32 box = PCBox_GetTargetBoxId(work, e->to);
     PCStorage_PlaceMonInBoxFirstEmptySlot(work->storage, box, mon);
@@ -424,7 +448,7 @@ void PCBox_MoveBoxMonToOtherBox(PCBoxWork *work, PCBoxMoveEntry *e) {
     PCBox_RefreshTrayBoxThumbnail(work, box);
 }
 
-void PCBox_MovePartyMonToOtherBox(PCBoxWork *work, PCBoxMoveEntry *e) {
+static void PCBox_MovePartyMonToOtherBox(PCBoxWork *work, PCBoxMoveEntry *e) {
     u32 box = PCBox_GetTargetBoxId(work, e->to);
     CopyPokemonToPokemon(Party_GetMonByIndex(work->party, e->from - 30), e->mon);
     if (GetMonData(e->mon, MON_DATA_SPECIES, NULL) == SPECIES_SHAYMIN) {
@@ -473,7 +497,7 @@ void PCBox_ApplyMonMove(PCBoxWork *work) {
     }
 }
 
-u32 PCBox_GetTargetBoxId(PCBoxWork *work, u32 v) {
+static u32 PCBox_GetTargetBoxId(PCBoxWork *work, u32 v) {
     return (v & 0x7F) + work->trayBox / 6 * 6;
 }
 
@@ -639,7 +663,7 @@ u32 PCBox_AnimateMoveEntries(PCBoxWork *work) {
     return 1;
 }
 
-u32 PCBox_CanMoveMon(PCBoxWork *work, u32 a, u32 b) {
+static u32 PCBox_CanMoveMon(PCBoxWork *work, u32 a, u32 b) {
     u32 box;
     u32 t;
     Pokemon *mon;
@@ -689,7 +713,7 @@ u32 PCBox_CanMoveMon(PCBoxWork *work, u32 a, u32 b) {
     return 1;
 }
 
-u32 PCBox_CanMovePartyMonToEmptySlot(PCBoxWork *work, u32 a, u32 b) {
+static u32 PCBox_CanMovePartyMonToEmptySlot(PCBoxWork *work, u32 a, u32 b) {
     Pokemon *mon;
     if (PCBox_GetSlotMonData(work, b, MON_DATA_SPECIES_EXISTS, NULL) != 0) {
         return 0;
@@ -733,7 +757,7 @@ u32 PCBox_CanSwapHeldItems(PCBoxWork *work, u32 a, u32 b) {
     return 1;
 }
 
-void PCBox_SetupMoveEntryToSlot(PCBoxWork *work, PCBoxMoveEntry *e) {
+static void PCBox_SetupMoveEntryToSlot(PCBoxWork *work, PCBoxMoveEntry *e) {
     s16 pos[2];
     PCBoxView *view = work->view;
     ManagedSprite_GetPositionXY(view->sprites[view->slotIcons[e->from]], &e->px, &e->py);
@@ -758,7 +782,7 @@ void PCBox_SetupMoveEntryToSlot(PCBoxWork *work, PCBoxMoveEntry *e) {
     }
 }
 
-void PCBox_SetupMoveEntryToSprite(PCBoxWork *work, PCBoxMoveEntry *e) {
+static void PCBox_SetupMoveEntryToSprite(PCBoxWork *work, PCBoxMoveEntry *e) {
     s16 pos[2];
     PCBoxView *view = work->view;
     u32 j = view->slotIcons[e->to];
@@ -780,7 +804,7 @@ void PCBox_SetupMoveEntryToSprite(PCBoxWork *work, PCBoxMoveEntry *e) {
     }
 }
 
-void PCBox_SetupMonSwapEntries(PCBoxWork *work, u32 a, u32 b) {
+static void PCBox_SetupMonSwapEntries(PCBoxWork *work, u32 a, u32 b) {
     PCBoxMoveWork *w = work->view->temp;
     w->entries[0].from = a;
     w->entries[0].to = b;
@@ -1015,7 +1039,7 @@ void PCBox_ApplyMoveEntryIcons(PCBoxWork *work, PCBoxMoveEntry *e) {
     }
 }
 
-s32 PCBox_GetReleaseCheckMoveIndex(u16 v) {
+static s32 PCBox_GetReleaseCheckMoveIndex(u16 v) {
     u32 i;
     for (i = 0; i < 4; i++) {
         if (v == sPCBoxReleaseCheckMoves[i]) {
@@ -1134,11 +1158,11 @@ PCBoxMonInfo *PCBox_CreateMonInfo(BoxPokemon *boxMon) {
     return monInfo;
 }
 
-void PCBox_FreeMonInfo(PCBoxMonInfo *monInfo) {
+static void PCBox_FreeMonInfo(PCBoxMonInfo *monInfo) {
     Heap_Free(monInfo);
 }
 
-void PCBox_DrawMonInfo(PCBoxWork *work, PCBoxMonInfo *monInfo) {
+static void PCBox_DrawMonInfo(PCBoxWork *work, PCBoxMonInfo *monInfo) {
     u32 base = PCBox_DrawMoveWindows(work, monInfo);
     u32 i;
 
@@ -1154,7 +1178,7 @@ void PCBox_DrawMonInfo(PCBoxWork *work, PCBoxMonInfo *monInfo) {
     PCBox_DrawMarkings(work, monInfo->markings);
 }
 
-void PCBox_DrawMonItemInfo(PCBoxWork *work, PCBoxMonInfo *monInfo) {
+static void PCBox_DrawMonItemInfo(PCBoxWork *work, PCBoxMonInfo *monInfo) {
     u32 base;
 
     if (monInfo->heldItem != ITEM_NONE) {
@@ -1234,7 +1258,7 @@ void PCBox_ClearMonInfoAndSelection(PCBoxWork *work) {
     work->selectedSlot = 0xff;
 }
 
-void PCBox_LoadWallpaperChars(PCBoxWork *work, s32 member, u32 unused, u32 offset) {
+static void PCBox_LoadWallpaperChars(PCBoxWork *work, s32 member, u32 unused, u32 offset) {
     NNSG2dCharacterData *data;
     void *allocation = GfGfxLoader_GetCharData(NARC_a_0_1_9, member + 0x10, TRUE, &data, HEAP_ID_10);
 
@@ -1243,11 +1267,11 @@ void PCBox_LoadWallpaperChars(PCBoxWork *work, s32 member, u32 unused, u32 offse
     Heap_Free(allocation);
 }
 
-void PCBox_LoadWallpaperPalette(PCBoxWork *work, s32 member, u32 palette) {
+static void PCBox_LoadWallpaperPalette(PCBoxWork *work, s32 member, u32 palette) {
     GfGfxLoader_GXLoadPal(NARC_a_0_1_9, member + 0x28, GF_PAL_LOCATION_MAIN_BG, (enum GFPalSlotOffset)(palette << 5), 0x20, HEAP_ID_10);
 }
 
-void PCBox_LoadWallpaperTilemap(PCBoxWork *work, s32 unused, u32 tile, u32 addend, u32 palette) {
+static void PCBox_LoadWallpaperTilemap(PCBoxWork *work, s32 unused, u32 tile, u32 addend, u32 palette) {
     NNSG2dScreenData *screen;
     void *allocation;
     u16 *raw;
@@ -1277,7 +1301,7 @@ void PCBox_LoadWallpaperTilemap(PCBoxWork *work, s32 unused, u32 tile, u32 adden
     FillBgTilemapRect(work->view->bgConfig, GF_BG_LYR_MAIN_3, 0x1001, x, 0, 2, 0x14, 0x11);
 }
 
-void PCBox_LoadWallpaper(PCBoxWork *work, s32 member, u32 tile, u32 offset, u32 palette) {
+static void PCBox_LoadWallpaper(PCBoxWork *work, s32 member, u32 tile, u32 offset, u32 palette) {
     PCBox_LoadWallpaperChars(work, member, tile, offset);
     PCBox_LoadWallpaperPalette(work, member, palette);
     PCBox_LoadWallpaperTilemap(work, member, tile, offset, palette);
@@ -1336,7 +1360,7 @@ u32 PCBox_GetWallpaperGfxIndex(PCBoxWork *work, u32 box) {
     return v;
 }
 
-u32 PCBox_IsPointInRect(s32 x, s32 y, const u8 *r) {
+static u32 PCBox_IsPointInRect(s32 x, s32 y, const u8 *r) {
     if (x >= r[0] && x <= r[1] && y >= r[2] && y < r[3]) {
         return 1;
     }

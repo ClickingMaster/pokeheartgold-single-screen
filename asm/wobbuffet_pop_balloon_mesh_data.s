@@ -53,13 +53,8 @@
 	.public WobbuffetPopBalloon_InitMeshVertices
 	.public WobbuffetPopBalloon_InitMeshTexCoords
 	.public WobbuffetPopBalloon_DrawMesh
-	.public WobbuffetPopBalloon_ToVtx16
 	.public WobbuffetPopBalloon_TryGrabHandle
 	.public WobbuffetPopBalloon_UpdateDrag
-	.public WobbuffetPopBalloon_DeformMesh
-	.public WobbuffetPopBalloon_GetPushSide
-	.public WobbuffetPopBalloon_CalcSidePush
-	.public WobbuffetPopBalloon_CalcMeshArea
 	.public WobbuffetPopBalloon_CalcMeshAreaPercent
 	.public WobbuffetPop_LoadHandleSpriteResources
 	.public WobbuffetPop_FreeHandleSpriteResources
@@ -78,8 +73,6 @@
 	.public WobbuffetPopBalloon_LoadShininessTable
 	.public WobbuffetPopBalloon_InitMeshVertices
 	.public WobbuffetPopBalloon_InitMeshTexCoords
-	.public WobbuffetPopBalloon_GetPushSide
-	.public WobbuffetPopBalloon_CalcMeshArea
 	.public WobbuffetPopBalloon_CalcMeshAreaPercent
 	.public WobbuffetPop_LoadHandleSpriteResources
 	.public WobbuffetPop_FreeHandleSpriteResources

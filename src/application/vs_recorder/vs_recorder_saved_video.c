@@ -39,6 +39,15 @@ extern const TouchscreenHitbox sVsRecorderSavedVideoHitboxes[3]; // profile, pla
 #define SAVED_VIDEO_EXIT           8
 #define SAVED_VIDEO_RESUME         9
 
+static void VsRecorder_ShowYesNoWindows(VsRecorderWork *work);
+static void VsRecorder_HideYesNoWindows(VsRecorderWork *work);
+static void VsRecorder_OnSavedVideoTouch(u32 index, u32 event, void *arg);
+static void VsRecorder_SetSavedVideoSlot(VsRecorderWork *work);
+static void VsRecorder_ShowProfileButton(VsRecorderWork *work);
+static void VsRecorder_RemoveProfileButton(VsRecorderWork *work);
+static void VsRecorder_PrintProfileButton(VsRecorderWork *work, u32 msgId);
+static void VsRecorder_CreateExitButton(VsRecorderWork *work);
+
 // right colour scheme arrow (VS_RECORDER_SCREEN_MENU substate 8): like VsRecorder_MenuPrevScheme the other way round
 BOOL VsRecorder_MenuNextScheme(VsRecorderWork *work) {
     switch (work->step) {
@@ -264,7 +273,7 @@ BOOL VsRecorder_SavedVideoToggleProfile(VsRecorderWork *work) {
     return FALSE;
 }
 
-void VsRecorder_ShowYesNoWindows(VsRecorderWork *work) {
+static void VsRecorder_ShowYesNoWindows(VsRecorderWork *work) {
     VsRecorderSavedVideo *savedVideo = work->screenWork;
     Window *window = &savedVideo->windows[0];
     String *str;
@@ -286,7 +295,7 @@ void VsRecorder_ShowYesNoWindows(VsRecorderWork *work) {
     ScheduleWindowCopyToVram(window);
 }
 
-void VsRecorder_HideYesNoWindows(VsRecorderWork *work) {
+static void VsRecorder_HideYesNoWindows(VsRecorderWork *work) {
     VsRecorderSavedVideo *savedVideo = work->screenWork;
     ClearWindowTilemapAndCopyToVram(&savedVideo->windows[0]);
     RemoveWindow(&savedVideo->windows[0]);
@@ -579,7 +588,7 @@ BOOL VsRecorder_SavedVideoResume(VsRecorderWork *work) {
     return FALSE;
 }
 
-void VsRecorder_OnSavedVideoTouch(u32 index, u32 event, void *arg) {
+static void VsRecorder_OnSavedVideoTouch(u32 index, u32 event, void *arg) {
     VsRecorderWork *work = arg;
     VsRecorderSavedVideo *savedVideo = work->screenWork;
 
@@ -606,7 +615,7 @@ void VsRecorder_OnSavedVideoTouch(u32 index, u32 event, void *arg) {
     }
 }
 
-void VsRecorder_SetSavedVideoSlot(VsRecorderWork *work) {
+static void VsRecorder_SetSavedVideoSlot(VsRecorderWork *work) {
     VsRecorderSavedVideo *savedVideo = work->screenWork;
     FrontierCard *owner = work->videoOwners[work->selection];
     savedVideo->profile.card = owner;
@@ -614,7 +623,7 @@ void VsRecorder_SetSavedVideoSlot(VsRecorderWork *work) {
     savedVideo->info.header = work->savedVideos[work->selection];
 }
 
-void VsRecorder_ShowProfileButton(VsRecorderWork *work) {
+static void VsRecorder_ShowProfileButton(VsRecorderWork *work) {
     VsRecorderSavedVideo *savedVideo = work->screenWork;
     Window *window = &savedVideo->windows[0];
     InitWindow(window);
@@ -622,13 +631,13 @@ void VsRecorder_ShowProfileButton(VsRecorderWork *work) {
     VsRecorder_PrintProfileButton(work, msg_0013_00121); // VIEW PROFILE
 }
 
-void VsRecorder_RemoveProfileButton(VsRecorderWork *work) {
+static void VsRecorder_RemoveProfileButton(VsRecorderWork *work) {
     VsRecorderSavedVideo *savedVideo = work->screenWork;
     ClearWindowTilemapAndCopyToVram(&savedVideo->windows[0]);
     RemoveWindow(&savedVideo->windows[0]);
 }
 
-void VsRecorder_PrintProfileButton(VsRecorderWork *work, u32 msgId) {
+static void VsRecorder_PrintProfileButton(VsRecorderWork *work, u32 msgId) {
     VsRecorderSavedVideo *savedVideo = work->screenWork;
     Window *window = &savedVideo->windows[0];
     String *str;
@@ -639,7 +648,7 @@ void VsRecorder_PrintProfileButton(VsRecorderWork *work, u32 msgId) {
     ScheduleWindowCopyToVram(window);
 }
 
-void VsRecorder_CreateExitButton(VsRecorderWork *work) {
+static void VsRecorder_CreateExitButton(VsRecorderWork *work) {
     VsRecorderSavedVideo *savedVideo = work->screenWork;
     VsRecorder_LoadButtonGfx31(work, NNS_G2D_VRAM_TYPE_2DSUB);
     savedVideo->exitButton.sprite = VsRecorder_NewButtonSprite(work, NNS_G2D_VRAM_TYPE_2DSUB);

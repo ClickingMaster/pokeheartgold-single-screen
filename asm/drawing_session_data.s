@@ -25,32 +25,11 @@
 	.public DrawingSession_Init
 	.public DrawingSession_Main
 	.public DrawingSession_Exit
-	.public DrawingSession_VBlankCB
-	.public DrawingSession_SetVramBanks
-	.public DrawingSession_InitBgs
-	.public DrawingSession_InitWork
-	.public DrawingSession_LoadBgGraphics
-	.public DrawingSession_InitObjTransfer
-	.public DrawingSession_InitSpriteResources
-	.public DrawingSession_CreateSprites
-	.public DrawingSession_AddWindows
-	.public DrawingSession_SetPenCursorPos
-	.public DrawingSession_HandleTouch
 	.public DrawingSession_StateHandleQuitPrompt
 	.public DrawingSession_StateLeaveAccepted
 	.public DrawingSession_StateHandleDisbandPrompt
 	.public DrawingSession_StateWaitAfterMemberLeft
 	.public DrawingSession_HandleNetEvent
-	.public DrawingSession_BlitClipped
-	.public DrawingSession_DrawLine
-	.public DrawingSession_SaveLastPoints
-	.public DrawingSession_DrawStrokes
-	.public DrawingSession_UpdatePenCursors
-	.public DrawingSession_AnimateCursorPalette
-	.public DrawingSession_PrintMemberNames
-	.public DrawingSession_SendStrokes
-	.public DrawingSession_PrintMessage
-	.public DrawingSession_HandleMemberCount
 	.public DrawingSession_BuildStroke
 	.public sDrawingSessionCanvasHitbox
 	.public sDrawingSessionGraphicsModes
@@ -65,13 +44,7 @@
 	.public sDrawingSessionButtonSprites
 	.public sDrawingSessionBrushBitmaps
 	.public sDrawingSessionSubStates
-	.public DrawingSession_FreeWork
-	.public DrawingSession_FreeBgs
-	.public DrawingSession_RemoveWindows
-	.public DrawingSession_SetColorButtonSelected
-	.public DrawingSession_SetQuitButtonPressed
 	.public DrawingSession_StateDraw
-	.public DrawingSession_UpdateCanvas
 	.public DrawingSession_StateMemberJoined
 	.public DrawingSession_StateHidePenCursors
 	.public DrawingSession_StateResumeDrawing
@@ -90,18 +63,7 @@
 	.public DrawingSession_StateWaitNoMembersMsg
 	.public DrawingSession_StatePrintMemberLeft
 	.public DrawingSession_StateWaitMemberLeftMsg
-	.public DrawingSession_CountPlayerProfiles
-	.public DrawingSession_CountMembers
 	.public DrawingSession_GetMemberCount
-	.public DrawingSession_UpdateMembers
-	.public DrawingSession_IsPrinterDone
-	.public DrawingSession_ClearMessageWindow
-	.public DrawingSession_UpdateMaxEntries
-	.public DrawingSession_SetNextSubState
-	.public DrawingSession_ApplyNextSubState
-	.public DrawingSession_ShowYesNo
-	.public DrawingSession_HideYesNo
-	.public DrawingSession_IsYesNoAreaTouched
 	.include "asm/macros.inc"
 	.include "overlay_37.inc"
 	.include "global.inc"

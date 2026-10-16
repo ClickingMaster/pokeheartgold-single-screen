@@ -17,6 +17,7 @@
 
 #include "bg_window.h"
 #include "comm_state.h"
+#include "communication_core.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
@@ -40,7 +41,6 @@
 #include "sprite.h"
 #include "sys_task_api.h"
 #include "system.h"
-#include "communication_core.h"
 #include "wireless_status_icon.h"
 
 // Main menu > Mystery Gift > "Check card": browses the three saved Wonder Cards, flips a card between its
@@ -48,7 +48,7 @@
 struct WonderCardAlbum {
     enum HeapID heapId;                        // 0x0000
     u8 commOwner[0x8C];                        // 0x0004, start of the MysteryGiftComm owner work (MysteryGiftComm_StartParent)
-    WonderCardInfo shareHeader;    // 0x0090, sent with shareCard
+    WonderCardInfo shareHeader;                // 0x0090, sent with shareCard
     WonderCard shareCard;                      // 0x00E0, copy of the card being shared
     u8 unk_0438[0x25C4];                       // 0x0438
     BgConfig *bgConfig;                        // 0x29FC
@@ -93,8 +93,6 @@ struct WonderCardAlbum {
     WaitingIcon *waitingIcon;                  // 0x3D50
 }; // size: 0x3D54
 
-// Declared here rather than through font.h / text.h: the card screens pass the u32 font ids of their text box
-// tables unconverted (those headers type them as the u8 FontID; matching).
 extern void ResetAllTextPrinters(void);
 extern void LoadFontPal0(enum GFPalLoadLocation location, enum GFPalSlotOffset palSlotOffset, enum HeapID heapID);
 extern u8 GetFontAttribute(u8 fontId, int attr);
@@ -154,7 +152,39 @@ enum {
     SHARE_ACTION_NO_RECEIVERS,
 };
 
-void WonderCardAlbum_LoadShareSprites(WonderCardAlbum *album) {
+static void WonderCardAlbum_LoadShareSprites(WonderCardAlbum *album);
+static void WonderCardAlbum_DeleteSprites(WonderCardAlbum *album);
+static void WonderCardAlbum_CreateButtonSprites(WonderCardAlbum *album);
+static void WonderCardAlbum_EraseWindowIfInUse(Window *window, BOOL dontCopyToVram);
+static void WonderCardAlbum_ClearWindowIfInUse(Window *window, BOOL dontCopyToVram);
+static void WonderCardAlbum_CreateListMenu(WonderCardAlbum *album, const MysteryGiftMenuItem *items, int count, Window *window, int itemsAbove);
+static void WonderCardAlbum_PrintMessage(Window *window, int msgId);
+static void WonderCardAlbum_LoadShareScreenBg(BgConfig *bgConfig);
+static void WonderCardAlbum_DestroyListMenu(WonderCardAlbum *album);
+static BOOL WonderCardAlbum_ShowWirelessYesNo(WonderCardAlbum *album, Window *window, u32 color);
+static void WonderCardAlbum_StartFade(WonderCardAlbum *album, enum FadeType fadeType, int nextState, int *state);
+static void WonderCardAlbum_DrawCard(WonderCardAlbum *album, int unused, int page);
+static int WonderCardAlbum_PrintTextBox(WonderCardAlbum *album, Window *window, int boxId, int baseTile);
+static int WonderCardAlbum_FindNextCard(WonderCardAlbum *album, int index, int step);
+static void WonderCardAlbum_LoadScreenData(WonderCardAlbum *album, int fileId, int bgId, int offset);
+static void WonderCardAlbum_LoadCardBg(WonderCardAlbum *album, int page);
+static void WonderCardAlbum_HandleListMenuInput(OverlayManager *manager, int *state, MysteryGiftMenuFunc cancelFunc);
+static void WonderCardAlbum_CreateMonIconSprites(WonderCardAlbum *album);
+static void WonderCardAlbum_FlipEffectTask(SysTask *task, WonderCardFlipEffect *effect);
+static void WonderCardAlbum_StartFlipEffect(WonderCardAlbum *album, int mode, fx32 speed, fx32 accel);
+static void WonderCardAlbum_StopFlipEffect(WonderCardAlbum *album);
+static BOOL WonderCardAlbum_UpdateFlipEffect(WonderCardAlbum *album);
+static void WonderCardAlbum_WaitForSave(WonderCardAlbum *album);
+static void WonderCardAlbum_CountShare(WonderCardAlbum *album);
+static void WonderCardAlbum_HandleShareInput(WonderCardAlbum *album, BOOL canShare, int *state);
+static int WonderCardAlbum_StartSharing(WonderCardAlbum *album);
+static int WonderCardAlbum_TakeEarliest(s32 *values);
+static int WonderCardAlbum_CountReceivers(void);
+static int WonderCardAlbum_UpdateReceiverList(WonderCardAlbum *album, Window *window);
+static void WonderCardAlbum_PrintReceiverCount(WonderCardAlbum *album, Window *window, int count);
+static void WonderCardAlbum_StopSharing(WonderCardAlbum *album, int *state, int nextState);
+
+static void WonderCardAlbum_LoadShareSprites(WonderCardAlbum *album) {
     WonderCardAlbum_DeleteSprites(album);
     MainMenuUtil_InitObjTransfer();
     MainMenuUtil_InitSprites();
@@ -163,7 +193,7 @@ void WonderCardAlbum_LoadShareSprites(WonderCardAlbum *album) {
 
 #pragma force_active on
 
-void WonderCardAlbum_DeleteSprites(WonderCardAlbum *album) {
+static void WonderCardAlbum_DeleteSprites(WonderCardAlbum *album) {
     if (album->buttonSprites[0] != NULL) {
         Sprite_Delete(album->buttonSprites[0]);
     }
@@ -186,7 +216,7 @@ void WonderCardAlbum_DeleteSprites(WonderCardAlbum *album) {
 
 #pragma force_active reset
 
-void WonderCardAlbum_CreateButtonSprites(WonderCardAlbum *album) {
+static void WonderCardAlbum_CreateButtonSprites(WonderCardAlbum *album) {
     album->selection = 0;
     album->buttonSprites[0] = MainMenuUtil_CreateSprite(0, album->buttonSprites[0], 72, 168, 1);
     Sprite_SetPriority(album->buttonSprites[0], 2);
@@ -194,13 +224,13 @@ void WonderCardAlbum_CreateButtonSprites(WonderCardAlbum *album) {
     Sprite_SetPriority(album->buttonSprites[1], 2);
 }
 
-void WonderCardAlbum_EraseWindowIfInUse(Window *window, BOOL dontCopyToVram) {
+static void WonderCardAlbum_EraseWindowIfInUse(Window *window, BOOL dontCopyToVram) {
     if (WindowIsInUse(window) == TRUE) {
         EraseFrameAndWindow1(window, dontCopyToVram);
     }
 }
 
-void WonderCardAlbum_ClearWindowIfInUse(Window *window, BOOL dontCopyToVram) {
+static void WonderCardAlbum_ClearWindowIfInUse(Window *window, BOOL dontCopyToVram) {
     if (WindowIsInUse(window) == TRUE) {
         ClearFrameAndWindow2(window, dontCopyToVram);
     }
@@ -208,7 +238,7 @@ void WonderCardAlbum_ClearWindowIfInUse(Window *window, BOOL dontCopyToVram) {
 
 #pragma force_active on
 
-void WonderCardAlbum_CreateListMenu(WonderCardAlbum *album, const MysteryGiftMenuItem *items, int count, Window *window, int itemsAbove) {
+static void WonderCardAlbum_CreateListMenu(WonderCardAlbum *album, const MysteryGiftMenuItem *items, int count, Window *window, int itemsAbove) {
     int i;
     ListMenuTemplate template;
 
@@ -238,7 +268,7 @@ void WonderCardAlbum_CreateListMenu(WonderCardAlbum *album, const MysteryGiftMen
 
 #pragma force_active reset
 
-void WonderCardAlbum_PrintMessage(Window *window, int msgId) {
+static void WonderCardAlbum_PrintMessage(Window *window, int msgId) {
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0247_bin, HEAP_ID_85);
     MessageFormat *msgFormat = MessageFormat_New(HEAP_ID_85);
     String *string;
@@ -254,7 +284,7 @@ void WonderCardAlbum_PrintMessage(Window *window, int msgId) {
 
 #pragma force_active on
 
-void WonderCardAlbum_LoadShareScreenBg(BgConfig *bgConfig) {
+static void WonderCardAlbum_LoadShareScreenBg(BgConfig *bgConfig) {
     GfGfxLoader_GXLoadPal(NARC_a_1_1_3, 15, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_15_OFFSET, 32, HEAP_ID_85);
     GfGfxLoader_GXLoadPal(NARC_a_1_1_3, 20, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_12_OFFSET, 32, HEAP_ID_85);
     GfGfxLoader_LoadCharData(NARC_a_1_1_3, 21, bgConfig, GF_BG_LYR_MAIN_1, 0, 0xC00, TRUE, HEAP_ID_85);
@@ -325,7 +355,7 @@ int WonderCardAlbum_ReturnToCardMenu(OverlayManager *manager) {
 
 #pragma force_active on
 
-void WonderCardAlbum_DestroyListMenu(WonderCardAlbum *album) {
+static void WonderCardAlbum_DestroyListMenu(WonderCardAlbum *album) {
     ListMenuItems_Delete(album->listMenuItems);
     album->listMenuItems = NULL;
     DestroyListMenu(album->listMenu, NULL, NULL);
@@ -443,7 +473,7 @@ BOOL WonderCardAlbum_ShowShareYesNo(WonderCardAlbum *album, Window *window, u32 
     return TRUE;
 }
 
-BOOL WonderCardAlbum_ShowWirelessYesNo(WonderCardAlbum *album, Window *window, u32 color) {
+static BOOL WonderCardAlbum_ShowWirelessYesNo(WonderCardAlbum *album, Window *window, u32 color) {
     WonderCardAlbum_PrintMessage(&album->messageWindow, msg_0247_00002);
     WonderCardAlbum_CreateListMenu(album, sWonderCardAlbumWirelessYesNoItems, 2, window, 0);
     return TRUE;
@@ -456,7 +486,7 @@ BOOL WonderCardAlbum_BufferZero(WonderCardAlbum *album) {
 
 #pragma force_active on
 
-void WonderCardAlbum_StartFade(WonderCardAlbum *album, enum FadeType fadeType, int nextState, int *state) {
+static void WonderCardAlbum_StartFade(WonderCardAlbum *album, enum FadeType fadeType, int nextState, int *state) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, fadeType, fadeType, RGB_BLACK, 6, 1, HEAP_ID_85);
     if (state != NULL) {
         *state = ALBUM_STATE_WAIT_FADE;
@@ -464,7 +494,7 @@ void WonderCardAlbum_StartFade(WonderCardAlbum *album, enum FadeType fadeType, i
     album->nextState = nextState;
 }
 
-void WonderCardAlbum_DrawCard(WonderCardAlbum *album, int unused, int page) {
+static void WonderCardAlbum_DrawCard(WonderCardAlbum *album, int unused, int page) {
     const WonderCardTextBox *boxes = sWonderCardAlbumTextBoxes;
     u32 i;
     u32 baseTile;
@@ -511,7 +541,7 @@ void WonderCardAlbum_DrawCard(WonderCardAlbum *album, int unused, int page) {
     }
 }
 
-int WonderCardAlbum_PrintTextBox(WonderCardAlbum *album, Window *window, int boxId, int baseTile) {
+static int WonderCardAlbum_PrintTextBox(WonderCardAlbum *album, Window *window, int boxId, int baseTile) {
     const WonderCardTextBox *box = &sWonderCardAlbumTextBoxes[boxId];
     String *string;
 
@@ -543,7 +573,7 @@ int WonderCardAlbum_PrintTextBox(WonderCardAlbum *album, Window *window, int box
 
 #pragma force_active reset
 
-int WonderCardAlbum_FindNextCard(WonderCardAlbum *album, int index, int step) {
+static int WonderCardAlbum_FindNextCard(WonderCardAlbum *album, int index, int step) {
     int start = index;
 
     do {
@@ -561,7 +591,7 @@ int WonderCardAlbum_FindNextCard(WonderCardAlbum *album, int index, int step) {
     return index;
 }
 
-void WonderCardAlbum_LoadScreenData(WonderCardAlbum *album, int fileId, int bgId, int offset) {
+static void WonderCardAlbum_LoadScreenData(WonderCardAlbum *album, int fileId, int bgId, int offset) {
     NNSG2dScreenData *screenData;
     void *data = GfGfxLoader_LoadFromNarc(NARC_a_1_1_3, fileId, TRUE, album->heapId, TRUE);
 
@@ -570,7 +600,7 @@ void WonderCardAlbum_LoadScreenData(WonderCardAlbum *album, int fileId, int bgId
     Heap_Free(data);
 }
 
-void WonderCardAlbum_LoadCardBg(WonderCardAlbum *album, int page) {
+static void WonderCardAlbum_LoadCardBg(WonderCardAlbum *album, int page) {
     GfGfxLoader_GXLoadPal(NARC_a_1_1_3, 3, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0x100, album->heapId);
     GfGfxLoader_LoadCharData(NARC_a_1_1_3, 6, album->bgConfig, GF_BG_LYR_MAIN_1, 0, 0x3000, TRUE, album->heapId);
     switch (page) {
@@ -588,7 +618,7 @@ void WonderCardAlbum_LoadCardBg(WonderCardAlbum *album, int page) {
     BgCommitTilemapBufferToVram(album->bgConfig, GF_BG_LYR_MAIN_3);
 }
 
-void WonderCardAlbum_HandleListMenuInput(OverlayManager *manager, int *state, MysteryGiftMenuFunc cancelFunc) {
+static void WonderCardAlbum_HandleListMenuInput(OverlayManager *manager, int *state, MysteryGiftMenuFunc cancelFunc) {
     u32 input = ListMenu_ProcessInput(((WonderCardAlbum *)OverlayManager_GetData(manager))->listMenu);
     int nextState;
 
@@ -625,7 +655,7 @@ void WonderCardAlbum_HandleListMenuInput(OverlayManager *manager, int *state, My
 
 #pragma force_active on
 
-void WonderCardAlbum_CreateMonIconSprites(WonderCardAlbum *album) {
+static void WonderCardAlbum_CreateMonIconSprites(WonderCardAlbum *album) {
     int x;
     int i;
     int species;
@@ -678,7 +708,7 @@ BOOL WonderCardAlbum_Init(OverlayManager *manager, int *state) {
     return TRUE;
 }
 
-void WonderCardAlbum_FlipEffectTask(SysTask *task, WonderCardFlipEffect *effect) {
+static void WonderCardAlbum_FlipEffectTask(SysTask *task, WonderCardFlipEffect *effect) {
     void *buffer;
 
     HBlankDma_Stop();
@@ -688,7 +718,7 @@ void WonderCardAlbum_FlipEffectTask(SysTask *task, WonderCardFlipEffect *effect)
 
 #pragma force_active on
 
-void WonderCardAlbum_StartFlipEffect(WonderCardAlbum *album, int mode, fx32 speed, fx32 accel) {
+static void WonderCardAlbum_StartFlipEffect(WonderCardAlbum *album, int mode, fx32 speed, fx32 accel) {
     WonderCardFlipEffect *effect = &album->flipEffect;
 
     effect->mode = mode;
@@ -705,7 +735,7 @@ void WonderCardAlbum_StartFlipEffect(WonderCardAlbum *album, int mode, fx32 spee
 
 #pragma force_active reset
 
-void WonderCardAlbum_StopFlipEffect(WonderCardAlbum *album) {
+static void WonderCardAlbum_StopFlipEffect(WonderCardAlbum *album) {
     WonderCardFlipEffect *effect = &album->flipEffect;
 
     if (effect->doubleBuffer != NULL) {
@@ -721,7 +751,7 @@ void WonderCardAlbum_StopFlipEffect(WonderCardAlbum *album) {
 
 #pragma force_active on
 
-BOOL WonderCardAlbum_UpdateFlipEffect(WonderCardAlbum *album) {
+static BOOL WonderCardAlbum_UpdateFlipEffect(WonderCardAlbum *album) {
     WonderCardFlipEffect *effect = &album->flipEffect;
     fx32 pos = 84 << FX32_SHIFT;
     int i;
@@ -771,7 +801,7 @@ BOOL WonderCardAlbum_UpdateFlipEffect(WonderCardAlbum *album) {
 
 #pragma force_active reset
 
-void WonderCardAlbum_WaitForSave(WonderCardAlbum *album) {
+static void WonderCardAlbum_WaitForSave(WonderCardAlbum *album) {
     int status = MainMenuUtil_RunSave();
 
     if (status == 2 || status == 3) {
@@ -780,7 +810,7 @@ void WonderCardAlbum_WaitForSave(WonderCardAlbum *album) {
     }
 }
 
-void WonderCardAlbum_CountShare(WonderCardAlbum *album) {
+static void WonderCardAlbum_CountShare(WonderCardAlbum *album) {
     GF_ASSERT(album->cardIndex < NUM_SAVED_WONDER_CARDS);
     SaveSubstruct_AssertCRC(SAVE_MYSTERY_GIFT);
     if (album->cards[album->cardIndex]->shareCount != 0xFF) {
@@ -794,7 +824,7 @@ void WonderCardAlbum_CountShare(WonderCardAlbum *album) {
     album->callback = WonderCardAlbum_WaitForSave;
 }
 
-void WonderCardAlbum_HandleShareInput(WonderCardAlbum *album, BOOL canShare, int *state) {
+static void WonderCardAlbum_HandleShareInput(WonderCardAlbum *album, BOOL canShare, int *state) {
     int prevSelection = album->selection;
     int action;
 
@@ -1068,7 +1098,7 @@ BOOL WonderCardAlbum_Main(OverlayManager *manager, int *state) {
     return FALSE;
 }
 
-int WonderCardAlbum_StartSharing(WonderCardAlbum *album) {
+static int WonderCardAlbum_StartSharing(WonderCardAlbum *album) {
     WonderCard *card = album->cards[album->cardIndex];
 
     memcpy(&album->shareCard, card, sizeof(WonderCard));
@@ -1081,7 +1111,7 @@ int WonderCardAlbum_StartSharing(WonderCardAlbum *album) {
 }
 
 // Returns 1 + the index of the smallest of values[0..3] and replaces it with a value larger than all others.
-int WonderCardAlbum_TakeEarliest(s32 *values) {
+static int WonderCardAlbum_TakeEarliest(s32 *values) {
     s32 *minimum = &values[0];
     s32 minimumValue = values[0];
     int result = 0;
@@ -1106,7 +1136,7 @@ int WonderCardAlbum_TakeEarliest(s32 *values) {
     return result + 1;
 }
 
-int WonderCardAlbum_CountReceivers(void) {
+static int WonderCardAlbum_CountReceivers(void) {
     int i;
     int count = 0;
 
@@ -1121,7 +1151,7 @@ int WonderCardAlbum_CountReceivers(void) {
 #pragma force_active on
 
 // Updates the list of connected receivers; reprints it in connection order when it changed. Returns their count.
-int WonderCardAlbum_UpdateReceiverList(WonderCardAlbum *album, Window *window) {
+static int WonderCardAlbum_UpdateReceiverList(WonderCardAlbum *album, Window *window) {
     int count = 0;
     int changes = 0;
     int i;
@@ -1193,7 +1223,7 @@ int WonderCardAlbum_UpdateReceiverList(WonderCardAlbum *album, Window *window) {
     return count;
 }
 
-void WonderCardAlbum_PrintReceiverCount(WonderCardAlbum *album, Window *window, int count) {
+static void WonderCardAlbum_PrintReceiverCount(WonderCardAlbum *album, Window *window, int count) {
     String *string;
 
     album->numReceivers = count;
@@ -1211,7 +1241,7 @@ void WonderCardAlbum_PrintReceiverCount(WonderCardAlbum *album, Window *window, 
 
 #pragma force_active reset
 
-void WonderCardAlbum_StopSharing(WonderCardAlbum *album, int *state, int nextState) {
+static void WonderCardAlbum_StopSharing(WonderCardAlbum *album, int *state, int nextState) {
     MysteryGiftComm_Free();
     WirelessStatusIcon_Destroy();
     album->nextState = nextState;

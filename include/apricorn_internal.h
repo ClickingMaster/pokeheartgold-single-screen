@@ -3,11 +3,11 @@
 
 #include "global.h"
 
+#include "apricorn_box.h"
 #include "heap.h"
 #include "msgdata.h"
 #include "player_data.h"
 #include "string_util.h"
-#include "apricorn_box.h"
 
 typedef struct ApricornRecord {
     u32 trainerId;
@@ -44,16 +44,10 @@ typedef struct ApricornMix {
 } ApricornMix;
 
 int ApricornBox_CountQueuedApricorns(SaveApricornBox *);
-int ApricornBox_TakeApricorn(SaveApricornBox *, int, u32);
-void ClearApricornJuice(void *);
 BOOL ApricornBox_GetJuice(SaveApricornBox *, int, ApricornJuice *);
-BOOL ApricornJuice_IsValid(ApricornJuice *);
 int ApricornJuice_GetFlavorTotal(ApricornJuice *);
 void ApricornJuice_RankFlavors(void *, void *);
 void ApricornBox_SetMixState(SaveApricornBox *, u32);
-void ApricornBox_AddJuiceMildness(SaveApricornBox *, u8);
-void ApricornBox_MixQueuedApricorns(SaveApricornBox *);
 int ApricornJuice_GetFlavorNameIndex(void *);
-u8 GetJuiceFlavorLevel(int, u8);
 
 #endif

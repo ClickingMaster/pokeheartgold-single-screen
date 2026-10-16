@@ -11,20 +11,10 @@ BOOL AprijuiceScreen_Init(OverlayManager *man, int *state);
 BOOL AprijuiceScreen_Main(OverlayManager *man, int *state);
 BOOL AprijuiceScreen_Exit(OverlayManager *man, int *state);
 
-BOOL ApricornBox_RunChildApp(OverlayManager **pMan);
 BOOL ApricornBox_Init(OverlayManager *man, int *state);
 BOOL ApricornBox_Main(OverlayManager *man, int *state);
 BOOL ApricornBox_Exit(OverlayManager *man, int *state);
 void ApricornBox_FeedAprijuice(ApricornJuice *record, Party *party, int slot);
-void ApricornBox_InitFromArgs(ApricornBoxApp *app);
-void ApricornBox_Cleanup(ApricornBoxApp *app);
-int ApricornBox_State_OpenBoxScreen(ApricornBoxApp *app);
-int ApricornBox_State_RunBoxScreen(ApricornBoxApp *app);
-int ApricornBox_State_OpenPartyMenu(ApricornBoxApp *app);
-int ApricornBox_State_RunPartyMenu(ApricornBoxApp *app);
-int ApricornBox_State_OpenAprijuiceScreen(ApricornBoxApp *app);
-int ApricornBox_State_RunAprijuiceScreen(ApricornBoxApp *app);
-void ApricornBox_ResetDisplay(void);
 
 enum ApricornBoxState {
     APRICORN_BOX_STATE_START,
@@ -36,6 +26,17 @@ enum ApricornBoxState {
     APRICORN_BOX_STATE_RUN_APRIJUICE_SCREEN,
     APRICORN_BOX_STATE_EXIT,
 };
+
+static BOOL ApricornBox_RunChildApp(OverlayManager **pMan);
+static void ApricornBox_InitFromArgs(ApricornBoxApp *app);
+static void ApricornBox_Cleanup(ApricornBoxApp *app);
+static int ApricornBox_State_OpenBoxScreen(ApricornBoxApp *app);
+static int ApricornBox_State_RunBoxScreen(ApricornBoxApp *app);
+static int ApricornBox_State_OpenPartyMenu(ApricornBoxApp *app);
+static int ApricornBox_State_RunPartyMenu(ApricornBoxApp *app);
+static int ApricornBox_State_OpenAprijuiceScreen(ApricornBoxApp *app);
+static int ApricornBox_State_RunAprijuiceScreen(ApricornBoxApp *app);
+static void ApricornBox_ResetDisplay(void);
 
 static const OverlayManagerTemplate sApricornBoxScreenTemplate = {
     ApricornBoxScreen_Init,
@@ -51,7 +52,7 @@ static const OverlayManagerTemplate sAprijuiceScreenTemplate = {
     FS_OVERLAY_ID(OVY_59),
 };
 
-BOOL ApricornBox_RunChildApp(OverlayManager **pMan) {
+static BOOL ApricornBox_RunChildApp(OverlayManager **pMan) {
     if (*pMan != NULL && OverlayManager_Run(*pMan)) {
         OverlayManager_Delete(*pMan);
         *pMan = NULL;
@@ -174,7 +175,7 @@ void ApricornBox_FeedAprijuice(ApricornJuice *record, Party *party, int slot) {
     ApplyMonMoodModifier(Party_GetMonByIndex(party, slot), 7);
 }
 
-void ApricornBox_InitFromArgs(ApricornBoxApp *app) {
+static void ApricornBox_InitFromArgs(ApricornBoxApp *app) {
     if (app->args->juiceUsedVar != NULL) {
         *app->args->juiceUsedVar = 0;
     }
@@ -198,15 +199,15 @@ void ApricornBox_InitFromArgs(ApricornBoxApp *app) {
     app->juiceIndex = 8;
 }
 
-void ApricornBox_Cleanup(ApricornBoxApp *app) {
+static void ApricornBox_Cleanup(ApricornBoxApp *app) {
 }
 
-int ApricornBox_State_OpenBoxScreen(ApricornBoxApp *app) {
+static int ApricornBox_State_OpenBoxScreen(ApricornBoxApp *app) {
     app->child = OverlayManager_New(&sApricornBoxScreenTemplate, app, app->heapId);
     return APRICORN_BOX_STATE_RUN_BOX_SCREEN;
 }
 
-int ApricornBox_State_RunBoxScreen(ApricornBoxApp *app) {
+static int ApricornBox_State_RunBoxScreen(ApricornBoxApp *app) {
     if (!ApricornBox_RunChildApp(&app->child)) {
         return APRICORN_BOX_STATE_RUN_BOX_SCREEN;
     }
@@ -217,7 +218,7 @@ int ApricornBox_State_RunBoxScreen(ApricornBoxApp *app) {
     return APRICORN_BOX_STATE_EXIT;
 }
 
-int ApricornBox_State_OpenPartyMenu(ApricornBoxApp *app) {
+static int ApricornBox_State_OpenPartyMenu(ApricornBoxApp *app) {
     PartyMenuArgs *args = Heap_Alloc(app->heapId, sizeof(PartyMenuArgs));
 
     MI_CpuFill8(args, 0, sizeof(PartyMenuArgs));
@@ -235,7 +236,7 @@ int ApricornBox_State_OpenPartyMenu(ApricornBoxApp *app) {
     return APRICORN_BOX_STATE_RUN_PARTY_MENU;
 }
 
-int ApricornBox_State_RunPartyMenu(ApricornBoxApp *app) {
+static int ApricornBox_State_RunPartyMenu(ApricornBoxApp *app) {
     u8 slot;
 
     if (!ApricornBox_RunChildApp(&app->child)) {
@@ -254,12 +255,12 @@ int ApricornBox_State_RunPartyMenu(ApricornBoxApp *app) {
     return APRICORN_BOX_STATE_OPEN_APRIJUICE_SCREEN;
 }
 
-int ApricornBox_State_OpenAprijuiceScreen(ApricornBoxApp *app) {
+static int ApricornBox_State_OpenAprijuiceScreen(ApricornBoxApp *app) {
     app->child = OverlayManager_New(&sAprijuiceScreenTemplate, app, app->heapId);
     return APRICORN_BOX_STATE_RUN_APRIJUICE_SCREEN;
 }
 
-int ApricornBox_State_RunAprijuiceScreen(ApricornBoxApp *app) {
+static int ApricornBox_State_RunAprijuiceScreen(ApricornBoxApp *app) {
     if (!ApricornBox_RunChildApp(&app->child)) {
         return APRICORN_BOX_STATE_RUN_APRIJUICE_SCREEN;
     }
@@ -272,7 +273,7 @@ int ApricornBox_State_RunAprijuiceScreen(ApricornBoxApp *app) {
     return APRICORN_BOX_STATE_OPEN_BOX_SCREEN;
 }
 
-void ApricornBox_ResetDisplay(void) {
+static void ApricornBox_ResetDisplay(void) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     GfGfx_DisableEngineAPlanes();

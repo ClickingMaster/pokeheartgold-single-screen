@@ -1,4 +1,25 @@
-#include "mart_bag_task_private.h"
+#include "mart_bag_task.h"
+
+#include "global.h"
+
+#include "field/fieldmap.h"
+
+#include "bag_view.h"
+#include "heap.h"
+#include "overlay_03.h"
+#include "task.h"
+
+typedef struct MartReturnEnv {
+    u8 unk_00[4];
+    BagView *bagView; // 0x004
+    u8 unk_08[0x26A];
+    u8 state; // 0x272
+    u8 unk_273[0x2D];
+    u16 *result; // 0x2A0
+} MartReturnEnv;
+
+static BOOL MartBag_WaitBagViewExit(FieldSystem *fieldSystem, MartReturnEnv *env);
+static void MartBag_ReturnToMart(TaskManager *taskManager);
 
 BOOL Task_MartBag(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
@@ -14,7 +35,7 @@ BOOL Task_MartBag(TaskManager *taskManager) {
     return FALSE;
 }
 
-BOOL MartBag_WaitBagViewExit(FieldSystem *fieldSystem, MartReturnEnv *env) {
+static BOOL MartBag_WaitBagViewExit(FieldSystem *fieldSystem, MartReturnEnv *env) {
     if (FieldSystem_ApplicationIsRunning(fieldSystem)) {
         return 24;
     }
@@ -26,7 +47,7 @@ BOOL MartBag_WaitBagViewExit(FieldSystem *fieldSystem, MartReturnEnv *env) {
     return 25;
 }
 
-void MartBag_ReturnToMart(TaskManager *taskManager) {
+static void MartBag_ReturnToMart(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     MartReturnEnv *env = TaskManager_GetEnvironment(taskManager);
     if (FieldSystem_IsOverworldRestored(fieldSystem)) {

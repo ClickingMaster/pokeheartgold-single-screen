@@ -1,7 +1,3 @@
-	.extern EvolutionScene_InitSprites
-	.extern EvolutionScene_Task
-	.extern EvolutionScene_InitGraphics
-	.extern EvolutionScene_CreatePokepics
 	.public gEvolutionMenuCursorX
 	.public gEvolutionMenuCursorY
 	.public gEvolutionMenuHitboxes
@@ -14,45 +10,11 @@
 	.public gEvolutionCursorSpriteTemplate
 	.public gEvolutionMainBgTemplates
 	.public gEvolutionSubBgTemplates
-	.public EvolutionScene_CreateSprite
-	.public EvolutionScene_InitSprites
-	.public EvolutionScene_FreeSprites
-	.public EvolutionScene_UpdateMenuCursor
-	.public EvolutionScene_PrintMenuOption
-	.public EvolutionScene_ShowMenu
-	.public EvolutionScene_HandleMenuInput
-	.public EvolutionScene_IsMenuCursorAnimDone
-	.public EvolutionScene_RunMenu
 	.public EvolutionScene_New
-	.public EvolutionScene_Task
 	.public EvolutionScene_IsDone
 	.public EvolutionScene_Delete
-	.public EvolutionScene_Run
-	.public EvolutionScene_ApplyEvolutionEffects
-	.public EvolutionScene_InitGraphics
-	.public EvolutionScene_FreeBgs
-	.public EvolutionScene_CreatePokepics
-	.public EvolutionScene_VBlankCB
-	.public EvolutionScene_PrintMessage
-	.public EvolutionScene_TextCallback
-	.public EvolutionScene_OpenSummary
-	.public EvolutionScene_CreateSprite
-	.public EvolutionScene_InitSprites
-	.public EvolutionScene_FreeSprites
-	.public EvolutionScene_UpdateMenuCursor
-	.public EvolutionScene_PrintMenuOption
-	.public EvolutionScene_ShowMenu
-	.public EvolutionScene_HandleMenuInput
-	.public EvolutionScene_IsMenuCursorAnimDone
-	.public EvolutionScene_RunMenu
-	.public EvolutionScene_Task
 	.public EvolutionScene_IsDone
 	.public EvolutionScene_Delete
-	.public EvolutionScene_FreeBgs
-	.public EvolutionScene_CreatePokepics
-	.public EvolutionScene_PrintMessage
-	.public EvolutionScene_TextCallback
-	.public EvolutionScene_OpenSummary
 #include "constants/items.h"
 #include "constants/moves.h"
 #include "constants/pokemon.h"

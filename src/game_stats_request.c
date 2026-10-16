@@ -27,6 +27,13 @@ extern char gGameStatsUrlFormat[];
 extern int strncmp(const char *a, const char *b, u32 n);
 extern int sprintf(char *dest, const char *format, ...);
 
+static void GameStats_SeedRandom(u32 seed);
+static u8 GameStats_NextRandom(void);
+static int GameStats_EncodePayload(u32 key, const u8 *data, int len, char *out, int outSize);
+static int GameStats_GetBase64Length(int size);
+static void GameStats_SetRequestError(int result);
+static void GameStats_ResponseCallback(const char *response, int length, int error);
+
 void *DWC_Alloc(int category, u32 size);
 void DWC_Free(int category, void *ptr, u32 size);
 void B64Encode(const void *src, char *dst, int len, int mode);
@@ -35,16 +42,16 @@ BOOL DWC_ProcessGHTTP(void);
 int DWC_GetGHTTPData(char *url, void (*callback)(const char *, int, int), void *arg);
 void DWC_ShutdownGHTTP(void);
 
-void GameStats_SeedRandom(u32 seed) {
+static void GameStats_SeedRandom(u32 seed) {
     gGameStatsRandState = seed | (seed << 16);
 }
 
-u8 GameStats_NextRandom(void) {
+static u8 GameStats_NextRandom(void) {
     gGameStatsRandState = (gGameStatsRandState * 0x45 + 0x1111) & 0x7FFFFFFF;
     return (s32)gGameStatsRandState >> 16;
 }
 
-int GameStats_EncodePayload(u32 key, const u8 *data, int len, char *out, int outSize) {
+static int GameStats_EncodePayload(u32 key, const u8 *data, int len, char *out, int outSize) {
     u32 sum = 0;
     int total = len + 8;
     int b1;
@@ -92,12 +99,11 @@ int GameStats_EncodePayload(u32 key, const u8 *data, int len, char *out, int out
     return 0;
 }
 
-// Callers pass a signed length (kept: an unsigned parameter changes their register allocation).
-int GameStats_GetBase64Length(int size) {
+static int GameStats_GetBase64Length(int size) {
     return ((u32)size / 3 + ((u32)size % 3 != 0)) * 4;
 }
 
-void GameStats_SetRequestError(int result) {
+static void GameStats_SetRequestError(int result) {
     switch (result) {
     case -8:
         gGameStatsRequest.error = 0;
@@ -126,7 +132,7 @@ void GameStats_SetRequestError(int result) {
     }
 }
 
-void GameStats_ResponseCallback(const char *response, int length, int error) {
+static void GameStats_ResponseCallback(const char *response, int length, int error) {
     char text[54];
     HexDigits hexDigits;
     char *digest;

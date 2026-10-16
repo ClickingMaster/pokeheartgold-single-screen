@@ -66,7 +66,7 @@ enum HatchEggSceneState {
     HATCH_EGG_SCENE_FREE,
 };
 
-// Layout of HatchEggTaskData (hatch_egg_task.c), which the task passes as the overlay's args.
+// Layout of HatchEggTaskData, which the task passes as the overlay's args.
 typedef struct HatchEggAppArgs {
     u32 taskState;
     BOOL wantToNameNewMon; // set by the nickname prompt
@@ -165,69 +165,70 @@ extern const TouchscreenHitbox gHatchEggYesNoHitboxes[];
 extern const ManagedSpriteTemplate gHatchEggYesNoCursorTemplate;
 extern const HatchEggBgTemplates gHatchEggYesNoBgTemplates;
 
+static void HatchEggApp_HideLayers(void);
+static void HatchEggApp_InitBlend(void);
+static GF3DVramMan *HatchEggApp_Create3DVramMan(void);
+static void HatchEggApp_Init3D(void);
+static void HatchEggApp_InitParticleVram(void);
+static void HatchEggApp_InitBgs(BgConfig *bgConfig);
+static void HatchEggApp_VBlankCB(void *data);
+static void HatchEggApp_Draw3D(void);
+static void HatchEggApp_FadeIn(void);
+static void HatchEggApp_FadeOut(void);
+static void HatchEggApp_LoadWindowGfx(BgConfig *bgConfig, PaletteData *paletteData, u32 frame);
+static void HatchEggApp_CreateMessageWindow(BgConfig *bgConfig, Window *window, int bgId, int x, int y, int width, int height, int baseTile, int paletteNum);
+static int HatchEggApp_PrintMessage(Window *window, int msgId, Pokemon *mon, int textSpeed);
+static void HatchEggApp_RemoveMessageWindow(Window *window);
+static void HatchEggApp_LoadBackground(BgConfig *bgConfig, PaletteData *paletteData);
+static u32 HatchEggApp_AllocParticleTexVram(u32 size, BOOL is4x4comp);
+static u32 HatchEggApp_AllocParticlePlttVram(u32 size, BOOL is4pltt);
+static SPLEmitter *HatchEggApp_CreateParticleSystem(enum HeapID heapId);
+static SPLEmitter *HatchEggApp_CreateParticleSystemFromNarc(enum HeapID heapId, NarcId narcId, int fileId);
+static void HatchEggApp_DestroyParticleSystem(SPLEmitter *particleSystem);
+static void HatchEggParticles_EmitterCB(SPLEmitter *emitter);
+static HatchEggParticles *HatchEggParticles_New(HatchEggParticlesParam *param);
+static void HatchEggParticles_Emit(HatchEggParticles *particles, int resId);
+static BOOL HatchEggParticles_IsRunning(HatchEggParticles *particles);
+static void HatchEggParticles_Free(HatchEggParticles *particles);
+static void HatchEggApp_LoadSpriteResources(HatchEggApp *app);
+static void HatchEggApp_CreateSprites(HatchEggApp *app);
+static BOOL HatchEggApp_StepEggShake(HatchEggApp *app, int pattern);
+static int HatchEggApp_UpdateEggShake(HatchEggApp *app, int pattern);
+static void HatchEggApp_DeleteSprites(HatchEggApp *app);
+static void HatchEggApp_InitSpriteSystem(HatchEggAppFromBgConfig *app);
+static void HatchEggApp_FreeSpriteSystem(HatchEggAppFromBgConfig *app);
+static void HatchEggApp_CreatePokepic(HatchEggApp *app);
+static void HatchEggApp_StartPokepicAnim(HatchEggApp *app);
+static void HatchEggApp_DeletePokepic(HatchEggApp *app);
+static void HatchEggApp_SetPokepicVanished(HatchEggApp *app, int vanished);
+static BOOL HatchEggApp_RunScene(HatchEggApp *app);
+static BOOL HatchEggApp_WaitBeforeShake(HatchEggApp *app);
+static BOOL HatchEggApp_ShakeEggOnce(HatchEggApp *app);
+static BOOL HatchEggApp_ShakeEggTwice(HatchEggApp *app);
+static BOOL HatchEggApp_ShakeEggCrack(HatchEggApp *app);
+static BOOL HatchEggApp_HatchEgg(HatchEggApp *app);
+static BOOL HatchEggApp_HatchManaphyEgg(HatchEggApp *app);
+static void HatchEggYesNoMenu_InitBgs(BgConfig *bgConfig);
+static HatchEggYesNoMenu *HatchEggYesNoMenu_New(BgConfig *bgConfig, SpriteSystem *spriteSystem, SpriteManager *spriteManager, enum HeapID heapId);
+static void HatchEggYesNoMenu_Free(HatchEggYesNoMenu *menu);
+static void HatchEggYesNoMenu_LoadGfx(HatchEggYesNoMenu *menu, PaletteData *paletteData, int charResId, int plttResId, int cellResId, int animResId);
+static void HatchEggYesNoMenu_Show(HatchEggYesNoMenu *menu, u32 yesMsgId, u32 noMsgId);
+static int HatchEggYesNoMenu_Run(HatchEggYesNoMenu *menu);
+static void HatchEggYesNoMenu_AddWindows(HatchEggYesNoMenu *menu);
+static void HatchEggYesNoMenu_RemoveWindows(HatchEggYesNoMenu *menu);
+static void HatchEggYesNoMenu_PrintButton(HatchEggYesNoMenu *menu, Window *window, u32 msgId);
+static void HatchEggYesNoMenu_CreateCursor(HatchEggYesNoMenu *menu, int charResId, int plttResId, int cellResId, int animResId);
+static void HatchEggYesNoMenu_DeleteCursor(HatchEggYesNoMenu *menu);
+static void HatchEggYesNoMenu_UpdateCursor(HatchEggYesNoMenu *menu);
+static BOOL HatchEggYesNoMenu_HandleInput(HatchEggYesNoMenu *menu);
+static BOOL HatchEggYesNoMenu_IsPressAnimFinished(HatchEggYesNoMenu *menu);
+
 u32 GetUserFrameGfx2PaletteMember(u32 frame);
 
-void HatchEggApp_HideLayers(void);
-void HatchEggApp_InitBlend(void);
-GF3DVramMan *HatchEggApp_Create3DVramMan(void);
-void HatchEggApp_Init3D(void);
-void HatchEggApp_InitParticleVram(void);
-void HatchEggApp_InitBgs(BgConfig *bgConfig);
-void HatchEggApp_VBlankCB(void *data);
-void HatchEggApp_Draw3D(void);
-void HatchEggApp_FadeIn(void);
-void HatchEggApp_FadeOut(void);
-void HatchEggApp_LoadWindowGfx(BgConfig *bgConfig, PaletteData *paletteData, u32 frame);
-void HatchEggApp_CreateMessageWindow(BgConfig *bgConfig, Window *window, int bgId, int x, int y, int width, int height, int baseTile, int paletteNum);
-int HatchEggApp_PrintMessage(Window *window, int msgId, Pokemon *mon, int textSpeed);
-void HatchEggApp_RemoveMessageWindow(Window *window);
-void HatchEggApp_LoadBackground(BgConfig *bgConfig, PaletteData *paletteData);
-u32 HatchEggApp_AllocParticleTexVram(u32 size, BOOL is4x4comp);
-u32 HatchEggApp_AllocParticlePlttVram(u32 size, BOOL is4pltt);
-SPLEmitter *HatchEggApp_CreateParticleSystem(enum HeapID heapId);
-SPLEmitter *HatchEggApp_CreateParticleSystemFromNarc(enum HeapID heapId, NarcId narcId, int fileId);
-void HatchEggApp_DestroyParticleSystem(SPLEmitter *particleSystem);
-void HatchEggParticles_EmitterCB(SPLEmitter *emitter);
-HatchEggParticles *HatchEggParticles_New(HatchEggParticlesParam *param);
-void HatchEggParticles_Emit(HatchEggParticles *particles, int resId);
-BOOL HatchEggParticles_IsRunning(HatchEggParticles *particles);
-void HatchEggParticles_Free(HatchEggParticles *particles);
-void HatchEggApp_LoadSpriteResources(HatchEggApp *app);
-void HatchEggApp_CreateSprites(HatchEggApp *app);
-BOOL HatchEggApp_StepEggShake(HatchEggApp *app, int pattern);
-int HatchEggApp_UpdateEggShake(HatchEggApp *app, int pattern);
-void HatchEggApp_DeleteSprites(HatchEggApp *app);
-void HatchEggApp_InitSpriteSystem(HatchEggAppFromBgConfig *app);
-void HatchEggApp_FreeSpriteSystem(HatchEggAppFromBgConfig *app);
-void HatchEggApp_CreatePokepic(HatchEggApp *app);
-void HatchEggApp_StartPokepicAnim(HatchEggApp *app);
-void HatchEggApp_DeletePokepic(HatchEggApp *app);
-void HatchEggApp_SetPokepicVanished(HatchEggApp *app, int vanished);
-BOOL HatchEggApp_RunScene(HatchEggApp *app);
 BOOL HatchEggApp_RunEggScene(HatchEggApp *app);
 BOOL HatchEggApp_RunManaphyEggScene(HatchEggApp *app);
-BOOL HatchEggApp_WaitBeforeShake(HatchEggApp *app);
-BOOL HatchEggApp_ShakeEggOnce(HatchEggApp *app);
-BOOL HatchEggApp_ShakeEggTwice(HatchEggApp *app);
-BOOL HatchEggApp_ShakeEggCrack(HatchEggApp *app);
-BOOL HatchEggApp_HatchEgg(HatchEggApp *app);
-BOOL HatchEggApp_HatchManaphyEgg(HatchEggApp *app);
-void HatchEggYesNoMenu_InitBgs(BgConfig *bgConfig);
-HatchEggYesNoMenu *HatchEggYesNoMenu_New(BgConfig *bgConfig, SpriteSystem *spriteSystem, SpriteManager *spriteManager, enum HeapID heapId);
-void HatchEggYesNoMenu_Free(HatchEggYesNoMenu *menu);
-void HatchEggYesNoMenu_LoadGfx(HatchEggYesNoMenu *menu, PaletteData *paletteData, int charResId, int plttResId, int cellResId, int animResId);
-void HatchEggYesNoMenu_Show(HatchEggYesNoMenu *menu, u32 yesMsgId, u32 noMsgId);
-int HatchEggYesNoMenu_Run(HatchEggYesNoMenu *menu);
-void HatchEggYesNoMenu_AddWindows(HatchEggYesNoMenu *menu);
-void HatchEggYesNoMenu_RemoveWindows(HatchEggYesNoMenu *menu);
-void HatchEggYesNoMenu_PrintButton(HatchEggYesNoMenu *menu, Window *window, u32 msgId);
-void HatchEggYesNoMenu_CreateCursor(HatchEggYesNoMenu *menu, int charResId, int plttResId, int cellResId, int animResId);
-void HatchEggYesNoMenu_DeleteCursor(HatchEggYesNoMenu *menu);
-void HatchEggYesNoMenu_UpdateCursor(HatchEggYesNoMenu *menu);
-BOOL HatchEggYesNoMenu_HandleInput(HatchEggYesNoMenu *menu);
-BOOL HatchEggYesNoMenu_IsPressAnimFinished(HatchEggYesNoMenu *menu);
 
-void HatchEggApp_HideLayers(void) {
+static void HatchEggApp_HideLayers(void) {
     // DISPCNT / DB_DISPCNT: turn off BG0-3 and OBJ
     volatile u32 *dispcntMain = (volatile u32 *)0x04000000, *dispcntSub = (volatile u32 *)0x04001000;
     GfGfx_DisableEngineAPlanes();
@@ -236,16 +237,16 @@ void HatchEggApp_HideLayers(void) {
     *dispcntSub &= 0xffffe0ff;
 }
 
-void HatchEggApp_InitBlend(void) {
+static void HatchEggApp_InitBlend(void) {
     G2x_SetBlendAlpha_(0x04000050, 0, 14, 11, 7);
     G2x_SetBlendAlpha_(0x04001050, 0, 14, 7, 8);
 }
 
-GF3DVramMan *HatchEggApp_Create3DVramMan(void) {
+static GF3DVramMan *HatchEggApp_Create3DVramMan(void) {
     return GF_3DVramMan_Create(HEAP_ID_70, 0, 2, 0, 2, HatchEggApp_Init3D);
 }
 
-void HatchEggApp_Init3D(void) {
+static void HatchEggApp_Init3D(void) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
     G2_SetBG0Priority(1);
     G3X_SetShading(GX_SHADING_TOON);
@@ -258,7 +259,7 @@ void HatchEggApp_Init3D(void) {
     G3_ViewPort(0, 0, 255, 191);
 }
 
-void HatchEggApp_InitParticleVram(void) {
+static void HatchEggApp_InitParticleVram(void) {
     u32 tex = NNS_GfdAllocTexVram(0x8000, FALSE, 0);
     u32 pltt = NNS_GfdAllocPlttVram(0x80, FALSE, 0);
     if (tex == 0) {
@@ -270,7 +271,7 @@ void HatchEggApp_InitParticleVram(void) {
     ParticleSystem_ZeroAll();
 }
 
-void HatchEggApp_InitBgs(BgConfig *bgConfig) {
+static void HatchEggApp_InitBgs(BgConfig *bgConfig) {
     GraphicsBanks banks;
     GraphicsModes modes;
     HatchEggBgTemplates templates;
@@ -296,7 +297,7 @@ void HatchEggApp_InitBgs(BgConfig *bgConfig) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-void HatchEggApp_VBlankCB(void *data) {
+static void HatchEggApp_VBlankCB(void *data) {
     // OS_IRQTABLE_INTR_CHECK: acknowledge the V-blank interrupt
     volatile u32 *dtcm = (volatile u32 *)0x027e0000;
     HatchEggApp *app = data;
@@ -308,7 +309,7 @@ void HatchEggApp_VBlankCB(void *data) {
     dtcm[0x3ff8 / 4] |= 1;
 }
 
-void HatchEggApp_Draw3D(void) {
+static void HatchEggApp_Draw3D(void) {
     Thunk_G3X_Reset();
     if (ParticleSystem_DrawAll() > 0) {
         Thunk_G3X_Reset();
@@ -318,15 +319,15 @@ void HatchEggApp_Draw3D(void) {
     RequestSwap3DBuffers(GX_SORTMODE_MANUAL, GX_BUFFERMODE_Z);
 }
 
-void HatchEggApp_FadeIn(void) {
+static void HatchEggApp_FadeIn(void) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_70);
 }
 
-void HatchEggApp_FadeOut(void) {
+static void HatchEggApp_FadeOut(void) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_70);
 }
 
-void HatchEggApp_LoadWindowGfx(BgConfig *bgConfig, PaletteData *paletteData, u32 frame) {
+static void HatchEggApp_LoadWindowGfx(BgConfig *bgConfig, PaletteData *paletteData, u32 frame) {
     LoadUserFrameGfx2(bgConfig, GF_BG_LYR_MAIN_1, 0x14, 0xF, (u8)frame, HEAP_ID_70);
     PaletteData_LoadNarc(paletteData, NARC_a_0_3_8, GetUserFrameGfx2PaletteMember(frame), HEAP_ID_70, PLTTBUF_MAIN_BG, 0x20, 0xC0);
     LoadUserFrameGfx1(bgConfig, GF_BG_LYR_MAIN_1, 0x32, 0xD, 0, HEAP_ID_70);
@@ -334,7 +335,7 @@ void HatchEggApp_LoadWindowGfx(BgConfig *bgConfig, PaletteData *paletteData, u32
     PaletteData_LoadNarc(paletteData, NARC_graphic_font, 8, HEAP_ID_70, PLTTBUF_MAIN_BG, 0x20, 0xE0);
 }
 
-void HatchEggApp_CreateMessageWindow(BgConfig *bgConfig, Window *window, int bgId, int x, int y, int width, int height, int baseTile, int paletteNum) {
+static void HatchEggApp_CreateMessageWindow(BgConfig *bgConfig, Window *window, int bgId, int x, int y, int width, int height, int baseTile, int paletteNum) {
     InitWindow(window);
     AddWindowParameterized(bgConfig, window, (u8)bgId, (u8)x, (u8)y, (u8)width, (u8)height, (u8)paletteNum, (u16)baseTile);
     DrawFrameAndWindow2(window, TRUE, 0x14, 0xC);
@@ -343,7 +344,7 @@ void HatchEggApp_CreateMessageWindow(BgConfig *bgConfig, Window *window, int bgI
 }
 
 // Prints message msgId of the hatch scene's bank with the Pokemon's species name; returns the printer id.
-int HatchEggApp_PrintMessage(Window *window, int msgId, Pokemon *mon, int textSpeed) {
+static int HatchEggApp_PrintMessage(Window *window, int msgId, Pokemon *mon, int textSpeed) {
     MsgData *msgData;
     MessageFormat *msgFormat;
     String *template;
@@ -364,32 +365,32 @@ int HatchEggApp_PrintMessage(Window *window, int msgId, Pokemon *mon, int textSp
     return printerId;
 }
 
-void HatchEggApp_RemoveMessageWindow(Window *window) {
+static void HatchEggApp_RemoveMessageWindow(Window *window) {
     ClearWindowTilemapAndCopyToVram(window);
     RemoveWindow(window);
 }
 
 #pragma force_active on
-void HatchEggApp_LoadBackground(BgConfig *bgConfig, PaletteData *paletteData) {
+static void HatchEggApp_LoadBackground(BgConfig *bgConfig, PaletteData *paletteData) {
     GfGfxLoader_LoadCharData(NARC_a_1_1_5, 0, bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, HEAP_ID_70);
     GfGfxLoader_LoadScrnData(NARC_a_1_1_5, 1, bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, HEAP_ID_70);
     PaletteData_LoadNarc(paletteData, NARC_a_1_1_5, 8, HEAP_ID_70, PLTTBUF_MAIN_BG, 0x40, 0);
 }
 #pragma force_active reset
 
-u32 HatchEggApp_AllocParticleTexVram(u32 size, BOOL is4x4comp) {
+static u32 HatchEggApp_AllocParticleTexVram(u32 size, BOOL is4x4comp) {
     NNSGfdTexKey key = NNS_GfdAllocTexVram(size, is4x4comp, 0);
     ParticleSystem_RegisterTexKey(key);
     return NNS_GfdGetTexKeyAddr(key);
 }
 
-u32 HatchEggApp_AllocParticlePlttVram(u32 size, BOOL is4pltt) {
+static u32 HatchEggApp_AllocParticlePlttVram(u32 size, BOOL is4pltt) {
     NNSGfdPlttKey key = NNS_GfdAllocPlttVram(size, is4pltt, 0);
     ParticleSystem_RegisterPlttKey(key);
     return NNS_GfdGetPlttKeyAddr(key);
 }
 
-SPLEmitter *HatchEggApp_CreateParticleSystem(enum HeapID heapId) {
+static SPLEmitter *HatchEggApp_CreateParticleSystem(enum HeapID heapId) {
     void *particleHeap = Heap_Alloc(heapId, 0x4800);
     SPLEmitter *particleSystem = ParticleSystem_New(HatchEggApp_AllocParticleTexVram, HatchEggApp_AllocParticlePlttVram, particleHeap, 0x4800, TRUE, heapId);
     Camera *camera = ParticleSystem_GetCamera(particleSystem);
@@ -399,26 +400,26 @@ SPLEmitter *HatchEggApp_CreateParticleSystem(enum HeapID heapId) {
     return particleSystem;
 }
 
-SPLEmitter *HatchEggApp_CreateParticleSystemFromNarc(enum HeapID heapId, NarcId narcId, int fileId) {
+static SPLEmitter *HatchEggApp_CreateParticleSystemFromNarc(enum HeapID heapId, NarcId narcId, int fileId) {
     SPLEmitter *particleSystem = HatchEggApp_CreateParticleSystem(heapId);
     void *resource = ParticleSystem_LoadResourceFile(narcId, fileId, heapId);
     ParticleSystem_SetResource(particleSystem, resource, 10, TRUE);
     return particleSystem;
 }
 
-void HatchEggApp_DestroyParticleSystem(SPLEmitter *particleSystem) {
+static void HatchEggApp_DestroyParticleSystem(SPLEmitter *particleSystem) {
     void *particleHeap = ParticleSystem_GetHeap(particleSystem);
     ParticleSystem_Free(particleSystem);
     Heap_Free(particleHeap);
 }
 
-void HatchEggParticles_EmitterCB(SPLEmitter *emitter) {
+static void HatchEggParticles_EmitterCB(SPLEmitter *emitter) {
     VecFx32 pos = { 0, 0, 0 };
     SPL_SetEmitterPosition(emitter, &pos);
 }
 
 #pragma force_active on
-HatchEggParticles *HatchEggParticles_New(HatchEggParticlesParam *param) {
+static HatchEggParticles *HatchEggParticles_New(HatchEggParticlesParam *param) {
     HatchEggParticles *particles = Heap_Alloc(param->heapId, sizeof(HatchEggParticles));
     if (particles == NULL) {
         GF_AssertFail();
@@ -435,21 +436,21 @@ HatchEggParticles *HatchEggParticles_New(HatchEggParticlesParam *param) {
     return particles;
 }
 
-void HatchEggParticles_Emit(HatchEggParticles *particles, int resId) {
+static void HatchEggParticles_Emit(HatchEggParticles *particles, int resId) {
     ParticleSystem_CreateEmitterWithParam(particles->particleSystem, resId, HatchEggParticles_EmitterCB, particles);
     ParticleSystem_SetPerspectiveType(particles->particleSystem, 1);
 }
 #pragma force_active reset
 
-BOOL HatchEggParticles_IsRunning(HatchEggParticles *particles) {
+static BOOL HatchEggParticles_IsRunning(HatchEggParticles *particles) {
     return ParticleSystem_GetActiveEmitterCount(particles->particleSystem) != FALSE;
 }
 
-void HatchEggParticles_Free(HatchEggParticles *particles) {
+static void HatchEggParticles_Free(HatchEggParticles *particles) {
     Heap_Free(particles);
 }
 
-void HatchEggApp_LoadSpriteResources(HatchEggApp *app) {
+static void HatchEggApp_LoadSpriteResources(HatchEggApp *app) {
     HatchEggSpriteFiles eggFiles = gHatchEggSpriteFiles;
     SpriteSystem *spriteSystem = app->spriteSystem;
     SpriteManager *spriteManager = app->spriteManager;
@@ -465,7 +466,7 @@ void HatchEggApp_LoadSpriteResources(HatchEggApp *app) {
 }
 
 #pragma force_active on
-void HatchEggApp_CreateSprites(HatchEggApp *app) {
+static void HatchEggApp_CreateSprites(HatchEggApp *app) {
     ManagedSpriteTemplate template;
     u32 zero = 0;
     int bgPriority = 2;
@@ -504,7 +505,7 @@ void HatchEggApp_CreateSprites(HatchEggApp *app) {
 
 // Plays one frame of shake pattern `pattern` (tables gHatchEggShakeOffsetsX/762C: position offsets, 0xFF = end;
 // gHatchEggShakeScalesX/7770: affine scale, 0 = end). Returns FALSE when the pattern has ended.
-BOOL HatchEggApp_StepEggShake(HatchEggApp *app, int pattern) {
+static BOOL HatchEggApp_StepEggShake(HatchEggApp *app, int pattern) {
     int *shake = &app->shakeState;
     int finished;
     s16 x;
@@ -550,7 +551,7 @@ running:
 }
 
 // Returns 2 when the shake has ended, 1 on its sixth frame (the hit) and 0 otherwise.
-int HatchEggApp_UpdateEggShake(HatchEggApp *app, int pattern) {
+static int HatchEggApp_UpdateEggShake(HatchEggApp *app, int pattern) {
     if (HatchEggApp_StepEggShake(app, pattern) == FALSE) {
         return 2;
     }
@@ -564,14 +565,14 @@ int HatchEggApp_UpdateEggShake(HatchEggApp *app, int pattern) {
     return 0;
 }
 
-void HatchEggApp_DeleteSprites(HatchEggApp *app) {
+static void HatchEggApp_DeleteSprites(HatchEggApp *app) {
     Sprite_DeleteAndFreeResources(app->eggSprite);
     Sprite_DeleteAndFreeResources(app->topBar);
     Sprite_DeleteAndFreeResources(app->bottomBar);
 }
 
 #pragma force_active on
-void HatchEggApp_InitSpriteSystem(HatchEggAppFromBgConfig *app) {
+static void HatchEggApp_InitSpriteSystem(HatchEggAppFromBgConfig *app) {
     OamManagerParam oamManagerParam;
     OamCharTransferParam oamTransferParam;
     SpriteResourceCountsListUnion resourceCounts;
@@ -586,12 +587,12 @@ void HatchEggApp_InitSpriteSystem(HatchEggAppFromBgConfig *app) {
 }
 #pragma force_active reset
 
-void HatchEggApp_FreeSpriteSystem(HatchEggAppFromBgConfig *app) {
+static void HatchEggApp_FreeSpriteSystem(HatchEggAppFromBgConfig *app) {
     SpriteSystem_FreeResourcesAndManager(app->spriteSystem, app->spriteManager);
     SpriteSystem_Free(app->spriteSystem);
 }
 
-void HatchEggApp_CreatePokepic(HatchEggApp *app) {
+static void HatchEggApp_CreatePokepic(HatchEggApp *app) {
     Pokemon *mon = app->args->hatch.mon;
     u32 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     u32 yOffset = GetBoxMonPicHeight((BoxPokemon *)mon, 2);
@@ -604,7 +605,7 @@ void HatchEggApp_CreatePokepic(HatchEggApp *app) {
     app->pokepic = PokepicManager_CreatePokepic(app->pokepicManager, &template, 128, yOffset + 96, 0, 0, animScript, NULL);
 }
 
-void HatchEggApp_StartPokepicAnim(HatchEggApp *app) {
+static void HatchEggApp_StartPokepicAnim(HatchEggApp *app) {
     u32 species = GetMonData(app->args->hatch.mon, MON_DATA_SPECIES, NULL);
     GetMonNature(app->args->hatch.mon);
     // The call passes an argument Pokepic_StartAnim does not take.
@@ -612,15 +613,15 @@ void HatchEggApp_StartPokepicAnim(HatchEggApp *app) {
     NARC_StartPokepicAnim(app->narc, app->picManager, app->pokepic, (u16)species, 2, 0, 0);
 }
 
-void HatchEggApp_DeletePokepic(HatchEggApp *app) {
+static void HatchEggApp_DeletePokepic(HatchEggApp *app) {
     Pokepic_Delete(app->pokepic);
 }
 
-void HatchEggApp_SetPokepicVanished(HatchEggApp *app, int vanished) {
+static void HatchEggApp_SetPokepicVanished(HatchEggApp *app, int vanished) {
     Pokepic_SetAttr(app->pokepic, POKEPIC_VANISHED, vanished);
 }
 
-BOOL HatchEggApp_RunScene(HatchEggApp *app) {
+static BOOL HatchEggApp_RunScene(HatchEggApp *app) {
     return gHatchEggSceneFuncs[app->sceneType](app);
 }
 
@@ -864,7 +865,7 @@ BOOL HatchEggApp_RunManaphyEggScene(HatchEggApp *app) {
     return ret;
 }
 
-BOOL HatchEggApp_WaitBeforeShake(HatchEggApp *app) {
+static BOOL HatchEggApp_WaitBeforeShake(HatchEggApp *app) {
     switch (app->subState) {
     case 0:
         ManagedSprite_SetAnimationFrame(app->eggSprite, 0);
@@ -885,7 +886,7 @@ BOOL HatchEggApp_WaitBeforeShake(HatchEggApp *app) {
     return TRUE;
 }
 
-BOOL HatchEggApp_ShakeEggOnce(HatchEggApp *app) {
+static BOOL HatchEggApp_ShakeEggOnce(HatchEggApp *app) {
     switch (app->subState) {
     case 0:
         if (HatchEggParticles_IsRunning(app->particles) != TRUE) {
@@ -913,7 +914,7 @@ BOOL HatchEggApp_ShakeEggOnce(HatchEggApp *app) {
     return TRUE;
 }
 
-BOOL HatchEggApp_ShakeEggTwice(HatchEggApp *app) {
+static BOOL HatchEggApp_ShakeEggTwice(HatchEggApp *app) {
     switch (app->subState) {
     case 0:
         app->subState++;
@@ -939,7 +940,7 @@ BOOL HatchEggApp_ShakeEggTwice(HatchEggApp *app) {
     return TRUE;
 }
 
-BOOL HatchEggApp_ShakeEggCrack(HatchEggApp *app) {
+static BOOL HatchEggApp_ShakeEggCrack(HatchEggApp *app) {
     switch (app->subState) {
     case 0:
         if (HatchEggParticles_IsRunning(app->particles) != TRUE) {
@@ -968,7 +969,7 @@ BOOL HatchEggApp_ShakeEggCrack(HatchEggApp *app) {
 }
 
 // The egg bursts, the screen flashes white and the bars slide off-screen to reveal the Pokemon.
-BOOL HatchEggApp_HatchEgg(HatchEggApp *app) {
+static BOOL HatchEggApp_HatchEgg(HatchEggApp *app) {
     struct {
         s16 y;
         s16 x;
@@ -1063,7 +1064,7 @@ BOOL HatchEggApp_HatchEgg(HatchEggApp *app) {
     return TRUE;
 }
 
-BOOL HatchEggApp_HatchManaphyEgg(HatchEggApp *app) {
+static BOOL HatchEggApp_HatchManaphyEgg(HatchEggApp *app) {
     struct {
         s16 y;
         s16 x;
@@ -1249,7 +1250,7 @@ BOOL HatchEggApp_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-void HatchEggYesNoMenu_InitBgs(BgConfig *bgConfig) {
+static void HatchEggYesNoMenu_InitBgs(BgConfig *bgConfig) {
     HatchEggBgTemplates templates = gHatchEggYesNoBgTemplates;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &templates.templates[0], GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
@@ -1260,7 +1261,7 @@ void HatchEggYesNoMenu_InitBgs(BgConfig *bgConfig) {
 }
 
 #pragma force_active on
-HatchEggYesNoMenu *HatchEggYesNoMenu_New(BgConfig *bgConfig, SpriteSystem *spriteSystem, SpriteManager *spriteManager, enum HeapID heapId) {
+static HatchEggYesNoMenu *HatchEggYesNoMenu_New(BgConfig *bgConfig, SpriteSystem *spriteSystem, SpriteManager *spriteManager, enum HeapID heapId) {
     HatchEggYesNoMenu *menu;
     if (!bgConfig) {
         GF_AssertFail();
@@ -1284,7 +1285,7 @@ HatchEggYesNoMenu *HatchEggYesNoMenu_New(BgConfig *bgConfig, SpriteSystem *sprit
 }
 #pragma force_active reset
 
-void HatchEggYesNoMenu_Free(HatchEggYesNoMenu *menu) {
+static void HatchEggYesNoMenu_Free(HatchEggYesNoMenu *menu) {
     if (!menu) {
         GF_AssertFail();
     }
@@ -1299,7 +1300,7 @@ void HatchEggYesNoMenu_Free(HatchEggYesNoMenu *menu) {
 }
 
 #pragma force_active on
-void HatchEggYesNoMenu_LoadGfx(HatchEggYesNoMenu *menu, PaletteData *paletteData, int charResId, int plttResId, int cellResId, int animResId) {
+static void HatchEggYesNoMenu_LoadGfx(HatchEggYesNoMenu *menu, PaletteData *paletteData, int charResId, int plttResId, int cellResId, int animResId) {
     SpriteSystem *spriteSystem = menu->spriteSystem;
     SpriteManager *spriteManager = menu->spriteManager;
     NARC *narc;
@@ -1325,7 +1326,7 @@ void HatchEggYesNoMenu_LoadGfx(HatchEggYesNoMenu *menu, PaletteData *paletteData
 }
 #pragma force_active reset
 
-void HatchEggYesNoMenu_Show(HatchEggYesNoMenu *menu, u32 yesMsgId, u32 noMsgId) {
+static void HatchEggYesNoMenu_Show(HatchEggYesNoMenu *menu, u32 yesMsgId, u32 noMsgId) {
     HatchEggYesNoMenu_PrintButton(menu, &menu->buttons[0], yesMsgId);
     HatchEggYesNoMenu_PrintButton(menu, &menu->buttons[1], noMsgId);
     menu->state = 0;
@@ -1339,7 +1340,7 @@ void HatchEggYesNoMenu_Show(HatchEggYesNoMenu *menu, u32 yesMsgId, u32 noMsgId) 
 
 // Returns the selection (1 = yes, 2 = no) once a button was pressed and its animation has ended, else 0.
 #pragma force_active on
-int HatchEggYesNoMenu_Run(HatchEggYesNoMenu *menu) {
+static int HatchEggYesNoMenu_Run(HatchEggYesNoMenu *menu) {
     switch (menu->state) {
     case 0:
         if (HatchEggYesNoMenu_HandleInput(menu)) {
@@ -1364,12 +1365,12 @@ int HatchEggYesNoMenu_Run(HatchEggYesNoMenu *menu) {
 }
 #pragma force_active reset
 
-void HatchEggYesNoMenu_AddWindows(HatchEggYesNoMenu *menu) {
+static void HatchEggYesNoMenu_AddWindows(HatchEggYesNoMenu *menu) {
     AddWindowParameterized(menu->bgConfig, &menu->buttons[0], GF_BG_LYR_SUB_2, 4, 8, 24, 2, 15, 0x50);
     AddWindowParameterized(menu->bgConfig, &menu->buttons[1], GF_BG_LYR_SUB_2, 4, 14, 24, 2, 15, 0x80);
 }
 
-void HatchEggYesNoMenu_RemoveWindows(HatchEggYesNoMenu *menu) {
+static void HatchEggYesNoMenu_RemoveWindows(HatchEggYesNoMenu *menu) {
     int i;
     Window *window;
     GF_ASSERT(menu != NULL);
@@ -1381,7 +1382,7 @@ void HatchEggYesNoMenu_RemoveWindows(HatchEggYesNoMenu *menu) {
     }
 }
 
-void HatchEggYesNoMenu_PrintButton(HatchEggYesNoMenu *menu, Window *window, u32 msgId) {
+static void HatchEggYesNoMenu_PrintButton(HatchEggYesNoMenu *menu, Window *window, u32 msgId) {
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0187_bin, menu->heapId);
     String *string = ReadMsgData_ExpandPlaceholders(menu->msgFormat, msgData, msgId, menu->heapId);
     FillWindowPixelBuffer(window, 0);
@@ -1391,7 +1392,7 @@ void HatchEggYesNoMenu_PrintButton(HatchEggYesNoMenu *menu, Window *window, u32 
     String_Delete(string);
 }
 
-void HatchEggYesNoMenu_CreateCursor(HatchEggYesNoMenu *menu, int charResId, int plttResId, int cellResId, int animResId) {
+static void HatchEggYesNoMenu_CreateCursor(HatchEggYesNoMenu *menu, int charResId, int plttResId, int cellResId, int animResId) {
     ManagedSpriteTemplate template = gHatchEggYesNoCursorTemplate;
     ManagedSprite *sprite;
     SpriteSystem *spriteSystem = menu->spriteSystem;
@@ -1412,12 +1413,12 @@ void HatchEggYesNoMenu_CreateCursor(HatchEggYesNoMenu *menu, int charResId, int 
     menu->cursor = sprite;
 }
 
-void HatchEggYesNoMenu_DeleteCursor(HatchEggYesNoMenu *menu) {
+static void HatchEggYesNoMenu_DeleteCursor(HatchEggYesNoMenu *menu) {
     Sprite_DeleteAndFreeResources(menu->cursor);
 }
 
 #pragma force_active on
-void HatchEggYesNoMenu_UpdateCursor(HatchEggYesNoMenu *menu) {
+static void HatchEggYesNoMenu_UpdateCursor(HatchEggYesNoMenu *menu) {
     int index;
     if (!menu->cursor) {
         GF_AssertFail();
@@ -1436,7 +1437,7 @@ void HatchEggYesNoMenu_UpdateCursor(HatchEggYesNoMenu *menu) {
     ManagedSprite_SetPositionXY(menu->cursor, gHatchEggYesNoCursorPositions[index][0], gHatchEggYesNoCursorPositions[index][1]);
 }
 
-BOOL HatchEggYesNoMenu_HandleInput(HatchEggYesNoMenu *menu) {
+static BOOL HatchEggYesNoMenu_HandleInput(HatchEggYesNoMenu *menu) {
     BOOL pressed = FALSE;
     int hit = TouchscreenHitbox_FindRectAtTouchNew(gHatchEggYesNoHitboxes);
     if (hit != -1) {
@@ -1488,7 +1489,7 @@ BOOL HatchEggYesNoMenu_HandleInput(HatchEggYesNoMenu *menu) {
 }
 #pragma force_active reset
 
-BOOL HatchEggYesNoMenu_IsPressAnimFinished(HatchEggYesNoMenu *menu) {
+static BOOL HatchEggYesNoMenu_IsPressAnimFinished(HatchEggYesNoMenu *menu) {
     if (ManagedSprite_GetActiveAnim(menu->cursor) != 3) {
         GF_AssertFail();
     }

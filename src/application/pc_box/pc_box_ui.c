@@ -23,6 +23,7 @@
 #include "poke_overlay.h"
 #include "pokedex_util.h"
 #include "pokemon_storage_system.h"
+#include "pokemon_summary.h"
 #include "render_window.h"
 #include "save_special_ribbons.h"
 #include "screen_fade.h"
@@ -31,14 +32,12 @@
 #include "sys_task_api.h"
 #include "touchpad.h"
 #include "touchscreen.h"
-#include "pokemon_summary.h"
 #include "yes_no_prompt.h"
 
 typedef u32 (*PCBoxStateFunc)(PCBoxWork *work);
 
 FS_EXTERN_OVERLAY(OVY_15);
 
-// Defined with overlay 15 (the bag), not declared in a header.
 extern const OverlayManagerTemplate gOverlayTemplate_Bag;
 
 extern const u8 sPCBoxPartyDropRects[];
@@ -46,6 +45,26 @@ extern const u8 sPCBoxTrayPartyDropRects[];
 extern const u8 sPCBoxSummaryPages[];
 extern const u8 sPCBoxBagPockets[];
 extern const PCBoxStateFunc sPCBoxStateTable[];
+
+static void PCBox_StartHeldItemMoveWithIcon(PCBoxWork *work, u32 fromSlot, u32 toSlot, u32 partyLayout);
+static void PCBox_StartHeldItemMoveFromDropTarget(PCBoxWork *work, int toSlot, int partyLayout);
+static BOOL PCBox_UpdateHeldItemMove(PCBoxWork *work, int toItemIcon);
+static u32 PCBox_UpdateHeldItemMoveWithIcon(PCBoxWork *work);
+static u32 PCBox_UpdateHeldItemMoveNoIcon(PCBoxWork *work);
+static void PCBox_LoadPanelTilemap(BgCellManager *panels, u32 index, u32 fileId);
+static void PCBox_DrawMarkingMenuEntry(PCBoxWork *work, u32 index);
+static void PCBox_LowerPartyPanel(BgCellManager *panels);
+static void PCBox_RaisePartyPanel(BgCellManager *panels);
+static u32 PCBox_UpdatePartyPanelSlide(PCBoxWork *work);
+static u32 PCBox_UpdatePartyPanelMove(PCBoxWork *work);
+static void PCBox_HidePartyButton(PCBoxWork *work);
+static void PCBox_HideTrayTab(PCBoxWork *work);
+static void PCBox_HideActionMenu(BgCellManager *panels);
+static u32 PCBox_UpdateActionMenuSlide(BgCellManager *panels);
+static void PCBox_HideChangeBoxButton(BgCellManager *panels);
+static void PCBox_SlideInChangeBoxButton(BgCellManager *panels);
+static void PCBox_HideSummaryButton(BgCellManager *panels);
+static void PCBox_ShowBoxMenuPanels(BgCellManager *panels);
 
 #pragma force_active on
 
@@ -99,17 +118,17 @@ void PCBox_StartHeldItemMove(PCBoxWork *work, int fromSlot, int toSlot, int part
 
 #pragma force_active reset
 
-void PCBox_StartHeldItemMoveWithIcon(PCBoxWork *work, u32 fromSlot, u32 toSlot, u32 partyLayout) {
+static void PCBox_StartHeldItemMoveWithIcon(PCBoxWork *work, u32 fromSlot, u32 toSlot, u32 partyLayout) {
     PCBox_StartHeldItemMove(work, fromSlot, toSlot, partyLayout, 1);
 }
 
 #pragma force_active on
 
-void PCBox_StartHeldItemMoveFromDropTarget(PCBoxWork *work, int toSlot, int partyLayout) {
+static void PCBox_StartHeldItemMoveFromDropTarget(PCBoxWork *work, int toSlot, int partyLayout) {
     PCBox_StartHeldItemMove(work, work->view->dropTarget, toSlot, partyLayout, 0);
 }
 
-BOOL PCBox_UpdateHeldItemMove(PCBoxWork *work, int toItemIcon) {
+static BOOL PCBox_UpdateHeldItemMove(PCBoxWork *work, int toItemIcon) {
     PCBoxView *view = work->view;
     PCBoxHeldItemMove *move = view->temp;
 
@@ -140,11 +159,11 @@ BOOL PCBox_UpdateHeldItemMove(PCBoxWork *work, int toItemIcon) {
 
 #pragma force_active reset
 
-u32 PCBox_UpdateHeldItemMoveWithIcon(PCBoxWork *work) {
+static u32 PCBox_UpdateHeldItemMoveWithIcon(PCBoxWork *work) {
     return PCBox_UpdateHeldItemMove(work, 1);
 }
 
-u32 PCBox_UpdateHeldItemMoveNoIcon(PCBoxWork *work) {
+static u32 PCBox_UpdateHeldItemMoveNoIcon(PCBoxWork *work) {
     return PCBox_UpdateHeldItemMove(work, 0);
 }
 
@@ -197,13 +216,13 @@ void PCBox_FreePanels(PCBoxView *view) {
     BgCellManager_Delete(view->panels);
 }
 
-void PCBox_LoadPanelTilemap(BgCellManager *panels, u32 index, u32 fileId) {
+static void PCBox_LoadPanelTilemap(BgCellManager *panels, u32 index, u32 fileId) {
     BgCellManager_LoadCellTilemap(panels, index, 0x13, fileId, 1);
 }
 
 #pragma force_active on
 
-void PCBox_DrawMarkingMenuEntry(PCBoxWork *work, u32 index) {
+static void PCBox_DrawMarkingMenuEntry(PCBoxWork *work, u32 index) {
     u16 *map = BgCellManager_GetCellTilemap(work->view->panels, 2);
     u8 row = (index / 2) * 3 + 2;
     u8 col = (index % 2) * 4 + 3;
@@ -294,7 +313,7 @@ void PCBox_SlideOutPartyPanel(BgCellManager *panels) {
 
 #pragma force_active on
 
-void PCBox_LowerPartyPanel(BgCellManager *panels) {
+static void PCBox_LowerPartyPanel(BgCellManager *panels) {
     struct {
         s8 y, x;
     } v;
@@ -305,7 +324,7 @@ void PCBox_LowerPartyPanel(BgCellManager *panels) {
     }
 }
 
-void PCBox_RaisePartyPanel(BgCellManager *panels) {
+static void PCBox_RaisePartyPanel(BgCellManager *panels) {
     struct {
         s8 y, x;
     } v;
@@ -337,7 +356,7 @@ void PCBox_ShiftPartyPanelLeft(BgCellManager *panels) {
     BgCellManager_StartCellMove(panels, 1, -1, 0, 0x13);
 }
 
-u32 PCBox_UpdatePartyPanelSlide(PCBoxWork *work) {
+static u32 PCBox_UpdatePartyPanelSlide(PCBoxWork *work) {
     s8 a[4];
     u32 x, y;
     BgCellManager_GetCellPosition(work->view->panels, 1, &a[3], &a[2]);
@@ -354,7 +373,7 @@ u32 PCBox_UpdatePartyPanelSlide(PCBoxWork *work) {
     return 1;
 }
 
-u32 PCBox_UpdatePartyPanelMove(PCBoxWork *work) {
+static u32 PCBox_UpdatePartyPanelMove(PCBoxWork *work) {
     s8 a[4];
     u32 x;
     BgCellManager_GetCellPosition(work->view->panels, 1, &a[3], &a[2]);
@@ -388,7 +407,7 @@ void PCBox_ShowPartyButton(PCBoxWork *work) {
     BgCellManager_DrawCellAt(*(void **)(&work->view->panels), 8, 0, 21);
 }
 
-void PCBox_HidePartyButton(PCBoxWork *work) {
+static void PCBox_HidePartyButton(PCBoxWork *work) {
     BgCellManager_DrawCellAt(work->view->panels, 8, 0, 0x18);
 }
 
@@ -405,7 +424,7 @@ void PCBox_ShowTrayTab(PCBoxWork *work) {
     BgCellManager_DrawCellAt(*(BgCellManager **)(&work->view->panels), 9, 12, 21);
 }
 
-void PCBox_HideTrayTab(PCBoxWork *work) {
+static void PCBox_HideTrayTab(PCBoxWork *work) {
     BgCellManager_DrawCellAt(work->view->panels, 9, 0xc, 0x18);
 }
 
@@ -455,7 +474,7 @@ void PCBox_HidePartyButtonAndTrayTab(BgCellManager *panels) {
     BgCellManager_DrawCellAt(panels, 9, 0xc, 0x18);
 }
 
-void PCBox_HideActionMenu(BgCellManager *panels) {
+static void PCBox_HideActionMenu(BgCellManager *panels) {
     u32 i;
     s32 v;
     for (i = 0, v = 5; i < 5; i++, v += 3) {
@@ -514,7 +533,7 @@ void PCBox_SlideOutActionMenu(BgCellManager *panels) {
     BgCellManager_StartCellMove(panels, 0xb, 0, 1, (u8)(0x18 - y));
 }
 
-u32 PCBox_UpdateActionMenuSlide(BgCellManager *panels) {
+static u32 PCBox_UpdateActionMenuSlide(BgCellManager *panels) {
     u32 i;
     u32 ret = FALSE;
     for (i = 0; i < 5; i++) {
@@ -545,11 +564,11 @@ void PCBox_SlideOutTitlePanel(BgCellManager *panels) {
     BgCellManager_StartCellMove(panels, 0xc, 1, 0, 0xb);
 }
 
-void PCBox_HideChangeBoxButton(BgCellManager *panels) {
+static void PCBox_HideChangeBoxButton(BgCellManager *panels) {
     BgCellManager_DrawCellAt(panels, 0xe, 0, 0x18);
 }
 
-void PCBox_SlideInChangeBoxButton(BgCellManager *panels) {
+static void PCBox_SlideInChangeBoxButton(BgCellManager *panels) {
     BgCellManager_StartCellMove(panels, 0xe, 0, -1, 3);
 }
 
@@ -564,7 +583,7 @@ u32 PCBox_IsChangeBoxButtonShown(BgCellManager *panels) {
     return y == 0x15;
 }
 
-void PCBox_HideSummaryButton(BgCellManager *panels) {
+static void PCBox_HideSummaryButton(BgCellManager *panels) {
     BgCellManager_DrawCellAt(panels, 0xf, 0, 0x18);
 }
 
@@ -610,7 +629,7 @@ void PCBox_SlideOutBoxTray(BgCellManager *panels) {
     BgCellManager_StartCellMove(panels, 0, 0, -1, 6);
 }
 
-void PCBox_ShowBoxMenuPanels(BgCellManager *panels) {
+static void PCBox_ShowBoxMenuPanels(BgCellManager *panels) {
     BgCellManager_DrawCellAt(panels, 0xc, 0x15, 8);
     BgCellManager_DrawCellAt(panels, 6, 0x15, 0xe);
     BgCellManager_DrawCellAt(panels, 7, 0x15, 0x11);

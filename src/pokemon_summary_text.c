@@ -16,16 +16,15 @@
 #include "pm_string.h"
 #include "pokedex_util.h"
 #include "pokemon.h"
+#include "pokemon_summary.h"
 #include "pokemon_summary_internal.h"
 #include "render_window.h"
 #include "ribbon.h"
 #include "string_util.h"
 #include "text.h"
 #include "trainer_memo.h"
-#include "pokemon_summary.h"
 
-// Pokemon summary screen text (ARM9 static 0x0208C3E4-0x0208DE40): the screen's windows and the text of each page.
-// Window templates: asm/pokemon_summary_text_data.s.
+// Pokemon summary screen text: the screen's windows and the text of each page.
 
 extern const WindowTemplate gPokemonSummaryRibbonWindowTemplates[];
 extern const WindowTemplate gPokemonSummaryInfoWindowTemplates[];
@@ -35,6 +34,24 @@ extern const s8 gNatureStatMods[][5];
 
 // PokemonSummary_PrintTrainerMemo calls it with three arguments.
 #define sub_0208E600_3(mon, isMine, heapID) ((TrainerMemo * (*)(void *, int, enum HeapID)) TrainerMemo_New)(mon, isMine, heapID)
+
+static int PokemonSummary_IsPlayersMon(PokemonSummary *summary);
+static void PokemonSummary_PrintBuffer(PokemonSummary *summary, Window *window, u32 color, int alignment);
+static void PokemonSummary_PrintStatLabel(PokemonSummary *summary, int window, int msgNo, int stat, int alignment);
+static void PokemonSummary_PrintMessage(PokemonSummary *summary, int window, int msgNo, u32 color, int alignment);
+static void PokemonSummary_FormatNumber(PokemonSummary *summary, int msgNo, int value, int digits, u8 mode);
+static void PokemonSummary_PrintValuePair(PokemonSummary *summary, int window, int labelMsg, int firstMsg, int secondMsg, u16 firstValue, u16 secondValue, volatile u8 digits, u8 centerX, u8 y);
+static void PokemonSummary_PrintLabels(PokemonSummary *summary);
+static void PokemonSummary_PrintInfo(PokemonSummary *summary);
+static void PokemonSummary_PrintTrainerMemo(Window *window, void *mon, int isMine);
+static int PokemonSummary_CountShinyLeaves(PokemonSummary *summary);
+static void PokemonSummary_PrintMemo(PokemonSummary *summary);
+static void PokemonSummary_PrintStats(PokemonSummary *summary);
+static void PokemonSummary_PrintMoves(PokemonSummary *summary);
+static void PokemonSummary_PrintPokeathlonStatLabels(PokemonSummary *summary);
+static void PokemonSummary_PrintRibbonCount(PokemonSummary *summary);
+static void PokemonSummary_PrintFlavorPreference(PokemonSummary *summary);
+static void PokemonSummary_PrintMoveSlot(PokemonSummary *summary, int slot);
 
 void PokemonSummary_AddWindows(PokemonSummary *summary) {
     u16 i;
@@ -166,7 +183,7 @@ void PokemonSummary_PrintHeldItem(PokemonSummary *summary) {
     ScheduleWindowCopyToVram(&summary->windows[31]);
 }
 
-int PokemonSummary_IsPlayersMon(PokemonSummary *summary) {
+static int PokemonSummary_IsPlayersMon(PokemonSummary *summary) {
     PokemonSummaryArgs *args = summary->args;
     if (summary->mon.otId == args->playerId && summary->mon.otGender == args->playerGender && String_Compare(summary->mon.otName, summary->playerName) == 0) {
         return TRUE;
@@ -175,7 +192,7 @@ int PokemonSummary_IsPlayersMon(PokemonSummary *summary) {
 }
 
 // alignment: 0 left, 1 right, 2 centered, otherwise the x position.
-void PokemonSummary_PrintBuffer(PokemonSummary *summary, Window *window, u32 color, int alignment) {
+static void PokemonSummary_PrintBuffer(PokemonSummary *summary, Window *window, u32 color, int alignment) {
     int x;
     switch (alignment) {
     case 0:
@@ -199,7 +216,7 @@ void PokemonSummary_PrintBuffer(PokemonSummary *summary, Window *window, u32 col
 }
 
 // The stat's label, coloured by the nature's effect on it.
-void PokemonSummary_PrintStatLabel(PokemonSummary *summary, int window, int msgNo, int stat, int alignment) {
+static void PokemonSummary_PrintStatLabel(PokemonSummary *summary, int window, int msgNo, int stat, int alignment) {
     u32 color = MAKE_TEXT_COLOR(14, 15, 0);
     int mod = gNatureStatMods[summary->mon.nature][stat];
     if (mod < 0) {
@@ -214,14 +231,14 @@ void PokemonSummary_PrintStatLabel(PokemonSummary *summary, int window, int msgN
     }
 }
 
-void PokemonSummary_PrintMessage(PokemonSummary *summary, int window, int msgNo, u32 color, int alignment) {
+static void PokemonSummary_PrintMessage(PokemonSummary *summary, int window, int msgNo, u32 color, int alignment) {
     Window *windows;
     ReadMsgDataIntoString(summary->msgData, msgNo, summary->buffer);
     windows = summary->windows;
     PokemonSummary_PrintBuffer(summary, &windows[window], color, alignment);
 }
 
-void PokemonSummary_FormatNumber(PokemonSummary *summary, int msgNo, int value, int digits, u8 mode) {
+static void PokemonSummary_FormatNumber(PokemonSummary *summary, int msgNo, int value, int digits, u8 mode) {
     String *template = NewString_ReadMsgData(summary->msgData, msgNo);
     BufferIntegerAsString(summary->msgFormat, 0, value, digits, (PrintingMode)mode, TRUE);
     StringExpandPlaceholders(summary->msgFormat, summary->buffer, template);
@@ -229,7 +246,7 @@ void PokemonSummary_FormatNumber(PokemonSummary *summary, int msgNo, int value, 
 }
 
 // "first / second" around a label centered on centerX.
-void PokemonSummary_PrintValuePair(PokemonSummary *summary, int window, int labelMsg, int firstMsg, int secondMsg, u16 firstValue, u16 secondValue, volatile u8 digits, u8 centerX, u8 y) {
+static void PokemonSummary_PrintValuePair(PokemonSummary *summary, int window, int labelMsg, int firstMsg, int secondMsg, u16 firstValue, u16 secondValue, volatile u8 digits, u8 centerX, u8 y) {
     Window *target = &summary->pageWindows[window];
     u32 width;
     u16 x;
@@ -247,7 +264,7 @@ void PokemonSummary_PrintValuePair(PokemonSummary *summary, int window, int labe
     AddTextPrinterParameterizedWithColor(target, 0, summary->buffer, end, y, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
 }
 
-void PokemonSummary_PrintLabels(PokemonSummary *summary) {
+static void PokemonSummary_PrintLabels(PokemonSummary *summary) {
     PokemonSummary_PrintMessage(summary, 0, msg_0302_00007, MAKE_TEXT_COLOR(14, 15, 0), 0);
     PokemonSummary_PrintMessage(summary, 1, msg_0302_00023, MAKE_TEXT_COLOR(14, 15, 0), 0);
     PokemonSummary_PrintMessage(summary, 2, msg_0302_00109, MAKE_TEXT_COLOR(14, 15, 0), 0);
@@ -308,7 +325,7 @@ void PokemonSummary_PrintPage(PokemonSummary *summary) {
     }
 }
 
-void PokemonSummary_PrintInfo(PokemonSummary *summary) {
+static void PokemonSummary_PrintInfo(PokemonSummary *summary) {
     ScheduleWindowCopyToVram(&summary->windows[23]);
     if (summary->mon.isEgg) {
         ClearWindowTilemapAndScheduleTransfer(&summary->windows[0]);
@@ -390,7 +407,7 @@ void PokemonSummary_PrintInfo(PokemonSummary *summary) {
 }
 
 // The trainer memo: nature, where and when it was met, characteristic, egg watch.
-void PokemonSummary_PrintTrainerMemo(Window *window, void *mon, int isMine) {
+static void PokemonSummary_PrintTrainerMemo(Window *window, void *mon, int isMine) {
     TrainerMemo *memo = sub_0208E600_3(mon, isMine, HEAP_ID_19);
     if (memo->notepad.nature != NULL) {
         AddTextPrinterParameterizedWithColor(window, 0, memo->notepad.nature, 6, (memo->notepad.natureLine - 1) * 16, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
@@ -408,11 +425,11 @@ void PokemonSummary_PrintTrainerMemo(Window *window, void *mon, int isMine) {
     TrainerMemo_Delete(memo);
 }
 
-int PokemonSummary_CountShinyLeaves(PokemonSummary *summary) {
+static int PokemonSummary_CountShinyLeaves(PokemonSummary *summary) {
     return summary->mon.shinyLeaves[0] + summary->mon.shinyLeaves[1] + summary->mon.shinyLeaves[2] + summary->mon.shinyLeaves[3] + summary->mon.shinyLeaves[4] + summary->mon.shinyLeaves[5];
 }
 
-void PokemonSummary_PrintMemo(PokemonSummary *summary) {
+static void PokemonSummary_PrintMemo(PokemonSummary *summary) {
     BoxPokemon *boxMon;
     int isMine;
     Pokemon *mon;
@@ -442,7 +459,7 @@ void PokemonSummary_PrintMemo(PokemonSummary *summary) {
 
 #pragma force_active on
 
-void PokemonSummary_PrintStats(PokemonSummary *summary) {
+static void PokemonSummary_PrintStats(PokemonSummary *summary) {
     String *template;
     MsgData *abilityDescriptions;
 
@@ -499,7 +516,7 @@ void PokemonSummary_PrintStats(PokemonSummary *summary) {
 
 #pragma force_active off
 
-void PokemonSummary_PrintMoves(PokemonSummary *summary) {
+static void PokemonSummary_PrintMoves(PokemonSummary *summary) {
     if (summary->args->mode != 2) {
         ScheduleWindowCopyToVram(&summary->windows[4]);
     }
@@ -520,7 +537,7 @@ void PokemonSummary_PrintMoves(PokemonSummary *summary) {
 
 #pragma force_active on
 
-void PokemonSummary_PrintPokeathlonStatLabels(PokemonSummary *summary) {
+static void PokemonSummary_PrintPokeathlonStatLabels(PokemonSummary *summary) {
     ScheduleWindowCopyToVram(&summary->windows[5]);
     if (summary->args->isFlag982Set) {
         FillWindowPixelBuffer(&summary->pageWindows[3], 0);
@@ -548,7 +565,7 @@ void PokemonSummary_PrintPokeathlonStatLabels(PokemonSummary *summary) {
 
 #pragma force_active off
 
-void PokemonSummary_PrintRibbonCount(PokemonSummary *summary) {
+static void PokemonSummary_PrintRibbonCount(PokemonSummary *summary) {
     ScheduleWindowCopyToVram(&summary->windows[30]);
     ScheduleWindowCopyToVram(&summary->windows[29]);
     ScheduleWindowCopyToVram(&summary->windows[23]);
@@ -559,7 +576,7 @@ void PokemonSummary_PrintRibbonCount(PokemonSummary *summary) {
     BgCommitTilemapBufferToVram(summary->bgConfig, GF_BG_LYR_SUB_0);
 }
 
-void PokemonSummary_PrintFlavorPreference(PokemonSummary *summary) {
+static void PokemonSummary_PrintFlavorPreference(PokemonSummary *summary) {
     u8 mode = summary->args->mode;
     if (mode == 3) {
     } else if (mode != 4) {
@@ -593,7 +610,7 @@ void PokemonSummary_PrintRibbonInfo(PokemonSummary *summary) {
 #pragma force_active on
 
 // slot 4: the move to learn.
-void PokemonSummary_PrintMoveSlot(PokemonSummary *summary, int slot) {
+static void PokemonSummary_PrintMoveSlot(PokemonSummary *summary, int slot) {
     int offset;
     u8 *windows;
     u32 move;

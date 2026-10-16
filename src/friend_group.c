@@ -7,7 +7,6 @@
 #include "math_util.h"
 #include "string_util.h"
 
-// The definitions' own types; friend_group_access.h has the (partly different) caller view.
 void Save_FriendGroup_CopyGroup(SAV_FRIEND_GRP *data, int src, int dst);
 void Save_FriendGroup_AdvanceSeeds(SAV_FRIEND_GRP *data, u32 days);
 u32 Save_FriendGroup_GetGroupId(SAV_FRIEND_GRP *data, int index);
@@ -21,7 +20,7 @@ BOOL Save_FriendGroup_IsGroupNameTaken(SAV_FRIEND_GRP *data, u16 *name);
 BOOL FriendGroup_IsEmpty(FRIEND_GROUP *group);
 BOOL FriendGroup_Equals(FRIEND_GROUP *a, FRIEND_GROUP *b);
 
-extern SAV_FRIEND_GRP *gFriendGroupSave; // asm/friend_group_data.s
+extern SAV_FRIEND_GRP *gFriendGroupSave;
 
 u32 Save_FriendGroup_sizeof(void) {
     return sizeof(SAV_FRIEND_GRP);

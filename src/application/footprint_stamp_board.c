@@ -10,12 +10,11 @@
 #include "math_util.h"
 #include "party.h"
 #include "pokemon.h"
-#include "sound_playback.h"
-#include "text.h"
 #include "screen_fade_legacy.h"
+#include "sound_playback.h"
 #include "swap_3d_buffers.h"
+#include "text.h"
 
-// Declared only in other modules' private headers (src/model_animation.c, ov45, screen fade).
 void ModelResource_LoadFromNarc(FootprintStampModel *model, NARC *narc, int fileId, enum HeapID heapId);
 void ModelResource_Free(FootprintStampModel *model);
 void ModelInstance_Init(FootprintStampModelInstance *instance, FootprintStampModel *model);
@@ -53,6 +52,17 @@ typedef struct FootprintStampRow {
 } FootprintStampRow;
 
 extern const FootprintStampRow sFootprintStampPlayerRows[FOOTPRINT_STAMP_PLAYERS_MAX];
+
+static BOOL FootprintStamp_LoadFootprintIcon(int species, int form, ManagedSprite *sprite, NARC *narc, NARC *footprintNarc, int screen, void *unk19E0);
+static void FootprintStamp_Setup3D(void);
+static void FootprintStamp_HighlightPartySlot(FootprintStamp *work, int slot);
+static void FootprintStamp_GetTextSize(String *string, int font, int *width, int *tiles);
+static inline int FootprintStamp_InkGaugeY(int y);
+static BOOL FootprintStampBoard_AddStamp(FootprintStamp *work, FootprintStampBoard *board, const FootprintStampMon *mon, NARC *narc, NARC *footprintNarc, void *unk19E0);
+static void FootprintStampBoard_Draw(FootprintStampBoard *board);
+static FootprintStampObj *FootprintStampBoard_CreateStamp(FootprintStamp *work, FootprintStampBoard *board, const FootprintStampMon *mon, NARC *narc, NARC *footprintNarc, void *unk19E0);
+static BOOL FootprintStamp_LoadStampModel(FootprintStampBoard *board, FootprintStampModel *model, NARC *narc, NARC *footprintNarc, FootprintStampMon *mon, void *unk19E0);
+static BOOL FootprintStamp_AllocTextureVram(NNSG3dResTex *texture);
 
 void FootprintStamp_FreePlayerSprites(FootprintStamp *work) {
     int i;
@@ -104,7 +114,7 @@ void FootprintStamp_ShowParty(FootprintStamp *work) {
 }
 
 // Copies the footprint of a Pokemon (or the generic one) into the 2x2-tile character of a sprite.
-BOOL FootprintStamp_LoadFootprintIcon(int species, int form, ManagedSprite *sprite, NARC *narc, NARC *footprintNarc, int screen, void *unk19E0) {
+static BOOL FootprintStamp_LoadFootprintIcon(int species, int form, ManagedSprite *sprite, NARC *narc, NARC *footprintNarc, int screen, void *unk19E0) {
     void *file;
     NNSG2dCharacterData *charData;
     u8 *bottom;
@@ -244,7 +254,7 @@ GF3DVramMan *FootprintStamp_Create3DVramMan(enum HeapID heapId) {
     return GF_3DVramMan_Create(heapId, 0, 2, 0, 2, FootprintStamp_Setup3D);
 }
 
-void FootprintStamp_Setup3D(void) {
+static void FootprintStamp_Setup3D(void) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
     G2_SetBG0Priority(1);
     G3X_SetShading(GX_SHADING_TOON);
@@ -429,7 +439,7 @@ void FootprintStamp_StartSelectEffect(FootprintStamp *work, int slot) {
     PlaySE(SEQ_SE_DP_BUTTON3);
 }
 
-void FootprintStamp_HighlightPartySlot(FootprintStamp *work, int slot) {
+static void FootprintStamp_HighlightPartySlot(FootprintStamp *work, int slot) {
     u16 *unfaded = PaletteData_GetUnfadedBuf(work->plttData, PLTTBUF_MAIN_OBJ);
     u16 *faded = PaletteData_GetFadedBuf(work->plttData, PLTTBUF_MAIN_OBJ);
 
@@ -503,7 +513,7 @@ void FootprintStamp_FreeTextSprite(FootprintStampTextSprite *text) {
     ObjCharTransfer_FreeCharSpace(&text->charTransfer);
 }
 
-void FootprintStamp_GetTextSize(String *string, int font, int *width, int *tiles) {
+static void FootprintStamp_GetTextSize(String *string, int font, int *width, int *tiles) {
     int textWidth = FontID_String_GetWidth(font, string, 0);
     int textTiles = textWidth / 8;
 
@@ -583,7 +593,7 @@ void FootprintStampBoard_Free(FootprintStampBoard *board) {
     }
 }
 
-BOOL FootprintStampBoard_AddStamp(FootprintStamp *work, FootprintStampBoard *board, const FootprintStampMon *mon, NARC *narc, NARC *footprintNarc, void *unk19E0) {
+static BOOL FootprintStampBoard_AddStamp(FootprintStamp *work, FootprintStampBoard *board, const FootprintStampMon *mon, NARC *narc, NARC *footprintNarc, void *unk19E0) {
     int i;
 
     if (board->cameraEffect != FOOTPRINT_STAMP_EFFECT_NONE) {
@@ -625,7 +635,7 @@ void FootprintStampBoard_Update(FootprintStampBoard *board, Camera *camera, int 
     }
 }
 
-void FootprintStampBoard_Draw(FootprintStampBoard *board) {
+static void FootprintStampBoard_Draw(FootprintStampBoard *board) {
     int i;
 
     for (i = 0; i < FOOTPRINT_STAMP_STAMPS_MAX; i++) {
@@ -708,7 +718,7 @@ void FootprintStampBoard_VBlank(FootprintStampBoard *board, int phase) {
     }
 }
 
-FootprintStampObj *FootprintStampBoard_CreateStamp(FootprintStamp *work, FootprintStampBoard *board, const FootprintStampMon *mon, NARC *narc, NARC *footprintNarc, void *unk19E0) {
+static FootprintStampObj *FootprintStampBoard_CreateStamp(FootprintStamp *work, FootprintStampBoard *board, const FootprintStampMon *mon, NARC *narc, NARC *footprintNarc, void *unk19E0) {
     FootprintStampObj *stamp = Heap_Alloc(HEAP_ID_125, sizeof(FootprintStampObj));
     fx32 x, y;
 
@@ -730,7 +740,7 @@ FootprintStampObj *FootprintStampBoard_CreateStamp(FootprintStamp *work, Footpri
     return stamp;
 }
 
-BOOL FootprintStamp_LoadStampModel(FootprintStampBoard *board, FootprintStampModel *model, NARC *narc, NARC *footprintNarc, FootprintStampMon *mon, void *unk19E0) {
+static BOOL FootprintStamp_LoadStampModel(FootprintStampBoard *board, FootprintStampModel *model, NARC *narc, NARC *footprintNarc, FootprintStampMon *mon, void *unk19E0) {
     model->file = GfGfxLoader_LoadFromOpenNarc(narc, 29, FALSE, HEAP_ID_125, FALSE);
     GF_ASSERT(model->file);
     model->set = NNS_G3dGetMdlSet(model->file);
@@ -782,7 +792,7 @@ void FootprintStampBoard_UnqueueTexture(FootprintStampBoard *board, NNSG3dResTex
     }
 }
 
-BOOL FootprintStamp_AllocTextureVram(NNSG3dResTex *texture) {
+static BOOL FootprintStamp_AllocTextureVram(NNSG3dResTex *texture) {
     u32 texSize;
     u32 plttSize;
     NNSG3dTexKey texKey;

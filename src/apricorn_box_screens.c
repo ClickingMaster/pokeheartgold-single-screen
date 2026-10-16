@@ -30,17 +30,16 @@
 #include "sound_playback.h"
 #include "sprite.h"
 #include "sprite_system.h"
+#include "swap_3d_buffers.h"
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
 #include "touchpad.h"
 #include "touchscreen.h"
 #include "touchscreen_list_menu.h"
-#include "swap_3d_buffers.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 
-// Defined in the apricorn save code (src/apricorn_box.c) and OVY_58; no header declares them yet.
 u8 ApricornBox_GetJuiceServings(SaveApricornBox *box);
 int ApricornBox_GetMixProgressLevel(SaveApricornBox *box);
 BOOL ApricornBox_QueueApricorn(SaveApricornBox *box, int apricorn, u32 value);
@@ -63,9 +62,9 @@ typedef struct ApricornBoxScreen {
     ApricornBoxApp *app;                 // 0x004
     u8 filler_08[8];                     // 0x008
     SaveApricornBox *apricornBox;        // 0x010
-    u8 juiceServings;                           // 0x014, ApricornBox_GetJuiceServings
-    u8 flavorTotal;                           // 0x015, ApricornJuice_GetFlavorTotal(juiceRecord)
-    u8 juiceMildness;                           // 0x016, juiceRecord byte 2
+    u8 juiceServings;                    // 0x014, ApricornBox_GetJuiceServings
+    u8 flavorTotal;                      // 0x015, ApricornJuice_GetFlavorTotal(juiceRecord)
+    u8 juiceMildness;                    // 0x016, juiceRecord byte 2
     u8 topMixIndex;                      // 0x017, ApricornJuice_GetTopMixIndex(juiceRecord)
     u8 numBlending;                      // 0x018, apricorns in the blender (ApricornBox_CountQueuedApricorns, at most 5)
     u8 mixStage;                         // 0x019, ApricornBox_GetMixProgressLevel
@@ -182,92 +181,93 @@ extern const UnmanagedSpriteTemplate sAprijuiceSpriteTemplates[];
 extern const UnmanagedSpriteTemplate sAprijuiceModifierSpriteTemplate;
 extern const UnmanagedSpriteTemplate sAprijuiceStarSpriteTemplate;
 
-void ApricornBoxScreen_InitFromArgs(ApricornBoxScreen *screen);
-void ApricornBoxScreen_RestoreMenuInputState(ApricornBoxScreen *screen);
-BOOL ApricornBoxScreen_Setup(ApricornBoxScreen *screen);
-BOOL ApricornBoxScreen_Teardown(ApricornBoxScreen *screen);
-int ApricornBoxScreen_FadeIn(ApricornBoxScreen *screen);
-int ApricornBoxScreen_FadeOut(ApricornBoxScreen *screen);
-int ApricornBoxScreen_ShowBlenderNews(ApricornBoxScreen *screen);
-int ApricornBoxScreen_ViewState(ApricornBoxScreen *screen);
-int ApricornBoxScreen_BlenderState(ApricornBoxScreen *screen);
-int ApricornBoxScreen_KurtState(ApricornBoxScreen *screen);
-int ApricornBoxScreen_KurtQuantityState(ApricornBoxScreen *screen);
-int ApricornBoxScreen_LiftApricornState(ApricornBoxScreen *screen);
-int ApricornBoxScreen_DragApricornState(ApricornBoxScreen *screen);
-int ApricornBoxScreen_PutBackApricornState(ApricornBoxScreen *screen);
-int ApricornBoxScreen_BlendApricornState(ApricornBoxScreen *screen);
-int ApricornBoxScreen_JuiceMenuState(ApricornBoxScreen *screen);
-int ApricornBoxScreen_WaitMessageState(ApricornBoxScreen *screen);
-int ApricornBoxScreen_WaitJuiceTasteState(ApricornBoxScreen *screen);
-BOOL ApricornBoxScreen_IsMessageDone(ApricornBoxScreen *screen);
-void ApricornBoxScreen_ResetDisplay(void);
-void ApricornBoxScreen_InitGraphics(ApricornBoxScreen *screen);
-void ApricornBoxScreen_FreeGraphics(ApricornBoxScreen *screen);
-void ApricornBoxScreen_DrawScreen(ApricornBoxScreen *screen);
-void ApricornBoxScreen_LoadBoxState(ApricornBoxScreen *screen);
-void ApricornBoxScreen_DrawCloseButton(ApricornBoxScreen *screen, int sequence);
-void ApricornBoxScreen_DrawConfirmButton(ApricornBoxScreen *screen, int index, int sequence);
-void ApricornBoxScreen_UpdateCursor(ApricornBoxScreen *screen);
-void ApricornBoxScreen_SetCursorAnimActive(ApricornBoxScreen *screen, int active);
-void ApricornBoxScreen_DrawApricornCount(ApricornBoxScreen *screen, u8 index);
-void ApricornBoxScreen_PrintQuantity(ApricornBoxScreen *screen, int value);
-void ApricornBoxScreen_ShowQuantityPanel(ApricornBoxScreen *screen, int show);
-void ApricornBoxScreen_PrintBlenderStatus(ApricornBoxScreen *screen);
-void ApricornBoxScreen_PrintHeader(ApricornBoxScreen *screen, int msgNo);
-void ApricornBoxScreen_PrintDescription(ApricornBoxScreen *screen);
-void ApricornBoxScreen_PrintMessage(ApricornBoxScreen *screen, int msgNo, int speed);
-void ApricornBoxScreen_ClearMessage(ApricornBoxScreen *screen);
-void ApricornBoxScreen_PrintJuiceTaste(ApricornBoxScreen *screen);
-void ApricornBoxScreen_CreateJuiceMenu(ApricornBoxScreen *screen);
-int ApricornBoxScreen_HandleJuiceMenu(ApricornBoxScreen *screen);
-void ApricornBoxScreen_ShowYesNo(ApricornBoxScreen *screen);
-int ApricornBoxScreen_HandleYesNo(ApricornBoxScreen *screen);
-void ApricornBoxScreen_SetApricornsFocus(ApricornBoxScreen *screen, int mode);
-BOOL ApricornBoxScreen_AnimateHand(ApricornBoxScreen *screen, int active);
-void ApricornBoxScreen_StartMoveTask(ApricornBoxScreen *screen, int index, int type);
-void ApricornBoxScreen_VBlankCB(ApricornBoxScreen *screen);
-void ApricornBoxScreen_SetGfxBanks(void);
-void ApricornBoxScreen_InitBgs(ApricornBoxScreen *screen);
-void ApricornBoxScreen_FreeBgs(ApricornBoxScreen *screen);
-void ApricornBoxScreen_LoadBgGraphics(ApricornBoxScreen *screen);
-void ApricornBoxScreen_FreeBgGraphics(ApricornBoxScreen *screen);
-void ApricornBoxScreen_InitStrings(ApricornBoxScreen *screen);
-void ApricornBoxScreen_FreeStrings(ApricornBoxScreen *screen);
-void ApricornBoxScreen_AddWindows(ApricornBoxScreen *screen);
-void ApricornBoxScreen_RemoveWindows(ApricornBoxScreen *screen);
-void ApricornBoxScreen_CreateListMenuItems(ApricornBoxScreen *screen);
-void ApricornBoxScreen_FreeListMenuItems(ApricornBoxScreen *screen);
-void ApricornBoxScreen_InitSpriteSystem(ApricornBoxScreen *screen);
-void ApricornBoxScreen_FreeSpriteSystem(ApricornBoxScreen *screen);
-void ApricornBoxScreen_InitSprites(ApricornBoxScreen *screen);
-void ApricornBoxScreen_FreeSprites(ApricornBoxScreen *screen);
-void ApricornBoxScreen_CreateSprites(ApricornBoxScreen *screen);
-void ApricornBoxScreen_DeleteSprites(ApricornBoxScreen *screen);
-void ApricornBoxScreen_MoveTask(SysTask *task, ApricornBoxMoveTask *move);
-void ApricornBoxScreen_ReadMessage(ApricornBoxScreen *screen, int msgNo);
-u16 ApricornBoxScreen_GetJuiceTasteMsg(ApricornBoxScreen *screen, ApricornJuiceEntry *entry, int line);
-u8 ApricornBoxScreen_GetCursorTarget(ApricornBoxScreen *screen);
-int ApricornBoxScreen_HandleViewInput(ApricornBoxScreen *screen);
-int ApricornBoxScreen_HandleBlenderInput(ApricornBoxScreen *screen);
-int ApricornBoxScreen_HandleDrag(ApricornBoxScreen *screen);
-int ApricornBoxScreen_HandleKurtInput(ApricornBoxScreen *screen);
-int ApricornBoxScreen_HandleQuantityInput(ApricornBoxScreen *screen);
-int ApricornBoxScreen_ViewSelect(ApricornBoxScreen *screen, u32 input);
-int ApricornBoxScreen_ViewKeys(ApricornBoxScreen *screen);
-int ApricornBoxScreen_ViewTouch(ApricornBoxScreen *screen, int *hit);
-int ApricornBoxScreen_BlenderSelect(ApricornBoxScreen *screen, u32 input);
-int ApricornBoxScreen_BlenderKeys(ApricornBoxScreen *screen);
-int ApricornBoxScreen_BlenderTouch(ApricornBoxScreen *screen, int *hit);
-int ApricornBoxScreen_KurtSelect(ApricornBoxScreen *screen, u32 input);
-int ApricornBoxScreen_KurtKeys(ApricornBoxScreen *screen);
-int ApricornBoxScreen_KurtTouch(ApricornBoxScreen *screen, int *hit);
-int ApricornBoxScreen_QuantitySelect(ApricornBoxScreen *screen, int input);
-int ApricornBoxScreen_StepQuantity(int value, int max, int delta);
-int ApricornBoxScreen_QuantityKeys(ApricornBoxScreen *screen);
-int ApricornBoxScreen_QuantityTouch(ApricornBoxScreen *screen, int *hit);
-BOOL ApricornBoxScreen_MoveCursor(ApricornBoxScreen *screen);
-void ApricornBoxScreen_SwitchColumn(ApricornBoxScreen *screen, int direction);
+static void ApricornBoxScreen_InitFromArgs(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_RestoreMenuInputState(ApricornBoxScreen *screen);
+static BOOL ApricornBoxScreen_Setup(ApricornBoxScreen *screen);
+static BOOL ApricornBoxScreen_Teardown(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_FadeIn(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_FadeOut(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_ShowBlenderNews(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_ViewState(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_BlenderState(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_KurtState(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_KurtQuantityState(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_LiftApricornState(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_DragApricornState(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_PutBackApricornState(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_BlendApricornState(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_JuiceMenuState(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_WaitMessageState(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_WaitJuiceTasteState(ApricornBoxScreen *screen);
+static BOOL ApricornBoxScreen_IsMessageDone(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_ResetDisplay(void);
+static void ApricornBoxScreen_InitGraphics(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_FreeGraphics(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_DrawScreen(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_LoadBoxState(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_DrawCloseButton(ApricornBoxScreen *screen, int sequence);
+static void ApricornBoxScreen_DrawConfirmButton(ApricornBoxScreen *screen, int index, int sequence);
+static void ApricornBoxScreen_UpdateCursor(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_SetCursorAnimActive(ApricornBoxScreen *screen, int active);
+static void ApricornBoxScreen_DrawApricornCount(ApricornBoxScreen *screen, u8 index);
+static void ApricornBoxScreen_PrintQuantity(ApricornBoxScreen *screen, int value);
+static void ApricornBoxScreen_ShowQuantityPanel(ApricornBoxScreen *screen, int show);
+static void ApricornBoxScreen_PrintBlenderStatus(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_PrintHeader(ApricornBoxScreen *screen, int msgNo);
+static void ApricornBoxScreen_PrintDescription(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_PrintMessage(ApricornBoxScreen *screen, int msgNo, int speed);
+static void ApricornBoxScreen_ClearMessage(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_PrintJuiceTaste(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_CreateJuiceMenu(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_HandleJuiceMenu(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_ShowYesNo(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_HandleYesNo(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_SetApricornsFocus(ApricornBoxScreen *screen, int mode);
+static BOOL ApricornBoxScreen_AnimateHand(ApricornBoxScreen *screen, int active);
+static inline int ApricornBoxScreen_Abs(int n);
+static void ApricornBoxScreen_StartMoveTask(ApricornBoxScreen *screen, int index, int type);
+static void ApricornBoxScreen_VBlankCB(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_SetGfxBanks(void);
+static void ApricornBoxScreen_InitBgs(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_FreeBgs(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_LoadBgGraphics(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_FreeBgGraphics(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_InitStrings(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_FreeStrings(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_AddWindows(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_RemoveWindows(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_CreateListMenuItems(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_FreeListMenuItems(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_InitSpriteSystem(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_FreeSpriteSystem(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_InitSprites(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_FreeSprites(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_CreateSprites(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_DeleteSprites(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_MoveTask(SysTask *task, ApricornBoxMoveTask *move);
+static void ApricornBoxScreen_ReadMessage(ApricornBoxScreen *screen, int msgNo);
+static u16 ApricornBoxScreen_GetJuiceTasteMsg(ApricornBoxScreen *screen, ApricornJuiceEntry *entry, int line);
+static u8 ApricornBoxScreen_GetCursorTarget(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_HandleViewInput(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_HandleBlenderInput(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_HandleDrag(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_HandleKurtInput(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_HandleQuantityInput(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_ViewSelect(ApricornBoxScreen *screen, u32 input);
+static int ApricornBoxScreen_ViewKeys(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_ViewTouch(ApricornBoxScreen *screen, int *hit);
+static int ApricornBoxScreen_BlenderSelect(ApricornBoxScreen *screen, u32 input);
+static int ApricornBoxScreen_BlenderKeys(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_BlenderTouch(ApricornBoxScreen *screen, int *hit);
+static int ApricornBoxScreen_KurtSelect(ApricornBoxScreen *screen, u32 input);
+static int ApricornBoxScreen_KurtKeys(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_KurtTouch(ApricornBoxScreen *screen, int *hit);
+static int ApricornBoxScreen_QuantitySelect(ApricornBoxScreen *screen, int input);
+static int ApricornBoxScreen_StepQuantity(int value, int max, int delta);
+static int ApricornBoxScreen_QuantityKeys(ApricornBoxScreen *screen);
+static int ApricornBoxScreen_QuantityTouch(ApricornBoxScreen *screen, int *hit);
+static BOOL ApricornBoxScreen_MoveCursor(ApricornBoxScreen *screen);
+static void ApricornBoxScreen_SwitchColumn(ApricornBoxScreen *screen, int direction);
 
 BOOL ApricornBoxScreen_Init(OverlayManager *man, int *state) {
     ApricornBoxScreen *screen;
@@ -357,7 +357,7 @@ BOOL ApricornBoxScreen_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-void ApricornBoxScreen_InitFromArgs(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_InitFromArgs(ApricornBoxScreen *screen) {
     Options *options;
 
     screen->menuInputState = MenuInputStateMgr_GetState(screen->app->args->menuInputStatePtr);
@@ -378,13 +378,13 @@ void ApricornBoxScreen_InitFromArgs(ApricornBoxScreen *screen) {
     }
 }
 
-void ApricornBoxScreen_RestoreMenuInputState(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_RestoreMenuInputState(ApricornBoxScreen *screen) {
     ApricornBoxApp *app = screen->app;
     ApricornBoxArgs *args = app->args;
     MenuInputStateMgr_SetState(args->menuInputStatePtr, screen->menuInputState);
 }
 
-BOOL ApricornBoxScreen_Setup(ApricornBoxScreen *screen) {
+static BOOL ApricornBoxScreen_Setup(ApricornBoxScreen *screen) {
     switch (screen->subState) {
     case 0:
         ApricornBoxScreen_InitGraphics(screen);
@@ -400,7 +400,7 @@ BOOL ApricornBoxScreen_Setup(ApricornBoxScreen *screen) {
     return FALSE;
 }
 
-BOOL ApricornBoxScreen_Teardown(ApricornBoxScreen *screen) {
+static BOOL ApricornBoxScreen_Teardown(ApricornBoxScreen *screen) {
     switch (screen->subState) {
     case 0:
         GF_TouchpadStopSampling();
@@ -416,7 +416,7 @@ BOOL ApricornBoxScreen_Teardown(ApricornBoxScreen *screen) {
     return FALSE;
 }
 
-int ApricornBoxScreen_FadeIn(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_FadeIn(ApricornBoxScreen *screen) {
     switch (screen->subState) {
     case 0:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, screen->heapId);
@@ -445,7 +445,7 @@ int ApricornBoxScreen_FadeIn(ApricornBoxScreen *screen) {
     return 0;
 }
 
-int ApricornBoxScreen_FadeOut(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_FadeOut(ApricornBoxScreen *screen) {
     switch (screen->subState) {
     case 0:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, screen->heapId);
@@ -461,7 +461,7 @@ int ApricornBoxScreen_FadeOut(ApricornBoxScreen *screen) {
     return 1;
 }
 
-int ApricornBoxScreen_ShowBlenderNews(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_ShowBlenderNews(ApricornBoxScreen *screen) {
     if (screen->subState == 0) {
         u32 kind;
         ApricornBoxScreen_SetApricornsFocus(screen, 1);
@@ -488,13 +488,13 @@ int ApricornBoxScreen_ShowBlenderNews(ApricornBoxScreen *screen) {
     return 2;
 }
 
-int ApricornBoxScreen_ViewState(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_ViewState(ApricornBoxScreen *screen) {
     return ApricornBoxScreen_HandleViewInput(screen);
 }
 
 #pragma force_active on
 
-int ApricornBoxScreen_BlenderState(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_BlenderState(ApricornBoxScreen *screen) {
     switch (screen->subState) {
     case 0:
         ApricornBoxScreen_SetApricornsFocus(screen, 0);
@@ -513,11 +513,11 @@ int ApricornBoxScreen_BlenderState(ApricornBoxScreen *screen) {
 
 #pragma force_active reset
 
-int ApricornBoxScreen_KurtState(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_KurtState(ApricornBoxScreen *screen) {
     return ApricornBoxScreen_HandleKurtInput(screen);
 }
 
-int ApricornBoxScreen_KurtQuantityState(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_KurtQuantityState(ApricornBoxScreen *screen) {
     int result;
     switch (screen->subState) {
     case 0:
@@ -571,7 +571,7 @@ int ApricornBoxScreen_KurtQuantityState(ApricornBoxScreen *screen) {
     return 6;
 }
 
-int ApricornBoxScreen_LiftApricornState(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_LiftApricornState(ApricornBoxScreen *screen) {
     switch (screen->subState) {
     case 0:
         ApricornBoxScreen_SetApricornsFocus(screen, 2);
@@ -620,7 +620,7 @@ int ApricornBoxScreen_LiftApricornState(ApricornBoxScreen *screen) {
     return 7;
 }
 
-int ApricornBoxScreen_DragApricornState(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_DragApricornState(ApricornBoxScreen *screen) {
     int result;
     switch (screen->subState) {
     case 0:
@@ -649,7 +649,7 @@ int ApricornBoxScreen_DragApricornState(ApricornBoxScreen *screen) {
     return 8;
 }
 
-int ApricornBoxScreen_PutBackApricornState(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_PutBackApricornState(ApricornBoxScreen *screen) {
     switch (screen->subState) {
     case 0:
         ApricornBoxScreen_StartMoveTask(screen, 0, 1);
@@ -675,7 +675,7 @@ int ApricornBoxScreen_PutBackApricornState(ApricornBoxScreen *screen) {
     return 9;
 }
 
-int ApricornBoxScreen_BlendApricornState(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_BlendApricornState(ApricornBoxScreen *screen) {
     switch (screen->subState) {
     case 0:
         if (screen->numBlending >= 5) {
@@ -732,7 +732,7 @@ int ApricornBoxScreen_BlendApricornState(ApricornBoxScreen *screen) {
     return 10;
 }
 
-int ApricornBoxScreen_JuiceMenuState(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_JuiceMenuState(ApricornBoxScreen *screen) {
     int result;
     switch (screen->subState) {
     case 0:
@@ -766,11 +766,11 @@ int ApricornBoxScreen_JuiceMenuState(ApricornBoxScreen *screen) {
     return 11;
 }
 
-int ApricornBoxScreen_WaitMessageState(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_WaitMessageState(ApricornBoxScreen *screen) {
     return ApricornBoxScreen_IsMessageDone(screen) ? 4 : 14;
 }
 
-int ApricornBoxScreen_WaitJuiceTasteState(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_WaitJuiceTasteState(ApricornBoxScreen *screen) {
     if (ApricornBoxScreen_IsMessageDone(screen)) {
         ApricornBoxScreen_ClearMessage(screen);
         ApricornBoxScreen_PrintBlenderStatus(screen);
@@ -779,7 +779,7 @@ int ApricornBoxScreen_WaitJuiceTasteState(ApricornBoxScreen *screen) {
     return 15;
 }
 
-BOOL ApricornBoxScreen_IsMessageDone(ApricornBoxScreen *screen) {
+static BOOL ApricornBoxScreen_IsMessageDone(ApricornBoxScreen *screen) {
     if (screen->textPrinterId != 0xFF && TextPrinterCheckActive(screen->textPrinterId)) {
         return FALSE;
     }
@@ -802,7 +802,7 @@ BOOL ApricornBoxScreen_IsMessageDone(ApricornBoxScreen *screen) {
     return FALSE;
 }
 
-void ApricornBoxScreen_ResetDisplay(void) {
+static void ApricornBoxScreen_ResetDisplay(void) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     GfGfx_DisableEngineAPlanes();
@@ -815,7 +815,7 @@ void ApricornBoxScreen_ResetDisplay(void) {
     ResetVisibleHardwareWindows(PM_LCD_BOTTOM);
 }
 
-void ApricornBoxScreen_InitGraphics(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_InitGraphics(ApricornBoxScreen *screen) {
     ApricornBoxScreen_InitBgs(screen);
     ApricornBoxScreen_LoadBgGraphics(screen);
     ApricornBoxScreen_InitStrings(screen);
@@ -825,7 +825,7 @@ void ApricornBoxScreen_InitGraphics(ApricornBoxScreen *screen) {
     Main_SetVBlankIntrCB((GFIntrCB)ApricornBoxScreen_VBlankCB, screen);
 }
 
-void ApricornBoxScreen_FreeGraphics(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_FreeGraphics(ApricornBoxScreen *screen) {
     ApricornBoxScreen_FreeSprites(screen);
     ApricornBoxScreen_FreeListMenuItems(screen);
     ApricornBoxScreen_RemoveWindows(screen);
@@ -834,7 +834,7 @@ void ApricornBoxScreen_FreeGraphics(ApricornBoxScreen *screen) {
     ApricornBoxScreen_FreeBgs(screen);
 }
 
-void ApricornBoxScreen_DrawScreen(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_DrawScreen(ApricornBoxScreen *screen) {
     int i;
     int width;
     int x;
@@ -863,7 +863,7 @@ void ApricornBoxScreen_DrawScreen(ApricornBoxScreen *screen) {
     ApricornBoxScreen_PrintHeader(screen, 0);
 }
 
-void ApricornBoxScreen_LoadBoxState(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_LoadBoxState(ApricornBoxScreen *screen) {
     int i;
     screen->numBlending = ApricornBox_CountQueuedApricorns(screen->apricornBox);
     screen->juiceServings = ApricornBox_GetJuiceServings(screen->apricornBox);
@@ -878,7 +878,7 @@ void ApricornBoxScreen_LoadBoxState(ApricornBoxScreen *screen) {
     }
 }
 
-void ApricornBoxScreen_DrawCloseButton(ApricornBoxScreen *screen, int sequence) {
+static void ApricornBoxScreen_DrawCloseButton(ApricornBoxScreen *screen, int sequence) {
     u32 width;
     Sprite_SetAnimCtrlSeq(screen->sprites[0], sequence);
     Sprite_ResetAnimCtrlState(screen->sprites[0]);
@@ -888,8 +888,7 @@ void ApricornBoxScreen_DrawCloseButton(ApricornBoxScreen *screen, int sequence) 
     ScheduleWindowCopyToVram(&screen->windows[2]);
 }
 
-void ApricornBoxScreen_DrawConfirmButton(ApricornBoxScreen *screen, int index, int sequence) {
-    // a struct of locals keeps the original stack layout
+static void ApricornBoxScreen_DrawConfirmButton(ApricornBoxScreen *screen, int index, int sequence) {
     struct {
         int value;
     } width;
@@ -904,7 +903,7 @@ void ApricornBoxScreen_DrawConfirmButton(ApricornBoxScreen *screen, int index, i
     Sprite_ResetAnimCtrlState(screen->sprites[index + 9]);
 }
 
-void ApricornBoxScreen_UpdateCursor(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_UpdateCursor(ApricornBoxScreen *screen) {
     int index = ApricornBoxScreen_GetCursorTarget(screen);
     s16 x;
     s16 y;
@@ -927,11 +926,11 @@ void ApricornBoxScreen_UpdateCursor(ApricornBoxScreen *screen) {
     ApricornBoxScreen_PrintDescription(screen);
 }
 
-void ApricornBoxScreen_SetCursorAnimActive(ApricornBoxScreen *screen, int active) {
+static void ApricornBoxScreen_SetCursorAnimActive(ApricornBoxScreen *screen, int active) {
     Sprite_SetAnimActiveFlag(screen->sprites[1], active);
 }
 
-void ApricornBoxScreen_DrawApricornCount(ApricornBoxScreen *screen, u8 index) {
+static void ApricornBoxScreen_DrawApricornCount(ApricornBoxScreen *screen, u8 index) {
     u8 *counts;
     int windowOffset;
     u8 *windowBase;
@@ -959,7 +958,7 @@ void ApricornBoxScreen_DrawApricornCount(ApricornBoxScreen *screen, u8 index) {
 
 #pragma force_active on
 
-void ApricornBoxScreen_PrintQuantity(ApricornBoxScreen *screen, int value) {
+static void ApricornBoxScreen_PrintQuantity(ApricornBoxScreen *screen, int value) {
     u8 digits[2];
     int i;
     digits[0] = value % 10;
@@ -978,7 +977,7 @@ void ApricornBoxScreen_PrintQuantity(ApricornBoxScreen *screen, int value) {
 
 #pragma force_active reset
 
-void ApricornBoxScreen_ShowQuantityPanel(ApricornBoxScreen *screen, int show) {
+static void ApricornBoxScreen_ShowQuantityPanel(ApricornBoxScreen *screen, int show) {
     int i;
     if (show) {
         GfGfxLoader_LoadScrnDataFromOpenNarc(screen->narc, 6, screen->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, screen->heapId);
@@ -1011,7 +1010,7 @@ void ApricornBoxScreen_ShowQuantityPanel(ApricornBoxScreen *screen, int show) {
     }
 }
 
-void ApricornBoxScreen_PrintBlenderStatus(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_PrintBlenderStatus(ApricornBoxScreen *screen) {
     if (screen->numBlending == 0) {
         ApricornBoxScreen_PrintHeader(screen, 1);
     } else {
@@ -1019,7 +1018,7 @@ void ApricornBoxScreen_PrintBlenderStatus(ApricornBoxScreen *screen) {
     }
 }
 
-void ApricornBoxScreen_PrintHeader(ApricornBoxScreen *screen, int msgNo) {
+static void ApricornBoxScreen_PrintHeader(ApricornBoxScreen *screen, int msgNo) {
     Window *window = &screen->windows[1];
     FillWindowPixelBuffer(window, 0);
     ApricornBoxScreen_ReadMessage(screen, msgNo);
@@ -1027,7 +1026,7 @@ void ApricornBoxScreen_PrintHeader(ApricornBoxScreen *screen, int msgNo) {
     ScheduleWindowCopyToVram(window);
 }
 
-void ApricornBoxScreen_PrintDescription(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_PrintDescription(ApricornBoxScreen *screen) {
     Window *window = &screen->windows[4];
     u32 selection;
     FillWindowPixelBuffer(window, 15);
@@ -1051,7 +1050,7 @@ void ApricornBoxScreen_PrintDescription(ApricornBoxScreen *screen) {
     ScheduleWindowCopyToVram(window);
 }
 
-void ApricornBoxScreen_PrintMessage(ApricornBoxScreen *screen, int msgNo, int speed) {
+static void ApricornBoxScreen_PrintMessage(ApricornBoxScreen *screen, int msgNo, int speed) {
     Window *window = &screen->windows[0];
     FillWindowPixelBuffer(window, 15);
     DrawFrameAndWindow2(window, TRUE, 1, 13);
@@ -1066,7 +1065,7 @@ void ApricornBoxScreen_PrintMessage(ApricornBoxScreen *screen, int msgNo, int sp
     ScheduleWindowCopyToVram(window);
 }
 
-void ApricornBoxScreen_ClearMessage(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_ClearMessage(ApricornBoxScreen *screen) {
     ClearFrameAndWindow2(&screen->windows[0], TRUE);
     ClearWindowTilemapAndScheduleTransfer(&screen->windows[0]);
 }
@@ -1074,8 +1073,7 @@ void ApricornBoxScreen_ClearMessage(ApricornBoxScreen *screen) {
 #pragma force_active on
 #pragma opt_propagation off
 
-void ApricornBoxScreen_PrintJuiceTaste(ApricornBoxScreen *screen) {
-    // the window is addressed through an offset variable, as in the original
+static void ApricornBoxScreen_PrintJuiceTaste(ApricornBoxScreen *screen) {
     u32 offset = offsetof(ApricornBoxScreen, windows);
     FillWindowPixelBuffer((Window *)((u8 *)screen + offset), 15);
     DrawFrameAndWindow2((Window *)((u8 *)screen + offset), TRUE, 1, 13);
@@ -1110,7 +1108,7 @@ void ApricornBoxScreen_PrintJuiceTaste(ApricornBoxScreen *screen) {
 
 #pragma opt_propagation reset
 
-void ApricornBoxScreen_CreateJuiceMenu(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_CreateJuiceMenu(ApricornBoxScreen *screen) {
     TouchscreenListMenuHeader header;
     u8 y;
     u8 x;
@@ -1126,7 +1124,7 @@ void ApricornBoxScreen_CreateJuiceMenu(ApricornBoxScreen *screen) {
 
 #pragma force_active reset
 
-int ApricornBoxScreen_HandleJuiceMenu(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_HandleJuiceMenu(ApricornBoxScreen *screen) {
     int result = TouchscreenListMenu_HandleInput(screen->listMenu);
     if (result == -1) {
         return -1;
@@ -1136,7 +1134,7 @@ int ApricornBoxScreen_HandleJuiceMenu(ApricornBoxScreen *screen) {
     return result;
 }
 
-void ApricornBoxScreen_ShowYesNo(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_ShowYesNo(ApricornBoxScreen *screen) {
     YesNoPromptTemplate template;
     MI_CpuFill8(&template, 0, sizeof(template));
     template.bgConfig = screen->bgConfig;
@@ -1150,7 +1148,7 @@ void ApricornBoxScreen_ShowYesNo(ApricornBoxScreen *screen) {
     YesNoPrompt_InitFromTemplate(screen->yesNoPrompt, &template);
 }
 
-int ApricornBoxScreen_HandleYesNo(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_HandleYesNo(ApricornBoxScreen *screen) {
     int result = YesNoPrompt_HandleInput(screen->yesNoPrompt);
     int answer;
     switch (result) {
@@ -1168,7 +1166,7 @@ int ApricornBoxScreen_HandleYesNo(ApricornBoxScreen *screen) {
     return answer;
 }
 
-void ApricornBoxScreen_SetApricornsFocus(ApricornBoxScreen *screen, int mode) {
+static void ApricornBoxScreen_SetApricornsFocus(ApricornBoxScreen *screen, int mode) {
     int i;
     if (mode == 1 || mode == 2) {
         for (i = 0; i < 7; i++) {
@@ -1197,7 +1195,7 @@ void ApricornBoxScreen_SetApricornsFocus(ApricornBoxScreen *screen, int mode) {
 
 #pragma force_active on
 
-BOOL ApricornBoxScreen_AnimateHand(ApricornBoxScreen *screen, int active) {
+static BOOL ApricornBoxScreen_AnimateHand(ApricornBoxScreen *screen, int active) {
     if (active) {
         switch (screen->animState) {
         case 0:
@@ -1249,7 +1247,7 @@ static inline int ApricornBoxScreen_Abs(int n) {
     return n < 0 ? -n : n;
 }
 
-void ApricornBoxScreen_StartMoveTask(ApricornBoxScreen *screen, int index, int type) {
+static void ApricornBoxScreen_StartMoveTask(ApricornBoxScreen *screen, int index, int type) {
     ApricornBoxMoveTask *move = Heap_Alloc(screen->heapId, sizeof(ApricornBoxMoveTask));
     s16 x;
     s16 y;
@@ -1303,7 +1301,7 @@ void ApricornBoxScreen_StartMoveTask(ApricornBoxScreen *screen, int index, int t
 
 #pragma force_active reset
 
-void ApricornBoxScreen_VBlankCB(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_VBlankCB(ApricornBoxScreen *screen) {
     if (screen->spriteSystem != NULL) {
         SpriteSystem_TransferOam();
     }
@@ -1312,12 +1310,12 @@ void ApricornBoxScreen_VBlankCB(ApricornBoxScreen *screen) {
     ((vu32 *)0x027E0000)[(HW_INTR_CHECK_BUF - HW_DTCM) / 4] |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag
 }
 
-void ApricornBoxScreen_SetGfxBanks(void) {
+static void ApricornBoxScreen_SetGfxBanks(void) {
     GraphicsBanks banks = sApricornBoxGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
-void ApricornBoxScreen_InitBgs(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_InitBgs(ApricornBoxScreen *screen) {
     ApricornBoxScreen_SetGfxBanks();
     screen->bgConfig = BgConfig_Alloc(screen->heapId);
     {
@@ -1363,7 +1361,7 @@ void ApricornBoxScreen_InitBgs(ApricornBoxScreen *screen) {
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_3, 0x40, 0, screen->heapId);
 }
 
-void ApricornBoxScreen_FreeBgs(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_FreeBgs(ApricornBoxScreen *screen) {
     FreeBgTilemapBuffer(screen->bgConfig, GF_BG_LYR_MAIN_3);
     FreeBgTilemapBuffer(screen->bgConfig, GF_BG_LYR_MAIN_2);
     FreeBgTilemapBuffer(screen->bgConfig, GF_BG_LYR_MAIN_1);
@@ -1376,7 +1374,7 @@ void ApricornBoxScreen_FreeBgs(ApricornBoxScreen *screen) {
 
 #pragma force_active on
 
-void ApricornBoxScreen_LoadBgGraphics(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_LoadBgGraphics(ApricornBoxScreen *screen) {
     NARC *narc = NARC_New(NARC_a_2_1_8, screen->heapId);
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 3, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0, screen->heapId);
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 4, screen->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, FALSE, screen->heapId);
@@ -1393,14 +1391,14 @@ void ApricornBoxScreen_LoadBgGraphics(ApricornBoxScreen *screen) {
 
 #pragma force_active reset
 
-void ApricornBoxScreen_FreeBgGraphics(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_FreeBgGraphics(ApricornBoxScreen *screen) {
     NARC_Delete(screen->narc);
     G2x_SetBlendAlpha_((u32)&reg_G2_BLDCNT, GX_BLEND_PLANEMASK_NONE, GX_BLEND_PLANEMASK_NONE, 31, 0);
 }
 
 #pragma force_active on
 
-void ApricornBoxScreen_InitStrings(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_InitStrings(ApricornBoxScreen *screen) {
     int i;
     int j;
     FontID_Alloc(4, screen->heapId);
@@ -1420,13 +1418,12 @@ void ApricornBoxScreen_InitStrings(ApricornBoxScreen *screen) {
 
 #pragma force_active reset
 
-void ApricornBoxScreen_FreeStrings(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_FreeStrings(ApricornBoxScreen *screen) {
     int i;
     for (i = 0; i < 7; i++) {
         String_Delete(screen->apricornNames[i]);
     }
     {
-        // a byte cursor, as in the original (keeps its register allocation)
         u8 *cursor;
         int j;
         j = 0;
@@ -1446,7 +1443,7 @@ void ApricornBoxScreen_FreeStrings(ApricornBoxScreen *screen) {
 
 #pragma force_active on
 
-void ApricornBoxScreen_AddWindows(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_AddWindows(ApricornBoxScreen *screen) {
     int i = 0;
     int tile;
     int y;
@@ -1472,7 +1469,7 @@ void ApricornBoxScreen_AddWindows(ApricornBoxScreen *screen) {
 
 #pragma force_active reset
 
-void ApricornBoxScreen_RemoveWindows(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_RemoveWindows(ApricornBoxScreen *screen) {
     int i = 0;
     Window *window = &screen->windows[0];
     for (; i < 18; i++, window++) {
@@ -1482,7 +1479,7 @@ void ApricornBoxScreen_RemoveWindows(ApricornBoxScreen *screen) {
     YesNoPrompt_Destroy(screen->yesNoPrompt);
 }
 
-void ApricornBoxScreen_CreateListMenuItems(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_CreateListMenuItems(ApricornBoxScreen *screen) {
     int i;
     if (screen->mode != APRICORN_BOX_MODE_VIEW) {
         int offset = (screen->mode - 1) * 8;
@@ -1494,7 +1491,7 @@ void ApricornBoxScreen_CreateListMenuItems(ApricornBoxScreen *screen) {
     }
 }
 
-void ApricornBoxScreen_FreeListMenuItems(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_FreeListMenuItems(ApricornBoxScreen *screen) {
     if (screen->mode) {
         ListMenuItems_Delete(screen->listMenuItems);
         screen->listMenuItems = NULL;
@@ -1503,7 +1500,7 @@ void ApricornBoxScreen_FreeListMenuItems(ApricornBoxScreen *screen) {
 
 #pragma force_active on
 
-void ApricornBoxScreen_InitSpriteSystem(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_InitSpriteSystem(ApricornBoxScreen *screen) {
     GF_CreateVramTransferManager(32, screen->heapId);
     screen->spriteSystem = SpriteSystem_Alloc(screen->heapId);
     SpriteSystem_Init(screen->spriteSystem, &sApricornBoxOamManagerParam, &sApricornBoxOamCharTransferParam, 3);
@@ -1515,7 +1512,7 @@ void ApricornBoxScreen_InitSpriteSystem(ApricornBoxScreen *screen) {
     screen->spawner = TouchscreenListMenuSpawner_Create(screen->heapId, NULL);
 }
 
-void ApricornBoxScreen_FreeSpriteSystem(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_FreeSpriteSystem(ApricornBoxScreen *screen) {
     TouchscreenListMenuSpawner_Destroy(screen->spawner);
     SpriteSystem_DestroySpriteManager(screen->spriteSystem, screen->spriteManager);
     screen->spriteManager = NULL;
@@ -1527,13 +1524,13 @@ void ApricornBoxScreen_FreeSpriteSystem(ApricornBoxScreen *screen) {
 
 #pragma force_active reset
 
-void ApricornBoxScreen_InitSprites(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_InitSprites(ApricornBoxScreen *screen) {
     ApricornBoxScreen_InitSpriteSystem(screen);
     ApricornBoxScreen_CreateSprites(screen);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-void ApricornBoxScreen_FreeSprites(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_FreeSprites(ApricornBoxScreen *screen) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
     ApricornBoxScreen_DeleteSprites(screen);
     ApricornBoxScreen_FreeSpriteSystem(screen);
@@ -1541,7 +1538,7 @@ void ApricornBoxScreen_FreeSprites(ApricornBoxScreen *screen) {
 
 #pragma force_active on
 
-void ApricornBoxScreen_CreateSprites(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_CreateSprites(ApricornBoxScreen *screen) {
     int y;
     int i;
     const UnmanagedSpriteTemplate *template = sApricornBoxSpriteTemplates;
@@ -1554,7 +1551,6 @@ void ApricornBoxScreen_CreateSprites(ApricornBoxScreen *screen) {
     }
     Sprite_SetPriority(screen->sprites[1], 2);
     position = (const s16 *)sApricornBoxApricornPositions;
-    // the sprite slots below are addressed through a byte cursor, as in the original
     for (i = 0; i < 7; position += 2, i++) {
         cursor = (u8 *)screen + (u8)(i + 2) * sizeof(Sprite *);
         ((ApricornBoxScreen *)cursor)->sprites[0] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, &sApricornBoxApricornSpriteTemplate);
@@ -1606,7 +1602,7 @@ void ApricornBoxScreen_CreateSprites(ApricornBoxScreen *screen) {
 
 #pragma force_active reset
 
-void ApricornBoxScreen_DeleteSprites(ApricornBoxScreen *screen) {
+static void ApricornBoxScreen_DeleteSprites(ApricornBoxScreen *screen) {
     int i;
     for (i = 0; i < 15; i++) {
         if (screen->sprites[i] != NULL) {
@@ -1617,7 +1613,7 @@ void ApricornBoxScreen_DeleteSprites(ApricornBoxScreen *screen) {
 
 #pragma force_active on
 
-void ApricornBoxScreen_MoveTask(SysTask *task, ApricornBoxMoveTask *move) {
+static void ApricornBoxScreen_MoveTask(SysTask *task, ApricornBoxMoveTask *move) {
     ApricornBoxScreen *owner = move->owner;
     switch (move->state) {
     case 0: {
@@ -1647,7 +1643,7 @@ void ApricornBoxScreen_MoveTask(SysTask *task, ApricornBoxMoveTask *move) {
 
 #pragma force_active reset
 
-void ApricornBoxScreen_ReadMessage(ApricornBoxScreen *screen, int msgNo) {
+static void ApricornBoxScreen_ReadMessage(ApricornBoxScreen *screen, int msgNo) {
     switch (msgNo) {
     case 6: {
         int count = ApricornBox_CountQueuedApricorns(screen->apricornBox);
@@ -1681,7 +1677,7 @@ void ApricornBoxScreen_ReadMessage(ApricornBoxScreen *screen, int msgNo) {
 
 #pragma force_active on
 
-u16 ApricornBoxScreen_GetJuiceTasteMsg(ApricornBoxScreen *screen, ApricornJuiceEntry *entry, int line) {
+static u16 ApricornBoxScreen_GetJuiceTasteMsg(ApricornBoxScreen *screen, ApricornJuiceEntry *entry, int line) {
     u8 high = entry->strength - 1;
     int nibble = entry->strength;
     int low;
@@ -1717,7 +1713,7 @@ u16 ApricornBoxScreen_GetJuiceTasteMsg(ApricornBoxScreen *screen, ApricornJuiceE
     }
 }
 
-u8 ApricornBoxScreen_GetCursorTarget(ApricornBoxScreen *screen) {
+static u8 ApricornBoxScreen_GetCursorTarget(ApricornBoxScreen *screen) {
     switch (screen->cursorArea) {
     case 0:
         return screen->cursorRow * 2;
@@ -1736,7 +1732,7 @@ u8 ApricornBoxScreen_GetCursorTarget(ApricornBoxScreen *screen) {
 
 #pragma force_active reset
 
-int ApricornBoxScreen_HandleViewInput(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_HandleViewInput(ApricornBoxScreen *screen) {
     int hit = 0;
     int result = ApricornBoxScreen_ViewTouch(screen, &hit);
     if (hit == 0) {
@@ -1745,7 +1741,7 @@ int ApricornBoxScreen_HandleViewInput(ApricornBoxScreen *screen) {
     return result;
 }
 
-int ApricornBoxScreen_HandleBlenderInput(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_HandleBlenderInput(ApricornBoxScreen *screen) {
     int hit = 0;
     int result = ApricornBoxScreen_BlenderTouch(screen, &hit);
     if (hit == 0) {
@@ -1754,7 +1750,7 @@ int ApricornBoxScreen_HandleBlenderInput(ApricornBoxScreen *screen) {
     return result;
 }
 
-int ApricornBoxScreen_HandleDrag(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_HandleDrag(ApricornBoxScreen *screen) {
     s16 x;
     s16 y;
     u8 hit;
@@ -1787,7 +1783,7 @@ int ApricornBoxScreen_HandleDrag(ApricornBoxScreen *screen) {
     return 0;
 }
 
-int ApricornBoxScreen_HandleKurtInput(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_HandleKurtInput(ApricornBoxScreen *screen) {
     int hit = 0;
     int result = ApricornBoxScreen_KurtTouch(screen, &hit);
     if (hit == 0) {
@@ -1796,7 +1792,7 @@ int ApricornBoxScreen_HandleKurtInput(ApricornBoxScreen *screen) {
     return result;
 }
 
-int ApricornBoxScreen_HandleQuantityInput(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_HandleQuantityInput(ApricornBoxScreen *screen) {
     int hit = 0;
     int result = ApricornBoxScreen_QuantityTouch(screen, &hit);
     if (hit == 0) {
@@ -1805,7 +1801,7 @@ int ApricornBoxScreen_HandleQuantityInput(ApricornBoxScreen *screen) {
     return result;
 }
 
-int ApricornBoxScreen_ViewSelect(ApricornBoxScreen *screen, u32 input) {
+static int ApricornBoxScreen_ViewSelect(ApricornBoxScreen *screen, u32 input) {
     if (input <= 6) {
         PlaySE(SEQ_SE_DP_SELECT);
         ApricornBoxScreen_UpdateCursor(screen);
@@ -1820,7 +1816,7 @@ int ApricornBoxScreen_ViewSelect(ApricornBoxScreen *screen, u32 input) {
     return 3;
 }
 
-int ApricornBoxScreen_ViewKeys(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_ViewKeys(ApricornBoxScreen *screen) {
     u32 keys = gSystem.newKeys;
     if (keys & 0xCF3) {
         screen->menuInputState = MENU_INPUT_STATE_BUTTONS;
@@ -1840,7 +1836,7 @@ int ApricornBoxScreen_ViewKeys(ApricornBoxScreen *screen) {
     return 3;
 }
 
-int ApricornBoxScreen_ViewTouch(ApricornBoxScreen *screen, int *hit) {
+static int ApricornBoxScreen_ViewTouch(ApricornBoxScreen *screen, int *hit) {
     int input = TouchscreenHitbox_FindHitboxAtTouchNew(sApricornBoxHitboxes);
     if (input == -1 || input == 7) {
         return 3;
@@ -1859,7 +1855,7 @@ int ApricornBoxScreen_ViewTouch(ApricornBoxScreen *screen, int *hit) {
     return ApricornBoxScreen_ViewSelect(screen, input);
 }
 
-int ApricornBoxScreen_BlenderSelect(ApricornBoxScreen *screen, u32 input) {
+static int ApricornBoxScreen_BlenderSelect(ApricornBoxScreen *screen, u32 input) {
     if (input <= 6) {
         ApricornBoxScreen_UpdateCursor(screen);
         if (screen->apricornCounts[input] == 0) {
@@ -1898,7 +1894,7 @@ int ApricornBoxScreen_BlenderSelect(ApricornBoxScreen *screen, u32 input) {
     return 4;
 }
 
-int ApricornBoxScreen_BlenderKeys(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_BlenderKeys(ApricornBoxScreen *screen) {
     u32 keys = gSystem.newKeys;
     if (keys & 0xCF3) {
         screen->menuInputState = MENU_INPUT_STATE_BUTTONS;
@@ -1918,11 +1914,10 @@ int ApricornBoxScreen_BlenderKeys(ApricornBoxScreen *screen) {
     return 4;
 }
 
-int ApricornBoxScreen_BlenderTouch(ApricornBoxScreen *screen, int *hit) {
+static int ApricornBoxScreen_BlenderTouch(ApricornBoxScreen *screen, int *hit) {
     int input;
     int value;
     input = TouchscreenHitbox_FindHitboxAtTouchNew(sApricornBoxHitboxes);
-    // the constants go through a variable, as in the original
     value = 0;
     if (input == ~value) {
         return 4;
@@ -1949,7 +1944,7 @@ int ApricornBoxScreen_BlenderTouch(ApricornBoxScreen *screen, int *hit) {
     return ApricornBoxScreen_BlenderSelect(screen, input);
 }
 
-int ApricornBoxScreen_KurtSelect(ApricornBoxScreen *screen, u32 input) {
+static int ApricornBoxScreen_KurtSelect(ApricornBoxScreen *screen, u32 input) {
     if (input <= 6) {
         PlaySE(SEQ_SE_DP_SELECT);
         ApricornBoxScreen_UpdateCursor(screen);
@@ -1969,7 +1964,7 @@ int ApricornBoxScreen_KurtSelect(ApricornBoxScreen *screen, u32 input) {
     return 5;
 }
 
-int ApricornBoxScreen_KurtKeys(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_KurtKeys(ApricornBoxScreen *screen) {
     u32 keys = gSystem.newKeys;
     if (keys & 0xCF3) {
         screen->menuInputState = MENU_INPUT_STATE_BUTTONS;
@@ -1989,7 +1984,7 @@ int ApricornBoxScreen_KurtKeys(ApricornBoxScreen *screen) {
     return 5;
 }
 
-int ApricornBoxScreen_KurtTouch(ApricornBoxScreen *screen, int *hit) {
+static int ApricornBoxScreen_KurtTouch(ApricornBoxScreen *screen, int *hit) {
     int input = TouchscreenHitbox_FindHitboxAtTouchNew(sApricornBoxHitboxes);
     if (input == -1 || input == 7) {
         return 5;
@@ -2008,7 +2003,7 @@ int ApricornBoxScreen_KurtTouch(ApricornBoxScreen *screen, int *hit) {
     return ApricornBoxScreen_KurtSelect(screen, input);
 }
 
-int ApricornBoxScreen_QuantitySelect(ApricornBoxScreen *screen, int input) {
+static int ApricornBoxScreen_QuantitySelect(ApricornBoxScreen *screen, int input) {
     if (input == 0) {
         PlaySE(SEQ_SE_DP_SELECT);
         ApricornBoxScreen_DrawConfirmButton(screen, 0, 1);
@@ -2040,7 +2035,7 @@ int ApricornBoxScreen_QuantitySelect(ApricornBoxScreen *screen, int input) {
     return 6;
 }
 
-int ApricornBoxScreen_StepQuantity(int value, int max, int delta) {
+static int ApricornBoxScreen_StepQuantity(int value, int max, int delta) {
     if (delta > 0) {
         if (value == max) {
             return 1;
@@ -2061,7 +2056,7 @@ int ApricornBoxScreen_StepQuantity(int value, int max, int delta) {
     return value;
 }
 
-int ApricornBoxScreen_QuantityKeys(ApricornBoxScreen *screen) {
+static int ApricornBoxScreen_QuantityKeys(ApricornBoxScreen *screen) {
     u32 keys = gSystem.newKeys;
     int down;
     if (keys & 0xCF3) {
@@ -2094,7 +2089,7 @@ int ApricornBoxScreen_QuantityKeys(ApricornBoxScreen *screen) {
     return 6;
 }
 
-int ApricornBoxScreen_QuantityTouch(ApricornBoxScreen *screen, int *hit) {
+static int ApricornBoxScreen_QuantityTouch(ApricornBoxScreen *screen, int *hit) {
     int input = TouchscreenHitbox_FindHitboxAtTouchNew(sApricornBoxQuantityHitboxes);
     if (input == -1) {
         return 6;
@@ -2113,7 +2108,7 @@ int ApricornBoxScreen_QuantityTouch(ApricornBoxScreen *screen, int *hit) {
     return ApricornBoxScreen_QuantitySelect(screen, input);
 }
 
-BOOL ApricornBoxScreen_MoveCursor(ApricornBoxScreen *screen) {
+static BOOL ApricornBoxScreen_MoveCursor(ApricornBoxScreen *screen) {
     u32 keys;
     switch (screen->cursorArea) {
     case 0:
@@ -2182,7 +2177,7 @@ BOOL ApricornBoxScreen_MoveCursor(ApricornBoxScreen *screen) {
     return FALSE;
 }
 
-void ApricornBoxScreen_SwitchColumn(ApricornBoxScreen *screen, int direction) {
+static void ApricornBoxScreen_SwitchColumn(ApricornBoxScreen *screen, int direction) {
     u8 row;
     if (direction == 0) {
         screen->lastRowLeft = screen->cursorRow;
@@ -2249,7 +2244,7 @@ typedef struct AprijuiceMon {
     u8 level;                                      // 0x06
     u8 gender;                                     // 0x07
     u8 slot;                                       // 0x08
-    u8 hFlip;                                     // 0x09
+    u8 hFlip;                                      // 0x09
     u8 filler_0A[2];                               // 0x0A
     String *name;                                  // 0x0C
     PartyExtraSub aprijuice;                       // 0x10
@@ -2277,7 +2272,7 @@ typedef struct AprijuiceScreen {
     u8 filler_0C[4];                            // 0x00C
     Party *party;                               // 0x010
     SaveApricornBox *apricornBox;               // 0x014
-    ApricornJuice juiceRecord;             // 0x018
+    ApricornJuice juiceRecord;                  // 0x018
     ApricornBoxJuice juice;                     // 0x020
     struct PokeathlonPerformanceStars oldStars; // 0x02E
     u8 stat;                                    // 0x036
@@ -2348,76 +2343,77 @@ typedef struct AprijuiceFadeTask {
     u8 state;               // 0x05
 } AprijuiceFadeTask;        // size: 0x08
 
-void AprijuiceScreen_InitFromArgs(AprijuiceScreen *screen);
-void AprijuiceScreen_WriteResult(AprijuiceScreen *screen);
-BOOL AprijuiceScreen_Setup(AprijuiceScreen *screen);
-BOOL AprijuiceScreen_Teardown(AprijuiceScreen *screen);
-int AprijuiceScreen_FadeIn(AprijuiceScreen *screen);
-int AprijuiceScreen_FadeOut(AprijuiceScreen *screen);
-int AprijuiceScreen_InputState(AprijuiceScreen *screen);
-int AprijuiceScreen_DrinkState(AprijuiceScreen *screen);
-int AprijuiceScreen_StatChangesState(AprijuiceScreen *screen);
-void AprijuiceScreen_ResetDisplay(void);
-void AprijuiceScreen_InitGraphics(AprijuiceScreen *screen);
-void AprijuiceScreen_FreeGraphics(AprijuiceScreen *screen);
-void AprijuiceScreen_DrawScreen(AprijuiceScreen *screen);
-void AprijuiceScreen_LoadParty(AprijuiceScreen *screen);
-void AprijuiceScreen_FreeParty(AprijuiceScreen *screen);
-void AprijuiceScreen_DrawButtons(AprijuiceScreen *screen, u32 state);
-int AprijuiceScreen_HandleInput(AprijuiceScreen *screen);
-BOOL AprijuiceScreen_PlayDrinkAnim(AprijuiceScreen *screen);
-BOOL AprijuiceScreen_PrintNothingChanged(AprijuiceScreen *screen);
-BOOL AprijuiceScreen_ShowStatChange(AprijuiceScreen *screen);
-int AprijuiceScreen_Select(AprijuiceScreen *screen, int input);
-int AprijuiceScreen_HandleKeys(AprijuiceScreen *screen);
-int AprijuiceScreen_HandleTouch(AprijuiceScreen *screen, int *hit);
-void AprijuiceScreen_VBlankCB(AprijuiceScreen *screen);
-void AprijuiceScreen_SetGfxBanks(void);
-void AprijuiceScreen_InitBgs(AprijuiceScreen *screen);
-void AprijuiceScreen_FreeBgs(AprijuiceScreen *screen);
-void AprijuiceScreen_LoadBgGraphics(AprijuiceScreen *screen);
-void AprijuiceScreen_FreeBgGraphics(AprijuiceScreen *screen);
-void AprijuiceScreen_InitStrings(AprijuiceScreen *screen);
-void AprijuiceScreen_FreeStrings(AprijuiceScreen *screen);
-void AprijuiceScreen_AddWindows(AprijuiceScreen *screen);
-void AprijuiceScreen_RemoveWindows(AprijuiceScreen *screen);
-void AprijuiceScreen_InitSpriteSystem(AprijuiceScreen *screen);
-void AprijuiceScreen_FreeSpriteSystem(AprijuiceScreen *screen);
-void AprijuiceScreen_InitSprites(AprijuiceScreen *screen);
-void AprijuiceScreen_FreeSprites(AprijuiceScreen *screen);
-void AprijuiceScreen_CreateSprites(AprijuiceScreen *screen);
-void AprijuiceScreen_DeleteSprites(AprijuiceScreen *screen);
-void AprijuiceMon_Init(AprijuiceMon *entry, Party *party, Pokemon *mon, u8 slot, enum HeapID heapId);
-void AprijuiceMon_Free(AprijuiceMon *entry);
-void AprijuiceScreen_UseJuice(AprijuiceScreen *screen);
-void AprijuiceScreen_DrawMessageBox(AprijuiceScreen *screen);
-void AprijuiceScreen_PrintMessage(AprijuiceScreen *screen, int message);
-void AprijuiceScreen_ShowMon(AprijuiceScreen *screen, int index);
-void AprijuiceScreen_DrawStatStars(AprijuiceScreen *screen, AprijuiceMon *entry, u8 stat);
-void AprijuiceScreen_DrawAllStars(AprijuiceScreen *screen, AprijuiceMon *entry);
-void AprijuiceScreen_SetStarSprite(AprijuiceScreen *screen, int index, u8 sequence, int draw);
-void AprijuiceScreen_StartStarTask(AprijuiceScreen *screen, int stat, int shrink);
-void AprijuiceScreen_StarTask(SysTask *task, AprijuiceStarTask *star);
-void AprijuiceScreen_StartShakeTask(AprijuiceScreen *screen);
-void AprijuiceScreen_ShakeTask(SysTask *task, AprijuiceShakeTask *shake);
-void AprijuiceScreen_StartFadeTask(AprijuiceScreen *screen);
-void AprijuiceScreen_FadeTask(SysTask *task, AprijuiceFadeTask *fade);
-AprijuiceScene *AprijuiceScene_New(enum HeapID heapId);
-void AprijuiceScene_Draw(AprijuiceScene *scene);
-void AprijuiceScene_Delete(AprijuiceScene *scene);
-void AprijuiceScene_TransferPokepicGfx(AprijuiceScene *scene);
-void AprijuiceScene_CreatePokepic(AprijuiceScene *scene, AprijuiceMon *entry);
-void AprijuiceScene_DeletePokepic(AprijuiceScene *scene);
-void AprijuiceScene_StartParticles(AprijuiceScene *scene, int resource);
-BOOL AprijuiceScene_AreParticlesActive(AprijuiceScene *scene);
-void AprijuiceScene_Init3D(void);
+static void AprijuiceScreen_InitFromArgs(AprijuiceScreen *screen);
+static void AprijuiceScreen_WriteResult(AprijuiceScreen *screen);
+static BOOL AprijuiceScreen_Setup(AprijuiceScreen *screen);
+static BOOL AprijuiceScreen_Teardown(AprijuiceScreen *screen);
+static int AprijuiceScreen_FadeIn(AprijuiceScreen *screen);
+static int AprijuiceScreen_FadeOut(AprijuiceScreen *screen);
+static int AprijuiceScreen_InputState(AprijuiceScreen *screen);
+static int AprijuiceScreen_DrinkState(AprijuiceScreen *screen);
+static int AprijuiceScreen_StatChangesState(AprijuiceScreen *screen);
+static void AprijuiceScreen_ResetDisplay(void);
+static void AprijuiceScreen_InitGraphics(AprijuiceScreen *screen);
+static void AprijuiceScreen_FreeGraphics(AprijuiceScreen *screen);
+static void AprijuiceScreen_DrawScreen(AprijuiceScreen *screen);
+static void AprijuiceScreen_LoadParty(AprijuiceScreen *screen);
+static void AprijuiceScreen_FreeParty(AprijuiceScreen *screen);
+static void AprijuiceScreen_DrawButtons(AprijuiceScreen *screen, u32 state);
+static int AprijuiceScreen_HandleInput(AprijuiceScreen *screen);
+static BOOL AprijuiceScreen_PlayDrinkAnim(AprijuiceScreen *screen);
+static BOOL AprijuiceScreen_PrintNothingChanged(AprijuiceScreen *screen);
+static BOOL AprijuiceScreen_ShowStatChange(AprijuiceScreen *screen);
+static int AprijuiceScreen_Select(AprijuiceScreen *screen, int input);
+static int AprijuiceScreen_HandleKeys(AprijuiceScreen *screen);
+static int AprijuiceScreen_HandleTouch(AprijuiceScreen *screen, int *hit);
+static void AprijuiceScreen_VBlankCB(AprijuiceScreen *screen);
+static void AprijuiceScreen_SetGfxBanks(void);
+static void AprijuiceScreen_InitBgs(AprijuiceScreen *screen);
+static void AprijuiceScreen_FreeBgs(AprijuiceScreen *screen);
+static void AprijuiceScreen_LoadBgGraphics(AprijuiceScreen *screen);
+static void AprijuiceScreen_FreeBgGraphics(AprijuiceScreen *screen);
+static void AprijuiceScreen_InitStrings(AprijuiceScreen *screen);
+static void AprijuiceScreen_FreeStrings(AprijuiceScreen *screen);
+static void AprijuiceScreen_AddWindows(AprijuiceScreen *screen);
+static void AprijuiceScreen_RemoveWindows(AprijuiceScreen *screen);
+static void AprijuiceScreen_InitSpriteSystem(AprijuiceScreen *screen);
+static void AprijuiceScreen_FreeSpriteSystem(AprijuiceScreen *screen);
+static void AprijuiceScreen_InitSprites(AprijuiceScreen *screen);
+static void AprijuiceScreen_FreeSprites(AprijuiceScreen *screen);
+static void AprijuiceScreen_CreateSprites(AprijuiceScreen *screen);
+static void AprijuiceScreen_DeleteSprites(AprijuiceScreen *screen);
+static void AprijuiceMon_Init(AprijuiceMon *entry, Party *party, Pokemon *mon, u8 slot, enum HeapID heapId);
+static void AprijuiceMon_Free(AprijuiceMon *entry);
+static void AprijuiceScreen_UseJuice(AprijuiceScreen *screen);
+static void AprijuiceScreen_DrawMessageBox(AprijuiceScreen *screen);
+static void AprijuiceScreen_PrintMessage(AprijuiceScreen *screen, int message);
+static void AprijuiceScreen_ShowMon(AprijuiceScreen *screen, int index);
+static void AprijuiceScreen_DrawStatStars(AprijuiceScreen *screen, AprijuiceMon *entry, u8 stat);
+static void AprijuiceScreen_DrawAllStars(AprijuiceScreen *screen, AprijuiceMon *entry);
+static void AprijuiceScreen_SetStarSprite(AprijuiceScreen *screen, int index, u8 sequence, int draw);
+static void AprijuiceScreen_StartStarTask(AprijuiceScreen *screen, int stat, int shrink);
+static void AprijuiceScreen_StarTask(SysTask *task, AprijuiceStarTask *star);
+static void AprijuiceScreen_StartShakeTask(AprijuiceScreen *screen);
+static void AprijuiceScreen_ShakeTask(SysTask *task, AprijuiceShakeTask *shake);
+static void AprijuiceScreen_StartFadeTask(AprijuiceScreen *screen);
+static void AprijuiceScreen_FadeTask(SysTask *task, AprijuiceFadeTask *fade);
+static AprijuiceScene *AprijuiceScene_New(enum HeapID heapId);
+static void AprijuiceScene_Draw(AprijuiceScene *scene);
+static void AprijuiceScene_Delete(AprijuiceScene *scene);
+static void AprijuiceScene_TransferPokepicGfx(AprijuiceScene *scene);
+static void AprijuiceScene_CreatePokepic(AprijuiceScene *scene, AprijuiceMon *entry);
+static void AprijuiceScene_DeletePokepic(AprijuiceScene *scene);
+static void AprijuiceScene_StartParticles(AprijuiceScene *scene, int resource);
+static BOOL AprijuiceScene_AreParticlesActive(AprijuiceScene *scene);
+static void AprijuiceScene_Init3D(void);
+static u32 AprijuiceScene_AllocTexVram(u32 size, BOOL is4x4);
+static u32 AprijuiceScene_AllocPlttVram(u32 size, BOOL is4color);
+static void AprijuiceScene_SetEmitterPosition(SPLEmitter *emitter);
+static SPLEmitter *AprijuiceScene_CreateParticleSystem(enum HeapID heapId);
+static void AprijuiceScene_InitParticles(AprijuiceScene *scene);
+static void AprijuiceScene_FreeParticles(AprijuiceScene *scene);
+
 void AprijuiceScene_ReserveVram(GF3DVramMan *vramMan);
-u32 AprijuiceScene_AllocTexVram(u32 size, BOOL is4x4);
-u32 AprijuiceScene_AllocPlttVram(u32 size, BOOL is4color);
-void AprijuiceScene_SetEmitterPosition(SPLEmitter *emitter);
-SPLEmitter *AprijuiceScene_CreateParticleSystem(enum HeapID heapId);
-void AprijuiceScene_InitParticles(AprijuiceScene *scene);
-void AprijuiceScene_FreeParticles(AprijuiceScene *scene);
 void AprijuiceScene_InitCamera(AprijuiceScene *scene, enum HeapID heapId);
 
 BOOL AprijuiceScreen_Init(OverlayManager *man, int *state) {
@@ -2480,7 +2476,7 @@ BOOL AprijuiceScreen_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-void AprijuiceScreen_InitFromArgs(AprijuiceScreen *screen) {
+static void AprijuiceScreen_InitFromArgs(AprijuiceScreen *screen) {
     int i;
     Options *options;
     u8 *entry;
@@ -2495,7 +2491,6 @@ void AprijuiceScreen_InitFromArgs(AprijuiceScreen *screen) {
     AprijuiceScreen_LoadParty(screen);
     i = 0;
     if (i < screen->numMons) {
-        // a byte cursor over the entries, as in the original
         entry = (u8 *)screen;
         do {
             if (screen->app->partySlot == ((AprijuiceScreen *)entry)->mons[0].slot) {
@@ -2508,7 +2503,7 @@ void AprijuiceScreen_InitFromArgs(AprijuiceScreen *screen) {
     }
 }
 
-void AprijuiceScreen_WriteResult(AprijuiceScreen *screen) {
+static void AprijuiceScreen_WriteResult(AprijuiceScreen *screen) {
     AprijuiceMon *entry;
     AprijuiceScreen_FreeParty(screen);
     MenuInputStateMgr_SetState(screen->app->args->menuInputStatePtr, screen->menuInputState);
@@ -2520,7 +2515,7 @@ void AprijuiceScreen_WriteResult(AprijuiceScreen *screen) {
     }
 }
 
-BOOL AprijuiceScreen_Setup(AprijuiceScreen *screen) {
+static BOOL AprijuiceScreen_Setup(AprijuiceScreen *screen) {
     switch (screen->subState) {
     case 0:
         AprijuiceScreen_InitGraphics(screen);
@@ -2536,7 +2531,7 @@ BOOL AprijuiceScreen_Setup(AprijuiceScreen *screen) {
     return FALSE;
 }
 
-BOOL AprijuiceScreen_Teardown(AprijuiceScreen *screen) {
+static BOOL AprijuiceScreen_Teardown(AprijuiceScreen *screen) {
     switch (screen->subState) {
     case 0:
         GF_TouchpadStopSampling();
@@ -2552,7 +2547,7 @@ BOOL AprijuiceScreen_Teardown(AprijuiceScreen *screen) {
     return FALSE;
 }
 
-int AprijuiceScreen_FadeIn(AprijuiceScreen *screen) {
+static int AprijuiceScreen_FadeIn(AprijuiceScreen *screen) {
     switch (screen->subState) {
     case 0:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, screen->heapId);
@@ -2568,7 +2563,7 @@ int AprijuiceScreen_FadeIn(AprijuiceScreen *screen) {
     return 0;
 }
 
-int AprijuiceScreen_FadeOut(AprijuiceScreen *screen) {
+static int AprijuiceScreen_FadeOut(AprijuiceScreen *screen) {
     switch (screen->subState) {
     case 0:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, screen->heapId);
@@ -2584,11 +2579,11 @@ int AprijuiceScreen_FadeOut(AprijuiceScreen *screen) {
     return 1;
 }
 
-int AprijuiceScreen_InputState(AprijuiceScreen *screen) {
+static int AprijuiceScreen_InputState(AprijuiceScreen *screen) {
     return AprijuiceScreen_HandleInput(screen);
 }
 
-int AprijuiceScreen_DrinkState(AprijuiceScreen *screen) {
+static int AprijuiceScreen_DrinkState(AprijuiceScreen *screen) {
     switch (screen->subState) {
     case 0:
         if (AprijuiceScreen_PlayDrinkAnim(screen)) {
@@ -2610,7 +2605,7 @@ int AprijuiceScreen_DrinkState(AprijuiceScreen *screen) {
     return 4;
 }
 
-int AprijuiceScreen_StatChangesState(AprijuiceScreen *screen) {
+static int AprijuiceScreen_StatChangesState(AprijuiceScreen *screen) {
     switch (screen->subState) {
     case 0:
         while (screen->stat < 5) {
@@ -2635,7 +2630,7 @@ int AprijuiceScreen_StatChangesState(AprijuiceScreen *screen) {
     return 5;
 }
 
-void AprijuiceScreen_ResetDisplay(void) {
+static void AprijuiceScreen_ResetDisplay(void) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     GfGfx_DisableEngineAPlanes();
@@ -2648,7 +2643,7 @@ void AprijuiceScreen_ResetDisplay(void) {
     ResetVisibleHardwareWindows(PM_LCD_BOTTOM);
 }
 
-void AprijuiceScreen_InitGraphics(AprijuiceScreen *screen) {
+static void AprijuiceScreen_InitGraphics(AprijuiceScreen *screen) {
     AprijuiceScreen_InitBgs(screen);
     AprijuiceScreen_LoadBgGraphics(screen);
     AprijuiceScreen_InitStrings(screen);
@@ -2658,7 +2653,7 @@ void AprijuiceScreen_InitGraphics(AprijuiceScreen *screen) {
     Main_SetVBlankIntrCB((GFIntrCB)AprijuiceScreen_VBlankCB, screen);
 }
 
-void AprijuiceScreen_FreeGraphics(AprijuiceScreen *screen) {
+static void AprijuiceScreen_FreeGraphics(AprijuiceScreen *screen) {
     AprijuiceScene_Delete(screen->scene);
     AprijuiceScreen_FreeSprites(screen);
     AprijuiceScreen_RemoveWindows(screen);
@@ -2669,7 +2664,7 @@ void AprijuiceScreen_FreeGraphics(AprijuiceScreen *screen) {
 
 #pragma force_active on
 
-void AprijuiceScreen_DrawScreen(AprijuiceScreen *screen) {
+static void AprijuiceScreen_DrawScreen(AprijuiceScreen *screen) {
     int i;
     Window *windows;
     AprijuiceScreen_DrawButtons(screen, 2);
@@ -2686,7 +2681,7 @@ void AprijuiceScreen_DrawScreen(AprijuiceScreen *screen) {
     AprijuiceScreen_ShowMon(screen, screen->selectedMon);
 }
 
-void AprijuiceScreen_LoadParty(AprijuiceScreen *screen) {
+static void AprijuiceScreen_LoadParty(AprijuiceScreen *screen) {
     int count;
     int i;
     int valid;
@@ -2711,7 +2706,7 @@ void AprijuiceScreen_LoadParty(AprijuiceScreen *screen) {
 
 #pragma force_active reset
 
-void AprijuiceScreen_FreeParty(AprijuiceScreen *screen) {
+static void AprijuiceScreen_FreeParty(AprijuiceScreen *screen) {
     int i;
     int count;
     AprijuiceMon *entry;
@@ -2729,7 +2724,7 @@ void AprijuiceScreen_FreeParty(AprijuiceScreen *screen) {
 
 #pragma force_active on
 
-void AprijuiceScreen_DrawButtons(AprijuiceScreen *screen, u32 state) {
+static void AprijuiceScreen_DrawButtons(AprijuiceScreen *screen, u32 state) {
     int i;
     switch (state) {
     case 3:
@@ -2754,7 +2749,7 @@ void AprijuiceScreen_DrawButtons(AprijuiceScreen *screen, u32 state) {
     }
 }
 
-int AprijuiceScreen_HandleInput(AprijuiceScreen *screen) {
+static int AprijuiceScreen_HandleInput(AprijuiceScreen *screen) {
     int hit = 0;
     int result = AprijuiceScreen_HandleTouch(screen, &hit);
     if (hit == 0) {
@@ -2765,7 +2760,7 @@ int AprijuiceScreen_HandleInput(AprijuiceScreen *screen) {
 
 #pragma force_active reset
 
-BOOL AprijuiceScreen_PlayDrinkAnim(AprijuiceScreen *screen) {
+static BOOL AprijuiceScreen_PlayDrinkAnim(AprijuiceScreen *screen) {
     switch (screen->animState) {
     case 0:
         if (Sprite_IsAnimated(screen->sprites[0])) {
@@ -2825,7 +2820,7 @@ BOOL AprijuiceScreen_PlayDrinkAnim(AprijuiceScreen *screen) {
     return FALSE;
 }
 
-BOOL AprijuiceScreen_PrintNothingChanged(AprijuiceScreen *screen) {
+static BOOL AprijuiceScreen_PrintNothingChanged(AprijuiceScreen *screen) {
     switch (screen->animState) {
     case 0:
         AprijuiceScreen_DrawMessageBox(screen);
@@ -2842,7 +2837,7 @@ BOOL AprijuiceScreen_PrintNothingChanged(AprijuiceScreen *screen) {
     return FALSE;
 }
 
-BOOL AprijuiceScreen_ShowStatChange(AprijuiceScreen *screen) {
+static BOOL AprijuiceScreen_ShowStatChange(AprijuiceScreen *screen) {
     u32 stat = sAprijuiceStatOrder[screen->stat];
     switch (screen->animState) {
     case 0: {
@@ -2898,7 +2893,7 @@ BOOL AprijuiceScreen_ShowStatChange(AprijuiceScreen *screen) {
     return FALSE;
 }
 
-int AprijuiceScreen_Select(AprijuiceScreen *screen, int input) {
+static int AprijuiceScreen_Select(AprijuiceScreen *screen, int input) {
     switch (input) {
     case 0:
         AprijuiceScreen_UseJuice(screen);
@@ -2924,7 +2919,7 @@ int AprijuiceScreen_Select(AprijuiceScreen *screen, int input) {
     }
 }
 
-int AprijuiceScreen_HandleKeys(AprijuiceScreen *screen) {
+static int AprijuiceScreen_HandleKeys(AprijuiceScreen *screen) {
     u32 keys = gSystem.newKeys;
     if (keys & 0xCF3) {
         screen->menuInputState = MENU_INPUT_STATE_BUTTONS;
@@ -2945,7 +2940,7 @@ int AprijuiceScreen_HandleKeys(AprijuiceScreen *screen) {
     return 2;
 }
 
-int AprijuiceScreen_HandleTouch(AprijuiceScreen *screen, int *hit) {
+static int AprijuiceScreen_HandleTouch(AprijuiceScreen *screen, int *hit) {
     int input = TouchscreenHitbox_FindHitboxAtTouchNew(sAprijuiceHitboxes);
     if (input == -1) {
         return 2;
@@ -2955,7 +2950,7 @@ int AprijuiceScreen_HandleTouch(AprijuiceScreen *screen, int *hit) {
     return AprijuiceScreen_Select(screen, input);
 }
 
-void AprijuiceScreen_VBlankCB(AprijuiceScreen *screen) {
+static void AprijuiceScreen_VBlankCB(AprijuiceScreen *screen) {
     if (screen->spriteSystem != NULL) {
         SpriteSystem_TransferOam();
     }
@@ -2965,12 +2960,12 @@ void AprijuiceScreen_VBlankCB(AprijuiceScreen *screen) {
     ((vu32 *)0x027E0000)[(HW_INTR_CHECK_BUF - HW_DTCM) / 4] |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag
 }
 
-void AprijuiceScreen_SetGfxBanks(void) {
+static void AprijuiceScreen_SetGfxBanks(void) {
     GraphicsBanks banks = sAprijuiceGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
-void AprijuiceScreen_InitBgs(AprijuiceScreen *screen) {
+static void AprijuiceScreen_InitBgs(AprijuiceScreen *screen) {
     GraphicsModes modes;
     BgTemplate subBg3;
     BgTemplate mainBg1;
@@ -2999,7 +2994,7 @@ void AprijuiceScreen_InitBgs(AprijuiceScreen *screen) {
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_3, 0x20, 0, screen->heapId);
 }
 
-void AprijuiceScreen_FreeBgs(AprijuiceScreen *screen) {
+static void AprijuiceScreen_FreeBgs(AprijuiceScreen *screen) {
     FreeBgTilemapBuffer(screen->bgConfig, GF_BG_LYR_MAIN_3);
     FreeBgTilemapBuffer(screen->bgConfig, GF_BG_LYR_MAIN_2);
     FreeBgTilemapBuffer(screen->bgConfig, GF_BG_LYR_MAIN_1);
@@ -3008,7 +3003,7 @@ void AprijuiceScreen_FreeBgs(AprijuiceScreen *screen) {
     reg_GX_POWCNT |= REG_GX_POWCNT_DSEL_MASK;
 }
 
-void AprijuiceScreen_LoadBgGraphics(AprijuiceScreen *screen) {
+static void AprijuiceScreen_LoadBgGraphics(AprijuiceScreen *screen) {
     NARC *narc = NARC_New(NARC_a_2_4_2, screen->heapId);
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 5, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0, screen->heapId);
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 7, screen->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, screen->heapId);
@@ -3022,12 +3017,12 @@ void AprijuiceScreen_LoadBgGraphics(AprijuiceScreen *screen) {
     G2x_SetBlendAlpha_((u32)&reg_G2_BLDCNT, GX_BLEND_PLANEMASK_BG0, GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3, 6, 26);
 }
 
-void AprijuiceScreen_FreeBgGraphics(AprijuiceScreen *screen) {
+static void AprijuiceScreen_FreeBgGraphics(AprijuiceScreen *screen) {
     NARC_Delete(screen->narc);
     G2x_SetBlendAlpha_((u32)&reg_G2_BLDCNT, GX_BLEND_PLANEMASK_NONE, GX_BLEND_PLANEMASK_NONE, 31, 0);
 }
 
-void AprijuiceScreen_InitStrings(AprijuiceScreen *screen) {
+static void AprijuiceScreen_InitStrings(AprijuiceScreen *screen) {
     int i;
     FontID_Alloc(4, screen->heapId);
     TextFlags_SetCanABSpeedUpPrint(TRUE);
@@ -3044,7 +3039,7 @@ void AprijuiceScreen_InitStrings(AprijuiceScreen *screen) {
     } while (i < 2);
 }
 
-void AprijuiceScreen_FreeStrings(AprijuiceScreen *screen) {
+static void AprijuiceScreen_FreeStrings(AprijuiceScreen *screen) {
     String_Delete(screen->genderSymbols[1]);
     String_Delete(screen->genderSymbols[0]);
     String_Delete(screen->levelTemplate);
@@ -3057,7 +3052,7 @@ void AprijuiceScreen_FreeStrings(AprijuiceScreen *screen) {
     FontID_Release(4);
 }
 
-void AprijuiceScreen_AddWindows(AprijuiceScreen *screen) {
+static void AprijuiceScreen_AddWindows(AprijuiceScreen *screen) {
     int i;
     int tile;
     int y;
@@ -3077,7 +3072,7 @@ void AprijuiceScreen_AddWindows(AprijuiceScreen *screen) {
     screen->yesNoPrompt = YesNoPrompt_Create(screen->heapId);
 }
 
-void AprijuiceScreen_RemoveWindows(AprijuiceScreen *screen) {
+static void AprijuiceScreen_RemoveWindows(AprijuiceScreen *screen) {
     int i;
     Window *window;
     i = 0;
@@ -3091,7 +3086,7 @@ void AprijuiceScreen_RemoveWindows(AprijuiceScreen *screen) {
     YesNoPrompt_Destroy(screen->yesNoPrompt);
 }
 
-void AprijuiceScreen_InitSpriteSystem(AprijuiceScreen *screen) {
+static void AprijuiceScreen_InitSpriteSystem(AprijuiceScreen *screen) {
     GF_CreateVramTransferManager(32, screen->heapId);
     screen->spriteSystem = SpriteSystem_Alloc(screen->heapId);
     SpriteSystem_Init(screen->spriteSystem, &sAprijuiceOamManagerParam, &sAprijuiceOamCharTransferParam, 3);
@@ -3102,7 +3097,7 @@ void AprijuiceScreen_InitSpriteSystem(AprijuiceScreen *screen) {
     SpriteSystem_LoadResourceDataFromFileIdListEx(screen->spriteSystem, screen->spriteManager, &sAprijuiceSpriteResources, 0, 0);
 }
 
-void AprijuiceScreen_FreeSpriteSystem(AprijuiceScreen *screen) {
+static void AprijuiceScreen_FreeSpriteSystem(AprijuiceScreen *screen) {
     SpriteSystem_DestroySpriteManager(screen->spriteSystem, screen->spriteManager);
     screen->spriteManager = NULL;
     SpriteSystem_Free(screen->spriteSystem);
@@ -3111,19 +3106,19 @@ void AprijuiceScreen_FreeSpriteSystem(AprijuiceScreen *screen) {
     thunk_ClearMainOAM(screen->heapId);
 }
 
-void AprijuiceScreen_InitSprites(AprijuiceScreen *screen) {
+static void AprijuiceScreen_InitSprites(AprijuiceScreen *screen) {
     AprijuiceScreen_InitSpriteSystem(screen);
     AprijuiceScreen_CreateSprites(screen);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-void AprijuiceScreen_FreeSprites(AprijuiceScreen *screen) {
+static void AprijuiceScreen_FreeSprites(AprijuiceScreen *screen) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
     AprijuiceScreen_DeleteSprites(screen);
     AprijuiceScreen_FreeSpriteSystem(screen);
 }
 
-void AprijuiceScreen_CreateSprites(AprijuiceScreen *screen) {
+static void AprijuiceScreen_CreateSprites(AprijuiceScreen *screen) {
     int i;
     int j;
     const u32 *stat;
@@ -3131,7 +3126,6 @@ void AprijuiceScreen_CreateSprites(AprijuiceScreen *screen) {
     int yStars;
     int x;
     u8 *slot;
-    // the sprite slots are addressed through byte cursors, as in the original
     u8 *cursor = (u8 *)screen;
     const UnmanagedSpriteTemplate *template = sAprijuiceSpriteTemplates;
     i = 0;
@@ -3176,7 +3170,7 @@ void AprijuiceScreen_CreateSprites(AprijuiceScreen *screen) {
     } while (i < 5);
 }
 
-void AprijuiceScreen_DeleteSprites(AprijuiceScreen *screen) {
+static void AprijuiceScreen_DeleteSprites(AprijuiceScreen *screen) {
     int i;
     for (i = 0; i < 34; i++) {
         if (screen->sprites[i] != NULL) {
@@ -3185,7 +3179,7 @@ void AprijuiceScreen_DeleteSprites(AprijuiceScreen *screen) {
     }
 }
 
-void AprijuiceMon_Init(AprijuiceMon *entry, Party *party, Pokemon *mon, u8 slot, enum HeapID heapId) {
+static void AprijuiceMon_Init(AprijuiceMon *entry, Party *party, Pokemon *mon, u8 slot, enum HeapID heapId) {
     entry->mon = mon;
     entry->slot = slot;
     entry->species = GetMonData(mon, MON_DATA_SPECIES, NULL);
@@ -3198,11 +3192,11 @@ void AprijuiceMon_Init(AprijuiceMon *entry, Party *party, Pokemon *mon, u8 slot,
     Party_GetMonAprijuiceModifiers(party, &entry->aprijuice, entry->slot);
 }
 
-void AprijuiceMon_Free(AprijuiceMon *entry) {
+static void AprijuiceMon_Free(AprijuiceMon *entry) {
     String_Delete(entry->name);
 }
 
-void AprijuiceScreen_UseJuice(AprijuiceScreen *screen) {
+static void AprijuiceScreen_UseJuice(AprijuiceScreen *screen) {
     int i;
     AprijuiceMon *entry = &screen->mons[screen->selectedMon];
     ApricornBox_FeedAprijuice(&screen->juiceRecord, screen->party, entry->slot);
@@ -3225,12 +3219,12 @@ void AprijuiceScreen_UseJuice(AprijuiceScreen *screen) {
     screen->juiceUsed = 1;
 }
 
-void AprijuiceScreen_DrawMessageBox(AprijuiceScreen *screen) {
+static void AprijuiceScreen_DrawMessageBox(AprijuiceScreen *screen) {
     DrawFrameAndWindow2(&screen->windows[0], TRUE, 1, 13);
     FillWindowPixelBuffer(&screen->windows[0], 15);
 }
 
-void AprijuiceScreen_PrintMessage(AprijuiceScreen *screen, int message) {
+static void AprijuiceScreen_PrintMessage(AprijuiceScreen *screen, int message) {
     u32 speed;
     switch (message) {
     case 0: {
@@ -3276,7 +3270,7 @@ void AprijuiceScreen_PrintMessage(AprijuiceScreen *screen, int message) {
     }
 }
 
-void AprijuiceScreen_ShowMon(AprijuiceScreen *screen, int index) {
+static void AprijuiceScreen_ShowMon(AprijuiceScreen *screen, int index) {
     AprijuiceMon *entry = &screen->mons[index];
     FillWindowPixelBuffer(&screen->windows[4], 0);
     AddTextPrinterParameterizedWithColor(&screen->windows[4], 0, entry->name, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 2, 0), NULL);
@@ -3295,12 +3289,11 @@ void AprijuiceScreen_ShowMon(AprijuiceScreen *screen, int index) {
 
 #pragma force_active on
 
-void AprijuiceScreen_DrawStatStars(AprijuiceScreen *screen, AprijuiceMon *entry, u8 stat) {
+static void AprijuiceScreen_DrawStatStars(AprijuiceScreen *screen, AprijuiceMon *entry, u8 stat) {
     int i;
     int index;
     u8 level;
 
-    // a struct of locals keeps the original stack layout
     struct {
         const u8 *bytes;
         int offset;
@@ -3333,7 +3326,7 @@ void AprijuiceScreen_DrawStatStars(AprijuiceScreen *screen, AprijuiceMon *entry,
 
 #pragma force_active reset
 
-void AprijuiceScreen_DrawAllStars(AprijuiceScreen *screen, AprijuiceMon *entry) {
+static void AprijuiceScreen_DrawAllStars(AprijuiceScreen *screen, AprijuiceMon *entry) {
     s32 i;
     CalcMonPokeathlonStars(&entry->stars, entry->mon, (const s8 *)entry->aprijuice.stats, screen->heapId);
     for (i = 0; i < 5; i++) {
@@ -3341,7 +3334,7 @@ void AprijuiceScreen_DrawAllStars(AprijuiceScreen *screen, AprijuiceMon *entry) 
     }
 }
 
-void AprijuiceScreen_SetStarSprite(AprijuiceScreen *screen, int index, u8 sequence, int draw) {
+static void AprijuiceScreen_SetStarSprite(AprijuiceScreen *screen, int index, u8 sequence, int draw) {
     u32 offset;
     Sprite **sprites;
     index += 8;
@@ -3354,7 +3347,7 @@ void AprijuiceScreen_SetStarSprite(AprijuiceScreen *screen, int index, u8 sequen
     }
 }
 
-void AprijuiceScreen_StartStarTask(AprijuiceScreen *screen, int stat, int shrink) {
+static void AprijuiceScreen_StartStarTask(AprijuiceScreen *screen, int stat, int shrink) {
     AprijuiceStarTask *star = Heap_Alloc(screen->heapId, sizeof(AprijuiceStarTask));
     u8 level;
     u8 index;
@@ -3400,7 +3393,7 @@ void AprijuiceScreen_StartStarTask(AprijuiceScreen *screen, int stat, int shrink
     screen->starsShown++;
 }
 
-void AprijuiceScreen_StarTask(SysTask *task, AprijuiceStarTask *star) {
+static void AprijuiceScreen_StarTask(SysTask *task, AprijuiceStarTask *star) {
     AprijuiceScreen *owner = star->owner;
     star->angle += star->angleStep;
     star->scale.x += star->scaleStep;
@@ -3424,7 +3417,7 @@ void AprijuiceScreen_StarTask(SysTask *task, AprijuiceStarTask *star) {
     SysTask_Destroy(task);
 }
 
-void AprijuiceScreen_StartShakeTask(AprijuiceScreen *screen) {
+static void AprijuiceScreen_StartShakeTask(AprijuiceScreen *screen) {
     AprijuiceShakeTask *shake = Heap_Alloc(screen->heapId, sizeof(AprijuiceShakeTask));
     MI_CpuFill8(shake, 0, sizeof(AprijuiceShakeTask));
     shake->owner = screen;
@@ -3435,7 +3428,7 @@ void AprijuiceScreen_StartShakeTask(AprijuiceScreen *screen) {
     screen->activeTasks++;
 }
 
-void AprijuiceScreen_ShakeTask(SysTask *task, AprijuiceShakeTask *shake) {
+static void AprijuiceScreen_ShakeTask(SysTask *task, AprijuiceShakeTask *shake) {
     SysTask *savedTask = task;
     AprijuiceScreen *owner = shake->owner;
     if ((shake->phase % 2) == 0) {
@@ -3457,7 +3450,7 @@ void AprijuiceScreen_ShakeTask(SysTask *task, AprijuiceShakeTask *shake) {
     }
 }
 
-void AprijuiceScreen_StartFadeTask(AprijuiceScreen *screen) {
+static void AprijuiceScreen_StartFadeTask(AprijuiceScreen *screen) {
     AprijuiceFadeTask *fade = Heap_Alloc(screen->heapId, sizeof(AprijuiceFadeTask));
     MI_CpuFill8(fade, 0, sizeof(AprijuiceFadeTask));
     fade->owner = screen;
@@ -3465,7 +3458,7 @@ void AprijuiceScreen_StartFadeTask(AprijuiceScreen *screen) {
     screen->activeTasks++;
 }
 
-void AprijuiceScreen_FadeTask(SysTask *task, AprijuiceFadeTask *fade) {
+static void AprijuiceScreen_FadeTask(SysTask *task, AprijuiceFadeTask *fade) {
     AprijuiceScreen *owner = fade->owner;
     switch (fade->state) {
     case 0:
@@ -3513,7 +3506,7 @@ void AprijuiceScreen_FadeTask(SysTask *task, AprijuiceFadeTask *fade) {
     }
 }
 
-AprijuiceScene *AprijuiceScene_New(enum HeapID heapId) {
+static AprijuiceScene *AprijuiceScene_New(enum HeapID heapId) {
     AprijuiceScene *scene = Heap_Alloc(heapId, sizeof(AprijuiceScene));
     MI_CpuFill8(scene, 0, sizeof(AprijuiceScene));
     scene->heapId = heapId;
@@ -3527,7 +3520,7 @@ AprijuiceScene *AprijuiceScene_New(enum HeapID heapId) {
     return scene;
 }
 
-void AprijuiceScene_Draw(AprijuiceScene *scene) {
+static void AprijuiceScene_Draw(AprijuiceScene *scene) {
     Thunk_G3X_Reset();
     ParticleSystem_DrawAll();
     Thunk_G3X_Reset();
@@ -3544,7 +3537,7 @@ void AprijuiceScene_Draw(AprijuiceScene *scene) {
     reg_G3_SWAP_BUFFERS = 1;
 }
 
-void AprijuiceScene_Delete(AprijuiceScene *scene) {
+static void AprijuiceScene_Delete(AprijuiceScene *scene) {
     Camera_Delete(scene->camera);
     PokepicManager_Delete(scene->pokepicManager);
     AprijuiceScene_FreeParticles(scene);
@@ -3554,11 +3547,11 @@ void AprijuiceScene_Delete(AprijuiceScene *scene) {
 
 #pragma force_active on
 
-void AprijuiceScene_TransferPokepicGfx(AprijuiceScene *scene) {
+static void AprijuiceScene_TransferPokepicGfx(AprijuiceScene *scene) {
     PokepicManager_HandleLoadImgAndOrPltt(scene->pokepicManager);
 }
 
-void AprijuiceScene_CreatePokepic(AprijuiceScene *scene, AprijuiceMon *entry) {
+static void AprijuiceScene_CreatePokepic(AprijuiceScene *scene, AprijuiceMon *entry) {
     PokepicTemplate template;
     GetPokemonSpriteCharAndPlttNarcIds(&template, entry->mon, 2);
     scene->pokepic = PokepicManager_CreatePokepic(scene->pokepicManager, &template, 204, 112, 0, 0, NULL, NULL);
@@ -3566,7 +3559,7 @@ void AprijuiceScene_CreatePokepic(AprijuiceScene *scene, AprijuiceMon *entry) {
 
 #pragma force_active reset
 
-void AprijuiceScene_DeletePokepic(AprijuiceScene *scene) {
+static void AprijuiceScene_DeletePokepic(AprijuiceScene *scene) {
     if (scene->pokepic) {
         Pokepic_Delete(scene->pokepic);
         scene->pokepic = NULL;
@@ -3575,20 +3568,20 @@ void AprijuiceScene_DeletePokepic(AprijuiceScene *scene) {
 
 #pragma force_active on
 
-void AprijuiceScene_StartParticles(AprijuiceScene *scene, int resource) {
+static void AprijuiceScene_StartParticles(AprijuiceScene *scene, int resource) {
     ParticleSystem_CreateEmitterWithParam(scene->emitter, resource, AprijuiceScene_SetEmitterPosition, scene);
     ParticleSystem_SetPerspectiveType(scene->emitter, 1);
 }
 
 #pragma force_active reset
 
-BOOL AprijuiceScene_AreParticlesActive(AprijuiceScene *scene) {
+static BOOL AprijuiceScene_AreParticlesActive(AprijuiceScene *scene) {
     return ParticleSystem_GetActiveEmitterCount(scene->emitter) != 0;
 }
 
 #pragma force_active on
 
-void AprijuiceScene_Init3D(void) {
+static void AprijuiceScene_Init3D(void) {
     NNS_G3dInit();
     G3X_Init();
     G3X_InitMtxStack();
@@ -3617,19 +3610,19 @@ void AprijuiceScene_ReserveVram(GF3DVramMan *vramMan) { // vramMan is unused
     ParticleSystem_ZeroAll();
 }
 
-u32 AprijuiceScene_AllocTexVram(u32 size, BOOL is4x4) {
+static u32 AprijuiceScene_AllocTexVram(u32 size, BOOL is4x4) {
     u32 key = NNS_GfdDefaultFuncAllocTexVram(size, is4x4, 0);
     ParticleSystem_RegisterTexKey(key);
     return (key << 16) >> 13;
 }
 
-u32 AprijuiceScene_AllocPlttVram(u32 size, BOOL is4color) {
+static u32 AprijuiceScene_AllocPlttVram(u32 size, BOOL is4color) {
     u32 key = NNS_GfdDefaultFuncAllocPlttVram(size, is4color, 0);
     ParticleSystem_RegisterPlttKey(key);
     return (key << 16) >> 13;
 }
 
-void AprijuiceScene_SetEmitterPosition(SPLEmitter *emitter) {
+static void AprijuiceScene_SetEmitterPosition(SPLEmitter *emitter) {
     VecFx32 offset = { 0, 0, 0 };
     offset.x = 0x3310;
     offset.y = -0x1020;
@@ -3639,7 +3632,7 @@ void AprijuiceScene_SetEmitterPosition(SPLEmitter *emitter) {
     emitter->emtr_pos.z = offset.z + emitter->p_res->p_base->pos.z;
 }
 
-SPLEmitter *AprijuiceScene_CreateParticleSystem(enum HeapID heapId) {
+static SPLEmitter *AprijuiceScene_CreateParticleSystem(enum HeapID heapId) {
     void *heap = Heap_Alloc(heapId, 0x4800);
     SPLEmitter *emitter = ParticleSystem_New(AprijuiceScene_AllocTexVram, AprijuiceScene_AllocPlttVram, heap, 0x4800, TRUE, heapId);
     Camera *camera = ParticleSystem_GetCamera(emitter);
@@ -3649,7 +3642,7 @@ SPLEmitter *AprijuiceScene_CreateParticleSystem(enum HeapID heapId) {
     return emitter;
 }
 
-void AprijuiceScene_InitParticles(AprijuiceScene *scene) {
+static void AprijuiceScene_InitParticles(AprijuiceScene *scene) {
     void *resource;
     scene->emitter = AprijuiceScene_CreateParticleSystem(scene->heapId);
     ParticleSystem_SetPerspectiveType(scene->emitter, 1);
@@ -3657,7 +3650,7 @@ void AprijuiceScene_InitParticles(AprijuiceScene *scene) {
     ParticleSystem_SetResource(scene->emitter, resource, 10, TRUE);
 }
 
-void AprijuiceScene_FreeParticles(AprijuiceScene *scene) {
+static void AprijuiceScene_FreeParticles(AprijuiceScene *scene) {
     ParticleSystem_Free(scene->emitter);
     Heap_Free(scene->emitter);
 }

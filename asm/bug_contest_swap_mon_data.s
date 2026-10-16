@@ -131,39 +131,6 @@
 	.public gBugContestSwapMonStateFuncs
 	.public BugContestSwapMon_ShowCaughtMon
 	.public BugContestSwapMon_ChooseMon
-	.public BugContestSwapMon_ShowBothMons
-	.public BugContestSwapMon_InitYesNoPrompt
-	.public BugContestSwapMon_SetBanks
-	.public BugContestSwapMon_ResetDisplay
-	.public BugContestSwapMon_SetResult
-	.public BugContestSwapMon_DrawHpBar
-	.public BugContestSwapMon_VBlank
-	.public BugContestSwapMon_Setup
-	.public BugContestSwapMon_InitBgs
-	.public BugContestSwapMon_LoadBgGfx
-	.public BugContestSwapMon_InitSpriteSystem
-	.public BugContestSwapMon_LoadSpriteGfx
-	.public BugContestSwapMon_SetMonIcon
-	.public BugContestSwapMon_LoadSpriteChar
-	.public BugContestSwapMon_NewSprite
-	.public BugContestSwapMon_NewMonIconSprite
-	.public SwapMonPanel_New
-	.public SwapMonPanel_Draw
-	.public SwapMonPanel_Scroll
-	.public SwapMonPanel_Delete
-	.public SwapMonPanels_New
-	.public SwapMonPanels_Delete
-	.public SwapMonPanels_Add
-	.public SwapMonPanels_Scroll
-	.public SwapMonText_New
-	.public SwapMonText_Init
-	.public SwapMonText_IsPrinting
-	.public SwapMonText_PrintMessage
-	.public SwapMonText_PrintString
-	.public SwapMonText_PrintStringWithColor
-	.public SwapMonText_PrintNumber
-	.public SwapMonText_ShowMessageBox
-	.public SwapMonText_PrintOnWindow
 	.public gBugContestSwapMonGraphicsModes
 	.public gBugContestSwapMonOamCharTransferParam
 	.public gBugContestSwapMonSpriteResourceCounts
@@ -180,63 +147,6 @@
 	.public gBugContestSwapMonStateFuncs
 	.public BugContestSwapMon_ShowCaughtMon
 	.public BugContestSwapMon_ChooseMon
-	.public BugContestSwapMon_ShowBothMons
-	.public BugContestSwapMon_InitYesNoPrompt
-	.public BugContestSwapMon_GetInitialState
-	.public BugContestSwapMon_SetBanks
-	.public BugContestSwapMon_ResetDisplay
-	.public BugContestSwapMon_SetResult
-	.public BugContestSwapMon_DrawHpBar
-	.public BugContestSwapMon_VBlank
-	.public BugContestSwapMon_Setup
-	.public BugContestSwapMon_Teardown
-	.public BugContestSwapMon_InitBgs
-	.public BugContestSwapMon_FreeBgs
-	.public BugContestSwapMon_LoadBgGfx
-	.public BugContestSwapMon_InitSpriteSystem
-	.public BugContestSwapMon_FreeSpriteSystem
-	.public BugContestSwapMon_LoadSpriteGfx
-	.public BugContestSwapMon_SetMonIcon
-	.public BugContestSwapMon_LoadSpriteChar
-	.public BugContestSwapMon_NewSprite
-	.public BugContestSwapMon_NewMonIconSprite
-	.public SwapMonPanel_New
-	.public SwapMonPanel_Draw
-	.public SwapMonPanel_StartScroll
-	.public SwapMonPanel_Scroll
-	.public SwapMonPanel_IsScrollDone
-	.public SwapMonPanel_Delete
-	.public SwapMonPanels_New
-	.public SwapMonPanels_Delete
-	.public SwapMonPanels_Add
-	.public SwapMonPanels_StartScroll
-	.public SwapMonPanels_Scroll
-	.public SwapMonPanels_IsScrollDone
-	.public SwapMonText_New
-	.public SwapMonText_Init
-	.public SwapMonText_Delete
-	.public SwapMonText_IsPrinting
-	.public SwapMonText_PrintMessage
-	.public SwapMonText_PrintString
-	.public SwapMonText_PrintStringWithColor
-	.public SwapMonText_PrintNumber
-	.public SwapMonText_CloseMessageBox
-	.public SwapMonText_GetMessageFormat
-	.public SwapMonText_LoadGfx
-	.public SwapMonText_ShowMessageBox
-	.public SwapMonText_PrintOnWindow
-	.public BugContestSwapMon_GetInitialState
-	.public BugContestSwapMon_Teardown
-	.public BugContestSwapMon_FreeBgs
-	.public BugContestSwapMon_FreeSpriteSystem
-	.public SwapMonPanel_StartScroll
-	.public SwapMonPanel_IsScrollDone
-	.public SwapMonPanels_StartScroll
-	.public SwapMonPanels_IsScrollDone
-	.public SwapMonText_Delete
-	.public SwapMonText_CloseMessageBox
-	.public SwapMonText_GetMessageFormat
-	.public SwapMonText_LoadGfx
 	.include "asm/macros.inc"
 	.include "overlay_111.inc"
 	.include "global.inc"

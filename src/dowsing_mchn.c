@@ -36,7 +36,7 @@
 #include "text.h"
 #include "touchscreen.h"
 
-// Field bottom-screen app 4: the Dowsing Machine (field_use_item.c Task_ActivateDowsingMchnUI).
+// Field bottom-screen app 4: the Dowsing Machine (Task_ActivateDowsingMchnUI).
 // While the stylus is held in the search circle, four indicators turn toward the nearest hidden
 // item, a signal meter rises and a tile grid lights up around the touch point; the dowsing SE
 // plays with a pitch from the signal. Also hosts the action, running shoes and EXIT buttons.
@@ -97,7 +97,6 @@ typedef struct DowsingMchnSpriteParams {
     u8 animSeq;
 } DowsingMchnSpriteParams;
 
-// Defined in field/bottom_screen_app.c; its header does not declare these.
 BOOL IsSpriteIdWithoutTalkAction(int spriteId);
 BOOL IsScriptIdWithoutTalkAction(int scriptId);
 
@@ -122,62 +121,63 @@ extern const WindowTemplate sDowsingMchnWindowTemplates[DOWSING_MCHN_NUM_STRINGS
 extern const u8 sDowsingMchnActionTypeToWindow[];
 extern const u8 sDowsingMchnLevelSignalGains[];
 
+static void DowsingMchn_SetVramBanks(void);
+static void DowsingMchn_InitBgs(BgConfig *bgConfig);
+static void DowsingMchn_FreeBgs(BgConfig *bgConfig);
+static void DowsingMchn_LoadBgGraphics(DowsingMchn *dowsing, NARC *narc);
+static void DowsingMchn_LoadStrings(DowsingMchn *dowsing);
+static void DowsingMchn_FreeStrings(DowsingMchn *dowsing);
+static void DowsingMchn_CreateWindows(DowsingMchn *dowsing);
+static void DowsingMchn_RemoveWindows(DowsingMchn *dowsing);
+static void DowsingMchn_CreateSprites(DowsingMchn *dowsing, NARC *narc);
+static void DowsingMchn_DestroySprites(DowsingMchn *dowsing);
+static void DowsingMchn_CreateResourceManagers(DowsingMchn *dowsing);
+static void DowsingMchn_DestroyResourceManagers(DowsingMchn *dowsing);
+static void DowsingMchn_LoadSpriteResources(SpriteResource **resObjs, GF_2DGfxResMan **resMans, NARC *narc, int charFileId, int plttFileId, int cellFileId, int animFileId, int plttNum, int charId, int plttId, int cellId, int animId);
+static void DowsingMchn_CreateResourcesHeader(SpriteResource **resObjs, GF_2DGfxResMan **resMans, SpriteResourcesHeader *header, int priority);
+static void DowsingMchn_CreateSprite(DowsingMchn *dowsing, int index, SpriteResourcesHeader *header, const u8 *params);
+static void DowsingMchn_CreateButtonSprites(DowsingMchn *dowsing);
+static void DowsingMchn_DestroyButtonSprites(DowsingMchn *dowsing);
+static void DowsingMchn_CreateIndicatorSprites(DowsingMchn *dowsing, NARC *narc);
+static void DowsingMchn_DestroyIndicatorSprites(DowsingMchn *dowsing);
+static void DowsingMchn_Task(SysTask *task, void *taskData);
+static void DowsingMchn_GetHiddenItemLocs(DowsingMchn *dowsing);
+static void DowsingMchn_FreeHiddenItemLocs(DowsingMchn *dowsing);
+static void DowsingMchn_FindNearestHiddenItem(DowsingMchn *dowsing);
+static void DowsingMchn_GetIndicatorPos(VecFx32 *pos, int deg);
+static u16 DowsingMchn_GetTouchAngle(int x, int y);
+static u16 DowsingMchn_Atan2Idx(int x, int y);
+static u32 DowsingMchn_AngleIdxToDegrees(int idx);
+static void DowsingMchn_SetTargetAnglesLevel0(DowsingMchn *dowsing);
+static void DowsingMchn_SetTargetAnglesLevel1(DowsingMchn *dowsing);
+static void DowsingMchn_SetTargetAnglesLevel2(DowsingMchn *dowsing);
+static void DowsingMchn_SetTargetAnglesLevel3(DowsingMchn *dowsing);
+static void DowsingMchn_SetTargetAnglesLevel4(DowsingMchn *dowsing);
+static void DowsingMchn_UpdateTargetAngles(DowsingMchn *dowsing);
+static void DowsingMchn_UpdateSignal(DowsingMchn *dowsing, int delta);
+static void DowsingMchn_GetIndicatorAnim(DowsingMchn *dowsing, u16 *blink, u16 *palette);
+static void DowsingMchn_UpdateIndicatorAppearance(DowsingMchn *dowsing);
+static void DowsingMchn_SetSpriteRotation(Sprite *sprite, int deg);
+static void DowsingMchn_UpdateIndicatorPositions(DowsingMchn *dowsing);
+static u8 DowsingMchn_GetGridCellTarget(DowsingMchn *dowsing, u16 x, u16 y);
+static void DowsingMchn_UpdateGrid(DowsingMchn *dowsing, BOOL touching);
+static void DowsingMchn_PlaySignalSE(DowsingMchn *dowsing);
+static BOOL DowsingMchn_UpdateTouchPos(DowsingMchn *dowsing);
+static void DowsingMchn_UpdateActionLabel(DowsingMchn *dowsing);
+static BOOL DowsingMchn_HandleButton(const TouchscreenHitbox *hitbox, Sprite *sprite, int idleAnim, int pressedAnim);
+static void DowsingMchn_HandleActionButton(DowsingMchn *dowsing);
+static void DowsingMchn_HandleRunningShoesButton(DowsingMchn *dowsing);
+static void DowsingMchn_HandleExitButton(DowsingMchn *dowsing);
+static BOOL DowsingMchn_ShouldHideButtons(DowsingMchn *dowsing);
+
 SysTask *DowsingMchn_Init(BgConfig *bgConfig, u16 *lastTouchMenuInput, FieldSystem *fieldSystem, void *args);
 void DowsingMchn_Exit(void *unused, SysTask *task);
 BOOL DowsingMchn_IsExitDone(void);
-void DowsingMchn_SetVramBanks(void);
-void DowsingMchn_InitBgs(BgConfig *bgConfig);
-void DowsingMchn_FreeBgs(BgConfig *bgConfig);
-void DowsingMchn_LoadBgGraphics(DowsingMchn *dowsing, NARC *narc);
-void DowsingMchn_LoadStrings(DowsingMchn *dowsing);
-void DowsingMchn_FreeStrings(DowsingMchn *dowsing);
-void DowsingMchn_CreateWindows(DowsingMchn *dowsing);
-void DowsingMchn_RemoveWindows(DowsingMchn *dowsing);
-void DowsingMchn_CreateSprites(DowsingMchn *dowsing, NARC *narc);
-void DowsingMchn_DestroySprites(DowsingMchn *dowsing);
-void DowsingMchn_CreateResourceManagers(DowsingMchn *dowsing);
-void DowsingMchn_DestroyResourceManagers(DowsingMchn *dowsing);
-void DowsingMchn_LoadSpriteResources(SpriteResource **resObjs, GF_2DGfxResMan **resMans, NARC *narc, int charFileId, int plttFileId, int cellFileId, int animFileId, int plttNum, int charId, int plttId, int cellId, int animId);
-void DowsingMchn_CreateResourcesHeader(SpriteResource **resObjs, GF_2DGfxResMan **resMans, SpriteResourcesHeader *header, int priority);
-void DowsingMchn_CreateSprite(DowsingMchn *dowsing, int index, SpriteResourcesHeader *header, const u8 *params);
-void DowsingMchn_CreateButtonSprites(DowsingMchn *dowsing);
-void DowsingMchn_DestroyButtonSprites(DowsingMchn *dowsing);
-void DowsingMchn_CreateIndicatorSprites(DowsingMchn *dowsing, NARC *narc);
-void DowsingMchn_DestroyIndicatorSprites(DowsingMchn *dowsing);
-void DowsingMchn_Task(SysTask *task, void *taskData);
-void DowsingMchn_GetHiddenItemLocs(DowsingMchn *dowsing);
-void DowsingMchn_FreeHiddenItemLocs(DowsingMchn *dowsing);
-void DowsingMchn_FindNearestHiddenItem(DowsingMchn *dowsing);
-void DowsingMchn_GetIndicatorPos(VecFx32 *pos, int deg);
-u16 DowsingMchn_GetTouchAngle(int x, int y);
-u16 DowsingMchn_Atan2Idx(int x, int y);
-u32 DowsingMchn_AngleIdxToDegrees(int idx);
 void DowsingMchn_StepAngleLevel0(DowsingMchnAngle *angle);
-void DowsingMchn_SetTargetAnglesLevel0(DowsingMchn *dowsing);
 void DowsingMchn_StepAngleLevel1(DowsingMchnAngle *angle);
-void DowsingMchn_SetTargetAnglesLevel1(DowsingMchn *dowsing);
 void DowsingMchn_StepAngleLevel2(DowsingMchnAngle *angle);
-void DowsingMchn_SetTargetAnglesLevel2(DowsingMchn *dowsing);
 void DowsingMchn_StepAngleLevel3(DowsingMchnAngle *angle);
-void DowsingMchn_SetTargetAnglesLevel3(DowsingMchn *dowsing);
 void DowsingMchn_StepAngleLevel4(DowsingMchnAngle *angle);
-void DowsingMchn_SetTargetAnglesLevel4(DowsingMchn *dowsing);
-void DowsingMchn_UpdateTargetAngles(DowsingMchn *dowsing);
-void DowsingMchn_UpdateSignal(DowsingMchn *dowsing, int delta);
-void DowsingMchn_GetIndicatorAnim(DowsingMchn *dowsing, u16 *blink, u16 *palette);
-void DowsingMchn_UpdateIndicatorAppearance(DowsingMchn *dowsing);
-void DowsingMchn_SetSpriteRotation(Sprite *sprite, int deg);
-void DowsingMchn_UpdateIndicatorPositions(DowsingMchn *dowsing);
-u8 DowsingMchn_GetGridCellTarget(DowsingMchn *dowsing, u16 x, u16 y);
-void DowsingMchn_UpdateGrid(DowsingMchn *dowsing, BOOL touching);
-void DowsingMchn_PlaySignalSE(DowsingMchn *dowsing);
-BOOL DowsingMchn_UpdateTouchPos(DowsingMchn *dowsing);
-void DowsingMchn_UpdateActionLabel(DowsingMchn *dowsing);
-BOOL DowsingMchn_HandleButton(const TouchscreenHitbox *hitbox, Sprite *sprite, int idleAnim, int pressedAnim);
-void DowsingMchn_HandleActionButton(DowsingMchn *dowsing);
-void DowsingMchn_HandleRunningShoesButton(DowsingMchn *dowsing);
-void DowsingMchn_HandleExitButton(DowsingMchn *dowsing);
-BOOL DowsingMchn_ShouldHideButtons(DowsingMchn *dowsing);
 
 SysTask *DowsingMchn_Init(BgConfig *bgConfig, u16 *lastTouchMenuInput, FieldSystem *fieldSystem, void *args) {
     DowsingMchn *dowsing;
@@ -228,7 +228,7 @@ BOOL DowsingMchn_IsExitDone(void) {
     return TRUE;
 }
 
-void DowsingMchn_SetVramBanks(void) {
+static void DowsingMchn_SetVramBanks(void) {
     GX_SetBankForSubBG(GX_VRAM_SUB_BG_32_H);
     GX_SetBankForSubOBJ(GX_VRAM_SUB_OBJ_16_I);
     GXS_SetOBJVRamModeChar(GX_OBJVRAMMODE_CHAR_1D_32K);
@@ -237,7 +237,7 @@ void DowsingMchn_SetVramBanks(void) {
 // force_active only sets a section flag here; kept so the object stays identical.
 #pragma force_active on
 
-void DowsingMchn_InitBgs(BgConfig *bgConfig) {
+static void DowsingMchn_InitBgs(BgConfig *bgConfig) {
     BgTemplate sub0;
     BgTemplate sub1;
     BgTemplate sub2;
@@ -255,20 +255,20 @@ void DowsingMchn_InitBgs(BgConfig *bgConfig) {
 
 #pragma force_active reset
 
-void DowsingMchn_FreeBgs(BgConfig *bgConfig) {
+static void DowsingMchn_FreeBgs(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_2);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_1);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_0);
 }
 
-void DowsingMchn_LoadBgGraphics(DowsingMchn *dowsing, NARC *narc) {
+static void DowsingMchn_LoadBgGraphics(DowsingMchn *dowsing, NARC *narc) {
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 2, dowsing->bgConfig, GF_BG_LYR_SUB_1, 0, 0, TRUE, HEAP_ID_8);
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 0, dowsing->bgConfig, GF_BG_LYR_SUB_1, 0, 0, TRUE, HEAP_ID_8);
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 1, dowsing->bgConfig, GF_BG_LYR_SUB_2, 0, 0, TRUE, HEAP_ID_8);
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 3, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0, HEAP_ID_8);
 }
 
-void DowsingMchn_LoadStrings(DowsingMchn *dowsing) {
+static void DowsingMchn_LoadStrings(DowsingMchn *dowsing) {
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0196_bin, HEAP_ID_8);
     dowsing->strings[1] = NewString_ReadMsgData(msgData, msg_0196_00017); // TALK
     dowsing->strings[0] = NewString_ReadMsgData(msgData, msg_0196_00018); // CHECK
@@ -278,7 +278,7 @@ void DowsingMchn_LoadStrings(DowsingMchn *dowsing) {
     DestroyMsgData(msgData);
 }
 
-void DowsingMchn_FreeStrings(DowsingMchn *dowsing) {
+static void DowsingMchn_FreeStrings(DowsingMchn *dowsing) {
     u32 i;
     for (i = 0; i < DOWSING_MCHN_NUM_STRINGS; i++) {
         String_Delete(dowsing->strings[i]);
@@ -288,7 +288,7 @@ void DowsingMchn_FreeStrings(DowsingMchn *dowsing) {
 #pragma force_active on
 
 // Prints each label into its own window; only the current action label and EXIT are shown.
-void DowsingMchn_CreateWindows(DowsingMchn *dowsing) {
+static void DowsingMchn_CreateWindows(DowsingMchn *dowsing) {
     u32 i;
 
     FontID_Alloc(4, HEAP_ID_8);
@@ -304,7 +304,7 @@ void DowsingMchn_CreateWindows(DowsingMchn *dowsing) {
 
 #pragma force_active reset
 
-void DowsingMchn_RemoveWindows(DowsingMchn *dowsing) {
+static void DowsingMchn_RemoveWindows(DowsingMchn *dowsing) {
     u32 i;
     for (i = 0; i < DOWSING_MCHN_NUM_STRINGS; i++) {
         RemoveWindow(&dowsing->windows[i]);
@@ -312,7 +312,7 @@ void DowsingMchn_RemoveWindows(DowsingMchn *dowsing) {
     FontID_Release(4);
 }
 
-void DowsingMchn_CreateSprites(DowsingMchn *dowsing, NARC *narc) {
+static void DowsingMchn_CreateSprites(DowsingMchn *dowsing, NARC *narc) {
     dowsing->spriteList = G2dRenderer_Init(8, &dowsing->renderer, HEAP_ID_8);
     G2dRenderer_SetSubSurfaceCoords(&dowsing->renderer, 0, FX32_CONST(256));
     DowsingMchn_CreateResourceManagers(dowsing);
@@ -320,21 +320,21 @@ void DowsingMchn_CreateSprites(DowsingMchn *dowsing, NARC *narc) {
     DowsingMchn_CreateIndicatorSprites(dowsing, narc);
 }
 
-void DowsingMchn_DestroySprites(DowsingMchn *dowsing) {
+static void DowsingMchn_DestroySprites(DowsingMchn *dowsing) {
     DowsingMchn_DestroyIndicatorSprites(dowsing);
     DowsingMchn_DestroyButtonSprites(dowsing);
     DowsingMchn_DestroyResourceManagers(dowsing);
     SpriteList_Delete(dowsing->spriteList);
 }
 
-void DowsingMchn_CreateResourceManagers(DowsingMchn *dowsing) {
+static void DowsingMchn_CreateResourceManagers(DowsingMchn *dowsing) {
     u32 i;
     for (i = 0; i < 4; i++) {
         dowsing->resMans[i] = Create2DGfxResObjMan(2, (GfGfxResType)i, HEAP_ID_8);
     }
 }
 
-void DowsingMchn_DestroyResourceManagers(DowsingMchn *dowsing) {
+static void DowsingMchn_DestroyResourceManagers(DowsingMchn *dowsing) {
     u32 i;
     for (i = 0; i < 4; i++) {
         Destroy2DGfxResObjMan(dowsing->resMans[i]);
@@ -343,7 +343,7 @@ void DowsingMchn_DestroyResourceManagers(DowsingMchn *dowsing) {
 
 #pragma force_active on
 
-void DowsingMchn_LoadSpriteResources(SpriteResource **resObjs, GF_2DGfxResMan **resMans, NARC *narc, int charFileId, int plttFileId, int cellFileId, int animFileId, int plttNum, int charId, int plttId, int cellId, int animId) {
+static void DowsingMchn_LoadSpriteResources(SpriteResource **resObjs, GF_2DGfxResMan **resMans, NARC *narc, int charFileId, int plttFileId, int cellFileId, int animFileId, int plttNum, int charId, int plttId, int cellId, int animId) {
     resObjs[GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromOpenNarc(resMans[GF_GFX_RES_TYPE_CHAR], narc, charFileId, TRUE, charId, NNS_G2D_VRAM_TYPE_2DSUB, HEAP_ID_8);
     SpriteTransfer_CreateCharTransferTask_AllocAtEnd(resObjs[GF_GFX_RES_TYPE_CHAR]);
     GF2DGfxResObj_FreeData(resObjs[GF_GFX_RES_TYPE_CHAR]);
@@ -356,7 +356,7 @@ void DowsingMchn_LoadSpriteResources(SpriteResource **resObjs, GF_2DGfxResMan **
 
 #pragma force_active reset
 
-void DowsingMchn_CreateResourcesHeader(SpriteResource **resObjs, GF_2DGfxResMan **resMans, SpriteResourcesHeader *header, int priority) {
+static void DowsingMchn_CreateResourcesHeader(SpriteResource **resObjs, GF_2DGfxResMan **resMans, SpriteResourcesHeader *header, int priority) {
     int charId = GF2DGfxResObj_GetResID(resObjs[GF_GFX_RES_TYPE_CHAR]);
     int plttId = GF2DGfxResObj_GetResID(resObjs[GF_GFX_RES_TYPE_PLTT]);
     int cellId = GF2DGfxResObj_GetResID(resObjs[GF_GFX_RES_TYPE_CELL]);
@@ -365,7 +365,7 @@ void DowsingMchn_CreateResourcesHeader(SpriteResource **resObjs, GF_2DGfxResMan 
 }
 
 // params: {x, y, drawPriority, animSeq}
-void DowsingMchn_CreateSprite(DowsingMchn *dowsing, int index, SpriteResourcesHeader *header, const u8 *params) {
+static void DowsingMchn_CreateSprite(DowsingMchn *dowsing, int index, SpriteResourcesHeader *header, const u8 *params) {
     SpriteTemplate template;
 
     template.spriteList = dowsing->spriteList;
@@ -385,7 +385,7 @@ void DowsingMchn_CreateSprite(DowsingMchn *dowsing, int index, SpriteResourcesHe
 }
 
 // The button graphics are shared with the touchscreen start menu (NARC a/0/1/4).
-void DowsingMchn_CreateButtonSprites(DowsingMchn *dowsing) {
+static void DowsingMchn_CreateButtonSprites(DowsingMchn *dowsing) {
     NARC *narc;
     SpriteResourcesHeader header;
 
@@ -406,7 +406,7 @@ void DowsingMchn_CreateButtonSprites(DowsingMchn *dowsing) {
     }
 }
 
-void DowsingMchn_DestroyButtonSprites(DowsingMchn *dowsing) {
+static void DowsingMchn_DestroyButtonSprites(DowsingMchn *dowsing) {
     Sprite_Delete(dowsing->sprites[0]);
     Sprite_Delete(dowsing->sprites[1]);
     Sprite_Delete(dowsing->sprites[2]);
@@ -417,7 +417,7 @@ void DowsingMchn_DestroyButtonSprites(DowsingMchn *dowsing) {
 #pragma force_active on
 
 // The indicators start at (0, 0); DowsingMchn_UpdateIndicatorPositions places them.
-void DowsingMchn_CreateIndicatorSprites(DowsingMchn *dowsing, NARC *narc) {
+static void DowsingMchn_CreateIndicatorSprites(DowsingMchn *dowsing, NARC *narc) {
     SpriteResourcesHeader header;
     DowsingMchnSpriteParams params = { 0 };
     u32 i;
@@ -431,7 +431,7 @@ void DowsingMchn_CreateIndicatorSprites(DowsingMchn *dowsing, NARC *narc) {
 
 #pragma force_active reset
 
-void DowsingMchn_DestroyIndicatorSprites(DowsingMchn *dowsing) {
+static void DowsingMchn_DestroyIndicatorSprites(DowsingMchn *dowsing) {
     u32 i;
     for (i = 0; i < DOWSING_MCHN_NUM_ANGLES; i++) {
         Sprite_Delete(dowsing->sprites[i + DOWSING_MCHN_SPRITE_INDICATORS]);
@@ -442,7 +442,7 @@ void DowsingMchn_DestroyIndicatorSprites(DowsingMchn *dowsing) {
 
 #pragma force_active on
 
-void DowsingMchn_Task(SysTask *task, void *taskData) {
+static void DowsingMchn_Task(SysTask *task, void *taskData) {
     DowsingMchn *dowsing = taskData;
 
     if (dowsing->fieldSystem->suppressBottomScreenDim && FieldSystem_IsPlayerMovementAllowed(dowsing->fieldSystem)) {
@@ -476,11 +476,11 @@ void DowsingMchn_Task(SysTask *task, void *taskData) {
 
 #pragma force_active reset
 
-void DowsingMchn_GetHiddenItemLocs(DowsingMchn *dowsing) {
+static void DowsingMchn_GetHiddenItemLocs(DowsingMchn *dowsing) {
     dowsing->hiddenItems = AllocAndFetchNearbyHiddenItems(dowsing->fieldSystem, HEAP_ID_8);
 }
 
-void DowsingMchn_FreeHiddenItemLocs(DowsingMchn *dowsing) {
+static void DowsingMchn_FreeHiddenItemLocs(DowsingMchn *dowsing) {
     if (dowsing->hiddenItems != NULL) {
         Heap_Free(dowsing->hiddenItems);
         dowsing->hiddenItems = NULL;
@@ -490,7 +490,7 @@ void DowsingMchn_FreeHiddenItemLocs(DowsingMchn *dowsing) {
 #pragma force_active on
 
 // Nearest by |x| + |y|; the list ends with an entry whose unk4 is 0xFF.
-void DowsingMchn_FindNearestHiddenItem(DowsingMchn *dowsing) {
+static void DowsingMchn_FindNearestHiddenItem(DowsingMchn *dowsing) {
     int offset;
     u16 minDistance;
 
@@ -523,20 +523,20 @@ void DowsingMchn_FindNearestHiddenItem(DowsingMchn *dowsing) {
 #pragma force_active reset
 
 // Point on the circle of radius 68 around (84, 100) of the sub screen.
-void DowsingMchn_GetIndicatorPos(VecFx32 *pos, int deg) {
+static void DowsingMchn_GetIndicatorPos(VecFx32 *pos, int deg) {
     pos->x = FX_Mul(GF_CosDeg((u16)deg), FX32_CONST(68)) + FX32_CONST(84);
     pos->y = FX_Mul(GF_SinDeg((u16)deg), FX32_CONST(68)) + FX32_CONST(256 + 100);
 }
 
-u16 DowsingMchn_GetTouchAngle(int x, int y) {
+static u16 DowsingMchn_GetTouchAngle(int x, int y) {
     return FX_Atan2Idx((y - 100) << FX32_SHIFT, (x - 84) << FX32_SHIFT);
 }
 
-u16 DowsingMchn_Atan2Idx(int x, int y) {
+static u16 DowsingMchn_Atan2Idx(int x, int y) {
     return FX_Atan2Idx(y << FX32_SHIFT, x << FX32_SHIFT);
 }
 
-u32 DowsingMchn_AngleIdxToDegrees(int idx) {
+static u32 DowsingMchn_AngleIdxToDegrees(int idx) {
     return (u32)(360 * (u16)idx) >> 16;
 }
 
@@ -545,7 +545,7 @@ void DowsingMchn_StepAngleLevel0(DowsingMchnAngle *angle) {
 }
 
 // No item in range: the indicators spread around the touch direction.
-void DowsingMchn_SetTargetAnglesLevel0(DowsingMchn *dowsing) {
+static void DowsingMchn_SetTargetAnglesLevel0(DowsingMchn *dowsing) {
     u32 touchDeg = DowsingMchn_AngleIdxToDegrees(DowsingMchn_GetTouchAngle(dowsing->touchX, dowsing->touchY));
     dowsing->angles[0].target = touchDeg;
     dowsing->angles[1].target = touchDeg + 300;
@@ -558,7 +558,7 @@ void DowsingMchn_StepAngleLevel1(DowsingMchnAngle *angle) {
     angle->next = (angle->target + angle->displayed * 3) / 4;
 }
 
-void DowsingMchn_SetTargetAnglesLevel1(DowsingMchn *dowsing) {
+static void DowsingMchn_SetTargetAnglesLevel1(DowsingMchn *dowsing) {
     u32 touchDeg = DowsingMchn_AngleIdxToDegrees(DowsingMchn_GetTouchAngle(dowsing->touchX, dowsing->touchY));
     u32 itemDeg = DowsingMchn_AngleIdxToDegrees(DowsingMchn_Atan2Idx(dowsing->itemX, dowsing->itemY));
     dowsing->angles[0].target = (u32)(itemDeg + touchDeg * 3) / 4;
@@ -572,7 +572,7 @@ void DowsingMchn_StepAngleLevel2(DowsingMchnAngle *angle) {
     angle->next = (angle->target + angle->displayed * 2) / 3;
 }
 
-void DowsingMchn_SetTargetAnglesLevel2(DowsingMchn *dowsing) {
+static void DowsingMchn_SetTargetAnglesLevel2(DowsingMchn *dowsing) {
     u32 touchDeg = DowsingMchn_AngleIdxToDegrees(DowsingMchn_GetTouchAngle(dowsing->touchX, dowsing->touchY));
     u32 itemDeg = DowsingMchn_AngleIdxToDegrees(DowsingMchn_Atan2Idx(dowsing->itemX, dowsing->itemY));
     dowsing->angles[0].target = (u32)(itemDeg + touchDeg * 2) / 3;
@@ -586,7 +586,7 @@ void DowsingMchn_StepAngleLevel3(DowsingMchnAngle *angle) {
     angle->next = (angle->target + angle->displayed) / 2;
 }
 
-void DowsingMchn_SetTargetAnglesLevel3(DowsingMchn *dowsing) {
+static void DowsingMchn_SetTargetAnglesLevel3(DowsingMchn *dowsing) {
     u32 touchDeg = DowsingMchn_AngleIdxToDegrees(DowsingMchn_GetTouchAngle(dowsing->touchX, dowsing->touchY));
     u32 itemDeg = DowsingMchn_AngleIdxToDegrees(DowsingMchn_Atan2Idx(dowsing->itemX, dowsing->itemY));
     dowsing->angles[0].target = (u32)(touchDeg + itemDeg) / 3;
@@ -601,7 +601,7 @@ void DowsingMchn_StepAngleLevel4(DowsingMchnAngle *angle) {
 }
 
 // Item within 8 tiles: every indicator aims at (a point near) the item's tile.
-void DowsingMchn_SetTargetAnglesLevel4(DowsingMchn *dowsing) {
+static void DowsingMchn_SetTargetAnglesLevel4(DowsingMchn *dowsing) {
     s32 x = dowsing->itemX * 8 + 84;
     s32 y = dowsing->itemY * 8 + 100;
 
@@ -616,7 +616,7 @@ void DowsingMchn_SetTargetAnglesLevel4(DowsingMchn *dowsing) {
 
 // Picks the proximity level from the nearest item, sets the targets and steps the angles,
 // unwrapping them so that each indicator turns the short way round.
-void DowsingMchn_UpdateTargetAngles(DowsingMchn *dowsing) {
+static void DowsingMchn_UpdateTargetAngles(DowsingMchn *dowsing) {
     u32 i;
     s16 x;
     s16 y;
@@ -667,7 +667,7 @@ void DowsingMchn_UpdateTargetAngles(DowsingMchn *dowsing) {
 
 #pragma opt_propagation off
 
-void DowsingMchn_UpdateSignal(DowsingMchn *dowsing, int delta) {
+static void DowsingMchn_UpdateSignal(DowsingMchn *dowsing, int delta) {
     if (delta >= 0) {
         int gain = delta * sDowsingMchnLevelSignalGains[dowsing->level];
         dowsing->signal = dowsing->signal + gain;
@@ -683,7 +683,7 @@ void DowsingMchn_UpdateSignal(DowsingMchn *dowsing, int delta) {
 #pragma opt_propagation reset
 #pragma force_active reset
 
-void DowsingMchn_GetIndicatorAnim(DowsingMchn *dowsing, u16 *blink, u16 *palette) {
+static void DowsingMchn_GetIndicatorAnim(DowsingMchn *dowsing, u16 *blink, u16 *palette) {
     if (dowsing->signal > sDowsingMchnLevelSignalCaps[dowsing->level * 2]) {
         dowsing->signal = sDowsingMchnLevelSignalCaps[dowsing->level * 2];
     }
@@ -691,7 +691,7 @@ void DowsingMchn_GetIndicatorAnim(DowsingMchn *dowsing, u16 *blink, u16 *palette
     *palette = dowsing->signal / 20;
 }
 
-void DowsingMchn_UpdateIndicatorAppearance(DowsingMchn *dowsing) {
+static void DowsingMchn_UpdateIndicatorAppearance(DowsingMchn *dowsing) {
     u32 i;
     u16 blink;
     u16 palette;
@@ -710,14 +710,14 @@ void DowsingMchn_UpdateIndicatorAppearance(DowsingMchn *dowsing) {
     }
 }
 
-void DowsingMchn_SetSpriteRotation(Sprite *sprite, int deg) {
+static void DowsingMchn_SetSpriteRotation(Sprite *sprite, int deg) {
     Sprite_SetRotationAndAffineType(sprite, GF_DegreeToSinCosIdx((u16)deg), 2);
 }
 
 #pragma force_active on
 
 // Moves the indicators one step: the last step lands on the target, the others on `next`.
-void DowsingMchn_UpdateIndicatorPositions(DowsingMchn *dowsing) {
+static void DowsingMchn_UpdateIndicatorPositions(DowsingMchn *dowsing) {
     u32 i;
     VecFx32 pos;
 
@@ -745,7 +745,7 @@ void DowsingMchn_UpdateIndicatorPositions(DowsingMchn *dowsing) {
 #pragma force_active reset
 
 // Level 4: brighter the closer the cell is to the item; otherwise a fixed value per level.
-u8 DowsingMchn_GetGridCellTarget(DowsingMchn *dowsing, u16 x, u16 y) {
+static u8 DowsingMchn_GetGridCellTarget(DowsingMchn *dowsing, u16 x, u16 y) {
     u32 level = dowsing->level;
 
     if (level == 4) {
@@ -763,7 +763,7 @@ u8 DowsingMchn_GetGridCellTarget(DowsingMchn *dowsing, u16 x, u16 y) {
 #pragma force_active on
 
 // Cells within distance 4 of the touched cell rise toward their target, the others fade out.
-void DowsingMchn_UpdateGrid(DowsingMchn *dowsing, BOOL touching) {
+static void DowsingMchn_UpdateGrid(DowsingMchn *dowsing, BOOL touching) {
     s16 x;
     s16 y;
     s16 touchX;
@@ -817,7 +817,7 @@ void DowsingMchn_UpdateGrid(DowsingMchn *dowsing, BOOL touching) {
 #pragma opt_propagation off
 
 // Every 11 frames; the pitch rises with the signal and, at level 4, with the item's closeness.
-void DowsingMchn_PlaySignalSE(DowsingMchn *dowsing) {
+static void DowsingMchn_PlaySignalSE(DowsingMchn *dowsing) {
     u16 blink;
     u16 palette;
     s16 pitch;
@@ -846,7 +846,7 @@ void DowsingMchn_PlaySignalSE(DowsingMchn *dowsing) {
 #pragma force_active reset
 
 // Returns TRUE if the stylus has not moved.
-BOOL DowsingMchn_UpdateTouchPos(DowsingMchn *dowsing) {
+static BOOL DowsingMchn_UpdateTouchPos(DowsingMchn *dowsing) {
     u32 x;
     u32 y;
 
@@ -860,7 +860,7 @@ BOOL DowsingMchn_UpdateTouchPos(DowsingMchn *dowsing) {
 }
 
 // Action types: 0/2 CHECK, 1 TALK, 3 FISHING, 4 NEXT (a textbox is open).
-void DowsingMchn_UpdateActionLabel(DowsingMchn *dowsing) {
+static void DowsingMchn_UpdateActionLabel(DowsingMchn *dowsing) {
     int actionType;
 
     if (dowsing->fieldSystem->textbox_open == TRUE) {
@@ -890,7 +890,7 @@ void DowsingMchn_UpdateActionLabel(DowsingMchn *dowsing) {
 }
 
 // Shows the pressed animation on a new touch; TRUE while the button stays pressed.
-BOOL DowsingMchn_HandleButton(const TouchscreenHitbox *hitbox, Sprite *sprite, int idleAnim, int pressedAnim) {
+static BOOL DowsingMchn_HandleButton(const TouchscreenHitbox *hitbox, Sprite *sprite, int idleAnim, int pressedAnim) {
     BOOL held = TouchscreenHitbox_TouchHeldIsIn(hitbox);
     u16 anim = Sprite_GetAnimationNumber(sprite);
 
@@ -905,7 +905,7 @@ BOOL DowsingMchn_HandleButton(const TouchscreenHitbox *hitbox, Sprite *sprite, i
     return FALSE;
 }
 
-void DowsingMchn_HandleActionButton(DowsingMchn *dowsing) {
+static void DowsingMchn_HandleActionButton(DowsingMchn *dowsing) {
     if (FieldSystem_IsFieldMapRunning(dowsing->fieldSystem) == TRUE) {
         DowsingMchn_UpdateActionLabel(dowsing);
     }
@@ -914,7 +914,7 @@ void DowsingMchn_HandleActionButton(DowsingMchn *dowsing) {
     }
 }
 
-void DowsingMchn_HandleRunningShoesButton(DowsingMchn *dowsing) {
+static void DowsingMchn_HandleRunningShoesButton(DowsingMchn *dowsing) {
     PlayerAvatar *avatar;
     u16 lock;
 
@@ -935,13 +935,12 @@ void DowsingMchn_HandleRunningShoesButton(DowsingMchn *dowsing) {
             Sprite_SetAnimCtrlSeq(dowsing->sprites[1], 3);
             Sprite_SetAnimCtrlSeq(dowsing->sprites[2], 11);
         }
-        // Called with an unnarrowed u32 lock (player_avatar.h declares u16).
         ((void (*)(PlayerAvatar *, u32))PlayerAvatar_SetRunningShoesLock)(avatar, lock ^ 1);
     }
 }
 
-// lastTouchMenuInput 11 makes field_control.c close the app.
-void DowsingMchn_HandleExitButton(DowsingMchn *dowsing) {
+// lastTouchMenuInput 11 makes the field close the app.
+static void DowsingMchn_HandleExitButton(DowsingMchn *dowsing) {
     if (DowsingMchn_ShouldHideButtons(dowsing) == TRUE) {
         ClearWindowTilemapAndScheduleTransfer(&dowsing->windows[DOWSING_MCHN_WINDOW_EXIT]);
         Sprite_SetAnimCtrlSeq(dowsing->sprites[DOWSING_MCHN_SPRITE_EXIT], 8);
@@ -956,7 +955,7 @@ void DowsingMchn_HandleExitButton(DowsingMchn *dowsing) {
     }
 }
 
-BOOL DowsingMchn_ShouldHideButtons(DowsingMchn *dowsing) {
+static BOOL DowsingMchn_ShouldHideButtons(DowsingMchn *dowsing) {
     if (FieldSystem_TaskIsRunning(dowsing->fieldSystem) == TRUE && dowsing->fieldSystem->suppressBottomScreenDim == 0) {
         return TRUE;
     }

@@ -1904,44 +1904,12 @@
 	.public PokedexEntryPopup_Create
 	.public PokedexEntryPopup_IsDone
 	.public PokedexEntryPopup_Delete
-	.public PokedexEntryPopup_Task
 	.public ov18_021F8A14
 	.public ov18_021F8A1E
 	.public ov18_021F8A52
 	.public ov18_021F8A66
 	.public ov18_021F8A8A
-	.public PokedexEntryPopup_ReadMonData
-	.public PokedexEntryPopup_InitBgs
-	.public PokedexEntryPopup_FreeBgs
-	.public PokedexEntryPopup_StartFadeIn
-	.public PokedexEntryPopup_IsFadeDone
-	.public PokedexEntryPopup_FlashBanner
-	.public PokedexEntryPopup_DrawWindows
-	.public PokedexEntryPopup_RemoveWindows
-	.public PokedexEntryPopup_InitObjCharTransfer
-	.public PokedexEntryPopup_DestroyObjCharTransfer
-	.public PokedexEntryPopup_CreateResourceManagers
-	.public PokedexEntryPopup_DestroyResourceManagers
-	.public PokedexEntryPopup_InitSprites
-	.public PokedexEntryPopup_LoadBannerResources
-	.public PokedexEntryPopup_FreeBannerResources
-	.public PokedexEntryPopup_LoadTypeIconResources
-	.public PokedexEntryPopup_UnloadTypeIconResources
-	.public PokedexEntryPopup_LoadFootprintResources
-	.public PokedexEntryPopup_UnloadFootprintResources
-	.public PokedexEntryPopup_FreeSprites
-	.public PokedexEntryPopup_LoadSpriteResources
-	.public PokedexEntryPopup_LoadPaletteResource
-	.public PokedexEntryPopup_FreeSpriteResources
-	.public PokedexEntryPopup_MakeResourcesHeader
-	.public PokedexEntryPopup_CreateTypeIconSprites
-	.public PokedexEntryPopup_DeleteTypeIconSprites
-	.public PokedexEntryPopup_CreateBannerSprite
-	.public PokedexEntryPopup_DeleteBannerSprite
-	.public PokedexEntryPopup_CreateFootprintSprite
-	.public PokedexEntryPopup_DeleteFootprintSprite
 	.public PokedexEntryPopup_HideSprites
-	.public PokedexEntryPopup_CreatePokepic
 	.public PokedexEntryPopup_GetPokepic
 	.public PokedexApp_PrintString
 	.public PokedexApp_PrintMessage
@@ -2113,13 +2081,6 @@
 	.public PokedexApp_IdentityU32
 	.public PokedexEntryPopup_IsDone
 	.public PokedexEntryPopup_Delete
-	.public PokedexEntryPopup_FreeBgs
-	.public PokedexEntryPopup_IsFadeDone
-	.public PokedexEntryPopup_DestroyResourceManagers
-	.public PokedexEntryPopup_FreeSprites
-	.public PokedexEntryPopup_DeleteTypeIconSprites
-	.public PokedexEntryPopup_DeleteBannerSprite
-	.public PokedexEntryPopup_DeleteFootprintSprite
 	.public PokedexEntryPopup_HideSprites
 	.public PokedexEntryPopup_GetPokepic
 	.public PokedexApp_PrintString

@@ -10,26 +10,26 @@
 
 #include "bg_window.h"
 #include "camera.h"
+#include "char_tiles.h"
 #include "filesystem.h"
 #include "follow_mon.h"
 #include "gf_3d_render.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
+#include "legendary_cinematic_manager.h"
 #include "party.h"
 #include "pokemon.h"
 #include "screen_fade.h"
 #include "sound.h"
+#include "sound_playback.h"
+#include "sprite_resource_header.h"
 #include "sprite_system.h"
+#include "swap_3d_buffers.h"
 #include "sys_task.h"
 #include "sys_task_api.h"
 #include "systask_environment.h"
 #include "system.h"
-#include "sound_playback.h"
-#include "sprite_resource_header.h"
-#include "char_tiles.h"
-#include "swap_3d_buffers.h"
-#include "legendary_cinematic_manager.h"
 
 #define LEGENDARY_CINEMATIC_MAX_MODELS  8
 #define LEGENDARY_CINEMATIC_MODEL_ANIMS 4
@@ -156,10 +156,49 @@ extern int (*const sScriptCinematicSubs_HoOh[])(LegendaryCinematic *);
 extern int (*const sScriptCinematicSubs_Lugia[])(LegendaryCinematic *);
 extern int (*const sScriptCinematicSubs_Arceus[])(LegendaryCinematic *);
 
-// declared only by the NitroSDK internal headers, which clash with lib/include
+static inline void LegendaryCinematic_SetCaptureRegister(GXCaptureSize size, GXCaptureMode mode, GXCaptureSrcA srcA, GXCaptureSrcB srcB, GXCaptureDest dest, int eva, int evb);
+static void LegendaryCinematic_Init3D(LegendaryCinematic *cinematic);
+static void LegendaryCinematic_Free3D(LegendaryCinematic *cinematic);
+static void LegendaryCinematic_FadeInFromBlack(LegendaryCinematic *cinematic, int steps, int framesPerStep, u32 nextState);
+static void LegendaryCinematic_FadeOutToBlack(LegendaryCinematic *cinematic, int steps, int framesPerStep, u32 nextState);
+static void LegendaryCinematic_FadeInFromWhite(LegendaryCinematic *cinematic, int steps, int framesPerStep, u32 nextState);
+static void LegendaryCinematic_FadeOutToWhite(LegendaryCinematic *cinematic, int steps, int framesPerStep, u32 nextState);
+static void LegendaryCinematic_SetCamera(LegendaryCinematic *cinematic, const LegendaryCinematicCamera *camera);
+static void LegendaryCinematic_SetLights(const ModelAttributes *attributes);
+static void LegendaryCinematic_SetEdgeMarking(const GXRgb *colorTable);
+static void LegendaryCinematic_LoadModels(LegendaryCinematic *cinematic, NarcId narcId, const LegendaryCinematicModelSpec *specs, u32 count);
+static void LegendaryCinematic_FreeModels(LegendaryCinematic *cinematic);
+static void LegendaryCinematic_DrawModels(LegendaryCinematic *cinematic);
+static BOOL LegendaryCinematic_IsModelAnimating(LegendaryCinematic *cinematic, u32 index);
+static BOOL LegendaryCinematic_AreModelsAnimating(LegendaryCinematic *cinematic);
+static void LegendaryCinematic_SetBanks(void);
+static void LegendaryCinematic_SetGraphicsModes(void);
+static void LegendaryCinematic_InitCameraAndLights(LegendaryCinematic *cinematic);
+static void LegendaryCinematic_FreeCamera(LegendaryCinematic *cinematic);
+static LegendaryCinematicCapture *LegendaryCinematic_StartCapture(const LegendaryCinematicCaptureConfig *config);
+static void LegendaryCinematic_StopCapture(LegendaryCinematicCapture *capture, GXDispMode dispMode, GXBGMode bgMode, GXBG0As bg0As);
+static void LegendaryCinematic_CaptureTask(SysTask *task, LegendaryCinematicCapture *capture);
+static void LegendaryCinematic_CaptureStartTask(SysTask *task, LegendaryCinematicCapture *capture);
+static void LegendaryCinematic_InitCapture(LegendaryCinematicCaptureConfig *config);
+static LegendaryCinematicCapture *LegendaryCinematic_StartMotionBlur(int eva, int evb);
+static void LegendaryCinematic_StopMotionBlur(LegendaryCinematicCapture *capture);
+static void ArceusCinematic_VBlank(ArceusCinematic *arceus);
+static void ArceusCinematic_SetBanks(void);
+static void ArceusCinematic_InitBgs(ArceusCinematic *arceus);
+static void ArceusCinematic_FreeBgs(ArceusCinematic *arceus);
+static void ArceusCinematic_InitSprites(LegendaryCinematic *cinematic);
+static void ArceusCinematic_DeleteSprite(ArceusCinematic *arceus, int index);
+static void ArceusCinematic_FreeSprites(ArceusCinematic *arceus);
+static void ArceusCinematic_UpdateSprites(ArceusCinematic *arceus);
+static void ArceusCinematic_LoadObjChar(void *src, u32 offset, u32 size);
+static void ArceusCinematic_LoadObjPltt(void *src, u32 offset, u32 size);
+static int ArceusCinematic_GetOverworldModel(int species, int form, int gender);
+static void ArceusCinematic_LoadArceusSprite(LegendaryCinematic *cinematic);
+static void ArceusCinematic_LoadBgPalette(ArceusCinematic *arceus, int bgId, int fileId);
+static void ArceusCinematic_TransferBgPalettes(ArceusCinematic *arceus);
+
 u32 GX_GetBankForLCDC(void);
 BOOL PlaySE_SetVolume(u16 seqNo, u16 volume);
-// sound_02004A44.h declares the volume as u16, but LugiaCinematic_Play passes it untruncated
 u16 GF_GetCurrentPlayingBGM();
 void GF_SetVolumeBySeqNo(u16 seqNo, int volume);
 
@@ -167,31 +206,6 @@ static inline void LegendaryCinematic_SetCaptureRegister(GXCaptureSize size, GXC
     reg_GX_DISPCAPCNT = REG_GX_DISPCAPCNT_FIELD(1, mode, 0, srcB, srcA, size, 0, dest, evb, eva);
 }
 
-void LegendaryCinematic_Init3D(LegendaryCinematic *cinematic);
-void LegendaryCinematic_Free3D(LegendaryCinematic *cinematic);
-void LegendaryCinematic_FadeInFromBlack(LegendaryCinematic *cinematic, int steps, int framesPerStep, u32 nextState);
-void LegendaryCinematic_FadeOutToBlack(LegendaryCinematic *cinematic, int steps, int framesPerStep, u32 nextState);
-void LegendaryCinematic_FadeInFromWhite(LegendaryCinematic *cinematic, int steps, int framesPerStep, u32 nextState);
-void LegendaryCinematic_FadeOutToWhite(LegendaryCinematic *cinematic, int steps, int framesPerStep, u32 nextState);
-void LegendaryCinematic_SetCamera(LegendaryCinematic *cinematic, const LegendaryCinematicCamera *camera);
-void LegendaryCinematic_SetLights(const ModelAttributes *attributes);
-void LegendaryCinematic_SetEdgeMarking(const GXRgb *colorTable);
-void LegendaryCinematic_LoadModels(LegendaryCinematic *cinematic, NarcId narcId, const LegendaryCinematicModelSpec *specs, u32 count);
-void LegendaryCinematic_FreeModels(LegendaryCinematic *cinematic);
-void LegendaryCinematic_DrawModels(LegendaryCinematic *cinematic);
-BOOL LegendaryCinematic_IsModelAnimating(LegendaryCinematic *cinematic, u32 index);
-BOOL LegendaryCinematic_AreModelsAnimating(LegendaryCinematic *cinematic);
-void LegendaryCinematic_SetBanks(void);
-void LegendaryCinematic_SetGraphicsModes(void);
-void LegendaryCinematic_InitCameraAndLights(LegendaryCinematic *cinematic);
-void LegendaryCinematic_FreeCamera(LegendaryCinematic *cinematic);
-LegendaryCinematicCapture *LegendaryCinematic_StartCapture(const LegendaryCinematicCaptureConfig *config);
-void LegendaryCinematic_StopCapture(LegendaryCinematicCapture *capture, GXDispMode dispMode, GXBGMode bgMode, GXBG0As bg0As);
-void LegendaryCinematic_CaptureTask(SysTask *task, LegendaryCinematicCapture *capture);
-void LegendaryCinematic_CaptureStartTask(SysTask *task, LegendaryCinematicCapture *capture);
-void LegendaryCinematic_InitCapture(LegendaryCinematicCaptureConfig *config);
-LegendaryCinematicCapture *LegendaryCinematic_StartMotionBlur(int eva, int evb);
-void LegendaryCinematic_StopMotionBlur(LegendaryCinematicCapture *capture);
 int HoOhCinematic_Init(LegendaryCinematic *cinematic);
 int HoOhCinematic_Exit(LegendaryCinematic *cinematic);
 int HoOhCinematic_WaitFade(LegendaryCinematic *cinematic);
@@ -202,25 +216,11 @@ int LugiaCinematic_Init(LegendaryCinematic *cinematic);
 int LugiaCinematic_Exit(LegendaryCinematic *cinematic);
 int LugiaCinematic_WaitFade(LegendaryCinematic *cinematic);
 int LugiaCinematic_Play(LegendaryCinematic *cinematic);
-void ArceusCinematic_VBlank(ArceusCinematic *arceus);
-void ArceusCinematic_SetBanks(void);
-void ArceusCinematic_InitBgs(ArceusCinematic *arceus);
-void ArceusCinematic_FreeBgs(ArceusCinematic *arceus);
-void ArceusCinematic_InitSprites(LegendaryCinematic *cinematic);
-void ArceusCinematic_DeleteSprite(ArceusCinematic *arceus, int index);
-void ArceusCinematic_FreeSprites(ArceusCinematic *arceus);
-void ArceusCinematic_UpdateSprites(ArceusCinematic *arceus);
-void ArceusCinematic_LoadObjChar(void *src, u32 offset, u32 size);
-void ArceusCinematic_LoadObjPltt(void *src, u32 offset, u32 size);
-int ArceusCinematic_GetOverworldModel(int species, int form, int gender);
-void ArceusCinematic_LoadArceusSprite(LegendaryCinematic *cinematic);
 int ArceusCinematic_Init(LegendaryCinematic *cinematic);
 int ArceusCinematic_Exit(LegendaryCinematic *cinematic);
 int ArceusCinematic_WaitFade(LegendaryCinematic *cinematic);
 int ArceusCinematic_Blend(LegendaryCinematic *cinematic);
 int ArceusCinematic_RunScript(LegendaryCinematic *cinematic);
-void ArceusCinematic_LoadBgPalette(ArceusCinematic *arceus, int bgId, int fileId);
-void ArceusCinematic_TransferBgPalettes(ArceusCinematic *arceus);
 int ArceusScriptCmd_Wait(LegendaryCinematic *cinematic, const int *cmd);
 int ArceusScriptCmd_FadeInFromBlack(LegendaryCinematic *cinematic, const int *cmd);
 int ArceusScriptCmd_FadeOutToBlack(LegendaryCinematic *cinematic, const int *cmd);
@@ -241,7 +241,7 @@ int ArceusScriptCmd_SetSpritePosition(LegendaryCinematic *cinematic, const int *
 int ArceusScriptCmd_SetSpritePriority(LegendaryCinematic *cinematic, const int *cmd);
 int ArceusScriptCmd_Nop(void);
 
-void LegendaryCinematic_Init3D(LegendaryCinematic *cinematic) {
+static void LegendaryCinematic_Init3D(LegendaryCinematic *cinematic) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     GfGfx_EngineASetPlanes(GX_PLANEMASK_NONE);
@@ -254,31 +254,31 @@ void LegendaryCinematic_Init3D(LegendaryCinematic *cinematic) {
     LegendaryCinematic_InitCameraAndLights(cinematic);
 }
 
-void LegendaryCinematic_Free3D(LegendaryCinematic *cinematic) {
+static void LegendaryCinematic_Free3D(LegendaryCinematic *cinematic) {
     LegendaryCinematic_FreeCamera(cinematic);
 }
 
-void LegendaryCinematic_FadeInFromBlack(LegendaryCinematic *cinematic, int steps, int framesPerStep, u32 nextState) {
+static void LegendaryCinematic_FadeInFromBlack(LegendaryCinematic *cinematic, int steps, int framesPerStep, u32 nextState) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, steps, framesPerStep, HEAP_ID_153);
     cinematic->nextState = nextState;
 }
 
-void LegendaryCinematic_FadeOutToBlack(LegendaryCinematic *cinematic, int steps, int framesPerStep, u32 nextState) {
+static void LegendaryCinematic_FadeOutToBlack(LegendaryCinematic *cinematic, int steps, int framesPerStep, u32 nextState) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, steps, framesPerStep, HEAP_ID_153);
     cinematic->nextState = nextState;
 }
 
-void LegendaryCinematic_FadeInFromWhite(LegendaryCinematic *cinematic, int steps, int framesPerStep, u32 nextState) {
+static void LegendaryCinematic_FadeInFromWhite(LegendaryCinematic *cinematic, int steps, int framesPerStep, u32 nextState) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_WHITE, steps, framesPerStep, HEAP_ID_153);
     cinematic->nextState = nextState;
 }
 
-void LegendaryCinematic_FadeOutToWhite(LegendaryCinematic *cinematic, int steps, int framesPerStep, u32 nextState) {
+static void LegendaryCinematic_FadeOutToWhite(LegendaryCinematic *cinematic, int steps, int framesPerStep, u32 nextState) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_WHITE, steps, framesPerStep, HEAP_ID_153);
     cinematic->nextState = nextState;
 }
 
-void LegendaryCinematic_SetCamera(LegendaryCinematic *cinematic, const LegendaryCinematicCamera *camera) {
+static void LegendaryCinematic_SetCamera(LegendaryCinematic *cinematic, const LegendaryCinematicCamera *camera) {
     VecFx32 target = camera->target;
     cinematic->cameraTarget = target;
     Camera_Init_FromTargetDistanceAndAngle(&cinematic->cameraTarget, camera->param.distance, &camera->param.angle, camera->param.perspective, camera->param.perspectiveType, TRUE, cinematic->camera);
@@ -286,7 +286,7 @@ void LegendaryCinematic_SetCamera(LegendaryCinematic *cinematic, const Legendary
     Camera_SetStaticPtr(cinematic->camera);
 }
 
-void LegendaryCinematic_SetLights(const ModelAttributes *attributes) {
+static void LegendaryCinematic_SetLights(const ModelAttributes *attributes) {
     u32 i = 0;
     const VecFx16 *vec = attributes->lightVectors;
     const GXRgb *color = (const GXRgb *)attributes;
@@ -300,7 +300,7 @@ void LegendaryCinematic_SetLights(const ModelAttributes *attributes) {
     }
 }
 
-void LegendaryCinematic_SetEdgeMarking(const GXRgb *colorTable) {
+static void LegendaryCinematic_SetEdgeMarking(const GXRgb *colorTable) {
     if (colorTable == NULL) {
         G3X_EdgeMarking(FALSE);
     } else {
@@ -309,7 +309,7 @@ void LegendaryCinematic_SetEdgeMarking(const GXRgb *colorTable) {
     }
 }
 
-void LegendaryCinematic_LoadModels(LegendaryCinematic *cinematic, NarcId narcId, const LegendaryCinematicModelSpec *specs, u32 count) {
+static void LegendaryCinematic_LoadModels(LegendaryCinematic *cinematic, NarcId narcId, const LegendaryCinematicModelSpec *specs, u32 count) {
     NNSG3dResTex *tex;
     u16 i;
     LegendaryCinematicModel *model;
@@ -346,7 +346,7 @@ void LegendaryCinematic_LoadModels(LegendaryCinematic *cinematic, NarcId narcId,
     cinematic->numModels = count;
 }
 
-void LegendaryCinematic_FreeModels(LegendaryCinematic *cinematic) {
+static void LegendaryCinematic_FreeModels(LegendaryCinematic *cinematic) {
     u16 i;
     for (i = 0; i < cinematic->numModels; i++) {
         LegendaryCinematicModel *model = &cinematic->models[i];
@@ -361,7 +361,7 @@ void LegendaryCinematic_FreeModels(LegendaryCinematic *cinematic) {
     }
 }
 
-void LegendaryCinematic_DrawModels(LegendaryCinematic *cinematic) {
+static void LegendaryCinematic_DrawModels(LegendaryCinematic *cinematic) {
     MtxFx33 rotation = gLegendaryCinematicModelRotation;
     VecFx32 scale = gLegendaryCinematicModelScale;
     VecFx32 translation = { 0, 0, 0 };
@@ -390,7 +390,7 @@ void LegendaryCinematic_DrawModels(LegendaryCinematic *cinematic) {
     RequestSwap3DBuffers(GX_SORTMODE_AUTO, GX_BUFFERMODE_Z);
 }
 
-BOOL LegendaryCinematic_IsModelAnimating(LegendaryCinematic *cinematic, u32 index) {
+static BOOL LegendaryCinematic_IsModelAnimating(LegendaryCinematic *cinematic, u32 index) {
     u32 offset = sizeof(LegendaryCinematicModel) * index;
     u8 *model = (u8 *)cinematic->models;
     fx32 step;
@@ -414,7 +414,7 @@ BOOL LegendaryCinematic_IsModelAnimating(LegendaryCinematic *cinematic, u32 inde
     return FALSE;
 }
 
-BOOL LegendaryCinematic_AreModelsAnimating(LegendaryCinematic *cinematic) {
+static BOOL LegendaryCinematic_AreModelsAnimating(LegendaryCinematic *cinematic) {
     u32 i;
     for (i = 0; i < cinematic->numModels; i++) {
         if (LegendaryCinematic_IsModelAnimating(cinematic, i) == TRUE) {
@@ -424,17 +424,17 @@ BOOL LegendaryCinematic_AreModelsAnimating(LegendaryCinematic *cinematic) {
     return FALSE;
 }
 
-void LegendaryCinematic_SetBanks(void) {
+static void LegendaryCinematic_SetBanks(void) {
     GfGfx_SetBanks(&gLegendaryCinematicGraphicsBanks);
 }
 
-void LegendaryCinematic_SetGraphicsModes(void) {
+static void LegendaryCinematic_SetGraphicsModes(void) {
     GraphicsModes modes = gLegendaryCinematicGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     BG_SetMaskColor(GF_BG_LYR_SUB_0, 0);
 }
 
-void LegendaryCinematic_InitCameraAndLights(LegendaryCinematic *cinematic) {
+static void LegendaryCinematic_InitCameraAndLights(LegendaryCinematic *cinematic) {
     ModelAttributes *attributes;
     cinematic->camera = Camera_New(HEAP_ID_153);
     GF3dRender_InitSimpleManager(HEAP_ID_153);
@@ -451,12 +451,12 @@ void LegendaryCinematic_InitCameraAndLights(LegendaryCinematic *cinematic) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
 }
 
-void LegendaryCinematic_FreeCamera(LegendaryCinematic *cinematic) {
+static void LegendaryCinematic_FreeCamera(LegendaryCinematic *cinematic) {
     GF3dRender_DeleteSimpleManager();
     Camera_Delete(cinematic->camera);
 }
 
-LegendaryCinematicCapture *LegendaryCinematic_StartCapture(const LegendaryCinematicCaptureConfig *config) {
+static LegendaryCinematicCapture *LegendaryCinematic_StartCapture(const LegendaryCinematicCaptureConfig *config) {
     SysTask *task = CreateSysTaskAndEnvironment((SysTaskFunc)LegendaryCinematic_CaptureTask, sizeof(LegendaryCinematicCapture), 5, config->heapID);
     LegendaryCinematicCapture *capture = SysTask_GetData(task);
     capture->config = *config;
@@ -468,7 +468,7 @@ LegendaryCinematicCapture *LegendaryCinematic_StartCapture(const LegendaryCinema
     return capture;
 }
 
-void LegendaryCinematic_StopCapture(LegendaryCinematicCapture *capture, GXDispMode dispMode, GXBGMode bgMode, GXBG0As bg0As) {
+static void LegendaryCinematic_StopCapture(LegendaryCinematicCapture *capture, GXDispMode dispMode, GXBGMode bgMode, GXBG0As bg0As) {
     GX_SetGraphicsMode(dispMode, bgMode, bg0As);
     GX_SetBankForLCDC((GXVRamLCDC)capture->savedLcdcBanks);
     switch (capture->config.dispMode) {
@@ -491,13 +491,13 @@ void LegendaryCinematic_StopCapture(LegendaryCinematicCapture *capture, GXDispMo
     DestroySysTaskAndEnvironment(capture->task);
 }
 
-void LegendaryCinematic_CaptureTask(SysTask *task, LegendaryCinematicCapture *capture) {
+static void LegendaryCinematic_CaptureTask(SysTask *task, LegendaryCinematicCapture *capture) {
     if (capture->started) {
         LegendaryCinematic_SetCaptureRegister(capture->config.size, capture->config.mode, capture->config.srcA, capture->config.srcB, capture->config.dest, capture->config.eva, capture->config.evb);
     }
 }
 
-void LegendaryCinematic_CaptureStartTask(SysTask *task, LegendaryCinematicCapture *capture) {
+static void LegendaryCinematic_CaptureStartTask(SysTask *task, LegendaryCinematicCapture *capture) {
     switch (capture->config.dispMode) {
     case GX_DISPMODE_VRAM_A:
         GX_SetBankForLCDC(GX_VRAM_LCDC_A);
@@ -520,7 +520,7 @@ void LegendaryCinematic_CaptureStartTask(SysTask *task, LegendaryCinematicCaptur
     SysTask_Destroy(task);
 }
 
-void LegendaryCinematic_InitCapture(LegendaryCinematicCaptureConfig *config) {
+static void LegendaryCinematic_InitCapture(LegendaryCinematicCaptureConfig *config) {
     switch (config->dispMode) {
     case GX_DISPMODE_VRAM_A:
         MI_CpuClearFast((void *)HW_LCDC_VRAM, 0x20000);
@@ -538,7 +538,7 @@ void LegendaryCinematic_InitCapture(LegendaryCinematicCaptureConfig *config) {
     LegendaryCinematic_SetCaptureRegister(config->size, config->mode, config->srcA, config->srcB, config->dest, 16, 0);
 }
 
-LegendaryCinematicCapture *LegendaryCinematic_StartMotionBlur(int eva, int evb) {
+static LegendaryCinematicCapture *LegendaryCinematic_StartMotionBlur(int eva, int evb) {
     LegendaryCinematicCaptureConfig config;
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
@@ -550,7 +550,7 @@ LegendaryCinematicCapture *LegendaryCinematic_StartMotionBlur(int eva, int evb) 
     return LegendaryCinematic_StartCapture(&config);
 }
 
-void LegendaryCinematic_StopMotionBlur(LegendaryCinematicCapture *capture) {
+static void LegendaryCinematic_StopMotionBlur(LegendaryCinematicCapture *capture) {
     LegendaryCinematic_StopCapture(capture, GX_DISPMODE_GRAPHICS, GX_BGMODE_0, GX_BG0_AS_3D);
     GX_SetBankForBG(GX_VRAM_BG_128_C);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1 | GX_PLANEMASK_BG2 | GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
@@ -718,18 +718,18 @@ int ScriptCinematic_Arceus(void *data) {
     return TRUE;
 }
 
-void ArceusCinematic_VBlank(ArceusCinematic *arceus) {
+static void ArceusCinematic_VBlank(ArceusCinematic *arceus) {
     ArceusCinematic_TransferBgPalettes(arceus);
     DoScheduledBgGpuUpdates(arceus->bgConfig);
     SpriteSystem_TransferOam();
     *(u32 *)((u8 *)OS_IRQTable + 0x3FF8) |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
 }
 
-void ArceusCinematic_SetBanks(void) {
+static void ArceusCinematic_SetBanks(void) {
     GfGfx_SetBanks(&gArceusCinematicGraphicsBanks);
 }
 
-void ArceusCinematic_InitBgs(ArceusCinematic *arceus) {
+static void ArceusCinematic_InitBgs(ArceusCinematic *arceus) {
     GraphicsModes modes;
     BgTemplate bg0;
     BgTemplate bg1;
@@ -754,14 +754,14 @@ void ArceusCinematic_InitBgs(ArceusCinematic *arceus) {
     BG_SetMaskColor(GF_BG_LYR_SUB_0, 0);
 }
 
-void ArceusCinematic_FreeBgs(ArceusCinematic *arceus) {
+static void ArceusCinematic_FreeBgs(ArceusCinematic *arceus) {
     FreeBgTilemapBuffer(arceus->bgConfig, GF_BG_LYR_MAIN_2);
     FreeBgTilemapBuffer(arceus->bgConfig, GF_BG_LYR_MAIN_1);
     FreeBgTilemapBuffer(arceus->bgConfig, GF_BG_LYR_MAIN_0);
     Heap_Free(arceus->bgConfig);
 }
 
-void ArceusCinematic_InitSprites(LegendaryCinematic *cinematic) {
+static void ArceusCinematic_InitSprites(LegendaryCinematic *cinematic) {
     ArceusCinematic *arceus = cinematic->arceus;
     OamManagerParam oamManagerParam;
     OamCharTransferParam oamCharTransferParam;
@@ -786,36 +786,36 @@ void ArceusCinematic_InitSprites(LegendaryCinematic *cinematic) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-void ArceusCinematic_DeleteSprite(ArceusCinematic *arceus, int index) {
+static void ArceusCinematic_DeleteSprite(ArceusCinematic *arceus, int index) {
     if (arceus->sprites[index] != NULL) {
         Sprite_DeleteAndFreeResources(arceus->sprites[index]);
         arceus->sprites[index] = NULL;
     }
 }
 
-void ArceusCinematic_FreeSprites(ArceusCinematic *arceus) {
+static void ArceusCinematic_FreeSprites(ArceusCinematic *arceus) {
     ArceusCinematic_DeleteSprite(arceus, 0);
     SpriteSystem_FreeResourcesAndManager(arceus->spriteSystem, arceus->spriteManager);
     SpriteSystem_Free(arceus->spriteSystem);
 }
 
-void ArceusCinematic_UpdateSprites(ArceusCinematic *arceus) {
+static void ArceusCinematic_UpdateSprites(ArceusCinematic *arceus) {
     if (arceus->sprites[0] != NULL) {
         ManagedSprite_TickFrame(arceus->sprites[0]);
     }
 }
 
-void ArceusCinematic_LoadObjChar(void *src, u32 offset, u32 size) {
+static void ArceusCinematic_LoadObjChar(void *src, u32 offset, u32 size) {
     DC_FlushRange(src, size);
     GX_LoadOBJ(src, offset, size);
 }
 
-void ArceusCinematic_LoadObjPltt(void *src, u32 offset, u32 size) {
+static void ArceusCinematic_LoadObjPltt(void *src, u32 offset, u32 size) {
     DC_FlushRange(src, size);
     GX_LoadOBJPltt(src, offset, size);
 }
 
-int ArceusCinematic_GetOverworldModel(int species, int form, int gender) {
+static int ArceusCinematic_GetOverworldModel(int species, int form, int gender) {
     int model;
     if (species <= 0 || species > NATIONAL_DEX_COUNT) {
         model = MMODEL_BABYGIRL1;
@@ -838,7 +838,7 @@ int ArceusCinematic_GetOverworldModel(int species, int form, int gender) {
 #pragma force_active on
 // The Arceus sprite uses the overworld texture of the party's lead Arceus (its form and shininess),
 // or of a genderless normal Arceus when the lead is something else.
-void ArceusCinematic_LoadArceusSprite(LegendaryCinematic *cinematic) {
+static void ArceusCinematic_LoadArceusSprite(LegendaryCinematic *cinematic) {
     ArceusCinematic *arceus = cinematic->arceus;
     Party *party = SaveArray_Party_Get(cinematic->args->saveData);
     u16 gender;
@@ -989,7 +989,7 @@ int ArceusCinematic_RunScript(LegendaryCinematic *cinematic) {
 }
 #pragma force_active reset
 
-void ArceusCinematic_LoadBgPalette(ArceusCinematic *arceus, int bgId, int fileId) {
+static void ArceusCinematic_LoadBgPalette(ArceusCinematic *arceus, int bgId, int fileId) {
     NNSG2dPaletteData *palette;
     void *buffer;
     ArceusBgPalette *bgPalette;
@@ -1001,7 +1001,7 @@ void ArceusCinematic_LoadBgPalette(ArceusCinematic *arceus, int bgId, int fileId
     Heap_Free(buffer);
 }
 
-void ArceusCinematic_TransferBgPalettes(ArceusCinematic *arceus) {
+static void ArceusCinematic_TransferBgPalettes(ArceusCinematic *arceus) {
     u32 i;
 
     for (i = 0; i < ARCEUS_CINEMATIC_BG_PALETTES; i++) {

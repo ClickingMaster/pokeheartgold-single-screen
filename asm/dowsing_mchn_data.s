@@ -5,59 +5,11 @@
 	.public DowsingMchn_Init
 	.public DowsingMchn_Exit
 	.public DowsingMchn_IsExitDone
-	.public DowsingMchn_SetVramBanks
-	.public DowsingMchn_InitBgs
-	.public DowsingMchn_FreeBgs
-	.public DowsingMchn_LoadBgGraphics
-	.public DowsingMchn_LoadStrings
-	.public DowsingMchn_FreeStrings
-	.public DowsingMchn_CreateWindows
-	.public DowsingMchn_RemoveWindows
-	.public DowsingMchn_CreateSprites
-	.public DowsingMchn_DestroySprites
-	.public DowsingMchn_CreateResourceManagers
-	.public DowsingMchn_DestroyResourceManagers
-	.public DowsingMchn_LoadSpriteResources
-	.public DowsingMchn_CreateResourcesHeader
-	.public DowsingMchn_CreateSprite
-	.public DowsingMchn_CreateButtonSprites
-	.public DowsingMchn_DestroyButtonSprites
-	.public DowsingMchn_CreateIndicatorSprites
-	.public DowsingMchn_DestroyIndicatorSprites
-	.public DowsingMchn_Task
-	.public DowsingMchn_GetHiddenItemLocs
-	.public DowsingMchn_FreeHiddenItemLocs
-	.public DowsingMchn_FindNearestHiddenItem
-	.public DowsingMchn_GetIndicatorPos
-	.public DowsingMchn_GetTouchAngle
-	.public DowsingMchn_Atan2Idx
-	.public DowsingMchn_AngleIdxToDegrees
 	.public DowsingMchn_StepAngleLevel0
-	.public DowsingMchn_SetTargetAnglesLevel0
 	.public DowsingMchn_StepAngleLevel1
-	.public DowsingMchn_SetTargetAnglesLevel1
 	.public DowsingMchn_StepAngleLevel2
-	.public DowsingMchn_SetTargetAnglesLevel2
 	.public DowsingMchn_StepAngleLevel3
-	.public DowsingMchn_SetTargetAnglesLevel3
 	.public DowsingMchn_StepAngleLevel4
-	.public DowsingMchn_SetTargetAnglesLevel4
-	.public DowsingMchn_UpdateTargetAngles
-	.public DowsingMchn_UpdateSignal
-	.public DowsingMchn_GetIndicatorAnim
-	.public DowsingMchn_UpdateIndicatorAppearance
-	.public DowsingMchn_SetSpriteRotation
-	.public DowsingMchn_UpdateIndicatorPositions
-	.public DowsingMchn_GetGridCellTarget
-	.public DowsingMchn_UpdateGrid
-	.public DowsingMchn_PlaySignalSE
-	.public DowsingMchn_UpdateTouchPos
-	.public DowsingMchn_UpdateActionLabel
-	.public DowsingMchn_HandleButton
-	.public DowsingMchn_HandleActionButton
-	.public DowsingMchn_HandleRunningShoesButton
-	.public DowsingMchn_HandleExitButton
-	.public DowsingMchn_ShouldHideButtons
 	.public sDowsingMchnActionButtonHitbox
 	.public sDowsingMchnExitButtonHitbox
 	.public sDowsingMchnRunningShoesHitbox

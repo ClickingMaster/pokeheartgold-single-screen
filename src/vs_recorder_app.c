@@ -13,6 +13,10 @@
 #include "sound_system.h"
 #include "vs_recorder_app_internal.h"
 
+static void VsRecorderApp_Create(OverlayManager *manager, u32 mode);
+static BOOL VsRecorderApp_RunMenu(VsRecorderApp *work, enum HeapID heapId);
+static BOOL VsRecorderApp_RunPlayback(VsRecorderApp *work, enum HeapID heapId);
+
 FS_EXTERN_OVERLAY(OVY_39);
 FS_EXTERN_OVERLAY(OVY_40);
 
@@ -26,7 +30,7 @@ void VsRecorderApp_SetResult(void *result, u32 first, u32 second) {
     pair->second = second;
 }
 
-void VsRecorderApp_Create(OverlayManager *manager, u32 mode) {
+static void VsRecorderApp_Create(OverlayManager *manager, u32 mode) {
     VsRecorderApp *work;
     VsRecorderWork *recorder;
     FieldSystem *fieldSystem;
@@ -121,7 +125,7 @@ BOOL VsRecorderApp_Exit(OverlayManager *manager, int *state) {
     return TRUE;
 }
 
-BOOL VsRecorderApp_RunMenu(VsRecorderApp *work, enum HeapID heapId) {
+static BOOL VsRecorderApp_RunMenu(VsRecorderApp *work, enum HeapID heapId) {
     if (work->state == 0) {
         if (work->recorder->mode == 0) {
             work->manager = OverlayManager_New(&gOverlayTemplate_VsRecorderMenu, work, heapId);
@@ -136,7 +140,7 @@ BOOL VsRecorderApp_RunMenu(VsRecorderApp *work, enum HeapID heapId) {
     return FALSE;
 }
 
-BOOL VsRecorderApp_RunPlayback(VsRecorderApp *work, enum HeapID heapId) {
+static BOOL VsRecorderApp_RunPlayback(VsRecorderApp *work, enum HeapID heapId) {
     BOOL result;
     u16 bgm;
     FSOverlayID overlayId;

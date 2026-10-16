@@ -89,29 +89,9 @@
 	.public NintendoWfcHttp_RequestUpload
 	.public NintendoWfcHttp_RequestInfo
 	.public NintendoWfcHttp_RequestSetProfile
-	.public NintendoWfcHttp_StartRequest
-	.public NintendoWfcHttp_ConvertError
-	.public NintendoWfc_VBlankCB
-	.public NintendoWfc_SetGfxBanks
-	.public NintendoWfc_InitObjTransfer
-	.public NintendoWfc_InitSpriteResources
-	.public NintendoWfc_CreateSprites
-	.public NintendoWfc_SetSpritePosition
-	.public NintendoWfc_MovePadCursor
-	.public NintendoWfc_MoveDigitCursor
-	.public NintendoWfc_SetDigitSpritePosition
-	.public NintendoWfc_Alloc
-	.public NintendoWfc_InitGraphics
-	.public NintendoWfc_FreeGraphics
 	.public NintendoWfc_SessionInit
 	.public NintendoWfc_SessionMain
 	.public NintendoWfc_SessionExit
-	.public NintendoWfc_InitBgs
-	.public NintendoWfc_LoadSubScreenBg
-	.public NintendoWfc_LoadBgGraphics
-	.public NintendoWfc_PaletteCycleTask
-	.public NintendoWfc_AddWindows
-	.public NintendoWfc_InitStrings
 	.public NintendoWfc_HandleConnectChoice
 	.public NintendoWfc_HandleLogOutChoice
 	.public NintendoWfc_StartConnect
@@ -146,44 +126,15 @@
 	.public NintendoWfc_WaitMessage
 	.public NintendoWfc_WaitMessageAndDelay
 	.public NintendoWfc_OpenYesNoMenu
-	.public NintendoWfc_PrintFormattedMessage
 	.public NintendoWfc_ShowDwcError
 	.public NintendoWfc_WaitErrorDismiss
-	.public NintendoWfc_PrintMessage
-	.public NintendoWfc_GetAlignedTextX
-	.public NintendoWfc_PrintAlignedText
-	.public NintendoWfc_ShowWaitingIcon
-	.public NintendoWfc_PrintErrorMessage
-	.public NintendoWfc_ShowErrorMessage
-	.public NintendoWfc_StartNumberInput
-	.public NintendoWfc_RunNumberInput
 	.public NintendoWfc_NumberInput_FadeOut
 	.public NintendoWfc_NumberInput_Setup
-	.public NintendoWfc_ShowNumberInputSprites
-	.public NintendoWfc_GetTouchedPadKey
-	.public NintendoWfc_GetPadNeighbor
-	.public NintendoWfc_GetEnteredNumber
-	.public NintendoWfc_AreDigitsComplete
-	.public NintendoWfc_PressPadKey
-	.public NintendoWfc_HandlePadButtons
 	.public NintendoWfc_NumberInput_Main
-	.public NintendoWfc_UpdateDigitSprites
 	.public NintendoWfc_NumberInput_StartFadeOut
 	.public NintendoWfc_NumberInput_Teardown
-	.public NintendoWfc_AddNumberInputWindows
-	.public NintendoWfc_PrintButtonLabel
-	.public NintendoWfc_RemoveNumberInputWindows
-	.public NintendoWfc_HideNumberInput
-	.public NintendoWfc_SetButtonFlashPltt
-	.public NintendoWfc_UpdateButtonFlash
-	.public NintendoWfc_StartButtonFlash
-	.public NintendoWfcYesNo_Init
-	.public NintendoWfcYesNo_Run
 	.public NintendoWfcYesNo_HandleInput
 	.public NintendoWfcYesNo_WaitClose
-	.public NintendoWfcYesNo_LoadGraphics
-	.public NintendoWfcYesNo_AddWindows
-	.public NintendoWfcYesNo_RemoveWindows
 	.public NintendoWfcYesNo_MoveCursor
 	.public gNintendoWfcButtonSpritePositions
 	.public sNintendoWfcObjCharTransferTemplate
@@ -230,17 +181,6 @@
 	.public sNintendoWfcGlobal
 	.public NintendoWfcHttp_Init
 	.public NintendoWfcHttp_GetResult
-	.public NintendoWfc_InitArgs
-	.public NintendoWfc_ExitDummy
-	.public NintendoWfc_InitSpriteTemplate
-	.public NintendoWfc_HandleYesNoPrompt
-	.public NintendoWfc_SetState
-	.public NintendoWfc_Free
-	.public NintendoWfc_GetWifiIconLevel
-	.public NintendoWfc_SetNextMode
-	.public NintendoWfc_FreeBgs
-	.public NintendoWfc_RemoveWindows
-	.public NintendoWfc_FreeStrings
 	.public NintendoWfc_AskConnect
 	.public NintendoWfc_AskLogOut
 	.public NintendoWfc_StartAuth
@@ -262,11 +202,7 @@
 	.public NintendoWfc_AskCancelDownload
 	.public NintendoWfc_CloseConnection
 	.public NintendoWfc_UnusedState_Idle
-	.public NintendoWfc_CreateWirelessIcon
-	.public NintendoWfc_NumberInputDummy
-	.public NintendoWfc_HideWaitingIcon
 	.public NintendoWfc_NumberInput_WaitFadeIn
-	.public NintendoWfc_GetCursorAfterDigit
 	.public NintendoWfc_NumberInput_UnusedState4
 	.public NintendoWfc_NumberInput_UnusedState5
 	.public NintendoWfc_NumberInput_UnusedState6
@@ -275,7 +211,6 @@
 	.public NintendoWfc_NumberInput_Finish
 	.public NintendoWfcYesNo_Start
 	.public NintendoWfcYesNo_UnusedState2
-	.public NintendoWfcYesNo_ShowCursor
 	.include "asm/macros.inc"
 	.include "overlay_72.inc"
 	.include "global.inc"

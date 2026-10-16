@@ -78,8 +78,6 @@ struct LockCapsuleCardView {
     WaitingIcon *waitingIcon;                    // 0x3D08
 }; // size: 0x3D0C
 
-// Declared here rather than through font.h / text.h: the card screens pass the u32 font ids of their text box
-// tables unconverted (those headers type them as the u8 FontID; matching).
 extern void ResetAllTextPrinters(void);
 extern u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, void *callback);
 
@@ -120,9 +118,26 @@ enum {
     LOCK_CAPSULE_STATE_IDLE,
 };
 
+static void LockCapsuleCard_DeleteSprites(LockCapsuleCardView *view);
+static void LockCapsuleCard_EraseWindowIfInUse(Window *window, BOOL dontCopyToVram);
+static void LockCapsuleCard_ClearWindowIfInUse(Window *window, BOOL dontCopyToVram);
+static void LockCapsuleCard_CreateListMenu(LockCapsuleCardView *view, const MysteryGiftMenuItem *items, int count, Window *window, int itemsAbove);
+static void LockCapsuleCard_DestroyListMenu(LockCapsuleCardView *view);
+static void LockCapsuleCard_StartFade(LockCapsuleCardView *view, enum FadeType fadeType, int nextState, int *state);
+static void LockCapsuleCard_DrawCard(LockCapsuleCardView *view, int unused, int page);
+static int LockCapsuleCard_PrintTextBox(LockCapsuleCardView *view, Window *window, int boxId, int baseTile);
+static void LockCapsuleCard_LoadScreenData(LockCapsuleCardView *view, int fileId, int bgId, int offset);
+static void LockCapsuleCard_LoadCardBg(LockCapsuleCardView *view, int page);
+static void LockCapsuleCard_HandleListMenuInput(OverlayManager *manager, int *state, MysteryGiftMenuFunc cancelFunc);
+static void LockCapsuleCard_CreateMonIconSprites(LockCapsuleCardView *view);
+static void LockCapsuleCard_FlipEffectTask(SysTask *task, WonderCardFlipEffect *effect);
+static void LockCapsuleCard_StartFlipEffect(LockCapsuleCardView *view, int mode, fx32 speed, fx32 accel);
+static void LockCapsuleCard_StopFlipEffect(LockCapsuleCardView *view);
+static BOOL LockCapsuleCard_UpdateFlipEffect(LockCapsuleCardView *view);
+
 #pragma force_active on
 
-void LockCapsuleCard_DeleteSprites(LockCapsuleCardView *view) {
+static void LockCapsuleCard_DeleteSprites(LockCapsuleCardView *view) {
     if (view->buttonSprites[0] != NULL) {
         Sprite_Delete(view->buttonSprites[0]);
     }
@@ -145,13 +160,13 @@ void LockCapsuleCard_DeleteSprites(LockCapsuleCardView *view) {
 
 #pragma force_active reset
 
-void LockCapsuleCard_EraseWindowIfInUse(Window *window, BOOL dontCopyToVram) {
+static void LockCapsuleCard_EraseWindowIfInUse(Window *window, BOOL dontCopyToVram) {
     if (WindowIsInUse(window) == TRUE) {
         EraseFrameAndWindow1(window, dontCopyToVram);
     }
 }
 
-void LockCapsuleCard_ClearWindowIfInUse(Window *window, BOOL dontCopyToVram) {
+static void LockCapsuleCard_ClearWindowIfInUse(Window *window, BOOL dontCopyToVram) {
     if (WindowIsInUse(window) == TRUE) {
         ClearFrameAndWindow2(window, dontCopyToVram);
     }
@@ -159,7 +174,7 @@ void LockCapsuleCard_ClearWindowIfInUse(Window *window, BOOL dontCopyToVram) {
 
 #pragma force_active on
 
-void LockCapsuleCard_CreateListMenu(LockCapsuleCardView *view, const MysteryGiftMenuItem *items, int count, Window *window, int itemsAbove) {
+static void LockCapsuleCard_CreateListMenu(LockCapsuleCardView *view, const MysteryGiftMenuItem *items, int count, Window *window, int itemsAbove) {
     int i;
     ListMenuTemplate template;
 
@@ -182,7 +197,7 @@ void LockCapsuleCard_CreateListMenu(LockCapsuleCardView *view, const MysteryGift
     view->listMenu = ListMenuInit(&template, 0, itemsAbove, HEAP_ID_85);
 }
 
-void LockCapsuleCard_DestroyListMenu(LockCapsuleCardView *view) {
+static void LockCapsuleCard_DestroyListMenu(LockCapsuleCardView *view) {
     ListMenuItems_Delete(view->listMenuItems);
     view->listMenuItems = NULL;
     DestroyListMenu(view->listMenu, NULL, NULL);
@@ -262,7 +277,7 @@ BOOL LockCapsuleCard_ShowCardMenu(LockCapsuleCardView *view, Window *window, u32
 
 #pragma force_active reset
 
-void LockCapsuleCard_StartFade(LockCapsuleCardView *view, enum FadeType fadeType, int nextState, int *state) {
+static void LockCapsuleCard_StartFade(LockCapsuleCardView *view, enum FadeType fadeType, int nextState, int *state) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, fadeType, fadeType, RGB_BLACK, 6, 1, HEAP_ID_85);
     if (state != NULL) {
         *state = LOCK_CAPSULE_STATE_WAIT_FADE;
@@ -272,7 +287,7 @@ void LockCapsuleCard_StartFade(LockCapsuleCardView *view, enum FadeType fadeType
 
 #pragma force_active on
 
-void LockCapsuleCard_DrawCard(LockCapsuleCardView *view, int unused, int page) {
+static void LockCapsuleCard_DrawCard(LockCapsuleCardView *view, int unused, int page) {
     const WonderCardTextBox *boxes = sLockCapsuleCardTextBoxes;
     u32 i;
     u32 baseTile;
@@ -314,7 +329,7 @@ void LockCapsuleCard_DrawCard(LockCapsuleCardView *view, int unused, int page) {
     }
 }
 
-int LockCapsuleCard_PrintTextBox(LockCapsuleCardView *view, Window *window, int boxId, int baseTile) {
+static int LockCapsuleCard_PrintTextBox(LockCapsuleCardView *view, Window *window, int boxId, int baseTile) {
     const WonderCardTextBox *box = &sLockCapsuleCardTextBoxes[boxId];
 
     if (window->bgConfig == NULL) {
@@ -345,7 +360,7 @@ int LockCapsuleCard_PrintTextBox(LockCapsuleCardView *view, Window *window, int 
 
 #pragma force_active reset
 
-void LockCapsuleCard_LoadScreenData(LockCapsuleCardView *view, int fileId, int bgId, int offset) {
+static void LockCapsuleCard_LoadScreenData(LockCapsuleCardView *view, int fileId, int bgId, int offset) {
     NNSG2dScreenData *screenData;
     void *data = GfGfxLoader_LoadFromNarc(NARC_a_1_1_3, fileId, TRUE, view->heapId, TRUE);
 
@@ -356,7 +371,7 @@ void LockCapsuleCard_LoadScreenData(LockCapsuleCardView *view, int fileId, int b
 
 #pragma force_active on
 
-void LockCapsuleCard_LoadCardBg(LockCapsuleCardView *view, int page) {
+static void LockCapsuleCard_LoadCardBg(LockCapsuleCardView *view, int page) {
     GfGfxLoader_GXLoadPal(NARC_a_1_1_3, 7, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0x100, view->heapId);
     GfGfxLoader_LoadCharData(NARC_a_1_1_3, 10, view->bgConfig, GF_BG_LYR_MAIN_1, 0, 0x3000, TRUE, view->heapId);
     switch (page) {
@@ -374,7 +389,7 @@ void LockCapsuleCard_LoadCardBg(LockCapsuleCardView *view, int page) {
     BgCommitTilemapBufferToVram(view->bgConfig, GF_BG_LYR_MAIN_3);
 }
 
-void LockCapsuleCard_HandleListMenuInput(OverlayManager *manager, int *state, MysteryGiftMenuFunc cancelFunc) {
+static void LockCapsuleCard_HandleListMenuInput(OverlayManager *manager, int *state, MysteryGiftMenuFunc cancelFunc) {
     LockCapsuleCardView *view = OverlayManager_GetData(manager);
     u32 input = ListMenu_ProcessInput(view->listMenu);
     u32 nextState;
@@ -410,7 +425,7 @@ void LockCapsuleCard_HandleListMenuInput(OverlayManager *manager, int *state, My
     }
 }
 
-void LockCapsuleCard_CreateMonIconSprites(LockCapsuleCardView *view) {
+static void LockCapsuleCard_CreateMonIconSprites(LockCapsuleCardView *view) {
     int x;
     int i;
     int species;
@@ -462,7 +477,7 @@ BOOL LockCapsuleCard_Init(OverlayManager *manager, int *state) {
     return TRUE;
 }
 
-void LockCapsuleCard_FlipEffectTask(SysTask *task, WonderCardFlipEffect *effect) {
+static void LockCapsuleCard_FlipEffectTask(SysTask *task, WonderCardFlipEffect *effect) {
     void *buffer;
 
     HBlankDma_Stop();
@@ -472,7 +487,7 @@ void LockCapsuleCard_FlipEffectTask(SysTask *task, WonderCardFlipEffect *effect)
 
 #pragma force_active on
 
-void LockCapsuleCard_StartFlipEffect(LockCapsuleCardView *view, int mode, fx32 speed, fx32 accel) {
+static void LockCapsuleCard_StartFlipEffect(LockCapsuleCardView *view, int mode, fx32 speed, fx32 accel) {
     WonderCardFlipEffect *effect = &view->flipEffect;
 
     effect->mode = mode;
@@ -489,7 +504,7 @@ void LockCapsuleCard_StartFlipEffect(LockCapsuleCardView *view, int mode, fx32 s
 
 #pragma force_active reset
 
-void LockCapsuleCard_StopFlipEffect(LockCapsuleCardView *view) {
+static void LockCapsuleCard_StopFlipEffect(LockCapsuleCardView *view) {
     WonderCardFlipEffect *effect = &view->flipEffect;
 
     if (effect->doubleBuffer != NULL) {
@@ -505,7 +520,7 @@ void LockCapsuleCard_StopFlipEffect(LockCapsuleCardView *view) {
 
 #pragma force_active on
 
-BOOL LockCapsuleCard_UpdateFlipEffect(LockCapsuleCardView *view) {
+static BOOL LockCapsuleCard_UpdateFlipEffect(LockCapsuleCardView *view) {
     WonderCardFlipEffect *effect = &view->flipEffect;
     fx32 pos = 84 << FX32_SHIFT;
     int i;

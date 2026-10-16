@@ -67,7 +67,6 @@ typedef struct VsRecorderSearchButtonMsgIds {
     u32 msgIds[3];
 } VsRecorderSearchButtonMsgIds;
 
-// asm/vs_recorder_data.s
 extern const TouchscreenHitbox sVsRecorderSearchResultOpenHitbox;
 extern const TouchscreenHitbox sVsRecorderSearchBackHitbox;
 extern const VsRecorderSearchButtonMsgIds sVsRecorderSearchButtonMsgIds;
@@ -117,7 +116,23 @@ extern const u16 sVsRecorderSearchSpeciesGroupStarts[];
 #define SEARCH_ANY          0xFF
 #define SEARCH_ANY_FACILITY 0xFE // sent instead of SEARCH_ANY when VsRecorderApp_HasVisitedBattleFrontier is FALSE
 
-void VsRecorder_PlaceSearchResultIcons(VsRecorderWork *work) {
+static void VsRecorder_PlaceSearchResultIcons(VsRecorderWork *work);
+static void VsRecorder_CreateSearchResultIcons(VsRecorderWork *work);
+static void VsRecorder_SetSearchResultIconsDrawFlag(VsRecorderWork *work, BOOL draw);
+static void VsRecorder_FreeSearchResultIcons(VsRecorderWork *work);
+static void VsRecorder_ScrollSearchResultIcons(VsRecorderWork *work);
+static void VsRecorder_CreateSearchConditionWindows(VsRecorderWork *work, int mode);
+static void VsRecorder_PrintSearchFacility(VsRecorderWork *work, u32 facility);
+static void VsRecorder_PrintSearchSpecies(VsRecorderWork *work, u16 species);
+static void VsRecorder_CreateSearchButtonWindows(VsRecorderWork *work, int mode);
+static void VsRecorder_RemoveSearchWindows(VsRecorderWork *work);
+static void VsRecorder_RemoveSearchButtonWindows(VsRecorderWork *work);
+static void VsRecorder_CreateSearchResultWindows(VsRecorderWork *work);
+static void VsRecorder_CreateSearchCategoryWindows(VsRecorderWork *work);
+static void VsRecorder_RemoveSearchCategoryWindows(VsRecorderWork *work);
+static void VsRecorder_FreeSearchSpeciesList(VsRecorderWork *work);
+
+static void VsRecorder_PlaceSearchResultIcons(VsRecorderWork *work) {
     VsRecorderIconPositions positions = sVsRecorderSearchResultIconPositions;
     int i, j;
     VsRecorderVideoSearch *search = work->screenWork;
@@ -134,7 +149,7 @@ void VsRecorder_PlaceSearchResultIcons(VsRecorderWork *work) {
 #pragma force_active on
 
 // party icons of the visible result rows
-void VsRecorder_CreateSearchResultIcons(VsRecorderWork *work) {
+static void VsRecorder_CreateSearchResultIcons(VsRecorderWork *work) {
     int i;
     VsRecorderVideoSearch *search = work->screenWork;
     VsRecorderPartyIconOrder order = sVsRecorderSearchListIconOrder;
@@ -195,7 +210,7 @@ void VsRecorder_CreateSearchResultIcons(VsRecorderWork *work) {
 
 #pragma force_active reset
 
-void VsRecorder_SetSearchResultIconsDrawFlag(VsRecorderWork *work, BOOL draw) {
+static void VsRecorder_SetSearchResultIconsDrawFlag(VsRecorderWork *work, BOOL draw) {
     int i;
     int j;
     VsRecorderVideoSearch *row; // walks by one row of icons
@@ -211,7 +226,7 @@ void VsRecorder_SetSearchResultIconsDrawFlag(VsRecorderWork *work, BOOL draw) {
     }
 }
 
-void VsRecorder_FreeSearchResultIcons(VsRecorderWork *work) {
+static void VsRecorder_FreeSearchResultIcons(VsRecorderWork *work) {
     int i;
     int j;
     VsRecorderVideoSearch *row = work->screenWork; // walks by one row of icons
@@ -233,7 +248,7 @@ void VsRecorder_FreeSearchResultIcons(VsRecorderWork *work) {
 #pragma force_active on
 
 // keep the icons in step with the list scroll: drop the row that left, shift, make the row that came in
-void VsRecorder_ScrollSearchResultIcons(VsRecorderWork *work) {
+static void VsRecorder_ScrollSearchResultIcons(VsRecorderWork *work) {
     int row = 0;
     int freed[6] = { 0 };
     VsRecorderVideoSearch *search = work->screenWork;
@@ -349,7 +364,7 @@ BOOL VsRecorder_HasSearchConditions(VsRecorderWork *work) {
 #pragma force_active on
 
 // the condition labels and value windows on the main screen
-void VsRecorder_CreateSearchConditionWindows(VsRecorderWork *work, int mode) {
+static void VsRecorder_CreateSearchConditionWindows(VsRecorderWork *work, int mode) {
     VsRecorderVideoSearch *search = work->screenWork;
     VsRecorderConditionWindows templates = sVsRecorderSearchConditionWindows;
     VsRecorderConditionMsgIds msgIds = sVsRecorderSearchConditionMsgIds;
@@ -391,7 +406,7 @@ void VsRecorder_CreateSearchConditionWindows(VsRecorderWork *work, int mode) {
 
 #pragma force_active reset
 
-void VsRecorder_PrintSearchFacility(VsRecorderWork *work, u32 facility) {
+static void VsRecorder_PrintSearchFacility(VsRecorderWork *work, u32 facility) {
     VsRecorderVideoSearch *search = work->screenWork;
     Window *window = &search->windows[3];
     String *str;
@@ -409,7 +424,7 @@ void VsRecorder_PrintSearchFacility(VsRecorderWork *work, u32 facility) {
     String_Delete(str);
 }
 
-void VsRecorder_PrintSearchSpecies(VsRecorderWork *work, u16 species) {
+static void VsRecorder_PrintSearchSpecies(VsRecorderWork *work, u16 species) {
     VsRecorderVideoSearch *search = work->screenWork;
     Window *window = &search->windows[4];
     u16 name[0x100];
@@ -478,7 +493,7 @@ void VsRecorder_PrintLocationButtonLabel(VsRecorderWork *work) {
 }
 
 // the condition buttons on the touch screen: facility, Pokemon, location
-void VsRecorder_CreateSearchButtonWindows(VsRecorderWork *work, int mode) {
+static void VsRecorder_CreateSearchButtonWindows(VsRecorderWork *work, int mode) {
     VsRecorderSearchButtonWindows templates;
     VsRecorderSearchButtonMsgIds msgIds;
     VsRecorderVideoSearch *search;
@@ -520,7 +535,7 @@ void VsRecorder_CreateSearchButtonWindows(VsRecorderWork *work, int mode) {
     VsRecorder_PrintLocationButtonLabel(work);
 }
 
-void VsRecorder_RemoveSearchWindows(VsRecorderWork *work) {
+static void VsRecorder_RemoveSearchWindows(VsRecorderWork *work) {
     VsRecorderVideoSearch *search = work->screenWork;
     int i;
 
@@ -533,7 +548,7 @@ void VsRecorder_RemoveSearchWindows(VsRecorderWork *work) {
     search->windowCount = 0;
 }
 
-void VsRecorder_RemoveSearchButtonWindows(VsRecorderWork *work) {
+static void VsRecorder_RemoveSearchButtonWindows(VsRecorderWork *work) {
     VsRecorderVideoSearch *search = work->screenWork;
     int i;
 
@@ -547,7 +562,7 @@ void VsRecorder_RemoveSearchButtonWindows(VsRecorderWork *work) {
 }
 
 // result list title and the label under the touch area
-void VsRecorder_CreateSearchResultWindows(VsRecorderWork *work) {
+static void VsRecorder_CreateSearchResultWindows(VsRecorderWork *work) {
     VsRecorderVideoSearch *search = work->screenWork;
     Window *window = &search->windows[0];
     String *str;
@@ -795,7 +810,7 @@ BOOL VsRecorder_VideoSearchClearSpecies(VsRecorderWork *work) {
 }
 
 // one window per species group, grayed out if no species of it was seen
-void VsRecorder_CreateSearchCategoryWindows(VsRecorderWork *work) {
+static void VsRecorder_CreateSearchCategoryWindows(VsRecorderWork *work) {
     String *str;
     int baseTile;
     u8 x;
@@ -838,7 +853,7 @@ void VsRecorder_CreateSearchCategoryWindows(VsRecorderWork *work) {
     }
 }
 
-void VsRecorder_RemoveSearchCategoryWindows(VsRecorderWork *work) {
+static void VsRecorder_RemoveSearchCategoryWindows(VsRecorderWork *work) {
     VsRecorderVideoSearch *search = work->screenWork;
     u32 i;
     Window *window;
@@ -1055,7 +1070,7 @@ void VsRecorder_BuildSearchSpeciesList(VsRecorderWork *work, int category) {
     search->categoryChosen = TRUE;
 }
 
-void VsRecorder_FreeSearchSpeciesList(VsRecorderWork *work) {
+static void VsRecorder_FreeSearchSpeciesList(VsRecorderWork *work) {
     VsRecorderVideoSearch *search = work->screenWork;
 
     DestroyMsgData(search->speciesNames);

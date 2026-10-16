@@ -62,24 +62,6 @@
 	.public _0225E158
 	.public sFriendRosterAppPageArrowHitboxes
 	.public FriendRosterApp_Init
-	.public FriendRosterApp_SetVramBanks
-	.public FriendRosterApp_InitWindows
-	.public FriendRosterApp_PrintPageNumber
-	.public FriendRosterApp_PrintNames
-	.public FriendRosterApp_InitSprites
-	.public FriendRosterApp_LoadSpriteResources
-	.public FriendRosterApp_CreateSpriteHeader
-	.public FriendRosterApp_CreateSprite
-	.public FriendRosterApp_CreateSprites
-	.public FriendRosterApp_SetCursorPos
-	.public FriendRosterApp_InitGridInput
-	.public FriendRosterApp_Task
-	.public FriendRosterApp_HandleInput
-	.public FriendRosterApp_ChangePage
-	.public FriendRosterApp_SetBlinkPalette
-	.public FriendRosterApp_StepBlink
-	.public FriendRosterApp_StartSpriteBlink
-	.public FriendRosterApp_StartNameBlink
 	.public sFriendRosterAppGridCallbacks
 	.public sFriendRosterAppSpriteSpecs
 	.public sFriendRosterAppBgTemplateSub2
@@ -92,60 +74,16 @@
 	.public FriendRosterApp_Init
 	.public FriendRosterApp_Exit
 	.public FriendRosterApp_IsExitDone
-	.public FriendRosterApp_SetVramBanks
-	.public FriendRosterApp_InitBgs
-	.public FriendRosterApp_FreeBgs
-	.public FriendRosterApp_LoadBgGraphics
-	.public FriendRosterApp_InitText
-	.public FriendRosterApp_FreeText
-	.public FriendRosterApp_InitWindows
-	.public FriendRosterApp_RemoveWindows
-	.public FriendRosterApp_PrintPageNumber
-	.public FriendRosterApp_PrintNames
-	.public FriendRosterApp_InitSprites
-	.public FriendRosterApp_FreeSprites
-	.public FriendRosterApp_CreateResourceManagers
-	.public FriendRosterApp_DestroyResourceManagers
-	.public FriendRosterApp_LoadSpriteResources
-	.public FriendRosterApp_CreateSpriteHeader
-	.public FriendRosterApp_CreateSprite
-	.public FriendRosterApp_CreateSprites
-	.public FriendRosterApp_DeleteSprites
-	.public FriendRosterApp_AnimateSprites
-	.public FriendRosterApp_SetCursorPos
-	.public FriendRosterApp_InitGridInput
-	.public FriendRosterApp_FreeGridInput
 	.public FriendRosterApp_GridNoop
 	.public FriendRosterApp_OnCursorMove
-	.public FriendRosterApp_Task
-	.public FriendRosterApp_HandleInput
-	.public FriendRosterApp_UpdateBlink
-	.public FriendRosterApp_ChangePage
-	.public FriendRosterApp_SetBlinkPalette
-	.public FriendRosterApp_StepBlink
-	.public FriendRosterApp_StartSpriteBlink
-	.public FriendRosterApp_StartNameBlink
 	.include "overlay_32.inc"
 	.include "global.inc"
 
 	.text
 	.public FriendRosterApp_Exit
 	.public FriendRosterApp_IsExitDone
-	.public FriendRosterApp_InitBgs
-	.public FriendRosterApp_FreeBgs
-	.public FriendRosterApp_LoadBgGraphics
-	.public FriendRosterApp_InitText
-	.public FriendRosterApp_FreeText
-	.public FriendRosterApp_RemoveWindows
-	.public FriendRosterApp_FreeSprites
-	.public FriendRosterApp_CreateResourceManagers
-	.public FriendRosterApp_DestroyResourceManagers
-	.public FriendRosterApp_DeleteSprites
-	.public FriendRosterApp_AnimateSprites
-	.public FriendRosterApp_FreeGridInput
 	.public FriendRosterApp_GridNoop
 	.public FriendRosterApp_OnCursorMove
-	.public FriendRosterApp_UpdateBlink
 
 	.rodata
 

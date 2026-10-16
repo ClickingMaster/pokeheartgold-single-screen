@@ -41,11 +41,11 @@ extern const struct {
 
 extern const TouchscreenHitbox sPalPadFriendCodeHitboxes[];
 
-NamingScreenArgs *PalPadNaming_CreateNamingArgs(PalPadNaming *naming, PalPadShared *shared, enum HeapID heapId);
-BOOL PalPadFriendCode_HandleInput(PalPadFriendCode *friendCode, PalPadShared *shared);
-void PalPadFriendCode_Show(PalPadFriendCode *friendCode, PalPadShared *shared, PalPadGfx *gfx);
-void PalPadFriendCode_Hide(PalPadFriendCode *friendCode, PalPadGfx *gfx);
-void PalPadFriendCode_HighlightReturn(PalPadFriendCode *friendCode, PalPadGfx *gfx, int highlight);
+static NamingScreenArgs *PalPadNaming_CreateNamingArgs(PalPadNaming *naming, PalPadShared *shared, enum HeapID heapId);
+static BOOL PalPadFriendCode_HandleInput(PalPadFriendCode *friendCode, PalPadShared *shared);
+static void PalPadFriendCode_Show(PalPadFriendCode *friendCode, PalPadShared *shared, PalPadGfx *gfx);
+static void PalPadFriendCode_Hide(PalPadFriendCode *friendCode, PalPadGfx *gfx);
+static void PalPadFriendCode_HighlightReturn(PalPadFriendCode *friendCode, PalPadGfx *gfx, int highlight);
 
 int PalPadNaming_Main(PalPadNaming *naming, PalPadWork *work, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     u32 codeEntryParams[4];
@@ -124,7 +124,7 @@ void PalPadNaming_Setup(PalPadNaming *naming, PalPadShared *shared, PalPadGfx *g
 void PalPadNaming_Teardown(PalPadNaming *naming, PalPadShared *shared, PalPadGfx *gfx) {
 }
 
-NamingScreenArgs *PalPadNaming_CreateNamingArgs(PalPadNaming *naming, PalPadShared *shared, enum HeapID heapId) {
+static NamingScreenArgs *PalPadNaming_CreateNamingArgs(PalPadNaming *naming, PalPadShared *shared, enum HeapID heapId) {
     Options *options = Save_PlayerData_GetOptionsAddr(shared->saveData);
     NamingScreenArgs *args = NamingScreen_CreateArgs(heapId, NAME_SCREEN_UNK7, 0, 7, options, NULL);
 
@@ -174,7 +174,7 @@ void PalPadFriendCode_Exit(PalPadFriendCode *friendCode, PalPadShared *shared, P
     PalPadFriendCode_Teardown(friendCode, shared, gfx);
 }
 
-BOOL PalPadFriendCode_HandleInput(PalPadFriendCode *friendCode, PalPadShared *shared) {
+static BOOL PalPadFriendCode_HandleInput(PalPadFriendCode *friendCode, PalPadShared *shared) {
     if (TouchscreenHitbox_FindHitboxAtTouchNew(sPalPadFriendCodeHitboxes) == 0) {
         shared->inputState = TRUE;
         return TRUE;
@@ -234,7 +234,7 @@ void PalPadFriendCode_Teardown(PalPadFriendCode *friendCode, PalPadShared *share
     Heap_Free(friendCode->screenFile);
 }
 
-void PalPadFriendCode_Show(PalPadFriendCode *friendCode, PalPadShared *shared, PalPadGfx *gfx) {
+static void PalPadFriendCode_Show(PalPadFriendCode *friendCode, PalPadShared *shared, PalPadGfx *gfx) {
     NNSG2dScreenData *screen;
 
     BufferPlayersName(gfx->msgFormat, 0, Save_PlayerData_GetProfile(shared->saveData));
@@ -247,7 +247,7 @@ void PalPadFriendCode_Show(PalPadFriendCode *friendCode, PalPadShared *shared, P
     ScheduleWindowCopyToVram(&friendCode->windows[2]);
 }
 
-void PalPadFriendCode_Hide(PalPadFriendCode *friendCode, PalPadGfx *gfx) {
+static void PalPadFriendCode_Hide(PalPadFriendCode *friendCode, PalPadGfx *gfx) {
     PalPadGfx_ClearTitle(gfx);
     FillBgTilemapRect(gfx->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 0, 32, 24, 0);
     ScheduleBgTilemapBufferTransfer(gfx->bgConfig, GF_BG_LYR_MAIN_2);
@@ -260,7 +260,7 @@ void PalPadFriendCode_Hide(PalPadFriendCode *friendCode, PalPadGfx *gfx) {
 
 #pragma force_active on
 
-void PalPadFriendCode_HighlightReturn(PalPadFriendCode *friendCode, PalPadGfx *gfx, int highlight) {
+static void PalPadFriendCode_HighlightReturn(PalPadFriendCode *friendCode, PalPadGfx *gfx, int highlight) {
     PalPadButtonPalettes button = _0222ED5C.returnButton;
 
     BgTilemapRectChangePalette(gfx->bgConfig, GF_BG_LYR_MAIN_2, 17, 20, 14, 4, button.palettes[highlight]);

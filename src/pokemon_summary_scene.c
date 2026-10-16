@@ -14,8 +14,8 @@ typedef struct PokemonSummaryScene {
     u32 isEgg : 1;
     u32 unk_280_29 : 3;
     u8 pad_284[0x29C - 0x284];
-    void *camera;         // 0x29C
-    void *pokepicManager; // 0x2A0
+    void *camera;             // 0x29C
+    void *pokepicManager;     // 0x2A0
     u32 pokepicAnimScript[2]; // 0x2A4
     u8 pad_2AC[0x2CC - 0x2AC];
     void *pokepicAnimManager; // 0x2CC
@@ -61,7 +61,7 @@ void PokepicAnimManager_Delete(void *a);
 void Pokepic_StartAnim(void *p, int a);
 void NARC_StartPokepicAnim(void *a, void *b, void *c, int d, int e, u32 f, int g);
 void *PokepicManager_Create(int heapId);
-int PokemonSummary_GetShownMon(PokemonSummaryScene *a);
+int PokemonSummary_GetShownMon(PokemonSummaryScene *summary);
 void GetPokemonSpriteCharAndPlttNarcIds(u32 *dest, int species, int c);
 void GetBoxmonSpriteCharAndPlttNarcIds(u32 *dest, int species, int c, int d);
 void NARC_ReadPokepicAnimScript(void *narc, void *dest, u16 species, int d);
@@ -71,31 +71,20 @@ int TouchscreenHitbox_FindRectAtTouchNew(const void *hitboxes);
 
 extern const u8 _02104FFC[][4];
 
-void PokemonSummary_DrawPokepic(PokemonSummaryScene *a);
-void PokemonSummary_FreePokepicAndCamera(PokemonSummaryScene *a);
-void ConditionChart_GetVertex(const ConditionChartVertexAnim *src, ConditionChartVertex *dst, int t);
-void ConditionChart_GetStep(const ConditionChartVertex *from, const ConditionChartVertex *to, ConditionChartVertex *out);
+void PokemonSummary_DrawPokepic(PokemonSummaryScene *summary);
+void PokemonSummary_FreePokepicAndCamera(PokemonSummaryScene *summary);
 void PokemonSummary_InitConditionChart(PokemonSummaryScene *summary);
-void PokemonSummary_CreatePokepic(PokemonSummaryScene *a);
-void PokemonSummary_StartPokepicAnim(PokemonSummaryScene *a);
-void PokemonSummary_ReloadPokepic(PokemonSummaryScene *a);
-int PokemonSummary_GetTouchedButton(PokemonSummaryScene *a);
-u8 PokemonSummary_CheckTouchedButton(PokemonSummaryScene *a);
+void PokemonSummary_CreatePokepic(PokemonSummaryScene *summary);
+void PokemonSummary_StartPokepicAnim(PokemonSummaryScene *summary);
+void PokemonSummary_ReloadPokepic(PokemonSummaryScene *summary);
+u8 PokemonSummary_CheckTouchedButton(PokemonSummaryScene *summary);
 
-typedef char AssertAnimVecSize[(sizeof(ConditionChartVertexAnim) == 0x12) ? 1 : -1];
-typedef char AssertAnimVecSignedSize[(sizeof(ConditionChartVertexAnimS) == 0x12) ? 1 : -1];
-typedef char AssertPicture22C[(offsetof(PokemonSummaryScene, args) == 0x22C) ? 1 : -1];
-typedef char AssertPicture23C[(offsetof(PokemonSummaryScene, species) == 0x23C) ? 1 : -1];
-typedef char AssertPicture29C[(offsetof(PokemonSummaryScene, camera) == 0x29C) ? 1 : -1];
-typedef char AssertPicture2A0[(offsetof(PokemonSummaryScene, pokepicManager) == 0x2A0) ? 1 : -1];
-typedef char AssertPicture2A4[(offsetof(PokemonSummaryScene, pokepicAnimScript) == 0x2A4) ? 1 : -1];
-typedef char AssertPicture2CC[(offsetof(PokemonSummaryScene, pokepicAnimManager) == 0x2CC) ? 1 : -1];
-typedef char AssertPicture2D0[(offsetof(PokemonSummaryScene, pokepic) == 0x2D0) ? 1 : -1];
-typedef char AssertPicture2D4[(offsetof(PokemonSummaryScene, pokepicAnimReverseX) == 0x2D4) ? 1 : -1];
-typedef char AssertPicture7B8[(offsetof(PokemonSummaryScene, pokepicAnimNarc) == 0x7B8) ? 1 : -1];
+static void ConditionChart_GetVertex(const ConditionChartVertexAnim *src, ConditionChartVertex *dst, int t);
+static void ConditionChart_GetStep(const ConditionChartVertex *from, const ConditionChartVertex *to, ConditionChartVertex *out);
+static int PokemonSummary_GetTouchedButton(PokemonSummaryScene *summary);
 
 void PokemonSummary_Init3D(void);
-void PokemonSummary_CreateCamera(PokemonSummaryScene *p);
+void PokemonSummary_CreateCamera(PokemonSummaryScene *summary);
 
 void PokemonSummary_Init3D(void) {
     NNS_G3dInit();
@@ -114,30 +103,30 @@ void PokemonSummary_Init3D(void) {
     G2_SetBG0Priority(2);
 }
 
-void PokemonSummary_DrawPokepic(PokemonSummaryScene *a) {
+void PokemonSummary_DrawPokepic(PokemonSummaryScene *summary) {
     NNS_G2dSetupSoftwareSpriteCamera();
-    PokepicManager_DrawAll(a->pokepicManager);
+    PokepicManager_DrawAll(summary->pokepicManager);
     *(vu32 *)0x04000540 = 1;
 }
 
-void PokemonSummary_FreePokepicAndCamera(PokemonSummaryScene *a) {
-    Camera_Delete(a->camera);
-    PokepicAnimManager_StopAnim(a->pokepicAnimManager, 0);
-    PokepicAnimManager_Delete(a->pokepicAnimManager);
-    PokepicManager_Delete(a->pokepicManager);
+void PokemonSummary_FreePokepicAndCamera(PokemonSummaryScene *summary) {
+    Camera_Delete(summary->camera);
+    PokepicAnimManager_StopAnim(summary->pokepicAnimManager, 0);
+    PokepicAnimManager_Delete(summary->pokepicAnimManager);
+    PokepicManager_Delete(summary->pokepicManager);
 }
 
-void PokemonSummary_CreateCamera(PokemonSummaryScene *p) {
+void PokemonSummary_CreateCamera(PokemonSummaryScene *summary) {
     VecFx32 pos = _02104EA4;
     CameraAngle angle = { 0, 0, 0, 0 };
-    p->camera = Camera_New((enum HeapID)0x13);
-    Camera_Init_FromPosDistanceAndAngle(&pos, 0x10000, &angle, 0x5C1, 1, p->camera);
-    Camera_SetPerspectiveClippingPlane(0, 0x64000, p->camera);
-    Camera_ClearFixedTarget(p->camera);
-    Camera_SetStaticPtr(p->camera);
+    summary->camera = Camera_New((enum HeapID)0x13);
+    Camera_Init_FromPosDistanceAndAngle(&pos, 0x10000, &angle, 0x5C1, 1, summary->camera);
+    Camera_SetPerspectiveClippingPlane(0, 0x64000, summary->camera);
+    Camera_ClearFixedTarget(summary->camera);
+    Camera_SetStaticPtr(summary->camera);
 }
 
-void ConditionChart_GetVertex(const ConditionChartVertexAnim *src, ConditionChartVertex *dst, int t) {
+static void ConditionChart_GetVertex(const ConditionChartVertexAnim *src, ConditionChartVertex *dst, int t) {
     if (t == 0xFF) {
         dst->x = src->max[0];
         dst->y = src->max[1];
@@ -184,7 +173,7 @@ extern const u8 _02104F9A[];
 extern const u8 _02104FAC[];
 extern const u8 _02104FBE[];
 
-void ConditionChart_GetStep(const ConditionChartVertex *from, const ConditionChartVertex *to, ConditionChartVertex *out) {
+static void ConditionChart_GetStep(const ConditionChartVertex *from, const ConditionChartVertex *to, ConditionChartVertex *out) {
     int diff;
     s16 rounded;
 
@@ -244,68 +233,68 @@ void PokemonSummary_InitConditionChart(PokemonSummaryScene *summary) {
     vectors->done = 0;
 }
 
-void PokemonSummary_CreatePokepic(PokemonSummaryScene *a) {
+void PokemonSummary_CreatePokepic(PokemonSummaryScene *summary) {
     u32 pokepicTemplate[4];
     int species;
 
-    a->pokepicManager = PokepicManager_Create(0x13);
-    species = PokemonSummary_GetShownMon(a);
-    if (((struct PokemonSummaryArgsDataTypeView *)a->args)->monDataType == 2) {
+    summary->pokepicManager = PokepicManager_Create(0x13);
+    species = PokemonSummary_GetShownMon(summary);
+    if (((struct PokemonSummaryArgsDataTypeView *)summary->args)->monDataType == 2) {
         GetBoxmonSpriteCharAndPlttNarcIds(pokepicTemplate, species, 2, 0);
     } else {
         GetPokemonSpriteCharAndPlttNarcIds(pokepicTemplate, species, 2);
     }
-    NARC_ReadPokepicAnimScript(a->pokepicAnimNarc, a->pokepicAnimScript, a->species, 1);
-    a->pokepicAnimReverseX = 0;
-    a->pokepic = PokepicManager_CreatePokepic(a->pokepicManager, pokepicTemplate, 0xd0, 0x68, 0, 0, a->pokepicAnimScript, 0);
-    Pokepic_SetAttr(a->pokepic, 6, 1);
-    Pokepic_SetAttr(a->pokepic, 0x23, 0);
+    NARC_ReadPokepicAnimScript(summary->pokepicAnimNarc, summary->pokepicAnimScript, summary->species, 1);
+    summary->pokepicAnimReverseX = 0;
+    summary->pokepic = PokepicManager_CreatePokepic(summary->pokepicManager, pokepicTemplate, 0xd0, 0x68, 0, 0, summary->pokepicAnimScript, 0);
+    Pokepic_SetAttr(summary->pokepic, 6, 1);
+    Pokepic_SetAttr(summary->pokepic, 0x23, 0);
 }
 
-void PokemonSummary_StartPokepicAnim(PokemonSummaryScene *a) {
-    if (a->isEgg) {
-        NARC_StartPokepicAnim(a->pokepicAnimNarc, a->pokepicAnimManager, a->pokepic, 0, 2, a->pokepicAnimReverseX, 0);
+void PokemonSummary_StartPokepicAnim(PokemonSummaryScene *summary) {
+    if (summary->isEgg) {
+        NARC_StartPokepicAnim(summary->pokepicAnimNarc, summary->pokepicAnimManager, summary->pokepic, 0, 2, summary->pokepicAnimReverseX, 0);
     } else {
-        Pokepic_StartAnim(a->pokepic, 1);
-        NARC_StartPokepicAnim(a->pokepicAnimNarc, a->pokepicAnimManager, a->pokepic, a->species, 2, a->pokepicAnimReverseX, 0);
+        Pokepic_StartAnim(summary->pokepic, 1);
+        NARC_StartPokepicAnim(summary->pokepicAnimNarc, summary->pokepicAnimManager, summary->pokepic, summary->species, 2, summary->pokepicAnimReverseX, 0);
     }
 }
 
-void PokemonSummary_ReloadPokepic(PokemonSummaryScene *a) {
-    PokepicAnimManager_StopAnim(a->pokepicAnimManager, 0);
-    PokepicManager_Delete(a->pokepicManager);
-    PokemonSummary_CreatePokepic(a);
-    PokemonSummary_StartPokepicAnim(a);
+void PokemonSummary_ReloadPokepic(PokemonSummaryScene *summary) {
+    PokepicAnimManager_StopAnim(summary->pokepicAnimManager, 0);
+    PokepicManager_Delete(summary->pokepicManager);
+    PokemonSummary_CreatePokepic(summary);
+    PokemonSummary_StartPokepicAnim(summary);
 }
 
-int PokemonSummary_GetTouchedButton(PokemonSummaryScene *a) {
-    int r;
+static int PokemonSummary_GetTouchedButton(PokemonSummaryScene *summary) {
+    int button;
 
-    if (a->unk_7BF_0 == 0xF) {
+    if (summary->unk_7BF_0 == 0xF) {
         return -1;
     }
-    if (((struct PokemonSummaryArgsDataTypeView *)a->args)->monDataType != 2) {
-        r = TouchscreenHitbox_FindRectAtTouchNew(_02104FFC);
-        if (r != -1) {
-            r = _02104FD0[r][0];
+    if (((struct PokemonSummaryArgsDataTypeView *)summary->args)->monDataType != 2) {
+        button = TouchscreenHitbox_FindRectAtTouchNew(_02104FFC);
+        if (button != -1) {
+            button = _02104FD0[button][0];
         }
-        return r;
+        return button;
     } else {
-        r = TouchscreenHitbox_FindRectAtTouchNew(_02104FFC);
-        if (r >= 4 && r <= 9) {
+        button = TouchscreenHitbox_FindRectAtTouchNew(_02104FFC);
+        if (button >= 4 && button <= 9) {
             return -1;
         }
-        if (r != -1) {
-            r = _02104FD0[r][0];
+        if (button != -1) {
+            button = _02104FD0[button][0];
         }
-        return r;
+        return button;
     }
 }
 
-u8 PokemonSummary_CheckTouchedButton(PokemonSummaryScene *a) {
-    int r = PokemonSummary_GetTouchedButton(a);
-    if (r != -1) {
-        return (u8)r;
+u8 PokemonSummary_CheckTouchedButton(PokemonSummaryScene *summary) {
+    int button = PokemonSummary_GetTouchedButton(summary);
+    if (button != -1) {
+        return (u8)button;
     }
     return 0xFF;
 }

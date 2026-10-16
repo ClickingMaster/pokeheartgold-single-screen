@@ -26,16 +26,40 @@
 #include "screen_fade.h"
 #include "sound_playback.h"
 #include "sprite.h"
+#include "swap_3d_buffers.h"
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "swap_3d_buffers.h"
 
 // Accessory Portrait: the renderer of a saved dress-up design (also used by the VS Recorder) and the app that shows
 // one design with its caption until a key or the touch screen is pressed.
 
-// save_fashion.c
 typedef struct SaveFashionMon SaveFashionMon;
+
+static void AccessoryPortrait_SetPosition(AccessoryPortrait *portrait, int x, int y);
+static AccessoryPortrait *AccessoryPortrait_CreateFromArgs(AccessoryPortraitArgs *args);
+static void AccessoryPortrait_InitGfx(AccessoryPortrait *portrait, AccessoryPortraitArgs *args);
+static void AccessoryPortrait_DrawMon(AccessoryPortrait *portrait);
+static void AccessoryPortrait_FreeGfx(AccessoryPortrait *portrait);
+static void AccessoryPortrait_InitCanvas(AccessoryPortrait *portrait, AccessoryPortraitArgs *args);
+static void AccessoryPortrait_SetBackground(AccessoryPortrait *portrait, AccessoryPortraitArgs *args);
+static void AccessoryPortrait_FreeCanvas(AccessoryPortrait *portrait);
+static void AccessoryPortrait_ClearBackground(AccessoryPortrait *portrait);
+static void AccessoryPortrait_InitTransform(AccessoryPortrait *portrait, AccessoryPortraitArgs *args);
+static void AccessoryPortrait_CopyConfig(AccessoryPortraitArgs *args, const AccessoryPortraitConfig *config);
+static void AccessoryPortrait_ReadFashionData(AccessoryPortraitArgs *args, SaveFashionDataSub *fashionData);
+static void AccessoryPortrait_LoadAccessoryGfx(AccessoryPortrait *portrait, DressUpGfxResources *resources, AccessoryPortraitArgs *args, enum HeapID heapID);
+static void AccessoryPortrait_LoadAccessoryCharsAndPltt(AccessoryPortrait *portrait, DressUpGfxResources *resources, AccessoryPortraitArgs *args, enum HeapID heapID);
+static void AccessoryPortrait_VBlankCB(void *data);
+static void AccessoryPortrait_LoadFrameBg(AccessoryPortraitAppWork *work);
+static void AccessoryPortrait_LoadSubBg(AccessoryPortraitAppWork *work);
+static void AccessoryPortrait_CreateIconSprite(AccessoryPortraitAppWork *work);
+static void AccessoryPortrait_FreeIconSprite(AccessoryPortraitAppWork *work);
+static void AccessoryPortrait_CreateCaptionWindow(AccessoryPortraitAppWork *work);
+static void AccessoryPortrait_FreeCaptionWindow(AccessoryPortraitAppWork *work);
+static void AccessoryPortrait_DrawCaption(AccessoryPortraitAppWork *work);
+static void AccessoryPortrait_PrintCaption(AccessoryPortraitAppWork *work);
+
 BOOL FashionEntry_IsItemPlaced(SaveFashionDataSub *entry, int index);
 SaveFashionMon *FashionEntry_GetMon(SaveFashionDataSub *entry);
 u8 *FashionEntry_GetItem(SaveFashionDataSub *entry, int index);
@@ -88,7 +112,7 @@ void AccessoryPortrait_SetMonVisible(AccessoryPortrait *portrait, BOOL visible) 
     portrait->monVisible = visible;
 }
 
-void AccessoryPortrait_SetPosition(AccessoryPortrait *portrait, int x, int y) {
+static void AccessoryPortrait_SetPosition(AccessoryPortrait *portrait, int x, int y) {
     DressUpCanvas_SetOrigin(&portrait->canvas, portrait->x, portrait->y, x, y);
     if (portrait->bgEnabled != FALSE) {
         BgSetPosTextAndCommit(portrait->gfx.bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_SET_X, 0x88 - x);
@@ -98,7 +122,7 @@ void AccessoryPortrait_SetPosition(AccessoryPortrait *portrait, int x, int y) {
     portrait->y = y;
 }
 
-AccessoryPortrait *AccessoryPortrait_CreateFromArgs(AccessoryPortraitArgs *args) {
+static AccessoryPortrait *AccessoryPortrait_CreateFromArgs(AccessoryPortraitArgs *args) {
     AccessoryPortrait *portrait = Heap_Alloc(args->heapID, sizeof(AccessoryPortrait));
     memset(portrait, 0, sizeof(AccessoryPortrait));
     portrait->heapID = args->heapID;
@@ -117,7 +141,7 @@ AccessoryPortrait *AccessoryPortrait_CreateFromArgs(AccessoryPortraitArgs *args)
     return portrait;
 }
 
-void AccessoryPortrait_InitGfx(AccessoryPortrait *portrait, AccessoryPortraitArgs *args) {
+static void AccessoryPortrait_InitGfx(AccessoryPortrait *portrait, AccessoryPortraitArgs *args) {
     DressUpGfxResources resources;
     GraphicsManagerTemplate template;
     portrait->gfx.narc = NARC_New(NARC_a_0_2_6, args->heapID);
@@ -131,11 +155,11 @@ void AccessoryPortrait_InitGfx(AccessoryPortrait *portrait, AccessoryPortraitArg
     DressUpGfx_DestroyRawResTables(&resources);
 }
 
-void AccessoryPortrait_DrawMon(AccessoryPortrait *portrait) {
+static void AccessoryPortrait_DrawMon(AccessoryPortrait *portrait) {
     AccessoryPortrait_DrawTransformed(&portrait->gfx, portrait->x + portrait->monOffsetX, portrait->y + portrait->monOffsetY, portrait->rotation, &portrait->scale);
 }
 
-void AccessoryPortrait_FreeGfx(AccessoryPortrait *portrait) {
+static void AccessoryPortrait_FreeGfx(AccessoryPortrait *portrait) {
     DressUpGfx_FreeAllTexAndPltt(&portrait->gfx);
     AccessoryPortrait_FreeGfxCore(&portrait->gfx);
     if (portrait->bgEnabled != FALSE) {
@@ -145,7 +169,7 @@ void AccessoryPortrait_FreeGfx(AccessoryPortrait *portrait) {
 }
 
 // the mon and every saved accessory at their saved positions
-void AccessoryPortrait_InitCanvas(AccessoryPortrait *portrait, AccessoryPortraitArgs *args) {
+static void AccessoryPortrait_InitCanvas(AccessoryPortrait *portrait, AccessoryPortraitArgs *args) {
     DressUpCanvasTemplate template = { 0 };
     PokepicTemplate pokepicTemplate;
     int i;
@@ -166,22 +190,22 @@ void AccessoryPortrait_InitCanvas(AccessoryPortrait *portrait, AccessoryPortrait
     }
 }
 
-void AccessoryPortrait_SetBackground(AccessoryPortrait *portrait, AccessoryPortraitArgs *args) {
+static void AccessoryPortrait_SetBackground(AccessoryPortrait *portrait, AccessoryPortraitArgs *args) {
     DressUpCanvas_SetBackdrop(&portrait->canvas, args->background, args->heapID);
 }
 
-void AccessoryPortrait_FreeCanvas(AccessoryPortrait *portrait) {
+static void AccessoryPortrait_FreeCanvas(AccessoryPortrait *portrait) {
     DressUpCanvas_ClearObjects(&portrait->canvas);
     DressUpCanvas_Destroy(&portrait->canvas);
 }
 
-void AccessoryPortrait_ClearBackground(AccessoryPortrait *portrait) {
+static void AccessoryPortrait_ClearBackground(AccessoryPortrait *portrait) {
     DressUpCanvas_FreeBackdrop(&portrait->canvas);
 }
 
 #pragma force_active on
 
-void AccessoryPortrait_InitTransform(AccessoryPortrait *portrait, AccessoryPortraitArgs *args) {
+static void AccessoryPortrait_InitTransform(AccessoryPortrait *portrait, AccessoryPortraitArgs *args) {
     portrait->x = 72;
     portrait->y = 56;
     portrait->monOffsetX = 56;
@@ -196,14 +220,14 @@ void AccessoryPortrait_InitTransform(AccessoryPortrait *portrait, AccessoryPortr
 
 #pragma force_active reset
 
-void AccessoryPortrait_CopyConfig(AccessoryPortraitArgs *args, const AccessoryPortraitConfig *config) {
+static void AccessoryPortrait_CopyConfig(AccessoryPortraitArgs *args, const AccessoryPortraitConfig *config) {
     args->bgConfig = config->bgConfig;
     args->x = config->x;
     args->y = config->y;
     args->heapID = config->heapID;
 }
 
-void AccessoryPortrait_ReadFashionData(AccessoryPortraitArgs *args, SaveFashionDataSub *fashionData) {
+static void AccessoryPortrait_ReadFashionData(AccessoryPortraitArgs *args, SaveFashionDataSub *fashionData) {
     int i;
     args->mon = FashionEntry_GetMon(fashionData);
     args->count = 0;
@@ -216,13 +240,13 @@ void AccessoryPortrait_ReadFashionData(AccessoryPortraitArgs *args, SaveFashionD
     args->background = FashionEntry_GetBackdrop(fashionData);
 }
 
-void AccessoryPortrait_LoadAccessoryGfx(AccessoryPortrait *portrait, DressUpGfxResources *resources, AccessoryPortraitArgs *args, enum HeapID heapID) {
+static void AccessoryPortrait_LoadAccessoryGfx(AccessoryPortrait *portrait, DressUpGfxResources *resources, AccessoryPortraitArgs *args, enum HeapID heapID) {
     AccessoryPortrait_AllocRawResTables(resources, heapID);
     AccessoryPortrait_LoadAccessoryCharsAndPltt(portrait, resources, args, heapID);
 }
 
 // chars of the placed accessories only (NARC member id + 1), then the shared accessory palette (member 0)
-void AccessoryPortrait_LoadAccessoryCharsAndPltt(AccessoryPortrait *portrait, DressUpGfxResources *resources, AccessoryPortraitArgs *args, enum HeapID heapID) {
+static void AccessoryPortrait_LoadAccessoryCharsAndPltt(AccessoryPortrait *portrait, DressUpGfxResources *resources, AccessoryPortraitArgs *args, enum HeapID heapID) {
     int i;
     int id;
     void *data;
@@ -327,14 +351,14 @@ BOOL AccessoryPortrait_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-void AccessoryPortrait_VBlankCB(void *data) {
+static void AccessoryPortrait_VBlankCB(void *data) {
     AccessoryPortraitAppWork *work = data;
     AccessoryPortrait_VBlank(work->portrait);
     AccessoryPortrait_AppVBlank(&work->gfx);
 }
 
 // photo frame on BG1 (NARC_a_0_2_6 pal 0x7E, chars 0x7D, screen 0x80)
-void AccessoryPortrait_LoadFrameBg(AccessoryPortraitAppWork *work) {
+static void AccessoryPortrait_LoadFrameBg(AccessoryPortraitAppWork *work) {
     NNSG2dScreenData *screen;
     void *data;
     GfGfxLoader_GXLoadPalFromOpenNarc(work->gfx.narc, 0x7E, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_3_OFFSET, 0x40, HEAP_ID_14);
@@ -346,13 +370,13 @@ void AccessoryPortrait_LoadFrameBg(AccessoryPortraitAppWork *work) {
     ScheduleBgTilemapBufferTransfer(work->gfx.bgConfig, GF_BG_LYR_MAIN_1);
 }
 
-void AccessoryPortrait_LoadSubBg(AccessoryPortraitAppWork *work) {
+static void AccessoryPortrait_LoadSubBg(AccessoryPortraitAppWork *work) {
     GfGfxLoader_GXLoadPal(NARC_a_2_3_7, 0, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0, HEAP_ID_14);
     GfGfxLoader_LoadScrnData(NARC_a_2_3_7, 9, work->gfx.bgConfig, GF_BG_LYR_SUB_0, 0, 0, FALSE, HEAP_ID_14);
     GfGfxLoader_LoadCharData(NARC_a_2_3_7, 1, work->gfx.bgConfig, GF_BG_LYR_SUB_0, 0, 0, FALSE, HEAP_ID_14);
 }
 
-void AccessoryPortrait_CreateIconSprite(AccessoryPortraitAppWork *work) {
+static void AccessoryPortrait_CreateIconSprite(AccessoryPortraitAppWork *work) {
     DressUpGfx_LoadCharRes(&work->gfx, work->gfx.narc, 0xE9, FALSE, 1, 1000);
     DressUpGfx_LoadPlttRes(&work->gfx, work->gfx.narc, 0xEA, FALSE, 1, 6, 1000);
     DressUpGfx_LoadCellRes(&work->gfx, work->gfx.narc, 0xE8, FALSE, 1000);
@@ -361,7 +385,7 @@ void AccessoryPortrait_CreateIconSprite(AccessoryPortraitAppWork *work) {
     Sprite_SetPriority(work->icon, 1);
 }
 
-void AccessoryPortrait_FreeIconSprite(AccessoryPortraitAppWork *work) {
+static void AccessoryPortrait_FreeIconSprite(AccessoryPortraitAppWork *work) {
     DressUpGfx_FreeCharRes(&work->gfx, 1000);
     DressUpGfx_FreePlttRes(&work->gfx, 1000);
     DressUpGfx_FreeCellRes(&work->gfx, 1000);
@@ -369,7 +393,7 @@ void AccessoryPortrait_FreeIconSprite(AccessoryPortraitAppWork *work) {
     Sprite_Delete(work->icon);
 }
 
-void AccessoryPortrait_CreateCaptionWindow(AccessoryPortraitAppWork *work) {
+static void AccessoryPortrait_CreateCaptionWindow(AccessoryPortraitAppWork *work) {
     work->captionWindow = AllocWindows(HEAP_ID_14, 1);
     AddWindowParameterized(work->gfx.bgConfig, work->captionWindow, GF_BG_LYR_MAIN_3, 0, 0x12, 0x20, 6, 5, 1);
     LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_5_OFFSET, HEAP_ID_14);
@@ -379,20 +403,20 @@ void AccessoryPortrait_CreateCaptionWindow(AccessoryPortraitAppWork *work) {
     BgSetPosTextAndCommit(work->gfx.bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_Y, 0);
 }
 
-void AccessoryPortrait_FreeCaptionWindow(AccessoryPortraitAppWork *work) {
+static void AccessoryPortrait_FreeCaptionWindow(AccessoryPortraitAppWork *work) {
     ClearWindowTilemapAndCopyToVram(work->captionWindow);
     RemoveWindow(work->captionWindow);
     WindowArray_Delete(work->captionWindow, 1);
 }
 
-void AccessoryPortrait_DrawCaption(AccessoryPortraitAppWork *work) {
+static void AccessoryPortrait_DrawCaption(AccessoryPortraitAppWork *work) {
     FillWindowPixelBuffer(work->captionWindow, 0);
     AccessoryPortrait_PrintCaption(work);
     CopyWindowToVram(work->captionWindow);
 }
 
 // the mon's name and the saved word ("{STRVAR_1 28}"), both centred
-void AccessoryPortrait_PrintCaption(AccessoryPortraitAppWork *work) {
+static void AccessoryPortrait_PrintCaption(AccessoryPortraitAppWork *work) {
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0215_bin, HEAP_ID_13);
     MessageFormat *msgFormat;
     String *string;

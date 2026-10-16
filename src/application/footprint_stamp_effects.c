@@ -13,7 +13,6 @@
 #include "text.h"
 #include "touchscreen.h"
 
-// Declared only in other modules' private headers (src/model_animation.c, ov45).
 void ModelResource_Free(FootprintStampModel *model);
 void ModelInstance_Init(FootprintStampModelInstance *instance, FootprintStampModel *model);
 void ModelInstance_Draw(FootprintStampModelInstance *instance);
@@ -51,10 +50,20 @@ extern const u8 sFootprintStampSpeciesFootprints[]; // per species: 4 bytes, [0]
 extern const u8 sFootprintStampSpeciesFootprintSizes[];
 extern const u8 sFootprintStampLinkCommands[]; // link command table: player joined, player left, stamp received
 
+static void FootprintStamp_RotateFootprintTexture(NNSG3dResTex *texture, int direction);
+static int FootprintStampBoard_AllocPolygonId(FootprintStampBoard *board);
+static void FootprintStampBoard_FreePolygonId(FootprintStampBoard *board, int id);
+static BOOL FootprintStamp_BoundsOverlap(const FootprintStampBounds *a, const FootprintStampBounds *b);
+static void FootprintStampBoard_NewChain(FootprintStampBoard *board, FootprintStampObj *stamp);
+static void FootprintStampBoard_ReleaseChain(FootprintStampBoard *board, int chain);
+static u8 FootprintStamp_GetNatureEffect(FootprintStampObj *stamp);
+static u32 FootprintStamp_GetFootprintSize(u32 species, int form);
+static BOOL FootprintStamp_IsFromOtherPlayer(u32 playerId, const FootprintStampLinkFilter *filter);
+
 #pragma force_active on
 
 // Rotates the 16x16 2bpp footprint texture a quarter turn (direction 3: one way, 4: the other).
-void FootprintStamp_RotateFootprintTexture(NNSG3dResTex *texture, int direction) {
+static void FootprintStamp_RotateFootprintTexture(NNSG3dResTex *texture, int direction) {
     u32 offset = texture->texInfo.ofsTex;
     u32 *copy = Heap_Alloc(HEAP_ID_125, 0x40);
     int i, j, shift;
@@ -133,7 +142,7 @@ void FootprintStamp_TouchToBoardPos(void *unused, int x, int y, fx32 *outX, fx32
 }
 
 // Polygon ids 1-62 for the translucent effects (stamps drawn with the same id do not blend with each other).
-int FootprintStampBoard_AllocPolygonId(FootprintStampBoard *board) {
+static int FootprintStampBoard_AllocPolygonId(FootprintStampBoard *board) {
     int id = 1;
     int one = 1;
     u32 used = board->polygonIds[0];
@@ -165,7 +174,7 @@ int FootprintStampBoard_AllocPolygonId(FootprintStampBoard *board) {
     return 0xFF;
 }
 
-void FootprintStampBoard_FreePolygonId(FootprintStampBoard *board, int id) {
+static void FootprintStampBoard_FreePolygonId(FootprintStampBoard *board, int id) {
     int one = 1;
 
     if (id == 0xFF) {
@@ -208,14 +217,14 @@ void FootprintStamp_GetBounds(FootprintStampModelInstance *instance, FootprintSt
 
 #pragma force_active reset
 
-BOOL FootprintStamp_BoundsOverlap(const FootprintStampBounds *a, const FootprintStampBounds *b) {
+static BOOL FootprintStamp_BoundsOverlap(const FootprintStampBounds *a, const FootprintStampBounds *b) {
     if (a->left <= b->right && b->left <= a->right && a->bottom >= b->top && b->bottom >= a->top) {
         return TRUE;
     }
     return FALSE;
 }
 
-void FootprintStampBoard_NewChain(FootprintStampBoard *board, FootprintStampObj *stamp) {
+static void FootprintStampBoard_NewChain(FootprintStampBoard *board, FootprintStampObj *stamp) {
     int i;
     FootprintStampChain *chain = board->chains;
 
@@ -250,7 +259,7 @@ BOOL FootprintStampBoard_AddToChain(FootprintStampBoard *board, int chain, int e
 #pragma opt_common_subs reset
 #pragma force_active reset
 
-void FootprintStampBoard_ReleaseChain(FootprintStampBoard *board, int chain) {
+static void FootprintStampBoard_ReleaseChain(FootprintStampBoard *board, int chain) {
     int refs;
 
     if (chain != 0xFF) {
@@ -288,7 +297,7 @@ BOOL FootprintStamp_SetEffect(FootprintStampObj *stamp, int effect) {
 
 #pragma force_active reset
 
-u8 FootprintStamp_GetNatureEffect(FootprintStampObj *stamp) {
+static u8 FootprintStamp_GetNatureEffect(FootprintStampObj *stamp) {
     return sFootprintStampNatureEffects[GetNatureFromPersonality(stamp->mon.personality)];
 }
 
@@ -1424,7 +1433,7 @@ u32 FootprintStamp_GetFootprintType(u32 species, int form, u32 unk19E0) {
     return sFootprintStampSpeciesFootprints[species * 4];
 }
 
-u32 FootprintStamp_GetFootprintSize(u32 species, int form) {
+static u32 FootprintStamp_GetFootprintSize(u32 species, int form) {
     if (species == SPECIES_GIRATINA && form > 0) {
         return 2;
     }
@@ -1435,7 +1444,7 @@ int FootprintStamp_RegisterLinkCommands(FootprintStamp *work) {
     return WiFiPlazaLobbyClient_SetChannelCommands(sFootprintStampLinkCommands, 3, work);
 }
 
-BOOL FootprintStamp_IsFromOtherPlayer(u32 playerId, const FootprintStampLinkFilter *filter) {
+static BOOL FootprintStamp_IsFromOtherPlayer(u32 playerId, const FootprintStampLinkFilter *filter) {
     int index;
 
     if (filter->myId == playerId) {

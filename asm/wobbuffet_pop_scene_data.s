@@ -4,28 +4,15 @@
 
 	.text
 	.public sWobbuffetPopConfettiPalettes
-	.public WobbuffetPopInflation_Start
-	.public WobbuffetPopInflation_UpdateBg
-	.public WobbuffetPopInflation_CalcScale
-	.public WobbuffetPopInflation_AddAir
 	.public WobbuffetPop_LaunchPuff
-	.public WobbuffetPopPuff_Init
 	.public WobbuffetPop_UpdatePuffs
-	.public WobbuffetPopPuff_Move
-	.public WobbuffetPop_CreatePuffSprite
-	.public WobbuffetPopConfetti_Create
 	.public WobbuffetPop_FreeConfetti
 	.public WobbuffetPop_UpdateConfetti
-	.public WobbuffetPop_PopBalloon
-	.public WobbuffetPop_CreateBalloonIconSprite
-	.public WobbuffetPopBalloonIcon_Slide
-	.public WobbuffetPopBalloonIcon_Update
 	.public WobbuffetPop_SetupThreePlayerSubBg
 	.public WobbuffetPop_SetPlayerSubBgColors
 	.public WobbuffetPop_SetPlayerSubObjPalettes
 	.public WobbuffetPop_SetPlayerSubObjColors
 	.public WobbuffetPop_QueuePump
-	.public WobbuffetPop_SetPumpBonus
 	.public WobbuffetPop_CreateSeatSprites
 	.public WobbuffetPopBonusRing_CreateSprites
 	.public WobbuffetPopBonusRing_Init
@@ -34,18 +21,11 @@
 	.public WobbuffetPopBonusTarget_Walk
 	.public WobbuffetPopBonusTarget_Hit
 	.public WobbuffetPop_CreateBonusPopupSprites
-	.public WobbuffetPop_ShowBonusPopup
-	.public WobbuffetPopBonusPopup_Update
 	.public WobbuffetPop_NewTextObj
 	.public WobbuffetPopScoreDisplay_PlaceDigits
 	.public WobbuffetPopScoreDisplay_Update
-	.public WobbuffetPopScoreDisplay_SetScore
-	.public WobbuffetPopScoreDisplay_StartRoll
-	.public WobbuffetPopScoreDisplay_RollDigits
 	.public WobbuffetPop_CreateScoreLabels
 	.public WobbuffetPop_RunDemo
-	.public WobbuffetPopDust_Start
-	.public WobbuffetPopDust_Update
 	.public WobbuffetPopPlazaScreen_Main
 	.public WobbuffetPop_RecvPlayerValue
 	.public WobbuffetPop_RunEvent
@@ -83,37 +63,24 @@
 	.public sWobbuffetPopPuffConfigs
 	.public sWobbuffetPopCommands
 	.public sWobbuffetPopEventFuncs
-	.public WobbuffetPopInflation_Stop
 	.public WobbuffetPop_GetBalloonSize
-	.public WobbuffetPopInflation_StepAir
 	.public WobbuffetPop_UpdateInflation
-	.public WobbuffetPop_GetInflationPercent
 	.public WobbuffetPop_FreePuffs
 	.public WobbuffetPop_InitBalloonIcons
 	.public WobbuffetPop_FreeBalloonIcons
 	.public WobbuffetPop_UpdateBalloonIcons
-	.public WobbuffetPopBalloonIcon_Init
-	.public WobbuffetPopBalloonIcon_GetSize
-	.public WobbuffetPop_PopBalloonIcon
 	.public WobbuffetPop_InitPump
-	.public WobbuffetPop_DequeuePump
 	.public WobbuffetPop_FreeSeatSprites
 	.public WobbuffetPopBonusRing_FreeSprites
-	.public WobbuffetPop_FindBonusTargetAtFront
-	.public WobbuffetPopBonusTarget_SetState
-	.public WobbuffetPopBonusTarget_Run
 	.public WobbuffetPopBonusTarget_Idle
 	.public WobbuffetPop_FreeBonusPopupSprites
 	.public WobbuffetPop_UpdateBonusPopups
 	.public WobbuffetPopTextObj_Free
-	.public WobbuffetPopScoreDisplay_IsSettled
 	.public WobbuffetPop_CreateScoreFrameSprite
 	.public WobbuffetPop_FreeScoreLabels
 	.public WobbuffetPop_DeleteScoreFrameSprite
 	.public WobbuffetPop_CreateDemoStylusSprite
 	.public WobbuffetPop_DeleteDemoStylusSprite
-	.public WobbuffetPopDust_Create
-	.public WobbuffetPopDust_Free
 	.public WobbuffetPopPlazaScreen_Init
 	.public WobbuffetPopPlazaScreen_Exit
 	.public WobbuffetPop_RegisterCommands
@@ -124,7 +91,6 @@
 	.public WobbuffetPop_RecvFinished
 	.public WobbuffetPop_SendFinished
 	.public WobbuffetPop_SendPlayerValue
-	.public WobbuffetPop_QueuePumpEvent
 	.public WobbuffetPop_HandlePumpEvent
 	.public WobbuffetPop_QueuePopEvent
 	.public WobbuffetPop_HandlePopEvent

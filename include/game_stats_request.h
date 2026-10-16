@@ -37,12 +37,6 @@ typedef struct GameStatsRequest {
 extern GameStatsRequest gGameStatsRequest;
 extern u32 gGameStatsRandState;
 
-void GameStats_SeedRandom(u32 seed);
-u8 GameStats_NextRandom(void);
-int GameStats_EncodePayload(u32 key, const u8 *data, int len, char *out, int outSize);
-int GameStats_GetBase64Length(int size);
-void GameStats_SetRequestError(int result);
-void GameStats_ResponseCallback(const char *response, int length, int error);
 void GameStats_Start(void);
 int GameStats_PrepareRequest(char *url, int pid, void *payload, int payloadSize, void *response, int responseCapacity);
 int GameStats_Update(void);

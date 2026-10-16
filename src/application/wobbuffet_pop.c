@@ -7,6 +7,8 @@
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0012.h"
 
+#include "comm_state.h"
+#include "communication_core.h"
 #include "communication_player_state.h"
 #include "error_handling.h"
 #include "filesystem.h"
@@ -22,17 +24,14 @@
 #include "render_window.h"
 #include "screen_fade.h"
 #include "sound_playback.h"
+#include "swap_3d_buffers.h"
 #include "system.h"
 #include "text.h"
 #include "touchpad.h"
-#include "swap_3d_buffers.h"
-#include "communication_core.h"
-#include "comm_state.h"
-#include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
 #include "wifi_connection.h"
+#include "wireless_status_icon.h"
 
-// SDK texture palette upload and a BG helper without a header here.
 void GX_BeginLoadTexPltt(void);
 void GX_LoadTexPltt(const void *src, u32 destSlotAddr, u32 size);
 void GX_EndLoadTexPltt(void);
@@ -40,81 +39,19 @@ void CommState_FrameDummy(enum HeapID heapId, BgConfig *bgConfig);
 void SetBothScreensBrightnessByColor(u16 color);
 
 // Defined in the other parts of the overlay.
-void WobbuffetPopBalloon_Update(WobbuffetPop *game, WobbuffetPopBalloon *balloon);
-void WobbuffetPopBalloon_Draw(WobbuffetPopBalloon *balloon);
-void WobbuffetPopBalloon_LoadTexture(WobbuffetPopBalloon *balloon);
 
 // Defined in this file.
-BOOL WobbuffetPopApp_CheckConnectionLost(WobbuffetPopApp *app);
-void WobbuffetPopApp_InitRoster(WobbuffetPopApp *app, PlazaGameArgs *args);
 BOOL WobbuffetPop_Init(OverlayManager *man, int *state);
 BOOL WobbuffetPop_Main(OverlayManager *man, int *state);
 BOOL WobbuffetPop_Exit(OverlayManager *man, int *state);
-void WobbuffetPop_VBlankCB(void *data);
-GF3DVramMan *WobbuffetPop_Create3DVramMan(enum HeapID heapId);
-void WobbuffetPop_Init3D(void);
-void WobbuffetPop_Delete3DVramMan(GF3DVramMan *vramMan);
-void WobbuffetPop_CreateCameras(WobbuffetPop *game);
-void WobbuffetPop_DeleteCameras(WobbuffetPop *game);
-void WobbuffetPop_DrawTask(SysTask *task, void *data);
-void WobbuffetPop_InitBgs(BgConfig *bgConfig);
-void WobbuffetPop_AddWindows(WobbuffetPop *game);
-void WobbuffetPop_ShowMessage(WobbuffetPop *game);
-void WobbuffetPop_HideMessageWindow(WobbuffetPop *game);
-void WobbuffetPop_PrintPlayerNames(WobbuffetPop *game);
-void WobbuffetPop_ClearPlayerPanels(WobbuffetPop *game, int started);
-void WobbuffetPop_CreateParticleSystem(WobbuffetPop *game);
-void WobbuffetPop_DestroyParticleSystem(WobbuffetPop *game);
-void WobbuffetPop_EmitParticles(WobbuffetPop *game, int effect);
-u32 WobbuffetPop_AllocParticleTexVram(u32 size, BOOL is4x4comp);
-u32 WobbuffetPop_AllocParticlePlttVram(u32 size, BOOL is4pltt);
-void WobbuffetPop_LoadMainObjGraphics(WobbuffetPop *game, NARC *narc);
-void WobbuffetPop_FreeMainObjGraphics(WobbuffetPop *game);
-void WobbuffetPop_LoadSubObjGraphics(WobbuffetPop *game, NARC *narc);
-void WobbuffetPop_FreeSubObjGraphics(WobbuffetPop *game);
-void WobbuffetPop_LoadMainBgGraphics(WobbuffetPop *game, NARC *narc);
-void WobbuffetPop_FreeMainBgGraphics(WobbuffetPop *game);
-void WobbuffetPop_LoadSubBgGraphics(WobbuffetPop *game, NARC *narc);
-void WobbuffetPop_FreeSubBgGraphics(WobbuffetPop *game);
-void WobbuffetPop_LoadModels(WobbuffetPop *game, NARC *narc);
-void WobbuffetPop_FreeModels(WobbuffetPop *game);
 BOOL WobbuffetPop_AddModelSlot(WobbuffetPop *game, u32 amount);
-void WobbuffetPop_RemoveModelSlot(WobbuffetPop *game, int row, int type);
-void WobbuffetPop_AnimateModelSlots(WobbuffetPop *game);
-void WobbuffetPop_DrawModelSlots(WobbuffetPop *game);
-BOOL WobbuffetPop_IsHost(WobbuffetPop *game);
-int WobbuffetPop_ChooseHost(WobbuffetPop *game);
 void WobbuffetPop_QueuePlayerEvent(WobbuffetPop *game, int netId, const WobbuffetPopEvent *event);
-WobbuffetPopEvent *WobbuffetPop_GetPlayerEvent(WobbuffetPop *game, int netId);
-BOOL WobbuffetPop_HoldPlayerEvent(WobbuffetPop *game, int netId, const WobbuffetPopEvent *event);
 void WobbuffetPop_QueueEvent(WobbuffetPop *game, const WobbuffetPopEvent *event);
-BOOL WobbuffetPop_HoldEvent(WobbuffetPop *game, const WobbuffetPopEvent *event);
-WobbuffetPopEvent *WobbuffetPop_PeekEvent(WobbuffetPop *game);
-BOOL WobbuffetPop_ProcessEvent(WobbuffetPop *game);
-void WobbuffetPop_ProcessPlayerEvents(WobbuffetPop *game);
-u32 WobbuffetPop_GetBalloonIndex(WobbuffetPop *game);
 int WobbuffetPop_GetPlayerSeat(WobbuffetPop *game, int netId);
-int WobbuffetPop_GetPlayerIndex(WobbuffetPop *game, int netId);
 void WobbuffetPop_RequestSync(WobbuffetPop *game, u32 kind, u32 syncId);
-BOOL WobbuffetPop_UpdateSync(WobbuffetPop *game);
-BOOL WobbuffetPop_IsSyncDone(WobbuffetPop *game, u8 syncId);
 BOOL WobbuffetPop_HostStartGame(WobbuffetPop *game, WobbuffetPopSequence *sequence);
 BOOL WobbuffetPop_HostPlayGame(WobbuffetPop *game, WobbuffetPopSequence *sequence);
 BOOL WobbuffetPop_HostFinishGame(WobbuffetPop *game, WobbuffetPopSequence *sequence);
-BOOL WobbuffetPop_RunHostSteps(WobbuffetPop *game);
-void WobbuffetPop_UpdateCameraDummy(Camera *camera);
-WobbuffetPopBalloon *WobbuffetPopBalloon_New(WobbuffetPop *game);
-void WobbuffetPopBalloon_Free(WobbuffetPop *game, WobbuffetPopBalloon *balloon);
-void WobbuffetPopBalloon_VBlank(WobbuffetPop *game, WobbuffetPopBalloon *balloon);
-s32 WobbuffetPopBalloon_CalcAirAmount(WobbuffetPopBalloon *balloon, s32 request);
-void WobbuffetPopBalloon_UpdateReboundSpeed(WobbuffetPopBalloon *balloon, s32 request);
-void WobbuffetPopBalloon_EmitPumpParticles(WobbuffetPop *game, WobbuffetPopBalloon *balloon, u32 request, u32 bonus);
-void WobbuffetPopBalloon_LoadPalette(WobbuffetPopBalloon *balloon);
-void WobbuffetPopBalloon_BlendPalette(WobbuffetPopBalloon *balloon, s32 air);
-BOOL WobbuffetPopBalloon_AddAir(WobbuffetPopBalloon *balloon, s32 air);
-void WobbuffetPopBalloon_ResetAir(WobbuffetPopBalloon *balloon);
-void WobbuffetPopBalloon_UpdateFlash(WobbuffetPopBalloon *balloon);
-void WobbuffetPopBalloon_SetMaterial(u32 diffuseIsVertexColor, u32 useShininess);
 
 typedef struct WobbuffetPopModelFiles {
     int files[5];
@@ -140,6 +77,70 @@ extern const WobbuffetPopModelFiles sWobbuffetPopSlotModelFiles3[];
 extern const BgTemplate sWobbuffetPopMainBgTemplates[3];
 extern const BgTemplate sWobbuffetPopSubBgTemplates[4];
 extern const s32 sWobbuffetPopBalloonAirRates[];
+
+static void WobbuffetPopApp_InitRoster(WobbuffetPopApp *app, PlazaGameArgs *args);
+static BOOL WobbuffetPopApp_CheckConnectionLost(WobbuffetPopApp *app);
+static void WobbuffetPop_VBlankCB(void *data);
+static GF3DVramMan *WobbuffetPop_Create3DVramMan(enum HeapID heapId);
+static void WobbuffetPop_Init3D(void);
+static void WobbuffetPop_Delete3DVramMan(GF3DVramMan *vramMan);
+static void WobbuffetPop_CreateCameras(WobbuffetPop *game);
+static void WobbuffetPop_DeleteCameras(WobbuffetPop *game);
+static void WobbuffetPop_DrawTask(SysTask *task, void *data);
+static void WobbuffetPop_InitBgs(BgConfig *bgConfig);
+static void WobbuffetPop_AddWindows(WobbuffetPop *game);
+static void WobbuffetPop_ShowMessage(WobbuffetPop *game);
+static void WobbuffetPop_HideMessageWindow(WobbuffetPop *game);
+static void WobbuffetPop_PrintPlayerNames(WobbuffetPop *game);
+static void WobbuffetPop_ClearPlayerPanels(WobbuffetPop *game, int started);
+static void WobbuffetPop_CreateParticleSystem(WobbuffetPop *game);
+static void WobbuffetPop_DestroyParticleSystem(WobbuffetPop *game);
+static void WobbuffetPop_EmitParticles(WobbuffetPop *game, int effect);
+static u32 WobbuffetPop_AllocParticleTexVram(u32 size, BOOL is4x4comp);
+static u32 WobbuffetPop_AllocParticlePlttVram(u32 size, BOOL is4pltt);
+static void WobbuffetPop_LoadMainObjGraphics(WobbuffetPop *game, NARC *narc);
+static void WobbuffetPop_FreeMainObjGraphics(WobbuffetPop *game);
+static void WobbuffetPop_LoadSubObjGraphics(WobbuffetPop *game, NARC *narc);
+static void WobbuffetPop_FreeSubObjGraphics(WobbuffetPop *game);
+static void WobbuffetPop_LoadMainBgGraphics(WobbuffetPop *game, NARC *narc);
+static void WobbuffetPop_FreeMainBgGraphics(WobbuffetPop *game);
+static void WobbuffetPop_LoadSubBgGraphics(WobbuffetPop *game, NARC *narc);
+static void WobbuffetPop_FreeSubBgGraphics(WobbuffetPop *game);
+static void WobbuffetPop_LoadModels(WobbuffetPop *game, NARC *narc);
+static void WobbuffetPop_FreeModels(WobbuffetPop *game);
+static inline BOOL WobbuffetPop_ShowBalloonModel(WobbuffetPopModels *models, int row, int type, ModelResource *resource);
+static void WobbuffetPop_RemoveModelSlot(WobbuffetPop *game, int row, int type);
+static void WobbuffetPop_AnimateModelSlots(WobbuffetPop *game);
+static void WobbuffetPop_DrawModelSlots(WobbuffetPop *game);
+static BOOL WobbuffetPop_IsHost(WobbuffetPop *game);
+static int WobbuffetPop_ChooseHost(WobbuffetPop *game);
+static WobbuffetPopEvent *WobbuffetPop_GetPlayerEvent(WobbuffetPop *game, int netId);
+static BOOL WobbuffetPop_HoldPlayerEvent(WobbuffetPop *game, int netId, const WobbuffetPopEvent *event);
+static BOOL WobbuffetPop_HoldEvent(WobbuffetPop *game, const WobbuffetPopEvent *event);
+static WobbuffetPopEvent *WobbuffetPop_PeekEvent(WobbuffetPop *game);
+static BOOL WobbuffetPop_ProcessEvent(WobbuffetPop *game);
+static void WobbuffetPop_ProcessPlayerEvents(WobbuffetPop *game);
+static u32 WobbuffetPop_GetBalloonIndex(WobbuffetPop *game);
+static int WobbuffetPop_GetPlayerIndex(WobbuffetPop *game, int netId);
+static BOOL WobbuffetPop_UpdateSync(WobbuffetPop *game);
+static BOOL WobbuffetPop_IsSyncDone(WobbuffetPop *game, u8 syncId);
+static BOOL WobbuffetPop_RunHostSteps(WobbuffetPop *game);
+static void WobbuffetPop_UpdateCameraDummy(Camera *camera);
+static WobbuffetPopBalloon *WobbuffetPopBalloon_New(WobbuffetPop *game);
+static void WobbuffetPopBalloon_Free(WobbuffetPop *game, WobbuffetPopBalloon *balloon);
+static void WobbuffetPopBalloon_Update(WobbuffetPop *game, WobbuffetPopBalloon *balloon);
+static void WobbuffetPopBalloon_VBlank(WobbuffetPop *game, WobbuffetPopBalloon *balloon);
+static s32 WobbuffetPopBalloon_CalcAirAmount(WobbuffetPopBalloon *balloon, s32 request);
+static void WobbuffetPopBalloon_UpdateReboundSpeed(WobbuffetPopBalloon *balloon, s32 request);
+static void WobbuffetPopBalloon_EmitPumpParticles(WobbuffetPop *game, WobbuffetPopBalloon *balloon, u32 request, u32 bonus);
+static void WobbuffetPopBalloon_Draw(WobbuffetPopBalloon *balloon);
+static void WobbuffetPopBalloon_LoadTexture(WobbuffetPopBalloon *balloon);
+static void WobbuffetPopBalloon_LoadPalette(WobbuffetPopBalloon *balloon);
+static void WobbuffetPopBalloon_BlendPalette(WobbuffetPopBalloon *balloon, s32 air);
+static BOOL WobbuffetPopBalloon_AddAir(WobbuffetPopBalloon *balloon, s32 air);
+static void WobbuffetPopBalloon_ResetAir(WobbuffetPopBalloon *balloon);
+static void WobbuffetPopBalloon_UpdateFlash(WobbuffetPopBalloon *balloon);
+static void WobbuffetPopBalloon_SetMaterial(u32 diffuseIsVertexColor, u32 useShininess);
 
 BOOL WobbuffetPopApp_Init(OverlayManager *man, int *state) {
     PlazaGameArgs *args;
@@ -235,7 +236,7 @@ BOOL WobbuffetPopApp_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-void WobbuffetPopApp_InitRoster(WobbuffetPopApp *app, PlazaGameArgs *args) {
+static void WobbuffetPopApp_InitRoster(WobbuffetPopApp *app, PlazaGameArgs *args) {
     int i;
     int count;
 
@@ -254,7 +255,7 @@ void WobbuffetPopApp_InitRoster(WobbuffetPopApp *app, PlazaGameArgs *args) {
     PlazaGameRoster_Init(&app->roster, args->fromLobby, args->saveData, args->voiceChat, args);
 }
 
-BOOL WobbuffetPopApp_CheckConnectionLost(WobbuffetPopApp *app) {
+static BOOL WobbuffetPopApp_CheckConnectionLost(WobbuffetPopApp *app) {
     if (app->connectionLost == FALSE) {
         if (PlazaGameRoster_CheckConnectionLost(&app->roster) == TRUE) {
             app->connectionLost = TRUE;
@@ -522,7 +523,7 @@ BOOL WobbuffetPop_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-void WobbuffetPop_VBlankCB(void *data) {
+static void WobbuffetPop_VBlankCB(void *data) {
     vu32 *dtcm;
     WobbuffetPop *game = data;
 
@@ -543,12 +544,12 @@ void WobbuffetPop_VBlankCB(void *data) {
     dtcm[0x3FF8 / 4] |= OS_IE_V_BLANK;
 }
 
-GF3DVramMan *WobbuffetPop_Create3DVramMan(enum HeapID heapId) {
+static GF3DVramMan *WobbuffetPop_Create3DVramMan(enum HeapID heapId) {
     return GF_3DVramMan_Create(heapId, 0, 1, 0, 2, WobbuffetPop_Init3D);
 }
 
 #pragma force_active on
-void WobbuffetPop_Init3D(void) {
+static void WobbuffetPop_Init3D(void) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
     G2_SetBG0Priority(1);
     G3X_SetShading(GX_SHADING_TOON);
@@ -562,12 +563,12 @@ void WobbuffetPop_Init3D(void) {
 }
 #pragma force_active off
 
-void WobbuffetPop_Delete3DVramMan(GF3DVramMan *vramMan) {
+static void WobbuffetPop_Delete3DVramMan(GF3DVramMan *vramMan) {
     GF_3DVramMan_Delete(vramMan);
 }
 
 #pragma force_active on
-void WobbuffetPop_CreateCameras(WobbuffetPop *game) {
+static void WobbuffetPop_CreateCameras(WobbuffetPop *game) {
     VecFx32 target = sWobbuffetPopCameraTarget;
 
     game->camera = Camera_New(HEAP_ID_117);
@@ -580,12 +581,12 @@ void WobbuffetPop_CreateCameras(WobbuffetPop *game) {
 }
 #pragma force_active off
 
-void WobbuffetPop_DeleteCameras(WobbuffetPop *game) {
+static void WobbuffetPop_DeleteCameras(WobbuffetPop *game) {
     Camera_Delete(game->camera);
     Camera_Delete(game->particleCamera);
 }
 
-void WobbuffetPop_DrawTask(SysTask *task, void *data) {
+static void WobbuffetPop_DrawTask(SysTask *task, void *data) {
     WobbuffetPop *game = data;
     VecFx32 scale;
     VecFx32 trans;
@@ -637,7 +638,7 @@ void WobbuffetPop_DrawTask(SysTask *task, void *data) {
     CommState_FrameDummy(HEAP_ID_117, game->bgConfig);
 }
 
-void WobbuffetPop_InitBgs(BgConfig *bgConfig) {
+static void WobbuffetPop_InitBgs(BgConfig *bgConfig) {
     BgTemplate templates[3];
     GraphicsBanks banks;
     GraphicsModes modes;
@@ -681,7 +682,7 @@ void WobbuffetPop_InitBgs(BgConfig *bgConfig) {
     ToggleBgLayer(GF_BG_LYR_SUB_3, GF_PLANE_TOGGLE_OFF);
 }
 
-void WobbuffetPop_AddWindows(WobbuffetPop *game) {
+static void WobbuffetPop_AddWindows(WobbuffetPop *game) {
     AddWindowParameterized(game->bgConfig, &game->playerNameWindows[0], GF_BG_LYR_MAIN_1, 11, 19, 20, 4, 14, 0x300);
     AddWindowParameterized(game->bgConfig, &game->playerNameWindows[1], GF_BG_LYR_SUB_0, 18, 1, 10, 2, 5, 0x314);
     AddWindowParameterized(game->bgConfig, &game->playerNameWindows[2], GF_BG_LYR_SUB_0, 21, 14, 10, 2, 5, 0x328);
@@ -693,7 +694,7 @@ void WobbuffetPop_AddWindows(WobbuffetPop *game) {
     FillWindowPixelBuffer(&game->messageWindow, 15);
 }
 
-void WobbuffetPop_ShowMessage(WobbuffetPop *game) {
+static void WobbuffetPop_ShowMessage(WobbuffetPop *game) {
     String *string;
 
     DrawFrameAndWindow1(&game->messageWindow, TRUE, 0x350, 6);
@@ -703,7 +704,7 @@ void WobbuffetPop_ShowMessage(WobbuffetPop *game) {
     ScheduleWindowCopyToVram(&game->messageWindow);
 }
 
-void WobbuffetPop_HideMessageWindow(WobbuffetPop *game) {
+static void WobbuffetPop_HideMessageWindow(WobbuffetPop *game) {
     FillBgTilemapRect(game->bgConfig, GF_BG_LYR_SUB_0, 0x3FF, 1, 18, 30, 6, TILEMAP_FILL_OVWT_PAL);
     ScheduleBgTilemapBufferTransfer(game->bgConfig, GF_BG_LYR_SUB_0);
 }
@@ -711,7 +712,7 @@ void WobbuffetPop_HideMessageWindow(WobbuffetPop *game) {
 #pragma force_active on
 #pragma opt_common_subs off
 #pragma opt_rotateloops off
-void WobbuffetPop_PrintPlayerNames(WobbuffetPop *game) {
+static void WobbuffetPop_PrintPlayerNames(WobbuffetPop *game) {
     int position;
     int width;
     String *name;
@@ -746,7 +747,7 @@ void WobbuffetPop_PrintPlayerNames(WobbuffetPop *game) {
 #pragma opt_rotateloops reset
 #pragma opt_common_subs reset
 
-void WobbuffetPop_ClearPlayerPanels(WobbuffetPop *game, int started) {
+static void WobbuffetPop_ClearPlayerPanels(WobbuffetPop *game, int started) {
     if (started == TRUE) {
         FillBgTilemapRect(game->bgConfig, GF_BG_LYR_SUB_0, 0x3FF, 0, 13, 12, 4, TILEMAP_FILL_OVWT_PAL);
         FillBgTilemapRect(game->bgConfig, GF_BG_LYR_SUB_0, 0x3FF, 17, 0, 12, 4, TILEMAP_FILL_OVWT_PAL);
@@ -766,7 +767,7 @@ void WobbuffetPop_ClearPlayerPanels(WobbuffetPop *game, int started) {
 }
 #pragma force_active off
 
-void WobbuffetPop_CreateParticleSystem(WobbuffetPop *game) {
+static void WobbuffetPop_CreateParticleSystem(WobbuffetPop *game) {
     void *heap;
 
     ParticleSystem_ZeroAll();
@@ -776,7 +777,7 @@ void WobbuffetPop_CreateParticleSystem(WobbuffetPop *game) {
     ParticleSystem_SetResource(game->particleSystem, ParticleSystem_LoadResourceFile(NARC_a_2_1_1, 0, HEAP_ID_117), 10, TRUE);
 }
 
-void WobbuffetPop_DestroyParticleSystem(WobbuffetPop *game) {
+static void WobbuffetPop_DestroyParticleSystem(WobbuffetPop *game) {
     void *heap = ParticleSystem_GetHeap(game->particleSystem);
 
     ParticleSystem_Free(game->particleSystem);
@@ -784,7 +785,7 @@ void WobbuffetPop_DestroyParticleSystem(WobbuffetPop *game) {
 }
 
 #pragma force_active on
-void WobbuffetPop_EmitParticles(WobbuffetPop *game, int effect) {
+static void WobbuffetPop_EmitParticles(WobbuffetPop *game, int effect) {
     switch (effect) {
     case 0:
         ParticleSystem_CreateEmitterWithParam(game->particleSystem, 0, NULL, game);
@@ -802,7 +803,7 @@ void WobbuffetPop_EmitParticles(WobbuffetPop *game, int effect) {
 }
 #pragma force_active off
 
-u32 WobbuffetPop_AllocParticleTexVram(u32 size, BOOL is4x4comp) {
+static u32 WobbuffetPop_AllocParticleTexVram(u32 size, BOOL is4x4comp) {
     NNSGfdTexKey key = NNS_GfdAllocTexVram(size, is4x4comp, 0);
 
     GF_ASSERT(key != NNS_GFD_ALLOC_ERROR_TEXKEY);
@@ -810,7 +811,7 @@ u32 WobbuffetPop_AllocParticleTexVram(u32 size, BOOL is4x4comp) {
     return NNS_GfdGetTexKeyAddr(key);
 }
 
-u32 WobbuffetPop_AllocParticlePlttVram(u32 size, BOOL is4pltt) {
+static u32 WobbuffetPop_AllocParticlePlttVram(u32 size, BOOL is4pltt) {
     NNSGfdPlttKey key = NNS_GfdAllocPlttVram(size, is4pltt, TRUE);
 
     GF_ASSERT(key != NNS_GFD_ALLOC_ERROR_PLTTKEY);
@@ -819,7 +820,7 @@ u32 WobbuffetPop_AllocParticlePlttVram(u32 size, BOOL is4pltt) {
 }
 
 #pragma force_active on
-void WobbuffetPop_LoadMainObjGraphics(WobbuffetPop *game, NARC *narc) {
+static void WobbuffetPop_LoadMainObjGraphics(WobbuffetPop *game, NARC *narc) {
     String *string;
     String *string1;
     int i;
@@ -862,7 +863,7 @@ void WobbuffetPop_LoadMainObjGraphics(WobbuffetPop *game, NARC *narc) {
 }
 #pragma force_active off
 
-void WobbuffetPop_FreeMainObjGraphics(WobbuffetPop *game) {
+static void WobbuffetPop_FreeMainObjGraphics(WobbuffetPop *game) {
     int i;
     WobbuffetPopTextObj *top;
     WobbuffetPopTextObj *bottom;
@@ -880,7 +881,7 @@ void WobbuffetPop_FreeMainObjGraphics(WobbuffetPop *game) {
 }
 
 #pragma force_active on
-void WobbuffetPop_LoadSubObjGraphics(WobbuffetPop *game, NARC *narc) {
+static void WobbuffetPop_LoadSubObjGraphics(WobbuffetPop *game, NARC *narc) {
     SpriteSystem_LoadPaletteBufferFromOpenNarc(game->paletteData, PLTTBUF_SUB_OBJ, game->spriteSystem, game->spriteManager, narc, 23, FALSE, 9, NNS_G2D_VRAM_TYPE_2DSUB, 10006);
     SpriteSystem_LoadCharResObjFromOpenNarc(game->spriteSystem, game->spriteManager, narc, 20, FALSE, NNS_G2D_VRAM_TYPE_2DSUB, 10004);
     SpriteSystem_LoadCellResObjFromOpenNarc(game->spriteSystem, game->spriteManager, narc, 22, FALSE, 10004);
@@ -894,7 +895,7 @@ void WobbuffetPop_LoadSubObjGraphics(WobbuffetPop *game, NARC *narc) {
 }
 #pragma force_active off
 
-void WobbuffetPop_FreeSubObjGraphics(WobbuffetPop *game) {
+static void WobbuffetPop_FreeSubObjGraphics(WobbuffetPop *game) {
     WobbuffetPop_FreeBalloonIcons(game);
     WobbuffetPop_FreeSeatSprites(game, game->seatSprites);
     WobbuffetPopBonusRing_FreeSprites(game, &game->bonusRing);
@@ -902,7 +903,7 @@ void WobbuffetPop_FreeSubObjGraphics(WobbuffetPop *game) {
 }
 
 #pragma force_active on
-void WobbuffetPop_LoadMainBgGraphics(WobbuffetPop *game, NARC *narc) {
+static void WobbuffetPop_LoadMainBgGraphics(WobbuffetPop *game, NARC *narc) {
     PaletteData_LoadNarc(game->paletteData, NARC_a_1_9_9, 4, HEAP_ID_117, PLTTBUF_MAIN_BG, 0, 0);
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 2, game->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, FALSE, HEAP_ID_117);
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 3, game->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, FALSE, HEAP_ID_117);
@@ -912,11 +913,11 @@ void WobbuffetPop_LoadMainBgGraphics(WobbuffetPop *game, NARC *narc) {
 }
 #pragma force_active off
 
-void WobbuffetPop_FreeMainBgGraphics(WobbuffetPop *game) {
+static void WobbuffetPop_FreeMainBgGraphics(WobbuffetPop *game) {
 }
 
 #pragma force_active on
-void WobbuffetPop_LoadSubBgGraphics(WobbuffetPop *game, NARC *narc) {
+static void WobbuffetPop_LoadSubBgGraphics(WobbuffetPop *game, NARC *narc) {
     PaletteData_LoadNarc(game->paletteData, NARC_a_1_9_9, 5, HEAP_ID_117, PLTTBUF_SUB_BG, 0xA0, 0);
     PaletteData_LoadFromNarc(game->paletteData, NARC_a_1_9_9, 6, HEAP_ID_117, PLTTBUF_SUB_BG, 0x140, 0x60, 0x60);
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 13, game->bgConfig, GF_BG_LYR_SUB_2, 0, 0, FALSE, HEAP_ID_117);
@@ -943,11 +944,11 @@ void WobbuffetPop_LoadSubBgGraphics(WobbuffetPop *game, NARC *narc) {
 }
 #pragma force_active off
 
-void WobbuffetPop_FreeSubBgGraphics(WobbuffetPop *game) {
+static void WobbuffetPop_FreeSubBgGraphics(WobbuffetPop *game) {
 }
 
 #pragma force_active on
-void WobbuffetPop_LoadModels(WobbuffetPop *game, NARC *narc) {
+static void WobbuffetPop_LoadModels(WobbuffetPop *game, NARC *narc) {
     void *animationFile;
     int index;
     WobbuffetPopModels *models;
@@ -988,7 +989,7 @@ void WobbuffetPop_LoadModels(WobbuffetPop *game, NARC *narc) {
 }
 #pragma force_active off
 
-void WobbuffetPop_FreeModels(WobbuffetPop *game) {
+static void WobbuffetPop_FreeModels(WobbuffetPop *game) {
     int i;
     int j;
     WobbuffetPopModels *models = &game->models;
@@ -1060,7 +1061,7 @@ BOOL WobbuffetPop_AddModelSlot(WobbuffetPop *game, u32 amount) {
 }
 #pragma force_active off
 
-void WobbuffetPop_RemoveModelSlot(WobbuffetPop *game, int row, int type) {
+static void WobbuffetPop_RemoveModelSlot(WobbuffetPop *game, int row, int type) {
     WobbuffetPopModels *models = &game->models;
 
     ModelInstance_RemoveAnimation(&models->slots[row][type].instance, &models->slots[row][type].animation);
@@ -1071,7 +1072,7 @@ void WobbuffetPop_RemoveModelSlot(WobbuffetPop *game, int row, int type) {
 // WobbuffetPopModels shifted by whole slots, so its slots[0][0] is the current slot.
 #define MODEL_SLOT(slot) (((WobbuffetPopModels *)(slot))->slots[0][0])
 
-void WobbuffetPop_AnimateModelSlots(WobbuffetPop *game) {
+static void WobbuffetPop_AnimateModelSlots(WobbuffetPop *game) {
     u8 *slotRow = (u8 *)&game->models;
     u8 *animationRow;
     int i;
@@ -1094,7 +1095,7 @@ void WobbuffetPop_AnimateModelSlots(WobbuffetPop *game) {
     }
 }
 
-void WobbuffetPop_DrawModelSlots(WobbuffetPop *game) {
+static void WobbuffetPop_DrawModelSlots(WobbuffetPop *game) {
     int i;
     u8 *slotRow;
     u8 *instanceRow;
@@ -1124,7 +1125,7 @@ void WobbuffetPop_DrawModelSlots(WobbuffetPop *game) {
 
 #undef MODEL_SLOT
 
-BOOL WobbuffetPop_IsHost(WobbuffetPop *game) {
+static BOOL WobbuffetPop_IsHost(WobbuffetPop *game) {
     if (game->hostNetId == Comm_GetLocalNetId()) {
         return TRUE;
     }
@@ -1132,7 +1133,7 @@ BOOL WobbuffetPop_IsHost(WobbuffetPop *game) {
 }
 
 #pragma force_active on
-int WobbuffetPop_ChooseHost(WobbuffetPop *game) {
+static int WobbuffetPop_ChooseHost(WobbuffetPop *game) {
     int hostNetId;
     int i;
     u32 max;
@@ -1164,7 +1165,7 @@ void WobbuffetPop_QueuePlayerEvent(WobbuffetPop *game, int netId, const Wobbuffe
     *dest = *event;
 }
 
-WobbuffetPopEvent *WobbuffetPop_GetPlayerEvent(WobbuffetPop *game, int netId) {
+static WobbuffetPopEvent *WobbuffetPop_GetPlayerEvent(WobbuffetPop *game, int netId) {
     u32 *counts;
     s32 index;
     WobbuffetPopEvent *queue;
@@ -1179,7 +1180,7 @@ WobbuffetPopEvent *WobbuffetPop_GetPlayerEvent(WobbuffetPop *game, int netId) {
     return NULL;
 }
 
-BOOL WobbuffetPop_HoldPlayerEvent(WobbuffetPop *game, int netId, const WobbuffetPopEvent *event) {
+static BOOL WobbuffetPop_HoldPlayerEvent(WobbuffetPop *game, int netId, const WobbuffetPopEvent *event) {
     switch (event->kind) {
     case WOBBUFFET_POP_EVENT_NONE:
         break;
@@ -1210,7 +1211,7 @@ void WobbuffetPop_QueueEvent(WobbuffetPop *game, const WobbuffetPopEvent *event)
     *dest = *event;
 }
 
-BOOL WobbuffetPop_HoldEvent(WobbuffetPop *game, const WobbuffetPopEvent *event) {
+static BOOL WobbuffetPop_HoldEvent(WobbuffetPop *game, const WobbuffetPopEvent *event) {
     u32 kind = event->kind;
     u32 current;
 
@@ -1239,7 +1240,7 @@ BOOL WobbuffetPop_HoldEvent(WobbuffetPop *game, const WobbuffetPopEvent *event) 
     return FALSE;
 }
 
-WobbuffetPopEvent *WobbuffetPop_PeekEvent(WobbuffetPop *game) {
+static WobbuffetPopEvent *WobbuffetPop_PeekEvent(WobbuffetPop *game) {
     WobbuffetPopEvent *event = &game->events[game->eventReadCount % WOBBUFFET_POP_EVENT_QUEUE_SIZE];
 
     if (event->kind == WOBBUFFET_POP_EVENT_NONE) {
@@ -1248,7 +1249,7 @@ WobbuffetPopEvent *WobbuffetPop_PeekEvent(WobbuffetPop *game) {
     return event;
 }
 
-BOOL WobbuffetPop_ProcessEvent(WobbuffetPop *game) {
+static BOOL WobbuffetPop_ProcessEvent(WobbuffetPop *game) {
     WobbuffetPopEvent *event;
 
     if (game->eventDelay > 0) {
@@ -1274,7 +1275,7 @@ BOOL WobbuffetPop_ProcessEvent(WobbuffetPop *game) {
     return FALSE;
 }
 
-void WobbuffetPop_ProcessPlayerEvents(WobbuffetPop *game) {
+static void WobbuffetPop_ProcessPlayerEvents(WobbuffetPop *game) {
     int i;
     WobbuffetPopEvent *event;
 
@@ -1293,7 +1294,7 @@ void WobbuffetPop_ProcessPlayerEvents(WobbuffetPop *game) {
     }
 }
 
-u32 WobbuffetPop_GetBalloonIndex(WobbuffetPop *game) {
+static u32 WobbuffetPop_GetBalloonIndex(WobbuffetPop *game) {
     return game->balloonIndex;
 }
 
@@ -1340,7 +1341,7 @@ int WobbuffetPop_GetPlayerSeat(WobbuffetPop *game, int netId) {
 #pragma opt_common_subs reset
 #pragma optimization_level reset
 
-int WobbuffetPop_GetPlayerIndex(WobbuffetPop *game, int netId) {
+static int WobbuffetPop_GetPlayerIndex(WobbuffetPop *game, int netId) {
     int i;
 
     for (i = 0; i < game->app->playerCount; i++) {
@@ -1359,7 +1360,7 @@ void WobbuffetPop_RequestSync(WobbuffetPop *game, u32 kind, u32 syncId) {
     game->syncId = syncId;
 }
 
-BOOL WobbuffetPop_UpdateSync(WobbuffetPop *game) {
+static BOOL WobbuffetPop_UpdateSync(WobbuffetPop *game) {
     BOOL ready = FALSE;
 
     switch (game->syncKind) {
@@ -1402,7 +1403,7 @@ BOOL WobbuffetPop_UpdateSync(WobbuffetPop *game) {
     return FALSE;
 }
 
-BOOL WobbuffetPop_IsSyncDone(WobbuffetPop *game, u8 syncId) {
+static BOOL WobbuffetPop_IsSyncDone(WobbuffetPop *game, u8 syncId) {
     if (game->syncKind != 7) {
         return FALSE;
     }
@@ -1515,7 +1516,7 @@ BOOL WobbuffetPop_HostFinishGame(WobbuffetPop *game, WobbuffetPopSequence *seque
     return FALSE;
 }
 
-BOOL WobbuffetPop_RunHostSteps(WobbuffetPop *game) {
+static BOOL WobbuffetPop_RunHostSteps(WobbuffetPop *game) {
     WobbuffetPopSequence *sequence;
 
     if (WobbuffetPop_IsHost(game) == FALSE) {
@@ -1534,10 +1535,10 @@ BOOL WobbuffetPop_RunHostSteps(WobbuffetPop *game) {
     return FALSE;
 }
 
-void WobbuffetPop_UpdateCameraDummy(Camera *camera) {
+static void WobbuffetPop_UpdateCameraDummy(Camera *camera) {
 }
 
-WobbuffetPopBalloon *WobbuffetPopBalloon_New(WobbuffetPop *game) {
+static WobbuffetPopBalloon *WobbuffetPopBalloon_New(WobbuffetPop *game) {
     WobbuffetPopBalloon *balloon = Heap_Alloc(HEAP_ID_117, sizeof(WobbuffetPopBalloon));
 
     MI_CpuFill8(balloon, 0, sizeof(WobbuffetPopBalloon));
@@ -1568,7 +1569,7 @@ WobbuffetPopBalloon *WobbuffetPopBalloon_New(WobbuffetPop *game) {
     return balloon;
 }
 
-void WobbuffetPopBalloon_Free(WobbuffetPop *game, WobbuffetPopBalloon *balloon) {
+static void WobbuffetPopBalloon_Free(WobbuffetPop *game, WobbuffetPopBalloon *balloon) {
     WobbuffetPop_DeleteHandleSprite(balloon->sprite);
     WobbuffetPop_FreeHandleSpriteResources(game);
     Heap_Free(balloon->textureFile);
@@ -1578,7 +1579,7 @@ void WobbuffetPopBalloon_Free(WobbuffetPop *game, WobbuffetPopBalloon *balloon) 
 }
 
 #pragma force_active on
-void WobbuffetPopBalloon_Update(WobbuffetPop *game, WobbuffetPopBalloon *balloon) {
+static void WobbuffetPopBalloon_Update(WobbuffetPop *game, WobbuffetPopBalloon *balloon) {
     WobbuffetPopPump pump;
 
     balloon->pumpStrength = 0;
@@ -1645,14 +1646,14 @@ void WobbuffetPopBalloon_Update(WobbuffetPop *game, WobbuffetPopBalloon *balloon
 }
 #pragma force_active off
 
-void WobbuffetPopBalloon_VBlank(WobbuffetPop *game, WobbuffetPopBalloon *balloon) {
+static void WobbuffetPopBalloon_VBlank(WobbuffetPop *game, WobbuffetPopBalloon *balloon) {
     if (balloon->paletteDirty == TRUE) {
         balloon->paletteDirty = FALSE;
         WobbuffetPopBalloon_LoadPalette(balloon);
     }
 }
 
-s32 WobbuffetPopBalloon_CalcAirAmount(WobbuffetPopBalloon *balloon, s32 request) {
+static s32 WobbuffetPopBalloon_CalcAirAmount(WobbuffetPopBalloon *balloon, s32 request) {
     s32 amount;
 
     if (request >= 98) {
@@ -1663,7 +1664,7 @@ s32 WobbuffetPopBalloon_CalcAirAmount(WobbuffetPopBalloon *balloon, s32 request)
     return sWobbuffetPopBalloonAirRates[balloon->selection] * amount / 100;
 }
 
-void WobbuffetPopBalloon_UpdateReboundSpeed(WobbuffetPopBalloon *balloon, s32 request) {
+static void WobbuffetPopBalloon_UpdateReboundSpeed(WobbuffetPopBalloon *balloon, s32 request) {
     if (balloon->pumpStrength >= 98) {
         balloon->reboundSpeed += FX32_ONE;
     } else if (balloon->pumpStrength >= 98) {
@@ -1676,7 +1677,7 @@ void WobbuffetPopBalloon_UpdateReboundSpeed(WobbuffetPopBalloon *balloon, s32 re
     }
 }
 
-void WobbuffetPopBalloon_EmitPumpParticles(WobbuffetPop *game, WobbuffetPopBalloon *balloon, u32 request, u32 bonus) {
+static void WobbuffetPopBalloon_EmitPumpParticles(WobbuffetPop *game, WobbuffetPopBalloon *balloon, u32 request, u32 bonus) {
     s32 x;
     s32 y;
 
@@ -1712,7 +1713,7 @@ void WobbuffetPopBalloon_ReleaseTouch(WobbuffetPopBalloon *balloon) {
 }
 
 #pragma force_active on
-void WobbuffetPopBalloon_Draw(WobbuffetPopBalloon *balloon) {
+static void WobbuffetPopBalloon_Draw(WobbuffetPopBalloon *balloon) {
     u32 lightVector;
     u32 lightColor;
     VecFx32 translate;
@@ -1766,7 +1767,7 @@ void WobbuffetPopBalloon_Draw(WobbuffetPopBalloon *balloon) {
     NNS_G3dGeFlushBuffer();
 }
 
-void WobbuffetPopBalloon_LoadTexture(WobbuffetPopBalloon *balloon) {
+static void WobbuffetPopBalloon_LoadTexture(WobbuffetPopBalloon *balloon) {
     NNSG3dResTex *texture;
     u32 paletteSize;
     u32 paletteOffset;
@@ -1792,13 +1793,13 @@ void WobbuffetPopBalloon_LoadTexture(WobbuffetPopBalloon *balloon) {
 }
 #pragma force_active off
 
-void WobbuffetPopBalloon_LoadPalette(WobbuffetPopBalloon *balloon) {
+static void WobbuffetPopBalloon_LoadPalette(WobbuffetPopBalloon *balloon) {
     GX_BeginLoadTexPltt();
     GX_LoadTexPltt(balloon->paletteDest, balloon->paletteAddr, balloon->paletteSize);
     GX_EndLoadTexPltt();
 }
 
-void WobbuffetPopBalloon_BlendPalette(WobbuffetPopBalloon *balloon, s32 air) {
+static void WobbuffetPopBalloon_BlendPalette(WobbuffetPopBalloon *balloon, s32 air) {
     s32 fraction;
 
     fraction = (air * 3 << 10) / 800;
@@ -1811,7 +1812,7 @@ void WobbuffetPopBalloon_BlendPalette(WobbuffetPopBalloon *balloon, s32 air) {
     balloon->paletteDirty = TRUE;
 }
 
-BOOL WobbuffetPopBalloon_AddAir(WobbuffetPopBalloon *balloon, s32 air) {
+static BOOL WobbuffetPopBalloon_AddAir(WobbuffetPopBalloon *balloon, s32 air) {
     BOOL full = FALSE;
 
     balloon->air += air;
@@ -1823,12 +1824,12 @@ BOOL WobbuffetPopBalloon_AddAir(WobbuffetPopBalloon *balloon, s32 air) {
     return full;
 }
 
-void WobbuffetPopBalloon_ResetAir(WobbuffetPopBalloon *balloon) {
+static void WobbuffetPopBalloon_ResetAir(WobbuffetPopBalloon *balloon) {
     balloon->air = 0;
     WobbuffetPopBalloon_BlendPalette(balloon, balloon->air);
 }
 
-void WobbuffetPopBalloon_UpdateFlash(WobbuffetPopBalloon *balloon) {
+static void WobbuffetPopBalloon_UpdateFlash(WobbuffetPopBalloon *balloon) {
     if (balloon->squash != 0) {
         balloon->flashCounter++;
         if (balloon->flashCounter == 4) {
@@ -1842,7 +1843,7 @@ void WobbuffetPopBalloon_UpdateFlash(WobbuffetPopBalloon *balloon) {
     }
 }
 
-void WobbuffetPopBalloon_SetMaterial(u32 diffuseIsVertexColor, u32 useShininess) {
+static void WobbuffetPopBalloon_SetMaterial(u32 diffuseIsVertexColor, u32 useShininess) {
     u32 diffAmb;
     u32 specEmi;
 

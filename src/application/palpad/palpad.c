@@ -40,6 +40,27 @@ enum {
     PALPAD_STATE_CHANGE_SCREEN,
 };
 
+static void PalPad_VBlankCallback(void *data);
+static void PalPadShared_Init(PalPadShared *shared, PalPadArgs *args, enum HeapID heapId);
+static void PalPadShared_Free(PalPadShared *shared, PalPadArgs *args);
+static void PalPadGfx_Init(PalPadGfx *gfx, PalPadShared *shared, enum HeapID heapId);
+static void PalPadGfx_RenderSprites(PalPadGfx *gfx);
+static void PalPadGfx_VBlank(PalPadGfx *gfx);
+static void PalPadGfx_Free(PalPadGfx *gfx);
+static void PalPadGfx_SetVramBanks(void);
+static void PalPadGfx_InitBgs(PalPadGfx *gfx, enum HeapID heapId);
+static void PalPadGfx_FreeBgs(PalPadGfx *gfx);
+static void PalPadGfx_InitSpriteSystem(PalPadGfx *gfx, enum HeapID heapId);
+static void PalPadGfx_FreeSpriteSystem(PalPadGfx *gfx);
+static void PalPadGfx_InitMsg(PalPadGfx *gfx, enum HeapID heapId);
+static void PalPadGfx_FreeMsg(PalPadGfx *gfx);
+static void PalPadGfx_InitWindows(PalPadGfx *gfx, PalPadShared *shared, enum HeapID heapId);
+static void PalPadGfx_FreeWindows(PalPadGfx *gfx);
+static void PalPadGfx_LoadScreens(PalPadGfx *gfx, enum HeapID heapId);
+static void PalPadGfx_FreeScreens(PalPadGfx *gfx);
+static void PalPadGfx_CreateSprites(PalPadGfx *gfx, enum HeapID heapId);
+static void PalPadGfx_DeleteSprites(PalPadGfx *gfx);
+
 BOOL PalPad_Init(OverlayManager *man, int *state) {
     PalPadWork *work;
 
@@ -105,7 +126,7 @@ BOOL PalPad_Main(OverlayManager *man, int *state) {
 
 BOOL PalPad_Exit(OverlayManager *man, int *state) {
     PalPadWork *work;
-    OverlayManager *manager = man; // kept in its own register by the original
+    OverlayManager *manager = man;
 
     work = OverlayManager_GetData(man);
     Main_SetVBlankIntrCB(NULL, NULL);
@@ -123,7 +144,7 @@ BOOL PalPad_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-void PalPad_VBlankCallback(void *data) {
+static void PalPad_VBlankCallback(void *data) {
     PalPadWork *work = data;
 
     PalPadGfx_VBlank(&work->gfx);
@@ -158,7 +179,7 @@ void PalPad_AddWindow(BgConfig *bgConfig, Window *window, u8 bgId, u8 x, u8 y, u
     FillWindowPixelBuffer(window, fillValue);
 }
 
-void PalPadShared_Init(PalPadShared *shared, PalPadArgs *args, enum HeapID heapId) {
+static void PalPadShared_Init(PalPadShared *shared, PalPadArgs *args, enum HeapID heapId) {
     shared->saveData = args->saveData;
     shared->name = String_New(0x80, heapId);
     shared->code = String_New(0x80, heapId);
@@ -171,7 +192,7 @@ void PalPadShared_Init(PalPadShared *shared, PalPadArgs *args, enum HeapID heapI
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);
 }
 
-void PalPadShared_Free(PalPadShared *shared, PalPadArgs *args) {
+static void PalPadShared_Free(PalPadShared *shared, PalPadArgs *args) {
     TextFlags_SetCanABSpeedUpPrint(FALSE);
     TextFlags_SetCanTouchSpeedUpPrint(FALSE);
     MenuInputStateMgr_SetState(args->menuInputStatePtr, (MenuInputState)shared->inputState);
@@ -269,7 +290,7 @@ void PalPadShared_ReadFriendList(PalPadShared *shared) {
     }
 }
 
-void PalPadGfx_Init(PalPadGfx *gfx, PalPadShared *shared, enum HeapID heapId) {
+static void PalPadGfx_Init(PalPadGfx *gfx, PalPadShared *shared, enum HeapID heapId) {
     gSystem.screensFlipped = TRUE;
     GfGfx_SwapDisplay();
     gfx->narc = NARC_New(NARC_a_0_8_5, heapId);
@@ -288,17 +309,17 @@ void PalPadGfx_Init(PalPadGfx *gfx, PalPadShared *shared, enum HeapID heapId) {
 
 #pragma force_active reset
 
-void PalPadGfx_RenderSprites(PalPadGfx *gfx) {
+static void PalPadGfx_RenderSprites(PalPadGfx *gfx) {
     SpriteList_RenderAndAnimateSprites(gfx->spriteList);
 }
 
-void PalPadGfx_VBlank(PalPadGfx *gfx) {
+static void PalPadGfx_VBlank(PalPadGfx *gfx) {
     DoScheduledBgGpuUpdates(gfx->bgConfig);
     GF_RunVramTransferTasks();
     OamManager_ApplyAndResetBuffers();
 }
 
-void PalPadGfx_Free(PalPadGfx *gfx) {
+static void PalPadGfx_Free(PalPadGfx *gfx) {
     PalPadGfx_DeleteSprites(gfx);
     PalPadGfx_FreeScreens(gfx);
     PalPadGfx_FreeWindows(gfx);
@@ -308,12 +329,12 @@ void PalPadGfx_Free(PalPadGfx *gfx) {
     NARC_Delete(gfx->narc);
 }
 
-void PalPadGfx_SetVramBanks(void) {
+static void PalPadGfx_SetVramBanks(void) {
     GraphicsBanks banks = sPalPadGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
-void PalPadGfx_InitBgs(PalPadGfx *gfx, enum HeapID heapId) {
+static void PalPadGfx_InitBgs(PalPadGfx *gfx, enum HeapID heapId) {
     GraphicsModes modes;
     int i;
 
@@ -334,7 +355,7 @@ void PalPadGfx_InitBgs(PalPadGfx *gfx, enum HeapID heapId) {
     GfGfxLoader_LoadScrnDataFromOpenNarc(gfx->narc, 8, gfx->bgConfig, GF_BG_LYR_SUB_2, 0, 0, TRUE, heapId);
 }
 
-void PalPadGfx_FreeBgs(PalPadGfx *gfx) {
+static void PalPadGfx_FreeBgs(PalPadGfx *gfx) {
     int i;
 
     for (i = 0; i < 7; i++) {
@@ -344,7 +365,7 @@ void PalPadGfx_FreeBgs(PalPadGfx *gfx) {
     gfx->bgConfig = NULL;
 }
 
-void PalPadGfx_InitSpriteSystem(PalPadGfx *gfx, enum HeapID heapId) {
+static void PalPadGfx_InitSpriteSystem(PalPadGfx *gfx, enum HeapID heapId) {
     ObjCharTransferTemplate template;
     int i;
 
@@ -373,7 +394,7 @@ void PalPadGfx_InitSpriteSystem(PalPadGfx *gfx, enum HeapID heapId) {
     CreateSpriteResourcesHeader(&gfx->spriteHeader, 100, 100, 100, 100, -1, -1, 0, 0, gfx->resourceManagers[GF_GFX_RES_TYPE_CHAR], gfx->resourceManagers[GF_GFX_RES_TYPE_PLTT], gfx->resourceManagers[GF_GFX_RES_TYPE_CELL], gfx->resourceManagers[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
 }
 
-void PalPadGfx_FreeSpriteSystem(PalPadGfx *gfx) {
+static void PalPadGfx_FreeSpriteSystem(PalPadGfx *gfx) {
     int i;
 
     SpriteTransfer_DeleteCharTransferTask(gfx->spriteResources[GF_GFX_RES_TYPE_CHAR]);
@@ -391,13 +412,13 @@ void PalPadGfx_FreeSpriteSystem(PalPadGfx *gfx) {
     GF_DestroyVramTransferManager();
 }
 
-void PalPadGfx_InitMsg(PalPadGfx *gfx, enum HeapID heapId) {
+static void PalPadGfx_InitMsg(PalPadGfx *gfx, enum HeapID heapId) {
     gfx->msgFormat = MessageFormat_New(heapId);
     gfx->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0779_bin, heapId);
     FontID_Alloc(4, heapId);
 }
 
-void PalPadGfx_FreeMsg(PalPadGfx *gfx) {
+static void PalPadGfx_FreeMsg(PalPadGfx *gfx) {
     FontID_Release(4);
     DestroyMsgData(gfx->msgData);
     MessageFormat_Delete(gfx->msgFormat);
@@ -405,7 +426,7 @@ void PalPadGfx_FreeMsg(PalPadGfx *gfx) {
 
 #pragma force_active on
 
-void PalPadGfx_InitWindows(PalPadGfx *gfx, PalPadShared *shared, enum HeapID heapId) {
+static void PalPadGfx_InitWindows(PalPadGfx *gfx, PalPadShared *shared, enum HeapID heapId) {
     LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_11_OFFSET, heapId);
     LoadFontPal1(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_14_OFFSET, heapId);
     LoadUserFrameGfx2(gfx->bgConfig, GF_BG_LYR_MAIN_1, 70, 12, shared->frame, heapId);
@@ -421,7 +442,7 @@ void PalPadGfx_InitWindows(PalPadGfx *gfx, PalPadShared *shared, enum HeapID hea
 
 #pragma force_active reset
 
-void PalPadGfx_FreeWindows(PalPadGfx *gfx) {
+static void PalPadGfx_FreeWindows(PalPadGfx *gfx) {
     YesNoPrompt_Destroy(gfx->yesNoPrompt);
     TouchscreenListMenuSpawner_Destroy(gfx->listMenuSpawner);
     String_Delete(gfx->pageText);
@@ -433,7 +454,7 @@ void PalPadGfx_FreeWindows(PalPadGfx *gfx) {
 
 #pragma force_active on
 
-void PalPadGfx_LoadScreens(PalPadGfx *gfx, enum HeapID heapId) {
+static void PalPadGfx_LoadScreens(PalPadGfx *gfx, enum HeapID heapId) {
     int i;
 
     for (i = 0; i < 2; i++) {
@@ -443,7 +464,7 @@ void PalPadGfx_LoadScreens(PalPadGfx *gfx, enum HeapID heapId) {
 
 #pragma force_active reset
 
-void PalPadGfx_FreeScreens(PalPadGfx *gfx) {
+static void PalPadGfx_FreeScreens(PalPadGfx *gfx) {
     int i;
 
     for (i = 0; i < 2; i++) {
@@ -534,7 +555,7 @@ void PalPadGfx_BufferActivityName(PalPadGfx *gfx, int activity) {
 
 #pragma force_active on
 
-void PalPadGfx_CreateSprites(PalPadGfx *gfx, enum HeapID heapId) {
+static void PalPadGfx_CreateSprites(PalPadGfx *gfx, enum HeapID heapId) {
     SpriteResourcesHeader *header;
     int i, animSeq;
     SpriteTemplate *template;
@@ -560,7 +581,6 @@ void PalPadGfx_CreateSprites(PalPadGfx *gfx, enum HeapID heapId) {
         arrowSlot = (PalPadGfx *)((u8 *)arrowSlot + sizeof(Sprite *));
         animSeq += 2;
     }
-    // the original addresses the cursor template from a label 0x14 bytes into the arrow templates
     ((SpriteTemplate *)(ov43_0222F160 + 0x4C))->spriteList = gfx->spriteList;
     ((SpriteTemplate *)(ov43_0222F160 + 0x4C))->header = &gfx->spriteHeader;
     ((SpriteTemplate *)(ov43_0222F160 + 0x4C))->heapID = heapId;
@@ -571,7 +591,7 @@ void PalPadGfx_CreateSprites(PalPadGfx *gfx, enum HeapID heapId) {
 
 #pragma force_active reset
 
-void PalPadGfx_DeleteSprites(PalPadGfx *gfx) {
+static void PalPadGfx_DeleteSprites(PalPadGfx *gfx) {
     int i;
 
     Sprite_Delete(gfx->cursor);

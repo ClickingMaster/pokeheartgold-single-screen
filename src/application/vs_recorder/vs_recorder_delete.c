@@ -17,7 +17,7 @@
 #include "text.h"
 #include "touchscreen.h"
 
-// YES / NO of the delete prompt (asm/vs_recorder_data.s)
+// YES / NO of the delete prompt
 extern const TouchscreenHitbox sVsRecorderDeleteYesHitbox;
 extern const TouchscreenHitbox sVsRecorderDeleteNoHitbox;
 
@@ -26,15 +26,21 @@ extern const TouchscreenHitbox sVsRecorderDeleteNoHitbox;
 #define DELETE_MAIN  2
 #define DELETE_EXIT  3
 
+static void VsRecorder_ShowDeleteWindow(VsRecorderWork *work, BOOL alternate);
+static void VsRecorder_HideDeleteWindow(VsRecorderWork *work);
+static void VsRecorder_PrintDeleteMessage(VsRecorderWork *work, int msgId, int slot);
+static void VsRecorder_ShowDeleteYesNo(VsRecorderWork *work);
+static void VsRecorder_HideDeleteYesNo(VsRecorderWork *work);
+
 // the message window of the delete screen (main screen BG 2)
-void VsRecorder_ShowDeleteWindow(VsRecorderWork *work, BOOL alternate) {
+static void VsRecorder_ShowDeleteWindow(VsRecorderWork *work, BOOL alternate) {
     Window *window = &work->messageWindow;
     VsRecorder_LoadMessageBg(work, GF_BG_LYR_MAIN_2, alternate);
     InitWindow(window);
     AddWindowParameterized(work->bgConfig, window, GF_BG_LYR_MAIN_2, 1, 0x13, 0x1E, 4, 0xE, 0x12C);
 }
 
-void VsRecorder_HideDeleteWindow(VsRecorderWork *work) {
+static void VsRecorder_HideDeleteWindow(VsRecorderWork *work) {
     ClearWindowTilemapAndCopyToVram(&work->messageWindow);
     RemoveWindow(&work->messageWindow);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
@@ -43,7 +49,7 @@ void VsRecorder_HideDeleteWindow(VsRecorderWork *work) {
 #pragma force_active on
 
 // msg 282 ("delete the video of {owner}?") names the owner of saved video `slot`
-void VsRecorder_PrintDeleteMessage(VsRecorderWork *work, int msgId, int slot) {
+static void VsRecorder_PrintDeleteMessage(VsRecorderWork *work, int msgId, int slot) {
     Window *window = &work->messageWindow;
     String *text;
     if (msgId == 282) {
@@ -71,7 +77,7 @@ void VsRecorder_PrintDeleteMessage(VsRecorderWork *work, int msgId, int slot) {
 #pragma force_active reset
 
 // YES / NO buttons (sub screen BG 2)
-void VsRecorder_ShowDeleteYesNo(VsRecorderWork *work) {
+static void VsRecorder_ShowDeleteYesNo(VsRecorderWork *work) {
     VsRecorderDeleteVideo *deleteWork = work->screenWork;
     Window *window = &deleteWork->yesNoWindows[0];
     String *str;
@@ -92,7 +98,7 @@ void VsRecorder_ShowDeleteYesNo(VsRecorderWork *work) {
     ScheduleWindowCopyToVram(window);
 }
 
-void VsRecorder_HideDeleteYesNo(VsRecorderWork *work) {
+static void VsRecorder_HideDeleteYesNo(VsRecorderWork *work) {
     VsRecorderDeleteVideo *deleteWork = work->screenWork;
     ClearWindowTilemapAndCopyToVram(&deleteWork->yesNoWindows[0]);
     RemoveWindow(&deleteWork->yesNoWindows[0]);

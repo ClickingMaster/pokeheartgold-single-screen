@@ -46,25 +46,13 @@
 .public ApricornBox_GetJuiceFlavorName
 .public MI_CpuFill8
 .public _u32_div_f
-.public InitApricornBox
-.public ApricornBox_ClearJuiceRecords
-.public ClearApricornJuice
-.public ApricornBox_TakeApricorn
 
-.public ApricornJuice_IsValid
 
-.public ApricornRecord_IsSameTrainer
 
-.public ApricornBox_AddJuiceMildness
 
-.public ApricornBox_MixQueuedApricorns
 
-.public ApricornJuice_GetFlavors
 
-.public GetJuiceFlavorLevel
 
-.public PackJuiceFlavor
 
-.public ClearApricornJuiceRecord
 .public gApricornFlavorDeltas
 .public gApricornJuicePresets

@@ -15,48 +15,8 @@
 	.public MoveRelearner_Init
 	.public MoveRelearner_Main
 	.public sMoveRelearnerSummaryPages
-	.public MoveRelearner_Setup
-	.public MoveRelearner_SetGfxBanks
-	.public MoveRelearner_InitBgs
-	.public MoveRelearner_LoadBgGraphics
-	.public MoveRelearner_AddWindows
-	.public MoveRelearner_HandleInput
-	.public MoveRelearner_ShowYesNo
-	.public MoveRelearner_HandleYesNo
-	.public MoveRelearner_TeachMove
-	.public MoveRelearner_AskAfterSummary
-	.public MoveRelearner_PrintString
-	.public MoveRelearner_FormatNumber
-	.public MoveRelearner_PrintStaticTexts
-	.public MoveRelearner_CopyButtonTiles
-	.public MoveRelearner_PrintListRow
-	.public MoveRelearner_PrintMoveList
-	.public MoveRelearner_InitMoveList
-	.public MoveRelearner_PrintMoveInfo
-	.public MoveRelearner_FormatMessage
-	.public MoveRelearner_PrintMessage
-	.public MoveRelearner_InitSpriteSystem
-	.public MoveRelearner_LoadSpriteResources
-	.public MoveRelearner_SetTypeIcon
-	.public MoveRelearner_UpdateListTypeIcons
-	.public MoveRelearner_SetCategoryIcon
-	.public MoveRelearner_InitSprites
-	.public MoveRelearner_CreateCamera
-	.public MoveRelearner_CreatePokepic
-	.public MoveRelearner_Init3D
-	.public MoveRelearner_Draw3D
-	.public MoveRelearner_SetCursorPos
-	.public MoveRelearner_UpdateScrollArrows
-	.public MoveRelearner_OpenSummary
-	.public MoveRelearner_RunSummary
-	.public MoveRelearner_CreateGridInput
 	.public MoveRelearner_GridOnKeyMove
 	.public MoveRelearner_GridOnTouch
-	.public MoveRelearner_SetLearnButtonActive
-	.public MoveRelearner_UpdateScrollButtons
-	.public MoveRelearner_AnimateScrollArrows
-	.public MoveRelearner_DrawListRows
-	.public MoveRelearner_UpdateButtonFlash
 	.public MoveRelearner_DimSubScreen
 	.public sMoveRelearnerCameraPos
 	.public sMoveRelearnerGraphicsModes
@@ -77,25 +37,6 @@
 	.public sMoveRelearnerMessageIds
 	.public sMoveRelearnerWindowTemplates
 	.public sMoveRelearnerSpriteTemplates
-	.public MoveRelearner_Teardown
-	.public MoveRelearner_VBlankCB
-	.public MoveRelearner_FreeBgs
-	.public MoveRelearner_FreeScreenFile
-	.public MoveRelearner_RemoveWindows
-	.public MoveRelearner_InitStrings
-	.public MoveRelearner_FreeStrings
-	.public MoveRelearner_WaitFade
-	.public MoveRelearner_WaitMessage
-	.public MoveRelearner_PrintLearned
-	.public MoveRelearner_FadeOut
-	.public MoveRelearner_PrintSelectedMove
-	.public MoveRelearner_CountEligibleMoves
-	.public MoveRelearner_FreeMoveList
-	.public MoveRelearner_GetSelectedMove
-	.public MoveRelearner_GetMoveToReplace
-	.public MoveRelearner_ClearMessage
-	.public MoveRelearner_TextPrinterCallback
-	.public MoveRelearner_CountKnownMoves
 	.public MoveRelearner_OnTeachYes
 	.public MoveRelearner_OnTeachNo
 	.public MoveRelearner_OnGiveUpYes
@@ -106,16 +47,7 @@
 	.public MoveRelearner_OnStopTeachingNo
 	.public MoveRelearner_OnForgetMoveYes
 	.public MoveRelearner_OnForgetMoveNo
-	.public MoveRelearner_FreeSprites
-	.public MoveRelearner_Free3D
-	.public MoveRelearner_FadeOutToSummary
-	.public MoveRelearner_FreeGridInput
 	.public MoveRelearner_GridNoop
-	.public MoveRelearner_StartReturnButtonFlash
-	.public MoveRelearner_StartLearnButtonFlash
-	.public MoveRelearner_AskGiveUp
-	.public MoveRelearner_AskTeachAfterFlash
-	.public MoveRelearner_AskTeach
 	.include "asm/macros.inc"
 	.include "overlay_68.inc"
 	.include "global.inc"

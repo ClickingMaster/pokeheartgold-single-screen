@@ -80,6 +80,23 @@ extern const TouchscreenHitbox sVsRecorderBoxDataCategoryHitboxes[];         // 
 #define BOX_DATA_VIEW_QUIT                  12
 #define BOX_DATA_VIEW_EXIT                  13
 
+static BOOL VsRecorder_BoxFormHasMon(GlobalTerminalNetBoxForm *form);
+static void VsRecorder_SkipToOccupiedSlot(VsRecorderBoxData *boxData);
+static void VsRecorder_OnBoxDataSendTouch(u32 index, u32 event, void *arg);
+static void VsRecorder_OnBoxDataSendCategoryTouch(u32 index, u32 event, void *arg);
+static void VsRecorder_OnBoxDataViewCategoryTouch(u32 index, u32 event, void *arg);
+static void VsRecorder_OnBoxListTouch(u32 index, u32 event, void *arg);
+static void VsRecorder_OnBoxDataBoxTouch(u32 index, u32 event, void *arg);
+static void VsRecorder_CreateBoxDataButtons(VsRecorderWork *work);
+static void VsRecorder_PackBoxForm(SaveData *saveData, PCStorage *storage, int box, GlobalTerminalNetBoxForm *form);
+static void VsRecorder_SetBoxDataSendButtonHidden(VsRecorderWork *work, BOOL hidden);
+static void VsRecorder_PrintBoxName(VsRecorderWork *work);
+static void VsRecorder_PrintBoxMonName(VsRecorderWork *work, int slot);
+static void VsRecorder_CreateBoxMonIcons(VsRecorderWork *work);
+static void VsRecorder_CreateBoxMonPic(VsRecorderWork *work);
+static inline void VsRecorder_LoadBoxGfx(VsRecorderWork *work, VsRecorderBoxData *boxData);
+static void VsRecorder_RefreshOwnBox(VsRecorderWork *work);
+
 void VsRecorder_OnDressUpUploaded(void *arg, GlobalTerminalNetError *error) {
 }
 
@@ -105,7 +122,7 @@ void VsRecorder_FreeBoxDataOwner(VsRecorderWork *work) {
     FrontierCard_Delete(((VsRecorderBoxData *)work->screenWork)->profile.card);
 }
 
-BOOL VsRecorder_BoxFormHasMon(GlobalTerminalNetBoxForm *form) {
+static BOOL VsRecorder_BoxFormHasMon(GlobalTerminalNetBoxForm *form) {
     int i;
 
     for (i = 0; i < 30; i++) {
@@ -119,7 +136,7 @@ BOOL VsRecorder_BoxFormHasMon(GlobalTerminalNetBoxForm *form) {
 #pragma force_active on
 
 // from the cursor on, then from the first slot: put the cursor on the next slot with a Pokemon
-void VsRecorder_SkipToOccupiedSlot(VsRecorderBoxData *boxData) {
+static void VsRecorder_SkipToOccupiedSlot(VsRecorderBoxData *boxData) {
     // the slots are walked through a view of the work shifted by one u16 per slot
     int i;
     VsRecorderBoxData *slot;
@@ -156,7 +173,7 @@ void VsRecorder_SkipToOccupiedSlot(VsRecorderBoxData *boxData) {
 
 #pragma force_active reset
 
-void VsRecorder_OnBoxDataSendTouch(u32 index, u32 event, void *arg) {
+static void VsRecorder_OnBoxDataSendTouch(u32 index, u32 event, void *arg) {
     VsRecorderWork *work = arg;
     VsRecorderBoxData *boxData = work->screenWork;
 
@@ -199,7 +216,7 @@ void VsRecorder_OnBoxDataSendTouch(u32 index, u32 event, void *arg) {
     }
 }
 
-void VsRecorder_OnBoxDataSendCategoryTouch(u32 index, u32 event, void *arg) {
+static void VsRecorder_OnBoxDataSendCategoryTouch(u32 index, u32 event, void *arg) {
     VsRecorderWork *work = arg;
     VsRecorderBoxData *boxData = work->screenWork;
 
@@ -215,7 +232,7 @@ void VsRecorder_OnBoxDataSendCategoryTouch(u32 index, u32 event, void *arg) {
     }
 }
 
-void VsRecorder_OnBoxDataViewCategoryTouch(u32 index, u32 event, void *arg) {
+static void VsRecorder_OnBoxDataViewCategoryTouch(u32 index, u32 event, void *arg) {
     VsRecorderWork *work = arg;
     VsRecorderBoxData *boxData = work->screenWork;
 
@@ -231,7 +248,7 @@ void VsRecorder_OnBoxDataViewCategoryTouch(u32 index, u32 event, void *arg) {
     }
 }
 
-void VsRecorder_OnBoxListTouch(u32 index, u32 event, void *arg) {
+static void VsRecorder_OnBoxListTouch(u32 index, u32 event, void *arg) {
     VsRecorderWork *work = arg;
     VsRecorderBoxData *boxData = work->screenWork;
 
@@ -258,7 +275,7 @@ void VsRecorder_OnBoxListTouch(u32 index, u32 event, void *arg) {
     }
 }
 
-void VsRecorder_OnBoxDataBoxTouch(u32 index, u32 event, void *arg) {
+static void VsRecorder_OnBoxDataBoxTouch(u32 index, u32 event, void *arg) {
     VsRecorderWork *work = arg;
     VsRecorderBoxData *boxData = work->screenWork;
 
@@ -296,7 +313,7 @@ void VsRecorder_OnBoxDataBoxTouch(u32 index, u32 event, void *arg) {
     }
 }
 
-void VsRecorder_CreateBoxDataButtons(VsRecorderWork *work) {
+static void VsRecorder_CreateBoxDataButtons(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
 
     VsRecorder_LoadButtonGfx(work, NNS_G2D_VRAM_TYPE_2DSUB);
@@ -323,7 +340,7 @@ void VsRecorder_SelectFirstBoxMon(VsRecorderBoxData *boxData) {
     }
 }
 
-void VsRecorder_PackBoxForm(SaveData *saveData, PCStorage *storage, int box, GlobalTerminalNetBoxForm *form) {
+static void VsRecorder_PackBoxForm(SaveData *saveData, PCStorage *storage, int box, GlobalTerminalNetBoxForm *form) {
     memset(form, 0, sizeof(GlobalTerminalNetBoxForm));
     GlobalTerminalNet_PackBoxData(saveData, storage, box, form, HEAP_ID_109);
 }
@@ -437,7 +454,7 @@ BOOL VsRecorder_BoxDataSendChangeBox(VsRecorderWork *work) {
 
 #pragma force_active reset
 
-void VsRecorder_SetBoxDataSendButtonHidden(VsRecorderWork *work, BOOL hidden) {
+static void VsRecorder_SetBoxDataSendButtonHidden(VsRecorderWork *work, BOOL hidden) {
     VsRecorderBoxData *boxData = work->screenWork;
 
     if (hidden == FALSE) {
@@ -755,7 +772,7 @@ void VsRecorder_PrintBoxDataOwnerMessage(VsRecorderWork *work, int unused) {
 
 #pragma force_active on
 
-void VsRecorder_PrintBoxName(VsRecorderWork *work) {
+static void VsRecorder_PrintBoxName(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
     Window *window = &boxData->windows[1];
     String *str = String_New(255, HEAP_ID_109);
@@ -786,7 +803,7 @@ BOOL VsRecorder_HasAllBits(u32 flags, u32 mask) {
     return (flags & mask) == mask;
 }
 
-void VsRecorder_PrintBoxMonName(VsRecorderWork *work, int slot) {
+static void VsRecorder_PrintBoxMonName(VsRecorderWork *work, int slot) {
     u16 name[256];
     VsRecorderBoxData *boxData = work->screenWork;
     Window *window = &boxData->windows[0];
@@ -814,7 +831,7 @@ void VsRecorder_PrintBoxMonName(VsRecorderWork *work, int slot) {
 
 #pragma force_active on
 
-void VsRecorder_CreateBoxMonIcons(VsRecorderWork *work) {
+static void VsRecorder_CreateBoxMonIcons(VsRecorderWork *work) {
     VsRecorderBoxData *boxData;
     PaletteData *plttData;
     SpriteSystem *spriteSystem;
@@ -889,7 +906,7 @@ void VsRecorder_FreeBoxMonIcons(VsRecorderWork *work) {
 
 #pragma force_active on
 
-void VsRecorder_CreateBoxMonPic(VsRecorderWork *work) {
+static void VsRecorder_CreateBoxMonPic(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
     int cursor = boxData->cursor;
     u32 otId = boxData->form.otIds[cursor];
@@ -966,7 +983,7 @@ void VsRecorder_ShowBox(VsRecorderWork *work) {
 }
 
 // a box of the player's PC: bonus wallpapers only once unlocked
-void VsRecorder_RefreshOwnBox(VsRecorderWork *work) {
+static void VsRecorder_RefreshOwnBox(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
     PCStorage *storage = SaveArray_PCStorage_Get(work->saveData);
 

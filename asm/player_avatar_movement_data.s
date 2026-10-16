@@ -15,7 +15,6 @@
 	.text
 	.public PlayerAvatar_MoveControl
 	.public PlayerAvatar_CheckReadyToMove
-	.public PlayerAvatar_IsReadyToMove
 	.rodata
 
 	.public gPlayerForcedMovementFuncs

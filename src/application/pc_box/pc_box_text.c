@@ -51,6 +51,31 @@ extern const TouchscreenHitbox sPCBoxPartyHitboxes[];
 extern const TouchscreenHitbox sPCBoxTrayPartyHitboxes[];
 extern const PCBoxGridLayout sPCBoxGridLayouts[];
 
+static void PCBox_PlaceSpriteOnTop(PCBoxView *view, u32 i, s32 x, s32 y, u32 v);
+static void PCBox_CopyWindowToTextObj(PCBoxView *view, Window *window, u32 index);
+static void PCBox_PrintAligned(Window *window, String *str, s32 x, s32 y, u32 font, u32 color, u32 align);
+static void PCBox_PrintMsg(PCBoxView *view, MsgData *msgData, u32 win, u32 msgId, s32 x, s32 y, u32 font, u32 color, u32 align);
+static void PCBox_PrintExpandedMsg(PCBoxView *view, MsgData *msgData, u32 win, u32 msgId, s32 x, s32 y, u32 font, u32 color, u32 align);
+static void PCBox_PrintSpeciesName(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win);
+static void PCBox_PrintNickname(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win);
+static void PCBox_PrintLevel(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win);
+static void PCBox_PrintGender(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win);
+static void PCBox_PrintDexNumber(PCBoxWork *work, PCBoxMonInfo *monInfo, u32 win);
+static void PCBox_PrintNature(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win);
+static void PCBox_PrintAbility(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win);
+static void PCBox_PrintHeldItem(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win);
+static void PCBox_DrawButtonWindow(PCBoxWork *work, u32 win, u32 msgId, u32 style);
+static void PCBox_PrintWindowMessage(PCBoxWork *work, u32 win, u32 msgId, u32 style, u8 align);
+static void PCBox_DrawTabWindow(PCBoxWork *work, u32 win, u32 msgId);
+static void PCBox_DrawMenuExitButton(PCBoxWork *work, u32 style);
+static void PCBox_DrawChangeBoxTitle(PCBoxWork *work);
+static void PCBox_SetPanelWindowFrame(BgCellManager *mgr, int id, Window *win);
+static void PCBox_AttachWindowToPanel(BgCellManager *mgr, int id, Window *window);
+static void PCBox_PrintCenteredLabel(PCBoxView *view, u32 windowIndex, u32 messageId, u32 unused);
+static MsgData *PCBox_LoadBoxMessages(void);
+static void PCBox_DrawMessageFrame(Window *window);
+static void PCBox_PrintMessage(PCBoxWork *work, int msgNo, int windowId);
+
 void PCBox_LoadTrayPageThumbnails(PCBoxWork *work) {
     u32 index;
     u32 offset;
@@ -124,7 +149,7 @@ void PCBox_DrawBoxThumbnailMons(PCBoxWork *work, u32 box, void *dst) {
     }
 }
 
-void PCBox_PlaceSpriteOnTop(PCBoxView *view, u32 i, s32 x, s32 y, u32 v) {
+static void PCBox_PlaceSpriteOnTop(PCBoxView *view, u32 i, s32 x, s32 y, u32 v) {
     ((void (*)(ManagedSprite *, s32, s32))ManagedSprite_SetPositionXY)(view->sprites[i], x, y);
     PCBox_SetSpriteVisible(view, i, v);
     PCBox_SetSpritePriority(view, i, 0);
@@ -234,7 +259,7 @@ void PCBox_DestroyTrayTextObjs(PCBoxView *view) {
     FontSystem_Delete(view->fontSystem);
 }
 
-void PCBox_CopyWindowToTextObj(PCBoxView *view, Window *window, u32 index) {
+static void PCBox_CopyWindowToTextObj(PCBoxView *view, Window *window, u32 index) {
     TextOBJLayout *layout;
 
     layout = TextOBJLayout_New(window, HEAP_ID_10);
@@ -260,7 +285,7 @@ void PCBox_RemoveWindows(PCBoxWork *work) {
     FontID_Release(4);
 }
 
-void PCBox_PrintAligned(Window *window, String *str, s32 x, s32 y, u32 font, u32 color, u32 align) {
+static void PCBox_PrintAligned(Window *window, String *str, s32 x, s32 y, u32 font, u32 color, u32 align) {
     if (align == 1) {
         x -= FontID_String_GetWidth(font, str, 0);
     } else if (align == 2) {
@@ -268,11 +293,10 @@ void PCBox_PrintAligned(Window *window, String *str, s32 x, s32 y, u32 font, u32
     } else if (align == 3) {
         x -= FontID_String_GetWidthMultiline(font, str, 0) / 2;
     }
-    // the font is not narrowed to a FontID
     ((u8(*)(Window *, u32, String *, u32, u32, u32, u32, PrinterCallback_t))AddTextPrinterParameterizedWithColor)(window, font, str, x, y, TEXT_SPEED_NOTRANSFER, color, NULL);
 }
 
-void PCBox_PrintMsg(PCBoxView *view, MsgData *msgData, u32 win, u32 msgId, s32 x, s32 y, u32 font, u32 color, u32 align) {
+static void PCBox_PrintMsg(PCBoxView *view, MsgData *msgData, u32 win, u32 msgId, s32 x, s32 y, u32 font, u32 color, u32 align) {
     String *str;
 
     str = NewString_ReadMsgData(msgData, msgId);
@@ -280,7 +304,7 @@ void PCBox_PrintMsg(PCBoxView *view, MsgData *msgData, u32 win, u32 msgId, s32 x
     String_Delete(str);
 }
 
-void PCBox_PrintExpandedMsg(PCBoxView *view, MsgData *msgData, u32 win, u32 msgId, s32 x, s32 y, u32 font, u32 color, u32 align) {
+static void PCBox_PrintExpandedMsg(PCBoxView *view, MsgData *msgData, u32 win, u32 msgId, s32 x, s32 y, u32 font, u32 color, u32 align) {
     String *str;
 
     str = NewString_ReadMsgData(msgData, msgId);
@@ -289,7 +313,7 @@ void PCBox_PrintExpandedMsg(PCBoxView *view, MsgData *msgData, u32 win, u32 msgI
     String_Delete(str);
 }
 
-void PCBox_PrintSpeciesName(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win) {
+static void PCBox_PrintSpeciesName(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win) {
     FillWindowPixelBuffer(&view->windows[win], 0);
     if (!monInfo->isEgg) {
         BufferBoxMonSpeciesName(view->msgFormat, 0, monInfo->boxMon);
@@ -298,14 +322,14 @@ void PCBox_PrintSpeciesName(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win) {
     ScheduleWindowCopyToVram(&view->windows[win]);
 }
 
-void PCBox_PrintNickname(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win) {
+static void PCBox_PrintNickname(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win) {
     FillWindowPixelBuffer(&view->windows[win], 0);
     BufferBoxMonNickname(view->msgFormat, 0, monInfo->boxMon);
     PCBox_PrintExpandedMsg(view, view->msgData, win, msg_0024_00001, 0, 0, 0, 0x10200, 0);
     ScheduleWindowCopyToVram(&view->windows[win]);
 }
 
-void PCBox_PrintLevel(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win) {
+static void PCBox_PrintLevel(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win) {
     FillWindowPixelBuffer(&view->windows[win], 0);
     if (!monInfo->isEgg) {
         MessagePrinter_PrintGlyph(view->msgPrinter, 1, &view->windows[win], 0, 5);
@@ -315,7 +339,7 @@ void PCBox_PrintLevel(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win) {
     ScheduleWindowCopyToVram(&view->windows[win]);
 }
 
-void PCBox_PrintGender(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win) {
+static void PCBox_PrintGender(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win) {
     FillWindowPixelBuffer(&view->windows[win], 0);
     if (!monInfo->isEgg) {
         if (monInfo->showGender == 1) {
@@ -329,7 +353,7 @@ void PCBox_PrintGender(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win) {
     ScheduleWindowCopyToVram(&view->windows[win]);
 }
 
-void PCBox_PrintDexNumber(PCBoxWork *work, PCBoxMonInfo *monInfo, u32 win) {
+static void PCBox_PrintDexNumber(PCBoxWork *work, PCBoxMonInfo *monInfo, u32 win) {
     u32 dexno;
 
     FillWindowPixelBuffer(&work->view->windows[win], 0);
@@ -344,7 +368,7 @@ void PCBox_PrintDexNumber(PCBoxWork *work, PCBoxMonInfo *monInfo, u32 win) {
     ScheduleWindowCopyToVram(&work->view->windows[win]);
 }
 
-void PCBox_PrintNature(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win) {
+static void PCBox_PrintNature(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win) {
     FillWindowPixelBuffer(&view->windows[win], 0);
     if (!monInfo->isEgg) {
         BufferNatureName(view->msgFormat, 0, monInfo->nature);
@@ -355,7 +379,7 @@ void PCBox_PrintNature(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win) {
     ScheduleWindowCopyToVram(&view->windows[win]);
 }
 
-void PCBox_PrintAbility(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win) {
+static void PCBox_PrintAbility(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win) {
     FillWindowPixelBuffer(&view->windows[win], 0);
     if (!monInfo->isEgg) {
         BufferAbilityName(view->msgFormat, 0, monInfo->ability);
@@ -366,7 +390,7 @@ void PCBox_PrintAbility(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win) {
     ScheduleWindowCopyToVram(&view->windows[win]);
 }
 
-void PCBox_PrintHeldItem(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win) {
+static void PCBox_PrintHeldItem(PCBoxView *view, PCBoxMonInfo *monInfo, u32 win) {
     FillWindowPixelBuffer(&view->windows[win], 0);
     if (monInfo->heldItem) {
         BufferItemName(view->msgFormat, 0, monInfo->heldItem);
@@ -556,7 +580,7 @@ void PCBox_DrawWallpaperName(PCBoxWork *work) {
     RemoveWindow(&window);
 }
 
-void PCBox_DrawButtonWindow(PCBoxWork *work, u32 win, u32 msgId, u32 style) {
+static void PCBox_DrawButtonWindow(PCBoxWork *work, u32 win, u32 msgId, u32 style) {
     Window *w = &work->view->windows[win];
     void *buf;
     u32 color;
@@ -601,7 +625,7 @@ void PCBox_DrawButtonWindow(PCBoxWork *work, u32 win, u32 msgId, u32 style) {
     CopyWindowPixelsToVram_TextMode(w);
 }
 
-void PCBox_PrintWindowMessage(PCBoxWork *work, u32 win, u32 msgId, u32 style, u8 align) {
+static void PCBox_PrintWindowMessage(PCBoxWork *work, u32 win, u32 msgId, u32 style, u8 align) {
     Window *w = &work->view->windows[win];
     u8 bg, x, y, width, height;
     String *str;
@@ -632,7 +656,7 @@ void PCBox_DrawPartyButton(PCBoxWork *work, u32 style) {
     PCBox_DrawButtonWindow(work, 0x18, msg_0024_00060, style);
 }
 
-void PCBox_DrawTabWindow(PCBoxWork *work, u32 win, u32 msgId) {
+static void PCBox_DrawTabWindow(PCBoxWork *work, u32 win, u32 msgId) {
     Window *w = &work->view->windows[win];
     u8 width;
     NNSG2dCharacterData *chr;
@@ -677,7 +701,7 @@ void PCBox_DrawExitButton(PCBoxWork *work, u32 style) {
     PCBox_DrawButtonWindow(work, 0x1b, msg_0024_00076, style);
 }
 
-void PCBox_DrawMenuExitButton(PCBoxWork *work, u32 style) {
+static void PCBox_DrawMenuExitButton(PCBoxWork *work, u32 style) {
     PCBox_DrawButtonWindow(work, 0x1c, msg_0024_00071, style);
 }
 
@@ -722,7 +746,7 @@ void PCBox_DrawChangeBoxButton(PCBoxWork *work) {
     PCBox_DrawButtonWindow(work, 0x2a, msg_0024_00063, 0);
 }
 
-void PCBox_DrawChangeBoxTitle(PCBoxWork *work) {
+static void PCBox_DrawChangeBoxTitle(PCBoxWork *work) {
     PCBox_PrintWindowMessage(work, 0x29, msg_0024_00077, 0, 3);
 }
 
@@ -740,7 +764,7 @@ void PCBox_DrawDepositTitle(PCBoxWork *work) {
     PCBox_PrintWindowMessage(work, 0x29, msg_0024_00079, 0, 3);
 }
 
-void PCBox_SetPanelWindowFrame(BgCellManager *mgr, int id, Window *win) {
+static void PCBox_SetPanelWindowFrame(BgCellManager *mgr, int id, Window *win) {
     u16 size[2];
     u16 *map;
     u16 i;
@@ -773,7 +797,7 @@ void PCBox_SetPanelWindowFrame(BgCellManager *mgr, int id, Window *win) {
     }
 }
 
-void PCBox_AttachWindowToPanel(BgCellManager *mgr, int id, Window *window) {
+static void PCBox_AttachWindowToPanel(BgCellManager *mgr, int id, Window *window) {
     u32 width;
     u32 height;
     u32 bg = GetWindowBgId(window);
@@ -813,7 +837,7 @@ void PCBox_AttachMenuExitButtonWindow(PCBoxWork *work) {
     PCBox_DrawMenuExitButton(work, 0);
 }
 
-void PCBox_PrintCenteredLabel(PCBoxView *view, u32 windowIndex, u32 messageId, u32 unused) {
+static void PCBox_PrintCenteredLabel(PCBoxView *view, u32 windowIndex, u32 messageId, u32 unused) {
     Window *window = &view->windows[windowIndex];
     u8 x;
 
@@ -885,11 +909,11 @@ void PCBox_DrawSummaryButton(PCBoxWork *work, u32 unused) {
     CopyWindowPixelsToVram_TextMode(&view->windows[43]);
 }
 
-MsgData *PCBox_LoadBoxMessages(void) {
+static MsgData *PCBox_LoadBoxMessages(void) {
     return NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0025_bin, HEAP_ID_10);
 }
 
-void PCBox_DrawMessageFrame(Window *window) {
+static void PCBox_DrawMessageFrame(Window *window) {
     FillWindowPixelBuffer(window, 15);
     DrawFrame2AroundWindow(window, 910, 10);
 }
@@ -908,7 +932,7 @@ void PCBox_ClearWindowFrame(PCBoxView *view, u32 idx) {
 }
 
 // Prints box message MSGNO (msg_0025) into window WINDOWID with a frame.
-void PCBox_PrintMessage(PCBoxWork *work, int msgNo, int windowId) {
+static void PCBox_PrintMessage(PCBoxWork *work, int msgNo, int windowId) {
     MsgData *msgData = PCBox_LoadBoxMessages();
 
     PCBox_DrawMessageFrame(&work->view->windows[windowId]);

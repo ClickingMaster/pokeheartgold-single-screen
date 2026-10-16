@@ -16,6 +16,6 @@ typedef struct NumberEntryArgs {
 
 SysTask *NumberEntry_Init(BgConfig *bgConfig, void *lastTouchMenuInput, void *fieldSystem, NumberEntryArgs *args);
 void NumberEntry_Exit(BgConfig *bgConfig, SysTask *task);
-BOOL NumberEntry_IsExitDone(void *a0);
+BOOL NumberEntry_IsExitDone(BgConfig *bgConfig);
 
 #endif // POKEHEARTGOLD_NUMBER_ENTRY_H

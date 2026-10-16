@@ -2,8 +2,8 @@
 
 #include "drawing_session.h"
 
-// The last function of the Union Room drawing session (drawing_session.c); its object is linked after
-// the overlay's data (asm/drawing_session_data.s).
+// The last function of the Union Room drawing session; its object is linked after
+// the overlay's data.
 
 // force_active only sets a section flag here; kept so the object stays identical.
 #pragma force_active on

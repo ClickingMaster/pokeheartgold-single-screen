@@ -58,14 +58,10 @@
 	.public sWiiAddressDomain
 	.public sWiiNumberDigitChars
 	.public gApplication_TitleScreen
-	.public sWiiMessageSettingsRegisterChoicePositions
 	.public sWiiMessageSettingsHeap
 	.public WiiMessageSettings_Init
 	.public WiiMessageSettings_Main
 	.public WiiMessageSettings_Exit
-	.public WiiMessageSettings_LoadNetworkOverlays
-	.public WiiMessageSettings_UnloadNetworkOverlays
-	.public WiiMessageSettings_SaveWiiAddress
 	.public WiiMessageSettings_CreateWiiNumberEntryArgs
 	.public WiiMessageSettings_FinishWiiNumberEntry
 	.public WiiMessageSettings_CreateRegistrationCodeEntryArgs
@@ -75,18 +71,9 @@
 	.public WiiMessageSettingsScreen_Init
 	.public WiiMessageSettingsScreen_Main
 	.public WiiMessageSettingsScreen_Exit
-	.public WiiMessageSettingsScreen_InitBgs
-	.public WiiMessageSettingsScreen_LoadGraphics
-	.public WiiMessageSettingsScreen_AnimatePaletteTask
-	.public WiiMessageSettingsScreen_AddWindows
-	.public WiiMessageSettingsScreen_CreateYesNoPrompt
 	.public WiiMessageSettingsScreen_MainMenu
 	.public WiiMessageSettingsScreen_SetMessageReception
 	.public WiiMessageSettingsScreen_DeleteSettings
-	.public WiiMessageSettingsScreen_PrintRegisterChoice
-	.public WiiMessageSettingsScreen_AnimateScrollArrows
-	.public WiiMessageSettingsScreen_PrintExplanation
-	.public WiiMessageSettingsScreen_RunExplanation
 	.public WiiMessageSettingsScreen_RegisterWiiNumber
 	.public WiiMessageSettingsScreen_ConfirmConnect
 	.public WiiMessageSettingsScreen_HandleConnectYesNo
@@ -109,14 +96,8 @@
 	.public WiiMessageSettingsScreen_ShowRegistrationError
 	.public WiiMessageSettingsScreen_DisconnectAndQuit
 	.public WiiMessageSettingsScreen_WaitMessageAndDelay
-	.public WiiMessageSettingsScreen_PrintMessage
-	.public WiiMessageSettingsScreen_IsPrinterActive
 	.public WiiMessageSettingsScreen_PrintWiiNumberReentry
 	.public WiiMessageSettingsScreen_CheckPassword
-	.public WiiMessageSettingsScreen_GetAlignedX
-	.public WiiMessageSettingsScreen_PrintAligned
-	.public WiiMessageSettingsScreen_PrintError
-	.public WiiMessageSettingsScreen_PrintErrorCode
 	.public WiiNumber_ToWiiAddress
 	.public WiiNumber_IsZero
 	.public WiiNumber_ParseDigitGroups
@@ -138,34 +119,11 @@
 	.public sWiiNumberDigitChars
 	.public ov75_02249B24
 	.public sWiiMessageSettingsScreenStates
-	.public WiiMessageSettings_SetNextApp
-	.public WiiMessageSettings_Quit
-	.public WiiMessageSettings_SetScreenStartState
-	.public WiiMessageSettings_GetScreenStartState
-	.public WiiMessageSettings_Alloc
-	.public WiiMessageSettings_Free
-	.public WiiMessageSettings_SaveRegistrationCode
-	.public WiiMessageSettings_SavePassword
-	.public WiiMessageSettings_InitRequest
-	.public WiiMessageSettings_SetRequestWiiAddress
-	.public WiiMessageSettings_SetRequestRegistrationCode
-	.public WiiMessageSettings_SetRegistrationCodePrefix
-	.public WiiMessageSettings_GetRegistrationCode
-	.public WiiMessageSettings_GetPassword
-	.public WiiMessageSettings_SetWiiNumberEntryState
-	.public WiiMessageSettings_GetWiiNumberEntryState
 	.public WiiMessageSettings_CreateScreenArgs
 	.public WiiMessageSettings_DestroyScreenArgs
 	.public WiiMessageSettings_CreateWifiClubArgs
 	.public WiiMessageSettings_FinishWifiClub
-	.public WiiMessageSettingsScreen_VBlankCB
-	.public WiiMessageSettingsScreen_FreeBgs
-	.public WiiMessageSettingsScreen_RemoveWindows
-	.public WiiMessageSettingsScreen_SetState
-	.public WiiMessageSettingsScreen_ShowWaitingIcon
-	.public WiiMessageSettingsScreen_HideWaitingIcon
 	.public WiiMessageSettingsScreen_StartCheckWiiNumber
-	.public WiiMessageSettingsScreen_ClearRegisterChoice
 	.public WiiMessageSettingsScreen_StartWiiNumberEntry
 	.public WiiMessageSettingsScreen_CheckWiiNumberEntry
 	.public WiiMessageSettingsScreen_Disconnect

@@ -16,7 +16,6 @@
 	.public gNatureStatMods
 
 	.text
-	.public VsRecorderApp_GetRootMenu
 	.public VsRecorderApp_GetStartMenu
 	.public VsRecorderApp_CountMenuChoices
 	.rodata

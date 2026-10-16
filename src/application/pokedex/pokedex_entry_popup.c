@@ -1,10 +1,11 @@
-#include "application/pokedex/pokedex_entry_popup.h"
-
 #include "global.h"
 
+#include "application/pokedex/pokedex_text_util.h"
+#include "battle/battle.h"
 #include "graphic/zukan_gra.naix"
 #include "msgdata/msg.naix"
 
+#include "bg_window.h"
 #include "dex_mon_measures.h"
 #include "filesystem.h"
 #include "filesystem_files_def.h"
@@ -14,12 +15,51 @@
 #include "heap.h"
 #include "message_format.h"
 #include "obj_char_transfer.h"
+#include "overlay_18.h"
+#include "palette.h"
 #include "pokedex_util.h"
+#include "pokemon.h"
+#include "pokepic.h"
 #include "sound_playback.h"
 #include "sound_system.h"
-#include "sprite_transfer.h"
-#include "text.h"
+#include "sprite.h"
+#include "sprite_resource.h"
 #include "sprite_resource_header.h"
+#include "sprite_transfer.h"
+#include "sys_task_api.h"
+#include "text.h"
+
+// Sprites of the popup: 0 banner, 1 and 2 the type icons, 3 the footprint
+typedef struct PokedexEntryPopupSprite {
+    Sprite *sprite;
+    SpriteResource *resources[4]; // char, palette, cell, anim
+} PokedexEntryPopupSprite;
+
+// "Registered in the Pokedex" popup after a capture (msg_0802). Starts with a copy of PokedexEntryPopupArgs; created
+// by PokedexEntryPopup_Create, run by PokedexEntryPopup_Task.
+typedef struct PokedexEntryPopup {
+    BgConfig *bgConfig;                  // 0x000
+    PaletteData *paletteData;            // 0x004
+    PokepicManager *pokepicManager;      // 0x008
+    Pokemon *mon;                        // 0x00C
+    BOOL natDexEnabled;                  // 0x010
+    enum HeapID heapId;                  // 0x014
+    SysTask *task;                       // 0x018
+    NARC *gfxNarc;                       // 0x01C
+    Pokepic *pokepic;                    // 0x020
+    Window windows[9];                   // 0x024
+    SpriteList *spriteList;              // 0x0B4
+    G2dRenderer renderer;                // 0x0B8
+    GF_2DGfxResMan *resourceManagers[4]; // 0x1E0
+    PokedexEntryPopupSprite sprites[4];  // 0x1F0
+    u16 state;                           // 0x240
+    u16 bannerFlashTimer;                // 0x242
+    u32 species;                         // 0x244
+    u32 form;                            // 0x248
+    u32 type1;                           // 0x24C
+    u32 type2;                           // 0x250
+    u32 done;                            // 0x254
+} PokedexEntryPopup;
 
 extern const BgTemplate sEntryPopupBg1Template;
 extern const BgTemplate sEntryPopupBg2Template;
@@ -27,14 +67,47 @@ extern const BgTemplate sEntryPopupBg3Template;
 extern const WindowTemplate sEntryPopupWindowTemplates[9];
 extern const ObjCharTransferTemplate sEntryPopupObjCharTransferTemplate;
 
-OverlayManager *PokedexEntryPopup_Create(PokedexEntryPopupArgs *unkStruct) {
-    PokedexEntryPopup *popup = Heap_Alloc(unkStruct->heapID, sizeof(PokedexEntryPopup));
+static void PokedexEntryPopup_Task(SysTask *task, void *data);
+static void PokedexEntryPopup_ReadMonData(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_InitBgs(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_FreeBgs(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_StartFadeIn(PokedexEntryPopup *popup);
+static BOOL PokedexEntryPopup_IsFadeDone(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_FlashBanner(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_DrawWindows(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_RemoveWindows(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_InitObjCharTransfer(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_DestroyObjCharTransfer(void);
+static void PokedexEntryPopup_CreateResourceManagers(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_DestroyResourceManagers(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_InitSprites(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_LoadBannerResources(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_FreeBannerResources(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_LoadTypeIconResources(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_UnloadTypeIconResources(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_LoadFootprintResources(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_UnloadFootprintResources(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_FreeSprites(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_LoadSpriteResources(SpriteResource **resources, GF_2DGfxResMan **managers, enum HeapID heapId, NARC *narc, int charFileId, int plttFileId, int cellFileId, int animFileId, int plttNum, int charId, int plttId, int cellId, int animId);
+static SpriteResource *PokedexEntryPopup_LoadPaletteResource(GF_2DGfxResMan *manager, enum HeapID heapId, NARC *narc, int fileId, int plttNum, int id);
+static void PokedexEntryPopup_FreeSpriteResources(SpriteResource **resources, GF_2DGfxResMan **managers);
+static void PokedexEntryPopup_MakeResourcesHeader(SpriteResource **resources, GF_2DGfxResMan **managers, SpriteResourcesHeader *header, int priority);
+static void PokedexEntryPopup_CreateTypeIconSprites(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_DeleteTypeIconSprites(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_CreateBannerSprite(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_DeleteBannerSprite(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_CreateFootprintSprite(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_DeleteFootprintSprite(PokedexEntryPopup *popup);
+static void PokedexEntryPopup_CreatePokepic(PokedexEntryPopup *popup);
+
+OverlayManager *PokedexEntryPopup_Create(PokedexEntryPopupArgs *args) {
+    PokedexEntryPopup *popup = Heap_Alloc(args->heapID, sizeof(PokedexEntryPopup));
     memset(popup, 0, sizeof(PokedexEntryPopup));
-    memcpy(popup, unkStruct, sizeof(PokedexEntryPopupArgs));
+    memcpy(popup, args, sizeof(PokedexEntryPopupArgs));
     popup->gfxNarc = NARC_New(NARC_graphic_zukan_gra, popup->heapId);
     popup->state = 0;
     popup->done = 0;
-    popup->task = SysTask_CreateOnMainQueue((SysTaskFunc)PokedexEntryPopup_Task, popup, 0);
+    popup->task = SysTask_CreateOnMainQueue(PokedexEntryPopup_Task, popup, 0);
     return (OverlayManager *)popup;
 }
 
@@ -54,7 +127,9 @@ void PokedexEntryPopup_Delete(OverlayManager *man) {
 }
 
 // Fades in the screen, plays the cry, then flags done; the caller deletes the popup.
-void PokedexEntryPopup_Task(SysTask *task, PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_Task(SysTask *task, void *data) {
+    PokedexEntryPopup *popup = data;
+
     switch (popup->state) {
     case 0:
         *(vu16 *)REG_BLDCNT_ADDR = 0;
@@ -88,7 +163,7 @@ void PokedexEntryPopup_Task(SysTask *task, PokedexEntryPopup *popup) {
     PokedexEntryPopup_FlashBanner(popup);
 }
 
-void PokedexEntryPopup_ReadMonData(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_ReadMonData(PokedexEntryPopup *popup) {
     BOOL lock = AcquireMonLock(popup->mon);
     popup->species = GetMonData(popup->mon, MON_DATA_SPECIES, NULL);
     popup->form = GetMonData(popup->mon, MON_DATA_FORM, NULL);
@@ -97,7 +172,7 @@ void PokedexEntryPopup_ReadMonData(PokedexEntryPopup *popup) {
     ReleaseMonLock(popup->mon, lock);
 }
 
-void PokedexEntryPopup_InitBgs(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_InitBgs(PokedexEntryPopup *popup) {
     SetBgPriority(GF_BG_LYR_MAIN_0, 0);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
     {
@@ -114,19 +189,19 @@ void PokedexEntryPopup_InitBgs(PokedexEntryPopup *popup) {
     PaletteData_LoadOpenNarc(popup->paletteData, popup->gfxNarc, NARC_zukan_gra_zukan_gra_00000018_NCLR, popup->heapId, PLTTBUF_MAIN_BG, 0, 0);
 }
 
-void PokedexEntryPopup_FreeBgs(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_FreeBgs(PokedexEntryPopup *popup) {
     FreeBgTilemapBuffer(popup->bgConfig, GF_BG_LYR_MAIN_3);
     FreeBgTilemapBuffer(popup->bgConfig, GF_BG_LYR_MAIN_2);
     FreeBgTilemapBuffer(popup->bgConfig, GF_BG_LYR_MAIN_1);
 }
 
-void PokedexEntryPopup_StartFadeIn(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_StartFadeIn(PokedexEntryPopup *popup) {
     PaletteData_BeginPaletteFade(popup->paletteData, PLTTBUF_MAIN_BG_F | PLTTBUF_MAIN_OBJ_F, 0xFFFF, 1, 16, 0, RGB_BLACK);
     Pokepic_StartPaletteFade(popup->pokepic, 16, 0, 0, RGB_BLACK);
     PaletteData_SetAutoTransparent(popup->paletteData, FALSE);
 }
 
-BOOL PokedexEntryPopup_IsFadeDone(PokedexEntryPopup *popup) {
+static BOOL PokedexEntryPopup_IsFadeDone(PokedexEntryPopup *popup) {
     if (PaletteData_GetSelectedBuffersBitmask(popup->paletteData) == 0 && Pokepic_ResumePaletteFade(popup->pokepic) == FALSE) {
         return TRUE;
     }
@@ -134,7 +209,7 @@ BOOL PokedexEntryPopup_IsFadeDone(PokedexEntryPopup *popup) {
 }
 
 // The banner (BG 2 rows 0-1) alternates between palettes 7 and 0 every 16 frames.
-void PokedexEntryPopup_FlashBanner(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_FlashBanner(PokedexEntryPopup *popup) {
     popup->bannerFlashTimer++;
     if (popup->bannerFlashTimer == 16) {
         BgTilemapRectChangePalette(popup->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 32, 2, 7);
@@ -146,7 +221,7 @@ void PokedexEntryPopup_FlashBanner(PokedexEntryPopup *popup) {
     }
 }
 
-void PokedexEntryPopup_DrawWindows(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_DrawWindows(PokedexEntryPopup *popup) {
     MsgData *msgData;
     MessageFormat *msgFormat;
     String *strbuf;
@@ -194,25 +269,25 @@ void PokedexEntryPopup_DrawWindows(PokedexEntryPopup *popup) {
     }
 }
 
-void PokedexEntryPopup_RemoveWindows(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_RemoveWindows(PokedexEntryPopup *popup) {
     u32 i;
 
-    for (i = 0; i < 9; i++) {
+    for (i = 0; i < NELEMS(popup->windows); i++) {
         RemoveWindow(&popup->windows[i]);
     }
 }
 
-void PokedexEntryPopup_InitObjCharTransfer(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_InitObjCharTransfer(PokedexEntryPopup *popup) {
     ObjCharTransferTemplate template = sEntryPopupObjCharTransferTemplate;
     template.heapID = popup->heapId;
     ObjCharTransfer_InitEx(&template, GX_OBJVRAMMODE_CHAR_1D_64K, GX_OBJVRAMMODE_CHAR_1D_32K);
 }
 
-void PokedexEntryPopup_DestroyObjCharTransfer(void) {
+static void PokedexEntryPopup_DestroyObjCharTransfer(void) {
     ObjCharTransfer_Destroy();
 }
 
-void PokedexEntryPopup_CreateResourceManagers(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_CreateResourceManagers(PokedexEntryPopup *popup) {
     int i;
 
     for (i = 0; i < 4; i++) {
@@ -220,18 +295,17 @@ void PokedexEntryPopup_CreateResourceManagers(PokedexEntryPopup *popup) {
     }
 }
 
-void PokedexEntryPopup_DestroyResourceManagers(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_DestroyResourceManagers(PokedexEntryPopup *popup) {
     int i;
     u8 *cur = (u8 *)popup;
 
-    // a byte pointer walks the struct (indexing resourceManagers[i] changes the code)
     for (i = 0; i < 4; i++) {
         Destroy2DGfxResObjMan(((PokedexEntryPopup *)cur)->resourceManagers[0]);
         cur += sizeof(GF_2DGfxResMan *);
     }
 }
 
-void PokedexEntryPopup_InitSprites(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_InitSprites(PokedexEntryPopup *popup) {
     popup->spriteList = G2dRenderer_Init(32, &popup->renderer, popup->heapId);
     ClearMainOAM(popup->heapId);
     PokedexEntryPopup_InitObjCharTransfer(popup);
@@ -245,24 +319,23 @@ void PokedexEntryPopup_InitSprites(PokedexEntryPopup *popup) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-// Banner sprite resources
-void PokedexEntryPopup_LoadBannerResources(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_LoadBannerResources(PokedexEntryPopup *popup) {
     PokedexEntryPopup_LoadSpriteResources(popup->sprites[0].resources, popup->resourceManagers, popup->heapId, popup->gfxNarc, 29, 32, 30, 31, 2, 0xC618, 0xC618, 0xC618, 0xC618);
     PaletteData_LoadPaletteSlotFromHardware(popup->paletteData, PLTTBUF_MAIN_OBJ, SpriteTransfer_GetPlttOffset(popup->sprites[0].resources[1], NNS_G2D_VRAM_TYPE_2DMAIN) << 4, 0x40);
 }
 
-void PokedexEntryPopup_FreeBannerResources(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_FreeBannerResources(PokedexEntryPopup *popup) {
     PokedexEntryPopup_FreeSpriteResources(popup->sprites[0].resources, popup->resourceManagers);
 }
 
 // Both type icons share the first icon's palettes, cell and animation.
-void PokedexEntryPopup_LoadTypeIconResources(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_LoadTypeIconResources(PokedexEntryPopup *popup) {
     PokedexEntryPopup_LoadSpriteResources(popup->sprites[1].resources, popup->resourceManagers, popup->heapId, popup->gfxNarc, PokedexApp_GetTypeIconCharFile(popup->type1), 35, 33, 34, 4, 0xC619, 0xC619, 0xC619, 0xC619);
     PokedexEntryPopup_LoadSpriteResources(popup->sprites[2].resources, popup->resourceManagers, popup->heapId, popup->gfxNarc, PokedexApp_GetTypeIconCharFile(popup->type2), -1, 33, 34, 4, 0xC61A, 0xC61A, 0xC61A, 0xC61A);
     PaletteData_LoadPaletteSlotFromHardware(popup->paletteData, PLTTBUF_MAIN_OBJ, SpriteTransfer_GetPlttOffset(popup->sprites[1].resources[1], NNS_G2D_VRAM_TYPE_2DMAIN) << 4, 0x80);
 }
 
-void PokedexEntryPopup_UnloadTypeIconResources(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_UnloadTypeIconResources(PokedexEntryPopup *popup) {
     PokedexEntryPopup_FreeSpriteResources(popup->sprites[1].resources, popup->resourceManagers);
     SpriteTransfer_DeleteCharTransferTask(popup->sprites[2].resources[0]);
     DestroySingle2DGfxResObj(popup->resourceManagers[0], popup->sprites[2].resources[0]);
@@ -270,7 +343,7 @@ void PokedexEntryPopup_UnloadTypeIconResources(PokedexEntryPopup *popup) {
     DestroySingle2DGfxResObj(popup->resourceManagers[3], popup->sprites[2].resources[3]);
 }
 
-void PokedexEntryPopup_LoadFootprintResources(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_LoadFootprintResources(PokedexEntryPopup *popup) {
     NARC *narc = NARC_New(Pokefoot_GetNarcId(), popup->heapId);
     PokedexEntryPopup_LoadSpriteResources(popup->sprites[3].resources, popup->resourceManagers, popup->heapId, popup->gfxNarc, 77, -1, 78, 79, 1, 0xC61B, 0xC61B, 0xC61B, 0xC61B);
     popup->sprites[3].resources[1] = PokedexEntryPopup_LoadPaletteResource(popup->resourceManagers[1], popup->heapId, narc, Pokefoot_GetPlttFileId(), 1, 0xC61B);
@@ -278,11 +351,11 @@ void PokedexEntryPopup_LoadFootprintResources(PokedexEntryPopup *popup) {
     NARC_Delete(narc);
 }
 
-void PokedexEntryPopup_UnloadFootprintResources(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_UnloadFootprintResources(PokedexEntryPopup *popup) {
     PokedexEntryPopup_FreeSpriteResources(popup->sprites[3].resources, popup->resourceManagers);
 }
 
-void PokedexEntryPopup_FreeSprites(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_FreeSprites(PokedexEntryPopup *popup) {
     PokedexEntryPopup_DeleteFootprintSprite(popup);
     PokedexEntryPopup_DeleteTypeIconSprites(popup);
     PokedexEntryPopup_DeleteBannerSprite(popup);
@@ -295,7 +368,7 @@ void PokedexEntryPopup_FreeSprites(PokedexEntryPopup *popup) {
 }
 
 // plttFileId -1: no palette (the caller shares or loads one itself)
-void PokedexEntryPopup_LoadSpriteResources(SpriteResource **resources, GF_2DGfxResMan **managers, enum HeapID heapId, NARC *narc, int charFileId, int plttFileId, int cellFileId, int animFileId, int plttNum, int charId, int plttId, int cellId, int animId) {
+static void PokedexEntryPopup_LoadSpriteResources(SpriteResource **resources, GF_2DGfxResMan **managers, enum HeapID heapId, NARC *narc, int charFileId, int plttFileId, int cellFileId, int animFileId, int plttNum, int charId, int plttId, int cellId, int animId) {
     resources[0] = AddCharResObjFromOpenNarc(managers[0], narc, charFileId, TRUE, charId, NNS_G2D_VRAM_TYPE_2DMAIN, heapId);
     SpriteTransfer_CreateCharTransferTask_AllocAtEnd(resources[0]);
     GF2DGfxResObj_FreeData(resources[0]);
@@ -306,14 +379,14 @@ void PokedexEntryPopup_LoadSpriteResources(SpriteResource **resources, GF_2DGfxR
     resources[3] = AddCellOrAnimResObjFromOpenNarc(managers[3], narc, animFileId, TRUE, animId, GF_GFX_RES_TYPE_ANIM, heapId);
 }
 
-SpriteResource *PokedexEntryPopup_LoadPaletteResource(GF_2DGfxResMan *manager, enum HeapID heapId, NARC *narc, int fileId, int plttNum, int id) {
+static SpriteResource *PokedexEntryPopup_LoadPaletteResource(GF_2DGfxResMan *manager, enum HeapID heapId, NARC *narc, int fileId, int plttNum, int id) {
     SpriteResource *resource = AddPlttResObjFromOpenNarc(manager, narc, fileId, FALSE, id, NNS_G2D_VRAM_TYPE_2DMAIN, plttNum, heapId);
     SpriteTransfer_CreatePlttTransferTask(resource);
     GF2DGfxResObj_FreeData(resource);
     return resource;
 }
 
-void PokedexEntryPopup_FreeSpriteResources(SpriteResource **resources, GF_2DGfxResMan **managers) {
+static void PokedexEntryPopup_FreeSpriteResources(SpriteResource **resources, GF_2DGfxResMan **managers) {
     SpriteTransfer_DeleteCharTransferTask(resources[0]);
     SpriteTransfer_DeletePlttTransferTask(resources[1]);
     DestroySingle2DGfxResObj(managers[0], resources[0]);
@@ -322,7 +395,7 @@ void PokedexEntryPopup_FreeSpriteResources(SpriteResource **resources, GF_2DGfxR
     DestroySingle2DGfxResObj(managers[3], resources[3]);
 }
 
-void PokedexEntryPopup_MakeResourcesHeader(SpriteResource **resources, GF_2DGfxResMan **managers, SpriteResourcesHeader *header, int priority) {
+static void PokedexEntryPopup_MakeResourcesHeader(SpriteResource **resources, GF_2DGfxResMan **managers, SpriteResourcesHeader *header, int priority) {
     int charId = GF2DGfxResObj_GetResID(resources[0]);
     int plttId = GF2DGfxResObj_GetResID(resources[1]);
     int cellId = GF2DGfxResObj_GetResID(resources[2]);
@@ -331,7 +404,7 @@ void PokedexEntryPopup_MakeResourcesHeader(SpriteResource **resources, GF_2DGfxR
 }
 
 // The second icon uses the first one's palette and is hidden for single-type species.
-void PokedexEntryPopup_CreateTypeIconSprites(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_CreateTypeIconSprites(PokedexEntryPopup *popup) {
     SimpleSpriteTemplate template;
     SpriteResourcesHeader header;
     int charId;
@@ -369,13 +442,12 @@ void PokedexEntryPopup_CreateTypeIconSprites(PokedexEntryPopup *popup) {
     }
 }
 
-void PokedexEntryPopup_DeleteTypeIconSprites(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_DeleteTypeIconSprites(PokedexEntryPopup *popup) {
     Sprite_Delete(popup->sprites[1].sprite);
     Sprite_Delete(popup->sprites[2].sprite);
 }
 
-// Banner sprite
-void PokedexEntryPopup_CreateBannerSprite(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_CreateBannerSprite(PokedexEntryPopup *popup) {
     SimpleSpriteTemplate template;
     SpriteResourcesHeader header;
 
@@ -390,12 +462,12 @@ void PokedexEntryPopup_CreateBannerSprite(PokedexEntryPopup *popup) {
     popup->sprites[0].sprite = Sprite_Create(&template);
 }
 
-void PokedexEntryPopup_DeleteBannerSprite(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_DeleteBannerSprite(PokedexEntryPopup *popup) {
     Sprite_Delete(popup->sprites[0].sprite);
 }
 
 // The footprint is copied straight into the sprite's VRAM.
-void PokedexEntryPopup_CreateFootprintSprite(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_CreateFootprintSprite(PokedexEntryPopup *popup) {
     SimpleSpriteTemplate template;
     SpriteResourcesHeader header;
     void *footprint;
@@ -417,7 +489,7 @@ void PokedexEntryPopup_CreateFootprintSprite(PokedexEntryPopup *popup) {
     Heap_Free(footprint);
 }
 
-void PokedexEntryPopup_DeleteFootprintSprite(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_DeleteFootprintSprite(PokedexEntryPopup *popup) {
     Sprite_Delete(popup->sprites[3].sprite);
 }
 
@@ -426,14 +498,13 @@ void PokedexEntryPopup_HideSprites(OverlayManager *man) {
     u8 *cur = (u8 *)man;
     int draw = FALSE;
 
-    // a byte pointer walks the sprite entries
     for (i = 0; i < 4; i++) {
         Sprite_SetDrawFlag(((PokedexEntryPopup *)cur)->sprites[0].sprite, draw);
         cur += sizeof(PokedexEntryPopupSprite);
     }
 }
 
-void PokedexEntryPopup_CreatePokepic(PokedexEntryPopup *popup) {
+static void PokedexEntryPopup_CreatePokepic(PokedexEntryPopup *popup) {
     PokepicTemplate template;
     GetPokemonSpriteCharAndPlttNarcIds(&template, popup->mon, 2);
     popup->pokepic = PokepicManager_CreatePokepic(popup->pokepicManager, &template, 48, 72, 0, 0, NULL, NULL);

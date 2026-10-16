@@ -57,39 +57,42 @@ typedef struct FashionItemCoords {
 
 extern void DressUpMon_GetCenterPos(int, int *, int *);
 extern int DressUpMon_GetPriority(int);
+
+static BOOL IsValidFashionMagic(u32 value);
+static void GetFashionObjectPlacement(int monPicId, u8 *outX, u8 *outY, u8 *outZ);
+static void FashionMon_Init(SaveFashionMon *dst, Pokemon *mon, u8 x, u8 y, s8 z);
+static void FashionMon_InitAtObject(SaveFashionMon *dst, Pokemon *mon, int monPicId);
+static void FashionMon_SetSecondText(SaveFashionMon *dst, String *str, u8 a2);
+static void FashionMon_CreatePokemon(SaveFashionMon *src, Pokemon *mon);
+static void SetFashionItemPlacement(u8 *dst, u8 x, u8 y, u8 z, u8 a4);
+static void SetStackableAccessoryCount(u32 *data, int value, u8 index);
+static u8 GetStackableAccessoryCount(u32 *data, u8 index);
+static void SetUniqueAccessoryFlag(u32 *data, u8 value, u8 index);
+static u8 GetUniqueAccessoryFlag(u32 *data, u8 index);
+static void SetWallpaperOrder(u32 *data, u32 value, u8 index);
+static u8 GetWallpaperOrder(u32 *data, u8 index);
+static u8 CountOwnedWallpapers(u32 *data);
+static BOOL IsStackableAccessory(u32 value);
+static void FashionCase_Init(FashionCase *fashionCase);
+static void FashionEntry_Copy(SaveFashionDataSub *dst_, SaveFashionDataSub *src_);
+static BOOL FashionEntryLarge_IsSaved(SaveFashionDataSub3FC *entry_);
+static void FashionMon_GetSecondText(SaveFashionMon *mon, String *string);
+static BOOL Save_FashionData_IsNewEntry(SaveFashionData *fashionData, SaveFashionDataSub *candidate);
+
 u32 GraphicsObject_GetPosition(void *object);
 int GraphicsObject_GetDepth(void *object);
 void MATHi_CRC32InitTableRev(u32 *table, u32 polynomial);
 u32 MATH_CalcCRC32(const u32 *table, const void *data, u32 size);
 
-BOOL IsValidFashionMagic(u32 value);
-void GetFashionObjectPlacement(int monPicId, u8 *outX, u8 *outY, u8 *outZ);
-void FashionMon_Init(SaveFashionMon *dst, Pokemon *mon, u8 x, u8 y, s8 z);
-void FashionMon_InitAtObject(SaveFashionMon *dst, Pokemon *mon, int monPicId);
-void FashionMon_SetSecondText(SaveFashionMon *dst, String *str, u8 a2);
-void FashionMon_CreatePokemon(SaveFashionMon *src, Pokemon *mon);
-void SetFashionItemPlacement(u8 *dst, u8 x, u8 y, u8 z, u8 a4);
-void SetStackableAccessoryCount(u32 *data, int value, u8 index);
-u8 GetStackableAccessoryCount(u32 *data, u8 index);
-void SetUniqueAccessoryFlag(u32 *data, u8 value, u8 index);
-u8 GetUniqueAccessoryFlag(u32 *data, u8 index);
-void SetWallpaperOrder(u32 *data, u32 value, u8 index);
-u8 GetWallpaperOrder(u32 *data, u8 index);
-u8 CountOwnedWallpapers(u32 *data);
-BOOL IsStackableAccessory(u32 value);
-void FashionCase_Init(FashionCase *fashionCase);
 void Save_FashionData_Init(SaveFashionData *fashionData);
 u32 Save_FashionData_sizeof(void);
 u32 FashionEntry_sizeof(void);
 SaveFashionDataSub *FashionEntry_New(enum HeapID heapId);
 BOOL FashionEntry_IsSaved(SaveFashionDataSub *entry);
-BOOL FashionEntryLarge_IsSaved(SaveFashionDataSub3FC *entry);
 u8 FashionCase_GetWallpaperOrder(FashionCase *fashionCase, int index);
 void FashionEntry_MarkSaved(SaveFashionDataSub *entry);
 void FashionEntry_Clear(SaveFashionDataSub *entry);
 void FashionEntry_SetMon(SaveFashionDataSub *entry, Pokemon *mon, int value);
-void FashionEntry_Copy(SaveFashionDataSub *dst, SaveFashionDataSub *src);
-void FashionMon_GetSecondText(SaveFashionMon *mon, String *string);
 void FashionEntry_PlaceItem(SaveFashionDataSub *entry, FashionSource *source, int index);
 void FashionEntry_SetBackdrop(SaveFashionDataSub *entry, int value);
 void FashionEntry_SetMonSecondText(SaveFashionDataSub *entry, String *string, u8 value);
@@ -107,17 +110,16 @@ u8 FashionItem_GetId(u8 *data);
 u8 FashionItem_GetX(u8 *data);
 u8 FashionItem_GetY(u8 *data);
 s8 FashionItem_GetZ(s8 *data);
-BOOL Save_FashionData_IsNewEntry(SaveFashionData *fashionData, SaveFashionDataSub *candidate);
 void Save_FashionData_InsertEntries(u8 count, int skip, SaveFashionData *fashionData, SaveFashionDataSub **entries);
 
-BOOL IsValidFashionMagic(u32 value) {
+static BOOL IsValidFashionMagic(u32 value) {
     if (value == 0x1234 || value == 0x2345) {
         return TRUE;
     }
     return FALSE;
 }
 
-void GetFashionObjectPlacement(int monPicId, u8 *outX, u8 *outY, u8 *outZ) {
+static void GetFashionObjectPlacement(int monPicId, u8 *outX, u8 *outY, u8 *outZ) {
     int x;
     int y;
     int z;
@@ -131,7 +133,7 @@ void GetFashionObjectPlacement(int monPicId, u8 *outX, u8 *outY, u8 *outZ) {
     *outZ = z;
 }
 
-void FashionMon_Init(SaveFashionMon *dst, Pokemon *mon, u8 x, u8 y, s8 z) {
+static void FashionMon_Init(SaveFashionMon *dst, Pokemon *mon, u8 x, u8 y, s8 z) {
     dst->species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     GetMonData(mon, MON_DATA_NICKNAME, dst->nickname);
     dst->personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
@@ -142,31 +144,31 @@ void FashionMon_Init(SaveFashionMon *dst, Pokemon *mon, u8 x, u8 y, s8 z) {
     dst->z = z;
 }
 
-void FashionMon_InitAtObject(SaveFashionMon *dst, Pokemon *mon, int monPicId) {
+static void FashionMon_InitAtObject(SaveFashionMon *dst, Pokemon *mon, int monPicId) {
     u8 x, y, z;
     GetFashionObjectPlacement(monPicId, &x, &y, &z);
     FashionMon_Init(dst, mon, x, y, (s8)z);
 }
 
-void FashionMon_SetSecondText(SaveFashionMon *dst, String *str, u8 a2) {
+static void FashionMon_SetSecondText(SaveFashionMon *dst, String *str, u8 a2) {
     CopyStringToU16Array(str, dst->secondText, 8);
     dst->unk_34 = a2;
 }
 
-void FashionMon_CreatePokemon(SaveFashionMon *src, Pokemon *mon) {
+static void FashionMon_CreatePokemon(SaveFashionMon *src, Pokemon *mon) {
     CreateMon(mon, src->species, 0, 0, TRUE, src->personality, TRUE, src->otId);
     SetMonData(mon, MON_DATA_NICKNAME, src->nickname);
     SetMonData(mon, MON_DATA_FORM, &src->form);
 }
 
-void SetFashionItemPlacement(u8 *dst, u8 x, u8 y, u8 z, u8 a4) {
+static void SetFashionItemPlacement(u8 *dst, u8 x, u8 y, u8 z, u8 a4) {
     dst[0] = x;
     dst[1] = y;
     dst[2] = z;
     dst[3] = a4;
 }
 
-void SetStackableAccessoryCount(u32 *data, int value, u8 index) {
+static void SetStackableAccessoryCount(u32 *data, int value, u8 index) {
     u8 shift;
     u8 word;
     GF_ASSERT(index < 61);
@@ -177,7 +179,7 @@ void SetStackableAccessoryCount(u32 *data, int value, u8 index) {
     data[word] |= value << shift;
 }
 
-u8 GetStackableAccessoryCount(u32 *data, u8 index) {
+static u8 GetStackableAccessoryCount(u32 *data, u8 index) {
     u8 word;
     u8 shift;
     u8 value;
@@ -192,7 +194,7 @@ u8 GetStackableAccessoryCount(u32 *data, u8 index) {
     return value;
 }
 
-void SetUniqueAccessoryFlag(u32 *data, u8 value, u8 index) {
+static void SetUniqueAccessoryFlag(u32 *data, u8 value, u8 index) {
     u8 shift;
     u8 word;
     GF_ASSERT(value < 2);
@@ -202,13 +204,13 @@ void SetUniqueAccessoryFlag(u32 *data, u8 value, u8 index) {
     data[word] |= value << shift;
 }
 
-u8 GetUniqueAccessoryFlag(u32 *data, u8 index) {
+static u8 GetUniqueAccessoryFlag(u32 *data, u8 index) {
     u8 word = index / 32;
     u8 shift = index % 32;
     return (data[word] >> shift) & 1;
 }
 
-void SetWallpaperOrder(u32 *data, u32 value, u8 index) {
+static void SetWallpaperOrder(u32 *data, u32 value, u8 index) {
     u8 shift;
     u8 word;
     GF_ASSERT(value <= 18);
@@ -219,14 +221,14 @@ void SetWallpaperOrder(u32 *data, u32 value, u8 index) {
     data[word] |= value << shift;
 }
 
-u8 GetWallpaperOrder(u32 *data, u8 index) {
+static u8 GetWallpaperOrder(u32 *data, u8 index) {
     u8 word = index / 4;
     u8 shift = index % 4;
     shift *= 8;
     return data[word] >> shift;
 }
 
-u8 CountOwnedWallpapers(u32 *data) {
+static u8 CountOwnedWallpapers(u32 *data) {
     int i = 0;
     int count = i;
     for (i = 0; i < 18; i++) {
@@ -237,14 +239,14 @@ u8 CountOwnedWallpapers(u32 *data) {
     return count;
 }
 
-BOOL IsStackableAccessory(u32 value) {
+static BOOL IsStackableAccessory(u32 value) {
     if (value < 61) {
         return TRUE;
     }
     return FALSE;
 }
 
-void FashionCase_Init(FashionCase *fashionCase) {
+static void FashionCase_Init(FashionCase *fashionCase) {
     int i;
     memset(fashionCase, 0, sizeof(FashionCase));
     for (i = 0; i < 18; i++) {
@@ -487,7 +489,7 @@ void FashionEntry_SetMailMessageWord(SaveFashionDataSub *entry_, int value) {
     ((void (*)(MailMessage *, int, int))MailMsg_SetFieldI)(&entry->mailMessage, 0, value);
 }
 
-void FashionEntry_Copy(SaveFashionDataSub *dst_, SaveFashionDataSub *src_) {
+static void FashionEntry_Copy(SaveFashionDataSub *dst_, SaveFashionDataSub *src_) {
     FashionEntry *dst = (FashionEntry *)dst_;
     GF_ASSERT(IsValidFashionMagic(dst->magic));
     memcpy(dst, src_, sizeof(FashionEntry));
@@ -537,13 +539,13 @@ u16 FashionEntry_GetMailMessageWord(SaveFashionDataSub *entry_) {
     return MailMsg_GetFieldI(&entry->mailMessage, 0);
 }
 
-BOOL FashionEntryLarge_IsSaved(SaveFashionDataSub3FC *entry_) {
+static BOOL FashionEntryLarge_IsSaved(SaveFashionDataSub3FC *entry_) {
     FashionEntryLarge *entry = (FashionEntryLarge *)entry_;
     GF_ASSERT(IsValidFashionMagic(entry->magic));
     return entry->magic == 0x2345;
 }
 
-void FashionMon_GetSecondText(SaveFashionMon *mon, String *string) {
+static void FashionMon_GetSecondText(SaveFashionMon *mon, String *string) {
     CopyU16ArrayToString(string, mon->secondText);
 }
 
@@ -579,7 +581,7 @@ s8 FashionItem_GetZ(s8 *data) {
     return data[3];
 }
 
-BOOL Save_FashionData_IsNewEntry(SaveFashionData *fashionData, SaveFashionDataSub *candidate) {
+static BOOL Save_FashionData_IsNewEntry(SaveFashionData *fashionData, SaveFashionDataSub *candidate) {
     u32 table[256];
     BOOL result = TRUE;
     u32 crc;

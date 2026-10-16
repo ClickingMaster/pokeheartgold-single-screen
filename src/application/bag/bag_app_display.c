@@ -29,11 +29,11 @@
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 
-// Bag application, part 2: item list, message boxes, quantity and money windows, sprites (cursor, item icons,
+// Bag application: item list, message boxes, quantity and money windows, sprites (cursor, item icons,
 // pocket tabs, buttons).
 
-// Data still in asm (asm/bag_app_data.s). The cursor position tables are {x, y, anim, palette} per
-// position; the *Y/*Anim/*Palette labels point at the later columns.
+// The cursor position tables are {x, y, anim, palette} per position; the *Y/*Anim/*Palette labels point at the
+// later columns.
 extern const u8 sListPocketCapacities[];
 extern const u8 sCursorPositions[];
 extern const u8 sCursorPositionsY[];
@@ -57,25 +57,24 @@ extern const int sHiddenQuantityButtons[][4];
 extern const int sQuantityButtonSprites[][6];
 extern const int sQuantityButtonAnims[][6];
 
-// src/move_relearner_app.c declares it with a parameter, so type_icon_resources.h cannot
-NarcId MoveCategoryIcon_GetNarc(void);
+static void BagApp_DrawRegisteredItemIcon(BagApp *app, Window *window, int y, BOOL secondSlot);
+static BOOL BagApp_TextPrinterCallback(TextPrinterTemplate *printer, u16 event);
+static int BagApp_GetNthItemSlotIndex(BagViewPocket *pocket, int pocketId, int n);
+static void BagApp_PrintItemListEntry(BagApp *app, Window *window, String *name, BagViewPocket *pocket, int index);
+static void BagApp_PrintItemQuantity(MessageFormat *msgFormat, MsgData *msgData, Window *window, int quantity);
+static void BagApp_SetItemIconSprite(BagApp *app, int slot, u16 itemId);
+static void BagApp_ShowTMHMTypeIcons(BagApp *app, u16 itemId, BOOL show);
+static void BagApp_CreateSpriteSystem(BagApp *app);
+static void BagApp_LoadSpriteResources(BagApp *app);
+static void BagApp_CreateSprites(BagApp *app);
+static void BagApp_ClearField648(BagApp *app);
+static void BagApp_UpdatePageArrows(BagApp *app);
 
-void BagApp_DrawRegisteredItemIcon(BagApp *app, Window *window, int y, BOOL secondSlot);
-BOOL BagApp_TextPrinterCallback(TextPrinterTemplate *printer, u16 event);
-int BagApp_GetNthItemSlotIndex(BagViewPocket *pocket, int pocketId, int n);
-void BagApp_PrintItemListEntry(BagApp *app, Window *window, String *name, BagViewPocket *pocket, int index);
-void BagApp_PrintItemQuantity(MessageFormat *msgFormat, MsgData *msgData, Window *window, int quantity);
-void BagApp_SetItemIconSprite(BagApp *app, int slot, u16 itemId);
-void BagApp_ShowTMHMTypeIcons(BagApp *app, u16 itemId, BOOL show);
-void BagApp_CreateSpriteSystem(BagApp *app);
-void BagApp_LoadSpriteResources(BagApp *app);
-void BagApp_CreateSprites(BagApp *app);
-void BagApp_ClearField648(BagApp *app);
-void BagApp_UpdatePageArrows(BagApp *app);
+NarcId MoveCategoryIcon_GetNarc(void);
 
 #pragma force_active on
 
-void BagApp_DrawRegisteredItemIcon(BagApp *app, Window *window, int y, BOOL secondSlot) {
+static void BagApp_DrawRegisteredItemIcon(BagApp *app, Window *window, int y, BOOL secondSlot) {
     NNSG2dCharacterData *charData;
     void *buffer = BagApp_LoadListIconChars(app, &charData);
     if (secondSlot == FALSE) {
@@ -255,7 +254,7 @@ u8 BagApp_PrintMessage(BagApp *app, BOOL wide) {
     return AddTextPrinterParameterized(window, 1, app->msgBuf, 0, 0, speed, BagApp_TextPrinterCallback);
 }
 
-BOOL BagApp_TextPrinterCallback(TextPrinterTemplate *printer, u16 event) {
+static BOOL BagApp_TextPrinterCallback(TextPrinterTemplate *printer, u16 event) {
     switch (event) {
     case 1:
         return GF_IsAnySEPlaying();
@@ -365,7 +364,7 @@ void BagApp_PrintCancelButton(BagApp *app, BOOL left) {
 
 #pragma force_active on
 
-int BagApp_GetNthItemSlotIndex(BagViewPocket *pocket, int pocketId, int n) {
+static int BagApp_GetNthItemSlotIndex(BagViewPocket *pocket, int pocketId, int n) {
     int i;
     int count;
     count = 0;
@@ -455,7 +454,7 @@ void BagApp_ClearSelectedItemEntry(BagApp *app) {
 
 #pragma force_active on
 
-void BagApp_PrintItemListEntry(BagApp *app, Window *window, String *name, BagViewPocket *pocket, int index) {
+static void BagApp_PrintItemListEntry(BagApp *app, Window *window, String *name, BagViewPocket *pocket, int index) {
     switch (pocket->pocketId) {
     case POCKET_TMHMS:
         AddTextPrinterParameterizedWithColor(window, 0, name, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
@@ -480,7 +479,7 @@ void BagApp_PrintItemListEntry(BagApp *app, Window *window, String *name, BagVie
     }
 }
 
-void BagApp_PrintItemQuantity(MessageFormat *msgFormat, MsgData *msgData, Window *window, int quantity) {
+static void BagApp_PrintItemQuantity(MessageFormat *msgFormat, MsgData *msgData, Window *window, int quantity) {
     BufferIntegerAsString(msgFormat, 0, quantity, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
     String *string = ReadMsgData_ExpandPlaceholders(msgFormat, msgData, 87, HEAP_ID_6);
     AddTextPrinterParameterizedWithColor(window, 0, string, 48, 16, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
@@ -580,7 +579,7 @@ void BagApp_TickSprites(BagApp *app) {
 
 #pragma force_active on
 
-void BagApp_SetItemIconSprite(BagApp *app, int slot, u16 itemId) {
+static void BagApp_SetItemIconSprite(BagApp *app, int slot, u16 itemId) {
     SpriteSystem_ReplaceCharResObj(app->spriteSystem, app->spriteManager, NARC_itemtool_itemdata_item_icon, GetItemIndexMapping(itemId, ITEMNARC_NCGR), FALSE, slot + 0xC0FC);
     SpriteSystem_ReplacePlttResObj(app->spriteSystem, app->spriteManager, NARC_itemtool_itemdata_item_icon, GetItemIndexMapping(itemId, ITEMNARC_NCLR), FALSE, slot + 0xC0FB);
 }
@@ -602,7 +601,7 @@ void BagApp_UpdateField648(BagApp *app) {
     }
 }
 
-void BagApp_ShowTMHMTypeIcons(BagApp *app, u16 itemId, BOOL show) {
+static void BagApp_ShowTMHMTypeIcons(BagApp *app, u16 itemId, BOOL show) {
     u16 move;
     u16 type;
     u16 category;
@@ -623,7 +622,7 @@ void BagApp_ShowTMHMTypeIcons(BagApp *app, u16 itemId, BOOL show) {
     }
 }
 
-void BagApp_CreateSpriteSystem(BagApp *app) {
+static void BagApp_CreateSpriteSystem(BagApp *app) {
     SpriteResourceCountsListUnion counts = sBagSpriteResourceCounts;
     app->spriteSystem = SpriteSystem_Alloc(HEAP_ID_6);
     app->spriteManager = SpriteManager_New(app->spriteSystem);
@@ -636,7 +635,7 @@ void BagApp_CreateSpriteSystem(BagApp *app) {
 
 #pragma force_active on
 
-void BagApp_LoadSpriteResources(BagApp *app) {
+static void BagApp_LoadSpriteResources(BagApp *app) {
     int i;
 
     SpriteSystem_LoadCharResObj(app->spriteSystem, app->spriteManager, NARC_a_0_1_5, 26, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 0xC0F9);
@@ -672,7 +671,7 @@ void BagApp_LoadSpriteResources(BagApp *app) {
 
 #pragma force_active reset
 
-void BagApp_CreateSprites(BagApp *app) {
+static void BagApp_CreateSprites(BagApp *app) {
     const ManagedSpriteTemplate *template = sBagSpriteTemplates;
     u32 i;
 
@@ -701,7 +700,7 @@ void BagApp_CreateSprites(BagApp *app) {
     ManagedSprite_SetPriority(app->sprites[38], 1);
 }
 
-void BagApp_ClearField648(BagApp *app) {
+static void BagApp_ClearField648(BagApp *app) {
     app->unk_648 = 0;
 }
 
@@ -788,7 +787,7 @@ void BagApp_ShowMoveSlotSprites(BagApp *app, int count, int movingSlot, BOOL hid
 
 #pragma force_active reset
 
-void BagApp_UpdatePageArrows(BagApp *app) {
+static void BagApp_UpdatePageArrows(BagApp *app) {
     BagView *bagView = app->bagView;
     if (bagView->pockets[bagView->pocketIndex].itemCount <= 6) {
         ManagedSprite_SetDrawFlag(app->sprites[17], FALSE);

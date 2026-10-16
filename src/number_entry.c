@@ -10,13 +10,18 @@
 #include "msgdata/msg/msg_0196.h"
 
 #include "bg_window.h"
+#include "dpad_menu_box.h"
 #include "filesystem.h"
 #include "filesystem_files_def.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
+#include "grid_input_handler.h"
 #include "heap.h"
 #include "msgdata.h"
+#include "sound_playback.h"
 #include "sprite.h"
+#include "sprite_resource.h"
+#include "sprite_resource_header.h"
 #include "sprite_transfer.h"
 #include "sys_task.h"
 #include "sys_task_api.h"
@@ -24,11 +29,6 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "sound_playback.h"
-#include "sprite_resource_header.h"
-#include "sprite_resource.h"
-#include "grid_input_handler.h"
-#include "dpad_menu_box.h"
 
 #define NUMBER_ENTRY_MAX_DIGITS       6
 #define NUMBER_ENTRY_NUM_SPRITES      11
@@ -120,64 +120,60 @@ static void NumberEntry_StartSpriteBlink(NumberEntryData *data, u8 target, u8 se
 static void NumberEntry_StartBgBlink(NumberEntryData *data, u8 x, u8 y, u16 nextState);
 static void NumberEntry_ComputeValue(NumberEntryData *data);
 
-// All of this overlay's .rodata as ONE const aggregate, fields in retail
-// address order (base 0x0225E114, span 0x1F0). MWCC size-sorts separate
-// file-scope const objects, which cannot reproduce this interleaved layout
-// (1-byte / 8-byte hitbox lists between 16- and 28-byte tables) -- see the
-// rodata-consolidate-one-struct-flip pattern.
+// The number entry screen's constant tables.
 typedef struct NumberEntryRodata {
-    u8 xOffsets1[1];                             // 0x0225E114
-    TouchscreenHitbox hitboxes1[2];              // 0x0225E115
-    TouchscreenHitbox hitboxes2[3];              // 0x0225E11D
-    TouchscreenHitbox hitboxes3[4];              // 0x0225E129 (+3 pad)
-    GridCallbacks gridCallbacks;                 // 0x0225E13C
-    TouchscreenHitbox hitboxes4[5];              // 0x0225E14C
-    TouchscreenHitbox hitboxes5[6];              // 0x0225E160
-    WindowTemplate windowTemplates[3];           // 0x0225E178
-    TouchscreenHitbox hitboxes6[7];              // 0x0225E190
-    const TouchscreenHitbox *hitboxes[7];        // 0x0225E1AC
-    BgTemplate bgTemplate4;                      // 0x0225E1C8
-    const u8 *xOffsets[7];                       // 0x0225E1E4
-    BgTemplate bgTemplate5;                      // 0x0225E200
-    u8 spriteSpecs[NUMBER_ENTRY_NUM_SPRITES][4]; // 0x0225E21C
-    TouchscreenHitbox padHitboxes[14];           // 0x0225E248
-    DpadMenuBox padDpadBoxes[13];                // 0x0225E280
-    u8 xOffsets2[4];                             // 0x0225E2E8
-    u8 xOffsets3[4];                             // 0x0225E2EC
-    u8 xOffsets4[4];                             // 0x0225E2F0
-    u8 xOffsets5[8];                             // 0x0225E2F4
-    u8 xOffsets6[8];                             // 0x0225E2FC
+    u8 xOffsets1[1];                             // 0x000
+    TouchscreenHitbox hitboxes1[2];              // 0x001
+    TouchscreenHitbox hitboxes2[3];              // 0x009
+    TouchscreenHitbox hitboxes3[4];              // 0x015 (+3 pad)
+    GridCallbacks gridCallbacks;                 // 0x028
+    TouchscreenHitbox hitboxes4[5];              // 0x038
+    TouchscreenHitbox hitboxes5[6];              // 0x04C
+    WindowTemplate windowTemplates[3];           // 0x064
+    TouchscreenHitbox hitboxes6[7];              // 0x07C
+    const TouchscreenHitbox *hitboxes[7];        // 0x098
+    BgTemplate bgTemplate4;                      // 0x0B4
+    const u8 *xOffsets[7];                       // 0x0D0
+    BgTemplate bgTemplate5;                      // 0x0EC
+    u8 spriteSpecs[NUMBER_ENTRY_NUM_SPRITES][4]; // 0x108
+    TouchscreenHitbox padHitboxes[14];           // 0x134
+    DpadMenuBox padDpadBoxes[13];                // 0x16C
+    u8 xOffsets2[4];                             // 0x1D4
+    u8 xOffsets3[4];                             // 0x1D8
+    u8 xOffsets4[4];                             // 0x1DC
+    u8 xOffsets5[8];                             // 0x1E0
+    u8 xOffsets6[8];                             // 0x1E8
 } NumberEntryRodata;
 
 static const NumberEntryRodata sRodata = {
-    // xOffsets1 (0x0225E114)
+    // xOffsets1
     { 0x80 },
-    // hitboxes1 (0x0225E115)
+    // hitboxes1
     {
      { 0x08, 0x27, 0x70, 0x8F },
      { TOUCHSCREEN_RECTLIST_END, 0, 0, 0 },
      },
-    // hitboxes2 (0x0225E11D)
+    // hitboxes2
     {
      { 0x08, 0x27, 0x60, 0x7F },
      { 0x08, 0x27, 0x80, 0x9F },
      { TOUCHSCREEN_RECTLIST_END, 0, 0, 0 },
      },
-    // hitboxes3 (0x0225E129)
+    // hitboxes3
     {
      { 0x08, 0x27, 0x50, 0x6F },
      { 0x08, 0x27, 0x70, 0x8F },
      { 0x08, 0x27, 0x90, 0xAF },
      { TOUCHSCREEN_RECTLIST_END, 0, 0, 0 },
      },
-    // gridCallbacks (0x0225E13C)
+    // gridCallbacks
     {
      NumberEntry_OnGridCursorMoveDummy,
      NumberEntry_OnGridCursorMoveDummy,
      NumberEntry_OnGridCursorMove,
      NumberEntry_OnGridCursorMove,
      },
-    // hitboxes4 (0x0225E14C)
+    // hitboxes4
     {
      { 0x08, 0x27, 0x40, 0x5F },
      { 0x08, 0x27, 0x60, 0x7F },
@@ -185,7 +181,7 @@ static const NumberEntryRodata sRodata = {
      { 0x08, 0x27, 0xA0, 0xBF },
      { TOUCHSCREEN_RECTLIST_END, 0, 0, 0 },
      },
-    // hitboxes5 (0x0225E160)
+    // hitboxes5
     {
      { 0x08, 0x27, 0x30, 0x4F },
      { 0x08, 0x27, 0x50, 0x6F },
@@ -194,13 +190,13 @@ static const NumberEntryRodata sRodata = {
      { 0x08, 0x27, 0xB0, 0xCF },
      { TOUCHSCREEN_RECTLIST_END, 0, 0, 0 },
      },
-    // windowTemplates (0x0225E178)
+    // windowTemplates
     {
      { GF_BG_LYR_SUB_0, 1, 21, 8, 2, 0, 0x001 },
      { GF_BG_LYR_SUB_0, 12, 21, 8, 2, 0, 0x011 },
      { GF_BG_LYR_SUB_0, 23, 21, 8, 2, 0, 0x021 },
      },
-    // hitboxes6 (0x0225E190)
+    // hitboxes6
     {
      { 0x08, 0x27, 0x20, 0x3F },
      { 0x08, 0x27, 0x40, 0x5F },
@@ -210,7 +206,7 @@ static const NumberEntryRodata sRodata = {
      { 0x08, 0x27, 0xC0, 0xE0 },
      { TOUCHSCREEN_RECTLIST_END, 0, 0, 0 },
      },
-    // hitboxes (0x0225E1AC), indexed by numDigits
+    // hitboxes, indexed by numDigits
     {
      NULL,
      sRodata.hitboxes1,
@@ -220,7 +216,7 @@ static const NumberEntryRodata sRodata = {
      sRodata.hitboxes5,
      sRodata.hitboxes6,
      },
-    // bgTemplate4 (0x0225E1C8)
+    // bgTemplate4
     {
      0,
      0,
@@ -236,7 +232,7 @@ static const NumberEntryRodata sRodata = {
      0,
      FALSE,
      },
-    // xOffsets (0x0225E1E4), indexed by numDigits
+    // xOffsets, indexed by numDigits
     {
      NULL,
      sRodata.xOffsets1,
@@ -246,7 +242,7 @@ static const NumberEntryRodata sRodata = {
      sRodata.xOffsets5,
      sRodata.xOffsets6,
      },
-    // bgTemplate5 (0x0225E200)
+    // bgTemplate5
     {
      0,
      0,
@@ -262,7 +258,7 @@ static const NumberEntryRodata sRodata = {
      0,
      FALSE,
      },
-    // spriteSpecs (0x0225E21C): { x, y, drawPriority, animSeq }
+    // spriteSpecs: { x, y, drawPriority, animSeq }
     {
      { 0x20, 0x20, 0, 1 },
      { 0x30, 0x24, 0, 0 },
@@ -276,7 +272,7 @@ static const NumberEntryRodata sRodata = {
      { 0xB0, 0x18, 1, 1 },
      { 0xD0, 0x18, 1, 1 },
      },
-    // padHitboxes (0x0225E248)
+    // padHitboxes
     {
      { 0x38, 0x67, 0x08, 0x37 },
      { 0x38, 0x67, 0x38, 0x67 },
@@ -293,7 +289,7 @@ static const NumberEntryRodata sRodata = {
      { 0xA0, 0xBF, 0xB0, 0xFF },
      { TOUCHSCREEN_RECTLIST_END, 0, 0, 0 },
      },
-    // padDpadBoxes (0x0225E280)
+    // padDpadBoxes
     {
      { 0x20, 0x50, 0, 0, 0x00, 0x05, 0x04, 0x01 },
      { 0x50, 0x50, 0, 0, 0x01, 0x06, 0x00, 0x02 },
@@ -309,15 +305,15 @@ static const NumberEntryRodata sRodata = {
      { 0x80, 0xB0, 0, 0, 0x87, 0x0B, 0x0A, 0x0C },
      { 0xD8, 0xB0, 0, 0, 0x89, 0x0C, 0x0B, 0x0A },
      },
-    // xOffsets2 (0x0225E2E8)
+    // xOffsets2
     { 0x70, 0x90, 0, 0 },
-    // xOffsets3 (0x0225E2EC)
+    // xOffsets3
     { 0x60, 0x80, 0xA0, 0 },
-    // xOffsets4 (0x0225E2F0)
+    // xOffsets4
     { 0x50, 0x70, 0x90, 0xB0 },
-    // xOffsets5 (0x0225E2F4)
+    // xOffsets5
     { 0x40, 0x60, 0x80, 0xA0, 0xC0, 0, 0, 0 },
-    // xOffsets6 (0x0225E2FC)
+    // xOffsets6
     { 0x30, 0x50, 0x70, 0x90, 0xB0, 0xD0, 0, 0 },
 };
 
@@ -376,7 +372,7 @@ void NumberEntry_Exit(BgConfig *bgConfig, SysTask *task) {
     Heap_Destroy(HEAP_ID_8);
 }
 
-BOOL NumberEntry_IsExitDone(void *a0) {
+BOOL NumberEntry_IsExitDone(BgConfig *bgConfig) {
     return TRUE;
 }
 

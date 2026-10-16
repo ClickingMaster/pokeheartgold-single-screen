@@ -122,24 +122,27 @@ extern const u16 sAgbKeepFirstAbilitySpecies[];
 extern u16 sAgbSpeciesMap[];
 extern u16 sAgbSpeciesMapNationalDex[];
 
-int IdentifyPmAgbCartridge(PmAgbCartridgeSpec *specs, int count);
-u16 PmAgbCartridge_CalcSectorChecksum(u32 *data, u16 size);
-void PmAgbCartridge_ReadSector(int sector, void *dest);
-u16 PmAgbCartridge_GetSectorDataSize(int id);
-void *PmAgbCartridge_GetSectorData(int id);
-int PmAgbCartridge_CheckSaveSlot(int slot, AgbSaveSector *sector, u32 *counter);
-int PmAgbCartridge_FindLatestSaveSlot(AgbSaveSector *sector, u32 *slot, u32 *counter);
-void PmAgbCartridge_WriteSectorAsync(int id);
-u32 PmAgbCartridge_WriteSectorCallback(PmAgbFlashTask *task);
 void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which);
-void AGB_DecryptBoxMon(AgbBoxMon *mon);
-void AGB_EncryptBoxMon(AgbBoxMon *mon);
-u16 AGB_CalcBoxMonChecksum(AgbBoxMon *mon);
-int AGB_GetBoxMonAbility(AgbBoxMon *agbMon, BoxPokemon *boxMon);
 
 extern PmAgbSave sPmAgbSave;
 
-BOOL PmAgbCartridgeHasFlash(void) {
+static BOOL PmAgbCartridgeHasFlash(void);
+static int IdentifyPmAgbCartridge(PmAgbCartridgeSpec *specs, int count);
+static u16 PmAgbCartridge_CalcSectorChecksum(u32 *data, u16 size);
+static void PmAgbCartridge_ReadSector(int sector, void *dest);
+static u16 PmAgbCartridge_GetSectorDataSize(int id);
+static void *PmAgbCartridge_GetSectorData(int id);
+static int PmAgbCartridge_CheckSaveSlot(int slot, AgbSaveSector *sector, u32 *counter);
+static int PmAgbCartridge_FindLatestSaveSlot(AgbSaveSector *sector, u32 *slot, u32 *counter);
+static void PmAgbCartridge_WriteSectorAsync(int id);
+static u32 PmAgbCartridge_WriteSectorCallback(PmAgbFlashTask *task);
+static void *PmAgbCartridge_GetTrainerInfo(void);
+static void AGB_DecryptBoxMon(AgbBoxMon *mon);
+static void AGB_EncryptBoxMon(AgbBoxMon *mon);
+static u16 AGB_CalcBoxMonChecksum(AgbBoxMon *mon);
+static int AGB_GetBoxMonAbility(AgbBoxMon *agbMon, BoxPokemon *boxMon);
+
+static BOOL PmAgbCartridgeHasFlash(void) {
     if (CTRDG_IdentifyAgbBackup(1) != 0) {
         return FALSE;
     }
@@ -188,7 +191,7 @@ u16 PmAgbCartridge_GetLanguage(void) {
 
 #pragma force_active on
 
-int IdentifyPmAgbCartridge(PmAgbCartridgeSpec *specs, int count) {
+static int IdentifyPmAgbCartridge(PmAgbCartridgeSpec *specs, int count) {
     AgbRomHeader header;
     u8 *bytes;
     u32 gameCode;
@@ -233,7 +236,7 @@ int IdentifyPmAgbCartridge(PmAgbCartridgeSpec *specs, int count) {
 
 #pragma force_active reset
 
-u16 PmAgbCartridge_CalcSectorChecksum(u32 *data, u16 size) {
+static u16 PmAgbCartridge_CalcSectorChecksum(u32 *data, u16 size) {
     u16 i;
     u32 sum = 0;
     for (i = 0; i < size / 4; i++) {
@@ -242,7 +245,7 @@ u16 PmAgbCartridge_CalcSectorChecksum(u32 *data, u16 size) {
     return (u16)(((sum >> 16) & 0xFFFF) + (sum & 0xFFFF));
 }
 
-void PmAgbCartridge_ReadSector(int sector, void *dest) {
+static void PmAgbCartridge_ReadSector(int sector, void *dest) {
     CTRDG_ReadAgbFlash((u16)sector, 0, dest, AGB_SAVE_SECTOR_SIZE);
 }
 
@@ -251,7 +254,7 @@ void PmAgbCartridge_ReadSector(int sector, void *dest) {
 #pragma opt_propagation off
 
 // Size of the data in the save sector with this id
-u16 PmAgbCartridge_GetSectorDataSize(int id) {
+static u16 PmAgbCartridge_GetSectorDataSize(int id) {
     if (id == 0) {
         PmAgbSaveSizes *sizes = &sPmAgbRomHeader.saveSizes;
         return sizes->trainerInfoSize;
@@ -271,7 +274,7 @@ u16 PmAgbCartridge_GetSectorDataSize(int id) {
 
 // Where the data of the save sector with this id is kept: trainer info at +0x1000, game state at +0x2000, PC boxes
 // at +0x6000
-void *PmAgbCartridge_GetSectorData(int id) {
+static void *PmAgbCartridge_GetSectorData(int id) {
     if (id == 0) {
         return sPmAgbSave.buffer + 0x1000;
     }
@@ -287,7 +290,7 @@ void *PmAgbCartridge_GetSectorData(int id) {
 #pragma force_active on
 
 // 1: all 14 sectors of the slot are valid, 0xFF: some are, 0: the slot is empty
-int PmAgbCartridge_CheckSaveSlot(int slot, AgbSaveSector *sector, u32 *counter) {
+static int PmAgbCartridge_CheckSaveSlot(int slot, AgbSaveSector *sector, u32 *counter) {
     u32 validSectors = 0;
     u8 found = FALSE;
     int i;
@@ -316,7 +319,7 @@ int PmAgbCartridge_CheckSaveSlot(int slot, AgbSaveSector *sector, u32 *counter) 
 #pragma force_active reset
 
 // Picks the newer of the two save slots
-int PmAgbCartridge_FindLatestSaveSlot(AgbSaveSector *sector, u32 *slot, u32 *counter) {
+static int PmAgbCartridge_FindLatestSaveSlot(AgbSaveSector *sector, u32 *slot, u32 *counter) {
     u32 counter0, counter1;
     int status0 = PmAgbCartridge_CheckSaveSlot(0, sector, &counter0);
     int status1 = PmAgbCartridge_CheckSaveSlot(1, sector, &counter1);
@@ -414,7 +417,7 @@ int PmAgbCartridge_LoadSave(void) {
 #pragma force_active reset
 
 // Writes the save sector with this id into the other slot (asynchronously; PmAgbCartridge_WriteSectorCallback continues)
-void PmAgbCartridge_WriteSectorAsync(int id) {
+static void PmAgbCartridge_WriteSectorAsync(int id) {
     AgbSaveSector *sector = (AgbSaveSector *)sPmAgbSave.buffer;
     int size;
     int flashSector;
@@ -430,7 +433,7 @@ void PmAgbCartridge_WriteSectorAsync(int id) {
     CTRDG_WriteAndVerifyAgbFlashAsync((u8)flashSector, sector, 4, (void *)PmAgbCartridge_WriteSectorCallback);
 }
 
-u32 PmAgbCartridge_WriteSectorCallback(PmAgbFlashTask *task) {
+static u32 PmAgbCartridge_WriteSectorCallback(PmAgbFlashTask *task) {
     if (task->result == 0) {
         sPmAgbSave.sectorsWritten++;
         if ((s32)sPmAgbSave.sectorsWritten >= AGB_SAVE_SECTORS_PER_SLOT) {
@@ -508,7 +511,7 @@ AgbPokemonStorage *PmAgbCartridge_GetPCStorage(void) {
 }
 
 // The trainer info sector
-void *PmAgbCartridge_GetTrainerInfo(void) {
+static void *PmAgbCartridge_GetTrainerInfo(void) {
     return PmAgbCartridge_GetSectorData(0);
 }
 
@@ -968,7 +971,7 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
 #pragma force_active reset
 
 // The substructures are XORed with the OT id and the personality
-void AGB_DecryptBoxMon(AgbBoxMon *mon) {
+static void AGB_DecryptBoxMon(AgbBoxMon *mon) {
     u32 *key = (u32 *)mon;
     u32 *ptr;
     u32 i = 0;
@@ -980,7 +983,7 @@ void AGB_DecryptBoxMon(AgbBoxMon *mon) {
     }
 }
 
-void AGB_EncryptBoxMon(AgbBoxMon *mon) {
+static void AGB_EncryptBoxMon(AgbBoxMon *mon) {
     u32 *key = (u32 *)mon;
     u32 *ptr;
     u32 i = 0;
@@ -992,7 +995,7 @@ void AGB_EncryptBoxMon(AgbBoxMon *mon) {
     }
 }
 
-u16 AGB_CalcBoxMonChecksum(AgbBoxMon *mon) {
+static u16 AGB_CalcBoxMonChecksum(AgbBoxMon *mon) {
     u16 *substruct2;
     u16 *substruct1;
     u16 *substruct0;
@@ -1354,7 +1357,7 @@ u32 AGB_GetBoxMonLevel(AgbBoxMon *mon) {
 }
 
 // Species that got a second ability in DP keep their first one (sAgbKeepFirstAbilitySpecies); the others keep their ability slot
-int AGB_GetBoxMonAbility(AgbBoxMon *agbMon, BoxPokemon *boxMon) {
+static int AGB_GetBoxMonAbility(AgbBoxMon *agbMon, BoxPokemon *boxMon) {
     u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL);
     u32 abilityNum = AGB_GetBoxMonData(agbMon, AGB_MON_DATA_ABILITY_NUM, NULL);
     int ability = GetMonBaseStat(species, BASE_ABILITY_2);

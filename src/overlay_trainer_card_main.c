@@ -7,6 +7,7 @@
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0727.h"
 
+#include "communication_core.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
@@ -14,6 +15,7 @@
 #include "menu_input_state.h"
 #include "message_format.h"
 #include "msgdata.h"
+#include "oam_manager.h"
 #include "obj_char_transfer.h"
 #include "obj_pltt_transfer.h"
 #include "options.h"
@@ -25,19 +27,17 @@
 #include "render_text.h"
 #include "render_window.h"
 #include "screen_fade.h"
+#include "sound_playback.h"
 #include "sound_system.h"
 #include "sprite.h"
+#include "sprite_resource.h"
 #include "sprite_transfer.h"
 #include "system.h"
 #include "text.h"
-#include "touchscreen.h"
-#include "sound_playback.h"
-#include "sprite_resource.h"
-#include "oam_manager.h"
 #include "touchpad.h"
-#include "communication_core.h"
-#include "wireless_status_icon.h"
+#include "touchscreen.h"
 #include "vram_transfer_manager.h"
+#include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
 enum TrainerCardMainState {
@@ -104,53 +104,53 @@ extern const TrainerCardSpritePosition sTrainerCardBadgeSpritePositions[16];
 extern const u8 sTrainerCardButtonSpriteAnims[];
 extern const TrainerCardButtonPosition sTrainerCardButtonSpritePositions[];
 
-void TrainerCardMain_LoadStrings(TrainerCardMain *cardMain);
-void TrainerCardMain_FreeStrings(TrainerCardMain *cardMain);
-void TrainerCardMain_SetGfxBanks(void);
-void TrainerCardMain_LoadCardColorPalette(u32 stars, BOOL pokedexObtained, u8 version);
-void TrainerCardMain_LoadCasePalette(int palette);
-void TrainerCardMain_InitBgLayers(BgConfig *bgConfig);
-void TrainerCardMain_LoadBgGraphics(TrainerCardMain *cardMain);
-void TrainerCardMain_FreeBgLayers(BgConfig *bgConfig);
-void TrainerCardMain_LoadSideLayout(TrainerCardMain *cardMain);
-void TrainerCardMain_DrawCard(TrainerCardMain *cardMain);
-int TrainerCardMain_RunSignPrompt(TrainerCardMain *cardMain);
-int TrainerCardMain_RunFlip(TrainerCardMain *cardMain);
-void TrainerCardMain_ApplyFlipScale(TrainerCardMain *cardMain);
-int TrainerCardMain_HandleKeys(TrainerCardMain *cardMain);
-int TrainerCardMain_HandleTouch(TrainerCardMain *cardMain, int *touched);
-int TrainerCardMain_HandleInput(TrainerCardMain *cardMain);
-void TrainerCardMain_VBlankCB(TrainerCardMain *cardMain);
-void TrainerCardMain_ResetBgAffine(void);
-void TrainerCardMain_DrawFrontPicture(TrainerCardMain *cardMain);
-void TrainerCardMain_ClearBackSideRect(TrainerCardMain *cardMain);
-void TrainerCardMain_UnpackSignature(u8 *signature, u8 *pixels);
-void TrainerCardMain_DrawSignature(BgConfig *bgConfig, int bgId, u8 *pixels);
-void TrainerCardMain_UpdatePlayTime(TrainerCardMain *cardMain, int update);
-void TrainerCardMain_SetButtonsHidden(TrainerCardMain *cardMain, int hide);
-void TrainerCardMain_CreateWindows(TrainerCardMain *cardMain);
-void TrainerCardMain_DestroyWindows(TrainerCardMain *cardMain);
-void TrainerCardMain_PrintFront(TrainerCardMain *cardMain, Window *windows, TrainerCardMainCard *card);
-void TrainerCardMain_CopySideWindowsToVram(TrainerCardMain *cardMain, Window *windows);
-void TrainerCardMain_PrintBack(TrainerCardMain *cardMain, Window *windows, TrainerCardMainCard *card);
-void TrainerCardMain_ClearWindows(Window *windows, u8 first, u8 last);
-void TrainerCardMain_PrintNumberRightAligned(Window *window, int right, int gap, int y, String *string, int value, u8 digits, int mode, int unused);
-void TrainerCardMain_PrintStringRightAligned(Window *window, int right, int gap, int y, String *string);
-void TrainerCardMain_PrintLivePlayTime(Window *windows, TrainerCardMainCard *card, String *unused);
-void TrainerCardMain_DrawPlayTimeColon(Window *window, BOOL show, String *string);
-void TrainerCardMain_PrintCancelButton(TrainerCardMain *cardMain, int unused);
-void TrainerCardMain_PrintActionButton(TrainerCardMain *cardMain, int mode);
-void TrainerCardMain_PrintSignPrompt(TrainerCardMain *cardMain, int message);
-void TrainerCardMain_ShowYesNoPrompt(TrainerCardMain *cardMain, int unused);
-int TrainerCardMain_HandleYesNoPrompt(TrainerCardMain *cardMain, BOOL keepFrame);
-void TrainerCardMain_SetButtonWindowsHidden(TrainerCardMain *cardMain, int hide);
-void TrainerCardMain_InitSprites(TrainerCardMainSprites *sprites);
-void TrainerCardMain_CreateBadgeSprites(TrainerCardMainSprites *sprites, const u8 *badgeFlags, int showKantoBadges);
-void TrainerCardMain_CreateButtonSprites(TrainerCardMainSprites *sprites);
-void TrainerCardMain_FreeSprites(TrainerCardMainSprites *sprites);
-void TrainerCardMain_SetButtonSpriteAnim(TrainerCardMainSprites *sprites, int button, int sequence, int draw);
-void TrainerCardMain_InitObjTransfer(void);
-void TrainerCardMain_InitUnk33A0Pairs(u8 *pairs);
+static void TrainerCardMain_LoadStrings(TrainerCardMain *cardMain);
+static void TrainerCardMain_FreeStrings(TrainerCardMain *cardMain);
+static void TrainerCardMain_SetGfxBanks(void);
+static void TrainerCardMain_LoadCardColorPalette(u32 stars, BOOL pokedexObtained, u8 version);
+static void TrainerCardMain_LoadCasePalette(int palette);
+static void TrainerCardMain_InitBgLayers(BgConfig *bgConfig);
+static void TrainerCardMain_LoadBgGraphics(TrainerCardMain *cardMain);
+static void TrainerCardMain_FreeBgLayers(BgConfig *bgConfig);
+static void TrainerCardMain_LoadSideLayout(TrainerCardMain *cardMain);
+static void TrainerCardMain_DrawCard(TrainerCardMain *cardMain);
+static int TrainerCardMain_RunSignPrompt(TrainerCardMain *cardMain);
+static int TrainerCardMain_RunFlip(TrainerCardMain *cardMain);
+static void TrainerCardMain_ApplyFlipScale(TrainerCardMain *cardMain);
+static int TrainerCardMain_HandleKeys(TrainerCardMain *cardMain);
+static int TrainerCardMain_HandleTouch(TrainerCardMain *cardMain, int *touched);
+static int TrainerCardMain_HandleInput(TrainerCardMain *cardMain);
+static void TrainerCardMain_VBlankCB(TrainerCardMain *cardMain);
+static void TrainerCardMain_ResetBgAffine(void);
+static void TrainerCardMain_DrawFrontPicture(TrainerCardMain *cardMain);
+static void TrainerCardMain_ClearBackSideRect(TrainerCardMain *cardMain);
+static void TrainerCardMain_UnpackSignature(u8 *signature, u8 *pixels);
+static void TrainerCardMain_DrawSignature(BgConfig *bgConfig, int bgId, u8 *pixels);
+static void TrainerCardMain_UpdatePlayTime(TrainerCardMain *cardMain, int update);
+static void TrainerCardMain_SetButtonsHidden(TrainerCardMain *cardMain, int hide);
+static void TrainerCardMain_CreateWindows(TrainerCardMain *cardMain);
+static void TrainerCardMain_DestroyWindows(TrainerCardMain *cardMain);
+static void TrainerCardMain_PrintFront(TrainerCardMain *cardMain, Window *windows, TrainerCardMainCard *card);
+static void TrainerCardMain_CopySideWindowsToVram(TrainerCardMain *cardMain, Window *windows);
+static void TrainerCardMain_PrintBack(TrainerCardMain *cardMain, Window *windows, TrainerCardMainCard *card);
+static void TrainerCardMain_ClearWindows(Window *windows, u8 first, u8 last);
+static void TrainerCardMain_PrintNumberRightAligned(Window *window, int right, int gap, int y, String *string, int value, u8 digits, int mode, int unused);
+static void TrainerCardMain_PrintStringRightAligned(Window *window, int right, int gap, int y, String *string);
+static void TrainerCardMain_PrintLivePlayTime(Window *windows, TrainerCardMainCard *card, String *unused);
+static void TrainerCardMain_DrawPlayTimeColon(Window *window, BOOL show, String *string);
+static void TrainerCardMain_PrintCancelButton(TrainerCardMain *cardMain, int unused);
+static void TrainerCardMain_PrintActionButton(TrainerCardMain *cardMain, int mode);
+static void TrainerCardMain_PrintSignPrompt(TrainerCardMain *cardMain, int message);
+static void TrainerCardMain_ShowYesNoPrompt(TrainerCardMain *cardMain, int unused);
+static int TrainerCardMain_HandleYesNoPrompt(TrainerCardMain *cardMain, BOOL keepFrame);
+static void TrainerCardMain_SetButtonWindowsHidden(TrainerCardMain *cardMain, int hide);
+static void TrainerCardMain_InitSprites(TrainerCardMainSprites *sprites);
+static void TrainerCardMain_CreateBadgeSprites(TrainerCardMainSprites *sprites, const u8 *badgeFlags, int showKantoBadges);
+static void TrainerCardMain_CreateButtonSprites(TrainerCardMainSprites *sprites);
+static void TrainerCardMain_FreeSprites(TrainerCardMainSprites *sprites);
+static void TrainerCardMain_SetButtonSpriteAnim(TrainerCardMainSprites *sprites, int button, int sequence, int draw);
+static void TrainerCardMain_InitObjTransfer(void);
+static void TrainerCardMain_InitUnk33A0Pairs(u8 *pairs);
 
 int TrainerCardMainApp_Init(OverlayManager *manager, int *state) {
     TrainerCardMain *cardMain;
@@ -327,7 +327,7 @@ int TrainerCardMainApp_Exit(OverlayManager *manager, int *state) {
     return TRUE;
 }
 
-void TrainerCardMain_LoadStrings(TrainerCardMain *cardMain) {
+static void TrainerCardMain_LoadStrings(TrainerCardMain *cardMain) {
     int i;
 
     FontID_Alloc(4, HEAP_ID_25);
@@ -348,7 +348,7 @@ void TrainerCardMain_LoadStrings(TrainerCardMain *cardMain) {
     }
 }
 
-void TrainerCardMain_FreeStrings(TrainerCardMain *cardMain) {
+static void TrainerCardMain_FreeStrings(TrainerCardMain *cardMain) {
     int i;
 
     for (i = 0; i < 14; i++) {
@@ -367,12 +367,12 @@ void TrainerCardMain_FreeStrings(TrainerCardMain *cardMain) {
     FontID_Release(4);
 }
 
-void TrainerCardMain_SetGfxBanks(void) {
+static void TrainerCardMain_SetGfxBanks(void) {
     GraphicsBanks banks = sTrainerCardGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
-void TrainerCardMain_LoadCardColorPalette(u32 stars, BOOL pokedexObtained, u8 version) {
+static void TrainerCardMain_LoadCardColorPalette(u32 stars, BOOL pokedexObtained, u8 version) {
     u32 fileId;
     NNSG2dPaletteData *plttData;
     void *file;
@@ -426,7 +426,7 @@ void TrainerCardMain_LoadCardColorPalette(u32 stars, BOOL pokedexObtained, u8 ve
     Heap_Free(file);
 }
 
-void TrainerCardMain_LoadCasePalette(int palette) {
+static void TrainerCardMain_LoadCasePalette(int palette) {
     NNSG2dPaletteData *plttData;
     void *file = GfGfxLoader_GetPlttData(NARC_a_0_4_9, 0x3c, &plttData, HEAP_ID_25);
     u8 *colors = (u8 *)plttData->pRawData + palette * 0x20;
@@ -435,7 +435,7 @@ void TrainerCardMain_LoadCasePalette(int palette) {
     Heap_Free(file);
 }
 
-void TrainerCardMain_InitBgLayers(BgConfig *bgConfig) {
+static void TrainerCardMain_InitBgLayers(BgConfig *bgConfig) {
     GraphicsModes modes;
     BgTemplate bg7;
     TrainerCardBgPair bg45;
@@ -465,7 +465,7 @@ void TrainerCardMain_InitBgLayers(BgConfig *bgConfig) {
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
 }
 
-void TrainerCardMain_LoadBgGraphics(TrainerCardMain *cardMain) {
+static void TrainerCardMain_LoadBgGraphics(TrainerCardMain *cardMain) {
     NNSG2dPaletteData *plttData;
     NNSG2dPaletteData *mainPlttData;
     void *file;
@@ -519,7 +519,7 @@ void TrainerCardMain_LoadBgGraphics(TrainerCardMain *cardMain) {
     TrainerCardMain_UnpackSignature(cardMain->card->signature, cardMain->signaturePixels);
 }
 
-void TrainerCardMain_FreeBgLayers(BgConfig *bgConfig) {
+static void TrainerCardMain_FreeBgLayers(BgConfig *bgConfig) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_ALL, FALSE);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_ALL, FALSE);
     BgSetPosTextAndCommit(bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_X, 0);
@@ -535,7 +535,7 @@ void TrainerCardMain_FreeBgLayers(BgConfig *bgConfig) {
     Heap_Free(bgConfig);
 }
 
-void TrainerCardMain_LoadSideLayout(TrainerCardMain *cardMain) {
+static void TrainerCardMain_LoadSideLayout(TrainerCardMain *cardMain) {
     if (cardMain->showingBack == FALSE) {
         GfGfxLoader_LoadScrnData(NARC_a_0_4_9, 0x2f, cardMain->bgConfig, (GFBgLayer)6, 0, 0, FALSE, HEAP_ID_25);
         TrainerCardMain_ClearWindows(cardMain->windows, 7, 10);
@@ -548,7 +548,7 @@ void TrainerCardMain_LoadSideLayout(TrainerCardMain *cardMain) {
     }
 }
 
-void TrainerCardMain_DrawCard(TrainerCardMain *cardMain) {
+static void TrainerCardMain_DrawCard(TrainerCardMain *cardMain) {
     TrainerCardMainCard *card;
 
     TrainerCardMain_LoadSideLayout(cardMain);
@@ -567,7 +567,7 @@ void TrainerCardMain_DrawCard(TrainerCardMain *cardMain) {
     TrainerCardMain_CopySideWindowsToVram(cardMain, cardMain->windows);
 }
 
-int TrainerCardMain_RunSignPrompt(TrainerCardMain *cardMain) {
+static int TrainerCardMain_RunSignPrompt(TrainerCardMain *cardMain) {
     switch (cardMain->subState) {
     case 0:
         TrainerCardMain_PrintSignPrompt(cardMain, 0);
@@ -622,7 +622,7 @@ int TrainerCardMain_RunSignPrompt(TrainerCardMain *cardMain) {
     return 0;
 }
 
-int TrainerCardMain_RunFlip(TrainerCardMain *cardMain) {
+static int TrainerCardMain_RunFlip(TrainerCardMain *cardMain) {
     int done = 0;
 
     switch (cardMain->subState) {
@@ -687,7 +687,7 @@ int TrainerCardMain_RunFlip(TrainerCardMain *cardMain) {
     return done;
 }
 
-void TrainerCardMain_ApplyFlipScale(TrainerCardMain *cardMain) {
+static void TrainerCardMain_ApplyFlipScale(TrainerCardMain *cardMain) {
     MtxFx22 matrix;
 
     matrix._00 = FX_Inv(cardMain->scaleX);
@@ -700,7 +700,7 @@ void TrainerCardMain_ApplyFlipScale(TrainerCardMain *cardMain) {
     cardMain->scaleChanged = FALSE;
 }
 
-int TrainerCardMain_HandleKeys(TrainerCardMain *cardMain) {
+static int TrainerCardMain_HandleKeys(TrainerCardMain *cardMain) {
     if (gSystem.newKeys & PAD_BUTTON_A) {
         if (cardMain->showingBack != FALSE && cardMain->isConnected == FALSE) {
             PlaySE(SEQ_SE_DP_SELECT);
@@ -716,7 +716,7 @@ int TrainerCardMain_HandleKeys(TrainerCardMain *cardMain) {
     return 0;
 }
 
-int TrainerCardMain_HandleTouch(TrainerCardMain *cardMain, int *touched) {
+static int TrainerCardMain_HandleTouch(TrainerCardMain *cardMain, int *touched) {
     if (!System_GetTouchNew()) {
         return 0;
     }
@@ -739,7 +739,7 @@ int TrainerCardMain_HandleTouch(TrainerCardMain *cardMain, int *touched) {
     return 0;
 }
 
-int TrainerCardMain_HandleInput(TrainerCardMain *cardMain) {
+static int TrainerCardMain_HandleInput(TrainerCardMain *cardMain) {
     int touched = 0;
     cardMain->unk_3108 = -1;
     {
@@ -756,7 +756,7 @@ int TrainerCardMain_HandleInput(TrainerCardMain *cardMain) {
     }
 }
 
-void TrainerCardMain_VBlankCB(TrainerCardMain *cardMain) {
+static void TrainerCardMain_VBlankCB(TrainerCardMain *cardMain) {
     int pos = -cardMain->scrollOffset;
     BgSetPosTextAndCommit(cardMain->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_X, pos);
     BgSetPosTextAndCommit(cardMain->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_Y, pos);
@@ -771,7 +771,7 @@ void TrainerCardMain_VBlankCB(TrainerCardMain *cardMain) {
     *(vu32 *)((u8 *)OS_IRQTable + 0x3ff8) |= OS_IE_VBLANK; // OS_SetIrqCheckFlag, addressed from OS_IRQTable
 }
 
-void TrainerCardMain_ResetBgAffine(void) {
+static void TrainerCardMain_ResetBgAffine(void) {
     MtxFx22 matrix;
     int x = FX_Inv(FX32_ONE);
     int y = FX_Inv(FX32_ONE);
@@ -786,7 +786,7 @@ void TrainerCardMain_ResetBgAffine(void) {
     G2_SetBG3Affine(&matrix, 128, 0, 0, 0);
 }
 
-void TrainerCardMain_DrawFrontPicture(TrainerCardMain *cardMain) {
+static void TrainerCardMain_DrawFrontPicture(TrainerCardMain *cardMain) {
     NNSG2dScreenData *screen;
     BG_LoadCharTilesData(cardMain->bgConfig, 7, cardMain->frontCharData->pRawData, cardMain->frontCharData->szByte, 0);
     screen = cardMain->frontScreen;
@@ -794,11 +794,11 @@ void TrainerCardMain_DrawFrontPicture(TrainerCardMain *cardMain) {
     BgCommitTilemapBufferToVram(cardMain->bgConfig, GF_BG_LYR_SUB_3);
 }
 
-void TrainerCardMain_ClearBackSideRect(TrainerCardMain *cardMain) {
+static void TrainerCardMain_ClearBackSideRect(TrainerCardMain *cardMain) {
     FillBgTilemapRect(cardMain->bgConfig, GF_BG_LYR_SUB_3, 0, 0x14, 6, 6, 9, TILEMAP_FILL_KEEP_PAL);
 }
 
-void TrainerCardMain_UnpackSignature(u8 *signature, u8 *pixels) {
+static void TrainerCardMain_UnpackSignature(u8 *signature, u8 *pixels) {
     int count = 0x3000;
     int i = 0;
     do {
@@ -809,7 +809,7 @@ void TrainerCardMain_UnpackSignature(u8 *signature, u8 *pixels) {
     } while (i < count);
 }
 
-void TrainerCardMain_DrawSignature(BgConfig *bgConfig, int bgId, u8 *pixels) {
+static void TrainerCardMain_DrawSignature(BgConfig *bgConfig, int bgId, u8 *pixels) {
     u16 *tilemap;
     u8 x;
     u8 y;
@@ -831,7 +831,7 @@ void TrainerCardMain_DrawSignature(BgConfig *bgConfig, int bgId, u8 *pixels) {
     ScheduleBgTilemapBufferTransfer(bgConfig, (u8)bgId);
 }
 
-void TrainerCardMain_UpdatePlayTime(TrainerCardMain *cardMain, int update) {
+static void TrainerCardMain_UpdatePlayTime(TrainerCardMain *cardMain, int update) {
     if (update != 0) {
         if (cardMain->showingBack == FALSE) {
             if (cardMain->colonBlinkTimer == 0) {
@@ -845,7 +845,7 @@ void TrainerCardMain_UpdatePlayTime(TrainerCardMain *cardMain, int update) {
     }
 }
 
-void TrainerCardMain_SetButtonsHidden(TrainerCardMain *cardMain, int hide) {
+static void TrainerCardMain_SetButtonsHidden(TrainerCardMain *cardMain, int hide) {
     if (hide == 1) {
         TrainerCardMain_SetButtonSpriteAnim(&cardMain->sprites, 1, 2, 0);
         TrainerCardMain_SetButtonSpriteAnim(&cardMain->sprites, 0, 0, 0);
@@ -856,7 +856,7 @@ void TrainerCardMain_SetButtonsHidden(TrainerCardMain *cardMain, int hide) {
     TrainerCardMain_SetButtonWindowsHidden(cardMain, hide);
 }
 
-void TrainerCardMain_CreateWindows(TrainerCardMain *cardMain) {
+static void TrainerCardMain_CreateWindows(TrainerCardMain *cardMain) {
     const WindowTemplate *templates = sTrainerCardWindowTemplates;
     u8 i = 0;
     do {
@@ -872,7 +872,7 @@ void TrainerCardMain_CreateWindows(TrainerCardMain *cardMain) {
     ScheduleBgTilemapBufferTransfer(cardMain->bgConfig, GF_BG_LYR_SUB_0);
 }
 
-void TrainerCardMain_DestroyWindows(TrainerCardMain *cardMain) {
+static void TrainerCardMain_DestroyWindows(TrainerCardMain *cardMain) {
     u16 i;
     YesNoPrompt_Destroy(cardMain->yesNoPrompt);
     for (i = 0; i < 14; i++) {
@@ -880,7 +880,7 @@ void TrainerCardMain_DestroyWindows(TrainerCardMain *cardMain) {
     }
 }
 
-void TrainerCardMain_PrintFront(TrainerCardMain *cardMain, Window *windows, TrainerCardMainCard *card) {
+static void TrainerCardMain_PrintFront(TrainerCardMain *cardMain, Window *windows, TrainerCardMainCard *card) {
     MsgData *msgData = cardMain->msgData;
     u8 i = 0;
     String *template;
@@ -938,7 +938,7 @@ void TrainerCardMain_PrintFront(TrainerCardMain *cardMain, Window *windows, Trai
     MessageFormat_Delete(format);
 }
 
-void TrainerCardMain_CopySideWindowsToVram(TrainerCardMain *cardMain, Window *windows) {
+static void TrainerCardMain_CopySideWindowsToVram(TrainerCardMain *cardMain, Window *windows) {
     int i;
     if (cardMain->showingBack != FALSE) {
         for (i = 7; i < 11; i++) {
@@ -951,7 +951,7 @@ void TrainerCardMain_CopySideWindowsToVram(TrainerCardMain *cardMain, Window *wi
     }
 }
 
-void TrainerCardMain_PrintBack(TrainerCardMain *cardMain, Window *windows, TrainerCardMainCard *card) {
+static void TrainerCardMain_PrintBack(TrainerCardMain *cardMain, Window *windows, TrainerCardMainCard *card) {
     String *template;
     String *formatted;
     MessageFormat *format;
@@ -1007,26 +1007,26 @@ void TrainerCardMain_PrintBack(TrainerCardMain *cardMain, Window *windows, Train
     MessageFormat_Delete(format);
 }
 
-void TrainerCardMain_ClearWindows(Window *windows, u8 first, u8 last) {
+static void TrainerCardMain_ClearWindows(Window *windows, u8 first, u8 last) {
     u8 i;
     for (i = first; i <= last; i++) {
         ClearWindowTilemapAndCopyToVram(&windows[i]);
     }
 }
 
-void TrainerCardMain_PrintNumberRightAligned(Window *window, int right, int gap, int y, String *string, int value, u8 digits, int mode, int unused) {
+static void TrainerCardMain_PrintNumberRightAligned(Window *window, int right, int gap, int y, String *string, int value, u8 digits, int mode, int unused) {
     int width;
     String16_FormatInteger(string, value, digits, (PrintingMode)mode, TRUE);
     width = FontID_String_GetWidth(0, string, 0);
     AddTextPrinterParameterizedWithColor(window, 0, string, right - (width + gap), y, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
 }
 
-void TrainerCardMain_PrintStringRightAligned(Window *window, int right, int gap, int y, String *string) {
+static void TrainerCardMain_PrintStringRightAligned(Window *window, int right, int gap, int y, String *string) {
     int width = FontID_String_GetWidth(0, string, 0);
     AddTextPrinterParameterizedWithColor(window, 0, string, right - (width + gap), y, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
 }
 
-void TrainerCardMain_PrintLivePlayTime(Window *windows, TrainerCardMainCard *card, String *unused) {
+static void TrainerCardMain_PrintLivePlayTime(Window *windows, TrainerCardMainCard *card, String *unused) {
     int x;
     MessageFormat *format;
     String *formatted;
@@ -1052,7 +1052,7 @@ void TrainerCardMain_PrintLivePlayTime(Window *windows, TrainerCardMainCard *car
     MessageFormat_Delete(format);
 }
 
-void TrainerCardMain_DrawPlayTimeColon(Window *window, BOOL show, String *string) {
+static void TrainerCardMain_DrawPlayTimeColon(Window *window, BOOL show, String *string) {
     if (show != FALSE) {
         AddTextPrinterParameterizedWithColor(window, 0, string, 0xcd, 0, TEXT_SPEED_INSTANT, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     } else {
@@ -1061,13 +1061,13 @@ void TrainerCardMain_DrawPlayTimeColon(Window *window, BOOL show, String *string
     }
 }
 
-void TrainerCardMain_PrintCancelButton(TrainerCardMain *cardMain, int unused) {
+static void TrainerCardMain_PrintCancelButton(TrainerCardMain *cardMain, int unused) {
     int x = 0x30 - FontID_String_GetWidth(4, cardMain->buttonStrings[0], 0);
     FillWindowPixelBuffer(&cardMain->windows[13], 0);
     AddTextPrinterParameterizedWithColor(&cardMain->windows[13], 4, cardMain->buttonStrings[0], (u32)x >> 1, 4, TEXT_SPEED_INSTANT, MAKE_TEXT_COLOR(5, 4, 0), NULL);
 }
 
-void TrainerCardMain_PrintActionButton(TrainerCardMain *cardMain, int mode) {
+static void TrainerCardMain_PrintActionButton(TrainerCardMain *cardMain, int mode) {
     Window *window = &cardMain->windows[12];
     if (mode == 0) {
         if (cardMain->isConnected) {
@@ -1091,7 +1091,7 @@ void TrainerCardMain_PrintActionButton(TrainerCardMain *cardMain, int mode) {
     }
 }
 
-void TrainerCardMain_PrintSignPrompt(TrainerCardMain *cardMain, int message) {
+static void TrainerCardMain_PrintSignPrompt(TrainerCardMain *cardMain, int message) {
     if (message == 0) {
         DrawFrameAndWindow2(&cardMain->windows[11], TRUE, 0x3e1, 0xd);
     }
@@ -1100,7 +1100,7 @@ void TrainerCardMain_PrintSignPrompt(TrainerCardMain *cardMain, int message) {
     ScheduleBgTilemapBufferTransfer(cardMain->bgConfig, GF_BG_LYR_SUB_0);
 }
 
-void TrainerCardMain_ShowYesNoPrompt(TrainerCardMain *cardMain, int unused) {
+static void TrainerCardMain_ShowYesNoPrompt(TrainerCardMain *cardMain, int unused) {
     YesNoPromptTemplate template;
     MI_CpuFill8(&template, 0, sizeof(template));
     template.bgConfig = cardMain->bgConfig;
@@ -1115,7 +1115,7 @@ void TrainerCardMain_ShowYesNoPrompt(TrainerCardMain *cardMain, int unused) {
     ScheduleBgTilemapBufferTransfer(cardMain->bgConfig, GF_BG_LYR_SUB_0);
 }
 
-int TrainerCardMain_HandleYesNoPrompt(TrainerCardMain *cardMain, BOOL keepFrame) {
+static int TrainerCardMain_HandleYesNoPrompt(TrainerCardMain *cardMain, BOOL keepFrame) {
     int answer;
     int result = YesNoPrompt_HandleInput(cardMain->yesNoPrompt);
     switch (result) {
@@ -1137,7 +1137,7 @@ int TrainerCardMain_HandleYesNoPrompt(TrainerCardMain *cardMain, BOOL keepFrame)
     return answer;
 }
 
-void TrainerCardMain_SetButtonWindowsHidden(TrainerCardMain *cardMain, int hide) {
+static void TrainerCardMain_SetButtonWindowsHidden(TrainerCardMain *cardMain, int hide) {
     if (hide == 1) {
         ClearWindowTilemapAndScheduleTransfer(&cardMain->windows[13]);
         ClearWindowTilemapAndScheduleTransfer(&cardMain->windows[12]);
@@ -1147,7 +1147,7 @@ void TrainerCardMain_SetButtonWindowsHidden(TrainerCardMain *cardMain, int hide)
     }
 }
 
-void TrainerCardMain_InitSprites(TrainerCardMainSprites *sprites) {
+static void TrainerCardMain_InitSprites(TrainerCardMainSprites *sprites) {
     TrainerCardBadgePalettes paletteFiles;
     TrainerCardObjVramTypes vramTypes;
     TrainerCardObjFiles files;
@@ -1195,7 +1195,7 @@ void TrainerCardMain_InitSprites(TrainerCardMainSprites *sprites) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-void TrainerCardMain_CreateBadgeSprites(TrainerCardMainSprites *sprites, const u8 *badgeFlags, int showKantoBadges) {
+static void TrainerCardMain_CreateBadgeSprites(TrainerCardMainSprites *sprites, const u8 *badgeFlags, int showKantoBadges) {
     SpriteResourcesHeader header;
     SpriteTemplate template;
     int yOffset;
@@ -1235,7 +1235,7 @@ void TrainerCardMain_CreateBadgeSprites(TrainerCardMainSprites *sprites, const u
     }
 }
 
-void TrainerCardMain_CreateButtonSprites(TrainerCardMainSprites *sprites) {
+static void TrainerCardMain_CreateButtonSprites(TrainerCardMainSprites *sprites) {
     SpriteResourcesHeader header;
     SpriteTemplate template;
     int i;
@@ -1264,7 +1264,7 @@ void TrainerCardMain_CreateButtonSprites(TrainerCardMainSprites *sprites) {
     }
 }
 
-void TrainerCardMain_FreeSprites(TrainerCardMainSprites *sprites) {
+static void TrainerCardMain_FreeSprites(TrainerCardMainSprites *sprites) {
     u8 i;
     for (i = 0; i < 16; i++) {
         Heap_Free(sprites->paletteFiles[i]);
@@ -1285,13 +1285,13 @@ void TrainerCardMain_FreeSprites(TrainerCardMainSprites *sprites) {
     GX_SetOBJVRamModeChar(GX_OBJVRAMMODE_CHAR_1D_32K);
 }
 
-void TrainerCardMain_SetButtonSpriteAnim(TrainerCardMainSprites *sprites, int button, int sequence, int draw) {
+static void TrainerCardMain_SetButtonSpriteAnim(TrainerCardMainSprites *sprites, int button, int sequence, int draw) {
     Sprite_SetAnimCtrlSeq(sprites->buttonSprites[button], sequence);
     Sprite_ResetAnimCtrlState(sprites->buttonSprites[button]);
     Sprite_SetDrawFlag(sprites->buttonSprites[button], draw);
 }
 
-void TrainerCardMain_InitObjTransfer(void) {
+static void TrainerCardMain_InitObjTransfer(void) {
     ObjCharTransferTemplate template = sTrainerCardObjCharTransferTemplate;
     ObjCharTransfer_Init(&template);
     ObjPlttTransfer_Init(2, HEAP_ID_25);
@@ -1301,7 +1301,7 @@ void TrainerCardMain_InitObjTransfer(void) {
     thunk_ClearSubOAM(HEAP_ID_25);
 }
 
-void TrainerCardMain_InitUnk33A0Pairs(u8 *pairs) {
+static void TrainerCardMain_InitUnk33A0Pairs(u8 *pairs) {
     int i;
     for (i = 0; i < 4; i++) {
         pairs[0] = i;

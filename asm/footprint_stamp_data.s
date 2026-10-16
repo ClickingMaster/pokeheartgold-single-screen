@@ -583,59 +583,35 @@
 	.public FootprintStamp_Init
 	.public FootprintStamp_Main
 	.public FootprintStamp_Exit
-	.public FootprintStamp_MainTask
-	.public FootprintStamp_VBlank
-	.public FootprintStamp_InitBgs
-	.public FootprintStamp_LoadBgGfx
-	.public FootprintStamp_LoadPartySpriteGfx
-	.public FootprintStamp_CreatePartySprites
-	.public FootprintStamp_FreePartySprites
-	.public FootprintStamp_LoadPlayerSpriteGfx
 	.public FootprintStamp_CreatePlayerSprites
 	.public FootprintStamp_FreePlayerSprites
 	.public FootprintStamp_ShowParty
-	.public FootprintStamp_LoadFootprintIcon
 	.public FootprintStamp_CreateCamera
 	.public FootprintStamp_LoadBoardModel
 	.public FootprintStamp_Draw3D
 	.public FootprintStamp_CreateWindows
 	.public FootprintStamp_FreeWindows
 	.public FootprintStamp_Create3DVramMan
-	.public FootprintStamp_Setup3D
 	.public FootprintStamp_LoadParty
 	.public FootprintStamp_PlaceStamp
 	.public FootprintStamp_UpdatePlayers
 	.public FootprintStamp_ShowPlayerName
 	.public FootprintStamp_StartSelectEffect
-	.public FootprintStamp_HighlightPartySlot
 	.public FootprintStamp_UpdateSelectEffects
 	.public FootprintStamp_CreateTextSprite
-	.public FootprintStamp_GetTextSize
 	.public FootprintStamp_UpdateInkGauge
 	.public FootprintStamp_UseInk
-	.public FootprintStampBoard_AddStamp
 	.public FootprintStampBoard_Update
-	.public FootprintStampBoard_Draw
 	.public FootprintStampBoard_ResolveChains
 	.public FootprintStampBoard_VBlank
-	.public FootprintStampBoard_CreateStamp
-	.public FootprintStamp_LoadStampModel
 	.public FootprintStampBoard_QueueTexture
 	.public FootprintStampBoard_UnqueueTexture
-	.public FootprintStamp_AllocTextureVram
 	.public FootprintStamp_DrawFootprintTexture
-	.public FootprintStamp_RotateFootprintTexture
 	.public FootprintStampBoard_RemoveStamp
 	.public FootprintStamp_TouchToBoardPos
-	.public FootprintStampBoard_AllocPolygonId
-	.public FootprintStampBoard_FreePolygonId
 	.public FootprintStamp_GetBounds
-	.public FootprintStamp_BoundsOverlap
-	.public FootprintStampBoard_NewChain
 	.public FootprintStampBoard_AddToChain
-	.public FootprintStampBoard_ReleaseChain
 	.public FootprintStamp_SetEffect
-	.public FootprintStamp_GetNatureEffect
 	.public FootprintStamp_UpdateIdle
 	.public FootprintStamp_UpdateVanish
 	.public FootprintStamp_DrawVanish
@@ -677,9 +653,7 @@
 	.public FootprintStamp_GetInkColor
 	.public FootprintStamp_GetTouchedPartySlot
 	.public FootprintStamp_GetFootprintType
-	.public FootprintStamp_GetFootprintSize
 	.public FootprintStamp_RegisterLinkCommands
-	.public FootprintStamp_IsFromOtherPlayer
 	.public FootprintStamp_HandlePlayerJoined
 	.public FootprintStamp_HandlePlayerLeft
 	.public FootprintStamp_HandleStampReceived
@@ -721,19 +695,9 @@
 	.public FootprintStamp_Init
 	.public FootprintStamp_Main
 	.public FootprintStamp_Exit
-	.public FootprintStamp_MainTask
-	.public FootprintStamp_VBlank
-	.public FootprintStamp_InitBgs
-	.public FootprintStamp_FreeBgs
-	.public FootprintStamp_LoadBgGfx
-	.public FootprintStamp_LoadPartySpriteGfx
-	.public FootprintStamp_CreatePartySprites
-	.public FootprintStamp_FreePartySprites
-	.public FootprintStamp_LoadPlayerSpriteGfx
 	.public FootprintStamp_CreatePlayerSprites
 	.public FootprintStamp_FreePlayerSprites
 	.public FootprintStamp_ShowParty
-	.public FootprintStamp_LoadFootprintIcon
 	.public FootprintStamp_CreateCamera
 	.public FootprintStamp_FreeCamera
 	.public FootprintStamp_LoadBoardModel
@@ -742,7 +706,6 @@
 	.public FootprintStamp_CreateWindows
 	.public FootprintStamp_FreeWindows
 	.public FootprintStamp_Create3DVramMan
-	.public FootprintStamp_Setup3D
 	.public FootprintStamp_Free3DVramMan
 	.public FootprintStamp_InitLinkFilter
 	.public FootprintStampMon_InitDummy
@@ -753,41 +716,27 @@
 	.public FootprintStamp_ShowPlayerName
 	.public FootprintStamp_ClearPlayerName
 	.public FootprintStamp_StartSelectEffect
-	.public FootprintStamp_HighlightPartySlot
 	.public FootprintStamp_UpdateSelectEffects
 	.public FootprintStamp_CreateTextSprite
 	.public FootprintStamp_FreeTextSprite
-	.public FootprintStamp_GetTextSize
 	.public FootprintStamp_UpdateInkGauge
 	.public FootprintStamp_UseInk
 	.public FootprintStamp_UpdateDummy
 	.public FootprintStampBoard_Init
 	.public FootprintStampBoard_Free
-	.public FootprintStampBoard_AddStamp
 	.public FootprintStampBoard_Update
-	.public FootprintStampBoard_Draw
 	.public FootprintStampBoard_ResolveChains
 	.public FootprintStampBoard_VBlank
-	.public FootprintStampBoard_CreateStamp
-	.public FootprintStamp_LoadStampModel
 	.public FootprintStampBoard_QueueTexture
 	.public FootprintStampBoard_UnqueueTexture
-	.public FootprintStamp_AllocTextureVram
 	.public FootprintStamp_DrawFootprintTexture
-	.public FootprintStamp_RotateFootprintTexture
 	.public FootprintStamp_DeleteStamp
 	.public FootprintStampBoard_RemoveStamp
 	.public FootprintStamp_TouchToBoardPos
-	.public FootprintStampBoard_AllocPolygonId
-	.public FootprintStampBoard_FreePolygonId
 	.public FootprintStamp_GetBounds
-	.public FootprintStamp_BoundsOverlap
-	.public FootprintStampBoard_NewChain
 	.public FootprintStampBoard_AddToChain
-	.public FootprintStampBoard_ReleaseChain
 	.public FootprintStampBoard_StartCameraEffect
 	.public FootprintStamp_SetEffect
-	.public FootprintStamp_GetNatureEffect
 	.public FootprintStamp_UpdateIdle
 	.public FootprintStamp_HitIdle
 	.public FootprintStamp_UpdateVanish
@@ -831,9 +780,7 @@
 	.public FootprintStamp_GetInkColor
 	.public FootprintStamp_GetTouchedPartySlot
 	.public FootprintStamp_GetFootprintType
-	.public FootprintStamp_GetFootprintSize
 	.public FootprintStamp_RegisterLinkCommands
-	.public FootprintStamp_IsFromOtherPlayer
 	.public FootprintStamp_SendStamp
 	.public FootprintStamp_HandlePlayerJoined
 	.public FootprintStamp_HandlePlayerLeft
@@ -842,7 +789,6 @@
 	.include "global.inc"
 
 	.text
-	.public FootprintStamp_FreeBgs
 	.public FootprintStamp_FreeCamera
 	.public FootprintStamp_FreeBoardModel
 	.public FootprintStamp_Free3DVramMan

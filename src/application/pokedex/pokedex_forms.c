@@ -5,17 +5,17 @@
 #include "application/pokedex/pokedex_internal.h"
 
 #include "bg_window.h"
+#include "char_tiles.h"
 #include "heap.h"
 #include "player_data.h"
 #include "pokedex.h"
 #include "pokemon.h"
 #include "sprite_system.h"
-#include "char_tiles.h"
 
 extern const ManagedSpriteTemplate sPokedexFormsSpriteTemplates[];
 extern const u16 sPokedexFormScrollbarSizeSteps[];
 extern const u8 sPokedexAreaScrollbarLengths[]; // area list scrollbar length per size animation
-extern const u8 sPokedexScrollbarLengths[]; // form list scrollbar length per size animation
+extern const u8 sPokedexScrollbarLengths[];     // form list scrollbar length per size animation
 extern const TileRect sPokedexMonPicBgRect;
 extern const u16 sPokedexMonPicBgTilemap[];
 

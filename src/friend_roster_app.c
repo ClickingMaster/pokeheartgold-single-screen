@@ -6,31 +6,31 @@
 #include "msgdata/msg/msg_0196.h"
 
 #include "bg_window.h"
+#include "dpad_menu_box.h"
 #include "field_system.h"
 #include "filesystem.h"
 #include "font.h"
+#include "friend_roster.h"
 #include "gf_gfx_loader.h"
+#include "grid_input_handler.h"
 #include "heap.h"
 #include "message_format.h"
 #include "msgdata.h"
 #include "player_data.h"
 #include "pm_string.h"
+#include "sound_playback.h"
 #include "sprite.h"
+#include "sprite_resource.h"
+#include "sprite_resource_header.h"
 #include "sprite_transfer.h"
 #include "sys_task.h"
 #include "systask_environment.h"
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "sound_playback.h"
-#include "sprite_resource_header.h"
-#include "sprite_resource.h"
-#include "grid_input_handler.h"
-#include "dpad_menu_box.h"
-#include "friend_roster.h"
 
-// Field bottom-screen app 6: when the Friend Roster is full, the player picks the entry to delete
-// (field/pal_pad_registration.c). *result: -1 while running, -2 = QUIT, otherwise the roster index.
+// Field bottom-screen app 6: when the Friend Roster is full, the player picks the entry to delete.
+// *result: -1 while running, -2 = QUIT, otherwise the roster index.
 
 #define FRIEND_ROSTER_APP_NUM_WINDOWS    18
 #define FRIEND_ROSTER_APP_NUM_SPRITES    4
@@ -97,42 +97,43 @@ extern const TouchscreenHitbox sFriendRosterAppGridHitboxes[];
 extern const DpadMenuBox sFriendRosterAppGridDpadBoxes[];
 extern const WindowTemplate sFriendRosterAppWindowTemplates[];
 
+static void FriendRosterApp_SetVramBanks(void);
+static void FriendRosterApp_InitBgs(BgConfig *bgConfig);
+static void FriendRosterApp_FreeBgs(BgConfig *bgConfig);
+static void FriendRosterApp_LoadBgGraphics(FriendRosterAppData *data, NARC *narc);
+static void FriendRosterApp_InitText(FriendRosterAppData *data);
+static void FriendRosterApp_FreeText(FriendRosterAppData *data);
+static void FriendRosterApp_InitWindows(FriendRosterAppData *data);
+static void FriendRosterApp_RemoveWindows(FriendRosterAppData *data);
+static void FriendRosterApp_PrintPageNumber(FriendRosterAppData *data);
+static void FriendRosterApp_PrintNames(FriendRosterAppData *data);
+static void FriendRosterApp_InitSprites(FriendRosterAppData *data, NARC *narc);
+static void FriendRosterApp_FreeSprites(FriendRosterAppData *data);
+static void FriendRosterApp_CreateResourceManagers(FriendRosterAppData *data);
+static void FriendRosterApp_DestroyResourceManagers(FriendRosterAppData *data);
+static void FriendRosterApp_LoadSpriteResources(SpriteResource **resObjs, GF_2DGfxResMan **resMans, NARC *narc, int charFileId, int plttFileId, int cellFileId, int animFileId, int plttNum, int charId, int plttId, int cellId, int animId);
+static void FriendRosterApp_CreateSpriteHeader(SpriteResource **resObjs, GF_2DGfxResMan **resMans, SpriteResourcesHeader *header, int priority);
+static void FriendRosterApp_CreateSprite(FriendRosterAppData *data, int index, SpriteResourcesHeader *header, const u8 *spec);
+static void FriendRosterApp_CreateSprites(FriendRosterAppData *data, NARC *narc);
+static void FriendRosterApp_DeleteSprites(FriendRosterAppData *data);
+static void FriendRosterApp_AnimateSprites(FriendRosterAppData *data);
+static void FriendRosterApp_SetCursorPos(FriendRosterAppData *data, int pos);
+static void FriendRosterApp_InitGridInput(FriendRosterAppData *data);
+static void FriendRosterApp_FreeGridInput(FriendRosterAppData *data);
+static void FriendRosterApp_Task(SysTask *task, void *taskData);
+static int FriendRosterApp_HandleInput(FriendRosterAppData *data);
+static int FriendRosterApp_UpdateBlink(FriendRosterAppData *data);
+static int FriendRosterApp_ChangePage(FriendRosterAppData *data, int delta);
+static void FriendRosterApp_SetBlinkPalette(FriendRosterAppData *data, u8 palette);
+static BOOL FriendRosterApp_StepBlink(FriendRosterAppData *data);
+static int FriendRosterApp_StartSpriteBlink(FriendRosterAppData *data, u8 target, u8 seqA, u8 seqB, u8 nextState);
+static int FriendRosterApp_StartNameBlink(FriendRosterAppData *data, u8 x, u8 y, u8 nextState);
+
 SysTask *FriendRosterApp_Init(BgConfig *bgConfig, void *lastTouchMenuInput, FieldSystem *fieldSystem, int *result);
 void FriendRosterApp_Exit(void *unused, SysTask *task);
 BOOL FriendRosterApp_IsExitDone(void);
-void FriendRosterApp_SetVramBanks(void);
-void FriendRosterApp_InitBgs(BgConfig *bgConfig);
-void FriendRosterApp_FreeBgs(BgConfig *bgConfig);
-void FriendRosterApp_LoadBgGraphics(FriendRosterAppData *data, NARC *narc);
-void FriendRosterApp_InitText(FriendRosterAppData *data);
-void FriendRosterApp_FreeText(FriendRosterAppData *data);
-void FriendRosterApp_InitWindows(FriendRosterAppData *data);
-void FriendRosterApp_RemoveWindows(FriendRosterAppData *data);
-void FriendRosterApp_PrintPageNumber(FriendRosterAppData *data);
-void FriendRosterApp_PrintNames(FriendRosterAppData *data);
-void FriendRosterApp_InitSprites(FriendRosterAppData *data, NARC *narc);
-void FriendRosterApp_FreeSprites(FriendRosterAppData *data);
-void FriendRosterApp_CreateResourceManagers(FriendRosterAppData *data);
-void FriendRosterApp_DestroyResourceManagers(FriendRosterAppData *data);
-void FriendRosterApp_LoadSpriteResources(SpriteResource **resObjs, GF_2DGfxResMan **resMans, NARC *narc, int charFileId, int plttFileId, int cellFileId, int animFileId, int plttNum, int charId, int plttId, int cellId, int animId);
-void FriendRosterApp_CreateSpriteHeader(SpriteResource **resObjs, GF_2DGfxResMan **resMans, SpriteResourcesHeader *header, int priority);
-void FriendRosterApp_CreateSprite(FriendRosterAppData *data, int index, SpriteResourcesHeader *header, const u8 *spec);
-void FriendRosterApp_CreateSprites(FriendRosterAppData *data, NARC *narc);
-void FriendRosterApp_DeleteSprites(FriendRosterAppData *data);
-void FriendRosterApp_AnimateSprites(FriendRosterAppData *data);
-void FriendRosterApp_SetCursorPos(FriendRosterAppData *data, int pos);
-void FriendRosterApp_InitGridInput(FriendRosterAppData *data);
-void FriendRosterApp_FreeGridInput(FriendRosterAppData *data);
 void FriendRosterApp_GridNoop(void);
 void FriendRosterApp_OnCursorMove(void *data, int newTarget, int prevTarget);
-void FriendRosterApp_Task(SysTask *task, void *taskData);
-int FriendRosterApp_HandleInput(FriendRosterAppData *data);
-int FriendRosterApp_UpdateBlink(FriendRosterAppData *data);
-int FriendRosterApp_ChangePage(FriendRosterAppData *data, int delta);
-void FriendRosterApp_SetBlinkPalette(FriendRosterAppData *data, u8 palette);
-BOOL FriendRosterApp_StepBlink(FriendRosterAppData *data);
-int FriendRosterApp_StartSpriteBlink(FriendRosterAppData *data, u8 target, u8 seqA, u8 seqB, u8 nextState);
-int FriendRosterApp_StartNameBlink(FriendRosterAppData *data, u8 x, u8 y, u8 nextState);
 
 SysTask *FriendRosterApp_Init(BgConfig *bgConfig, void *lastTouchMenuInput, FieldSystem *fieldSystem, int *result) {
     SysTask *task;
@@ -180,13 +181,13 @@ BOOL FriendRosterApp_IsExitDone(void) {
     return TRUE;
 }
 
-void FriendRosterApp_SetVramBanks(void) {
+static void FriendRosterApp_SetVramBanks(void) {
     GX_SetBankForSubBG(GX_VRAM_SUB_BG_32_H);
     GX_SetBankForSubOBJ(GX_VRAM_SUB_OBJ_16_I);
     GXS_SetOBJVRamModeChar(GX_OBJVRAMMODE_CHAR_1D_32K);
 }
 
-void FriendRosterApp_InitBgs(BgConfig *bgConfig) {
+static void FriendRosterApp_InitBgs(BgConfig *bgConfig) {
     BgTemplate bg4;
     BgTemplate bg5;
     BgTemplate bg6;
@@ -202,30 +203,30 @@ void FriendRosterApp_InitBgs(BgConfig *bgConfig) {
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &bg6, GF_BG_TYPE_TEXT);
 }
 
-void FriendRosterApp_FreeBgs(BgConfig *bgConfig) {
+static void FriendRosterApp_FreeBgs(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_2);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_1);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_0);
 }
 
-void FriendRosterApp_LoadBgGraphics(FriendRosterAppData *data, NARC *narc) {
+static void FriendRosterApp_LoadBgGraphics(FriendRosterAppData *data, NARC *narc) {
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 2, data->bgConfig, GF_BG_LYR_SUB_1, 0, 0, TRUE, HEAP_ID_8);
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 1, data->bgConfig, GF_BG_LYR_SUB_1, 0, 0, TRUE, HEAP_ID_8);
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 0, data->bgConfig, GF_BG_LYR_SUB_2, 0, 0, TRUE, HEAP_ID_8);
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 3, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0, HEAP_ID_8);
 }
 
-void FriendRosterApp_InitText(FriendRosterAppData *data) {
+static void FriendRosterApp_InitText(FriendRosterAppData *data) {
     data->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0196_bin, HEAP_ID_8);
     data->msgFormat = MessageFormat_New(HEAP_ID_8);
 }
 
-void FriendRosterApp_FreeText(FriendRosterAppData *data) {
+static void FriendRosterApp_FreeText(FriendRosterAppData *data) {
     MessageFormat_Delete(data->msgFormat);
     DestroyMsgData(data->msgData);
 }
 
-void FriendRosterApp_InitWindows(FriendRosterAppData *data) {
+static void FriendRosterApp_InitWindows(FriendRosterAppData *data) {
     String *string;
     u16 i;
     u16 center;
@@ -246,7 +247,7 @@ void FriendRosterApp_InitWindows(FriendRosterAppData *data) {
     FriendRosterApp_PrintNames(data);
 }
 
-void FriendRosterApp_RemoveWindows(FriendRosterAppData *data) {
+static void FriendRosterApp_RemoveWindows(FriendRosterAppData *data) {
     u32 i = 0;
     Window *window = &data->windows[0];
     do {
@@ -256,7 +257,7 @@ void FriendRosterApp_RemoveWindows(FriendRosterAppData *data) {
     } while (i < FRIEND_ROSTER_APP_NUM_WINDOWS);
 }
 
-void FriendRosterApp_PrintPageNumber(FriendRosterAppData *data) {
+static void FriendRosterApp_PrintPageNumber(FriendRosterAppData *data) {
     String *string;
     String *buf;
     String *template;
@@ -288,7 +289,7 @@ void FriendRosterApp_PrintPageNumber(FriendRosterAppData *data) {
 }
 
 // Prints the current page into the name window set that is not on screen, then swaps sets.
-void FriendRosterApp_PrintNames(FriendRosterAppData *data) {
+static void FriendRosterApp_PrintNames(FriendRosterAppData *data) {
     PlayerProfile *profile;
     String *template;
     String *buf;
@@ -320,34 +321,34 @@ void FriendRosterApp_PrintNames(FriendRosterAppData *data) {
     data->bufferToggle ^= 1;
 }
 
-void FriendRosterApp_InitSprites(FriendRosterAppData *data, NARC *narc) {
+static void FriendRosterApp_InitSprites(FriendRosterAppData *data, NARC *narc) {
     data->spriteList = G2dRenderer_Init(FRIEND_ROSTER_APP_NUM_SPRITES, &data->renderer, HEAP_ID_8);
     G2dRenderer_SetSubSurfaceCoords(&data->renderer, 0, FX32_CONST(256));
     FriendRosterApp_CreateResourceManagers(data);
     FriendRosterApp_CreateSprites(data, narc);
 }
 
-void FriendRosterApp_FreeSprites(FriendRosterAppData *data) {
+static void FriendRosterApp_FreeSprites(FriendRosterAppData *data) {
     FriendRosterApp_DeleteSprites(data);
     FriendRosterApp_DestroyResourceManagers(data);
     SpriteList_Delete(data->spriteList);
 }
 
-void FriendRosterApp_CreateResourceManagers(FriendRosterAppData *data) {
+static void FriendRosterApp_CreateResourceManagers(FriendRosterAppData *data) {
     u32 i;
     for (i = 0; i < 4; i++) {
         data->resMans[i] = Create2DGfxResObjMan(1, (GfGfxResType)i, HEAP_ID_8);
     }
 }
 
-void FriendRosterApp_DestroyResourceManagers(FriendRosterAppData *data) {
+static void FriendRosterApp_DestroyResourceManagers(FriendRosterAppData *data) {
     u32 i;
     for (i = 0; i < 4; i++) {
         Destroy2DGfxResObjMan(data->resMans[i]);
     }
 }
 
-void FriendRosterApp_LoadSpriteResources(SpriteResource **resObjs, GF_2DGfxResMan **resMans, NARC *narc, int charFileId, int plttFileId, int cellFileId, int animFileId, int plttNum, int charId, int plttId, int cellId, int animId) {
+static void FriendRosterApp_LoadSpriteResources(SpriteResource **resObjs, GF_2DGfxResMan **resMans, NARC *narc, int charFileId, int plttFileId, int cellFileId, int animFileId, int plttNum, int charId, int plttId, int cellId, int animId) {
     resObjs[GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromOpenNarc(resMans[GF_GFX_RES_TYPE_CHAR], narc, charFileId, TRUE, charId, NNS_G2D_VRAM_TYPE_2DSUB, HEAP_ID_8);
     SpriteTransfer_CreateCharTransferTask_AllocAtEnd(resObjs[GF_GFX_RES_TYPE_CHAR]);
     GF2DGfxResObj_FreeData(resObjs[GF_GFX_RES_TYPE_CHAR]);
@@ -358,7 +359,7 @@ void FriendRosterApp_LoadSpriteResources(SpriteResource **resObjs, GF_2DGfxResMa
     resObjs[GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromOpenNarc(resMans[GF_GFX_RES_TYPE_ANIM], narc, animFileId, TRUE, animId, GF_GFX_RES_TYPE_ANIM, HEAP_ID_8);
 }
 
-void FriendRosterApp_CreateSpriteHeader(SpriteResource **resObjs, GF_2DGfxResMan **resMans, SpriteResourcesHeader *header, int priority) {
+static void FriendRosterApp_CreateSpriteHeader(SpriteResource **resObjs, GF_2DGfxResMan **resMans, SpriteResourcesHeader *header, int priority) {
     int charId = GF2DGfxResObj_GetResID(resObjs[GF_GFX_RES_TYPE_CHAR]);
     int plttId = GF2DGfxResObj_GetResID(resObjs[GF_GFX_RES_TYPE_PLTT]);
     int cellId = GF2DGfxResObj_GetResID(resObjs[GF_GFX_RES_TYPE_CELL]);
@@ -367,7 +368,7 @@ void FriendRosterApp_CreateSpriteHeader(SpriteResource **resObjs, GF_2DGfxResMan
 }
 
 // spec: {x, y, drawPriority, animSeq}
-void FriendRosterApp_CreateSprite(FriendRosterAppData *data, int index, SpriteResourcesHeader *header, const u8 *spec) {
+static void FriendRosterApp_CreateSprite(FriendRosterAppData *data, int index, SpriteResourcesHeader *header, const u8 *spec) {
     SpriteTemplate template;
     template.spriteList = data->spriteList;
     template.header = header;
@@ -385,7 +386,7 @@ void FriendRosterApp_CreateSprite(FriendRosterAppData *data, int index, SpriteRe
     Sprite_SetAnimCtrlSeq(data->sprites[index], spec[3]);
 }
 
-void FriendRosterApp_CreateSprites(FriendRosterAppData *data, NARC *narc) {
+static void FriendRosterApp_CreateSprites(FriendRosterAppData *data, NARC *narc) {
     SpriteResourcesHeader header;
     u32 i;
     FriendRosterApp_LoadSpriteResources(data->resObjs, data->resMans, narc, 4, 7, 5, 6, 1, 0x781, 0x781, 0x781, 0x781);
@@ -395,7 +396,7 @@ void FriendRosterApp_CreateSprites(FriendRosterAppData *data, NARC *narc) {
     }
 }
 
-void FriendRosterApp_DeleteSprites(FriendRosterAppData *data) {
+static void FriendRosterApp_DeleteSprites(FriendRosterAppData *data) {
     u32 i;
     for (i = 0; i < FRIEND_ROSTER_APP_NUM_SPRITES; i++) {
         Sprite_Delete(data->sprites[i]);
@@ -404,14 +405,14 @@ void FriendRosterApp_DeleteSprites(FriendRosterAppData *data) {
     SpriteTransfer_DeletePlttTransferTask(data->resObjs[GF_GFX_RES_TYPE_PLTT]);
 }
 
-void FriendRosterApp_AnimateSprites(FriendRosterAppData *data) {
+static void FriendRosterApp_AnimateSprites(FriendRosterAppData *data) {
     u32 i;
     for (i = 0; i < FRIEND_ROSTER_APP_NUM_SPRITES; i++) {
         Sprite_UpdateAnim(data->sprites[i], FX32_ONE);
     }
 }
 
-void FriendRosterApp_SetCursorPos(FriendRosterAppData *data, int pos) {
+static void FriendRosterApp_SetCursorPos(FriendRosterAppData *data, int pos) {
     const DpadMenuBox *box;
     VecFx32 vec;
 
@@ -426,12 +427,12 @@ void FriendRosterApp_SetCursorPos(FriendRosterAppData *data, int pos) {
     }
 }
 
-void FriendRosterApp_InitGridInput(FriendRosterAppData *data) {
+static void FriendRosterApp_InitGridInput(FriendRosterAppData *data) {
     data->gridInput = GridInputHandler_Create(sFriendRosterAppGridHitboxes, sFriendRosterAppGridDpadBoxes, &sFriendRosterAppGridCallbacks, data, TRUE, 0, HEAP_ID_8);
     FriendRosterApp_SetCursorPos(data, 0);
 }
 
-void FriendRosterApp_FreeGridInput(FriendRosterAppData *data) {
+static void FriendRosterApp_FreeGridInput(FriendRosterAppData *data) {
     GridInputHandler_Free(data->gridInput);
 }
 
@@ -442,7 +443,7 @@ void FriendRosterApp_OnCursorMove(void *data, int newTarget, int prevTarget) {
     FriendRosterApp_SetCursorPos(data, newTarget);
 }
 
-void FriendRosterApp_Task(SysTask *task, void *taskData) {
+static void FriendRosterApp_Task(SysTask *task, void *taskData) {
     FriendRosterAppData *data = taskData;
 
     switch (data->state) {
@@ -465,7 +466,7 @@ void FriendRosterApp_Task(SysTask *task, void *taskData) {
     SpriteList_RenderAndAnimateSprites(data->spriteList);
 }
 
-int FriendRosterApp_HandleInput(FriendRosterAppData *data) {
+static int FriendRosterApp_HandleInput(FriendRosterAppData *data) {
     u32 input;
     int touch;
 
@@ -520,7 +521,7 @@ int FriendRosterApp_HandleInput(FriendRosterAppData *data) {
     return FRIEND_ROSTER_APP_STATE_INPUT;
 }
 
-int FriendRosterApp_UpdateBlink(FriendRosterAppData *data) {
+static int FriendRosterApp_UpdateBlink(FriendRosterAppData *data) {
     if (FriendRosterApp_StepBlink(data) == FALSE) {
         return data->nextState;
     }
@@ -528,7 +529,7 @@ int FriendRosterApp_UpdateBlink(FriendRosterAppData *data) {
 }
 
 // Moves to the previous/next page (wrapping) and blinks the page arrow; redraws after the blink.
-int FriendRosterApp_ChangePage(FriendRosterAppData *data, int delta) {
+static int FriendRosterApp_ChangePage(FriendRosterAppData *data, int delta) {
     int seqA;
     int seqB;
 
@@ -549,7 +550,7 @@ int FriendRosterApp_ChangePage(FriendRosterAppData *data, int delta) {
     return FriendRosterApp_StartSpriteBlink(data, seqA, seqB + 1, seqB, FRIEND_ROSTER_APP_STATE_REDRAW);
 }
 
-void FriendRosterApp_SetBlinkPalette(FriendRosterAppData *data, u8 palette) {
+static void FriendRosterApp_SetBlinkPalette(FriendRosterAppData *data, u8 palette) {
     if (data->blink.isBg == 0) {
         Sprite_SetAnimCtrlSeq(data->sprites[data->blink.target], palette);
     } else {
@@ -558,7 +559,7 @@ void FriendRosterApp_SetBlinkPalette(FriendRosterAppData *data, u8 palette) {
     }
 }
 
-BOOL FriendRosterApp_StepBlink(FriendRosterAppData *data) {
+static BOOL FriendRosterApp_StepBlink(FriendRosterAppData *data) {
     FriendRosterAppBlink *blink = &data->blink;
 
     switch (blink->phase) {
@@ -584,7 +585,7 @@ BOOL FriendRosterApp_StepBlink(FriendRosterAppData *data) {
     return TRUE;
 }
 
-int FriendRosterApp_StartSpriteBlink(FriendRosterAppData *data, u8 target, u8 seqA, u8 seqB, u8 nextState) {
+static int FriendRosterApp_StartSpriteBlink(FriendRosterAppData *data, u8 target, u8 seqA, u8 seqB, u8 nextState) {
     data->blink.isBg = FALSE;
     data->blink.timer = 0;
     data->blink.phase = 0;
@@ -595,7 +596,7 @@ int FriendRosterApp_StartSpriteBlink(FriendRosterAppData *data, u8 target, u8 se
     return FRIEND_ROSTER_APP_STATE_BLINK;
 }
 
-int FriendRosterApp_StartNameBlink(FriendRosterAppData *data, u8 x, u8 y, u8 nextState) {
+static int FriendRosterApp_StartNameBlink(FriendRosterAppData *data, u8 x, u8 y, u8 nextState) {
     int flags = *(u8 *)&data->blink;
     flags &= ~1;
     flags |= 1; // isBg = TRUE

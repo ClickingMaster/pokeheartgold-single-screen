@@ -62,11 +62,10 @@
 #include "text.h"
 #include "touchscreen.h"
 
-// Field bottom-screen app 0, the touchscreen start menu (ScrCmd_TouchscreenMenuShow, AppEntry 0 of
-// field/bottom_screen_app.c): the start-menu icons (msg 196), the running shoes and action buttons,
-// the two registered-item buttons, the Safari / Park / Sport ball counters and the Pokegear caller name.
-// Touching an icon writes *lastTouchMenuInput (1 = MENU, menu index + 2), which start_menu.c and
-// field_control.c consume.
+// Field bottom-screen app 0, the touchscreen start menu (ScrCmd_TouchscreenMenuShow): the start-menu icons
+// (msg 196), the running shoes and action buttons, the two registered-item buttons, the Safari / Park / Sport ball
+// counters and the Pokegear caller name. Touching an icon writes *lastTouchMenuInput (1 = MENU, menu index + 2),
+// which the field start menu and field control consume.
 
 FS_EXTERN_OVERLAY(ds_protect);
 
@@ -176,11 +175,9 @@ typedef struct TouchscreenMenuBgFile {
     u32 otherColumns[2];
 } TouchscreenMenuBgFile;
 
-// Defined in field/bottom_screen_app.c; its header does not declare these.
 BOOL IsSpriteIdWithoutTalkAction(int spriteId);
 BOOL IsScriptIdWithoutTalkAction(int scriptId);
 
-// Defined in link_lobby_2.c / link_lobby_4.c and communication_player_movement.c; no header declares them.
 BOOL CommClubLink_CardExchangeFinished(void);
 BOOL CommClubLink_IsStartingBattle(void);
 BOOL CommPlayerManager_IsInitialized(void);
@@ -204,70 +201,74 @@ extern const TouchscreenMenuWindowPos sTouchscreenMenuIconWindowPositions[];
 extern const u8 sTouchscreenMenuIconNeighbors[][4][3];
 extern const u8 sTouchscreenMenuActionTypeToString[];
 
+static void TouchscreenMenu_Task(SysTask *task, void *taskData);
+static void TouchscreenMenu_SetRunningShoesSprites(TouchscreenMenuData *data, int on);
+static void TouchscreenMenu_HandleRunningShoesButton(TouchscreenMenuData *data, int button);
+static void TouchscreenMenu_UpdateRunningShoesSprites(TouchscreenMenuData *data);
+static BOOL TouchscreenMenu_UpdateRunningShoesVisibility(TouchscreenMenuData *data);
+static void TouchscreenMenu_HandleActionButton(TouchscreenMenuData *data, int heldButton);
+static int TouchscreenMenu_GetActionType(TouchscreenMenuData *data);
+static void TouchscreenMenu_PrintActionLabel(TouchscreenMenuData *data, int actionType);
+static void TouchscreenMenu_UpdateActionLabel(TouchscreenMenuData *data);
+static void TouchscreenMenu_SetButtonsActive(TouchscreenMenuData *data, BOOL active);
+static BOOL TouchscreenMenu_SyncStartMenuState(TouchscreenMenuData *data);
+static void TouchscreenMenu_RefreshLabelAndNewIcons(TouchscreenMenuData *data);
+static void TouchscreenMenu_HighlightSelectionAndDisable(TouchscreenMenuData *data);
+static void TouchscreenMenu_UpdateForStartMenu(TouchscreenMenuData *data);
+static void TouchscreenMenu_RestoreAfterStartMenu(TouchscreenMenuData *data);
+static BOOL TouchscreenMenu_IsFieldBusy(FieldSystem *fieldSystem);
+static void TouchscreenMenu_SetDimmed(TouchscreenMenuData *data, BOOL dimmed);
+static void TouchscreenMenu_UpdateRegisteredItemButtons(TouchscreenMenuData *data, BOOL show);
+static u8 TouchscreenMenu_SumBytes(const u8 *values, int count);
+static void TouchscreenMenu_ShowIcons(TouchscreenMenuData *data);
+static void TouchscreenMenu_ShowNewIcons(TouchscreenMenuData *data);
+static void TouchscreenMenu_LoadBgAndWindows(BgConfig *bgConfig, int variant, Window *actionWindow, Window *menuWindow, Window *iconWindows);
+static void TouchscreenMenu_LoadSpriteResources(TouchscreenMenuData *data);
+static u32 TouchscreenMenu_GetBallItem(u32 layout);
+static void TouchscreenMenu_LoadIconResources(FieldSystem *fieldSystem, GF_2DGfxResMan **resMans, SpriteResource **resObjs, int index, int resId, int gender, Bag *bag, int layout);
+static inline s32 TouchscreenMenu_RoundToFx32(int x);
+static inline s32 TouchscreenMenu_PosToFx32(u16 x);
+static inline s32 TouchscreenMenu_PosToFx32Half(u16 x, float half);
+static void TouchscreenMenu_CreateSprites(TouchscreenMenuData *data);
+static int TouchscreenMenu_FindNeighborIcon(int selection, int dir, const TouchscreenMenuIcon *icons);
+static void TouchscreenMenu_HighlightIcon(TouchscreenMenuData *data, int selection);
+static void TouchscreenMenu_HandleDpadInput(TouchscreenMenuData *data);
+static void TouchscreenMenu_SetIconsTranslucent(Sprite **sprites, int selection);
+static BOOL TouchscreenMenu_HandleTouchInput(TouchscreenMenuData *data);
+static void TouchscreenMenu_DrawWindowFrame(Window *window, u32 mode);
+static void TouchscreenMenu_PrintFramedText(Window *window, String *string, int colorIndex);
+static void TouchscreenMenu_LoadStrings(TouchscreenMenuData *data, u32 unused);
+static void TouchscreenMenu_FreeStrings(TouchscreenMenuData *data);
+static void TouchscreenMenu_CopyIconLabelsToVram(TouchscreenMenuData *data);
+static void TouchscreenMenu_PrintIconLabels(TouchscreenMenuData *data);
+static u32 TouchscreenMenu_IsTextboxOpen(FieldSystem *fieldSystem);
+static int TouchscreenMenu_GetLayout(FieldSystem *fieldSystem);
+static BOOL TouchscreenMenu_LayoutHasRegisteredItems(TouchscreenMenuData *data);
+static BOOL TouchscreenMenu_HasRunningShoes(TouchscreenMenuData *data);
+static void TouchscreenMenu_InitPhoneRing(TouchscreenMenuPhoneRing *phoneRing, TouchscreenMenuData *data);
+static void TouchscreenMenu_UpdatePhoneRing(TouchscreenMenuPhoneRing *phoneRing);
+static void TouchscreenMenu_HidePhoneCaller(TouchscreenMenuPhoneRing *phoneRing);
+static void TouchscreenMenu_PrintMessageAt(TouchscreenMenuData *data, u32 msgId, u8 x, u8 y, u8 width, u8 height, u32 baseTile, s16 textX, s16 textY);
+static void TouchscreenMenu_PrintItemCount(TouchscreenMenuData *data, u8 x, u8 y, u16 count);
+static void TouchscreenMenu_PrintContestMonLevel(TouchscreenMenuData *data, BugContest *contest);
+static void TouchscreenMenu_PrintBallLabel(TouchscreenMenuData *data);
+static void TouchscreenMenu_PrintSafariBalls(TouchscreenMenuData *data);
+static void TouchscreenMenu_PrintParkBalls(TouchscreenMenuData *data);
+static void TouchscreenMenu_PrintBugContestInfo(TouchscreenMenuData *data);
+static void TouchscreenMenu_PrintBallInfo(TouchscreenMenuData *data);
+static void TouchscreenMenu_InitIconFlags(TouchscreenMenuData *data);
+static int TouchscreenMenu_GetMenuIndex(TouchscreenMenuData *data, int slot);
+static int TouchscreenMenu_GetSlotFromMenuIndex(TouchscreenMenuData *data, int menuIndex);
+static void TouchscreenMenu_ValidateSelection(TouchscreenMenuData *data);
+static void *TouchscreenMenu_OnFlashcartDetected(void);
+static void TouchscreenMenu_OnEmulatorCheckDummy(void);
+static void TouchscreenMenu_OnDummyCheckDummy(void);
+
 SysTask *TouchscreenMenu_Create(BgConfig *bgConfig, u16 *lastTouchMenuInput, FieldSystem *fieldSystem, void *args);
 void TouchscreenMenu_Destroy(BgConfig *bgConfig, SysTask *task);
 BOOL TouchscreenMenu_IsExitDone(void *unused);
 void TouchscreenMenu_RequestSelectedIconAnim(SysTask *task);
 void TouchscreenMenu_RequestRegisteredItemAnim(SysTask *task, int item);
-void TouchscreenMenu_Task(SysTask *task, void *taskData);
-void TouchscreenMenu_SetRunningShoesSprites(TouchscreenMenuData *data, int on);
-void TouchscreenMenu_HandleRunningShoesButton(TouchscreenMenuData *data, int button);
-void TouchscreenMenu_UpdateRunningShoesSprites(TouchscreenMenuData *data);
-BOOL TouchscreenMenu_UpdateRunningShoesVisibility(TouchscreenMenuData *data);
-void TouchscreenMenu_HandleActionButton(TouchscreenMenuData *data, int heldButton);
-int TouchscreenMenu_GetActionType(TouchscreenMenuData *data);
-void TouchscreenMenu_PrintActionLabel(TouchscreenMenuData *data, int actionType);
-void TouchscreenMenu_UpdateActionLabel(TouchscreenMenuData *data);
-void TouchscreenMenu_SetButtonsActive(TouchscreenMenuData *data, BOOL active);
-BOOL TouchscreenMenu_SyncStartMenuState(TouchscreenMenuData *data);
-void TouchscreenMenu_RefreshLabelAndNewIcons(TouchscreenMenuData *data);
-void TouchscreenMenu_HighlightSelectionAndDisable(TouchscreenMenuData *data);
-void TouchscreenMenu_UpdateForStartMenu(TouchscreenMenuData *data);
-void TouchscreenMenu_RestoreAfterStartMenu(TouchscreenMenuData *data);
-BOOL TouchscreenMenu_IsFieldBusy(FieldSystem *fieldSystem);
-void TouchscreenMenu_SetDimmed(TouchscreenMenuData *data, BOOL dimmed);
-void TouchscreenMenu_UpdateRegisteredItemButtons(TouchscreenMenuData *data, BOOL show);
-u8 TouchscreenMenu_SumBytes(const u8 *values, int count);
-void TouchscreenMenu_ShowIcons(TouchscreenMenuData *data);
-void TouchscreenMenu_ShowNewIcons(TouchscreenMenuData *data);
-void TouchscreenMenu_LoadBgAndWindows(BgConfig *bgConfig, int variant, Window *actionWindow, Window *menuWindow, Window *iconWindows);
-void TouchscreenMenu_LoadSpriteResources(TouchscreenMenuData *data);
-u32 TouchscreenMenu_GetBallItem(u32 layout);
-void TouchscreenMenu_LoadIconResources(FieldSystem *fieldSystem, GF_2DGfxResMan **resMans, SpriteResource **resObjs, int index, int resId, int gender, Bag *bag, int layout);
-void TouchscreenMenu_CreateSprites(TouchscreenMenuData *data);
-int TouchscreenMenu_FindNeighborIcon(int selection, int dir, const TouchscreenMenuIcon *icons);
-void TouchscreenMenu_HighlightIcon(TouchscreenMenuData *data, int selection);
-void TouchscreenMenu_HandleDpadInput(TouchscreenMenuData *data);
-void TouchscreenMenu_SetIconsTranslucent(Sprite **sprites, int selection);
-BOOL TouchscreenMenu_HandleTouchInput(TouchscreenMenuData *data);
-void TouchscreenMenu_DrawWindowFrame(Window *window, u32 mode);
-void TouchscreenMenu_PrintFramedText(Window *window, String *string, int colorIndex);
-void TouchscreenMenu_LoadStrings(TouchscreenMenuData *data, u32 unused);
-void TouchscreenMenu_FreeStrings(TouchscreenMenuData *data);
-void TouchscreenMenu_CopyIconLabelsToVram(TouchscreenMenuData *data);
-void TouchscreenMenu_PrintIconLabels(TouchscreenMenuData *data);
-u32 TouchscreenMenu_IsTextboxOpen(FieldSystem *fieldSystem);
-int TouchscreenMenu_GetLayout(FieldSystem *fieldSystem);
-BOOL TouchscreenMenu_LayoutHasRegisteredItems(TouchscreenMenuData *data);
-BOOL TouchscreenMenu_HasRunningShoes(TouchscreenMenuData *data);
-void TouchscreenMenu_InitPhoneRing(TouchscreenMenuPhoneRing *phoneRing, TouchscreenMenuData *data);
-void TouchscreenMenu_UpdatePhoneRing(TouchscreenMenuPhoneRing *phoneRing);
-void TouchscreenMenu_HidePhoneCaller(TouchscreenMenuPhoneRing *phoneRing);
-void TouchscreenMenu_PrintMessageAt(TouchscreenMenuData *data, u32 msgId, u8 x, u8 y, u8 width, u8 height, u32 baseTile, s16 textX, s16 textY);
-void TouchscreenMenu_PrintItemCount(TouchscreenMenuData *data, u8 x, u8 y, u16 count);
-void TouchscreenMenu_PrintContestMonLevel(TouchscreenMenuData *data, BugContest *contest);
-void TouchscreenMenu_PrintBallLabel(TouchscreenMenuData *data);
-void TouchscreenMenu_PrintSafariBalls(TouchscreenMenuData *data);
-void TouchscreenMenu_PrintParkBalls(TouchscreenMenuData *data);
-void TouchscreenMenu_PrintBugContestInfo(TouchscreenMenuData *data);
-void TouchscreenMenu_PrintBallInfo(TouchscreenMenuData *data);
-void TouchscreenMenu_InitIconFlags(TouchscreenMenuData *data);
-int TouchscreenMenu_GetMenuIndex(TouchscreenMenuData *data, int slot);
-int TouchscreenMenu_GetSlotFromMenuIndex(TouchscreenMenuData *data, int menuIndex);
-void TouchscreenMenu_ValidateSelection(TouchscreenMenuData *data);
-void *TouchscreenMenu_OnFlashcartDetected(void);
-void TouchscreenMenu_OnEmulatorCheckDummy(void);
-void TouchscreenMenu_OnDummyCheckDummy(void);
 
 SysTask *TouchscreenMenu_Create(BgConfig *bgConfig, u16 *lastTouchMenuInput, FieldSystem *fieldSystem, void *args) {
     SysTask *task;
@@ -391,7 +392,7 @@ void TouchscreenMenu_RequestRegisteredItemAnim(SysTask *task, int item) {
     data->registeredItemAnim = item;
 }
 
-void TouchscreenMenu_Task(SysTask *task, void *taskData) {
+static void TouchscreenMenu_Task(SysTask *task, void *taskData) {
     TouchscreenMenuData *data = taskData;
     BOOL busy = TouchscreenMenu_IsFieldBusy(data->fieldSystem);
     BOOL movementAllowed = FieldSystem_IsPlayerMovementAllowed(data->fieldSystem);
@@ -441,12 +442,12 @@ void TouchscreenMenu_Task(SysTask *task, void *taskData) {
     SpriteList_RenderAndAnimateSprites(data->spriteList);
 }
 
-void TouchscreenMenu_SetRunningShoesSprites(TouchscreenMenuData *data, int on) {
+static void TouchscreenMenu_SetRunningShoesSprites(TouchscreenMenuData *data, int on) {
     Sprite_SetAnimCtrlSeq(data->sprites[TOUCHSCREEN_MENU_SPRITE_SHOES_LABEL], 11 - on * 4);
     Sprite_SetAnimCtrlSeq(data->sprites[TOUCHSCREEN_MENU_SPRITE_SHOES], on + 3);
 }
 
-void TouchscreenMenu_HandleRunningShoesButton(TouchscreenMenuData *data, int button) {
+static void TouchscreenMenu_HandleRunningShoesButton(TouchscreenMenuData *data, int button) {
     PlayerAvatar *avatar;
     int on;
 
@@ -454,16 +455,15 @@ void TouchscreenMenu_HandleRunningShoesButton(TouchscreenMenuData *data, int but
         avatar = FieldSystem_GetPlayerAvatar(data->fieldSystem);
         on = PlayerAvatar_CheckRunningShoesLock(avatar) ^ 1;
         TouchscreenMenu_SetRunningShoesSprites(data, on);
-        // Called with an unnarrowed lock (player_avatar.h declares u16).
         ((void (*)(PlayerAvatar *, u32))PlayerAvatar_SetRunningShoesLock)(avatar, on);
     }
 }
 
-void TouchscreenMenu_UpdateRunningShoesSprites(TouchscreenMenuData *data) {
+static void TouchscreenMenu_UpdateRunningShoesSprites(TouchscreenMenuData *data) {
     TouchscreenMenu_SetRunningShoesSprites(data, PlayerAvatar_CheckRunningShoesLock(FieldSystem_GetPlayerAvatar(data->fieldSystem)));
 }
 
-BOOL TouchscreenMenu_UpdateRunningShoesVisibility(TouchscreenMenuData *data) {
+static BOOL TouchscreenMenu_UpdateRunningShoesVisibility(TouchscreenMenuData *data) {
     BOOL show = TouchscreenMenu_HasRunningShoes(data);
 
     if (PlayerAvatar_GetState(data->fieldSystem->playerAvatar) == PLAYER_STATE_CYCLING || data->fieldSystem->startMenuState != 0) {
@@ -480,7 +480,7 @@ BOOL TouchscreenMenu_UpdateRunningShoesVisibility(TouchscreenMenuData *data) {
 }
 
 // Touching the action button simulates an A press (and keeps doing so while it stays pressed).
-void TouchscreenMenu_HandleActionButton(TouchscreenMenuData *data, int heldButton) {
+static void TouchscreenMenu_HandleActionButton(TouchscreenMenuData *data, int heldButton) {
     int anim = Sprite_GetAnimationNumber(data->sprites[TOUCHSCREEN_MENU_SPRITE_ACTION]);
 
     if (Sprite_GetDrawFlag(data->sprites[TOUCHSCREEN_MENU_SPRITE_ACTION])) {
@@ -498,7 +498,7 @@ void TouchscreenMenu_HandleActionButton(TouchscreenMenuData *data, int heldButto
 }
 
 // 0/2 CHECK, 1 TALK, 3 FISHING, 4 NEXT (a textbox is open).
-int TouchscreenMenu_GetActionType(TouchscreenMenuData *data) {
+static int TouchscreenMenu_GetActionType(TouchscreenMenuData *data) {
     FieldSystem *fieldSystem = data->fieldSystem;
     LocalMapObject *playerObj;
     LocalMapObject *facingObj;
@@ -528,13 +528,13 @@ int TouchscreenMenu_GetActionType(TouchscreenMenuData *data) {
     return actionType;
 }
 
-void TouchscreenMenu_PrintActionLabel(TouchscreenMenuData *data, int actionType) {
+static void TouchscreenMenu_PrintActionLabel(TouchscreenMenuData *data, int actionType) {
     FillWindowPixelBuffer(&data->actionWindow, 0);
     AddTextPrinterParameterizedWithColor(&data->actionWindow, 4, data->actionStrings[sTouchscreenMenuActionTypeToString[actionType]], 0, 0, TEXT_SPEED_INSTANT, MAKE_TEXT_COLOR(15, 1, 0), NULL);
     Sprite_SetDrawFlag(data->sprites[TOUCHSCREEN_MENU_SPRITE_ACTION], TRUE);
 }
 
-void TouchscreenMenu_UpdateActionLabel(TouchscreenMenuData *data) {
+static void TouchscreenMenu_UpdateActionLabel(TouchscreenMenuData *data) {
     int actionType = TouchscreenMenu_GetActionType(data);
     if (data->actionType != actionType) {
         TouchscreenMenu_PrintActionLabel(data, actionType);
@@ -542,7 +542,7 @@ void TouchscreenMenu_UpdateActionLabel(TouchscreenMenuData *data) {
     }
 }
 
-void TouchscreenMenu_SetButtonsActive(TouchscreenMenuData *data, BOOL active) {
+static void TouchscreenMenu_SetButtonsActive(TouchscreenMenuData *data, BOOL active) {
     if (active) {
         data->buttonsActive = TRUE;
         TouchscreenMenu_UpdateRunningShoesVisibility(data);
@@ -559,7 +559,7 @@ void TouchscreenMenu_SetButtonsActive(TouchscreenMenuData *data, BOOL active) {
     }
 }
 
-BOOL TouchscreenMenu_SyncStartMenuState(TouchscreenMenuData *data) {
+static BOOL TouchscreenMenu_SyncStartMenuState(TouchscreenMenuData *data) {
     FieldSystem *fieldSystem;
     u16 *lastTouchMenuInput;
     int state;
@@ -587,7 +587,7 @@ BOOL TouchscreenMenu_SyncStartMenuState(TouchscreenMenuData *data) {
     return TRUE;
 }
 
-void TouchscreenMenu_RefreshLabelAndNewIcons(TouchscreenMenuData *data) {
+static void TouchscreenMenu_RefreshLabelAndNewIcons(TouchscreenMenuData *data) {
     if (FieldSystem_IsFieldMapRunning(data->fieldSystem) == TRUE) {
         TouchscreenMenu_UpdateActionLabel(data);
     }
@@ -596,13 +596,13 @@ void TouchscreenMenu_RefreshLabelAndNewIcons(TouchscreenMenuData *data) {
     }
 }
 
-void TouchscreenMenu_HighlightSelectionAndDisable(TouchscreenMenuData *data) {
+static void TouchscreenMenu_HighlightSelectionAndDisable(TouchscreenMenuData *data) {
     GF_ASSERT(data->selection < TOUCHSCREEN_MENU_NUM_ICONS);
     TouchscreenMenu_HighlightIcon(data, data->selection);
     TouchscreenMenu_SetButtonsActive(data, FALSE);
 }
 
-void TouchscreenMenu_UpdateForStartMenu(TouchscreenMenuData *data) {
+static void TouchscreenMenu_UpdateForStartMenu(TouchscreenMenuData *data) {
     switch (data->fieldSystem->startMenuState) {
     case 0:
         TouchscreenMenu_RefreshLabelAndNewIcons(data);
@@ -624,14 +624,14 @@ void TouchscreenMenu_UpdateForStartMenu(TouchscreenMenuData *data) {
     }
 }
 
-void TouchscreenMenu_RestoreAfterStartMenu(TouchscreenMenuData *data) {
+static void TouchscreenMenu_RestoreAfterStartMenu(TouchscreenMenuData *data) {
     TouchscreenMenu_PrintActionLabel(data, TouchscreenMenu_GetActionType(data));
     TouchscreenMenu_HighlightIcon(data, TOUCHSCREEN_MENU_NO_HIGHLIGHT);
     CopyWindowToVram(&data->actionWindow);
     TouchscreenMenu_SetButtonsActive(data, TRUE);
 }
 
-BOOL TouchscreenMenu_IsFieldBusy(FieldSystem *fieldSystem) {
+static BOOL TouchscreenMenu_IsFieldBusy(FieldSystem *fieldSystem) {
     if (!IsPaletteFadeFinished() || !fieldSystem->runningFieldMap || fieldSystem->startMenuState != 0 || !FieldSystem_IsPlayerMovementAllowed(fieldSystem) || TouchscreenMenu_IsTextboxOpen(fieldSystem) || MapSceneScriptCheck(fieldSystem) || CommClubLink_IsStartingBattle()) {
         return TRUE;
     }
@@ -639,7 +639,7 @@ BOOL TouchscreenMenu_IsFieldBusy(FieldSystem *fieldSystem) {
 }
 
 // While the field is busy the buttons are drawn translucent over a dimmed bottom screen.
-void TouchscreenMenu_SetDimmed(TouchscreenMenuData *data, BOOL dimmed) {
+static void TouchscreenMenu_SetDimmed(TouchscreenMenuData *data, BOOL dimmed) {
     if (dimmed) {
         if (data->layout == TOUCHSCREEN_MENU_LAYOUT_5 && data->fieldSystem->startMenuState == 0) {
             TouchscreenMenu_HighlightIcon(data, TOUCHSCREEN_MENU_NO_HIGHLIGHT);
@@ -664,7 +664,7 @@ void TouchscreenMenu_SetDimmed(TouchscreenMenuData *data, BOOL dimmed) {
     }
 }
 
-void TouchscreenMenu_UpdateRegisteredItemButtons(TouchscreenMenuData *data, BOOL show) {
+static void TouchscreenMenu_UpdateRegisteredItemButtons(TouchscreenMenuData *data, BOOL show) {
     Bag *bag;
     BOOL hasItem1;
     BOOL hasItem2;
@@ -688,7 +688,7 @@ void TouchscreenMenu_UpdateRegisteredItemButtons(TouchscreenMenuData *data, BOOL
     }
 }
 
-u8 TouchscreenMenu_SumBytes(const u8 *values, int count) {
+static u8 TouchscreenMenu_SumBytes(const u8 *values, int count) {
     int i;
     int sum = 0;
     for (i = 0; i < count; i++) {
@@ -697,7 +697,7 @@ u8 TouchscreenMenu_SumBytes(const u8 *values, int count) {
     return sum;
 }
 
-void TouchscreenMenu_ShowIcons(TouchscreenMenuData *data) {
+static void TouchscreenMenu_ShowIcons(TouchscreenMenuData *data) {
     int i;
 
     for (i = 0; i < TOUCHSCREEN_MENU_NUM_ICONS; i++) {
@@ -712,7 +712,7 @@ void TouchscreenMenu_ShowIcons(TouchscreenMenuData *data) {
 }
 
 // Icons unlocked while the menu is shown appear with an animation; the selection is re-validated.
-void TouchscreenMenu_ShowNewIcons(TouchscreenMenuData *data) {
+static void TouchscreenMenu_ShowNewIcons(TouchscreenMenuData *data) {
     int i;
     int count;
     int oldCount;
@@ -752,7 +752,7 @@ void TouchscreenMenu_ShowNewIcons(TouchscreenMenuData *data) {
     }
 }
 
-void TouchscreenMenu_LoadBgAndWindows(BgConfig *bgConfig, int variant, Window *actionWindow, Window *menuWindow, Window *iconWindows) {
+static void TouchscreenMenu_LoadBgAndWindows(BgConfig *bgConfig, int variant, Window *actionWindow, Window *menuWindow, Window *iconWindows) {
     int i;
     int baseTile;
     const TouchscreenMenuWindowPos *pos;
@@ -773,7 +773,7 @@ void TouchscreenMenu_LoadBgAndWindows(BgConfig *bgConfig, int variant, Window *a
     }
 }
 
-void TouchscreenMenu_LoadSpriteResources(TouchscreenMenuData *data) {
+static void TouchscreenMenu_LoadSpriteResources(TouchscreenMenuData *data) {
     int i;
     void *nclr;
     NNSG2dPaletteData *paletteData;
@@ -800,7 +800,7 @@ void TouchscreenMenu_LoadSpriteResources(TouchscreenMenuData *data) {
     Heap_Free(nclr);
 }
 
-u32 TouchscreenMenu_GetBallItem(u32 layout) {
+static u32 TouchscreenMenu_GetBallItem(u32 layout) {
     if (layout == TOUCHSCREEN_MENU_LAYOUT_SAFARI) {
         return ITEM_SAFARI_BALL;
     }
@@ -811,7 +811,7 @@ u32 TouchscreenMenu_GetBallItem(u32 layout) {
 }
 
 // Resource ids 100 + index: 0-6 icons of the layout, 7/8 registered item icons, 9 the buttons, 10 the ball item.
-void TouchscreenMenu_LoadIconResources(FieldSystem *fieldSystem, GF_2DGfxResMan **resMans, SpriteResource **resObjs, int index, int resId, int gender, Bag *bag, int layout) {
+static void TouchscreenMenu_LoadIconResources(FieldSystem *fieldSystem, GF_2DGfxResMan **resMans, SpriteResource **resObjs, int index, int resId, int gender, Bag *bag, int layout) {
     u8 icon = sTouchscreenMenuLayouts[layout][index];
     NarcId narcId = NARC_a_0_1_4;
     int charFileId = 18;
@@ -899,7 +899,7 @@ static inline s32 TouchscreenMenu_PosToFx32Half(u16 x, float half) {
     return (s32)f;
 }
 
-void TouchscreenMenu_CreateSprites(TouchscreenMenuData *data) {
+static void TouchscreenMenu_CreateSprites(TouchscreenMenuData *data) {
     SpriteTemplate template;
     SpriteResourcesHeader *header;
     int i;
@@ -984,7 +984,7 @@ void TouchscreenMenu_CreateSprites(TouchscreenMenuData *data) {
     TouchscreenMenu_ShowIcons(data);
 }
 
-int TouchscreenMenu_FindNeighborIcon(int selection, int dir, const TouchscreenMenuIcon *icons) {
+static int TouchscreenMenu_FindNeighborIcon(int selection, int dir, const TouchscreenMenuIcon *icons) {
     int i;
     int ret = -1;
 
@@ -998,7 +998,7 @@ int TouchscreenMenu_FindNeighborIcon(int selection, int dir, const TouchscreenMe
     return ret;
 }
 
-void TouchscreenMenu_HighlightIcon(TouchscreenMenuData *data, int selection) {
+static void TouchscreenMenu_HighlightIcon(TouchscreenMenuData *data, int selection) {
     GF_ASSERT(selection < TOUCHSCREEN_MENU_NUM_ICONS);
     int i = 0;
     int offset = i;
@@ -1018,7 +1018,7 @@ void TouchscreenMenu_HighlightIcon(TouchscreenMenuData *data, int selection) {
     }
 }
 
-void TouchscreenMenu_HandleDpadInput(TouchscreenMenuData *data) {
+static void TouchscreenMenu_HandleDpadInput(TouchscreenMenuData *data) {
     int dir = -1;
     int selection = data->selection;
 
@@ -1047,7 +1047,7 @@ void TouchscreenMenu_HandleDpadInput(TouchscreenMenuData *data) {
     }
 }
 
-void TouchscreenMenu_SetIconsTranslucent(Sprite **sprites, int selection) {
+static void TouchscreenMenu_SetIconsTranslucent(Sprite **sprites, int selection) {
     int i;
     for (i = 0; i < 9; i++) {
         if (sprites[i] != NULL) {
@@ -1061,7 +1061,7 @@ void TouchscreenMenu_SetIconsTranslucent(Sprite **sprites, int selection) {
 }
 
 // Returns FALSE when a touch was handled (or hit a hidden icon), TRUE when input is still free.
-BOOL TouchscreenMenu_HandleTouchInput(TouchscreenMenuData *data) {
+static BOOL TouchscreenMenu_HandleTouchInput(TouchscreenMenuData *data) {
     int hit;
     Bag *bag;
 
@@ -1121,7 +1121,7 @@ BOOL TouchscreenMenu_HandleTouchInput(TouchscreenMenuData *data) {
 #define TouchscreenMenu_FillFrameRow(bgId, tile, x, y, width, palette) FillBgTilemapRect(bgConfig, bgId, tile, x, y, width, 1, palette)
 
 // Mode 1 draws, mode 2 erases a tile frame around the window (BG sub 0 left part, BG sub 1 the rest).
-void TouchscreenMenu_DrawWindowFrame(Window *window, u32 mode) {
+static void TouchscreenMenu_DrawWindowFrame(Window *window, u32 mode) {
     BgConfig *bgConfig = window->bgConfig;
     u32 x = GetWindowX(window);
     u32 y = GetWindowY(window);
@@ -1179,13 +1179,13 @@ void TouchscreenMenu_DrawWindowFrame(Window *window, u32 mode) {
 
 #undef TouchscreenMenu_FillFrameRow
 
-void TouchscreenMenu_PrintFramedText(Window *window, String *string, int colorIndex) {
+static void TouchscreenMenu_PrintFramedText(Window *window, String *string, int colorIndex) {
     u32 color = sTouchscreenMenuTextColors[colorIndex];
     FillWindowPixelBuffer(window, color);
     AddTextPrinterParameterizedWithColor(window, 0, string, 3, 0, TEXT_SPEED_INSTANT, color, NULL);
 }
 
-void TouchscreenMenu_LoadStrings(TouchscreenMenuData *data, u32 unused) {
+static void TouchscreenMenu_LoadStrings(TouchscreenMenuData *data, u32 unused) {
     int i;
     int j;
 
@@ -1203,7 +1203,7 @@ void TouchscreenMenu_LoadStrings(TouchscreenMenuData *data, u32 unused) {
     data->unk_4C8 = ReadMsgData_ExpandPlaceholders(data->msgFormat, data->msgData, msg_0196_00013, HEAP_ID_8);
 }
 
-void TouchscreenMenu_FreeStrings(TouchscreenMenuData *data) {
+static void TouchscreenMenu_FreeStrings(TouchscreenMenuData *data) {
     int i;
 
     String_Delete(data->unk_4C8);
@@ -1218,7 +1218,7 @@ void TouchscreenMenu_FreeStrings(TouchscreenMenuData *data) {
     }
 }
 
-void TouchscreenMenu_CopyIconLabelsToVram(TouchscreenMenuData *data) {
+static void TouchscreenMenu_CopyIconLabelsToVram(TouchscreenMenuData *data) {
     BOOL draw[8];
     int i;
     int count = 0;
@@ -1238,7 +1238,7 @@ void TouchscreenMenu_CopyIconLabelsToVram(TouchscreenMenuData *data) {
     }
 }
 
-void TouchscreenMenu_PrintIconLabels(TouchscreenMenuData *data) {
+static void TouchscreenMenu_PrintIconLabels(TouchscreenMenuData *data) {
     int i = 0;
     Window *window = data->iconWindows;
 
@@ -1252,11 +1252,11 @@ void TouchscreenMenu_PrintIconLabels(TouchscreenMenuData *data) {
     }
 }
 
-u32 TouchscreenMenu_IsTextboxOpen(FieldSystem *fieldSystem) {
+static u32 TouchscreenMenu_IsTextboxOpen(FieldSystem *fieldSystem) {
     return fieldSystem->textbox_open;
 }
 
-int TouchscreenMenu_GetLayout(FieldSystem *fieldSystem) {
+static int TouchscreenMenu_GetLayout(FieldSystem *fieldSystem) {
     SaveVarsFlags *varsFlags = Save_VarsFlags_Get(fieldSystem->saveData);
     if (FieldSystem_MapIsBattleTowerMultiPartnerSelectRoom(fieldSystem)) {
         return TOUCHSCREEN_MENU_LAYOUT_BATTLE_TOWER_PARTNER_ROOM;
@@ -1279,7 +1279,7 @@ int TouchscreenMenu_GetLayout(FieldSystem *fieldSystem) {
     return TOUCHSCREEN_MENU_LAYOUT_NORMAL;
 }
 
-BOOL TouchscreenMenu_LayoutHasRegisteredItems(TouchscreenMenuData *data) {
+static BOOL TouchscreenMenu_LayoutHasRegisteredItems(TouchscreenMenuData *data) {
     u32 layout = data->layout;
     if (layout - TOUCHSCREEN_MENU_LAYOUT_BUG_CONTEST > TOUCHSCREEN_MENU_LAYOUT_BATTLE_TOWER_PARTNER_ROOM - TOUCHSCREEN_MENU_LAYOUT_BUG_CONTEST) {
         return TRUE;
@@ -1287,18 +1287,18 @@ BOOL TouchscreenMenu_LayoutHasRegisteredItems(TouchscreenMenuData *data) {
     return FALSE;
 }
 
-BOOL TouchscreenMenu_HasRunningShoes(TouchscreenMenuData *data) {
+static BOOL TouchscreenMenu_HasRunningShoes(TouchscreenMenuData *data) {
     return PlayerSaveData_CheckRunningShoes(LocalFieldData_GetPlayer(Save_LocalFieldData_Get(data->fieldSystem->saveData)));
 }
 
-void TouchscreenMenu_InitPhoneRing(TouchscreenMenuPhoneRing *phoneRing, TouchscreenMenuData *data) {
+static void TouchscreenMenu_InitPhoneRing(TouchscreenMenuPhoneRing *phoneRing, TouchscreenMenuData *data) {
     phoneRing->phoneRingManager = FieldSystem_GetGearPhoneRingManager(data->fieldSystem);
     phoneRing->pokegearSprite = data->sprites[3];
     phoneRing->bgConfig = data->bgConfig;
     phoneRing->shown = FALSE;
 }
 
-void TouchscreenMenu_UpdatePhoneRing(TouchscreenMenuPhoneRing *phoneRing) {
+static void TouchscreenMenu_UpdatePhoneRing(TouchscreenMenuPhoneRing *phoneRing) {
     BOOL ringing = GearPhoneRingManager_IsRinging(phoneRing->phoneRingManager);
 
     if (phoneRing->shown == FALSE) {
@@ -1324,7 +1324,7 @@ void TouchscreenMenu_UpdatePhoneRing(TouchscreenMenuPhoneRing *phoneRing) {
     }
 }
 
-void TouchscreenMenu_HidePhoneCaller(TouchscreenMenuPhoneRing *phoneRing) {
+static void TouchscreenMenu_HidePhoneCaller(TouchscreenMenuPhoneRing *phoneRing) {
     if (phoneRing->shown != FALSE) {
         TouchscreenMenu_DrawWindowFrame(&phoneRing->callerWindow, 2);
         ClearWindowTilemapAndCopyToVram(&phoneRing->callerWindow);
@@ -1333,7 +1333,7 @@ void TouchscreenMenu_HidePhoneCaller(TouchscreenMenuPhoneRing *phoneRing) {
 }
 
 // Prints a message into a temporary window on BG sub 1; textX == -1 centres it.
-void TouchscreenMenu_PrintMessageAt(TouchscreenMenuData *data, u32 msgId, u8 x, u8 y, u8 width, u8 height, u32 baseTile, s16 textX, s16 textY) {
+static void TouchscreenMenu_PrintMessageAt(TouchscreenMenuData *data, u32 msgId, u8 x, u8 y, u8 width, u8 height, u32 baseTile, s16 textX, s16 textY) {
     Window window;
     String *string;
 
@@ -1350,32 +1350,32 @@ void TouchscreenMenu_PrintMessageAt(TouchscreenMenuData *data, u32 msgId, u8 x, 
     RemoveWindow(&window);
 }
 
-void TouchscreenMenu_PrintItemCount(TouchscreenMenuData *data, u8 x, u8 y, u16 count) {
+static void TouchscreenMenu_PrintItemCount(TouchscreenMenuData *data, u8 x, u8 y, u16 count) {
     BufferIntegerAsString(data->msgFormat, 0, count, 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
     TouchscreenMenu_PrintMessageAt(data, msg_0196_00031, x, y, 6, 2, 0x186, 0, 0);
 }
 
-void TouchscreenMenu_PrintContestMonLevel(TouchscreenMenuData *data, BugContest *contest) {
+static void TouchscreenMenu_PrintContestMonLevel(TouchscreenMenuData *data, BugContest *contest) {
     u32 level = GetMonData(contest->mon, MON_DATA_LEVEL, NULL);
 
     BufferIntegerAsString(data->msgFormat, 0, level, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
     TouchscreenMenu_PrintMessageAt(data, msg_0196_00033, 12, 21, 6, 2, 0x192, 4, 0);
 }
 
-void TouchscreenMenu_PrintBallLabel(TouchscreenMenuData *data) {
+static void TouchscreenMenu_PrintBallLabel(TouchscreenMenuData *data) {
     TouchscreenMenu_PrintMessageAt(data, msg_0196_00032, 11, 21, 9, 2, 372, -1, 0);
 }
 
-void TouchscreenMenu_PrintSafariBalls(TouchscreenMenuData *data) {
+static void TouchscreenMenu_PrintSafariBalls(TouchscreenMenuData *data) {
     TouchscreenMenu_PrintItemCount(data, 14, 19, *LocalFieldData_GetSafariBallsCounter(Save_LocalFieldData_Get(data->fieldSystem->saveData)));
     TouchscreenMenu_PrintBallLabel(data);
 }
 
-void TouchscreenMenu_PrintParkBalls(TouchscreenMenuData *data) {
+static void TouchscreenMenu_PrintParkBalls(TouchscreenMenuData *data) {
     TouchscreenMenu_PrintItemCount(data, 14, 14, FieldSystem_GetParkBallCount(data->fieldSystem));
 }
 
-void TouchscreenMenu_PrintBugContestInfo(TouchscreenMenuData *data) {
+static void TouchscreenMenu_PrintBugContestInfo(TouchscreenMenuData *data) {
     BugContest *contest = FieldSystem_BugContest_Get(data->fieldSystem);
     if (contest == NULL) {
         GF_AssertFail();
@@ -1389,7 +1389,7 @@ void TouchscreenMenu_PrintBugContestInfo(TouchscreenMenuData *data) {
     data->icons[TOUCHSCREEN_MENU_SPRITE_BUG_CONTEST_MON].shown = FALSE;
 }
 
-void TouchscreenMenu_PrintBallInfo(TouchscreenMenuData *data) {
+static void TouchscreenMenu_PrintBallInfo(TouchscreenMenuData *data) {
     u32 layout = data->layout;
     if (layout == TOUCHSCREEN_MENU_LAYOUT_SAFARI) {
         TouchscreenMenu_PrintSafariBalls(data);
@@ -1404,7 +1404,7 @@ void TouchscreenMenu_PrintBallInfo(TouchscreenMenuData *data) {
     }
 }
 
-void TouchscreenMenu_InitIconFlags(TouchscreenMenuData *data) {
+static void TouchscreenMenu_InitIconFlags(TouchscreenMenuData *data) {
     int i;
     for (i = 0; i < TOUCHSCREEN_MENU_NUM_ICONS; i++) {
         int icon = sTouchscreenMenuLayouts[data->layout][i];
@@ -1420,7 +1420,7 @@ void TouchscreenMenu_InitIconFlags(TouchscreenMenuData *data) {
 }
 
 // Slots 7/8 (registered items) pass through; icon slots map to their index among the shown icons.
-int TouchscreenMenu_GetMenuIndex(TouchscreenMenuData *data, int slot) {
+static int TouchscreenMenu_GetMenuIndex(TouchscreenMenuData *data, int slot) {
     int menuIndex = -1;
     int i;
 
@@ -1438,7 +1438,7 @@ int TouchscreenMenu_GetMenuIndex(TouchscreenMenuData *data, int slot) {
     return menuIndex;
 }
 
-int TouchscreenMenu_GetSlotFromMenuIndex(TouchscreenMenuData *data, int menuIndex) {
+static int TouchscreenMenu_GetSlotFromMenuIndex(TouchscreenMenuData *data, int menuIndex) {
     int i;
     int slot;
     int count;
@@ -1461,7 +1461,7 @@ int TouchscreenMenu_GetSlotFromMenuIndex(TouchscreenMenuData *data, int menuInde
     return slot;
 }
 
-void TouchscreenMenu_ValidateSelection(TouchscreenMenuData *data) {
+static void TouchscreenMenu_ValidateSelection(TouchscreenMenuData *data) {
     int i;
 
     GF_ASSERT(data->fieldSystem);
@@ -1476,12 +1476,12 @@ void TouchscreenMenu_ValidateSelection(TouchscreenMenuData *data) {
     }
 }
 
-void *TouchscreenMenu_OnFlashcartDetected(void) {
+static void *TouchscreenMenu_OnFlashcartDetected(void) {
     return Heap_AllocAtEnd(HEAP_ID_3, 1000);
 }
 
-void TouchscreenMenu_OnEmulatorCheckDummy(void) {
+static void TouchscreenMenu_OnEmulatorCheckDummy(void) {
 }
 
-void TouchscreenMenu_OnDummyCheckDummy(void) {
+static void TouchscreenMenu_OnDummyCheckDummy(void) {
 }

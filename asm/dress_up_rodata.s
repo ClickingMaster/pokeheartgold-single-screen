@@ -5,23 +5,8 @@
 	.public sDressUpGraphicsModes
 	.public DressUpGfx_CreateSlotList
 	.public DressUpGfx_FreeSlotList
-	.public DressUpGfx_AddSlotObject
-	.public DressUpGfx_IsTouchHeldOnSlot
-	.public DressUpGfx_HitTestSlotPixels
-	.public DressUpGfx_SetSlotPos
-	.public DressUpGfx_GetSlotPos
-	.public DressUpGfx_GetSlotSize
-	.public DressUpGfx_SetSlotVisible
-	.public DressUpGfx_SetSlotPriority
-	.public DressUpGfx_GetSlotMargins
-	.public DressUpGfx_FindFreeSlot
-	.public DressUpGfx_CreateSlotGraphicsObject
-	.public DressUpGfx_GetSlotHitbox
 	.public DressUpGfx_InitDisplay
 	.public DressUpGfx_ResetDisplay
-	.public DressUp_InitGfxCore
-	.public DressUp_FreeGfxCore
-	.public DressUp_DrawFrame3D
 	.public DressUpGfx_UploadRawResTables
 	.public DressUpGfx_FreeAllTexAndPltt
 	.public DressUpGfx_CreateSprite
@@ -33,14 +18,8 @@
 	.public DressUpGfx_FreePlttRes
 	.public DressUpGfx_FreeCellRes
 	.public DressUpGfx_FreeAnimRes
-	.public DressUp_LoadRawResTables
 	.public DressUpGfx_DestroyRawResTables
-	.public DressUpGfx_StoreUnpackedChar
-	.public DressUp_DisableDragWindow
-	.public DressUp_EnableDragWindow
-	.public DressUp_VBlank
 	.public AccessoryPortrait_AllocRawResTables
-	.public DressUpGfx_CharPixelEquals
 	.public AccessoryPortrait_InitGfxCore
 	.public AccessoryPortrait_InitBg
 	.public AccessoryPortrait_FreeGfxCore
@@ -51,300 +30,30 @@
 	.public AccessoryPortrait_FreeAppGfx
 	.public AccessoryPortrait_AppVBlank
 	.public AccessoryPortrait_RenderSprites
-	.public DressUpGfx_SetVramBanks
-	.public DressUpGfx_Init3D
-	.public DressUpGfx_Init2DModes
-	.public DressUpGfx_ResetFrameVram
-	.public DressUpGfx_DisablePlanes
-	.public DressUpGfx_CreateGraphicsManager
-	.public DressUpGfx_DestroyGraphicsManager
-	.public DressUpGfx_DrawGraphicsManager
-	.public DressUpGfx_AddImages
-	.public DressUpGfx_AddPalettes
-	.public DressUpGfx_InitBgs
-	.public DressUpGfx_FreeBgs
-	.public DressUp_CreateCharRawResMan
-	.public DressUp_DestroyCharRawResMan
-	.public DressUpGfx_InitSpriteSystem
-	.public DressUpGfx_FreeSpriteSystem
-	.public DressUpGfx_RenderSprites
-	.public DressUp_LoadAccessoryChars
-	.public DressUp_LoadBackdropCharsAndPalettes
-	.public DressUpGfx_LoadMonPicAttrs
-	.public DressUpGfx_FreeMonPicAttrs
-	.public DressUpGfx_CreatePokepicManager
-	.public DressUpGfx_DestroyPokepicManager
-	.public DressUpGfx_AllocRawResTables
-	.public DressUpGfx_FreeRawResTables
 	.public DressUp_Init
 	.public DressUp_Main
 	.public DressUp_Exit
-	.public DressUp_InitGraphics
-	.public DressUp_DrawFrame
-	.public DressUp_FreeGraphics
-	.public DressUp_InitCanvas
-	.public DressUp_FreeCanvas
-	.public DressUp_InitTray
-	.public DressUp_FreeTray
-	.public DressUp_RestoreEditBgLayout
-	.public DressUp_VBlankCB
-	.public DressUp_LoadFrameBg
-	.public DressUp_FreeFrameBg
-	.public DressUp_InitButtons
-	.public DressUp_FreeButtons
-	.public DressUp_UpdateButtons
-	.public DressUp_ResetButtons
-	.public DressUp_OnDoneButton
-	.public DressUp_OnNextPageButton
-	.public DressUp_OnPrevPageButton
-	.public DressUp_OnAccessoryTabButton
-	.public DressUp_OnBackdropTabButton
 	.public DressUp_InitHud
-	.public DressUp_FreeHud
-	.public DressUp_StartFinishTransition
-	.public DressUp_FinishTransitionTask
-	.public DressUp_StartReturnTransition
-	.public DressUp_ReturnTransitionTask
-	.public DressUp_SaveDesign
-	.public DressUp_SlideCanvasStep
-	.public DressUp_ShowDressedUpPrompt
-	.public DressUp_HidePrompt
-	.public DressUp_HandleDressedUpPrompt
-	.public DressUp_CreateMsgWindow
-	.public DressUp_PrintMsgWindow
-	.public DressUp_RemoveMsgWindow
-	.public DressUp_CreatePromptMsgWindow
-	.public DressUp_PrintPromptMsgWindow
-	.public DressUp_RemovePromptMsgWindow
-	.public DressUp_UpdateCountMeter
-	.public DressUp_ShowSavePrompt
-	.public DressUp_HandleSavePrompt
-	.public DressUpCanvas_GetRectSamplePoint
 	.public DressUpCanvas_Init
 	.public DressUpCanvas_Destroy
 	.public AccessoryPortrait_CreateCanvasMonPic
-	.public DressUpCanvas_CreateMonPic
-	.public DressUpCanvas_CreateMonPicEx
-	.public DressUpCanvas_AddToMonList
-	.public DressUpCanvas_RemoveNode
-	.public DressUpCanvas_FreeMonPic
 	.public AccessoryPortrait_PlaceCanvasAccessory
-	.public DressUpCanvas_TryAddAccessory
-	.public DressUpCanvas_RemoveAccessory
 	.public DressUpCanvas_ClearObjects
-	.public DressUpCanvas_MoveAll
-	.public DressUpCanvas_MoveMonGroup
 	.public DressUpCanvas_SetOrigin
-	.public DressUpCanvas_RefreshPriorities
-	.public DressUpCanvas_SetPriorities
-	.public DressUpCanvas_IsTouchHeldIn
-	.public DressUpCanvas_IsPointIn
-	.public DressUpCanvas_FindObjectAt
 	.public DressUpCanvas_SetBackdrop
 	.public DressUpCanvas_FreeBackdrop
-	.public DressUpCanvas_GetCount
-	.public DressUpCanvas_GetMaxOverflow
-	.public DressUpCanvas_LinkByMonOverlap
-	.public DressUpCanvas_GetPushback
-	.public DressUpTray_Init
-	.public DressUpTray_Destroy
-	.public DressUpTray_GetItemPage
-	.public DressUpTray_GetItemSpawnPos
-	.public DressUpTray_AddItem
-	.public DressUpTray_LinkObjectToPage
-	.public DressUpTray_RemoveNode
-	.public DressUpTray_ClearObjects
-	.public DressUpTray_RefreshPriorities
-	.public DressUpTray_AnimateToPage
-	.public DressUpTray_CyclePage
-	.public DressUpTray_SetPageImmediate
-	.public DressUpTray_IsTouchHeldIn
-	.public DressUpTray_IsPointIn
-	.public DressUpTray_FindObjectAt
-	.public DressUpTray_LoadTabBg
-	.public DressUpTray_SlideInTabBg
-	.public DressUpTray_FreeTabBg
-	.public DressUpTray_GetGroup
-	.public DressUpTray_GetGroupPage
-	.public DressUpTray_MovePageObjects
-	.public DressUpTray_IsIdle
-	.public DressUpTray_InitPageLists
-	.public DressUpTray_SetListVisible
-	.public DressUpTray_SetPageVisible
-	.public DressUpTray_SetCurPageVisible
-	.public DressUpTray_AllocPageTable
-	.public DressUpTray_FreePageTable
-	.public DressUpTray_GetCurPageHead
-	.public DressUpTray_GetPageHead
-	.public DressUpTray_CountPageObjects
-	.public DressUpTray_GetPageObject
-	.public DressUpTray_SyncObjectVisible
-	.public DressUpTray_GetGridPos
-	.public DressUpTray_StartPageSwapTask
-	.public DressUpTray_PageSwapTask
-	.public DressUp_StartSlideAnim
-	.public DressUp_FindFreeSlideAnim
-	.public DressUp_TickSlideAnims
-	.public DressUp_TickSlideAnim
-	.public DressUp_DivFloorPlusOne
-	.public DressUpTouch_Reset
-	.public DressUpTouch_Update
-	.public DressUpTouch_DefaultHandler
-	.public DressUp_LoadFashionCaseTable
-	.public DressUp_GetAccessoryCount
-	.public DressUp_GetBackdropByOrder
-	.public DressUp_GetBackdropOrder
-	.public DressUpDrag_Init
-	.public DressUpDrag_Destroy
-	.public DressUpDrag_OnTouchIdle
-	.public DressUpDrag_OnHeldBackdrop
-	.public DressUpDrag_OnReleaseBackdrop
-	.public DressUpDrag_OnReleaseAccessory
-	.public DressUpDrag_OnHeldAccessory
-	.public DressUpDrag_OnReleaseMon
-	.public DressUpDrag_OnHeldMon
-	.public DressUpDrag_ApplyBackdrop
-	.public DressUpDrag_BeginDrag
-	.public DressUpDrag_ClearSelection
-	.public DressUpDrag_GetSelectedRect
-	.public DressUpDrag_GetSelectedVisibleRect
-	.public DressUp_StartTweenToTray
-	.public DressUp_TweenToTrayTask
-	.public DressUp_PrintSelectedItemName
-	.public DressUp_MoveMonWithAccessories
-	.public DressUp_LoadMonHitMap
-	.public DressUpMon_Create
-	.public DressUpMon_CreateEx
-	.public DressUpMon_Delete
-	.public DressUpMon_SetPriority
 	.public DressUpMon_GetPriority
-	.public DressUpMon_SetCenterPos
-	.public DressUpMon_IsTouchHeldIn
-	.public DressUpMon_IsPointIn
 	.public DressUpMon_GetCenterPos
-	.public DressUpMon_GetSize
-	.public DressUpMon_HitTestTouch
-	.public DressUpMon_HitTestPoint
-	.public DressUpMon_GetMargins
-	.public DressUpMon_FindPicLeftEdge
-	.public DressUpMon_CalcPicMargins
-	.public DressUpMon_MakeClampedRect
 	.public DressUpNodePool_Init
 	.public DressUpNodePool_Free
-	.public DressUpNodePool_Acquire
-	.public DressUpList_InitNode
-	.public DressUpList_InsertAfter
-	.public DressUpList_Remove
-	.public DressUpList_Clear
-	.public DressUpObj_SetPriority
-	.public DressUpObj_HitTest
-	.public DressUpObj_SetPos
-	.public DressUpObj_GetPos
-	.public DressUpObj_GetSize
-	.public DressUpObj_GetMargins
-	.public DressUpObj_MoveListBy
-	.public DressUpObj_GetVisibleRect
-	.public DressUpBgScreen_LoadFromTemplate
-	.public DressUpBgScreen_Unload
-	.public DressUpBgScreen_InitAltAnim
-	.public DressUpBgScreen_UpdateAltAnim
-	.public DressUpBgScreen_StopAltAnim
-	.public DressUp_StartBgSlide
-	.public DressUpBgScreen_AddCharOffset
-	.public DressUpBgScreen_Load
-	.public DressUp_BgSlideTask
-	.public DressUpBgScreen_CopyToTilemap
-	.public DressUpBgScreen_QueueLoadChars
-	.public DressUpBgScreen_QueueLoadPltt
-	.public DressUpBgScreen_LoadCharsTask
-	.public DressUpBgScreen_LoadPlttTask
-	.public DressUpButton_Init
-	.public DressUpButton_InitWithText
-	.public DressUpButton_Delete
-	.public DressUpButton_DeleteWithText
-	.public DressUpButton_TryCallback
-	.public DressUp_UpdateCategoryTabs
-	.public DressUpButton_SetCallback
-	.public DressUpButton_DefaultCallback
-	.public DressUpButton_SetAnimSelected
-	.public DressUpButton_SetAnimNormal
-	.public DressUpButton_SetAnimPressed
-	.public DressUpButtonPanel_Create
-	.public DressUpButtonPanel_Destroy
-	.public DressUpButtonPanel_HandleKeys
-	.public DressUpButtonPanel_UpdateInputMode
-	.public DressUpButtonPanel_Update
-	.public DressUpButtonPanel_ResetButtons
-	.public DressUpButtonPanel_MoveBy
-	.public DressUpButtonPanel_SetCallback
-	.public DressUpButtonPanel_OnTouch
-	.public DressUpButton_CreateSprite
-	.public DressUpButton_CreateTextSprite
-	.public DressUp_SetHitboxRect
-	.public DressUpButtonPanel_LoadResources
-	.public DressUpButtonPanel_FreeResources
-	.public DressUpButton_SetAnimByTouchState
-	.public DressUpButton_SetTextByState
-	.public DressUpButton_PlaySE
-	.public DressUpButton_CreateTextBitmap
-	.public DressUpButton_DeleteTextBitmap
-	.public DressUpButton_MoveBy
-	.public DressUpButton_MoveTextBy
 	.public DressUpHud_Init
-	.public DressUpHud_Free
-	.public DressUpHud_UpdateCountdown
-	.public DressUpHud_PrintMsgInstant
-	.public DressUpHud_PrintMsg
-	.public DressUpHud_FreeMsgString
-	.public DressUpHud_SetAccessoryCount
-	.public DressUpHud_LoadSubBg
-	.public DressUpHud_LoadFrameAndFontPal
-	.public DressUpHud_AddWindow
-	.public DressUpHud_UnloadSubBg
-	.public DressUpHud_DeleteWindow
-	.public DressUp_PrintMsgFramed
-	.public DressUp_PrintMsgFramedKeepString
-	.public DressUp_PrintMsg
-	.public DressUp_PrintMsgKeepString
-	.public DressUpHud_CreateCountIcons
-	.public DressUpHud_SetCountIcons
-	.public DressUpHud_DestroyCountIcons
-	.public DressUp_LoadSpriteRes
-	.public DressUp_FreeSpriteRes
-	.public DressUp_MakeSpriteHeader
-	.public DressUpCountdown_Create
-	.public DressUpCountdown_Destroy
-	.public DressUpCountdown_Update
-	.public DressUpCountdown_Sync
-	.public DressUpCountdown_DrawDigits
-	.public DressUpCountdown_DecFrames
-	.public DressUpTween_Init
-	.public DressUpTween_Step
-	.public DressUpCountdown_StartPulse
-	.public DressUpCountdown_UpdatePulse
 	.public DressUp_StartBackdropAnim
 	.public DressUp_UpdateBackdropAnim
-	.public DressUp_StopBackdropAnim
 	.public AccessoryPortrait_Create
 	.public AccessoryPortrait_Draw
 	.public AccessoryPortrait_Destroy
 	.public AccessoryPortrait_VBlank
 	.public AccessoryPortrait_SetMonVisible
-	.public AccessoryPortrait_SetPosition
-	.public AccessoryPortrait_CreateFromArgs
-	.public AccessoryPortrait_InitGfx
-	.public AccessoryPortrait_DrawMon
-	.public AccessoryPortrait_FreeGfx
-	.public AccessoryPortrait_InitCanvas
-	.public AccessoryPortrait_SetBackground
-	.public AccessoryPortrait_FreeCanvas
-	.public AccessoryPortrait_ClearBackground
-	.public AccessoryPortrait_InitTransform
-	.public AccessoryPortrait_CopyConfig
-	.public AccessoryPortrait_ReadFashionData
-	.public AccessoryPortrait_LoadAccessoryGfx
-	.public AccessoryPortrait_LoadAccessoryCharsAndPltt
-	.public AccessoryPortrait_VBlankCB
 	.public sDressUpObjCharTransferTemplate
 	.public sDressUpGraphicsManagerTemplate
 	.public sDressUpBgTemplate_Sub0
@@ -361,10 +70,6 @@
 	.text
 	.public DressUpGfx_CreateSlotList
 	.public DressUpGfx_FreeSlotList
-	.public DressUpGfx_IsTouchHeldOnSlot
-	.public DressUpGfx_SetSlotPos
-	.public DressUpGfx_SetSlotVisible
-	.public DressUpGfx_SetSlotPriority
 	.public DressUpGfx_InitDisplay
 	.public DressUpGfx_ResetDisplay
 	.public DressUpGfx_UploadRawResTables
@@ -377,114 +82,22 @@
 	.public DressUpGfx_FreeCellRes
 	.public DressUpGfx_FreeAnimRes
 	.public DressUpGfx_DestroyRawResTables
-	.public DressUpGfx_StoreUnpackedChar
-	.public DressUp_VBlank
 	.public AccessoryPortrait_AllocRawResTables
 	.public AccessoryPortrait_FreeBg
 	.public DressUpGfx_HandlePokepicLoad
 	.public AccessoryPortrait_FreeAppGfx
 	.public AccessoryPortrait_AppVBlank
 	.public AccessoryPortrait_RenderSprites
-	.public DressUpGfx_ResetFrameVram
-	.public DressUpGfx_DisablePlanes
-	.public DressUpGfx_DestroyGraphicsManager
-	.public DressUpGfx_DrawGraphicsManager
-	.public DressUp_DestroyCharRawResMan
-	.public DressUpGfx_RenderSprites
-	.public DressUpGfx_LoadMonPicAttrs
-	.public DressUpGfx_FreeMonPicAttrs
-	.public DressUp_DrawFrame
-	.public DressUp_FreeGraphics
-	.public DressUp_FreeCanvas
-	.public DressUp_FreeTray
-	.public DressUp_VBlankCB
-	.public DressUp_FreeFrameBg
-	.public DressUp_UpdateButtons
-	.public DressUp_ResetButtons
-	.public DressUp_OnDoneButton
-	.public DressUp_OnNextPageButton
-	.public DressUp_OnPrevPageButton
-	.public DressUp_FreeHud
-	.public DressUp_HidePrompt
-	.public DressUp_RemoveMsgWindow
-	.public DressUp_CreatePromptMsgWindow
-	.public DressUp_PrintPromptMsgWindow
-	.public DressUp_RemovePromptMsgWindow
-	.public DressUp_UpdateCountMeter
 	.public DressUpCanvas_Destroy
-	.public DressUpCanvas_CreateMonPic
-	.public DressUpCanvas_AddToMonList
-	.public DressUpCanvas_RemoveNode
-	.public DressUpCanvas_FreeMonPic
-	.public DressUpCanvas_TryAddAccessory
-	.public DressUpCanvas_RemoveAccessory
 	.public DressUpCanvas_ClearObjects
-	.public DressUpCanvas_MoveAll
-	.public DressUpCanvas_MoveMonGroup
-	.public DressUpCanvas_RefreshPriorities
-	.public DressUpCanvas_IsTouchHeldIn
 	.public DressUpCanvas_FreeBackdrop
-	.public DressUpCanvas_GetCount
-	.public DressUpTray_RemoveNode
-	.public DressUpTray_IsTouchHeldIn
-	.public DressUpTray_FreeTabBg
-	.public DressUpTray_GetGroup
-	.public DressUpTray_MovePageObjects
-	.public DressUpTray_IsIdle
-	.public DressUpTray_SetPageVisible
-	.public DressUpTray_SetCurPageVisible
-	.public DressUpTray_CountPageObjects
-	.public DressUp_StartSlideAnim
-	.public DressUp_TickSlideAnims
-	.public DressUpTouch_DefaultHandler
-	.public DressUp_GetAccessoryCount
-	.public DressUp_GetBackdropByOrder
-	.public DressUpDrag_Destroy
-	.public DressUpDrag_OnHeldBackdrop
-	.public DressUpDrag_GetSelectedVisibleRect
-	.public DressUpMon_Create
-	.public DressUpMon_SetPriority
 	.public DressUpMon_GetPriority
-	.public DressUpMon_IsTouchHeldIn
-	.public DressUpMon_IsPointIn
 	.public DressUpMon_GetCenterPos
-	.public DressUpMon_GetSize
-	.public DressUpMon_GetMargins
 	.public DressUpNodePool_Init
 	.public DressUpNodePool_Free
-	.public DressUpList_InitNode
-	.public DressUpList_InsertAfter
-	.public DressUpList_Remove
-	.public DressUpList_Clear
-	.public DressUpObj_SetPriority
-	.public DressUpObj_GetSize
-	.public DressUpBgScreen_Unload
-	.public DressUpBgScreen_InitAltAnim
-	.public DressUpButton_Delete
-	.public DressUpButton_DeleteWithText
-	.public DressUpButton_SetCallback
-	.public DressUpButton_DefaultCallback
-	.public DressUpButton_SetAnimSelected
-	.public DressUpButton_SetAnimNormal
-	.public DressUpButton_SetAnimPressed
-	.public DressUpButton_PlaySE
-	.public DressUpButton_DeleteTextBitmap
-	.public DressUpButton_MoveTextBy
-	.public DressUpHud_UpdateCountdown
-	.public DressUpHud_FreeMsgString
-	.public DressUpHud_SetAccessoryCount
-	.public DressUpHud_UnloadSubBg
-	.public DressUpHud_DeleteWindow
-	.public DressUpCountdown_DecFrames
-	.public DressUpTween_Init
 	.public DressUp_UpdateBackdropAnim
-	.public DressUp_StopBackdropAnim
 	.public AccessoryPortrait_VBlank
 	.public AccessoryPortrait_SetMonVisible
-	.public AccessoryPortrait_SetBackground
-	.public AccessoryPortrait_FreeCanvas
-	.public AccessoryPortrait_CopyConfig
-	.public AccessoryPortrait_VBlankCB
 
 
 	.rodata

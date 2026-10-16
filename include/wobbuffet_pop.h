@@ -248,10 +248,10 @@ typedef struct WobbuffetPopBonusPopup {
 
 // A text OBJ made by WobbuffetPop_NewTextObj.
 typedef struct WobbuffetPopTextObj {
-    TextOBJ *textObj;             // 0x00
+    TextOBJ *textObj;                  // 0x00
     ObjCharSpaceReservation charAlloc; // 0x04
-    u16 width;                    // 0x10
-    u8 unk_12[2];                 // 0x12
+    u16 width;                         // 0x10
+    u8 unk_12[2];                      // 0x12
 } WobbuffetPopTextObj;
 
 // The score on the upper screen: six rolling digits.
@@ -409,13 +409,8 @@ void WobbuffetPopBalloon_LoadShininessTable(void);
 void WobbuffetPopBalloon_InitMeshVertices(WobbuffetPopBalloon *balloon);
 void WobbuffetPopBalloon_InitMeshTexCoords(WobbuffetPopBalloon *balloon);
 void WobbuffetPopBalloon_DrawMesh(WobbuffetPopBalloon *balloon);
-void WobbuffetPopBalloon_ToVtx16(s32 x, s32 y, s16 *outX, s16 *outY);
 int WobbuffetPopBalloon_TryGrabHandle(WobbuffetPopBalloon *balloon);
 int WobbuffetPopBalloon_UpdateDrag(WobbuffetPopBalloon *balloon);
-s32 WobbuffetPopBalloon_DeformMesh(WobbuffetPopBalloon *balloon, s32 mode, fx32 amount);
-s32 WobbuffetPopBalloon_GetPushSide(WobbuffetPopBalloon *balloon, s32 mode);
-s32 WobbuffetPopBalloon_CalcSidePush(WobbuffetPopBalloon *balloon, s32 amount, s32 pushed, s32 other, s32 *outPushed, s32 *outOther);
-s32 WobbuffetPopBalloon_CalcMeshArea(WobbuffetPopBalloon *balloon);
 s32 WobbuffetPopBalloon_CalcMeshAreaPercent(WobbuffetPopBalloon *balloon);
 void WobbuffetPop_LoadHandleSpriteResources(WobbuffetPop *game);
 void WobbuffetPop_FreeHandleSpriteResources(WobbuffetPop *game);
@@ -423,14 +418,12 @@ ManagedSprite *WobbuffetPop_CreateHandleSprite(WobbuffetPop *game);
 void WobbuffetPopBalloon_UpdateHandleSprite(WobbuffetPopBalloon *balloon, ManagedSprite *sprite);
 void WobbuffetPop_DeleteHandleSprite(ManagedSprite *sprite);
 
-// wobbuffet_pop.c, used by the other parts of the game.
 int WobbuffetPop_GetPlayerSeat(WobbuffetPop *game, int netId);
 BOOL WobbuffetPop_AddModelSlot(WobbuffetPop *game, u32 amount);
 void WobbuffetPop_QueuePlayerEvent(WobbuffetPop *game, int netId, const WobbuffetPopEvent *event);
 void WobbuffetPop_QueueEvent(WobbuffetPop *game, const WobbuffetPopEvent *event);
 void WobbuffetPop_RequestSync(WobbuffetPop *game, u32 kind, u32 syncId);
 
-// wobbuffet_pop_scene.c, used by wobbuffet_pop.c.
 int WobbuffetPop_GetBalloonSize(int n);
 void WobbuffetPop_UpdateInflation(WobbuffetPop *game, BgConfig *bgConfig, WobbuffetPopInflation *inflation);
 BOOL WobbuffetPop_LaunchPuff(WobbuffetPop *game, const WobbuffetPopPump *pump);

@@ -362,94 +362,14 @@
 	.public BoxMonSelector_Init
 	.public BoxMonSelector_VBlank
 	.public BoxMonSelector_Run
-	.public BoxMonSelector_HandleInput
-	.public BoxMonSelector_ShowConfirmPrompt
-	.public BoxMonSelector_HandleConfirmPrompt
-	.public BoxMonSelector_ShowRemovePrompt
-	.public BoxMonSelector_HandleRemovePrompt
 	.public BoxMonSelector_RenderSprites
-	.public BoxMonSelector_InitSpriteResources
-	.public BoxMonSelector_InitSpriteHeader
-	.public BoxMonSelector_CreatePickSlots
-	.public BoxMonSelector_HandleDrop
-	.public BoxMonSelector_AddPick
-	.public BoxMonSelector_MovePick
-	.public BoxMonSelector_CreateButtons
-	.public BoxMonSelector_InitSpriteTemplate
-	.public BoxMonSelector_CreateSprite
-	.public BoxMonSelector_LoadScreens
-	.public BoxMonSelector_SetHitboxRect
-	.public BoxMonSelector_CreateBoxIcons
-	.public BoxMonSelector_LoadPage
-	.public BoxMonSelector_LoadBoxPage
-	.public BoxMonSelector_LoadPartyPage
-	.public BoxMonSelector_SetPickIcon
-	.public BoxMonSelector_TransferIconChars
-	.public BoxMonSelector_PointAtBoxSlot
-	.public BoxMonSelector_GetBoxSlotState
-	.public BoxMonSelector_PointAtPick
-	.public BoxMonSelector_GetPickState
-	.public BoxMonSelector_StartDrag
-	.public BoxMonSelector_UpdateTouchDrag
-	.public BoxMonSelector_Drop
-	.public BoxMonSelector_EndDrag
-	.public BoxMonSelector_LoadIconChars
-	.public BoxMonSelector_ReadIconChars
-	.public BoxMonSelector_PrintPageName
-	.public BoxMonSelector_PrintCancelButton
-	.public BoxMonSelector_InitBgs
-	.public BoxMonSelector_InitBgLayers
-	.public BoxMonSelector_UpdatePickMarks
-	.public BoxMonSelector_GetPartyMon
-	.public BoxMonSelector_RemovePick
-	.public BoxMonSelector_ShowMessage
-	.public BoxMonSelector_ShowTakePrompt
-	.public BoxMonSelector_RemoveTakePrompt
-	.public BoxMonSelector_ClearMessageWindow
-	.public BoxMonSelector_WriteResults
-	.public BoxMonSelector_DeleteSprites
-	.public BoxMonSelector_UpdateCursorSprite
-	.public BoxMonSelector_HandleAButton
-	.public BoxMonSelector_HandleBButton
-	.public BoxMonSelector_PrevPage
-	.public BoxMonSelector_NextPage
-	.public BoxMonSelector_PressCancelButton
-	.public BoxMonSelector_NotifyCursorMove
-	.public BoxMonSelector_DimScreen
-	.public BoxMonSelector_ResetBlend
 	.include "box_mon_selector_data.inc"
 	.include "global.inc"
 
 	.text
 	.public BoxMonSelector_VBlank
 	.public BoxMonSelector_Run
-	.public BoxMonSelector_ShowConfirmPrompt
-	.public BoxMonSelector_HandleConfirmPrompt
-	.public BoxMonSelector_ShowRemovePrompt
-	.public BoxMonSelector_HandleRemovePrompt
 	.public BoxMonSelector_RenderSprites
-	.public BoxMonSelector_InitSpriteHeader
-	.public BoxMonSelector_InitSpriteTemplate
-	.public BoxMonSelector_CreateSprite
-	.public BoxMonSelector_SetHitboxRect
-	.public BoxMonSelector_LoadPage
-	.public BoxMonSelector_TransferIconChars
-	.public BoxMonSelector_PointAtBoxSlot
-	.public BoxMonSelector_PointAtPick
-	.public BoxMonSelector_GetPickState
-	.public BoxMonSelector_Drop
-	.public BoxMonSelector_ReadIconChars
-	.public BoxMonSelector_InitBgs
-	.public BoxMonSelector_InitBgLayers
-	.public BoxMonSelector_UpdatePickMarks
-	.public BoxMonSelector_GetPartyMon
-	.public BoxMonSelector_ShowTakePrompt
-	.public BoxMonSelector_RemoveTakePrompt
-	.public BoxMonSelector_ClearMessageWindow
-	.public BoxMonSelector_WriteResults
-	.public BoxMonSelector_PressCancelButton
-	.public BoxMonSelector_DimScreen
-	.public BoxMonSelector_ResetBlend
 	.rodata
 
 gBoxMonSelectorBgTemplateMain2:

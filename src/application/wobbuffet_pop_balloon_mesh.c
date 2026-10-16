@@ -22,6 +22,12 @@ extern const u8 sWobbuffetPopBalloonTouchTop[];
 extern const u8 sWobbuffetPopBalloonTouchBottom[];
 extern const ManagedSpriteTemplate sWobbuffetPopHandleSpriteTemplate;
 
+static void WobbuffetPopBalloon_ToVtx16(s32 x, s32 y, s16 *outX, s16 *outY);
+static s32 WobbuffetPopBalloon_DeformMesh(WobbuffetPopBalloon *balloon, s32 mode, fx32 amount);
+static s32 WobbuffetPopBalloon_GetPushSide(WobbuffetPopBalloon *balloon, s32 mode);
+static s32 WobbuffetPopBalloon_CalcSidePush(WobbuffetPopBalloon *balloon, s32 amount, s32 pushed, s32 other, s32 *outPushed, s32 *outOther);
+static s32 WobbuffetPopBalloon_CalcMeshArea(WobbuffetPopBalloon *balloon);
+
 void WobbuffetPopBalloon_LoadShininessTable(void) {
     u8 buf[0x80];
     u8 *p = buf;
@@ -138,7 +144,7 @@ void WobbuffetPopBalloon_DrawMesh(WobbuffetPopBalloon *balloon) {
 }
 
 // Mesh coordinates (0..128 per axis) to VTX_16 coordinates around the origin.
-void WobbuffetPopBalloon_ToVtx16(s32 x, s32 y, s16 *outX, s16 *outY) {
+static void WobbuffetPopBalloon_ToVtx16(s32 x, s32 y, s16 *outX, s16 *outY) {
     s32 tx = ((s64)x << 12) / 0x80000;
     s32 ty = ((s64)y << 12) / 0x80000;
 
@@ -232,7 +238,7 @@ int WobbuffetPopBalloon_UpdateDrag(WobbuffetPopBalloon *balloon) {
     return 1;
 }
 
-s32 WobbuffetPopBalloon_DeformMesh(WobbuffetPopBalloon *balloon, s32 mode, fx32 amount) {
+static s32 WobbuffetPopBalloon_DeformMesh(WobbuffetPopBalloon *balloon, s32 mode, fx32 amount) {
     s32 hi;
     s32 lo;
     BOOL flag;
@@ -333,7 +339,7 @@ s32 WobbuffetPopBalloon_DeformMesh(WobbuffetPopBalloon *balloon, s32 mode, fx32 
 }
 
 // 0: pushed in the middle (or released), 1: left of the handle, 2: right of it.
-s32 WobbuffetPopBalloon_GetPushSide(WobbuffetPopBalloon *balloon, s32 mode) {
+static s32 WobbuffetPopBalloon_GetPushSide(WobbuffetPopBalloon *balloon, s32 mode) {
     s32 base;
     s32 cur;
 
@@ -352,7 +358,7 @@ s32 WobbuffetPopBalloon_GetPushSide(WobbuffetPopBalloon *balloon, s32 mode) {
 }
 
 // The pushed side moves by the full amount (up to 100), the other side by a quarter of it.
-s32 WobbuffetPopBalloon_CalcSidePush(WobbuffetPopBalloon *balloon, s32 amount, s32 pushed, s32 other, s32 *outPushed, s32 *outOther) {
+static s32 WobbuffetPopBalloon_CalcSidePush(WobbuffetPopBalloon *balloon, s32 amount, s32 pushed, s32 other, s32 *outPushed, s32 *outOther) {
     BOOL ret = FALSE;
     s32 sum;
 
@@ -376,7 +382,7 @@ s32 WobbuffetPopBalloon_CalcSidePush(WobbuffetPopBalloon *balloon, s32 amount, s
 }
 
 // Area of the mesh outline: (top width + bottom width) * height / 2.
-s32 WobbuffetPopBalloon_CalcMeshArea(WobbuffetPopBalloon *balloon) {
+static s32 WobbuffetPopBalloon_CalcMeshArea(WobbuffetPopBalloon *balloon) {
     s32 mid;
     s32 span;
 

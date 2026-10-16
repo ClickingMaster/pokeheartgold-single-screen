@@ -69,60 +69,60 @@ extern const BgTemplate gBoxMonSelectorBgTemplateMain1;
 extern const BgTemplate gBoxMonSelectorBgTemplateMain0;
 extern const BgTemplate gBoxMonSelectorBgTemplateMain3;
 
-int BoxMonSelector_HandleInput(BoxMonSelector *selector);
-void BoxMonSelector_ShowConfirmPrompt(BoxMonSelector *selector);
-void BoxMonSelector_HandleConfirmPrompt(BoxMonSelector *selector);
-void BoxMonSelector_ShowRemovePrompt(BoxMonSelector *selector);
-void BoxMonSelector_HandleRemovePrompt(BoxMonSelector *selector);
-void BoxMonSelector_InitSpriteResources(BoxMonSelector *selector);
-void BoxMonSelector_InitSpriteHeader(BoxMonSelector *selector);
-void BoxMonSelector_CreatePickSlots(BoxMonSelector *selector);
-int BoxMonSelector_HandleDrop(BoxMonSelector *selector);
-void BoxMonSelector_AddPick(BoxMonSelector *selector, u8 pick);
-void BoxMonSelector_MovePick(BoxMonSelector *selector, u8 from, u8 to);
-void BoxMonSelector_CreateButtons(BoxMonSelector *selector);
-void BoxMonSelector_InitSpriteTemplate(SpriteTemplate *template, BoxMonSelector *selector, NNS_G2D_VRAM_TYPE vram);
-Sprite *BoxMonSelector_CreateSprite(BoxMonSelector *selector, int x, int y, int animSeq, BOOL drawFlag);
-void BoxMonSelector_LoadScreens(BoxMonSelector *selector, BgConfig *bgConfig, enum HeapID heapId);
-void BoxMonSelector_SetHitboxRect(TouchscreenHitbox *hitbox, int x, int y, int width, int height);
-void BoxMonSelector_CreateBoxIcons(BoxMonSelector *selector);
-int BoxMonSelector_LoadPage(BoxMonSelector *selector);
-int BoxMonSelector_LoadBoxPage(BoxMonSelector *selector);
-int BoxMonSelector_LoadPartyPage(BoxMonSelector *selector);
-void BoxMonSelector_SetPickIcon(BoxMonSelector *selector, u8 pick, int source, BOOL fromPick);
-void BoxMonSelector_TransferIconChars(BoxMonSelectorIconChars *chars);
-int BoxMonSelector_PointAtBoxSlot(BoxMonSelector *selector, int slot);
-int BoxMonSelector_GetBoxSlotState(BoxMonSelector *selector, int slot);
-int BoxMonSelector_PointAtPick(BoxMonSelector *selector, int pick);
-int BoxMonSelector_GetPickState(BoxMonSelector *selector, int pick);
-void BoxMonSelector_StartDrag(BoxMonSelector *selector, int source, int index);
-void BoxMonSelector_UpdateTouchDrag(BoxMonSelector *selector);
-void BoxMonSelector_Drop(BoxMonSelector *selector);
-void BoxMonSelector_EndDrag(BoxMonSelector *selector, int result);
-void BoxMonSelector_LoadIconChars(BoxMonSelectorMon *mon, BoxMonSelectorIconChars *chars, int index, Sprite *sprite, void *buf, NARC *narc, int baseTile);
-void BoxMonSelector_ReadIconChars(u32 fileId, NNSG2dCharacterData **ppCharData, void *dest, NARC *narc);
-void BoxMonSelector_PrintPageName(BoxMonSelector *selector, int page);
-void BoxMonSelector_PrintCancelButton(BoxMonSelector *selector);
-void BoxMonSelector_InitBgs(BgConfig *bgConfig, enum HeapID heapId);
-void BoxMonSelector_InitBgLayers(BgConfig *bgConfig);
-void BoxMonSelector_UpdatePickMarks(BoxMonSelector *selector);
-void BoxMonSelector_GetPartyMon(BoxMonSelector *selector, int slot, BoxMonSelectorMon *mon);
-void BoxMonSelector_RemovePick(BoxMonSelector *selector, int pick);
-void BoxMonSelector_ShowMessage(BoxMonSelector *selector, int msgId, FontID fontId);
-void BoxMonSelector_ShowTakePrompt(BoxMonSelector *selector);
-void BoxMonSelector_RemoveTakePrompt(BoxMonSelector *selector);
-void BoxMonSelector_ClearMessageWindow(Window *window, BOOL hidePlane);
-void BoxMonSelector_WriteResults(BoxMonSelector *selector);
-void BoxMonSelector_DeleteSprites(BoxMonSelector *selector);
-void BoxMonSelector_UpdateCursorSprite(BoxMonSelector *selector);
-int BoxMonSelector_HandleAButton(BoxMonSelector *selector);
-int BoxMonSelector_HandleBButton(BoxMonSelector *selector);
-void BoxMonSelector_PrevPage(BoxMonSelector *selector);
-void BoxMonSelector_NextPage(BoxMonSelector *selector);
-void BoxMonSelector_PressCancelButton(BoxMonSelector *selector);
-void BoxMonSelector_NotifyCursorMove(BoxMonSelector *selector);
-void BoxMonSelector_DimScreen(void);
-void BoxMonSelector_ResetBlend(void);
+static int BoxMonSelector_HandleInput(BoxMonSelector *selector);
+static void BoxMonSelector_ShowConfirmPrompt(BoxMonSelector *selector);
+static void BoxMonSelector_HandleConfirmPrompt(BoxMonSelector *selector);
+static void BoxMonSelector_ShowRemovePrompt(BoxMonSelector *selector);
+static void BoxMonSelector_HandleRemovePrompt(BoxMonSelector *selector);
+static void BoxMonSelector_InitSpriteResources(BoxMonSelector *selector);
+static void BoxMonSelector_InitSpriteHeader(BoxMonSelector *selector);
+static void BoxMonSelector_CreatePickSlots(BoxMonSelector *selector);
+static int BoxMonSelector_HandleDrop(BoxMonSelector *selector);
+static void BoxMonSelector_AddPick(BoxMonSelector *selector, u8 pick);
+static void BoxMonSelector_MovePick(BoxMonSelector *selector, u8 from, u8 to);
+static void BoxMonSelector_CreateButtons(BoxMonSelector *selector);
+static void BoxMonSelector_InitSpriteTemplate(SpriteTemplate *template, BoxMonSelector *selector, NNS_G2D_VRAM_TYPE vram);
+static Sprite *BoxMonSelector_CreateSprite(BoxMonSelector *selector, int x, int y, int animSeq, BOOL drawFlag);
+static void BoxMonSelector_LoadScreens(BoxMonSelector *selector, BgConfig *bgConfig, enum HeapID heapId);
+static void BoxMonSelector_SetHitboxRect(TouchscreenHitbox *hitbox, int x, int y, int width, int height);
+static void BoxMonSelector_CreateBoxIcons(BoxMonSelector *selector);
+static int BoxMonSelector_LoadPage(BoxMonSelector *selector);
+static int BoxMonSelector_LoadBoxPage(BoxMonSelector *selector);
+static int BoxMonSelector_LoadPartyPage(BoxMonSelector *selector);
+static void BoxMonSelector_SetPickIcon(BoxMonSelector *selector, u8 pick, int source, BOOL fromPick);
+static void BoxMonSelector_TransferIconChars(BoxMonSelectorIconChars *chars);
+static int BoxMonSelector_PointAtBoxSlot(BoxMonSelector *selector, int slot);
+static int BoxMonSelector_GetBoxSlotState(BoxMonSelector *selector, int slot);
+static int BoxMonSelector_PointAtPick(BoxMonSelector *selector, int pick);
+static int BoxMonSelector_GetPickState(BoxMonSelector *selector, int pick);
+static void BoxMonSelector_StartDrag(BoxMonSelector *selector, int source, int index);
+static void BoxMonSelector_UpdateTouchDrag(BoxMonSelector *selector);
+static void BoxMonSelector_Drop(BoxMonSelector *selector);
+static void BoxMonSelector_EndDrag(BoxMonSelector *selector, int result);
+static void BoxMonSelector_LoadIconChars(BoxMonSelectorMon *mon, BoxMonSelectorIconChars *chars, int index, Sprite *sprite, void *buf, NARC *narc, int baseTile);
+static void BoxMonSelector_ReadIconChars(u32 fileId, NNSG2dCharacterData **ppCharData, void *dest, NARC *narc);
+static void BoxMonSelector_PrintPageName(BoxMonSelector *selector, int page);
+static void BoxMonSelector_PrintCancelButton(BoxMonSelector *selector);
+static void BoxMonSelector_InitBgs(BgConfig *bgConfig, enum HeapID heapId);
+static void BoxMonSelector_InitBgLayers(BgConfig *bgConfig);
+static void BoxMonSelector_UpdatePickMarks(BoxMonSelector *selector);
+static void BoxMonSelector_GetPartyMon(BoxMonSelector *selector, int slot, BoxMonSelectorMon *mon);
+static void BoxMonSelector_RemovePick(BoxMonSelector *selector, int pick);
+static void BoxMonSelector_ShowMessage(BoxMonSelector *selector, int msgId, FontID fontId);
+static void BoxMonSelector_ShowTakePrompt(BoxMonSelector *selector);
+static void BoxMonSelector_RemoveTakePrompt(BoxMonSelector *selector);
+static void BoxMonSelector_ClearMessageWindow(Window *window, BOOL hidePlane);
+static void BoxMonSelector_WriteResults(BoxMonSelector *selector);
+static void BoxMonSelector_DeleteSprites(BoxMonSelector *selector);
+static void BoxMonSelector_UpdateCursorSprite(BoxMonSelector *selector);
+static int BoxMonSelector_HandleAButton(BoxMonSelector *selector);
+static int BoxMonSelector_HandleBButton(BoxMonSelector *selector);
+static void BoxMonSelector_PrevPage(BoxMonSelector *selector);
+static void BoxMonSelector_NextPage(BoxMonSelector *selector);
+static void BoxMonSelector_PressCancelButton(BoxMonSelector *selector);
+static void BoxMonSelector_NotifyCursorMove(BoxMonSelector *selector);
+static void BoxMonSelector_DimScreen(void);
+static void BoxMonSelector_ResetBlend(void);
 
 #pragma force_active on
 
@@ -256,7 +256,7 @@ int BoxMonSelector_Run(BoxMonSelector *selector) {
 
 #pragma force_active on
 
-int BoxMonSelector_HandleInput(BoxMonSelector *selector) {
+static int BoxMonSelector_HandleInput(BoxMonSelector *selector) {
     int result = 0;
     int keys = 0;
     int hit;
@@ -374,7 +374,7 @@ int BoxMonSelector_HandleInput(BoxMonSelector *selector) {
 
 #pragma force_active off
 
-void BoxMonSelector_ShowConfirmPrompt(BoxMonSelector *selector) {
+static void BoxMonSelector_ShowConfirmPrompt(BoxMonSelector *selector) {
     YesNoPromptTemplate template;
     MI_CpuFill8(&template, 0, sizeof(YesNoPromptTemplate));
     template.bgConfig = selector->bgConfig;
@@ -394,7 +394,7 @@ void BoxMonSelector_ShowConfirmPrompt(BoxMonSelector *selector) {
     selector->state = BOX_MON_SELECTOR_STATE_CONFIRM;
 }
 
-void BoxMonSelector_HandleConfirmPrompt(BoxMonSelector *selector) {
+static void BoxMonSelector_HandleConfirmPrompt(BoxMonSelector *selector) {
     switch (YesNoPrompt_HandleInput(selector->yesNoPrompt)) {
     case 1:
         BoxMonSelector_ClearMessageWindow(&selector->messageWindow, TRUE);
@@ -413,7 +413,7 @@ void BoxMonSelector_HandleConfirmPrompt(BoxMonSelector *selector) {
     }
 }
 
-void BoxMonSelector_ShowRemovePrompt(BoxMonSelector *selector) {
+static void BoxMonSelector_ShowRemovePrompt(BoxMonSelector *selector) {
     YesNoPromptTemplate template;
     MI_CpuFill8(&template, 0, sizeof(YesNoPromptTemplate));
     template.bgConfig = selector->bgConfig;
@@ -428,7 +428,7 @@ void BoxMonSelector_ShowRemovePrompt(BoxMonSelector *selector) {
     selector->state = BOX_MON_SELECTOR_STATE_REMOVE;
 }
 
-void BoxMonSelector_HandleRemovePrompt(BoxMonSelector *selector) {
+static void BoxMonSelector_HandleRemovePrompt(BoxMonSelector *selector) {
     switch (YesNoPrompt_HandleInput(selector->yesNoPrompt)) {
     case 1:
         BoxMonSelector_ClearMessageWindow(&selector->messageWindow, TRUE);
@@ -459,7 +459,7 @@ void BoxMonSelector_RenderSprites(BoxMonSelector *selector) {
 
 #pragma force_active on
 
-void BoxMonSelector_InitSpriteResources(BoxMonSelector *selector) {
+static void BoxMonSelector_InitSpriteResources(BoxMonSelector *selector) {
     int i;
 
     selector->spriteList = G2dRenderer_Init(43, &selector->renderer, selector->heapId);
@@ -478,11 +478,11 @@ void BoxMonSelector_InitSpriteResources(BoxMonSelector *selector) {
 
 #pragma force_active off
 
-void BoxMonSelector_InitSpriteHeader(BoxMonSelector *selector) {
+static void BoxMonSelector_InitSpriteHeader(BoxMonSelector *selector) {
     CreateSpriteResourcesHeader(&selector->spriteHeader, 0, 0, 0, 0, -1, -1, 0, 0, selector->resManagers[0], selector->resManagers[1], selector->resManagers[2], selector->resManagers[3], NULL, NULL);
 }
 
-void BoxMonSelector_CreatePickSlots(BoxMonSelector *selector) {
+static void BoxMonSelector_CreatePickSlots(BoxMonSelector *selector) {
     SpriteTemplate template;
     int i;
     u8 numEmpty;
@@ -524,7 +524,7 @@ void BoxMonSelector_CreatePickSlots(BoxMonSelector *selector) {
 
 // Returns 0 when nothing happened, 1 when the Pokemon in hand was placed in a free pick slot, 2 when it was dropped
 // back on the box (pick removed), 3 when a pick was moved to another pick slot.
-int BoxMonSelector_HandleDrop(BoxMonSelector *selector) {
+static int BoxMonSelector_HandleDrop(BoxMonSelector *selector) {
     if (selector->dragSource == DRAG_FROM_BOX) {
         int i = 0, count;
         count = selector->maxPicks;
@@ -575,7 +575,7 @@ int BoxMonSelector_HandleDrop(BoxMonSelector *selector) {
 
 #pragma force_active off
 
-void BoxMonSelector_AddPick(BoxMonSelector *selector, u8 pick) {
+static void BoxMonSelector_AddPick(BoxMonSelector *selector, u8 pick) {
     u8 i;
 
     PlaySE(SEQ_SE_DP_BOX01);
@@ -603,7 +603,7 @@ void BoxMonSelector_AddPick(BoxMonSelector *selector, u8 pick) {
     }
 }
 
-void BoxMonSelector_MovePick(BoxMonSelector *selector, u8 from, u8 to) {
+static void BoxMonSelector_MovePick(BoxMonSelector *selector, u8 from, u8 to) {
     PlaySE(SEQ_SE_DP_BOX01);
     selector->picks[from].active = FALSE;
     Sprite_SetDrawFlag(selector->pickIcons[from].sprite, FALSE);
@@ -618,7 +618,7 @@ void BoxMonSelector_MovePick(BoxMonSelector *selector, u8 from, u8 to) {
     selector->lastPick = to;
 }
 
-void BoxMonSelector_CreateButtons(BoxMonSelector *selector) {
+static void BoxMonSelector_CreateButtons(BoxMonSelector *selector) {
     int i;
 
     BoxMonSelector_SetHitboxRect(&selector->hitboxes[HITBOX_CANCEL], 224, 176, 50, 32);
@@ -648,7 +648,7 @@ void BoxMonSelector_CreateButtons(BoxMonSelector *selector) {
     Sprite_SetDrawPriority(selector->handCursor, 1);
 }
 
-void BoxMonSelector_InitSpriteTemplate(SpriteTemplate *template, BoxMonSelector *selector, NNS_G2D_VRAM_TYPE vram) {
+static void BoxMonSelector_InitSpriteTemplate(SpriteTemplate *template, BoxMonSelector *selector, NNS_G2D_VRAM_TYPE vram) {
     template->spriteList = selector->spriteList;
     template->header = &selector->spriteHeader;
     template->position.z = 0;
@@ -661,7 +661,7 @@ void BoxMonSelector_InitSpriteTemplate(SpriteTemplate *template, BoxMonSelector 
     template->heapID = selector->heapId;
 }
 
-Sprite *BoxMonSelector_CreateSprite(BoxMonSelector *selector, int x, int y, int animSeq, BOOL drawFlag) {
+static Sprite *BoxMonSelector_CreateSprite(BoxMonSelector *selector, int x, int y, int animSeq, BOOL drawFlag) {
     SpriteTemplate template;
     Sprite *sprite;
     BoxMonSelector_InitSpriteTemplate(&template, selector, NNS_G2D_VRAM_TYPE_2DMAIN);
@@ -678,7 +678,7 @@ Sprite *BoxMonSelector_CreateSprite(BoxMonSelector *selector, int x, int y, int 
 
 #pragma force_active on
 
-void BoxMonSelector_LoadScreens(BoxMonSelector *selector, BgConfig *bgConfig, enum HeapID heapId) {
+static void BoxMonSelector_LoadScreens(BoxMonSelector *selector, BgConfig *bgConfig, enum HeapID heapId) {
     GfGfxLoader_LoadScrnData(NARC_a_1_5_1, 1, bgConfig, GF_BG_LYR_MAIN_2, 0, 0x600, TRUE, heapId);
     BgTilemapRectChangePalette(bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 32, 24, 1);
     BgCommitTilemapBufferToVram(bgConfig, GF_BG_LYR_MAIN_2);
@@ -692,7 +692,7 @@ void BoxMonSelector_LoadScreens(BoxMonSelector *selector, BgConfig *bgConfig, en
 
 #pragma force_active off
 
-void BoxMonSelector_SetHitboxRect(TouchscreenHitbox *hitbox, int x, int y, int width, int height) {
+static void BoxMonSelector_SetHitboxRect(TouchscreenHitbox *hitbox, int x, int y, int width, int height) {
     hitbox->rect.top = y - height / 2;
     hitbox->rect.left = x - width / 2;
     hitbox->rect.bottom = y + height / 2;
@@ -701,7 +701,7 @@ void BoxMonSelector_SetHitboxRect(TouchscreenHitbox *hitbox, int x, int y, int w
 
 #pragma force_active on
 
-void BoxMonSelector_CreateBoxIcons(BoxMonSelector *selector) {
+static void BoxMonSelector_CreateBoxIcons(BoxMonSelector *selector) {
     SpriteTemplate template;
     int col, row, n;
 
@@ -739,14 +739,14 @@ void BoxMonSelector_CreateBoxIcons(BoxMonSelector *selector) {
 
 #pragma force_active off
 
-int BoxMonSelector_LoadPage(BoxMonSelector *selector) {
+static int BoxMonSelector_LoadPage(BoxMonSelector *selector) {
     if (selector->page == BOX_MON_SELECTOR_PARTY_PAGE) {
         return BoxMonSelector_LoadPartyPage(selector);
     }
     return BoxMonSelector_LoadBoxPage(selector);
 }
 
-int BoxMonSelector_LoadBoxPage(BoxMonSelector *selector) {
+static int BoxMonSelector_LoadBoxPage(BoxMonSelector *selector) {
     BoxMonSelectorMon mon;
     void *buf;
     NARC *narc;
@@ -778,7 +778,7 @@ int BoxMonSelector_LoadBoxPage(BoxMonSelector *selector) {
     ScheduleBgTilemapBufferTransfer(selector->bgConfig, GF_BG_LYR_MAIN_2);
 }
 
-int BoxMonSelector_LoadPartyPage(BoxMonSelector *selector) {
+static int BoxMonSelector_LoadPartyPage(BoxMonSelector *selector) {
     BoxMonSelectorMon mon;
     void *buf;
     NARC *narc;
@@ -818,7 +818,7 @@ int BoxMonSelector_LoadPartyPage(BoxMonSelector *selector) {
 
 #pragma force_active on
 
-void BoxMonSelector_SetPickIcon(BoxMonSelector *selector, u8 pick, int source, BOOL fromPick) {
+static void BoxMonSelector_SetPickIcon(BoxMonSelector *selector, u8 pick, int source, BOOL fromPick) {
     void *buf;
     NARC *narc;
     int i;
@@ -842,7 +842,7 @@ void BoxMonSelector_SetPickIcon(BoxMonSelector *selector, u8 pick, int source, B
 
 #pragma force_active off
 
-void BoxMonSelector_TransferIconChars(BoxMonSelectorIconChars *chars) {
+static void BoxMonSelector_TransferIconChars(BoxMonSelectorIconChars *chars) {
     int i;
     for (i = 0; i < BOX_MON_SELECTOR_BOX_SLOTS; i++) {
         if (chars->sprite != NULL) {
@@ -854,14 +854,14 @@ void BoxMonSelector_TransferIconChars(BoxMonSelectorIconChars *chars) {
     }
 }
 
-int BoxMonSelector_PointAtBoxSlot(BoxMonSelector *selector, int slot) {
+static int BoxMonSelector_PointAtBoxSlot(BoxMonSelector *selector, int slot) {
     Sprite_SetMatrix(selector->handCursor, Sprite_GetMatrixPtr(selector->boxIcons[slot].sprite));
     return BoxMonSelector_GetBoxSlotState(selector, slot);
 }
 
 #pragma force_active on
 
-int BoxMonSelector_GetBoxSlotState(BoxMonSelector *selector, int slot) {
+static int BoxMonSelector_GetBoxSlotState(BoxMonSelector *selector, int slot) {
     int i, found;
     if (selector->boxIcons[slot].sprite && Sprite_GetDrawFlag(selector->boxIcons[slot].sprite) == FALSE) {
         return SLOT_INVALID;
@@ -891,7 +891,7 @@ int BoxMonSelector_GetBoxSlotState(BoxMonSelector *selector, int slot) {
 
 #pragma force_active off
 
-int BoxMonSelector_PointAtPick(BoxMonSelector *selector, int pick) {
+static int BoxMonSelector_PointAtPick(BoxMonSelector *selector, int pick) {
     int ret = BoxMonSelector_GetPickState(selector, pick);
     if (pick < selector->maxPicks) {
         Sprite_SetMatrix(selector->handCursor, Sprite_GetMatrixPtr(selector->pickIcons[pick].sprite));
@@ -900,7 +900,7 @@ int BoxMonSelector_PointAtPick(BoxMonSelector *selector, int pick) {
     return ret;
 }
 
-int BoxMonSelector_GetPickState(BoxMonSelector *selector, int pick) {
+static int BoxMonSelector_GetPickState(BoxMonSelector *selector, int pick) {
     if (pick >= selector->maxPicks) {
         return SLOT_INVALID;
     }
@@ -912,7 +912,7 @@ int BoxMonSelector_GetPickState(BoxMonSelector *selector, int pick) {
 
 #pragma force_active on
 
-void BoxMonSelector_StartDrag(BoxMonSelector *selector, int source, int index) {
+static void BoxMonSelector_StartDrag(BoxMonSelector *selector, int source, int index) {
     BoxMonSelectorIcon *icons;
 
     selector->dragging = TRUE;
@@ -950,7 +950,7 @@ void BoxMonSelector_StartDrag(BoxMonSelector *selector, int source, int index) {
     }
 }
 
-void BoxMonSelector_UpdateTouchDrag(BoxMonSelector *selector) {
+static void BoxMonSelector_UpdateTouchDrag(BoxMonSelector *selector) {
     u32 x, y;
     VecFx32 pos, iconPos;
 
@@ -970,7 +970,7 @@ void BoxMonSelector_UpdateTouchDrag(BoxMonSelector *selector) {
 
 #pragma force_active off
 
-void BoxMonSelector_Drop(BoxMonSelector *selector) {
+static void BoxMonSelector_Drop(BoxMonSelector *selector) {
     if (selector->dragging != FALSE) {
         BoxMonSelector_EndDrag(selector, BoxMonSelector_HandleDrop(selector));
     }
@@ -979,7 +979,7 @@ void BoxMonSelector_Drop(BoxMonSelector *selector) {
 #pragma force_active on
 
 // result: 0 puts the Pokemon in hand back, otherwise the result of BoxMonSelector_HandleDrop.
-void BoxMonSelector_EndDrag(BoxMonSelector *selector, int result) {
+static void BoxMonSelector_EndDrag(BoxMonSelector *selector, int result) {
     VecFx32 position;
 
     if (result) {
@@ -1030,7 +1030,7 @@ void BoxMonSelector_EndDrag(BoxMonSelector *selector, int result) {
     Sprite_SetDrawFlag(selector->boxIcons[BOX_MON_SELECTOR_BOX_SLOTS].sprite, FALSE);
 }
 
-void BoxMonSelector_LoadIconChars(BoxMonSelectorMon *mon, BoxMonSelectorIconChars *chars, int index, Sprite *sprite, void *buf, NARC *narc, int baseTile) {
+static void BoxMonSelector_LoadIconChars(BoxMonSelectorMon *mon, BoxMonSelectorIconChars *chars, int index, Sprite *sprite, void *buf, NARC *narc, int baseTile) {
     BoxMonSelectorIconChars *entry = &chars[index];
     if (sprite) {
         NNSG2dCharacterData *charData;
@@ -1047,14 +1047,14 @@ void BoxMonSelector_LoadIconChars(BoxMonSelectorMon *mon, BoxMonSelectorIconChar
 
 #pragma force_active off
 
-void BoxMonSelector_ReadIconChars(u32 fileId, NNSG2dCharacterData **ppCharData, void *dest, NARC *narc) {
+static void BoxMonSelector_ReadIconChars(u32 fileId, NNSG2dCharacterData **ppCharData, void *dest, NARC *narc) {
     NARC_ReadWholeMember(narc, fileId, dest);
     NNS_G2dGetUnpackedBGCharacterData(dest, ppCharData);
 }
 
 #pragma force_active on
 
-void BoxMonSelector_PrintPageName(BoxMonSelector *selector, int page) {
+static void BoxMonSelector_PrintPageName(BoxMonSelector *selector, int page) {
     String *string;
     if (page == BOX_MON_SELECTOR_PARTY_PAGE) {
         MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0298_bin, selector->heapId);
@@ -1070,7 +1070,7 @@ void BoxMonSelector_PrintPageName(BoxMonSelector *selector, int page) {
     String_Delete(string);
 }
 
-void BoxMonSelector_PrintCancelButton(BoxMonSelector *selector) {
+static void BoxMonSelector_PrintCancelButton(BoxMonSelector *selector) {
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0298_bin, selector->heapId);
     String *string = NewString_ReadMsgData(msgData, msg_0298_00000);
     FillWindowPixelBuffer(&selector->cancelWindow, 0);
@@ -1085,7 +1085,7 @@ void BoxMonSelector_PrintCancelButton(BoxMonSelector *selector) {
 
 #pragma force_active off
 
-void BoxMonSelector_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {
+static void BoxMonSelector_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {
     BoxMonSelector_InitBgLayers(bgConfig);
     gSystem.screensFlipped = TRUE;
     GfGfx_SwapDisplay();
@@ -1094,7 +1094,7 @@ void BoxMonSelector_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {
     BG_FillCharDataRange(bgConfig, GF_BG_LYR_MAIN_0, 0, 1, 0);
 }
 
-void BoxMonSelector_InitBgLayers(BgConfig *bgConfig) {
+static void BoxMonSelector_InitBgLayers(BgConfig *bgConfig) {
     {
         BgTemplate template = gBoxMonSelectorBgTemplateMain0;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &template, GF_BG_TYPE_TEXT);
@@ -1118,7 +1118,7 @@ void BoxMonSelector_InitBgLayers(BgConfig *bgConfig) {
 }
 
 // Shows the marks of the picks on the page shown and makes their box icons translucent.
-void BoxMonSelector_UpdatePickMarks(BoxMonSelector *selector) {
+static void BoxMonSelector_UpdatePickMarks(BoxMonSelector *selector) {
     int i;
     for (i = 0; i < selector->maxPicks; i++) {
         if (selector->marks[i].slot != -1 && selector->page == selector->marks[i].page) {
@@ -1130,7 +1130,7 @@ void BoxMonSelector_UpdatePickMarks(BoxMonSelector *selector) {
     }
 }
 
-void BoxMonSelector_GetPartyMon(BoxMonSelector *selector, int slot, BoxMonSelectorMon *mon) {
+static void BoxMonSelector_GetPartyMon(BoxMonSelector *selector, int slot, BoxMonSelectorMon *mon) {
     Pokemon *partyMon = Party_GetMonByIndex(selector->party, slot);
     mon->species = GetMonData(partyMon, MON_DATA_SPECIES, NULL);
     mon->isEgg = GetMonData(partyMon, MON_DATA_IS_EGG, NULL);
@@ -1141,7 +1141,7 @@ void BoxMonSelector_GetPartyMon(BoxMonSelector *selector, int slot, BoxMonSelect
 
 #pragma force_active on
 
-void BoxMonSelector_RemovePick(BoxMonSelector *selector, int pick) {
+static void BoxMonSelector_RemovePick(BoxMonSelector *selector, int pick) {
     u32 markIndex = selector->picks[pick].markIndex;
     int page = selector->marks[markIndex].page;
     int slot = selector->marks[markIndex].slot;
@@ -1160,7 +1160,7 @@ void BoxMonSelector_RemovePick(BoxMonSelector *selector, int pick) {
     selector->pickDropAreas[pick].occupied = FALSE;
 }
 
-void BoxMonSelector_ShowMessage(BoxMonSelector *selector, int msgId, FontID fontId) {
+static void BoxMonSelector_ShowMessage(BoxMonSelector *selector, int msgId, FontID fontId) {
     MsgData *msgData;
     String *string;
 
@@ -1178,13 +1178,13 @@ void BoxMonSelector_ShowMessage(BoxMonSelector *selector, int msgId, FontID font
 
 #pragma force_active off
 
-void BoxMonSelector_ShowTakePrompt(BoxMonSelector *selector) {
+static void BoxMonSelector_ShowTakePrompt(BoxMonSelector *selector) {
     if (selector->maxPicks == 1) {
         BoxMonSelector_ShowMessage(selector, msg_0298_00005, 1);
     }
 }
 
-void BoxMonSelector_RemoveTakePrompt(BoxMonSelector *selector) {
+static void BoxMonSelector_RemoveTakePrompt(BoxMonSelector *selector) {
     if (selector->maxPicks == 1) {
         if (GetWindowBgConfig(&selector->messageWindow) != NULL) {
             RemoveWindow(&selector->messageWindow);
@@ -1192,7 +1192,7 @@ void BoxMonSelector_RemoveTakePrompt(BoxMonSelector *selector) {
     }
 }
 
-void BoxMonSelector_ClearMessageWindow(Window *window, BOOL hidePlane) {
+static void BoxMonSelector_ClearMessageWindow(Window *window, BOOL hidePlane) {
     if (window->bgConfig != NULL) {
         if (hidePlane) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
@@ -1202,7 +1202,7 @@ void BoxMonSelector_ClearMessageWindow(Window *window, BOOL hidePlane) {
     }
 }
 
-void BoxMonSelector_WriteResults(BoxMonSelector *selector) {
+static void BoxMonSelector_WriteResults(BoxMonSelector *selector) {
     int i;
     for (i = 0; i < selector->maxPicks; i++) {
         selector->results[i].page = selector->picks[i].page;
@@ -1210,7 +1210,7 @@ void BoxMonSelector_WriteResults(BoxMonSelector *selector) {
     }
 }
 
-void BoxMonSelector_DeleteSprites(BoxMonSelector *selector) {
+static void BoxMonSelector_DeleteSprites(BoxMonSelector *selector) {
     int i;
     u8 numEmpty;
     for (i = 0; i < BOX_MON_SELECTOR_BOX_SLOTS; i++) {
@@ -1251,7 +1251,7 @@ void BoxMonSelector_DeleteSprites(BoxMonSelector *selector) {
     }
 }
 
-void BoxMonSelector_UpdateCursorSprite(BoxMonSelector *selector) {
+static void BoxMonSelector_UpdateCursorSprite(BoxMonSelector *selector) {
     VecFx32 pos;
     VecFx32 iconPos;
     int moved = FALSE;
@@ -1302,7 +1302,7 @@ void BoxMonSelector_UpdateCursorSprite(BoxMonSelector *selector) {
 #pragma force_active on
 
 // Returns 1 when a Pokemon was taken in hand, 3 when CANCEL was pressed.
-int BoxMonSelector_HandleAButton(BoxMonSelector *selector) {
+static int BoxMonSelector_HandleAButton(BoxMonSelector *selector) {
     int result = 0;
     u32 panel = GridCursor_GetPanel(selector->cursor), index = GridCursor_GetIndex(selector->cursor);
     switch (panel) {
@@ -1358,7 +1358,7 @@ int BoxMonSelector_HandleAButton(BoxMonSelector *selector) {
 
 #pragma force_active off
 
-int BoxMonSelector_HandleBButton(BoxMonSelector *selector) {
+static int BoxMonSelector_HandleBButton(BoxMonSelector *selector) {
     VecFx32 pos;
     int result = 0;
     switch (GridCursor_GetPanel(selector->cursor)) {
@@ -1386,7 +1386,7 @@ int BoxMonSelector_HandleBButton(BoxMonSelector *selector) {
 
 #pragma force_active on
 
-void BoxMonSelector_PrevPage(BoxMonSelector *selector) {
+static void BoxMonSelector_PrevPage(BoxMonSelector *selector) {
     if (selector->page == 0) {
         selector->page = selector->numPages - 1;
     } else {
@@ -1417,7 +1417,7 @@ void BoxMonSelector_PrevPage(BoxMonSelector *selector) {
 
 #pragma force_active off
 
-void BoxMonSelector_NextPage(BoxMonSelector *selector) {
+static void BoxMonSelector_NextPage(BoxMonSelector *selector) {
     VecFx32 pos;
     u8 index;
     u8 column;
@@ -1444,7 +1444,7 @@ void BoxMonSelector_NextPage(BoxMonSelector *selector) {
     }
 }
 
-void BoxMonSelector_PressCancelButton(BoxMonSelector *selector) {
+static void BoxMonSelector_PressCancelButton(BoxMonSelector *selector) {
     Sprite_SetAnimCtrlSeq(selector->cancelButton, 5);
     PlaySE(SEQ_SE_DP_SELECT);
 }
@@ -1452,7 +1452,7 @@ void BoxMonSelector_PressCancelButton(BoxMonSelector *selector) {
 #pragma force_active on
 
 // Tells the caller about the Pokemon under the cursor (page and slot, or -1, -1) when it changed.
-void BoxMonSelector_NotifyCursorMove(BoxMonSelector *selector) {
+static void BoxMonSelector_NotifyCursorMove(BoxMonSelector *selector) {
     int page, slot, index;
     if (selector->onCursorMove) {
         page = slot = -1;
@@ -1493,11 +1493,11 @@ void BoxMonSelector_NotifyCursorMove(BoxMonSelector *selector) {
 
 #pragma force_active off
 
-void BoxMonSelector_DimScreen(void) {
+static void BoxMonSelector_DimScreen(void) {
     G2_SetBlendBrightness(GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_OBJ, -7);
 }
 
-void BoxMonSelector_ResetBlend(void) {
+static void BoxMonSelector_ResetBlend(void) {
     reg_G2_BLDCNT = 0;
     G2_SetBlendAlpha(GX_BLEND_PLANEMASK_NONE, GX_BLEND_PLANEMASK_BG2, 6, 10);
 }

@@ -20,14 +20,15 @@ typedef struct VsRecorderRankLimits {
     int v[3];
 } VsRecorderRankLimits;
 
-// GetSpeciesNameIntoArray called through an int prototype, as compiled (no u16 truncation of the species)
 #define GetSpeciesNameIntoArrayInt ((void (*)(int, enum HeapID, u16 *))GetSpeciesNameIntoArray)
 
 extern const VsRecorderRankLimits sVsRecorderRankLimits;
 extern const VsRecorderRankLimits sVsRecorderRankLimitsRedraw;
 
+static void VsRecorder_PrintListLocation(VsRecorderListWindow *list, VsRecorderWork *work);
+
 // "country / region" of the shown trainer in the list's second row
-void VsRecorder_PrintListLocation(VsRecorderListWindow *list, VsRecorderWork *work) {
+static void VsRecorder_PrintListLocation(VsRecorderListWindow *list, VsRecorderWork *work) {
     MessageFormat *fmt;
     String *template;
     String *str;

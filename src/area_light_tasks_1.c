@@ -1,12 +1,12 @@
 #include "area_light_tasks_internal.h"
 #include "field_bgm.h"
+#include "field_time_events.h"
 #include "field_warp_tasks.h"
 #include "heap.h"
 #include "screen_fade.h"
 #include "sound.h"
-#include "sound_system.h"
 #include "sound_playback.h"
-#include "field_time_events.h"
+#include "sound_system.h"
 
 enum ShipVoyageState {
     SHIP_VOYAGE_FADE_OUT,
@@ -16,6 +16,10 @@ enum ShipVoyageState {
     SHIP_VOYAGE_RETURN_TO_OVERWORLD,
     SHIP_VOYAGE_FREE,
 };
+
+static void CallTask_ShipDepartureCutscene(FieldSystem *fieldSystem, u8 param, void *destination);
+static BOOL Task_ShipDepartureCutscene(TaskManager *taskManager);
+static BOOL Task_ShipVoyage(TaskManager *taskManager);
 
 void CallTask_ShipVoyage(FieldSystem *fieldSystem, u8 param1, u8 direction, u32 mapId, u32 x, u32 y) {
     AreaLightTaskEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(AreaLightTaskEnv));
@@ -30,7 +34,7 @@ void CallTask_ShipVoyage(FieldSystem *fieldSystem, u8 param1, u8 direction, u32 
     TaskManager_Call(fieldSystem->taskman, Task_ShipVoyage, env);
 }
 
-void CallTask_ShipDepartureCutscene(FieldSystem *fieldSystem, u8 param, void *destination) {
+static void CallTask_ShipDepartureCutscene(FieldSystem *fieldSystem, u8 param, void *destination) {
     NightTaskEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(NightTaskEnv));
 
     env->destination = destination;
@@ -53,7 +57,7 @@ void CallTask_ShipDepartureCutscene(FieldSystem *fieldSystem, u8 param, void *de
     TaskManager_Call(fieldSystem->taskman, Task_ShipDepartureCutscene, env);
 }
 
-BOOL Task_ShipDepartureCutscene(TaskManager *taskManager) {
+static BOOL Task_ShipDepartureCutscene(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     NightTaskEnv *env = TaskManager_GetEnvironment(taskManager);
     u32 *state = TaskManager_GetStatePtr(taskManager);
@@ -75,7 +79,7 @@ BOOL Task_ShipDepartureCutscene(TaskManager *taskManager) {
     return FALSE;
 }
 
-BOOL Task_ShipVoyage(TaskManager *taskManager) {
+static BOOL Task_ShipVoyage(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     AreaLightTaskEnv *env = TaskManager_GetEnvironment(taskManager);
 

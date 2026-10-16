@@ -105,27 +105,30 @@ typedef struct PokepicMotionType {
     int targetArg;
 } PokepicMotionType;
 
-// asm/pokepic_anim_data.s
 extern const PokepicMotionType gPokepicMotionTypes[];
 extern const int gPokepicMotionTypeArgCounts[];
 extern const int gPokepicMotionTypeTargetArgs[];
 extern void (*gPokepicAnimCommands[])(PokepicScriptAnim *anim);
 
-void PokepicScriptAnim_Task(SysTask *task, void *data);
-void PokepicScriptAnim_RunFrame(PokepicScriptAnim *anim);
-void *PokepicScriptAnim_GetScriptWordAt(void **array, int index, int expected);
-void *PokepicScriptAnim_GetScriptWordChecked(void **array, int expected);
-void *PokepicScriptAnim_GetScriptWord(void **array);
-PokepicMotion *PokepicScriptAnim_AllocMotion(PokepicScriptAnim *anim, int type);
-void PokepicScriptAnim_ReadArg(PokepicScriptAnim *anim, s32 *out);
-void PokepicScriptAnim_ReadArgByte(PokepicScriptAnim *anim, u8 *out);
-void PokepicScriptAnim_ReadVarIndex(PokepicScriptAnim *anim, u8 *out);
-void PokepicScriptAnim_ReadVarIndexPair(PokepicScriptAnim *anim, u8 *a, u8 *b);
-void PokepicScriptAnim_ReadDestVarAndOperands(PokepicScriptAnim *anim, u8 *dest, s32 *a, s32 *b);
-void PokepicScriptAnim_ReadDestAndOperands(PokepicScriptAnim *anim, u8 *dest, s32 *a, s32 *b);
-void PokepicScriptAnim_ReadDestAngleAndAmplitude(PokepicScriptAnim *anim, u8 *dest, s32 *angle, s32 *amplitude);
-u32 PokepicScriptAnim_Compare(const s32 *a, const s32 *b);
-void PokepicScriptAnim_AdjustYForScale(PokepicScriptAnim *anim);
+static void PokepicScriptAnim_Task(SysTask *task, void *data);
+static void PokepicScriptAnim_RunFrame(PokepicScriptAnim *anim);
+static void *PokepicScriptAnim_GetScriptWordAt(void **array, int index, int expected);
+static void *PokepicScriptAnim_GetScriptWordChecked(void **array, int expected);
+static void *PokepicScriptAnim_GetScriptWord(void **array);
+static PokepicMotion *PokepicScriptAnim_AllocMotion(PokepicScriptAnim *anim, int type);
+static void PokepicScriptAnim_ReadArg(PokepicScriptAnim *anim, s32 *out);
+static void PokepicScriptAnim_ReadArgByte(PokepicScriptAnim *anim, u8 *out);
+static void PokepicScriptAnim_ReadVarIndex(PokepicScriptAnim *anim, u8 *out);
+static void PokepicScriptAnim_ReadVarIndexPair(PokepicScriptAnim *anim, u8 *a, u8 *b);
+static void PokepicScriptAnim_ReadDestVarAndOperands(PokepicScriptAnim *anim, u8 *dest, s32 *a, s32 *b);
+static void PokepicScriptAnim_ReadDestAndOperands(PokepicScriptAnim *anim, u8 *dest, s32 *a, s32 *b);
+static void PokepicScriptAnim_ReadDestAngleAndAmplitude(PokepicScriptAnim *anim, u8 *dest, s32 *angle, s32 *amplitude);
+static u32 PokepicScriptAnim_Compare(const s32 *a, const s32 *b);
+static void PokepicScriptAnim_AdjustYForScale(PokepicScriptAnim *anim);
+static void PokepicMotion_ApplyValue(int op, int *base, int *value, int *dest);
+static void PokepicMotion_SetTarget(u8 target, PokepicMotion *motion, PokepicScriptAnim *anim);
+static void PokepicScriptAnim_StartMotion(PokepicScriptAnim *anim, int type);
+
 void PokepicScriptAnimCmd_End(PokepicScriptAnim *anim);
 void PokepicScriptAnimCmd_Yield(PokepicScriptAnim *anim);
 void PokepicScriptAnimCmd_ResetTransform(PokepicScriptAnim *anim);
@@ -160,9 +163,6 @@ void PokepicScriptAnimCmd_StartWaveMotionOverDuration(PokepicScriptAnim *anim);
 void PokepicScriptAnimCmd_StartAccelMotion(PokepicScriptAnim *anim);
 void PokepicScriptAnimCmd_StartLinearMotion(PokepicScriptAnim *anim);
 void PokepicScriptAnimCmd_StartAccelMotionToLimit(PokepicScriptAnim *anim);
-void PokepicMotion_ApplyValue(int op, int *base, int *value, int *dest);
-void PokepicMotion_SetTarget(u8 target, PokepicMotion *motion, PokepicScriptAnim *anim);
-void PokepicScriptAnim_StartMotion(PokepicScriptAnim *anim, int type);
 void PokepicMotion_UpdateWave(PokepicMotion *motion);
 void PokepicMotion_UpdateWaveOverDuration(PokepicMotion *motion);
 void PokepicMotion_UpdateAccel(PokepicMotion *motion);
@@ -247,7 +247,7 @@ void PokepicAnimManager_StopAnim(PokepicAnimManager *mgr, u32 index) {
     }
 }
 
-void PokepicScriptAnim_Task(SysTask *task, void *data) {
+static void PokepicScriptAnim_Task(SysTask *task, void *data) {
     PokepicScriptAnim *anim = data;
     if (anim->delay == 0) {
         PokepicScriptAnim_RunFrame(anim);
@@ -263,7 +263,7 @@ void PokepicScriptAnim_Task(SysTask *task, void *data) {
     }
 }
 
-void PokepicScriptAnim_RunFrame(PokepicScriptAnim *anim) {
+static void PokepicScriptAnim_RunFrame(PokepicScriptAnim *anim) {
     u8 ended;
     u8 i;
 
@@ -320,21 +320,21 @@ void PokepicScriptAnim_RunFrame(PokepicScriptAnim *anim) {
     anim->done = 1;
 }
 
-void *PokepicScriptAnim_GetScriptWordAt(void **array, int index, int expected) {
+static void *PokepicScriptAnim_GetScriptWordAt(void **array, int index, int expected) {
     void *value = array[index];
     GF_ASSERT(expected == 1);
     return value;
 }
 
-void *PokepicScriptAnim_GetScriptWordChecked(void **array, int expected) {
+static void *PokepicScriptAnim_GetScriptWordChecked(void **array, int expected) {
     return PokepicScriptAnim_GetScriptWordAt(array, 0, expected);
 }
 
-void *PokepicScriptAnim_GetScriptWord(void **array) {
+static void *PokepicScriptAnim_GetScriptWord(void **array) {
     return PokepicScriptAnim_GetScriptWordChecked(array, 1);
 }
 
-PokepicMotion *PokepicScriptAnim_AllocMotion(PokepicScriptAnim *anim, int type) {
+static PokepicMotion *PokepicScriptAnim_AllocMotion(PokepicScriptAnim *anim, int type) {
     u8 i;
 
     for (i = 0; i < 4; i++) {
@@ -350,28 +350,28 @@ PokepicMotion *PokepicScriptAnim_AllocMotion(PokepicScriptAnim *anim, int type) 
     return NULL;
 }
 
-void PokepicScriptAnim_ReadArg(PokepicScriptAnim *anim, s32 *out) {
+static void PokepicScriptAnim_ReadArg(PokepicScriptAnim *anim, s32 *out) {
     anim->cursor++;
     *out = (u32)PokepicScriptAnim_GetScriptWord(anim->cursor);
 }
 
-void PokepicScriptAnim_ReadArgByte(PokepicScriptAnim *anim, u8 *out) {
+static void PokepicScriptAnim_ReadArgByte(PokepicScriptAnim *anim, u8 *out) {
     anim->cursor++;
     *out = (u8)(u32)PokepicScriptAnim_GetScriptWord(anim->cursor);
 }
 
-void PokepicScriptAnim_ReadVarIndex(PokepicScriptAnim *anim, u8 *out) {
+static void PokepicScriptAnim_ReadVarIndex(PokepicScriptAnim *anim, u8 *out) {
     anim->cursor++;
     *out = (u8)(u32)PokepicScriptAnim_GetScriptWord(anim->cursor);
     GF_ASSERT(*out < 8);
 }
 
-void PokepicScriptAnim_ReadVarIndexPair(PokepicScriptAnim *anim, u8 *a, u8 *b) {
+static void PokepicScriptAnim_ReadVarIndexPair(PokepicScriptAnim *anim, u8 *a, u8 *b) {
     PokepicScriptAnim_ReadVarIndex(anim, a);
     PokepicScriptAnim_ReadVarIndex(anim, b);
 }
 
-void PokepicScriptAnim_ReadDestVarAndOperands(PokepicScriptAnim *anim, u8 *dest, s32 *a, s32 *b) {
+static void PokepicScriptAnim_ReadDestVarAndOperands(PokepicScriptAnim *anim, u8 *dest, s32 *a, s32 *b) {
     u8 args[4];
     PokepicScriptAnim_ReadVarIndex(anim, dest);
     PokepicScriptAnim_ReadArgByte(anim, &args[0]);
@@ -388,7 +388,7 @@ void PokepicScriptAnim_ReadDestVarAndOperands(PokepicScriptAnim *anim, u8 *dest,
     }
 }
 
-void PokepicScriptAnim_ReadDestAndOperands(PokepicScriptAnim *anim, u8 *dest, s32 *a, s32 *b) {
+static void PokepicScriptAnim_ReadDestAndOperands(PokepicScriptAnim *anim, u8 *dest, s32 *a, s32 *b) {
     u8 args[4];
     PokepicScriptAnim_ReadVarIndex(anim, dest);
     PokepicScriptAnim_ReadArgByte(anim, &args[1]);
@@ -411,7 +411,7 @@ void PokepicScriptAnim_ReadDestAndOperands(PokepicScriptAnim *anim, u8 *dest, s3
     }
 }
 
-void PokepicScriptAnim_ReadDestAngleAndAmplitude(PokepicScriptAnim *anim, u8 *dest, s32 *angle, s32 *amplitude) {
+static void PokepicScriptAnim_ReadDestAngleAndAmplitude(PokepicScriptAnim *anim, u8 *dest, s32 *angle, s32 *amplitude) {
     u8 angleVar, amplitudeVar, offsetVar, argType;
     s32 baseAngle, offset;
 
@@ -443,7 +443,7 @@ void PokepicScriptAnim_ReadDestAngleAndAmplitude(PokepicScriptAnim *anim, u8 *de
     *angle %= 0x10000;
 }
 
-u32 PokepicScriptAnim_Compare(const s32 *a, const s32 *b) {
+static u32 PokepicScriptAnim_Compare(const s32 *a, const s32 *b) {
     s32 difference = *a - *b;
     if (difference < 0) {
         return 0xf;
@@ -454,7 +454,7 @@ u32 PokepicScriptAnim_Compare(const s32 *a, const s32 *b) {
     return 0x11;
 }
 
-void PokepicScriptAnim_AdjustYForScale(PokepicScriptAnim *anim) {
+static void PokepicScriptAnim_AdjustYForScale(PokepicScriptAnim *anim) {
     Pokepic_AddAttr(anim->pic, POKEPIC_Y, -anim->scaleY / 8);
 }
 
@@ -816,7 +816,7 @@ void PokepicScriptAnimCmd_StartAccelMotionToLimit(PokepicScriptAnim *anim) {
     PokepicScriptAnim_StartMotion(anim, 4);
 }
 
-void PokepicMotion_ApplyValue(int op, int *base, int *value, int *dest) {
+static void PokepicMotion_ApplyValue(int op, int *base, int *value, int *dest) {
     if (op == 0x18) {
         *dest = *value;
     } else if (op == 0x19) {
@@ -828,7 +828,7 @@ void PokepicMotion_ApplyValue(int op, int *base, int *value, int *dest) {
     }
 }
 
-void PokepicMotion_SetTarget(u8 target, PokepicMotion *motion, PokepicScriptAnim *anim) {
+static void PokepicMotion_SetTarget(u8 target, PokepicMotion *motion, PokepicScriptAnim *anim) {
     switch (target) {
     case 0x23:
         motion->value = &motion->values[0];
@@ -861,7 +861,7 @@ void PokepicMotion_SetTarget(u8 target, PokepicMotion *motion, PokepicScriptAnim
     }
 }
 
-void PokepicScriptAnim_StartMotion(PokepicScriptAnim *anim, int type) {
+static void PokepicScriptAnim_StartMotion(PokepicScriptAnim *anim, int type) {
     PokepicMotion *motion = PokepicScriptAnim_AllocMotion(anim, (u8)type);
     u8 i;
     int offset;

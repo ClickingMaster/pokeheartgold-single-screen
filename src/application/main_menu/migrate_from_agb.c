@@ -37,17 +37,15 @@
 #include "sound_playback.h"
 #include "sound_system.h"
 #include "sprite.h"
+#include "sprite_resource.h"
+#include "sprite_resource_header.h"
 #include "sprite_transfer.h"
 #include "system.h"
 #include "title_screen.h"
 #include "touchscreen.h"
-#include "sprite_resource_header.h"
-#include "sprite_resource.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 
-// Declared here rather than through text.h / render_text.h: the text parameters keep the font id in an int that is
-// passed unconverted (text.h types it as the u8 FontID; matching).
 extern u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, void *callback);
 extern void ResetAllTextPrinters(void);
 extern u8 TextPrinterCheckActive(u8 printerId);
@@ -144,107 +142,61 @@ enum {
     MIGRATE_BUTTON_NEXT_BOX,
 };
 
-BOOL MigrateFromAgb_IsSpeciesUnavailable(int species);
-void MigrateFromAgb_GetAgbVersion(int *version);
-void MigrateFromAgb_SaveMigrationRecord(MigrateFromAgbApp *app);
-void MigrateFromAgb_MovePicksToPalPark(MigrateFromAgbApp *app);
-int MigrateFromAgb_GetTextX(MigrateFromAgbText *text, String *string, int flags);
-void MigrateFromAgb_InitObjTransfer(void);
-void MigrateFromAgb_InitSpriteResources(MigrateFromAgbApp *app);
-void MigrateFromAgb_InitSpriteHeader(MigrateFromAgbApp *app);
-void MigrateFromAgb_InitSpriteTemplate(SpriteTemplate *template, MigrateFromAgbApp *app, int unused, NNS_G2D_VRAM_TYPE whichScreen);
-u32 MigrateFromAgb_GetBoxMonSpecies(MigrateFromAgbApp *app, int box, int slot);
-u32 MigrateFromAgb_GetBoxMonIsEgg(MigrateFromAgbApp *app, int box, int slot);
-u32 MigrateFromAgb_GetBoxMonPersonality(MigrateFromAgbApp *app, int box, int slot);
-void MigrateFromAgb_SetHitbox(TouchscreenHitbox *hitbox, int x, int y, int width, int height);
-void *MigrateFromAgb_LoadCharData(NarcId narcId, int fileId, NNSG2dCharacterData **charData, enum HeapID heapId);
-BOOL MigrateFromAgb_ReadCharData(int fileId, NNSG2dCharacterData **charData, void *file, NARC *narc);
-int MigrateFromAgb_GetMonForm(int species, u32 personality, int agbVersion);
-void MigrateFromAgb_LoadMonIcon(int species, int isEgg, u32 personality, int agbVersion, int index, Sprite *sprite);
-void MigrateFromAgb_PrepareBoxIcon(int species, int isEgg, int form, int index, Sprite *sprite, void *file, NARC *narc);
-void MigrateFromAgb_UploadBoxIcons(void);
-void MigrateFromAgb_ShowBox(MigrateFromAgbApp *app);
-void MigrateFromAgb_CreateBoxSprites(MigrateFromAgbApp *app);
-Sprite *MigrateFromAgb_CreateSprite(MigrateFromAgbApp *app, int x, int y, int anim, BOOL draw);
-void MigrateFromAgb_CreateButtons(MigrateFromAgbApp *app);
-BOOL MigrateFromAgb_IsEgg(MigrateFromAgbApp *app, int slot);
-BOOL MigrateFromAgb_KnowsHM(MigrateFromAgbApp *app, int slot);
-BOOL MigrateFromAgb_HoldsBlockedItem(MigrateFromAgbApp *app, int slot);
-BOOL MigrateFromAgb_IsBoxMonSpeciesUnavailable(MigrateFromAgbApp *app, int slot);
-int MigrateFromAgb_TogglePick(MigrateFromAgbApp *app, int slot);
-void MigrateFromAgb_ShowBoxPicks(MigrateFromAgbApp *app);
-void MigrateFromAgb_PrintBoxName(MigrateFromAgbApp *app, int box);
-void MigrateFromAgb_ShowMarkings(MigrateFromAgbApp *app, AgbBoxMon *mon);
-void MigrateFromAgb_PrintMonInfo(MigrateFromAgbApp *app, AgbBoxMon *mon);
-void MigrateFromAgb_StartFadeBlack(MigrateFromAgbApp *app, enum FadeType fadeType, int nextState, int *state);
-void MigrateFromAgb_StartFadeWhite(MigrateFromAgbApp *app, enum FadeType fadeType, int nextState, int *state);
-void MigrateFromAgb_InitBgs(BgConfig *bgConfig);
-void MigrateFromAgb_InitGraphics(MigrateFromAgbApp *app);
-void MigrateFromAgb_LoadBoxBg(MigrateFromAgbApp *app);
-void MigrateFromAgb_InitMsgBox(MigrateFromAgbApp *app);
-void MigrateFromAgb_ShowConfirmScreen(MigrateFromAgbApp *app);
-void MigrateFromAgb_RemoveWindow(Window *window);
-void MigrateFromAgb_CloseConfirmScreen(MigrateFromAgbApp *app);
-void MigrateFromAgb_FreeGraphics(MigrateFromAgbApp *app);
-void MigrateFromAgb_ShowYesNo(MigrateFromAgbApp *app);
-void MigrateFromAgb_PrintIntro(MigrateFromAgbApp *app);
-void MigrateFromAgb_VBlankCB(MigrateFromAgbApp *app);
-int MigrateFromAgb_CheckCanMigrate(MigrateFromAgbApp *app);
+static BOOL MigrateFromAgb_IsSpeciesUnavailable(int species);
+static void MigrateFromAgb_GetAgbVersion(int *version);
+static void MigrateFromAgb_SaveMigrationRecord(MigrateFromAgbApp *app);
+static void MigrateFromAgb_MovePicksToPalPark(MigrateFromAgbApp *app);
+static int MigrateFromAgb_GetTextX(MigrateFromAgbText *text, String *string, int flags);
+static void MigrateFromAgb_InitObjTransfer(void);
+static void MigrateFromAgb_InitSpriteResources(MigrateFromAgbApp *app);
+static void MigrateFromAgb_InitSpriteHeader(MigrateFromAgbApp *app);
+static void MigrateFromAgb_InitSpriteTemplate(SpriteTemplate *template, MigrateFromAgbApp *app, int unused, NNS_G2D_VRAM_TYPE whichScreen);
+static u32 MigrateFromAgb_GetBoxMonSpecies(MigrateFromAgbApp *app, int box, int slot);
+static u32 MigrateFromAgb_GetBoxMonIsEgg(MigrateFromAgbApp *app, int box, int slot);
+static u32 MigrateFromAgb_GetBoxMonPersonality(MigrateFromAgbApp *app, int box, int slot);
+static void MigrateFromAgb_SetHitbox(TouchscreenHitbox *hitbox, int x, int y, int width, int height);
+static void *MigrateFromAgb_LoadCharData(NarcId narcId, int fileId, NNSG2dCharacterData **charData, enum HeapID heapId);
+static BOOL MigrateFromAgb_ReadCharData(int fileId, NNSG2dCharacterData **charData, void *file, NARC *narc);
+static int MigrateFromAgb_GetMonForm(int species, u32 personality, int agbVersion);
+static void MigrateFromAgb_LoadMonIcon(int species, int isEgg, u32 personality, int agbVersion, int index, Sprite *sprite);
+static void MigrateFromAgb_PrepareBoxIcon(int species, int isEgg, int form, int index, Sprite *sprite, void *file, NARC *narc);
+static void MigrateFromAgb_UploadBoxIcons(void);
+static void MigrateFromAgb_ShowBox(MigrateFromAgbApp *app);
+static void MigrateFromAgb_CreateBoxSprites(MigrateFromAgbApp *app);
+static Sprite *MigrateFromAgb_CreateSprite(MigrateFromAgbApp *app, int x, int y, int anim, BOOL draw);
+static void MigrateFromAgb_CreateButtons(MigrateFromAgbApp *app);
+static BOOL MigrateFromAgb_IsEgg(MigrateFromAgbApp *app, int slot);
+static BOOL MigrateFromAgb_KnowsHM(MigrateFromAgbApp *app, int slot);
+static BOOL MigrateFromAgb_HoldsBlockedItem(MigrateFromAgbApp *app, int slot);
+static BOOL MigrateFromAgb_IsBoxMonSpeciesUnavailable(MigrateFromAgbApp *app, int slot);
+static int MigrateFromAgb_TogglePick(MigrateFromAgbApp *app, int slot);
+static void MigrateFromAgb_ShowBoxPicks(MigrateFromAgbApp *app);
+static void MigrateFromAgb_PrintBoxName(MigrateFromAgbApp *app, int box);
+static void MigrateFromAgb_ShowMarkings(MigrateFromAgbApp *app, AgbBoxMon *mon);
+static void MigrateFromAgb_PrintMonInfo(MigrateFromAgbApp *app, AgbBoxMon *mon);
+static void MigrateFromAgb_StartFadeBlack(MigrateFromAgbApp *app, enum FadeType fadeType, int nextState, int *state);
+static void MigrateFromAgb_StartFadeWhite(MigrateFromAgbApp *app, enum FadeType fadeType, int nextState, int *state);
+static void MigrateFromAgb_InitBgs(BgConfig *bgConfig);
+static void MigrateFromAgb_InitGraphics(MigrateFromAgbApp *app);
+static void MigrateFromAgb_LoadBoxBg(MigrateFromAgbApp *app);
+static void MigrateFromAgb_InitMsgBox(MigrateFromAgbApp *app);
+static void MigrateFromAgb_ShowConfirmScreen(MigrateFromAgbApp *app);
+static void MigrateFromAgb_RemoveWindow(Window *window);
+static void MigrateFromAgb_CloseConfirmScreen(MigrateFromAgbApp *app);
+static void MigrateFromAgb_FreeGraphics(MigrateFromAgbApp *app);
+static void MigrateFromAgb_ShowYesNo(MigrateFromAgbApp *app);
+static void MigrateFromAgb_PrintIntro(MigrateFromAgbApp *app);
+static void MigrateFromAgb_VBlankCB(MigrateFromAgbApp *app);
+static int MigrateFromAgb_CheckCanMigrate(MigrateFromAgbApp *app);
 
-BOOL MigrateFromAgb_IsSpeciesUnavailable(int species);
-void MigrateFromAgb_GetAgbVersion(int *version);
 int MigrateFromAgb_RunTransfer(MigrateFromAgbApp *app);
-void MigrateFromAgb_SaveMigrationRecord(MigrateFromAgbApp *app);
-void MigrateFromAgb_MovePicksToPalPark(MigrateFromAgbApp *app);
-int MigrateFromAgb_GetTextX(MigrateFromAgbText *text, String *string, int flags);
 void MigrateFromAgb_PrintText(MigrateFromAgbApp *app, MigrateFromAgbText *text, int flags);
-void MigrateFromAgb_InitObjTransfer(void);
-void MigrateFromAgb_InitSpriteResources(MigrateFromAgbApp *app);
-void MigrateFromAgb_InitSpriteHeader(MigrateFromAgbApp *app);
-void MigrateFromAgb_InitSpriteTemplate(SpriteTemplate *template, MigrateFromAgbApp *app, int unused, NNS_G2D_VRAM_TYPE whichScreen);
-u32 MigrateFromAgb_GetBoxMonSpecies(MigrateFromAgbApp *app, int box, int slot);
-u32 MigrateFromAgb_GetBoxMonIsEgg(MigrateFromAgbApp *app, int box, int slot);
-u32 MigrateFromAgb_GetBoxMonPersonality(MigrateFromAgbApp *app, int box, int slot);
-void MigrateFromAgb_SetHitbox(TouchscreenHitbox *hitbox, int x, int y, int width, int height);
-void *MigrateFromAgb_LoadCharData(NarcId narcId, int fileId, NNSG2dCharacterData **charData, enum HeapID heapId);
-BOOL MigrateFromAgb_ReadCharData(int fileId, NNSG2dCharacterData **charData, void *file, NARC *narc);
-int MigrateFromAgb_GetMonForm(int species, u32 personality, int agbVersion);
-void MigrateFromAgb_LoadMonIcon(int species, int isEgg, u32 personality, int agbVersion, int index, Sprite *sprite);
-void MigrateFromAgb_PrepareBoxIcon(int species, int isEgg, int form, int index, Sprite *sprite, void *file, NARC *narc);
-void MigrateFromAgb_UploadBoxIcons(void);
-void MigrateFromAgb_ShowBox(MigrateFromAgbApp *app);
-void MigrateFromAgb_CreateBoxSprites(MigrateFromAgbApp *app);
-Sprite *MigrateFromAgb_CreateSprite(MigrateFromAgbApp *app, int x, int y, int anim, BOOL draw);
-void MigrateFromAgb_CreateButtons(MigrateFromAgbApp *app);
-BOOL MigrateFromAgb_IsEgg(MigrateFromAgbApp *app, int slot);
-BOOL MigrateFromAgb_KnowsHM(MigrateFromAgbApp *app, int slot);
-BOOL MigrateFromAgb_HoldsBlockedItem(MigrateFromAgbApp *app, int slot);
-BOOL MigrateFromAgb_IsBoxMonSpeciesUnavailable(MigrateFromAgbApp *app, int slot);
-int MigrateFromAgb_TogglePick(MigrateFromAgbApp *app, int slot);
-void MigrateFromAgb_ShowBoxPicks(MigrateFromAgbApp *app);
-void MigrateFromAgb_PrintBoxName(MigrateFromAgbApp *app, int box);
-void MigrateFromAgb_ShowMarkings(MigrateFromAgbApp *app, AgbBoxMon *mon);
-void MigrateFromAgb_PrintMonInfo(MigrateFromAgbApp *app, AgbBoxMon *mon);
-void MigrateFromAgb_StartFadeBlack(MigrateFromAgbApp *app, enum FadeType fadeType, int nextState, int *state);
-void MigrateFromAgb_StartFadeWhite(MigrateFromAgbApp *app, enum FadeType fadeType, int nextState, int *state);
-void MigrateFromAgb_InitBgs(BgConfig *bgConfig);
-void MigrateFromAgb_InitGraphics(MigrateFromAgbApp *app);
-void MigrateFromAgb_LoadBoxBg(MigrateFromAgbApp *app);
-void MigrateFromAgb_InitMsgBox(MigrateFromAgbApp *app);
-void MigrateFromAgb_ShowConfirmScreen(MigrateFromAgbApp *app);
-void MigrateFromAgb_RemoveWindow(Window *window);
-void MigrateFromAgb_CloseConfirmScreen(MigrateFromAgbApp *app);
-void MigrateFromAgb_FreeGraphics(MigrateFromAgbApp *app);
-void MigrateFromAgb_ShowYesNo(MigrateFromAgbApp *app);
-void MigrateFromAgb_PrintIntro(MigrateFromAgbApp *app);
-void MigrateFromAgb_VBlankCB(MigrateFromAgbApp *app);
-int MigrateFromAgb_CheckCanMigrate(MigrateFromAgbApp *app);
 BOOL MigrateFromAgb_PrintResultMsg(MigrateFromAgbApp *app, int index);
 BOOL MigrateFromAgb_PrintResultMsgWithYesNo(MigrateFromAgbApp *app, int index);
 BOOL MigrateFromAgb_PrintPendingMsg(MigrateFromAgbApp *app, int textSpeed);
 
 // Species the DP games can't take (none, the unused GBA indexes, out of range)
-BOOL MigrateFromAgb_IsSpeciesUnavailable(int species) {
+static BOOL MigrateFromAgb_IsSpeciesUnavailable(int species) {
     if (species <= 0) {
         return TRUE;
     }
@@ -260,7 +212,7 @@ BOOL MigrateFromAgb_IsSpeciesUnavailable(int species) {
     return FALSE;
 }
 
-void MigrateFromAgb_GetAgbVersion(int *version) {
+static void MigrateFromAgb_GetAgbVersion(int *version) {
     switch (PmAgbCartridge_GetVersionInternal()) {
     case 0:
         *version = VERSION_RUBY;
@@ -370,7 +322,7 @@ int MigrateFromAgb_RunTransfer(MigrateFromAgbApp *app) {
     return TRANSFER_IN_PROGRESS;
 }
 
-void MigrateFromAgb_SaveMigrationRecord(MigrateFromAgbApp *app) {
+static void MigrateFromAgb_SaveMigrationRecord(MigrateFromAgbApp *app) {
     MigratedPokemon *migrated = Save_MigratedPokemon_Get(app->saveData);
     u32 trainerId = PmAgbCartridge_GetTrainerId();
     MigratedPokemon_RecordMigration(migrated, trainerId);
@@ -379,7 +331,7 @@ void MigrateFromAgb_SaveMigrationRecord(MigrateFromAgbApp *app) {
     Sys_ClearSoftResetDisableFlag(4);
 }
 
-void MigrateFromAgb_MovePicksToPalPark(MigrateFromAgbApp *app) {
+static void MigrateFromAgb_MovePicksToPalPark(MigrateFromAgbApp *app) {
     Pokemon mon;
     u16 noSpecies;
     MigratedPokemon *migrated = Save_MigratedPokemon_Get(app->saveData);
@@ -398,7 +350,7 @@ void MigrateFromAgb_MovePicksToPalPark(MigrateFromAgbApp *app) {
     }
 }
 
-int MigrateFromAgb_GetTextX(MigrateFromAgbText *text, String *string, int flags) {
+static int MigrateFromAgb_GetTextX(MigrateFromAgbText *text, String *string, int flags) {
     if (flags & 1) {
         int width = FontID_String_GetWidth(1, string, 0);
         return (text->width * 8 - width) / 2;
@@ -460,7 +412,7 @@ void MigrateFromAgb_PrintText(MigrateFromAgbApp *app, MigrateFromAgbText *text, 
     }
 }
 
-void MigrateFromAgb_InitObjTransfer(void) {
+static void MigrateFromAgb_InitObjTransfer(void) {
     ObjCharTransferTemplate template = sMigrateFromAgbObjCharTransferTemplate;
     ObjCharTransfer_Init(&template);
     ObjPlttTransfer_Init(20, HEAP_ID_76);
@@ -468,7 +420,7 @@ void MigrateFromAgb_InitObjTransfer(void) {
     ObjPlttTransfer_Reset();
 }
 
-void MigrateFromAgb_InitSpriteResources(MigrateFromAgbApp *app) {
+static void MigrateFromAgb_InitSpriteResources(MigrateFromAgbApp *app) {
     int i;
     MigrateFromAgbApp *cursor;
     NNS_G2dInitOamManagerModule();
@@ -487,12 +439,12 @@ void MigrateFromAgb_InitSpriteResources(MigrateFromAgbApp *app) {
     GfGfxLoader_GXLoadPal(NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), GF_PAL_LOCATION_MAIN_OBJ, GF_PAL_SLOT_8_OFFSET, 0, HEAP_ID_76);
 }
 
-void MigrateFromAgb_InitSpriteHeader(MigrateFromAgbApp *app) {
+static void MigrateFromAgb_InitSpriteHeader(MigrateFromAgbApp *app) {
     CreateSpriteResourcesHeader(&app->resHeader, 0, 0, 0, 0, -1, -1, FALSE, 0, app->resMan[GF_GFX_RES_TYPE_CHAR], app->resMan[GF_GFX_RES_TYPE_PLTT], app->resMan[GF_GFX_RES_TYPE_CELL], app->resMan[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-void MigrateFromAgb_InitSpriteTemplate(SpriteTemplate *template, MigrateFromAgbApp *app, int unused, NNS_G2D_VRAM_TYPE whichScreen) {
+static void MigrateFromAgb_InitSpriteTemplate(SpriteTemplate *template, MigrateFromAgbApp *app, int unused, NNS_G2D_VRAM_TYPE whichScreen) {
     template->spriteList = app->spriteList;
     template->header = &app->resHeader;
     template->position.z = 0;
@@ -505,22 +457,22 @@ void MigrateFromAgb_InitSpriteTemplate(SpriteTemplate *template, MigrateFromAgbA
     template->heapID = HEAP_ID_76;
 }
 
-u32 MigrateFromAgb_GetBoxMonSpecies(MigrateFromAgbApp *app, int box, int slot) {
+static u32 MigrateFromAgb_GetBoxMonSpecies(MigrateFromAgbApp *app, int box, int slot) {
     AgbPokemonStorage *storage = app->storage;
     return AGB_GetBoxMonData(&storage->boxes[box][slot], AGB_MON_DATA_SPECIES, NULL);
 }
 
-u32 MigrateFromAgb_GetBoxMonIsEgg(MigrateFromAgbApp *app, int box, int slot) {
+static u32 MigrateFromAgb_GetBoxMonIsEgg(MigrateFromAgbApp *app, int box, int slot) {
     AgbPokemonStorage *storage = app->storage;
     return AGB_GetBoxMonData(&storage->boxes[box][slot], AGB_MON_DATA_IS_EGG, NULL);
 }
 
-u32 MigrateFromAgb_GetBoxMonPersonality(MigrateFromAgbApp *app, int box, int slot) {
+static u32 MigrateFromAgb_GetBoxMonPersonality(MigrateFromAgbApp *app, int box, int slot) {
     AgbPokemonStorage *storage = app->storage;
     return AGB_GetBoxMonData(&storage->boxes[box][slot], AGB_MON_DATA_PERSONALITY, NULL);
 }
 
-void MigrateFromAgb_SetHitbox(TouchscreenHitbox *hitbox, int x, int y, int width, int height) {
+static void MigrateFromAgb_SetHitbox(TouchscreenHitbox *hitbox, int x, int y, int width, int height) {
     int halfHeight = height / 2;
     int halfWidth;
     hitbox->rect.top = y - halfHeight;
@@ -530,7 +482,7 @@ void MigrateFromAgb_SetHitbox(TouchscreenHitbox *hitbox, int x, int y, int width
     hitbox->rect.right = x + halfWidth;
 }
 
-void *MigrateFromAgb_LoadCharData(NarcId narcId, int fileId, NNSG2dCharacterData **charData, enum HeapID heapId) {
+static void *MigrateFromAgb_LoadCharData(NarcId narcId, int fileId, NNSG2dCharacterData **charData, enum HeapID heapId) {
     void *file = Heap_AllocAtEnd(heapId, 0x1000);
     if (file != NULL) {
         ReadWholeNarcMemberByIdPair(file, narcId, fileId);
@@ -542,13 +494,13 @@ void *MigrateFromAgb_LoadCharData(NarcId narcId, int fileId, NNSG2dCharacterData
     return file;
 }
 
-BOOL MigrateFromAgb_ReadCharData(int fileId, NNSG2dCharacterData **charData, void *file, NARC *narc) {
+static BOOL MigrateFromAgb_ReadCharData(int fileId, NNSG2dCharacterData **charData, void *file, NARC *narc) {
     NARC_ReadWholeMember(narc, fileId, file);
     return NNS_G2dGetUnpackedBGCharacterData(file, charData);
 }
 
 // Unown letter from the personality, Deoxys form from the game
-int MigrateFromAgb_GetMonForm(int species, u32 personality, int agbVersion) {
+static int MigrateFromAgb_GetMonForm(int species, u32 personality, int agbVersion) {
     u8 form = 0;
     switch (species) {
     case SPECIES_UNOWN:
@@ -577,7 +529,7 @@ int MigrateFromAgb_GetMonForm(int species, u32 personality, int agbVersion) {
     return form;
 }
 
-void MigrateFromAgb_LoadMonIcon(int species, int isEgg, u32 personality, int agbVersion, int index, Sprite *sprite) {
+static void MigrateFromAgb_LoadMonIcon(int species, int isEgg, u32 personality, int agbVersion, int index, Sprite *sprite) {
     NNSG2dCharacterData *charData;
     int dpSpecies = TranslateAgbSpecies(species);
     int form = MigrateFromAgb_GetMonForm(dpSpecies, personality, agbVersion);
@@ -589,7 +541,7 @@ void MigrateFromAgb_LoadMonIcon(int species, int isEgg, u32 personality, int agb
 }
 
 // Loads a box slot's icon into sMigrateFromAgbIcons[index] for the VBlank upload (MigrateFromAgb_UploadBoxIcons)
-void MigrateFromAgb_PrepareBoxIcon(int species, int isEgg, int form, int index, Sprite *sprite, void *file, NARC *narc) {
+static void MigrateFromAgb_PrepareBoxIcon(int species, int isEgg, int form, int index, Sprite *sprite, void *file, NARC *narc) {
     MigrateFromAgbIcon *icon = sMigrateFromAgbIcons + index;
     NNSG2dCharacterData *charData;
     if (sprite) {
@@ -608,7 +560,7 @@ void MigrateFromAgb_PrepareBoxIcon(int species, int isEgg, int form, int index, 
     }
 }
 
-void MigrateFromAgb_UploadBoxIcons(void) {
+static void MigrateFromAgb_UploadBoxIcons(void) {
     int i;
     MigrateFromAgbIcon *icon = sMigrateFromAgbIcons;
     for (i = 0; i < AGB_BOX_MON_COUNT; i++, icon++) {
@@ -621,7 +573,7 @@ void MigrateFromAgb_UploadBoxIcons(void) {
 }
 
 // Shows the current box
-void MigrateFromAgb_ShowBox(MigrateFromAgbApp *app) {
+static void MigrateFromAgb_ShowBox(MigrateFromAgbApp *app) {
     int species, isEgg, form;
     void *file;
     NARC *narc;
@@ -658,7 +610,7 @@ void MigrateFromAgb_ShowBox(MigrateFromAgbApp *app) {
 #pragma opt_strength_reduction off
 
 // The 6x5 box grid: a mon icon and a held item icon per slot
-void MigrateFromAgb_CreateBoxSprites(MigrateFromAgbApp *app) {
+static void MigrateFromAgb_CreateBoxSprites(MigrateFromAgbApp *app) {
     SpriteTemplate template;
 
     volatile struct {
@@ -730,7 +682,7 @@ end:;
 
 #pragma pop
 
-Sprite *MigrateFromAgb_CreateSprite(MigrateFromAgbApp *app, int x, int y, int anim, BOOL draw) {
+static Sprite *MigrateFromAgb_CreateSprite(MigrateFromAgbApp *app, int x, int y, int anim, BOOL draw) {
     SpriteTemplate template;
     MigrateFromAgb_InitSpriteTemplate(&template, app, (int)&app->resHeader, NNS_G2D_VRAM_TYPE_2DMAIN);
     template.position.x = x << FX32_SHIFT;
@@ -745,7 +697,7 @@ Sprite *MigrateFromAgb_CreateSprite(MigrateFromAgbApp *app, int x, int y, int an
 }
 
 // The exit / next box / previous box buttons and the picked mon icons
-void MigrateFromAgb_CreateButtons(MigrateFromAgbApp *app) {
+static void MigrateFromAgb_CreateButtons(MigrateFromAgbApp *app) {
     MigrateFromAgb_SetHitbox(&app->hitboxes[MIGRATE_BUTTON_EXIT], 228, 176, 50, 32);
     app->buttons[0].sprite = MigrateFromAgb_CreateSprite(app, 228, 176, 6, TRUE);
     MigrateFromAgb_SetHitbox(&app->hitboxes[MIGRATE_BUTTON_NEXT_BOX], 176, 176, 32, 32);
@@ -766,13 +718,13 @@ void MigrateFromAgb_CreateButtons(MigrateFromAgbApp *app) {
 
 // Pokemon that can't be migrated: eggs, Pokemon knowing an HM (sMigrateFromAgbHMMoves), holding a GBA-only item
 // (sMigrateFromAgbBlockedItems), species the DP games lack
-BOOL MigrateFromAgb_IsEgg(MigrateFromAgbApp *app, int slot) {
+static BOOL MigrateFromAgb_IsEgg(MigrateFromAgbApp *app, int slot) {
     AgbPokemonStorage *storage = app->storage;
     int box = app->box;
     return AGB_GetBoxMonData(&storage->boxes[box][slot], AGB_MON_DATA_SPECIES_OR_EGG, NULL) == 412;
 }
 
-BOOL MigrateFromAgb_KnowsHM(MigrateFromAgbApp *app, int slot) {
+static BOOL MigrateFromAgb_KnowsHM(MigrateFromAgbApp *app, int slot) {
     AgbPokemonStorage *storage = app->storage;
     int box = app->box;
     AgbBoxMon *mon = &storage->boxes[box][slot];
@@ -789,7 +741,7 @@ BOOL MigrateFromAgb_KnowsHM(MigrateFromAgbApp *app, int slot) {
     return FALSE;
 }
 
-BOOL MigrateFromAgb_HoldsBlockedItem(MigrateFromAgbApp *app, int slot) {
+static BOOL MigrateFromAgb_HoldsBlockedItem(MigrateFromAgbApp *app, int slot) {
     AgbPokemonStorage *storage = app->storage;
     int box = app->box;
     u32 item = AGB_GetBoxMonData(&storage->boxes[box][slot], AGB_MON_DATA_HELD_ITEM, NULL);
@@ -805,7 +757,7 @@ BOOL MigrateFromAgb_HoldsBlockedItem(MigrateFromAgbApp *app, int slot) {
     return FALSE;
 }
 
-BOOL MigrateFromAgb_IsBoxMonSpeciesUnavailable(MigrateFromAgbApp *app, int slot) {
+static BOOL MigrateFromAgb_IsBoxMonSpeciesUnavailable(MigrateFromAgbApp *app, int slot) {
     AgbPokemonStorage *storage = app->storage;
     int box = app->box;
     return MigrateFromAgb_IsSpeciesUnavailable(AGB_GetBoxMonData(&storage->boxes[box][slot], AGB_MON_DATA_SPECIES, NULL));
@@ -813,7 +765,7 @@ BOOL MigrateFromAgb_IsBoxMonSpeciesUnavailable(MigrateFromAgbApp *app, int slot)
 
 // Picks or unpicks a box slot: 0 nothing (6 picked), 1 picked, 2 unpicked, 3 empty, 4 egg, 5 forbidden move,
 // 6 forbidden item, 7 not a DP species
-int MigrateFromAgb_TogglePick(MigrateFromAgbApp *app, int slot) {
+static int MigrateFromAgb_TogglePick(MigrateFromAgbApp *app, int slot) {
     int found;
     int i;
     VecFx32 pos;
@@ -867,7 +819,7 @@ int MigrateFromAgb_TogglePick(MigrateFromAgbApp *app, int slot) {
 }
 
 // Shows the picks of the current box
-void MigrateFromAgb_ShowBoxPicks(MigrateFromAgbApp *app) {
+static void MigrateFromAgb_ShowBoxPicks(MigrateFromAgbApp *app) {
     int i;
     MigrateFromAgbApp *cursor = app;
     for (i = 0; i < MIGRATE_FROM_AGB_MON_COUNT; i++, cursor = (MigrateFromAgbApp *)((u8 *)cursor + sizeof(MigrateFromAgbPick))) {
@@ -879,7 +831,7 @@ void MigrateFromAgb_ShowBoxPicks(MigrateFromAgbApp *app) {
     }
 }
 
-void MigrateFromAgb_PrintBoxName(MigrateFromAgbApp *app, int box) {
+static void MigrateFromAgb_PrintBoxName(MigrateFromAgbApp *app, int box) {
     MigrateFromAgbText text = { 0 };
     u16 name[10];
     text.window = &app->boxNameWindow;
@@ -900,7 +852,7 @@ void MigrateFromAgb_PrintBoxName(MigrateFromAgbApp *app, int box) {
     MigrateFromAgb_PrintText(app, &text, 1);
 }
 
-void MigrateFromAgb_ShowMarkings(MigrateFromAgbApp *app, AgbBoxMon *mon) {
+static void MigrateFromAgb_ShowMarkings(MigrateFromAgbApp *app, AgbBoxMon *mon) {
     u16 *tilemap = GetBgTilemapBuffer(app->bgConfig, GF_BG_LYR_MAIN_2);
     u8 markings;
     int i;
@@ -921,7 +873,7 @@ void MigrateFromAgb_ShowMarkings(MigrateFromAgbApp *app, AgbBoxMon *mon) {
 }
 
 // Nickname, species, held item, level and markings of the touched Pokemon (NULL: clears)
-void MigrateFromAgb_PrintMonInfo(MigrateFromAgbApp *app, AgbBoxMon *mon) {
+static void MigrateFromAgb_PrintMonInfo(MigrateFromAgbApp *app, AgbBoxMon *mon) {
     MigrateFromAgbText text = { 0 };
 
     struct {
@@ -1002,7 +954,7 @@ void MigrateFromAgb_PrintMonInfo(MigrateFromAgbApp *app, AgbBoxMon *mon) {
     PlayCry((u16)species, 0);
 }
 
-void MigrateFromAgb_StartFadeBlack(MigrateFromAgbApp *app, enum FadeType fadeType, int nextState, int *state) {
+static void MigrateFromAgb_StartFadeBlack(MigrateFromAgbApp *app, enum FadeType fadeType, int nextState, int *state) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, fadeType, fadeType, RGB_BLACK, 6, 1, HEAP_ID_76);
     if (state != NULL) {
         *state = MIGRATE_STATE_WAIT_FADE;
@@ -1010,7 +962,7 @@ void MigrateFromAgb_StartFadeBlack(MigrateFromAgbApp *app, enum FadeType fadeTyp
     app->nextState = nextState;
 }
 
-void MigrateFromAgb_StartFadeWhite(MigrateFromAgbApp *app, enum FadeType fadeType, int nextState, int *state) {
+static void MigrateFromAgb_StartFadeWhite(MigrateFromAgbApp *app, enum FadeType fadeType, int nextState, int *state) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, fadeType, fadeType, RGB_WHITE, 6, 1, HEAP_ID_76);
     if (state != NULL) {
         *state = MIGRATE_STATE_WAIT_FADE;
@@ -1018,7 +970,7 @@ void MigrateFromAgb_StartFadeWhite(MigrateFromAgbApp *app, enum FadeType fadeTyp
     app->nextState = nextState;
 }
 
-void MigrateFromAgb_InitBgs(BgConfig *bgConfig) {
+static void MigrateFromAgb_InitBgs(BgConfig *bgConfig) {
     GraphicsModes modes = gMigrateFromAgbGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     BgTemplate bg0 = sMigrateFromAgbBgTemplate0;
@@ -1035,7 +987,7 @@ void MigrateFromAgb_InitBgs(BgConfig *bgConfig) {
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
 }
 
-void MigrateFromAgb_InitGraphics(MigrateFromAgbApp *app) {
+static void MigrateFromAgb_InitGraphics(MigrateFromAgbApp *app) {
     GraphicsBanks banks = gMigrateFromAgbGraphicsBanks;
     GfGfx_SetBanks(&banks);
     MigrateFromAgb_InitBgs(app->bgConfig);
@@ -1049,13 +1001,13 @@ void MigrateFromAgb_InitGraphics(MigrateFromAgbApp *app) {
 }
 
 // The box screen background, in the colour of the game
-void MigrateFromAgb_LoadBoxBg(MigrateFromAgbApp *app) {
+static void MigrateFromAgb_LoadBoxBg(MigrateFromAgbApp *app) {
     GfGfxLoader_LoadScrnData(NARC_a_1_1_3, 24, app->bgConfig, GF_BG_LYR_MAIN_2, 0, 0x600, TRUE, HEAP_ID_76);
     BgTilemapRectChangePalette(app->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 32, 24, sMigrateFromAgbBoxBgPalettes[app->agbVersion]);
     BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_2);
 }
 
-void MigrateFromAgb_InitMsgBox(MigrateFromAgbApp *app) {
+static void MigrateFromAgb_InitMsgBox(MigrateFromAgbApp *app) {
     LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_14_OFFSET, HEAP_ID_76);
     LoadUserFrameGfx1(app->bgConfig, GF_BG_LYR_MAIN_0, 0x3F0, 14, 0, HEAP_ID_76);
     LoadUserFrameGfx2(app->bgConfig, GF_BG_LYR_MAIN_0, 0x3D2, 13, app->frame, HEAP_ID_76);
@@ -1075,7 +1027,7 @@ void MigrateFromAgb_InitMsgBox(MigrateFromAgbApp *app) {
 }
 
 // The confirmation screen with the six picked Pokemon
-void MigrateFromAgb_ShowConfirmScreen(MigrateFromAgbApp *app) {
+static void MigrateFromAgb_ShowConfirmScreen(MigrateFromAgbApp *app) {
     int i;
     int species, isEgg;
     SpriteTemplate template;
@@ -1114,7 +1066,7 @@ void MigrateFromAgb_ShowConfirmScreen(MigrateFromAgbApp *app) {
     MigrateFromAgb_PrintText(app, &app->msgBox, 24);
 }
 
-void MigrateFromAgb_RemoveWindow(Window *window) {
+static void MigrateFromAgb_RemoveWindow(Window *window) {
     if (window->bgConfig != NULL) {
         ClearFrameAndWindow2(window, FALSE);
         ClearWindowTilemapAndCopyToVram(window);
@@ -1123,7 +1075,7 @@ void MigrateFromAgb_RemoveWindow(Window *window) {
 }
 
 // Back from the confirmation screen to the boxes
-void MigrateFromAgb_CloseConfirmScreen(MigrateFromAgbApp *app) {
+static void MigrateFromAgb_CloseConfirmScreen(MigrateFromAgbApp *app) {
     int i = 0;
     MigrateFromAgbApp *cursor = app;
     for (; i < MIGRATE_FROM_AGB_MON_COUNT; i++, cursor = (MigrateFromAgbApp *)((u8 *)cursor + sizeof(Sprite *))) {
@@ -1143,7 +1095,7 @@ void MigrateFromAgb_CloseConfirmScreen(MigrateFromAgbApp *app) {
     app->pickCount = 0;
 }
 
-void MigrateFromAgb_FreeGraphics(MigrateFromAgbApp *app) {
+static void MigrateFromAgb_FreeGraphics(MigrateFromAgbApp *app) {
     int i;
     Main_SetVBlankIntrCB(NULL, NULL);
     for (i = 0; i < AGB_BOX_MON_COUNT; i++) {
@@ -1191,7 +1143,7 @@ void MigrateFromAgb_FreeGraphics(MigrateFromAgbApp *app) {
     FreeBgTilemapBuffer(app->bgConfig, GF_BG_LYR_MAIN_3);
 }
 
-void MigrateFromAgb_ShowYesNo(MigrateFromAgbApp *app) {
+static void MigrateFromAgb_ShowYesNo(MigrateFromAgbApp *app) {
     YesNoPromptTemplate template;
     template.bgConfig = app->bgConfig;
     template.bgId = GF_BG_LYR_MAIN_0;
@@ -1205,7 +1157,7 @@ void MigrateFromAgb_ShowYesNo(MigrateFromAgbApp *app) {
 }
 
 // "Migrate from <player>'s game?" (message per GBA game)
-void MigrateFromAgb_PrintIntro(MigrateFromAgbApp *app) {
+static void MigrateFromAgb_PrintIntro(MigrateFromAgbApp *app) {
     u16 name[8];
     MessageFormat *msgFormat;
     String *string;
@@ -1224,7 +1176,7 @@ void MigrateFromAgb_PrintIntro(MigrateFromAgbApp *app) {
     MigrateFromAgb_ShowYesNo(app);
 }
 
-void MigrateFromAgb_VBlankCB(MigrateFromAgbApp *app) {
+static void MigrateFromAgb_VBlankCB(MigrateFromAgbApp *app) {
     if (app->vblankCallback) {
         app->vblankCallback();
         app->vblankCallback = NULL;
@@ -1233,14 +1185,14 @@ void MigrateFromAgb_VBlankCB(MigrateFromAgbApp *app) {
     OamManager_ApplyAndResetBuffers();
     DoScheduledBgGpuUpdates(app->bgConfig);
     {
-        // OS_SetIrqCheckFlag(OS_IE_V_BLANK), with the address of the check flag spelled out (matching)
+        // OS_SetIrqCheckFlag(OS_IE_V_BLANK), with the address of the check flag spelled out
         volatile u32 *dtcm = (volatile u32 *)0x027E0000;
         dtcm[0x3FF8 / 4] |= OS_IE_V_BLANK;
     }
 }
 
 // The checks before the boxes are shown: 0 OK, 5 fewer than six Pokemon, 6 the Pal Park is not empty
-int MigrateFromAgb_CheckCanMigrate(MigrateFromAgbApp *app) {
+static int MigrateFromAgb_CheckCanMigrate(MigrateFromAgbApp *app) {
     MigratedPokemon *migrated = Save_MigratedPokemon_Get(app->saveData);
     int count = 0;
     int box;

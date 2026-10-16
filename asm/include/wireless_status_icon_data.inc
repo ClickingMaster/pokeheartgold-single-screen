@@ -29,17 +29,6 @@
 .public GXS_LoadOBJ
 .public DC_FlushRange
 
-	.public WirelessStatusIcon_New
-	.public WirelessStatusIcon_Task
-	.public WirelessStatusIcon_SetLevelOf
-	.public WirelessStatusIcon_Delete
-	.public WirelessStatusIcon_ShowOnBothScreensOf
-	.public WirelessStatusIcon_LoadPalette
-	.public WirelessStatusIcon_GetCharData
-	.public WirelessStatusIcon_LoadChar
-	.public WirelessStatusIcon_WriteOam
-	.public WirelessStatusIcon_CreateOnScreen
-	.public WirelessStatusIcon_CreateAt
 	.public _020F6A9C
 	.public _020F6AA4
 	.public _020F6AAC

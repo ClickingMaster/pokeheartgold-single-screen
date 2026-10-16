@@ -176,25 +176,8 @@
 	.public PokemonSummary_PrintNickname
 	.public PokemonSummary_PrintLevel
 	.public PokemonSummary_PrintHeldItem
-	.public PokemonSummary_IsPlayersMon
-	.public PokemonSummary_PrintBuffer
-	.public PokemonSummary_PrintStatLabel
-	.public PokemonSummary_PrintMessage
-	.public PokemonSummary_FormatNumber
-	.public PokemonSummary_PrintValuePair
-	.public PokemonSummary_PrintLabels
 	.public PokemonSummary_PrintPage
-	.public PokemonSummary_PrintInfo
-	.public PokemonSummary_PrintTrainerMemo
-	.public PokemonSummary_CountShinyLeaves
-	.public PokemonSummary_PrintMemo
-	.public PokemonSummary_PrintStats
-	.public PokemonSummary_PrintMoves
-	.public PokemonSummary_PrintPokeathlonStatLabels
-	.public PokemonSummary_PrintRibbonCount
-	.public PokemonSummary_PrintFlavorPreference
 	.public PokemonSummary_PrintRibbonInfo
-	.public PokemonSummary_PrintMoveSlot
 	.public PokemonSummary_PrintMoveInfo
 	.public PokemonSummary_ClearMoveInfo
 	.public PokemonSummary_PrintMoveToLearn
@@ -207,16 +190,6 @@
 	.text
 	.public PokemonSummary_RemovePageWindows
 	.public PokemonSummary_RemoveWindows
-	.public PokemonSummary_IsPlayersMon
-	.public PokemonSummary_PrintBuffer
-	.public PokemonSummary_PrintStatLabel
-	.public PokemonSummary_PrintMessage
-	.public PokemonSummary_FormatNumber
-	.public PokemonSummary_CountShinyLeaves
-	.public PokemonSummary_PrintMemo
-	.public PokemonSummary_PrintMoves
-	.public PokemonSummary_PrintRibbonCount
-	.public PokemonSummary_PrintFlavorPreference
 	.public PokemonSummary_PrintRibbonInfo
 	.public PokemonSummary_ClearMoveInfo
 	.public PokemonSummary_PrintMoveToLearn
