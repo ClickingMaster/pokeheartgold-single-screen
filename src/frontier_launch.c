@@ -14,7 +14,7 @@ FrontierLaunchArgs *Frontier_LaunchApp(FieldSystem *fieldSystem, void *param1) {
     args->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
     args->saveData = fieldSystem->saveData;
     args->bagCursor = fieldSystem->bagCursor;
-    args->keyPressedSave = fieldSystem->unkB0;
+    args->keyPressedSave = fieldSystem->keyPressedSave;
     args->unk10 = 0;
     args->unk14 = 0;
     args->mapId = fieldSystem->location->mapId;

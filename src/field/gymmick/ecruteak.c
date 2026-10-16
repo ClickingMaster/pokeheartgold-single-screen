@@ -35,7 +35,7 @@ void GymmickInit_Ecruteak(FieldSystem *fieldSystem) {
     fieldSystem->mapSystems->localData = Heap_Alloc(HEAP_ID_FIELD1, sizeof(EcruteakGymmickLocalData));
     MI_CpuClear8(fieldSystem->mapSystems->localData, sizeof(EcruteakGymmickLocalData));
     EcruteakGymmickLocalData *localData = fieldSystem->mapSystems->localData;
-    fieldSystem->unk11C = FX32_CONST(0.0625);
+    fieldSystem->projZOffset = FX32_CONST(0.0625);
     Fog_Set(fieldSystem->fog, -1, TRUE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x0020, 0);
     Fog_SetColor(fieldSystem->fog, -1, 0, 31);
 

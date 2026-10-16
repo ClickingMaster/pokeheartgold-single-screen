@@ -59,7 +59,7 @@ typedef struct ScriptEnvironment {
     int facingDirection;
     LocalMapObject *lastInteracted;
     u32 cameraTarget;
-    LocalMapObject *unk_34;
+    LocalMapObject *resultPtr;
     ScriptContext *scriptContexts[3];
     MessageFormat *msgfmt;
     String *stringBuffer0;

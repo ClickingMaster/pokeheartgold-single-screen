@@ -1147,30 +1147,30 @@ void PokewalkerEventLog_ShowRadarLost(PokewalkerEventLog *eventLog) {
     PokewalkerEventLog_PrintEntry(eventLog, msg_0275_00045, 0);
 }
 
-// The second line depends on unk_77.
+// The second line depends on friendship.
 void PokewalkerEventLog_ShowMonFoundItem(PokewalkerEventLog *eventLog) {
     PokewalkerIrRecord *record = eventLog->entries[eventLog->page];
     int msgId2 = 0;
     PokewalkerEventLog_ShowMon(eventLog, 0, TRUE);
     ManagedSprite_SetDrawFlag(eventLog->sprites[EVENT_LOG_SPRITE_RIGHT_ICON], TRUE);
     ManagedSprite_SetAnim(eventLog->sprites[EVENT_LOG_SPRITE_RIGHT_ICON], 12);
-    if (record->unk_77 >= 250) {
+    if (record->friendship >= 250) {
         msgId2 = msg_0275_00047;
-    } else if (record->unk_77 >= 200) {
+    } else if (record->friendship >= 200) {
         msgId2 = msg_0275_00048;
-    } else if (record->unk_77 >= 150) {
+    } else if (record->friendship >= 150) {
         msgId2 = msg_0275_00049;
-    } else if (record->unk_77 >= 90) {
+    } else if (record->friendship >= 90) {
         msgId2 = msg_0275_00050;
     }
     PokewalkerEventLog_PrintEntry(eventLog, msg_0275_00046, msgId2);
 }
 
-// Events 18-22, three messages each by unk_77.
+// Events 18-22, three messages each by friendship.
 void PokewalkerEventLog_ShowHappy(PokewalkerEventLog *eventLog) {
     PokewalkerIrRecord *record = eventLog->entries[eventLog->page];
     int type = record->eventType;
-    int value = record->unk_77;
+    int value = record->friendship;
     int msgId = (type - POKEWALKER_EVENT_HAPPY_FIRST) * 3 + msg_0275_00051;
     if (value < 200) {
         if (value >= 60) {
@@ -1228,7 +1228,7 @@ void PokewalkerEventLog_ShowStrollEnd(PokewalkerEventLog *eventLog) {
     u32 total;
     PokewalkerEventLog_ShowMon(eventLog, 0, TRUE);
     PokewalkerEventLog_ShowTrainer(eventLog->sprites[EVENT_LOG_SPRITE_RIGHT_ICON], (u8)eventLog->playerGender, 3);
-    part = record->unk_7C / 100;
+    part = record->strollSteps / 100;
     if (part > 655) {
         part = 655;
     }
@@ -1560,7 +1560,7 @@ void PokewalkerEventLog_InitStrollEndRecord(PokewalkerIrRecord *record, Pokewalk
     record->form = params->mon.form;
     record->gender = params->mon.gender;
     record->isShiny = params->mon.isShiny;
-    record->unk_7C = params->steps;
+    record->strollSteps = params->steps;
     record->eventType = POKEWALKER_EVENT_STROLL_END;
     record->value = -1;
 }

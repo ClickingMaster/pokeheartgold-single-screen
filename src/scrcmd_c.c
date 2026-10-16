@@ -4166,7 +4166,7 @@ BOOL ScrCmd_LaunchFrontier(ScriptContext *ctx) {
     args->saveData = ctx->fieldSystem->saveData;
     args->mapId = ctx->fieldSystem->location->mapId;
     args->bagCursor = ctx->fieldSystem->bagCursor;
-    args->keyPressedSave = ctx->fieldSystem->unkB0;
+    args->keyPressedSave = ctx->fieldSystem->keyPressedSave;
     CallApplicationAsTask(ctx->taskman, &gOverlayTemplate_Frontier, args);
     SetupNativeScript(ctx, ScrNative_WaitApplication_DestroyTaskData);
     return TRUE;
@@ -4658,7 +4658,7 @@ BOOL ScrCmd_SetPhoneCall(ScriptContext *ctx) {
     u16 callScriptID = ScriptGetVar(ctx);
     void **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA); // PhoneCallAppData
     GearPhoneRingManager_StartRinging(FieldSystem_GetGearPhoneRingManager(ctx->fieldSystem));
-    ctx->fieldSystem->unkD2_7 = TRUE;
+    ctx->fieldSystem->suppressBottomScreenDim = TRUE;
     GearPhoneRingManager_SetCallerParams(FieldSystem_GetGearPhoneRingManager(ctx->fieldSystem), callerId, 0xFF, 0, isScriptedCall, callScriptID);
     return TRUE;
 }

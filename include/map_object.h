@@ -75,7 +75,7 @@ struct LocalMapObject { // declared field_system.h
     /*0x070*/ VecFx32 positionVector;
     /*0x07C*/ VecFx32 facingVector;
     /*0x088*/ VecFx32 drawOffset;
-    /*0x094*/ VecFx32 unk94;
+    /*0x094*/ VecFx32 tileDrawOffset;
     /*0x0A0*/ u32 animation;
     /*0x0A4*/ u32 movementCmd;
     /*0x0A8*/ u32 movementStep;
@@ -95,7 +95,7 @@ struct LocalMapObject { // declared field_system.h
     /*0x0E8*/ u8 behaviorData[0x10];
     /*0x0F8*/ u8 movementCmdData[0x10];
     /*0x108*/ u8 drawData[0x20];
-    /*0x128*/ u16 unk128;
+    /*0x128*/ u16 savedPreviousBehavior;
 };
 
 typedef struct MapObjectMovementCallbacks {
@@ -163,8 +163,8 @@ typedef struct MapObjectInitArgs {
 typedef struct ObjectEventGraphicsInfo {
     u16 spriteId;
     u16 mapModelId;
-    u16 unk4_0 : 5; // Unknown actual size
-    u16 unk4_5 : 5;
+    u16 effectFlagsIdx : 5; // Unknown actual size
+    u16 drawCallbacksIdx : 5;
     u16 unk4_10 : 6; // Unknown actual size
 } ObjectEventGraphicsInfo;
 

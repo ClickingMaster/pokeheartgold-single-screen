@@ -106,14 +106,14 @@ typedef struct MapFlypointParam {
     u8 unk_05;
     u8 x;
     u8 y;
-    u8 unk170SrcX;
-    u8 unk170SrcY;
+    u8 patchSrcX;
+    u8 patchSrcY;
     u8 width : 4;
     u8 height : 4;
-    u8 unk170DestWidth : 4;
-    u8 unk170DestHeight : 4;
-    u8 unk170DestX : 4;
-    u8 unk170DestY : 4;
+    u8 patchWidth : 4;
+    u8 patchHeight : 4;
+    u8 patchOffsetX : 4;
+    u8 patchOffsetY : 4;
 } MapFlypointParam;
 
 typedef struct PokegearMapTextObj {

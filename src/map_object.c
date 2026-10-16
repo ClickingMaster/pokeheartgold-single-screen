@@ -1362,11 +1362,11 @@ u16 MapObject_GetPreviousMetatileBehavior(LocalMapObject *object) {
 }
 
 void MapObject_SetSavedPreviousBehavior(LocalMapObject *object, u16 param1) {
-    object->unk128 = param1;
+    object->savedPreviousBehavior = param1;
 }
 
 u16 MapObject_GetSavedPreviousBehavior(LocalMapObject *object) {
-    return object->unk128;
+    return object->savedPreviousBehavior;
 }
 
 FieldSystem *MapObject_GetFieldSystem(LocalMapObject *object) {
@@ -1741,11 +1741,11 @@ void MapObject_SetDrawOffset(LocalMapObject *object, VecFx32 *vector) {
 }
 
 void MapObject_CopyTileDrawOffset(LocalMapObject *object, VecFx32 *vector) {
-    *vector = object->unk94;
+    *vector = object->tileDrawOffset;
 }
 
 void MapObject_SetTileDrawOffset(LocalMapObject *object, VecFx32 *vector) {
-    object->unk94 = *vector;
+    object->tileDrawOffset = *vector;
 }
 
 u32 MapObject_GetPositionVectorYCoordUInt(LocalMapObject *object) {
@@ -1949,7 +1949,7 @@ static MapObjectDrawCallbacks *MapObject_GetDrawCallbacksForSprite(u32 spriteId)
         return NULL;
     }
 
-    return gMapObjectDrawCallbacks[graphicsInfo->unk4_5];
+    return gMapObjectDrawCallbacks[graphicsInfo->drawCallbacksIdx];
 }
 
 LocalMapObject *MapObjectManager_GetFirstObjectWithXAndZ(MapObjectManager *manager, u32 x, u32 z, BOOL checkPrevious) {

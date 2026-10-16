@@ -143,8 +143,8 @@ void GearPhoneRingManager_SetCallTrigger(GearPhoneRingManager *ptr, u8 callTrigg
 }
 
 void GearPhoneRingManager_AddMinutes(GearPhoneRingManager *ptr, s32 minutes, BOOL a2) {
-    if (!ptr->unk_var0_2) {
-        ptr->unk_var0_2 = TRUE;
+    if (!ptr->receivedFirstMinutes) {
+        ptr->receivedFirstMinutes = TRUE;
         if (minutes >= 10) {
             return;
         }

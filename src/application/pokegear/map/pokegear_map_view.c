@@ -976,7 +976,7 @@ void PokegearMap_DrawMapTilemap(PokegearMapAppData *mapApp) {
         if (Save_VarsFlags_FlypointFlagAction(mapApp->pokegear->saveVarsFlags, FLAG_ACTION_CHECK, flypoint->flypoint)) {
             continue;
         }
-        CopyToBgTilemapRect(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_3, flypoint->x - flypoint->unk170DestX, flypoint->y - flypoint->unk170DestY + 2, flypoint->unk170DestWidth, flypoint->unk170DestHeight, mapApp->mapScreen->rawData, flypoint->unk170SrcX, flypoint->unk170SrcY, mapApp->mapScreen->screenWidth / 8, mapApp->mapScreen->screenHeight / 8);
+        CopyToBgTilemapRect(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_3, flypoint->x - flypoint->patchOffsetX, flypoint->y - flypoint->patchOffsetY + 2, flypoint->patchWidth, flypoint->patchHeight, mapApp->mapScreen->rawData, flypoint->patchSrcX, flypoint->patchSrcY, mapApp->mapScreen->screenWidth / 8, mapApp->mapScreen->screenHeight / 8);
     }
 
     if (mapApp->canSeeSafariZone) {

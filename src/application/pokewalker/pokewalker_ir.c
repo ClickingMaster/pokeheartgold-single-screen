@@ -637,7 +637,7 @@ void PokewalkerIr_OnReceiveComplete(void) {
             record->value = SWAP32(record->value);
             record->steps = SWAP16(record->steps);
             record->peerSteps = SWAP16(record->peerSteps);
-            record->unk_7C = SWAP32(record->unk_7C);
+            record->strollSteps = SWAP32(record->strollSteps);
             record->unk_80 = SWAP32(record->unk_80);
         }
         switch (ov112_021FFB24.command) {
@@ -819,17 +819,17 @@ void PokewalkerIr_ValidatePeer(void) {
 
     switch (command) {
     case 0x32:
-        if (ov112_021FFAA4.unk_18 != 0 && ov112_021FFAA4.peerIdentity->unk_5B_0 != 0) {
+        if (ov112_021FFAA4.unk_18 != 0 && ov112_021FFAA4.peerIdentity->isRegistered != 0) {
             FAIL_RESPONSE(0x36, 4);
         }
         PokewalkerIr_Send(ov112_021FFAA4.identity, 0x68, 0x32, 1);
         return;
 
     case 0x40:
-        if (ov112_021FFAA4.peerIdentity->unk_5B_0 == 0) {
+        if (ov112_021FFAA4.peerIdentity->isRegistered == 0) {
             FAIL_RESPONSE(0x44, 5);
         }
-        if (ov112_021FFAA4.peerIdentity->unk_5B_1 == 0) {
+        if (ov112_021FFAA4.peerIdentity->hasStrollMon == 0) {
             FAIL_RESPONSE(0x44, 6);
         }
         if (ov112_021FFAA4.peerIdentity->trainerId != ov112_021FFAA4.identity->trainerId) {
@@ -848,10 +848,10 @@ void PokewalkerIr_ValidatePeer(void) {
         return;
 
     case 0x52:
-        if (ov112_021FFAA4.peerIdentity->unk_5B_0 == 0) {
+        if (ov112_021FFAA4.peerIdentity->isRegistered == 0) {
             FAIL_RESPONSE(0x56, 5);
         }
-        if (ov112_021FFAA4.peerIdentity->unk_5B_1 == 1) {
+        if (ov112_021FFAA4.peerIdentity->hasStrollMon == 1) {
             FAIL_RESPONSE(0x56, 7);
         }
         if (ov112_021FFAA4.peerIdentity->unk_00 != ov112_021FFAA4.identity->unk_00) {
@@ -870,7 +870,7 @@ void PokewalkerIr_ValidatePeer(void) {
         return;
 
     case 0x60:
-        if (ov112_021FFAA4.peerIdentity->unk_5B_0 == 0) {
+        if (ov112_021FFAA4.peerIdentity->isRegistered == 0) {
             PokewalkerIr_Send(ov112_021FFAA4.identity, 0x68, 0x64, 1);
             PokewalkerIr_SetError(5);
             PokewalkerIr_Disconnect();
@@ -893,7 +893,7 @@ void PokewalkerIr_ValidatePeer(void) {
     case 0xBA:
     case 0xBC:
     case 0xBE:
-        if (ov112_021FFAA4.peerIdentity->unk_5B_0 == 0) {
+        if (ov112_021FFAA4.peerIdentity->isRegistered == 0) {
             FAIL_RESPONSE(0xD8, 5);
         }
         if (ov112_021FFAA4.peerIdentity->unk_00 != ov112_021FFAA4.identity->unk_00) {

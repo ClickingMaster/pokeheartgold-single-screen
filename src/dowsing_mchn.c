@@ -445,8 +445,8 @@ void DowsingMchn_DestroyIndicatorSprites(DowsingMchn *dowsing) {
 void DowsingMchn_Task(SysTask *task, void *taskData) {
     DowsingMchn *dowsing = taskData;
 
-    if (dowsing->fieldSystem->unkD2_7 && FieldSystem_IsPlayerMovementAllowed(dowsing->fieldSystem)) {
-        dowsing->fieldSystem->unkD2_7 = FALSE;
+    if (dowsing->fieldSystem->suppressBottomScreenDim && FieldSystem_IsPlayerMovementAllowed(dowsing->fieldSystem)) {
+        dowsing->fieldSystem->suppressBottomScreenDim = FALSE;
     }
     if (dowsing->touchActive == FALSE && TouchscreenHitbox_FindHitboxAtTouchNew(sDowsingMchnSearchAreaHitbox) != -1) {
         dowsing->touchActive = TRUE;
@@ -957,7 +957,7 @@ void DowsingMchn_HandleExitButton(DowsingMchn *dowsing) {
 }
 
 BOOL DowsingMchn_ShouldHideButtons(DowsingMchn *dowsing) {
-    if (FieldSystem_TaskIsRunning(dowsing->fieldSystem) == TRUE && dowsing->fieldSystem->unkD2_7 == 0) {
+    if (FieldSystem_TaskIsRunning(dowsing->fieldSystem) == TRUE && dowsing->fieldSystem->suppressBottomScreenDim == 0) {
         return TRUE;
     }
     return FALSE;

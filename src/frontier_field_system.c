@@ -399,11 +399,11 @@ u8 FrontierFieldSystem_GetFrontierBattleNumber(FrontierFieldSystem *frontierFsys
 }
 
 BOOL FrontierFieldSystem_HasWonSet(FrontierFieldSystem *frontierFsys) {
-    if (frontierFsys->unk10_0) {
+    if (frontierFsys->wonSet) {
         return TRUE;
     }
     if (frontierFsys->currentBattleNumber > 7) {
-        frontierFsys->unk10_0 = TRUE;
+        frontierFsys->wonSet = TRUE;
         return TRUE;
     }
     return FALSE;
@@ -418,7 +418,7 @@ static void FrontierFieldSystem_RecordSetMons(FrontierFieldSystem *frontierFsys,
         break;
     case TOWER_MODE_WIFI:
         FrontierFieldSystem_SetFrontierMons(frontierFsys, saveData, TRUE);
-        BattleTowerChallenge_AddWifiScoreCounters(frontierFsys->challenge, frontierFsys->unk28, frontierFsys->unk24, frontierFsys->unk26);
+        BattleTowerChallenge_AddWifiScoreCounters(frontierFsys->challenge, frontierFsys->totalTimesFainted, frontierFsys->totalTurns, frontierFsys->totalDamage);
         u8 data = frontierFsys->towerMode;
         BattleTowerChallenge_SetField(frontierFsys->challenge, 0, &data);
         data = frontierFsys->currentBattleNumber;
@@ -496,7 +496,7 @@ void FrontierFieldSystem_SaveChallenge(FrontierFieldSystem *frontierFsys) {
     data = frontierFsys->currentBattleNumber;
     BattleTowerChallenge_SetField(frontierFsys->challenge, 1, &data);
     BattleTowerChallenge_SetField(frontierFsys->challenge, 5, frontierFsys->partyMonIndexes);
-    BattleTowerChallenge_AddWifiScoreCounters(frontierFsys->challenge, frontierFsys->unk28, frontierFsys->unk24, frontierFsys->unk26);
+    BattleTowerChallenge_AddWifiScoreCounters(frontierFsys->challenge, frontierFsys->totalTimesFainted, frontierFsys->totalTurns, frontierFsys->totalDamage);
     BattleTowerChallenge_SetField(frontierFsys->challenge, 8, frontierFsys->trainersInCurrentRound);
     BattleTowerChallenge_SetField(frontierFsys->challenge, 10, &frontierFsys->randomState);
     BattleTowerChallenge_SetSaved(frontierFsys->challenge, 1);
@@ -504,13 +504,13 @@ void FrontierFieldSystem_SaveChallenge(FrontierFieldSystem *frontierFsys) {
         data = frontierFsys->multiBattleAllyID;
         BattleTowerChallenge_SetField(frontierFsys->challenge, 9, &data);
         BattleTowerChallenge_SetField(frontierFsys->challenge, 6, &frontierFsys->multiBattleAllyData[frontierFsys->multiBattleAllyID]);
-        BattleTowerChallenge_SetField(frontierFsys->challenge, 7, &frontierFsys->unk838[frontierFsys->multiBattleAllyID]);
+        BattleTowerChallenge_SetField(frontierFsys->challenge, 7, &frontierFsys->allyReplaceItems[frontierFsys->multiBattleAllyID]);
     }
 }
 
 void FrontierFieldSystem_GenerateStatTrainers(FrontierFieldSystem *frontierFsys) {
     for (s32 i = 0; i < 5; i++) {
-        frontierFsys->unk838[i] = FrontierFieldSystem_GenerateFrontierTrainer(frontierFsys, &frontierFsys->frontierStatTrainers[i], 300 + i, frontierFsys->numMons, frontierFsys->partyMonSpecies, frontierFsys->partyMonItems, &frontierFsys->multiBattleAllyData[i], frontierFsys->heapID);
+        frontierFsys->allyReplaceItems[i] = FrontierFieldSystem_GenerateFrontierTrainer(frontierFsys, &frontierFsys->frontierStatTrainers[i], 300 + i, frontierFsys->numMons, frontierFsys->partyMonSpecies, frontierFsys->partyMonItems, &frontierFsys->multiBattleAllyData[i], frontierFsys->heapID);
     }
 }
 

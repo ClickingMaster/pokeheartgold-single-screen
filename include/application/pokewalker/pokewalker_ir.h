@@ -20,8 +20,8 @@ typedef struct PokewalkerIrIdentity {
     u32 trainerId;
     PokewalkerIrClock clock; // 0x10
     u8 unk_38[0x23];
-    u8 unk_5B_0 : 1;
-    u8 unk_5B_1 : 1;
+    u8 isRegistered : 1;
+    u8 hasStrollMon : 1;
     u8 hasWalkerMon : 1;
     u8 unk_5B_3 : 5;
     u8 unk_5C;
@@ -105,10 +105,10 @@ typedef struct PokewalkerIrRecord {
     u16 peerNickname[POKEMON_NAME_LENGTH + 1];   // 0x36, the other Pokemon
     u16 routeName[21];                           // 0x4C
     u8 course;
-    u8 unk_77;
+    u8 friendship;
     u16 steps;
     u16 peerSteps;
-    u32 unk_7C;
+    u32 strollSteps;
     u32 unk_80;
     u8 eventType; // 1-29, 0 = empty entry
     u8 form : 5;  // 0x85, walking Pokemon

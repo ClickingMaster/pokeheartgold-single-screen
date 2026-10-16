@@ -261,7 +261,7 @@ static void ItemMenuUseFunc_Bicycle(struct ItemMenuUseData *data, const struct I
 
 static BOOL ItemFieldUseFunc_Bicycle(struct ItemFieldUseData *data) {
     FieldSystem_CreateTask(data->fieldSystem, Task_MountOrDismountBicycle, NULL);
-    data->fieldSystem->unkD2_7 = TRUE;
+    data->fieldSystem->suppressBottomScreenDim = TRUE;
     return FALSE;
 }
 
@@ -666,7 +666,7 @@ static BOOL Task_ActivateDowsingMchnUI(TaskManager *taskManager) {
     switch (*state_p) {
     case 0:
         FieldSystem_SwitchBottomScreenApp(fieldSystem, 4, NULL);
-        fieldSystem->unkD2_7 = TRUE;
+        fieldSystem->suppressBottomScreenDim = TRUE;
         (*state_p)++;
         break;
     case 1:

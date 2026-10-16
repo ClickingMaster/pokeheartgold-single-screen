@@ -7,7 +7,7 @@
 #include "save.h"
 
 typedef struct POKEWALKER {
-    u16 unk_000;
+    u16 strollState;
     u16 unk_002;
     BoxPokemon pokemon;
     u8 filler_08C[0x6C];

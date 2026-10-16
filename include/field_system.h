@@ -56,7 +56,7 @@ typedef struct FollowMon {
 struct GearPhoneRingManager {
     u8 active : 1;
     u8 unk_var0_1 : 1;
-    u8 unk_var0_2 : 1;
+    u8 receivedFirstMinutes : 1;
     u8 ringing : 1;
     u8 unk_var0_4 : 4;
     u8 unk_var1;
@@ -100,7 +100,7 @@ typedef struct FieldMapSystems {
     WeatherManager *weatherManager;
     FieldTextureManager *textureManager;
     u32 unk14;
-    UnusedFieldModel *unk18;
+    UnusedFieldModel *unusedFieldModel;
     HBlankSystem *hBlankSystem;
     void *poisonEffect;
     void *localData;
@@ -247,9 +247,9 @@ struct FieldSystem {
     MapPropManager *mapPropManager;
     FrontierFieldSystem *frontierFsys;
     LinkBattleRuleset *linkBattleRuleset;
-    PokedexResumeState *unkA8;
+    PokedexResumeState *pokedexResumeState;
     u32 unkAC;
-    void *unkB0;
+    void *keyPressedSave;
     s64 plazaLoginTime;
     int fieldMapUpdateFlags;     // FieldMap_UpdateFrame steps: bit 0 texture free, 1 map load tick, 2 3D render, 3 MapPropAnimationPoolList_Update
     Field3dRenderObjManager *renderObjManager;
@@ -259,7 +259,7 @@ struct FieldSystem {
     u16 lastTouchMenuInput;
     u8 startMenuState : 6;
     u8 textbox_open : 1;
-    u8 unkD2_7 : 1;
+    u8 suppressBottomScreenDim : 1;
     u8 startMenuCursorPos;
     SysTask *touchSaveTask;    // bottom screen type 4 (bottom_screen_app.c)
     SysTask *bottomScreenTask; // the bottom-screen app manager, or the view photo task
@@ -273,7 +273,7 @@ struct FieldSystem {
     u8 safariDecorationCursorPos[3];
     GearPhoneRingManager *phoneRingManager;
     BugContest *bugContest;
-    fx32 unk11C;
+    fx32 projZOffset;
     FollowMonInteraction *followMonInteraction;
     u32 judgeStatPosition;
 }; // size: 0x128
@@ -286,7 +286,7 @@ typedef struct FieldInput {
     u16 sign : 1;
     u16 mapTransition : 1;
     u16 movement : 1;
-    u16 unk0_8 : 1;
+    u16 stationary : 1;
     u16 switchBottomScreen : 1;
     u16 unk0_A : 1;
     u16 unk0_B : 1;

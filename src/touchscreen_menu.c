@@ -313,9 +313,9 @@ SysTask *TouchscreenMenu_Create(BgConfig *bgConfig, u16 *lastTouchMenuInput, Fie
     TouchscreenMenu_PrintBallInfo(data);
     TouchscreenMenu_InitPhoneRing(&data->phoneRing, data);
     if (MenuInputStateMgr_GetState(&fieldSystem->menuInputState) == MENU_INPUT_STATE_BUTTONS) {
-        fieldSystem->unkD2_7 = FALSE;
+        fieldSystem->suppressBottomScreenDim = FALSE;
     } else if (!FieldSystem_TaskIsRunning(fieldSystem)) {
-        fieldSystem->unkD2_7 = TRUE;
+        fieldSystem->suppressBottomScreenDim = TRUE;
     }
     if (!TouchscreenMenu_SyncStartMenuState(data)) {
         return task;
@@ -400,9 +400,9 @@ void TouchscreenMenu_Task(SysTask *task, void *taskData) {
     int heldButton;
     int newButton;
 
-    if (data->fieldSystem->unkD2_7) {
+    if (data->fieldSystem->suppressBottomScreenDim) {
         if (movementAllowed && IsPaletteFadeFinished()) {
-            data->fieldSystem->unkD2_7 = FALSE;
+            data->fieldSystem->suppressBottomScreenDim = FALSE;
         } else {
             G2S_BlendNone();
         }
@@ -584,7 +584,7 @@ BOOL TouchscreenMenu_SyncStartMenuState(TouchscreenMenuData *data) {
         if (MenuInputStateMgr_GetState(&fieldSystem->menuInputState) == MENU_INPUT_STATE_TOUCH) {
             *lastTouchMenuInput = 1;
             fieldSystem->startMenuState = 0;
-            fieldSystem->unkD2_7 = TRUE;
+            fieldSystem->suppressBottomScreenDim = TRUE;
         } else {
             TouchscreenMenu_HighlightIcon(data, data->selection);
             fieldSystem->startMenuState = 1;
@@ -741,7 +741,7 @@ void TouchscreenMenu_ShowNewIcons(TouchscreenMenuData *data) {
             CopyWindowToVram(&data->iconWindows[iconAnim->window]);
             data->iconShown[i] = TRUE;
             data->icons[i].shown = TRUE;
-            data->fieldSystem->unkD2_7 = TRUE;
+            data->fieldSystem->suppressBottomScreenDim = TRUE;
             count++;
         }
         iconAnim++;

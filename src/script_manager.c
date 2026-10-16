@@ -163,7 +163,7 @@ void SetupScriptEngine(FieldSystem *fieldSystem, ScriptEnvironment *env, u16 scr
     env->facingDirection = PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar);
     env->lastInteracted = lastInteracted;
     env->activeScriptNumber = script;
-    env->unk_34 = a4;
+    env->resultPtr = a4;
     if (lastInteracted != NULL) {
         *varLastInteracted = MapObject_GetID(lastInteracted);
     }
@@ -246,7 +246,7 @@ void *FieldSysGetAttrAddrInternal(ScriptEnvironment *environment, enum ScriptEnv
     case SCRIPTENV_CAMERA_TARGET:
         return &environment->cameraTarget;
     case SCRIPTENV_FIELD_34:
-        return &environment->unk_34;
+        return &environment->resultPtr;
     case SCRIPTENV_SCRIPT_CONTEXT_0:
     case SCRIPTENV_SCRIPT_CONTEXT_1:
     case SCRIPTENV_SCRIPT_CONTEXT_2:

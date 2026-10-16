@@ -255,7 +255,7 @@ void BattleSetup_InitFromSaveData(BattleSetup *setup, FieldSystem *fieldSystem, 
 }
 
 void BattleSetup_InitFromFieldSystem(BattleSetup *setup, FieldSystem *fieldSystem) {
-    BattleSetup_InitFromSaveData(setup, fieldSystem, fieldSystem->saveData, fieldSystem->location->mapId, fieldSystem->bagCursor, fieldSystem->unkB0);
+    BattleSetup_InitFromSaveData(setup, fieldSystem, fieldSystem->saveData, fieldSystem->location->mapId, fieldSystem->bagCursor, fieldSystem->keyPressedSave);
     BattleSetup_SetAllySideBattlersToPlayer(setup);
 }
 
@@ -298,7 +298,7 @@ void BattleSetup_InitForFixedLevelFacility(BattleSetup *setup, FieldSystem *fiel
     setup->storagePC = SaveArray_PCStorage_Get(fieldSystem->saveData);
     setup->timeOfDay = Field_GetTimeOfDay(fieldSystem);
     setup->bagCursor = fieldSystem->bagCursor;
-    setup->keyPressedSave = fieldSystem->unkB0;
+    setup->keyPressedSave = fieldSystem->keyPressedSave;
     setup->wifiHistory = Save_WiFiHistory_Get(fieldSystem->saveData);
     setup->gameStats = Save_GameStats_Get(fieldSystem->saveData);
     setup->palPad = Save_PalPad_Get(fieldSystem->saveData);
@@ -369,7 +369,7 @@ void BattleSetup_InitForLinkBattleWithParty(BattleSetup *setup, FieldSystem *fie
     setup->storagePC = SaveArray_PCStorage_Get(fieldSystem->saveData);
     setup->timeOfDay = Field_GetTimeOfDay(fieldSystem);
     setup->bagCursor = fieldSystem->bagCursor;
-    setup->keyPressedSave = fieldSystem->unkB0;
+    setup->keyPressedSave = fieldSystem->keyPressedSave;
     setup->wifiHistory = Save_WiFiHistory_Get(fieldSystem->saveData);
     setup->gameStats = Save_GameStats_Get(fieldSystem->saveData);
     setup->mapNumber = fieldSystem->location->mapId;

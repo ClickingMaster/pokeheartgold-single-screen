@@ -47,13 +47,13 @@ void Pokewalker_GetStepsAndWatts(POKEWALKER *pokeWalker, u32 *steps, u32 *watts)
 
 void Pokewalker_GetStrollState(POKEWALKER *pokeWalker, u16 *a1, u16 *a2) {
     GF_ASSERT(pokeWalker != NULL);
-    *a1 = pokeWalker->unk_000;
+    *a1 = pokeWalker->strollState;
     *a2 = pokeWalker->unk_002;
 }
 
 void Pokewalker_SetStrollState(POKEWALKER *pokeWalker, u16 a1, u16 a2) {
     GF_ASSERT(pokeWalker != NULL);
-    pokeWalker->unk_000 = a1;
+    pokeWalker->strollState = a1;
     pokeWalker->unk_002 = a2;
 }
 

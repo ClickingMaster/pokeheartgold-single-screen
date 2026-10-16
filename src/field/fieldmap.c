@@ -140,7 +140,7 @@ BOOL FieldMap_Init(OverlayManager *man, int *state) {
         offset += (0x6B * (DSProt_DetectNotEmulator(&FieldMapInit_DSProtEmulatorCallback) == FALSE));
 
         FieldMapChange_Set3DDisplay(fieldSystem);
-        fieldSystem->unk11C = 8;
+        fieldSystem->projZOffset = 8;
 
         if (fieldSystem->mapLoadMode->loadExtOverlay) {
             HandleLoadOverlay(FS_OVERLAY_ID(OVY_2), OVY_LOAD_ASYNC);
@@ -328,7 +328,7 @@ BOOL FieldMap_Exit(OverlayManager *man, int *state) {
             WeatherManager_Delete(fieldSystem->mapSystems->weatherManager);
             PoisonEffect_Delete(fieldSystem->mapSystems->poisonEffect);
             HBlankSystem_Delete(fieldSystem->mapSystems->hBlankSystem);
-            UnusedFieldModel_Delete(fieldSystem->mapSystems->unk18);
+            UnusedFieldModel_Delete(fieldSystem->mapSystems->unusedFieldModel);
             Fog_Free(&fieldSystem->fog);
             ModelAttributes_Free(&fieldSystem->modelAttributes);
             Thunk_OamManager_Free();
@@ -594,7 +594,7 @@ static void FieldMap_Render3D(FieldSystem *fieldSystem) {
     MapPropManager_Draw(fieldSystem->mapPropManager, fieldSystem->areaDataManager);
 
     camAngle = Camera_GetAngle(fieldSystem->camera);
-    fx64 offsetProduct = (fieldSystem->unk11C << FX32_SHIFT) * (fx64)(FX_CosIdx((u16)(-camAngle.x)));
+    fx64 offsetProduct = (fieldSystem->projZOffset << FX32_SHIFT) * (fx64)(FX_CosIdx((u16)(-camAngle.x)));
     fx64 offsetRounded = offsetProduct + 0x800;
     fx64 offset = offsetRounded >> FX32_SHIFT;
     MtxFx44 projMtx = NNS_G3dGlb.projMtx;
@@ -710,7 +710,7 @@ static void FieldMap_InitFieldEffectsAndObjects(FieldSystem *fieldSystem) {
 
     FieldEffectManager_InitGfx(fieldSystem->fieldEffectManager, HEAP_ID_FIELD1, 32, 32, 32, 32, 0x500 * (32 / 2), 0x80 * (32 / 2), 0x800 * 32);
 
-    fieldSystem->mapSystems->unk18 = UnusedFieldModel_New(fieldSystem, HEAP_ID_FIELD1);
+    fieldSystem->mapSystems->unusedFieldModel = UnusedFieldModel_New(fieldSystem, HEAP_ID_FIELD1);
     if (fieldSystem->mapLoadType == MAP_LOAD_TYPE_UNION) {
         MapObjectManager_SetEndMovement(fieldSystem->mapObjectManager, FALSE);
     }

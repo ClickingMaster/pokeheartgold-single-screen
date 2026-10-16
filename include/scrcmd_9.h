@@ -65,7 +65,7 @@ typedef struct FrontierFieldSystem {
     u8 curWinStreak;
     u8 numMons;
     u8 towerMode;
-    u8 unk10_0 : 1;
+    u8 wonSet : 1;
     u8 palmerDefeated : 2;
     u8 unk10_3 : 1;
     u8 ribbonEarned : 1;
@@ -79,9 +79,9 @@ typedef struct FrontierFieldSystem {
     u16 currentRound;           // Rounds (sets of 7 battles) won in the current streak.
     u8 filler1e[2];
     u32 totalTowerWins;
-    u16 unk24;
-    u16 unk26;
-    u16 unk28;
+    u16 totalTurns;
+    u16 totalDamage;
+    u16 totalTimesFainted;
     u8 partyMonIndexes[4];
     u16 partyMonSpecies[4];
     u16 partyMonItems[4];
@@ -92,7 +92,7 @@ typedef struct FrontierFieldSystem {
     FrontierTrainer opponents[2];
     FrontierTrainer frontierStatTrainers[5];
     FrontierMultiBattleAllyData multiBattleAllyData[5];
-    u8 unk838[5]; // Related to multi battle allies' replaced items.
+    u8 allyReplaceItems[5]; // Related to multi battle allies' replaced items.
     u8 filler83d;
     u16 linkSendBuffer[0x23]; // Related to unk10_3 somehow. Also player gender? Also species??? these seem to be some sort of struct?
     u16 unk884[0x23]; // Seemingly never set. Probably relates to tag partner somehow.

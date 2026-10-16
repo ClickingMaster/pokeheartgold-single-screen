@@ -100,7 +100,7 @@ static void FieldInput_Clear(FieldInput *fieldInput) {
     fieldInput->sign = 0;
     fieldInput->mapTransition = 0;
     fieldInput->movement = 0;
-    fieldInput->unk0_8 = 0;
+    fieldInput->stationary = 0;
     fieldInput->switchBottomScreen = 0;
     fieldInput->unk0_A = 0;
     fieldInput->unk0_B = 0;
@@ -166,7 +166,7 @@ void FieldInput_Update(FieldInput *fieldInput, FieldSystem *fieldSystem, u16 new
             fieldInput->sign = TRUE;
             fieldInput->mapTransition = TRUE;
         }
-        fieldInput->unk0_8 = TRUE;
+        fieldInput->stationary = TRUE;
     } else {
         fieldSystem->lastTouchMenuInput = 0;
     }
@@ -316,7 +316,7 @@ int FieldInput_Process(FieldInput *fieldInput, FieldSystem *fieldSystem) {
         return 2;
     }
 
-    if (fieldInput->unk0_8 && GearPhoneRingManager_TryStartCall(FieldSystem_GetGearPhoneRingManager(fieldSystem))) {
+    if (fieldInput->stationary && GearPhoneRingManager_TryStartCall(FieldSystem_GetGearPhoneRingManager(fieldSystem))) {
         return 2;
     }
 

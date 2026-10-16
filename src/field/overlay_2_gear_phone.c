@@ -120,7 +120,7 @@ BOOL GearPhoneRingManager_TryStartCall(GearPhoneRingManager *gearPhone) {
     if (var) {
         FreePhoneBook(phoneBook);
         if (var == 2) {
-            gearPhone->sys->unkD2_7 = TRUE;
+            gearPhone->sys->suppressBottomScreenDim = TRUE;
             StartMapSceneScript(gearPhone->sys, 0x7FF, 0);
             return TRUE;
         }
